@@ -1,0 +1,6 @@
+# Test artifacts and auth files
+.auth/
+test-results/
+node_modules/
+.playwright/
+.DS_Store
