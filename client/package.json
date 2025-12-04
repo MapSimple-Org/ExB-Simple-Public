@@ -9,10 +9,8 @@
     "build:prod": "cross-env NODE_ENV=production webpack --mode production",
     "build:for-download": "cross-env NODE_ENV=production OUTPUT_FOLDER=./dist-download webpack --mode production",
     "test": "jest --runInBand",
-    "test:e2e": "playwright test --config=tests/playwright.config.ts",
-    "test:e2e:ui": "playwright test --config=tests/playwright.config.ts --ui",
-    "test:e2e:debug": "playwright test --config=tests/playwright.config.ts --debug",
-    "test:e2e:auth-setup": "playwright test --config=tests/playwright.config.ts tests/e2e/auth-setup.ts --project=setup",
+    "test:e2e:auth-setup": "playwright test tests/e2e/auth-setup.ts --headed",
+    "test:e2e:add-to-map": "playwright test tests/e2e/query-simple/add-to-map.spec.ts --headed",
     "lint": "eslint",
     "postinstall": "node ./npm-bootstrap-extensions"
   },
