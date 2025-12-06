@@ -276,9 +276,77 @@ export const QueryTask = React.memo((props: QueryTaskProps) => {
 
 ---
 
+### 6. Set Up GitHub Actions CI/CD
+**Status:** Pending  
+**Priority:** Medium  
+**Source:** User Request - Automated Testing & Quality Checks
+
+**Issue:** No CI/CD pipeline exists. All testing and quality checks are manual. Need automated testing and linting on pull requests and pushes.
+
+**Desired Behavior:**
+- Run Playwright E2E tests on pull requests and pushes to `develop`
+- Run TypeScript/ESLint checks on code changes
+- Build widgets to catch build errors early
+- Report test results and lint errors in pull requests
+- Optional: Run tests on multiple Node.js versions for compatibility
+
+**Implementation Plan:**
+1. Create `.github/workflows/ci.yml` workflow file
+2. Configure workflow to:
+   - Trigger on: pull requests to `main`/`develop`, pushes to `develop`
+   - Set up Node.js environment
+   - Install dependencies (`npm install`)
+   - Run linting (`npm run lint` or equivalent)
+   - Build widgets (`npm run build` or equivalent)
+   - Run Playwright tests (`npx playwright test`)
+   - Upload test results/artifacts if tests fail
+3. Configure GitHub repository settings:
+   - Require CI checks to pass before merging PRs (optional)
+   - Add status badge to README.md
+4. Test workflow with a test PR
+5. Document CI/CD setup in CONTRIBUTING.md
+
+**Files to Create:**
+- `.github/workflows/ci.yml` - Main CI workflow
+- `.github/workflows/test.yml` - Separate test workflow (optional, can combine with ci.yml)
+
+**Example Workflow Structure:**
+```yaml
+name: CI
+
+on:
+  push:
+    branches: [ develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+      - run: npm install
+      - run: npm run lint
+      - run: npm run build
+      - run: npx playwright test
+```
+
+**Resources:**
+- GitHub Actions documentation: https://docs.github.com/en/actions
+- Playwright CI guide: https://playwright.dev/docs/ci
+- Example workflows: https://github.com/actions/starter-workflows
+
+**Related:**
+- Test coverage expansion (TODO item #2)
+- Contributing guidelines (CONTRIBUTING.md)
+- E2E test suite (`client/tests/e2e/`)
+
+---
+
 ## Low Priority - Code Consistency
 
-### 6. Standardize i18n Pattern
+### 7. Standardize i18n Pattern
 **Status:** Pending  
 **Priority:** Low  
 **Source:** Code Review - Development Guide Compliance
@@ -310,7 +378,7 @@ export const QueryTask = React.memo((props: QueryTaskProps) => {
 
 ---
 
-### 7. Enhance Widget Context Structure
+### 8. Enhance Widget Context Structure
 **Status:** Pending  
 **Priority:** Low  
 **Source:** Code Review - Development Guide Compliance
