@@ -199,6 +199,16 @@ export function createAddToMapAction(
         
         return true
       } catch (error) {
+        // ERROR HANDLING: This data action returns false on error rather than displaying
+        // user-facing errors. This is acceptable because:
+        // 1. Data actions are typically called from dropdown menus where error display
+        //    would be intrusive
+        // 2. The calling code can handle the false return value appropriately
+        // 3. Debug logging provides sufficient information for development/debugging
+        //
+        // FUTURE IMPROVEMENT: Consider showing a toast notification or inline error
+        // message if user-facing feedback becomes important. Could use ExB's notification
+        // system or add error state to the widget that triggered the action.
         debugLogger.log('DATA-ACTION', {
           action: 'addToMap-onExecute',
           result: false,
