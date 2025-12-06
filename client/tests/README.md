@@ -8,9 +8,10 @@ The QuerySimple widget includes configurable debug logging that can be controlle
 
 Add `?debug=` to your URL with one of the following options:
 
-- `?debug=all` - Enable all debug logs (default if no debug parameter is provided)
+- **No `debug` parameter** - **All debug logging DISABLED** (default for production)
+- `?debug=all` - Enable all debug logs
 - `?debug=HASH,FORM` - Enable specific feature logs (comma-separated)
-- `?debug=false` - Disable all debug logs
+- `?debug=false` - Explicitly disable all debug logs (same as no parameter)
 
 ### Available Debug Features
 
@@ -19,6 +20,11 @@ Add `?debug=` to your URL with one of the following options:
 - **TASK** - Query task management
 - **ZOOM** - Zoom behavior
 - **MAP-EXTENT** - Map extent changes
+- **DATA-ACTION** - Data action execution (Add to Map, etc.)
+- **UI** - UI interactions (tab switching, etc.)
+- **ERROR** - Error logging (console.error/warn calls)
+
+**Important**: When `?debug=false` is set, **ALL** console logging is disabled, including error logs.
 
 ### Examples
 
