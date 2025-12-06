@@ -127,6 +127,18 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
         }, 500)
       })
       .catch((error) => {
+        // ERROR HANDLING: This helper widget uses console.error directly (not debugLogger)
+        // because it's a utility widget that operates silently. This is acceptable because:
+        // 1. HelperSimple is designed to fail silently - widget may already be open or
+        //    not exist, which is not a user-facing error
+        // 2. The error is gated by debug parameter check (only logs if debug !== 'false')
+        // 3. No user-facing UI to display errors in this minimal helper widget
+        //
+        // FUTURE IMPROVEMENT: Consider migrating to debugLogger for consistency:
+        //   - Import debugLogger from query-simple or create shared instance
+        //   - Use debugLogger.log('HELPER', { error: ... }) instead of console.error
+        //   - This would provide better consistency and centralized debug control
+        //
         // Log for debugging but don't show to user (expected in some scenarios)
         // Widget may already be open or not in a controller
         const errorMessage = error instanceof Error ? error.message : String(error)
