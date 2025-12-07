@@ -11,6 +11,7 @@ import { TaskListInline } from './query-task-list-inline'
 import { TaskListPopperWrapper } from './query-task-list-popper-wrapper'
 import { QueryWidgetContext } from './widget-context'
 import { debugLogger } from './debug-logger'
+import { WIDGET_VERSION } from '../version'
 
 const { iconMap } = getWidgetRuntimeDataMap()
 
@@ -128,23 +129,14 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
         // Only update if the value has changed to avoid unnecessary re-renders
         if (this.state.initialQueryValue?.shortId !== shortId || this.state.initialQueryValue?.value !== value) {
           debugLogger.log('HASH', {
-            event: 'hash-detected-setting-state',
+            event: 'hash-detected',
             widgetId: this.props.id,
             shortId: shortId,
             value: value,
             previousShortId: this.state.initialQueryValue?.shortId,
-            previousValue: this.state.initialQueryValue?.value,
-            willSetState: true
+            previousValue: this.state.initialQueryValue?.value
           })
-          this.setState({ initialQueryValue: { shortId, value } }, () => {
-            debugLogger.log('HASH', {
-              event: 'hash-state-set',
-              widgetId: this.props.id,
-              shortId: shortId,
-              value: value,
-              newState: this.state.initialQueryValue
-            })
-          })
+          this.setState({ initialQueryValue: { shortId, value } })
         } else {
           debugLogger.log('HASH', {
             event: 'hash-skipped',
@@ -217,7 +209,7 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
     }
 
     return (
-      <Paper variant='flat' className='jimu-widget runtime-query pb-4' css={css`
+      <Paper variant='flat' className='jimu-widget runtime-query' css={css`
         display: flex;
         flex-direction: column;
         height: 100%;
@@ -236,9 +228,65 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
             {label || widgetLabel}
           </h3>
         </div>
-        <QueryWidgetContext.Provider value={`${layoutId}:${layoutItemId}`}>
-          <QueryTaskList widgetId={id} queryItems={config.queryItems} defaultPageSize={config.defaultPageSize} initialQueryValue={this.state.initialQueryValue} onHashParameterUsed={this.removeHashParameter}/>
-        </QueryWidgetContext.Provider>
+        <div css={css`
+          flex: 1;
+          display: flex;
+          flex-direction: column;
+          overflow: hidden;
+        `}>
+          <div css={css`
+            flex: 1;
+            overflow: auto;
+            padding-bottom: 1rem;
+          `}>
+            <QueryWidgetContext.Provider value={`${layoutId}:${layoutItemId}`}>
+              <QueryTaskList widgetId={id} queryItems={config.queryItems} defaultPageSize={config.defaultPageSize} initialQueryValue={this.state.initialQueryValue} onHashParameterUsed={this.removeHashParameter}/>
+            </QueryWidgetContext.Provider>
+          </div>
+          {/* Stationary footer */}
+          <div css={css`
+            padding: 4px 12px;
+            border-top: 1px solid var(--sys-color-divider-secondary);
+            background-color: var(--sys-color-surface-paper);
+            flex-shrink: 0;
+            text-align: center;
+          `}>
+            <span css={css`
+              font-size: 0.75rem;
+              color: var(--sys-color-text-tertiary);
+              font-weight: 400;
+              letter-spacing: 0.025em;
+              display: inline-flex;
+              align-items: center;
+              gap: 4px;
+            `}>
+              {/* Code/Open Source Symbol */}
+              <svg 
+                width="14" 
+                height="14" 
+                viewBox="0 0 24 24" 
+                fill="none" 
+                stroke="currentColor" 
+                strokeWidth="2"
+                css={css`
+                  flex-shrink: 0;
+                  opacity: 0.6;
+                `}
+              >
+                <polyline points="16 18 22 12 16 6"/>
+                <polyline points="8 6 2 12 8 18"/>
+              </svg>
+              QuerySimple by MapSimple.org
+              <span css={css`
+                margin-left: 6px;
+                opacity: 0.5;
+                font-size: 0.7rem;
+              `}>
+                v{WIDGET_VERSION}
+              </span>
+            </span>
+          </div>
+        </div>
       </Paper>
     )
   }
