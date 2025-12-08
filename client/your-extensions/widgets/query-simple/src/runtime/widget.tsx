@@ -215,7 +215,7 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
         height: 100%;
       `}>
         <div className="widget-header" css={css`
-          padding: 12px 16px;
+          padding: 6px 16px;
           border-bottom: 1px solid var(--sys-color-divider-secondary);
           background-color: var(--sys-color-surface);
         `}>
