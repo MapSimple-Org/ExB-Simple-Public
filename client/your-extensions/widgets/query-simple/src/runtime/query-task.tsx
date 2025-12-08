@@ -4,6 +4,7 @@ import {
   jsx,
   css,
   type ImmutableObject,
+  type ImmutableArray,
   type IMSqlExpression,
   DataSourceComponent,
   type DataSource,
@@ -33,7 +34,7 @@ import {
   type IMState,
   type FeatureDataRecord
 } from 'jimu-core'
-import { Button, Tooltip, FOCUSABLE_CONTAINER_CLASS, Tabs, Tab } from 'jimu-ui'
+import { Button, Tooltip, FOCUSABLE_CONTAINER_CLASS, Tabs, Tab, Select } from 'jimu-ui'
 import { TrashOutlined } from 'jimu-icons/outlined/editor/trash'
 import { PagingType, type QueryItemType, type SpatialFilterObj } from '../config'
 import { QueryTaskForm } from './query-task-form'
@@ -62,6 +63,10 @@ export interface QueryTaskProps {
   initialInputValue?: string
   onHashParameterUsed?: (shortId: string) => void
   queryItemShortId?: string
+  // Props for Search Layer dropdown (when multiple queries)
+  queryItems?: ImmutableArray<QueryItemType>
+  selectedQueryIndex?: number
+  onQueryChange?: (index: number) => void
 }
 
 const style = css`
@@ -99,7 +104,7 @@ const style = css`
 `
 
 export function QueryTask (props: QueryTaskProps) {
-  const { queryItem, onNavBack, total, isInPopper = false, defaultPageSize = CONSTANTS.DEFAULT_QUERY_PAGE_SIZE, wrappedInPopper = false, className = '', index, initialInputValue, onHashParameterUsed, ...otherProps } = props
+  const { queryItem, onNavBack, total, isInPopper = false, defaultPageSize = CONSTANTS.DEFAULT_QUERY_PAGE_SIZE, wrappedInPopper = false, className = '', index, initialInputValue, onHashParameterUsed, queryItems, selectedQueryIndex, onQueryChange, ...otherProps } = props
   const getI18nMessage = hooks.useTranslation(defaultMessage)
   const [stage, setStage] = React.useState(0) // 0 = form, 1 = results, 2 = loading
   const [activeTab, setActiveTab] = React.useState<'query' | 'results'>('query')
@@ -620,6 +625,39 @@ export function QueryTask (props: QueryTaskProps) {
                 </Tooltip>
               )}
             </div>
+            {/* Search Layer dropdown - only show if multiple queries */}
+            {queryItems && queryItems.length > 1 && (
+              <div css={css`
+                padding: 16px;
+                border-bottom: 1px solid var(--sys-color-divider-secondary);
+                flex-shrink: 0;
+              `}>
+                <label css={css`
+                  font-size: 0.875rem;
+                  font-weight: 500;
+                  color: var(--sys-color-text-primary);
+                  margin-bottom: 8px;
+                  display: block;
+                `}>
+                  {getI18nMessage('searchLayer')}
+                </label>
+                <Select 
+                  size="sm"
+                  value={selectedQueryIndex !== undefined ? selectedQueryIndex : index} 
+                  onChange={(e) => {
+                    if (onQueryChange) {
+                      onQueryChange(parseInt(e.target.value))
+                    }
+                  }}
+                >
+                  {queryItems.map((item, idx) => (
+                    <option key={item.configId} value={idx}>
+                      {item.name || `Query ${idx + 1}`}
+                    </option>
+                  ))}
+                </Select>
+              </div>
+            )}
             {enabled && dsExists && (
               <QueryTaskForm
                 {...otherProps}
