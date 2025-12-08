@@ -237,7 +237,6 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
           <div css={css`
             flex: 1;
             overflow: auto;
-            padding-bottom: 1rem;
           `}>
             <QueryWidgetContext.Provider value={`${layoutId}:${layoutItemId}`}>
               <QueryTaskList widgetId={id} queryItems={config.queryItems} defaultPageSize={config.defaultPageSize} initialQueryValue={this.state.initialQueryValue} onHashParameterUsed={this.removeHashParameter}/>
