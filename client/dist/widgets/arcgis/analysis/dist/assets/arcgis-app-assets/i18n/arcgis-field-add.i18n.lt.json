@@ -1,0 +1,137 @@
+{
+  "next": "Kitas",
+  "addField": "Pridėti laukelį",
+  "selectDataType": "Pasirinkite duomenų tipą, kuris bus saugomas lauke",
+  "addGlobalIDNotice": "Laukas bus automatiškai užpildytas esamais duomenimis iš sluoksnio ar lentelės. Pridėto lauko nebebus galima redaguoti ar ištrinti.",
+  "fieldName": "Lauko pavadinimas",
+  "displayName": "Rodomas pavadinimas",
+  "length": "Ilgis",
+  "defaultValue": "Numatytoji reikšmė (neprivaloma)",
+  "fieldTypes": "Laukų tipai",
+  "fieldValueType": "Lauko reikšmės tipas (neprivaloma)",
+  "fieldDescription": "Lauko aprašas (neprivaloma)",
+  "allowNullValues": "Leisti null reikšmes",
+  "valueRequiredError": "Ši reikšmė yra būtina",
+  "fieldAdded": "Laukas sėkmingai pridėtas",
+  "newFieldTypeNotice": "Šis lauko tipas gali būti nevisiškai palaikomas kai kuriuose klientuose.",
+  "addingField": "Pridedamas laukas...",
+  "syncEnabled": "Kai kurių laukų tipų pridėti negalima, nes sluoksnyje įjungtas sinchronizavimas.",
+  "newFeature": "Naujas elementas",
+  "fieldAdditionUnsuccessful": "Lauko pridėti nepavyko",
+  "error": "Klaida",
+  "noFieldTypeSelected": "Nepasirinkta lauko tipo",
+  "nullFieldTypeError": "Norėdami tęsti, turite pasirinkti lauko tipą.",
+  "fieldNameCharacterNotice": "Laukų pavadinimai, ilgesni nei 31 simbolis, nesuderinami su naudojimu neprisijungus.",
+  "suggestedHeader": "Siūloma",
+  "otherHeader": "Kita",
+  "provideDescription": "Pateikite informacijos, kuri bus šiame lauke, aprašą",
+  "nullableTooltipInfo": "Šis nustatymas nėra redaguojamas, jei jūsų sluoksnyje jau yra duomenų.",
+  "tooltipInfo": {
+    "globalIDExists": "Šioje paslaugoje jau yra GlobalID laukas. Sluoksnyje arba lentelėje gali būti tik vienas GlobalID laukas.",
+    "enterpriseTimestampOffset": "ArcGIS Enterprise nepalaiko laiko žymos poslinkio laukų talpinamų elementų sluoksniuose."
+  },
+  "text": {
+    "title": "Tekstas",
+    "description": "Reikšmės, kuriose yra raidinių ir skaitinių arba specialiųjų simbolių.",
+    "types": {
+      "esriFieldTypeString": {
+        "title": "Eilutė",
+        "description": "Saugomas nurodyto ilgio raidinių ir skaitinių simbolių rinkinys."
+      }
+    }
+  },
+  "numbers": {
+    "title": "Skaičiai",
+    "description": "Reikšmės, kuriose yra skaitinė informacija.",
+    "types": {
+      "esriFieldTypeDouble": {
+        "title": "Dvigubo tikslumo",
+        "description": "Saugomi skaičiai, turintys dešimtainių dalių."
+      },
+      "esriFieldTypeInteger": {
+        "title": "Sveikasis skaičius",
+        "description": "Saugomi sveikieji skaičiai nuo ${lowerIntegerRange} iki ${upperIntegerRange}."
+      },
+      "esriFieldTypeBigInteger": {
+        "title": "Big Integer",
+        "description": "Saugomi sveikieji skaičiai nuo -(2${startSup}53${endSup}-1) iki 2${startSup}53${endSup}-1. Naudokite šį lauko tipą, kai naudojate skaičius, kurie nepatenka į palaikomo sveikųjų skaičių laukų invervalą."
+      }
+    }
+  },
+  "dates": {
+    "title": "Datos",
+    "description": "Reikšmės, kuriose yra laiko informacija.",
+    "types": {
+      "esriFieldTypeDate": {
+        "title": "Data",
+        "description": "Saugomos datos ir laiko reikšmės."
+      },
+      "esriFieldTypeDateOnly": {
+        "title": "Tik data",
+        "description": "Saugomos datos reikšmės be laiko reikšmių."
+      },
+      "esriFieldTypeTimeOnly": {
+        "title": "Tik laikas",
+        "description": "Saugomos laiko reikšmės be datos reikšmių."
+      },
+      "esriFieldTypeTimestampOffset": {
+        "title": "Laiko žymos poslinkis",
+        "description": "Saugomos reikšmės, nurodančios datą, laiką ir nuokrypį nuo pasaulinio suderintojo laiko (UTC)."
+      }
+    }
+  },
+  "globalIdentifiers": {
+    "title": "Bendrieji identifikatoriai",
+    "description": "Reikšmės, kurios unikaliai identifikuoja elementą arba lentelės eilutę.",
+    "types": {
+      "esriFieldTypeGlobalID": {
+        "title": "GlobalID",
+        "description": "Saugoma 36 simbolių eilutė, kurią sudaro raidės ir skaičiai, naudojami elementui unikaliai identifikuoti."
+      },
+      "esriFieldTypeGUID": {
+        "title": "GUID",
+        "description": "Saugoma 36 simbolių eilutė, kurią sudaro raidės ir skaičiai. Visuotinai unikalus identifikatorius arba GUID dažnai naudojamas ryšiams tarp elementų valdyti."
+      }
+    }
+  },
+  "fieldValueTypes": {
+    "nameOrTitle": "Vardas arba pavadinimas",
+    "description": "Aprašas",
+    "typeOrCategory": "Tipas arba kategorija",
+    "countOrAmount": "Skaičius arba kiekis",
+    "percentageOrRatio": "Procentas arba santykis",
+    "measurement": "Matavimas",
+    "currency": "Valiuta",
+    "uniqueIdentifier": "Unikalus identifikatorius",
+    "phoneNumber": "Telefono numeris",
+    "emailAddress": "El. paštas",
+    "orderedOrRanked": "Reitinguojamos reikšmės",
+    "binary": "Dvejetainis",
+    "locationOrPlaceName": "Vieta, vietovės pavadinimas",
+    "coordinate": "Koordinatė",
+    "dateAndTime": "Data ir laikas",
+    "none": "Nėra"
+  },
+  "addFieldErrors": {
+    "invalidName": "Netinkamas pavadinimas",
+    "invalidLength": "Netinkamas ilgis",
+    "outOfRangeValueError": "Ši reikšmė nepatenka į intervalą.",
+    "invalidValueError": "Įvesta netinkama reikšmė.",
+    "invalidFieldParameters": "Neleistini lauko parametrai",
+    "invalidInputsError": "Patikrinkite, ar jūsų lauko parametrai užpildyti teisingai.",
+    "existingFieldNameError": "Lauko pavadinimas negali būti toks pat kaip jau esamo lauko pavadinimas.",
+    "invalidNameInputSQLError": "Lauko pavadinimas negali būti toks pat kaip SQL raktinis žodis.",
+    "invalidNameInputInvalidCharactersError": "Turi prasidėti raide ir gali būti sudarytas tik iš raidžių, skaitmenų ir simbolių '_'.",
+    "valueIsRequiredError": "Ši reikšmė privaloma.",
+    "lengthExceeds": "Lauko pavadinimo ilgis turi būti ne ilgesnis nei ${maxFieldNameLength} simboliai (-ų).",
+    "defaultValueExceeds": "Numatytoji reikšmė viršija nurodytą lauko ilgį.",
+    "savingFailed": "${layerName} įrašyti nepavyko",
+    "readOnlyErrorMessage": "ArcGIS Online susiduria su veikimo problemomis ir persijungė į skaitymo režimą. Kai kurios galimybės gali būti ribotos. Naujausią informaciją apie tai, kada ši problema bus išspręsta, gausite apsilankę ArcGIS Online veikimo švieslentėje.",
+    "readOnlyErrorMessageEnterprise": "ArcGIS Enterprise susiduria su veikimo problemomis ir persijungė į tik skaitymo režimą. Kai kurios galimybės gali būti ribotos.",
+    "healthDashboard": "ArcGIS Online veikimo švieslentė",
+    "genericAddFieldError": {
+      "title": "Klaida",
+      "description": "Pridedant lauką įvyko klaida."
+    }
+  }
+}

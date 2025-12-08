@@ -1,0 +1,137 @@
+{
+  "next": "Sledeće",
+  "addField": "Dodaj polje",
+  "selectDataType": "Izaberite tip podataka koji će biti sačuvan u polju",
+  "addGlobalIDNotice": "Polje će biti automatski popunjeno za postojeće podatke u sloju ili tabeli. Jednom dodato, ovo polje se ne može menjati ili brisati.",
+  "fieldName": "Ime polja",
+  "displayName": "Prikaži ime",
+  "length": "Dužina",
+  "defaultValue": "Podrazumevana vrednost (opciono)",
+  "fieldTypes": "Tipovi polja",
+  "fieldValueType": "Tip vrednosti polja (opcionalno)",
+  "fieldDescription": "Opis polja (opciono)",
+  "allowNullValues": "Dozvoli vrednosti sa nulom",
+  "valueRequiredError": "Ova vrednost je obavezna",
+  "fieldAdded": "Polje je uspešno dodato",
+  "newFieldTypeNotice": "Ovaj tip polja možda nije u potpunosti podržan kod nekih klijenata.",
+  "addingField": "Dodavanje polja...",
+  "syncEnabled": "Neki tipovi polja se ne mogu dodati jer je sinhronizacija omogućena na sloju.",
+  "newFeature": "Novi geoobjekat",
+  "fieldAdditionUnsuccessful": "Dodavanje polja je bilo neuspešno",
+  "error": "Greška",
+  "noFieldTypeSelected": "Nije izabran nijedan tip polja",
+  "nullFieldTypeError": "Morate da izaberete tip polja da biste nastavili.",
+  "fieldNameCharacterNotice": "Nazivi polja duži od 31 znaka nisu kompatibilni sa korišćenjem van mreže.",
+  "suggestedHeader": "Predloženo",
+  "otherHeader": "Ostalo",
+  "provideDescription": "Navedite opis informacija koje će polje sadržavati",
+  "nullableTooltipInfo": "Ova postavka ne može da se uređuje ako vaš sloj već sadrži podatke.",
+  "tooltipInfo": {
+    "globalIDExists": "Polje GlobalID već postoji na ovoj usluzi. Samo jedno polje GlobalID može biti prisutno na sloju ili tabeli.",
+    "enterpriseTimestampOffset": "ArcGIS Enterprise ne podržava polja sa odstupanjem vremenske oznake u hostovanim slojevima geoobjekata."
+  },
+  "text": {
+    "title": "Tekst",
+    "description": "Vrednosti koje sadrže alfanumeričke ili specijalne znakove.",
+    "types": {
+      "esriFieldTypeString": {
+        "title": "String",
+        "description": "Čuvajte skup alfanumeričkih znakova određene dužine."
+      }
+    }
+  },
+  "numbers": {
+    "title": "Brojevi",
+    "description": "Vrednosti koje sadrže numeričke informacije.",
+    "types": {
+      "esriFieldTypeDouble": {
+        "title": "Dvostruko",
+        "description": "Čuvajte brojeve sa decimalnim mestima."
+      },
+      "esriFieldTypeInteger": {
+        "title": "Celi broj",
+        "description": "Sačuvaj cele brojeve od ${lowerIntegerRange} do ${upperIntegerRange}."
+      },
+      "esriFieldTypeBigInteger": {
+        "title": "Veliki ceo broj",
+        "description": "Sačuvajte cele brojeve od -(2${startSup}53${endSup}-1) do 2${startSup}53${endSup}-1. Koristite ovaj tip polja kada koristite brojeve koji su izvan podržanog opsega celobrojnih polja."
+      }
+    }
+  },
+  "dates": {
+    "title": "Datumi",
+    "description": "Vrednosti koje sadrže vremenske informacije.",
+    "types": {
+      "esriFieldTypeDate": {
+        "title": "Datum",
+        "description": "Čuvajte vrednosti sa datumom i vremenom."
+      },
+      "esriFieldTypeDateOnly": {
+        "title": "Samo datum",
+        "description": "Sačuvajte vrednosti datuma bez vrednosti vremena."
+      },
+      "esriFieldTypeTimeOnly": {
+        "title": "Samo vreme",
+        "description": "Čuvajte vremenske vrednosti bez vrednosti datuma."
+      },
+      "esriFieldTypeTimestampOffset": {
+        "title": "Odstupanje vremenske oznake",
+        "description": "Čuvajte vrednosti koje ukazuju na datum, vreme i pomak od univerzalnog koordiniranog vremena (UTC)."
+      }
+    }
+  },
+  "globalIdentifiers": {
+    "title": "Globalni identifikatori",
+    "description": "Vrednosti koje jedinstveno identifikuju geoobjekat ili red tabele.",
+    "types": {
+      "esriFieldTypeGlobalID": {
+        "title": "GlobalID",
+        "description": "Sačuvajte string od 36 znakova sastavljen od slova i brojeva koji se koristi za jedinstvenu identifikaciju geoobjekta."
+      },
+      "esriFieldTypeGUID": {
+        "title": "GUID",
+        "description": "Sačuvajte string od 36 znakova koji se sastoji od slova i brojeva. Globalni jedinstveni identifikator, odnosno GUID, često se koristi za upravljanje odnosima između geoobjekata."
+      }
+    }
+  },
+  "fieldValueTypes": {
+    "nameOrTitle": "Ime ili naslov",
+    "description": "Opis",
+    "typeOrCategory": "Tip ili kategorija",
+    "countOrAmount": "Broj ili iznos",
+    "percentageOrRatio": "Procenat ili odnos",
+    "measurement": "Mera",
+    "currency": "Valuta",
+    "uniqueIdentifier": "Jedinstveni identifikator",
+    "phoneNumber": "Broj telefona",
+    "emailAddress": "Adresa e-pošte",
+    "orderedOrRanked": "Poređano ili rangirano",
+    "binary": "Binarno",
+    "locationOrPlaceName": "Ime mesta ili lokacije",
+    "coordinate": "Koordinata",
+    "dateAndTime": "Datum i vreme",
+    "none": "Nijedan"
+  },
+  "addFieldErrors": {
+    "invalidName": "Nevažeće ime",
+    "invalidLength": "Nevažeća dužina",
+    "outOfRangeValueError": "Ova vrednost je van opsega.",
+    "invalidValueError": "Uneta vrednost je nevažeća.",
+    "invalidFieldParameters": "Nevažeći parametri polja",
+    "invalidInputsError": "Proverite da li su parametri polja ispravno popunjeni.",
+    "existingFieldNameError": "Ime polja ne može da bude isto kao ime postojećeg polja.",
+    "invalidNameInputSQLError": "Ime polja ne može da bude isto kao SQL ključna reč.",
+    "invalidNameInputInvalidCharactersError": "Mora da započinje sa slovom i može da sadrži samo slova, brojeve i '_'.",
+    "valueIsRequiredError": "Ova vrednost je obavezna.",
+    "lengthExceeds": "Dužina naziva polja treba da bude manja od ili jednaka ${maxFieldNameLength} znakova.",
+    "defaultValueExceeds": "Podrazumevana vrednost prekoračuje preciziranu dužinu polja.",
+    "savingFailed": "Čuvanje ${layerName} nije uspelo",
+    "readOnlyErrorMessage": "ArcGIS Online je naišao na probleme u radu i prebacio se u režim samo za čitanje. Neke mogućnosti mogu biti ograničene. Za najnovija ažuriranja o tome kada će ovo biti rešeno, posetite kontrolnu tablu za status platforme ArcGIS Online.",
+    "readOnlyErrorMessageEnterprise": "ArcGIS Enterprise je naišao na probleme u radu i prebacio se u režim samo za čitanje. Neke mogućnosti mogu biti ograničene.",
+    "healthDashboard": "Kontrolna tabla za status platforme ArcGIS Online",
+    "genericAddFieldError": {
+      "title": "Greška",
+      "description": "Došlo je do greške pri dodavanju vašeg polja."
+    }
+  }
+}

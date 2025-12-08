@@ -1,0 +1,14 @@
+{
+  "outputRaster": "ÇıktıRasterı",
+  "rfxVariable": "RasterFonksiyonuDeğişkeni",
+  "selectLayer": "Katman seç",
+  "allowScalar": "Bir katman seçin veya bir sabit girin",
+  "browseLayer": "Katmanlara gözat",
+  "loading": "Yükleniyor...",
+  "layerMissing": "Analiz servisine izin ver özelliği etkinleştirilmediğinden haritadaki bir veya daha fazla görüntü katmanı burada listelenmiyor.",
+  "layerFailedToLoad": "Katman yüklenemedi.",
+  "learnMore": "Daha fazla bilgi",
+  "errorCodes": {
+    "required": "Bu parametre gerekli."
+  }
+}

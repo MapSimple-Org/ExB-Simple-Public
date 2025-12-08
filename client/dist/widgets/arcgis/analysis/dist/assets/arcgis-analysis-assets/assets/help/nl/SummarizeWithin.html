@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>De tool Samenvatten in berekent statistieken voor objecten binnen gespecificeerde bins of polygonen.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="summaryLayer">
+        <div>
+            <p>De laag die wordt samengevat.
+            </p>
+            <p class="toolPaneOnly">Het aantal objecten is afhankelijk van aanvullende factoren als de filtercriteria en de analyse-extent.
+            </p>
+        </div>
+    </div>
+    <div id="binType">
+        <div>
+            <p>Het type begrenzende objecten waarbinnen de invoerobjecten worden samengevat. Dit kan een polygoonlaag zijn of een betegelingraster van vierkante of zeshoekige bins die worden gegenereerd wanneer de tool wordt uitgevoerd.
+            </p>
+        </div>
+    </div>
+    <div id="sumWithinLayer">
+        <div>
+            <p>De polygoonlaag waarin de ingevoerde objecten worden samengevat.
+            </p>
+            <p class="toolPaneOnly">Het aantal objecten is afhankelijk van aanvullende factoren als de filtercriteria en de analyse-extent.
+            </p>
+        </div>
+    </div>
+    <div id="binSize">
+        <div>
+            <p>De grootte van de gegenereerde bins. Voor vierkante bins bepalen het gespecificeerde aantal en de eenheden de hoogte en de lengte van het vierkant. Voor zeshoekige bins bepalen het gespecificeerde aantal en de eenheden de afstand tussen de evenwijdige zijden.
+            </p>
+        </div>
+    </div>
+    <div id="binSizeUnit">
+        <div>
+            <p>De eenheden die worden gebruikt om de bingrootte te specificeren.
+            </p>
+        </div>
+    </div>
+    <div id="sumShape">
+        <div>
+            <p>Specificeert of de totale grootte zal worden berekend van de objecten die in elke grensgpolygoon zijn samengevat. Voor lijnen wordt de totale lengte berekend. Voor polygonen wordt het totale oppervlak berekend.
+            </p>
+        </div>
+    </div>
+    <div id="shapeUnits">
+        <div>
+            <p>De eenheden die zullen worden gebruikt om de totale omvang van de samengevatte objecten te berekenen.
+            </p>
+        </div>
+    </div>
+    <div id="summaryFields">
+        <div>
+            <p>Het aantal datumvelden uit de invoerlijst dat zal worden samengevat en de statistieken die voor elke veld zullen worden berekend.
+            </p>
+        </div>
+    </div>
+    <div id="groupByField">
+        <div>
+            <p>Het veld uit de invoerlaag dat zal worden gebruikt om de gegevens in afzonderlijke groepen te scheiden voor statistische berekeningen.
+            </p>
+        </div>
+    </div>
+    <div id="minorityMajority">
+        <div>
+            <p>Specificeert of de minderheids- (minst dominante) en meerderheids- (meest dominante) groepen binnen elk overzichtsgebied moeten worden berekend.
+            </p>
+        </div>
+    </div>
+    <div id="percentShape">
+        <div>
+            <p>Specificeert of het percentage zal worden berekend van de samengevatte objecten die bij elke groep binnen elk samenvattingsgebied horen.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>De naam van de laag die wordt aangemaakt en toegevoegd aan de kaart.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>De naam van de map in  <b>Mijn content</b> waarin de resultaten worden opgeslagen.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

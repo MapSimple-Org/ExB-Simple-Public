@@ -1,0 +1,17 @@
+{
+  "aboveMaximumMessage": "Input-værdien skal være mindre end eller lig med ${max}.",
+  "add": "Tilføj",
+  "addDuplicateMessage": "Duplikerede værdier kan ikke tilføjes.",
+  "belowMinimumMessage": "Input-værdien skal være større end eller lig med ${min}.",
+  "defaultPlaceholder": "Angiv en værdi, og klik på Tilføj",
+  "duplicateValueMessage": "Duplikerede værdier kan ikke ignoreres.",
+  "invalidDoubleMessage": "Input-værdien skal være en dobbelt.",
+  "invalidIntegerMessage": "Input-værdien skal være et heltal.",
+  "maxValuesMessage": "Der må højst være ${maxValues} forskellige input-værdier.",
+  "minValuesMessage": "Der skal være mindst ${minValues} forskellige input-værdier.",
+  "remove": "Fjern",
+  "requiredInputMessage": "Denne parameter er påkrævet.",
+  "strictlyMaximumMessage": "Input-værdien skal være mindre end ${max}.",
+  "strictlyMinimumMessage": "Input-værdien skal være større end ${min}.",
+  "value": "Værdi: ${value}"
+}

@@ -1,0 +1,15 @@
+{
+  "addDataStore": "Adăugare depozit de date",
+  "addFile": "Adăugați un fișier",
+  "addServiceConnection": "Adăugați o conexiune",
+  "itemNotFound": "Elementul nu există sau este inaccesibil.",
+  "itemPermissionDenied": "Nu aveți permisiuni de accesare a acestui element.",
+  "previewDetails": "Previzualizare detalii",
+  "queryModelArgsErrMsg": "A eșuat interogarea argumentelor modelului.",
+  "queryModelArgsMsg": "Se analizează argumentele modelului...",
+  "removeItem": "Eliminați articol",
+  "replaceItem": "Înlocuiți articol",
+  "requiredInputMessage": "Acest parametru este obligatoriu.",
+  "selectItem": "Selectați un element",
+  "viewDetails": "Vizualizare detalii"
+}

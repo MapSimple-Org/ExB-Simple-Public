@@ -1,0 +1,1 @@
+System.register([],function(a){return{execute:function(){a({verticalAlign:"Dikey hizalama",spaceAround:"\xc7evresindeki bo\u015fluk",spaceBetween:"Aralar\u0131ndaki bo\u015fluk",spaceEvenly:"E\u015fit bo\u015fluk b\u0131rak",horizontalAlign:"Yatay hizalama",scrollable:"Kayd\u0131r\u0131labilir"})}}});

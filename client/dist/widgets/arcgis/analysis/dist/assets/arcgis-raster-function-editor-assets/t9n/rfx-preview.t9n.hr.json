@@ -1,0 +1,13 @@
+{
+  "header": "Pretpregled",
+  "description": "Pregledajte rezultat prije pokretanja analize.",
+  "showPreview": "Prikaži pretpregled",
+  "previewLayer": "Sloj pretpregleda ${number}",
+  "update": "Ažuriraj",
+  "newPreview": "Novi pretpregled",
+  "previewPopup": "Omogućite pregled rezultata analize na temelju ulaznih parametara.",
+  "previewError": "Ovaj sloj pretpregleda nije dostupan. Provjerite ulazne parametre i ponovno ažurirajte ovaj sloj pretpregleda.",
+  "updatePopover": "Ažurirajte odabrani sloj pretpregleda",
+  "createPopover": "Stvori novi sloj pretpregleda",
+  "maxPreview": "Maksimalni dopušteni broj slojeva pretpregleda: ${maxCount}"
+}

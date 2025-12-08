@@ -1,0 +1,12 @@
+{
+  "classField": "Klasės laukas",
+  "classesAsRowsLabel": "Klasės kaip eilutės išvesties lentelėje",
+  "inputClassRasterOrFeatures": "Įvesties klasės rastras arba elementai",
+  "inputLayerGroupText": "Pasirinkite įvesties zoną ir klasės sluoksnį, kad apskaičiuotumėte susietas abiejų duomenų rinkinių sritis.",
+  "itemProperties": {
+    "description": "Išvesties lentelė sugeneruota paleidus tabuliavimo srities analizės įrankį.",
+    "snippet": "Išvesties lentelė sugeneruota iš tabuliavimo srities"
+  },
+  "tabulateAreaSettingsGroupLabel": "Tabuliavimo srities nustatymai",
+  "tabulateAreaSettingsGroupText": "Pasirinkite, kaip tvarkysite klases išvesties lentelėje. Nurodykite apskaičiuotiną gardelės dydį. "
+}

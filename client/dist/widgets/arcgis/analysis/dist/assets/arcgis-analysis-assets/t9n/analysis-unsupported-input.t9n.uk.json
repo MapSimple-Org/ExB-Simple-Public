@@ -1,0 +1,7 @@
+{
+  "defaultValue": "Непідтримуваний тип параметру. Буде використовуватися параметр за замовчуванням. <calcite-link target='_blank' href='${ docLink }'>Докладніше </calcite-link>",
+  "requiredMessage": "Цей параметр обов'язковий.",
+  "unsupportedGPType": "Непідтримуваний тип параметру. <calcite-link target='_blank' href='${ docLink }'>Докладніше </calcite-link>",
+  "unsupportedParameterConfig": "Непідтримувана конфігурація параметра. <calcite-link target='_blank' href='${ docLink }'>Докладніше </calcite-link>",
+  "unsupportedParameterConfigDefaultValue": "Непідтримувана конфігурація параметра. Буде використовуватися параметр за замовчуванням. <calcite-link target='_blank' href='${ docLink }'>Докладніше </calcite-link>"
+}

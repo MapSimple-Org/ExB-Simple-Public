@@ -1,0 +1,417 @@
+{
+  "itemBrowser": {
+    "filters": "סינונים",
+    "preview": "תצוגה מקדימה",
+    "selectedLayers": "שכבות נבחרות",
+    "selectedItems": "פריטים נבחרים",
+    "pageRange": "${start}-${end}, סה\"כ: ${total}",
+    "pageRangeAria": "${start}-${end}, סה\"כ פריטים: ${total}",
+    "pageRangeWithRecycleBin": "${start}-${end}, סה\"כ: ${total} (גודל כולל: ${recycleBinSize})",
+    "pageRangeAriaWithRecycleBin": "${start}-${end}, סה\"כ פריטים: ${total} (גודל כולל: ${recycleBinSize})",
+    "foundOnPage": "תוצאות תואמות בדף נוכחי: ${total}",
+    "totalSize": "גודל כולל: ${totalSize}",
+    "selectedMultipleWithSize": "נבחרו: ${num} (${totalSize})",
+    "selectedMultipleWithSizeSmall": "${num} (${totalSize})",
+    "noSelectedLayers": "אין כעת שכבות שנבחרו",
+    "noSelectedItems": "אין כעת פריטים שנבחרו",
+    "sharingUpdated": "שיתוף ${itemTitle} עודכן",
+    "refineContent": "מקד תוכן"
+  },
+  "layerTypes": {
+    "point": "שכבת נקודות",
+    "line": "שכבת קווים",
+    "polygon": "שכבת פוליגון",
+    "multipatch": "שכבת MultiPatch",
+    "multipoint": "שכבת Multipoint",
+    "table": "טבלה",
+    "catalog": "‏שכבת קטלוג",
+    "oriented imagery": "שכבת תצלומים מכוונים",
+    "parcel": "שכבת חלקות",
+    "utility network": "שכבת Utility Network",
+    "topology": "שכבת טופולוגיה",
+    "trace network": "שכבת רשת מעקב"
+  },
+  "filterIndustry": {
+    "title": "תעשייה",
+    "Industry": "תעשייה: ${industry}",
+    "Build a layer": "בנה שכבה",
+    "Agriculture": "חקלאות",
+    "Electric Utilities": "תשתיות חשמל",
+    "Environment": "סביבה",
+    "Forestry": "ייעור",
+    "Gas Utilities": "תשתיות גז",
+    "General": "כללי",
+    "Natural Resources": "משאבים טבעיים",
+    "Petroleum": "נפט",
+    "Public Safety": "בטיחות הציבור",
+    "Telecommunications": "טלקומוניקציה",
+    "Transportation": "תחבורה",
+    "Water Utilities": "תשתיות מים"
+  },
+  "filterItemType": {
+    "title": "סוג פריט",
+    "itemType": "סוג: ${itemType}",
+    "options": {
+      "maps": "מפות",
+      "maps-webmaps": "Web maps",
+      "maps-mapfiles": "קובצי מפה",
+      "layers": "שכבות",
+      "layers-weblayers": "שכבות Web",
+      "layers-weblayers-features": "שכבות ישויות",
+      "layers-weblayers-tiles": "שכבות אריחים",
+      "layers-weblayers-mapimage": "שכבות של תמונות מפה",
+      "layers-weblayers-imagery": "שכבות תצלומים",
+      "layers-weblayers-scenelayers": "שכבות סצנה",
+      "layers-weblayers-videolayers": "שכבות וידאו",
+      "layers-weblayers-tiledimagelayers": "שכבות תצלומים באריחים",
+      "layers-weblayers-elevationlayers": "שכבות גובה",
+      "layers-weblayers-feeds": "הזנות",
+      "layers-weblayers-tables": "טבלאות",
+      "layers-layerfiles": "קובצי שכבה",
+      "scenes": "סצנות",
+      "applications": "יישומים",
+      "applications-web": "אפליקציות web",
+      "applications-dashboards": "לוחות מחוונים",
+      "applications-sites": "אתרים",
+      "applications-pages": "דפים",
+      "applications-geobim-projects": "פרויקטים של GeoBIM",
+      "applications-geobim-apps": "יישומים של GeoBIM",
+      "applications-instant-apps": "Instant Apps",
+      "applications-storymap": "Storymaps",
+      "applications-data-pipelines": "צינורות נתונים",
+      "applications-experience": "Experience Builder",
+      "applications-wab": "Web AppBuilder",
+      "applications-mobile": "יישומים למכשירים ניידים",
+      "applications-desktop": "יישומים למחשבים שולחניים",
+      "developer-credentials": "אישורים של מפתחים",
+      "developer-credentials-oauth": "אישורי כניסה של OAuth 2.0",
+      "developer-credentials-api-token": "אישורי כניסה של מפתח API",
+      "developer-credentials-api-key": "מפתח API (דור קודם)",
+      "tools": "כלים",
+      "tools-locators": "מגדירי עיגון כתובות",
+      "tools-geodatabase": "גישה ל-Geodatabase",
+      "tools-geometric": "פעולות גיאומטריות",
+      "tools-geoprocessing": "משימות Geoprocessing",
+      "tools-network": "ניתוח רשת",
+      "tools-analytics": "ניתוח",
+      "files": "קבצים",
+      "files-document": "מסמכים",
+      "files-image": "תמונות",
+      "files-pdf": "קובצי PDF",
+      "files-csv": "קובצי CSV",
+      "files-report": "דוחות ניהול",
+      "files-raster": "תבניות לפונקציות רסטרים",
+      "notebooks": "מחברות",
+      "insights": "Insights",
+      "insights-workbooks": "חוברות עבודה",
+      "insights-pages": "דוחות",
+      "insights-models": "מודלים",
+      "insights-themes": "ערכות נושא",
+      "data-stores": "מאגרי נתונים",
+      "knowledge-graphs": "גרפים של ידע"
+    }
+  },
+  "filterCategories": {
+    "categories": "קטגוריות",
+    "groupCategories": "קטגוריות קבוצה",
+    "category": "קטגוריה: ${category}",
+    "uncategorized": "ללא קטגוריה",
+    "noCategoriesTitle": "אין עדיין קטגוריות",
+    "noCategories": "קטגוריות מאפשרות לחברים לארגן פריטים באופן עקבי, ומעניקות דרך פשוטה לעיין בתוכן של הארגון.",
+    "noGroupCategoriesTitle": "אין עדיין קטגוריות קבוצה",
+    "noGroupCategories": "קטגוריות מאפשרות לחברים בקבוצה לארגן פריטים באופן עקבי, ומעניקות דרך פשוטה לעיין בתוכן של הקבוצה.",
+    "setupCategories": "הגדרת קטגוריות תוכן",
+    "setupGroupCategories": "הגדרת קטגוריות קבוצה",
+    "configureCategories": "הגדר קטגוריות"
+  },
+  "filterRegion": {
+    "regions": "אזורים",
+    "region": "אזור: ${region}"
+  },
+  "filterCollaborations": {
+    "title": "שיתופי פעולה מבוזרים",
+    "label": "שיתופי פעולה מבוזרים: ${name}",
+    "loading": "טוען שיתופי פעולה..."
+  },
+  "filterContentStatus": {
+    "title": "סטטוס",
+    "label": "סטטוס: ${contentStatus}",
+    "authoritative": "מהימן",
+    "deprecated": "מופחת"
+  },
+  "filterDeleteProtection": {
+    "title": "הגנה מפני מחיקה",
+    "label": "הגנה מפני מחיקה: ${deleteProtection}",
+    "enabled": "מופעל",
+    "disabled": "מושבת"
+  },
+  "filterExpiration": {
+    "today": "היום",
+    "tomorrow": "מחר",
+    "next7": "7 הימים הבאם",
+    "next30": "30 הימים הבאים",
+    "custom": "טווח מותאם אישית...",
+    "title": {
+      "expires": "תאריך תפוגה"
+    },
+    "expires": "תאריך תפוגה: ${date}"
+  },
+  "filterExtent": {
+    "label": "בתוך שטח המפה",
+    "title": "הצג תוכן בשטח המפה בלבד"
+  },
+  "filterFolder": {
+    "folders": "תיקיות",
+    "placeholder": "סנן תיקיות",
+    "clear": "נקה חיפוש",
+    "all": "כל התוכן שלי",
+    "allContentUser": "כל התוכן של ${username}",
+    "recycleBin": "סל מיחזור",
+    "label": "תיקייה: ${folder}",
+    "loading": "טוען תיקיות...",
+    "folderOptions": "אפשרויות תיקייה",
+    "editFolder": "ערוך תיקייה",
+    "deleteFolder": "מחק תיקייה",
+    "delete": "מחיקה",
+    "areYouSure": "האם אתה בטוח שברצונך למחוק תיקייה זו?",
+    "areYouSureExplanation": "התיקייה, <strong style='font-weight: 500'>${title}</strong>, תימחק לצמיתות. בנוסף, כל הפריטים בתיקייה יסומנו למחיקה. האם ברצונך להמשיך במחיקת תיקייה זו?",
+    "cancel": "ביטול",
+    "save": "שמור",
+    "createAFolder": "צור תיקייה",
+    "folderName": "שם תיקייה",
+    "createFolder": "צור תיקייה",
+    "error": {
+      "title": "שגיאה",
+      "noName": "עליך לספק שם עבור התיקייה שלך.",
+      "folderAlreadyExists": "תיקייה '${folder}' כבר קיימת. בחר שם אחר.",
+      "invalidCharacters": {
+        "single": "השם לא יכול להכיל את התו הבא: ${invalidCharacters}.",
+        "multiple": "השם לא יכול להכיל את התווים הבאים: ${invalidCharacters}.",
+        "unknown": "השם לא יכול להכיל את התווים הבאים: ${invalidCharacters}."
+      },
+      "errorCreatingFolder": "אירעה שגיאה ביצירת התיקייה ${folderName}."
+    }
+  },
+  "filterGroup": {
+    "title": "קבוצות",
+    "groups": "הקבוצות שלי",
+    "placeholder": "סנן קבוצות",
+    "all": "התוכן של כל הקבוצות שלי",
+    "label": "קבוצה: ${group}",
+    "loading": "טוען קבוצות..."
+  },
+  "filterContentType": {
+    "contentType": "סוג תוכן",
+    "all": "כל התוכן של הארגון שלי",
+    "recycle": "סל מיחזור"
+  },
+  "filterLocation": {
+    "location": "מיקום",
+    "label": "מיקום: ${location}",
+    "findLocationText": "חיפוש כתובת או מקום",
+    "search": "חפש מיקומים",
+    "suggestions": "תכונות ליישום",
+    "noResults": "אין תוצאות עבור \"${searchTerm}\""
+  },
+  "filterSharing": {
+    "title": "שיתוף",
+    "label": "משותף: ${sharing}",
+    "owner": "יוצר",
+    "shared": "משותף עם קבוצות",
+    "private": "לא משותף עם קבוצות",
+    "account": "ארגון",
+    "public": "כולם (ציבורי)"
+  },
+  "filterTags": {
+    "title": "תגיות",
+    "label": "תויגו: ${tags}",
+    "selectTags": "בחר תגיות"
+  },
+  "filterReportType": {
+    "title": "סוג דוח",
+    "label": "סוג דוח: ${reportType}",
+    "activity": "פעילות",
+    "credits": "אשראי",
+    "users": "חבר",
+    "content": "פריט",
+    "item_usages": "מספר צפיות בפריט",
+    "service_usages": "שימוש בשירות"
+  },
+  "cardThumbnail": {
+    "loading": "טוען תמונה"
+  },
+  "card": {
+    "select": "בחר פריט: ${title}",
+    "lastUpdated": "פריט עודכן: ${date}",
+    "viewItemDetails": "הצג פרטים נוספים אודות ${title}",
+    "preview": "פרטים נוספים",
+    "hidePreview": "פחות פרטים",
+    "closeDetails": "סגור תצוגה מקדימה",
+    "openDetails": "תצוגה מקדימה",
+    "moreOptions": "עוד אפשרויות"
+  },
+  "cardSublayerSelect": {
+    "select": "בחר שכבה",
+    "selectLayers": "בחר שכבות",
+    "selectedSingle": "נבחר",
+    "selectedLayers": "שכבות שנבחרו: ${num}",
+    "selectedMultiple": "נבחר: ${num}",
+    "selectedName": "השכבה שנבחרה: ${name}",
+    "selectedTask": "משימה שנבחרה: ${task}",
+    "errorTitle": "שגיאה בהתחברות לשירות.",
+    "errorBody": "לא ניתן להתחבר בהצלחה לשירות. השירות מושבת או מחייב אימות.",
+    "notebookErrorBody": "כלי זה פורסם מ-Notebook. הגישה אל ArcGIS Notebooks חסומה עבור ארגונך. פנה למנהל המערכת שלך להתאמת ההגדרה.",
+    "retry": "נסה שוב",
+    "selectTask": "בחר משימה",
+    "selectTaskFrom": "בחר משימה מ-${title}"
+  },
+  "cardLayersList": {
+    "hideDetails": "הסתר פרטים",
+    "showDetails": "הצג פרטים",
+    "layersAndTables": "שכבות וטבלאות"
+  },
+  "content": {
+    "noResults": "לא נמצאו פריטים העומדים בקריטריונים שלך. נסה לשנות את מונח החיפוש או לנקות כמה מסננים כדי להציג פריטים נוספים.",
+    "noContent": "אין תוכן זמין.",
+    "loading": "טוען..."
+  },
+  "copy": {
+    "copy": "העתק",
+    "copied": "הועתק"
+  },
+  "bucketSelect": {
+    "my": "התוכן שלי",
+    "org": "הארגון שלי",
+    "group": "הקבוצות שלי",
+    "favorites": "המועדפים שלי",
+    "living atlas": "אטלס דינמי",
+    "living atlas analysis": "שכבות ניתוח של אטלס חי",
+    "subscription content": "תוכן למנויים",
+    "all": "ArcGIS Online",
+    "catalog": "קטלוגים של Hub",
+    "catalogLabel": "קטלוג"
+  },
+  "preview": {
+    "owner": "יוצר",
+    "summary": "תקציר",
+    "noSummary": "לא סופק סיכום",
+    "description": "תאור",
+    "noDescription": "לא ניתן תיאור",
+    "thumbnail": "תמונה ממוזערת",
+    "overview": "צפייה מקדימה",
+    "details": "פרטים",
+    "termsOfUse": "תנאי שימוש",
+    "noTermsOfUse": "לא סופקו תנאי שימוש",
+    "itemManagedBy": "פריט מנוהל על ידי: ${username}",
+    "fullItemDetails": "פרטי פריט מלאים",
+    "layersCount": "שכבות (${count})",
+    "layers": "שכבות",
+    "add": "הוספה",
+    "remove": "הסרה",
+    "loading": "טוען...",
+    "shared": "שיתוף",
+    "created": "פריט נוצר",
+    "updated": "פריט עודכן",
+    "fileSize": "גודל קובץ",
+    "dataUpdated": "הנתונים עודכנו",
+    "schemaUpdated": "הסכמה עודכנה",
+    "ID": "מזהה",
+    "copyID": "העתק מזהה",
+    "URL": "כתובת URL",
+    "copyURL": "העתק URL",
+    "itemStatus": "סטטוס",
+    "viewCount": "ספירת תצוגות",
+    "readMore": "מידע נוסף",
+    "dashboardViews": "תצוגות לוח מחוונים",
+    "dashboardMobile": "מחשב שולחני, מכשיר נייד",
+    "dashboardDesktop": "מחשב",
+    "sharing": {
+      "private": "פרטי",
+      "shared": "קבוצות",
+      "public": "כולם",
+      "org": "ארגון"
+    },
+    "groupCategories": "קטגוריות קבוצה",
+    "matched": "מותאם",
+    "matchedNumber": "מותאם (${num})",
+    "layerError": {
+      "title": "לא ניתן להציג שכבות",
+      "message": "תצוגה מקדימה של שכבה לא נתמכת עבור שירותים מאובטחים."
+    },
+    "noServiceMessage": "השירות הנבחר לא קיים או לא נגיש.",
+    "credits": "אישורים",
+    "noCredits": "לא אושר מקור.",
+    "geometryTypeTitle": "סוג גיאומטריה",
+    "layerTypeTitle": "סוג שכבה",
+    "fields": "שדות",
+    "noFields": "לא הוגדרו שדות עבור שכבה זו",
+    "geometryType": {
+      "esriGeometryPoint": "שכבת נקודות",
+      "esriGeometryPolyline": "שכבת קווים",
+      "esriGeometryPolygon": "שכבת פוליגון",
+      "esriGeometryMultiPatch": "שכבת MultiPatch",
+      "table": "טבלה"
+    },
+    "layerActions": "פעולות שכבה",
+    "itemError": {
+      "title": "שגיאה",
+      "subscription": "פרט זה לא זמין כעת. מינוי ArcGIS Online המשויך לפריט זה הושבת.",
+      "unhandled": "אירעה שגיאה במהלך אחזור פריט זה."
+    }
+  },
+  "table": {
+    "loading": "טוען...",
+    "caption": "תוצאות פריטים, ניתן למיין כותרות עמודות עם לחצנים.",
+    "selectAll": "בחר הכול",
+    "selection": "בחירה",
+    "headers": {
+      "title": "כותרת",
+      "modified": "שונה",
+      "created": "נוצר",
+      "owner": "יוצר",
+      "size": "גודל",
+      "deleted": "תאריך מחיקה",
+      "type": "סוג פריט",
+      "badges": "סטטוס פריט",
+      "favorite": "מועדף",
+      "sharing": "רמת שירות",
+      "details": "הצג פרטים",
+      "actions": "פעולות פריט נוספות",
+      "dataset": "סט נתונים"
+    }
+  },
+  "tableRow": {
+    "deletesTomorrow": "מוחק מחר",
+    "deletes": {
+      "single": "מחיקה בעוד יום ${number}",
+      "multiple": "נמחק בעוד ${number} ימים",
+      "unknown": "ימים עד למחיקה: ${number}"
+    },
+    "restore": "שחזר",
+    "details": "הצג פרטים",
+    "moreOptions": "עוד אפשרויות",
+    "download": "הורדה"
+  },
+  "search": {
+    "searchName": "חפש ${searchName}",
+    "searchAllContent": "חפש בכל התוכן שלי",
+    "searchAllUserContent": "חפש בכל התוכן של ${username}",
+    "searchGroupsContent": "חפש בקבוצות שלי",
+    "searchingGroupsContent": "מחפש בקבוצות שלי את",
+    "searchFavoritesContent": "חפש במועדפים שלי",
+    "searchOrganizationsContent": "חפש בארגון שלי",
+    "searchLivingAtlasContent": "חפש ב-Living Atlas",
+    "searchRecycleCurrentPage": "חפש כותרות פריט בדף נוכחי"
+  },
+  "find": {
+    "find": "חיפוש",
+    "findOnPage": "חיפוש בדף",
+    "match": "מחזיר התאמות טקסט עבור כותרות של פריטים בדף הנוכחי בלבד."
+  },
+  "view": {
+    "view": "הצג",
+    "list": "רשימה",
+    "grid": "גריד",
+    "table": "טבלה"
+  }
+}

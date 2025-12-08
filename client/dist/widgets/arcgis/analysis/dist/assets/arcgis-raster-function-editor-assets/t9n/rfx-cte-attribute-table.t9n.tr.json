@@ -1,0 +1,22 @@
+{
+  "value": "Değer",
+  "classname": "SınıfAdı",
+  "color": "Renkli",
+  "raster": "Raster",
+  "tableType": "Tablo Tipi",
+  "manual": "El İle",
+  "external": "Harici",
+  "browseTable": "Tabloya Gözat",
+  "browseTableFrom": "Şuradan Tabloya Gözat",
+  "file": "Dosya",
+  "dbfFile": "DBF Dosyası",
+  "layer": "Katman",
+  "unsupportedDataType": "Desteklenmeyen tür",
+  "failedToGetTableFromLayer": "Katmandan tablo alınamadı.",
+  "generate": "Tablo Oluştur",
+  "minValue": "Minimum Değer",
+  "maxValue": "Maksimum Değer",
+  "classBaseName": "Sınıf Taban Adı",
+  "colorscheme": "Renk Düzeni",
+  "defaultClassName": "Etiket_"
+}

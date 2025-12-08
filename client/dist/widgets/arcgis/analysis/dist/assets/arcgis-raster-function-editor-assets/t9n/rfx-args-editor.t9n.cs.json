@@ -1,0 +1,11 @@
+{
+  "unsupportedDataType": "Nepodporovaný typ",
+  "currentlyUnsupported": " Výchozí editor pro ${missingType} je v jednání, ale brzy bude k dispozici. Dočasné zástupné textové pole pro zadávání vstupů založených na řetězcích.",
+  "unsupportedOverrideWarning": "Komponenta editoru přepisů, která poskytuje lepší uživatelské rozhraní pro práci s následujícími parametry, se připravuje, ale brzy se objeví:",
+  "overrideWidgetMissing": "Chybí komponenta editoru přepisu!",
+  "uiIncomplete": "Odeslání úlohy se nezdařilo. Funkci nelze spustit, protože některá z požadovaných polí jsou neúplná nebo v uživatelském rozhraní chybí.",
+  "deprecatedBannerText": "Tato šablona rastrové funkce obsahuje jednu nebo více zastaralých rastrových funkcí a bude odstraněna v některé z budoucích verzí.",
+  "deprecatedBannerTextWithLink": "Tato šablona rastrové funkce obsahuje jednu nebo více zastaralých rastrových funkcí a bude odstraněna v některé z budoucích verzí. <calcite-link target='_blank' href='${ docLink }'>Více informací</calcite-link> o tom, jak nahradit zastaralou rastrovou funkci.",
+  "unsupportedBannerText": "Tato šablona rastrové funkce obsahuje jednu nebo více nepodporovaných rastrových funkcí.",
+  "unsupportedBannerTextWithLink": "Tato šablona rastrové funkce obsahuje jednu nebo více nepodporovaných rastrových funkcí. <calcite-link target='_blank' href='${ docLink }'>Další informace</calcite-link> o podporovaných rastrových funkcích."
+}

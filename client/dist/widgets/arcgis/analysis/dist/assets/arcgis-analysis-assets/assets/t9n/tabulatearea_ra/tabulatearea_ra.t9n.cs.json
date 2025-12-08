@@ -1,0 +1,12 @@
+{
+  "classField": "Pole třídy",
+  "classesAsRowsLabel": "Třídy jako řádky ve výstupní tabulce",
+  "inputClassRasterOrFeatures": "Rastr nebo prvky vstupní třídy",
+  "inputLayerGroupText": "Vyberte vstupní zónu a vrstvu třídy pro výpočet křížového srovnání mezi dvěma datovými sadami.",
+  "itemProperties": {
+    "description": "Výstupní tabulka vygenerovaná spuštěním nástroje pro analýzu Sestavit tabulku oblasti.",
+    "snippet": "Výstupní tabulka generovaná z nástroje Sestavit tabulku oblasti"
+  },
+  "tabulateAreaSettingsGroupLabel": "Nastavení nástroje Sestavit tabulku oblasti",
+  "tabulateAreaSettingsGroupText": "Zvolte, jak zacházet s třídami ve výstupní tabulce. Zadejte velikost buňky, která bude použita ve výpočtu. "
+}

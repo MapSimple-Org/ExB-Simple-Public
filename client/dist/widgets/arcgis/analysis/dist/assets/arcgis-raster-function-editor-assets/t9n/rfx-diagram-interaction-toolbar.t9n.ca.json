@@ -1,0 +1,9 @@
+{
+  "zoomIn": "Amplia",
+  "zoomOut": "Redueix",
+  "autoLayout": "Disseny automàtic",
+  "stretch": "Ajusta a la visualització",
+  "select": "Selecciona",
+  "pan": "Desplaça",
+  "deleteSelectedItemsText": "Suprimeix els elements seleccionats"
+}

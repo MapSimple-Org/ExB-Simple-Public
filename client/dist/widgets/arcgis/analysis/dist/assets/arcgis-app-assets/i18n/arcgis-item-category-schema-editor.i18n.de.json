@@ -1,0 +1,36 @@
+{
+  "modalHeader": "Inhaltskategorien konfigurieren",
+  "modalGroupHeader": "Gruppenkategorien konfigurieren",
+  "helpText": "Bearbeiten oder löschen Sie Kategorien in Ihrer Organisation, oder ordnen Sie sie neu an.",
+  "helpTextGroup": "Bearbeiten oder löschen Sie Kategorien für die Inhalte in dieser Gruppe, oder ordnen Sie sie neu an.",
+  "helpTextDescription": "Beachten Sie, dass andere Mitglieder der Organisation diese Kategorien möglicherweise bereits ihren Elementen zugewiesen haben. Beim Bearbeiten des Schemas werden diese Elemente entsprechend aktualisiert.",
+  "helpTextGroupDescription": "Beachten Sie, dass andere Mitglieder der Gruppe diese Kategorien möglicherweise bereits ihren Elementen zugewiesen haben. Beim Bearbeiten des Schemas werden diese Elemente entsprechend aktualisiert.",
+  "warning": {
+    "deleteInUseCategory": {
+      "title": "Kategorie löschen",
+      "cta": "Kategorie löschen",
+      "message": {
+        "single": "Dieser Kategorie ist ein Element zugewiesen. Wenn Sie die Kategorie löschen, wird sie auch aus diesem Element entfernt.",
+        "multiple": "Dieser Kategorie sind ${number} Elemente zugewiesen. Wenn Sie die Kategorie löschen, wird sie auch aus diesen Elementen entfernt.",
+        "unknown": "Dieser Kategorie zugewiesene Elemente: ${number}. Wenn Sie die Kategorie löschen, wird sie auch aus diesen Elementen entfernt."
+      }
+    },
+    "changeTitleInUseCategory": {
+      "title": "Kategorie aktualisieren",
+      "message": {
+        "single": "Dieser Kategorie ist ein Element zugewiesen. Indem Sie die Kategorie aktualisieren, wird das Element für die Verwendung von \"${newTitle}\" aktualisiert.",
+        "multiple": "Dieser Kategorie sind ${number} Elemente zugewiesen. Indem Sie die Kategorie aktualisieren, werden die Elemente für die Verwendung von \"${newTitle}\" aktualisiert.",
+        "unknown": "Dieser Kategorie zugewiesene Elemente: ${number}. Indem Sie die Kategorie aktualisieren, werden die Elemente für die Verwendung von \"${newTitle}\" aktualisiert."
+      },
+      "cta": "Kategorie aktualisieren"
+    }
+  },
+  "template": {
+    "templateList": {
+      "custom": {
+        "message": "Erstellen Sie Ihre eigenen Kategorien, um Inhalte in Ihrer Organisation zu organisieren.",
+        "messageGroup": "Erstellen Sie Ihre eigenen Kategorien, um Inhalte in dieser Gruppe zu organisieren."
+      }
+    }
+  }
+}

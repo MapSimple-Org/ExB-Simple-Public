@@ -1,0 +1,9 @@
+{
+  "inputFlowDirectionRasterLabel": "Ievades plūsmas virziena rastrs",
+  "inputLayerGroupText": "Izvēlēties ievades straumes un plūsmas virziena rastrus.",
+  "inputStreamRasterLabel": "Ievades straumes rastrs",
+  "itemProperties": {
+    "description": "Izvade, kas ģenerēta, palaižot StreamLink analīzes rīku.",
+    "snippet": "No StreamLink ģenerētā izvade"
+  }
+}

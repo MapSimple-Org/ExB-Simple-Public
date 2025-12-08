@@ -1,0 +1,10 @@
+{
+  "summary": "Yhteenveto",
+  "description": "Kuvaus",
+  "addSummary": "Lisää yhteenveto",
+  "addDescription": "Lisää kuvaus",
+  "charactersLeft": "Merkkejä jäljellä: ${num}",
+  "invalid": "Yhteenvedossa ei voi olla seuraavia merkkejä: < tai >.",
+  "invalidDescription": "Kuvaus ei voi sisältää mitään seuraavista merkeistä: < tai >.",
+  "summaryReadOnly": "Yhteenveto on vain luku -muodossa."
+}

@@ -1,0 +1,17 @@
+{
+  "sharing": "Partajare",
+  "private": "Proprietar",
+  "shared": "Proprietar și partajat cu grupurile",
+  "org": "Organizaţie",
+  "public": "Toată lumea (public)",
+  "privateGroups": "Proprietar",
+  "sharedGroups": "Proprietar + Grupuri (${num})",
+  "orgGroups": "Organizație + Grupuri (${num})",
+  "publicGroups": "Toată lumea (public) + Grupuri (${num})",
+  "groups": "Grupuri (${num})",
+  "updateSharing": "Nivel de partajare: ${level}, actualizare partajare",
+  "viewableBy": "Poate fi văzut de: ${level}",
+  "everyone": "Toată lumea (public)",
+  "organization": "Organizaţie",
+  "groupMembers": "Membrii grupului"
+}

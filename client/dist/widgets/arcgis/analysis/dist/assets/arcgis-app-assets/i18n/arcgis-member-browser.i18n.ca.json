@@ -1,0 +1,177 @@
+{
+  "memberBrowser": {
+    "filters": "Filtres",
+    "pageRange": "${start}-${end}, total: ${total}",
+    "pageRangeAria": "${start}-${end}, total de membres: ${total}",
+    "selectedMembers": "Membres seleccionats",
+    "noSelectedMembers": "No hi ha cap membre seleccionat",
+    "noUsersFound": "No s'ha trobat cap usuari que compleixi els vostres criteris. Proveu d'esborrar alguns filtres o de canviar la cerca perquè es mostrin més usuaris.",
+    "enterTermExternal": "Introduïu un terme de cerca per trobar usuaris a tot l'ArcGIS Online",
+    "noUsers": "No hi ha cap usuari disponible",
+    "coordinator": "Coordinador de la col·laboració"
+  },
+  "search": {
+    "searchMembers": "Cerca membres"
+  },
+  "filterUserTypes": {
+    "title": "Tipus d'usuari",
+    "label": "Tipus d'usuari: ${name}",
+    "loading": "S'estan carregant els tipus d'usuari..."
+  },
+  "filterRoles": {
+    "title": "Rol",
+    "label": "Rol: ${name}",
+    "loading": "S'estan carregant els rols...",
+    "searchRoles": "Cerca rols"
+  },
+  "filterOrgGroups": {
+    "title": "Grups de l'organització",
+    "label": "Grup: ${name}",
+    "loading": "S'estan carregant grups de l'organització...",
+    "searchGroups": "Cerca grups",
+    "noGroupsFound": "No s'ha trobat cap grup. Proveu de canviar el terme de cerca perquè es mostrin més grups."
+  },
+  "filterMyGroups": {
+    "title": "Els meus grups",
+    "label": "Grup: ${name}",
+    "loading": "S'estan carregant Els meus grups...",
+    "searchMyGroups": "Cerca a Els meus grups"
+  },
+  "filterCategories": {
+    "title": "Categories",
+    "label": "Categoria: ${name}",
+    "loading": "S'estan carregant les categories...",
+    "noCategoriesTitle": "Encara no hi ha cap categoria de membre",
+    "noCategories": "Les categories de membres permeten als administradors organitzar els seus membres en un directori per simplificar les accions administratives sobre els membres. Els membres de l'organització també poden fer servir aquest directori per trobar altres membres.",
+    "setupCategories": "Configura categories de membre",
+    "configureCategories": "Configura les categories",
+    "noCategoriesAssigned": "No s'ha assignat cap categoria"
+  },
+  "filterPartnerCollabs": {
+    "title": "Col·laboracions associades",
+    "label": "Col·laboracions associades: ${name}",
+    "loading": "S'estan carregant les col·laboracions associades...",
+    "coordinatorsOnly": "Només coordinadors de la col·laboració",
+    "coordinatorsDescription": "Els coordinadors de la col·laboració són representants de col·laboracions associades que es poden afegir a un grup sense confirmació.‎",
+    "coordinatorsInfoLabel": "Més informació sobre els coordinadors de la col·laboració"
+  },
+  "filterSearchSwitch": {
+    "searchAll": "Cerca a tots els membres de l'organització de l'ArcGIS Online",
+    "searchPartners": "Inclou aquest membre i els membres d'organitzacions associades"
+  },
+  "table": {
+    "caption": "Resultats dels membres. Les capçaleres de columna amb botons es poden ordenar.",
+    "selectAll": "Selecciona-ho tot",
+    "selection": "Selecció",
+    "headers": {
+      "name": "Nom",
+      "membertype": "Rol de grup",
+      "affiliation": "Afiliació",
+      "joined": "Data d'incorporació",
+      "credits": "Crèdits restants",
+      "remainingCredits": "Total de crèdits restants ${num}",
+      "lastlogin": "Darrer inici de sessió",
+      "usertype": "Tipus d'usuari",
+      "role": "Rol",
+      "mfaenabled": "Autenticació multifactorial"
+    }
+  },
+  "tableRow": {
+    "moreOptions": "Més opcions",
+    "groupManager": "Administrador del grup",
+    "owner": "Propietari",
+    "member": "Membre",
+    "myOrg": "La meva organització",
+    "other": "Altres",
+    "coordinator": "Coordinador de la col·laboració",
+    "noLimit": "Sense límit",
+    "creditsNumber": "${remain} de ${total}",
+    "today": "Avui",
+    "yesterday": "Ahir",
+    "never": "Mai",
+    "role": "Rol",
+    "memberIsCoordinator": "Aquest membre és coordinador d'una col·laboració",
+    "rolesForCoordinator": "Els coordinadors de col·laboracions només poden tenir rols d'administrador o de facilitador.",
+    "memberIsContact": "Aquest membre és un contacte administratiu",
+    "removeFromContact": "Si voleu canviar el rol d'aquest membre, primer heu d'eliminar-lo de la ${linkStart}llista de contactes administratius${linkEnd}."
+  },
+  "listCard": {
+    "moreOptions": "Més opcions",
+    "lastLoggedIn": "Darrer inici de sessió: ${value}",
+    "today": "Avui",
+    "yesterday": "Ahir",
+    "hasNotLoggedIn": "Encara no ha iniciat la sessió",
+    "neverSignedInTooltip": "Aquest membre mai no ha iniciat la sessió al seu compte creat el dia ${date}",
+    "userType": "Tipus d'usuari",
+    "role": "Rol",
+    "creditsRemaining": "Crèdits restants",
+    "noLimit": "Sense límit",
+    "creditsNumber": "${remain} de ${total}",
+    "addonLicenses": "Llicències de complement",
+    "configureLicenses": "Configura les llicències",
+    "groups": "Grups",
+    "configureGroups": "Configura els grups",
+    "viewGroups": "Mostra els grups"
+  },
+  "myOrg": {
+    "myOrgView": "Visualització de la meva organització"
+  },
+  "filterGroupRole": {
+    "title": "Rol de grup",
+    "label": "Rol de grup: ${role}",
+    "admins": "Propietari i administradors de grups",
+    "member": "Membre"
+  },
+  "filterAffiliation": {
+    "title": "Afiliació",
+    "label": "Afiliació: ${name}",
+    "myOrg": "La meva organització",
+    "other": "Altres"
+  },
+  "filterCreditsRemain": {
+    "title": "Crèdits restants",
+    "noLimit": "Sense límit",
+    "lessThan": "Menor que",
+    "credits": "Crèdits",
+    "labelNoLimit": "Crèdits: sense límit",
+    "labelLess": "Crèdits: menor que ${value}",
+    "invalidValue": "El valor que s'ha introduït no és vàlid."
+  },
+  "filterEmailVerification": {
+    "title": "Estat de verificació de l'adreça electrònica",
+    "unverified": "Adreces electròniques sense verificar",
+    "verified": "Adreces electròniques verificades",
+    "label": "Estat de verificació de l'adreça electrònica: ${status}"
+  },
+  "filterLoginType": {
+    "title": "Tipus d'inici de sessió",
+    "label": "Tipus d'inici de sessió: ${type}",
+    "social": "Xarxes socials"
+  },
+  "filterApp": {
+    "title": "Aplicació",
+    "label": "Aplicació: ${app}"
+  },
+  "filterMFA": {
+    "title": "Autenticació multifactorial",
+    "enabled": "Habilitat",
+    "disabled": "Deshabilitat",
+    "label": "Autenticació multifactorial: ${status}"
+  },
+  "roles": {
+    "user": "Usuari",
+    "publisher": "Editor",
+    "admin": "Administrador",
+    "viewer": "Visor",
+    "editor": "Editor de dades",
+    "facilitator": "Facilitador"
+  },
+  "view": {
+    "view": "Mostra",
+    "list": "Llista",
+    "table": "Taula"
+  },
+  "assignedLicenses": "Mostra només els membres que tinguin assignada aquesta llicència",
+  "onlyDoubleAssigned": "Mostra només els membres que tinguin assignada dues vegades aquesta llicència",
+  "maxSelected": "Només es poden seleccionar ${number} membres alhora."
+}

@@ -1,0 +1,22 @@
+{
+  "value": "Значення",
+  "classname": "ClassName",
+  "color": "Колір",
+  "raster": "Растр",
+  "tableType": "Тип таблиці",
+  "manual": "Ручний",
+  "external": "Зовнішній",
+  "browseTable": "Перегляд таблиці",
+  "browseTableFrom": "Перегляд таблиці з",
+  "file": "Файл",
+  "dbfFile": "Файл DBF",
+  "layer": "Шар",
+  "unsupportedDataType": "Непідтримуваний тип файлу",
+  "failedToGetTableFromLayer": "Не вдалося отримати таблицю із шару.",
+  "generate": "Згенерувати таблицю",
+  "minValue": "Мінімальне значення",
+  "maxValue": "Максимальне значення",
+  "classBaseName": "Базове ім'я класу",
+  "colorscheme": "Колірна схема",
+  "defaultClassName": "Напис_"
+}

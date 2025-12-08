@@ -1,0 +1,27 @@
+{
+  "area": "Suprafaţă",
+  "binResolution": "Rezoluție coș H3",
+  "binSize": "Dimensiunea containerului",
+  "binSizeUnit": "Unitate",
+  "binType": "Tipul formei containerului",
+  "diamondBins": "Containere în formă de diamant",
+  "distance": "Distanță",
+  "extentLayer": "Strat tematic de extindere",
+  "extentOverrideMessage": "Acest strat tematic de extindere va fi utilizat în locul oricărui set de extindere de procesare din medii.",
+  "extentSectionLabel": "Setări extindere",
+  "extentSectionText": "Specificați un strat tematic de extindere pe care mozaicarea ar trebui să-l acopere.",
+  "h3hexagonBins": "Containere hexagonale H3",
+  "hexagon": "Hexagon",
+  "intersectStudyArea": "Păstrați numai mozaicări intersectate",
+  "itemProperties": {
+    "description": "Strat tematic de obiecte spațiale generat din executarea instrumentului de analiză Generare mozaicări.",
+    "snippet": "Strat tematic de obiecte spațiale generat de Generare mozaicări"
+  },
+  "outputAreasSectionText": "Furnizați un nume pentru grila de mozaicare.",
+  "sizeType": "Măsurarea dimensiunii containerului",
+  "square": "Pătrat",
+  "tessellationSettingsLabel": "Setări mozaicare",
+  "tessellationSettingsSummaryText": "Specificați forma și dimensiunea containerelor de generat.",
+  "thexagonBins": "Containere hexagonale transversale",
+  "triangleBins": "Containere triunghiulare"
+}

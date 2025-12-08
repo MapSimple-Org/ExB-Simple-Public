@@ -1,0 +1,12 @@
+{
+  "apiCredentialType": "자격 증명 유형: API 키",
+  "oauthCredentialType": "자격 증명 유형: OAuth 2.0",
+  "itemAccess": "항목 접근 권한",
+  "page": "페이지: ${page}",
+  "currentPage": "현재 페이지: ${page}",
+  "privileges": "권한",
+  "itemDetails": "항목 세부정보",
+  "settings": "설정",
+  "serviceScope": "서비스 범위",
+  "summary": "요약"
+}

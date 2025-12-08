@@ -1,0 +1,1 @@
+System.register([],function(e){return{execute:function(){e({_widgetLabel:"\u0e1b\u0e38\u0e48\u0e21\u0e01\u0e14",dynamicStyleExpressionsLabel:"\u0e43\u0e0a\u0e49\u0e40\u0e19\u0e37\u0e49\u0e2d\u0e2b\u0e32\u0e02\u0e49\u0e2d\u0e04\u0e27\u0e32\u0e21\u0e1b\u0e38\u0e48\u0e21"})}}});

@@ -1,0 +1,69 @@
+{
+  "loadingText": "Wczytywanie szablonów schematów",
+  "cancel": "Anuluj",
+  "finishSetup": "Zakończ konfigurację",
+  "hasUnsavedChanges": "Wprowadzono zmiany do kategorii, które zostaną utracone, jeśli nie zostaną najpierw zapisane. Czy na pewno chcesz zamknąć ten widok i utracić wprowadzone zmiany?",
+  "error": {
+    "generic": {
+      "title": "Błąd aktualizacji kategorii",
+      "message": "Wystąpiły problemy. Spróbuj ponownie później."
+    },
+    "maxDepthExceeded": {
+      "title": "Błąd aktualizacji kategorii",
+      "message": "Nie można zagnieżdżać kategorii na więcej niż 2 poziomach."
+    },
+    "destinationHasSameName": {
+      "title": "Błąd aktualizacji kategorii",
+      "message": "Kategoria o tej samej nazwie już istnieje w kategorii docelowej."
+    },
+    "emptyTitle": {
+      "title": "Błąd aktualizacji kategorii",
+      "message": "Tytuł kategorii nie może być pusty."
+    },
+    "noSchema": {
+      "title": "Nie znaleziono schematu",
+      "message": "Nie znaleziono schematu elementu dla użytkownika."
+    },
+    "maxCharacter": {
+      "title": "Błąd aktualizacji kategorii",
+      "message": "Nazwy kategorii mogą mieć maksymalnie ${maxCharacter} znaków."
+    },
+    "invalidCharacters": {
+      "title": "Błąd aktualizacji kategorii",
+      "single": "Kategoria nie może zawierać tego znaku: ${invalidCharacters}.",
+      "multiple": "Kategoria nie może zawierać żadnego z tych znaków: ${invalidCharacters}.",
+      "unknown": "Kategoria nie może zawierać żadnego z tych znaków: ${invalidCharacters}."
+    }
+  },
+  "warning": {
+    "deleteInUseCategory": {
+      "title": "Usuń kategorię",
+      "cta": "Usuń kategorię"
+    },
+    "changeTitleInUseCategory": {
+      "title": "Zaktualizuj kategorię",
+      "cta": "Zaktualizuj kategorię"
+    }
+  },
+  "template": {
+    "title": "Szablony kategorii",
+    "learnMore": "Dowiedz się więcej",
+    "templateList": {
+      "custom": {
+        "title": "Kategorie niestandardowe"
+      },
+      "arcgis": {
+        "title": "Kategorie ArcGIS",
+        "message": "Kategorie ArcGIS obejmują wybór kategorii i podkategorii tematycznych, które mogą być używane do kategoryzacji wielu rodzajów zasobów geoprzestrzennych. Kategorie te są wykorzystywane do obsługi atlasu ArcGIS Living Atlas of the World."
+      },
+      "iso": {
+        "title": "Kategorie ISO",
+        "message": "Kategorie ISO o między innymi kategorie tematyczne ze standardu International Organization for Standardization zapewniające metody opisu i katalogowania informacji geograficznych."
+      },
+      "inspire": {
+        "title": "Kategorie INSPIRE",
+        "message": "Kategorie INSPIRE obejmują obszerny zestaw motywów danych przestrzennych określony w dyrektywie INSPIRE."
+      }
+    }
+  }
+}

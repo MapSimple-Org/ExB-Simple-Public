@@ -1,0 +1,6 @@
+{
+  "greaterThanErrorMessage": "Sisestatav arv peab olema suurem kui ${min}",
+  "lesserThanErrorMessage": "Sisestatav arv peab olema väiksem kui ${max}",
+  "greaterThanOrEqualErrorMessage": "Sisestatav arv peab olema suurem kui${min} või sellega võrdne",
+  "lesserThanOrEqualErrorMessage": "Sisestatav arv peab olema väiksem kui${max} või sellega võrdne"
+}

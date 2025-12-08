@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>Įrankis Sujungti elementus perkelia atributus i&scaron; vieno sluoksnio ar lentelės į kitą pagal erdvinius ir atributų ry&scaron;ius. Pasirinktinai statistinius duomenis galima apskaičiuoti, kai yra keli sutampantys įra&scaron;ai.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="targetLayer">
+        <div>
+            <p>Sluoksnis arba lentelė, kuri turės atributus i&scaron; jungtinio sluoksnio, pridėto prie jo atributų lentelės.
+            </p> 
+            <p class="toolPaneOnly">Elementų skaičius priklauso nuo papildomų veiksnių, pavyzdžiui, filtravimo kriterijų ir analizės apimties.
+            </p> 
+            <p class="modelBuilderOnly"> <b>Sluoksnis</b> nurodomas pagal numatytuosius nustatymus, kai <b>tikslinis sluoksnis</b> neužpildomas. Norėdami pridėti įvesties lentelę, prie&scaron; pridėdami duomenų rinkinį, pasirinkite <b>Lentelė</b>.
+            </p>
+        </div>
+    </div>
+    <div id="joinLayer">
+        <div>
+            <p>Sluoksnis arba lentelė su atributais, kurie bus pridėti prie paskirties sluoksnio.
+            </p> 
+            <p class="toolPaneOnly">Elementų skaičius priklauso nuo papildomų veiksnių, pavyzdžiui, filtravimo kriterijų ir analizės apimties.
+            </p> 
+            <p class="modelBuilderOnly"> <b>Sluoksnis</b> nurodomas pagal numatytuosius nustatymus, kai laukas <b>Prijungti sluoksnį</b> neužpildomas. Norėdami pridėti įvesties lentelę, prie&scaron; pridėdami duomenų rinkinį, pasirinkite <b>Lentelė</b>.
+            </p>
+        </div>
+    </div>
+    <div id="useSpatialRelationship">
+        <div>
+            <p>Nurodykite, ar sluoksniai bus sujungti remiantis erdviniu ry&scaron;iu. Reikalauja, kad abu sluoksniai turėtų geometrinių savybių.
+            </p>
+        </div>
+    </div>
+    <div id="spatialRelationship">
+        <div>
+            <p>Nurodomas erdvinis ry&scaron;ys, lemiantis, kurie elementai bus sujungiami. Bus sujungti jungiamojo sluoksnio elementai, turintys nurodytą ry&scaron;į su tiksliniu sluoksniu. Galimi ry&scaron;iai priklauso nuo įvesties geometrijos tipo.
+            </p>
+        </div>
+    </div>
+    <div id="spatialRelationshipDistance">
+        <div>
+            <p>Atstumas nuo tikslinio sluoksnio elementų, kuris bus naudojamas nustatant, ar elementai bus sujungti.
+            </p>
+        </div>
+    </div>
+    <div id="spatialRelationshipDistanceUnits">
+        <div>
+            <p>Vienetai, kurie bus naudojami atstumui nurodyti.
+            </p>
+        </div>
+    </div>
+    <div id="useAttributeRelationship">
+        <div>
+            <p>Nurodoma, ar sluoksniai bus sujungti remiantis sutampančiomis laukų reik&scaron;mėmis. Jei viena ar kelios įvestys yra lentelė, sujungimas gali būti apibrėžtas naudojant tik atributinį ry&scaron;į.
+            </p>
+        </div>
+    </div>
+    <div id="attributeRelationship">
+        <div>
+            <p>Atributinis ry&scaron;ys, lemiantis, kurie elementai bus sujungiami. Elementai atitinka, kai lauko reik&scaron;mės jungtiniame sluoksnyje yra lygios lauko reik&scaron;mėms tiksliniame sluoksnyje.
+            </p>
+        </div>
+    </div>
+    <div id="joinOperation">
+        <div>
+            <p>Nurodoma, kaip bus elgiamasi sujungimo metu, jei sujungimo kriterijus atitinka keli įra&scaron;ai i&scaron; sujungimo sluoksnio. Pasirinkite i&scaron; toliau nurodytų parinkčių:
+                <ul>
+                    <li> <b>Sujungti vieną su vienu</b> &ndash; vienas įra&scaron;as jungiamajame sluoksnyje prijungiamas prie kiekvieno tikslinio sluoksnio elemento.
+                    </li>
+                    <li> <b>Sujungti vieną su daugeliu</b> &ndash; visi atitinkantys jungiamojo sluoksnio elementai prijungiami prie tikslinio sluoksnio. Rezultatų sluoksnyje bus keli tikslinio elemento įra&scaron;ai.
+                    </li>
+                </ul>
+                
+            </p>
+        </div>
+    </div>
+    <div id="handleMatchingRecords">
+        <div>
+            <p>Kai keli jungiamojo sluoksnio elementai atitinka tikslinį elementą, &scaron;iuo parametru nurodoma, ar bus prijungtas vienas įra&scaron;as i&scaron; jungiamojo sluoksnio, ar bus apibendrinti visi jungiamojo sluoksnio įra&scaron;ai ir pateikta lauko statistika, ar bus apskaičiuotas tik atitinkančių įra&scaron;ų skaičius.
+            </p>
+        </div>
+    </div>
+    <div id="summaryFields">
+        <div>
+            <p>Kai keli jungiamieji elementai atitinka tikslinį elementą, bus apskaičiuojama visų atitinkančių įra&scaron;ų suvestinė statistika. Nurodykite jungiamojo sluoksnio skaitinį arba datos laukus ir statistiką, kuri bus apskaičiuojama kiekvienam laukui.
+            </p>
+        </div>
+    </div>
+    <div id="recordsToMatch">
+        <div>
+            <p>Jei yra keli jungiamojo sluoksnio elementai, atitinkantys tikslinį elementą, į i&scaron;vestį bus įtrauktas pirmasis įra&scaron;as i&scaron; jungiamojo sluoksnio atributų lentelės. Pasirinktinai pasirinkite skaičių arba datos lauką ir rū&scaron;iavimo tvarką, kuri lems atributų lentelės eili&scaron;kumą.
+            </p>
+        </div>
+    </div>
+    <div id="joinType">
+        <div>
+            <p>Nurodoma, ar į i&scaron;vestį bus įtraukti nesutampantys tiksliniai elementai. Naudojant parinktį  <b>Vidinis sujungimas</b> pateikiami tik sutampantys tiksliniai įra&scaron;ai, o naudojant parinktį <b>Kairysis sujungimas</b> pateikiami visi tiksliniai įra&scaron;ai, net jei tikslinis elementas neturi atitikmens jungiamajame sluoksnyje.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>Sluoksnio arba lentelės, kuri bus sukurta ir pridėta į žemėlapį, pavadinimas.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>Puslapyje  <b>Mano turinys</b> esančio aplanko, kur bus įra&scaron;ytas rezultatas, pavadinimas.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

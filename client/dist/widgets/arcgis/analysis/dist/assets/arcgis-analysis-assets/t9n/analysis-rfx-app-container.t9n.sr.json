@@ -1,0 +1,16 @@
+{
+  "backLabel": "Nazad",
+  "browseHeader": "Izaberite sloj",
+  "cannotReopenRasterFunction": "Funkcija rastera se ne može ponovo otvoriti.",
+  "creditThresholdModal": {
+    "cancelRun": "Otkaži",
+    "continueRun": "Svakako pokreni",
+    "creditEstimate": "Procenjeni krediti: ${cost}",
+    "creditThreshold": "Kreditni prag: ${threshold}",
+    "heading": "Pre nego što nastavite",
+    "learnMore": "Saznajte više o pragovima kredita",
+    "thresholdExceeded": "Procenjeni trošak u kreditima za ovu analizu je veći od praga kredita veb mape:"
+  },
+  "failedToExecuteEstimate": "Slanje nije uspelo. Izvršavanje procene troška rasterske analize nije uspelo",
+  "runAnalysisLabel": "Pokreni"
+}

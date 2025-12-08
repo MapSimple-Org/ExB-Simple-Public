@@ -1,0 +1,22 @@
+{
+  "value": "ערך",
+  "classname": "ClassName",
+  "color": "צבע",
+  "raster": "רסטר",
+  "tableType": "סוג טבלה",
+  "manual": "ידני",
+  "external": "חיצוני",
+  "browseTable": "עיין בטבלה",
+  "browseTableFrom": "עיין בטבלה מ:",
+  "file": "קובץ",
+  "dbfFile": "קובץ DBF",
+  "layer": "שכבה",
+  "unsupportedDataType": "סוג לא נתמך",
+  "failedToGetTableFromLayer": "נכשלה השגת טבלה מהשכבה.",
+  "generate": "צור טבלה",
+  "minValue": "ערך מינימלי",
+  "maxValue": "ערך מקסימלי",
+  "classBaseName": "שם בסיס הקבוצה",
+  "colorscheme": "סכמת צבעים",
+  "defaultClassName": "תווית_"
+}

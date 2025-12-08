@@ -1,0 +1,137 @@
+{
+  "next": "הבא",
+  "addField": "הוסף שדה",
+  "selectDataType": "בחר את סוג הנץןנחפ אשר יישמר בשדה",
+  "addGlobalIDNotice": "השדה יאוכלס אוטומטית עבור נתונים קיימים בשכבה או בטבלה. לאחר ההוספה, לא ניתן לערוך או למחוק שדה זה.",
+  "fieldName": "שם שדה",
+  "displayName": "שם תצוגה",
+  "length": "אורך",
+  "defaultValue": "ערך ברירת מחדל (אופציונלי)",
+  "fieldTypes": "סוגי שדות",
+  "fieldValueType": "סוג ערך שדה (אופציונלי)",
+  "fieldDescription": "תיאור שדה (אופציונלי)",
+  "allowNullValues": "אפשר ערכי Null",
+  "valueRequiredError": "ערך זה נדרש",
+  "fieldAdded": "שדה נוסף בהצלחה",
+  "newFieldTypeNotice": "ייתכן שלקוחות מסוימים לא תומכים באופן מלא בסוג שדה זה.",
+  "addingField": "מוסיף שדה...",
+  "syncEnabled": "לא ניתן להוסיף חלק מסוגי השדות מכיוון שסנכרון מופעל בשכבה.",
+  "newFeature": "ישות חדשה",
+  "fieldAdditionUnsuccessful": "הוספת השדה לא הצליחה",
+  "error": "שגיאה",
+  "noFieldTypeSelected": "לא נבחר סוג שדה",
+  "nullFieldTypeError": "יש לבחור סוג שדה כדי להמשיך.",
+  "fieldNameCharacterNotice": "שמות שדה ארוכים מ-31 תווים אינם תואמים עם שימוש במצב לא מקוון.",
+  "suggestedHeader": "מוצע",
+  "otherHeader": "אחר",
+  "provideDescription": "הוסף תיאור קצר של המידע שיכיל השדה.",
+  "nullableTooltipInfo": "הגדרה זו לא ניתנת לעריכה אם השכבה שלך כבר מכילה נתונים.",
+  "tooltipInfo": {
+    "globalIDExists": "שדה GlobalID כבר קיים בשירות זה. רק שדה GlobalID אחד יכול להתקיים בשכבה או בטבלה.",
+    "enterpriseTimestampOffset": "ArcGIS Enterprise לא תומך בשדות 'היסט חותמת זמן' בשכבות ישויות מתארחות."
+  },
+  "text": {
+    "title": "טקסט",
+    "description": "ערכים שמכילים תווים אלפא-נומריים או תווים מיוחדים.",
+    "types": {
+      "esriFieldTypeString": {
+        "title": "מחרוזת",
+        "description": "אחסן סט של תווים אלפא-נומריים באורך שצוין."
+      }
+    }
+  },
+  "numbers": {
+    "title": "מספרים",
+    "description": "ערכים שמכילים מידע מספרי.",
+    "types": {
+      "esriFieldTypeDouble": {
+        "title": "כפול",
+        "description": "אחסן מספרים עם מקומות עשרוניים."
+      },
+      "esriFieldTypeInteger": {
+        "title": "מספר שלם",
+        "description": "אחסן מספרים שלמים בטווח של ${lowerIntegerRange} עד ${upperIntegerRange}."
+      },
+      "esriFieldTypeBigInteger": {
+        "title": "מספר שלם גדול",
+        "description": "אחסן מספרים שלמים בטווח של -(2${startSup}53${endSup}-1) עד 2${startSup}53${endSup}-1. השתמש בסוג שדה זה בעת שימוש במספרים שהם מחוץ לטווח השדה הנתמך של מספרים שלמים."
+      }
+    }
+  },
+  "dates": {
+    "title": "תאריכים",
+    "description": "ערכים שמכילים מידע בממד זמן.",
+    "types": {
+      "esriFieldTypeDate": {
+        "title": "תאריך",
+        "description": "אכסן ערכים עם תאריך ושעה."
+      },
+      "esriFieldTypeDateOnly": {
+        "title": "תאריך בלבד",
+        "description": "אחסן ערכי תאריך ללא ערכי שעה."
+      },
+      "esriFieldTypeTimeOnly": {
+        "title": "שעה בלבד",
+        "description": "אחסן ערכי שעה ללא ערכי תאריך."
+      },
+      "esriFieldTypeTimestampOffset": {
+        "title": "היסט חותמת זמן",
+        "description": "אחסן ערכים שמציינים את התאריך, השעה והיסט מזמן אוניברסלי מתואם (UTC)."
+      }
+    }
+  },
+  "globalIdentifiers": {
+    "title": "מזהים גלובליים",
+    "description": "ערכים שמזהים ייחודית ישות או שורת טבלה.",
+    "types": {
+      "esriFieldTypeGlobalID": {
+        "title": "GlobalID",
+        "description": "אחסן מחרוזת באורך 36 תווים שמורכב מאותיות וממספרים לזיהוי ייחודי של ישות."
+      },
+      "esriFieldTypeGUID": {
+        "title": "GUID",
+        "description": "אחסן מחרוזת באורך 36 תווים שמורכב מאותיות וממספרים. מזהה יחודי גלובלי, שנקרא גם GUID, משמש לעתים קרובות לניהול קשרים בין ישויות."
+      }
+    }
+  },
+  "fieldValueTypes": {
+    "nameOrTitle": "שם או כותרת",
+    "description": "תאור",
+    "typeOrCategory": "סוג או קטגוריה",
+    "countOrAmount": "ספירה או כמות",
+    "percentageOrRatio": "אחוז או יחס",
+    "measurement": "מדידה",
+    "currency": "מטבע",
+    "uniqueIdentifier": "מזהה ייחודי",
+    "phoneNumber": "מספר טלפון",
+    "emailAddress": "כתובת דוא\"ל",
+    "orderedOrRanked": "ממוין או מדורג",
+    "binary": "בינארי",
+    "locationOrPlaceName": "מיקום או שם של מקום",
+    "coordinate": "קואורדינטה",
+    "dateAndTime": "תאריך ושעה",
+    "none": "ללא"
+  },
+  "addFieldErrors": {
+    "invalidName": "שם לא חוקי",
+    "invalidLength": "אורך לא חוקי",
+    "outOfRangeValueError": "ערך זה חורג מהטווח.",
+    "invalidValueError": "הערך שהוזן לא חוקי.",
+    "invalidFieldParameters": "פרמטרים לא חוקיים של שדה",
+    "invalidInputsError": "בדוק שפרמטרי השדות שלך מולאו כהלכה.",
+    "existingFieldNameError": "שם השדה לא יכול להיות זהה לשם השדה הקיים.",
+    "invalidNameInputSQLError": "שם השדה לא יכול להיות זהה למילת מפתח SQL.",
+    "invalidNameInputInvalidCharactersError": "חייב להתחיל באות ויכול להכיל רק אותיות, ספרות ואת התו '_'",
+    "valueIsRequiredError": "זהו ערך נדרש.",
+    "lengthExceeds": "אורך שם השדה צריך להיות פחות מ-${maxFieldNameLength} תווים.",
+    "defaultValueExceeds": "ערך ברירת המחדל חורג מאורך השדה שצוין.",
+    "savingFailed": "שמירת ${layerName} נכשלה",
+    "readOnlyErrorMessage": "ArcGIS Online נתקל בבעיות תפעול ועבר למצב קריאה-בלבד. ייתכן שכמה יכולות יוגבלו. לעדכונים האחרונים לגבי מועד פתרון בעיה זו, עבור אל ArcGIS Online Health Dashboard.",
+    "readOnlyErrorMessageEnterprise": "ArcGIS Enterprise נתקל בבעיות תפעול ועבר למצב קריאה-בלבד. ייתכן שכמה יכולות יוגבלו.",
+    "healthDashboard": "ArcGIS Online Health Dashboard",
+    "genericAddFieldError": {
+      "title": "שגיאה",
+      "description": "אירעה שגיאה בזמן הוספת השדה."
+    }
+  }
+}

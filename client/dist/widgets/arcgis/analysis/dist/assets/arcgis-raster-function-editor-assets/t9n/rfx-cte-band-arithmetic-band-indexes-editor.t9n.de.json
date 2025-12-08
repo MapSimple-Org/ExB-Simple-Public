@@ -1,0 +1,7 @@
+{
+  "example": "Beispiel",
+  "input": "Eingabe",
+  "output": "Ausgabe",
+  "optional": "Optional",
+  "WNDWIHintText": "α:α-Wert muss zwischen 0 und 1 liegen; Standardwert ist 0,5."
+}

@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>เครื่องมือเพิ่มค่าชั้นข้อมูล จะช่วยเสริมค่าให้กับฟีเจอร์อินพุทด้วยสถิติประชากรและข้อมูลภูมิประเทศ
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputLayer">
+        <div>
+            <p>ฟีเจอร์จุด เส้น หรือโพลีกอนที่จะได้รับการเพิ่มค่าด้วยข้อมูลเพิ่มเติม
+            </p>
+            <p class="toolPaneOnly">จำนวนของฟีเจอร์จะขึ้นอยู่กับปัจจัยเพิ่มเติม อาทิ เกณฑ์การกรองและขอบเขตการวิเคราะห์
+            </p>
+        </div>
+    </div>
+    <div id="analysisVariables">
+        <div>
+            <p>ตัวแปรที่จะเพิ่มในรูปแบบแอตทริบิวต์ให้กับฟีเจอร์อินพุท
+            </p>
+        </div>
+    </div>
+    <div id="bufferType">
+        <div>
+            
+            <p class="toolPaneOnly">วิธีการที่จะใช้ในการสร้างพื้นที่ขอบเขตรอบๆ จุดอินพุทหรือฟีเจอร์เส้น วิธีการสามารถเป็นระยะทางเส้นตรงหรือโหมดการเดินทางก็ได้ พื้นที่ทั้งหมดรอบๆ แต่ละฟีเจอร์จะได้รับการเพิ่มค่า
+            </p> 
+            <p class="modelBuilderOnly">วิธีการที่จะใช้ในการสร้างพื้นที่ขอบเขตรอบๆ จุดอินพุทหรือฟีเจอร์เส้น ในปัจจุบัน ระยะทางเส้นตรงเป็นวิธีเดียวที่ได้รับการรองรับสำหรับแบบจำลอง พื้นที่ทั้งหมดรอบๆ แต่ละฟีเจอร์จะได้รับการเพิ่มค่า
+            </p>
+        </div>
+    </div>
+    <div id="distance">
+        <div>
+            <p>ค่าตัวเลขที่จะระบุระยะทางหรือเวลาที่พื้นที่ที่เพิ่มค่าจะขยายรอบๆ แต่ละฟีเจอร์อินพุท
+            </p>
+        </div>
+    </div>
+    <div id="units">
+        <div>
+            <p>หน่วยที่จะใช้ในการระบุระยะทางหรือเวลาที่พื้นที่ที่เพิ่มค่าจะขยายรอบๆ แต่ละฟีเจอร์อินพุท
+            </p>
+        </div>
+    </div>
+    <div id="returnBoundaries">
+        <div>
+            <p>ระบุว่าชั้นข้อมูลเอาท์พุทจะมีฟีเจอร์โพลีกอนที่ถูกกำหนดโดยการตั้งค่า  <b>พื้นที่การเพิ่มค่า</b> (เลือก) หรือฟีเจอร์อินพุท (ไม่เลือก)
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>ชื่อของชั้นข้อมูลที่จะสร้างและเพิ่มลงในแผนที่
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>ชื่อของโฟลเดอร์ใน  <b>เนื้อหาของฉัน</b> ที่จะทำการบันทึกผลลัพธ์
+            </p>
+        </div>
+    </div>
+</div>
+</html>

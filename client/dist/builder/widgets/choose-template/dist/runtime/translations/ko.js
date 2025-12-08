@@ -1,0 +1,1 @@
+System.register([],function(e){return{execute:function(){e({_widgetLabel:"\uc0c8 \ud658\uacbd \uc0dd\uc131",createNewApp:"\uc0c8 \uc571 \uc0dd\uc131",largeDevices:"\ub300\ud615 \ud654\uba74 \uae30\uae30",mediumDevices:"\uc911\ud615 \ud654\uba74 \uae30\uae30",smallDevices:"\uc18c\ud615 \ud654\uba74 \uae30\uae30"})}}});

@@ -1,0 +1,27 @@
+{
+  "hosted": "размещенный",
+  "hostedView": "размещенный, вид",
+  "hostedPhotos": "размещённый, фото",
+  "hostedCollection": "размещенный, коллекция",
+  "hostedMultidimensional": "размещенный, многомерный",
+  "hostedCollectionMultidimensional": "размещенный, коллекция, многомерный",
+  "collectionMultidimensional": "коллекция, многомерный",
+  "multidimensional": "многомерный",
+  "collection": "коллекция",
+  "photoLocations": "фото",
+  "locatorView": "вид",
+  "utilityNetwork": "инженерная сеть",
+  "Integrated Mesh": "Интегрированная модель mesh",
+  "3D Object": "3D-объект",
+  "Point": "точка",
+  "Point Cloud": "облако точек",
+  "Building Scene Layer": "слой сцены зданий",
+  "Voxel Scene Layer": "слой сцены вокселов",
+  "dataStore": {
+    "bigdata": "файловое хранилище больших данных",
+    "cloud": "облако",
+    "cloudStorage": "облачное хранилище",
+    "database": "база данных",
+    "folder": "папка"
+  }
+}

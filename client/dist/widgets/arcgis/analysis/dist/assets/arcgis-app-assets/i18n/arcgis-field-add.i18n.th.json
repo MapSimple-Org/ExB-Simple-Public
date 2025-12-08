@@ -1,0 +1,137 @@
+{
+  "next": "ถัดไป",
+  "addField": "เพิ่มฟิลด์",
+  "selectDataType": "เลือกประเภทข้อมูลที่จะจัดเก็บไว้ในฟิลด์",
+  "addGlobalIDNotice": "ฟิลด์จะได้รับการเติมข้อมูลโดยอัตโนมัติ ด้วยข้อมูลเดิมในชั้นข้อมูลหรือตาราง หลังจากที่เพิ่มแล้ว จะไม่สามารถแก้ไขหรือลบฟิลด์นี้ได้",
+  "fieldName": "ชื่อฟิลด์",
+  "displayName": "ชื่อที่แสดง",
+  "length": "ความยาว:",
+  "defaultValue": "ค่าเริ่มต้น (ไม่บังคับ)",
+  "fieldTypes": "ประเภทฟิลด์",
+  "fieldValueType": "ประเภทค่าฟิลด์ (ไม่บังคับ)",
+  "fieldDescription": "คำอธิบายฟิลด์ (ตัวเลือกเสริม)",
+  "allowNullValues": "อนุญาตค่าว่าง",
+  "valueRequiredError": "จำเป็นต้องระบุค่านี้",
+  "fieldAdded": "เพิ่มฟิลด์สำเร็จแล้ว",
+  "newFieldTypeNotice": "บางไคลเอ็นต์อาจไม่รองรับประเภทฟิลด์นี้อย่างสมบูรณ์",
+  "addingField": "กำลังเพิ่มฟิลด์...",
+  "syncEnabled": "ไม่สามารถเพิ่มบางประเภทฟิลด์ได้ เนื่องจากเปิดใช้งานการซิงค์ไว้บนชั้นข้อมูล",
+  "newFeature": "ฟีเจอร์ใหม่",
+  "fieldAdditionUnsuccessful": "เพิ่มฟิลด์ไม่สำเร็จ",
+  "error": "ข้อผิดพลาด",
+  "noFieldTypeSelected": "ไม่ได้เลือกประเภทฟิลด์",
+  "nullFieldTypeError": "คุณต้องเลือกประเภทฟิลด์เพื่อดำเนินการต่อ",
+  "fieldNameCharacterNotice": "ชื่อฟิลด์ที่ยาวเกิน 31 อักขระ จะไม่สามารถเข้ากันได้กับการใช้งานออฟไลน์",
+  "suggestedHeader": "ที่แนะนำ",
+  "otherHeader": "อื่น ๆ",
+  "provideDescription": "ระบุคำอธิบายข้อมูลที่จะมีในฟิลด์",
+  "nullableTooltipInfo": "ไม่สามารถแก้ไขการตั้งค่านี้ได้ หากชั้นข้อมูลของคุณมีข้อมูลอยู่แล้ว",
+  "tooltipInfo": {
+    "globalIDExists": "มีฟิลด์ GlobalID ในบริการนี้อยู่แล้ว ในชั้นหนึ่งข้อมูลหรือตาราง สามารถมีฟิลด์ GlobalID ได้เพียงฟิลด์เดียว",
+    "enterpriseTimestampOffset": "ArcGIS Enterprise ไม่รองรับฟิลด์ออฟเซ็ตประทับเวลาในชั้นข้อมูลฟีเจอร์ที่โฮสต์"
+  },
+  "text": {
+    "title": "ข้อความ",
+    "description": "ค่าที่มีตัวอักษรและตัวเลข หรืออักขระพิเศษ",
+    "types": {
+      "esriFieldTypeString": {
+        "title": "ตัวหนังสือ",
+        "description": "จัดเก็บชุดอักขระตัวอักษรและตัวเลขตามความยาวที่กำหนด"
+      }
+    }
+  },
+  "numbers": {
+    "title": "ตัวเลข",
+    "description": "ค่าที่มีข้อมูลตัวเลข",
+    "types": {
+      "esriFieldTypeDouble": {
+        "title": "เส้นคู่",
+        "description": "จัดเก็บตัวเลขพร้อมจุดทศนิยม"
+      },
+      "esriFieldTypeInteger": {
+        "title": "จำนวนเต็ม",
+        "description": "จัดเก็บจำนวนเต็มตั้งแต่ ${lowerIntegerRange} ถึง ${upperIntegerRange}"
+      },
+      "esriFieldTypeBigInteger": {
+        "title": "Big Integer",
+        "description": "จัดเก็บจำนวนเต็มระหว่าง -(2${startSup}53${endSup}-1) ถึง 2${startSup}53${endSup}-1 ใช้ประเภทฟิลด์นี้ขณะใช้ตัวเลขที่อยู่นอกช่วงฟิลด์จำนวนเต็มที่รองรับ"
+      }
+    }
+  },
+  "dates": {
+    "title": "วันที่",
+    "description": "ค่าที่มีข้อมูลเชิงเวลา",
+    "types": {
+      "esriFieldTypeDate": {
+        "title": "วันที่",
+        "description": "จัดเก็บค่าที่มีวันที่และเวลา"
+      },
+      "esriFieldTypeDateOnly": {
+        "title": "วันที่เท่านั้น",
+        "description": "จัดเก็บค่าวันที่โดยไม่มีค่าเวลา"
+      },
+      "esriFieldTypeTimeOnly": {
+        "title": "เวลาเท่านั้น",
+        "description": "จัดเก็บค่าเวลาโดยไม่มีค่าวันที่"
+      },
+      "esriFieldTypeTimestampOffset": {
+        "title": "ออฟเซ็ตการประทับเวลา",
+        "description": "จัดเก็บค่าที่ระบุวันที่ เวลา และชดเชยจากเวลาสากลเชิงพิกัด (UTC)"
+      }
+    }
+  },
+  "globalIdentifiers": {
+    "title": "ตัวระบุส่วนกลาง",
+    "description": "ค่าที่ระบุฟีเจอร์หรือแถวตารางแบบไม่ซ้ำกัน",
+    "types": {
+      "esriFieldTypeGlobalID": {
+        "title": "GlobalID",
+        "description": "จัดเก็บสตริง 36 อักขระ ที่ประกอบไปด้วยตัวอักษรและตัวเลขที่ใช้เพื่อระบุฟีเจอร์แบบไม่ซ้ำกัน"
+      },
+      "esriFieldTypeGUID": {
+        "title": "GUID",
+        "description": "จัดเก็บสตริง 36 อักขระ ที่ประกอบไปด้วยตัวอักษรและตัวเลข Globally Unique Identifier หรือ GUID มักถูกใช้ในการจัดการความสัมพันธ์ระหว่างฟีเจอร์"
+      }
+    }
+  },
+  "fieldValueTypes": {
+    "nameOrTitle": "ชื่อหรือหัวข้อ",
+    "description": "คำอธิบาย",
+    "typeOrCategory": "ประเภทหรือหมวดหมู่",
+    "countOrAmount": "จำนวนหรือปริมาณ",
+    "percentageOrRatio": "เปอร์เซ็นต์หรืออัตราส่วน",
+    "measurement": "การวัด",
+    "currency": "สกุลเงิน",
+    "uniqueIdentifier": "ตัวระบุที่ไม่ซ้ำกัน",
+    "phoneNumber": "หมายเลขโทรศัพท์",
+    "emailAddress": "ที่อยู่อีเมล",
+    "orderedOrRanked": "เรียงลำดับหรือจัดอันดับ",
+    "binary": "ไบนารี",
+    "locationOrPlaceName": "ตำแหน่งที่ตั้งหรือชื่อสถานที่",
+    "coordinate": "พิกัด",
+    "dateAndTime": "วันที่และเวลา",
+    "none": "ไม่มีเลย"
+  },
+  "addFieldErrors": {
+    "invalidName": "ชื่อไม่ถูกต้อง",
+    "invalidLength": "ความยาวไม่ถูกต้อง",
+    "outOfRangeValueError": "ค่านี้อยู่นอกช่วง",
+    "invalidValueError": "ค่าที่ป้อนไม่ถูกต้อง",
+    "invalidFieldParameters": "พารามิเตอร์ฟิลด์ไม่ถูกต้อง",
+    "invalidInputsError": "ตรวจสอบว่าพารามิเตอร์ฟิลด์ของคุณได้รับการเติมอย่างถูกต้อง",
+    "existingFieldNameError": "ชื่อฟิลด์ต้องไม่เหมือนกับชื่อฟิลด์ที่มีอยู่",
+    "invalidNameInputSQLError": "ชื่อฟิลด์ต้องไม่เหมือนกับคีย์เวิร์ด SQL",
+    "invalidNameInputInvalidCharactersError": "ต้องขึ้นต้นด้วยตัวอักษรและมีได้เฉพาะตัวอักษร ตัวเลข และ '_'",
+    "valueIsRequiredError": "ต้องการค่านี้",
+    "lengthExceeds": "ความยาวชื่อฟิลด์ควรน้อยกว่าหรือเท่ากับ ${maxFieldNameLength} อักขระ",
+    "defaultValueExceeds": "ค่าเริ่มต้นเกินความยาวฟิลด์ที่กำหนด",
+    "savingFailed": "การบันทึก ${layerName} ล้มเหลว",
+    "readOnlyErrorMessage": "ArcGIS Online กำลังประสบปัญหาด้านการดำเนินงาน และสลับเป็นโหมดอ่านอย่างเดียวแล้ว อาจใช้งานบางความสามารถได้อย่างจำกัด หากต้องการทราบข้อมูลอัปเดตล่าสุด ว่าปัญหานี้จะได้รับการแก้ไขเมื่อใด โปรดไปที่ แดชบอร์ดสถานะ ArcGIS Online",
+    "readOnlyErrorMessageEnterprise": "ArcGIS Enterprise กำลังประสบปัญหาด้านการดำเนินงาน และสลับเป็นโหมดอ่านอย่างเดียวแล้ว อาจใช้งานบางความสามารถได้อย่างจำกัด",
+    "healthDashboard": "แดชบอร์ดสถานะ ArcGIS Online",
+    "genericAddFieldError": {
+      "title": "ข้อผิดพลาด",
+      "description": "เกิดข้อผิดพลาดขึ้นขณะเพิ่มฟิลด์ของคุณ"
+    }
+  }
+}

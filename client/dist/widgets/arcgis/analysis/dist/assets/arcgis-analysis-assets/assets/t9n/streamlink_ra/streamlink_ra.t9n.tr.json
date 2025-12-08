@@ -1,0 +1,9 @@
+{
+  "inputFlowDirectionRasterLabel": "Girdi akış doğrultusu rasterı",
+  "inputLayerGroupText": "Girdi akış ve akış doğrultusu rasterlarını seçin.",
+  "inputStreamRasterLabel": "Girdi akış rasterı",
+  "itemProperties": {
+    "description": "Çıktı, StreamLink analiz aracı çalıştırılarak oluşturuldu.",
+    "snippet": "Çıktı, StreamLink ile oluşturuldu"
+  }
+}

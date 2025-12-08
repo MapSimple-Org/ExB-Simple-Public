@@ -1,0 +1,6 @@
+{
+  "dialogTitle": "Uređivač rasterske funkcije",
+  "defaultTemplateName": "Predložak funkcije rastera",
+  "readOnlyModeTitle": "Samo za čitanje",
+  "readOnlyModeMessage": "Stavka predloška rasterske funkcije je samo za čitanje. Promjene se ne mogu spremiti."
+}

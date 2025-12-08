@@ -1,0 +1,55 @@
+{
+  "beginningOnLabel": "Започва на",
+  "repeatTypeLabel": "Тип на повторение",
+  "endingOnTypeLabel": "Завършва на",
+  "endingOnDateLabel": "Крайна дата",
+  "endingOnCountLabel": "Брой",
+  "endingOnCountPlaceholder": "например: 1, 10, 30",
+  "dailyRepeatIntervalLabel": "Интервал на повторение",
+  "dailyTimeLabel": "Време",
+  "weeklyDaysOfWeekLabel": "Ден от седмицата",
+  "weeklyTimeLabel": "Време",
+  "monthlyDayOfMonthLabel": "Ден от месеца",
+  "monthlyDayOfMonthPlaceholder": "например 1 - 31",
+  "monthlyRepeatIntervalLabel": "Интервал на повторение",
+  "monthlyTimeLabel": "Време",
+  "repeatTypeOptions": {
+    "day": "Ден",
+    "week": "Седмица",
+    "month": "Месец"
+  },
+  "endingOnType": {
+    "never": "Никога",
+    "date": "Дата",
+    "count": "Включен"
+  },
+  "dailyRepeatInterval": {
+    "everyDay": "Всеки ден",
+    "everyOtherDay": "През два дни",
+    "everyThreeDays": "На всеки три дни",
+    "everyFourDays": "На всеки четири дни",
+    "everyFiveDays": "На всеки пет дни",
+    "everySixDays": "На всеки шест дни",
+    "everySevenDays": "На всеки седем дни",
+    "everyFourteenDays": "На всеки четиринайсет дни"
+  },
+  "weekDays": {
+    "all": "Всичко",
+    "allWeekdays": "Всички дни от седмицата",
+    "sunday": "Неделя",
+    "monday": "Понеделник",
+    "tuesday": "Вторник",
+    "wednesday": "Сряда",
+    "thursday": "Четвъртък",
+    "friday": "Петък",
+    "saturday": "Събота"
+  },
+  "monthlyRepeatInterval": {
+    "everyMonth": "Всеки месец",
+    "everyTwoMonths": "На всеки два месеца",
+    "everyThreeMonths": "На всеки три месеца",
+    "everyFourMonths": "На всеки четири месеца",
+    "everyFiveMonths": "На всеки пет месеца",
+    "everySixMonths": "На всеки шест месеца"
+  }
+}

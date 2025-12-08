@@ -1,0 +1,1 @@
+{"componentLabel":"Meritev površine","hint":"Začnite meriti tako, da kliknete na karto in postavite vašo prvo točko","mode":"Način","modes":{"auto":"Samodejno","planar":"Planarno","geodesic":"Geodezično"},"newMeasurement":"Nova meritev","perimeter":"Obseg","unit":"Enota","unsupported":"2D-meritev površine je podprta samo v pogledu MapView."}

@@ -1,0 +1,6 @@
+{
+  "greaterThanErrorMessage": "Вхідне число має становити більше${min}",
+  "lesserThanErrorMessage": "Вхідне число має становити менше ${max}",
+  "greaterThanOrEqualErrorMessage": "Вхідне число має становити більше або дорівнювати ${min}",
+  "lesserThanOrEqualErrorMessage": "Вхідне число має становити менше або дорівнювати ${max}"
+}

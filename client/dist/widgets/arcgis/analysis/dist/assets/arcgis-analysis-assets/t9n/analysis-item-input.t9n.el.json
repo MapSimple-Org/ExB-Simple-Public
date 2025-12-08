@@ -1,0 +1,15 @@
+{
+  "addDataStore": "Προσθήκη datastore",
+  "addFile": "Προσθήκη αρχείου",
+  "addServiceConnection": "Προσθήκη σύνδεσης",
+  "itemNotFound": "Το αντικείμενο δεν υπάρχει ή δεν είναι προσβάσιμο.",
+  "itemPermissionDenied": "Δεν έχετε δικαιώματα για πρόσβαση στο αντικείμενο αυτό.",
+  "previewDetails": "Προεπισκόπηση λεπτομερειών",
+  "queryModelArgsErrMsg": "Απέτυχε η υποβολή ερωτήματος για ορίσματα μοντέλου.",
+  "queryModelArgsMsg": "Εξέταση ορισμάτων μοντέλου...",
+  "removeItem": "Κατάργηση αντικειμένου",
+  "replaceItem": "Αντικατάσταση αντικειμένου",
+  "requiredInputMessage": "Απαιτείται αυτή η παράμετρος.",
+  "selectItem": "Επιλογή αντικειμένου",
+  "viewDetails": "Προβολή λεπτομερειών"
+}

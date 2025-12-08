@@ -1,0 +1,7 @@
+{
+  "addEntryButtonLabel": "添加",
+  "maxGroupsMessage": "最大条目数为 ${maxCount}。",
+  "minGroupsMessage": "最小条目数为 ${minCount}。",
+  "removeEntryButtonLabel": "移除条目",
+  "requiredMessage": "必需参数。"
+}

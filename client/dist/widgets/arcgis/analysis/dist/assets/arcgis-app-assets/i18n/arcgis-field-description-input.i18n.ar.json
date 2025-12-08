@@ -1,0 +1,6 @@
+{
+  "description": "الوصف",
+  "addDescription": "إضافة وصف",
+  "charactersLeft": "أحرف متروكة: ${num}",
+  "invalid": "لا يمكن أن يحتوي الوصف على أي من تلك الأحرف: < أو >."
+}

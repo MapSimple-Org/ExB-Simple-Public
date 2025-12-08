@@ -1,0 +1,14 @@
+{
+  "AddDataFromUrl": "Pridať dáta z URL",
+  "addData": "Pridať dáta",
+  "clear": "Vyčistiť",
+  "file": "Súbor",
+  "fileNotFound": "Nepodarilo sa načítať súbor.",
+  "invalidUrl": "Nesprávna URL adresa alebo prípona súboru.",
+  "layerNotFound": "Nepodarilo sa načítať vrstvu.",
+  "replaceData": "Nahradiť dáta",
+  "required": "Tento parameter je povinný.",
+  "uploadData": "Nahrať dáta",
+  "uploadFailureMsg": "Chyba pri vykonávaní operácie nahrávania, veľkosť alebo typ súboru nie sú podporované pre túto službu.",
+  "url": "Url"
+}

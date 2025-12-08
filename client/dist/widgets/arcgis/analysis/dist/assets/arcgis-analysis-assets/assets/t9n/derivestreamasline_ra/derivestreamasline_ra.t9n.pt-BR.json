@@ -1,0 +1,11 @@
+{
+  "all": "Todos",
+  "inputLayersGroupText": "Escolha o raster de superfície de entrada e, opcionalmente, os dados de depressão e o raster de peso.",
+  "itemProperties": {
+    "description": "Saída gerada a partir da execução da ferramenta Derivar Fluxo como Raster.",
+    "snippet": "Saída gerada de Derivar Fluxo como Raster"
+  },
+  "outputStreamFeaturesLabel": "Nome das feições do fluxo de saída",
+  "simplifyLabel": "Simplificar feições",
+  "streamSettingsGroupText": "Especifique o limite de acumulação, o método de designação do fluxo e se as linhas do fluxo de saída serão suavizadas em formas simples."
+}

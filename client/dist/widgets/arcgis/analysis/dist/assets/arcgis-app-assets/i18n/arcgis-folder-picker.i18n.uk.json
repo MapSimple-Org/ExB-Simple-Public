@@ -1,0 +1,21 @@
+{
+  "folder": "Папка",
+  "folders": "Папки",
+  "searchFolders": "Шукати папки",
+  "enterFolder": "Ввести ім'я папки",
+  "createNewFolder": "Створити нову папку",
+  "noFoldersFoundCreate": "Папки з цим іменем не знайдено. Створити '${folder}'?",
+  "noFoldersFound": "Папки з цим іменем не знайдено.",
+  "create": "Створити '${folder}'?",
+  "loading": "Завантаження папок",
+  "error": {
+    "noName": "Ви повинні надати назву для вашої папки.",
+    "folderAlreadyExists": "Папка '${folder}' вже існує. Виберіть іншу назву.",
+    "title": "Помилка",
+    "invalidCharacters": {
+      "single": "Назва не може містити цей символ: ${invalidCharacters}.",
+      "multiple": "Назва не може містити будь-який із цих символів: ${invalidCharacters}.",
+      "unknown": "Назва не може містити будь-який із цих символів: ${invalidCharacters}."
+    }
+  }
+}

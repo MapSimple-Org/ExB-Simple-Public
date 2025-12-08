@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>N&aacute;stroj Odvodit vodn&iacute; tok jako rastr generuje rastr toku ze vstupn&iacute;ho rastru povrchu bez nutnosti předchoz&iacute;ho vyplněn&iacute; bezodtok&eacute; oblasti nebo ter&eacute;nn&iacute; deprese.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputSurfaceRaster">
+        <div>
+            <p>Rastr nadmořsk&eacute; v&yacute;&scaron;ky, kter&yacute; se použije pro v&yacute;počet.
+            </p>
+        </div>
+    </div>
+    <div id="inputDepressionsData">
+        <div>
+            <p>Vstup, kter&yacute; vymezuje m&iacute;sta skutečn&yacute;ch prohlubn&iacute; nebo propadlin, do nichž může voda proudit, ale nemůže z nich odt&eacute;kat.
+            </p>
+            <p class="toolPaneOnly">U vstupů prvků z&aacute;vis&iacute; počet na dal&scaron;&iacute;ch faktorech, jako jsou krit&eacute;ria filtrov&aacute;n&iacute; a rozsah anal&yacute;zy.
+            </p>
+        </div>
+    </div>
+    <div id="inputWeightRaster">
+        <div>
+            <p>Rastrov&aacute; vrstva, kter&aacute; definuje pod&iacute;l průtoku, kter&yacute; se pod&iacute;l&iacute; na akumulaci průtoku v každ&eacute; buňce.
+            </p>
+        </div>
+    </div>
+    <div id="accumulationThreshold">
+        <div>
+            <p>Pr&aacute;h pro určov&aacute;n&iacute;, zda je dan&aacute; buňka souč&aacute;st&iacute; toku, pokud jde o celkovou plochu, kter&aacute; do takov&eacute; buňky přit&eacute;k&aacute;.
+            </p>
+        </div>
+    </div>
+    <div id="streamDesignationMethod">
+        <div>
+            <p>Určuje, zda budou m&iacute;t segmenty toku ve v&yacute;stupu konstantn&iacute; hodnotu, jedinečn&eacute; hodnoty nebo budou seřazeny.
+            </p>
+        </div>
+    </div>
+    <div id="forceFlow">
+        <div>
+            <p>Určuje, zda se tok v okrajov&yacute;ch buňk&aacute;ch bude ř&iacute;dit běžn&yacute;mi pravidly toku, nebo zda bude vždy proudit směrem ven.
+            </p>
+            <p>Pokud nen&iacute; za&scaron;krtnut, bude tok směřovat k vnitřn&iacute; buňce s nejstrměj&scaron;&iacute;m poklesem hodnoty Z. Pokud je v&scaron;ak pokles men&scaron;&iacute; nebo roven nule, bude buňka proudit směrem ven z rastru povrchu. Pokud je za&scaron;krtnut, tok bude směřovat ven z rastru povrchu.
+            </p>
+        </div>
+    </div>
+    <div id="outputStreamRasterName">
+        <div>
+            <p>N&aacute;zev rastrov&eacute; vrstvy vodn&iacute;ho toku, kter&aacute; bude vytvořena a přid&aacute;na do mapy.
+            </p>
+        </div>
+    </div>
+    <div id="resultType">
+        <div>
+            <p>Typ v&yacute;stupu, kter&yacute; bude vytvořen. V&yacute;stupem může b&yacute;t vrstva dlaždicov&yacute;ch sn&iacute;mků nebo vrstva dynamick&yacute;ch sn&iacute;mků.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>N&aacute;zev složky v č&aacute;sti  <b>Můj obsah,</b> do kter&eacute; budou v&yacute;sledky uloženy.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

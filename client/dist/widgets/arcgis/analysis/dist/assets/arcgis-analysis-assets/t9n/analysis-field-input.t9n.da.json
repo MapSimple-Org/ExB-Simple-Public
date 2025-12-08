@@ -1,0 +1,68 @@
+{
+  "addField": "Tilføj felt",
+  "addFieldErrors": {
+    "creatingFailed": "Oprettelse af feltet ${fieldName} mislykkedes.",
+    "existingFieldNameError": "Feltnavnet må ikke være det samme som et eksisterende feltnavn.",
+    "invalidName": "Ugyldigt navn",
+    "invalidNameInputInvalidCharactersError": "Feltnavnet skal begynde med et bogstav og må kun indeholde bogstaver, tal og \"_\".",
+    "invalidNameInputSQLError": "Feltnavnet må ikke være det samme som et SQL-nøgleord.",
+    "valueIsRequiredError": "Denne værdi er obligatorisk."
+  },
+  "cancel": "Annullér",
+  "createAndSelectField": "Opret og vælg felt",
+  "createNewFields": "Opret nyt felt",
+  "fieldLoadingErrorText": "Kan ikke indlæse felter.",
+  "fieldName": "Feltnavn",
+  "fieldType": "Felttype",
+  "fieldTypesIncompatible": "Ingen kompatible felter tilgængelige.",
+  "layerNotSelected": "Der er ikke valgt nogen lag til at udfylde felterne.",
+  "loadingFields": "Indlæser felter",
+  "noSearchResults": "Ingen matchende felter blev fundet.",
+  "requiredErrorLabelDefault": "Et felt",
+  "requiredErrorMessage": "Denne parameter er påkrævet.",
+  "selectFieldPicklistHeading": "Vælg felt",
+  "selectOkBtnText": "Vælg",
+  "tooltip": "Der skal angives et gyldigt feltnavn og en gyldig felttype.",
+  "types": {
+    "big-integer": {
+      "description": "Gem hele tal fra -(2${startSup}53${endSup}-1) til 2${startSup}53${endSup}-1. Brug denne felttype, når du bruger tal, der ligger uden for det understøttede heltal-feltområde.",
+      "title": "Stort heltal"
+    },
+    "date": {
+      "description": "Gem værdier med dato og tidspunkt.",
+      "title": "Dato"
+    },
+    "date-only": {
+      "description": "Gem datoværdier, der ikke har nogen tidspunktværdier.",
+      "title": "Kun dato"
+    },
+    "double": {
+      "description": "Gem tal med decimalpladser.",
+      "title": "Dobbelt"
+    },
+    "global-id": {
+      "description": "Gem en streng på 36 tegn, der består af bogstaver og tal. Den bruges til at identificere et objekt entydigt.",
+      "title": "GlobalID"
+    },
+    "guid": {
+      "description": "Gem en streng på 36 tegn, der består af bogstaver og tal. Et GUID (Globally Unique Identifier) bruges ofte til at administrere relationer mellem objekter.",
+      "title": "GUID"
+    },
+    "integer": {
+      "description": "Gem hele tal fra ${lowerIntegerRange} til ${upperIntegerRange}.",
+      "title": "Heltal"
+    },
+    "string": {
+      "description": "Gem et sæt af alfanumeriske tegn",
+      "title": "Streng"
+    },
+    "time-only": {
+      "description": "Gem tidspunktværdier, der ikke har nogen datoværdier.",
+      "title": "Kun tid"
+    },
+    "timestamp-offset": {
+      "description": "Gem værdier, der angiver dato, tidspunkt og forskydning fra Coordinated Universal Time (UTC).",
+      "title": "Tidsstempel-forskydning"
+    }
+  }
+}

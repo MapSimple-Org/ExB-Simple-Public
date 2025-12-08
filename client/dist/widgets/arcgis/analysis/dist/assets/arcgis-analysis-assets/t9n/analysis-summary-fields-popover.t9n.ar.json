@@ -1,0 +1,13 @@
+{
+  "addField": "إضافة حقل",
+  "deselectAll": "إلغاء تحديد الكل",
+  "done": "تم",
+  "noFieldsAvailable": "لا يحتوي ${layerName} على أي حقول تستوفي متطلبات نوع البيانات. حدد طبقة أخرى للمتابعة.",
+  "noInputSelected": {
+    "withLayerInputLabel": "لم يتم تحديد طبقة إدخال. حدد طبقة في ${layerInputLabel} للمتابعة.",
+    "withoutLayerInputLabel": "لم يتم تحديد طبقة إدخال. حدد طبقة إدخال للمتابعة."
+  },
+  "noSearchResults": "لم يتم العثور على حقول مطابقة.",
+  "selectAll": "تحديد الكل",
+  "summaryFieldsPopover": "حقول الملخص"
+}

@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>Nibble-verkt&oslash;yet erstatter celler i et raster som svarer til en maske med verdien til n&aelig;rmeste nabo.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputRaster">
+        <div>
+            <p>Inndatarasteret med maskerte lokasjoner som skal erstattes av verdien for n&aelig;rmeste nabo.
+            </p>
+        </div>
+    </div>
+    <div id="inputMaskRaster">
+        <div>
+            <p>Maskerasteret som identifiserer lokasjonene i inndatarasteret som skal erstattes. Celler med verdien NoData regnes som innenfor det maskerte arealet.
+            </p>
+        </div>
+    </div>
+    <div id="inputZoneRaster">
+        <div>
+            <p>Inndatasonerasteret. For hver sone vil inndataceller som er innenfor masken bli erstattet bare av de n&aelig;rmeste celleverdiene innenfor den samme sonen.
+            </p>
+        </div>
+    </div>
+    <div id="nibbleValues">
+        <div>
+            <p>Spesifiserer om NoData-celler i inndatarasteret kan erstatte celler i de maskerte omr&aring;dene hvis de er den n&aelig;rmeste naboen.
+            </p>
+            <p>Hvis det er merket av for alternativet, kan NoData-celler i inndatarasteret erstatte celler i det maskerte omr&aring;det. Hvis det ikke er merket av for alternativet, kan bare gyldige celler i inndatarasteret erstatte celler i det maskerte omr&aring;det.
+            </p>
+        </div>
+    </div>
+    <div id="nibbleNodata">
+        <div>
+            <p>Spesifiserer om NoData-celler i det maskerte arealet skal bevares eller erstattes.
+            </p>
+            <p>Hvis det ikke er merket av for alternativet, blir NoData-celler innenfor det maskerte omr&aring;det bevart i utdataene. Hvis det er merket av for alternativet, blir NoData-celler innenfor det maskerte omr&aring;det erstattet med verdien for n&aelig;rmeste nabo som er utenfor det maskerte omr&aring;det.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>Navnet p&aring; rasterlaget som opprettes og legges til kartet.
+            </p>
+        </div>
+    </div>
+    <div id="resultType">
+        <div>
+            <p>Typen utdata som blir opprettet. Utdata kan v&aelig;re et flisinndelt bildelag eller et dynamisk bildelag.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>Navnet p&aring; mappen i  <b>Mitt innhold</b> der resultatene blir lagret.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

@@ -1,0 +1,13 @@
+{
+  "weightedOverlayTable": "Tabulka váženého překryvu",
+  "id": "ID",
+  "layer": "Vrstva",
+  "field": "Pole",
+  "influence": "Vliv",
+  "sumOfInfluence": "Součet vlivu",
+  "value": "Hodnota",
+  "remapTable": "Přemapování tabulky",
+  "scale": "Měřítko",
+  "scales": "Měřítka",
+  "selectRaster": "Vybrat rastr"
+}

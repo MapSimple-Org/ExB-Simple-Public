@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkRemoteClient=self.webpackChunkRemoteClient||[]).push([[1190],{51190:(e,t,n)=>{n.r(t),n.d(t,{execute:()=>r});var c=n(83047),o=n(83299);function r(e,t={}){const{unit:n}=t;let r=(0,o.fromGeometryToGXGeometry)(e).calculateLength2D();const u=(0,o.getSpatialReference)(e);return r&&n&&u&&(r=(0,c.PQ)(r,u,n)),r}}}]);

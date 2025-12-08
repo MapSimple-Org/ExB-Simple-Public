@@ -1,0 +1,1 @@
+System.register([],function(e){return{execute:function(){e({_widgetLabel:"\u6309\u94ae",dynamicStyleExpressionsLabel:"\u4f7f\u7528\u6309\u94ae\u6587\u672c\u5185\u5bb9"})}}});

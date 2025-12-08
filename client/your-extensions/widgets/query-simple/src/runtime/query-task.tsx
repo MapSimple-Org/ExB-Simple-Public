@@ -67,6 +67,38 @@ export interface QueryTaskProps {
   queryItems?: ImmutableArray<QueryItemType>
   selectedQueryIndex?: number
   onQueryChange?: (index: number) => void
+  // Grouping props
+  groups?: { [groupId: string]: { items: ImmutableArray<QueryItemType>, displayName: string, icon?: any } }
+  ungrouped?: Array<{ item: ImmutableObject<QueryItemType>, index: number }>
+  groupOrder?: string[]
+  selectedGroupId?: string | null
+  selectedGroupQueryIndex?: number
+  onGroupChange?: (groupId: string | null) => void
+  onGroupQueryChange?: (index: number) => void
+  onUngroupedChange?: (index: number) => void
+}
+
+// Helper function to get display name for query in dropdown
+// Uses: searchAlias || jimuFieldName || item.name || fallback
+const getQueryDisplayName = (item: ImmutableObject<QueryItemType>): string => {
+  // First priority: searchAlias if set
+  if (item.searchAlias) {
+    return item.searchAlias
+  }
+  
+  // Second priority: field name from SQL expression
+  const jimuFieldName = item.sqlExprObj?.parts?.[0]?.jimuFieldName
+  if (jimuFieldName) {
+    return jimuFieldName
+  }
+  
+  // Third priority: item name
+  if (item.name) {
+    return item.name
+  }
+  
+  // Fallback
+  return 'Query'
 }
 
 const style = css`
@@ -104,7 +136,7 @@ const style = css`
 `
 
 export function QueryTask (props: QueryTaskProps) {
-  const { queryItem, onNavBack, total, isInPopper = false, defaultPageSize = CONSTANTS.DEFAULT_QUERY_PAGE_SIZE, wrappedInPopper = false, className = '', index, initialInputValue, onHashParameterUsed, queryItems, selectedQueryIndex, onQueryChange, ...otherProps } = props
+  const { queryItem, onNavBack, total, isInPopper = false, defaultPageSize = CONSTANTS.DEFAULT_QUERY_PAGE_SIZE, wrappedInPopper = false, className = '', index, initialInputValue, onHashParameterUsed, queryItems, selectedQueryIndex, onQueryChange, groups, ungrouped, groupOrder, selectedGroupId, selectedGroupQueryIndex, onGroupChange, onGroupQueryChange, onUngroupedChange, ...otherProps } = props
   const getI18nMessage = hooks.useTranslation(defaultMessage)
   const [stage, setStage] = React.useState(0) // 0 = form, 1 = results, 2 = loading
   const [activeTab, setActiveTab] = React.useState<'query' | 'results'>('query')
@@ -182,12 +214,6 @@ export function QueryTask (props: QueryTaskProps) {
   })
 
 
-  React.useEffect(() => {
-    if (queryItem.useDataSource?.dataSourceId) {
-      DataSourceManager.getInstance().destroyDataSource(queryItem.outputDataSourceId)
-    }
-  }, [queryItem.useDataSource?.dataSourceId, queryItem.outputDataSourceId])
-
   // Watch for when results are ready and switch to Results tab
   // This ensures we wait for React to render results, not just for the query to complete
   // This approach matches the behavior of manual input where results are rendered before tab switch
@@ -206,6 +232,68 @@ export function QueryTask (props: QueryTaskProps) {
       setActiveTab('results')
     }
   }, [resultCount, stage, activeTab])
+
+  // Verify dropdowns are synchronized with hash parameter when present
+  // This is especially important for grouped queries where dropdowns need to be synchronized
+  React.useEffect(() => {
+    // Only verify if we have a hash parameter
+    if (!initialInputValue || !queryItem.shortId) {
+      return
+    }
+    
+    // Verify the current queryItem matches what we expect from hash parameter
+    const expectedShortId = queryItem.shortId
+    const isGroupedQuery = queryItem.groupId !== null && queryItem.groupId !== undefined
+    
+    // Check if dropdowns are correctly set for grouped queries
+    if (isGroupedQuery) {
+      const expectedGroupId = queryItem.groupId
+      const actualGroupId = selectedGroupId
+      const expectedQueryIndex = selectedGroupQueryIndex
+      
+      if (expectedGroupId !== actualGroupId) {
+        debugLogger.log('GROUP', {
+          event: 'dropdown-group-mismatch',
+          expectedGroupId,
+          actualGroupId,
+          queryItemShortId: expectedShortId,
+          warning: 'First dropdown may not be synchronized with hash parameter'
+        })
+      } else if (expectedQueryIndex !== undefined) {
+        // Verify the query index within the group matches
+        const groupItems = groups?.[expectedGroupId]?.items
+        if (groupItems && groupItems.length > expectedQueryIndex) {
+          const expectedQueryConfigId = groupItems[expectedQueryIndex]?.configId
+          const actualQueryConfigId = queryItem.configId
+          if (expectedQueryConfigId !== actualQueryConfigId) {
+            debugLogger.log('GROUP', {
+              event: 'dropdown-query-index-mismatch',
+              expectedQueryConfigId,
+              actualQueryConfigId,
+              expectedQueryIndex,
+              queryItemShortId: expectedShortId,
+              warning: 'Second dropdown may not be synchronized with hash parameter'
+            })
+          } else {
+            debugLogger.log('GROUP', {
+              event: 'dropdowns-synchronized',
+              queryItemShortId: expectedShortId,
+              groupId: expectedGroupId,
+              selectedGroupQueryIndex: expectedQueryIndex,
+              note: 'Dropdowns synchronized with hash parameter'
+            })
+          }
+        }
+      }
+    } else {
+      // Ungrouped query - verify it's selected
+      debugLogger.log('GROUP', {
+        event: 'dropdowns-synchronized-ungrouped',
+        queryItemShortId: expectedShortId,
+        note: 'Ungrouped query dropdown synchronized with hash parameter'
+      })
+    }
+  }, [initialInputValue, queryItem.shortId, queryItem.groupId, queryItem.configId, selectedGroupId, selectedGroupQueryIndex, groups])
 
   const useOutputDs: ImmutableObject<UseDataSource> = React.useMemo(
     () =>
@@ -659,39 +747,204 @@ export function QueryTask (props: QueryTaskProps) {
                 </Tooltip>
               )}
             </div>
-            {/* Search Layer dropdown - only show if multiple queries */}
-            {queryItems && queryItems.length > 1 && (
-              <div css={css`
-                padding: 16px;
-                border-bottom: 1px solid var(--sys-color-divider-secondary);
-                flex-shrink: 0;
-              `}>
-                <label css={css`
-                  font-size: 0.875rem;
-                  font-weight: 500;
-                  color: var(--sys-color-text-primary);
-                  margin-bottom: 8px;
-                  display: block;
-                `}>
-                  {getI18nMessage('searchLayer')}
-                </label>
-                <Select 
-                  size="sm"
-                  value={selectedQueryIndex !== undefined ? selectedQueryIndex : index} 
-                  onChange={(e) => {
-                    if (onQueryChange) {
-                      onQueryChange(parseInt(e.target.value))
-                    }
-                  }}
-                >
-                  {queryItems.map((item, idx) => (
-                    <option key={item.configId} value={idx}>
-                      {item.name || `Query ${idx + 1}`}
-                    </option>
-                  ))}
-                </Select>
-              </div>
-            )}
+            {/* Search Layer / Group dropdowns - show based on grouping */}
+            {(() => {
+              // Only show dropdowns if multiple queries exist
+              if (!queryItems || queryItems.length <= 1) {
+                return null
+              }
+              
+              // Build flat list of all queries with their display info
+              // For grouped queries, use group display name (only show once per group)
+              const queryOptions: Array<{
+                configId: string
+                displayName: string
+                groupId: string | null
+                index: number
+              }> = []
+              
+              // Track which groups we've already added to avoid duplicates
+              const addedGroups = new Set<string>()
+              
+              queryItems.forEach((item, idx) => {
+                if (item.groupId) {
+                  // For grouped queries, use group display name (only add once per group)
+                  if (!addedGroups.has(item.groupId)) {
+                    addedGroups.add(item.groupId)
+                    const groupDisplayName = groups?.[item.groupId]?.displayName || 
+                                           groups?.[item.groupId]?.items[0]?.name || 
+                                           item.name || 
+                                           `Group ${item.groupId}`
+                    queryOptions.push({
+                      configId: item.configId,
+                      displayName: groupDisplayName,
+                      groupId: item.groupId,
+                      index: idx
+                    })
+                  }
+                } else {
+                  // Ungrouped query - use item.name for first dropdown (not searchAlias/jimuFieldName)
+                  queryOptions.push({
+                    configId: item.configId,
+                    displayName: item.name || getQueryDisplayName(item),
+                    groupId: null,
+                    index: idx
+                  })
+                }
+              })
+              
+              // Determine currently selected query
+              const currentQueryItem = queryItem
+              const currentQueryGroupId = currentQueryItem.groupId || null
+              const isGroupedQuery = currentQueryGroupId !== null
+              
+              // Find the option index for the current query
+              const currentOptionIndex = queryOptions.findIndex(opt => {
+                if (isGroupedQuery) {
+                  return opt.groupId === currentQueryGroupId
+                } else {
+                  return opt.configId === currentQueryItem.configId
+                }
+              })
+              
+              debugLogger.log('GROUP', {
+                event: 'rendering-dropdowns',
+                totalQueries: queryItems.length,
+                queryOptionsCount: queryOptions.length,
+                currentQueryGroupId,
+                isGroupedQuery,
+                currentOptionIndex,
+                selectedGroupId,
+                selectedGroupQueryIndex,
+                currentQueryConfigId: currentQueryItem.configId
+              })
+              
+              return (
+                <>
+                  {/* First Dropdown: All queries */}
+                  <div css={css`
+                    padding: 16px;
+                    border-bottom: 1px solid var(--sys-color-divider-secondary);
+                    flex-shrink: 0;
+                  `}>
+                    <label css={css`
+                      font-size: 0.875rem;
+                      font-weight: 500;
+                      color: var(--sys-color-text-primary);
+                      margin-bottom: 8px;
+                      display: block;
+                    `}>
+                      {getI18nMessage('searchLayer')}
+                    </label>
+                    <Select 
+                      size="sm"
+                      value={currentOptionIndex >= 0 ? currentOptionIndex : 0}
+                      onChange={(e) => {
+                        const optionIndex = parseInt(e.target.value)
+                        const selectedOption = queryOptions[optionIndex]
+                        
+                        debugLogger.log('GROUP', {
+                          event: 'query-option-selected',
+                          optionIndex,
+                          selectedOption,
+                          isGrouped: selectedOption.groupId !== null
+                        })
+                        
+                        if (selectedOption.groupId) {
+                          // Grouped query selected - set group and first query in group
+                          if (onGroupChange) {
+                            onGroupChange(selectedOption.groupId)
+                          }
+                          if (onGroupQueryChange) {
+                            onGroupQueryChange(0)
+                          }
+                        } else {
+                          // Ungrouped query selected - clear group selection
+                          if (onGroupChange) {
+                            onGroupChange(null)
+                          }
+                          if (onUngroupedChange) {
+                            // Find the ungrouped index
+                            const ungroupedIndex = ungrouped?.findIndex(({ item }) => 
+                              item.configId === selectedOption.configId
+                            ) ?? -1
+                            if (ungroupedIndex >= 0) {
+                              onUngroupedChange(ungroupedIndex)
+                            } else {
+                              // Fallback: use the index from queryItems
+                              debugLogger.log('GROUP', {
+                                event: 'ungrouped-fallback-to-index',
+                                selectedOptionIndex: selectedOption.index
+                              })
+                              if (onQueryChange) {
+                                onQueryChange(selectedOption.index)
+                              }
+                            }
+                          }
+                        }
+                      }}
+                    >
+                      {queryOptions.map((option, idx) => {
+                        debugLogger.log('GROUP', {
+                          event: 'rendering-query-option',
+                          index: idx,
+                          configId: option.configId,
+                          displayName: option.displayName,
+                          groupId: option.groupId
+                        })
+                        return (
+                          <option key={option.configId} value={idx}>
+                            {option.displayName}
+                          </option>
+                        )
+                      })}
+                    </Select>
+                  </div>
+                  
+                  {/* Second Dropdown: Queries within selected group (only if grouped query selected) */}
+                  {isGroupedQuery && currentQueryGroupId && groups && groups[currentQueryGroupId] && (
+                    <div css={css`
+                      padding: 16px;
+                      border-bottom: 1px solid var(--sys-color-divider-secondary);
+                      flex-shrink: 0;
+                    `}>
+                      <label css={css`
+                        font-size: 0.875rem;
+                        font-weight: 500;
+                        color: var(--sys-color-text-primary);
+                        margin-bottom: 8px;
+                        display: block;
+                      `}>
+                        Search Alias
+                      </label>
+                      <Select 
+                        size="sm"
+                        value={selectedGroupQueryIndex !== undefined ? selectedGroupQueryIndex : 0}
+                        onChange={(e) => {
+                          const newIndex = parseInt(e.target.value)
+                          debugLogger.log('GROUP', {
+                            event: 'group-query-selected',
+                            groupId: currentQueryGroupId,
+                            groupQueryIndex: newIndex,
+                            queryItemConfigId: groups[currentQueryGroupId].items[newIndex]?.configId,
+                            queryDisplayName: getQueryDisplayName(groups[currentQueryGroupId].items[newIndex])
+                          })
+                          if (onGroupQueryChange) {
+                            onGroupQueryChange(newIndex)
+                          }
+                        }}
+                      >
+                        {groups[currentQueryGroupId].items.map((item, idx) => (
+                          <option key={item.configId} value={idx}>
+                            {getQueryDisplayName(item)}
+                          </option>
+                        ))}
+                      </Select>
+                    </div>
+                  )}
+                </>
+              )
+            })()}
             <div css={css`
               flex: 1;
               display: flex;

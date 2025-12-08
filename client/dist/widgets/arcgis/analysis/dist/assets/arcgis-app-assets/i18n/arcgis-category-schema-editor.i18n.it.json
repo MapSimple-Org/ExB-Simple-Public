@@ -1,0 +1,69 @@
+{
+  "loadingText": "Caricamento dei modelli di schema",
+  "cancel": "Annulla",
+  "finishSetup": "Termina installazione",
+  "hasUnsavedChanges": "Sono state apportate modifiche di categoria che andranno perse se non saranno salvate. Chiudere questa vista e perdere le modifiche?",
+  "error": {
+    "generic": {
+      "title": "Errore durante l'aggiornamento delle categorie",
+      "message": "Si è verificato un errore. Riprovare più tardi."
+    },
+    "maxDepthExceeded": {
+      "title": "Errore durante l'aggiornamento delle categorie",
+      "message": "Non è possibile annidare categorie con più di 2 livelli di profondità."
+    },
+    "destinationHasSameName": {
+      "title": "Errore durante l'aggiornamento delle categorie",
+      "message": "Una categoria con lo stesso nome esiste giù nella categoria di destinazione."
+    },
+    "emptyTitle": {
+      "title": "Errore durante l'aggiornamento delle categorie",
+      "message": "Specificare il titolo della categoria."
+    },
+    "noSchema": {
+      "title": "Schema non trovato",
+      "message": "Schema elemento non trovato per l'utente."
+    },
+    "maxCharacter": {
+      "title": "Errore durante l'aggiornamento delle categorie",
+      "message": "I nomi delle categorie possono contenere massimo ${maxCharacter} caratteri."
+    },
+    "invalidCharacters": {
+      "title": "Errore durante l'aggiornamento delle categorie",
+      "single": "La categoria non può contenere questo carattere: ${invalidCharacters}.",
+      "multiple": "La categoria non può contenere nessuno dei seguenti caratteri: ${invalidCharacters}.",
+      "unknown": "La categoria non può contenere nessuno dei seguenti caratteri: ${invalidCharacters}."
+    }
+  },
+  "warning": {
+    "deleteInUseCategory": {
+      "title": "Elimina categoria",
+      "cta": "Elimina categoria"
+    },
+    "changeTitleInUseCategory": {
+      "title": "Aggiorna categoria",
+      "cta": "Aggiorna categoria"
+    }
+  },
+  "template": {
+    "title": "Modelli di categoria",
+    "learnMore": "Ulteriori informazioni",
+    "templateList": {
+      "custom": {
+        "title": "Personalizza categorie"
+      },
+      "arcgis": {
+        "title": "Categorie ArcGIS",
+        "message": "Le categorie ArcGIS includono una selezione di categorie e sottocategorie di argomenti utilizzabili per classificare molti tipi di contenuto geospaziale. Tali categorie sono utilizzate per supportare ArcGIS Living Atlas of the World."
+      },
+      "iso": {
+        "title": "Categorie ISO",
+        "message": "Le categorie ISO sono categorie di argomenti elaborate dall'Organizzazione Internazionale per la Normazione al fine di fornire un metodo di descrizione e catalogazione delle informazioni geografiche."
+      },
+      "inspire": {
+        "title": "Categorie INSPIRE",
+        "message": "Le categorie INSPIRE comprendono un insieme di temi relativi ai dati spaziali definiti dalla Direttiva INSPIRE."
+      }
+    }
+  }
+}

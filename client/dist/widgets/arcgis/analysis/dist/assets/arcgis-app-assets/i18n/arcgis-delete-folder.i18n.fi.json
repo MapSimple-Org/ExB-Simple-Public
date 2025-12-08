@@ -1,0 +1,22 @@
+{
+  "deleteFolder": "Poista kansio",
+  "delete": "Poista",
+  "permanentlyDelete": "Poista pysyvästi",
+  "back": "Takaisin",
+  "cancel": "Peruuta",
+  "success": "Kansion ${title} poistaminen onnistui",
+  "deleteProtectedItemsInFolder": "Kansiota ei voi poistaa, koska osa kohteista on suojattu tai niillä on riippuvaisia kohteita.",
+  "message": {
+    "empty": "Haluatko varmasti poistaa kansion <strong style='font-weight: 500'>${title}</strong>?",
+    "recycleAll": "Haluatko varmasti poistaa kansion <strong style='font-weight: 500'>${title}</strong> ja lähettää sen sisällön roskakoriin?",
+    "mustBeEmpty": "Kansio <strong style='font-weight: 500'>${title}</strong> on tyhjennettävä, jotta se voidaan poistaa.",
+    "aFewCannotBeDeleted": "Joitain kohteita ei voi poistaa. Haluatko jatkaa jäljellä olevien poistoa?",
+    "canBeEmptied": "Kansio <strong style='font-weight: 500'>${title}</strong> on tyhjennettävä, jotta se voidaan poistaa. Haluatko jatkaa näiden kohteiden poistoa?",
+    "cannotBeDeleted": "Kansiota <strong style='font-weight: 500'>${title}</strong> ei voi poistaa, koska sen kohteita ei voi poistaa."
+  },
+  "disabledMessage": {
+    "single": "Kansiossa <b>${label}</b> on <span style='color:red'>yksi kohde</span>.<br/></br/>Haluatko varmasti poistaa tämän kansion ja sen kohteen?",
+    "multiple": "Kansiossa <b>${label}</b> on <span style='color:red'>${number} kohdetta</span>.<br/></br/>Haluatko varmasti poistaa tämän kansion ja kaikki sen kohteet?",
+    "unknown": "Haluatko varmasti poistaa tämän kansion <b>${label}</b>?"
+  }
+}

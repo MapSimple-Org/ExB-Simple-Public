@@ -1,0 +1,12 @@
+{
+  "apiCredentialType": "Тип облікових даних: ключ API",
+  "oauthCredentialType": "Тип облікових даних: OAuth 2.0",
+  "itemAccess": "Доступ до елемента",
+  "page": "Сторінка: ${page}",
+  "currentPage": "Поточна сторінка: ${page}",
+  "privileges": "Права",
+  "itemDetails": "Детальна інформація про елемент",
+  "settings": "Налаштування",
+  "serviceScope": "Охоплення сервісу",
+  "summary": "Короткий опис"
+}

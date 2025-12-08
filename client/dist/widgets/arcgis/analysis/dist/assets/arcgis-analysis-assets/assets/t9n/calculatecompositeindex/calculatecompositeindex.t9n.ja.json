@@ -1,0 +1,26 @@
+{
+  "CCIAnalysisSettingGroupLabel": "インデックスの設定",
+  "CCIAnalysisSettingGroupText": "インデックスの計算方法を指定します。",
+  "geomeanPercentileLabel": "ランクの複合 (パーセンタイルの幾何学的平均値)",
+  "geomeanRawLabel": "生の値の複合 (生の値の幾何学的平均値)",
+  "geomeanScaledLabel": "スケール処理済みの値の複合 (スケール処理済みの値の幾何学的平均値)",
+  "indexMethodLabel": "変数のスケール方法と結合方法",
+  "inputFeaturesOrTableLabel": "フィーチャまたはテーブルの入力",
+  "inputLayerGroupText": "インデックスを作成するフィーチャまたはテーブルと、変数を選択します。",
+  "inputVariablesLabel": "変数の入力",
+  "itemProperties": {
+    "description": "複合インデックスの計算解析ツールを実行して生成されたフィーチャ レイヤー。",
+    "snippet": "複合インデックスの計算によって生成されたフィーチャ レイヤー"
+  },
+  "meanPercentileLabel": "ランクの結合 (パーセンタイルの平均値)",
+  "meanRawLabel": "生の値の結合 (生の値の平均値)",
+  "meanScaledLabel": "スケール処理済みの値の結合 (スケール処理済みの値の平均値)",
+  "outputIndexMaxLabel": "最大",
+  "outputIndexMinLabel": "最小",
+  "outputIndexMinMaxLabel": "インデックスの最小値と最大値",
+  "outputIndexReverseLabel": "インデックス値の反転",
+  "reverseVariableLabel": "方向の反転",
+  "sumFlagsPercentileLabel": "極値のハイライト表示 (90 番目のパーセンタイルを超える値の数)",
+  "toolName": "複合インデックスの計算",
+  "weight": "加重"
+}

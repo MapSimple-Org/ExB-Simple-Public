@@ -1,0 +1,36 @@
+{
+  "modalHeader": "Configura les categories de contingut",
+  "modalGroupHeader": "Configura les categories de grup",
+  "helpText": "Editeu, elimineu o reordeneu categories de la vostra organització.",
+  "helpTextGroup": "Editeu, elimineu o reordeneu categories del contingut d'aquest grup.",
+  "helpTextDescription": "Recordeu que altres membres de l'organització poden haver assignat aquestes categories als seus elements i, si editeu l'esquema, aquests elements s'actualitzaran en conseqüència",
+  "helpTextGroupDescription": "Recordeu que altres membres del grup poden haver assignat aquestes categories als seus elements i, si editeu l'esquema, aquests elements s'actualitzaran en conseqüència",
+  "warning": {
+    "deleteInUseCategory": {
+      "title": "Suprimeix la categoria",
+      "cta": "Suprimeix la categoria",
+      "message": {
+        "single": "S'ha assignat un element a aquesta categoria. Si suprimiu la categoria, també s'eliminarà d'aquest element.",
+        "multiple": "S'han assignat ${number} elements a aquesta categoria. Si suprimiu la categoria, també s'eliminarà d'aquests elements.",
+        "unknown": "Elements assignats a aquesta categoria: ${number}. Si suprimiu la categoria, també s'eliminarà d'aquests elements."
+      }
+    },
+    "changeTitleInUseCategory": {
+      "title": "Actualitza la categoria",
+      "message": {
+        "single": "S'ha assignat un element a aquesta categoria. Si actualitzeu aquesta categoria, s'actualitzarà l'element perquè utilitzi \"${newTitle}\".",
+        "multiple": "S'han assignat ${number} elements a aquesta categoria. Si actualitzeu aquesta categoria, s'actualitzaran els elements perquè utilitzin \"${newTitle}\".",
+        "unknown": "Elements assignats a aquesta categoria: ${number}. Si actualitzeu aquesta categoria, s'actualitzaran els elements perquè utilitzin \"${newTitle}\"."
+      },
+      "cta": "Actualitza la categoria"
+    }
+  },
+  "template": {
+    "templateList": {
+      "custom": {
+        "message": "Creeu les vostres pròpies categories per organitzar el contingut a l'organització.",
+        "messageGroup": "Creeu les vostres pròpies categories per organitzar el contingut en aquest grup."
+      }
+    }
+  }
+}

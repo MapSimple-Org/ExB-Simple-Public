@@ -1,0 +1,7 @@
+{
+  "deselectAll": "Odznači sve",
+  "ignoreFieldMessage": "Ovo polje će se zanemariti jer nisu odabrane vrste statistike.",
+  "remove": "Ukloni",
+  "requiredError": "Ovaj parametar je obavezan.",
+  "selectAll": "Odaberi sve"
+}

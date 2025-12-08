@@ -1,0 +1,12 @@
+{
+  "apiCredentialType": "Vrsta poverilnic: ključ API",
+  "oauthCredentialType": "Vrsta poverilnic: OAuth 2.0",
+  "itemAccess": "Dostop elementa",
+  "page": "Stran: ${page}",
+  "currentPage": "Trenutna stran: ${page}",
+  "privileges": "Pravice",
+  "itemDetails": "Podrobnosti elementa",
+  "settings": "Nastavitve",
+  "serviceScope": "Domet storitve",
+  "summary": "Povzetek"
+}

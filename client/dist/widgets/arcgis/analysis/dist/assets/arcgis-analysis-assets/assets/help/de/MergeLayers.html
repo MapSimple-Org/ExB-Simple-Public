@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>Mit dem Werkzeug &quot;Layer zusammenf&uuml;hren&quot; werden Features aus zwei Layern in einen neuen Layer kopiert. Sie k&ouml;nnen steuern, wie die Felder aus den Eingabe-Layern verkn&uuml;pft und kopiert werden.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputLayer">
+        <div>
+            <p>Die Punkt-, Linien- oder Polygon-Features, die mit dem Zusammenf&uuml;hrungs-Layer zusammengef&uuml;hrt werden.
+            </p>
+            <p class="toolPaneOnly">Die Anzahl der Features ist abh&auml;ngig von zus&auml;tzlichen Faktoren wie Filterkriterien oder der Analyseausdehnung.
+            </p>
+        </div>
+    </div>
+    <div id="mergeLayer">
+        <div>
+            <p>Der Layer, der mit dem Eingabe-Layer zusammengef&uuml;hrt wird.
+            </p>
+            <p class="toolPaneOnly">Die Anzahl der Features ist abh&auml;ngig von zus&auml;tzlichen Faktoren wie Filterkriterien oder der Analyseausdehnung.
+            </p>
+        </div>
+    </div>
+    <div id="mergingAttributes">
+        <div>
+            <p>Gibt an, wie Felder zusammengef&uuml;hrt werden.
+            </p>
+            <p>Wenn die beiden Layer ein Feld mit dem gleichen Namen und Datentyp enthalten, wird der Inhalt der beiden Felder in einem Feld mit diesem Namen zusammengef&uuml;hrt. Dies gilt nicht f&uuml;r Felder, bei denen im Parameterwert  <b>Vorgang</b> die Option <b>Abgleichen</b> verwendet wird. 
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>Der Name des Layers, der erstellt und der Karte hinzugef&uuml;gt wird.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>Der Name des Ordners in  <b>Eigene Inhalte</b>, in dem das Ergebnis gespeichert werden soll.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

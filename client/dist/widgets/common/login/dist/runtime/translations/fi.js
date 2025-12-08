@@ -1,0 +1,1 @@
+System.register([],function(t){return{execute:function(){t({_widgetLabel:"Kirjaudu sis\xe4\xe4n",switchToLogin:"Vaihda kirjautumista edelt\xe4v\xe4\xe4n",switchToLogout:"Vaihda kirjautumisen j\xe4lkeiseen",toggleSignInPreview:"Ota kirjautumisen esikatselu k\xe4ytt\xf6\xf6n tai poista se k\xe4yt\xf6st\xe4",restrictedResources:"Rajoitetut resurssit"})}}});

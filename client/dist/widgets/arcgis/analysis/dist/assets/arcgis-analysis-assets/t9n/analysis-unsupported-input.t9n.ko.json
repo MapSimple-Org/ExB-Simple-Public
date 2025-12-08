@@ -1,0 +1,7 @@
+{
+  "defaultValue": "지원되지 않는 매개변수 유형입니다. 기본값이 사용됩니다. <calcite-link target='_blank' href='${ docLink }'>자세한 정보</calcite-link>",
+  "requiredMessage": "이 매개변수는 필수입니다.",
+  "unsupportedGPType": "지원되지 않는 매개변수 유형입니다. <calcite-link target='_blank' href='${ docLink }'>자세한 정보</calcite-link>",
+  "unsupportedParameterConfig": "지원되지 않는 매개변수 구성입니다. <calcite-link target='_blank' href='${ docLink }'>자세한 정보</calcite-link>",
+  "unsupportedParameterConfigDefaultValue": "지원되지 않는 매개변수 구성입니다. 기본값이 사용됩니다. <calcite-link target='_blank' href='${ docLink }'>자세한 정보</calcite-link>"
+}

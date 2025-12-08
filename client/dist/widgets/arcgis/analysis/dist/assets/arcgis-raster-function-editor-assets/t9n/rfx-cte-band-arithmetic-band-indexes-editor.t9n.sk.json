@@ -1,0 +1,7 @@
+{
+  "example": "Príklad",
+  "input": "Vstup",
+  "output": "Výstup",
+  "optional": "Voliteľné",
+  "WNDWIHintText": "α:α hodnota by mala byť medzi 0 a 1; predvolená hodnota je 0,5"
+}

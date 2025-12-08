@@ -1,0 +1,18 @@
+{
+  "save": "Salvesta",
+  "cancel": "Loobu",
+  "dragDrop": "Lohistage JPEG-, PNG- või GIF-formaadis fail.",
+  "browse": "Sirvi...",
+  "chooseDiff": "Vali muu pilt",
+  "zoom": "Suum:",
+  "bestSize": "Parima tulemuse saamiseks peab pildi suurus olema 300 x 300 pikslit.",
+  "or": "või",
+  "fromMap": "Loo kaardi pisipilt",
+  "fromMapDesc": "Saate luua kohandatud pisipildi, määrates ulatuse ja suumitaseme",
+  "changeBasemap": "Muuda aluskaarti",
+  "loading": "Laadimine",
+  "imageRequired": "Vaja on kehtivat pilti.",
+  "imageSizeError": "Faili maksimaalne suurus on 10 MB.",
+  "deleteImage": "Kustuta pilt",
+  "unableToLoadItem": "Üksust ei saa laadida"
+}

@@ -1,0 +1,10 @@
+{
+  "forceFlowLabel": "Likt šķautnes šūnām plūst uz ārpusi",
+  "inputLayersGroupText": "Izvēlieties ievades virsmas rastru un, ja vēlaties, ieplakas datus un svara rastru.",
+  "itemProperties": {
+    "description": "Izvade, kas ģenerēta, palaižot rīku Iegūt straumi kā rastru.",
+    "snippet": "No Iegūt straumi kā rastru ģenerētā izvade"
+  },
+  "outputStreamRasterLabel": "Izvades straumes rastra nosaukums",
+  "streamSettingsGroupText": "Norādiet uzkrāšanas slieksni, straumes apzīmējuma metodi un to, kā plūsma tiek apstrādāta ievades virsmas rastra malā."
+}

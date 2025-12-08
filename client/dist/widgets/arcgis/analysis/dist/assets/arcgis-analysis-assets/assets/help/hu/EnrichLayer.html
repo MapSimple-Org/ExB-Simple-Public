@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>Az Enrich Layer eszk&ouml;z demogr&aacute;fiai &eacute;s topogr&aacute;fiai adatokkal bőv&iacute;ti a bemeneti vektoros elemeket.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputLayer">
+        <div>
+            <p>Azok a pontszerű, vonalas vagy polygon vektoros elemek, amelyek majd tov&aacute;bbi adatokkal bőv&uuml;lnek.
+            </p>
+            <p class="toolPaneOnly">A vektoros elemek sz&aacute;ma olyan tov&aacute;bbi t&eacute;nyezőktől f&uuml;gg, mint p&eacute;ld&aacute;ul szűr&eacute;si krit&eacute;rium &eacute;s elemz&eacute;s kiterjeszt&eacute;se.
+            </p>
+        </div>
+    </div>
+    <div id="analysisVariables">
+        <div>
+            <p>Azok a v&aacute;ltoz&oacute;k, amelyek attrib&uacute;tumk&eacute;nt ad&oacute;dnak majd hozz&aacute; a bemeneti vektoros elemekhez.
+            </p>
+        </div>
+    </div>
+    <div id="bufferType">
+        <div>
+            
+            <p class="toolPaneOnly">A beviteli pont vagy vonalas vektoros elemek k&ouml;r&uuml;li hat&aacute;rol&oacute; ter&uuml;letek l&eacute;trehoz&aacute;s&aacute;ra haszn&aacute;lt m&oacute;dszer. A met&oacute;dus egyenes vonalszerű t&aacute;vols&aacute;g vagy utaz&aacute;si m&oacute;d lehet. Az egyes vektoros elemek k&ouml;r&uuml;li teljes ter&uuml;let adatokkal fog bőv&uuml;lni.
+            </p> 
+            <p class="modelBuilderOnly">A beviteli pont vagy vonalas vektoros elemek k&ouml;r&uuml;li hat&aacute;rol&oacute; ter&uuml;letek l&eacute;trehoz&aacute;s&aacute;ra haszn&aacute;lt m&oacute;dszer. Jelenleg az egyenes vonalt&aacute;vols&aacute;g az egyetlen t&aacute;mogatott met&oacute;dus a modellek eset&eacute;ben. Az egyes vektoros elemek k&ouml;r&uuml;li teljes ter&uuml;let adatokkal fog bőv&uuml;lni.
+            </p>
+        </div>
+    </div>
+    <div id="distance">
+        <div>
+            <p>Az adatokkal bőv&iacute;tett ter&uuml;let adott bemeneti vektoros elemek k&ouml;r&uuml;li bőv&uuml;l&eacute;s&eacute;t kifejező t&aacute;vols&aacute;g vagy idő megad&aacute;s&aacute;ra szolg&aacute;l&oacute; numerikus &eacute;rt&eacute;k.
+            </p>
+        </div>
+    </div>
+    <div id="units">
+        <div>
+            <p>Az adatokkal bőv&iacute;tett ter&uuml;let adott bemeneti vektoros elemek k&ouml;r&uuml;li bőv&uuml;l&eacute;s&eacute;t kifejező t&aacute;vols&aacute;g vagy idő meghat&aacute;roz&aacute;s&aacute;ra szolg&aacute;l&oacute; m&eacute;rt&eacute;kegys&eacute;gek.
+            </p>
+        </div>
+    </div>
+    <div id="returnBoundaries">
+        <div>
+            <p>Meghat&aacute;rozza, hogy a kimeneti r&eacute;teg a  <b>Bőv&iacute;t&eacute;si ter&uuml;letek</b> be&aacute;ll&iacute;t&aacute;sai &aacute;ltal meghat&aacute;rozott poligonelemeket (bejel&ouml;lve) vagy a bemeneti elemeket (nem bejel&ouml;lve) tartalmazza-e.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>A l&eacute;trehozni &eacute;s a t&eacute;rk&eacute;phez hozz&aacute;adni k&iacute;v&aacute;nt r&eacute;teg neve.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>A  <b>Saj&aacute;t tartalom</b> azon mapp&aacute;j&aacute;nak neve, ahov&aacute; az eredm&eacute;ny ment&eacute;se t&ouml;rt&eacute;nik.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

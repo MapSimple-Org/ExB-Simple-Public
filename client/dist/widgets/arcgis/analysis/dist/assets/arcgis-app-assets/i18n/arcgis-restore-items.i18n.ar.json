@@ -1,0 +1,31 @@
+{
+  "back": "رجوع",
+  "cancel": "إلغاء الأمر",
+  "learnMore": "تعرّف على المزيد",
+  "restore": "استعادة",
+  "restoreTo": "الاستعادة إلى",
+  "restoreItem": "استعادة العنصر",
+  "restoreItems": "استعادة العناصر",
+  "noticeMessage": "سيتم إلغاء مشاركة العناصر التي تم استعادتها. يرجى مراجعة محتواك قبل مشاركته مرة أخرى.",
+  "cannotBulkRestoreXItems": "لا يمكن استعادة أكثر من ${number} عنصر بشكل مجمَّع، يرجى إلغاء تحديد بعض العناصر.",
+  "cannotBulkRestoreMultipleOwners": "لا يمكن استعادة العناصر التي تنتمي إلى ملاك مختلفين بشكل مجمَّع. حدد عناصر من مالك واحد لاستعادتها بشكل مجمع.",
+  "toRestore": {
+    "single": "العنصر المراد استعادته:",
+    "multiple": "العناصر المراد استعادتها:"
+  },
+  "cannotRestore": "تتعذر الاستعادة:",
+  "dependentItems": {
+    "single": "لا يمكن استعادة هذا العنصر لأنه تابع لـ <strong style='font-weight: 500'>${parent}</strong>. استعادتها بعضها مع بعض.",
+    "singleUnknown": "يتعذر استعادة هذا العنصر لأنه يعتمد على عنصر آخر في سلة المحذوفات. استعادتها بعضها مع بعض.",
+    "multiple": "لا يمكن استعادة هذه العناصر لأنها تابعة لعناصر أخرى في سلة المحذوفات. استعادتها بعضها مع بعض.",
+    "multipleSameSource": "لا يمكن استعادة هذه العناصر لأنها تابعة لـ <strong style='font-weight: 500'>${parent}</strong>. استعادتها بعضها مع بعض."
+  },
+  "pageRangeWithTotalRecycleBinSize": {
+    "en": "${start} - ${end} من ضمن ${total} (${size}) في سلة المحذوفات",
+    "other": "${start} - ${end}، إجمالي: ${total} (${size}) في سلة المحذوفات"
+  },
+  "pageRangeWithGreaterThanTotalRecycleBinSize": {
+    "en": "${start} - ${end} من ضمن ${total} (>${size}) في سلة المحذوفات",
+    "other": "${start} - ${end}، إجمالي: ${total} (>${size}) في سلة المحذوفات"
+  }
+}

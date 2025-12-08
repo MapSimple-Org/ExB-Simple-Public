@@ -1,0 +1,21 @@
+{
+  "folder": "Carpeta",
+  "folders": "Carpetas",
+  "searchFolders": "Buscar carpetas",
+  "enterFolder": "Introducir nombre de carpeta",
+  "createNewFolder": "Crear nueva carpeta",
+  "noFoldersFoundCreate": "No se encontró ninguna carpeta con este nombre. ¿Crear \"${folder}\"?",
+  "noFoldersFound": "No se encontró ninguna carpeta con este nombre.",
+  "create": "¿Crear \"${folder}\"?",
+  "loading": "Cargando carpetas",
+  "error": {
+    "noName": "Debe proporcionar un nombre para la carpeta.",
+    "folderAlreadyExists": "Ya existe una carpeta \"${folder}\". Elija otro nombre.",
+    "title": "Error",
+    "invalidCharacters": {
+      "single": "El nombre no puede contener este carácter: ${invalidCharacters}.",
+      "multiple": "El nombre no puede contener ninguno de los siguientes caracteres: ${invalidCharacters}.",
+      "unknown": "El nombre no puede contener ninguno de los siguientes caracteres: ${invalidCharacters}."
+    }
+  }
+}

@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>Orodje Izračunaj gostoto izračuna oceno gostote iz točkovnih in linijskih geoobjektov. Orodje ustvari izhodni geoobjekt.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputLayer">
+        <div>
+            <p>Točkovni ali linijski sloj, iz katerega bo izračunana gostota.
+            </p>
+            <p class="toolPaneOnly">&Scaron;tevilo funkcij je odvisno od dodatnih dejavnikov, kot so kriteriji filtriranja in obseg analize.
+            </p>
+        </div>
+    </div>
+    <div id="field">
+        <div>
+            <p>Polje, ki določa &scaron;tevilo dogodkov na vsaki lokaciji.
+            </p>
+        </div>
+    </div>
+    <div id="boundingPolygonLayer">
+        <div>
+            <p>Poligonski geoobjektni sloj, ki opredeljuje, kje bodo izračunane gostote.
+            </p>
+            <p class="toolPaneOnly">&Scaron;tevilo funkcij je odvisno od dodatnih dejavnikov, kot so kriteriji filtriranja in obseg analize.
+            </p>
+        </div>
+    </div>
+    <div id="radius">
+        <div>
+            <p>Določa razdaljo za iskanje točk in linij pri izračunu gostote.
+            </p>
+        </div>
+    </div>
+    <div id="radiusUnits">
+        <div>
+            <p>Enote, ki bodo uporabljene za vrednost parametra  <b>Poi&scaron;či razdaljo</b>.
+            </p>
+        </div>
+    </div>
+    <div id="classificationType">
+        <div>
+            <p>Določite, kako bodo vrednosti gostote klasificirane v območja.
+            </p>
+        </div>
+    </div>
+    <div id="numClasses">
+        <div>
+            <p>&Scaron;tevilo razredov (razponov napovedanih vrednosti) v sloju z rezultati.
+            </p>
+        </div>
+    </div>
+    <div id="areaUnits">
+        <div>
+            <p>Enote, ki bodo uporabljene za izhodno območje.
+            </p>
+            <p>Gostota je &scaron;tevilo, deljeno s povr&scaron;ino, in ta parameter določa povr&scaron;insko enoto v izračunu gostote.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>Ime sloja, ki bo ustvarjen in dodan na karto.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>Ime mape v  <b>Moja vsebina</b>, kjer bodo shranjeni rezultati.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

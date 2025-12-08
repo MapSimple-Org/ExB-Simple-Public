@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>Thiết lập m&ocirc;i trường để ph&acirc;n t&iacute;ch trong  Map Viewer. </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="analysisProcessingExtent">
+        <div>
+            <p>Chỉ định khu vực sẽ được d&ugrave;ng cho ph&acirc;n t&iacute;ch. Mặc định l&agrave; sử dụng phạm vi to&agrave;n khung h&igrave;nh.
+            </p>
+        </div>
+    </div>
+    <div id="rasterAnalysisProcessingExtent">
+        <div>
+            <p>Chỉ định khu vực sẽ được d&ugrave;ng cho c&ocirc;ng cụ ph&acirc;n t&iacute;ch raster v&agrave; h&agrave;m raster khi bật  <b>Sử dụng phạm vi xử l&yacute; kh&aacute;c cho ph&acirc;n t&iacute;ch raster</b>. Mặc định l&agrave; sử dụng phạm vi hiển thị của bản đồ.
+            </p>
+        </div>
+    </div>
+    <div id="useDifferentExtentForRA">
+        <div>
+            <p>Chỉ định xem c&oacute; sử dụng phạm vi xử l&yacute; kh&aacute;c cho c&ocirc;ng cụ ph&acirc;n t&iacute;ch raster v&agrave; h&agrave;m raster kh&ocirc;ng. Khi bật, ph&acirc;n t&iacute;ch raster sẽ sử dụng gi&aacute; trị đ&atilde; đặt cho  <b>Phạm vi xử l&yacute; ph&acirc;n t&iacute;ch raster</b> m&agrave; vốn mặc định được đặt l&agrave; sử dụng phạm vi hiển thị của bản đồ. Khi bật, tất cả c&aacute;c loại ph&acirc;n t&iacute;ch sẽ sử dụng gi&aacute; trị đ&atilde; đặt cho <b>Phạm vi xử l&yacute; ph&acirc;n t&iacute;ch</b> m&agrave; vốn mặc định được đặt l&agrave; sử dụng phạm vi to&agrave;n khung h&igrave;nh.
+            </p>
+        </div>
+    </div>
+    <div id="outSR">
+        <div>
+            <p>Chỉ định hệ tọa độ sẽ được d&ugrave;ng cho ph&acirc;n t&iacute;ch v&agrave; lớp kết quả.
+            </p>
+        </div>
+    </div>
+    <div id="extent">
+        <div>
+            <p>Chỉ định khu vực sẽ được d&ugrave;ng cho ph&acirc;n t&iacute;ch.
+            </p>
+        </div>
+    </div>
+    <div id="snapRaster">
+        <div>
+            <p>Điều chỉnh phạm vi của đầu ra sao cho tr&ugrave;ng khớp với phần căn chỉnh cell của lớp snap raster được chỉ định.
+            </p>
+        </div>
+    </div>
+    <div id="cellSize">
+        <div>
+            <p>X&aacute;c định k&iacute;ch thước cell hoặc độ ph&acirc;n giải sẽ được sử dụng để ph&acirc;n t&iacute;ch v&agrave; tạo lớp raster đầu ra.
+            </p>
+            <p>Nếu  <b>Theo chỉ định</b> được chọn v&agrave; tham chiếu kh&ocirc;ng gian đầu ra kh&aacute;c với tham chiếu kh&ocirc;ng gian đầu v&agrave;o, th&igrave; gi&aacute; trị k&iacute;ch thước cell sẽ kh&ocirc;ng được chiếu lại.
+            </p>
+        </div>
+    </div>
+    <div id="mask">
+        <div>
+            <p>Chỉ định một lớp mặt nạ m&agrave; tại đ&oacute; chỉ c&aacute;c cell nằm trong khu vực mặt nạ mới được d&ugrave;ng cho ph&acirc;n t&iacute;ch.
+            </p>
+        </div>
+    </div>
+    <div id="resamplingMethod">
+        <div>
+            <p>Chỉ định c&aacute;ch nội suy c&aacute;c gi&aacute; trị pixel khi c&aacute;c raster đầu v&agrave;o v&agrave; đầu ra kh&ocirc;ng thẳng h&agrave;ng.
+            </p>
+        </div>
+    </div>
+    <div id="processorType">
+        <div>
+            <p>Chỉ định loại bộ xử l&yacute; sẽ được d&ugrave;ng. C&aacute;c t&ugrave;y chọn bao gồm  <b>CPU</b>, <b>GPU</b>, v&agrave; <b>Tự động</b>. Nếu chỉ định t&ugrave;y chọn <b>Tự động</b>, c&ocirc;ng cụ sẽ x&aacute;c định loại bộ xử l&yacute;.
+            </p>
+        </div>
+    </div>
+    <div id="parallelProcessingFactor">
+        <div>
+            <p>Chỉ định số phi&ecirc;n bản dịch vụ xử l&yacute; raster được sử dụng trong khi chạy c&ocirc;ng cụ. C&aacute;c gi&aacute; trị được hỗ trợ bao gồm c&aacute;c chuỗi trống (c&ocirc;ng cụ sẽ x&aacute;c định số phi&ecirc;n bản dịch vụ xử l&yacute; raster cần sử dụng), số nguy&ecirc;n (0 hoặc số nguy&ecirc;n dương) v&agrave; phần trăm. Phần trăm phải bao gồm k&yacute; hiệu phần trăm (%) theo sau gi&aacute; trị phần trăm.
+            </p>
+        </div>
+    </div>
+    <div id="askConfirmation">
+        <div>
+            <p>X&aacute;c định xem th&ocirc;ng b&aacute;o cảnh b&aacute;o c&oacute; xuất hiện hay kh&ocirc;ng nếu số lượng credits ước t&iacute;nh vượt qu&aacute; ngưỡng được chỉ định (đ&atilde; bật) hoặc liệu ph&acirc;n t&iacute;ch sẽ chạy m&agrave; kh&ocirc;ng hiển thị th&ocirc;ng b&aacute;o bất kể mức sử dụng credits ước t&iacute;nh (kh&ocirc;ng được bật). Ph&acirc;n t&iacute;ch vẫn sẽ t&ocirc;n trọng c&aacute;c thiết lập ng&acirc;n s&aacute;ch credits cho tổ chức.
+            </p>
+        </div>
+    </div>
+    <div id="creditThreshold">
+        <div>
+            <p>Chỉ định ngưỡng th&ocirc;ng b&aacute;o cảnh b&aacute;o sẽ xuất hiện dựa tr&ecirc;n mức sử dụng credits ước t&iacute;nh từ việc chạy ph&acirc;n t&iacute;ch. Bạn vẫn c&oacute; thể chạy ph&acirc;n t&iacute;ch nếu ước t&iacute;nh vượt qu&aacute; ngưỡng.
+            </p>
+        </div>
+    </div>
+    <div id="recycleProcessingWorkers">
+        <div>
+            <p>X&aacute;c định số lượng phần h&igrave;nh ảnh sẽ được xử l&yacute; trước khi khởi động lại c&aacute;c quy tr&igrave;nh của nh&acirc;n vi&ecirc;n hiện trường, để ngăn ngừa lỗi tiềm ẩn trong c&aacute;c quy tr&igrave;nh m&agrave; c&oacute; thời gian chạy d&agrave;i. Gi&aacute; trị mặc định l&agrave; 0.
+            </p>
+        </div>
+    </div>
+    <div id="retryOnFailures">
+        <div>
+            <p>X&aacute;c định số lần m&agrave; c&ugrave;ng một quy tr&igrave;nh nh&acirc;n vi&ecirc;n sẽ thực hiện khi xảy ra lỗi trong qu&aacute; tr&igrave;nh xử l&yacute; một c&ocirc;ng việc cụ thể. Gi&aacute; trị mặc định l&agrave; 0.
+            </p>
+        </div>
+    </div>
+    <div id="geographicTransformations">
+        <div>
+            <p>X&aacute;c định phương ph&aacute;p chuyển đổi c&oacute; thể được sử dụng để chiếu dữ liệu cho ph&acirc;n t&iacute;ch.
+            </p>
+            <p>M&ocirc;i trường n&agrave;y hiện chỉ hỗ trợ c&ocirc;ng cụ Raster Analysis v&agrave; H&agrave;m Raster.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

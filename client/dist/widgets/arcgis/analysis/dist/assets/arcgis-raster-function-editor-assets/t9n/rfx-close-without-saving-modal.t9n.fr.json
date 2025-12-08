@@ -1,0 +1,7 @@
+{
+  "header": "Éditeur de fonctions raster",
+  "content": "Certaines modifications ne sont pas enregistrées dans '${rftTitle}'. Si vous ne les enregistrez pas, vos modifications seront perdues.",
+  "cancel": "Annuler",
+  "dontSave": "Ne pas enregistrer",
+  "save": "Enregistrer"
+}

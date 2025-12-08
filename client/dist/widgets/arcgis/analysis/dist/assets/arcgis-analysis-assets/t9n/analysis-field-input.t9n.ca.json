@@ -1,0 +1,68 @@
+{
+  "addField": "Afegeix un camp",
+  "addFieldErrors": {
+    "creatingFailed": "Error en crear el camp ${fieldName}.",
+    "existingFieldNameError": "El nom del camp no pot ser igual que un nom de camp existent.",
+    "invalidName": "Nom no vàlid",
+    "invalidNameInputInvalidCharactersError": "El nom del camp ha de començar amb una lletra i només pot contenir lletres, números i \"_\".",
+    "invalidNameInputSQLError": "El nom del camp no pot ser igual que una paraula clau SQL.",
+    "valueIsRequiredError": "Aquest valor és obligatori."
+  },
+  "cancel": "Cancel·la",
+  "createAndSelectField": "Crea i selecciona un camp",
+  "createNewFields": "Crea un camp nou",
+  "fieldLoadingErrorText": "No es poden carregar els camps.",
+  "fieldName": "Nom del camp",
+  "fieldType": "Tipus de camp",
+  "fieldTypesIncompatible": "No hi ha cap camp compatible disponible.",
+  "layerNotSelected": "No hi ha cap capa seleccionada per emplenar els camps.",
+  "loadingFields": "S'estan carregant els camps",
+  "noSearchResults": "No s'ha trobat cap camp coincident.",
+  "requiredErrorLabelDefault": "Un camp",
+  "requiredErrorMessage": "Aquest paràmetre és obligatori.",
+  "selectFieldPicklistHeading": "Seleccioneu un camp",
+  "selectOkBtnText": "Selecciona",
+  "tooltip": "Cal especificar un nom i un tipus de camp que siguin vàlids.",
+  "types": {
+    "big-integer": {
+      "description": "Emmagatzemeu nombres enters entre -(2${startSup}53${endSup}-1) i 2${startSup}53${endSup}-1. Feu servir aquest tipus de camp en utilitzar nombres fora de l'interval de camps enters admesos.",
+      "title": "Enter gran"
+    },
+    "date": {
+      "description": "Emmagatzemeu valors amb data i hora.",
+      "title": "Data"
+    },
+    "date-only": {
+      "description": "Emmagatzemeu valors de data sense valors de temps.",
+      "title": "Només la data"
+    },
+    "double": {
+      "description": "Emmagatzemeu nombres amb posicions decimals.",
+      "title": "Doble"
+    },
+    "global-id": {
+      "description": "Emmagatzemeu una cadena de 36 caràcters formada per lletres i nombres que es fa servir per identificar de manera única una entitat.",
+      "title": "GlobalID"
+    },
+    "guid": {
+      "description": "Emmagatzemeu una cadena de 36 caràcters formada per lletres i nombres. Un identificador únic global (GUID) se sol fer servir per administrar relacions entre entitats.",
+      "title": "GUID"
+    },
+    "integer": {
+      "description": "Emmagatzemeu nombres enters entre ${lowerIntegerRange} i ${upperIntegerRange}.",
+      "title": "Enter"
+    },
+    "string": {
+      "description": "Emmagatzema un conjunt de caràcters alfanumèrics",
+      "title": "Cadena"
+    },
+    "time-only": {
+      "description": "Emmagatzemeu valors de temps sense valors de data.",
+      "title": "Només l'hora"
+    },
+    "timestamp-offset": {
+      "description": "Emmagatzemeu valors que indiquin la data, l'hora i el desplaçament respecte de l'hora universal coordinada (UTC).",
+      "title": "Desplaçament de la marca d'hora"
+    }
+  }
+}

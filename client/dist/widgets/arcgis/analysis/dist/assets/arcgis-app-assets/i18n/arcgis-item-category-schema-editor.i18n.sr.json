@@ -1,0 +1,36 @@
+{
+  "modalHeader": "Konfiguriši kategorije sadržaja",
+  "modalGroupHeader": "Konfiguriši grupe kategorija",
+  "helpText": "Uređivanje, brisanje ili promena redosleda kategorije u vašoj organizaciji.",
+  "helpTextGroup": "Uredite, izbrišite ili promenite redosled kategorija za sadržaj u ovoj grupi.",
+  "helpTextDescription": "Imajte u vidu da su drugi članovi vaše organizacije možda već dodelili ove kategorije svojim stavkama i da će se uređivanjem šeme njihove stavke ažurirati u skladu sa tim.",
+  "helpTextGroupDescription": "Imajte u vidu da su drugi članovi grupe možda već dodelili ove kategorije svojim stavkama i da će se uređivanjem šeme njihove stavke ažurirati u skladu sa tim.",
+  "warning": {
+    "deleteInUseCategory": {
+      "title": "Obriši kategoriju",
+      "cta": "Obriši kategoriju",
+      "message": {
+        "single": "Jedna stavka je dodeljena za ovu kategoriju. Brisanje kategorije takođe će je ukloniti iz ove stavke.",
+        "multiple": "${number} stavki je dodeljeno u ovu kategoriju. Brisanje ove kategorije ukloniće je iz ovih stavki.",
+        "unknown": "Stavki dodeljeno u ovu kategoriju: ${number}. Brisanje ove kategorije ukloniće je iz ovih stavki."
+      }
+    },
+    "changeTitleInUseCategory": {
+      "title": "Ažuriraj kategoriju",
+      "message": {
+        "single": "Jedna stavka je dodeljena za ovu kategoriju. Ažuriranje kategorije će ažurirati stavku za upotrebu \"${newTitle}\".",
+        "multiple": "${number} stavki je dodeljeno u ovu kategoriju. Ažuriranje kategorije ažuriraće stavke u upotrebi \"${newTitle}\".",
+        "unknown": "Stavki dodeljeno u ovu kategoriju: ${number}. Ažuriranje kategorije ažuriraće stavke u upotrebi \"${newTitle}\"."
+      },
+      "cta": "Ažuriraj kategoriju"
+    }
+  },
+  "template": {
+    "templateList": {
+      "custom": {
+        "message": "Kreirajte sopstvene kategorije za organizovanje sadržaja unutar organizacije.",
+        "messageGroup": "Kreirajte sopstvene fotografije za organizovanje sadržaja unutar ove grupe."
+      }
+    }
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "header": "Önizleme",
+  "description": "Analizi çalıştırmadan sonucu ön izleyin.",
+  "showPreview": "Ön izlemeyi göster",
+  "previewLayer": "Ön izleme katmanı ${number}",
+  "update": "Güncelle",
+  "newPreview": "Yeni ön izleme",
+  "previewPopup": "Girdi parametrelerine dayalı olarak analiz sonuçlarının ön izlemesini etkinleştirin.",
+  "previewError": "Bu ön izleme katmanı kullanılamıyor. Girdi parametrelerini kontrol edin ve bu ön izleme katmanını yeniden güncelleyin.",
+  "updatePopover": "Seçili ön izleme katmanını güncelle",
+  "createPopover": "Yeni ön izleme katmanı oluştur",
+  "maxPreview": "Maksimum sayıda ön izleme katmanına izin verildi: ${maxCount}"
+}

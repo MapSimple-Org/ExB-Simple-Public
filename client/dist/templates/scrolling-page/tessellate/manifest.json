@@ -1,0 +1,33 @@
+{
+  "name": "tessellate",
+  "type": "template",
+  "templateType": "scrolling-page",
+  "label": "Tessellate",
+  "description": "Tesselate is a dashboard-like scrolling page template that includes text, charts, a table, and more widgets for displaying information from a data source.",
+  "thumbnail": "thumbnail.png",
+  "order": 10,
+  "tags": [
+    "Logo",
+    "Title",
+    "Share",
+    "Link",
+    "Filter",
+    "Chart",
+    "Card",
+    "Section",
+    "View",
+    "Navigation",
+    "Map",
+    "Query",
+    "Spatial filter",
+    "Table",
+    "List",
+    "Indicator"
+  ],
+  "categoriesTags": [
+    "Dashboard",
+    "Scrolling"
+  ],
+  "thumbnailWidth": 320,
+  "thumbnailHeight": 214
+}

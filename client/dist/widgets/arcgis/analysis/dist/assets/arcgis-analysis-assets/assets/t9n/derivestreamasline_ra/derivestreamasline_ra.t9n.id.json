@@ -1,0 +1,11 @@
+{
+  "all": "Semua",
+  "inputLayersGroupText": "Pilih raster permukaan input, dan secara opsional data penurunan dan raster bobot.",
+  "itemProperties": {
+    "description": "Output yang dibuat dari menjalankan alat Dapatkan Aliran sebagai Raster.",
+    "snippet": "Output yang dibuat dari Dapatkan Aliran sebagai Raster."
+  },
+  "outputStreamFeaturesLabel": "Nama fitur aliran output",
+  "simplifyLabel": "Sederhanakan fitur",
+  "streamSettingsGroupText": "Tentukan batas akumulasi, metode tujuan aliran, dan apakah garis aliran output akan diperhalus menjadi bentuk sederhana."
+}

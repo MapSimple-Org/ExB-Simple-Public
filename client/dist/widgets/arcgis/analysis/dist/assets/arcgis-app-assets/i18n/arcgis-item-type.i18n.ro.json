@@ -1,0 +1,27 @@
+{
+  "hosted": "găzduită",
+  "hostedView": "vizualizare, găzduită",
+  "hostedPhotos": "găzduite, fotografii",
+  "hostedCollection": "găzduită, colecție",
+  "hostedMultidimensional": "găzduită, multidimensională",
+  "hostedCollectionMultidimensional": "găzduită, colecție, multidimensională",
+  "collectionMultidimensional": "colecție, multidimensională",
+  "multidimensional": "multidimensională",
+  "collection": "colecție",
+  "photoLocations": "fotografii",
+  "locatorView": "vizualizare",
+  "utilityNetwork": "rețea de utilități",
+  "Integrated Mesh": "rețea integrată",
+  "3D Object": "Obiect 3D",
+  "Point": "punct",
+  "Point Cloud": "cloud de puncte",
+  "Building Scene Layer": "strat tematic scenă de clădiri",
+  "Voxel Scene Layer": "strat tematic de scenă voxel",
+  "dataStore": {
+    "bigdata": "partajare a fișierelor big data",
+    "cloud": "cloud",
+    "cloudStorage": "stocare în cloud",
+    "database": "bază de date",
+    "folder": "folder"
+  }
+}

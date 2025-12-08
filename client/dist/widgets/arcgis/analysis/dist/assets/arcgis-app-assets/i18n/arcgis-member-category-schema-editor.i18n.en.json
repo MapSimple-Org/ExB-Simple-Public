@@ -1,0 +1,22 @@
+{
+  "dialogHeading": "Configure member categories",
+  "noticeTitle": "Edit, delete, or reorder categories in your organization.",
+  "noticeDescription": "You can assign categories to members through the Members tab.",
+  "defaultCategoryWarning": "This member category is set as a new member default and cannot be edited or deleted.",
+  "warning": {
+    "deleteInUseCategory": {
+      "message": {
+        "single": "One member is assigned to this category. Deleting the category will also remove it from this member.",
+        "multiple": "${number} members are assigned to this category. Deleting the category will also remove it from these members.",
+        "unknown": "Members assigned to this category: ${number}. Deleting the category will also remove it from these members."
+      }
+    },
+    "changeTitleInUseCategory": {
+      "message": {
+        "single": "One member is assigned to this category. Updating the category will update the member to use \"${newTitle}\".",
+        "multiple": "${number} members are assigned to this category. Updating the category will update the members to use \"${newTitle}\".",
+        "unknown": "Members assigned to this category: ${number}. Updating the category will update the members to use \"${newTitle}\"."
+      }
+    }
+  }
+}

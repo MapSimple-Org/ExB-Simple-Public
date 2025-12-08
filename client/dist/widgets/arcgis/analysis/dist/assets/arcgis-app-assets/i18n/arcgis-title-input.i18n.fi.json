@@ -1,0 +1,20 @@
+{
+  "title": "Otsikko",
+  "addTitle": "Lisää otsikko",
+  "validation": {
+    "error": "Virhe",
+    "titleRequired": "Otsikko on pakollinen kenttä.",
+    "itemExists": "Tässä kansiossa on jo kohde, jonka otsikko on \"${name}\". Valitse jokin muu otsikko.",
+    "titleInUseService": "Karttataso, jonka nimi on \"${name}\", on jo olemassa. Valitse jokin muu otsikko.",
+    "itemInRecycleBin": "Kohde, jonka nimi on \"${name}\", on jo olemassa ja löytyy roskakorista. Valitse jokin muu otsikko.",
+    "serviceNameInvalid": "Palvelun otsikossa voi olla vain aakkosnumeerisia merkkejä tai alaviivoja, ja se voi olla enintään 90 merkkiä pitkä.",
+    "dataStoreTitleInvalid": "Aineistosäilön otsikossa voi olla vain aakkosnumeerisia merkkejä tai alaviivoja, ja se voi olla enintään 90 merkkiä pitkä.",
+    "titleInvalid": "Otsikossa saa olla enintään 250 merkkiä eikä siinä voi olla merkkejä < tai >.",
+    "titleStartsWithNumber": "Otsikko ei voi alkaa numerolla.",
+    "invalidCharacters": {
+      "single": "Nimessä ei voi olla tätä merkkiä: ${invalidCharacters}.",
+      "multiple": "Nimi ei saa sisältää mitään seuraavista merkeistä: ${invalidCharacters}.",
+      "unknown": "Nimi ei saa sisältää mitään seuraavista merkeistä: ${invalidCharacters}."
+    }
+  }
+}

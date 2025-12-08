@@ -1,0 +1,137 @@
+{
+  "next": "Edasi",
+  "addField": "Lisa väli",
+  "selectDataType": "Valige väljale salvestatav andmetüüp",
+  "addGlobalIDNotice": "Väli täidetakse automaatselt kihis või tabelis olevate olemasolevate andmetega. Pärast lisamist ei saa seda välja redigeerida ega kustutada.",
+  "fieldName": "Välja nimi",
+  "displayName": "Kuvatav nimi",
+  "length": "Pikkus",
+  "defaultValue": "Vaikeväärtus (valikuline)",
+  "fieldTypes": "Väljatüübid",
+  "fieldValueType": "Välja väärtuse tüüp (valikuline)",
+  "fieldDescription": "Välja kirjeldus (valikuline)",
+  "allowNullValues": "Luba nullväärtused",
+  "valueRequiredError": "See väärtus on nõutav",
+  "fieldAdded": "Välja lisamine õnnestus",
+  "newFieldTypeNotice": "Mõnes klientrakenduses ei pruugita seda väljatüüpi toetada.",
+  "addingField": "Välja lisamine...",
+  "syncEnabled": "Mõnesid väljatüüpe ei saa lisada, sest kihi sünkroonimine on lubatud.",
+  "newFeature": "Uus objekt",
+  "fieldAdditionUnsuccessful": "Välja lisamine nurjus",
+  "error": "Tõrge",
+  "noFieldTypeSelected": "Välja tüüpi ei ole valitud",
+  "nullFieldTypeError": "Jätkamiseks peate valima välja tüübi.",
+  "fieldNameCharacterNotice": "Pikemad kui 40-tähemärgilised väljanimed ei sobi võrguühenduseta kasutamiseks.",
+  "suggestedHeader": "Soovitatud",
+  "otherHeader": "Muud",
+  "provideDescription": "Esitage väljal sisalduva teabe kirjeldus",
+  "nullableTooltipInfo": "Seda seadet ei saa muuta, kui teie kiht juba sisaldab andmeid.",
+  "tooltipInfo": {
+    "globalIDExists": "GlobalID väli on sellel teenusel juba olemas. Kihis või tabelis saab olla ainult üks GlobalID väli.",
+    "enterpriseTimestampOffset": "ArcGIS Enterprise ei toeta ajatempli nihke välju majutatud objektikihtidel."
+  },
+  "text": {
+    "title": "Tekst",
+    "description": "Tähtnumbrilisi või erimärke sisaldavad väärtused.",
+    "types": {
+      "esriFieldTypeString": {
+        "title": "Tekstistring",
+        "description": "Salvestage määratud pikkusega tähtnumbriliste tähemärkide kogum."
+      }
+    }
+  },
+  "numbers": {
+    "title": "Arvud",
+    "description": "Numbrilist teavet sisaldavad väärtused.",
+    "types": {
+      "esriFieldTypeDouble": {
+        "title": "Kahekordne",
+        "description": "Salvestage kümnendkohtadega arvud."
+      },
+      "esriFieldTypeInteger": {
+        "title": "Täisarv",
+        "description": "Talletage täisarvud alates ${lowerIntegerRange} kuni ${upperIntegerRange}."
+      },
+      "esriFieldTypeBigInteger": {
+        "title": "Suur täisarv",
+        "description": "Salvestage täisarvud alates -(2${startSup}53${endSup}-1) ja 2${startSup}53${endSup}-1. Kasutage seda väljatüüpi, kui kasutate arve, mis on väljaspool toetatud täisarvu välja vahemikku."
+      }
+    }
+  },
+  "dates": {
+    "title": "Kuupäevad",
+    "description": "Ajaandmeid sisaldavad väärtused.",
+    "types": {
+      "esriFieldTypeDate": {
+        "title": "Kuupäev",
+        "description": "Salvestage väärtused koos kuupäeva ja kellaajaga."
+      },
+      "esriFieldTypeDateOnly": {
+        "title": "Ainult kuupäev",
+        "description": "Salvestage kuupäeva väärtused ilma kellaaja väärtusteta."
+      },
+      "esriFieldTypeTimeOnly": {
+        "title": "Ainult kellaaeg",
+        "description": "Salvestage kellaaja väärtused ilma kuupäeva väärtusteta."
+      },
+      "esriFieldTypeTimestampOffset": {
+        "title": "Ajatempli nihe",
+        "description": "Salvestage kuupäeva, kellaaega ja nihet koordineeritud maailmaajast (UTC) tähistavad väärtused."
+      }
+    }
+  },
+  "globalIdentifiers": {
+    "title": "Globaalsed identifikaatorid",
+    "description": "Objekti või tabelirida kordumatult tuvastavad väärtused.",
+    "types": {
+      "esriFieldTypeGlobalID": {
+        "title": "GlobalID",
+        "description": "Salvestage tähtedest ja numbritest koosnev string, mis sisaldab 36 tähemärki ja mida kasutatakse objekti unikaalseks tuvastamiseks."
+      },
+      "esriFieldTypeGUID": {
+        "title": "GUID",
+        "description": "Salvestage tähtedest ja numbritest koosnev string, mis sisaldab 36 tähemärki. Ülemaailmselt unikaalset identifikaatorit (GUID) kasutatakse sageli objektivaheliste seoste haldamiseks."
+      }
+    }
+  },
+  "fieldValueTypes": {
+    "nameOrTitle": "Nimi või pealkiri",
+    "description": "Kirjeldus",
+    "typeOrCategory": "Tüüp või kategooria",
+    "countOrAmount": "Arv või hulk",
+    "percentageOrRatio": "Protsent või suhe",
+    "measurement": "Mõõtmine",
+    "currency": "Valuuta",
+    "uniqueIdentifier": "Kordumatu identifikaator",
+    "phoneNumber": "Telefoninumber",
+    "emailAddress": "Meiliaadress",
+    "orderedOrRanked": "Tellitud või järjestatud",
+    "binary": "Kahendandmed",
+    "locationOrPlaceName": "Asukoha või koha nimi",
+    "coordinate": "Koordinaat",
+    "dateAndTime": "Kuupäev ja kellaaeg",
+    "none": "Puudub"
+  },
+  "addFieldErrors": {
+    "invalidName": "Nimi ei sobi",
+    "invalidLength": "Pikkus ei sobi",
+    "outOfRangeValueError": "See väärtus on vahemikust väljas.",
+    "invalidValueError": "Sisestatud väärtus ei sobi.",
+    "invalidFieldParameters": "Välja kehtetud parameetrid",
+    "invalidInputsError": "Kontrollige, kas välja parameetrid on õigesti täidetud.",
+    "existingFieldNameError": "Välja nimi ei saa olla sama kui olemasolev väljanimi.",
+    "invalidNameInputSQLError": "Välja nimi ei saa olla sama kui SQL-i märksõna.",
+    "invalidNameInputInvalidCharactersError": "Peab algama tähega ja tohib sisaldada ainult tähti, numbreid ja märki „_“.",
+    "valueIsRequiredError": "See väärtus on nõutav.",
+    "lengthExceeds": "Välja nime pikkus peaks olema maksimaalselt ${maxFieldNameLength} tähemärki.",
+    "defaultValueExceeds": "Vaikeväärtus ületab määratud välja pikkust.",
+    "savingFailed": "${layerName} salvestamine nurjus",
+    "readOnlyErrorMessage": "ArcGIS Online'i talitluses esineb häireid ja see on lülitunud kirjutuskaitstud režiimi. Mõned võimalused võivad olla piiratud. Uudised selle kohta, millal tõrge lahendatakse, leiate ArcGIS Online Health tervise töölaualt.",
+    "readOnlyErrorMessageEnterprise": "ArcGIS Enterprise'i talitluses esineb häireid ja see on lülitunud kirjutuskaitstud režiimi. Mõned võimalused võivad olla piiratud.",
+    "healthDashboard": "ArcGIS Online'i tervise töölaud",
+    "genericAddFieldError": {
+      "title": "Tõrge",
+      "description": "Välja lisamisel ilmnes tõrge."
+    }
+  }
+}

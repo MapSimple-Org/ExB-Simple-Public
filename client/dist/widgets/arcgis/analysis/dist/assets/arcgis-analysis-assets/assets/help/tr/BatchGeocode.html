@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>Tablodan Alınan Coğrafi Kod Konumları aracı, bir girdi tablosu veya dosyasındaki adresleri veya yerleri koordinatlara d&ouml;n&uuml;şt&uuml;r&uuml;r.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputType">
+        <div>
+            <p>Girdinin bir Tablo &ouml;gesi (<b>Barındırılan tablo</b>) veya bir <code>.csv</code> veya Excel dosyası (<b>CSV/Excel</b>) olduğunu belirtir.
+            </p>
+        </div>
+    </div>
+    <div id="inputFileItem">
+        <div>
+            <p>Coğrafi kodlanacak adresleri veya yerleri i&ccedil;eren girdi dosyası. Girdi bir  <code>.csv</code> veya Excel dosyası olmalıdır. </p>
+        </div>
+    </div>
+    <div id="inputTable">
+        <div>
+            <p>Coğrafi kodlanacak adresleri veya yerleri i&ccedil;eren girdi tablosu. Girdi bir barındırılan Tablo &ouml;gesi olmalıdır.
+            </p>
+            <p>Tablo adının altında bir detay sayısı g&ouml;r&uuml;nt&uuml;lenir. Sayım, bir filtre kullanılarak kaldırılanlar dışında tabloda bulunan t&uuml;m detayları i&ccedil;erir.
+            </p>
+        </div>
+    </div>
+    <div id="geocodeServiceURL">
+        <div>
+            <p>Coğrafi kodlama i&ccedil;in kullanılacak konumlandırıcı servisi. Kullanmak istediğiniz konumlandırıcı servis aşağı a&ccedil;ılan men&uuml;de yoksa, y&ouml;neticinize başvurarak konumlandırıcı servisin bir yardımcı servis olarak eklenmesini sağlayın.
+            </p>
+        </div>
+    </div>
+    <div id="singleOrMultiFieldSwitch">
+        <div>
+            <p>Girdi verilerinin tek bir alanda mı yoksa birden fazla alanda mı bulunduğunu belirtir.
+            </p>
+        </div>
+    </div>
+    <div id="geocodeUIParameters">
+        <div>
+            <p>Konumlandırıcı tarafından verilerin konumlarını belirlemek i&ccedil;in kullanılacak alanlar. Adres, şehir, eyalet ve posta kodu gibi belirli alanların verilerde olduğu varsayılır.
+            </p>
+        </div>
+    </div>
+    <div id="sourceCountry">
+        <div>
+            <p>Verilerin bulunduğu &uuml;lke. Adreslerin t&uuml;m&uuml; bir tek &uuml;lkedeyse, en doğru sonu&ccedil;ları elde etmek i&ccedil;in s&ouml;z konusu &uuml;lke adını se&ccedil;in. Aksi takdirde bu parametreyi boş bırakın.
+            </p>
+        </div>
+    </div>
+    <div id="outputFields">
+        <div>
+            <p>&Ccedil;ıktı veri k&uuml;mesine dahil edilecek alanları belirtir. Se&ccedil;enekler şu şekildedir:
+            </p>
+            <ul>
+                <li> <b>T&uuml;m&uuml;</b>&mdash;Mevcut t&uuml;m konumlandırıcı &ccedil;ıktı alanları coğrafi kodlama sonu&ccedil;larına dahil edilecektir.
+                </li>
+                <li> <b>Minimum</b>&mdash;Konumlandırıcıdaki alanların bir alt k&uuml;mesinin yanı sıra girdi tablosundaki alanlar da sonu&ccedil;lara dahil edilecektir.
+                </li>
+                <li> <b>Yalnızca konum</b>&mdash;Konumlandırıcıdaki <i>Shape</i> alanının yanı sıra girdi tablosundan alınan alanlar sonu&ccedil;lara dahil edilecektir.
+                </li>
+            </ul>
+            
+        </div>
+    </div>
+    <div id="outputType">
+        <div>
+            <p>Oluşturulacak &ccedil;ıktının t&uuml;r&uuml;. &Ccedil;ıktı bir detay servisi,  <code>.csv</code> dosyası veya <code>.xls</code> dosyası olabilir.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p> <b>İ&ccedil;eriğim</b> b&ouml;l&uuml;m&uuml;nde oluşturulacak katmanın veya dosyanın adı.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p> <b>İ&ccedil;eriğim</b> i&ccedil;inde sonucun kaydedileceği klas&ouml;r&uuml;n adı.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

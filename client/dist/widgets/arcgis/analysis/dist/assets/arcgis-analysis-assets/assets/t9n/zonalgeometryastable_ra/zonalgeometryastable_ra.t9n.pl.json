@@ -1,0 +1,9 @@
+{
+  "inputLayerGroupText": "Wybierz warstwę wejściową, aby obliczyć geometrię granic stref.",
+  "itemProperties": {
+    "description": "Tabela wynikowa wygenerowana za pomocą narzędzia analizy Geometria stref jako tabela.",
+    "snippet": "Tabela wynikowa wygenerowana przy użyciu narzędzia Geometria stref jako tabela"
+  },
+  "zonalGeometrySettingGroupLabel": "Ustawienie geometrii strefowej",
+  "zonalGeometrySettingGroupText": "Podaj wielkość komórki do obliczenia."
+}

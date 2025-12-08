@@ -1,0 +1,1 @@
+{"componentLabel":"Sporingsinput","labels":{"utilityNetwork":"Forsyningsnetværk","traceConfiguration":"Sporingskonfiguration","traceInputs":"Sporingsinput"},"errors":{"noMapError":"Ingen tilgængelige kort","noUtilityNetworkError":"Der blev ikke fundet nogen forsyningsnetværk på kortet","noTraceConfigurationError":"Ingen tilgængelige navngivne sporingskonfigurationer"}}

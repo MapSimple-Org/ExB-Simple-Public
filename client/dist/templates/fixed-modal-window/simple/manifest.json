@@ -1,0 +1,12 @@
+{
+  "name": "simple",
+  "type": "template",
+  "templateType": "fixed-modal-window",
+  "label": "Simple",
+  "thumbnail": "thumbnail.png",
+  "order": 4,
+  "tags": [],
+  "categoriesTags": [],
+  "thumbnailWidth": 320,
+  "thumbnailHeight": 268
+}

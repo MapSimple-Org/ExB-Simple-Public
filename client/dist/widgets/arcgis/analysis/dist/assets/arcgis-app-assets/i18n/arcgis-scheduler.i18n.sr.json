@@ -1,0 +1,55 @@
+{
+  "beginningOnLabel": "Počinje",
+  "repeatTypeLabel": "Tip ponavljanja",
+  "endingOnTypeLabel": "Završava se",
+  "endingOnDateLabel": "Datum završetka",
+  "endingOnCountLabel": "Broj",
+  "endingOnCountPlaceholder": "na primer: 1, 10, 30",
+  "dailyRepeatIntervalLabel": "Interval ponavljanja",
+  "dailyTimeLabel": "Vreme",
+  "weeklyDaysOfWeekLabel": "Dan u nedelji",
+  "weeklyTimeLabel": "Vreme",
+  "monthlyDayOfMonthLabel": "Dan u mesecu",
+  "monthlyDayOfMonthPlaceholder": "na primer, 1 - 31",
+  "monthlyRepeatIntervalLabel": "Interval ponavljanja",
+  "monthlyTimeLabel": "Vreme",
+  "repeatTypeOptions": {
+    "day": "Dan",
+    "week": "Sedmica",
+    "month": "Mesec"
+  },
+  "endingOnType": {
+    "never": "Nikada",
+    "date": "Datum",
+    "count": "Uključeno"
+  },
+  "dailyRepeatInterval": {
+    "everyDay": "Svakog dana",
+    "everyOtherDay": "Svakog drugog dana",
+    "everyThreeDays": "Svaka tri dana",
+    "everyFourDays": "Svaka četiri dana",
+    "everyFiveDays": "Svakih pet dana",
+    "everySixDays": "Svakih šest dana",
+    "everySevenDays": "Svakih sedam dana",
+    "everyFourteenDays": "Svakih četrnaest dana"
+  },
+  "weekDays": {
+    "all": "Sve",
+    "allWeekdays": "Svim radnim danima",
+    "sunday": "Nedelja",
+    "monday": "Ponedeljak",
+    "tuesday": "Utorak",
+    "wednesday": "Sreda",
+    "thursday": "Četvrtak",
+    "friday": "Petak",
+    "saturday": "Subota"
+  },
+  "monthlyRepeatInterval": {
+    "everyMonth": "Svakog meseca",
+    "everyTwoMonths": "Svaka dva meseca",
+    "everyThreeMonths": "Svaka tri meseca",
+    "everyFourMonths": "Svaka četiri meseca",
+    "everyFiveMonths": "Svakih pet meseci",
+    "everySixMonths": "Svakih šest meseci"
+  }
+}

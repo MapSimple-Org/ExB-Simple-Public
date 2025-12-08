@@ -1,0 +1,23 @@
+{
+  "add": "Pievienot",
+  "arcade": "Arcade",
+  "arcadeExpressionEditor": "Arcade izteiksmes redaktors",
+  "badSyntaxSQLExpression": "SQL izteiksmē ir sintakses kļūda. Labojiet kļūdas.",
+  "calculationExpressionEditor": "Aprēķināšanas izteiksmes redaktors",
+  "cancel": "Atcelt",
+  "chooseLanguage": "Izvēlēties valodu",
+  "fieldToCalculate": "Lauks, ko aprēķināt: ${fieldName}",
+  "idealFor": "Ideāli piemērots:",
+  "languageSelect": "Valodas izvēle",
+  "layerLoadFailNoFields": "Slāni neizdevās ielādēt. Redaktoram laukus nevarēja izgūt.",
+  "next": "Nākošais",
+  "noLayerProvidedNoFields": "Slānis netika norādīts. Redaktoram laukus nevarēja izgūt.",
+  "sql": "SQL",
+  "sqlExpressionEditor": "SQL izteiksmes redaktors",
+  "tileSelectArcadeUseCase1": "Aprēķini, kuru veikšanai ir nepieciešama lielāka funkcionalitāte nekā SQL, iekļaujot telpiskās darbības",
+  "tileSelectArcadeUseCase2": "Uzlabota problēmu novēršana",
+  "tileSelectSqlUseCase1": "Visātrākā veiktspēja",
+  "tileSelectSqlUseCase2": "Aprēķini, ko var izteikt, izmantojot SQL",
+  "tileSelectSqlUseCase3": "Slāņi ar sinhronizāciju vai kuriem ir iespējota izveidoto vai atjaunināto elementu izsekošana",
+  "valueCannotBeBlank": "Vērtība nevar būt tukša."
+}

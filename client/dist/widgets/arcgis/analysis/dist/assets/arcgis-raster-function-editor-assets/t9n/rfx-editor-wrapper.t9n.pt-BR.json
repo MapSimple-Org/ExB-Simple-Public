@@ -1,0 +1,6 @@
+{
+  "dialogTitle": "Editor de Função do Raster",
+  "defaultTemplateName": "Modelo de Função do Raster",
+  "readOnlyModeTitle": "Somente Leitura",
+  "readOnlyModeMessage": "O item do modelo de função raster é somente leitura. As alterações não podem ser salvas."
+}

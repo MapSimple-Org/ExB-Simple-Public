@@ -1,0 +1,9 @@
+{
+  "inputLayerGroupText": "Trieu la capa d'entrada per calcular la geometria dels límits de la zona.",
+  "itemProperties": {
+    "description": "Taula de sortida generada en executar l'eina d'anàlisi Geometria zonal com a taula.",
+    "snippet": "Taula de sortida generada a partir de Geometria zonal com a taula"
+  },
+  "zonalGeometrySettingGroupLabel": "Configuració de la geometria zonal",
+  "zonalGeometrySettingGroupText": "Especifiqueu la mida de la cel·la per calcular."
+}

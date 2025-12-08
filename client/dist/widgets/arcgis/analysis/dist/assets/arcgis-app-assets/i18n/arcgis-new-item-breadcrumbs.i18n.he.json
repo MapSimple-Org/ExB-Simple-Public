@@ -1,0 +1,12 @@
+{
+  "apiCredentialType": "סוג אישור: מפתח API",
+  "oauthCredentialType": "סוג אישור: OAuth 2.0",
+  "itemAccess": "גישה לפריט",
+  "page": "דף: ${page}",
+  "currentPage": "דף נוכחי: ${page}",
+  "privileges": "הרשאות",
+  "itemDetails": "פרטי פריט",
+  "settings": "הגדרות",
+  "serviceScope": "היקף שירות",
+  "summary": "תקציר"
+}

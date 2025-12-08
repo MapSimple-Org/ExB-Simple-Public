@@ -1,0 +1,1 @@
+System.register([],function(e){return{execute:function(){e({_widgetLabel:"Conectar",switchToLogin:"Trocar para antes do login",switchToLogout:"Trocar para ap\xf3s o login",toggleSignInPreview:"Alternar visualiza\xe7\xe3o de login",restrictedResources:"Recursos restritos"})}}});

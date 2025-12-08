@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>Bileşik İndeks Hesaplama aracı, birden fazla sayısal değişkeni birleştirerek tek bir indeks oluşturur.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputLayer">
+        <div>
+            <p>İndekste birleştirilecek değişkenleri i&ccedil;eren tablo veya detaylar.
+            </p>
+            <p class="toolPaneOnly">Detay sayısı, filtreleme kriterleri ve analiz yayılımı gibi ek fakt&ouml;rlere bağlıdır.
+            </p> 
+            <p class="modelBuilderOnly"> <b>Girdi detaylar veya tablo</b> doldurulmadığında <b>katman</b> varsayılan olarak belirtilir. Bir girdi tablosu eklemek i&ccedil;in bir veri k&uuml;mesi eklemeden &ouml;nce <b>Tablo</b>'yu se&ccedil;in.
+            </p>
+        </div>
+    </div>
+    <div id="inputVariables">
+        <div>
+            <p>İndeksi oluşturmak i&ccedil;in birleştirilecek değişkenleri i&ccedil;eren alanlar.  <b>Ters y&ouml;n</b>, değişken değerlerinin tersine &ccedil;evrilip &ccedil;evrilmeyeceğini belirtir. <b>Ağırlık</b>, her bir değişkenin indeks &uuml;zerindeki g&ouml;receli etkisidir.
+            </p>
+        </div>
+    </div>
+    <div id="indexMethod">
+        <div>
+            <p>Girdi değişkenlerini &ouml;l&ccedil;eklendirmek ve &ouml;l&ccedil;eklendirilmiş değişkenleri birleştirerek indeks oluşturmak i&ccedil;in kullanılacak y&ouml;ntemi belirtir.
+            </p>
+        </div>
+    </div>
+    <div id="outputIndexReverse">
+        <div>
+            <p>&Ccedil;ıktı indeks değerlerinin y&ouml;n&uuml;n&uuml;n tersine &ccedil;evrilip &ccedil;evrilmeyeceğini belirtir. İşaretlendiğinde, y&uuml;ksek değerler d&uuml;ş&uuml;k indeks değerleri olarak değerlendirilecek ve bunun tersi de ge&ccedil;erli olacaktır.
+            </p>
+        </div>
+    </div>
+    <div id="outputIndexMinMax">
+        <div>
+            <p>&Ccedil;ıktı indeksi değerlerinin minimum ve maksimum değerleri.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>Oluşturulacak ve haritaya eklenecek katmanın adı.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p> <b>İ&ccedil;eriğim</b> i&ccedil;inde sonucun kaydedileceği klas&ouml;r&uuml;n adı.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

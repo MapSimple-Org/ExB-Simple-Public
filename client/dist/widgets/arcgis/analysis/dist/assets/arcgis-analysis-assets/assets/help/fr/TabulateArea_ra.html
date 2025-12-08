@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>L&rsquo;outil Tabulate Area (Croiser les superficies) calcule les surfaces crois&eacute;es entre deux jeux de donn&eacute;es et fournit les r&eacute;sultats sous forme de table.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputZoneRasterOrFeatures">
+        <div>
+            <p>Entr&eacute;e qui d&eacute;finit les limites des zones.
+            </p>
+            <p class="toolPaneOnly">Le nombre d&rsquo;entit&eacute;s en entr&eacute;e d&eacute;pend de facteurs suppl&eacute;mentaires, tels que les crit&egrave;res de filtrage et l&rsquo;&eacute;tendue d&rsquo;analyse.
+            </p>
+        </div>
+    </div>
+    <div id="zoneField">
+        <div>
+            <p>Champ contenant les valeurs qui d&eacute;finissent chaque zone.
+            </p>
+        </div>
+    </div>
+    <div id="inputClassRasterOrFeatures">
+        <div>
+            <p>Entr&eacute;e qui d&eacute;finit les limites des classes dont la surface est calcul&eacute;e.
+            </p>
+            <p class="toolPaneOnly">Le nombre d&rsquo;entit&eacute;s en entr&eacute;e d&eacute;pend de facteurs suppl&eacute;mentaires, tels que les crit&egrave;res de filtrage et l&rsquo;&eacute;tendue d&rsquo;analyse.
+            </p>
+        </div>
+    </div>
+    <div id="classField">
+        <div>
+            <p>Champ contenant les valeurs qui d&eacute;finissent chaque classe.
+            </p>
+        </div>
+    </div>
+    <div id="classesAsRows">
+        <div>
+            <p>Indique si les valeurs du raster de classes en entr&eacute;e seront repr&eacute;sent&eacute;es en tant que lignes dans la table en sortie.
+            </p>
+            <p>Si l&rsquo;option est d&eacute;sactiv&eacute;e, les classes sont repr&eacute;sent&eacute;es en tant que champs. Si l&rsquo;option est activ&eacute;e, les classes sont repr&eacute;sent&eacute;es en tant que lignes.
+            </p>
+        </div>
+    </div>
+    <div id="analysisCellSize">
+        <div>
+            <p>Sp&eacute;cifie la taille de cellule du raster d&rsquo;analyse cr&eacute;&eacute; pour calculer les surfaces crois&eacute;es.
+            </p>
+        </div>
+    </div>
+    <div id="outputTableName">
+        <div>
+            <p>Nom de la couche de tables de surfaces crois&eacute;es qui sera cr&eacute;&eacute;e et ajout&eacute;e &agrave; la carte.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>Nom du dossier de  <b>My content (Mon contenu)</b> dans lequel est enregistr&eacute; le r&eacute;sultat.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

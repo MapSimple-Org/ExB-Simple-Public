@@ -1,0 +1,26 @@
+{
+  "CCIAnalysisSettingGroupLabel": "Nastavitve indeksa",
+  "CCIAnalysisSettingGroupText": "Navedite, kako bo indeks izračunan.",
+  "geomeanPercentileLabel": "Združi stopnje (geometrična povprečna vrednost odstotkov)",
+  "geomeanRawLabel": "Združi neobdelane vrednosti (geometrična povprečna vrednost neobdelanih vrednosti)",
+  "geomeanScaledLabel": "Združi skalirane vrednosti (geometrična povprečna vrednost skaliranih vrednosti)",
+  "indexMethodLabel": "Metoda za skaliranje in kombiniranje spremenljivk",
+  "inputFeaturesOrTableLabel": "Vhodni geoobjekti ali tabele",
+  "inputLayerGroupText": "Izberite geoobjekte ali tabelo in spremenljivke za ustvarjanje indeksa.",
+  "inputVariablesLabel": "Vhodne spremenljivke",
+  "itemProperties": {
+    "description": "Geoobjektni sloj, ustvarjen z izvajanjem orodja za analizo Izračunaj sestavljen indeks.",
+    "snippet": "Geoobjektni sloj, ustvarjen z Izračunom sestavljenega indeksa"
+  },
+  "meanPercentileLabel": "Kombinira stopnje (povprečna vrednost odstotkov)",
+  "meanRawLabel": "Kombiniraj neobdelane vrednosti (povprečna vrednost neobdelanih vrednosti)",
+  "meanScaledLabel": "Kombiniraj skalirane vrednosti (povprečna vrednost skaliranih vrednosti)",
+  "outputIndexMaxLabel": "Maksimum",
+  "outputIndexMinLabel": "Minimum",
+  "outputIndexMinMaxLabel": "Najmanjše in največje vrednosti indeksa",
+  "outputIndexReverseLabel": "Obratne vrednosti indeksa",
+  "reverseVariableLabel": "Obrni smer",
+  "sumFlagsPercentileLabel": "Poudari ekstremne vrednosti (štetje vrednosti nad 90. odstotkom)",
+  "toolName": "Izračunaj sestavljen indeks",
+  "weight": "Teža"
+}

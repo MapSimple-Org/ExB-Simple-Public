@@ -1,0 +1,1 @@
+System.register([],function(e){return{execute:function(){e({_widgetLabel:"Anmeldung",switchToLogin:"Vor der Anmeldung wechseln zu",switchToLogout:"Nach der Anmeldung wechseln zu",toggleSignInPreview:"Vorschau der Anmeldung umschalten",restrictedResources:"Eingeschr\xe4nkte Ressourcen"})}}});

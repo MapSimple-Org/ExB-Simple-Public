@@ -1,0 +1,88 @@
+{
+  "version": "24.0.0",
+  "id": "pie",
+  "type": "chart",
+  "dataSource": {
+    "query": {
+      "groupByFieldsForStatistics": [],
+      "outStatistics": []
+    }
+  },
+  "colorMatch": true,
+  "series": [
+    {
+      "type": "pieSeries",
+      "dataTooltipVisible": true,
+      "innerRadius": 0,
+      "startAngle": 0,
+      "endAngle": 360,
+      "displayNumericValueOnDataLabel": true,
+      "displayPercentageOnDataLabel": false,
+      "displayNumericValueOnTooltip": true,
+      "displayPercentageOnTooltip": true,
+      "dataLabelsOffset": 0,
+      "sliceGrouping": {
+        "sliceId": "__other-slice__",
+        "percentageThreshold": 0,
+        "label": "Other",
+        "fillSymbol": {
+          "type": "esriSFS",
+          "style": "esriSFSSolid",
+          "color": "#D6D6D6",
+          "outline": {
+            "type": "esriSLS",
+            "style": "esriSLSSolid",
+            "color": "var(--sys-color-divider-secondary)",
+            "width": 1
+          }
+        }
+      },
+      "numericValueFormat": {
+        "type": "number",
+        "intlOptions": {
+          "style": "decimal",
+          "notation": "standard",
+          "minimumFractionDigits": 0,
+          "maximumFractionDigits": 0
+        }
+      },
+      "percentValueFormat": {
+        "type": "number",
+        "intlOptions": {
+          "style": "percent",
+          "notation": "standard",
+          "minimumFractionDigits": 2,
+          "maximumFractionDigits": 2
+        }
+      },
+      "dataLabels": {
+        "type": "chartText",
+        "visible": false,
+        "content": {
+          "type": "esriTS",
+          "color": "var(--sys-color-surface-paper-hint)",
+          "font": {
+            "family": "inherit",
+            "size": 10,
+            "style": "normal",
+            "weight": "normal",
+            "decoration": "none"
+          },
+          "horizontalAlignment": "center",
+          "verticalAlignment": "top"
+        }
+      },
+      "fillSymbol": {
+        "type": "esriSFS",
+        "style": "esriSFSSolid",
+        "color": "#5E8FD0",
+        "outline": {
+          "type": "esriSLS",
+          "style": "esriSLSSolid",
+          "color": "var(--sys-color-divider-secondary)",
+          "width": 1
+        }
+      }
+    }
+  ]
+}

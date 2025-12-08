@@ -1,0 +1,16 @@
+{
+  "updateData": "Perbaharui data",
+  "cancel": "Batalkan",
+  "editStyle": "Ganti file gaya layer dengan versi terbaru dari komputer Anda.",
+  "updatePackages": "Ganti file ${type} versi terbaru dari komputer Anda. File yang diunggah harus memiliki nama yang sama dengan ${hostedLayerName}.",
+  "uploadStaticFiles": "File yang diunggah harus memiliki nama yang sama dengan file aslinya ${fileName}",
+  "sameFileNameDescription": "File yang diunggah harus memiliki nama dan nama kolom yang sama dengan file ${fileName} aslinya",
+  "updating": "Memperbarui...",
+  "error": "Kesalahan",
+  "errors": {
+    "sameFileName": "Untuk memperbarui item ini, Anda harus mengunggah file bernama ${fileName}.",
+    "invalidStyleFileExtension": "Ekstensi file tidak valid. Gaya yang diunggah harus memiliki ekstensi file .json.",
+    "errorWhileUpload": "Terjadi kesalahan saat mengunggah item.",
+    "errorUpdate": "Terjadi kesalahan saat menimpa item."
+  }
+}

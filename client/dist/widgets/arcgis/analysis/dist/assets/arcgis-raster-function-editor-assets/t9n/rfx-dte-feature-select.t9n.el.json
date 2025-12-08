@@ -1,0 +1,8 @@
+{
+  "selectFeature": "Επιλέξτε feature layer",
+  "browseLayer": "Περιήγηση στα θεματικά επίπεδα",
+  "loading": "Φόρτωση...",
+  "errorCodes": {
+    "required": "Απαιτείται αυτή η παράμετρος."
+  }
+}

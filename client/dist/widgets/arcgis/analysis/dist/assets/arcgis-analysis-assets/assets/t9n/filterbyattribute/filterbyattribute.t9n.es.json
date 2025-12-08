@@ -1,0 +1,8 @@
+{
+  "itemProperties": {
+    "description": "Resultado generado al ejecutar la herramienta de análisis Filtrar por atributos.",
+    "snippet": "Resultado generado por Filtrar por atributos"
+  },
+  "noLayerDisabledTooltip": "Seleccione un dataset de entrada válido.",
+  "queryCriteriaGroupLabel": "Criterios de consulta"
+}

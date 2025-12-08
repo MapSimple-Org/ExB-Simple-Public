@@ -1,0 +1,17 @@
+{
+  "any": "Cualquier miembro de equipo de",
+  "count": "Recuento",
+  "field": "Campo",
+  "fieldLoadingErrorText": "No se pueden cargar los campos.",
+  "first": "Primero",
+  "isRequired": "Parámetro requerido.",
+  "last": "Último(a)",
+  "max": "Máx.",
+  "mean": "Valor medio",
+  "min": "Mín.",
+  "selectAll": "Seleccionar todo",
+  "standardDeviation": "Desviación estándar",
+  "statistic": "Estadística",
+  "statisticNotSelected": "Se requiere al menos un tipo de estadística para cada campo.",
+  "sum": "Suma"
+}

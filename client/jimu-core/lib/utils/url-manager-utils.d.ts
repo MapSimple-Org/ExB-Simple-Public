@@ -1,0 +1,24 @@
+import * as Immutable from 'seamless-immutable';
+import type { ImmutableObject } from 'seamless-immutable';
+import { type UrlWidgetSpecificParams, type UrlHashParameters, type IMUrlHashParameters, type IMUrlWidgetSpecificParams, HashParamsType, type UrlParameters } from '../types/url-parameters';
+export declare function getAppConfig(): Immutable.ImmutableObject<import("jimu-core").AppConfig>;
+export declare function updateUrl(location: Location, isReplace: boolean): void;
+export declare function isWidgetEnable(widgetId: string): boolean;
+export declare function isWidgetParamsEnable(widgetId: string, paramName: string): boolean;
+export declare function isWidgetsHashParamsType(itemId: string): boolean;
+export declare function filterWidgetsEnable(hashParameters: IMUrlHashParameters): IMUrlHashParameters;
+export declare function filterWidgetsEnabledParams(hashParameters: IMUrlHashParameters): IMUrlHashParameters;
+export declare function parseHashStrToObj(hashStr: string): UrlHashParameters;
+export declare function parseHashObjToStr(urlHashParametersObject: IMUrlHashParameters): string;
+export declare function parseQueryObjToStr(queryObject: any): string;
+export declare function parseDsQueryObject(queryStr: string, compatibleMode: boolean): ImmutableObject<UrlWidgetSpecificParams>;
+export declare function encodeRFC3986URIComponent(str: any): string;
+export declare function parseHashObject(hashStr: string, hashParamsType: HashParamsType, options?: {
+    compatibleMode: boolean;
+}): ImmutableObject<UrlWidgetSpecificParams>;
+export declare function stringifyHashObject(widgetHashObj: UrlWidgetSpecificParams): string;
+export declare function getFullEncodedUrlHashObject(decodedUrlHashObject: IMUrlHashParameters): IMUrlHashParameters;
+export declare function getFullEncodedUrlHashWidgetParams(urlHashWidgetParams: IMUrlWidgetSpecificParams): IMUrlWidgetSpecificParams;
+export declare function isDataSelectionEnable(): boolean;
+export declare function encodeForCompatibleMode(input: any): any;
+export declare function compatibleParseOldUrlRule(initQueryObject: UrlParameters): {};

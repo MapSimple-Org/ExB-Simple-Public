@@ -1,0 +1,12 @@
+{
+  "classField": "Câmp de clasă",
+  "classesAsRowsLabel": "Clasele sub formă de rânduri în tabelul rezultat",
+  "inputClassRasterOrFeatures": "Rasterul de clase de intrare sau obiecte spațiale",
+  "inputLayerGroupText": "Alegeți zona de intrare și stratul tematic de clasă pentru a calcula zonele tabelare încrucișate între două seturi de date.",
+  "itemProperties": {
+    "description": "Tabelul rezultat generat din executarea instrumentului de analiză Zonă tabelară.",
+    "snippet": "Tabel rezultat generat din Zona tabelară"
+  },
+  "tabulateAreaSettingsGroupLabel": "Setări de zonă tabelară",
+  "tabulateAreaSettingsGroupText": "Alegeți cum să manipulați clasele din tabelul rezultat. Specificați dimensiunea celulei de calculat. "
+}

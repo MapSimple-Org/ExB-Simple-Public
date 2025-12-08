@@ -1,0 +1,36 @@
+{
+  "modalHeader": "Konfigurace kategorií obsahu",
+  "modalGroupHeader": "Konfigurace kategorií skupin",
+  "helpText": "Upravit, smazat nebo znovu seřadit kategorie ve vaší organizaci.",
+  "helpTextGroup": "Upravujte nebo odstraňujte kategorie a měňte jejich pořadí pro obsah v této skupině.a",
+  "helpTextDescription": "Mějte na paměti, že další členové organizace mohli již přiřadit tyto kategorie ke svým položkám, a že úprava schématu tedy tyto položky patřičně aktualizuje",
+  "helpTextGroupDescription": "Mějte na paměti, že další členové skupiny mohli již přiřadit tyto kategorie ke svým položkám, a že úprava schématu tedy tyto položky patřičně aktualizuje",
+  "warning": {
+    "deleteInUseCategory": {
+      "title": "Smazat kategorii",
+      "cta": "Smazat kategorii",
+      "message": {
+        "single": "Této kategorii je přiřazena jedna položka. Odstraněním této kategorie ji odstraníte i z této položky.",
+        "multiple": "${number} položek je přiřazeno této kategorii. Odstraněním této kategorie ji odstraníte i z těchto položek.",
+        "unknown": "Položky přiřazené této kategorii: ${number}. Odstraněním této kategorie ji odstraníte i z těchto položek."
+      }
+    },
+    "changeTitleInUseCategory": {
+      "title": "Aktualizovat kategorii",
+      "message": {
+        "single": "Této kategorii je přiřazena jedna položka. Aktualizace kategorie se projeví i na položce, která použije \"${newTitle}\".",
+        "multiple": "${number} položek je přiřazeno této kategorii. Aktualizace kategorie se projeví i na položkách, které použijí \"${newTitle}\".",
+        "unknown": "Položky přiřazené této kategorii: ${number}. Aktualizace kategorie se projeví i na položkách, které použijí \"${newTitle}\"."
+      },
+      "cta": "Aktualizovat kategorii"
+    }
+  },
+  "template": {
+    "templateList": {
+      "custom": {
+        "message": "Vytvořte si vlastní kategorie pro uspořádání obsahu v rámci organizace.",
+        "messageGroup": "Vytvářejte své vlastní kategorie pro uspořádání obsahu v rámci této skupiny."
+      }
+    }
+  }
+}

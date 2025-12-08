@@ -1,0 +1,16 @@
+{
+  "updateData": "Mettre à jour les données",
+  "cancel": "Annuler",
+  "editStyle": "Remplacez le fichier de style de la couche par une version mise à jour provenant de votre ordinateur.",
+  "updatePackages": "Remplacez le fichier de ${type} par une version mise à jour provenant de votre ordinateur. Le fichier chargé doit porter le même nom que ${hostedLayerName}.",
+  "uploadStaticFiles": "Le fichier à charger doit porter le même nom que le fichier d’origine ${fileName}",
+  "sameFileNameDescription": "Le fichier à charger doit porter le même nom et posséder les mêmes noms de champ que le fichier d’origine ${fileName}",
+  "updating": "Mise à jour...",
+  "error": "Erreur",
+  "errors": {
+    "sameFileName": "Pour mettre à jour cet élément, vous devez charger un fichier nommé ${fileName}.",
+    "invalidStyleFileExtension": "Extension de fichier non valide. Le style chargé doit présenter l’extension de fichier .json.",
+    "errorWhileUpload": "Une erreur est survenue lors du chargement de l’élément.",
+    "errorUpdate": "Une erreur est survenue lors du remplacement de l’élément."
+  }
+}

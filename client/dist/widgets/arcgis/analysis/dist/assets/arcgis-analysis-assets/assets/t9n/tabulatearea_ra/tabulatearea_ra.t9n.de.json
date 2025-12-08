@@ -1,0 +1,12 @@
+{
+  "classField": "Klassenwerte-Feld",
+  "classesAsRowsLabel": "Klassen als Zeilen in der Ausgabetabelle",
+  "inputClassRasterOrFeatures": "Eingabeklasse-Raster oder -Features",
+  "inputLayerGroupText": "Wählen Sie den Layer für Eingabezone und Klasse aus, um die kreuztabellierten Bereiche zwischen den beiden Datasets zu berechnen.",
+  "itemProperties": {
+    "description": "Durch Ausführung des Analysewerkzeugs \"Flächentabellen erstellen\" generierte Ausgabetabelle",
+    "snippet": "Über \"Flächentabellen erstellen\" generierte Ausgabetabelle"
+  },
+  "tabulateAreaSettingsGroupLabel": "Einstellungen für \"Flächentabellen erstellen\"",
+  "tabulateAreaSettingsGroupText": "Geben Sie an, wie die Klassen in der Ausgabetabelle behandelt werden sollen. Geben Sie die zu berechnende Zellengröße an. "
+}

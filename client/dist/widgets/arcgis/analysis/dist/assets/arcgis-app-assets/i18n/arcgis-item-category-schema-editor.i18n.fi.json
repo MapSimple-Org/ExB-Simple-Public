@@ -1,0 +1,36 @@
+{
+  "modalHeader": "Määritä sisältöluokkia",
+  "modalGroupHeader": "Määritä ryhmän luokkia",
+  "helpText": "Muokkaa, poistaa tai järjestele uudelleen organisaatiosi luokkia.",
+  "helpTextGroup": "Muokkaa, poista tai järjestä uudelleen tämän ryhmän sisällön luokkia.",
+  "helpTextDescription": "Muista, että organisaation muut jäsenet ovat ehkä jo määrittäneet näitä luokkia omille kohteilleen ja että skeeman muokkaaminen päivittää kyseiset kohteet sen mukaisesti.",
+  "helpTextGroupDescription": "Muista, että ryhmän muut jäsenet ovat ehkä jo määrittäneet näitä luokkia omille kohteilleen ja että skeeman muokkaaminen päivittää kyseiset kohteet sen mukaisesti.",
+  "warning": {
+    "deleteInUseCategory": {
+      "title": "Poista luokka",
+      "cta": "Poista luokka",
+      "message": {
+        "single": "Tälle luokalle on määritetty yksi kohde. Luokan poistaminen poistaa sen myös tästä kohteesta.",
+        "multiple": "${number} kohdetta on määritetty tähän luokkaan. Luokan poistaminen poistaa sen myös näistä kohteista.",
+        "unknown": "Kohteet on määritetty tähän luokkaan: ${number}. Luokan poistaminen poistaa sen myös näistä kohteista."
+      }
+    },
+    "changeTitleInUseCategory": {
+      "title": "Päivitä luokka",
+      "message": {
+        "single": "Tälle luokalle on määritetty yksi kohde. Luokan päivittäminen päivittää kohteen käyttämään luokkaa \"${newTitle}\".",
+        "multiple": "${number} kohdetta on määritetty tähän luokkaan. Luokan päivittäminen päivittää kohteet käyttämään luokkaa \"${newTitle}\".",
+        "unknown": "Kohteet on määritetty tähän luokkaan: ${number}. Luokan päivittäminen päivittää kohteet käyttämään luokkaa \"${newTitle}\"."
+      },
+      "cta": "Päivitä luokka"
+    }
+  },
+  "template": {
+    "templateList": {
+      "custom": {
+        "message": "Luo omia luokkia, jotta voit organisoida sisältöä organisaatiossa.",
+        "messageGroup": "Luo omia luokkia, jotta voit järjestää sisältöä tässä ryhmässä."
+      }
+    }
+  }
+}

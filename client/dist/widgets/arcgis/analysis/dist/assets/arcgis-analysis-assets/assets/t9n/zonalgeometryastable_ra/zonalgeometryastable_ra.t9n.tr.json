@@ -1,0 +1,9 @@
+{
+  "inputLayerGroupText": "Bölge sınırlarının geometrisini hesaplamak için girdi katmanını seçin.",
+  "itemProperties": {
+    "description": "Tablo analiz aracı olarak Bölgesel Geometri çalıştırılarak oluşturulan çıktı tablosu.",
+    "snippet": "Çıktı tablosu, Tablo olarak Bölgesel Geometri ile oluşturuldu."
+  },
+  "zonalGeometrySettingGroupLabel": "Bölgesel geometri ayarı",
+  "zonalGeometrySettingGroupText": "Hesaplanacak hücre boyutunu belirtin."
+}

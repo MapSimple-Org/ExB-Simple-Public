@@ -1,0 +1,7 @@
+{
+  "example": "Ví dụ",
+  "input": "Đầu vào",
+  "output": "Đầu ra",
+  "optional": "Tùy chọn",
+  "WNDWIHintText": "Giá trị α:α cần nằm trong khoảng 0 và 1; giá trị mặc định là 0,5"
+}

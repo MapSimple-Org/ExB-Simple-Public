@@ -1,0 +1,8 @@
+{
+  "itemProperties": {
+    "description": "Result generated from running the Filter by Attributes analysis tool.",
+    "snippet": "Result generated from Filter by Attributes"
+  },
+  "noLayerDisabledTooltip": "Select a valid input dataset.",
+  "queryCriteriaGroupLabel": "Query criteria"
+}

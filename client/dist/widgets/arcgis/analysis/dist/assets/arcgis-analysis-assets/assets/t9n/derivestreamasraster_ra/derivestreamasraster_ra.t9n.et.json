@@ -1,0 +1,10 @@
+{
+  "forceFlowLabel": "Sunni servapikslid voolama väljapoole",
+  "inputLayersGroupText": "Valige sisendpinnaraster ning soovi korral madaliku andmed ja kaaluraster.",
+  "itemProperties": {
+    "description": "Analüüsitööriista Voolu tuletamine rastrina käitamise kaudu loodud väljund.",
+    "snippet": "Tööriista Voolu tuletamine rastrina kaudu loodud väljund"
+  },
+  "outputStreamRasterLabel": "Väljundvoolurastri nimi",
+  "streamSettingsGroupText": "Määrake akumulatsiooni lävi, voo määramise meetod ja see, kuidas hallatakse voolu sisnedpinnarastri servas."
+}

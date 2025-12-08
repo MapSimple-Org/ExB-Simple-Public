@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>N&aacute;stroj V&yacute;počet cestovn&yacute;ch n&aacute;kladov meria cestovn&yacute; čas alebo vzdialenosť medzi dvojicami bodov.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="originsLayer">
+        <div>
+            
+            <p class="OnlineOnly">Bodov&aacute; vrstva reprezentuj&uacute;ca počiatočn&eacute; lokality, z ktor&yacute;ch sa vypoč&iacute;taj&uacute; cestovn&eacute; n&aacute;klady. Podporovan&eacute; s&uacute; vrstvy s maxim&aacute;lne  päťtisíc prvkami. </p>  
+            <p class="PortalOnly">Bodov&aacute; vrstva reprezentuj&uacute;ca počiatočn&eacute; lokality, z ktor&yacute;ch sa vypoč&iacute;taj&uacute; cestovn&eacute; n&aacute;klady.
+            </p>
+            <p class="toolPaneOnly">Počet prvkov z&aacute;vis&iacute; od ďal&scaron;&iacute;ch faktorov, ako napr&iacute;klad filtrovacie krit&eacute;ri&aacute; a rozsah anal&yacute;zy.
+            </p>
+        </div>
+    </div>
+    <div id="destinationsLayer">
+        <div>
+            
+            <p class="OnlineOnly">Bodov&aacute; vrstva reprezentuj&uacute;ca lokality destin&aacute;ci&iacute;, ku ktor&yacute;m sa vypoč&iacute;taj&uacute; cestovn&eacute; n&aacute;klady. Podporovan&eacute; s&uacute; vrstvy s maxim&aacute;lne  päťtisíc prvkami. </p> 
+            <p class="PortalOnly">Bodov&aacute; vrstva reprezentuj&uacute;ca lokality destin&aacute;ci&iacute;, ku ktor&yacute;m sa vypoč&iacute;taj&uacute; cestovn&eacute; n&aacute;klady.
+            </p>
+            <p class="toolPaneOnly">Počet prvkov z&aacute;vis&iacute; od ďal&scaron;&iacute;ch faktorov, ako napr&iacute;klad filtrovacie krit&eacute;ri&aacute; a rozsah anal&yacute;zy.
+            </p>
+        </div>
+    </div>
+    <div id="originsLayerRouteIDField">
+        <div>
+            
+            <p>Pole v s&uacute;bore &uacute;dajov vo  <b>vrstve Z</b>, ktor&eacute; definuje vopred priraden&uacute; dvojicu počiatok &ndash;⁠⁠⁠⁠⁠⁠ destin&aacute;cia. Ak existuje viac počiatočn&yacute;ch lokal&iacute;t a destin&aacute;ci&iacute;, toto ID sa mus&iacute; zhodovať s hodnotou v poli <b>ID trasy vo vrstve Do</b>.
+            </p>
+        </div>
+    </div>
+    <div id="destinationsLayerRouteIDField">
+        <div>
+            
+            <p>Pole v s&uacute;bore &uacute;dajov vo  <b>vrstve Do</b>, ktor&eacute; definuje vopred priraden&uacute; dvojicu počiatok &ndash;⁠⁠⁠⁠⁠⁠ destin&aacute;cia. Ak existuje viac počiatočn&yacute;ch lokal&iacute;t a destin&aacute;ci&iacute;, toto ID sa mus&iacute; zhodovať s hodnotou v poli <b>ID trasy vo vrstve Z</b>.
+            </p>
+        </div>
+    </div>
+    <div id="pointBarrierLayer">
+        <div>
+            <p>Jeden alebo viac bodov&yacute;ch prvkov, ktor&eacute; sl&uacute;žia ako dočasn&eacute; obmedzenia (bari&eacute;ry), pri prechode prvkami podkladov&yacute;ch ciest. Cestovanie po cest&aacute;ch je povolen&eacute;, av&scaron;ak nie cez bari&eacute;ry.
+            </p>
+        </div>
+    </div>
+    <div id="lineBarrierLayer">
+        <div>
+            <p>Jeden alebo viac l&iacute;niov&yacute;ch prvkov, ktor&eacute; sl&uacute;žia ako dočasn&eacute; obmedzenia (bari&eacute;ry), pri prechode prvkami podkladov&yacute;ch ciest. L&iacute;niov&eacute; bari&eacute;ry zakazuj&uacute; prejazd v miestach, kde bari&eacute;ry pret&iacute;naj&uacute; cesty.
+            </p>
+        </div>
+    </div>
+    <div id="polygonBarrierLayer">
+        <div>
+            <p>Jeden alebo viac polyg&oacute;nov&yacute;ch prvkov, ktor&eacute; sl&uacute;žia ako dočasn&eacute; obmedzenia (bari&eacute;ry), pri prechode prvkami podkladov&yacute;ch ciest. Polyg&oacute;nov&eacute; bari&eacute;ry zakazuj&uacute; prejazd v miestach, kde polyg&oacute;ny pret&iacute;naj&uacute; cesty.
+            </p>
+        </div>
+    </div>
+    <div id="measurementType">
+        <div>
+            <p>Met&oacute;da, ktor&aacute; sa použije na meranie vzdialenosti alebo času. Met&oacute;da m&ocirc;že byť l&iacute;niov&aacute; vzdialenosť alebo cestovn&yacute; režim.
+            </p>
+        </div>
+    </div>
+    <div id="timeOfDay">
+        <div>
+            <p>D&aacute;tum a čas odchodu z počiatočn&yacute;ch lokal&iacute;t v s&uacute;bore &uacute;dajov vo vrstve Z.
+            </p>
+        </div>
+    </div>
+    <div id="routeShape">
+        <div>
+            <p>Určuje, či bud&uacute; počiatky a destin&aacute;cie prepojen&eacute; pomocou čiar typu &sbquo;spider lines&lsquo; alebo &sbquo;desire lines&lsquo; (<b>Priama čiara</b>) alebo pomocou ul&iacute;c podkladovej uličnej siete (<b>Sledovanie ul&iacute;c</b>).
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>N&aacute;zov vrstvy, ktor&aacute; sa vytvor&iacute; a prid&aacute; do mapy.
+            </p>
+        </div>
+    </div>
+    <div id="includeRouteLayers">
+        <div>
+            <p>Určuje, či sa každ&aacute; v&yacute;sledn&aacute; trasa ulož&iacute; ako vrstva trasy.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            
+            <p>N&aacute;zov priečinka v r&aacute;mci  <b>M&ocirc;j obsah</b>, do ktor&eacute;ho sa ulož&iacute; v&yacute;sledok.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

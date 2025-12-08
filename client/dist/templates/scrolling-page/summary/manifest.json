@@ -1,0 +1,22 @@
+{
+  "name": "summary",
+  "type": "template",
+  "templateType": "scrolling-page",
+  "label": "Summary",
+  "description": "Summary is a template created to be used as a secondary or ending page that focuses on short text descriptions and actionable links to additional content.",
+  "thumbnail": "thumbnail.png",
+  "order": 7,
+  "tags": [
+    "Title",
+    "Divider",
+    "Map",
+    "Card",
+    "Flow"
+  ],
+  "categoriesTags": [
+    "Web page",
+    "Scrolling"
+  ],
+  "thumbnailWidth": 320,
+  "thumbnailHeight": 214
+}

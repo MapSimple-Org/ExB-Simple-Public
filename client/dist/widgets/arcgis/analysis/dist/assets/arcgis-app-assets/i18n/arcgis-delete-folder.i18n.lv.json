@@ -1,0 +1,22 @@
+{
+  "deleteFolder": "Dzēst mapi",
+  "delete": "Dzēst",
+  "permanentlyDelete": "Neatgriezeniski dzēst",
+  "back": "Atpakaļ",
+  "cancel": "Atcelt",
+  "success": "Mape '${title}' ir veiksmīgi izdzēsta",
+  "deleteProtectedItemsInFolder": "Mapi nevarēja izdzēst, jo dažas vienības ir aizsargātas pret dzēšanu vai tām ir atkarīgi vienumi.",
+  "message": {
+    "empty": "Vai tiešām vēlaties dzēst mapi <strong style='font-weight: 500'>${title}</strong>?",
+    "recycleAll": "Vai tiešām vēlaties dzēst mapi <strong style='font-weight: 500'>${title}</strong> un nosūtīt tās saturu uz atkritni?",
+    "mustBeEmpty": "Lai izdzēstu <strong style='font-weight: 500'>${title}</strong> mapi, tā ir jāiztukšo.",
+    "aFewCannotBeDeleted": "Dažas vienības nevar izdzēst. Vai vēlaties turpināt ar pārējo dzēšanu?",
+    "canBeEmptied": "Lai izdzēstu <strong style='font-weight: 500'>${title}</strong> mapi, tā ir jāiztukšo. Vai vēlaties turpināt ar šo vienību dzēšanu?",
+    "cannotBeDeleted": "Mapi <strong style='font-weight: 500'>${title}</strong> nevar izdzēst, jo nevar izdzēst mapes vienības."
+  },
+  "disabledMessage": {
+    "single": "Šajā mapē ir <span style='color:red'>1 vienība</span>, <b>${label}</b>.<br/></br/>Vai tiešām vēlaties dzēst šo mapi un tās vienību?",
+    "multiple": "Šajā mapē ir <span style='color:red'>${number} vienības</span>, <b>${label}</b>.<br/></br/>Vai tiešām vēlaties dzēst šo mapi un visas tās vienības?",
+    "unknown": "Vai tiešām vēlaties dzēst šo mapi, <b>${label}</b>?"
+  }
+}

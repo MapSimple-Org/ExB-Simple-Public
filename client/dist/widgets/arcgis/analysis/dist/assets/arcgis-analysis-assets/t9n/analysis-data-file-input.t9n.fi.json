@@ -1,0 +1,14 @@
+{
+  "AddDataFromUrl": "Lisää aineistoa URL-osoitteesta",
+  "addData": "Lisää aineistoa",
+  "clear": "Tyhjennä",
+  "file": "Tiedosto",
+  "fileNotFound": "Tiedoston lataus epäonnistui.",
+  "invalidUrl": "Virheellinen URL-osoite tai tiedostotunniste.",
+  "layerNotFound": "Karttatason lataus epäonnistui.",
+  "replaceData": "Korvaa aineisto",
+  "required": "Tämä parametri on pakollinen.",
+  "uploadData": "Lataa aineisto palveluun",
+  "uploadFailureMsg": "Lataustoiminnon aikana tapahtui virhe. Tämä palvelu ei tue tiedoston kokoa tai tyyppiä.",
+  "url": "URL-osoite"
+}

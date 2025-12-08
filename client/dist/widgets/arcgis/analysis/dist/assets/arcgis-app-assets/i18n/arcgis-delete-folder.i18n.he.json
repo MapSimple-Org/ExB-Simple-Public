@@ -1,0 +1,22 @@
+{
+  "deleteFolder": "מחק תיקייה",
+  "delete": "מחיקה",
+  "permanentlyDelete": "מחק לתמיד",
+  "back": "חזור",
+  "cancel": "ביטול",
+  "success": "התיקייה '${title}' נמחקה בהצלחה",
+  "deleteProtectedItemsInFolder": "לא ניתן למחוק את התיקייה בגלל שכמה מהפריטים מוגנים מפני מחיקה או שיש להם פריטים תלויים.",
+  "message": {
+    "empty": "האם אתה בטוח שברצונך למחוק את התיקייה <strong style='font-weight: 500'>${title}</strong>?",
+    "recycleAll": "האם אתה בטוח שברצונך למחוק את התיקייה <strong style='font-weight: 500'>${title}</strong> ולשלוח את התוכן שלה לסל המיחזור?",
+    "mustBeEmpty": "התיקייה <strong style='font-weight: 500'>${title}</strong> חייבת להיות ריקה כדי שניתן יהיה למחוק אותה.",
+    "aFewCannotBeDeleted": "לא ניתן למחוק חלק מהפריטים. האם ברצונך להמשיך במחיקת השאר?",
+    "canBeEmptied": "התיקייה <strong style='font-weight: 500'>${title}</strong> חייבת להיות ריקה כדי שניתן יהיה למחוק אותה. האם ברצונך להמשיך במחיקת פריטים אלה?",
+    "cannotBeDeleted": "לא ניתן למחוק את התיקייה <strong style='font-weight: 500'>${title}</strong> מכיוון שלא ניתן למחוק את הפריטים שלה."
+  },
+  "disabledMessage": {
+    "single": "קיים <span style='color:red'>פריט 1</span> בתיקייה זו, <b>${label}</b>.<br/></br/>האם אתה בטוח שברצונך למחוק תיקייה זו ואת הפריט שלה?",
+    "multiple": "קיימים <span style='color:red'>${number} פריטים</span> בתיקייה זו, <b>${label}</b>.<br/></br/>האם אתה בטוח שברצונך למחוק תיקייה זו ואת כל הפריטים שלה?",
+    "unknown": "האם אתה בטוח שברצונך למחוק תיקייה זו, <b>${label}</b>?"
+  }
+}

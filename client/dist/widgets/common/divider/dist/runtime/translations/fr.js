@@ -1,0 +1,1 @@
+System.register([],function(e){return{execute:function(){e({_widgetLabel:"S\xe9parateur",quickStyleItem:"Style rapide {index}"})}}});

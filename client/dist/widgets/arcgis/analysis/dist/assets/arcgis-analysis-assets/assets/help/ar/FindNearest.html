@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html dir="rtl">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>تبحث أداة العثور على الأقرب المعالم الأقرب إلى المواقع المحددة وتصنفها.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="analysisLayer">
+        <div>
+            
+            <p class="OnlineOnly">طبقة البداية التي سيتم رسم نطاق البحث حولها للعثور على أقرب المعالم من الطبقة المجاورة. سيتم إرجاع المعالم الموجودة في الطبقة المجاورة استنادًا إلى قربها من الطبقة المدخلة. تكون الطبقات التي تتضمن ما يصل إلى  خمسة آلاف من المعالم مدعومة. </p>  
+            <p class="PortalOnly">طبقة البداية التي سيتم رسم نطاق البحث حولها للعثور على أقرب المعالم من الطبقة المجاورة. سيتم إرجاع المعالم الموجودة في الطبقة المجاورة استنادًا إلى قربها من الطبقة المدخلة.
+            </p>
+            <p class="toolPaneOnly">يعتمد عدد المعالم على عوامل إضافية مثل معايير التصفية ومدى التحليل.
+            </p>
+        </div>
+    </div>
+    <div id="nearLayer">
+        <div>
+             
+            <p class="OnlineOnly">تم العثور على المعالم بناءً على القرب من طبقة الإدخال. تكون الطبقات التي تتضمن ما يصل إلى  خمسة آلاف من المعالم مدعومة. </p> 
+            <p class="PortalOnly">تم العثور على المعالم بناءً على القرب من طبقة الإدخال.
+            </p>
+            <p class="toolPaneOnly">يعتمد عدد المعالم على عوامل إضافية مثل معايير التصفية ومدى التحليل.
+            </p>
+        </div>
+    </div>
+    <div id="pointBarrierLayer">
+        <div>
+            <p>معلم نقطي واحد أو أكثر يعمل كقيود (حواجز) مؤقتة عند التنقل عبر الشوارع الأساسية. يُسمح بالسفر عبر الشارع ولكن ليس من خلال العائق.
+            </p>
+        </div>
+    </div>
+    <div id="lineBarrierLayer">
+        <div>
+            <p>معلم خطي واحد أو أكثر يعمل كقيود (حواجز) مؤقتة عند التنقل عبر الشوارع الأساسية. تمنع الحواجز الخطية التنقل في أي مكان تتقاطع فيه الحواجز مع الشوارع.
+            </p>
+        </div>
+    </div>
+    <div id="polygonBarrierLayer">
+        <div>
+            <p>معلم مضلع واحد أو أكثر يعمل كقيود (حواجز) مؤقتة عند التنقل عبر الشوارع الأساسية. تمنع حواجز المضلع التنقل في أي مكان تتقاطع فيه المضلعات مع الشوارع.
+            </p>
+        </div>
+    </div>
+    <div id="measurementType">
+        <div>
+            <p>الطريقة التي سيتم استخدامها لقياس المسافة أو الوقت. قد تكون الطريقة مسافة خط أو وضع تنقل.
+            </p>
+        </div>
+    </div>
+    <div id="timeOfDay">
+        <div>
+            <p>التاريخ والوقت الذي يغادر فيه المسافر المواقع في قيمة  <b>طبقة الإدخال</b>.
+            </p>
+        </div>
+    </div>
+    <div id="limitNearNumberCheckbox">
+        <div>
+            
+            <p>يحدد ما إذا كان سيتم استخدام الحد الأقصى المخصص لعدد المعالم الأقرب (ممكّن) أو الاعتماد على الحد الأقصى الافتراضي للأداة، وهو 100.
+            </p>
+        </div>
+    </div>
+    <div id="maxCount">
+        <div>
+            <p>أقصى عدد من أقرب المعالم التي يمكن العثور عليها لكل معلم مدخل.
+            </p>
+        </div>
+    </div>
+    <div id="limitSearchRangeCheckbox">
+        <div>
+            
+            <p>يحدد ما إذا كان سيتم استخدام الحد الأقصى لنطاق البحث (ممكّن) أو إذا كان نطاق البحث غير محدود.
+            </p>
+        </div>
+    </div>
+    <div id="searchCutoff">
+        <div>
+            <p>الحد الأقصى لنطاق البحث للعثور على أقرب المعالم.
+            </p>
+        </div>
+    </div>
+    <div id="searchCutoffUnits">
+        <div>
+            <p>الوحدات المستخدمة لتحديد نطاق البحث.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>اسم الطبقة التي سيتم إنشاؤها وإضافتها إلى الخريطة.
+            </p>
+        </div>
+    </div>
+    <div id="includeRouteLayers">
+        <div>
+            <p>يحدد ما إذا كان سيتم حفظ كل مسار نتيجة كطبقة مسار أم لا.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>اسم المجلد الموجود في  <b>المحتوى الخاص بي</b> الذي سيتم حفظ النتائج فيه.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

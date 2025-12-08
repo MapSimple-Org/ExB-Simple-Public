@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>&Ccedil;ok Boyutlu Rasterı K&uuml;mele aracı, bir boyut boyunca mevcut &ccedil;ok boyutlu g&ouml;r&uuml;nt&uuml; katmanı değişkenlerini bir araya getirerek &ccedil;ok boyutlu bir g&ouml;r&uuml;nt&uuml; katmanı oluşturur.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputMultidimensionalRaster">
+        <div>
+            <p>K&uuml;melenecek &ccedil;ok boyutlu g&ouml;r&uuml;nt&uuml; rasterı.
+            </p> 
+        </div>
+    </div>
+    <div id="dimension">
+        <div>
+            <p>Değişkenin k&uuml;melenmesinde kullanılacak &ccedil;ok boyutlu g&ouml;r&uuml;nt&uuml; katmanının boyutu.
+            </p>
+        </div>
+    </div>
+    <div id="dimensionless">
+        <div>
+            <p>Katmanda boyut değerleri olup olmadığını g&ouml;sterir.
+            </p> 
+        </div>
+    </div>
+    <div id="variables">
+        <div>
+            <p>Tanımlanan boyut boyunca k&uuml;melenecek &ccedil;ok boyutlu g&ouml;r&uuml;nt&uuml; katmanının değişkeni.
+            </p>
+        </div>
+    </div>
+    <div id="aggregationMethod">
+        <div>
+            <p>&Ccedil;ok boyutlu g&ouml;r&uuml;nt&uuml; katmanının dilimlerini k&uuml;melemek i&ccedil;in kullanılacak matematiksel y&ouml;ntem.
+            </p>
+        </div>
+    </div>
+    <div id="percentileValue">
+        <div>
+            <p>K&uuml;meleme y&ouml;ntemi belirtildikten sonra hesaplamalar i&ccedil;in kullanılacak y&uuml;zde değeri.
+            </p>
+        </div>
+    </div>
+    <div id="percentileInterpolationType">
+        <div>
+            <p>Girdi g&ouml;r&uuml;nt&uuml; katmanından &ccedil;ift sayıda değer geldiğinde kullanılacak y&uuml;zde enterpolasyonu y&ouml;ntemi.
+            </p>
+        </div>
+    </div>
+    <div id="aggregationFunction">
+        <div>
+            <p>K&uuml;melenen g&ouml;r&uuml;nt&uuml; katmanlarının piksel değerlerini hesaplamak i&ccedil;in kullanılacak &ouml;zel raster fonksiyonu.
+            </p>
+        </div>
+    </div>
+    <div id="aggregationDefinition">
+        <div>
+            <p>&Ccedil;ok boyutlu verileri k&uuml;melemek i&ccedil;in kullanılacak boyut aralığı.
+            </p>
+        </div>
+    </div>
+    <div id="intervalKeyword">
+        <div>
+            <p>Her anahtar s&ouml;zc&uuml;k, her bir istatistiğin k&uuml;meleneceği zaman birimini belirtir. Anahtar s&ouml;zc&uuml;kler listesi, Saatlik, G&uuml;nl&uuml;k, Haftalık, Aylık, &Uuml;&ccedil; Aylık ve Yıllık terimlerini i&ccedil;erir.
+            </p>
+        </div>
+    </div>
+    <div id="intervalValue">
+        <div>
+            <p>Boyut boyunca k&uuml;melerken kullanılacak aralığın boyutu.
+            </p>
+        </div>
+    </div>
+    <div id="intervalUnit">
+        <div>
+            <p>Aralık değeri i&ccedil;in &ouml;l&ccedil;&uuml;m birimleri.
+            </p>
+        </div>
+    </div>
+    <div id="intervalRanges">
+        <div>
+            <p>Belirtilen boyut boyunca k&uuml;melerken kullanılacak değer tablosu. Minimum ve maksimum değerler, dahil edilecek aralığı belirtir.
+            </p>
+        </div>
+    </div>
+    <div id="minValue">
+        <div>
+            <p>Aralık i&ccedil;in minimum değer.
+            </p>
+        </div>
+    </div>
+    <div id="maxValue">
+        <div>
+            <p>Aralık i&ccedil;in maksimum değer.
+            </p>
+        </div>
+    </div>
+    <div id="ignoreNodata">
+        <div>
+            <p>K&uuml;melemede NoData değerlerinin yok sayılıp sayılmayacağını g&ouml;sterir.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>Oluşturulacak ve haritaya eklenecek katmanın adı.
+            </p>
+        </div>
+    </div>
+    <div id="resultType">
+        <div>
+            
+            <p>Oluşturulacak &ccedil;ıktı t&uuml;rleri. &Ccedil;ıktılar d&ouml;şemeli g&ouml;r&uuml;nt&uuml; katmanları veya dinamik g&ouml;r&uuml;nt&uuml; katmanları olabilir.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            
+            <p> <b>İ&ccedil;eriğim</b> i&ccedil;inde sonucun kaydedileceği klas&ouml;r&uuml;n adı.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

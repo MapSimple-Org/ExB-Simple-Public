@@ -1,0 +1,14 @@
+{
+  "AddDataFromUrl": "Adatok hozzáadása URL-ből",
+  "addData": "Adatok hozzáadása",
+  "clear": "Törlés",
+  "file": "Fájl",
+  "fileNotFound": "A fájl betöltése nem sikerült.",
+  "invalidUrl": "Érvénytelen URL vagy fájlkiterjesztés.",
+  "layerNotFound": "A réteg betöltése nem sikerült.",
+  "replaceData": "Adatok cseréje",
+  "required": "Ez a paraméter kötelező.",
+  "uploadData": "Adatok feltöltése.",
+  "uploadFailureMsg": "Hiba történt a feltöltési művelet végrehajtásakor: a szolgáltatás nem támogatja a fájl méretét vagy típusát.",
+  "url": "URL"
+}

@@ -1,0 +1,8 @@
+{
+  "select": "Seleziona la voce: ${title}",
+  "lastUpdated": "Elemento aggiornato: ${date}",
+  "viewItemDetails": "Visualizza dettagli",
+  "preview": "Anteprima",
+  "closePreview": "Chiudi anteprima",
+  "moreOptions": "Altre opzioni"
+}

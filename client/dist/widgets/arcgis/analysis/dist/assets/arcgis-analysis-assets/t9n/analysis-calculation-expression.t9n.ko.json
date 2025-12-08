@@ -1,0 +1,10 @@
+{
+  "cannotAssignValueToTargetField": "계산된 값과 필드 유형이 일치하지 않습니다.",
+  "createExpression": "식 생성",
+  "deleteExpression": "식 삭제",
+  "editExpression": "식 편집",
+  "expression": "식",
+  "isRequired": "이 매개변수는 필수입니다.",
+  "layerLoadError": "레이어를 불러올 수 없습니다.",
+  "validationFailedInvalidSQL": "식 유효성 검사에 실패했습니다. 식이 유효한 SQL이 아닙니다."
+}

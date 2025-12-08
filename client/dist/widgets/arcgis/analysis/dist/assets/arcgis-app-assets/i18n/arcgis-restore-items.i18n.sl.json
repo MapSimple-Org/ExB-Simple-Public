@@ -1,0 +1,31 @@
+{
+  "back": "Nazaj",
+  "cancel": "Prekliči",
+  "learnMore": "Več",
+  "restore": "Obnovi",
+  "restoreTo": "Obnovi v",
+  "restoreItem": "Obnovi element",
+  "restoreItems": "Obnovi elemente",
+  "noticeMessage": "Deljenje obnovljenih elementov bo preklicano. Preglejte svojo vsebino, preden jo znova delite.",
+  "cannotBulkRestoreXItems": "Več kot ${number} elementov ni mogoče množično obnoviti, prekličite izbiro nekaj elementov.",
+  "cannotBulkRestoreMultipleOwners": "Elementov, ki pripadajo različnim lastnikom, ni mogoče množično obnoviti. Izberite elemente enega lastnika za množično obnovitev.",
+  "toRestore": {
+    "single": "Element za obnovitev:",
+    "multiple": "Elementi za obnovitev:"
+  },
+  "cannotRestore": "Ni mogoče obnoviti:",
+  "dependentItems": {
+    "single": "Tega elementa ni mogoče obnoviti, ker je odvisen od <strong style='font-weight: 500'>${parent}</strong>. Obnovite jih skupaj.",
+    "singleUnknown": "Tega elementa ni mogoče obnoviti, ker je odvisen od drugega elementa v košu. Obnovite jih skupaj.",
+    "multiple": "Teh elementov ni mogoče obnoviti, ker so odvisni od drugih elementov v košu. Obnovite jih skupaj.",
+    "multipleSameSource": "Teh elementov ni mogoče obnoviti, ker so odvisni od <strong style='font-weight: 500'>${parent}</strong>. Obnovite jih skupaj."
+  },
+  "pageRangeWithTotalRecycleBinSize": {
+    "en": "${start} - ${end} od ${total} (${size}) v košu",
+    "other": "${start} - ${end}, skupaj: ${total} (${size}) v košu"
+  },
+  "pageRangeWithGreaterThanTotalRecycleBinSize": {
+    "en": "${start} - ${end} od ${total} (>${size}) v košu",
+    "other": "${start} - ${end}, skupaj: ${total} (>${size}) v košu"
+  }
+}

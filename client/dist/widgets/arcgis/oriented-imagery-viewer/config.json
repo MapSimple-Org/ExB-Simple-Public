@@ -1,0 +1,14 @@
+{
+  "viewerToolsEnabled": false,
+  "imageGalleryEnabled": false,
+  "imageEnahncementEnabled": false,
+  "mapImageConversionToolEnabled": false,
+  "showPopupsActionEnabled": false,
+  "navigationToolEnabled": false,
+  "measurementToolsEnabled": false,
+  "imageOverlaysEnabled": false,
+  "dataCaptureEnabled": false,
+  "directionalNavigationEnabled": false,
+  "sequentialNavigationEnabled": false,
+  "navigateToExtentEnabled": true
+}

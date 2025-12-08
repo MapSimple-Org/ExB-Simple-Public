@@ -1,0 +1,17 @@
+{
+  "sharing": "Freigeben",
+  "private": "Besitzer",
+  "shared": "Besitzer und für Gruppen freigegeben",
+  "org": "Organisation",
+  "public": "Alle (öffentlich)",
+  "privateGroups": "Besitzer",
+  "sharedGroups": "Besitzer + Gruppen (${num})",
+  "orgGroups": "Organisation + Gruppen (${num})",
+  "publicGroups": "Alle (öffentlich) + Gruppen (${num})",
+  "groups": "Gruppen (${num})",
+  "updateSharing": "Freigabeebene: ${level}, Freigabe aktualisieren",
+  "viewableBy": "Sichtbar für: ${level}",
+  "everyone": "Alle (öffentlich)",
+  "organization": "Organisation",
+  "groupMembers": "Gruppenmitglieder"
+}

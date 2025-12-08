@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>The Calculate Travel Cost tool measures the travel time or distance between pairs of points.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="originsLayer">
+        <div>
+            
+            <p class="OnlineOnly">The point layer representing the origin locations from which the travel cost will be calculated.  
+Layers with up to  five thousand features are supported. </p>  
+            <p class="PortalOnly">The point layer representing the origin locations from which the travel cost will be calculated.
+            </p>
+            <p class="toolPaneOnly">The count of features depends on additional factors such as filtering criteria and the analysis extent.
+            </p>
+        </div>
+    </div>
+    <div id="destinationsLayer">
+        <div>
+            
+            <p class="OnlineOnly">The point layer representing the destination locations toward which the travel cost will be calculated.  
+Layers with up to  five thousand features are supported. </p> 
+            <p class="PortalOnly">The point layer representing the destination locations toward which the travel cost will be calculated.
+            </p>
+            <p class="toolPaneOnly">The count of features depends on additional factors such as filtering criteria and the analysis extent.
+            </p>
+        </div>
+    </div>
+    <div id="originsLayerRouteIDField">
+        <div>
+            
+            <p>The field in the  <b>From layer</b> dataset that defines the preassigned origin-destination pair.
+If there are
+multiple origin and destination locations,
+this ID must match a value in the <b>To layer route ID</b> field.
+            </p>
+        </div>
+    </div>
+    <div id="destinationsLayerRouteIDField">
+        <div>
+            
+            <p>The field in the  <b>To layer</b> dataset that defines the preassigned origin-destination pair.
+If there are
+multiple origin and destination locations,
+this ID must match a value in the <b>From layer route ID</b> field.
+            </p>
+        </div>
+    </div>
+    <div id="pointBarrierLayer">
+        <div>
+            <p>One or more point features that act as temporary restrictions (barriers) when traveling on the underlying streets. 
+Travel is permitted on the street but not through the barrier.
+            </p>
+        </div>
+    </div>
+    <div id="lineBarrierLayer">
+        <div>
+            <p>One or more line features that act as temporary restrictions (barriers) when traveling on the underlying streets. The line barriers prohibit travel anywhere the barriers intersect the streets.
+            </p>
+        </div>
+    </div>
+    <div id="polygonBarrierLayer">
+        <div>
+            <p>One or more polygon features that act as temporary restrictions (barriers) when traveling on the underlying streets. The polygon
+barriers prohibit travel anywhere the polygons intersect the streets.
+            </p>
+        </div>
+    </div>
+    <div id="measurementType">
+        <div>
+            <p>The 
+method that will be used to measure distance or time. The method can be line distance or a travel mode.
+            </p>
+        </div>
+    </div>
+    <div id="timeOfDay">
+        <div>
+            <p>The date and time of departure from the origin locations in the From layer dataset.
+            </p>
+        </div>
+    </div>
+    <div id="routeShape">
+        <div>
+            <p>Specifies whether the origins and destinations will be connected using spider lines or desire lines (<b>Straight line</b>) or the streets on the underlying street network (<b>Follow streets</b>).
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>The name of the layer that will be created and added to the map.
+            </p>
+        </div>
+    </div>
+    <div id="includeRouteLayers">
+        <div>
+            <p>Specifies whether each result route will be saved as a route layer.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            
+            <p>The name of the folder in  <b>My content</b> where the results will be saved.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

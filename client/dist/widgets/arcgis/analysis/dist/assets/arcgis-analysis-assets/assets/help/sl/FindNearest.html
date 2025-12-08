@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>Orodje Najdi najbližje poi&scaron;če in razvrsti geoobjekte, ki so najbližje določenim lokacijam.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="analysisLayer">
+        <div>
+            
+            <p class="OnlineOnly">Začetni sloj, okoli katerega bo narisano območje iskanja za iskanje najbližjih geoobjektov iz sloja v bližini. Geoobjekti v sloju v bližini bodo vrnjeni na podlagi bližine vhodnemu sloju. Podprti so sloji z do  pet tisoč geoobjekti. </p>  
+            <p class="PortalOnly">Začetni sloj, okoli katerega bo narisano območje iskanja za iskanje najbližjih geoobjektov iz sloja v bližini. Geoobjekti v sloju v bližini bodo vrnjeni na podlagi bližine vhodnemu sloju.
+            </p>
+            <p class="toolPaneOnly">&Scaron;tevilo funkcij je odvisno od dodatnih dejavnikov, kot so kriteriji filtriranja in obseg analize.
+            </p>
+        </div>
+    </div>
+    <div id="nearLayer">
+        <div>
+             
+            <p class="OnlineOnly">Najdeni geoobjekti na podlagi bližine vhodnemu sloju. Podprti so sloji z do  pet tisoč geoobjekti. </p> 
+            <p class="PortalOnly">Najdeni geoobjekti na podlagi bližine vhodnemu sloju.
+            </p>
+            <p class="toolPaneOnly">&Scaron;tevilo funkcij je odvisno od dodatnih dejavnikov, kot so kriteriji filtriranja in obseg analize.
+            </p>
+        </div>
+    </div>
+    <div id="pointBarrierLayer">
+        <div>
+            <p>Eden ali več točkovnih geoobjektov, ki imajo vlogo začasnih omejitev (pregrad) pri potovanju po ulicah. Potovanje po ulici je dovoljeno, vendar ne skozi oviro.
+            </p>
+        </div>
+    </div>
+    <div id="lineBarrierLayer">
+        <div>
+            <p>Eden ali več linijskih geoobjektov, ki imajo vlogo začasnih omejitev (pregrad) pri potovanju po ulicah. Linijske pregrade prepovedujejo potovanje na območju, kjer se pregrada križa z ulico.
+            </p>
+        </div>
+    </div>
+    <div id="polygonBarrierLayer">
+        <div>
+            <p>Eden ali več poligonskih geoobjektov, ki imajo vlogo začasnih omejitev (pregrad) pri potovanju po ulicah. Poligonska pregrada prepoveduje potovanje na območju, kjer se poligon križa z ulico.
+            </p>
+        </div>
+    </div>
+    <div id="measurementType">
+        <div>
+            <p>Metoda, ki bo uporabljena za merjenje razdalje ali časa. Metoda je lahko linijska razdalja ali način potovanja.
+            </p>
+        </div>
+    </div>
+    <div id="timeOfDay">
+        <div>
+            <p>Datum in čas odhoda popotnika iz lokacije v vrednosti  <b>Vhodnega sloja</b>.
+            </p>
+        </div>
+    </div>
+    <div id="limitNearNumberCheckbox">
+        <div>
+            
+            <p>Določi, ali se uporabi najvi&scaron;je &scaron;tevilo najbližjih geoobjektov po meri (omogočeno) ali pa se uporabi privzeta nastavitev orodja, ki je največ 100.
+            </p>
+        </div>
+    </div>
+    <div id="maxCount">
+        <div>
+            <p>Največje &scaron;tevilo najbližjih geoobjektov, ki jih je mogoče najti za vsak vhodni geoobjekt.
+            </p>
+        </div>
+    </div>
+    <div id="limitSearchRangeCheckbox">
+        <div>
+            
+            <p>Določi, ali se uporabi največji iskalni doseg (omogočeno) ali pa je iskalni doseg neomejen.
+            </p>
+        </div>
+    </div>
+    <div id="searchCutoff">
+        <div>
+            <p>Največji iskalni doseg za iskanje najbližjih geoobjektov.
+            </p>
+        </div>
+    </div>
+    <div id="searchCutoffUnits">
+        <div>
+            <p>Enote za določanje iskalnega dosega.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>Ime sloja, ki bo ustvarjen in dodan na karto.
+            </p>
+        </div>
+    </div>
+    <div id="includeRouteLayers">
+        <div>
+            <p>Določa, ali bo vsaka pot rezultata shranjena kot usmerjevalni sloj.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>Ime mape v  <b>Moja vsebina</b>, kjer bodo shranjeni rezultati.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

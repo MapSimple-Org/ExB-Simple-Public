@@ -1,0 +1,16 @@
+{
+  "backLabel": "Terug",
+  "browseHeader": "Kaartlaag selecteren",
+  "cannotReopenRasterFunction": "Rasterfunctie kon niet geopend worden.",
+  "creditThresholdModal": {
+    "cancelRun": "Annuleren",
+    "continueRun": "Toch uitvoeren",
+    "creditEstimate": "Geschat aantal credits: ${cost}",
+    "creditThreshold": "Drempel credits: ${threshold}",
+    "heading": "Voordat u verder gaat",
+    "learnMore": "Meer informatie over creditdrempels",
+    "thresholdExceeded": "De geschatte creditkosten voor deze analyse zijn hoger dan de creditdrempel van de web map."
+  },
+  "failedToExecuteEstimate": "Submissie mislukt. Uitvoering EstimateRasterAnalysisCost mislukt",
+  "runAnalysisLabel": "Uitvoeren"
+}

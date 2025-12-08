@@ -1,0 +1,21 @@
+{
+  "backLabel": "Enrere",
+  "cannotReopenTool": "No s'ha pogut tornar a obrir l'eina. Els paràmetres de l'eina s'han revertit als valors per defecte.",
+  "cannotReopenWebTool": "No es pot obrir l'eina web. <calcite-link target='_blank' href='${ docLink }'>Més informació</calcite-link>",
+  "creditThresholdModal": {
+    "cancelRun": "Cancel·la",
+    "continueRun": "Executa de totes maneres",
+    "creditEstimate": "Crèdits estimats: ${cost}",
+    "creditThreshold": "Llindar de crèdits: ${threshold}",
+    "heading": "Abans de continuar",
+    "learnMore": "Més informació sobre els llindars de crèdits",
+    "thresholdExceeded": "El cost de crèdits estimat per a aquesta anàlisi és superior al llindar de crèdits del mapa web:"
+  },
+  "failedToExecuteEstimate": "Error en els enviaments. No s'ha pogut executar EstimateRasterAnalysisCost",
+  "missingPermissionForWebTool": "No es pot accedir a aquesta eina. Assegureu-vos que l'eina existeixi i que el vostre usuari tingui permís per accedir-hi.",
+  "runAnalysisLabel": "Execució",
+  "toolPreviewNoParameters": "No s'ha configurat cap paràmetre per a aquest model. Torneu al model per afegir-hi variables i definiu-les com a paràmetres.",
+  "toolPreviewNoParametersLink": "<calcite-link target='_blank' href='${ docLink }'>Més informació</calcite-link>",
+  "toolPreviewWebTool": "Per executar aquest model com a eina web, publiqueu-lo i obriu-lo des de la subfinestra Anàlisi.",
+  "webToolJSONChanged": "S'han actualitzat un o diversos paràmetres. És possible que alguns paràmetres no es puguin tornar a emplenar des de l'historial."
+}

@@ -1,0 +1,27 @@
+{
+  "area": "面積",
+  "binResolution": "H3 ビン解像度",
+  "binSize": "ビン サイズ",
+  "binSizeUnit": "単位",
+  "binType": "ビン形状タイプ",
+  "diamondBins": "ひし形のビン",
+  "distance": "距離",
+  "extentLayer": "範囲レイヤー",
+  "extentOverrideMessage": "この範囲レイヤーは、環境で設定された処理範囲の代わりに使用されます。",
+  "extentSectionLabel": "範囲設定",
+  "extentSectionText": "テッセレーションがカバーする範囲レイヤーを指定します。",
+  "h3hexagonBins": "H3 六角形のビン",
+  "hexagon": "六角形",
+  "intersectStudyArea": "交差するテッセレーションのみを維持",
+  "itemProperties": {
+    "description": "テッセレーションの生成解析ツールを実行して生成されるフィーチャ レイヤー。",
+    "snippet": "テッセレーションの生成から生成されるフィーチャ レイヤー"
+  },
+  "outputAreasSectionText": "テッセレーション グリッドの名前を指定します。",
+  "sizeType": "ビン サイズの計測値",
+  "square": "正方形",
+  "tessellationSettingsLabel": "テッセレーションの設定",
+  "tessellationSettingsSummaryText": "生成するビンの形状とサイズを指定します。",
+  "thexagonBins": "六角形 (縦) のビン",
+  "triangleBins": "三角形のビン"
+}

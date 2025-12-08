@@ -1,0 +1,1 @@
+System.register([],function(e){return{execute:function(){e({_widgetLabel:"Filtre des \xe9tages",floorfilter_noMap:"Filtre des \xe9tages",floorfilter_notFloorAware:"La carte s\xe9lectionn\xe9e ne tient pas compte des \xe9tages"})}}});

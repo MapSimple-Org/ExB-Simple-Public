@@ -1,0 +1,11 @@
+{
+  "all": "Kõik",
+  "inputLayersGroupText": "Valige sisendpinnaraster ning soovi korral madaliku andmed ja kaaluraster.",
+  "itemProperties": {
+    "description": "Analüüsitööriista Voolu tuletamine rastrina käitamise kaudu loodud väljund.",
+    "snippet": "Tööriista Voolu tuletamine rastrina kaudu loodud väljund"
+  },
+  "outputStreamFeaturesLabel": "Väljunudvooluobjektide nimi",
+  "simplifyLabel": "Lihtsusta objekte",
+  "streamSettingsGroupText": "Määrake akumulatsiooni lävi, voo määramise meetod ja see, kas voojooned silutakse lihtkujunditeks."
+}

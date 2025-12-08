@@ -1,0 +1,11 @@
+{
+  "newTemplate": "Kreirajte novi šablon",
+  "openTemplate": "Otvorite šablon",
+  "addTemplate": "Dodaj šablon",
+  "addFunction": "Dodajte rasterske funkcije",
+  "addConstant": "Dodajte konstantu",
+  "addRaster": "Dodajte promenljivu rastera",
+  "expand": "Proširi",
+  "editTemplateProperties": "Uredi svojstva šablona",
+  "viewTemplateProperties": "Prikaži svojstva šablona"
+}

@@ -1,0 +1,18 @@
+{
+  "add": "Adăugare",
+  "analysisSessionLayers": "Straturi tematice de sesiuni de analiză",
+  "browseAnalysisLayers": "Răsfoirea straturilor tematice",
+  "cancel": "Anulare",
+  "heading": "Selectare strat tematic",
+  "mapLayers": "Straturi tematice de hărți",
+  "mesh": "Strat tematic de rețea integrată",
+  "modelVariableLayers": "Straturi tematice variabile de model",
+  "multipatch": "Strat tematic multipatch",
+  "multipoint": "Strat tematic multipunct",
+  "noCompatibleLayers": "Harta nu conține straturi tematice compatibile. Adăugați straturi tematice la hartă sau răsfoiți pentru straturi tematice pentru a realiza analiza.",
+  "noMatchesFound": "Nu au fost găsite concordanțe pentru „${searchTerm}”.",
+  "point": "Strat tematic punct",
+  "polygon": "Strat tematic poligon",
+  "polyline": "Strat tematic polilinie",
+  "table": "Tabel"
+}

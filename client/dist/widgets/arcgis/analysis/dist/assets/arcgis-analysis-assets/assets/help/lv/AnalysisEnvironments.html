@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>Vides iestatījumi analīzei  Map Viewer. </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="analysisProcessingExtent">
+        <div>
+            <p>Norāda teritoriju, kas tiks izmantota analīzei. Pēc noklusējuma tas izmantos pilnu pārklājumu.
+            </p>
+        </div>
+    </div>
+    <div id="rasterAnalysisProcessingExtent">
+        <div>
+            <p>Norāda platību, kas tiks izmantota rastra analīzes rīkiem un rastra funkcijām, kad ir iespējota opcija  <b>Izmantot citu apstrādes apjomu rastra analīzei</b>. Pēc noklusējuma tā izmantos kartes attēlojuma pārklājumu.
+            </p>
+        </div>
+    </div>
+    <div id="useDifferentExtentForRA">
+        <div>
+            <p>Norāda, vai rastra analīzes rīkiem un rastra funkcijām izmantot citu apstrādes pārklājumu. Kad iespējota, rastra analīze izmantos vērtību, kas iestatīta laukā  <b>Rastra analīzes apstrādes apjoms</b>, kas pēc noklusējuma ir iestatīts uz kartes attēlojuma pārklājumu. Kad iespējota, rastra analīze izmantos vērtību, kas iestatīta laukā <b>Analīzes apstrādes pārklājums</b>, kas pēc noklusējuma ir iestatīts uz pilnu pārklājumu.
+            </p>
+        </div>
+    </div>
+    <div id="outSR">
+        <div>
+            <p>Norāda uz koordinātu sistēmu, kas tiks izmantota analīzei un rezultātu slānim.
+            </p>
+        </div>
+    </div>
+    <div id="extent">
+        <div>
+            <p>Norāda teritoriju, kas tiks izmantota analīzei.
+            </p>
+        </div>
+    </div>
+    <div id="snapRaster">
+        <div>
+            <p>Pielāgo izvades pārklājumu, lai tas atbilstu pielipinā&scaron;anas rastra slāņa &scaron;ūnu līdzinājumam.
+            </p>
+        </div>
+    </div>
+    <div id="cellSize">
+        <div>
+            <p>Norāda &scaron;ūnas lielumu vai iz&scaron;ķirtspēju, kas tiks izmantota analīzei un izvades rastra slāņa izveidei.
+            </p>
+            <p>Ja  <b>, kā norādīts</b>, tiek atlasīts, un izvades telpiskā atsauce at&scaron;ķiras no ievades telpiskās atsauces, &scaron;ūnas lieluma vērtība netiks atkārtoti projicēta.
+            </p>
+        </div>
+    </div>
+    <div id="mask">
+        <div>
+            <p>Norāda maskas slāni, kurā analīzei tiks izmantotas tikai tās &scaron;ūnas, kas ietilpst maskas teritorijā.
+            </p>
+        </div>
+    </div>
+    <div id="resamplingMethod">
+        <div>
+            <p>Norāda, kā pikseļu vērtības tiks interpolētas, ja ievades un izvades rastri nesakrīt.
+            </p>
+        </div>
+    </div>
+    <div id="processorType">
+        <div>
+            <p>Norāda izmantojamā procesora veidu. Iespējas ir  <b>centrālais procesors</b>, <b>grafiskais procesors</b> un <b>Automātiski</b>. Ja ir norādīts <b>Automātiski</b>, rīks definēs procesora veidu.
+            </p>
+        </div>
+    </div>
+    <div id="parallelProcessingFactor">
+        <div>
+            <p>Norāda rīku izpildes laikā izmantoto rastra apstrādes servisa instanču skaitu. Atbalstītās vērtības ietver tuk&scaron;as virknes (rīks noteiks izmantojamo rastra apstrādes servisa instanču skaitu), veselus skaitļus (0 vai pozitīvus veselus skaitļus) un procentus. Procentos ir jāiekļauj procentu zīme (%), kas seko procentu vērtībai.
+            </p>
+        </div>
+    </div>
+    <div id="askConfirmation">
+        <div>
+            <p>Nosaka, vai brīdinājuma ziņojums tiks parādīts, ja paredzamais kredītu skaits pārsniegs norādīto slieksni (iespējots) vai arī analīze tiks veikta, nerādot ziņojumu, neatkarīgi no paredzamā kredīta patēriņa (nav iespējots). Analīzē joprojām tiks ievēroti organizācijas servisa kredītu budžeta iestatījumi.
+            </p>
+        </div>
+    </div>
+    <div id="creditThreshold">
+        <div>
+            <p>Norāda slieksni, pie kura tiks parādīts brīdinājuma ziņojums, pamatojoties uz paredzamo servisa kredīta patēriņu analīzes veik&scaron;anai. Analīzi joprojām var veikt, ja aplēse pārsniedz robežslieksni.
+            </p>
+        </div>
+    </div>
+    <div id="recycleProcessingWorkers">
+        <div>
+            <p>Norāda attēlu sadaļu skaitu, kas tiks apstrādātas pirms darbinieku procesu restartē&scaron;anas, lai novērstu iespējamās kļūmes ilgsto&scaron;os procesos. Noklusējuma vērtība ir 0.
+            </p>
+        </div>
+    </div>
+    <div id="retryOnFailures">
+        <div>
+            <p>Norāda, cik reižu viens notiks mēģinājums apstrādāt viena un tā pa&scaron;a darbinieka procesu, ja konkrēta darba apstrādes laikā rodas kļūme. Noklusējuma vērtība ir 0.
+            </p>
+        </div>
+    </div>
+    <div id="geographicTransformations">
+        <div>
+            <p>Nosaka transformācijas metodes, kas tiks izmantotas, lai projicētu datus analīzei.
+            </p>
+            <p>Vide pa&scaron;laik atbalsta tikai rastra analīzes rīkus un rastra funkcijas.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

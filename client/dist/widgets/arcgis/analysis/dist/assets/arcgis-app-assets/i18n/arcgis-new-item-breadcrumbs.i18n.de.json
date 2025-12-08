@@ -1,0 +1,12 @@
+{
+  "apiCredentialType": "Anmeldeinformationstyp: API-Schlüssel",
+  "oauthCredentialType": "Anmeldeinformationstyp: OAuth 2.0",
+  "itemAccess": "Elementzugriff",
+  "page": "Seite: ${page}",
+  "currentPage": "Aktuelle Seite: ${page}",
+  "privileges": "Berechtigungen",
+  "itemDetails": "Elementdetails",
+  "settings": "Einstellungen",
+  "serviceScope": "Serviceumfang",
+  "summary": "Zusammenfassung"
+}

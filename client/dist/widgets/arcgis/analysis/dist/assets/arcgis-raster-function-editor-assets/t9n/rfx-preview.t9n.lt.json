@@ -1,0 +1,13 @@
+{
+  "header": "Peržiūra",
+  "description": "Peržiūrėti rezultatą prieš vykdant analizę.",
+  "showPreview": "Rodyti peržiūrą",
+  "previewLayer": "Peržiūrėti sluoksnį ${number}",
+  "update": "Atnaujinti",
+  "newPreview": "Peržiūros nėra",
+  "previewPopup": "Įgalinkite analizės rezultatų peržiūrą pagal įvesties parametrus.",
+  "previewError": "Šis peržiūros sluoksnis neprieinamas. Patikrinkite įvesties parametrus ir dar kartą atnaujinkite šį peržiūros sluoksnį.",
+  "updatePopover": "Atnaujinti pasirinktą peržiūros sluoksnį",
+  "createPopover": "Kurti naują peržiūros sluoksnį",
+  "maxPreview": "Didžiausias leidžiamas peržiūros sluoksnių skaičius: ${maxCount}"
+}

@@ -1,0 +1,18 @@
+{
+  "add": "Aggiungi",
+  "analysisSessionLayers": "Layer sessione analisi",
+  "browseAnalysisLayers": "Sfoglia layer",
+  "cancel": "Annulla",
+  "heading": "Seleziona layer",
+  "mapLayers": "Layer mappa",
+  "mesh": "Layer mesh",
+  "modelVariableLayers": "Layer variabili del modello",
+  "multipatch": "Layer multipatch",
+  "multipoint": "Layer multipunto",
+  "noCompatibleLayers": "La mappa non contiene layer compatibili. Aggiungi layer alla mappa o cerca layer per eseguire l'analisi.",
+  "noMatchesFound": "Nessuna corrispondenza trovata per '${searchTerm}'.",
+  "point": "Layer puntuale",
+  "polygon": "Layer poligono",
+  "polyline": "Layer polilinea",
+  "table": "Tabella"
+}

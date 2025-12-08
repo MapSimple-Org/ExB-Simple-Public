@@ -1,0 +1,11 @@
+{
+  "newTemplate": "Nieuwe sjabloon maken",
+  "openTemplate": "Sjabloon openen",
+  "addTemplate": "Sjabloon toevoegen",
+  "addFunction": "Rasterfuncties toevoegen",
+  "addConstant": "Constante toevoegen",
+  "addRaster": "Rastervariabele toevoegen",
+  "expand": "Uitklappen",
+  "editTemplateProperties": "Sjablooneigenschappen bewerken",
+  "viewTemplateProperties": "Eigenschappen sjabloon toevoegen"
+}

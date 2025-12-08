@@ -1,0 +1,160 @@
+{
+  "deleteItem": "删除项目",
+  "deleteItems": "删除项目",
+  "deleteFolder": "删除文件夹",
+  "recycleBin": "回收站",
+  "delete": "删除",
+  "permanentlyDelete": "永久删除",
+  "next": "前进",
+  "back": "返回",
+  "cancel": "取消",
+  "item": "项目",
+  "items": "项目",
+  "cantDelete": "无法删除以下项目，因为这些项目存在删除保护或具有依赖项目。",
+  "proceed": "是否要继续删除剩余项目?",
+  "showMore": "显示更多",
+  "showLess": "显示更少",
+  "deletePermanently": "永久删除(无法撤消)",
+  "learnMore": "了解详细信息",
+  "summary": {
+    "select": "选择",
+    "deselect": "取消选择",
+    "selectedItems": "所选项目：",
+    "additionalDependentItems": "附加从属项目：",
+    "permanentlyDelete": "永久删除：",
+    "permanentDelete": {
+      "notSupported": {
+        "single": "回收站不支持此项目。",
+        "multiple": "回收站不支持这些项目。"
+      },
+      "unsynchronized": "对分布式协作组中的要素图层进行的未同步编辑内容将会丢失。",
+      "notSupportedAndUnsynchronized": "某些项目类型不受支持。 对分布式协作组中的要素图层进行的未同步编辑内容将会丢失。",
+      "group": {
+        "notSupported": "不支持",
+        "distributedCollaboration": "分布式协作部分"
+      }
+    },
+    "canBeRecovered": {
+      "single": "此项目将在 ${days} 天后永久删除。",
+      "multiple": "这些项目会在 ${days} 天后永久删除。",
+      "unknown": "这些项目会在 ${days} 天后永久删除。"
+    },
+    "includesDependentItems": "附加从属项目：",
+    "willBeRecycled": "发送至回收站：",
+    "cannotDelete": "无法删除：",
+    "deleteDiscouraged": "删除不支持内容：",
+    "hasDependentItems": "具有依赖项目：",
+    "replacementItemFor": "替换项目，针对：",
+    "someActionsMayNoLongerWork": {
+      "single": "如果将此项目发送至回收站，则一些需要源项目访问权限的操作可能不会如预期一样工作。",
+      "multiple": "如果将这些项目发送至回收站，则一些需要源项目访问权限的操作可能不会如预期一样工作。"
+    },
+    "deletePermanently": "永久删除：${count} (无法撤消)",
+    "deleteAllPermanently": "永久删除所有项目：${count} (无法撤消)",
+    "deleteXPermanently": "永久删除 ${subset} 个项目(共 ${total} 个) (无法撤消)",
+    "unprotectedGroup": {
+      "deleteDiscouraged": {
+        "dependent": "如果删除此项目，某些需要访问源项目的操作可能无法按预期运行。 是否确定删除此项目?",
+        "replacement": "此项目被选为替换项目。 是否确定删除此项目?",
+        "learnMore": "了解关于删除源项目的详细信息"
+      }
+    },
+    "protectedGroup": {
+      "deleteProtected": "删除保护",
+      "deleteProtectedDescription": "无法删除受删除保护的项目。",
+      "hasDependentItems": "具有依赖项目",
+      "dependentItems": {
+        "single": "依赖项目：",
+        "multiple": "依赖项目："
+      },
+      "compositeDelete": "此项目依赖于：",
+      "compositeDeleteDescription": "如果没有关联的源项目，则不能删除复合关系中的从属项目。",
+      "hasDependentItemsDescription": {
+        "singleOneDependentItem": "此项目具有依赖项目。 必须将其一起删除。",
+        "singleMultipleDependentItems": "此项目具有依赖项目。 必须将其一起删除。",
+        "multiple": "这些项目具有其他依赖于它们的项目。 必须将其一起删除。"
+      },
+      "protectedAndDependentDescription": "无法删除受删除保护或者具有依赖项目的项目。",
+      "deleteDiscouraged": "删除不支持内容",
+      "deleteDiscouragedDescription": {
+        "single": "如果删除此项目，依赖项目可能会失去某些功能。 您可以从项目详细信息页面删除该项目。",
+        "multiple": "如果删除这些项目，依赖项目可能会失去某些功能。 您可以从项目详细信息页面分别删除这些项目。"
+      }
+    }
+  },
+  "willBePermanentlyDeleted": {
+    "single": "将永久删除此项目，因为其不受回收站支持。",
+    "multiple": "将永久删除这些项目，因为其不受回收站支持。",
+    "unknown": "将永久删除这些项目，因为其不受回收站支持。"
+  },
+  "willBePermanentlyDeletedCollaboration": {
+    "single": "所选项目属于分布式协作群组，无法将其发送至回收站。 将永久删除此项目。",
+    "multiple": "所选项目属于分布式协作群组，无法将其发送至回收站。 将永久删除这些项目。",
+    "unknown": "所选项目属于分布式协作群组，无法将其发送至回收站。 将永久删除这些项目。"
+  },
+  "areYouSure": {
+    "single": "是否确定删除此项目?",
+    "multiple": "是否确定要删除这些项目?",
+    "unknown": "是否确定要删除这些项目?"
+  },
+  "areYouSureRecycle": {
+    "single": "此项目将在回收站中保留 ${days} 天，然后才会将其永久删除。",
+    "multiple": "这些项目将在回收站中保留 ${days} 天，然后才会将其永久删除。",
+    "unknown": "这些项目将在回收站中保留 ${days} 天，然后才会将其永久删除。"
+  },
+  "areYouSurePermanent": {
+    "single": "是否确定要永久删除此项目? 永久删除后，将无法恢复此项目。",
+    "multiple": "是否确定要永久删除这些项目? 永久删除后，将无法恢复这些项目。",
+    "unknown": "是否确定要永久删除这些项目? 永久删除后，将无法恢复这些项目。"
+  },
+  "deletes": {
+    "single": "${days} 天后删除",
+    "multiple": "${days} 天后删除",
+    "unknown": "删除前的天数：${days}"
+  },
+  "deleteOverride": {
+    "single": "是否确定要永久删除此项目? 永久删除后，将无法恢复此项目。",
+    "multiple": "是否确定要永久删除这些项目? 永久删除后，将无法恢复这些项目。"
+  },
+  "restore": {
+    "restore": "恢复",
+    "restoreTo": "恢复到",
+    "restoreItem": "恢复项目",
+    "restoreItems": "恢复多个项目",
+    "noticeMessage": "将取消共享恢复项目。 请在再次共享之前检查您的内容。",
+    "cannotBulkRestoreXItems": "无法批量恢复超过 ${number} 个项目，请取消选择一些项目。",
+    "cannotBulkRestoreMultipleOwners": "无法批量恢复属于不同所有者的项目。 请选择单个所有者的项目以进行批量恢复。",
+    "toRestore": {
+      "single": "要恢复的项目：",
+      "multiple": "要恢复的多个项目："
+    },
+    "cannotRestore": "无法恢复：",
+    "dependentItems": {
+      "single": "无法恢复此项目，因为其依赖于 <b>${parent}</b>。 请将其一起恢复。",
+      "multiple": "无法恢复这些项目，因为其依赖于回收站中的其他项目。 请将其一起恢复： "
+    }
+  },
+  "onboarding": {
+    "checkItOut": "是否需要恢复此意外删除的项目? 请检出新回收站!",
+    "takeALook": "请查看新回收站!",
+    "learnMore": "了解有关恢复已删除项目的详细信息",
+    "heldInRecycleBin": "回收站中的项目会在 ${days} 天后永久删除。",
+    "goToUserRecycleBin": "请转至您的${linkStart}回收站${linkEnd}以恢复项目或永久删除项目。",
+    "goToOrgRecycleBin": "请转至您${linkStart}组织的回收站${linkEnd}以恢复项目或永久删除项目。 回收站中的内容将继续消耗配额。"
+  },
+  "pageRangeWithTotalRecycleBinSize": {
+    "en": "回收站中的 ${start} - ${end}，共 ${total} 个 (${size})",
+    "other": "回收站中的 ${start} - ${end}，共 ${total} 个 (${size})"
+  },
+  "pageRangeWithGreaterThanTotalRecycleBinSize": {
+    "en": "回收站中的 ${start} - ${end}，共 ${total} 个 (>${size})",
+    "other": "回收站中的 ${start} - ${end}，共 ${total} 个 (>${size})"
+  },
+  "compositeDeleteDisclaimer": {
+    "oneToOne": "<strong>${item}</strong> 具有依赖项目 <strong>${dependentItem}</strong>，必须将其一起删除。",
+    "oneToMany": "<strong>${item}</strong> 具有依赖项目，必须将其一起删除。",
+    "manyToMany": "某些选定项目具有依赖项目，必须将其一起删除。",
+    "additional": "其他项目：",
+    "dependentOn": "依赖于"
+  }
+}

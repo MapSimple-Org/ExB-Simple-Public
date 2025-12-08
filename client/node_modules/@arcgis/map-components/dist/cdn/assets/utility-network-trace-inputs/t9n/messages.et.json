@@ -1,0 +1,1 @@
+{"componentLabel":"Jälgi sisendeid","labels":{"utilityNetwork":"Utility network","traceConfiguration":"Jälgi konfiguratsiooni","traceInputs":"Jälgi sisendeid"},"errors":{"noMapError":"Kaarte pole saadaval","noUtilityNetworkError":"Kaardilt ei leitud ühtegi kommunaalvõrku","noTraceConfigurationError":"Nimelisi jälgimiskonfiguratsioone pole saadaval"}}

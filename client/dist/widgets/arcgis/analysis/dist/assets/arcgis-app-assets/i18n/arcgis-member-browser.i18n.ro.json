@@ -1,0 +1,177 @@
+{
+  "memberBrowser": {
+    "filters": "Filtre",
+    "pageRange": "${start}-${end}, total: ${total}",
+    "pageRangeAria": "${start}-${end}, total membrii: ${total}",
+    "selectedMembers": "Membri selectați",
+    "noSelectedMembers": "Nu există membri selectați în prezent",
+    "noUsersFound": "Nu s-au găsit utilizatori care să îndeplinească criteriile. Încercați să eliminați unele filtre sau să modificați căutarea pentru a arăta mai mulți utilizatori.",
+    "enterTermExternal": "Introduceți un termen de căutare pentru a găsi utilizatori în toate resursele ArcGIS Online",
+    "noUsers": "Nu există utilizatori disponibili",
+    "coordinator": "Coordonator de colaborare"
+  },
+  "search": {
+    "searchMembers": "Căutare membri"
+  },
+  "filterUserTypes": {
+    "title": "Tip utilizator",
+    "label": "Tip utilizator: ${name}",
+    "loading": "Se încarcă tipurile de utilizatori..."
+  },
+  "filterRoles": {
+    "title": "Rol",
+    "label": "Rol: ${name}",
+    "loading": "Se încarcă roluri...",
+    "searchRoles": "Căutare roluri"
+  },
+  "filterOrgGroups": {
+    "title": "Grupurile organizației",
+    "label": "Grup: ${name}",
+    "loading": "Se încarcă grupurile organizației...",
+    "searchGroups": "Căutaţi grupuri",
+    "noGroupsFound": "Nu a fost găsit niciun grup. Încercați să modificați termenul de căutare pentru a afișa mai multe grupuri."
+  },
+  "filterMyGroups": {
+    "title": "Grupurile mele",
+    "label": "Grup: ${name}",
+    "loading": "Se încarcă grupurile mele...",
+    "searchMyGroups": "Căutare în Grupurile mele"
+  },
+  "filterCategories": {
+    "title": "Categorii",
+    "label": "Categorie: ${name}",
+    "loading": "Încărcare categorii în curs...",
+    "noCategoriesTitle": "Încă nu există nicio categorie de membri",
+    "noCategories": "Categoriile de membri permit administratorilor să-ți organizeze membrii într-un director pentru a simplifica acțiunile administrative asupra membrilor. Membrii organizației pot, de asemenea, să utilizeze acest director pentru a găsi alți membri.",
+    "setupCategories": "Configurarea categoriilor de membri",
+    "configureCategories": "Configurarea categoriilor",
+    "noCategoriesAssigned": "Nu există categorii atribuite"
+  },
+  "filterPartnerCollabs": {
+    "title": "Colaborări partenere",
+    "label": "Colaborări partenere: ${name}",
+    "loading": "Se încarcă colaborări partenere...",
+    "coordinatorsOnly": "Doar coordonatori de colaborare",
+    "coordinatorsDescription": "Coordonatorii de colaborare sunt reprezentanții din colaborările partenere care pot fi adăugați unui grup fără a fi nevoie de confirmare.",
+    "coordinatorsInfoLabel": "Mai multe informații despre coordonatorii de colaborare"
+  },
+  "filterSearchSwitch": {
+    "searchAll": "Căutați toți membrii organizației ArcGIS Online",
+    "searchPartners": "Invitați membrii organizațiilor partenere și ai acesteia"
+  },
+  "table": {
+    "caption": "Rezultatele membrilor, antetele de coloane cu butoane pot fi sortate.",
+    "selectAll": "Selectare globală",
+    "selection": "Selecție",
+    "headers": {
+      "name": "Nume",
+      "membertype": "Rol grup",
+      "affiliation": "Afiliere",
+      "joined": "Asociat",
+      "credits": "Credite rămase",
+      "remainingCredits": "Total credite rămase ${num}",
+      "lastlogin": "Ultima autentificare",
+      "usertype": "Tip utilizator",
+      "role": "Rol",
+      "mfaenabled": "Autentificare multi-factor"
+    }
+  },
+  "tableRow": {
+    "moreOptions": "Mai multe opțiuni",
+    "groupManager": "Manager grup",
+    "owner": "Proprietar",
+    "member": "Membru",
+    "myOrg": "Organizaţia mea",
+    "other": "Altele",
+    "coordinator": "Coordonator de colaborare",
+    "noLimit": "Nicio limită",
+    "creditsNumber": "${remain} din ${total}",
+    "today": "Astăzi",
+    "yesterday": "Ieri",
+    "never": "Niciodată",
+    "role": "Rol",
+    "memberIsCoordinator": "Membrul este un coordonator de colaborare",
+    "rolesForCoordinator": "Coordonatorii de colaborare pot avea doar roluri de administrator sau moderator.",
+    "memberIsContact": "Acest membru este un contact administrativ",
+    "removeFromContact": "Dacă doriți să schimbați rolul acestui membru, întâi trebuie să îl scoateți din ${linkStart}lista contactelor administrative${linkEnd}."
+  },
+  "listCard": {
+    "moreOptions": "Mai multe opțiuni",
+    "lastLoggedIn": "Ultima oară autentificat în ${value}",
+    "today": "Astăzi",
+    "yesterday": "Ieri",
+    "hasNotLoggedIn": "Nu s-a autentificat încă",
+    "neverSignedInTooltip": "Acest membru nu s-a conectat niciodată cu contul său creat pe ${date}",
+    "userType": "Tip utilizator",
+    "role": "Rol",
+    "creditsRemaining": "Credite rămase",
+    "noLimit": "Nicio limită",
+    "creditsNumber": "${remain} din ${total}",
+    "addonLicenses": "Licențe de completare",
+    "configureLicenses": "Configurare licențe",
+    "groups": "Grupuri",
+    "configureGroups": "Configurare grupuri",
+    "viewGroups": "Vizualizați grupuri"
+  },
+  "myOrg": {
+    "myOrgView": "Vizualizarea organizației mele"
+  },
+  "filterGroupRole": {
+    "title": "Rol grup",
+    "label": "Rol grup: ${role}",
+    "admins": "Manageri titulari și grupuri",
+    "member": "Membru"
+  },
+  "filterAffiliation": {
+    "title": "Afiliere",
+    "label": "Afiliere: ${name}",
+    "myOrg": "Organizaţia mea",
+    "other": "Altele"
+  },
+  "filterCreditsRemain": {
+    "title": "Credite rămase",
+    "noLimit": "Nicio limită",
+    "lessThan": "Mai mic decât",
+    "credits": "Credite",
+    "labelNoLimit": "Credite: nicio limită",
+    "labelLess": "Credite: mai puțin de ${value}",
+    "invalidValue": "Valoarea introdusă nu este validă."
+  },
+  "filterEmailVerification": {
+    "title": "Stare verificare e-mail",
+    "unverified": "Adrese de e-mail neverificate",
+    "verified": "Adrese de e-mail verificate",
+    "label": "Stare verificare e-mail: ${status}"
+  },
+  "filterLoginType": {
+    "title": "Tip de conectare",
+    "label": "Tip conectare: ${type}",
+    "social": "Rețele socializare"
+  },
+  "filterApp": {
+    "title": "Aplicație",
+    "label": "Aplicație: ${app}"
+  },
+  "filterMFA": {
+    "title": "Autentificare multi-factor",
+    "enabled": "Activat",
+    "disabled": "Dezactivat",
+    "label": "Autentificare multi-factor: ${status}"
+  },
+  "roles": {
+    "user": "Utilizator",
+    "publisher": "Editor",
+    "admin": "Administrator",
+    "viewer": "Aplicaţie de vizualizare",
+    "editor": "Editor de date",
+    "facilitator": "Facilitator"
+  },
+  "view": {
+    "view": "Vizualizare",
+    "list": "Listare",
+    "table": "Tabel"
+  },
+  "assignedLicenses": "Arată doar membri cărora le-a fost alocată această licență",
+  "onlyDoubleAssigned": "Arată doar membri cărora le-a fost alocată această licență de două ori",
+  "maxSelected": "Pot fi selectați simultan doar ${number} membri."
+}

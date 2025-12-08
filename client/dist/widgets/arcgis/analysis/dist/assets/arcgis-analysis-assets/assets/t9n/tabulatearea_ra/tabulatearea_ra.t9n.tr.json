@@ -1,0 +1,12 @@
+{
+  "classField": "Sınıf alanı",
+  "classesAsRowsLabel": "Çıktı tablosunda satırlar olarak sınıflar",
+  "inputClassRasterOrFeatures": "Girdi sınıf rasterı veya detayları",
+  "inputLayerGroupText": "İki veri kümesi arasındaki çapraz çizelgelenmiş alanları hesaplamak için giriş bölgesini ve sınıf katmanını seçin.",
+  "itemProperties": {
+    "description": "Çizelge Alanı analiz aracının çalıştırılmasıyla oluşturulan çıktı tablosu.",
+    "snippet": "Çizelge Alanı'ndan oluşturulan çıktı tablosu"
+  },
+  "tabulateAreaSettingsGroupLabel": "Çizelge alanı ayarları",
+  "tabulateAreaSettingsGroupText": "Çıktı tablosundaki sınıfların nasıl işleneceğini seçin. Hesaplanacak hücre boyutunu belirtin. "
+}

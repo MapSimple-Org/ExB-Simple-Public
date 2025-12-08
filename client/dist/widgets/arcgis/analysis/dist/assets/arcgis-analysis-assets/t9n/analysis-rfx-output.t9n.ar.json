@@ -1,0 +1,12 @@
+{
+  "dynamicLayer": "طبقة الصور المتحركة",
+  "outputDescription": "الإخراج الناتج من تشغيل دالة البيانات النقطية ${rfxName}",
+  "outputDescriptionRFT": "الإخراج الناتج عن تشغيل قالب دالة البيانات النقطية ${rfxName}",
+  "outputName": "الاسم الناتج",
+  "outputNamePlaceHolder": "أدخل اسمًا مميزًا...",
+  "resultLayer": "طبقة النتيجة",
+  "resultType": "نوع النتيجة",
+  "saveFolder": "حفظ في مجلد",
+  "summaryText": "اكتب اسمًا لطبقة النتيجة.",
+  "tileImagery": "طبقة الصور المتجانبة"
+}

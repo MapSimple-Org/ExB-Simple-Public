@@ -1,0 +1,29 @@
+{
+  "name": "dart",
+  "type": "template",
+  "templateType": "app",
+  "label": "Dart",
+  "description": "Dart is a template that focuses on the map, the widgets are placed inside a fixed panel positioned at the bottom of the map.",
+  "thumbnail": "thumbnail.png",
+  "order": 16,
+  "tags": [
+    "Map",
+    "Legend",
+    "Search",
+    "Widget Controller",
+    "Panel",
+    "Map Layers",
+    "Basemap Gallery",
+    "Title",
+    "Splash window"
+  ],
+  "categoriesTags": [
+    "WAB classic",
+    "Map centric",
+    "Fullscreen"
+  ],
+  "isMultiplePage": false,
+  "isMapAware": true,
+  "thumbnailWidth": 320,
+  "thumbnailHeight": 214
+}

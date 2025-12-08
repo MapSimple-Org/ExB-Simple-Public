@@ -1,0 +1,12 @@
+{
+  "apiCredentialType": "Typ av autentiseringsuppgifter: API-nyckel",
+  "oauthCredentialType": "Typ av autentiseringsuppgifter: OAuth 2.0",
+  "itemAccess": "Objektåtkomst",
+  "page": "Sida: ${page}",
+  "currentPage": "Aktuell sida: ${page}",
+  "privileges": "Behörighet",
+  "itemDetails": "Objektinformation",
+  "settings": "Inställningar",
+  "serviceScope": "Tjänstens omfång",
+  "summary": "Sammanfattning"
+}

@@ -1,0 +1,1 @@
+System.register([],function(a){return{execute:function(){a({distance:"Razdalja",area:"Povr\u0161ina",atLeastOne:"Izbrano mora biti vsaj eno orodje",toolbar:"Orodna vrstica",disableSnapping:"Onemogo\u010di hiter preklop v 2D karti"})}}});

@@ -1,0 +1,13 @@
+{
+  "fieldCalcExpression": "Výraz na kalkuláciu poľa",
+  "fieldCalculationGroupLabel": "Kalkulácia poľa",
+  "fieldPlaceholderText": "Kliknutím vyberte alebo vytvorte pole",
+  "fieldToCalculate": "Pole na kalkuláciu",
+  "inputDatasetGroupLabel": "Vstup",
+  "itemProperties": {
+    "description": "Výsledok generovaný spustením nástroja Kalkulovať pole v ModelBuilder.",
+    "snippet": "Prvková vrstva vygenerovaná nástrojom Kalkulovať pole"
+  },
+  "noFieldSpecified": "Zadajte pole, ktoré sa má kalkulovať, aby sa vytvoril výraz.",
+  "whereClause": "Kalkuláciu aplikovať len na určité záznamy"
+}

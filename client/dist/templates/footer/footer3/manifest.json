@@ -1,0 +1,12 @@
+{
+  "name": "footer3",
+  "type": "template",
+  "templateType": "footer",
+  "label": "Footer 3",
+  "thumbnail": "thumbnail.png",
+  "order": 3,
+  "tags": [],
+  "categoriesTags": [],
+  "thumbnailWidth": 400,
+  "thumbnailHeight": 62
+}

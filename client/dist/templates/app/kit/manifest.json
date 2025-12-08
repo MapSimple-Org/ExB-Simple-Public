@@ -1,0 +1,18 @@
+{
+  "name": "kit",
+  "type": "template",
+  "templateType": "app",
+  "label": "Kit",
+  "description": "Kit is a template that uses 3D Toolbox, Bookmark and Map widgets to display 3D effects for web scenes.",
+  "thumbnail": "thumbnail.png",
+  "order": 5,
+  "tags": [],
+  "categoriesTags": [
+    "Map centric",
+    "Fullscreen"
+  ],
+  "isMultiplePage": false,
+  "isMapAware": true,
+  "thumbnailWidth": 320,
+  "thumbnailHeight": 214
+}

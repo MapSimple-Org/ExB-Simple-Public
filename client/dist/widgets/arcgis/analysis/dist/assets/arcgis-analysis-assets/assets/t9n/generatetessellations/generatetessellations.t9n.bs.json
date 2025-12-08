@@ -1,0 +1,27 @@
+{
+  "area": "Poligona",
+  "binResolution": "H3 razlučivost ćelija",
+  "binSize": "Veličina ćelije",
+  "binSizeUnit": "Jedinica",
+  "binType": "Vrsta oblika ćeije",
+  "diamondBins": "Dijamantne ćelije",
+  "distance": "Udaljenosti",
+  "extentLayer": "Sloj obuhvata",
+  "extentOverrideMessage": "Ovaj sloj obuhvata koristit će se umjesto bilo kojeg obuhvata obrade postavljenog u okruženjima.",
+  "extentSectionLabel": "Postavke obuhvata",
+  "extentSectionText": "Odredite sloj proširenja koji bi teselacija trebala pokriti.",
+  "h3hexagonBins": "H3 šesterokutne ćelije",
+  "hexagon": "Šesterokut",
+  "intersectStudyArea": "Zadrži samo presijecajuće teselacije",
+  "itemProperties": {
+    "description": "Sloj geoobjekta generiran pokretanjem alata za analizu Generiraj teselacije.",
+    "snippet": "Sloj geoobjekata generiran iz Generiraj teselacije"
+  },
+  "outputAreasSectionText": "Navedite naziv za teselacijsku mrežu.",
+  "sizeType": "Mjerenje veličine ćelije",
+  "square": "Kvadrat",
+  "tessellationSettingsLabel": "Postavke teselacije",
+  "tessellationSettingsSummaryText": "Odredite oblik i veličinu ćelija za generiranje.",
+  "thexagonBins": "Poprečne šesterokutne ćelije",
+  "triangleBins": "Trokutaste ćelije"
+}

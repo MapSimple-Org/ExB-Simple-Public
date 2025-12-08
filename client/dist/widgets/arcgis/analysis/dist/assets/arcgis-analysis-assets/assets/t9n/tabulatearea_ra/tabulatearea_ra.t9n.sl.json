@@ -1,0 +1,12 @@
+{
+  "classField": "Polje razreda",
+  "classesAsRowsLabel": "Razredi kot vrstice v izhodni tabeli",
+  "inputClassRasterOrFeatures": "Vhodni raster razreda ali geoobjektov",
+  "inputLayerGroupText": "Izberite vnosno območje in sloj razreda za izračun navzkrižno tabelariziranih območij med dvema sklopoma podatkov.",
+  "itemProperties": {
+    "description": "Izhodna tabela, ustvarjena z izvajanjem orodja za analizo Območja tabelarnega prikaza.",
+    "snippet": "Izhodna tabela, ustvarjena iz Območja tabelarnega prikaza"
+  },
+  "tabulateAreaSettingsGroupLabel": "Nastavitve območja tabelarnega prikaza",
+  "tabulateAreaSettingsGroupText": "Izberite, kako ravnati z razredi v izhodni tabeli. Določite velikost celice za izračun. "
+}

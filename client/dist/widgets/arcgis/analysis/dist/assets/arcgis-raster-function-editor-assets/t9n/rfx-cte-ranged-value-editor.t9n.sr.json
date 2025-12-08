@@ -1,0 +1,6 @@
+{
+  "greaterThanErrorMessage": "Ulazna vrednost mora da bude veća od ${min}",
+  "lesserThanErrorMessage": "Ulazna vrednost mora da bude manja od ${max}",
+  "greaterThanOrEqualErrorMessage": "Ulazna vrednost mora da bude veća od ili jednaka ${min}",
+  "lesserThanOrEqualErrorMessage": "Ulazna vrednost mora da bude veća ili jednaka od ${max}"
+}

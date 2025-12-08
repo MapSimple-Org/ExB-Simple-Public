@@ -1,0 +1,20 @@
+{
+  "name": "faq",
+  "type": "template",
+  "templateType": "scrolling-page",
+  "label": "FAQ",
+  "description": "FAQ uses an accordion widget to organize text widgets, allowing users to expand one or more items for streamlined FAQ browsing or detailed content viewing.",
+  "thumbnail": "thumbnail.png",
+  "order": 23,
+  "templateCreateVersion": "1.17.0",
+  "tags": [
+    "Accordion",
+    "Divider"
+  ],
+  "categoriesTags": [
+    "Web page",
+    "Scrolling"
+  ],
+  "thumbnailWidth": 320,
+  "thumbnailHeight": 214
+}

@@ -1,0 +1,7 @@
+{
+  "addEntryButtonLabel": "Dodaj",
+  "maxGroupsMessage": "Maksimalan broj unosa je ${maxCount}.",
+  "minGroupsMessage": "Minimalan broj unosa je ${minCount}.",
+  "removeEntryButtonLabel": "Ukloni unos",
+  "requiredMessage": "Ovaj parametar je obavezan."
+}

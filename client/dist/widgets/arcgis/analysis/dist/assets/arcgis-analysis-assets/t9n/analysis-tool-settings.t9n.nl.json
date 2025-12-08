@@ -1,0 +1,13 @@
+{
+  "cancel": "Annuleren",
+  "creditUsage": "Creditering",
+  "envSettings": "Omgevingsinstellingen",
+  "envSettingsDescription": "Extra instellingen specificeren die beïnvloeden hoe de analyse wordt uitgevoerd.",
+  "generalSettings": "Algemene omgevingen",
+  "geoanalytics": "GeoAnalytics",
+  "noEnvSettings": "Geen omgevingen",
+  "processingExtentEnv": "Bezig met verwerken extentomgeving",
+  "rasterAnalysis": "Rasteromgevingen",
+  "resetDefaults": "Standaardinstellingen resetten",
+  "save": "Opslaan"
+}

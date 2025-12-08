@@ -1,0 +1,1 @@
+System.register([],function(e){return{execute:function(){e({_widgetLabel:"Bouton",dynamicStyleExpressionsLabel:"Utiliser le contenu du texte du bouton"})}}});

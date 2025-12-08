@@ -1,0 +1,11 @@
+{
+  "newTemplate": "Criar novo template",
+  "openTemplate": "Abrir template",
+  "addTemplate": "Adicionar template",
+  "addFunction": "Adicionar funções raster",
+  "addConstant": "Adicionar constante",
+  "addRaster": "Adicionar variável raster",
+  "expand": "Expandir",
+  "editTemplateProperties": "Editar propriedades do template",
+  "viewTemplateProperties": "Ver propriedades do template"
+}

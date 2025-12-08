@@ -1,0 +1,14 @@
+{
+  "AddDataFromUrl": "Legg til data fra URL",
+  "addData": "Legg til data",
+  "clear": "Fjern",
+  "file": "Fil",
+  "fileNotFound": "Kan ikke laste inn filen.",
+  "invalidUrl": "Ugyldig URL eller filtype.",
+  "layerNotFound": "Kan ikke laste inn laget.",
+  "replaceData": "Erstatt data",
+  "required": "Denne parameteren kreves.",
+  "uploadData": "Last opp data",
+  "uploadFailureMsg": "Kunne ikke laste opp. Filstørrelsen eller filtypen støttes ikke for denne tjenesten.",
+  "url": "URL"
+}

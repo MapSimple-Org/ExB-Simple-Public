@@ -1,0 +1,22 @@
+{
+  "value": "قيمة",
+  "classname": "ClassName",
+  "color": "لون",
+  "raster": "البيانات النقطية",
+  "tableType": "نوع الجدول",
+  "manual": "يدوي",
+  "external": "خارجي",
+  "browseTable": "استعراض الجدول",
+  "browseTableFrom": "استعراض جدول من",
+  "file": "الملف",
+  "dbfFile": "ملف DBF",
+  "layer": "الطبقة",
+  "unsupportedDataType": "نوع غير مدعوم",
+  "failedToGetTableFromLayer": "فشل الحصول على جدول من الطبقة.",
+  "generate": "إنشاء جدول",
+  "minValue": "الحد الأدنى للقيمة",
+  "maxValue": "الحد الأقصى للقيمة",
+  "classBaseName": "اسم قاعدة الصنيف",
+  "colorscheme": "نظام الألوان",
+  "defaultClassName": "التسمية_"
+}

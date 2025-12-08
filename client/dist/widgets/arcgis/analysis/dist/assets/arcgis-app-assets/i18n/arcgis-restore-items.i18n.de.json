@@ -1,0 +1,31 @@
+{
+  "back": "Zurück",
+  "cancel": "Abbrechen",
+  "learnMore": "Weitere Informationen",
+  "restore": "Wiederherstellen",
+  "restoreTo": "Wiederherstellen in",
+  "restoreItem": "Element wiederherstellen",
+  "restoreItems": "Elemente wiederherstellen",
+  "noticeMessage": "Freigabe der wiederhergestellten Elemente wird aufgehoben. Überprüfen Sie die Inhalte vor der erneuten Freigabe.",
+  "cannotBulkRestoreXItems": "Batchweise Wiederherstellung von mehr als ${number} Elementen nicht möglich. Heben Sie die Auswahl für einige Elemente auf.",
+  "cannotBulkRestoreMultipleOwners": "Batchweise Wiederherstellung von Elementen, die sich im Besitz verschiedener Benutzer befinden, nicht möglich. Wählen Sie für die batchweise Wiederherstellung Elemente aus, die sich im Besitz desselben Benutzers befinden.",
+  "toRestore": {
+    "single": "Wiederherzustellendes Element:",
+    "multiple": "Wiederherzustellende Elemente:"
+  },
+  "cannotRestore": "Wiederherstellen nicht möglich:",
+  "dependentItems": {
+    "single": "Dieses Element kann nicht wiederhergestellt werden, weil es von <strong style='font-weight: 500'>${parent}</strong> abhängig ist. Stellen Sie sie gemeinsam wieder her.",
+    "singleUnknown": "Dieses Element kann nicht wiederhergestellt werden, weil es von einem anderen Element im Papierkorb abhängig sind. Stellen Sie sie gemeinsam wieder her.",
+    "multiple": "Diese Elemente können nicht wiederhergestellt werden, weil sie von anderen Elementen im Papierkorb abhängig sind. Stellen Sie sie gemeinsam wieder her.",
+    "multipleSameSource": "Diese Elemente können nicht wiederhergestellt werden, weil sie von <strong style='font-weight: 500'>${parent}</strong> abhängig sind. Stellen Sie sie gemeinsam wieder her."
+  },
+  "pageRangeWithTotalRecycleBinSize": {
+    "en": "${start}–${end} von ${total} (${size}) im Papierkorb",
+    "other": "${start}–${end}, gesamt: ${total} (${size}) im Papierkorb"
+  },
+  "pageRangeWithGreaterThanTotalRecycleBinSize": {
+    "en": "${start}–${end} von ${total} (> ${size}) im Papierkorb",
+    "other": "${start}–${end}, gesamt: ${total} (> ${size}) im Papierkorb"
+  }
+}

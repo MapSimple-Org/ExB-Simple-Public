@@ -1,0 +1,17 @@
+{
+  "sharing": "مشاركة",
+  "private": "المالك",
+  "shared": "المالك والمشاركة مع المجموعات",
+  "org": "المؤسسة",
+  "public": "كل شخص (عام)",
+  "privateGroups": "المالك",
+  "sharedGroups": "المالك + المجموعات (${num})",
+  "orgGroups": "المؤسسة + المجموعات (${num})",
+  "publicGroups": "الجميع (عام) + المجموعات (${num})",
+  "groups": "المجموعات (${num})",
+  "updateSharing": "مستوى المشاركة: ${level}، تحديث المشاركة",
+  "viewableBy": "قابل للعرض بواسطة: ${level}",
+  "everyone": "كل شخص (عام)",
+  "organization": "المؤسسة",
+  "groupMembers": "أعضاء المجموعة"
+}

@@ -1,0 +1,14 @@
+{
+  "AddDataFromUrl": "Ajouter des données à partir d’une URL",
+  "addData": "Ajouter des données",
+  "clear": "Effacer",
+  "file": "Fichier",
+  "fileNotFound": "Échec du chargement du fichier.",
+  "invalidUrl": "URL ou extension de fichier non valide.",
+  "layerNotFound": "Échec du chargement de la couche.",
+  "replaceData": "Remplacer les données",
+  "required": "Ce paramètre est obligatoire.",
+  "uploadData": "Charger des données",
+  "uploadFailureMsg": "Erreur lors de l’opération de chargement. La taille ou le type du fichier ne sont pas pris en charge pour ce service.",
+  "url": "URL"
+}

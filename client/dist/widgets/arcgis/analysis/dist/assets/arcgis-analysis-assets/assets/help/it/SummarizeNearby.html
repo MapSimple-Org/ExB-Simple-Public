@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>Lo strumento Riepiloga nelle vicinanze calcola le statistiche per le feature che si trovano a una distanza specificata da altre feature. La distanza pu&ograve; essere calcolata utilizzando una distanza in linea retta o una modalit&agrave; di viaggio.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="summaryLayer">
+        <div>
+            <p>Il layer che dovr&agrave; essere riepilogato entro una distanza dal layer vicino.
+            </p>
+            <p class="toolPaneOnly">Il conteggio di feature dipende da altri fattori, come i criteri di filtraggio e l'estensione analisi.
+            </p>
+        </div>
+    </div>
+    <div id="sumNearbyLayer">
+        <div>
+            <p>Il layer punto, linea o poligono che verr&agrave; utilizzato come posizione di partenza attorno alla quale verranno create le aree di delimitazione per riassumere le feature vicine.
+            </p>
+            <p class="toolPaneOnly">Il conteggio di feature dipende da altri fattori, come i criteri di filtraggio e l'estensione analisi.
+            </p>
+        </div>
+    </div>
+    <div id="nearType">
+        <div>
+            
+            <p class="toolPaneOnly">Il metodo che verr&agrave; utilizzato per creare le aree di delimitazione. Il metodo pu&ograve; essere una distanza in linea retta o una modalit&agrave; di viaggio.
+            </p> 
+            <p class="modelBuilderOnly">Il metodo che verr&agrave; utilizzato per creare le aree di delimitazione. Attualmente, la distanza in linea retta e il solo metodo supportato per i modelli.
+            </p>
+        </div>
+    </div>
+    <div id="distances">
+        <div>
+            <p>La distanza o il tempo che verr&agrave; utilizzato per creare le aree di delimitazione. Se vengono aggiunti pi&ugrave; valori, ogni valore verr&agrave; utilizzato per calcolare le aree di delimitazione per tutte le feature di input.
+            </p>
+        </div>
+    </div>
+    <div id="units">
+        <div>
+            <p>Le unit&agrave; che verranno utilizzate per specificare la distanza o il tempo.
+            </p>
+        </div>
+    </div>
+    <div id="returnBoundaries">
+        <div>
+            <p>Specifica se il layer risultato sar&agrave; costituito dalle aree di delimitazione (selezionato) o dalla stessa geometria del layer vicino di input (non selezionato).
+            </p>
+        </div>
+    </div>
+    <div id="sumShape">
+        <div>
+            <p>Specifica se verr&agrave; calcolata la dimensione totale delle feature riepilogate in ogni area di delimitazione. Per le linee, verr&agrave; calcolata la lunghezza totale. Per i poligoni, verr&agrave; calcolata l'area totale.
+            </p>
+        </div>
+    </div>
+    <div id="shapeUnits">
+        <div>
+            <p>Le unit&agrave; che verranno utilizzate per calcolare la dimensione totale delle feature riepilogate.
+            </p>
+        </div>
+    </div>
+    <div id="summaryFields">
+        <div>
+            <p>I campi numero o data del layer di input da riepilogare e le statistiche che verranno calcolate per ogni campo.
+            </p>
+        </div>
+    </div>
+    <div id="groupByField">
+        <div>
+            <p>Il campo del layer di input che verr&agrave; utilizzato per separare i dati in gruppi distinti per i calcoli statistici.
+            </p>
+        </div>
+    </div>
+    <div id="minorityMajority">
+        <div>
+            <p>Specifica se calcolare i gruppi minoritari (meno dominanti) e maggioritari (pi&ugrave; dominanti) all'interno di ogni area di riepilogo.
+            </p>
+        </div>
+    </div>
+    <div id="percentShape">
+        <div>
+            <p>Specifica se verr&agrave; calcolata la percentuale delle feature riepilogate che appartengono a ciascun gruppo all'interno di ogni delimitazione.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>Il nome del layer che sar&agrave; creato e aggiunto alla mappa.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>Il nome della cartella in  <b>I miei contenuti</b> in cui saranno salvati i risultati.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

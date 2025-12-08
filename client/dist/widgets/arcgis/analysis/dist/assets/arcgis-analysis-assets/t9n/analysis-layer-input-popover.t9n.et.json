@@ -1,0 +1,18 @@
+{
+  "add": "Lisa",
+  "analysisSessionLayers": "Analüüsiseansi kihid",
+  "browseAnalysisLayers": "Sirvi kihte",
+  "cancel": "Loobu",
+  "heading": "Valige kiht",
+  "mapLayers": "Kaardikihid",
+  "mesh": "Võrkkiht",
+  "modelVariableLayers": "Mudeli muutuja kihid",
+  "multipatch": "Ruumilise geomeetria kiht",
+  "multipoint": "Mitmikpunktikiht",
+  "noCompatibleLayers": "Kaardil pole ühilduvaid kihte. Analüüsi tegemiseks lisage kaardile kihid või sirvige kihte.",
+  "noMatchesFound": "Otsingule „${searchTerm}“ ei leitud vasteid.",
+  "point": "Punktikiht",
+  "polygon": "Polügoonikiht",
+  "polyline": "Murdjoonekiht",
+  "table": "Tabel"
+}

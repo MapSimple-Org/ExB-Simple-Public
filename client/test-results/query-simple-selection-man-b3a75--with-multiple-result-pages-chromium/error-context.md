@@ -1,0 +1,89 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e2]:
+  - generic [ref=e15]:
+    - application "Map" [ref=e21]
+    - generic [ref=e32]:
+      - button "Enhanced Search" [expanded] [ref=e35] [cursor=pointer]:
+        - img [ref=e37]
+      - button "QuerySimple" [ref=e42] [cursor=pointer]:
+        - img [ref=e44]
+    - generic:
+      - generic:
+        - generic:
+          - generic [ref=e54] [cursor=pointer]:
+            - generic "Zoom in" [ref=e55]:
+              - button "Zoom in" [ref=e57]:
+                - img [ref=e59]
+            - generic "Zoom out" [ref=e61]:
+              - button "Zoom out" [ref=e63]:
+                - img [ref=e65]
+          - generic "Default map view" [ref=e71] [cursor=pointer]:
+            - button "Home" [ref=e73]:
+              - img [ref=e75]
+        - generic [ref=e80]:
+          - generic [ref=e81]:
+            - button "Select by rectangle ∙ New selection (Draw a shape) ∙ Add to the current selection (Shift + Draw) ∙ Remove from current selection (Ctrl + Draw) ∙ Select subset from the current selection (Shift + Ctrl + Draw)" [ref=e82] [cursor=pointer]:
+              - img [ref=e83]
+            - button "More selection tools" [ref=e85] [cursor=pointer]:
+              - img [ref=e86]
+          - button "Clear selection" [ref=e88] [cursor=pointer]:
+            - img [ref=e89]
+      - generic:
+        - button "Search" [ref=e92] [cursor=pointer]:
+          - img [ref=e93]
+        - button "Layers" [ref=e96] [cursor=pointer]:
+          - img [ref=e97]
+      - generic:
+        - 'button "Selected features: 0" [ref=e100] [cursor=pointer]':
+          - img [ref=e101]
+          - text: "Selected features: 0"
+        - generic [ref=e104]:
+          - generic [ref=e105]: King County
+          - generic [ref=e106]:
+            - text: Powered by
+            - link "Esri" [ref=e107] [cursor=pointer]:
+              - /url: https://www.esri.com/
+  - dialog "Enhanced Search" [ref=e108]:
+    - generic [ref=e109]:
+      - generic "Enhanced Search" [ref=e110]
+      - generic [ref=e111]:
+        - button "Collapse" [ref=e112] [cursor=pointer]:
+          - img [ref=e114]
+        - button "Close" [ref=e116] [cursor=pointer]:
+          - img [ref=e118]
+    - generic [ref=e123]:
+      - heading "Enhanced Search" [level=3] [ref=e125]
+      - generic [ref=e126]:
+        - generic [ref=e127]:
+          - generic [ref=e128]: Search Layer
+          - combobox [ref=e130] [cursor=pointer]:
+            - generic [ref=e132]: King County Parcels - Parcel
+            - img [ref=e134]
+        - generic [ref=e138]:
+          - generic "King County Parcels - Parcel" [ref=e142]
+          - generic [ref=e143]:
+            - button "Query" [ref=e144] [cursor=pointer]
+            - button "Results" [disabled] [ref=e145]
+          - generic [ref=e148]:
+            - group "Attribute filter" [ref=e150]:
+              - generic [ref=e151]:
+                - generic [ref=e152]: Attribute filter
+                - button "Specify a valid parcel number also known as PIN" [ref=e153] [cursor=pointer]:
+                  - img [ref=e155]
+              - generic [ref=e161]:
+                - generic [ref=e162]:
+                  - generic [ref=e163]: Parcel number is
+                  - textbox "Parcel number is" [ref=e168]: "22"
+                - text: Please enter a ten digit number
+            - generic [ref=e169]:
+              - generic [ref=e170] [cursor=pointer]:
+                - checkbox [checked] [ref=e171]
+                - img [ref=e172]
+              - generic [ref=e174]: Zoom to selected
+              - button "Apply" [active] [ref=e175] [cursor=pointer]: Apply
+              - button "Reset" [ref=e176] [cursor=pointer]: Reset
+    - slider "Press arrow keys to resize" [ref=e177]:
+      - img [ref=e179]
+```

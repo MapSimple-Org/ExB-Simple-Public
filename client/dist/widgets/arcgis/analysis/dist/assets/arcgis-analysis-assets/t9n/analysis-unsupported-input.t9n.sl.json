@@ -1,0 +1,7 @@
+{
+  "defaultValue": "Nepodprt tip parametra. Uporabljena bo privzeta vrednost. <calcite-link target='_blank' href='${ docLink }'>Več</calcite-link>",
+  "requiredMessage": "Ta parameter je obvezen.",
+  "unsupportedGPType": "Nepodprt tip parametra. <calcite-link target='_blank' href='${ docLink }'>Več</calcite-link>",
+  "unsupportedParameterConfig": "Nepodprta konfiguracija parametra. <calcite-link target='_blank' href='${ docLink }'>Več</calcite-link>",
+  "unsupportedParameterConfigDefaultValue": "Nepodprta konfiguracija parametra. Uporabljena bo privzeta vrednost. <calcite-link target='_blank' href='${ docLink }'>Več</calcite-link>"
+}

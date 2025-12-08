@@ -1,0 +1,1 @@
+System.register([],function(e){return{execute:function(){e({settingsLabel:"Ba\u011flant\u0131 Gezgini Ayarlar\u0131",selectModelViewer:"Ba\u011flant\u0131l\u0131 belgeleri g\xf6r\xfcnt\xfclemek i\xe7in bir Belge G\xf6r\xfcnt\xfcleyici arac\u0131 se\xe7in."})}}});

@@ -1,0 +1,13 @@
+{
+  "header": "Eelvaade",
+  "description": "Vaadake tulemust eelvaates enne analüüsi käitamist.",
+  "showPreview": "Kuva eelvaade",
+  "previewLayer": "Eelvaatekiht ${number}",
+  "update": "Uuenda",
+  "newPreview": "Uus eelvaade",
+  "previewPopup": "Lubage analüüsitulemuste eelvaade sisendi parameetrite põhjal.",
+  "previewError": "See eelvaatekiht pole saadaval. Kontrollige sisendi parameetreid ja värskendage uuesti seda eelvaatekihti.",
+  "updatePopover": "Uuenda valitud eelvaatekihti",
+  "createPopover": "Loo uus eelvaatekiht",
+  "maxPreview": "Lubatud eelvaatekihtide maksimaalne arv: ${maxCount}"
+}

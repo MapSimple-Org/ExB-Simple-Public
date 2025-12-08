@@ -1,0 +1,21 @@
+{
+  "folder": "Kansio",
+  "folders": "Kansiot",
+  "searchFolders": "Etsi kansioita",
+  "enterFolder": "Anna kansion nimi",
+  "createNewFolder": "Luo uusi kansio",
+  "noFoldersFoundCreate": "Tämännimisiä kansioita ei löytynyt. Luodaanko \"${folder}\"?",
+  "noFoldersFound": "Tämännimisiä kansioita ei löytynyt.",
+  "create": "Luodaanko \"${folder}\"?",
+  "loading": "Ladataan kansioita",
+  "error": {
+    "noName": "Anna kansion nimi.",
+    "folderAlreadyExists": "Kansio \"${folder}\" on jo olemassa. Valitse toinen nimi.",
+    "title": "Virhe",
+    "invalidCharacters": {
+      "single": "Nimessä ei voi olla tätä merkkiä: ${invalidCharacters}.",
+      "multiple": "Nimi ei saa sisältää mitään seuraavista merkeistä: ${invalidCharacters}.",
+      "unknown": "Nimi ei saa sisältää mitään seuraavista merkeistä: ${invalidCharacters}."
+    }
+  }
+}

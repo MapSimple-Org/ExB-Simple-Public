@@ -1,0 +1,13 @@
+{
+  "addField": "Přidat pole",
+  "deselectAll": "Zrušit výběr",
+  "done": "Hotovo",
+  "noFieldsAvailable": "${layerName} neobsahuje žádná pole, která by splňovala požadavek na datový typ. Chcete-li pokračovat, vyberte jinou vrstvu.",
+  "noInputSelected": {
+    "withLayerInputLabel": "Není vybrána žádná vstupní vrstva. Pro pokračování vyberte vrstvu v ${layerInputLabel}.",
+    "withoutLayerInputLabel": "Není vybrána žádná vstupní vrstva. Chcete-li pokračovat, vyberte vstupní vrstvu."
+  },
+  "noSearchResults": "Nebyla nalezena žádná odpovídající pole.",
+  "selectAll": "Vybrat vše",
+  "summaryFieldsPopover": "Pole souhrnu"
+}

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html dir="rtl">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>כלי החיפוש לפי מאפיינים ומיקום יוצר שכבה חדשה של הישויות או חלקי הישויות שעומדים בקריטריונים שצוינו לגבי נתונים מרחביים או מאפיינים.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputLayers">
+        <div>
+            <p>שכבת הנקודות, הקווים או הפוליגון שעבורה יימצאו ישויות על בסיס שילוב של שאילתות לגבי מאפיינים ונתונים מרחביים.
+            </p>
+        </div>
+    </div>
+    <div id="queryBuilder">
+        <div>
+            <p>הקריטריונים של נתונים מרחביים או מאפיינים שישמשו לחיפוש ישויות. לחץ על  <b>בנה שאילתה חדשה</b> כדי להגדיר קריטריון אחד או יותר של נתונים מרחביים או מאפיינים. הישויות, או חלקי הישויות, שעומדים בכל הקריטריונים ייכתבו בשכבת התוצאה.
+            </p>
+        </div>
+    </div>
+    <div id="expressions">
+        <div>
+            <p> הקריטריונים של נתונים מרחביים או מאפיינים שישמשו לחיפוש ישויות. לחץ על <b>בנה שאילתה חדשה</b> כדי להגדיר קריטריון אחד או יותר של נתונים מרחביים או מאפיינים. הישויות, או חלקי הישויות, שעומדים בכל הקריטריונים ייכתבו בשכבת התוצאה.
+            </p>
+        </div>
+    </div>
+    <div id="clipFeatures">
+        <div>
+            <p>כאשר רק חלק של ישות עומד בקריטריונים, מציין אם התוצאה כוללת את הישות כולה או רק את החלק של הישות שעומד בכל הקריטריונים. כשאפשרות זו מסומנת, יוחזרו רק החלקים של הישות שעומדים בכל הקריטריונים. כשאפשרות זו לא מסומנת, תוחזר הישות כולה, בתנאי שלפחות חלק של הישות עומד בכל הקריטריונים.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>שם השכבה שתיווצר ותתווסף למפה.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>שם התיקייה  <b>בתוכן שלי</b> שבה התוצאה תישמר.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

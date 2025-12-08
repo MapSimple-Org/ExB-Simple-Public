@@ -1,0 +1,21 @@
+{
+  "folder": "Fascikla",
+  "folders": "Fascikle",
+  "searchFolders": "Pretraži fascikle",
+  "enterFolder": "Unesite ime fascikle",
+  "createNewFolder": "Kreiraj novu fasciklu",
+  "noFoldersFoundCreate": "Nisu pronađene fascikle pod ovim nazivom. Kreiraj \"${folder}\"?",
+  "noFoldersFound": "Nisu pronađene fascikle pod ovim nazivom.",
+  "create": "Kreiraj \"${folder}\"?",
+  "loading": "Učitavanje fascikli",
+  "error": {
+    "noName": "Morate da unesete ime za stavku.",
+    "folderAlreadyExists": "Fascikla \"${folder}\" već postoji. Izaberite drugi naziv.",
+    "title": "Greška",
+    "invalidCharacters": {
+      "single": "Naziv ne može da sadrži ovaj znak: ${invalidCharacters}.",
+      "multiple": "Naziv ne može da sadrži bilo koji od ovih znakova: ${invalidCharacters}.",
+      "unknown": "Naziv ne može da sadrži bilo koji od ovih znakova: ${invalidCharacters}."
+    }
+  }
+}

@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>De Geocode-locaties uit de Tabel-tool zetten adressen of plaatsen uit een invoertabel of bestand om in co&ouml;rdinaten.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputType">
+        <div>
+            <p>Specificeert of de invoer zal bestaan uit een tabelitem (<b>Gehoste tabel</b>) of uit een <code>.csv</code>- of Excel-bestand (<b>csv/Excel</b>).
+            </p>
+        </div>
+    </div>
+    <div id="inputFileItem">
+        <div>
+            <p>Het invoerbestand met de adressen of plaatsen die u wilt geocoderen. De invoer moet bestaan uit een gehost  <code>.csv</code>- of Excel-bestand. </p>
+        </div>
+    </div>
+    <div id="inputTable">
+        <div>
+            <p>De invoertabel met de adressen of plaatsen die u wilt geocoderen. De invoer moet bestaan uit een gehost tabelitem.
+            </p>
+            <p>Onder de naam van de tabel wordt het aantal objecten weergegeven. Het aantal omvat alle objecten in de tabel, behalve die objecten die met behulp van een filter zijn verwijderd.
+            </p>
+        </div>
+    </div>
+    <div id="geocodeServiceURL">
+        <div>
+            <p>De locatorservice die voor geocoderen zal worden gebruikt. Als de locatorservice die u wilt gebruiken, niet in het vervolgkeuzemenu staat, moet u contact opnemen met uw beheerder om de locatorservice toe te laten voegen als een hulpservice.
+            </p>
+        </div>
+    </div>
+    <div id="singleOrMultiFieldSwitch">
+        <div>
+            <p>Specificeert of de invoergegevens zich in &eacute;&eacute;n enkel veld of in meerdere velden bevinden.
+            </p>
+        </div>
+    </div>
+    <div id="geocodeUIParameters">
+        <div>
+            <p>De velden die door de locator zullen worden gebruikt om de locaties van de gegevens te bepalen. Van bepaalde velden wordt aangenomen dat deze in de gegevens aanwezig zijn, zoals adres, plaats, staat/provincie en postcode.
+            </p>
+        </div>
+    </div>
+    <div id="sourceCountry">
+        <div>
+            <p>Het land waarin de gegevens zich bevinden. Als alle adressen uit &eacute;&eacute;n land komen, dient u de naam van dat land te selecteren om de nauwkeurigste resultaten te garanderen. Laat deze parameter leeg als dit niet het geval is.
+            </p>
+        </div>
+    </div>
+    <div id="outputFields">
+        <div>
+            <p>Geeft de velden op die in de uitvoer-gegevensset zullen worden opgenomen. De opties zijn als volgt:
+            </p>
+            <ul>
+                <li> <b>Alle</b>&mdash;Alle beschikbare locator-uitvoervelden worden in de geocoderesultaten opgenomen.
+                </li>
+                <li> <b>Minimaal</b>&mdash;Een subset van de velden uit de locator wordt samen met de velden uit de invoertabel in de resultaten opgenomen.
+                </li>
+                <li> <b>Alleen locatie</b>&mdash;Het veld <i>Shape</i> uit de locator en de velden uit de invoertabel worden in de resultaten opgenomen.
+                </li>
+            </ul>
+            
+        </div>
+    </div>
+    <div id="outputType">
+        <div>
+            <p>Het type uitvoer dat wordt gemaakt. De uitvoer kan een feature service, een  <code>.csv</code>-bestand of een <code>.xls</code>-bestand zijn.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>De naam van de laag of het bestand dat in  <b>Mijn content</b> zal worden gemaakt.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>De naam van de map in  <b>Mijn content</b> waarin het resultaat wordt opgeslagen.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

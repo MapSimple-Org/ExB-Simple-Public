@@ -1,0 +1,8 @@
+{
+  "arriveTime": "Čas příjezdu",
+  "modes": {
+    "custom": "Vlastní datum a čas",
+    "now": "Nyní",
+    "unspecified": "Čas nespecifikován"
+  }
+}

@@ -1,0 +1,1 @@
+System.register([],function(e){return{execute:function(){e({_widgetLabel:"Zaloguj si\u0119",switchToLogin:"Prze\u0142\u0105cz na przed zalogowaniem",switchToLogout:"Prze\u0142\u0105cz na po zalogowaniu",toggleSignInPreview:"Prze\u0142\u0105cz podgl\u0105d logowania",restrictedResources:"Zasoby ograniczone"})}}});

@@ -1,0 +1,19 @@
+{
+  "autoDetect": "Automatická detekcia",
+  "circularCalculation": "Vypočítať cirkulárnu štatistiku",
+  "circularWrapValue": "Hodnota Circular Wrap",
+  "ignoreMissingValues": "Ignorovať NoData",
+  "inputLayerGroupText": "Vyberte vrstvu zóny a rastrovú vrstvu hodnôt na sumarizáciu v rámci hraníc zóny.",
+  "inputStatisticSettingsGroupLabel": "Nastavenia štatistickej analýzy",
+  "inputStatisticSettingsGroupText": "Zadajte typ štatistiky, ktorá sa má vypočítať. Vyberte spôsob spracovania buniek NoData a multidimenzionálnych dát.",
+  "itemProperties": {
+    "description": "Výstup vygenerovaný z spustením analytického nástroja Zonálna štatistika.",
+    "snippet": "Výstup vygenerovaný zo zonálnej štatistiky"
+  },
+  "linear": "Lineárne",
+  "nearest": "Najbližšie",
+  "percentileInterpolationType": "Percentilný typ interpolácie",
+  "percentileValue": "Hodnota percentilu",
+  "processAsMultidimensional": "Spracovať ako viacrozmerné",
+  "statisticType": "Typ štatistiky"
+}

@@ -1,0 +1,8 @@
+{
+  "select": "항목 선택: ${title}",
+  "lastUpdated": "항목 업데이트됨: ${date}",
+  "viewItemDetails": "세부정보 보기",
+  "preview": "미리 보기",
+  "closePreview": "미리 보기 닫기",
+  "moreOptions": "추가 옵션"
+}

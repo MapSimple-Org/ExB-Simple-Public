@@ -1,0 +1,6 @@
+{
+  "description": "Descriere",
+  "addDescription": "Adăugaţi o descriere",
+  "charactersLeft": "Caractere rămase: ${num}",
+  "invalid": "Descrierea nu poate conține niciunul din următoarele caractere: < sau >."
+}

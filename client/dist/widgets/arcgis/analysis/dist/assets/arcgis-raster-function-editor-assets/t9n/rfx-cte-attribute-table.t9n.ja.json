@@ -1,0 +1,22 @@
+{
+  "value": "値",
+  "classname": "ClassName",
+  "color": "色",
+  "raster": "ラスター",
+  "tableType": "テーブル タイプ",
+  "manual": "マニュアル",
+  "external": "外部",
+  "browseTable": "テーブルの参照",
+  "browseTableFrom": "テーブルの参照元",
+  "file": "ファイル",
+  "dbfFile": "DBF ファイル",
+  "layer": "レイヤー",
+  "unsupportedDataType": "サポートされていないタイプ",
+  "failedToGetTableFromLayer": "レイヤーからテーブルを取得できませんでした。",
+  "generate": "テーブルの生成",
+  "minValue": "最小",
+  "maxValue": "最大",
+  "classBaseName": "クラス ベース名",
+  "colorscheme": "配色",
+  "defaultClassName": "ラベル_"
+}

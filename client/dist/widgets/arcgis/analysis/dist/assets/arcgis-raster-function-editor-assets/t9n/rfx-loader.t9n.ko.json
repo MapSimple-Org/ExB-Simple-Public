@@ -1,0 +1,8 @@
+{
+  "loading": "불러오는 중...",
+  "pleaseWait": "잠시 기다려 주세요.",
+  "loadingXMLRFT": "선택한 래스터 함수 템플릿을 XML 형식으로 불러오는 중입니다.",
+  "failedToOpen": "열지 못했습니다.",
+  "readingFailed": "선택한 래스터 함수 템플릿 불러오기에 실패했습니다.",
+  "failedToLoadXML": "선택한 래스터 함수 템플릿을 XML 형식으로 불러오지 못했습니다."
+}

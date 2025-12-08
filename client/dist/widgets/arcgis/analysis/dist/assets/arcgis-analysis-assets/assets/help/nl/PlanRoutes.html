@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>De tool Routes plannen cre&euml;ert reisroutes met meerdere stops voor een wagenpark.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="startLayer">
+        <div>
+            <p>De puntobjecten die aangeven waar de voertuigen hun route beginnen.
+            </p>
+            <p class="toolPaneOnly">Het aantal objecten is afhankelijk van aanvullende factoren als de filtercriteria en de analyse-extent.
+            </p>
+        </div>
+    </div>
+    <div id="stopsLayer">
+        <div>
+            <p>De puntobjecten die de voertuigen op hun route moeten aandoen. Deze punten worden toegewezen of niet-toegewezen stopplaatsen in de uitvoer.
+            </p>
+            <p class="toolPaneOnly">Het aantal objecten is afhankelijk van aanvullende factoren als de filtercriteria en de analyse-extent.
+            </p>
+        </div>
+    </div>
+    <div id="returnToStart">
+        <div>
+            
+            <p>Specificeert of de voertuigen moeten terugkeren naar hun startlocaties (ingeschakeld) of moeten eindigen op opgegeven locaties.
+            </p>
+        </div>
+    </div>
+    <div id="endLayer">
+        <div>
+            <p>De puntobjecten die aangeven waar de voertuigen hun route be&euml;indigen. Indien de laag slechts &eacute;&eacute;n punt omvat, worden alle voertuigen naar een gemeenschappelijk eindpunt geleid. Indien de laag meerdere punten bevat, wordt elk voertuig naar een unieke eindlocatie geleid.
+            </p>
+            <p class="toolPaneOnly">Het aantal objecten is afhankelijk van aanvullende factoren als de filtercriteria en de analyse-extent.
+            </p>
+        </div>
+    </div>
+    <div id="startLayerRouteIDField">
+        <div>
+            <p>Het veld in de startlaag dat de individuele routes, voertuigen of bestuurders uniek identificeert. Als de voertuigen op meerdere locaties beginnen en op meerdere locaties eindigen, moeten de route-id's die voor de begin- en eindlagen gespecificeerd zijn, overeenkomen.
+            </p>
+        </div>
+    </div>
+    <div id="endLayerRouteIDField">
+        <div>
+            <p>Het veld in de eindlaag dat de individuele routes, voertuigen of bestuurders uniek identificeert. Als de voertuigen op meerdere locaties beginnen en op meerdere locaties eindigen, moeten de route-id's die voor de begin- en eindlagen gespecificeerd zijn, overeenkomen.
+            </p>
+        </div>
+    </div>
+    <div id="pointBarrierLayer">
+        <div>
+            <p>E&eacute;n of meerdere puntobjecten die dienen als tijdelijke beperkingen (barri&egrave;res) tijdens het reizen op de onderliggende straten. Verkeer heeft toegang tot de straat maar kan de barri&egrave;re niet passeren.
+            </p>
+        </div>
+    </div>
+    <div id="lineBarrierLayer">
+        <div>
+            <p>E&eacute;n of meerdere lijnobjecten die dienen als tijdelijke beperkingen (barri&egrave;res) tijdens het reizen op de onderliggende straten. De lijnbarri&egrave;res verbieden het verkeer overal waar de barri&egrave;res de straten kruisen.
+            </p>
+        </div>
+    </div>
+    <div id="polygonBarrierLayer">
+        <div>
+            <p>E&eacute;n of meerdere polygoonobjecten die dienen als tijdelijke beperkingen (barri&egrave;res) tijdens het reizen op de onderliggende straten. De polygoonbarri&egrave;res verbieden het verkeer overal waar de polygonen de straten kruisen.
+            </p>
+        </div>
+    </div>
+    <div id="travelMode">
+        <div>
+            <p>De reismodus die zal worden gebruikt om de routes te maken. Er is alleen ondersteuning voor op tijd gebaseerde reismodi.
+            </p>
+        </div>
+    </div>
+    <div id="routeStartTime">
+        <div>
+            <p>De datum en het tijdstip van vertrek van de voertuigen.
+            </p>
+        </div>
+    </div>
+    <div id="routeCount">
+        <div>
+            
+            <p class="OnlineOnly">Het maximum aantal voertuigen dat beschikbaar is om de stopplaatsen te bezoeken. Als de  <b>Beginlaag</b>- en de <b>Eindlaag</b>-waarden elk &eacute;&eacute;n object bevatten, kunt u maximaal 100 voertuigen specificeren. Als een van beide lagen meer dan &eacute;&eacute;n object bevat, kan de standaardwaarde niet worden gewijzigd. </p> 
+            <p class="PortalOnly">Het maximum aantal voertuigen dat beschikbaar is om de stopplaatsen te bezoeken. Als de  <b>Beginlaag</b>- en de <b>Eindlaag</b>-waarden elk &eacute;&eacute;n object bevatten, kunt u een maximumaantal voertuigen specificeren. Als een van beide lagen meer dan &eacute;&eacute;n object bevat, kan de standaardwaarde niet worden gewijzigd.
+            </p>
+        </div>
+    </div>
+    <div id="maxStopsPerRoute">
+        <div>
+            
+            <p class="OnlineOnly">Het maximum aantal stops dat elk voertuig op een route kan maken. U kunt een waarde opgeven tussen 1 en  200. </p> 
+            <p class="PortalOnly">Het maximum aantal stops dat elk voertuig op een route kan maken.
+            </p>
+        </div>
+    </div>
+    <div id="stopServiceTime">
+        <div>
+            <p>De verwachte gemiddelde servicetijd die op elke stopplaats wordt doorgebracht.
+            </p>
+        </div>
+    </div>
+    <div id="limitMaxRouteTimeCheckbox">
+        <div>
+            <p>Specificeert of de maximale routetijd wordt toegepast op voertuigen. De routetijd omvat de verwachte reistijd en de servicetijden op de stopplaatsen langs de route.
+            </p>
+        </div>
+    </div>
+    <div id="maxRouteTime">
+        <div>
+            <p>De maximale tijdsduur die een route van start tot eind kan innemen.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>De naam van de laag die wordt aangemaakt en toegevoegd aan de kaart.
+            </p>
+        </div>
+    </div>
+    <div id="includeRouteLayers">
+        <div>
+            <p>Specificeert of elke resultaatroute al routelaag zal worden opgeslagen.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            
+            <p>De naam van de map in  <b>Mijn content</b> waarin de resultaten worden opgeslagen.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

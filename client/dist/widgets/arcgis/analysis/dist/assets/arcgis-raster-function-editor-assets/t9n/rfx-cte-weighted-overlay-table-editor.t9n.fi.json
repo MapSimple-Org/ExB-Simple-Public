@@ -1,0 +1,13 @@
+{
+  "weightedOverlayTable": "Painotetun päällekkäisyyden taulu",
+  "id": "ID",
+  "layer": "Karttataso",
+  "field": "Kenttä",
+  "influence": "Vaikutus",
+  "sumOfInfluence": "Vaikutuksen summa",
+  "value": "Arvo",
+  "remapTable": "Täsmäytä taulu uudelleen",
+  "scale": "Mittakaava",
+  "scales": "Mittakaavat",
+  "selectRaster": "Valitse rasteri"
+}

@@ -1,0 +1,6 @@
+{
+  "defaultToolDescription": "Инструмент анализа ${toolTitle}.",
+  "noResults": "Результаты не найдены",
+  "openToolText": "Открыть инструмент",
+  "toolDropdownText": "Ниспадающий список инструмента"
+}

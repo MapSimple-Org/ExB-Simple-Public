@@ -1,0 +1,17 @@
+{
+  "sharing": "공유",
+  "private": "소유자",
+  "shared": "소유자 및 그룹과 공유됨",
+  "org": "기관",
+  "public": "모든 사람(공개)",
+  "privateGroups": "소유자",
+  "sharedGroups": "소유자 + 그룹(${num})",
+  "orgGroups": "기관 + 그룹(${num})",
+  "publicGroups": "모든 사람(공개) + 그룹(${num})",
+  "groups": "그룹(${num})",
+  "updateSharing": "공유 레벨: ${level}, 공유 업데이트",
+  "viewableBy": "볼 수 있는 사람: ${level}",
+  "everyone": "모든 사람(공개)",
+  "organization": "기관",
+  "groupMembers": "그룹 구성원"
+}

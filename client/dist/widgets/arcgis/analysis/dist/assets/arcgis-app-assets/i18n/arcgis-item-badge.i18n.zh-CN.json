@@ -1,0 +1,110 @@
+{
+  "Authoritative": {
+    "title": "权威",
+    "tooltip": {
+      "org": "由您的组织推荐",
+      "public": "由 ${name} 推荐"
+    }
+  },
+  "Deprecated": {
+    "title": "已弃用",
+    "tooltip": "不建议使用"
+  },
+  "Has Replacement": {
+    "title": "具有替换",
+    "tooltip": "此项目具有所推荐的替换。 查看项目细节，以查找替换。",
+    "itemPageTooltip": "此项目具有所推荐的替换。",
+    "link": "查看替换项目"
+  },
+  "DeprecatedItem": {
+    "title": "已弃用的项目类型"
+  },
+  "Living Atlas": {
+    "title": "Living Atlas",
+    "tooltip": "Esri 精选内容"
+  },
+  "Subscriber": {
+    "title": "订阅者",
+    "tooltip": {
+      "org": "订阅者专享内容",
+      "public": "订阅者专享内容。 要使用，请通过 ArcGIS Online 订阅登录。"
+    }
+  },
+  "Premium": {
+    "title": "高级内容",
+    "tooltip": {
+      "org": "订阅者专享内容。 消耗配额。",
+      "public": "订阅者专享的需消费配额的独家内容。 要使用，请通过 ArcGIS Online 订阅登录。"
+    }
+  },
+  "Open Data": {
+    "title": "Open Data",
+    "tooltip": "可供所有人使用"
+  },
+  "Marketplace": {
+    "title": "Marketplace",
+    "tooltip": "在 ArcGIS Marketplace 中列出"
+  },
+  "Collaboration": {
+    "title": "分布式协作",
+    "tooltip": "该项目接收自分布式协作"
+  },
+  "Retired": {
+    "title": "已停用",
+    "tooltip": {
+      "general": "只读",
+      "cityEngine": "不再支持 CityEngine Web Viewer 和 CityEngine Web Scenes。",
+      "storyMap": "用于创建此应用程序的经典 Esri Story Map 已在 ArcGIS Enterprise 中停用。 要新建故事，请使用 ArcGIS StoryMaps。",
+      "app": "用于创建此应用程序的 Configurable Apps 模板已在 ArcGIS Enterprise 中停用。 该项目不再运行，且可删除。 要创建新应用程序，请使用 ArcGIS Instant Apps、ArcGIS StoryMaps、ArcGIS Dashboards 或 ArcGIS Experience Builder",
+      "webAppBuilder": "ArcGIS Enterprise 中的 ArcGIS Web AppBuilder 已停用。 该项目不再运行，且可删除。 要创建新应用程序，请使用 ArcGIS Experience Builder。",
+      "insights": "ArcGIS Enterprise 中的 ArcGIS Insights 已停用。 该项目不再运行，且可删除。",
+      "bdfs": "ArcGIS Enterprise 中已弃用大数据文件共享功能。 该项目不再运行，且可删除。"
+    }
+  },
+  "Public Data Collection": {
+    "title": "公共数据采集",
+    "tooltip": "获得批准以用于公共数据采集。"
+  },
+  "Solution": {
+    "title": "ArcGIS Solution",
+    "tooltip": "Esri 支持的解决方案"
+  },
+  "Registered": {
+    "title": "OAuth 2.0",
+    "tooltip": {
+      "online": "一个已注册的 OAuth 2.0 应用程序。 可以使用高级或订阅者内容。",
+      "enterprise": "一个已注册的 OAuth 2.0 应用程序。"
+    }
+  },
+  "Registered API Key Credentials (Standard)": {
+    "title": {
+      "online": "API 密钥凭据 - 标准",
+      "enterprise": "API 密钥凭据"
+    },
+    "tooltip": "授予服务访问权限。"
+  },
+  "Registered API Key Credentials (Personal)": {
+    "title": "API 密钥凭据 - 个人",
+    "tooltip": "授予个人权限。 为了安全目的，您应该像保护您的用户名和密码一样保护这些凭据。"
+  },
+  "Registered OAuth 2.0 Credentials (Standard)": {
+    "title": {
+      "online": "OAuth 2.0 凭据 - 标准",
+      "enterprise": "OAuth 2.0 凭据"
+    },
+    "tooltip": "授予服务访问权限。"
+  },
+  "Registered OAuth 2.0 Credentials (Personal)": {
+    "title": "OAuth 2.0 凭据 - 个人",
+    "tooltip": "授予个人权限。 为了安全目的，您应该像保护您的用户名和密码一样保护这些凭据。"
+  },
+  "Registered Application": {
+    "title": "OAuth 2.0 应用程序",
+    "tooltip": "一个已注册的 OAuth 2.0 应用程序"
+  },
+  "Personal credential": {
+    "title": "个人",
+    "tooltip": "您正在授予此凭证个人权限。 出于安全目的，您应该像保护您的用户名和密码一样保护使用这些凭据创建的任何访问令牌。 查看使用条款。"
+  },
+  "loading": "正在加载..."
+}

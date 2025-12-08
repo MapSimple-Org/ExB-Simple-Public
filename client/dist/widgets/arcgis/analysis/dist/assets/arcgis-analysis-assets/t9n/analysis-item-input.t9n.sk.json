@@ -1,0 +1,15 @@
+{
+  "addDataStore": "Pridať úložisko data store",
+  "addFile": "Pridať súbor",
+  "addServiceConnection": "Pridať pripojenie",
+  "itemNotFound": "Položka neexistuje alebo je nedostupná.",
+  "itemPermissionDenied": "Nemáte oprávnenie na prístup k tejto položke.",
+  "previewDetails": "Podrobnosti náhľadu",
+  "queryModelArgsErrMsg": "Dopytovanie parametrov modelu zlyhalo.",
+  "queryModelArgsMsg": "Dopytujú sa parametre modelu...",
+  "removeItem": "Odstrániť položku",
+  "replaceItem": "Nahradiť položku",
+  "requiredInputMessage": "Tento parameter je povinný.",
+  "selectItem": "Vybrať položku",
+  "viewDetails": "Zobraziť podrobnosti"
+}

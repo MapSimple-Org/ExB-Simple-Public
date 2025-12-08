@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>Lo strumento Arricchisci layer integra le feature di input con dati demografici e paesaggistici.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputLayer">
+        <div>
+            <p>Le feature punto, linea o poligono che verranno integrate con dati aggiuntivi.
+            </p>
+            <p class="toolPaneOnly">Il conteggio di feature dipende da altri fattori, come i criteri di filtraggio e l'estensione analisi.
+            </p>
+        </div>
+    </div>
+    <div id="analysisVariables">
+        <div>
+            <p>Le variabili che verranno aggiunte come attributi alle feature di input.
+            </p>
+        </div>
+    </div>
+    <div id="bufferType">
+        <div>
+            
+            <p class="toolPaneOnly">Il metodo che verr&agrave; utilizzato per creare le aree di delimitazione attorno al punto di input o alle feature linea. Il metodo pu&ograve; essere una distanza in linea retta o una modalit&agrave; di viaggio. L'intera area intorno a ciascuna feature verr&agrave; integrata.
+            </p> 
+            <p class="modelBuilderOnly">Il metodo che verr&agrave; utilizzato per creare le aree di delimitazione attorno al punto di input o alle feature linea. Attualmente, la distanza in linea retta e il solo metodo supportato per i modelli. L'intera area intorno a ciascuna feature verr&agrave; integrata.
+            </p>
+        </div>
+    </div>
+    <div id="distance">
+        <div>
+            <p>Un valore numerico che specifica la distanza o il tempo in cui l'area integrata si estender&agrave; intorno a ciascuna feature di input.
+            </p>
+        </div>
+    </div>
+    <div id="units">
+        <div>
+            <p>Le unit&agrave; che verranno utilizzate per specificare la distanza o il tempo in cui l'area integrata si estender&agrave; intorno a ciascuna feature di input.
+            </p>
+        </div>
+    </div>
+    <div id="returnBoundaries">
+        <div>
+            <p>Specifica se il layer di output conterr&agrave; le feature poligono definite dalle  <b>Impostazioni aree di integrazione</b> (selezionate) o le feature di input (deselezionate).
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>Il nome del layer che sar&agrave; creato e aggiunto alla mappa.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>Il nome della cartella in  <b>I miei contenuti</b> in cui sar&agrave; salvato il risultato.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

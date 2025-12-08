@@ -1,0 +1,26 @@
+{
+  "CCIAnalysisSettingGroupLabel": "การตั้งค่าดัชนี",
+  "CCIAnalysisSettingGroupText": "ระบุวิธีที่ควรใช้ในการคำนวณดัชนี",
+  "geomeanPercentileLabel": "อันดับผสม (ค่าเฉลี่ยเรขาคณิตของเปอร์เซนไทล์)",
+  "geomeanRawLabel": "ค่า Raw ผสม (ค่าเฉลี่ยเรขาคณิตของค่า Raw)",
+  "geomeanScaledLabel": "ค่าที่ปรับสเกลผสม (ค่าเฉลี่ยเรขาคณิตของค่าที่ปรับสเกล)",
+  "indexMethodLabel": "วิธีปรับสเกลและรวมตัวแปร",
+  "inputFeaturesOrTableLabel": "ฟีเจอร์หรือตารางอินพุท",
+  "inputLayerGroupText": "เลือกฟีเจอร์หรือตารางและตัวแปรที่จะใช้ในการสร้างดัชนี",
+  "inputVariablesLabel": "ตัวแปรอินพุท",
+  "itemProperties": {
+    "description": "ชั้นข้อมูลฟีเจอร์ที่สร้างจากการรันเครื่องมือการวิเคราะห์คำนวณดัชนีคอมโพสิท",
+    "snippet": "ชั้นข้อมูลฟีเจอร์ที่สร้างขึ้นจากคำนวณดัชนีคอมโพสิท"
+  },
+  "meanPercentileLabel": "รวมอันดับ (ค่าเฉลี่ยเปอร์เซนไทล์)",
+  "meanRawLabel": "ค่า Raw รวม (ค่าเฉลี่ยของค่า Raw)",
+  "meanScaledLabel": "ค่าที่ปรับสเกลรวม (ค่าเฉลี่ยของค่าที่ปรับสเกล)",
+  "outputIndexMaxLabel": "สูงสุด",
+  "outputIndexMinLabel": "น้อยสุด",
+  "outputIndexMinMaxLabel": "ดัชนีค่าต่ำสุดและสูงสุด",
+  "outputIndexReverseLabel": "ค่าดัชนีตรงกันข้าม",
+  "reverseVariableLabel": "ทิศทางตรงกันข้าม",
+  "sumFlagsPercentileLabel": "ไฮไลท์ค่าสุดขั้ว (จำนวนค่าที่สูงเกินเปอร์เซนไทล์ที่ 90)",
+  "toolName": "คำนวณดัชนีคอมโพสิท",
+  "weight": "น้ำหนัก"
+}

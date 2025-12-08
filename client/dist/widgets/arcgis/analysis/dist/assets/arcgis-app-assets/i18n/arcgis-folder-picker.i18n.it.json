@@ -1,0 +1,21 @@
+{
+  "folder": "Cartella",
+  "folders": "Cartelle",
+  "searchFolders": "Cerca cartelle",
+  "enterFolder": "Inserisci nome cartella",
+  "createNewFolder": "Crea nuova cartella",
+  "noFoldersFoundCreate": "Nessuna cartella trovata con questo nome. Creare '${folder}'?",
+  "noFoldersFound": "Nessuna cartella trovata con questo nome.",
+  "create": "Creare '${folder}'?",
+  "loading": "Caricamento cartelle in corso",
+  "error": {
+    "noName": "Specificare un nome per la propria cartella.",
+    "folderAlreadyExists": "Una cartella '${folder}' esiste già. Scegliere un altro nome.",
+    "title": "Errore",
+    "invalidCharacters": {
+      "single": "Il nome non può contenere questo carattere: ${invalidCharacters}.",
+      "multiple": "Il nome non può contenere i seguenti caratteri: ${invalidCharacters}.",
+      "unknown": "Il nome non può contenere i seguenti caratteri: ${invalidCharacters}."
+    }
+  }
+}

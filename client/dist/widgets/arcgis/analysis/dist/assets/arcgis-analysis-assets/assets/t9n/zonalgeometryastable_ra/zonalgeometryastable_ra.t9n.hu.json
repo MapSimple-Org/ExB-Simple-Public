@@ -1,0 +1,9 @@
+{
+  "inputLayerGroupText": "Válassza ki a bemeneti réteget a zónahatárok geometriájának kiszámításához.",
+  "itemProperties": {
+    "description": "A Zónageometria táblázatként elemzőeszköz futtatása nyomán generált kimeneti tábla.",
+    "snippet": "A Zónageometria táblázatként függvényből létrehozott kimeneti tábla"
+  },
+  "zonalGeometrySettingGroupLabel": "Zónageometria beállítások",
+  "zonalGeometrySettingGroupText": "Adja meg a kiszámítandó cellaméretet."
+}

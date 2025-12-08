@@ -1,0 +1,8 @@
+{
+  "itemProperties": {
+    "description": "Hasil yang didapatkan dari menjalankan Filter berdasarkan alat analisis Atribut.",
+    "snippet": "Hasil yang didapatkan dari Filter berdasarkan Atribut"
+  },
+  "noLayerDisabledTooltip": "Pilih kumpulan data input yang valid.",
+  "queryCriteriaGroupLabel": "Kriteria kueri"
+}

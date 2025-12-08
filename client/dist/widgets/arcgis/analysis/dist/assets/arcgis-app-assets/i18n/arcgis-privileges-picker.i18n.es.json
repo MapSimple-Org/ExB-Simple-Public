@@ -1,0 +1,592 @@
+{
+  "rolePrivileges": "Privilegios del rol",
+  "setFromExisting": "Definir a partir de un rol existente",
+  "expandAll": "Expandir todo",
+  "generalPrivileges": "Privilegios generales",
+  "adminPrivileges": "Privilegios de administración",
+  "enabledLabel": "Habilitado:",
+  "enableAll": "Habilitar todo",
+  "disableAll": "Deshabilitar todo",
+  "members": "Miembros",
+  "groups": "Grupos",
+  "content": "Contenido",
+  "sharing": "Uso compartido",
+  "premiumContent": "Contenido Premium",
+  "premiumContentServices": "Servicios y contenido Premium",
+  "contentAndAnalysis": "Contenido y análisis",
+  "features": "Entidades",
+  "versionMgmt": "Administración de versiones",
+  "webhooks": "Webhooks",
+  "marketplaceSubscriptions": "Suscripciones a ArcGIS Marketplace",
+  "orgSettings": "Configuración de la organización",
+  "learnMore": "Más información",
+  "searchPrivileges": "Privilegios de búsqueda",
+  "notebooks": "Notebooks",
+  "analysis": "Análisis",
+  "networkAnalysis": "Análisis de red",
+  "locationServices": "Servicios de ubicación",
+  "requiredService": "Servicio obligatorio",
+  "availableServices": "Servicios disponibles",
+  "basemaps": "Mapas base",
+  "staticMaps": "Mapas estáticos",
+  "places": "Lugares",
+  "geocoding": "Geocodificación",
+  "routing": "Generación de rutas",
+  "dataEnrichment": "Enriquecimiento de datos",
+  "boundaries": "Límites",
+  "elevation": "Elevación",
+  "spatialPrivileges": "Análisis espacial",
+  "featureAnalysis": "Análisis de entidades",
+  "imageAnalysis": "Análisis de imagen",
+  "readOnlyBasemapsTooltip": "Se incluye el acceso a mapas base.",
+  "privileges": {
+    "portal:user:viewOrgUsers": {
+      "label": "Vista",
+      "description": "Permita al miembro ver los miembros de la organización.",
+      "descriptionPortal": "Permitir al miembro ver los miembros del portal.",
+      "descriptionApp": "Permita a la aplicación ver los miembros de la organización."
+    },
+    "portal:user:createGroup": {
+      "label": "Crear, actualizar y eliminar",
+      "description": "Permita al miembro crear, editar y eliminar sus propios grupos.",
+      "descriptionApp": "Permita que la aplicación cree, edite y elimine los grupos del propietario de la aplicación."
+    },
+    "portal:user:joinGroup": {
+      "label": "Unirse a grupos de la organización",
+      "description": "Permita al miembro unirse a grupos de su organización.",
+      "descriptionPortal": "Permita al miembro unirse a grupos de su portal.",
+      "descriptionApp": "Permita a la aplicación unir los grupos de su organización."
+    },
+    "portal:user:joinNonOrgGroup": {
+      "label": "Unirse a grupos externos",
+      "description": "Permita al miembro unirse a grupos ajenos a su organización.",
+      "descriptionPortal": "Permita al miembro unirse a grupos ajenos a su portal.",
+      "descriptionApp": "Permita a la aplicación unirse a grupos ajenos a su organización."
+    },
+    "portal:user:viewOrgGroups": {
+      "label": "Ver grupos compartidos con la organización",
+      "description": "Permita al miembro ver grupos compartidos con la organización.",
+      "descriptionPortal": "Permita al miembro ver grupos compartidos con el portal.",
+      "descriptionApp": "Permita a la aplicación ver grupos compartidos con la organización."
+    },
+    "portal:user:invitePartneredCollaborationMembers": {
+      "label": "Invitar a miembros de organizaciones asociadas",
+      "description": "Permitir al miembro invitar a miembros de organizaciones de colaboraciones asociadas a grupos.",
+      "descriptionApp": "Permita a la aplicación invitar a miembros de organizaciones de colaboraciones asociadas a grupos."
+    },
+    "portal:user:addExternalMembersToGroup": {
+      "label": "Agregar miembros de otras organizaciones",
+      "description": "Permitir al miembro crear grupos que admitan miembros de otras organizaciones, así como invitar a miembros externos a grupos.",
+      "descriptionApp": "Permita a la aplicación crear grupos que admitan miembros de otras organizaciones, así como invitar a miembros externos a grupos."
+    },
+    "portal:user:createItem": {
+      "label": "Crear, actualizar y eliminar",
+      "description": "Permita al miembro crear, editar y eliminar su propio contenido.",
+      "descriptionApp": "Permita que la aplicación cree, edite y elimine el contenido del propietario de la aplicación."
+    },
+    "portal:publisher:publishFeatures": {
+      "label": "Publicar capas de entidades alojadas",
+      "description": "Permita al miembro publicar capas de entidades alojadas a partir de shapefiles, CSV, etc.",
+      "descriptionApp": "Permita a la aplicación publicar capas de entidades alojadas a partir de shapefiles, CSV, etc."
+    },
+    "portal:publisher:publishTiles": {
+      "label": "Publicar capas de teselas alojadas",
+      "description": "Permita al miembro publicar capas de teselas alojadas a partir de paquetes de teselas, entidades, etc.",
+      "descriptionApp": "Permita a la aplicación publicar capas de teselas alojadas a partir de paquetes de teselas, entidades, etc."
+    },
+    "portal:publisher:publishScenes": {
+      "label": "Publicar capas de escenas alojadas",
+      "description": "Permita al miembro publicar capas de escenas alojadas.",
+      "descriptionApp": "Permita a la aplicación publicar capas de escenas alojadas."
+    },
+    "portal:publisher:publishTiledImagery": {
+      "label": "Publicar capas de imágenes en teselas alojadas",
+      "description": "Permitir al miembro publicar capas de imágenes en teselas alojadas desde una única imagen o colección de imágenes. Requiere una extensión de tipo de usuario de ArcGIS Image for ArcGIS Online.",
+      "descriptionPortal": "Permitir al miembro publicar capas de imágenes en teselas alojadas desde una única imagen o colección de imágenes.",
+      "descriptionApp": "Permita a la aplicación publicar capas de imágenes en teselas alojadas desde una única imagen o colección de imágenes. Requiere una licencia de alojamiento de ArcGIS Image."
+    },
+    "portal:publisher:publishDynamicImagery": {
+      "label": "Publicar capas de imágenes dinámicas alojadas",
+      "description": "Permitir al miembro publicar capas de imágenes dinámicas alojadas desde una única imagen o colección de imágenes.",
+      "descriptionApp": "Permita a la aplicación publicar capas de imágenes dinámicas alojadas desde una única imagen o colección de imágenes."
+    },
+    "portal:publisher:publishServerServices": {
+      "label": "Publicar capas basadas en servidor",
+      "description": "Este privilegio permite publicar capas basadas en los servicios ofrecidos por sitios de servidores federados. Con frecuencia, estos servicios hacen referencia a datos registrados de geodatabases o fuentes de datos basadas en archivos."
+    },
+    "portal:publisher:publishKnowledgeGraph": {
+      "label": "Publicar gráficos de conocimiento alojados",
+      "description": "Permitir al miembro publicar gráficos de conocimiento alojados.",
+      "descriptionApp": "Permita a la aplicación publicar gráficos de conocimiento alojados."
+    },
+    "portal:user:viewOrgItems": {
+      "label": "Ver contenido compartido con la organización",
+      "description": "Permita al miembro ver el contenido compartido con la organización.",
+      "descriptionPortal": "Permita al miembro ver el contenido compartido con el portal.",
+      "descriptionApp": "Permita a la aplicación ver el contenido compartido con la organización."
+    },
+    "premium:publisher:createNotebooks": {
+      "label": "Crear y editar notebooks",
+      "description": "Permitir al miembro crear y editar notebooks interactivos.",
+      "descriptionApp": "Permita a la aplicación crear y editar notebooks interactivos."
+    },
+    "premium:publisher:scheduleNotebooks": {
+      "label": "Programar notebooks",
+      "description": "Permitir al miembro programar futuras ejecuciones automáticas de un notebook.",
+      "descriptionApp": "Permita a la aplicación programar futuras ejecuciones automáticas de un notebook."
+    },
+    "portal:publisher:bulkPublishFromDataStores": {
+      "label": "Crear capas de entidades en masa desde un data store",
+      "description": "Este privilegio le permite publicar capas web desde un data store registrado."
+    },
+    "portal:publisher:registerDataStores": {
+      "label": "Registrar data stores",
+      "description": "Este privilegio le permite registrar data stores en el portal."
+    },
+    "portal:user:viewTracks": {
+      "label": "Ver rastreos de ubicación",
+      "description": "Permita al miembro ver rastreos de ubicación de los miembros a través de vistas de rastreos compartidas cuando el uso compartido de la ubicación está habilitado.",
+      "descriptionApp": "Permita a la aplicación ver rastreos de ubicación de los miembros a través de vistas de rastreos compartidas cuando el uso compartido de la ubicación está habilitado."
+    },
+    "portal:user:reassignItems": {
+      "label": "Reasignar contenido",
+      "description": "Permita que el miembro reasigne solamente su contenido a otro miembro con el privilegio de recibir contenido.",
+      "descriptionApp": "Permita que la aplicación reasigne solamente el contenido del propietario de la aplicación a otro miembro con el privilegio de recibir contenido."
+    },
+    "portal:user:receiveItems": {
+      "label": "Recibir contenido",
+      "description": "Permita que el miembro reciba contenido que le ha reasignado otro miembro con el privilegio de reasignar contenido."
+    },
+    "portal:publisher:publishFeeds": {
+      "label": "Publicar feeds",
+      "description": "Este privilegio concede la capacidad de publicar feeds para incorporar y visualizar datos en tiempo real utilizando ArcGIS Velocity."
+    },
+    "portal:publisher:publishRealTimeAnalytics": {
+      "label": "Publicar análisis en tiempo real",
+      "description": "Este privilegio concede la capacidad de publicar análisis en tiempo real para analizar y procesar datos en tiempo real utilizando ArcGIS Velocity."
+    },
+    "portal:publisher:publishBigDataAnalytics": {
+      "label": "Publicar análisis de big data",
+      "description": "Este privilegio concede la capacidad de publicar análisis de big data para analizar datos de observación históricos utilizando ArcGIS Velocity."
+    },
+    "portal:publisher:createDataPipelines": {
+      "label": "Crear y ejecutar canalizaciones de datos",
+      "description": "Permita que los miembros creen, editen y ejecuten canalizaciones de datos.",
+      "descriptionApp": "Permita que la aplicación cree, edite y ejecute canalizaciones de datos."
+    },
+    "portal:publisher:publishLivestreamVideo": {
+      "label": "Publicar vídeo en directo",
+      "description": "Permita a los miembros publicar capas de vídeo en directo alojadas procedentes de emisiones y flujos de vídeo en red.",
+      "descriptionApp": "Permita a la aplicación publicar capas de vídeo en directo alojadas procedentes de emisiones y flujos de vídeo en red."
+    },
+    "portal:publisher:publishVideo": {
+      "label": "Publicar vídeo",
+      "description": "Permita a los miembros publicar capas de vídeo alojadas desde archivos de vídeo y archivos de metadatos de vídeo compatibles.",
+      "descriptionApp": "Permita a la aplicación publicar capas de vídeo alojadas desde archivos de vídeo y archivos de metadatos de vídeo compatibles."
+    },
+    "portal:user:shareToGroup": {
+      "label": "Compartir con grupos",
+      "description": "Permita al miembro compartir contenido con grupos.",
+      "descriptionApp": "Permita a la aplicación compartir contenido con los grupos."
+    },
+    "portal:user:shareToOrg": {
+      "label": "Compartir con la organización",
+      "labelPortal": "Compartir con el portal",
+      "description": "Permita al miembro compartir contenido con su organización.",
+      "descriptionPortal": "Permita al miembro compartir contenido con su portal.",
+      "descriptionApp": "Permita a la aplicación compartir contenido con su organización."
+    },
+    "portal:user:shareToPublic": {
+      "label": "Compartir con el público",
+      "description": "Permita que el miembro comparta su contenido públicamente si lo permite la política de uso público compartido de la organización.",
+      "descriptionApp": "Permita que la aplicación comparta el contenido del propietario de la aplicación públicamente si lo permite la política de uso público compartido de la organización.",
+      "tooltip": "Si la organización no permite que los miembros compartan contenido públicamente, estos necesitarán privilegios administrativos para compartir contenido de los miembros con el público."
+    },
+    "portal:user:shareGroupToOrg": {
+      "label": "Hacer los grupos visibles para la organización",
+      "labelPortal": "Hacer los grupos visibles en el portal",
+      "description": "Permita al miembro compartir contenido con su organización.",
+      "descriptionPortal": "Permita al miembro compartir contenido con su portal.",
+      "descriptionApp": "Permita a la aplicación compartir contenido con su portal."
+    },
+    "portal:user:shareGroupToPublic": {
+      "label": "Hacer los grupos visibles al público",
+      "description": "Permita al miembro hacer que todos los grupos puedan ser descubiertos por el público.",
+      "descriptionApp": "Permita a la aplicación hacer que todos los grupos puedan ser descubiertos por el público."
+    },
+    "opendata:user:designateGroup": {
+      "label": "Hacer que los grupos estén disponibles para Open Data",
+      "description": "Permita al miembro designar grupos como disponibles para su uso en Open Data.",
+      "descriptionApp": "Permita a la aplicación designar grupos como disponibles para su uso en Open Data."
+    },
+    "premium:user:basemaps": {
+      "label": "Basemap styles service",
+      "descriptionLocationPlatform": "Permitir que la aplicación acceda a Basemap Styles service."
+    },
+    "premium:user:staticbasemaptiles": {
+      "label": "Teselas de mapas base estáticos",
+      "descriptionLocationPlatform": "Permitir que la aplicación acceda al servicio de teselas de mapas base estáticos."
+    },
+    "premium:user:staticMaps": {
+      "label": "Servicio de mapas estáticos (beta)",
+      "descriptionLocationPlatform": "Permitir que la aplicación acceda al servicio de mapas estáticos."
+    },
+    "premium:user:elevation": {
+      "label": "Servicio de elevación",
+      "descriptionLocationPlatform": "Permita que la aplicación acceda al servicio de elevación."
+    },
+    "premium:user:geocode": {
+      "label": "Geocódigo",
+      "description": "Permitir al miembro realizar tareas de geocodificación que consumen créditos con el servicio de geocodificación de ArcGIS (o una vista de este localizador).",
+      "descriptionApp": "Permita a la aplicación realizar tareas de geocodificación que consumen créditos con ArcGIS World Geocoding Service (o una vista de este localizador)."
+    },
+    "premium:user:geocode:stored": {
+      "label": "Geocódigo (almacenado)",
+      "descriptionLocationPlatform": "Permita que la aplicación acceda al servicio de geocodificación y represente geocódigos almacenados."
+    },
+    "premium:user:geocode:temporary": {
+      "label": "Geocódigo (no almacenado)",
+      "descriptionLocationPlatform": "Permita que la aplicación acceda al servicio de geocodificación y represente geocódigos que no están almacenados."
+    },
+    "premium:user:networkanalysis": {
+      "label": "Generación de rutas",
+      "description": "Permita al miembro tareas de análisis de red, como la generación de rutas y de áreas de tiempo de recorrido por vehículo.",
+      "descriptionApp": "Permita que la aplicación acceda al servicio de generación de rutas."
+    },
+    "premium:user:networkanalysis:closestfacility": {
+      "label": "Instalación más cercana",
+      "descriptionLocationPlatform": "Permita que la aplicación acceda al servicio de generación de rutas y represente operaciones de generación de rutas a las instalaciones más próximas."
+    },
+    "premium:user:networkanalysis:lastmiledelivery": {
+      "label": "Entrega de última milla",
+      "descriptionLocationPlatform": "Permita que la aplicación acceda al servicio de generación de rutas y represente operaciones de generación de rutas para la entrega de última milla."
+    },
+    "premium:user:networkanalysis:snaptoroads": {
+      "label": "Snap To Roads",
+      "descriptionLocationPlatform": "Permita que el miembro realice tareas de análisis de red, como alinear los puntos de rastreo GPS con las carreteras."
+    },
+    "premium:user:networkanalysis:locationallocation": {
+      "label": "Asignación de ubicación",
+      "descriptionLocationPlatform": "Permita que la aplicación acceda al servicio de generación de rutas y represente operaciones de asignación de ubicación."
+    },
+    "premium:user:networkanalysis:routing": {
+      "label": "Generación de rutas simple",
+      "descriptionLocationPlatform": "Permita que la aplicación acceda al servicio de generación de rutas y represente las operaciones de generación de rutas estándar."
+    },
+    "premium:user:networkanalysis:optimizedrouting": {
+      "label": "Generación de rutas optimizada",
+      "descriptionLocationPlatform": "Permita que la aplicación acceda al servicio de generación de rutas y represente operaciones de generación de rutas optimizadas."
+    },
+    "premium:user:networkanalysis:vehiclerouting": {
+      "label": "Generación de rutas para múltiples vehículos",
+      "descriptionLocationPlatform": "La generación de rutas para múltiples vehículos permite que la aplicación acceda al servicio de generación de rutas y represente operaciones de generación de rutas de flotas."
+    },
+    "premium:user:networkanalysis:origindestinationcostmatrix": {
+      "label": "Matriz de coste origen-destino",
+      "descriptionLocationPlatform": "Permita que la aplicación acceda al servicio de generación de rutas y genere matrices de costes de viaje."
+    },
+    "premium:user:networkanalysis:servicearea": {
+      "label": "Área de servicio",
+      "descriptionLocationPlatform": "Permita que la aplicación acceda al servicio de generación de rutas y genere áreas de servicio."
+    },
+    "premium:user:places": {
+      "label": "Servicio de lugares",
+      "descriptionLocationPlatform": "Permita que la aplicación acceda al servicio de lugares."
+    },
+    "premium:user:spatialanalysis": {
+      "labelOld": "Servicio de análisis espacial",
+      "label": "Servicio de análisis de entidades",
+      "labelPortal": "Análisis de entidades estándar",
+      "description": "Permitir al miembro realizar tareas de análisis de entidades.",
+      "descriptionPortal": "Este privilegio permite realizar tareas de análisis de entidades estándar.",
+      "descriptionLocationPlatform": "Permita que la aplicación acceda al servicio de análisis de entidades.",
+      "descriptionApp": "Permita que la aplicación acceda al servicio de análisis de entidades."
+    },
+    "premium:user:geoenrichment": {
+      "label": "Servicio de geoenriquecimiento",
+      "description": "Permita al miembro geoenriquecer entidades.",
+      "descriptionLocationPlatform": "Permita que la aplicación acceda al servicio de geoenriquecimiento.",
+      "descriptionApp": "Permita que la aplicación acceda al servicio de geoenriquecimiento."
+    },
+    "premium:user:demographics": {
+      "label": "Mapas demográficos",
+      "description": "Permita que la aplicación acceda a mapas demográficos premium en ArcGIS Living Atlas.",
+      "descriptionApp": "Permita que la aplicación acceda a mapas demográficos premium en ArcGIS Living Atlas.",
+      "descriptionLocationPlatform": "Permita que la aplicación acceda a mapas demográficos en ArcGIS Living Atlas."
+    },
+    "premium:publisher:geoanalytics": {
+      "label": "Análisis de entidades de GeoAnalytics",
+      "description": "Este privilegio permite realizar tareas de geoanálisis."
+    },
+    "premium:publisher:rasteranalysis": {
+      "label": "Análisis de imágenes",
+      "description": "Permitir al miembro realizar tareas de análisis de imágenes. Requiere las capacidades de análisis de ArcGIS Image.",
+      "descriptionPortal": "Permitir al miembro realizar tareas de análisis de imágenes.",
+      "descriptionApp": "Permita a la aplicación realizar tareas de análisis de imágenes. Requiere las capacidades de análisis de ArcGIS Image.",
+      "descriptionAppPortal": "Permita a la aplicación realizar tareas de análisis de imágenes."
+    },
+    "premium:publisher:createAdvancedNotebooks": {
+      "label": "Notebooks avanzados",
+      "description": "Permitir al miembro importar y usar módulos ArcPy en notebooks.",
+      "descriptionApp": "Permita a la aplicación importar y usar módulos ArcPy en notebooks."
+    },
+    "portal:user:runWebTool": {
+      "label": "Ejecutar herramientas web",
+      "description": "Permita que los miembros ejecuten herramientas web.",
+      "descriptionPortal": "Permita que los miembros ejecuten herramientas web publicadas desde notebooks.",
+      "descriptionApp": "Permita que las aplicaciones ejecuten herramientas web.",
+      "descriptionAppPortal": "Permita que la aplicación ejecute herramientas web publicadas desde notebooks."
+    },
+    "portal:user:generateApiTokens": {
+      "label": "Generar claves de API",
+      "description": "Permita que el miembro genere claves de API."
+    },
+    "portal:user:assignPrivilegesToApps": {
+      "label": "Asignar privilegios a aplicaciones OAuth 2.0",
+      "description": "Permita que el miembro asigne privilegios a las aplicaciones OAuth 2.0."
+    },
+    "portal:user:createWorkflow": {
+      "label": "Crear elemento de flujo de trabajo",
+      "description": "Permitir a los miembros crear elementos de Workflow Manager"
+    },
+    "premium:user:featurereport": {
+      "label": "Informe de entidades",
+      "description": "Permita al miembro crear informes de entidades en Survey123.",
+      "descriptionApp": "Permita a la aplicación crear informes de entidades en Survey123."
+    },
+    "premium:user:realitymapping": {
+      "label": "Representación cartográfica de realidad",
+      "description": "Permitir al miembro realizar tareas de representación cartográfica de la realidad."
+    },
+    "features:user:edit": {
+      "label": "Editar",
+      "description": "Permita al miembro editar entidades de capas editables que no sean públicas, basándose en las opciones de edición habilitadas en la capa.",
+      "descriptionApp": "Permita a la aplicación editar entidades de capas editables que no sean públicas, basándose en las opciones de edición habilitadas en la capa."
+    },
+    "features:user:fullEdit": {
+      "label": "Editar con control total",
+      "description": "Permita al miembro agregar, eliminar y actualizar entidades de una capa de entidades alojada editable, independientemente de las opciones de edición habilitadas en la capa.",
+      "descriptionApp": "Permita a la aplicación agregar, eliminar y actualizar entidades de una capa de entidades alojada editable, independientemente de las opciones de edición habilitadas en la capa."
+    },
+    "features:user:manageVersions": {
+      "label": "Administrar todo",
+      "description": "Permita que los miembros administren bloqueos de versiones y vean, modifiquen, eliminen, editen, concilien y publiquen en todas las versiones en rama a la que se accede mediante capas de entidades de ArcGIS Server.",
+      "descriptionApp": "Permita que la aplicación administre bloqueos de versiones y vea, modifique, elimine, edite, concilie y publique en todas las versiones en rama a la que se accede mediante capas de entidades de ArcGIS Server."
+    },
+    "portal:publisher:createFeatureWebhook": {
+      "label": "Capa de entidades",
+      "description": "Permita que los miembros creen, editen y eliminen sus propios webhooks de capas de entidades.",
+      "descriptionApp": "Permita que la aplicación cree, edite y elimine sus propios webhooks de capas de entidades."
+    },
+    "portal:admin:viewUsers": {
+      "label": "Ver todo",
+      "description": "Permita al miembro ver toda la información de cuentas de miembro de su organización.",
+      "descriptionPortal": "Permita al miembro ver toda la información de cuentas de miembro de su portal.",
+      "descriptionApp": "Permita a la aplicación ver toda la información de cuentas de miembro de su organización."
+    },
+    "portal:admin:updateUsers": {
+      "label": "Actualizar",
+      "description": "Permitir al miembro restablecer contraseñas, actualizar la información de cuentas de miembros y actualizar las categorías de miembros de su organización.",
+      "descriptionPortal": "Permitir al miembro restablecer contraseñas, actualizar la información de cuentas de miembros y actualizar las categorías de miembros de su portal.",
+      "descriptionApp": "Permita a la aplicación restablecer contraseñas, actualizar la información de cuentas de miembros y actualizar las categorías de miembros de su organización."
+    },
+    "portal:admin:deleteUsers": {
+      "label": "Eliminar",
+      "description": "Permita al miembro eliminar cuentas de miembro de su organización.",
+      "descriptionPortal": "Permita al miembro eliminar cuentas de miembro de su portal.",
+      "descriptionApp": "Permita a la aplicación eliminar cuentas de miembro de su organización."
+    },
+    "portal:admin:inviteUsers": {
+      "label": "Añadir",
+      "labelPortal": "Invitar",
+      "description": "Permita al miembro invitar a miembros a su organización.",
+      "descriptionPortal": "Permita al miembro invitar a miembros a su portal.",
+      "descriptionApp": "Permita a la aplicación invitar a miembros a su organización."
+    },
+    "portal:admin:disableUsers": {
+      "label": "Deshabilitar",
+      "description": "Permita al miembro habilitar y deshabilitar cuentas de miembro de su organización.",
+      "descriptionPortal": "Permita al miembro habilitar y deshabilitar cuentas de miembro de su portal.",
+      "descriptionApp": "Permita a la aplicación habilitar y deshabilitar cuentas de miembro de su organización."
+    },
+    "portal:admin:changeUserRoles": {
+      "label": "Cambiar roles",
+      "description": "Permita al miembro modificar el rol asignado a una cuenta de miembro. Recuerde que solo los miembros con el rol de Administrador pueden asignar o desasignar el rol de Administrador a otras cuentas.",
+      "descriptionPortal": "Permita al miembro modificar el rol asignado a una cuenta de miembro. Recuerde que solo los miembros con el rol de Administrador pueden asignar o desasignar el rol de Administrador a otras cuentas.",
+      "descriptionApp": "Permita a la aplicación modificar el rol asignado a una cuenta de miembro. Recuerde que solo los miembros con el rol de Administrador pueden asignar o desasignar el rol de Administrador a otras cuentas."
+    },
+    "portal:admin:manageLicenses": {
+      "label": "Administrar licencias",
+      "description": "Permita al miembro asignar licencias a miembros de su organización.",
+      "descriptionPortal": "Permita al miembro asignar licencias a miembros de su portal.",
+      "descriptionApp": "Permita a la aplicación asignar licencias a miembros de su organización."
+    },
+    "portal:admin:updateMemberCategorySchema": {
+      "label": "Administrar categorías",
+      "description": "Permitir al miembro configurar categorías de miembros de su organización.",
+      "descriptionPortal": "Permitir al miembro configurar categorías de miembros en su portal.",
+      "descriptionApp": "Permita a la aplicación configurar categorías de contenido de los miembros de la organización."
+    },
+    "portal:admin:viewGroups": {
+      "label": "Ver todo",
+      "description": "Permita al miembro ver todos los grupos de su organización.",
+      "descriptionPortal": "Permita al miembro ver todos los grupos de su portal.",
+      "descriptionApp": "Permita a la aplicación ver los grupos de su organización."
+    },
+    "portal:admin:updateGroups": {
+      "label": "Actualizar",
+      "description": "Permita al miembro actualizar los grupos de su organización.",
+      "descriptionPortal": "Permita al miembro actualizar los grupos de su portal.",
+      "descriptionApp": "Permita a la aplicación actualizar los grupos de su organización."
+    },
+    "portal:admin:deleteGroups": {
+      "label": "Eliminar",
+      "description": "Permita al miembro eliminar los grupos de su organización.",
+      "descriptionPortal": "Permita al miembro eliminar los grupos de su portal.",
+      "descriptionApp": "Permita a la aplicación eliminar los grupos de su organización."
+    },
+    "portal:admin:reassignGroups": {
+      "label": "Reasignar propiedad",
+      "description": "Permita al miembro reasignar grupos a otros miembros de su organización.",
+      "descriptionPortal": "Permita al miembro reasignar grupos a otros miembros de su portal.",
+      "descriptionApp": "Permita a la aplicación reasignar grupos a otros miembros de su organización."
+    },
+    "portal:admin:assignToGroups": {
+      "label": "Asignar miembros",
+      "description": "Permita al miembro asignar y eliminar miembros de grupos de su organización y actualizar el rol de grupo de los miembros de su organización.",
+      "descriptionPortal": "Permita al miembro asignar y eliminar miembros de grupos de su portal y actualizar el rol de grupo de los miembros de su organización.",
+      "descriptionApp": "Permita a la aplicación asignar y eliminar miembros de grupos de su organización y actualizar el rol de grupo de los miembros de su organización."
+    },
+    "portal:admin:manageEnterpriseGroups": {
+      "label": "Vínculo al grupo específico de la organización",
+      "description": "Permitir al miembro vincular la pertenencia a un grupo a un grupo específico de la organización.",
+      "descriptionApp": "Permita a la aplicación vincular la pertenencia a un grupo a un grupo específico de la organización."
+    },
+    "portal:admin:createUpdateCapableGroup": {
+      "label": "Crear con capacidades de actualización",
+      "description": "Permita al miembro crear grupos con capacidades de actualización.",
+      "descriptionApp": "Permita a la aplicación crear grupos con capacidades de actualización."
+    },
+    "portal:admin:createLeavingDisallowedGroup": {
+      "label": "Crear con abandono no permitido",
+      "description": "Permita que el miembro cree y posea grupos que no permitan que los miembros abandonen (grupos administrativos).",
+      "descriptionApp": "Permita que la aplicación cree y tenga grupos que no permiten que las aplicaciones salgan (grupos administrativos)."
+    },
+    "portal:admin:viewItems": {
+      "label": "Ver todo",
+      "description": "Permita al miembro ver todo el contenido de su organización.",
+      "descriptionPortal": "Permita al miembro ver todo el contenido de su portal.",
+      "descriptionApp": "Permita a la aplicación ver todo el contenido de su organización."
+    },
+    "portal:admin:updateItems": {
+      "label": "Actualizar",
+      "description": "Permita al miembro actualizar y categorizar el contenido y editar las capas de entidades alojadas en su organización.",
+      "descriptionPortal": "Permita al miembro actualizar y categorizar el contenido y editar las capas de entidades alojadas en su portal.",
+      "descriptionApp": "Permita a la aplicación actualizar y categorizar el contenido y editar las capas de entidades alojadas en su organización."
+    },
+    "portal:admin:deleteItems": {
+      "label": "Eliminar",
+      "description": "Permita al miembro eliminar el contenido de su organización.",
+      "descriptionPortal": "Permita al miembro eliminar el contenido de su portal.",
+      "descriptionApp": "Permita a la aplicación eliminar el contenido de su organización."
+    },
+    "portal:admin:reassignItems": {
+      "label": "Reasignar propiedad",
+      "description": "Permita al miembro reasignar contenido a otros miembros de su organización.",
+      "descriptionPortal": "Permita al miembro reasignar contenido a otros miembros de su portal.",
+      "descriptionApp": "Permita a la aplicación reasignar contenido a otros miembros de su organización."
+    },
+    "portal:admin:updateItemCategorySchema": {
+      "label": "Administrar categorías",
+      "description": "Permita al miembro configurar categorías de contenido en su organización.",
+      "descriptionPortal": "Permita al miembro configurar categorías de contenido en su portal.",
+      "descriptionApp": "Permita a la aplicación configurar categorías de contenido en su organización."
+    },
+    "portal:publisher:publishServerGPServices": {
+      "label": "Publicar herramientas web",
+      "description": "Este privilegio permite publicar herramientas web basadas en servicios de geoprocesamiento ofrecidos por sitios de servidores federados."
+    },
+    "portal:admin:shareToOrg": {
+      "label": "Compartir contenido de los miembros con la organización",
+      "description": "Permita que el miembro comparta contenido propiedad de otros miembros de su organización con la organización.",
+      "descriptionPortal": "Permita que el miembro comparta contenido propiedad de otros miembros de su portal con el portal.",
+      "descriptionApp": "Permita que la aplicación comparta contenido propiedad de otros miembros de su organización con la organización."
+    },
+    "portal:admin:shareToPublic": {
+      "label": "Compartir contenido de los miembros con el público",
+      "description": "Permita que el miembro comparta contenido propiedad de otros miembros de su organización con el público.",
+      "descriptionPortal": "Permita que el miembro comparta contenido propiedad de otros miembros de su portal con el público.",
+      "descriptionApp": "Permita que el miembro comparta contenido propiedad de otros miembros de su organización con el público."
+    },
+    "portal:admin:createReports": {
+      "label": "Crear y administrar informes administrativos",
+      "description": "Permita que un miembro cree y administre informes administrativos para su organización.",
+      "descriptionPortal": "Permita que un miembro cree y administre informes administrativos para su portal.",
+      "descriptionApp": "Permita que la aplicación cree y gestione informes administrativos para su organización."
+    },
+    "marketplace:admin:manage": {
+      "label": "Crear y administrar",
+      "description": "Permita al miembro crear artículos, listar artículos, administrar suscripciones dentro de ArcGIS Marketplace y administrar compradores y datos de contacto para su organización. El uso de este privilegio depende de que su organización obtenga acceso a artículos y publicación en ArcGIS Marketplace."
+    },
+    "marketplace:admin:purchase": {
+      "label": "Comprar y obtener productos gratuitos",
+      "description": "Permitir al miembro enviar solicitudes de compra y acceder a productos gratuitos de proveedores en ArcGIS Marketplace. Para permitir que los miembros compren productos con tarjetas de crédito, debe designarlos como compradores de Marketplace."
+    },
+    "marketplace:admin:startTrial": {
+      "label": "Iniciar pruebas",
+      "description": "Permita al miembro iniciar suscripciones de prueba en ArcGIS Marketplace."
+    },
+    "portal:admin:manageSecurity": {
+      "label": "Seguridad e infraestructura",
+      "description": "Permita al miembro administrar la configuración de infraestructura y seguridad de la organización.",
+      "descriptionPortal": "Permita al miembro administrar la configuración de infraestructura y seguridad del portal.",
+      "descriptionApp": "Permita a la aplicación administrar la configuración de infraestructura y seguridad de la organización."
+    },
+    "portal:admin:manageWebsite": {
+      "label": "Sitio web de la organización",
+      "description": "Permita al miembro administrar la configuración del sitio web de la organización.",
+      "descriptionPortal": "Permita al miembro administrar la configuración del sitio web del portal.",
+      "descriptionApp": "Permita a la aplicación administrar la configuración del sitio web de la organización."
+    },
+    "portal:admin:manageCollaborations": {
+      "label": "Colaboraciones",
+      "description": "Permita al miembro administrar las colaboraciones de la organización.",
+      "descriptionPortal": "Permita al miembro administrar las colaboraciones del portal.",
+      "descriptionApp": "Permita a la aplicación administrar las colaboraciones de la organización."
+    },
+    "portal:admin:manageCredits": {
+      "label": "Créditos",
+      "description": "Permita al miembro administrar la configuración de presupuestación de créditos de la organización.",
+      "descriptionApp": "Permita a la aplicación administrar la configuración de presupuestación de créditos de la organización."
+    },
+    "portal:admin:manageRoles": {
+      "label": "Roles de miembro",
+      "description": "Permita al miembro administrar los roles de miembro de la organización.",
+      "descriptionPortal": "Permita al miembro administrar los roles de miembro del portal.",
+      "descriptionApp": "Permita a la aplicación administrar los roles de miembro de la organización."
+    },
+    "portal:admin:manageServers": {
+      "label": "Servidores",
+      "description": "Este privilegio permite administrar la configuración del servidor del portal."
+    },
+    "portal:admin:manageUtilityServices": {
+      "label": "Servicios de utilidades",
+      "description": "Permita al miembro administrar la configuración de los servicios de utilidades de la organización.",
+      "descriptionPortal": "Permita al miembro administrar la configuración de los servicios de utilidades del portal.",
+      "descriptionApp": "Permita a la aplicación administrar la configuración de los servicios de utilidades de la organización."
+    },
+    "portal:admin:manageWebhooks": {
+      "label": "Webhooks",
+      "labelPortal": "Webhooks de organización",
+      "description": "Permita que los miembros creen, editen y eliminen todos los webhooks de la organización.",
+      "descriptionApp": "Permita que las aplicaciones creen, editen y eliminen todos los webhooks de la organización.",
+      "descriptionPortal": "Permita que los miembros creen, editen y eliminen webhooks de organización y administren todos los webhooks dentro del portal.",
+      "descriptionAppPortal": "Permita que la aplicación cree, edite y elimine webhooks de organización y administre todos los webhooks dentro del portal."
+    },
+    "portal:admin:createGPWebhook": {
+      "label": "Geoprocesamiento",
+      "description": "Permita que los miembros creen, editen y eliminen sus propios webhooks de geoprocesamiento.",
+      "descriptionApp": "Permita que la aplicación cree, edite y elimine sus propios webhooks de geoprocesamiento."
+    }
+  }
+}

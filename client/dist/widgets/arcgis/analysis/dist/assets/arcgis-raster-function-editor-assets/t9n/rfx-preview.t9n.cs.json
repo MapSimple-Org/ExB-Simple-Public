@@ -1,0 +1,13 @@
+{
+  "header": "Náhled",
+  "description": "Před spuštěním analýzy zobrazte náhled výsledku.",
+  "showPreview": "Zobrazit náhled",
+  "previewLayer": "Náhled vrstvy ${number}",
+  "update": "Aktualizovat",
+  "newPreview": "Nový náhled",
+  "previewPopup": "Povolit náhled výsledků analýzy na základě vstupních parametrů.",
+  "previewError": "Tato vrstva náhledu není k dispozici. Zkontrolujte vstupní parametry a znovu aktualizujte tuto vrstvu náhledu.",
+  "updatePopover": "Aktualizovat vybranou vrstvu náhledu",
+  "createPopover": "Vytvořit novou vrstvu náhledu",
+  "maxPreview": "Maximální povolený počet vrstev náhledu: ${maxCount}"
+}

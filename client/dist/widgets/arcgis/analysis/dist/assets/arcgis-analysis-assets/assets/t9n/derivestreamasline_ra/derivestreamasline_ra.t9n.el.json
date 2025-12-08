@@ -1,0 +1,11 @@
+{
+  "all": "Όλα",
+  "inputLayersGroupText": "Επιλέξτε το raster επιφάνειας εισόδου και προαιρετικά τα δεδομένα κατάθλιψης και το raster στάθμισης.",
+  "itemProperties": {
+    "description": "Έξοδος που παράγεται από την εκτέλεση του εργαλείου Derive Stream As Raster.",
+    "snippet": "Έξοδος που παράγεται από το Derive Stream As Raster"
+  },
+  "outputStreamFeaturesLabel": "Όνομα χαρακτηριστικών ροής εξόδου",
+  "simplifyLabel": "Απλοποίηση στοιχείων",
+  "streamSettingsGroupText": "Καθορίστε το όριο συσσώρευσης, τη μέθοδο προσδιορισμού ροής και εάν οι γραμμές ροής εξόδου θα εξομαλυνθούν σε απλά σχήματα."
+}

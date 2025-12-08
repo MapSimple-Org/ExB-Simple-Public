@@ -1,0 +1,1 @@
+System.register([],function(e){return{execute:function(){e({settingsLabel:"Instellingen Koppelingsverkenner",selectModelViewer:"Selecteer een Documentweergave-widget als u gekoppelde documenten wilt weergeven."})}}});

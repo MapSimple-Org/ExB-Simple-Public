@@ -1,0 +1,8 @@
+{
+  "selectFeature": "フィーチャ レイヤーの選択",
+  "browseLayer": "レイヤーの参照",
+  "loading": "読み込んでいます...",
+  "errorCodes": {
+    "required": "このパラメーターは必須です。"
+  }
+}

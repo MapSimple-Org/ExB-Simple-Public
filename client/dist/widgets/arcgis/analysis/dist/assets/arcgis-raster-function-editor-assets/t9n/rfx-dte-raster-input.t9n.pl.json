@@ -1,0 +1,14 @@
+{
+  "outputRaster": "Raster wynikowy",
+  "rfxVariable": "RasterFunctionVariable",
+  "selectLayer": "Wybierz warstwę",
+  "allowScalar": "Wybierz warstwę lub wprowadź stałą",
+  "browseLayer": "Przeglądaj warstwy",
+  "loading": "Wczytywanie...",
+  "layerMissing": "Nie została tu wymieniona jedna lub większa liczba warstw zobrazowań na mapie, ponieważ właściwość zezwalania na usługę analizy jest wyłączona.",
+  "layerFailedToLoad": "Nie udało się wczytać warstwy.",
+  "learnMore": "Dowiedz się więcej",
+  "errorCodes": {
+    "required": "Ten parametr jest wymagany."
+  }
+}

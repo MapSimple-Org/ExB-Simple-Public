@@ -1,0 +1,7 @@
+{
+  "browseRFT": "Browse raster function templates",
+  "rfxVariable": "RasterFunctionVariable",
+  "outputRaster": "OutputRaster",
+  "previewDetails": "Preview details",
+  "readingFailed": "Failed to load the selected raster function template."
+}

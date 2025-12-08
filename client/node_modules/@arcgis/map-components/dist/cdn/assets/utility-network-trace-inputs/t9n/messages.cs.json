@@ -1,0 +1,1 @@
+{"componentLabel":"Vstupy trasování","labels":{"utilityNetwork":"Inženýrská síť","traceConfiguration":"Konfigurace trasování","traceInputs":"Vstupy trasování"},"errors":{"noMapError":"Žádná mapa k dispozici","noUtilityNetworkError":"V mapě nebyly nalezeny žádné inženýrské sítě","noTraceConfigurationError":"Nejsou k dispozici žádné pojmenované konfigurace trasování"}}

@@ -1,0 +1,1 @@
+System.register([],function(e){return{execute:function(){e({_widgetLabel:"\xd6l\xe7\xfcm",selectToStart:"\xd6l\xe7\xfcm\xfc ba\u015flatmak i\xe7in bir ara\xe7 se\xe7in.",measureDistance:"Mesafeyi \xf6l\xe7",measureArea:"Alan\u0131 \xf6l\xe7",clearMeasurement:"\xd6l\xe7\xfcm\xfc temizle",measureUnit:"\xd6l\xe7\xfcm birimi"})}}});

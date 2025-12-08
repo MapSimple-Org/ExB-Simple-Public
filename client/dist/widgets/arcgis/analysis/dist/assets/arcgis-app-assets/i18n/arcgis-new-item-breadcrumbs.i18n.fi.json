@@ -1,0 +1,12 @@
+{
+  "apiCredentialType": "Tunnistetietotyyppi: API-avain",
+  "oauthCredentialType": "Tunnistetietotyyppi: OAuth 2.0",
+  "itemAccess": "Kohteen käyttöoikeus",
+  "page": "Sivu: ${page}",
+  "currentPage": "Nykyinen sivu: ${page}",
+  "privileges": "Valtuudet",
+  "itemDetails": "Kohteen tiedot",
+  "settings": "Asetukset",
+  "serviceScope": "Palvelun soveltamisala",
+  "summary": "Yhteenveto"
+}

@@ -1,0 +1,15 @@
+{
+  "expandAll": "Izvērst visu",
+  "collapseAll": "Sakļaut visu",
+  "categoryItem": {
+    "expand": "Izvērst",
+    "collapse": "Sakļaut",
+    "editCategory": "Rediģēt kategoriju",
+    "deleteCategory": "Dzēst kategoriju",
+    "addSubcategory": "Pievienot apakškategoriju",
+    "addCategory": "Pievienot kategoriju",
+    "save": "Saglabāt",
+    "cancel": "Atcelt",
+    "missingTitleMessage": "Ir nepieciešams kategorijas nosaukums."
+  }
+}

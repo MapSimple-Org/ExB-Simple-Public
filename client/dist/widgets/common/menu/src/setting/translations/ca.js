@@ -1,0 +1,1 @@
+System.register([],function(e){return{execute:function(){e({subMenuExpandMode:"Mode d'expansi\xf3 de submen\xfa",mainMenu:"Men\xfa principal",subMenu:"Submen\xfa",navArrowColor:"Color de la fletxa de navegaci\xf3"})}}});

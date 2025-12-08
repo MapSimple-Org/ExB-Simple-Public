@@ -1,0 +1,9 @@
+{
+  "inputLayerGroupText": "Pasirinkite įvesties sluoksnį, kad apskaičiuotumėte geometrinius zonų ribų duomenis.",
+  "itemProperties": {
+    "description": "Išvesties lentelė, sugeneruota paleidus zoninę geometriją kaip lentelės analizės įrankį.",
+    "snippet": "Išvesties lentelė, sugeneruota iš zoninės geometrijos lentelėje"
+  },
+  "zonalGeometrySettingGroupLabel": "Zoninės geometrijos nustatymas",
+  "zonalGeometrySettingGroupText": "Nurodykite apskaičiuotiną gardelės dydį."
+}

@@ -1,0 +1,13 @@
+{
+  "addField": "Pridėti laukelį",
+  "deselectAll": "Panaikinti visų pasirinkimą",
+  "done": "Atlikta",
+  "noFieldsAvailable": "${layerName} nėra laukų, atitinkančių duomenų tipo reikalavimą. Norėdami tęsti, pasirinkite kitą sluoksnį.",
+  "noInputSelected": {
+    "withLayerInputLabel": "Nepasirinktas joks įvesties sluoksnis. Norėdami tęsti, pasirinkite ${layerInputLabel} sluoksnį.",
+    "withoutLayerInputLabel": "Nepasirinktas joks įvesties sluoksnis. Norėdami tęsti, pasirinkite įvesties sluoksnį."
+  },
+  "noSearchResults": "Atitinkančių laukų nerasta.",
+  "selectAll": "Pasirinkti viską",
+  "summaryFieldsPopover": "Suvestinės laukai"
+}

@@ -1,0 +1,16 @@
+{
+  "updateData": "Aggiorna dati",
+  "cancel": "Annulla",
+  "editStyle": "Sostituisci il file di stile del layer con una versione aggiornata disponibile nel computer.",
+  "updatePackages": "Sostituire ${type} con una versione aggiornata disponibile nel computer. Il nome del file caricato deve corrispondere a quello di ${hostedLayerName}.",
+  "uploadStaticFiles": "Il file da caricare deve avere lo stesso nome del file originale ${fileName}",
+  "sameFileNameDescription": "Il file da caricare deve avere lo stesso nome e gli stessi campi del file originale ${fileName}",
+  "updating": "Aggiornamento in corso...",
+  "error": "Errore",
+  "errors": {
+    "sameFileName": "Per aggiornare questo elemento, devi caricare un file denominato ${fileName}.",
+    "invalidStyleFileExtension": "Estensione file non valida. L'estensione file dello stile caricato deve essere .json.",
+    "errorWhileUpload": "Si è verificato un errore durante il caricamento dell'elemento.",
+    "errorUpdate": "Si è verificato un errore durante la sovrascrittura dell'elemento."
+  }
+}

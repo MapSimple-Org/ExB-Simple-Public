@@ -1,0 +1,1 @@
+System.register([],function(t){return{execute:function(){t({_widgetLabel:"Bi\u1ec3u \u0111\u1ed3",dataEmptyTip:"Kh\xf4ng t\xecm th\u1ea5y d\u1eef li\u1ec7u."})}}});

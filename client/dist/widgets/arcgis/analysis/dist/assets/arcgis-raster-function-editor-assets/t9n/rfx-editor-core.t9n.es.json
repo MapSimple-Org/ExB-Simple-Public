@@ -1,0 +1,15 @@
+{
+  "addRaster": "Agregar variable de ráster",
+  "addScalar": "Agregar constante",
+  "raster": "Calculadora ráster",
+  "scalar": "Escalar",
+  "defaultModelName": "Plantilla de función ráster",
+  "defaultRasterName": "Calculadora ráster",
+  "invalidRFTMessage": "La plantilla de función ráster no es válida.",
+  "deprecated": "Obsoleto",
+  "deprecatedHoverText": "Esta función ráster está obsoleta y se eliminará en una versión futura.",
+  "unsupported": "Incompatible",
+  "unsupportedHoverText": "Esta función ráster no es compatible y puede estar disponible en una versión futura.",
+  "userStartDirection": "Seleccione una función para empezar a crear una plantilla de función ráster.",
+  "learnMore": "Más información"
+}

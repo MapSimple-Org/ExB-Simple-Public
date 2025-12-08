@@ -1,0 +1,6 @@
+{
+  "header": "Voleu tornar a començar sense desar?",
+  "content": "Teniu canvis sense desar a \"${rftTitle}\". Si torneu a començar amb una plantilla nova, aquests canvis es perdran.",
+  "cancel": "Cancel·la",
+  "continue": "Continua"
+}

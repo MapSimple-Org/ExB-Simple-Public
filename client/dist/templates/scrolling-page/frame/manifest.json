@@ -1,0 +1,25 @@
+{
+  "name": "frame",
+  "type": "template",
+  "templateType": "scrolling-page",
+  "label": "Frame",
+  "description": "Frame is a template that features a framed design that provides a sense of boundaries and structure. By enclosing images and text in boxes, the template makes the content feel organized and easy to navigate.",
+  "thumbnail": "thumbnail.png",
+  "order": 16,
+  "templateCreateVersion": "1.12.0",
+  "tags": [
+    "Title",
+    "Logo",
+    "Banner",
+    "Gallery",
+    "Card",
+    "Grid",
+    "Map"
+  ],
+  "categoriesTags": [
+    "Web page",
+    "Scrolling"
+  ],
+  "thumbnailWidth": 320,
+  "thumbnailHeight": 214
+}

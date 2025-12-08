@@ -1,0 +1,9 @@
+{
+  "weightedSumTable": "Bảng Tổng Trọng Số",
+  "id": "ID",
+  "layer": "Lớp",
+  "field": "Trường",
+  "weight": "Weight",
+  "value": "Giá trị",
+  "selectLayer": "Chọn Lớp"
+}

@@ -9,13 +9,11 @@ import {
   DataRecordSetChangeMessage,
   RecordSetChangeType,
   type ImmutableArray,
-  dataSourceUtils,
-  DataSourceStatus
+  dataSourceUtils
 } from 'jimu-core'
 import type { IFieldInfo } from '@esri/arcgis-rest-feature-service'
 import { type QueryItemType, SpatialRelation, type SpatialFilterObj, FieldsType, mapJSAPIUnitToDsUnit, mapJSAPISpatialRelToDsSpatialRel } from '../config'
 import { getFieldInfosInPopupContent } from 'widgets/shared-code/common'
-import { debugLogger } from './debug-logger'
 
 export function combineFields (resultDisplayFields: ImmutableArray<string>, resultTitleExpression: string, idField?: string): string[] {
   const fields = new Set<string>()
@@ -214,33 +212,7 @@ export async function executeQuery (
   //   ? Object.keys(fields).filter((jimuName) => selectedFieldNames.includes(fields[jimuName].name))
   //   : []
   // outputDS.setSelectedFields(selectedFieldJimuNames)
-  
-  // Log status right before load() is called
-  debugLogger.log('TASK', {
-    event: 'outputDS-before-load-call',
-    widgetId,
-    outputDSId: outputDS.id,
-    status: outputDS.getStatus(),
-    countStatus: outputDS.getCountStatus(),
-    queryParams: JSON.stringify(queryParams),
-    getAllLoadedRecordsBefore: outputDS.getAllLoadedRecords()?.length || 0
-  })
-  
   let records = await outputDS.load(queryParams, { widgetId })
-  
-  // Log status and results after load()
-  debugLogger.log('TASK', {
-    event: 'outputDS-after-load-call',
-    widgetId,
-    outputDSId: outputDS.id,
-    status: outputDS.getStatus(),
-    countStatus: outputDS.getCountStatus(),
-    recordsReturned: records?.length || 0,
-    recordsIsNull: records == null,
-    getAllLoadedRecordsAfter: outputDS.getAllLoadedRecords()?.length || 0,
-    recordsMatchLoaded: records?.length === (outputDS.getAllLoadedRecords()?.length || 0)
-  })
-  
   if (records == null) {
     records = []
   }

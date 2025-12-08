@@ -1,0 +1,21 @@
+{
+  "folder": "Map",
+  "folders": "Mappen",
+  "searchFolders": "Mappen doorzoeken",
+  "enterFolder": "Mapnaam invoeren",
+  "createNewFolder": "Nieuwe map toevoegen",
+  "noFoldersFoundCreate": "Geen mappen gevonden met deze naam. '${folder}’ maken?",
+  "noFoldersFound": "Geen mappen gevonden met deze naam.",
+  "create": "'${folder}’ maken?",
+  "loading": "Bezig met laden mappen",
+  "error": {
+    "noName": "U moet een naam opgeven voor uw folder.",
+    "folderAlreadyExists": "Er bestaat al een map ‘${folder}'. Kies een andere naam.",
+    "title": "Fout",
+    "invalidCharacters": {
+      "single": "Dit teken mag niet in de naam voorkomen: ${invalidCharacters}.",
+      "multiple": "De naam mag geen van deze tekens bevatten: ${invalidCharacters}.",
+      "unknown": "De naam mag geen van deze tekens bevatten: ${invalidCharacters}."
+    }
+  }
+}

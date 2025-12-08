@@ -1,0 +1,11 @@
+{
+  "modalTitle": "Categorizar Itens",
+  "save": "Guardar",
+  "cancel": "Cancelar",
+  "loadingText": "A carregar...",
+  "assignCategory": "Atribuir Categoria",
+  "errorMessage": "Algo correu mal. Tente novamente mais tarde.",
+  "limited": "Os itens estão limitados a 20 categorias. Remova uma categoria antes de adicionar outra.",
+  "undo": "Anular",
+  "redo": "Refazer"
+}

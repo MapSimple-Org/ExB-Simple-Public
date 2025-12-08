@@ -1,0 +1,85 @@
+{
+  "heading": "Kreiraj kategoriju prijave",
+  "select": "Odaberite kategoriju prijave za početak",
+  "selectCustomSignIn": "Odaberite kategoriju prijave",
+  "orgDefaults": "Zadane postavke organizacije",
+  "createNew": "Stvori novo",
+  "name": "Naziv",
+  "description": "Opis",
+  "enterName": "Unesite naziv kategorije",
+  "enterDescription": "Unesite opis kategorije",
+  "enterTitle": "Unesite naziv za ovu prijavu",
+  "showOnTriage": "Omogući kategoriju prijave",
+  "showOnTriageDescription": "Opis vaše kategorije prikazat će se na stranici za odabir kategorije samo ako imate omogućene dvije ili više kategorija.",
+  "socialProviders": "Pružatelji usluga prijave na društvenim mrežama",
+  "authenticationProviders": "Metode provjere autentičnosti",
+  "errorLabel": "Pogreška kategorije prilagođene prijave",
+  "preview": "Pretpregled",
+  "restrictions": "Mogu se promijeniti samo naslov i opis ove kategorije. Sve ostale opcije nasljeđuju se iz postavki organizacije.",
+  "loginNotAvailable": "Način prijave deaktivirala je vaša organizacija i neće se prikazivati korisnicima.",
+  "buttons": {
+    "editCategory": "Spremi kategoriju",
+    "next": "Sljedeće",
+    "back": "Natrag",
+    "createCategory": "Kreiraj kategoriju"
+  },
+  "errors": {
+    "nameRequired": "Za sve kategorije prijave potreban je naziv.",
+    "authenticationMethodsRequired": "Potrebna je barem jednan način prijave.",
+    "socialProviderRequired": "Potreban je barem jedan pružatelj usluge prijave putem društvenih mreža."
+  },
+  "steps": {
+    "1": {
+      "title": "Odaberite kako započeti",
+      "description": "Možete započeti s zadanim postavkama za prijavu u organizaciji, urediti postojeću kategoriju prijave ili kreirati novu kategoriju prijave."
+    },
+    "2": {
+      "title": "Naslov i opis",
+      "description": "Unesite naslov i opis kategorije svoje prijave."
+    },
+    "3": {
+      "title": "Vrste prijave",
+      "description": "Prilagodite i poredajte prijave koje se prikazuju za ovu kategoriju prijave."
+    }
+  },
+  "createAccount": {
+    "label": "Kreiraj poveznicu za račun",
+    "description": "Dopustite kreiranje novog ArcGIS računa u ovoj organizaciji."
+  },
+  "switchOrganization": {
+    "label": "Promjeni poveznicu organizacije",
+    "description": "Prikažite poveznicu koja korisnicima omogućuje prijavu u drugu organizaciju."
+  },
+  "authenticationMethods": {
+    "arcgis": {
+      "label": "Prijava u ArcGIS",
+      "description": "Omogućite korisnicima da se prijave uz svoje podatke za prijavu za ArcGIS.",
+      "required": "Naslov je potreban za ArcGIS način prijave."
+    },
+    "saml": {
+      "label": "SAML prijava",
+      "description": "Omogućite korisnicima da se prijave svojim SAML računom.",
+      "required": "Naslov je potreban za SAML način prijave."
+    },
+    "oidc": {
+      "label": "Prijava u OIDC",
+      "description": "Omogućite korisnicima da se prijave svojim OIDC računom.",
+      "required": "Naslov je potreban za OIDC način prijave."
+    },
+    "social": {
+      "label": "Prijave putem društvenih mreža",
+      "description": "Omogućite članovima prijavu u vašu organizaciju pomoću svojih podataka za prijavu sa sljedećih društvenih mreža.",
+      "github": "GitHub",
+      "facebook": "Facebook",
+      "google": "Google",
+      "apple": "Apple",
+      "required": "Naslov je potreban za način prijave na društvene mreže."
+    }
+  },
+  "confirmLeave": {
+    "title": "Nespremljene promjene",
+    "message": "Imate izmjene koje nisu spremljene. Sigurno želite napustiti ovu stranicu?",
+    "remain": "Ostani na stranici",
+    "leave": "Izađi bez spremanja"
+  }
+}

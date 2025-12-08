@@ -1,0 +1,1 @@
+System.register([],function(e){return{execute:function(){e({_widgetLabel:"Painike",dynamicStyleExpressionsLabel:"K\xe4yt\xe4 painikkeen tekstisis\xe4lt\xf6\xe4"})}}});

@@ -1,0 +1,1 @@
+System.register([],function(i){return{execute:function(){i({_widgetLabel:"Rodini\u0173 navigacija",tabStyle:"Skirtuko stilius",navBtnStyle:"Navigacijos mygtuko stilius",stepTips:"Veikia tik tada, kai atitinkamos Skilties valdikliui nustatyta per\u0117jimo animacija.",paginationStyle:"Puslapi\u0173 numeravimo stilius",navArrowColor:"Navigacijos rodykl\u0117s spalva"})}}});

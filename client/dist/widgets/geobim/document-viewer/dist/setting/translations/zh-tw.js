@@ -1,0 +1,1 @@
+System.register([],function(e){return{execute:function(){e({settingsLabel:"\u6587\u4ef6\u6aa2\u8996\u5668\u8a2d\u5b9a"})}}});

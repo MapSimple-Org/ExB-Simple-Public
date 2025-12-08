@@ -1,0 +1,13 @@
+{
+  "fieldCalcExpression": "Feldberechnungsausdruck",
+  "fieldCalculationGroupLabel": "Feldberechnung",
+  "fieldPlaceholderText": "Zum Auswählen oder Erstellen eines Feldes klicken",
+  "fieldToCalculate": "Zu berechnendes Feld",
+  "inputDatasetGroupLabel": "Eingabe",
+  "itemProperties": {
+    "description": "Durch Ausführung des Werkzeugs \"Feld berechnen\" in ModelBuilder generiertes Ergebnis.",
+    "snippet": "Über \"Feld berechnen\" generierter Feature-Layer"
+  },
+  "noFieldSpecified": "Geben Sie zum Erstellen eines Ausdrucks ein zu berechnendes Feld an.",
+  "whereClause": "Berechnung nur auf bestimmte Datensätze anwenden"
+}

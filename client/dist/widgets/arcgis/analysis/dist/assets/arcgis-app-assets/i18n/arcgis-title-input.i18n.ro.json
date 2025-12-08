@@ -1,0 +1,20 @@
+{
+  "title": "Titlu",
+  "addTitle": "Adăugați un titlu",
+  "validation": {
+    "error": "Eroare",
+    "titleRequired": "Titlul este un câmp obligatoriu.",
+    "itemExists": "Un element intitulat „${name}” există deja în acest folder. Alegeți un titlu diferit.",
+    "titleInUseService": "Un strat tematic „${name}” există deja. Alegeți un titlu diferit.",
+    "itemInRecycleBin": "Un element cu titlul „${name}” există deja și este în coșul de reciclare. Alegeți un titlu diferit.",
+    "serviceNameInvalid": "Titlul unui serviciu poate conține doar caractere alfanumerice sau semne de subliniere și poate avea 90 de caractere sau mai puțin.",
+    "dataStoreTitleInvalid": "Titlul unui depozit de date poate conține doar caractere alfanumerice sau semne de subliniere și poate avea 90 de caractere sau mai puțin.",
+    "titleInvalid": "Titlul trebuie să conțină mai puțin de 250 de caractere și nu poate conține < sau >.",
+    "titleStartsWithNumber": "Titlul nu poate începe cu un alt număr.",
+    "invalidCharacters": {
+      "single": "Numele nu poate conține acest caracter: ${invalidCharacters}.",
+      "multiple": "Numele nu poate conține niciunul din aceste caractere: ${invalidCharacters}.",
+      "unknown": "Numele nu poate conține niciunul din aceste caractere: ${invalidCharacters}."
+    }
+  }
+}

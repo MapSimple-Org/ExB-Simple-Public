@@ -1,0 +1,1 @@
+System.register([],function(e){return{execute:function(){e({verticalAlign:"Vertikal justering",spaceAround:"Plass rundt",spaceBetween:"Plass mellom",spaceEvenly:"Fordel jevnt",horizontalAlign:"Horisontal justering",scrollable:"Kan rulles"})}}});

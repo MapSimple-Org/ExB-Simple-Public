@@ -1,0 +1,7 @@
+{
+  "searchMembers": "Otsi liikmeid",
+  "selectUser": "Vali kasutaja",
+  "editSelection": "Muuda valitud kasutajat. Praegu valitud: ${name}",
+  "clear": "Tühista",
+  "members": "Liikmed"
+}

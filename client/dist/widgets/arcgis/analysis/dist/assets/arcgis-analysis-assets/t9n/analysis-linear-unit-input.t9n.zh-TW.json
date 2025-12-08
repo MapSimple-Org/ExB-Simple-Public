@@ -1,0 +1,13 @@
+{
+  "aboveMaximumMessage": "輸入值必須小於或等於 ${max}。",
+  "belowMinimumMessage": "輸入值必須大於或等於 ${min}。",
+  "choiceListBadInput": "輸入值包含無效項目。",
+  "defaultLabel": "線性單位",
+  "inputPlaceholderText": "輸入距離值...",
+  "invalidDoubleMessage": "輸入值必須是倍整數。",
+  "invalidIntegerMessage": "輸入值必須是整數。",
+  "requiredInputMessage": "需要此參數。",
+  "strictlyMaximumMessage": "輸入值必須小於 ${max}。",
+  "strictlyMinimumMessage": "輸入值必須大於 ${min}。",
+  "unitSelect": "單位選擇"
+}

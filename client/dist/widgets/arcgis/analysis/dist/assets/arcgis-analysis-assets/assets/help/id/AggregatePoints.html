@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>Alat Titik Agregat menghitung jumlah titik dan statistik lainnya dalam bin atau poligon yang ditentukan.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="pointLayer">
+        <div>
+            <p>Layer titik akan diagregasi ke dalam area ringkasan.
+            </p>
+            <p class="toolPaneOnly">Jumlah fitur bergantung pada faktor tambahan seperti kriteria pemfilteran dan jangkauan analisis.
+            </p>
+        </div>
+    </div>
+    <div id="polygonLayer">
+        <div>
+            <p>Layer poligon yang titiknya akan diagregasi.
+            </p>
+            <p class="toolPaneOnly">Jumlah fitur bergantung pada faktor tambahan seperti kriteria pemfilteran dan jangkauan analisis.
+            </p>
+        </div>
+    </div>
+    <div id="binType">
+        <div>
+            <p>Jenis fitur pembatas yang titik inputnya akan diagregasi. Ini dapat berupa layer poligon atau grid tessellation dari bin persegi atau heksagon yang dihasilkan ketika alat dijalankan.
+            </p>
+        </div>
+    </div>
+    <div id="binSize">
+        <div>
+            <p>Ukuran bin yang dihasilkan. Untuk bin persegi, nomor dan unit yang ditentukan, menentukan tinggi dan panjang persegi tersebut. Untuk bin heksagon, nomor dan unit yang ditentukan menentukan jarak antara sisi paralel.
+            </p>
+        </div>
+    </div>
+    <div id="binSizeUnit">
+        <div>
+            <p>Unit yang akan digunakan untuk menentukan ukuran bin.
+            </p>
+        </div>
+    </div>
+    <div id="keepBoundariesWithNoPoints">
+        <div>
+            <p>Menentukan apakah fitur yang tidak memiliki titik muncul di layer hasil. Jika tidak dicentang, fitur tanpa titik tidak akan muncul pada hasil. Jika dicentang, fitur tanpa titik akan muncul pada hasil.
+            </p>
+        </div>
+    </div>
+    <div id="summaryFields">
+        <div>
+            <p>Kolom jumlah atau tanggal dari layer input yang akan diringkas, dan akan digunakan statistiknya untuk menghitung setiap kolom.
+            </p>
+        </div>
+    </div>
+    <div id="groupByField">
+        <div>
+            <p>Kolom layer input yang akan digunakan untuk memisahkan data ke dalam kelompok yang berbeda untuk perhitungan statistik.
+            </p>
+        </div>
+    </div>
+    <div id="minorityMajority">
+        <div>
+            <p>Menentukan apakah akan menghitung kelompok minoritas (paling tidak dominan) dan mayoritas (paling dominan) dalam setiap area ringkasan.
+            </p>
+        </div>
+    </div>
+    <div id="percentPoints">
+        <div>
+            <p>Menentukan apakah persentase titik milik tiap grup dalam area ringkasan akan dihitung.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>Nama layer yang akan dibuat dan ditambahkan ke peta.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>Nama folder di  <b>Konten saya</b> tempat penyimpanan hasil.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

@@ -1,0 +1,7 @@
+{
+  "example": "Örnek",
+  "input": "Girdi",
+  "output": "Çıktı",
+  "optional": "İsteğe bağlı",
+  "WNDWIHintText": "α:α değeri 0 ile 1 arasında olmalıdır; varsayılan değer 0,5'tir"
+}

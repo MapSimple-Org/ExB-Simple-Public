@@ -1,0 +1,12 @@
+{
+  "classField": "Klassefelt",
+  "classesAsRowsLabel": "Klasser som rækker i outputtabel",
+  "inputClassRasterOrFeatures": "Inputklasseraster eller -objekter",
+  "inputLayerGroupText": "Vælg inputzonen og klasselageret for at beregne de krydstabulerede områder mellem de to datasæt.",
+  "itemProperties": {
+    "description": "Outputtabel genereret ud fra kørsel af analyseværktøjet Tabuleret område.",
+    "snippet": "Outputtabel genereret fra Tabuleret område"
+  },
+  "tabulateAreaSettingsGroupLabel": "Indstillinger for tabulerede områder",
+  "tabulateAreaSettingsGroupText": "Vælg, hvordan du skal håndtere klasserne i outputtabellen. Angiv den cellestørrelse, der skal beregnes. "
+}

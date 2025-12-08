@@ -1,0 +1,18 @@
+{
+  "add": "Legg til",
+  "analysisSessionLayers": "Analyseøktlag",
+  "browseAnalysisLayers": "Bla gjennom lag",
+  "cancel": "Avbryt",
+  "heading": "Velg lag",
+  "mapLayers": "Kartlag",
+  "mesh": "Nettlag",
+  "modelVariableLayers": "Modeller variable lag",
+  "multipatch": "Multipatchlag",
+  "multipoint": "Multipunktlag",
+  "noCompatibleLayers": "Kartet inneholder ingen kompatible lag. Legg til lag i kartet eller bla gjennom etter lag for å utføre analyser.",
+  "noMatchesFound": "Fant ingen matcher for \"${searchTerm}\".",
+  "point": "Punktlag",
+  "polygon": "Polygonlag",
+  "polyline": "Polylinjelag",
+  "table": "Tabell"
+}

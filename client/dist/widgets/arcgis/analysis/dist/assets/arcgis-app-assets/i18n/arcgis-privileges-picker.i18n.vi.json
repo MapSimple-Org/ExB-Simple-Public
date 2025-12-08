@@ -1,0 +1,592 @@
+{
+  "rolePrivileges": "Các quyền của vai trò",
+  "setFromExisting": "Thiết lập từ vai trò hiện tại",
+  "expandAll": "Mở rộng tất cả",
+  "generalPrivileges": "Các quyền chung",
+  "adminPrivileges": "Các quyền quản trị viên",
+  "enabledLabel": "Đã kích hoạt:",
+  "enableAll": "Kích hoạt tất cả",
+  "disableAll": "Vô hiệu hóa tất cả",
+  "members": "Thành viên",
+  "groups": "Nhóm",
+  "content": "Nội dung",
+  "sharing": "Chia sẻ",
+  "premiumContent": "Nội dung cao cấp",
+  "premiumContentServices": "Nội dung cao cấp và dịch vụ",
+  "contentAndAnalysis": "Nội dung và phân tích",
+  "features": "Đối tượng",
+  "versionMgmt": "Quản lý phiên bản",
+  "webhooks": "Webhook",
+  "marketplaceSubscriptions": "Gói đăng ký ArcGIS Marketplace",
+  "orgSettings": "Thiết lập tổ chức",
+  "learnMore": "Tìm hiểu thêm",
+  "searchPrivileges": "Tìm kiếm quyền",
+  "notebooks": "Notebook",
+  "analysis": "Phân tích",
+  "networkAnalysis": "Phân tích mạng lưới",
+  "locationServices": "Dịch vụ vị trí",
+  "requiredService": "Dịch vụ bắt buộc",
+  "availableServices": "Dịch vụ khả dụng",
+  "basemaps": "Bản đồ nền",
+  "staticMaps": "Bản đồ tĩnh",
+  "places": "Địa điểm",
+  "geocoding": "Mã hóa địa lý",
+  "routing": "Định tuyến",
+  "dataEnrichment": "Bổ sung dữ liệu",
+  "boundaries": "Ranh giới",
+  "elevation": "Độ cao",
+  "spatialPrivileges": "Phân tích không gian",
+  "featureAnalysis": "Phân tích đối tượng",
+  "imageAnalysis": "Phân tích hình ảnh",
+  "readOnlyBasemapsTooltip": "Bao gồm quyền truy cập vào bản đồ nền.",
+  "privileges": {
+    "portal:user:viewOrgUsers": {
+      "label": "Xem",
+      "description": "Cho phép thành viên xem các thành viên của tổ chức.",
+      "descriptionPortal": "Cho phép thành viên xem các thành viên của cổng thông tin.",
+      "descriptionApp": "Cho phép ứng dụng xem thành viên trong tổ chức."
+    },
+    "portal:user:createGroup": {
+      "label": "Tạo, cập nhật và xóa",
+      "description": "Cho phép thành viên tạo, chỉnh sửa và xóa các nhóm của chính họ.",
+      "descriptionApp": "Cho phép ứng dụng tạo, chỉnh sửa và xóa nhóm của chủ sở hữu ứng dụng."
+    },
+    "portal:user:joinGroup": {
+      "label": "Gia nhập các nhóm tổ chức",
+      "description": "Cho phép thành viên gia nhập các nhóm trong tổ chức của bạn.",
+      "descriptionPortal": "Cho phép thành viên gia nhập các nhóm trên cổng thông tin của bạn.",
+      "descriptionApp": "Cho phép ứng dụng gia nhập các nhóm trong tổ chức bạn."
+    },
+    "portal:user:joinNonOrgGroup": {
+      "label": "Gia nhập các nhóm bên ngoài",
+      "description": "Cho phép thành viên gia nhập các nhóm ngoài tổ chức của bạn.",
+      "descriptionPortal": "Cho phép thành viên gia nhập các nhóm ngoài cổng thông tin của bạn.",
+      "descriptionApp": "Cho phép ứng dụng gia nhập các nhóm ngoài tổ chức bạn."
+    },
+    "portal:user:viewOrgGroups": {
+      "label": "Xem các nhóm được chia sẻ với tổ chức",
+      "description": "Cho phép thành viên xem các nhóm được chia sẻ với tổ chức.",
+      "descriptionPortal": "Cho phép thành viên xem các nhóm được chia sẻ với cổng thông tin.",
+      "descriptionApp": "Cho phép ứng dụng xem các nhóm được chia sẻ với tổ chức."
+    },
+    "portal:user:invitePartneredCollaborationMembers": {
+      "label": "Mời thành viên từ tổ chức đối tác",
+      "description": "Cho phép thành viên mời các thành viên từ tổ chức cộng tác đối tác vào nhóm.",
+      "descriptionApp": "Cho phép ứng dụng mời thành viên từ tổ chức cộng tác đối tác vào nhóm."
+    },
+    "portal:user:addExternalMembersToGroup": {
+      "label": "Thêm thành viên từ các tổ chức khác",
+      "description": "Cho phép thành viên tạo các nhóm để cho phép thành viên từ các tổ chức khác, cũng như mời thành viên bên ngoài vào nhóm.",
+      "descriptionApp": "Cho phép ứng dụng tạo nhóm cho phép thành viên từ tổ chức khác, cũng như mời thành viên bên ngoài vào nhóm."
+    },
+    "portal:user:createItem": {
+      "label": "Tạo, cập nhật và xóa",
+      "description": "Cho phép thành viên tạo, chỉnh sửa và xóa nội dung của chính họ.",
+      "descriptionApp": "Cho phép ứng dụng tạo, chỉnh sửa và xóa nội dung của chủ sở hữu ứng dụng."
+    },
+    "portal:publisher:publishFeatures": {
+      "label": "Xuất bản lớp đối tượng được lưu trữ",
+      "description": "Cho phép thành viên xuất bản các lớp đối tượng được lưu trữ từ các shapefile, CSV, v.v.",
+      "descriptionApp": "Cho phép ứng dụng xuất bản lớp đối tượng được lưu trữ từ các shapefile, CSV, v.v."
+    },
+    "portal:publisher:publishTiles": {
+      "label": "Xuất bản các lớp tile được lưu trữ",
+      "description": "Cho phép thành viên xuất bản các lớp tile được lưu trữ từ gói tile, đối tượng, v.v.",
+      "descriptionApp": "Cho phép ứng dụng xuất bản lớp tile được lưu trữ từ gói tile, đối tượng, v.v."
+    },
+    "portal:publisher:publishScenes": {
+      "label": "Xuất bản các lớp scene được lưu trữ",
+      "description": "Cho phép thành viên xuất bản các lớp scene được lưu trữ.",
+      "descriptionApp": "Cho phép ứng dụng xuất bản lớp scene được lưu trữ."
+    },
+    "portal:publisher:publishTiledImagery": {
+      "label": "Xuất bản lớp hình ảnh dạng tile đã lưu trữ",
+      "description": "Cho phép thành viên xuất bản các lớp hình ảnh dạng tile đã lưu trữ từ một hình ảnh hoặc bộ sưu tập hình ảnh. Yêu cầu phải có phần mở rộng của loại người dùng ArcGIS Image for ArcGIS Online.",
+      "descriptionPortal": "Cho phép thành viên xuất bản các lớp hình ảnh dạng tile đã lưu trữ từ một hình ảnh hoặc bộ sưu tập hình ảnh.",
+      "descriptionApp": "Cho phép ứng dụng xuất bản lớp hình ảnh dạng tile được lưu trữ từ một hình ảnh hoặc bộ sưu tập hình ảnh. Yêu cầu có giấy phép Lưu trữ ArcGIS Image."
+    },
+    "portal:publisher:publishDynamicImagery": {
+      "label": "Xuất bản lớp hình ảnh động được lưu trữ",
+      "description": "Cho phép thành viên xuất bản các lớp hình ảnh động đã lưu trữ từ một hình ảnh hoặc bộ sưu tập hình ảnh.",
+      "descriptionApp": "Cho phép ứng dụng xuất bản lớp hình ảnh động đã lưu trữ từ một hình ảnh hoặc bộ sưu tập hình ảnh."
+    },
+    "portal:publisher:publishServerServices": {
+      "label": "Xuất bản các lớp dựa trên máy chủ",
+      "description": "Quyền này cung cấp khả năng xuất bản các lớp được hỗ trợ bằng dịch vụ từ các trang máy chủ được liên kết. Các dịch vụ này thường tham chiếu dữ liệu đã đăng ký từ các geodatabase hoặc nguồn dữ liệu dựa trên tệp."
+    },
+    "portal:publisher:publishKnowledgeGraph": {
+      "label": "Xuất bản đồ thị kiến thực được lưu trữ",
+      "description": "Cho phép thành viên xuất bản đồ thị kiến thức được lưu trữ.",
+      "descriptionApp": "Cho phép ứng dụng xuất bản đồ thị kiến thức được lưu trữ."
+    },
+    "portal:user:viewOrgItems": {
+      "label": "Xem nội dung được chia sẻ với tổ chức",
+      "description": "Cho phép thành viên xem nội dung được chia sẻ với tổ chức.",
+      "descriptionPortal": "Cho phép thành viên xem nội dung được chia sẻ với cổng thông tin.",
+      "descriptionApp": "Cho phép ứng dụng xem nội dung được chia sẻ với tổ chức."
+    },
+    "premium:publisher:createNotebooks": {
+      "label": "Tạo và chỉnh sửa notebook",
+      "description": "Cho phép thành viên tạo và chỉnh sửa notebook tương tác.",
+      "descriptionApp": "Cho phép ứng dụng tạo và chỉnh sửa notebook tương tác."
+    },
+    "premium:publisher:scheduleNotebooks": {
+      "label": "Lập lịch notebook",
+      "description": "Cho phép thành viên lên lịch cho các lần chạy tự động trong tương lai của một notebook.",
+      "descriptionApp": "Cho phép ứng dụng lên lịch lần chạy tự động trong tương lai của notebook."
+    },
+    "portal:publisher:bulkPublishFromDataStores": {
+      "label": "Tạo hàng loạt lớp đối tượng từ kho dữ liệu",
+      "description": "Quyền này cấp khả năng xuất bản các lớp web từ một kho dữ liệu đã đăng ký."
+    },
+    "portal:publisher:registerDataStores": {
+      "label": "Đăng ký kho dữ liệu",
+      "description": "Quyền này cung cấp khả năng đăng ký kho dữ liệu với cổng thông tin."
+    },
+    "portal:user:viewTracks": {
+      "label": "Xem thông tin theo dõi vị trí",
+      "description": "Cho phép thành viên xem thông tin theo dõi vị trí của các thành viên thông qua các chế độ xem thông tin theo dõi được chia sẻ khi bật dịch vụ chia sẻ vị trí.",
+      "descriptionApp": "Cho phép ứng dụng xem thông tin theo dõi vị trí của thành viên thông qua chế độ xem thông tin theo dõi được chia sẻ khi bật dịch vụ chia sẻ vị trí."
+    },
+    "portal:user:reassignItems": {
+      "label": "Chỉ định lại nội dung",
+      "description": "Chỉ cho phép thành viên chỉ định lại nội dung của họ cho thành viên khác có quyền nhận nội dung.",
+      "descriptionApp": "Chỉ cho phép ứng dụng chỉ định lại nội dung của chủ sở hữu ứng dụng cho thành viên khác có quyền nhận nội dung."
+    },
+    "portal:user:receiveItems": {
+      "label": "Nhận nội dung",
+      "description": "Cho phép thành viên nhận nội dung do một thành viên khác có quyền chỉ định lại nội dung chỉ định lại cho họ."
+    },
+    "portal:publisher:publishFeeds": {
+      "label": "Xuất bản nguồn cấp dữ liệu",
+      "description": "Quyền này cung cấp khả năng xuất bản các nguồn cấp dữ liệu để nhập và hiển thị dữ liệu thời gian thực bằng cách sử dụng ArcGIS Velocity."
+    },
+    "portal:publisher:publishRealTimeAnalytics": {
+      "label": "Xuất bản phân tích thời gian thực",
+      "description": "Quyền này cung cấp khả năng xuất bản các phân tích thời gian thực để phân tích và xử lý dữ liệu thời gian thực bằng cách sử dụng ArcGIS Velocity."
+    },
+    "portal:publisher:publishBigDataAnalytics": {
+      "label": "Xuất bản các phân tích big data",
+      "description": "Quyền này cung cấp khả năng xuất bản các phân tích big data để phân tích dữ liệu quan sát được từ trước đến nay bằng cách sử dụng ArcGIS Velocity."
+    },
+    "portal:publisher:createDataPipelines": {
+      "label": "Tạo và chạy quy trình dữ liệu",
+      "description": "Cho phép thành viên tạo, chỉnh sửa và chạy quy trình dữ liệu.",
+      "descriptionApp": "Cho phép ứng dụng tạo, chỉnh sửa và chạy quy trình dữ liệu."
+    },
+    "portal:publisher:publishLivestreamVideo": {
+      "label": "Xuất bản video phát trực tiếp",
+      "description": "Cho phép thành viên xuất bản các lớp video phát trực tiếp được lưu trữ lấy nguồn từ các buổi phát trực tuyến và phát sóng video trên mạng.",
+      "descriptionApp": "Cho phép ứng dụng xuất bản lớp video phát trực tiếp được lưu trữ lấy nguồn từ các buổi phát trực tuyến và phát sóng video trên mạng."
+    },
+    "portal:publisher:publishVideo": {
+      "label": "Xuất bản video",
+      "description": "Cho phép thành viên xuất bản các lớp video được lưu trữ từ tệp video và tệp siêu dữ liệu video được hỗ trợ.",
+      "descriptionApp": "Cho phép ứng dụng xuất bản lớp video được lưu trữ từ tệp video và tệp siêu dữ liệu video được hỗ trợ."
+    },
+    "portal:user:shareToGroup": {
+      "label": "Chia sẻ với các nhóm",
+      "description": "Cho phép thành viên chia sẻ nội dung với các nhóm.",
+      "descriptionApp": "Cho phép ứng dụng chia sẻ nội dung với nhóm."
+    },
+    "portal:user:shareToOrg": {
+      "label": "Chia sẻ với tổ chức",
+      "labelPortal": "Chia sẻ với cổng thông tin",
+      "description": "Cho phép thành viên chia sẻ nội dung với tổ chức của bạn.",
+      "descriptionPortal": "Cho phép thành viên chia sẻ nội dung với cổng thông tin của bạn.",
+      "descriptionApp": "Cho phép ứng dụng chia sẻ nội dung với tổ chức bạn."
+    },
+    "portal:user:shareToPublic": {
+      "label": "Chia sẻ với công chúng",
+      "description": "Cho phép thành viên chia sẻ công khai nội dung của họ nếu chính sách chia sẻ công khai của tổ chức cho phép.",
+      "descriptionApp": "Cho phép ứng dụng chia sẻ công khai nội dung của chủ sở hữu ứng dụng nếu chính sách chia sẻ công khai của tổ chức cho phép.",
+      "tooltip": "Nếu tổ chức không cho phép thành viên chia sẻ công khai nội dung thì thành viên sẽ cần quyền quản trị viên để chia sẻ công khai nội dung."
+    },
+    "portal:user:shareGroupToOrg": {
+      "label": "Hiển thị các nhóm với tổ chức",
+      "labelPortal": "Hiển thị các nhóm với cổng thông tin",
+      "description": "Cho phép thành viên chia sẻ nội dung với tổ chức của bạn.",
+      "descriptionPortal": "Cho phép thành viên chia sẻ nội dung với cổng thông tin của bạn.",
+      "descriptionApp": "Cho phép ứng dụng chia sẻ nội dung với cổng thông tin của bạn."
+    },
+    "portal:user:shareGroupToPublic": {
+      "label": "Hiển thị các nhóm công khai",
+      "description": "Cho phép thành viên tạo các nhóm có thể tìm thấy được công khai.",
+      "descriptionApp": "Cho phép ứng dụng tạo các nhóm có thể tìm thấy công khai."
+    },
+    "opendata:user:designateGroup": {
+      "label": "Làm các nhóm có sẵn trong Dữ liệu Mở",
+      "description": "Cho phép thành viên chỉ định các nhóm có sẵn để sử dụng trong Dữ liệu Mở.",
+      "descriptionApp": "Cho phép ứng dụng chỉ định nhóm có sẵn để sử dụng trong Dữ liệu Mở."
+    },
+    "premium:user:basemaps": {
+      "label": "Dịch vụ kiểu bản đồ nền",
+      "descriptionLocationPlatform": "Cho phép ứng dụng truy cập vào dịch vụ kiểu bản đồ nền."
+    },
+    "premium:user:staticbasemaptiles": {
+      "label": "Tile bản đồ nền tĩnh",
+      "descriptionLocationPlatform": "Cho phép ứng dụng truy cập vào dịch vụ tile bản đồ nền tĩnh."
+    },
+    "premium:user:staticMaps": {
+      "label": "Dịch vụ bản đồ tĩnh (thử nghiệm)",
+      "descriptionLocationPlatform": "Cho phép ứng dụng truy cập vào dịch vụ bản đồ tĩnh."
+    },
+    "premium:user:elevation": {
+      "label": "Dịch vụ độ cao",
+      "descriptionLocationPlatform": "Cho phép ứng dụng truy cập vào dịch vụ độ cao."
+    },
+    "premium:user:geocode": {
+      "label": "Mã hóa địa lý",
+      "description": "Cho phép thành viên thực hiện các tác vụ mã hóa địa lý tiêu tốn credit bằng ArcGIS Geocoding service (hoặc một chế độ xem của bộ định vị này).",
+      "descriptionApp": "Cho phép ứng dụng thực hiện tác vụ mã hóa địa lý tiêu tốn credit bằng ArcGIS World Geocoding Service (hoặc một chế độ xem của công cụ định vị này)."
+    },
+    "premium:user:geocode:stored": {
+      "label": "Mã hóa địa lý (được lưu trữ)",
+      "descriptionLocationPlatform": "Cho phép ứng dụng truy cập vào dịch vụ mã hóa địa lý và thực hiện mã hóa địa lý được lưu trữ."
+    },
+    "premium:user:geocode:temporary": {
+      "label": "Mã hóa địa lý (chưa được lưu trữ)",
+      "descriptionLocationPlatform": "Cho phép ứng dụng truy cập vào dịch vụ mã hóa địa lý và thực hiện mã hóa địa lý chưa được lưu trữ."
+    },
+    "premium:user:networkanalysis": {
+      "label": "Định tuyến",
+      "description": "Cho phép thành viên thực hiện các tác vụ phân tích mạng lưới, ví dụ như định tuyến và các khu vực theo thời gian lái xe.",
+      "descriptionApp": "Cho phép ứng dụng truy cập vào dịch vụ định tuyến."
+    },
+    "premium:user:networkanalysis:closestfacility": {
+      "label": "Cơ sở gần nhất",
+      "descriptionLocationPlatform": "Cho phép ứng dụng truy cập vào dịch vụ định tuyến và thực hiện hoạt động định tuyến cơ sở gần nhất."
+    },
+    "premium:user:networkanalysis:lastmiledelivery": {
+      "label": "Giao hàng chặng cuối",
+      "descriptionLocationPlatform": "Cho phép ứng dụng truy cập vào dịch vụ định tuyến và thực hiện hoạt động định tuyến cho giao hàng chặng cuối."
+    },
+    "premium:user:networkanalysis:snaptoroads": {
+      "label": "Bắt điểm Vào Đường",
+      "descriptionLocationPlatform": "Cho phép thành viên thực hiện các tác vụ phân tích mạng như bắt điểm theo dõi GPS vào đường."
+    },
+    "premium:user:networkanalysis:locationallocation": {
+      "label": "Phân bổ vị trí",
+      "descriptionLocationPlatform": "Cho phép ứng dụng truy cập vào dịch vụ định tuyến và thực hiện hoạt động phân bổ vị trí."
+    },
+    "premium:user:networkanalysis:routing": {
+      "label": "Định tuyến đơn giản",
+      "descriptionLocationPlatform": "Cho phép ứng dụng truy cập vào dịch vụ định tuyến và thực hiện hoạt động định tuyến tiêu chuẩn."
+    },
+    "premium:user:networkanalysis:optimizedrouting": {
+      "label": "Tuyến đường tối ưu",
+      "descriptionLocationPlatform": "Cho phép ứng dụng truy cập vào dịch vụ định tuyến và thực hiện hoạt động định tuyến tối ưu."
+    },
+    "premium:user:networkanalysis:vehiclerouting": {
+      "label": "Tuyến đường nhiều xe",
+      "descriptionLocationPlatform": "Định tuyến đa phương tiện cho phép ứng dụng truy cập vào dịch vụ định tuyến và thực hiện hoạt động định tuyến đội xe."
+    },
+    "premium:user:networkanalysis:origindestinationcostmatrix": {
+      "label": "Ma trận chi phí điểm gốc/điểm đích",
+      "descriptionLocationPlatform": "Cho phép ứng dụng truy cập vào dịch vụ định tuyến và tạo ma trận chi phí di chuyển."
+    },
+    "premium:user:networkanalysis:servicearea": {
+      "label": "Khu vực dịch vụ",
+      "descriptionLocationPlatform": "Cho phép ứng dụng truy cập vào dịch vụ định tuyến và tạo các khu vực dịch vụ."
+    },
+    "premium:user:places": {
+      "label": "Places service",
+      "descriptionLocationPlatform": "Cho phép ứng dụng truy cập vào dịch vụ địa điểm."
+    },
+    "premium:user:spatialanalysis": {
+      "labelOld": "Dịch vụ phân tích không gian",
+      "label": "Dịch vụ phân tích đối tượng",
+      "labelPortal": "Phân tích đối tượng tiêu chuẩn",
+      "description": "Cho phép thành viên thực hiện các tác vụ phân tích đối tượng.",
+      "descriptionPortal": "Quyền này cung cấp khả năng thực hiện các tác vụ phân tích đối tượng tiêu chuẩn.",
+      "descriptionLocationPlatform": "Cho phép ứng dụng truy cập vào dịch vụ phân tích đối tượng.",
+      "descriptionApp": "Cho phép ứng dụng truy cập vào dịch vụ phân tích đối tượng."
+    },
+    "premium:user:geoenrichment": {
+      "label": "Dịch vụ GeoEnrichment",
+      "description": "Cho phép thành viên làm phong phú các đối tượng địa lý.",
+      "descriptionLocationPlatform": "Cho phép ứng dụng truy cập vào GeoEnrichment service.",
+      "descriptionApp": "Cho phép ứng dụng truy cập vào GeoEnrichment service."
+    },
+    "premium:user:demographics": {
+      "label": "Bản đồ Nhân khẩu học",
+      "description": "Cho phép ứng dụng truy cập vào bản đồ nhân khẩu học cao cấp trong ArcGIS Living Atlas.",
+      "descriptionApp": "Cho phép ứng dụng truy cập vào bản đồ nhân khẩu học cao cấp trong ArcGIS Living Atlas.",
+      "descriptionLocationPlatform": "Cho phép ứng dụng truy cập vào bản đồ nhân khẩu học trong ArcGIS Living Atlas."
+    },
+    "premium:publisher:geoanalytics": {
+      "label": "Phân tích đối tượng GeoAnalytics",
+      "description": "Quyền này cung cấp khả năng thực hiện các tác vụ GeoAnalytics."
+    },
+    "premium:publisher:rasteranalysis": {
+      "label": "Phân tích hình ảnh",
+      "description": "Cho phép thành viên thực hiện các tác vụ phân tích hình ảnh. Yêu cầu tính năng phân tích của ArcGIS Image.",
+      "descriptionPortal": "Cho phép thành viên thực hiện các tác vụ phân tích hình ảnh.",
+      "descriptionApp": "Cho phép ứng dụng thực hiện tác vụ phân tích hình ảnh. Yêu cầu tính năng phân tích của ArcGIS Image.",
+      "descriptionAppPortal": "Cho phép ứng dụng thực hiện tác vụ phân tích hình ảnh."
+    },
+    "premium:publisher:createAdvancedNotebooks": {
+      "label": "Notebook nâng cao",
+      "description": "Cho phép thành viên nhập và sử dụng các mô đun ArcPy trong notebook.",
+      "descriptionApp": "Cho phép ứng dụng nhập và sử dụng mô đun ArcPy trong notebook."
+    },
+    "portal:user:runWebTool": {
+      "label": "Chạy công cụ web",
+      "description": "Cho phép thành viên chạy công cụ web.",
+      "descriptionPortal": "Cho phép thành viên chạy công cụ web được xuất bản từ notebook.",
+      "descriptionApp": "Cho phép ứng dụng chạy công cụ web.",
+      "descriptionAppPortal": "Cho phép ứng dụng chạy công cụ web được xuất bản từ notebook."
+    },
+    "portal:user:generateApiTokens": {
+      "label": "Tạo khóa API",
+      "description": "Cho phép thành viên tạo khóa API."
+    },
+    "portal:user:assignPrivilegesToApps": {
+      "label": "Chỉ định quyền cho ứng dụng OAuth 2.0",
+      "description": "Cho phép thành viên chỉ định quyền cho ứng dụng OAuth 2.0."
+    },
+    "portal:user:createWorkflow": {
+      "label": "Tạo mục quy trình",
+      "description": "Cho phép thành viên tạo mục Workflow Manager"
+    },
+    "premium:user:featurereport": {
+      "label": "Báo cáo đối tượng",
+      "description": "Cho phép thành viên tạo các báo cáo đối tượng trong Survey123.",
+      "descriptionApp": "Cho phép ứng dụng tạo báo cáo đối tượng trong Survey123."
+    },
+    "premium:user:realitymapping": {
+      "label": "Lập bản đồ Thực tế",
+      "description": "Cho phép thành viên thực hiện tác vụ lập bản đồ thực tế."
+    },
+    "features:user:edit": {
+      "label": "Chỉnh sửa",
+      "description": "Cho phép thành viên chỉnh sửa đối tượng trong các lớp có thể chỉnh sửa mà không được chia sẻ công khai dựa trên các tùy chọn chỉnh sửa được kích hoạt trong lớp đó.",
+      "descriptionApp": "Cho phép ứng dụng chỉnh sửa đối tượng trong lớp có thể chỉnh sửa mà không được chia sẻ công khai dựa trên tùy chọn chỉnh sửa được kích hoạt trong lớp đó."
+    },
+    "features:user:fullEdit": {
+      "label": "Chỉnh sửa với toàn quyền kiểm soát",
+      "description": "Cho phép thành viên thêm, xóa và cập nhật các đối tượng trong lớp đối tượng được lưu trữ có thể chỉnh sửa, bất kể tùy chọn chỉnh sửa nào được kích hoạt trong lớp đó.",
+      "descriptionApp": "Cho phép ứng dụng thêm, xóa và cập nhật đối tượng trong lớp đối tượng được lưu trữ có thể chỉnh sửa, bất kể tùy chọn chỉnh sửa nào được kích hoạt trong lớp đó."
+    },
+    "features:user:manageVersions": {
+      "label": "Quản lý tất cả",
+      "description": "Cho phép các thành viên quản lý khóa phiên bản, xem, thay đổi, xóa, chỉnh sửa, đối chiếu và đăng lên tất cả các phiên bản nhánh được truy cập thông qua các lớp đối tượng của ArcGIS Server.",
+      "descriptionApp": "Cho phép ứng dụng quản lý khóa phiên bản, xem, thay đổi, xóa, chỉnh sửa, đối chiếu và đăng lên tất cả phiên bản nhánh được truy cập thông qua lớp đối tượng của ArcGIS Server."
+    },
+    "portal:publisher:createFeatureWebhook": {
+      "label": "Lớp đối tượng",
+      "description": "Cho phép thành viên tạo, chỉnh sửa và xóa các webhook lớp đối tượng của họ.",
+      "descriptionApp": "Cho phép ứng dụng tạo, chỉnh sửa và xóa webhook lớp đối tượng của mình."
+    },
+    "portal:admin:viewUsers": {
+      "label": "Xem tất cả",
+      "description": "Cho phép thành viên xem đầy đủ thông tin tài khoản thành viên trong tổ chức của bạn.",
+      "descriptionPortal": "Cho phép thành viên xem đầy đủ thông tin tài khoản thành viên trên cổng thông tin của bạn.",
+      "descriptionApp": "Cho phép ứng dụng xem đầy đủ thông tin tài khoản thành viên trong tổ chức bạn."
+    },
+    "portal:admin:updateUsers": {
+      "label": "Cập nhật",
+      "description": "Cho phép thành viên đặt lại mật khẩu, cập nhật thông tin tài khoản của thành viên và cập nhật danh mục thành viên trong tổ chức của bạn.",
+      "descriptionPortal": "Cho phép thành viên thiết lập lại mật khẩu, cập nhật thông tin tài khoản của thành viên và cập nhật danh mục thành viên trong cổng thông tin của bạn.",
+      "descriptionApp": "Cho phép ứng dụng đặt lại mật khẩu, cập nhật thông tin tài khoản thành viên và cập nhật danh mục thành viên trong tổ chức bạn."
+    },
+    "portal:admin:deleteUsers": {
+      "label": "Xóa",
+      "description": "Cho phép thành viên xóa các tài khoản thành viên trong tổ chức của bạn.",
+      "descriptionPortal": "Cho phép thành viên xóa các tài khoản thành viên trên cổng thông tin của bạn.",
+      "descriptionApp": "Cho phép ứng dụng xóa tài khoản thành viên trong tổ chức bạn."
+    },
+    "portal:admin:inviteUsers": {
+      "label": "Thêm",
+      "labelPortal": "Mời",
+      "description": "Cho phép thành viên mời các thành viên vào tổ chức của bạn.",
+      "descriptionPortal": "Cho phép thành viên mời các thành viên vào cổng thông tin của bạn.",
+      "descriptionApp": "Cho phép ứng dụng mời thành viên vào tổ chức bạn."
+    },
+    "portal:admin:disableUsers": {
+      "label": "Hủy bỏ",
+      "description": "Cho phép thành viên kích hoạt và vô hiệu hóa các tài khoản thành viên trong tổ chức của bạn.",
+      "descriptionPortal": "Cho phép thành viên kích hoạt và vô hiệu hóa các tài khoản thành viên trong cổng thông tin của bạn.",
+      "descriptionApp": "Cho phép ứng dụng kích hoạt và vô hiệu hóa tài khoản thành viên trong tổ chức bạn."
+    },
+    "portal:admin:changeUserRoles": {
+      "label": "Thay đổi vai trò",
+      "description": "Cho phép thành viên thay đổi vai trò được chỉ định của một tài khoản thành viên. Xin lưu ý rằng chỉ những thành viên có vai trò Quản trị viên mới có thể chỉ định hoặc bỏ chỉ định vai trò Quản trị viên cho các tài khoản khác.",
+      "descriptionPortal": "Cho phép thành viên thay đổi vai trò được chỉ định của một tài khoản thành viên. Xin lưu ý rằng chỉ những thành viên có vai trò Quản trị viên mới có thể chỉ định hoặc bỏ chỉ định vai trò Quản trị viên cho các tài khoản khác.",
+      "descriptionApp": "Cho phép ứng dụng thay đổi vai trò được chỉ định của một tài khoản thành viên. Xin lưu ý rằng chỉ những thành viên có vai trò Quản trị viên mới có thể chỉ định hoặc bỏ chỉ định vai trò Quản trị viên cho các tài khoản khác."
+    },
+    "portal:admin:manageLicenses": {
+      "label": "Quản lý giấy phép",
+      "description": "Cho phép thành viên chỉ định giấy phép cho các thành viên trong tổ chức của bạn.",
+      "descriptionPortal": "Cho phép thành viên chỉ định giấy phép cho các thành viên trên cổng thông tin của bạn.",
+      "descriptionApp": "Cho phép ứng dụng chỉ định giấy phép cho thành viên trong tổ chức bạn."
+    },
+    "portal:admin:updateMemberCategorySchema": {
+      "label": "Quản lý danh mục",
+      "description": "Cho phép thành viên cấu hình các danh mục thành viên của tổ chức.",
+      "descriptionPortal": "Cho phép thành viên cấu hình các danh mục thành viên của cổng thông tin.",
+      "descriptionApp": "Cho phép ứng dụng cấu hình danh mục thành viên của tổ chức."
+    },
+    "portal:admin:viewGroups": {
+      "label": "Xem tất cả",
+      "description": "Cho phép thành viên xem tất cả các nhóm trong tổ chức của bạn.",
+      "descriptionPortal": "Cho phép thành viên xem tất cả các nhóm trên cổng thông tin của bạn.",
+      "descriptionApp": "Cho phép ứng dụng xem tất cả nhóm trong tổ chức bạn."
+    },
+    "portal:admin:updateGroups": {
+      "label": "Cập nhật",
+      "description": "Cho phép thành viên cập nhật các nhóm trong tổ chức của bạn.",
+      "descriptionPortal": "Cho phép thành viên cập nhật các nhóm trên cổng thông tin của bạn.",
+      "descriptionApp": "Cho phép ứng dụng cập nhật nhóm trong tổ chức bạn."
+    },
+    "portal:admin:deleteGroups": {
+      "label": "Xóa",
+      "description": "Cho phép thành viên xóa các nhóm trong tổ chức của bạn.",
+      "descriptionPortal": "Cho phép thành viên xóa các nhóm trên cổng thông tin của bạn.",
+      "descriptionApp": "Cho phép ứng dụng xóa nhóm trong tổ chức bạn."
+    },
+    "portal:admin:reassignGroups": {
+      "label": "Phân công lại quyền sở hữu",
+      "description": "Cho phép thành viên chỉ định lại nhóm cho các thành viên khác trong tổ chức của bạn.",
+      "descriptionPortal": "Cho phép thành viên chỉ định lại nhóm cho các thành viên khác trên cổng thông tin của bạn.",
+      "descriptionApp": "Cho phép ứng dụng chỉ định lại nhóm cho thành viên khác trong tổ chức bạn."
+    },
+    "portal:admin:assignToGroups": {
+      "label": "Phân công các thành viên",
+      "description": "Cho phép thành viên chỉ định thành viên của bạn, cập nhật vai trò nhóm của thành viên và xóa thành viên khỏi các nhóm trong tổ chức của bạn.",
+      "descriptionPortal": "Cho phép thành viên chỉ định thành viên của bạn, cập nhật vai trò nhóm của thành viên và xóa thành viên khỏi các nhóm trên cổng thông tin của bạn.",
+      "descriptionApp": "Cho phép ứng dụng chỉ định thành viên của bạn, cập nhật vai trò nhóm của thành viên và xóa thành viên khỏi nhóm trong tổ chức bạn."
+    },
+    "portal:admin:manageEnterpriseGroups": {
+      "label": "Liên kết tới nhóm tổ chức cụ thể",
+      "description": "Cho phép thành viên liên kết thành viên nhóm tới một nhóm tổ chức cụ thể.",
+      "descriptionApp": "Cho phép ứng dụng liên kết thành viên nhóm tới một nhóm tổ chức cụ thể."
+    },
+    "portal:admin:createUpdateCapableGroup": {
+      "label": "Tạo với khả năng cập nhật",
+      "description": "Cho phép thành viên tạo các nhóm với khả năng cập nhật.",
+      "descriptionApp": "Cho phép ứng dụng tạo nhóm với khả năng cập nhật."
+    },
+    "portal:admin:createLeavingDisallowedGroup": {
+      "label": "Tạo với tính năng rời nhóm bị vô hiệu hóa",
+      "description": "Cho phép thành viên tạo và sở hữu nhóm không cho phép thành viên rời đi (các nhóm quản trị).",
+      "descriptionApp": "Cho phép ứng dụng tạo và sở hữu nhóm không cho phép ứng dụng rời đi (các nhóm quản trị)."
+    },
+    "portal:admin:viewItems": {
+      "label": "Xem tất cả",
+      "description": "Cho phép thành viên xem tất cả nội dung trong tổ chức của bạn.",
+      "descriptionPortal": "Cho phép thành viên xem tất cả nội dung trên cổng thông tin của bạn.",
+      "descriptionApp": "Cho phép ứng dụng xem tất cả nội dung trong tổ chức bạn."
+    },
+    "portal:admin:updateItems": {
+      "label": "Cập nhật",
+      "description": "Cho phép thành viên cập nhật và phân loại nội dung và chỉnh sửa lớp đối tượng được lưu trữ trong tổ chức của bạn.",
+      "descriptionPortal": "Cho phép thành viên cập nhật và phân loại nội dung và chỉnh sửa lớp đối tượng được lưu trữ trong cổng thông tin của bạn.",
+      "descriptionApp": "Cho phép ứng dụng cập nhật và phân loại nội dung và chỉnh sửa lớp đối tượng được lưu trữ trong tổ chức bạn."
+    },
+    "portal:admin:deleteItems": {
+      "label": "Xóa",
+      "description": "Cho phép thành viên xóa nội dung trong tổ chức của bạn.",
+      "descriptionPortal": "Cho phép thành viên xóa nội dung trên cổng thông tin của bạn.",
+      "descriptionApp": "Cho phép ứng dụng xóa nội dung trong tổ chức bạn."
+    },
+    "portal:admin:reassignItems": {
+      "label": "Chỉ định lại quyền sở hữu",
+      "description": "Cho phép thành viên chỉ định lại nội dung cho các thành viên khác trong tổ chức của bạn.",
+      "descriptionPortal": "Cho phép thành viên chỉ định lại nội dung cho các thành viên khác trên cổng thông tin của bạn.",
+      "descriptionApp": "Cho phép ứng dụng chỉ định lại nội dung cho thành viên khác trong tổ chức bạn."
+    },
+    "portal:admin:updateItemCategorySchema": {
+      "label": "Quản lý danh mục",
+      "description": "Cho phép thành viên cấu hình các danh mục nội dung của tổ chức.",
+      "descriptionPortal": "Cho phép thành viên cấu hình các danh mục nội dung của cổng thông tin.",
+      "descriptionApp": "Cho phép ứng dụng cấu hình danh mục nội dung của tổ chức."
+    },
+    "portal:publisher:publishServerGPServices": {
+      "label": "Xuất bản công cụ web",
+      "description": "Quyền này cung cấp khả năng xuất bản các công cụ web được hỗ trợ bằng dịch vụ địa xử lý từ các trang máy chủ được liên kết."
+    },
+    "portal:admin:shareToOrg": {
+      "label": "Chia sẻ nội dung của thành viên với tổ chức",
+      "description": "Cho phép thành viên chia sẻ nội dung thuộc sở hữu của các thành viên khác trong tổ chức của bạn cho tổ chức.",
+      "descriptionPortal": "Cho phép thành viên chia sẻ nội dung thuộc sở hữu của các thành viên khác trong cổng thông tin của bạn cho cổng thông tin.",
+      "descriptionApp": "Cho phép ứng dụng chia sẻ nội dung thuộc sở hữu của thành viên khác trong tổ chức bạn cho tổ chức."
+    },
+    "portal:admin:shareToPublic": {
+      "label": "Chia sẻ công khai nội dung của thành viên",
+      "description": "Cho phép thành viên chia sẻ công khai nội dung thuộc sở hữu của các thành viên khác trong tổ chức của bạn.",
+      "descriptionPortal": "Cho phép thành viên chia sẻ công khai nội dung thuộc sở hữu của các thành viên khác trong cổng thông tin của bạn.",
+      "descriptionApp": "Cho phép ứng dụng chia sẻ công khai nội dung thuộc sở hữu của thành viên khác trong tổ chức bạn."
+    },
+    "portal:admin:createReports": {
+      "label": "Tạo và quản lý báo cáo thông tin quản trị",
+      "description": "Cho phép thành viên tạo và quản lý các báo cáo thông tin quản trị cho tổ chức của bạn.",
+      "descriptionPortal": "Cho phép thành viên tạo và quản lý các báo cáo thông tin quản trị cho cổng thông tin của bạn.",
+      "descriptionApp": "Cho phép ứng dụng tạo và quản lý báo cáo thông tin quản trị cho tổ chức bạn."
+    },
+    "marketplace:admin:manage": {
+      "label": "Tạo và quản lý",
+      "description": "Cho phép thành viên tạo danh sách, liệt kê các mục, quản lý gói đăng ký trong ArcGIS Marketplace, cũng như quản lý người mua và thông tin liên hệ cho tổ chức của bạn. Việc sử dụng quyền này sẽ tùy thuộc vào việc tổ chức của bạn có quyền truy cập vào danh sách và xuất bản lên ArcGIS Marketplace không."
+    },
+    "marketplace:admin:purchase": {
+      "label": "Mua và nhận các sản phẩm miễn phí",
+      "description": "Cho phép thành viên gửi yêu cầu mua và tiếp cận với các sản phẩm miễn phí từ nhà cung cấp trong ArcGIS Marketplace. Để cho phép thành viên mua sản phẩm bằng thẻ tín dụng, bạn phải chỉ định họ là người mua Marketplace."
+    },
+    "marketplace:admin:startTrial": {
+      "label": "Bắt đầu dùng thử",
+      "description": "Cho phép thành viên bắt đầu gói dùng thử trong ArcGIS Marketplace."
+    },
+    "portal:admin:manageSecurity": {
+      "label": "Bảo mật và hạ tầng",
+      "description": "Cho phép thành viên quản lý các thiết lập hạ tầng và bảo mật của tổ chức.",
+      "descriptionPortal": "Cho phép thành viên quản lý các thiết lập hạ tầng và bảo mật của cổng thông tin.",
+      "descriptionApp": "Cho phép ứng dụng quản lý các thiết lập hạ tầng và bảo mật của tổ chức."
+    },
+    "portal:admin:manageWebsite": {
+      "label": "Trang web của tổ chức",
+      "description": "Cho phép thành viên quản lý các thiết lập trang web của tổ chức.",
+      "descriptionPortal": "Cho phép thành viên quản lý các thiết lập trang web của cổng thông tin.",
+      "descriptionApp": "Cho phép ứng dụng quản lý thiết lập trang web của tổ chức."
+    },
+    "portal:admin:manageCollaborations": {
+      "label": "Hoạt động cộng tác",
+      "description": "Cho phép thành viên quản lý các hoạt động cộng tác của tổ chức.",
+      "descriptionPortal": "Cho phép thành viên quản lý các hoạt động cộng tác của cổng thông tin.",
+      "descriptionApp": "Cho phép ứng dụng quản lý hoạt động cộng tác của tổ chức."
+    },
+    "portal:admin:manageCredits": {
+      "label": "Credit",
+      "description": "Cho phép thành viên quản lý các thiết lập ngân sách credit của tổ chức.",
+      "descriptionApp": "Cho phép ứng dụng quản lý thiết lập ngân sách credit của tổ chức."
+    },
+    "portal:admin:manageRoles": {
+      "label": "Vai trò thành viên",
+      "description": "Cho phép thành viên quản lý các vai trò thành viên của tổ chức.",
+      "descriptionPortal": "Cho phép thành viên quản lý các vai trò thành viên của cổng thông tin.",
+      "descriptionApp": "Cho phép ứng dụng quản lý vai trò của thành viên trong tổ chức."
+    },
+    "portal:admin:manageServers": {
+      "label": "Các máy chủ",
+      "description": "Quyền này cung cấp khả năng quản lý thiết lập máy chủ của cổng thông tin."
+    },
+    "portal:admin:manageUtilityServices": {
+      "label": "Dịch vụ tiện ích",
+      "description": "Cho phép thành viên quản lý các thiết lập dịch vụ tiện ích của tổ chức.",
+      "descriptionPortal": "Cho phép thành viên quản lý các thiết lập dịch vụ tiện ích của cổng thông tin.",
+      "descriptionApp": "Cho phép ứng dụng quản lý các thiết lập dịch vụ tiện ích của tổ chức."
+    },
+    "portal:admin:manageWebhooks": {
+      "label": "Webhook",
+      "labelPortal": "Webhook của tổ chức",
+      "description": "Cho phép thành viên tạo, chỉnh sửa và xóa tất cả webhook trong tổ chức.",
+      "descriptionApp": "Cho phép ứng dụng tạo, chỉnh sửa và xóa tất cả webhook trong tổ chức.",
+      "descriptionPortal": "Cho phép thành viên tạo, chỉnh sửa và xóa các webhook của tổ chức và quản lý tất cả các webhook trong cổng thông tin.",
+      "descriptionAppPortal": "Cho phép ứng dụng tạo, chỉnh sửa và xóa webhook của tổ chức và quản lý tất cả webhook trong cổng thông tin."
+    },
+    "portal:admin:createGPWebhook": {
+      "label": "Địa xử lý",
+      "description": "Cho phép thành viên tạo, chỉnh sửa và xóa các webhook địa xử lý của họ.",
+      "descriptionApp": "Cho phép ứng dụng tạo, chỉnh sửa và xóa các webhook địa xử lý của mình."
+    }
+  }
+}

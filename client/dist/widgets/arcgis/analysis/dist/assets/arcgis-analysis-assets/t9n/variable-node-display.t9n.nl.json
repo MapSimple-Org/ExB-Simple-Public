@@ -1,0 +1,9 @@
+{
+  "disconnect": "Loskoppelen van variabele",
+  "overwriteTo": "Laag overschrijven: <span style='font-weight: var(--calcite-font-weight-normal)'>${val}</span>",
+  "resultType": "Type resultaat: <span style='font-weight: var(--calcite-font-weight-normal)'>${val}</span>",
+  "saveTo": "Naam uitvoer: <span style='font-weight: var(--calcite-font-weight-normal)'>${val}</span>",
+  "variableLabel": "Label: <span style='font-weight: var(--calcite-font-weight-normal)'>${val}</span>",
+  "variableNode": "Variabele-knooppunt",
+  "variableVal": "Waarde: <span style='font-weight: var(--calcite-font-weight-normal)'>${val}</span>"
+}

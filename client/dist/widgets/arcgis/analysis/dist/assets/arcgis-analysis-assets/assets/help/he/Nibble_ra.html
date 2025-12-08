@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html dir="rtl">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>הכלי 'Nibble' מחליף תאים של רסטר שמתאימים למיסוך עם הערך של השכן הקרוב ביותר.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputRaster">
+        <div>
+            <p>רסטר הקלט עם המיקומים הממוסכים אשר יוחלפו בערך של השכן הקרוב אליהם ביותר.
+            </p>
+        </div>
+    </div>
+    <div id="inputMaskRaster">
+        <div>
+            <p>רסטר המיסוך שמזהה את המיקומים ברסטר הקלט אשר יוחלפו. תאים עם ערך של NoData נחשבים כמצויים בתוך השטח הממוסך.
+            </p>
+        </div>
+    </div>
+    <div id="inputZoneRaster">
+        <div>
+            <p>רסטר אזור הקלט. עבור כל אזור, תאי קלט שהם בתוך המיסוך יוחלפו רק על ידי ערכי התא הקרוב ביותר בתוך אותו אזור.
+            </p>
+        </div>
+    </div>
+    <div id="nibbleValues">
+        <div>
+            <p>מציין האם תאי NoData ברסטר הקלט יכולים להחליף תאים בשטחים הממוסכים אם הם השכן הקרוב ביותר.
+            </p>
+            <p>אם מסומן, תאי NoData ברסטר הקלט יכולים להחליף תאים בשטח הממוסך. אם לא מסומן, רק תאים חוקיים ברסטר הקלט יכולים להחליף תאים בשטח הממוסך.
+            </p>
+        </div>
+    </div>
+    <div id="nibbleNodata">
+        <div>
+            <p>מציין הם תאי NoData בשטח הממוסך יישמרו או יוחלפו.
+            </p>
+            <p>אם לא מסומן, כל תאי NoData שהם בתוך השטח הממוסך יישמרו בפלט. אם מסומן, תאי NoData בתוך השטח הממוסך יוחלפו בערך של השכן הקרוב ביותר שנמצא מחוץ לשטח הממוסך.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>השם של שכבת רסטר פני השטח המוחלפת שתיווצר ותתווסף למפה.
+            </p>
+        </div>
+    </div>
+    <div id="resultType">
+        <div>
+            <p>סוג הקלט שייווצר. הפלט יכול להיות שכבת תצלומים באריחים או שכבת תצלומים דינמית.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>שם התיקייה  <b>בתוכן שלי</b> שבה התוצאות יישמרו.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

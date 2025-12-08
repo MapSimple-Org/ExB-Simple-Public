@@ -1,0 +1,7 @@
+{
+  "header": "בחר משתנה",
+  "noFound": "לא נמצאו משתנים תואמים",
+  "search": "חפש משתנים",
+  "variableLabel": "תווית: <span style='font-weight: var(--calcite-font-weight-normal)'>${val}</span>",
+  "variableVal": "ערך: <span style='font-weight: var(--calcite-font-weight-normal)'>${val}</span>"
+}

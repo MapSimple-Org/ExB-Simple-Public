@@ -1,0 +1,11 @@
+{
+  "addBtn": "Gatavs",
+  "cancelBtn": "Atcelt",
+  "header": "Izvēlēties mainīgo",
+  "multipleVariables": "Mainīgie ar vairākām vērtībām",
+  "noFound": "Saderīgi mainīgie netika atrasti",
+  "search": "Meklēt mainīgos",
+  "singleVariables": "Mainīgie ar vienu vērtību",
+  "variableLabel": "Kartes teksts: <span style='font-weight: var(--calcite-font-weight-normal)'>${val}</span>",
+  "variableVal": "Vērtība: <span style='font-weight: var(--calcite-font-weight-normal)'>${val}</span>"
+}

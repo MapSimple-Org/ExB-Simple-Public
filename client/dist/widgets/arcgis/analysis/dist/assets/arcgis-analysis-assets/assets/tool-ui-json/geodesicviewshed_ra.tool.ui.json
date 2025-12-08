@@ -1,0 +1,548 @@
+{
+  "toolName": "GeodesicViewshed",
+  "version": "0.1.0",
+  "validationRules": [
+    {
+      "expression": "((($[Component].verticalLowerAngle.dataType = 'GPDouble' AND $[Component].verticalUpperAngle.dataType = 'GPDouble') AND ($[Data].verticalLowerAngle NOT null AND $[Data].verticalUpperAngle NOT null)) AND ($[Data].verticalUpperAngle <= $[Data].verticalLowerAngle))",
+      "errorKey": "viewshedVerticalAngles"
+    }
+  ],
+  "rules": [
+    {
+      "ruleType": "set",
+      "value": "$[Component].inputObserverFeatures.selectedLayers",
+      "destination": [
+        "maximumViewingDistance.UIparameterInfos[1]",
+        "minimumViewingDistance.UIparameterInfos[1]",
+        "observersElevation.UIparameterInfos[1]",
+        "observersHeight.UIparameterInfos[1]",
+        "targetHeight.UIparameterInfos[1]",
+        "horizontalStartAngle.UIparameterInfos[1]",
+        "horizontalEndAngle.UIparameterInfos[1]",
+        "verticalUpperAngle.UIparameterInfos[1]",
+        "verticalLowerAngle.UIparameterInfos[1]"
+      ],
+      "property": "mapLayer"
+    },
+    {
+      "ruleType": "expression",
+      "expression": "$[Data].userSettings.unitSystem = 'metric'",
+      "destination": "maximumViewingDistance",
+      "effectParams": {
+        "UIparameterInfos[0].unitChoiceList": ["KILOMETERS", "METERS", "MILES", "YARDS", "FEET"],
+        "defaultValue": {
+          "dataType": "GPLinearUnit",
+          "value": { "distance": 15, "units": "KILOMETERS" }
+        }
+      }
+    },
+    {
+      "ruleType": "expression",
+      "expression": "$[Data].userSettings.unitSystem = 'metric'",
+      "destination": "minimumViewingDistance",
+      "effectParams": {
+        "UIparameterInfos[0].unitChoiceList": ["KILOMETERS", "METERS", "MILES", "YARDS", "FEET"],
+        "defaultValue": {
+          "dataType": "GPLinearUnit",
+          "value": { "distance": 0, "units": "KILOMETERS" }
+        }
+      }
+    },
+    {
+      "ruleType": "expression",
+      "expression": "$[Data].userSettings.unitSystem = 'metric'",
+      "destination": "observersElevation",
+      "effectParams": {
+        "UIparameterInfos[0].unitChoiceList": ["KILOMETERS", "METERS", "MILES", "YARDS", "FEET"]
+      }
+    },
+    {
+      "ruleType": "expression",
+      "expression": "$[Data].userSettings.unitSystem = 'metric'",
+      "destination": "observersHeight",
+      "effectParams": {
+        "UIparameterInfos[0].unitChoiceList": ["KILOMETERS", "METERS", "MILES", "YARDS", "FEET"],
+        "defaultValue": {
+          "dataType": "GPLinearUnit",
+          "value": { "distance": 1.75, "units": "METERS" }
+        }
+      }
+    },
+    {
+      "ruleType": "expression",
+      "expression": "$[Data].userSettings.unitSystem = 'metric'",
+      "destination": "targetHeight",
+      "effectParams": {
+        "UIparameterInfos[0].unitChoiceList": ["KILOMETERS", "METERS", "MILES", "YARDS", "FEET"],
+        "defaultValue": {
+          "dataType": "GPLinearUnit",
+          "value": { "distance": 0, "units": "METERS" }
+        }
+      }
+    },
+    {
+      "ruleType": "expression",
+      "expression": "$[Data].userSettings.unitSystem = 'metric'",
+      "destination": "verticalError",
+      "effectParams": {
+        "unitChoiceList": ["KILOMETERS", "METERS", "MILES", "YARDS", "FEET"],
+        "defaultValue": { "distance": 0, "units": "METERS" }
+      }
+    },
+    {
+      "ruleType": "expression",
+      "expression": "(($[Component].inputElevationSurface.user.portal NOT undefined) AND ($[Component].inputElevationSurface.user.portal.isPortal = true))",
+      "destination": "resultType",
+      "effectParams": {
+        "value": "DYNAMIC_IMAGERY_LAYER",
+        "visible": false
+      }
+    },
+    {
+      "ruleType": "expression",
+      "expression": "(('portal:publisher:publishDynamicImagery' IN $[Component].inputElevationSurface.user.privileges) AND ('portal:publisher:publishTiledImagery' NOT IN $[Component].inputElevationSurface.user.privileges))",
+      "destination": "resultType",
+      "effectParams": {
+        "choiceList": ["DYNAMIC_IMAGERY_LAYER"],
+        "choiceListIcons": {
+          "DYNAMIC_IMAGERY_LAYER": "image-layer"
+        },
+        "choiceListLabels": {
+          "DYNAMIC_IMAGERY_LAYER": "$dynamicImageryLayer"
+        },
+        "value": "DYNAMIC_IMAGERY_LAYER"
+      }
+    },
+    {
+      "ruleType": "expression",
+      "expression": "(('portal:publisher:publishDynamicImagery' NOT IN $[Component].inputElevationSurface.user.privileges) AND ('portal:publisher:publishTiledImagery' IN $[Component].inputElevationSurface.user.privileges))",
+      "destination": "resultType",
+      "effectParams": {
+        "choiceListIcons": {
+          "TILED_IMAGERY_LAYER": "tiled-imagery-layer"
+        },
+        "choiceListLabels": {
+          "TILED_IMAGERY_LAYER": "$tiledImageryLayer"
+        },
+        "value": "TILED_IMAGERY_LAYER"
+      }
+    },
+    {
+      "ruleType": "expression",
+      "expression": "$[Data].optimizeFor = 'SPEED'",
+      "destination": "verticalError",
+      "effectParams": {
+        "visible": false
+      }
+    }
+  ],
+  "environmentSettings": {
+    "raster": ["snapRaster", "cellSize", "mask", "parallelProcessingFactor"]
+  },
+  "UIparameters": [
+    {
+      "label": "$inputLayersGroupLabel",
+      "componentName": "analysis-block",
+      "summaryText": "$inputLayersGroupText",
+      "UIparameters": [
+        {
+          "name": "inputElevationSurface",
+          "label": "$inputElevationSurfaceLabel",
+          "componentName": "analysis-layer-input",
+          "required": true,
+          "selectionMode": "single",
+
+          "layerFilterType": ["imagery_float", "imagery_integer"]
+        },
+        {
+          "name": "inputObserverFeatures",
+          "label": "$inputObserverFeatureLabel",
+          "componentName": "analysis-layer-input",
+          "required": true,
+          "selectionMode": "single",
+          "enableSketch": true,
+          "layerFilterType": ["feature_line", "feature_point"]
+        }
+      ]
+    },
+    {
+      "label": "$inputViewshedSettingsGroupLabel",
+      "componentName": "analysis-block",
+      "summaryText": "$inputViewshedSettingsGroupText",
+      "UIparameters": [
+        {
+          "name": "optimizeFor",
+          "label": "$optimizeForLabel",
+          "componentName": "analysis-string-input",
+          "required": true,
+          "showAsRadioGroup": true,
+          "defaultValue": "ACCURACY",
+          "choiceList": ["SPEED", "ACCURACY"],
+          "choiceListLabels": {
+            "SPEED": "$speed",
+            "ACCURACY": "$accuracy"
+          }
+        },
+        {
+          "name": "verticalError",
+          "label": "$verticalErrorLabel",
+          "componentName": "analysis-linear-unit-input",
+          "defaultValue": { "distance": 0, "units": "METERS" },
+          "minimum": 0,
+          "placeholderText": "$linearUnitText",
+          "choiceListLabels": {
+            "FEET": "$feet",
+            "YARDS": "$yards",
+            "MILES": "$miles",
+            "KILOMETERS": "$kilometers",
+            "METERS": "$meters"
+          },
+          "unitChoiceList": ["MILES", "YARDS", "FEET", "KILOMETERS", "METERS"],
+          "required": false
+        },
+        {
+          "name": "refractivityCoefficient",
+          "label": "$refractivityCoefficientLabel",
+          "componentName": "analysis-number-input",
+          "selectionMode": "single",
+          "min": 0,
+          "defaultValue": 0.13,
+          "excludeMinValue": false,
+          "required": false
+        },
+        {
+          "label": "$observerparametersLabel",
+          "componentName": "analysis-section",
+          "open": false,
+          "UIparameters": [
+            {
+              "name": "maximumViewingDistance",
+              "label": "$maximumViewingDistanceGroupLabel",
+              "componentName": "analysis-gp-composite",
+              "initialDataType": "GPLinearUnit",
+              "UIparameterInfos": [
+                {
+                  "name": "maxViewingDistanceValue",
+                  "dataType": "GPLinearUnit",
+                  "componentName": "analysis-linear-unit-input",
+                  "minimum": 0,
+                  "label": "$value",
+                  "placeholderText": "$linearUnitText",
+                  "choiceListLabels": {
+                    "FEET": "$feet",
+                    "YARDS": "$yards",
+                    "MILES": "$miles",
+                    "KILOMETERS": "$kilometers",
+                    "METERS": "$meters"
+                  },
+                  "unitChoiceList": ["MILES", "YARDS", "FEET", "KILOMETERS", "METERS"],
+                  "defaultValue": { "distance": 9, "units": "MILES" }
+                },
+                {
+                  "name": "maxViewingDistanceField",
+                  "dataType": "Field",
+                  "componentName": "analysis-field-input",
+                  "selectionMode": "single",
+                  "fieldTypes": ["double", "integer", "small-integer", "single", "string"]
+                }
+              ]
+            },
+            {
+              "name": "minimumViewingDistance",
+              "label": "$minimumViewingDistanceGroupLabel",
+              "componentName": "analysis-gp-composite",
+              "initialDataType": "GPLinearUnit",
+              "UIparameterInfos": [
+                {
+                  "name": "minViewingDistanceValue",
+                  "dataType": "GPLinearUnit",
+                  "label": "$value",
+                  "componentName": "analysis-linear-unit-input",
+                  "minimum": 0,
+                  "placeholderText": "$linearUnitText",
+                  "choiceListLabels": {
+                    "FEET": "$feet",
+                    "YARDS": "$yards",
+                    "MILES": "$miles",
+                    "KILOMETERS": "$kilometers",
+                    "METERS": "$meters"
+                  },
+                  "unitChoiceList": ["MILES", "YARDS", "FEET", "KILOMETERS", "METERS"],
+                  "defaultValue": { "distance": 0, "units": "MILES" }
+                },
+                {
+                  "name": "minViewingDistanceField",
+                  "dataType": "Field",
+                  "componentName": "analysis-field-input",
+                  "selectionMode": "single",
+                  "fieldTypes": ["double", "integer", "small-integer", "single", "string"]
+                }
+              ]
+            },
+            {
+              "name": "viewingDistancesAre3D",
+              "label": "$viewingDistanceAre3DLabel",
+              "componentName": "analysis-boolean-input",
+              "required": true,
+              "selectionMode": "single"
+            },
+            {
+              "name": "observersElevation",
+              "label": "$observersElevationGroupLabel",
+              "componentName": "analysis-gp-composite",
+              "UIparameterInfos": [
+                {
+                  "name": "obsElevationValue",
+                  "dataType": "GPLinearUnit",
+                  "label": "$value",
+                  "componentName": "analysis-linear-unit-input",
+                  "placeholderText": "$linearUnitText",
+                  "choiceListLabels": {
+                    "FEET": "$feet",
+                    "YARDS": "$yards",
+                    "MILES": "$miles",
+                    "KILOMETERS": "$kilometers",
+                    "METERS": "$meters"
+                  },
+                  "unitChoiceList": ["MILES", "YARDS", "FEET", "KILOMETERS", "METERS"]
+                },
+                {
+                  "name": "obsElevationField",
+                  "dataType": "Field",
+                  "componentName": "analysis-field-input",
+                  "selectionMode": "single",
+                  "fieldTypes": ["double", "integer", "small-integer", "single", "string"]
+                }
+              ]
+            },
+            {
+              "name": "observersHeight",
+              "label": "$observersHeightGroupLabel",
+              "componentName": "analysis-gp-composite",
+              "initialDataType": "GPLinearUnit",
+              "UIparameterInfos": [
+                {
+                  "name": "obsHeightValue",
+                  "dataType": "GPLinearUnit",
+                  "label": "$value",
+                  "componentName": "analysis-linear-unit-input",
+                  "placeholderText": "$linearUnitText",
+                  "choiceListLabels": {
+                    "FEET": "$feet",
+                    "YARDS": "$yards",
+                    "MILES": "$miles",
+                    "KILOMETERS": "$kilometers",
+                    "METERS": "$meters"
+                  },
+                  "unitChoiceList": ["MILES", "YARDS", "FEET", "KILOMETERS", "METERS"],
+                  "defaultValue": { "distance": 6, "units": "FEET" }
+                },
+                {
+                  "name": "obsHeightField",
+                  "dataType": "Field",
+                  "componentName": "analysis-field-input",
+                  "selectionMode": "single",
+                  "fieldTypes": ["double", "integer", "small-integer", "single", "string"]
+                }
+              ]
+            },
+            {
+              "name": "targetHeight",
+              "label": "$targetHeightGroupLabel",
+              "componentName": "analysis-gp-composite",
+              "initialDataType": "GPLinearUnit",
+              "UIparameterInfos": [
+                {
+                  "name": "targHeightValue",
+                  "dataType": "GPLinearUnit",
+                  "label": "$value",
+                  "componentName": "analysis-linear-unit-input",
+                  "placeholderText": "$linearUnitText",
+                  "choiceListLabels": {
+                    "FEET": "$feet",
+                    "YARDS": "$yards",
+                    "MILES": "$miles",
+                    "KILOMETERS": "$kilometers",
+                    "METERS": "$meters"
+                  },
+                  "unitChoiceList": ["MILES", "YARDS", "FEET", "KILOMETERS", "METERS"],
+                  "defaultValue": { "distance": 0, "units": "FEET" }
+                },
+                {
+                  "name": "targHeightField",
+                  "dataType": "Field",
+                  "componentName": "analysis-field-input",
+                  "selectionMode": "single",
+                  "fieldTypes": ["double", "integer", "small-integer", "single", "string"]
+                }
+              ]
+            },
+            {
+              "name": "horizontalStartAngle",
+              "label": "$horizontalStartAngleGroupLabel",
+              "componentName": "analysis-gp-composite",
+              "initialDataType": "GPDouble",
+              "UIparameterInfos": [
+                {
+                  "name": "horizStartAngleValue",
+                  "dataType": "GPDouble",
+                  "label": "$value",
+                  "selectionMode": "single",
+                  "min": 0,
+                  "max": 360,
+                  "excludeMinValue": false,
+                  "defaultValue": 0
+                },
+                {
+                  "name": "horizStartAngleField",
+                  "dataType": "Field",
+                  "componentName": "analysis-field-input",
+                  "selectionMode": "single",
+                  "fieldTypes": ["double", "integer", "small-integer", "single"]
+                }
+              ]
+            },
+            {
+              "name": "horizontalEndAngle",
+              "label": "$horizontalEndAngleGroupLabel",
+              "componentName": "analysis-gp-composite",
+              "initialDataType": "GPDouble",
+              "UIparameterInfos": [
+                {
+                  "name": "horizEndAngleValue",
+                  "dataType": "GPDouble",
+                  "label": "$value",
+                  "selectionMode": "single",
+                  "min": 0,
+                  "max": 360,
+                  "excludeMinValue": false,
+                  "defaultValue": 360
+                },
+                {
+                  "name": "horizEndAngleField",
+                  "dataType": "Field",
+                  "componentName": "analysis-field-input",
+                  "selectionMode": "single",
+                  "fieldTypes": ["double", "integer", "small-integer", "single"]
+                }
+              ]
+            },
+            {
+              "name": "verticalUpperAngle",
+              "label": "$verticalUpperAngleGroupLabel",
+              "componentName": "analysis-gp-composite",
+              "initialDataType": "GPDouble",
+              "UIparameterInfos": [
+                {
+                  "name": "vertUpperAngleValue",
+                  "dataType": "GPDouble",
+                  "label": "$value",
+                  "selectionMode": "single",
+                  "min": -90,
+                  "max": 90,
+                  "excludeMinValue": false,
+                  "defaultValue": 90
+                },
+                {
+                  "name": "vertUpperAngleField",
+                  "dataType": "Field",
+                  "componentName": "analysis-field-input",
+                  "selectionMode": "single",
+                  "fieldTypes": ["double", "integer", "small-integer", "single"]
+                }
+              ]
+            },
+            {
+              "name": "verticalLowerAngle",
+              "label": "$verticalLowerAngleGroupLabel",
+              "componentName": "analysis-gp-composite",
+              "initialDataType": "GPDouble",
+              "UIparameterInfos": [
+                {
+                  "name": "vertLowerAngleValue",
+                  "dataType": "GPDouble",
+                  "label": "$value",
+                  "selectionMode": "single",
+                  "min": -90,
+                  "max": 90,
+                  "excludeMinValue": false,
+                  "defaultValue": -90
+                },
+                {
+                  "name": "vertLowerAngleField",
+                  "dataType": "Field",
+                  "componentName": "analysis-field-input",
+                  "selectionMode": "single",
+                  "fieldTypes": ["double", "integer", "small-integer", "single"]
+                }
+              ]
+            },
+            {
+              "name": "analysisType",
+              "label": "",
+              "componentName": "analysis-string-input",
+              "required": false,
+              "visible": false
+            },
+            {
+              "name": "outputObserverRegionRelationshipTableName",
+              "label": "",
+              "componentName": "analysis-string-input",
+              "required": false,
+              "visible": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "label": "$resultLayersGroupLabel",
+      "layout": "vertical",
+      "componentName": "analysis-block",
+      "summaryText": "$resultLayersGroupText",
+      "UIparameters": [
+        {
+          "name": "outputName",
+          "label": "$outputViewshedRasterNameLabel",
+          "placeholderText": "$outputNamePlaceholderText",
+          "componentName": "analysis-string-input",
+          "required": true
+        },
+        {
+          "label": "$optionalLayersSectionLabel",
+          "componentName": "analysis-section",
+          "open": false,
+          "UIparameters": [
+            {
+              "name": "outputAboveGroundLevelRasterName",
+              "label": "$outputAboveGroundLevelRasterNameLabel",
+              "placeholderText": "$outputNamePlaceholderText",
+              "componentName": "analysis-string-input",
+              "required": false
+            }
+          ]
+        },
+        {
+          "name": "resultType",
+          "label": "$resultType",
+          "componentName": "analysis-string-input",
+          "choiceList": ["TILED_IMAGERY_LAYER", "DYNAMIC_IMAGERY_LAYER"],
+          "choiceListIcons": {
+            "TILED_IMAGERY_LAYER": "tiled-imagery-layer",
+            "DYNAMIC_IMAGERY_LAYER": "image-layer"
+          },
+          "choiceListLabels": {
+            "TILED_IMAGERY_LAYER": "$tiledImageryLayer",
+            "DYNAMIC_IMAGERY_LAYER": "$dynamicImageryLayer"
+          },
+          "value": "TILED_IMAGERY_LAYER"
+        },
+        {
+          "name": "saveResultIn",
+          "label": "$saveResultIn",
+          "componentName": "analysis-folder-input"
+        }
+      ]
+    }
+  ]
+}

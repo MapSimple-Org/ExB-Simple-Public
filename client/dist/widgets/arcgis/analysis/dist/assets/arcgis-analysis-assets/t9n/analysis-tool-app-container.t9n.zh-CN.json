@@ -1,0 +1,21 @@
+{
+  "backLabel": "返回",
+  "cannotReopenTool": "无法重新打开工具。 工具参数已恢复为默认值。",
+  "cannotReopenWebTool": "无法打开 web 工具。 <calcite-link target='_blank' href='${ docLink }'>了解详细信息</calcite-link>",
+  "creditThresholdModal": {
+    "cancelRun": "取消",
+    "continueRun": "仍然运行",
+    "creditEstimate": "预估配额：${cost}",
+    "creditThreshold": "配额阈值：${threshold}",
+    "heading": "在继续之前",
+    "learnMore": "了解有关配额阈值的详细信息",
+    "thresholdExceeded": "此分析的预估配额成本高于web地图的配额阈值："
+  },
+  "failedToExecuteEstimate": "提交失败。 执行 EstimateRasterAnalysisCost 失败",
+  "missingPermissionForWebTool": "无法访问此工具。 确保该工具存在并且您的用户拥有其访问权限。",
+  "runAnalysisLabel": "运行",
+  "toolPreviewNoParameters": "尚未为此模型设置任何参数。 返回该模型，以添加变量并将之设置为参数。",
+  "toolPreviewNoParametersLink": "<calcite-link target='_blank' href='${ docLink }'>了解详细信息</calcite-link>",
+  "toolPreviewWebTool": "将此模型作为web工具运行、发布并从分析窗格打开。",
+  "webToolJSONChanged": "已更新一个或多个参数。 可能无法根据历史记录重新填充某些参数。"
+}

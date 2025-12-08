@@ -1,0 +1,6 @@
+{
+  "dialogTitle": "ラスター関数エディター",
+  "defaultTemplateName": "ラスター関数テンプレート",
+  "readOnlyModeTitle": "読み取り専用",
+  "readOnlyModeMessage": "ラスター関数テンプレート アイテムは読み取り専用です。 変更は保存されません。"
+}

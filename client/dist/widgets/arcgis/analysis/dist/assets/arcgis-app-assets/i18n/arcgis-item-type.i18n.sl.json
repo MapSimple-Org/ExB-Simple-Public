@@ -1,0 +1,27 @@
+{
+  "hosted": "gostujoči",
+  "hostedView": "gostujoči, ogled",
+  "hostedPhotos": "gostujoči, fotografije",
+  "hostedCollection": "gostujoči, zbirka",
+  "hostedMultidimensional": "gostujoči, večdimenzionalno",
+  "hostedCollectionMultidimensional": "gostujoči, zbirka, večdimenzionalno",
+  "collectionMultidimensional": "zbirka, večdimenzionalno",
+  "multidimensional": "večdimenzionalno",
+  "collection": "zbirka",
+  "photoLocations": "fotografije",
+  "locatorView": "pogled",
+  "utilityNetwork": "omrežje pripomočkov",
+  "Integrated Mesh": "integrirana mreža",
+  "3D Object": "3D-predmet",
+  "Point": "točka",
+  "Point Cloud": "oblak točk",
+  "Building Scene Layer": "sloj prizora stavbe",
+  "Voxel Scene Layer": "sloj prizora voxel",
+  "dataStore": {
+    "bigdata": "delitev datotek velikih podatkov",
+    "cloud": "oblak",
+    "cloudStorage": "shramba v oblaku",
+    "database": "podatkovna baza",
+    "folder": "mapa"
+  }
+}

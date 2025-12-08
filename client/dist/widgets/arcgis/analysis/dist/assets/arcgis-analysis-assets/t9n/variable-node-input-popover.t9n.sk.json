@@ -1,0 +1,7 @@
+{
+  "header": "Vyberte premennú",
+  "noFound": "Žiadne kompatibilné premenné sa nenašli",
+  "search": "Vyhľadať premenné",
+  "variableLabel": "Vrstva: <span style='font-weight: var(--calcite-font-weight-normal)'>${val}</span>",
+  "variableVal": "Hodnota: <span style='font-weight: var(--calcite-font-weight-normal)'>${val}</span>"
+}

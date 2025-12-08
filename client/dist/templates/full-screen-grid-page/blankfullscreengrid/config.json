@@ -1,0 +1,30 @@
+{
+  "pages": {
+    "page_0": {
+      "id": "page_0",
+      "mode": "FIT_WINDOW",
+      "type": "NORMAL",
+      "layout": {
+        "LARGE": "layout_0"
+      },
+      "isDefault": true,
+      "isVisible": true
+    }
+  },
+  "layouts": {
+    "layout_0": {
+      "type": "GRID",
+      "content": {},
+      "order": [],
+      "setting": {
+        "rootItem": "0"
+      }
+    }
+  },
+  "widgets": {},
+  "views": {},
+  "sections": {},
+  "messageConfigs": {},
+  "originExbVersion": "1.17.0",
+  "template": "blankfullscreengrid"
+}

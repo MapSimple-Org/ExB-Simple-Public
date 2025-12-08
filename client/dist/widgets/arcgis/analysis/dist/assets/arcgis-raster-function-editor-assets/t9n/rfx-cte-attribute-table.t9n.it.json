@@ -1,0 +1,22 @@
+{
+  "value": "Valore",
+  "classname": "ClassName",
+  "color": "Colore",
+  "raster": "Raster",
+  "tableType": "Tipo di tabella",
+  "manual": "Manuale",
+  "external": "Esterno",
+  "browseTable": "Esamina tabella",
+  "browseTableFrom": "Sfoglia tabella da",
+  "file": "File",
+  "dbfFile": "File DBF",
+  "layer": "Layer",
+  "unsupportedDataType": "Tipo non supportato",
+  "failedToGetTableFromLayer": "Impossibile ottenere la tabella dal layer.",
+  "generate": "Genera tabella",
+  "minValue": "Valore minimo",
+  "maxValue": "Valore massimo",
+  "classBaseName": "Nome base classe",
+  "colorscheme": "Schema colori",
+  "defaultClassName": "Etichetta_"
+}

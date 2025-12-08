@@ -1,0 +1,1 @@
+System.register([],function(e){return{execute:function(){e({verticalAlign:"Pystysuora kohdistus",spaceAround:"Ymp\xe4rill\xe4 oleva tila",spaceBetween:"V\xe4liss\xe4 oleva tila",spaceEvenly:"Jaksota tasaisesti",horizontalAlign:"Vaakasuora kohdistus",scrollable:"Vieritett\xe4v\xe4"})}}});

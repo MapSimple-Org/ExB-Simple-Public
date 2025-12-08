@@ -1,0 +1,11 @@
+{
+  "modalTitle": "Elemek kategóriába sorolása",
+  "save": "Mentés",
+  "cancel": "Mégse",
+  "loadingText": "Betöltés...",
+  "assignCategory": "Kategória hozzárendelése",
+  "errorMessage": "Hiba történt. Próbálja meg újra később.",
+  "limited": "Az elemekhez legfeljebb 20 kategória tartozhat. Másik kategória hozzáadása előtt távolítson el egyet a meglévők közül.",
+  "undo": "Visszavonás",
+  "redo": "Újra"
+}

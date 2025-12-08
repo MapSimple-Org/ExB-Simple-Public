@@ -1,0 +1,1 @@
+System.register([],function(i){return{execute:function(){i({_widgetLabel:"Prisijungti",switchToLogin:"Pakeisti prie\u0161 prisijungiant",switchToLogout:"Pakeisti po prisijungimo",toggleSignInPreview:"Perjungti \u012f prisijungimo per\u017ei\u016br\u0105",restrictedResources:"Apriboti i\u0161tekliai"})}}});

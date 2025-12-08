@@ -1,0 +1,55 @@
+{
+  "beginningOnLabel": "å_Beginning on_____________ø",
+  "repeatTypeLabel": "å_Repeat type____________ø",
+  "endingOnTypeLabel": "å_Ending on___________________ø",
+  "endingOnDateLabel": "å_End date_________________ø",
+  "endingOnCountLabel": "å_Count___________ø",
+  "endingOnCountPlaceholder": "å_for example: 1, 10, 30_______________________ø",
+  "dailyRepeatIntervalLabel": "å_Repeat interval________________ø",
+  "dailyTimeLabel": "å_Time_________ø",
+  "weeklyDaysOfWeekLabel": "å_Day of week____________ø",
+  "weeklyTimeLabel": "å_Time_________ø",
+  "monthlyDayOfMonthLabel": "å_Day of month_____________ø",
+  "monthlyDayOfMonthPlaceholder": "å_for example, 1 - 31____________________ø",
+  "monthlyRepeatIntervalLabel": "å_Repeat interval________________ø",
+  "monthlyTimeLabel": "å_Time_________ø",
+  "repeatTypeOptions": {
+    "day": "å_Day_______ø",
+    "week": "å_Week_________ø",
+    "month": "å_Month___________ø"
+  },
+  "endingOnType": {
+    "never": "å_Never___________ø",
+    "date": "å_Date_________ø",
+    "count": "å_On_____ø"
+  },
+  "dailyRepeatInterval": {
+    "everyDay": "å_Every day___________________ø",
+    "everyOtherDay": "å_Every other day________________ø",
+    "everyThreeDays": "å_Every three days_________________ø",
+    "everyFourDays": "å_Every four days________________ø",
+    "everyFiveDays": "å_Every five days________________ø",
+    "everySixDays": "å_Every six days_______________ø",
+    "everySevenDays": "å_Every seven days_________________ø",
+    "everyFourteenDays": "å_Every fourteen days____________________ø"
+  },
+  "weekDays": {
+    "all": "å_All_______ø",
+    "allWeekdays": "å_All weekdays_____________ø",
+    "sunday": "å_Sunday_____________ø",
+    "monday": "å_Monday_____________ø",
+    "tuesday": "å_Tuesday_______________ø",
+    "wednesday": "å_Wednesday___________________ø",
+    "thursday": "å_Thursday_________________ø",
+    "friday": "å_Friday_____________ø",
+    "saturday": "å_Saturday_________________ø"
+  },
+  "monthlyRepeatInterval": {
+    "everyMonth": "å_Every month____________ø",
+    "everyTwoMonths": "å_Every two months_________________ø",
+    "everyThreeMonths": "å_Every three months___________________ø",
+    "everyFourMonths": "å_Every four months__________________ø",
+    "everyFiveMonths": "å_Every five months__________________ø",
+    "everySixMonths": "å_Every six months_________________ø"
+  }
+}

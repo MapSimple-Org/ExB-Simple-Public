@@ -1,0 +1,26 @@
+{
+  "CCIAnalysisSettingGroupLabel": "Pengaturan indeks",
+  "CCIAnalysisSettingGroupText": "Tentukan cara penghitungan indeks",
+  "geomeanPercentileLabel": "Peringkat gabungan (Rata-rata geometri persentil)",
+  "geomeanRawLabel": "Nilai mentah gabungan (Rata-rata geometri dari nilai mentah)",
+  "geomeanScaledLabel": "Nilai berskala gabungan (Rata-rata geometri dari nilai berskala)",
+  "indexMethodLabel": "Metode penskalaan dan kombinasi variabel",
+  "inputFeaturesOrTableLabel": "Fitur atau tabel input",
+  "inputLayerGroupText": "Pilih fitur atau tabel dan variabel untuk membuat indeks.",
+  "inputVariablesLabel": "Variabel input",
+  "itemProperties": {
+    "description": "Feature layer yang dihasilkan dari menjalankan alat Hitung Indeks Komposit.",
+    "snippet": "Feature layer yang dihasilkan dari menjalankan alat Hitung Indeks Komposit"
+  },
+  "meanPercentileLabel": "Kombinasikan peringkat (Rata-rata persentil)",
+  "meanRawLabel": "Kombinasikan nilai mentah (Rata-rata nilai mentah)",
+  "meanScaledLabel": "Kombinasikan nilai berskala (Rata-rata nilai berskala)",
+  "outputIndexMaxLabel": "Maksimal",
+  "outputIndexMinLabel": "Minimal",
+  "outputIndexMinMaxLabel": "Nilai minimum dan maksimum indeks",
+  "outputIndexReverseLabel": "Balikkan nilai indeks",
+  "reverseVariableLabel": "Balikkan arah",
+  "sumFlagsPercentileLabel": "Sorot kondisi ekstrem (Hitungan nilai di atas persentil ke-90)",
+  "toolName": "Hitung Indeks Komposit",
+  "weight": "Berat"
+}

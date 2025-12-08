@@ -1,0 +1,23 @@
+{
+  "add": "Přidat",
+  "arcade": "Arcade",
+  "arcadeExpressionEditor": "Editor výrazů Arcade",
+  "badSyntaxSQLExpression": "Výraz SQL obsahuje nesprávnou syntaxi. Opravte chyby.",
+  "calculationExpressionEditor": "Editor výpočetních výrazů",
+  "cancel": "Storno",
+  "chooseLanguage": "Zvolte jazyk",
+  "fieldToCalculate": "Pole pro výpočet: ${fieldName}",
+  "idealFor": "Ideální pro:",
+  "languageSelect": "Výběr jazyka",
+  "layerLoadFailNoFields": "Vrstvu se nepodařilo načíst. Nepodařilo se načíst pole pro editor.",
+  "next": "Další",
+  "noLayerProvidedNoFields": "Nebyla poskytnuta žádná vrstva. Nepodařilo se načíst pole pro editor.",
+  "sql": "SQL",
+  "sqlExpressionEditor": "Editor výrazů SQL",
+  "tileSelectArcadeUseCase1": "Výpočty, které vyžadují více funkcionality než SQL, včetně prostorových operací",
+  "tileSelectArcadeUseCase2": "Vylepšené řešení problémů",
+  "tileSelectSqlUseCase1": "Nejvyšší výkon",
+  "tileSelectSqlUseCase2": "Výpočty, které lze zapsat pomocí SQL",
+  "tileSelectSqlUseCase3": "Vrstvy se zapnutou synchronizací nebo se zapnutým sledováním vytvořených nebo aktualizovaných prvků",
+  "valueCannotBeBlank": "Hodnota nesmí být prázdná."
+}

@@ -1,0 +1,85 @@
+{
+  "heading": "Opprett påloggingskategori",
+  "select": "Velg en påloggingskategori å starte fra",
+  "selectCustomSignIn": "Velg en påloggingskategori",
+  "orgDefaults": "Organisasjonsstandard",
+  "createNew": "Opprett nytt",
+  "name": "Tittel",
+  "description": "Beskrivelse",
+  "enterName": "Angi en kategoritittel",
+  "enterDescription": "Angi en kategoribeskrivelse",
+  "enterTitle": "Angi en tittel for denne påloggingen",
+  "showOnTriage": "Aktiver påloggingskategori",
+  "showOnTriageDescription": "Beskrivelsen av kategorien vises på kategorivalgsiden bare hvis du har to eller flere kategorier aktivert.",
+  "socialProviders": "Leverandører av sosiale pålogginger",
+  "authenticationProviders": "Godkjenningsmetoder",
+  "errorLabel": "Feil med egendefinert påloggingskategori",
+  "preview": "Forhåndsvisning",
+  "restrictions": "Bare tittelen og beskrivelsen for denne kategorien kan endres. Alle andre alternativer arves fra organisasjonens innstillinger.",
+  "loginNotAvailable": "Denne påloggingsmetoden er deaktivert av organisasjonen din og blir ikke vist til brukere.",
+  "buttons": {
+    "editCategory": "Lagre kategori",
+    "next": "Neste",
+    "back": "Tilbake",
+    "createCategory": "Opprett kategori"
+  },
+  "errors": {
+    "nameRequired": "Det kreves en tittel for alle påloggingskategorier.",
+    "authenticationMethodsRequired": "Minst én påloggingsmetode er obligatorisk.",
+    "socialProviderRequired": "Minst én sosial påloggingsleverandør er påkrevd."
+  },
+  "steps": {
+    "1": {
+      "title": "Velg hvordan du vil starte",
+      "description": "Du kan starte med organisasjonens standard pålogginger, redigere en eksisterende påloggingskategori eller opprette en helt ny påloggingskategori."
+    },
+    "2": {
+      "title": "Tittel og beskrivelse",
+      "description": "Angi tittelen og beskrivelsen for påloggingskategorien."
+    },
+    "3": {
+      "title": "Påloggingstyper",
+      "description": "Tilpass og sett påloggingene som vises for denne påloggingskategorien i rekkefølge."
+    }
+  },
+  "createAccount": {
+    "label": "Opprett kontokobling",
+    "description": "Tillat opprettelse av en ny ArcGIS-konto i denne organisasjonen."
+  },
+  "switchOrganization": {
+    "label": "Bytt organisasjonskobling",
+    "description": "Vis en kobling som lar brukerne logge på en annen organisasjon."
+  },
+  "authenticationMethods": {
+    "arcgis": {
+      "label": "ArcGIS-pålogging",
+      "description": "La brukere logge på med sin ArcGIS-pålogging",
+      "required": "Det kreves en tittel for ArcGIS-påloggingsmetoden."
+    },
+    "saml": {
+      "label": "SAML-pålogging",
+      "description": "La brukere logge på med sin SAML-konto.",
+      "required": "Det kreves en tittel for SAML-påloggingsmetoden."
+    },
+    "oidc": {
+      "label": "OIDC-pålogging",
+      "description": "La brukere logge på med sin OIDC-konto.",
+      "required": "Det kreves en tittel for OIDC-påloggingsmetoden."
+    },
+    "social": {
+      "label": "Pålogging via sosiale medier",
+      "description": "Tillat at medlemmer logger på organisasjonen med påloggingen sin fra de sosiale nettverkene som følges.",
+      "github": "GitHub",
+      "facebook": "Facebook",
+      "google": "Google",
+      "apple": "Apple",
+      "required": "Det kreves en tittel for den sosiale påloggingsmetoden."
+    }
+  },
+  "confirmLeave": {
+    "title": "Ulagrede endringer",
+    "message": "Du har endringer som ikke er lagret. Er du sikker på at du vil forlate denne siden?",
+    "remain": "Bli værende på siden",
+    "leave": "Avslutt uten å lagre"
+  }
+}

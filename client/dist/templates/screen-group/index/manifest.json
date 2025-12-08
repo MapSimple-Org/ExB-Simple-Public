@@ -1,0 +1,12 @@
+{
+  "name": "index",
+  "type": "template",
+  "templateType": "screen-group",
+  "label": "Index",
+  "thumbnail": "thumbnail.png",
+  "order": 2,
+  "tags": [],
+  "categoriesTags": [],
+  "thumbnailWidth": 400,
+  "thumbnailHeight": 240
+}

@@ -1,0 +1,16 @@
+{
+  "updateData": "Posodobite podatke",
+  "cancel": "Prekliči",
+  "editStyle": "Slogovno datoteko sloja nadomestite s posodobljeno različico iz računalnika.",
+  "updatePackages": "${type} nadomestite s posodobljeno različico iz računalnika. Naložena datoteka mora imeti enako ime kot ${hostedLayerName}.",
+  "uploadStaticFiles": "Ime datoteke, ki se nalaga, mora biti enako imenu prvotne datoteke ${fileName}",
+  "sameFileNameDescription": "Datoteka, ki se nalaga, mora imeti enako ime in imena polj kot prvotna datoteka ${fileName}",
+  "updating": "Posodabljanje ...",
+  "error": "Napaka",
+  "errors": {
+    "sameFileName": "Za posodobitev tega elementa morate naložiti datoteko z imenom ${fileName}.",
+    "invalidStyleFileExtension": "Neveljavna razširitev datoteke. Naloženi slog mora imeti razširitev datoteke .json.",
+    "errorWhileUpload": "Med nalaganjem elementa je prišlo do napake.",
+    "errorUpdate": "Med prepisovanjem elementa je prišlo do napake."
+  }
+}

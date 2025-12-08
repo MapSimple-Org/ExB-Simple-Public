@@ -1,0 +1,55 @@
+{
+  "beginningOnLabel": "Alkaen",
+  "repeatTypeLabel": "Toistotyyppi",
+  "endingOnTypeLabel": "Päättyen",
+  "endingOnDateLabel": "Lopetuspäivämäärä",
+  "endingOnCountLabel": "Määrä",
+  "endingOnCountPlaceholder": "esimerkiksi 1, 10, 30",
+  "dailyRepeatIntervalLabel": "Toistoväli",
+  "dailyTimeLabel": "Aika",
+  "weeklyDaysOfWeekLabel": "Viikonpäivä",
+  "weeklyTimeLabel": "Aika",
+  "monthlyDayOfMonthLabel": "Kuukauden päivä",
+  "monthlyDayOfMonthPlaceholder": "esimerkiksi 1–31",
+  "monthlyRepeatIntervalLabel": "Toistoväli",
+  "monthlyTimeLabel": "Aika",
+  "repeatTypeOptions": {
+    "day": "Päivä",
+    "week": "Viikko",
+    "month": "Kuukausi"
+  },
+  "endingOnType": {
+    "never": "Ei koskaan",
+    "date": "Päivämäärä",
+    "count": "Käytössä"
+  },
+  "dailyRepeatInterval": {
+    "everyDay": "Joka päivä",
+    "everyOtherDay": "Joka toinen päivä",
+    "everyThreeDays": "Kolmen päivän välein",
+    "everyFourDays": "Neljän päivän välein",
+    "everyFiveDays": "Viiden päivän välein",
+    "everySixDays": "Kuuden päivän välein",
+    "everySevenDays": "Seitsemän päivän välein",
+    "everyFourteenDays": "14 päivän välein"
+  },
+  "weekDays": {
+    "all": "Kaikki",
+    "allWeekdays": "Kaikki viikonpäivät",
+    "sunday": "Sunnuntai",
+    "monday": "Maanantai",
+    "tuesday": "Tiistai",
+    "wednesday": "Keskiviikko",
+    "thursday": "Torstai",
+    "friday": "Perjantai",
+    "saturday": "Lauantai"
+  },
+  "monthlyRepeatInterval": {
+    "everyMonth": "Joka kuukausi",
+    "everyTwoMonths": "Kahden kuukauden välein",
+    "everyThreeMonths": "Kolmen kuukauden välein",
+    "everyFourMonths": "Neljän kuukauden välein",
+    "everyFiveMonths": "Viiden kuukauden välein",
+    "everySixMonths": "Kuuden kuukauden välein"
+  }
+}

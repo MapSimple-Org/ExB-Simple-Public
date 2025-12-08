@@ -1,0 +1,11 @@
+{
+  "unsupportedDataType": "Niet-ondersteund type",
+  "currentlyUnsupported": " Er wordt gewerkt aan een standaard-editor voor de ${missingType}; deze is binnenkort beschikbaar. Tijdelijke plaatshouder voor tekstvak voor het specificeren van op tekenreeksen gebaseerde invoer.",
+  "unsupportedOverrideWarning": "Er is binnenkort een overschrijvingsonderdeel beschikbaar voor de editor, dat een betere UX biedt voor werk met de volgende parameter(s):",
+  "overrideWidgetMissing": "Overschrijvingsonderdeel editor ontbreekt!",
+  "uiIncomplete": "Taakindiening is mislukt. De functie kan niet worden uitgevoerd omdat een aantal van de vereiste velden onvolledig is of ontbreekt in de UI.",
+  "deprecatedBannerText": "De rasterfunctiesjabloon bevat een of meer verouderde rasterfuncties en zal in een toekomstige release worden verwijderd.",
+  "deprecatedBannerTextWithLink": "De rasterfunctiesjabloon bevat een of meer verouderde rasterfuncties en zal in een toekomstige release worden verwijderd. <calcite-link target='_blank' href='${ docLink }'>Meer informatie</calcite-link> over hoe u een verouderde rasterfunctie vervangt.",
+  "unsupportedBannerText": "De rasterfunctiesjabloon bevat een of meer niet-ondersteunde rasterfuncties.",
+  "unsupportedBannerTextWithLink": "De rasterfunctiesjabloon bevat een of meer niet-ondersteunde rasterfuncties. <calcite-link target='_blank' href='${ docLink }'>Meer informatie</calcite-link> over de rasterfuncties die wel worden ondersteund."
+}

@@ -1,0 +1,15 @@
+{
+  "addDataStore": "Legg til datalager",
+  "addFile": "Legg til fil",
+  "addServiceConnection": "Legg til kobling",
+  "itemNotFound": "Elementet eksisterer ikke eller er utilgjengelig.",
+  "itemPermissionDenied": "Du har ikke tillatelser til å bruke dette elementet.",
+  "previewDetails": "Forhåndsvis detaljer",
+  "queryModelArgsErrMsg": "Kan ikke utføre spørring i modellargumenter.",
+  "queryModelArgsMsg": "Spørring i modellargumenter...",
+  "removeItem": "Fjern element",
+  "replaceItem": "Erstatt element",
+  "requiredInputMessage": "Denne parameteren kreves.",
+  "selectItem": "Velg element",
+  "viewDetails": "Vis detaljer"
+}

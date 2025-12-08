@@ -1,0 +1,6 @@
+{
+  "header": "Începeți din nou fără să salvați?",
+  "content": "Aveți modificări nesalvate în „${rftTitle}”. Dacă începeți din nou cu un șablon nou, acele modificări vor fi pierdute.",
+  "cancel": "Anulare",
+  "continue": "Continuare"
+}

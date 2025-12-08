@@ -1,0 +1,592 @@
+{
+  "rolePrivileges": "Rol ayrıcalıkları",
+  "setFromExisting": "Mevcut rolden belirle",
+  "expandAll": "Tümünü genişlet",
+  "generalPrivileges": "Genel ayrıcalıklar",
+  "adminPrivileges": "Yönetici ayrıcalıkları",
+  "enabledLabel": "Etkin:",
+  "enableAll": "Tümünü etkinleştir",
+  "disableAll": "Tümünü devre dışı bırak",
+  "members": "Üyeler",
+  "groups": "Gruplar",
+  "content": "İçerik",
+  "sharing": "Paylaşım",
+  "premiumContent": "Premium içerik",
+  "premiumContentServices": "Premium içerik ve servisler",
+  "contentAndAnalysis": "İçerik ve analiz",
+  "features": "Özellikler",
+  "versionMgmt": "Versiyon yönetimi",
+  "webhooks": "Web kancaları",
+  "marketplaceSubscriptions": "ArcGIS Marketplace abonelikleri",
+  "orgSettings": "Kuruluş ayarları",
+  "learnMore": "Daha fazla bilgi",
+  "searchPrivileges": "Arama ayrıcalıkları",
+  "notebooks": "Notebooks",
+  "analysis": "Analiz",
+  "networkAnalysis": "Ağ analizi",
+  "locationServices": "Konum servisleri",
+  "requiredService": "Gerekli servis",
+  "availableServices": "Mevcut servisler",
+  "basemaps": "Altlık Haritalar",
+  "staticMaps": "Statik haritalar",
+  "places": "Yerler",
+  "geocoding": "Coğrafi Kodlama",
+  "routing": "Rotalama",
+  "dataEnrichment": "Veri zenginleştirme",
+  "boundaries": "Sınırlar",
+  "elevation": "Yükselti",
+  "spatialPrivileges": "Mekansal analiz",
+  "featureAnalysis": "Detay analizi",
+  "imageAnalysis": "Görüntü analizi",
+  "readOnlyBasemapsTooltip": "Altlık haritalara erişim dahildir.",
+  "privileges": {
+    "portal:user:viewOrgUsers": {
+      "label": "Görüntüle",
+      "description": "Üyenin kuruluş üyelerini görüntülemesine izin verin.",
+      "descriptionPortal": "Üyenin portal üyelerini görüntülemesine izin verin.",
+      "descriptionApp": "Uygulamanın kuruluşunuzun üyelerini görüntülemesine izin verin."
+    },
+    "portal:user:createGroup": {
+      "label": "Oluştur, güncelle ve sil",
+      "description": "Üyenin kendi gruplarını oluşturmasına, düzenlemesine ve silmesine izin verin.",
+      "descriptionApp": "Uygulamanın uygulama sahibinin gruplarını oluşturmasına, düzenlemesine ve silmesine izin verin."
+    },
+    "portal:user:joinGroup": {
+      "label": "Kuruluş gruplarına katıl",
+      "description": "Üyenin kuruluşunuzdaki gruplara katılmasına izin verin.",
+      "descriptionPortal": "Üyenin portalınızdaki gruplara katılmasına izin verin.",
+      "descriptionApp": "Uygulamanın kuruluşunuzdaki gruplara katılmasına izin verin."
+    },
+    "portal:user:joinNonOrgGroup": {
+      "label": "Harici gruplara katıl",
+      "description": "Üyenin kuruluşunuzun dışındaki gruplara katılmasına izin verin.",
+      "descriptionPortal": "Üyenin portalınızın dışındaki gruplara katılmasına izin verin.",
+      "descriptionApp": "Uygulamanın kuruluşunuzun dışındaki gruplara katılmasına izin verin."
+    },
+    "portal:user:viewOrgGroups": {
+      "label": "Kuruluş ile paylaşılan grupları görüntüle",
+      "description": "Üyenin kuruluşla paylaşılan grupları görüntülemesine izin verin.",
+      "descriptionPortal": "Üyenin portalla paylaşılan grupları görüntülemesine izin verin.",
+      "descriptionApp": "Uygulamanın kuruluşla paylaşılan grupları görüntülemesine izin verin."
+    },
+    "portal:user:invitePartneredCollaborationMembers": {
+      "label": "Ortaklı kuruluş üyelerini davet edin",
+      "description": "Üyenin ortaklı iş birliği kuruluşlarından üyeleri gruplara davet etmesine izin verin.",
+      "descriptionApp": "Uygulamanın ortaklı iş birliği kuruluşlarından üyeleri gruplara davet etmesine izin verin."
+    },
+    "portal:user:addExternalMembersToGroup": {
+      "label": "Diğer kuruluşlardan üyeler ekleyin",
+      "description": "Üyenin diğer kuruluşlardan üyelere izin veren gruplar oluşturmasına ve ayrıca harici üyeleri gruplara davet etmesine izin verin.",
+      "descriptionApp": "Uygulamanın diğer kuruluşlardan üyelere izin veren gruplar oluşturmasına ve ayrıca harici üyeleri gruplara davet etmesine izin verin."
+    },
+    "portal:user:createItem": {
+      "label": "Oluştur, güncelle ve sil",
+      "description": "Üyenin kendi içeriklerini oluşturmasına, düzenlemesine ve silmesine izin verin.",
+      "descriptionApp": "Uygulamanın uygulama sahibinin içeriğini oluşturmasına, düzenlemesine ve silmesine izin verin."
+    },
+    "portal:publisher:publishFeatures": {
+      "label": "Barındırılan detay katmanlarını yayınla",
+      "description": "Üyenin barındırılan detay katmanlarını shapefile'lardan, CSV'lerden, vb. yayınlamasına izin verin.",
+      "descriptionApp": "Uygulamanın barındırılan detay katmanlarını shapefile'lardan, CSV'lerden, vb. yayınlamasına izin verin."
+    },
+    "portal:publisher:publishTiles": {
+      "label": "Barındırılan döşeme katmanlarını yayınla",
+      "description": "Üyenin barındırılan döşeme katmanlarını döşeme paketlerinden, detaylardan, vb. yayınlamasına izin verin.",
+      "descriptionApp": "Uygulamanın barındırılan döşeme katmanlarını döşeme paketlerinden, detaylardan, vb. yayınlamasına izin verin."
+    },
+    "portal:publisher:publishScenes": {
+      "label": "Barındırılan sahne katmanlarını yayınla",
+      "description": "Üyenin barındırılan sahne katmanlarını yayınlamasına izin verin.",
+      "descriptionApp": "Uygulamanın barındırılan sahne katmanlarını yayınlamasına izin verin."
+    },
+    "portal:publisher:publishTiledImagery": {
+      "label": "Barındırılan döşemeli görüntü katmanlarını yayınla",
+      "description": "Üyenin, barındırılan döşemeli görüntü katmanlarını tek bir görüntüden veya görüntü koleksiyonundan yayınlamasına izin verin. Bir ArcGIS Image for ArcGIS Online kullanıcı tipi uzantısı gerektirir.",
+      "descriptionPortal": "Üyenin, barındırılan döşemeli görüntü katmanlarını tek bir görüntüden veya görüntü koleksiyonundan yayınlamasına izin verin.",
+      "descriptionApp": "Uygulamanın, barındırılan döşemeli görüntü katmanlarını tek bir görüntüden veya görüntü koleksiyonundan yayınlamasına izin verin. ArcGIS Image Hosting lisansı gerektirir."
+    },
+    "portal:publisher:publishDynamicImagery": {
+      "label": "Barındırılan dinamik görüntü katmanlarını yayınla",
+      "description": "Üyenin, barındırılan dinamik görüntü katmanlarını tek bir görüntüden veya görüntü koleksiyonundan yayınlamasına izin verin.",
+      "descriptionApp": "Uygulamanın, barındırılan dinamik görüntü katmanlarını tek bir görüntüden veya görüntü koleksiyonundan yayınlamasına izin verin."
+    },
+    "portal:publisher:publishServerServices": {
+      "label": "Sunucu tabanlı katmanları yayınla",
+      "description": "Bu ayrıcalık, federe sunucusu sitelerinden servisler tarafından desteklenen katmanları yayınlama özelliği sağlar. Bu servisler çoğunlukla, coğrafi veritabanlarından veya dosya tabanlı veri kaynaklarından kayıtlı verileri referans alır."
+    },
+    "portal:publisher:publishKnowledgeGraph": {
+      "label": "Barındırılan bilgi grafiklerini yayınla",
+      "description": "Üyenin barındırılan bilgi grafikleri yayınlamasına izin verin.",
+      "descriptionApp": "Uygulamanın barındırılan bilgi grafikleri yayınlamasına izin verin."
+    },
+    "portal:user:viewOrgItems": {
+      "label": "Kuruluş ile paylaşılan içerikleri görüntüle",
+      "description": "Üyenin kuruluşla paylaşılan içerikleri görüntülemesine izin verin.",
+      "descriptionPortal": "Üyenin portalla paylaşılan içerikleri görüntülemesine izin verin.",
+      "descriptionApp": "Uygulamanın kuruluşla paylaşılan içerikleri görüntülemesine izin verin."
+    },
+    "premium:publisher:createNotebooks": {
+      "label": "Notebook oluşturun ve düzenleyin",
+      "description": "Üyenin etkileşimli notebook'lar oluşturmasına ve düzenlemesine izin verin.",
+      "descriptionApp": "Uygulamanın etkileşimli notebook'lar oluşturmasına ve düzenlemesine izin verin."
+    },
+    "premium:publisher:scheduleNotebooks": {
+      "label": "Notebook'lar için takvim belirle",
+      "description": "Üyenin bir notebook için ileri bir zamanda otomatik çalıştırma planlamasına izin verin.",
+      "descriptionApp": "Uygulamanın bir notebook için ileri bir zamanda otomatik çalıştırma planlamasına izin verin."
+    },
+    "portal:publisher:bulkPublishFromDataStores": {
+      "label": "Bir veri deposundan detay katmanları oluştur",
+      "description": "Bu ayrıcalık, kayıtlı bir veri deposundan web katmanları yayınlama becerisi sunar."
+    },
+    "portal:publisher:registerDataStores": {
+      "label": "Veri depolarını kaydet",
+      "description": "Bu ayrıcalık portala veri depoları kaydetme becerisi sunar."
+    },
+    "portal:user:viewTracks": {
+      "label": "Konum izlerini görüntüle",
+      "description": "Üyenin konum paylaşma etkinleştirildiğinde paylaşılan iz görüntüleriyle üyelerin konum izlerini görüntülemesine izin verin.",
+      "descriptionApp": "Uygulamanın konum paylaşma etkinleştirildiğinde paylaşılan iz görüntüleriyle üyelerin konum izlerini görüntülemesine izin verin."
+    },
+    "portal:user:reassignItems": {
+      "label": "İçeriği yeniden ata",
+      "description": "Üyenin, içerik alma ayrıcalığına sahip başka bir üyeye yalnızca kendi içeriğini yeniden atamasına izin verin.",
+      "descriptionApp": "Uygulamanın, uygulama sahibinin içeriğini alma ayrıcalığına sahip başka bir üyeye yalnızca kendi içeriğini yeniden atamasına izin verin."
+    },
+    "portal:user:receiveItems": {
+      "label": "İçeriği al",
+      "description": "Üyenin, içeriği yeniden atama ayrıcalığına sahip başka bir üye tarafından kendisine yeniden atanan içeriği almasına izin verin."
+    },
+    "portal:publisher:publishFeeds": {
+      "label": "Akışları yayınla",
+      "description": "Bu ayrıcalık, gerçek zamanlı verileri almak ve görüntülemek için ArcGIS Velocity'yi kullanarak akış yayınlama olanağı sağlar."
+    },
+    "portal:publisher:publishRealTimeAnalytics": {
+      "label": "Gerçek zamanlı analizleri yayınla",
+      "description": "Bu ayrıcalık, gerçek zamanlı verileri analiz etmek ve işlemek için ArcGIS Velocity'yi kullanarak gerçek zamanlı analiz yayınlama olanağı sağlar."
+    },
+    "portal:publisher:publishBigDataAnalytics": {
+      "label": "Büyük veri analizlerini paylaş",
+      "description": "Bu ayrıcalık, geçmiş gözlem verilerini analiz etmek için ArcGIS Velocity'yi kullanarak büyük veri analizlerini yayınlama olanağı sağlar."
+    },
+    "portal:publisher:createDataPipelines": {
+      "label": "Veri boru hatlarını oluştur ve çalıştır",
+      "description": "Üyenin veri boru hatları oluşturmasına, düzenlemesine ve çalıştırmasına izin verin.",
+      "descriptionApp": "Uygulamanın veri boru hatları oluşturmasına, düzenlemesine ve çalıştırmasına izin verin."
+    },
+    "portal:publisher:publishLivestreamVideo": {
+      "label": "Canlı akış video yayınlama",
+      "description": "Üyenin ağ video yayınları ve akışlarından kaynaklanan barındırılan canlı akış video katmanları yayınlamasına izin verin.",
+      "descriptionApp": "Uygulamanın ağ video yayınları ve akışlarından kaynaklanan barındırılan canlı akış video katmanları yayınlamasına izin verin."
+    },
+    "portal:publisher:publishVideo": {
+      "label": "Video yayınlama",
+      "description": "Üyenin video dosyası ve desteklenen video meta veri dosyalarında barındırılan video katmanları yayınlamasına izin verin.",
+      "descriptionApp": "Uygulamanın video dosyası ve desteklenen video meta veri dosyalarında barındırılan video katmanları yayınlamasına izin verin."
+    },
+    "portal:user:shareToGroup": {
+      "label": "Gruplarla paylaş",
+      "description": "Üyenin gruplarla içerik paylaşmasına izin verin.",
+      "descriptionApp": "Uygulamanın gruplarla içerik paylaşmasına izin verin."
+    },
+    "portal:user:shareToOrg": {
+      "label": "Kuruluşla paylaş",
+      "labelPortal": "Portalla paylaş",
+      "description": "Üyenin kuruluşunuzla içerik paylaşmasına izin verin.",
+      "descriptionPortal": "Üyenin portalınızla içerik paylaşmasına izin verin.",
+      "descriptionApp": "Uygulamanın kuruluşunuzla içerik paylaşmasına izin verin."
+    },
+    "portal:user:shareToPublic": {
+      "label": "Herkesle paylaş",
+      "description": "Kuruluşun genel paylaşım politikası izin veriyorsa, üyenin içeriğini herkese açık olarak paylaşmasına izin ver.",
+      "descriptionApp": "Kuruluşun genel paylaşım politikası izin veriyorsa, uygulamanın uygulama sahibinin içeriğini herkese açık olarak paylaşmasına izin ver.",
+      "tooltip": "Kuruluş, üyelerin içeriği herkese açık olarak paylaşmasına izin vermiyorsa, üyelerin, üye içeriğini herkesle paylaşmak için yönetici ayrıcalığına ihtiyacı olacaktır."
+    },
+    "portal:user:shareGroupToOrg": {
+      "label": "Grupları kuruluş tarafından görünür yap",
+      "labelPortal": "Grupları portal tarafından görünür yap",
+      "description": "Üyenin kuruluşunuzla içerik paylaşmasına izin verin.",
+      "descriptionPortal": "Üyenin portalınızla içerik paylaşmasına izin verin.",
+      "descriptionApp": "Uygulamanın portalınızla içerik paylaşmasına izin verin."
+    },
+    "portal:user:shareGroupToPublic": {
+      "label": "Grupları herkes tarafından görünür yap",
+      "description": "Üyenin grupları herkes tarafından bulunabilir duruma getirmesine izin verin.",
+      "descriptionApp": "Uygulamanın grupları herkes tarafından bulunabilir duruma getirmesine izin verin."
+    },
+    "opendata:user:designateGroup": {
+      "label": "Grupları Açık Veri kullanımına sun",
+      "description": "Üyenin grupları Açık Veri'de kullanım için kullanılabilir olarak belirlemesine izin verin.",
+      "descriptionApp": "Uygulamanın grupları Açık Veri'de kullanım için kullanılabilir olarak belirlemesine izin verin."
+    },
+    "premium:user:basemaps": {
+      "label": "Altlık harita stilleri servisi",
+      "descriptionLocationPlatform": "Uygulamanın altlık harita stilleri servisine erişmesine izin verin."
+    },
+    "premium:user:staticbasemaptiles": {
+      "label": "Statik altlık harita döşemeleri",
+      "descriptionLocationPlatform": "Uygulamanın statik altlık harita döşeme servisine erişmesine izin verin."
+    },
+    "premium:user:staticMaps": {
+      "label": "Statik haritalar servisi (beta)",
+      "descriptionLocationPlatform": "Uygulamanın statik haritalar servisine erişmesine izin verin."
+    },
+    "premium:user:elevation": {
+      "label": "Yükselti servisi",
+      "descriptionLocationPlatform": "Uygulamanın yükselti servisine erişmesine izin ver."
+    },
+    "premium:user:geocode": {
+      "label": "Coğrafi kod",
+      "description": "Üyenin, ArcGIS Geocoding Service (veya bu konumlandırıcının bir görünümü) ile kredi tüketen coğrafi kodlama görevlerini gerçekleştirmesine izin verin.",
+      "descriptionApp": "Uygulamanın, ArcGIS World Geocoding Service (veya bu konumlandırıcının bir görünümü) ile kredi tüketen coğrafi kodlama görevlerini gerçekleştirmesine izin verin."
+    },
+    "premium:user:geocode:stored": {
+      "label": "Coğrafi kod (depolanmış)",
+      "descriptionLocationPlatform": "Uygulamanın coğrafi kodlama servisine erişmesine ve depolanan coğrafi kodlamaları gerçekleştirmesine izin ver."
+    },
+    "premium:user:geocode:temporary": {
+      "label": "Coğrafi kod (depolanmamış)",
+      "descriptionLocationPlatform": "Uygulamanın coğrafi kodlama servisine erişmesine ve depolanmamış olan coğrafi kodlamaları gerçekleştirmesine izin ver."
+    },
+    "premium:user:networkanalysis": {
+      "label": "Rotalama",
+      "description": "Üyenin, yönlendirme ve sürüş zamanı alanları gibi ağ analizi görevlerini gerçekleştirmesine izin verin.",
+      "descriptionApp": "Uygulamanın rotalama servisine erişmesine izin ver."
+    },
+    "premium:user:networkanalysis:closestfacility": {
+      "label": "En yakın tesis",
+      "descriptionLocationPlatform": "Uygulamanın rotalama servisine erişmesine ve en yakın tesis rotalama işlemlerini gerçekleştirmesine izin ver."
+    },
+    "premium:user:networkanalysis:lastmiledelivery": {
+      "label": "Son nokta teslimatı",
+      "descriptionLocationPlatform": "Uygulamanın rotalama servisine erişmesine ve son mil teslimatı rotalama işlemlerini gerçekleştirmesine izin ver."
+    },
+    "premium:user:networkanalysis:snaptoroads": {
+      "label": "Yolları Yakala",
+      "descriptionLocationPlatform": "Üyenin yollara GPS izleme noktaları ekleme gibi ağ analizi görevlerini gerçekleştirmesine izin verin."
+    },
+    "premium:user:networkanalysis:locationallocation": {
+      "label": "Konum ataması",
+      "descriptionLocationPlatform": "Uygulamanın rotalama servisine erişmesine ve konum tahsis işlemlerini gerçekleştirmesine izin ver."
+    },
+    "premium:user:networkanalysis:routing": {
+      "label": "Basit rotalama",
+      "descriptionLocationPlatform": "Uygulamanın rotalama servisine erişmesine ve standart rotalama işlemlerini gerçekleştirmesine izin ver."
+    },
+    "premium:user:networkanalysis:optimizedrouting": {
+      "label": "Optimum rotalama",
+      "descriptionLocationPlatform": "Uygulamanın rotalama servisine erişmesine ve optimum rotalama işlemlerini gerçekleştirmesine izin ver."
+    },
+    "premium:user:networkanalysis:vehiclerouting": {
+      "label": "Çok taşıtlı rotalama",
+      "descriptionLocationPlatform": "Çok araçlı rotalama, uygulamanın rotalama servisine erişmesine ve filo rotalama işlemlerini gerçekleştirmesine olanak tanır."
+    },
+    "premium:user:networkanalysis:origindestinationcostmatrix": {
+      "label": "Başlangıç/varış maliyet matrisi",
+      "descriptionLocationPlatform": "Uygulamanın rotalama servisine erişmesine ve seyahat maliyeti matrisleri oluşturmasına izin ver."
+    },
+    "premium:user:networkanalysis:servicearea": {
+      "label": "Servis alanı",
+      "descriptionLocationPlatform": "Uygulamanın rotalama servisine erişmesine ve servis alanları oluşturmasına izin ver."
+    },
+    "premium:user:places": {
+      "label": "Yerler servisi",
+      "descriptionLocationPlatform": "Uygulamanın yerler servisine erişmesine izin ver."
+    },
+    "premium:user:spatialanalysis": {
+      "labelOld": "Mekansal analiz servisi",
+      "label": "Detay analizi servisi",
+      "labelPortal": "Standart detay analizi",
+      "description": "Üyenin detay analiz görevlerini gerçekleştirmesine izin verin.",
+      "descriptionPortal": "Bu ayrıcalık, standart detay analizi görevlerini gerçekleştirme özelliği sağlar.",
+      "descriptionLocationPlatform": "Uygulamanın detay analizi servisine erişmesine izin ver.",
+      "descriptionApp": "Uygulamanın detay analizi servisine erişmesine izin ver."
+    },
+    "premium:user:geoenrichment": {
+      "label": "GeoEnrichment servisi",
+      "description": "Üyenin detaylarda coğrafi zenginleştirme yapmasına izin verin.",
+      "descriptionLocationPlatform": "Uygulamanın GeoEnrichment servisine erişmesine izin ver.",
+      "descriptionApp": "Uygulamanın GeoEnrichment servisine erişmesine izin ver."
+    },
+    "premium:user:demographics": {
+      "label": "Demografik Haritalar",
+      "description": "Uygulamanın ArcGIS Living Atlas'taki premium demografik haritalara erişmesine izin ver.",
+      "descriptionApp": "Uygulamanın ArcGIS Living Atlas'taki premium demografik haritalara erişmesine izin ver.",
+      "descriptionLocationPlatform": "Uygulamanın ArcGIS Living Atlas'taki demografik haritalara erişmesine izin ver."
+    },
+    "premium:publisher:geoanalytics": {
+      "label": "GeoAnalytics detay analizi",
+      "description": "Bu ayrıcalık, GeoAnalytics görevlerini gerçekleştirme özelliği sağlar."
+    },
+    "premium:publisher:rasteranalysis": {
+      "label": "Görüntü analizi",
+      "description": "Üyenin görüntü analiz görevlerini gerçekleştirmesine izin verin. ArcGIS Image analiz yeteneğini gerektirir.",
+      "descriptionPortal": "Üyenin görüntü analiz görevlerini gerçekleştirmesine izin verin.",
+      "descriptionApp": "Uygulamanın görüntü analiz görevlerini gerçekleştirmesine izin verin. ArcGIS Image analiz yeteneğini gerektirir.",
+      "descriptionAppPortal": "Uygulamanın görüntü analiz görevlerini gerçekleştirmesine izin verin."
+    },
+    "premium:publisher:createAdvancedNotebooks": {
+      "label": "Gelişmiş notebook'lar",
+      "description": "Üyenin, notebook'lardaki ArcPy modüllerini içe aktarmasına ve kullanmasına izin verin.",
+      "descriptionApp": "Uygulamanın, notebook'lardaki ArcPy modüllerini içe aktarmasına ve kullanmasına izin verin."
+    },
+    "portal:user:runWebTool": {
+      "label": "Web araçlarını çalıştır",
+      "description": "Üyenin web araçları çalıştırmasına izin verin.",
+      "descriptionPortal": "Üyenin notebooks'tan yayımlanmış web araçlarını çalıştırmasına izin verin.",
+      "descriptionApp": "Uygulamanın web araçları çalıştırmasına izin verin.",
+      "descriptionAppPortal": "Uygulamanın notebooks'tan yayımlanmış web araçlarını çalıştırmasına izin verin."
+    },
+    "portal:user:generateApiTokens": {
+      "label": "API anahtarları oluştur",
+      "description": "Üyenin API anahtarları oluşturmasına izin ver."
+    },
+    "portal:user:assignPrivilegesToApps": {
+      "label": "OAuth 2.0 uygulamalarına ayrıcalıklar ata",
+      "description": "Üyenin OAuth 2.0 uygulamalarına ayrıcalıklar atamasına izin ver."
+    },
+    "portal:user:createWorkflow": {
+      "label": "İş akışı ögesi oluştur",
+      "description": "Üyenin Workflow Manager öğeleri oluşturmasına izin ver"
+    },
+    "premium:user:featurereport": {
+      "label": "Detay raporu",
+      "description": "Üyenin Survey123'de detay raporları oluşturmasına izin verin.",
+      "descriptionApp": "Uygulamanın Survey123'de detay raporları oluşturmasına izin verin."
+    },
+    "premium:user:realitymapping": {
+      "label": "Gerçeklik Haritalama",
+      "description": "Üyenin gerçeklik haritalama görevlerini gerçekleştirmesine izin verin."
+    },
+    "features:user:edit": {
+      "label": "Düzenle",
+      "description": "Üyenin katmanda etkin düzenleme seçeneklerine göre halka açık olmayan düzenlenebilir katmanlarda detay düzenlemesine izin verin.",
+      "descriptionApp": "Uygulamanın katmanda etkin düzenleme seçeneklerine göre halka açık olmayan düzenlenebilir katmanlarda detay düzenlemesine izin verin."
+    },
+    "features:user:fullEdit": {
+      "label": "Tam denetimle düzenle",
+      "description": "Üyenin katmanda etkin düzenleme seçeneklerinden bağımsız olarak, düzenlenebilir, barındırılan bir detay katmanına detay eklemesine, silmesine ve güncellemesine izin verin.",
+      "descriptionApp": "Uygulamanın katmanda etkin düzenleme seçeneklerinden bağımsız olarak, düzenlenebilir, barındırılan bir detay katmanına detay eklemesine, silmesine ve güncellemesine izin verin."
+    },
+    "features:user:manageVersions": {
+      "label": "Tümünü yönet",
+      "description": "Üyelerin versiyon kilitleri yönetmesine ve ArcGIS Server detay katmanları üzerinden erişim sağlanan tüm dallanmış versiyonları görüntülemesine, değiştirmesine, silmesine, düzenlemesine, birleştirmesine ve yayınlamasına izin verin.",
+      "descriptionApp": "Uygulamanın versiyon kilitleri yönetmesine ve ArcGIS Server detay katmanları üzerinden erişim sağlanan tüm dallanmış versiyonları görüntülemesine, değiştirmesine, silmesine, düzenlemesine, birleştirmesine ve yayınlamasına izin verin."
+    },
+    "portal:publisher:createFeatureWebhook": {
+      "label": "Detay katmanı",
+      "description": "Üyenin kendi detay katmanı web kancaları oluşturmasına, düzenlemesine ve silmesine izin verin.",
+      "descriptionApp": "Uygulamanın kendi detay katmanı web kancaları oluşturmasına, düzenlemesine ve silmesine izin verin."
+    },
+    "portal:admin:viewUsers": {
+      "label": "Tümünü görüntüle",
+      "description": "Üyenin kuruluşunuzdaki üyelerin tüm hesap bilgilerini görüntülemesine izin verin.",
+      "descriptionPortal": "Üyenin portalınızdaki üyelerin tüm hesap bilgilerini görüntülemesine izin verin.",
+      "descriptionApp": "Uygulamanın kuruluşunuzdaki üyelerin tüm hesap bilgilerini görüntülemesine izin verin."
+    },
+    "portal:admin:updateUsers": {
+      "label": "Güncelle",
+      "description": "Üyenin kuruluşunuzdaki parolaları sıfırlamasına, üye hesabı bilgilerini güncellemesine ve üye kategorilerini güncellemesine izin verin.",
+      "descriptionPortal": "Üyenin portalınızdaki parolaları sıfırlamasına, üye hesabı bilgilerini güncellemesine ve üye kategorilerini güncellemesine izin verin.",
+      "descriptionApp": "Uygulamanın kuruluşunuzdaki parolaları sıfırlamasına, üye hesabı bilgilerini güncellemesine ve üye kategorilerini güncellemesine izin verin."
+    },
+    "portal:admin:deleteUsers": {
+      "label": "Sil",
+      "description": "Üyenin kuruluşunuzdaki üyelerin hesaplarını silmesine izin verin.",
+      "descriptionPortal": "Üyenin portalınızdaki üyelerin hesaplarını silmesine izin verin.",
+      "descriptionApp": "Uygulamanın kuruluşunuzdaki üyelerin hesaplarını silmesine izin verin."
+    },
+    "portal:admin:inviteUsers": {
+      "label": "Ekle",
+      "labelPortal": "Davet Et",
+      "description": "Üyenin kuruluşunuza üye davet etmesine izin verin.",
+      "descriptionPortal": "Üyenin portalınıza üye davet etmesine izin verin.",
+      "descriptionApp": "Uygulamanın kuruluşunuza üye davet etmesine izin verin."
+    },
+    "portal:admin:disableUsers": {
+      "label": "Devre dışı bırak",
+      "description": "Üyenin kuruluşunuzdaki üyelerin hesaplarını etkinleştirmesine ve devre dışı bırakmasına izin verin.",
+      "descriptionPortal": "Üyenin portalınızdaki üyelerin hesaplarını etkinleştirmesine ve devre dışı bırakmasına izin verin.",
+      "descriptionApp": "Uygulamanın kuruluşunuzdaki üyelerin hesaplarını etkinleştirmesine ve devre dışı bırakmasına izin verin."
+    },
+    "portal:admin:changeUserRoles": {
+      "label": "Rolleri değiştir",
+      "description": "Üyenin bir üye hesabına atanan rolü değiştirmesine izin verin. Yalnızca Yönetici rolüne sahip üyeler diğer hesaplara Yönetici rolü atayabilir veya atamasını kaldırabilirler.",
+      "descriptionPortal": "Üyenin bir üye hesabına atanan rolü değiştirmesine izin verin. Yalnızca Yönetici rolüne sahip üyeler diğer hesaplara Yönetici rolü atayabilir veya atamasını kaldırabilirler.",
+      "descriptionApp": "Uygulamanın bir üye hesabına atanan rolü değiştirmesine izin verin. Yalnızca Yönetici rolüne sahip üyeler diğer hesaplara Yönetici rolü atayabilir veya atamasını kaldırabilirler."
+    },
+    "portal:admin:manageLicenses": {
+      "label": "Lisansları yönet",
+      "description": "Üyenin kuruluşunuzun üyelerine lisans atamasına izin verin.",
+      "descriptionPortal": "Üyenin portalınızın üyelerine lisans atamasına izin verin.",
+      "descriptionApp": "Uygulamanın kuruluşunuzun üyelerine lisans atamasına izin verin."
+    },
+    "portal:admin:updateMemberCategorySchema": {
+      "label": "Kategorileri yönet",
+      "description": "Üyenin kuruluşun üye kategorilerini yapılandırmasına izin verin.",
+      "descriptionPortal": "Üyenin portalın üye kategorilerini yapılandırmasına izin verin.",
+      "descriptionApp": "Uygulamanın kuruluşun üyelik kategorilerini yapılandırmasına izin verin."
+    },
+    "portal:admin:viewGroups": {
+      "label": "Tümünü görüntüle",
+      "description": "Üyenin kuruluşunuzdaki tüm grupları görüntülemesine izin verin.",
+      "descriptionPortal": "Üyenin portalınızdaki tüm grupları görüntülemesine izin verin.",
+      "descriptionApp": "Uygulamanın kuruluşunuzdaki tüm grupları görüntülemesine izin verin."
+    },
+    "portal:admin:updateGroups": {
+      "label": "Güncelle",
+      "description": "Üyenin kuruluşunuzdaki grupları güncellemesine izin verin.",
+      "descriptionPortal": "Üyenin portalınızdaki grupları güncellemesine izin verin.",
+      "descriptionApp": "Uygulamanın kuruluşunuzdaki grupları güncellemesine izin verin."
+    },
+    "portal:admin:deleteGroups": {
+      "label": "Sil",
+      "description": "Üyenin kuruluşunuzdaki grupları silmesine izin verin.",
+      "descriptionPortal": "Üyenin portalınızdaki grupları silmesine izin verin.",
+      "descriptionApp": "Uygulamanın kuruluşunuzdaki grupları silmesine izin verin."
+    },
+    "portal:admin:reassignGroups": {
+      "label": "Sahipliği yeniden ata",
+      "description": "Üyenin kuruluşunuzdaki diğer üyelere grupları yeniden atamasına izin verin.",
+      "descriptionPortal": "Üyenin portalınızdaki diğer üyelere grupları yeniden atamasına izin verin.",
+      "descriptionApp": "Uygulamanın kuruluşunuzdaki diğer üyelere grupları yeniden atamasına izin verin."
+    },
+    "portal:admin:assignToGroups": {
+      "label": "Üye ata",
+      "description": "Üyenin kuruluşunuzdaki üyeleri gruplara atamasına, üyenin grup rolünü güncellemesine ve üyeleri gruplardan çıkarmasına izin verin.",
+      "descriptionPortal": "Üyenin portalınızdaki üyeleri gruplara atamasına, üyenin grup rolünü güncellemesine ve üyeleri gruplardan çıkarmasına izin verin.",
+      "descriptionApp": "Uygulamanın kuruluşunuzdaki üyeleri gruplara atamasına, üyenin grup rolünü güncellemesine ve üyeleri gruplardan çıkarmasına izin verin."
+    },
+    "portal:admin:manageEnterpriseGroups": {
+      "label": "Kuruluşa özel grupla ilişkilendir",
+      "description": "Üyenin grup üyeliğini bir kuruluşa özel grupla ilişkilendirmesine izin verin.",
+      "descriptionApp": "Uygulamanın grup üyeliğini bir kuruluşa özel grupla ilişkilendirmesine izin verin."
+    },
+    "portal:admin:createUpdateCapableGroup": {
+      "label": "Güncelleme yetenekleriyle oluştur",
+      "description": "Üyenin güncelleme yeteneklerine sahip gruplar oluşturmasına izin verin.",
+      "descriptionApp": "Uygulamanın güncelleme yeteneklerine sahip gruplar oluşturmasına izin verin."
+    },
+    "portal:admin:createLeavingDisallowedGroup": {
+      "label": "Ayrılmaya izin vermeyecek şekilde oluştur",
+      "description": "Üyenin, üyelerin ayrılmasına izin vermeyen gruplar oluşturmasına ve sahiplenmesine izin verin (yönetici grupları).",
+      "descriptionApp": "Uygulamanın, uygulamaların ayrılmasına izin vermeyen gruplar oluşturmasına ve sahiplenmesine izin verin (yönetici grupları)."
+    },
+    "portal:admin:viewItems": {
+      "label": "Tümünü görüntüle",
+      "description": "Üyenin kuruluşunuzdaki tüm içerikleri görüntülemesine izin verin.",
+      "descriptionPortal": "Üyenin portalınızdaki tüm içerikleri görüntülemesine izin verin.",
+      "descriptionApp": "Uygulamanın kuruluşunuzdaki tüm içerikleri görüntülemesine izin verin."
+    },
+    "portal:admin:updateItems": {
+      "label": "Güncelle",
+      "description": "Üyenin, içeriği güncellemesine ve kategorize etmesine ve kuruluşunuzda barındırılan detay katmanlarını düzenlemesine izin verin.",
+      "descriptionPortal": "Üyenin, içeriği güncellemesine ve kategorize etmesine ve portalınızda barındırılan detay katmanlarını düzenlemesine izin verin.",
+      "descriptionApp": "Uygulamanın, içeriği güncellemesine ve kategorize etmesine ve kuruluşunuzda barındırılan detay katmanlarını düzenlemesine izin verin."
+    },
+    "portal:admin:deleteItems": {
+      "label": "Sil",
+      "description": "Üyenin kuruluşunuzdaki içerikleri silmesine izin verin.",
+      "descriptionPortal": "Üyenin portalınızdaki içerikleri silmesine izin verin.",
+      "descriptionApp": "Uygulamanın kuruluşunuzdaki içerikleri silmesine izin verin."
+    },
+    "portal:admin:reassignItems": {
+      "label": "Sahipliği yeniden ata",
+      "description": "Üyenin kuruluşunuzdaki diğer üyelere içerikleri yeniden atamasına izin verin.",
+      "descriptionPortal": "Üyenin portalınızdaki diğer üyelere içerikleri yeniden atamasına izin verin.",
+      "descriptionApp": "Uygulamanın kuruluşunuzdaki diğer üyelere içerikleri yeniden atamasına izin verin."
+    },
+    "portal:admin:updateItemCategorySchema": {
+      "label": "Kategorileri yönet",
+      "description": "Üyenin kuruluşun içerik kategorilerini yapılandırmasına izin verin.",
+      "descriptionPortal": "Üyenin portalın içerik kategorilerini yapılandırmasına izin verin.",
+      "descriptionApp": "Uygulamanın kuruluşun içerik kategorilerini yapılandırmasına izin verin."
+    },
+    "portal:publisher:publishServerGPServices": {
+      "label": "Web araçlarını yayınla",
+      "description": "Bu ayrıcalık, federe sunucusu sitelerinden coğrafi işleme servisleri tarafından desteklenen web araçlarını yayınlama özelliği sağlar."
+    },
+    "portal:admin:shareToOrg": {
+      "label": "Üye içeriğini kuruluşla paylaş",
+      "description": "Üyenin kuruluşunuz bünyesindeki diğer üyelerin sahip olduğu içeriği kuruluşla paylaşmasına izin verin.",
+      "descriptionPortal": "Üyenin portalınızdaki başka üyelerin sahip olduğu içeriği portalla paylaşmasına izin verin.",
+      "descriptionApp": "Uygulamanın kuruluşunuz bünyesindeki diğer üyelerin sahip olduğu içeriği kuruluşla paylaşmasına izin verin."
+    },
+    "portal:admin:shareToPublic": {
+      "label": "Üye içeriğini halka açık olarak paylaş",
+      "description": "Üyenin kuruluşunuzdaki başka üyelerin sahip olduğu içeriği halka açık olarak paylaşmasına izin verin.",
+      "descriptionPortal": "Üyenin portalınızdaki başka üyelerin sahip olduğu içeriği halka açık olarak paylaşmasına izin verin.",
+      "descriptionApp": "Uygulamanın kuruluşunuz bünyesindeki diğer üyelerin sahip olduğu içeriği herkesle paylaşmasına izin verin."
+    },
+    "portal:admin:createReports": {
+      "label": "İdari raporlar oluşturun ve yönetin",
+      "description": "Üyenin kuruluşunuz için idari raporlar oluşturmasına ve yönetmesine izin verin.",
+      "descriptionPortal": "Üyenin portalınız için idari raporlar oluşturmasına ve yönetmesine izin verin.",
+      "descriptionApp": "Uygulamanın kuruluşunuz için idari raporlar oluşturmasına ve yönetmesine izin verin."
+    },
+    "marketplace:admin:manage": {
+      "label": "Oluştur ve yönet",
+      "description": "Üyenin ArcGIS Marketplace içinde liste oluşturma, ögeleri listeleme, abonelikleri yönetmenin yanı sıra alıcıları ve kuruluşun iletişim bilgilerini yönetmesine izin verin. Bu ayrıcalığın kullanımı, kuruluşunuzun ArcGIS Marketplace’e listeleme ve yayınlama erişimi edinmesine bağlıdır."
+    },
+    "marketplace:admin:purchase": {
+      "label": "Satın alın ve ücretsiz ürün edinin",
+      "description": "Üyenin ArcGIS Marketplace içinde sağlayıcılara satın alma talepleri göndermesine ve onların ücretsiz ürünlerine erişmesine izin verin. Üyelerin kredi kartı kullanarak ürün satın almasına izin vermek için onları Marketplace satın alıcıları olarak belirtmeniz gerekiyor."
+    },
+    "marketplace:admin:startTrial": {
+      "label": "Denemeleri başlat",
+      "description": "Üyenin ArcGIS Marketplace içinde deneme abonelikleri başlatmasına izin verin."
+    },
+    "portal:admin:manageSecurity": {
+      "label": "Güvenlik ve altyapı",
+      "description": "Üyenin kuruluşun güvenlik ve altyapı ayarlarını yönetmesine izin verin.",
+      "descriptionPortal": "Üyenin portalın güvenlik ve altyapı ayarlarını yönetmesine izin verin.",
+      "descriptionApp": "Uygulamanın kuruluşun güvenlik ve altyapı ayarlarını yönetmesine izin verin."
+    },
+    "portal:admin:manageWebsite": {
+      "label": "Kuruluş web sitesi",
+      "description": "Üyenin kuruluşun web sitesi ayarlarını yönetmesine izin verin.",
+      "descriptionPortal": "Üyenin portalın web sitesi ayarlarını yönetmesine izin verin.",
+      "descriptionApp": "Uygulamanın kuruluşun web sitesi ayarlarını yönetmesine izin verin."
+    },
+    "portal:admin:manageCollaborations": {
+      "label": "İş birlikleri",
+      "description": "Üyenin kuruluşun iş birliklerini yönetmesine izin verin.",
+      "descriptionPortal": "Üyenin portalın iş birliklerini yönetmesine izin verin.",
+      "descriptionApp": "Uygulamanın kuruluşun iş birliklerini yönetmesine izin verin."
+    },
+    "portal:admin:manageCredits": {
+      "label": "Krediler",
+      "description": "Üyenin kuruluşun kredi bütçeleme ayarlarını yönetmesine izin verin.",
+      "descriptionApp": "Uygulamanın kuruluşun kredi bütçeleme ayarlarını yönetmesine izin verin."
+    },
+    "portal:admin:manageRoles": {
+      "label": "Üye rolleri",
+      "description": "Üyenin kuruluşun üye rollerini yönetmesine izin verin.",
+      "descriptionPortal": "Üyenin portalın üye rollerini yönetmesine izin verin.",
+      "descriptionApp": "Uygulamanın kuruluşun üye rollerini yönetmesine izin verin."
+    },
+    "portal:admin:manageServers": {
+      "label": "Sunucular",
+      "description": "Bu ayrıcalık portalın sunucu ayarlarını yönetme becerisi sağlar."
+    },
+    "portal:admin:manageUtilityServices": {
+      "label": "Altyapı servisleri",
+      "description": "Üyenin kuruluşun altyapı servisi ayarlarını yönetmesine izin verin.",
+      "descriptionPortal": "Üyenin portalın altyapı servisi ayarlarını yönetmesine izin verin.",
+      "descriptionApp": "Uygulamanın kuruluşun altyapı servisi ayarlarını yönetmesine izin verin."
+    },
+    "portal:admin:manageWebhooks": {
+      "label": "Web kancaları",
+      "labelPortal": "Kuruluş web kancaları",
+      "description": "Üyenin kuruluşunuzda web kancaları oluşturmasına, düzenlemesine ve silmesine izin verin.",
+      "descriptionApp": "Uygulamanın kuruluşunuzda web kancaları oluşturmasına, düzenlemesine ve silmesine izin verin.",
+      "descriptionPortal": "Üyenin kuruluş web kancaları oluşturmasına, düzenlemesine ve silmesine izin verin ve tüm web kancalarını portal içinde yönetin.",
+      "descriptionAppPortal": "Uygulamanın kuruluş web kancaları oluşturmasına, düzenlemesine ve silmesine izin verin ve tüm web kancalarını portal içinde yönetin."
+    },
+    "portal:admin:createGPWebhook": {
+      "label": "Coğrafi İşlem",
+      "description": "Üyenin kendi coğrafi işlem web kancaları oluşturmasına, düzenlemesine ve silmesine izin verin.",
+      "descriptionApp": "Uygulamanın kendi coğrafi işlem web kancaları oluşturmasına, düzenlemesine ve silmesine izin verin."
+    }
+  }
+}

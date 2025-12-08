@@ -1,0 +1,6 @@
+{
+  "description": "Aprašas",
+  "addDescription": "Įtraukite aprašą",
+  "charactersLeft": "Liko simbolių: ${num}",
+  "invalid": "Apraše negali būti šių simbolių: < arba >."
+}

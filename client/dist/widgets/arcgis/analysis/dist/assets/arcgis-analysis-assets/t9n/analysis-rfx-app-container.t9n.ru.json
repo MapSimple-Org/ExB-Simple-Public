@@ -1,0 +1,16 @@
+{
+  "backLabel": "Назад",
+  "browseHeader": "Выбрать слой",
+  "cannotReopenRasterFunction": "Невозможно повторно открыть функцию растра.",
+  "creditThresholdModal": {
+    "cancelRun": "Отмена",
+    "continueRun": "Запустить все равно",
+    "creditEstimate": "Предполагаемые кредиты: ${cost}",
+    "creditThreshold": "Пороговое количество кредитов: ${threshold}",
+    "heading": "Перед тем, как вы продолжите",
+    "learnMore": "Прочитайте информацию о пороговом количестве кредитов",
+    "thresholdExceeded": "Предполагаемая стоимость этого анализа (количество кредитов) больше порогового количества кредитов веб-карты:"
+  },
+  "failedToExecuteEstimate": "Отправка не выполнена. Не удалось выполнить EstimateRasterAnalysisCost",
+  "runAnalysisLabel": "Запустить"
+}

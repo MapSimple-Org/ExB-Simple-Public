@@ -1,0 +1,15 @@
+{
+  "addRaster": "Adăugați variabila raster",
+  "addScalar": "Adăugare constantă",
+  "raster": "Raster",
+  "scalar": "Scalar",
+  "defaultModelName": "Şablon funcţie raster",
+  "defaultRasterName": "Raster",
+  "invalidRFTMessage": "Șablonul de funcție raster nu este valabil.",
+  "deprecated": "Perimat",
+  "deprecatedHoverText": "Această funcție raster este perimată și va fi eliminată dintr-o versiune viitoare.",
+  "unsupported": "Neacceptat",
+  "unsupportedHoverText": "Această funcție raster nu este acceptată și poate fi disponibilă într-o versiune viitoare.",
+  "userStartDirection": "Selectați o funcție pentru a începe construirea unui șablon de funcţie raster.",
+  "learnMore": "Aflați mai multe"
+}

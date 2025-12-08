@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>Alat Temukan Terdekat menemukan dan mengurutkan fitur terdekat ke lokasi yang ditentukan.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="analysisLayer">
+        <div>
+            
+            <p class="OnlineOnly">Layer awal di mana rentang pencarian akan digambar untuk menemukan fitur terdekat dari layer yang dekat. Fitur dalam layer yang dekat akan ditampilkan berdasarkan kedekatan dengan layer input. Layer dengan hingga  lima ribu fitur didukung. </p>  
+            <p class="PortalOnly">Layer awal di mana rentang pencarian akan digambar untuk menemukan fitur terdekat dai layer yang dekat. Fitur dalam layer yang dekat akan ditampilkan berdasarkan kedekatan dengan layer input.
+            </p>
+            <p class="toolPaneOnly">Jumlah fitur bergantung pada faktor tambahan seperti kriteria pemfilteran dan jangkauan analisis.
+            </p>
+        </div>
+    </div>
+    <div id="nearLayer">
+        <div>
+             
+            <p class="OnlineOnly">Fitur-fitur yang ditemukan berdasarkan kedekatan dengan layer input. Layer dengan hingga  lima ribu fitur didukung. </p> 
+            <p class="PortalOnly">Fitur-fitur yang ditemukan berdasarkan kedekatan dengan layer input.
+            </p>
+            <p class="toolPaneOnly">Jumlah fitur bergantung pada faktor tambahan seperti kriteria pemfilteran dan jangkauan analisis.
+            </p>
+        </div>
+    </div>
+    <div id="pointBarrierLayer">
+        <div>
+            <p>Satu atau lebih fitur titik yang bertindak sebagai pembatas sementara (penghalang) saat melakukan perjalanan di jalan mendasar. Perjalanan diperbolehkan di jalan tetapi tidak melewati penghalang.
+            </p>
+        </div>
+    </div>
+    <div id="lineBarrierLayer">
+        <div>
+            <p>Satu atau lebih fitur garis yang bertindak sebagai pembatas sementara (penghalang) saat melakukan perjalanan di jalan mendasar. Penghalang garis melarang perjalanan ke mana pun penghalang bersinggungan dengan jalan.
+            </p>
+        </div>
+    </div>
+    <div id="polygonBarrierLayer">
+        <div>
+            <p>Satu atau lebih fitur poligon yang bertindak sebagai pembatas sementara (penghalang) saat melakukan perjalanan di jalan mendasar. Penghalang poligon melarang perjalanan ke mana pun poligon bersinggungan dengan jalan.
+            </p>
+        </div>
+    </div>
+    <div id="measurementType">
+        <div>
+            <p>Metode yang akan digunakan untuk mengukur jarak atau waktu. Metode dapat berupa jarak garis atau mode perjalanan.
+            </p>
+        </div>
+    </div>
+    <div id="timeOfDay">
+        <div>
+            <p>Tanggal dan waktu keberangkatan penjelajah dari lokasi di nilai  <b>Layer input</b>.
+            </p>
+        </div>
+    </div>
+    <div id="limitNearNumberCheckbox">
+        <div>
+            
+            <p>Menentukan jumlah maksimum kustom yang diatur dari fitur terdekat digunakan (diaktifkan) atau alat default maksimum 100 yang digunakan.
+            </p>
+        </div>
+    </div>
+    <div id="maxCount">
+        <div>
+            <p>Jumlah maksimum fitur terdekat dapat ditemukan untuk setiap fitur input.
+            </p>
+        </div>
+    </div>
+    <div id="limitSearchRangeCheckbox">
+        <div>
+            
+            <p>Menentukan apakah rentang pencarian maksimum digunakan (diaktifkan) atau rentang pencarian tidak terbatas.
+            </p>
+        </div>
+    </div>
+    <div id="searchCutoff">
+        <div>
+            <p>Rentang pencarian maksimum untuk menemukan fitur terdekat.
+            </p>
+        </div>
+    </div>
+    <div id="searchCutoffUnits">
+        <div>
+            <p>Unit yang digunakan untuk menentukan rentang pencarian.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>Nama layer yang akan dibuat dan ditambahkan ke peta.
+            </p>
+        </div>
+    </div>
+    <div id="includeRouteLayers">
+        <div>
+            <p>Menentukan apakah setiap rute hasil akan disimpan sebagai layer rute.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>Nama folder di  <b>Konten saya</b> tempat penyimpanan hasil.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

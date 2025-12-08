@@ -1,0 +1,12 @@
+{
+  "apiCredentialType": "Тип учетных данных: ключ API",
+  "oauthCredentialType": "Тип учетных данных: OAuth 2.0",
+  "itemAccess": "Доступ к элементу",
+  "page": "Страница: ${page}",
+  "currentPage": "Текущая страница: ${page}",
+  "privileges": "Права доступа",
+  "itemDetails": "Сведения об элементе",
+  "settings": "Настройки",
+  "serviceScope": "Область применения сервиса",
+  "summary": "Краткая информация"
+}

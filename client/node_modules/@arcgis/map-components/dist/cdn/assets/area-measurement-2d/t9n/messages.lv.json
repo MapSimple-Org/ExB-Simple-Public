@@ -1,0 +1,1 @@
+{"componentLabel":"Laukuma mērījums","hint":"Sāciet mērīšanu, noklikšķinot uz kartes, lai novietotu pirmo punktu","mode":"Režīms","modes":{"auto":"Automātiski","planar":"Planārs","geodesic":"Ģeodēzisks"},"newMeasurement":"Jauna mērvienība","perimeter":"Perimetrs","unit":"Vienība","unsupported":"2D laukuma mērīšana tiek atbalstīta tikai MapView režīmā."}

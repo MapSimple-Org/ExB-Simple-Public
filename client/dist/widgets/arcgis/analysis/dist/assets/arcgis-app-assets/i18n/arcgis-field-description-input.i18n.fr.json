@@ -1,0 +1,6 @@
+{
+  "description": "Description",
+  "addDescription": "Ajouter une description",
+  "charactersLeft": "Caractères restants : ${num}",
+  "invalid": "La description ne peut pas contenir les caractères < ou >."
+}

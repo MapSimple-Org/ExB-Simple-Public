@@ -1,0 +1,6 @@
+{
+  "greaterThanErrorMessage": "Số đầu vào phải lớn hơn ${min}",
+  "lesserThanErrorMessage": "Số đầu vào phải nhỏ hơn ${max}",
+  "greaterThanOrEqualErrorMessage": "Số đầu vào phải lớn hơn hoặc bằng ${min}",
+  "lesserThanOrEqualErrorMessage": "Số đầu vào phải nhỏ hơn hoặc bằng ${max}"
+}

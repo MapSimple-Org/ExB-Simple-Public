@@ -1,0 +1,1 @@
+System.register([],function(e){return{execute:function(){e({settingsLabel:"Innstillinger for Koblingsutforsker",selectModelViewer:"Velg et miniprogram for dokumentviseren for \xe5 vise tilkoblede dokumenter."})}}});

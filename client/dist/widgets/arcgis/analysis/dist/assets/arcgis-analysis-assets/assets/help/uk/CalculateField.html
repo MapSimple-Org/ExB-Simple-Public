@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>Інструмент &laquo;Обчислити поле&raquo; обчислює значення для нового або наявного поля.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputTable">
+        <div>
+            <p>Вхідний шар або таблиця, для яких обчислюватиметься поле.
+            </p>
+            <p class="modelBuilderOnly"> <b>Шар</b> визначається за замовчуванням, коли <b>Вхідний набір даних</b> не заповнено. Щоб додати вхідну таблицю, виберіть <b>Таблиця</b> перед додаванням набору даних.
+            </p>
+        </div>
+    </div>
+    <div id="whereClause">
+        <div>
+            <p>Атрибутивний запит, яким визначається підмножина записів, до якої застосовуватиметься обчислення поля. Щоб застосувати обчислення до усіх записів, залиште цей параметр порожнім.
+            </p>
+        </div>
+    </div>
+    <div id="field">
+        <div>
+            <p>Поле, куди додаватимуться обчислені значення. Можна вибрати наявне поле або створити нове. 
+            </p>
+        </div>
+    </div>
+    <div id="fieldCalcExpression">
+        <div>
+            <p>Вираз SQL, що використовується для обчислення значень для  <b>Поля для обчислення</b>.
+            </p>
+            <p>Вираз може містити основні оператори, функції й імена полів і має створювати значення, які відповідають типу поля для  <b>Поля для обчислення</b>.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

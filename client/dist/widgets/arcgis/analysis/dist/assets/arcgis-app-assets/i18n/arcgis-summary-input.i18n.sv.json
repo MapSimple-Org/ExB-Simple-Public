@@ -1,0 +1,10 @@
+{
+  "summary": "Sammanfattning",
+  "description": "Beskrivning",
+  "addSummary": "Lägg till en sammanfattning",
+  "addDescription": "Lägg till en beskrivning",
+  "charactersLeft": "Tecken kvar: ${num}",
+  "invalid": "Sammanfattningen får inte innehålla något av dessa tecken: < eller >.",
+  "invalidDescription": "Beskrivningen får inte innehålla något av dessa tecken: < eller >.",
+  "summaryReadOnly": "Sammanfattning skrivskyddad."
+}

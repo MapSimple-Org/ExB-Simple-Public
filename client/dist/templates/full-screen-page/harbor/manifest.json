@@ -1,0 +1,23 @@
+{
+  "name": "harbor",
+  "type": "template",
+  "templateType": "full-screen-page",
+  "label": "Harbor",
+  "description": "Harbor is a map-centric template featuring collapsible filter groups in an accordion layout. Users can interact with dynamic filter panels to refine visible data, while contextual buttons open related windows or panels for additional detail.",
+  "thumbnail": "thumbnail.png",
+  "order": 26,
+  "templateCreateVersion": "1.18.0",
+  "tags": [
+    "Map",
+    "Legend",
+    "Filter",
+    "Accordion"
+  ],
+  "categoriesTags": [
+    "Web page",
+    "Fullscreen",
+    "Map centric"
+  ],
+  "thumbnailWidth": 320,
+  "thumbnailHeight": 214
+}

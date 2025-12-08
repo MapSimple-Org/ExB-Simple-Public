@@ -1,0 +1,20 @@
+{
+  "title": "Naslov",
+  "addTitle": "Dodajte naslov",
+  "validation": {
+    "error": "Greška",
+    "titleRequired": "Popunjavanje polja s naslovom je obavezno.",
+    "itemExists": "Stavka s naslovom \"${name}\" već postoji u ovoj fascikli. Odaberite drugi naslov.",
+    "titleInUseService": "Sloj s naslovom \"${name}\" već postoji. Odaberite drugi naslov.",
+    "itemInRecycleBin": "Stavka sa naslovom \"${name}\" već postoji i nalazi se u korpi za otpatke. Odaberite drugi naslov.",
+    "serviceNameInvalid": "Naslov servisa može da sadrži samo alfanumeričke znakove ili donje crte, i da bude dugačak 90 znakova ili manje.",
+    "dataStoreTitleInvalid": "Naslov skladišta podataka može da sadrži samo alfanumeričke znakove ili donje crte, i da bude dugačak 90 znakova ili manje.",
+    "titleInvalid": "Dužina mora da sadrži manje od 255 znakova i ne može da sadrži: < ili >.",
+    "titleStartsWithNumber": "Naslov ne može da počinje brojem.",
+    "invalidCharacters": {
+      "single": "Naziv ne može da sadrži ovaj znak: ${invalidCharacters}.",
+      "multiple": "Naziv ne može da sadrži bilo koji od ovih znakova: ${invalidCharacters}.",
+      "unknown": "Naziv ne može da sadrži bilo koji od ovih znakova: ${invalidCharacters}."
+    }
+  }
+}

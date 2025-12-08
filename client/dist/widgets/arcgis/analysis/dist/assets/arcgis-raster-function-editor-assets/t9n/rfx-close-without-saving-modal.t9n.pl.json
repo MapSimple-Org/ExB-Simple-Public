@@ -1,0 +1,7 @@
+{
+  "header": "Edytor funkcji rastrów",
+  "content": "Istnieją niezapisane zmiany w '${rftTitle}'. Jeśli nie zapiszesz zmian, zostaną one utracone.",
+  "cancel": "Anuluj",
+  "dontSave": "Nie zapisuj",
+  "save": "Zapisz"
+}

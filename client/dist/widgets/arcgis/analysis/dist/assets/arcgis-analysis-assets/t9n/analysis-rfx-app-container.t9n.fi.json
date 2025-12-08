@@ -1,0 +1,16 @@
+{
+  "backLabel": "Takaisin",
+  "browseHeader": "Valitse karttataso",
+  "cannotReopenRasterFunction": "Rasteritoimintoa ei voitu avata uudelleen.",
+  "creditThresholdModal": {
+    "cancelRun": "Peruuta",
+    "continueRun": "Suorita joka tapauksessa",
+    "creditEstimate": "Arvioidut krediitit: ${cost}",
+    "creditThreshold": "Krediitin kynnysarvo: ${threshold}",
+    "heading": "Ennen kuin jatkat",
+    "learnMore": "Lue lisää krediittien kynnysmääristä",
+    "thresholdExceeded": "Tämän analyysin arvioitu krediittikustannus on suurempi kuin web-kartan krediittien kynnysarvo:"
+  },
+  "failedToExecuteEstimate": "Lähettäminen epäonnistui. Rasterianalyysin kustannusarvion suorittaminen epäonnistui",
+  "runAnalysisLabel": "Suorita"
+}

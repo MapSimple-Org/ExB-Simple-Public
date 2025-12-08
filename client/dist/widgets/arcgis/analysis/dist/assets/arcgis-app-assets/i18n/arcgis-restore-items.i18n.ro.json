@@ -1,0 +1,31 @@
+{
+  "back": "Înapoi",
+  "cancel": "Anulare",
+  "learnMore": "Aflați mai multe",
+  "restore": "Restaurare",
+  "restoreTo": "Restabilire la",
+  "restoreItem": "Restabilire element",
+  "restoreItems": "Restabilire elemente",
+  "noticeMessage": "Elementele restaurate nu vor mai fi partajate. Examinați conținutul înainte de a-l partaja din nou.",
+  "cannotBulkRestoreXItems": "Nu se pot restaura în grup mai mult de ${number} elemente, vă rugăm să deselectați câteva elemente.",
+  "cannotBulkRestoreMultipleOwners": "Nu se pot restaura în grup elemente care aparțin unor proprietari diferiți. Selectați elemente de la un singur proprietar pentru a le restaura în grup.",
+  "toRestore": {
+    "single": "Element de restaurat:",
+    "multiple": "Elemente de restaurat:"
+  },
+  "cannotRestore": "Nu se poate restaura:",
+  "dependentItems": {
+    "single": "Acest element nu poate fi restaurat deoarece este dependent de <strong style='font-weight: 500'>${parent}</strong>. Restaurați-le împreună.",
+    "singleUnknown": "Acest element nu poate fi restaurat deoarece depind de un alt element din coșul de reciclare. Restaurați-le împreună.",
+    "multiple": "Aceste elemente nu pot fi restaurate deoarece depind de alte elemente din coșul de reciclare. Restaurați-le împreună.",
+    "multipleSameSource": "Aceste elemente nu pot fi restabilite deoarece sunt dependente de <strong style='font-weight: 500'>${parent}</strong>. Restaurați-le împreună."
+  },
+  "pageRangeWithTotalRecycleBinSize": {
+    "en": "${start} - ${end} din ${total} (${size}) în coșul de reciclare",
+    "other": "${start} - ${end}, total: ${total} (${size}) în coșul de reciclare"
+  },
+  "pageRangeWithGreaterThanTotalRecycleBinSize": {
+    "en": "${start} - ${end} din ${total} (>${size}) în coșul de reciclare",
+    "other": "${start} - ${end}, total: ${total} (>${size}) în coșul de reciclare"
+  }
+}

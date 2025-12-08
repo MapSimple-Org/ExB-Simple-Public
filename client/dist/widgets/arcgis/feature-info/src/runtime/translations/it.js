@@ -1,0 +1,1 @@
+System.register([],function(e){return{execute:function(){e({_widgetLabel:"Informazioni sulla feature",noDataMessageDefaultText:"Nessun dato trovato.",featureNumbers:"{index} di {count}",featureInfoDataActionLabel:"Record corrente informazioni feature {layer}"})}}});

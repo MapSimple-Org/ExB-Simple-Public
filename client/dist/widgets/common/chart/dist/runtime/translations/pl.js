@@ -1,0 +1,1 @@
+System.register([],function(e){return{execute:function(){e({_widgetLabel:"Wykres",dataEmptyTip:"Nie znaleziono danych."})}}});

@@ -1,0 +1,7 @@
+{
+  "defaultValue": "Jenis parameter tidak didukung. Nilai default akan digunakan. <calcite-link target='_blank' href='${ docLink }'>Pelajari selengkapnya</calcite-link>",
+  "requiredMessage": "Parameter ini harus diisi.",
+  "unsupportedGPType": "Jenis parameter tidak didukung. <calcite-link target='_blank' href='${ docLink }'>Pelajari selengkapnya</calcite-link>",
+  "unsupportedParameterConfig": "Konfigurasi parameter tidak didukung. <calcite-link target='_blank' href='${ docLink }'>Pelajari selengkapnya</calcite-link>",
+  "unsupportedParameterConfigDefaultValue": "Konfigurasi parameter tidak didukung. Nilai default akan digunakan. <calcite-link target='_blank' href='${ docLink }'>Pelajari selengkapnya</calcite-link>"
+}

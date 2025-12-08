@@ -1,0 +1,13 @@
+{
+  "weightedOverlayTable": "भारित ओवरले तालिका",
+  "id": "ID",
+  "layer": "लेयर",
+  "field": "फ़ील्ड",
+  "influence": "प्रभाव",
+  "sumOfInfluence": "प्रभाव का योग",
+  "value": "मान",
+  "remapTable": "तालिका को रीमैप करें",
+  "scale": "स्केल",
+  "scales": "तराजू",
+  "selectRaster": "रास्टर चुनें"
+}

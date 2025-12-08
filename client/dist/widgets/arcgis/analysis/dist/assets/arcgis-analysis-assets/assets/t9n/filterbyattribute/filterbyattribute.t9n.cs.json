@@ -1,0 +1,8 @@
+{
+  "itemProperties": {
+    "description": "Výsledek vygenerovaný spuštěním analytického nástroje Filtrovat podle atributů.",
+    "snippet": "Výsledek vygenerovaný nástrojem Filtrovat podle atributů"
+  },
+  "noLayerDisabledTooltip": "Vyberte platnou vstupní datovou sadu.",
+  "queryCriteriaGroupLabel": "Kritéria dotazu"
+}

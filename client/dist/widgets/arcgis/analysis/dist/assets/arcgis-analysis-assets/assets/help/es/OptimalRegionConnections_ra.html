@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>La herramienta Conexiones de regi&oacute;n &oacute;ptimas calcula la red de conectividad &oacute;ptima entre dos o m&aacute;s regiones de entrada.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputRegionRasterOrFeatures">
+        <div>
+            <p>La capa de entidades o r&aacute;ster que identifica las regiones que se conectar&aacute;n mediante la red &oacute;ptima.
+            </p>
+            <p class="toolPaneOnly">En el caso de las entradas de entidades, el recuento depende de factores adicionales como los criterios de filtrado y el alcance del an&aacute;lisis.
+            </p>
+        </div>
+    </div>
+    <div id="inputBarrierRasterOrFeatures">
+        <div>
+            <p>La capa de entidades o r&aacute;ster que identifica los obst&aacute;culos que se deben evitar a la hora de generar las rutas.
+            </p>
+            <p>Para una capa r&aacute;ster, las celdas que tengan alg&uacute;n valor (incluido cero) se tratar&aacute;n como barreras.
+            </p>
+            <p class="toolPaneOnly">En el caso de las entradas de entidades, el recuento depende de factores adicionales como los criterios de filtrado y el alcance del an&aacute;lisis.
+            </p>
+        </div>
+    </div>
+    <div id="inputCostRaster">
+        <div>
+            <p>La capa r&aacute;ster que define la impedancia o el coste de moverse por cada celda.
+            </p>
+            <p>El valor de cada ubicaci&oacute;n de celda representa la distancia de coste por unidad para moverse a trav&eacute;s de la celda. No puede ser negativo ni cero.
+            </p>
+        </div>
+    </div>
+    <div id="distanceMethod">
+        <div>
+            <p>Especifica si la distancia se calcular&aacute; utilizando un m&eacute;todo planar (Tierra plana) o geod&eacute;sico (elipsoide).
+            </p>
+        </div>
+    </div>
+    <div id="connectionsWithinRegions">
+        <div>
+            <p>Especifica si las rutas seguir&aacute;n y se conectar&aacute;n dentro de las regiones de entrada.
+            </p>
+        </div>
+    </div>
+    <div id="outputOptimalLinesName">
+        <div>
+            <p>El nombre de la capa de red &oacute;ptima de rutas que conecta cada una de las regiones de entrada que se crear&aacute;n y agregar&aacute;n al mapa.
+            </p>
+        </div>
+    </div>
+    <div id="outputNeighborConnectionsName">
+        <div>
+            <p>El nombre de la capa de l&iacute;neas de conexi&oacute;n vecina que se crear&aacute; y se agregar&aacute; al mapa. La capa identifica todas las rutas de cada regi&oacute;n hacia sus vecinos de coste o m&aacute;s pr&oacute;ximos.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>El nombre de la carpeta de  <b>Mi contenido</b> en la que se guardar&aacute; el resultado.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

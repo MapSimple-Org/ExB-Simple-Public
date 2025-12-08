@@ -1,0 +1,12 @@
+{
+  "choiceList": "Lista med alternativ",
+  "choiceListBadInput": "Indatavärdet innehåller en ogiltig post.",
+  "comboboxPlaceholderText": "Välj ett alternativ...",
+  "inputPlaceholderText": "Ange ett värde...",
+  "invalidCharacterError": "Indatavärdet innehåller ogiltiga tecken.",
+  "maxLengthError": "Indatavärdet kan inte ha fler än ${maxLength} tecken.",
+  "minLengthError": "Indatavärdet kan inte ha färre än ${minLength} tecken.",
+  "multiSelectComboboxPlaceholderText": "Välj ett eller flera alternativ...",
+  "requiredError": "Denna parameter är obligatorisk.",
+  "selectAll": "Markera alla"
+}

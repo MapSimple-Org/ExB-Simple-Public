@@ -1,0 +1,9 @@
+{
+  "zoomIn": "Nagyítás",
+  "zoomOut": "Kicsinyítés",
+  "autoLayout": "Automatikus elrendezés",
+  "stretch": "Nézethez igazítás",
+  "select": "Kiválasztás",
+  "pan": "Pásztázás",
+  "deleteSelectedItemsText": "Kijelölt elemek törlése"
+}

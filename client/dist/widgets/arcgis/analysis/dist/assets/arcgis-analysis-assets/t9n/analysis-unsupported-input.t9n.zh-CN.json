@@ -1,0 +1,7 @@
+{
+  "defaultValue": "参数类型不受支持。 将使用默认值。 <calcite-link target='_blank' href='${ docLink }'>了解详细信息</calcite-link>",
+  "requiredMessage": "必需参数。",
+  "unsupportedGPType": "参数类型不受支持。 <calcite-link target='_blank' href='${ docLink }'>了解详细信息</calcite-link>",
+  "unsupportedParameterConfig": "不支持的参数配置。 <calcite-link target='_blank' href='${ docLink }'>了解详细信息</calcite-link>",
+  "unsupportedParameterConfigDefaultValue": "不支持的参数配置。 将使用默认值。 <calcite-link target='_blank' href='${ docLink }'>了解详细信息</calcite-link>"
+}

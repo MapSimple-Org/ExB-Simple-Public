@@ -1,0 +1,16 @@
+{
+  "updateData": "Zaktualizuj dane",
+  "cancel": "Anuluj",
+  "editStyle": "Zastąp plik stylów warstwy zaktualizowaną wersją z komputera.",
+  "updatePackages": "Zastąp ${type} zaktualizowaną wersją z komputera. Przesłany plik musi mieć taką samą nazwę jak ${hostedLayerName}.",
+  "uploadStaticFiles": "Przesyłany plik musi mieć taką samą nazwę jak plik oryginalny ${fileName}",
+  "sameFileNameDescription": "Przesyłany plik musi mieć taką samą nazwę i nazwy pól jak oryginalny plik ${fileName}",
+  "updating": "Aktualizowanie...",
+  "error": "Błąd",
+  "errors": {
+    "sameFileName": "Aby zaktualizować ten element, należy przesłać plik o nazwie ${fileName}.",
+    "invalidStyleFileExtension": "Nieprawidłowe rozszerzenie pliku. Przesłany plik stylów musi mieć rozszerzenie .json.",
+    "errorWhileUpload": "Wystąpił błąd podczas przesyłania elementu.",
+    "errorUpdate": "Wystąpił błąd podczas zastępowania elementu."
+  }
+}

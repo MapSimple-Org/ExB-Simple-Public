@@ -1,0 +1,20 @@
+{
+  "name": "timeline",
+  "type": "template",
+  "templateType": "scrolling-page",
+  "label": "Timeline",
+  "description": "Timeline is a template designed to display your images and content in chronological order.",
+  "thumbnail": "thumbnail.png",
+  "order": 8,
+  "tags": [
+    "Divider",
+    "Title",
+    "Flow"
+  ],
+  "categoriesTags": [
+    "Web page",
+    "Scrolling"
+  ],
+  "thumbnailWidth": 320,
+  "thumbnailHeight": 214
+}

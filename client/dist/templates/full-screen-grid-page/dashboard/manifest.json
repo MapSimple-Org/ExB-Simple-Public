@@ -1,0 +1,23 @@
+{
+  "name": "dashboard",
+  "type": "template",
+  "templateType": "full-screen-grid-page",
+  "label": "Dashboard",
+  "description": "Dashboard is a template with a map at the upper right corner surrounded by five customizable placeholders, allowing you to design content with ease.",
+  "thumbnail": "thumbnail.png",
+  "order": 9,
+  "templateCreateVersion": "1.14.0",
+  "tags": [
+    "Map",
+    "Grid",
+    "Widget Controller"
+  ],
+  "categoriesTags": [
+    "Map centric",
+    "WAB classic",
+    "Dashboard",
+    "Fullscreen grid"
+  ],
+  "thumbnailWidth": 320,
+  "thumbnailHeight": 214
+}

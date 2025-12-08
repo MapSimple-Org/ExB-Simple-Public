@@ -1,0 +1,15 @@
+{
+  "expandAll": "ขยายทั้งหมด",
+  "collapseAll": "ยุบทั้งหมด",
+  "categoryItem": {
+    "expand": "ขยาย",
+    "collapse": "ย่อลงมา",
+    "editCategory": "แก้ไขหมวดหมู่",
+    "deleteCategory": "ลบหมวดหมู่",
+    "addSubcategory": "เพิ่มหมวดหมู่ย่อย",
+    "addCategory": "เพิ่มหมวดหมู่",
+    "save": "จัดเก็บ",
+    "cancel": "ยกเลิก",
+    "missingTitleMessage": "ต้องระบุชื่อหมวดหมู่"
+  }
+}

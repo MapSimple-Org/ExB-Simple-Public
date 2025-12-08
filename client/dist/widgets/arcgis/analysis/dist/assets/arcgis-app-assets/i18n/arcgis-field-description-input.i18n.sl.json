@@ -1,0 +1,6 @@
+{
+  "description": "Opis",
+  "addDescription": "Dodaj opis",
+  "charactersLeft": "Preostalih znakov: ${num}",
+  "invalid": "Opis ne sme vsebovati nobenega od znakov: < ali >."
+}

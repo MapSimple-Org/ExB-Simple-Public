@@ -1,0 +1,27 @@
+{
+  "area": "Area",
+  "binResolution": "Risoluzione bin H3",
+  "binSize": "Dimensioni del raccoglietore",
+  "binSizeUnit": "Unità",
+  "binType": "Tipo forma raccoglitore",
+  "diamondBins": "Contenitori romboidali",
+  "distance": "Distanza",
+  "extentLayer": "Layer di estensione",
+  "extentOverrideMessage": "Questo layer estensione verrà utilizzato al posto di qualsiasi estensione di elaborazione impostata negli ambienti.",
+  "extentSectionLabel": "Impostazioni di estensione",
+  "extentSectionText": "Specificare un layer di estensione che la tassellazione dovrebbe coprire.",
+  "h3hexagonBins": "Contenitori esagonali H3",
+  "hexagon": "Esagono",
+  "intersectStudyArea": "Mantieni solo tassellazioni che si intersecano",
+  "itemProperties": {
+    "description": "Feature layer generato dall'esecuzione dello strumento di analisi Genera tassellazioni.",
+    "snippet": "Feature layer generato da Genera tassellazioni"
+  },
+  "outputAreasSectionText": "Fornisci un nome per la griglia di tassellazione.",
+  "sizeType": "Misura dimensioni raccoglitore",
+  "square": "Quadrati",
+  "tessellationSettingsLabel": "Impostazioni tassellazione",
+  "tessellationSettingsSummaryText": "Specifica la forma e le dimensioni del raccoglitore da generare.",
+  "thexagonBins": "Contenitori a esagono trasversale",
+  "triangleBins": "Contenitori triangolari"
+}

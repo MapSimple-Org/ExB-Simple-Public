@@ -1,0 +1,1 @@
+System.register([],function(e){return{execute:function(){e({_widgetLabel:"Odd\u011blova\u010d",quickStyleItem:"Rychl\xfd styl {index}"})}}});

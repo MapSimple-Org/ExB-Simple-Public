@@ -1,0 +1,9 @@
+{
+  "inputFlowDirectionRasterLabel": "แรสเตอร์ทิศทางการไหลอินพุท",
+  "inputLayerGroupText": "เลือกแรสเตอร์สตรีมอินพุทและทิศทางการไหล",
+  "inputStreamRasterLabel": "แรสเตอร์สตรีมอินพุท",
+  "itemProperties": {
+    "description": "เอาท์พุทที่สร้างขึ้นจากการรันเครื่องมือการวิเคราะห์ StreamLink",
+    "snippet": "เอาท์พุทที่สร้างขึ้นจาก StreamLink"
+  }
+}

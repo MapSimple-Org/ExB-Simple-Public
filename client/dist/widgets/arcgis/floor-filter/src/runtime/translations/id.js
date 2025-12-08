@@ -1,0 +1,1 @@
+System.register([],function(t){return{execute:function(){t({_widgetLabel:"Filter Lantai",floorfilter_noMap:"Filter Lantai",floorfilter_notFloorAware:"Peta yang dipilih tidak sadar lantai"})}}});

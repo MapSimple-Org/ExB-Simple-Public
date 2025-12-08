@@ -1,0 +1,23 @@
+{
+  "CPU": "CPU",
+  "GPU": "GPU",
+  "asSpecified": "Kā norādīts",
+  "automatic": "Automātisks",
+  "bilinear": "Bilineārā interpolācija (mainīgām vērtībām)",
+  "cellSize": "Šūnas izmērs",
+  "cubic": "Kubiskā konvolūcija (mainīgām vērtībām)",
+  "default": "Noklusējums",
+  "fromLayer": "No slāņa",
+  "mask": "Maska",
+  "maxOf": "Maksimālais ievades skaits",
+  "minOf": "Minimālais ievades skaits",
+  "nearest": "Tuvākā apkārtne (konkrētām vērtībām)",
+  "parallelProcessingFactor": "Paralēlās apstrādes koeficients",
+  "parallelProcessingFactorPlaceholderText": "Ievadiet skaitli vai procentus...",
+  "processorType": "Procesora veids",
+  "recycleProcessingWorkers": "Apstrādes darbinieku pārstrādes intervāls",
+  "resamplingMethod": "Pārģenerēšanas metode",
+  "retryOnFailures": "Atkārtoto mēģinājumu skaits kļūmju gadījumā",
+  "selectCellSize": "Izvēlēties šūnas izmēru...",
+  "snapRaster": "Pielipināšanas rastrs"
+}

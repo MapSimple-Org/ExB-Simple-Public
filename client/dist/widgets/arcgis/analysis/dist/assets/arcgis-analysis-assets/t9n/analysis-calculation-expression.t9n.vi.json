@@ -1,0 +1,10 @@
+{
+  "cannotAssignValueToTargetField": "Giá trị tính toán và loại trường không khớp.",
+  "createExpression": "Tạo biểu thức",
+  "deleteExpression": "Xóa biểu thức",
+  "editExpression": "Chỉnh sửa biểu thức",
+  "expression": "Biểu thức",
+  "isRequired": "Thông số này là thông tin bắt buộc.",
+  "layerLoadError": "Không thể tải lớp.",
+  "validationFailedInvalidSQL": "Xác thực biểu thức không thành công. Biểu thức này không phải SQL hợp lệ."
+}

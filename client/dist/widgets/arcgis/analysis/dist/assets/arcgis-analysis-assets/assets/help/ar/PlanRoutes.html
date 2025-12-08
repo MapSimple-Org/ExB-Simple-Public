@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html dir="rtl">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>تنشئ أداة &quot;تخطيط المسارات&quot; مسارات التنقل باستخدام نقاط توقف متعددة لأساطيل المركبات.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="startLayer">
+        <div>
+            <p>المعالم النقطية التي تحدد أماكن بدء مسارات المركبات.
+            </p>
+            <p class="toolPaneOnly">يعتمد عدد المعالم على عوامل إضافية مثل معايير التصفية ومدى التحليل.
+            </p>
+        </div>
+    </div>
+    <div id="stopsLayer">
+        <div>
+            <p>المعالم النقطية التي يجب على المركبات المرور بها خلال مساراتها. أصبحت هذه النقاط محطات مُعينة أو غير مُعينة في الناتج.
+            </p>
+            <p class="toolPaneOnly">يعتمد عدد المعالم على عوامل إضافية مثل معايير التصفية ومدى التحليل.
+            </p>
+        </div>
+    </div>
+    <div id="returnToStart">
+        <div>
+            
+            <p>يحدد ما إذا كان ينبغي على المركبات العودة إلى نقطة الانطلاق (ممكّن) أو إنهاء رحلتها في مواقع محددة.
+            </p>
+        </div>
+    </div>
+    <div id="endLayer">
+        <div>
+            <p>المعالم النقطية التي تحدد أماكن انتهاء مسارات المركبات. عندما تضم الطبقة نقطة واحدة فقط، يتم توجيه مسار جميع المركبات إلى نقطة انتهاء مشتركة. عندما تتضمن الطبقة نقاطًا متعددة، يتم توجيه كل مركبة نحو موقع نهاية فريد.
+            </p>
+            <p class="toolPaneOnly">يعتمد عدد المعالم على عوامل إضافية مثل معايير التصفية ومدى التحليل.
+            </p>
+        </div>
+    </div>
+    <div id="startLayerRouteIDField">
+        <div>
+            <p>الحقل الموجود في طبقة البدء والذي يحدد بشكل فريد المسارات أو المركبات أو السائقين الفرديين. إذا كانت المركبات تنطلق من مواقع متعددة وتصل إلى مواقع متعددة، يتعين أن تتطابق معرفات المسار في طبقات البداية والنهاية.
+            </p>
+        </div>
+    </div>
+    <div id="endLayerRouteIDField">
+        <div>
+            <p>الحقل الموجود في طبقة الانتهاء والذي يحدد بشكل فريد المسارات أو المركبات أو السائقين الفرديين. إذا كانت المركبات تبدأ في مواقع متعددة وتنتهي في مواقع متعددة، يجب مطابقة معرفات المسار المختارة لطبقات البدء والانتهاء.
+            </p>
+        </div>
+    </div>
+    <div id="pointBarrierLayer">
+        <div>
+            <p>معلم نقطي واحد أو أكثر يعمل كقيود (حواجز) مؤقتة عند التنقل عبر الشوارع الأساسية. يُسمح بالسفر عبر الشارع ولكن ليس من خلال العائق.
+            </p>
+        </div>
+    </div>
+    <div id="lineBarrierLayer">
+        <div>
+            <p>معلم خطي واحد أو أكثر يعمل كقيود (حواجز) مؤقتة عند التنقل عبر الشوارع الأساسية. تمنع الحواجز الخطية التنقل في أي مكان تتقاطع فيه الحواجز مع الشوارع.
+            </p>
+        </div>
+    </div>
+    <div id="polygonBarrierLayer">
+        <div>
+            <p>معلم مضلع واحد أو أكثر يعمل كقيود (حواجز) مؤقتة عند التنقل عبر الشوارع الأساسية. تمنع حواجز المضلع التنقل في أي مكان تتقاطع فيه المضلعات مع الشوارع.
+            </p>
+        </div>
+    </div>
+    <div id="travelMode">
+        <div>
+            <p>يحدد وضع السفر المستخدم لإنشاء المسارات. يتم دعم أوضاع السفر المستندة إلى الوقت فقط.
+            </p>
+        </div>
+    </div>
+    <div id="routeStartTime">
+        <div>
+            <p>تاريخ ووقت مغادرة المركبات.
+            </p>
+        </div>
+    </div>
+    <div id="routeCount">
+        <div>
+            
+            <p class="OnlineOnly">العدد الأقصى للمركبات التي تكون متاحة للمرور بنقاط التوقف. في حالة احتواء قيم  <b>طبقة البداية</b> و <b>طبقة النهاية</b> على معلم واحد فقط، يمكنك تحديد عدد المركبات المسموح به بحد أقصى 100. إذا كان أي من الطبقتين تحتوي على أكثر من معلم واحد، فلا يمكن تحرير القيمة الافتراضية. </p> 
+            <p class="PortalOnly">العدد الأقصى للمركبات التي تكون متاحة للمرور بنقاط التوقف. إذا كانت قيم  <b>طبقة البداية</b> و <b>طبقة النهاية</b> تحتوي على معلم واحد، فيمكنك تحديد الحد الأقصى لعدد المركبات. إذا كان أي من الطبقتين تحتوي على أكثر من معلم واحد، فلا يمكن تحرير القيمة الافتراضية.
+            </p>
+        </div>
+    </div>
+    <div id="maxStopsPerRoute">
+        <div>
+            
+            <p class="OnlineOnly">العدد الأقصى لنقاط التوقف التي يمكن لكل مركبة إنشاؤها على مسار. يمكنك تحديد القيمة بين 1 و 200. </p> 
+            <p class="PortalOnly">العدد الأقصى لنقاط التوقف التي يمكن لكل مركبة إنشاؤها على مسار.
+            </p>
+        </div>
+    </div>
+    <div id="stopServiceTime">
+        <div>
+            <p>متوسط وقت الخدمة المتوقع الذي يُقضى في كل محطة.
+            </p>
+        </div>
+    </div>
+    <div id="limitMaxRouteTimeCheckbox">
+        <div>
+            <p>يحدد ما إذا كان يجب تطبيق الحد الأقصى لوقت التوجيه على المركبات. يشمل وقت المسار وقت التنقل المتوقع وأوقات الخدمة المُستغرقة عند نقاط التوقف على طول المسار.
+            </p>
+        </div>
+    </div>
+    <div id="maxRouteTime">
+        <div>
+            <p>الحد الأقصى للمدة الزمنية التي يمكن أن يستغرقها المسار من البداية إلى النهاية.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>اسم الطبقة التي سيتم إنشاؤها وإضافتها إلى الخريطة.
+            </p>
+        </div>
+    </div>
+    <div id="includeRouteLayers">
+        <div>
+            <p>يحدد ما إذا كان سيتم حفظ كل مسار نتيجة كطبقة مسار أم لا.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            
+            <p>اسم المجلد الموجود في  <b>المحتوى الخاص بي</b> الذي سيتم حفظ النتائج فيه.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

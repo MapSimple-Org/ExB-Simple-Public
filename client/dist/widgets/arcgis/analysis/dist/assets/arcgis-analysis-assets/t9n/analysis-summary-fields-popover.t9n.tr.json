@@ -1,0 +1,13 @@
+{
+  "addField": "Alan ekle",
+  "deselectAll": "Tümünün seçimini kaldır",
+  "done": "Tamam",
+  "noFieldsAvailable": "${layerName}, veri türü gereksinimini karşılayan bir alan içermiyor. Devam etmek için farklı bir katman seçin.",
+  "noInputSelected": {
+    "withLayerInputLabel": "Seçili bir girdi katmanı yok. Devam etmek için ${layerInputLabel} içinde bir katman seçin.",
+    "withoutLayerInputLabel": "Seçili bir girdi katmanı yok. Devam etmek için bir girdi katmanı seçin."
+  },
+  "noSearchResults": "Eşleşen alan bulunamadı.",
+  "selectAll": "Tümünü seç",
+  "summaryFieldsPopover": "Özet Alanları"
+}

@@ -1,0 +1,11 @@
+{
+  "all": "Összes",
+  "inputLayersGroupText": "Válassza ki a bemeneti felszínrasztert, és lehetőség szerint a lejtőadatokat és a súlyrasztert.",
+  "itemProperties": {
+    "description": "Az Áramlat származtatása raszterként eszköz futtatásával létrehozott kimenet",
+    "snippet": "Az Áramlat származtatása raszterként megoldással létrehozott kimenet"
+  },
+  "outputStreamFeaturesLabel": "Kimeneti áramlat vektoros elemek neve",
+  "simplifyLabel": "Vektoros elemek egyszerűsítése",
+  "streamSettingsGroupText": "Adja meg az akkumulációs küszöbértéket, az áramlatmegnevezési metódust, valamint azt, hogy a kimeneti áramlatvonalak egyszerű alakzatokká simítódjanak-e."
+}

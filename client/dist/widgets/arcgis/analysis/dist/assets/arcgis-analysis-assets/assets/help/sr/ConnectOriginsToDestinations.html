@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>Alat za izračunavanje tro&scaron;kova putovanja meri vreme putovanja ili rastojanje između parova tačaka.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="originsLayer">
+        <div>
+            
+            <p class="OnlineOnly">Sloj tačaka koji predstavlja početne lokacije od kojih će se izračunati tro&scaron;kovi putovanja. Slojevi sa do  pet hiljada geoobjekata su podržani. </p>  
+            <p class="PortalOnly">Sloj tačaka koji predstavlja početne lokacije od kojih će se izračunati tro&scaron;kovi putovanja.
+            </p>
+            <p class="toolPaneOnly">Broj geoobjekata zavisi od dodatnih faktora kao &scaron;to su kriterijumi filtriranja i obuhvat analize.
+            </p>
+        </div>
+    </div>
+    <div id="destinationsLayer">
+        <div>
+            
+            <p class="OnlineOnly">Sloj tačaka koji predstavlja lokacije odredi&scaron;ta do kojih će se izračunati tro&scaron;kovi putovanja. Slojevi sa do  pet hiljada geoobjekata su podržani. </p> 
+            <p class="PortalOnly">Sloj tačaka koji predstavlja lokacije odredi&scaron;ta do kojih će se izračunati tro&scaron;kovi putovanja.
+            </p>
+            <p class="toolPaneOnly">Broj geoobjekata zavisi od dodatnih faktora kao &scaron;to su kriterijumi filtriranja i obuhvat analize.
+            </p>
+        </div>
+    </div>
+    <div id="originsLayerRouteIDField">
+        <div>
+            
+            <p>Polje u skupu podataka  <b>Odlazni sloj</b> koje defini&scaron;e unapred dodeljeni par početak-odredi&scaron;te. Ako postoji vi&scaron;e lokacija početka i destinacije, ovaj ID mora da se podudara sa vredno&scaron;ću u polju <b>ID rute dolaznog sloja</b>.
+            </p>
+        </div>
+    </div>
+    <div id="destinationsLayerRouteIDField">
+        <div>
+            
+            <p>Polje u skupu podataka  <b>Dolazni sloj</b> koje defini&scaron;e prethodno dodeljeni par početak-odredi&scaron;te. Ako postoji vi&scaron;e lokacija početka i destinacije, ovaj ID mora da se podudara sa vredno&scaron;ću u polju <b>ID rute odlaznog sloja</b>.
+            </p>
+        </div>
+    </div>
+    <div id="pointBarrierLayer">
+        <div>
+            <p>Jedan ili vi&scaron;e tačaka geoobjekata koji će da predstavljaju privremena ograničenja (barijere) prilikom putovanja po pozadinskim ulicama. Kretanje je dozvoljeno na ulici, ali ne kroz barijeru.
+            </p>
+        </div>
+    </div>
+    <div id="lineBarrierLayer">
+        <div>
+            <p>Jedan ili vi&scaron;e linija geoobjekata koji će da predstavljaju privremena ograničenja (barijere) prilikom putovanja po pozadinskim ulicama. Linijske barijere zabranjuju putovanje svuda gde se barijere ukr&scaron;taju sa ulicama.
+            </p>
+        </div>
+    </div>
+    <div id="polygonBarrierLayer">
+        <div>
+            <p>Jedan ili vi&scaron;e poligona geoobjekata koji će da predstavljaju privremena ograničenja (barijere) prilikom putovanja po pozadinskim ulicama. Poligonalna barijera zabranjuje kretanje svuda gde poligon preseca ulice.
+            </p>
+        </div>
+    </div>
+    <div id="measurementType">
+        <div>
+            <p>Metoda koja će se koristiti za merenje udaljenosti ili vremena. Metoda može biti linija udaljenosti ili način putovanja.
+            </p>
+        </div>
+    </div>
+    <div id="timeOfDay">
+        <div>
+            <p>Datum i vreme polaska sa početne lokacije u skupu podataka odlaznog sloja.
+            </p>
+        </div>
+    </div>
+    <div id="routeShape">
+        <div>
+            <p>Oređuje da li će počeci i destinacije biti povezani pomoću paukovih linija ili linija želja (<b>Prava linija</b>) ili ulica na osnovnoj mreži ulica (<b>Prati ulice</b>).
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>Naziv sloja koji će biti kreiran i dodat mapi.
+            </p>
+        </div>
+    </div>
+    <div id="includeRouteLayers">
+        <div>
+            <p>Određuje da li će svaka ruta rezultata biti sačuvana kao sloj rute.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            
+            <p>Naziv fascikle u  <b>Mom sadržaju</b> u kojoj će rezultati biti sačuvani.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

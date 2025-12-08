@@ -1,0 +1,7 @@
+{
+  "header": "Uređivač rasterske funkcije",
+  "content": "Imate promjene koje nisu spremljene u „${rftTitle}”. Ako ne spremite, te će promjene biti izgubljene.",
+  "cancel": "Odustani",
+  "dontSave": "Nemoj spremiti",
+  "save": "Spremi"
+}

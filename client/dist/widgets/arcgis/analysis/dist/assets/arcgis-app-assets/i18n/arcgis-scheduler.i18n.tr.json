@@ -1,0 +1,55 @@
+{
+  "beginningOnLabel": "Başlangıç",
+  "repeatTypeLabel": "Tekrarlama türü",
+  "endingOnTypeLabel": "Bitiş",
+  "endingOnDateLabel": "Bitiş tarihi",
+  "endingOnCountLabel": "Sayım",
+  "endingOnCountPlaceholder": "örnek: 1, 10, 30",
+  "dailyRepeatIntervalLabel": "Tekrarlama aralığı",
+  "dailyTimeLabel": "Zaman",
+  "weeklyDaysOfWeekLabel": "Haftanın günü",
+  "weeklyTimeLabel": "Zaman",
+  "monthlyDayOfMonthLabel": "Ayın günü",
+  "monthlyDayOfMonthPlaceholder": "örnek, 1 - 31",
+  "monthlyRepeatIntervalLabel": "Tekrarlama aralığı",
+  "monthlyTimeLabel": "Zaman",
+  "repeatTypeOptions": {
+    "day": "Gün",
+    "week": "Hafta",
+    "month": "Ay"
+  },
+  "endingOnType": {
+    "never": "Hiçbir Zaman",
+    "date": "Tarih",
+    "count": "Açık"
+  },
+  "dailyRepeatInterval": {
+    "everyDay": "Her gün",
+    "everyOtherDay": "İki günde bir",
+    "everyThreeDays": "Üç günde bir",
+    "everyFourDays": "Dört günde bir",
+    "everyFiveDays": "Beş günde bir",
+    "everySixDays": "Altı günde bir",
+    "everySevenDays": "Yedi günde bir",
+    "everyFourteenDays": "On dört günde bir"
+  },
+  "weekDays": {
+    "all": "Tümü",
+    "allWeekdays": "Haftanın tüm günleri",
+    "sunday": "Pazar",
+    "monday": "Pazartesi",
+    "tuesday": "Salı",
+    "wednesday": "Çarşamba",
+    "thursday": "Perşembe",
+    "friday": "Cuma",
+    "saturday": "Cumartesi"
+  },
+  "monthlyRepeatInterval": {
+    "everyMonth": "Her ay",
+    "everyTwoMonths": "İki ayda bir",
+    "everyThreeMonths": "Üç ayda bir",
+    "everyFourMonths": "Dört ayda bir",
+    "everyFiveMonths": "Beş ayda bir",
+    "everySixMonths": "Altı ayda bir"
+  }
+}

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html dir="rtl">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>تعثر أداة &quot;تلخيص المركز والتشتت&quot; على المعلم المركزي والاتجاه المركزي والقطع الناقص للانحراف المعياري لمجموعة من المعالم.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="analysisLayer">
+        <div>
+            <p>المعالم النقطية أو الخطية أو المضلعة التي سيتم من أجلها حساب المعلم المركزي والاتجاه المركزي والقطع الناقص للانحراف المعياري.
+            </p>
+        </div>
+    </div>
+    <div id="summarizeType">
+        <div>
+            <p>تحدد الطرق التي تلخص المركز وتشتت المعالم.
+            </p>
+        </div>
+    </div>
+    <div id="ellipseSize">
+        <div>
+            <p>تحدد الحجم، بالانحرافات المعيارية، للمضلع على شكل قطع ناقص. إذا كانت المسافة بين متوسط المركز ومواقع المعالم تتبع توزيع Rayleigh، فإن  <b>خيار الانحراف المعياري 1</b> و <b>الانحراف المعياري 2</b> و <b>الانحراف المعياري 3</b> سينتج مضلعًا على شكل قطع ناقص يغطي 68 بالمائة و95 بالمائة و99 بالمائة من المعالم، على التوالي.
+            </p>
+        </div>
+    </div>
+    <div id="weightField">
+        <div>
+            <p>الحقل الذي سيتم استخدامه لتحديد وزن المعلم.
+            </p>
+        </div>
+    </div>
+    <div id="groupField">
+        <div>
+            <p>الحقل الذي سيتم استخدامه لتجميع المعالم معًا. سيتم حساب قيم  <b>أنواع الملخص</b> المحددة لكل مجموعة.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>اسم الطبقة التي سيتم إنشاؤها وإضافتها إلى الخريطة.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>اسم المجلد الموجود في  <b>المحتوى الخاص بي</b> الذي سيتم حفظ النتيجة فيه.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

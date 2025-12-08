@@ -1,0 +1,9 @@
+{
+  "weightedSumTable": "Tabelle der gewichteten Summe",
+  "id": "ID",
+  "layer": "Layer",
+  "field": "Feld",
+  "weight": "Gewichtung",
+  "value": "Wert",
+  "selectLayer": "Layer auswählen"
+}

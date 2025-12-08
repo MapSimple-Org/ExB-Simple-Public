@@ -1,0 +1,1 @@
+System.register([],function(e){return{execute:function(){e({customizeLayer:"Anpassa lager",selectLayers:"V\xe4lj lager",noDataSourceWarning:"Den valda kartwidgeten inneh\xe5ller inte en webbkarta eller en webbscen."})}}});

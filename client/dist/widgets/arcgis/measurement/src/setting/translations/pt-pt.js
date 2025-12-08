@@ -1,0 +1,1 @@
+System.register([],function(e){return{execute:function(){e({distance:"Dist\xe2ncia",area:"\xc1rea",atLeastOne:"Tem de ser selecionada pelo menos uma ferramenta",toolbar:"Barra de ferramentas",disableSnapping:"Desativar o ajuste no mapa 2D"})}}});

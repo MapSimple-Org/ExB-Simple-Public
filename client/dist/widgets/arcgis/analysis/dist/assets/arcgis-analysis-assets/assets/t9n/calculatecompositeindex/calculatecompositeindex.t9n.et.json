@@ -1,0 +1,26 @@
+{
+  "CCIAnalysisSettingGroupLabel": "Indeksi seaded",
+  "CCIAnalysisSettingGroupText": "Määrake, kuidas tuleks indeks arvutada.",
+  "geomeanPercentileLabel": "Järkude koondamine (protsentiilide geomeetriline keskmine)",
+  "geomeanRawLabel": "Toorväärtuste koondamine (toorväärtuste geomeetriline keskmine)",
+  "geomeanScaledLabel": "Skaleeritud väärtuste koondamine (skaleeritud väärtuste geomeetriline keskmine",
+  "indexMethodLabel": "Muutujate skaleerimise ja kombineerimise meetod",
+  "inputFeaturesOrTableLabel": "Sisendobjektid või -tabel",
+  "inputLayerGroupText": "Valige objektid või tabel ja muutujad, millega indeks luua.",
+  "inputVariablesLabel": "Sisendmuutujad",
+  "itemProperties": {
+    "description": "Analüüsitööriista Arvuta liitindeks käitamise kaudu loodud objektikiht.",
+    "snippet": "Tööriista Arvuta liitindeks abil loodud objektikiht"
+  },
+  "meanPercentileLabel": "Kombineeri järgud (protsentiilide keskmine)",
+  "meanRawLabel": "Toorväärtuste kombineerimine (toorväärtuste keskmine)",
+  "meanScaledLabel": "Skaleeritud väärtuste kombineerimine (skaleeritud väärtuste keskmine)",
+  "outputIndexMaxLabel": "Maksimum",
+  "outputIndexMinLabel": "Miinimum",
+  "outputIndexMinMaxLabel": "Indeksi miinimum- ja maksimumväärtused",
+  "outputIndexReverseLabel": "Pööra indeksi väärtused ümber",
+  "reverseVariableLabel": "Pööra suund ümber",
+  "sumFlagsPercentileLabel": "Tõsta ekstreemumid esile (90. protsentiili ületavate väärtuste arv)",
+  "toolName": "Arvuta liitindeks",
+  "weight": "Kaal"
+}

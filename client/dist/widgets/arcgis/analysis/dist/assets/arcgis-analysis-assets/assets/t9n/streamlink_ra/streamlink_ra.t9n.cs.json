@@ -1,0 +1,9 @@
+{
+  "inputFlowDirectionRasterLabel": "Vstupní rastr směru odtoku",
+  "inputLayerGroupText": "Zvolte vstupní rastr toku a směru odtoku.",
+  "inputStreamRasterLabel": "Vstupní rastr toků",
+  "itemProperties": {
+    "description": "Výstup vytvořený spuštěním analytického nástroje Úsek vodního toku (Stream Link).",
+    "snippet": "Výstup vytvořený nástrojem Úsek vodního toku (Stream Link)"
+  }
+}

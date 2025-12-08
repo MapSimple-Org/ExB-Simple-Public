@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>Geod&aelig;tisk udsigtsomr&aring;de-v&aelig;rkt&oslash;jet identificerer de positioner p&aring; en rasteroverflade, der er synlige for input-observationspositioner.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputElevationSurface">
+        <div>
+            <p>Den h&oslash;jderaster, som udsigtsomr&aring;det beregnes ud fra.
+            </p>
+        </div>
+    </div>
+    <div id="inputObserverFeatures">
+        <div>
+            <p>De observat&oslash;rpositioner, for hvilke udsigtsomr&aring;det beregnes.
+            </p>
+        </div>
+    </div>
+    <div id="optimizeFor">
+        <div>
+            <p>Optimerer beregningen af udsigtsomr&aring;de baseret p&aring; enten hastighed eller n&oslash;jagtighed.
+            </p>
+        </div>
+    </div>
+    <div id="verticalError">
+        <div>
+            <p>M&aelig;ngden af usikkerhed i h&oslash;jdev&aelig;rdierne for  <b>Input-h&oslash;jdeoverflade</b>-v&aelig;rdien.
+            </p>
+        </div>
+    </div>
+    <div id="refractivityCoefficient">
+        <div>
+            <p>Lysbrydningskoefficienten for synligt lys i luften.
+            </p>
+        </div>
+    </div>
+    <div id="maximumViewingDistanceField">
+        <div>
+            <p>Den maksimale visningsafstand for beregning af udsigtsomr&aring;de.
+            </p>
+            <p>Afstanden kan defineres af en v&aelig;rdi og dens enheder eller fra et felt i v&aelig;rdien for  <b>Input observationspunkt- eller linjeobjekter</b>.
+            </p>
+        </div>
+    </div>
+    <div id="minimumViewingDistanceField">
+        <div>
+            <p>Den minimale visningsafstand for beregning af udsigtsomr&aring;de.
+            </p>
+            <p>Afstanden kan defineres af en v&aelig;rdi og dens enheder eller fra et felt i v&aelig;rdien for  <b>Input observationspunkt- eller linjeobjekter</b>.
+            </p>
+        </div>
+    </div>
+    <div id="viewingDistanceIs3D">
+        <div>
+            <p>Angiver, hvorvidt de maksimale eller minimale visningsafstande vil blive m&aring;lt i 3D-afstand eller 2D-afstand.
+            </p>
+            <p>Hvis indstillingen ikke er markeret, behandles visningsafstandene som Euklid-afstande i 2D. Hvis indstillingen er markeret, behandles visningsafstandene som 3D-afstande.
+            </p>
+        </div>
+    </div>
+    <div id="observersElevationField">
+        <div>
+            <p>Overfladeh&oslash;jden p&aring; observat&oslash;rpositionerne.
+            </p>
+            <p>Overfladeh&oslash;jden kan defineres af en v&aelig;rdi og dens enheder eller fra et felt i v&aelig;rdien for  <b>Input observationspunkt- eller linjeobjekter</b>.
+            </p>
+        </div>
+    </div>
+    <div id="observersHeightField">
+        <div>
+            <p>Observat&oslash;rernes h&oslash;jde over jorden.
+            </p>
+            <p>H&oslash;jden kan defineres af en v&aelig;rdi og dens enheder eller fra et felt i v&aelig;rdien for  <b>Input observationspunkt- eller linjeobjekter</b>.
+            </p>
+        </div>
+    </div>
+    <div id="targetHeightField">
+        <div>
+            <p>H&oslash;jden af m&aring;l p&aring; jorden.
+            </p>
+            <p>H&oslash;jden kan defineres af en v&aelig;rdi og dens enheder eller fra et felt i v&aelig;rdien for  <b>Input observationspunkt- eller linjeobjekter</b>.
+            </p>
+        </div>
+    </div>
+    <div id="horizontalStartAngle">
+        <div>
+            <p>Startvinklen for det vandrette scan-omr&aring;de.
+            </p>
+            <p>Vinklen kan defineres af en v&aelig;rdi fra 0 til 360 eller fra et felt i v&aelig;rdien for  <b>Input observationspunkt- eller linjeobjekter</b>.
+            </p>
+        </div>
+    </div>
+    <div id="horizontalEndAngle">
+        <div>
+            <p>Slutvinklen for det vandrette scan-omr&aring;de.
+            </p>
+            <p>Vinklen kan defineres af en v&aelig;rdi fra 0 til 360 eller fra et felt i v&aelig;rdien for  <b>Input observationspunkt- eller linjeobjekter</b>.
+            </p>
+        </div>
+    </div>
+    <div id="verticalUpperAngle">
+        <div>
+            <p>Den &oslash;vre gr&aelig;nse for scanningens lodrette vinkel i forhold til det vandrette plan.
+            </p>
+            <p>Vinklen kan defineres af en v&aelig;rdi fra -90 til 90 eller fra et felt i v&aelig;rdien for  <b>Input observationspunkt- eller linjeobjekter</b>.
+            </p>
+        </div>
+    </div>
+    <div id="verticalLowerAngle">
+        <div>
+            <p>Den nedre gr&aelig;nse for scanningens lodrette vinkel i forhold til det vandrette plan.
+            </p>
+            <p>Vinklen kan defineres af en v&aelig;rdi fra -90 til 90 eller fra et felt i v&aelig;rdien for  <b>Input observationspunkt- eller linjeobjekter</b>.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>Navnet p&aring; det rasterlag for oversigtsomr&aring;de, der oprettes og f&oslash;jes til kortet. Dette lag indeholder de synlige omr&aring;der, som observat&oslash;rerne kan se, og cellev&aelig;rdierne repr&aelig;senterer det antal observat&oslash;rer, der kan se cellerne.
+            </p>
+        </div>
+    </div>
+    <div id="aboveGroundLevelOutputName">
+        <div>
+            <p>Navnet p&aring; det AGL-overflade-rasterlag (above ground level), der oprettes og f&oslash;jes til kortet.
+            </p>
+        </div>
+    </div>
+    <div id="resultType">
+        <div>
+            <p>Den type output, der oprettes. Outputtet kan v&aelig;re et tile-billedlag eller et dynamisk billedlag.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>Navnet p&aring; mappen  <b>Mit indhold</b>, hvor resultatet gemmes.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

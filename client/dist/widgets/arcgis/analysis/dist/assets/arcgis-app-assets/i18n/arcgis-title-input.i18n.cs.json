@@ -1,0 +1,20 @@
+{
+  "title": "Nadpis",
+  "addTitle": "Přidat název",
+  "validation": {
+    "error": "Chyba",
+    "titleRequired": "Název je povinné pole.",
+    "itemExists": "Položka s názvem ${name} již v této složce existuje. Zvolte prosím jiný název.",
+    "titleInUseService": "Vrstva s názvem ${name} již existuje. Zvolte prosím jiný název.",
+    "itemInRecycleBin": "Položka s názvem \"${name}\" již existuje a je v koši. Zvolte prosím jiný název.",
+    "serviceNameInvalid": "Název služby smí obsahovat pouze alfanumerické znaky nebo podtržítka a nesmí být delší než 90 znaků.",
+    "dataStoreTitleInvalid": "Název datového úložiště smí obsahovat pouze alfanumerické znaky nebo podtržítka a nesmí být delší než 90 znaků.",
+    "titleInvalid": "Název musí mít méně než 250 znaků a nesmí obsahovat < nebo >.",
+    "titleStartsWithNumber": "Název nesmí začínat číslem.",
+    "invalidCharacters": {
+      "single": "Název nesmí obsahovat tento znak: ${invalidCharacters}.",
+      "multiple": "Název nesmí obsahovat žádný z těchto znaků: ${invalidCharacters}.",
+      "unknown": "Název nesmí obsahovat žádný z těchto znaků: ${invalidCharacters}."
+    }
+  }
+}

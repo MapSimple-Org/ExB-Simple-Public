@@ -1,0 +1,12 @@
+{
+  "name": "header1",
+  "type": "template",
+  "templateType": "header",
+  "label": "Header 1",
+  "thumbnail": "thumbnail.png",
+  "order": 1,
+  "tags": [],
+  "categoriesTags": [],
+  "thumbnailWidth": 400,
+  "thumbnailHeight": 62
+}

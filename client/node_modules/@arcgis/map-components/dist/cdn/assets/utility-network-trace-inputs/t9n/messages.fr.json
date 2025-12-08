@@ -1,0 +1,1 @@
+{"componentLabel":"Entrées du traçage","labels":{"utilityNetwork":"Réseau de distribution","traceConfiguration":"Configuration de traçage","traceInputs":"Entrées du traçage"},"errors":{"noMapError":"Aucune carte disponible","noUtilityNetworkError":"Aucun réseau de distribution trouvé dans la carte","noTraceConfigurationError":"Aucune configuration de traçage nommée disponible"}}

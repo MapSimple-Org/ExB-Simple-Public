@@ -1,0 +1,85 @@
+{
+  "heading": "创建登录类别",
+  "select": "选择登录类别作为起点",
+  "selectCustomSignIn": "选择登录类别",
+  "orgDefaults": "组织默认值",
+  "createNew": "新建",
+  "name": "标题",
+  "description": "描述",
+  "enterName": "输入类别标题",
+  "enterDescription": "输入类别描述",
+  "enterTitle": "输入此登录的标题",
+  "showOnTriage": "输入登录类别",
+  "showOnTriageDescription": "仅当您启用了两个或更多分类时，您的分类描述才会显示在分类选择页面上。",
+  "socialProviders": "社交登录提供商",
+  "authenticationProviders": "身份验证方法",
+  "errorLabel": "自定义登录类别错误",
+  "preview": "预览",
+  "restrictions": "只能更改此类别的标题和描述。 所有其他选项均继承自组织的设置。",
+  "loginNotAvailable": "您的组织已禁用此登录方式，因此不会向用户显示。",
+  "buttons": {
+    "editCategory": "保存类别",
+    "next": "前进",
+    "back": "返回",
+    "createCategory": "创建类别"
+  },
+  "errors": {
+    "nameRequired": "所有登录类别均需提供标题。",
+    "authenticationMethodsRequired": "至少需要一种登录方法。",
+    "socialProviderRequired": "至少需要一个社交登录提供商。"
+  },
+  "steps": {
+    "1": {
+      "title": "选择开始方式",
+      "description": "您可以从组织的登录默认值开始，编辑现有登录类别，或创建新的登录类别。"
+    },
+    "2": {
+      "title": "标题和描述",
+      "description": "输入登录类别的标题和描述。"
+    },
+    "3": {
+      "title": "登录类型",
+      "description": "自定义此登录类型下显示的登录方式，并调整其显示顺序。"
+    }
+  },
+  "createAccount": {
+    "label": "创建账户链接",
+    "description": "允许在本组织中创建新 ArcGIS 账户。"
+  },
+  "switchOrganization": {
+    "label": "切换组织链接",
+    "description": "显示一个链接，允许用户登录到其他组织。"
+  },
+  "authenticationMethods": {
+    "arcgis": {
+      "label": "ArcGIS 登录",
+      "description": "允许用户使用 ArcGIS 登录账户进行登录。",
+      "required": "ArcGIS 登录方法需要标题。"
+    },
+    "saml": {
+      "label": "SAML 登录账户",
+      "description": "允许用户使用其 SAML 账户登录。",
+      "required": "SAML 登录方法需要标题。"
+    },
+    "oidc": {
+      "label": "OIDC 登录",
+      "description": "允许用户使用其 OIDC 账户登录。",
+      "required": "OIDC 登录方法需要标题。"
+    },
+    "social": {
+      "label": "社交登录账户",
+      "description": "允许成员使用以下社交网络中的登录账户登录到您的组织。",
+      "github": "GitHub",
+      "facebook": "Facebook",
+      "google": "Google",
+      "apple": "Apple",
+      "required": "社交登录方法需要标题。"
+    }
+  },
+  "confirmLeave": {
+    "title": "未保存的更改",
+    "message": "您有未保存的更改。 是否确定要离开此页面?",
+    "remain": "保留在此页面上",
+    "leave": "退出但不保存"
+  }
+}

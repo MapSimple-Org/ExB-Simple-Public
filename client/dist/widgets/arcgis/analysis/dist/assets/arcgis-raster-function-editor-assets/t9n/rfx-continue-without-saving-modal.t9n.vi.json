@@ -1,0 +1,6 @@
+{
+  "header": "Bắt đầu lại mà không lưu?",
+  "content": "Bạn có những thay đổi chưa được lưu trong '${rftTitle}'. Nếu bạn bắt đầu với biểu mẫu mới, những thay đổi đó sẽ bị mất.",
+  "cancel": "Hủy",
+  "continue": "Tiếp"
+}

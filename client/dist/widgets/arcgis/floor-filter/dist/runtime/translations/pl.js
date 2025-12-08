@@ -1,0 +1,1 @@
+System.register([],function(n){return{execute:function(){n({_widgetLabel:"Filtr kondygnacji",floorfilter_noMap:"Filtr kondygnacji",floorfilter_notFloorAware:"Wybrana mapa nie obs\u0142uguje kondygnacji"})}}});

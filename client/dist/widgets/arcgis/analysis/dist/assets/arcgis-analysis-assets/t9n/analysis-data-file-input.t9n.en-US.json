@@ -1,0 +1,14 @@
+{
+  "AddDataFromUrl": "Add data from URL",
+  "addData": "Add data",
+  "clear": "Clear",
+  "file": "File",
+  "fileNotFound": "Failed to load file.",
+  "invalidUrl": "Invalid URL or file extension.",
+  "layerNotFound": "Failed to load layer.",
+  "replaceData": "Replace data",
+  "required": "This parameter is required.",
+  "uploadData": "Upload data",
+  "uploadFailureMsg": "Error performing upload operation, file size or type not supported for this service.",
+  "url": "Url"
+}

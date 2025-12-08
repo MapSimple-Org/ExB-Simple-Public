@@ -1,0 +1,13 @@
+{
+  "aboveMaximumMessage": "입력 값은 ${max}보다 작거나 같아야 합니다.",
+  "belowMinimumMessage": "입력 값은 ${min}보다 크거나 같아야 합니다.",
+  "choiceListBadInput": "입력 값에 유효하지 않은 항목이 포함되어 있습니다.",
+  "defaultLabel": "선형 단위",
+  "inputPlaceholderText": "거리 값 입력...",
+  "invalidDoubleMessage": "입력 값은 실수여야 합니다.",
+  "invalidIntegerMessage": "입력 값은 정수여야 합니다.",
+  "requiredInputMessage": "이 매개변수는 필수입니다.",
+  "strictlyMaximumMessage": "입력 값은 ${max}보다 작아야 합니다.",
+  "strictlyMinimumMessage": "입력 값은 ${min}보다 커야 합니다.",
+  "unitSelect": "단위 선택"
+}

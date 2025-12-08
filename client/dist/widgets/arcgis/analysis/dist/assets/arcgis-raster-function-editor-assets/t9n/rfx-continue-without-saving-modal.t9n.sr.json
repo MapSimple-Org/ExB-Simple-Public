@@ -1,0 +1,6 @@
+{
+  "header": "Počnite ponovo bez čuvanja?",
+  "content": "Imate promene koje nisu sačuvane u '${rftTitle}'. Ako počnete ispočetka sa novim šablonom, te promene će biti izgubljene.",
+  "cancel": "Otkaži",
+  "continue": "Nastavi"
+}

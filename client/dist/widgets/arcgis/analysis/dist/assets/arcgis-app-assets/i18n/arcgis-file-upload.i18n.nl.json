@@ -1,0 +1,16 @@
+{
+  "updateData": "Gegevens bijwerken",
+  "cancel": "Annuleren",
+  "editStyle": "Vervang het stijlbestand van de laag door een bijgewerkte versie van uw computer.",
+  "updatePackages": "Vervang de ${type} door een bijgewerkte versie vanaf uw computer. Het geüploade bestand moet dezelfde naam hebben als ${hostedLayerName}.",
+  "uploadStaticFiles": "Het bestand dat u uploadt moet dezelfde naam hebben als het oorspronkelijke bestand ${fileName}",
+  "sameFileNameDescription": "Het bestand dat u uploadt moet dezelfde naam en veldnamen hebben als het originele bestand ${fileName}",
+  "updating": "Bezig met bijwerken...",
+  "error": "Fout",
+  "errors": {
+    "sameFileName": "Om dit item bij te werken, moet u een bestand uploaden genaamd ${fileName}.",
+    "invalidStyleFileExtension": "Ongeldige bestandsextensie. Geüploade stijl moet de .json bestandsextensie hebben.",
+    "errorWhileUpload": "Er is een fout opgetreden bij het uploaden van het item.",
+    "errorUpdate": "Er is een fout opgetreden bij het overschrijven van het item."
+  }
+}

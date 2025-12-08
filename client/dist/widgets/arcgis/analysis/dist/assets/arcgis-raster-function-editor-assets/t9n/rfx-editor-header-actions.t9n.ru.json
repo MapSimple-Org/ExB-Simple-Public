@@ -1,0 +1,11 @@
+{
+  "newTemplate": "Создать новый шаблон",
+  "openTemplate": "Открыть шаблон",
+  "addTemplate": "Добавить шаблон",
+  "addFunction": "Добавить функции растра",
+  "addConstant": "Добавить константу",
+  "addRaster": "Добавить переменную растра",
+  "expand": "Расширение",
+  "editTemplateProperties": "Редактировать свойства шаблона",
+  "viewTemplateProperties": "Просмотреть свойства шаблона"
+}

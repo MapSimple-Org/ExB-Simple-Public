@@ -1,0 +1,13 @@
+{
+  "weightedOverlayTable": "Súlyozott átfedési táblázat",
+  "id": "Azonosító",
+  "layer": "Réteg",
+  "field": "Mező",
+  "influence": "Hatás",
+  "sumOfInfluence": "Összesített hatás",
+  "value": "Érték",
+  "remapTable": "Tábla újbóli leképezése",
+  "scale": "Méretarány",
+  "scales": "Méretarányok",
+  "selectRaster": "Raszter kiválasztása"
+}

@@ -1,0 +1,1 @@
+System.register([],function(e){return{execute:function(){e({_widgetLabel:"Aplikacij\u0173 s\u0105ra\u0161as"})}}});

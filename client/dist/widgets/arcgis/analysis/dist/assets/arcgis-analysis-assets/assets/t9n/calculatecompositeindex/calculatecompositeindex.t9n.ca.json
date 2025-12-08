@@ -1,0 +1,26 @@
+{
+  "CCIAnalysisSettingGroupLabel": "Configuració de l'índex",
+  "CCIAnalysisSettingGroupText": "Especifiqueu com voleu que es calculi l'índex.",
+  "geomeanPercentileLabel": "Classificacions compostes (mitjana geomètrica de percentils)",
+  "geomeanRawLabel": "Valors compostos (mitjana geomètrica de valors sense format)",
+  "geomeanScaledLabel": "Valors escalats compostos (mitjana geomètrica de valors escalats)",
+  "indexMethodLabel": "Mètode per escalar i combinar variables",
+  "inputFeaturesOrTableLabel": "Entitats o taula d'entrada",
+  "inputLayerGroupText": "Trieu les entitats o la taula i les variables amb què voleu crear l'índex.",
+  "inputVariablesLabel": "Variables d'entrada",
+  "itemProperties": {
+    "description": "Capa d'entitats generada en executar l'eina d'anàlisi Calcula l'índex compost.",
+    "snippet": "Capa d'entitats generada des de Calcula l'índex compost"
+  },
+  "meanPercentileLabel": "Combina classificacions (mitjana de percentils)",
+  "meanRawLabel": "Combina valors sense format (mitjana de valors sense format)",
+  "meanScaledLabel": "Combina valors escalats (mitjana de valors escalats)",
+  "outputIndexMaxLabel": "Màxim",
+  "outputIndexMinLabel": "Mínim",
+  "outputIndexMinMaxLabel": "Valors mínim i màxim de l'índex",
+  "outputIndexReverseLabel": "Inverteix els valors de l'índex",
+  "reverseVariableLabel": "Inverteix la direcció",
+  "sumFlagsPercentileLabel": "Ressalta els extrems (recompte de valors per sobre del percentil 90)",
+  "toolName": "Calcula l'índex compost",
+  "weight": "Pes"
+}

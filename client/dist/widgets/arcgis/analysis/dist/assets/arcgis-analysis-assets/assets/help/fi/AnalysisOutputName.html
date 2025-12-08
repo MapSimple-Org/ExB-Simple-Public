@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>Analyysin korvausasetukset  Map Viewerissa. </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="resultType">
+        <div>
+            <p>M&auml;&auml;ritt&auml;&auml; luotavan tulosaineiston tyypin.  <b>Luo v&auml;litason aineisto</b> -asetus luo tilap&auml;isen karttatason, jota voidaan k&auml;ytt&auml;&auml; toisen ty&ouml;kalun l&auml;ht&ouml;aineistona mutta jota ei voida tallentaa tai katsoa kartassa. <b>Luo is&auml;nn&ouml;ity karttataso</b> -asetus julkaisee uuden is&auml;nn&ouml;idyn kohdekarttatason. <b>Korvaa nykyinen karttataso</b> -asetus p&auml;ivitt&auml;&auml; nykyisen karttatason ty&ouml;kalun tulosaineistolla.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>Karttaan luotavan ja lis&auml;tt&auml;v&auml;n karttatason nimi.
+            </p>
+        </div>
+    </div>
+    <div id="layerExistsAutomaticallyOverwrite">
+        <div>
+            <p>M&auml;&auml;ritt&auml;&auml;, korvaako ty&ouml;kalun tulosaineisto karttatason sis&auml;ll&ouml;ss&auml;, jolla on m&auml;&auml;ritetty tulosaineiston nimi. Jos karttatason nime&auml; ei ole viel&auml; k&auml;ytetty organisaatiossa, luodaan uusi kohde. Sinun on oltava joko karttatason omistaja tai p&auml;&auml;k&auml;ytt&auml;j&auml;, jotta voit korvata sen.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>Sen  <b>Omassa sis&auml;ll&ouml;ss&auml;</b> olevan kansion nimi, johon tulokset tallennetaan.
+            </p>
+            <p>T&auml;t&auml; ei voi p&auml;ivitt&auml;&auml;, jos karttataso on jo luotu.
+            </p>
+        </div>
+    </div>
+    <div id="existingLayerToOverwrite">
+        <div>
+            <p> <b>Omassa sis&auml;ll&ouml;ss&auml;</b> oleva karttataso, joka korvataan tulosaineiston karttatasolla. Tulosaineiston ja nykyisen karttatason koordinaatistotietojen vastattava toisiaan.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

@@ -1,0 +1,11 @@
+{
+  "addToMap": "تأكيد وإضافة إلى الخريطة",
+  "cancel": "إلغاء الأمر",
+  "confirm": "تأكيد",
+  "header": "تحديد عنصر",
+  "select": "تحديد",
+  "selectTask": "تحديد مهمة",
+  "unsupportedLayer": "لا تدعم هذه المعلمة الطبقات التالية: ${layerName}.",
+  "viewDetails": "عرض التفاصيل",
+  "layerLoadFailure": "فشل تحميل الطبقة."
+}

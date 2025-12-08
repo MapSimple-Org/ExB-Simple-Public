@@ -1,0 +1,22 @@
+{
+  "dialogHeading": "配置成员类别",
+  "noticeTitle": "在组织中对类别进行编辑、删除或重新排序。",
+  "noticeDescription": "通过“成员”选项卡为成员分配类别。",
+  "defaultCategoryWarning": "此成员类别将设置为“新成员默认设置”，且无法进行编辑或删除。",
+  "warning": {
+    "deleteInUseCategory": {
+      "message": {
+        "single": "一个成员将分配给此类别。 删除此类别也会将其从该成员中移除。",
+        "multiple": "${number} 名成员被分配到这个类别。 删除此类别也会将其从这些成员中移除。",
+        "unknown": "成员已分配到此类别：${number}。 删除此类别也会将其从这些成员中移除。"
+      }
+    },
+    "changeTitleInUseCategory": {
+      "message": {
+        "single": "一个成员将分配给此类别。 更新类别将更新使用 \"${newTitle}\" 的成员。",
+        "multiple": "${number} 名成员被分配到这个类别。 更新类别将更新使用 \"${newTitle}\" 的成员。",
+        "unknown": "成员已分配到此类别：${number}。 更新类别将更新使用 \"${newTitle}\" 的成员。"
+      }
+    }
+  }
+}

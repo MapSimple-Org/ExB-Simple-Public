@@ -1,0 +1,7 @@
+{
+  "defaultValue": "Nepodržani tip parametra. Koristiće se podrazumevana vrednost. <calcite-link target='_blank' href='${ docLink }'>Saznaj više</calcite-link>",
+  "requiredMessage": "Ovaj parametar je obavezan.",
+  "unsupportedGPType": "Nepodržani tip parametra. <calcite-link target='_blank' href='${ docLink }'>Saznaj više</calcite-link>",
+  "unsupportedParameterConfig": "Nepodržana konfiguracija parametara. <calcite-link target='_blank' href='${ docLink }'>Saznaj više</calcite-link>",
+  "unsupportedParameterConfigDefaultValue": "Nepodržana konfiguracija parametara. Koristiće se podrazumevana vrednost. <calcite-link target='_blank' href='${ docLink }'>Saznaj više</calcite-link>"
+}

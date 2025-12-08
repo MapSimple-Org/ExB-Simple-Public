@@ -1,0 +1,12 @@
+{
+  "apiCredentialType": "Typ poświadczeń: klucz API",
+  "oauthCredentialType": "Typ poświadczeń: OAuth 2.0",
+  "itemAccess": "Dostęp do elementu",
+  "page": "Strona: ${page}",
+  "currentPage": "Bieżąca strona: ${page}",
+  "privileges": "Uprawnienia",
+  "itemDetails": "Szczegóły elementu",
+  "settings": "Parametry",
+  "serviceScope": "Zakres usługi",
+  "summary": "Podsumowanie"
+}

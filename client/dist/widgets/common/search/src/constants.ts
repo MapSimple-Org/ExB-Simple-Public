@@ -1,0 +1,11 @@
+export const ByFieldSeriesX = 'FieldName'
+export const ByFieldSeriesY = 'FieldValue'
+export const MaxCategories = 99
+export const MaxPieces = 1000
+export const MaxSeries = 20
+export const OutStatisticFieldNameSplit = '__'
+export const DefaultAddress = 'Default Address'
+export const DefaultGeocodeURL = 'https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer'
+export const DefaultGeocodeLabel = 'ArcGIS World Geocoding Service'
+export const OutputDsObjectField = 'objectid'
+export const OutputDsAddress = 'address'

@@ -1,0 +1,36 @@
+{
+  "modalHeader": "Configurar categorias de conteúdo",
+  "modalGroupHeader": "Configurar categorias de grupo",
+  "helpText": "Edite, exclua ou reordene categorias em sua organização.",
+  "helpTextGroup": "Edite, exclua ou reordene categorias de conteúdo neste grupo.",
+  "helpTextDescription": "Lembre-se de que outros membros da sua organização podem já ter atribuído essas categorias aos seus itens, e a edição do esquema atualizará esses itens adequadamente",
+  "helpTextGroupDescription": "Lembre-se de que outros membros do grupo podem já ter atribuído essas categorias aos seus itens, e a edição do esquema atualizará esses itens adequadamente",
+  "warning": {
+    "deleteInUseCategory": {
+      "title": "Excluir categoria",
+      "cta": "Excluir categoria",
+      "message": {
+        "single": "Um item está atribuído a esta categoria. Excluir a categoria também irá removê-la deste item.",
+        "multiple": "${number} itens estão atribuídos a esta categoria. Excluir a categoria também a removerá destes itens.",
+        "unknown": "Itens atribuídos a esta categoria: ${number}. Excluir a categoria também a removerá destes itens."
+      }
+    },
+    "changeTitleInUseCategory": {
+      "title": "Atualizar categoria",
+      "message": {
+        "single": "Um item está atribuído a esta categoria. Atualizar a categoria atualizará o item para usar \"${newTitle}\".",
+        "multiple": "${number} itens estão atribuídos a esta categoria. Atualizar a categoria atualizará os itens para usar \"${newTitle}\".",
+        "unknown": "Itens atribuídos a esta categoria: ${number}. Atualizar a categoria atualizará os itens para usar \"${newTitle}\"."
+      },
+      "cta": "Atualizar categoria"
+    }
+  },
+  "template": {
+    "templateList": {
+      "custom": {
+        "message": "Crie suas próprias categorias para organizar o conteúdo dentro da sua organização.",
+        "messageGroup": "Crie suas próprias categorias para organizar o conteúdo dentro deste grupo."
+      }
+    }
+  }
+}

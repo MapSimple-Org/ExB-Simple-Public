@@ -1,0 +1,1 @@
+System.register([],function(e){return{execute:function(){e({settingsLabel:"Param\xe8tres de l\u2019explorateur de documents",selectModelViewer:"S\xe9lectionnez un widget Visionneuse de documents pour afficher les documents."})}}});

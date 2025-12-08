@@ -1,0 +1,11 @@
+{
+  "addBtn": "تم",
+  "cancelBtn": "إلغاء الأمر",
+  "header": "تحديد متغير",
+  "multipleVariables": "متغيرات متعددة القيمة",
+  "noFound": "لم يتم العثور على متغيرات متوافقة",
+  "search": "البحث في المتغيرات",
+  "singleVariables": "متغيرات ذات قيمة واحدة",
+  "variableLabel": "التسمية: <span style='font-weight: var(--calcite-font-weight-normal)'>${val}</span>",
+  "variableVal": "القيمة: <span style='font-weight: var(--calcite-font-weight-normal)'>${val}</span>"
+}

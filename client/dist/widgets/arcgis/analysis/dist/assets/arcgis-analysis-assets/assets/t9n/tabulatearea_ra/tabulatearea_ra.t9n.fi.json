@@ -1,0 +1,12 @@
+{
+  "classField": "Luokka-kenttä",
+  "classesAsRowsLabel": "Luokat riveinä tulosaineistotaulussa",
+  "inputClassRasterOrFeatures": "Lähtöaineiston luokkarasteri tai kohteet",
+  "inputLayerGroupText": "Valitse lähtöaineiston vyöhyke ja luokkakarttataso, jotta voit laskea ristiintaulukoidut alueet kahden aineistoryhmän välillä.",
+  "itemProperties": {
+    "description": "Tulosaineistotaulu luotiin suorittamalla Taulukoi alue -analyysityökalu.",
+    "snippet": "Tulosaineistotaulu luotiin Taulukoi alue -työkalulla"
+  },
+  "tabulateAreaSettingsGroupLabel": "Alueen taulukointiasetukset",
+  "tabulateAreaSettingsGroupText": "Valitse, miten tulosaineistotaulun luokkia käsitellään. Määritä laskettava solukoko. "
+}

@@ -1,0 +1,85 @@
+{
+  "heading": "Kurti prisijungimo kategoriją",
+  "select": "Pasirinkite prisijungimo kategoriją, nuo kurios pradėsite",
+  "selectCustomSignIn": "Pasirinkite prisijungimo kategoriją",
+  "orgDefaults": "Organizacijos numatytosios reikšmės",
+  "createNew": "Sukurti naują",
+  "name": "Pavadinimas",
+  "description": "Aprašas",
+  "enterName": "Įveskite kategorijos pavadinimą",
+  "enterDescription": "Įveskite kategorijos aprašymą",
+  "enterTitle": "Įvesti šio prisijungimo antraštę",
+  "showOnTriage": "Įjungti prisijungimo kategoriją",
+  "showOnTriageDescription": "Jūsų kategorijos aprašymas bus rodomas kategorijų pasirinkimo puslapyje tik jei esate įjungę dvi ar daugiau kategorijų.",
+  "socialProviders": "Prisijungimo naudojant socialinių tinklų paskyras teikėjai",
+  "authenticationProviders": "Autentifikacijos metodai",
+  "errorLabel": "Pasirinktinės prisijungimo kategorijos klaida",
+  "preview": "Peržiūra",
+  "restrictions": "Galima pakeisti tik šios kategorijos antraštę ir aprašą. Visos kitos parinktys perimtos iš organizacijos nustatymų.",
+  "loginNotAvailable": "Jūsų organizacija šį prisijungimo būdą išjungė, jis naudotojams nebus rodomas.",
+  "buttons": {
+    "editCategory": "Išsaugoti kategoriją",
+    "next": "Kitas",
+    "back": "Atgal",
+    "createCategory": "Kurti kategoriją"
+  },
+  "errors": {
+    "nameRequired": "Visoms prisijungimo kategorijoms būtinas pavadinimas.",
+    "authenticationMethodsRequired": "Būtinas bent vienas prisijungimo būdas.",
+    "socialProviderRequired": "Būtinas bent vienas prisijungimo per socialinius tinklus paslaugos teikėjas."
+  },
+  "steps": {
+    "1": {
+      "title": "Pasirinkite, kaip pradėti",
+      "description": "Galite pradėti naudodami numatytuosius savo organizacijos prisijungimo duomenis, redaguoti esamą prisijungimo kategoriją arba sukurti naują prisijungimo kategoriją."
+    },
+    "2": {
+      "title": "Pavadinimas ir aprašymas",
+      "description": "Įveskite savo prisijungimo kategorijos pavadinimą ir aprašymą."
+    },
+    "3": {
+      "title": "Prisijungimo tipai",
+      "description": "Adaptuokite ir išrikiuokite prisijungimus šioje prisijungimo kategorijoje."
+    }
+  },
+  "createAccount": {
+    "label": "Kurti paskyros nuorodą",
+    "description": "Leiskite kurti naują ArcGIS paskyrą šioje organizacijoje."
+  },
+  "switchOrganization": {
+    "label": "Pakeisti organizacijos susiejimą",
+    "description": "Rodoma nuoroda, leidžianti naudotojams prisijungti prie kitos organizacijos."
+  },
+  "authenticationMethods": {
+    "arcgis": {
+      "label": "ArcGIS prisijungimas",
+      "description": "Leisti naudotojams prisijungti naudojant ArcGIS.",
+      "required": "Būtina ArcGIS prisijungimo būdo antraštė."
+    },
+    "saml": {
+      "label": "SAML prisijungimas",
+      "description": "Leiskite naudotojams prisijungti naudojant jų SAML paskyrą.",
+      "required": "Būtina SAML prisijungimo būdo antraštė."
+    },
+    "oidc": {
+      "label": "OIDC prisijungimas",
+      "description": "Leiskite naudotojams prisijungti naudojant jų OIDC paskyrą.",
+      "required": "Būtina OIDC prisijungimo būdo antraštė."
+    },
+    "social": {
+      "label": "Prisijungimuai per socialinius tinklus",
+      "description": "Leiskite nariams prisijungti prie jūsų organizacijos naudojant prisijungimus iš šių socialinių tinklų.",
+      "github": "„GitHub“",
+      "facebook": "Facebook",
+      "google": "„Google“",
+      "apple": "„Apple“",
+      "required": "Būtina prisijungimo per socialinius tinklus antraštė."
+    }
+  },
+  "confirmLeave": {
+    "title": "Neįrašyti pakeitimai",
+    "message": "Neįrašėte pakeitimų. Ar tikrai norite išeiti iš šio puslapio?",
+    "remain": "Likti puslapyje",
+    "leave": "Išeiti neįrašant"
+  }
+}

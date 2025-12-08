@@ -212,9 +212,61 @@ export function QueryTaskForm (props: QueryTaskItemProps) {
               }
             })
             
-            // After setting values and blurring, remove hash parameter and trigger Apply button
+            // After setting values and blurring, verify input value is set before triggering Apply button
             setTimeout(() => {
               if (applyButtonRef.current && !applyButtonRef.current.disabled && datasourceReady) {
+                // VERIFICATION: Ensure input value is actually set before executing query
+                // This is especially important for grouped queries where dropdowns need to be synchronized first
+                const formElement = document.querySelector(`[data-widget-id="${widgetId}"]`)?.closest('.query-form') || 
+                                   document.querySelector('.query-form')
+                
+                if (formElement && initialInputValue) {
+                  const textInputs = formElement.querySelectorAll('input[type="text"]')
+                  let inputValueSet = false
+                  
+                  textInputs.forEach((input: HTMLInputElement) => {
+                    if (input.value === initialInputValue) {
+                      inputValueSet = true
+                    }
+                  })
+                  
+                  if (!inputValueSet) {
+                    debugLogger.log('FORM', {
+                      event: 'input-value-not-set-retrying',
+                      expectedValue: initialInputValue,
+                      queryItemShortId,
+                      action: 'will-retry-after-delay',
+                      note: 'Input value not set, retrying to ensure synchronization'
+                    })
+                    // Retry after a short delay to allow state to sync
+                    setTimeout(() => {
+                      // Recursively call verifyAndApply if needed, but limit retries
+                      // For now, just retry once more
+                      if (applyButtonRef.current && !applyButtonRef.current.disabled && datasourceReady) {
+                        // Set hashTriggeredRef to force zoom for hash-triggered queries
+                        hashTriggeredRef.current = true
+                        
+                        // Remove hash parameter from URL before Apply is triggered
+                        if (onHashParameterUsed && queryItemShortId) {
+                          onHashParameterUsed(queryItemShortId)
+                        }
+
+                        // Auto-trigger Apply button
+                        applyButtonRef.current.click()
+                      }
+                    }, 300)
+                    return // Exit early, will retry
+                  }
+                }
+                
+                // Input value is set correctly, proceed with execution
+                debugLogger.log('FORM', {
+                  event: 'input-value-verified',
+                  expectedValue: initialInputValue,
+                  queryItemShortId,
+                  note: 'Input value verified, proceeding with query execution'
+                })
+                
                 // Set hashTriggeredRef to force zoom for hash-triggered queries
                 hashTriggeredRef.current = true
                 

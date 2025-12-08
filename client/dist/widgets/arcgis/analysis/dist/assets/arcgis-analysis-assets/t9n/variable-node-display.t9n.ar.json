@@ -1,0 +1,9 @@
+{
+  "disconnect": "قطع الاتصال من المتغير",
+  "overwriteTo": "استبدال الطبقة: <span style='font-weight: var(--calcite-font-weight-normal)'>${val}</span>",
+  "resultType": "نوع النتيجة: <span style='font-weight: var(--calcite-font-weight-normal)'>${val}</span>",
+  "saveTo": "الاسم الناتج: <span style='font-weight: var(--calcite-font-weight-normal)'>${val}</span>",
+  "variableLabel": "التسمية: <span style='font-weight: var(--calcite-font-weight-normal)'>${val}</span>",
+  "variableNode": "عقدة المتغير",
+  "variableVal": "القيمة: <span style='font-weight: var(--calcite-font-weight-normal)'>${val}</span>"
+}

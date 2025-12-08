@@ -1,0 +1,11 @@
+{
+  "newTemplate": "Opprett ny mal",
+  "openTemplate": "Åpne mal",
+  "addTemplate": "Legg til mal",
+  "addFunction": "Legg til rasterfunksjoner",
+  "addConstant": "Legg til konstant",
+  "addRaster": "Legg til rastervariabel",
+  "expand": "Utvid",
+  "editTemplateProperties": "Rediger egenskaper for mal",
+  "viewTemplateProperties": "Vis egenskaper for mal"
+}

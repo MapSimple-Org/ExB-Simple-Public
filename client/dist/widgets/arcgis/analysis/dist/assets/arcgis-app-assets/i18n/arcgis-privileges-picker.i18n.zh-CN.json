@@ -1,0 +1,592 @@
+{
+  "rolePrivileges": "角色权限",
+  "setFromExisting": "根据现有角色进行设置",
+  "expandAll": "全部展开",
+  "generalPrivileges": "常规权限",
+  "adminPrivileges": "管理员权限",
+  "enabledLabel": "已启用：",
+  "enableAll": "全部启用",
+  "disableAll": "全部禁用",
+  "members": "成员",
+  "groups": "群组",
+  "content": "内容",
+  "sharing": "共享",
+  "premiumContent": "高级内容",
+  "premiumContentServices": "高级内容和服务",
+  "contentAndAnalysis": "內容和分析",
+  "features": "要素",
+  "versionMgmt": "版本管理",
+  "webhooks": "Webhook",
+  "marketplaceSubscriptions": "ArcGIS Marketplace 订阅",
+  "orgSettings": "组织设置",
+  "learnMore": "了解详细信息",
+  "searchPrivileges": "搜索权限",
+  "notebooks": "Notebook",
+  "analysis": "分析",
+  "networkAnalysis": "网络分析",
+  "locationServices": "定位服务",
+  "requiredService": "所需服务",
+  "availableServices": "可用服务",
+  "basemaps": "底图",
+  "staticMaps": "静态地图",
+  "places": "地点",
+  "geocoding": "地理编码",
+  "routing": "路径选择",
+  "dataEnrichment": "数据丰富",
+  "boundaries": "边界",
+  "elevation": "高程",
+  "spatialPrivileges": "空间分析",
+  "featureAnalysis": "要素分析",
+  "imageAnalysis": "图像分析",
+  "readOnlyBasemapsTooltip": "包括访问底图。",
+  "privileges": {
+    "portal:user:viewOrgUsers": {
+      "label": "查看",
+      "description": "允许成员查看组织的成员。",
+      "descriptionPortal": "允许成员查看门户的成员。",
+      "descriptionApp": "允许应用程序查看组织成员。"
+    },
+    "portal:user:createGroup": {
+      "label": "创建、更新和删除",
+      "description": "允许成员创建、编辑和删除自己的群组。",
+      "descriptionApp": "允许应用程序创建、编辑和删除应用程序拥有者的群组。"
+    },
+    "portal:user:joinGroup": {
+      "label": "加入组织群组",
+      "description": "允许成员加入组织内的群组。",
+      "descriptionPortal": "允许成员加入门户内的群组。",
+      "descriptionApp": "允许应用程序加入组织内的群组。"
+    },
+    "portal:user:joinNonOrgGroup": {
+      "label": "加入外部群组",
+      "description": "允许成员加入组织外的群组。",
+      "descriptionPortal": "允许成员加入门户外的群组。",
+      "descriptionApp": "允许应用程序加入组织外的群组。"
+    },
+    "portal:user:viewOrgGroups": {
+      "label": "查看与组织共享的群组",
+      "description": "允许成员查看与组织共享的群组。",
+      "descriptionPortal": "允许成员查看与门户共享的群组。",
+      "descriptionApp": "允许应用程序查看与组织共享的群组。"
+    },
+    "portal:user:invitePartneredCollaborationMembers": {
+      "label": "邀请合作伙伴组织成员",
+      "description": "允许成员邀请合作伙伴协作组织的成员加入群组。",
+      "descriptionApp": "允许应用程序邀请合作伙伴协作组织的成员加入群组。"
+    },
+    "portal:user:addExternalMembersToGroup": {
+      "label": "从其他组织添加成员",
+      "description": "允许成员创建允许成员来自其他组织和允许邀请外部成员加入的群组。",
+      "descriptionApp": "允许应用程序创建允许成员来自其他组织和允许邀请外部成员加入的群组。"
+    },
+    "portal:user:createItem": {
+      "label": "创建、更新和删除",
+      "description": "允许成员创建、编辑和删除自己的内容。",
+      "descriptionApp": "允许应用程序创建、编辑和删除应用程序拥有者的内容。"
+    },
+    "portal:publisher:publishFeatures": {
+      "label": "发布托管要素图层",
+      "description": "允许成员通过 shapefile、CSV 等发布托管要素图层。",
+      "descriptionApp": "允许应用程序通过 shapefile、CSV 等发布托管要素图层。"
+    },
+    "portal:publisher:publishTiles": {
+      "label": "发布托管切片图层",
+      "description": "允许成员通过切片包、要素等发布托管切片图层。",
+      "descriptionApp": "允许应用程序通过切片包、要素等发布托管切片图层。"
+    },
+    "portal:publisher:publishScenes": {
+      "label": "发布托管场景图层",
+      "description": "允许成员发布托管场景图层。",
+      "descriptionApp": "允许应用程序发布托管场景图层。"
+    },
+    "portal:publisher:publishTiledImagery": {
+      "label": "发布托管切片影像图层",
+      "description": "允许成员从单个图像或图像集合发布托管切片影像图层。 需要 ArcGIS Image for ArcGIS Online 用户类型扩展模块。",
+      "descriptionPortal": "允许成员从单个图像或图像集合发布托管切片影像图层。",
+      "descriptionApp": "允许应用程序从单个图像或图像集合发布托管切片影像图层。 需要 ArcGIS Image Hosting 许可。"
+    },
+    "portal:publisher:publishDynamicImagery": {
+      "label": "发布托管动态影像图层",
+      "description": "允许成员从单个图像或图像集合发布托管动态影像图层。",
+      "descriptionApp": "允许应用程序从单个图像或图像集合发布托管动态影像图层。"
+    },
+    "portal:publisher:publishServerServices": {
+      "label": "发布基于服务器的图层",
+      "description": "如果拥有此权限，则可发布由联合服务器站点的服务提供支持的图层。 这些服务通常引用地理数据库或基于文件的数据源的注册数据。"
+    },
+    "portal:publisher:publishKnowledgeGraph": {
+      "label": "发布托管知识图",
+      "description": "允许成员托管知识图。",
+      "descriptionApp": "允许应用程序托管知识图谱。"
+    },
+    "portal:user:viewOrgItems": {
+      "label": "查看与组织共享的内容",
+      "description": "允许成员查看共享到组织的内容。",
+      "descriptionPortal": "允许成员查看共享到门户的内容。",
+      "descriptionApp": "允许应用程序查看共享到组织的内容。"
+    },
+    "premium:publisher:createNotebooks": {
+      "label": "创建和编辑 Notebook",
+      "description": "允许成员创建和编辑交互式 notebook。",
+      "descriptionApp": "允许应用程序创建和编辑交互式笔记本。"
+    },
+    "premium:publisher:scheduleNotebooks": {
+      "label": "计划 notebook",
+      "description": "允许成员计划未来自动运行 notebook。",
+      "descriptionApp": "允许应用程序计划未来自动运行笔记本。"
+    },
+    "portal:publisher:bulkPublishFromDataStores": {
+      "label": "从数据存储批量创建要素图层",
+      "description": "如果拥有此权限，可从已注册数据存储发布 Web 图层。"
+    },
+    "portal:publisher:registerDataStores": {
+      "label": "注册数据存储",
+      "description": "如果拥有此权限，可将数据存储注册到门户。"
+    },
+    "portal:user:viewTracks": {
+      "label": "查看位置轨迹",
+      "description": "在启用位置共享的情况下，允许成员通过共享轨迹视图查看成员位置轨迹。",
+      "descriptionApp": "在启用位置共享的情况下，允许应用程序通过共享轨迹视图查看成员位置轨迹。"
+    },
+    "portal:user:reassignItems": {
+      "label": "重新分配内容",
+      "description": "允许成员仅将其内容重新分配给有权接收内容的其他成员。",
+      "descriptionApp": "允许应用程序仅将应用程序拥有者的内容重新分配给有权接收内容的其他成员。"
+    },
+    "portal:user:receiveItems": {
+      "label": "接收内容",
+      "description": "允许成员接收由其他有权重新分配内容的成员重新分配给他们的内容。"
+    },
+    "portal:publisher:publishFeeds": {
+      "label": "发布数据源",
+      "description": "如果拥有此权限，即可发布数据源以使用 ArcGIS Velocity 合并和显示实时数据。"
+    },
+    "portal:publisher:publishRealTimeAnalytics": {
+      "label": "发布实时分析",
+      "description": "如果拥有此权限，即可发布实时分析以使用 ArcGIS Velocity 分析和处理实时数据。"
+    },
+    "portal:publisher:publishBigDataAnalytics": {
+      "label": "发布大数据分析",
+      "description": "如果拥有此权限，即可发布大数据分析以使用 ArcGIS Velocity 分析历史观测数据。"
+    },
+    "portal:publisher:createDataPipelines": {
+      "label": "创建和运行数据管道",
+      "description": "允许成员创建、编辑和运行数据管道。",
+      "descriptionApp": "允许应用程序创建、编辑和运行数据管道。"
+    },
+    "portal:publisher:publishLivestreamVideo": {
+      "label": "发布直播视频",
+      "description": "允许成员发布来自网络视频广播和流的托管直播流视频图层。",
+      "descriptionApp": "允许应用程序发布来自网络视频广播和流的托管直播流视频图层。"
+    },
+    "portal:publisher:publishVideo": {
+      "label": "发布视频",
+      "description": "允许成员从视频文件和支持的视频元数据文件发布托管视频图层。",
+      "descriptionApp": "允许应用程序从视频文件和支持的视频元数据文件发布托管视频图层。"
+    },
+    "portal:user:shareToGroup": {
+      "label": "与群组共享",
+      "description": "允许成员将内容共享至群组。",
+      "descriptionApp": "允许应用程序将内容共享至群组。"
+    },
+    "portal:user:shareToOrg": {
+      "label": "与组织共享",
+      "labelPortal": "与门户共享",
+      "description": "允许成员将内容共享至组织。",
+      "descriptionPortal": "允许成员将内容共享至门户。",
+      "descriptionApp": "允许应用程序将内容共享至组织。"
+    },
+    "portal:user:shareToPublic": {
+      "label": "与公众共享",
+      "description": "在所在组织公开共享政策允许的情况下，允许成员公开共享其内容。",
+      "descriptionApp": "在所在组织公开共享政策允许的情况下，允许应用程序公开共享应用程序拥有者的内容。",
+      "tooltip": "如果组织不允许成员公开共享内容，则成员需要管理权限才能与公众共享成员内容。"
+    },
+    "portal:user:shareGroupToOrg": {
+      "label": "将群组设置为对组织可见",
+      "labelPortal": "将群组设置为对门户可见",
+      "description": "允许成员将内容共享至组织。",
+      "descriptionPortal": "允许成员将内容共享至门户。",
+      "descriptionApp": "允许应用程序将内容共享至门户。"
+    },
+    "portal:user:shareGroupToPublic": {
+      "label": "将群组设置为对公众可见",
+      "description": "允许成员将群组设置为可被公众发现。",
+      "descriptionApp": "允许应用程序将群组设置为可被公众发现。"
+    },
+    "opendata:user:designateGroup": {
+      "label": "向 Open Data 提供群组",
+      "description": "允许成员将群组指定为可在 Open Data 中使用。",
+      "descriptionApp": "允许应用程序将群组指定为可在 Open Data 中使用。"
+    },
+    "premium:user:basemaps": {
+      "label": "底图样式服务",
+      "descriptionLocationPlatform": "允许应用程序访问底图样式服务。"
+    },
+    "premium:user:staticbasemaptiles": {
+      "label": "静态底图切片",
+      "descriptionLocationPlatform": "允许应用程序访问静态底图切片服务。"
+    },
+    "premium:user:staticMaps": {
+      "label": "静态地图服务 (beta)",
+      "descriptionLocationPlatform": "允许应用程序访问静态地图服务。"
+    },
+    "premium:user:elevation": {
+      "label": "高程服务",
+      "descriptionLocationPlatform": "允许应用程序访问高程服务。"
+    },
+    "premium:user:geocode": {
+      "label": "地理编码",
+      "description": "允许成员使用 ArcGIS Geocoding Service (或此定位器的视图)执行消耗配额的地理编码任务。",
+      "descriptionApp": "允许应用程序使用 ArcGIS World Geocoding Service（或此定位器的视图）执行消耗配额的地理编码任务。"
+    },
+    "premium:user:geocode:stored": {
+      "label": "地理编码(已存储)",
+      "descriptionLocationPlatform": "允许应用程序访问地理编码服务并执行存储的地理编码。"
+    },
+    "premium:user:geocode:temporary": {
+      "label": "地理编码(未存储)",
+      "descriptionLocationPlatform": "允许应用程序访问地理编码服务并执行未存储的地理编码。"
+    },
+    "premium:user:networkanalysis": {
+      "label": "路径选择",
+      "description": "允许成员执行网络分析任务，例如路径查找和行驶时间面。",
+      "descriptionApp": "允许应用程序访问路径选择服务。"
+    },
+    "premium:user:networkanalysis:closestfacility": {
+      "label": "最近设施点",
+      "descriptionLocationPlatform": "允许应用程序访问路径选择服务并执行最近设施点路径选择操作。"
+    },
+    "premium:user:networkanalysis:lastmiledelivery": {
+      "label": "最后一公里配送",
+      "descriptionLocationPlatform": "允许应用程序访问路径选择服务并执行最后一公里配送的路径选择操作。"
+    },
+    "premium:user:networkanalysis:snaptoroads": {
+      "label": "捕捉到道路",
+      "descriptionLocationPlatform": "允许成员执行网络分析任务，例如将 GPS 轨迹点捕捉到道路。"
+    },
+    "premium:user:networkanalysis:locationallocation": {
+      "label": "位置分配",
+      "descriptionLocationPlatform": "允许应用程序访问路径选择服务并执行位置分配操作。"
+    },
+    "premium:user:networkanalysis:routing": {
+      "label": "简单路径服务",
+      "descriptionLocationPlatform": "允许应用程序访问路径选择服务并执行标准路径选择操作。"
+    },
+    "premium:user:networkanalysis:optimizedrouting": {
+      "label": "优化路径",
+      "descriptionLocationPlatform": "允许应用程序访问路径选择服务并执行优化的路径选择操作。"
+    },
+    "premium:user:networkanalysis:vehiclerouting": {
+      "label": "多车辆路径",
+      "descriptionLocationPlatform": "多车辆路径选择允许应用程序访问路径选择服务并执行车队路径选择操作。"
+    },
+    "premium:user:networkanalysis:origindestinationcostmatrix": {
+      "label": "起点/目的地成本矩阵",
+      "descriptionLocationPlatform": "允许应用程序访问路径选择服务并生成出行成本矩阵。"
+    },
+    "premium:user:networkanalysis:servicearea": {
+      "label": "服务区",
+      "descriptionLocationPlatform": "允许应用程序访问路径选择服务并生成服务区。"
+    },
+    "premium:user:places": {
+      "label": "地点服务",
+      "descriptionLocationPlatform": "允许应用程序访问地点服务。"
+    },
+    "premium:user:spatialanalysis": {
+      "labelOld": "空间分析服务",
+      "label": "要素分析服务",
+      "labelPortal": "标准要素分析",
+      "description": "允许成员执行要素分析任务。",
+      "descriptionPortal": "此权限授予执行执行标准要素分析任务的权限。",
+      "descriptionLocationPlatform": "允许应用程序访问要素分析服务。",
+      "descriptionApp": "允许应用程序访问要素分析服务。"
+    },
+    "premium:user:geoenrichment": {
+      "label": "地理丰富服务",
+      "description": "允许成员在地理层面上丰富要素。",
+      "descriptionLocationPlatform": "允许应用程序访问 GeoEnrichment 服务。",
+      "descriptionApp": "允许应用程序访问 GeoEnrichment 服务。"
+    },
+    "premium:user:demographics": {
+      "label": "人口统计地图",
+      "description": "允许应用程序访问 ArcGIS Living Atlas 中的高级人口统计地图。",
+      "descriptionApp": "允许应用程序访问 ArcGIS Living Atlas 中的高级人口统计地图。",
+      "descriptionLocationPlatform": "允许应用程序访问 ArcGIS Living Atlas 中的人口统计地图。"
+    },
+    "premium:publisher:geoanalytics": {
+      "label": "GeoAnalytics 要素分析",
+      "description": "此权限授予执行 GeoAnalytics 任务的权限。"
+    },
+    "premium:publisher:rasteranalysis": {
+      "label": "影像分析",
+      "description": "允许成员执行影像分析任务。 需要 ArcGIS 图像分析功能。",
+      "descriptionPortal": "允许成员执行影像分析任务。",
+      "descriptionApp": "允许应用程序执行影像分析任务。 需要 ArcGIS 图像分析功能。",
+      "descriptionAppPortal": "允许应用程序执行影像分析任务。"
+    },
+    "premium:publisher:createAdvancedNotebooks": {
+      "label": "高级笔记本",
+      "description": "允许成员在笔记本中导入和使用 ArcPy 模块。",
+      "descriptionApp": "允许应用程序在笔记本中导入和使用 ArcPy 模块。"
+    },
+    "portal:user:runWebTool": {
+      "label": "运行 web 工具",
+      "description": "允许成员运行 Web 工具。",
+      "descriptionPortal": "允许成员运行从笔记本发布的 Web 工具。",
+      "descriptionApp": "允许应用程序运行web工具。",
+      "descriptionAppPortal": "允许应用程序运行从笔记本发布的 Web 工具。"
+    },
+    "portal:user:generateApiTokens": {
+      "label": "生成 API 密钥",
+      "description": "允许成员生成 API 密钥。"
+    },
+    "portal:user:assignPrivilegesToApps": {
+      "label": "为 OAuth 2.0 应用程序分配权限",
+      "description": "允许成员为 OAuth 2.0 应用程序分配权限。"
+    },
+    "portal:user:createWorkflow": {
+      "label": "创建工作流项目",
+      "description": "允许成员创建 Workflow Manager 项目"
+    },
+    "premium:user:featurereport": {
+      "label": "要素报表",
+      "description": "允许成员在 Survey123 中创建要素报表。",
+      "descriptionApp": "允许应用程序在 Survey123 中创建要素报表。"
+    },
+    "premium:user:realitymapping": {
+      "label": "实景映射",
+      "description": "允许成员执行实景映射任务。"
+    },
+    "features:user:edit": {
+      "label": "编辑",
+      "description": "允许成员根据图层中启用的编辑选项来编辑非公开共享的可编辑图层中的要素。",
+      "descriptionApp": "允许应用程序根据图层中启用的编辑选项来编辑非公开共享的可编辑图层中的要素。"
+    },
+    "features:user:fullEdit": {
+      "label": "以完全控制功能进行编辑",
+      "description": "允许成员添加、删除和更新可编辑托管要素图层中的要素，不必考虑图层是否启用了编辑选项。",
+      "descriptionApp": "允许应用程序添加、删除和更新可编辑托管要素图层中的要素，不必考虑图层是否启用了编辑选项。"
+    },
+    "features:user:manageVersions": {
+      "label": "管理全部",
+      "description": "允许成员管理版本锁定，以及查看、更改、删除、编辑、协调和发布到通过 ArcGIS Server 要素图层访问的所有分支版本。",
+      "descriptionApp": "允许应用程序管理版本锁定，以及查看、更改、删除、编辑、协调和发布到通过 ArcGIS Server 要素图层访问的所有分支版本。"
+    },
+    "portal:publisher:createFeatureWebhook": {
+      "label": "要素图层",
+      "description": "允许成员创建、编辑和删除他们自己的要素图层 webhook。",
+      "descriptionApp": "允许应用程序创建、编辑和删除他们自己的要素图层 webhook。"
+    },
+    "portal:admin:viewUsers": {
+      "label": "查看全部",
+      "description": "允许成员查看组织内的完整成员帐户信息。",
+      "descriptionPortal": "允许成员查看门户内的完整成员帐户信息。",
+      "descriptionApp": "允许应用程序查看组织内的完整成员账户信息。"
+    },
+    "portal:admin:updateUsers": {
+      "label": "更新",
+      "description": "允许成员在组织内重置密码、更新成员帐户信息和更新成员类别。",
+      "descriptionPortal": "允许成员在门户内重置密码、更新成员账户信息和更新成员类别。",
+      "descriptionApp": "允许应用程序在组织内重置密码、更新成员账户信息和更新成员类别。"
+    },
+    "portal:admin:deleteUsers": {
+      "label": "删除",
+      "description": "允许成员删除组织内的成员帐户。",
+      "descriptionPortal": "允许成员删除门户内的成员帐户。",
+      "descriptionApp": "允许应用程序删除组织内的成员账户。"
+    },
+    "portal:admin:inviteUsers": {
+      "label": "添加",
+      "labelPortal": "邀请",
+      "description": "允许成员邀请成员加入组织。",
+      "descriptionPortal": "允许成员邀请成员加入门户。",
+      "descriptionApp": "允许应用程序邀请成员加入组织。"
+    },
+    "portal:admin:disableUsers": {
+      "label": "禁用",
+      "description": "允许成员启用和禁用组织内的成员帐户。",
+      "descriptionPortal": "允许成员启用和禁用门户内的成员帐户。",
+      "descriptionApp": "允许应用程序启用和禁用组织内的成员账户。"
+    },
+    "portal:admin:changeUserRoles": {
+      "label": "更改角色",
+      "description": "允许成员更改分配给成员帐户的角色。 请注意：仅具有管理员角色的成员能够向其他帐户分配或取消分配管理员角色。",
+      "descriptionPortal": "允许成员更改分配给成员帐户的角色。 请注意：仅具有管理员角色的成员能够向其他帐户分配或取消分配管理员角色。",
+      "descriptionApp": "允许应用程序更改分配给成员账户的角色。 请注意：仅具有管理员角色的成员能够向其他账户分配或取消分配管理员角色。"
+    },
+    "portal:admin:manageLicenses": {
+      "label": "管理许可",
+      "description": "允许成员为组织成员分配许可。",
+      "descriptionPortal": "允许成员为门户成员分配许可。",
+      "descriptionApp": "允许应用程序为组织成员分配许可。"
+    },
+    "portal:admin:updateMemberCategorySchema": {
+      "label": "管理类别",
+      "description": "允许成员配置组织成员类别。",
+      "descriptionPortal": "允许成员配置门户成员类别。",
+      "descriptionApp": "允许应用程序配置组织成员类别。"
+    },
+    "portal:admin:viewGroups": {
+      "label": "查看全部",
+      "description": "允许成员查看组织内的所有群组。",
+      "descriptionPortal": "允许成员查看门户内的所有群组。",
+      "descriptionApp": "允许应用程序查看组织内的所有群组。"
+    },
+    "portal:admin:updateGroups": {
+      "label": "更新",
+      "description": "允许成员更新组织内的群组。",
+      "descriptionPortal": "允许成员更新门户内的群组。",
+      "descriptionApp": "允许应用程序更新组织内的群组。"
+    },
+    "portal:admin:deleteGroups": {
+      "label": "删除",
+      "description": "允许成员删除组织内的群组。",
+      "descriptionPortal": "允许成员删除门户内的群组。",
+      "descriptionApp": "允许应用程序删除组织内的群组。"
+    },
+    "portal:admin:reassignGroups": {
+      "label": "重新分配所有权",
+      "description": "允许成员为组织内的其他成员重新分配群组。",
+      "descriptionPortal": "允许成员为门户内的其他成员重新分配群组。",
+      "descriptionApp": "允许应用程序为组织内的其他成员重新分配群组。"
+    },
+    "portal:admin:assignToGroups": {
+      "label": "分配成员",
+      "description": "允许成员将成员分配到组织内的群组、更新成员的群组角色以及从组织内的群组中移除成员。",
+      "descriptionPortal": "允许成员将成员分配到门户内的群组、更新成员的群组角色以及从门户内的群组中移除成员。",
+      "descriptionApp": "允许应用程序将成员分配到组织内的群组、更新成员的群组角色以及从组织内的群组中移除成员。"
+    },
+    "portal:admin:manageEnterpriseGroups": {
+      "label": "组织特定群组链接",
+      "description": "允许成员将群组成员资格链接到组织特定群组。",
+      "descriptionApp": "允许应用程序将群组成员资格链接到组织特定群组。"
+    },
+    "portal:admin:createUpdateCapableGroup": {
+      "label": "创建具有更新功能的群组",
+      "description": "允许成员创建具有更新功能的群组。",
+      "descriptionApp": "允许应用程序创建具有更新功能的群组。"
+    },
+    "portal:admin:createLeavingDisallowedGroup": {
+      "label": "创建不允许离开的群组",
+      "description": "允许成员创建和拥有不允许成员离开的群组(管理群组)。",
+      "descriptionApp": "允许应用程序创建和拥有不允许应用程序离开的群组(管理群组)。"
+    },
+    "portal:admin:viewItems": {
+      "label": "查看全部",
+      "description": "允许成员查看组织内的所有内容。",
+      "descriptionPortal": "允许成员查看门户内的所有内容。",
+      "descriptionApp": "允许应用程序查看组织内的所有内容。"
+    },
+    "portal:admin:updateItems": {
+      "label": "更新",
+      "description": "允许成员更新和分类内容以及编辑组织中的托管要素图层。",
+      "descriptionPortal": "允许成员更新和分类内容以及编辑门户中的托管要素图层。",
+      "descriptionApp": "允许应用程序更新和分类内容以及编辑组织中的托管要素图层。"
+    },
+    "portal:admin:deleteItems": {
+      "label": "删除",
+      "description": "允许成员删除组织内的内容。",
+      "descriptionPortal": "允许成员删除门户内的内容。",
+      "descriptionApp": "允许应用程序删除组织内的内容。"
+    },
+    "portal:admin:reassignItems": {
+      "label": "重新分配所有权",
+      "description": "允许成员为组织内的其他成员重新分配内容。",
+      "descriptionPortal": "允许成员为门户内的其他成员重新分配内容。",
+      "descriptionApp": "允许应用程序为组织内的其他成员重新分配内容。"
+    },
+    "portal:admin:updateItemCategorySchema": {
+      "label": "管理类别",
+      "description": "允许成员配置组织内容类别。",
+      "descriptionPortal": "允许成员配置门户内容类别。",
+      "descriptionApp": "允许应用程序配置组织内容类别。"
+    },
+    "portal:publisher:publishServerGPServices": {
+      "label": "发布 web 工具",
+      "description": "如果拥有此权限，则可发布由联合服务器站点的地理处理服务提供支持的 web 工具。"
+    },
+    "portal:admin:shareToOrg": {
+      "label": "与组织共享成员内容",
+      "description": "允许成员与组织共享组织内其他成员拥有的内容。",
+      "descriptionPortal": "允许成员与门户共享门户内其他成员拥有的内容。",
+      "descriptionApp": "允许应用程序与组织共享组织内其他成员拥有的内容。"
+    },
+    "portal:admin:shareToPublic": {
+      "label": "与公众分享成员内容",
+      "description": "允许成员与公众共享组织内其他成员拥有的内容。",
+      "descriptionPortal": "允许成员与公众共享门户内其他成员拥有的内容。",
+      "descriptionApp": "允许应用程序与公众共享组织内其他成员拥有的内容。"
+    },
+    "portal:admin:createReports": {
+      "label": "创建和管理行政报告",
+      "description": "允许成员为您的组织创建和管理行政报告。",
+      "descriptionPortal": "允许成员为您的门户创建和管理行政报告。",
+      "descriptionApp": "允许应用程序为您的组织创建和管理行政报告。"
+    },
+    "marketplace:admin:manage": {
+      "label": "创建和管理",
+      "description": "允许成员在 ArcGIS Marketplace 内创建清单、列出项目、管理订阅，并管理组织的购买者和联系人信息。 此权限的使用取决于您的组织是否获取 ArcGIS Marketplace 的列表和发布权限。"
+    },
+    "marketplace:admin:purchase": {
+      "label": "购买和获取免费产品",
+      "description": "允许成员发送购买请求并访问来自 ArcGIS Marketplace 中提供者的免费产品。 要允许成员使用信用卡购买产品，您必须将其指定为 Marketplace 采购者。"
+    },
+    "marketplace:admin:startTrial": {
+      "label": "开启试用",
+      "description": "允许成员在 ArcGIS Marketplace 内开始试用订阅。"
+    },
+    "portal:admin:manageSecurity": {
+      "label": "安全性和基础架构",
+      "description": "允许成员管理组织的安全性和基础架构设置。",
+      "descriptionPortal": "允许成员管理门户的安全性和基础架构设置。",
+      "descriptionApp": "允许应用程序管理组织的安全性和基础架构设置。"
+    },
+    "portal:admin:manageWebsite": {
+      "label": "组织网站",
+      "description": "允许成员管理组织的网站设置。",
+      "descriptionPortal": "允许成员管理门户的网站设置。",
+      "descriptionApp": "允许应用程序管理组织的网站设置。"
+    },
+    "portal:admin:manageCollaborations": {
+      "label": "协作",
+      "description": "允许成员管理组织的协作。",
+      "descriptionPortal": "允许成员管理门户的协作。",
+      "descriptionApp": "允许应用程序管理组织的协作。"
+    },
+    "portal:admin:manageCredits": {
+      "label": "配额",
+      "description": "允许成员管理组织的配额预算设置。",
+      "descriptionApp": "允许应用程序管理组织的配额预算设置。"
+    },
+    "portal:admin:manageRoles": {
+      "label": "成员角色",
+      "description": "允许成员管理组织的成员角色。",
+      "descriptionPortal": "允许成员管理门户的成员角色。",
+      "descriptionApp": "允许应用程序管理组织的成员角色。"
+    },
+    "portal:admin:manageServers": {
+      "label": "服务器",
+      "description": "如果拥有此权限，则可以管理门户的服务器设置。"
+    },
+    "portal:admin:manageUtilityServices": {
+      "label": "实用程序服务",
+      "description": "允许成员管理组织的实用程序服务设置。",
+      "descriptionPortal": "允许成员管理门户的实用程序服务设置。",
+      "descriptionApp": "允许应用程序管理组织的实用程序服务设置。"
+    },
+    "portal:admin:manageWebhooks": {
+      "label": "Webhook",
+      "labelPortal": "组织 webhook",
+      "description": "允许成员创建、编辑和删除您组织中的所有webhooks。",
+      "descriptionApp": "允许应用程序创建、编辑和删除您组织中的所有webhooks。",
+      "descriptionPortal": "允许成员创建、编辑和删除组织 webhook 并管理门户内的所有 webhook。",
+      "descriptionAppPortal": "允许应用程序创建、编辑和删除组织 webhook 并管理门户内的所有 webhook。"
+    },
+    "portal:admin:createGPWebhook": {
+      "label": "地理处理",
+      "description": "允许成员创建、编辑和删除他们自己的地理处理 webhook。",
+      "descriptionApp": "允许应用程序创建、编辑和删除他们自己的地理处理 webhook。"
+    }
+  }
+}

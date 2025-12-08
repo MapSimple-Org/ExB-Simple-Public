@@ -1,0 +1,8 @@
+{
+  "arriveTime": "到達時間",
+  "modes": {
+    "custom": "自訂日期和時間",
+    "now": "我現在",
+    "unspecified": "時間未指定"
+  }
+}

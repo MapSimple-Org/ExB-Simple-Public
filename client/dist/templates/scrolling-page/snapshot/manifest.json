@@ -1,0 +1,22 @@
+{
+  "name": "snapshot",
+  "type": "template",
+  "templateType": "scrolling-page",
+  "label": "Snapshot",
+  "description": "Snapshot is a template designed to showcase your captivating images with the use of a section, views navigation, and cards.",
+  "thumbnail": "thumbnail.png",
+  "order": 5,
+  "tags": [
+    "Banner",
+    "Gallery",
+    "Section",
+    "View",
+    "Navigation"
+  ],
+  "categoriesTags": [
+    "Web page",
+    "Scrolling"
+  ],
+  "thumbnailWidth": 320,
+  "thumbnailHeight": 214
+}

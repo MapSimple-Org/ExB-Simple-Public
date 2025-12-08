@@ -1,0 +1,6 @@
+{
+  "greaterThanErrorMessage": "A bemeneti szám értéke több mint ${min} kell legyen.",
+  "lesserThanErrorMessage": "A bemeneti szám értéke ${max} alatti kell legyen.",
+  "greaterThanOrEqualErrorMessage": "A bemeneti szám értéke legalább ${min} kell legyen.",
+  "lesserThanOrEqualErrorMessage": "A bemeneti szám értéke legfeljebb ${max} lehet."
+}

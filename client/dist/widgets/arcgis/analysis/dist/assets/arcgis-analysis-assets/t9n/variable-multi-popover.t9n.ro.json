@@ -1,0 +1,11 @@
+{
+  "addBtn": "Gata",
+  "cancelBtn": "Anulare",
+  "header": "Selectare variabilă",
+  "multipleVariables": "Variabile multiple",
+  "noFound": "Nicio variabilă compatibilă găsită",
+  "search": "Căutare variabile",
+  "singleVariables": "Variabile cu o singură valoare",
+  "variableLabel": "Etichetă: <span style='font-weight: var(--calcite-font-weight-normal)'>${val}</span>",
+  "variableVal": "Valoare: <span style='font-weight: var(--calcite-font-weight-normal)'>${val}</span>"
+}

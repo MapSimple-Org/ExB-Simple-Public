@@ -1,0 +1,13 @@
+{
+  "fieldCalcExpression": "นิพจน์การคำนวณฟิลด์",
+  "fieldCalculationGroupLabel": "การคำนวณฟิลด์",
+  "fieldPlaceholderText": "คลิกเพื่อเลือกหรือสร้างฟิลด์",
+  "fieldToCalculate": "ฟิลด์ที่จะคำนวณ",
+  "inputDatasetGroupLabel": "ข้อมูลนำเข้า",
+  "itemProperties": {
+    "description": "ผลลัพธ์ที่สร้างขึ้นจากการรันเครื่องมือคำนวณฟิลด์ใน ModelBuilder",
+    "snippet": "ชั้นข้อมูลฟีเจอร์ที่สร้างขึ้นจากคำนวณฟิลด์"
+  },
+  "noFieldSpecified": "ระบุฟิลด์ที่จะคำนวณเพื่อสร้างนิพจน์",
+  "whereClause": "ใช้การคำนวณเฉพาะกับบางบันทึก"
+}

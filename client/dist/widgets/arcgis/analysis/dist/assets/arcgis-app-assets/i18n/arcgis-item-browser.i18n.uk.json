@@ -1,0 +1,417 @@
+{
+  "itemBrowser": {
+    "filters": "Фільтри",
+    "preview": "Попередній перегляд",
+    "selectedLayers": "Вибрані шари",
+    "selectedItems": "Вибрані елементи",
+    "pageRange": "${start}-${end}, усього: ${total}",
+    "pageRangeAria": "${start}-${end}, всього елементів: ${total}",
+    "pageRangeWithRecycleBin": "${start}-${end}, всього: ${total} (Загальний розмір: ${recycleBinSize})",
+    "pageRangeAriaWithRecycleBin": "${start}-${end}, всього елементів: ${total} (Загальний розмір: ${recycleBinSize})",
+    "foundOnPage": "Результатів, які відповідають критеріям пошуку, на поточній сторінці: ${total}",
+    "totalSize": "Загальний розмір: ${totalSize}",
+    "selectedMultipleWithSize": "Вибрано: ${num} (${totalSize})",
+    "selectedMultipleWithSizeSmall": "${num} (${totalSize})",
+    "noSelectedLayers": "Зараз не вибрано жодного шару",
+    "noSelectedItems": "Зараз не вибрано жодного елементу",
+    "sharingUpdated": "Спільний доступ до ${itemTitle} оновлено.",
+    "refineContent": "Уточнити зміст"
+  },
+  "layerTypes": {
+    "point": "Шар точок",
+    "line": "Шар ліній",
+    "polygon": "Шар полігонів",
+    "multipatch": "Шар мультипатчів",
+    "multipoint": "Шар мультиточок",
+    "table": "Таблиця",
+    "catalog": "Шар каталогу",
+    "oriented imagery": "Шар орієнтованих зображень",
+    "parcel": "Шар ділянки",
+    "utility network": "Шар інженерної мережі",
+    "topology": "Шар топології",
+    "trace network": "Шар мережі трасування"
+  },
+  "filterIndustry": {
+    "title": "Галузь",
+    "Industry": "Галузь: ${industry}",
+    "Build a layer": "Побудувати шар",
+    "Agriculture": "Сільське господарство",
+    "Electric Utilities": "Електроенергетичні компанії",
+    "Environment": "Навколишнє середовище",
+    "Forestry": "Лісова промисловість",
+    "Gas Utilities": "Газопостачальні компанії",
+    "General": "Загальний",
+    "Natural Resources": "Природні ресурси",
+    "Petroleum": "Нафтогазова промисловість",
+    "Public Safety": "Суспільна безпека",
+    "Telecommunications": "Телекомунікації",
+    "Transportation": "Транспорт",
+    "Water Utilities": "Водопостачальні компанії"
+  },
+  "filterItemType": {
+    "title": "Тип елементу",
+    "itemType": "Тип: ${itemType}",
+    "options": {
+      "maps": "Карти",
+      "maps-webmaps": "Веб-карти",
+      "maps-mapfiles": "Файли карти",
+      "layers": "Шари",
+      "layers-weblayers": "Веб-шари",
+      "layers-weblayers-features": "Векторні шари",
+      "layers-weblayers-tiles": "Шари тайлу",
+      "layers-weblayers-mapimage": "Шари зображення карти",
+      "layers-weblayers-imagery": "Шари зображення",
+      "layers-weblayers-scenelayers": "Шари сцени",
+      "layers-weblayers-videolayers": "Шари відео",
+      "layers-weblayers-tiledimagelayers": "Шари зображення з тайлами",
+      "layers-weblayers-elevationlayers": "Шари висоти",
+      "layers-weblayers-feeds": "Вхідні сигнали",
+      "layers-weblayers-tables": "Таблиці",
+      "layers-layerfiles": "Файли шару",
+      "scenes": "Сцени",
+      "applications": "Додатки",
+      "applications-web": "Веб-додатки",
+      "applications-dashboards": "Панелі управління",
+      "applications-sites": "Сайти",
+      "applications-pages": "Сторінки",
+      "applications-geobim-projects": "Проєкти GeoBIM",
+      "applications-geobim-apps": "Додатки GeoBIM",
+      "applications-instant-apps": "Миттєві додатки",
+      "applications-storymap": "StoryMaps",
+      "applications-data-pipelines": "Конвеєри даних",
+      "applications-experience": "Experience Builder",
+      "applications-wab": "Web AppBuilder",
+      "applications-mobile": "Мобільні додатки",
+      "applications-desktop": "Додатки для настільних систем",
+      "developer-credentials": "Облікові дані розробника",
+      "developer-credentials-oauth": "Облікові дані OAuth 2.0",
+      "developer-credentials-api-token": "Облікові дані API-ключа",
+      "developer-credentials-api-key": "API-ключ (попередні версії)",
+      "tools": "Інструменти",
+      "tools-locators": "Локатори",
+      "tools-geodatabase": "Доступ до бази геоданих",
+      "tools-geometric": "Геометричні операції",
+      "tools-geoprocessing": "Задачі геообробки",
+      "tools-network": "Мережевий аналіз",
+      "tools-analytics": "Аналітика",
+      "files": "Файли",
+      "files-document": "Документи",
+      "files-image": "Зображення",
+      "files-pdf": "Файли PDF",
+      "files-csv": "CSV",
+      "files-report": "Адміністративні звіти",
+      "files-raster": "Шаблони растрових функцій",
+      "notebooks": "Журнали",
+      "insights": "Insights",
+      "insights-workbooks": "Робочі журнали",
+      "insights-pages": "Звіти",
+      "insights-models": "Моделі",
+      "insights-themes": "Теми",
+      "data-stores": "Сховища даних",
+      "knowledge-graphs": "Графи знань"
+    }
+  },
+  "filterCategories": {
+    "categories": "Категорії",
+    "groupCategories": "Категорії груп",
+    "category": "Категорія: ${category}",
+    "uncategorized": "Не віднесено до категорії",
+    "noCategoriesTitle": "Категорій ще немає",
+    "noCategories": "Категорії дозволяють учасникам узгоджено організовувати елементи та забезпечують простий спосіб перегляду вмісту в організації.",
+    "noGroupCategoriesTitle": "Ще немає категорій групи",
+    "noGroupCategories": "Категорії дозволяють учасникам групи узгоджено організовувати елементи та забезпечують простий спосіб перегляду вмісту в групі.",
+    "setupCategories": "Налаштувати категорії вмісту",
+    "setupGroupCategories": "Налаштувати категорії групи",
+    "configureCategories": "Налаштувати категорії"
+  },
+  "filterRegion": {
+    "regions": "Регіони",
+    "region": "Регіон: ${region}"
+  },
+  "filterCollaborations": {
+    "title": "Розподілені співробітництва",
+    "label": "Розподілені співробітництва: ${name}",
+    "loading": "Завантаження співробітництва..."
+  },
+  "filterContentStatus": {
+    "title": "Стан",
+    "label": "Стан: ${contentStatus}",
+    "authoritative": "Повноважний",
+    "deprecated": "Не рекомендований"
+  },
+  "filterDeleteProtection": {
+    "title": "Захист від видалення",
+    "label": "Захист від видалення: ${deleteProtection}",
+    "enabled": "Активовано",
+    "disabled": "Виключено"
+  },
+  "filterExpiration": {
+    "today": "Сьогодні",
+    "tomorrow": "Завтра",
+    "next7": "Наступні 7 днів",
+    "next30": "Наступні 30 днів",
+    "custom": "Діапазон, заданий користувачем...",
+    "title": {
+      "expires": "Дата закінчення терміну дії"
+    },
+    "expires": "Термін придатності: ${date}"
+  },
+  "filterExtent": {
+    "label": "В області карти",
+    "title": "Показати зміст тільки в області карти"
+  },
+  "filterFolder": {
+    "folders": "Папки",
+    "placeholder": "Фільтрувати папки",
+    "clear": "Очистити пошук",
+    "all": "Весь мій зміст",
+    "allContentUser": "Весь вміст ${username}",
+    "recycleBin": "Кошик",
+    "label": "Папка: ${folder}",
+    "loading": "Завантаження папок...",
+    "folderOptions": "Опції папки",
+    "editFolder": "Редагувати папку",
+    "deleteFolder": "Видалити папку",
+    "delete": "Видалити",
+    "areYouSure": "Бажаєте видалити цю папку?",
+    "areYouSureExplanation": "Папку <strong style='font-weight: 500'>${title}</strong> буде видалено назавжди. Крім того, усі елементи в папці буде позначено для видалення. Все одно бажаєте видалити цю папку?",
+    "cancel": "Скасувати",
+    "save": "Зберегти",
+    "createAFolder": "Створити папку",
+    "folderName": "Назва папки",
+    "createFolder": "Створити папку",
+    "error": {
+      "title": "Помилка",
+      "noName": "Ви повинні надати назву для вашої папки.",
+      "folderAlreadyExists": "Папка '${folder}' вже існує. Виберіть іншу назву.",
+      "invalidCharacters": {
+        "single": "Назва не може містити цей символ: ${invalidCharacters}.",
+        "multiple": "Назва не може містити будь-який із цих символів: ${invalidCharacters}.",
+        "unknown": "Назва не може містити будь-який із цих символів: ${invalidCharacters}."
+      },
+      "errorCreatingFolder": "Під час створення папки ${folderName} сталася помилка."
+    }
+  },
+  "filterGroup": {
+    "title": "Групи",
+    "groups": "Мої групи",
+    "placeholder": "Фільтрувати групи",
+    "all": "Весь зміст моєї групи",
+    "label": "Група: ${group}",
+    "loading": "Виконується завантаження груп..."
+  },
+  "filterContentType": {
+    "contentType": "Тип вмісту",
+    "all": "Весь вміст моєї організації",
+    "recycle": "Кошик"
+  },
+  "filterLocation": {
+    "location": "Місце розташування",
+    "label": "Місце розташування: ${location}",
+    "findLocationText": "Знайти адресу або місце",
+    "search": "Пошук місць розташування",
+    "suggestions": "Пропозиції",
+    "noResults": "Не знайдено результатів для \"${searchTerm}\""
+  },
+  "filterSharing": {
+    "title": "Спільне використання",
+    "label": "Спільний: ${sharing}",
+    "owner": "Власник",
+    "shared": "Спільно використовуваний з групами",
+    "private": "Використовуваний не спільно з групами",
+    "account": "Організація",
+    "public": "Усі (публічний)"
+  },
+  "filterTags": {
+    "title": "Теги",
+    "label": "Тегований: ${tags}",
+    "selectTags": "Вибрані теги"
+  },
+  "filterReportType": {
+    "title": "Тип звіту",
+    "label": "Тип звіту: ${reportType}",
+    "activity": "Активність",
+    "credits": "Кредит",
+    "users": "Учасник",
+    "content": "Елемент",
+    "item_usages": "Лічильник переглядів елементів",
+    "service_usages": "Використання сервісу"
+  },
+  "cardThumbnail": {
+    "loading": "Завантаження зображення"
+  },
+  "card": {
+    "select": "Вибрати елемент: ${title}",
+    "lastUpdated": "Елемент оновлено: ${date}",
+    "viewItemDetails": "Переглянути додаткову інформацію про ${title}",
+    "preview": "Більше інформації",
+    "hidePreview": "Менше відомостей",
+    "closeDetails": "Закрити попередній перегляд",
+    "openDetails": "Попередній перегляд",
+    "moreOptions": "Більше опцій"
+  },
+  "cardSublayerSelect": {
+    "select": "Вибрати шар",
+    "selectLayers": "Вибрати шари",
+    "selectedSingle": "Вибрано",
+    "selectedLayers": "Обрані шари: ${num}",
+    "selectedMultiple": "Вибрано: ${num}",
+    "selectedName": "Вибраний шар: ${name}",
+    "selectedTask": "Вибрана задача: ${task}",
+    "errorTitle": "Помилка підключення до сервісу.",
+    "errorBody": "Не вдалося успішно підключитися до сервісу. Сервіс або не працює, або вимагає автентифікації.",
+    "notebookErrorBody": "Цей інструмент опубліковано з блокноту. Доступ до ArcGIS Notebooks заблоковано для вашої організації. Зверніться до адміністратора, щоб налаштувати параметри.",
+    "retry": "Повторити",
+    "selectTask": "Вибрати задачу",
+    "selectTaskFrom": "Виберіть задачу із ${title}"
+  },
+  "cardLayersList": {
+    "hideDetails": "Приховати відомості",
+    "showDetails": "Показати відомості",
+    "layersAndTables": "Шари й таблиці"
+  },
+  "content": {
+    "noResults": "Елементи, які відповідають вашим критеріям, не було знайдено. Спробуйте змінити критерій пошуку або очистити деякі фільтри для відображення більшої кількості елементів.",
+    "noContent": "Немає доступного вмісту.",
+    "loading": "Виконується завантаження..."
+  },
+  "copy": {
+    "copy": "Копіювати",
+    "copied": "Скопійовано"
+  },
+  "bucketSelect": {
+    "my": "Мій вміст",
+    "org": "Моя організація",
+    "group": "Мої групи",
+    "favorites": "Моє обране",
+    "living atlas": "Living Atlas",
+    "living atlas analysis": "Шари аналізу Живого атласу",
+    "subscription content": "Зміст за підпискою",
+    "all": "ArcGIS Online",
+    "catalog": "Каталоги хабу",
+    "catalogLabel": "Каталог"
+  },
+  "preview": {
+    "owner": "Власник",
+    "summary": "Короткий опис",
+    "noSummary": "Коротку інформацію не надано",
+    "description": "Опис",
+    "noDescription": "Опис не надано",
+    "thumbnail": "Зразок",
+    "overview": "Огляд",
+    "details": "Детальна інформація",
+    "termsOfUse": "Умови використання",
+    "noTermsOfUse": "Умови використання не надані",
+    "itemManagedBy": "Керування елементом здійснює: ${username}",
+    "fullItemDetails": "Повна інформація про елемент",
+    "layersCount": "Шари (${count})",
+    "layers": "Шари",
+    "add": "Додати",
+    "remove": "Вилучити",
+    "loading": "Виконується завантаження...",
+    "shared": "Спільне використання",
+    "created": "Елемент створено",
+    "updated": "Елемент оновлено",
+    "fileSize": "Розмір файлу",
+    "dataUpdated": "Дані оновлені",
+    "schemaUpdated": "Схему оновлено",
+    "ID": "Ідентифікатор",
+    "copyID": "Копіювати ідентифікатор",
+    "URL": "URL",
+    "copyURL": "Скопіювати URL",
+    "itemStatus": "Стан",
+    "viewCount": "Лічильник переглядів",
+    "readMore": "Прочитати більше",
+    "dashboardViews": "Перегляди панелі приладів",
+    "dashboardMobile": "Настільний ПК, мобільний",
+    "dashboardDesktop": "Настільні системи",
+    "sharing": {
+      "private": "Приватний",
+      "shared": "Групи",
+      "public": "Всі",
+      "org": "Організація"
+    },
+    "groupCategories": "Категорії груп",
+    "matched": "Відповідний",
+    "matchedNumber": "Відповідні (${num})",
+    "layerError": {
+      "title": "Не вдалося відобразити шари",
+      "message": "Попередній перегляд шару не підтримується для захищених сервісів."
+    },
+    "noServiceMessage": "Вибраний сервіс не існує або недоступний.",
+    "credits": "Вдячність",
+    "noCredits": "Джерела не підтверджено.",
+    "geometryTypeTitle": "Тип геометрії",
+    "layerTypeTitle": "Тип шару",
+    "fields": "Поля",
+    "noFields": "Не налаштовані поля для цього шару",
+    "geometryType": {
+      "esriGeometryPoint": "Шар точок",
+      "esriGeometryPolyline": "Шар ліній",
+      "esriGeometryPolygon": "Шар полігонів",
+      "esriGeometryMultiPatch": "Шар мультипатчів",
+      "table": "Таблиця"
+    },
+    "layerActions": "Дії з шаром",
+    "itemError": {
+      "title": "Помилка",
+      "subscription": "Цей елемент зараз недоступний. Підписку ArcGIS Online, пов’язану з цим елементом, було деактивовано.",
+      "unhandled": "Під час вибірки цього елементу сталася помилка."
+    }
+  },
+  "table": {
+    "loading": "Виконується завантаження...",
+    "caption": "Результати елемента, заголовки стовпців з кнопками є доступними для сортування.",
+    "selectAll": "Вибрати всі",
+    "selection": "Вибірка",
+    "headers": {
+      "title": "Заголовок",
+      "modified": "Змінено",
+      "created": "Створено",
+      "owner": "Власник",
+      "size": "Розмір",
+      "deleted": "Дані видалено",
+      "type": "Тип елементу",
+      "badges": "Статус елемента",
+      "favorite": "Обране",
+      "sharing": "Поширити рівень",
+      "details": "Переглянути детальну інформацію",
+      "actions": "Більше дій з елементом",
+      "dataset": "Набір даних"
+    }
+  },
+  "tableRow": {
+    "deletesTomorrow": "Буде видалено завтра",
+    "deletes": {
+      "single": "Буде видалено за ${number} днів",
+      "multiple": "Буде видалено за ${number} днів",
+      "unknown": "Днів до видалення: ${number}"
+    },
+    "restore": "Відновити",
+    "details": "Переглянути детальну інформацію",
+    "moreOptions": "Більше опцій",
+    "download": "Завантажити"
+  },
+  "search": {
+    "searchName": "Пошук ${searchName}",
+    "searchAllContent": "Шукати в усьому моєму вмісті",
+    "searchAllUserContent": "Шукати в усьому вмісті ${username}",
+    "searchGroupsContent": "Шукати в моїх групах",
+    "searchingGroupsContent": "Пошук у моїх групах для",
+    "searchFavoritesContent": "Шукати в моєму обраному",
+    "searchOrganizationsContent": "Шукати в моїй організації",
+    "searchLivingAtlasContent": "Шукати в Living Atlas",
+    "searchRecycleCurrentPage": "Пошук заголовків елементів на поточній сторінці"
+  },
+  "find": {
+    "find": "Знайти",
+    "findOnPage": "Знайти на сторінці",
+    "match": "Повертає текстові збіги для назв елементів лише на поточній сторінці."
+  },
+  "view": {
+    "view": "Огляд",
+    "list": "Перелік",
+    "grid": "Грід",
+    "table": "Таблиця"
+  }
+}

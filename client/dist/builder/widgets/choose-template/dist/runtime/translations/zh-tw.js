@@ -1,0 +1,1 @@
+System.register([],function(e){return{execute:function(){e({_widgetLabel:"\u5efa\u7acb\u65b0\u9ad4\u9a57",createNewApp:"\u5efa\u7acb\u65b0\u61c9\u7528\u7a0b\u5f0f",largeDevices:"\u5927\u87a2\u5e55\u88dd\u7f6e",mediumDevices:"\u4e2d\u87a2\u5e55\u88dd\u7f6e",smallDevices:"\u5c0f\u87a2\u5e55\u88dd\u7f6e"})}}});

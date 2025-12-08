@@ -1,0 +1,13 @@
+{
+  "header": "Previzualizare",
+  "description": "Previzualizați rezultatul înainte de a executa analiza.",
+  "showPreview": "Afișare previzualizare",
+  "previewLayer": "Previzualizare strat tematic ${number}",
+  "update": "Actualizare",
+  "newPreview": "Previzualizare nouă",
+  "previewPopup": "Activați previzualizarea rezultatelor analizei pe baza parametrilor de intrare.",
+  "previewError": "Acest strat tematic de previzualizare este indisponibil. Verificați parametrii de intrare și actualizați acest strat tematic de previzualizare din nou.",
+  "updatePopover": "Actualizare strat tematic de previzualizare selectat",
+  "createPopover": "Creare strat tematic de previzualizare nou",
+  "maxPreview": "Număr maxim de straturi tematice de previzualizare permis: ${maxCount}"
+}

@@ -1,0 +1,1 @@
+System.register([],function(e){return{execute:function(){e({settingsLabel:"Set\u0103ri Explorer de documente",selectModelViewer:"Selecta\u021bi un widget Vizualizator de documente pentru a afi\u0219a documentele."})}}});

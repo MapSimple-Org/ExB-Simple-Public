@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>Ovl&aacute;dacie prvky na pridanie nov&eacute;ho poľa v analytick&yacute;ch n&aacute;strojoch.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="fieldName">
+        <div>
+            <p>Určuje n&aacute;zov nov&eacute;ho poľa. N&aacute;zov poľa sa bude použ&iacute;vať aj ako zobrazovan&yacute; n&aacute;zov.
+            </p>
+            <p>N&aacute;zov poľa nesmie byť zhodn&yacute; s n&aacute;zvom existuj&uacute;ceho poľa vo vrstve, nesmie obsahovať &scaron;peci&aacute;lne znaky ani medzery a nesmie byť kľ&uacute;čov&yacute;m slovom SQL.
+            </p>
+        </div>
+    </div>
+    <div id="fieldType">
+        <div>
+            <p>Vyberte typ poľa pre nov&yacute; pole.
+            </p>
+            <p>Typ poľa určuje, ak&eacute; typy hodn&ocirc;t s&uacute; povolen&eacute; v novom poli.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

@@ -1,0 +1,9 @@
+{
+  "inputFlowDirectionRasterLabel": "輸入流動方向點陣",
+  "inputLayerGroupText": "選擇輸入串流和流動方向點陣。",
+  "inputStreamRasterLabel": "輸入串流點陣",
+  "itemProperties": {
+    "description": "執行 StreamLink 分析工具所產生的輸出。",
+    "snippet": "從 StreamLink 產生的輸出"
+  }
+}

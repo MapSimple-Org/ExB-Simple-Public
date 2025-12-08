@@ -1,0 +1,8 @@
+{
+  "selectFeature": "Sélectionner une couche d’entités",
+  "browseLayer": "Rechercher des couches",
+  "loading": "Chargement...",
+  "errorCodes": {
+    "required": "Ce paramètre est obligatoire."
+  }
+}

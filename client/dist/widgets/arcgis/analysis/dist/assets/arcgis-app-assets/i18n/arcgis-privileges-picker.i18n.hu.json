@@ -1,0 +1,592 @@
+{
+  "rolePrivileges": "Szerep jogosultságai",
+  "setFromExisting": "Beállítás meglévő szerepből",
+  "expandAll": "Mindent kibont",
+  "generalPrivileges": "Általános jogosultságok",
+  "adminPrivileges": "Adminisztrátori jogosultságok",
+  "enabledLabel": "Engedélyezve:",
+  "enableAll": "Összes engedélyezése",
+  "disableAll": "Összes letiltása",
+  "members": "Tagok",
+  "groups": "Csoportok",
+  "content": "Tartalom",
+  "sharing": "Megosztás",
+  "premiumContent": "Prémium tartalom",
+  "premiumContentServices": "Prémium tartalom és szolgáltatások",
+  "contentAndAnalysis": "Tartalom és elemzés",
+  "features": "Vektoros elemek",
+  "versionMgmt": "Verziókezelés",
+  "webhooks": "Webhookok",
+  "marketplaceSubscriptions": "ArcGIS Marketplace-előfizetések",
+  "orgSettings": "Szervezet beállításai",
+  "learnMore": "További információ",
+  "searchPrivileges": "Jogosultságok keresése",
+  "notebooks": "Jegyzetfüzetek",
+  "analysis": "Elemzés",
+  "networkAnalysis": "Hálózatelemzés",
+  "locationServices": "Helyszolgáltatások",
+  "requiredService": "Szükséges szolgáltatás",
+  "availableServices": "Rendelkezésre álló szolgáltatások",
+  "basemaps": "Alaptérképek",
+  "staticMaps": "Statikus térképek",
+  "places": "Helyek",
+  "geocoding": "Geokódolás",
+  "routing": "Útvonal-megállapítás",
+  "dataEnrichment": "Adatbővítés",
+  "boundaries": "Határolók",
+  "elevation": "Domborzat",
+  "spatialPrivileges": "Térbeli elemzés",
+  "featureAnalysis": "Vektoros elem elemzése",
+  "imageAnalysis": "Képelemzés",
+  "readOnlyBasemapsTooltip": "Tartalmazza az alaptérképekhez való hozzáférést.",
+  "privileges": {
+    "portal:user:viewOrgUsers": {
+      "label": "Nézet",
+      "description": "Lehetőséget ad a tagnak a szervezet tagjainak megtekintésére.",
+      "descriptionPortal": "Lehetőséget ad a tagnak a portál tagjainak megtekintésére.",
+      "descriptionApp": "A szervezet tagjai megtekintésének engedélyezése az alkalmazás számára."
+    },
+    "portal:user:createGroup": {
+      "label": "Létrehozás, frissítés és törlés",
+      "description": "Lehetőséget ad a tagnak saját csoport létrehozására, szerkesztésére és törlésére.",
+      "descriptionApp": "Annak engedélyezése az alkalmazás számára, hogy létrehozza, szerkessze és törölje a tulajdonosa csoportjait."
+    },
+    "portal:user:joinGroup": {
+      "label": "Csatlakozás szervezeti csoportokhoz",
+      "description": "Lehetőséget ad a tagnak a csatlakozásra a szervezetben lévő csoportokhoz.",
+      "descriptionPortal": "Lehetőséget ad a tagnak a csatlakozásra a portálon lévő csoportokhoz.",
+      "descriptionApp": "Lehetőséget ad az alkalmazásnak a csoportokhoz való csatlakozásra a szervezetben."
+    },
+    "portal:user:joinNonOrgGroup": {
+      "label": "Csatlakozás külső csoportokhoz",
+      "description": "Lehetőséget ad a tagnak a csatlakozásra a szervezeten kívüli csoportokhoz.",
+      "descriptionPortal": "Lehetőséget ad a tagnak a csatlakozásra a portálon kívüli csoportokhoz.",
+      "descriptionApp": "Lehetőséget ad az alkalmazásnak a csatlakozásra a szervezeten kívüli csoportokhoz."
+    },
+    "portal:user:viewOrgGroups": {
+      "label": "Szervezettel megosztott csoportok megtekintése",
+      "description": "Lehetőséget ad a tagnak a szervezettel megosztott csoportok megtekintésére.",
+      "descriptionPortal": "Lehetőséget ad a tagnak a portállal megosztott csoportok megtekintésére.",
+      "descriptionApp": "Lehetőséget ad az alkalmazásnak a szervezettel megosztott csoportok megtekintésére."
+    },
+    "portal:user:invitePartneredCollaborationMembers": {
+      "label": "Partneri szervezet tagjainak meghívása",
+      "description": "A partneri együttműködés szervezetei tagjai csoportokba való meghívásának engedélyezése a tag számára.",
+      "descriptionApp": "A partneri együttműködés szervezetei tagjai csoportokba való meghívásának engedélyezése az alkalmazás számára."
+    },
+    "portal:user:addExternalMembersToGroup": {
+      "label": "Tagok hozzáadása más szervezetekből",
+      "description": "A más szervezetek tagjait befogadó csoportok létrehozásának, valamint a külső tagok csoportokba való meghívásának engedélyezése a tag számára.",
+      "descriptionApp": "A más szervezetek tagjait befogadó csoportok létrehozásának, valamint a külső tagok csoportokba való meghívásának engedélyezése az alkalmazás számára."
+    },
+    "portal:user:createItem": {
+      "label": "Létrehozás, frissítés és törlés",
+      "description": "Lehetőséget ad a tagnak saját tartalom létrehozására, szerkesztésére és törlésére.",
+      "descriptionApp": "Annak engedélyezése az alkalmazás számára, hogy létrehozza, szerkessze és törölje a tulajdonosa tartalmát."
+    },
+    "portal:publisher:publishFeatures": {
+      "label": "Központilag tárolt vektoros rétegek közzététele",
+      "description": "Lehetőséget ad a tagnak központilag tárolt vektoros rétegek közzétételére shapefile-okból, CSV-kből stb.",
+      "descriptionApp": "Lehetőséget ad az alkalmazásnak központilag tárolt vektoros rétegek közzétételére shapefile-okból, CSV-kből stb."
+    },
+    "portal:publisher:publishTiles": {
+      "label": "Központilag tárolt csemperétegek közzététele",
+      "description": "Lehetőséget ad a tagnak központilag tárolt csemperétegek közzétételére csomagokból, vektoros elemekből stb.",
+      "descriptionApp": "Lehetőséget ad az alkalmazásnak központilag tárolt csemperétegek közzétételére csomagokból, vektoros elemekből stb."
+    },
+    "portal:publisher:publishScenes": {
+      "label": "Központilag tárolt 3D rétegek közzététele",
+      "description": "Lehetőséget ad a tagnak központilag tárolt 3D rétegek közzétételére.",
+      "descriptionApp": "Lehetőséget ad az alkalmazásnak központilag tárolt 3D rétegek közzétételére."
+    },
+    "portal:publisher:publishTiledImagery": {
+      "label": "Tárolt csempézett távérzékelt rétegek közzététele",
+      "description": "Lehetővé teszi a tagoknak egyetlen képből vagy képek gyűjteményéből származó, tárolt csempézett távérzékelt rétegek közzétételét. ArcGIS Image for ArcGIS Online felhasználóitípus-bővítményt igényel.",
+      "descriptionPortal": "Lehetővé teszi a tagoknak egyetlen képből vagy képek gyűjteményéből származó, tárolt csempézett távérzékelt rétegek közzétételét.",
+      "descriptionApp": "Lehetővé teszi az alkalmazásnak egyetlen képből vagy képek gyűjteményéből származó, tárolt csempézett távérzékelt rétegek közzétételét. ArcGIS Image Hosting szolgáltatáshoz érvényes licenccel rendelkező szerepkör szükséges hozzá."
+    },
+    "portal:publisher:publishDynamicImagery": {
+      "label": "Tárolt dinamikus távérzékelt rétegek közzététele",
+      "description": "Lehetővé teszi a tagoknak egyetlen képből vagy képek gyűjteményéből származó, tárolt dinamikus távérzékelt rétegek közzétételét.",
+      "descriptionApp": "Lehetővé teszi az alkalmazásnak egyetlen képből vagy képek gyűjteményéből származó, tárolt dinamikus távérzékelt rétegek közzétételét."
+    },
+    "portal:publisher:publishServerServices": {
+      "label": "Szerveralapú rétegek közzététele",
+      "description": "Ez a jogosultság feljogosít federált szerverhelyeken működő szolgáltatások által működtetett rétegek közzétételére. Ezek a szolgáltatások gyakran hivatkoznak geoadatbázisokban vagy fájlalapú adatforrásokban regisztrált adatokra."
+    },
+    "portal:publisher:publishKnowledgeGraph": {
+      "label": "Tárolt tudásbázisábrák közzététele",
+      "description": "Engedélyezze a tag számára a tárolt tudásbázisábrák közzétételét.",
+      "descriptionApp": "Lehetőséget ad az alkalmazásnak a tárolt tudásbázisábrák közzétételére."
+    },
+    "portal:user:viewOrgItems": {
+      "label": "Szervezettel megosztott tartalom megtekintése",
+      "description": "Lehetőséget ad a tagnak a szervezettel megosztott tartalom megtekintésére.",
+      "descriptionPortal": "Lehetőséget ad a tagnak a portállal megosztott tartalom megtekintésére.",
+      "descriptionApp": "Lehetőséget ad az alkalmazásnak a szervezettel megosztott tartalom megtekintésére."
+    },
+    "premium:publisher:createNotebooks": {
+      "label": "Jegyzetfüzetek létrehozása és szerkesztése",
+      "description": "Interaktív jegyzetfüzetek létrehozásának és szerkesztésének engedélyezése a tag számára.",
+      "descriptionApp": "Interaktív jegyzetfüzetek létrehozásának és szerkesztésének engedélyezése az alkalmazás számára."
+    },
+    "premium:publisher:scheduleNotebooks": {
+      "label": "Jegyzetfüzetek ütemezése",
+      "description": "A jegyzetfüzet jövőbeni automatikus futtatásai ütemezésének engedélyezése a tag számára.",
+      "descriptionApp": "A jegyzetfüzet jövőbeni automatikus futtatásai ütemezésének engedélyezése az alkalmazás számára."
+    },
+    "portal:publisher:bulkPublishFromDataStores": {
+      "label": "Vektoros rétegek tömeges létrehozása egy adattárból",
+      "description": "Ez a jogosultság biztosítja a webes rétegek regisztrált adattárból való közzétételének képességét."
+    },
+    "portal:publisher:registerDataStores": {
+      "label": "Adattárak regisztrálása",
+      "description": "Ez a jogosultság biztosítja az adattárak portálhoz való regisztrálásának képességét."
+    },
+    "portal:user:viewTracks": {
+      "label": "Helykövetési nyomvonalak megtekintése",
+      "description": "Lehetőséget ad a tagnak a tagok helymegosztási nyomvonalainak megtekintésére a megosztott nyomvonal-megtekintéseken keresztül, ha engedélyezve van a helymegosztás.",
+      "descriptionApp": "Lehetőséget ad az alkalmazásnak a tagok helymegosztási nyomvonalainak megtekintésére a megosztott nyomvonal-megtekintéseken keresztül, ha engedélyezve van a helymegosztás."
+    },
+    "portal:user:reassignItems": {
+      "label": "Tartalom hozzárendelése máshoz",
+      "description": "Engedélyezheti a tag számára, hogy tartalmát kizárólag a tartalom fogadását lehetővé tevő jogosultsággal rendelkező másik taghoz rendelje hozzá.",
+      "descriptionApp": "Engedélyezheti az alkalmazás számára, hogy az alkalmazás tulajdonosának tartalmát kizárólag a tartalom fogadását lehetővé tevő jogosultsággal rendelkező másik taghoz rendelje hozzá."
+    },
+    "portal:user:receiveItems": {
+      "label": "Tartalom fogadása",
+      "description": "Engedélyezheti a tag számára, hogy olyan tartalmat fogadjon, amelyet a tartalom máshoz való hozzárendelésének jogosultságával rendelkező tag rendelte hozzá."
+    },
+    "portal:publisher:publishFeeds": {
+      "label": "Adatcsatornák közzététele",
+      "description": "Ez a jogosultság feljogosít adatcsatornák közzétételére, majd a valós idejű adatok feldolgozására és megjelenítésére az ArcGIS Velocity segítségével."
+    },
+    "portal:publisher:publishRealTimeAnalytics": {
+      "label": "Valós idejű elemzések közzététele",
+      "description": "Ez a jogosultság feljogosít valós idejű elemzések közzétételére, majd a valós idejű adatok elemzésére és feldolgozására az ArcGIS Velocity segítségével."
+    },
+    "portal:publisher:publishBigDataAnalytics": {
+      "label": "Bigdata-elemzések közzététele",
+      "description": "Ez a jogosultság feljogosít bigdata-elemzések közzétételére, majd a korábban megfigyelt adatok elemzésére az ArcGIS Velocity segítségével."
+    },
+    "portal:publisher:createDataPipelines": {
+      "label": "Adatcsatornák létrehozása és futtatása",
+      "description": "Lehetővé teszi a tagok számára az adatcsatornák létrehozását, szerkesztését és futtatását.",
+      "descriptionApp": "Lehetővé teszi az alkalmazás számára az adatcsatornák létrehozását, szerkesztését és futtatását."
+    },
+    "portal:publisher:publishLivestreamVideo": {
+      "label": "Livestream videó közzététele",
+      "description": "Lehetővé teszi a tagok számára, hogy hálózati videóközvetítésekből és adatfolyamokból származó, hosztolt livestream videórétegeket tegyenek közzé.",
+      "descriptionApp": "Lehetővé teszi az alkalmazás számára, hogy hálózati videóközvetítésekből és adatfolyamokból származó, hosztolt livestream videórétegeket tegyenek közzé."
+    },
+    "portal:publisher:publishVideo": {
+      "label": "Videó közzététele",
+      "description": "Lehetővé teszi a tagok számára a videofájlok és a támogatott videó metaadatfájlok hosztolt videórétegeinek közzétételét.",
+      "descriptionApp": "Lehetővé teszi az alkalmazás számára a videofájlok és a támogatott videó metaadatfájlok hosztolt videórétegeinek közzétételét."
+    },
+    "portal:user:shareToGroup": {
+      "label": "Megosztás csoportokkal",
+      "description": "Lehetőséget ad a tagnak a tartalom csoportokkal történő megosztására.",
+      "descriptionApp": "Lehetőséget ad az alkalmazásnak csoportokkal történő megosztására."
+    },
+    "portal:user:shareToOrg": {
+      "label": "Megosztás szervezettel",
+      "labelPortal": "Megosztás portállal",
+      "description": "Lehetőséget ad a tagnak a tartalom szervezettel történő megosztására.",
+      "descriptionPortal": "Lehetőséget ad a tagnak a tartalom portállal történő megosztására.",
+      "descriptionApp": "Lehetőséget ad az alkalmazásnak arra, hogy tartalmat osszon meg az Ön szervezetével."
+    },
+    "portal:user:shareToPublic": {
+      "label": "Nyilvános megosztás",
+      "description": "Engedélyezheti a tagok számára, hogy nyilvánosan megosszák tartalmukat, ha a szervezet nyilvános megosztásra vonatkozó irányelvei ezt lehetővé teszik.",
+      "descriptionApp": "Engedélyezheti az alkalmazás számára, hogy nyilvánosan megossza az alkalmazás tulajdonosának tartalmát, ha a szervezet nyilvános megosztásra vonatkozó irányelvei ezt lehetővé teszik.",
+      "tooltip": "Ha a szervezet nem engedélyezi a tagok számára a tartalom nyilvános megosztását, akkor a tagoknak adminisztrátori jogosultságra van szükségük ahhoz, hogy a tagi tartalmakat megoszthassák a nyilvánossággal."
+    },
+    "portal:user:shareGroupToOrg": {
+      "label": "Csoportok láthatóvá tétele a szervezet számára",
+      "labelPortal": "Csoportok láthatóvá tétele a portál számára",
+      "description": "Lehetőséget ad a tagnak a tartalom szervezettel történő megosztására.",
+      "descriptionPortal": "Lehetőséget ad a tagnak a tartalom portállal történő megosztására.",
+      "descriptionApp": "Lehetőséget ad az alkalmazásnak a tartalom portállal történő megosztására."
+    },
+    "portal:user:shareGroupToPublic": {
+      "label": "Csoportok nyilvánosan láthatóvá tétele",
+      "description": "Lehetőséget ad a tagnak a csoportok nyilvánosan felfedezhetővé tételére.",
+      "descriptionApp": "Lehetőséget ad az alkalmazásnak a csoportok nyilvánosan felfedezhetővé tételére."
+    },
+    "opendata:user:designateGroup": {
+      "label": "Csoportok elérhetővé tétele az Open Data számára",
+      "description": "Lehetőséget ad a tagnak csoportok kijelölésére az Open Data által használható csoportként.",
+      "descriptionApp": "Lehetőséget ad az alkalmazásnak csoportok kijelölésére az Open Data által használható csoportként."
+    },
+    "premium:user:basemaps": {
+      "label": "Basemap Styles szolgáltatás",
+      "descriptionLocationPlatform": "Az alkalmazás hozzáférésének engedélyezése a Basemap Styles szolgáltatáshoz."
+    },
+    "premium:user:staticbasemaptiles": {
+      "label": "Statikus alaptérkép-csempék",
+      "descriptionLocationPlatform": "Lehetővé teszi az alkalmazás számára a statikus alaptérképcsempe-szolgáltatáshoz való hozzáférést."
+    },
+    "premium:user:staticMaps": {
+      "label": "Statikus térképszolgáltatás (béta)",
+      "descriptionLocationPlatform": "Lehetővé teszi az alkalmazás számára a statikus térképszolgáltatáshoz való hozzáférést."
+    },
+    "premium:user:elevation": {
+      "label": "Magasságszolgáltatás",
+      "descriptionLocationPlatform": "Az alkalmazás hozzáférésének engedélyezése a magasságszolgáltatáshoz."
+    },
+    "premium:user:geocode": {
+      "label": "Geokód",
+      "description": "Lehetővé teszi a tagoknak kreditet felhasználó geokódolási feladatok elvégzését az ArcGIS World Service segítségével (vagy a locator megtekintését).",
+      "descriptionApp": "Lehetővé teszi az alkalmazásnak kreditet felhasználó geokódolási feladatok elvégzését az ArcGIS World Geocoding Service segítségével (vagy a locator megtekintését)."
+    },
+    "premium:user:geocode:stored": {
+      "label": "Geokód (tárolt)",
+      "descriptionLocationPlatform": "Lehetővé teszi az alkalmazás számára a geokódoló szolgáltatáshoz való hozzáférést és a tárolt geokódolások elvégzését."
+    },
+    "premium:user:geocode:temporary": {
+      "label": "Geokód (nincs tárolva)",
+      "descriptionLocationPlatform": "Lehetővé teszi az alkalmazás számára a geokódoló szolgáltatáshoz való hozzáférést és a nem tárolt geokódolások elvégzését."
+    },
+    "premium:user:networkanalysis": {
+      "label": "Útvonal-megállapítás",
+      "description": "Lehetőséget ad a tagnak hálózatelemzési feladatok elvégzésére, például útvonal-megállapításra és elérésiidő-zónákra.",
+      "descriptionApp": "Lehetővé teszi az alkalmazás számára az útvonal-megállapítási szolgáltatáshoz való hozzáférést."
+    },
+    "premium:user:networkanalysis:closestfacility": {
+      "label": "Legközelebbi épület",
+      "descriptionLocationPlatform": "Lehetővé teszi az alkalmazás számára az útvonal-megállapítási szolgáltatáshoz való hozzáférést és a legközelebbi létesítményi útvonal-megállapítási műveletek végrehajtását."
+    },
+    "premium:user:networkanalysis:lastmiledelivery": {
+      "label": "Kézbesítési folyamat utolsó szakasza",
+      "descriptionLocationPlatform": "Lehetővé teszi az alkalmazás számára az útvonaltervezési szolgáltatáshoz való hozzáférést és útvonaltervezési műveletek végrehajtását a kézbesítési folyamat utolsó szakaszára vonatkozóan."
+    },
+    "premium:user:networkanalysis:snaptoroads": {
+      "label": "Illesztés utakra",
+      "descriptionLocationPlatform": "Lehetővé teszi a tag számára, hogy hálózatelemzési feladatokat hajtson végre, például GPS-követési pontokat illesszen utakhoz."
+    },
+    "premium:user:networkanalysis:locationallocation": {
+      "label": "Hely kiosztása",
+      "descriptionLocationPlatform": "Lehetővé teszi az alkalmazás számára az útvonaltervezési szolgáltatáshoz való hozzáférést és helyhozzárendelési műveletek végrehajtását."
+    },
+    "premium:user:networkanalysis:routing": {
+      "label": "Egyszerű útvonaltervezés",
+      "descriptionLocationPlatform": "Lehetővé teszi az alkalmazás számára az útvonaltervezési szolgáltatáshoz való hozzáférést és standard útvonaltervezési műveletek végrehajtását."
+    },
+    "premium:user:networkanalysis:optimizedrouting": {
+      "label": "Optimalizált útvonal-megállapítás",
+      "descriptionLocationPlatform": "Lehetővé teszi az alkalmazás számára az útvonaltervezési szolgáltatáshoz való hozzáférést és optimalizált útvonaltervezési műveletek végrehajtását."
+    },
+    "premium:user:networkanalysis:vehiclerouting": {
+      "label": "Több jármű útvonal-megállapítása",
+      "descriptionLocationPlatform": "A több járműre kiterjedő útvonaltervezés lehetővé teszi az alkalmazás számára az útvonaltervezési szolgáltatáshoz való hozzáférést és útvonaltervezési műveletek végrehajtását."
+    },
+    "premium:user:networkanalysis:origindestinationcostmatrix": {
+      "label": "Kiindulási hely/úti cél költségmátrix",
+      "descriptionLocationPlatform": "Lehetővé teszi az alkalmazás számára az útvonaltervezési szolgáltatáshoz való hozzáférést és útiköltségmátrixok létrehozását."
+    },
+    "premium:user:networkanalysis:servicearea": {
+      "label": "Szolgáltatási terület",
+      "descriptionLocationPlatform": "Lehetővé teszi az alkalmazás számára az útvonaltervezési szolgáltatáshoz való hozzáférést és szolgáltatási területek létrehozását."
+    },
+    "premium:user:places": {
+      "label": "Helyek szolgáltatás",
+      "descriptionLocationPlatform": "Az alkalmazás hozzáférésének engedélyezése a helyszolgáltatáshoz."
+    },
+    "premium:user:spatialanalysis": {
+      "labelOld": "Térbeli elemzés szolgáltatás",
+      "label": "Vektoroselem-elemzés szolgáltatás",
+      "labelPortal": "Szabványos vektoroselem-elemzés",
+      "description": "Lehetőséget ad a tagnak vektoroselem-elemzési feladatok elvégzésére.",
+      "descriptionPortal": "Ez a jogosultság feljogosít szabványos vektoroselem-elemzési feladatok elvégzésére.",
+      "descriptionLocationPlatform": "Lehetővé teszi az alkalmazás számára a vektoroselem-elemzési szolgáltatásokhoz való hozzáférést.",
+      "descriptionApp": "Lehetővé teszi az alkalmazás számára a vektoroselem-elemzési szolgáltatásokhoz való hozzáférést."
+    },
+    "premium:user:geoenrichment": {
+      "label": "Téradatbővítés-szolgáltatás",
+      "description": "Lehetőséget ad a tagnak a vektoros elemek bővítésére.",
+      "descriptionLocationPlatform": "Lehetővé teszi az alkalmazás számára a téradatbővítési szolgáltatáshoz való hozzáférést.",
+      "descriptionApp": "Lehetővé teszi az alkalmazás számára a téradatbővítési szolgáltatáshoz való hozzáférést."
+    },
+    "premium:user:demographics": {
+      "label": "Demográfiai térképek",
+      "description": "Az alkalmazás hozzáférésének engedélyezése az ArcGIS Living Atlas prémium demográfiai térképeihez.",
+      "descriptionApp": "Az alkalmazás hozzáférésének engedélyezése az ArcGIS Living Atlas prémium demográfiai térképeihez.",
+      "descriptionLocationPlatform": "Az alkalmazás hozzáférésének engedélyezése az ArcGIS Living Atlas demográfiai térképeihez."
+    },
+    "premium:publisher:geoanalytics": {
+      "label": "Geoanalitikai vektoroselem-elemzés",
+      "description": "Ez a jogosultság jogot ad geoanalitikai feladatok elvégzésére."
+    },
+    "premium:publisher:rasteranalysis": {
+      "label": "Távérzékelési elemzés",
+      "description": "Engedélyezheti a tagok számára a távérzékelési elemzési feladatok elvégzését. ArcGIS Image elemzőfunkció szükséges.",
+      "descriptionPortal": "Engedélyezheti a tagok számára a távérzékelési elemzési feladatok elvégzését.",
+      "descriptionApp": "Lehetőséget ad az alkalmazásnak távérzékeltfelvétel-elemzési feladatok elvégzésére. ArcGIS Image elemzőfunkció szükséges.",
+      "descriptionAppPortal": "Lehetőséget ad az alkalmazásnak távérzékeltfelvétel-elemzési feladatok elvégzésére."
+    },
+    "premium:publisher:createAdvancedNotebooks": {
+      "label": "Speciális jegyzetfüzetek",
+      "description": "Az ArcPy modulok jegyzetfüzetekbe importálásának és használatának engedélyezése a tag számára.",
+      "descriptionApp": "Az ArcPy modulok jegyzetfüzetekbe importálásának és használatának engedélyezése az alkalmazás számára."
+    },
+    "portal:user:runWebTool": {
+      "label": "Webeszközök futtatása",
+      "description": "Engedélyezheti a tag számára, hogy webes eszközöket futtasson.",
+      "descriptionPortal": "Lehetővé teszi a tagok számára a jegyzetfüzetekből közzétett webes eszközök futtatását.",
+      "descriptionApp": "Lehetővé teszi az alkalmazás számára a webes eszközök futtatását.",
+      "descriptionAppPortal": "Lehetővé teszi az alkalmazás számára a jegyzetfüzetekből közzétett webes eszközök futtatását."
+    },
+    "portal:user:generateApiTokens": {
+      "label": "API-kulcs létrehozása",
+      "description": "API-kulcs létrehozásának engedélyezése a tag számára."
+    },
+    "portal:user:assignPrivilegesToApps": {
+      "label": "Jogosultságok kiosztása OAuth 2.0 alkalmazásoknak",
+      "description": "Jogosultságok OAuth 2.0 alkalmazások számára történő kiosztásának engedélyezése a tag számára."
+    },
+    "portal:user:createWorkflow": {
+      "label": "Munkafolyamati elem létrehozása",
+      "description": "Workflow Manager-elemek létrehozásának engedélyezése a tag számára"
+    },
+    "premium:user:featurereport": {
+      "label": "Vektoros elemekkel kapcsolatos jelentés",
+      "description": "Lehetőséget ad a tagnak vektoros elemekkel kapcsolatos jelentések létrehozására a Survey123-ban.",
+      "descriptionApp": "Lehetőséget ad az alkalmazásnak vektoros elemekkel kapcsolatos jelentések létrehozására a Survey123-ban."
+    },
+    "premium:user:realitymapping": {
+      "label": "Valóságtérképezés",
+      "description": "Lehetővé teszi a tag számára, hogy valóságtérképezési feladatokat hajtson végre."
+    },
+    "features:user:edit": {
+      "label": "Szerkesztés",
+      "description": "Lehetőséget ad a tagnak vektoros elemek szerkesztésére nem nyilvános szerkeszthető rétegeken a rétegen elérhetővé tett szerkesztési lehetőségekkel.",
+      "descriptionApp": "Lehetőséget ad az alkalmazásnak vektoros elemek szerkesztésére nem nyilvános szerkeszthető rétegeken a rétegen elérhetővé tett szerkesztési lehetőségekkel."
+    },
+    "features:user:fullEdit": {
+      "label": "Szerkesztés teljes hozzáféréssel",
+      "description": "Lehetőséget ad a tagnak vektoros elemek hozzáadására, törlésére és frissítésére szerkeszthető, központilag tárolt vektoros rétegen az ott elérhetővé tett szerkesztési lehetőségektől függetlenül.",
+      "descriptionApp": "Lehetőséget ad az alkalmazásnak vektoros elemek hozzáadására, törlésére és frissítésére szerkeszthető, központilag tárolt vektoros rétegen az ott elérhetővé tett szerkesztési lehetőségektől függetlenül."
+    },
+    "features:user:manageVersions": {
+      "label": "Összes kezelése",
+      "description": "Lehetőséget ad a tagoknak a zárolt verziók kezelésére, valamint az ArcGIS Server vektoros rétegein keresztül elérhető összes verzió megtekintésére, módosítására, törlésére, szerkesztésére, egyeztetésére és közzétételre.",
+      "descriptionApp": "Lehetőséget ad az alkalmazásnak a zárolt verziók kezelésére, valamint az ArcGIS Server vektoros rétegein keresztül elérhető összes verzió megtekintésére, módosítására, törlésére, szerkesztésére, egyeztetésére és közzétételre."
+    },
+    "portal:publisher:createFeatureWebhook": {
+      "label": "Vektoros réteg",
+      "description": "Lehetővé teheti a tag számára a saját vektorosréteg-webhookjai létrehozását, szerkesztését és törlését.",
+      "descriptionApp": "Lehetővé teheti az alkalmazás számára a saját vektorosréteg-webhookjai létrehozását, szerkesztését és törlését."
+    },
+    "portal:admin:viewUsers": {
+      "label": "Összes megtekintése",
+      "description": "Lehetőséget ad a tagnak az összes tagi fiók információinak megtekintésére a szervezetben.",
+      "descriptionPortal": "Lehetőséget ad a tagnak az összes tagi fiók információinak megtekintésére a portálon.",
+      "descriptionApp": "Lehetőséget ad az alkalmazásnak az összes tagi fiók információinak megtekintésére a szervezetben."
+    },
+    "portal:admin:updateUsers": {
+      "label": "Frissítés",
+      "description": "Lehetővé teszi a tagok számára a jelszavak visszaállítását, a tagi fiókinformációk frissítését és a tagi kategóriák frissítését a szervezeten belül.",
+      "descriptionPortal": "Lehetővé teszi a tagok számára a jelszavak visszaállítását, a tagi fiókinformációk frissítését és a tagi kategóriák frissítését a portálon belül.",
+      "descriptionApp": "Lehetővé teszi az alkalmazás számára a jelszavak visszaállítását, a tagi fiókinformációk frissítését és a tagi kategóriák frissítését a szervezeten belül."
+    },
+    "portal:admin:deleteUsers": {
+      "label": "Törlés",
+      "description": "Lehetőséget ad a tagnak a tagok fiókjainak törlésére a szervezetben.",
+      "descriptionPortal": "Lehetőséget ad a tagnak a tagok fiókjainak törlésére a portálon.",
+      "descriptionApp": "Lehetőséget ad az alkalmazásnak a tagok fiókjainak törlésére a szervezetben."
+    },
+    "portal:admin:inviteUsers": {
+      "label": "Hozzáadás",
+      "labelPortal": "Meghívás",
+      "description": "Lehetőséget ad a tagnak tagok meghívására a szervezetbe.",
+      "descriptionPortal": "Lehetőséget ad a tagnak tagok meghívására a portálra.",
+      "descriptionApp": "Lehetőséget ad az alkalmazásnak tagok meghívására a szervezetbe."
+    },
+    "portal:admin:disableUsers": {
+      "label": "Letiltás",
+      "description": "Lehetőséget ad a tagnak a tagok fiókjainak engedélyezésére és letiltására a szervezetben.",
+      "descriptionPortal": "Lehetőséget ad a tagnak a tagok fiókjainak engedélyezésére és letiltására a portálon.",
+      "descriptionApp": "Lehetőséget ad az alkalmazásnak a tagok fiókjainak engedélyezésére és letiltására a szervezetben."
+    },
+    "portal:admin:changeUserRoles": {
+      "label": "Szerepek módosítása",
+      "description": "Lehetőséget ad a tagnak egy tagi fiókhoz rendelt szerep módosítására. Figyelem, csak adminisztrátori szereppel rendelkező tagok rendelhetik hozzá az adminisztrátori szerepet más fiókokhoz, vagy szüntethetik meg a hozzárendelést.",
+      "descriptionPortal": "Lehetőséget ad a tagnak egy tagi fiókhoz rendelt szerep módosítására. Figyelem, csak adminisztrátori szereppel rendelkező tagok rendelhetik hozzá az adminisztrátori szerepet más fiókokhoz, vagy szüntethetik meg a hozzárendelést.",
+      "descriptionApp": "Lehetőséget ad az alkalmazásnak egy fiókhoz rendelt szerep módosítására. Figyelem, csak adminisztrátori szereppel rendelkező tagok rendelhetik hozzá az adminisztrátori szerepet más fiókokhoz, vagy szüntethetik meg a hozzárendelést."
+    },
+    "portal:admin:manageLicenses": {
+      "label": "Licencek kezelése",
+      "description": "Lehetőséget ad a tagnak licencek szervezeti tagokhoz rendelésére.",
+      "descriptionPortal": "Lehetőséget ad a tagnak licencek portáltagokhoz rendelésére.",
+      "descriptionApp": "Lehetőséget ad az alkalmazásnak licencek szervezeti tagokhoz rendelésére."
+    },
+    "portal:admin:updateMemberCategorySchema": {
+      "label": "Kategóriák kezelése",
+      "description": "Lehetőséget ad a tagnak szervezettag-kategóriák beállítására.",
+      "descriptionPortal": "Lehetőséget ad a tagnak portáltag-kategóriák beállítására.",
+      "descriptionApp": "Lehetőséget ad az alkalmazásnak tartalomkategóriák beállítására."
+    },
+    "portal:admin:viewGroups": {
+      "label": "Összes megtekintése",
+      "description": "Lehetőséget ad a tagnak az összes csoport megtekintésére a szervezetben.",
+      "descriptionPortal": "Lehetőséget ad a tagnak az összes csoport megtekintésére a portálon.",
+      "descriptionApp": "Lehetőséget ad az alkalmazásnak a szervezeten belüli valamennyi csoport megtekintésére."
+    },
+    "portal:admin:updateGroups": {
+      "label": "Frissítés",
+      "description": "Lehetőséget ad a tagnak a csoportok frissítésére a szervezetben.",
+      "descriptionPortal": "Lehetőséget ad a tagnak a csoportok frissítésére a portálon.",
+      "descriptionApp": "Lehetőséget ad az alkalmazásnak a csoportok módosítására a szervezetben."
+    },
+    "portal:admin:deleteGroups": {
+      "label": "Törlés",
+      "description": "Lehetőséget ad a tagnak a csoportok törlésére a szervezetben.",
+      "descriptionPortal": "Lehetőséget ad a tagnak a csoportok törlésére a portálon.",
+      "descriptionApp": "Lehetőséget ad az alkalmazásnak a csoportok törlésére a szervezetben."
+    },
+    "portal:admin:reassignGroups": {
+      "label": "Tulajdonosi jogok másik taghoz rendelése",
+      "description": "Lehetőséget ad a tagnak csoportok másik taghoz rendelésére a szervezetben.",
+      "descriptionPortal": "Lehetőséget ad a tagnak csoportok másik taghoz rendelésére a portálon.",
+      "descriptionApp": "Lehetőséget ad az alkalmazásnak csoportok másik taghoz rendelésére a szervezetben."
+    },
+    "portal:admin:assignToGroups": {
+      "label": "Tagok hozzárendelése",
+      "description": "Lehetőséget ad a tagnak a tagok csoportokhoz rendelésére, a tagok csoportszerepeinek frissítésére és a tagok eltávolítására a csoportokból a szervezetben.",
+      "descriptionPortal": "Lehetőséget ad a tagnak a tagok csoportokhoz rendelésére, a tagok csoportszerepeinek frissítésére és a tagok eltávolítására a csoportokból a portálon.",
+      "descriptionApp": "Lehetőséget ad az alkalmazásnak a tagok csoportokhoz rendelésére, a tagok csoportszerepeinek frissítésére és a tagok eltávolítására a csoportokból a szervezetben."
+    },
+    "portal:admin:manageEnterpriseGroups": {
+      "label": "Szervezetspecifikus csoportra mutató hivatkozás",
+      "description": "Engedélyezheti a tag számára, hogy a csoporttagságot szervezetspecifikus csoporttal kapcsolja össze.",
+      "descriptionApp": "Engedélyezheti az alkalmazás számára, hogy a csoporttagságot szervezetspecifikus csoporttal kapcsolja össze."
+    },
+    "portal:admin:createUpdateCapableGroup": {
+      "label": "Létrehozás frissítési lehetőségekkel",
+      "description": "Lehetőséget ad a tagnak frissítési lehetőségekkel rendelkező csoportok létrehozására.",
+      "descriptionApp": "Lehetőséget ad az alkalmazásnak frissítési lehetőségekkel rendelkező csoportok létrehozására."
+    },
+    "portal:admin:createLeavingDisallowedGroup": {
+      "label": "Létrehozás kilépés tiltásával",
+      "description": "Annak lehetővé tétele a tagok számára, hogy olyan csoportokat hozzanak létre és tulajdonoljanak, amelyek nem engedélyezik a tagok számára a kilépést (adminisztratív csoportok).",
+      "descriptionApp": "Annak lehetővé tétele az alkalmazás számára, hogy olyan csoportokat hozzon létre és tulajdonoljon, amelyek nem engedélyezik az alkalmazások számára a kilépést (adminisztratív csoportok)."
+    },
+    "portal:admin:viewItems": {
+      "label": "Összes megtekintése",
+      "description": "Lehetőséget ad a tagnak az összes tartalom megtekintésére a szervezetben.",
+      "descriptionPortal": "Lehetőséget ad a tagnak az összes tartalom megtekintésére a portálon.",
+      "descriptionApp": "Lehetőséget ad az alkalmazásnak az Ön szervezetén belüli valamennyi tartalom megtekintésére."
+    },
+    "portal:admin:updateItems": {
+      "label": "Frissítés",
+      "description": "Lehetőséget ad a tagnak a tartalom frissítésére és kategorizálására, valamint a központilag tárolt vektoros rétegek szerkesztésére a szervezetben.",
+      "descriptionPortal": "Lehetőséget ad a tagnak a tartalom frissítésére és kategorizálására, valamint a központilag tárolt vektoros rétegek szerkesztésére a portálon.",
+      "descriptionApp": "Lehetőséget ad az alkalmazásnak a tartalom frissítésére és kategorizálására, valamint a központilag tárolt vektoros rétegek szerkesztésére a szervezetben."
+    },
+    "portal:admin:deleteItems": {
+      "label": "Törlés",
+      "description": "Lehetőséget ad a tagnak a tartalom törlésére a szervezetben.",
+      "descriptionPortal": "Lehetőséget ad a tagnak a tartalom törlésére a portálon.",
+      "descriptionApp": "Lehetőséget ad az alkalmazásnak az Ön szervezetén belüli tartalom törlésére."
+    },
+    "portal:admin:reassignItems": {
+      "label": "Tulajdonosi jogok másik taghoz rendelése",
+      "description": "Lehetőséget ad a tagnak tartalom másik taghoz rendelésére a szervezetben.",
+      "descriptionPortal": "Lehetőséget ad a tagnak tartalom másik taghoz rendelésére a portálon.",
+      "descriptionApp": "Lehetőséget ad az alkalmazásnak tartalom másik taghoz rendelésére a szervezetben."
+    },
+    "portal:admin:updateItemCategorySchema": {
+      "label": "Kategóriák kezelése",
+      "description": "Lehetőséget ad a tagnak szervezettartalom-kategóriák beállítására.",
+      "descriptionPortal": "Lehetőséget ad a tagnak portáltartalom-kategóriák beállítására.",
+      "descriptionApp": "Lehetőséget ad az alkalmazásnak szervezettartalom-kategóriák beállítására."
+    },
+    "portal:publisher:publishServerGPServices": {
+      "label": "Webeszközök közzététele",
+      "description": "Ez a jogosultság feljogosít federált szerverhelyeken működő téradat-feldolgozási szolgáltatásokkal támogatott webeszközök közzétételére."
+    },
+    "portal:admin:shareToOrg": {
+      "label": "Tagi tartalom megosztása szervezettel",
+      "description": "Engedélyezheti a tagnak, hogy az Ön szervezetének más tagjai által birtokolt tartalomat osszon meg a szervezettel.",
+      "descriptionPortal": "Engedélyezheti a tagnak, hogy az Ön portáljának más tagjai által birtokolt tartalomat osszon meg a portállal.",
+      "descriptionApp": "Engedélyezheti az alkalmazásnak, hogy az Ön szervezetének más tagjai által birtokolt tartalmat osszon meg a szervezettel."
+    },
+    "portal:admin:shareToPublic": {
+      "label": "Tagi tartalom megosztása a nyilvánossággal",
+      "description": "Engedélyezheti a tagnak, hogy az Ön szervezetének más tagjai által birtokolt tartalomat osszon meg a nyilvánossággal.",
+      "descriptionPortal": "Engedélyezheti a tagnak, hogy az Ön portáljának más tagjai által birtokolt tartalomat osszon meg a nyilvánossággal.",
+      "descriptionApp": "Engedélyezheti az alkalmazásnak, hogy az Ön szervezetének más tagjai által birtokolt tartalmat osszon meg a nyilvánossággal."
+    },
+    "portal:admin:createReports": {
+      "label": "Adminisztrátori jelentések létrehozása és kezelése",
+      "description": "Lehetővé teheti a tagok számára, hogy adminisztratív jelentéseket hozzanak létre és kezeljenek a szervezet számára.",
+      "descriptionPortal": "Lehetővé teheti a tagok számára, hogy adminisztratív jelentéseket hozzanak létre és kezeljenek a portálja számára.",
+      "descriptionApp": "Lehetővé teheti az alkalmazás számára, hogy adminisztratív jelentéseket hozzanak létre és kezeljenek a szervezet számára."
+    },
+    "marketplace:admin:manage": {
+      "label": "Létrehozás és kezelés",
+      "description": "Lehetőséget ad a tagnak termékek létrehozására, elemek listázására, előfizetések kezelésére az ArcGIS Marketplace-ben, valamint a szervezet vásárlóinak és elérhetőségeinek kezelésére. Ennek a jogosultságnak a használatához a szervezetének terméklistázási és közzétételi hozzáférést kell szereznie az ArcGIS Marketplace-hez."
+    },
+    "marketplace:admin:purchase": {
+      "label": "Vásároljon, és ingyenes termékeket kaphat",
+      "description": "Engedélyezheti a tag számára, hogy vásárlási kéréseket küldjön, és hozzáférjen a szolgáltatók ingyenes termékeihez az ArcGIS Marketplace áruházban. Ha engedélyezni szeretné a tagok számára, hogy bankkártyával vásároljanak termékeket, akkor Marketplace-vásárlóként kell megjelölnie őket."
+    },
+    "marketplace:admin:startTrial": {
+      "label": "Próbaverziók indítása",
+      "description": "Lehetőséget ad a tagnak próba-előfizetések indítására az ArcGIS Marketplace áruházban."
+    },
+    "portal:admin:manageSecurity": {
+      "label": "Biztonság és infrastruktúra",
+      "description": "Lehetőséget ad a tagnak a szervezet biztonsági és infrastruktúra-beállításainak kezelésére.",
+      "descriptionPortal": "Lehetőséget ad a tagnak a portál biztonsági és infrastruktúra-beállításainak kezelésére.",
+      "descriptionApp": "Lehetőséget ad az alkalmazásnak a szervezet biztonsági és infrastruktúra-beállításainak kezelésére."
+    },
+    "portal:admin:manageWebsite": {
+      "label": "Szervezet webhelye",
+      "description": "Lehetőséget ad a tagnak a szervezet webhelybeállításainak kezelésére.",
+      "descriptionPortal": "Lehetőséget ad a tagnak a portál webhelybeállításainak kezelésére.",
+      "descriptionApp": "Lehetőséget ad az alkalmazásnak a szervezet webhelybeállításainak kezelésére."
+    },
+    "portal:admin:manageCollaborations": {
+      "label": "Együttműködések",
+      "description": "Lehetőséget ad a tagnak a szervezet együttműködéseinek kezelésére.",
+      "descriptionPortal": "Lehetőséget ad a tagnak a portál együttműködéseinek kezelésére.",
+      "descriptionApp": "Lehetőséget ad az alkalmazásnak a szervezet együttműködéseinek kezelésére."
+    },
+    "portal:admin:manageCredits": {
+      "label": "Kreditek",
+      "description": "Lehetőséget ad a tagnak a szervezet kreditkeret-beállításainak kezelésére.",
+      "descriptionApp": "Lehetőséget ad az alkalmazásnak a szervezet kreditkeret-beállításainak kezelésére."
+    },
+    "portal:admin:manageRoles": {
+      "label": "Tag szerepei",
+      "description": "Lehetőséget ad a tagnak a szervezeti tagok szerepeinek kezelésére.",
+      "descriptionPortal": "Lehetőséget ad a tagnak a portáltagok szerepeinek kezelésére.",
+      "descriptionApp": "Lehetőséget ad az alkalmazásnak a szervezeti tagok szerepköreinek kezelésére."
+    },
+    "portal:admin:manageServers": {
+      "label": "Szerverek",
+      "description": "Ez a jogosultság jogot ad a portál szerverbeállításainak kezelésére."
+    },
+    "portal:admin:manageUtilityServices": {
+      "label": "Segédszolgáltatások",
+      "description": "Lehetőséget ad a tagnak a szervezet segédszolgáltatásainak kezelésére.",
+      "descriptionPortal": "Lehetőséget ad a tagnak a portál segédszolgáltatásainak kezelésére.",
+      "descriptionApp": "Lehetőséget ad az alkalmazásnak a szervezet segédszolgáltatásainak kezelésére."
+    },
+    "portal:admin:manageWebhooks": {
+      "label": "Webhookok",
+      "labelPortal": "Szervezeti webhookok",
+      "description": "Engedélyezheti a tag számára, hogy létrehozhassa, szerkeszthesse és törölhesse az Ön szervezetén belüli összes webhookot.",
+      "descriptionApp": "Engedélyezheti az alkalmazás számára, hogy létrehozza, szerkessze és törölje az Ön szervezetén belüli összes webhookot.",
+      "descriptionPortal": "Engedélyezheti a tag számára, hogy szervezeti webhookokat hozzon létre, szerkesszen és töröljön, továbbá hogy valamenyni webhookot a portálon belül kezelje.",
+      "descriptionAppPortal": "Engedélyezheti az alkalmazás számára, hogy szervezeti webhookokat hozzon létre, szerkesszen és töröljön, továbbá hogy valamenyni webhookot a portálon belül kezelje."
+    },
+    "portal:admin:createGPWebhook": {
+      "label": "Téradat-feldolgozás",
+      "description": "Lehetővé teheti a tag számára a saját téradat-feldolgozási webhookjai létrehozását, szerkesztését és törlését.",
+      "descriptionApp": "Lehetővé teheti az alkalmazás számára a saját téradat-feldolgozási webhookok létrehozását, szerkesztését és törlését."
+    }
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "addBtn": "Gereed",
+  "cancelBtn": "Annuleren",
+  "header": "Variabele selecteren",
+  "multipleVariables": "Variabelen met meerdere waarden",
+  "noFound": "Kan geen compatibele variabelen vinden",
+  "search": "Variabelen zoeken",
+  "singleVariables": "Variabelen met één enkele waarde",
+  "variableLabel": "Label: <span style='font-weight: var(--calcite-font-weight-normal)'>${val}</span>",
+  "variableVal": "Waarde: <span style='font-weight: var(--calcite-font-weight-normal)'>${val}</span>"
+}

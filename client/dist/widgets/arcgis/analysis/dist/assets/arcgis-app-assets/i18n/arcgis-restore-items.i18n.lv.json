@@ -1,0 +1,31 @@
+{
+  "back": "Atpakaļ",
+  "cancel": "Atcelt",
+  "learnMore": "Uzzināt vairāk",
+  "restore": "Atjaunot",
+  "restoreTo": "Atjaunot uz",
+  "restoreItem": "Atjaunot vienību",
+  "restoreItems": "Atjaunot vienības",
+  "noticeMessage": "Atjaunotās vienības netiks koplietotas. Lūdzu, pārskatiet saturu, pirms to atkal koplietojat.",
+  "cannotBulkRestoreXItems": "Nevar veikt lielapjoma atjaunināšanu, iekļaujot vairāk par ${number} vienībām. Lūdzu, noņemiet dažas vienības.",
+  "cannotBulkRestoreMultipleOwners": "Nevar veikt tādu vienību lielapjoma atjaunināšanu, kas pieder dažādiem īpašniekiem. Atlasiet viena īpašnieka vienības, lai veiktu lielapjoma atjaunošanu.",
+  "toRestore": {
+    "single": "Atjaunojamā vienība:",
+    "multiple": "Atjaunojamās vienības:"
+  },
+  "cannotRestore": "Nevar atjaunot:",
+  "dependentItems": {
+    "single": "Šo vienību nevar atjaunot, jo tā ir atkarīga no <strong style='font-weight: 500'>${parent}</strong>. Atjaunojiet tās kopā.",
+    "singleUnknown": "Šo vienību nevar atjaunot, jo tā ir atkarīga no citas vienības atkritnē. Atjaunojiet tās kopā.",
+    "multiple": "Šīs vienības nevar atjaunot, jo tās ir atkarīgas no citām vienībām atkritnē. Atjaunojiet tās kopā.",
+    "multipleSameSource": "Šīs vienības nevar atjaunot, jo tās ir atkarīgas no <strong style='font-weight: 500'>${parent}</strong>. Atjaunojiet tās kopā."
+  },
+  "pageRangeWithTotalRecycleBinSize": {
+    "en": "${start} - ${end} no ${total} (${size}) atkritnē",
+    "other": "${start} - ${end}, kopā: ${total} (${size}) atkritnē"
+  },
+  "pageRangeWithGreaterThanTotalRecycleBinSize": {
+    "en": "${start} - ${end} no ${total} (>${size}) atkritnē",
+    "other": "${start} - ${end}, kopā: ${total} (>${size}) atkritnē"
+  }
+}

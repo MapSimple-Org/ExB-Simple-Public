@@ -1,0 +1,7 @@
+{
+  "browseRFT": "Parcourir les modèles de fonction raster",
+  "rfxVariable": "RasterFunctionVariable",
+  "outputRaster": "Raster en sortie",
+  "previewDetails": "Aperçu des détails",
+  "readingFailed": "Échec du chargement du modèle de fonction raster sélectionné."
+}

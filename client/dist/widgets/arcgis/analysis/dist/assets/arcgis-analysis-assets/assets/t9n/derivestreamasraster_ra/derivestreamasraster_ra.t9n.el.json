@@ -1,0 +1,10 @@
+{
+  "forceFlowLabel": "Επιβολή ροής στα κελιά άκρων προς τα έξω",
+  "inputLayersGroupText": "Επιλέξτε το input surface raster και προαιρετικά τα depression δεδομένα και το raster στάθμισης.",
+  "itemProperties": {
+    "description": "Έξοδος που παράγεται από την εκτέλεση του εργαλείου Derive Stream As Raster.",
+    "snippet": "Έξοδος που παράγεται από το Derive Stream As Raster"
+  },
+  "outputStreamRasterLabel": "Όνομα output stream raster",
+  "streamSettingsGroupText": "Καθορίστε το όριο συσσώρευσης, τη μέθοδο προσδιορισμού ροής και τον τρόπο χειρισμού της ροής στο άκρο του raster της επιφάνειας εισόδου."
+}

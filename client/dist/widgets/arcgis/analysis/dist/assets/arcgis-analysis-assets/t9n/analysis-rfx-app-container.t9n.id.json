@@ -1,0 +1,16 @@
+{
+  "backLabel": "Kembali",
+  "browseHeader": "Pilih layer",
+  "cannotReopenRasterFunction": "Fungsi raster tidak dapat dibuka kembali.",
+  "creditThresholdModal": {
+    "cancelRun": "Batalkan",
+    "continueRun": "Tetap jalankan",
+    "creditEstimate": "Perkiraan kredit: ${cost}",
+    "creditThreshold": "Ambang batas kredit: ${threshold}",
+    "heading": "Sebelum Anda melanjutkan",
+    "learnMore": "Pelajari selengkapnya tentang ambang batas kredit",
+    "thresholdExceeded": "Perkiraan biaya kredit untuk analisis ini lebih besar dari ambang batas kredit web map Anda:"
+  },
+  "failedToExecuteEstimate": "Pengiriman gagal. Gagal mengeksekusi EstimateRasterAnalysisCost",
+  "runAnalysisLabel": "Jalankan"
+}

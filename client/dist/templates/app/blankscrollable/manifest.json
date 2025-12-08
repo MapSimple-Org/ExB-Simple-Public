@@ -1,0 +1,17 @@
+{
+  "name": "blankscrollable",
+  "type": "template",
+  "templateType": "app",
+  "label": "Blank scrolling",
+  "description": "A blank template to create your design in a scrolling page.",
+  "thumbnail": "thumbnail.png",
+  "order": 3,
+  "tags": [],
+  "categoriesTags": [
+    "Blank"
+  ],
+  "isMultiplePage": false,
+  "isMapAware": true,
+  "thumbnailWidth": 320,
+  "thumbnailHeight": 214
+}

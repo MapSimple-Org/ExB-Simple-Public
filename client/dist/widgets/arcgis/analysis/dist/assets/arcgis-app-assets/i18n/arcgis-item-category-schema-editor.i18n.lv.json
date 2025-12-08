@@ -1,0 +1,36 @@
+{
+  "modalHeader": "Konfigurēt satura kategorijas",
+  "modalGroupHeader": "Konfigurēt grupas kategorijas",
+  "helpText": "Rediģējiet, dzēsiet vai pārkārtojiet savas organizācijas kategorijas.",
+  "helpTextGroup": "Rediģējiet, dzēsiet vai pārkārtojiet kategorijas šīs grupas saturam.",
+  "helpTextDescription": "Atcerieties, ka citi jūsu organizācijas dalībnieki, iespējams, jau ir piesaistījuši šīs kategorijas savām vienībām, tāpēc, labojot shēmu, šīs vienības atbilstoši tiks atjauninātas",
+  "helpTextGroupDescription": "Atcerieties, ka citi grupas dalībnieki, iespējams, jau ir piesaistījuši šīs kategorijas savām vienībām, tāpēc, labojot shēmu, šīs vienības atbilstoši tiks atjauninātas",
+  "warning": {
+    "deleteInUseCategory": {
+      "title": "Dzēst kategoriju",
+      "cta": "Dzēst kategoriju",
+      "message": {
+        "single": "Šai kategorijai ir piešķirta viena vienība. Dzēšot kategoriju, tā tiks noņemta arī no šīs vienības.",
+        "multiple": "Šai kategorijai piešķirto vienību skaits: ${number}. Dzēšot kategoriju, tā tiks noņemta arī no šīm vienībām.",
+        "unknown": "Šai kategorijai piešķirto vienību skaits: ${number}. Dzēšot kategoriju, tā tiks noņemta arī no šīm vienībām."
+      }
+    },
+    "changeTitleInUseCategory": {
+      "title": "Atjaunināt kategoriju",
+      "message": {
+        "single": "Šai kategorijai ir piešķirta viena vienība. Atjauninot kategoriju, vienība tiks atjaunināta, lai izmantotu “${newTitle}”.",
+        "multiple": "Šai kategorijai piešķirto vienību skaits: ${number}. Atjauninot kategoriju, vienība tiks atjaunināta, lai izmantotu “${newTitle}”.",
+        "unknown": "Šai kategorijai piešķirto vienību skaits: ${number}. Atjauninot kategoriju, vienība tiks atjaunināta, lai izmantotu “${newTitle}”."
+      },
+      "cta": "Atjaunināt kategoriju"
+    }
+  },
+  "template": {
+    "templateList": {
+      "custom": {
+        "message": "Izveidojiet savas kategorijas, lai kārtotu saturu savā organizācijā.",
+        "messageGroup": "Izveidojiet savas kategorijas, lai organizētu saturu šajā grupā."
+      }
+    }
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "back": "返回",
+  "cancel": "取消",
+  "learnMore": "了解详细信息",
+  "restore": "恢复",
+  "restoreTo": "恢复到",
+  "restoreItem": "恢复项目",
+  "restoreItems": "恢复多个项目",
+  "noticeMessage": "将取消共享恢复项目。 请在再次共享之前检查您的内容。",
+  "cannotBulkRestoreXItems": "无法批量恢复超过 ${number} 个项目，请取消选择一些项目。",
+  "cannotBulkRestoreMultipleOwners": "无法批量恢复属于不同所有者的项目。 请选择单个所有者的项目以进行批量恢复。",
+  "toRestore": {
+    "single": "要恢复的项目：",
+    "multiple": "要恢复的多个项目："
+  },
+  "cannotRestore": "无法恢复：",
+  "dependentItems": {
+    "single": "无法恢复此项目，因为其依赖于 <strong style='font-weight: 500'>${parent}</strong>。 请将其一起恢复。",
+    "singleUnknown": "无法恢复此项目，因为其依赖于回收站的另一个项目。 请将其一起恢复。",
+    "multiple": "无法恢复这些项目，因为其依赖于回收站中的其他项目。 请将其一起恢复。",
+    "multipleSameSource": "无法恢复这些项目，因为它们依赖于 <strong style='font-weight: 500'>${parent}</strong>。 请将其一起恢复。"
+  },
+  "pageRangeWithTotalRecycleBinSize": {
+    "en": "回收站中的 ${start} - ${end}，共 ${total} 个 (${size})",
+    "other": "回收站中的 ${start} - ${end}，共 ${total} 个 (${size})"
+  },
+  "pageRangeWithGreaterThanTotalRecycleBinSize": {
+    "en": "回收站中的 ${start} - ${end}，共 ${total} 个 (>${size})",
+    "other": "回收站中的 ${start} - ${end}，共 ${total} 个 (>${size})"
+  }
+}

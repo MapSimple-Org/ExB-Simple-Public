@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>A ferramenta Gerar Mosaicos cria uma grade de pol&iacute;gonos com base na extens&atilde;o, forma e tamanho especificados.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="binType">
+        <div>
+            <p>A forma dos mosaicos que ser&atilde;o criados.
+            </p>
+        </div>
+    </div>
+    <div id="sizeType">
+        <div>
+            <p>Especifica se o tamanho do mosaico ser&aacute; definido por sua &aacute;rea (<b>&Aacute;rea</b>) ou por um valor de dist&acirc;ncia (<b>Dist&acirc;ncia</b>).
+            </p>
+        </div>
+    </div>
+    <div id="binSize">
+        <div>
+            <p>O tamanho (&aacute;rea ou dist&acirc;ncia) dos mosaicos gerados. Para quadrados, hex&aacute;gonos, tri&acirc;ngulos e losangos, a dist&acirc;ncia determina a altura dos mosaicos. Para hex&aacute;gonos transversais, a dist&acirc;ncia determina a largura dos mosaicos.
+            </p>
+        </div>
+    </div>
+    <div id="binResolution">
+        <div>
+            <p>A resolu&ccedil;&atilde;o H3 dos mosaicos. A resolu&ccedil;&atilde;o varia de 0 a 15. A cada tamanho de resolu&ccedil;&atilde;o crescente, a &aacute;rea dos pol&iacute;gonos diminuir&aacute; para um s&eacute;timo do tamanho na resolu&ccedil;&atilde;o mais baixa.
+            </p>
+        </div>
+    </div>
+    <div id="binSizeUnit">
+        <div>
+            <p>As unidades que ser&atilde;o usadas para o tamanho da tessela&ccedil;&atilde;o.
+            </p>
+        </div>
+    </div>
+    <div id="extentLayer">
+        <div>
+            <p>A extens&atilde;o que os mosaicos cobrir&atilde;o.
+            </p>
+            <p class="toolPaneOnly">A contagem de fei&ccedil;&otilde;es depende de fatores adicionais, como crit&eacute;rios de filtragem e extens&atilde;o de an&aacute;lise.
+            </p>
+        </div>
+    </div>
+    <div id="intersectStudyArea">
+        <div>
+            <p>Para camadas de fei&ccedil;&otilde;es, especifica se as tessela&ccedil;&otilde;es cobrir&atilde;o toda a extens&atilde;o ou apenas as &aacute;reas onde as tessela&ccedil;&otilde;es interseccionam as fei&ccedil;&otilde;es.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>O nome da camada que ser&aacute; criada e adicionada ao mapa.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>O nome da pasta em  <b>Meu conte&uacute;do</b> onde o resultado ser&aacute; salvo.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

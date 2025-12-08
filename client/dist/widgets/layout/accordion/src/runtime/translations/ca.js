@@ -1,0 +1,1 @@
+System.register([],function(e){return{execute:function(){e({_widgetLabel:"Subfinestra extensible",tips:"Subfinestra extensible"})}}});

@@ -1,0 +1,13 @@
+{
+  "header": "Voorbeeld",
+  "description": "Geef een voorbeeld weer voordat de analyse wordt uitgevoerd.",
+  "showPreview": "Voorbeeld weergeven",
+  "previewLayer": "Voorbeeld laag ${number}",
+  "update": "Bijwerken",
+  "newPreview": "Nieuw voorbeeld",
+  "previewPopup": "Schakel het voorbeeld van de analyseresultaten in op basis van de invoerparameters.",
+  "previewError": "Deze voorbeeldlaag is niet beschikbaar. Controleer de invoerparameters en werk de voorbeeldlaag opnieuw bij.",
+  "updatePopover": "Geselecteerde voorbeeldlaag updaten",
+  "createPopover": "Nieuwe voorbeeldlaag maken",
+  "maxPreview": "Maximumaantal toegestane voorbeeldlagen: ${maxCount}"
+}

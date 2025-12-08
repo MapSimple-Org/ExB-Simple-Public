@@ -1,0 +1,17 @@
+{
+  "any": "Apa pun",
+  "count": "Count",
+  "field": "Kolom",
+  "fieldLoadingErrorText": "Tidak dapat memuat bidang.",
+  "first": "Pertama",
+  "isRequired": "Parameter ini diperlukan.",
+  "last": "Terakhir",
+  "max": "Maks",
+  "mean": "Rata-rata",
+  "min": "Min",
+  "selectAll": "Pilih semua",
+  "standardDeviation": "Deviasi standar",
+  "statistic": "Statistik",
+  "statisticNotSelected": "Diperlukan sedikitnya satu jenis statistik untuk setiap kolom.",
+  "sum": "Sum"
+}

@@ -1,0 +1,23 @@
+{
+  "add": "Add",
+  "arcade": "Arcade",
+  "arcadeExpressionEditor": "Arcade expression editor",
+  "badSyntaxSQLExpression": "Bad syntax in SQL expression. Correct the errors.",
+  "calculationExpressionEditor": "Calculation expression editor",
+  "cancel": "Cancel",
+  "chooseLanguage": "Choose a language",
+  "fieldToCalculate": "Field to calculate: ${fieldName}",
+  "idealFor": "Ideal for:",
+  "languageSelect": "Language select",
+  "layerLoadFailNoFields": "Layer failed to load. Fields could not be retrieved for the editor.",
+  "next": "Next",
+  "noLayerProvidedNoFields": "No layer was provided. Fields could not be retrieved for the editor.",
+  "sql": "SQL",
+  "sqlExpressionEditor": "SQL expression editor",
+  "tileSelectArcadeUseCase1": "Calculations that require more functionality than SQL including spatial operations",
+  "tileSelectArcadeUseCase2": "Improved troubleshooting",
+  "tileSelectSqlUseCase1": "Fastest performance",
+  "tileSelectSqlUseCase2": "Calculations that can be expressed in SQL",
+  "tileSelectSqlUseCase3": "Layers with Sync or that have Keep track of created or updated features enabled",
+  "valueCannotBeBlank": "The value cannot be blank."
+}

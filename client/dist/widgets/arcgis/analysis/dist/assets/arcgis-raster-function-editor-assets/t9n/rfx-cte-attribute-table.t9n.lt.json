@@ -1,0 +1,22 @@
+{
+  "value": "Reikšmė",
+  "classname": "ClassName",
+  "color": "Spalva",
+  "raster": "Rastras",
+  "tableType": "Lentelės tipas",
+  "manual": "Rankinis",
+  "external": "Išorinis",
+  "browseTable": "Naršyti lentelę",
+  "browseTableFrom": "Naršyti lentelę nuo",
+  "file": "Failas",
+  "dbfFile": "DBF failas",
+  "layer": "Sluoksnis",
+  "unsupportedDataType": "Nepalaikomas tipas",
+  "failedToGetTableFromLayer": "Nepavyko gauti lentelės iš sluoksnio.",
+  "generate": "Generuoti lentelę",
+  "minValue": "Minimali reikšmė",
+  "maxValue": "Maksimali reikšmė",
+  "classBaseName": "Bazinis klasės pavadinimas",
+  "colorscheme": "Spalvų paletė",
+  "defaultClassName": "Žymė_"
+}

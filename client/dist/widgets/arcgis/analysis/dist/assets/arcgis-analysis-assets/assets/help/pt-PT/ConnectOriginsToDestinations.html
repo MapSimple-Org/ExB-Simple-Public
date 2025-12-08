@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>A ferramenta Calcular Custo da Viagem mede o tempo de viagem ou dist&acirc;ncia entre pares de pontos.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="originsLayer">
+        <div>
+            
+            <p class="OnlineOnly">A camada de pontos que representa as localiza&ccedil;&otilde;es de origem a partir das quais o custo da viagem ser&aacute; calculado. S&atilde;o suportadas camadas com at&eacute;  cinco mil elementos. </p>  
+            <p class="PortalOnly">A camada de pontos que representa as localiza&ccedil;&otilde;es de origem a partir das quais o custo da viagem ser&aacute; calculado.
+            </p>
+            <p class="toolPaneOnly">A contagem de elementos depende de fatores adicionais, como os crit&eacute;rios de filtragem e a extens&atilde;o da an&aacute;lise.
+            </p>
+        </div>
+    </div>
+    <div id="destinationsLayer">
+        <div>
+            
+            <p class="OnlineOnly">A camada de pontos que representa as localiza&ccedil;&otilde;es de destino para as quais &eacute; calculado o custo da viagem. S&atilde;o suportadas camadas com at&eacute;  cinco mil elementos. </p> 
+            <p class="PortalOnly">A camada de pontos que representa as localiza&ccedil;&otilde;es de destino para as quais &eacute; calculado o custo da viagem.
+            </p>
+            <p class="toolPaneOnly">A contagem de elementos depende de fatores adicionais, como os crit&eacute;rios de filtragem e a extens&atilde;o da an&aacute;lise.
+            </p>
+        </div>
+    </div>
+    <div id="originsLayerRouteIDField">
+        <div>
+            
+            <p>O campo no conjunto de dados da  <b>camada De</b> que define o par origem-destino pr&eacute;-atribu&iacute;do. Se existirem m&uacute;ltiplas localiza&ccedil;&otilde;es de origem e destino, este ID tem de corresponder a um valor no campo de <b>ID da camada Para</b>.
+            </p>
+        </div>
+    </div>
+    <div id="destinationsLayerRouteIDField">
+        <div>
+            
+            <p>O campo no conjunto de dados da  <b>camada Para</b> que define o par origem-destino pr&eacute;-atribu&iacute;do. Se existirem m&uacute;ltiplas localiza&ccedil;&otilde;es de origem e destino, este ID tem de corresponder a um valor no campo de <b>ID da camada De</b>.
+            </p>
+        </div>
+    </div>
+    <div id="pointBarrierLayer">
+        <div>
+            <p>Um ou mais elementos de ponto que atuam como restri&ccedil;&otilde;es tempor&aacute;rias (barreiras) ao transitar pelas ruas subjacentes. &Eacute; poss&iacute;vel transitar na rua, mas n&atilde;o pela barreira.
+            </p>
+        </div>
+    </div>
+    <div id="lineBarrierLayer">
+        <div>
+            <p>Um ou mais elementos de linha que atuam como restri&ccedil;&otilde;es tempor&aacute;rias (barreiras) ao transitar pelas ruas subjacentes. As barreiras de linha pro&iacute;bem a circula&ccedil;&atilde;o em qualquer ponto onde as barreiras intersectam as ruas.
+            </p>
+        </div>
+    </div>
+    <div id="polygonBarrierLayer">
+        <div>
+            <p>Um ou mais elementos de pol&iacute;gono que atuam como restri&ccedil;&otilde;es tempor&aacute;rias (barreiras) ao transitar pelas ruas subjacentes. As barreiras de pol&iacute;gonos pro&iacute;bem que se transite por qualquer ponto de intersec&ccedil;&atilde;o entre o pol&iacute;gono e as ruas.
+            </p>
+        </div>
+    </div>
+    <div id="measurementType">
+        <div>
+            <p>O m&eacute;todo que ser&aacute; utilizado para medir a dist&acirc;ncia ou o tempo. O m&eacute;todo pode ser uma dist&acirc;ncia em linha ou um modo de viagem.
+            </p>
+        </div>
+    </div>
+    <div id="timeOfDay">
+        <div>
+            <p>A data e hora de partida a partir das localiza&ccedil;&otilde;es de origem no conjunto de dados da camada De.
+            </p>
+        </div>
+    </div>
+    <div id="routeShape">
+        <div>
+            <p>Especifica se as origens e destinos estar&atilde;o ligados atrav&eacute;s de linhas de radar ou linhas de desejo (<b>Linha reta</b>) ou as ruas da rede de ruas subjacente (<b>Seguir ruas</b>).
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>O nome da camada que ser&aacute; criada e adicionada ao mapa.
+            </p>
+        </div>
+    </div>
+    <div id="includeRouteLayers">
+        <div>
+            <p>Especifica se cada rota resultante ser&aacute; guardada como uma camada de rota.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            
+            <p>O nome da pasta em  <b>O meu conte&uacute;do</b> onde os resultados ser&atilde;o guardados.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

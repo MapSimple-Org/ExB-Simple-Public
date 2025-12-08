@@ -1,0 +1,7 @@
+{
+  "header": "Editor rastrových funkcií",
+  "content": "Máte neuložené zmeny v '${rftTitle}'. Ak zmeny neuložíte, budú stratené.",
+  "cancel": "Zrušiť",
+  "dontSave": "Neuložiť",
+  "save": "Uložiť"
+}

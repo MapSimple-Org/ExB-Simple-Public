@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>측지 가시권역 도구는 입력 관측자 위치에 표시되는 래스터 표면의 위치를 식별합니다.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputElevationSurface">
+        <div>
+            <p>가시권역이 계산될 고도 래스터입니다.
+            </p>
+        </div>
+    </div>
+    <div id="inputObserverFeatures">
+        <div>
+            <p>가시권역이 계산될 관측자 위치입니다.
+            </p>
+        </div>
+    </div>
+    <div id="optimizeFor">
+        <div>
+            <p>속도 또는 정확도를 기반으로 가시권역 계산을 최적화합니다.
+            </p>
+        </div>
+    </div>
+    <div id="verticalError">
+        <div>
+            <p> <b>입력 고도 표면</b> 값의 고도 값에 대한 불확실성 정도입니다.
+            </p>
+        </div>
+    </div>
+    <div id="refractivityCoefficient">
+        <div>
+            <p>대기 중의 가시광선에 대한 굴절 계수입니다.
+            </p>
+        </div>
+    </div>
+    <div id="maximumViewingDistanceField">
+        <div>
+            <p>가시권역 계산을 위한 최대 가시거리입니다.
+            </p>
+            <p>거리는 값 및 단위로 정의하거나  <b>입력 관측점 또는 라인 피처</b> 값의 필드에서 정의할 수 있습니다.
+            </p>
+        </div>
+    </div>
+    <div id="minimumViewingDistanceField">
+        <div>
+            <p>가시권역 계산을 위한 최소 가시거리입니다.
+            </p>
+            <p>거리는 값 및 단위로 정의하거나  <b>입력 관측점 또는 라인 피처</b> 값의 필드에서 정의할 수 있습니다.
+            </p>
+        </div>
+    </div>
+    <div id="viewingDistanceIs3D">
+        <div>
+            <p>최대 및 최소 가시거리를 3D 거리 또는 2D 거리로 측정할지 지정합니다.
+            </p>
+            <p>선택하지 않는 경우 가시거리가 2D 유클리드 기하학적 거리로 처리됩니다. 선택하는 경우 가시거리가 3D 거리로 처리됩니다.
+            </p>
+        </div>
+    </div>
+    <div id="observersElevationField">
+        <div>
+            <p>관찰자 위치의 표면 고도입니다.
+            </p>
+            <p>고도는 값 및 단위로 정의하거나  <b>입력 관측점 또는 라인 피처</b> 값의 필드에서 정의할 수 있습니다.
+            </p>
+        </div>
+    </div>
+    <div id="observersHeightField">
+        <div>
+            <p>지표 위 관찰자의 높이입니다.
+            </p>
+            <p>높이는 값 및 단위로 정의하거나  <b>입력 관측점 또는 라인 피처</b> 값의 필드에서 정의할 수 있습니다.
+            </p>
+        </div>
+    </div>
+    <div id="targetHeightField">
+        <div>
+            <p>지표상 대상의 높이입니다.
+            </p>
+            <p>높이는 값 및 단위로 정의하거나  <b>입력 관측점 또는 라인 피처</b> 값의 필드에서 정의할 수 있습니다.
+            </p>
+        </div>
+    </div>
+    <div id="horizontalStartAngle">
+        <div>
+            <p>수평 스캔 범위의 시작 각도입니다.
+            </p>
+            <p>각도는 0~360의 값으로 정의하거나  <b>입력 관측점 또는 라인 피처</b> 값의 필드에서 정의할 수 있습니다.
+            </p>
+        </div>
+    </div>
+    <div id="horizontalEndAngle">
+        <div>
+            <p>수평 스캔 범위의 끝 각도입니다.
+            </p>
+            <p>각도는 0~360의 값으로 정의하거나  <b>입력 관측점 또는 라인 피처</b> 값의 필드에서 정의할 수 있습니다.
+            </p>
+        </div>
+    </div>
+    <div id="verticalUpperAngle">
+        <div>
+            <p>수평면 기준의 스캔 수직 각도 상한입니다.
+            </p>
+            <p>각도는 -90~90의 값으로 정의하거나  <b>입력 관측점 또는 라인 피처</b> 값의 필드에서 정의할 수 있습니다.
+            </p>
+        </div>
+    </div>
+    <div id="verticalLowerAngle">
+        <div>
+            <p>수평면 기준의 스캔 수직 각도 하한입니다.
+            </p>
+            <p>각도는 -90~90의 값으로 정의하거나  <b>입력 관측점 또는 라인 피처</b> 값의 필드에서 정의할 수 있습니다.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>생성되어 맵에 추가될 가시권역 래스터 레이어의 이름입니다. 이 레이어에는 관찰자가 볼 수 있는 가시 영역이 포함되며 셀 값은 셀을 볼 수 있는 관찰자 수를 나타냅니다.
+            </p>
+        </div>
+    </div>
+    <div id="aboveGroundLevelOutputName">
+        <div>
+            <p>생성되어 맵에 추가될 지상 레벨(AGL) 래스터 레이어의 이름입니다.
+            </p>
+        </div>
+    </div>
+    <div id="resultType">
+        <div>
+            <p>생성될 결과 유형입니다. 결과는 타일 영상 레이어 또는 동적 영상 레이어일 수 있습니다.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>결과를 저장할  <b>내 콘텐츠</b>의 폴더 이름입니다.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

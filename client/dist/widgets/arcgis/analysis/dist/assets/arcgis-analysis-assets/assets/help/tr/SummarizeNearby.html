@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>Yakındakileri &Ouml;zetle aracı, diğer detaylara belirli bir mesafedeki detaylar i&ccedil;in istatistikleri hesaplar. Mesafe, d&uuml;z bir &ccedil;izgi mesafesi veya seyahat modu kullanılarak hesaplanabilir.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="summaryLayer">
+        <div>
+            <p>Yakın katmanın belirli bir mesafesi i&ccedil;inde &ouml;zetlenecek katman.
+            </p>
+            <p class="toolPaneOnly">Detay sayısı, filtreleme kriterleri ve analiz yayılımı gibi ek fakt&ouml;rlere bağlıdır.
+            </p>
+        </div>
+    </div>
+    <div id="sumNearbyLayer">
+        <div>
+            <p>Yakındaki detayları &ouml;zetlemek i&ccedil;in etrafında sınırlayıcı alanların oluşturulacağı başlangı&ccedil; konumları olarak kullanılacak nokta, &ccedil;izgi veya &ccedil;okgen katmanı.
+            </p>
+            <p class="toolPaneOnly">Detay sayısı, filtreleme kriterleri ve analiz yayılımı gibi ek fakt&ouml;rlere bağlıdır.
+            </p>
+        </div>
+    </div>
+    <div id="nearType">
+        <div>
+            
+            <p class="toolPaneOnly">Sınırlayıcı alanları oluşturmak i&ccedil;in kullanılacak y&ouml;ntem. Bu y&ouml;ntem, d&uuml;z &ccedil;izgi mesafesi veya seyahat modu olabilir.
+            </p> 
+            <p class="modelBuilderOnly">Sınırlayıcı alanları oluşturmak i&ccedil;in kullanılacak y&ouml;ntem. Şu anda d&uuml;z &ccedil;izgi mesafesi modeller i&ccedil;in desteklenen tek y&ouml;ntemdir.
+            </p>
+        </div>
+    </div>
+    <div id="distances">
+        <div>
+            <p>Sınırlayıcı alanları oluşturmak i&ccedil;in kullanılacak mesafe veya s&uuml;re. Birden fazla değer eklenirse her bir değer t&uuml;m girdi noktalarının sınırlayıcı alanlarını hesaplamak i&ccedil;in kullanılacaktır.
+            </p>
+        </div>
+    </div>
+    <div id="units">
+        <div>
+            <p>Mesafe veya s&uuml;reyi belirtmek i&ccedil;in kullanılacak birimler.
+            </p>
+        </div>
+    </div>
+    <div id="returnBoundaries">
+        <div>
+            <p>Sonu&ccedil; katmanının sınırlayıcı alanlar mı (işaretli), yoksa girdi yakın katmanıyla aynı geometri mi (işaretsiz) olacağını belirtir.
+            </p>
+        </div>
+    </div>
+    <div id="sumShape">
+        <div>
+            <p>Her bir sınırlandırıcı alanda &ouml;zetlenen detayların toplam boyutunun hesaplanıp hesaplanmayacağını belirtir. &Ccedil;izgiler i&ccedil;in toplam uzunluk hesaplanacaktır. &Ccedil;okgenler i&ccedil;in toplam alan hesaplanacaktır.
+            </p>
+        </div>
+    </div>
+    <div id="shapeUnits">
+        <div>
+            <p>&Ouml;zetlenen detayların toplam boyutunu hesaplamak i&ccedil;in kullanılacak birimler.
+            </p>
+        </div>
+    </div>
+    <div id="summaryFields">
+        <div>
+            <p>&Ouml;zetlenecek girdi katmanından gelen sayı veya tarih alanları ve her alan i&ccedil;in hesaplanacak istatistikler.
+            </p>
+        </div>
+    </div>
+    <div id="groupByField">
+        <div>
+            <p>İstatistiksel hesaplamalar i&ccedil;in verileri ayrı gruplara ayırmak amacıyla kullanılacak girdi katmanından gelen alan.
+            </p>
+        </div>
+    </div>
+    <div id="minorityMajority">
+        <div>
+            <p>Her &ouml;zet alanı i&ccedil;inde azınlık (en az baskın) ve &ccedil;oğunluk (en baskın) gruplarının hesaplanıp hesaplanmayacağını belirtir.
+            </p>
+        </div>
+    </div>
+    <div id="percentShape">
+        <div>
+            <p>Her sınır i&ccedil;indeki her gruba ait olan &ouml;zetlenen detayların y&uuml;zdesinin hesaplanıp hesaplanmayacağını belirtir.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>Oluşturulacak ve haritaya eklenecek katmanın adı.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p> <b>İ&ccedil;eriğim</b> i&ccedil;inde sonu&ccedil;ların kaydedileceği klas&ouml;r&uuml;n adı.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

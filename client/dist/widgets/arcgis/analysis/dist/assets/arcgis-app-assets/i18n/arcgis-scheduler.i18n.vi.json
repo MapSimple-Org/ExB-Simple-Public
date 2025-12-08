@@ -1,0 +1,55 @@
+{
+  "beginningOnLabel": "Bắt đầu vào",
+  "repeatTypeLabel": "Kiểu lặp lại",
+  "endingOnTypeLabel": "Kết thúc vào",
+  "endingOnDateLabel": "Ngày kết thúc",
+  "endingOnCountLabel": "Đếm",
+  "endingOnCountPlaceholder": "ví dụ: 1, 10, 30",
+  "dailyRepeatIntervalLabel": "Tần suất lặp lại",
+  "dailyTimeLabel": "Thời gian",
+  "weeklyDaysOfWeekLabel": "Ngày trong tuần",
+  "weeklyTimeLabel": "Thời gian",
+  "monthlyDayOfMonthLabel": "Ngày trong tháng",
+  "monthlyDayOfMonthPlaceholder": "ví dụ: 1 - 31",
+  "monthlyRepeatIntervalLabel": "Tần suất lặp lại",
+  "monthlyTimeLabel": "Thời gian",
+  "repeatTypeOptions": {
+    "day": "Ngày",
+    "week": "Tuần",
+    "month": "Tháng"
+  },
+  "endingOnType": {
+    "never": "Không bao giờ",
+    "date": "Ngày",
+    "count": "Bật"
+  },
+  "dailyRepeatInterval": {
+    "everyDay": "Hàng ngày",
+    "everyOtherDay": "Hai ngày một lần",
+    "everyThreeDays": "Ba ngày một lần",
+    "everyFourDays": "Bốn ngày một lần",
+    "everyFiveDays": "Năm ngày một lần",
+    "everySixDays": "Sáu ngày một lần",
+    "everySevenDays": "Bảy ngày một lần",
+    "everyFourteenDays": "Mười bốn ngày một lần"
+  },
+  "weekDays": {
+    "all": "Tất cả",
+    "allWeekdays": "Tất cả ngày trong tuần",
+    "sunday": "Chủ nhật",
+    "monday": "Thứ hai",
+    "tuesday": "Thứ ba",
+    "wednesday": "Thứ tư",
+    "thursday": "Thứ năm",
+    "friday": "Thứ sáu",
+    "saturday": "Thứ bảy"
+  },
+  "monthlyRepeatInterval": {
+    "everyMonth": "Hàng tháng",
+    "everyTwoMonths": "Hai tháng một lần",
+    "everyThreeMonths": "Ba tháng một lần",
+    "everyFourMonths": "Bốn tháng một lần",
+    "everyFiveMonths": "Năm tháng một lần",
+    "everySixMonths": "Sáu tháng một lần"
+  }
+}

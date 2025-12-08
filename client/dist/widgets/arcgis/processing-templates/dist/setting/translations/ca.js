@@ -1,0 +1,1 @@
+System.register([],function(e){return{execute:function(){e({customizeLayer:"Personalitza les capes",selectLayers:"Seleccioneu les capes",noDataSourceWarning:"El widget de mapa seleccionat no cont\xe9 cap mapa web ni cap escena web."})}}});

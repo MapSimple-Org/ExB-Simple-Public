@@ -1,0 +1,13 @@
+{
+  "fieldCalcExpression": "Mezőszámítási kifejezés",
+  "fieldCalculationGroupLabel": "Mezőszámítás",
+  "fieldPlaceholderText": "Kattintson a mező kiválasztásához vagy létrehozásához",
+  "fieldToCalculate": "Kiszámítani kívánt mező",
+  "inputDatasetGroupLabel": "Bemenet",
+  "itemProperties": {
+    "description": "A Mezők kiszámítása eszköz ModelBuilderben történő futtatásával kapott eredmény.",
+    "snippet": "A Számítás mezőből létrehozott vektoros réteg"
+  },
+  "noFieldSpecified": "Adjon meg egy mezőt, amelyet ki szeretne számítani egy kifejezés létrehozásához.",
+  "whereClause": "A számítást csak bizonyos rekordokra alkalmazza"
+}

@@ -1,0 +1,8 @@
+{
+  "loading": "Memuat...",
+  "pleaseWait": "Harap tunggu.",
+  "loadingXMLRFT": "Memuat template fungsi raster pilihan dalam format XML.",
+  "failedToOpen": "Gagal membuka.",
+  "readingFailed": "Gagal memuat template fungsi raster pilihan.",
+  "failedToLoadXML": "Gagal memuat template fungsi raster pilihan dalam format XML."
+}

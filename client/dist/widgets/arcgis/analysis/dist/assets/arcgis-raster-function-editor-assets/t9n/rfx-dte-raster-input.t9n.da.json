@@ -1,0 +1,14 @@
+{
+  "outputRaster": "OutputRaster",
+  "rfxVariable": "RasterFunctionVariable",
+  "selectLayer": "Vælg lag",
+  "allowScalar": "Vælg et lag, eller angiv en konstant",
+  "browseLayer": "Gennemse lag",
+  "loading": "Indlæser...",
+  "layerMissing": "Et eller flere billedlag fra lag, der ikke er angivet her, fordi egenskaben til at tillade analysetjeneste ikke er aktiveret.",
+  "layerFailedToLoad": "Kunne ikke indlæse lag.",
+  "learnMore": "Få mere at vide",
+  "errorCodes": {
+    "required": "Denne parameter er påkrævet."
+  }
+}

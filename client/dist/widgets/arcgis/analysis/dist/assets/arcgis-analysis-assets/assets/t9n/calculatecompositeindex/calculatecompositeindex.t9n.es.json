@@ -1,0 +1,26 @@
+{
+  "CCIAnalysisSettingGroupLabel": "Configuración de índice",
+  "CCIAnalysisSettingGroupText": "Especifique cómo debe calcularse el índice.",
+  "geomeanPercentileLabel": "Clasificaciones compuestas (media geométrica de percentiles)",
+  "geomeanRawLabel": "Valores sin procesar compuestos (media geométrica de los valores sin procesar)",
+  "geomeanScaledLabel": "Valores escalados compuestos (media geométrica de los valores escalados)",
+  "indexMethodLabel": "Método para escalar y combinar variables",
+  "inputFeaturesOrTableLabel": "Tabla o entidades de entrada",
+  "inputLayerGroupText": "Elija las entidades o la tabla y las variables con las que crear el índice.",
+  "inputVariablesLabel": "Variables de entrada",
+  "itemProperties": {
+    "description": "Capa de entidades generada al ejecutar la herramienta de análisis Índice compuesto.",
+    "snippet": "Capa de entidades generada a partir de Calcular índice compuesto"
+  },
+  "meanPercentileLabel": "Combinar rangos (media de percentiles)",
+  "meanRawLabel": "Combinar valores sin procesar (media de valores sin procesar)",
+  "meanScaledLabel": "Combinar valores escalados (media de los valores escalados)",
+  "outputIndexMaxLabel": "Máximo",
+  "outputIndexMinLabel": "Mínimo",
+  "outputIndexMinMaxLabel": "Valores mínimo y máximo de índice",
+  "outputIndexReverseLabel": "Revertir valores de índice",
+  "reverseVariableLabel": "Invertir dirección",
+  "sumFlagsPercentileLabel": "Resaltar extremos (cantidad de valores por encima del percentil 90)",
+  "toolName": "Calcular índice compuesto",
+  "weight": "Peso"
+}

@@ -1,0 +1,7 @@
+{
+  "example": "Przykład",
+  "input": "Dane wejściowe",
+  "output": "Dane wynikowe",
+  "optional": "Opcjonalnie",
+  "WNDWIHintText": "Wartość α:α powinna wynosić od 0 do 1; wartość domyślna to 0,5"
+}

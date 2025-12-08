@@ -1,0 +1,1 @@
+System.register([],function(e){return{execute:function(){e({subMenuExpandMode:"Alt men\xfc geni\u015fletme modu",mainMenu:"Ana men\xfc",subMenu:"Alt men\xfc",navArrowColor:"Navigasyon oku rengi"})}}});

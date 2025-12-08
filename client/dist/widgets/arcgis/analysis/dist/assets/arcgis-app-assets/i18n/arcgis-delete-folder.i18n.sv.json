@@ -1,0 +1,22 @@
+{
+  "deleteFolder": "Ta bort mapp",
+  "delete": "Ta bort",
+  "permanentlyDelete": "Ta bort permanent",
+  "back": "Bakåt",
+  "cancel": "Avbryt",
+  "success": "Mappen '${title}' har tagits bort",
+  "deleteProtectedItemsInFolder": "Det gick inte att ta bort mappen eftersom en del av objekten är skyddade mot borttagning eller har objekt med beroenden.",
+  "message": {
+    "empty": "Vill du ta bort mappen <strong style='font-weight: 500'>${title}</strong>?",
+    "recycleAll": "Vill du ta bort mappen <strong style='font-weight: 500'>${title}</strong> och skicka innehållet till papperskorgen?",
+    "mustBeEmpty": "Mappen <strong style='font-weight: 500'>${title}</strong> måste tömmas för att kunna tas bort.",
+    "aFewCannotBeDeleted": "Några objekt kan inte tas bort. Vill du fortsätta med borttagningen av resten?",
+    "canBeEmptied": "Mappen <strong style='font-weight: 500'>${title}</strong> måste tömmas för att kunna tas bort. Vill du fortsätta med borttagningen av dessa objekt?",
+    "cannotBeDeleted": "Mappen <strong style='font-weight: 500'>${title}</strong> kan inte tas bort eftersom dess objekt inte kan tas bort."
+  },
+  "disabledMessage": {
+    "single": "Det finns <span style='color:red'>1 objekt</span> i den här mappen, <b>${label}</b>.<br/></br/>Vill du ta bort den här mappen och tillhörande objekt?",
+    "multiple": "Det finns <span style='color:red'>${number} objekt</span> i den här mappen, <b>${label}</b>.<br/></br/>Vill du ta bort den här mappen och alla tillhörande objekt?",
+    "unknown": "Vill du ta bort den här mappen, <b>${label}</b>?"
+  }
+}

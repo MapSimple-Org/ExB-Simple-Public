@@ -1,0 +1,12 @@
+{
+  "choiceList": "Lista opțiunilor",
+  "choiceListBadInput": "Valoarea de intrare conține o intrare nevalidă.",
+  "comboboxPlaceholderText": "Selectați o opțiune...",
+  "inputPlaceholderText": "Introduceţi o valoare...",
+  "invalidCharacterError": "Valoarea de intrare conține caractere nevalide.",
+  "maxLengthError": "Valoarea de intrare nu poate avea mai mult de ${maxLength} caractere.",
+  "minLengthError": "Valoarea de intrare nu poate avea mai puțin de ${minLength} caractere.",
+  "multiSelectComboboxPlaceholderText": "Selectați una sau mai multe opțiuni...",
+  "requiredError": "Acest parametru este obligatoriu.",
+  "selectAll": "Selectare globală"
+}

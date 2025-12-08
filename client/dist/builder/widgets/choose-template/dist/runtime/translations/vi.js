@@ -1,0 +1,1 @@
+System.register([],function(e){return{execute:function(){e({_widgetLabel:"T\u1ea1o m\u1ed9t tr\u1ea3i nghi\u1ec7m m\u1edbi",createNewApp:"T\u1ea1o \u1ee9ng d\u1ee5ng m\u1edbi",largeDevices:"Thi\u1ebft b\u1ecb m\xe0n h\xecnh l\u1edbn",mediumDevices:"Thi\u1ebft b\u1ecb m\xe0n h\xecnh v\u1eeba",smallDevices:"Thi\u1ebft b\u1ecb m\xe0n h\xecnh nh\u1ecf"})}}});

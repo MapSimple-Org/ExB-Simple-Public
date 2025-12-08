@@ -1,0 +1,12 @@
+{
+  "apiCredentialType": "認證類型: API 金鑰",
+  "oauthCredentialType": "認證類型: OAuth 2.0",
+  "itemAccess": "項目存取權",
+  "page": "頁面: ${page}",
+  "currentPage": "目前頁面: ${page}",
+  "privileges": "權限",
+  "itemDetails": "項目詳細資訊",
+  "settings": "設定",
+  "serviceScope": "服務範圍",
+  "summary": "摘要"
+}

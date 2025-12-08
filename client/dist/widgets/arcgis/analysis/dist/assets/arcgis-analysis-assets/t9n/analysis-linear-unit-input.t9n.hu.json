@@ -1,0 +1,13 @@
+{
+  "aboveMaximumMessage": "A bemeneti érték legfeljebb ${max} lehet.",
+  "belowMinimumMessage": "A bemeneti érték legalább ${min} kell legyen.",
+  "choiceListBadInput": "A bemeneti érték érvénytelen bejegyzést tartalmaz.",
+  "defaultLabel": "Lineáris egység",
+  "inputPlaceholderText": "Adja meg a kívánt távolságértéket…",
+  "invalidDoubleMessage": "A bemeenti értéknek double típusúnak kell lennie.",
+  "invalidIntegerMessage": "A bemeneti értéknek egész számnak kell lennie.",
+  "requiredInputMessage": "Ez a paraméter kötelező.",
+  "strictlyMaximumMessage": "A bemeneti értéknek kisebbnek kell lennie a következőnél: ${max}.",
+  "strictlyMinimumMessage": "A bemeneti értéknek nagyobbnak kell lennie a következőnél: ${min}.",
+  "unitSelect": "Mértékegység választása"
+}

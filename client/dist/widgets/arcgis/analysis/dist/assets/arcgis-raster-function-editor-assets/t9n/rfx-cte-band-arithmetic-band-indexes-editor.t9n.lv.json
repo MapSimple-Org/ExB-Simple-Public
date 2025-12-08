@@ -1,0 +1,7 @@
+{
+  "example": "Piemērs",
+  "input": "Ievade",
+  "output": "Izvade",
+  "optional": "Pēc izvēles",
+  "WNDWIHintText": "α:α vērtībai jābūt no 0 līdz 1; noklusējuma vērtība ir 0,5"
+}

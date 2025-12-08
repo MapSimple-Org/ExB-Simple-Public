@@ -1,0 +1,13 @@
+{
+  "weightedOverlayTable": "Таблиця зваженого накладення",
+  "id": "Ідентифікатор",
+  "layer": "Шар",
+  "field": "Поле",
+  "influence": "Вплив",
+  "sumOfInfluence": "Сума впливу",
+  "value": "Значення",
+  "remapTable": "Таблиця перерозподілу",
+  "scale": "Масштаб",
+  "scales": "Масштаби",
+  "selectRaster": "Вибрати растр"
+}

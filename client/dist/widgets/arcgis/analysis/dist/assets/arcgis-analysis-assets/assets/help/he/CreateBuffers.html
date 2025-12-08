@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html dir="rtl">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>הכלי 'יצירת אזורי חיץ' יוצר פוליגונים שמכסים מרחק נתון מישויות קלט.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputLayer">
+        <div>
+            <p>ישויות הנקודה, הקו או הפוליגון ליצירת חיץ.
+            </p>
+            <p class="toolPaneOnly">מספר היישויות תלוי בגורמים נוספים כגון קריטריונים לסינון ותיחום הניתוח.
+            </p>
+        </div>
+    </div>
+    <div id="distanceType">
+        <div>
+            <p>מציין האם מרחק החיץ יוגדר על ידי קבוע (<b>ערך</b>) או שדה מספרים (<b>שדה</b>).
+            </p>
+        </div>
+    </div>
+    <div id="distances">
+        <div>
+            <p>המרחק אשר ישמש ליצירת החיץ. אם מתווספים ערכים מרובים, כל ערך ישמש ליצירת חיץ בכל ישות קלט.
+            </p> 
+            <p class="modelBuilderOnly">חובה לציין  <b>ערכי מרחק</b> או <b>שדה מרחק</b>. אם שני הפרמטרים צויני, יעשה שימוש <b>בשדה מרחק</b>.
+            </p>
+        </div>
+    </div>
+    <div id="field">
+        <div>
+            <p>השדה שיכיל את מרחק החיץ עבור כל ישות.
+            </p> 
+            <p class="modelBuilderOnly">חובה לציין  <b>ערכי מרחק</b> או <b>שדה מרחק</b>. אם שני הפרמטרים צויני, יעשה שימוש <b>בשדה מרחק</b>.
+            </p>
+        </div>
+    </div>
+    <div id="units">
+        <div>
+            <p>היחידות אשר ישמשו לציון מרחק החיץ.
+            </p>
+        </div>
+    </div>
+    <div id="dissolveType">
+        <div>
+            <p>מציין את אופן הטיפול באזורי חיץ מיישויות קלט שונות כאשר הם חופפים.
+            </p>
+        </div>
+    </div>
+    <div id="ringType">
+        <div>
+            
+            <p>מציין האם אזורי חיץ עם מרחקים מרובים יהיו אזורי חיץ מרובי מרכזים חופפים (<b>דיסקים חופפים</b>) או טבעות שאינן חופפות (<b>טבעות נפרדות</b>).
+            </p>
+        </div>
+    </div>
+    <div id="sideType">
+        <div>
+            <p>עבור ישויות קו, מציין האם החיץ ייווצר בשני הצדדים של הקו (<b>סביב</b>), בצד שמאל בלבד (<b>שמאל</b>) או בצד ימין בלבד (<b>ימין</b>).
+            </p>
+            <p>עבור ישויות פוליגון, מציין האם ישויות פוליגון הקלט ייכללו בחיץ (<b>כלול</b>) או יוחרגו מהחיץ (<b>החרג</b>).
+            </p>
+        </div>
+    </div>
+    <div id="endType">
+        <div>
+            <p>מציין האם הצורה של החיץ בקצה של ישות קו תהיה עגולה (<b>עגול</b>) או שטוחה (<b>שטוח</b>).
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>שם השכבה שתיווצר ותתווסף למפה.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>שם התיקייה  <b>בתוכן שלי</b> שבה התוצאה תישמר.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

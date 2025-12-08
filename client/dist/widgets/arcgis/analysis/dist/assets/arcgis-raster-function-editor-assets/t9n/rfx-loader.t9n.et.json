@@ -1,0 +1,8 @@
+{
+  "loading": "Laadimine...",
+  "pleaseWait": "Palun oodake.",
+  "loadingXMLRFT": "Valitud rasterfunktsiooni malli laaditakse XML-vormingus.",
+  "failedToOpen": "Avamine nurjus.",
+  "readingFailed": "Valitud rasterfunktsiooni malli ei saanud laadida.",
+  "failedToLoadXML": "Valitud rasterfunktsiooni malli laadimine XML-vormingus nurjus."
+}

@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>Postavke za okruženja za analizu za  Map Viewer. </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="analysisProcessingExtent">
+        <div>
+            <p>Određuje oblast koja će se koristiti za analizu. Podrazumevano će koristiti pun opseg.
+            </p>
+        </div>
+    </div>
+    <div id="rasterAnalysisProcessingExtent">
+        <div>
+            <p>Određuje oblast koja će se koristiti za alate za rastersku analizu i rasterske funkcije kada je omogućena opcija  <b>Koristi drugi opseg obrade za rastersku analizu</b>. Podrazumevano će koristiti opseg prikaza mape.
+            </p>
+        </div>
+    </div>
+    <div id="useDifferentExtentForRA">
+        <div>
+            <p>Određuje da li će se koristiti drugi opseg obrade za alate za rastersku analizu i rasterske funkcije. Kada je omogućeno, rasterska analiza će koristiti vrednost postavljenu za  <b>Opseg obrade rasterske analize</b>, koja je postavljena tako da podrazumevano koristi opseg prikaza mape. Kada je onemogućeno, svi tipovi analize će koristiti vrednost postavljenu za <b>Opseg obrade analize</b>, koja je postavljena tako da podrazumevano koristi pun opseg.
+            </p>
+        </div>
+    </div>
+    <div id="outSR">
+        <div>
+            <p>Određuje koordinatni sistem koji će se koristiti za analizu i sloj rezultata.
+            </p>
+        </div>
+    </div>
+    <div id="extent">
+        <div>
+            <p>Određuje oblast koja će se koristiti za analizu.
+            </p>
+        </div>
+    </div>
+    <div id="snapRaster">
+        <div>
+            <p>Prilagođava opseg izlaza tako da se poklapa sa poravnanjem ćelija navedenog sloja rastera za kačenje.
+            </p>
+        </div>
+    </div>
+    <div id="cellSize">
+        <div>
+            <p>Određuje veličinu ćelije ili rezoluciju koja će se koristiti za analizu i kreiranje izlaznog rasterskog sloja.
+            </p>
+            <p>Ako je izabrano  <b>Kao &scaron;to je navedeno</b>, a izlazna prostorna referenca se razlikuje od ulazne prostorne reference, vrednost veličine ćelije neće da bude ponovo projektovana.
+            </p>
+        </div>
+    </div>
+    <div id="mask">
+        <div>
+            <p>Određuje sloj maske u kojem će se za analizu koristiti samo ćelije koje spadaju u oblast maske.
+            </p>
+        </div>
+    </div>
+    <div id="resamplingMethod">
+        <div>
+            <p>Određuje kako da se interpoliraju vrednosti piksela kada se ulazni i izlazni rasteri ne poklapaju.
+            </p>
+        </div>
+    </div>
+    <div id="processorType">
+        <div>
+            <p>Određuje vrstu procesora koji će se koristiti. Opcije su  <b>CPU</b>, <b>GPU</b>, i <b>Automatski</b>. Ako je <b>Automatski</b> određen, alat će definisati tip procesora.
+            </p>
+        </div>
+    </div>
+    <div id="parallelProcessingFactor">
+        <div>
+            <p>Određuje broj instanci usluge obrade rastera koje se koriste tokom pokretanja alata. Podržane vrednosti uključuju prazne stringove (alatka će odrediti broj instanci usluge obrade rastera koje će se koristiti), cele brojeve (0 ili pozitivne celine) i procente. Procenti moraju da sadrže znak procenta (%) iza vrednosti procenta.
+            </p>
+        </div>
+    </div>
+    <div id="askConfirmation">
+        <div>
+            <p>Određuje da li će se pojaviti poruka upozorenja ako procenjeni broj kredita prema&scaron;i navedeni prag (omogućeno) ili će se analiza pokrenuti bez prikazivanja poruke, bez obzira na procenjenu potro&scaron;nju kredita (nije omogućeno). Analiza će i dalje po&scaron;tovati postavke kreditnog budžetiranja za organizaciju.
+            </p>
+        </div>
+    </div>
+    <div id="creditThreshold">
+        <div>
+            <p>Određuje prag na kojem će se pojaviti poruka upozorenja na osnovu procenjene potro&scaron;nje kredita od pokretanja analize. Analiza se i dalje može izvr&scaron;iti ako procena prema&scaron;uje prag.
+            </p>
+        </div>
+    </div>
+    <div id="recycleProcessingWorkers">
+        <div>
+            <p>Određuje broj odeljaka snimaka koji će biti obrađeni pre restartovanja postupka radnika, da bi se sprečili potencijalni neuspesi u dugoročnim postupcima. Podrazumevano je 0.
+            </p>
+        </div>
+    </div>
+    <div id="retryOnFailures">
+        <div>
+            <p>Određuje koliko puta će isti postupak radnika biti poku&scaron;an kada postoji neuspeh tokom obrade određenog posla. Podrazumevano je 0.
+            </p>
+        </div>
+    </div>
+    <div id="geographicTransformations">
+        <div>
+            <p>Određuje metode transformacije koji mogu da se koriste za projektovanje podataka za analizu.
+            </p>
+            <p>Ovo okruženje trenutno podržava samo alatke za rastersku analizu i rasterske funkcije.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

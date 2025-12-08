@@ -1,0 +1,31 @@
+{
+  "name": "vista",
+  "type": "template",
+  "templateType": "app",
+  "label": "Vista",
+  "description": "Vista is a comprehensive two-page template designed for in-depth building exploration.",
+  "thumbnail": "thumbnail.png",
+  "order": 66,
+  "templateCreateVersion": "1.16.0",
+  "tags": [
+    "Screen Group",
+    "Menu",
+    "Map",
+    "Title",
+    "Building Explorer",
+    "Section",
+    "View",
+    "Navigation",
+    "Select",
+    "Feature Info",
+    "Table"
+  ],
+  "categoriesTags": [
+    "Website",
+    "Multipage"
+  ],
+  "isMultiplePage": true,
+  "isMapAware": false,
+  "thumbnailWidth": 320,
+  "thumbnailHeight": 214
+}

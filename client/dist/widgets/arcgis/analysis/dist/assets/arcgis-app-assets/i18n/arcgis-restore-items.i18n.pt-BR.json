@@ -1,0 +1,31 @@
+{
+  "back": "Voltar",
+  "cancel": "Cancelar",
+  "learnMore": "Saiba mais",
+  "restore": "Restaurar",
+  "restoreTo": "Restaurar para",
+  "restoreItem": "Restaurar item",
+  "restoreItems": "Restaurar itens",
+  "noticeMessage": "Os itens restaurados não serão compartilhados. Revise seu conteúdo antes de compartilhá-lo novamente.",
+  "cannotBulkRestoreXItems": "Não é possível restaurar em massa mais de ${number} itens. Desmarque alguns itens.",
+  "cannotBulkRestoreMultipleOwners": "Não é possível restaurar em massa itens que pertencem a diferentes proprietários. Selecione itens de um único proprietário para restauração em massa.",
+  "toRestore": {
+    "single": "Item para Restaurar:",
+    "multiple": "Itens para Restaurar:"
+  },
+  "cannotRestore": "Não é possível restaurar:",
+  "dependentItems": {
+    "single": "Este item não pode ser restaurado, pois depende de<strong style='font-weight: 500'>${parent}</strong>. Restaure-os juntos.",
+    "singleUnknown": "Este item não pode ser restaurado porque depende de outro item na lixeira. Restaure-os juntos.",
+    "multiple": "Esses itens não podem ser restaurados, pois dependem de outros itens da lixeira. Restaure-os juntos.",
+    "multipleSameSource": "Esses itens não podem ser restaurados, pois dependem de <strong style='font-weight: 500'>${parent}</strong>. Restaure-os juntos."
+  },
+  "pageRangeWithTotalRecycleBinSize": {
+    "en": "${start} - ${end} de ${total} (${size}) na lixeira",
+    "other": "${start} - ${end}, total: ${total} (${size}) na lixeira"
+  },
+  "pageRangeWithGreaterThanTotalRecycleBinSize": {
+    "en": "${start} - ${end} de ${total} (>${size}) na lixeira",
+    "other": "${start} - ${end}, total: ${total} (>${size}) na lixeira"
+  }
+}

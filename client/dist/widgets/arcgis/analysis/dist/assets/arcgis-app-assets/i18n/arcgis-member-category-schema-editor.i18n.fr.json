@@ -1,0 +1,22 @@
+{
+  "dialogHeading": "Configurer les catégories de membres",
+  "noticeTitle": "Modifiez, supprimez ou réorganisez les catégories de votre organisation.",
+  "noticeDescription": "Vous pouvez attribuer des catégories aux membres via l’onglet Membres.",
+  "defaultCategoryWarning": "Cette catégorie de membres est définie comme catégorie par défaut pour les nouveaux membres et ne peut pas être modifiée ni supprimée.",
+  "warning": {
+    "deleteInUseCategory": {
+      "message": {
+        "single": "Un membre est attribué à cette catégorie. La suppression de cette catégorie entraînera également sa suppression pour ce membre.",
+        "multiple": "${number} membres sont attribués à cette catégorie. La suppression de cette catégorie entraînera également sa suppression pour ces membres.",
+        "unknown": "Membres attribués à cette catégorie : ${number}. La suppression de cette catégorie entraînera également sa suppression pour ces membres."
+      }
+    },
+    "changeTitleInUseCategory": {
+      "message": {
+        "single": "Un membre est attribué à cette catégorie. La mise à jour de cette catégorie entraînera la mise à jour du membre de sorte qu’il utilise \"${newTitle}\".",
+        "multiple": "${number} membres sont attribués à cette catégorie. La mise à jour de cette catégorie entraînera la mise à jour des membres de sorte qu’ils utilisent \"${newTitle}\".",
+        "unknown": "Membres attribués à cette catégorie : ${number}. La mise à jour de cette catégorie entraînera la mise à jour des membres de sorte qu’ils utilisent \"${newTitle}\"."
+      }
+    }
+  }
+}

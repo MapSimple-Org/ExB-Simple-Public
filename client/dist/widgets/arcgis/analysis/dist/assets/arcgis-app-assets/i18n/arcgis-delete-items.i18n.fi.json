@@ -1,0 +1,160 @@
+{
+  "deleteItem": "Poista kohde",
+  "deleteItems": "Poista kohteet",
+  "deleteFolder": "Poista kansio",
+  "recycleBin": "Roskakori",
+  "delete": "Poista",
+  "permanentlyDelete": "Poista pysyvästi",
+  "next": "Seuraava",
+  "back": "Takaisin",
+  "cancel": "Peruuta",
+  "item": "kohde",
+  "items": "kohteet",
+  "cantDelete": "Seuraavia kohteita ei voi poistaa, koska ne ovat poistosuojattuja tai niillä on riippuvaisia kohteita.",
+  "proceed": "Jatketaanko jäljellä olevien kohteiden poistoa?",
+  "showMore": "Näytä enemmän",
+  "showLess": "Näytä vähemmän",
+  "deletePermanently": "Poista pysyvästi (ei voi kumota)",
+  "learnMore": "Lisätietoja",
+  "summary": {
+    "select": "Valitse",
+    "deselect": "Poista valinta",
+    "selectedItems": "Valitut kohteet:",
+    "additionalDependentItems": "muut riippuvaiset kohteet:",
+    "permanentlyDelete": "Poista pysyvästi:",
+    "permanentDelete": {
+      "notSupported": {
+        "single": "Roskakori ei tue tätä kohdetta.",
+        "multiple": "Roskakori ei tue näitä kohteita."
+      },
+      "unsynchronized": "Hajautetun kollaboraation ryhmän kohdekarttatasoihin tehdyt synkronoimattomat muutokset menetetään.",
+      "notSupportedAndUnsynchronized": "Joitain kohdetyyppejä ei tueta. Hajautetun kollaboraation ryhmän kohdekarttatasoihin tehdyt synkronoimattomat muutokset menetetään.",
+      "group": {
+        "notSupported": "Ei tueta",
+        "distributedCollaboration": "Osa hajautettua kollaboraatiota"
+      }
+    },
+    "canBeRecovered": {
+      "single": "Tämä kohde poistetaan pysyvästi ${days} päivän kuluttua.",
+      "multiple": "Nämä kohteet poistetaan pysyvästi ${days} päivän kuluttua.",
+      "unknown": "Nämä kohteet poistetaan pysyvästi ${days} päivän kuluttua."
+    },
+    "includesDependentItems": "Muut riippuvaiset kohteet:",
+    "willBeRecycled": "Lähetä roskakoriin:",
+    "cannotDelete": "Ei voi poistaa:",
+    "deleteDiscouraged": "Poista ne, joita ei suositella:",
+    "hasDependentItems": "On riippuvaisia kohteita:",
+    "replacementItemFor": "Korvaava kohde seuraavalle:",
+    "someActionsMayNoLongerWork": {
+      "single": "Jos lähetät tämän kohteen roskakoriin, jotkin toimet, jotka edellyttävät lähdekohteen käyttöoikeuksia, eivät ehkä enää toimi odotetusti.",
+      "multiple": "Jos lähetät nämä kohteet roskakoriin, jotkin toimet, jotka edellyttävät lähdekohteen käyttöoikeuksia, eivät ehkä enää toimi odotetusti."
+    },
+    "deletePermanently": "Poista pysyvästi: ${count} (ei voi kumota)",
+    "deleteAllPermanently": "Poista kaikki kohteet pysyvästi: ${count} (ei voi kumota)",
+    "deleteXPermanently": "Poista ${subset}/${total} kohdetta pysyvästi (ei voi kumota)",
+    "unprotectedGroup": {
+      "deleteDiscouraged": {
+        "dependent": "Jos poistat tämän kohteen, jotkin toimet, jotka edellyttävät lähdekohteen käyttöoikeuksia, eivät ehkä enää toimi odotetusti. Haluatko varmasti poistaa kohteen?",
+        "replacement": "Tämä kohde on valittu korvaavaksi kohteeksi. Haluatko varmasti poistaa kohteen?",
+        "learnMore": "Lisätietoja lähtöaineiston kohteiden poistosta"
+      }
+    },
+    "protectedGroup": {
+      "deleteProtected": "Poista suojatut",
+      "deleteProtectedDescription": "Poistosuojattuja kohteita ei voi poistaa.",
+      "hasDependentItems": "On riippuvaisia kohteita",
+      "dependentItems": {
+        "single": "Riippuvainen kohde:",
+        "multiple": "Riippuvaiset kohteet:"
+      },
+      "compositeDelete": "Tämä kohde on riippuvainen seuraavasta:",
+      "compositeDeleteDescription": "Riippuvaisia kohteita, joilla on kerroksellinen suhde, ei voi poistaa ilman niihin liittyvää lähdekohdetta.",
+      "hasDependentItemsDescription": {
+        "singleOneDependentItem": "Tällä kohteella on riippuvainen kohde. Ne on poistettava yhdessä.",
+        "singleMultipleDependentItems": "Tällä kohteella on riippuvaisia kohteita. Ne on poistettava yhdessä.",
+        "multiple": "Näillä kohteilla on muita niistä riippuvaisia kohteita. Ne on poistettava yhdessä."
+      },
+      "protectedAndDependentDescription": "Kohteita, jotka on poistosuojattu tai joilla on riippuvaisia kohteita, ei voi poistaa.",
+      "deleteDiscouraged": "Poista ne, joita ei suositella",
+      "deleteDiscouragedDescription": {
+        "single": "Jos tämä kohde poistetaan, riippuvaiset kohteet voivat menettää joitain toiminnallisuuksia. Voit poistaa tämän kohteen Kohteen tiedot -sivulta.",
+        "multiple": "Jos nämä kohteet poistetaan, riippuvaiset kohteet voivat menettää joitain toiminnallisuuksia. Voit poistaa nämä kohteet erikseen Kohteen tiedot -sivulta."
+      }
+    }
+  },
+  "willBePermanentlyDeleted": {
+    "single": "Tämä kohde poistetaan pysyvästi, koska roskakori ei tue sitä.",
+    "multiple": "Nämä kohteet poistetaan pysyvästi, koska roskakori ei tue niitä.",
+    "unknown": "Nämä kohteet poistetaan pysyvästi, koska roskakori ei tue niitä."
+  },
+  "willBePermanentlyDeletedCollaboration": {
+    "single": "Valittu kohde kuuluu hajautetun kollaboraation ryhmään, eikä sitä voi lähettää roskakoriin. Se poistetaan pysyvästi.",
+    "multiple": "Valitut kohteet kuuluvat hajautetun kollaboraation ryhmään, eikä niitä voi lähettää roskakoriin. Ne poistetaan pysyvästi.",
+    "unknown": "Valitut kohteet kuuluvat hajautetun kollaboraation ryhmään, eikä niitä voi lähettää roskakoriin. Ne poistetaan pysyvästi."
+  },
+  "areYouSure": {
+    "single": "Haluatko varmasti poistaa tämän kohteen?",
+    "multiple": "Haluatko varmasti poistaa nämä kohteet?",
+    "unknown": "Haluatko varmasti poistaa nämä kohteet?"
+  },
+  "areYouSureRecycle": {
+    "single": "Tätä kohdetta säilytetään roskakorissa ${days} päivää ennen kuin se poistetaan pysyvästi.",
+    "multiple": "Näitä kohteita säilytetään roskakorissa ${days} päivää ennen kuin ne poistetaan pysyvästi.",
+    "unknown": "Näitä kohteita säilytetään roskakorissa ${days} päivää ennen kuin ne poistetaan pysyvästi."
+  },
+  "areYouSurePermanent": {
+    "single": "Haluatko varmasti poistaa tämän kohteen pysyvästi? Tätä kohdetta ei voi palauttaa sen jälkeen, kun se on poistettu pysyvästi.",
+    "multiple": "Haluatko varmasti poistaa nämä kohteet pysyvästi? Näitä kohteita ei voi palauttaa sen jälkeen, kun ne on poistettu pysyvästi.",
+    "unknown": "Haluatko varmasti poistaa nämä kohteet pysyvästi? Näitä kohteita ei voi palauttaa sen jälkeen, kun ne on poistettu pysyvästi."
+  },
+  "deletes": {
+    "single": "Poistetaan ${days} päivän kuluttua",
+    "multiple": "Poistuu ${days} päivässä",
+    "unknown": "Päiviä jäljellä poistamiseen: ${days}"
+  },
+  "deleteOverride": {
+    "single": "Haluatko varmasti poistaa tämän kohteen pysyvästi? Tätä kohdetta ei voi palauttaa sen jälkeen, kun se on poistettu pysyvästi.",
+    "multiple": "Haluatko varmasti poistaa nämä kohteet pysyvästi? Näitä kohteita ei voi palauttaa sen jälkeen, kun ne on poistettu pysyvästi."
+  },
+  "restore": {
+    "restore": "Palauta",
+    "restoreTo": "Palauta kohteeseen",
+    "restoreItem": "Palauta kohde",
+    "restoreItems": "Palauta kohteet",
+    "noticeMessage": "Palautettujen kohteiden jakaminen poistetaan. Tarkista sisältösi, ennen kuin jaat sen uudelleen.",
+    "cannotBulkRestoreXItems": "Yhdellä kertaa voidaan palauttaa enintään ${number} kohdetta. Poista muutamien kohteiden valinta.",
+    "cannotBulkRestoreMultipleOwners": "Yhdellä kertaa ei voi palauttaa eri omistajille kuuluvia kohteita. Voit palauttaa yhdellä kertaa kohteita, joilla on yksi omistaja.",
+    "toRestore": {
+      "single": "Palautettava kohde:",
+      "multiple": "Palautettavat kohteet:"
+    },
+    "cannotRestore": "Ei voi palauttaa:",
+    "dependentItems": {
+      "single": "Tätä kohdetta ei voi palauttaa, koska se on riippuvainen kohteesta <b>${parent}</b>. Palauta ne yhdessä.",
+      "multiple": "Näitä kohteita ei voi palauttaa, koska ne ovat riippuvaisia muista roskakorissa olevista kohteista. Palauta ne yhdessä: "
+    }
+  },
+  "onboarding": {
+    "checkItOut": "Haluatko palauttaa vahingossa poistetun kohteen? Tutustu uuteen roskakoriin.",
+    "takeALook": "Tutustu uuteen roskakoriin.",
+    "learnMore": "Lisätietoja poistettujen kohteiden palauttamisesta",
+    "heldInRecycleBin": "Roskakorissa olevat kohteet poistetaan pysyvästi ${days} päivän kuluttua.",
+    "goToUserRecycleBin": "Siirry ${linkStart}roskakoriin${linkEnd}, jos haluat palauttaa tai poistaa kohteita pysyvästi.",
+    "goToOrgRecycleBin": "Siirry ${linkStart}organisaation roskakoriin${linkEnd}, jos haluat palauttaa tai poistaa kohteita pysyvästi. Roskakorin sisältö kuluttaa edelleen krediittejä."
+  },
+  "pageRangeWithTotalRecycleBinSize": {
+    "en": "${start}–${end}/${total} (${size}) roskakorissa",
+    "other": "${start}–${end}, yhteensä: ${total} (${size}) roskakorissa"
+  },
+  "pageRangeWithGreaterThanTotalRecycleBinSize": {
+    "en": "${start}–${end}/${total} (> ${size}) roskakorissa",
+    "other": "${start}–${end}, yhteensä: ${total} (> ${size}) roskakorissa"
+  },
+  "compositeDeleteDisclaimer": {
+    "oneToOne": "Kohteella <strong>${item}</strong> on alisteinen kohde <strong>${dependentItem}</strong>, joka on poistettava sen kanssa.",
+    "oneToMany": "Kohteella <strong>${item}</strong> on alisteisia kohteita, jotka on poistettava sen kanssa.",
+    "manyToMany": "Joillain valituilla kohteilla on riippuvaisia kohteita, jotka on poistettava niiden kanssa.",
+    "additional": "Muut kohteet:",
+    "dependentOn": "Riippuvainen kohteesta"
+  }
+}

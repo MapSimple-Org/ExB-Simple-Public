@@ -1,0 +1,8 @@
+{
+  "selectFeature": "Chọn lớp đối tượng",
+  "browseLayer": "Duyệt tìm lớp",
+  "loading": "Đang tải...",
+  "errorCodes": {
+    "required": "Thông số này là thông tin bắt buộc."
+  }
+}

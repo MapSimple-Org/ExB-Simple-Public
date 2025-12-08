@@ -1,0 +1,10 @@
+{
+  "forceFlowLabel": "Forțați celulele de margine pentru a curge în exterior",
+  "inputLayersGroupText": "Alegeți rasterul de suprafață de intrare și opțional datele de depresiune și rasterul de greutate.",
+  "itemProperties": {
+    "description": "Rezultatul generat din funcționarea instrumentului Derivare flux ca raster.",
+    "snippet": "Rezultat generat din Derivare flux ca raster"
+  },
+  "outputStreamRasterLabel": "Nume raster flux de ieșire",
+  "streamSettingsGroupText": "Specificați pragul de acumulare, metoda de desemnare a cursului și modul în care este tratat cursul la marginea de raster a suprafeței de intrare."
+}

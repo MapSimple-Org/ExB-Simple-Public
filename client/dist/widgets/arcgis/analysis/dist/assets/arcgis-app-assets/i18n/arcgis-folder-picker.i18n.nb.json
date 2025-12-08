@@ -1,0 +1,21 @@
+{
+  "folder": "Mappe",
+  "folders": "å_Folders_______________ø",
+  "searchFolders": "Søk i mapper",
+  "enterFolder": "Angi mappenavn",
+  "createNewFolder": "Opprett ny mappe",
+  "noFoldersFoundCreate": "Finner ingen mapper med dette navnet. Opprette ${folder}?",
+  "noFoldersFound": "Finner ingen mapper med dette navnet.",
+  "create": "Opprette ${folder}?",
+  "loading": "Laster inn mapper",
+  "error": {
+    "noName": "Du må oppgi et navn på mappen din.",
+    "folderAlreadyExists": "Det finnes allerede en ${folder}-mappe. Velg et annet navn.",
+    "title": "Feil",
+    "invalidCharacters": {
+      "single": "å_The name cannot contain this character: ${invalidCharacters}________________________________ø.",
+      "multiple": "å_The name cannot contain any of these characters: ${invalidCharacters}____________________________________ø.",
+      "unknown": "å_The name cannot contain any of these characters: ${invalidCharacters}____________________________________ø."
+    }
+  }
+}

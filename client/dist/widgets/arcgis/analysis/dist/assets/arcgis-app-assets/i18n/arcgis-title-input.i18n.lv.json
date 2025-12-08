@@ -1,0 +1,20 @@
+{
+  "title": "Nosaukums",
+  "addTitle": "Pievienot nosaukumu",
+  "validation": {
+    "error": "Kļūda",
+    "titleRequired": "Nosaukums ir obligāts lauks.",
+    "itemExists": "Šajā mapē jau ir vienība ar nosaukumu “${name}”. Lūdzu, izvēlieties citu virsrakstu.",
+    "titleInUseService": "Slānis ar nosaukumu “${name}” jau pastāv. Lūdzu, izvēlieties citu virsrakstu.",
+    "itemInRecycleBin": "Vienība ar nosaukumu ${name} jau pastāv un ir atkritnē. Lūdzu, izvēlieties citu virsrakstu.",
+    "serviceNameInvalid": "Servisa nosaukumā drīkst būt tikai burtciparu rakstzīmes un pasvītrojumi, un nosaukuma garums nedrīkst pārsniegt 90 rakstzīmes.",
+    "dataStoreTitleInvalid": "Datu krātuves nosaukumā drīkst būt tikai burtciparu rakstzīmes un pasvītrojumi, un nosaukuma garums nedrīkst pārsniegt 90 rakstzīmes.",
+    "titleInvalid": "Virsrakstā jābūt mazāk par 250 rakstzīmēm, un tas nedrīkst saturēt < vai >.",
+    "titleStartsWithNumber": "Virsraksts nevar sākties ar ciparu.",
+    "invalidCharacters": {
+      "single": "Nosaukums nevar saturēt šo rakstzīmi: ${invalidCharacters}.",
+      "multiple": "Nosaukums nevar saturēt nevienu no šīm rakstzīmēm: ${invalidCharacters}.",
+      "unknown": "Nosaukums nevar saturēt nevienu no šīm rakstzīmēm: ${invalidCharacters}."
+    }
+  }
+}

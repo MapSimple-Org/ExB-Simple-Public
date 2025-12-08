@@ -1,0 +1,12 @@
+{
+  "classField": "Campo classe",
+  "classesAsRowsLabel": "Classi come righe nella tabella di output",
+  "inputClassRasterOrFeatures": "Immetti raster class o feature",
+  "inputLayerGroupText": "Scegliere la zona di input e il layer classe per calcolare le aree con tabelle incrociate tra due dataset.",
+  "itemProperties": {
+    "description": "La tabella di output generata dall'esecuzione dello strumento di analisi Cataloga area.",
+    "snippet": "La tabella di output generata da Cataloga area."
+  },
+  "tabulateAreaSettingsGroupLabel": "Impostazioni Cataloga Area",
+  "tabulateAreaSettingsGroupText": "Scegliere la modalità di gestione delle classi nella tabella di output. Per il calcolo specificare la dimensione cella. "
+}

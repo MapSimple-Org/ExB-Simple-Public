@@ -1,0 +1,31 @@
+{
+  "back": "上一步",
+  "cancel": "取消",
+  "learnMore": "瞭解詳細資訊",
+  "restore": "復原",
+  "restoreTo": "復原至",
+  "restoreItem": "還原項目",
+  "restoreItems": "復原項目",
+  "noticeMessage": "將取消分享還原的項目。 請在重新分享前檢閱您的內容。",
+  "cannotBulkRestoreXItems": "無法批次還原多於 ${number} 個的項目，請取消選擇一些項目。",
+  "cannotBulkRestoreMultipleOwners": "無法批次還原屬於不同擁有者的項目。 選擇單一擁有者的項目進行批次還原。",
+  "toRestore": {
+    "single": "要還原的項目:",
+    "multiple": "要復原的項目:"
+  },
+  "cannotRestore": "無法還原:",
+  "dependentItems": {
+    "single": "無法還原此項目，因為其依賴於 <strong style='font-weight: 500'>${parent}</strong>。 一起還原它們。",
+    "singleUnknown": "無法還原此項目，因為它相依於資源回收筒中的其他項目。 一起還原它們。",
+    "multiple": "這些項目無法還原，因為它們依賴資源回收筒中的其他項目。 一起還原它們。",
+    "multipleSameSource": "無法還原這些項目，因為其依賴於 <strong style='font-weight: 500'>${parent}</strong>。 一起還原它們。"
+  },
+  "pageRangeWithTotalRecycleBinSize": {
+    "en": "資源回收筒中的 ${start} - ${end}/${total} (${size})",
+    "other": "資源回收筒中的 ${start} - ${end}，總計: ${total} (${size})"
+  },
+  "pageRangeWithGreaterThanTotalRecycleBinSize": {
+    "en": "資源回收筒中的 ${start} - ${end}/${total} (>${size})",
+    "other": "資源回收筒中的 ${start} - ${end}，總計: ${total} (>${size})"
+  }
+}

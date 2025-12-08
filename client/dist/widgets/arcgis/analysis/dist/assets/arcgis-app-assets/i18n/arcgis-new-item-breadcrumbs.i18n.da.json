@@ -1,0 +1,12 @@
+{
+  "apiCredentialType": "Logontype: API-nøgle",
+  "oauthCredentialType": "Logontype: OAuth 2.0",
+  "itemAccess": "Elementadgang",
+  "page": "Side: ${page}",
+  "currentPage": "Aktuel side: ${page}",
+  "privileges": "Rettigheder",
+  "itemDetails": "Elementoplysninger",
+  "settings": "Indstillinger",
+  "serviceScope": "Tjenesteomfang",
+  "summary": "Resumé"
+}

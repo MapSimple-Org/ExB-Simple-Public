@@ -1,0 +1,23 @@
+{
+  "CPU": "CPU",
+  "GPU": "GPU",
+  "asSpecified": "Enligt vad som anges",
+  "automatic": "Automatisk",
+  "bilinear": "Bilinjär interpolering (för kontinuerliga data)",
+  "cellSize": "Cellstorlek",
+  "cubic": "Kubisk interpolation (för kontinuerliga data)",
+  "default": "Standard",
+  "fromLayer": "Från lager",
+  "mask": "Mask",
+  "maxOf": "Maximum för indata",
+  "minOf": "Minimum för indata",
+  "nearest": "Närmaste granne (för diskreta data)",
+  "parallelProcessingFactor": "Parallellbearbetningsfaktor",
+  "parallelProcessingFactorPlaceholderText": "Ange ett tal eller en procentsats...",
+  "processorType": "Processortyp",
+  "recycleProcessingWorkers": "Återanvändningsintervall för processpersonal",
+  "resamplingMethod": "Omsamplingsmetod",
+  "retryOnFailures": "Antal återförsök vid fel",
+  "selectCellSize": "Välj cellstorlek...",
+  "snapRaster": "Snappraster"
+}

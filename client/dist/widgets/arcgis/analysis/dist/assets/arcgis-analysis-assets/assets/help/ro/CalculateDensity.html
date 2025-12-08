@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>Instrumentul Calcul densitate calculează o estimare a densității din obiectele spațiale punctuale și liniare. Instrumentul creează o ieșire de obiect spațial.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputLayer">
+        <div>
+            <p>Stratul tematic de puncte sau linii din care va fi calculată densitatea.
+            </p>
+            <p class="toolPaneOnly">Numărul de obiecte spațiale depinde de factori suplimentari, cum ar fi criteriile de filtrare și extinderea analizei.
+            </p>
+        </div>
+    </div>
+    <div id="field">
+        <div>
+            <p>C&acirc;mpul care specifică numărul de incidente din fiecare locație.
+            </p>
+        </div>
+    </div>
+    <div id="boundingPolygonLayer">
+        <div>
+            <p>Stratul tematic de obiect spațial poligonal care definește unde vor fi calculate densitățile.
+            </p>
+            <p class="toolPaneOnly">Numărul de obiecte spațiale depinde de factori suplimentari, cum ar fi criteriile de filtrare și extinderea analizei.
+            </p>
+        </div>
+    </div>
+    <div id="radius">
+        <div>
+            <p>Specifică distanța de căutare pentru puncte sau linii la calcularea densității.
+            </p>
+        </div>
+    </div>
+    <div id="radiusUnits">
+        <div>
+            <p>Unitățile care vor fi utilizate pentru valoarea parametrului  <b>Distanță de căutare</b>.
+            </p>
+        </div>
+    </div>
+    <div id="classificationType">
+        <div>
+            <p>Specificați cum vor fi clasificate valorile pentru densitate &icirc;n suprafețe.
+            </p>
+        </div>
+    </div>
+    <div id="numClasses">
+        <div>
+            <p>Numărul de clase (intervalul de valori anticipate) din stratul tematic de rezultate.
+            </p>
+        </div>
+    </div>
+    <div id="areaUnits">
+        <div>
+            <p>Unitățile care vor fi utilizate pentru zona de ieșire.
+            </p>
+            <p>Densitatea este un număr &icirc;mpărțit la suprafață, iar acest parametru specifică unitatea de suprafață din calculul densității.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>Numele stratului tematic care va fi creat și adăugat pe hartă.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>Numele folderului din  <b>Resursele mele</b> &icirc;n care va fi salvat rezultatul.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

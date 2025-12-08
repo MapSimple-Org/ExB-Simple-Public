@@ -1,0 +1,6 @@
+{
+  "dialogTitle": "Rader Function Editor",
+  "defaultTemplateName": "Πρότυπο συναρτήσεων raster",
+  "readOnlyModeTitle": "Μόνο για ανάγνωση",
+  "readOnlyModeMessage": "Το αντικείμενο προτύπου raster συνάρτησης είναι μόνο για ανάγνωση. Οι αλλαγές δεν μπορούν να αποθηκευτούν."
+}

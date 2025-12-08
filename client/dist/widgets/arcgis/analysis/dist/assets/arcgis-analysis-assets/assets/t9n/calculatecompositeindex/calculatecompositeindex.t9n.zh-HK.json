@@ -1,0 +1,26 @@
+{
+  "CCIAnalysisSettingGroupLabel": "索引設定",
+  "CCIAnalysisSettingGroupText": "指定索引的計算方式。",
+  "geomeanPercentileLabel": "複合等級 (百分位數的幾何平均值)",
+  "geomeanRawLabel": "複合原始值 (原始值的幾何平均值)",
+  "geomeanScaledLabel": "複合縮放值 (縮放值的幾何平均值)",
+  "indexMethodLabel": "縮放和結合變數的方法",
+  "inputFeaturesOrTableLabel": "輸入圖徵或表格",
+  "inputLayerGroupText": "選擇用於建立索引的圖徵或表格和變數。",
+  "inputVariablesLabel": "輸入變數",
+  "itemProperties": {
+    "description": "執行「計算綜合索引」分析工具所產生的圖徵圖層。",
+    "snippet": "從「計算綜合索引」產生的圖徵圖層"
+  },
+  "meanPercentileLabel": "結合等級 (百分位數的平均值)",
+  "meanRawLabel": "結合原始值 (原始值的平均值)",
+  "meanScaledLabel": "結合縮放值 (縮放值的平均值)",
+  "outputIndexMaxLabel": "最大值",
+  "outputIndexMinLabel": "最小值",
+  "outputIndexMinMaxLabel": "索引最小值和最大值",
+  "outputIndexReverseLabel": "反向索引值",
+  "reverseVariableLabel": "反轉方向",
+  "sumFlagsPercentileLabel": "突出顯示極端值 (高於第 90 個百分位數的值計數)",
+  "toolName": "計算綜合索引",
+  "weight": "重量"
+}

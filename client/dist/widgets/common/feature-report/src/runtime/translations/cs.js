@@ -1,0 +1,1 @@
+System.register([],function(e){return{execute:function(){e({_widgetLabel:"Zpr\xe1va o prvc\xedch"})}}});

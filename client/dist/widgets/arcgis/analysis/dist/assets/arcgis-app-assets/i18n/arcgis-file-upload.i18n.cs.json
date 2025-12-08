@@ -1,0 +1,16 @@
+{
+  "updateData": "Aktualizovat data",
+  "cancel": "Storno",
+  "editStyle": "Nahraďte soubor stylu vrstvy aktualizovanou verzí ze svého počítače.",
+  "updatePackages": "Nahraďte ${type} aktualizovanou verzí ze svého počítače. Nahraný soubor musí mít stejný název jako ${hostedLayerName}.",
+  "uploadStaticFiles": "Nahrávaný soubor musí mít stejný název jako původní soubor ${fileName}",
+  "sameFileNameDescription": "Nahrávaný soubor musí mít stejný název a názvy polí jako původní soubor ${fileName}",
+  "updating": "Probíhá aktualizace…",
+  "error": "Chyba",
+  "errors": {
+    "sameFileName": "Chcete-li tuto položku aktualizovat, musíte nahrát soubor s názvem ${fileName}.",
+    "invalidStyleFileExtension": "Neplatná přípona souboru. Nahraný styl musí mít příponu .json.",
+    "errorWhileUpload": "Při nahrávání položky došlo k chybě.",
+    "errorUpdate": "Při přepisování položky došlo k chybě."
+  }
+}

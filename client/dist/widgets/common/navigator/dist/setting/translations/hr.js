@@ -1,0 +1,1 @@
+System.register([],function(a){return{execute:function(){a({_widgetLabel:"Pregledi Navigacije",tabStyle:"Stil kartice",navBtnStyle:"Stil navigacijskog gumba",stepTips:"Radi samo kada je postavljena animacija prijelaza za odgovaraju\u0107i widget odjeljka.",paginationStyle:"Stil paginacije",navArrowColor:"Boja navigacijske strelice"})}}});

@@ -1,0 +1,36 @@
+{
+  "modalHeader": "Configurarea categoriilor de conținut",
+  "modalGroupHeader": "Configurarea categoriilor de grup",
+  "helpText": "Editați, ștergeți sau reordonați categoriile din organizația dvs.",
+  "helpTextGroup": "Editați, ștergeți sau reordonați categorii pentru conținut în acest grup.",
+  "helpTextDescription": "Rețineți că alți membri ai organizației dvs. pot să fi alocat deja aceste categorii reperelor proprii, iar editarea schemei va actualiza acele repere în mod corespunzător.",
+  "helpTextGroupDescription": "Rețineți că alți membri ai grupului pot să fi alocat deja aceste categorii reperelor proprii, iar editarea schemei va actualiza acele repere în mod corespunzător.",
+  "warning": {
+    "deleteInUseCategory": {
+      "title": "Ștergere categorie",
+      "cta": "Ștergere categorie",
+      "message": {
+        "single": "Un reper a fost deja alocat acestei categorii. Ștergerea categoriei o va elimina și din acest reper.",
+        "multiple": "${number} elemente sunt alocate acestei categorii. Ștergerea categoriei o va elimina și din aceste repere.",
+        "unknown": "Elementele alocate acestei categorii: ${number}. Ștergerea categoriei o va elimina și din aceste repere."
+      }
+    },
+    "changeTitleInUseCategory": {
+      "title": "Actualizare categorie",
+      "message": {
+        "single": "Un reper a fost deja alocat acestei categorii. Actualizarea categoriei va actualiza reperul pentru a utiliza \"${newTitle}\".",
+        "multiple": "${number} elemente sunt alocate acestei categorii. Actualizarea categoriei va actualiza reperul pentru a utiliza \"${newTitle}\".",
+        "unknown": "Elementele alocate acestei categorii: ${number}. Actualizarea categoriei va actualiza reperul pentru a utiliza \"${newTitle}\"."
+      },
+      "cta": "Actualizare categorie"
+    }
+  },
+  "template": {
+    "templateList": {
+      "custom": {
+        "message": "Creați propriile categorii pentru a organiza conținutul în organizaţia dvs.",
+        "messageGroup": "Creați propriile categorii pentru a organiza conținut în acest grup."
+      }
+    }
+  }
+}

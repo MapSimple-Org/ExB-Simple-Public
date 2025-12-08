@@ -1,0 +1,11 @@
+{
+  "addBtn": "בוצע",
+  "cancelBtn": "ביטול",
+  "header": "בחר משתנה",
+  "multipleVariables": "משתנים מרובי ערכים",
+  "noFound": "לא נמצאו משתנים תואמים",
+  "search": "חפש משתנים",
+  "singleVariables": "משתנים חד-ערכיים",
+  "variableLabel": "תווית: <span style='font-weight: var(--calcite-font-weight-normal)'>${val}</span>",
+  "variableVal": "ערך: <span style='font-weight: var(--calcite-font-weight-normal)'>${val}</span>"
+}

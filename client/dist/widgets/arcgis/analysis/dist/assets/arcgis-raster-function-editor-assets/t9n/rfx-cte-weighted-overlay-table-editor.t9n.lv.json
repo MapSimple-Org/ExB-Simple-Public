@@ -1,0 +1,13 @@
+{
+  "weightedOverlayTable": "Svērtās pārklāšanās tabula",
+  "id": "ID",
+  "layer": "Slānis",
+  "field": "Lauks",
+  "influence": "Ietekme",
+  "sumOfInfluence": "Ietekmju summa",
+  "value": "Vērtība",
+  "remapTable": "Pārkartēt tabulu",
+  "scale": "Mērogs",
+  "scales": "Mērogi",
+  "selectRaster": "Atlasīt rastru"
+}

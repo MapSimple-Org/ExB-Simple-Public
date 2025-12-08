@@ -1,0 +1,26 @@
+{
+  "CCIAnalysisSettingGroupLabel": "Indexinstellingen",
+  "CCIAnalysisSettingGroupText": "Geef op hoe de index moet worden berekend.",
+  "geomeanPercentileLabel": "Rangen samenstellen (geometrisch gemiddelde van percentielen)",
+  "geomeanRawLabel": "Ruwe waarden samenstellen (geometrisch gemiddelde van ruwe waarden)",
+  "geomeanScaledLabel": "Schaalwaarden samenstellen (geometrisch gemiddelde van geschaalde waarden)",
+  "indexMethodLabel": "Methode voor het schalen en combineren van variabelen",
+  "inputFeaturesOrTableLabel": "Voer objecten of tabel in",
+  "inputLayerGroupText": "Kies de objecten of tabel en variabelen waarmee u de index wilt maken.",
+  "inputVariablesLabel": "Voer variabelen in",
+  "itemProperties": {
+    "description": "Objectlaag die is gegenereerd door het uitvoeren van de analysetool Samengestelde index berekenen.",
+    "snippet": "Objectlaag die is gegenereerd vanuit Samengestelde index berekenen"
+  },
+  "meanPercentileLabel": "Combineer rangen (gemiddelde van percentielen)",
+  "meanRawLabel": "Ruwe waarden combineren (gemiddelde van ruwe waarden)",
+  "meanScaledLabel": "Geschaalde waarden combineren (gemiddelde van geschaalde waarden)",
+  "outputIndexMaxLabel": "Maximum",
+  "outputIndexMinLabel": "Minimum",
+  "outputIndexMinMaxLabel": "Indexeer minimum- en maximumwaarden",
+  "outputIndexReverseLabel": "Keer indexwaarden om",
+  "reverseVariableLabel": "Omgekeerde richting",
+  "sumFlagsPercentileLabel": "Markeer extremen (aantal waarden boven 90e percentiel)",
+  "toolName": "Bereken composietindex",
+  "weight": "Gewicht"
+}

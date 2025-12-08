@@ -1,0 +1,12 @@
+{
+  "aboveMaximumMessage": "Girdi değer ${max}’a eşit veya küçük olmalıdır.",
+  "belowMinimumMessage": "Girdi değer ${min}’a eşit veya büyük olmalıdır.",
+  "invalidDoubleMessage": "Girdi değer çift olmalıdır.",
+  "invalidIntegerMessage": "Girdi değer tamsayı olmalıdır.",
+  "maxValuesMessage": "${maxValues}'den fazla belirgin girdi değeri olmamalıdır.",
+  "minValuesMessage": "En az ${minValues} belirgin girdi değeri olmalıdır.",
+  "requiredInputMessage": "Bu parametre gerekli.",
+  "strictlyMaximumMessage": "Girdi değer ${max}'den küçük olmalıdır.",
+  "strictlyMinimumMessage": "Girdi değer ${min}'dan büyük olmalıdır.",
+  "placeholder": "Bir değer gir..."
+}

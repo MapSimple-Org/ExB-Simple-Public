@@ -1,0 +1,69 @@
+{
+  "loadingText": "Memuat template skema",
+  "cancel": "Batalkan",
+  "finishSetup": "Selesaikan pengaturan",
+  "hasUnsavedChanges": "Anda sudah membuat perubahan kategori yang akan hilang jika tidak disimpan terlebih dahulu. Anda yakin ingin menutup tampilan ini dan kehilangan perubahan Anda?",
+  "error": {
+    "generic": {
+      "title": "Kesalahan saat memperbarui kategori",
+      "message": "Ada kesalahan. Coba lagi nanti."
+    },
+    "maxDepthExceeded": {
+      "title": "Kesalahan saat memperbarui kategori",
+      "message": "Anda tidak boleh menyarangkan kategori di kedalaman lebih dari level 2."
+    },
+    "destinationHasSameName": {
+      "title": "Kesalahan saat memperbarui kategori",
+      "message": "Kategori dengan nama yang sama sudah ada di kategori tujuan."
+    },
+    "emptyTitle": {
+      "title": "Kesalahan saat memperbarui kategori",
+      "message": "Judul kategori tidak boleh kosong."
+    },
+    "noSchema": {
+      "title": "Skema tidak ditemukan",
+      "message": "Skema item tidak ditemukan untuk pengguna."
+    },
+    "maxCharacter": {
+      "title": "Kesalahan saat memperbarui kategori",
+      "message": "Nama kategori boleh mencapai panjang maksimum ${maxCharacter} karakter."
+    },
+    "invalidCharacters": {
+      "title": "Kesalahan saat memperbarui kategori",
+      "single": "Kategori tidak boleh berisi karakter ini: ${invalidCharacters}.",
+      "multiple": "Kategori tidak boleh berisi salah satu karakter ini: ${invalidCharacters}.",
+      "unknown": "Kategori ini tidak boleh berisi salat satu karakter ini: ${invalidCharacters}."
+    }
+  },
+  "warning": {
+    "deleteInUseCategory": {
+      "title": "Hapus kategori",
+      "cta": "Hapus kategori"
+    },
+    "changeTitleInUseCategory": {
+      "title": "Perbarui kategori",
+      "cta": "Perbarui kategori"
+    }
+  },
+  "template": {
+    "title": "Template kategori",
+    "learnMore": "Pelajari selengkapnya",
+    "templateList": {
+      "custom": {
+        "title": "Kategori kustom"
+      },
+      "arcgis": {
+        "title": "Kategori ArcGIS",
+        "message": "Kategori ArcGIS mencakup pilihan kategori dan subkategori topik yang dapat digunakan untuk mengategorikan berbagai jenis konten geospasial. Kategori ini digunakan untuk mendukung ArcGIS Living Atlas of the World."
+      },
+      "iso": {
+        "title": "Kategori ISO",
+        "message": "Kategori ISO mencakup kategori topik dari Organisasi Standardisasi Internasional yang menyediakan metode untuk menguraikan dan membuat katalog informasi geografis."
+      },
+      "inspire": {
+        "title": "Kategori INSPIRE",
+        "message": "Kategori INSPIRE mencakup serangkaian lengkap tema data spasial yang diatur dalam INSPIRE Directive."
+      }
+    }
+  }
+}

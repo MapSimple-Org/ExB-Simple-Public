@@ -1,0 +1,10 @@
+{
+  "summary": "Zusammenfassung",
+  "description": "Beschreibung",
+  "addSummary": "Eine Zusammenfassung hinzufügen",
+  "addDescription": "Eine Beschreibung hinzufügen",
+  "charactersLeft": "Verbleibende Zeichen: ${num}",
+  "invalid": "Die Zusammenfassung darf keines der folgenden Zeichen enthalten: < oder >.",
+  "invalidDescription": "Die Beschreibung darf keines der folgenden Zeichen enthalten: < oder >.",
+  "summaryReadOnly": "Zusammenfassung schreibgeschützt."
+}

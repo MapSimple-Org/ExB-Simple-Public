@@ -1,0 +1,14 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Test embed version-manager for version 1.4.0 should return new config 1`] = `
+{
+  "autoInterval": 10,
+  "autoRefresh": false,
+  "embedCode": "",
+  "embedType": "url",
+  "enableLabel": true,
+  "expression": "<p><exp data-uniqueid="e2f5" data-dsid="ds_9212" data-expression="%7B%22name%22%3A%22%7BOBJECTID%7D%22%2C%22parts%22%3A%5B%7B%22dataSourceId%22%3A%22ds_9212%22%2C%22exp%22%3A%22%7BOBJECTID%7D%22%2C%22isFromRepeatedDataSourceContext%22%3Afalse%2C%22jimuFieldName%22%3A%22OBJECTID%22%2C%22type%22%3A%22FIELD%22%7D%5D%7D">{OBJECTID}</exp>666search</p>",
+  "label": "Expression 1",
+  "staticUrl": "",
+}
+`;

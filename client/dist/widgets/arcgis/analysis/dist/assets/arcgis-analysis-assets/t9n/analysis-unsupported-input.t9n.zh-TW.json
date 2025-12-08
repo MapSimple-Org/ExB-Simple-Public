@@ -1,0 +1,7 @@
+{
+  "defaultValue": "不支援的參數類型。 將使用預設值。 <calcite-link target='_blank' href='${ docLink }'>瞭解詳細資訊</calcite-link>",
+  "requiredMessage": "需要此參數。",
+  "unsupportedGPType": "不支援的參數類型。 <calcite-link target='_blank' href='${ docLink }'>瞭解詳細資訊</calcite-link>",
+  "unsupportedParameterConfig": "不支援的參數配置。 <calcite-link target='_blank' href='${ docLink }'>瞭解詳細資訊</calcite-link>",
+  "unsupportedParameterConfigDefaultValue": "不支援的參數配置。 將使用預設值。 <calcite-link target='_blank' href='${ docLink }'>瞭解詳細資訊</calcite-link>"
+}

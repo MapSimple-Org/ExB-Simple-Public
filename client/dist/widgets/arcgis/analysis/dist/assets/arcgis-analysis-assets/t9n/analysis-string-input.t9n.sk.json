@@ -1,0 +1,12 @@
+{
+  "choiceList": "Zoznam výberov",
+  "choiceListBadInput": "Vstupná hodnota obsahuje neplatný údaj.",
+  "comboboxPlaceholderText": "Vyberte možnosť...",
+  "inputPlaceholderText": "Zadajte hodnotu...",
+  "invalidCharacterError": "Vstupná hodnota obsahuje neplatné znaky.",
+  "maxLengthError": "Vstupná hodnota nemôže mať viac ako ${maxLength} znakov.",
+  "minLengthError": "Vstupná hodnota nemôže mať menej ako ${minLength} znakov.",
+  "multiSelectComboboxPlaceholderText": "Vyberte jednu alebo viac možností...",
+  "requiredError": "Tento parameter je povinný.",
+  "selectAll": "Vybrať všetko"
+}

@@ -1,0 +1,11 @@
+{
+  "addBtn": "Hoàn tất",
+  "cancelBtn": "Hủy bỏ",
+  "header": "Chọn biến số",
+  "multipleVariables": "Biến số nhiều giá trị",
+  "noFound": "Không tìm thấy biến số tương thích nào",
+  "search": "Tìm kiếm các biến số",
+  "singleVariables": "Biến số một giá trị",
+  "variableLabel": "Nhãn: <span style='font-weight: var(--calcite-font-weight-normal)'>${val}</span>",
+  "variableVal": "Giá trị: <span style='font-weight: var(--calcite-font-weight-normal)'>${val}</span>"
+}

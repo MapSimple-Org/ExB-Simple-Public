@@ -1,0 +1,15 @@
+{
+  "addRaster": "Dodaj zmienną rastra",
+  "addScalar": "Dodaj stałą",
+  "raster": "Raster",
+  "scalar": "Skalar",
+  "defaultModelName": "Szablon funkcji rastrowej",
+  "defaultRasterName": "Raster",
+  "invalidRFTMessage": "Szablon funkcji rastrowej jest nieprawidłowy.",
+  "deprecated": "Nieaktualne",
+  "deprecatedHoverText": "Ta funkcja rastrowa jest przestarzała i zostanie usunięta w przyszłym wydaniu.",
+  "unsupported": "Nieobsługiwane",
+  "unsupportedHoverText": "Ta funkcja rastra nie jest obsługiwana i może być dostępna w przyszłej wersji.",
+  "userStartDirection": "Wybierz funkcję, aby rozpocząć budowanie szablonu funkcji rastrowej.",
+  "learnMore": "Dowiedz się więcej"
+}

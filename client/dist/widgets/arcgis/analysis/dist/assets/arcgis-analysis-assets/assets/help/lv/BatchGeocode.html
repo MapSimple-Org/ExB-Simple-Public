@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>Rīks Ģeokodēt novietojumus no Tabulas rīka adreses vai vietas no ievades tabulas vai faila konvertē par koordinātām.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputType">
+        <div>
+            <p>Norāda vai ievade būs Tabulas vienība (<b>Viesota tabula</b>), vai <code>.csv</code> vai Excel fails (<b>CSV/Excel</b>).
+            </p>
+        </div>
+    </div>
+    <div id="inputFileItem">
+        <div>
+            <p>Ievades fails ar ģeokodējamām adresēm vai vietām. Ievadei ir jābūt viesotam  <code>.csv</code> vai Excel failam. </p>
+        </div>
+    </div>
+    <div id="inputTable">
+        <div>
+            <p>Ievades tabula ar ģeokodējamām adresēm vai vietām. Ievadei ir jābūt viesotai Tabulas vienībai.
+            </p>
+            <p>Elementu skaits ir norādīts zem tabulas nosaukuma. Skaits ietver visus tabulas elementus, izņemot tos, kuri ir noņemti, izmantojot filtru.
+            </p>
+        </div>
+    </div>
+    <div id="geocodeServiceURL">
+        <div>
+            <p>Meklētāja serviss, kas tiks izmantots ģeokodē&scaron;anai. Ja meklētāja serviss, kuru vēlaties izmantot, nav norādīts nolaižamajā izvēlnē, sazinieties ar administratoru, lai tas meklētāja pakalpojumu pievienotu kā utilītpakalpojumu.
+            </p>
+        </div>
+    </div>
+    <div id="singleOrMultiFieldSwitch">
+        <div>
+            <p>Norāda, vai ievades dati ir vienā vai vairākos laukos.
+            </p>
+        </div>
+    </div>
+    <div id="geocodeUIParameters">
+        <div>
+            <p>Lauki, kurus meklētājs izmantos, lai noteiktu datu atra&scaron;anās vietas. Tiek pieņemts, ka noteikti lauki atrodas datos, piemēram, adrese, pilsēta, apgabals un pasta indekss.
+            </p>
+        </div>
+    </div>
+    <div id="sourceCountry">
+        <div>
+            <p>Valsts, kurā atrodas dati. Ja visas adreses ir no vienas valsts, izvēlieties &scaron;īs valsts nosaukumu, lai nodro&scaron;inātu visprecīzākos rezultātus. Pretējā gadījumā &scaron;o parametru atstājiet tuk&scaron;u.
+            </p>
+        </div>
+    </div>
+    <div id="outputFields">
+        <div>
+            <p>Norāda laukus, kas tiks iekļauti izvades datu kopā. Opcijas ir &scaron;ādas:
+            </p>
+            <ul>
+                <li> <b>Visi</b>&mdash;ģeokodē&scaron;anas rezultātos tiks iekļauti visi pieejamie meklētāja izvades lauki.
+                </li>
+                <li> <b>Minimāli</b>&mdash;rezultātos tiks iekļauta meklētāja lauku apak&scaron;kopa, kā arī ievades tabulas lauki.
+                </li>
+                <li> <b>Tikai novietojums</b>&mdash;rezultātos tiks iekļauts meklētāja <i>Shape</i> lauks, kā arī ievades tabulas lauki.
+                </li>
+            </ul>
+            
+        </div>
+    </div>
+    <div id="outputType">
+        <div>
+            <p>Izveidotās izvades veids. Izvade var būt elementu pakalpojums,  <code>.csv</code> fails vai <code>.xls</code> fails.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>Tā slāņa vai faila nosaukums, kas tiks izveidots sadaļā  <b>Mans saturs</b>.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>Mapes nosaukums sadaļā  <b>Mans saturs</b>, kurā tiks saglabāts rezultāts.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

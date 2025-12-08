@@ -1,0 +1,13 @@
+{
+  "header": "Náhľad",
+  "description": "Náhľad výsledku pred spustením analýzy.",
+  "showPreview": "Zobraziť náhľad",
+  "previewLayer": "Vrstva náhľadu ${number}",
+  "update": "Aktualizovať",
+  "newPreview": "Nový náhľad",
+  "previewPopup": "Povoliť náhľad výsledkov analýzy na základe vstupných parametrov.",
+  "previewError": "Táto vrstva náhľadu nie je k dispozícii. Skontrolujte vstupné parametre a znovu aktualizujte túto vrstvu náhľadu.",
+  "updatePopover": "Aktualizovať vybranú vrstvu náhľadu",
+  "createPopover": "Vytvoriť novú vrstvu náhľadu",
+  "maxPreview": "Maximálny povolený počet vrstiev náhľadu: ${maxCount}"
+}

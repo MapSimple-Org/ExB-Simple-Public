@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>&Ouml;znitelikler ve Konuma g&ouml;re bul aracı, belirtilen mekan ve &ouml;znitelik kriterlerini karşılayan yeni bir detaylar katmanı ve detay par&ccedil;aları oluşturur.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputLayers">
+        <div>
+            <p>Bir &ouml;znitelik ve mekansal sorgu bileşimine dayanarak detayların bulunacağı nokta, &ccedil;izgi veya &ccedil;okgen katmanı.
+            </p>
+        </div>
+    </div>
+    <div id="queryBuilder">
+        <div>
+            <p>Detayları bulmak i&ccedil;in kullanılacak mekan ve &ouml;znitelik kriterleri. Bir ya da daha fazla mekan veya &ouml;znitelik kriterini tanımlamak i&ccedil;in  <b>Yeni sorgu oluştur</b> butonuna tıklayın. T&uuml;m kriterleri karşılayan detaylar veya detay kısımları sonu&ccedil; katmanına yazılacaktır.
+            </p>
+        </div>
+    </div>
+    <div id="expressions">
+        <div>
+            <p> Detayları bulmak i&ccedil;in kullanılacak mekan ve &ouml;znitelik kriterleri. Bir ya da daha fazla mekan veya &ouml;znitelik kriterini tanımlamak i&ccedil;in <b>Yeni sorgu oluştur</b> butonuna tıklayın. T&uuml;m kriterleri karşılayan detaylar veya detay kısımları sonu&ccedil; katmanına yazılacaktır.
+            </p>
+        </div>
+    </div>
+    <div id="clipFeatures">
+        <div>
+            <p>Sadece detayın bir kısmı kriterleri karşıladığında, sonucun t&uuml;m detayı mı yoksa sadece kriterleri karşılayan detay kısmını i&ccedil;erdiğini belirtir. Bu se&ccedil;enek işaretlendiğinde sadece t&uuml;m kriterleri karşılayan detay kısımları geri d&ouml;nd&uuml;r&uuml;lecektir. İşaret kaldırıldığında, detayın en azından bir kısmının kriterleri karşılaması şartıyla t&uuml;m detay geri d&ouml;nd&uuml;r&uuml;lecektir.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>Oluşturulacak ve haritaya eklenecek katmanın adı.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p> <b>İ&ccedil;eriğim</b> i&ccedil;inde sonucun kaydedileceği klas&ouml;r&uuml;n adı.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

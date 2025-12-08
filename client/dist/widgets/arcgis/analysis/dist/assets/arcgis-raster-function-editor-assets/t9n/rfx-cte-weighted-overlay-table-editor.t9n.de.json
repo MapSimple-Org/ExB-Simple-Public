@@ -1,0 +1,13 @@
+{
+  "weightedOverlayTable": "Gewichtungsüberlagerungstabelle",
+  "id": "ID",
+  "layer": "Layer",
+  "field": "Feld",
+  "influence": "Einfluss",
+  "sumOfInfluence": "Summe der Einflüsse",
+  "value": "Wert",
+  "remapTable": "Neuzuordnungs-Tabelle",
+  "scale": "Maßstab",
+  "scales": "Maßstäbe",
+  "selectRaster": "Raster auswählen"
+}

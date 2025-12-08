@@ -1,0 +1,8 @@
+{
+  "select": "Odaberi stavku: ${title}",
+  "lastUpdated": "Stavka ažurirana: ${date}",
+  "viewItemDetails": "Prikaži pojedinosti",
+  "preview": "Pretpregled",
+  "closePreview": "Zatvori pretpregled",
+  "moreOptions": "Više opcija"
+}

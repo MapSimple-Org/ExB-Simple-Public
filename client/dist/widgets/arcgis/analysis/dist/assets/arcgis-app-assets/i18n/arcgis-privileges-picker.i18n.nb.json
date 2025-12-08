@@ -1,0 +1,567 @@
+{
+  "rolePrivileges": "Rollerettigheter",
+  "setFromExisting": "Angi fra eksisterende rolle",
+  "expandAll": "Utvid alle",
+  "generalPrivileges": "Generelle rettigheter",
+  "adminPrivileges": "Administrative rettigheter",
+  "enabledLabel": "Aktivert:",
+  "enableAll": "Aktiver alle",
+  "disableAll": "Deaktiver alle",
+  "members": "Medlemmer",
+  "groups": "Grupper",
+  "content": "Innhold",
+  "sharing": "Deler",
+  "premiumContent": "Premiuminnhold",
+  "premiumContentServices": "Premiuminnhold og -tjenester",
+  "features": "Geoobjekter",
+  "versionMgmt": "Versjonsbehandling",
+  "webhooks": "Webhooks",
+  "marketplaceSubscriptions": "ArcGIS Marketplace-abonnementer",
+  "orgSettings": "Organisasjonsinnstillinger",
+  "learnMore": "Mer informasjon",
+  "searchPrivileges": "Søk i rettigheter",
+  "notebooks": "Notatblokker",
+  "analysis": "Analyse",
+  "networkAnalysis": "Nettverksanalyse",
+  "locationServices": "Lokasjonstjenester",
+  "requiredService": "Nødvendig tjeneste",
+  "availableServices": "Tilgjengelige tjenester",
+  "basemaps": "Bakgrunnskart",
+  "places": "Steder",
+  "geocoding": "Geokoding",
+  "routing": "Ruting",
+  "dataEnrichment": "Databerikelse",
+  "boundaries": "Grenser",
+  "elevation": "Høydedata",
+  "spatialPrivileges": "Romlig analyse",
+  "featureAnalysis": "Geoobjektanalyse",
+  "imageAnalysis": "Bildeanalyse",
+  "readOnlyBasemapsTooltip": "Tilgang til bakgrunnskart er inkludert.",
+  "privileges": {
+    "portal:user:viewOrgUsers": {
+      "label": "Vis",
+      "description": "Tillat at medlemmet viser medlemmer i organisasjonen.",
+      "descriptionPortal": "Tillat at medlemmet viser medlemmer i portalen.",
+      "descriptionApp": "Tillat at applikasjonen viser organisasjonens medlemmer."
+    },
+    "portal:user:createGroup": {
+      "label": "Opprett, oppdater og slett",
+      "description": "Tillat at medlem oppretter, redigerer og sletter egne grupper.",
+      "descriptionApp": "Tillat at applikasjonen oppretter, redigerer og sletter applikasjonens eiers grupper."
+    },
+    "portal:user:joinGroup": {
+      "label": "Bli med i organisasjonsgrupper",
+      "description": "Tillat at medlemmet blir med i grupper i organisasjonen.",
+      "descriptionPortal": "Tillat at medlemmet blir med i grupper i portalen.",
+      "descriptionApp": "Tillat at applikasjonen blir med i grupper i organisasjonen."
+    },
+    "portal:user:joinNonOrgGroup": {
+      "label": "Bli med i eksterne grupper",
+      "description": "Tillat at medlemmet blir med i grupper utenfor organisasjonen.",
+      "descriptionPortal": "Tillat at medlemmet blir med i grupper utenfor portalen.",
+      "descriptionApp": "Tillat at applikasjonen blir med i grupper utenfor organisasjonen."
+    },
+    "portal:user:viewOrgGroups": {
+      "label": "Vis grupper som er delt med organisasjonen",
+      "description": "Tillat at medlemmet viser grupper som er delt med organisasjonen.",
+      "descriptionPortal": "Tillat at medlemmet viser grupper som er delt med portalen.",
+      "descriptionApp": "Tillat at applikasjonen viser grupper som er delt med organisasjonen."
+    },
+    "portal:user:invitePartneredCollaborationMembers": {
+      "label": "Inviter partnerorganisasjonsmedlemmer",
+      "description": "Tillat at medlemmet inviterer medlemmer fra partnerorganisasjoner til å bli med i grupper.",
+      "descriptionApp": "Tillat at applikasjonen inviterer medlemmer fra partnerorganisasjoner til å bli med i grupper."
+    },
+    "portal:user:addExternalMembersToGroup": {
+      "label": "Legg til medlemmer fra andre organisasjoner",
+      "description": "Tillat at medlemmet oppretter grupper med medlemmer fra andre organisasjoner samt inviterer eksterne medlemmer til å bli med i grupper.",
+      "descriptionApp": "Tillat at applikasjonen oppretter grupper med medlemmer fra andre organisasjoner samt inviterer eksterne medlemmer til å bli med i grupper."
+    },
+    "portal:user:createItem": {
+      "label": "Opprett, oppdater og slett",
+      "description": "Tillat at medlemmet oppretter, redigerer og sletter eget innhold.",
+      "descriptionApp": "Tillat at applikasjonen oppretter, redigerer og sletter applikasjonens eiers innhold."
+    },
+    "portal:publisher:publishFeatures": {
+      "label": "Publiser hostede geoobjektlag",
+      "description": "Tillat at medlemmet publiserer hostede geoobjektlag fra shapefiler, CSV-filer osv.",
+      "descriptionApp": "Tillat at applikasjonen publiserer hostede geoobjektlag fra shapefiler, CSV-filer osv."
+    },
+    "portal:publisher:publishTiles": {
+      "label": "Publiser hostede flislag",
+      "description": "Tillat at medlemmet publiserer hostede flislag fra flisepakker, geoobjekter osv.",
+      "descriptionApp": "Tillat at applikasjonen publiserer hostede flislag fra flisepakker, geoobjekter osv."
+    },
+    "portal:publisher:publishScenes": {
+      "label": "Publiser hostede scenelag",
+      "description": "Tillat at medlemmer publiserer hostede scenelag.",
+      "descriptionApp": "Tillat at applikasjonen publiserer hostede scenelag."
+    },
+    "portal:publisher:publishTiledImagery": {
+      "label": "Publiser hostede flisinndelte bildelag",
+      "description": "Tillat at medlemmer publiserer hostede flisinndelte bildelag fra et enkelt bilde eller en bildesamling. Krever en ArcGIS Image for ArcGIS Online-brukertypeutvidelse.",
+      "descriptionPortal": "Tillat at medlemmer publiserer hostede flisinndelte bildelag fra et enkelt bilde eller en bildesamling.",
+      "descriptionApp": "Tillat at applikasjonen publiserer hostede flisinndelte bildelag fra et enkelt bilde eller en bildesamling. Krever ArcGIS Image Hosting-lisens."
+    },
+    "portal:publisher:publishDynamicImagery": {
+      "label": "Publiser hostede dynamiske bildelag",
+      "description": "Tillat at medlemmet publiserer hostede dynamisek bildelag fra et enkelt bilde eller en bildesamling.",
+      "descriptionApp": "Tillat at applikasjonen publiserer hostede dynamisek bildelag fra et enkelt bilde eller en bildesamling."
+    },
+    "portal:publisher:publishServerServices": {
+      "label": "Publiser serverbaserte lag",
+      "description": "Denne rettigheten gir tilgang til å publisere lag som leveres av tjenester fra fødererte serverområder. Disse tjenestene henviser ofte til registrerte data fra geodatabaser eller filbaserte datakilder."
+    },
+    "portal:publisher:publishKnowledgeGraph": {
+      "label": "Publiser hostede kunnskapsgrafer",
+      "description": "Tillat at medlemmer publiserer hostede kunnskapsgrafer.",
+      "descriptionApp": "Tillat at applikasjonen publiserer hostede kunnskapsgrafer."
+    },
+    "portal:user:viewOrgItems": {
+      "label": "Vis innhold som er delt med organisasjonen",
+      "description": "Tillat at medlemmet viser innhold som er delt med organisasjonen.",
+      "descriptionPortal": "Tillat at medlemmet viser innhold som er delt med portalen.",
+      "descriptionApp": "Tillat at applikasjonen viser innhold som er delt med organisasjonen."
+    },
+    "premium:publisher:createNotebooks": {
+      "label": "Opprett og rediger notebooks",
+      "description": "Tillat at medlemmet oppretter og redigerer interaktive notebooks.",
+      "descriptionApp": "Tillat at applikasjonen oppretter og redigerer interaktive notebooks."
+    },
+    "premium:publisher:scheduleNotebooks": {
+      "label": "Planlegg notebooks",
+      "description": "Tillatt at medlemmet planlegger fremtidige automatiske kjøringer av en notebook.",
+      "descriptionApp": "Tillatt at applikasjonen planlegger fremtidige automatiske kjøringer av en notebook."
+    },
+    "portal:publisher:bulkPublishFromDataStores": {
+      "label": "Opprett flere geoobjektlag samtidig fra et datalager",
+      "description": "Denne rettigheten gir tilgang til å publisere weblag fra et registrert datalager."
+    },
+    "portal:publisher:registerDataStores": {
+      "label": "Registrer datalagre",
+      "description": "Denne rettigheten gir tilgang til å registrere datalagre til portalen."
+    },
+    "portal:user:viewTracks": {
+      "label": "Vis lokasjonssporinger",
+      "description": "Tillat at medlemmet viser lokasjonssporinger for medlemmer via delte sporingsvisninger når lokasjonsdeling er aktivert.",
+      "descriptionApp": "Tillat at applikasjonen viser lokasjonssporinger for medlemmer via delte sporingsvisninger når lokasjonsdeling er aktivert."
+    },
+    "portal:user:reassignItems": {
+      "label": "Tilordne innhold på nytt",
+      "description": "Tillat medlemmet å tilordne bare innholdet til et annet medlem med tillatelse til å motta innhold.",
+      "descriptionApp": "Tillat applikasjonen å tilordne eierskapet for innhold bare for applikasjonseierens innhold til en at annet medlem med rett til å motta innhold."
+    },
+    "portal:user:receiveItems": {
+      "label": "Motta innhold",
+      "description": "Tillat at medlemmet mottar innhold som er tilordnet dem på nytt av et annet medlem, med tillatelse til å tilordne innhold på nytt."
+    },
+    "portal:publisher:publishFeeds": {
+      "label": "Publiser feeder",
+      "description": "Denne rettigheten gir mulighet til å publisere feeder og vise data i sanntid ved hjelp av ArcGIS Velocity."
+    },
+    "portal:publisher:publishRealTimeAnalytics": {
+      "label": "Publiser analyser i sanntid",
+      "description": "Denne rettigheten gir mulighet til å publisere analyser i sanntid for analysering og behandling av data i sanntid ved hjelp av ArcGIS Velocity."
+    },
+    "portal:publisher:publishBigDataAnalytics": {
+      "label": "Publiser stordata-analyser",
+      "description": "Denne rettigheten gir mulighet til å publisere stordata-analyser for å analysere historiske observasjonsdata ved hjelp av ArcGIS Velocity."
+    },
+    "portal:publisher:createDataPipelines": {
+      "label": "Opprett og kjøre datapipelines",
+      "description": "Tillat at medlem oppretter, redigerer og sletter datapipelines.",
+      "descriptionApp": "Tillat at applikasjonen oppretter, redigerer og sletter datapipelines."
+    },
+    "portal:publisher:publishLivestreamVideo": {
+      "label": "Publiser livestrømmet video",
+      "description": "Tillat at medlemmet publiserer hostede videolag for livestrømming hentet fra videokringkastinger og -strømminger i nettverk.",
+      "descriptionApp": "Tillat at applikasjonen publiserer hostede videolag for livestrømming hentet fra videokringkastinger og -strømminger i nettverk."
+    },
+    "portal:publisher:publishVideo": {
+      "label": "Publiser video",
+      "description": "Tillat at medlemmet publiserer hostede videolag fra videofil og støttede videometadatafiler.",
+      "descriptionApp": "Tillat at applikasjonen publiserer hostede videolag fra videofil og støttede videometadatafiler."
+    },
+    "portal:user:shareToGroup": {
+      "label": "Del med grupper",
+      "description": "Tillat at medlemmet deler innhold med grupper.",
+      "descriptionApp": "Tillat at applikasjonen deler innhold med gruppene dine."
+    },
+    "portal:user:shareToOrg": {
+      "label": "Del med organisasjon",
+      "labelPortal": "Del med portal",
+      "description": "Tillat at medlemmet deler innhold med organisasjonen din.",
+      "descriptionPortal": "Tillat at medlemmet deler innhold med portalen din.",
+      "descriptionApp": "Tillat at applikasjonen deler innhold med organisasjonen din."
+    },
+    "portal:user:shareToPublic": {
+      "label": "Del offentlig",
+      "description": "Tillat at medlemmet deler innhold offentlig dersom organisasjonens retningslinjer for offentlig deling tillater det.",
+      "descriptionApp": "Tillat at applikasjonen deler applikasjonseierens innhold offentlig dersom organisasjonens retningslinjer for offentlig deling tillater det.",
+      "tooltip": "Hvis organisasjonen ikke tillater at medlemmer deler innhold offentlig, må medlemmene ha administrativ rettighet for å dele medlemsinnhold offentlig."
+    },
+    "portal:user:shareGroupToOrg": {
+      "label": "Del med portal",
+      "description": "Tillat at medlemmet deler innhold med organisasjonen din.",
+      "descriptionPortal": "Tillat at medlemmet deler innhold med portalen din.",
+      "descriptionApp": "Tillat at applikasjonen deler innhold med portalen din."
+    },
+    "portal:user:shareGroupToPublic": {
+      "label": "Gjør grupper synlige for allmennheten",
+      "description": "Tillat at medlemmet gjør grupper synlige for allmennheten.",
+      "descriptionApp": "Tillat at applikasjonen gjør grupper synlige i organisasjonen."
+    },
+    "opendata:user:designateGroup": {
+      "label": "Gjør grupper tilgjengelig for Open Data",
+      "description": "Tillat at medlemmet angir at grupper er tilgjengelig for bruk i Open Data.",
+      "descriptionApp": "Tillat at applikasjonen angir at grupper er tilgjengelig for bruk i Open Data."
+    },
+    "premium:user:basemaps": {
+      "label": "Basemap Styles service",
+      "descriptionLocationPlatform": "Tillat at applikasjonen bruker Basemap Styles service."
+    },
+    "premium:user:staticbasemaptiles": {
+      "label": "Statiske bakgrunnskartfliser (beta)",
+      "descriptionLocationPlatform": "Tillat at applikasjonen bruker statiske bakgrunnskartfliser-tjenesten."
+    },
+    "premium:user:elevation": {
+      "label": "Høydetjeneste (beta)",
+      "descriptionLocationPlatform": "Tillat at applikasjonen bruker høydetjenesten."
+    },
+    "premium:user:geocode": {
+      "label": "Geokode",
+      "description": "Tillat at medlemmet utfører geokodingsoppgaver som bruker credits, med ArcGIS Geocoding Service (eller en visning av denne posisjonsindikatoren).",
+      "descriptionApp": "Tillat at applikasjonen utfører geokodingsoppgaver som bruker credits, med ArcGIS World Geocoding Service (eller en visning av denne posisjonsindikatoren)."
+    },
+    "premium:user:geocode:stored": {
+      "label": "Geokode (lagret)",
+      "descriptionLocationPlatform": "Tillat at applikasjonen bruker geokodetjenesten og utfører lagrede geokoder."
+    },
+    "premium:user:geocode:temporary": {
+      "label": "Geokode (ikke lagret)",
+      "descriptionLocationPlatform": "Tillat at applikasjonen bruker geokodetjenesten og utfører geokoder som ikke er lagret."
+    },
+    "premium:user:networkanalysis": {
+      "label": "Ruting",
+      "description": "Tillat at medlemmet utfører oppgaver for nettverksanalyse som ruting og kjøretidsområder.",
+      "descriptionApp": "Tillat at applikasjonen bruker routing-tjenesten."
+    },
+    "premium:user:networkanalysis:closestfacility": {
+      "label": "Nærmeste fasilitet",
+      "descriptionLocationPlatform": "Tillat at applikasjonen bruker routing-tjenesten og utfører nærmeste fasilitet-rutingoperasjoner."
+    },
+    "premium:user:networkanalysis:lastmiledelivery": {
+      "label": "Siste mile (beta)",
+      "descriptionLocationPlatform": "Tillat at applikasjonen bruker routing-tjenesten og utfører ruting for siste mile-levering."
+    },
+    "premium:user:networkanalysis:locationallocation": {
+      "label": "Posisjonsallokering",
+      "descriptionLocationPlatform": "Tillat at applikasjonen bruker routing-tjenesten og utfører lokasjons-allokeringsoperasjoner."
+    },
+    "premium:user:networkanalysis:routing": {
+      "label": "Enkel ruting",
+      "descriptionLocationPlatform": "Tillat at applikasjonen bruker routing-tjenesten og utfører standard rutingoperasjoner."
+    },
+    "premium:user:networkanalysis:optimizedrouting": {
+      "label": "Optimalisert ruteplanlegging",
+      "descriptionLocationPlatform": "Tillat at applikasjonen bruker routing-tjenesten og utfører optimaliserte rutingoperasjoner."
+    },
+    "premium:user:networkanalysis:vehiclerouting": {
+      "label": "Ruteplanlegging for flere kjøretøyer",
+      "descriptionLocationPlatform": "Ruting av flere kjøretøyer tillater at applikasjonen bruker routing-tjenesten og utfører flåte-rutingoperasjoner."
+    },
+    "premium:user:networkanalysis:origindestinationcostmatrix": {
+      "label": "Kostnadsmatrise for startpunkt-mål",
+      "descriptionLocationPlatform": "Tillat at applikasjonen bruker routing-tjenesten og genererer reisekostnadmatriser."
+    },
+    "premium:user:networkanalysis:servicearea": {
+      "label": "Dekningsområde",
+      "descriptionLocationPlatform": "Tillat at applikasjonen bruker routing-tjenesten og genererer tjenesteområder."
+    },
+    "premium:user:places": {
+      "label": "Places service",
+      "descriptionLocationPlatform": "Tillat at applikasjonen bruker Places-tjenesten."
+    },
+    "premium:user:spatialanalysis": {
+      "labelOld": "Romlig analyse-tjeneste",
+      "label": "Geoobjekt-analysetjeneste",
+      "labelPortal": "Standard geoobjektsanalyse",
+      "description": "Tillat at medlemmet utfører oppgaver i forbindelse med geoobjektanalyse.",
+      "descriptionPortal": "Denne rettigheten gir tillatelse til å utføre standard analyseoppgaver for geoobjekter.",
+      "descriptionLocationPlatform": "Tillat at applikasjonen bruker geoobjektanalysetjenesten.",
+      "descriptionApp": "Tillat at applikasjonen bruker geoobjektanalysetjenesten."
+    },
+    "premium:user:geoenrichment": {
+      "label": "GeoEnrichment-tjeneste",
+      "description": "Tillat at medlemmet geoberiker geoobjekter.",
+      "descriptionLocationPlatform": "Tillat at applikasjonen bruker GeoEnrichment-tjenesten.",
+      "descriptionApp": "Tillat at applikasjonen bruker GeoEnrichment-tjenesten."
+    },
+    "premium:user:demographics": {
+      "label": "Demografikart",
+      "description": "Tillat at applikasjonen bruker premium demografiske kart i ArcGIS Living Atlas.",
+      "descriptionApp": "Tillat at applikasjonen bruker premium demografiske kart i ArcGIS Living Atlas.",
+      "descriptionLocationPlatform": "Tillat at applikasjonen bruker demografiske kart i ArcGIS Living Atlas."
+    },
+    "premium:publisher:geoanalytics": {
+      "label": "GeoAnalytics-analyse av geoobjekt",
+      "description": "Denne rettigheten gir tillatelse til å utføre GeoAnalytics-oppgaver."
+    },
+    "premium:publisher:rasteranalysis": {
+      "label": "Bildeanalyse",
+      "description": "Tillat at medlemmer kan utføre bildeanalyseoppgaver. Krever ArcGIS Image-analyseegenskaper.",
+      "descriptionPortal": "Tillat at medlemmer kan utføre bildeanalyseoppgaver.",
+      "descriptionApp": "Tillat at applikasjonen kan utføre bildeanalyseoppgaver. Krever ArcGIS Image-analyseegenskaper."
+    },
+    "premium:publisher:createAdvancedNotebooks": {
+      "label": "Avanserte notebooks",
+      "description": "Tillat at medlemmet importerer og bruker ArcPy-moduler i notebooks.",
+      "descriptionApp": "Tillat at applikasjonen importerer og bruker ArcPy-moduler i notebooks."
+    },
+    "portal:user:runWebTool": {
+      "label": "Kjør webverktøy",
+      "description": "Tillat at medlemmet kjører webverktøy publisert fra Notebooks.",
+      "descriptionApp": "Tillat at applikasjonen kjører webverktøy publisert fra Notebooks."
+    },
+    "portal:user:generateApiTokens": {
+      "label": "Generer API-nøkler",
+      "description": "Tillat at medlemmet genererer API-nøkler."
+    },
+    "portal:user:assignPrivilegesToApps": {
+      "label": "Tilordne rettigheter til OAuth 2.0-applikasjoner",
+      "description": "Tillat at medlemmet tilordner rettigheter til OAuth 2.0-applikasjoner."
+    },
+    "premium:user:featurereport": {
+      "label": "Geoobjektrapport",
+      "description": "Tillat at medlemmet oppretter geoobjektrapporter i Survey123.",
+      "descriptionApp": "Tillat at applikasjonen oppretter geoobjektrapporter i Survey123."
+    },
+    "features:user:edit": {
+      "label": "Rediger",
+      "description": "Tillat at medlemmet redigerer geoobjekter i redigerbare lag som ikke er offentlige, basert på redigeringsalternativene som er aktivert i laget.",
+      "descriptionApp": "Tillat at applikasjonen redigerer geoobjekter i redigerbare lag som ikke er offentlige, basert på redigeringsalternativene som er aktivert i laget."
+    },
+    "features:user:fullEdit": {
+      "label": "Rediger med fullstendig kontroll",
+      "description": "Tillat at medlemmet legger til, sletter og oppdaterer geoobjekter i et redigerbart, hostet geoobjektlag, uavhengig av hvilke redigeringsalternativer som er aktivert i laget.",
+      "descriptionApp": "Tillat at applikasjonen legger til, sletter og oppdaterer geoobjekter i et redigerbart, hostet geoobjektlag, uavhengig av hvilke redigeringsalternativer som er aktivert i laget."
+    },
+    "features:user:manageVersions": {
+      "label": "Administrer alt",
+      "description": "Gi medlemmer tillatelse til å administrere versjonslåser og vise, endre, redigere, avstemme og poste til alle branch-versjoner som åpnes gjennom ArcGIS Server-geoobjektlag.",
+      "descriptionApp": "Gi applikasjonen tillatelse til å administrere versjonslåser og vise, endre, redigere, avstemme og poste til alle branch-versjoner som åpnes gjennom ArcGIS Server-geoobjektlag."
+    },
+    "portal:publisher:createFeatureWebhook": {
+      "label": "Geoobjektlag",
+      "description": "Tillat at medlemmet oppretter, redigerer og sletter sine egne webhooks for funksjonslag.",
+      "descriptionApp": "Tillat at applikasjonen oppretter, redigerer og sletter sine egne webhooks for funksjonslag."
+    },
+    "portal:admin:viewUsers": {
+      "label": "Vis alle",
+      "description": "Tillat at medlemmet viser fullstendig kontoinformasjon for medlemmer i organisasjonen.",
+      "descriptionPortal": "Tillat at medlemmet viser fullstendig kontoinformasjon for medlemmer i portalen.",
+      "descriptionApp": "Tillat at applikasjonen viser fullstendig kontoinformasjon for medlemmer i organisasjonen."
+    },
+    "portal:admin:updateUsers": {
+      "label": "Oppdater",
+      "description": "Tillat at medlemmet tilbakestiller passord, oppdaterer medlemskontoinformasjon og medlemskategoriene i organisasjonen.",
+      "descriptionPortal": "Tillat at medlemmet tilbakestiller passord, oppdaterer medlemskontoinformasjon og oppdaterer medlemskategorier i organisasjonen.",
+      "descriptionApp": "Tillat at applikasjonen tilbakestiller passord, oppdaterer medlemskontoinformasjon og medlemskategoriene i organisasjonen."
+    },
+    "portal:admin:deleteUsers": {
+      "label": "Slett",
+      "description": "Tillat at medlemmet sletter medlemskontoer i organisasjonen.",
+      "descriptionPortal": "Tillat at medlemmet sletter medlemskontoer i portalen.",
+      "descriptionApp": "Tillat at applikasjonen sletter medlemskontoer i organisasjonen."
+    },
+    "portal:admin:inviteUsers": {
+      "label": "Legg til",
+      "labelPortal": "Inviter",
+      "description": "Tillat at medlemmet inviterer medlemmer til organisasjonen.",
+      "descriptionPortal": "Tillat at medlemmet inviterer medlemmer til portalen.",
+      "descriptionApp": "Tillat at applikasjonen inviterer medlemmer til organisasjonen."
+    },
+    "portal:admin:disableUsers": {
+      "label": "Deaktiver",
+      "description": "Tillat at medlemmet aktiverer og deaktiverer medlemskontoer i organisasjonen.",
+      "descriptionPortal": "Tillat at medlemmet aktiverer og deaktiverer medlemskontoer i portalen.",
+      "descriptionApp": "Tillat at applikasjonen aktiverer og deaktiverer medlemskontoer i organisasjonen."
+    },
+    "portal:admin:changeUserRoles": {
+      "label": "Endre roller",
+      "description": "Tillat at medlemmet endrer rollen en medlemskonto er tildelt. Obs! Det er bare medlemmer med administratorrolle som kan tilordne eller fjerne tilordning av administratorrollen til andre kontoer.",
+      "descriptionPortal": "Tillat at medlemmet endrer rollen en medlemskonto er tildelt. Obs! Det er bare medlemmer med administratorrolle som kan tilordne eller fjerne tilordning av administratorrollen til andre kontoer.",
+      "descriptionApp": "Tillat at applikasjonen endrer rollen en medlemskonto er tildelt. Obs! Det er bare medlemmer med administratorrolle som kan tilordne eller fjerne tilordning av administratorrollen til andre kontoer."
+    },
+    "portal:admin:manageLicenses": {
+      "label": "Administrer lisenser",
+      "description": "Tillat at medlemmet tilordner lisenser til medlemmer i organisasjonen.",
+      "descriptionPortal": "Tillat at medlemmet tilordner lisenser til medlemmer i portalen.",
+      "descriptionApp": "Tillat at applikasjonen tilordner lisenser til medlemmer i organisasjonen."
+    },
+    "portal:admin:updateMemberCategorySchema": {
+      "label": "Administrer kategorier",
+      "description": "Tillat at medlemmet konfigurerer medlemskategorier for organisasjonen.",
+      "descriptionPortal": "Tillat at medlemmet konfigurerer medlemskategorier for portalen.",
+      "descriptionApp": "Tillat at applikasjonen konfigurerer medlemskategorier for organisasjonen."
+    },
+    "portal:admin:viewGroups": {
+      "label": "Vis alle",
+      "description": "Tillat at medlemmet viser alle grupper i organisasjonen.",
+      "descriptionPortal": "Tillat at medlemmet viser alle grupper i portalen.",
+      "descriptionApp": "Tillat at applikasjonen viser alle grupper i organisasjonen."
+    },
+    "portal:admin:updateGroups": {
+      "label": "Oppdater",
+      "description": "Tillat at medlemmet oppdaterer grupper i organisasjonen.",
+      "descriptionPortal": "Tillat at medlemmet oppdaterer grupper i portalen.",
+      "descriptionApp": "Tillat at applikasjonen oppdaterer grupper i organisasjonen."
+    },
+    "portal:admin:deleteGroups": {
+      "label": "Slett",
+      "description": "Tillat at medlemmet sletter grupper i organisasjonen.",
+      "descriptionPortal": "Tillat at medlemmet sletter grupper i portalen.",
+      "descriptionApp": "Tillat at applikasjonen sletter grupper i organisasjonen."
+    },
+    "portal:admin:reassignGroups": {
+      "label": "Tilordne eierskap på nytt",
+      "description": "Tillat at medlemmet tilordner grupper på nytt til andre medlemmer i organisasjonen.",
+      "descriptionPortal": "Tillat at medlemmet tilordner grupper på nytt til andre medlemmer i portalen.",
+      "descriptionApp": "Tillat at applikasjonen tilordner grupper på nytt til andre medlemmer i organisasjonen."
+    },
+    "portal:admin:assignToGroups": {
+      "label": "Tilordne medlemmer",
+      "description": "Tillat at medlemmet tilordner medlemmer til grupper, oppdaterer grupperolle for medlemmer og fjerner medlemmer fra grupper i organisasjonen.",
+      "descriptionPortal": "Tillat at medlemmet tilordner medlemmer til grupper, oppdaterer grupperolle for medlemmer og fjerner medlemmer fra grupper i portalen.",
+      "descriptionApp": "Tillat at applikasjonen tilordner medlemmer til grupper, oppdaterer grupperolle for medlemmer og fjerner medlemmer fra grupper i organisasjonen."
+    },
+    "portal:admin:manageEnterpriseGroups": {
+      "label": "Kobling til organisasjonsspesifikk gruppe",
+      "description": "Tillat at medlemmet kobler gruppemedlemskap til en organisasjonsspesifikk gruppe.",
+      "descriptionApp": "Tillat at applikasjonen kobler gruppemedlemskap til en organisasjonsspesifikk gruppe."
+    },
+    "portal:admin:createUpdateCapableGroup": {
+      "label": "Opprett med oppdateringsmulighet",
+      "description": "Tillat at medlemmet oppretter grupper med oppdateringsmuligheter.",
+      "descriptionApp": "Tillat at applikasjonen oppretter grupper med oppdateringsmuligheter."
+    },
+    "portal:admin:createLeavingDisallowedGroup": {
+      "label": "Opprett uten tillatelse til å forlate",
+      "description": "Tillat at medlemmet oppretter og eier grupper som ikke tillater at medlemmer forlater gruppen (administrative grupper).",
+      "descriptionApp": "Tillat at applikasjonen oppretter og eier grupper som ikke tillater at applikasjoner forlater gruppen (administrative grupper)."
+    },
+    "portal:admin:viewItems": {
+      "label": "Vis alle",
+      "description": "Tillat at medlemmet viser alt innhold i organisasjonen.",
+      "descriptionPortal": "Tillat at medlemmet viser alt innhold i portalen.",
+      "descriptionApp": "Tillat at applikasjonen viser alt innhold i organisasjonen."
+    },
+    "portal:admin:updateItems": {
+      "label": "Oppdater",
+      "description": "Tillat at medlemmet oppdaterer og kategoriserer innhold og redigerer hostede geoobjektlag i organisasjonen.",
+      "descriptionPortal": "Tillat at medlemmet oppdaterer og kategoriserer innhold og redigerer hostede geoobjektlag i portalen.",
+      "descriptionApp": "Tillat at applikasjonen oppdaterer og kategoriserer innhold og redigerer hostede geoobjektlag i organisasjonen."
+    },
+    "portal:admin:deleteItems": {
+      "label": "Slett",
+      "description": "Tillat at medlemmet sletter innhold i organisasjonen.",
+      "descriptionPortal": "Tillat at medlemmet sletter innhold i portalen.",
+      "descriptionApp": "Tillat at applikasjonen sletter innhold i organisasjonen."
+    },
+    "portal:admin:reassignItems": {
+      "label": "Tilordne eierskap på nytt",
+      "description": "Tillat at medlemmet tilordner innhold på nytt til andre medlemmer i organisasjonen.",
+      "descriptionPortal": "Tillat at medlemmet tilordner innhold på nytt til andre medlemmer i portalen.",
+      "descriptionApp": "Tillat at applikasjonen tilordner innhold på nytt til andre medlemmer i organisasjonen."
+    },
+    "portal:admin:updateItemCategorySchema": {
+      "label": "Administrer kategorier",
+      "description": "Tillat at medlemmet konfigurerer innholdskategorier for organisasjonen.",
+      "descriptionPortal": "Tillat at medlemmet konfigurerer innholdskategorier for portalen.",
+      "descriptionApp": "Tillat at applikasjonen konfigurerer innholdskategorier for organisasjonen."
+    },
+    "portal:publisher:publishServerGPServices": {
+      "label": "Publiser webverktøy",
+      "description": "Denne rettigheten gir tilgang til å publisere webverktøy som understøttes av geoprosesseringstjenester fra fødererte serverområder."
+    },
+    "portal:admin:shareToOrg": {
+      "label": "Del medlemsinnhold med organisasjon",
+      "description": "Tillat at medlemmet deler innhold som eies av andre medlemmer i organisasjonen, med organisasjonen.",
+      "descriptionPortal": "Tillat at medlemmet deler innhold som eies av andre medlemmer i portalen, med portalen.",
+      "descriptionApp": "Tillat at applikasjonen deler innhold som eies av andre medlemmer i organisasjonen, med organisasjonen."
+    },
+    "portal:admin:shareToPublic": {
+      "label": "Del medlemsinnhold offentlig",
+      "description": "Tillat at medlemmet deler innhold som eies av andre medlemmer i organisasjonen, offentlig.",
+      "descriptionPortal": "Tillat at medlemmet deler innhold som eies av andre medlemmer i portalen, offentlig.",
+      "descriptionApp": "Tillat at applikasjonen deler innhold som eies av andre medlemmer i organisasjonen til offentligheten."
+    },
+    "portal:admin:createReports": {
+      "label": "Opprett og administrer administrative rapporter",
+      "description": "La medlemmer få opprette og administrere administrative rapporter for organisasjonen din.",
+      "descriptionPortal": "La medlemmer få opprette og administrere administrative rapporter for portalen din.",
+      "descriptionApp": "La applikasjonen få opprette og administrere administrative rapporter for organisasjonen din."
+    },
+    "marketplace:admin:manage": {
+      "label": "Opprett og administrer",
+      "description": "Tillat at medlemmet oppretter oppføringer, viser elementer og administrerer abonnementer på ArcGIS Marketplace samt administrerer organisasjonens kontaktopplysninger og kjøp. Bruk av denne rettigheten avhenger av at organisasjonen din har oppførings- og publiseringstilgang til ArcGIS Marketplace."
+    },
+    "marketplace:admin:purchase": {
+      "label": "Kjøp og hent gratis produkter",
+      "description": "Tillat at medlemmer sender kjøpsforespørsler og har tilgang til gratisprodukter fra tilbydere i ArcGIS Marketplace. For å tillate at medlemmer kjøper produkter med kredittkort, må du legge dem inn som Marketplace-kjøpere."
+    },
+    "marketplace:admin:startTrial": {
+      "label": "Start prøveabonnement",
+      "description": "Tillat at medlemmet starter prøveabonnement på ArcGIS Marketplace."
+    },
+    "portal:admin:manageSecurity": {
+      "label": "Sikkerhet og infrastruktur",
+      "description": "Tillat at medlemmet administrerer organisasjonens innstillinger for sikkerhet og infrastruktur.",
+      "descriptionPortal": "Tillat at medlemmet administrerer portalens innstillinger for sikkerhet og infrastruktur.",
+      "descriptionApp": "Tillat at applikasjonen administrerer organisasjonens innstillinger for sikkerhet og infrastruktur."
+    },
+    "portal:admin:manageWebsite": {
+      "label": "Organisasjonsnettsted",
+      "description": "Tillat at medlemmet administrerer organisasjonens nettstedinnstillinger.",
+      "descriptionPortal": "Tillat at medlemmet administrerer portalens nettstedinnstillinger.",
+      "descriptionApp": "Tillat at applikasjonen administrerer organisasjonens innstillinger for webområder."
+    },
+    "portal:admin:manageCollaborations": {
+      "label": "Samarbeid",
+      "description": "Tillat at medlemmet administrerer organisasjonens samarbeid.",
+      "descriptionPortal": "Tillat at medlemmet administrerer portalens samarbeid.",
+      "descriptionApp": "Tillat at applikasjonen administrerer organisasjonens samarbeid."
+    },
+    "portal:admin:manageCredits": {
+      "label": "Credits",
+      "description": "Tillat at medlemmet administrerer organisasjonens innstillinger for creditbudsjettering.",
+      "descriptionApp": "Tillat at applikasjonen administrerer organisasjonens innstillinger for creditbudsjettering."
+    },
+    "portal:admin:manageRoles": {
+      "label": "Medlemsroller",
+      "description": "Tillat at medlemmet administrerer organisasjonens medlemsroller.",
+      "descriptionPortal": "Tillat at medlemmet administrerer portalens medlemsroller.",
+      "descriptionApp": "Tillat at applikasjonen administrerer organisasjonens medlemsroller."
+    },
+    "portal:admin:manageServers": {
+      "label": "Servere",
+      "description": "Denne rettigheten gir tilgang til å administrere portalens serverinnstillinger."
+    },
+    "portal:admin:manageUtilityServices": {
+      "label": "Verktøytjenester",
+      "description": "Tillat at medlemmet administrerer organisasjonens innstillinger for verktøytjenester.",
+      "descriptionPortal": "Tillat at medlemmet administrerer portalens innstillinger for verktøytjenester.",
+      "descriptionApp": "Tillat at applikasjonen administrerer organisasjonens innstillinger for verktøytjenester."
+    },
+    "portal:admin:manageWebhooks": {
+      "label": "Webhooks for organisasjon",
+      "description": "Tillat at medlemmet oppretter, redigerer og sletter webhooks for organisasjonen og behandler alle webhooks i portalen.",
+      "descriptionApp": "Tillat at applikasjonen oppretter, redigerer og sletter webhooks for organisasjonen og behandler alle webhooks i portalen."
+    },
+    "portal:admin:createGPWebhook": {
+      "label": "Geoprosessering",
+      "description": "Tillat at medlemmet oppretter, redigerer og sletter sine egne webhooks for geoprosessering.",
+      "descriptionApp": "Tillat at applikasjonen oppretter, redigerer og sletter sine egne webhooks for geoprosessering."
+    }
+  }
+}

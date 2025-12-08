@@ -1,0 +1,69 @@
+{
+  "loadingText": "Įkeliami schemos šablonai",
+  "cancel": "Atšaukti",
+  "finishSetup": "Baigti nustatymą",
+  "hasUnsavedChanges": "Atlikote kategorijos pakeitimus, kuriuos prarasite, jei pirmiausia neįrašysite. Ar tikrai norite uždaryti šį rodinį ir prarasti pakeitimus?",
+  "error": {
+    "generic": {
+      "title": "Atnaujinant kategorijas, įvyko klaida",
+      "message": "Įvyko klaida. Prašome pabandyti vėliau."
+    },
+    "maxDepthExceeded": {
+      "title": "Atnaujinant kategorijas, įvyko klaida",
+      "message": "Negalite įdėti kategorijų daugiau nei 2 lygių gylyje."
+    },
+    "destinationHasSameName": {
+      "title": "Atnaujinant kategorijas, įvyko klaida",
+      "message": "Kategorija tokiu pavadinimu paskirties kategorijoje jau yra."
+    },
+    "emptyTitle": {
+      "title": "Atnaujinant kategorijas, įvyko klaida",
+      "message": "Būtina įvesti kategorijos pavadinimą."
+    },
+    "noSchema": {
+      "title": "Schema nerasta",
+      "message": "Naudotojo elementų schema nerasta."
+    },
+    "maxCharacter": {
+      "title": "Atnaujinant kategorijas, įvyko klaida",
+      "message": "Kategorijų pavadinimai gali būti daugiausia ${maxCharacter} simbolių ilgio."
+    },
+    "invalidCharacters": {
+      "title": "Atnaujinant kategorijas, įvyko klaida",
+      "single": "Kategorijoje negali būti šio simbolio: ${invalidCharacters}.",
+      "multiple": "Kategorijoje negali būti nė vieno iš šių simbolių: ${invalidCharacters}.",
+      "unknown": "Kategorijoje negali būti nė vieno iš šių simbolių: ${invalidCharacters}."
+    }
+  },
+  "warning": {
+    "deleteInUseCategory": {
+      "title": "Ištrinti kategoriją",
+      "cta": "Ištrinti kategoriją"
+    },
+    "changeTitleInUseCategory": {
+      "title": "Atnaujinti kategoriją",
+      "cta": "Atnaujinti kategoriją"
+    }
+  },
+  "template": {
+    "title": "Kategorijos šablonai",
+    "learnMore": "Sužinokite daugiau",
+    "templateList": {
+      "custom": {
+        "title": "Pasirinktinės kategorijos"
+      },
+      "arcgis": {
+        "title": "ArcGIS kategorijos",
+        "message": "ArcGIS kategorijos apima temų kategorijas ir subkategorijas, kurios gali būti naudojamos skirstant į kategorijas daugelio tipų geoerdvinį turinį. Šios kategorijos naudojamos ArcGIS Gyvajam pasaulio atlasui palaikyti."
+      },
+      "iso": {
+        "title": "ISO kategorijos",
+        "message": "ISO kategorijos apima temų kategorijas iš Tarptautinės standartizacijos organizacijos, kuri suteikia geografinės informacijos aprašymo ir katalogavimo metodus."
+      },
+      "inspire": {
+        "title": "INSPIRE kategorijos",
+        "message": "INSPIRE kategorijos apima INSPIRE direktyvoje išdėstytų erdvinių duomenų temų išsamų rinkinį."
+      }
+    }
+  }
+}

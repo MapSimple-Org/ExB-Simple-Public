@@ -1,0 +1,22 @@
+{
+  "deleteFolder": "Видалити папку",
+  "delete": "Видалити",
+  "permanentlyDelete": "Видалити назавжди",
+  "back": "Назад",
+  "cancel": "Скасувати",
+  "success": "Папку '${title}' успішно видалено",
+  "deleteProtectedItemsInFolder": "Не вдалося видалити папку, оскільки деякі елементи захищені від видалення або мають залежні елементи.",
+  "message": {
+    "empty": "Бажаєте видалити папку <strong style='font-weight: 500'>${title}</strong>?",
+    "recycleAll": "Бажаєте видалити папку <strong style='font-weight: 500'>${title}</strong> та відправити її вміст у кошик?",
+    "mustBeEmpty": "Папку <strong style='font-weight: 500'>${title}</strong> потрібно очистити, щоб її можна було видалити.",
+    "aFewCannotBeDeleted": "Неможливо видалити декілька елементів. Бажаєте продовжити видалення решти?",
+    "canBeEmptied": "Папку <strong style='font-weight: 500'>${title}</strong> потрібно очистити, щоб її можна було видалити. Бажаєте продовжити видалення цих елементів?",
+    "cannotBeDeleted": "Папку <strong style='font-weight: 500'>${title}</strong> неможливо видалити, оскільки неможливо видалити елементи в ній."
+  },
+  "disabledMessage": {
+    "single": "У цій папці наявний <span style='color:red'>1 елемент</span>, <b>${label}</b>.<br/></br/>Дійсно видалити цю папку і наявний у ній елемент?",
+    "multiple": "У цій папці міститься <span style='color:red'>${number} елементів</span>, <b>${label}</b>.<br/></br/>Дійсно видалити цю папку та всі її елементи?",
+    "unknown": "Бажаєте видалити цю папку <b>${label}</b>?"
+  }
+}

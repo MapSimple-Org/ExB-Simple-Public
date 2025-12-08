@@ -1,0 +1,89 @@
+{
+  "browser": {
+    "refineContent": "Уточнити зміст",
+    "filters": "Фільтри",
+    "pageRange": "${start}-${end}, усього: ${total}",
+    "pageRangeAria": "${start}-${end}, всього елементів: ${total}",
+    "pageRangeWithRecycleBin": "${start}-${end}, всього: ${total} (Загальний розмір: ${recycleBinSize})",
+    "pageRangeAriaWithRecycleBin": "${start}-${end}, всього елементів: ${total} (Загальний розмір: ${recycleBinSize})",
+    "totalSize": "Загальний розмір: ${totalSize}",
+    "loading": "Завантаження результатів",
+    "close": "Закрити"
+  },
+  "actions": {
+    "more": "Більше"
+  },
+  "filter": {
+    "clear": "Очистити"
+  },
+  "filterDate": {
+    "today": "Сьогодні",
+    "yesterday": "Вчора",
+    "last7": "Останні 7 днів",
+    "last30": "Останні 30 днів",
+    "never": "Ніколи",
+    "custom": "Діапазон, заданий користувачем...",
+    "title": {
+      "created": "Дата створення",
+      "modified": "Дата зміни",
+      "joined": "Дата приєднання",
+      "lastLogin": "Останній вхід у систему"
+    },
+    "created": "Створено: ${date}",
+    "modified": "Змінено: ${date}",
+    "joined": "Приєднався: ${date}",
+    "lastLogin": "Останній вхід в систему: ${date}"
+  },
+  "pagination": {
+    "next": "Наступна сторінка",
+    "prev": "Попередня сторінка"
+  },
+  "search": {
+    "label": "Шукати групи",
+    "search": "Пошук",
+    "clear": "Очистити критерій пошуку",
+    "wildcard": "Пошук із символами підставлення не підтримується"
+  },
+  "sort": {
+    "sortDirection": "Напрямок сортування",
+    "title": "Заголовок",
+    "relevance": "Відповідність",
+    "modified": "Дата зміни",
+    "deleted": "Дата видалення",
+    "created": "Дата створення",
+    "added": "Дата додавання",
+    "size": "Розмір",
+    "owner": "Власник",
+    "sizeAsc": "Від найменшого до найбільшого",
+    "sizeDesc": "Від найбільшого до найменшого",
+    "numviews": "Лічильник переглядів",
+    "numAsc": "Від найменшого до найбільшого",
+    "numDesc": "Від найбільшого до найменшого",
+    "alphabeticalAsc": "В алфавітному порядку",
+    "alphabeticalDesc": "В зворотному алфавітному порядку",
+    "recentAsc": "Найбільш давній",
+    "recentDesc": "Найбільш пізній",
+    "sort": "Сортувати",
+    "sortBy": "Сортувати за",
+    "sortByColon": "Сортувати за:",
+    "fullname": "Назва",
+    "username": "Ім'я користувача",
+    "name": "Назва",
+    "membertype": "Роль групи",
+    "joined": "Дата приєднання",
+    "lastlogin": "Останній вхід у систему",
+    "dataset": "Набір даних",
+    "mfaenabled": "Багатофакторна аутентифікація",
+    "defaultAsc": "У висхідному порядку",
+    "defaultDesc": "У низхідному порядку"
+  },
+  "topBar": {
+    "filter": "Фільтр"
+  },
+  "filterStatus": {
+    "clear": "Очистити",
+    "filters": "Фільтри:",
+    "additional": "Додаткові активні фільтри",
+    "clearAllFilters": "Очистити всі фільтри"
+  }
+}

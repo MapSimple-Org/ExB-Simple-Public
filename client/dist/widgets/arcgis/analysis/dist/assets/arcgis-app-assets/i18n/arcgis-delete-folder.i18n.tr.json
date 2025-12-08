@@ -1,0 +1,22 @@
+{
+  "deleteFolder": "Klasörü sil",
+  "delete": "Sil",
+  "permanentlyDelete": "Kalıcı olarak sil",
+  "back": "Geri",
+  "cancel": "İptal",
+  "success": "\"${title}\" klasörü başarıyla silindi",
+  "deleteProtectedItemsInFolder": "Bazı ögeler silme korumalı olduğu veya bağımlı ögelere sahip olduğu için klasör silinemedi.",
+  "message": {
+    "empty": "<strong style='font-weight: 500'>${title}</strong> klasörünü silmek istediğinizden emin misiniz?",
+    "recycleAll": "<strong style='font-weight: 500'>${title}</strong> klasörünü silmek ve tüm içeriğini geri dönüşüm kutusuna göndermek istediğinize emin misiniz?",
+    "mustBeEmpty": "<strong style='font-weight: 500'>${title}</strong> klasörünün silinebilmesi için boşaltılmış olması gerekir.",
+    "aFewCannotBeDeleted": "Birkaç öge silinemiyor. Kalanların silinmesiyle devam etmek istiyor musunuz?",
+    "canBeEmptied": "<strong style='font-weight: 500'>${title}</strong> klasörünün silinebilmesi için boşaltılmış olması gerekir. Bu ögelerin silinmesiyle devam etmek istiyor musunuz?",
+    "cannotBeDeleted": "<strong style='font-weight: 500'>${title}</strong> klasörü silinemez çünkü ögeleri silinemez."
+  },
+  "disabledMessage": {
+    "single": "Bu klasörde (<b>${label}</b>) <span style='color:red'>1 öge</span> var.<br/></br/>Bu klasörü ve onun ögesini silmek istediğinizden emin misiniz?",
+    "multiple": "Bu klasörde (<b>${label}</b>) <span style='color:red'>${number} öge</span> var.<br/></br/>Bu klasörü ve onun ögelerini silmek istediğinizden emin misiniz?",
+    "unknown": "<b>${label}</b> klasörünü silmek istediğinizden emin misiniz?"
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "hosted": "hostované",
+  "hostedView": "hostované, pohľad",
+  "hostedPhotos": "hostované, fotografie",
+  "hostedCollection": "hostované, kolekcia",
+  "hostedMultidimensional": "hostované, multidimenzionálne",
+  "hostedCollectionMultidimensional": "hostované, kolekcia, multidimenzionálne",
+  "collectionMultidimensional": "kolekcia, multidimenzionálne",
+  "multidimensional": "multidimenzionálne",
+  "collection": "kolekcia",
+  "photoLocations": "fotografie",
+  "locatorView": "pohľad",
+  "utilityNetwork": "utility sieť",
+  "Integrated Mesh": "integrovaná mriežka",
+  "3D Object": "3D objekt",
+  "Point": "bod",
+  "Point Cloud": "bodové mračno",
+  "Building Scene Layer": "scénová vrstva budov",
+  "Voxel Scene Layer": "voxel scénová vrstva",
+  "dataStore": {
+    "bigdata": "zdieľanie súborov big data",
+    "cloud": "cloud",
+    "cloudStorage": "cloudové úložisko",
+    "database": "databáza",
+    "folder": "priečinok"
+  }
+}

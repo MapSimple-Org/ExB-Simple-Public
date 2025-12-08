@@ -1,0 +1,1 @@
+System.register([],function(o){return{execute:function(){o({_widgetLabel:"Filtro piano",floorfilter_noMap:"Filtro piano",floorfilter_notFloorAware:"La mappa selezionata non \xe8 una mappa di piano"})}}});

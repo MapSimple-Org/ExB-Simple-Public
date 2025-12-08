@@ -1,0 +1,12 @@
+{
+  "name": "block1",
+  "type": "template",
+  "templateType": "block",
+  "label": "Block 1",
+  "thumbnail": "thumbnail.png",
+  "order": 1,
+  "tags": [],
+  "categoriesTags": [],
+  "thumbnailWidth": 400,
+  "thumbnailHeight": 120
+}

@@ -1,0 +1,13 @@
+{
+  "header": "Esikatselu",
+  "description": "Esikatsele tulos ennen analyysin suorittamista.",
+  "showPreview": "Näytä esikatselu",
+  "previewLayer": "Esikatselukarttataso ${number}",
+  "update": "Päivitä",
+  "newPreview": "Uusi esikatselu",
+  "previewPopup": "Ota käyttöön analyysin tulosten esikatselu lähtöaineiston parametrien perusteella.",
+  "previewError": "Tämä esikatselukarttataso ei ole käytettävissä. Tarkista lähtöaineiston parametrit ja päivitä tämä esikatselukarttataso uudelleen.",
+  "updatePopover": "Päivitä valittu esikatselukarttataso",
+  "createPopover": "Luo uusi esikatselukarttataso",
+  "maxPreview": "Sallittujen esikatselukarttatasojen enimmäismäärä: ${maxCount}"
+}

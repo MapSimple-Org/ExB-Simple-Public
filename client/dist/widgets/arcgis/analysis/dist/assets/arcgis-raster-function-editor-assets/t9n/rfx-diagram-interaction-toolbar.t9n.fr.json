@@ -1,0 +1,9 @@
+{
+  "zoomIn": "Zoom avant",
+  "zoomOut": "Zoom arrière",
+  "autoLayout": "Mise en page automatique",
+  "stretch": "Ajuster à la vue",
+  "select": "Sélectionner",
+  "pan": "Déplacer",
+  "deleteSelectedItemsText": "Supprimer les éléments sélectionnés"
+}

@@ -1,0 +1,21 @@
+{
+  "folder": "Director",
+  "folders": "Foldere",
+  "searchFolders": "Căutare dosare",
+  "enterFolder": "Introduceţi numele dosarului",
+  "createNewFolder": "Creare director nou",
+  "noFoldersFoundCreate": "Nu a fost găsit niciun folder cu acest nume. Creare '${folder}'?",
+  "noFoldersFound": "Nu a fost găsit niciun folder cu acest nume.",
+  "create": "Creare '${folder}'?",
+  "loading": "Încărcare foldere",
+  "error": {
+    "noName": "Trebuie să furnizați un nume pentru director.",
+    "folderAlreadyExists": "Deja există un director cu numele '${folder}'. Alegeți alt nume.",
+    "title": "Eroare",
+    "invalidCharacters": {
+      "single": "Numele nu poate conține acest caracter: ${invalidCharacters}.",
+      "multiple": "Numele nu poate conține niciunul din aceste caractere: ${invalidCharacters}.",
+      "unknown": "Numele nu poate conține niciunul din aceste caractere: ${invalidCharacters}."
+    }
+  }
+}

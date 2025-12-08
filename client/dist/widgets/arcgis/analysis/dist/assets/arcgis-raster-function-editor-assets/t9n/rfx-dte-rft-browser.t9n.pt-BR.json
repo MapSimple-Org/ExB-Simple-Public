@@ -1,0 +1,7 @@
+{
+  "browseRFT": "Procurar modelos de função raster",
+  "rfxVariable": "RasterFunctionVariable",
+  "outputRaster": "OutputRaster",
+  "previewDetails": "Detalhes da pré-visualização",
+  "readingFailed": "Falha ao carregar modelo de função raster selecionado."
+}

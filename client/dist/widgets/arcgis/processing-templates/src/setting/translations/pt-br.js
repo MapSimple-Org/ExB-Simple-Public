@@ -1,0 +1,1 @@
+System.register([],function(a){return{execute:function(){a({customizeLayer:"Personalizar camadas",selectLayers:"Selecionar camadas",noDataSourceWarning:"O widget Mapa selecionado n\xe3o cont\xe9m um mapa da web ou cena da web."})}}});

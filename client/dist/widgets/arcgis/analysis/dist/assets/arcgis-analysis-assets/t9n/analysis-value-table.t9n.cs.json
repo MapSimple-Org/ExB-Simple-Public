@@ -1,0 +1,7 @@
+{
+  "addEntryButtonLabel": "Přidat",
+  "maxGroupsMessage": "Maximální počet záznamů je ${maxCount}.",
+  "minGroupsMessage": "Minimální počet záznamů je ${minCount}.",
+  "removeEntryButtonLabel": "Odebrat záznam",
+  "requiredMessage": "Tento parametr je povinný."
+}

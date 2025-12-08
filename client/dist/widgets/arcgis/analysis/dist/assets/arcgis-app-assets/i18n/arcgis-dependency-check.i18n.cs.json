@@ -1,0 +1,54 @@
+{
+  "updateSharing": "Kontrola sdílení",
+  "moreInfo": "Další informace",
+  "learnMore": "Další informace",
+  "noItemToShare": "Nebyly nalezeny problémy se sdílením",
+  "loadingInfo": "Načítání informací o sdílení...",
+  "updatingSharing": "Aktualizace sdílení...",
+  "updateItemsCount": "Položky, k jejichž aktualizaci máte oprávnění: {num}",
+  "updateItemsCountText": "Tyto závislé položky nemusí být viditelné pro ostatní, protože jsou sdíleny jiným způsobem. Kliknutím na Aktualizovat synchronizujte sdílení závislých položek, k jejichž aktualizaci máte oprávnění.",
+  "uneditableItemsCount": "Položky, k jejichž aktualizaci nemáte oprávnění: {num}",
+  "uneditableMessage": "Tyto závislé položky nemusí být viditelné pro ostatní, protože jsou sdíleny jiným způsobem.",
+  "nonPublicItems": "Položka/položky, které nelze sdílet veřejně:",
+  "premiumItemsWebMap": "Tato webová mapa obsahuje prémiový nebo předplatitelský obsah.",
+  "premiumMessage": "Tyto závislé položky nemusí být viditelné pro ostatní, protože vyžadují předplatné.",
+  "premiumTextMap": "Další informace o sdílení map s předplatitelským nebo prémiovým obsahem",
+  "notice": "Následující položky nemusí být pro ostatní viditelné, protože se sdílí jiným způsobem nebo k jejich zobrazení je nutné předplatné. Kliknutím na tlačítko <b>Aktualizovat sdílení</b> synchronizujte sdílení položek, které máte oprávnění aktualizovat.",
+  "noticeEnterprise": "Následující položky nemusí být pro ostatní viditelné, protože jsou sdíleny jiným způsobem. Kliknutím na tlačítko <b>Aktualizovat sdílení</b> synchronizujte sdílení položek, které máte oprávnění aktualizovat.",
+  "canBeUpdated": "Položky, které lze aktualizovat: ${count}",
+  "cantBeUpdated": "Položky, které nelze aktualizovat: ${count}",
+  "update": "Aktualizovat sdílení",
+  "cancel": "Neprovádět aktualizaci sdílení",
+  "ok": "OK",
+  "goToItem": "Zobrazit všechny podrobnosti",
+  "unableToGetItem": "Nelze získat podrobnosti o položce.",
+  "postShareDialog": {
+    "title": "Sdílení položek bylo úspěšně aktualizováno",
+    "description": "Jedna či více sdílených položek odkazuje na jiné položky, které nemusí být viditelné, protože jsou sdíleny jinak. Zkontrolujte sdílení těchto položek.",
+    "confirm": "Kontrola sdílení"
+  },
+  "needShare": {
+    "noPermission": {
+      "notice": "Nemáte oprávnění aktualizovat sdílení této položky.",
+      "panel": "Nemáte oprávnění aktualizovat sdílení této položky. Tato položka nemusí být pro ostatní viditelná, protože je sdílena jinak."
+    },
+    "pdc": {
+      "notice": "Před veřejným sdílením této vrstvy povolte Sběr veřejných dat.",
+      "panel": "Před veřejným sdílením této vrstvy povolte Sběr veřejných dat. Pro optimální výkon a integritu dat zvažte vypnutí editace u vrstvy nebo použití needitovatelné vrstvy.",
+      "learnMore": "Další informace o povolení editace u veřejných vrstev."
+    },
+    "premium": {
+      "notice": "Prémiový obsah a obsah pro předplatitele může k zobrazení vyžadovat přihlášení.",
+      "panel": "Prémiový obsah a obsah pro předplatitele může k zobrazení vyžadovat přihlášení.",
+      "learnMore": "Další informace o sdílení prémiového obsahu nebo obsahu pro předplatitele."
+    },
+    "sharingPDCEnabled": {
+      "notice": "Pokud tuto editovatelnou vrstvu budete sdílet veřejně, bude ji moci upravovat kdokoli.",
+      "panel": "Pokud tuto editovatelnou vrstvu budete sdílet veřejně, bude ji moci upravovat kdokoli. Pro optimální výkon a integritu dat zvažte vypnutí editace u vrstvy nebo použití needitovatelné vrstvy."
+    },
+    "needsAuthentication": {
+      "notice": "Požadováno ověření.",
+      "panel": "Tato položka nemusí být přístupná ostatním, protože obsahuje polohové služby, které vyžadují ověření v aplikacích, které položku zobrazují."
+    }
+  }
+}

@@ -1,0 +1,1 @@
+System.register([],function(e){return{execute:function(){e({createNew:"Luo uusi",newExperience:"Uusi kokemus",developerEdition:"Developer Edition",linkToHome:"Aloitussivu",linkToMapViewer:"Kartta",linkToSceneViewer:"Maisema",linkToNotebooks:"Muistikirjat",linkToGroups:"Ryhm\xe4t",linkToContent:"Sis\xe4lt\xf6",linkToOrganization:"Organisaatio",expressModeLabel:"Pikatila"})}}});

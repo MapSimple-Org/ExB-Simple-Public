@@ -1,0 +1,14 @@
+{
+  "AddDataFromUrl": "URL에서 데이터 추가",
+  "addData": "데이터 추가",
+  "clear": "선택 해제",
+  "file": "파일",
+  "fileNotFound": "파일을 불러오지 못했습니다.",
+  "invalidUrl": "유효하지 않은 URL 또는 파일 확장자입니다.",
+  "layerNotFound": "레이어를 불러오지 못했습니다.",
+  "replaceData": "데이터 바꾸기",
+  "required": "이 매개변수는 필수입니다.",
+  "uploadData": "데이터 업로드",
+  "uploadFailureMsg": "업로드 작업을 수행하는 동안 오류가 발생했습니다. 파일 크기 또는 형식이 이 서비스에서 지원되지 않습니다.",
+  "url": "URL"
+}

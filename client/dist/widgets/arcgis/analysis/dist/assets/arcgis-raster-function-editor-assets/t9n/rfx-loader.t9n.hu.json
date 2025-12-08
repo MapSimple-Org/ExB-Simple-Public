@@ -1,0 +1,8 @@
+{
+  "loading": "Betöltés...",
+  "pleaseWait": "Kérjük, várjon.",
+  "loadingXMLRFT": "A a kiválasztott raszterfunkció-sablon betöltése XML-formátumban.",
+  "failedToOpen": "A megnyitás nem sikerült.",
+  "readingFailed": "Nem sikerült a kiválasztott raszterfunkció-sablon betöltése.",
+  "failedToLoadXML": "Nem sikerült a kiválasztott raszterfunkció-sablon XML-formátumú betöltése."
+}

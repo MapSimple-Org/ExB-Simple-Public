@@ -1,0 +1,27 @@
+{
+  "area": "Luas",
+  "binResolution": "Resolusi bin H3",
+  "binSize": "Ukuran bin",
+  "binSizeUnit": "Unit",
+  "binType": "Jenis bentuk bin",
+  "diamondBins": "Bin wajik",
+  "distance": "Jarak",
+  "extentLayer": "Layer jangkauan",
+  "extentOverrideMessage": "Layer jangkauan ini akan digunakan, bukan jangkauan pemrosesan apa pun yang ditetapkan di lingkungan.",
+  "extentSectionLabel": "Pengaturan jangkauan",
+  "extentSectionText": "Tentukan layer jangkauan yang harus dicakup permukaan subdivisi",
+  "h3hexagonBins": "Bin heksagon H3",
+  "hexagon": "Heksagon",
+  "intersectStudyArea": "Cukup jaga permukaan subdivisi berpotongan",
+  "itemProperties": {
+    "description": "Feature layer yang dihasilkan dari menjalankan alat analisis Buat Permukaan Subdivisi.",
+    "snippet": "Feature layer yang dihasilkan dari Buat Permukaan Subdivisi"
+  },
+  "outputAreasSectionText": "Berikan nama untuk kisi permukaan subdivisi.",
+  "sizeType": "Pengukuran ukuran bin",
+  "square": "Kotak",
+  "tessellationSettingsLabel": "Pengaturan permukaan subdivisi",
+  "tessellationSettingsSummaryText": "Tentukan bentuk dan ukuran bin yang akan dibuat.",
+  "thexagonBins": "Bin heksagon melintang",
+  "triangleBins": "Bin segitiga"
+}

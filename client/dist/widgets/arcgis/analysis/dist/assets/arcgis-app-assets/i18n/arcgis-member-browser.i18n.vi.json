@@ -1,0 +1,177 @@
+{
+  "memberBrowser": {
+    "filters": "Bộ lọc",
+    "pageRange": "${start}-${end}, tổng: ${total}",
+    "pageRangeAria": "${start}-${end}, tổng số thành viên: ${total}",
+    "selectedMembers": "Các thành viên được chọn",
+    "noSelectedMembers": "Hiện không có thành viên nào được chọn",
+    "noUsersFound": "Không tìm thấy người dùng nào phù hợp với tiêu chí của bạn. Hãy thử xóa một số bộ lọc hoặc thay đổi tìm kiếm để hiển thị thêm người dùng.",
+    "enterTermExternal": "Nhập từ khóa tìm kiếm để tìm người dùng trên toàn bộ ArcGIS Online",
+    "noUsers": "Không có người dùng khả dụng",
+    "coordinator": "Điều phối viên nhóm cộng tác"
+  },
+  "search": {
+    "searchMembers": "Tìm kiếm thành viên"
+  },
+  "filterUserTypes": {
+    "title": "Loại người dùng",
+    "label": "Loại người dùng: ${name}",
+    "loading": "Đang tải loại người dùng..."
+  },
+  "filterRoles": {
+    "title": "Vai trò",
+    "label": "Vai trò: ${name}",
+    "loading": "Đang tải vai trò...",
+    "searchRoles": "Tìm kiếm vai trò"
+  },
+  "filterOrgGroups": {
+    "title": "Nhóm trong tổ chức",
+    "label": "Nhóm: ${name}",
+    "loading": "Đang tải nhóm trong tổ chức...",
+    "searchGroups": "Tìm kiếm nhóm",
+    "noGroupsFound": "Không tìm thấy nhóm nào. Hãy thử thay đổi cụm từ tìm kiếm để hiển thị thêm nhóm."
+  },
+  "filterMyGroups": {
+    "title": "Nhóm của tôi",
+    "label": "Nhóm: ${name}",
+    "loading": "Đang tải nhóm của tôi…",
+    "searchMyGroups": "Tìm kiếm nhóm của tôi"
+  },
+  "filterCategories": {
+    "title": "Danh mục",
+    "label": "Thể loại: ${name}",
+    "loading": "Đang tải danh mục...",
+    "noCategoriesTitle": "Chưa có danh mục thành viên",
+    "noCategories": "Danh mục thành viên cho phép quản trị viên sắp xếp các thành viên của họ vào một thư mục để hợp lý hóa các hành động quản trị đối với các thành viên. Các thành viên thuộc tổ chức cũng có thể sử dụng thư mục này để tìm các thành viên khác.",
+    "setupCategories": "Thiết lập danh mục thành viên",
+    "configureCategories": "Cấu hình danh mục",
+    "noCategoriesAssigned": "Không có danh mục nào được chỉ định"
+  },
+  "filterPartnerCollabs": {
+    "title": "Nhóm cộng tác đối tác",
+    "label": "Nhóm cộng tác đối tác: ${name}",
+    "loading": "Đang tải nhóm cộng tác đối tác...",
+    "coordinatorsOnly": "Chỉ dành cho điều phối viên nhóm cộng tác",
+    "coordinatorsDescription": "Điều phối viên nhóm cộng tác là người đại diện từ các nhóm cộng tác đối tác, người có thể được thêm vào nhóm mà không cần xác nhận.",
+    "coordinatorsInfoLabel": "Thông tin khác về điều phối viên nhóm cộng tác"
+  },
+  "filterSearchSwitch": {
+    "searchAll": "Tìm kiếm tất cả các thành viên trong tổ chức ArcGIS Online",
+    "searchPartners": "Bao gồm thành viên từ tổ chức này và các tổ chức đối tác"
+  },
+  "table": {
+    "caption": "Kết quả thành viên, tiêu đề cột có nút có thể sắp xếp được.",
+    "selectAll": "Chọn tất cả",
+    "selection": "Lựa chọn",
+    "headers": {
+      "name": "Tên",
+      "membertype": "Vai trò nhóm",
+      "affiliation": "Liên kết",
+      "joined": "Đã tham gia",
+      "credits": "Credit còn lại",
+      "remainingCredits": "Tổng credit còn lại ${num}",
+      "lastlogin": "Đăng nhập lần cuối",
+      "usertype": "Loại người dùng",
+      "role": "Vai trò",
+      "mfaenabled": "Xác thực đa yếu tố"
+    }
+  },
+  "tableRow": {
+    "moreOptions": "Các tùy chọn khác",
+    "groupManager": "Quản lý Nhóm",
+    "owner": "Chủ sở hữu",
+    "member": "Thành viên",
+    "myOrg": "Tổ chức của tôi",
+    "other": "Khác",
+    "coordinator": "Điều phối viên nhóm cộng tác",
+    "noLimit": "Không có giới hạn",
+    "creditsNumber": "${remain} / ${total}",
+    "today": "Hôm nay",
+    "yesterday": "Hôm qua",
+    "never": "Không bao giờ",
+    "role": "Vai trò",
+    "memberIsCoordinator": "Thành viên này là một điều phối viên nhóm cộng tác",
+    "rolesForCoordinator": "Điều phối viên nhóm cộng tác chỉ có thể có vai trò Administrator hoặc Facilitator.",
+    "memberIsContact": "Thành viên này là một người liên hệ quản trị",
+    "removeFromContact": "Nếu bạn muốn thay đổi vai trò của thành viên này, trước tiên bạn phải xóa họ khỏi ${linkStart}danh sách người liên hệ quản trị${linkEnd}."
+  },
+  "listCard": {
+    "moreOptions": "Các tùy chọn khác",
+    "lastLoggedIn": "Đăng nhập lần cuối ${value}",
+    "today": "Hôm nay",
+    "yesterday": "Hôm qua",
+    "hasNotLoggedIn": "Vẫn chưa đăng nhập",
+    "neverSignedInTooltip": "Thành viên này chưa bao giờ đăng nhập vào tài khoản được tạo vào ${date} của họ",
+    "userType": "Loại người dùng",
+    "role": "Vai trò",
+    "creditsRemaining": "Credit còn lại",
+    "noLimit": "Không có giới hạn",
+    "creditsNumber": "${remain} của ${total}",
+    "addonLicenses": "Giấy phép bổ sung",
+    "configureLicenses": "Cấu hình giấy phép",
+    "groups": "Nhóm",
+    "configureGroups": "Cấu hình nhóm",
+    "viewGroups": "Xem nhóm"
+  },
+  "myOrg": {
+    "myOrgView": "Chế độ xem tổ chức của tôi"
+  },
+  "filterGroupRole": {
+    "title": "Vai trò nhóm",
+    "label": "Vai trò Nhóm: ${role}",
+    "admins": "Chủ sở hữu và Quản lý Nhóm",
+    "member": "Thành viên"
+  },
+  "filterAffiliation": {
+    "title": "Liên kết",
+    "label": "Liên kết: ${name}",
+    "myOrg": "Tổ chức của tôi",
+    "other": "Khác"
+  },
+  "filterCreditsRemain": {
+    "title": "Credit còn lại",
+    "noLimit": "Không có giới hạn",
+    "lessThan": "Nhỏ hơn",
+    "credits": "Credit",
+    "labelNoLimit": "Credits: Không giới hạn",
+    "labelLess": "Credits: Nhỏ hơn ${value}",
+    "invalidValue": "Giá trị đã nhập không hợp lệ."
+  },
+  "filterEmailVerification": {
+    "title": "Trạng thái xác minh email",
+    "unverified": "Địa chỉ email chưa được xác minh",
+    "verified": "Địa chỉ email đã xác minh",
+    "label": "Trạng thái xác minh email: ${status}"
+  },
+  "filterLoginType": {
+    "title": "Loại đăng nhập",
+    "label": "Loại đăng nhập: ${type}",
+    "social": "Xã hội"
+  },
+  "filterApp": {
+    "title": "Ứng dụng",
+    "label": "Ứng dụng: ${app}"
+  },
+  "filterMFA": {
+    "title": "Xác thực đa yếu tố",
+    "enabled": "Đã bật",
+    "disabled": "Đã tắt",
+    "label": "Xác thực đa yếu tố: ${status}"
+  },
+  "roles": {
+    "user": "Người dùng",
+    "publisher": "Người xuất bản",
+    "admin": "Người quản trị",
+    "viewer": "Người xem",
+    "editor": "Người biên tập dữ liệu",
+    "facilitator": "Người điều hành"
+  },
+  "view": {
+    "view": "Xem",
+    "list": "Danh sách",
+    "table": "Bảng"
+  },
+  "assignedLicenses": "Chỉ hiển thị các thành viên được chỉ định giấy phép này",
+  "onlyDoubleAssigned": "Chỉ hiển thị các thành viên được chỉ định giấy phép này hai lần",
+  "maxSelected": "Mỗi lần chỉ có thể chọn ${number} thành viên."
+}

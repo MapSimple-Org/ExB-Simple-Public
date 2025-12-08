@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>N&aacute;stroj Geodetick&yacute; viditeln&yacute; povrch (Geodesic Viewshed) identifikuje m&iacute;sta na rastrov&eacute;m povrchu, kter&aacute; jsou viditeln&aacute; ze zadan&yacute;ch m&iacute;st pozorovatele.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputElevationSurface">
+        <div>
+            <p>Rastr nadmořsk&eacute; v&yacute;&scaron;ky, na kter&eacute;m se vypoč&iacute;t&aacute; viditeln&yacute; povrch.
+            </p>
+        </div>
+    </div>
+    <div id="inputObserverFeatures">
+        <div>
+            <p>M&iacute;sta pozorovatelů, pro kter&aacute; se vypoč&iacute;t&aacute; viditeln&yacute; povrch.
+            </p>
+            <p class="toolPaneOnly">Počet prvků z&aacute;vis&iacute; na dal&scaron;&iacute;ch faktorech, jako jsou krit&eacute;ria filtrov&aacute;n&iacute; a rozsah anal&yacute;zy.
+            </p>
+        </div>
+    </div>
+    <div id="optimizeFor">
+        <div>
+            <p>Optimalizuje v&yacute;počet viditeln&eacute;ho povrchu na z&aacute;kladě rychlosti nebo přesnosti.
+            </p>
+        </div>
+    </div>
+    <div id="verticalError">
+        <div>
+            <p>Velikost nejistoty v hodnot&aacute;ch nadmořsk&eacute; v&yacute;&scaron;ky hodnoty  <b>Vstupn&iacute; povrch reprezentuj&iacute;c&iacute; v&yacute;&scaron;ku</b>.
+            </p>
+        </div>
+    </div>
+    <div id="refractivityCoefficient">
+        <div>
+            <p>Koeficient lomu viditeln&eacute;ho světla ve vzduchu.
+            </p>
+        </div>
+    </div>
+    <div id="maximumViewingDistance">
+        <div>
+            <p>Maxim&aacute;ln&iacute; pozorovac&iacute; vzd&aacute;lenost pro v&yacute;počet viditeln&eacute;ho povrchu.
+            </p>
+            <p>Vzd&aacute;lenost může b&yacute;t definov&aacute;na hodnotou a jej&iacute;mi jednotkami nebo polem v hodnotě  <b>Vstupn&iacute; bodov&eacute; nebo liniov&eacute; prvky pozorovatele</b>.
+            </p>
+        </div>
+    </div>
+    <div id="minimumViewingDistance">
+        <div>
+            <p>Minim&aacute;ln&iacute; pozorovac&iacute; vzd&aacute;lenost pro v&yacute;počet viditeln&eacute;ho povrchu.
+            </p>
+            <p>Vzd&aacute;lenost může b&yacute;t definov&aacute;na hodnotou a jej&iacute;mi jednotkami nebo polem v hodnotě  <b>Vstupn&iacute; bodov&eacute; nebo liniov&eacute; prvky pozorovatele</b>.
+            </p>
+        </div>
+    </div>
+    <div id="viewingDistancesAre3D">
+        <div>
+            <p>Určuje, zda bude maxim&aacute;ln&iacute; a minim&aacute;ln&iacute; pozorovac&iacute; vzd&aacute;lenost měřena jako 3D nebo 2D vzd&aacute;lenost.
+            </p>
+            <p>Pokud nen&iacute; tato možnost za&scaron;krtnuta, budou pozorovac&iacute; vzd&aacute;lenosti považov&aacute;ny za 2D euklidovsk&eacute;. Pokud je za&scaron;krtnuta, budou&nbsp;pozorovac&iacute; vzd&aacute;lenosti považov&aacute;ny za 3D vzd&aacute;lenosti.
+            </p>
+        </div>
+    </div>
+    <div id="observersElevation">
+        <div>
+            <p>Nadmořsk&aacute; v&yacute;&scaron;ka povrchu um&iacute;stěn&iacute; pozorovatelů.
+            </p>
+            <p>Nadmořsk&aacute; v&yacute;&scaron;ka může b&yacute;t definov&aacute;na hodnotou a jej&iacute;mi jednotkami nebo polem v hodnotě  <b>Vstupn&iacute; bodov&eacute; nebo liniov&eacute; prvky pozorovatele</b>.
+            </p>
+        </div>
+    </div>
+    <div id="observersHeight">
+        <div>
+            <p>V&yacute;&scaron;ka pozorovatelů nad zem&iacute;.
+            </p>
+            <p>V&yacute;&scaron;ka může b&yacute;t definov&aacute;na hodnotou a jej&iacute;mi jednotkami nebo polem v hodnotě  <b>Vstupn&iacute; bodov&eacute; nebo liniov&eacute; prvky pozorovatele</b>.
+            </p>
+        </div>
+    </div>
+    <div id="targetHeight">
+        <div>
+            <p>V&yacute;&scaron;ka c&iacute;lů na zemi.
+            </p>
+            <p>V&yacute;&scaron;ka může b&yacute;t definov&aacute;na hodnotou a jej&iacute;mi jednotkami nebo polem v hodnotě  <b>Vstupn&iacute; bodov&eacute; nebo liniov&eacute; prvky pozorovatele</b>.
+            </p>
+        </div>
+    </div>
+    <div id="horizontalStartAngle">
+        <div>
+            <p>Poč&aacute;tečn&iacute; &uacute;hel horizont&aacute;ln&iacute;ho rozsahu skenov&aacute;n&iacute;.
+            </p>
+            <p>&Uacute;hel může b&yacute;t definov&aacute;n hodnotou od 0 do 360 nebo polem v hodnotě  <b>Vstupn&iacute; bodov&eacute; nebo liniov&eacute; prvky pozorovatele</b>.
+            </p>
+        </div>
+    </div>
+    <div id="horizontalEndAngle">
+        <div>
+            <p>Koncov&yacute; &uacute;hel horizont&aacute;ln&iacute;ho rozsahu skenov&aacute;n&iacute;.
+            </p>
+            <p>&Uacute;hel může b&yacute;t definov&aacute;n hodnotou od 0 do 360 nebo polem v hodnotě  <b>Vstupn&iacute; bodov&eacute; nebo liniov&eacute; prvky pozorovatele</b>.
+            </p>
+        </div>
+    </div>
+    <div id="verticalUpperAngle">
+        <div>
+            <p>Horn&iacute; vertik&aacute;ln&iacute; limit &uacute;hlu skenov&aacute;n&iacute; vzhledem k horizont&aacute;ln&iacute; rovině.
+            </p>
+            <p>&Uacute;hel může b&yacute;t definov&aacute;n hodnotou od -90 do 90 nebo polem v hodnotě  <b>Vstupn&iacute; bodov&eacute; nebo liniov&eacute; prvky pozorovatele</b>.
+            </p>
+        </div>
+    </div>
+    <div id="verticalLowerAngle">
+        <div>
+            <p>Doln&iacute; vertik&aacute;ln&iacute; limit &uacute;hlu skenov&aacute;n&iacute; vzhledem k horizont&aacute;ln&iacute; rovině.
+            </p>
+            <p>&Uacute;hel může b&yacute;t definov&aacute;n hodnotou od -90 do 90 nebo polem v hodnotě  <b>Vstupn&iacute; bodov&eacute; nebo liniov&eacute; prvky pozorovatele</b>.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>N&aacute;zev rastrov&eacute; vrstvy viditeln&eacute;ho povrchu, kter&aacute; bude vytvořena a přid&aacute;na do mapy. Tato vrstva obsahuje viditeln&eacute; oblasti, kter&eacute; mohou pozorovatel&eacute; vidět; hodnoty buněk představuj&iacute; počet pozorovatelů, kteř&iacute; mohou vidět dan&eacute; buňky.
+            </p>
+        </div>
+    </div>
+    <div id="outputAboveGroundLevelRasterName">
+        <div>
+            <p>N&aacute;zev rastrov&eacute; vrstvy nad &uacute;rovn&iacute; ter&eacute;nu (AGL), kter&aacute; bude vytvořena a přid&aacute;na do mapy.
+            </p>
+        </div>
+    </div>
+    <div id="resultType">
+        <div>
+            <p>Typ v&yacute;stupu, kter&yacute; bude vytvořen. V&yacute;stupem může b&yacute;t vrstva dlaždicov&yacute;ch sn&iacute;mků nebo vrstva dynamick&yacute;ch sn&iacute;mků.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>N&aacute;zev složky v č&aacute;sti  <b>Můj obsah</b>, do kter&eacute; bude v&yacute;sledek uložen.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

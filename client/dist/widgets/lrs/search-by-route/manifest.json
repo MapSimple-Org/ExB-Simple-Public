@@ -1,0 +1,87 @@
+{
+  "name": "search-by-route",
+  "label": "Search By Route",
+  "type": "widget",
+  "version": "1.19.0",
+  "exbVersion": "1.19.0",
+  "author": "Esri Solutions",
+  "description": "",
+  "copyright": "",
+  "license": "http://www.apache.org/licenses/LICENSE-2.0",
+  "dependency": "jimu-arcgis",
+  "notSupportAGOL": true,
+  "messageActions": [],
+  "publishMessages": [
+    {
+      "messageType": "DATA_RECORDS_SELECTION_CHANGE",
+      "messageCarryData": "OUTPUT_DATA_SOURCE"
+    },
+    {
+      "messageType": "DATA_RECORD_SET_CHANGE",
+      "messageCarryData": "USE_DATA_SOURCE"
+    }
+  ],
+  "properties": {
+    "canConsumeDataAction": true,
+    "coverLayoutBackground": true,
+    "canGenerateMultipleOutputDataSources": true
+  },
+  "defaultSize": {
+    "width": 350,
+    "height": 400
+  },
+  "extensions": [
+    {
+      "name": "appConfigOperations",
+      "point": "APP_CONFIG_OPERATIONS",
+      "uri": "tools/app-config-operations"
+    },
+    {
+      "name": "LRS Store",
+      "point": "REDUX_STORE",
+      "uri": "extensions/lrs-store"
+    }
+  ],
+  "translatedLocales": [
+    "en",
+    "ar",
+    "bg",
+    "bs",
+    "ca",
+    "cs",
+    "da",
+    "de",
+    "el",
+    "es",
+    "et",
+    "fi",
+    "fr",
+    "he",
+    "hr",
+    "hu",
+    "id",
+    "it",
+    "ja",
+    "ko",
+    "lt",
+    "lv",
+    "no",
+    "nl",
+    "pl",
+    "pt-br",
+    "pt-pt",
+    "ro",
+    "ru",
+    "sk",
+    "sl",
+    "sr",
+    "sv",
+    "th",
+    "tr",
+    "zh-cn",
+    "uk",
+    "vi",
+    "zh-hk",
+    "zh-tw"
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "outputRaster": "OutputRaster",
+  "rfxVariable": "RasterFunctionVariable",
+  "selectLayer": "Selecionar Camada",
+  "allowScalar": "Selecione uma camada ou introduza uma constante",
+  "browseLayer": "Procurar camadas",
+  "loading": "A carregar...",
+  "layerMissing": "Uma ou mais camadas de imagens do mapa não estão listadas aqui porque a propriedade de serviço Permitir análise não está ativada.",
+  "layerFailedToLoad": "Falha ao carregar camada.",
+  "learnMore": "Saiba mais",
+  "errorCodes": {
+    "required": "Este parâmetro é obrigatório."
+  }
+}

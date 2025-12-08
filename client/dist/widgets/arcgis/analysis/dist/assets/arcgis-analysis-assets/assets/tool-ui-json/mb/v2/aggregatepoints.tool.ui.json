@@ -1,0 +1,201 @@
+{
+  "toolName": "AggregatePoints",
+  "version": "0.1.0",
+  "modelBuilderVersion": "V2",
+  "rules": [
+    {
+      "ruleType": "set",
+      "value": "$[Component].pointLayer.selectedLayers",
+      "destination": "summaryFields",
+      "property": "layer"
+    },
+    {
+      "ruleType": "set",
+      "value": "$[Component].pointLayer.selectedLayers",
+      "destination": "groupByField",
+      "property": "mapLayer"
+    },
+    {
+      "ruleType": "expression",
+      "destination": "binSize",
+      "expression": "(($[Data].binType = 'SQUARE') OR ($[Data].binType = 'HEXAGON')))",
+      "effectParams": {
+        "visible": true,
+        "required": true
+      }
+    },
+    {
+      "ruleType": "equals",
+      "destination": "polygonLayer",
+      "valueA": "$[Data].binType",
+      "valueB": "PolygonLayer",
+      "effectParams": {
+        "visible": true,
+        "required": true
+      }
+    },
+    {
+      "ruleType": "equals",
+      "destination": "binSize",
+      "valueA": "$[Data].binType",
+      "valueB": "PolygonLayer",
+      "effectParams": {
+        "visible": false
+      }
+    },
+    {
+      "ruleType": "expression",
+      "expression": "$[Data].groupByField NOT null",
+      "destination": ["minorityMajority", "percentPoints"],
+      "effectParams": {
+        "visible": true
+      }
+    }
+  ],
+  "UIparameters": [
+    {
+      "label": "$featuresToAggregateSectionLabel",
+      "componentName": "analysis-block",
+      "summaryText": "$featuresToAggregateSectionText",
+      "UIparameters": [
+        {
+          "name": "pointLayer",
+          "label": "$inputPointLayer",
+          "componentName": "analysis-layer-input",
+          "layerFilterType": ["feature_point", "feature_multiPoint"]
+        }
+      ]
+    },
+    {
+      "label": "$summaryAreasSectionLabel",
+      "layout": "vertical",
+      "componentName": "analysis-block",
+      "summaryText": "$summaryAreasSectionText",
+      "UIparameters": [
+        {
+          "label": "$binTypeLabel",
+          "name": "binType",
+          "choiceList": ["PolygonLayer", "SQUARE", "HEXAGON"],
+          "choiceListLabels": {
+            "SQUARE": "$squareBins",
+            "HEXAGON": "$hexagonBins",
+            "PolygonLayer": "$polygonLayer"
+          },
+          "choiceListIcons": {
+            "SQUARE": "grid-unit",
+            "HEXAGON": "grid-hexagon",
+            "PolygonLayer": "layer-polygon"
+          },
+          "defaultValue": "PolygonLayer",
+          "required": true
+        },
+        {
+          "name": "polygonLayer",
+          "label": "$summaryPolygonLayer",
+          "componentName": "analysis-layer-input",
+          "layerFilterType": ["feature_polygon"],
+          "visible": false,
+          "enableSketch": true
+        },
+        {
+          "name": "binSize",
+          "label": "$binSizeLabel",
+          "visible": false,
+          "UIparameterInfos": [
+            {
+              "name": "linearUnit",
+              "dataType": "GPLinearUnit",
+              "unitChoiceList": ["Kilometers", "Meters", "Miles", "NauticalMiles", "Feet", "Yards"],
+              "choiceListLabels": {
+                "Kilometers": "$kilometers",
+                "Meters": "$meters",
+                "Miles": "$miles",
+                "NauticalMiles": "$nauticalMiles",
+                "Feet": "$feet",
+                "Yards": "$yards"
+              },
+              "minimum": 0,
+              "excludeMinValue": true
+            }
+          ]
+        },
+        {
+          "name": "keepBoundariesWithNoPoints",
+          "label": "$keepBoundariesWithNoPoints"
+        }
+      ]
+    },
+    {
+      "label": "$calculateStatisticsSectionLabel",
+      "componentName": "analysis-block",
+      "UIparameters": [
+        {
+          "name": "summaryFields",
+          "label": "$summaryFieldsLabel",
+          "componentName": "analysis-summary-fields",
+          "allowDateType": true,
+          "serializationType": "sequentialValueArray",
+          "serializationParameterName": "summaryFields"
+        },
+        {
+          "name": "groupByField",
+          "label": "$groupByFieldLabel",
+          "placeholderText": "$groupByFieldPlaceholderText",
+          "componentName": "analysis-field-input",
+          "fieldTypes": [
+            "integer",
+            "small-integer",
+            "big-integer",
+            "single",
+            "string",
+            "date",
+            "date-only",
+            "time-only",
+            "long"
+          ]
+        },
+        {
+          "name": "minorityMajority",
+          "label": "$minorityMajorityLabel",
+          "visible": false
+        },
+        {
+          "name": "percentPoints",
+          "label": "$percentPointsLabel",
+          "visible": false
+        }
+      ],
+      "summaryText": "$calculateStatisticsSectionText"
+    },
+    {
+      "label": "$resultLayerGroupLabel",
+      "layout": "vertical",
+      "componentName": "analysis-block",
+      "summaryText": "$outputSectionText",
+      "UIparameters": [
+        {
+          "name": "outputName",
+          "label": "$outputName",
+          "placeholderText": "$outputNamePlaceholderText",
+          "componentName": "analysis-output-name",
+          "required": true
+        },
+        {
+          "name": "saveResultIn",
+          "label": "$saveResultIn",
+          "componentName": "analysis-folder-input"
+        }
+      ]
+    }
+  ],
+  "outputParameters": [
+    {
+      "label": "$aggregatedLayerOutput",
+      "name": "aggregatedLayer"
+    },
+    {
+      "label": "$groupBySummaryOutput",
+      "name": "groupSummary"
+    }
+  ]
+}

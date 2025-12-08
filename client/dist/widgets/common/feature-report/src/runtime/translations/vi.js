@@ -1,0 +1,1 @@
+System.register([],function(e){return{execute:function(){e({_widgetLabel:"B\xe1o c\xe1o \u0110\u1ed1i t\u01b0\u1ee3ng"})}}});

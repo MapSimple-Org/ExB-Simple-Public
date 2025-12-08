@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>Инструментът Планиране на маршрути създава маршрути за пътуване с множество спирки за автомобилен парк.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="startLayer">
+        <div>
+            <p>Точковите обекти, които указват къде превозните средства започват своите маршрути.
+            </p>
+            <p class="toolPaneOnly">Броят на обектите зависи от допълнителни фактори, като например критериите за филтриране и обхвата за анализ.
+            </p>
+        </div>
+    </div>
+    <div id="stopsLayer">
+        <div>
+            <p>Точковите обекти, които превозните средства трябва да посетят по маршрута си. Тези точки се превръщат в разпределени или неразпределени спирки в изходните данни.
+            </p>
+            <p class="toolPaneOnly">Броят на обектите зависи от допълнителни фактори, като например критериите за филтриране и обхвата за анализ.
+            </p>
+        </div>
+    </div>
+    <div id="returnToStart">
+        <div>
+            
+            <p>Определя дали превозните средства трябва да се връщат в началното си местоположение (активирано) или да приключват на определени места.
+            </p>
+        </div>
+    </div>
+    <div id="endLayer">
+        <div>
+            <p>Точковите обекти, които указват къде превозните средства завършват своите маршрути. Ако слоят включва само една точка, всички превозни средства се насочват към обща крайна точка. Ако слоят включва няколко точки, всяко превозно средство се насочва към уникално крайно местоположение.
+            </p>
+            <p class="toolPaneOnly">Броят на обектите зависи от допълнителни фактори, като например критериите за филтриране и обхвата за анализ.
+            </p>
+        </div>
+    </div>
+    <div id="startLayerRouteIDField">
+        <div>
+            <p>Полето в началния слой, което уникално идентифицира отделните маршрути, превозни средства или водачи. Ако превозните средства започват от няколко местоположения и завършват в няколко местоположения, идентификаторите на маршрута, зададени за началния и крайния слой, трябва да съвпадат.
+            </p>
+        </div>
+    </div>
+    <div id="endLayerRouteIDField">
+        <div>
+            <p>Полето в крайния слой, което уникално идентифицира отделните маршрути, превозни средства или водачи. Ако превозните средства започват от няколко местоположения и завършват в няколко местоположения, идентификаторите на маршрута, зададени за началния и крайния слой, трябва да съвпадат.
+            </p>
+        </div>
+    </div>
+    <div id="pointBarrierLayer">
+        <div>
+            <p>Един или повече точкови обекти, които действат като временни ограничения (бариери) при движение по основните улици. Движението по улицата е разрешено, но не и през бариерата.
+            </p>
+        </div>
+    </div>
+    <div id="lineBarrierLayer">
+        <div>
+            <p>Един или повече линейни обекти, които действат като временни ограничения (бариери) при движение по основните улици. Линейните бариери забраняват движението навсякъде, където бариерите пресичат улиците.
+            </p>
+        </div>
+    </div>
+    <div id="polygonBarrierLayer">
+        <div>
+            <p>Един или повече полигонови обекти, които действат като временни ограничения (бариери) при движение по основните улици. Полигоновите бариери забраняват движението навсякъде, където полигоните пресичат улиците.
+            </p>
+        </div>
+    </div>
+    <div id="travelMode">
+        <div>
+            <p>Режимът на пътуване, който ще се използва за създаване на маршрутите. Поддържат се само времеви режими на пътуване.
+            </p>
+        </div>
+    </div>
+    <div id="routeStartTime">
+        <div>
+            <p>Датата и часът на тръгване на превозните средства.
+            </p>
+        </div>
+    </div>
+    <div id="routeCount">
+        <div>
+            
+            <p class="OnlineOnly">Максималният брой на превозните средства, които могат да посетят спирките. Ако стойностите за  <b>Начален слой</b> и <b>Краен слой</b> съдържат по един обект, можете да посочите до 100 превозни средства. Ако някой от слоевете съдържа повече от един обект, стойността по подразбиране не може да се редактира. </p> 
+            <p class="PortalOnly">Максималният брой на превозните средства, които могат да посетят спирките. Ако стойностите за  <b>Начален слой</b> и <b>Краен слой</b> съдържат по един обект, можете да зададете максимален брой превозни средства. Ако някой от слоевете съдържа повече от един обект, стойността по подразбиране не може да се редактира.
+            </p>
+        </div>
+    </div>
+    <div id="maxStopsPerRoute">
+        <div>
+            
+            <p class="OnlineOnly">Максималният брой спирания, които всяко превозно средство може да направи по маршрут. Можете да посочите стойност между 1 и  200. </p> 
+            <p class="PortalOnly">Максималният брой спирания, които всяко превозно средство може да направи по маршрут.
+            </p>
+        </div>
+    </div>
+    <div id="stopServiceTime">
+        <div>
+            <p>Очакваното средно време за обслужване на всяка спирка.
+            </p>
+        </div>
+    </div>
+    <div id="limitMaxRouteTimeCheckbox">
+        <div>
+            <p>Определя дали максималното време за маршрутизиране се прилага към превозните средства. Времето за маршрута включва очакваното време за пътуване и времето за обслужване на спирките по маршрута.
+            </p>
+        </div>
+    </div>
+    <div id="maxRouteTime">
+        <div>
+            <p>Максималната продължителност на маршрута от началото до края.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>Името на слоя, който ще бъде създаден и добавен към картата.
+            </p>
+        </div>
+    </div>
+    <div id="includeRouteLayers">
+        <div>
+            <p>Указва дали всеки маршрут с резултат ще бъде запазен като маршрутен слой.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            
+            <p>Името на папката в  <b>Моето съдържание</b>, където резултатите ще бъдат запазени.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

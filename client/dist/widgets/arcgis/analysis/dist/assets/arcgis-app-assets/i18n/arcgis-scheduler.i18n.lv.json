@@ -1,0 +1,55 @@
+{
+  "beginningOnLabel": "Sākums",
+  "repeatTypeLabel": "Atkārtošanas veids",
+  "endingOnTypeLabel": "Beidzas",
+  "endingOnDateLabel": "Beigu datums",
+  "endingOnCountLabel": "Skaits",
+  "endingOnCountPlaceholder": "piemēram: 1, 10, 30",
+  "dailyRepeatIntervalLabel": "Atkārtošanas intervāls",
+  "dailyTimeLabel": "Laiks",
+  "weeklyDaysOfWeekLabel": "Nedēļas diena",
+  "weeklyTimeLabel": "Laiks",
+  "monthlyDayOfMonthLabel": "Mēneša diena",
+  "monthlyDayOfMonthPlaceholder": "piemēram, 1 - 31",
+  "monthlyRepeatIntervalLabel": "Atkārtošanas intervāls",
+  "monthlyTimeLabel": "Laiks",
+  "repeatTypeOptions": {
+    "day": "Diena",
+    "week": "Nedēļa",
+    "month": "Mēnesis"
+  },
+  "endingOnType": {
+    "never": "Nekad",
+    "date": "Datums",
+    "count": "Ieslēgts"
+  },
+  "dailyRepeatInterval": {
+    "everyDay": "Katru dienu",
+    "everyOtherDay": "Ik pārdienas",
+    "everyThreeDays": "Ik pēc trijām dienām",
+    "everyFourDays": "Ik pēc četrām dienām",
+    "everyFiveDays": "Ik pēc piecām dienām",
+    "everySixDays": "Ik pēc sešām dienām",
+    "everySevenDays": "Ik pēc septiņām dienām",
+    "everyFourteenDays": "Ik pēc četrpadsmit dienām"
+  },
+  "weekDays": {
+    "all": "Viss",
+    "allWeekdays": "Visas darbdienas",
+    "sunday": "Svētdiena",
+    "monday": "Pirmdiena",
+    "tuesday": "Otrdiena",
+    "wednesday": "Trešdiena",
+    "thursday": "Ceturtdiena",
+    "friday": "Piektdiena",
+    "saturday": "Sestdiena"
+  },
+  "monthlyRepeatInterval": {
+    "everyMonth": "Reizi mēnesī",
+    "everyTwoMonths": "Ik pēc diviem mēnešiem",
+    "everyThreeMonths": "Ik pēc trijiem mēnešiem",
+    "everyFourMonths": "Ik pēc četriem mēnešiem",
+    "everyFiveMonths": "Ik pēc pieciem mēnešiem",
+    "everySixMonths": "Ik pēc sešiem mēnešiem"
+  }
+}

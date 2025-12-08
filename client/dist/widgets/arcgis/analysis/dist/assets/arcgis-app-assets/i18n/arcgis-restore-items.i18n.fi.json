@@ -1,0 +1,31 @@
+{
+  "back": "Takaisin",
+  "cancel": "Peruuta",
+  "learnMore": "Lisätietoja",
+  "restore": "Palauta",
+  "restoreTo": "Palauta kohteeseen",
+  "restoreItem": "Palauta kohde",
+  "restoreItems": "Palauta kohteet",
+  "noticeMessage": "Palautettujen kohteiden jakaminen poistetaan. Tarkista sisältösi, ennen kuin jaat sen uudelleen.",
+  "cannotBulkRestoreXItems": "Yhdellä kertaa voidaan palauttaa enintään ${number} kohdetta. Poista muutamien kohteiden valinta.",
+  "cannotBulkRestoreMultipleOwners": "Yhdellä kertaa ei voi palauttaa eri omistajille kuuluvia kohteita. Voit palauttaa yhdellä kertaa kohteita, joilla on yksi omistaja.",
+  "toRestore": {
+    "single": "Palautettava kohde:",
+    "multiple": "Palautettavat kohteet:"
+  },
+  "cannotRestore": "Ei voi palauttaa:",
+  "dependentItems": {
+    "single": "Tätä kohdetta ei voi palauttaa, koska se on riippuvainen kohteesta <strong style='font-weight: 500'>${parent}</strong>. Palauta ne yhdessä.",
+    "singleUnknown": "Tätä kohdetta ei voi palauttaa, koska se on riippuvainen toisesta roskakorissa olevasta kohteesta. Palauta ne yhdessä.",
+    "multiple": "Näitä kohteita ei voi palauttaa, koska ne ovat riippuvaisia muista roskakorissa olevista kohteista. Palauta ne yhdessä.",
+    "multipleSameSource": "Näitä kohteita ei voi palauttaa, koska ne ovat riippuvaisia kohteesta <strong style='font-weight: 500'>${parent}</strong>. Palauta ne yhdessä."
+  },
+  "pageRangeWithTotalRecycleBinSize": {
+    "en": "${start}–${end}/${total} (${size}) roskakorissa",
+    "other": "${start}–${end}, yhteensä: ${total} (${size}) roskakorissa"
+  },
+  "pageRangeWithGreaterThanTotalRecycleBinSize": {
+    "en": "${start}–${end}/${total} (> ${size}) roskakorissa",
+    "other": "${start}–${end}, yhteensä: ${total} (> ${size}) roskakorissa"
+  }
+}

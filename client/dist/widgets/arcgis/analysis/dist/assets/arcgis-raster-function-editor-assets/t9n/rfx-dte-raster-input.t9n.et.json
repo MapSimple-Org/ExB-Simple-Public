@@ -1,0 +1,14 @@
+{
+  "outputRaster": "OutputRaster",
+  "rfxVariable": "RasterFunctionVariable",
+  "selectLayer": "Vali kiht",
+  "allowScalar": "Kihi valimine või konstandi sisestamine",
+  "browseLayer": "Sirvi kihte",
+  "loading": "Laadimine...",
+  "layerMissing": "Üht või mitut kaardilt pärit pildikihti pole siin loetletud, kuna analüüsiteenuse lubamise atribuut pole lubatud.",
+  "layerFailedToLoad": "Kihi laadimine nurjus.",
+  "learnMore": "Lisainfo",
+  "errorCodes": {
+    "required": "See parameeter on nõutav."
+  }
+}

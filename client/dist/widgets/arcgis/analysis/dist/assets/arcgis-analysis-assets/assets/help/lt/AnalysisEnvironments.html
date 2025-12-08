@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>Analizės aplinkos nustatymai  Map Viewer. </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="analysisProcessingExtent">
+        <div>
+            <p>Nurodomas plotas, kuris bus naudojamas analizei. Pagal numatytuosius nustatymus bus naudojama visa aprėptis.
+            </p>
+        </div>
+    </div>
+    <div id="rasterAnalysisProcessingExtent">
+        <div>
+            <p>Nurodoma teritorija, kuri bus naudojama rastrų analizės įrankiams ir rastrų funkcijoms, kai įjungta funkcija  <b>Rastrų analizei naudoti kitokią apdorojimo aprėptį</b>. Pagal numatytuosius nustatymus bus naudojama matoma žemėlapio aprėptis.
+            </p>
+        </div>
+    </div>
+    <div id="useDifferentExtentForRA">
+        <div>
+            <p>Nurodoma, ar rastrų analizės įrankiams ir rastrų funkcijoms reikia naudoti kitokią apdorojimo aprėptį. Kai &scaron;i funkcija įjungta, rastrų analizei bus naudojamas reik&scaron;mių rinkinys, skirtas  <b>rastrų analizės apdorojimo aprėpčiai</b>, ir pagal numatytuosius nustatymus naudojama matoma žemėlapio aprėptis. Kai &scaron;i funkcija i&scaron;jungta, atliekant visų tipų analizę bus naudojamas reik&scaron;mių rinkinys, skirtas <b>analizės apdorojimo aprėpčiai</b>, ir pagal numatytuosius nustatymus naudojama visa aprėptis.
+            </p>
+        </div>
+    </div>
+    <div id="outSR">
+        <div>
+            <p>Nurodoma koordinačių sistema, kuri bus naudojama analizei, ir rezultatų sluoksnis.
+            </p>
+        </div>
+    </div>
+    <div id="extent">
+        <div>
+            <p>Nurodomas plotas, kuris bus naudojamas analizei.
+            </p>
+        </div>
+    </div>
+    <div id="snapRaster">
+        <div>
+            <p>Sureguliuoja i&scaron;vesties aprėptį taip, kad ji atitiktų nurodyto pritraukimo rastrinio sluoksnio gardelių i&scaron;lyginimą.
+            </p>
+        </div>
+    </div>
+    <div id="cellSize">
+        <div>
+            <p>Nurodomas gardelės dydis arba skiriamoji geba, kuri bus naudojama analizei ir i&scaron;vesties rastriniam sluoksniui kurti.
+            </p>
+            <p>Jei pasirenkama  <b>Kaip nurodyta</b> ir i&scaron;vesties erdvinė atskaita skiriasi nuo įvesties erdvinės atskaitos, gardelės dydžio reik&scaron;mė nebus perprojektuota.
+            </p>
+        </div>
+    </div>
+    <div id="mask">
+        <div>
+            <p>Nurodomas kaukės sluoksnis, kuriame analizei bus naudojamos tik tos gardelės, kurios patenka į kaukės sritį.
+            </p>
+        </div>
+    </div>
+    <div id="resamplingMethod">
+        <div>
+            <p>Nurodo, kaip bus interpoliuotos pikselių vertės, kai įvesties ir i&scaron;vesties rastrai nesutampa.
+            </p>
+        </div>
+    </div>
+    <div id="processorType">
+        <div>
+            <p>Nurodomas procesoriaus, kuris bus naudojamas, tipas. Galimi variantai &ndash;  <b>CPU</b>, <b>GPU</b> ir <b>automatinis</b>. Pasirinkus nustatymą <b>Automatinis</b> procesoriaus tipas bus nurodytas įrankio.
+            </p>
+        </div>
+    </div>
+    <div id="parallelProcessingFactor">
+        <div>
+            <p>Nurodo rastro apdorojimo paslaugos egzempliorių, naudojamų vykdant įrankį, skaičių. Palaikomos reik&scaron;mės apima tu&scaron;čias eilutes (įrankis nustatys rastro apdorojimo paslaugos egzempliorių skaičių), sveikuosius skaičius (0 arba teigiamus sveikuosius skaičius) ir procentus. I&scaron;rei&scaron;kiant procentus po procentinės reik&scaron;mės turi sekti procentų ženklas (%).
+            </p>
+        </div>
+    </div>
+    <div id="askConfirmation">
+        <div>
+            <p>Nurodoma, ar numatomam kreditų skaičiui vir&scaron;ijus nurodytą ribą (įjungta), bus rodomas įspėjimo prane&scaron;imas, ar analizė bus vykdoma nerodant prane&scaron;imo, neatsižvelgiant į numatomą kreditų suvartojimą (neįjungta). Atliekant analizę vis tiek bus atsižvelgiama į organizacijos kredito biudžeto sudarymo parametrus.
+            </p>
+        </div>
+    </div>
+    <div id="creditThreshold">
+        <div>
+            <p>Nurodo ribą, kuriai esant bus rodomas perspėjimo prane&scaron;imas, pagrįstas apskaičiuotu kredito suvartojimu vykdant analizę. Net jei apskaičiavimai vir&scaron;ija ribas, analizę vis tiek galima vykdyti.
+            </p>
+        </div>
+    </div>
+    <div id="recycleProcessingWorkers">
+        <div>
+            <p>Nurodoma, kiek vaizdo dalių bus apdorota prie&scaron; dar kartą paleidžiant darbo procesus, kad būtų i&scaron;vengta galimų ilgalaikių procesų nesėkmių. Numatytoji reik&scaron;mė yra 0.
+            </p>
+        </div>
+    </div>
+    <div id="retryOnFailures">
+        <div>
+            <p>Nurodoma, kiek kartų bus bandoma paleisti tą patį darbo procesą, kai tam tikros užduoties apdorojimo metu įvyksta klaida. Numatytoji reik&scaron;mė yra 0.
+            </p>
+        </div>
+    </div>
+    <div id="geographicTransformations">
+        <div>
+            <p>Nurodomi transformacijos metodai, kurie gali būti naudojami analizės duomenims projektuoti.
+            </p>
+            <p>&Scaron;ioje aplinkoje &scaron;iuo metu palaikomi tik rastrų analizės įrankiai ir rastrų funkcijos.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

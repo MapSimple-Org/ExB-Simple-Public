@@ -1,0 +1,10 @@
+{
+  "summary": "摘要",
+  "description": "描述",
+  "addSummary": "添加摘要",
+  "addDescription": "添加描述",
+  "charactersLeft": "剩余字符：${num}",
+  "invalid": "摘要不能包含以下任何字符：< 或 >。",
+  "invalidDescription": "描述不能包含以下任何字符：< 或 >。",
+  "summaryReadOnly": "摘要只读。"
+}

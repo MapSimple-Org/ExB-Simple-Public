@@ -1,0 +1,20 @@
+{
+  "title": "Título",
+  "addTitle": "Agregar título",
+  "validation": {
+    "error": "Error",
+    "titleRequired": "Título es un campo obligatorio.",
+    "itemExists": "Ya existe un elemento titulado \"${name}\" en esta carpeta. Elija otro título.",
+    "titleInUseService": "Ya existe una capa titulada \"${name}\". Elija otro título.",
+    "itemInRecycleBin": "Ya existe un elemento llamado \"${name}\" en la papelera de reciclaje. Elija otro título.",
+    "serviceNameInvalid": "El título de un servicio solo puede contener caracteres alfanuméricos o guiones bajos y debe tener 90 caracteres o menos.",
+    "dataStoreTitleInvalid": "El título de un almacén de datos solo puede contener caracteres alfanuméricos o guiones bajos y debe tener 90 caracteres o menos.",
+    "titleInvalid": "El título debe tener menos de 250 caracteres y no puede contener < o >.",
+    "titleStartsWithNumber": "El título no puede empezar con un número.",
+    "invalidCharacters": {
+      "single": "El nombre no puede contener este carácter: ${invalidCharacters}.",
+      "multiple": "El nombre no puede contener ninguno de los siguientes caracteres: ${invalidCharacters}.",
+      "unknown": "El nombre no puede contener ninguno de los siguientes caracteres: ${invalidCharacters}."
+    }
+  }
+}

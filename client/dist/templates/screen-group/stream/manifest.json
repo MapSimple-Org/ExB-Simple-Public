@@ -1,0 +1,12 @@
+{
+  "name": "stream",
+  "type": "template",
+  "templateType": "screen-group",
+  "label": "Stream",
+  "thumbnail": "thumbnail.png",
+  "order": 4,
+  "tags": [],
+  "categoriesTags": [],
+  "thumbnailWidth": 400,
+  "thumbnailHeight": 240
+}

@@ -1,0 +1,69 @@
+{
+  "loadingText": "Ladataan rakennemalleja",
+  "cancel": "Peruuta",
+  "finishSetup": "Viimeistele määritys",
+  "hasUnsavedChanges": "Menetät tekemäsi kategoriamuutokset, jos et tallenna ensin. Haluatko varmasti sulkea tämän näkymän ja menettää tekemäsi muutokset?",
+  "error": {
+    "generic": {
+      "title": "Luokkien päivityksessä tapahtui virhe",
+      "message": "Tapahtui virhe. Yritä myöhemmin uudelleen."
+    },
+    "maxDepthExceeded": {
+      "title": "Luokkien päivityksessä tapahtui virhe",
+      "message": "Luokkia voidaan asettaa sisäkkäin enintään kahden tason syvyydeltä."
+    },
+    "destinationHasSameName": {
+      "title": "Luokkien päivityksessä tapahtui virhe",
+      "message": "Kohdeluokassa on jo luokka, jolla on sama nimi."
+    },
+    "emptyTitle": {
+      "title": "Luokkien päivityksessä tapahtui virhe",
+      "message": "Luokan otsikko ei voi olla tyhjä."
+    },
+    "noSchema": {
+      "title": "Rakennetta ei löydy",
+      "message": "Kohteen rakennetta ei löytynyt käyttäjälle."
+    },
+    "maxCharacter": {
+      "title": "Luokkien päivityksessä tapahtui virhe",
+      "message": "Luokan nimessä voi olla enintään ${maxCharacter} merkkiä."
+    },
+    "invalidCharacters": {
+      "title": "Luokkien päivityksessä tapahtui virhe",
+      "single": "Luokassa ei voi olla tätä merkkiä: ${invalidCharacters}.",
+      "multiple": "Luokassa ei voi olla seuraavia merkkejä: ${invalidCharacters}.",
+      "unknown": "Luokassa ei voi olla seuraavia merkkejä: ${invalidCharacters}."
+    }
+  },
+  "warning": {
+    "deleteInUseCategory": {
+      "title": "Poista luokka",
+      "cta": "Poista luokka"
+    },
+    "changeTitleInUseCategory": {
+      "title": "Päivitä luokka",
+      "cta": "Päivitä luokka"
+    }
+  },
+  "template": {
+    "title": "Luokkamallit",
+    "learnMore": "Lisätietoja",
+    "templateList": {
+      "custom": {
+        "title": "Mukautetut luokat"
+      },
+      "arcgis": {
+        "title": "ArcGIS-luokat",
+        "message": "ArcGIS-luokkiin sisältyy niiden aiheluokkien ja aliluokkien valikoima, joita voi käyttää monenlaisten paikkatietoaineistojen luokitteluun. Näiden luokkien avulla tuetaan ArcGIS Living Atlas of the World -palvelua."
+      },
+      "iso": {
+        "title": "ISO-luokat",
+        "message": "ISO-luokat ovat ISO (International Organization for Standardization) -standardin aiheluokkia, jotka määrittävät maantieteellisten tietojen kuvaus- ja luettelointimenetelmän."
+      },
+      "inspire": {
+        "title": "INSPIRE-luokat",
+        "message": "INSPIRE-luokat sisältävät kattavan joukon paikkatietoteemoja, jotka on määritelty INSPIRE-direktiivissä."
+      }
+    }
+  }
+}

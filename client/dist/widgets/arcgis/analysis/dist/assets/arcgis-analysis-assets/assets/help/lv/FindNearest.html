@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>Rīks Atrast tuvāko atrod un sarindo elementus, kas ir vistuvāk norādītajam novietojumam.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="analysisLayer">
+        <div>
+            
+            <p class="OnlineOnly">Sākuma slānis, ap kuru tiks veidots meklē&scaron;anas diapazons, lai atrastu vistuvākos elementus no slāņa. Elementi tuvumā eso&scaron;ajā slānī tiks atgriezti, pamatojoties uz to tuvumu ievades slānim. Tiek atbalstīti slāņi ar līdz  pieci tūkstoši elementiem. </p>  
+            <p class="PortalOnly">Sākuma slānis, ap kuru tiks veidots meklē&scaron;anas diapazons, lai atrastu vistuvākos elementus no slāņa. Elementi tuvumā eso&scaron;ajā slānī tiks atgriezti, pamatojoties uz to tuvumu ievades slānim.
+            </p>
+            <p class="toolPaneOnly">Elementu skaits ir atkarīgs no papildu faktoriem, piemēram, filtrē&scaron;anas kritērijiem un analīzes apjoma.
+            </p>
+        </div>
+    </div>
+    <div id="nearLayer">
+        <div>
+             
+            <p class="OnlineOnly">Atrastie elementi ir atkarīgi no ievades slāņa tuvuma. Tiek atbalstīti slāņi ar līdz  pieci tūkstoši elementiem. </p> 
+            <p class="PortalOnly">Atrastie elementi ir atkarīgi no ievades slāņa tuvuma.
+            </p>
+            <p class="toolPaneOnly">Elementu skaits ir atkarīgs no papildu faktoriem, piemēram, filtrē&scaron;anas kritērijiem un analīzes apjoma.
+            </p>
+        </div>
+    </div>
+    <div id="pointBarrierLayer">
+        <div>
+            <p>Viens vai vairāki punktu elementi, kas darbojas kā īslaicīgi ierobežojumi (barjeras), braucot pa ielām. Brauk&scaron;ana ir atļauta pa ielu, ne&scaron;ķērsojot barjeru.
+            </p>
+        </div>
+    </div>
+    <div id="lineBarrierLayer">
+        <div>
+            <p>Viens vai vairāki punktu elementi, kas darbojas kā īslaicīgi ierobežojumi (barjeras), braucot pa ielām. Līnijas barjeras aizliedz pārvietoties jebkur, kur barjeras &scaron;ķērso ielas.
+            </p>
+        </div>
+    </div>
+    <div id="polygonBarrierLayer">
+        <div>
+            <p>Viens vai vairāki laukuma elementi, kas darbojas kā īslaicīgi ierobežojumi (barjeras), braucot pa ielām. Laukuma barjeras aizliedz pārvietoties jebkur, kur laukums &scaron;ķērso ielas.
+            </p>
+        </div>
+    </div>
+    <div id="measurementType">
+        <div>
+            <p>Metode, kas tiks izmantota attāluma vai laika mērī&scaron;anai. Metode var būt līnijas attālums vai pārvieto&scaron;anās režīms.
+            </p>
+        </div>
+    </div>
+    <div id="timeOfDay">
+        <div>
+            <p>Datums un laiks, kad ceļotājs iziet no atra&scaron;anās vietām  <b>ievades slāņa</b> vērtībā.
+            </p>
+        </div>
+    </div>
+    <div id="limitNearNumberCheckbox">
+        <div>
+            
+            <p>Norāda, vai tiek izmantots pielāgots maksimālais tuvāko elementu skaits (iespējots) vai rīka noklusējuma maksimums 100.
+            </p>
+        </div>
+    </div>
+    <div id="maxCount">
+        <div>
+            <p>Maksimālais tuvāko elementu skaits, ko var atrast katram ievades elementam.
+            </p>
+        </div>
+    </div>
+    <div id="limitSearchRangeCheckbox">
+        <div>
+            
+            <p>Norāda, vai tiek izmantots maksimālais meklē&scaron;anas diapazons (iespējots), vai arī meklē&scaron;anas diapazons ir neierobežots.
+            </p>
+        </div>
+    </div>
+    <div id="searchCutoff">
+        <div>
+            <p>Maksimālais meklē&scaron;anas diapazons tuvāko elementu atra&scaron;anai.
+            </p>
+        </div>
+    </div>
+    <div id="searchCutoffUnits">
+        <div>
+            <p>Vienības, kas tiek izmantotas, lai precizētu meklē&scaron;anas diapazonu.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>Tā slāņa nosaukums, kas tiks izveidots un pievienots kartei.
+            </p>
+        </div>
+    </div>
+    <div id="includeRouteLayers">
+        <div>
+            <p>Norāda, vai katrs rezultātu mar&scaron;ruts tiks saglabāts kā mar&scaron;ruta slānis.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>Mapes nosaukums sadaļā  <b>Mans saturs</b>, kurā tiks saglabāti rezultāti.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

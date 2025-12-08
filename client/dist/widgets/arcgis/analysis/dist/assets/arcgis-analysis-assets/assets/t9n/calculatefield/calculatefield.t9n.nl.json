@@ -1,0 +1,13 @@
+{
+  "fieldCalcExpression": "Veldberekening expressie",
+  "fieldCalculationGroupLabel": "Veldberekening",
+  "fieldPlaceholderText": "Klik om een veld te selecteren of te maken",
+  "fieldToCalculate": "Te berekenen veld",
+  "inputDatasetGroupLabel": "Invoer",
+  "itemProperties": {
+    "description": "Resultaat dat is gegenereerd via het uitvoeren van de tool Veld berekenen in ModelBuilder.",
+    "snippet": "Feature layer gegenereerd via Veld berekenen"
+  },
+  "noFieldSpecified": "Specificeer een te berekenen veld als u een expressie wilt maken.",
+  "whereClause": "Berekening alleen op bepaalde records toepassen"
+}

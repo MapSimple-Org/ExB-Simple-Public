@@ -1,0 +1,23 @@
+{
+  "add": "Adăugare",
+  "arcade": "Arcade",
+  "arcadeExpressionEditor": "Editor de expresii Arcade",
+  "badSyntaxSQLExpression": "Sintaxă greșită în expresia SQL. Corectați erorile.",
+  "calculationExpressionEditor": "Editor de expresii de calcul",
+  "cancel": "Anulare",
+  "chooseLanguage": "Alegeți o limbă",
+  "fieldToCalculate": "Câmp de calculat: ${fieldName}",
+  "idealFor": "Ideal pentru‎:",
+  "languageSelect": "Selectare limbă",
+  "layerLoadFailNoFields": "Stratul tematic nu a putut fi încărcat. Câmpurile nu au putut fi recuperate pentru editor.",
+  "next": "Următorul",
+  "noLayerProvidedNoFields": "Nu a fost furnizat niciun strat tematic. Câmpurile nu au putut fi recuperate pentru editor.",
+  "sql": "SQL",
+  "sqlExpressionEditor": "Editor expresii SQL",
+  "tileSelectArcadeUseCase1": "Calculațiile care necesită funcționalitate mai mare decât SQL inclusiv operațiile spațiale",
+  "tileSelectArcadeUseCase2": "Depanare îmbunătățită",
+  "tileSelectSqlUseCase1": "Cea mai rapidă executare",
+  "tileSelectSqlUseCase2": "Calculațiile pot fi exprimate în SQL",
+  "tileSelectSqlUseCase3": "Straturile tematice cu Sincronizare care au Monitorizare obiecte spațiale create și actualizate activat",
+  "valueCannotBeBlank": "Valoarea nu poate fi goală."
+}

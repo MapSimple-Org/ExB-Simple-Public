@@ -1,0 +1,7 @@
+{
+  "addEntryButtonLabel": "Toevoegen",
+  "maxGroupsMessage": "Het maximumaantal vermeldingen is ${maxCount}.",
+  "minGroupsMessage": "Het minimumaantal vermeldingen is ${minCount}.",
+  "removeEntryButtonLabel": "Invoer verwijderen",
+  "requiredMessage": "Deze parameter is vereist."
+}

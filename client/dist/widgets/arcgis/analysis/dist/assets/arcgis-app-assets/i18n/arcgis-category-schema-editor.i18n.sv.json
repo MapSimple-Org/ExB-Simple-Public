@@ -1,0 +1,69 @@
+{
+  "loadingText": "Läser in schemamallar",
+  "cancel": "Avbryt",
+  "finishSetup": "Slutför installationen",
+  "hasUnsavedChanges": "Du har gjort kategoriändringar som kommer att gå förlorade om du inte sparar först. Vill du stänga den här vyn och förlora ändringarna?",
+  "error": {
+    "generic": {
+      "title": "Det gick inte att uppdatera kategorier",
+      "message": "Det uppstod ett fel. Försök igen senare."
+    },
+    "maxDepthExceeded": {
+      "title": "Det gick inte att uppdatera kategorier",
+      "message": "Du kan inte koppla kategorier som har fler än två nivåer."
+    },
+    "destinationHasSameName": {
+      "title": "Det gick inte att uppdatera kategorier",
+      "message": "Det finns redan en kategori med samma namn i destinationskategorin."
+    },
+    "emptyTitle": {
+      "title": "Det gick inte att uppdatera kategorier",
+      "message": "Kategorititeln får inte vara tom."
+    },
+    "noSchema": {
+      "title": "Schema hittades inte",
+      "message": "Objektschema hittades inte för användare."
+    },
+    "maxCharacter": {
+      "title": "Det gick inte att uppdatera kategorier",
+      "message": "Kategorinamn får innehålla högst ${maxCharacter} tecken."
+    },
+    "invalidCharacters": {
+      "title": "Det gick inte att uppdatera kategorier",
+      "single": "Kategorin får inte innehålla det här tecknet: ${invalidCharacters}.",
+      "multiple": "Kategorin får inte innehålla något av dessa tecken: ${invalidCharacters}.",
+      "unknown": "Kategorin får inte innehålla något av dessa tecken: ${invalidCharacters}."
+    }
+  },
+  "warning": {
+    "deleteInUseCategory": {
+      "title": "Ta bort kategori",
+      "cta": "Ta bort kategori"
+    },
+    "changeTitleInUseCategory": {
+      "title": "Uppdatera kategori",
+      "cta": "Uppdatera kategori"
+    }
+  },
+  "template": {
+    "title": "Kategorimallar",
+    "learnMore": "Läs mer",
+    "templateList": {
+      "custom": {
+        "title": "Anpassade kategorier"
+      },
+      "arcgis": {
+        "title": "ArcGIS-kategorier",
+        "message": "ArcGIS-kategorierna består av ett urval ämneskategorier och underkategorier som kan användas för att kategorisera många olika typer av geospatialt innehåll. Dessa kategorier används som stöd för ArcGIS Living Atlas of the World."
+      },
+      "iso": {
+        "title": "ISO-kategorier",
+        "message": "ISO-kategorierna innehåller ämneskategorier som valts ut av den internationella standardiseringsorganisationen (ISO) för att skapa en metod för beskrivning och katalogisering av geografisk information."
+      },
+      "inspire": {
+        "title": "INSPIRE-kategorier",
+        "message": "INSPIRE-kategorierna innehåller en omfattande uppsättning teman med spatiala data definierade i INSPIRE-direktivet."
+      }
+    }
+  }
+}

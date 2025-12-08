@@ -1,0 +1,69 @@
+{
+  "loadingText": "Načítavanie šablón schém",
+  "cancel": "Zrušiť",
+  "finishSetup": "Dokončiť nastavenie",
+  "hasUnsavedChanges": "Vykonali ste zmeny kategórie, ktoré sa stratia, ak ich neuložíte ako prvé. Naozaj chcete toto zobrazenie zavrieť a stratiť svoje zmeny?",
+  "error": {
+    "generic": {
+      "title": "Chyba pri aktualizácii kategórií",
+      "message": "Niečo sa pokazilo. Skúste to neskôr prosím."
+    },
+    "maxDepthExceeded": {
+      "title": "Chyba pri aktualizácii kategórií",
+      "message": "Kategórie nie je možné vkladať do viac ako 2 úrovní."
+    },
+    "destinationHasSameName": {
+      "title": "Chyba pri aktualizácii kategórií",
+      "message": "V cieľovej kategórii už existuje kategória s rovnakým názvom."
+    },
+    "emptyTitle": {
+      "title": "Chyba pri aktualizácii kategórií",
+      "message": "Názov kategórie nesmie byť prázdny."
+    },
+    "noSchema": {
+      "title": "Schéma sa nenašla",
+      "message": "Schéma položky sa pre používateľa nenašla."
+    },
+    "maxCharacter": {
+      "title": "Chyba pri aktualizácii kategórií",
+      "message": "Názvy kategórií môžu mať dĺžku najviac ${maxCharacter} znakov."
+    },
+    "invalidCharacters": {
+      "title": "Chyba pri aktualizácii kategórií",
+      "single": "Kategória nemôže obsahovať tento znak: ${invalidCharacters}.",
+      "multiple": "Kategória nemôže obsahovať žiadny z týchto znakov: ${invalidCharacters}.",
+      "unknown": "Kategória nemôže obsahovať žiadny z týchto znakov: ${invalidCharacters}."
+    }
+  },
+  "warning": {
+    "deleteInUseCategory": {
+      "title": "Odstrániť kategóriu",
+      "cta": "Odstrániť kategóriu"
+    },
+    "changeTitleInUseCategory": {
+      "title": "Aktualizovať kategóriu",
+      "cta": "Aktualizovať kategóriu"
+    }
+  },
+  "template": {
+    "title": "Šablóny kategórií",
+    "learnMore": "Zistiť viac",
+    "templateList": {
+      "custom": {
+        "title": "Vlastné kategórie"
+      },
+      "arcgis": {
+        "title": "Kategórie ArcGIS",
+        "message": "Kategórie ArcGIS zahŕňajú výber tematických kategórií a podkategórií, ktoré môžu byť použité na kategorizáciu viacerých typov geopriestorového obsahu. Tieto kategórie sú používané na podporu ArcGIS Living Atlas of the World."
+      },
+      "iso": {
+        "title": "Kategórie ISO",
+        "message": "ISO kategórie obsahujú tématické kategórie Medzinárodnej organizácie pre štandardizáciu, ktoré poskytujú metódu pre opis a kategorizáciu geografických informácií."
+      },
+      "inspire": {
+        "title": "Kategórie INSPIRE",
+        "message": "Kategórie INSPIRE obsahujú rozsiahlu sadu priestorovo dátových tém stanovených v smerniciach INSPIRE."
+      }
+    }
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "folder": "Mapa",
+  "folders": "Mape",
+  "searchFolders": "Pretraži mape",
+  "enterFolder": "Unesite naziv mape",
+  "createNewFolder": "Stvori novu mapu",
+  "noFoldersFoundCreate": "Nema mapa pod tim nazivom. Stvori '${folder}'?",
+  "noFoldersFound": "Nema mapa pod tim nazivom.",
+  "create": "Stvori '${folder}'?",
+  "loading": "Učitavanje mapa",
+  "error": {
+    "noName": "Morate navesti naziv za mapu.",
+    "folderAlreadyExists": "Datoteka '${folder}' već postoji. Odaberite drugi naziv.",
+    "title": "Pogreška",
+    "invalidCharacters": {
+      "single": "Naziv ne može saržavati ovaj znak: ${invalidCharacters}.",
+      "multiple": "Naziv ne može sadržavati niti jedan od ovih znakova: ${invalidCharacters}.",
+      "unknown": "Naziv ne može sadržavati niti jedan od ovih znakova: ${invalidCharacters}."
+    }
+  }
+}

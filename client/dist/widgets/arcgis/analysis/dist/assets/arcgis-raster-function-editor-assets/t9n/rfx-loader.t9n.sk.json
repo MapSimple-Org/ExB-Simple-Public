@@ -1,0 +1,8 @@
+{
+  "loading": "Načítava sa...",
+  "pleaseWait": "Prosím čakajte.",
+  "loadingXMLRFT": "Načítava sa vybraná šablóna rastrovej funkcie vo formáte XML.",
+  "failedToOpen": "Nepodarilo sa otvoriť.",
+  "readingFailed": "Zvolenú šablónu rastrovej funkcie sa nepodarilo načítať.",
+  "failedToLoadXML": "Nepodarilo sa načítať vybranú šablónu rastrovej funkcie vo formáte XML."
+}

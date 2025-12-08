@@ -1,0 +1,13 @@
+{
+  "aboveMaximumMessage": "El valor de entrada debe ser menor o igual que ${max}.",
+  "belowMinimumMessage": "El valor de entrada debe ser mayor o igual que ${min}.",
+  "choiceListBadInput": "El valor de entrada no es válido.",
+  "defaultLabel": "Unidad lineal",
+  "inputPlaceholderText": "Introducir un valor de distancia...",
+  "invalidDoubleMessage": "El valor de entrada debe ser un doble.",
+  "invalidIntegerMessage": "El valor de entrada debe ser un entero.",
+  "requiredInputMessage": "Este parámetro es obligatorio.",
+  "strictlyMaximumMessage": "El valor de entrada debe ser menor que ${max}.",
+  "strictlyMinimumMessage": "El valor de entrada debe ser mayor que ${min}.",
+  "unitSelect": "Seleccionar unidad"
+}

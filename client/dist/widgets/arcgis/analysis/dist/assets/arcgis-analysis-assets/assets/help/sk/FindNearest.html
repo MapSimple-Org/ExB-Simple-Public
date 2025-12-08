@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>N&aacute;stroj N&aacute;jsť najbliž&scaron;ie n&aacute;jde a zorad&iacute; prvky, ktor&eacute; s&uacute; najbliž&scaron;ie k zadan&yacute;m lokalit&aacute;m.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="analysisLayer">
+        <div>
+            
+            <p class="OnlineOnly">V&yacute;chodiskov&aacute; vrstva, okolo ktorej sa vytvor&iacute; rozsah vyhľad&aacute;vania na vyhľadanie najbliž&scaron;&iacute;ch prvkov z bl&iacute;zkej vrstvy. Prvky v bl&iacute;zkej vrstve sa vr&aacute;tia na z&aacute;klade ich bl&iacute;zkosti k vstupnej vrstve. Podporovan&eacute; s&uacute; vrstvy s maxim&aacute;lne  päťtisíc prvkami. </p>  
+            <p class="PortalOnly">V&yacute;chodiskov&aacute; vrstva, okolo ktorej sa vytvor&iacute; rozsah vyhľad&aacute;vania na vyhľadanie najbliž&scaron;&iacute;ch prvkov z bl&iacute;zkej vrstvy. Prvky v bl&iacute;zkej vrstve sa vr&aacute;tia na z&aacute;klade ich bl&iacute;zkosti k vstupnej vrstve.
+            </p>
+            <p class="toolPaneOnly">Počet prvkov z&aacute;vis&iacute; od ďal&scaron;&iacute;ch faktorov, ako napr&iacute;klad filtrovacie krit&eacute;ri&aacute; a rozsah anal&yacute;zy.
+            </p>
+        </div>
+    </div>
+    <div id="nearLayer">
+        <div>
+             
+            <p class="OnlineOnly">Prvky n&aacute;jden&eacute; na z&aacute;klade bl&iacute;zkosti k vstupnej vrstve. Podporovan&eacute; s&uacute; vrstvy s maxim&aacute;lne  päťtisíc prvkami. </p> 
+            <p class="PortalOnly">Prvky n&aacute;jden&eacute; na z&aacute;klade bl&iacute;zkosti k vstupnej vrstve.
+            </p>
+            <p class="toolPaneOnly">Počet prvkov z&aacute;vis&iacute; od ďal&scaron;&iacute;ch faktorov, ako napr&iacute;klad filtrovacie krit&eacute;ri&aacute; a rozsah anal&yacute;zy.
+            </p>
+        </div>
+    </div>
+    <div id="pointBarrierLayer">
+        <div>
+            <p>Jeden alebo viac bodov&yacute;ch prvkov, ktor&eacute; sl&uacute;žia ako dočasn&eacute; obmedzenia (bari&eacute;ry), pri prechode prvkami podkladov&yacute;ch ciest. Cestovanie po cest&aacute;ch je povolen&eacute;, av&scaron;ak nie cez bari&eacute;ry.
+            </p>
+        </div>
+    </div>
+    <div id="lineBarrierLayer">
+        <div>
+            <p>Jeden alebo viac l&iacute;niov&yacute;ch prvkov, ktor&eacute; sl&uacute;žia ako dočasn&eacute; obmedzenia (bari&eacute;ry), pri prechode prvkami podkladov&yacute;ch ciest. L&iacute;niov&eacute; bari&eacute;ry zakazuj&uacute; prejazd v miestach, kde bari&eacute;ry pret&iacute;naj&uacute; cesty.
+            </p>
+        </div>
+    </div>
+    <div id="polygonBarrierLayer">
+        <div>
+            <p>Jeden alebo viac polyg&oacute;nov&yacute;ch prvkov, ktor&eacute; sl&uacute;žia ako dočasn&eacute; obmedzenia (bari&eacute;ry), pri prechode prvkami podkladov&yacute;ch ciest. Polyg&oacute;nov&eacute; bari&eacute;ry zakazuj&uacute; prejazd v miestach, kde polyg&oacute;ny pret&iacute;naj&uacute; cesty.
+            </p>
+        </div>
+    </div>
+    <div id="measurementType">
+        <div>
+            <p>Met&oacute;da, ktor&aacute; sa použije na meranie vzdialenosti alebo času. Met&oacute;da m&ocirc;že byť l&iacute;niov&aacute; vzdialenosť alebo cestovn&yacute; režim.
+            </p>
+        </div>
+    </div>
+    <div id="timeOfDay">
+        <div>
+            <p>Hodnota d&aacute;tumu a času odchodu cestuj&uacute;ceho z lokal&iacute;t  <b>vstupnej vrstvy</b>.
+            </p>
+        </div>
+    </div>
+    <div id="limitNearNumberCheckbox">
+        <div>
+            
+            <p>Určuje, či sa použije vlastn&yacute; maxim&aacute;lny počet najbliž&scaron;&iacute;ch prvkov (povolen&eacute;) alebo sa použije predvolen&eacute; maximum n&aacute;stroja 100.
+            </p>
+        </div>
+    </div>
+    <div id="maxCount">
+        <div>
+            <p>Maxim&aacute;lny počet najbliž&scaron;&iacute;ch prvkov, ktor&eacute; možno n&aacute;jsť pre každ&yacute; vstupn&yacute; prvok.
+            </p>
+        </div>
+    </div>
+    <div id="limitSearchRangeCheckbox">
+        <div>
+            
+            <p>Určuje, či sa použije maxim&aacute;lny rozsah vyhľad&aacute;vania (povolen&eacute;) alebo či je rozsah vyhľad&aacute;vania neobmedzen&yacute;.
+            </p>
+        </div>
+    </div>
+    <div id="searchCutoff">
+        <div>
+            <p>Maxim&aacute;lny rozsah vyhľad&aacute;vania na n&aacute;jdenie najbliž&scaron;&iacute;ch prvkov.
+            </p>
+        </div>
+    </div>
+    <div id="searchCutoffUnits">
+        <div>
+            <p>Jednotky použit&eacute; na určenie rozsahu vyhľad&aacute;vania.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>N&aacute;zov vrstvy, ktor&aacute; sa vytvor&iacute; a prid&aacute; do mapy.
+            </p>
+        </div>
+    </div>
+    <div id="includeRouteLayers">
+        <div>
+            <p>Určuje, či sa každ&aacute; v&yacute;sledn&aacute; trasa ulož&iacute; ako vrstva trasy.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>N&aacute;zov priečinka v r&aacute;mci  <b>M&ocirc;j obsah</b>, do ktor&eacute;ho sa ulož&iacute; v&yacute;sledok.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

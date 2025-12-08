@@ -1,0 +1,7 @@
+{
+  "defaultValue": "Tipo de parâmetro não suportado. O valor padrão será usado. <calcite-link target='_blank' href='${ docLink }'>Saiba mais</calcite-link>",
+  "requiredMessage": "Este parâmetro é exigido.s",
+  "unsupportedGPType": "Tipo de parâmetro não suportado. <calcite-link target='_blank' href='${ docLink }'>Saiba mais</calcite-link>",
+  "unsupportedParameterConfig": "Configuração de parâmetro não suportada. <calcite-link target='_blank' href='${ docLink }'>Saiba mais</calcite-link>",
+  "unsupportedParameterConfigDefaultValue": "Configuração de parâmetro não suportada. O valor padrão será usado. <calcite-link target='_blank' href='${ docLink }'>Saiba mais</calcite-link>"
+}

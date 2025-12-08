@@ -1,0 +1,33 @@
+{
+  "DEFAULT": {
+    "enable": true,
+    "backgroundStyle": {
+      "border": {
+        "type": "solid",
+        "color": "var(--sys-color-divider-secondary)",
+        "width": "0px"
+      }
+    }
+  },
+  "HOVER": {
+    "enable": false,
+    "backgroundStyle": {
+      "border": {
+        "type": "solid",
+        "color": "var(--sys-color-divider-secondary)",
+        "width": "0px"
+      }
+    }
+  },
+  "itemStyle": "STYLE1",
+  "isItemStyleConfirm": false,
+  "isOpenAdvabceSetting": false,
+  "direction": "Horizontal",
+  "transitionInfo": {
+    "transition": {
+      "type": "None",
+      "direction": "H"
+    },
+    "oneByOneEffect": null
+  }
+}

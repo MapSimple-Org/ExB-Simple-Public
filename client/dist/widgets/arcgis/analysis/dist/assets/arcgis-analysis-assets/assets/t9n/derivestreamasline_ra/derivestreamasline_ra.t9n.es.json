@@ -1,0 +1,11 @@
+{
+  "all": "Todo",
+  "inputLayersGroupText": "Elija el ráster de superficie de entrada y, opcionalmente, los datos de depresión y el ráster de ponderación.",
+  "itemProperties": {
+    "description": "Salida generada al ejecutar la herramienta Calcular curso de agua como ráster.",
+    "snippet": "Salida generada a partir de Calcular curso de agua como ráster"
+  },
+  "outputStreamFeaturesLabel": "Nombre de entidades de curso de agua de salida",
+  "simplifyLabel": "Simplificar entidades",
+  "streamSettingsGroupText": "Especifique el umbral de acumulación, el método de designación de la transmisión y si las líneas de la transmisión de salida se suavizarán a formas simples."
+}

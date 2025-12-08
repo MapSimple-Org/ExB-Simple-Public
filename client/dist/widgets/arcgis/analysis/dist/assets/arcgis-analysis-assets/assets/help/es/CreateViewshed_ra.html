@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>La herramienta Cuenca visual geod&eacute;sica identifica las ubicaciones de una superficie de r&aacute;ster que son visibles para las ubicaciones del observador de entrada.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputElevationSurface">
+        <div>
+            <p>El r&aacute;ster de elevaci&oacute;n en el que se calcular&aacute; la cuenca visual.
+            </p>
+        </div>
+    </div>
+    <div id="inputObserverFeatures">
+        <div>
+            <p>Las ubicaciones del observador para las que se calcular&aacute; la cuenca visual.
+            </p>
+        </div>
+    </div>
+    <div id="optimizeFor">
+        <div>
+            <p>Optimiza el c&aacute;lculo de la cuenca visual en funci&oacute;n de la velocidad o la precisi&oacute;n.
+            </p>
+        </div>
+    </div>
+    <div id="verticalError">
+        <div>
+            <p>La cantidad de incertidumbre en los valores de elevaci&oacute;n del valor de  <b>Superficie de elevaci&oacute;n de entrada</b>.
+            </p>
+        </div>
+    </div>
+    <div id="refractivityCoefficient">
+        <div>
+            <p>El coeficiente de la refracci&oacute;n de la luz visible en el aire.
+            </p>
+        </div>
+    </div>
+    <div id="maximumViewingDistanceField">
+        <div>
+            <p>La distancia de visualizaci&oacute;n m&aacute;xima para el c&aacute;lculo de la cuenca visual.
+            </p>
+            <p>La distancia se puede definir mediante un valor y sus unidades, o desde un campo en el valor  <b>Entidades de puntos o l&iacute;neas del observador de entrada</b>.
+            </p>
+        </div>
+    </div>
+    <div id="minimumViewingDistanceField">
+        <div>
+            <p>La distancia de visualizaci&oacute;n m&iacute;nima para el c&aacute;lculo de la cuenca visual.
+            </p>
+            <p>La distancia se puede definir mediante un valor y sus unidades, o desde un campo en el valor  <b>Entidades de puntos o l&iacute;neas del observador de entrada</b>.
+            </p>
+        </div>
+    </div>
+    <div id="viewingDistanceIs3D">
+        <div>
+            <p>Especifica si las distancias de visualizaci&oacute;n m&aacute;xima y m&iacute;nima se medir&aacute;n en distancia 3D o en distancia 2D.
+            </p>
+            <p>Si est&aacute; desactivado, las distancias de visualizaci&oacute;n se tratar&aacute;n como distancias euclidianas 2D. Si est&aacute; activada, las distancias de visualizaci&oacute;n se tratar&aacute;n como distancias 3D.
+            </p>
+        </div>
+    </div>
+    <div id="observersElevationField">
+        <div>
+            <p>La elevaci&oacute;n de la superficie en las ubicaciones del observador.
+            </p>
+            <p>La elevaci&oacute;n se puede definir mediante un valor y sus unidades, o desde un campo en el valor  <b>Entidades de puntos o l&iacute;neas del observador de entrada</b>.
+            </p>
+        </div>
+    </div>
+    <div id="observersHeightField">
+        <div>
+            <p>La altura de los observadores por encima del suelo.
+            </p>
+            <p>La altura se puede definir mediante un valor y sus unidades, o desde un campo en el valor  <b>Entidades de puntos o l&iacute;neas del observador de entrada</b>.
+            </p>
+        </div>
+    </div>
+    <div id="targetHeightField">
+        <div>
+            <p>La altura de los objetivos en el suelo.
+            </p>
+            <p>La altura se puede definir mediante un valor y sus unidades, o desde un campo en el valor  <b>Entidades de puntos o l&iacute;neas del observador de entrada</b>.
+            </p>
+        </div>
+    </div>
+    <div id="horizontalStartAngle">
+        <div>
+            <p>El &aacute;ngulo inicial del rango de escaneo horizontal.
+            </p>
+            <p>El &aacute;ngulo puede definirse por un valor de 0 a 360 o desde un campo en el valor de  <b>Entidades de puntos o l&iacute;neas del observador de entrada</b>.
+            </p>
+        </div>
+    </div>
+    <div id="horizontalEndAngle">
+        <div>
+            <p>El &aacute;ngulo final del rango de escaneo horizontal.
+            </p>
+            <p>El &aacute;ngulo puede definirse por un valor de 0 a 360 o desde un campo en el valor de  <b>Entidades de puntos o l&iacute;neas del observador de entrada</b>.
+            </p>
+        </div>
+    </div>
+    <div id="verticalUpperAngle">
+        <div>
+            <p>El l&iacute;mite del &aacute;ngulo vertical superior del escaneo en relaci&oacute;n con el plano horizontal.
+            </p>
+            <p>El &aacute;ngulo puede definirse por un valor de &ndash;90 a 90 o desde un campo en el valor de  <b>Entidades de puntos o l&iacute;neas del observador de entrada</b>.
+            </p>
+        </div>
+    </div>
+    <div id="verticalLowerAngle">
+        <div>
+            <p>El l&iacute;mite del &aacute;ngulo vertical inferior del escaneo en relaci&oacute;n con el plano horizontal.
+            </p>
+            <p>El &aacute;ngulo puede definirse por un valor de &ndash;90 a 90 o desde un campo en el valor de  <b>Entidades de puntos o l&iacute;neas del observador de entrada</b>.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>El nombre de la capa r&aacute;ster de cuenca visual que se crear&aacute; y se agregar&aacute; al mapa. Esta capa contiene las &aacute;reas visibles que los observadores pueden ver y los valores de celda representan el n&uacute;mero de observadores que pueden ver las celdas.
+            </p>
+        </div>
+    </div>
+    <div id="aboveGroundLevelOutputName">
+        <div>
+            <p>El nombre de la capa r&aacute;ster sobre el nivel del suelo (AGL) que se crear&aacute; y se agregar&aacute; al mapa.
+            </p>
+        </div>
+    </div>
+    <div id="resultType">
+        <div>
+            <p>El tipo de salida que se crear&aacute;. La salida puede ser una capa de im&aacute;genes en teselas o una capa de im&aacute;genes din&aacute;micas.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>El nombre de la carpeta de  <b>Mi contenido</b> en la que se guardar&aacute; el resultado.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

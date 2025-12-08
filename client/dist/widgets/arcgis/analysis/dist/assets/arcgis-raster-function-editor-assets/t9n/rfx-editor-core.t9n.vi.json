@@ -1,0 +1,15 @@
+{
+  "addRaster": "Thêm Biến Raster",
+  "addScalar": "Thêm Hằng số",
+  "raster": "Raster",
+  "scalar": "Vô hướng",
+  "defaultModelName": "Raster Function Template",
+  "defaultRasterName": "Raster",
+  "invalidRFTMessage": "Biểu mẫu hàm raster không hợp lệ.",
+  "deprecated": "Không còn sử dụng",
+  "deprecatedHoverText": "Hàm raster này đã không còn được sử dụng và sẽ bị xóa khỏi bản phát hành trong tương lai.",
+  "unsupported": "Không được hỗ trợ",
+  "unsupportedHoverText": "Hàm raster này không được hỗ trợ và có thể có trong bản phát hành tương lai.",
+  "userStartDirection": "Chọn một chức năng để bắt đầu xây dựng biểu mẫu chức năng raster.",
+  "learnMore": "Tìm hiểu thêm"
+}

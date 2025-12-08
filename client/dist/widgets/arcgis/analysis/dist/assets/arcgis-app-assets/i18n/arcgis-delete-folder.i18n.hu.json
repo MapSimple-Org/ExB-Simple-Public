@@ -1,0 +1,22 @@
+{
+  "deleteFolder": "Mappa törlése",
+  "delete": "Törlés",
+  "permanentlyDelete": "Végleges törlés",
+  "back": "Vissza",
+  "cancel": "Mégse",
+  "success": "A(z) „${title}” mappa törlése sikeresen megtörtént",
+  "deleteProtectedItemsInFolder": "A mappát nem sikerült törölni, mert néhány elem törlés ellen védett vagy függő elemekkel rendelkezik.",
+  "message": {
+    "empty": "Biztosan törölni kívánja a(z) <strong style='font-weight: 500'>${title}</strong> mappát?",
+    "recycleAll": "Biztosan törölni szeretné a(z) <strong style='font-weight: 500'>${title}</strong> mappát, és a lomtárba szeretné küldeni a tartalmát?",
+    "mustBeEmpty": "Hogy törölni lehessen, a(z) <strong style='font-weight: 500'>${title}</strong> mappát ki kell üríteni.",
+    "aFewCannotBeDeleted": "Néhány elem nem törölhető. Szeretné folytatni a többi törlését?",
+    "canBeEmptied": "Hogy törölni lehessen, a(z) <strong style='font-weight: 500'>${title}</strong> mappát ki kell üríteni. Szeretné folytatni a többi elem törlését?",
+    "cannotBeDeleted": "A(z) <strong style='font-weight: 500'>${title}</strong> mappa nem törölhető, mert az elemei nem törölhetők."
+  },
+  "disabledMessage": {
+    "single": "<span style='color:red'>1 elem</span> van ebben a(z) <b>${label}</b> mappában.<br/></br/>Biztosan törli a mappát és a mappa elemét?",
+    "multiple": "<span style='color:red'>${number} elem</span> van ebben a(z) <b>${label}</b> mappában.<br/></br/>Biztosan törli a mappát és a mappa minden elemét?",
+    "unknown": "Biztosan törölni kívánja a(z) <b>${label}</b> mappát?"
+  }
+}

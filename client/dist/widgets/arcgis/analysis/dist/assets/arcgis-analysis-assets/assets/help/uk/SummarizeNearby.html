@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>Інструмент &laquo;Підсумувати поруч&raquo; обчислює статистику для об&rsquo;єктів на певній відстані від інших об&rsquo;єктів. Відстань можна обчислити за допомогою відстані по прямій лінії або режиму переміщення.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="summaryLayer">
+        <div>
+            <p>Шар, що підсумовуватиметься на відстані від сусіднього шару.
+            </p>
+            <p class="toolPaneOnly">Кількість об'єктів залежить від таких додаткових факторів, як критерії фільтрування та екстент аналізу.
+            </p>
+        </div>
+    </div>
+    <div id="sumNearbyLayer">
+        <div>
+            <p>Шар точок, ліній або полігонів, який використовуватиметься як початкове місце розташування, навколо якого буде створено обмежувальні області для підсумування прилеглих об'єктів.
+            </p>
+            <p class="toolPaneOnly">Кількість об'єктів залежить від таких додаткових факторів, як критерії фільтрування та екстент аналізу.
+            </p>
+        </div>
+    </div>
+    <div id="nearType">
+        <div>
+            
+            <p class="toolPaneOnly">Метод, який буде використано для створення обмежувальних областей. Методом може бути відстань по прямій лінії або режим переміщення.
+            </p> 
+            <p class="modelBuilderOnly">Метод, який буде використано для створення обмежувальних областей. Наразі відстань по прямій лінії є єдиним методом, що підтримується для моделей.
+            </p>
+        </div>
+    </div>
+    <div id="distances">
+        <div>
+            <p>Відстань або час, який буде використано для створення обмежувальних областей. Якщо додаються кілька значень, кожне значення буде використано для обчислення обмежувальних площ для всіх вхідних об&rsquo;єктів.
+            </p>
+        </div>
+    </div>
+    <div id="units">
+        <div>
+            <p>Одиниці вимірювання, які будуть використовуватися для визначення відстані або часу.
+            </p>
+        </div>
+    </div>
+    <div id="returnBoundaries">
+        <div>
+            <p>Визначає, чи буде шар результатів обмежувальними областями (вибрано) чи такою ж геометрією, що й вхідний прилеглий шар (не вибрано).
+            </p>
+        </div>
+    </div>
+    <div id="sumShape">
+        <div>
+            <p>Визначає, чи обчислюватиметься загальний розмір об&rsquo;єктів, підсумованих у кожній обмежувальній області. Для ліній обчислюватиметься загальна довжина. Для полігонів обчислюватиметься загальна площа.
+            </p>
+        </div>
+    </div>
+    <div id="shapeUnits">
+        <div>
+            <p>Одиниці вимірювання, які будуть використовуватися для обчислення загального розміру підсумованих об'єктів.
+            </p>
+        </div>
+    </div>
+    <div id="summaryFields">
+        <div>
+            <p>Поля чисел або дат із вхідного шару, які будуть підсумовані, і статистика, яка обчислюватиметься для кожного поля.
+            </p>
+        </div>
+    </div>
+    <div id="groupByField">
+        <div>
+            <p>Поле з вхідного шару, яке буде використане для розділення даних на окремі групи для статистичних обчислень.
+            </p>
+        </div>
+    </div>
+    <div id="minorityMajority">
+        <div>
+            <p>Визначає, чи слід обчислювати групу меншості (найменш значущих) і більшості (найбільш значущих) у кожній підсумковій області.
+            </p>
+        </div>
+    </div>
+    <div id="percentShape">
+        <div>
+            <p>Визначає, чи обчислюватиметься відсоток підсумованих об'єктів, які належать до кожної групи в межах кожного кордону.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>Назва шару, який буде створено та додано до карти.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>Назва папки в  <b>Моєму вмісті</b>, де буде збережено результати.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

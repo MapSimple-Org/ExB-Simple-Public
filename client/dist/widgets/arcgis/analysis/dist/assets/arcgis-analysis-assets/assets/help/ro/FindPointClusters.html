@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>Instrumentul Găsire fascicule de puncte identifică obiecte spațiale fascicule de puncte &icirc;n zgomotul &icirc;nconjurător pe baza distribuției lor spațiale.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="analysisLayer">
+        <div>
+            <p>Stratul tematic de puncte de intrare care va fi grupat &icirc;n fascicule pe baza distribuției spațiale a obiectelor spațiale de puncte.
+            </p>
+        </div>
+    </div>
+    <div id="method">
+        <div>
+            <p>Metoda care va fi utilizată pentru a identifica clustere.
+            </p>
+        </div>
+    </div>
+    <div id="minFeaturesCluster">
+        <div>
+            <p>Numărul minim de obiecte spațiale de punte care vor fi considerate un fascicul.
+            </p>
+        </div>
+    </div>
+    <div id="searchDistance">
+        <div>
+            <p>Specifică distanța maximă din jurului fiecărui obiect spațial de punct pentru a căuta puncte care pot fi incluse &icirc;n fascicul. Dacă este lăsată necompletată, valoarea  <b>Distanța căutare</b> va fi cea mai mare distanță de bază găsită &icirc;n stratul tematic, exclusiv acele distanțe de bază din partea superioară de 1%.
+            </p>
+        </div>
+    </div>
+    <div id="searchDistanceUnit">
+        <div>
+            <p>Specifică unitățile care vor fi utilizate pentru distanța de căutare.
+            </p>
+        </div>
+    </div>
+    <div id="sensitivity">
+        <div>
+            <p>Un număr &icirc;ntreg &icirc;ntre 0 și 100 care stabilește compactitatea clusterelor. Dacă este lăsată goală, valoarea  <b>Sensibilitate cluster</b> va fi calculată folosind Divergența Kullback-Leibler.
+            </p>
+        </div>
+    </div>
+    <div id="timeField">
+        <div>
+            <p>C&acirc;mpul din stratul tematic de intrare conține un marcaj temporal pentru fiecare obiect spațial.
+            </p>
+        </div>
+    </div>
+    <div id="searchTimeInterval">
+        <div>
+            <p>Intervalul de timp care va fi utilizat pentru a stabili dacă obiectele spațiale formează un cluster spațiu-timp. Intervalul de timp de căutare se &icirc;ntinde &icirc;nainte și după ora fiecărui obiect spațial; de exemplu, un interval de timp de căutare de 3 zile &icirc;n apropierea unui obiect spațial va include toate obiectele spațiale &icirc;ncep&acirc;nd cu 3 zile &icirc;nainte și &icirc;ncheindu-se la 3 zile după momentul obiectului spațial.
+            </p>
+        </div>
+    </div>
+    <div id="searchTimeUnit">
+        <div>
+            <p>Specifică unitățile care vor fi utilizate pentru intervalul de timp de căutare.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>Numele stratului tematic care va fi creat și adăugat pe hartă.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>Numele folderului din  <b>Resursele mele</b> &icirc;n care va fi salvat rezultatul.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

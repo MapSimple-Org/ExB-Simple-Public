@@ -1,0 +1,34 @@
+{
+  "aggregationType": "Type",
+
+  "aggDefTypeAll": "All",
+  "aggDefTypeIntervalKeyword": "Interval Keyword",
+  "aggDefTypeIntervalValue": "Interval Value",
+  "aggDefTypeIntervalRanges": "Interval Ranges",
+
+  "valueInterval": "Value Interval",
+  "dimensionUnit": "Unit",
+
+  "ranges": "Ranges",
+  "minValue": "Minimum Value",
+  "maxValue": "Maximum Value",
+
+  "esriTimeUnitsHours": "Hours",
+  "esriTimeUnitsDays": "Days",
+  "esriTimeUnitsWeeks": "Weeks",
+  "esriTimeUnitsMonths": "Months",
+  "esriTimeUnitsYears": "Years",
+
+  "esriTimeIntervalKeywordHourly": "Hourly",
+  "esriTimeIntervalKeywordDaily": "Daily",
+  "esriTimeIntervalKeywordWeekly": "Weekly",
+  "esriTimeIntervalKeywordDekadly": "Dekadly",
+  "esriTimeIntervalKeywordPentadly": "Pentadly",
+  "esriTimeIntervalKeywordMonthly": "Monthly",
+  "esriTimeIntervalKeywordQuarterly": "Quarterly",
+  "esriTimeIntervalKeywordYearly": "Yearly",
+  "esriTimeIntervalKeywordRecurringDaily": "Recurring daily",
+  "esriTimeIntervalKeywordRecurringWeekly": "Recurring weekly",
+  "esriTimeIntervalKeywordRecurringMonthly": "Recurring monthly",
+  "esriTimeIntervalKeywordRecurringQuarterly": "Recurring quarterly"
+}

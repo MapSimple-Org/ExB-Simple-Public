@@ -1,0 +1,7 @@
+{
+  "defaultValue": "Nepodporovaný typ parametru. Bude použita výchozí hodnota. <calcite-link target='_blank' href='${ docLink }'>Další informace</calcite-link>",
+  "requiredMessage": "Tento parametr je povinný.",
+  "unsupportedGPType": "Nepodporovaný typ parametru. <calcite-link target='_blank' href='${ docLink }'>Další informace</calcite-link>",
+  "unsupportedParameterConfig": "Nepodporovaná konfigurace parametru. <calcite-link target='_blank' href='${ docLink }'>Další informace</calcite-link>",
+  "unsupportedParameterConfigDefaultValue": "Nepodporovaná konfigurace parametru. Bude použita výchozí hodnota. <calcite-link target='_blank' href='${ docLink }'>Další informace</calcite-link>"
+}

@@ -1,0 +1,27 @@
+{
+  "area": "Laukums",
+  "binResolution": "H3 nodalījuma izšķirtspēja",
+  "binSize": "Nodalījuma izmērs",
+  "binSizeUnit": "Vienība",
+  "binType": "Nodalījuma formas veids",
+  "diamondBins": "Dimanta formas nodalījumi",
+  "distance": "Attālums",
+  "extentLayer": "Pārklājuma slānis",
+  "extentOverrideMessage": "Šis pārklājuma slānis tiks izmantots jebkura apstrādes pārklājuma, kas iestatīti vidēs, vietā.",
+  "extentSectionLabel": "Pārklājuma iestatījumi",
+  "extentSectionText": "Norādiet pārklājuma slāni, kas jāaptver mozaīkas veidošanai.",
+  "h3hexagonBins": "H3 sešstūra nodalījumi",
+  "hexagon": "Sešstūris",
+  "intersectStudyArea": "Saglabāt tikai krustojošus mozaīkas veidojumus",
+  "itemProperties": {
+    "description": "Elementu slānis ir ģenerēts, palaižot analīzes rīku Ģenerēt mozaīkas veidošanu.",
+    "snippet": "Elementu slānis ir ģenerēts, izmantojot Ģenerēt mozaīkas veidošanu"
+  },
+  "outputAreasSectionText": "Norādiet mozaīkas veidošanas režģa nosaukumu.",
+  "sizeType": "Nodalījuma izmēra mērījumi",
+  "square": "Kvadrāts",
+  "tessellationSettingsLabel": "Mozaīkas veidošanas iestatījumi",
+  "tessellationSettingsSummaryText": "Norādiet ģenerējamo nodalījumu formu un lielumu.",
+  "thexagonBins": "Šķērseniski sešstūra nodalījumi",
+  "triangleBins": "Trijstūrveida nodalījumi"
+}

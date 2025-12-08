@@ -1,0 +1,110 @@
+{
+  "Authoritative": {
+    "title": "Acreditado",
+    "tooltip": {
+      "org": "Recomendado por su organización",
+      "public": "Recomendado por ${name}"
+    }
+  },
+  "Deprecated": {
+    "title": "Obsoleto",
+    "tooltip": "No recomendado para su uso"
+  },
+  "Has Replacement": {
+    "title": "Tiene reemplazo",
+    "tooltip": "Este elemento es un reemplazo recomendado. Ver detalles del elemento para buscar y usar el reemplazo.",
+    "itemPageTooltip": "Este elemento es un reemplazo recomendado.",
+    "link": "Ver elemento de reemplazo"
+  },
+  "DeprecatedItem": {
+    "title": "Tipo de elemento obsoleto"
+  },
+  "Living Atlas": {
+    "title": "Living Atlas",
+    "tooltip": "Contenido depurado por Esri"
+  },
+  "Subscriber": {
+    "title": "Suscriptor",
+    "tooltip": {
+      "org": "Contenido exclusivo para suscriptores",
+      "public": "Contenido exclusivo para suscriptores. Para usarlo, inicie sesión con una suscripción de ArcGIS Online."
+    }
+  },
+  "Premium": {
+    "title": "Premium",
+    "tooltip": {
+      "org": "Contenido exclusivo para suscriptores. Consume créditos.",
+      "public": "Contenido exclusivo para suscriptores que consumen créditos. Para usarlo, inicie sesión con una suscripción de ArcGIS Online."
+    }
+  },
+  "Open Data": {
+    "title": "Datos abiertos",
+    "tooltip": "Disponible para su uso público"
+  },
+  "Marketplace": {
+    "title": "Marketplace",
+    "tooltip": "Incluido en ArcGIS Marketplace"
+  },
+  "Collaboration": {
+    "title": "Colaboración distribuida",
+    "tooltip": "Este elemento se recibió de una colaboración distribuida"
+  },
+  "Retired": {
+    "title": "Retirado",
+    "tooltip": {
+      "general": "Solo lectura",
+      "cityEngine": "Visor web de CityEngine y Escenas web de CityEngine ya no son compatibles.",
+      "storyMap": "El Story Map clásico de Esri utilizado para crear esta aplicación se ha retirado de ArcGIS Enterprise. Para crear historias nuevas, utilice ArcGIS StoryMaps.",
+      "app": "La plantilla Configurable Apps utilizada para crear esta aplicación se ha retirado de ArcGIS Enterprise. Este elemento no es operacional y puede eliminarse. Para crear una aplicación nueva, utilice ArcGIS Instant Apps, ArcGIS StoryMaps, ArcGIS Dashboards o ArcGIS Experience Builder.",
+      "webAppBuilder": "ArcGIS Web AppBuilder se ha retirado de ArcGIS Enterprise. Este elemento no es operacional y puede eliminarse. Para crear una nueva aplicación, utilice ArcGIS Experience Builder.",
+      "insights": "ArcGIS Insights se ha retirado de ArcGIS Enterprise. Este elemento no es operacional y puede eliminarse.",
+      "bdfs": "Los archivos compartidos de Big Data se han suprimido en ArcGIS Enterprise. Este elemento no es operacional y puede eliminarse."
+    }
+  },
+  "Public Data Collection": {
+    "title": "Recopilación de datos públicos",
+    "tooltip": "Aprobado para recopilación de datos públicos"
+  },
+  "Solution": {
+    "title": "ArcGIS Solution",
+    "tooltip": "Solución compatible con Esri"
+  },
+  "Registered": {
+    "title": "OAuth 2.0",
+    "tooltip": {
+      "online": "Una aplicación OAuth 2.0 registrada. Puede utilizar contenido Premium o de suscriptor.",
+      "enterprise": "Una aplicación OAuth 2.0 registrada."
+    }
+  },
+  "Registered API Key Credentials (Standard)": {
+    "title": {
+      "online": "Credenciales de clave de API - Estándar",
+      "enterprise": "Credenciales de clave de API"
+    },
+    "tooltip": "Otorga acceso a servicios."
+  },
+  "Registered API Key Credentials (Personal)": {
+    "title": "Credenciales de clave de API - Personal",
+    "tooltip": "Otorga privilegios personales. Por motivos de seguridad, debe proteger estas credenciales del mismo modo que protegería su nombre de usuario y contraseña."
+  },
+  "Registered OAuth 2.0 Credentials (Standard)": {
+    "title": {
+      "online": "Credenciales de OAuth 2.0 - Estándar",
+      "enterprise": "Credenciales de OAuth 2.0"
+    },
+    "tooltip": "Otorga acceso a servicios."
+  },
+  "Registered OAuth 2.0 Credentials (Personal)": {
+    "title": "Credenciales de OAuth 2.0 - Personal",
+    "tooltip": "Otorga privilegios personales. Por motivos de seguridad, debe proteger estas credenciales del mismo modo que protegería su nombre de usuario y contraseña."
+  },
+  "Registered Application": {
+    "title": "Aplicación OAuth 2.0",
+    "tooltip": "Una aplicación OAuth 2.0 registrada"
+  },
+  "Personal credential": {
+    "title": "Personal",
+    "tooltip": "Está concediendo un privilegio personal a esta credencial. Por motivos de seguridad, debe proteger los tokens de acceso creados con estas credenciales del mismo modo que protegería su nombre de usuario y contraseña. Revise las Condiciones de uso."
+  },
+  "loading": "Cargando..."
+}

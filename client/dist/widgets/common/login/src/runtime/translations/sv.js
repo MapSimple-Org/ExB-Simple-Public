@@ -1,0 +1,1 @@
+System.register([],function(n){return{execute:function(){n({_widgetLabel:"Logga in",switchToLogin:"V\xe4xla till innan du loggar in",switchToLogout:"V\xe4xla till efter inloggning",toggleSignInPreview:"V\xe4xla f\xf6rhandsgranskning av inloggning",restrictedResources:"Begr\xe4nsade resurser"})}}});

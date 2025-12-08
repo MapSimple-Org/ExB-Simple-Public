@@ -1,0 +1,17 @@
+{
+  "any": "أي",
+  "count": "عدد",
+  "field": "حقل",
+  "fieldLoadingErrorText": "يتعذر تحميل الحقول.",
+  "first": "الأول",
+  "isRequired": "هذه المعلمة مطلوبة.",
+  "last": "أخير",
+  "max": "الحد الأقصى",
+  "mean": "المتوسط",
+  "min": "الحد الأدنى",
+  "selectAll": "تحديد الكل",
+  "standardDeviation": "الانحراف المعياري",
+  "statistic": "إحصائيات",
+  "statisticNotSelected": "مطلوب اسم إحصائية واحد على الأقل لكل حقل.",
+  "sum": "مجموع"
+}

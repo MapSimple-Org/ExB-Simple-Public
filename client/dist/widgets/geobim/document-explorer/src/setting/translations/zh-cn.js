@@ -1,0 +1,1 @@
+System.register([],function(e){return{execute:function(){e({settingsLabel:"Document Explorer \u8bbe\u7f6e",selectModelViewer:"\u9009\u62e9 Document Viewer \u5fae\u4ef6\u4ee5\u663e\u793a\u6587\u6863\u3002"})}}});

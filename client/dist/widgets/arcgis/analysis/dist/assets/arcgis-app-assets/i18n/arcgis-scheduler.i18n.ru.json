@@ -1,0 +1,55 @@
+{
+  "beginningOnLabel": "Начиная с",
+  "repeatTypeLabel": "Тип повтора",
+  "endingOnTypeLabel": "Заканчивая на",
+  "endingOnDateLabel": "Дата окончания",
+  "endingOnCountLabel": "Количество",
+  "endingOnCountPlaceholder": "например: 1, 10, 30",
+  "dailyRepeatIntervalLabel": "Интервал повтора",
+  "dailyTimeLabel": "Время",
+  "weeklyDaysOfWeekLabel": "День недели",
+  "weeklyTimeLabel": "Время",
+  "monthlyDayOfMonthLabel": "День месяца",
+  "monthlyDayOfMonthPlaceholder": "например, 1-31",
+  "monthlyRepeatIntervalLabel": "Интервал повтора",
+  "monthlyTimeLabel": "Время",
+  "repeatTypeOptions": {
+    "day": "День",
+    "week": "Неделя",
+    "month": "Месяц"
+  },
+  "endingOnType": {
+    "never": "Никогда",
+    "date": "Дата",
+    "count": "Вкл"
+  },
+  "dailyRepeatInterval": {
+    "everyDay": "Каждый день",
+    "everyOtherDay": "Через день",
+    "everyThreeDays": "Каждые три дня",
+    "everyFourDays": "Каждые четыре дня",
+    "everyFiveDays": "Каждые пять дней",
+    "everySixDays": "Каждые шесть дней",
+    "everySevenDays": "Каждые семь дней",
+    "everyFourteenDays": "Каждые четырнадцать дней"
+  },
+  "weekDays": {
+    "all": "Все",
+    "allWeekdays": "Все будние дни",
+    "sunday": "Воскресенье",
+    "monday": "Понедельник",
+    "tuesday": "Вторник",
+    "wednesday": "Среда",
+    "thursday": "Четверг",
+    "friday": "Пятница",
+    "saturday": "Суббота"
+  },
+  "monthlyRepeatInterval": {
+    "everyMonth": "Каждый месяц",
+    "everyTwoMonths": "Каждые два месяца",
+    "everyThreeMonths": "Каждые три месяца",
+    "everyFourMonths": "Каждые четыре месяца",
+    "everyFiveMonths": "Каждые пять месяцев",
+    "everySixMonths": "Каждые шесть месяцев"
+  }
+}

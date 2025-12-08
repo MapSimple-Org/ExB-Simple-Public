@@ -1,0 +1,1 @@
+System.register([],function(e){return{execute:function(){e({settingsLabel:"Pengaturan Explorer Tautan",selectModelViewer:"Pilih widget Penampil Dokumen untuk menampilkan dokumen tertaut."})}}});

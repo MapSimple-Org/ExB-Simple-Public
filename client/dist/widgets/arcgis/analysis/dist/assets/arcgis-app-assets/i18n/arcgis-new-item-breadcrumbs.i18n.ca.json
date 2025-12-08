@@ -1,0 +1,12 @@
+{
+  "apiCredentialType": "Tipus de credencial: clau d'API",
+  "oauthCredentialType": "Tipus de credencial: OAuth 2.0",
+  "itemAccess": "Accés a elements",
+  "page": "Pàgina: ${page}",
+  "currentPage": "Pàgina actual: ${page}",
+  "privileges": "Permisos",
+  "itemDetails": "Detalls de l'element",
+  "settings": "Configuració",
+  "serviceScope": "Àmbit del servei",
+  "summary": "Resum"
+}

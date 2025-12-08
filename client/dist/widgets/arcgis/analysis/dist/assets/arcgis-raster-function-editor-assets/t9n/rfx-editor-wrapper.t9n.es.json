@@ -1,0 +1,6 @@
+{
+  "dialogTitle": "Editor de funciones ráster",
+  "defaultTemplateName": "Plantilla de función ráster",
+  "readOnlyModeTitle": "Solo lectura",
+  "readOnlyModeMessage": "El elemento de la plantilla de la función ráster es de solo lectura. Los cambios no se pueden guardar."
+}

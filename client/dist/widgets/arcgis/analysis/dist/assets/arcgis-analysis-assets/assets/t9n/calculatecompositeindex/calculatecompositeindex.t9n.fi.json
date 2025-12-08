@@ -1,0 +1,26 @@
+{
+  "CCIAnalysisSettingGroupLabel": "Indeksiasetukset",
+  "CCIAnalysisSettingGroupText": "Määritä indeksin oikea laskutapa.",
+  "geomeanPercentileLabel": "Yhdistä arvojärjestykset (prosenttipisteiden geometrinen keskiarvo)",
+  "geomeanRawLabel": "Yhdistä raaka-arvot (raaka-arvojen geometrinen keskiarvo)",
+  "geomeanScaledLabel": "Yhdistä skaalatut arvot (skaalattujen arvojen geometrinen keskiarvo)",
+  "indexMethodLabel": "Muuttujien skaalaus- ja yhdistämismenetelmä",
+  "inputFeaturesOrTableLabel": "Lähtöaineiston kohteet tai taulu",
+  "inputLayerGroupText": "Valitse kohteet tai taulu ja muuttujat, joilla indeksi luodaan.",
+  "inputVariablesLabel": "Lähtöaineiston muuttujat",
+  "itemProperties": {
+    "description": "Kohdekarttataso, joka on luotu Laske yhdistelmäindeksi -analyysityökalulla.",
+    "snippet": "Laske yhdistelmäindeksi -toiminnon perusteella luotu kohdekarttataso"
+  },
+  "meanPercentileLabel": "Yhdistä arvojärjestykset (prosenttipisteiden keskiarvo)",
+  "meanRawLabel": "Yhdistä raaka-arvot (raaka-arvojen keskiarvo)",
+  "meanScaledLabel": "Yhdistä skaalatut arvot (raaka-arvojen keskiarvo)",
+  "outputIndexMaxLabel": "Maksimi",
+  "outputIndexMinLabel": "Minimi",
+  "outputIndexMinMaxLabel": "Indeksi minimi- ja maksimiarvot",
+  "outputIndexReverseLabel": "Käännä indeksin arvot",
+  "reverseVariableLabel": "Käännä suunta",
+  "sumFlagsPercentileLabel": "Korosta äärimmäiset (90. prosenttipisteen ylittävien arvojen määrä)",
+  "toolName": "Laske yhdistelmäindeksi",
+  "weight": "Painoarvo"
+}

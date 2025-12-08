@@ -1,0 +1,12 @@
+{
+  "apiCredentialType": "Kimlik bilgisi türü: API anahtarı",
+  "oauthCredentialType": "Kimlik bilgisi türü: OAuth 2.0",
+  "itemAccess": "Öge Erişimi",
+  "page": "Sayfa: ${page}",
+  "currentPage": "Geçerli sayfa: ${page}",
+  "privileges": "Ayrıcalıklar",
+  "itemDetails": "Öge ayrıntıları",
+  "settings": "Ayarlar",
+  "serviceScope": "Hizmet kapsamı",
+  "summary": "Özet"
+}

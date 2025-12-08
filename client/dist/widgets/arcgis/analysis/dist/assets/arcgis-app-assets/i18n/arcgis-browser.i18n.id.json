@@ -1,0 +1,89 @@
+{
+  "browser": {
+    "refineContent": "Perbaiki konten",
+    "filters": "Filter",
+    "pageRange": "${start}-${end}, total: ${total}",
+    "pageRangeAria": "${start}-${end}, total item: ${total}",
+    "pageRangeWithRecycleBin": "${start}-${end}, total: ${total} (Total ukuran: ${recycleBinSize})",
+    "pageRangeAriaWithRecycleBin": "${start}-${end}, total item: ${total} (Total ukuran: ${recycleBinSize})",
+    "totalSize": "Total ukuran: ${totalSize}",
+    "loading": "Memuat hasil",
+    "close": "Tutup"
+  },
+  "actions": {
+    "more": "Lainnya"
+  },
+  "filter": {
+    "clear": "Hapus"
+  },
+  "filterDate": {
+    "today": "Hari ini",
+    "yesterday": "Kemarin",
+    "last7": "7 hari terakhir",
+    "last30": "30 hari terakhir",
+    "never": "Jangan pernah",
+    "custom": "Kustomisasi rentang...",
+    "title": {
+      "created": "Tanggal dibuat",
+      "modified": "Tanggal diubah",
+      "joined": "Tanggal bergabung",
+      "lastLogin": "Masuk terakhir"
+    },
+    "created": "Dibuat: ${date}",
+    "modified": "Diubah: ${date}",
+    "joined": "Bergabung: ${date}",
+    "lastLogin": "Terakhir masuk: ${date}"
+  },
+  "pagination": {
+    "next": "Halaman berikutnya",
+    "prev": "Halaman sebelumnya"
+  },
+  "search": {
+    "label": "Cari grup",
+    "search": "Cari",
+    "clear": "Hapus istilah pencarian",
+    "wildcard": "Pencarian wildcard tidak didukung"
+  },
+  "sort": {
+    "sortDirection": "Urutkan arah",
+    "title": "Judul",
+    "relevance": "Relevansi",
+    "modified": "Tanggal diubah",
+    "deleted": "Tanggal dihapus",
+    "created": "Tanggal dibuat",
+    "added": "Tanggal ditambahkan",
+    "size": "Ukuran",
+    "owner": "Pemilik",
+    "sizeAsc": "Terkecil hingga terbesar",
+    "sizeDesc": "Terbesar hingga terkecil",
+    "numviews": "Jumlah tampilan",
+    "numAsc": "Paling sedikit ke paling banyak",
+    "numDesc": "Paling banyak ke paling sedikit",
+    "alphabeticalAsc": "Alfabetis",
+    "alphabeticalDesc": "Alfabetis terbalik",
+    "recentAsc": "Paling lama",
+    "recentDesc": "Paling baru",
+    "sort": "Urutkan",
+    "sortBy": "Urutkan menurut",
+    "sortByColon": "Sortir menurut:",
+    "fullname": "Nama",
+    "username": "Nama Pengguna",
+    "name": "Nama",
+    "membertype": "Peran grup",
+    "joined": "Tanggal bergabung",
+    "lastlogin": "Masuk terakhir",
+    "dataset": "Kumpulan data",
+    "mfaenabled": "Autentikasi multifaktor",
+    "defaultAsc": "Naik",
+    "defaultDesc": "Turun"
+  },
+  "topBar": {
+    "filter": "Filter"
+  },
+  "filterStatus": {
+    "clear": "Hapus",
+    "filters": "Filter:",
+    "additional": "Filter aktif tambahan",
+    "clearAllFilters": "Hapus semua filter"
+  }
+}

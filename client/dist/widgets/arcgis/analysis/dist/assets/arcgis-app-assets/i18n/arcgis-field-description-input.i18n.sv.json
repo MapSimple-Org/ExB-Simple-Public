@@ -1,0 +1,6 @@
+{
+  "description": "Beskrivning",
+  "addDescription": "Lägg till en beskrivning",
+  "charactersLeft": "Tecken kvar: ${num}",
+  "invalid": "Beskrivningen får inte innehålla något av dessa tecken: < eller >."
+}

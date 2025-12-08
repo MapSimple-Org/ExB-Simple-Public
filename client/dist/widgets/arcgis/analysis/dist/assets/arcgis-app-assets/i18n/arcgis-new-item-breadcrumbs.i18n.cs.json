@@ -1,0 +1,12 @@
+{
+  "apiCredentialType": "Typ přihlašovacích údajů: Klíč API",
+  "oauthCredentialType": "Typ přihlašovacích údajů: OAuth 2.0",
+  "itemAccess": "Přístup k položce",
+  "page": "Stránka: ${page}",
+  "currentPage": "Aktuální stránka: ${page}",
+  "privileges": "Oprávnění",
+  "itemDetails": "Podrobnosti položky",
+  "settings": "Nastavení",
+  "serviceScope": "Rozsah služby",
+  "summary": "Souhrn"
+}

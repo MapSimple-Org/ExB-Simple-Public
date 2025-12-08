@@ -1,0 +1,12 @@
+{
+  "apiCredentialType": "Hitelesítő adatok típusa: API kulcs",
+  "oauthCredentialType": "Hitelesítő adatok típusa: OAuth 2.0",
+  "itemAccess": "Elemhozzáférés",
+  "page": "Oldal: ${page}",
+  "currentPage": "Aktuális oldal: ${page}",
+  "privileges": "Jogosultságok",
+  "itemDetails": "Elem részletei",
+  "settings": "Beállítások",
+  "serviceScope": "Szolgáltatás hatásköre",
+  "summary": "Összefoglalás"
+}

@@ -1,0 +1,9 @@
+{
+  "inputFlowDirectionRasterLabel": "Flödesriktningsraster som indata",
+  "inputLayerGroupText": "Välj indataströmraster och flödesriktningsraster som indata.",
+  "inputStreamRasterLabel": "Indataströmraster",
+  "itemProperties": {
+    "description": "Utdata har genererats från körning av analysverktyget StreamLink.",
+    "snippet": "Utdata har genererats från StreamLink"
+  }
+}

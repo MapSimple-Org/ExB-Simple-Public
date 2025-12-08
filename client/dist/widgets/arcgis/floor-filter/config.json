@@ -1,0 +1,9 @@
+{
+  "displayLabel": false,
+  "filterDataSources": false,
+  "filterByActiveFloorOnly": false,
+  "autoSetOnFeatureSelection": false,
+  "zoomOnAutoSet": false,
+  "longNames": false,
+  "position": "top-left"
+}

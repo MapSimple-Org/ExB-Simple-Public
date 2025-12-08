@@ -1,0 +1,22 @@
+{
+  "name": "avatarboard",
+  "type": "template",
+  "templateType": "full-screen-grid-page",
+  "label": "Avatarboard",
+  "description": "Avatarboard is a grid page template displaying multiple Card widgets with hover & flip-over effects, and you can add more details in the back like flash cards.",
+  "thumbnail": "thumbnail.png",
+  "order": 3,
+  "templateCreateVersion": "1.11.0",
+  "tags": [
+    "Card",
+    "Gallery",
+    "Title",
+    "Divider"
+  ],
+  "categoriesTags": [
+    "Web page",
+    "Fullscreen grid"
+  ],
+  "thumbnailWidth": 320,
+  "thumbnailHeight": 214
+}

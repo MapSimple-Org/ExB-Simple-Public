@@ -1,0 +1,89 @@
+{
+  "browser": {
+    "refineContent": "Optimitza el contingut",
+    "filters": "Filtres",
+    "pageRange": "${start}-${end}, total: ${total}",
+    "pageRangeAria": "${start}-${end}, total d'elements: ${total}",
+    "pageRangeWithRecycleBin": "${start}-${end}, total: ${total} (Mida total: ${recycleBinSize})",
+    "pageRangeAriaWithRecycleBin": "${start}-${end}, total d'elements: ${total} (Mida total: ${recycleBinSize})",
+    "totalSize": "Mida total: ${totalSize}",
+    "loading": "S'estan carregant els resultats",
+    "close": "Tanca"
+  },
+  "actions": {
+    "more": "Més"
+  },
+  "filter": {
+    "clear": "Esborra"
+  },
+  "filterDate": {
+    "today": "Avui",
+    "yesterday": "Ahir",
+    "last7": "Darrers 7 dies",
+    "last30": "Darrers 30 dies",
+    "never": "Mai",
+    "custom": "Interval personalitzat...",
+    "title": {
+      "created": "Data de creació",
+      "modified": "Data de modificació",
+      "joined": "Data d'incorporació",
+      "lastLogin": "Darrer inici de sessió"
+    },
+    "created": "Creat: ${date}",
+    "modified": "Modificat: ${date}",
+    "joined": "Data d'incorporació: ${date}",
+    "lastLogin": "Darrer inici de sessió: ${date}"
+  },
+  "pagination": {
+    "next": "Pàgina següent",
+    "prev": "Pàgina anterior"
+  },
+  "search": {
+    "label": "Cerca grups",
+    "search": "Cerca",
+    "clear": "Esborra el terme de cerca",
+    "wildcard": "Les cerques amb comodins no s'admeten"
+  },
+  "sort": {
+    "sortDirection": "Direcció de l'ordenació",
+    "title": "Títol",
+    "relevance": "Rellevància",
+    "modified": "Data de modificació",
+    "deleted": "Data d'eliminació",
+    "created": "Data de creació",
+    "added": "Data d'addició",
+    "size": "Mida",
+    "owner": "Propietari",
+    "sizeAsc": "De més petit a més gran",
+    "sizeDesc": "De més gran a més petit",
+    "numviews": "Recompte de visualitzacions",
+    "numAsc": "De menys a més",
+    "numDesc": "De més a menys",
+    "alphabeticalAsc": "Alfabètic",
+    "alphabeticalDesc": "Alfabètic invers",
+    "recentAsc": "Menys recent",
+    "recentDesc": "Més recent",
+    "sort": "Ordena",
+    "sortBy": "Ordena per",
+    "sortByColon": "Ordena per:",
+    "fullname": "Nom",
+    "username": "Nom d'usuari",
+    "name": "Nom",
+    "membertype": "Rol de grup",
+    "joined": "Data d'incorporació",
+    "lastlogin": "Darrer inici de sessió",
+    "dataset": "Dataset",
+    "mfaenabled": "Autenticació multifactorial",
+    "defaultAsc": "Ascendent",
+    "defaultDesc": "Descendent"
+  },
+  "topBar": {
+    "filter": "Filtre"
+  },
+  "filterStatus": {
+    "clear": "Esborra",
+    "filters": "Filtres:",
+    "additional": "Filtres actius addicionals",
+    "clearAllFilters": "Esborra tots els filtres"
+  }
+}

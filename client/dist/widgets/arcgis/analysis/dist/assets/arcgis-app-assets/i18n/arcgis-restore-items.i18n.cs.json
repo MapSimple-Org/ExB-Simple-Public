@@ -1,0 +1,31 @@
+{
+  "back": "Zpět",
+  "cancel": "Storno",
+  "learnMore": "Další informace",
+  "restore": "Obnovit",
+  "restoreTo": "Obnovit do",
+  "restoreItem": "Obnovit položku",
+  "restoreItems": "Obnovit položky",
+  "noticeMessage": "Obnovené položky nebudou sdíleny. Před dalším sdílením si obsah zkontrolujte.",
+  "cannotBulkRestoreXItems": "${number} položek nelze hromadně obnovit, zrušte výběr několika položek.",
+  "cannotBulkRestoreMultipleOwners": "Nelze hromadně obnovit položky, které patří různým vlastníkům. K hromadnému obnovení vyberte položky s jedním vlastníkem.",
+  "toRestore": {
+    "single": "Položka k obnovení:",
+    "multiple": "Položky k obnovení:"
+  },
+  "cannotRestore": "Nelze obnovit:",
+  "dependentItems": {
+    "single": "Tato položka nemůže být obnovena, protože je závislá na <strong style='font-weight: 500'>${parent}</strong>. Obnovte je společně.",
+    "singleUnknown": "Tuto položku nelze obnovit, protože je závislá na jiné položce v koši. Obnovte je společně.",
+    "multiple": "Tyto položky nelze obnovit, protože jsou závislé na jiných položkách v koši. Obnovte je společně.",
+    "multipleSameSource": "Tyto položky nemohou být obnoveny, protože jsou závislé na: <strong style='font-weight: 500'>${parent}</strong>. Obnovte je společně."
+  },
+  "pageRangeWithTotalRecycleBinSize": {
+    "en": "${start} – ${end} z ${total} (${size}) v koši",
+    "other": "${start} – ${end}, celkem: ${total} (${size}) v koši"
+  },
+  "pageRangeWithGreaterThanTotalRecycleBinSize": {
+    "en": "${start} – ${end} z ${total} (>${size}) v koši",
+    "other": "${start} – ${end}, celkem: ${total} (>${size}) v koši"
+  }
+}

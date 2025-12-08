@@ -1,0 +1,55 @@
+{
+  "beginningOnLabel": "Început pe",
+  "repeatTypeLabel": "Tip repetare",
+  "endingOnTypeLabel": "Terminat pe",
+  "endingOnDateLabel": "Data terminării",
+  "endingOnCountLabel": "Număr",
+  "endingOnCountPlaceholder": "de exemplu: 1, 10, 30",
+  "dailyRepeatIntervalLabel": "Interval de repetare",
+  "dailyTimeLabel": "Ora",
+  "weeklyDaysOfWeekLabel": "Ziua săptămânii",
+  "weeklyTimeLabel": "Ora",
+  "monthlyDayOfMonthLabel": "Ziua din lună",
+  "monthlyDayOfMonthPlaceholder": "de exemplu, 1 - 31",
+  "monthlyRepeatIntervalLabel": "Interval de repetare",
+  "monthlyTimeLabel": "Ora",
+  "repeatTypeOptions": {
+    "day": "Zi",
+    "week": "Săptămână",
+    "month": "Lună"
+  },
+  "endingOnType": {
+    "never": "Niciodată",
+    "date": "Data",
+    "count": "Activ"
+  },
+  "dailyRepeatInterval": {
+    "everyDay": "În fiecare zi",
+    "everyOtherDay": "La fiecare două zile",
+    "everyThreeDays": "La fiecare trei zile",
+    "everyFourDays": "La fiecare patru zile",
+    "everyFiveDays": "La fiecare cinci zile",
+    "everySixDays": "La fiecare șase zile",
+    "everySevenDays": "La fiecare șapte zile",
+    "everyFourteenDays": "La fiecare paisprezece zile"
+  },
+  "weekDays": {
+    "all": "Toate",
+    "allWeekdays": "În toate zilele săptămânii",
+    "sunday": "Duminică",
+    "monday": "Luni",
+    "tuesday": "Marți",
+    "wednesday": "Miercuri",
+    "thursday": "Joi",
+    "friday": "Vineri",
+    "saturday": "Sâmbătă"
+  },
+  "monthlyRepeatInterval": {
+    "everyMonth": "În fiecare lună",
+    "everyTwoMonths": "La fiecare două luni",
+    "everyThreeMonths": "La fiecare trei luni",
+    "everyFourMonths": "La fiecare patru luni",
+    "everyFiveMonths": "La fiecare cinci luni",
+    "everySixMonths": "La fiecare șase luni"
+  }
+}

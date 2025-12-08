@@ -1,0 +1,10 @@
+{
+  "forceFlowLabel": "Tvinga kantceller att flöda utåt",
+  "inputLayersGroupText": "Välj indataytrastret och eventuella sänkdata och viktraster.",
+  "itemProperties": {
+    "description": "Utdata har genererats vid körning av verktyget Härled ström som raster.",
+    "snippet": "Utdata har genererats från Härled ström som raster"
+  },
+  "outputStreamRasterLabel": "Utdataströmrastrets namn",
+  "streamSettingsGroupText": "Ange ackumuleringströskel, strömbeteckningsmetod och hur flödet ska hanteras vid indataytrasterkanten."
+}

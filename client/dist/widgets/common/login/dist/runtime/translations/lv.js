@@ -1,0 +1,1 @@
+System.register([],function(e){return{execute:function(){e({_widgetLabel:"Pieteik\u0161an\u0101s",switchToLogin:"P\u0101rsl\u0113gties pirms pieteik\u0161an\u0101s",switchToLogout:"P\u0101rsl\u0113gties p\u0113c pieteik\u0161an\u0101s",toggleSignInPreview:"P\u0101rsl\u0113gt pieteik\u0161an\u0101s priek\u0161skat\u012bjumu",restrictedResources:"Ierobe\u017eotie avoti"})}}});

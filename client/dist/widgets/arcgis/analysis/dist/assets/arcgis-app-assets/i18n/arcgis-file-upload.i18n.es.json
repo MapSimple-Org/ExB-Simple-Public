@@ -1,0 +1,16 @@
+{
+  "updateData": "Actualizar datos",
+  "cancel": "Cancelar",
+  "editStyle": "Reemplace el archivo de estilos de la capa con una versión actualizada de su ordenador.",
+  "updatePackages": "Reemplace el ${type} con una versión actualizada de su ordenador. El archivo cargado debe tener el mismo nombre que ${hostedLayerName}.",
+  "uploadStaticFiles": "El archivo que se cargue debe tener el mismo nombre que el archivo original ${fileName}",
+  "sameFileNameDescription": "El archivo que se cargue debe tener el mismo nombre y nombres de campo que el archivo original ${fileName}",
+  "updating": "Actualizando...",
+  "error": "Error",
+  "errors": {
+    "sameFileName": "Para actualizar este elemento, debe cargar un archivo denominado ${fileName}.",
+    "invalidStyleFileExtension": "Extensión de archivo no válida. El estilo cargado debe tener la extensión de archivo .json.",
+    "errorWhileUpload": "Ha ocurrido un error al cargar el elemento.",
+    "errorUpdate": "Ha ocurrido un error al sobrescribir el elemento."
+  }
+}

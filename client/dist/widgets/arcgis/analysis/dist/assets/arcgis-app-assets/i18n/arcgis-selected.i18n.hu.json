@@ -1,0 +1,8 @@
+{
+  "selected": "Kiválasztva: ${number}",
+  "selectPage": "Oldal kiválasztása",
+  "selectAll": "Összes kiválasztása",
+  "deselect": "Összes kijelölésének megszüntetése",
+  "selectingAll": "Összes kiválasztása",
+  "clearAll": "Összes törlése"
+}

@@ -1,0 +1,417 @@
+{
+  "itemBrowser": {
+    "filters": "Filtri",
+    "preview": "Priekšskatījums",
+    "selectedLayers": "Izvēlētie slāņi",
+    "selectedItems": "Izvēlētās vienības",
+    "pageRange": "${start}-${end}, kopā: ${total}",
+    "pageRangeAria": "${start}-${end}, vienības kopā: ${total}",
+    "pageRangeWithRecycleBin": "${start}-${end}, kopā: ${total} (kopējais izmērs: ${recycleBinSize})",
+    "pageRangeAriaWithRecycleBin": "${start}-${end}, vienību kopskaits: ${total} (kopējais izmērs: ${recycleBinSize})",
+    "foundOnPage": "Atbilstīgi rezultāti pašreizējā lapā: ${total}",
+    "totalSize": "Kopējais izmērs: ${totalSize}",
+    "selectedMultipleWithSize": "Izvēlēti: ${num} (${totalSize})",
+    "selectedMultipleWithSizeSmall": "${num} (${totalSize})",
+    "noSelectedLayers": "Pašlaik nav atlasīts neviens slānis",
+    "noSelectedItems": "Pašlaik nav atlasīta neviena vienība",
+    "sharingUpdated": "${itemTitle} koplietošana atjaunināta.",
+    "refineContent": "Precizēt saturu"
+  },
+  "layerTypes": {
+    "point": "Punktu slānis",
+    "line": "Līniju slānis",
+    "polygon": "Laukumu slānis",
+    "multipatch": "Daudzformu slānis",
+    "multipoint": "Vairākpunktu slānis",
+    "table": "Tabula",
+    "catalog": "Kataloga slānis",
+    "oriented imagery": "Orientēts attēlu slānis",
+    "parcel": "Parceles slānis",
+    "utility network": "Utility Network slānis",
+    "topology": "Topoloģijas slānis",
+    "trace network": "Trasēšanas tīkla slānis"
+  },
+  "filterIndustry": {
+    "title": "Nozare",
+    "Industry": "Nozare: ${industry}",
+    "Build a layer": "Izveidot slāni",
+    "Agriculture": "Lauksaimniecība",
+    "Electric Utilities": "Energoapgāde",
+    "Environment": "Vide",
+    "Forestry": "Mežsaimniecība",
+    "Gas Utilities": "Gāzes apgāde",
+    "General": "Vispārīgi",
+    "Natural Resources": "Dabas resursi",
+    "Petroleum": "Nafta",
+    "Public Safety": "Sabiedriskā drošība",
+    "Telecommunications": "Telekomunikācijas",
+    "Transportation": "Transports",
+    "Water Utilities": "Ūdensapgāde"
+  },
+  "filterItemType": {
+    "title": "Vienības veids",
+    "itemType": "Veids: ${itemType}",
+    "options": {
+      "maps": "Kartes",
+      "maps-webmaps": "Tīmekļa kartes",
+      "maps-mapfiles": "Kartes faili",
+      "layers": "Slāņi",
+      "layers-weblayers": "Tīmekļa slāņi",
+      "layers-weblayers-features": "Elementu slāņi",
+      "layers-weblayers-tiles": "Mozaīkas slāņi",
+      "layers-weblayers-mapimage": "Kartes attēla slāņi",
+      "layers-weblayers-imagery": "Attēlu slāņi",
+      "layers-weblayers-scenelayers": "Scēnu slāņi",
+      "layers-weblayers-videolayers": "Video slāņi",
+      "layers-weblayers-tiledimagelayers": "Mozaīkas attēlu slāņi",
+      "layers-weblayers-elevationlayers": "Augstuma slāņi",
+      "layers-weblayers-feeds": "Plūsmas",
+      "layers-weblayers-tables": "Tabulas",
+      "layers-layerfiles": "Slāņa faili",
+      "scenes": "Scēnas",
+      "applications": "Lietotnes",
+      "applications-web": "Tīmekļa lietotnes",
+      "applications-dashboards": "Informācijas paneļi",
+      "applications-sites": "Vietas",
+      "applications-pages": "Lapas",
+      "applications-geobim-projects": "GeoBIM projekti",
+      "applications-geobim-apps": "GeoBIM lietotne",
+      "applications-instant-apps": "Instant Apps",
+      "applications-storymap": "Storymaps",
+      "applications-data-pipelines": "Datu konveijeri",
+      "applications-experience": "Experience Builder",
+      "applications-wab": "Web AppBuilder",
+      "applications-mobile": "Mobilās lietotnes",
+      "applications-desktop": "Darbvirsmas lietotnes",
+      "developer-credentials": "Izstrādātāja akreditācijas dati",
+      "developer-credentials-oauth": "OAuth 2.0 akreditācijas dati",
+      "developer-credentials-api-token": "API atslēgas akreditācijas dati",
+      "developer-credentials-api-key": "API atslēga (iepriekšējā)",
+      "tools": "Rīki",
+      "tools-locators": "Lokators",
+      "tools-geodatabase": "Ģeodatubāzes piekļuve",
+      "tools-geometric": "Ģeometriskās darbības",
+      "tools-geoprocessing": "Ģeoapstrādes uzdevumi",
+      "tools-network": "Tīkla analīze",
+      "tools-analytics": "Analīze",
+      "files": "Faili",
+      "files-document": "Dokumenti",
+      "files-image": "Attēli",
+      "files-pdf": "PDF faili",
+      "files-csv": "CSV",
+      "files-report": "Administratīvie pārskati",
+      "files-raster": "Rastra funkciju veidnes",
+      "notebooks": "Notebooks",
+      "insights": "Insights",
+      "insights-workbooks": "Darbgrāmatas",
+      "insights-pages": "Pārskati",
+      "insights-models": "Modeļi",
+      "insights-themes": "Tēmas",
+      "data-stores": "Datu krātuves",
+      "knowledge-graphs": "Knowledge diagrammas"
+    }
+  },
+  "filterCategories": {
+    "categories": "Kategorijas",
+    "groupCategories": "Grupu kategorijas",
+    "category": "Kategorija: ${category}",
+    "uncategorized": "Bez kategorijas",
+    "noCategoriesTitle": "Kategoriju vēl nav",
+    "noCategories": "Kategorijas ļauj dalībniekiem kārtot vienības konsekventi un piedāvā vienkāršu veidu, kā pārlūkot organizācijas saturu.",
+    "noGroupCategoriesTitle": "Vēl nav nevienas grupas kategorijas",
+    "noGroupCategories": "Kategorijas ļauj grupu dalībniekiem kārtot vienības konsekventi un piedāvā vienkāršu veidu, kā pārlūkot grupas saturu.",
+    "setupCategories": "Iestatīt satura kategorijas",
+    "setupGroupCategories": "Iestatīt grupas kategorijas",
+    "configureCategories": "Konfigurēt kategorijas"
+  },
+  "filterRegion": {
+    "regions": "Reģioni",
+    "region": "Reģions: ${region}"
+  },
+  "filterCollaborations": {
+    "title": "Dalītā sadarbība",
+    "label": "Dalītā sadarbība: ${name}",
+    "loading": "Sadarbību ielādēšana..."
+  },
+  "filterContentStatus": {
+    "title": "Statuss",
+    "label": "Statuss: ${contentStatus}",
+    "authoritative": "Autoritatīvs",
+    "deprecated": "Novecojis"
+  },
+  "filterDeleteProtection": {
+    "title": "Dzēst aizsardzību",
+    "label": "Dzēst aizsardzību: ${deleteProtection}",
+    "enabled": "Iespējots",
+    "disabled": "Atspējots"
+  },
+  "filterExpiration": {
+    "today": "Šodien",
+    "tomorrow": "Rīt",
+    "next7": "Nākamās 7 dienas",
+    "next30": "Nākamās 30 dienas",
+    "custom": "Pielāgots diapazons…",
+    "title": {
+      "expires": "Termiņa beigu datums"
+    },
+    "expires": "Termiņa beigu datums: ${date}"
+  },
+  "filterExtent": {
+    "label": "Kartes teritorijas ietvaros",
+    "title": "Rādīt saturu tikai kartes teritorijas ietvaros"
+  },
+  "filterFolder": {
+    "folders": "Mapes",
+    "placeholder": "Filtrēt mapes",
+    "clear": "Notīrīt meklēto",
+    "all": "Viss mans saturs",
+    "allContentUser": "Viss ${username} saturs.",
+    "recycleBin": "Atkritne",
+    "label": "Mape: ${folder}",
+    "loading": "Ielādē mapes...",
+    "folderOptions": "Mapes opcijas",
+    "editFolder": "Rediģēt mapi",
+    "deleteFolder": "Dzēst mapi",
+    "delete": "Dzēst",
+    "areYouSure": "Vai tiešām vēlaties dzēst šo mapi?",
+    "areYouSureExplanation": "Mape, <strong style='font-weight: 500'>${title}</strong>, tiks neatgriezeniski izdzēsta. Turklāt visas mapē esošās vienības tiks atzīmētas dzēšanai Vai joprojām vēlaties turpināt šīs mapes dzēšanu?",
+    "cancel": "Atcelt",
+    "save": "Saglabāt",
+    "createAFolder": "Izveidot mapi",
+    "folderName": "Mapes nosaukums",
+    "createFolder": "Izveidot mapi",
+    "error": {
+      "title": "Kļūda",
+      "noName": "Jums ir jāiesniedz nosaukums jūsu mapei.",
+      "folderAlreadyExists": "Mape “${folder}” jau pastāv. Lūdzu, izvēlieties citu nosaukumu.",
+      "invalidCharacters": {
+        "single": "Nosaukums nevar saturēt šo rakstzīmi: ${invalidCharacters}.",
+        "multiple": "Nosaukums nevar saturēt nevienu no šīm rakstzīmēm: ${invalidCharacters}.",
+        "unknown": "Nosaukums nevar saturēt nevienu no šīm rakstzīmēm: ${invalidCharacters}."
+      },
+      "errorCreatingFolder": "Veidojot mapi ${folderName}, radās kļūda."
+    }
+  },
+  "filterGroup": {
+    "title": "Grupas",
+    "groups": "Manas grupas",
+    "placeholder": "Filtrēt grupas",
+    "all": "Viss manu grupu saturs",
+    "label": "Grupa: ${group}",
+    "loading": "Ielādē grupas…"
+  },
+  "filterContentType": {
+    "contentType": "Satura veids",
+    "all": "Viss manas organizācijas saturs",
+    "recycle": "Atkritne"
+  },
+  "filterLocation": {
+    "location": "Atrašanās vieta",
+    "label": "Atrašanās vieta: ${location}",
+    "findLocationText": "Atrast adresi vai vietu",
+    "search": "Meklēt novietojumus",
+    "suggestions": "Ierosinājumi",
+    "noResults": "Nav atrasts neviens “${searchTerm}” rezultāts"
+  },
+  "filterSharing": {
+    "title": "Koplietošana",
+    "label": "Koplietots: ${sharing}",
+    "owner": "Īpašnieks",
+    "shared": "Kopīgots ar grupām",
+    "private": "Nav koplietots ar grupām",
+    "account": "Organizācija",
+    "public": "Ikviens (publiski)"
+  },
+  "filterTags": {
+    "title": "Atslēgvārdi",
+    "label": "Atzīmēts: ${tags}",
+    "selectTags": "Izvēlēties atslēgvārdus"
+  },
+  "filterReportType": {
+    "title": "Pārskata veids",
+    "label": "Pārskata veids: ${reportType}",
+    "activity": "Aktivitāte",
+    "credits": "Kredīti",
+    "users": "Dalībnieks",
+    "content": "Vienība",
+    "item_usages": "Vienības skatījumu skaits",
+    "service_usages": "Servisu lietojums"
+  },
+  "cardThumbnail": {
+    "loading": "Attēla ielādēšana"
+  },
+  "card": {
+    "select": "Izvēlēties vienību: ${title}",
+    "lastUpdated": "Atjauninātā vienība: ${date}",
+    "viewItemDetails": "Skatīt detalizētāku informāciju par ${title}",
+    "preview": "Vairāk informācijas",
+    "hidePreview": "Mazāk informācijas",
+    "closeDetails": "Aizvērt priekšskatījumu",
+    "openDetails": "Priekšskatījums",
+    "moreOptions": "Vairāk iespēju"
+  },
+  "cardSublayerSelect": {
+    "select": "Izvēlēties slāni",
+    "selectLayers": "Izvēlieties slāņus",
+    "selectedSingle": "Izvēlētais",
+    "selectedLayers": "Atlasītie slāņi: ${num}",
+    "selectedMultiple": "Atlasīts: ${num}",
+    "selectedName": "Izvēlētais slānis: ${name}",
+    "selectedTask": "Izvēlētais uzdevums: ${task}",
+    "errorTitle": "Veidojot savienojumu ar pakalpojumu, radās kļūda.",
+    "errorBody": "Nevar sekmīgi izveidot savienojumu ar pakalpojumu. Pakalpojums nedarbojas vai tam nepieciešama autentifikācija.",
+    "notebookErrorBody": "Šis rīks tika publicēts no notebook. ArcGIS Notebooks piekļuve ir bloķēta jūsu organizācijai. Sazinieties ar savu administratoru, lai pielāgotu iestatījumu.",
+    "retry": "Atkārtot",
+    "selectTask": "Izvēlieties uzdevumu",
+    "selectTaskFrom": "Izvēlieties uzdevumu no ${title}"
+  },
+  "cardLayersList": {
+    "hideDetails": "Paslēpt informāciju",
+    "showDetails": "Rādīt informāciju",
+    "layersAndTables": "Slāņi un tabulas"
+  },
+  "content": {
+    "noResults": "Nav atrastas vienības, kas atbilstu jūsu meklēšanas kritērijiem. Mēģiniet mainīt meklēšanas terminu vai notīrīt dažus filtrus, lai rādītu vairāk vienību.",
+    "noContent": "Saturs nav pieejams.",
+    "loading": "Ielādē..."
+  },
+  "copy": {
+    "copy": "Kopēt",
+    "copied": "Nokopēts"
+  },
+  "bucketSelect": {
+    "my": "Mans saturs",
+    "org": "Mana organizācija",
+    "group": "Manas grupas",
+    "favorites": "Mani favorīti",
+    "living atlas": "Living Atlas",
+    "living atlas analysis": "Living Atlas analīzes slāņi",
+    "subscription content": "Abonementa saturs",
+    "all": "ArcGIS Online",
+    "catalog": "Hub katalogi",
+    "catalogLabel": "Catalog"
+  },
+  "preview": {
+    "owner": "Īpašnieks",
+    "summary": "Kopsavilkums",
+    "noSummary": "Nav norādīts kopsavilkums",
+    "description": "Apraksts",
+    "noDescription": "Nav norādīts apraksts",
+    "thumbnail": "Sīktēls",
+    "overview": "Pārskats",
+    "details": "Detalizēta informācija",
+    "termsOfUse": "Lietošanas noteikumi",
+    "noTermsOfUse": "Nav norādīti lietošanas nosacījumi",
+    "itemManagedBy": "Vienību pārvalda ${username}",
+    "fullItemDetails": "Pilna vienības informācija",
+    "layersCount": "Slāņi (${count})",
+    "layers": "Slāņi",
+    "add": "Pievienot",
+    "remove": "Noņemt",
+    "loading": "Ielādē...",
+    "shared": "Koplietošana",
+    "created": "Izveidota vienība",
+    "updated": "Atjaunināta vienība",
+    "fileSize": "Faila lielums",
+    "dataUpdated": "Dati ir atjaunināti",
+    "schemaUpdated": "Shēma ir atjaunināta",
+    "ID": "ID",
+    "copyID": "Kopēt ID",
+    "URL": "Vietrādis (URL)",
+    "copyURL": "Kopēt vietrādi (URL)",
+    "itemStatus": "Statuss",
+    "viewCount": "Skatījumu skaits",
+    "readMore": "Lasīt vēl",
+    "dashboardViews": "Informācijas paneļa skati",
+    "dashboardMobile": "Darbvirsma, mobilais",
+    "dashboardDesktop": "Darbvirsma",
+    "sharing": {
+      "private": "Privāts",
+      "shared": "Grupas",
+      "public": "Ikviens",
+      "org": "Organizācija"
+    },
+    "groupCategories": "Grupu kategorijas",
+    "matched": "Atbilst",
+    "matchedNumber": "Atbilst (${num})",
+    "layerError": {
+      "title": "Nevar attēlot slāņus",
+      "message": "Drošajiem servisiem slāņu priekšskatījums netiek atbalstīts."
+    },
+    "noServiceMessage": "Atlasītais serviss nepastāv vai nav pieejams.",
+    "credits": "Apstiprinājumi",
+    "noCredits": "Nav apliecināta avota.",
+    "geometryTypeTitle": "Ģeometrijas veids",
+    "layerTypeTitle": "Slāņa veids",
+    "fields": "Lauki",
+    "noFields": "Šim slānim nav konfigurēti lauki",
+    "geometryType": {
+      "esriGeometryPoint": "Punktu slānis",
+      "esriGeometryPolyline": "Līniju slānis",
+      "esriGeometryPolygon": "Daudzstūru slānis",
+      "esriGeometryMultiPatch": "Daudzformu slānis",
+      "table": "Tabula"
+    },
+    "layerActions": "Slāņa darbības",
+    "itemError": {
+      "title": "Kļūda",
+      "subscription": "Šī vienība pašlaik nav pieejama. ArcGIS Online abonements, kas saistīts ar šo vienību, ir atspējots.",
+      "unhandled": "Ienesot šo vienību, radās kļūda."
+    }
+  },
+  "table": {
+    "loading": "Ielādē...",
+    "caption": "Vienību rezultāti, kolonnu galvenes ar pogām ir kārtojamas.",
+    "selectAll": "Izvēlēties visu",
+    "selection": "Atlase",
+    "headers": {
+      "title": "Nosaukums",
+      "modified": "Mainīts",
+      "created": "Izveidots",
+      "owner": "Īpašnieks",
+      "size": "Izmērs",
+      "deleted": "Datums izdzēsts",
+      "type": "Vienības veids",
+      "badges": "Vienības statuss",
+      "favorite": "Izlase",
+      "sharing": "Koplietošanas līmenis",
+      "details": "Skatīt detalizētu informāciju",
+      "actions": "Vairāk ar vienībām saistītu darbību",
+      "dataset": "Datu kopa"
+    }
+  },
+  "tableRow": {
+    "deletesTomorrow": "Dzēš rīt",
+    "deletes": {
+      "single": "Tiks dzēsts pēc ${number} dienām",
+      "multiple": "Tiks dzēsts pēc ${number} dienām",
+      "unknown": "Dienu skaits, kas atlicis līdz dzēšanai: ${number}"
+    },
+    "restore": "Atjaunot",
+    "details": "Skatīt detalizētu informāciju",
+    "moreOptions": "Vairāk iespēju",
+    "download": "Lejupielādēt"
+  },
+  "search": {
+    "searchName": "Meklēt ${searchName}",
+    "searchAllContent": "Meklēt Viss mans saturs",
+    "searchAllUserContent": "Meklēts Viss ${username} saturs",
+    "searchGroupsContent": "Meklēt Manas grupas",
+    "searchingGroupsContent": "Manās grupās meklē:",
+    "searchFavoritesContent": "Meklēt Mani favorīti",
+    "searchOrganizationsContent": "Meklēt Mana organizācija",
+    "searchLivingAtlasContent": "Meklēt Living Atlas",
+    "searchRecycleCurrentPage": "Meklēt vienību nosaukumus pašreizējā lapā"
+  },
+  "find": {
+    "find": "Atrast",
+    "findOnPage": "Atrast lapā",
+    "match": "Uzrāda teksta atbilstības vienības virsrakstiem tikai pašreizējā lapā."
+  },
+  "view": {
+    "view": "Skatīt",
+    "list": "Saraksts",
+    "grid": "Režģis",
+    "table": "Tabula"
+  }
+}

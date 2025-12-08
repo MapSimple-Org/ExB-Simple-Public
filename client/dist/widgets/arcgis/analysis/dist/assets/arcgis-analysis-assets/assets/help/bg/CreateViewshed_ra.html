@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>Инструментът Геодезична зона на видимост идентифицира местоположенията на растерна повърхност, които са видими за местоположенията на входния наблюдател.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputElevationSurface">
+        <div>
+            <p>Височинния растерът , върху който ще се изчисли видимостта.
+            </p>
+        </div>
+    </div>
+    <div id="inputObserverFeatures">
+        <div>
+            <p>Местоположението на наблюдателя, за което ще се изчислява видимостта.
+            </p>
+        </div>
+    </div>
+    <div id="optimizeFor">
+        <div>
+            <p>Оптимизира изчислението на зона на видимост въз основа на скорост или точност.
+            </p>
+        </div>
+    </div>
+    <div id="verticalError">
+        <div>
+            <p>Размерът на несигурността във височинните стойности на стойността на  <b>Входната надморса височина</b> .
+            </p>
+        </div>
+    </div>
+    <div id="refractivityCoefficient">
+        <div>
+            <p>Коефициентът на пречупване на видимата светлина във въздуха.
+            </p>
+        </div>
+    </div>
+    <div id="maximumViewingDistanceField">
+        <div>
+            <p>Определя максималното разстояние за видимост за изчисление на зоната на видимост.
+            </p>
+            <p>Разстоянието може да се дефинира чрез стойност и нейните единици или от поле в стойността на  <b>Входната наблюдателна точка или линейни обекти</b> .
+            </p>
+        </div>
+    </div>
+    <div id="minimumViewingDistanceField">
+        <div>
+            <p>Минималното разстояние за видимост за изчисление на зоната на видимост.
+            </p>
+            <p>Разстоянието може да се дефинира чрез стойност и нейните единици или от поле в стойността на  <b>Входната наблюдателна точка или линейни обекти</b> .
+            </p>
+        </div>
+    </div>
+    <div id="viewingDistanceIs3D">
+        <div>
+            <p>Определя дали максималното и минималното разстояние за видимост ще бъдат измерени в 3D разстояние или 2D разстояние.
+            </p>
+            <p>Ако не е отметнато, разстоянията за видимост ще се третират като 2D евклидови разстояния. Ако е отметнато, разстоянията за видимост ще се третират като 3D разстояния.
+            </p>
+        </div>
+    </div>
+    <div id="observersElevationField">
+        <div>
+            <p>Надморската височина на местоположенията на наблюдателя.
+            </p>
+            <p>Надморската височина може да се определи чрез стойност и нейните единици или от поле в стойността  <b>Входна наблюдателна точка или линейни обекти</b> .
+            </p>
+        </div>
+    </div>
+    <div id="observersHeightField">
+        <div>
+            <p>Височината на наблюдателите над земята.
+            </p>
+            <p>Височината може да се дефинира чрез стойност и нейните единици или от поле в стойността на <b>Входна наблюдателна точка или линейни обекти</b> .
+            </p>
+        </div>
+    </div>
+    <div id="targetHeightField">
+        <div>
+            <p>Височината на целите на земята.
+            </p>
+            <p>Височината може да се дефинира чрез стойност и нейните единици или от поле в стойността на <b>Входната наблюдателна точка или линейни обекти</b> .
+            </p>
+        </div>
+    </div>
+    <div id="horizontalStartAngle">
+        <div>
+            <p>Началният ъгъл на хоризонталния диапазон на сканиране.
+            </p>
+            <p>Ъгълът може да бъде дефиниран чрез стойност от 0 до 360 или от поле в стойността на  <b>Входната наблюдателна точка или линейни обекти</b> .
+            </p>
+        </div>
+    </div>
+    <div id="horizontalEndAngle">
+        <div>
+            <p>Крайният ъгъл на хоризонталния диапазон на сканиране.
+            </p>
+            <p>Ъгълът може да бъде дефиниран чрез стойност от 0 до 360 или от поле в стойността на  <b>Входната наблюдателна точка или линейни обекти</b> .
+            </p>
+        </div>
+    </div>
+    <div id="verticalUpperAngle">
+        <div>
+            <p>Горната вертикална граница на ъгъла на сканиране спрямо хоризонталната равнина.
+            </p>
+            <p>Ъгълът може да бъде дефиниран със стойност от &ndash;90 до 90 или от поле в стойността на  <b>Входната наблюдателна точка или линейни обекти</b> .
+            </p>
+        </div>
+    </div>
+    <div id="verticalLowerAngle">
+        <div>
+            <p>Долната граница на вертикалния ъгъл на сканирането спрямо хоризонталната равнина.
+            </p>
+            <p>Ъгълът може да бъде дефиниран със стойност от &ndash;90 до 90 или от поле в стойността на  <b>Входната наблюдателна точка или линейни обекти</b> .
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>Името на растерния слой на зоната на видимост, който ще бъде създаден и добавен към картата. Този слой съдържа видимите области, които наблюдателите могат да видят, а стойностите на клетките представляват броя наблюдатели, които могат да виждат клетките.
+            </p>
+        </div>
+    </div>
+    <div id="aboveGroundLevelOutputName">
+        <div>
+            <p>Името на растерния слой над нивото на земята (AGL), който ще бъде създаден и добавен към картата.
+            </p>
+        </div>
+    </div>
+    <div id="resultType">
+        <div>
+            <p>Типът резултат, който ще бъде създаден. Резултатът може да бъде слой с плочкови изображения или слой с динамични изображения.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>Името на папка в  <b>Моето съдържание</b>, където резултатите ще бъдат запазени.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

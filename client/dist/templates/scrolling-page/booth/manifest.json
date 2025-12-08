@@ -1,0 +1,23 @@
+{
+  "name": "booth",
+  "type": "template",
+  "templateType": "scrolling-page",
+  "label": "Booth",
+  "description": "Booth organizes content in a grid of card widgets, with detailed views accessible in a window for focused exploration.",
+  "thumbnail": "thumbnail.png",
+  "order": 22,
+  "templateCreateVersion": "1.17.0",
+  "tags": [
+    "Title",
+    "Logo",
+    "Gallery",
+    "Card",
+    "Divider"
+  ],
+  "categoriesTags": [
+    "Web page",
+    "Scrolling"
+  ],
+  "thumbnailWidth": 320,
+  "thumbnailHeight": 214
+}

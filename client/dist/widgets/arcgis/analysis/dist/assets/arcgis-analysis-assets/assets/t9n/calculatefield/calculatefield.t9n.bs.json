@@ -1,0 +1,13 @@
+{
+  "fieldCalcExpression": "Izraz za izračun polja",
+  "fieldCalculationGroupLabel": "Izračun polja",
+  "fieldPlaceholderText": "Kliknite za odabir ili kreiranje polja",
+  "fieldToCalculate": "Polje za izračun",
+  "inputDatasetGroupLabel": "Unos",
+  "itemProperties": {
+    "description": "ezultat generiran pokretanjem alata \"Izračunaj polje\" u alatu ModelBuilder.",
+    "snippet": "Sloj geoobjekta generiran iz alata \"Izračunaj polje\"."
+  },
+  "noFieldSpecified": "Navedite polje koje treba izračunati za kreiranje izraza.",
+  "whereClause": "Primijeni izračun samo na određene zapise"
+}

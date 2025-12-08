@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>L&rsquo;outil G&eacute;n&eacute;rer un raster de cours d&rsquo;eau g&eacute;n&egrave;re un raster de cours d&rsquo;eau &agrave; partir d&rsquo;un raster de surface en entr&eacute;e sans remplissage pr&eacute;alable requis des cuvettes ou d&eacute;pressions.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputSurfaceRaster">
+        <div>
+            <p>Raster d&rsquo;altitude &agrave; utiliser pour le calcul.
+            </p>
+        </div>
+    </div>
+    <div id="inputDepressionsData">
+        <div>
+            <p>Entr&eacute;e qui d&eacute;finit les localisations des d&eacute;pressions ou cuvettes r&eacute;elles, vers lesquelles l&rsquo;eau peut s&rsquo;&eacute;couler, mais depuis lesquelles elle ne le peut pas.
+            </p>
+            <p class="toolPaneOnly">Le nombre d&rsquo;entit&eacute;s en entr&eacute;e d&eacute;pend de facteurs suppl&eacute;mentaires, tels que les crit&egrave;res de filtrage et l&rsquo;&eacute;tendue d&rsquo;analyse.
+            </p>
+        </div>
+    </div>
+    <div id="inputWeightRaster">
+        <div>
+            <p>Couche raster qui d&eacute;finit la portion de flux contribuant &agrave; l&rsquo;accumulation de flux &agrave; chaque cellule.
+            </p>
+        </div>
+    </div>
+    <div id="accumulationThreshold">
+        <div>
+            <p>Seuil permettant de d&eacute;terminer si une cellule donn&eacute;e participe &agrave; un &eacute;coulement en termes de surface totale qui p&eacute;n&egrave;tre dans ladite cellule.
+            </p>
+        </div>
+    </div>
+    <div id="streamDesignationMethod">
+        <div>
+            <p>Indique si les segments d&rsquo;&eacute;coulement dans la sortie poss&egrave;dent une valeur constante, poss&egrave;dent des valeurs uniques ou sont class&eacute;s.
+            </p>
+        </div>
+    </div>
+    <div id="forceFlow">
+        <div>
+            <p>Indique si le flux au niveau des cellules des contours suit les r&egrave;gles d&rsquo;&eacute;coulement normales ou se dirige toujours vers l&rsquo;ext&eacute;rieur.
+            </p>
+            <p>Si ce param&egrave;tre n&rsquo;est pas s&eacute;lectionn&eacute;, le flux se dirige vers la cellule int&eacute;rieure, avec la pente la plus raide dans la valeur&nbsp;z. Toutefois, si la pente est inf&eacute;rieure ou &eacute;gale &agrave; z&eacute;ro, la cellule s&rsquo;&eacute;coule du raster de surface vers l&rsquo;ext&eacute;rieur. Si ce param&egrave;tre est s&eacute;lectionn&eacute;, le flux se dirige vers l&rsquo;ext&eacute;rieur depuis le raster de surface.
+            </p>
+        </div>
+    </div>
+    <div id="outputStreamRasterName">
+        <div>
+            <p>Nom de la couche raster de cours d&rsquo;eau &agrave; cr&eacute;er et ajouter &agrave; la carte.
+            </p>
+        </div>
+    </div>
+    <div id="resultType">
+        <div>
+            <p>Type de sortie &agrave; cr&eacute;er. La sortie peut &ecirc;tre une couche d&rsquo;imagerie tuil&eacute;e ou une couche d&rsquo;imagerie dynamique.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>Nom du dossier de  <b>My content (Mon contenu)</b> dans lequel sont enregistr&eacute;s les r&eacute;sultats.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

@@ -1,0 +1,21 @@
+{
+  "folder": "Složka",
+  "folders": "Složky",
+  "searchFolders": "Hledat složky",
+  "enterFolder": "Zadat název složky",
+  "createNewFolder": "Vytvořit novou složku",
+  "noFoldersFoundCreate": "Nebyly nalezeny žádné složky s tímto názvem. Vytvořit '${folder}'?",
+  "noFoldersFound": "Nebyly nalezeny žádné složky s tímto názvem.",
+  "create": "Vytvořit '${folder}'?",
+  "loading": "Načítání složek",
+  "error": {
+    "noName": "Musíte zadat název složky.",
+    "folderAlreadyExists": "Složka '${folder}' již existuje. Zvolte prosím jiný název.",
+    "title": "Chyba",
+    "invalidCharacters": {
+      "single": "Název nesmí obsahovat tento znak: ${invalidCharacters}.",
+      "multiple": "Název nesmí obsahovat žádný z těchto znaků: ${invalidCharacters}.",
+      "unknown": "Název nesmí obsahovat žádný z těchto znaků: ${invalidCharacters}."
+    }
+  }
+}

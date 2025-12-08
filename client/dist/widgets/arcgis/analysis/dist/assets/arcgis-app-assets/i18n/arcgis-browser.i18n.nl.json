@@ -1,0 +1,89 @@
+{
+  "browser": {
+    "refineContent": "Inhoud verfijnen",
+    "filters": "Filters",
+    "pageRange": "${start}-${end}, totaal: ${total}",
+    "pageRangeAria": "${start}-${end}, totale items: ${total}",
+    "pageRangeWithRecycleBin": "${start}-${end}, totaal: ${total} (Totale grootte: ${recycleBinSize})",
+    "pageRangeAriaWithRecycleBin": "${start}-${end}, totaal items: ${total} (Totale grootte: ${recycleBinSize})",
+    "totalSize": "Totale grootte: ${totalSize}",
+    "loading": "Bezig met laden resultaten",
+    "close": "Sluiten"
+  },
+  "actions": {
+    "more": "Meer"
+  },
+  "filter": {
+    "clear": "Wissen"
+  },
+  "filterDate": {
+    "today": "Vandaag",
+    "yesterday": "Gisteren",
+    "last7": "Afgelopen 7 dagen",
+    "last30": "Afgelopen 30 dagen",
+    "never": "Nooit",
+    "custom": "Aangepast bereik...",
+    "title": {
+      "created": "Aanmaakdatum",
+      "modified": "Wijzigingsdatum",
+      "joined": "Datum lidmaatschap",
+      "lastLogin": "Laatste aanmelding"
+    },
+    "created": "Gemaakt: ${date}",
+    "modified": "Gewijzigd: ${date}",
+    "joined": "Lid sinds: ${date}",
+    "lastLogin": "Laatste aanmelding: ${date}"
+  },
+  "pagination": {
+    "next": "Volgende pagina",
+    "prev": "Vorige pagina"
+  },
+  "search": {
+    "label": "Groepen zoeken",
+    "search": "Zoeken",
+    "clear": "Zoekterm wissen",
+    "wildcard": "Zoekacties met wildcard worden niet ondersteund"
+  },
+  "sort": {
+    "sortDirection": "Sorteervolgorde",
+    "title": "Titel",
+    "relevance": "Relevantie",
+    "modified": "Wijzigingsdatum",
+    "deleted": "Datum verwijderd",
+    "created": "Aanmaakdatum",
+    "added": "Datum toegevoegd",
+    "size": "Grootte",
+    "owner": "Eigenaar",
+    "sizeAsc": "Kleinste naar grootste",
+    "sizeDesc": "Grootste naar kleinste",
+    "numviews": "Aantal keer bekeken",
+    "numAsc": "Minst naar meest",
+    "numDesc": "Meest naar minst",
+    "alphabeticalAsc": "Alfabetisch",
+    "alphabeticalDesc": "Omgekeerd alfabetisch",
+    "recentAsc": "Minst recent",
+    "recentDesc": "Meest recent",
+    "sort": "Sorteren",
+    "sortBy": "Sorteren op",
+    "sortByColon": "Sorteren op:",
+    "fullname": "Naam",
+    "username": "Gebruikersnaam",
+    "name": "Naam",
+    "membertype": "Groepsrol",
+    "joined": "Datum lidmaatschap",
+    "lastlogin": "Laatste login",
+    "dataset": "Gegevensset",
+    "mfaenabled": "Multifactorverificatie",
+    "defaultAsc": "Oplopend",
+    "defaultDesc": "Aflopend"
+  },
+  "topBar": {
+    "filter": "Filter"
+  },
+  "filterStatus": {
+    "clear": "Wissen",
+    "filters": "Filters:",
+    "additional": "Extra actieve filters",
+    "clearAllFilters": "Alle filters wissen"
+  }
+}

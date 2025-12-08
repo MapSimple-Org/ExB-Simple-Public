@@ -1,0 +1,10 @@
+{
+  "cannotAssignValueToTargetField": "Valoarea calculată a câmpului și tipul de câmp nu se potrivesc.",
+  "createExpression": "Creare expresie",
+  "deleteExpression": "Ștergeți expresia",
+  "editExpression": "Editare expresie",
+  "expression": "Expresie",
+  "isRequired": "Acest parametru este obligatoriu.",
+  "layerLoadError": "Stratul tematic nu a putut fi încărcat.",
+  "validationFailedInvalidSQL": "Validarea expresiei nu a reușit. Expresia nu este SQL valid."
+}

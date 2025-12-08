@@ -1,0 +1,6 @@
+{
+  "greaterThanErrorMessage": "Girdi sayısı ${min}'den büyük olmalıdır",
+  "lesserThanErrorMessage": "Girdi sayısı ${max}'den küçük olmalıdır",
+  "greaterThanOrEqualErrorMessage": "Girdi sayısı, ${min}'den büyük veya eşit olmalıdır",
+  "lesserThanOrEqualErrorMessage": "Girdi sayısı, ${max}'den küçük veya eşit olmalıdır"
+}

@@ -1,0 +1,11 @@
+{
+  "newTemplate": "Vytvořit novou šablonu",
+  "openTemplate": "Otevřít šablonu",
+  "addTemplate": "Přidat šablonu",
+  "addFunction": "Přidat rastrové funkce",
+  "addConstant": "Přidat konstantu",
+  "addRaster": "Přidat proměnnou rastru",
+  "expand": "Rozšířit",
+  "editTemplateProperties": "Upravit vlastnosti funkce",
+  "viewTemplateProperties": "Zobrazit vlastnosti šablony"
+}

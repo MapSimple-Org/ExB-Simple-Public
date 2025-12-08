@@ -1,0 +1,14 @@
+{
+  "outputRaster": "Výstupný raster",
+  "rfxVariable": "Premenná funkcie rastra",
+  "selectLayer": "Vybrať vrstvu",
+  "allowScalar": "Vyberte vrstvu alebo zadajte konštantu",
+  "browseLayer": "Prehľadať vrstvy",
+  "loading": "Načítava sa...",
+  "layerMissing": "Jedna alebo viac snímkových vrstiev z mapy tu nie sú uvedené, pretože vlastnosť pre povolenie analýz pre službu nie je aktivovaná.",
+  "layerFailedToLoad": "Nepodarilo sa načítať vrstvu.",
+  "learnMore": "Zistiť viac",
+  "errorCodes": {
+    "required": "Tento parameter je povinný."
+  }
+}

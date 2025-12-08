@@ -1,0 +1,22 @@
+{
+  "dialogHeading": "Konfiguruj kategorie członków",
+  "noticeTitle": "Edytuj lub usuń kategorie w instytucji albo zmień ich kolejność.",
+  "noticeDescription": "Kategorie można przypisywać do członków na karcie Członkowie.",
+  "defaultCategoryWarning": "Ta kategoria członków jest ustawiona jako domyślna dla nowych członków i nie można jej edytować ani usunąć.",
+  "warning": {
+    "deleteInUseCategory": {
+      "message": {
+        "single": "Jeden członek jest przypisany do tej kategorii. Usunięcie kategorii spowoduje również jej usunięcie dla tego członka.",
+        "multiple": "Do tej kategorii przypisano następującą liczbę członków: ${number}. Usunięcie kategorii spowoduje również jej usunięcie dla tych członków.",
+        "unknown": "Członkowie przypisani do tej kategorii: ${number}. Usunięcie kategorii spowoduje również jej usunięcie dla tych członków."
+      }
+    },
+    "changeTitleInUseCategory": {
+      "message": {
+        "single": "Jeden członek jest przypisany do tej kategorii. Zaktualizowanie kategorii spowoduje aktualizację członka, aby używał \"${newTitle}\".",
+        "multiple": "Do tej kategorii przypisano następującą liczbę członków: ${number}. Zaktualizowanie kategorii spowoduje aktualizację członków, aby korzystali z \"${newTitle}\".",
+        "unknown": "Członkowie przypisani do tej kategorii: ${number}. Zaktualizowanie kategorii spowoduje aktualizację członków, aby korzystali z \"${newTitle}\"."
+      }
+    }
+  }
+}

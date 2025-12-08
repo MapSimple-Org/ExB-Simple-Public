@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>การตั้งค่าการเขียนทับสำหรับการวิเคราะห์ใน  Map Viewer </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="resultType">
+        <div>
+            <p>ระบุประเภทเอาท์พุทที่จะสร้าง ตัวเลือก  <b>สร้างข้อมูลกลาง</b> จะสร้างชั้นข้อมูลชั่วคราวที่สามารถใช้เป็นอินพุทเครื่องมืออื่นได้ แต่จะไม่สามารถบันทึกหรือดูบนแผนที่ได้ ตัวเลือก <b>สร้างชั้นข้อมูลที่โฮสต์</b> จะเผยแพร่ชั้นข้อมูลฟีเจอร์ที่โฮสต์ใหม่ ตัวเลือก <b>เขียนทับชั้นข้อมูลเดิม</b> จะอัปเดตชั้นข้อมูลเดิมด้วยเอาท์พุทเครื่องมือ
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>ชื่อของชั้นข้อมูลที่จะสร้างและเพิ่มลงในแผนที่
+            </p>
+        </div>
+    </div>
+    <div id="layerExistsAutomaticallyOverwrite">
+        <div>
+            <p>ระบุว่าเอาท์พุทของเครื่องมือจะเขียนทับชั้นข้อมูลในเนื้อหาของคุณ ที่มีชื่อเอาท์พุทที่ระบุไว้หรือไม่ หากยังไม่ได้ใช้ชื่อชั้นข้อมูลนั้นในองค์กรของคุณ จะทำการสร้างรายการใหม่ ในการเขียนทับ คุณต้องเป็นเจ้าของชั้นข้อมูลหรือเป็นผู้ดูแล
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>ชื่อของโฟลเดอร์ใน  <b>เนื้อหาของฉัน</b> ที่จะทำการบันทึกผลลัพธ์
+            </p>
+            <p>จะไม่สามารถอัปเดตรายการนี้ได้ หากมีชั้นข้อมูลอยู่แล้ว
+            </p>
+        </div>
+    </div>
+    <div id="existingLayerToOverwrite">
+        <div>
+            <p>ชั้นข้อมูลใน  <b>เนื้อหาของฉัน</b> ที่จะถูกเขียนทับโดยชั้นข้อมูลเอาท์พุท การอ้างอิงเชิงพื้นที่ของเอาท์พุท และชั้นข้อมูลเดิมต้องตรงกัน
+            </p>
+        </div>
+    </div>
+</div>
+</html>

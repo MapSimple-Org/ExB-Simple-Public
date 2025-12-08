@@ -1,0 +1,22 @@
+{
+  "dialogHeading": "Konfigurēt dalībnieku kategorijas",
+  "noticeTitle": "Rediģējiet, dzēsiet vai pārkārtojiet savas organizācijas kategorijas.",
+  "noticeDescription": "Kategorijas dalībniekiem var piešķirt, izmantojot cilni Dalībnieki.",
+  "defaultCategoryWarning": "Šī dalībnieku kategorija ir iestatīta kā jauna dalībnieka noklusējums, un to nevar rediģēt vai dzēst.",
+  "warning": {
+    "deleteInUseCategory": {
+      "message": {
+        "single": "Šai kategorijai ir piešķirts viens dalībnieks. Dzēšot kategoriju, tā tiks noņemta šim dalībniekam.",
+        "multiple": "Šai kategorijai tiek piešķirti ${number} dalībnieki. Dzēšot kategoriju, tā tiks noņemta šiem dalībniekiem.",
+        "unknown": "Šai kategorijai piešķirtie dalībnieki: ${number}. Dzēšot kategoriju, tā tiks noņemta šiem dalībniekiem."
+      }
+    },
+    "changeTitleInUseCategory": {
+      "message": {
+        "single": "Šai kategorijai ir piešķirts viens dalībnieks. Atjauninot kategoriju, tiks atjaunināta arī dalībnieka iespēja izmantot “${newTitle}”.",
+        "multiple": "Šai kategorijai tiek piešķirti ${number} dalībnieki. Atjauninot kategoriju, tiks atjaunināta arī dalībnieku iespēja izmantot “${newTitle}”.",
+        "unknown": "Šai kategorijai piešķirtie dalībnieki: ${number}. Atjauninot kategoriju, tiks atjaunināta arī dalībnieku iespēja izmantot “${newTitle}”."
+      }
+    }
+  }
+}

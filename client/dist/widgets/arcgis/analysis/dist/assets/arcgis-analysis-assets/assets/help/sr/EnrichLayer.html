@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>Alat Obogati sloj pobolj&scaron;ava karakteristike unosa demografskim i pejzažnim podacima.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputLayer">
+        <div>
+            <p>Karakteristike tačke, linije ili poligona koje će biti obogaćene dodatnim podacima.
+            </p>
+            <p class="toolPaneOnly">Broj geoobjekata zavisi od dodatnih faktora kao &scaron;to su kriterijumi filtriranja i obuhvat analize.
+            </p>
+        </div>
+    </div>
+    <div id="analysisVariables">
+        <div>
+            <p>Promenljive koje će biti dodate kao atributi ulaznim karakteristikama.
+            </p>
+        </div>
+    </div>
+    <div id="bufferType">
+        <div>
+            
+            <p class="toolPaneOnly">Metod koji će se koristiti za kreiranje graničnih oblasti oko ulazne tačke ili linijskog geoobjekta. Metod može da prava linija udaljenosti ili režim putovanja. Celokupno područje oko svake karakteristike biće obogaćeno.
+            </p> 
+            <p class="modelBuilderOnly">Metod koji će se koristiti za kreiranje graničnih oblasti oko ulazne tačke ili linijskog geoobjekta. Prava linija udaljenosti je trenutno jedini podržan metod za modele. Celokupno područje oko svake karakteristike biće obogaćeno.
+            </p>
+        </div>
+    </div>
+    <div id="distance">
+        <div>
+            <p>Numerička vrednost koja precizira udaljenost ili vreme koje će obogaćena oblast pro&scaron;iriti oko svakog ulaznog geoobjekta.
+            </p>
+        </div>
+    </div>
+    <div id="units">
+        <div>
+            <p>Jedinice koje će se koristiti za određivanje udaljenosti ili vremena koje će se obogaćena oblast prostirati oko svake ulazne karakteristike.
+            </p>
+        </div>
+    </div>
+    <div id="returnBoundaries">
+        <div>
+            <p>Određuje da li će izlazni sloj sadržati poligonalne karakteristike definisane postavkama  <b>oblasti obogaćivanja</b> (potvrđeno) ili ulazne karakteristike (nepotvrđeno).
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>Naziv sloja koji će biti kreiran i dodat mapi.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>Naziv fascikle u  <b>Mom sadržaju</b> u kojoj će rezultat biti sačuvan.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

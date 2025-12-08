@@ -1,0 +1,30 @@
+<svg width="400" height="400" viewBox="0 0 400 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect x="132.5" y="67" width="20" height="87" transform="rotate(90 132.5 67)" fill="black"/>
+<rect x="195.5" y="67" width="20" height="61" transform="rotate(90 195.5 67)" fill="black"/>
+<rect x="243.5" y="67" width="20" height="46" transform="rotate(90 243.5 67)" fill="black"/>
+<rect x="188.5" y="130" width="20" height="143" transform="rotate(90 188.5 130)" fill="black"/>
+<rect x="259.5" y="130" width="20" height="69" transform="rotate(90 259.5 130)" fill="black"/>
+<rect x="325.5" y="130" width="20" height="64" transform="rotate(90 325.5 130)" fill="black"/>
+<rect x="158.5" y="191" width="20" height="113" transform="rotate(90 158.5 191)" fill="black"/>
+<rect x="234.5" y="191" width="20" height="74" transform="rotate(90 234.5 191)" fill="black"/>
+<rect x="282.5" y="191" width="20" height="46" transform="rotate(90 282.5 191)" fill="black"/>
+<rect x="114.5" y="253" width="20" height="69" transform="rotate(90 114.5 253)" fill="black"/>
+<rect x="158.5" y="253" width="20" height="42" transform="rotate(90 158.5 253)" fill="black"/>
+<rect x="197.5" y="253" width="20" height="37" transform="rotate(90 197.5 253)" fill="black"/>
+<rect x="100.5" y="315" width="20" height="55" transform="rotate(90 100.5 315)" fill="black"/>
+<rect x="163.5" y="315" width="20" height="61" transform="rotate(90 163.5 315)" fill="black"/>
+<rect x="228.5" y="315" width="20" height="63" transform="rotate(90 228.5 315)" fill="black"/>
+<rect x="24" y="79" width="8" height="16" transform="rotate(-90 24 79)" fill="black"/>
+<rect x="24" y="140" width="8" height="16" transform="rotate(-90 24 140)" fill="black"/>
+<rect x="24" y="200" width="8" height="16" transform="rotate(-90 24 200)" fill="black"/>
+<rect x="24" y="262" width="8" height="16" transform="rotate(-90 24 262)" fill="black"/>
+<rect x="24" y="323" width="8" height="16" transform="rotate(-90 24 323)" fill="black"/>
+<rect x="135" y="372" width="8" height="24" transform="rotate(-90 135 372)" fill="black"/>
+<rect x="85" y="372" width="8" height="24" transform="rotate(-90 85 372)" fill="black"/>
+<rect x="33" y="372" width="8" height="24" transform="rotate(-90 33 372)" fill="black"/>
+<rect x="185" y="372" width="8" height="24" transform="rotate(-90 185 372)" fill="black"/>
+<rect x="237" y="372" width="8" height="24" transform="rotate(-90 237 372)" fill="black"/>
+<rect x="289" y="372" width="8" height="24" transform="rotate(-90 289 372)" fill="black"/>
+<rect x="341" y="372" width="8" height="24" transform="rotate(-90 341 372)" fill="black"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M376 350.501L376 351.5L300.5 351.5L300.5 355.5L299.5 355.5L299.5 351.5L249.5 351.5L249.5 355.5L248.5 355.5L248.5 351.5L198.5 351.5L198.5 355.5L197.5 355.5L197.5 351.5L147.5 351.5L147.5 355.5L146.5 355.5L146.5 351.5L96.5 351.5L96.5 355.5L95.5 355.5L95.5 351.5L45.5 351.5L45.5 355.5L44.5 355.5L44.5 351.5L40.5 351.5L40.5 350.5L44.5 350.5L44.5 290.5L40.5 290.5L40.5 289.5L44.5 289.5L44.5 229.5L40.5 229.5L40.5 228.5L44.5 228.5L44.5 168.5L40.5 168.5L40.5 167.5L44.5 167.5L44.5 107.5L40.5 107.5L40.5 106.5L44.5 106.5L44.5 46.5L40.5 46.5L40.5 45.5L44.5 45.5L44.5 23.5L45.4983 23.5L45.4984 350.501L376 350.501ZM351.5 351.5L351.5 355.5L350.5 355.5L350.5 351.5L351.5 351.5Z" fill="black"/>
+</svg>

@@ -1,0 +1,31 @@
+{
+  "back": "戻る",
+  "cancel": "キャンセル",
+  "learnMore": "詳細",
+  "restore": "復元",
+  "restoreTo": "復元先",
+  "restoreItem": "アイテムの復元",
+  "restoreItems": "アイテムの復元",
+  "noticeMessage": "復元されたアイテムは共有解除されます。 コンテンツを確認してから、もう一度共有してください。",
+  "cannotBulkRestoreXItems": "${number} 個を超えるアイテムを一括復元することはできません、いくつかのアイテムを選択解除してください。",
+  "cannotBulkRestoreMultipleOwners": "別々の所有者に属しているアイテムを一括復元することはできません。 一括復元するには、単一の所有者からのアイテムを選択します。",
+  "toRestore": {
+    "single": "復元するアイテム:",
+    "multiple": "復元するアイテム:"
+  },
+  "cannotRestore": "復元できません:",
+  "dependentItems": {
+    "single": "このアイテムは、<strong style='font-weight: 500'>${parent}</strong> に従属しているため、復元できません。 これらのアイテムは同時に復元してください。",
+    "singleUnknown": "このアイテムは、ゴミ箱内の別のアイテムに従属しているため、復元できません。 これらのアイテムは同時に復元してください。",
+    "multiple": "これらのアイテムは、ゴミ箱内の他のアイテムに従属しているため、復元できません。 これらのアイテムは同時に復元してください。",
+    "multipleSameSource": "これらのアイテムは、<strong style='font-weight: 500'>${parent}</strong> に従属しているため、復元できません。 これらのアイテムは同時に復元してください。"
+  },
+  "pageRangeWithTotalRecycleBinSize": {
+    "en": "ゴミ箱の内容: ${start} - ${end} / ${total} (${size})",
+    "other": "ゴミ箱の内容: ${start} - ${end}、合計サイズ: ${total} (${size})"
+  },
+  "pageRangeWithGreaterThanTotalRecycleBinSize": {
+    "en": "ゴミ箱の内容: ${start} - ${end} / ${total} (${size} より大きい)",
+    "other": "ゴミ箱の内容: ${start} - ${end}、合計サイズ: ${total} (${size} より大きい)"
+  }
+}

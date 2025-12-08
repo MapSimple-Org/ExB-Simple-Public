@@ -1,0 +1,13 @@
+{
+  "weightedOverlayTable": "טבלת חפיפה משוקללת",
+  "id": "מזהה",
+  "layer": "שכבה",
+  "field": "שדה",
+  "influence": "השפעה",
+  "sumOfInfluence": "סכום ההשפעה",
+  "value": "ערך",
+  "remapTable": "מפה מחדש טבלה",
+  "scale": "קנה מידה",
+  "scales": "קני מידה",
+  "selectRaster": "בחר רסטר"
+}

@@ -1,0 +1,36 @@
+{
+  "modalHeader": "Configurar categorias de conteúdo",
+  "modalGroupHeader": "Configurar categorias de grupo",
+  "helpText": "Edite, elimine ou reordene categorias na sua organização.",
+  "helpTextGroup": "Edite, elimine ou reordene as categorias de conteúdo deste grupo.",
+  "helpTextDescription": "Lembre-se que outros membros da sua organização poderão já ter atribuído estas categorias aos seus itens, e editar o esquema irá atualizar esses itens de forma correspondente.",
+  "helpTextGroupDescription": "Lembre-se que outros membros do grupo poderão já ter atribuído estas categorias aos seus itens, e editar o esquema irá atualizar esses itens de forma correspondente.",
+  "warning": {
+    "deleteInUseCategory": {
+      "title": "Eliminar categoria",
+      "cta": "Eliminar categoria",
+      "message": {
+        "single": "Existe um item atribuído a esta categoria. A eliminação da categoria irá também removê-la deste item.",
+        "multiple": "Existem ${number} itens atribuídos a esta categoria. A eliminação da categoria irá também removê-la destes itens.",
+        "unknown": "Itens atribuídos a esta categoria: ${number}. A eliminação da categoria irá também removê-la destes itens."
+      }
+    },
+    "changeTitleInUseCategory": {
+      "title": "Atualizar categoria",
+      "message": {
+        "single": "Existe um item atribuído a esta categoria. A atualização da categoria irá atualizar o item para usar \"${newTitle}\".",
+        "multiple": "Existem ${number} itens atribuídos a esta categoria. A atualização da categoria irá atualizar os itens para usar \"${newTitle}\".",
+        "unknown": "Itens atribuídos a esta categoria: ${number}. A atualização da categoria irá atualizar os itens para usar \"${newTitle}\"."
+      },
+      "cta": "Atualizar categoria"
+    }
+  },
+  "template": {
+    "templateList": {
+      "custom": {
+        "message": "Crie as suas próprias categorias para organizar conteúdo na sua organização.",
+        "messageGroup": "Crie as suas próprias categorias para organizar conteúdo neste grupo."
+      }
+    }
+  }
+}

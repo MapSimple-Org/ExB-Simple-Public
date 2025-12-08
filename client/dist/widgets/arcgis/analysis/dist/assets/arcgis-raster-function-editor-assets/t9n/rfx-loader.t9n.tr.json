@@ -1,0 +1,8 @@
+{
+  "loading": "Yükleniyor...",
+  "pleaseWait": "Lütfen bekleyin.",
+  "loadingXMLRFT": "Seçilen raster fonksiyon şablonu XML biçiminde yükleniyor.",
+  "failedToOpen": "Açılamadı.",
+  "readingFailed": "Seçilen raster fonksiyon şablonu yüklenemedi.",
+  "failedToLoadXML": "Seçilen raster fonksiyon şablonu XML biçiminde yüklenemedi."
+}

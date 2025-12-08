@@ -1,0 +1,6 @@
+{
+  "greaterThanErrorMessage": "يجب أن يكون رقم الإدخال أكبر من ${min}",
+  "lesserThanErrorMessage": "يجب أن يكون رقم الإدخال أقل من ${max}",
+  "greaterThanOrEqualErrorMessage": "يجب أن يكون رقم الإدخال أكبر من أو يساوي ${min}",
+  "lesserThanOrEqualErrorMessage": "يجب أن يكون رقم الإدخال أقل من أو يساوي ${max}"
+}

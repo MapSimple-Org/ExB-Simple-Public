@@ -1,0 +1,89 @@
+{
+  "browser": {
+    "refineContent": "מקד תוכן",
+    "filters": "סינונים",
+    "pageRange": "${start}-${end}, סה\"כ: ${total}",
+    "pageRangeAria": "${start}-${end}, סה\"כ פריטים: ${total}",
+    "pageRangeWithRecycleBin": "${start}-${end}, סה\"כ: ${total} (גודל כולל: ${recycleBinSize})",
+    "pageRangeAriaWithRecycleBin": "${start}-${end}, סה\"כ פריטים: ${total} (גודל כולל: ${recycleBinSize})",
+    "totalSize": "גודל כולל: ${totalSize}",
+    "loading": "טוען תוצאות",
+    "close": "סגירה"
+  },
+  "actions": {
+    "more": "עוד"
+  },
+  "filter": {
+    "clear": "נקה"
+  },
+  "filterDate": {
+    "today": "היום",
+    "yesterday": "אתמול",
+    "last7": "7 הימים האחרונים",
+    "last30": "30 הימים האחרונים",
+    "never": "אף פעם",
+    "custom": "טווח מותאם אישית...",
+    "title": {
+      "created": "תאריך יצירה",
+      "modified": "תאריך שינוי",
+      "joined": "תאריך הצטרפות",
+      "lastLogin": "התחברות אחרונה"
+    },
+    "created": "נוצר: ${date}",
+    "modified": "השתנה: ${date}",
+    "joined": "הצטרף: ${date}",
+    "lastLogin": "התחברות אחרונה: ${date}"
+  },
+  "pagination": {
+    "next": "העמוד הבא",
+    "prev": "העמוד הקודם"
+  },
+  "search": {
+    "label": "חיפוש קבוצות",
+    "search": "חיפוש",
+    "clear": "נקה ביטוי חיפוש",
+    "wildcard": "אין תמיכה בחיפושי עם תוויים כלליים"
+  },
+  "sort": {
+    "sortDirection": "כיוון מיון",
+    "title": "כותרת",
+    "relevance": "רלוונטיות",
+    "modified": "תאריך שינוי",
+    "deleted": "תאריך מחיקה",
+    "created": "תאריך יצירה",
+    "added": "תאריך הוספה",
+    "size": "גודל",
+    "owner": "יוצר",
+    "sizeAsc": "מהקטן ביותר לגדול ביותר",
+    "sizeDesc": "מהגדול ביותר לקטן ביותר",
+    "numviews": "ספירת תצוגות",
+    "numAsc": "מהנמוך לגבוה",
+    "numDesc": "מהגבוה לנמוך",
+    "alphabeticalAsc": "סדר א\"ב",
+    "alphabeticalDesc": "סדר א\"ב הפוך",
+    "recentAsc": "הכי פחות עדכני",
+    "recentDesc": "העדכני ביותר",
+    "sort": "מיין",
+    "sortBy": "מיין לפי",
+    "sortByColon": "מיון על ידי:",
+    "fullname": "שם",
+    "username": "שם משתמש",
+    "name": "שם",
+    "membertype": "תפקיד קבוצה",
+    "joined": "תאריך הצטרפות",
+    "lastlogin": "התחברות אחרונה",
+    "dataset": "סט נתונים",
+    "mfaenabled": "אימות מרובה גורמים",
+    "defaultAsc": "סדר עולה",
+    "defaultDesc": "סדר יורד"
+  },
+  "topBar": {
+    "filter": "מסנן"
+  },
+  "filterStatus": {
+    "clear": "נקה",
+    "filters": "מסננים:",
+    "additional": "מסננים פעילים נוספים",
+    "clearAllFilters": "נקה את כל המסננים"
+  }
+}

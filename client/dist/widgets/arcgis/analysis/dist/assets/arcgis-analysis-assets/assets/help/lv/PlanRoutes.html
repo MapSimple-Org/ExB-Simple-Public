@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>Mar&scaron;rutu plāno&scaron;anas rīks izveido pārvieto&scaron;anās mar&scaron;rutus ar vairākām pieturvietām transportlīdzekļu kolonnai.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="startLayer">
+        <div>
+            <p>Punktu elemeti, kas norāda, kur transportlīdzekļi sāk savu mar&scaron;rutu.
+            </p>
+            <p class="toolPaneOnly">Elementu skaits ir atkarīgs no papildu faktoriem, piemēram, filtrē&scaron;anas kritērijiem un analīzes apjoma.
+            </p>
+        </div>
+    </div>
+    <div id="stopsLayer">
+        <div>
+            <p>Punktu elementi, kas transportlīdzekļiem jāapmeklē, pārvietojoties pa mar&scaron;rutu. &Scaron;ie punkti izvadē kļūst par pie&scaron;ķirtām vai nepie&scaron;ķirtām pieturām.
+            </p>
+            <p class="toolPaneOnly">Elementu skaits ir atkarīgs no papildu faktoriem, piemēram, filtrē&scaron;anas kritērijiem un analīzes apjoma.
+            </p>
+        </div>
+    </div>
+    <div id="returnToStart">
+        <div>
+            
+            <p>Nosaka, vai transportlīdzekļiem jāatgriežas savā sākuma vietā (iespējots) vai jāapstājas noteiktās gala vietās.
+            </p>
+        </div>
+    </div>
+    <div id="endLayer">
+        <div>
+            <p>Punktu elementi, kas norādā, kur transportlīdzekļiem jābeidz savs mar&scaron;ruts. Ja slānī ir tikai viens punkts, visi transportlīdzekļi tiek novirzīti uz kopēju galapunktu. Ja slānis ietver vairākus punktus, katrs transportlīdzeklis tiek novirzīts uz unikālu galapunktu.
+            </p>
+            <p class="toolPaneOnly">Elementu skaits ir atkarīgs no papildu faktoriem, piemēram, filtrē&scaron;anas kritērijiem un analīzes apjoma.
+            </p>
+        </div>
+    </div>
+    <div id="startLayerRouteIDField">
+        <div>
+            <p>Lauks sākuma slānī, kas unikāli identificē atsevi&scaron;ķus mar&scaron;rutus, transportlīdzekļus vai autovadītājus. Ja transportlīdzekļi sāk mar&scaron;rutu vairākās vietās un to beidzas vairākās vietās, ir jāsakrīt mar&scaron;ruta ID, kas norādīti sākuma un beigu slāņiem.
+            </p>
+        </div>
+    </div>
+    <div id="endLayerRouteIDField">
+        <div>
+            <p>Lauks beigu slānī, kas unikāli identificē atsevi&scaron;ķus mar&scaron;rutus, transportlīdzekļus vai autovadītājus. Ja transportlīdzekļi sāk mar&scaron;rutu vairākās vietās un to beidzas vairākās vietās, ir jāsakrīt mar&scaron;ruta ID, kas norādīti sākuma un beigu slāņiem.
+            </p>
+        </div>
+    </div>
+    <div id="pointBarrierLayer">
+        <div>
+            <p>Viens vai vairāki punktu elementi, kas darbojas kā īslaicīgi ierobežojumi (barjeras), braucot pa ielām. Brauk&scaron;ana ir atļauta pa ielu, ne&scaron;ķērsojot barjeru.
+            </p>
+        </div>
+    </div>
+    <div id="lineBarrierLayer">
+        <div>
+            <p>Viens vai vairāki punktu elementi, kas darbojas kā īslaicīgi ierobežojumi (barjeras), braucot pa ielām. Līnijas barjeras aizliedz pārvietoties jebkur, kur barjeras &scaron;ķērso ielas.
+            </p>
+        </div>
+    </div>
+    <div id="polygonBarrierLayer">
+        <div>
+            <p>Viens vai vairāki laukuma elementi, kas darbojas kā īslaicīgi ierobežojumi (barjeras), braucot pa ielām. Laukuma barjeras aizliedz pārvietoties jebkur, kur laukums &scaron;ķērso ielas.
+            </p>
+        </div>
+    </div>
+    <div id="travelMode">
+        <div>
+            <p>Pārvieto&scaron;anās režīms, kas tiks izmantots mar&scaron;rutu veido&scaron;anā. Tiek atbalstīti tikai uz laiku balstīti pārvieto&scaron;anās režīmi.
+            </p>
+        </div>
+    </div>
+    <div id="routeStartTime">
+        <div>
+            <p>Transportlīdzekļu izbrauk&scaron;anas datums un laiks.
+            </p>
+        </div>
+    </div>
+    <div id="routeCount">
+        <div>
+            
+            <p class="OnlineOnly">Maksimālais transportlīdzekļu skaits, kuriem būs pieejamas apstā&scaron;anās vietas. Ja  <b>sākuma slāņa</b> un <b>beigu slāņa</b> vērtības katra satur vienu elementu, Jūs varat norādīt līdz pat 100 transportlīdzekļiem. Ja kādā no slāņiem ir vairāk nekā viens elements, noklusējuma vērtību nevar rediģēt. </p> 
+            <p class="PortalOnly">Maksimālais transportlīdzekļu skaits, kuriem būs pieejamas apstā&scaron;anās vietas. Ja  <b>sākuma slāņa</b> un <b>beigu slāņa</b> vērtības katra satur vienu elementu, Jūs varat norādīt maksimālo transportlīdzekļi daudzumu. Ja kādā no slāņiem ir vairāk nekā viens elements, noklusējuma vērtību nevar rediģēt.
+            </p>
+        </div>
+    </div>
+    <div id="maxStopsPerRoute">
+        <div>
+            
+            <p class="OnlineOnly">Maksimālais pieturu skaits, ko katrs transportlīdzeklis var veikt mar&scaron;rutā. Varat norādīt vērtību no 1 līdz  200. </p> 
+            <p class="PortalOnly">Maksimālais pieturu skaits, ko katrs transportlīdzeklis var veikt mar&scaron;rutā.
+            </p>
+        </div>
+    </div>
+    <div id="stopServiceTime">
+        <div>
+            <p>Paredzamais vidējais pakalpojuma laiks, kas tiks patērēts katrā apstā&scaron;anās vietā.
+            </p>
+        </div>
+    </div>
+    <div id="limitMaxRouteTimeCheckbox">
+        <div>
+            <p>Norāda, vai transportlīdzekļiem tiek izmantots maksimālais mar&scaron;ruta laiks. Mar&scaron;ruta laiks ietver paredzamo ceļojuma laiku un laiku, kas pavadīts pieturvietās.
+            </p>
+        </div>
+    </div>
+    <div id="maxRouteTime">
+        <div>
+            <p>Maksimālais laiks, ko patērē mar&scaron;rutā no sākuma līdz galam.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>Tā slāņa nosaukums, kas tiks izveidots un pievienots kartei.
+            </p>
+        </div>
+    </div>
+    <div id="includeRouteLayers">
+        <div>
+            <p>Norāda, vai katrs rezultātu mar&scaron;ruts tiks saglabāts kā mar&scaron;ruta slānis.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            
+            <p>Mapes nosaukums sadaļā  <b>Mans saturs</b>, kurā tiks saglabāti rezultāti.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

@@ -1,0 +1,7 @@
+{
+  "example": "Esimerkki",
+  "input": "Lähtöaineisto",
+  "output": "Tulosaineisto",
+  "optional": "Valinnainen",
+  "WNDWIHintText": "α:α-arvon tulee olla 0–1, ja oletusarvo on 0,5"
+}

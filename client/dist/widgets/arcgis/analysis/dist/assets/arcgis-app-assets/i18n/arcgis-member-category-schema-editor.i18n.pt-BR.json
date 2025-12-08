@@ -1,0 +1,22 @@
+{
+  "dialogHeading": "Configurar categorias de membros",
+  "noticeTitle": "Edite, exclua ou reordene categorias em sua organização.",
+  "noticeDescription": "Você pode atribuir categorias a membros por meio da guia Membros.",
+  "defaultCategoryWarning": "Esta categoria de membro é definida como um novo membro padrão e não pode ser editada ou excluída.",
+  "warning": {
+    "deleteInUseCategory": {
+      "message": {
+        "single": "Um membro está atribuído a esta categoria. A exclusão da categoria também a removerá deste membro.",
+        "multiple": "${number} membros estão atribuídos a esta categoria. A exclusão da categoria também a removerá destes membros.",
+        "unknown": "Membros atribuídos a esta categoria: ${number}. A exclusão da categoria também a removerá destes membros."
+      }
+    },
+    "changeTitleInUseCategory": {
+      "message": {
+        "single": "Um membro está atribuído a esta categoria. Atualizar a categoria atualizará o membro para usar \"${newTitle}\".",
+        "multiple": "${number} membros estão atribuídos a esta categoria. Atualizar a categoria atualizará o membro para usar \"${newTitle}\".",
+        "unknown": "Membros atribuídos a esta categoria: ${number}. Atualizar a categoria atualizará o membro para usar \"${newTitle}\"."
+      }
+    }
+  }
+}

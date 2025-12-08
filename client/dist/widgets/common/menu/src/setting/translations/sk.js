@@ -1,0 +1,1 @@
+System.register([],function(n){return{execute:function(){n({subMenuExpandMode:"Re\u017eim roz\u0161\xedrenia podponuky",mainMenu:"Hlavn\xe1 ponuka",subMenu:"Podponuka",navArrowColor:"Farba naviga\u010dnej \u0161\xedpky"})}}});

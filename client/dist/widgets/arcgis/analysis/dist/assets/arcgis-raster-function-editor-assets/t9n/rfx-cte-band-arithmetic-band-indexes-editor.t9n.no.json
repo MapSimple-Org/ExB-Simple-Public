@@ -1,0 +1,7 @@
+{
+  "example": "Eksempel",
+  "input": "Inndata",
+  "output": "Resultat",
+  "optional": "Valgfritt",
+  "WNDWIHintText": "Verdien α:α bør være mellom 0 og 1; standardverdien er 0,5"
+}

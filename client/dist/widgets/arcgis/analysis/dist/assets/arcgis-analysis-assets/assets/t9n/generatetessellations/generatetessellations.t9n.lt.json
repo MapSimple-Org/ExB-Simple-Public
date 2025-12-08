@@ -1,0 +1,27 @@
+{
+  "area": "Teritorija",
+  "binResolution": "H3 kubo raiška",
+  "binSize": "Kubo dydis",
+  "binSizeUnit": "Skyrius",
+  "binType": "Kubo formos tipas",
+  "diamondBins": "Rombo elementai",
+  "distance": "Atstumas",
+  "extentLayer": "Aprėpties sluoksnis",
+  "extentOverrideMessage": "Šis aprėpties sluoksnis bus naudojamas vietoje bet kurios aplinkose nustatytos apdorojimo apimties.",
+  "extentSectionLabel": "Aprėpties nustatymai",
+  "extentSectionText": "Nurodykite aprėpties sluoksnį, kurį turi apimti teseliacija.",
+  "h3hexagonBins": "H3 šešiakampiai elementai",
+  "hexagon": "Šešiakampis",
+  "intersectStudyArea": "Palikti tik susikertančias teseliacijas",
+  "itemProperties": {
+    "description": "Elementų sluoksnis sugeneruotas paleidus analizės įrankį Generuoti teseliacijas.",
+    "snippet": "Elementų sluoksnis sukurtas naudojant Generuoti teseliacijas"
+  },
+  "outputAreasSectionText": "Pateikite teseliacijos tinklelio pavadinimą.",
+  "sizeType": "Kubo dydžio matavimo vienetas",
+  "square": "Kvadratas",
+  "tessellationSettingsLabel": "Teseliacijos nustatymai",
+  "tessellationSettingsSummaryText": "Nurodykite generuojamų kubų dydį ir formą.",
+  "thexagonBins": "Skersiniai šešiakampiai elementai",
+  "triangleBins": "Trikampiai elementai"
+}

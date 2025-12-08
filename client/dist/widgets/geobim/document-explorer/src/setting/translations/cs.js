@@ -1,0 +1,1 @@
+System.register([],function(e){return{execute:function(){e({settingsLabel:"Nastaven\xed Pr\u016fzkumn\xedku dokument\u016f",selectModelViewer:"Vyberte widget Prohl\xed\u017ee\u010d dokument\u016f k zobrazen\xed dokument\u016f."})}}});

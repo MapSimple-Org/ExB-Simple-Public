@@ -1,0 +1,11 @@
+{
+  "unsupportedDataType": "不受支援的類型",
+  "currentlyUnsupported": " ${missingType} 的預設編輯器正在擱置，但即將推出。 用於指定字串式輸入的臨時預留位置文字方塊。",
+  "unsupportedOverrideWarning": "為使用以下參數以提供更好的 UX 的覆寫編輯器元件正在擱置，但即將推出:",
+  "overrideWidgetMissing": "缺少覆寫編輯器元件!",
+  "uiIncomplete": "工作提交失敗。 該函數無法執行，因為 UI 中的某些必要欄位不完整或缺失。",
+  "deprecatedBannerText": "此點陣函數樣板包含一或多個已棄用的點陣函數，並將在未來版本中移除。",
+  "deprecatedBannerTextWithLink": "此點陣函數樣板包含一或多個已棄用的點陣函數，並將在未來版本中移除。 <calcite-link target='_blank' href='${ docLink }'>深入瞭解</calcite-link>如何取代已棄用的點陣函數。",
+  "unsupportedBannerText": "此點陣函數樣板包含一或多個不支援的點陣函數。",
+  "unsupportedBannerTextWithLink": "此點陣函數樣板包含一或多個不支援的點陣函數。 <calcite-link target='_blank' href='${ docLink }'>深入瞭解</calcite-link>支援的點陣函數。"
+}

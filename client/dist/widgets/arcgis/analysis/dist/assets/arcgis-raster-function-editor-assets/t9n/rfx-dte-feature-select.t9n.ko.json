@@ -1,0 +1,8 @@
+{
+  "selectFeature": "피처 레이어 선택",
+  "browseLayer": "레이어 찾아보기",
+  "loading": "불러오는 중...",
+  "errorCodes": {
+    "required": "이 매개변수는 필수입니다."
+  }
+}

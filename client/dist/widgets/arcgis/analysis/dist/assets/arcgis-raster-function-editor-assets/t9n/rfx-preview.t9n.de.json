@@ -1,0 +1,13 @@
+{
+  "header": "Vorschau",
+  "description": "Vor dem Ausführen der Analyse eine Vorschau des Ergebnisses anzeigen.",
+  "showPreview": "Vorschau anzeigen",
+  "previewLayer": "Vorschau von Layer ${number} anzeigen",
+  "update": "Aktualisieren",
+  "newPreview": "Neue Vorschau",
+  "previewPopup": "Die Vorschau der Analyseergebnisse basierend auf den Eingabeparametern aktivieren.",
+  "previewError": "Dieser Vorschau-Layer ist nicht verfügbar. Überprüfen Sie die Eingabeparameter, und aktualisieren Sie diesen Vorschau-Layer erneut.",
+  "updatePopover": "Ausgewählten Vorschau-Layer aktualisieren",
+  "createPopover": "Neuen Vorschau-Layer erstellen",
+  "maxPreview": "Maximal zulässige Anzahl von Vorschau-Layern: ${maxCount}"
+}

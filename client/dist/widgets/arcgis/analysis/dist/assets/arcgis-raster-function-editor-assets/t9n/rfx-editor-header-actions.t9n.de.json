@@ -1,0 +1,11 @@
+{
+  "newTemplate": "Neue Vorlage erstellen",
+  "openTemplate": "Vorlage öffnen",
+  "addTemplate": "Vorlage hinzufügen",
+  "addFunction": "Raster-Funktionen hinzufügen",
+  "addConstant": "Konstante hinzufügen",
+  "addRaster": "Raster-Variable hinzufügen",
+  "expand": "Erweitern",
+  "editTemplateProperties": "Vorlageneigenschaften bearbeiten",
+  "viewTemplateProperties": "Vorlageneigenschaften anzeigen"
+}

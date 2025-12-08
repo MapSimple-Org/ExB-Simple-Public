@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>&Ccedil;izgi Olarak En Uygun Yol aracı, hedeflerden optimum kaynağa yolu bir &ccedil;izgi olarak hesaplar.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputDestinationRasterOrFeatures">
+        <div>
+            <p>En az maliyetli kaynağa mesafenin hesaplanmasında temel alınan hedefleri tanımlayan katman.
+            </p>
+            <p>Eğer girdi bir raster ise, hedefler i&ccedil;in ge&ccedil;erli tam sayı değerlerine sahip olan h&uuml;crelerden oluşması gerekir (sıfır ge&ccedil;erli bir değerdir) ve kalan h&uuml;creler NoData (Verisiz) olarak belirlenmelidir.
+            </p>
+            <p class="toolPaneOnly">Detay girdileri i&ccedil;in sayı, filtreleme kriterleri ve analiz yayılımı gibi ek fakt&ouml;rlere bağlıdır.
+            </p>
+        </div>
+    </div>
+    <div id="destinationField">
+        <div>
+            <p>Hedef konum değerleri almak i&ccedil;in kullanılacak alan.
+            </p>
+        </div>
+    </div>
+    <div id="inputDistanceAccumulationRaster">
+        <div>
+            <p>Hedeflerden kaynaklara en uygun yolu belirleyen raster.
+            </p>
+            <p>Mesafe birikim rasterı genellikle Mesafe Birikimi ya da Mesafe Dağıtımı aracıyla oluşturulur.
+            </p>
+        </div>
+    </div>
+    <div id="inputBackDirectionRaster">
+        <div>
+            <p>Hesaplanan y&ouml;nleri derece olarak i&ccedil;eren raster.
+            </p>
+            <p>Geri y&ouml;n rasterı genellikle Mesafe Birikimi ya da Mesafe Dağıtımı aracıyla oluşturulur.
+            </p>
+        </div>
+    </div>
+    <div id="pathType">
+        <div>
+            <p>Girdi hedef verilerindeki değerlerin ve b&ouml;lgelerin, en uygun yol hesaplamalarında nasıl yorumlanacağını belirtir.
+            </p>
+        </div>
+    </div>
+    <div id="createNetworkPaths">
+        <div>
+            <p>Hedeflerden kaynaklara tam ve muhtemelen &ccedil;akışan yolların hesaplanıp hesaplanmayacağını veya &ccedil;akışmayan ağ yollarının oluşturulup oluşturulmayacağını belirtir.
+            </p>
+        </div>
+    </div>
+    <div id="outputPolylineName">
+        <div>
+            <p>Oluşturulacak ve haritaya eklenecek &ccedil;izgi katmanı olarak en uygun yolun adı.
+            </p>
+            <p>Katman oluşturulacak ve haritaya eklenecektir.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p> <b>İ&ccedil;eriğim</b> i&ccedil;inde sonucun kaydedileceği klas&ouml;r&uuml;n adı.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

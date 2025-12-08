@@ -1,0 +1,26 @@
+{
+  "CCIAnalysisSettingGroupLabel": "Paramètres de l’indice",
+  "CCIAnalysisSettingGroupText": "Spécifier le mode de calcul de l’indice.",
+  "geomeanPercentileLabel": "Classements composites (moyenne géométrique des centiles)",
+  "geomeanRawLabel": "Valeurs brutes composites (moyenne géométrique des valeurs brutes)",
+  "geomeanScaledLabel": "Valeurs mises à l’échelle composites (moyenne géométrique des valeurs mises à l’échelle)",
+  "indexMethodLabel": "Méthode de mise à l’échelle et de combinaison des variables",
+  "inputFeaturesOrTableLabel": "Table ou entités en entrée",
+  "inputLayerGroupText": "Sélectionner les entités ou la table et les variables avec lesquelles créer l’indice.",
+  "inputVariablesLabel": "Variables en entrée",
+  "itemProperties": {
+    "description": "Couche d’entités générée en exécutant l’outil d’analyse Calculer un indice composite.",
+    "snippet": "Couche d’entités générée avec Calculer un indice composite"
+  },
+  "meanPercentileLabel": "Combiner les classements (moyenne des centiles)",
+  "meanRawLabel": "Combiner les valeurs brutes (moyenne des valeurs brutes)",
+  "meanScaledLabel": "Combiner les valeurs mises à l’échelle (moyenne des valeurs mises à l’échelle)",
+  "outputIndexMaxLabel": "Maximum",
+  "outputIndexMinLabel": "Minimum",
+  "outputIndexMinMaxLabel": "Valeurs minimales et maximales de l’indice",
+  "outputIndexReverseLabel": "Inverser les valeurs de l’indice",
+  "reverseVariableLabel": "Inverser le sens",
+  "sumFlagsPercentileLabel": "Mettre en évidence les extrêmes (nombre de valeurs au-dessus du 90e centile)",
+  "toolName": "Calculer un indice composite",
+  "weight": "Pondération"
+}

@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>Tuvumā eso&scaron;ā apkopo&scaron;anas rīks aprēķina elementu statistiku noteiktā attālumā no citiem elementiem. Attālumu var aprēķināt, izmantojot taisnas līnijas attālumu vai pārvieto&scaron;anās režīmu.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="summaryLayer">
+        <div>
+            <p>Slānis, kas tiks apkopots tuvējā slāņa attālumā.
+            </p>
+            <p class="toolPaneOnly">Elementu skaits ir atkarīgs no papildu faktoriem, piemēram, filtrē&scaron;anas kritērijiem un analīzes apjoma.
+            </p>
+        </div>
+    </div>
+    <div id="sumNearbyLayer">
+        <div>
+            <p>Punkta, līnijas vai daudzstūra slānis, kas tiks izmantots kā sākuma vietas, ap kurām tiks izveidoti ierobežojo&scaron;ie apgabali, lai apkopotu tuvumā eso&scaron;os elementus.
+            </p>
+            <p class="toolPaneOnly">Elementu skaits ir atkarīgs no papildu faktoriem, piemēram, filtrē&scaron;anas kritērijiem un analīzes apjoma.
+            </p>
+        </div>
+    </div>
+    <div id="nearType">
+        <div>
+            
+            <p class="toolPaneOnly">&Scaron;ī metode tiks izmantota, lai veidotu ierobežojo&scaron;os apgabalus. Metode var būt taisnas līnijas attālums vai pārvieto&scaron;anās režīms.
+            </p> 
+            <p class="modelBuilderOnly">&Scaron;ī metode tiks izmantota, lai veidotu ierobežojo&scaron;os apgabalus. Pa&scaron;laik vienīgā metode, kas ir atbalstīta modeļiem, ir taisnas līnijas attālums.
+            </p>
+        </div>
+    </div>
+    <div id="distances">
+        <div>
+            <p>Attālums vai laiks, kas tiks izmantots, lai izveidotu ierobežojo&scaron;os apgabalus. Ja tiek pievienotas vairākas vērtības, katra vērtība tiks izmantota, lai aprēķinātu visu ievades elementu ierobežojo&scaron;os apgabalus.
+            </p>
+        </div>
+    </div>
+    <div id="units">
+        <div>
+            <p>Vienības, kas tiks izmantotas, lai norādītu attālumu vai laiku.
+            </p>
+        </div>
+    </div>
+    <div id="returnBoundaries">
+        <div>
+            <p>Norāda, vai rezultāta slānis būs ierobežojo&scaron;ie apgabali (pārbaudīti) vai tāda pati ģeometrija kā tuvumā eso&scaron;ais ievades slānis (nav atzīmēts).
+            </p>
+        </div>
+    </div>
+    <div id="sumShape">
+        <div>
+            <p>Norāda, vai tiks aprēķināts katrā ierobežojo&scaron;ajā apgabalā apkopoto elementu kopējais lielums. Līnijām tiks aprēķināts kopējais garums. Laukumiem tiks aprēķināta kopējā platība.
+            </p>
+        </div>
+    </div>
+    <div id="shapeUnits">
+        <div>
+            <p>Vienības, kas tiks izmantotas, lai aprēķinātu summēto elementu kopējo lielumu.
+            </p>
+        </div>
+    </div>
+    <div id="summaryFields">
+        <div>
+            <p>Skaitļu vai datumu lauki no ievades slāņa, kas tiks izmantoti apkopo&scaron;anai un statistika, kas tiks aprēķināta katram laukam.
+            </p>
+        </div>
+    </div>
+    <div id="groupByField">
+        <div>
+            <p>Lauks no ievades slāņa, kas tiks izmantots, lai atdalītu datus atsevi&scaron;ķās grupās statistisko aprēķinu veik&scaron;anai.
+            </p>
+        </div>
+    </div>
+    <div id="minorityMajority">
+        <div>
+            <p>Norāda, vai aprēķināt mazākuma (vismazāk dominējo&scaron;ās) un vairākuma (dominējo&scaron;ās) grupas katrā kopsavilkuma teritorijā.
+            </p>
+        </div>
+    </div>
+    <div id="percentShape">
+        <div>
+            <p>Nosaka, vai tiks aprēķināts apkopoto elementu, kas pieder katrai grupai katrā ierobežojumā, procentuālais daudzums
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>Tā slāņa nosaukums, kas tiks izveidots un pievienots kartei.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>Mapes nosaukums sadaļā  <b>Mans saturs</b>, kurā tiks saglabāti rezultāti.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

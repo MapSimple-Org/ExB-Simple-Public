@@ -1,0 +1,89 @@
+{
+  "browser": {
+    "refineContent": "优化内容",
+    "filters": "过滤器",
+    "pageRange": "${start}-${end}，总计：${total}",
+    "pageRangeAria": "${start}-${end}，总项目数：${total}",
+    "pageRangeWithRecycleBin": "${start}-${end}，总数：${total}（大小总计：${recycleBinSize}）",
+    "pageRangeAriaWithRecycleBin": "${start}-${end}，总项目数：${total}（大小总计：${recycleBinSize}）",
+    "totalSize": "大小总计：${totalSize}",
+    "loading": "正在加载结果",
+    "close": "关闭"
+  },
+  "actions": {
+    "more": "更多"
+  },
+  "filter": {
+    "clear": "清除"
+  },
+  "filterDate": {
+    "today": "今天",
+    "yesterday": "昨天",
+    "last7": "最近 7 天",
+    "last30": "最近 30 天",
+    "never": "从未",
+    "custom": "自定义范围...",
+    "title": {
+      "created": "创建日期",
+      "modified": "修改日期",
+      "joined": "加入日期",
+      "lastLogin": "上次登录"
+    },
+    "created": "创建日期：${date}",
+    "modified": "修改时间：${date}",
+    "joined": "加入：${date}",
+    "lastLogin": "上次登录：${date}"
+  },
+  "pagination": {
+    "next": "下一页",
+    "prev": "上一页"
+  },
+  "search": {
+    "label": "搜索群组",
+    "search": "搜索",
+    "clear": "清除搜索词",
+    "wildcard": "通配符搜索不受支持"
+  },
+  "sort": {
+    "sortDirection": "排序",
+    "title": "标题",
+    "relevance": "相关度",
+    "modified": "修改日期",
+    "deleted": "删除日期",
+    "created": "创建日期",
+    "added": "新增日期",
+    "size": "大小",
+    "owner": "所有者",
+    "sizeAsc": "最小到最大",
+    "sizeDesc": "最大到最小",
+    "numviews": "查看计数",
+    "numAsc": "最少至最多",
+    "numDesc": "最多至最少",
+    "alphabeticalAsc": "按字母顺序",
+    "alphabeticalDesc": "按字母逆向顺序",
+    "recentAsc": "最近最少",
+    "recentDesc": "最近",
+    "sort": "排序",
+    "sortBy": "排序方式",
+    "sortByColon": "排序方式：",
+    "fullname": "名称",
+    "username": "用户名",
+    "name": "名称",
+    "membertype": "群组角色",
+    "joined": "加入日期",
+    "lastlogin": "上次登录",
+    "dataset": "数据集",
+    "mfaenabled": "多因子身份验证",
+    "defaultAsc": "升序",
+    "defaultDesc": "降序"
+  },
+  "topBar": {
+    "filter": "过滤器"
+  },
+  "filterStatus": {
+    "clear": "清除",
+    "filters": "过滤器：",
+    "additional": "附加活动过滤器",
+    "clearAllFilters": "清除所有过滤器"
+  }
+}

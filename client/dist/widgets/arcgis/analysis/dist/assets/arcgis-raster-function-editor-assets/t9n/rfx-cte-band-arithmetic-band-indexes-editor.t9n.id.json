@@ -1,0 +1,7 @@
+{
+  "example": "Contoh",
+  "input": "Input",
+  "output": "Keluaran",
+  "optional": "Opsional",
+  "WNDWIHintText": "Nilai α:α harus berada di antara 0 dan 1; nilai default adalah 0,5"
+}

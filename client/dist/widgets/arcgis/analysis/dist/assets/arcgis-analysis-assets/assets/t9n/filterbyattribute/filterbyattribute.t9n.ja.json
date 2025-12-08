@@ -1,0 +1,8 @@
+{
+  "itemProperties": {
+    "description": "属性によるフィルター解析ツールを実行して生成された結果。",
+    "snippet": "属性によるフィルターから生成された結果"
+  },
+  "noLayerDisabledTooltip": "有効な入力データセットを選択してください。",
+  "queryCriteriaGroupLabel": "クエリー条件"
+}

@@ -1,0 +1,20 @@
+{
+  "title": "Títol",
+  "addTitle": "Afegeix un títol",
+  "validation": {
+    "error": "Error",
+    "titleRequired": "El títol és un camp obligatori.",
+    "itemExists": "Aquesta carpeta ja té un element titulat \"${name}\". Trieu un títol diferent.",
+    "titleInUseService": "Ja hi ha una capa titulada \"${name}\". Trieu un títol diferent.",
+    "itemInRecycleBin": "Ja hi ha un element titulat \"${name}\" i es troba a la paperera. Trieu un títol diferent.",
+    "serviceNameInvalid": "El títol d'un servei només pot contenir caràcters alfanumèrics o ratlles baixes i ha de tenir 90 caràcters o menys.",
+    "dataStoreTitleInvalid": "El títol d'un magatzem de dades només pot contenir caràcters alfanumèrics o ratlles baixes i ha de tenir 90 caràcters o menys.",
+    "titleInvalid": "El títol ha de tenir menys de 250 caràcters i no pot contenir < ni >.",
+    "titleStartsWithNumber": "El títol no pot començar amb un número.",
+    "invalidCharacters": {
+      "single": "El nom no pot contenir aquest caràcter: ${invalidCharacters}.",
+      "multiple": "El nom no pot contenir cap d'aquests caràcters: ${invalidCharacters}.",
+      "unknown": "El nom no pot contenir cap d'aquests caràcters: ${invalidCharacters}."
+    }
+  }
+}

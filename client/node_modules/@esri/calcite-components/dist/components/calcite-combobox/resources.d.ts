@@ -1,0 +1,50 @@
+export declare const ComboboxItemSelector = "CALCITE-COMBOBOX-ITEM";
+export declare const ComboboxItemGroupSelector = "CALCITE-COMBOBOX-ITEM-GROUP";
+export declare const AllComboboxChildrenSelector = "CALCITE-COMBOBOX-ITEM, CALCITE-COMBOBOX-ITEM-GROUP";
+export declare const CSS: {
+    allSelected: string;
+    chip: string;
+    chipInvisible: string;
+    icon: string;
+    input: string;
+    inputHidden: string;
+    label: string;
+    labelIcon: string;
+    listContainer: string;
+    noMatches: string;
+    noMatchesPlaceholder: string;
+    placeholderIcon: string;
+    selectAll: string;
+    selectionDisplayFit: string;
+    selectionDisplaySingle: string;
+    selectedIcon: string;
+    floatingUIContainer: string;
+    screenReadersOnly: string;
+    wrapper: string;
+    wrapperSingle: string;
+    wrapperActive: string;
+    gridInput: string;
+    inputSingle: string;
+    inputIcon: string;
+    inputWrap: string;
+    inputWrapSingle: string;
+    iconEnd: string;
+    iconStart: string;
+    list: string;
+    listHide: string;
+};
+export declare const IDS: {
+    readonly validationMessage: "comboboxValidationMessage";
+    readonly item: (id: string) => string;
+    readonly chip: (id: string) => string;
+    readonly label: (id: string) => string;
+    readonly listbox: (id: string) => string;
+    readonly input: (id: string) => string;
+};
+export declare const ICONS: {
+    chevronUp: string;
+    chevronDown: string;
+};
+export declare const SLOTS: {
+    labelContent: string;
+};

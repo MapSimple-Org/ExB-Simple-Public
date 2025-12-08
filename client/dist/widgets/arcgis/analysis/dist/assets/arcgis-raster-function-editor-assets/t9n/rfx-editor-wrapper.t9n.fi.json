@@ -1,0 +1,6 @@
+{
+  "dialogTitle": "Rasteritoimintoeditori",
+  "defaultTemplateName": "Rasteritoimintomalli",
+  "readOnlyModeTitle": "Vain luku",
+  "readOnlyModeMessage": "Rasteritoimintomallin kohde on vain luku -tilassa. Muutoksia ei voi tallentaa."
+}

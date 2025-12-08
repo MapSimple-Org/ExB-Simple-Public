@@ -1,0 +1,6 @@
+{
+  "header": "Ricominciare senza salvare?",
+  "content": "Sono presenti modifiche non salvate in '${rftTitle}'. Se si ricomincia con un nuovo modello, queste modifiche andranno perse.",
+  "cancel": "Cancella",
+  "continue": "Continua"
+}

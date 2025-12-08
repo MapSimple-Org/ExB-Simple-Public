@@ -1,0 +1,15 @@
+{
+  "addDataStore": "Dodaj spremnik podataka",
+  "addFile": "Dodaj datoteku",
+  "addServiceConnection": "Dodaj vezu",
+  "itemNotFound": "Stavka ne postoji ili nije dostupna.",
+  "itemPermissionDenied": "Nemate dopuštenje za pristup ovoj stavki.",
+  "previewDetails": "Pretpregled pojedinosti",
+  "queryModelArgsErrMsg": "Neuspjelo ispitivanje argumenata za model.",
+  "queryModelArgsMsg": "Ispitivanje argumenata za model...",
+  "removeItem": "Ukloni stavku",
+  "replaceItem": "Zamijeni stavku",
+  "requiredInputMessage": "Ovaj parametar je obavezan.",
+  "selectItem": "Odaberi stavku",
+  "viewDetails": "Prikaži pojedinosti"
+}

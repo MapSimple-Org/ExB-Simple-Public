@@ -1,0 +1,11 @@
+{
+  "modalTitle": "Kategorisér elementer",
+  "save": "Gem",
+  "cancel": "Annuller",
+  "loadingText": "Indlæser...",
+  "assignCategory": "Tilknyt kategori",
+  "errorMessage": "Der gik noget galt. Prøv igen senere.",
+  "limited": "Elementerne er begrænset til 20 kategorier. Fjern en kategori, før du tilføjer en ny.",
+  "undo": "Fortryd",
+  "redo": "Annullér fortryd"
+}

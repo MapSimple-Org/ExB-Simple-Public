@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>Instrumentul Rezumat &icirc;n apropiere calculează datele statistice pentru obiectele spațiale pe o distanță specificată de alte obiecte spațiale. Distanța poate fi calculată folosind o distanță &icirc;n linie dreaptă sau un mod de deplasare.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="summaryLayer">
+        <div>
+            <p>Stratul tematic care va fi rezumat la o distanță de stratul tematic din apropiere.
+            </p>
+            <p class="toolPaneOnly">Numărul de obiecte spațiale depinde de factori suplimentari, cum ar fi criteriile de filtrare și extinderea analizei.
+            </p>
+        </div>
+    </div>
+    <div id="sumNearbyLayer">
+        <div>
+            <p>Stratul tematic punctual, liniar sau poligonal care vor fi folosite ca locații de pornire &icirc;n jurul căruia vor fi create zonele de legătură pentru a rezuma obiectele spațiale din apropiere.
+            </p>
+            <p class="toolPaneOnly">Numărul de obiecte spațiale depinde de factori suplimentari, cum ar fi criteriile de filtrare și extinderea analizei.
+            </p>
+        </div>
+    </div>
+    <div id="nearType">
+        <div>
+            
+            <p class="toolPaneOnly">Metoda care va fi folosită pentru a crea zonele de legătură. Metoda poate fi o distanță &icirc;n linie dreaptă sau un mod de deplasare.
+            </p> 
+            <p class="modelBuilderOnly">Metoda care va fi folosită pentru a crea zonele de legătură. Momentan, distanța &icirc;n linie dreaptă este singura metodă acceptată pentru modele.
+            </p>
+        </div>
+    </div>
+    <div id="distances">
+        <div>
+            <p>Distanța sau timpul care va fi utilizat pentru a crea zonele de legătură. Dacă sunt adăugate mai multe valori, fiecare valoare va fi utilizată pentru a calcula zonele de legătură pentru toate obiectele spațiale de intrare.
+            </p>
+        </div>
+    </div>
+    <div id="units">
+        <div>
+            <p>Unitățile care vor fi utilizate pentru a specifica distanța sau timpul.
+            </p>
+        </div>
+    </div>
+    <div id="returnBoundaries">
+        <div>
+            <p>Specifică dacă stratul tematic de rezultat va fi zonele de legătură (bifată) sau aceeași geometrie ca și stratul tematic de intrare din apropiere (nebifată).
+            </p>
+        </div>
+    </div>
+    <div id="sumShape">
+        <div>
+            <p>Specifică dacă dimensiunea totală a obiectelor spațiale rezumate &icirc;n fiecare zonă de legătură va fi calculată. Pentru linii, va fi calculată lungimea totală. Pentru poligoane, va fi calculată suprafața totală.
+            </p>
+        </div>
+    </div>
+    <div id="shapeUnits">
+        <div>
+            <p>Unitățile care vor fi folosite pentru a calcula dimensiunea totală a obiectelor spațiale rezumate.
+            </p>
+        </div>
+    </div>
+    <div id="summaryFields">
+        <div>
+            <p>C&acirc;mpurile număr sau dată din stratul tematic de intrare vor fi rezumate și statisticile care vor fi calculate pentru fiecare c&acirc;mp.
+            </p>
+        </div>
+    </div>
+    <div id="groupByField">
+        <div>
+            <p>C&acirc;mpul din stratul tematic de intrare care va fi utilizat pentru a separa datele &icirc;n grupuri distincte pentru calcule statistice.
+            </p>
+        </div>
+    </div>
+    <div id="minorityMajority">
+        <div>
+            <p>Specifică dacă se calculează grupurile minoritare (mai puțin dominante) și majoritare (mai dominante) din fiecare zonă de rezumare.
+            </p>
+        </div>
+    </div>
+    <div id="percentShape">
+        <div>
+            <p>Specifică dacă procentul obiectelor spațiale rezumate care aparțin fiecărui grup din fiecare graniță va fi calculat.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>Numele stratului tematic care va fi creat și adăugat pe hartă.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>Numele folderului din  <b>Resursele mele</b> &icirc;n care va fi salvat rezultatul.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

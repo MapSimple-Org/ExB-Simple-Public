@@ -1,0 +1,13 @@
+{
+  "header": "Predogled",
+  "description": "Predogled rezultata pred izvedbo analize.",
+  "showPreview": "Prikaži predogled",
+  "previewLayer": "Predogled sloja ${number}",
+  "update": "Posodobi",
+  "newPreview": "Novi predogled",
+  "previewPopup": "Omogoči predogled rezultatov analize na podlagi vhodnih parametrov.",
+  "previewError": "Ta predogled sloja ni na voljo. Preverite vhodne parametre in ponovno posodobite ta predogled sloja.",
+  "updatePopover": "Posodobi izbrani predogled sloja",
+  "createPopover": "Ustvari novi predogleda sloja",
+  "maxPreview": "Največje dovoljeno število predogledov sloja: ${maxCount}"
+}

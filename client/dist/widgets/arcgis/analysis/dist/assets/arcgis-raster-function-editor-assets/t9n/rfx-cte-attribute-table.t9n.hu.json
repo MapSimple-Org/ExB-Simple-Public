@@ -1,0 +1,22 @@
+{
+  "value": "Érték",
+  "classname": "OsztályNév",
+  "color": "Szín",
+  "raster": "Raszter",
+  "tableType": "Táblatípus",
+  "manual": "Egyedi",
+  "external": "Külső",
+  "browseTable": "Tábla tallózása",
+  "browseTableFrom": "Tábla tallózása innen:",
+  "file": "Fájl",
+  "dbfFile": "DBF-fájl",
+  "layer": "Réteg",
+  "unsupportedDataType": "Nem támogatott típus",
+  "failedToGetTableFromLayer": "Nem sikerült lekérni a táblát a rétegből.",
+  "generate": "Tábla létrehozása",
+  "minValue": "Minimum érték",
+  "maxValue": "Maximum érték",
+  "classBaseName": "Osztályalap neve",
+  "colorscheme": "Színséma",
+  "defaultClassName": "Felirat_"
+}

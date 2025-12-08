@@ -1,0 +1,10 @@
+{
+  "forceFlowLabel": "エッジにあるセルは外側に流出",
+  "inputLayersGroupText": "入力サーフェス ラスターを選択し、必要に応じてくぼ地データと加重ラスターを選択します。",
+  "itemProperties": {
+    "description": "河川をラスターとして生成ツールを実行して生成される出力。",
+    "snippet": "河川をラスターとして生成により作成される出力"
+  },
+  "outputStreamRasterLabel": "出力河川ラスター名",
+  "streamSettingsGroupText": "累積閾値、河川の指定方法、入力サーフェス ラスター エッジでのフローの処理方法を指定します。"
+}

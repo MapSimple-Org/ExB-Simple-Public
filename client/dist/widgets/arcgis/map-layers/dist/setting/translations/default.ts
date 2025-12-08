@@ -1,0 +1,23 @@
+export default {
+  sourceLabel: 'Source',
+  sourceDescript: 'A web map or web scene, or any combination of the two.',
+  goto: 'Zoom to',
+  layerTransparency: 'Adjust layer transparency',
+  information: 'View layer details',
+  setVisibility: 'Toggle layer visibility',
+  showOrHideLabels: 'Show or hide labels',
+  showLayerForMap: 'Show layers for map data only',
+  customizeLayerDesc: 'Select the layers to display for users.',
+  enableLegend: 'Show legend',
+  showAllLegend: 'Show legend for all visible layers by default',
+  useTickBoxes: 'Use tick boxes to control layer visibility',
+  reorderLayers: 'Reorder layers',
+  searchLayers: 'Search layers',
+  showTables: 'Show tables',
+  popup: 'Enable or disable pop-up',
+  customizeDescription: 'Specify which layers will be displayed for each map',
+  expandAllLayersByDefault: 'Expand all layers by default',
+  visibilityRange: 'Visibility range',
+  layerBatchOptions: 'Enable layer batch options',
+  changeSymbolForRuntimeLayers: 'Change symbols for layers generated at runtime'
+}

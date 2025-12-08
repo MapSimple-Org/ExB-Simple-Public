@@ -1,0 +1,8 @@
+{
+  "select": "Element auswählen: ${title}",
+  "lastUpdated": "Element aktualisiert: ${date}",
+  "viewItemDetails": "Details anzeigen",
+  "preview": "Vorschau",
+  "closePreview": "Vorschau schließen",
+  "moreOptions": "Weitere Optionen"
+}

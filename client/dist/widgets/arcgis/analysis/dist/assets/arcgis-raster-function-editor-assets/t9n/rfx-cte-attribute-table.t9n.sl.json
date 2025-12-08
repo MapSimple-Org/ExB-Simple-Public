@@ -1,0 +1,22 @@
+{
+  "value": "Vrednost",
+  "classname": "Ime razreda",
+  "color": "Barva",
+  "raster": "Raster",
+  "tableType": "Tip tabele",
+  "manual": "Ročno",
+  "external": "Zunanji",
+  "browseTable": "Prebrskaj tabelo",
+  "browseTableFrom": "Prebrskaj tabelo od",
+  "file": "Datoteka",
+  "dbfFile": "Datoteka DBF",
+  "layer": "Sloj",
+  "unsupportedDataType": "Nepodprt tip",
+  "failedToGetTableFromLayer": "Pridobivanje tabele iz sloja ni uspelo.",
+  "generate": "Ustvari tabelo",
+  "minValue": "Minimalna vrednost",
+  "maxValue": "Maksimalna vrednost",
+  "classBaseName": "Osnovno ime razreda",
+  "colorscheme": "Barvna shema",
+  "defaultClassName": "Oznaka_"
+}

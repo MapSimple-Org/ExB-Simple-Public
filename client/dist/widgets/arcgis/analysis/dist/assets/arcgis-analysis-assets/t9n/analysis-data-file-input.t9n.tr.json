@@ -1,0 +1,14 @@
+{
+  "AddDataFromUrl": "URL adresinden veri ekle",
+  "addData": "Veri ekle",
+  "clear": "Temizle",
+  "file": "Dosya",
+  "fileNotFound": "Dosya yüklenemedi.",
+  "invalidUrl": "Geçersiz URL veya dosya ek bileşeni.",
+  "layerNotFound": "Katman yüklenemedi.",
+  "replaceData": "Verileri değiştir",
+  "required": "Bu parametre gerekli.",
+  "uploadData": "Veri yükle",
+  "uploadFailureMsg": "Yükleme işlemi gerçekleştirilirken hata oluştu, dosya boyutu veya türü bu servis için desteklenmiyor.",
+  "url": "Url"
+}

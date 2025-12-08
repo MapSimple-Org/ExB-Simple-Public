@@ -1,0 +1,10 @@
+{
+  "forceFlowLabel": "Přinutit okrajové buňky proudit ven",
+  "inputLayersGroupText": "Zvolte vstupní rastr povrchu a volitelně data terénních depresí a váhový rastr.",
+  "itemProperties": {
+    "description": "Výstup vygenerovaný po spuštění nástroje Odvodit vodní tok jako rastr (Derive Stream as Raster).",
+    "snippet": "Výstup vygenerovaný z nástroje Odvodit vodní tok jako rastr (Derive Stream as Raster)."
+  },
+  "outputStreamRasterLabel": "Název výstupního rastru vodních toků",
+  "streamSettingsGroupText": "Zadejte práh akumulace, metodu označení toku a způsob zpracování toku na okraji rastru vstupního povrchu."
+}

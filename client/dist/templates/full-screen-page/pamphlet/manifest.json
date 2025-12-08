@@ -1,0 +1,27 @@
+{
+  "name": "pamphlet",
+  "type": "template",
+  "templateType": "full-screen-page",
+  "label": "Pamphlet",
+  "description": "Pamphlet is a single fullscreen-page template focusing on the map. The Card widget works as a navigation with the side panel and Section views to emulate flipping through a pamphlet.",
+  "thumbnail": "thumbnail.png",
+  "order": 19,
+  "templateCreateVersion": "1.11.0",
+  "tags": [
+    "Map",
+    "Card",
+    "Direction",
+    "Route",
+    "Link",
+    "List",
+    "Panel",
+    "Chart",
+    "Bookmark"
+  ],
+  "categoriesTags": [
+    "Map centric",
+    "Fullscreen"
+  ],
+  "thumbnailWidth": 320,
+  "thumbnailHeight": 214
+}

@@ -1,0 +1,1 @@
+System.register([],function(e){return{execute:function(){e({_widgetLabel:"Pr\u016ftokov\xfd \u0159\xe1dek"})}}});

@@ -1,0 +1,1 @@
+System.register([],function(t){return{execute:function(){t({_widgetLabel:"Sporing i forsyningsnetv\xe6rk",_widgetDescription:"En Widget til at spore et ArcGIS Utility Network.",_action_filter_label:"Filtr\xe9r"})}}});

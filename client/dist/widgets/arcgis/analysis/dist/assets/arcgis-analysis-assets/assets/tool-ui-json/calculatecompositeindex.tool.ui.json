@@ -1,0 +1,182 @@
+{
+  "toolName": "CalculateCompositeIndex",
+  "version": "0.1.0",
+  "validationRules": [
+    {
+      "expression": "($[Data].outputIndexMinMax.min >= $[Data].outputIndexMinMax.max)",
+      "errorKey": "findArgumentStatistics_1"
+    }
+  ],
+  "rules": [
+    {
+      "ruleType": "set",
+      "value": "$[Component].inputLayer.selectedLayers",
+      "destination": "inputVariables.UIparameterInfos[0]",
+      "property": "mapLayer"
+    },
+    {
+      "ruleType": "expression",
+      "expression": "$[Data].outputIndexMinMax.min NOT null",
+      "destination": "outputIndexMinMax.UIparameterInfos[1]",
+      "effectParams": {
+        "required": true
+      }
+    },
+    {
+      "ruleType": "expression",
+      "expression": "$[Data].outputIndexMinMax.max NOT null",
+      "destination": "outputIndexMinMax.UIparameterInfos[0]",
+      "effectParams": {
+        "required": true
+      }
+    },
+    {
+      "ruleType": "set",
+      "destination": "inputVariables.UIparameterInfos[0]",
+      "value": "$[Function].valueTableSelectedFields.inputVariables.field",
+      "property": "notAllowedFields"
+    }
+  ],
+  "UIparameters": [
+    {
+      "label": "$inputs",
+      "componentName": "analysis-block",
+      "summaryText": "$inputLayerGroupText",
+      "UIparameters": [
+        {
+          "name": "inputLayer",
+          "label": "$inputFeaturesOrTableLabel",
+          "required": true
+        },
+        {
+          "name": "inputVariables",
+          "label": "$inputVariablesLabel",
+          "componentName": "analysis-value-table",
+          "minGroupCount": 2,
+          "required": true,
+          "UIparameterInfos": [
+            {
+              "name": "field",
+              "label": "$fieldLabel",
+              "componentName": "analysis-field-input",
+              "selectionMode": "single",
+              "fieldTypes": ["double", "integer", "small-integer", "big-integer", "single"],
+              "showFieldInfo": true,
+              "required": true
+            },
+            {
+              "name": "reverseVariable",
+              "label": "$reverseVariableLabel",
+              "componentName": "analysis-boolean-input",
+              "displayStyle": "checkbox",
+              "defaultValue": false
+            },
+            {
+              "name": "weight",
+              "label": "$weight",
+              "componentName": "analysis-number-input",
+              "defaultValue": 1,
+              "min": 0,
+              "excludeMinValue": true,
+              "numberType": "float",
+              "required": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "label": "$CCIAnalysisSettingGroupLabel",
+      "componentName": "analysis-block",
+      "summaryText": "$CCIAnalysisSettingGroupText",
+      "UIparameters": [
+        {
+          "name": "indexMethod",
+          "label": "$indexMethodLabel",
+          "componentName": "analysis-string-input",
+          "choiceList": [
+            "meanScaled",
+            "meanPercentile",
+            "meanRaw",
+            "geomeanScaled",
+            "geomeanPercentile",
+            "geomeanRaw",
+            "sumFlagsPercentile"
+          ],
+          "choiceListLabels": {
+            "meanScaled": "$meanScaledLabel",
+            "meanPercentile": "$meanPercentileLabel",
+            "meanRaw": "$meanRawLabel",
+            "geomeanScaled": "$geomeanScaledLabel",
+            "geomeanPercentile": "$geomeanPercentileLabel",
+            "geomeanRaw": "$geomeanRawLabel",
+            "sumFlagsPercentile": "$sumFlagsPercentileLabel"
+          },
+          "selectionMode": "single",
+          "defaultValue": "meanScaled",
+          "useDefaultOnReset": true,
+          "required": true
+        },
+        {
+          "name": "outputIndexReverse",
+          "label": "$outputIndexReverseLabel",
+          "componentName": "analysis-boolean-input"
+        },
+        {
+          "name": "outputIndexMinMax",
+          "label": "$outputIndexMinMaxLabel",
+          "componentName": "analysis-key-value",
+          "serializationType": "wrapInAnArray",
+          "required": false,
+          "layout": "horizontal",
+          "defaultValue": {},
+          "UIparameterInfos": [
+            {
+              "name": "min",
+              "label": "$outputIndexMinLabel",
+              "visible": true,
+              "required": false,
+              "numberType": "float"
+            },
+            {
+              "name": "max",
+              "label": "$outputIndexMaxLabel",
+              "visible": true,
+              "required": false,
+              "numberType": "float"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "label": "$resultLayerGroupLabel",
+      "componentName": "analysis-block",
+      "summaryText": "$outputSectionText",
+      "UIparameters": [
+        {
+          "name": "outputName",
+          "label": "$outputName",
+          "placeholderText": "$outputNamePlaceholderText",
+          "componentName": "analysis-string-input",
+          "required": true
+        },
+        {
+          "name": "saveResultIn",
+          "label": "$saveResultIn",
+          "componentName": "analysis-folder-input"
+        }
+      ]
+    }
+  ],
+  "outputParameters": [
+    {
+      "name": "indexResultLayer",
+      "label": "$indexResultLayerOutput"
+    },
+    {
+      "label": "$processInfoOutput",
+      "name": "processInfo"
+    }
+  ]
+}

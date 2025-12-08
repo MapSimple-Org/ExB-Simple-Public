@@ -1,0 +1,17 @@
+{
+  "sharing": "共有",
+  "private": "所有者",
+  "shared": "所有者および、グループで共有",
+  "org": "組織",
+  "public": "すべての人に公開 (パブリック)",
+  "privateGroups": "所有者",
+  "sharedGroups": "所有者とグループ (${num})",
+  "orgGroups": "組織とグループ (${num})",
+  "publicGroups": "すべての人 (パブリック) とグループ (${num})",
+  "groups": "グループ (${num})",
+  "updateSharing": "共有レベル: ${level}、共有の更新",
+  "viewableBy": "表示できるユーザー: ${level}",
+  "everyone": "すべての人 (パブリック)",
+  "organization": "組織",
+  "groupMembers": "グループ メンバー"
+}

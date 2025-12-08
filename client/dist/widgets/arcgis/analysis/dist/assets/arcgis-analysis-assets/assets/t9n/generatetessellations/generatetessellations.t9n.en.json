@@ -1,0 +1,27 @@
+{
+  "area": "Area",
+  "binResolution": "H3 bin resolution",
+  "binSize": "Bin size",
+  "binSizeUnit": "Unit",
+  "binType": "Bin shape type",
+  "diamondBins": "Diamond bins",
+  "distance": "Distance",
+  "extentLayer": "Extent layer",
+  "extentOverrideMessage": "This extent layer will be used instead of any processing extent set in the environments.",
+  "extentSectionLabel": "Extent settings",
+  "extentSectionText": "Specify an extent layer that the tessellation should cover.",
+  "h3hexagonBins": "H3 hexagon bins",
+  "hexagon": "Hexagon",
+  "intersectStudyArea": "Only keep intersecting tessellations",
+  "itemProperties": {
+    "description": "Feature layer generated from running the Generate Tessellations analysis tool.",
+    "snippet": "Feature layer generated from Generate Tessellations"
+  },
+  "outputAreasSectionText": "Provide a name for the tessellation grid.",
+  "sizeType": "Bin size measurement",
+  "square": "Square",
+  "tessellationSettingsLabel": "Tessellation settings",
+  "tessellationSettingsSummaryText": "Specify the shape and size of the bins to generate.",
+  "thexagonBins": "Transverse hexagon bins",
+  "triangleBins": "Triangle bins"
+}

@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>ゾーン統計ツールは、他のデータセットのゾーンごとにラスター値を集計します。
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputZoneRasterOrFeatures">
+        <div>
+            <p>集計対象のゾーン (エリア) の境界を定義する入力。
+            </p>
+            <p class="toolPaneOnly">フィーチャ入力の場合、カウントはフィルター処理条件や解析の範囲などのその他の要因によって異なります。
+            </p>
+        </div>
+    </div>
+    <div id="zoneField">
+        <div>
+            <p>各ゾーンを定義する値を格納するフィールド。
+            </p>
+        </div>
+    </div>
+    <div id="inputValueRaster">
+        <div>
+            <p>統計の計算に使用するセル値を含むラスター レイヤー。
+            </p>
+        </div>
+    </div>
+    <div id="statisticType">
+        <div>
+            <p>計算する統計の種類を指定します。
+            </p>
+        </div>
+    </div>
+    <div id="percentileValue">
+        <div>
+            <p>計算するパーセンタイルを指定します。
+            </p>
+        </div>
+    </div>
+    <div id="percentileInterpolationType">
+        <div>
+            <p>計算する入力ラスターの値の数が偶数である場合に使用する方法を指定します。
+            </p>
+        </div>
+    </div>
+    <div id="circularCalculation">
+        <div>
+            <p> <b>[入力値ラスター]</b> セル値を、円形データに対してどのように処理するかを指定します。
+            </p>
+            <p>オフの場合、通常の算術 (リニア) 統計が計算されます。 オンの場合、円周統計が計算されます。
+            </p>
+        </div>
+    </div>
+    <div id="circularWrapValue">
+        <div>
+            <p>リニアの値を指定された円周統計の範囲に丸めるために使用する値を指定します。
+            </p>
+        </div>
+    </div>
+    <div id="ignoreNodata">
+        <div>
+            <p> <b>[入力値ラスター]</b> 内の NoData セルを、それが属するゾーンの結果で無視するかどうかを指定します。
+            </p>
+            <p>オンにすると、値ラスターの NoData セルは、統計の計算時に無視されます。 オフにすると、NoData セルは無視されず、ゾーン全体が出力ラスターで NoData 値を受け取ります。
+            </p>
+        </div>
+    </div>
+    <div id="processAsMultidimensional">
+        <div>
+            <p>多次元の場合の入力ラスターの処理方法を指定します。
+            </p>
+            <p>オンの場合、統計は入力多次元データセットのすべての次元について計算されます。 オフの場合、入力多次元データセットの現在のスライスから統計情報が算出されます。
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>作成され、マップに追加されるゾーン統計ラスター レイヤーの名前。
+            </p>
+        </div>
+    </div>
+    <div id="resultType">
+        <div>
+            <p>作成する出力のタイプ。 出力は、タイル イメージ レイヤーまたはダイナミック イメージ レイヤーです。
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>結果を保存する  <b>[マイ コンテンツ]</b> 内のフォルダーの名前。
+            </p>
+        </div>
+    </div>
+</div>
+</html>

@@ -1,0 +1,23 @@
+{
+  "CPU": "CPU",
+  "GPU": "GPU",
+  "asSpecified": "Com s'ha especificat",
+  "automatic": "Automàtic",
+  "bilinear": "Interpolació bilineal (per a dades contínues)",
+  "cellSize": "Mida de la cel·la",
+  "cubic": "Convolució cúbica (per a dades contínues)",
+  "default": "Per defecte",
+  "fromLayer": "Des de la capa",
+  "mask": "Màscara",
+  "maxOf": "Quantitat màxima d'entrades",
+  "minOf": "Quantitat mínima d'entrades",
+  "nearest": "Veí més proper (per a dades discretes)",
+  "parallelProcessingFactor": "Factor de processament en paral·lel",
+  "parallelProcessingFactorPlaceholderText": "Introduïu un nombre o un percentatge...",
+  "processorType": "Tipus de processador",
+  "recycleProcessingWorkers": "Interval de reciclatge dels treballadors de processament",
+  "resamplingMethod": "Mètode de remostreig",
+  "retryOnFailures": "Nombre de reintents després d'errors",
+  "selectCellSize": "Seleccioneu la mida de la cel·la...",
+  "snapRaster": "Ràster d'ajust"
+}

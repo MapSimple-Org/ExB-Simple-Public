@@ -1,0 +1,6 @@
+{
+  "header": "Zacząć od nowa bez zapisywania?",
+  "content": "Istnieją niezapisane zmiany w '${rftTitle}'. Jeśli zaczniesz od nowa przy użyciu nowego szablonu, te zmiany zostaną utracone.",
+  "cancel": "Anuluj",
+  "continue": "Kontynuuj"
+}

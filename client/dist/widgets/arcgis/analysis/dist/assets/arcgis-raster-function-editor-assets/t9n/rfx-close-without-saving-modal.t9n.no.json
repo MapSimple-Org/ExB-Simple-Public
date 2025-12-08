@@ -1,0 +1,7 @@
+{
+  "header": "Rasterfunksjonsredigering",
+  "content": "Du har endringer som ikke er lagret i \"${rftTitle}\". Hvis du ikke lagrer, går disse endringene tapt.",
+  "cancel": "Avbryt",
+  "dontSave": "Ikke lagre",
+  "save": "Lagre"
+}

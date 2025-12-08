@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>The  Generate Travel Areas tool creates areas that can be reached within a travel time or distance.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputLayer">
+        <div>
+            <p>The point features around which areas will be calculated.
+            </p>
+            <p class="toolPaneOnly">The count of features depends on additional factors such as filtering criteria and the analysis extent.
+            </p>
+        </div>
+    </div>
+    <div id="pointBarrierLayer">
+        <div>
+            <p>One or more point features that act as temporary restrictions (barriers) when traveling on the underlying streets. 
+Travel is permitted on the street but not through the barrier.
+            </p>
+        </div>
+    </div>
+    <div id="lineBarrierLayer">
+        <div>
+            <p>One or more line features that act as temporary restrictions (barriers) when traveling on the underlying streets. The line barriers prohibit travel anywhere the barriers intersect the streets.
+            </p>
+        </div>
+    </div>
+    <div id="polygonBarrierLayer">
+        <div>
+            <p>One or more polygon features that act as temporary restrictions (barriers) when traveling on the underlying streets. The polygon
+barriers prohibit travel anywhere the polygons intersect the streets.
+            </p>
+        </div>
+    </div>
+    <div id="travelMode">
+        <div>
+            <p>The travel mode that will be used to create the travel areas. The travel mode can be based on distance or time.
+            </p>
+        </div>
+    </div>
+    <div id="breakValues">
+        <div>
+            <p>The travel distance or time limit for each input point. If multiple values are added, each value will be used to calculate travel areas for all input points.
+            </p>
+        </div>
+    </div>
+    <div id="breakUnits">
+        <div>
+            <p>The units that will be used to specify travel distance or time. The  <b>Cutoff</b> value is interpreted in these units.
+            </p>
+        </div>
+    </div>
+    <div id="travelDirection">
+        <div>
+            <p>Specifies whether travel areas will be created for travel away from the input points or toward the input points.
+
+            </p>
+        </div>
+    </div>
+    <div id="timeOfDay">
+        <div>
+            <p>The date and time that the traveler departs from or arrives at the input locations.
+            </p>
+        </div>
+    </div>
+    <div id="overlapPolicy">
+        <div>
+            <p>Specifies how shared areas from different inputs are handled when they reach one another. 
+
+            </p>
+        </div>
+    </div>
+    <div id="showHoles">
+        <div>
+            <p>Specifies whether each output area will be one continuous polygon (unchecked) or include holes on streets that are not reachable but are fully surrounded by reachable streets (checked).
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>The name of the layer that will be created and added to the map.
+            </p>
+        </div>
+    </div>
+    <div id="includeReachableStreets">
+        <div>
+            <p>Specifies whether the streets that are
+used to create the travel areas will be included as an output layer. 
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            
+            <p>The name of the folder in  <b>My content</b> where the results will be saved.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

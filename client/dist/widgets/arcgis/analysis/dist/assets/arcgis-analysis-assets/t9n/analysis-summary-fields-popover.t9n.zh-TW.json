@@ -1,0 +1,13 @@
+{
+  "addField": "新增欄位",
+  "deselectAll": "取消全選",
+  "done": "完成",
+  "noFieldsAvailable": "${layerName} 不包含符合資料類型需求的欄位。 選擇不同的圖層以繼續。",
+  "noInputSelected": {
+    "withLayerInputLabel": "未選擇輸入圖層。 在 ${layerInputLabel} 中選擇圖層以繼續。",
+    "withoutLayerInputLabel": "未選擇輸入圖層。 選擇輸入圖層以繼續。"
+  },
+  "noSearchResults": "找不到符合的欄位。",
+  "selectAll": "全選",
+  "summaryFieldsPopover": "摘要欄位"
+}

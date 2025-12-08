@@ -1,0 +1,30 @@
+<svg width="400" height="400" viewBox="0 0 400 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect x="24" y="107" width="8" height="16" transform="rotate(-90 24 107)" fill="black"/>
+<rect x="24" y="56" width="8" height="16" transform="rotate(-90 24 56)" fill="black"/>
+<rect x="24" y="158" width="8" height="16" transform="rotate(-90 24 158)" fill="black"/>
+<rect x="24" y="209" width="8" height="16" transform="rotate(-90 24 209)" fill="black"/>
+<rect x="24" y="261" width="8" height="16" transform="rotate(-90 24 261)" fill="black"/>
+<rect x="24" y="311" width="8" height="16" transform="rotate(-90 24 311)" fill="black"/>
+<rect x="24" y="362" width="8" height="16" transform="rotate(-90 24 362)" fill="black"/>
+<rect x="128" y="376" width="8" height="24" transform="rotate(-90 128 376)" fill="black"/>
+<rect x="68" y="376" width="8" height="24" transform="rotate(-90 68 376)" fill="black"/>
+<rect x="189" y="376" width="8" height="24" transform="rotate(-90 189 376)" fill="black"/>
+<rect x="250" y="376" width="8" height="24" transform="rotate(-90 250 376)" fill="black"/>
+<rect x="311" y="376" width="8" height="24" transform="rotate(-90 311 376)" fill="black"/>
+<rect x="70" y="271" width="20" height="87" fill="black"/>
+<rect x="70" y="208" width="20" height="61" fill="black"/>
+<rect x="70" y="160" width="20" height="46" fill="black"/>
+<rect x="130" y="215" width="20" height="143" fill="black"/>
+<rect x="130" y="144" width="20" height="69" fill="black"/>
+<rect x="130" y="78" width="20" height="64" fill="black"/>
+<rect x="190" y="245" width="20" height="113" fill="black"/>
+<rect x="190" y="169" width="20" height="74" fill="black"/>
+<rect x="190" y="121" width="20" height="46" fill="black"/>
+<rect x="252" y="289" width="20" height="69" fill="black"/>
+<rect x="252" y="245" width="20" height="42" fill="black"/>
+<rect x="252" y="206" width="20" height="37" fill="black"/>
+<rect x="313" y="303" width="20" height="55" fill="black"/>
+<rect x="313" y="240" width="20" height="61" fill="black"/>
+<rect x="313" y="175" width="20" height="63" fill="black"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M48.9991 24H48V52H44V53H48V103H44V104H48V154H44V155H48V205H44V206H48V256H44V257H48V307H44V308H48V358H44V359H48V363H49V359H109V363H110V359H170V363H171V359H231V363H232V359H292V363H293V359H353V363H354V359H376V358.002H48.9991V24Z" fill="black"/>
+</svg>

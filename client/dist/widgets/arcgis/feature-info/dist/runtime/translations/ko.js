@@ -1,0 +1,1 @@
+System.register([],function(e){return{execute:function(){e({_widgetLabel:"\ud53c\ucc98 \uc815\ubcf4",noDataMessageDefaultText:"\ub370\uc774\ud130\ub97c \ucc3e\uc744 \uc218 \uc5c6\uc2b5\ub2c8\ub2e4.",featureNumbers:"{count}\uac1c \uc911 {index}\uac1c",featureInfoDataActionLabel:"{layer} \ud53c\ucc98 \uc815\ubcf4 \ud604\uc7ac \ub808\ucf54\ub4dc"})}}});

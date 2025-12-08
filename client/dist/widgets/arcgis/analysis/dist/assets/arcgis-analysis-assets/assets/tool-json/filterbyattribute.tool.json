@@ -1,0 +1,88 @@
+{
+  "name": "FilterByAttribute",
+  "displayName": "FilterByAttribute",
+  "category": "",
+  "parameters": [
+    {
+      "name": "inputRows",
+      "dataType": "GPComposite",
+      "displayName": "Input Rows",
+      "description": "",
+      "direction": "esriGPParameterDirectionInput",
+      "defaultValue": {
+        "dataType": "GPFeatureRecordSetLayer",
+        "value": {}
+      },
+      "parameterType": "esriGPParameterTypeRequired",
+      "category": "",
+      "parameterInfos": [
+        {
+          "name": "",
+          "dataType": "GPFeatureRecordSetLayer",
+          "displayName": ""
+        },
+        {
+          "name": "",
+          "dataType": "GPRecordSet",
+          "displayName": ""
+        }
+      ]
+    },
+    {
+      "name": "whereClause",
+      "dataType": "GPSQLExpression",
+      "displayName": "Expression",
+      "description": "",
+      "direction": "esriGPParameterDirectionInput",
+      "defaultValue": "",
+      "parameterType": "esriGPParameterTypeOptional",
+      "category": "",
+      "dependency": "inputRows"
+    },
+    {
+      "name": "outputName",
+      "dataType": "GPString",
+      "displayName": "outputName",
+      "description": "",
+      "direction": "esriGPParameterDirectionInput",
+      "defaultValue": "",
+      "parameterType": "esriGPParameterTypeOptional",
+      "category": ""
+    },
+    {
+      "name": "context",
+      "dataType": "GPString",
+      "displayName": "context",
+      "description": "",
+      "direction": "esriGPParameterDirectionInput",
+      "defaultValue": "",
+      "parameterType": "esriGPParameterTypeOptional",
+      "category": ""
+    },
+    {
+      "name": "outputRows",
+      "dataType": "GPComposite",
+      "displayName": "Output Rows",
+      "description": "",
+      "direction": "esriGPParameterDirectionOutput",
+      "defaultValue": {
+        "dataType": "GPFeatureRecordSetLayer",
+        "value": {}
+      },
+      "parameterType": "esriGPParameterTypeRequired",
+      "category": "",
+      "parameterInfos": [
+        {
+          "name": "",
+          "dataType": "GPFeatureRecordSetLayer",
+          "displayName": ""
+        },
+        {
+          "name": "",
+          "dataType": "GPRecordSet",
+          "displayName": ""
+        }
+      ]
+    }
+  ]
+}

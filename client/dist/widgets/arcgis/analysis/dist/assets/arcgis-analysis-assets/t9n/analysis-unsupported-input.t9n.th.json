@@ -1,0 +1,7 @@
+{
+  "defaultValue": "ประเภทพารามิเตอร์ที่ไม่รองรับ จะใช้ค่าเริ่มต้น <calcite-link target='_blank' href='${ docLink }'>เรียนรู้เพิ่มเติม</calcite-link>",
+  "requiredMessage": "จำเป็นต้องใช้พารามิเตอร์นี้",
+  "unsupportedGPType": "ประเภทพารามิเตอร์ที่ไม่รองรับ <calcite-link target='_blank' href='${ docLink }'>เรียนรู้เพิ่มเติม</calcite-link>",
+  "unsupportedParameterConfig": "การกำหนดค่าพารามิเตอร์ที่ไม่รองรับ <calcite-link target='_blank' href='${ docLink }'>เรียนรู้เพิ่มเติม</calcite-link>",
+  "unsupportedParameterConfigDefaultValue": "การกำหนดค่าพารามิเตอร์ที่ไม่รองรับ จะใช้ค่าเริ่มต้น <calcite-link target='_blank' href='${ docLink }'>เรียนรู้เพิ่มเติม</calcite-link>"
+}

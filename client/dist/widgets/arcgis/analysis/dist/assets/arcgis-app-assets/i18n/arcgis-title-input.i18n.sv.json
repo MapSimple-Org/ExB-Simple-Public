@@ -1,0 +1,20 @@
+{
+  "title": "Titel",
+  "addTitle": "Lägg till en titel",
+  "validation": {
+    "error": "Fel",
+    "titleRequired": "Titel är ett obligatoriskt fält.",
+    "itemExists": "Det finns redan ett objekt med titeln \"${name}\" i den här mappen. Välj en annan titel.",
+    "titleInUseService": "Det finns redan ett lager med titeln \"${name}\". Välj en annan titel.",
+    "itemInRecycleBin": "Det finns redan ett objekt med titeln \"${name}\" och är i papperskorgen. Välj en annan titel.",
+    "serviceNameInvalid": "Titeln för en tjänst får bara innehålla siffror och bokstäver eller understreck och får vara högst 90 tecken långt.",
+    "dataStoreTitleInvalid": "Titeln för ett datalager får bara innehålla siffror och bokstäver eller understreck och får vara högst 90 tecken långt.",
+    "titleInvalid": "Titeln måste vara kortare än 250 tecken och får inte innehålla < eller >.",
+    "titleStartsWithNumber": "Titeln får inte börja med en siffra.",
+    "invalidCharacters": {
+      "single": "Namnet får inte innehålla det här tecknet: ${invalidCharacters}.",
+      "multiple": "Namnet får inte innehålla något av dessa tecken: ${invalidCharacters}.",
+      "unknown": "Namnet får inte innehålla något av dessa tecken: ${invalidCharacters}."
+    }
+  }
+}

@@ -1,0 +1,1 @@
+System.register([],function(e){return{execute:function(){e({_widgetLabel:"Snimak",imageChooseShape:"Oblik",imageCrop:"Skrati",previousImage:"Prethodni snimak",nextImage:"Slede\u0107i snimak",imageViewer:"Prikaziva\u010d snimka"})}}});

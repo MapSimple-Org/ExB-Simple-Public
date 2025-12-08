@@ -1,0 +1,1 @@
+System.register([],function(e){return{execute:function(){e({_widgetLabel:"\u533a\u5207\u308a\u7dda",quickStyleItem:"\u30af\u30a4\u30c3\u30af \u30b9\u30bf\u30a4\u30eb{index}"})}}});

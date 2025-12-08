@@ -1,0 +1,17 @@
+{
+  "sharing": "שיתוף",
+  "private": "יוצר",
+  "shared": "בעלים ומשותף עם קבוצות",
+  "org": "ארגון",
+  "public": "כולם (ציבורי)",
+  "privateGroups": "יוצר",
+  "sharedGroups": "בעלים + קבוצות (${num})",
+  "orgGroups": "ארגון + קבוצות (${num})",
+  "publicGroups": "כולם (ציבורי) + קבוצות (${num})",
+  "groups": "קבוצות (${num})",
+  "updateSharing": "רמת שיתוף: ${level}, עדכן שיתוף",
+  "viewableBy": "ניתן להצגה על-ידי: ${level}",
+  "everyone": "כולם (ציבורי)",
+  "organization": "ארגון",
+  "groupMembers": "חברי הקבוצה"
+}

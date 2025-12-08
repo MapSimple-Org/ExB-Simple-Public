@@ -1,0 +1,16 @@
+{
+  "updateData": "Actualitza les dades",
+  "cancel": "Cancel·la",
+  "editStyle": "Substituïu el fitxer d'estil de la capa per una versió actualitzada del vostre ordinador.",
+  "updatePackages": "Substituïu l'element de tipus ${type} per una versió actualitzada del vostre ordinador. El fitxer pujat ha de tenir el mateix nom que ${hostedLayerName}.",
+  "uploadStaticFiles": "El fitxer que es pugi ha de tenir el mateix nom que el fitxer original ${fileName}",
+  "sameFileNameDescription": "El fitxer que s'està pujant ha de tenir el mateix nom i els mateixos noms de camp que el fitxer original ${fileName}",
+  "updating": "S'està actualitzant...",
+  "error": "Error",
+  "errors": {
+    "sameFileName": "Per actualitzar aquest element, heu de pujar un fitxer anomenat ${fileName}.",
+    "invalidStyleFileExtension": "L'extensió del fitxer no és vàlida. L'estil pujat ha de tenir l'extensió de fitxer .json.",
+    "errorWhileUpload": "S'ha produït un error en pujar l'element.",
+    "errorUpdate": "S'ha produït un error en sobreescriure l'element."
+  }
+}

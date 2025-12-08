@@ -1,0 +1,9 @@
+{
+  "inputLayerGroupText": "Pilih layer input untuk menghitung geometri batas zona.",
+  "itemProperties": {
+    "description": "Tabel output yang dihasilkan dari menjalankan alat analisis Geometri Zona sebagai Tabel.",
+    "snippet": "Tabel output yang dihasilkan dari Geometri Zona sebagai Tabel"
+  },
+  "zonalGeometrySettingGroupLabel": "Pengaturan geometri zona",
+  "zonalGeometrySettingGroupText": "Tentukan ukuran sel yang akan dihitung."
+}

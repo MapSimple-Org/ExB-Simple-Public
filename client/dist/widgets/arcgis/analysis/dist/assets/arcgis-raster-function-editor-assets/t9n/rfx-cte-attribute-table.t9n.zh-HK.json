@@ -1,0 +1,22 @@
+{
+  "value": "數值",
+  "classname": "ClassName",
+  "color": "顏色",
+  "raster": "點陣",
+  "tableType": "表格類型",
+  "manual": "手動",
+  "external": "外部",
+  "browseTable": "瀏覽表格",
+  "browseTableFrom": "瀏覽表格來源",
+  "file": "檔案",
+  "dbfFile": "DBF 檔案",
+  "layer": "圖層",
+  "unsupportedDataType": "不受支援的類型",
+  "failedToGetTableFromLayer": "無法從圖層取得表格。",
+  "generate": "產生表格",
+  "minValue": "最小值",
+  "maxValue": "最大值",
+  "classBaseName": "類別基本名稱",
+  "colorscheme": "色彩配置",
+  "defaultClassName": "標注_"
+}

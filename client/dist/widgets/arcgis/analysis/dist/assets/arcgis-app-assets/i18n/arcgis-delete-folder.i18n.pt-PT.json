@@ -1,0 +1,22 @@
+{
+  "deleteFolder": "Eliminar pasta",
+  "delete": "Eliminar",
+  "permanentlyDelete": "Eliminar permanentemente",
+  "back": "Retroceder",
+  "cancel": "Cancelar",
+  "success": "A pasta '${title}' foi eliminada com sucesso",
+  "deleteProtectedItemsInFolder": "Não foi possível eliminar a pasta, pois alguns dos artigos estão protegidos contra eliminação ou têm itens dependentes.",
+  "message": {
+    "empty": "Tem a certeza de que pretende eliminar a pasta <strong style='font-weight: 500'>${title}</strong>?",
+    "recycleAll": "Tem a certeza de que pretende eliminar a pasta <strong style='font-weight: 500'>${title}</strong> e enviar o respetivo conteúdo para a reciclagem?",
+    "mustBeEmpty": "A pasta <strong style='font-weight: 500'>${title}</strong> tem de ser esvaziada para poder ser eliminada.",
+    "aFewCannotBeDeleted": "Alguns itens não podem ser eliminados. Pretende continuar a eliminar o resto?",
+    "canBeEmptied": "A pasta <strong style='font-weight: 500'>${title}</strong> tem de ser esvaziada para poder ser eliminada. Pretende continuar a eliminar estes itens?",
+    "cannotBeDeleted": "A pasta <strong style='font-weight: 500'>${title}</strong> não pode ser eliminada porque os respetivos itens não podem ser eliminados."
+  },
+  "disabledMessage": {
+    "single": "Existe <span style='color:red'>1 item</span> nesta pasta <b>(${label})</b>.<br/></br/>Tem a certeza de que pretende eliminar esta pasta e o respetivo item?",
+    "multiple": "Existem <span style='color:red'>${number} itens</span> nesta pasta <b>(${label})</b>.<br/></br/>Tem a certeza de que pretende eliminar esta pasta e todos os respetivos itens?",
+    "unknown": "Tem a certeza de que pretende eliminar esta pasta <b>${label}</b>?"
+  }
+}

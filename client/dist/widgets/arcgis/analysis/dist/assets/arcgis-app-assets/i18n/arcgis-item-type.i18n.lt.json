@@ -1,0 +1,27 @@
+{
+  "hosted": "talpinama",
+  "hostedView": "talpinama, rodinys",
+  "hostedPhotos": "talpinama, nuotraukos",
+  "hostedCollection": "talpinama, rinkinys",
+  "hostedMultidimensional": "talpinama, multidimensinis",
+  "hostedCollectionMultidimensional": "talpinama, rinkinys, multidimensinis",
+  "collectionMultidimensional": "rinkinys, multidimensinis",
+  "multidimensional": "multidimensinis",
+  "collection": "rinkinys",
+  "photoLocations": "nuotraukos",
+  "locatorView": "rodinys",
+  "utilityNetwork": "utility network",
+  "Integrated Mesh": "integruotas tinklelis",
+  "3D Object": "3D objektas",
+  "Point": "taškas",
+  "Point Cloud": "taškų debesis",
+  "Building Scene Layer": "pastatų scenos sluoksnis",
+  "Voxel Scene Layer": "vokselio scenos sluoksnis",
+  "dataStore": {
+    "bigdata": "didelių duomenų failo bendrinimas",
+    "cloud": "debesis",
+    "cloudStorage": "debesies saugykla",
+    "database": "duomenų bazė",
+    "folder": "aplankas"
+  }
+}

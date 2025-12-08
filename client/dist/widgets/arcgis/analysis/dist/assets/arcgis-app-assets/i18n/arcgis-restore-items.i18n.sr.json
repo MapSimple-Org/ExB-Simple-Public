@@ -1,0 +1,31 @@
+{
+  "back": "Nazad",
+  "cancel": "Otkaži",
+  "learnMore": "Saznajte više",
+  "restore": "Vrati u prethodno stanje",
+  "restoreTo": "Vrati na",
+  "restoreItem": "Vrati stavku",
+  "restoreItems": "Vrati stavke",
+  "noticeMessage": "Deljenje vraćenih stavki biće opozvano. Pregledajte svoj sadržaj pre nego što ga ponovo podelite.",
+  "cannotBulkRestoreXItems": "Nije moguće grupno vratiti više od ${number} stavki, poništite izbor nekoliko stavki.",
+  "cannotBulkRestoreMultipleOwners": "Nije moguće grupno vratiti stavke koje pripadaju različitim vlasnicima. Izaberite stavke od jednog vlasnika za grupno vraćanje.",
+  "toRestore": {
+    "single": "Stavka za vraćanje:",
+    "multiple": "Stavke za vraćanje:"
+  },
+  "cannotRestore": "Nije moguće vraćanje:",
+  "dependentItems": {
+    "single": "Ova stavka se ne može vratiti jer zavisi od <strong style='font-weight: 500'>${parent}</strong>. Vratite ih zajedno.",
+    "singleUnknown": "Ova stavka se ne može vratiti jer zavisi od druge stavke u kanti za otpatke. Vratite ih zajedno.",
+    "multiple": "Ove stavke se ne mogu vratiti jer zavise od drugih stavki u kanti za otpatke. Vratite ih zajedno.",
+    "multipleSameSource": "Ove stavke ne mogu biti vraćene jer su zavisne od <strong style='font-weight: 500'>${parent}</strong>. Vratite ih zajedno."
+  },
+  "pageRangeWithTotalRecycleBinSize": {
+    "en": "${start} - ${end} od ${total} (${size}) u kanti za otpatke",
+    "other": "${start} - ${end}, ukupno: ${total} (${size}) u kanti za otpatke"
+  },
+  "pageRangeWithGreaterThanTotalRecycleBinSize": {
+    "en": "${start} - ${end} od ${total} (>${size}) u kanti za otpatke",
+    "other": "${start} - ${end}, ukupno: ${total} (>${size}) u kanti za otpatke"
+  }
+}

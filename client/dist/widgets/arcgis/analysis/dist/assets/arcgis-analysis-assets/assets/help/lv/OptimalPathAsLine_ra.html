@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>Rīks Optimāls ceļ&scaron; kā līnija aprēķina ceļu no galamērķiem līdz optimālajam avotam kā līniju.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputDestinationRasterOrFeatures">
+        <div>
+            <p>Slānis, kas identificē galamērķus, no kuriem tiek aprēķināts attālums līdz vislētākajam avotam.
+            </p>
+            <p>Ja ievade ir rastrs, tajā jābūt &scaron;ūnām ar derīgām galamērķu veselu skaitļu vērtībām&nbsp;(nulle ir derīga vērtība), un atliku&scaron;ajām &scaron;ūnām jābūt pie&scaron;ķirtai vērtībai NoData.
+            </p>
+            <p class="toolPaneOnly">Elementu ievadei skaits ir atkarīgs no papildu faktoriem, piemēram, filtrē&scaron;anas kritērijiem un analīzes apjoma.
+            </p>
+        </div>
+    </div>
+    <div id="destinationField">
+        <div>
+            <p>Lauks, kas tiks izmantots, lai iegūtu galamērķa novietojuma vērtības.
+            </p>
+        </div>
+    </div>
+    <div id="inputDistanceAccumulationRaster">
+        <div>
+            <p>Rastrs, kas nosaka optimālo ceļu no galamērķiem līdz avotiem.
+            </p>
+            <p>Attāluma akumulē&scaron;anas rastrs parasti tiek veidots ar rīku Attāluma akumulē&scaron;ana vai Attāluma pie&scaron;ķire.
+            </p>
+        </div>
+    </div>
+    <div id="inputBackDirectionRaster">
+        <div>
+            <p>Rastrs, kurā ir aprēķinātie virzieni grādos.
+            </p>
+            <p>Atpakaļvirziena rastrs parasti tiek veidots ar rīku Attāluma akumulē&scaron;ana vai Attāluma pie&scaron;ķir&scaron;ana.
+            </p>
+        </div>
+    </div>
+    <div id="pathType">
+        <div>
+            <p>Norāda, kā vērtības un zonas ievades galamērķa datos tiks interpretētas optimālajos ceļa aprēķinos.
+            </p>
+        </div>
+    </div>
+    <div id="createNetworkPaths">
+        <div>
+            <p>Norāda, vai tiks aprēķināti tādi ceļi no galamērķiem uz avotiem, kas pilnībā vai iespējams pārklājas, vai arī tiks izveidots tāds ceļu tīkls, kas nepārklājas.
+            </p>
+        </div>
+    </div>
+    <div id="outputPolylineName">
+        <div>
+            <p>Optimālā ceļa kā līnija slāņa nosaukums, kas tiks izveidots un pievienots kartei.
+            </p>
+            <p>Slānis tiks izveidots un pievienots kartei.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>Mapes nosaukums sadaļā  <b>Mans saturs</b>, kurā tiks saglabāts rezultāts.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

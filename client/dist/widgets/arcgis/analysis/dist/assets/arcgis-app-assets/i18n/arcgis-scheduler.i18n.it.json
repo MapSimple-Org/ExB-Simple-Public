@@ -1,0 +1,55 @@
+{
+  "beginningOnLabel": "Inizio il",
+  "repeatTypeLabel": "Tipo di ripetizione",
+  "endingOnTypeLabel": "Fine il",
+  "endingOnDateLabel": "Data di fine",
+  "endingOnCountLabel": "Conteggio",
+  "endingOnCountPlaceholder": "ad esempio: 1, 10, 30",
+  "dailyRepeatIntervalLabel": "Intervallo ripetizione",
+  "dailyTimeLabel": "Orario",
+  "weeklyDaysOfWeekLabel": "Giorno della settimana",
+  "weeklyTimeLabel": "Orario",
+  "monthlyDayOfMonthLabel": "Giorno del mese",
+  "monthlyDayOfMonthPlaceholder": "ad esempio, 1 - 31",
+  "monthlyRepeatIntervalLabel": "Intervallo ripetizione",
+  "monthlyTimeLabel": "Orario",
+  "repeatTypeOptions": {
+    "day": "Giorno",
+    "week": "Settimana",
+    "month": "Mese"
+  },
+  "endingOnType": {
+    "never": "Mai",
+    "date": "Data",
+    "count": "Sì"
+  },
+  "dailyRepeatInterval": {
+    "everyDay": "Ogni giorno",
+    "everyOtherDay": "A giorni alterni",
+    "everyThreeDays": "Ogni tre giorni",
+    "everyFourDays": "Ogni quattro giorni",
+    "everyFiveDays": "Ogni cinque giorni",
+    "everySixDays": "Ogni sei giorni",
+    "everySevenDays": "Ogni sette giorni",
+    "everyFourteenDays": "Ogni quattordici giorni"
+  },
+  "weekDays": {
+    "all": "Tutte",
+    "allWeekdays": "Tutti i giorni feriali",
+    "sunday": "Domenica",
+    "monday": "Lunedì",
+    "tuesday": "Martedì",
+    "wednesday": "Mercoledì",
+    "thursday": "Giovedì",
+    "friday": "Venerdì",
+    "saturday": "Sabato"
+  },
+  "monthlyRepeatInterval": {
+    "everyMonth": "Ogni mese",
+    "everyTwoMonths": "Ogni due mesi",
+    "everyThreeMonths": "Ogni tre mesi",
+    "everyFourMonths": "Ogni quattro mesi",
+    "everyFiveMonths": "Ogni cinque mesi",
+    "everySixMonths": "Ogni sei mesi"
+  }
+}

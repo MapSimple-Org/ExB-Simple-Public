@@ -1,0 +1,20 @@
+{
+  "title": "Titel",
+  "addTitle": "Voeg een titel toe",
+  "validation": {
+    "error": "Fout",
+    "titleRequired": "Titel is een vereist veld.",
+    "itemExists": "Er bestaat al een item met de naam \"${name}\" in deze map. Kies een andere naam.",
+    "titleInUseService": "Er bestaat al een laag met de naam \"${name}\". Kies een andere naam.",
+    "itemInRecycleBin": "Er bestaat al een item met de naam \"${name}\" en dit bevindt zich in de prullenbak. Kies een andere naam.",
+    "serviceNameInvalid": "De titel van een service mag alleen alfanumerieke tekens of onderstrepingstekens bevatten en 90 tekens of korter zijn.",
+    "dataStoreTitleInvalid": "De titel van een data-opslag mag alleen alfanumerieke tekens of onderstrepingstekens bevatten en 90 tekens of korter zijn.",
+    "titleInvalid": "De titel moet minder dan 250 tekens zijn en kan geen < of > bevatten.",
+    "titleStartsWithNumber": "De naam kan niet met een getal beginnen.",
+    "invalidCharacters": {
+      "single": "Dit teken mag niet in de naam voorkomen: ${invalidCharacters}.",
+      "multiple": "De naam mag geen van deze tekens bevatten: ${invalidCharacters}.",
+      "unknown": "De naam mag geen van deze tekens bevatten: ${invalidCharacters}."
+    }
+  }
+}

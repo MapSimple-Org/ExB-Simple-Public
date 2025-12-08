@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>T&ouml;&ouml;riistaga Voolu tuletamine rastrina luuakse sisendpinnarastri p&otilde;hjal vooluraster, ilma et varasem neelu v&otilde;i madaliku t&auml;itmine oleks n&otilde;utav.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputSurfaceRaster">
+        <div>
+            <p>Arvutamiseks kasutatav k&otilde;rgusraster.
+            </p>
+        </div>
+    </div>
+    <div id="inputDepressionsData">
+        <div>
+            <p>Sisend, mis m&auml;&auml;ratleb t&otilde;eliste s&uuml;vendite v&otilde;i n&otilde;gude asukohad, kus vesi saab sisse, kuid mitte v&auml;lja voolata.
+            </p>
+            <p class="toolPaneOnly">Objekti sisendite puhul s&otilde;ltub arv t&auml;iendavatest teguritest, n&auml;iteks filtreerimiskriteeriumidest ja anal&uuml;&uuml;si ulatusest.
+            </p>
+        </div>
+    </div>
+    <div id="inputWeightRaster">
+        <div>
+            <p>Rasterkiht, mis m&auml;&auml;ratleb voolu osa, mis panustab voolu akumulatsiooni igas pikslis.
+            </p>
+        </div>
+    </div>
+    <div id="accumulationThreshold">
+        <div>
+            <p>L&auml;viv&auml;&auml;rtus, mille alusel m&auml;&auml;ratakse kindlaks, kas teatud lahter on voolu osa, arvestades sellesse pikslisse voolava kogupinna suurust.
+            </p>
+        </div>
+    </div>
+    <div id="streamDesignationMethod">
+        <div>
+            <p>M&auml;&auml;rab, kas v&auml;ljundis olevatel voo segmentidel on konstantne v&auml;&auml;rtus, unikaalsed v&auml;&auml;rtused v&otilde;i on need j&auml;rjestatud.
+            </p>
+        </div>
+    </div>
+    <div id="forceFlow">
+        <div>
+            <p>M&auml;&auml;rab, kas vool j&auml;rgib servapikslite juures normaalseid voolureegleid v&otilde;i voolab alati v&auml;ljapoole.
+            </p>
+            <p>Kui see pole m&auml;rgitud, on voolusuund k&otilde;ige j&auml;rsema z-v&auml;&auml;rtuse langusega sisemise piksli suunas. Pange t&auml;hele, et kui langus on null v&otilde;i sellest v&auml;iksem, voolab piksel pinnarastrist v&auml;ljapoole. Kui see on m&auml;rgitud, on voolusuund alati pinnarastrist v&auml;ljapoole.
+            </p>
+        </div>
+    </div>
+    <div id="outputStreamRasterName">
+        <div>
+            <p>Selle voolurastri kihi nimi, mis luuakse ja lisatakse kaardile.
+            </p>
+        </div>
+    </div>
+    <div id="resultType">
+        <div>
+            <p>Loodava v&auml;ljundi t&uuml;&uuml;p. V&auml;ljund v&otilde;ib olla paanitud pildikiht v&otilde;i d&uuml;naamiline pildikiht.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>Selle kausta nimi jaotises  <b>Minu sisu</b>, kuhu tulemused salvestatakse.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

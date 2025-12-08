@@ -1,0 +1,22 @@
+{
+  "general": "Generelt",
+  "parameters": "Parametre",
+  "variables": "Variabler",
+  "name": "Navn",
+  "namePlaceHolder": "Indtast navn",
+  "description": "Beskrivelse",
+  "parameter": "parameter",
+  "isPublic": "IsPublic",
+  "isDataset": "IsDataset",
+  "unknownPixelType": "Ukendt",
+  "outputPixelType": "Output-pixeltype",
+  "u8PixelType": "8 bit usigneret",
+  "s8PixelType": "8 bit signeret",
+  "u16PixelType": "16 bit usigneret",
+  "s16PixelType": "16 bit signeret",
+  "u32PixelType": "32 bit usigneret",
+  "s32PixelType": "32 bit signeret",
+  "f32PixelType": "32 bit flydende",
+  "f64PixelType": "64 bit doblet",
+  "properties": "Egenskaber"
+}

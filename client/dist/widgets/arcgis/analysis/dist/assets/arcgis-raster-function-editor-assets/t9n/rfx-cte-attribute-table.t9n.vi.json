@@ -1,0 +1,22 @@
+{
+  "value": "Giá trị",
+  "classname": "ClassName",
+  "color": "Màu sắc",
+  "raster": "Raster",
+  "tableType": "Loại Bảng",
+  "manual": "Thủ công",
+  "external": "Bên ngoài",
+  "browseTable": "Duyệt Bảng",
+  "browseTableFrom": "Duyệt tìm Bảng Từ",
+  "file": "Tệp",
+  "dbfFile": "Tệp DBF",
+  "layer": "Lớp",
+  "unsupportedDataType": "Loại không được hỗ trợ",
+  "failedToGetTableFromLayer": "Không thể lấy bảng từ lớp.",
+  "generate": "Tạo Bảng",
+  "minValue": "Giá trị Tối thiểu",
+  "maxValue": "Giá trị Tối đa",
+  "classBaseName": "Tên Cơ sở Lớp",
+  "colorscheme": "Bảng phối Màu",
+  "defaultClassName": "Gắn nhãn_"
+}

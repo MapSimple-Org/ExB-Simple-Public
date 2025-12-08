@@ -1,0 +1,22 @@
+{
+  "deleteFolder": "Slet mappe",
+  "delete": "Slet",
+  "permanentlyDelete": "Permanent sletning",
+  "back": "Tilbage",
+  "cancel": "Annuller",
+  "success": "Mappen '${title}' er blevet slettet",
+  "deleteProtectedItemsInFolder": "Mappen kunne ikke slettes, fordi nogle af elementerne er beskyttede eller har afhængige elementer.",
+  "message": {
+    "empty": "Er du sikker på, at du vil slette denne mappe <strong style='font-weight: 500'>${title}</strong>?",
+    "recycleAll": "Er du sikker på, at du vil slette denne mappe <strong style='font-weight: 500'>${title}</strong> og sende dens indhold til papirkurven?",
+    "mustBeEmpty": "Mappen <strong style='font-weight: 500'>${title}</strong> skal være tom for at kunne slettes.",
+    "aFewCannotBeDeleted": "Nogle få elementer kan ikke slettes. Ønsker du at fortsætte med at slette resten?",
+    "canBeEmptied": "Mappen <strong style='font-weight: 500'>${title}</strong> skal være tom for at kunne slettes. Ønsker du at fortsætte med at slette disse elementer?",
+    "cannotBeDeleted": "Mappen <strong style='font-weight: 500'>${title}</strong> kan ikke slettes, fordi dens elementer ikke kan slettes."
+  },
+  "disabledMessage": {
+    "single": "Der er <span style='color:red'>1 element</span> i denne mappe. <b>${label}</b>.<br/></br/>Er du sikker på, at du vil slette denne mappe og dens element?",
+    "multiple": "Der er <span style='color:red'>${number} elementer</span> i denne mappe, <b>${label}</b>.<br/></br/>Er du sikker på, at du vil slette denne mappe og alle dens elementer?",
+    "unknown": "Er du sikker på, at du vil slette denne mappe, <b>${label}</b>?"
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "name": "gear",
+  "type": "template",
+  "templateType": "full-screen-page",
+  "label": "Gear",
+  "description": "Gear is a template that features a Section widget that autoplays through four identical structured Views and is appropriate for displaying different content from the same category.",
+  "thumbnail": "thumbnail.png",
+  "order": 14,
+  "tags": [
+    "Title",
+    "Section",
+    "View",
+    "Navigation"
+  ],
+  "categoriesTags": [
+    "Web page",
+    "Fullscreen"
+  ],
+  "thumbnailWidth": 320,
+  "thumbnailHeight": 214
+}

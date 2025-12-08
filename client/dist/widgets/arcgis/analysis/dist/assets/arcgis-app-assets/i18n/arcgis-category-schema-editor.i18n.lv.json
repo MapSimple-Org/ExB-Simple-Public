@@ -1,0 +1,69 @@
+{
+  "loadingText": "Shēmas veidņu ielāde",
+  "cancel": "Atcelt",
+  "finishSetup": "Pabeigt iestatīšanu",
+  "hasUnsavedChanges": "Esat veicis kategoriju izmaiņas, kuras tiks zaudētas, ja netiks vispirms saglabātas. Vai tiešām vēlaties aizvērt šo skatu un zaudēt izmaiņas?",
+  "error": {
+    "generic": {
+      "title": "Atjauninot kategorijas, radās kļūda",
+      "message": "Radās kāda problēma. Lūdzu, vēlāk mēģiniet vēlreiz."
+    },
+    "maxDepthExceeded": {
+      "title": "Atjauninot kategorijas, radās kļūda",
+      "message": "Kategorijas nevar ligzdot dziļāk par 2 līmeņiem."
+    },
+    "destinationHasSameName": {
+      "title": "Atjauninot kategorijas, radās kļūda",
+      "message": "Kategorija ar tādu pašu nosaukumu jau pastāv mērķa kategorijā."
+    },
+    "emptyTitle": {
+      "title": "Atjauninot kategorijas, radās kļūda",
+      "message": "Kategorijas nosaukums nedrīkst būt tukšs."
+    },
+    "noSchema": {
+      "title": "Shēma nav atrasta",
+      "message": "Lietotājam nav atrasta vienības shēma."
+    },
+    "maxCharacter": {
+      "title": "Atjauninot kategorijas, radās kļūda",
+      "message": "Kategoriju nosaukumu garums nevar pārsniegt ${maxCharacter} rakstzīmes."
+    },
+    "invalidCharacters": {
+      "title": "Atjauninot kategorijas, radās kļūda",
+      "single": "Kategorija nevar saturēt šo rakstzīmi: ${invalidCharacters}.",
+      "multiple": "Kategorija nevar saturēt nevienu no šīm rakstzīmēm: ${invalidCharacters}.",
+      "unknown": "Kategorija nevar saturēt nevienu no šīm rakstzīmēm: ${invalidCharacters}."
+    }
+  },
+  "warning": {
+    "deleteInUseCategory": {
+      "title": "Dzēst kategoriju",
+      "cta": "Dzēst kategoriju"
+    },
+    "changeTitleInUseCategory": {
+      "title": "Atjaunināt kategoriju",
+      "cta": "Atjaunināt kategoriju"
+    }
+  },
+  "template": {
+    "title": "Kategoriju veidnes",
+    "learnMore": "Uzzināt vairāk",
+    "templateList": {
+      "custom": {
+        "title": "Pielāgotas kategorijas"
+      },
+      "arcgis": {
+        "title": "ArcGIS kategorijas",
+        "message": "ArcGIS kategorijas ietver tēmu kategoriju un apakškategoriju atlasi, ko var izmantot, lai kategorizētu daudzus ģeotelpiskā satura veidus. Šīs kategorijas tiek izmantotas, lai atbalstītu ArcGIS Living Atlas of the World."
+      },
+      "iso": {
+        "title": "ISO kategorijas",
+        "message": "ISO kategorijās ietilpst Starptautiskās Standartizācijas organizācijas tēmu kategorijas, kas nodrošina ģeogrāfiskās informācijas aprakstīšanas un kataloģizēšanas metodi."
+      },
+      "inspire": {
+        "title": "INSPIRE kategorijas",
+        "message": "INSPIRE kategorijās iekļauta visaptveroša to telpisko datu motīvu kopa, kas aprakstīta INSPIRE direktīvā."
+      }
+    }
+  }
+}

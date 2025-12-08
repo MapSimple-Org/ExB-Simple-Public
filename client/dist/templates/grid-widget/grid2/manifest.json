@@ -1,0 +1,12 @@
+{
+  "name": "grid2",
+  "type": "template",
+  "templateType": "grid-widget",
+  "label": "Grid 2",
+  "thumbnail": "thumbnail.png",
+  "order": 2,
+  "tags": [],
+  "categoriesTags": [],
+  "thumbnailWidth": 320,
+  "thumbnailHeight": 214
+}

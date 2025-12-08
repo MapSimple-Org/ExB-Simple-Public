@@ -1,0 +1,6 @@
+{
+  "description": "説明",
+  "addDescription": "説明の追加",
+  "charactersLeft": "残り文字: ${num}",
+  "invalid": "説明に < や > の文字は使用できません。"
+}

@@ -1,0 +1,11 @@
+{
+  "newTemplate": "Opret ny skabelon",
+  "openTemplate": "Åbn skabelon",
+  "addTemplate": "Tilføj skabelon",
+  "addFunction": "Tilføj rasterfunktioner",
+  "addConstant": "Tilføj kontrast",
+  "addRaster": "Tilføj rastervariabel",
+  "expand": "Vis",
+  "editTemplateProperties": "Redigér skabelonegenskaber",
+  "viewTemplateProperties": "Vis skabelonegenskaber"
+}

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html dir="rtl">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>הכלי 'סכם מרכז ופיזור' מוצא את הישות המרכזית, הנטייה למרכז ואת אליפסת סטיית התקן של קבוצת ישויות.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="analysisLayer">
+        <div>
+            <p>ישויות הנקודה, הקו או הפוליגון שעבורן יחושבו ישות המרכז, הנטייה למרכז והאליפסה של סטיית התקן.
+            </p>
+        </div>
+    </div>
+    <div id="summarizeType">
+        <div>
+            <p>מציין את השיטות שיסכמו את המרכז והפיזור של הישויות.
+            </p>
+        </div>
+    </div>
+    <div id="ellipseSize">
+        <div>
+            <p>מציין את הגודל, בסטיות תקן, של הפוליגון האליפטי. אם המרחק בין המרכז הממוצע ומיקומי הישויות תואם לפיזור ריילי, האפשרויות  <b>סטיית תקן אחת</b>, <b>2 סטיות תקן</b> ו-3 <b>סטיות תקן</b> יפיקו פוליגון אליפטי שיכסה 68, 95 ו-99 אחוזים של הישויות, בהתאמה.
+            </p>
+        </div>
+    </div>
+    <div id="weightField">
+        <div>
+            <p>השדה שישמש לקביעת המשקל של הישות.
+            </p>
+        </div>
+    </div>
+    <div id="groupField">
+        <div>
+            <p>השדה שישמש לקיבוץ הישויות. ערכי  <b>סוגי הסיכום</b> שנבחרו יחושבו עבור כל קבוצה.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>שם השכבה שתיווצר ותתווסף למפה.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>שם התיקייה  <b>בתוכן שלי</b> שבה התוצאה תישמר.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

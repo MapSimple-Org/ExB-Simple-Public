@@ -1,0 +1,7 @@
+{
+  "header": "Raster İşlevi Düzenleyici",
+  "content": "'${rftTitle}' içinde kaydedilmemiş değişiklikleriniz var. Kaydetmezseniz bu değişiklikler kaybolacaktır.",
+  "cancel": "İptal Et",
+  "dontSave": "Kaydetmeyin",
+  "save": "Kaydet"
+}

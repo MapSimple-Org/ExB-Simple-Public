@@ -1,0 +1,1 @@
+System.register([],function(e){return{execute:function(){e({_widgetLabel:"Obraz rastrowy",imageChooseShape:"Kszta\u0142t",imageCrop:"Przytnij",previousImage:"Poprzedni obraz",nextImage:"Nast\u0119pny obraz",imageViewer:"Przegl\u0105darka obraz\xf3w"})}}});

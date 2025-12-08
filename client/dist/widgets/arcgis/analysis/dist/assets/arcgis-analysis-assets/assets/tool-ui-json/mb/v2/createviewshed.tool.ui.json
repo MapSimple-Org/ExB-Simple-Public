@@ -1,0 +1,157 @@
+{
+  "toolName": "CreateViewshed",
+  "version": "0.1.0",
+  "modelBuilderVersion": "V2",
+  "rules": [
+    {
+      "ruleType": "equals",
+      "destination": "maximumDistance",
+      "valueA": "$[Component].maximumDistance.resolvedValue.units",
+      "valueB": "Kilometers",
+      "effectParams": {
+        "maximum": 50
+      }
+    },
+    {
+      "ruleType": "equals",
+      "destination": "maximumDistance",
+      "valueA": "$[Component].maximumDistance.resolvedValue.units",
+      "valueB": "Meters",
+      "effectParams": {
+        "maximum": 50000
+      }
+    },
+    {
+      "ruleType": "equals",
+      "destination": "maximumDistance",
+      "effectParams": {
+        "maximum": 164041
+      },
+      "valueA": "$[Component].maximumDistance.resolvedValue.units",
+      "valueB": "Feet"
+    },
+    {
+      "ruleType": "equals",
+      "destination": "maximumDistance",
+      "effectParams": {
+        "maximum": 54680
+      },
+      "valueA": "$[Component].maximumDistance.resolvedValue.units",
+      "valueB": "Yards"
+    },
+    {
+      "ruleType": "equals",
+      "destination": "maximumDistance",
+      "effectParams": {
+        "maximum": 31
+      },
+      "valueA": "$[Component].maximumDistance.resolvedValue.units",
+      "valueB": "Miles"
+    }
+  ],
+  "UIparameters": [
+    {
+      "label": "$inputLayerGroupLabel",
+      "componentName": "analysis-block",
+      "summaryText": "$inputLayersSummaryText",
+      "UIparameters": [
+        {
+          "name": "inputLayer",
+          "label": "$inputObserverFeaturesLayerLabel",
+          "componentName": "analysis-layer-input",
+          "layerFilterType": ["feature_point"],
+          "hideAddToMap": true,
+          "ignoreTimeExtent": true,
+          "required": true,
+          "selectionMode": "single",
+          "enableSketch": false
+        }
+      ]
+    },
+    {
+      "label": "$inputViewshedSettingGroupLabel",
+      "componentName": "analysis-block",
+      "UIparameters": [
+        {
+          "name": "observerHeight",
+          "label": "$observersHeightLabel",
+          "required": false,
+          "defaultValue": {
+            "units": "Meters",
+            "distance": 1.75
+          },
+          "minimum": 0,
+          "unitChoiceList": ["Meters", "Kilometers", "Feet", "Miles", "Yards"],
+          "choiceListLabels": {
+            "Meters": "$meters",
+            "Kilometers": "$kilometers",
+            "Feet": "$feet",
+            "Miles": "$miles",
+            "Yards": "$yards"
+          }
+        },
+        {
+          "name": "targetHeight",
+          "label": "$targetHeightLabel",
+          "required": false,
+          "defaultValue": {
+            "units": "Meters",
+            "distance": 0
+          },
+          "minimum": 0,
+          "unitChoiceList": ["Meters", "Kilometers", "Feet", "Miles", "Yards"],
+          "choiceListLabels": {
+            "Meters": "$meters",
+            "Kilometers": "$kilometers",
+            "Feet": "$feet",
+            "Miles": "$miles",
+            "Yards": "$yards"
+          }
+        },
+        {
+          "name": "maximumDistance",
+          "label": "$maximumViewingDistanceLabel",
+          "required": false,
+          "defaultValue": {
+            "units": "Kilometers",
+            "distance": 15
+          },
+          "minimum": 0,
+          "excludeMinValue": true,
+          "unitChoiceList": ["Kilometers", "Meters", "Miles", "Yards", "Feet"],
+          "choiceListLabels": {
+            "Kilometers": "$kilometers",
+            "Meters": "$meters",
+            "Feet": "$feet",
+            "Miles": "$miles",
+            "Yards": "$yards"
+          }
+        }
+      ]
+    },
+    {
+      "label": "$resultLayerGroupLabel",
+      "componentName": "analysis-block",
+      "summaryText": "$resultLayerGroupText",
+      "UIparameters": [
+        {
+          "name": "outputName",
+          "label": "$outputPolygonNameLabel",
+          "componentName": "analysis-output-name",
+          "required": true,
+          "placeholderText": "$outputNamePlaceholderText"
+        }
+      ],
+      "layout": "vertical"
+    }
+  ],
+  "outputParameters": [
+    {
+      "label": "$viewshedLayerOutput",
+      "name": "viewshedLayer"
+    }
+  ],
+  "environmentSettings": {
+    "raster": []
+  }
+}

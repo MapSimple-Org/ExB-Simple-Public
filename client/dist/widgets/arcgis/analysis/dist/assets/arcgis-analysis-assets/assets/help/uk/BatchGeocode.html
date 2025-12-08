@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>Інструмент &laquo;Геокодування місць розташування з таблиці&raquo; перетворює адреси або місця зі вхідної таблиці або файлу в координати.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputType">
+        <div>
+            <p>Визначає, чи буде введення з табличного елемента (<b>розміщеної таблиці</b>) або файлу <code>.csv</code> чи Excel (<b>CSV/Excel</b>).
+            </p>
+        </div>
+    </div>
+    <div id="inputFileItem">
+        <div>
+            <p>Вхідний файл з адресами або місцями для геокодування. Вхідними даними повинні бути розміщена  <code>.csv</code> або файл Excel. </p>
+        </div>
+    </div>
+    <div id="inputTable">
+        <div>
+            <p>Вхідна таблиця з адресами або місцями для геокодування. Вхідними даними має бути елемент розміщеної таблиці.
+            </p>
+            <p>Підрахунок об'єктів наведено під назвою таблиці. Підрахунок включає всі елементи в таблиці, за винятком видалених за допомогою фільтра.
+            </p>
+        </div>
+    </div>
+    <div id="geocodeServiceURL">
+        <div>
+            <p>Для геокодування буде використовуватися сервіс локатора. Якщо потрібний сервіс локатора відсутній у розкривному меню, зверніться до свого адміністратора, щоб він додав сервіс локатора як сервіс-утиліту.
+            </p>
+        </div>
+    </div>
+    <div id="singleOrMultiFieldSwitch">
+        <div>
+            <p>Указує, чи вхідні дані містяться в одному або в декількох полях.
+            </p>
+        </div>
+    </div>
+    <div id="geocodeUIParameters">
+        <div>
+            <p>Поля, які використовуватимуться локатором для визначення місць розташування даних. Очікується, що в даних є наявними певні поля, як-от адреса, місто, штат та поштовий індекс.
+            </p>
+        </div>
+    </div>
+    <div id="sourceCountry">
+        <div>
+            <p>Країна, у якій розташовуються дані. Якщо всі адреси знаходяться в одній країні виберіть назву країни для отримання максимально точних результатів. Або залиште цей параметр порожнім.
+            </p>
+        </div>
+    </div>
+    <div id="outputFields">
+        <div>
+            <p>Указує поля, які будуть включені у набір вихідних даних. Доступні такі опції:
+            </p>
+            <ul>
+                <li> <b>Усе</b>&mdash;У результати геокодування будуть включені всі наявні вихідні поля локатора.
+                </li>
+                <li> <b>Мінімум</b>&mdash;У результати будуть включені піднабір полів із локатора і поля зі вхідної таблиці.
+                </li>
+                <li> <b>Тільки місце розташування</b>&mdash;У результати будуть включені поле <i>Shape</i> із локатора і поля зі вхідної таблиці.
+                </li>
+            </ul>
+            
+        </div>
+    </div>
+    <div id="outputType">
+        <div>
+            <p>Тип вихідних даних, які буде створено. Вихідними даними може бути сервіс об'єктів, файл  <code>.csv</code> або файл <code>.xls</code>.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>Назва шару або файлу, які будуть створені у  <b>Мій зміст</b>.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>Назва папки в  <b>Моєму вмісті</b>, де буде збережено результат.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

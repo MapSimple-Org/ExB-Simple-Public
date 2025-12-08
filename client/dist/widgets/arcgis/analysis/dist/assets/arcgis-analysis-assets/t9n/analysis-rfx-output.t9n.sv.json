@@ -1,0 +1,12 @@
+{
+  "dynamicLayer": "Dynamiskt bildlager",
+  "outputDescription": "Utdata genererades vid körning av rasterfunktionen ${rfxName}",
+  "outputDescriptionRFT": "Utdata genererades vid körning av rasterfunktionsmallen ${rfxName}",
+  "outputName": "Utdatanamn",
+  "outputNamePlaceHolder": "Ange ett unikt namn...",
+  "resultLayer": "Resultatlager",
+  "resultType": "Resultattyp",
+  "saveFolder": "Spara i mapp",
+  "summaryText": "Ange ett namn för resultatlagret.",
+  "tileImagery": "Bildlager i tileform"
+}

@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>Alat Pronađi klastere točaka identificira klastere točkastih geoobjekata unutar okolnih podataka na temelju njihove prostorne distribucije.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="analysisLayer">
+        <div>
+            <p>Ulazni točkasti sloj koji će biti grupiran u klastere na temelju prostorne distribucije točkastih geoobjekata.
+            </p>
+        </div>
+    </div>
+    <div id="method">
+        <div>
+            <p>Metoda koja će se koristiti za identifikaciju klastera.
+            </p>
+        </div>
+    </div>
+    <div id="minFeaturesCluster">
+        <div>
+            <p>Minimalni broj točkastih geoobjekata koji će se smatrati klasterom.
+            </p>
+        </div>
+    </div>
+    <div id="searchDistance">
+        <div>
+            <p>Određuje maksimalnu udaljenost oko svakog točkastog geoobjekta za traženje točaka koje mogu biti uključene u klaster. Ako se ostavi prazno, vrijednost  <b>Udaljenost pretraživanja</b> bit će najveća temeljna udaljenost pronađena u sloju, isključujući gornjih 1 posto temeljnih udaljenosti.
+            </p>
+        </div>
+    </div>
+    <div id="searchDistanceUnit">
+        <div>
+            <p>Određuje jedinice koje će se koristiti za udaljenost pretraživanja.
+            </p>
+        </div>
+    </div>
+    <div id="sensitivity">
+        <div>
+            <p>Cijeli broj između 0 i 100 koji određuje kompaktnost klastera. Ako se ostavi prazno, vrijednost  <b>Osjetljivost klastera</b> izračunat će se pomoću Kullback-Leiblerove divergencije.
+            </p>
+        </div>
+    </div>
+    <div id="timeField">
+        <div>
+            <p>Polje iz ulaznog sloja koje sadrži vremensku oznaku za svaki geoobjekt.
+            </p>
+        </div>
+    </div>
+    <div id="searchTimeInterval">
+        <div>
+            <p>Vremenski interval koji će se koristiti za određivanje tvore li geoobjekti prostorno-vremenski klaster. Vremenski interval pretraživanja proteže se od prije do poslije vremena svakog geoobjekta; na primjer, vremenski interval pretraživanja od 3 dana oko geoobjekta obuhvaćat će sve geoobjekte koji počinju 3 dana prije i zavr&scaron;avaju 3 dana nakon vremena geoobjekta.
+            </p>
+        </div>
+    </div>
+    <div id="searchTimeUnit">
+        <div>
+            <p>Određuje jedinice koje će se koristiti za vremenski interval pretraživanja.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>Naziv sloja koji će se stvoriti i dodati karti.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>Naziv mape u opciji  <b>My sadržaj</b> gdje će se spremiti rezultat.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

@@ -1,0 +1,13 @@
+{
+  "weightedOverlayTable": "Tabel Overlay dengan Pembobotan",
+  "id": "ID",
+  "layer": "Layer",
+  "field": "Kolom",
+  "influence": "Pengaruh",
+  "sumOfInfluence": "Jumlah Pengaruh",
+  "value": "Nilai",
+  "remapTable": "Petakan Ulang Tabel",
+  "scale": "Skala",
+  "scales": "Skala",
+  "selectRaster": "Pilih Raster"
+}

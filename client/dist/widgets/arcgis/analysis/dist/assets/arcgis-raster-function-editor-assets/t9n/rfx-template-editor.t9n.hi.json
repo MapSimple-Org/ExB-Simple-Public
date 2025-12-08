@@ -1,0 +1,14 @@
+{
+  "general": "सामान्य",
+  "thumbnail": "थंबनेल",
+  "title": "शीर्षक",
+  "type": "टाइप करें",
+  "multidimensionalRules": "बहुआयामी नियम",
+  "mosaic": "मौज़ेक",
+  "itemGroup": "आइटम समूह",
+  "item": "आइटम",
+  "defaultToolName": "रैस्टर फंक्शन टेंपलेट",
+  "defaultToolDescription": "रास्टर फ़क्शन के बारे में संक्षिप्त सारांश जोड़ें।",
+  "defaultHelpText": "मदद पाठ को संपादित करने के लिए सहायता आइकन पर क्लिक करें",
+  "cancelLabel": "रद्द करें"
+}

@@ -1,0 +1,6 @@
+{
+  "dialogTitle": "栅格函数编辑器",
+  "defaultTemplateName": "栅格函数模板",
+  "readOnlyModeTitle": "只读",
+  "readOnlyModeMessage": "栅格函数模板项目为只读项目。 无法保存更改。"
+}

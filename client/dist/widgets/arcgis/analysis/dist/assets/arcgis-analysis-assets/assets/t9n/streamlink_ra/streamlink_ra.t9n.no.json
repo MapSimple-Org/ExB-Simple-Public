@@ -1,0 +1,9 @@
+{
+  "inputFlowDirectionRasterLabel": "Innlagt strømningsretningsraster",
+  "inputLayerGroupText": "Velg inndatarastre for strømning og strømningsretning.",
+  "inputStreamRasterLabel": "Inndata-strømraster",
+  "itemProperties": {
+    "description": "Utdata generert ved kjøring av analyseverktøyet StreamLink.",
+    "snippet": "Utdata generert fra StreamLink"
+  }
+}

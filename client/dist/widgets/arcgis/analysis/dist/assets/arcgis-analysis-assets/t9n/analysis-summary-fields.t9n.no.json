@@ -1,0 +1,17 @@
+{
+  "any": "Hvilken som helst",
+  "count": "Antall",
+  "field": "Felt",
+  "fieldLoadingErrorText": "Kan ikke laste inn felter.",
+  "first": "Første",
+  "isRequired": "Denne parameteren kreves.",
+  "last": "Siste",
+  "max": "Maks.",
+  "mean": "Gjennomsnitt",
+  "min": "Min.",
+  "selectAll": "Velg alle",
+  "standardDeviation": "Standardavvik",
+  "statistic": "Statistikk",
+  "statisticNotSelected": "Minst én statistikktype er påkrevd for hvert felt.",
+  "sum": "Sum"
+}

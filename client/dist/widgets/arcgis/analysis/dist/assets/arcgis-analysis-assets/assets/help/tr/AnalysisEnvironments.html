@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p> Map Viewer i&ccedil;inde analiz i&ccedil;in ortam ayarları. </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="analysisProcessingExtent">
+        <div>
+            <p>Analiz i&ccedil;in kullanılacak alanı belirtir. Varsayılan olarak tam yayılımı kullanır.
+            </p>
+        </div>
+    </div>
+    <div id="rasterAnalysisProcessingExtent">
+        <div>
+            <p> <b>Raster analizi i&ccedil;in farklı bir işleme yayılımı kullan</b> etkinleştirildiğinde, raster analiz ara&ccedil;ları ve raster işlevleri i&ccedil;in kullanılacak alanı belirtir. Varsayılan olarak haritanın g&ouml;r&uuml;nt&uuml;leme alanını kullanır.
+            </p>
+        </div>
+    </div>
+    <div id="useDifferentExtentForRA">
+        <div>
+            <p>Raster analiz ara&ccedil;ları ve raster işlevleri i&ccedil;in farklı bir işleme yayılımı kullanılıp kullanılmayacağını belirtir. Etkinleştirildiğinde, raster analizi, varsayılan olarak haritanın g&ouml;r&uuml;nt&uuml;leme yayılımını kullanmak &uuml;zere ayarlanan  <b>Raster analizi işleme yayılımı</b> i&ccedil;in ayarlanan değeri kullanır. Devre dışı bırakıldığında, t&uuml;m analiz t&uuml;rleri, varsayılan olarak tam yayılımı kullanacak şekilde ayarlanan <b>Analiz işleme yayılımı</b> i&ccedil;in ayarlanan değeri kullanır.
+            </p>
+        </div>
+    </div>
+    <div id="outSR">
+        <div>
+            <p>Analiz ve sonu&ccedil; katmanı i&ccedil;in kullanılacak koordinat sistemini belirtir.
+            </p>
+        </div>
+    </div>
+    <div id="extent">
+        <div>
+            <p>Analiz i&ccedil;in kullanılacak alanı belirtir.
+            </p>
+        </div>
+    </div>
+    <div id="snapRaster">
+        <div>
+            <p>Belirtilen raster yakalama katmanının h&uuml;cre hizalamasıyla eşleşecek şekilde &ccedil;ıktının yayılımını ayarlar.
+            </p>
+        </div>
+    </div>
+    <div id="cellSize">
+        <div>
+            <p>Analiz ve &ccedil;ıktı raster katmanını oluşturmak i&ccedil;in kullanılacak olan h&uuml;cre boyutunu veya &ccedil;&ouml;z&uuml;n&uuml;rl&uuml;ğ&uuml; belirtir.
+            </p>
+            <p> <b>Belirtildiği gibi</b> se&ccedil;ilirse ve &ccedil;ıktı mekansal referansı girdi mekansal referansından farklıysa, h&uuml;cre boyutu değeri yeniden d&ouml;n&uuml;şt&uuml;r&uuml;lemez.
+            </p>
+        </div>
+    </div>
+    <div id="mask">
+        <div>
+            <p>Analiz i&ccedil;in yalnızca maske alanına giren h&uuml;crelerin kullanılacağı bir maske katmanını belirtir.
+            </p>
+        </div>
+    </div>
+    <div id="resamplingMethod">
+        <div>
+            <p>Giriş ve &ccedil;ıkış rasterları hizalanmadığında piksel değerlerinin nasıl enterpole edileceğini belirtir.
+            </p>
+        </div>
+    </div>
+    <div id="processorType">
+        <div>
+            <p>Kullanılacak işlemci t&uuml;r&uuml;n&uuml; belirtir. Se&ccedil;enekler  <b>CPU</b>, <b>GPU</b> ve <b>Otomatik</b>'tir. <b>Otomatik</b> belirtilirse, ara&ccedil; işlemci t&uuml;r&uuml;n&uuml; tanımlayacaktır.
+            </p>
+        </div>
+    </div>
+    <div id="parallelProcessingFactor">
+        <div>
+            <p>Aracın &ccedil;alıştırması sırasında kullanılan raster işleme servis &ouml;rneklerinin sayısını belirtir. Desteklenen değerler arasında boş dizeler (ara&ccedil;, kullanılacak raster işleme servisi &ouml;rneklerinin sayısını belirler), tam sayılar (0 veya pozitif tam sayılar) ve y&uuml;zdeler bulunur. Y&uuml;zdeler, y&uuml;zde değerini takip eden bir y&uuml;zde işareti (%) i&ccedil;ermelidir.
+            </p>
+        </div>
+    </div>
+    <div id="askConfirmation">
+        <div>
+            <p>Tahmini kredi sayısının belirtilen eşiği aşması durumunda bir uyarı mesajının g&ouml;r&uuml;nt&uuml;lenip g&ouml;r&uuml;nt&uuml;lenmeyeceğini (etkin) veya analizin tahmini kredi t&uuml;ketimine bakılmaksızın bir mesaj g&ouml;r&uuml;nt&uuml;lenmeden &ccedil;alışıp &ccedil;alışmayacağını (etkin değil) belirtir. Analiz yine de kuruluşun kredi b&uuml;t&ccedil;eleme ayarlarına uyacaktır.
+            </p>
+        </div>
+    </div>
+    <div id="creditThreshold">
+        <div>
+            <p>Analizin &ccedil;alıştırılmasından elde edilen tahmini kredi t&uuml;ketimine dayalı olarak bir uyarı mesajının g&ouml;r&uuml;nt&uuml;leneceği eşiği belirtir. Tahmin eşiği aşsa bile analiz yine de &ccedil;alıştırılabilir.
+            </p>
+        </div>
+    </div>
+    <div id="recycleProcessingWorkers">
+        <div>
+            <p>Uzun s&uuml;ren işlemlerde olası hataları &ouml;nlemek i&ccedil;in &ccedil;alışan işlemlerini yeniden başlatmadan &ouml;nce işlenecek g&ouml;r&uuml;nt&uuml; b&ouml;l&uuml;m&uuml; sayısını belirtir. Varsayılan değer 0'dır.
+            </p>
+        </div>
+    </div>
+    <div id="retryOnFailures">
+        <div>
+            <p>Belirli bir işin işlenmesi sırasında bir hata olduğunda, aynı &ccedil;alışan işleminin denenme sayısını belirtir. Varsayılan değer 0'dır.
+            </p>
+        </div>
+    </div>
+    <div id="geographicTransformations">
+        <div>
+            <p>Analiz i&ccedil;in veri projeksiyonu amacıyla kullanılabilecek d&ouml;n&uuml;ş&uuml;m y&ouml;ntemlerini belirtir.
+            </p>
+            <p>Bu ortam şu anda sadece Raster Analizi ara&ccedil;ları ve Raster İşlevlerini desteklemektedir.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

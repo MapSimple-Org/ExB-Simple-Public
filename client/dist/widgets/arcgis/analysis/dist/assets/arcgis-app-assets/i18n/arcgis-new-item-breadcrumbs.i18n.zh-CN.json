@@ -1,0 +1,12 @@
+{
+  "apiCredentialType": "凭据类型：API 键",
+  "oauthCredentialType": "凭据类型：OAuth 2.0",
+  "itemAccess": "项目访问权限",
+  "page": "页：${page}",
+  "currentPage": "当前页：${page}",
+  "privileges": "权限",
+  "itemDetails": "项目详细信息",
+  "settings": "设置",
+  "serviceScope": "服务范围",
+  "summary": "摘要"
+}

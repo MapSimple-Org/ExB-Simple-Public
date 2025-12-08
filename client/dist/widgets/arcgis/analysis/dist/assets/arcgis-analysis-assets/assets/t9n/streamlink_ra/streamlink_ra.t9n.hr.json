@@ -1,0 +1,9 @@
+{
+  "inputFlowDirectionRasterLabel": "Ulazni raster smjera protoka",
+  "inputLayerGroupText": "Odaberite ulazno strujanje i raster smjera protoka.",
+  "inputStreamRasterLabel": "Ulazni raster protoka",
+  "itemProperties": {
+    "description": "Izlaz generiran pokretanjem alata za analizu StreamLink.",
+    "snippet": "Izlaz generiran iz Streamlink-a"
+  }
+}

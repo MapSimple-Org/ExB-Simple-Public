@@ -1,0 +1,1 @@
+System.register([],function(e){return{execute:function(){e({distance:"Distancia",area:"\xc1rea",atLeastOne:"Se debe seleccionar al menos una herramienta",toolbar:"Barra de herramientas",disableSnapping:"Deshabilitar alineaci\xf3n en mapa 2D"})}}});

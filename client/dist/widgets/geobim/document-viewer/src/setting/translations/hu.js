@@ -1,0 +1,1 @@
+System.register([],function(e){return{execute:function(){e({settingsLabel:"Document Viewer be\xe1ll\xedt\xe1sok"})}}});

@@ -1,0 +1,22 @@
+{
+  "deleteFolder": "刪除資料夾",
+  "delete": "刪除",
+  "permanentlyDelete": "永久刪除",
+  "back": "上一步",
+  "cancel": "取消",
+  "success": "已成功刪除資料夾 '${title}'。",
+  "deleteProtectedItemsInFolder": "無法刪除資料夾，因為其中一些項目無法刪除或具有相依項目。",
+  "message": {
+    "empty": "是否確定要刪除資料夾 <strong style='font-weight: 500'>${title}</strong>?",
+    "recycleAll": "是否確定要刪除資料夾 <strong style='font-weight: 500'>${title}</strong>，並將其內容傳送至資源回收筒?",
+    "mustBeEmpty": "資料夾 <strong style='font-weight: 500'>${title}</strong> 必須清空才能刪除。",
+    "aFewCannotBeDeleted": "無法刪除一些項目。 是否要繼續刪除其餘項目?",
+    "canBeEmptied": "資料夾 <strong style='font-weight: 500'>${title}</strong> 必須清空才能刪除。 是否要繼續刪除這些項目?",
+    "cannotBeDeleted": "無法刪除資料夾 <strong style='font-weight: 500'>${title}</strong>，因為無法刪除其項目。"
+  },
+  "disabledMessage": {
+    "single": "資料夾 <b>${label}</b> 內有 <span style='color:red'>1 個項目</span>。<br/></br/>確定要刪除此資料夾及其項目?",
+    "multiple": "資料夾 <b>${label}</b> 有 <span style='color:red'>${number} 個項目</span>。<br/></br/>確定要刪除此資料夾及其所有項目?",
+    "unknown": "是否確定要刪除此資料夾 <b>${label}</b>?"
+  }
+}

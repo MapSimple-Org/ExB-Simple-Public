@@ -1,0 +1,14 @@
+{
+  "outputRaster": "רסטר פלט",
+  "rfxVariable": "RasterFunctionVariable",
+  "selectLayer": "בחר שכבה",
+  "allowScalar": "בחר שכבה או הזן ערך קבוע",
+  "browseLayer": "עיין בשכבות",
+  "loading": "טוען...",
+  "layerMissing": "שכבת תצלומים אחת או יותר מהמפה לא מופיעות כאן מכיוון שמאפיין התרת שירות הניתוח לא מופעל.",
+  "layerFailedToLoad": "טעינת שכבה נכשלה.",
+  "learnMore": "מידע נוסף",
+  "errorCodes": {
+    "required": "זהו פרמטר חובה."
+  }
+}

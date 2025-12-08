@@ -1,0 +1,13 @@
+{
+  "weightedOverlayTable": "加權覆蓋表",
+  "id": "ID",
+  "layer": "圖層",
+  "field": "欄位",
+  "influence": "影響",
+  "sumOfInfluence": "影響力總和",
+  "value": "數值",
+  "remapTable": "重新製圖表格",
+  "scale": "比例",
+  "scales": "比例",
+  "selectRaster": "選擇點陣"
+}

@@ -1,0 +1,11 @@
+{
+  "addBtn": "เสร็จ",
+  "cancelBtn": "ยกเลิก",
+  "header": "เลือกตัวแปร",
+  "multipleVariables": "ตัวแปรหลายค่า",
+  "noFound": "ไม่พบตัวแปรที่เข้ากันได้",
+  "search": "ค้นหาตัวแปร",
+  "singleVariables": "ตัวแปรค่าเดี่ยว",
+  "variableLabel": "ป้ายกำกับ: <span style='font-weight: var(--calcite-font-weight-normal)'>${val}</span>",
+  "variableVal": "ค่า: <span style='font-weight: var(--calcite-font-weight-normal)'>${val}</span>"
+}

@@ -1,0 +1,17 @@
+{
+  "any": "Herhangi",
+  "count": "Sayım",
+  "field": "Alan",
+  "fieldLoadingErrorText": "Alanlar yüklenemiyor.",
+  "first": "Birinci",
+  "isRequired": "Bu parametre gerekli.",
+  "last": "Son",
+  "max": "Maks",
+  "mean": "Ortalama",
+  "min": "Min",
+  "selectAll": "Tümünü seç",
+  "standardDeviation": "Standart sapma",
+  "statistic": "İstatistik",
+  "statisticNotSelected": "Her alan için en az bir istatistik türü gereklidir.",
+  "sum": "Toplam"
+}

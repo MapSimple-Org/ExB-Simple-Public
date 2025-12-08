@@ -1,0 +1,8 @@
+{
+  "fieldTypesIncompatible": "ไม่มีฟิลด์ที่เข้ากันได้ที่พร้อมใช้งาน",
+  "inputPlaceholderText": "เลือกฟิลด์",
+  "layerNotSelected": "ไม่ได้เลือกชั้นข้อมูลที่จะเติมข้อมูลฟิลด์",
+  "multiSelectFieldButtonText": "ฟิลด์",
+  "removeField": "ลบทิ้ง",
+  "replaceField": "แทนที่ฟิลด์"
+}

@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>Narzędzie Obszar tabelaryczny oblicza obszary krzyżowe między dwoma zestawami danych i przedstawia wyniki w formie tabeli.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputZoneRasterOrFeatures">
+        <div>
+            <p>Dane wejściowe definiujące granice stref.
+            </p>
+            <p class="toolPaneOnly">W przypadku obiekt&oacute;w wejściowych liczba zależy od dodatkowych czynnik&oacute;w, takich jak kryteria filtrowania i zasięg analizy.
+            </p>
+        </div>
+    </div>
+    <div id="zoneField">
+        <div>
+            <p>Pole zawierające wartości definiujące poszczeg&oacute;lne strefy.
+            </p>
+        </div>
+    </div>
+    <div id="inputClassRasterOrFeatures">
+        <div>
+            <p>Dane wejściowe definiujące granice klas, kt&oacute;rych obszar zostanie obliczony.
+            </p>
+            <p class="toolPaneOnly">W przypadku obiekt&oacute;w wejściowych liczba zależy od dodatkowych czynnik&oacute;w, takich jak kryteria filtrowania i zasięg analizy.
+            </p>
+        </div>
+    </div>
+    <div id="classField">
+        <div>
+            <p>Pole zawierające wartości definiujące poszczeg&oacute;lne klasy.
+            </p>
+        </div>
+    </div>
+    <div id="classesAsRows">
+        <div>
+            <p>Określa, czy wartości z wejściowego rastra klas będą reprezentowane jako wiersze w tabeli wynikowej.
+            </p>
+            <p>Jeśli ta opcja nie zostanie wybrana, klasy będą reprezentowane jako pola. Jeśli ta opcja zostanie wybrana, klasy będą reprezentowane jako wiersze.
+            </p>
+        </div>
+    </div>
+    <div id="analysisCellSize">
+        <div>
+            <p>Określa wielkość kom&oacute;rki rastra analitycznego, kt&oacute;ry zostanie utworzony w celu obliczenia krzyżowych obszar&oacute;w tabelarycznych.
+            </p>
+        </div>
+    </div>
+    <div id="outputTableName">
+        <div>
+            <p>Nazwa warstwy tabeli obszar&oacute;w tabelarycznych, kt&oacute;ra zostanie utworzona i dodana do mapy.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>Nazwa folderu na stronie  <b>Moje zasoby</b>, w kt&oacute;rym zostanie zapisany wynik.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

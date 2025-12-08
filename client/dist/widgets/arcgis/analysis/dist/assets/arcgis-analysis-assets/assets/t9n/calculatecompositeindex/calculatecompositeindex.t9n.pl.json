@@ -1,0 +1,26 @@
+{
+  "CCIAnalysisSettingGroupLabel": "Ustawienia indeksu",
+  "CCIAnalysisSettingGroupText": "Określ sposób obliczania indeksu.",
+  "geomeanPercentileLabel": "Złóż rangi (średnia geometryczna percentyli)",
+  "geomeanRawLabel": "Złóż wartości nieprzetworzone (średnia geometryczna wartości nieprzetworzonych)",
+  "geomeanScaledLabel": "Złóż wartości skalowane (średnia geometryczna wartości skalowanych)",
+  "indexMethodLabel": "Metoda skalowania i łączenia zmiennych",
+  "inputFeaturesOrTableLabel": "Wejściowe obiekty lub tabela",
+  "inputLayerGroupText": "Wybierz obiekty lub tabelę oraz zmienne, aby utworzyć indeks.",
+  "inputVariablesLabel": "Zmienne wejściowe",
+  "itemProperties": {
+    "description": "Warstwa obiektowa wygenerowana w wyniku uruchomienia narzędzia analizy Oblicz indeks złożony.",
+    "snippet": "Warstwa obiektowa utworzona przez narzędzie Oblicz indeks złożony"
+  },
+  "meanPercentileLabel": "Połącz rangi (średnia percentyli)",
+  "meanRawLabel": "Połącz wartości nieprzetworzone (średnia wartości nieprzetworzonych)",
+  "meanScaledLabel": "Połącz wartości skalowane (średnia wartości skalowanych)",
+  "outputIndexMaxLabel": "Maksimum",
+  "outputIndexMinLabel": "Minimum",
+  "outputIndexMinMaxLabel": "Wartości minimalna i maksymalna indeksu",
+  "outputIndexReverseLabel": "Odwróć wartości indeksu",
+  "reverseVariableLabel": "Odwróć kierunek",
+  "sumFlagsPercentileLabel": "Wyróżnij wartości skrajne (liczba powyżej 90. percentyla)",
+  "toolName": "Oblicz indeks złożony",
+  "weight": "Waga"
+}

@@ -1,0 +1,22 @@
+{
+  "general": "ทั่วไป",
+  "parameters": "พารามิเตอร์",
+  "variables": "ตัวแปร",
+  "name": "ชื่อ",
+  "namePlaceHolder": "ใส่ชื่อ",
+  "description": "คำอธิบาย",
+  "parameter": "พารามิเตอร์",
+  "isPublic": "IsPublic",
+  "isDataset": "IsDataset",
+  "unknownPixelType": "ไม่ทราบ",
+  "outputPixelType": "ประเภทพิกเซลเอาต์พุต",
+  "u8PixelType": "8 บิต ไม่ได้เซ็นชื่อ",
+  "s8PixelType": "8 บิต เซ็นชื่อ",
+  "u16PixelType": "16 บิต ไม่ได้เซ็นชื่อ",
+  "s16PixelType": "16 บิต เซ็นชื่อ",
+  "u32PixelType": "32 บิต ไม่ได้เซ็นชื่อ",
+  "s32PixelType": "32 บิต เซ็นชื่อ",
+  "f32PixelType": "32 บิต ลอย",
+  "f64PixelType": "64 บิต ดับเบิล",
+  "properties": "คุณสมบัติ"
+}

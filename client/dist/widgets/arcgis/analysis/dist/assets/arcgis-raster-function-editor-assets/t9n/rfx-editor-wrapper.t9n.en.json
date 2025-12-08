@@ -1,0 +1,6 @@
+{
+  "dialogTitle": "Raster Function Editor",
+  "defaultTemplateName": "Raster Function Template",
+  "readOnlyModeTitle": "Read Only",
+  "readOnlyModeMessage": "Raster function template item is read-only. Changes can not be saved."
+}

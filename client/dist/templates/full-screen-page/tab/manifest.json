@@ -1,0 +1,31 @@
+{
+  "name": "tab",
+  "type": "template",
+  "templateType": "full-screen-page",
+  "label": "Tab",
+  "description": "Tab is a map-centric template with tabs on the left to open different sidebar content.",
+  "thumbnail": "thumbnail.png",
+  "order": 23,
+  "templateCreateVersion": "1.15.0",
+  "tags": [
+    "Map",
+    "Table",
+    "Legend",
+    "Search",
+    "Sidebar",
+    "Widget Controller",
+    "Basemap Gallery",
+    "Panel",
+    "Map Layers",
+    "Section",
+    "Navigation",
+    "View"
+  ],
+  "categoriesTags": [
+    "WAB classic",
+    "Fullscreen",
+    "Map centric"
+  ],
+  "thumbnailWidth": 320,
+  "thumbnailHeight": 214
+}

@@ -1,0 +1,6 @@
+{
+  "greaterThanErrorMessage": "Vstupní číslo musí být větší než ${min}",
+  "lesserThanErrorMessage": "Vstupní číslo musí být menší než ${max}",
+  "greaterThanOrEqualErrorMessage": "Vstupní číslo musí být větší nebo rovno hodnotě ${min}",
+  "lesserThanOrEqualErrorMessage": "Vstupní číslo musí být menší nebo rovno hodnotě ${max}"
+}

@@ -1,0 +1,8 @@
+{
+  "loading": "Wird geladen...",
+  "pleaseWait": "Bitte warten.",
+  "loadingXMLRFT": "Die ausgewählte Raster-Funktionsvorlage wird im XML-Format geladen.",
+  "failedToOpen": "Fehler beim Öffnen.",
+  "readingFailed": "Die ausgewählte Raster-Funktionsvorlage konnte nicht geladen werden.",
+  "failedToLoadXML": "Die ausgewählte Raster-Funktionsvorlage konnte im XML-Format nicht geladen werden."
+}

@@ -1,0 +1,13 @@
+{
+  "cancel": "Cancelar",
+  "creditUsage": "Crédito",
+  "envSettings": "Configurações do ambiente",
+  "envSettingsDescription": "Especifique configurações adicionais que afetam como a análise é executada.",
+  "generalSettings": "Ambientes gerais",
+  "geoanalytics": "GeoAnalytics",
+  "noEnvSettings": "Sem ambientes",
+  "processingExtentEnv": "Ambiente de extensão de processamento",
+  "rasterAnalysis": "Ambientes raster",
+  "resetDefaults": "Redefinir padrões",
+  "save": "Salvar"
+}

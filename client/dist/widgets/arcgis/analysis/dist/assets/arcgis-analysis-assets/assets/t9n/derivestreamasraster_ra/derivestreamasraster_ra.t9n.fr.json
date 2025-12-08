@@ -1,0 +1,10 @@
+{
+  "forceFlowLabel": "Forcer l’écoulement vers l’extérieur sur les quatre bords",
+  "inputLayersGroupText": "Sélectionner le raster de surface en entrée et éventuellement les données de dépression et le raster de pondération.",
+  "itemProperties": {
+    "description": "Sortie générée en exécutant l’outil Générer un raster de cours d’eau.",
+    "snippet": "Sortie générée avec Générer un raster de cours d’eau"
+  },
+  "outputStreamRasterLabel": "Nom du raster de cours d’eau en sortie",
+  "streamSettingsGroupText": "Spécifier le seuil d’accumulation, la méthode de désignation des cours d’eau, ainsi que le mode de gestion de l’écoulement aux bords du raster de surface en entrée."
+}

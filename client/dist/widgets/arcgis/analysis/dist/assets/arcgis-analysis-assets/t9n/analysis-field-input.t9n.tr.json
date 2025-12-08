@@ -1,0 +1,68 @@
+{
+  "addField": "Alan ekle",
+  "addFieldErrors": {
+    "creatingFailed": "${fieldName} alanı oluşturma başarısız oldu.",
+    "existingFieldNameError": "Alan adı mevcut bir alan adıyla aynı olamaz.",
+    "invalidName": "Geçersiz ad",
+    "invalidNameInputInvalidCharactersError": "Alan adı bir harfle başlamalı ve yalnızca harfler, rakamlar ve ‘_’ karakterini içermelidir.",
+    "invalidNameInputSQLError": "Alan adı, bir SQL anahtar sözcüğüyle aynı olamaz.",
+    "valueIsRequiredError": "Bu değer gereklidir."
+  },
+  "cancel": "İptal",
+  "createAndSelectField": "Alan oluştur ve seç",
+  "createNewFields": "Yeni alan oluştur",
+  "fieldLoadingErrorText": "Alanlar yüklenemiyor.",
+  "fieldName": "Alan adı",
+  "fieldType": "Alan türü",
+  "fieldTypesIncompatible": "Kullanılabilir uyumlu alan yok.",
+  "layerNotSelected": "Alanları doldurmak için katman seçilmedi.",
+  "loadingFields": "Alanlar yükleniyor",
+  "noSearchResults": "Eşleşen alan bulunamadı.",
+  "requiredErrorLabelDefault": "Bir alan",
+  "requiredErrorMessage": "Bu parametre gerekli.",
+  "selectFieldPicklistHeading": "Alan seç",
+  "selectOkBtnText": "Seç",
+  "tooltip": "Geçerli bir alan adı ve alan türü belirtilmelidir.",
+  "types": {
+    "big-integer": {
+      "description": "-(2${startSup}53${endSup}-1) ile 2${startSup}53${endSup}-1 arası tamsayıları depola. Desteklenen tamsayı alan aralığının dışında kalan sayıları kullanırken bu alan türünü kullanın.",
+      "title": "Büyük Tamsayı"
+    },
+    "date": {
+      "description": "Tarih ve saat içeren değerleri depola.",
+      "title": "Tarih"
+    },
+    "date-only": {
+      "description": "Saat değeri içermeyen tarih değerlerini depola.",
+      "title": "Yalnızca Tarih"
+    },
+    "double": {
+      "description": "Ondalık haneleri olan sayıları depola.",
+      "title": "Çift"
+    },
+    "global-id": {
+      "description": "Bir detayı benzersiz bir şekilde tanımlamak için kullanılan harf ve rakamlardan oluşan 36 karakterlik bir dizeyi saklar.",
+      "title": "GlobalID"
+    },
+    "guid": {
+      "description": "Harf ve rakamlardan oluşan 36 karakterlik bir dizeyi saklar. Global Benzersiz Tanımlayıcı veya GUID, detaylar arasındaki ilişkileri yönetmek için sıklıkla kullanılır.",
+      "title": "GUID"
+    },
+    "integer": {
+      "description": "${lowerIntegerRange} - ${upperIntegerRange} arası tam sayıları depola.",
+      "title": "Tamsayı"
+    },
+    "string": {
+      "description": "Bir dizi alfasayısal karakter depola",
+      "title": "Dize"
+    },
+    "time-only": {
+      "description": "Tarih değeri içermeyen saat değerlerini depola.",
+      "title": "Yalnızca Saat"
+    },
+    "timestamp-offset": {
+      "description": "Tarih, saat ve Koordineli Evrensel Zaman'dan (UTC) ofseti gösteren değerleri depola.",
+      "title": "Zaman Damgası Ofseti"
+    }
+  }
+}

@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>Įrankis Kurti buferius sukuria poligonus, kurie užima tam tikrą atstumą nuo įvesties elementų.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputLayer">
+        <div>
+            <p>Ta&scaron;kų, linijų arba poligonų elementai, kurie bus buferizuojami.
+            </p>
+            <p class="toolPaneOnly">Elementų skaičius priklauso nuo papildomų veiksnių, pavyzdžiui, filtravimo kriterijų ir analizės apimties.
+            </p>
+        </div>
+    </div>
+    <div id="distanceType">
+        <div>
+            <p>Nurodo, ar buferio atstumas bus apibrėžtas konstanta <b>(Reik&scaron;mė)</b>, ar skaitmeniniu lauku <b>(Laukas</b>).
+            </p>
+        </div>
+    </div>
+    <div id="distances">
+        <div>
+            <p>Atstumas, kuris bus naudojamas buferiui sukurti. Jei pridedamos kelios reik&scaron;mės, kiekviena reik&scaron;mė bus naudojama buferiui sukurti kiekviename įvesties elemente.
+            </p> 
+            <p class="modelBuilderOnly">Reikalingos  <b>Atstumo reik&scaron;mės</b> arba <b>Atstumo laukas</b>. Jei pateikiami abu parametrai, bus naudojamas <b>Atstumo laukas</b>.
+            </p>
+        </div>
+    </div>
+    <div id="field">
+        <div>
+            <p>Laukas, kuriame nurodomas kiekvieno elemento buferinis atstumas.
+            </p> 
+            <p class="modelBuilderOnly">Reikalingos  <b>Atstumo reik&scaron;mės</b> arba <b>Atstumo laukas</b>. Jei pateikiami abu parametrai, bus naudojamas <b>Atstumo laukas</b>.
+            </p>
+        </div>
+    </div>
+    <div id="units">
+        <div>
+            <p>Vienetai, kurie bus naudojami buferio atstumui nurodyti.
+            </p>
+        </div>
+    </div>
+    <div id="dissolveType">
+        <div>
+            <p>Nurodo, kaip bus elgiamasi su skirtingų įvesties elementų buferiais, kai jie persidengia.
+            </p>
+        </div>
+    </div>
+    <div id="ringType">
+        <div>
+            
+            <p>Nurodo, ar kelių atstumų buferiai bus koncentriniai buferiai, kurie persidengia <b>(Persidengiantys diskai</b>), ar žiedai, kurie nepersidengia <b>(Atskiri žiedai</b>).
+            </p>
+        </div>
+    </div>
+    <div id="sideType">
+        <div>
+            <p>Linijų elementams nurodoma, ar buferis bus kuriamas abiejose linijos pusėse <b>(Aplink)</b>, tik kairėje pusėje <b>(Kairėje)</b>, ar tik de&scaron;inėje pusėje <b>(De&scaron;inėje</b>).
+            </p>
+            <p>Poligonų elementams nurodoma, ar įvesties poligonų elementai bus įtraukti į buferį <b>(Įtraukti)</b>, ar neįtraukti į buferį <b>(Neįtraukti)</b>.
+            </p>
+        </div>
+    </div>
+    <div id="endType">
+        <div>
+            <p>Nurodo, ar linijos elemento pabaigoje esančio buferio forma bus apvali <b>(Apvali</b>), ar plok&scaron;čia <b>(</b>Plok&scaron;čia).
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>Sluoksnio, kuris bus sukurtas ir pridėtas į žemėlapį, pavadinimas.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>Puslapyje  <b>Mano turinys</b> esančio aplanko, kur bus įra&scaron;ytas rezultatas, pavadinimas.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

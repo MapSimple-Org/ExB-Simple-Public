@@ -1,0 +1,417 @@
+{
+  "itemBrowser": {
+    "filters": "Filtry",
+    "preview": "Zobacz podgląd",
+    "selectedLayers": "Wybrane warstwy",
+    "selectedItems": "Wybrane elementy",
+    "pageRange": "${start}-${end}, razem: ${total}",
+    "pageRangeAria": "${start}-${end}, łączna liczba elementów: ${total}",
+    "pageRangeWithRecycleBin": "${start}–${end}, łącznie: ${total} (rozmiar łączny: ${recycleBinSize})",
+    "pageRangeAriaWithRecycleBin": "${start}–${end}, łączna liczba elementów: ${total} (rozmiar łączny: ${recycleBinSize})",
+    "foundOnPage": "Pasujące wyniki na bieżącej stronie: ${total}",
+    "totalSize": "Rozmiar łączny: ${totalSize}",
+    "selectedMultipleWithSize": "Wybrano: ${num} (${totalSize})",
+    "selectedMultipleWithSizeSmall": "${num} (${totalSize})",
+    "noSelectedLayers": "Brak wybranych warstw",
+    "noSelectedItems": "Brak wybranych elementów",
+    "sharingUpdated": "Zaktualizowano następującą liczbę udostępnień: ${itemTitle}.",
+    "refineContent": "Zawęź zasoby"
+  },
+  "layerTypes": {
+    "point": "Warstwa punktowa",
+    "line": "Warstwa liniowa",
+    "polygon": "Warstwa poligonowa",
+    "multipatch": "Warstwa wielopłatowa",
+    "multipoint": "Warstwa wielopunktowa",
+    "table": "Tabela",
+    "catalog": "Warstwa katalogu",
+    "oriented imagery": "Warstwa zobrazowań zorientowanych",
+    "parcel": "Warstwa działek",
+    "utility network": "Warstwa sieci infrastruktury",
+    "topology": "Warstwa topologiczna",
+    "trace network": "Warstwa trasowania sieci"
+  },
+  "filterIndustry": {
+    "title": "Branża",
+    "Industry": "Branża: ${industry}",
+    "Build a layer": "Buduj warstwę",
+    "Agriculture": "Rolnictwo",
+    "Electric Utilities": "Sieci elektryczne",
+    "Environment": "Środowisko",
+    "Forestry": "Leśnictwo",
+    "Gas Utilities": "Sieci gazowe",
+    "General": "Ogólne",
+    "Natural Resources": "Zasoby naturalne",
+    "Petroleum": "Ropa naftowa",
+    "Public Safety": "Bezpieczeństwo publiczne",
+    "Telecommunications": "Telekomunikacja",
+    "Transportation": "Transport",
+    "Water Utilities": "Sieci wodociągowe"
+  },
+  "filterItemType": {
+    "title": "Typ elementu",
+    "itemType": "Typ: ${itemType}",
+    "options": {
+      "maps": "Mapy",
+      "maps-webmaps": "Mapy internetowe",
+      "maps-mapfiles": "Pliki map",
+      "layers": "Warstwy",
+      "layers-weblayers": "Warstwy internetowe",
+      "layers-weblayers-features": "Warstwy obiektowe",
+      "layers-weblayers-tiles": "Warstwy kafli",
+      "layers-weblayers-mapimage": "Warstwy rastrowe mapy",
+      "layers-weblayers-imagery": "Warstwy zobrazowań",
+      "layers-weblayers-scenelayers": "Warstwy scen",
+      "layers-weblayers-videolayers": "Warstwy filmów",
+      "layers-weblayers-tiledimagelayers": "Warstwy zobrazowań kafelkowych",
+      "layers-weblayers-elevationlayers": "Warstwy wysokościowe",
+      "layers-weblayers-feeds": "Kanały",
+      "layers-weblayers-tables": "Tabele",
+      "layers-layerfiles": "Pliki warstw",
+      "scenes": "Sceny",
+      "applications": "Aplikacje",
+      "applications-web": "Aplikacje internetowe",
+      "applications-dashboards": "Panele",
+      "applications-sites": "Witryny",
+      "applications-pages": "Strony",
+      "applications-geobim-projects": "Projekty GeoBIM",
+      "applications-geobim-apps": "Aplikacje GeoBIM",
+      "applications-instant-apps": "Aplikacje błyskawiczne",
+      "applications-storymap": "Storymaps",
+      "applications-data-pipelines": "Data Pipelines",
+      "applications-experience": "Program budujący interfejsy",
+      "applications-wab": "Web AppBuilder",
+      "applications-mobile": "Aplikacje mobilne",
+      "applications-desktop": "Aplikacje komputerowe",
+      "developer-credentials": "Poświadczenia dewelopera",
+      "developer-credentials-oauth": "Poświadczenia OAuth 2.0",
+      "developer-credentials-api-token": "Poświadczenia klucza API",
+      "developer-credentials-api-key": "Klucz API (starsza wersja)",
+      "tools": "Narzędzia",
+      "tools-locators": "Lokalizatory",
+      "tools-geodatabase": "Dostęp do geobaz",
+      "tools-geometric": "Operacje geometryczne",
+      "tools-geoprocessing": "Zadania geoprzetwarzania",
+      "tools-network": "Analiza sieciowa",
+      "tools-analytics": "Analizy",
+      "files": "Pliki",
+      "files-document": "Dokumenty",
+      "files-image": "Obrazy",
+      "files-pdf": "Pliki PDF",
+      "files-csv": "Pliki CSV",
+      "files-report": "Raporty administracyjne",
+      "files-raster": "Szablony funkcji rastrowych",
+      "notebooks": "Notatniki",
+      "insights": "Insights",
+      "insights-workbooks": "Skoroszyty",
+      "insights-pages": "Raporty",
+      "insights-models": "Modele",
+      "insights-themes": "Motywy",
+      "data-stores": "Magazyny danych",
+      "knowledge-graphs": "Wykresy wiedzy"
+    }
+  },
+  "filterCategories": {
+    "categories": "Kategorie",
+    "groupCategories": "Kategorie grup",
+    "category": "Kategoria: ${category}",
+    "uncategorized": "Bez kategorii",
+    "noCategoriesTitle": "Nie ma jeszcze żadnych kategorii",
+    "noCategories": "Kategorie pozwalają członkom na spójne organizowanie elementów i oferują prostą metodę przeglądania zasobów w instytucji.",
+    "noGroupCategoriesTitle": "Nie ma jeszcze kategorii grup",
+    "noGroupCategories": "Kategorie pozwalają członkom grupy na spójne organizowanie elementów i oferują prostą metodę przeglądania zasobów w grupie.",
+    "setupCategories": "Skonfiguruj kategorie zasobów",
+    "setupGroupCategories": "Skonfiguruj kategorie grupy",
+    "configureCategories": "Konfiguruj kategorie"
+  },
+  "filterRegion": {
+    "regions": "Regiony",
+    "region": "Region: ${region}"
+  },
+  "filterCollaborations": {
+    "title": "Kooperacje rozproszone",
+    "label": "Kooperacje rozproszone: ${name}",
+    "loading": "Ładowanie kooperacji..."
+  },
+  "filterContentStatus": {
+    "title": "Status",
+    "label": "Stan: ${contentStatus}",
+    "authoritative": "Wiarygodne",
+    "deprecated": "Nieaktualne"
+  },
+  "filterDeleteProtection": {
+    "title": "Ochrona przed usunięciem",
+    "label": "Ochrona przed usunięciem: ${deleteProtection}",
+    "enabled": "Włączone",
+    "disabled": "Wyłączone"
+  },
+  "filterExpiration": {
+    "today": "Dzisiaj",
+    "tomorrow": "Jutro",
+    "next7": "Następne 7 dni",
+    "next30": "Następne 30 dni",
+    "custom": "Zakres niestandardowy...",
+    "title": {
+      "expires": "Data ważności"
+    },
+    "expires": "Data ważności: ${date}"
+  },
+  "filterExtent": {
+    "label": "W obszarze mapy",
+    "title": "Pokazuj tylko zasoby znajdujące się w obszarze mapy"
+  },
+  "filterFolder": {
+    "folders": "Foldery",
+    "placeholder": "Filtruj foldery",
+    "clear": "Wyczyść wyszukiwanie",
+    "all": "Wszystkie moje zasoby",
+    "allContentUser": "Wszystkie zasoby użytkownika ${username}",
+    "recycleBin": "Kosz",
+    "label": "Folder: ${folder}",
+    "loading": "Wczytywanie folderów...",
+    "folderOptions": "Opcje folderów",
+    "editFolder": "Edytuj folder",
+    "deleteFolder": "Usuń folder",
+    "delete": "Usuń",
+    "areYouSure": "Czy na pewno chcesz usunąć folder ?",
+    "areYouSureExplanation": "Folder <strong style='font-weight: 500'>${title}</strong> zostanie trwale usunięty. Dodatkowo wszystkie elementy w tym folderze zostaną oznaczone do usunięcia. Czy nadal chcesz kontynuować usuwanie tego folderu?",
+    "cancel": "Anuluj",
+    "save": "Zapisz",
+    "createAFolder": "Utwórz folder",
+    "folderName": "Nazwa folderu",
+    "createFolder": "Utwórz folder",
+    "error": {
+      "title": "Błąd",
+      "noName": "Należy podać nazwę folderu.",
+      "folderAlreadyExists": "Folder '${folder}' już istnieje. Wybierz inną nazwę.",
+      "invalidCharacters": {
+        "single": "Nazwa nie może zawierać tego znaku: ${invalidCharacters}.",
+        "multiple": "Nazwa nie może zawierać żadnego z następujących znaków: ${invalidCharacters}.",
+        "unknown": "Nazwa nie może zawierać żadnego z następujących znaków: ${invalidCharacters}."
+      },
+      "errorCreatingFolder": "Wystąpił błąd podczas tworzenia folderu ${folderName}."
+    }
+  },
+  "filterGroup": {
+    "title": "Grupy",
+    "groups": "Moje grupy",
+    "placeholder": "Filtruj grupy",
+    "all": "Wszystkie zasoby moich grup",
+    "label": "Grupa: ${group}",
+    "loading": "Wczytywanie grup..."
+  },
+  "filterContentType": {
+    "contentType": "Typ zasobów",
+    "all": "Wszystkie zasoby mojej instytucji",
+    "recycle": "Kosz"
+  },
+  "filterLocation": {
+    "location": "Lokalizacja",
+    "label": "Lokalizacja: ${location}",
+    "findLocationText": "Znajdź adres lub miejsce",
+    "search": "Wyszukiwanie lokalizacji",
+    "suggestions": "Sugestie",
+    "noResults": "Nie znaleziono wyników dla „${searchTerm}”"
+  },
+  "filterSharing": {
+    "title": "Udostępnianie",
+    "label": "Udostępnione: ${sharing}",
+    "owner": "Właściciel",
+    "shared": "Udostępnione dla grup",
+    "private": "Nieudostępnione dla grup",
+    "account": "Instytucja",
+    "public": "Wszyscy (publiczne)"
+  },
+  "filterTags": {
+    "title": "Znaczniki",
+    "label": "Ze znacznikami: ${tags}",
+    "selectTags": "Wybierz znaczniki"
+  },
+  "filterReportType": {
+    "title": "Typ raportu",
+    "label": "Typ raportu: ${reportType}",
+    "activity": "Aktywność",
+    "credits": "Kredyt",
+    "users": "Członek",
+    "content": "Element",
+    "item_usages": "Liczba wyświetleń elementów",
+    "service_usages": "Wykorzystanie usług"
+  },
+  "cardThumbnail": {
+    "loading": "Wczytywanie obrazu"
+  },
+  "card": {
+    "select": "Wybierz element: ${title}",
+    "lastUpdated": "Zaktualizowany element: ${date}",
+    "viewItemDetails": "Wyświetl więcej szczegółów o ${title}",
+    "preview": "Więcej szczegółów",
+    "hidePreview": "Mniej szczegółów",
+    "closeDetails": "Zamknij podgląd",
+    "openDetails": "Podgląd",
+    "moreOptions": "Więcej opcji"
+  },
+  "cardSublayerSelect": {
+    "select": "Wybierz warstwę",
+    "selectLayers": "Wybierz warstwy",
+    "selectedSingle": "Wybrane",
+    "selectedLayers": "Wybrane warstwy: ${num}",
+    "selectedMultiple": "Wybrano: ${num}",
+    "selectedName": "Wybrana warstwa: ${name}",
+    "selectedTask": "Wybrane zadanie: ${task}",
+    "errorTitle": "Błąd połączenia z usługą.",
+    "errorBody": "Nie można pomyślnie połączyć się z usługą. Usługa nie działa lub wymaga uwierzytelnienia.",
+    "notebookErrorBody": "To narzędzie zostało opublikowane z poziomu notatnika. Dostęp do aplikacji ArcGIS Notebooks jest zablokowany dla Twojej instytucji. Skontaktuj się z administratorem w celu dostosowania ustawienia.",
+    "retry": "Ponów próbę",
+    "selectTask": "Wybierz zadanie",
+    "selectTaskFrom": "Wybierz zadanie z: ${title}"
+  },
+  "cardLayersList": {
+    "hideDetails": "Ukryj szczegóły",
+    "showDetails": "Pokaż szczegóły",
+    "layersAndTables": "Warstwy i tabele"
+  },
+  "content": {
+    "noResults": "Nie znaleziono elementów spełniających Twoje kryteria. Zmień wyszukiwane wyrażenie lub wyczyść niektóre filtry, aby wyświetlić więcej elementów.",
+    "noContent": "Brak dostępnych zasobów.",
+    "loading": "Wczytywanie..."
+  },
+  "copy": {
+    "copy": "Kopiuj",
+    "copied": "Skopiowano"
+  },
+  "bucketSelect": {
+    "my": "Moje zasoby",
+    "org": "Moja instytucja",
+    "group": "Moje grupy",
+    "favorites": "Moje ulubione",
+    "living atlas": "Living Atlas",
+    "living atlas analysis": "Warstwy analizy atlasu Living Atlas",
+    "subscription content": "Zasoby subskrybowane",
+    "all": "ArcGIS Online",
+    "catalog": "Katalogi Hub",
+    "catalogLabel": "Katalog"
+  },
+  "preview": {
+    "owner": "Właściciel",
+    "summary": "Podsumowanie",
+    "noSummary": "Nie podano podsumowania",
+    "description": "Opis",
+    "noDescription": "Brak opisu",
+    "thumbnail": "Miniatura",
+    "overview": "Przegląd",
+    "details": "Szczegóły",
+    "termsOfUse": "Warunki użytkowania",
+    "noTermsOfUse": "Nie podano warunków użytkowania",
+    "itemManagedBy": "Elementem zarządza: ${username}",
+    "fullItemDetails": "Pełne szczegóły elementu",
+    "layersCount": "Warstwy (${count})",
+    "layers": "Warstwy",
+    "add": "Dodaj",
+    "remove": "Usuń",
+    "loading": "Wczytywanie...",
+    "shared": "Udostępnianie",
+    "created": "Utworzony element",
+    "updated": "Zaktualizowano element",
+    "fileSize": "Rozmiar pliku",
+    "dataUpdated": "Zaktualizowano dane",
+    "schemaUpdated": "Zaktualizowano schemat",
+    "ID": "Identyfikator",
+    "copyID": "Kopiuj identyfikator",
+    "URL": "Adres URL",
+    "copyURL": "Kopiuj adres URL",
+    "itemStatus": "Status",
+    "viewCount": "Liczba wyświetleń",
+    "readMore": "Więcej informacji",
+    "dashboardViews": "Widoki paneli",
+    "dashboardMobile": "Klasyczne, mobilne",
+    "dashboardDesktop": "Komputer stacjonarny",
+    "sharing": {
+      "private": "Prywatny",
+      "shared": "Grupy",
+      "public": "Wszyscy",
+      "org": "Instytucja"
+    },
+    "groupCategories": "Kategorie grup",
+    "matched": "Dopasowane",
+    "matchedNumber": "Dopasowane (${num})",
+    "layerError": {
+      "title": "Nie można wyświetlić warstw",
+      "message": "Podgląd warstwy nie jest obsługiwany w przypadku zabezpieczonych usług."
+    },
+    "noServiceMessage": "Wybrana usługa nie istnieje lub jest niedostępna.",
+    "credits": "Podziękowanie i potwierdzenie praw",
+    "noCredits": "Nie potwierdzono źródła.",
+    "geometryTypeTitle": "Typ geometrii",
+    "layerTypeTitle": "Typ warstwy",
+    "fields": "Pola",
+    "noFields": "Nie skonfigurowano żadnych pól dla tej warstwy",
+    "geometryType": {
+      "esriGeometryPoint": "Warstwa punktowa",
+      "esriGeometryPolyline": "Warstwa liniowa",
+      "esriGeometryPolygon": "Warstwa poligonowa",
+      "esriGeometryMultiPatch": "Warstwa wielopłatowa",
+      "table": "Tabela"
+    },
+    "layerActions": "Działania warstwy",
+    "itemError": {
+      "title": "Błąd",
+      "subscription": "Ten element nie jest obecnie dostępny. Subskrypcja ArcGIS Online związana z tym elementem została wyłączona.",
+      "unhandled": "Wystąpił błąd podczas pobierania tego elementu."
+    }
+  },
+  "table": {
+    "loading": "Wczytywanie...",
+    "caption": "Wyniki elementów i nagłówki kolumn zawierające przyciski są dostępne do sortowania.",
+    "selectAll": "Wybierz wszystkie",
+    "selection": "Wybór",
+    "headers": {
+      "title": "Tytuł",
+      "modified": "Zmodyfikowano",
+      "created": "Utworzono",
+      "owner": "Właściciel",
+      "size": "Rozmiar",
+      "deleted": "Data usunięcia",
+      "type": "Typ elementu",
+      "badges": "Stan elementu",
+      "favorite": "Ulubione",
+      "sharing": "Poziom udostępniania",
+      "details": "Wyświetl szczegóły",
+      "actions": "Więcej działań dotyczących elementów",
+      "dataset": "Zestaw danych"
+    }
+  },
+  "tableRow": {
+    "deletesTomorrow": "Do usunięcia jutro",
+    "deletes": {
+      "single": "Usunięcia w ciągu dni: ${number}",
+      "multiple": "Usunięcia w ciągu następującej liczby dni: ${number}",
+      "unknown": "Dni do usunięcia: ${number}"
+    },
+    "restore": "Przywróć",
+    "details": "Wyświetl szczegóły",
+    "moreOptions": "Więcej opcji",
+    "download": "Pobierz"
+  },
+  "search": {
+    "searchName": "Wyszukaj ${searchName}",
+    "searchAllContent": "Przeszukaj wszystkie moje zasoby",
+    "searchAllUserContent": "Przeszukaj wszystkie zasoby użytkownika ${username}",
+    "searchGroupsContent": "Wyszukaj w moich grupach",
+    "searchingGroupsContent": "Przeszukiwanie moich grup pod kątem",
+    "searchFavoritesContent": "Wyszukaj w moich ulubionych",
+    "searchOrganizationsContent": "Wyszukaj w mojej instytucji",
+    "searchLivingAtlasContent": "Wyszukiwanie w atlasie Living Atlas",
+    "searchRecycleCurrentPage": "Wyszukaj tytuły elementów na bieżącej stronie"
+  },
+  "find": {
+    "find": "Znajdź",
+    "findOnPage": "Znajdź na stronie",
+    "match": "Zwraca dopasowania tekstowe tytułów elementów wyłącznie na bieżącej stronie."
+  },
+  "view": {
+    "view": "Wyświetl",
+    "list": "Lista",
+    "grid": "Siatka",
+    "table": "Tabela"
+  }
+}

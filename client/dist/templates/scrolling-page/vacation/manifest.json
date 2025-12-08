@@ -1,0 +1,31 @@
+{
+  "name": "vacation",
+  "type": "template",
+  "templateType": "scrolling-page",
+  "label": "Vacation",
+  "description": "Vacation is a template utilizing the Fly Controller widget and maps to provide an interactive trip event website.",
+  "thumbnail": "thumbnail.png",
+  "order": 12,
+  "tags": [
+    "Banner",
+    "Title",
+    "Share",
+    "Map",
+    "Section",
+    "Auto play",
+    "View",
+    "Navigation",
+    "Fly Controller",
+    "Divider",
+    "Bookmark",
+    "Slides",
+    "Gallery",
+    "Indicator"
+  ],
+  "categoriesTags": [
+    "Web page",
+    "Scrolling"
+  ],
+  "thumbnailWidth": 320,
+  "thumbnailHeight": 214
+}

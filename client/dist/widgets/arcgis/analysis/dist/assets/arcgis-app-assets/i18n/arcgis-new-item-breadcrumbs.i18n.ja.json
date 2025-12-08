@@ -1,0 +1,12 @@
+{
+  "apiCredentialType": "認証情報タイプ: API キー",
+  "oauthCredentialType": "認証情報タイプ: OAuth 2.0",
+  "itemAccess": "アイテムのアクセス権",
+  "page": "ページ: ${page}",
+  "currentPage": "現在のページ: ${page}",
+  "privileges": "権限",
+  "itemDetails": "アイテムの詳細",
+  "settings": "設定",
+  "serviceScope": "サービス スコープ",
+  "summary": "サマリー"
+}

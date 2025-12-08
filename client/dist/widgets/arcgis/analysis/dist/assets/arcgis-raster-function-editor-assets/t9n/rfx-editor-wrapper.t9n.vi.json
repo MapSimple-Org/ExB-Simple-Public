@@ -1,0 +1,6 @@
+{
+  "dialogTitle": "Raster Function Editor",
+  "defaultTemplateName": "Mẫu Chức năng Raster",
+  "readOnlyModeTitle": "Chỉ Đọc",
+  "readOnlyModeMessage": "Mục biểu mẫu hàm raster chỉ được đọc. Không thể lưu các thay đổi."
+}

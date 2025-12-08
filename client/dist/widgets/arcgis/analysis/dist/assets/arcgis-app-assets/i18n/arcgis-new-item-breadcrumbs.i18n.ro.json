@@ -1,0 +1,12 @@
+{
+  "apiCredentialType": "Tip de acreditare: cheie API",
+  "oauthCredentialType": "Tip de acreditare: OAuth 2.0",
+  "itemAccess": "Acces element",
+  "page": "Pagina: ${page}",
+  "currentPage": "Pagina curentă: ${page}",
+  "privileges": "Privilegii",
+  "itemDetails": "Detalii elemente",
+  "settings": "Setări",
+  "serviceScope": "Domeniul serviciului",
+  "summary": "Rezumat"
+}

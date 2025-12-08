@@ -1,0 +1,6 @@
+{
+  "greaterThanErrorMessage": "Det angitte tallet må være høyere enn ${min}",
+  "lesserThanErrorMessage": "Det angitte tallet må være lavere enn ${max}",
+  "greaterThanOrEqualErrorMessage": "Det angitte tallet må være større enn eller lik ${min}",
+  "lesserThanOrEqualErrorMessage": "Det angitte tallet må være lavere enn eller lik ${max}"
+}

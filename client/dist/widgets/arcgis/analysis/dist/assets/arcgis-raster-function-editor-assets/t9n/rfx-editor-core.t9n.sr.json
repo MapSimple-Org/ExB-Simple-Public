@@ -1,0 +1,15 @@
+{
+  "addRaster": "Dodaj promenljivu rastera",
+  "addScalar": "Dodaj konstantu",
+  "raster": "Raster",
+  "scalar": "Skalar",
+  "defaultModelName": "Šablon rasterske funkcije",
+  "defaultRasterName": "Raster",
+  "invalidRFTMessage": "Šablon rasterske funkcije je nevažeći.",
+  "deprecated": "Zastarelo",
+  "deprecatedHoverText": "Ova rasterska funkcija je zastarela i biće uklonjena u budućem izdanju.",
+  "unsupported": "Nije podržano",
+  "unsupportedHoverText": "Ova rasterska funkcija nije podržana i moguće je da će biti dostupna u budućem izdanju.",
+  "userStartDirection": "Izaberite funkciju da biste počeli da pravite šablon rasterske funkcije.",
+  "learnMore": "Saznajte više"
+}

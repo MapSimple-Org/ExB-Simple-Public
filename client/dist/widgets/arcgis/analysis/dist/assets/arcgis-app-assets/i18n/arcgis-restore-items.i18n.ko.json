@@ -1,0 +1,31 @@
+{
+  "back": "뒤로",
+  "cancel": "취소",
+  "learnMore": "자세한 정보",
+  "restore": "복원",
+  "restoreTo": "다음으로 복원",
+  "restoreItem": "항목 복원",
+  "restoreItems": "여러 항목 복원",
+  "noticeMessage": "복원된 항목의 공유가 해제됩니다. 다시 공유하기 전에 콘텐츠를 검토하세요.",
+  "cannotBulkRestoreXItems": "${number}개 이상의 항목은 일괄 복원할 수 없습니다. 항목 중 일부를 선택 해제하세요.",
+  "cannotBulkRestoreMultipleOwners": "서로 다른 소유자에게 속한 항목은 일괄 복원할 수 없습니다. 일괄 복원하려면 단일 사용자의 항목을 선택하세요.",
+  "toRestore": {
+    "single": "복원할 항목:",
+    "multiple": "복원할 항목:"
+  },
+  "cannotRestore": "복원할 수 없음:",
+  "dependentItems": {
+    "single": "이 항목은 <strong style='font-weight: 500'>${parent}</strong>에 종속되어 있으므로 복원할 수 없습니다. 함께 복원하세요.",
+    "singleUnknown": "이 항목은 휴지통에 있는 다른 항목에 종속되어 있으므로 복구할 수 없습니다. 함께 복구하세요.",
+    "multiple": "이 항목은 휴지통에 있는 다른 항목에 종속되어 있으므로 복원할 수 없습니다. 함께 복원하세요.",
+    "multipleSameSource": "이 항목은 <strong style='font-weight: 500'>${parent}</strong>에 종속되어 있으므로 복원할 수 없습니다. 함께 복구하세요."
+  },
+  "pageRangeWithTotalRecycleBinSize": {
+    "en": "휴지통의 ${start} - ${end}/${total}(${size})",
+    "other": "휴지통의 ${start} - ${end}, 총 개수: ${total}(${size})"
+  },
+  "pageRangeWithGreaterThanTotalRecycleBinSize": {
+    "en": "휴지통의 ${start} - ${end}/${total}(>${size})",
+    "other": "휴지통의 ${start} - ${end}, 총 개수: ${total}(>${size})"
+  }
+}

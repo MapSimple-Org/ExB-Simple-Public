@@ -1,0 +1,89 @@
+{
+  "browser": {
+    "refineContent": "精細化內容",
+    "filters": "篩選器",
+    "pageRange": "${start}-${end}，總計: ${total}",
+    "pageRangeAria": "${start}-${end}，項目總計: ${total}",
+    "pageRangeWithRecycleBin": "${start}-${end}，總計: ${total} (大小總計: ${recycleBinSize})",
+    "pageRangeAriaWithRecycleBin": "${start}-${end}，項目總計: ${total} (大小總計: ${recycleBinSize})",
+    "totalSize": "大小總計: ${totalSize}",
+    "loading": "正在載入結果",
+    "close": "關閉"
+  },
+  "actions": {
+    "more": "較多"
+  },
+  "filter": {
+    "clear": "清除"
+  },
+  "filterDate": {
+    "today": "今天",
+    "yesterday": "昨天",
+    "last7": "最近 7 天",
+    "last30": "最近 30 天",
+    "never": "從不",
+    "custom": "自訂範圍...",
+    "title": {
+      "created": "建立日期",
+      "modified": "修改日期",
+      "joined": "加入日期",
+      "lastLogin": "上次登入時間"
+    },
+    "created": "建立日期: ${date}",
+    "modified": "修改日期: ${date}",
+    "joined": "已加入: ${date}",
+    "lastLogin": "上次登入時間: ${date}"
+  },
+  "pagination": {
+    "next": "下一頁",
+    "prev": "上一頁"
+  },
+  "search": {
+    "label": "搜尋群組",
+    "search": "搜尋",
+    "clear": "清除搜尋詞彙",
+    "wildcard": "不支援萬用字元搜尋"
+  },
+  "sort": {
+    "sortDirection": "排序方向",
+    "title": "標題",
+    "relevance": "相關度",
+    "modified": "修改日期",
+    "deleted": "刪除日期",
+    "created": "建立日期",
+    "added": "新增日期",
+    "size": "大小",
+    "owner": "擁有者",
+    "sizeAsc": "最小到最大",
+    "sizeDesc": "最大到最小",
+    "numviews": "檢視計數",
+    "numAsc": "最小到最大",
+    "numDesc": "最大到最小",
+    "alphabeticalAsc": "字母",
+    "alphabeticalDesc": "反向字母",
+    "recentAsc": "最少結果",
+    "recentDesc": "最新",
+    "sort": "排序",
+    "sortBy": "排序方式",
+    "sortByColon": "排序方式:",
+    "fullname": "名稱",
+    "username": "使用者名稱",
+    "name": "名稱",
+    "membertype": "群組角色",
+    "joined": "加入日期",
+    "lastlogin": "上次登入時間",
+    "dataset": "資料集",
+    "mfaenabled": "多重身份驗證",
+    "defaultAsc": "遞增",
+    "defaultDesc": "降冪"
+  },
+  "topBar": {
+    "filter": "篩選器"
+  },
+  "filterStatus": {
+    "clear": "清除",
+    "filters": "篩檢程式:",
+    "additional": "其他作用中篩選器",
+    "clearAllFilters": "清除所有篩選器"
+  }
+}

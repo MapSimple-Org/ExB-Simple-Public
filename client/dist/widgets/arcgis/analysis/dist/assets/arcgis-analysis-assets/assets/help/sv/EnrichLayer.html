@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>Verktyget Berika lager berikar indatageoobjekten med demografi och landskapsdata.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputLayer">
+        <div>
+            <p>Punkt-, linje- eller polygongeoobjekten som berikas med ytterligare data.
+            </p>
+            <p class="toolPaneOnly">Antalet geoobjekt beror p&aring; ytterligare faktorer som filtreringskriterier och analysutbredningen.
+            </p>
+        </div>
+    </div>
+    <div id="analysisVariables">
+        <div>
+            <p>Variablerna som l&auml;ggs till som attribut i indatageoobjekten.
+            </p>
+        </div>
+    </div>
+    <div id="bufferType">
+        <div>
+            
+            <p class="toolPaneOnly">Metoden som ska anv&auml;ndas f&ouml;r att skapa begr&auml;nsningsomr&aring;den runt indatapunkten eller linjegeoobjekten. Metoden kan vara ett rak linje-avst&aring;nd eller ett f&auml;rdl&auml;ge. Hela omr&aring;det runt varje geoobjekt berikas.
+            </p> 
+            <p class="modelBuilderOnly">Metoden som ska anv&auml;ndas f&ouml;r att skapa begr&auml;nsningsomr&aring;den runt indatapunkten eller linjegeoobjekten. F&ouml;r n&auml;rvarande &auml;r rak linje-avst&aring;nd den enda metoden som st&ouml;ds f&ouml;r modeller. Hela omr&aring;det runt varje geoobjekt berikas.
+            </p>
+        </div>
+    </div>
+    <div id="distance">
+        <div>
+            <p>Ett numeriskt v&auml;rde som anger avst&aring;nd eller tid som det berikade omr&aring;det ut&ouml;kas runt varje indatgeoobjekt.
+            </p>
+        </div>
+    </div>
+    <div id="units">
+        <div>
+            <p>Enheterna som anv&auml;nds f&ouml;r att ange avst&aring;nd eller tid som det berikade omr&aring;det ut&ouml;kas runt varje indatgeoobjekt.
+            </p>
+        </div>
+    </div>
+    <div id="returnBoundaries">
+        <div>
+            <p>Anger om utdatalagret ska inneh&aring;lla polygongeoobjekt definierade av inst&auml;llningar f&ouml;r  <b>Berikningsomr&aring;den</b> (markerat) eller indatageoobjekt (omarkerat).
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>Namnet p&aring; lagret som skapas och l&auml;ggs till i kartan.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>Namnet p&aring; mappen i  <b>Mitt inneh&aring;ll</b> d&auml;r resultatet ska sparas.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

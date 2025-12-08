@@ -1,0 +1,17 @@
+{
+  "any": "Katerokoli",
+  "count": "Število",
+  "field": "Polje",
+  "fieldLoadingErrorText": "Polj ni mogoče naložiti.",
+  "first": "Prvi",
+  "isRequired": "Ta parameter je obvezen.",
+  "last": "Zadnji",
+  "max": "Maks.",
+  "mean": "Srednja vrednost",
+  "min": "Min.",
+  "selectAll": "Izberi vse",
+  "standardDeviation": "Standardni odklon",
+  "statistic": "Statistika",
+  "statisticNotSelected": "Zahtevan je vsaj en tip statistike za vsako polje.",
+  "sum": "Vsota"
+}

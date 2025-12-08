@@ -1,0 +1,9 @@
+{
+  "disconnect": "Putuskan koneksi dari variabel",
+  "overwriteTo": "Timpa layer: <span style='font-weight: var(--calcite-font-weight-normal)'>${val}</span>",
+  "resultType": "Jenis hasil: <span style='font-weight: var(--calcite-font-weight-normal)'>${val}</span>",
+  "saveTo": "Nama output: <span style='font-weight: var(--calcite-font-weight-normal)'>${val}</span>",
+  "variableLabel": "Label: <span style='font-weight: var(--calcite-font-weight-normal)'>${val}</span>",
+  "variableNode": "Node variabel",
+  "variableVal": "Nilai: <span style='font-weight: var(--calcite-font-weight-normal)'>${val}</span>"
+}

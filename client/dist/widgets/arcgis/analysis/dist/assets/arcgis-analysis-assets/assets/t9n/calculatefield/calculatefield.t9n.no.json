@@ -1,0 +1,13 @@
+{
+  "fieldCalcExpression": "Feltberegningsuttrykk",
+  "fieldCalculationGroupLabel": "Feltberegning",
+  "fieldPlaceholderText": "Klikk for å velge eller opprette et felt",
+  "fieldToCalculate": "Felt som skal beregnes",
+  "inputDatasetGroupLabel": "Inndata",
+  "itemProperties": {
+    "description": "Resultat generert ved å kjøre verktøyet Beregn felt i ModelBuilder.",
+    "snippet": "Geoobjektlag generert fra Beregn felt"
+  },
+  "noFieldSpecified": "Angi et felt som skal beregne for å opprette et uttrykk.",
+  "whereClause": "Bruk beregning bare på visse poster"
+}

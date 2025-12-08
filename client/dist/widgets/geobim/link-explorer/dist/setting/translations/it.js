@@ -1,0 +1,1 @@
+System.register([],function(e){return{execute:function(){e({settingsLabel:"Impostazioni Explorer collegamento",selectModelViewer:"Selezionare un widget Visualizzatore documenti per visualizzare i documenti collegati."})}}});

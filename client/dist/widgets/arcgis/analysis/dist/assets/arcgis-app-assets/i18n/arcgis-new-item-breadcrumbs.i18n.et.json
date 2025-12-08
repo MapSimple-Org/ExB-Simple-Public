@@ -1,0 +1,12 @@
+{
+  "apiCredentialType": "Mandaadi tüüp: API-võti",
+  "oauthCredentialType": "Mandaadi tüüp: OAuth 2.0",
+  "itemAccess": "Juurdepääs üksusele",
+  "page": "Lehekülg: ${page}",
+  "currentPage": "Praegune lehekülg: ${page}",
+  "privileges": "Õigused",
+  "itemDetails": "Üksuse üksikasjad",
+  "settings": "Seaded",
+  "serviceScope": "Teenuse ulatus",
+  "summary": "Kokkuvõte"
+}

@@ -1,0 +1,17 @@
+{
+  "any": "Akékoľvek",
+  "count": "Počet",
+  "field": "Pole",
+  "fieldLoadingErrorText": "Nie je možné načítať polia.",
+  "first": "Prvý",
+  "isRequired": "Tento parameter je povinný.",
+  "last": "Posledný",
+  "max": "Max",
+  "mean": "Priemer",
+  "min": "Min",
+  "selectAll": "Vybrať všetko",
+  "standardDeviation": "Štandardná odchýlka",
+  "statistic": "Štatistika",
+  "statisticNotSelected": "Pre každé pole sa vyžaduje aspoň jeden typ štatistiky.",
+  "sum": "Suma"
+}

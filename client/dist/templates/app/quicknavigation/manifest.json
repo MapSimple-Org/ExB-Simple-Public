@@ -1,0 +1,25 @@
+{
+  "name": "quicknavigation",
+  "type": "template",
+  "templateType": "app",
+  "label": "Quick navigation",
+  "description": "Quick navigation allows you to quickly switch between multiple views and bookmarks on a single page.",
+  "thumbnail": "thumbnail.png",
+  "order": 18,
+  "tags": [
+    "Map",
+    "View",
+    "Navigation",
+    "Section",
+    "Title",
+    "Bookmark"
+  ],
+  "categoriesTags": [
+    "Map centric",
+    "Fullscreen"
+  ],
+  "isMultiplePage": false,
+  "isMapAware": true,
+  "thumbnailWidth": 320,
+  "thumbnailHeight": 214
+}

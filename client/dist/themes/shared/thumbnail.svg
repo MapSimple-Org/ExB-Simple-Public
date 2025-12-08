@@ -1,0 +1,7 @@
+<svg width="228" height="140" viewBox="0 0 228 140" fill="none" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+<rect width="228" height="140" fill="var(--theme-primary)" opacity="0.1"  />
+<path d="M0 120.5L228 100V140H0L0 120.5Z" fill="var(--theme-primary)"/>
+<path opacity="0.6" d="M0 94.5L83 113L0 120.5L0 94.5Z" fill="var(--theme-primary)"/>
+<path d="M0 0H228L228 15.5L0 37V0Z" fill="var(--theme-secondary)"/>
+<path opacity="0.6" d="M228 41L145 22.5L228 15L228 41Z" fill="var(--theme-secondary)"/>
+</svg>

@@ -1,0 +1,26 @@
+{
+  "itemsList": [{
+      "uuid": "0",
+      "name": "ROTATE",
+      "isInUse": true,
+      "direction": "CCW",
+      "defaultSpeed": "default",
+
+      "targetMode": "POINT",
+      "rotationPauseTime": "2.0"
+    }, {
+      "uuid": "1",
+      "name": "PATH",
+      "isInUse": false,
+      "direction": "FORWARD",
+      "style": "CURVED",
+      "defaultSpeed": "default"
+    }, {
+      "uuid": "2",
+      "name": "ROUTE",
+      "isInUse": false,
+      "routes": []
+    }
+  ],
+  "layout": "HORIZONTAL"
+}

@@ -1,0 +1,1 @@
+System.register([],function(e){return{execute:function(){e({customizeLayer:"Prisp\xf4sobi\u0165 vrstvy",selectLayers:"Vyberte vrstvy",noDataSourceWarning:"Vybran\xfd Mapov\xfd widget neobsahuje webov\xfa mapu ani webov\xfa sc\xe9nu."})}}});

@@ -1,0 +1,10 @@
+{
+  "forceFlowLabel": "Forceer randcellen om naar buiten te stromen",
+  "inputLayersGroupText": "Kies de invoer oppervlakteraster en optioneel de depressiedata en het gewichtsraster.",
+  "itemProperties": {
+    "description": "Uitvoer die wordt gegenereerd door het uitvoeren van de tool Stroom als raster afleiden",
+    "snippet": "Uitvoer die door Stroom als raster afleiden is gegenereerd"
+  },
+  "outputStreamRasterLabel": "Naam raster uitvoerstroom",
+  "streamSettingsGroupText": "Geef op wat de accumulatiedrempel is, welke stroomaanduidingsmethode wordt gebruikt en hoe stroming wordt afgehandeld aan de rand van het invoer-oppervlakteraster."
+}

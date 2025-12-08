@@ -1,0 +1,22 @@
+{
+  "value": "Hodnota",
+  "classname": "Názov triedy",
+  "color": "Farba",
+  "raster": "Raster",
+  "tableType": "Typ tabuľky",
+  "manual": "Manuálne",
+  "external": "Externé",
+  "browseTable": "Prehľadať tabuľku",
+  "browseTableFrom": "Prehľadávať tabuľku z",
+  "file": "Súbor",
+  "dbfFile": "Súbor DBF",
+  "layer": "Vrstva",
+  "unsupportedDataType": "Nepodporovaný typ",
+  "failedToGetTableFromLayer": "Nepodarilo sa získať tabuľku z vrstvy.",
+  "generate": "Generovať tabuľku",
+  "minValue": "Minimálna hodnota",
+  "maxValue": "Maximálna hodnota",
+  "classBaseName": "Názov základnej triedy",
+  "colorscheme": "Schéma farieb",
+  "defaultClassName": "Označenie_"
+}

@@ -1,0 +1,22 @@
+{
+  "value": "값",
+  "classname": "ClassName",
+  "color": "색상",
+  "raster": "래스터",
+  "tableType": "테이블 유형",
+  "manual": "수동",
+  "external": "외부",
+  "browseTable": "테이블 찾아보기",
+  "browseTableFrom": "다음에서 테이블 찾아보기",
+  "file": "파일",
+  "dbfFile": "DBF 파일",
+  "layer": "레이어",
+  "unsupportedDataType": "지원되지 않는 유형",
+  "failedToGetTableFromLayer": "레이어에서 테이블을 가져오지 못했습니다.",
+  "generate": "테이블 생성",
+  "minValue": "최소 값",
+  "maxValue": "최대 값",
+  "classBaseName": "클래스 기본 이름",
+  "colorscheme": "색 구성표",
+  "defaultClassName": "Label_"
+}

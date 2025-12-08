@@ -1,0 +1,1 @@
+System.register([],function(e){return{execute:function(){e({customizeLayer:"Piel\u0101got sl\u0101\u0146us",selectLayers:"Izv\u0113l\u0113ties sl\u0101\u0146us",noDataSourceWarning:"Atlas\u012btais kartes logr\u012bks nesatur t\u012bmek\u013ca karti vai t\u012bmek\u013ca sc\u0113nu."})}}});

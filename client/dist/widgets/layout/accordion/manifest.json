@@ -1,0 +1,87 @@
+{
+  "name": "accordion",
+  "label": "Accordion",
+  "type": "widget",
+  "widgetType": "LAYOUT",
+  "version": "1.19.0",
+  "exbVersion": "1.19.0",
+  "author": "Esri R&D Center Beijing",
+  "description": "This is the widget used in developer guide",
+  "copyright": "",
+  "license": "http://www.apache.org/licenses/LICENSE-2.0",
+  "properties": {
+    "supportAutoSize": true,
+    "forbidOneByOneEffect": true,
+    "hasBuilderSupportModule": true
+  },
+  "layouts": [
+    {
+      "name": "DEFAULT",
+      "label": "Default",
+      "type": "ACCORDION"
+    }
+  ],
+  "extensions": [
+    {
+      "name": "quick-style",
+      "point": "CONTEXT_TOOL",
+      "uri": "tools/quick-style"
+    },
+    {
+      "name": "add-widget",
+      "point": "CONTEXT_TOOL",
+      "uri": "tools/add-widget"
+    },
+    {
+      "name": "appConfigOperations",
+      "point": "APP_CONFIG_OPERATIONS",
+      "uri": "tools/app-config-operations"
+    }
+  ],
+  "defaultSize": {
+    "width": 300,
+    "height": 500
+  },
+  "translatedLocales": [
+    "en",
+    "ar",
+    "bg",
+    "bs",
+    "ca",
+    "cs",
+    "da",
+    "de",
+    "el",
+    "es",
+    "et",
+    "fi",
+    "fr",
+    "he",
+    "hr",
+    "hu",
+    "id",
+    "it",
+    "ja",
+    "ko",
+    "lt",
+    "lv",
+    "no",
+    "nl",
+    "pl",
+    "pt-br",
+    "pt-pt",
+    "ro",
+    "ru",
+    "sk",
+    "sl",
+    "sr",
+    "sv",
+    "th",
+    "tr",
+    "zh-cn",
+    "uk",
+    "vi",
+    "zh-hk",
+    "zh-tw"
+  ]
+}

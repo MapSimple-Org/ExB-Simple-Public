@@ -1,0 +1,6 @@
+{
+  "header": "Erneut starten, ohne zu speichern?",
+  "content": "Nicht gespeicherte Änderungen in \"${rftTitle}\". Wenn Sie mit einer neuen Vorlage beginnen, gehen diese Änderungen verloren.",
+  "cancel": "Abbrechen",
+  "continue": "Weiter"
+}

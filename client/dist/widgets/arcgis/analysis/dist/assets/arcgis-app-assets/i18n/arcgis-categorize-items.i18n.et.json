@@ -1,0 +1,11 @@
+{
+  "modalTitle": "Üksuste kategoriseerimine",
+  "save": "Salvesta",
+  "cancel": "Loobu",
+  "loadingText": "Laadimine...",
+  "assignCategory": "Kategooria määramine",
+  "errorMessage": "Midagi läks valesti. Proovige hiljem uuesti.",
+  "limited": "Üksused on piiratud 20 kategooriaga. Enne uue kategooria lisamist eemaldage mõni kategooria.",
+  "undo": "Võta tagasi",
+  "redo": "Tee uuesti"
+}

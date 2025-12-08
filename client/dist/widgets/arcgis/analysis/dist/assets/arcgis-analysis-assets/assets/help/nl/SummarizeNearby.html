@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>De tool Nabij samenvatten van berekent statistieken voor objecten binnen een gespecificeerde afstand van andere objecten. De afstand kan worden berekend in een rechte lijn of met een reismodus.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="summaryLayer">
+        <div>
+            <p>De laag die zal worden samengevat binnen een afstand van de nabijgelegen laag.
+            </p>
+            <p class="toolPaneOnly">Het aantal objecten is afhankelijk van aanvullende factoren als de filtercriteria en de analyse-extent.
+            </p>
+        </div>
+    </div>
+    <div id="sumNearbyLayer">
+        <div>
+            <p>De punt-, lijn- of polygoonlaag die zal worden gebruikt als startlocatie waaromheen grensvlakken worden gecre&euml;erd om nabijgelegen objecten samen te vatten.
+            </p>
+            <p class="toolPaneOnly">Het aantal objecten is afhankelijk van aanvullende factoren als de filtercriteria en de analyse-extent.
+            </p>
+        </div>
+    </div>
+    <div id="nearType">
+        <div>
+            
+            <p class="toolPaneOnly">De methode die zal worden gebruikt om de grensgebieden te maken. De methode kan een afstand in rechte lijn zijn of een reismethode.
+            </p> 
+            <p class="modelBuilderOnly">De methode die zal worden gebruikt om de grensgebieden te maken. Momenteel is afstand in rechte lijn de enige methode die voor modellen wordt ondersteund.
+            </p>
+        </div>
+    </div>
+    <div id="distances">
+        <div>
+            <p>De afstand of tijd die zal worden gebruikt om grensgebieden te cre&euml;ren. Als meerdere waarden worden toegevoegd, wordt elke waarde gebruikt om de grensgebieden voor alle ingevoerde objecten te berekenen.
+            </p>
+        </div>
+    </div>
+    <div id="units">
+        <div>
+            <p>De eenheden die worden gebruikt om de afstand of tijd te specificeren.
+            </p>
+        </div>
+    </div>
+    <div id="returnBoundaries">
+        <div>
+            <p>Specificeert of de resultatenlaag de grensgebieden (aangevinkt) moet zijn of dat het dezelfde geometrie moet hebben als de ingevoerde nabije laag (niet aangevinkt)
+            </p>
+        </div>
+    </div>
+    <div id="sumShape">
+        <div>
+            <p>Specificeert of de totale grootte zal worden berekend van de objecten die in elk grensgebied zijn samengevat. Voor lijnen wordt de totale lengte berekend. Voor polygonen wordt het totale oppervlak berekend.
+            </p>
+        </div>
+    </div>
+    <div id="shapeUnits">
+        <div>
+            <p>De eenheden die zullen worden gebruikt om de totale omvang van de samengevatte objecten te berekenen.
+            </p>
+        </div>
+    </div>
+    <div id="summaryFields">
+        <div>
+            <p>Het aantal datumvelden uit de invoerlijst dat zal worden samengevat en de statistieken die voor elke veld zullen worden berekend.
+            </p>
+        </div>
+    </div>
+    <div id="groupByField">
+        <div>
+            <p>Het veld uit de invoerlaag dat zal worden gebruikt om de gegevens in afzonderlijke groepen te scheiden voor statistische berekeningen.
+            </p>
+        </div>
+    </div>
+    <div id="minorityMajority">
+        <div>
+            <p>Specificeert of de minderheids- (minst dominante) en meerderheids- (meest dominante) groepen binnen elk overzichtsgebied moeten worden berekend.
+            </p>
+        </div>
+    </div>
+    <div id="percentShape">
+        <div>
+            <p>Specificeert of het percentage zal worden berekend van de samengevatte objecten die bij elke groep binnen elke grens horen.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>De naam van de laag die wordt aangemaakt en toegevoegd aan de kaart.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>De naam van de map in  <b>Mijn content</b> waarin de resultaten worden opgeslagen.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

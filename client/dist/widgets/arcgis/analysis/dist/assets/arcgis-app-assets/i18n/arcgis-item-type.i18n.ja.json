@@ -1,0 +1,27 @@
+{
+  "hosted": "ホスト",
+  "hostedView": "ホスト、ビュー",
+  "hostedPhotos": "ホスト、写真",
+  "hostedCollection": "ホスト、コレクション",
+  "hostedMultidimensional": "ホスト、多次元",
+  "hostedCollectionMultidimensional": "ホスト、コレクション、多次元",
+  "collectionMultidimensional": "コレクション、多次元",
+  "multidimensional": "多次元",
+  "collection": "コレクション",
+  "photoLocations": "写真",
+  "locatorView": "ビュー",
+  "utilityNetwork": "ユーティリティーネットワーク",
+  "Integrated Mesh": "3D メッシュ",
+  "3D Object": "3D オブジェクト",
+  "Point": "ポイント",
+  "Point Cloud": "点群",
+  "Building Scene Layer": "ビルディング シーン レイヤー",
+  "Voxel Scene Layer": "ボクセル シーン レイヤー",
+  "dataStore": {
+    "bigdata": "ビッグ データ ファイル共有",
+    "cloud": "クラウド",
+    "cloudStorage": "クラウド ストレージ",
+    "database": "データベース",
+    "folder": "フォルダー"
+  }
+}

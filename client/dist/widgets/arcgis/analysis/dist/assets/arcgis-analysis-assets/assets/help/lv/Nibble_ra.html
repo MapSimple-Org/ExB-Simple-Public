@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>Ar atdarinā&scaron;anas rīku rastra &scaron;ūnas, kas atbilst maskai, tiek aizstātas ar tuvāko &scaron;ūnu vērtībām.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputRaster">
+        <div>
+            <p>Ievades rastrs ar maskētiem novietojumiem, kas tiks aizstāts ar tuvākā kaimiņa vērtību.
+            </p>
+        </div>
+    </div>
+    <div id="inputMaskRaster">
+        <div>
+            <p>Maskas rastrs, kas identificē novietojumus ievades rastrā, kas tiks aizstāti. Tiek uzskatīts, ka &scaron;ūnas ar NoData vērtību atrodas maskas zonā.
+            </p>
+        </div>
+    </div>
+    <div id="inputZoneRaster">
+        <div>
+            <p>Ievades zonas rastrs. Katrai zonai ievades &scaron;ūnas, kas atrodas maskā, tiks aizstātas tikai ar tuvākajām &scaron;ūnu vērtībām tajā pa&scaron;ā zonā.
+            </p>
+        </div>
+    </div>
+    <div id="nibbleValues">
+        <div>
+            <p>Norāda, vai ievades rastra NoData &scaron;ūnas var aizstāt &scaron;ūnas maskētajās zonās, ja tās ir tuvākais kaimiņ&scaron;.
+            </p>
+            <p>Ja atzīmēts, ievades rastra NoData &scaron;ūnas var aizstāt &scaron;ūnas maskētajā apgabalā. Ja opcija nav atzīmēta, maskētajā apgabalā &scaron;ūnas var aizstāt tikai derīgas ievades rastra &scaron;ūnas.
+            </p>
+        </div>
+    </div>
+    <div id="nibbleNodata">
+        <div>
+            <p>Norāda, vai NoData &scaron;ūnas maskētajā apgabalā tiks saglabātas vai aizstātas.
+            </p>
+            <p>Ja atzīmēts, visas NoData &scaron;ūnas maskētajā apgabalā tiks saglabātas izvadē. Ja opcija nav atzīmēta, NoData &scaron;ūnas maskētajā apgabalā tiks aizstātas ar tuvākā kaimiņa vērtību, kas atrodas ārpus maskētā apgabala.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>Aizstātā rastra slāņa nosaukums, kas tiks izveidots un pievienots kartei.
+            </p>
+        </div>
+    </div>
+    <div id="resultType">
+        <div>
+            <p>Izveidotās izvades veids. Izvade var būt mozaīkas attēlu slānis vai dinamisks attēlu slānis.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>Mapes nosaukums sadaļā  <b>Mans saturs</b>, kurā tiks saglabāti rezultāti.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

@@ -1,0 +1,7 @@
+{
+  "header": "Izvēlēties mainīgo",
+  "noFound": "Saderīgi mainīgie netika atrasti",
+  "search": "Meklēt mainīgos",
+  "variableLabel": "Kartes teksts: <span style='font-weight: var(--calcite-font-weight-normal)'>${val}</span>",
+  "variableVal": "Vērtība: <span style='font-weight: var(--calcite-font-weight-normal)'>${val}</span>"
+}

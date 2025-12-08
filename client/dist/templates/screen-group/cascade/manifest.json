@@ -1,0 +1,12 @@
+{
+  "name": "cascade",
+  "type": "template",
+  "templateType": "screen-group",
+  "label": "Cascade",
+  "thumbnail": "thumbnail.png",
+  "order": 1,
+  "tags": [],
+  "categoriesTags": [],
+  "thumbnailWidth": 400,
+  "thumbnailHeight": 240
+}

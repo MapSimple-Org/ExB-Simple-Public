@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>L'eina Deriva el curs d'aigua com a r&agrave;ster genera un r&agrave;ster de curs d'aigua des d'un r&agrave;ster de superf&iacute;cie d'entrada sense necessitat pr&egrave;via d'emplenament de depressi&oacute; ni d'embornal.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputSurfaceRaster">
+        <div>
+            <p>R&agrave;ster d'elevaci&oacute; que s'utilitzar&agrave; per al c&agrave;lcul.
+            </p>
+        </div>
+    </div>
+    <div id="inputDepressionsData">
+        <div>
+            <p>Entrada que defineix les ubicacions de depressions o embornals reals, on l'aigua pot entrar per&ograve; d'on no pot sortir.
+            </p>
+            <p class="toolPaneOnly">En el cas d'entrades d'entitats, el recompte dep&egrave;n d'altres factors com ara els criteris de filtratge i l'extensi&oacute; d'an&agrave;lisi.
+            </p>
+        </div>
+    </div>
+    <div id="inputWeightRaster">
+        <div>
+            <p>Capa r&agrave;ster que defineix la fracci&oacute; de flux que contribueix a l'acumulaci&oacute; de flux a cada cel&middot;la.
+            </p>
+        </div>
+    </div>
+    <div id="accumulationThreshold">
+        <div>
+            <p>Llindar per determinar si una cel&middot;la especificada forma part d'un curs d'aigua en termes de l'&agrave;rea total que flueix a aquesta cel&middot;la.
+            </p>
+        </div>
+    </div>
+    <div id="streamDesignationMethod">
+        <div>
+            <p>Especifica si els segments de corrent d'aigua de la sortida tindran un valor constant o valors &uacute;nics, o si estaran ordenats.
+            </p>
+        </div>
+    </div>
+    <div id="forceFlow">
+        <div>
+            <p>Especifica si el flux de les cel&middot;les de vores seguir&agrave; les regles de flux normals o sempre fluir&agrave; cap enfora.
+            </p>
+            <p>Si aquesta opci&oacute; no est&agrave; seleccionada, el flux es dirigir&agrave; cap a la cel&middot;la interior amb el pendent m&eacute;s pronunciat en el valor z. Malgrat tot, si el pendent &eacute;s menor o igual a zero, la cel&middot;la fluir&agrave; cap enfora des del r&agrave;ster de superf&iacute;cie. Si est&agrave; seleccionada, la direcci&oacute; del flux ser&agrave; cap enfora des del r&agrave;ster de superf&iacute;cie.
+            </p>
+        </div>
+    </div>
+    <div id="outputStreamRasterName">
+        <div>
+            <p>Nom de la capa r&agrave;ster de curs d'aigua que es crear&agrave; i s'afegir&agrave; al mapa.
+            </p>
+        </div>
+    </div>
+    <div id="resultType">
+        <div>
+            <p>Tipus de sortida que es crear&agrave;. La sortida pot ser una capa d'imatges en mosaic o una capa d'imatges din&agrave;miques.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>Nom de la carpeta d' <b>El meu contingut</b> on es desaran els resultats.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

@@ -1,0 +1,55 @@
+{
+  "beginningOnLabel": "Začína o",
+  "repeatTypeLabel": "Typ opakovania",
+  "endingOnTypeLabel": "Končí o",
+  "endingOnDateLabel": "Dátum ukončenia",
+  "endingOnCountLabel": "Počet",
+  "endingOnCountPlaceholder": "napríklad: 1, 10, 30",
+  "dailyRepeatIntervalLabel": "Interval opakovania",
+  "dailyTimeLabel": "Čas",
+  "weeklyDaysOfWeekLabel": "Deň v týždni",
+  "weeklyTimeLabel": "Čas",
+  "monthlyDayOfMonthLabel": "Deň v mesiaci",
+  "monthlyDayOfMonthPlaceholder": "napríklad 1 - 31",
+  "monthlyRepeatIntervalLabel": "Interval opakovania",
+  "monthlyTimeLabel": "Čas",
+  "repeatTypeOptions": {
+    "day": "Deň",
+    "week": "Týždeň",
+    "month": "Mesiac"
+  },
+  "endingOnType": {
+    "never": "Nikdy",
+    "date": "Dátum",
+    "count": "Zapnuté"
+  },
+  "dailyRepeatInterval": {
+    "everyDay": "Každý deň",
+    "everyOtherDay": "Každý druhý deň",
+    "everyThreeDays": "Každé tri dni",
+    "everyFourDays": "Každé štyri dni",
+    "everyFiveDays": "Každých päť dní",
+    "everySixDays": "Každých šesť dní",
+    "everySevenDays": "Každých sedem dní",
+    "everyFourteenDays": "Každých štrnásť dní"
+  },
+  "weekDays": {
+    "all": "Všetko",
+    "allWeekdays": "Všetky pracovné dni",
+    "sunday": "Nedeľa",
+    "monday": "Pondelok",
+    "tuesday": "Utorok",
+    "wednesday": "Streda",
+    "thursday": "Štvrtok",
+    "friday": "Piatok",
+    "saturday": "Sobota"
+  },
+  "monthlyRepeatInterval": {
+    "everyMonth": "Každý mesiac",
+    "everyTwoMonths": "Každé dva mesiace",
+    "everyThreeMonths": "Každé tri mesiace",
+    "everyFourMonths": "Každé štyri mesiace",
+    "everyFiveMonths": "Každých päť mesiacov",
+    "everySixMonths": "Každých šesť mesiacov"
+  }
+}

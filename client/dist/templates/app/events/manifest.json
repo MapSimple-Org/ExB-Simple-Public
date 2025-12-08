@@ -1,0 +1,21 @@
+{
+  "name": "events",
+  "type": "template",
+  "templateType": "app",
+  "label": "Events",
+  "description": "Events is a scrolling template that uses Card widgets and the hover feature to make a zoom hover effect.",
+  "thumbnail": "thumbnail.png",
+  "order": 59,
+  "tags": [
+    "Gallery",
+    "Card"
+  ],
+  "categoriesTags": [
+    "Web page",
+    "Scrolling"
+  ],
+  "isMultiplePage": false,
+  "isMapAware": false,
+  "thumbnailWidth": 320,
+  "thumbnailHeight": 214
+}

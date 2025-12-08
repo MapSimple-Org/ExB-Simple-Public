@@ -1,0 +1,1 @@
+System.register([],function(t){return{execute:function(){t({_widgetLabel:"Sp\xe5rning av infrastruktursn\xe4tverk",_widgetDescription:"En widget f\xf6r att sp\xe5ra ett ArcGIS Utility Network",_action_filter_label:"Filter"})}}});

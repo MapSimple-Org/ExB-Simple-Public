@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>เครื่องมือสรุปใกล้เคียงจะคำนวณสถิติสำหรับฟีเจอร์ที่อยู่ภายในระยะทางที่กำหนดของฟีเจอร์อื่นๆ สามารถคำนวณระยะทางได้โดยใช้ระยะทางเส้นตรงหรือโหมดการเดินทาง
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="summaryLayer">
+        <div>
+            <p>ชั้นข้อมูลที่จะสรุปภายในระยะทางของชั้นข้อมูลใกล้เคียง
+            </p>
+            <p class="toolPaneOnly">จำนวนของฟีเจอร์จะขึ้นอยู่กับปัจจัยเพิ่มเติม อาทิ เกณฑ์การกรองและขอบเขตการวิเคราะห์
+            </p>
+        </div>
+    </div>
+    <div id="sumNearbyLayer">
+        <div>
+            <p>ชั้นข้อมูลจุด เส้น หรือโพลีกอนที่จะใช้เป็นตำแหน่งเริ่มต้นรอบๆ พื้นที่ขอบเขต ซึ่งจะถูกสร้างขึ้นเพื่อสรุปฟีเจอร์ใกล้เคียง
+            </p>
+            <p class="toolPaneOnly">จำนวนของฟีเจอร์จะขึ้นอยู่กับปัจจัยเพิ่มเติม อาทิ เกณฑ์การกรองและขอบเขตการวิเคราะห์
+            </p>
+        </div>
+    </div>
+    <div id="nearType">
+        <div>
+            
+            <p class="toolPaneOnly">วิธีการที่จะใช้ในการสร้างพื้นที่ขอบเขต วิธีการสามารถเป็นระยะทางเส้นตรงหรือโหมดการเดินทางก็ได้
+            </p> 
+            <p class="modelBuilderOnly">วิธีการที่จะใช้ในการสร้างพื้นที่ขอบเขต ในปัจจุบัน ระยะทางเส้นตรงเป็นวิธีเดียวที่ได้รับการรองรับสำหรับแบบจำลอง
+            </p>
+        </div>
+    </div>
+    <div id="distances">
+        <div>
+            <p>ระยะทางหรือเวลาที่จะใช้ในการสร้างพื้นที่ขอบเขต หากมีการเพิ่มหลายค่า แต่ละค่าจะถูกใช้เพื่อคำนวณพื้นที่ขอบเขตสำหรับฟีเจอร์อินพุททั้งหมด
+            </p>
+        </div>
+    </div>
+    <div id="units">
+        <div>
+            <p>หน่วยที่จะใช้เพื่อระบุระยะทางหรือเวลา
+            </p>
+        </div>
+    </div>
+    <div id="returnBoundaries">
+        <div>
+            <p>ระบุว่าชั้นข้อมูลผลลัพธ์จะเป็นพื้นที่ขอบเขต (เลือก) หรือเรขาคณิตเดียวกันกับชั้นข้อมูลใกล้เคียงอินพุท (ไม่เลือก)
+            </p>
+        </div>
+    </div>
+    <div id="sumShape">
+        <div>
+            <p>ระบุว่าจะคำนวณขนาดรวมของฟีเจอร์ที่สรุปภายในแต่ละพื้นที่ขอบเขตหรือไม่ สำหรับเส้น จะคำนวณความยาวรวม สำหรับโพลีกอน จะคำนวณพื้นที่รวม
+            </p>
+        </div>
+    </div>
+    <div id="shapeUnits">
+        <div>
+            <p>หน่วยที่จะใช้เพื่อคำนวณขนาดรวมของฟีเจอร์ที่สรุป
+            </p>
+        </div>
+    </div>
+    <div id="summaryFields">
+        <div>
+            <p>ฟิลด์ตัวเลขหรือวันที่จากชั้นข้อมูลอินพุทที่จะทำการสรุป และสถิติที่จะทำการคำนวณสำหรับแต่ละฟิลด์
+            </p>
+        </div>
+    </div>
+    <div id="groupByField">
+        <div>
+            <p>ฟิลด์จากชั้นข้อมูลอินพุทที่จะถูกใช้ในการแยกข้อมูลเป็นกลุ่มเฉพาะสำหรับการคำนวณสถิติ
+            </p>
+        </div>
+    </div>
+    <div id="minorityMajority">
+        <div>
+            <p>ระบุว่าจะคำนวณกลุ่มส่วนน้อย (มีจำนวนค่าน้อยที่สุด) และส่วนมาก (มีจำนวนค่ามากที่สุด) ภายในแต่ละพื้นที่การสรุปหรือไม่
+            </p>
+        </div>
+    </div>
+    <div id="percentShape">
+        <div>
+            <p>ระบุว่าจะคำนวณเปอร์เซ็นต์ของฟีเจอร์ผลสรุปที่เป็นส่วนหนึ่งของแต่ละกลุ่มภายในแต่ละขอบเขตหรือไม่
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>ชื่อของชั้นข้อมูลที่จะสร้างและเพิ่มลงในแผนที่
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>ชื่อของโฟลเดอร์ใน  <b>เนื้อหาของฉัน</b> ที่จะทำการบันทึกผลลัพธ์
+            </p>
+        </div>
+    </div>
+</div>
+</html>

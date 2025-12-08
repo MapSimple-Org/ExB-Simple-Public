@@ -1,0 +1,89 @@
+{
+  "browser": {
+    "refineContent": "Прецизиране на съдържание",
+    "filters": "Филтри",
+    "pageRange": "${start}-${end}, общо: ${total}",
+    "pageRangeAria": "${start}-${end}, общо елементи: ${total}",
+    "pageRangeWithRecycleBin": "${start}-${end}, общо: ${total} (Общ размер: ${recycleBinSize})",
+    "pageRangeAriaWithRecycleBin": "${start}-${end}, общ брой елементи: ${total} (Общ размер: ${recycleBinSize})",
+    "totalSize": "Общ размер: ${totalSize}",
+    "loading": "Зареждане на резултати",
+    "close": "Затваряне"
+  },
+  "actions": {
+    "more": "Още"
+  },
+  "filter": {
+    "clear": "Изчистване"
+  },
+  "filterDate": {
+    "today": "Днес",
+    "yesterday": "Вчера",
+    "last7": "Последните 7 дни",
+    "last30": "Последните 30 дни",
+    "never": "Никога",
+    "custom": "Пресонализиран диапазон...",
+    "title": {
+      "created": "Дата на създаване",
+      "modified": "Дата на промяна",
+      "joined": "Дата на присъединяване",
+      "lastLogin": "Последно влизане"
+    },
+    "created": "Създадено: ${date}",
+    "modified": "Променени: ${date}",
+    "joined": "Присъединени: ${date}",
+    "lastLogin": "Последно вписване: ${date}"
+  },
+  "pagination": {
+    "next": "Следваща страница",
+    "prev": "Предишна страница"
+  },
+  "search": {
+    "label": "Групи за търсене",
+    "search": "Търсене",
+    "clear": "Изчистване на термин за търсене",
+    "wildcard": "Търсенето по заместващ символ не се поддържа."
+  },
+  "sort": {
+    "sortDirection": "Посока за сортиране",
+    "title": "Заглавие",
+    "relevance": "Свързаност",
+    "modified": "Дата на промяна",
+    "deleted": "Изтрита дата",
+    "created": "Дата на създаване",
+    "added": "Дата на добавяне",
+    "size": "Размер",
+    "owner": "Собственик",
+    "sizeAsc": "От най-малки към най-големи",
+    "sizeDesc": "От най-големи към най-малки",
+    "numviews": "Брой прегледи",
+    "numAsc": "От най - малко към най - много",
+    "numDesc": "От най - много към най - малко",
+    "alphabeticalAsc": "Азбучен ред",
+    "alphabeticalDesc": "По азбучен ред отзад напред",
+    "recentAsc": "Най - скорошни",
+    "recentDesc": "Най - скоро използвани",
+    "sort": "Сортиране",
+    "sortBy": "Сортиране по",
+    "sortByColon": "Сортирано по:",
+    "fullname": "Име",
+    "username": "Потребителско име",
+    "name": "Име",
+    "membertype": "Групова роля",
+    "joined": "Дата на присъединяване",
+    "lastlogin": "Последно влизане",
+    "dataset": "Набор от данни",
+    "mfaenabled": "Многофакторна автентификация",
+    "defaultAsc": "Възходящ",
+    "defaultDesc": "Низходящ"
+  },
+  "topBar": {
+    "filter": "Филтър"
+  },
+  "filterStatus": {
+    "clear": "Изчистване",
+    "filters": "Филтри:",
+    "additional": "Допълнителни активни филтри",
+    "clearAllFilters": "Изчистване на всички филтри"
+  }
+}

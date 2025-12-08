@@ -1,0 +1,12 @@
+{
+  "classField": "類別欄位",
+  "classesAsRowsLabel": "將類別作為輸出表中的列",
+  "inputClassRasterOrFeatures": "輸入類別點陣或圖徵",
+  "inputLayerGroupText": "選擇輸入區域和類別圖層來計算兩個資料集之間的跨表格區域。",
+  "itemProperties": {
+    "description": "執行表格區域分析工具所產生的輸出表。",
+    "snippet": "從表格區域產生的輸出表"
+  },
+  "tabulateAreaSettingsGroupLabel": "表格區域設定",
+  "tabulateAreaSettingsGroupText": "選擇如何處理輸出表中的類別。 指定要計算的儲存格大小。 "
+}

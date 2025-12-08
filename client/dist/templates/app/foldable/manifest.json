@@ -1,0 +1,32 @@
+{
+  "name": "foldable",
+  "type": "template",
+  "templateType": "app",
+  "label": "Foldable",
+  "description": "Foldable is a template with a simple, open interface that focuses on the map, featuring a header and a controller widget.",
+  "thumbnail": "thumbnail.png",
+  "order": 4,
+  "tags": [
+    "Map",
+    "Table",
+    "Legend",
+    "Search",
+    "Sidebar",
+    "Widget Controller",
+    "Basemap Gallery",
+    "Panel",
+    "Logo",
+    "Title",
+    "Map Layers",
+    "Splash window"
+  ],
+  "categoriesTags": [
+    "WAB classic",
+    "Map centric",
+    "Fullscreen"
+  ],
+  "isMultiplePage": false,
+  "isMapAware": true,
+  "thumbnailWidth": 320,
+  "thumbnailHeight": 214
+}

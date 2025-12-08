@@ -1,0 +1,13 @@
+{
+  "weightedOverlayTable": "Viktad överlagringstabell",
+  "id": "ID",
+  "layer": "Lager",
+  "field": "Fält",
+  "influence": "Inflytande",
+  "sumOfInfluence": "Summa av inflytande",
+  "value": "Värde",
+  "remapTable": "Ommappningstabell",
+  "scale": "Skala",
+  "scales": "Skalor",
+  "selectRaster": "Välj raster"
+}

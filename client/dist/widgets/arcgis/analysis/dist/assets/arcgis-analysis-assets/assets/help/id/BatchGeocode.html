@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>Alat Lokasi Geocode dari Tabel mengubah alamat atau tempat dari file atau tabel input menjadi koordinat.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputType">
+        <div>
+            <p>Menentukan apakah input akan berupa item Tabel (<b>Tabel yang di-hosting</b>), atau file <code>.csv</code> atau Excel (<b>CSV/Excel</b>).
+            </p>
+        </div>
+    </div>
+    <div id="inputFileItem">
+        <div>
+            <p>File input dengan alamat atau tempat yang akan di-geocode. Input harus berupa file  <code>.csv</code> atau Excel yang di-hosting. </p>
+        </div>
+    </div>
+    <div id="inputTable">
+        <div>
+            <p>Tabel input dengan alamat atau tempat yang akan di-geocode. Input harus berupa item Tabel yang di-hosting.
+            </p>
+            <p>Jumlah fitur ditampilkan di bawah nama tabel. Jumlah tersebut meliputi semua fitur dalam tabel, kecuali fitur yang sudah dihapus menggunakan filter.
+            </p>
+        </div>
+    </div>
+    <div id="geocodeServiceURL">
+        <div>
+            <p>Layanan penentu lokasi yang akan digunakan untuk geocoding. Jika layanan penentu lokasi yang ingin Anda gunakan tidak berada di menu tarik-turun, hubungi administrator agar layanan penentu lokasi ditambahkan sebagai layanan utilitas.
+            </p>
+        </div>
+    </div>
+    <div id="singleOrMultiFieldSwitch">
+        <div>
+            <p>Menentukan apakah input data terdapat dalam satu bidang atau beberapa bidang.
+            </p>
+        </div>
+    </div>
+    <div id="geocodeUIParameters">
+        <div>
+            <p>Bidang yang akan digunakan oleh penentu lokasi untuk menentukan lokasi data. Bidang tertentu diasumsikan ada dalam data, seperti alamat, kota, negara bagian, dan kode pos.
+            </p>
+        </div>
+    </div>
+    <div id="sourceCountry">
+        <div>
+            <p>Negara tempat data berada. Jika semua alamat berasal dari satu negara, pilih nama negara tersebut untuk memastikan hasil yang paling akurat. Jika tidak, kosongkan parameter ini.
+            </p>
+        </div>
+    </div>
+    <div id="outputFields">
+        <div>
+            <p>Menentukan bidang yang akan disertakan dalam kumpulan data output. Opsinya sebagai berikut:
+            </p>
+            <ul>
+                <li> <b>Semua</b>&mdash;Semua kolom output penentu lokasi yang tersedia akan disertakan dalam hasil geocode.
+                </li>
+                <li> <b>Minimal</b>&mdash;Subkumpulan bidang dari pencari lokasi serta bidang dari tabel input akan disertakan dalam hasil.
+                </li>
+                <li> <b>Hanya lokasi</b>&mdash;Bidang <i>Shape</i> dari penentu lokasi serta bidang dari tabel input akan disertakan dalam hasil.
+                </li>
+            </ul>
+            
+        </div>
+    </div>
+    <div id="outputType">
+        <div>
+            <p>Jenis output yang akan dibuat. Outputnya dapat berupa fitur layanan, file  <code>.csv</code>, atau file <code>.xls</code>.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>Nama layer atau file akan dibuat dalam  <b>Konten saya</b>.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>Nama folder di  <b>Konten saya</b> tempat penyimpanan hasil.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

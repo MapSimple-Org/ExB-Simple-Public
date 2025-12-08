@@ -1,0 +1,1 @@
+System.register([],function(t){return{execute:function(){t({_widgetLabel:"Diagram",dataEmptyTip:"Inga data hittades."})}}});

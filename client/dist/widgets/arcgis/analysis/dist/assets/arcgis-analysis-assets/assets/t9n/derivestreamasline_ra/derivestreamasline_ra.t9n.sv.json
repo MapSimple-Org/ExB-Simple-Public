@@ -1,0 +1,11 @@
+{
+  "all": "Alla",
+  "inputLayersGroupText": "Välj indataytrastret och eventuella sänkdata och viktraster.",
+  "itemProperties": {
+    "description": "Utdata har genererats vid körning av verktyget Härled ström som raster.",
+    "snippet": "Utdata har genererats från Härled ström som raster"
+  },
+  "outputStreamFeaturesLabel": "Namn på utdataströmgeoobjekt",
+  "simplifyLabel": "Förenkla geoobjekt",
+  "streamSettingsGroupText": "Ange ackumuleringströskel, strömbeteckningsmetod och om utdataströmlinjer ska utjämnas till enkla former."
+}

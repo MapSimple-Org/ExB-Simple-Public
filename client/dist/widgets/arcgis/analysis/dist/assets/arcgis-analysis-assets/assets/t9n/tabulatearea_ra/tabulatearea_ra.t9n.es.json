@@ -1,0 +1,12 @@
+{
+  "classField": "Campo de clases",
+  "classesAsRowsLabel": "Clases como filas en la tabla de salida",
+  "inputClassRasterOrFeatures": "Ráster o entidades de clase de entrada",
+  "inputLayerGroupText": "Elija la zona de entrada y la capa de clase para calcular las áreas de tabulación cruzada entre los dos datasets.",
+  "itemProperties": {
+    "description": "Tabla de salida generada al ejecutar la herramienta de análisis Tabular superficie.",
+    "snippet": "Tabla de salida generada desde el Tabular área."
+  },
+  "tabulateAreaSettingsGroupLabel": "Configuración de área tabulada",
+  "tabulateAreaSettingsGroupText": "Elija cómo gestionar las clases en la tabla de salida. Especifique el tamaño de celda a calcular. "
+}

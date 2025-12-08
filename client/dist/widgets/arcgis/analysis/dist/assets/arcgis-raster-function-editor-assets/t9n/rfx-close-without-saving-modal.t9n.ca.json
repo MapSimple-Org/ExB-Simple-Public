@@ -1,0 +1,7 @@
+{
+  "header": "Editor de funcions ràster",
+  "content": "Teniu canvis sense desar a \"${rftTitle}\". Si no els deseu, els canvis es perdran.",
+  "cancel": "Cancel·la",
+  "dontSave": "No ho desis",
+  "save": "Desa"
+}

@@ -1,0 +1,1 @@
+System.register([],function(e){return{execute:function(){e({_widgetLabel:"Mre\u017ea",widgetProperties:"Svojstva vid\u017eeta",widgetFunctions:"Funkcije vid\u017eeta",widgetName:"ime vid\u017eeta:",widgetProps:"svojstva vid\u017eeta:",tips:"Mre\u017ea"})}}});

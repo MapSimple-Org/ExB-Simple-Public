@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>Įrankis Rasti ta&scaron;kų sankaupas nustato ta&scaron;kinių elementų grupes aplinkiniame triuk&scaron;me pagal jų erdvinį pasiskirstymą.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="analysisLayer">
+        <div>
+            <p>Įvesties ta&scaron;kų sluoksnis, kuris bus grupuojamas į sankaupas pagal ta&scaron;kinių elementų erdvinį pasiskirstymą.
+            </p>
+        </div>
+    </div>
+    <div id="method">
+        <div>
+            <p>Būdas, kuris bus naudojamas sankaupoms identifikuoti.
+            </p>
+        </div>
+    </div>
+    <div id="minFeaturesCluster">
+        <div>
+            <p>Mažiausias ta&scaron;kinių elementų, kurie bus laikomi sankaupa, skaičius.
+            </p>
+        </div>
+    </div>
+    <div id="searchDistance">
+        <div>
+            <p>Nurodomas didžiausias atstumas aplink kiekvieną ta&scaron;kinį elementą, kuriuo ie&scaron;koma ta&scaron;kų, kuriuos galima įtraukti į sankaupą. Jei palikta tu&scaron;čia, reik&scaron;mė  <b>Paie&scaron;kos atstumas</b> bus didžiausias sluoksnyje rastas pagrindinis atstumas, i&scaron;skyrus tuos, kurie yra tarp 1% didžiausių pagrindinių atstumų.
+            </p>
+        </div>
+    </div>
+    <div id="searchDistanceUnit">
+        <div>
+            <p>Nurodo vienetus, kurie bus naudojami atstumo paie&scaron;kai.
+            </p>
+        </div>
+    </div>
+    <div id="sensitivity">
+        <div>
+            <p>Sveikasis skaičius tarp 0 ir 100, nustatantis sankaupų kompakti&scaron;kumą. Jei palikta tu&scaron;čia, reik&scaron;mė  <b>Sankaupos jautrumas</b> bus apskaičiuota naudojant Kulbako- Leiblerio divergenciją.
+            </p>
+        </div>
+    </div>
+    <div id="timeField">
+        <div>
+            <p>Laukas i&scaron; įvesties sluoksnio, kuriame yra kiekvieno elemento laiko žyma.
+            </p>
+        </div>
+    </div>
+    <div id="searchTimeInterval">
+        <div>
+            <p>Laiko intervalas, kuris bus naudojamas nustatyti, ar elementai sudaro erdvės laiko sankaupą. Laiko intervalo paie&scaron;ka apima laiką prie&scaron; kiekvieną elementą ir po jo; pvz., elemento 3&nbsp;dienų laiko intervalo paie&scaron;ka įtrauks visus elementus, pradedant 3&nbsp;dienomis prie&scaron; elemento laiką ir baigiant 3&nbsp;dienomis po jo.
+            </p>
+        </div>
+    </div>
+    <div id="searchTimeUnit">
+        <div>
+            <p>Nurodo vienetus, kurie bus naudojami laiko intervalo paie&scaron;kai.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>Sluoksnio, kuris bus sukurtas ir pridėtas į žemėlapį, pavadinimas.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>Puslapyje  <b>Mano turinys</b> esančio aplanko, kur bus įra&scaron;ytas rezultatas, pavadinimas.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

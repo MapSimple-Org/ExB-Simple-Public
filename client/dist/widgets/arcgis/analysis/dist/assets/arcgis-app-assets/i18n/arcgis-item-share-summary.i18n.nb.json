@@ -1,0 +1,13 @@
+{
+  "sharing": "Deler",
+  "private": "Eier",
+  "shared": "Eier og delt med grupper",
+  "org": "Organisasjon",
+  "public": "Alle (offentlig)",
+  "privateGroups": "Eier",
+  "sharedGroups": "Eier + grupper (${num})",
+  "orgGroups": "Organisasjon + grupper (${num})",
+  "publicGroups": "Alle (offentlig) + grupper (${num})",
+  "groups": "Grupper (${num})",
+  "updateSharing": "Delingsnivå: ${level}, oppdater deling"
+}

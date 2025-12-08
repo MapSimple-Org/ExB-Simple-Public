@@ -1,0 +1,22 @@
+{
+  "dialogHeading": "Configura categories de membre",
+  "noticeTitle": "Editeu, elimineu o reordeneu categories de la vostra organització.",
+  "noticeDescription": "Podeu assignar categories als membres a través de la pestanya Membres.",
+  "defaultCategoryWarning": "Aquesta categoria de membre està definida com a valor per defecte dels membres nous i no es pot editar ni suprimir.",
+  "warning": {
+    "deleteInUseCategory": {
+      "message": {
+        "single": "Hi ha un membre assignat a aquesta categoria. Si suprimiu la categoria, també s'eliminarà d'aquest membre.",
+        "multiple": "Hi ha ${number} membres assignats a aquesta categoria. Si suprimiu la categoria, també s'eliminarà d'aquests membres.",
+        "unknown": "Membres assignats a aquesta categoria: ${number}. Si suprimiu la categoria, també s'eliminarà d'aquests membres."
+      }
+    },
+    "changeTitleInUseCategory": {
+      "message": {
+        "single": "Hi ha un membre assignat a aquesta categoria. Si actualitzeu aquesta categoria, s'actualitzarà el membre perquè utilitzi \"${newTitle}\".",
+        "multiple": "Hi ha ${number} membres assignats a aquesta categoria. Si actualitzeu aquesta categoria, s'actualitzaran els membres perquè utilitzin \"${newTitle}\".",
+        "unknown": "Membres assignats a aquesta categoria: ${number}. Si actualitzeu aquesta categoria, s'actualitzaran els membres perquè utilitzin \"${newTitle}\"."
+      }
+    }
+  }
+}

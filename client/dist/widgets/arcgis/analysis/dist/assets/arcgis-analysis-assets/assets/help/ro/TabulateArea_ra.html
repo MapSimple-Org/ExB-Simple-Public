@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>Instrumentul Introducere &icirc;n tabel calculează zonele introduse &icirc;n tabele &icirc;ntre două seturi de date și raportează rezultatele sub formă de tabel.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputZoneRasterOrFeatures">
+        <div>
+            <p>Intrarea care definește limitele zonelor.
+            </p>
+            <p class="toolPaneOnly">Pentru intrările de obiecte spațiale, numărul depinde de factori suplimentari, cum ar fi criteriile de filtrare și extinderea analizei.
+            </p>
+        </div>
+    </div>
+    <div id="zoneField">
+        <div>
+            <p>C&acirc;mpul care include valorile care definesc fiecare zonă.
+            </p>
+        </div>
+    </div>
+    <div id="inputClassRasterOrFeatures">
+        <div>
+            <p>Intrarea care definește limitele claselor a căror zonă va fi calculată.
+            </p>
+            <p class="toolPaneOnly">Pentru intrările de obiecte spațiale, numărul depinde de factori suplimentari, cum ar fi criteriile de filtrare și extinderea analizei.
+            </p>
+        </div>
+    </div>
+    <div id="classField">
+        <div>
+            <p>C&acirc;mpul care conține valorile care definesc fiecare clasă.
+            </p>
+        </div>
+    </div>
+    <div id="classesAsRows">
+        <div>
+            <p>Specifică dacă valorile din rasterul de clase de intrare vor fi reprezentate ca r&acirc;nduri &icirc;n tabelul rezultat.
+            </p>
+            <p>Dacă opțiunea nu este selectată, clasele vor fi reprezentate sub formă de c&acirc;mpuri. Dacă opțiunea este selectată, clasele vor fi reprezentate sub formă de r&acirc;nduri.
+            </p>
+        </div>
+    </div>
+    <div id="analysisCellSize">
+        <div>
+            <p>Specifică dimensiunea celulelor rasterului de analiză care va fi creat pentru a calcula zonele incluse &icirc;n mai multe tabele.
+            </p>
+        </div>
+    </div>
+    <div id="outputTableName">
+        <div>
+            <p>Denumirea stratului tematic de tabel pentru zona inclusă &icirc;n tabele care va fi crea și adăugat la hartă.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>Numele folderului din  <b>Resursele mele</b> &icirc;n care va fi salvat rezultatul.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

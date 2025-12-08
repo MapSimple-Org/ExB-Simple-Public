@@ -1,0 +1,10 @@
+import "../calcite-swatch/index.js";
+import "../calcite-color-picker-hex-input/index.js";
+import "../calcite-tabs/index.js";
+import "../calcite-tab-nav/index.js";
+import "../calcite-button/index.js";
+import "../calcite-swatch-group/index.js";
+import "../calcite-tab-title/index.js";
+import "../calcite-tab/index.js";
+import "../calcite-input-number/index.js";
+export * from "./customElement.js";

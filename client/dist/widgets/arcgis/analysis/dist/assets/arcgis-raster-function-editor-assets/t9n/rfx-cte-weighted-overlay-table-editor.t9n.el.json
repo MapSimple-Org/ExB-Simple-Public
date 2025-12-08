@@ -1,0 +1,13 @@
+{
+  "weightedOverlayTable": "Πίνακας σταθμισμένης υπέρθεσης",
+  "id": "Αναγνωριστικό",
+  "layer": "Θεματικό επίπεδο",
+  "field": "Πεδίο",
+  "influence": "Επηρεασμός",
+  "sumOfInfluence": "Άθροισμα επηρεασμού",
+  "value": "Τιμή",
+  "remapTable": "Νέα αποτύπωση πίνακα",
+  "scale": "Κλίμακα",
+  "scales": "Κλίμακες",
+  "selectRaster": "Επιλογή raster"
+}

@@ -1,0 +1,32 @@
+{
+  "name": "jewelrybox",
+  "type": "template",
+  "templateType": "app",
+  "label": "JewelryBox",
+  "description": "JewelryBox is a template created to display features in a list combined with a map.",
+  "thumbnail": "thumbnail.png",
+  "order": 17,
+  "tags": [
+    "Map",
+    "Legend",
+    "Search",
+    "Widget Controller",
+    "Panel",
+    "Map Layers",
+    "Basemap Gallery",
+    "Title",
+    "Table",
+    "Sidebar",
+    "Logo",
+    "Splash window"
+  ],
+  "categoriesTags": [
+    "WAB classic",
+    "Map centric",
+    "Fullscreen"
+  ],
+  "isMultiplePage": false,
+  "isMapAware": true,
+  "thumbnailWidth": 320,
+  "thumbnailHeight": 214
+}

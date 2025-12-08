@@ -1,0 +1,1 @@
+System.register([],function(t){return{execute:function(){t({_widgetLabel:"Atdal\u012bt\u0101js",quickStyleItem:"\u0100trais stils {index}"})}}});

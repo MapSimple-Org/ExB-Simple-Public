@@ -1,0 +1,20 @@
+{
+  "title": "Naziv",
+  "addTitle": "Dodajte naslov",
+  "validation": {
+    "error": "Pogreška",
+    "titleRequired": "Naziv je obvezno polje.",
+    "itemExists": "Stavka pod nazivom \"${name}\" već postoji u ovoj mapi. Odaberite drugačiji naziv.",
+    "titleInUseService": "Sloj pod nazivom \"${name}\" već postoji. Odaberite drugačiji naziv.",
+    "itemInRecycleBin": "Stavka s nazivom \"${name}\" već postoji i nalazi se u košu za smeće. Odaberite drugačiji naziv.",
+    "serviceNameInvalid": "Naslov usluge može sadržavati samo alfanumeričke znakove ili podcrte i može imati najviše 90 znakova.",
+    "dataStoreTitleInvalid": "Naslov pohrane podataka može sadržavati samo alfanumeričke znakove ili podcrte i može imati najviše 90 znakova.",
+    "titleInvalid": "Naslov mora imati manje od 250 znakova i ne može sadržavati < ili >.",
+    "titleStartsWithNumber": "Naziv ne može započeti s brojem.",
+    "invalidCharacters": {
+      "single": "Naziv ne može saržavati ovaj znak: ${invalidCharacters}.",
+      "multiple": "Naziv ne može sadržavati niti jedan od ovih znakova: ${invalidCharacters}.",
+      "unknown": "Naziv ne može sadržavati niti jedan od ovih znakova: ${invalidCharacters}."
+    }
+  }
+}

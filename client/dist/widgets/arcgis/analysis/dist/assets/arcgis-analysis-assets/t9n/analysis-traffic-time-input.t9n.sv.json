@@ -1,0 +1,8 @@
+{
+  "arriveTime": "Ankomsttid",
+  "modes": {
+    "custom": "Anpassat datum och tid",
+    "now": "Nu",
+    "unspecified": "Ej angiven tid"
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "value": "Value",
+  "classname": "ClassName",
+  "color": "Color",
+  "raster": "Raster",
+  "tableType": "Table Type",
+  "manual": "Manual",
+  "external": "External",
+  "browseTable": "Browse Table",
+  "browseTableFrom": "Browse Table From",
+  "file": "File",
+  "dbfFile": "DBF File",
+  "layer": "Layer",
+  "unsupportedDataType": "Unsupported type",
+  "failedToGetTableFromLayer": "Failed to get table from the layer.",
+  "generate": "Generate Table",
+  "minValue": "Minimum Value",
+  "maxValue": "Maximum Value",
+  "classBaseName": "Class Base Name",
+  "colorscheme": "Color Scheme",
+  "defaultClassName": "Label_"
+}

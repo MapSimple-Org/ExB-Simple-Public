@@ -1,0 +1,6 @@
+{
+  "greaterThanErrorMessage": "Jumlah input harus lebih besar dari ${min}",
+  "lesserThanErrorMessage": "Jumah input harus kurang dari ${max}",
+  "greaterThanOrEqualErrorMessage": "Jumlah input harus lebih besar dari atau sama dengan ${min}",
+  "lesserThanOrEqualErrorMessage": "Jumlah input harus kurang dari atau sama dengan ${max}"
+}

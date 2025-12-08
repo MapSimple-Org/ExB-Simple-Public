@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>Das Werkzeug &quot;Punkt-Cluster suchen&quot; identifiziert Cluster aus Punkt-Features im Datenrauschen des Umfelds basierend auf deren r&auml;umlicher Verteilung.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="analysisLayer">
+        <div>
+            <p>Der Eingabe-Punkt-Layer, der basierend auf der r&auml;umlichen Verteilung der Punkt-Features in Cluster gruppiert wird.
+            </p>
+        </div>
+    </div>
+    <div id="method">
+        <div>
+            <p>Die Methode zum Identifizieren von Clustern.
+            </p>
+        </div>
+    </div>
+    <div id="minFeaturesCluster">
+        <div>
+            <p>Die minimale Anzahl von Punkt-Features, die als Cluster eingestuft werden sollen.
+            </p>
+        </div>
+    </div>
+    <div id="searchDistance">
+        <div>
+            <p>Gibt die maximale Entfernung um jedes Punkt-Feature f&uuml;r die Suche nach Punkten an, die in den Cluster aufgenommen werden k&ouml;nnen. Wenn die Option leer gelassen wird, ist der Wert  <b>Suchentfernung</b> die gr&ouml;&szlig;te Kernentfernung, die im Layer gefunden wurde, wobei die Kernentfernungen des obersten 1&nbsp;Prozents ausgeschlossen werden.
+            </p>
+        </div>
+    </div>
+    <div id="searchDistanceUnit">
+        <div>
+            <p>Gibt die Einheiten an, die f&uuml;r die Suchentfernung verwendet werden.
+            </p>
+        </div>
+    </div>
+    <div id="sensitivity">
+        <div>
+            <p>Eine ganze Zahl zwischen 0 und 100, die die Kompaktheit der Cluster bestimmt. Wenn die Option leer gelassen wird, wird der Wert  <b>Cluster-Empfindlichkeit</b> mithilfe Kullback-Leibler Divergenz berechnet.
+            </p>
+        </div>
+    </div>
+    <div id="timeField">
+        <div>
+            <p>Das Feld aus dem Eingabe-Layer, das einen Zeitstempel f&uuml;r jedes Feature enth&auml;lt.
+            </p>
+        </div>
+    </div>
+    <div id="searchTimeInterval">
+        <div>
+            <p>Das Zeitintervall, das verwendet wird, um festzustellen, ob Features einen Raum-Zeit-Cluster bilden. Das Suchzeitintervall deckt den Zeitraum vor und nach dem Zeitpunkt der einzelnen Features ab; ein Suchzeitintervall von 3&nbsp;Tagen um ein Feature schlie&szlig;t beispielsweise alle Features ein, die 3&nbsp;Tage vor und 3&nbsp;Tage nach dem Zeitpunkt des jeweiligen Features beginnen bzw. enden.
+            </p>
+        </div>
+    </div>
+    <div id="searchTimeUnit">
+        <div>
+            <p>Gibt die Einheiten an, die f&uuml;r das Suchzeitintervall verwendet werden.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>Der Name des Layers, der erstellt und der Karte hinzugef&uuml;gt wird.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>Der Name des Ordners in  <b>Eigene Inhalte</b>, in dem das Ergebnis gespeichert werden soll.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

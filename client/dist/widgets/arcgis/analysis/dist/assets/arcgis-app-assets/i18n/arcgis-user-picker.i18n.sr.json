@@ -1,0 +1,7 @@
+{
+  "searchMembers": "Pretraži članove",
+  "selectUser": "Izaberite korisnika",
+  "editSelection": "Uredite izabranog korisnika. Trenutno izabrano: ${name}",
+  "clear": "Obriši",
+  "members": "Članovi"
+}

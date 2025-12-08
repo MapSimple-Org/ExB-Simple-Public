@@ -1,0 +1,30 @@
+<svg width="228" height="140" viewBox="0 0 228 140" fill="none" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+<rect width="228" height="140" opacity="0.3" fill="var(--theme-primary)"/>
+<rect opacity="0.2" x="32.5" y="47.5" width="20" height="20" rx="4.5" stroke="var(--theme-primary)" stroke-width="3"/>
+<rect opacity="0.4" x="6.5" y="74.5" width="24" height="21" rx="5.5" stroke="var(--theme-primary)" stroke-width="3"/>
+<rect opacity="0.6" x="43.5" y="79.5" width="20" height="22" rx="4.5" stroke="var(--theme-primary)" stroke-width="3"/>
+<rect x="20" y="60" width="34" height="33" rx="9" fill="var(--theme-primary)"/>
+<g opacity="0.5">
+<rect x="81" y="112" width="7" height="7" rx="3" fill="var(--theme-primary)"/>
+<rect x="90" y="112" width="7" height="7" rx="3" fill="var(--theme-primary)"/>
+<rect x="99" y="112" width="7" height="7" rx="3" fill="var(--theme-primary)"/>
+<rect x="108" y="112" width="7" height="7" rx="3" fill="var(--theme-primary)"/>
+<rect x="117" y="112" width="7" height="7" rx="3" fill="var(--theme-primary)"/>
+<rect x="126" y="112" width="7" height="7" rx="3" fill="var(--theme-primary)"/>
+<rect x="135" y="112" width="7" height="7" rx="3" fill="var(--theme-primary)"/>
+<rect x="81" y="121" width="7" height="7" rx="3" fill="var(--theme-primary)"/>
+<rect x="90" y="121" width="7" height="7" rx="3" fill="var(--theme-primary)"/>
+<rect x="99" y="121" width="7" height="7" rx="3" fill="var(--theme-primary)"/>
+<rect x="108" y="121" width="7" height="7" rx="3" fill="var(--theme-primary)"/>
+<rect x="117" y="121" width="7" height="7" rx="3" fill="var(--theme-primary)"/>
+<rect x="126" y="121" width="7" height="7" rx="3" fill="var(--theme-primary)"/>
+<rect x="135" y="121" width="7" height="7" rx="3" fill="var(--theme-primary)"/>
+</g>
+<path opacity="0.6" d="M170 -4.5H181C183.485 -4.5 185.5 -2.48528 185.5 0V13C185.5 15.4853 183.485 17.5 181 17.5H170C167.515 17.5 165.5 15.4853 165.5 13V0C165.5 -2.48528 167.515 -4.5 170 -4.5Z" stroke="var(--theme-primary)" stroke-width="3"/>
+<rect x="177" y="-6" width="57" height="40" rx="6" fill="var(--theme-primary)"/>
+<path opacity="0.2" d="M221 22.5H232C234.485 22.5 236.5 24.5147 236.5 27V40C236.5 42.4853 234.485 44.5 232 44.5H221C218.515 44.5 216.5 42.4853 216.5 40V27C216.5 24.5147 218.515 22.5 221 22.5Z" stroke="var(--theme-primary)" stroke-width="3"/>
+<path opacity="0.5" d="M0 112H66C70.4183 112 74 115.582 74 120V140H0V112Z" fill="var(--theme-secondary)"/>
+<rect opacity="0.8" x="74" y="131" width="154" height="9" fill="var(--theme-secondary)"/>
+<path opacity="0.5" d="M149 126C149 123.791 150.791 122 153 122H228V131H149V126Z" fill="var(--theme-secondary)"/>
+<rect x="35" y="93" width="4" height="47" fill="var(--theme-secondary)"/>
+</svg>

@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>래스터로 하천 취득 도구는 사전에 싱크 또는 침강을 채울 필요 없이 입력 표면 래스터에서 하천 래스터를 생성합니다.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputSurfaceRaster">
+        <div>
+            <p>계산에 사용될 고도 래스터입니다.
+            </p>
+        </div>
+    </div>
+    <div id="inputDepressionsData">
+        <div>
+            <p>물이 안으로는 흐르고 밖으로는 흐르지 않는 실제 침체 또는 싱크의 위치를 정의하는 입력입니다.
+            </p>
+            <p class="toolPaneOnly">피처 입력의 경우 개수는 필터링 기준 및 분석 범위와 같은 추가 요소에 따라 달라집니다.
+            </p>
+        </div>
+    </div>
+    <div id="inputWeightRaster">
+        <div>
+            <p>각 셀에서 흐름 누적에 기여하는 흐름의 비율을 정의하는 래스터 레이어입니다.
+            </p>
+        </div>
+    </div>
+    <div id="accumulationThreshold">
+        <div>
+            <p>지정된 셀이 스트림의 일부인지 여부를 해당 셀로 흐르는 총 면적 측면에서 결정하기 위한 임계값입니다.
+            </p>
+        </div>
+    </div>
+    <div id="streamDesignationMethod">
+        <div>
+            <p>결과의 스트림 구간이 상수 값을 가질지, 고유한 값을 가질지, 또는 순서대로 정렬될지 지정합니다.
+            </p>
+        </div>
+    </div>
+    <div id="forceFlow">
+        <div>
+            <p>엣지 셀의 흐름이 정상 흐름 규칙을 따르도록 할지 항상 밖으로 흐르도록 할지 지정합니다.
+            </p>
+            <p>선택하지 않는 경우 흐름은 z 값에서 가장 가파른 하락이 있는 내부 셀을 향합니다. 그러나 하락이 0보다 작거나 같으면 셀이 표면 래스터의 바깥쪽으로 흐릅니다. 선택하는 경우 흐름 방향은 표면 래스터에서 바깥쪽으로 향합니다.
+            </p>
+        </div>
+    </div>
+    <div id="outputStreamRasterName">
+        <div>
+            <p>생성 후 맵에 추가할 하천 래스터 레이어의 이름입니다.
+            </p>
+        </div>
+    </div>
+    <div id="resultType">
+        <div>
+            <p>생성될 결과 유형입니다. 결과는 타일 영상 레이어 또는 동적 영상 레이어일 수 있습니다.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>결과를 저장할  <b>내 콘텐츠</b>의 폴더 이름입니다.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

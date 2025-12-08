@@ -1,0 +1,16 @@
+{
+  "updateData": "データの更新",
+  "cancel": "キャンセル",
+  "editStyle": "レイヤーのスタイル ファイルを、お使いのコンピューター上の更新バージョンで置き換えます。",
+  "updatePackages": "${type} を、お使いのコンピューター上の更新バージョンで置き換えます。 アップロードするファイルは、${hostedLayerName} と同じ名前である必要があります。",
+  "uploadStaticFiles": "アップロード中のファイルの名前は、元のファイル ${fileName} と同じ名前である必要があります",
+  "sameFileNameDescription": "アップロード中のファイルの名前とフィールド名は、元のファイル ${fileName} と同じである必要があります",
+  "updating": "更新しています...",
+  "error": "エラー",
+  "errors": {
+    "sameFileName": "このアイテムを更新するには、${fileName} という名前のファイルをアップロードする必要があります。",
+    "invalidStyleFileExtension": "ファイル拡張子が無効です。 アップロードされたスタイルのファイル拡張子は .json である必要があります。",
+    "errorWhileUpload": "アイテムのアップロード中にエラーが発生しました。",
+    "errorUpdate": "アイテムの上書き中にエラーが発生しました。"
+  }
+}

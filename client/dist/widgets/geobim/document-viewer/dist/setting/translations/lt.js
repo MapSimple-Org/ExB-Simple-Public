@@ -1,0 +1,1 @@
+System.register([],function(t){return{execute:function(){t({settingsLabel:"Dokument\u0173 \u017ei\u016brykl\u0117s nustatymai"})}}});

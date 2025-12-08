@@ -1,0 +1,12 @@
+{
+  "classField": "Pole klasy",
+  "classesAsRowsLabel": "Klasy jako wiersze w tabeli wynikowej",
+  "inputClassRasterOrFeatures": "Raster lub obiekty klasy wejściowej",
+  "inputLayerGroupText": "Wybierz wejściową strefę i warstwę klasy do obliczenia obszarów tabelarycznych między dwoma zestawami danych.",
+  "itemProperties": {
+    "description": "Tabela wynikowa wygenerowana za pomocą narzędzia analizy Obszar tabelaryczny.",
+    "snippet": "Tabela wynikowa wygenerowana przez narzędzie Obszar tabelaryczny."
+  },
+  "tabulateAreaSettingsGroupLabel": "Ustawienia narzędzia Obszar tabelaryczny",
+  "tabulateAreaSettingsGroupText": "Wybierz sposób obsługi klas w tabeli wynikowej. Podaj wielkość komórki do obliczenia. "
+}

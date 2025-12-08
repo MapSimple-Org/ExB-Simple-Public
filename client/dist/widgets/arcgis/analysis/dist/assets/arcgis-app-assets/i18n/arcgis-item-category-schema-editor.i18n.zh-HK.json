@@ -1,0 +1,36 @@
+{
+  "modalHeader": "配置內容類別",
+  "modalGroupHeader": "配置群組類別",
+  "helpText": "在您的組織中編輯、刪除或重新排序類別。",
+  "helpTextGroup": "編輯、刪除或重新排序此群組中內容的類別。",
+  "helpTextDescription": "請注意，組織的其他成員可能已將這些類別指派給其項目，且編輯方案將相應地更新那些項目",
+  "helpTextGroupDescription": "請注意，群組的其他成員可能已將這些類別指派給其項目，且編輯方案將相應地更新那些項目",
+  "warning": {
+    "deleteInUseCategory": {
+      "title": "刪除類別",
+      "cta": "刪除類別",
+      "message": {
+        "single": "已將一個項目指派給此類別。 刪除類別也會從此項目中移除它。",
+        "multiple": "已將 ${number} 個項目指派給此類別。 刪除類別也會從這些項目中移除它。",
+        "unknown": "已指派至此類別的項目: ${number}。 刪除類別也會從這些項目中移除它。"
+      }
+    },
+    "changeTitleInUseCategory": {
+      "title": "更新類別",
+      "message": {
+        "single": "已將一個項目指派給此類別。 更新類別將更新項目以使用 '${newTitle}'。",
+        "multiple": "已將 ${number} 個項目指派給此類別。 更新類別將更新項目以使用 \"${newTitle}\"。",
+        "unknown": "已指派至此類別的項目: ${number}。 更新類別將更新項目以使用 \"${newTitle}\"。"
+      },
+      "cta": "更新類別"
+    }
+  },
+  "template": {
+    "templateList": {
+      "custom": {
+        "message": "建立您自己的類別來組織您組織中的內容。",
+        "messageGroup": "建立您自己的類別來組織此群組中的內容。"
+      }
+    }
+  }
+}

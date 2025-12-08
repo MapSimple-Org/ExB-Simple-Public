@@ -1,0 +1,12 @@
+{
+  "name": "novel",
+  "type": "template",
+  "templateType": "fixed-modal-window",
+  "label": "Novel",
+  "thumbnail": "thumbnail.png",
+  "order": 6,
+  "tags": [],
+  "categoriesTags": [],
+  "thumbnailWidth": 320,
+  "thumbnailHeight": 268
+}

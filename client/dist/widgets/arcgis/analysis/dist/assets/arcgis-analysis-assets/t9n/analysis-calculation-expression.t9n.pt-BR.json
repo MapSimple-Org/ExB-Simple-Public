@@ -1,0 +1,10 @@
+{
+  "cannotAssignValueToTargetField": "O valor calculado e o tipo de campo não correspondem.",
+  "createExpression": "Criar expressão",
+  "deleteExpression": "Excluir expressão",
+  "editExpression": "Editar expressão",
+  "expression": "Expressão",
+  "isRequired": "Este parâmetro é exigido.s",
+  "layerLoadError": "A camada não pôde ser carregada.",
+  "validationFailedInvalidSQL": "Falha na validação da expressão. A expressão não é SQL válida."
+}

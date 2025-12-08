@@ -1,0 +1,10 @@
+{
+  "cannotAssignValueToTargetField": "Arvutatud väärtus ja väljatüüp ei ühti.",
+  "createExpression": "Loo avaldis",
+  "deleteExpression": "Kustuta avaldis",
+  "editExpression": "Muuda avaldist",
+  "expression": "Avaldis",
+  "isRequired": "See parameeter on nõutav.",
+  "layerLoadError": "Kihti ei saanud laadida.",
+  "validationFailedInvalidSQL": "Avaldise valideerimine ebaõnnestus. Avaldis ei ole sobiv SQL."
+}

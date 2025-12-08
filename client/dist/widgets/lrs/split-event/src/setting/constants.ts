@@ -1,0 +1,22 @@
+export const LrsEventFields = [
+  'FromDateFieldName',
+  'ToDateFieldName',
+  'DerivedFromMeasureFieldName',
+  'DerivedRouteIdFieldName',
+  'DerivedRouteNameFieldName',
+  'DerivedToMeasureFieldName',
+  'FromReferentLocationFieldName',
+  'FromReferentMethodFieldName',
+  'FromReferentOffsetFieldName',
+  'ToReferentLocationFieldName',
+  'ToReferentMethodFieldName',
+  'ToReferentOffsetFieldName',
+  'LocErrorFieldName',
+  'EventIdFieldName',
+  'RouteIdFieldName',
+  'RouteNameFieldName',
+  'FromMeasureFieldName',
+  'ToRouteIdFieldName',
+  'ToRouteNameFieldName',
+  'ToMeasureFieldName'
+]

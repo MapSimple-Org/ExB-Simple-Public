@@ -1,0 +1,12 @@
+{
+  "choiceList": "Valikuloend",
+  "choiceListBadInput": "Sisendväärtus sisaldab lubamatut kirjet.",
+  "comboboxPlaceholderText": "Tehke valik...",
+  "inputPlaceholderText": "Sisestage väärtus...",
+  "invalidCharacterError": "Sisendväärtus sisaldab lubamatuid märke.",
+  "maxLengthError": "Sisendväärtus ei tohi olla pikem kui ${maxLength} märki.",
+  "minLengthError": "Sisendväärtus ei tohi olla lühem kui ${minLength} märki.",
+  "multiSelectComboboxPlaceholderText": "Tehke vähemalt üks valik...",
+  "requiredError": "See parameeter on nõutav.",
+  "selectAll": "Vali kõik"
+}

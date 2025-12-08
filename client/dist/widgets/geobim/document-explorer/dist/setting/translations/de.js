@@ -1,0 +1,1 @@
+System.register([],function(e){return{execute:function(){e({settingsLabel:"Dokument-Explorer-Einstellungen",selectModelViewer:"W\xe4hlen Sie zum Anzeigen von Dokumenten ein Dokument-Viewer-Widget aus."})}}});

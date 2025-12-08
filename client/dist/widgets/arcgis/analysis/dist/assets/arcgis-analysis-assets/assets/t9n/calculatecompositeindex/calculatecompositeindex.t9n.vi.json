@@ -1,0 +1,26 @@
+{
+  "CCIAnalysisSettingGroupLabel": "Thiết lập chỉ mục",
+  "CCIAnalysisSettingGroupText": "Chỉ định cách tính chỉ mục.",
+  "geomeanPercentileLabel": "Ghép các xếp hạng (Trung bình hình học của phần trăm)",
+  "geomeanRawLabel": "Ghép các giá trị thô (Trung bình hình học của các giá trị thô)",
+  "geomeanScaledLabel": "Ghép các giá trị được chia tỷ lệ (Trung bình hình học của các giá trị được chia tỷ lệ)",
+  "indexMethodLabel": "Phương pháp chia tỷ lệ và kết hợp các biến",
+  "inputFeaturesOrTableLabel": "Nhập các đối tượng hoặc bảng",
+  "inputLayerGroupText": "Chọn các đối tượng hoặc bảng và các biến để tạo chỉ mục.",
+  "inputVariablesLabel": "Nhập biến",
+  "itemProperties": {
+    "description": "Lớp đối tượng được tạo từ việc chạy công cụ phân tích Tính toán Chỉ mục Hỗn hợp.",
+    "snippet": "Lớp đối tượng được tạo ra từ công cụ Tính toán Chỉ mục Hỗn hợp"
+  },
+  "meanPercentileLabel": "Gộp các xếp hạng (Trung bình của phân vị)",
+  "meanRawLabel": "Gộp các giá trị thô (Trung bình của giá trị thô)",
+  "meanScaledLabel": "Gộp các giá trị được chia tỷ lệ (Trung bình của giá trị được chia tỷ lệ)",
+  "outputIndexMaxLabel": "Tối đa",
+  "outputIndexMinLabel": "Tối thiểu",
+  "outputIndexMinMaxLabel": "Giá trị tối thiểu và tối đa của chỉ mục",
+  "outputIndexReverseLabel": "Đảo ngược giá trị chỉ mục",
+  "reverseVariableLabel": "Đảo ngược phương hướng",
+  "sumFlagsPercentileLabel": "Làm nổi bật các giá trị tối đa (Đếm các giá trị trên phân vị thứ 90)",
+  "toolName": "Tính toán Chỉ mục Hỗn hợp",
+  "weight": "Trọng số"
+}

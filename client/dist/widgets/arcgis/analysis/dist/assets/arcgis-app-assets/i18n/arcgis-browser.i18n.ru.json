@@ -1,0 +1,89 @@
+{
+  "browser": {
+    "refineContent": "Уточнить ресурсы",
+    "filters": "Фильтры",
+    "pageRange": "${start}-${end}, всего: ${total}",
+    "pageRangeAria": "${start}-${end}, всего элементов: ${total}",
+    "pageRangeWithRecycleBin": "${start}-${end}, всего: ${total} (Общий размер: ${recycleBinSize})",
+    "pageRangeAriaWithRecycleBin": "${start}-${end}, всего элементов: ${total} (Общий размер: ${recycleBinSize})",
+    "totalSize": "Общий размер: ${totalSize}",
+    "loading": "Загрузка результатов",
+    "close": "Закрыть"
+  },
+  "actions": {
+    "more": "Больше"
+  },
+  "filter": {
+    "clear": "Очистить"
+  },
+  "filterDate": {
+    "today": "Сегодня",
+    "yesterday": "Вчера",
+    "last7": "Последние 7 дней",
+    "last30": "Последние 30 дней",
+    "never": "Никогда",
+    "custom": "Пользовательский диапазон...",
+    "title": {
+      "created": "Дата создания",
+      "modified": "Дата изменения",
+      "joined": "Дата присоединения",
+      "lastLogin": "Последний вход"
+    },
+    "created": "Создано: ${date}",
+    "modified": "Изменено: ${date}",
+    "joined": "Присоединился: ${date}",
+    "lastLogin": "Последний вход: ${date}"
+  },
+  "pagination": {
+    "next": "Следующая страница",
+    "prev": "Предыдущая страница"
+  },
+  "search": {
+    "label": "Поиск групп",
+    "search": "Поиск",
+    "clear": "Очистить термин поиска",
+    "wildcard": "Поиск по подстановочным знакам не поддерживается"
+  },
+  "sort": {
+    "sortDirection": "Направление сортировки",
+    "title": "Заголовок",
+    "relevance": "Актуальность",
+    "modified": "Дата изменения",
+    "deleted": "Дата удаления",
+    "created": "Дата создания",
+    "added": "Дата добавления",
+    "size": "Размер",
+    "owner": "Владелец",
+    "sizeAsc": "От наименьшего к наибольшему",
+    "sizeDesc": "От наибольшего к наименьшему",
+    "numviews": "Количество просмотров",
+    "numAsc": "От наименьшего к наибольшему",
+    "numDesc": "От наибольшего к наименьшему",
+    "alphabeticalAsc": "По алфавиту",
+    "alphabeticalDesc": "По алфавиту в обратном порядке",
+    "recentAsc": "Последние",
+    "recentDesc": "Самые свежие",
+    "sort": "Сортировать",
+    "sortBy": "Сортировать по",
+    "sortByColon": "Сортировать по:",
+    "fullname": "Имя",
+    "username": "Имя пользователя",
+    "name": "Имя",
+    "membertype": "Роль группы",
+    "joined": "Дата присоединения",
+    "lastlogin": "Последний вход",
+    "dataset": "Набор данных",
+    "mfaenabled": "Многофакторная аутентификация",
+    "defaultAsc": "По возрастанию",
+    "defaultDesc": "По убыванию"
+  },
+  "topBar": {
+    "filter": "Фильтр"
+  },
+  "filterStatus": {
+    "clear": "Очистить",
+    "filters": "Фильтры:",
+    "additional": "Дополнительные активные фильтры",
+    "clearAllFilters": "Очистить все фильтры"
+  }
+}

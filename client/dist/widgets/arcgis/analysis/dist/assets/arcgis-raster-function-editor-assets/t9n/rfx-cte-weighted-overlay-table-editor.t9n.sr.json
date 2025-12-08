@@ -1,0 +1,13 @@
+{
+  "weightedOverlayTable": "Tabela težinskog preklapanja",
+  "id": "ID",
+  "layer": "Sloj",
+  "field": "Polje",
+  "influence": "Uticaj",
+  "sumOfInfluence": "Skup uticaja",
+  "value": "Vrednost",
+  "remapTable": "Tabela ponovnog mapiranja",
+  "scale": "Razmera",
+  "scales": "Vaga",
+  "selectRaster": "Izaberite raster"
+}

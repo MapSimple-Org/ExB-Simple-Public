@@ -1,0 +1,10 @@
+{
+  "forceFlowLabel": "Robne celice naj tečejo navzven",
+  "inputLayersGroupText": "Izberite vhodni površinski raster in po želji podatke o vdolbini in rastru uteži.",
+  "itemProperties": {
+    "description": "Izhod, ustvarjen z izvajanjem orodja za analizo Pridobi pretok kot raster.",
+    "snippet": "Izhod, ustvarjen iz Pridobi pretok kot raster"
+  },
+  "outputStreamRasterLabel": "Ime izhodnega rastra toka",
+  "streamSettingsGroupText": "Navedite prag akumulacije, način označevanja pretoka in kako je pretok upravljan na robu vhodnega površinskega rastra."
+}

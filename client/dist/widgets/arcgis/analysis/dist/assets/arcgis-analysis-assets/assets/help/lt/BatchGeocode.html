@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>Įrankis Geokoduoti vietas i&scaron; lentelės konvertuoja adresus ar vietas i&scaron; įvesties lentelės ar failo į koordinates.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputType">
+        <div>
+            <p>Nurodo, ar įvestis bus lentelės elementas (<b>talpinama lentelė</b>), ar <code>.csv</code> arba Excelfailas (<b>CSV/Excel</b>).
+            </p>
+        </div>
+    </div>
+    <div id="inputFileItem">
+        <div>
+            <p>Įvesties failas su adresais ar vietomis, kuris bus geokoduojamas. Įvestis turi būti talpinamas  <code>.csv</code> arba Excel failas. </p>
+        </div>
+    </div>
+    <div id="inputTable">
+        <div>
+            <p>Įvesties lentelė su adresais ar vietomis, kuri bus geokoduojama. Įvestis turi būti talpinamos lentelės elementas.
+            </p>
+            <p>Po lentelės pavadinimu rodomas elementų skaičius. Skaičiuojami visi lentelės elementai, i&scaron;skyrus tuos, kurie buvo pa&scaron;alinti naudojant filtrą.
+            </p>
+        </div>
+    </div>
+    <div id="geocodeServiceURL">
+        <div>
+            <p>Lokatoriaus paslauga, kuri bus naudojama geokodavimui. Jeigu lokatoriaus paslaugos, kurią norite naudoti, nėra i&scaron;skleidžiamajame meniu, kreipkitės į savo administratorių, kad lokatoriaus paslauga būtų įtraukta į papildomų paslaugų sąra&scaron;ą.
+            </p>
+        </div>
+    </div>
+    <div id="singleOrMultiFieldSwitch">
+        <div>
+            <p>Nurodo, ar įvesties duomenys yra viename, ar keliuose laukuose.
+            </p>
+        </div>
+    </div>
+    <div id="geocodeUIParameters">
+        <div>
+            <p>Laukai, kuriuos lokatorius naudos nustatyti duomenų vietas. Laikoma, kad kai kurie laukai, tokie kaip adresas, miestas, valstija ir pa&scaron;to kodas, duomenyse yra.
+            </p>
+        </div>
+    </div>
+    <div id="sourceCountry">
+        <div>
+            <p>Duomenų vietos &scaron;alis. Jeigu visi adresai yra vienoje &scaron;alyje, kad rezultatai būtų kuo tikslesni, pasirinkite &scaron;alį. Kitu atveju, palikite &scaron;į parametrą tu&scaron;čią.
+            </p>
+        </div>
+    </div>
+    <div id="outputFields">
+        <div>
+            <p>Nurodo laukus, kurie bus įtraukti į i&scaron;vesties duomenų rinkinį. Galimos parinktys:
+            </p>
+            <ul>
+                <li> <b>Visi</b> &ndash; į geokodavimo rezultatus bus įtraukti visi galimi lokatoriaus i&scaron;vesties laukai.
+                </li>
+                <li> <b>Minimalus</b> &ndash; į rezultatus bus įtraukta dalis laukų i&scaron; lokatoriaus ir laukai i&scaron; įvesties lentelės.
+                </li>
+                <li> <b>Tik vieta</b> &mdash; į rezultatus bus įtraukti <i>Shape</i> laukas i&scaron; lokatoriaus ir laukai i&scaron; įvesties lentelės.
+                </li>
+            </ul>
+            
+        </div>
+    </div>
+    <div id="outputType">
+        <div>
+            <p>Sukuriamos i&scaron;vesties tipas. I&scaron;vestis gali būti elementų paslauga,  <code>.csv</code> failas arba <code>.xls</code> failas.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>Pavadinimas sluoksnio ar failo, kuris bus sukurtas puslapyje  <b>Mano turinys</b>.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>Puslapyje  <b>Mano turinys</b> esančio aplanko, kur bus įra&scaron;ytas rezultatas, pavadinimas.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

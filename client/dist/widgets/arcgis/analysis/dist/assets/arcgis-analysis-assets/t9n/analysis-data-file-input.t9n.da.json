@@ -1,0 +1,14 @@
+{
+  "AddDataFromUrl": "Tilføj data fra URL",
+  "addData": "Tilføj data",
+  "clear": "Ryd",
+  "file": "Fil",
+  "fileNotFound": "Kunne ikke indlæse fil.",
+  "invalidUrl": "Ugyldig URL eller ugyldigt filtypenavn.",
+  "layerNotFound": "Kunne ikke indlæse lag.",
+  "replaceData": "Erstat data",
+  "required": "Denne parameter er påkrævet.",
+  "uploadData": "Overfør data",
+  "uploadFailureMsg": "Fejl under udførelse af overførselshandling, filstørrelse eller -type understøttes ikke for denne tjeneste.",
+  "url": "URL"
+}

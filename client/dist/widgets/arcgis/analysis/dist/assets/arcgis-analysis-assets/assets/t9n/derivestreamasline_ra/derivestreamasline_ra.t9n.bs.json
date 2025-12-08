@@ -1,0 +1,11 @@
+{
+  "all": "Svi",
+  "inputLayersGroupText": "Odaberite raster ulazne površine, a po izboru podatke o depresiji i raster težine.",
+  "itemProperties": {
+    "description": "Izlaz generiran izvođenjem alata Derive Stream As Raster.",
+    "snippet": "Izlaz generiran iz Izvedi strujanje kao raster"
+  },
+  "outputStreamFeaturesLabel": "Naziv izlaznih geoobjekata strujanja",
+  "simplifyLabel": "Pojednostavi geoobjekte",
+  "streamSettingsGroupText": "Odredite prag akumulacije, metodu označavanja toka i hoće li se linije izlaznog toka izgladiti u jednostavne oblike."
+}

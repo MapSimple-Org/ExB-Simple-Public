@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>Alat Enrich Layer meningkatkan fitur input dengan data demografis dan lanskap.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputLayer">
+        <div>
+            <p>Fitur titik, garis, atau poligon yang akan ditingkatkan dengan data tambahan.
+            </p>
+            <p class="toolPaneOnly">Jumlah fitur bergantung pada faktor tambahan seperti kriteria pemfilteran dan jangkauan analisis.
+            </p>
+        </div>
+    </div>
+    <div id="analysisVariables">
+        <div>
+            <p>Variabel yang akan ditambahkan sebagai atribut ke fitur input.
+            </p>
+        </div>
+    </div>
+    <div id="bufferType">
+        <div>
+            
+            <p class="toolPaneOnly">Metode yang akan digunakan untuk membuat area pembatas di sekitar fitur garis atau titik input. Metoda tersebut dapat berupa jarak garis lurus atau mode perjalanan. Area keseluruhan sekitar masing-masing fitur akan diperkaya.
+            </p> 
+            <p class="modelBuilderOnly">Metode yang akan digunakan untuk membuat area pembatas di sekitar fitur garis atau titik input. Saat ini, jarak garis lurus adalah satu-satunya metode yang didukung untuk model. Area keseluruhan sekitar masing-masing fitur akan diperkaya.
+            </p>
+        </div>
+    </div>
+    <div id="distance">
+        <div>
+            <p>Nilai numerik yang menentukan jarak atau waktu yang akan diperluas oleh area yang diperkaya di sekitar setiap fitur input.
+            </p>
+        </div>
+    </div>
+    <div id="units">
+        <div>
+            <p>Unit yang akan digunakan untuk menentukan jarak atau waktu yang akan diperluas oleh area yang diperkaya di sekitar setiap fitur masukan.
+            </p>
+        </div>
+    </div>
+    <div id="returnBoundaries">
+        <div>
+            <p>Menentukan layer output akan berisi fitur poligon yang ditentukan oleh pengaturan  <b>Area pengayaan</b> (dicentang) atau fitur input (tidak dicentang).
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>Nama layer yang akan dibuat dan ditambahkan ke peta.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>Nama folder di  <b>Konten saya</b> tempat penyimpanan hasil.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

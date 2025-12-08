@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>T&ouml;&ouml;riist Geokodeeritud asukohad tabelist v&otilde;imaldab teisendada tabelis v&otilde;i failis olevad aadressid v&otilde;i kohad koordinaatideks.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputType">
+        <div>
+            <p>M&auml;&auml;rab, kas sisendiks on tabeli element (<b>Majutatud tabel</b>) v&otilde;i <code>.csv</code> v&otilde;i Excel fail (<b>CSV/Excel</b>).
+            </p>
+        </div>
+    </div>
+    <div id="inputFileItem">
+        <div>
+            <p>Geokodeeritav sisendfail koos aadresside v&otilde;i kohtadega. Sisend peab olema majutatud  <code>.csv</code> v&otilde;i Excel fail. </p>
+        </div>
+    </div>
+    <div id="inputTable">
+        <div>
+            <p>Geokodeeritav sisendtabel koos aadresside v&otilde;i kohtadega. Sisend peab olema majutatud tabeli &uuml;ksus.
+            </p>
+            <p>Tabeli nime all kuvatakse objektide arv. Arv h&otilde;lmab k&otilde;iki tabelis olevaid objekte, v&auml;lja arvatud need, mis on filtri abil eemaldatud.
+            </p>
+        </div>
+    </div>
+    <div id="geocodeServiceURL">
+        <div>
+            <p>Lokaatorteenus, mida kasutatakse geokodeerimiseks. Kui lokaatorteenust, mida soovite kasutada, rippmen&uuml;&uuml;s pole, v&otilde;tke &uuml;hendust administraatoriga, et lokaatorteenus lisataks utiliiditeenusena.
+            </p>
+        </div>
+    </div>
+    <div id="singleOrMultiFieldSwitch">
+        <div>
+            <p>M&auml;&auml;rab, kas sisendandmed asuvad &uuml;hel v&auml;ljal v&otilde;i mitmel v&auml;ljal.
+            </p>
+        </div>
+    </div>
+    <div id="geocodeUIParameters">
+        <div>
+            <p>Lokaatori poolt andmete asukoha m&auml;&auml;ramiseks kasutatavad v&auml;ljad. Teatud v&auml;ljad nagu aadress, linn, osariik ja postiindeks eeldatakse olevat andmetes.
+            </p>
+        </div>
+    </div>
+    <div id="sourceCountry">
+        <div>
+            <p>Andmete asukohariik. Kui k&otilde;ik aadressid p&auml;rinevad &uuml;hest riigist, valige selle riigi nimi, et tagada k&otilde;ige t&auml;psemad tulemused. Vastasel juhul j&auml;tke see parameeter t&uuml;hjaks.
+            </p>
+        </div>
+    </div>
+    <div id="outputFields">
+        <div>
+            <p>M&auml;&auml;rab v&auml;ljad, mis kaasatakse v&auml;ljundandmestikku. Valikud on j&auml;rgmised:
+            </p>
+            <ul>
+                <li> <b>K&otilde;ik</b>&mdash;Geokodeerimise tulemustesse kaasatakse lokaatori k&otilde;ik saadaolevad v&auml;ljundv&auml;ljad.
+                </li>
+                <li> <b>Minimaalne</b>&mdash;Tulemused sisaldavad nii lokaatori kui ka sisendtabeli v&auml;ljade alamhulka.
+                </li>
+                <li> <b>Ainult asukoht</b>&mdash; <i>Shape</i> Tulemustesse lisatakse nii lokaatori v&auml;li kui ka sisendtabeli v&auml;ljad.
+                </li>
+            </ul>
+            
+        </div>
+    </div>
+    <div id="outputType">
+        <div>
+            <p>Loodava v&auml;ljundi t&uuml;&uuml;p. V&auml;ljund v&otilde;ib olla objektiteenus,  <code>.csv</code> fail v&otilde;i <code>.xls</code> fail.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>Jaotises  <b>Minu sisu</b> loodava kihi v&otilde;i faili nimi.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>Selle kausta nimi jaotises  <b>Minu sisu</b>, kuhu tulemus salvestatakse.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

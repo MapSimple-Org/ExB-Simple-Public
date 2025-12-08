@@ -1,0 +1,7 @@
+{
+  "header": "Pilih variabel",
+  "noFound": "Tidak ditemukan variabel yang kompatibel",
+  "search": "Cari variabel",
+  "variableLabel": "Label: <span style='font-weight: var(--calcite-font-weight-normal)'>${val}</span>",
+  "variableVal": "Nilai: <span style='font-weight: var(--calcite-font-weight-normal)'>${val}</span>"
+}

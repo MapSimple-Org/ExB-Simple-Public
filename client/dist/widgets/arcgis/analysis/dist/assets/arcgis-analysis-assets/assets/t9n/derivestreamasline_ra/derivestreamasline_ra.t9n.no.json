@@ -1,0 +1,11 @@
+{
+  "all": "Alle",
+  "inputLayersGroupText": "Velg det innlagte overflaterasteret, og eventuelt rasteret for nedsenkningsdata og vektingsrasteret.",
+  "itemProperties": {
+    "description": "Utdata generert ved å kjøre verktøyet Utled vannløp som raster.",
+    "snippet": "Utdata generert fra Utled vannløp som raster"
+  },
+  "outputStreamFeaturesLabel": "Navn på utdatageoobjekt for vannløp",
+  "simplifyLabel": "Forenkle geoobjekter",
+  "streamSettingsGroupText": "Spesifiser akkumuleringsterskel, metode for betegnelse av vannløp og om utdatalinjer for vannløp skal glattes ut til enkle former."
+}

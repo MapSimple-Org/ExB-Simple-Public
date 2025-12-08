@@ -1,0 +1,1 @@
+System.register([],function(e){return{execute:function(){e({_widgetLabel:"Elemento informacija",noDataMessageDefaultText:"Duomen\u0173 rasti nepavyko.",featureNumbers:"{index} i\u0161 {count}",featureInfoDataActionLabel:"{layer} element\u0173 informacijos dabartinis \u012fra\u0161as"})}}});

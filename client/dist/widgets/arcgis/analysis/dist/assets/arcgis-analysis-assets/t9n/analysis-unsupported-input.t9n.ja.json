@@ -1,0 +1,7 @@
+{
+  "defaultValue": "サポートされていないパラメーター タイプです。 デフォルトの値が使用されます。 <calcite-link target='_blank' href='${ docLink }'>詳細</calcite-link>",
+  "requiredMessage": "このパラメーターは必須です。",
+  "unsupportedGPType": "サポートされていないパラメーター タイプです。 <calcite-link target='_blank' href='${ docLink }'>詳細</calcite-link>",
+  "unsupportedParameterConfig": "サポートされていないパラメーター構成です。 <calcite-link target='_blank' href='${ docLink }'>詳細</calcite-link>",
+  "unsupportedParameterConfigDefaultValue": "サポートされていないパラメーター構成です。 デフォルトの値が使用されます。 <calcite-link target='_blank' href='${ docLink }'>詳細</calcite-link>"
+}

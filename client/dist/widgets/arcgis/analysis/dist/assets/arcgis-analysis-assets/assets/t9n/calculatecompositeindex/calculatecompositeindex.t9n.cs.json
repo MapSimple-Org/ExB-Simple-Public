@@ -1,0 +1,26 @@
+{
+  "CCIAnalysisSettingGroupLabel": "Nastavení indexu",
+  "CCIAnalysisSettingGroupText": "Určete, jak se má index vypočítat.",
+  "geomeanPercentileLabel": "Složené pořadí (geometrický průměr percentilů)",
+  "geomeanRawLabel": "Složené surové hodnoty (geometrický průměr surových hodnot)",
+  "geomeanScaledLabel": "Složené škálované hodnoty (geometrický průměr skálovaných hodnot)",
+  "indexMethodLabel": "Metoda škálování a kombinování proměnných",
+  "inputFeaturesOrTableLabel": "Vstupní prvky nebo tabulka",
+  "inputLayerGroupText": "Vyberte prvky nebo tabulku a proměnné pro vytvoření indexu.",
+  "inputVariablesLabel": "Vstupní proměnné",
+  "itemProperties": {
+    "description": "Vrstva prvků vytvořená spuštěním analytického nástroje Vypočítat složený index.",
+    "snippet": "Vrstva prvků vygenerovaná nástrojem Vypočítat složený index"
+  },
+  "meanPercentileLabel": "Kombinovat pořadí (průměr percentilů)",
+  "meanRawLabel": "Kombinovat surové hodnoty (průměr surových hodnot)",
+  "meanScaledLabel": "Kombinovat škálované hodnoty (průměr škálovaných hodnot)",
+  "outputIndexMaxLabel": "Maximum",
+  "outputIndexMinLabel": "Minimum",
+  "outputIndexMinMaxLabel": "Minimální a maximální hodnoty indexu",
+  "outputIndexReverseLabel": "Obrátit hodnoty indexu",
+  "reverseVariableLabel": "Obrátit směr",
+  "sumFlagsPercentileLabel": "Zvýraznit extrémy (počet hodnot nad 90. percentilem)",
+  "toolName": "Vypočítat složený index",
+  "weight": "Váha"
+}

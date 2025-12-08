@@ -1,0 +1,89 @@
+{
+  "browser": {
+    "refineContent": "Refinar conteúdo",
+    "filters": "Filtros",
+    "pageRange": "${start}-${end}, total: ${total}",
+    "pageRangeAria": "${start}-${end}, total de itens: ${total}",
+    "pageRangeWithRecycleBin": "${start}-${end}, total: ${total} (Tamanho total: ${recycleBinSize})",
+    "pageRangeAriaWithRecycleBin": "${start}-${end}, total de itens: ${total} (Tamanho total: ${recycleBinSize})",
+    "totalSize": "Tamanho total: ${totalSize}",
+    "loading": "A carregar resultados",
+    "close": "Fechar"
+  },
+  "actions": {
+    "more": "Mais"
+  },
+  "filter": {
+    "clear": "Limpar"
+  },
+  "filterDate": {
+    "today": "Hoje",
+    "yesterday": "Ontem",
+    "last7": "Últimos 7 dias",
+    "last30": "Últimos 30 dias",
+    "never": "Nunca",
+    "custom": "Intervalo personalizado...",
+    "title": {
+      "created": "Data de criação",
+      "modified": "Data de modificação",
+      "joined": "Data de adesão",
+      "lastLogin": "Último início de sessão"
+    },
+    "created": "Criação: ${date}",
+    "modified": "Modificação: ${date}",
+    "joined": "Aderiu em: ${date}",
+    "lastLogin": "Último início de sessão: ${date}"
+  },
+  "pagination": {
+    "next": "Página seguinte",
+    "prev": "Página anterior"
+  },
+  "search": {
+    "label": "Procurar grupos",
+    "search": "Pesquisar",
+    "clear": "Limpar termo de pesquisa",
+    "wildcard": "As pesquisas com caracteres universais não são suportadas"
+  },
+  "sort": {
+    "sortDirection": "Ordenar direção",
+    "title": "Título",
+    "relevance": "Relevância",
+    "modified": "Data de modificação",
+    "deleted": "Data de eliminação",
+    "created": "Data de criação",
+    "added": "Data de adição",
+    "size": "Tamanho",
+    "owner": "Proprietário",
+    "sizeAsc": "Menor para o maior",
+    "sizeDesc": "Maior para o menor",
+    "numviews": "Visualizar contagem",
+    "numAsc": "Menos para mais",
+    "numDesc": "Mais para menos",
+    "alphabeticalAsc": "Alfabética",
+    "alphabeticalDesc": "Ordem inversa à alfabética",
+    "recentAsc": "Menos recente",
+    "recentDesc": "Mais recente",
+    "sort": "Ordenar",
+    "sortBy": "Ordenar por",
+    "sortByColon": "Ordenar por:",
+    "fullname": "Nome",
+    "username": "Nome de utilizador",
+    "name": "Nome",
+    "membertype": "Perfil de grupo",
+    "joined": "Data de adesão",
+    "lastlogin": "Último início de sessão",
+    "dataset": "Conjunto de Dados",
+    "mfaenabled": "Autenticação multifator",
+    "defaultAsc": "Ascendente",
+    "defaultDesc": "Decrescente"
+  },
+  "topBar": {
+    "filter": "Filtrar"
+  },
+  "filterStatus": {
+    "clear": "Limpar",
+    "filters": "Filtros:",
+    "additional": "Filtros ativos adicionais",
+    "clearAllFilters": "Limpar todos os filtros"
+  }
+}

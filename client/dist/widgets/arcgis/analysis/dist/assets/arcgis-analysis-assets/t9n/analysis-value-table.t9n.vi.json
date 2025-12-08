@@ -1,0 +1,7 @@
+{
+  "addEntryButtonLabel": "Thêm",
+  "maxGroupsMessage": "Số lượng mục nhập tối đa là ${maxCount}.",
+  "minGroupsMessage": "Số lượng mục nhập tối thiểu là ${minCount}.",
+  "removeEntryButtonLabel": "Gỡ bỏ mục nhập",
+  "requiredMessage": "Thông số này là thông tin bắt buộc."
+}

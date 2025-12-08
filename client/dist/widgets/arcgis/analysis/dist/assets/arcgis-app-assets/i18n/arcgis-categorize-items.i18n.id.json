@@ -1,0 +1,11 @@
+{
+  "modalTitle": "Kategorisasikan Item",
+  "save": "Simpan",
+  "cancel": "Batalkan",
+  "loadingText": "Memuat...",
+  "assignCategory": "Tetapkan Kategori",
+  "errorMessage": "Ada kesalahan. Coba lagi nanti.",
+  "limited": "Item dibatasi hingga 20 kategori. Hapus satu kategori sebelum menambahkan lainnya.",
+  "undo": "Urungkan",
+  "redo": "Ulangi"
+}

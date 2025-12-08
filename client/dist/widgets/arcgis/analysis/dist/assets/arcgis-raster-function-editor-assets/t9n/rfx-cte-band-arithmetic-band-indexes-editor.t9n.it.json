@@ -1,0 +1,7 @@
+{
+  "example": "Esempio",
+  "input": "Input",
+  "output": "Output",
+  "optional": "Opzionale",
+  "WNDWIHintText": "Il valore α:α deve trovarsi tra 0 e 1; il valore predefinito è 0,5"
+}

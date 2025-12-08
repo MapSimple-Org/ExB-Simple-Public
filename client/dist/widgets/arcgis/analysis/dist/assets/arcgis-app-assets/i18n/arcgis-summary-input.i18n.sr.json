@@ -1,0 +1,10 @@
+{
+  "summary": "Rezime",
+  "description": "Opis",
+  "addSummary": "Dodajte rezime",
+  "addDescription": "Dodajte opis",
+  "charactersLeft": "Znakova preostalo: ${num}",
+  "invalid": "Rezime ne može da sadrži bilo koji od ovih znakova: < ili >.",
+  "invalidDescription": "Opis ne može da sadrži nijedan od ovih znakova: < ili >.",
+  "summaryReadOnly": "Rezime samo za čitanje."
+}

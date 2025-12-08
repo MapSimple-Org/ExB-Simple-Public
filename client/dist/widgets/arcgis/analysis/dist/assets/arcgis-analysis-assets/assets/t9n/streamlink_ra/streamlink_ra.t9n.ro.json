@@ -1,0 +1,9 @@
+{
+  "inputFlowDirectionRasterLabel": "Raster al direcției fluxului de intrare",
+  "inputLayerGroupText": "Alegeți rasterele pentru fluxul de intrare și direcția fluxului.",
+  "inputStreamRasterLabel": "Raster transmisie de intrare",
+  "itemProperties": {
+    "description": "Rezultat general din funcționarea instrumentului de analiză StreamLink.",
+    "snippet": "Rezultat generat din StreamLink"
+  }
+}

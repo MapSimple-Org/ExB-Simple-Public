@@ -1,0 +1,13 @@
+{
+  "weightedOverlayTable": "Tabela de Sobreposição Ponderada",
+  "id": "ID",
+  "layer": "Camada",
+  "field": "Campo",
+  "influence": "Influência",
+  "sumOfInfluence": "Soma de Influência",
+  "value": "Valor",
+  "remapTable": "Tabela de Remapeamento",
+  "scale": "Escala",
+  "scales": "Escalas",
+  "selectRaster": "Selecionar Raster"
+}

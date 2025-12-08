@@ -1,0 +1,9 @@
+{
+  "addToMap": "Megerősítés, majd hozzáadás a térképhez",
+  "cancel": "Mégse",
+  "confirm": "Megerősít",
+  "header": "Elem kiválasztása",
+  "select": "Kiválasztás",
+  "unsupportedLayer": "Ez a paraméter nem támogatja a következő rétegeket: ${layerName}.",
+  "viewDetails": "Részletek megtekintése"
+}

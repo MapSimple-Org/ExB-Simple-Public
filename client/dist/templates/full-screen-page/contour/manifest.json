@@ -1,0 +1,34 @@
+{
+  "name": "contour",
+  "type": "template",
+  "templateType": "full-screen-page",
+  "label": "Contour",
+  "description": "Contour facilitates broad inspection through a prominent map view supplemented by charts and contextual text below.",
+  "thumbnail": "thumbnail.png",
+  "order": 24,
+  "templateCreateVersion": "1.15.0",
+  "tags": [
+    "Map",
+    "Logo",
+    "Title",
+    "Navigation",
+    "Section",
+    "Table",
+    "View",
+    "Card",
+    "Chart",
+    "List",
+    "Widget Controller",
+    "Search",
+    "Map Layers",
+    "Legend",
+    "Draw",
+    "Measurement"
+  ],
+  "categoriesTags": [
+    "Fullscreen",
+    "Map centric"
+  ],
+  "thumbnailWidth": 320,
+  "thumbnailHeight": 214
+}

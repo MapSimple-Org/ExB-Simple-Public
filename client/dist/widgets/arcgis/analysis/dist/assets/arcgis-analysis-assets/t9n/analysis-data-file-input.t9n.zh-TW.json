@@ -1,0 +1,14 @@
+{
+  "AddDataFromUrl": "從 URL 新增資料",
+  "addData": "新增資料",
+  "clear": "清除",
+  "file": "檔案",
+  "fileNotFound": "無法載入檔案。",
+  "invalidUrl": "URL 或副檔名無效。",
+  "layerNotFound": "無法載入圖層。",
+  "replaceData": "取代資料",
+  "required": "需要此參數。",
+  "uploadData": "上傳資料",
+  "uploadFailureMsg": "執行上傳操作時發生錯誤，此服務不支援檔案大小或類型。",
+  "url": "Url"
+}

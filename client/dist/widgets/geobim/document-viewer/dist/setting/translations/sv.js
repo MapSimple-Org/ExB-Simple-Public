@@ -1,0 +1,1 @@
+System.register([],function(e){return{execute:function(){e({settingsLabel:"Inst\xe4llningar f\xf6r dokumentvisare"})}}});

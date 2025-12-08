@@ -1,0 +1,8 @@
+{
+  "selectFeature": "Selektujte sloj funkcija",
+  "browseLayer": "Pretraži slojeve",
+  "loading": "Učitavanje...",
+  "errorCodes": {
+    "required": "Ovaj parametar je obavezan."
+  }
+}

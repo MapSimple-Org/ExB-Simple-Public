@@ -1,0 +1,13 @@
+{
+  "weightedOverlayTable": "加重オーバーレイ テーブル",
+  "id": "ID",
+  "layer": "レイヤー",
+  "field": "フィールド",
+  "influence": "影響度",
+  "sumOfInfluence": "影響度の合計",
+  "value": "値",
+  "remapTable": "再分類テーブル",
+  "scale": "サイズ変更",
+  "scales": "縮尺",
+  "selectRaster": "ラスターの選択"
+}

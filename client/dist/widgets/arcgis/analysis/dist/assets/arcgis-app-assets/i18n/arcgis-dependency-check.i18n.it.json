@@ -1,0 +1,54 @@
+{
+  "updateSharing": "Verificare condivisione",
+  "moreInfo": "Ulteriori informazioni",
+  "learnMore": "Ulteriori informazioni",
+  "noItemToShare": "Nessun problema di condivisione rilevato",
+  "loadingInfo": "Caricamento informazioni di condivisione...",
+  "updatingSharing": "Aggiornamento condivisione...",
+  "updateItemsCount": "Elementi che si è autorizzati ad aggiornare: {num}",
+  "updateItemsCountText": "Questi elementi dipendenti potrebbero non essere visibili ad altri utenti perché sono condivisi in modo differente. Fare clic su Aggiorna per sincronizzare la condivisione degli elementi dipendenti che si è autorizzati ad aggiornare.",
+  "uneditableItemsCount": "Elementi che non si è autorizzati ad aggiornare: {num}",
+  "uneditableMessage": "Questi elementi dipendenti potrebbero non essere visibili ad altri utenti perché sono condivisi in modo differente.",
+  "nonPublicItems": "Elementi non condivisibili pubblicamente:",
+  "premiumItemsWebMap": "Questa mappa web contiene contenuti premium o per abbonati.",
+  "premiumMessage": "Questi elementi dipendenti potrebbero non essere visibili ad altri utenti perché necessitano di un abbonamento.",
+  "premiumTextMap": "Per saperne di più sulla condivisione di mappe con contenuti abbonati o premium",
+  "notice": "I seguenti elementi potrebbero non essere visibili ad altri perché sono condivisi in modo diverso o perché la visualizzazione richiede un abbonamento. Fare clic su <b>Aggiorna condivisione</b> per sincronizzare la condivisione degli elementi per cui disponi dell'autorizzazione all'aggiornamento.",
+  "noticeEnterprise": "I seguenti elementi potrebbero non essere visibili ad altri utenti perché sono condivisi in modo differente. Fare clic su <b>Aggiorna condivisione</b> per sincronizzare la condivisione degli elementi per cui disponi dell'autorizzazione all'aggiornamento.",
+  "canBeUpdated": "Elementi che possono essere aggiornati: ${count}",
+  "cantBeUpdated": "Elementi che non possono essere aggiornati: ${count}",
+  "update": "Aggiorna condivisione",
+  "cancel": "Non aggiornare la condivisione",
+  "ok": "OK",
+  "goToItem": "Visualizzare i dettagli completi",
+  "unableToGetItem": "Impossibile ottenere i dettagli dell'elemento.",
+  "postShareDialog": {
+    "title": "Condivisione degli elementi aggiornata con successo",
+    "description": "L'elemento o gli elementi condivisi fanno riferimento ad altri elementi che potrebbero non essere visibili perché condivisi in modo diverso. Rivedi la condivisione di questi elementi.",
+    "confirm": "Verificare condivisione"
+  },
+  "needShare": {
+    "noPermission": {
+      "notice": "Non si ha il permesso di aggiornare la condivisione di questo elemento.",
+      "panel": "Non si ha il permesso di aggiornare la condivisione di questo elemento. Questo elemento potrebbe non essere visibile agli altri perché è condiviso in modo diverso."
+    },
+    "pdc": {
+      "notice": "Abilitare la raccolta di dati pubblici prima di condividere questo layer pubblicamente.",
+      "panel": "Abilitare la raccolta di dati pubblici prima di condividere questo layer pubblicamente. Per ottenere prestazioni ottimali e mantenere integrità dei dati si consiglia di disabilitare le modifiche o usare un layer di visualizzazione di sola lettura.",
+      "learnMore": "Maggiori informazioni sull'abilitazione della modifica dei layer pubblici."
+    },
+    "premium": {
+      "notice": "Il contenuto premium e quello per gli abbonati possono richiedere l'accesso per essere visualizzati.",
+      "panel": "Il contenuto premium e quello per gli abbonati possono richiedere l'accesso per essere visualizzati.",
+      "learnMore": "Maggiori informazioni sulla condivisione di contenuti premium o per abbonati."
+    },
+    "sharingPDCEnabled": {
+      "notice": "Condividendo questo layer modificabile pubblicamente, chiunque potrà modificarlo.",
+      "panel": "Condividendo questo layer modificabile pubblicamente, chiunque potrà modificarlo. Per ottenere prestazioni ottimali e mantenere integrità dei dati si consiglia di disabilitare le modifiche o usare un layer di visualizzazione di sola lettura."
+    },
+    "needsAuthentication": {
+      "notice": "Autenticazione richiesta.",
+      "panel": "Questo elemento potrebbe non essere accessibile ad altri perché contiene servizi di localizzazione che richiedono l'autenticazione nelle applicazioni che visualizzano l'elemento."
+    }
+  }
+}

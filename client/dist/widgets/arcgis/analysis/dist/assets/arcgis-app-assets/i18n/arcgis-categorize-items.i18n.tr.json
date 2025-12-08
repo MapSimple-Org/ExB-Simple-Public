@@ -1,0 +1,11 @@
+{
+  "modalTitle": "Öğeleri Kategorilere Ayır",
+  "save": "Kaydet",
+  "cancel": "İptal",
+  "loadingText": "Yükleniyor...",
+  "assignCategory": "Kategori Ata",
+  "errorMessage": "Bazı hatalar oluştu. Daha sonra yeniden deneyin.",
+  "limited": "Ögeler 20 kategori ile sınırlıdır. Başka bir kategori eklemeden önce lütfen bir kategoriyi kaldırın.",
+  "undo": "Geri Al",
+  "redo": "Yinele"
+}

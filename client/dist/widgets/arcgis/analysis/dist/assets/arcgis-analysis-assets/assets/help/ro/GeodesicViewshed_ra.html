@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>Instrumentul Rază vizuală geodezică identifică locații pe o suprafață de rastere care sunt vizibile din locațiile observatorilor de intrare.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputElevationSurface">
+        <div>
+            <p>Rasterul de elevație pe care va fi calculată raza vizuală.
+            </p>
+        </div>
+    </div>
+    <div id="inputObserverFeatures">
+        <div>
+            <p>Locațiile observatorului pentru care va fi calculată raza vizuală.
+            </p>
+            <p class="toolPaneOnly">Numărul de obiecte spațiale depinde de factori suplimentari, cum ar fi criteriile de filtrare și extinderea analizei.
+            </p>
+        </div>
+    </div>
+    <div id="optimizeFor">
+        <div>
+            <p>Optimizează calcularea razei vizuale pe baza vitezei sau preciziei.
+            </p>
+        </div>
+    </div>
+    <div id="verticalError">
+        <div>
+            <p>Nivelul de incertitudine &icirc;n valorile de elevație ale valorii  <b>Suprafață de elevație de intrare</b>.
+            </p>
+        </div>
+    </div>
+    <div id="refractivityCoefficient">
+        <div>
+            <p>Coeficientul de refracție al luminii vizibile &icirc;n aer.
+            </p>
+        </div>
+    </div>
+    <div id="maximumViewingDistance">
+        <div>
+            <p>Distanța de vizualizare maximă pentru calculul razei de vedere.
+            </p>
+            <p>Distanța poate fi definită de o valoare și unitățile sale sau dintr-un c&acirc;mp &icirc;n valoarea  <b>Obiectele spațiale punctuale sau liniare ale observatorului de intrare</b>.
+            </p>
+        </div>
+    </div>
+    <div id="minimumViewingDistance">
+        <div>
+            <p>Distanța de vizualizare minimă pentru calculul razei de vedere.
+            </p>
+            <p>Distanța poate fi definită de o valoare și unitățile sale sau dintr-un c&acirc;mp &icirc;n valoarea  <b>Obiectele spațiale punctuale sau liniare ale observatorului de intrare</b>.
+            </p>
+        </div>
+    </div>
+    <div id="viewingDistancesAre3D">
+        <div>
+            <p>Specifică dacă distanțele de vizualizare maximă și minimă vor fi măsurate &icirc;n distanță 3D sau distanță 2D.
+            </p>
+            <p>Dacă nu este selectată, distanțele de vizualizare vor fi tratate ca distanțe euclidiene 2D. Dacă este selectată, distanțele de vizualizare vor fi tratate ca distanțe 3D.
+            </p>
+        </div>
+    </div>
+    <div id="observersElevation">
+        <div>
+            <p>Elevația suprafeței locațiilor observatorului.
+            </p>
+            <p>Elevația poate fi definită de o valoare și unitățile sale sau dintr-un c&acirc;mp &icirc;n valoarea  <b>Obiectele spațiale punctuale sau liniare ale observatorului de intrare</b>.
+            </p>
+        </div>
+    </div>
+    <div id="observersHeight">
+        <div>
+            <p>&Icirc;nălțimea observatorilor deasupra solului.
+            </p>
+            <p>&Icirc;nălțimea poate fi definită de o valoare și unitățile sale sau dintr-un c&acirc;mp &icirc;n valoarea  <b>Obiectele spațiale punctuale sau liniare ale observatorului de intrare</b>.
+            </p>
+        </div>
+    </div>
+    <div id="targetHeight">
+        <div>
+            <p>&Icirc;nălțimea țintelor pe sol.
+            </p>
+            <p>&Icirc;nălțimea poate fi definită de o valoare și unitățile sale sau dintr-un c&acirc;mp &icirc;n valoarea  <b>Obiectele spațiale punctuale sau liniare ale observatorului de intrare</b>.
+            </p>
+        </div>
+    </div>
+    <div id="horizontalStartAngle">
+        <div>
+            <p>Unghiul de &icirc;nceput al intervalului de scanare orizontal.
+            </p>
+            <p>Unghiul poate fi definit de o valoare de la 0 la 360 sau dintr-un c&acirc;mp din valoarea  <b>Obiecte spațiale punctuale sau liniare ale observatorului de intrare</b>.
+            </p>
+        </div>
+    </div>
+    <div id="horizontalEndAngle">
+        <div>
+            <p>Unghiul de &icirc;ncheiere al intervalului de scanare orizontal.
+            </p>
+            <p>Unghiul poate fi definit de o valoare de la 0 la 360 sau dintr-un c&acirc;mp din valoarea  <b>Obiecte spațiale punctuale sau liniare ale observatorului de intrare</b>.
+            </p>
+        </div>
+    </div>
+    <div id="verticalUpperAngle">
+        <div>
+            <p>Limita verticală superioară a unghiului scanării relative la planul orizontal.
+            </p>
+            <p>Unghiul poate fi definit de o valoare de la 90 la 180 sau dintr-un c&acirc;mp din valoarea  <b>Obiecte spațiale punctuale sau liniare ale observatorului de intrare</b>.
+            </p>
+        </div>
+    </div>
+    <div id="verticalLowerAngle">
+        <div>
+            <p>Limita verticală inferioară a unghiului scanării relative la planul orizontal.
+            </p>
+            <p>Unghiul poate fi definit de o valoare de la 90 la 180 sau dintr-un c&acirc;mp din valoarea  <b>Obiecte spațiale punctuale sau liniare ale observatorului de intrare</b>.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>Numele stratului tematic de raster razei de vizualizare care va fi creat și adăugat pe hartă. Acest strat tematic conține zone vizibile pe care observatorii le pot vedea și valorile celulelor reprezintă numărul de observatori care pot vizualiza celulele.
+            </p>
+        </div>
+    </div>
+    <div id="outputAboveGroundLevelRasterName">
+        <div>
+            <p>Numele stratului tematic de raster deasupra solului (AGL) care va fi creat și adăugat la hartă.
+            </p>
+        </div>
+    </div>
+    <div id="resultType">
+        <div>
+            <p>Tipul de ieșire care va fi creată. Ieșirea poate fi un strat tematic de imagini satelitare cu structură tile sau un strat tematic de imagini satelitare dinamic.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>Numele folderului din  <b>Resursele mele</b> &icirc;n care va fi salvat rezultatul.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

@@ -1,0 +1,13 @@
+{
+  "weightedOverlayTable": "Tabela obteženega prekrivanja",
+  "id": "ID",
+  "layer": "Sloj",
+  "field": "Polje",
+  "influence": "Vpliv",
+  "sumOfInfluence": "Vsota vpliva",
+  "value": "Vrednost",
+  "remapTable": "Tabela preslikav",
+  "scale": "Merilo",
+  "scales": "Merila",
+  "selectRaster": "Izberi raster"
+}

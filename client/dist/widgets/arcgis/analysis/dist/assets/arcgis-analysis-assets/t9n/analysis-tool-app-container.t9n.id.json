@@ -1,0 +1,21 @@
+{
+  "backLabel": "Kembali",
+  "cannotReopenTool": "Alat tidak dapat dibuka kembali. Alat parameter telah dikembalikan ke mode default.",
+  "cannotReopenWebTool": "Tidak dapat membuka alat web. <calcite-link target='_blank' href='${ docLink }'>Pelajari selengkapnya</calcite-link>",
+  "creditThresholdModal": {
+    "cancelRun": "Batalkan",
+    "continueRun": "Tetap jalankan",
+    "creditEstimate": "Perkiraan kredit: ${cost}",
+    "creditThreshold": "Ambang batas kredit: ${threshold}",
+    "heading": "Sebelum Anda melanjutkan",
+    "learnMore": "Pelajari selengkapnya tentang ambang batas kredit",
+    "thresholdExceeded": "Perkiraan biaya kredit untuk analisis ini lebih besar dari ambang batas kredit web map Anda."
+  },
+  "failedToExecuteEstimate": "Pengiriman gagal. Gagal mengeksekusi EstimateRasterAnalysisCost",
+  "missingPermissionForWebTool": "Alat ini tidak dapat diakses. Pastikan alat masih ada dan pengguna Anda memiliki izin untuk menggunakannya.",
+  "runAnalysisLabel": "Jalankan",
+  "toolPreviewNoParameters": "Belum ada parameter yang diatur untuk model ini. Kembali ke model untuk menambahkan variabel dan mengaturnya sebagai parameter.",
+  "toolPreviewNoParametersLink": "<calcite-link target='_blank' href='${ docLink }'>Pelajari selengkapnya</calcite-link>",
+  "toolPreviewWebTool": "Untuk menjalankan model ini sebagai alat web, publikasikan dan buka panel Analisis.",
+  "webToolJSONChanged": "Satu parameter atau lebih telah diperbarui. Beberapa parameter mungkin tidak dapat diisi kembali dari riwayat."
+}

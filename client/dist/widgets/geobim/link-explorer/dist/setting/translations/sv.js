@@ -1,0 +1,1 @@
+System.register([],function(e){return{execute:function(){e({settingsLabel:"Link Explorer-inst\xe4llningar",selectModelViewer:"V\xe4lj en dokumentvisarwidget f\xf6r att visa l\xe4nkade dokument."})}}});

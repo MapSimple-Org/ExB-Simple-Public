@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>Įrankis Sumuoti viduje apskaičiuoja statistinius duomenis apie elementus, esančius nurodytuose daugiakampiuose arba poligonuose.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="summaryLayer">
+        <div>
+            <p>Sluoksnis, kuris bus susumuotas.
+            </p>
+            <p class="toolPaneOnly">Elementų skaičius priklauso nuo papildomų veiksnių, pavyzdžiui, filtravimo kriterijų ir analizės apimties.
+            </p>
+        </div>
+    </div>
+    <div id="binType">
+        <div>
+            <p>Ribojančių elementų, pagal kuriuos bus susumuojami įvesties elementai, tipas. Tai gali būti poligonų sluoksnis arba kvadratinių ar &scaron;e&scaron;iakampių gardelių tinklelis, kuris sukuriamas paleidus įrankį.
+            </p>
+        </div>
+    </div>
+    <div id="sumWithinLayer">
+        <div>
+            <p>Poligonų sluoksnis, kuriame bus susumuoti įvesties elementai.
+            </p>
+            <p class="toolPaneOnly">Elementų skaičius priklauso nuo papildomų veiksnių, pavyzdžiui, filtravimo kriterijų ir analizės apimties.
+            </p>
+        </div>
+    </div>
+    <div id="binSize">
+        <div>
+            <p>Sukurtų daugiakampių dydis. Kvadratų atveju nurodytas skaičius ir vienetai lemia kvadrato auk&scaron;tį ir ilgį. &Scaron;e&scaron;iakampių atveju nurodytas skaičius ir vienetai lemia atstumą tarp lygiagrečių kra&scaron;tinių.
+            </p>
+        </div>
+    </div>
+    <div id="binSizeUnit">
+        <div>
+            <p>Vienetai, kurie bus naudojami nurodant daugiakampio dydį.
+            </p>
+        </div>
+    </div>
+    <div id="sumShape">
+        <div>
+            <p>Nurodoma, ar bus apskaičiuotas kiekviename ribiniame poligone apibendrintų elementų dydis. Bus apskaičiuotas bendras linijų ilgis. Bus apskaičiuotas bendras poligonų plotas.
+            </p>
+        </div>
+    </div>
+    <div id="shapeUnits">
+        <div>
+            <p>Vienetai, kurie bus naudojami bendram susumuotų elementų dydžiui apskaičiuoti.
+            </p>
+        </div>
+    </div>
+    <div id="summaryFields">
+        <div>
+            <p>Įvesties sluoksnio skaičių arba datų laukai, kurie bus apibendrinti, ir kiekvienam laukui apskaičiuojama statistika.
+            </p>
+        </div>
+    </div>
+    <div id="groupByField">
+        <div>
+            <p>Laukas i&scaron; įvesties sluoksnio, kuris bus naudojamas duomenims suskirstyti į atskiras grupes statistiniams skaičiavimams atlikti.
+            </p>
+        </div>
+    </div>
+    <div id="minorityMajority">
+        <div>
+            <p>Nurodoma, ar apskaičiuoti mažumos (mažiausiai dominuojančios) ir daugumos (labiausiai dominuojančios) grupes kiekvienoje apibendrinimo srityje.
+            </p>
+        </div>
+    </div>
+    <div id="percentShape">
+        <div>
+            <p>Nurodoma, ar bus apskaičiuota apibendrintų elementų, priklausančių atskiroms grupėms, procentinė dalis kiekvienoje suvestinės teritorijoje.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>Sluoksnio, kuris bus sukurtas ir pridėtas į žemėlapį, pavadinimas.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>Puslapyje  <b>Mano turinys</b> esančio aplanko, kur bus įra&scaron;yti rezultatai, pavadinimas.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

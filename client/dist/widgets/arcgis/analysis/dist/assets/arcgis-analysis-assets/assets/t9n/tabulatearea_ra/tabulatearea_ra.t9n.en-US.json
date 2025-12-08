@@ -1,0 +1,12 @@
+{
+  "classField": "Class field",
+  "classesAsRowsLabel": "Classes as rows in output table",
+  "inputClassRasterOrFeatures": "Input class raster or features",
+  "inputLayerGroupText": "Choose the input zone and class layer to calculate the cross-tabulated areas between the two datasets.",
+  "itemProperties": {
+    "description": "Output table generated from running the Tabulate Area analysis tool.",
+    "snippet": "Output table generated from Tabulate Area"
+  },
+  "tabulateAreaSettingsGroupLabel": "Tabulate area settings",
+  "tabulateAreaSettingsGroupText": "Choose how to handle the classes in the output table. Specify the cell size to calculate. "
+}

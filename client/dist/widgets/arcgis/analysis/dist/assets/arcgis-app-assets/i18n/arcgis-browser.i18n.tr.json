@@ -1,0 +1,89 @@
+{
+  "browser": {
+    "refineContent": "İçeriği ayrıntılandır",
+    "filters": "Filtreler",
+    "pageRange": "${start}-${end}, toplam: ${total}",
+    "pageRangeAria": "${start}-${end}, toplam öge: ${total}",
+    "pageRangeWithRecycleBin": "${start}-${end}, toplam: ${total} (Toplam boyut: ${recycleBinSize})",
+    "pageRangeAriaWithRecycleBin": "${start}-${end}, toplam öge: ${total} (Toplam boyut: ${recycleBinSize})",
+    "totalSize": "Toplam boyut: ${totalSize}",
+    "loading": "Sonuçlar yükleniyor",
+    "close": "Kapat"
+  },
+  "actions": {
+    "more": "Daha fazla"
+  },
+  "filter": {
+    "clear": "Temizle"
+  },
+  "filterDate": {
+    "today": "Bugün",
+    "yesterday": "Dün",
+    "last7": "Son 7 gün",
+    "last30": "Son 30 gün",
+    "never": "Hiçbir Zaman",
+    "custom": "Özel aralık...",
+    "title": {
+      "created": "Oluşturulma tarihi",
+      "modified": "Değiştirilme tarihi",
+      "joined": "Katıldığı tarih",
+      "lastLogin": "Son oturum açma"
+    },
+    "created": "Oluşturma Tarihi: ${date}",
+    "modified": "Değiştirme Tarihi: ${date}",
+    "joined": "Katılma tarihi: ${date}",
+    "lastLogin": "Son oturum açma: ${date}"
+  },
+  "pagination": {
+    "next": "Sonraki sayfa",
+    "prev": "Önceki sayfa"
+  },
+  "search": {
+    "label": "Grupları ara",
+    "search": "Ara",
+    "clear": "Arama terimini sil",
+    "wildcard": "Joker karakterli aramalar desteklenmez"
+  },
+  "sort": {
+    "sortDirection": "Sıralama yönü",
+    "title": "Başlık",
+    "relevance": "İlgi derecesi",
+    "modified": "Değiştirilme tarihi",
+    "deleted": "Silindiği tarih",
+    "created": "Oluşturulma tarihi",
+    "added": "Eklendiği tarih",
+    "size": "Boyut",
+    "owner": "Sahip",
+    "sizeAsc": "En küçükten en büyüğe",
+    "sizeDesc": "En büyükten en küçüğe",
+    "numviews": "Görüntülenme sayısı",
+    "numAsc": "En azdan en çoğa",
+    "numDesc": "En çoktan en aza",
+    "alphabeticalAsc": "Alfabetik",
+    "alphabeticalDesc": "Ters alfabetik",
+    "recentAsc": "En eski",
+    "recentDesc": "En yeni",
+    "sort": "Sırala",
+    "sortBy": "Şuna göre sırala",
+    "sortByColon": "Sıralama şekli:",
+    "fullname": "Adı",
+    "username": "Kullanıcı Adı",
+    "name": "Adı",
+    "membertype": "Grup rolü",
+    "joined": "Katıldığı tarih",
+    "lastlogin": "Son oturum açma",
+    "dataset": "Veri kümesi",
+    "mfaenabled": "Çok faktörlü kimlik doğrulama",
+    "defaultAsc": "Artan",
+    "defaultDesc": "Azalan"
+  },
+  "topBar": {
+    "filter": "Filtrele"
+  },
+  "filterStatus": {
+    "clear": "Temizle",
+    "filters": "Filtreler:",
+    "additional": "Ek etkin filtreler",
+    "clearAllFilters": "Tüm filtreleri temizle"
+  }
+}

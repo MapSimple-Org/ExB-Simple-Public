@@ -1,0 +1,11 @@
+{
+  "newTemplate": "Stvori novi predložak",
+  "openTemplate": "Otvori predložak",
+  "addTemplate": "Dodaj predložak",
+  "addFunction": "Dodaj rasterske funkcije",
+  "addConstant": "Dodaj konstantu",
+  "addRaster": "Dodaj varijablu rastera",
+  "expand": "Proširi",
+  "editTemplateProperties": "Uredi svojstva predloška",
+  "viewTemplateProperties": "Prikaz svojstava predloška"
+}

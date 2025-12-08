@@ -1,0 +1,21 @@
+{
+  "name": "showroom",
+  "type": "template",
+  "templateType": "app",
+  "label": "Showroom",
+  "description": "Showroom is a template with four equal-sized Card widgets which show more details when hovered over.",
+  "thumbnail": "thumbnail.png",
+  "order": 27,
+  "tags": [
+    "Card",
+    "Gallery"
+  ],
+  "categoriesTags": [
+    "Web page",
+    "Fullscreen"
+  ],
+  "isMultiplePage": false,
+  "isMapAware": false,
+  "thumbnailWidth": 320,
+  "thumbnailHeight": 214
+}

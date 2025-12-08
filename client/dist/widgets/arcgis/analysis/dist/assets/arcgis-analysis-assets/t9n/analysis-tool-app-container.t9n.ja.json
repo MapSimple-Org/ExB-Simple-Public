@@ -1,0 +1,21 @@
+{
+  "backLabel": "戻る",
+  "cannotReopenTool": "ツールを再開できませんでした。 ツール パラメーターがデフォルトに変更されました。",
+  "cannotReopenWebTool": "Web ツールを開けません。 <calcite-link target='_blank' href='${ docLink }'>詳細</calcite-link>",
+  "creditThresholdModal": {
+    "cancelRun": "キャンセル",
+    "continueRun": "常に実行",
+    "creditEstimate": "推定クレジット: ${cost}",
+    "creditThreshold": "クレジットの閾値: ${threshold}",
+    "heading": "続行する前に",
+    "learnMore": "クレジット閾値の詳細",
+    "thresholdExceeded": "この解析の推定クレジット コストは、Web マップのクレジットの閾値より大きいです。"
+  },
+  "failedToExecuteEstimate": "送信に失敗しました。 EstimateRasterAnalysisCost を実行できませんでした",
+  "missingPermissionForWebTool": "このツールにアクセスできません。 ツールが存在することと、ユーザーにアクセスする権限があることを確認してください。",
+  "runAnalysisLabel": "実行",
+  "toolPreviewNoParameters": "このモデルにはパラメーターが設定されていません。 モデルに戻り、変数を追加してパラメーターとして設定します。",
+  "toolPreviewNoParametersLink": "<calcite-link target='_blank' href='${ docLink }'>詳細</calcite-link>",
+  "toolPreviewWebTool": "このモデルを Web ツールとして実行するには、公開して解析ウィンドウから開きます。",
+  "webToolJSONChanged": "1 つ以上のパラメーターが更新されました。 一部のパラメーターは、履歴から再設定できません。"
+}

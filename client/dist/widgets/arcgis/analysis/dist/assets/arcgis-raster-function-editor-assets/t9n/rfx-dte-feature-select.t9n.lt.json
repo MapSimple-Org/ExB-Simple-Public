@@ -1,0 +1,8 @@
+{
+  "selectFeature": "Pasirinkti elementų sluoksnį",
+  "browseLayer": "Naršyti sluoksnius",
+  "loading": "Įkeliama...",
+  "errorCodes": {
+    "required": "Šis parametras yra būtinas."
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "addField": "フィールドの追加",
+  "deselectAll": "すべて選択解除",
+  "done": "完了",
+  "noFieldsAvailable": "${layerName}には、データ タイプ要件を満たすフィールドがありません。 続行するには、別のレイヤーを選択します。",
+  "noInputSelected": {
+    "withLayerInputLabel": "入力レイヤーが選択されていません。 続行するには、${layerInputLabel}内のレイヤーを選択します。",
+    "withoutLayerInputLabel": "入力レイヤーが選択されていません。 続行するには、入力レイヤーを選択します。"
+  },
+  "noSearchResults": "一致するフィールドが見つかりません。",
+  "selectAll": "すべて選択",
+  "summaryFieldsPopover": "サマリー フィールド"
+}

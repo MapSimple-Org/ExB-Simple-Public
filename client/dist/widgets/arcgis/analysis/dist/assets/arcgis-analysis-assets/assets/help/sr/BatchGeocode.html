@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>Alat Geokodiranje lokacija iz tabele pretvara adrese ili mesta iz ulazne tabele ili datoteke u koordinate.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputType">
+        <div>
+            <p>Precizira da li će ulaz biti stavka tabele (<b>hostovana tabela</b>) ili <code>.csv</code> ili Excel datoteka (<b>CSV/Excel</b>).
+            </p>
+        </div>
+    </div>
+    <div id="inputFileItem">
+        <div>
+            <p>Ulazna datoteka sa adresama ili mestima za geokodiranje. Ulaz mora biti hostovana  <code>.csv</code> ili Excel datoteka. </p>
+        </div>
+    </div>
+    <div id="inputTable">
+        <div>
+            <p>Ulazna tabela sa adresama za geokodiranje. Ulaz mora biti stavka hostovane tabele.
+            </p>
+            <p>Broj geoobjekata je prikazan ispod naziva tabele. Taj broj uključuje sve geoobjekte u tabeli, osim onih koji su uklonjeni kori&scaron;ćenjem filtera.
+            </p>
+        </div>
+    </div>
+    <div id="geocodeServiceURL">
+        <div>
+            <p>Usluga lokatora koja će biti kori&scaron;ćena za geokodiranje. Ako se usluga lokatora koju želite da koristite ne nalazi u padajućem meniju, kontaktirajte administratora kako bi usluga lokatora bila dodana kao pomoćna usluga.
+            </p>
+        </div>
+    </div>
+    <div id="singleOrMultiFieldSwitch">
+        <div>
+            <p>Određuje da li su ulazni podaci sadržani u jednom ili vi&scaron;e polja.
+            </p>
+        </div>
+    </div>
+    <div id="geocodeUIParameters">
+        <div>
+            <p>Polja koja će se koristiti od strane lokatora za određivanje lokacije podataka. Pojedina polja se podrazumevaju da su u podacima, poput adrese, grada, države i po&scaron;tanskog broja.
+            </p>
+        </div>
+    </div>
+    <div id="sourceCountry">
+        <div>
+            <p>Država u kojoj su podaci locirani. Ako su sve adrese iz jedne države, izaberite naziv te države da osigurate najtačnije rezultate. U suprotnom, ovaj parametar ostavite prazan.
+            </p>
+        </div>
+    </div>
+    <div id="outputFields">
+        <div>
+            <p>Određuje polja koja će biti uključena u izlazne podatke. Opcije su sledeće:
+            </p>
+            <ul>
+                <li> <b>Sve</b>&mdash;Sva dostupna izlazna polja lokatora će biti uključena u rezultate geokoda.
+                </li>
+                <li> <b>Minimalno</b>&mdash;Podskup polja iz lokatora kao i polja iz tabele za unos biće uključeni u rezultate.
+                </li>
+                <li> <b>Samo lokacija</b>&mdash;Polje <i>Shape</i> polje iz lokatora kao i polja iz tabele za unos biće uključeni u rezultate.
+                </li>
+            </ul>
+            
+        </div>
+    </div>
+    <div id="outputType">
+        <div>
+            <p>Tip izlaza koji će biti kreiran. Izlaz može biti usluga,  <code>.csv</code> datoteka, ili <code>.xls</code> datoteka.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>Naziv sloja ili datoteke koji će biti kreirani u  <b>Mom sadržaju</b>.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>Naziv fascikle u  <b>Mom sadržaju</b> u kojoj će rezultat biti sačuvan.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

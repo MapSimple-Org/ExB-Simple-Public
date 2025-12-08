@@ -1,0 +1,22 @@
+{
+  "value": "Waarde",
+  "classname": "Klassenaam",
+  "color": "Kleur",
+  "raster": "Raster",
+  "tableType": "Tabeltype",
+  "manual": "Handmatig",
+  "external": "Extern",
+  "browseTable": "Tabel Bekijken",
+  "browseTableFrom": "Door tabel bladeren vanuit",
+  "file": "Bestand",
+  "dbfFile": "DBF-bestand",
+  "layer": "Laag",
+  "unsupportedDataType": "Niet-ondersteund type",
+  "failedToGetTableFromLayer": "Kan tabel niet ophalen uit de laag.",
+  "generate": "Tabel genereren",
+  "minValue": "Minimumwaarde",
+  "maxValue": "Maximumwaarde",
+  "classBaseName": "Klasse basisnaam",
+  "colorscheme": "Kleurenschema",
+  "defaultClassName": "Label_"
+}

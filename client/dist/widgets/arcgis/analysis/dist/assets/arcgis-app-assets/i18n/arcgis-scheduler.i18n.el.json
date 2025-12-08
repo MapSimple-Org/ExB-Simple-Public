@@ -1,0 +1,55 @@
+{
+  "beginningOnLabel": "Έναρξη στις",
+  "repeatTypeLabel": "Τύπος επανάληψης",
+  "endingOnTypeLabel": "Λήξη στις",
+  "endingOnDateLabel": "Ημερομηνία τέλους",
+  "endingOnCountLabel": "Συνολικός αριθμός",
+  "endingOnCountPlaceholder": "για παράδειγμα, 1, 10, 30",
+  "dailyRepeatIntervalLabel": "Διάστημα επανάληψης",
+  "dailyTimeLabel": "Ώρα",
+  "weeklyDaysOfWeekLabel": "Ημέρα της εβδομάδας",
+  "weeklyTimeLabel": "Ώρα",
+  "monthlyDayOfMonthLabel": "Ημέρα του μήνα",
+  "monthlyDayOfMonthPlaceholder": "για παράδειγμα, 1 - 31",
+  "monthlyRepeatIntervalLabel": "Διάστημα επανάληψης",
+  "monthlyTimeLabel": "Ώρα",
+  "repeatTypeOptions": {
+    "day": "Ημέρα",
+    "week": "Εβδομάδα",
+    "month": "Μήνας"
+  },
+  "endingOnType": {
+    "never": "Ποτέ",
+    "date": "Ημερομηνία",
+    "count": "Ενεργοποίηση"
+  },
+  "dailyRepeatInterval": {
+    "everyDay": "Κάθε μέρα",
+    "everyOtherDay": "Κάθε δεύτερη μέρα",
+    "everyThreeDays": "Κάθε τρεις ημέρες",
+    "everyFourDays": "Κάθε τέσσερις ημέρες",
+    "everyFiveDays": "Κάθε πέντε ημέρες",
+    "everySixDays": "Κάθε έξι ημέρες",
+    "everySevenDays": "Κάθε επτά ημέρες",
+    "everyFourteenDays": "Κάθε δεκατέσσερις ημέρες"
+  },
+  "weekDays": {
+    "all": "Όλα",
+    "allWeekdays": "Όλες τις καθημερινές",
+    "sunday": "Κυριακή",
+    "monday": "Δευτέρα",
+    "tuesday": "Τρίτη",
+    "wednesday": "Τετάρτη",
+    "thursday": "Πέμπτη",
+    "friday": "Παρασκευή",
+    "saturday": "Σάββατο"
+  },
+  "monthlyRepeatInterval": {
+    "everyMonth": "Κάθε μήνα",
+    "everyTwoMonths": "Κάθε δύο μήνες",
+    "everyThreeMonths": "Κάθε τρεις μήνες",
+    "everyFourMonths": "Κάθε τέσσερις μήνες",
+    "everyFiveMonths": "Κάθε πέντε μήνες",
+    "everySixMonths": "Κάθε έξι μήνες"
+  }
+}

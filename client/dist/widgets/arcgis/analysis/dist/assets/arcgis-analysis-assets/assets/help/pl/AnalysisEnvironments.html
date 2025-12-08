@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>Ustawienia środowiskowe dotyczące analiz w przeglądarce  Map Viewer </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="analysisProcessingExtent">
+        <div>
+            <p>Określa obszar, kt&oacute;ry będzie używany na potrzeby analizy. Domyślnie będzie używany pełny zasięg.
+            </p>
+        </div>
+    </div>
+    <div id="rasterAnalysisProcessingExtent">
+        <div>
+            <p>Określa obszar, kt&oacute;ry będzie używany na potrzeby narzędzi analizy rastrowej i funkcji rastrowych, jeśli włączono opcję  <b>Używaj innego zasięgu przetwarzania na potrzeby analizy rastrowej</b>. Domyślnie będzie używany zasięg wyświetlania mapy.
+            </p>
+        </div>
+    </div>
+    <div id="useDifferentExtentForRA">
+        <div>
+            <p>Określa, czy na potrzeby narzędzi analizy rastrowej i funkcji rastrowych będzie używany inny zasięg przetwarzania. Jeśli ta opcja będzie włączona, na potrzeby analizy rastrowej będzie używana wartość ustawiona dla opcji  <b>Zasięg przetwarzania na potrzeby analizy rastrowej</b>. Domyślnie ta opcja jest ustawiona do korzystania z zasięgu wyświetlania mapy. Jeśli ta opcja będzie wyłączona, wszystkie typy analizy będą korzystały z wartości ustawionej dla opcji <b>Zasięg przetwarzania na potrzeby analizy</b>. Domyślnie ta opcja jest ustawiona do korzystania z pełnego zasięgu.
+            </p>
+        </div>
+    </div>
+    <div id="outSR">
+        <div>
+            <p>Określa układ wsp&oacute;łrzędnych, kt&oacute;ry będzie używany na potrzeby analizy i warstwy wynikowej.
+            </p>
+        </div>
+    </div>
+    <div id="extent">
+        <div>
+            <p>Określa obszar, kt&oacute;ry będzie używany na potrzeby analizy.
+            </p>
+        </div>
+    </div>
+    <div id="snapRaster">
+        <div>
+            <p>Dostosowuje zasięg danych wynikowych, tak aby był zgodny z wyr&oacute;wnaniem kom&oacute;rek podanej warstwy rastra dociągania.
+            </p>
+        </div>
+    </div>
+    <div id="cellSize">
+        <div>
+            <p>Określa wielkość kom&oacute;rki lub rozdzielczość, kt&oacute;ra będzie używana podczas analizy i do tworzenia wynikowej warstwy rastrowej.
+            </p>
+            <p>Jeśli wybrano opcję  <b>Jak podano</b>, a wynikowe odniesienie przestrzenne jest inne niż wejściowe odniesienie przestrzenne, wartość wielkości kom&oacute;rki nie zostanie ponownie odwzorowana.
+            </p>
+        </div>
+    </div>
+    <div id="mask">
+        <div>
+            <p>Określa warstwę maski, dzięki kt&oacute;rej do analizy zostaną użyte tylko kom&oacute;rki znajdujące się w obszarze maski.
+            </p>
+        </div>
+    </div>
+    <div id="resamplingMethod">
+        <div>
+            <p>Określa spos&oacute;b interpolacji wartości pikseli, gdy rastry wejściowy i wynikowy nie są wyr&oacute;wnane.
+            </p>
+        </div>
+    </div>
+    <div id="processorType">
+        <div>
+            <p>Określa typ procesora, kt&oacute;ry będzie używany. Dostępne opcje to:  <b>CPU</b>, <b>GPU</b> i <b>Automatycznie</b>. Jeśli zostanie wybrana opcja <b>Automatycznie</b>, narzędzie zdefiniuje typ procesora.
+            </p>
+        </div>
+    </div>
+    <div id="parallelProcessingFactor">
+        <div>
+            <p>Określa liczbę instancji usługi przetwarzania rastrowego używanych podczas działania narzędzia. Obsługiwane wartości obejmują puste ciągi znakowe (narzędzie ustali liczbę instancji usługi przetwarzania rastrowego do użycia), liczby całkowite (0 lub dodatnie liczby całkowite) i wartości procentowe. Wartości procentowe muszą zawierać znak procentu (%) po wartości procentowej.
+            </p>
+        </div>
+    </div>
+    <div id="askConfirmation">
+        <div>
+            <p>Określa, czy pojawi się komunikat ostrzegawczy, jeśli szacowana liczba kredyt&oacute;w przekroczy określony pr&oacute;g (opcja włączona), czy też analiza zostanie przeprowadzona bez wyświetlania komunikatu niezależnie od szacowanego wykorzystania kredyt&oacute;w (opcja niewłączona). W analizie nadal będą uwzględniane ustawienia budżetowania kredyt&oacute;w dla instytucji.
+            </p>
+        </div>
+    </div>
+    <div id="creditThreshold">
+        <div>
+            <p>Określa pr&oacute;g, przy kt&oacute;rym pojawi się komunikat ostrzegawczy na podstawie szacowanego wykorzystania kredytu w przypadku przeprowadzenia analizy. Analizę można nadal przeprowadzić, jeśli oszacowanie przekracza pr&oacute;g.
+            </p>
+        </div>
+    </div>
+    <div id="recycleProcessingWorkers">
+        <div>
+            <p>Określa liczbę sekcji obraz&oacute;w, kt&oacute;re zostaną przetworzone przed ponownym uruchomieniem proces&oacute;w użytkownika, aby zapobiec potencjalnym niepowodzeniom wynikającym z długiego działania procesu. Domyślna wartość to 0.
+            </p>
+        </div>
+    </div>
+    <div id="retryOnFailures">
+        <div>
+            <p>Określa liczbę ponownych pr&oacute;b wykonania tego samego procesu użytkownika w przypadku niepowodzenia przetwarzania danego zadania. Domyślna wartość to 0.
+            </p>
+        </div>
+    </div>
+    <div id="geographicTransformations">
+        <div>
+            <p>Określa metody transformacji, kt&oacute;rych można używać do odwzorowywania danych na potrzeby analizy.
+            </p>
+            <p>Środowisko to obsługuje obecnie tylko narzędzia analizy rastrowej i funkcje rastrowe.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

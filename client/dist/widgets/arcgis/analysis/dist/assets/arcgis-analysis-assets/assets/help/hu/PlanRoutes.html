@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>A Plan Routes eszk&ouml;z t&ouml;bb meg&aacute;ll&oacute;val rendelkező &uacute;tvonalakat hoz l&eacute;tre j&aacute;rműflotta sz&aacute;m&aacute;ra.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="startLayer">
+        <div>
+            <p>Azt meghat&aacute;roz&oacute; pontszerű vektoros elemek, hogy a j&aacute;rművek hol kezdik meg &uacute;tvonalukat.
+            </p>
+            <p class="toolPaneOnly">A vektoros elemek sz&aacute;ma olyan tov&aacute;bbi t&eacute;nyezőktől f&uuml;gg, mint p&eacute;ld&aacute;ul szűr&eacute;si krit&eacute;rium &eacute;s elemz&eacute;s kiterjeszt&eacute;se.
+            </p>
+        </div>
+    </div>
+    <div id="stopsLayer">
+        <div>
+            <p>Pontszerű t&eacute;rk&eacute;pobjektumok, amelyeket a j&aacute;rműveknek &uacute;tvonaluk sor&aacute;n fel kell keresni&uuml;k. Ezek a pontok hozz&aacute;rendelt vagy nem hozz&aacute;rendelt meg&aacute;ll&oacute;helyekk&eacute; v&aacute;lnak a kimeneten.
+            </p>
+            <p class="toolPaneOnly">A vektoros elemek sz&aacute;ma olyan tov&aacute;bbi t&eacute;nyezőktől f&uuml;gg, mint p&eacute;ld&aacute;ul szűr&eacute;si krit&eacute;rium &eacute;s elemz&eacute;s kiterjeszt&eacute;se.
+            </p>
+        </div>
+    </div>
+    <div id="returnToStart">
+        <div>
+            
+            <p>Megadja, hogy a j&aacute;rműveknek vissza kell-e t&eacute;rni&uuml;k a kiindul&aacute;si hely&uuml;kre (enged&eacute;lyezve), vagy meghat&aacute;rozott helyeken kell-e befejezni&uuml;k &uacute;tjukat.
+            </p>
+        </div>
+    </div>
+    <div id="endLayer">
+        <div>
+            <p>Azt meghat&aacute;roz&oacute; pontszerű vektoros elemek, hogy a j&aacute;rművek hol fejezik be az &uacute;tvonalukat. Ha a r&eacute;teg csak egy pontot tartalmaz, az eszk&ouml;z az &ouml;sszes j&aacute;rművet egy k&ouml;z&ouml;s v&eacute;gpontra ir&aacute;ny&iacute;tja. Ha a r&eacute;teg t&ouml;bb pontot tartalmaz, akkor az eszk&ouml;z minden j&aacute;rművet egyedi v&eacute;gpontra fog ir&aacute;ny&iacute;tani.
+            </p>
+            <p class="toolPaneOnly">A vektoros elemek sz&aacute;ma olyan tov&aacute;bbi t&eacute;nyezőktől f&uuml;gg, mint p&eacute;ld&aacute;ul szűr&eacute;si krit&eacute;rium &eacute;s elemz&eacute;s kiterjeszt&eacute;se.
+            </p>
+        </div>
+    </div>
+    <div id="startLayerRouteIDField">
+        <div>
+            <p>Az indul&aacute;si r&eacute;teg azon mezője, amely egyedileg azonos&iacute;tja az egyes &uacute;tvonalakat, j&aacute;rműveket vagy j&aacute;rművezetőket. Ha a j&aacute;rművek t&ouml;bb helyről indulnak, &eacute;s t&ouml;bb helyen fejezik be az &uacute;tvonalat, akkor a kezdő &eacute;s a z&aacute;r&oacute; r&eacute;teghez megadott &uacute;tvonal-azonos&iacute;t&oacute;knak meg kell egyezni&uuml;k.
+            </p>
+        </div>
+    </div>
+    <div id="endLayerRouteIDField">
+        <div>
+            <p>A v&eacute;gződ&eacute;s r&eacute;teg azon mezője, amely egyedileg azonos&iacute;tja az egyes &uacute;tvonalakat, j&aacute;rműveket vagy j&aacute;rművezetőket. Ha a j&aacute;rművek t&ouml;bb helyről indulnak, &eacute;s t&ouml;bb helyen fejezik be az &uacute;tvonalat, akkor a kezdő &eacute;s a z&aacute;r&oacute; r&eacute;teghez megadott &uacute;tvonal-azonos&iacute;t&oacute;knak meg kell egyezni&uuml;k.
+            </p>
+        </div>
+    </div>
+    <div id="pointBarrierLayer">
+        <div>
+            <p>Egy vagy t&ouml;bb olyan pontszerű vektoros elem, amely ideiglenes korl&aacute;toz&aacute;sk&eacute;nt (hat&aacute;rk&eacute;nt) szolg&aacute;l az &eacute;rintett utc&aacute;kon val&oacute; halad&aacute;skor. A k&ouml;zleked&eacute;s enged&eacute;lyezett az utc&aacute;n, de a hat&aacute;ron kereszt&uuml;l m&aacute;r nem.
+            </p>
+        </div>
+    </div>
+    <div id="lineBarrierLayer">
+        <div>
+            <p>Egy vagy t&ouml;bb olyan vonalas vektoros elem, amely ideiglenes korl&aacute;toz&aacute;sk&eacute;nt (hat&aacute;rk&eacute;nt) szolg&aacute;l az &eacute;rintett utc&aacute;kon val&oacute; halad&aacute;skor. A vonalas hat&aacute;rok minden olyan helyen akad&aacute;lyozz&aacute;k a tov&aacute;bbhalad&aacute;st, ahol a hat&aacute;rok keresztezik az utc&aacute;kat.
+            </p>
+        </div>
+    </div>
+    <div id="polygonBarrierLayer">
+        <div>
+            <p>Egy vagy t&ouml;bb olyan polygon vektoros elem, amely ideiglenes korl&aacute;toz&aacute;sk&eacute;nt (hat&aacute;rk&eacute;nt) szolg&aacute;l az &eacute;rintett utc&aacute;kon val&oacute; halad&aacute;skor. A polygon hat&aacute;rok megakad&aacute;lyozz&aacute;k a halad&aacute;st minden&uuml;tt, ahol a polygonok utc&aacute;t kereszteznek.
+            </p>
+        </div>
+    </div>
+    <div id="travelMode">
+        <div>
+            <p>Az &uacute;tvonalak l&eacute;trehoz&aacute;s&aacute;hoz haszn&aacute;lt utaz&aacute;si m&oacute;d. Csak az időalap&uacute; utaz&aacute;si m&oacute;dok vannak t&aacute;mogatva.
+            </p>
+        </div>
+    </div>
+    <div id="routeStartTime">
+        <div>
+            <p>A j&aacute;rművek indul&aacute;s&aacute;nak napja &eacute;s időpontja.
+            </p>
+        </div>
+    </div>
+    <div id="routeCount">
+        <div>
+            
+            <p class="OnlineOnly">A meg&aacute;ll&oacute;helyek felkeres&eacute;s&eacute;hez rendelkez&eacute;sre &aacute;ll&oacute; j&aacute;rművek maxim&aacute;lis sz&aacute;ma. Ha az  <b>Indul&aacute;si r&eacute;teg</b> &eacute;s a <b>V&eacute;gződ&eacute;s r&eacute;teg</b> &eacute;rt&eacute;kek egyetlen vektoros elemet tartalmaznak, ak&aacute;r 100 j&aacute;rművet is megadhat. Ha valamelyik r&eacute;teg egyn&eacute;l t&ouml;bb vektoros elemet tartalmaz, az alap&eacute;rtelmezett &eacute;rt&eacute;k nem szerkeszthető. </p> 
+            <p class="PortalOnly">A meg&aacute;ll&oacute;helyek felkeres&eacute;s&eacute;hez rendelkez&eacute;sre &aacute;ll&oacute; j&aacute;rművek maxim&aacute;lis sz&aacute;ma. Ha az  <b>Indul&aacute;si r&eacute;teg</b> &eacute;s a <b>V&eacute;gződ&eacute;s r&eacute;teg</b> &eacute;rt&eacute;kei egyetlen vektoros elemet tartalmaznak, akkor maxim&aacute;lis sz&aacute;m&uacute; j&aacute;rművet is megadhat. Ha valamelyik r&eacute;teg egyn&eacute;l t&ouml;bb vektoros elemet tartalmaz, az alap&eacute;rtelmezett &eacute;rt&eacute;k nem szerkeszthető.
+            </p>
+        </div>
+    </div>
+    <div id="maxStopsPerRoute">
+        <div>
+            
+            <p class="OnlineOnly">Az egyes j&aacute;rművek &aacute;ltal az adott &uacute;tvonalon megejthető meg&aacute;ll&aacute;sok maxim&aacute;lis sz&aacute;ma. 1 &eacute;s  200 k&ouml;z&ouml;tti &eacute;rt&eacute;ket adhat meg. </p> 
+            <p class="PortalOnly">Az egyes j&aacute;rművek &aacute;ltal az adott &uacute;tvonalon megejthető meg&aacute;ll&aacute;sok maxim&aacute;lis sz&aacute;ma.
+            </p>
+        </div>
+    </div>
+    <div id="stopServiceTime">
+        <div>
+            <p>Az egyes meg&aacute;ll&oacute;helyeken t&ouml;lt&ouml;tt v&aacute;rhat&oacute; &aacute;tlagos szolg&aacute;ltat&aacute;si idő.
+            </p>
+        </div>
+    </div>
+    <div id="limitMaxRouteTimeCheckbox">
+        <div>
+            <p>Megadja, hogy a j&aacute;rművekre a maxim&aacute;lis &uacute;tvonal-meg&aacute;llap&iacute;t&aacute;si időt alkalmazz&aacute;k-e. Az &uacute;tvonal-meg&aacute;llap&iacute;t&aacute;si idő tartalmazza a v&aacute;rhat&oacute; &uacute;tidőt &eacute;s az &uacute;tvonal menti meg&aacute;ll&oacute;kban t&ouml;lt&ouml;tt szervizidőt.
+            </p>
+        </div>
+    </div>
+    <div id="maxRouteTime">
+        <div>
+            <p>Azt a maxim&aacute;lis időt jelenti, ameddig az &uacute;tvonal tarthat egy &uacute;tvonal a kezdet&eacute;től a v&eacute;g&eacute;ig.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>A l&eacute;trehozni &eacute;s a t&eacute;rk&eacute;phez hozz&aacute;adni k&iacute;v&aacute;nt r&eacute;teg neve.
+            </p>
+        </div>
+    </div>
+    <div id="includeRouteLayers">
+        <div>
+            <p>Megadja, hogy minden egyes eredm&eacute;ny &uacute;tvonal el legyen mentve &uacute;tvonalr&eacute;tegk&eacute;nt.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            
+            <p>A  <b>Saj&aacute;t tartalom </b>azon mapp&aacute;j&aacute;nak neve, ahov&aacute; az eredm&eacute;nyek ment&eacute;se t&ouml;rt&eacute;nik.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

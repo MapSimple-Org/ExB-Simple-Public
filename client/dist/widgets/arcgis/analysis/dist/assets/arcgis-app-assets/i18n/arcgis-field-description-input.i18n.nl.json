@@ -1,0 +1,6 @@
+{
+  "description": "Beschrijving",
+  "addDescription": "Een beschrijving toevoegen",
+  "charactersLeft": "Resterende tekens: ${num}",
+  "invalid": "De beschrijving kan geen van de volgende tekens bevatten: < of >."
+}

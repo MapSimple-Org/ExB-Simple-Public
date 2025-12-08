@@ -1,0 +1,69 @@
+{
+  "loadingText": "Đang tải biểu mẫu schema",
+  "cancel": "Hủy",
+  "finishSetup": "Hoàn tất thiết lập",
+  "hasUnsavedChanges": "Bạn đã thực hiện các thay đổi với danh mục và chúng sẽ bị mất nếu không được lưu lại trước. Bạn có chắc chắn muốn đóng chế độ xem này và mất các thay đổi đã thực hiện không?",
+  "error": {
+    "generic": {
+      "title": "Lỗi khi đang cập nhật danh mục",
+      "message": "Đã xảy ra sự cố. Vui lòng thử lại sau."
+    },
+    "maxDepthExceeded": {
+      "title": "Lỗi khi đang cập nhật danh mục",
+      "message": "Bạn không thể lồng danh mục sâu hơn 2 cấp độ."
+    },
+    "destinationHasSameName": {
+      "title": "Lỗi khi đang cập nhật danh mục",
+      "message": "Một danh mục có cùng tên đã tồn tại trong danh mục đích."
+    },
+    "emptyTitle": {
+      "title": "Lỗi khi đang cập nhật danh mục",
+      "message": "Tiêu đề danh mục không được trống."
+    },
+    "noSchema": {
+      "title": "Không tìm thấy schema",
+      "message": "Không tìm thấy schema mục cho người dùng."
+    },
+    "maxCharacter": {
+      "title": "Lỗi khi đang cập nhật danh mục",
+      "message": "Tên danh mục chỉ có thể dài tối đa ${maxCharacter} ký tự."
+    },
+    "invalidCharacters": {
+      "title": "Lỗi khi đang cập nhật danh mục",
+      "single": "Danh mục không được chứa ký tự này: ${invalidCharacters}.",
+      "multiple": "Danh mục không được chứa bất kỳ ký tự nào sau đây: ${invalidCharacters}.",
+      "unknown": "Danh mục không được chứa bất kỳ ký tự nào sau đây: ${invalidCharacters}."
+    }
+  },
+  "warning": {
+    "deleteInUseCategory": {
+      "title": "Xóa danh mục",
+      "cta": "Xóa danh mục"
+    },
+    "changeTitleInUseCategory": {
+      "title": "Cập nhật danh mục",
+      "cta": "Cập nhật danh mục"
+    }
+  },
+  "template": {
+    "title": "Biểu mẫu danh mục",
+    "learnMore": "Tìm hiểu thêm",
+    "templateList": {
+      "custom": {
+        "title": "Tùy chỉnh danh mục"
+      },
+      "arcgis": {
+        "title": "Danh mục ArcGIS",
+        "message": "Danh mục ArcGIS bao gồm một tập hợp các danh mục chủ đề và các danh mục con có thể được sử dụng để phân loại nhiều thể loại nội dung không gian địa lý. Các danh mục này được sử dụng để hỗ trợ ArcGIS Living Atlas of the World."
+      },
+      "iso": {
+        "title": "Danh mục ISO",
+        "message": "Danh mục ISO bao gồm các danh mục chủ đề từ Tổ chức Quốc tế về Chuẩn hóa cung cấp phương pháp mô tả và phân chia danh mục thông tin địa lý."
+      },
+      "inspire": {
+        "title": "Danh mục INSPIRE",
+        "message": "Danh mục INSPIRE bao gồm một tập hợp bao quát các chủ đề dữ liệu không gian được thiết lập ra trong Chỉ thị INSPIRE."
+      }
+    }
+  }
+}

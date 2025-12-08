@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>Etsi pisteklustereita -ty&ouml;kalu tunnistaa pistekohdeklustereita ymp&auml;r&ouml;iv&auml;st&auml; kohinasta sijainnin jakauman perusteella.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="analysisLayer">
+        <div>
+            <p>L&auml;ht&ouml;aineiston pistekarttataso, joka ryhmitell&auml;&auml;n klustereiksi pistekohteiden sijainnin jakauman perusteella.
+            </p>
+        </div>
+    </div>
+    <div id="method">
+        <div>
+            <p>Menetelm&auml;, jota k&auml;ytet&auml;&auml;n klustereiden tunnistamiseen.
+            </p>
+        </div>
+    </div>
+    <div id="minFeaturesCluster">
+        <div>
+            <p>Klusteriksi laskettavien pistekohteiden minimim&auml;&auml;r&auml;.
+            </p>
+        </div>
+    </div>
+    <div id="searchDistance">
+        <div>
+            <p>M&auml;&auml;ritt&auml;&auml; enimm&auml;iset&auml;isyyden kunkin pistekohteen ymp&auml;rill&auml;, kun etsit&auml;&auml;n klusteriin sis&auml;llytett&auml;vi&auml; pisteit&auml;. Jos t&auml;m&auml; j&auml;tet&auml;&auml;n tyhj&auml;ksi,  <b>Hakuet&auml;isyys</b>-arvo on pisin aineistoryhm&auml;st&auml; l&ouml;ytyv&auml; peruset&auml;isyys ylimm&auml;n 1 prosentin peruset&auml;isyyksi&auml; lukuun ottamatta.
+            </p>
+        </div>
+    </div>
+    <div id="searchDistanceUnit">
+        <div>
+            <p>M&auml;&auml;ritt&auml;&auml; yksik&ouml;t, joita k&auml;ytet&auml;&auml;n hakuet&auml;isyyteen.
+            </p>
+        </div>
+    </div>
+    <div id="sensitivity">
+        <div>
+            <p>Kokonaisluku 0&ndash;100, joka m&auml;&auml;ritt&auml;&auml; klustereiden tiiviyden. Jos t&auml;m&auml; j&auml;tet&auml;&auml;n tyhj&auml;ksi,  <b>Klusteriherkkyys</b>-arvo lasketaan k&auml;ytt&auml;m&auml;ll&auml; Kullback&ndash;Leibler-divergenssi&auml;.
+            </p>
+        </div>
+    </div>
+    <div id="timeField">
+        <div>
+            <p>L&auml;ht&ouml;aineiston karttatason kentt&auml; sis&auml;lt&auml;&auml; aikaleiman kullekin kohteelle.
+            </p>
+        </div>
+    </div>
+    <div id="searchTimeInterval">
+        <div>
+            <p>Aikav&auml;li, jota k&auml;ytet&auml;&auml;n sen m&auml;&auml;ritt&auml;miseen, muodostavatko kohteet avaruus-aikaklusterin. Hakuaikav&auml;li kattaa kutakin kohdetta edelt&auml;v&auml;n ajan ja sen j&auml;lkeisen ajan; esimerkiksi 3 p&auml;iv&auml;n hakuaikav&auml;li kohteen ymp&auml;rill&auml; sis&auml;lt&auml;&auml; kaikki kohteet aikav&auml;lilt&auml;, joka alkaa 3 p&auml;iv&auml;&auml; ennen kohteen aikaa ja p&auml;&auml;ttyy 3 p&auml;iv&auml;&auml; sen j&auml;lkeen.
+            </p>
+        </div>
+    </div>
+    <div id="searchTimeUnit">
+        <div>
+            <p>M&auml;&auml;ritt&auml;&auml; yksik&ouml;t, joita k&auml;ytet&auml;&auml;n hakuaikav&auml;lill&auml;.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>Karttaan luotavan ja lis&auml;tt&auml;v&auml;n karttatason nimi.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>Sen  <b>Omassa sis&auml;ll&ouml;ss&auml;</b> olevan kansion nimi, johon tulos tallennetaan.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

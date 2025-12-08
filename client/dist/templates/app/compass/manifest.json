@@ -1,0 +1,27 @@
+{
+  "name": "compass",
+  "type": "template",
+  "templateType": "app",
+  "label": "Compass",
+  "description": "Compass is a grid template used to organize your data with a map, feature information, and a versatile panel for visuals.",
+  "thumbnail": "thumbnail.png",
+  "order": 38,
+  "templateCreateVersion": "1.19.0",
+  "tags": [
+    "Map",
+    "Title",
+    "Logo",
+    "Feature Info",
+    "Section",
+    "Navigation",
+    "View"
+  ],
+  "categoriesTags": [
+    "Map centric",
+    "Fullscreen grid"
+  ],
+  "isMultiplePage": false,
+  "isMapAware": true,
+  "thumbnailWidth": 320,
+  "thumbnailHeight": 214
+}

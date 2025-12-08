@@ -1,0 +1,12 @@
+{
+  "classField": "Polje razreda",
+  "classesAsRowsLabel": "Razredi kao redovi u izlaznoj tablici",
+  "inputClassRasterOrFeatures": "Unesi raster razreda ili geoobjekta",
+  "inputLayerGroupText": "Odaberite ulaznu zonu i sloj razreda za izračun križnih tabličnih područja između dva skupa podataka.",
+  "itemProperties": {
+    "description": "Izlazna tablica generirana pokretanjem alata za analizu tablične površine.",
+    "snippet": "Izlazna tablica generirana iz tablične površine"
+  },
+  "tabulateAreaSettingsGroupLabel": "Postavke tablične površine",
+  "tabulateAreaSettingsGroupText": "Odaberite način rukovanja razredima u izlaznoj tablici. Za izračun navedite veličinu ćelije. "
+}

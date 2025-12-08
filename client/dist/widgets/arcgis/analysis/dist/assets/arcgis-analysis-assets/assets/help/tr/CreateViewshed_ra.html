@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>Jeodezik G&ouml;r&uuml;ş Alanı aracı, bir raster y&uuml;zeyinde girdi g&ouml;zlemcisi konumlarından g&ouml;r&uuml;lebilen konumları tanımlar.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputElevationSurface">
+        <div>
+            <p>G&ouml;r&uuml;ş alanının hesaplanmasında kullanılacak y&uuml;kselti rasterı.
+            </p>
+        </div>
+    </div>
+    <div id="inputObserverFeatures">
+        <div>
+            <p>G&ouml;r&uuml;ş alanının hesaplanacağı g&ouml;zlemci konumları.
+            </p>
+        </div>
+    </div>
+    <div id="optimizeFor">
+        <div>
+            <p>Ya hız ya da doğruluğa g&ouml;re g&ouml;r&uuml;ş alanı hesaplamasını optimize eder.
+            </p>
+        </div>
+    </div>
+    <div id="verticalError">
+        <div>
+            <p> <b>Girdi y&uuml;kselti y&uuml;zeyi</b> değerinin y&uuml;kselti değerlerindeki belirsizlik miktarı.
+            </p>
+        </div>
+    </div>
+    <div id="refractivityCoefficient">
+        <div>
+            <p>G&ouml;r&uuml;n&uuml;r ışığın havadaki kırılma katsayısı.
+            </p>
+        </div>
+    </div>
+    <div id="maximumViewingDistanceField">
+        <div>
+            <p>G&ouml;r&uuml;ş alanı hesaplaması i&ccedil;in maksimum g&ouml;r&uuml;nt&uuml;leme mesafesi.
+            </p>
+            <p>Mesafe, bir değer ve onun birimleriyle veya  <b>Girdi g&ouml;zlemci nokta veya &ccedil;izgi detayları</b> değerindeki bir alandan tanımlanabilir.
+            </p>
+        </div>
+    </div>
+    <div id="minimumViewingDistanceField">
+        <div>
+            <p>G&ouml;r&uuml;ş alanı hesaplaması i&ccedil;in minimum g&ouml;r&uuml;nt&uuml;leme mesafesi.
+            </p>
+            <p>Mesafe, bir değer ve onun birimleriyle veya  <b>Girdi g&ouml;zlemci nokta veya &ccedil;izgi detayları</b> değerindeki bir alandan tanımlanabilir.
+            </p>
+        </div>
+    </div>
+    <div id="viewingDistanceIs3D">
+        <div>
+            <p>Maksimum ve minimum g&ouml;r&uuml;nt&uuml;leme mesafelerinin 3B mesafe olarak mı yoksa 2B mesafe olarak mı &ouml;l&ccedil;&uuml;leceğini belirtir.
+            </p>
+            <p>İşaretlenmemişse, g&ouml;r&uuml;nt&uuml;leme mesafelerine 2B &Ouml;klid uzaklıkları olarak davranılacaktır. İşaretli olduğunda, g&ouml;r&uuml;nt&uuml;leme mesafeleri 3B mesafe olarak işlenir.
+            </p>
+        </div>
+    </div>
+    <div id="observersElevationField">
+        <div>
+            <p>G&ouml;zlemci konumlarının y&uuml;zey y&uuml;kseltisi.
+            </p>
+            <p>Y&uuml;kselti, bir değer ve onun birimleriyle veya  <b>Girdi g&ouml;zlemci nokta veya &ccedil;izgi detayları</b> değerindeki bir alandan tanımlanabilir.
+            </p>
+        </div>
+    </div>
+    <div id="observersHeightField">
+        <div>
+            <p>G&ouml;zlemcilerin zeminden y&uuml;ksekliği.
+            </p>
+            <p>Y&uuml;kseklik, bir değer ve onun birimleriyle veya  <b>Girdi g&ouml;zlemci nokta veya &ccedil;izgi detayları</b> değerindeki bir alandan tanımlanabilir.
+            </p>
+        </div>
+    </div>
+    <div id="targetHeightField">
+        <div>
+            <p>Zemindeki hedeflerin y&uuml;ksekliği.
+            </p>
+            <p>Y&uuml;kseklik, bir değer ve onun birimleriyle veya  <b>Girdi g&ouml;zlemci nokta veya &ccedil;izgi detayları</b> değerindeki bir alandan tanımlanabilir.
+            </p>
+        </div>
+    </div>
+    <div id="horizontalStartAngle">
+        <div>
+            <p>Yatay tarama aralığının başlangı&ccedil; a&ccedil;ısı.
+            </p>
+            <p>A&ccedil;ı, 0'dan 360'a kadar bir değerle veya  <b>Girdi g&ouml;zlemci nokta veya &ccedil;izgi detayları</b> değerindeki bir alandan tanımlanabilir.
+            </p>
+        </div>
+    </div>
+    <div id="horizontalEndAngle">
+        <div>
+            <p>Yatay tarama aralığının bitiş a&ccedil;ısı.
+            </p>
+            <p>A&ccedil;ı, 0'dan 360'a kadar bir değerle veya  <b>Girdi g&ouml;zlemci nokta veya &ccedil;izgi detayları</b> değerindeki bir alandan tanımlanabilir.
+            </p>
+        </div>
+    </div>
+    <div id="verticalUpperAngle">
+        <div>
+            <p>Taramanın yatay d&uuml;zleme g&ouml;re &uuml;st dikey a&ccedil;ı sınırı.
+            </p>
+            <p>A&ccedil;ı, &ndash;90 ile 90 arasında bir değerle veya  <b>Girdi g&ouml;zlemci nokta veya &ccedil;izgi detayları</b> değerindeki bir alandan tanımlanabilir.
+            </p>
+        </div>
+    </div>
+    <div id="verticalLowerAngle">
+        <div>
+            <p>Taramanın yatay d&uuml;zleme g&ouml;re alt dikey a&ccedil;ı sınırı.
+            </p>
+            <p>A&ccedil;ı, &ndash;90 ile 90 arasında bir değerle veya  <b>Girdi g&ouml;zlemci nokta veya &ccedil;izgi detayları</b> değerindeki bir alandan tanımlanabilir.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>Oluşturulacak ve haritaya eklenecek g&ouml;r&uuml;ş alanı raster katmanının adı. Bu katman, g&ouml;zlemcilerin g&ouml;rebildiği g&ouml;r&uuml;n&uuml;r alanları i&ccedil;erir ve h&uuml;cre değerleri h&uuml;creleri g&ouml;rebilen g&ouml;zlemci sayısını temsil eder.
+            </p>
+        </div>
+    </div>
+    <div id="aboveGroundLevelOutputName">
+        <div>
+            <p>Oluşturulacak ve haritaya eklenecek zemin seviyesi &uuml;st&uuml; (AGL) raster katmanının adı.
+            </p>
+        </div>
+    </div>
+    <div id="resultType">
+        <div>
+            <p>Oluşturulacak &ccedil;ıktının t&uuml;r&uuml;. &Ccedil;ıktı, d&ouml;şemeli g&ouml;r&uuml;nt&uuml; katmanı veya dinamik g&ouml;r&uuml;nt&uuml; katmanı olabilir.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p> <b>İ&ccedil;eriğim</b> i&ccedil;inde sonucun kaydedileceği klas&ouml;r&uuml;n adı.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

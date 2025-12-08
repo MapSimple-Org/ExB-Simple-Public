@@ -1,0 +1,7 @@
+{
+  "defaultValue": "סוג פרמטר לא נתמך. יעשה שימוש בערך ברירת המחדל. <calcite-link target='_blank' href='${ docLink }'>למידע נוסף</calcite-link>",
+  "requiredMessage": "זהו פרמטר חובה.",
+  "unsupportedGPType": "סוג פרמטר לא נתמך. <calcite-link target='_blank' href='${ docLink }'>למידע נוסף</calcite-link>",
+  "unsupportedParameterConfig": "תצורת פרמטר לא נתמכת. <calcite-link target='_blank' href='${ docLink }'>למידע נוסף</calcite-link>",
+  "unsupportedParameterConfigDefaultValue": "תצורת פרמטר לא נתמכת. יעשה שימוש בערך ברירת המחדל. <calcite-link target='_blank' href='${ docLink }'>למידע נוסף</calcite-link>"
+}

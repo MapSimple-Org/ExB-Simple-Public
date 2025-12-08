@@ -1,0 +1,12 @@
+{
+  "apiCredentialType": "Legitimasjonstype: API-nøkkel",
+  "oauthCredentialType": "Legitimasjonstype: OAuth 2.0",
+  "itemAccess": "Elementtilgang",
+  "page": "Side: ${page}",
+  "currentPage": "Gjeldende side: ${page}",
+  "privileges": "Rettigheter",
+  "itemDetails": "Elementdetaljer",
+  "settings": "Innstillinger",
+  "serviceScope": "Tjenesteomfang",
+  "summary": "Sammendrag"
+}

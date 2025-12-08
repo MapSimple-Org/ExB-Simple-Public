@@ -1,0 +1,27 @@
+{
+  "hosted": "gehost",
+  "hostedView": "gehost, weergave",
+  "hostedPhotos": "gehost, foto's",
+  "hostedCollection": "gehoste verzameling",
+  "hostedMultidimensional": "gehost, multidimensionaal",
+  "hostedCollectionMultidimensional": "gehost, verzameling, multidimensionaal",
+  "collectionMultidimensional": "verzameling, multidimensionaal",
+  "multidimensional": "multidimensionaal",
+  "collection": "verzameling",
+  "photoLocations": "foto's",
+  "locatorView": "weergave",
+  "utilityNetwork": "utility network",
+  "Integrated Mesh": "geïntegreerde mesh",
+  "3D Object": "3D-object",
+  "Point": "punt",
+  "Point Cloud": "puntenwolk",
+  "Building Scene Layer": "scenelaag bouwen",
+  "Voxel Scene Layer": "voxel scene layer",
+  "dataStore": {
+    "bigdata": "groot gedeeld gegevensbestand",
+    "cloud": "cloud",
+    "cloudStorage": "cloud-opslag",
+    "database": "database",
+    "folder": "map"
+  }
+}

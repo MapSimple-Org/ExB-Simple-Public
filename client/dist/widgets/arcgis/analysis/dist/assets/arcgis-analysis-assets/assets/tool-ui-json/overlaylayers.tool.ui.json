@@ -1,0 +1,248 @@
+{
+  "toolName": "OverlayLayers",
+  "version": "0.1.0",
+  "rules": [
+    {
+      "ruleType": "expression",
+      "expression": "(($[Data].userSettings.hasAdvancedLicense = true) OR ($[Component].currentTool.portal.isPortal = false)))",
+      "destination": "overlayType",
+      "effectParams": {
+        "choiceList": ["Intersect", "Union", "Erase"],
+        "defaultValue": "Intersect"
+      }
+    },
+    {
+      "ruleType": "expression",
+      "destination": "overlayType",
+      "expression": "((($[Component].inputLayer.selectedLayers.geometryType = 'point') OR ($[Component].inputLayer.selectedLayers.geometryType = 'multipoint')) AND (($[Data].userSettings.hasAdvancedLicense = true) OR ($[Component].currentTool.portal.isPortal = false)))",
+      "effectParams": {
+        "choiceList": ["Intersect", "Erase"],
+        "defaultValue": "Intersect"
+      }
+    },
+    {
+      "ruleType": "expression",
+      "destination": "overlayType",
+      "expression": "((($[Component].inputLayer.selectedLayers.geometryType = 'point') OR ($[Component].inputLayer.selectedLayers.geometryType = 'multipoint')) AND (($[Data].userSettings.hasAdvancedLicense = false) AND ($[Component].currentTool.portal.isPortal = true)))",
+      "effectParams": {
+        "choiceList": ["Intersect"],
+        "defaultValue": "Intersect",
+        "readOnly": true
+      }
+    },
+    {
+      "ruleType": "expression",
+      "destination": "outputType",
+      "expression": "(($[Component].inputLayer.selectedLayers.geometryType = 'point') OR ($[Component].inputLayer.selectedLayers.geometryType = 'multipoint'))",
+      "effectParams": {
+        "choiceList": ["Point"],
+        "defaultValue": "Point",
+        "readOnly": true
+      }
+    },
+    {
+      "ruleType": "expression",
+      "destination": "overlayType",
+      "expression": "(($[Component].inputLayer.selectedLayers.geometryType = 'polyline') AND ($[Component].overlayLayer.selectedLayers.geometryType IN ('point', 'multipoint')))",
+      "effectParams": {
+        "choiceList": ["Intersect"],
+        "readOnly": true,
+        "defaultValue": "Intersect"
+      }
+    },
+    {
+      "ruleType": "expression",
+      "destination": "outputType",
+      "expression": "(($[Component].inputLayer.selectedLayers.geometryType = 'polyline') AND ($[Component].overlayLayer.selectedLayers.geometryType IN ('point', 'multipoint')))",
+      "effectParams": {
+        "choiceList": ["Point"],
+        "defaultValue": "Point",
+        "readOnly": true
+      }
+    },
+    {
+      "ruleType": "expression",
+      "destination": "overlayType",
+      "expression": "((($[Component].inputLayer.selectedLayers.geometryType = 'polyline') AND ($[Component].overlayLayer.selectedLayers.geometryType IN ('polyline', 'polygon'))) AND (($[Data].userSettings.hasAdvancedLicense = true) OR ($[Component].currentTool.portal.isPortal = false)))",
+      "effectParams": {
+        "choiceList": ["Intersect", "Erase"],
+        "defaultValue": "Intersect"
+      }
+    },
+    {
+      "ruleType": "expression",
+      "destination": "overlayType",
+      "expression": "((($[Component].inputLayer.selectedLayers.geometryType = 'polyline') AND ($[Component].overlayLayer.selectedLayers.geometryType IN ('polyline', 'polygon'))) AND (($[Data].userSettings.hasAdvancedLicense = false) AND ($[Component].currentTool.portal.isPortal = true)))",
+      "effectParams": {
+        "choiceList": ["Intersect"],
+        "defaultValue": "Intersect",
+        "readOnly": true
+      }
+    },
+    {
+      "ruleType": "expression",
+      "destination": "outputType",
+      "expression": "(($[Component].inputLayer.selectedLayers.geometryType = 'polyline') AND ($[Component].overlayLayer.selectedLayers.geometryType IN ('polyline', 'polygon')))",
+      "effectParams": {
+        "choiceList": ["Point", "Line"],
+        "defaultValue": "Point"
+      }
+    },
+    {
+      "ruleType": "expression",
+      "destination": "overlayType",
+      "expression": "(($[Component].inputLayer.selectedLayers.geometryType = 'polygon') AND ($[Component].overlayLayer.selectedLayers.geometryType NOT 'polygon')",
+      "effectParams": {
+        "choiceList": ["Intersect"],
+        "readOnly": true,
+        "defaultValue": "Intersect"
+      }
+    },
+    {
+      "ruleType": "expression",
+      "destination": "outputType",
+      "expression": "(($[Component].inputLayer.selectedLayers.geometryType = 'polygon') AND ($[Component].overlayLayer.selectedLayers.geometryType IN ('point', 'multipoint')))",
+      "effectParams": {
+        "choiceList": ["Point"],
+        "defaultValue": "Point",
+        "readOnly": true
+      }
+    },
+    {
+      "ruleType": "expression",
+      "destination": "outputType",
+      "expression": "(($[Component].inputLayer.selectedLayers.geometryType = 'polygon') AND ($[Component].overlayLayer.selectedLayers.geometryType = 'polyline'))",
+      "effectParams": {
+        "choiceList": ["Point", "Line"],
+        "defaultValue": "Point"
+      }
+    },
+    {
+      "ruleType": "expression",
+      "destination": "outputType",
+      "expression": "(($[Data].inputLayer.selectedLayers.geometryType = 'polygon') AND ($[Component].overlayLayer.selectedLayers.geometryType = 'polygon'))",
+      "effectParams": {
+        "choiceList": ["Point", "Line", "Input"],
+        "defaultValue": "Input"
+      }
+    },
+    {
+      "ruleType": "expression",
+      "destination": "outputType",
+      "expression": "((($[Data].inputLayer.selectedLayers.geometryType = 'polygon') AND ($[Component].overlayLayer.selectedLayers.geometryType = 'polygon') AND (($[Data].userSettings.hasAdvancedLicense = true) OR ($[Component].currentTool.portal.isPortal = false)))",
+      "effectParams": {
+        "choiceList": ["Intersect", "Union", "Erase"],
+        "defaultValue": "Intersect"
+      }
+    },
+    {
+      "ruleType": "expression",
+      "destination": "outputType",
+      "expression": "(($[Data].inputLayer.selectedLayers.geometryType = 'polygon') AND ($[Component].overlayLayer.selectedLayers.geometryType = 'polygon') AND (($[Data].userSettings.hasAdvancedLicense = false) AND ($[Component].currentTool.portal.isPortal = true)))",
+      "effectParams": {
+        "choiceList": ["Intersect", "Union"],
+        "defaultValue": "Intersect"
+      }
+    },
+    {
+      "ruleType": "expression",
+      "destination": "outputType",
+      "expression": "$[Data].overlayType IN ('Union', 'Erase')",
+      "effectParams": {
+        "visible": false
+      }
+    }
+  ],
+  "UIparameters": [
+    {
+      "label": "$inputFeatures",
+      "componentName": "analysis-block",
+      "summaryText": "$inputFeaturesSectionText",
+      "UIparameters": [
+        {
+          "name": "inputLayer",
+          "label": "$inputFeatures",
+          "componentName": "analysis-layer-input",
+          "layerFilterType": ["feature"],
+          "enableSketch": true
+        },
+        {
+          "label": "$overlayLayer",
+          "name": "overlayLayer",
+          "componentName": "analysis-layer-input",
+          "layerFilterType": ["feature"],
+          "enableSketch": true
+        }
+      ]
+    },
+    {
+      "label": "$overlaySettingsSectionLabel",
+      "componentName": "analysis-block",
+      "summaryText": "$overlaySettingsSectionText",
+      "UIparameters": [
+        {
+          "name": "overlayType",
+          "label": "$overlayType",
+          "componentName": "analysis-string-input",
+          "choiceList": ["Intersect", "Union", "Erase"],
+          "choiceListLabels": {
+            "Intersect": "$intersect",
+            "Union": "$union",
+            "Erase": "$erase"
+          },
+          "useDefaultOnReset": true,
+          "choiceListIcons": {
+            "Intersect": "preserve",
+            "Union": "split",
+            "Erase": "discard"
+          },
+          "required": true
+        },
+        {
+          "name": "outputType",
+          "label": "$outputType",
+          "required": true,
+          "componentName": "analysis-string-input",
+          "choiceList": ["Input", "Point", "Line"],
+          "choiceListLabels": {
+            "Input": "$polygon",
+            "Point": "$point",
+            "Line": "$line"
+          },
+          "useDefaultOnReset": true
+        },
+        {
+          "name": "snapToInput",
+          "label": "",
+          "required": false,
+          "visible": false
+        }
+      ]
+    },
+    {
+      "label": "$resultLayerGroupLabel",
+      "layout": "vertical",
+      "componentName": "analysis-block",
+      "summaryText": "$outputSectionText",
+      "UIparameters": [
+        {
+          "name": "outputName",
+          "label": "$outputName",
+          "placeholderText": "$outputNamePlaceholderText",
+          "required": true
+        },
+        {
+          "name": "saveResultIn",
+          "label": "$saveResultIn",
+          "componentName": "analysis-folder-input"
+        }
+      ]
+    }
+  ],
+  "outputParameters": [
+    {
+      "label": "$overlayLayersOutput",
+      "name": "outputLayer"
+    }
+  ]
+}

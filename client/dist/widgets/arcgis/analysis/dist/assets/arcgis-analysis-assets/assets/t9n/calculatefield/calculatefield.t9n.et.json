@@ -1,0 +1,13 @@
+{
+  "fieldCalcExpression": "Välja arvutamise esitamine",
+  "fieldCalculationGroupLabel": "Väljaarvutus",
+  "fieldPlaceholderText": "Klõpsake välja valimiseks või loomiseks",
+  "fieldToCalculate": "Arvutatav väli",
+  "inputDatasetGroupLabel": "Sisend",
+  "itemProperties": {
+    "description": "ModelBuilderis tööriista „Arvuta väli“ käitamisel genereeritud tulemus.",
+    "snippet": "Tööriistaga „Arvuta väli“ genereeritud objektikiht"
+  },
+  "noFieldSpecified": "Avaldise loomiseks täpsustage arvutamiseks väli.",
+  "whereClause": "Rakenda arvutust ainult teatavatele kirjetele"
+}

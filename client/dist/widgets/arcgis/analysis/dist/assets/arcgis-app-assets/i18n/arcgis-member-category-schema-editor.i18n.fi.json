@@ -1,0 +1,22 @@
+{
+  "dialogHeading": "Määritä jäsenluokkien asetukset",
+  "noticeTitle": "Muokkaa, poistaa tai järjestele uudelleen organisaatiosi luokkia.",
+  "noticeDescription": "Voit määrittää luokkia jäsenille Jäsenet-välilehdeltä.",
+  "defaultCategoryWarning": "Tämä jäsenluokka on määritetty uuden jäsenen oletusarvoksi eikä sitä voi muokata tai poistaa.",
+  "warning": {
+    "deleteInUseCategory": {
+      "message": {
+        "single": "Tähän luokkaan on määritetty yksi jäsen. Luokan poistaminen poistaa sen myös tältä jäseneltä.",
+        "multiple": "Tähän luokkaan on määritetty ${number} jäsentä. Luokan poistaminen poistaa sen myös näiltä jäseniltä.",
+        "unknown": "Tähän luokkaan määritetyt jäsenet: ${number}. Luokan poistaminen poistaa sen myös näiltä jäseniltä."
+      }
+    },
+    "changeTitleInUseCategory": {
+      "message": {
+        "single": "Tähän luokkaan on määritetty yksi jäsen. Luokan päivittäminen päivittää jäsenen käyttämään luokkaa ${newTitle}.",
+        "multiple": "Tähän luokkaan on määritetty ${number} jäsentä. Luokan päivittäminen päivittää jäsenet käyttämään luokkaa ${newTitle}.",
+        "unknown": "Tähän luokkaan määritetyt jäsenet: ${number}. Luokan päivittäminen päivittää jäsenet käyttämään luokkaa ${newTitle}."
+      }
+    }
+  }
+}

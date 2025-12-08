@@ -1,0 +1,6 @@
+{
+  "greaterThanErrorMessage": "Le nombre en entrée doit être supérieur à ${min}",
+  "lesserThanErrorMessage": "Le nombre en entrée doit être inférieur à ${max}",
+  "greaterThanOrEqualErrorMessage": "Le nombre en entrée doit être supérieur ou égal à ${min}",
+  "lesserThanOrEqualErrorMessage": "Le nombre en entrée doit être inférieur ou égal à ${max}"
+}

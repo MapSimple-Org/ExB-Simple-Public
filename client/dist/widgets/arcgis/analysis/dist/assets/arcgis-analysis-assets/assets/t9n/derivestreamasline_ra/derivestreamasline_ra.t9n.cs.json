@@ -1,0 +1,11 @@
+{
+  "all": "Vše",
+  "inputLayersGroupText": "Zvolte vstupní rastr povrchu a volitelně data terénních depresí a váhový rastr.",
+  "itemProperties": {
+    "description": "Výstup vygenerovaný po spuštění nástroje Odvodit vodní tok jako rastr (Derive Stream as Raster).",
+    "snippet": "Výstup vygenerovaný z nástroje Odvodit vodní tok jako rastr (Derive Stream as Raster)."
+  },
+  "outputStreamFeaturesLabel": "Název výstupních prvků vodních toků",
+  "simplifyLabel": "Zjednodušit prvky",
+  "streamSettingsGroupText": "Zadejte práh akumulace, metodu označení toku a to, zda budou výstupní linie toku vyhlazeny do jednoduchých tvarů."
+}

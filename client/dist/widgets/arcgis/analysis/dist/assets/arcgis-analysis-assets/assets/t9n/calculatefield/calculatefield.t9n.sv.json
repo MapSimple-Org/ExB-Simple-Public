@@ -1,0 +1,13 @@
+{
+  "fieldCalcExpression": "Fältberäkningsuttryck",
+  "fieldCalculationGroupLabel": "Fältberäkning",
+  "fieldPlaceholderText": "Klicka för att välja eller skapa fält",
+  "fieldToCalculate": "Fält som ska beräknas",
+  "inputDatasetGroupLabel": "Indata",
+  "itemProperties": {
+    "description": "Resultat har genererats från körning av verktyget Beräkna fält i ModelBuilder.",
+    "snippet": "Geoobjektlager som genererats av Beräkna fält"
+  },
+  "noFieldSpecified": "Ange ett fält som ska beräknas för att skapa ett uttryck.",
+  "whereClause": "Tillämpa endast beräkning på vissa poster"
+}

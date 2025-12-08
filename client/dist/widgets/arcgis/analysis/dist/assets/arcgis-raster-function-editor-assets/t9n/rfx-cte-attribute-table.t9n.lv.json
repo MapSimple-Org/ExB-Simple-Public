@@ -1,0 +1,22 @@
+{
+  "value": "Vērtība",
+  "classname": "Klases nosaukums",
+  "color": "Krāsa",
+  "raster": "Rastrs",
+  "tableType": "Tabulas veids",
+  "manual": "Manuāli",
+  "external": "Ārējais",
+  "browseTable": "Pārlūkot tabulu",
+  "browseTableFrom": "Pārlūkot tabulu no",
+  "file": "Fails",
+  "dbfFile": "DBF fails",
+  "layer": "Slānis",
+  "unsupportedDataType": "Neatbalstīts veids",
+  "failedToGetTableFromLayer": "Neizdevās iegūt tabulu no slāņa.",
+  "generate": "Ģenerēt tabulu",
+  "minValue": "Minimālā vērtība",
+  "maxValue": "Maksimālā vērtība",
+  "classBaseName": "Klases pamata nosaukums",
+  "colorscheme": "Krāsu shēma",
+  "defaultClassName": "Kartes teksts_"
+}

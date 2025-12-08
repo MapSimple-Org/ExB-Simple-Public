@@ -1,0 +1,14 @@
+{
+  "outputRaster": "Izlazni raster",
+  "rfxVariable": "Varijabla rasterske funkcije",
+  "selectLayer": "Odabir sloja",
+  "allowScalar": "Odaberi sloj ili unesi konstantu",
+  "browseLayer": "Pretraži slojeve",
+  "loading": "Učitavanje u tijeku...",
+  "layerMissing": "Jedan ili više slojeva slika s karte nisu navedeni ovdje jer svojstvo dopuštanja usluge analize nije omogućeno.",
+  "layerFailedToLoad": "Nije uspjelo učitavanje sloja.",
+  "learnMore": "Saznajte više",
+  "errorCodes": {
+    "required": "Ovaj parametar je obavezan."
+  }
+}

@@ -1,0 +1,55 @@
+{
+  "beginningOnLabel": "開始時間",
+  "repeatTypeLabel": "重複類型",
+  "endingOnTypeLabel": "結束時間",
+  "endingOnDateLabel": "結束日期",
+  "endingOnCountLabel": "計數",
+  "endingOnCountPlaceholder": "例如: 1, 10, 30",
+  "dailyRepeatIntervalLabel": "重複間隔",
+  "dailyTimeLabel": "時間",
+  "weeklyDaysOfWeekLabel": "星期",
+  "weeklyTimeLabel": "時間",
+  "monthlyDayOfMonthLabel": "月份日期",
+  "monthlyDayOfMonthPlaceholder": "例如，1 - 31",
+  "monthlyRepeatIntervalLabel": "重複間隔",
+  "monthlyTimeLabel": "時間",
+  "repeatTypeOptions": {
+    "day": "天",
+    "week": "週",
+    "month": "月"
+  },
+  "endingOnType": {
+    "never": "從不",
+    "date": "日期",
+    "count": "打開"
+  },
+  "dailyRepeatInterval": {
+    "everyDay": "每日",
+    "everyOtherDay": "每隔一天",
+    "everyThreeDays": "每三天",
+    "everyFourDays": "每四天",
+    "everyFiveDays": "每五天",
+    "everySixDays": "每六天",
+    "everySevenDays": "每七天",
+    "everyFourteenDays": "每十四天"
+  },
+  "weekDays": {
+    "all": "全部",
+    "allWeekdays": "所有工作日",
+    "sunday": "星期日",
+    "monday": "星期一",
+    "tuesday": "星期二",
+    "wednesday": "星期三",
+    "thursday": "星期四",
+    "friday": "星期五",
+    "saturday": "星期六"
+  },
+  "monthlyRepeatInterval": {
+    "everyMonth": "每個月",
+    "everyTwoMonths": "每兩個月",
+    "everyThreeMonths": "每三個月",
+    "everyFourMonths": "每四個月",
+    "everyFiveMonths": "每五個月",
+    "everySixMonths": "每六個月"
+  }
+}

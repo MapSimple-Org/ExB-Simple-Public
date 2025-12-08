@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>A ferramenta Ligar Elementos adiciona atributos de uma camada ou tabela para outra com base em rela&ccedil;&otilde;es espaciais e de atributos. Em alternativa, as estat&iacute;sticas podem ser calculadas quando existem m&uacute;ltiplos registos de correspond&ecirc;ncia.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="targetLayer">
+        <div>
+            <p>A camada ou tabela que ter&aacute; atributos da camada de liga&ccedil;&atilde;o anexada &agrave; respetiva tabela de atributos.
+            </p> 
+            <p class="toolPaneOnly">A contagem de elementos depende de fatores adicionais, como os crit&eacute;rios de filtragem e a extens&atilde;o da an&aacute;lise.
+            </p> 
+            <p class="modelBuilderOnly">A  <b>Camada</b> &eacute; especificada por predefini&ccedil;&atilde;o quando a <b>Camada de destino</b> n&atilde;o est&aacute; preenchida. Para adicionar uma tabela de entrada, selecione <b>Tabela</b> antes de adicionar um conjunto de dados.
+            </p>
+        </div>
+    </div>
+    <div id="joinLayer">
+        <div>
+            <p>A camada ou tabela com os atributos que ser&atilde;o anexados &agrave; camada de destino.
+            </p> 
+            <p class="toolPaneOnly">A contagem de elementos depende de fatores adicionais, como os crit&eacute;rios de filtragem e a extens&atilde;o da an&aacute;lise.
+            </p> 
+            <p class="modelBuilderOnly">A  <b>Camada</b> &eacute; especificada por predefini&ccedil;&atilde;o quando a <b>Camada de liga&ccedil;&atilde;o</b> n&atilde;o est&aacute; preenchida. Para adicionar uma tabela de entrada, selecione <b>Tabela</b> antes de adicionar um conjunto de dados.
+            </p>
+        </div>
+    </div>
+    <div id="useSpatialRelationship">
+        <div>
+            <p>Especifica se as camadas ser&atilde;o ligadas com base numa rela&ccedil;&atilde;o espacial. Isto exige que ambas as camadas possuam geometria.
+            </p>
+        </div>
+    </div>
+    <div id="spatialRelationship">
+        <div>
+            <p>Especifica a rela&ccedil;&atilde;o espacial que determina que elementos ser&atilde;o ligados. Os elementos na camada de liga&ccedil;&atilde;o que t&ecirc;m a rela&ccedil;&atilde;o especificada com a camada de destino ser&atilde;o ligados. As rela&ccedil;&otilde;es dispon&iacute;veis dependem do tipo de geometria das entradas.
+            </p>
+        </div>
+    </div>
+    <div id="spatialRelationshipDistance">
+        <div>
+            <p>A dist&acirc;ncia a partir dos elementos da camada de destino que ser&aacute; utilizada para determinar se os elementos devem ser ligados.
+            </p>
+        </div>
+    </div>
+    <div id="spatialRelationshipDistanceUnits">
+        <div>
+            <p>As unidades que ser&atilde;o utilizadas para especificar a dist&acirc;ncia.
+            </p>
+        </div>
+    </div>
+    <div id="useAttributeRelationship">
+        <div>
+            <p>Especifica se as camadas ser&atilde;o ligadas com base em valores de campo correspondentes. Se uma ou mais entradas forem uma tabela, uma liga&ccedil;&atilde;o s&oacute; pode ser definida com uma rela&ccedil;&atilde;o de atributos.
+            </p>
+        </div>
+    </div>
+    <div id="attributeRelationship">
+        <div>
+            <p>A rela&ccedil;&atilde;o de atributos que determina que elementos ser&atilde;o ligados. Os elementos s&atilde;o correspondidos quando os valores de campo na camada de liga&ccedil;&atilde;o s&atilde;o iguais a valores de campo da camada de destino.
+            </p>
+        </div>
+    </div>
+    <div id="joinOperation">
+        <div>
+            <p>Especifica como ser&atilde;o tratadas as liga&ccedil;&otilde;es se v&aacute;rios registos da camada de liga&ccedil;&atilde;o cumprirem os crit&eacute;rios de liga&ccedil;&atilde;o. Escolha uma das seguintes op&ccedil;&otilde;es:
+                <ul>
+                    <li> <b>Ligar um a um</b>: um &uacute;nico registo na camada de liga&ccedil;&atilde;o ser&aacute; ligado a cada elemento da camada de destino.
+                    </li>
+                    <li> <b>Ligar um a muitos</b>: todos os elementos correspondentes na camada de liga&ccedil;&atilde;o ser&atilde;o ligados &agrave; camada de destino. A camada resultante conter&aacute; m&uacute;ltiplos registos do elemento de destino.
+                    </li>
+                </ul>
+                
+            </p>
+        </div>
+    </div>
+    <div id="handleMatchingRecords">
+        <div>
+            <p>Quando v&aacute;rios elementos da camada de liga&ccedil;&atilde;o correspondem a um elemento de destino, este par&acirc;metro especifica se um &uacute;nico registo da camada de liga&ccedil;&atilde;o ser&aacute; ligado, se ser&atilde;o calculadas estat&iacute;sticas resumidas para um campo escolhido para todos os registos correspondentes da camada de liga&ccedil;&atilde;o ou se apenas ser&aacute; calculada a contagem de registos correspondentes.
+            </p>
+        </div>
+    </div>
+    <div id="summaryFields">
+        <div>
+            <p>Quando existem m&uacute;ltiplos elementos de liga&ccedil;&atilde;o que correspondem a um elemento de destino, ser&atilde;o calculadas estat&iacute;sticas de resumo para todos os registos correspondentes. Especifique os campos de n&uacute;mero ou data da camada de liga&ccedil;&atilde;o e as estat&iacute;sticas que ser&atilde;o calculadas para cada campo.
+            </p>
+        </div>
+    </div>
+    <div id="recordsToMatch">
+        <div>
+            <p>Quando existem m&uacute;ltiplos elementos de liga&ccedil;&atilde;o que correspondem a um elemento de destino, o primeiro registo da tabela de atributos da camada de liga&ccedil;&atilde;o ser&aacute; inclu&iacute;do na sa&iacute;da. Em alternativa, escolha um campo de n&uacute;mero ou data e a sequ&ecirc;ncia de ordena&ccedil;&atilde;o que ir&aacute; determinar a ordena&ccedil;&atilde;o da tabela de atributos.
+            </p>
+        </div>
+    </div>
+    <div id="joinType">
+        <div>
+            <p>Especifica se elementos de destino sem correspond&ecirc;ncia ser&atilde;o inclu&iacute;dos na sa&iacute;da. A op&ccedil;&atilde;o  <b>Liga&ccedil;&atilde;o interior</b> devolve apenas os registos de destino correspondentes, enquanto a op&ccedil;&atilde;o <b>Liga&ccedil;&atilde;o &agrave; esquerda</b> devolve todos os registos de destino, mesmo que o elemento de destino n&atilde;o tenha uma correspond&ecirc;ncia na camada de liga&ccedil;&atilde;o.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>O nome da camada ou tabela que ser&aacute; criada e adicionada ao mapa.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>O nome da pasta em  <b>O meu conte&uacute;do</b> onde o resultado ser&aacute; guardado.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

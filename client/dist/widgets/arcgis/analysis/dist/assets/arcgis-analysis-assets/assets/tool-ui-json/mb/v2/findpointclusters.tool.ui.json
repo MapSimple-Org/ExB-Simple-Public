@@ -1,0 +1,173 @@
+{
+  "toolName": "FindPointClusters",
+  "version": "0.1.0",
+  "modelBuilderVersion": "V2",
+  "validationRules": [],
+  "rules": [
+    {
+      "ruleType": "set",
+      "value": "$[Component].analysisLayer.selectedLayers",
+      "destination": "timeField",
+      "property": "mapLayer"
+    },
+    {
+      "ruleType": "expression",
+      "expression": "$[Data].method = 'OPTICS'",
+      "destination": "sensitivity",
+      "effectParams": {
+        "visible": true
+      }
+    },
+    {
+      "ruleType": "expression",
+      "expression": "($[Data].method = 'OPTICS') OR ($[Data].method = 'DBSCAN')",
+      "destination": "timeField",
+      "effectParams": {
+        "visible": true,
+        "required": false
+      }
+    },
+    {
+      "ruleType": "expression",
+      "expression": "$[Data].timeField not null",
+      "destination": ["searchTimeInterval", "searchDistance"],
+      "effectParams": {
+        "visible": true,
+        "required": true
+      }
+    },
+    {
+      "ruleType": "expression",
+      "expression": "$[Data].method = 'HDBSCAN'",
+      "destination": "searchDistance",
+      "effectParams": {
+        "visible": false,
+        "required": false
+      }
+    }
+  ],
+  "UIparameters": [
+    {
+      "label": "$inputFeatures",
+      "componentName": "analysis-block",
+      "summaryText": "$inputFeaturesSectionText",
+      "UIparameters": [
+        {
+          "name": "analysisLayer",
+          "label": "$inputLayerGroupLabel",
+          "componentName": "analysis-layer-input",
+          "layerFilterType": ["feature_point"],
+          "required": true
+        }
+      ]
+    },
+    {
+      "label": "$FPCAnalysisSettingGroupLabel",
+      "componentName": "analysis-block",
+      "summaryText": "$FPCAnalysisSettingText",
+      "UIparameters": [
+        {
+          "name": "method",
+          "label": "$clusteringMethodLabel",
+          "componentName": "analysis-string-input",
+          "choiceList": ["DBSCAN", "HDBSCAN", "OPTICS"],
+          "choiceListLabels": {
+            "DBSCAN": "$dbscanLabel",
+            "HDBSCAN": "$hdbscanLabel",
+            "OPTICS": "$opticsLabel"
+          },
+          "defaultValue": "DBSCAN",
+          "required": true
+        },
+        {
+          "name": "minFeaturesCluster",
+          "label": "$minFeaturesClusterLabel",
+          "componentName": "analysis-number-input",
+          "min": 2,
+          "numberType": "integer",
+          "required": true
+        },
+        {
+          "name": "searchDistance",
+          "label": "$searchDistanceLabel",
+          "minimum": 0,
+          "excludeMinValue": true,
+          "unitChoiceList": ["Meters", "Kilometers", "Miles", "Feet"],
+          "choiceListLabels": {
+            "Meters": "$meters",
+            "Kilometers": "$kilometers",
+            "Miles": "$miles",
+            "Feet": "$feet"
+          }
+        },
+        {
+          "name": "timeField",
+          "label": "$timeFieldLabel",
+          "componentName": "analysis-field-input",
+          "fieldTypes": ["date"],
+          "required": false,
+          "visible": false
+        },
+        {
+          "name": "searchTimeInterval",
+          "label": "$searchTimeIntervalLabel",
+          "componentName": "analysis-time-unit-input",
+          "unitChoiceList": ["Minutes", "Seconds", "Hours", "Days", "Weeks", "Months", "Years"],
+          "choiceListLabels": {
+            "Minutes": "$minutes",
+            "Seconds": "$seconds",
+            "Hours": "$hours",
+            "Days": "$days",
+            "Weeks": "$weeks",
+            "Months": "$months",
+            "Years": "$years"
+          },
+          "numberType": "integer",
+          "minimum": 0,
+          "excludeMinValue": true,
+          "required": false,
+          "visible": false
+        },
+        {
+          "name": "sensitivity",
+          "label": "$sensitivityLabel",
+          "componentName": "analysis-number-input",
+          "min": 0,
+          "max": 100,
+          "numberType": "integer",
+          "required": false,
+          "visible": false
+        }
+      ]
+    },
+    {
+      "label": "$resultLayerGroupLabel",
+      "componentName": "analysis-block",
+      "summaryText": "$outputSectionText",
+      "UIparameters": [
+        {
+          "name": "outputName",
+          "label": "$outputName",
+          "placeholderText": "$outputNamePlaceholderText",
+          "componentName": "analysis-string-input",
+          "required": true
+        },
+        {
+          "name": "saveResultIn",
+          "label": "$saveResultIn",
+          "componentName": "analysis-folder-input"
+        }
+      ]
+    }
+  ],
+  "outputParameters": [
+    {
+      "name": "pointClustersResultLayer",
+      "label": "$pointClustersResultLayerOutput"
+    },
+    {
+      "label": "$processInfoOutput",
+      "name": "processInfo"
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "AddDataFromUrl": "Gegevens toevoegen vanaf URL",
+  "addData": "Gegevens toevoegen",
+  "clear": "Wissen",
+  "file": "Bestand",
+  "fileNotFound": "Kan bestand niet laden.",
+  "invalidUrl": "Ongeldige URL of bestandsextensie.",
+  "layerNotFound": "Kan laag niet laden.",
+  "replaceData": "Gegevens vervangen",
+  "required": "Deze parameter is vereist.",
+  "uploadData": "Gegevens uploaden",
+  "uploadFailureMsg": "Er is een fout opgetreden tijdens de uploadbewerking, bestandsgrootte of -type worden niet ondersteund voor deze service.",
+  "url": "URL"
+}

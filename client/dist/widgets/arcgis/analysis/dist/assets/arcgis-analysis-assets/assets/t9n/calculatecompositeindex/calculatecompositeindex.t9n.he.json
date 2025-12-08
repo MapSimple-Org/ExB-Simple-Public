@@ -1,0 +1,26 @@
+{
+  "CCIAnalysisSettingGroupLabel": "הגדרות אינדקס",
+  "CCIAnalysisSettingGroupText": "ציין כיצד יש לחשב את האינדקס.",
+  "geomeanPercentileLabel": "דירוגים מורכבים (ממוצע גיאומטרי של אחוזונים)",
+  "geomeanRawLabel": "ערכים גולמיים מורכבים (ממוצע גיאומטרי של ערכים גולמיים)",
+  "geomeanScaledLabel": "ערכים מותאמים לקנה מידה מורכבים (ממוצע גיאומטרי של ערכים מותאמים לקנה מידה)",
+  "indexMethodLabel": "שיטה לשינוי קנה מידה ושילוב משתנים",
+  "inputFeaturesOrTableLabel": "ישויות קלט או טבלה",
+  "inputLayerGroupText": "בחר את הישוות או הטבלה והמשתנים ליצירת האינדקס באמצעותם.",
+  "inputVariablesLabel": "משתני קלט",
+  "itemProperties": {
+    "description": "שכבת ישויות נוצרה מהרצת כלי הניתוח 'חישוב אינדקס מרוכב'.",
+    "snippet": "שכבת ישויות נוצרה מחישוב אינדקס מרוכב"
+  },
+  "meanPercentileLabel": "שלב דירוגים (ממוצע אחוזונים)",
+  "meanRawLabel": "שלב ערכים גולמיים (ממוצע ערכים גולמיים)",
+  "meanScaledLabel": "שלב ערכים מותאמים לקנה מידה (ממוצע ערכים מותאמים לקנה מידה)",
+  "outputIndexMaxLabel": "מקסימום",
+  "outputIndexMinLabel": "מינימום",
+  "outputIndexMinMaxLabel": "ערכי מינימום ומקסימום של אינדקס",
+  "outputIndexReverseLabel": "ערכי אינדקס הפוכים",
+  "reverseVariableLabel": "כיוון הפוך",
+  "sumFlagsPercentileLabel": "הדגש קיצוניים (ספירת ערכים מאל אחוזון 90)",
+  "toolName": "חשב אינדקס מרוכב",
+  "weight": "משקל"
+}

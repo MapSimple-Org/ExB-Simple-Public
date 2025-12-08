@@ -1,17 +1,14 @@
 # Git ignore file
 
-# macOS system files
-.DS_Store
-**/.DS_Store
 
 # Exclude unwanted widgets
 client/your-extensions/widgets/kc-search/
 client/your-extensions/widgets/simple/
 
-# Internal documentation (not for public)
+# Internal documentation (keep locally, don't commit to main)
 client/your-extensions/widgets/BLOG_ARTICLE_IDEAS.md
 client/your-extensions/widgets/BLOG_GROUPING_IMPLEMENTATION.md
+client/your-extensions/widgets/TODO.md
 client/your-extensions/widgets/DEVELOPMENT_GUIDE.md
 client/your-extensions/widgets/MANUAL_TESTING_PLAN.md
-client/your-extensions/widgets/TODO.md
-client/your-extensions/widgets/BUG_HASH_PARAMETER_AFTER_CLEAR.md
+PR_DESCRIPTION.md

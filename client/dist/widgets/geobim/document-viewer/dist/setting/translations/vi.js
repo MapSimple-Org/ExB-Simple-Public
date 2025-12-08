@@ -1,0 +1,1 @@
+System.register([],function(e){return{execute:function(){e({settingsLabel:"Thi\u1ebft l\u1eadp Document Viewer"})}}});

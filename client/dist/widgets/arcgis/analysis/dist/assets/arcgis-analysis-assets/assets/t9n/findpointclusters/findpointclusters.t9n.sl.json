@@ -1,0 +1,21 @@
+{
+  "FPCAnalysisSettingGroupLabel": "Nastavitve gruče",
+  "FPCAnalysisSettingText": "Navedite metodo in merila za klasifikacijo izbora točk kot gruče.",
+  "clusteringMethodLabel": "Metoda gručenja",
+  "dbscanLabel": "Določena razdalja (DBSCAN)",
+  "hdbscanLabel": "Samoprilagoditev (HDBSCAN)",
+  "inputFeaturesSectionText": "Izberite sloj, ki vsebuje točke, na katerih želite opraviti analizo gruč.",
+  "itemProperties": {
+    "description": "Geoobjektni sloj, ustvarjen z izvajanjem orodja za analizo Najdi gruče točk.",
+    "snippet": "Geoobjektni sloj, ustvarjen iz Najdi gruče točk"
+  },
+  "minFeaturesClusterLabel": "Minimalne točke na gručo",
+  "opticsLabel": "Večplastno (OPTICS)",
+  "searchDistanceLabel": "Poišči razdaljo",
+  "searchDistanceUnitLabel": "Enota iskalne razdalje",
+  "searchTimeIntervalLabel": "Išči časovni interval",
+  "searchTimeUnitLabel": "Išči časovno enoto",
+  "sensitivityLabel": "Občutljivost gruče",
+  "timeFieldLabel": "Časovno polje",
+  "toolName": "Najdi gruče točk"
+}

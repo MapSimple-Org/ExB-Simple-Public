@@ -1,0 +1,17 @@
+import { TemplateResult } from 'lit-html';
+import { LuminaJsx } from '@arcgis/lumina';
+import { Scale, Status } from '../interfaces';
+import { IconNameOrString } from '../calcite-icon/interfaces';
+interface ValidationProps extends LuminaJsx.CustomAttributes {
+    scale: Scale;
+    status: Status;
+    icon?: IconNameOrString | boolean;
+    id?: string;
+    message: string;
+    ref?: (el: HTMLDivElement) => void;
+}
+export declare const CSS: {
+    validationContainer: string;
+};
+export declare const Validation: ({ scale, status, id, icon, message, ref, }: ValidationProps) => TemplateResult;
+export {};

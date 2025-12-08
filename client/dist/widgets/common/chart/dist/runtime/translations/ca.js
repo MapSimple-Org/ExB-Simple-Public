@@ -1,0 +1,1 @@
+System.register([],function(t){return{execute:function(){t({_widgetLabel:"Gr\xe0fic",dataEmptyTip:"No s'ha trobat cap dada."})}}});

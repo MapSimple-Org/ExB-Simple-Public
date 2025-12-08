@@ -1,0 +1,55 @@
+{
+  "beginningOnLabel": "A partir de",
+  "repeatTypeLabel": "Tipus de repetició",
+  "endingOnTypeLabel": "Fins a",
+  "endingOnDateLabel": "Data de finalització",
+  "endingOnCountLabel": "Recompte",
+  "endingOnCountPlaceholder": "per exemple: 1, 10, 30",
+  "dailyRepeatIntervalLabel": "Interval de repetició",
+  "dailyTimeLabel": "Temps",
+  "weeklyDaysOfWeekLabel": "Dia de la setmana",
+  "weeklyTimeLabel": "Temps",
+  "monthlyDayOfMonthLabel": "Dia del mes",
+  "monthlyDayOfMonthPlaceholder": "per exemple, 1 - 31",
+  "monthlyRepeatIntervalLabel": "Interval de repetició",
+  "monthlyTimeLabel": "Temps",
+  "repeatTypeOptions": {
+    "day": "Dia",
+    "week": "Setmana",
+    "month": "Mes"
+  },
+  "endingOnType": {
+    "never": "Mai",
+    "date": "Data",
+    "count": "El dia"
+  },
+  "dailyRepeatInterval": {
+    "everyDay": "Cada dia",
+    "everyOtherDay": "Cada dos dies",
+    "everyThreeDays": "Cada tres dies",
+    "everyFourDays": "Cada quatre dies",
+    "everyFiveDays": "Cada cinc dies",
+    "everySixDays": "Cada sis dies",
+    "everySevenDays": "Cada set dies",
+    "everyFourteenDays": "Cada catorze dies"
+  },
+  "weekDays": {
+    "all": "Tot",
+    "allWeekdays": "Tots els dies entre setmana",
+    "sunday": "Diumenge",
+    "monday": "Dilluns",
+    "tuesday": "Dimarts",
+    "wednesday": "Dimecres",
+    "thursday": "Dijous",
+    "friday": "Divendres",
+    "saturday": "Dissabte"
+  },
+  "monthlyRepeatInterval": {
+    "everyMonth": "Cada mes",
+    "everyTwoMonths": "Cada dos mesos",
+    "everyThreeMonths": "Cada tres mesos",
+    "everyFourMonths": "Cada quatre mesos",
+    "everyFiveMonths": "Cada cinc mesos",
+    "everySixMonths": "Cada sis mesos"
+  }
+}

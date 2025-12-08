@@ -1,0 +1,11 @@
+{
+  "all": "Alle",
+  "inputLayersGroupText": "Vælg input-overfladerasteren og eventuelt nedsænkningsdata og vægtrasteren.",
+  "itemProperties": {
+    "description": "Output, der er genereret ud fra kørsel af Afled strøm som raster-værktøjet.",
+    "snippet": "Output, der er genereret fra Afled strøm som raster"
+  },
+  "outputStreamFeaturesLabel": "Objektnavn på output-strøm",
+  "simplifyLabel": "Forenkl objekter",
+  "streamSettingsGroupText": "Angiv akkumuleringsgrænsen, metoden til strømbetegnelsen, og om output-strømlinjer udjævnes til mere enkle former."
+}

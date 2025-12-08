@@ -1,0 +1,9 @@
+{
+  "addToMap": "Bevestigen en aan kaart toevoegen",
+  "cancel": "Annuleren",
+  "confirm": "Bevestigen",
+  "header": "Item selecteren",
+  "select": "Selecteren",
+  "unsupportedLayer": "Deze parameter biedt geen ondersteuning voor de volgende kaartlagen: ${layerName}.",
+  "viewDetails": "Details weergeven"
+}

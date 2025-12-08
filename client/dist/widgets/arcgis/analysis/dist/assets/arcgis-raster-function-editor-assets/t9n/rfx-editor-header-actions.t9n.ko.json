@@ -1,0 +1,11 @@
+{
+  "newTemplate": "새 템플릿 생성",
+  "openTemplate": "템플릿 열기",
+  "addTemplate": "템플릿 추가",
+  "addFunction": "래스터 함수 추가",
+  "addConstant": "상수 추가",
+  "addRaster": "래스터 변수 추가",
+  "expand": "확장(Expand)",
+  "editTemplateProperties": "템플릿 등록정보 편집",
+  "viewTemplateProperties": "템플릿 등록정보 보기"
+}

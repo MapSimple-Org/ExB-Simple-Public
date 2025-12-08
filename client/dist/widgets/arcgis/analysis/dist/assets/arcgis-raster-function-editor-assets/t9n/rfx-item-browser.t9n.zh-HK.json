@@ -1,0 +1,11 @@
+{
+  "addToMap": "確認並新增至地圖",
+  "cancel": "取消",
+  "confirm": "確認",
+  "header": "選擇項目",
+  "select": "選擇",
+  "selectTask": "選擇任務",
+  "unsupportedLayer": "此參數不支援以下圖層: ${layerName}。",
+  "viewDetails": "檢視詳細資訊",
+  "layerLoadFailure": "無法載入圖層。"
+}

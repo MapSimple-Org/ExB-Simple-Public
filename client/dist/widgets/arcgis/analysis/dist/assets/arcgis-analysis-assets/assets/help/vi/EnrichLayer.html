@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>C&ocirc;ng cụ Bổ sung th&ocirc;ng tin lớp cải thiện c&aacute;c đối tượng đầu v&agrave;o bằng dữ liệu nh&acirc;n khẩu học v&agrave; cảnh quan.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputLayer">
+        <div>
+            <p>C&aacute;c đối tượng dạng điểm, đường hoặc v&ugrave;ng sẽ được bổ sung th&ecirc;m dữ liệu.
+            </p>
+            <p class="toolPaneOnly">Số lượng đối tượng phụ thuộc v&agrave;o c&aacute;c yếu tố bổ sung như ti&ecirc;u ch&iacute; lọc v&agrave; phạm vi ph&acirc;n t&iacute;ch.
+            </p>
+        </div>
+    </div>
+    <div id="analysisVariables">
+        <div>
+            <p>C&aacute;c biến sẽ được th&ecirc;m l&agrave;m thuộc t&iacute;nh cho c&aacute;c đối tượng đầu v&agrave;o.
+            </p>
+        </div>
+    </div>
+    <div id="bufferType">
+        <div>
+            
+            <p class="toolPaneOnly">Phương ph&aacute;p sẽ được sử dụng để tạo khu vực bao quanh xung quanh đối tượng điểm hoặc đường đầu v&agrave;o. Phương ph&aacute;p c&oacute; thể l&agrave; khoảng c&aacute;ch đường thẳng hoặc phương thức di chuyển. To&agrave;n bộ khu vực xung quanh mỗi đối tượng sẽ được bổ sung.
+            </p> 
+            <p class="modelBuilderOnly">Phương ph&aacute;p sẽ được sử dụng để tạo khu vực bao quanh xung quanh đối tượng điểm hoặc đường đầu v&agrave;o. Hiện tại, khoảng c&aacute;ch di chuyển đường thẳng l&agrave; phương ph&aacute;p duy nhất hỗ trợ c&aacute;c m&ocirc; h&igrave;nh. To&agrave;n bộ khu vực xung quanh mỗi đối tượng sẽ được bổ sung.
+            </p>
+        </div>
+    </div>
+    <div id="distance">
+        <div>
+            <p>Gi&aacute; trị số chỉ định khoảng c&aacute;ch hoặc thời gian m&agrave; khu vực được bổ sung sẽ mở rộng xung quanh mỗi đối tượng đầu v&agrave;o.
+            </p>
+        </div>
+    </div>
+    <div id="units">
+        <div>
+            <p>C&aacute;c đơn vị sẽ được sử dụng để chỉ định khoảng c&aacute;ch hoặc thời gian m&agrave; khu vực được bổ sung sẽ mở rộng xung quanh mỗi đối tượng đầu v&agrave;o.
+            </p>
+        </div>
+    </div>
+    <div id="returnBoundaries">
+        <div>
+            <p>Chỉ định liệu lớp đầu ra sẽ chứa c&aacute;c đối tượng dạng v&ugrave;ng được x&aacute;c định bởi c&agrave;i đặt  <b>Khu vực bổ sung</b> (đ&atilde; chọn) hay c&aacute;c đối tượng đầu v&agrave;o (kh&ocirc;ng được chọn).
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>T&ecirc;n của lớp sẽ được tạo v&agrave; th&ecirc;m v&agrave;o bản đồ.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>T&ecirc;n của thư mục trong  <b>Nội dung của t&ocirc;i</b> sẽ lưu trữ kết quả.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

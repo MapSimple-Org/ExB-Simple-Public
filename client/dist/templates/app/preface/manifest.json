@@ -1,0 +1,23 @@
+{
+  "name": "preface",
+  "type": "template",
+  "templateType": "app",
+  "label": "Preface",
+  "description": "Preface is a fullscreen template with split background colors. It displays basic information through compact blocks and is appropriate for introductions.",
+  "thumbnail": "thumbnail.png",
+  "order": 10,
+  "templateCreateVersion": "1.14.0",
+  "tags": [
+    "Logo",
+    "Title",
+    "Share"
+  ],
+  "categoriesTags": [
+    "Web page",
+    "Fullscreen"
+  ],
+  "isMultiplePage": false,
+  "isMapAware": false,
+  "thumbnailWidth": 320,
+  "thumbnailHeight": 214
+}

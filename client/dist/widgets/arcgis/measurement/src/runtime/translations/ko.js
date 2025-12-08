@@ -1,0 +1,1 @@
+System.register([],function(e){return{execute:function(){e({_widgetLabel:"\uce21\uc815",selectToStart:"\ub3c4\uad6c\ub97c \uc120\ud0dd\ud558\uc5ec \uce21\uc815\uc744 \uc2dc\uc791\ud569\ub2c8\ub2e4.",measureDistance:"\uac70\ub9ac \uce21\uc815",measureArea:"\uba74\uc801 \uce21\uc815",clearMeasurement:"\uce21\uc815 \uc9c0\uc6b0\uae30",measureUnit:"\uce21\uc815 \ub2e8\uc704"})}}});

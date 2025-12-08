@@ -1,0 +1,12 @@
+{
+  "name": "leftdock",
+  "type": "template",
+  "templateType": "screen",
+  "label": "Left Dock",
+  "thumbnail": "thumbnail.png",
+  "order": 4,
+  "tags": [],
+  "categoriesTags": [],
+  "thumbnailWidth": 328,
+  "thumbnailHeight": 200
+}

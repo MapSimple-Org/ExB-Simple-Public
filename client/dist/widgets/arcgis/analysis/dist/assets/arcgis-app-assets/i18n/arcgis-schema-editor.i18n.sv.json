@@ -1,0 +1,15 @@
+{
+  "expandAll": "Visa alla",
+  "collapseAll": "Dölj alla",
+  "categoryItem": {
+    "expand": "Expandera",
+    "collapse": "Dölj",
+    "editCategory": "Redigera kategori",
+    "deleteCategory": "Ta bort kategori",
+    "addSubcategory": "Lägg till underkategori",
+    "addCategory": "Lägg till kategori",
+    "save": "Spara",
+    "cancel": "Avbryt",
+    "missingTitleMessage": "Kategorititel krävs."
+  }
+}

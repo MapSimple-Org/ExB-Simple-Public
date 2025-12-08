@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>De tool Punten interpoleren voorspelt waarden op nieuwe locaties op basis van puntmetingen. De tool cre&euml;ert objectuitvoeren.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputLayer">
+        <div>
+            <p>Kies de puntlaag van de locaties die zullen worden ge&iuml;nterpoleerd.
+            </p>
+            <p class="toolPaneOnly">Het aantal objecten is afhankelijk van aanvullende factoren als de filtercriteria en de analyse-extent.
+            </p>
+        </div>
+    </div>
+    <div id="field">
+        <div>
+            <p>Kies het veld met de gemeten waarden die zullen worden ge&iuml;nterpoleerd.
+            </p>
+        </div>
+    </div>
+    <div id="interpolateOption">
+        <div>
+            <p>Kies of berekeningssnelheid of nauwkeurigheid en precisie prioriteit krijgen. Het berekenen van nauwkeurigere en precieze voorspellingen duurt langer.
+            </p>
+        </div>
+    </div>
+    <div id="outputPredictionError">
+        <div>
+            <p>Kies of een laag standaardfouten voor de interpolatievoorspellingen in de uitvoer moet worden opgenomen.
+            </p>
+        </div>
+    </div>
+    <div id="classificationType">
+        <div>
+            <p>Kies hoe de waarden van de klassebreuken worden berekend.
+            </p>
+        </div>
+    </div>
+    <div id="numClasses">
+        <div>
+            <p>Specificeer het aantal klassen (reeksen voorspelde waarden) dat in de resultatenlaag wordt opgenomen. Elke klasse definieert de grens van een polygoon en vertegenwoordigt de contouren van de voorspelde waarden. De breukwaarden van de klasse worden bepaald door het classificatietype.
+            </p>
+        </div>
+    </div>
+    <div id="classBreaks">
+        <div>
+            <p>Geef de klassebreekwaarden die zullen worden gebruikt.
+            </p>
+        </div>
+    </div>
+    <div id="boundingPolygonLayer">
+        <div>
+            <p>Kies een polygoonlaag die zal worden gebruikt om een studiegebied te defini&euml;ren. De resultaten worden zodanig geknipt dat ze alleen binnen het studiegebied worden weergegeven.
+            </p>
+            <p class="toolPaneOnly">Het aantal objecten is afhankelijk van aanvullende factoren als de filtercriteria en de analyse-extent.
+            </p>
+        </div>
+    </div>
+    <div id="predictAtPointLayer">
+        <div>
+            <p>Kies een puntlaag die de locaties vertegenwoordigt die zullen worden gebruikt om waarden te voorspellen. Indien opgegeven, wordt een puntlaag met voorspelde waarden op de opgegeven plaatsen gecre&euml;erd.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>De naam van de laag die wordt aangemaakt en toegevoegd aan de kaart.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>De naam van de map in  <b>Mijn content</b> waarin de resultaten worden opgeslagen.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

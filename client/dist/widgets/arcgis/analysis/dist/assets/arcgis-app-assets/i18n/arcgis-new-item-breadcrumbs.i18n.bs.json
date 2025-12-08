@@ -1,0 +1,12 @@
+{
+  "apiCredentialType": "Vrsta vjerodajnice: API ključ",
+  "oauthCredentialType": "Vrsta vjerodajnice: OAuth 2.0",
+  "itemAccess": "Pristup stavci",
+  "page": "Stranica: ${page}",
+  "currentPage": "Trenutna stranica: ${page}",
+  "privileges": "Privilegije",
+  "itemDetails": "Pojedinosti o stavci",
+  "settings": "Postavke",
+  "serviceScope": "Opseg usluge",
+  "summary": "Sažetak"
+}

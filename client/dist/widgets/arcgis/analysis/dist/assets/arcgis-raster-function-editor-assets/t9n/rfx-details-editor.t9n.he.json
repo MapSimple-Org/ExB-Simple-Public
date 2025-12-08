@@ -1,0 +1,22 @@
+{
+  "general": "כללי",
+  "parameters": "פרמטרים",
+  "variables": "משתנים",
+  "name": "שם",
+  "namePlaceHolder": "הזן שם",
+  "description": "תאור",
+  "parameter": "פרמטר",
+  "isPublic": "IsPublic",
+  "isDataset": "IsDataset",
+  "unknownPixelType": "לא ידוע",
+  "outputPixelType": "סוג פלט הפיקסל",
+  "u8PixelType": "8 ביט לא חתום",
+  "s8PixelType": "8 ביט Signed",
+  "u16PixelType": "16 ביט לא חתום",
+  "s16PixelType": "16 ביט חתום",
+  "u32PixelType": "32 ביט לא חתום",
+  "s32PixelType": "32 ביט חתום",
+  "f32PixelType": "32 ביט צף",
+  "f64PixelType": "64 ביט כפול",
+  "properties": "מאפיינים"
+}

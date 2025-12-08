@@ -1,0 +1,12 @@
+{
+  "apiCredentialType": "Prisijungimo duomenų tipas: API raktas",
+  "oauthCredentialType": "Prisijungimo duomenų tipas: OAuth 2.0",
+  "itemAccess": "Elementų prieiga",
+  "page": "Puslapis: ${page}",
+  "currentPage": "Dabartinis puslapis: ${page}",
+  "privileges": "Teisės",
+  "itemDetails": "Elemento informacija",
+  "settings": "Nustatymai",
+  "serviceScope": "Paslaugos apimtis",
+  "summary": "Santrauka"
+}

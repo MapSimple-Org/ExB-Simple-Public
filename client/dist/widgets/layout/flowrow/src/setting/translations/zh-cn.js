@@ -1,0 +1,1 @@
+System.register([],function(e){return{execute:function(){e({verticalAlign:"\u5782\u76f4\u5bf9\u9f50",spaceAround:"\u5468\u56f4\u7a7a\u95f4",spaceBetween:"\u95f4\u8ddd",spaceEvenly:"\u5747\u5300\u7a7a\u95f4",horizontalAlign:"\u6c34\u5e73\u5bf9\u9f50",scrollable:"\u53ef\u6eda\u52a8"})}}});

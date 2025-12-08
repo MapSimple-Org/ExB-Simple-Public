@@ -1,0 +1,8 @@
+{
+  "loading": "S'està carregant...",
+  "pleaseWait": "Espereu.",
+  "loadingXMLRFT": "S'està carregant la plantilla de funció ràster seleccionada en format XML.",
+  "failedToOpen": "No s'ha pogut obrir.",
+  "readingFailed": "No s'ha pogut carregar la plantilla de funció de ràster seleccionada.",
+  "failedToLoadXML": "No s'ha pogut pujar la plantilla de funció ràster seleccionada en format XML."
+}

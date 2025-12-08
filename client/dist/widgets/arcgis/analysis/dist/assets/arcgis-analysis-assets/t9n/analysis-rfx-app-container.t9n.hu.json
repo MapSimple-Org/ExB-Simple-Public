@@ -1,0 +1,16 @@
+{
+  "backLabel": "Vissza",
+  "browseHeader": "Réteg kijelölése",
+  "cannotReopenRasterFunction": "A raszterfüggvény újbóli megnyitása nem sikerült.",
+  "creditThresholdModal": {
+    "cancelRun": "Mégse",
+    "continueRun": "Futtatás mindenképp",
+    "creditEstimate": "Becsült kreditek: ${cost}",
+    "creditThreshold": "Kreditküszöbérték: ${threshold}",
+    "heading": "Mielőtt továbblépne",
+    "learnMore": "További információ a kreditküszöbértékekről",
+    "thresholdExceeded": "Ennek az elemzésnek a becsült kredithasználati költsége meghaladja a webtérkép kreditküszöbértékét:"
+  },
+  "failedToExecuteEstimate": "A beküldés nem sikerült. Az EstimateRasterAnalysisCost végrehajtása nem sikerült",
+  "runAnalysisLabel": "Futtatás"
+}

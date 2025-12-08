@@ -1,0 +1,11 @@
+{
+  "addBtn": "Concluir",
+  "cancelBtn": "Cancelar",
+  "header": "Selecionar variável",
+  "multipleVariables": "Variável de múltiplos valores",
+  "noFound": "Nenhuma variável compatível encontrada",
+  "search": "Variáveis ​​de pesquisa",
+  "singleVariables": "Variáveis de valor único",
+  "variableLabel": "Rótulo: <span style='font-weight: var(--calcite-font-weight-normal)'>${val}</span>",
+  "variableVal": "Valor: <span style='font-weight: var(--calcite-font-weight-normal)'>${val}</span>"
+}

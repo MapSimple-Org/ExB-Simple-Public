@@ -1,0 +1,1 @@
+System.register([],function(e){return{execute:function(){e({settingsLabel:"Link-Explorer-Einstellungen",selectModelViewer:"W\xe4hlen Sie zum Anzeigen von verkn\xfcpften Dokumenten ein Dokument-Viewer-Widget aus."})}}});

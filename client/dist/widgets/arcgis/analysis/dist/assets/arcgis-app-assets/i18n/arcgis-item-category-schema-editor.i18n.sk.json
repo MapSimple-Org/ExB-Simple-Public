@@ -1,0 +1,36 @@
+{
+  "modalHeader": "Konfigurovať kategórie obsahu",
+  "modalGroupHeader": "Konfigurovať kategórie skupín",
+  "helpText": "Úpravy, odstránenie alebo zmena poradia kategórií vo vašej organizácii.",
+  "helpTextGroup": "Editovať, mazať alebo zmeniť poradie kategórií obsahu v tejto skupine.",
+  "helpTextDescription": "Pamätajte, že ostatní členovia vašej organizácie už mohli priradiť tieto kategórie k svojim položkám a úpravou schémy sa podľa toho aktualizujú tieto položky",
+  "helpTextGroupDescription": "Pamätajte, že ostatní členovia skupiny už mohli priradiť tieto kategórie k svojim položkám a úpravou schémy sa podľa toho aktualizujú tieto položky",
+  "warning": {
+    "deleteInUseCategory": {
+      "title": "Odstrániť kategóriu",
+      "cta": "Odstrániť kategóriu",
+      "message": {
+        "single": "Jedna položka je priradená do tejto kategórie. Odstránenie kategórie ju tiež odstráni z tejto položky.",
+        "multiple": "${number} položiek je priradených do tejto kategórie. Odstránenie kategórie ju tiež odstráni z týchto položiek.",
+        "unknown": "Položky priradené do tejto kategórie: ${number}. Odstránenie kategórie ju tiež odstráni z týchto položiek."
+      }
+    },
+    "changeTitleInUseCategory": {
+      "title": "Aktualizovať kategóriu",
+      "message": {
+        "single": "Jedna položka je priradená do tejto kategórie. Aktualizácia kategórie aktualizuje položku na použitie \"${newTitle}\".",
+        "multiple": "${number} položiek je priradených do tejto kategórie. Aktualizácia kategórie aktualizuje položku na použitie \"${newTitle}\".",
+        "unknown": "Položky priradené do tejto kategórie: ${number}. Aktualizácia kategórie aktualizuje položku na použitie \"${newTitle}\"."
+      },
+      "cta": "Aktualizovať kategóriu"
+    }
+  },
+  "template": {
+    "templateList": {
+      "custom": {
+        "message": "Vytvorte si vlastné kategórie na organizovanie obsahu vo vašej organizácii.",
+        "messageGroup": "Vytvorte si vlastné kategórie na usporiadanie obsahu v rámci tejto skupiny."
+      }
+    }
+  }
+}

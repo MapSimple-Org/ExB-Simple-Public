@@ -1,0 +1,9 @@
+{
+  "weightedSumTable": "加權總和表格",
+  "id": "ID",
+  "layer": "圖層",
+  "field": "欄位",
+  "weight": "權重",
+  "value": "數值",
+  "selectLayer": "選擇圖層"
+}

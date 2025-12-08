@@ -1,0 +1,11 @@
+{
+  "newTemplate": "Creare șablon nou",
+  "openTemplate": "Deschidere șablon",
+  "addTemplate": "Adăugați un șablon",
+  "addFunction": "Adăugare funcții raster",
+  "addConstant": "Adăugare constantă",
+  "addRaster": "Adăugare variabilă raster",
+  "expand": "Extindere",
+  "editTemplateProperties": "Editare proprietăți șablon",
+  "viewTemplateProperties": "Vizualizați proprietățile șabloanelor"
+}

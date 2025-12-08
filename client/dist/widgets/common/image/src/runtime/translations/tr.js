@@ -1,0 +1,1 @@
+System.register([],function(e){return{execute:function(){e({_widgetLabel:"G\xf6r\xfcnt\xfc",imageChooseShape:"\u015eekil",imageCrop:"Kes",previousImage:"\xd6nceki g\xf6r\xfcnt\xfc",nextImage:"Sonraki g\xf6r\xfcnt\xfc",imageViewer:"G\xf6r\xfcnt\xfc g\xf6r\xfcnt\xfcleyici"})}}});

@@ -1,0 +1,32 @@
+{
+  "name": "comparatist",
+  "type": "template",
+  "templateType": "scrolling-page",
+  "label": "Comparatist",
+  "description": "Comparatist is a template with an interactive Swipe widget for comparing map layers side by side. The Chart and Feature Info widgets also provide a more comprehensive description of the underlying data.",
+  "thumbnail": "thumbnail.png",
+  "order": 17,
+  "templateCreateVersion": "1.13.0",
+  "tags": [
+    "Map",
+    "Title",
+    "Share",
+    "Basemap Gallery",
+    "Chart",
+    "Map Layers",
+    "Feature Info",
+    "Legend",
+    "Section",
+    "View",
+    "Navigation",
+    "Pop up",
+    "Swipe"
+  ],
+  "categoriesTags": [
+    "Web page",
+    "Scrolling",
+    "Map centric"
+  ],
+  "thumbnailWidth": 320,
+  "thumbnailHeight": 214
+}

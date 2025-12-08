@@ -1,0 +1,13 @@
+{
+  "weightedOverlayTable": "Ağırlıklı Çakıştırma Tablosu",
+  "id": "Kimlik",
+  "layer": "Katman",
+  "field": "Alan",
+  "influence": "Etki",
+  "sumOfInfluence": "Etki Toplamı",
+  "value": "Değer",
+  "remapTable": "Yeniden Haritalama Tablosu",
+  "scale": "Ölçeklendir",
+  "scales": "Ölçekler",
+  "selectRaster": "Raster Seç"
+}

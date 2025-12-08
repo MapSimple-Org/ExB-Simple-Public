@@ -1,0 +1,22 @@
+{
+  "value": "Vrijednost",
+  "classname": "Naziv razreda",
+  "color": "Boja",
+  "raster": "Raster",
+  "tableType": "Vrsta tablice",
+  "manual": "Ručno",
+  "external": "Vanjski",
+  "browseTable": "Pregledaj tablicu",
+  "browseTableFrom": "Pregledaj tablicu iz",
+  "file": "Datoteka",
+  "dbfFile": "DBF datoteka",
+  "layer": "Sloj",
+  "unsupportedDataType": "Nepodržana vrsta",
+  "failedToGetTableFromLayer": "Neuspjelo dohvaćanje tablice iz sloja.",
+  "generate": "Generiraj tablicu",
+  "minValue": "Minimalna vrijednost",
+  "maxValue": "Maksimalna vrijednost",
+  "classBaseName": "Osnovni naziv razreda",
+  "colorscheme": "Shema boja",
+  "defaultClassName": "Oznaka_"
+}

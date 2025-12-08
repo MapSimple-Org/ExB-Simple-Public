@@ -1,0 +1,1 @@
+{"headings":{"features":"피처","functions":"함수","totalFeatures":"합계: {number}","traceResultsCustom":"결과 {string}개","traceResultsGeneric":"추적 결과"},"labels":{"numFeatures":"피처의 개수","numFunctions":"함수의 개수"},"noResultsDescription":"추적이 결과를 반환하지 않았습니다.","noResultsHeading":"결과가 없습니다.","noTraceConfigDescription":"입력 탭을 사용하여 추적을 구성하고 실행하세요.","noTraceConfigHeading":"실행한 추적이 없습니다."}

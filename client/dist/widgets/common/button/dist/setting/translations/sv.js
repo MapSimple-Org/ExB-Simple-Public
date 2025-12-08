@@ -1,0 +1,1 @@
+System.register([],function(e){return{execute:function(){e({_widgetLabel:"Knapp",dynamicStyleExpressionsLabel:"Anv\xe4nd inneh\xe5ll i knapptext"})}}});

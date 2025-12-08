@@ -1,0 +1,20 @@
+{
+  "title": "제목",
+  "addTitle": "제목 추가",
+  "validation": {
+    "error": "오류",
+    "titleRequired": "제목은 필수 필드입니다.",
+    "itemExists": "제목인 \"${name}\"인 항목이 이 폴더에 이미 있습니다. 다른 제목을 선택하세요.",
+    "titleInUseService": "제목이 \"${name}\"인 레이어가 이미 있습니다. 다른 제목을 선택하세요.",
+    "itemInRecycleBin": "제목이 \"${name}\"인 항목이 휴지통에 이미 있습니다. 다른 제목을 선택하세요.",
+    "serviceNameInvalid": "서비스 제목은 영숫자 문자 또는 밑줄만 포함할 수 있으며 90자 이하여야 합니다.",
+    "dataStoreTitleInvalid": "데이터 스토어 제목은 영숫자 문자 또는 밑줄만 포함할 수 있으며 90자 이하여야 합니다.",
+    "titleInvalid": "제목은 250자 미만이어야 하며 < 또는 > 문자를 포함할 수 없습니다.",
+    "titleStartsWithNumber": "제목은 숫자로 시작할 수 없습니다.",
+    "invalidCharacters": {
+      "single": "이름에는 ${invalidCharacters} 문자를 포함할 수 없습니다.",
+      "multiple": "이름에는 ${invalidCharacters} 문자를 포함할 수 없습니다.",
+      "unknown": "이름에는 ${invalidCharacters} 문자를 포함할 수 없습니다."
+    }
+  }
+}

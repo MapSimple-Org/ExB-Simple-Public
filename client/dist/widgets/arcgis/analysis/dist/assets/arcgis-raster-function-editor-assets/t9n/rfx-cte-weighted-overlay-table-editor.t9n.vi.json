@@ -1,0 +1,13 @@
+{
+  "weightedOverlayTable": "Bảng Chồng lớp có Trọng số",
+  "id": "ID",
+  "layer": "Lớp",
+  "field": "Trường",
+  "influence": "Ảnh hưởng",
+  "sumOfInfluence": "Tổng Ảnh hưởng",
+  "value": "Giá trị",
+  "remapTable": "Thiết lập lại bảng",
+  "scale": "Tỷ lệ",
+  "scales": "Tỷ lệ",
+  "selectRaster": "Chọn Raster"
+}

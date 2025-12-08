@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>Alatka Nibble zamenjuje ćelije rastera koje odgovaraju masci sa vredno&scaron;ću najbližeg suseda.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputRaster">
+        <div>
+            <p>Ulazni raster sa maskiranim lokacijama koje će biti zamenjene vredno&scaron;ću njihovog najbližeg suseda.
+            </p>
+        </div>
+    </div>
+    <div id="inputMaskRaster">
+        <div>
+            <p>Raster maske koji identifikuje lokacije u ulaznom rasteru koje će biti zamenjene. Smatra se da su ćelije sa vredno&scaron;ću NoData unutar maskirane oblasti.
+            </p>
+        </div>
+    </div>
+    <div id="inputZoneRaster">
+        <div>
+            <p>Ulazni raster zone. Za svaku zonu, ulazne ćelije koje se nalaze unutar maske biće zamenjene samo najbližim vrednostima ćelija unutar te iste zone.
+            </p>
+        </div>
+    </div>
+    <div id="nibbleValues">
+        <div>
+            <p>Određuje da li ćelije NoData u ulaznom rasteru mogu zameniti ćelije u maskiranim oblastima ako su najbliži sused.
+            </p>
+            <p>Ako je označeno, ćelije NoData u ulaznom rasteru mogu da zamenjuju ćelije u maskiranoj oblasti. Ako nije označeno, samo važeće ćelije u ulaznom rasteru mogu da zamenjuju ćelije u maskiranoj oblasti.
+            </p>
+        </div>
+    </div>
+    <div id="nibbleNodata">
+        <div>
+            <p>Određuje da li će ćelije NoData u maskiranoj oblasti biti sačuvane ili zamenjene.
+            </p>
+            <p>Ako nije označeno, sve ćelije NoData koje su unutar maskirane oblasti će biti sačuvane u izlazu. Ako je označeno, ćelije NoData unutar maskirane oblasti će biti zamenjene vredno&scaron;ću najbližeg suseda koji je izvan maskirane oblasti.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>Naziv povr&scaron;ine sloja rastera koji će biti kreiran i dodat mapi.
+            </p>
+        </div>
+    </div>
+    <div id="resultType">
+        <div>
+            <p>Tip izlaza koji će biti kreiran. Izlaz može biti sloj sa popločanim slikama ili sloj dinamičkih slika.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>Naziv fascikle u  <b>Mom sadržaju</b> u kojoj će rezultati biti sačuvani.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

@@ -1,0 +1,1 @@
+System.register([],function(t){return{execute:function(){t({distance:"Et\xe4isyys",area:"Pinta-ala",atLeastOne:"V\xe4hint\xe4\xe4n yksi ty\xf6kalu on valittava",toolbar:"Ty\xf6kalurivi",disableSnapping:"Poista tartunta k\xe4yt\xf6st\xe4 2D-kartassa"})}}});

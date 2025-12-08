@@ -1,0 +1,7 @@
+{
+  "addEntryButtonLabel": "Legg til",
+  "maxGroupsMessage": "Maksimalt antall oppføringer er ${maxCount}.",
+  "minGroupsMessage": "Minste antall oppføringer er ${minCount}.",
+  "removeEntryButtonLabel": "Fjern oppføring",
+  "requiredMessage": "Denne parameteren kreves."
+}

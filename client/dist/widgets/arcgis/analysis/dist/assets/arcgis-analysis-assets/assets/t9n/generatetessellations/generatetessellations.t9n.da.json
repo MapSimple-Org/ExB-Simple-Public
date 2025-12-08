@@ -1,0 +1,27 @@
+{
+  "area": "Område",
+  "binResolution": "H3-bin-opløsning",
+  "binSize": "Beholderstørrelse",
+  "binSizeUnit": "Enhed",
+  "binType": "Formtype af beholder",
+  "diamondBins": "Rombe-celler",
+  "distance": "Afstand",
+  "extentLayer": "Udstrækningslag",
+  "extentOverrideMessage": "Dette udstrækningslag vil blive brugt i stedet for enhver indstilling af behandlingsudstrækning i miljøerne.",
+  "extentSectionLabel": "Indstillinger for udstrækning",
+  "extentSectionText": "Angiv et udstrækningslag, som underopdelingen skal dække.",
+  "h3hexagonBins": "H3 sekskantede celler",
+  "hexagon": "Sekskant",
+  "intersectStudyArea": "Behold kun gennemskærende underopdelinger",
+  "itemProperties": {
+    "description": "Objektlag genereret ud fra kørsel af Generer underopdelinger-analyseværktøjet.",
+    "snippet": "Objektlag genereret ud fra Generer underopdelinger"
+  },
+  "outputAreasSectionText": "Angiv et navn på underopdelingsgitteret.",
+  "sizeType": "Måling af beholderstørrelse",
+  "square": "Kvadrat",
+  "tessellationSettingsLabel": "Indstillinger for underopdeling",
+  "tessellationSettingsSummaryText": "Angiv formen og størrelsen på de beholdere, der skal genereres.",
+  "thexagonBins": "Tværgående sekskantede celler",
+  "triangleBins": "Trekantede celler"
+}

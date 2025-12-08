@@ -1,0 +1,12 @@
+{
+  "dynamicLayer": "Layer citra dinamis",
+  "outputDescription": "Output dibuat dari menjalankan fungsi raster ${rfxName}",
+  "outputDescriptionRFT": "Output dibuat dari menjalankan template fungsi raster ${rfxName}",
+  "outputName": "Nama output",
+  "outputNamePlaceHolder": "Masukkan nama unik...",
+  "resultLayer": "Layer hasil",
+  "resultType": "Jenis hasil",
+  "saveFolder": "Simpan di folder",
+  "summaryText": "Berikan nama untuk layer hasil.",
+  "tileImagery": "Layer citra berubin"
+}

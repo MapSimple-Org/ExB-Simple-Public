@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>Orodje Izračunaj polje izračuna vrednosti za novo ali obstoječe polje.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputTable">
+        <div>
+            <p>Vhodni sloj ali tabela, za katero bo izračunano polje.
+            </p>
+            <p class="modelBuilderOnly"> <b>Sloj</b> je privzeto določen, če <b>vhodni sklop podatkov</b> ni izpolnjen. Za dodajanje vhodne tabele, izberite <b>Tabela</b>, preden dodate sklop podatkov.
+            </p>
+        </div>
+    </div>
+    <div id="whereClause">
+        <div>
+            <p>Atributna poizvedba, ki določa, za katero podmnožico zapisov bo uporabljen izračun polja. Če želite izračun uporabiti za vse zapise, pustite ta parameter prazen.
+            </p>
+        </div>
+    </div>
+    <div id="field">
+        <div>
+            <p>Polje, kamor bodo dodane izračunane vrednosti. Izberete lahko obstoječe polje ali pa ustvarite novo. 
+            </p>
+        </div>
+    </div>
+    <div id="fieldCalcExpression">
+        <div>
+            <p>Izraz SQL, ki se uporablja za izračun vrednosti za  <b>Polje za izračun</b>.
+            </p>
+            <p>Izraz lahko vključuje osnovne operatorje, funkcije in imena polj ter mora ustvariti vrednosti, ki se ujemajo s tipom polja za  <b>Polje za izračun</b>.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

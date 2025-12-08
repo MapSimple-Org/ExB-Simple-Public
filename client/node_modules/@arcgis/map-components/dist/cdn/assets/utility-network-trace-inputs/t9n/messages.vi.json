@@ -1,0 +1,1 @@
+{"componentLabel":"Đầu vào Truy dấu","labels":{"utilityNetwork":"Mạng lưới tiện ích","traceConfiguration":"Cấu hình truy dấu","traceInputs":"Đầu vào truy dấu"},"errors":{"noMapError":"Không có bản đồ có sẵn","noUtilityNetworkError":"Không tìm thấy mạng lưới tiện ích nào trong bản đồ","noTraceConfigurationError":"Không có cấu hình truy dấu đã được đặt tên có sẵn"}}

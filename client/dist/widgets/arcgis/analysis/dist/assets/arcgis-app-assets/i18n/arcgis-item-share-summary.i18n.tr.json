@@ -1,0 +1,17 @@
+{
+  "sharing": "Paylaşım",
+  "private": "Sahip",
+  "shared": "Sahibi ve gruplarla paylaşıldı.",
+  "org": "Kuruluş",
+  "public": "Herkes (genel)",
+  "privateGroups": "Sahip",
+  "sharedGroups": "Sahibi + Gruplar (${num})",
+  "orgGroups": "Kuruluş + Gruplar (${num})",
+  "publicGroups": "Herkes (genel) + Gruplar (${num})",
+  "groups": "Gruplar (${num})",
+  "updateSharing": "Paylaşım seviyesi: ${level}, paylaşımı güncelle",
+  "viewableBy": "Şunlar tarafından görüntülenebilir: ${level}",
+  "everyone": "Herkes (genel)",
+  "organization": "Kuruluş",
+  "groupMembers": "Grup üyeleri"
+}

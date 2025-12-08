@@ -1,0 +1,10 @@
+{
+  "forceFlowLabel": "엣지 셀이 밖으로 흐르도록 하기",
+  "inputLayersGroupText": "입력 표면 래스터를 선택하고 필요에 따라 침체 데이터와 가중치 래스터를 선택합니다.",
+  "itemProperties": {
+    "description": "래스터로 스트림 취득 도구를 실행하여 생성된 결과입니다.",
+    "snippet": "래스터로 스트림 취득을 통해 생성된 결과"
+  },
+  "outputStreamRasterLabel": "결과 스트림 래스터 이름",
+  "streamSettingsGroupText": "누적 임계값, 스트림 지정 방법, 입력 표면 래스터 엣지에서 흐름을 처리하는 방법을 지정합니다."
+}

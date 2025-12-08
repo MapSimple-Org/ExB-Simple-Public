@@ -1,0 +1,7 @@
+{
+  "header": "Rasterfunktionsredigerare",
+  "content": "Du har osparade ändringar i '${rftTitle}'. Om du inte sparar går dessa ändringar förlorade.",
+  "cancel": "Avbryt",
+  "dontSave": "Spara inte",
+  "save": "Spara"
+}

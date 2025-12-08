@@ -1,0 +1,13 @@
+{
+  "fieldCalcExpression": "Field calculation expression",
+  "fieldCalculationGroupLabel": "Field calculation",
+  "fieldPlaceholderText": "Click to select or create field",
+  "fieldToCalculate": "Field to calculate",
+  "inputDatasetGroupLabel": "Input",
+  "itemProperties": {
+    "description": "Result generated from running the Calculate Field tool in ModelBuilder.",
+    "snippet": "Feature layer generated from Calculate Field"
+  },
+  "noFieldSpecified": "Specify a field to calculate in order to create an expression.",
+  "whereClause": "Only apply calculation to certain records"
+}

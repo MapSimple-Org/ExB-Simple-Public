@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>N&aacute;stroj Sumarizovat nejbliž&scaron;&iacute; (Summarize Nearby) vypoč&iacute;t&aacute; statistiky pro prvky v zadan&eacute; vzd&aacute;lenosti od jin&yacute;ch prvků. Vzd&aacute;lenost lze měřit vzdu&scaron;nou čarou nebo podle zadan&eacute;ho způsobu přepravy.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="summaryLayer">
+        <div>
+            <p>Vrstva, kter&aacute; se sumarizuje do určit&eacute; vzd&aacute;lenosti od vrstvy bl&iacute;zk&yacute;ch prvků.
+            </p>
+            <p class="toolPaneOnly">Počet prvků z&aacute;vis&iacute; na dal&scaron;&iacute;ch faktorech, jako jsou krit&eacute;ria filtrov&aacute;n&iacute; a rozsah anal&yacute;zy.
+            </p>
+        </div>
+    </div>
+    <div id="sumNearbyLayer">
+        <div>
+            <p>Bodov&aacute;, liniov&aacute; nebo polygonov&aacute; vrstva, kter&aacute; se použije jako v&yacute;choz&iacute; m&iacute;sta, kolem nichž se vytvoř&iacute; ohraničuj&iacute;c&iacute; oblasti pro sumarizaci nejbliž&scaron;&iacute;ch prvků.
+            </p>
+            <p class="toolPaneOnly">Počet prvků z&aacute;vis&iacute; na dal&scaron;&iacute;ch faktorech, jako jsou krit&eacute;ria filtrov&aacute;n&iacute; a rozsah anal&yacute;zy.
+            </p>
+        </div>
+    </div>
+    <div id="nearType">
+        <div>
+            
+            <p class="toolPaneOnly">Metoda, kter&yacute; se použije k vytvořen&iacute; ohraničuj&iacute;c&iacute;ch oblast&iacute;. Metodou může b&yacute;t př&iacute;m&aacute; vzd&aacute;lenost nebo cestovn&iacute; režim.
+            </p> 
+            <p class="modelBuilderOnly">Metoda, kter&yacute; se použije k vytvořen&iacute; ohraničuj&iacute;c&iacute;ch oblast&iacute;. V současn&eacute; době je u modelů podporov&aacute;na pouze metoda př&iacute;m&eacute; vzd&aacute;lenosti.
+            </p>
+        </div>
+    </div>
+    <div id="distances">
+        <div>
+            <p>Vzd&aacute;lenost nebo čas, kter&yacute; se použije k vytvořen&iacute; ohraničuj&iacute;c&iacute;ch oblast&iacute;. Pokud je přid&aacute;no v&iacute;ce hodnot, použije se každ&aacute; hodnota k v&yacute;počtu ohraničuj&iacute;c&iacute;ch oblast&iacute; pro v&scaron;echny vstupn&iacute; prvky.
+            </p>
+        </div>
+    </div>
+    <div id="units">
+        <div>
+            <p>Jednotky, kter&eacute; se použij&iacute; pro zad&aacute;n&iacute; vzd&aacute;lenosti nebo času.
+            </p>
+        </div>
+    </div>
+    <div id="returnBoundaries">
+        <div>
+            <p>Určete, zda maj&iacute; b&yacute;t v&yacute;slednou vrstvou ohraničuj&iacute;c&iacute; oblasti (za&scaron;krtnuto) nebo stejn&aacute; geometrie jako ve vstupn&iacute; vrstvě bl&iacute;zk&yacute;ch prvků (neza&scaron;krtnuto).
+            </p>
+        </div>
+    </div>
+    <div id="sumShape">
+        <div>
+            <p>Určuje, zda se vypoč&iacute;t&aacute; celkov&aacute; velikost prvků shrnut&yacute;ch v každ&eacute; ohraničuj&iacute;c&iacute; oblasti. U lini&iacute; se vypoč&iacute;t&aacute; celkov&aacute; d&eacute;lka. U polygonů se vypoč&iacute;t&aacute; celkov&aacute; plocha.
+            </p>
+        </div>
+    </div>
+    <div id="shapeUnits">
+        <div>
+            <p>Jednotky, kter&eacute; se použij&iacute; pro v&yacute;počet celkov&eacute; velikosti sumarizovan&yacute;ch prvků.
+            </p>
+        </div>
+    </div>
+    <div id="summaryFields">
+        <div>
+            <p>Pole s č&iacute;slem nebo datem ze vstupn&iacute; vrstvy, kter&aacute; se maj&iacute; shrnout, a statistiky, kter&eacute; se vypoč&iacute;taj&iacute; pro každ&eacute; pole.
+            </p>
+        </div>
+    </div>
+    <div id="groupByField">
+        <div>
+            <p>Pole ze vstupn&iacute; vrstvy, kter&eacute; bude použito k&nbsp;rozdělen&iacute; dat do samostatn&yacute;ch skupin pro statistick&eacute; v&yacute;počty.
+            </p>
+        </div>
+    </div>
+    <div id="minorityMajority">
+        <div>
+            <p>Určuje, zda se maj&iacute; vypoč&iacute;tat minoritn&iacute; (nejm&eacute;ně dominantn&iacute;) a majoritn&iacute; (nejv&iacute;ce dominantn&iacute;) skupiny v r&aacute;mci každ&eacute; souhrnn&eacute; oblasti.
+            </p>
+        </div>
+    </div>
+    <div id="percentShape">
+        <div>
+            <p>Určuje, zda bude vypoč&iacute;t&aacute;n procentn&iacute; pod&iacute;l sumarizovan&yacute;ch prvků, kter&eacute; patř&iacute; do každ&eacute; skupiny v r&aacute;mci každ&eacute; hranice.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>N&aacute;zev vrstvy, kter&aacute; bude vytvořena a přid&aacute;na do mapy.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>N&aacute;zev složky v č&aacute;sti  <b>Můj obsah,</b> do kter&eacute; budou v&yacute;sledky uloženy.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

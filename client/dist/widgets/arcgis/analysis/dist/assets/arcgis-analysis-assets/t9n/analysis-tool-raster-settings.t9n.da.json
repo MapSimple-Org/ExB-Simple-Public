@@ -1,0 +1,23 @@
+{
+  "CPU": "CPU",
+  "GPU": "GPU",
+  "asSpecified": "Som angivet",
+  "automatic": "Automatisk",
+  "bilinear": "Bilineær interpolation (for kontinuerlige data)",
+  "cellSize": "Cellestørrelse",
+  "cubic": "Kubik-konvolution (for kontinuerlige data)",
+  "default": "Standard",
+  "fromLayer": "Fra lag",
+  "mask": "Maske",
+  "maxOf": "Maksimalt antal input",
+  "minOf": "Minimalt antal input",
+  "nearest": "Nærmeste nabo (for diskrete data)",
+  "parallelProcessingFactor": "Parallel databehandlingsfaktor",
+  "parallelProcessingFactorPlaceholderText": "Indtast et tal eller en procent...",
+  "processorType": "Processortype",
+  "recycleProcessingWorkers": "Genanvendelsesinterval for forarbejdningsmedarbejdere",
+  "resamplingMethod": "Resampling-metode",
+  "retryOnFailures": "Antal gentagne forsøg efter fejl",
+  "selectCellSize": "Vælg cellestørrelse...",
+  "snapRaster": "Snap-raster"
+}

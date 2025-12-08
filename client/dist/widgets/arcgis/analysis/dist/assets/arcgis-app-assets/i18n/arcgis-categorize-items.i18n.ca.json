@@ -1,0 +1,11 @@
+{
+  "modalTitle": "Classifica els elements",
+  "save": "Desa",
+  "cancel": "Cancel·la",
+  "loadingText": "S'està carregant...",
+  "assignCategory": "Assigna una categoria",
+  "errorMessage": "Hi ha hagut algun problema. Torneu-ho a provar més tard.",
+  "limited": "Els elements estan limitats a 20 categories. Elimineu una categoria abans d'afegir-ne una altra.",
+  "undo": "Desfés",
+  "redo": "Refés"
+}

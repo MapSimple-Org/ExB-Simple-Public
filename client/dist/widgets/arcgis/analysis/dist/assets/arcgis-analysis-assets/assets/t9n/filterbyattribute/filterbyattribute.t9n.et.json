@@ -1,0 +1,8 @@
+{
+  "itemProperties": {
+    "description": "Tulemus genereeriti analüüsitööriistas atribuutide alusel filtrimise käivitamisega",
+    "snippet": "Tulemus genereeriti atribuutide alusel filtrimisega"
+  },
+  "noLayerDisabledTooltip": "Valige sobiv sisendandmestik.",
+  "queryCriteriaGroupLabel": "Päringu kriteeriumid"
+}

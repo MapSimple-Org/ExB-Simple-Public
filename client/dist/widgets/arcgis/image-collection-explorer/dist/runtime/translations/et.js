@@ -1,0 +1,1 @@
+System.register([],function(i){return{execute:function(){i({_widgetLabel:"Pildikogu uurija",_widgetDescription:"Vidin pildikihi pildiandmete kogu otsimiseks ja uurimiseks.",noQualifiedLayerCoachMessage:"Praegusel kaardil puudub pildikiht (pildikogu).",openSettingPanelCoachMessage:"Avage konfiguratsioonide uuendamiseks vidina s\xe4tete paneel.",selectLayers:"Vali kihid"})}}});

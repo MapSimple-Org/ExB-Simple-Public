@@ -1,0 +1,12 @@
+{
+  "classField": "Trường phân nhóm",
+  "classesAsRowsLabel": "Các phân nhóm dưới dạng hàng trong bảng đầu ra",
+  "inputClassRasterOrFeatures": "Phân nhóm Raster đầu vào hoặc đối tượng",
+  "inputLayerGroupText": "Chọn vùng đầu vào và phân nhóm lớp để tính toán khu vực được lập bảng chéo giữa hai bộ dữ liệu.",
+  "itemProperties": {
+    "description": "Bảng đầu ra được tạo từ việc chạy công cụ phân tích Lập bảng Khu vực.",
+    "snippet": "Bảng đầu ra được tạo từ Lập bảng Khu vực"
+  },
+  "tabulateAreaSettingsGroupLabel": "Cài đặt lập bảng khu vực",
+  "tabulateAreaSettingsGroupText": "Chọn cách xử lý phân nhóm trong bảng đầu ra. Chỉ định kích thước cell để tính toán. "
+}

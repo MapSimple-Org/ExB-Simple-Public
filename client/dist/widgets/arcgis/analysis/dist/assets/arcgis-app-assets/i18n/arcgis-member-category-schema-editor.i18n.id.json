@@ -1,0 +1,22 @@
+{
+  "dialogHeading": "Konfigurasikan kategori anggota",
+  "noticeTitle": "Tambahkan, hapus, atau urutkan ulang kategori di organisasi Anda.",
+  "noticeDescription": "Anda dapat menetapkan kategori ke anggota melalui tab Anggota.",
+  "defaultCategoryWarning": "Kategori anggota ini ditetapkan sebagai default anggota baru dan tidak dapat diedit atau dihapus.",
+  "warning": {
+    "deleteInUseCategory": {
+      "message": {
+        "single": "Satu anggota sudah ditetapkan ke kategori ini. Menghapus kategori juga akan menghapusnya dari anggota ini.",
+        "multiple": "${number} anggota ditetapkan untuk kategori ini. Menghapus kategori juga akan menghapusnya dari anggota ini.",
+        "unknown": "Anggota ditetapkan untuk kategori ini: ${number}. Menghapus kategori juga akan menghapusnya dari anggota ini."
+      }
+    },
+    "changeTitleInUseCategory": {
+      "message": {
+        "single": "Satu anggota sudah ditetapkan ke kategori ini. Memperbarui kategori akan memperbarui anggota yang akan digunakan \"${newTitle}\".",
+        "multiple": "${number} anggota ditetapkan untuk kategori ini. Memperbarui kategori akan memperbarui anggota yang akan digunakan \"${newTitle}\".",
+        "unknown": "Anggota ditetapkan untuk kategori ini: ${number}. Memperbarui kategori akan memperbarui anggota yang akan digunakan \"${newTitle}\"."
+      }
+    }
+  }
+}

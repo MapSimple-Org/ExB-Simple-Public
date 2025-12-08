@@ -1,0 +1,17 @@
+{
+  "any": "Jebkāda",
+  "count": "Skaits",
+  "field": "Lauks",
+  "fieldLoadingErrorText": "Nevar ielādēt laukus.",
+  "first": "Pirmais",
+  "isRequired": "Šis parametrs ir obligāts.",
+  "last": "Pēdējais",
+  "max": "Maks.",
+  "mean": "Vidējais",
+  "min": "Min.",
+  "selectAll": "Izvēlēties visu",
+  "standardDeviation": "Standartnovirze",
+  "statistic": "Statistika",
+  "statisticNotSelected": "Katram laukam ir nepieciešams vismaz viens statistikas veids.",
+  "sum": "Summa"
+}

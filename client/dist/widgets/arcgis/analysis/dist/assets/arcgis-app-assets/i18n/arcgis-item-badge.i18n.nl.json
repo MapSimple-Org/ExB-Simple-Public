@@ -1,0 +1,110 @@
+{
+  "Authoritative": {
+    "title": "Gezaghebbend",
+    "tooltip": {
+      "org": "Aanbevolen door uw organisatie",
+      "public": "Aanbevolen door ${name}"
+    }
+  },
+  "Deprecated": {
+    "title": "Verouderd",
+    "tooltip": "Gebruik wordt niet aanbevolen"
+  },
+  "Has Replacement": {
+    "title": "Heeft vervanging",
+    "tooltip": "Dit item heeft een aanbevolen vervanging. Geef itemdetails weer om de vervanging op te zoeken en te gebruiken.",
+    "itemPageTooltip": "Dit item heeft een aanbevolen vervanging.",
+    "link": "Vervangend item weergeven"
+  },
+  "DeprecatedItem": {
+    "title": "Verouderd itemtype"
+  },
+  "Living Atlas": {
+    "title": "Levende Atlas",
+    "tooltip": "Door Esri ontwikkelde content"
+  },
+  "Subscriber": {
+    "title": "Abonnee",
+    "tooltip": {
+      "org": "Exclusieve content voor abonnees",
+      "public": "Exclusieve content voor abonnees. Om te gebruiken, meld u aan met een ArcGIS Online-abonnement."
+    }
+  },
+  "Premium": {
+    "title": "Premium",
+    "tooltip": {
+      "org": "Exclusieve content voor abonnees. Verbruikt credits.",
+      "public": "Exclusieve content voor abonnees die credits verbruikt. Om te gebruiken, meld u aan met een ArcGIS Online-abonnement."
+    }
+  },
+  "Open Data": {
+    "title": "Open Data",
+    "tooltip": "Beschikbaar voor gebruik door het publiek"
+  },
+  "Marketplace": {
+    "title": "Marketplace",
+    "tooltip": "Vermeld op de ArcGIS Marketplace"
+  },
+  "Collaboration": {
+    "title": "Gedistribueerde samenwerking",
+    "tooltip": "Dit item is ontvangen van een gedistribueerde samenwerking"
+  },
+  "Retired": {
+    "title": "Buiten dienst gesteld",
+    "tooltip": {
+      "general": "Alleen-lezen",
+      "cityEngine": "CityEngine Web Viewer en CityEngine Web Scenes worden niet meer ondersteund.",
+      "storyMap": "De klassieke Esri Story Map die is gebruikt om deze applicatie te maken, is in ArcGIS Enterprise buiten dienst gesteld. Om nieuwe verhalen te maken, kunt u ArcGIS Storymaps gebruiken.",
+      "app": "De Configurable Apps-sjabloon die is gebruikt om deze applicatie te maken, is in ArcGIS Enterprise buiten dienst gesteld. Dit item is niet-operationeel en kan worden verwijderd. U kunt een nieuwe applicatie maken door ArcGIS Instant Apps, ArcGIS Storymaps, ArcGIS Dashboards of ArcGIS Experience Builder te gebruiken.",
+      "webAppBuilder": "ArcGIS Web AppBuilder is buiten dienst gesteld in ArcGIS Enterprise. Dit item is niet-operationeel en kan worden verwijderd. Gebruik ArcGIS Experience Builder als u een nieuwe applicatie wilt maken.",
+      "insights": "ArcGIS Insights is buiten dienst gesteld in ArcGIS Enterprise. Dit item is niet-operationeel en kan worden verwijderd.",
+      "bdfs": "Bestandsshares voor Big Data zijn buiten dienst gesteld in ArcGIS Enterprise. Dit item is niet-operationeel en kan worden verwijderd."
+    }
+  },
+  "Public Data Collection": {
+    "title": "Openbare gegevensverzameling",
+    "tooltip": "Goedgekeurd voor openbare gegevensverzameling."
+  },
+  "Solution": {
+    "title": "ArcGIS Solution",
+    "tooltip": "Door Esri ondersteunde oplossing"
+  },
+  "Registered": {
+    "title": "OAuth 2.0",
+    "tooltip": {
+      "online": "Een geregistreerde OAuth 2.0-applicatie. Kan premium-content of content van abonnees gebruiken.",
+      "enterprise": "Een geregistreerde OAuth 2.0-applicatie."
+    }
+  },
+  "Registered API Key Credentials (Standard)": {
+    "title": {
+      "online": "API-sleutelverificatie - standaard",
+      "enterprise": "API-sleutelverificatie"
+    },
+    "tooltip": "Verleent toegang tot services."
+  },
+  "Registered API Key Credentials (Personal)": {
+    "title": "API-sleutelverificatie - persoonlijk",
+    "tooltip": "Verleent persoonlijke machtigingen. Omwille van de beveiliging moet u deze verificatiemiddelen op dezelfde manier bewaken als uw gebruikersnaam en wachtwoord."
+  },
+  "Registered OAuth 2.0 Credentials (Standard)": {
+    "title": {
+      "online": "OAuth 2.0-verificatie - standaard",
+      "enterprise": "OAuth 2.0-verificatie"
+    },
+    "tooltip": "Verleent toegang tot services."
+  },
+  "Registered OAuth 2.0 Credentials (Personal)": {
+    "title": "OAuth 2.0-verificatie - persoonlijk",
+    "tooltip": "Verleent persoonlijke machtigingen. Omwille van de beveiliging moet u deze verificatiemiddelen op dezelfde manier bewaken als uw gebruikersnaam en wachtwoord."
+  },
+  "Registered Application": {
+    "title": "OAuth 2.0-applicatie",
+    "tooltip": "Een geregistreerde OAuth 2.0-applicatie"
+  },
+  "Personal credential": {
+    "title": "Persoonlijk",
+    "tooltip": "U verleent een persoonlijke machtiging aan dit verificatiemiddel. Omwille van de beveiliging moet u alle toegangstokens die met dit verificatiemiddel worden gemaakt, op dezelfde manier beschermen als uw gebruikersnaam en wachtwoord. Lees de gebruiksvoorwaarden."
+  },
+  "loading": "Bezig met laden..."
+}

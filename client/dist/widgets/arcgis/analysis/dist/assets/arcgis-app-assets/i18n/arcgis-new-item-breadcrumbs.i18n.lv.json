@@ -1,0 +1,12 @@
+{
+  "apiCredentialType": "Akreditācijas datu veids: API atslēga",
+  "oauthCredentialType": "Akreditācijas datu veids: OAuth 2.0",
+  "itemAccess": "Vienību piekļuve",
+  "page": "Lapa: ${page}",
+  "currentPage": "Pašreizējā lapa: ${page}",
+  "privileges": "Privilēģijas",
+  "itemDetails": "Vienības detaļas",
+  "settings": "Iestatījumi",
+  "serviceScope": "Servisa tvērums",
+  "summary": "Kopsavilkums"
+}

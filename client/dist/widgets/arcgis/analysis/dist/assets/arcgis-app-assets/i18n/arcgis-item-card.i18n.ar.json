@@ -1,0 +1,8 @@
+{
+  "select": "تحديد عنصر: ${title}",
+  "lastUpdated": "تم تحديث العنصر: ${date}",
+  "viewItemDetails": "عرض التفاصيل",
+  "preview": "معاينة",
+  "closePreview": "إغلاق المعاينة",
+  "moreOptions": "مزيد من الخيارات"
+}

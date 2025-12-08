@@ -1,0 +1,1 @@
+{"componentLabel":"Input Pelacakan","labels":{"utilityNetwork":"Utility network","traceConfiguration":"Konfigurasi pelacakan","traceInputs":"Input pelacakan"},"errors":{"noMapError":"Tidak ada peta tersedia","noUtilityNetworkError":"Tidak ada jaringan utilitas yang ditemukan dalam peta","noTraceConfigurationError":"Tidak ada konfigurasi pelacakan dengan nama yang tersedia"}}

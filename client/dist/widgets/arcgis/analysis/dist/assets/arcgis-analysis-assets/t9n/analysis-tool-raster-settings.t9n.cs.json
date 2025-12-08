@@ -1,0 +1,23 @@
+{
+  "CPU": "CPU",
+  "GPU": "GPU",
+  "asSpecified": "Jak je zadáno",
+  "automatic": "Automaticky",
+  "bilinear": "Bilineární interpolace (pro souvislá data)",
+  "cellSize": "Velikost buňky",
+  "cubic": "Kubická interpolace (pro souvislá data)",
+  "default": "Výchozí",
+  "fromLayer": "Z vrstvy",
+  "mask": "Maska",
+  "maxOf": "Maximum vstupů",
+  "minOf": "Minimum vstupů",
+  "nearest": "Nejbližší soused (pro diskrétní data)",
+  "parallelProcessingFactor": "Faktor paralelního zpracování",
+  "parallelProcessingFactorPlaceholderText": "Zadejte číslo nebo procento...",
+  "processorType": "Typ procesoru",
+  "recycleProcessingWorkers": "Interval recyklace procesů zpracování",
+  "resamplingMethod": "Metoda převzorkování",
+  "retryOnFailures": "Počet opakování při nezdařeném pokusu",
+  "selectCellSize": "Vyberte velikost buňky...",
+  "snapRaster": "Rastr pro přichycení"
+}

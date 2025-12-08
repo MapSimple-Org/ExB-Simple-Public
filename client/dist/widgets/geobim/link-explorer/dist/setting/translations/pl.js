@@ -1,0 +1,1 @@
+System.register([],function(e){return{execute:function(){e({settingsLabel:"Ustawienia Eksploratora po\u0142\u0105cze\u0144",selectModelViewer:"Wybierz wid\u017cet Przegl\u0105darka dokument\xf3w, aby wy\u015bwietli\u0107 powi\u0105zane dokumenty."})}}});

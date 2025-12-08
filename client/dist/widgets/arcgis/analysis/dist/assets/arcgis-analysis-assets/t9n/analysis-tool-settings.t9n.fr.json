@@ -1,0 +1,13 @@
+{
+  "cancel": "Annuler",
+  "creditUsage": "Utilisation des crédits",
+  "envSettings": "Paramètres d’environnement",
+  "envSettingsDescription": "Spécifiez des paramètres supplémentaires qui affectent la façon dont l’analyse est effectuée.",
+  "generalSettings": "Environnements généraux",
+  "geoanalytics": "GeoAnalytics",
+  "noEnvSettings": "Aucun environnement",
+  "processingExtentEnv": "Environnement de l’étendue de traitement",
+  "rasterAnalysis": "Environnements raster",
+  "resetDefaults": "Rétablir les paramètres par défaut",
+  "save": "Enregistrer"
+}

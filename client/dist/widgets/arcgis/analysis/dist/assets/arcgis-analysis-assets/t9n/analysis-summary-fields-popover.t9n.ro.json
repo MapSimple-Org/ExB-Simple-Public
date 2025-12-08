@@ -1,0 +1,13 @@
+{
+  "addField": "Adăugare câmp",
+  "deselectAll": "Deselectare globală",
+  "done": "Gata",
+  "noFieldsAvailable": "${layerName} nu conține câmpuri care îndeplinesc cerința tipului de date. Pentru a continua, selectați un strat tematic diferit.",
+  "noInputSelected": {
+    "withLayerInputLabel": "Nu a fost selectat un strat tematic de intrare. Pentru a continua, selectați un strat tematic din ${layerInputLabel}.",
+    "withoutLayerInputLabel": "Nu a fost selectat un strat tematic de intrare. Pentru a continua, selectați un strat tematic de intrare."
+  },
+  "noSearchResults": "Nu au fost găsite câmpuri asociate.",
+  "selectAll": "Selectare globală",
+  "summaryFieldsPopover": "Rezumat câmpuri"
+}

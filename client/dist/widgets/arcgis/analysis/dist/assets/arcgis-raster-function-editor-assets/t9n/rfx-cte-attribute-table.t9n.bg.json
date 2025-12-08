@@ -1,0 +1,22 @@
+{
+  "value": "Стойност",
+  "classname": "Име на клас",
+  "color": "Цвят",
+  "raster": "Растер",
+  "tableType": "Тип таблица",
+  "manual": "Ръчно",
+  "external": "Външна",
+  "browseTable": "Преглед на таблица",
+  "browseTableFrom": "Преглед на таблица от",
+  "file": "Файл",
+  "dbfFile": "DBF файл",
+  "layer": "Слой",
+  "unsupportedDataType": "Неподдържан тип",
+  "failedToGetTableFromLayer": "Неуспешно получаване на таблица от слой.",
+  "generate": "Генериране на таблица",
+  "minValue": "Минимална стойност",
+  "maxValue": "Максимална стойност",
+  "classBaseName": "Базово име на клас",
+  "colorscheme": "Цветова схема",
+  "defaultClassName": "Надпис_"
+}

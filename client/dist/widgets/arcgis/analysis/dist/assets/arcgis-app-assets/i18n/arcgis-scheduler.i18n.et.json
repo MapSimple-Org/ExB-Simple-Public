@@ -1,0 +1,55 @@
+{
+  "beginningOnLabel": "Algab kuupäeval",
+  "repeatTypeLabel": "Korduse tüüp",
+  "endingOnTypeLabel": "Lõpeb kuupäeval",
+  "endingOnDateLabel": "Lõppkuupäev",
+  "endingOnCountLabel": "Kogus",
+  "endingOnCountPlaceholder": "nt: 1, 10, 30",
+  "dailyRepeatIntervalLabel": "Korda ajavahemikku",
+  "dailyTimeLabel": "Aeg",
+  "weeklyDaysOfWeekLabel": "Nädalapäev",
+  "weeklyTimeLabel": "Aeg",
+  "monthlyDayOfMonthLabel": "Kuupäev",
+  "monthlyDayOfMonthPlaceholder": "nt 1–31",
+  "monthlyRepeatIntervalLabel": "Korda ajavahemikku",
+  "monthlyTimeLabel": "Aeg",
+  "repeatTypeOptions": {
+    "day": "Päev",
+    "week": "Nädal",
+    "month": "Kuu"
+  },
+  "endingOnType": {
+    "never": "Mitte kunagi",
+    "date": "Kuupäev",
+    "count": "Sees"
+  },
+  "dailyRepeatInterval": {
+    "everyDay": "Iga päev",
+    "everyOtherDay": "Üle päeva",
+    "everyThreeDays": "Iga kolme päeva järel",
+    "everyFourDays": "Iga nelja päeva järel",
+    "everyFiveDays": "Iga viie päeva järel",
+    "everySixDays": "Iga kuue päeva järel",
+    "everySevenDays": "Iga seistme päeva järel",
+    "everyFourteenDays": "Iga neljateist päeva järel"
+  },
+  "weekDays": {
+    "all": "Kõik",
+    "allWeekdays": "Kõik tööpäevad",
+    "sunday": "pühapäev",
+    "monday": "esmaspäev",
+    "tuesday": "teisipäev",
+    "wednesday": "kolmapäev",
+    "thursday": "neljapäev",
+    "friday": "reede",
+    "saturday": "laupäev"
+  },
+  "monthlyRepeatInterval": {
+    "everyMonth": "Iga kuu",
+    "everyTwoMonths": "Iga kahe kuu järel",
+    "everyThreeMonths": "Iga kolme kuu järel",
+    "everyFourMonths": "Iga nelja kuu järel",
+    "everyFiveMonths": "Iga viie kuu järel",
+    "everySixMonths": "Iga kuue kuu järel"
+  }
+}

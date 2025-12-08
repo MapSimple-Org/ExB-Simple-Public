@@ -1,0 +1,7 @@
+{
+  "header": "Raster Function Editor",
+  "content": "You have unsaved changes in '${rftTitle}'. If you don't save, those changes will be lost.",
+  "cancel": "Cancel",
+  "dontSave": "Don't save",
+  "save": "Save"
+}

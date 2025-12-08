@@ -1,0 +1,16 @@
+{
+  "updateData": "Päivitä aineisto",
+  "cancel": "Peruuta",
+  "editStyle": "Korvaa karttatason tyylitiedosto tietokoneen päivitetyllä versiolla.",
+  "updatePackages": "Korvaa ${type} tietokoneen päivitetyllä versiolla. Palveluun ladatun tiedoston on oltava samanniminen kuin ${hostedLayerName}.",
+  "uploadStaticFiles": "Ladattavalla tiedostolla tulee olla sama nimi kuin alkuperäisellä tiedostolla ${fileName}",
+  "sameFileNameDescription": "Palveluun ladattavalla tiedostolla on oltava sama nimi ja kenttänimet kuin alkuperäisellä tiedostolla ${fileName}",
+  "updating": "Päivitetään...",
+  "error": "Virhe",
+  "errors": {
+    "sameFileName": "Jos haluat päivittää tämän kohteen, sinun on ladattava palveluun tiedosto, jonka nimi on ${fileName}.",
+    "invalidStyleFileExtension": "Virheellinen tiedostotunniste. Ladatussa tyylissä on oltava .json-tiedostotunniste.",
+    "errorWhileUpload": "Kohteen lataamisessa tapahtui virhe.",
+    "errorUpdate": "Kohteen korvaamisen aikana tapahtui virhe."
+  }
+}

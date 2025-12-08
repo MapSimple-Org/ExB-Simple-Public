@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>L'eina Cerca cl&uacute;sters de punts identifica cl&uacute;sters d'entitats de punts dins del soroll de l'entorn en funci&oacute; de la seva distribuci&oacute; espacial.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="analysisLayer">
+        <div>
+            <p>Capa de punts d'entrada que s'agrupar&agrave; en cl&uacute;sters en funci&oacute; de la distribuci&oacute; espacial de les entitats de punt.
+            </p>
+        </div>
+    </div>
+    <div id="method">
+        <div>
+            <p>M&egrave;tode que s'utilitzar&agrave; per identificar cl&uacute;sters.
+            </p>
+        </div>
+    </div>
+    <div id="minFeaturesCluster">
+        <div>
+            <p>Nombre m&iacute;nim d'entitats de punt que es considerar&agrave; un cl&uacute;ster.
+            </p>
+        </div>
+    </div>
+    <div id="searchDistance">
+        <div>
+            <p>Especifica la dist&agrave;ncia m&agrave;xima al voltant de cada entitat de punt per cercar punts que es poden incloure al cl&uacute;ster. Si es deixa en blanc, el valor  <b>Dist&agrave;ncia de cerca</b> ser&agrave; la dist&agrave;ncia principal m&eacute;s gran trobada a la capa, excl&ograve;s l'1&nbsp;% superior de dist&agrave;ncies principals.
+            </p>
+        </div>
+    </div>
+    <div id="searchDistanceUnit">
+        <div>
+            <p>Especifica les unitats que s'utilitzaran per a la dist&agrave;ncia de cerca.
+            </p>
+        </div>
+    </div>
+    <div id="sensitivity">
+        <div>
+            <p>Enter entre 0 i 100 que determina la compacitat dels cl&uacute;sters. Si es deixa en blanc, el valor  <b>Sensibilitat del cl&uacute;ster</b> es calcular&agrave; mitjan&ccedil;ant la diverg&egrave;ncia de Kullback-Leibler.
+            </p>
+        </div>
+    </div>
+    <div id="timeField">
+        <div>
+            <p>Camp de la capa d'entrada que cont&eacute; una marca de temps per a cada entitat.
+            </p>
+        </div>
+    </div>
+    <div id="searchTimeInterval">
+        <div>
+            <p>Interval de temps que s'utilitzar&agrave; per determinar si les entitats formen un cl&uacute;ster espaciotemporal. L'interval de temps de cerca s'est&eacute;n abans i despr&eacute;s del moment espec&iacute;fic de cada entitat; per exemple, un interval de temps de cerca de 3 dies al voltant d'una entitat inclour&agrave; totes les entitats que comencin 3 dies abans i acabin 3 dies despr&eacute;s del moment espec&iacute;fic de l'entitat.
+            </p>
+        </div>
+    </div>
+    <div id="searchTimeUnit">
+        <div>
+            <p>Especifica les unitats que s'utilitzaran per a l'interval de temps de cerca.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>Nom de la capa que es crear&agrave; i s'afegir&agrave; al mapa.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>Nom de la carpeta d' <b>El meu contingut</b> on es desar&agrave; el resultat.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

@@ -1,0 +1,23 @@
+{
+  "name": "seeker",
+  "type": "template",
+  "templateType": "scrolling-page",
+  "label": "Seeker",
+  "description": "Seeker is a template designed as a web home page. You can utilize the search widget on top of the page to quickly extract the desired information.",
+  "thumbnail": "thumbnail.png",
+  "order": 13,
+  "tags": [
+    "Search",
+    "Title",
+    "Banner",
+    "Gallery",
+    "List",
+    "Share"
+  ],
+  "categoriesTags": [
+    "Web page",
+    "Scrolling"
+  ],
+  "thumbnailWidth": 320,
+  "thumbnailHeight": 214
+}

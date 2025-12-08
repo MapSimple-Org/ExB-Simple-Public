@@ -1,0 +1,21 @@
+{
+  "backLabel": "Zurück",
+  "cannotReopenTool": "Werkzeug konnte nicht erneut geöffnet werden. Werkzeugparameter wurden auf die Standardwerte zurückgesetzt.",
+  "cannotReopenWebTool": "Web-Werkzeug kann nicht geöffnet werden. <calcite-link target='_blank' href='${ docLink }'>Weitere Informationen</calcite-link>",
+  "creditThresholdModal": {
+    "cancelRun": "Abbrechen",
+    "continueRun": "Trotzdem ausführen",
+    "creditEstimate": "Geschätzte Credit-Anzahl: ${cost}",
+    "creditThreshold": "Credit-Schwellenwert: ${threshold}",
+    "heading": "Bevor Sie fortfahren",
+    "learnMore": "Weitere Informationen zu Credit-Schwellenwerten",
+    "thresholdExceeded": "Die geschätzten Credit-Kosten für diese Analyse liegen über dem Credit-Schwellenwert der Webkarte:"
+  },
+  "failedToExecuteEstimate": "Übermittlung fehlgeschlagen. Fehler beim Ausführen von EstimateRasterAnalysisCost",
+  "missingPermissionForWebTool": "Auf dieses Werkzeug kann nicht zugegriffen werden. Stellen Sie sicher, dass das Werkzeug vorhanden ist und dass Ihr Benutzerkonto über die entsprechende Zugriffsberechtigung verfügt.",
+  "runAnalysisLabel": "Ausführen",
+  "toolPreviewNoParameters": "Für dieses Modell wurden keine Parameter festgelegt. Kehren Sie zum Modell zurück, um Variablen hinzuzufügen und als Parameter festzulegen.",
+  "toolPreviewNoParametersLink": "<calcite-link target='_blank' href='${ docLink }'>Weitere Informationen</calcite-link>",
+  "toolPreviewWebTool": "Sie können dieses Modell als Web-Werkzeug ausführen, indem Sie es veröffentlichen und über den Bereich \"Analyse\" öffnen.",
+  "webToolJSONChanged": "Mindestens ein Parameter wurde aktualisiert. Bestimmte Parameter können möglicherweise nicht aus dem Verlauf wiederhergestellt werden."
+}

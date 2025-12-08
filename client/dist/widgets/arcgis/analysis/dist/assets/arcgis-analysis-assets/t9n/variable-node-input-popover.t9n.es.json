@@ -1,0 +1,7 @@
+{
+  "header": "Seleccionar variable",
+  "noFound": "No se encontró ninguna variable compatible",
+  "search": "Buscar variables",
+  "variableLabel": "Etiqueta: <span style='font-weight: var(--calcite-font-weight-normal)'>${val}</span>",
+  "variableVal": "Valor: <span style='font-weight: var(--calcite-font-weight-normal)'>${val}</span>"
+}

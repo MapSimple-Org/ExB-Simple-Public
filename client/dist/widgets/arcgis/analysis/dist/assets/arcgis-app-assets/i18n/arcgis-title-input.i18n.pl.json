@@ -1,0 +1,20 @@
+{
+  "title": "Tytuł",
+  "addTitle": "Dodaj tytuł",
+  "validation": {
+    "error": "Błąd",
+    "titleRequired": "Tytuł jest polem wymaganym.",
+    "itemExists": "Element o tytule „${name}” już istnieje w tym folderze. Wybierz inną nazwę.",
+    "titleInUseService": "Warstwa o tytule „${name}” już istnieje. Wybierz inną nazwę.",
+    "itemInRecycleBin": "Element o tytule „${name}” już istnieje i znajduje się w koszu. Wybierz inną nazwę.",
+    "serviceNameInvalid": "Tytuł usługi może zawierać tylko znaki alfanumeryczne lub podkreślenia i nie może być dłuższy niż 90 znaków.",
+    "dataStoreTitleInvalid": "Tytuł magazynu danych może zawierać tylko znaki alfanumeryczne lub podkreślenia i nie może być dłuższy niż 90 znaków.",
+    "titleInvalid": "Tytuł musi zawierać mniej niż 250 znaków i nie może zawierać znaku < ani >.",
+    "titleStartsWithNumber": "Tytuł nie może zaczynać się od cyfry.",
+    "invalidCharacters": {
+      "single": "Nazwa nie może zawierać tego znaku: ${invalidCharacters}.",
+      "multiple": "Nazwa nie może zawierać żadnego z następujących znaków: ${invalidCharacters}.",
+      "unknown": "Nazwa nie może zawierać żadnego z następujących znaków: ${invalidCharacters}."
+    }
+  }
+}

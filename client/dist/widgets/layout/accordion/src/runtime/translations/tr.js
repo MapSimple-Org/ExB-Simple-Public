@@ -1,0 +1,1 @@
+System.register([],function(e){return{execute:function(){e({_widgetLabel:"Yana do\u011fru geni\u015fleyen",tips:"Yana do\u011fru geni\u015fleyen"})}}});

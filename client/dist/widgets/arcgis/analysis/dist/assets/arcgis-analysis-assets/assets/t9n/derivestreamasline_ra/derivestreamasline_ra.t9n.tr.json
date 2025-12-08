@@ -1,0 +1,11 @@
+{
+  "all": "Tümü",
+  "inputLayersGroupText": "Girdi yüzeyi rasterını ve isteğe bağlı olarak çöküntü verilerini ve ağırlık rasterını seçin.",
+  "itemProperties": {
+    "description": "Raster Olarak Akış Türet aracının çalıştırılmasından oluşturulan çıktı.",
+    "snippet": "Raster Olarak Akış Türet aracından oluşturulan çıktı."
+  },
+  "outputStreamFeaturesLabel": "Çıktı akış detay adları",
+  "simplifyLabel": "Detayları basitleştir",
+  "streamSettingsGroupText": "Biriktirme eşiğini, akış belirleme yöntemini ve çıktı akışı hatlarının basit şekiller halinde yumuşatılıp yumuşatılmayacağını belirtin."
+}

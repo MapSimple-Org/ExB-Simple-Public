@@ -1,0 +1,8 @@
+{
+  "arriveTime": "Ierašanās laiks",
+  "modes": {
+    "custom": "Pielāgots datums un laiks",
+    "now": "Tagad",
+    "unspecified": "Nenorādīts laiks"
+  }
+}

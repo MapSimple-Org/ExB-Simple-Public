@@ -1,0 +1,18 @@
+{
+  "add": "Lisää",
+  "analysisSessionLayers": "Analyysi-istunnon karttatasot",
+  "browseAnalysisLayers": "Selaa karttatasoja",
+  "cancel": "Peruuta",
+  "heading": "Valitse karttataso",
+  "mapLayers": "Karttatasot",
+  "mesh": "Verkkokarttataso",
+  "modelVariableLayers": "Mallin muuttujan karttatasot",
+  "multipatch": "MultiPatch-karttataso",
+  "multipoint": "Monipistekarttataso",
+  "noCompatibleLayers": "Kartassa ei ole yhteensopivia karttatasoja. Lisää karttaan karttatasoja tai selaa karttatasoja analyysin suorittamista varten.",
+  "noMatchesFound": "Termille ${searchTerm} ei löytynyt vastaavuuksia.",
+  "point": "Pistekarttataso",
+  "polygon": "Aluekarttataso",
+  "polyline": "Taiteviivakarttataso",
+  "table": "Taulu"
+}

@@ -1,0 +1,1 @@
+System.register([],function(e){return{execute:function(){e({_widgetLabel:"Razdjeljiva\u010d",quickStyleItem:"Brzi stil {index}"})}}});

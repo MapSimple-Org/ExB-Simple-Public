@@ -1,0 +1,69 @@
+{
+  "loadingText": "Bezig met laden schemasjablonen",
+  "cancel": "Annuleren",
+  "finishSetup": "Setup voltooien",
+  "hasUnsavedChanges": "U hebt categoriewijzigingen aangebracht die verloren zullen gaan als u ze niet eerst opslaat. Weet u zeker dat u deze weergave wilt sluiten en uw wijzigingen wilt annuleren?",
+  "error": {
+    "generic": {
+      "title": "Fout bij bijwerken categorieën",
+      "message": "Er is iets fout gegaan. Probeer het later opnieuw."
+    },
+    "maxDepthExceeded": {
+      "title": "Fout bij bijwerken categorieën",
+      "message": "Het is niet mogelijk categorieën dieper dan 2 niveaus te nesten."
+    },
+    "destinationHasSameName": {
+      "title": "Fout bij bijwerken categorieën",
+      "message": "Er bestaat al een categorie met dezelfde naam in de doelcategorie."
+    },
+    "emptyTitle": {
+      "title": "Fout bij bijwerken categorieën",
+      "message": "Titel categorie mag niet leeg zijn."
+    },
+    "noSchema": {
+      "title": "Kan schema niet vinden",
+      "message": "Kan itemschema niet vinden voor gebruiker."
+    },
+    "maxCharacter": {
+      "title": "Fout bij bijwerken categorieën",
+      "message": "Namen van categorieën kunnen maximaal ${maxCharacter} tekens lang zijn."
+    },
+    "invalidCharacters": {
+      "title": "Fout bij bijwerken categorieën",
+      "single": "Het volgende teken mag niet in de categorie voorkomen: ${invalidCharacters}.",
+      "multiple": "De volgende tekens mogen niet in de categorie voorkomen: ${invalidCharacters}.",
+      "unknown": "De volgende tekens mogen niet in de categorie voorkomen: ${invalidCharacters}."
+    }
+  },
+  "warning": {
+    "deleteInUseCategory": {
+      "title": "Categorie verwijderen",
+      "cta": "Categorie verwijderen"
+    },
+    "changeTitleInUseCategory": {
+      "title": "Categorie bijwerken",
+      "cta": "Categorie bijwerken"
+    }
+  },
+  "template": {
+    "title": "Categoriesjablonen",
+    "learnMore": "Meer informatie",
+    "templateList": {
+      "custom": {
+        "title": "Aangepaste categorieën"
+      },
+      "arcgis": {
+        "title": "ArcGIS-categorieën",
+        "message": "ArcGIS-categorieën bevatten een selectie aan onderwerpcategorieën en subcategorieën die kunnen worden gebruikt om een groot aantal types geospatiale content te categoriseren. Deze categorieën worden gebruikt om ArcGIS Living Atlas of the World te ondersteunen."
+      },
+      "iso": {
+        "title": "ISO-categorieën",
+        "message": "ISO-categorieën bevatten onderwerpcategorieën van de International Organization for Standardization die een methode bieden voor het beschrijven en catalogiseren van geografische informatie."
+      },
+      "inspire": {
+        "title": "INSPIRE-categorieën",
+        "message": "INSPIRE-categorieën bevatten een uitgebreide set ruimtelijke gegevensthema's die worden uiteengezet in de INSPIRE-richtlijn."
+      }
+    }
+  }
+}

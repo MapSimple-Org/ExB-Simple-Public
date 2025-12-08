@@ -1,0 +1,14 @@
+{
+  "AddDataFromUrl": "Lisa andmed URL-ilt",
+  "addData": "Lisa andmed",
+  "clear": "Tühista",
+  "file": "Fail",
+  "fileNotFound": "Faili laadimine nurjus.",
+  "invalidUrl": "Kehtetu URL või faililaiend.",
+  "layerNotFound": "Kihi laadimine nurjus.",
+  "replaceData": "Asenda andmed",
+  "required": "See parameeter on nõutav.",
+  "uploadData": "Laadi andmed üles",
+  "uploadFailureMsg": "Tõrge üleslaadimistoimingu tegemisel. Faili mahtu või tüüpi ei toetata selle teenuse puhul.",
+  "url": "URL"
+}

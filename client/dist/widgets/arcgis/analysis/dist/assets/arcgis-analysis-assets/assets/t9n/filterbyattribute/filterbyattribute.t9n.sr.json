@@ -1,0 +1,8 @@
+{
+  "itemProperties": {
+    "description": "Rezultat generisan pokretanjem alatke za analizu Filtriraj po atributima.",
+    "snippet": "Rezultat generisan iz alatke Filtriraj po atributima"
+  },
+  "noLayerDisabledTooltip": "Izaberite važeći ulazni skup podataka.",
+  "queryCriteriaGroupLabel": "Kriterijumi upita"
+}

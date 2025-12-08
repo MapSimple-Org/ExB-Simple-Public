@@ -1,0 +1,16 @@
+{
+  "updateData": "Ažuriraj podatke",
+  "cancel": "Odustani",
+  "editStyle": "Zamijenite datoteku stila sloja ažuriranom verzijom sa svojeg računala.",
+  "updatePackages": "Zamijenite ${type} ažuriranom verzijom s vašeg računala. Učitana datoteka mora imati isti naziv kao ${hostedLayerName}.",
+  "uploadStaticFiles": "Datoteka koja se učitava mora imati isti naziv kao izvorna datoteka ${fileName}",
+  "sameFileNameDescription": "Datoteka koja se učitava mora imati isti naziv i nazive polja kao izvorna datoteka ${fileName}",
+  "updating": "Ažuriranje...",
+  "error": "Pogreška",
+  "errors": {
+    "sameFileName": "Da biste ažurirali ovu stavku, morate učitati datoteku pod nazivom ${fileName}.",
+    "invalidStyleFileExtension": "Nevažeće proširenje datoteke. Učitani stil mora imati proširenje datoteke .json.",
+    "errorWhileUpload": "Došlo je do pogreške prilikom učitavanja stavke.",
+    "errorUpdate": "Došlo je do pogreške prilikom prepisivanja stavke."
+  }
+}

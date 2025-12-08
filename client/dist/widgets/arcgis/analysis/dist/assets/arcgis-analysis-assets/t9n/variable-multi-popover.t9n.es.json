@@ -1,0 +1,11 @@
+{
+  "addBtn": "Listo",
+  "cancelBtn": "Cancelar",
+  "header": "Seleccionar variable",
+  "multipleVariables": "Variables de valores múltiples",
+  "noFound": "No se encontró ninguna variable compatible",
+  "search": "Buscar variables",
+  "singleVariables": "Variables de valor único",
+  "variableLabel": "Etiqueta: <span style='font-weight: var(--calcite-font-weight-normal)'>${val}</span>",
+  "variableVal": "Valor: <span style='font-weight: var(--calcite-font-weight-normal)'>${val}</span>"
+}

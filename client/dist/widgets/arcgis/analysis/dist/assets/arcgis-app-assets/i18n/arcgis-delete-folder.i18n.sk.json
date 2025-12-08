@@ -1,0 +1,22 @@
+{
+  "deleteFolder": "Vymazať priečinok",
+  "delete": "Zmazať",
+  "permanentlyDelete": "Natrvalo vymazať",
+  "back": "Späť",
+  "cancel": "Zrušiť",
+  "success": "Priečinok '${title}' bol úspešne odstránený",
+  "deleteProtectedItemsInFolder": "Priečinok nebolo možné odstrániť, pretože niektoré položky sú chránené proti vymazaniu alebo má závislé položky.",
+  "message": {
+    "empty": "Ste si istý, že chcete odstrániť priečinok <strong style='font-weight: 500'>${title}</strong>?",
+    "recycleAll": "Ste si istí, že chcete odstrániť priečinok <strong style='font-weight: 500'>${title}</strong> a jeho obsah presunúť do koša?",
+    "mustBeEmpty": "Priečinok <strong style='font-weight: 500'>${title}</strong> musí byť prázdny, aby ho bolo možné vymazať.",
+    "aFewCannotBeDeleted": "Niekoľko položiek nie je možné vymazať. Chcete pokračovať vo vymazávaní ostatných?",
+    "canBeEmptied": "Priečinok <strong style='font-weight: 500'>${title}</strong> musí byť prázdny, aby ho bolo možné vymazať. Chcete pokračovať vo vymazávaní týchto položiek?",
+    "cannotBeDeleted": "Priečinok <strong style='font-weight: 500'>${title}</strong> nie je možné vymazať, pretože nie je možné vymazať jeho položky."
+  },
+  "disabledMessage": {
+    "single": "V tomto priečinku je <span style='color:red'>1 položka</span>, <b>${label}</b>.<br/></br/>Ste si istí, že chcete odstrániť tento priečinok aj s položkou?",
+    "multiple": "V tomto priečinku je <span style='color:red'>${number} položiek</span>, <b>${label}</b>.<br/></br/>Ste si istí, že chcete odstrániť tento priečinok a všetky jeho položky?",
+    "unknown": "Ste si istí, že chcete odstrániť tento priečinok <b>${label}</b>?"
+  }
+}

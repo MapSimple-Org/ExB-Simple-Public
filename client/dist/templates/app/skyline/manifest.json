@@ -1,0 +1,26 @@
+{
+  "name": "skyline",
+  "type": "template",
+  "templateType": "app",
+  "label": "Skyline",
+  "description": "Skyline is a sleek template designed for professional service showcasing. It features distinct sections with circular imagery, a prominent map display, and a gallery-like bookmark.",
+  "thumbnail": "thumbnail.png",
+  "order": 47,
+  "templateCreateVersion": "1.16.0",
+  "tags": [
+    "Banner",
+    "Title",
+    "Logo",
+    "Map",
+    "Bookmark",
+    "Slides"
+  ],
+  "categoriesTags": [
+    "Web page",
+    "Scrolling"
+  ],
+  "isMultiplePage": false,
+  "isMapAware": true,
+  "thumbnailWidth": 320,
+  "thumbnailHeight": 214
+}

@@ -1,0 +1,7 @@
+{
+  "deselectAll": "Összes kijelölésének megszüntetése",
+  "ignoreFieldMessage": "Ezt a mezőt figyelmen kívül hagyja a rendszer, mivel nincsenek kiválasztva statisztikai típusok.",
+  "remove": "Eltávolítás",
+  "requiredError": "Ez a paraméter kötelező.",
+  "selectAll": "Összes kiválasztása"
+}

@@ -1,0 +1,26 @@
+{
+  "CCIAnalysisSettingGroupLabel": "Configurações de índice",
+  "CCIAnalysisSettingGroupText": "Especifique como o índice deve ser calculado.",
+  "geomeanPercentileLabel": "Classificações compostas (média geométrica dos percentis)",
+  "geomeanRawLabel": "Valores brutos compostos (média geométrica dos valores brutos)",
+  "geomeanScaledLabel": "Valores escalonados compostos (média geométrica dos valores escalonados)",
+  "indexMethodLabel": "Método para dimensionar e combinar variáveis",
+  "inputFeaturesOrTableLabel": "Feições de entrada ou tabela",
+  "inputLayerGroupText": "Escolha as feições ou tabelas e variáveis ​​com as quais criar o índice.",
+  "inputVariablesLabel": "Variáveis ​​de entrada",
+  "itemProperties": {
+    "description": "Camada de feição gerada a partir da execução da ferramenta de análise Calcular Índice Composto.",
+    "snippet": "Camada de feição gerada a partir de Calcular Índice Composto"
+  },
+  "meanPercentileLabel": "Combinar classificações (média dos percentis)",
+  "meanRawLabel": "Combine valores brutos (média dos valores brutos)",
+  "meanScaledLabel": "Combinar valores em escala (média dos valores em escala)",
+  "outputIndexMaxLabel": "Máximo",
+  "outputIndexMinLabel": "Mínimo",
+  "outputIndexMinMaxLabel": "Valores mínimos e máximos do índice",
+  "outputIndexReverseLabel": "Valores de índice reverso",
+  "reverseVariableLabel": "Inverter direção",
+  "sumFlagsPercentileLabel": "Destacar extremos (contagem de valores acima do percentil 90)",
+  "toolName": "Calcular Índice Composto",
+  "weight": "Peso"
+}

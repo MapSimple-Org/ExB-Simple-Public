@@ -1,0 +1,27 @@
+{
+  "area": "Alan",
+  "binResolution": "H3 ikilik kutu çözünürlüğü",
+  "binSize": "Kutu boyutu",
+  "binSizeUnit": "Birim",
+  "binType": "Kutu şekli türü",
+  "diamondBins": "Karo kutuları",
+  "distance": "Mesafe",
+  "extentLayer": "Yayılım katmanı",
+  "extentOverrideMessage": "Bu yayılım katmanı, ortamlarda ayarlanan herhangi bir işleme yayılımının yerine kullanılacaktır.",
+  "extentSectionLabel": "Yayılım ayarları",
+  "extentSectionText": "Mozaiğin kapsaması gereken bir yayılım katmanı belirtin.",
+  "h3hexagonBins": "H3 altıgen kutular",
+  "hexagon": "Altıgen",
+  "intersectStudyArea": "Sadece kesişen mozaikleri tut",
+  "itemProperties": {
+    "description": "Detay katmanı, Mozaikler Oluştur analiz aracı çalıştırılarak oluşturuldu.",
+    "snippet": "Detay katmanı, Mozaikler Oluştur ile oluşturuldu"
+  },
+  "outputAreasSectionText": "Mozaik gridine bir ad verin.",
+  "sizeType": "Kutu boyutu ölçümü",
+  "square": "Kare",
+  "tessellationSettingsLabel": "Mozaik ayarları",
+  "tessellationSettingsSummaryText": "Oluşturulacak kutuların şeklini ve boyutunu belirtin.",
+  "thexagonBins": "Ters altıgen kutular",
+  "triangleBins": "Üçgen kutular"
+}

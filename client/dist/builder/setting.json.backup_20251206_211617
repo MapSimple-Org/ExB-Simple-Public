@@ -1,0 +1,17 @@
+{
+  "devEnv": {
+    "dev": {
+      "portalUrl": "https://devext.arcgis.com",
+      "clientId": "experienceBuilder"
+    },
+    "qa": {
+      "portalUrl": "https://qaext.arcgis.com",
+      "clientId": "experienceBuilder"
+    },
+    "prod": {
+      "portalUrl": "https://kingcounty.maps.arcgis.com",
+      "clientId": "nt8b4CtMJ5Cs89Dv",
+      "isWebTier": false
+    }
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "header": "Anteprima",
+  "description": "Visualizzare in anteprima il risultato prima di eseguire l'analisi.",
+  "showPreview": "Mostra anteprima",
+  "previewLayer": "Layer di anteprima ${number}",
+  "update": "Aggiorna",
+  "newPreview": "Nuova anteprima",
+  "previewPopup": "Attivare l'anteprima dei risultati dell'analisi in base ai parametri di input.",
+  "previewError": "Questo layer di anteprima non è disponibile. Controllare i parametri di input e aggiornare nuovamente questo layer di anteprima.",
+  "updatePopover": "Aggiorna layer di anteprima selezionato",
+  "createPopover": "Crea nuovo layer di anteprima",
+  "maxPreview": "Numero massimo di layer di anteprima consentiti: ${maxCount}"
+}

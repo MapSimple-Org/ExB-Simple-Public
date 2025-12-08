@@ -1,0 +1,8 @@
+{
+  "fieldTypesIncompatible": "Không có trường tương thích nào khả dụng.",
+  "inputPlaceholderText": "Chọn trường",
+  "layerNotSelected": "Không có lớp nào được chọn để điền dữ liệu vào trường.",
+  "multiSelectFieldButtonText": "Trường",
+  "removeField": "Gỡ bỏ",
+  "replaceField": "Thay thế trường"
+}

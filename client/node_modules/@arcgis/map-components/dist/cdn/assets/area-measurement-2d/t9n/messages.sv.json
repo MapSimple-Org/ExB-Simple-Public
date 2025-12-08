@@ -1,0 +1,1 @@
+{"componentLabel":"Ytmätning","hint":"Börja mäta genom att klicka i kartan för att placera den första punkten","mode":"Läge","modes":{"auto":"Auto","planar":"Plan","geodesic":"Geodetisk"},"newMeasurement":"Ny mätning","perimeter":"Omkrets","unit":"Enhet","unsupported":"2D-ytmätning stöds bara i MapView."}

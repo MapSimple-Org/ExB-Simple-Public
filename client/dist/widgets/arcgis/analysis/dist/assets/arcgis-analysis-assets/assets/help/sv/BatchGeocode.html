@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>Verktyget Geokoda platser fr&aring;n tabell konverterar adresser eller platser fr&aring;n en indatatabell eller -fil till koordinater.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputType">
+        <div>
+            <p>Anger om indata kommer att vara ett tabellobjekt (<b>driftad tabell</b>), eller en <code>.csv</code> eller Excel-fil (<b>CSV/Excel</b>).
+            </p>
+        </div>
+    </div>
+    <div id="inputFileItem">
+        <div>
+            <p>Indatafilen med adresserna eller platserna som ska geokodas. Indata m&aring;ste vara en driftad  <code>.csv</code> eller Excel-fil. </p>
+        </div>
+    </div>
+    <div id="inputTable">
+        <div>
+            <p>Indatatabellen med adresserna eller platserna som ska geokodas. Indata m&aring;ste vara ett driftat tabellobjekt.
+            </p>
+            <p>Ett antal geoobjekt under tabellnamnet. Antalet inkluderar alla geoobjekt i tabellen, f&ouml;rutom de som har tagits bort med ett filter.
+            </p>
+        </div>
+    </div>
+    <div id="geocodeServiceURL">
+        <div>
+            <p>Placeringstj&auml;nsten som ska anv&auml;ndas f&ouml;r geokodning. Om den placeringstj&auml;nst du vill anv&auml;nda inte finns i listrutan kontaktar du administrat&ouml;ren s&aring; att placeringstj&auml;nsten l&auml;ggs till som en infrastrukturtj&auml;nst.
+            </p>
+        </div>
+    </div>
+    <div id="singleOrMultiFieldSwitch">
+        <div>
+            <p>Anger om indata finns i ett enstaka f&auml;lt eller i flera f&auml;lt.
+            </p>
+        </div>
+    </div>
+    <div id="geocodeUIParameters">
+        <div>
+            <p>F&auml;lten som anv&auml;nds av lokaliseringsfilen f&ouml;r att avg&ouml;ra platserna f&ouml;r data. Vissa f&auml;lt antas finnas i dina data, som adress, ort och postnummer.
+            </p>
+        </div>
+    </div>
+    <div id="sourceCountry">
+        <div>
+            <p>Landet d&auml;r data finns. Om alla adresserna &auml;r fr&aring;n ett land v&auml;ljer du det landsnamnet f&ouml;r att s&auml;kerst&auml;lla de mest korrekta resultaten. L&auml;mna annars denna parameter tom.
+            </p>
+        </div>
+    </div>
+    <div id="outputFields">
+        <div>
+            <p>Anger f&auml;lten som ska inkluderas i utdatasetet. F&ouml;ljande alternativ finns:
+            </p>
+            <ul>
+                <li> <b>Alla</b> &mdash; alla lokaliseringsfilens utdataf&auml;lt inkluderas i geokodresultatet.
+                </li>
+                <li> <b>Minimal</b> &mdash; En delm&auml;ngd f&auml;lt fr&aring;n lokaliseringsfilen samt f&auml;lten fr&aring;n indatatabellen inkluderas i resultatet.
+                </li>
+                <li> <b>Endast plats</b> &mdash; F&auml;ltet <i>Shape</i> fr&aring;n lokaliseringsfilen samt f&auml;lten fr&aring;n indatatabellen inkluderas i resultatet.
+                </li>
+            </ul>
+            
+        </div>
+    </div>
+    <div id="outputType">
+        <div>
+            <p>Typ av utdata som skapas. Utdata kan vara en geoobjekttj&auml;nst, en  <code>.csv</code>-fil eller en <code>.xls</code>-fil.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>Namnet p&aring; lagret eller filen som ska skapas i  <b>Mitt inneh&aring;ll</b>.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>Namnet p&aring; mappen i  <b>Mitt inneh&aring;ll</b> d&auml;r resultatet ska sparas.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

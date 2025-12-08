@@ -1,0 +1,6 @@
+{
+  "header": "Kaydetmeden baştan başlansın mı?",
+  "content": "'${rftTitle}' içinde kaydedilmemiş değişiklikleriniz var. Yeni bir şablonla baştan başlarsanız, bu değişiklikler kaybolacaktır.",
+  "cancel": "İptal Et",
+  "continue": "Devam"
+}

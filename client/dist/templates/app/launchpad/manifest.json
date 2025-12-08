@@ -1,0 +1,34 @@
+{
+  "name": "launchpad",
+  "type": "template",
+  "templateType": "app",
+  "label": "Launchpad",
+  "description": "Launchpad is a template designed with the emphasis on the map and a controller widget anchored at the bottom of the page.",
+  "thumbnail": "thumbnail.png",
+  "order": 15,
+  "tags": [
+    "Map",
+    "Table",
+    "Legend",
+    "Search",
+    "Sidebar",
+    "Widget Controller",
+    "Basemap Gallery",
+    "Panel",
+    "Logo",
+    "Title",
+    "Map Layers",
+    "Bar",
+    "Pop up",
+    "Splash window"
+  ],
+  "categoriesTags": [
+    "WAB classic",
+    "Map centric",
+    "Fullscreen"
+  ],
+  "isMultiplePage": false,
+  "isMapAware": true,
+  "thumbnailWidth": 320,
+  "thumbnailHeight": 214
+}

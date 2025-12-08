@@ -1,0 +1,8 @@
+{
+  "select": "Öge seç: ${title}",
+  "lastUpdated": "Güncellenen öge: ${date}",
+  "viewItemDetails": "Ayrıntıları görüntüle",
+  "preview": "Önizleme",
+  "closePreview": "Önizlemeyi kapat",
+  "moreOptions": "Daha fazla seçenek"
+}

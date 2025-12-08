@@ -1,0 +1,69 @@
+{
+  "loadingText": "Schemavorlagen werden geladen",
+  "cancel": "Abbrechen",
+  "finishSetup": "Einrichtung abschließen",
+  "hasUnsavedChanges": "Sie haben Kategorieänderungen vorgenommen, die verloren gehen, wenn Sie nicht zuerst speichern. Möchten Sie diese Ansicht wirklich schließen und Ihre Änderungen verwerfen?",
+  "error": {
+    "generic": {
+      "title": "Fehler beim Aktualisieren der Kategorien",
+      "message": "Ein Fehler ist aufgetreten. Versuchen Sie es später erneut."
+    },
+    "maxDepthExceeded": {
+      "title": "Fehler beim Aktualisieren der Kategorien",
+      "message": "Sie können Kategorien nicht mehr als 2 Ebenen tief verschachteln."
+    },
+    "destinationHasSameName": {
+      "title": "Fehler beim Aktualisieren der Kategorien",
+      "message": "Eine Kategorie mit diesem Namen ist in der Zielkategorie bereits vorhanden."
+    },
+    "emptyTitle": {
+      "title": "Fehler beim Aktualisieren der Kategorien",
+      "message": "Kategorietitel darf nicht leer sein."
+    },
+    "noSchema": {
+      "title": "Schema nicht gefunden",
+      "message": "Elementschema für Benutzer nicht gefunden."
+    },
+    "maxCharacter": {
+      "title": "Fehler beim Aktualisieren der Kategorien",
+      "message": "Kategorienamen dürfen maximal ${maxCharacter} Zeichen lang sein."
+    },
+    "invalidCharacters": {
+      "title": "Fehler beim Aktualisieren der Kategorien",
+      "single": "Die Kategorie darf das folgende Zeichen nicht enthalten: ${invalidCharacters}.",
+      "multiple": "Die Kategorie darf keines dieser Zeichen enthalten: ${invalidCharacters}.",
+      "unknown": "Die Kategorie darf keines dieser Zeichen enthalten: ${invalidCharacters}."
+    }
+  },
+  "warning": {
+    "deleteInUseCategory": {
+      "title": "Kategorie löschen",
+      "cta": "Kategorie löschen"
+    },
+    "changeTitleInUseCategory": {
+      "title": "Kategorie aktualisieren",
+      "cta": "Kategorie aktualisieren"
+    }
+  },
+  "template": {
+    "title": "Kategorievorlagen",
+    "learnMore": "Weitere Informationen",
+    "templateList": {
+      "custom": {
+        "title": "Benutzerdefinierte Kategorien"
+      },
+      "arcgis": {
+        "title": "ArcGIS-Kategorien",
+        "message": "Die ArcGIS-Kategorien umfassen eine Auswahl an Themenkategorien und -unterkategorien zur Einteilung vieler verschiedener Typen von räumlichen Inhalten. Diese Kategorien werden im ArcGIS Living Atlas of the World verwendet."
+      },
+      "iso": {
+        "title": "ISO-Kategorien",
+        "message": "Die ISO-Kategorien sind von der International Organization for Standardization (ISO) festgelegte Themenkategorien zur Beschreibung und Katalogisierung von geographischen Informationen."
+      },
+      "inspire": {
+        "title": "INSPIRE-Kategorien",
+        "message": "Die INSPIRE-Kategorien stellen eine umfassende Sammlung von Geodaten-Themen dar, die in der INSPIRE-Richtlinie beschrieben werden."
+      }
+    }
+  }
+}

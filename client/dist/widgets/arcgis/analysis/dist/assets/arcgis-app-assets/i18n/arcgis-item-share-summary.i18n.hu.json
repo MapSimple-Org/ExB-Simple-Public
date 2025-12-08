@@ -1,0 +1,17 @@
+{
+  "sharing": "Megosztás",
+  "private": "Tulajdonos",
+  "shared": "Tulajdonos és csoportokkal megosztott",
+  "org": "Szervezet",
+  "public": "Mindenki (nyilvános)",
+  "privateGroups": "Tulajdonos",
+  "sharedGroups": "Tulajdonos + csoportok (${num})",
+  "orgGroups": "Szervezet + csoportok (${num})",
+  "publicGroups": "Mindenki (nyilvános) + csoportok (${num})",
+  "groups": "Csoportok (${num})",
+  "updateSharing": "Megosztási szint: ${level}, megosztás frissítése",
+  "viewableBy": "Megtekintheti: ${level}",
+  "everyone": "Mindenki (nyilvános)",
+  "organization": "Szervezet",
+  "groupMembers": "Csoporttagok"
+}

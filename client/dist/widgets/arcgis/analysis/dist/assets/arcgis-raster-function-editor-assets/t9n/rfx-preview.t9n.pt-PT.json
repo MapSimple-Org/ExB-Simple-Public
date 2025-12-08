@@ -1,0 +1,13 @@
+{
+  "header": "Pré-visualizar",
+  "description": "Pré-visualize o resultado antes de efetuar a análise.",
+  "showPreview": "Exibir pré-visualização",
+  "previewLayer": "Pré-visualizar camada ${number}",
+  "update": "Atualizar",
+  "newPreview": "Nova pré-visualização",
+  "previewPopup": "Ative a pré-visualização dos resultados da análise com base nos parâmetros de entrada.",
+  "previewError": "Esta camada de pré-visualização não está disponível. Verifique os parâmetros de entrada e atualize novamente esta camada de pré-visualização.",
+  "updatePopover": "Atualizar a camada de pré-visualização selecionada",
+  "createPopover": "Criar nova camada de pré-visualização",
+  "maxPreview": "Número máximo de camadas de pré-visualização permitido: ${maxCount}"
+}

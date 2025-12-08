@@ -1,0 +1,9 @@
+{
+  "inputFlowDirectionRasterLabel": "Ràster de direcció del flux",
+  "inputLayerGroupText": "Trieu els ràsters de curs d'aigua d'entrada i direcció del flux",
+  "inputStreamRasterLabel": "Ràster de curs d'aigua d'entrada",
+  "itemProperties": {
+    "description": "Sortida generada en executar l'eina d'anàlisi StreamLink.",
+    "snippet": "Sortida generada amb StreamLink"
+  }
+}

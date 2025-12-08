@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>Instrumentul Planificare rute creează rute de deplasare cu mai multe opriri pentru un parc de vehicule.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="startLayer">
+        <div>
+            <p>Obiectele spațiale punctuale care specifică unde &icirc;și &icirc;ncep vehiculele rutele.
+            </p>
+            <p class="toolPaneOnly">Numărul de obiecte spațiale depinde de factori suplimentari, cum ar fi criteriile de filtrare și extinderea analizei.
+            </p>
+        </div>
+    </div>
+    <div id="stopsLayer">
+        <div>
+            <p>Obiectele spațiale punctuale pe care vehiculele trebuie să le viziteze pe parcursul rutelor lor. Aceste puncte sunt puncte atribuite sau neatribuite &icirc;n rezultat.
+            </p>
+            <p class="toolPaneOnly">Numărul de obiecte spațiale depinde de factori suplimentari, cum ar fi criteriile de filtrare și extinderea analizei.
+            </p>
+        </div>
+    </div>
+    <div id="returnToStart">
+        <div>
+            
+            <p>Specifică dacă vehiculele trebuie să se &icirc;ntoarcă la locația lor de pornire (activată) sau să se oprească la locații specificate.
+            </p>
+        </div>
+    </div>
+    <div id="endLayer">
+        <div>
+            <p>Obiectele spațiale punctuale care specifică unde &icirc;și &icirc;ncheie vehiculele rutele. Dacă stratul tematic include un singur punct, toate vehiculele sunt direcționate către un punct de &icirc;ncheiere comun. Dacă stratul tematic include mai multe puncte, fiecare vehicul este rutat către o locație finală unică.
+            </p>
+            <p class="toolPaneOnly">Numărul de obiecte spațiale depinde de factori suplimentari, cum ar fi criteriile de filtrare și extinderea analizei.
+            </p>
+        </div>
+    </div>
+    <div id="startLayerRouteIDField">
+        <div>
+            <p>C&acirc;mpul din stratul tematic de pornire care identifică numai rutele individuale, vehicule sau șoferi. Dacă vehiculele pornesc din mai multe locații și sosesc &icirc;n mai multe locații, ID-urile de rute specificate pentru straturile tematice cu puncte de plecare și cu puncte de sosire trebuie să corespundă.
+            </p>
+        </div>
+    </div>
+    <div id="endLayerRouteIDField">
+        <div>
+            <p>C&acirc;mpul din stratul tematic de &icirc;ncheiere care identifică numai rutele individuale, vehicule sau șoferi. Dacă vehiculele pornesc din mai multe locații și sosesc &icirc;n mai multe locații, ID-urile de rute specificate pentru straturile tematice cu puncte de plecare și cu puncte de sosire trebuie să corespundă.
+            </p>
+        </div>
+    </div>
+    <div id="pointBarrierLayer">
+        <div>
+            <p>Unul sau mai multe obiecte spațiale punctuale care acționează ca restricții temporare (bariere) atunci c&acirc;nd vă deplasați pe străzile subiacente. Deplasarea este permisă pe stradă, dar nu &icirc;n afara barierei.
+            </p>
+        </div>
+    </div>
+    <div id="lineBarrierLayer">
+        <div>
+            <p>Unul sau mai multe obiecte spațiale liniare care acționează ca restricții temporare (bariere) atunci c&acirc;nd vă deplasați pe străzile subiacente. Barierele liniare interzic deplasarea oriunde barierele se intersectează cu străzile.
+            </p>
+        </div>
+    </div>
+    <div id="polygonBarrierLayer">
+        <div>
+            <p>Unul sau mai multe obiecte spațiale poligonale care acționează ca restricții temporare (bariere) atunci c&acirc;nd vă deplasați pe străzile subiacente. Barierele poligonale interzic deplasarea oriunde poligoanele se intersectează cu străzile.
+            </p>
+        </div>
+    </div>
+    <div id="travelMode">
+        <div>
+            <p>Modul de deplasare care va fi utilizat pentru a crea rutele. Sunt acceptate doar modele de deplasare bazate pe timp.
+            </p>
+        </div>
+    </div>
+    <div id="routeStartTime">
+        <div>
+            <p>Data și ora de plecare pentru vehicule.
+            </p>
+        </div>
+    </div>
+    <div id="routeCount">
+        <div>
+            
+            <p class="OnlineOnly">Numărul maxim de vehicule care sunt disponibile pentru a ajunge la opriri. Dacă valorile  <b>Strat tematic de pornire</b> și <b>Strat tematic de &icirc;ncheiere</b> conțin fiecare c&acirc;te un obiect spațial, puteți specifica p&acirc;nă la 100 vehicule. Dacă unul dintre straturile tematice conține mai multe obiecte spațiale, valoarea implicită nu poate fi editată. </p> 
+            <p class="PortalOnly">Numărul maxim de vehicule care sunt disponibile pentru a ajunge la opriri. Dacă fiecare dintre valorile  <b>Strat tematic de pornire</b> și <b>Strat tematic de &icirc;ncheiere</b> conține un obiect spațial, puteți specifica un număr maxim de vehicule. Dacă unul dintre straturile tematice conține mai multe obiecte spațiale, valoarea implicită nu poate fi editată.
+            </p>
+        </div>
+    </div>
+    <div id="maxStopsPerRoute">
+        <div>
+            
+            <p class="OnlineOnly">Numărul maxim de opriri pe care le poate face fiecare vehicul pe o rută. Puteți specifica o valoare cuprinsă &icirc;ntre 1 și  200. </p> 
+            <p class="PortalOnly">Numărul maxim de opriri pe care le poate face fiecare vehicul pe o rută.
+            </p>
+        </div>
+    </div>
+    <div id="stopServiceTime">
+        <div>
+            <p>Durata medie estimată care va fi petrecută la fiecare oprire.
+            </p>
+        </div>
+    </div>
+    <div id="limitMaxRouteTimeCheckbox">
+        <div>
+            <p>Specifică dacă timpul maxim de rutare se aplică tuturor vehiculelor. Timpul de rutare include durata de călătorie și duratele de timp petrecute la fiecare din opririle planificate de-a lungul rutei.
+            </p>
+        </div>
+    </div>
+    <div id="maxRouteTime">
+        <div>
+            <p>Timpul maxim pentru parcurgerea unei rute de la &icirc;nceput p&acirc;nă la &icirc;ncheiere.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>Numele stratului tematic care va fi creat și adăugat pe hartă.
+            </p>
+        </div>
+    </div>
+    <div id="includeRouteLayers">
+        <div>
+            <p>Specifică dacă fiecare rută de rezultat va fi salvată ca strat tematic de rută.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            
+            <p>Numele folderului din  <b>Resursele mele</b> &icirc;n care va fi salvat rezultatul.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

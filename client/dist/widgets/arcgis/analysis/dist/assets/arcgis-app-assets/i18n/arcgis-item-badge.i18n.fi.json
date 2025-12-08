@@ -1,0 +1,110 @@
+{
+  "Authoritative": {
+    "title": "Virallinen",
+    "tooltip": {
+      "org": "Organisaatiosi suosittelema",
+      "public": "Henkilön ${name} suosittelema"
+    }
+  },
+  "Deprecated": {
+    "title": "Vanhentunut",
+    "tooltip": "Ei suositella käytettäväksi"
+  },
+  "Has Replacement": {
+    "title": "Korvaava kohde on olemassa",
+    "tooltip": "Tällä kohteella on suositeltu korvaava kohde. Tarkastele kohteen tietoja, jos haluat etsiä korvaavan kohteen ja käyttää sitä.",
+    "itemPageTooltip": "Tällä kohteella on suositeltu korvaava kohde.",
+    "link": "Näytä korvaava kohde"
+  },
+  "DeprecatedItem": {
+    "title": "Käytöstä poistettu kohteen tyyppi"
+  },
+  "Living Atlas": {
+    "title": "Maailmankartasto",
+    "tooltip": "Esrin kokoama sisältö"
+  },
+  "Subscriber": {
+    "title": "Tilaaja",
+    "tooltip": {
+      "org": "Sisältö vain tilaajien käytössä",
+      "public": "Sisältö vain tilaajien käytössä. Käytä kirjautumalla sisään ArcGIS Online -tilauksella."
+    }
+  },
+  "Premium": {
+    "title": "Premium",
+    "tooltip": {
+      "org": "Sisältö vain tilaajien käytössä. Kuluttaa krediittejä.",
+      "public": "Sisältö on vain krediittejä käyttävien tilaajien käytössä. Käytä kirjautumalla sisään ArcGIS Online -tilauksella."
+    }
+  },
+  "Open Data": {
+    "title": "Open Data",
+    "tooltip": "Käytettävissä julkisesti"
+  },
+  "Marketplace": {
+    "title": "Marketplace",
+    "tooltip": "Lueteltu ArcGIS Marketplacessa"
+  },
+  "Collaboration": {
+    "title": "Hajautettu kollaboraatio",
+    "tooltip": "Tämä kohde on vastaanotettu hajautetusta kollaboraatiosta"
+  },
+  "Retired": {
+    "title": "Vanhentunut",
+    "tooltip": {
+      "general": "Vain luku",
+      "cityEngine": "CityEngine Web Vieweria ja CityEngine-web-maisemia ei enää tueta.",
+      "storyMap": "Tämän sovelluksen luomisessa käytetty Classic Esri Story Map -kartta on poistettu käytöstä ArcGIS Enterprisessa. Luo uusia tarinoita käyttämällä ArcGIS StoryMapsia.",
+      "app": "Tämän sovelluksen luomisessa käytetty Configurable Apps -malli on poistettu käytöstä ArcGIS Enterprisessa. Tämä kohde ei ole toiminnallinen, ja sen voi poistaa. Luo uusi sovellus käyttämällä ArcGIS Instant Appsia, ArcGIS StoryMapsia, ArcGIS Dashboardsia tai ArcGIS Experience Builderia",
+      "webAppBuilder": "ArcGIS Web AppBuilder poistuu käytöstä ArcGIS Enterprisessa. Tämä kohde ei ole toiminnallinen, ja sen voi poistaa. Luo uusi sovellus käyttämällä ArcGIS Experience Builderia.",
+      "insights": "ArcGIS Insights poistuu käytöstä ArcGIS Enterprisessa. Tämä kohde ei ole toiminnallinen, ja sen voi poistaa.",
+      "bdfs": "Big Data -tiedostojaot poistuvat käytöstä ArcGIS Enterprisesta. Tämä kohde ei ole toiminnallinen, ja sen voi poistaa."
+    }
+  },
+  "Public Data Collection": {
+    "title": "Julkisen aineiston kerääminen",
+    "tooltip": "Hyväksytty julkista aineiston keruuta varten."
+  },
+  "Solution": {
+    "title": "ArcGIS Solution",
+    "tooltip": "Esrin tukema ratkaisu"
+  },
+  "Registered": {
+    "title": "OAuth 2.0",
+    "tooltip": {
+      "online": "Rekisteröity OAuth 2.0 -sovellus. Voi käyttää Premium- tai tilaajasisältöä.",
+      "enterprise": "Rekisteröity OAuth 2.0 -sovellus."
+    }
+  },
+  "Registered API Key Credentials (Standard)": {
+    "title": {
+      "online": "API-avaimen tunnistetiedot – Tavalliset",
+      "enterprise": "API-avaimen tunnistetiedot"
+    },
+    "tooltip": "Myöntää oikeuden palveluihin."
+  },
+  "Registered API Key Credentials (Personal)": {
+    "title": "API-avaimen tunnistetiedot – Henkilökohtaiset",
+    "tooltip": "Myöntää henkilökohtaiset oikeudet. Tietoturvasyistä sinun on suojattava näitä tunnistetietoja samalla tavalla kuin suojaisit omaa käyttäjänimeäsi/salasanaasi."
+  },
+  "Registered OAuth 2.0 Credentials (Standard)": {
+    "title": {
+      "online": "OAuth 2.0 -tunnistetiedot – Tavalliset",
+      "enterprise": "OAuth 2.0 -tunnistetiedot"
+    },
+    "tooltip": "Myöntää oikeuden palveluihin."
+  },
+  "Registered OAuth 2.0 Credentials (Personal)": {
+    "title": "OAuth 2.0 -tunnistetiedot – Henkilökohtaiset",
+    "tooltip": "Myöntää henkilökohtaiset oikeudet. Tietoturvasyistä sinun on suojattava näitä tunnistetietoja samalla tavalla kuin suojaisit omaa käyttäjänimeäsi/salasanaasi."
+  },
+  "Registered Application": {
+    "title": "OAuth 2.0 -sovellus",
+    "tooltip": "Rekisteröity OAuth 2.0 -sovellus"
+  },
+  "Personal credential": {
+    "title": "Henkilökohtainen",
+    "tooltip": "Olet myöntämässä henkilökohtaisen oikeuden tähän käyttöoikeuteen. Tietoturvasyistä sinun on suojattava kaikki näillä tunnistetiedoilla luodut käyttöoikeustunnukset samalla tavalla kuin suojaisit omaa käyttäjänimeäsi/salasanaasi. Tutustu käyttöehtoihin."
+  },
+  "loading": "Ladataan..."
+}

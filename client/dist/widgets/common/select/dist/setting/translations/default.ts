@@ -1,0 +1,21 @@
+export default {
+  _widgetLabel: 'Select',
+  sourceLabel: 'Source',
+  selectByAttrbute: 'Select by attributes',
+  newData: 'New data',
+  allowGeneratedData: 'Allow selection of data generated at runtime',
+  configureLayerAttribute: 'Configure layer attribute',
+  labelForAttribution: 'Label for attribution',
+  spatialSelection: 'Spatial selection',
+  selectByData: 'Select by data',
+  addSelectingData: 'Add selecting data',
+  selectableLayers: 'Selectable layers',
+  interactiveSelection: 'Interactive selection',
+  atLeastOneToolTip: 'At least one interactive tool is required.',
+  interactiveSelectionMode: 'Interactive selection mode',
+  partiallyWithin: 'Partially within',
+  whollyWithin: 'Wholly within',
+  addAttributionTip: 'Add label for attribution',
+  noDataSourceTooltip: 'Click the “New data” button to add and configure data sources to be selected.',
+  selectionViewOnly: 'Support selected features view only'
+}

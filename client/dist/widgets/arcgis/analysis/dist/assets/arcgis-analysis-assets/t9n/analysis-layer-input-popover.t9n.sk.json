@@ -1,0 +1,18 @@
+{
+  "add": "Pridať",
+  "analysisSessionLayers": "Vrstvy relácie analýzy",
+  "browseAnalysisLayers": "Prehľadať vrstvy",
+  "cancel": "Zrušiť",
+  "heading": "Vybrať vrstvu",
+  "mapLayers": "Mapové vrstvy",
+  "mesh": "Mesh vrstva",
+  "modelVariableLayers": "Vrstvy modelových premenných",
+  "multipatch": "Multipatch vrstva",
+  "multipoint": "Multibodová vrstva",
+  "noCompatibleLayers": "Mapa neobsahuje žiadne kompatibilné vrstvy. Pridať vrstvy do mapy alebo vyhľadať vrstvy na vykonanie analýzy.",
+  "noMatchesFound": "Pre '${searchTerm}' neboli nájdené žiadne zhody.",
+  "point": "Bodová vrstva",
+  "polygon": "Polygónová vrstva",
+  "polyline": "Líniová vrstva",
+  "table": "Tabuľka"
+}

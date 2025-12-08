@@ -1,0 +1,17 @@
+{
+  "any": "Any",
+  "count": "Count",
+  "field": "Field",
+  "fieldLoadingErrorText": "Unable to load fields.",
+  "first": "First",
+  "isRequired": "This parameter is required.",
+  "last": "Last",
+  "max": "Max",
+  "mean": "Mean",
+  "min": "Min",
+  "selectAll": "Select all",
+  "standardDeviation": "Standard deviation",
+  "statistic": "Statistic",
+  "statisticNotSelected": "At least one statistic type is required for each field.",
+  "sum": "Sum"
+}

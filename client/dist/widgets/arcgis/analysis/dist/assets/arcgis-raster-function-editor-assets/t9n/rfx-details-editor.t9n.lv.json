@@ -1,0 +1,22 @@
+{
+  "general": "Vispārīgi",
+  "parameters": "Parametri",
+  "variables": "Mainīgie",
+  "name": "Nosaukums",
+  "namePlaceHolder": "Ievadīt nosaukumu",
+  "description": "Apraksts",
+  "parameter": "Parametrs",
+  "isPublic": "Ir publisks",
+  "isDataset": "Ir datu kopa",
+  "unknownPixelType": "Nezināms",
+  "outputPixelType": "Izvades pikseļa veids",
+  "u8PixelType": "8 bitu bez zīmes",
+  "s8PixelType": "8 bitu ar zīmi",
+  "u16PixelType": "16 bitu bez zīmes",
+  "s16PixelType": "16 bitu ar zīmi",
+  "u32PixelType": "32 bitu bez zīmes",
+  "s32PixelType": "32 bitu ar zīmi",
+  "f32PixelType": "32 bitu daļskaitlis",
+  "f64PixelType": "64 bitu dubultās precizitātes daļskaitlis",
+  "properties": "Īpašības"
+}

@@ -1,0 +1,6 @@
+{
+  "description": "Thông tin mô tả",
+  "addDescription": "Thêm mô tả",
+  "charactersLeft": "Ký tự còn lại: ${num}",
+  "invalid": "Mô tả không được chứa bất kỳ ký tự nào sau đây: < hoặc >."
+}

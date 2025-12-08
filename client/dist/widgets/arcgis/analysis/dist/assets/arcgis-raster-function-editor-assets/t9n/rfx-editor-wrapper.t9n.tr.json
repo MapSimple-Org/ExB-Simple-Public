@@ -1,0 +1,6 @@
+{
+  "dialogTitle": "Raster İşlevi Düzenleyici",
+  "defaultTemplateName": "Raster Fonksiyonu Şablonu",
+  "readOnlyModeTitle": "Salt Okunur",
+  "readOnlyModeMessage": "Raster fonksiyon şablonu ögesi salt okunur. Değişiklikler kaydedilemedi."
+}

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>De tool Veld berekenen berekent waarden voor een nieuw of bestaand veld.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputTable">
+        <div>
+            <p>De invoerlaag of tabel waarvoor een veld zal worden berekend.
+            </p>
+            <p class="modelBuilderOnly"> <b>Laag</b> wordt standaard gespecificeerd wanneer <b>Invoer-gegevensset</b> niet wordt ingevuld. Als u een invoertabel wilt toevoegen, moet u <b>Tabel</b> selecteren voordat u een gegevensset toevoegt.
+            </p>
+        </div>
+    </div>
+    <div id="whereClause">
+        <div>
+            <p>De attribuutquery die bepaalt op welke subset records de veldberekening wordt toegepast. Als u wilt dat de berekening op alle records wordt toegepast, moet u deze parameter leeg laten.
+            </p>
+        </div>
+    </div>
+    <div id="field">
+        <div>
+            <p>Het veld waaraan de berekende waarden worden toegevoegd. U kunt een bestaand veld kiezen of een nieuw veld maken. 
+            </p>
+        </div>
+    </div>
+    <div id="fieldCalcExpression">
+        <div>
+            <p>De SQL-expressie die wordt gebruikt om waarden te berekenen voor  <b>Te berekenen veld</b>.
+            </p>
+            <p>De expressie kan basis-operators, functies en veldnamen bevatten en moet waarden scheppen die overeenkomen met het veldtype voor  <b>Te berekenen veld</b>.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

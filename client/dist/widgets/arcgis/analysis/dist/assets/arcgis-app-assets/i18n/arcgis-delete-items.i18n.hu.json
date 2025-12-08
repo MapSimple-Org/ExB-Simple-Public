@@ -1,0 +1,160 @@
+{
+  "deleteItem": "Elem törlése",
+  "deleteItems": "Elemek törlése",
+  "deleteFolder": "Mappa törlése",
+  "recycleBin": "Lomtár",
+  "delete": "Törlés",
+  "permanentlyDelete": "Végleges törlés",
+  "next": "Tovább",
+  "back": "Vissza",
+  "cancel": "Mégse",
+  "item": "elem",
+  "items": "elemek",
+  "cantDelete": "A következő elemek nem törölhetők, mert törlés ellen védettek vagy függő elemekkel rendelkeznek.",
+  "proceed": "Folytatja a fennmaradó elemek törlésével?",
+  "showMore": "Továbbiak megjelenítése",
+  "showLess": "Részletek elrejtése",
+  "deletePermanently": "Végleges törlés (nem vonható vissza)",
+  "learnMore": "További információ",
+  "summary": {
+    "select": "Kiválasztás",
+    "deselect": "Kijelölés megszüntetése",
+    "selectedItems": "Kijelölt elemek:",
+    "additionalDependentItems": "további függő elemek:",
+    "permanentlyDelete": "Végleges törlés:",
+    "permanentDelete": {
+      "notSupported": {
+        "single": "A lomtár nem támogatja ezt az elemet.",
+        "multiple": "A lomtár nem támogatja ezeket az elemeket."
+      },
+      "unsynchronized": "Az elosztott együttműködési csoportban lévő vektoros rétegeken végzett, nem szinkronizált szerkesztések elvesznek.",
+      "notSupportedAndUnsynchronized": "Egyes elemtípusok nem támogatottak. Az elosztott együttműködési csoportban lévő vektoros rétegeken végzett, nem szinkronizált szerkesztések elvesznek.",
+      "group": {
+        "notSupported": "Nem támogatott",
+        "distributedCollaboration": "Elosztott együttműködés része"
+      }
+    },
+    "canBeRecovered": {
+      "single": "Ez az elem ${days} nap elteltével véglegesen törlődik.",
+      "multiple": "Ezek az elemek ${days} nap elteltével véglegesen törlődnek.",
+      "unknown": "Ezek az elemek ${days} nap elteltével véglegesen törlődnek."
+    },
+    "includesDependentItems": "További függő elemek:",
+    "willBeRecycled": "Küldés a lomtárba:",
+    "cannotDelete": "Nem törölhető:",
+    "deleteDiscouraged": "Törlés elutasítva:",
+    "hasDependentItems": "Függő elemekkel rendelkezik:",
+    "replacementItemFor": "Helyettesítő elem ehhez:",
+    "someActionsMayNoLongerWork": {
+      "single": "Ha ezt az elemet a lomtárba küldi, előfordulhat, hogy egyes, a forráselemhez való hozzáférést igénylő műveletek a továbbiakban nem működnek a várt módon.",
+      "multiple": "Ha ezeket az elemeket a lomtárba küldi, előfordulhat, hogy egyes, a forráselemekhez való hozzáférést igénylő műveletek a továbbiakban nem működnek a várt módon."
+    },
+    "deletePermanently": "Végleges törlés: ${count} (nem vonható vissza)",
+    "deleteAllPermanently": "Minden elem végleges törlése: ${count} (nem vonható vissza)",
+    "deleteXPermanently": "${subset} / ${total} elem végleges törlése (nem vonható vissza)",
+    "unprotectedGroup": {
+      "deleteDiscouraged": {
+        "dependent": "Ha törli ezt az elemet, előfordulhat, hogy egyes, a forráselemhez való hozzáférést igénylő műveletek a továbbiakban nem működnek a várt módon. Biztosan törli ezt az elemet?",
+        "replacement": "Ezt az elemet helyettesítő elemként választották ki. Biztosan törli ezt az elemet?",
+        "learnMore": "További információk a forráselemek törléséről"
+      }
+    },
+    "protectedGroup": {
+      "deleteProtected": "Törlés ellen védett",
+      "deleteProtectedDescription": "A törlés ellen védett elemek nem törölhetők.",
+      "hasDependentItems": "Függő elemekkel rendelkezik",
+      "dependentItems": {
+        "single": "Függő elem:",
+        "multiple": "Függő elemek:"
+      },
+      "compositeDelete": "Ez az elem a következő függvénye:",
+      "compositeDeleteDescription": "Az összetett kapcsolat függő elemei nem törölhetők a hozzájuk tartozó forráselem nélkül.",
+      "hasDependentItemsDescription": {
+        "singleOneDependentItem": "Ez az elem függő elemmel rendelkezik. Együtt kell törölni őket.",
+        "singleMultipleDependentItems": "Ez az elem függő elemmel rendelkezik. Együtt kell törölni őket.",
+        "multiple": "Ezek az elemek olyan elemekkel rendelkeznek, melyek tőlük függenek. Együtt kell törölni őket."
+      },
+      "protectedAndDependentDescription": "A törlés ellen védett vagy függő elemeket nem lehet törölni.",
+      "deleteDiscouraged": "Törlés elutasítva",
+      "deleteDiscouragedDescription": {
+        "single": "Ha ez az elem törlésre kerül, a függő elemek bizonyos funkciókat elveszíthetnek. Ez az elem az elem adatlapján törölhető.",
+        "multiple": "Ha ezek az elemek törlésre kerülnek, a függő elemek bizonyos funkciókat elveszíthetnek. Ezeket az elemeket az elem adatlapján egyesével törölheti."
+      }
+    }
+  },
+  "willBePermanentlyDeleted": {
+    "single": "Ez az elem véglegesen törlődni fog, mivel a lomtár nem támogatja.",
+    "multiple": "Ezek az elemek véglegesen törlődni fognak, mivel a lomtár nem támogatja őket.",
+    "unknown": "Ezek az elemek véglegesen törlődni fognak, mivel a lomtár nem támogatja őket."
+  },
+  "willBePermanentlyDeletedCollaboration": {
+    "single": "A kiválasztott elem megosztott együttműködési csoporthoz tartozik, és nem küldhető a lomtárba. Véglegesen törlődni fog.",
+    "multiple": "A kiválasztott elemek megosztott együttműködési csoporthoz tartoznak, és nem küldhetők a lomtárba. Véglegesen törlődni fognak.",
+    "unknown": "A kiválasztott elemek megosztott együttműködési csoporthoz tartoznak, és nem küldhetők a lomtárba. Véglegesen törlődni fognak."
+  },
+  "areYouSure": {
+    "single": "Biztosan törli ezt az elemet?",
+    "multiple": "Biztosan törölni szeretné ezeket az elemeket?",
+    "unknown": "Biztosan törölni szeretné ezeket az elemeket?"
+  },
+  "areYouSureRecycle": {
+    "single": "Ez az elem ${days} napig a lomtárban marad a végleges törlés előtt.",
+    "multiple": "Ezek az elemek ${days} napig a lomtárban maradnak a végleges törlés előtt.",
+    "unknown": "Ezek az elemek ${days} napig a lomtárban maradnak a végleges törlés előtt."
+  },
+  "areYouSurePermanent": {
+    "single": "Biztosan véglegesen törli ezt az elemet? Ez az elem nem állítható helyre a végleges törlés után.",
+    "multiple": "Biztosan véglegesen törli ezeket az elemeket? Ezek az elemek nem állíthatók helyre a végleges törlés után.",
+    "unknown": "Biztosan véglegesen törli ezeket az elemeket? Ezek az elemek nem állíthatók helyre a végleges törlés után."
+  },
+  "deletes": {
+    "single": "${days} nap múlva törlődik",
+    "multiple": "${days} nap múlva törlődik",
+    "unknown": "Törlésig hátralévő napok száma: ${days}"
+  },
+  "deleteOverride": {
+    "single": "Biztosan véglegesen törli ezt az elemet? Ez az elem nem állítható helyre a végleges törlés után.",
+    "multiple": "Biztosan véglegesen törli ezeket az elemeket? Ezek az elemek nem állíthatók helyre a végleges törlés után."
+  },
+  "restore": {
+    "restore": "Visszaállítás",
+    "restoreTo": "Visszaállítás ide:",
+    "restoreItem": "Elem visszaállítása",
+    "restoreItems": "Elemek visszaállítása",
+    "noticeMessage": "A visszaállított elemek nem lesznek megosztva. Kérjük, mielőtt újból megosztaná tartalmát, ellenőrizze.",
+    "cannotBulkRestoreXItems": "Nem lehet ${number} elemnél több elemet tömegesen visszaállítani: kérjük, törölje néhány elem kijelölését.",
+    "cannotBulkRestoreMultipleOwners": "Nem lehet tömegesen visszaállítani a különböző tulajdonosokhoz tartozó elemeket. Válassza ki egyetlen tulajdonos tömegesen visszaállítani kívánt elemeit.",
+    "toRestore": {
+      "single": "Visszaállítani kívánt elem:",
+      "multiple": "Visszaállítani kívánt elemek:"
+    },
+    "cannotRestore": "Nem lehet visszaállítani a következőt:",
+    "dependentItems": {
+      "single": "Az elem nem állítható vissza, mert a következőtől függ: <b>${parent}</b>. Állítsa vissza őket együtt.",
+      "multiple": "Ezek az elemek nem állíthatók vissza, mert a lomtárban lévő más elemektől függenek. Állítsa vissza őket együtt: "
+    }
+  },
+  "onboarding": {
+    "checkItOut": "Vissza kell állítania a véletlenül törölt elemet? Nézze meg az új lomtárat!",
+    "takeALook": "Vessen egy pillantást az új lomtárra!",
+    "learnMore": "További információk a törölt elemek visszaállításáról",
+    "heldInRecycleBin": "A lomtárban lévő elemek ${days} nap elteltével véglegesen törlődnek.",
+    "goToUserRecycleBin": "Az elemek visszaállításához vagy végleges törléséhez lépjen a ${linkStart}lomtárra${linkEnd}.",
+    "goToOrgRecycleBin": "Az elemek visszaállításához vagy végleges törléséhez lépjen ${linkStart}szervezete lomtárára${linkEnd}. A lomtárban lévő tartalom továbbra is használja a krediteket."
+  },
+  "pageRangeWithTotalRecycleBinSize": {
+    "en": "${total}/${start} – ${end} (${size}) van a lomtárban",
+    "other": "${start} – ${end}, összesen: ${total} (${size}) a lomtárban"
+  },
+  "pageRangeWithGreaterThanTotalRecycleBinSize": {
+    "en": "${total}/${start} – ${end} (>${size}) a lomtárban",
+    "other": "${start} – ${end}, összesen: ${total} (>${size}) a lomtárban"
+  },
+  "compositeDeleteDisclaimer": {
+    "oneToOne": "A(z) <strong>${item}</strong> olyan függő elemmel (<strong>${dependentItem}</strong>) rendelkezik, amelyet vele együtt kell törölni.",
+    "oneToMany": "A(z) <strong>${item}</strong> olyan függő elemekkel rendelkezik, amelyeket vele együtt kell törölni.",
+    "manyToMany": "Néhány kijelölt elem olyan függő elemekkel rendelkezik, amelyeket velük együtt kell törölni.",
+    "additional": "További elemek:",
+    "dependentOn": "A következő függvénye:"
+  }
+}

@@ -1,0 +1,1 @@
+System.register([],function(e){return{execute:function(){e({settingsLabel:"Ustawienia Eksploratora dokument\xf3w",selectModelViewer:"Wybierz wid\u017cet Przegl\u0105darka dokument\xf3w, aby wy\u015bwietli\u0107 dokumenty."})}}});

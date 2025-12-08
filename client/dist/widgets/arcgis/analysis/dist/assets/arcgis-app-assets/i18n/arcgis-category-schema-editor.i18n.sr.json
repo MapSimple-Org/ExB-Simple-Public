@@ -1,0 +1,69 @@
+{
+  "loadingText": "Učitavanje šeme šablona",
+  "cancel": "Otkaži",
+  "finishSetup": "Završi podešavanje",
+  "hasUnsavedChanges": "Napravili ste izmene na kategoriji koje će se izgubiti, ako ih najpre ne sačuvate. Da li zaista želite da zatvorite ovaj prikaz i izgubite izmene?",
+  "error": {
+    "generic": {
+      "title": "Greška prilikom ažuriranja kategorija",
+      "message": "Nešto nije u redu. Pokušajte ponovo kasnije."
+    },
+    "maxDepthExceeded": {
+      "title": "Greška prilikom ažuriranja kategorija",
+      "message": "Ne možete ugnezditi kategorije dublje od 2 nivoa."
+    },
+    "destinationHasSameName": {
+      "title": "Greška prilikom ažuriranja kategorija",
+      "message": "Kategorija sa istim imenom već postoji u kategoriji odredišta."
+    },
+    "emptyTitle": {
+      "title": "Greška prilikom ažuriranja kategorija",
+      "message": "Naslov kategorije ne može da bude prazan."
+    },
+    "noSchema": {
+      "title": "Šema nije pronađena",
+      "message": "Šema stavke nije pronađena za korisnika."
+    },
+    "maxCharacter": {
+      "title": "Greška prilikom ažuriranja kategorija",
+      "message": "Nazivi kategorija mogu da budu maksimalne dužine ${maxCharacter} karaktera."
+    },
+    "invalidCharacters": {
+      "title": "Greška prilikom ažuriranja kategorija",
+      "single": "Kategorija ne može da sadrži ovaj znak: ${invalidCharacters}.",
+      "multiple": "Kategorija ne može da sadrži nijedan od ovih znakova: ${invalidCharacters}.",
+      "unknown": "Kategorija ne može da sadrži nijedan od ovih znakova: ${invalidCharacters}."
+    }
+  },
+  "warning": {
+    "deleteInUseCategory": {
+      "title": "Obriši kategoriju",
+      "cta": "Obriši kategoriju"
+    },
+    "changeTitleInUseCategory": {
+      "title": "Ažuriraj kategoriju",
+      "cta": "Ažuriraj kategoriju"
+    }
+  },
+  "template": {
+    "title": "Šabloni kategorija",
+    "learnMore": "Saznajte više",
+    "templateList": {
+      "custom": {
+        "title": "Prilagođene kategorije"
+      },
+      "arcgis": {
+        "title": "ArcGIS kategorije",
+        "message": "ArcGIS kategorije uključuju odabir kategorija i potkategorija koje mogu da budu korišćene za kategorizaciju brojnih tipova geoprostornog sadržaja. Ove kategorije se koriste za podršku ArcGIS Living Atlas of the World."
+      },
+      "iso": {
+        "title": "ISO kategorije",
+        "message": "ISO kategorije uključuju kategorije tema Međunarodne organizacije za standardizaciju koje omogućavaju metod za opis i katalogizaciju geografskih informacija."
+      },
+      "inspire": {
+        "title": "INSPIRE kategorije",
+        "message": "INSPIRE kategorija uključuju sveobuhvatni skup tema prostornih podataka postavljenih u INSPIRE datoteci."
+      }
+    }
+  }
+}

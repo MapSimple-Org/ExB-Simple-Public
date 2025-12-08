@@ -1,0 +1,17 @@
+{
+  "sharing": "Jagamine",
+  "private": "Omanik",
+  "shared": "Omanik ja jagatud gruppidega",
+  "org": "Ettevõte",
+  "public": "Igaüks (avalik)",
+  "privateGroups": "Omanik",
+  "sharedGroups": "Omanik + grupid (${num})",
+  "orgGroups": "Organisatsioon + grupid (${num})",
+  "publicGroups": "Kõik (avalikkus) + grupid (${num})",
+  "groups": "Grupid (${num})",
+  "updateSharing": "Jagamistase: ${level}, uuenda jagamist",
+  "viewableBy": "Vaadata saab: ${level}",
+  "everyone": "Igaüks (avalik)",
+  "organization": "Ettevõte",
+  "groupMembers": "Grupi liikmed"
+}

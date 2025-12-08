@@ -1,0 +1,417 @@
+{
+  "itemBrowser": {
+    "filters": "Filtros",
+    "preview": "Previsualización",
+    "selectedLayers": "Capas seleccionadas",
+    "selectedItems": "Elementos seleccionados",
+    "pageRange": "${start}-${end}, total: ${total}",
+    "pageRangeAria": "${start}-${end}, total de elementos: ${total}",
+    "pageRangeWithRecycleBin": "${start}-${end}, total: ${total} (Tamaño total: ${recycleBinSize})",
+    "pageRangeAriaWithRecycleBin": "${start}-${end}, elementos en total: ${total} (Tamaño total: ${recycleBinSize})",
+    "foundOnPage": "Resultados coincidentes en la página actual: ${total}",
+    "totalSize": "Tamaño total: ${totalSize}",
+    "selectedMultipleWithSize": "Seleccionado: ${num} (${totalSize})",
+    "selectedMultipleWithSizeSmall": "${num} (${totalSize})",
+    "noSelectedLayers": "No hay capas seleccionadas actualmente",
+    "noSelectedItems": "No hay elementos seleccionados actualmente",
+    "sharingUpdated": "Uso compartido de ${itemTitle} actualizado.",
+    "refineContent": "Perfeccionar contenido"
+  },
+  "layerTypes": {
+    "point": "Capa de puntos",
+    "line": "Capa de línea",
+    "polygon": "Capa de polígono",
+    "multipatch": "Capa multiparche",
+    "multipoint": "Capa multipunto",
+    "table": "Tabla",
+    "catalog": "Capa de catálogo",
+    "oriented imagery": "Capa de imágenes orientadas",
+    "parcel": "Capa de parcela",
+    "utility network": "Capa de red de servicios públicos",
+    "topology": "Capa de topología",
+    "trace network": "Capa de trazado de red"
+  },
+  "filterIndustry": {
+    "title": "Industria",
+    "Industry": "Sector: ${industry}",
+    "Build a layer": "Crear una capa",
+    "Agriculture": "Agricultura",
+    "Electric Utilities": "Servicios públicos de electricidad",
+    "Environment": "Medio ambiente",
+    "Forestry": "Forestal",
+    "Gas Utilities": "Servicios públicos de gas",
+    "General": "General",
+    "Natural Resources": "Recursos Naturales",
+    "Petroleum": "Petróleo",
+    "Public Safety": "Seguridad pública",
+    "Telecommunications": "Telecomunicaciones",
+    "Transportation": "Transporte",
+    "Water Utilities": "Servicios públicos de aguas"
+  },
+  "filterItemType": {
+    "title": "Tipo de elemento",
+    "itemType": "Tipo: ${itemType}",
+    "options": {
+      "maps": "Mapas",
+      "maps-webmaps": "Mapas Web",
+      "maps-mapfiles": "Archivos de mapa",
+      "layers": "Capas",
+      "layers-weblayers": "Capas web",
+      "layers-weblayers-features": "Capas de entidades",
+      "layers-weblayers-tiles": "Capas de teselas",
+      "layers-weblayers-mapimage": "Capas de imágenes de mapa",
+      "layers-weblayers-imagery": "Capas de imágenes",
+      "layers-weblayers-scenelayers": "Capas de escenas",
+      "layers-weblayers-videolayers": "Capas de vídeo",
+      "layers-weblayers-tiledimagelayers": "Capas de imágenes en teselas",
+      "layers-weblayers-elevationlayers": "Capas de elevación",
+      "layers-weblayers-feeds": "Fuentes",
+      "layers-weblayers-tables": "Tablas",
+      "layers-layerfiles": "Archivos de capas",
+      "scenes": "Escenas",
+      "applications": "Aplicaciones",
+      "applications-web": "Aplicaciones web",
+      "applications-dashboards": "Dashboards",
+      "applications-sites": "Ubicaciones",
+      "applications-pages": "Páginas",
+      "applications-geobim-projects": "Proyectos GeoBIM",
+      "applications-geobim-apps": "Aplicaciones GeoBIM",
+      "applications-instant-apps": "Instant Apps",
+      "applications-storymap": "Storymaps",
+      "applications-data-pipelines": "Data Pipelines",
+      "applications-experience": "Experience Builder",
+      "applications-wab": "Web AppBuilder",
+      "applications-mobile": "Aplicaciones móviles",
+      "applications-desktop": "Aplicaciones de escritorio",
+      "developer-credentials": "Credenciales de desarrollador",
+      "developer-credentials-oauth": "Credenciales de OAuth 2.0",
+      "developer-credentials-api-token": "Credenciales de clave de API",
+      "developer-credentials-api-key": "Clave de API (heredada)",
+      "tools": "Herramientas",
+      "tools-locators": "Localizadores",
+      "tools-geodatabase": "Acceso a la geodatabase",
+      "tools-geometric": "Operaciones geométricas",
+      "tools-geoprocessing": "Tareas de geoprocesamiento",
+      "tools-network": "Análisis de red",
+      "tools-analytics": "Análisis",
+      "files": "Archivos",
+      "files-document": "Documentos",
+      "files-image": "Imágenes",
+      "files-pdf": "PDF",
+      "files-csv": "CSV",
+      "files-report": "Informes administrativos",
+      "files-raster": "Plantillas de función de ráster",
+      "notebooks": "Notebooks",
+      "insights": "Insights",
+      "insights-workbooks": "Libros de trabajo",
+      "insights-pages": "Informes",
+      "insights-models": "Modelos",
+      "insights-themes": "Temas",
+      "data-stores": "Data stores",
+      "knowledge-graphs": "Gráficos de conocimiento"
+    }
+  },
+  "filterCategories": {
+    "categories": "Categorías",
+    "groupCategories": "Categorías de grupo",
+    "category": "Categoría: ${category}",
+    "uncategorized": "No categorizado",
+    "noCategoriesTitle": "Aún sin categorías",
+    "noCategories": "Las categorías permiten a los miembros organizar los elementos de manera uniforme y les ofrecen una forma sencilla de buscar contenido en la organización.",
+    "noGroupCategoriesTitle": "Aún sin categorías de grupo",
+    "noGroupCategories": "Las categorías permiten a los miembros del grupo organizar los elementos de manera uniforme y les ofrece una forma sencilla de buscar contenido en el grupo.",
+    "setupCategories": "Configurar categorías de contenido",
+    "setupGroupCategories": "Definir categorías de grupo",
+    "configureCategories": "Configurar categorías"
+  },
+  "filterRegion": {
+    "regions": "Regiones",
+    "region": "Región: ${region}"
+  },
+  "filterCollaborations": {
+    "title": "Colaboraciones distribuidas",
+    "label": "Colaboraciones distribuidas: ${name}",
+    "loading": "Cargando colaboraciones..."
+  },
+  "filterContentStatus": {
+    "title": "Estado",
+    "label": "Estado: ${contentStatus}",
+    "authoritative": "Acreditado",
+    "deprecated": "Obsoleto"
+  },
+  "filterDeleteProtection": {
+    "title": "Protección contra eliminación",
+    "label": "Protección contra eliminación: ${deleteProtection}",
+    "enabled": "Habilitado",
+    "disabled": "Deshabilitado"
+  },
+  "filterExpiration": {
+    "today": "Hoy",
+    "tomorrow": "Mañana",
+    "next7": "Próximos 7 días",
+    "next30": "Próximos 30 días",
+    "custom": "Rango personalizado...",
+    "title": {
+      "expires": "Fecha de caducidad"
+    },
+    "expires": "Fecha de caducidad: ${date}"
+  },
+  "filterExtent": {
+    "label": "Dentro del área del mapa",
+    "title": "Mostrar solo contenido dentro del área del mapa"
+  },
+  "filterFolder": {
+    "folders": "Carpetas",
+    "placeholder": "Filtrar carpetas",
+    "clear": "Borrar búsqueda",
+    "all": "Todo mi contenido",
+    "allContentUser": "Todo el contenido de ${username}",
+    "recycleBin": "Papelera de reciclaje",
+    "label": "Carpeta: ${folder}",
+    "loading": "Cargando carpetas...",
+    "folderOptions": "Opciones de carpeta",
+    "editFolder": "Editar carpeta",
+    "deleteFolder": "Eliminar carpeta",
+    "delete": "Eliminar",
+    "areYouSure": "¿Seguro que desea eliminar esta carpeta?",
+    "areYouSureExplanation": "La carpeta, <strong style='font-weight: 500'>${title}</strong>, se eliminará de forma permanente. Además, todos los elementos de la carpeta se marcarán para eliminarlos. ¿Aún desea continuar eliminando esta carpeta?",
+    "cancel": "Cancelar",
+    "save": "Guardar",
+    "createAFolder": "Crear una carpeta",
+    "folderName": "Nombre de carpeta",
+    "createFolder": "Crear carpeta",
+    "error": {
+      "title": "Error",
+      "noName": "Debe proporcionar un nombre para la carpeta.",
+      "folderAlreadyExists": "Ya existe una carpeta \"${folder}\". Elija otro nombre.",
+      "invalidCharacters": {
+        "single": "El nombre no puede contener este carácter: ${invalidCharacters}.",
+        "multiple": "El nombre no puede contener ninguno de los siguientes caracteres: ${invalidCharacters}.",
+        "unknown": "El nombre no puede contener ninguno de los siguientes caracteres: ${invalidCharacters}."
+      },
+      "errorCreatingFolder": "Se produjo un error al crear la carpeta ${folderName}."
+    }
+  },
+  "filterGroup": {
+    "title": "Grupos",
+    "groups": "Mis grupos",
+    "placeholder": "Filtrar grupos",
+    "all": "Contenido de Todos mis grupos",
+    "label": "Grupo: ${group}",
+    "loading": "Cargando grupos…"
+  },
+  "filterContentType": {
+    "contentType": "Tipo de contenido",
+    "all": "Todo el contenido de mi organización",
+    "recycle": "Papelera de reciclaje"
+  },
+  "filterLocation": {
+    "location": "Localización",
+    "label": "Ubicación: ${location}",
+    "findLocationText": "Buscar dirección o lugar",
+    "search": "Buscar ubicaciones",
+    "suggestions": "Sugerencias",
+    "noResults": "No se encontraron resultados para \"${searchTerm}\""
+  },
+  "filterSharing": {
+    "title": "Uso compartido",
+    "label": "Compartido: ${sharing}",
+    "owner": "Propietario",
+    "shared": "Compartido con grupos",
+    "private": "No compartido con grupos",
+    "account": "Organización",
+    "public": "Todos (público)"
+  },
+  "filterTags": {
+    "title": "Etiquetas",
+    "label": "Etiquetado: ${tags}",
+    "selectTags": "Seleccionar etiquetas"
+  },
+  "filterReportType": {
+    "title": "Tipo de informe",
+    "label": "Tipo de informe: ${reportType}",
+    "activity": "Actividad",
+    "credits": "Crédito",
+    "users": "Miembro",
+    "content": "Elemento",
+    "item_usages": "Número de visualizaciones de elementos",
+    "service_usages": "Uso del servicio"
+  },
+  "cardThumbnail": {
+    "loading": "Cargando imagen"
+  },
+  "card": {
+    "select": "Seleccionar elemento: ${title}",
+    "lastUpdated": "Elemento actualizado: ${date}",
+    "viewItemDetails": "Ver más detalles sobre ${title}",
+    "preview": "Más detalles",
+    "hidePreview": "Menos detalles",
+    "closeDetails": "Cerrar vista previa",
+    "openDetails": "Previsualización",
+    "moreOptions": "Más opciones"
+  },
+  "cardSublayerSelect": {
+    "select": "Seleccionar capa",
+    "selectLayers": "Seleccionar capas",
+    "selectedSingle": "Seleccionado",
+    "selectedLayers": "Capas seleccionadas: ${num}",
+    "selectedMultiple": "Seleccionado: ${num}",
+    "selectedName": "Capa seleccionada: ${name}",
+    "selectedTask": "Tarea seleccionada: ${task}",
+    "errorTitle": "Error al conectar al servicio.",
+    "errorBody": "No se pudo conectar correctamente al servicio. El servicio no funciona o requiere autenticación.",
+    "notebookErrorBody": "Esta herramienta se ha publicado a través de un notebook. El acceso a ArcGIS Notebooks está bloqueado para su organización. Póngase en contacto con su administrador para ajustar la configuración.",
+    "retry": "Volver a intentar",
+    "selectTask": "Seleccionar tarea",
+    "selectTaskFrom": "Seleccionar una tarea desde ${title}"
+  },
+  "cardLayersList": {
+    "hideDetails": "Ocultar detalles",
+    "showDetails": "Mostrar detalles",
+    "layersAndTables": "Capas y tablas"
+  },
+  "content": {
+    "noResults": "No hemos encontrado ningún elemento que cumpla sus criterios. Pruebe a cambiar su término de búsqueda o borrar algunos filtros para mostrar más elementos.",
+    "noContent": "No hay contenido disponible.",
+    "loading": "Cargando..."
+  },
+  "copy": {
+    "copy": "Copiar",
+    "copied": "Copiada"
+  },
+  "bucketSelect": {
+    "my": "Mi contenido",
+    "org": "Mi organización",
+    "group": "Mis grupos",
+    "favorites": "Mis favoritos",
+    "living atlas": "Living Atlas",
+    "living atlas analysis": "Capas de análisis de Living Atlas",
+    "subscription content": "Contenido de suscripción",
+    "all": "ArcGIS Online",
+    "catalog": "Catálogos de hub",
+    "catalogLabel": "Catálogo"
+  },
+  "preview": {
+    "owner": "Propietario",
+    "summary": "Resumen",
+    "noSummary": "No se proporcionó ningún resumen",
+    "description": "Descripción",
+    "noDescription": "Ninguna descripción proporcionada",
+    "thumbnail": "Vista en miniatura",
+    "overview": "Información general",
+    "details": "Detalles",
+    "termsOfUse": "Condiciones de uso",
+    "noTermsOfUse": "No se proporcionaron las condiciones de uso",
+    "itemManagedBy": "Elemento administrado por: ${username}",
+    "fullItemDetails": "Detalles de todo el elemento",
+    "layersCount": "Capas (${count})",
+    "layers": "Capas",
+    "add": "Añadir",
+    "remove": "Eliminar",
+    "loading": "Cargando...",
+    "shared": "Uso compartido",
+    "created": "Elemento creado",
+    "updated": "Elemento actualizado",
+    "fileSize": "Tamaño de archivo",
+    "dataUpdated": "Datos actualizados",
+    "schemaUpdated": "Esquema actualizado",
+    "ID": "Id.",
+    "copyID": "Copiar Id.",
+    "URL": "URL",
+    "copyURL": "Copiar URL",
+    "itemStatus": "Estado",
+    "viewCount": "Recuento de visualizaciones",
+    "readMore": "Más información",
+    "dashboardViews": "Vistas de cuadros de mando",
+    "dashboardMobile": "Escritorio, móvil",
+    "dashboardDesktop": "Desktop",
+    "sharing": {
+      "private": "Privada",
+      "shared": "Grupos",
+      "public": "Todos",
+      "org": "Organización"
+    },
+    "groupCategories": "Categorías de grupo",
+    "matched": "Coincidentes",
+    "matchedNumber": "Coincidentes (${num})",
+    "layerError": {
+      "title": "No se puede mostrar las capas",
+      "message": "La vista previa de la capa no se admite con los servicios asegurados."
+    },
+    "noServiceMessage": "El servicio seleccionado no existe o no está accesible.",
+    "credits": "Agradecimientos",
+    "noCredits": "No hay ninguna fuente confirmada.",
+    "geometryTypeTitle": "Tipo de geometría",
+    "layerTypeTitle": "Tipo de capa",
+    "fields": "Campos",
+    "noFields": "No hay ningún campo configurado para esta capa",
+    "geometryType": {
+      "esriGeometryPoint": "Capa de puntos",
+      "esriGeometryPolyline": "Capa de línea",
+      "esriGeometryPolygon": "Capa de polígono",
+      "esriGeometryMultiPatch": "Capa multiparche",
+      "table": "Tabla"
+    },
+    "layerActions": "Acciones de capa",
+    "itemError": {
+      "title": "Error",
+      "subscription": "Este elemento no está disponible actualmente. La suscripción a ArcGIS Online asociada a este elemento se ha deshabilitado.",
+      "unhandled": "Se ha producido un error al recuperar este elemento."
+    }
+  },
+  "table": {
+    "loading": "Cargando...",
+    "caption": "Los resultados de los elementos, los encabezados de columna con botones, se pueden ordenar.",
+    "selectAll": "Seleccionar todo",
+    "selection": "Selección",
+    "headers": {
+      "title": "Título",
+      "modified": "Modificado",
+      "created": "Creada",
+      "owner": "Propietario",
+      "size": "Tamaño",
+      "deleted": "Fecha de eliminación",
+      "type": "Tipo de elemento",
+      "badges": "Estado del elemento",
+      "favorite": "Favorito",
+      "sharing": "Nivel de compartición",
+      "details": "Ver detalles",
+      "actions": "Más acciones del elemento",
+      "dataset": "Dataset"
+    }
+  },
+  "tableRow": {
+    "deletesTomorrow": "Se elimina mañana",
+    "deletes": {
+      "single": "Se elimina en ${number} día",
+      "multiple": "Se elimina en ${number} días",
+      "unknown": "Días hasta la eliminación: ${number}"
+    },
+    "restore": "Restaurar",
+    "details": "Ver detalles",
+    "moreOptions": "Más opciones",
+    "download": "Descargar"
+  },
+  "search": {
+    "searchName": "Buscar ${searchName}",
+    "searchAllContent": "Buscar en todo mi contenido",
+    "searchAllUserContent": "Buscar en todo el contenido de ${username}",
+    "searchGroupsContent": "Buscar en mis grupos",
+    "searchingGroupsContent": "Buscando en mis grupos",
+    "searchFavoritesContent": "Buscar en mis favoritos",
+    "searchOrganizationsContent": "Buscar en mi organización",
+    "searchLivingAtlasContent": "Buscar en Living Atlas",
+    "searchRecycleCurrentPage": "Buscar títulos de elementos en la página actual"
+  },
+  "find": {
+    "find": "Buscar",
+    "findOnPage": "Buscar en página",
+    "match": "Devuelve las coincidencias de texto de los títulos de elementos de la página actual solamente."
+  },
+  "view": {
+    "view": "Vista",
+    "list": "Lista",
+    "grid": "Cuadrícula",
+    "table": "Tabla"
+  }
+}

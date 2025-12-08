@@ -1,0 +1,14 @@
+{
+  "outputRaster": "OutputRaster",
+  "rfxVariable": "RasterFunctionVariable",
+  "selectLayer": "Pilih Layer",
+  "allowScalar": "Pilih layer atau masukkan konstan",
+  "browseLayer": "Telusuri layer",
+  "loading": "Memuat...",
+  "layerMissing": "Satu atau lebih layer citra dari peta tidak tercantum di sini karena properti layanan analisis izin tidak diaktifkan.",
+  "layerFailedToLoad": "Gagal memuat layer.",
+  "learnMore": "Pelajari selengkapnya",
+  "errorCodes": {
+    "required": "Parameter ini harus diisi."
+  }
+}

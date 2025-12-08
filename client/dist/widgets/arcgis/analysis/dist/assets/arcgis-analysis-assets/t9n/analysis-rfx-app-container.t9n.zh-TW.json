@@ -1,0 +1,16 @@
+{
+  "backLabel": "上一步",
+  "browseHeader": "選擇圖層",
+  "cannotReopenRasterFunction": "無法重新開啟點陣函數。",
+  "creditThresholdModal": {
+    "cancelRun": "取消",
+    "continueRun": "一律執行",
+    "creditEstimate": "估計的點數: ${cost}",
+    "creditThreshold": "點數閾值: ${threshold}",
+    "heading": "繼續前",
+    "learnMore": "深入瞭解點數閾值",
+    "thresholdExceeded": "此分析的估計點數成本大於 Web 地圖的點數閾值:"
+  },
+  "failedToExecuteEstimate": "提交失敗。 無法執行 EstimateRasterAnalysisCost",
+  "runAnalysisLabel": "執行"
+}

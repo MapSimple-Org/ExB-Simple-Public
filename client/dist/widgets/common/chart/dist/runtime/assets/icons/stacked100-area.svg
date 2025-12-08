@@ -1,0 +1,16 @@
+<svg width="400" height="400" viewBox="0 0 400 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect x="24" y="83" width="8" height="16" transform="rotate(-90 24 83)" fill="#A8A8A8"/>
+<rect x="24" y="144" width="8" height="16" transform="rotate(-90 24 144)" fill="#A8A8A8"/>
+<rect x="24" y="204" width="8" height="16" transform="rotate(-90 24 204)" fill="#A8A8A8"/>
+<rect x="24" y="266" width="8" height="16" transform="rotate(-90 24 266)" fill="#A8A8A8"/>
+<rect x="24" y="327" width="8" height="16" transform="rotate(-90 24 327)" fill="#A8A8A8"/>
+<rect x="135" y="376" width="8" height="24" transform="rotate(-90 135 376)" fill="#A8A8A8"/>
+<rect x="85" y="376" width="8" height="24" transform="rotate(-90 85 376)" fill="#A8A8A8"/>
+<rect x="33" y="376" width="8" height="24" transform="rotate(-90 33 376)" fill="#A8A8A8"/>
+<rect x="185" y="376" width="8" height="24" transform="rotate(-90 185 376)" fill="#A8A8A8"/>
+<rect x="237" y="376" width="8" height="24" transform="rotate(-90 237 376)" fill="#A8A8A8"/>
+<rect x="289" y="376" width="8" height="24" transform="rotate(-90 289 376)" fill="#A8A8A8"/>
+<rect x="341" y="376" width="8" height="24" transform="rotate(-90 341 376)" fill="#A8A8A8"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M376 354.501L376 355.5L351.5 355.5L351.5 359.5L350.5 359.5L350.5 355.5L300.5 355.5L300.5 359.5L299.5 359.5L299.5 355.5L249.5 355.5L249.5 359.5L248.5 359.5L248.5 355.5L198.5 355.5L198.5 359.5L197.5 359.5L197.5 355.5L147.5 355.5L147.5 359.5L146.5 359.5L146.5 355.5L96.5 355.5L96.5 359.5L95.5 359.5L95.5 355.5L45.5 355.5L45.5 359.5L44.5 359.5L44.5 355.5L40.5 355.5L40.5 354.5L44.5 354.5L44.5 294.5L40.5 294.5L40.5 293.5L44.5 293.5L44.5 233.5L40.5 233.5L40.5 232.5L44.5 232.5L44.5 172.5L40.5 172.5L40.5 171.5L44.5 171.5L44.5 111.5L40.5 111.5L40.5 110.5L44.5 110.5L44.5 50.5L40.5 50.5L40.5 49.5L44.5 49.5L44.5 27.5L45.4983 27.5L45.4984 354.501L376 354.501Z" fill="#A8A8A8"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M147.167 71.5L96.0835 75.5L45 67.5V159.851L95.7364 148.31L146.729 157.258L196.977 144.089L248.848 154.932L299.378 144L351 149.76V62L300.417 67.5L249.334 63.5L197.249 74.5L147.167 71.5ZM45 249.41V164.677L96.4305 154.456L147.605 163.508L197.52 150.678L249.82 161.834L300.455 150.766L351 154.608V241.848L299.158 233L248.776 244.264L197.224 235.571L146.704 243.833L95.594 236.828L45 249.41ZM45 254.438V354.5H351V246.954L300.675 238.943L249.892 250.679L197.274 241.372L147.63 249.11L96.5731 242.115L45 254.438Z" fill="#A8A8A8"/>
+</svg>

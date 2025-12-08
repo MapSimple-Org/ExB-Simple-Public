@@ -1,0 +1,22 @@
+{
+  "general": "Ogólne",
+  "parameters": "Parametry",
+  "variables": "Zmienne",
+  "name": "Nazwa",
+  "namePlaceHolder": "Wprowadź nazwę",
+  "description": "Opis",
+  "parameter": "Parametr",
+  "isPublic": "Jest publiczne",
+  "isDataset": "Jest zestawem danych",
+  "unknownPixelType": "Nieznane",
+  "outputPixelType": "Typ piksela wynikowego",
+  "u8PixelType": "8 bitów bez znaku",
+  "s8PixelType": "8 bitów ze znakiem",
+  "u16PixelType": "16 bitów ze znakiem",
+  "s16PixelType": "16 bitów ze znakiem",
+  "u32PixelType": "32 bity ze znakiem",
+  "s32PixelType": "32 bity ze znakiem",
+  "f32PixelType": "32 bity zmiennoprzecinkowa",
+  "f64PixelType": "64 bity podwójna",
+  "properties": "Właściwości"
+}

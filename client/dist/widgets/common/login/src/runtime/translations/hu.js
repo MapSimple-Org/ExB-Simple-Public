@@ -1,0 +1,1 @@
+System.register([],function(e){return{execute:function(){e({_widgetLabel:"Bejelentkez\xe9s",switchToLogin:"V\xe1lt\xe1s bejelentkez\xe9s el\u0151tti \xe1llapotra",switchToLogout:"V\xe1lt\xe1s bejelentkez\xe9s ut\xe1ni \xe1llapotra",toggleSignInPreview:"Bejelentkez\xe9si el\u0151n\xe9zet be-/kikapcsol\xe1sa",restrictedResources:"Korl\xe1tozott er\u0151forr\xe1sok"})}}});

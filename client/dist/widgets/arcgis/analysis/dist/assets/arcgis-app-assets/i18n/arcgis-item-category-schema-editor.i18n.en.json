@@ -1,0 +1,36 @@
+{
+  "modalHeader": "Configure content categories",
+  "modalGroupHeader": "Configure group categories",
+  "helpText": "Edit, delete, or reorder categories in your organization.",
+  "helpTextGroup": "Edit, delete, or reorder categories for content in this group.",
+  "helpTextDescription": "Remember that other members of your organization may have already assigned these categories to their items, and editing the schema will update those items accordingly",
+  "helpTextGroupDescription": "Remember that other members of the group may have already assigned these categories to their items, and editing the schema will update those items accordingly",
+  "warning": {
+    "deleteInUseCategory": {
+      "title": "Delete category",
+      "cta": "Delete category",
+      "message": {
+        "single": "One item is assigned to this category. Deleting the category will also remove it from this item.",
+        "multiple": "${number} items are assigned to this category. Deleting the category will also remove it from these items.",
+        "unknown": "Items assigned to this category: ${number}. Deleting the category will also remove it from these items."
+      }
+    },
+    "changeTitleInUseCategory": {
+      "title": "Update category",
+      "message": {
+        "single": "One item is assigned to this category. Updating the category will update the item to use \"${newTitle}\".",
+        "multiple": "${number} items are assigned to this category. Updating the category will update the items to use \"${newTitle}\".",
+        "unknown": "Items assigned to this category: ${number}. Updating the category will update the items to use \"${newTitle}\"."
+      },
+      "cta": "Update category"
+    }
+  },
+  "template": {
+    "templateList": {
+      "custom": {
+        "message": "Create your own categories to organize content within your organization.",
+        "messageGroup": "Create your own categories to organize content within this group."
+      }
+    }
+  }
+}

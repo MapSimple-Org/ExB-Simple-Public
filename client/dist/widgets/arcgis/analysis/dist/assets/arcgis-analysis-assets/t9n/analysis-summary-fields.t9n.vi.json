@@ -1,0 +1,17 @@
+{
+  "any": "Bất kỳ",
+  "count": "Số lượng",
+  "field": "Trường",
+  "fieldLoadingErrorText": "Không thể tải các trường.",
+  "first": "Đầu tiên",
+  "isRequired": "Thông số này là thông tin bắt buộc.",
+  "last": "Cuối cùng",
+  "max": "Tối đa",
+  "mean": "Trung bình",
+  "min": "Tối thiểu",
+  "selectAll": "Chọn tất cả",
+  "standardDeviation": "Độ lệch chuẩn",
+  "statistic": "Thống kê",
+  "statisticNotSelected": "Cần có ít nhất một loại thống kê cho mỗi trường.",
+  "sum": "Tổng"
+}

@@ -1,0 +1,13 @@
+{
+  "aboveMaximumMessage": "Girdi değer ${max}’a eşit veya küçük olmalıdır.",
+  "belowMinimumMessage": "Girdi değer ${min}’a eşit veya büyük olmalıdır.",
+  "choiceListBadInput": "Girdi değeri geçersiz bir giriş içeriyor.",
+  "defaultLabel": "Doğrusal birim",
+  "inputPlaceholderText": "Bir mesafe değeri gir...",
+  "invalidDoubleMessage": "Girdi değer çift olmalıdır.",
+  "invalidIntegerMessage": "Girdi değer tamsayı olmalıdır.",
+  "requiredInputMessage": "Bu parametre gerekli.",
+  "strictlyMaximumMessage": "Girdi değer ${max}'den küçük olmalıdır.",
+  "strictlyMinimumMessage": "Girdi değer ${min}'dan büyük olmalıdır.",
+  "unitSelect": "Birim seçme"
+}

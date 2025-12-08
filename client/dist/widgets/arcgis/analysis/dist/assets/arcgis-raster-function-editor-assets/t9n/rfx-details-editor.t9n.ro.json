@@ -1,0 +1,22 @@
+{
+  "general": "Informații generale",
+  "parameters": "Parametri",
+  "variables": "Variabile",
+  "name": "Nume",
+  "namePlaceHolder": "Introduceți numele",
+  "description": "Descriere",
+  "parameter": "Parametru",
+  "isPublic": "IsPublic",
+  "isDataset": "IsDataset",
+  "unknownPixelType": "Necunoscut",
+  "outputPixelType": "Tip pixeli de ieşire",
+  "u8PixelType": "8 Bit nesemnat",
+  "s8PixelType": "8 Bit Semnat",
+  "u16PixelType": "16 Bit nesemnat",
+  "s16PixelType": "16 Bit Semnat",
+  "u32PixelType": "32 Bit nesemnat",
+  "s32PixelType": "32 Bit Semnat",
+  "f32PixelType": "32 Bit Mobil",
+  "f64PixelType": "64 Bit Dublu",
+  "properties": "Proprietăți"
+}

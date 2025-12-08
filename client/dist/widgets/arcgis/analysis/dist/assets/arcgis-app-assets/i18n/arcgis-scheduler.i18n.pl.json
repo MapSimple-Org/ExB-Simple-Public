@@ -1,0 +1,55 @@
+{
+  "beginningOnLabel": "Rozpoczęcie:",
+  "repeatTypeLabel": "Typ powtarzania",
+  "endingOnTypeLabel": "Zakończenie:",
+  "endingOnDateLabel": "Data końcowa",
+  "endingOnCountLabel": "Liczba",
+  "endingOnCountPlaceholder": "na przykład: 1, 10, 30",
+  "dailyRepeatIntervalLabel": "Przedział powtarzania",
+  "dailyTimeLabel": "Czas",
+  "weeklyDaysOfWeekLabel": "Dzień tygodnia",
+  "weeklyTimeLabel": "Czas",
+  "monthlyDayOfMonthLabel": "Dzień miesiąca",
+  "monthlyDayOfMonthPlaceholder": "na przykład 1 - 31",
+  "monthlyRepeatIntervalLabel": "Przedział powtarzania",
+  "monthlyTimeLabel": "Czas",
+  "repeatTypeOptions": {
+    "day": "Dzień",
+    "week": "Tydzień",
+    "month": "Miesiąc"
+  },
+  "endingOnType": {
+    "never": "Nigdy",
+    "date": "Data",
+    "count": "Wł."
+  },
+  "dailyRepeatInterval": {
+    "everyDay": "Codziennie",
+    "everyOtherDay": "Co drugi dzień",
+    "everyThreeDays": "Co trzy dni",
+    "everyFourDays": "Co cztery dni",
+    "everyFiveDays": "Co pięć dni",
+    "everySixDays": "Co sześć dni",
+    "everySevenDays": "Co siedem dni",
+    "everyFourteenDays": "Co 14 dni"
+  },
+  "weekDays": {
+    "all": "Wszystkie",
+    "allWeekdays": "Wszystkie dni tygodnia",
+    "sunday": "Niedziela",
+    "monday": "Poniedziałek",
+    "tuesday": "Wtorek",
+    "wednesday": "Środa",
+    "thursday": "Czwartek",
+    "friday": "Piątek",
+    "saturday": "Sobota"
+  },
+  "monthlyRepeatInterval": {
+    "everyMonth": "Co miesiąc",
+    "everyTwoMonths": "Co dwa miesiące",
+    "everyThreeMonths": "Co trzy miesiące",
+    "everyFourMonths": "Co cztery miesiące",
+    "everyFiveMonths": "Co pięć miesięcy",
+    "everySixMonths": "Co sześć miesięcy"
+  }
+}

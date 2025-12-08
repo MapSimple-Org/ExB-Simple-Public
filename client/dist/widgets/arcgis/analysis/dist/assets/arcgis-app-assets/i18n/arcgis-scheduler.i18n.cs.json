@@ -1,0 +1,55 @@
+{
+  "beginningOnLabel": "Začátek",
+  "repeatTypeLabel": "Typ opakování",
+  "endingOnTypeLabel": "Konec",
+  "endingOnDateLabel": "Koncové datum",
+  "endingOnCountLabel": "Počet",
+  "endingOnCountPlaceholder": "například: 1, 10, 30",
+  "dailyRepeatIntervalLabel": "Opakovat interval",
+  "dailyTimeLabel": "Čas",
+  "weeklyDaysOfWeekLabel": "Den v týdnu",
+  "weeklyTimeLabel": "Čas",
+  "monthlyDayOfMonthLabel": "Den v měsíci",
+  "monthlyDayOfMonthPlaceholder": "například: 1 - 31",
+  "monthlyRepeatIntervalLabel": "Opakovat interval",
+  "monthlyTimeLabel": "Čas",
+  "repeatTypeOptions": {
+    "day": "den",
+    "week": "týden",
+    "month": "měsíc"
+  },
+  "endingOnType": {
+    "never": "Nikdy",
+    "date": "Datum",
+    "count": "Zapnuto"
+  },
+  "dailyRepeatInterval": {
+    "everyDay": "Každý den",
+    "everyOtherDay": "Každý druhý den",
+    "everyThreeDays": "Každé tři dny",
+    "everyFourDays": "Každé čtyři dny",
+    "everyFiveDays": "Každých pět dní",
+    "everySixDays": "Každých šest dní",
+    "everySevenDays": "Každých sedm dní",
+    "everyFourteenDays": "Každých čtrnáct dní"
+  },
+  "weekDays": {
+    "all": "Vše",
+    "allWeekdays": "Všechny pracovní dny",
+    "sunday": "Neděle",
+    "monday": "Pondělí",
+    "tuesday": "Úterý",
+    "wednesday": "Středa",
+    "thursday": "Čtvrtek",
+    "friday": "Pátek",
+    "saturday": "Sobota"
+  },
+  "monthlyRepeatInterval": {
+    "everyMonth": "Každý měsíc",
+    "everyTwoMonths": "Každé dva měsíce",
+    "everyThreeMonths": "Každé tři měsíce",
+    "everyFourMonths": "Každé čtyři měsíce",
+    "everyFiveMonths": "Každých pět měsíců",
+    "everySixMonths": "Každých šest měsíců"
+  }
+}

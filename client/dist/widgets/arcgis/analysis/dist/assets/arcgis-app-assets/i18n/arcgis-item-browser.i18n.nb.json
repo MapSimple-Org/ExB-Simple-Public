@@ -1,0 +1,400 @@
+{
+  "itemBrowser": {
+    "filters": "Filtre",
+    "preview": "Forhåndsvisning",
+    "selectedLayers": "Valgte lag",
+    "selectedItems": "Valgte elementer",
+    "pageRange": "${start}–${end}, totalt: ${total}",
+    "pageRangeAria": "${start}–${end}, totalt antall elementer: ${total}",
+    "pageRangeWithRecycleBin": "${start}-${end}, samlet: ${total} (Samlet størrelse: ${recycleBinSize})",
+    "pageRangeAriaWithRecycleBin": "${start}-${end}, samlet antall elementer: ${total} (Samlet størrelse: ${recycleBinSize})",
+    "foundOnPage": "Samsvarende resultater på gjeldende side: ${total}",
+    "totalSize": "Samlet størrelse: ${totalSize}",
+    "selectedMultipleWithSize": "Valg: ${num} (${totalSize})",
+    "selectedMultipleWithSizeSmall": "${num} (${totalSize})",
+    "noSelectedLayers": "Ingen lag er valgt for tiden",
+    "noSelectedItems": "Igen elementer er valgt for tiden",
+    "sharingUpdated": "Deling av ${itemTitle} oppdatert.",
+    "refineContent": "Forbedre innhold"
+  },
+  "layerTypes": {
+    "point": "Punktlag",
+    "line": "Linjelag",
+    "polygon": "Polygonlag",
+    "multipatch": "Multipatchlag",
+    "multipoint": "Multipunktlag",
+    "table": "Tabell",
+    "catalog": "Kataloglag",
+    "oriented imagery": "Orientert bildelag",
+    "parcel": "Eiendomslag",
+    "utility network": "Utility Network-lag",
+    "topology": "Topologilag",
+    "trace network": "Trace network-lag"
+  },
+  "filterIndustry": {
+    "title": "Bransje",
+    "Industry": "Bransje: ${industry}",
+    "Build a layer": "Opprett et lag",
+    "Agriculture": "Landbruk",
+    "Electric Utilities": "Elektrisitetsverk",
+    "Environment": "Miljødata",
+    "Forestry": "Skogbruk",
+    "Gas Utilities": "Gassverk",
+    "General": "Generelt",
+    "Natural Resources": "Naturressurser",
+    "Petroleum": "Petroleum",
+    "Public Safety": "Offentlig sikkerhet",
+    "Telecommunications": "Telekommunikasjon",
+    "Transportation": "Transport",
+    "Water Utilities": "Vannverk"
+  },
+  "filterItemType": {
+    "title": "Elementtype",
+    "itemType": "Type: ${itemType}",
+    "options": {
+      "maps": "Kart",
+      "maps-webmaps": "Webkart",
+      "maps-mapfiles": "Kartfiler",
+      "layers": "Lag",
+      "layers-weblayers": "Weblag",
+      "layers-weblayers-features": "Geoobjektlag",
+      "layers-weblayers-tiles": "Flislag",
+      "layers-weblayers-mapimage": "Kartbildelag",
+      "layers-weblayers-imagery": "Bildelag",
+      "layers-weblayers-scenelayers": "Scenelag",
+      "layers-weblayers-videolayers": "Videolag",
+      "layers-weblayers-tiledimagelayers": "Flisinndelte bildelag",
+      "layers-weblayers-elevationlayers": "Høydelag",
+      "layers-weblayers-feeds": "Feeder",
+      "layers-weblayers-tables": "Tabeller",
+      "layers-layerfiles": "Lagfiler",
+      "scenes": "Scener",
+      "applications": "Apper",
+      "applications-web": "Webapper",
+      "applications-dashboards": "Dashbord",
+      "applications-sites": "Nettsteder",
+      "applications-pages": "Sider",
+      "applications-geobim-projects": "GeoBIM-prosjekter",
+      "applications-geobim-apps": "GeoBIM-applikasjoner",
+      "applications-instant-apps": "Instant Apps",
+      "applications-storymap": "StoryMaps",
+      "applications-data-pipelines": "Data Pipelines",
+      "applications-experience": "Experience Builder",
+      "applications-wab": "Web AppBuilder",
+      "applications-mobile": "Mobilapper",
+      "applications-desktop": "Skrivebordsapper",
+      "developer-credentials": "Utviklerlegitimasjon",
+      "developer-credentials-oauth": "OAuth 2.0-legitimasjon",
+      "developer-credentials-api-token": "Påloggingsdetaljer for API-nøkkel",
+      "developer-credentials-api-key": "API-nøkkel (gammel)",
+      "tools": "Verktøy",
+      "tools-locators": "Lokatorer",
+      "tools-geodatabase": "Geodatabasetilgang",
+      "tools-geometric": "Geometriske operasjoner",
+      "tools-geoprocessing": "Geoprosesseringsoppgaver",
+      "tools-network": "Nettverksanalyse",
+      "tools-analytics": "Analytics",
+      "files": "Filer",
+      "files-document": "Dokumenter",
+      "files-image": "Bilder",
+      "files-pdf": "PDF-er",
+      "files-csv": "CSV-er",
+      "files-report": "Administrative rapporter",
+      "files-raster": "Rasterfunksjonmaler",
+      "notebooks": "Notatblokker",
+      "insights": "Insights",
+      "insights-workbooks": "Arbeidsbøker",
+      "insights-pages": "Rapporter",
+      "insights-models": "Modeller",
+      "insights-themes": "Temaer",
+      "data-stores": "Datalagre",
+      "knowledge-graphs": "Kunnskapsgrafer"
+    }
+  },
+  "filterCategories": {
+    "categories": "Kategorier",
+    "groupCategories": "Gruppekategorier",
+    "category": "Kategori: ${category}",
+    "uncategorized": "Ikke kategorisert",
+    "noCategoriesTitle": "Ingen kategorier ennå",
+    "noCategories": "Med kategorier kan medlemmer ordne elementer på en konsekvent måte. Kategoriene gjør det også enkelt å bla gjennom innhold i organisasjonen.",
+    "noGroupCategoriesTitle": "Ingen gruppekategorier ennå",
+    "noGroupCategories": "Med kategorier kan gruppemedlemmene ordne elementer på en konsekvent måte. Kategoriene gjør det også enkelt å bla gjennom innhold i gruppen.",
+    "setupCategories": "Angi innholdskategorier",
+    "setupGroupCategories": "Angi gruppekategorier",
+    "configureCategories": "Konfigurer kategorier"
+  },
+  "filterRegion": {
+    "regions": "Regioner",
+    "region": "Region: ${region}"
+  },
+  "filterCollaborations": {
+    "title": "Distribuerte samarbeid",
+    "label": "Distribuerte samarbeid: ${name}",
+    "loading": "Laster inn samarbeid..."
+  },
+  "filterContentStatus": {
+    "title": "Status",
+    "label": "Status: ${contentStatus}",
+    "authoritative": "Autoritativ",
+    "deprecated": "Foreldet"
+  },
+  "filterDeleteProtection": {
+    "title": "Slettebeskyttelse",
+    "label": "Slettebeskyttelse: ${deleteProtection}",
+    "enabled": "Aktivert",
+    "disabled": "Deaktivert"
+  },
+  "filterExpiration": {
+    "today": "I dag",
+    "tomorrow": "I morgen",
+    "next7": "Neste 7 dager",
+    "next30": "Neste 30 dager",
+    "custom": "Egendefinert område...",
+    "title": {
+      "expires": "Utløpsdato"
+    },
+    "expires": "Utløpsdato: ${date}"
+  },
+  "filterExtent": {
+    "label": "Innenfor kartområde",
+    "title": "Vis bare innhold innenfor kartområde"
+  },
+  "filterFolder": {
+    "folders": "Mapper",
+    "placeholder": "Filtrer mapper",
+    "clear": "Tøm søk",
+    "all": "Alt mitt innhold",
+    "allContentUser": "Alt innhold for ${username}",
+    "recycleBin": "Papirkurv",
+    "label": "Mappe: ${folder}",
+    "loading": "Laster inn mapper...",
+    "folderOptions": "Mappealternativer",
+    "editFolder": "Rediger mappe",
+    "deleteFolder": "Slett mappe",
+    "delete": "Slett",
+    "areYouSure": "Er du sikker på at du vil slette denne mappen?",
+    "areYouSureExplanation": "Mappen <strong style='font-weight: 500'>${title}</strong> blir slettet for godt. Alle elementene i mappen blir også merket for sletting. Vil du likevel slette mappen?",
+    "cancel": "Avbryt",
+    "save": "Lagre",
+    "createAFolder": "Opprett en mappe",
+    "folderName": "Mappenavn",
+    "createFolder": "Opprett mappe",
+    "error": {
+      "title": "Feil",
+      "noName": "Du må oppgi et navn på mappen din.",
+      "folderAlreadyExists": "Det finnes allerede en ${folder}-mappe. Velg et annet navn.",
+      "invalidCharacters": {
+        "single": "å_The name cannot contain this character: ${invalidCharacters}________________________________ø.",
+        "multiple": "å_The name cannot contain any of these characters: ${invalidCharacters}____________________________________ø.",
+        "unknown": "å_The name cannot contain any of these characters: ${invalidCharacters}____________________________________ø."
+      },
+      "errorCreatingFolder": "Det oppstod en feil under opprettingen av mappen ${folderName}."
+    }
+  },
+  "filterGroup": {
+    "groups": "Mine grupper",
+    "placeholder": "Filtrer grupper",
+    "all": "Innhold i alle mine grupper",
+    "label": "Gruppe: ${group}",
+    "loading": "Laster inn grupper…"
+  },
+  "filterContentType": {
+    "contentType": "Innholdstype",
+    "all": "Alt innhold i organisasjonen min",
+    "recycle": "Papirkurv"
+  },
+  "filterLocation": {
+    "location": "Posisjon",
+    "label": "Lokasjon: ${location}",
+    "findLocationText": "Finn adresse eller sted",
+    "search": "Søk etter lokasjoner",
+    "suggestions": "Forslag",
+    "noResults": "Fant ingen resultater for ${searchTerm}"
+  },
+  "filterSharing": {
+    "title": "Deler",
+    "label": "Delt: ${sharing}",
+    "owner": "Eier",
+    "shared": "Delt med grupper",
+    "private": "Ikke delt med grupper",
+    "org": "Organisasjon",
+    "public": "Alle (offentlig)"
+  },
+  "filterTags": {
+    "title": "Tagger",
+    "label": "Tagget: ${tags}",
+    "selectTags": "Velg tagger"
+  },
+  "cardThumbnail": {
+    "loading": "Laster inn bilde"
+  },
+  "card": {
+    "select": "Velg element: ${title}",
+    "lastUpdated": "Element oppdatert: ${date}",
+    "viewItemDetails": "Vis flere detaljer om ${title}",
+    "preview": "Flere detaljer",
+    "hidePreview": "Færre detaljer",
+    "closeDetails": "Lukk forhåndsvisningen",
+    "openDetails": "Forhåndsvisning",
+    "moreOptions": "Flere alternativer"
+  },
+  "cardSublayerSelect": {
+    "select": "Velg lag",
+    "selectLayers": "Velg lag",
+    "selectedSingle": "Valgt",
+    "selectedLayers": "Valgte lag: ${num}",
+    "selectedMultiple": "Valgte: ${num}",
+    "selectedName": "Valgt lag: ${name}",
+    "selectedTask": "Valgt oppgave: ${task}",
+    "errorTitle": "Feil ved tilkobling til tjenesten.",
+    "errorBody": "Kan ikke koble til tjenesten Tjenesten er enten nede eller krever autentisering.",
+    "notebookErrorBody": "Dette verktøyet ble publisert fra en notisbok. Tilgang til ArcGIS Notebooks er blokkert for din organisasjon. Kontakt administratoren din for å justere innstillingen.",
+    "retry": "Prøv på nytt",
+    "selectTask": "Velg oppgave",
+    "selectTaskFrom": "Velg en oppgave fra ${title}"
+  },
+  "cardLayersList": {
+    "hideDetails": "Skjul detaljer",
+    "showDetails": "Vis detaljer",
+    "layersAndTables": "Lag og tabeller"
+  },
+  "content": {
+    "noResults": "Finner ingen elementer som oppfyller kriteriene. Prøv å endre søkeordet eller fjerne noen filtre for å vise flere elementer.",
+    "noContent": "Ikke noe tilgjengelig innhold.",
+    "loading": "Laster inn..."
+  },
+  "copy": {
+    "copy": "Kopier",
+    "copied": "Kopiert"
+  },
+  "bucketSelect": {
+    "my": "Mitt innhold",
+    "org": "Min organisasjon",
+    "group": "Mine grupper",
+    "favorites": "Mine favoritter",
+    "living atlas": "Living Atlas",
+    "living atlas analysis": "Living Atlas-analyselag",
+    "subscription content": "Abonnementsinnhold",
+    "all": "ArcGIS Online"
+  },
+  "preview": {
+    "owner": "Eier",
+    "summary": "Sammendrag",
+    "noSummary": "Ingen sammendrag oppgitt",
+    "description": "Beskrivelse",
+    "noDescription": "Det er ikke angitt en beskrivelse",
+    "thumbnail": "Miniatyrbilde",
+    "overview": "Oversikt",
+    "details": "Detaljer",
+    "termsOfUse": "Vilkår for bruk",
+    "noTermsOfUse": "Ingen bruksvilkår angitt",
+    "itemManagedBy": "Element administrert av: ${username}",
+    "fullItemDetails": "Fullstendige elementdetaljer",
+    "layersCount": "Lag (${count})",
+    "layers": "Lag",
+    "add": "Legg til",
+    "remove": "Fjern",
+    "loading": "Laster inn...",
+    "shared": "Deler",
+    "created": "Element opprettet",
+    "updated": "Element oppdatert",
+    "fileSize": "Filstørrelse",
+    "dataUpdated": "Data oppdatert",
+    "schemaUpdated": "Skjema oppdatert",
+    "ID": "ID",
+    "URL": "URL",
+    "itemStatus": "Status",
+    "viewCount": "Vis antall",
+    "readMore": "Les mer",
+    "dashboardViews": "Dashbordvisninger",
+    "dashboardMobile": "Skrivebord, mobil",
+    "dashboardDesktop": "Skrivebord",
+    "sharing": {
+      "private": "Privat",
+      "shared": "Grupper",
+      "public": "Alle",
+      "org": "Organisasjon"
+    },
+    "matched": "Samsvarende",
+    "matchedNumber": "Samsvarende (${num})",
+    "layerError": {
+      "title": "Kan ikke vise lag",
+      "message": "Forhåndsvisning av lag støttes ikke for sikrede tjenester."
+    },
+    "noServiceMessage": "Tjenesten som er valgt, finnes ikke eller er ikke tilgjengelig.",
+    "credits": "Anerkjennelse",
+    "noCredits": "Ingen kilde anerkjent.",
+    "geometryTypeTitle": "Geometritype",
+    "layerTypeTitle": "Lagtype",
+    "fields": "Felter",
+    "noFields": "Ingen felt er konfigurert for dette laget",
+    "geometryType": {
+      "esriGeometryPoint": "Punktlag",
+      "esriGeometryPolyline": "Linjelag",
+      "esriGeometryPolygon": "Polygonlag",
+      "esriGeometryMultiPatch": "Multipatchlag",
+      "table": "Tabell"
+    },
+    "layerActions": "Laghandlinger",
+    "itemError": {
+      "title": "Feil",
+      "subscription": "Dette elementet er for tiden ikke tilgjengelig. ArcGIS Online-abonnementet som er knyttet til dette elementet, er deaktivert.",
+      "unhandled": "Det oppstod en feil ved henting av dette elementet."
+    }
+  },
+  "table": {
+    "loading": "Laster inn...",
+    "caption": "Elementresultater, kolonneoverskrifter med knapper kan sorteres.",
+    "selectAll": "Velg alle",
+    "selection": "Utvalg",
+    "headers": {
+      "title": "Tittel",
+      "modified": "Endret",
+      "created": "å_Created_______________ø",
+      "owner": "Eier",
+      "size": "Størrelse",
+      "deleted": "Slettet dato",
+      "type": "Elementtype",
+      "badges": "Elementstatus",
+      "favorite": "Favoritt",
+      "sharing": "Delingsnvivå",
+      "details": "Vis detaljer",
+      "actions": "Flere elementhandlinger",
+      "dataset": "å_Dataset_______________ø"
+    }
+  },
+  "tableRow": {
+    "deletesTomorrow": "Sletter i morgen",
+    "deletes": {
+      "single": "Sletter om ${number} dager",
+      "multiple": "Sletter om ${number} dager",
+      "unknown": "Dager til sletting: ${number}"
+    },
+    "restore": "Gjenopprett",
+    "details": "Vis detaljer",
+    "moreOptions": "Flere alternativer"
+  },
+  "search": {
+    "searchName": "Søk i ${searchName}",
+    "searchAllContent": "Søk i alt mitt innhold",
+    "searchAllUserContent": "Søk i alt ${username} sitt innhold",
+    "searchGroupsContent": "Søk i mine grupper",
+    "searchingGroupsContent": "Søker i mine grupper etter",
+    "searchFavoritesContent": "Søk i mine favoritter",
+    "searchOrganizationsContent": "Søk i min organisasjon",
+    "searchLivingAtlasContent": "Søk i Living Atlas",
+    "searchRecycleCurrentPage": "Søk i elementtitler på den gjeldende siden"
+  },
+  "find": {
+    "find": "Søk",
+    "findOnPage": "Finn på side",
+    "match": "Returnerer tekstmatcher for elementtitler bare på den gjeldende siden."
+  },
+  "view": {
+    "view": "Vis",
+    "list": "Liste",
+    "grid": "Rutenett",
+    "table": "Tabell"
+  }
+}

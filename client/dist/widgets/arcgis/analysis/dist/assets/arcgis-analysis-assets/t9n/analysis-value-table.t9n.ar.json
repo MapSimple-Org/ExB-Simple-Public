@@ -1,0 +1,7 @@
+{
+  "addEntryButtonLabel": "إضافة",
+  "maxGroupsMessage": "الحد الأقصى لعدد الإدخالات هو ${maxCount}.",
+  "minGroupsMessage": "الحد الأدنى لعدد الإدخالات هو ${minCount}.",
+  "removeEntryButtonLabel": "إزالة الإدخال",
+  "requiredMessage": "هذه المعلمة مطلوبة."
+}

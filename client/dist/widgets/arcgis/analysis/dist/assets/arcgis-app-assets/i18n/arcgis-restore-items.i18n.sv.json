@@ -1,0 +1,31 @@
+{
+  "back": "Bakåt",
+  "cancel": "Avbryt",
+  "learnMore": "Läs mer",
+  "restore": "Återställ",
+  "restoreTo": "Återställ till",
+  "restoreItem": "Återställ objekt",
+  "restoreItems": "Återställ objekt",
+  "noticeMessage": "Återställda objekt kommer att tas bort. Granska ditt innehåll innan du delar det igen.",
+  "cannotBulkRestoreXItems": "Det går inte att massåterställa fler än ${number} objekt, avmarkera några objekt.",
+  "cannotBulkRestoreMultipleOwners": "Det går inte att massåterställa objekt som tillhör olika ägare. Välj objekt från en enda ägare för att massåterställa.",
+  "toRestore": {
+    "single": "Objekt att återställa:",
+    "multiple": "Objekt att återställa:"
+  },
+  "cannotRestore": "Det går inte att återställa:",
+  "dependentItems": {
+    "single": "Det här objektet kan inte återställas eftersom det är beroende av <strong style='font-weight: 500'>${parent}</strong>. Återställ dem tillsammans.",
+    "singleUnknown": "Det här objektet kan inte återställas eftersom det är beroende av ett annat objekt i papperskorgen. Återställ dem tillsammans.",
+    "multiple": "Dessa objekt kan inte återställas eftersom de är beroende av andra objekt i papperskorgen. Återställ dem tillsammans.",
+    "multipleSameSource": "Dessa objekt kan inte återställas eftersom de är beroende av<strong style='font-weight: 500'>${parent}</strong>. Återställ dem tillsammans."
+  },
+  "pageRangeWithTotalRecycleBinSize": {
+    "en": "${start} - ${end} av ${total} (${size}) i papperskorgen",
+    "other": "${start} - ${end}, totalt: ${total} (${size}) i papperskorgen"
+  },
+  "pageRangeWithGreaterThanTotalRecycleBinSize": {
+    "en": "${start} - ${end} av ${total} (>${size}) i papperskorgen",
+    "other": "${start} - ${end}, totalt: ${total} (>${size}) i papperskorgen"
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "CCIAnalysisSettingGroupLabel": "Indeksinnstillinger",
+  "CCIAnalysisSettingGroupText": "Angi hvordan indeksen skal beregnes.",
+  "geomeanPercentileLabel": "Sammenstill rangordninger (geometrisk middelverdi for persentiler)",
+  "geomeanRawLabel": "Sammenstill råverdier (geometrisk middelverdi for råverdier)",
+  "geomeanScaledLabel": "Sammenstill skalerte verdier (geometrisk middelverdi for skalerte verdier)",
+  "indexMethodLabel": "Metode for å skalere og kombinere variabler",
+  "inputFeaturesOrTableLabel": "Inndatageoobjekter eller tabell",
+  "inputLayerGroupText": "Velg geoobjektene eller tabellen og variablene som indeksen skal opprettes med.",
+  "inputVariablesLabel": "Inndatavariabler",
+  "itemProperties": {
+    "description": "Geoobjektlag generert ved å kjøre analyseverktøyet Beregn sammensatt indeks.",
+    "snippet": "Geoobjektlag generert fra Beregn sammensatt indeks"
+  },
+  "meanPercentileLabel": "Kombiner rangordninger (middelverdi for persentiler)",
+  "meanRawLabel": "Kombiner råverdier (middelverdi for råverdier)",
+  "meanScaledLabel": "Kombiner skalerte verdier (middelverdi for skalerte verdier)",
+  "outputIndexMaxLabel": "Maksimum",
+  "outputIndexMinLabel": "Minimum",
+  "outputIndexMinMaxLabel": "Minimums- og maksimumsverdier for indeks",
+  "outputIndexReverseLabel": "Omvendte indeksverdier",
+  "reverseVariableLabel": "Omvendt retning",
+  "sumFlagsPercentileLabel": "Uthev ekstremer (antall verdier over 90-persentilen)",
+  "toolName": "Beregn sammensatt indeks",
+  "weight": "Vekt"
+}

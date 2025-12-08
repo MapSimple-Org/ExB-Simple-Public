@@ -1,0 +1,8 @@
+{
+  "selectFeature": "Selecione uma camada de feição",
+  "browseLayer": "Procurar camadas",
+  "loading": "Carregando...",
+  "errorCodes": {
+    "required": "Este parâmetro é exigido.s"
+  }
+}

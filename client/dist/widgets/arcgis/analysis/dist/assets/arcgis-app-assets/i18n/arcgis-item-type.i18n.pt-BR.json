@@ -1,0 +1,27 @@
+{
+  "hosted": "hospedado",
+  "hostedView": "hospedado, visualização",
+  "hostedPhotos": "hospedado, fotos",
+  "hostedCollection": "hospedado, coleção",
+  "hostedMultidimensional": "hospedado, multidimensional",
+  "hostedCollectionMultidimensional": "hospedado, coleção, multidimensional",
+  "collectionMultidimensional": "coleção, multidimensional",
+  "multidimensional": "multidimensional",
+  "collection": "coleção",
+  "photoLocations": "fotos",
+  "locatorView": "visualização",
+  "utilityNetwork": "rede de utilitário",
+  "Integrated Mesh": "Malha integrada",
+  "3D Object": "Objeto 3D",
+  "Point": "ponto",
+  "Point Cloud": "nuvem de pontos",
+  "Building Scene Layer": "camada de cena de edifícios",
+  "Voxel Scene Layer": "camada de cena do voxel",
+  "dataStore": {
+    "bigdata": "compartilhamento de arquivo big data",
+    "cloud": "nuvem",
+    "cloudStorage": "armazenamento da nuvem",
+    "database": "banco de dados",
+    "folder": "pasta"
+  }
+}

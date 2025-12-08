@@ -1,0 +1,10 @@
+{
+  "forceFlowLabel": "Força que les cel·les de vores flueixin enfora",
+  "inputLayersGroupText": "Trieu el ràster de superfície d'entrada i, si voleu, les dades de depressió i el ràster de pes.",
+  "itemProperties": {
+    "description": "Sortida generada en executar l'eina Deriva el curs d'aigua com a línia.",
+    "snippet": "Sortida generada des de Deriva el curs d'aigua com a ràster"
+  },
+  "outputStreamRasterLabel": "Nom del ràster de sortida del curs d'aigua",
+  "streamSettingsGroupText": "Especifiqueu el llindar d'acumulació, el mètode de designació del curs d'aigua i com es gestiona el flux a la vora del ràster de superfície d'entrada."
+}

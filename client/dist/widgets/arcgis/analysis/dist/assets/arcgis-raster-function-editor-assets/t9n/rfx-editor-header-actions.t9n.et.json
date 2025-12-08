@@ -1,0 +1,11 @@
+{
+  "newTemplate": "Loo uus mall",
+  "openTemplate": "Ava mall",
+  "addTemplate": "Lisa mall",
+  "addFunction": "Lisa rasterfunktsioonid",
+  "addConstant": "Lisa konstant",
+  "addRaster": "Lisa rastri muutuja",
+  "expand": "Laienda",
+  "editTemplateProperties": "Muuda malli atribuute",
+  "viewTemplateProperties": "Vaata malli atribuute"
+}

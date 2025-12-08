@@ -1,0 +1,16 @@
+{
+  "updateData": "更新資料",
+  "cancel": "取消",
+  "editStyle": "以您電腦的更新版本取代圖層的樣式檔。",
+  "updatePackages": "以您電腦的更新版本取代 ${type}。 上傳的檔案必須與 ${hostedLayerName} 同名。",
+  "uploadStaticFiles": "正在上傳的檔案必須與原始檔案 ${fileName} 的名稱相同",
+  "sameFileNameDescription": "正在上傳的檔案必須與原始檔案 ${fileName} 具有相同的名稱和檔案名稱",
+  "updating": "正在更新...",
+  "error": "錯誤",
+  "errors": {
+    "sameFileName": "要更新此項目，您必須上傳名為 ${fileName} 的檔案。",
+    "invalidStyleFileExtension": "副檔名無效。 上傳的樣式必須有 .json 副檔名。",
+    "errorWhileUpload": "上傳項目時發生錯誤。",
+    "errorUpdate": "覆寫項目時發生錯誤。"
+  }
+}

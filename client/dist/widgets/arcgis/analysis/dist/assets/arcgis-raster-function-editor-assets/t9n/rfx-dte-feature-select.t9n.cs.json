@@ -1,0 +1,8 @@
+{
+  "selectFeature": "Vybrat vrstvu prvků",
+  "browseLayer": "Procházet vrstvy",
+  "loading": "Nahrávání…",
+  "errorCodes": {
+    "required": "Tento parametr je povinný."
+  }
+}

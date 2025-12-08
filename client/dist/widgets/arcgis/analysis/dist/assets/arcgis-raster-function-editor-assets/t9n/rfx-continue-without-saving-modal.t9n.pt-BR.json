@@ -1,0 +1,6 @@
+{
+  "header": "Recomeçar sem economizar?",
+  "content": "Você tem alterações não salvas no '${rftTitle}'. Se você recomeçar com um novo modelo, essas alterações serão perdidas.",
+  "cancel": "Cancelar",
+  "continue": "Continuar"
+}

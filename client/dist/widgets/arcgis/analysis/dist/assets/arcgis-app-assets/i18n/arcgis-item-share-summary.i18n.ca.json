@@ -1,0 +1,17 @@
+{
+  "sharing": "Ús compartit",
+  "private": "Propietari",
+  "shared": "Propietari i compartit amb grups",
+  "org": "Organització",
+  "public": "Tothom (públic)",
+  "privateGroups": "Propietari",
+  "sharedGroups": "Propietari + grups (${num})",
+  "orgGroups": "Organització + grups (${num})",
+  "publicGroups": "Tothom (públic) + grups (${num})",
+  "groups": "Grups (${num})",
+  "updateSharing": "Nivell d'ús compartit: ${level}, actualitza l'ús compartit",
+  "viewableBy": "Visible per a: ${level}",
+  "everyone": "Tothom (públic)",
+  "organization": "Organització",
+  "groupMembers": "Membres del grup"
+}

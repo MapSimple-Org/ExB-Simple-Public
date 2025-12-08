@@ -1,0 +1,23 @@
+{
+  "CPU": "CPU",
+  "GPU": "GPU",
+  "asSpecified": "Conform specificațiilor",
+  "automatic": "Automat",
+  "bilinear": "Interpolare biliniară (pentru date continue)",
+  "cellSize": "Dimensiune celulă",
+  "cubic": "Convoluție cubică (pentru date continue)",
+  "default": "Implicit",
+  "fromLayer": "Din strat tematic",
+  "mask": "Mască",
+  "maxOf": "Număr maxim de intrări",
+  "minOf": "Număr minim de intrări",
+  "nearest": "Cel mai apropiat vecin (pentru date discrete)",
+  "parallelProcessingFactor": "Factor de procesare paralelă",
+  "parallelProcessingFactorPlaceholderText": "Introduceți un număr sau un procent...",
+  "processorType": "Tipul de procesor",
+  "recycleProcessingWorkers": "Interval de reciclare a lucrătorilor de procesare",
+  "resamplingMethod": "Metodă de re-prelevare de eșantioane",
+  "retryOnFailures": "Număr de încercări repetate pe eșecuri",
+  "selectCellSize": "Selectare dimensiune celulă...",
+  "snapRaster": "Fixare raster"
+}

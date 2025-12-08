@@ -1,0 +1,31 @@
+{
+  "back": "Retour",
+  "cancel": "Annuler",
+  "learnMore": "En savoir plus",
+  "restore": "Restaurer",
+  "restoreTo": "Restaurer dans",
+  "restoreItem": "Restaurer l’élément",
+  "restoreItems": "Restaurer les éléments",
+  "noticeMessage": "Le partage des éléments restaurés sera annulé. Examinez les contenus avant de les partager à nouveau.",
+  "cannotBulkRestoreXItems": "Il n’est pas possible de restaurer en bloc plus de ${number} éléments. Désélectionnez-en quelques-uns.",
+  "cannotBulkRestoreMultipleOwners": "Il n’est pas possible de restaurer en bloc des éléments appartenant à des propriétaires différents. Sélectionnez les éléments d’un seul propriétaire pour la restauration en bloc.",
+  "toRestore": {
+    "single": "Élément à restaurer :",
+    "multiple": "Éléments à restaurer :"
+  },
+  "cannotRestore": "Impossible de restaurer :",
+  "dependentItems": {
+    "single": "Cet élément ne peut pas être restauré car il dépend de <strong style='font-weight: 500'>${parent}</strong>. Restaurez ces deux éléments ensemble.",
+    "singleUnknown": "Cet élément ne peut pas être restauré car il dépend d’un autre élément qui se trouve dans la corbeille. Restaurez ces deux éléments ensemble.",
+    "multiple": "Ces éléments ne peuvent pas être restaurés car ils dépendent d’autres éléments qui se trouvent dans la corbeille. Restaurez-les ensemble.",
+    "multipleSameSource": "Ces éléments ne peuvent pas être restaurés car ils dépendent de <strong style='font-weight: 500'>${parent}</strong>. Restaurez ces éléments ensemble."
+  },
+  "pageRangeWithTotalRecycleBinSize": {
+    "en": "${start}-${end} sur ${total} (${size}) dans la corbeille",
+    "other": "${start}-${end}, total : ${total} (${size}) dans la corbeille"
+  },
+  "pageRangeWithGreaterThanTotalRecycleBinSize": {
+    "en": "${start}-${end} sur ${total} (> ${size}) dans la corbeille",
+    "other": "${start}-${end}, total : ${total} (> ${size}) dans la corbeille"
+  }
+}

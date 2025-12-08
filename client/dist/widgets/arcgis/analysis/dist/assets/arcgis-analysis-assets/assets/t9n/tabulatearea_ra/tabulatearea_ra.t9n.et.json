@@ -1,0 +1,12 @@
+{
+  "classField": "Klassi väärtus",
+  "classesAsRowsLabel": "Klassid ridadena väljundtabelis",
+  "inputClassRasterOrFeatures": "Sisendklassi raster või objektid",
+  "inputLayerGroupText": "Valige sisendtsooni ja -klassi kiht, et arvutada kahe andmestiku vahelised risttabelitega alad.",
+  "itemProperties": {
+    "description": "Tabuleerimisala analüüsitööriista käitamise kaudu loodud väljund.",
+    "snippet": "Tabuleerimisala kaudu loodud väljundtabel"
+  },
+  "tabulateAreaSettingsGroupLabel": "Tabuleerimisala seaded",
+  "tabulateAreaSettingsGroupText": "Valige, kuidas väljundtabelis klasse käsitleda. Määrake arvutamiseks lahtri suurus. "
+}

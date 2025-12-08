@@ -1,0 +1,158 @@
+{
+  "deleteItem": "Slett element",
+  "deleteItems": "Slett elementer",
+  "deleteFolder": "Slett mappe",
+  "recycleBin": "Papirkurv",
+  "delete": "Slett",
+  "permanentlyDelete": "Slett permanent",
+  "next": "Neste",
+  "back": "Tilbake",
+  "cancel": "Avbryt",
+  "item": "element",
+  "items": "elementer",
+  "cantDelete": "Følgende elementer kan ikke slettes fordi de er beskyttet mot sletting eller har avhengige elementer.",
+  "proceed": "Fortsette sletting av de gjenværende elementene?",
+  "showMore": "Vis mer",
+  "showLess": "Vis mindre",
+  "deletePermanently": "Slett permanent (kan ikke angres)",
+  "learnMore": "Mer informasjon",
+  "summary": {
+    "select": "Velg",
+    "deselect": "Fjern valg",
+    "selectedItems": "Valgte elementer:",
+    "additionalDependentItems": "ytterligere avhengige elementer:",
+    "permanentlyDelete": "Slett permanent:",
+    "permanentDelete": {
+      "notSupported": {
+        "single": "Dette elementet støttes ikke av papirkurven.",
+        "multiple": "Papirkurven støtter ikke disse elementene."
+      },
+      "unsynchronized": "Usynkroniserte redigeringer av geoobjektlag i en distribuert samarbeidsgruppe vil gå tapt.",
+      "notSupportedAndUnsynchronized": "Enkelte elementtyper støttes ikke. Usynkroniserte redigeringer av geoobjektlag i en distribuert samarbeidsgruppe vil gå tapt.",
+      "group": {
+        "notSupported": "Ikke støttet",
+        "distributedCollaboration": "Del av distribuert samarbeid"
+      }
+    },
+    "canBeRecovered": {
+      "single": "Dette elementet blir slettet permanent etter ${days} dager.",
+      "multiple": "Disse elementene blir slettet permanent etter ${days} dager.",
+      "unknown": "Disse elementene blir slettet permanent etter ${days} dager."
+    },
+    "includesDependentItems": "Ytterligere avhengige elementer:",
+    "willBeRecycled": "Send til papirkurven:",
+    "cannotDelete": "Kan ikke slette:",
+    "deleteDiscouraged": "Slett frarådet:",
+    "hasDependentItems": "Har avhengige elementer:",
+    "someActionsMayNoLongerWork": {
+      "single": "Hvis du sender dette elementet til papirkurven, kan det være at handlinger som krever tilgang til kildeelementet ikke lenger fungerer som forventet.",
+      "multiple": "Hvis du sender disse elementene til papirkurven, kan det være at handlinger som krever tilgang til kildeelementet ikke lenger fungerer som forventet."
+    },
+    "deletePermanently": "Slett permanent: ${count} (kan ikke angres)",
+    "deleteAllPermanently": "Slett alle elementer permanent: ${count} (kan ikke angres)",
+    "deleteXPermanently": "Slett ${subset} av ${total} permanent (kan ikke angres)",
+    "unprotectedGroup": {
+      "deleteDiscouraged": {
+        "message": "Hvis du sletter dette elementet, kan det være at handlinger som krever tilgang til kildeelementet ikke lenger fungerer som forventet. Er du sikker på at du vil slette elementet?",
+        "learnMore": "Få mer informasjon om hvordan du sletter kildeelementer"
+      }
+    },
+    "protectedGroup": {
+      "deleteProtected": "Slett beskyttet",
+      "deleteProtectedDescription": "Elementer som er beskyttet mot sletting, kan ikke slettes.",
+      "hasDependentItems": "Har avhengige elementer",
+      "dependentItems": {
+        "single": "Avhengig element:",
+        "multiple": "Avhengige elementer:"
+      },
+      "compositeDelete": "Dette elementet er avhengig av:",
+      "compositeDeleteDescription": "Avhengigee elementer i en sammensatt relasjon kan ikke slettes uten deres tilknyttede kildeelement.",
+      "hasDependentItemsDescription": {
+        "singleOneDependentItem": "Dette elementet har et avhengig element. De må slettes sammen.",
+        "singleMultipleDependentItems": "Dette elementet har avhengige elementer. De må slettes sammen.",
+        "multiple": "Disse elementene har andre elementer som er avengige av dem. De må slettes sammen."
+      },
+      "protectedAndDependentDescription": "Elementer som er beskyttet mot sletting eller har avhengige elementer, kan ikke slettes.",
+      "deleteDiscouraged": "Slett frarådet",
+      "deleteDiscouragedDescription": {
+        "single": "Hvis dette elementet slettes, kan avhengige elemeneter miste noe funksjonalitet. Du kan slette dette elementet fra elementdetaljer-siden.",
+        "multiple": "Hvis disse elementene slettes, kan avhengige elemeneter miste noe funksjonalitet. Du kan slette disse elementene individuelt fra innstillingsfanen på elementets detaljside."
+      }
+    }
+  },
+  "willBePermanentlyDeleted": {
+    "single": "Elementet blir permanent slettet fordi det ikke støttes av papirkurven.",
+    "multiple": "Disse elementene blir slettet permanent fordi de ikke støttes av papirkurven.",
+    "unknown": "Disse elementene blir slettet permanent fordi de ikke støttes av papirkurven."
+  },
+  "willBePermanentlyDeletedCollaboration": {
+    "single": "Det valgte elementet tilhører en distribuert samarbeidsgruppe og kan ikke sendes til papirkurven. Det blir slettet permanent.",
+    "multiple": "De valgte elementene tilhører en distribuert samarbeidsgruppe og kan ikke sendes til papirkurven. De blir slettet permanent.",
+    "unknown": "De valgte elementene tilhører en distribuert samarbeidsgruppe og kan ikke sendes til papirkurven. De blir slettet permanent."
+  },
+  "areYouSure": {
+    "single": "Er du sikker på at du vil slette dette elementet?",
+    "multiple": "Er du sikker på at du vil slette disse elementene?",
+    "unknown": "Er du sikker på at du vil slette disse elementene?"
+  },
+  "areYouSureRecycle": {
+    "single": "Dette elementet blir værende i papirkurven i ${days} dager før det blir slettet permanent.",
+    "multiple": "Disse elementene blir værende i papirkurven i ${days} dager før de blir slettet permanent.",
+    "unknown": "Disse elementene blir værende i papirkurven i ${days} dager før de blir slettet permanent."
+  },
+  "areYouSurePermanent": {
+    "single": "Er du sikker på at du vil slette dette elementet permanent? Dette elementet kan ikke gjenopprettet etter at det er blitt slettet permanent.",
+    "multiple": "Er du sikker på at du vil slette disse elementene permanent? Disse elementene kan ikke gjenopprettet etter at de er blitt slettet permanent.",
+    "unknown": "Er du sikker på at du vil slette disse elementene permanent? Disse elementene kan ikke gjenopprettet etter at de er blitt slettet permanent."
+  },
+  "deletes": {
+    "single": "Sletter om ${days} dager",
+    "multiple": "Sletter om ${days} dager",
+    "unknown": "Dager til sletting: ${days}"
+  },
+  "deleteOverride": {
+    "single": "Er du sikker på at du vil slette dette elementet permanent i stedet? Dette elementet kan ikke gjenopprettet etter at det er blitt slettet permanent.",
+    "multiple": "Er du sikker på at du vil slette disse elementene permanent i stedet? Disse elementene kan ikke gjenopprettet etter at de er blitt slettet permanent."
+  },
+  "restore": {
+    "restore": "Gjenopprett",
+    "restoreTo": "Gjenopprett til",
+    "restoreItem": "Gjenopprett element",
+    "restoreItems": "Gjenopprett elementer",
+    "noticeMessage": "Gjenopprettede elementer deles ikke lenger. Gjennomgå innholdet ditt før du deler det igjen.",
+    "cannotBulkRestoreXItems": "Kan ikke gjenopprette flere enn ${number} på en gang; fjern valget av noen elementer.",
+    "cannotBulkRestoreMultipleOwners": "Kan ikke gjenopprette flere elementer som tilhører ulike eiere på en gang. Velg elementer fra én enkelt eier å gjenopprette på en gang.",
+    "toRestore": {
+      "single": "Element å gjenopprette:",
+      "multiple": "Elementer å gjenopprette:"
+    },
+    "cannotRestore": "Kan ikke gjenopprette:",
+    "dependentItems": {
+      "single": "Dette elementet kan ikke gjenopprettes fordi det er avhengig av <b>${parent}</b>. Gjenopprett dem sammen.",
+      "multiple": "Disse elementene kan ikke gjenopprettes fordi de er avhengige av andre elementer i papirkurven. Gjenopprett dem sammen: "
+    }
+  },
+  "onboarding": {
+    "checkItOut": "Må du gjenopprette et element som ble slettet ved en feiltakelse? Sjekk den nye papirkurven!",
+    "takeALook": "Ta en kikk på den nye papirkurven!",
+    "learnMore": "Få mer informasjon om hvordan du gjenoppretter slettede elementer",
+    "heldInRecycleBin": "Elementer i papirkurven blir slettet permanent etter ${days} dager.",
+    "goToUserRecycleBin": "Gå til ${linkStart}papirkurven${linkEnd} din for å gjenopprette eller slette elementer permanent.",
+    "goToOrgRecycleBin": "Gå til din ${linkStart}organisasjons papirkurv${linkEnd} for å gjenopprette eller slette elementer permanent. Innhold i papirkurvel fortsetter å bruke credits."
+  },
+  "pageRangeWithTotalRecycleBinSize": {
+    "en": "${start} - ${end} av ${total} (${size}) i papirkurven",
+    "other": "${start} - ${end}, totalt: ${total} (${size}) i papirkurven"
+  },
+  "pageRangeWithGreaterThanTotalRecycleBinSize": {
+    "en": "${start} - ${end} av ${total} (>${size}) i papirkurven",
+    "other": "${start} - ${end}, totalt: ${total} (>${size}) i papirkurven"
+  },
+  "compositeDeleteDisclaimer": {
+    "oneToOne": "<strong>${item}</strong> har avhengige elementer <strong>${dependentItem}</strong> som må slettes sammen med det.",
+    "oneToMany": "<strong>${item}</strong> har avhengige elementer som må slettes sammen med det.",
+    "manyToMany": "Enkelte valgte elementer har avhengige elementer som må slettes sammen med dem.",
+    "additional": "Ytterligere elementer:",
+    "dependentOn": "Avhengig av"
+  }
+}

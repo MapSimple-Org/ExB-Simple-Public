@@ -1,0 +1,13 @@
+{
+  "addField": "Mező hozzáadása",
+  "deselectAll": "Összes kijelölésének megszüntetése",
+  "done": "Kész",
+  "noFieldsAvailable": "${layerName} nem tartalmaz olyan mezőt, amely megfelel az adattípusra vonatkozó követelményeknek. A folytatáshoz válasszon másfajta réteget.",
+  "noInputSelected": {
+    "withLayerInputLabel": "Nincs kiválasztva bemeneti réteg. A folytatáshoz válasszon réteget ebben: ${layerInputLabel}.",
+    "withoutLayerInputLabel": "Nincs kiválasztva bemeneti réteg. A folytatáshoz válasszon bemeneti réteget."
+  },
+  "noSearchResults": "A rendszer nem talált egyező mezőket.",
+  "selectAll": "Összes kiválasztása",
+  "summaryFieldsPopover": "Összegző mezők"
+}

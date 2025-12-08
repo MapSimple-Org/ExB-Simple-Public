@@ -1,0 +1,21 @@
+{
+  "folder": "Priečinok",
+  "folders": "Priečinky",
+  "searchFolders": "Vyhľadať priečinky",
+  "enterFolder": "Zadať názov priečinka",
+  "createNewFolder": "Vytvoriť nový priečinok",
+  "noFoldersFoundCreate": "Nenašli sa žiadne priečinky s týmto názvom. Vytvoriť '${folder}'?",
+  "noFoldersFound": "Nenašli sa žiadne priečinky s týmto názvom.",
+  "create": "Vytvoriť '${folder}'?",
+  "loading": "Načítavajú sa priečinky",
+  "error": {
+    "noName": "Musíte zadať názov priečinka.",
+    "folderAlreadyExists": "Priečinok '${folder}' už existuje. Vyberte iný názov.",
+    "title": "Chyba",
+    "invalidCharacters": {
+      "single": "Názov nesmie obsahovať tento znak: ${invalidCharacters}.",
+      "multiple": "Názov nesmie obsahovať žiadny z týchto znakov: ${invalidCharacters}.",
+      "unknown": "Názov nesmie obsahovať žiadny z týchto znakov: ${invalidCharacters}."
+    }
+  }
+}

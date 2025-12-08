@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html dir="rtl">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>تحدد أداة مجال الرؤية الجيوديسية مواقع سطح البيانات النقطية المرئية لمواقع مراقب الإدخال.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputElevationSurface">
+        <div>
+            <p>البيانات النقطية للارتفاع التي سيتم حساب مجال الرؤية على أساسها.
+            </p>
+        </div>
+    </div>
+    <div id="inputObserverFeatures">
+        <div>
+            <p>مواقع المراقب التي سيتم حساب مجال الرؤية لها.
+            </p>
+        </div>
+    </div>
+    <div id="optimizeFor">
+        <div>
+            <p>تحسّن حساب مجال الرؤية بناءً على السرعة أو الدقة.
+            </p>
+        </div>
+    </div>
+    <div id="verticalError">
+        <div>
+            <p>مقدار عدم اليقين في قيم الارتفاع  <b>لسطح ارتفاع الإدخال</b>.
+            </p>
+        </div>
+    </div>
+    <div id="refractivityCoefficient">
+        <div>
+            <p>معامل انكسار الضوء المرئي في الهواء.
+            </p>
+        </div>
+    </div>
+    <div id="maximumViewingDistanceField">
+        <div>
+            <p>الحد الأقصى لمسافة العرض لحساب مجال الرؤية.
+            </p>
+            <p>يمكن تحديد المسافة بواسطة القيمة والوحدة الخاصة بها، أو من حقل في  <b>نقطة مراقب الإدخال أو قيمة أو معالم الخط</b>.
+            </p>
+        </div>
+    </div>
+    <div id="minimumViewingDistanceField">
+        <div>
+            <p>الحد الأدنى لمسافة العرض لحساب مجال الرؤية.
+            </p>
+            <p>يمكن تحديد المسافة بواسطة القيمة والوحدة الخاصة بها، أو من حقل في  <b>نقطة مراقب الإدخال أو قيمة أو معالم الخط</b>.
+            </p>
+        </div>
+    </div>
+    <div id="viewingDistanceIs3D">
+        <div>
+            <p>يُحدد ما إذا كانت أقصى وأدنى مسافات العرض ستُقاس في المسافة ثلاثية الأبعاد أم ثنائية الأبعاد.
+            </p>
+            <p>إذا لم يتم التحديد، فستُعامل مسافات العرض كمسافات إقليديسية ثنائية الأبعاد. إذا تم التحديد، فستُعامل مسافات العرض كمسافات ثلاثية الأبعاد.
+            </p>
+        </div>
+    </div>
+    <div id="observersElevationField">
+        <div>
+            <p>ارتفاع السطح لمواقع المراقب.
+            </p>
+            <p>يمكن تحديد الارتفاع من خلال القيمة والوحدة الخاصة بها أو من حقل في  <b>نقطة مراقب الإدخال أو قيمة معالم الخط</b>.
+            </p>
+        </div>
+    </div>
+    <div id="observersHeightField">
+        <div>
+            <p>ارتفاع المراقبين عن سطح الأرض.
+            </p>
+            <p>يمكن تحديد الارتفاع من خلال القيمة والوحدات الخاصة بها، أو من حقل في  <b>نقطة مراقب الإدخال أو قيمة معالم الخط</b>.
+            </p>
+        </div>
+    </div>
+    <div id="targetHeightField">
+        <div>
+            <p>ارتفاع الأهداف على الأرض.
+            </p>
+            <p>يمكن تحديد الارتفاع من خلال القيمة والوحدات الخاصة بها، أو من حقل في  <b>نقطة مراقب الإدخال أو قيمة معالم الخط</b>.
+            </p>
+        </div>
+    </div>
+    <div id="horizontalStartAngle">
+        <div>
+            <p>زاوية البداية لنطاق المسح الأفقي.
+            </p>
+            <p>يمكن تحديد الزاوية بقيمة من 0 إلى 360 أو من حقل في  <b>نقطة مراقب الإدخال أو قيمة معالم الخط</b>.
+            </p>
+        </div>
+    </div>
+    <div id="horizontalEndAngle">
+        <div>
+            <p>زاوية نهاية نطاق المسح الأفقي.
+            </p>
+            <p>يمكن تحديد الزاوية بقيمة من 0 إلى 360 أو من حقل في  <b>نقطة مراقب الإدخال أو قيمة معالم الخط</b>.
+            </p>
+        </div>
+    </div>
+    <div id="verticalUpperAngle">
+        <div>
+            <p>حد الزاوية الرأسية العلوية للمسح نسبة إلى المستوى الأفقي.
+            </p>
+            <p>يمكن تحديد الزاوية بقيمة من -90 إلى 90 أو من حقل في  <b>نقطة مراقب الإدخال أو قيمة معالم الخط</b>.
+            </p>
+        </div>
+    </div>
+    <div id="verticalLowerAngle">
+        <div>
+            <p>حد الزاوية الرأسية السفلية للمسح نسبة إلى المستوى الأفقي.
+            </p>
+            <p>يمكن تحديد الزاوية بقيمة من -90 إلى 90 أو من حقل في  <b>نقطة مراقب الإدخال أو قيمة معالم الخط</b>.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>اسم طبقة البيانات النقطية لمجال الرؤية التي سيتم إنشاؤها وإضافتها إلى الخريطة. تحتوي هذه الطبقة على المناطق المرئية التي يمكن للمراقبين الرؤية منها، وتمثل قيم الخلية عدد المراقبين الذين يمكنهم عرض الخلايا.
+            </p>
+        </div>
+    </div>
+    <div id="aboveGroundLevelOutputName">
+        <div>
+            <p>اسم طبقة البيانات النقطية فوق مستوى سطح الأرض (AGL) التي سيتم إنشاؤها وإضافتها إلى الخريطة.
+            </p>
+        </div>
+    </div>
+    <div id="resultType">
+        <div>
+            <p>نوع المخرجات التي سيتم إنشاؤها. يمكن أن تكون المخرجات عبارة عن طبقة صور متجانبة أو طبقة صور ديناميكية.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>اسم المجلد الموجود في  <b>المحتوى الخاص بي</b> الذي سيتم حفظ النتيجة فيه.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

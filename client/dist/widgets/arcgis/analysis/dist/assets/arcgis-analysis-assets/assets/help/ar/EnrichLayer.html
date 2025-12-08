@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html dir="rtl">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>تحسن أداة &quot;طبقة التعزيز&quot; المعالم المدخلة باستخدام البيانات الديموغرافية والبيانات الأفقية.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputLayer">
+        <div>
+            <p>المعالم النقطية أو الخطية أو معالم المضلع المراد تعزيزها باستخدام بيانات إضافية.
+            </p>
+            <p class="toolPaneOnly">يعتمد عدد المعالم على عوامل إضافية مثل معايير التصفية ومدى التحليل.
+            </p>
+        </div>
+    </div>
+    <div id="analysisVariables">
+        <div>
+            <p>المتغيرات المراد إضافتها في صورة بيانات جدولية إلى المعالم المدخلة.
+            </p>
+        </div>
+    </div>
+    <div id="bufferType">
+        <div>
+            
+            <p class="toolPaneOnly">الطريقة التي ستُستخدم لإنشاء المناطق المحيطة بنقطة الإدخال أو معالم الخط. يمكن أن تكون الطريقة إما المسافة على طول الخط المستقيم أو وضع التنقل. سيتم تعزيز المنطقة المحيطة بكل معلم بالكامل.
+            </p> 
+            <p class="modelBuilderOnly">الطريقة التي ستُستخدم لإنشاء المناطق المحيطة بنقطة الإدخال أو معالم الخط. في الوقت الحالي، تعد مسافة الخط المستقيم هي الطريقة الوحيدة المدعومة للنماذج. سيتم تعزيز المنطقة المحيطة بكل معلم بالكامل.
+            </p>
+        </div>
+    </div>
+    <div id="distance">
+        <div>
+            <p>قيمة عددية تحدد المسافة أو الوقت الذي ستمتد فيه المنطقة المحيطة بكل معلم إدخال.
+            </p>
+        </div>
+    </div>
+    <div id="units">
+        <div>
+            <p>الوحدات المراد استخدامها لتحديد المسافة أو الزمن الذي ستمتد فيه المنطقة المعززة حول كل معلم مدخل.
+            </p>
+        </div>
+    </div>
+    <div id="returnBoundaries">
+        <div>
+            <p>تحدد ما إذا كانت طبقة الإخراج ستتضمن معالم مضلع محدد بواسطة إعدادات  <b>مناطق التعزيز</b> (محددة) أو المعالم المدخلة (غير محددة).
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>اسم الطبقة التي سيتم إنشاؤها وإضافتها إلى الخريطة.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>اسم المجلد الموجود في  <b>المحتوى الخاص بي</b> الذي سيتم حفظ النتيجة فيه.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

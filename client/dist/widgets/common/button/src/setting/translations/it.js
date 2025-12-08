@@ -1,0 +1,1 @@
+System.register([],function(e){return{execute:function(){e({_widgetLabel:"Pulsante",dynamicStyleExpressionsLabel:"Utilizza il pulsante Contenuto del testo"})}}});

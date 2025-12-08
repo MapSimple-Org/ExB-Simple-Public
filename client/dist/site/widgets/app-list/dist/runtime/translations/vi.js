@@ -1,0 +1,1 @@
+System.register([],function(e){return{execute:function(){e({_widgetLabel:"Danh s\xe1ch \u1ee8ng d\u1ee5ng"})}}});

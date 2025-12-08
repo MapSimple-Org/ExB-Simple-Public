@@ -1,0 +1,25 @@
+export declare const IDS: {
+    content: string;
+    toggle: string;
+};
+export declare const CSS: {
+    chevronIcon: string;
+    content: string;
+    iconStart: string;
+    iconEnd: string;
+    invalid: string;
+    sectionHeaderText: string;
+    statusIcon: string;
+    switch: string;
+    toggle: string;
+    toggleContainer: string;
+    toggleSwitchContent: string;
+    toggleSwitchText: string;
+    valid: string;
+};
+export declare const ICONS: {
+    readonly menuExpanded: "chevron-up";
+    readonly menuCollapsed: "chevron-down";
+    readonly valid: "check-circle";
+    readonly invalid: "exclamation-mark-triangle";
+};

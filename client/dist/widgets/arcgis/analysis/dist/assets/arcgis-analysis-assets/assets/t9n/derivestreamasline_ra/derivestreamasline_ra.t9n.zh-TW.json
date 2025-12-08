@@ -1,0 +1,11 @@
+{
+  "all": "全部",
+  "inputLayersGroupText": "選擇輸入表面點陣，以及可選的窪地資料和權數點陣。",
+  "itemProperties": {
+    "description": "執行「衍生串流作為點陣」工具所產生的輸出。",
+    "snippet": "「衍生串流作為點陣」所產生的輸出"
+  },
+  "outputStreamFeaturesLabel": "輸出串流圖徵名稱",
+  "simplifyLabel": "簡化圖徽",
+  "streamSettingsGroupText": "指定累積閾值、串流指定方法，以及是否將輸出串流線條平滑為簡單形狀。"
+}

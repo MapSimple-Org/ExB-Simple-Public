@@ -1,0 +1,14 @@
+{
+  "outputRaster": "OutputRaster",
+  "rfxVariable": "RasterFunctionVariable",
+  "selectLayer": "Pasirinkti sluoksnį",
+  "allowScalar": "Pasirinkite sluoksnį arba įveskite konstantą",
+  "browseLayer": "Naršyti sluoksnius",
+  "loading": "Įkeliama...",
+  "layerMissing": "Vienas ar keli žemėlapio vaizdų sluoksniai čia nepateikti, nes neįjungta analizės paslaugos ypatybė.",
+  "layerFailedToLoad": "Sluoksnio įkelti nepavyko.",
+  "learnMore": "Sužinokite daugiau",
+  "errorCodes": {
+    "required": "Šis parametras yra būtinas."
+  }
+}

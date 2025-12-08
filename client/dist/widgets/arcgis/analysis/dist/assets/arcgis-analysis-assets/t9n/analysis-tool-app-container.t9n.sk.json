@@ -1,0 +1,21 @@
+{
+  "backLabel": "Späť",
+  "cannotReopenTool": "Nástroj nebolo možné znovu otvoriť. Parametre nástroja boli obnovené na predvolené hodnoty.",
+  "cannotReopenWebTool": "Nie je možné otvoriť webový nástroj. <calcite-link target='_blank' href='${ docLink }'>Zistiť viac</calcite-link>",
+  "creditThresholdModal": {
+    "cancelRun": "Zrušiť",
+    "continueRun": "Napriek tomu spustiť",
+    "creditEstimate": "Odhadované kredity: ${cost}",
+    "creditThreshold": "Prahová hodnota kreditov: ${threshold}",
+    "heading": "Napriek tomu spustiť",
+    "learnMore": "Zistite viac o prahových hodnotách kreditov.",
+    "thresholdExceeded": "Odhadované náklady kreditov na túto analýzu sú vyššie ako prahová hodnota kreditov webovej mapy:"
+  },
+  "failedToExecuteEstimate": "Odovzdanie zlyhalo. Zlyhalo vykonanie EstimateRasterAnalysisCost",
+  "missingPermissionForWebTool": "K tomuto nástroju nie je možné získať prístup. Uistite sa, že nástroj existuje a že váš používateľ má oprávnenie na prístup k nemu.",
+  "runAnalysisLabel": "Spustiť",
+  "toolPreviewNoParameters": "Pre tento model neboli nastavené žiadne parametre Vráťte sa k modelu, aby ste pridali premenné a nastavili ich ako parametre.",
+  "toolPreviewNoParametersLink": "<calcite-link target='_blank' href='${ docLink }'>Zistiť viac</calcite-link>",
+  "toolPreviewWebTool": "Ak chcete tento model spustiť ako webový nástroj, publikujte ho a otvorte v paneli Analýzy.",
+  "webToolJSONChanged": "Bol aktualizovaný jeden alebo viac parametrov. Niektoré parametre sa nemusia opätovne doplniť z histórie."
+}

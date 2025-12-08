@@ -1,0 +1,12 @@
+{
+  "dynamicLayer": "Dynamische imagery layer",
+  "outputDescription": "Uitvoer gegenereerd door uitvoeren van rasterfunctie ${rfxName}",
+  "outputDescriptionRFT": "Uitvoer gegenereerd door uitvoeren van rasterfunctiesjabloon ${rfxName}",
+  "outputName": "Uitvoernaam",
+  "outputNamePlaceHolder": "Een unieke naam invoeren...",
+  "resultLayer": "Resultaatlaag",
+  "resultType": "Resultaattype",
+  "saveFolder": "Opslaan in map",
+  "summaryText": "Naam opgeven voor de resultaatlaag.",
+  "tileImagery": "Tiled imagery layer"
+}

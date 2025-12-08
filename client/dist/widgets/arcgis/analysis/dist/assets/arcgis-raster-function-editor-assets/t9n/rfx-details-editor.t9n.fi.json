@@ -1,0 +1,22 @@
+{
+  "general": "Yleinen",
+  "parameters": "Parametrit",
+  "variables": "Muuttujat",
+  "name": "Nimi",
+  "namePlaceHolder": "Kirjoita nimi",
+  "description": "Kuvaus",
+  "parameter": "Parametri",
+  "isPublic": "IsPublic",
+  "isDataset": "IsDataset",
+  "unknownPixelType": "Tuntematon",
+  "outputPixelType": "Tulosaineiston pikselityyppi",
+  "u8PixelType": "Etumerkitön 8-bittinen",
+  "s8PixelType": "Etumerkillinen 8-bittinen",
+  "u16PixelType": "Etumerkitön 16-bittinen",
+  "s16PixelType": "Etumerkillinen 16-bittinen",
+  "u32PixelType": "Etumerkitön 32-bittinen",
+  "s32PixelType": "Etumerkillinen 32-bittinen",
+  "f32PixelType": "32-bittinen desimaaliluku",
+  "f64PixelType": "64-bittinen kaksoistarkkuus",
+  "properties": "Ominaisuudet"
+}

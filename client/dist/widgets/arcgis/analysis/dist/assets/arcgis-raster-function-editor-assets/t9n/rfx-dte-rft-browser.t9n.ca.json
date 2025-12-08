@@ -1,0 +1,7 @@
+{
+  "browseRFT": "Examina les plantilles de funció de ràster",
+  "rfxVariable": "RasterFunctionVariable",
+  "outputRaster": "OutputRaster",
+  "previewDetails": "Visualització prèvia dels detalls",
+  "readingFailed": "No s'ha pogut carregar la plantilla de funció de ràster seleccionada."
+}

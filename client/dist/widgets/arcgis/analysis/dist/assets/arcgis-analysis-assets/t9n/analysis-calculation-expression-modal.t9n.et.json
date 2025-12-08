@@ -1,0 +1,23 @@
+{
+  "add": "Lisa",
+  "arcade": "Arcade",
+  "arcadeExpressionEditor": "Arcade’i avaldise redaktor",
+  "badSyntaxSQLExpression": "Vigane süntaks SQL-avaldises. Parandage vead.",
+  "calculationExpressionEditor": "Arvutuse esildise redaktor",
+  "cancel": "Tühista",
+  "chooseLanguage": "Vali keel",
+  "fieldToCalculate": "Arvutatav väli: ${fieldName}",
+  "idealFor": "Ideaalne järgmiseks:",
+  "languageSelect": "Keele valimine",
+  "layerLoadFailNoFields": "Kihi laadimine ebaõnnestus. Redaktori jaoks ei õnnestunud välju hankida.",
+  "next": "Edasi",
+  "noLayerProvidedNoFields": "Kihte ei esitatud. Redaktori jaoks ei õnnestunud välju hankida.",
+  "sql": "SQL",
+  "sqlExpressionEditor": "SQL-i avaldise redaktor",
+  "tileSelectArcadeUseCase1": "Arvutused, mis nõuavad rohkem funktsioone kui SQL (sh ruumitoimingud)",
+  "tileSelectArcadeUseCase2": "Täiustatud rikkeotsing",
+  "tileSelectSqlUseCase1": "Kiireim jõudlus",
+  "tileSelectSqlUseCase2": "Arvutused, mida saab väljendada SQL-i abil",
+  "tileSelectSqlUseCase3": "Kihid, kus on lubatud loodud ja uuendatud objektide jälgimine või sünkroonimine",
+  "valueCannotBeBlank": "Väärtus ei tohi olla tühi."
+}

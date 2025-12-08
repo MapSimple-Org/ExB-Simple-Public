@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>Udled str&oslash;m som raster-v&aelig;rkt&oslash;jet genererer en str&oslash;mraster fra en input-overfladeraster uden nogen tidligere fordybning eller neds&aelig;nkning p&aring;kr&aelig;vet.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputSurfaceRaster">
+        <div>
+            <p>H&oslash;jderasteren, der bruges til beregning.
+            </p>
+        </div>
+    </div>
+    <div id="inputDepressionsData">
+        <div>
+            <p>Det input, der definerer placeringen af virkelige neds&aelig;nkninger eller fordybninger, som vandet kan flyde ind i, men ikke ud af.
+            </p>
+            <p class="toolPaneOnly">Med hensyn til objektinput afh&aelig;nger opt&aelig;llingen af yderligere faktorer s&aring;som filtreringskriterier og analyseudstr&aelig;kningen.
+            </p>
+        </div>
+    </div>
+    <div id="inputWeightRaster">
+        <div>
+            <p>Det rasterlag, der definerer den andel af flowet, der bidrager til flowakkumulering ved hver celle.
+            </p>
+        </div>
+    </div>
+    <div id="accumulationThreshold">
+        <div>
+            <p>Den t&aelig;rskel, der bestemmer, om en given celle er en del af en str&oslash;m i form af det samlede areal, der str&oslash;mmer ind i en s&aring;dan celle.
+            </p>
+        </div>
+    </div>
+    <div id="streamDesignationMethod">
+        <div>
+            <p>Angiver, hvorvidt str&oslash;msegmenterne i outputtet vil have en konstant v&aelig;rdi, unikke v&aelig;rdier eller v&aelig;re ordnet.
+            </p>
+        </div>
+    </div>
+    <div id="forceFlow">
+        <div>
+            <p>Angiver, om flowet ved kantceller f&oslash;lger normale regler eller altid flyder udad.
+            </p>
+            <p>Hvis indstillingen ikke er markeret, vil flowet v&aelig;re mod den indvendige celle med det kraftigste fald i z-v&aelig;rdi. Hvis faldet imidlertid er mindre end eller lig med nul, flyder cellen udad fra overfladerasteren. Hvis indstillingen er markeret, vil flowretningen v&aelig;re udad fra overfladerasteren.
+            </p>
+        </div>
+    </div>
+    <div id="outputStreamRasterName">
+        <div>
+            <p>Navnet p&aring; det str&oslash;mrasterlag, der oprettes og f&oslash;jes til kortet.
+            </p>
+        </div>
+    </div>
+    <div id="resultType">
+        <div>
+            <p>Den type output, der oprettes. Outputtet kan v&aelig;re et tile-billedlag eller et dynamisk billedlag.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>Navnet p&aring; mappen  <b>Mit indhold</b>, hvor resultaterne gemmes.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

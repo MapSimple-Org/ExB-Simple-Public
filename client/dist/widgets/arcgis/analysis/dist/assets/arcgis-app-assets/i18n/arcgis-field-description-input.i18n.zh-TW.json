@@ -1,0 +1,6 @@
+{
+  "description": "描述",
+  "addDescription": "新增描述",
+  "charactersLeft": "剩下字元: ${num}",
+  "invalid": "描述不能包含以下任何字元: < 或 >。"
+}

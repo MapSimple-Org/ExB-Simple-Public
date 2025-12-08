@@ -1,0 +1,8 @@
+{
+  "selectFeature": "Odaberi sloj geoobjekata",
+  "browseLayer": "Pretraži slojeve",
+  "loading": "Učitavanje u tijeku...",
+  "errorCodes": {
+    "required": "Ovaj parametar je obavezan."
+  }
+}

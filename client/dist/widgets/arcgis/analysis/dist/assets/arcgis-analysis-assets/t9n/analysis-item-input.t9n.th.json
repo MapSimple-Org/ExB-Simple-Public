@@ -1,0 +1,15 @@
+{
+  "addDataStore": "เพิ่มที่เก็บข้อมูล",
+  "addFile": "เพิ่มไฟล์",
+  "addServiceConnection": "เพิ่มการเชื่อมต่อ",
+  "itemNotFound": "ไม่มีรายการอยู่ หรือไม่สามารถเข้าถึงได้",
+  "itemPermissionDenied": "คุณไม่มีสิทธิ์ในการเข้าถึงรายการนี้",
+  "previewDetails": "รายละเอียดตัวอย่าง",
+  "queryModelArgsErrMsg": "การค้นหาอาร์กิวเมนตของโมเดลล้มเหลว",
+  "queryModelArgsMsg": "กำลังคิวรีอาร์กิวเมนท์โมเดล...",
+  "removeItem": "ลบรายการ",
+  "replaceItem": "แทนที่รายการ",
+  "requiredInputMessage": "จำเป็นต้องใช้พารามิเตอร์นี้",
+  "selectItem": "เลือกไอเท็ม",
+  "viewDetails": "ดูรายละเอียด"
+}

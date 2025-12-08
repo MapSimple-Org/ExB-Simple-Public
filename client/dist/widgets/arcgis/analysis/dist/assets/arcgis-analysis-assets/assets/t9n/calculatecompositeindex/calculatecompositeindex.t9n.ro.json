@@ -1,0 +1,26 @@
+{
+  "CCIAnalysisSettingGroupLabel": "Setări indice",
+  "CCIAnalysisSettingGroupText": "Specificați cum ar trebui să fie calculat indicele.",
+  "geomeanPercentileLabel": "Ierarhii de componente (media geometrică a percentilelor)",
+  "geomeanRawLabel": "Valori brute ale componentelor (media geometrică a valorilor brute)",
+  "geomeanScaledLabel": "Valorile scalate ale componentelor (media geometrică a valorilor scalate)",
+  "indexMethodLabel": "Metoda de a scala și de a combina variabilele",
+  "inputFeaturesOrTableLabel": "Introducere obiecte spațiale sau tabel",
+  "inputLayerGroupText": "Alegeți obiectele spațiale sau tabelul și variabilele pentru a crea indicele.",
+  "inputVariablesLabel": "Introducere variabile",
+  "itemProperties": {
+    "description": "Strat tematic de obiect spațial generat din executarea instrumentului de analiză Calculare indice compozit.",
+    "snippet": "Strat tematic de obiect spațial generat din calcularea indicelui compozit"
+  },
+  "meanPercentileLabel": "Combinare poziții ierarhice (media percentilelor)",
+  "meanRawLabel": "Combinare valori brute (media valorilor brute)",
+  "meanScaledLabel": "Combinare valori scalate (media valorilor scalate)",
+  "outputIndexMaxLabel": "Maxim",
+  "outputIndexMinLabel": "Minim",
+  "outputIndexMinMaxLabel": "Valori minime și maxime indice",
+  "outputIndexReverseLabel": "Inversare valori indice",
+  "reverseVariableLabel": "Inversare direcție",
+  "sumFlagsPercentileLabel": "Evidențiere extreme (numărul de valori peste percentila 90)",
+  "toolName": "Calculare indice compozit",
+  "weight": "Greutate"
+}

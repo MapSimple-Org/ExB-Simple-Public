@@ -1,0 +1,54 @@
+{
+  "updateSharing": "Rever partilha",
+  "moreInfo": "Mais informações",
+  "learnMore": "Saiba mais",
+  "noItemToShare": "Não foram detetados problemas de partilha",
+  "loadingInfo": "A carregar informações de partilha...",
+  "updatingSharing": "A atualizar partilha...",
+  "updateItemsCount": "Itens com permissão para atualizar: {num}",
+  "updateItemsCountText": "Estes itens dependentes podem não ser visíveis para os outros, porque são partilhados de forma diferente. Clique em Atualizar para sincronizar a partilha dos itens dependentes que tem permissão para atualizar.",
+  "uneditableItemsCount": "Itens sem permissão para atualizar: {num}",
+  "uneditableMessage": "Estes itens dependentes podem não ser visíveis para os outros, porque são partilhados de forma diferente.",
+  "nonPublicItems": "Item(ns) que não poderá(ão) ser partilhado(s) publicamente:",
+  "premiumItemsWebMap": "Este mapa web contém conteúdo premium ou de subscritor.",
+  "premiumMessage": "Estes itens dependentes podem não ser visíveis para os outros, porque requerem uma subscrição.",
+  "premiumTextMap": "Saiba mais sobre partilha de mapas com conteúdo de subscritor ou premium",
+  "notice": "Os seguintes itens podem não ser visíveis para outras pessoas porque foram partilhados de forma diferente ou requerem uma subscrição para serem visualizados. Clique em <b>Atualizar partilha</b> para sincronizar a partilha dos itens que tem permissão para atualizar.",
+  "noticeEnterprise": "Os seguintes itens podem não ser visíveis para os outros, porque são partilhados de forma diferente. Clique em <b>Atualizar partilha</b> para sincronizar a partilha dos itens que tem permissão para atualizar.",
+  "canBeUpdated": "Itens que podem ser atualizados: ${count}",
+  "cantBeUpdated": "Itens que não podem ser atualizados: ${count}",
+  "update": "Atualizar partilha",
+  "cancel": "Não atualizar a partilha",
+  "ok": "OK",
+  "goToItem": "Ver detalhes completos",
+  "unableToGetItem": "Não foi possível obter detalhes do item.",
+  "postShareDialog": {
+    "title": "Partilha de itens atualizada com sucesso",
+    "description": "O(s) item(ns) partilhado(s) faz(em) referência a outros itens que podem não ser visíveis porque estão partilhados de forma diferente. Reveja a partilha destes itens.",
+    "confirm": "Rever partilha"
+  },
+  "needShare": {
+    "noPermission": {
+      "notice": "Não tem permissão para atualizar a partilha deste item.",
+      "panel": "Não tem permissão para atualizar a partilha deste item. Este item pode não ser visível para outras pessoas porque está partilhado de forma diferente."
+    },
+    "pdc": {
+      "notice": "Ative a Recolha de Dados Públicos antes de partilhar esta camada publicamente.",
+      "panel": "Ative a Recolha de Dados Públicos antes de partilhar esta camada publicamente. Para desempenho ideal e integridade dos dados, considere desativar a edição ou usar uma camada de visualização não editável.",
+      "learnMore": "Saiba mais sobre como ativar a edição em camadas públicas."
+    },
+    "premium": {
+      "notice": "Os conteúdos premium e para subscritores podem exigir o início de sessão para serem visualizados.",
+      "panel": "Os conteúdos premium e para subscritores podem exigir o início de sessão para serem visualizados.",
+      "learnMore": "Saiba mais sobre a partilha de conteúdos premium ou para subscritores."
+    },
+    "sharingPDCEnabled": {
+      "notice": "Partilhar esta camada editável publicamente irá permitir que qualquer pessoa a edite.",
+      "panel": "Partilhar esta camada editável publicamente irá permitir que qualquer pessoa a edite. Para desempenho ideal e integridade dos dados, considere desativar a edição ou usar uma camada de visualização não editável."
+    },
+    "needsAuthentication": {
+      "notice": "Autenticação necessária.",
+      "panel": "Este item pode não estar acessível a outras pessoas porque contém serviços de localização que requerem autenticação em aplicações que exibem o item."
+    }
+  }
+}

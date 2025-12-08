@@ -1,0 +1,7 @@
+{
+  "header": "Valitse muuttuja",
+  "noFound": "Yhteensopivia muuttujia ei löytynyt",
+  "search": "Etsi muuttujista",
+  "variableLabel": "Tunnusteksti: <span style='font-weight: var(--calcite-font-weight-normal)'>${val}</span>",
+  "variableVal": "Arvo: <span style='font-weight: var(--calcite-font-weight-normal)'>${val}</span>"
+}

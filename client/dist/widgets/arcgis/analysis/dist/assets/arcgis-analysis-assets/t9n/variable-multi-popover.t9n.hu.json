@@ -1,0 +1,11 @@
+{
+  "addBtn": "Kész",
+  "cancelBtn": "Mégse",
+  "header": "Változó kiválasztása",
+  "multipleVariables": "Többértékű változók",
+  "noFound": "Nem találhatók kompatibilis változók",
+  "search": "Változók keresése",
+  "singleVariables": "Egyértékű változók",
+  "variableLabel": "Felirat: <span style='font-weight: var(--calcite-font-weight-normal)'>${val}</span>",
+  "variableVal": "Érték: <span style='font-weight: var(--calcite-font-weight-normal)'>${val}</span>"
+}

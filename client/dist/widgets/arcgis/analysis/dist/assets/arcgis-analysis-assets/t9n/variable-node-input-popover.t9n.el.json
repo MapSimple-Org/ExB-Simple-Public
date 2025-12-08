@@ -1,0 +1,7 @@
+{
+  "header": "Επιλογή μεταβλητής",
+  "noFound": "Δεν βρέθηκαν συμβατές μεταβλητές",
+  "search": "Αναζήτηση μεταβλητών",
+  "variableLabel": "Ετικέτα: </span>${val}<span style='font-weight: var(--calcite-font-weight-normal)'>",
+  "variableVal": "Τιμή: </span>${val}<span style='font-weight: var(--calcite-font-weight-normal)'>"
+}

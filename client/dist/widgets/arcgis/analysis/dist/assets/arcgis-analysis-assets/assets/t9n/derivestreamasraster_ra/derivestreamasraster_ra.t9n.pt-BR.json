@@ -1,0 +1,10 @@
+{
+  "forceFlowLabel": "Forçar saída do fluxo de células do segmento",
+  "inputLayersGroupText": "Escolha o raster de superfície de entrada e, opcionalmente, os dados de depressão e o raster de peso.",
+  "itemProperties": {
+    "description": "Saída gerada a partir da execução da ferramenta Derivar Fluxo como Raster.",
+    "snippet": "Saída gerada de Derivar Fluxo como Raster"
+  },
+  "outputStreamRasterLabel": "Nome raster do fluxo de saída",
+  "streamSettingsGroupText": "Especifique o limite de acumulação, o método de designação do fluxo e como o fluxo é tratado na borda raster da superfície de entrada."
+}

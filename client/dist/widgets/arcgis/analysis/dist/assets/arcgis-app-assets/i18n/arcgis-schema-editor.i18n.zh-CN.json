@@ -1,0 +1,15 @@
+{
+  "expandAll": "全部展开",
+  "collapseAll": "全部折叠",
+  "categoryItem": {
+    "expand": "展开",
+    "collapse": "折叠",
+    "editCategory": "编辑类别",
+    "deleteCategory": "删除类别",
+    "addSubcategory": "添加子类别",
+    "addCategory": "添加类别",
+    "save": "保存",
+    "cancel": "取消",
+    "missingTitleMessage": "类别标题为必填项。"
+  }
+}

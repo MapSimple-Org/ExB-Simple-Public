@@ -1,0 +1,11 @@
+{
+  "all": "Toate",
+  "inputLayersGroupText": "Alegeți rasterul de suprafață de intrare și opțional datele de depresiune și rasterul de greutate.",
+  "itemProperties": {
+    "description": "Rezultatul generat din funcționarea instrumentului Derivare flux ca raster.",
+    "snippet": "Rezultat generat din Derivare flux ca raster"
+  },
+  "outputStreamFeaturesLabel": "Nume obiecte spațiale din fluxul de ieșire",
+  "simplifyLabel": "Simplificare obiecte spațiale",
+  "streamSettingsGroupText": "Specificați pragul de acumulare, metoda de desemnare a cursului și dacă liniile de curs de ieșire vor fi netezite în forme simple."
+}

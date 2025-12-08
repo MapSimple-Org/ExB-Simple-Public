@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>Alat Sažmi sredinu i disperziju pronalazi sredi&scaron;nji geoobjekt, sredi&scaron;nju tendenciju i standardnu devijacijsku elipsu skupa geoobjekata.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="analysisLayer">
+        <div>
+            <p>Točkasti, linijski ili poligonalni geoobjekti za koje će se izračunati sredi&scaron;nji geoobjekt, sredi&scaron;nja tendencija i standardna devijacijska elipsa.
+            </p>
+        </div>
+    </div>
+    <div id="summarizeType">
+        <div>
+            <p>Određuje metode koje će sažeti sredi&scaron;te i disperziju geoobjekata.
+            </p>
+        </div>
+    </div>
+    <div id="ellipseSize">
+        <div>
+            <p>Određuje veličinu, u standardnim odstupanjima, eliptičnog poligona. Ako udaljenost između srednje sredine i lokacija geoobjekata slijedi Rayleighovu distribuciju,  <b>opcija 1 standardna devijacija</b>, <b>2 standardna devijacija</b>, i <b>3 standardna devijacija</b> će dati eliptični poligon koji će pokriti 68 posto, 95 posto odnosno 99 posto geoobjekata.
+            </p>
+        </div>
+    </div>
+    <div id="weightField">
+        <div>
+            <p>Polje koje će se koristiti za određivanje težine geoobjekta.
+            </p>
+        </div>
+    </div>
+    <div id="groupField">
+        <div>
+            <p>Polje koje će se koristiti za grupiranje geoobjekata. Vrijednosti odabranih  <b>Vrsta sažetaka</b> izračunat će se za svaku grupu.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>Naziv sloja koji će se stvoriti i dodati karti.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>Naziv mape u opciji  <b>My sadržaj</b> gdje će se spremiti rezultat.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

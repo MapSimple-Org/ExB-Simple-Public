@@ -1,0 +1,13 @@
+{
+  "header": "預覽",
+  "description": "在執行分析之前預覽結果。",
+  "showPreview": "顯示預覽",
+  "previewLayer": "預覽圖層 ${number}",
+  "update": "更新",
+  "newPreview": "新增預覽",
+  "previewPopup": "啟用根據輸入參數預覽分析結果。",
+  "previewError": "此預覽圖層無法使用。 檢查輸入參數並再次更新此預覽圖層。",
+  "updatePopover": "更新選擇的預覽圖層",
+  "createPopover": "建立新預覽圖層",
+  "maxPreview": "允許的預覽圖層數上限: ${maxCount}"
+}

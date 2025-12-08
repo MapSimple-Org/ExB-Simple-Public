@@ -1,0 +1,1 @@
+System.register([],function(e){return{execute:function(){e({customizeLayer:"P\u0159izp\u016fsobit vrstvy",selectLayers:"Vybrat vrstvy",noDataSourceWarning:"Vybran\xfd widget Mapa neobsahuje webovou mapu ani webovou sc\xe9nu."})}}});

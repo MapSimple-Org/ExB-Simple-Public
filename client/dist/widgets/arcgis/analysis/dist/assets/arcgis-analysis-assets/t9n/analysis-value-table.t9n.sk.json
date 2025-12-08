@@ -1,0 +1,7 @@
+{
+  "addEntryButtonLabel": "Pridať",
+  "maxGroupsMessage": "Maximálny počet vstupov je ${maxCount}.",
+  "minGroupsMessage": "Minimálny počet vstupov je ${minCount}.",
+  "removeEntryButtonLabel": "Odstrániť vstup",
+  "requiredMessage": "Tento parameter je povinný."
+}

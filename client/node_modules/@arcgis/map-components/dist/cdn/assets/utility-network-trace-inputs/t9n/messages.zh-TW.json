@@ -1,0 +1,1 @@
+{"componentLabel":"軌跡輸入","labels":{"utilityNetwork":"公用事業網路","traceConfiguration":"軌跡配置","traceInputs":"軌跡輸入"},"errors":{"noMapError":"無可用地圖","noUtilityNetworkError":"在地圖中找不到公用事業網路","noTraceConfigurationError":"無可用的具名追蹤配置"}}

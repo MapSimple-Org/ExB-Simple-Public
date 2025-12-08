@@ -1,0 +1,12 @@
+{
+  "name": "alert",
+  "type": "template",
+  "templateType": "fixed-modal-window",
+  "label": "Alert",
+  "thumbnail": "thumbnail.png",
+  "order": 3,
+  "tags": [],
+  "categoriesTags": [],
+  "thumbnailWidth": 320,
+  "thumbnailHeight": 268
+}

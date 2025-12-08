@@ -1,0 +1,9 @@
+{
+  "inputFlowDirectionRasterLabel": "Sisendvoolusuuna raster",
+  "inputLayerGroupText": "Valige sisendvoo ja -voolusuuna rastrid.",
+  "inputStreamRasterLabel": "Sisendvooraster",
+  "itemProperties": {
+    "description": "Analüüsitööriista StreamLink käitamise kaudu loodud väljund.",
+    "snippet": "StreamLinki kaudu loodud väljund"
+  }
+}

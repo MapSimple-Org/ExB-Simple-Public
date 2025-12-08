@@ -1,0 +1,27 @@
+{
+  "area": "Površina",
+  "binResolution": "Resolucija celice H3",
+  "binSize": "Velikost celice",
+  "binSizeUnit": "Enota",
+  "binType": "Vrsta oblike celice",
+  "diamondBins": "Diamantne celice",
+  "distance": "Razdalja",
+  "extentLayer": "Sloj obsega",
+  "extentOverrideMessage": "Ta sloj obsega se bo uporabil namesto katerega koli obsega procesiranja nastavljenega v okoljih.",
+  "extentSectionLabel": "Nastavitve obsega",
+  "extentSectionText": "Določite sloj obsega, ki naj bi ga pokrivala teselacija.",
+  "h3hexagonBins": "Šestkotne celice H3",
+  "hexagon": "Šestkotnik",
+  "intersectStudyArea": "Ohrani samo teselacije, ki se sekajo",
+  "itemProperties": {
+    "description": "Geoobjektni sloj, ustvarjen z izvajanjem orodja za analizo Ustvari teselacije.",
+    "snippet": "Geoobjektni sloj, ustvarjen iz Ustvari teselacije"
+  },
+  "outputAreasSectionText": "Vnesite ime za teselacijsko mrežo.",
+  "sizeType": "Merjenje velikosti celice",
+  "square": "Kvadrat",
+  "tessellationSettingsLabel": "Nastavitve teselacije",
+  "tessellationSettingsSummaryText": "Določite obliko in velikost celic, ki jih želite ustvariti.",
+  "thexagonBins": "Prečne šesterokotne celice",
+  "triangleBins": "Trikotne celice"
+}

@@ -1,0 +1,13 @@
+{
+  "weightedOverlayTable": "Weighted Overlay-tabel",
+  "id": "ID",
+  "layer": "Kaartlaag",
+  "field": "Veld",
+  "influence": "Invloed",
+  "sumOfInfluence": "Som van invloed",
+  "value": "Waarde",
+  "remapTable": "Remaptabel",
+  "scale": "Schaal",
+  "scales": "Schalen",
+  "selectRaster": "Raster selecteren"
+}

@@ -1,0 +1,36 @@
+{
+  "modalHeader": "İçerik kategorilerini yapılandır",
+  "modalGroupHeader": "Grup kategorilerini yapılandır",
+  "helpText": "Kuruluşunuzdaki kategorileri ekleyin, silin veya yeniden sıralayın.",
+  "helpTextGroup": "Bu gruptaki içerik için kategorileri düzenleyin, silin veya yeniden sıralayın.",
+  "helpTextDescription": "Kuruluşunuzun diğer üyelerinin bu kategorileri önceden öğelerine atamış olabileceğini ve şemayı düzenlemenin bu öğeleri uygun şekilde güncelleyeceğini unutmayın.",
+  "helpTextGroupDescription": "Grubunuzun diğer üyelerinin bu kategorileri önceden öğelerine atamış olabileceğini ve şemayı düzenlemenin bu öğeleri uygun şekilde güncelleyeceğini unutmayın.",
+  "warning": {
+    "deleteInUseCategory": {
+      "title": "Kategoriyi sil",
+      "cta": "Kategoriyi sil",
+      "message": {
+        "single": "Bir öge bu kategoriye atandı. Kategoriyi silmek onu bu ögeden çıkarır.",
+        "multiple": "Bu kategoriye ${number} öge atandı. Kategoriyi silmek onu bu ögelerden çıkarır.",
+        "unknown": "Bu kategoriye atanan ögeler: ${number}. Kategoriyi silmek onu bu ögelerden çıkarır."
+      }
+    },
+    "changeTitleInUseCategory": {
+      "title": "Kategoriyi güncelle",
+      "message": {
+        "single": "Bir öge bu kategoriye atandı. Kategorinin güncellenmesi ögeyi \"${newTitle}\" kullanacak şekilde güncelleyecektir.",
+        "multiple": "Bu kategoriye ${number} öge atandı. Kategorinin güncellenmesi ögeleri \"${newTitle}\" kullanacak şekilde güncelleyecektir.",
+        "unknown": "Bu kategoriye atanan ögeler: ${number}. Kategorinin güncellenmesi ögeleri \"${newTitle}\" kullanacak şekilde güncelleyecektir."
+      },
+      "cta": "Kategoriyi güncelle"
+    }
+  },
+  "template": {
+    "templateList": {
+      "custom": {
+        "message": "Kuruluşunuz içindeki içeriği düzenlemek için kendi kategorilerinizi oluşturun.",
+        "messageGroup": "Bu grup içindeki içeriği düzenlemek için kendi kategorilerinizi oluşturun."
+      }
+    }
+  }
+}

@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>La herramienta Enriquecer capa mejora las entidades de entrada con datos demogr&aacute;ficos y de paisaje.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputLayer">
+        <div>
+            <p>Las entidades de punto, l&iacute;nea o poligonales que se van a enriquecer con datos adicionales.
+            </p>
+            <p class="toolPaneOnly">El recuento de entidades depende de factores adicionales como los criterios de filtrado y el alcance del an&aacute;lisis.
+            </p>
+        </div>
+    </div>
+    <div id="analysisVariables">
+        <div>
+            <p>Las variables que se agregar&aacute;n como atributos a las entidades de entrada.
+            </p>
+        </div>
+    </div>
+    <div id="bufferType">
+        <div>
+            
+            <p class="toolPaneOnly">El m&eacute;todo que se utilizar&aacute; para crear las &aacute;reas delimitadoras alrededor de las entidades de punto o de l&iacute;nea introducidas. El m&eacute;todo puede ser una distancia en l&iacute;nea recta o un modo de viaje. Se enriquecer&aacute; toda el &aacute;rea alrededor de cada entidad.
+            </p> 
+            <p class="modelBuilderOnly">El m&eacute;todo que se utilizar&aacute; para crear las &aacute;reas delimitadoras alrededor de las entidades de punto o de l&iacute;nea introducidas. Actualmente, la distancia en l&iacute;nea recta es el &uacute;nico m&eacute;todo admitido para los modelos. Se enriquecer&aacute; toda el &aacute;rea alrededor de cada entidad.
+            </p>
+        </div>
+    </div>
+    <div id="distance">
+        <div>
+            <p>Un valor num&eacute;rico que especifica la distancia o el tiempo que se extender&aacute; el &aacute;rea enriquecida alrededor de cada entidad de entrada.
+            </p>
+        </div>
+    </div>
+    <div id="units">
+        <div>
+            <p>Las unidades que se utilizar&aacute;n para especificar la distancia o el tiempo que se extender&aacute; el &aacute;rea enriquecida alrededor de cada entidad de entrada.
+            </p>
+        </div>
+    </div>
+    <div id="returnBoundaries">
+        <div>
+            <p>Especifica si la capa de salida contendr&aacute; entidades poligonales definidas por la configuraci&oacute;n  <b>&Aacute;reas de enriquecimiento</b> (activada) o las entidades de entrada (desactivada).
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>El nombre de la capa que se crear&aacute; y se agregar&aacute; al mapa.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>El nombre de la carpeta de  <b>Mi contenido</b> en la que se guardar&aacute; el resultado.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

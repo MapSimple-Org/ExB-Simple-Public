@@ -1,0 +1,8 @@
+{
+  "itemProperties": {
+    "description": "Resultat generat en executar l'eina d'anàlisi Filtra per atributs.",
+    "snippet": "Resultat generat a partir de Filtra per atributs"
+  },
+  "noLayerDisabledTooltip": "Seleccioneu un dataset d'entrada vàlid.",
+  "queryCriteriaGroupLabel": "Criteris de consulta"
+}

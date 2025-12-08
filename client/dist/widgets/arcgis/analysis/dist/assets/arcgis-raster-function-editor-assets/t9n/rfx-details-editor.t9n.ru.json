@@ -1,0 +1,22 @@
+{
+  "general": "Общее",
+  "parameters": "Параметры",
+  "variables": "Переменные",
+  "name": "Имя",
+  "namePlaceHolder": "Введите имя",
+  "description": "Описание",
+  "parameter": "Параметр",
+  "isPublic": "IsPublic",
+  "isDataset": "IsDataset",
+  "unknownPixelType": "Неизвестно",
+  "outputPixelType": "Тип выходного пиксела",
+  "u8PixelType": "8 бит без знака",
+  "s8PixelType": "8 бит со знаком",
+  "u16PixelType": "16 бит без знака",
+  "s16PixelType": "16 бит со знаком",
+  "u32PixelType": "32 бита без знака",
+  "s32PixelType": "32 бита со знаком",
+  "f32PixelType": "32 бита с плав. запятой",
+  "f64PixelType": "64 бита двойной точности",
+  "properties": "Свойства"
+}

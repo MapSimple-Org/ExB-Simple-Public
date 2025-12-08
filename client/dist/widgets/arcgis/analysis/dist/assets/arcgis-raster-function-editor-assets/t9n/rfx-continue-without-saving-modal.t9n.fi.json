@@ -1,0 +1,6 @@
+{
+  "header": "Aloitetaanko uudelleen alusta tallentamatta?",
+  "content": "Sinulla on tallentamattomia muutoksia kohteessa \"${rftTitle}\". Jos aloitat alusta käyttämällä uutta mallia, kyseiset muutokset menetetään.",
+  "cancel": "Peruuta",
+  "continue": "Jatka"
+}

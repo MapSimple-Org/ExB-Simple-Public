@@ -1,0 +1,9 @@
+{
+  "disconnect": "Ngắt kết nối khỏi biến số",
+  "overwriteTo": "Ghi đè lớp: <span style='font-weight: var(--calcite-font-weight-normal)'>${val}</span>",
+  "resultType": "Loại kết quả: <span style='font-weight: var(--calcite-font-weight-normal)'>${val}</span>",
+  "saveTo": "Tên đầu ra: <span style='font-weight: var(--calcite-font-weight-normal)'>${val}</span>",
+  "variableLabel": "Nhãn: <span style='font-weight: var(--calcite-font-weight-normal)'>${val}</span>",
+  "variableNode": "Nút biến số",
+  "variableVal": "Giá trị: <span style='font-weight: var(--calcite-font-weight-normal)'>${val}</span>"
+}

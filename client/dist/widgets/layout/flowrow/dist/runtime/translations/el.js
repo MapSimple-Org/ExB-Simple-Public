@@ -1,0 +1,1 @@
+System.register([],function(e){return{execute:function(){e({_widgetLabel:"\u03a3\u03b5\u03b9\u03c1\u03ac \u03c1\u03bf\u03ae\u03c2"})}}});

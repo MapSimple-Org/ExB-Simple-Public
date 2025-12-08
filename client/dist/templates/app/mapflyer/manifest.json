@@ -1,0 +1,24 @@
+{
+  "name": "mapflyer",
+  "type": "template",
+  "templateType": "app",
+  "label": "Mapflyer",
+  "description": "Mapflyer is a grid page template using the Coordinates widget with the Map widget to display instant text and location information from a map.",
+  "thumbnail": "thumbnail.png",
+  "order": 32,
+  "templateCreateVersion": "1.11.0",
+  "tags": [
+    "Map",
+    "Title",
+    "Coordinates"
+  ],
+  "categoriesTags": [
+    "Map centric",
+    "Web page",
+    "Fullscreen grid"
+  ],
+  "isMultiplePage": false,
+  "isMapAware": true,
+  "thumbnailWidth": 320,
+  "thumbnailHeight": 214
+}

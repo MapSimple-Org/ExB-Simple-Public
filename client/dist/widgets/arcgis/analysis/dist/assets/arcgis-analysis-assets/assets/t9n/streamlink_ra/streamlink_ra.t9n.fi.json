@@ -1,0 +1,9 @@
+{
+  "inputFlowDirectionRasterLabel": "Lähtöaineiston virtaussuunnan rasteri",
+  "inputLayerGroupText": "Valitse lähtöaineiston virta ja virtaussuunnan rasterit.",
+  "inputStreamRasterLabel": "Lähtöaineiston virtausrasteri",
+  "itemProperties": {
+    "description": "Tulosaineisto luotu StreamLink-analysointityökalulla.",
+    "snippet": "Tulosaineisto luotu StreamLink-toiminnolla"
+  }
+}

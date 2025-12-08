@@ -1,0 +1,20 @@
+export default {
+  floorfilter_setting_description: 'Floor Filter',
+  floorfilter_setting_selectMap: 'Select a floor aware map',
+  floorfilter_setting_displayLabel: 'Display label',
+  floorfilter_setting_longNames: 'Expand on startup',
+  floorfilter_setting_longNamesTip: 'Opens the floor filter in expanded view to show level names',
+  floorfilter_setting_filterDataSources: 'Filter data by selected floor',
+  floorfilter_setting_filterDataSourcesTip: 'Displays data from selected floor in current facility and shows ground level of all other facilities',
+  floorfilter_setting_filterByActiveFloorOnly: 'Display selected floor only',
+  floorfilter_setting_filterByActiveFloorOnlyTip: 'Displays data only of selected floor in current facility and no floors from other facilities',
+  floorfilter_setting_autoSetOnFeatureSelection: 'Switch floor on feature selection',
+  floorfilter_setting_autoSetOnFeatureSelectionTip: 'Sets the floor based on feature selected in map or widget',
+  floorfilter_setting_zoomOnAutoSet: 'Zoom to selected floor',
+  floorfilter_setting_zoomOnAutoSetTip: 'Zooms to the floor extent based on selected feature',
+  floorfilter_setting_positioned: 'Arrangement style',
+  floorfilter_setting_topLeft: 'Top down, slide right',
+  floorfilter_setting_topRight: 'Top down, slide left',
+  floorfilter_setting_bottomLeft: 'Bottom up, slide right',
+  floorfilter_setting_bottomRight: 'Bottom up, slide left'
+}

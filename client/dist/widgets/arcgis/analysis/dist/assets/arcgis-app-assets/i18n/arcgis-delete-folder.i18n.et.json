@@ -1,0 +1,22 @@
+{
+  "deleteFolder": "Kustuta kaust",
+  "delete": "Kustuta",
+  "permanentlyDelete": "Kustuta jäädavalt",
+  "back": "Tagasi",
+  "cancel": "Loobu",
+  "success": "Kaust '${title}' kustutati edukalt",
+  "deleteProtectedItemsInFolder": "Kausta ei tohi kustutada, kuna mõni üksus on kustutuskaitstud või sellel on sõltuvad üksused.",
+  "message": {
+    "empty": "Kas soovite kausta <strong style='font-weight: 500'>${title}</strong>kindlasti kustutada?",
+    "recycleAll": "Kas soovite kausta <strong style='font-weight: 500'>${title}</strong> kustutada ja selle sisu prügikasti saata?",
+    "mustBeEmpty": "Kaust <strong style='font-weight: 500'>${title}</strong> tuleb kustutamiseks tühjendada.",
+    "aFewCannotBeDeleted": "Mõnda üksust ei saa kustutada. Kas soovite ülejäänute kustutamisega jätkata?",
+    "canBeEmptied": "Kaust <strong style='font-weight: 500'>${title}</strong> tuleb kustutamiseks tühjendada. Kas soovite nende üksuste kustutamisega jätkata?",
+    "cannotBeDeleted": "Kausta <strong style='font-weight: 500'>${title}</strong> ei saa kustutada, kuna selle üksusi ei saa kustutada."
+  },
+  "disabledMessage": {
+    "single": "Selles kaustas <b>${label}</b> on <span style='color:red'>1 üksus</span>.<br/></br/>Kas soovite selle kausta ja selles oleva üksuse kindlasti kustutada?",
+    "multiple": "Selles kaustas on <span style='color:red'>${number} üksust</span><b>${label}</b>.<br/></br/>Kas soovite selle kausta ja selles olevad üksused kindlasti kustutada?",
+    "unknown": "Kas soovite selle kausta <b>${label}</b> kindlasti kustutada?"
+  }
+}

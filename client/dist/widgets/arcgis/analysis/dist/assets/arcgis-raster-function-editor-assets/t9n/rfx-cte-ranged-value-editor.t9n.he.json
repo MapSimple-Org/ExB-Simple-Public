@@ -1,0 +1,6 @@
+{
+  "greaterThanErrorMessage": "מספר הקלט חייב להיות גדול מ-${min}",
+  "lesserThanErrorMessage": "מספר הקלט חייב להיות קטן מ-${max}",
+  "greaterThanOrEqualErrorMessage": "מספר הקלט חייב להיות גדול או שווה ${min}",
+  "lesserThanOrEqualErrorMessage": "מספר הקלט חייב להיות קטן או שווה ${max}"
+}

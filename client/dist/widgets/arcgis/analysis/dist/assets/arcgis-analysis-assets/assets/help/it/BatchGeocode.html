@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>Lo strumento Geocodifica posizioni da tabella converte indirizzi o luoghi da una tabella o file di input in coordinate.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputType">
+        <div>
+            <p>Specifica se l'input sar&agrave; un elemento di tabella (<b>Tabella in hosting</b>) oppure un file <code>.csv</code> o Excel (<b>CSV/Excel</b>).
+            </p>
+        </div>
+    </div>
+    <div id="inputFileItem">
+        <div>
+            <p>Il file di input con gli indirizzi o luoghi da geocodificare. L'input deve essere un file in hosting  <code>.csv</code> o un file Excel. </p>
+        </div>
+    </div>
+    <div id="inputTable">
+        <div>
+            <p>La tabella di input con gli indirizzi o luoghi da geocodificare. L'input deve essere un elemento di tabella ospitata.
+            </p>
+            <p>Un conteggio delle feature viene visualizzato sotto il nome della tabella. Il conteggio include tutte le feature della tabella, ad eccezione di quelle che sono state rimosse utilizzando un filtro.
+            </p>
+        </div>
+    </div>
+    <div id="geocodeServiceURL">
+        <div>
+            <p>Il servizio di localizzazione che verr&agrave; utilizzato per la geocodifica. Se il servizio di localizzazione che desideri utilizzare non &egrave; presente nel menu a discesa, contatta il tuo amministratore per far aggiungere il servizio di localizzazione come servizio di utilit&agrave;.
+            </p>
+        </div>
+    </div>
+    <div id="singleOrMultiFieldSwitch">
+        <div>
+            <p>Specifica se i dati di input sono contenuti in uno o pi&ugrave; campi.
+            </p>
+        </div>
+    </div>
+    <div id="geocodeUIParameters">
+        <div>
+            <p>I campi saranno utilizzati dal localizzatore per determinare le posizioni dei dati. Alcuni campi devono essere nei dati, ad esempio indirizzo, citt&agrave;, stato e codice postale.
+            </p>
+        </div>
+    </div>
+    <div id="sourceCountry">
+        <div>
+            <p>Il paese in cui si trovano i dati. Se tutti gli indirizzi provengono da un Paese, seleziona il nome di quel Paese per garantire i risultati pi&ugrave; accurati. In caso contrario, lasciare questo parametro vuoto.
+            </p>
+        </div>
+    </div>
+    <div id="outputFields">
+        <div>
+            <p>Specifica i campi che saranno inclusi nel dataset di output. Le opzioni sono le seguenti:
+            </p>
+            <ul>
+                <li> <b>Tutto</b>: tutti i campi di output del localizzatore disponibili saranno inclusi nei risultati del geocodice.
+                </li>
+                <li> <b>Minimo</b>: un sottoinsieme di campi del localizzatore e dei campi della tabella di input saranno inclusi nei risultati.
+                </li>
+                <li> <b>Solo posizione</b>: il campo <i>Shape</i> del localizzatore e i campi della tabella di input saranno inclusi nei risultati.
+                </li>
+            </ul>
+            
+        </div>
+    </div>
+    <div id="outputType">
+        <div>
+            <p>Il tipo di output che sar&agrave; creato. L'output pu&ograve; essere un feature service, un file  <code>.csv</code> o un file <code>.xls</code>.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>Il nome del layer o del file che verr&agrave; creato in  <b>I miei contenuti</b>.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>Il nome della cartella in  <b>I miei contenuti</b> in cui sar&agrave; salvato il risultato.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

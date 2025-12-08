@@ -1,0 +1,33 @@
+{
+  "name": "route",
+  "type": "template",
+  "templateType": "full-screen-page",
+  "label": "Route",
+  "description": "Route is a template that uses the Chart, List, and Bookmark widgets to introduce a series of places, and includes a Directions widget to let users visualize trips to those places.",
+  "thumbnail": "thumbnail.png",
+  "order": 16,
+  "tags": [
+    "Map",
+    "Chart",
+    "Section",
+    "View",
+    "Navigation",
+    "Direction",
+    "Logo",
+    "Title",
+    "Filter",
+    "Share",
+    "Sidebar",
+    "Panel",
+    "Bookmark",
+    "List",
+    "Slides",
+    "Route"
+  ],
+  "categoriesTags": [
+    "Map centric",
+    "Fullscreen"
+  ],
+  "thumbnailWidth": 320,
+  "thumbnailHeight": 214
+}

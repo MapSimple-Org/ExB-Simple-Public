@@ -1,0 +1,9 @@
+{
+  "inputLayerGroupText": "Velg inndatalag for å beregne sonegrensenes geometri.",
+  "itemProperties": {
+    "description": "Utdatatabellen genereres ved å kjøre Sonegeometri som et tabellanalyseverktøy.",
+    "snippet": "Tabell generert fra Sonegeometri som tabell"
+  },
+  "zonalGeometrySettingGroupLabel": "Innstilling for sonegeometri",
+  "zonalGeometrySettingGroupText": "Spesifiser cellestørrelsen som skal beregnes."
+}

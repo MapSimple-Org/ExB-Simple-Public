@@ -1,0 +1,1 @@
+System.register([],function(e){return{execute:function(){e({_widgetLabel:"Luo uusi kokemus",createNewApp:"Luo uusi sovellus",largeDevices:"Laitteet, joissa on suuri n\xe4ytt\xf6",mediumDevices:"Laitteet, joissa on keskikokoinen n\xe4ytt\xf6",smallDevices:"Laitteet, joissa on pieni n\xe4ytt\xf6"})}}});

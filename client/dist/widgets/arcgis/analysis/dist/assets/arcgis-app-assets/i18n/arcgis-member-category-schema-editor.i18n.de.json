@@ -1,0 +1,22 @@
+{
+  "dialogHeading": "Mitgliederkategorien konfigurieren",
+  "noticeTitle": "Bearbeiten oder löschen Sie Kategorien in Ihrer Organisation, oder ordnen Sie sie neu an.",
+  "noticeDescription": "Die Zuweisung von Kategorien zu Mitgliedern erfolgt über die Registerkarte \"Mitglieder\".",
+  "defaultCategoryWarning": "Diese Mitgliederkategorie ist als Standardeinstellung für neue Mitglieder festgelegt und kann nicht bearbeitet oder gelöscht werden.",
+  "warning": {
+    "deleteInUseCategory": {
+      "message": {
+        "single": "Ein Mitglied ist dieser Kategorie zugewiesen. Wenn Sie die Kategorie löschen, wird sie auch für dieses Mitglied entfernt.",
+        "multiple": "${number} Mitglieder sind dieser Kategorie zugewiesen. Wenn Sie die Kategorie löschen, wird sie auch für diese Mitglieder entfernt.",
+        "unknown": "Dieser Kategorie zugewiesene Mitglieder: ${number} Wenn Sie die Kategorie löschen, wird sie auch für diese Mitglieder entfernt."
+      }
+    },
+    "changeTitleInUseCategory": {
+      "message": {
+        "single": "Ein Mitglied ist dieser Kategorie zugewiesen. Wenn Sie die Kategorie aktualisieren, wird das Mitglied für die Verwendung von \"${newTitle}\" aktualisiert.",
+        "multiple": "${number} Mitglieder sind dieser Kategorie zugewiesen. Wenn Sie die Kategorie aktualisieren, werden die Mitglieder für die Verwendung von \"${newTitle}\" aktualisiert.",
+        "unknown": "Dieser Kategorie zugewiesene Mitglieder: ${number} Wenn Sie die Kategorie aktualisieren, werden die Mitglieder für die Verwendung von \"${newTitle}\" aktualisiert."
+      }
+    }
+  }
+}

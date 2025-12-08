@@ -1,0 +1,9 @@
+{
+  "inputLayerGroupText": "Chọn lớp đầu vào để tính toán hình học của ranh giới vùng.",
+  "itemProperties": {
+    "description": "Bảng đầu ra được tạo từ việc chạy công cụ phân tích Hình học Vùng dưới dạng Bảng.",
+    "snippet": "Bảng đầu ra được tạo từ Hình học Vùng dưới dạng Bảng"
+  },
+  "zonalGeometrySettingGroupLabel": "Thiết lập hình học vùng",
+  "zonalGeometrySettingGroupText": "Chỉ định kích thước cell để tính toán."
+}

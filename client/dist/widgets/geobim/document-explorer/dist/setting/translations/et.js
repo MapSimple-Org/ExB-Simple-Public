@@ -1,0 +1,1 @@
+System.register([],function(e){return{execute:function(){e({settingsLabel:"Document Exploreri seaded",selectModelViewer:"Dokumentide kuvamiseks valige dokumendivaaturi Viewer vidin."})}}});

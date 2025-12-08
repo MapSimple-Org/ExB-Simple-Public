@@ -1,0 +1,26 @@
+{
+  "CCIAnalysisSettingGroupLabel": "Indekso nustatymai",
+  "CCIAnalysisSettingGroupText": "Nurodykite, kaip turėtų būti skaičiuojamas indeksas.",
+  "geomeanPercentileLabel": "Sudėtiniai įvertinimai (procentilių geometrinis vidurkis)",
+  "geomeanRawLabel": "Sudėtinės neapdorotos reikšmės (neapdorotų reikšmių geometrinis vidurkis)",
+  "geomeanScaledLabel": "Sudėtinės padidintos reikšmės (padidintų reikšmių geometrinis vidurkis)",
+  "indexMethodLabel": "Kintamųjų didinimo ir sujungimo metodas",
+  "inputFeaturesOrTableLabel": "Įvesties elementai arba lentelė",
+  "inputLayerGroupText": "Pasirinkite elementus arba lentelę ir kintamuosius, kuriuos naudodami norite sukurti indeksą.",
+  "inputVariablesLabel": "Įvesties kintamieji",
+  "itemProperties": {
+    "description": "Elementų sluoksnis, sugeneruotas paleidžiant analizės įrankį Skaičiuoti sudėtinių reikšmių indeksą.",
+    "snippet": "Elementų sluoksnis, sugeneruotas paleidžiant „Skaičiuoti sudėtinių reikšmių indeksą“."
+  },
+  "meanPercentileLabel": "Sujungti įvertinimus (procentilių vidurkis)",
+  "meanRawLabel": "Sujungti neapdorotas reikšmes (neapdorotų reikšmių vidurkis)",
+  "meanScaledLabel": "Sujungti padidintas reikšmes (padidintų reikšmių vidurkis)",
+  "outputIndexMaxLabel": "Maksimumas",
+  "outputIndexMinLabel": "Minimumas",
+  "outputIndexMinMaxLabel": "Indekso minimalios ir maksimalios reikšmės",
+  "outputIndexReverseLabel": "Apsukti indekso reikšmes",
+  "reverseVariableLabel": "Apsukti kryptį",
+  "sumFlagsPercentileLabel": "Pažymėti kraštutinumus (reikšmių virš 90 procentilės skaičius)",
+  "toolName": "Skaičiuoti sudėtinių reikšmių indeksą",
+  "weight": "Svoris"
+}

@@ -1,0 +1,1 @@
+System.register([],function(a){return{execute:function(){a({distance:"Att\u0101lums",area:"Laukums",atLeastOne:"Ir j\u0101atlasa vismaz viens r\u012bks",toolbar:"R\u012bkjosla",disableSnapping:"Deaktiviz\u0113t pielipin\u0101\u0161anu 2D kart\u0113."})}}});

@@ -1,0 +1,5 @@
+export enum ActionType {
+  SET_JIMU_MAP_VIEW = 'SET_JIMU_MAP_VIEW',
+  SET_LAYER_LIST = 'SET_LAYER_LIST',
+  SET_LAYER_ID = 'SET_LAYER_ID'
+}

@@ -1,0 +1,1 @@
+System.register([],function(e){return{execute:function(){e({_widgetLabel:"Dugme",dynamicStyleExpressionsLabel:"Upotrebi sadr\u017eaj teksta dugmeta"})}}});

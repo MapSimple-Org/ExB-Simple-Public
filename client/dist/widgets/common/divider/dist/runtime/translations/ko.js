@@ -1,0 +1,1 @@
+System.register([],function(e){return{execute:function(){e({_widgetLabel:"\uad6c\ubd84\uc120",quickStyleItem:"\ube60\ub978 \uc2a4\ud0c0\uc77c {index}"})}}});

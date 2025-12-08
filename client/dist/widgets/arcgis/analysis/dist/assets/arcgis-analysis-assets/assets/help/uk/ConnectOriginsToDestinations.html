@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>Інструмент &laquo;Обчислити вартість подорожі&raquo; вимірює час у дорозі або відстань шляху між парами точок.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="originsLayer">
+        <div>
+            
+            <p class="OnlineOnly">Шар точок, що відображає місця розташування джерел, від яких розраховується вартість подорожі. Підтримується шари з  п'ять тисяч об'єктами. </p>  
+            <p class="PortalOnly">Шар точок, що відображає місця розташування джерел, від яких розраховується вартість подорожі.
+            </p>
+            <p class="toolPaneOnly">Кількість об'єктів залежить від таких додаткових факторів, як критерії фільтрування та екстент аналізу.
+            </p>
+        </div>
+    </div>
+    <div id="destinationsLayer">
+        <div>
+            
+            <p class="OnlineOnly">Шар точок, що відображає місця пунктів призначення, до яких обчислюється вартість подорожі. Підтримується шари з  п'ять тисяч об'єктами. </p> 
+            <p class="PortalOnly">Шар точок, що відображає місця пунктів призначення, до яких обчислюється вартість подорожі.
+            </p>
+            <p class="toolPaneOnly">Кількість об'єктів залежить від таких додаткових факторів, як критерії фільтрування та екстент аналізу.
+            </p>
+        </div>
+    </div>
+    <div id="originsLayerRouteIDField">
+        <div>
+            
+            <p>Поле в наборі даних  <b>Від шару</b>, яке визначає попередньо призначену пару джерело-пункт призначення. Якщо існує кілька місць розташування джерел і пунктів призначення, цей ідентифікатор має відповідати значенню в полі <b>Ідентифікатор маршруту до шару</b>.
+            </p>
+        </div>
+    </div>
+    <div id="destinationsLayerRouteIDField">
+        <div>
+            
+            <p>Поле в наборі даних  <b>До шару</b>, яке визначає попередньо призначену пару джерело-пункт призначення. Якщо існує кілька місць розташування джерел і пунктів призначення, цей ідентифікатор має відповідати значенню в полі <b>Ідентифікатор маршруту від шару</b>.
+            </p>
+        </div>
+    </div>
+    <div id="pointBarrierLayer">
+        <div>
+            <p>Один або більше точкових об'єктів, які діють у якості тимчасових обмежень (бар'єрів) під час подорожування нижчележачими вулицями. Рух по вулиці дозволено, але тільки не через бар'єр.
+            </p>
+        </div>
+    </div>
+    <div id="lineBarrierLayer">
+        <div>
+            <p>Один або більше лінійних об'єктів, які діють у якості тимчасових обмежень (бар'єрів) під час подорожування нижчележачими вулицями. Лінійні бар'єри забороняють рух у будь-якому місці, де бар'єри перетинаються з вулицями.
+            </p>
+        </div>
+    </div>
+    <div id="polygonBarrierLayer">
+        <div>
+            <p>Один або більше полігональних об'єктів, які діють у якості тимчасових обмежень (бар'єрів) під час подорожування нижчележачими вулицями. Полігональні бар'єри забороняють рух у будь-якому місці, де полігони перетинають вулиці.
+            </p>
+        </div>
+    </div>
+    <div id="measurementType">
+        <div>
+            <p>Метод, який буде використаний для вимірювання відстані або часу. Методом може бути відстань по лінії або режим переміщення.
+            </p>
+        </div>
+    </div>
+    <div id="timeOfDay">
+        <div>
+            <p>Дата й час відправлення з місць розташування джерел в полі набору даних &laquo;Від шару&raquo;.
+            </p>
+        </div>
+    </div>
+    <div id="routeShape">
+        <div>
+            <p>Визначає, чи з&rsquo;єднані джерела та пункти призначення за допомогою павутинних ліній чи ліній бажань (<b>Пряма лінія</b>) чи мережі основних вулиць (<b>Дотримуватись вулиць</b>).
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>Назва шару, який буде створено та додано до карти.
+            </p>
+        </div>
+    </div>
+    <div id="includeRouteLayers">
+        <div>
+            <p>Указує, чи буде кожний результівний маршрут зберігатися як шар маршруту.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            
+            <p>Назва папки в  <b>Моєму вмісті</b>, де буде збережено результати.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

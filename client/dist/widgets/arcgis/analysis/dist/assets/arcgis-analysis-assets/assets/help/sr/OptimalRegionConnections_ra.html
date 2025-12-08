@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>Alat Optimalne veze regiona izračunava optimalnu mrežu povezanosti između dva ili vi&scaron;e regiona.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputRegionRasterOrFeatures">
+        <div>
+            <p>Raster ili sloj karakteristika koji identifikuje regione koji će biti povezani optimalnom mrežom.
+            </p>
+            <p class="toolPaneOnly">Za uzlaze geoobjekata, broj zavisi od dodatnih faktora kao &scaron;to su kriterijumi za filtriranje i obuhvat analize.
+            </p>
+        </div>
+    </div>
+    <div id="inputBarrierRasterOrFeatures">
+        <div>
+            <p>Raster ili sloj geoobjekata koji identifikuje prepreke koje se moraju usmeriti okolo.
+            </p>
+            <p>Za bilo koji rasterski sloj, ćelije koje imaju vrednost (uključujući nulu) će se tretirati kao barijera.
+            </p>
+            <p class="toolPaneOnly">Za uzlaze geoobjekata, broj zavisi od dodatnih faktora kao &scaron;to su kriterijumi za filtriranje i obuhvat analize.
+            </p>
+        </div>
+    </div>
+    <div id="inputCostRaster">
+        <div>
+            <p>Rasterski sloj koji defini&scaron;e impedansu, ili cenu, za kretanje kroz svaku ćeliju.
+            </p>
+            <p>Vrednost na lokaciji svake ćelije predstavlja rastojanje tro&scaron;ak-po-jedinici za pomeranje kroz ćeliju. Ne može da bude negativan ili nula.
+            </p>
+        </div>
+    </div>
+    <div id="distanceMethod">
+        <div>
+            <p>Navedite da li će se rastojanje izračunati pomoću planarne (ravna zemlja) ili geodetske (elipsoidne) metode.
+            </p>
+        </div>
+    </div>
+    <div id="connectionsWithinRegions">
+        <div>
+            <p>Određuje da li će se putanje nastaviti i povezati unutar ulaznih regiona.
+            </p>
+        </div>
+    </div>
+    <div id="outputOptimalLinesName">
+        <div>
+            <p>Naziv sloja optimalne mreže putanja koji povezuje svaki od ulaznih regiona koji će biti kreiran i dodati na mapu.
+            </p>
+        </div>
+    </div>
+    <div id="outputNeighborConnectionsName">
+        <div>
+            <p>Naziv sloja linije susednih veza koji će biti kreiran i dodat na mapu. Sloj identifikuje sve putanje od svakog regiona do svakog od njegovih najbližih ili suseda sa cenom.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>Naziv fascikle u  <b>Mom sadržaju</b> u kojoj će rezultat biti sačuvan.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

@@ -1,0 +1,23 @@
+{
+  "name": "pocket",
+  "type": "template",
+  "templateType": "full-screen-page",
+  "label": "Pocket",
+  "description": "Pocket is a template with a map and semi-transparent placeholder widget. It is appropriate for creating apps that feature one main widget that interacts with the map.",
+  "thumbnail": "thumbnail.png",
+  "order": 9,
+  "tags": [
+    "Map",
+    "Search",
+    "Panel",
+    "Table",
+    "Sidebar"
+  ],
+  "categoriesTags": [
+    "WAB classic",
+    "Map centric",
+    "Fullscreen"
+  ],
+  "thumbnailWidth": 320,
+  "thumbnailHeight": 214
+}

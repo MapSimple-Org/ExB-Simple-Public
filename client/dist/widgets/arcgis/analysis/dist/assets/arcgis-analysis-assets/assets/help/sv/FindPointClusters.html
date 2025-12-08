@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>Verktyget Hitta punktkluster identifierar kluster av punktgeoobjekt i bakgrundsbrus baserat p&aring; deras spatiala f&ouml;rdelning.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="analysisLayer">
+        <div>
+            <p>Indatapunktlagret som grupperas till kluster baserat p&aring; punktgeoobjektens spatiala f&ouml;rdelning.
+            </p>
+        </div>
+    </div>
+    <div id="method">
+        <div>
+            <p>Metoden som anv&auml;nds f&ouml;r att identifiera kluster.
+            </p>
+        </div>
+    </div>
+    <div id="minFeaturesCluster">
+        <div>
+            <p>Minimalt antal punktgeoobjekt som betraktas som ett kluster.
+            </p>
+        </div>
+    </div>
+    <div id="searchDistance">
+        <div>
+            <p>Anger maximalt avst&aring;nd runt varje punktgeoobjekt f&ouml;r s&ouml;kning efter punkter som kan inkluderas i klustret. Om f&auml;ltet l&auml;mnas tomt kommer v&auml;rdet f&ouml;r  <b>S&ouml;kavst&aring;nd</b> att vara det h&ouml;gsta k&auml;rnavst&aring;ndet i lagret, exklusive den &ouml;versta procenten av k&auml;rnavst&aring;nden.
+            </p>
+        </div>
+    </div>
+    <div id="searchDistanceUnit">
+        <div>
+            <p>Anger enheterna som anv&auml;nds f&ouml;r avst&aring;nd.
+            </p>
+        </div>
+    </div>
+    <div id="sensitivity">
+        <div>
+            <p>Ett heltal mellan 0 och 100 som fastst&auml;ller kompaktheten hos klustren. Om f&auml;ltet l&auml;mnas tomt kommer v&auml;rdet  <b>Klusterk&auml;nslighet</b> att ber&auml;knas med Kullback-Leibler-divergensen.
+            </p>
+        </div>
+    </div>
+    <div id="timeField">
+        <div>
+            <p>F&auml;ltet fr&aring;n indatalagret som inneh&aring;ller en tidsst&auml;mpel f&ouml;r varje geoobjekt.
+            </p>
+        </div>
+    </div>
+    <div id="searchTimeInterval">
+        <div>
+            <p>Tidsintervallet som ska anv&auml;ndas f&ouml;r att best&auml;mma om geoobjekt bildar ett rumtidskluster. S&ouml;ktidsintervallet str&auml;cker sig f&ouml;re och efter tiden f&ouml;r varje geoobjekt. Ett s&ouml;ktidsintervall p&aring; 3 dagar runt ett geoobjekt inkluderar alla geoobjekt med start 3 dagar f&ouml;re och som slutar 3 dagar efter tiden f&ouml;r geoobjektet.
+            </p>
+        </div>
+    </div>
+    <div id="searchTimeUnit">
+        <div>
+            <p>Anger enheterna som anv&auml;nds f&ouml;r s&ouml;ktidsintervallet.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>Namnet p&aring; lagret som skapas och l&auml;ggs till i kartan.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>Namnet p&aring; mappen i  <b>Mitt inneh&aring;ll</b> d&auml;r resultatet ska sparas.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

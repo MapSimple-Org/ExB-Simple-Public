@@ -1,0 +1,16 @@
+{
+  "value": "मान",
+  "classname": "ClassName",
+  "color": "रंग",
+  "raster": "रास्टर",
+  "tableType": "तालिका प्रकार",
+  "manual": "मैन्युअल",
+  "external": "बाह्य",
+  "browseTable": "तालिका ब्राउज़ करें",
+  "generate": "तालिका जनरेट करें",
+  "minValue": "न्यूनतम मान",
+  "maxValue": "अधिकतम मान",
+  "classBaseName": "श्रेणी आधार नाम",
+  "colorscheme": "रंग प्रणाली",
+  "defaultClassName": "लेबल_"
+}

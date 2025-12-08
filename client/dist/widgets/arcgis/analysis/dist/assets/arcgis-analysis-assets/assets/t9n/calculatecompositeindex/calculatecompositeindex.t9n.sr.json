@@ -1,0 +1,26 @@
+{
+  "CCIAnalysisSettingGroupLabel": "Postavke za indeks",
+  "CCIAnalysisSettingGroupText": "Navedite kako treba izračunati indeks.",
+  "geomeanPercentileLabel": "Složeni rangovi (geometrijska sredina percentila)",
+  "geomeanRawLabel": "Složene neobrađene vrednosti (geometrijska sredina neobrađenih vrednosti)",
+  "geomeanScaledLabel": "Složene skalirane vrednosti (geometrijska sredina skaliranih vrednosti)",
+  "indexMethodLabel": "Metod za skaliranje i kombinovanje promenljivi",
+  "inputFeaturesOrTableLabel": "Ulazni geoobjekti ili tabela",
+  "inputLayerGroupText": "Izaberite geoobjekte ili tabelu i promenljive sa kojima ćete kreirati indeks.",
+  "inputVariablesLabel": "Ulazne promenljive",
+  "itemProperties": {
+    "description": "Sloj geoobjekta generisan pokretanjem alatke za analizu Izračunaj složeni indeks.",
+    "snippet": "Sloj geoobjekta nastao iz funkcije Izračunaj složeni indeks"
+  },
+  "meanPercentileLabel": "Kombinujte rangove (srednja vrednost percentila)",
+  "meanRawLabel": "Kombinujte neobrađene vrednosti (srednja vrednost neobrađenih vrednosti)",
+  "meanScaledLabel": "Kombinujte skalirane vrednosti (srednja vrednost skaliranih vrednosti)",
+  "outputIndexMaxLabel": "Maksimum",
+  "outputIndexMinLabel": "Minimum",
+  "outputIndexMinMaxLabel": "Minimalne i maksimalne vrednosti indeksa",
+  "outputIndexReverseLabel": "Obrnute vrednosti indeksa",
+  "reverseVariableLabel": "Obrnuto usmerenje",
+  "sumFlagsPercentileLabel": "Istaknite ekstreme (broj vrednosti iznad 90. percentila)",
+  "toolName": "Izračunaj složeni indeks",
+  "weight": "Debljina"
+}

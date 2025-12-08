@@ -1,0 +1,7 @@
+{
+  "header": "Vybrat proměnnou",
+  "noFound": "Nebyly nalezeny žádné kompatibilní proměnné",
+  "search": "Vyhledat proměnné",
+  "variableLabel": "Popisek: <span style='font-weight: var(--calcite-font-weight-normal)'>${val}</span>",
+  "variableVal": "Hodnota: <span style='font-weight: var(--calcite-font-weight-normal)'>${val}</span>"
+}

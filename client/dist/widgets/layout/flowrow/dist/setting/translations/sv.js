@@ -1,0 +1,1 @@
+System.register([],function(e){return{execute:function(){e({verticalAlign:"Justera vertikalt",spaceAround:"Utrymme omkring",spaceBetween:"Utrymme mellan",spaceEvenly:"Utrymme j\xe4mnt",horizontalAlign:"Justera horisontellt",scrollable:"Rullningsbar"})}}});

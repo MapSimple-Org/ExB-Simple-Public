@@ -1,0 +1,7 @@
+{
+  "searchMembers": "Søg efter medlemmer",
+  "selectUser": "Vælg bruger",
+  "editSelection": "Redigér valgt bruger. Aktuelt valgt: ${name}",
+  "clear": "Ryd",
+  "members": "Medlemmer"
+}

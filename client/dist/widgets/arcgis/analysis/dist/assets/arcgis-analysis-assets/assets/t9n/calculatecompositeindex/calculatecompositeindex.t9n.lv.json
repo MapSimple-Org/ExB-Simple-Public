@@ -1,0 +1,26 @@
+{
+  "CCIAnalysisSettingGroupLabel": "Indeksa iestatījumi",
+  "CCIAnalysisSettingGroupText": "Norādiet, kā jāaprēķina indekss.",
+  "geomeanPercentileLabel": "Saliktās rindas (procentīļu ģeometriskais vidējais)",
+  "geomeanRawLabel": "Saliktās neapstrādātās vērtības (neapstrādāto vērtību ģeometriskais vidējais)",
+  "geomeanScaledLabel": "Saliktās mērogotās vērtības (mērogoto vērtību ģeometriskais vidējais)",
+  "indexMethodLabel": "Mainīgo lielumu mērogošanas un apvienošanas metode",
+  "inputFeaturesOrTableLabel": "Ievades elementi vai tabula",
+  "inputLayerGroupText": "Izvēlieties elementus vai tabulu un mainīgos, ar kuriem izveidot indeksu.",
+  "inputVariablesLabel": "Ievades mainīgie",
+  "itemProperties": {
+    "description": "Elementu slānis, kas ģenerēts, palaižot analīzes rīku Aprēķināt salikto indeksu.",
+    "snippet": "Elementu slānis, kas ģenerēts, izmantojot saliktā indeksa aprēķināšanu"
+  },
+  "meanPercentileLabel": "Apvienot rangus (procentiļu vidējais aritmētiskais)",
+  "meanRawLabel": "Apvienot neapstrādātās vērtības (mērogoto vērtību vidējais aritmētiskais)",
+  "meanScaledLabel": "Apvienot mērogotās vērtības (mērogoto vērtību vidējais aritmētiskais)",
+  "outputIndexMaxLabel": "Maksimālais",
+  "outputIndexMinLabel": "Minimālais",
+  "outputIndexMinMaxLabel": "Indeksa minimālās un maksimālās vērtības",
+  "outputIndexReverseLabel": "Apgriezt indeksa vērtības",
+  "reverseVariableLabel": "Pretējais virziens",
+  "sumFlagsPercentileLabel": "Iezīmēt galējības (vērtību skaits virs 90. procentiles)",
+  "toolName": "Aprēķināt salikto indeksu",
+  "weight": "Nozīmīgums"
+}

@@ -1,0 +1,69 @@
+{
+  "loadingText": "Loading schema templates",
+  "cancel": "Cancel",
+  "finishSetup": "Finish setup",
+  "hasUnsavedChanges": "You've made category changes that will be lost if you don't save first. Are you sure you want to close this view and lose your changes?",
+  "error": {
+    "generic": {
+      "title": "Error updating categories",
+      "message": "Something went wrong. Please try again later."
+    },
+    "maxDepthExceeded": {
+      "title": "Error updating categories",
+      "message": "You cannot nest categories more than 2 levels deep."
+    },
+    "destinationHasSameName": {
+      "title": "Error updating categories",
+      "message": "A category with the same name already exists in the destination category."
+    },
+    "emptyTitle": {
+      "title": "Error updating categories",
+      "message": "Category title cannot be empty."
+    },
+    "noSchema": {
+      "title": "Schema not found",
+      "message": "Item schema not found for user."
+    },
+    "maxCharacter": {
+      "title": "Error updating categories",
+      "message": "Category names can be a maximum of ${maxCharacter} characters long."
+    },
+    "invalidCharacters": {
+      "title": "Error updating categories",
+      "single": "The category cannot contain this character: ${invalidCharacters}.",
+      "multiple": "The category cannot contain any of these characters: ${invalidCharacters}.",
+      "unknown": "The category cannot contain any of these characters: ${invalidCharacters}."
+    }
+  },
+  "warning": {
+    "deleteInUseCategory": {
+      "title": "Delete category",
+      "cta": "Delete category"
+    },
+    "changeTitleInUseCategory": {
+      "title": "Update category",
+      "cta": "Update category"
+    }
+  },
+  "template": {
+    "title": "Category templates",
+    "learnMore": "Learn more",
+    "templateList": {
+      "custom": {
+        "title": "Custom categories"
+      },
+      "arcgis": {
+        "title": "ArcGIS categories",
+        "message": "ArcGIS categories include a selection of topic categories and subcategories that can be used to categorize many types of geospatial content. These categories are used to support ArcGIS Living Atlas of the World."
+      },
+      "iso": {
+        "title": "ISO categories",
+        "message": "ISO categories includes topic categories from the International Organization for Standardization that provide a method for describing and cataloging geographic information."
+      },
+      "inspire": {
+        "title": "INSPIRE categories",
+        "message": "INSPIRE categories include a comprehensive set of spatial data themes set out in the INSPIRE Directive."
+      }
+    }
+  }
+}

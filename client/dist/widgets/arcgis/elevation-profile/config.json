@@ -1,0 +1,17 @@
+{
+  "useMapWidget": false,
+  "activeDataSource": "",
+  "generalSettings": {
+    "allowExport": true,
+    "keepResultsWhenClosed": true,
+    "isSelectToolActive": false,
+    "isDrawToolActive": false,
+    "showGridAxis": true,
+    "showAxisTitles": false,
+    "showLegend": true,
+    "buttonStyle": "ICONTEXT"
+  },
+  "configInfo": {
+
+  }
+}

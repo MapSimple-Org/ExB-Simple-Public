@@ -1,0 +1,13 @@
+{
+  "aboveMaximumMessage": "Wartość wejściowa musi być mniejsza niż lub równa ${max}.",
+  "belowMinimumMessage": "Wartość wejściowa musi być większa niż lub równa ${min}.",
+  "choiceListBadInput": "Wartość wejściowa zawiera nieprawidłowy wpis.",
+  "defaultLabel": "Jednostka liniowa",
+  "inputPlaceholderText": "Wprowadź wartość odległości...",
+  "invalidDoubleMessage": "Wartość wejściowa musi być liczbą podwójnej precyzji.",
+  "invalidIntegerMessage": "Wartość wejściowa musi być liczbą całkowitą.",
+  "requiredInputMessage": "Ten parametr jest wymagany.",
+  "strictlyMaximumMessage": "Wartość wejściowa musi być mniejsza niż ${max}.",
+  "strictlyMinimumMessage": "Wartość wejściowa musi być większa niż ${min}.",
+  "unitSelect": "Wybór jednostki"
+}

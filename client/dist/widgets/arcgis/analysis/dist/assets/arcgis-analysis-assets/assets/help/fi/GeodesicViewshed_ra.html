@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>Geodeettinen n&auml;kym&auml;alue -ty&ouml;kalu tunnistaa rasteripinnalla olevat sijainnit, jotka ovat n&auml;kyviss&auml; l&auml;ht&ouml;aineiston tarkkailusijainteihin.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputElevationSurface">
+        <div>
+            <p>Korkeusrasteri, josta n&auml;kym&auml;alue lasketaan.
+            </p>
+        </div>
+    </div>
+    <div id="inputObserverFeatures">
+        <div>
+            <p>Tarkkailusijainnit, joille n&auml;kym&auml;alue lasketaan.
+            </p>
+            <p class="toolPaneOnly">Kohteiden m&auml;&auml;r&auml; riippuu ylim&auml;&auml;r&auml;isist&auml; tekij&ouml;ist&auml;, kuten suodatusehdoista ja analyysin laajuudesta.
+            </p>
+        </div>
+    </div>
+    <div id="optimizeFor">
+        <div>
+            <p>Optimoi n&auml;kym&auml;alueen laskennan joko nopeuden tai tarkkuuden perusteella.
+            </p>
+        </div>
+    </div>
+    <div id="verticalError">
+        <div>
+            <p>Ep&auml;varmuuden m&auml;&auml;r&auml;  <b>L&auml;ht&ouml;aineiston korkeuspinta</b> -arvon korkeusarvoissa.
+            </p>
+        </div>
+    </div>
+    <div id="refractivityCoefficient">
+        <div>
+            <p>Ilman n&auml;kyv&auml;n valon taittokyvyn kerroin.
+            </p>
+        </div>
+    </div>
+    <div id="maximumViewingDistance">
+        <div>
+            <p>N&auml;kym&auml;alueen laskennan enimm&auml;iskatseluet&auml;isyys.
+            </p>
+            <p>Et&auml;isyys voidaan m&auml;&auml;ritt&auml;&auml; arvolla ja sen yksik&ouml;ill&auml; tai  <b>L&auml;ht&ouml;aineiston tarkkailusijainnin piste- tai viivakohteet</b> -arvon kent&auml;st&auml;.
+            </p>
+        </div>
+    </div>
+    <div id="minimumViewingDistance">
+        <div>
+            <p>N&auml;kym&auml;alueen laskennan v&auml;himm&auml;iskatseluet&auml;isyys.
+            </p>
+            <p>Et&auml;isyys voidaan m&auml;&auml;ritt&auml;&auml; arvolla ja sen yksik&ouml;ill&auml; tai  <b>L&auml;ht&ouml;aineiston tarkkailusijainnin piste- tai viivakohteet</b> -arvon kent&auml;st&auml;.
+            </p>
+        </div>
+    </div>
+    <div id="viewingDistancesAre3D">
+        <div>
+            <p>M&auml;&auml;ritt&auml;&auml;, mitataanko enimm&auml;is- ja v&auml;himm&auml;iskatseluet&auml;isyydet 3D- vai 2D-et&auml;isyyten&auml;.
+            </p>
+            <p>Jos t&auml;t&auml; ei valita, katseluet&auml;isyyksi&auml; k&auml;sitell&auml;&auml;n kaksiulotteisina Euklidisina et&auml;isyyksin&auml;. Jos t&auml;m&auml; valitaan, katseluet&auml;isyyksi&auml; k&auml;sitell&auml;&auml;n kolmiulotteisina et&auml;isyyksin&auml;.
+            </p>
+        </div>
+    </div>
+    <div id="observersElevation">
+        <div>
+            <p>Tarkkailusijaintien pinnan korkeus.
+            </p>
+            <p>Korkeustaso voidaan m&auml;&auml;ritt&auml;&auml; arvolla ja sen yksik&ouml;ill&auml; tai  <b>L&auml;ht&ouml;aineiston tarkkailusijainnin piste- tai viivakohteet</b> -arvon kent&auml;st&auml;.
+            </p>
+        </div>
+    </div>
+    <div id="observersHeight">
+        <div>
+            <p>Tarkkailusijaintien korkeus maanpinnan yl&auml;puolella.
+            </p>
+            <p>Korkeus voidaan m&auml;&auml;ritt&auml;&auml; arvolla ja sen yksik&ouml;ill&auml; tai  <b>L&auml;ht&ouml;aineiston tarkkailusijainnin piste- tai viivakohteet</b> -arvon kent&auml;st&auml;.
+            </p>
+        </div>
+    </div>
+    <div id="targetHeight">
+        <div>
+            <p>Kohteiden korkeus maanpinnasta.
+            </p>
+            <p>Korkeus voidaan m&auml;&auml;ritt&auml;&auml; arvolla ja sen yksik&ouml;ill&auml; tai  <b>L&auml;ht&ouml;aineiston tarkkailusijainnin piste- tai viivakohteet</b> -arvon kent&auml;st&auml;.
+            </p>
+        </div>
+    </div>
+    <div id="horizontalStartAngle">
+        <div>
+            <p>Vaakasuuntaisen mittakaava-alueen alkukulma.
+            </p>
+            <p>Kulma voidaan m&auml;&auml;ritt&auml;&auml; arvolla 0&ndash;360 tai  <b>L&auml;ht&ouml;aineiston tarkkailusijainnin piste- tai viivakohteet</b> -arvon kent&auml;st&auml;.
+            </p>
+        </div>
+    </div>
+    <div id="horizontalEndAngle">
+        <div>
+            <p>Vaakasuuntaisen mittakaava-alueen loppukulma.
+            </p>
+            <p>Kulma voidaan m&auml;&auml;ritt&auml;&auml; arvolla 0&ndash;360 tai  <b>L&auml;ht&ouml;aineiston tarkkailusijainnin piste- tai viivakohteet</b> -arvon kent&auml;st&auml;.
+            </p>
+        </div>
+    </div>
+    <div id="verticalUpperAngle">
+        <div>
+            <p>Skannauksen pystysuuntaisen yl&auml;kulman raja suhteessa vaakatasoon.
+            </p>
+            <p>Kulma voidaan m&auml;&auml;ritt&auml;&auml; arvolla &ndash;90&ndash;90 tai  <b>L&auml;ht&ouml;aineiston tarkkailusijainnin piste- tai viivakohteet</b> -arvon kent&auml;st&auml;.
+            </p>
+        </div>
+    </div>
+    <div id="verticalLowerAngle">
+        <div>
+            <p>Skannauksen pystysuuntaisen alakulman raja suhteessa vaakatasoon.
+            </p>
+            <p>Kulma voidaan m&auml;&auml;ritt&auml;&auml; arvolla &ndash;90&ndash;90 tai  <b>L&auml;ht&ouml;aineiston tarkkailusijainnin piste- tai viivakohteet</b> -arvon kent&auml;st&auml;.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>Karttaan luotavan ja lis&auml;tt&auml;v&auml;n n&auml;kym&auml;alueen rasterikarttatason nimi. T&auml;m&auml; karttataso sis&auml;lt&auml;&auml; tarkkailusijainnista n&auml;kyv&auml;t alueet, ja soluarvot edustavat niiden tarkkailusijaintien m&auml;&auml;r&auml;&auml;, joista solut voidaan n&auml;hd&auml;.
+            </p>
+        </div>
+    </div>
+    <div id="outputAboveGroundLevelRasterName">
+        <div>
+            <p>Karttaan luotavan ja lis&auml;tt&auml;v&auml;n maanpinnan yl&auml;puolisen rasterikarttatason nimi.
+            </p>
+        </div>
+    </div>
+    <div id="resultType">
+        <div>
+            <p>Luotavan tulosaineiston tyyppi. Tulosaineisto voi olla tiilitetty kuva-aineistokarttataso tai dynaaminen kuvakarttataso.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>Sen  <b>Omassa sis&auml;ll&ouml;ss&auml;</b> olevan kansion nimi, johon tulos tallennetaan.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

@@ -1,0 +1,1 @@
+System.register([],function(t){return{execute:function(){t({_widgetLabel:"Tla\u010d\xedtko",dynamicStyleExpressionsLabel:"Pou\u017e\xedt textov\xfd obsah tla\u010d\xedtka"})}}});

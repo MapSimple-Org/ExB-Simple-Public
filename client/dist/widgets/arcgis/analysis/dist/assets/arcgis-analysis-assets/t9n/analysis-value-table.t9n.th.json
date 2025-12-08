@@ -1,0 +1,7 @@
+{
+  "addEntryButtonLabel": "เพิ่ม",
+  "maxGroupsMessage": "จำนวนสูงสุดของรายการคือ ${maxCount}",
+  "minGroupsMessage": "จำนวนขั้นต่ำของรายการคือ ${minCount}",
+  "removeEntryButtonLabel": "ลบรายการ",
+  "requiredMessage": "จำเป็นต้องใช้พารามิเตอร์นี้"
+}

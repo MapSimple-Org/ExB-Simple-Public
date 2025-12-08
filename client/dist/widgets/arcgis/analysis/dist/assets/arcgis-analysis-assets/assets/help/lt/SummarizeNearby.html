@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>Įrankis Sumuoti &scaron;alia apskaičiuoja elementų, esančių nurodytu atstumu nuo kitų elementų, statistinius duomenis. Atstumas gali būti apskaičiuojamas naudojant tiesiaeigį atstumą arba kelionės režimą.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="summaryLayer">
+        <div>
+            <p>Sluoksnis, kuris bus apibendrintas per atstumą nuo gretimo sluoksnio.
+            </p>
+            <p class="toolPaneOnly">Elementų skaičius priklauso nuo papildomų veiksnių, pavyzdžiui, filtravimo kriterijų ir analizės apimties.
+            </p>
+        </div>
+    </div>
+    <div id="sumNearbyLayer">
+        <div>
+            <p>Ta&scaron;kų, linijų arba poligonų sluoksnis, kuris bus naudojamas kaip pradinės vietos, aplink kurias bus kuriamos ribinės teritorijos, apibendrinant netoliese esančius elementus.
+            </p>
+            <p class="toolPaneOnly">Elementų skaičius priklauso nuo papildomų veiksnių, pavyzdžiui, filtravimo kriterijų ir analizės apimties.
+            </p>
+        </div>
+    </div>
+    <div id="nearType">
+        <div>
+            
+            <p class="toolPaneOnly">Metodas, kuris bus naudojamas ribinėms teritorijoms sukurti. Metodas gali būti atstumas tiesia linija arba kelionės režimas.
+            </p> 
+            <p class="modelBuilderOnly">Metodas, kuris bus naudojamas ribinėms teritorijoms sukurti. &Scaron;iuo metu atstumas tiesia linija yra vienintelis modeliuose palaikomas metodas.
+            </p>
+        </div>
+    </div>
+    <div id="distances">
+        <div>
+            <p>Atstumas arba laikas, kuris bus naudojamas ribinėms sritims sukurti. Jei pridedamos kelios reik&scaron;mės, kiekviena reik&scaron;mė bus naudojama visų įvesties elementų ribinėms sritims apskaičiuoti.
+            </p>
+        </div>
+    </div>
+    <div id="units">
+        <div>
+            <p>Vienetai, kurie bus naudojami atstumui arba laikui nurodyti.
+            </p>
+        </div>
+    </div>
+    <div id="returnBoundaries">
+        <div>
+            <p>Nurodoma, ar rezultatų sluoksnis turi būti ribinės teritorijos (pažymėta), ar ta pati geometrija, kaip ir įvesties sluoksnis (nepažymėta).
+            </p>
+        </div>
+    </div>
+    <div id="sumShape">
+        <div>
+            <p>Nurodoma, ar bus apskaičiuotas bendras elementų, apibendrintų kiekvienoje ribinėje teritorijoje, dydis. Bus apskaičiuotas bendras linijų ilgis. Bus apskaičiuotas bendras poligonų plotas.
+            </p>
+        </div>
+    </div>
+    <div id="shapeUnits">
+        <div>
+            <p>Vienetai, kurie bus naudojami bendram susumuotų elementų dydžiui apskaičiuoti.
+            </p>
+        </div>
+    </div>
+    <div id="summaryFields">
+        <div>
+            <p>Įvesties sluoksnio skaičių arba datų laukai, kurie bus apibendrinti, ir kiekvienam laukui apskaičiuojama statistika.
+            </p>
+        </div>
+    </div>
+    <div id="groupByField">
+        <div>
+            <p>Laukas i&scaron; įvesties sluoksnio, kuris bus naudojamas duomenims suskirstyti į atskiras grupes statistiniams skaičiavimams atlikti.
+            </p>
+        </div>
+    </div>
+    <div id="minorityMajority">
+        <div>
+            <p>Nurodoma, ar apskaičiuoti mažumos (mažiausiai dominuojančios) ir daugumos (labiausiai dominuojančios) grupes kiekvienoje apibendrinimo srityje.
+            </p>
+        </div>
+    </div>
+    <div id="percentShape">
+        <div>
+            <p>Nurodoma, ar bus apskaičiuota apibendrintų elementų, priklausančių kiekvienai grupei, procentinė dalis kiekvienoje riboje.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>Sluoksnio, kuris bus sukurtas ir pridėtas į žemėlapį, pavadinimas.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>Puslapyje  <b>Mano turinys</b> esančio aplanko, kur bus įra&scaron;yti rezultatai, pavadinimas.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

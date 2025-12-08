@@ -1,0 +1,12 @@
+{
+  "choiceList": "Valgliste",
+  "choiceListBadInput": "Inputværdien indeholder en ugyldig indtastning.",
+  "comboboxPlaceholderText": "Vælg en indstilling...",
+  "inputPlaceholderText": "Indtast en værdi...",
+  "invalidCharacterError": "Inputværdien indeholder ugyldige tegn.",
+  "maxLengthError": "Inputværdien kan højst være på ${maxLength} tegn.",
+  "minLengthError": "Inputværdien kan ikke være på mindre end ${minLength} tegn.",
+  "multiSelectComboboxPlaceholderText": "Vælg en eller flere indstillinger...",
+  "requiredError": "Denne parameter er påkrævet.",
+  "selectAll": "Vælg alle"
+}

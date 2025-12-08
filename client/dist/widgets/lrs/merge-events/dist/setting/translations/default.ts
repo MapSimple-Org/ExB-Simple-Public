@@ -1,0 +1,23 @@
+export default {
+  blankStatus: 'Select a map to import LRS networks',
+  defaultSettings: 'Default Settings',
+  defaultEvent: 'Event',
+  defaultMethod: 'Method',
+  defaultType: 'Type',
+  methodMeasure: 'Route and Measure',
+  methodCoordinate: 'Coordinate',
+  methodLocationOffset: 'Location Offset',
+  operationTypeSingle: 'Single Point',
+  operationTypeMultiple: 'Multiple Point',
+  loadLayers: 'Load Layers',
+  clearLayers: 'Clear Layers',
+  useFieldAlias: 'Use field alias',
+  configureFields: 'Configure Fields',
+  layerConfig: 'Layer Configuration',
+  selectMap: 'Select Map',
+  noNetworkLayersTips: 'No Network layers in the map',
+  noPointEventLayersTips: 'No Point event layers in the map',
+  missingParentNetwork: 'Parent network is missing',
+  attributeEditable: 'Editable',
+  attributeNotEditable: 'Not editable'
+}

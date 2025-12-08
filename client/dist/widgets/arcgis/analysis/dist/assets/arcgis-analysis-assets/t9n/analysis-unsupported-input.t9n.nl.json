@@ -1,0 +1,7 @@
+{
+  "defaultValue": "Niet-ondersteund parametertype. Er zal gebruik worden gemaakt van de standaardwaarde. <calcite-link target='_blank' href='${ docLink }'>Meer informatie</calcite-link>",
+  "requiredMessage": "Deze parameter is vereist.",
+  "unsupportedGPType": "Niet-ondersteund parametertype. <calcite-link target='_blank' href='${ docLink }'>Meer informatie</calcite-link>",
+  "unsupportedParameterConfig": "Niet-ondersteunde parameterconfiguratie. <calcite-link target='_blank' href='${ docLink }'>Meer informatie</calcite-link>",
+  "unsupportedParameterConfigDefaultValue": "Niet-ondersteunde parameterconfiguratie. Er zal gebruik worden gemaakt van de standaardwaarde. <calcite-link target='_blank' href='${ docLink }'>Meer informatie</calcite-link>"
+}

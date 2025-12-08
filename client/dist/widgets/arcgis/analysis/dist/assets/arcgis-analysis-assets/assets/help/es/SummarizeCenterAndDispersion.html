@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>La herramienta Resumir centro y dispersi&oacute;n encuentra la entidad central, la tendencia central y la elipse de desviaci&oacute;n est&aacute;ndar de un conjunto de entidades.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="analysisLayer">
+        <div>
+            <p>Entidades de punto, l&iacute;nea o pol&iacute;gono cuya entidad central, tendencia central y elipse de desviaci&oacute;n est&aacute;ndar se calcular&aacute;.
+            </p>
+        </div>
+    </div>
+    <div id="summarizeType">
+        <div>
+            <p>Especifica los m&eacute;todos que resumir&aacute;n el centro y la dispersi&oacute;n de las entidades.
+            </p>
+        </div>
+    </div>
+    <div id="ellipseSize">
+        <div>
+            <p>Especifica el tama&ntilde;o del pol&iacute;gono el&iacute;ptico en desviaciones est&aacute;ndar. Si la distancia entre el centro medio y las ubicaciones de entidades sigue la distribuci&oacute;n de Rayleigh, las opciones  <b>1 desviaci&oacute;n est&aacute;ndar</b>, <b>2 desviaciones est&aacute;ndar</b> y <b>3 desviaciones est&aacute;ndar</b> generar&aacute;n un pol&iacute;gono el&iacute;ptico que cubrir&aacute; el 68%, el 95% y el 99% de las entidades, respectivamente.
+            </p>
+        </div>
+    </div>
+    <div id="weightField">
+        <div>
+            <p>Campo que se utilizar&aacute; para determinar el peso de la entidad.
+            </p>
+        </div>
+    </div>
+    <div id="groupField">
+        <div>
+            <p>Campo que se utilizar&aacute; para agrupar las entidades. Se calcular&aacute; los valores de  <b>Tipos de resumen</b> seleccionados correspondientes a cada grupo.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>El nombre de la capa que se crear&aacute; y se agregar&aacute; al mapa.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>El nombre de la carpeta de  <b>Mi contenido</b> en la que se guardar&aacute; el resultado.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

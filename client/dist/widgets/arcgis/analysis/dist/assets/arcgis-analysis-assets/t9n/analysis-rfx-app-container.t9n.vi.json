@@ -1,0 +1,16 @@
+{
+  "backLabel": "Quay lại",
+  "browseHeader": "Chọn lớp",
+  "cannotReopenRasterFunction": "Không thể mở lại hàm raster.",
+  "creditThresholdModal": {
+    "cancelRun": "Hủy",
+    "continueRun": "Dù sao vẫn chạy",
+    "creditEstimate": "Credit ước tính: ${cost}",
+    "creditThreshold": "Ngưỡng credit: ${threshold}",
+    "heading": "Trước khi tiếp tục",
+    "learnMore": "Tìm hiểu thêm về ngưỡng credit",
+    "thresholdExceeded": "Chi phí credit ước tính cho phân tích này lớn hơn ngưỡng credit của bản đồ web:"
+  },
+  "failedToExecuteEstimate": "Gửi không thành công. Không thể thực hiện EstimateRasterAnalysisCost",
+  "runAnalysisLabel": "Chạy"
+}

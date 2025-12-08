@@ -1,0 +1,7 @@
+{
+  "header": "Raster-Funktions-Editor",
+  "content": "Nicht gespeicherte Änderungen in \"${rftTitle}\". Wenn Sie nicht speichern, gehen alle Änderungen verloren.",
+  "cancel": "Abbrechen",
+  "dontSave": "Nicht speichern",
+  "save": "Speichern"
+}

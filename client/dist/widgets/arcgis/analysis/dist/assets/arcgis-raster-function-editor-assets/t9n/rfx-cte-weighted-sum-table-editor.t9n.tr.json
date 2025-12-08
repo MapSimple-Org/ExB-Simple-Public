@@ -1,0 +1,9 @@
+{
+  "weightedSumTable": "Ağırlıklı Toplam Tablosu",
+  "id": "Kimlik",
+  "layer": "Katman",
+  "field": "Alan",
+  "weight": "Ağırlık",
+  "value": "Değer",
+  "selectLayer": "Katman seç"
+}

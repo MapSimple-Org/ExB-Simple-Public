@@ -1,0 +1,8 @@
+{
+  "select": "Seleccioneu un element: ${title}",
+  "lastUpdated": "Element actualitzat: ${date}",
+  "viewItemDetails": "Mostra els detalls",
+  "preview": "Visualització prèvia",
+  "closePreview": "Tanca la visualització prèvia",
+  "moreOptions": "Més opcions"
+}

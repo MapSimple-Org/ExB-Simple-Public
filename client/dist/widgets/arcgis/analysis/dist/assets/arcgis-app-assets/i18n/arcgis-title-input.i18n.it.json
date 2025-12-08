@@ -1,0 +1,20 @@
+{
+  "title": "Titolo",
+  "addTitle": "Aggiungi un titolo",
+  "validation": {
+    "error": "Errore",
+    "titleRequired": "Il titolo è un campo richiesto.",
+    "itemExists": "Un elemento intitolato \"${name}\" esiste già in questa cartella. Scegliere un titolo diverso.",
+    "titleInUseService": "Un layer intitolato \"${name}\" esiste già. Scegliere un titolo diverso.",
+    "itemInRecycleBin": "Esiste già un elemento denominato \"${name}\" e si trova nel cestino. Scegliere un titolo diverso.",
+    "serviceNameInvalid": "Il titolo di un servizio può contenere solo caratteri alfanumerici o underscore ed essere di 90 caratteri o meno.",
+    "dataStoreTitleInvalid": "Il titolo di un data store può contenere solo caratteri alfanumerici o trattini bassi ed essere al massimo di 90 caratteri.",
+    "titleInvalid": "Il titolo deve essere inferiore a 250 caratteri e non può contenere <or >.</or>",
+    "titleStartsWithNumber": "Il titolo non può iniziare con un numero.",
+    "invalidCharacters": {
+      "single": "Il nome non può contenere questo carattere: ${invalidCharacters}.",
+      "multiple": "Il nome non può contenere i seguenti caratteri: ${invalidCharacters}.",
+      "unknown": "Il nome non può contenere i seguenti caratteri: ${invalidCharacters}."
+    }
+  }
+}

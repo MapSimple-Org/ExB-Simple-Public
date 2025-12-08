@@ -1,0 +1,22 @@
+{
+  "deleteFolder": "Ordner löschen",
+  "delete": "Löschen",
+  "permanentlyDelete": "Dauerhaft löschen",
+  "back": "Zurück",
+  "cancel": "Abbrechen",
+  "success": "Ordner '${title}' wurde erfolgreich gelöscht",
+  "deleteProtectedItemsInFolder": "Ordner konnte nicht gelöscht werden, da für einige Elemente der Löschschutz aktiviert ist oder sie abhängige Elemente haben.",
+  "message": {
+    "empty": "Möchten Sie den Ordner <strong style='font-weight: 500'>${title}</strong> wirklich löschen?",
+    "recycleAll": "Möchten Sie den Ordner <strong style='font-weight: 500'>${title}</strong> wirklich löschen und seinen Inhalt an den Papierkorb senden?",
+    "mustBeEmpty": "Zum Löschen muss der Ordner <strong style='font-weight: 500'>${title}</strong> geleert werden.",
+    "aFewCannotBeDeleted": "Einige Elemente können nicht gelöscht werden. Möchten Sie mit dem Löschen der verbleibenden Elemente fortfahren?",
+    "canBeEmptied": "Zum Löschen muss der Ordner <strong style='font-weight: 500'>${title}</strong> geleert werden. Möchten Sie mit dem Löschen dieser Elemente fortfahren?",
+    "cannotBeDeleted": "Der Ordner <strong style='font-weight: 500'>${title}</strong> kann nicht gelöscht werden, da die enthaltenen Elemente nicht gelöscht werden können."
+  },
+  "disabledMessage": {
+    "single": "Im Ordner <b>${label}</b> befindet sich <span style='color:red'>1 Element</span>.<br/></br/>Möchten Sie diesen Ordner und das Element in ihm wirklich löschen?",
+    "multiple": "Im Ordner <b>${label}</b> befinden sich <span style='color:red'>${number} Elemente</span>.<br/></br/>Möchten Sie den Ordner und alle Elemente in ihm wirklich löschen?",
+    "unknown": "Möchten Sie den Ordner <b>${label}</b> wirklich löschen?"
+  }
+}

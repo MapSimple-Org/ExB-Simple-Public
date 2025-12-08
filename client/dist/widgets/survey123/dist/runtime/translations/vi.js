@@ -1,0 +1,1 @@
+System.register([],function(e){return{execute:function(){e({_widgetLabel:"Kh\u1ea3o s\xe1t"})}}});

@@ -1,0 +1,6 @@
+{
+  "greaterThanErrorMessage": "Ievades vērtībai jābūt lielākai par ${min}.",
+  "lesserThanErrorMessage": "Ievades vērtībai jābūt mazākai par ${max}.",
+  "greaterThanOrEqualErrorMessage": "Ievades vērtībai jābūt lielākai vai vienādai ar ${min}",
+  "lesserThanOrEqualErrorMessage": "Ievades vērtībai jābūt mazākai vai vienādai ar ${max}"
+}

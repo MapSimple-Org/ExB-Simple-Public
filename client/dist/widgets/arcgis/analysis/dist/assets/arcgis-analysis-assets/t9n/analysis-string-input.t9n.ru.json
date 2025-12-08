@@ -1,0 +1,12 @@
+{
+  "choiceList": "Список вариантов",
+  "choiceListBadInput": "Входное значение содержит недопустимую запись.",
+  "comboboxPlaceholderText": "Выберите опцию...",
+  "inputPlaceholderText": "Введите значение...",
+  "invalidCharacterError": "Входное значение содержит недопустимые символы.",
+  "maxLengthError": "Входное значение не может превышать ${maxLength} символов.",
+  "minLengthError": "Входное значение не может быть меньше ${minLength} символов.",
+  "multiSelectComboboxPlaceholderText": "Выбрать одну или более опций...",
+  "requiredError": "Это обязательный параметр.",
+  "selectAll": "Выбрать все"
+}

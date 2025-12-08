@@ -1,0 +1,17 @@
+import { type LayoutInfo, type MobileSidePanelContentOptions } from 'jimu-core';
+import type { ResourceItemInfo } from './app-resource-manager';
+import type { RichArcadeContentBuilderProps } from 'jimu-ui/advanced/rich-text-editor';
+export declare function listenBuilderEvents(): void;
+export declare function publishAppSessionChangeToBuilder(): void;
+export declare function publishNoPermissionResourceInfoListChangeToBuilder(): void;
+export declare function publishCheck498ErrorToBuilder(url: string): void;
+export declare function publishAppStateChangeToBuilder(): void;
+export declare function publishAppIsLoadedToBuilder(): void;
+export declare function letBuilderAddResource(resourceItemInfo: ResourceItemInfo): void;
+export declare function letBuilderResponseToKeyboard(event: KeyboardEvent): void;
+export declare function publishConfirmDeleteToApp(itemToDelete: LayoutInfo): void;
+export declare function publishPortalUrlNeedToRegisterClientId(portalUrl: string, needToSignIn?: boolean, serviceUrl?: string, forceLogin?: boolean): void;
+export declare function publishSidePanelToApp(option: MobileSidePanelContentOptions): void;
+export declare function publishCloseBannerToBuilder(): void;
+export declare function publishClassificationBannerReadyToBuilder(): void;
+export declare function publishShowTextArcadePanelBuilder(arcadeProps: RichArcadeContentBuilderProps): void;

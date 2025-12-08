@@ -1,0 +1,11 @@
+{
+  "addBtn": "Klar",
+  "cancelBtn": "Avbryt",
+  "header": "Välj variabel",
+  "multipleVariables": "Flervärdesvariabler",
+  "noFound": "Inga kompatibla variabler hittades",
+  "search": "Sök variabler",
+  "singleVariables": "Variabler med enskilt värde",
+  "variableLabel": "Etikett: <span style='font-weight: var(--calcite-font-weight-normal)'>${val}</span>",
+  "variableVal": "Värde: <span style='font-weight: var(--calcite-font-weight-normal)'>${val}</span>"
+}

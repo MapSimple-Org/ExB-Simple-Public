@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>Param&egrave;tres d'environnement de l'analyse dans  Map Viewer. </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="analysisProcessingExtent">
+        <div>
+            <p>Sp&eacute;cifie la surface utilis&eacute;e pour l&rsquo;analyse. Par d&eacute;faut, la vue g&eacute;n&eacute;rale est utilis&eacute;e.
+            </p>
+        </div>
+    </div>
+    <div id="rasterAnalysisProcessingExtent">
+        <div>
+            <p>Sp&eacute;cifie la zone qui sera utilis&eacute;e pour les outils d&rsquo;analyse raster et les fonctions raster lorsque l&rsquo;option  <b>Use a different processing extent for raster analysis (Utiliser une autre &eacute;tendue de traitement pour l&rsquo;analyse raster)</b> est s&eacute;lectionn&eacute;e. Par d&eacute;faut, l&rsquo;&eacute;tendue d&rsquo;affichage de la carte est utilis&eacute;e.
+            </p>
+        </div>
+    </div>
+    <div id="useDifferentExtentForRA">
+        <div>
+            <p>Indique si une autre &eacute;tendue de traitement doit &ecirc;tre utilis&eacute;e pour les outils d&rsquo;analyse raster et les fonctions raster. Lorsque ce param&egrave;tre est s&eacute;lectionn&eacute;, l&rsquo;analyse raster utilise la valeur d&eacute;finie pour  <b>Raster analysis processing extent (&Eacute;tendue de traitement pour l&rsquo;analyse raster)</b>, qui est par d&eacute;faut l&rsquo;&eacute;tendue d&rsquo;affichage de la carte. Lorsque ce param&egrave;tre n&rsquo;est pas s&eacute;lectionn&eacute;, tous les types d&rsquo;analyse utilisent la valeur d&eacute;finie pour <b>Analysis processing extent (&Eacute;tendue de traitement pour l&rsquo;analyse)</b>, qui est par d&eacute;faut la vue g&eacute;n&eacute;rale.
+            </p>
+        </div>
+    </div>
+    <div id="outSR">
+        <div>
+            <p>Sp&eacute;cifie le syst&egrave;me de coordonn&eacute;es utilis&eacute; pour l&rsquo;analyse et la couche de r&eacute;sultat.
+            </p>
+        </div>
+    </div>
+    <div id="extent">
+        <div>
+            <p>Sp&eacute;cifie la surface utilis&eacute;e pour l&rsquo;analyse.
+            </p>
+        </div>
+    </div>
+    <div id="snapRaster">
+        <div>
+            <p>Ajuste l&rsquo;&eacute;tendue de la sortie afin qu&rsquo;elle corresponde &agrave; l&rsquo;alignement des cellules de la couche raster de capture sp&eacute;cifi&eacute;e.
+            </p>
+        </div>
+    </div>
+    <div id="cellSize">
+        <div>
+            <p>Sp&eacute;cifie la taille de cellule ou la r&eacute;solution &agrave; utiliser pour l'analyse et pour cr&eacute;er la couche raster en sortie.
+            </p>
+            <p>Si l&rsquo;option  <b>As specified (Comme sp&eacute;cifi&eacute;)</b> est s&eacute;lectionn&eacute;e et que la r&eacute;f&eacute;rence spatiale en sortie est diff&eacute;rente de la r&eacute;f&eacute;rence spatiale en entr&eacute;e, la valeur de taille de cellule n&rsquo;est pas reprojet&eacute;e.
+            </p>
+        </div>
+    </div>
+    <div id="mask">
+        <div>
+            <p>Sp&eacute;cifie une couche de masque dans laquelle seules les cellules qui se trouvent dans la zone du masque sont utilis&eacute;es pour l&rsquo;analyse.
+            </p>
+        </div>
+    </div>
+    <div id="resamplingMethod">
+        <div>
+            <p>Indique comment les valeurs de pixel sont interpol&eacute;es si les rasters en entr&eacute;e et en sortie ne correspondent pas.
+            </p>
+        </div>
+    </div>
+    <div id="processorType">
+        <div>
+            <p>Sp&eacute;cifie le type de processeur utilis&eacute;. Les options sont  <b>CPU (UC)</b>, <b>GPU</b> et <b>Automatic (Automatique)</b>. Si l&rsquo;option <b>Automatic (Automatique)</b> est sp&eacute;cifi&eacute;e, l&rsquo;outil d&eacute;finit le type de processeur.
+            </p>
+        </div>
+    </div>
+    <div id="parallelProcessingFactor">
+        <div>
+            <p>Indique le nombre d&rsquo;instances du service de traitement raster utilis&eacute;es pendant l&rsquo;ex&eacute;cution de l&rsquo;outil. Les valeurs prises en charge incluent les cha&icirc;nes vides (l&rsquo;outil d&eacute;termine le nombre d&rsquo;instances du service de traitement raster &agrave; utiliser), les nombres entiers (0 ou entiers positifs) et les pourcentages. Les pourcentages doivent inclure un signe de pourcentage (%) apr&egrave;s la valeur de pourcentage.
+            </p>
+        </div>
+    </div>
+    <div id="askConfirmation">
+        <div>
+            <p>Indique si un message d&rsquo;avertissement appara&icirc;t lorsque le nombre estim&eacute; de cr&eacute;dits d&eacute;passe le seuil sp&eacute;cifi&eacute; (activ&eacute;) ou si l&rsquo;analyse s&rsquo;ex&eacute;cute sans afficher de message, quelle que soit la consommation de cr&eacute;dits estim&eacute;e (non activ&eacute;). L&rsquo;analyse respecte toujours les param&egrave;tres de budg&eacute;tisation des cr&eacute;dits de l&rsquo;organisation.
+            </p>
+        </div>
+    </div>
+    <div id="creditThreshold">
+        <div>
+            <p>Sp&eacute;cifie le seuil auquel un message d&rsquo;avertissement appara&icirc;t en fonction de la consommation de cr&eacute;dits estim&eacute;e lors de l&rsquo;ex&eacute;cution de l&rsquo;analyse. L&rsquo;analyse peut toujours s&rsquo;ex&eacute;cuter si l&rsquo;estimation d&eacute;passe le seuil.
+            </p>
+        </div>
+    </div>
+    <div id="recycleProcessingWorkers">
+        <div>
+            <p>Indique le nombre de sections d&rsquo;image &agrave; traiter avant de red&eacute;marrer les processus de travail pour emp&ecirc;cher les &eacute;checs potentiels des longs traitements. La valeur par d&eacute;faut est 0.
+            </p>
+        </div>
+    </div>
+    <div id="retryOnFailures">
+        <div>
+            <p>Indique le nombre de tentatives du m&ecirc;me processus de travail en cas d&rsquo;&eacute;chec lors du traitement d&rsquo;une t&acirc;che donn&eacute;e. La valeur par d&eacute;faut est 0.
+            </p>
+        </div>
+    </div>
+    <div id="geographicTransformations">
+        <div>
+            <p>Sp&eacute;cifie les m&eacute;thodes de transformation qui peuvent &ecirc;tre utilis&eacute;es pour projeter les donn&eacute;es pour l&rsquo;analyse.
+            </p>
+            <p>Actuellement, cet environnement ne prend en charge que les outils Raster Analysis (Analyseur raster) et les fonctions raster.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

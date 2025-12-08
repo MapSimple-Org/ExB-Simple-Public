@@ -1,0 +1,7 @@
+{
+  "header": "Выбрать переменную",
+  "noFound": "Не найдено совместимых переменных",
+  "search": "Поиск переменных",
+  "variableLabel": "Надпись: <span style='font-weight: var(--calcite-font-weight-normal)'>${val}</span>",
+  "variableVal": "Значение: <span style='font-weight: var(--calcite-font-weight-normal)'>${val}</span>"
+}

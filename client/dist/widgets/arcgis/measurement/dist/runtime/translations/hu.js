@@ -1,0 +1,1 @@
+System.register([],function(e){return{execute:function(){e({_widgetLabel:"M\xe9r\xe9s",selectToStart:"A m\xe9r\xe9s megkezd\xe9s\xe9hez v\xe1lasszon eszk\xf6zt.",measureDistance:"T\xe1vols\xe1gm\xe9r\xe9s",measureArea:"Ter\xfcletm\xe9r\xe9s",clearMeasurement:"M\xe9r\xe9s t\xf6rl\xe9se",measureUnit:"M\xe9rt\xe9kegys\xe9g"})}}});

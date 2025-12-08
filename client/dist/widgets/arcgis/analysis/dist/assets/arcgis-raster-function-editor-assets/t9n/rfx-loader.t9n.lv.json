@@ -1,0 +1,8 @@
+{
+  "loading": "Ielādē...",
+  "pleaseWait": "Lūdzu, uzgaidiet.",
+  "loadingXMLRFT": "Ielādē izvēlēto rastra funkcijas veidni XML formātā.",
+  "failedToOpen": "Neizdevās atvērt.",
+  "readingFailed": "Neizdevās ielādēt atlasīto rastra funkciju veidni.",
+  "failedToLoadXML": "Neizdevās ielādēt atlasīto rastra funkciju veidni XML formātā."
+}

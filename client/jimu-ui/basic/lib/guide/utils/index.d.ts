@@ -1,0 +1,10 @@
+import { type IMAppConfig, type LayoutInfo, React, type IMLayoutItemJson } from 'jimu-core';
+import type { Step as JoyRideStep } from 'react-joyride';
+import type { Step, ConditionalStep, InjectedStep, Steps, ConditionalStepIndexes } from '../types';
+export declare function mapStepProps(steps: Steps, condStepIndexes: ConditionalStepIndexes): JoyRideStep[];
+export declare function getMaskPositionCSS(step: Step): React.CSSProperties;
+export declare function getAppTargetElement(step: Step): any;
+export declare function getTargetSelector(step: Step): string;
+export declare function isInjectedStep(step: Step | ConditionalStep | InjectedStep): boolean;
+export declare function bidi(s: string, isRTL?: boolean): string;
+export declare function findLayoutItem(appConfig: IMAppConfig, layoutInfo: LayoutInfo): IMLayoutItemJson;

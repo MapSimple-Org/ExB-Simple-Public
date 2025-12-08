@@ -1,0 +1,1 @@
+System.register([],function(i){return{execute:function(){i({_widgetLabel:"Komunalini\u0173 paslaug\u0173 tinklo trasavimas",_widgetDescription:"Valdiklis, leid\u017eiantis sekti ArcGIS Utility Network",_action_filter_label:"Filtruoti"})}}});

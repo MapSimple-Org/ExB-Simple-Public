@@ -1,0 +1,12 @@
+{
+  "apiCredentialType": "Tip akreditiva: API ključ",
+  "oauthCredentialType": "Tip akreditiva: OAuth 2.0",
+  "itemAccess": "Pristup stavci",
+  "page": "Stranica: ${page}",
+  "currentPage": "Trenutna stranica: ${page}",
+  "privileges": "Privilegije",
+  "itemDetails": "Detalji stavke",
+  "settings": "Podešavanja",
+  "serviceScope": "Opseg servisa",
+  "summary": "Rezime"
+}

@@ -1,0 +1,15 @@
+{
+  "expandAll": "Laajenna kaikki",
+  "collapseAll": "Tiivistä kaikki",
+  "categoryItem": {
+    "expand": "Laajenna",
+    "collapse": "Kutista",
+    "editCategory": "Muokkaa luokkaa",
+    "deleteCategory": "Poista luokka",
+    "addSubcategory": "Lisää alaluokka",
+    "addCategory": "Lisää luokka",
+    "save": "Tallenna",
+    "cancel": "Peruuta",
+    "missingTitleMessage": "Luokan otsikko vaaditaan."
+  }
+}

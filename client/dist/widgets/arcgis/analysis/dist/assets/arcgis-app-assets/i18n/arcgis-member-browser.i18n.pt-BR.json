@@ -1,0 +1,177 @@
+{
+  "memberBrowser": {
+    "filters": "Filtros",
+    "pageRange": "${start}-${end}, total: ${total}",
+    "pageRangeAria": "${start}-${end}, total de membros: ${total}",
+    "selectedMembers": "Membros selecionados",
+    "noSelectedMembers": "Nenhum membro atualmente selecionado",
+    "noUsersFound": "Nenhum usuário encontrado que atenda aos seus critérios. Tente limpar alguns filtros ou alterar sua pesquisa para mostrar mais usuários.",
+    "enterTermExternal": "Digite um termo de pesquisa para encontrar usuários em todo o ArcGIS Online",
+    "noUsers": "Nenhum usuário disponível",
+    "coordinator": "Coordenador da colaboração"
+  },
+  "search": {
+    "searchMembers": "Procurar membros"
+  },
+  "filterUserTypes": {
+    "title": "Tipos de usuário",
+    "label": "Tipo de usuário: ${name}",
+    "loading": "Carregando tipos de usuários..."
+  },
+  "filterRoles": {
+    "title": "Papel",
+    "label": "Papel: ${name}",
+    "loading": "Carregando papéis...",
+    "searchRoles": "Pesquisar papéis"
+  },
+  "filterOrgGroups": {
+    "title": "Grupos da organização",
+    "label": "Grupo: ${name}",
+    "loading": "Carregando grupos da organização...",
+    "searchGroups": "Pesquisar grupos",
+    "noGroupsFound": "Nenhum grupo localizado. Tente alterar seu termo de pesquisa para mostrar mais grupos."
+  },
+  "filterMyGroups": {
+    "title": "Meus grupos",
+    "label": "Grupo: ${name}",
+    "loading": "Carregando meus grupos…",
+    "searchMyGroups": "Pesquisar meus grupos"
+  },
+  "filterCategories": {
+    "title": "Categorias",
+    "label": "Categoria: ${name}",
+    "loading": "Carregando categorias...",
+    "noCategoriesTitle": "Nenhuma categoria de membros ainda",
+    "noCategories": "As categorias de membros permitem que os administradores organizem seus membros em um diretório para simplificar as ações administrativas sobre os membros. Os membros da organização também podem usar esse diretório para localizar outros membros.",
+    "setupCategories": "Configurar categorias de membros",
+    "configureCategories": "Configurar categorias",
+    "noCategoriesAssigned": "Nenhuma categoria atribuída"
+  },
+  "filterPartnerCollabs": {
+    "title": "Colaborações parcerias",
+    "label": "Colaborações em parceria: ${name}",
+    "loading": "Carregando colaborações em parceria...",
+    "coordinatorsOnly": "Somente coordenadores da colaboração",
+    "coordinatorsDescription": "Os coordenadores da colaboração são representantes de colaborações parceiras que podem ser adicionados a um grupo sem exigir confirmação.",
+    "coordinatorsInfoLabel": "Mais informações sobre coordenadores da colaboração"
+  },
+  "filterSearchSwitch": {
+    "searchAll": "Procurar todos os membros de organização do ArcGIS Online",
+    "searchPartners": "Incluir este e membros de organizações parceiras"
+  },
+  "table": {
+    "caption": "Resultados do membro, cabeçalhos de colunas com botões são classificáveis.",
+    "selectAll": "Selecionar todos",
+    "selection": "Seleção",
+    "headers": {
+      "name": "Nome",
+      "membertype": "Papel do grupo",
+      "affiliation": "Afiliação",
+      "joined": "Unido",
+      "credits": "Créditos remanescentes",
+      "remainingCredits": "Total de créditos restantes ${num}",
+      "lastlogin": "Último registro",
+      "usertype": "Tipos de usuário",
+      "role": "Papel",
+      "mfaenabled": "Autenticação de múltiplos fatores"
+    }
+  },
+  "tableRow": {
+    "moreOptions": "Mais opções",
+    "groupManager": "Gerente do Grupo",
+    "owner": "Proprietáeio",
+    "member": "Membro",
+    "myOrg": "Minha Organização",
+    "other": "Outro",
+    "coordinator": "Coordenador da colaboração",
+    "noLimit": "Sem limite",
+    "creditsNumber": "${remain} de ${total}",
+    "today": "Hoje",
+    "yesterday": "Ontem",
+    "never": "Nunca",
+    "role": "Papel",
+    "memberIsCoordinator": "Este membro é um coordenador da colaboração",
+    "rolesForCoordinator": "Os coordenadores da colaboração podem ter somente papéis de Administrador ou Facilitador.",
+    "memberIsContact": "Este membro é um contato administrativo",
+    "removeFromContact": "Se deseja mudar o papel deste membro, você deverá primeiro removê-lo da ${linkStart}lista de contatos administrativos${linkEnd}."
+  },
+  "listCard": {
+    "moreOptions": "Mais opções",
+    "lastLoggedIn": "Último login ${value}",
+    "today": "Hoje",
+    "yesterday": "Ontem",
+    "hasNotLoggedIn": "Ainda não registrou",
+    "neverSignedInTooltip": "Este membro nunca entrou em sua conta criada em ${date}",
+    "userType": "Tipos de usuário",
+    "role": "Papel",
+    "creditsRemaining": "Créditos remanescentes",
+    "noLimit": "Sem limite",
+    "creditsNumber": "${remain} de ${total}",
+    "addonLicenses": "Licenças complementares",
+    "configureLicenses": "Configurar licenças",
+    "groups": "Grupos",
+    "configureGroups": "Configurar grupos",
+    "viewGroups": "Visualizar grupos"
+  },
+  "myOrg": {
+    "myOrgView": "Visão da minha organização"
+  },
+  "filterGroupRole": {
+    "title": "Papel do grupo",
+    "label": "Papel do Grupo: ${role}",
+    "admins": "Gerenciadores e Proprietário do Grupo",
+    "member": "Membro"
+  },
+  "filterAffiliation": {
+    "title": "Afiliação",
+    "label": "Afiliação: ${name}",
+    "myOrg": "Minha Organização",
+    "other": "Outro"
+  },
+  "filterCreditsRemain": {
+    "title": "Créditos remanescentes",
+    "noLimit": "Sem limite",
+    "lessThan": "Menos que",
+    "credits": "Créditos",
+    "labelNoLimit": "Créditos: Sem limite",
+    "labelLess": "Créditos: Menos que ${value}",
+    "invalidValue": "O valor inserido não é válido."
+  },
+  "filterEmailVerification": {
+    "title": "Status de verificação do e-mail",
+    "unverified": "Endereços de e-mail não verificados",
+    "verified": "Endereços de e-mail verificado",
+    "label": "Status de verificação do e-mail: ${status}"
+  },
+  "filterLoginType": {
+    "title": "Tipo de registro",
+    "label": "Tipo de registro: ${type}",
+    "social": "Social"
+  },
+  "filterApp": {
+    "title": "Aplicativo",
+    "label": "Aplicativo: ${app}"
+  },
+  "filterMFA": {
+    "title": "Autenticação de múltiplos fatores",
+    "enabled": "Habilitado",
+    "disabled": "Desabilitado",
+    "label": "Autenticação de múltiplos fatores: ${status}"
+  },
+  "roles": {
+    "user": "Usuário",
+    "publisher": "Publisher",
+    "admin": "Administrador",
+    "viewer": "Viewer",
+    "editor": "Editor de Dados",
+    "facilitator": "Facilitador"
+  },
+  "view": {
+    "view": "Visualizar",
+    "list": "Lista",
+    "table": "Tabela"
+  },
+  "assignedLicenses": "Mostrar somente membros atribuídos a esta licença",
+  "onlyDoubleAssigned": "Mostrar apenas membros com esta licença atribuída em dobro",
+  "maxSelected": "Somente ${number} membros podem ser selecionados de cada vez."
+}

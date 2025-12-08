@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>L'outil Generate Travel Areas (G&eacute;n&eacute;rer des zones de d&eacute;placement) cr&eacute;e des zones accessibles dans une dur&eacute;e ou une distance de trajet donn&eacute;e.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputLayer">
+        <div>
+            <p>Entit&eacute;s ponctuelles autour desquelles les zones seront calcul&eacute;es.
+            </p>
+            <p class="toolPaneOnly">Le nombre d&rsquo;entit&eacute;s d&eacute;pend de facteurs suppl&eacute;mentaires, tels que les crit&egrave;res de filtrage et l&rsquo;&eacute;tendue d&rsquo;analyse.
+            </p>
+        </div>
+    </div>
+    <div id="pointBarrierLayer">
+        <div>
+            <p>Une ou plusieurs entit&eacute;s ponctuelles qui agissent comme restrictions temporaires (interruptions) lors du d&eacute;placement dans les rues sous-jacentes. Le d&eacute;placement est autoris&eacute; sur la rue, hormis franchir l&rsquo;interruption.
+            </p>
+        </div>
+    </div>
+    <div id="lineBarrierLayer">
+        <div>
+            <p>Une ou plusieurs entit&eacute;s lin&eacute;aires qui agissent comme restrictions temporaires (interruptions) lors du d&eacute;placement dans les rues sous-jacentes. Les interruptions lin&eacute;aires interdisent la circulation partout o&ugrave; elles intersectent les rues.
+            </p>
+        </div>
+    </div>
+    <div id="polygonBarrierLayer">
+        <div>
+            <p>Une ou plusieurs entit&eacute;s surfaciques qui agissent comme restrictions temporaires (interruptions) lors du d&eacute;placement dans les rues sous-jacentes. Les interruptions surfaciques interdisent la circulation partout o&ugrave; elles intersectent les rues.
+            </p>
+        </div>
+    </div>
+    <div id="travelMode">
+        <div>
+            <p>Mode de d&eacute;placement &agrave; utiliser pour cr&eacute;er les zones de d&eacute;placement. Le mode de d&eacute;placement peut &ecirc;tre bas&eacute; sur la distance ou la dur&eacute;e.
+            </p>
+        </div>
+    </div>
+    <div id="breakValues">
+        <div>
+            <p>Distance de trajet ou dur&eacute;e de trajet maximale pour chaque point en entr&eacute;e. Si plusieurs valeurs sont ajout&eacute;es, chaque valeur est utilis&eacute;e pour calculer les zones de d&eacute;placement de tous les points en entr&eacute;e.
+            </p>
+        </div>
+    </div>
+    <div id="breakUnits">
+        <div>
+            <p>Unit&eacute;s &agrave; utiliser pour sp&eacute;cifier la distance ou la dur&eacute;e de d&eacute;placement. La valeur  <b>Cutoff (Limite)</b> est interpr&eacute;t&eacute;e dans ces unit&eacute;s.
+            </p>
+        </div>
+    </div>
+    <div id="travelDirection">
+        <div>
+            <p>Indique si les zones de d&eacute;placement sont cr&eacute;&eacute;es pour un d&eacute;placement depuis les points en entr&eacute;e ou vers ces derniers.
+            </p>
+        </div>
+    </div>
+    <div id="timeOfDay">
+        <div>
+            <p>Date et heure auxquelles le voyageur quitte les localisations en entr&eacute;e ou y arrive.
+            </p>
+        </div>
+    </div>
+    <div id="overlapPolicy">
+        <div>
+            <p>Indique le mode de traitement des surfaces partag&eacute;es de diff&eacute;rentes entr&eacute;es lorsqu&rsquo;elles se rencontrent.
+            </p>
+        </div>
+    </div>
+    <div id="showHoles">
+        <div>
+            <p>Indique si chaque zone en sortie correspond &agrave; un polygone continu (non s&eacute;lectionn&eacute;e) ou inclut des trous sur les rues inaccessibles, mais enti&egrave;rement entour&eacute;es de rues accessibles (s&eacute;lectionn&eacute;e).
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>Nom de la couche &agrave; cr&eacute;er et ajouter &agrave; la carte.
+            </p>
+        </div>
+    </div>
+    <div id="includeReachableStreets">
+        <div>
+            <p>Indique si les rues utilis&eacute;es pour cr&eacute;er les zones de d&eacute;placement sont incluses comme couche en sortie.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            
+            <p>Nom du dossier de  <b>My content (Mon contenu)</b> dans lequel sont enregistr&eacute;s les r&eacute;sultats.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

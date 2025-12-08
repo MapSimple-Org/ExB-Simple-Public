@@ -1,0 +1,8 @@
+{
+  "itemProperties": {
+    "description": "속성별 필터링 분석 도구를 실행하여 생성된 결과입니다.",
+    "snippet": "속성별 필터링에서 생성된 결과"
+  },
+  "noLayerDisabledTooltip": "유효한 입력 데이터셋을 선택합니다.",
+  "queryCriteriaGroupLabel": "쿼리 기준"
+}

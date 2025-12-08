@@ -1,0 +1,9 @@
+{
+  "inputLayerGroupText": "Elija la capa de entrada para calcular la geometría de los límites de zona.",
+  "itemProperties": {
+    "description": "Tabla de salida generada al ejecutar la herramienta de análisis Geometría zonal como tabla.",
+    "snippet": "Tabla de salida generada a partir de Geometría zonal como tabla"
+  },
+  "zonalGeometrySettingGroupLabel": "Configuración de geometría zonal",
+  "zonalGeometrySettingGroupText": "Especifique el tamaño de celda a calcular."
+}

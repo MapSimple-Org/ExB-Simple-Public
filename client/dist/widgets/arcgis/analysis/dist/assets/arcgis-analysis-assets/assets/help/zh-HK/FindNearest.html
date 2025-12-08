@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>「尋找最近」工具可尋找最接近指定位置的圖徵並對其進行排名。
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="analysisLayer">
+        <div>
+            
+            <p class="OnlineOnly">將圍繞其繪製搜尋範圍的起始圖層，以找到距離鄰近圖層的最近圖徵。 鄰近圖層中的圖徵將根據其與輸入圖層的鄰域分析而返回。 支援最多  五千 個圖徵的圖層。 </p>  
+            <p class="PortalOnly">將圍繞其繪製搜尋範圍的起始圖層，以找到距離鄰近圖層的最近圖徵。 鄰近圖層中的圖徵將根據其與輸入圖層的鄰域分析而返回。
+            </p>
+            <p class="toolPaneOnly">圖徵的計數取決於其他因素，例如篩選準則和分析範圍。
+            </p>
+        </div>
+    </div>
+    <div id="nearLayer">
+        <div>
+             
+            <p class="OnlineOnly">基於對輸入圖層的鄰域分析所找到的圖徵。 支援最多  五千 個圖徵的圖層。 </p> 
+            <p class="PortalOnly">基於對輸入圖層的鄰域分析所找到的圖徵。
+            </p>
+            <p class="toolPaneOnly">圖徵的計數取決於其他因素，例如篩選準則和分析範圍。
+            </p>
+        </div>
+    </div>
+    <div id="pointBarrierLayer">
+        <div>
+            <p>在基礎街道行進時要作為臨時限制 (屏障) 的一或多個點圖徵。 允許在街道行進，但無法通過屏障。
+            </p>
+        </div>
+    </div>
+    <div id="lineBarrierLayer">
+        <div>
+            <p>在基礎街道行進時要作為臨時限制 (屏障) 的一或多個線圖徵。 線屏障禁止在屏障與街道相交的任何地方行進。
+            </p>
+        </div>
+    </div>
+    <div id="polygonBarrierLayer">
+        <div>
+            <p>在基礎街道行進時要作為臨時限制 (屏障) 的一或多個多邊形圖徵。 多邊形屏障禁止在多邊形與街道的任何相交處行進。
+            </p>
+        </div>
+    </div>
+    <div id="measurementType">
+        <div>
+            <p>將用於測量距離或時間的方法。 方法可為線距離或行進模式。
+            </p>
+        </div>
+    </div>
+    <div id="timeOfDay">
+        <div>
+            <p>行進者離開 <b>輸入圖層</b>值中位置的日期和時間。
+            </p>
+        </div>
+    </div>
+    <div id="limitNearNumberCheckbox">
+        <div>
+            
+            <p>指定是使用自訂的最近圖素數上限 (啟用)，還是使用工具的預設數量上限 100。
+            </p>
+        </div>
+    </div>
+    <div id="maxCount">
+        <div>
+            <p>可為每個輸入圖徵找到的最近圖徵數上限。
+            </p>
+        </div>
+    </div>
+    <div id="limitSearchRangeCheckbox">
+        <div>
+            
+            <p>指定是使用最大搜索範圍 (啟用)，或搜索範圍不受限制。
+            </p>
+        </div>
+    </div>
+    <div id="searchCutoff">
+        <div>
+            <p>用於尋找最近圖徵的最大搜尋範圍。
+            </p>
+        </div>
+    </div>
+    <div id="searchCutoffUnits">
+        <div>
+            <p>用來指定搜尋範圍的單位。
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>將建立並新增到地圖之圖層的名稱。
+            </p>
+        </div>
+    </div>
+    <div id="includeRouteLayers">
+        <div>
+            <p>指定是否將每條結果路線儲存為路線圖層。
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p> <b>我的內容</b>中將儲存結果的資料夾名稱。
+            </p>
+        </div>
+    </div>
+</div>
+</html>

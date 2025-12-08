@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>Orodje Povzemi v bližini izračuna statistiko za geoobjekte v določenih razdaljah do drugih geoobjektov. Razdaljo je mogoče izračunati s pomočjo razdalje zračne linije ali načina potovanja.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="summaryLayer">
+        <div>
+            <p>Sloj bo povzet znotraj razdalje sloja v bližini.
+            </p>
+            <p class="toolPaneOnly">&Scaron;tevilo funkcij je odvisno od dodatnih dejavnikov, kot so kriteriji filtriranja in obseg analize.
+            </p>
+        </div>
+    </div>
+    <div id="sumNearbyLayer">
+        <div>
+            <p>Točkovni, linijski ali poligonski sloj, ki bo uporabljen kot začetna lokacija, okoli katere bodo ustvarjena omejitvena območja za povzemanje geoobjektov v bližini.
+            </p>
+            <p class="toolPaneOnly">&Scaron;tevilo funkcij je odvisno od dodatnih dejavnikov, kot so kriteriji filtriranja in obseg analize.
+            </p>
+        </div>
+    </div>
+    <div id="nearType">
+        <div>
+            
+            <p class="toolPaneOnly">Metoda, ki bo uporabljena za ustvarjanje omejitvenih območij. Ta metoda je lahko razdalja zračne linije ali način potovanja.
+            </p> 
+            <p class="modelBuilderOnly">Metoda, ki bo uporabljena za ustvarjanje omejitvenih območij. Trenutno je razdalja zračne linij edina metoda, ki je podprta za modele.
+            </p>
+        </div>
+    </div>
+    <div id="distances">
+        <div>
+            <p>Razdalja ali čas, ki bo uporabljen za ustvarjanje omejitvenih območij. Če je dodanih več vrednosti, bo vsaka vrednost uporabljena za izračun omejitvenih območij za vse vhodne geoobjekte.
+            </p>
+        </div>
+    </div>
+    <div id="units">
+        <div>
+            <p>Enote, ki bodo uporabljene za določanje razdalje in časa.
+            </p>
+        </div>
+    </div>
+    <div id="returnBoundaries">
+        <div>
+            <p>Določi, ali bo sloj z rezultati omejitveno območje (obkljukano) ali ista geometrija, kot vhodni sloj v bližini (ni obkljukano).
+            </p>
+        </div>
+    </div>
+    <div id="sumShape">
+        <div>
+            <p>Določa, ali bo izračunana skupna velikost geoobjektov, povzetih v vsakem omejitvenem območju. Za linije se bo izračunala skupna dolžina. Za poligone se bo izračunala skupna povr&scaron;ina.
+            </p>
+        </div>
+    </div>
+    <div id="shapeUnits">
+        <div>
+            <p>Enote, ki bodo uporabljene za izračun skupne velikosti povzetih geoobjektov.
+            </p>
+        </div>
+    </div>
+    <div id="summaryFields">
+        <div>
+            <p>&Scaron;tevilo ali datumska polja iz vhodnega sloja, ki bodo povzeta, in statistika, ki bo izračunana za vsako polje.
+            </p>
+        </div>
+    </div>
+    <div id="groupByField">
+        <div>
+            <p>Polje iz vhodnega sloja, ki bo uporabljeno za ločevanje podatkov v različne skupine za statistične izračune.
+            </p>
+        </div>
+    </div>
+    <div id="minorityMajority">
+        <div>
+            <p>Določa, ali naj se izračunajo skupine manj&scaron;ine (najmanj prevladujejo) in večine (najbolj prevladujejo) znotraj vsakega območja povzetka.
+            </p>
+        </div>
+    </div>
+    <div id="percentShape">
+        <div>
+            <p>Določa, ali se bo izračunal odstotek povzetih geoobjektov, ki pripadajo vsaki skupini znotraj vsake razmejitve.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>Ime sloja, ki bo ustvarjen in dodan na karto.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>Ime mape v  <b>Moja vsebina</b>, kjer bodo shranjeni rezultati.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

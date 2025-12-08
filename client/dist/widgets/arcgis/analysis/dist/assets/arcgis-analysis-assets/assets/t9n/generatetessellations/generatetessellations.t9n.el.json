@@ -1,0 +1,27 @@
+{
+  "area": "Περιοχή",
+  "binResolution": "Ανάλυση bin H3",
+  "binSize": "Μέγεθος bin",
+  "binSizeUnit": "Μονάδα",
+  "binType": "Τύπος σχήματος bin",
+  "diamondBins": "Διαμαντοειδή bin",
+  "distance": "Απόσταση",
+  "extentLayer": "Θεματικό επίπεδο έκτασης",
+  "extentOverrideMessage": "Αυτό το θεματικό επίπεδο ορίων περιοχής μελέτης θα χρησιμοποιηθεί αντί για οποιαδήποτε όρια περιοχής μελέτης που έχουν καθοριστεί στα περιβάλλοντα.",
+  "extentSectionLabel": "Ρυθμίσεις έκτασης",
+  "extentSectionText": "Προσδιορίστε ένα θεματικό επίπεδο έκτασης που θα πρέπει να καλύπτεται από την κατάτμηση.",
+  "h3hexagonBins": "H3 εξαγωνικά bin",
+  "hexagon": "Εξάγωνο",
+  "intersectStudyArea": "Διατήρηση μόνο τεμνόμενων κατατμήσεων",
+  "itemProperties": {
+    "description": "Το feature layer που δημιουργείται από την εκτέλεση του εργαλείου ανάλυσης \"Δημιουργία κατατμήσεων\".",
+    "snippet": "Το feature layer που δημιουργείται από τη Δημιουργία κατατμήσεων."
+  },
+  "outputAreasSectionText": "Καταχωρίστε ένα όνομα για το πλέγμα κατάτμησης.",
+  "sizeType": "Μέτρηση μεγέθους bin",
+  "square": "Τετράγωνο",
+  "tessellationSettingsLabel": "Ρυθμίσεις κατάτμησης",
+  "tessellationSettingsSummaryText": "Προσδιορίστε το σχήμα και το μέγεθος των bin που θα δημιουργηθούν.",
+  "thexagonBins": "Εγκάρσια εξαγωνικά bin",
+  "triangleBins": "Τριγωνικά bin"
+}

@@ -1,0 +1,21 @@
+{
+  "folder": "Carpeta",
+  "folders": "Carpetes",
+  "searchFolders": "Cerca carpetes",
+  "enterFolder": "Introduïu el nom de la carpeta",
+  "createNewFolder": "Crea una carpeta",
+  "noFoldersFoundCreate": "No s'ha trobat cap carpeta amb aquest nom. Voleu crear \"${folder}\"?",
+  "noFoldersFound": "No s'ha trobat cap carpeta amb aquest nom.",
+  "create": "Voleu crear \"${folder}\"?",
+  "loading": "S'estan carregant les carpetes",
+  "error": {
+    "noName": "Heu de proporcionar un nom per a la carpeta.",
+    "folderAlreadyExists": "Ja existeix una carpeta \"${folder}\". Trieu un altre nom.",
+    "title": "Error",
+    "invalidCharacters": {
+      "single": "El nom no pot contenir aquest caràcter: ${invalidCharacters}.",
+      "multiple": "El nom no pot contenir cap d'aquests caràcters: ${invalidCharacters}.",
+      "unknown": "El nom no pot contenir cap d'aquests caràcters: ${invalidCharacters}."
+    }
+  }
+}

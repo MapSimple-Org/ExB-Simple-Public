@@ -1,0 +1,7 @@
+{
+  "header": "Izaberi promenljivu",
+  "noFound": "Nisu pronađene kompatibilne promenljive",
+  "search": "Pretraži promenljive",
+  "variableLabel": "Oznaka: <span style='font-weight: var(--calcite-font-weight-normal)'>${val}</span>",
+  "variableVal": "Vrednost: <span style='font-weight: var(--calcite-font-weight-normal)'>${val}</span>"
+}

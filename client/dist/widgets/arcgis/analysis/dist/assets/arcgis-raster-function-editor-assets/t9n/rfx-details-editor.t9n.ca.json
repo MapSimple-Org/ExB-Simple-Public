@@ -1,0 +1,22 @@
+{
+  "general": "General",
+  "parameters": "Paràmetres",
+  "variables": "Variables",
+  "name": "Nom",
+  "namePlaceHolder": "Introduïu el nom",
+  "description": "Descripció",
+  "parameter": "Paràmetre",
+  "isPublic": "IsPublic",
+  "isDataset": "IsDataset",
+  "unknownPixelType": "Desconegut",
+  "outputPixelType": "Tipus de píxel de sortida",
+  "u8PixelType": "8 bits sense signar",
+  "s8PixelType": "8 bits signat",
+  "u16PixelType": "16 bits sense signar",
+  "s16PixelType": "16 bits signat",
+  "u32PixelType": "32 bits sense signar",
+  "s32PixelType": "32 bits signat",
+  "f32PixelType": "32 bits flotant",
+  "f64PixelType": "64 bits doble",
+  "properties": "Propietats"
+}

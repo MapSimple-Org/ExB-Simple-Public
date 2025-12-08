@@ -1,0 +1,9 @@
+{
+  "inputLayerGroupText": "Wählen Sie den Eingabe-Layer aus, um die Geometrie der Zonengrenzen zu berechnen.",
+  "itemProperties": {
+    "description": "Durch Ausführung des Analysewerkzeugs \"Zonale Geometrie als Tabelle\" generierte Ausgabetabelle",
+    "snippet": "Über \"Zonale Geometrie als Tabelle\" generierte Ausgabetabelle"
+  },
+  "zonalGeometrySettingGroupLabel": "Einstellung für \"Zonale Geometrie\"",
+  "zonalGeometrySettingGroupText": "Geben Sie die zu berechnende Zellengröße an."
+}

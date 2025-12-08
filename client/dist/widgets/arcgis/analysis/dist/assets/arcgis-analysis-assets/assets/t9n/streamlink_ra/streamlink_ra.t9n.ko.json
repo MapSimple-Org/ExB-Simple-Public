@@ -1,0 +1,9 @@
+{
+  "inputFlowDirectionRasterLabel": "입력 흐름 방향 래스터",
+  "inputLayerGroupText": "입력 스트림 및 흐름 방향 래스터를 선택합니다.",
+  "inputStreamRasterLabel": "입력 스트림 래스터",
+  "itemProperties": {
+    "description": "스트림 연계 분석 도구를 실행하여 생성된 결과입니다.",
+    "snippet": "스트림 연계를 통해 생성된 결과"
+  }
+}

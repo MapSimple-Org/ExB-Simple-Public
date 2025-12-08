@@ -1,0 +1,9 @@
+{
+  "zoomIn": "Tarkenna",
+  "zoomOut": "Loitonna",
+  "autoLayout": "Automaattinen asettelu",
+  "stretch": "Sovita näkymään",
+  "select": "Valitse",
+  "pan": "Vieritä",
+  "deleteSelectedItemsText": "Poista valitut kohteet"
+}

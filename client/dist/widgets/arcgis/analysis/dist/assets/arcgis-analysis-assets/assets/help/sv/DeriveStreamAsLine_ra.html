@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>Verktyget H&auml;rled str&ouml;m som linje genererar str&ouml;mlinjegeoobjekt fr&aring;n ett indataytraster utan krav p&aring; f&ouml;reg&aring;ende s&auml;nkfyllning.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputSurfaceRaster">
+        <div>
+            <p>H&ouml;jdrastret som anv&auml;nds f&ouml;r ber&auml;kningar.
+            </p>
+        </div>
+    </div>
+    <div id="inputDepressionsData">
+        <div>
+            <p>De indata som definierar platserna f&ouml;r verkliga s&auml;nkor, d&auml;r vattnet kan rinna in i men inte ut fr&aring;n.
+            </p>
+            <p class="toolPaneOnly">F&ouml;r geoobjektindata beror antalet p&aring; ytterligare faktorer som filtreringskriterier och analysutbredningen.
+            </p>
+        </div>
+    </div>
+    <div id="inputWeightRaster">
+        <div>
+            <p>Rasterlagret som definierar andelen fl&ouml;de som bidrar till fl&ouml;desackumulering i varje cell.
+            </p>
+        </div>
+    </div>
+    <div id="accumulationThreshold">
+        <div>
+            <p>Tr&ouml;skelv&auml;rdet f&ouml;r att best&auml;mma om en angiven cell &auml;r del av en str&ouml;m utifr&aring;n totalytan som fl&ouml;dar in i en s&aring;dan cell.
+            </p>
+        </div>
+    </div>
+    <div id="streamDesignationMethod">
+        <div>
+            <p>Anger om str&ouml;msegmenten i utdata ska ha ett konstant v&auml;rde, unika v&auml;rden eller &auml;r ordnade.
+            </p>
+        </div>
+    </div>
+    <div id="simplify">
+        <div>
+            <p>Anger om utdatastr&ouml;mlinjer ska utj&auml;mnas till enklare former.
+            </p>
+            <p>Om alternativet &auml;r markerat f&ouml;renklas str&ouml;mlinjegeoobjekten med Douglas-Peucker-algoritmen med en tolerans p&aring; sqrt(0,5) * cellstorleken. Det h&auml;r &auml;r standardinst&auml;llningen. Om alternativet &auml;r omarkerat j&auml;mnas str&ouml;mlinjegeoobjekten inte ut.
+            </p>
+        </div>
+    </div>
+    <div id="outputStreamFeaturesName">
+        <div>
+            <p>Namnet p&aring; det str&ouml;mlinjegeoobjektlager som skapas och l&auml;ggs till i kartan.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>Namnet p&aring; mappen i  <b>Mitt inneh&aring;ll</b> d&auml;r resultaten ska sparas.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

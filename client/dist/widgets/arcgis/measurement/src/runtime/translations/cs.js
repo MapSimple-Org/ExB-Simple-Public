@@ -1,0 +1,1 @@
+System.register([],function(e){return{execute:function(){e({_widgetLabel:"M\u011b\u0159en\xed",selectToStart:"P\u0159ed zah\xe1jen\xedm m\u011b\u0159en\xed vyberte n\xe1stroj.",measureDistance:"M\u011b\u0159it vzd\xe1lenost",measureArea:"M\u011b\u0159it plochu",clearMeasurement:"Vymazat m\u011b\u0159en\xed",measureUnit:"M\u011brn\xe1 jednotka"})}}});

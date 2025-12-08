@@ -1,0 +1,15 @@
+{
+  "addDataStore": "Přidat datové úložiště",
+  "addFile": "Přidat soubor",
+  "addServiceConnection": "Přidat připojení",
+  "itemNotFound": "Položka neexistuje nebo je nedostupná.",
+  "itemPermissionDenied": "Pro přístup k této položce nemáte oprávnění.",
+  "previewDetails": "Náhled podrobností",
+  "queryModelArgsErrMsg": "Dotazování argumentů modelu selhalo.",
+  "queryModelArgsMsg": "Dotazování argumentů modelu...",
+  "removeItem": "Odebrat položku",
+  "replaceItem": "Nahradit položku",
+  "requiredInputMessage": "Tento parametr je povinný.",
+  "selectItem": "Vybrat položku",
+  "viewDetails": "Zobrazit podrobnosti"
+}

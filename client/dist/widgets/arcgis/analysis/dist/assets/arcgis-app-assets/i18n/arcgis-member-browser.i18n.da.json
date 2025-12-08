@@ -1,0 +1,177 @@
+{
+  "memberBrowser": {
+    "filters": "Filtre",
+    "pageRange": "${start}-${end}, i alt: ${total}",
+    "pageRangeAria": "${start}-${end}, samlet antal medlemmer: ${total}",
+    "selectedMembers": "Valgte medlemmer",
+    "noSelectedMembers": "Ingen medlemmer valgt i øjeblikket",
+    "noUsersFound": "Der blev ikke fundet nogen brugere, der opfylder dine kriterier. Forsøg at rydde nogle filtre eller ændre din søgning for at få vist flere brugere.",
+    "enterTermExternal": "Indtast et søgeord for at finde brugere på hele ArcGIS Online",
+    "noUsers": "Ingen brugere er tilgængelige",
+    "coordinator": "Samarbejdskoordinator"
+  },
+  "search": {
+    "searchMembers": "Søg efter medlemmer"
+  },
+  "filterUserTypes": {
+    "title": "Brugertype",
+    "label": "Brugertype: ${name}",
+    "loading": "Indlæser brugertyper..."
+  },
+  "filterRoles": {
+    "title": "Rolle",
+    "label": "Rolle: ${name}",
+    "loading": "Indlæser roller...",
+    "searchRoles": "Søg i roller"
+  },
+  "filterOrgGroups": {
+    "title": "Organisationens grupper",
+    "label": "Gruppe: ${name}",
+    "loading": "Indlæser organisationens grupper...",
+    "searchGroups": "Søg efter grupper",
+    "noGroupsFound": "Ingen grupper fundet. Forsøg at ændre din søgeterm for at få vist flere grupper."
+  },
+  "filterMyGroups": {
+    "title": "Mine grupper",
+    "label": "Gruppe: ${name}",
+    "loading": "Indlæser mine grupper...",
+    "searchMyGroups": "Søg i mine grupper"
+  },
+  "filterCategories": {
+    "title": "Kategorier",
+    "label": "Kategori: ${name}",
+    "loading": "Indlæser kategorier...",
+    "noCategoriesTitle": "Endnu ingen medlemskategorier",
+    "noCategories": "Med medlemskategorier kan administratorer organisere deres medlemmer i et bibliotek for at strømline administrative handlinger vedrørende medlemmer. Organisationsmedlemmer kan også bruge dette bibliotek til at finde andre medlemmer.",
+    "setupCategories": "Konfigurér medlemskategorier",
+    "configureCategories": "Konfigurér kategorier",
+    "noCategoriesAssigned": "Ingen kategorier tildelt"
+  },
+  "filterPartnerCollabs": {
+    "title": "Partnersamarbejder",
+    "label": "Partnersamarbejder: ${name}",
+    "loading": "Indlæser partnersamarbejder...",
+    "coordinatorsOnly": "Kun samarbejdskoordinatorer",
+    "coordinatorsDescription": "Samarbejdskoordinatorer er repræsentanter for partnersamarbejder, som kan føjes til en gruppe uden bekræftelse.",
+    "coordinatorsInfoLabel": "Flere oplysninger om samarbejdskoordinatorer"
+  },
+  "filterSearchSwitch": {
+    "searchAll": "Søg i alle ArcGIS Online-organisationsmedlemmer",
+    "searchPartners": "Medtag dette medlem og medlemmer af partnerorganisation"
+  },
+  "table": {
+    "caption": "Medlemsresultater, kolonneoverskrifter med knapper er sortérbare.",
+    "selectAll": "Vælg alle",
+    "selection": "Markering",
+    "headers": {
+      "name": "Navn",
+      "membertype": "Grupperolle",
+      "affiliation": "Tilknytning",
+      "joined": "Tilknyttet",
+      "credits": "Credits tilbage",
+      "remainingCredits": "Samlede resterende credits ${num}",
+      "lastlogin": "Sidste login",
+      "usertype": "Brugertype",
+      "role": "Rolle",
+      "mfaenabled": "Multifactor-godkendelse"
+    }
+  },
+  "tableRow": {
+    "moreOptions": "Flere indstillinger",
+    "groupManager": "Gruppeadministrator",
+    "owner": "Ejer",
+    "member": "Medlem",
+    "myOrg": "Min organisation",
+    "other": "Andet",
+    "coordinator": "Samarbejdskoordinator",
+    "noLimit": "Ingen grænse",
+    "creditsNumber": "${remain} for ${total}",
+    "today": "I dag",
+    "yesterday": "I går",
+    "never": "Aldrig",
+    "role": "Rolle",
+    "memberIsCoordinator": "Dette medlem er en samarbejdskoordinator",
+    "rolesForCoordinator": "Samarbejdskoordinatorer kan kun have roller som administrator eller facilitator.",
+    "memberIsContact": "Dette medlem er en administrativ kontakt",
+    "removeFromContact": "Hvis du vil ændre dette medlems rolle, skal du først fjerne medlemmet fra ${linkStart}listen over administrative kontakter${linkEnd}."
+  },
+  "listCard": {
+    "moreOptions": "Flere indstillinger",
+    "lastLoggedIn": "Sidst logget ind ${value}",
+    "today": "I dag",
+    "yesterday": "I går",
+    "hasNotLoggedIn": "Har ikke logget ind endnu",
+    "neverSignedInTooltip": "Dette medlem har aldrig logget ind på sin konto, der er oprettet ${date}",
+    "userType": "Brugertype",
+    "role": "Rolle",
+    "creditsRemaining": "Credits tilbage",
+    "noLimit": "Ingen grænse",
+    "creditsNumber": "${remain} for ${total}",
+    "addonLicenses": "Add-on-licenser",
+    "configureLicenses": "Konfigurér licenser",
+    "groups": "Grupper",
+    "configureGroups": "Konfigurér grupper",
+    "viewGroups": "Få vist grupper"
+  },
+  "myOrg": {
+    "myOrgView": "Min organisation-visning"
+  },
+  "filterGroupRole": {
+    "title": "Grupperolle",
+    "label": "Grupperolle: ${role}",
+    "admins": "Ejer og gruppeadministratorer",
+    "member": "Medlem"
+  },
+  "filterAffiliation": {
+    "title": "Tilknytning",
+    "label": "Tilknytning: ${name}",
+    "myOrg": "Min organisation",
+    "other": "Andet"
+  },
+  "filterCreditsRemain": {
+    "title": "Credits tilbage",
+    "noLimit": "Ingen grænse",
+    "lessThan": "Mindre end",
+    "credits": "Credits",
+    "labelNoLimit": "Credits: Ingen begrænsning",
+    "labelLess": "Credits: Mindre end ${value}",
+    "invalidValue": "Den angivne værdi er ikke gyldig."
+  },
+  "filterEmailVerification": {
+    "title": "Status for verificering af e-mail",
+    "unverified": "E-mailadresser, der ikke er verificeret",
+    "verified": "Verificerede e-mailadresser",
+    "label": "Status for verificering af e-mail: ${status}"
+  },
+  "filterLoginType": {
+    "title": "Login-type",
+    "label": "Login-type: ${type}",
+    "social": "Social"
+  },
+  "filterApp": {
+    "title": "App",
+    "label": "App: ${app}"
+  },
+  "filterMFA": {
+    "title": "Multifactor-godkendelse",
+    "enabled": "Aktiveret",
+    "disabled": "Deaktiveret",
+    "label": "Multifaktor-godkendelse: ${status}"
+  },
+  "roles": {
+    "user": "Bruger",
+    "publisher": "Udgiver",
+    "admin": "Administrator",
+    "viewer": "Viewer",
+    "editor": "Dataeditor",
+    "facilitator": "Facilitator"
+  },
+  "view": {
+    "view": "Vis",
+    "list": "Liste",
+    "table": "Tabel"
+  },
+  "assignedLicenses": "Vis kun medlemmer, der har fået tildelt denne licens",
+  "onlyDoubleAssigned": "Vis kun medlemmer, der har fået tildelt denne licens to gange",
+  "maxSelected": "Kun ${number} medlemmer kan vælges ad gangen."
+}

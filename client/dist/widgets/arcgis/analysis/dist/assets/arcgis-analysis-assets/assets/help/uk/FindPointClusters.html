@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>Інструмент &laquo;Знайти кластери точок&raquo; виконує пошук кластерів точкових об&rsquo;єктів у межах навколишнього шуму на основі їх просторового розподілу.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="analysisLayer">
+        <div>
+            <p>Вхідний шар точок, який буде згруповано в кластери на основі просторового розподілу точкових об&rsquo;єктів.
+            </p>
+        </div>
+    </div>
+    <div id="method">
+        <div>
+            <p>Метод, який використовуватиметься для ідентифікації кластерів.
+            </p>
+        </div>
+    </div>
+    <div id="minFeaturesCluster">
+        <div>
+            <p>Мінімальна кількість точкових об&rsquo;єктів, які вважатимуться кластером.
+            </p>
+        </div>
+    </div>
+    <div id="searchDistance">
+        <div>
+            <p>Визначає максимальну відстань навколо кожного об&rsquo;єкта точки для пошуку точок, які можна включити в кластер. Якщо залишити порожнім, значенням  <b>Відстань пошуку</b> буде найбільше значення основної відстані в шарі, за винятком тих основних відстаней, що потрапляють у верхній 1 відсоток.
+            </p>
+        </div>
+    </div>
+    <div id="searchDistanceUnit">
+        <div>
+            <p>Указує одиниці, які використовуватимуться для відстані пошуку.
+            </p>
+        </div>
+    </div>
+    <div id="sensitivity">
+        <div>
+            <p>Ціле число від 0 до 100, яке визначає компактність кластерів. Якщо залишити порожнім, значення  <b>Чутливість кластера</b> буде обчислюватися з використанням відстані Кульбака-Лейблера.
+            </p>
+        </div>
+    </div>
+    <div id="timeField">
+        <div>
+            <p>Поле вхідного шару, яке містить позначку часу для кожного об&rsquo;єкта.
+            </p>
+        </div>
+    </div>
+    <div id="searchTimeInterval">
+        <div>
+            <p>Інтервал часу, який використовуватиметься для визначення того, чи утворюють об&rsquo;єкти просторово-часовий кластер. Часовий інтервал пошуку охоплює час до та після для кожного об'єкта; наприклад, часовий інтервал пошуку в 3 дні навколо об'єкта буде включати всі об'єкти, що починаються за 3 дні до і закінчуються через 3 дні після об'єкта.
+            </p>
+        </div>
+    </div>
+    <div id="searchTimeUnit">
+        <div>
+            <p>Визначає одиниці, які використовуватимуться для часового інтервалу пошуку.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>Назва шару, який буде створено та додано до карти.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>Назва папки в  <b>Моєму вмісті</b>, де буде збережено результат.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

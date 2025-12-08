@@ -1,0 +1,12 @@
+{
+  "name": "leftfloating",
+  "type": "template",
+  "templateType": "screen",
+  "label": "Left Floating",
+  "thumbnail": "thumbnail.png",
+  "order": 1,
+  "tags": [],
+  "categoriesTags": [],
+  "thumbnailWidth": 328,
+  "thumbnailHeight": 200
+}

@@ -1,0 +1,417 @@
+{
+  "itemBrowser": {
+    "filters": "Filtrid",
+    "preview": "Eelvaade",
+    "selectedLayers": "Valitud kihid",
+    "selectedItems": "Valitud üksused",
+    "pageRange": "${start}–${end}, kokku: ${total}",
+    "pageRangeAria": "${start}–${end}, üksusi kokku: ${total}",
+    "pageRangeWithRecycleBin": "${start}-${end}, kokku: ${total} (kogusuurus: ${recycleBinSize})",
+    "pageRangeAriaWithRecycleBin": "${start}-${end}, üksuste koguarv: ${total} (kogusuurus: ${recycleBinSize})",
+    "foundOnPage": "Jooksval lehel vasteid: ${total}",
+    "totalSize": "Kogusuurus: ${totalSize}",
+    "selectedMultipleWithSize": "Valitud: ${num} (${totalSize})",
+    "selectedMultipleWithSizeSmall": "${num} (${totalSize})",
+    "noSelectedLayers": "Praegu pole ühtegi kihti valitud",
+    "noSelectedItems": "Praegu pole ühtegi üksust valitud",
+    "sharingUpdated": "${itemTitle} jagamine on värskendatud.",
+    "refineContent": "Täpsusta sisu"
+  },
+  "layerTypes": {
+    "point": "Punktikiht",
+    "line": "Joonekiht",
+    "polygon": "Polügoonikiht",
+    "multipatch": "Ruumilise geomeetria kiht",
+    "multipoint": "Mitmikpunktikiht",
+    "table": "Tabel",
+    "catalog": "Kataloogikiht",
+    "oriented imagery": "Orienteeritud piltide kiht",
+    "parcel": "Maaüksuse kiht",
+    "utility network": "Utility networki kiht",
+    "topology": "Topoloogiakiht",
+    "trace network": "Trace networki kiht"
+  },
+  "filterIndustry": {
+    "title": "Valdkond",
+    "Industry": "Valdkond: ${industry}",
+    "Build a layer": "Koosta kiht",
+    "Agriculture": "Põllumajandus",
+    "Electric Utilities": "Elektriettevõtted",
+    "Environment": "Keskkond",
+    "Forestry": "Metsandus",
+    "Gas Utilities": "Gaasiettevõtted",
+    "General": "Üldine",
+    "Natural Resources": "Loodusressursid",
+    "Petroleum": "Naftatööstus",
+    "Public Safety": "Riiklik julgeolek",
+    "Telecommunications": "Telekommunikatsioon",
+    "Transportation": "Transport",
+    "Water Utilities": "Vee-ettevõtted"
+  },
+  "filterItemType": {
+    "title": "Üksuse tüüp",
+    "itemType": "Tüüp: ${itemType}",
+    "options": {
+      "maps": "Kaardid",
+      "maps-webmaps": "Veebikaardid",
+      "maps-mapfiles": "Kaardifailid",
+      "layers": "Kihid",
+      "layers-weblayers": "Veebikihid",
+      "layers-weblayers-features": "Objektikihid",
+      "layers-weblayers-tiles": "Pildiüksuste kihid",
+      "layers-weblayers-mapimage": "Kaardi pildikihid",
+      "layers-weblayers-imagery": "Satelliitpiltide kihid",
+      "layers-weblayers-scenelayers": "Stseenikihid",
+      "layers-weblayers-videolayers": "Videokihid",
+      "layers-weblayers-tiledimagelayers": "Paanitud pildikihid",
+      "layers-weblayers-elevationlayers": "Kõrgusekihid",
+      "layers-weblayers-feeds": "Vood",
+      "layers-weblayers-tables": "Tabelid",
+      "layers-layerfiles": "Kihifailid",
+      "scenes": "Stseenid",
+      "applications": "Rakendused",
+      "applications-web": "Veebirakendused",
+      "applications-dashboards": "Töölauad",
+      "applications-sites": "Asukohad",
+      "applications-pages": "Lehed",
+      "applications-geobim-projects": "GeoBIM-i projektid",
+      "applications-geobim-apps": "GeoBIM-i rakendused",
+      "applications-instant-apps": "Instant Apps",
+      "applications-storymap": "Storymaps",
+      "applications-data-pipelines": "Andmekonveierid",
+      "applications-experience": "Experience Builder",
+      "applications-wab": "Web AppBuilder",
+      "applications-mobile": "Mobiilirakendused",
+      "applications-desktop": "Töölauarakendused",
+      "developer-credentials": "Arendaja identimisteave",
+      "developer-credentials-oauth": "OAuth 2.0 sisselogimise andmed",
+      "developer-credentials-api-token": "API-võtme sisselogimise andmed",
+      "developer-credentials-api-key": "API-võti (pärandrakendus)",
+      "tools": "Töövahendid",
+      "tools-locators": "Lokaatorid",
+      "tools-geodatabase": "Geoandmebaasile juurdepääs",
+      "tools-geometric": "Geomeetrilised operatsioonid",
+      "tools-geoprocessing": "Geotöötlustoimingud",
+      "tools-network": "Võrguanalüüs",
+      "tools-analytics": "Analüütika",
+      "files": "Failid",
+      "files-document": "Dokumendid",
+      "files-image": "Pildid",
+      "files-pdf": "PDF failid",
+      "files-csv": "CSV-failid",
+      "files-report": "Haldusaruanded",
+      "files-raster": "Rasterfunktsioonide mallid",
+      "notebooks": "Märkmikud",
+      "insights": "Ülevaated",
+      "insights-workbooks": "Töövihikud",
+      "insights-pages": "Aruanded",
+      "insights-models": "Mudelid",
+      "insights-themes": "Teemad",
+      "data-stores": "Andmelaod",
+      "knowledge-graphs": "Teabegraafikud"
+    }
+  },
+  "filterCategories": {
+    "categories": "Kategooriad",
+    "groupCategories": "Grupi kategooriad",
+    "category": "Kategooria: ${category}",
+    "uncategorized": "Kategoriseerimata",
+    "noCategoriesTitle": "Kategooriaid pole veel",
+    "noCategories": "Kategooriad võimaldavad grupi liikmetel üksuseid järjekindlalt korrastada ja võimaldavad grupi sisu lihtsalt sirvida.",
+    "noGroupCategoriesTitle": "Grupi kategooriaid ei ole",
+    "noGroupCategories": "Kategooriad võimaldavad grupi liikmetel üksuseid järjekindlalt korrastada ja võimaldavad grupi sisu lihtsalt sirvida.",
+    "setupCategories": "Seadista sisukategooriad",
+    "setupGroupCategories": "Seadista grupikategooriad",
+    "configureCategories": "Konfigureeri kategooriad"
+  },
+  "filterRegion": {
+    "regions": "Piirkonnad",
+    "region": "Piirkond: ${region}"
+  },
+  "filterCollaborations": {
+    "title": "Hajutatud koostööd",
+    "label": "Hajutatud koostööd: ${name}",
+    "loading": "Koostööde laadimine..."
+  },
+  "filterContentStatus": {
+    "title": "Olek",
+    "label": "Olek: ${contentStatus}",
+    "authoritative": "Usaldusväärne",
+    "deprecated": "Aegunud"
+  },
+  "filterDeleteProtection": {
+    "title": "Kustuta kaitse",
+    "label": "Kustuta kaitse: ${deleteProtection}",
+    "enabled": "Lubatud",
+    "disabled": "Keelatud"
+  },
+  "filterExpiration": {
+    "today": "Täna",
+    "tomorrow": "Homme",
+    "next7": "Järgmised 7 päeva",
+    "next30": "Järgmised 30 päeva",
+    "custom": "Kohandatud vahemik...",
+    "title": {
+      "expires": "Aegumiskuupäev"
+    },
+    "expires": "Aegumise kuupäev: ${date}"
+  },
+  "filterExtent": {
+    "label": "Kaardi kuvaulatuses",
+    "title": "Kuva ainult kaardi kuvaulatuses asuv sisu"
+  },
+  "filterFolder": {
+    "folders": "Kaustad",
+    "placeholder": "Filtreeri kaustad",
+    "clear": "Tühjenda otsing",
+    "all": "Kogu minu sisu",
+    "allContentUser": "Kasutaja ${username} kogu sisu",
+    "recycleBin": "Prügikast",
+    "label": "Kaust: ${folder}",
+    "loading": "Kaustade laadimine...",
+    "folderOptions": "Kausta valikud",
+    "editFolder": "Redigeeri kausta",
+    "deleteFolder": "Kustuta kaust",
+    "delete": "Kustuta",
+    "areYouSure": "Kas soovite selle kausta kindlasti kustutada?",
+    "areYouSureExplanation": "Kaust <strong style='font-weight: 500'>${title}</strong> kustutatakse jäädavalt. Lisaks märgitakse kõik kaustas olevad sisuüksused kustutamiseks. Kas soovite ikka jätkata selle kausta kustutamisega?",
+    "cancel": "Loobu",
+    "save": "Salvesta",
+    "createAFolder": "Looge kaust",
+    "folderName": "Kausta nimi",
+    "createFolder": "Loo kaust",
+    "error": {
+      "title": "Tõrge",
+      "noName": "Peate sisestama kausta nime.",
+      "folderAlreadyExists": "Kaust \"${folder}\" on juba olemas. Valige mõni muu nimi.",
+      "invalidCharacters": {
+        "single": "Nimi ei tohi sisaldada seda tähemärki: ${invalidCharacters}.",
+        "multiple": "Nimi ei tohi sisaldada ühtegi järgnevatest tähemärkidest: ${invalidCharacters}.",
+        "unknown": "Nimi ei tohi sisaldada ühtegi järgnevatest tähemärkidest: ${invalidCharacters}."
+      },
+      "errorCreatingFolder": "Kausta ${folderName} loomisel ilmnes tõrge."
+    }
+  },
+  "filterGroup": {
+    "title": "Grupid",
+    "groups": "Minu grupid",
+    "placeholder": "Filtreeri grupid",
+    "all": "Minu gruppide kogu sisu",
+    "label": "Grupp: ${group}",
+    "loading": "Laadin gruppe..."
+  },
+  "filterContentType": {
+    "contentType": "Sisu tüüp",
+    "all": "Kogu minu organisatsiooni sisu",
+    "recycle": "Prügikast"
+  },
+  "filterLocation": {
+    "location": "Asukoht",
+    "label": "Asukoht: ${location}",
+    "findLocationText": "Otsi aadressi või kohta",
+    "search": "Otsi asukohti",
+    "suggestions": "Soovitused",
+    "noResults": "Päringule „${searchTerm}“ ei leitud tulemusi"
+  },
+  "filterSharing": {
+    "title": "Jagamine",
+    "label": "Jagatud: ${sharing}",
+    "owner": "Omanik",
+    "shared": "Jagatud gruppidega",
+    "private": "Ei jagata gruppidega",
+    "account": "Ettevõte",
+    "public": "Igaüks (avalik)"
+  },
+  "filterTags": {
+    "title": "Märksõnad",
+    "label": "Märgistatud: ${tags}",
+    "selectTags": "Vali märksõnad"
+  },
+  "filterReportType": {
+    "title": "Aruande tüüp",
+    "label": "Aruande tüüp: ${reportType}",
+    "activity": "Tegevus",
+    "credits": "Krediit",
+    "users": "Liige",
+    "content": "Sisuüksus",
+    "item_usages": "Üksuste vaatamiste arv",
+    "service_usages": "Teenuse kasutus"
+  },
+  "cardThumbnail": {
+    "loading": "Pildi laadimine"
+  },
+  "card": {
+    "select": "Vali üksus: ${title}",
+    "lastUpdated": "Üksus on uuendatud: ${date}",
+    "viewItemDetails": "Kuva üksuse ${title} kohta rohkem üksikasju",
+    "preview": "Täpsemalt",
+    "hidePreview": "Vähem üksikasju",
+    "closeDetails": "Sule eelvaade",
+    "openDetails": "Eelvaade",
+    "moreOptions": "Rohkem valikuid"
+  },
+  "cardSublayerSelect": {
+    "select": "Valige kiht",
+    "selectLayers": "Vali kihid",
+    "selectedSingle": "Valitud",
+    "selectedLayers": "Valitud kihid: ${num}",
+    "selectedMultiple": "Valitud: ${num}",
+    "selectedName": "Valitud kiht: ${name}",
+    "selectedTask": "Valitud toiming: ${task}",
+    "errorTitle": "Tõrge teenusega ühenduse loomisel.",
+    "errorBody": "Teenusega ei saa ühendust luua. Teenus ei toimi või nõuab autentimist.",
+    "notebookErrorBody": "See tööriist avaldati märkmikust. Juurdepääs ArcGIS märkmikele on teie organisatsiooni jaoks blokeeritud. Seadete kohandamiseks võtke ühendust oma administraatoriga.",
+    "retry": "Proovige uuesti",
+    "selectTask": "Valige toiming",
+    "selectTaskFrom": "Valige toiming kohast ${title}"
+  },
+  "cardLayersList": {
+    "hideDetails": "Peida üksikasjad",
+    "showDetails": "Näita detaile",
+    "layersAndTables": "Kihid ja tabelid"
+  },
+  "content": {
+    "noResults": "Teie nõuetele vastavaid sisuobjekte ei leitud. Proovige otsinguterminit muuta või mõned filtrid eemaldada, et kuvada rohkem sisuobjekte.",
+    "noContent": "Sisu pole saadaval.",
+    "loading": "Laadimine..."
+  },
+  "copy": {
+    "copy": "Kopeeri",
+    "copied": "Kopeeritud"
+  },
+  "bucketSelect": {
+    "my": "Minu sisu",
+    "org": "Minu organisatsioon",
+    "group": "Minu grupid",
+    "favorites": "Minu lemmikud",
+    "living atlas": "Elukoha atlas",
+    "living atlas analysis": "Living Atlase analüüsikihid",
+    "subscription content": "Tellimuse sisu",
+    "all": "ArcGIS Online",
+    "catalog": "Hubi kataloogid",
+    "catalogLabel": "Kataloog"
+  },
+  "preview": {
+    "owner": "Omanik",
+    "summary": "Kokkuvõte",
+    "noSummary": "Kokkuvõtet pole esitatud",
+    "description": "Kirjeldus",
+    "noDescription": "Kirjeldus puudub",
+    "thumbnail": "Pisipilt",
+    "overview": "Ülevaade",
+    "details": "Detailid",
+    "termsOfUse": "Kasutustingimused",
+    "noTermsOfUse": "Kasutustingimusi pole esitatud",
+    "itemManagedBy": "Üksuse haldaja: ${username}",
+    "fullItemDetails": "Kõik üksuse üksikasjad",
+    "layersCount": "Kihid (${count})",
+    "layers": "Kihid",
+    "add": "Lisa",
+    "remove": "Eemalda",
+    "loading": "Laadimine...",
+    "shared": "Jagamine",
+    "created": "Üksus on loodud",
+    "updated": "Üksus on uuendatud",
+    "fileSize": "Faili maht",
+    "dataUpdated": "Andmed on uuendatud",
+    "schemaUpdated": "Skeem on uuendatud",
+    "ID": "ID",
+    "copyID": "Kopeeri ID",
+    "URL": "URL",
+    "copyURL": "Kopeeri URL",
+    "itemStatus": "Olek",
+    "viewCount": "Vaatamiste arv",
+    "readMore": "Lisateave",
+    "dashboardViews": "Töölauavaated",
+    "dashboardMobile": "Lauaarvuti, mobiilseade",
+    "dashboardDesktop": "Lauaarvuti",
+    "sharing": {
+      "private": "Privaatne",
+      "shared": "Grupid",
+      "public": "Kõik",
+      "org": "Ettevõte"
+    },
+    "groupCategories": "Grupi kategooriad",
+    "matched": "Vastendatud",
+    "matchedNumber": "Vastendatud (${num})",
+    "layerError": {
+      "title": "Kihte ei saa kuvada",
+      "message": "Kihi eelvaade pole turvatud teenuste puhul toetatud."
+    },
+    "noServiceMessage": "Valitud teenust pole olemas või pole see juurdepääsetav.",
+    "credits": "Kinnitused",
+    "noCredits": "Ühtegi allikat ei ole kinnitatud.",
+    "geometryTypeTitle": "Geomeetria tüüp",
+    "layerTypeTitle": "Kihi tüüp",
+    "fields": "Väljad",
+    "noFields": "Selle kihi jaoks pole välju konfigureeritud",
+    "geometryType": {
+      "esriGeometryPoint": "Punktikiht",
+      "esriGeometryPolyline": "Joonekiht",
+      "esriGeometryPolygon": "Polügoonikiht",
+      "esriGeometryMultiPatch": "Ruumilise geomeetria kiht",
+      "table": "Tabel"
+    },
+    "layerActions": "Kihitoimingud",
+    "itemError": {
+      "title": "Tõrge",
+      "subscription": "See üksus pole praegu saadaval. Selle sisuobjektiga seotud ArcGIS Online’i tellimus on keelatud.",
+      "unhandled": "Viga selle sisuüksuse toomisel."
+    }
+  },
+  "table": {
+    "loading": "Laadimine...",
+    "caption": "Sisuüksuse tulemused, nuppudega veerupäised on sorditavad.",
+    "selectAll": "Vali kõik",
+    "selection": "Valik",
+    "headers": {
+      "title": "Pealkiri",
+      "modified": "Muudetud",
+      "created": "Koostatud",
+      "owner": "Omanik",
+      "size": "Suurus",
+      "deleted": "Kuupäev on kustutatud.",
+      "type": "Üksuse tüüp",
+      "badges": "Sisüksuse olek",
+      "favorite": "Lemmik",
+      "sharing": "Jagamistase",
+      "details": "Kuva üksikasjad",
+      "actions": "Rohkem sisuüksuste toiminguid",
+      "dataset": "Andmestik"
+    }
+  },
+  "tableRow": {
+    "deletesTomorrow": "Kustutatakse homme",
+    "deletes": {
+      "single": "Kustutatakse ${number} päeva pärast",
+      "multiple": "Kustutatakse ${number} päeva pärast",
+      "unknown": "Päevi kustutamiseni: ${number}"
+    },
+    "restore": "Taasta",
+    "details": "Kuva üksikasjad",
+    "moreOptions": "Rohkem valikuid",
+    "download": "Allalaadimine"
+  },
+  "search": {
+    "searchName": "Otsi: ${searchName}",
+    "searchAllContent": "Otsi kogu minu sisust",
+    "searchAllUserContent": "Otsi kogu üksuse ${username} sisust",
+    "searchGroupsContent": "Otsi minu gruppidest",
+    "searchingGroupsContent": "Minu gruppidest otsimine:",
+    "searchFavoritesContent": "Otsi minu lemmikute seast",
+    "searchOrganizationsContent": "Otsi minu organisatsioonist",
+    "searchLivingAtlasContent": "Otsi elukeskkonna atlasest",
+    "searchRecycleCurrentPage": "Otsi üksuse pealkirju praeguselt lehelt"
+  },
+  "find": {
+    "find": "Otsi",
+    "findOnPage": "Otsi lehelt",
+    "match": "Tagastab ainult praeguse lehekülje üksuse pealkirjade tekstivasted."
+  },
+  "view": {
+    "view": "Kuva",
+    "list": "Loend",
+    "grid": "Ruudustik",
+    "table": "Tabel"
+  }
+}

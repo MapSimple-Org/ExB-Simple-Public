@@ -1,0 +1,1 @@
+System.register([],function(e){return{execute:function(){e({_widgetLabel:"Gitter",widgetProperties:"Widget-egenskaber",widgetFunctions:"Widget-funktioner",widgetName:"widget-navn:",widgetProps:"widget-egenskaber:",tips:"Gitter"})}}});

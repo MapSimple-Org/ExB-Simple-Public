@@ -1,0 +1,27 @@
+{
+  "area": "Área",
+  "binResolution": "Resolução bin H3",
+  "binSize": "Tamanho da caixa",
+  "binSizeUnit": "Unidade",
+  "binType": "Tipo de forma da caixa",
+  "diamondBins": "Caixas de diamante",
+  "distance": "Distância",
+  "extentLayer": "Camada de extensão",
+  "extentOverrideMessage": "Esta camada de extensão será usada em vez de qualquer extensão de processamento definida nos ambientes.",
+  "extentSectionLabel": "Configurações de extensão",
+  "extentSectionText": "Especifique uma camada de extensão que o mosaico deve cobrir.",
+  "h3hexagonBins": "Caixas hexagonais H3",
+  "hexagon": "Hexágono",
+  "intersectStudyArea": "Somente manter intersecção de tesselação",
+  "itemProperties": {
+    "description": "Camada de feição gerada a partir da execução da ferramenta de análise Gerar Tesselações.",
+    "snippet": "Camada de feição gerada de Gerar Tesselações"
+  },
+  "outputAreasSectionText": "Forneça um nome para a grade de tesselação.",
+  "sizeType": "Medida de tamanho da caixa",
+  "square": "Equacionar",
+  "tessellationSettingsLabel": "Configurações de tesselação",
+  "tessellationSettingsSummaryText": "Especifique a forma e o tamanho das caixas a serem geradas.",
+  "thexagonBins": "Caixas hexagonais transversais",
+  "triangleBins": "Caixas triangulares"
+}

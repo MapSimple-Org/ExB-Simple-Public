@@ -1,0 +1,13 @@
+{
+  "header": "Visualizar",
+  "description": "Visualize o resultado antes de executar a análise.",
+  "showPreview": "Mostrar visualização",
+  "previewLayer": "Camada de visualização ${number}",
+  "update": "Atualizar",
+  "newPreview": "Nova visualização",
+  "previewPopup": "Habilite a visualização dos resultados da análise com base nos parâmetros de entrada.",
+  "previewError": "Esta camada de visualização não está disponível. Verifique os parâmetros de entrada e atualize esta camada de visualização novamente.",
+  "updatePopover": "Atualizar camada de visualização selecionada",
+  "createPopover": "Crie uma nova camada de visualização",
+  "maxPreview": "Número máximo permitido de camadas de visualização: ${maxCount}"
+}

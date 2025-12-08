@@ -1,0 +1,63 @@
+{
+  "gap": 4,
+  "padding": {
+    "number": [0],
+    "unit": "px"
+  },
+  "header": {
+    "expandIcon": {
+      "svg": "<svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 16 16'><path fill-rule='evenodd' d='M2.146 4.653a.485.485 0 0 1 .708 0L8 10.24l5.146-5.587a.485.485 0 0 1 .708 0 .54.54 0 0 1 0 .738l-5.5 5.956a.485.485 0 0 1-.708 0l-5.5-5.956a.54.54 0 0 1 0-.738' clip-rule='evenodd'></path></svg>",
+      "properties": {
+        "size": 16,
+        "color": "var(--sys-color-action-selected-text)",
+        "inlineSvg": true,
+        "isUploaded": false,
+        "originalName": "outlined/directional/down.svg",
+        "path": ["arrows", "arrowDown"]
+      }
+    },
+    "collapseIcon": {
+      "svg": "<svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 16 16'><path fill-rule='evenodd' d='M13.854 11.347a.486.486 0 0 1-.708 0L8 5.76l-5.146 5.587a.485.485 0 0 1-.708 0 .54.54 0 0 1 0-.738l5.5-5.956a.485.485 0 0 1 .708 0l5.5 5.956a.54.54 0 0 1 0 .738' clip-rule='evenodd'></path></svg>",
+      "properties": {
+        "size": 16,
+        "color": "var(--sys-color-action-selected-text)",
+        "inlineSvg": true,
+        "isUploaded": false,
+        "originalName": "outlined/directional/up.svg",
+        "path": ["arrows", "arrowUp"]
+      }
+    },
+    "showWidgetIcon": false,
+    "widgetIconSize": 16,
+    "widgetIconColor": "var(--sys-color-action-selected-text)",
+
+    "textStyle": {
+      "bold": true,
+      "color": "var(--sys-color-action-selected-text)",
+      "size": "14px"
+    },
+    "padding": {
+      "number": [8],
+      "unit": "px"
+    },
+    "borderRadius": {
+      "number": [45],
+      "unit": "px"
+    },
+    "collapsedColor": "var(--sys-color-action-selected)",
+    "expandedColor": "var(--sys-color-action-selected-hover)"
+  },
+  "panel": {
+    "borderRadius": {
+      "number": [8],
+      "unit": "px"
+    },
+    "padding": {
+      "number": [12],
+      "unit": "px"
+    }
+  },
+  "singleMode": false,
+  "showToggleAll": false,
+  "useQuickStyle": 2
+}

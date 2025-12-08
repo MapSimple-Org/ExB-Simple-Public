@@ -1,0 +1,17 @@
+{
+  "sharing": "Jakaminen",
+  "private": "Omistaja",
+  "shared": "Omistaja ja jaettu ryhmille",
+  "org": "Organisaatio",
+  "public": "Kaikki (julkinen)",
+  "privateGroups": "Omistaja",
+  "sharedGroups": "Omistaja ja ryhmät (${num})",
+  "orgGroups": "Organisaatio ja ryhmät (${num})",
+  "publicGroups": "Kaikki (julkinen) ja ryhmät (${num})",
+  "groups": "Ryhmät (${num})",
+  "updateSharing": "Jakamistaso: ${level}, päivitä jakaminen",
+  "viewableBy": "Käyttäjät, joilla on katseluoikeus: ${level}",
+  "everyone": "Kaikki (julkinen)",
+  "organization": "Organisaatio",
+  "groupMembers": "Ryhmän jäsenet"
+}

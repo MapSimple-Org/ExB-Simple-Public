@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>T&ouml;&ouml;riistaga &quot;Arvuta s&otilde;idukulud&quot; saab punktipaaride puhul m&otilde;&otilde;ta &uuml;hest punktist teise liikumiseks kuluvat reisiaega v&otilde;i vahemaad.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="originsLayer">
+        <div>
+            
+            <p class="OnlineOnly">Reisikulu arvutamiseks kasutatavaid l&auml;htekohti t&auml;histav punktikiht. Toetatud on kuni  viis tuhat objektiga kihid. </p>  
+            <p class="PortalOnly">Reisikulu arvutamiseks kasutatavaid l&auml;htekohti t&auml;histav punktikiht.
+            </p>
+            <p class="toolPaneOnly">Objektide arv s&otilde;ltub t&auml;iendavatest teguritest, n&auml;iteks filtreerimiskriteeriumidest ja anal&uuml;&uuml;si ulatusest.
+            </p>
+        </div>
+    </div>
+    <div id="destinationsLayer">
+        <div>
+            
+            <p class="OnlineOnly">Reisikulu arvutamiseks kasutatavaid sihtkohti t&auml;histav punktikiht. Toetatud on kuni  viis tuhat objektiga kihid. </p> 
+            <p class="PortalOnly">Reisikulu arvutamiseks kasutatavaid sihtkohti t&auml;histav punktikiht.
+            </p>
+            <p class="toolPaneOnly">Objektide arv s&otilde;ltub t&auml;iendavatest teguritest, n&auml;iteks filtreerimiskriteeriumidest ja anal&uuml;&uuml;si ulatusest.
+            </p>
+        </div>
+    </div>
+    <div id="originsLayerRouteIDField">
+        <div>
+            
+            <p>V&auml;li  <b>L&auml;htekoha kihi</b> andmestikus, mis m&auml;&auml;rab eelm&auml;&auml;ratud l&auml;hte- ja sihtkoha paari. Kui l&auml;hte- ja sihtkohti on mitu, peab see ID vastama v&auml;&auml;rtusele <b>Sihtkoha kihi marsruudi ID</b> v&auml;ljal.
+            </p>
+        </div>
+    </div>
+    <div id="destinationsLayerRouteIDField">
+        <div>
+            
+            <p>V&auml;li  <b>Sihtkoha kihi</b> andmestikus, mis m&auml;&auml;rab eelm&auml;&auml;ratud l&auml;hte- ja sihtkoha paari. Kui l&auml;hte- ja sihtkohti on mitu, peab see ID vastama v&auml;&auml;rtusele <b>L&auml;htekohakihi marsruudi ID</b> v&auml;ljal.
+            </p>
+        </div>
+    </div>
+    <div id="pointBarrierLayer">
+        <div>
+            <p>&Uuml;ks v&otilde;i mitu punktobjekti, mis toimivad allpool paiknevatel t&auml;navatel s&otilde;itmise korral ajutiste piirangute (t&otilde;ketena). T&auml;naval on liiklemine lubatud, kuid mitte l&auml;bi piirajast t&otilde;kke.
+            </p>
+        </div>
+    </div>
+    <div id="lineBarrierLayer">
+        <div>
+            <p>&Uuml;ks v&otilde;i mitu joonobjekti, mis toimivad allpool paiknevatel t&auml;navatel s&otilde;itmise korral ajutiste piirangute (t&otilde;ketena). Joont&otilde;kked keelavad liiklemise igal pool, kus t&otilde;kked l&otilde;ikuvad t&auml;navatega.
+            </p>
+        </div>
+    </div>
+    <div id="polygonBarrierLayer">
+        <div>
+            <p>&Uuml;ks v&otilde;i mitu pol&uuml;goonobjekti, mis toimivad allpool paiknevatel t&auml;navatel s&otilde;itmise korral ajutiste piirangute (t&otilde;ketena). Pol&uuml;goont&otilde;kked keelaavad liiklemise igal pool, kus pol&uuml;goonid l&otilde;ikuvad t&auml;navatega.
+            </p>
+        </div>
+    </div>
+    <div id="measurementType">
+        <div>
+            <p>Sirgjoonelise vahemaa v&otilde;i aja m&otilde;&otilde;tmiseks kasutatav meetod. Meetod v&otilde;ib olla sirgjooneline vahemaa v&otilde;i liikumisviis.
+            </p>
+        </div>
+    </div>
+    <div id="timeOfDay">
+        <div>
+            <p>L&auml;htekohast v&auml;ljumise kuup&auml;ev ja kellaaeg L&auml;htekoha kihi andmestikus.
+            </p>
+        </div>
+    </div>
+    <div id="routeShape">
+        <div>
+            <p>M&auml;&auml;rab, kas l&auml;hte- ja sihtkohad &uuml;hendatakse v&otilde;rgujoontega v&otilde;i soovijoontega (<b>Sirgjoon</b>) v&otilde;i aluseks oleva t&auml;navate v&otilde;rgu t&auml;navatega (<b>J&auml;rgi t&auml;navaid</b>).
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>Selle kihi nimi, mis luuakse ja lisatakse kaardile.
+            </p>
+        </div>
+    </div>
+    <div id="includeRouteLayers">
+        <div>
+            <p>M&auml;&auml;rab, kas iga tulemmarsuut salvestatakse marsruudikihina.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            
+            <p>Selle kausta nimi jaotises  <b>Minu sisu</b>, kuhu tulemused salvestatakse.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

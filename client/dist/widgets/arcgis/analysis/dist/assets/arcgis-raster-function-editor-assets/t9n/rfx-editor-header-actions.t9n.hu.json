@@ -1,0 +1,11 @@
+{
+  "newTemplate": "Új sablon létrehozása",
+  "openTemplate": "Sablon megnyitása",
+  "addTemplate": "Sablon hozzáadása",
+  "addFunction": "Raszterfunkciók hozzáadása",
+  "addConstant": "Állandó hozzáadása",
+  "addRaster": "Raszterváltozók hozzáadása",
+  "expand": "Kibontás",
+  "editTemplateProperties": "Sablontulajdonságok szerkesztés",
+  "viewTemplateProperties": "Sablontulajdonságok megtekintése"
+}

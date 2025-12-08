@@ -1,0 +1,295 @@
+{
+  "layouts": {
+    "layout_1": {
+      "content": {
+        "1": {
+          "bbox": {
+            "left": 4,
+            "width": 8,
+            "height": "500px"
+          },
+          "type": "WIDGET",
+          "widgetId": "widget_5",
+          "setting": {
+            "heightMode": "fixed",
+            "aspectRatio": 0.75,
+            "autoProps": {
+              "height": "STRETCH"
+            }
+          }
+        },
+        "2": {
+          "type": "WIDGET",
+          "bbox": {
+            "left": 0,
+            "width": 4,
+            "height": "600px"
+          },
+          "widgetId": "widget_6",
+          "setting": {
+            "autoProps": {
+              "height": "STRETCH"
+            }
+          }
+        }
+      },
+      "order": [
+        "2",
+        "1"
+      ],
+      "type": "ROW"
+    },
+    "layout_3": {
+      "type": "COLUMN",
+      "content": {
+        "0": {
+          "type": "WIDGET",
+          "setting": {
+            "style": {},
+            "heightMode": "ratio",
+            "aspectRatio": "100:75"
+          },
+          "bbox": {
+            "width": "413px",
+            "height": 303
+          },
+          "widgetId": "widget_3"
+        },
+        "1": {
+          "type": "WIDGET",
+          "setting": {
+            "style": {
+              "transform": {
+                "rotate": 0
+              }
+            },
+            "autoProps": {
+              "height": "STRETCH"
+            },
+            "heightMode": "ratio",
+            "aspectRatio": "100:75"
+          },
+          "bbox": {
+            "width": "202px",
+            "height": "469px"
+          },
+          "widgetId": "widget_4"
+        }
+      },
+      "order": [
+        "0",
+        "1"
+      ]
+    },
+    "layout_5": {
+      "content": {
+        "1": {
+          "bbox": {
+            "left": 12,
+            "width": 12,
+            "height": 501.875
+          },
+          "type": "WIDGET",
+          "widgetId": "widget_5",
+          "setting": {
+            "heightMode": "fixed",
+            "aspectRatio": 0.75,
+            "autoProps": {
+              "height": "STRETCH"
+            }
+          }
+        },
+        "2": {
+          "type": "WIDGET",
+          "bbox": {
+            "left": 0,
+            "width": 12,
+            "height": 501.875
+          },
+          "widgetId": "widget_8",
+          "setting": {
+            "autoProps": {
+              "height": "AUTO"
+            }
+          }
+        }
+      },
+      "order": [
+        "2",
+        "1"
+      ],
+      "type": "ROW"
+    },
+    "layout_6": {
+      "type": "COLUMN",
+      "content": {
+        "0": {
+          "type": "WIDGET",
+          "setting": {
+            "style": {},
+            "heightMode": "ratio",
+            "aspectRatio": "100:75"
+          },
+          "bbox": {
+            "width": "413px",
+            "height": 303
+          },
+          "widgetId": "widget_3"
+        },
+        "1": {
+          "type": "WIDGET",
+          "setting": {
+            "style": {
+              "transform": {
+                "rotate": 0
+              }
+            },
+            "autoProps": {
+              "height": "STRETCH"
+            },
+            "heightMode": "ratio",
+            "aspectRatio": "100:75"
+          },
+          "bbox": {
+            "width": "202px",
+            "height": "469px"
+          },
+          "widgetId": "widget_4"
+        }
+      },
+      "order": [
+        "0",
+        "1"
+      ]
+    }
+  },
+  "widgets": {
+    "widget_1": {
+      "uri": "widgets/layout/row/",
+      "config": {
+        "space": 10,
+        "style": {
+          "padding": {
+            "number": [
+              10
+            ],
+            "unit": "px"
+          }
+        }
+      },
+      "id": "widget_1",
+      "layouts": {
+        "DEFAULT": {
+          "LARGE": "layout_1"
+        }
+      }
+    },
+    "widget_3": {
+      "uri": "widgets/common/image/",
+      "config": {
+        "functionConfig": {
+          "altText": "",
+          "toolTip": "",
+          "linkParam": {},
+          "scale": "Fit",
+          "imageParam": {}
+        },
+        "styleConfig": {}
+      },
+      "id": "widget_3"
+    },
+    "widget_4": {
+      "uri": "widgets/common/image/",
+      "config": {
+        "functionConfig": {
+          "altText": "",
+          "toolTip": "",
+          "linkParam": {},
+          "scale": "Fit",
+          "imageParam": {}
+        },
+        "styleConfig": {}
+      },
+      "id": "widget_4"
+    },
+    "widget_5": {
+      "uri": "widgets/common/image/",
+      "config": {
+        "functionConfig": {
+          "altText": "",
+          "toolTip": "",
+          "linkParam": {},
+          "scale": "Fit",
+          "imageParam": {}
+        },
+        "styleConfig": {}
+      },
+      "id": "widget_5"
+    },
+    "widget_6": {
+      "uri": "widgets/layout/column/",
+      "config": {
+        "space": 10,
+        "style": {
+          "padding": {
+            "space": [
+              10
+            ],
+            "unit": "px"
+          },
+          "justifyContent": "flex-start",
+          "alignItems": "stretch"
+        }
+      },
+      "id": "widget_6",
+      "layouts": {
+        "DEFAULT": {
+          "LARGE": "layout_3"
+        }
+      }
+    },
+    "widget_7": {
+      "uri": "widgets/layout/row/",
+      "config": {
+        "space": 10,
+        "style": {
+          "padding": {
+            "number": [
+              10
+            ],
+            "unit": "px"
+          }
+        }
+      },
+      "id": "widget_7",
+      "layouts": {
+        "DEFAULT": {
+          "SMALL": "layout_5"
+        }
+      }
+    },
+    "widget_8": {
+      "uri": "widgets/layout/column/",
+      "config": {
+        "space": 10,
+        "style": {
+          "padding": {
+            "space": [
+              10
+            ],
+            "unit": "px"
+          },
+          "justifyContent": "flex-start",
+          "alignItems": "stretch"
+        }
+      },
+      "id": "widget_8",
+      "layouts": {
+        "DEFAULT": {
+          "SMALL": "layout_6"
+        }
+      }
+    }
+  },
+  "template": "block3"
+}

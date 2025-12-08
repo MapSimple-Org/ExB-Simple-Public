@@ -1,0 +1,11 @@
+{
+  "all": "Všetko",
+  "inputLayersGroupText": "Vyberte vstupný raster povrchu a voliteľne dáta o priehlbinách a raster váh.",
+  "itemProperties": {
+    "description": "Výstup vygenerovaný po spustení nástroja Odvodiť prúd ako raster.",
+    "snippet": "Výstup vygenerovaný z Odvodiť prúd ako raster"
+  },
+  "outputStreamFeaturesLabel": "Názov prvkov výstupného toku",
+  "simplifyLabel": "Zjednodušiť prvky",
+  "streamSettingsGroupText": "Zadajte prah akumulácie, metódu tvorby toku a či budú výstupné línie toku vyhladené alebo ako jednoduché tvary."
+}

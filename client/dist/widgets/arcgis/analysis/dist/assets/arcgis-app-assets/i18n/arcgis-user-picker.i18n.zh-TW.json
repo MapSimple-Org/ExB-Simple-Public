@@ -1,0 +1,7 @@
+{
+  "searchMembers": "搜尋成員",
+  "selectUser": "選擇使用者",
+  "editSelection": "編輯所選使用者。 目前已選擇: ${name}",
+  "clear": "清除",
+  "members": "成員"
+}

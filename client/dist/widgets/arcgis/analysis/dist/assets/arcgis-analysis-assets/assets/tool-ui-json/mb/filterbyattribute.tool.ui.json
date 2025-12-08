@@ -1,0 +1,75 @@
+{
+  "toolName": "FilterByAttribute",
+  "version": "0.1.0",
+  "rules": [
+    {
+      "ruleType": "set",
+      "value": "$[Component].inputRows.selectedLayers",
+      "destination": "whereClause",
+      "property": "layer"
+    }
+  ],
+  "UIparameters": [
+    {
+      "label": "$queryCriteriaGroupLabel",
+      "componentName": "analysis-block",
+      "UIparameters": [
+        {
+          "name": "inputRows",
+          "label": "$inputDataset",
+          "componentName": "analysis-gp-composite",
+          "required": true,
+          "UIparameterInfos": [
+            {
+              "name": "layer",
+              "label": "$layer",
+              "dataType": "GPFeatureRecordSetLayer",
+              "layerFilterType": ["feature"],
+              "hideAddToMap": true
+            },
+            {
+              "name": "table",
+              "label": "$table",
+              "dataType": "GPRecordSet",
+              "layerFilterType": ["table"],
+              "hideAddToMap": true
+            }
+          ]
+        },
+        {
+          "name": "whereClause",
+          "label": "$filterExpression",
+          "componentName": "analysis-query-input",
+          "mode": "sql",
+          "recordsTerm": "records",
+          "disabledTooltip": "$addDataToQueryTooltip"
+        }
+      ]
+    },
+    {
+      "label": "$resultLayerGroupLabel",
+      "componentName": "analysis-block",
+      "summaryText": "$outputSectionText",
+      "UIparameters": [
+        {
+          "name": "outputName",
+          "label": "$outputName",
+          "placeholderText": "$outputNamePlaceholderText",
+          "componentName": "analysis-output-name",
+          "required": true
+        },
+        {
+          "name": "saveResultIn",
+          "label": "$saveResultIn",
+          "componentName": "analysis-folder-input"
+        }
+      ]
+    }
+  ],
+  "outputParameters": [
+    {
+      "label": "$filterByAttributeResult",
+      "name": "outputRows"
+    }
+  ]
+}

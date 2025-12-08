@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>Rotaları Planla aracı, bir ara&ccedil; filosu i&ccedil;in &ccedil;ok duraklı seyahat rotaları oluşturur.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="startLayer">
+        <div>
+            <p>Ara&ccedil;ların rotalarına başladığı yeri belirten nokta detayları.
+            </p>
+            <p class="toolPaneOnly">Detay sayısı, filtreleme kriterleri ve analiz yayılımı gibi ek fakt&ouml;rlere bağlıdır.
+            </p>
+        </div>
+    </div>
+    <div id="stopsLayer">
+        <div>
+            <p>Rotaları &uuml;zerinde ara&ccedil;ların ziyaret etmesi gereken nokta detayları. Bu noktalar &ccedil;ıktıda atanmış veya atanmamış durak halini alır.
+            </p>
+            <p class="toolPaneOnly">Detay sayısı, filtreleme kriterleri ve analiz yayılımı gibi ek fakt&ouml;rlere bağlıdır.
+            </p>
+        </div>
+    </div>
+    <div id="returnToStart">
+        <div>
+            
+            <p>Ara&ccedil;ların başlangı&ccedil; konumlarına d&ouml;nmesi mi (etkinleştirilmiş), yoksa belirtilen konumlarda sonlanması mı gerektiğini belirtir.
+            </p>
+        </div>
+    </div>
+    <div id="endLayer">
+        <div>
+            <p>Ara&ccedil;ların rotalarını bitirdiği yeri belirten nokta detayları. Katman sadece bir nokta i&ccedil;eriyorsa t&uuml;m ara&ccedil;lar ortak bir bitiş noktasına y&ouml;nlendirilir. Katman birden fazla nokta i&ccedil;eriyorsa her ara&ccedil; benzersiz bir bitiş konumuna y&ouml;nlendirilir.
+            </p>
+            <p class="toolPaneOnly">Detay sayısı, filtreleme kriterleri ve analiz yayılımı gibi ek fakt&ouml;rlere bağlıdır.
+            </p>
+        </div>
+    </div>
+    <div id="startLayerRouteIDField">
+        <div>
+            <p>Tek tek rotaları, ara&ccedil;ları veya s&uuml;r&uuml;c&uuml;leri benzersiz olarak tanımlayan başlangı&ccedil; katmanındaki alan. Ara&ccedil;lar birden &ccedil;ok konumda başlayıp birden &ccedil;ok konumda sonlanıyorsa, başlangı&ccedil; ve bitiş katmanları i&ccedil;in belirtilen rota kimlikleri aynı olmalıdır.
+            </p>
+        </div>
+    </div>
+    <div id="endLayerRouteIDField">
+        <div>
+            <p>Tek tek rotaları, ara&ccedil;ları veya s&uuml;r&uuml;c&uuml;leri benzersiz olarak tanımlayan bitiş katmanındaki alan. Ara&ccedil;lar birden &ccedil;ok konumda başlayıp birden &ccedil;ok konumda sonlanıyorsa, başlangı&ccedil; ve bitiş katmanları i&ccedil;in belirtilen rota kimlikleri aynı olmalıdır.
+            </p>
+        </div>
+    </div>
+    <div id="pointBarrierLayer">
+        <div>
+            <p>Aşağıdaki sokaklarda seyahat ederken ge&ccedil;ici kısıtlamalar (engeller) işlevi g&ouml;recek bir ya da daha fazla nokta detayı. Sokakta harekete izin verilir ancak engel ge&ccedil;ilemez.
+            </p>
+        </div>
+    </div>
+    <div id="lineBarrierLayer">
+        <div>
+            <p>Aşağıdaki sokaklarda seyahat ederken ge&ccedil;ici kısıtlamalar (engeller) işlevi g&ouml;recek bir ya da daha fazla &ccedil;izgi detayı. &Ccedil;izgi engelleri, engellerin sokaklarla kesiştiği her yerde seyahati engeller.
+            </p>
+        </div>
+    </div>
+    <div id="polygonBarrierLayer">
+        <div>
+            <p>Aşağıdaki sokaklarda seyahat ederken ge&ccedil;ici kısıtlamalar (engeller) işlevi g&ouml;recek bir ya da daha fazla &ccedil;okgen detayı. &Ccedil;okgen engeller, &ccedil;okgenlerin sokaklarla kesiştiği her yerde seyahati engeller.
+            </p>
+        </div>
+    </div>
+    <div id="travelMode">
+        <div>
+            <p>Rotaları oluşturmak i&ccedil;in kullanılacak seyahat modu. Sadece zaman tabanlı seyahat modları desteklenmektedir.
+            </p>
+        </div>
+    </div>
+    <div id="routeStartTime">
+        <div>
+            <p>Ara&ccedil;lar i&ccedil;in kalkış tarihi ve saati.
+            </p>
+        </div>
+    </div>
+    <div id="routeCount">
+        <div>
+            
+            <p class="OnlineOnly">Durakları ziyaret edebilecek maksimum ara&ccedil; sayısı. Her bir  <b>Başlangı&ccedil; katmanı</b> ve <b>Bitiş katmanı</b> değerleri sadece bir detay i&ccedil;eriyorsa 100 adete kadar aracı belirtebilirsiniz. Herhangi bir katman birden fazla detay i&ccedil;eriyorsa varsayılan değer değiştirilemez. </p> 
+            <p class="PortalOnly">Durakları ziyaret edebilecek maksimum ara&ccedil; sayısı. Her bir  <b>Başlangı&ccedil; katmanı</b> ve <b>Bitiş katmanı</b> değerleri sadece bir detay i&ccedil;eriyorsa maksimum adete kadar aracı belirtebilirsiniz. Herhangi bir katman birden fazla detay i&ccedil;eriyorsa varsayılan değer değiştirilemez.
+            </p>
+        </div>
+    </div>
+    <div id="maxStopsPerRoute">
+        <div>
+            
+            <p class="OnlineOnly">Her aracın bir rota &uuml;zerinde yapabileceği maksimum duraklama sayısı. 1 ile  200 arasında bir değer belirtebilirsiniz. </p> 
+            <p class="PortalOnly">Her aracın bir rota &uuml;zerinde yapabileceği maksimum duraklama sayısı.
+            </p>
+        </div>
+    </div>
+    <div id="stopServiceTime">
+        <div>
+            <p>Her durakta harcanması beklenen ortalama hizmet s&uuml;resi.
+            </p>
+        </div>
+    </div>
+    <div id="limitMaxRouteTimeCheckbox">
+        <div>
+            <p>Ara&ccedil;lara maksimum rotalama zamanının uygulanıp uygulanmayacağını belirtir. Rotalama zamanı beklenen seyahat s&uuml;resini ve rota boyunca duraklarda harcanan servis s&uuml;relerini i&ccedil;erir.
+            </p>
+        </div>
+    </div>
+    <div id="maxRouteTime">
+        <div>
+            <p>Bir rotanın başlangı&ccedil;tan bitişe alabileceği maksimum s&uuml;re.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>Oluşturulacak ve haritaya eklenecek katmanın adı.
+            </p>
+        </div>
+    </div>
+    <div id="includeRouteLayers">
+        <div>
+            <p>Her sonu&ccedil; rotasının bir rota katmanı olarak dahil edilip edilmeyeceğini belirtir.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            
+            <p> <b>İ&ccedil;eriğim</b> i&ccedil;inde sonu&ccedil;ların kaydedileceği klas&ouml;r&uuml;n adı.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

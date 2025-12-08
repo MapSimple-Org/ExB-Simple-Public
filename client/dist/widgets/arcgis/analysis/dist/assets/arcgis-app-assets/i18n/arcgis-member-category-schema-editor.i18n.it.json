@@ -1,0 +1,22 @@
+{
+  "dialogHeading": "Configura le categorie dei membri",
+  "noticeTitle": "Modifica, cancella o riordina le categorie nella tua organizzazione.",
+  "noticeDescription": "Puoi assegnare categorie ai membri attraverso la scheda Membri.",
+  "defaultCategoryWarning": "Questa categoria membro è impostata come impostazione predefinita per nuovi membri e non può essere modificata né eliminata.",
+  "warning": {
+    "deleteInUseCategory": {
+      "message": {
+        "single": "Un membro è assegnato a questa categoria. L'eliminazione della categoria la rimuoverà anche da questo membro.",
+        "multiple": "${number} membri assegnati a questa categoria. L'eliminazione della categoria la rimuoverà anche da questo membro.",
+        "unknown": "Membri assegnati a questa categoria: ${number}. L'eliminazione della categoria la rimuoverà anche da questo membro."
+      }
+    },
+    "changeTitleInUseCategory": {
+      "message": {
+        "single": "Un membro è assegnato a questa categoria. L'aggiornamento della categoria aggiornerà il membro da utilizzare \"${newTitle}\".",
+        "multiple": "${number} membri assegnati a questa categoria. L'aggiornamento della categoria aggiornerà i membri da utilizzare \"${newTitle}\".",
+        "unknown": "Membri assegnati a questa categoria: ${number}. L'aggiornamento della categoria aggiornerà i membri da utilizzare \"${newTitle}\"."
+      }
+    }
+  }
+}

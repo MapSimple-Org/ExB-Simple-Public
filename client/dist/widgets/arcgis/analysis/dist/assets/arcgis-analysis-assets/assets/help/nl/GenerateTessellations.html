@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>De tool Moza&iuml;ekwerk genereren cre&euml;ert een raster van polygonen op basis van gespecificeerde omvang, vorm en grootte.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="binType">
+        <div>
+            <p>De vorm van de moza&iuml;ekwerken die worden gemaakt.
+            </p>
+        </div>
+    </div>
+    <div id="sizeType">
+        <div>
+            <p>Geeft aan of het moza&iuml;ekwerk wordt gedefinieerd door het gebied (<b>Gebied</b>) of door een afstandswaarde (<b>Afstand</b>).
+            </p>
+        </div>
+    </div>
+    <div id="binSize">
+        <div>
+            <p>De grootte (gebied of afstand) van de gegenereerde moza&iuml;ekwerken. Voor vierkanten, zeshoeken, driehoeken en ruiten bepaalt de afstand de hoogte van de moza&iuml;ekwerken. Voor transversale zeshoeken bepaalt de afstand de breedte van de moza&iuml;ekwerken.
+            </p>
+        </div>
+    </div>
+    <div id="binResolution">
+        <div>
+            <p>De H3-resolutie van de moza&iuml;ekwerken. Resolutie ligt tussen 0-15. Met elke toenemende resolutiegrootte neemt het oppervlak van de polygonen af tot een-zevende van de grootte bij de lagere resolutie.
+            </p>
+        </div>
+    </div>
+    <div id="binSizeUnit">
+        <div>
+            <p>De eenheden die zullen worden gebruikt voor de betegelingsgrootte.
+            </p>
+        </div>
+    </div>
+    <div id="extentLayer">
+        <div>
+            <p>De extent die de moza&iuml;ekwerken zullen bedekken.
+            </p>
+            <p class="toolPaneOnly">Het aantal objecten is afhankelijk van aanvullende factoren als de filtercriteria en de analyse-extent.
+            </p>
+        </div>
+    </div>
+    <div id="intersectStudyArea">
+        <div>
+            <p>Specificeert voor objectlagen of de betegelingen de hele extent zullen bestrijken of alleen de gebieden waar de betegelingen objecten snijden.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>De naam van de laag die wordt aangemaakt en toegevoegd aan de kaart.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>De naam van de map in  <b>Mijn content</b> waarin het resultaat wordt opgeslagen.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

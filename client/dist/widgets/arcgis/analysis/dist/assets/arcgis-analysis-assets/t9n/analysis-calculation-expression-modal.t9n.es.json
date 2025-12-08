@@ -1,0 +1,23 @@
+{
+  "add": "Agregar",
+  "arcade": "Arcade",
+  "arcadeExpressionEditor": "Editor de expresiones de Arcade",
+  "badSyntaxSQLExpression": "cSintaxis incorrecta en la expresión SQL. Corrija los errores.",
+  "calculationExpressionEditor": "Editor de Expresión de cálculo",
+  "cancel": "Cancelar",
+  "chooseLanguage": "Elegir un idioma",
+  "fieldToCalculate": "Campo a calcular: ${fieldName}",
+  "idealFor": "Ideal para:",
+  "languageSelect": "Selección de idioma",
+  "layerLoadFailNoFields": "Error al cargar la capa. No se pudieron recuperar los campos para el editor.",
+  "next": "Siguiente",
+  "noLayerProvidedNoFields": "No se proporcionó ninguna capa. No se pudieron recuperar los campos para el editor.",
+  "sql": "SQL",
+  "sqlExpressionEditor": "Editor de Expresión de SQL",
+  "tileSelectArcadeUseCase1": "Cálculos que requieren más funcionalidad que SQL, incluidas operaciones espaciales",
+  "tileSelectArcadeUseCase2": "Mejora de solución de problemas",
+  "tileSelectSqlUseCase1": "Rendimiento más rápido",
+  "tileSelectSqlUseCase2": "Cálculos que se pueden expresar en SQL",
+  "tileSelectSqlUseCase3": "Capas que tienen habilitadas las opciones Sincronización o Hacer seguimiento de entidades creadas o actualizadas",
+  "valueCannotBeBlank": "El valor no puede estar en blanco."
+}

@@ -1,0 +1,592 @@
+{
+  "rolePrivileges": "Pravice vloge",
+  "setFromExisting": "Nastavi iz obstoječe vloge",
+  "expandAll": "Razširi vse",
+  "generalPrivileges": "Splošne pravice",
+  "adminPrivileges": "Administratorske pravice",
+  "enabledLabel": "Omogočeno:",
+  "enableAll": "Omogoči vse",
+  "disableAll": "Onemogoči vse",
+  "members": "Uporabniki",
+  "groups": "Skupine",
+  "content": "Vsebina",
+  "sharing": "Deljenje",
+  "premiumContent": "Premium vsebina",
+  "premiumContentServices": "Premium vsebina in storitve",
+  "contentAndAnalysis": "Vsebina in analiza",
+  "features": "Geoobjekti",
+  "versionMgmt": "Upravljanje različice",
+  "webhooks": "Webhooks",
+  "marketplaceSubscriptions": "Naročnine za ArcGIS Marketplace",
+  "orgSettings": "Nastavitve organizacije",
+  "learnMore": "Več",
+  "searchPrivileges": "Išči pravice",
+  "notebooks": "Beležke",
+  "analysis": "Analiza",
+  "networkAnalysis": "Mrežna analiza",
+  "locationServices": "Storitve lociranja",
+  "requiredService": "Obvezna storitev",
+  "availableServices": "Razpoložljive storitve",
+  "basemaps": "Temeljne karte",
+  "staticMaps": "Statične karte",
+  "places": "Kraji",
+  "geocoding": "Geokodiranje",
+  "routing": "Usmerjanje",
+  "dataEnrichment": "Obogatitev podatkov",
+  "boundaries": "Meje",
+  "elevation": "Višina",
+  "spatialPrivileges": "Prostorska analiza",
+  "featureAnalysis": "Geoobjektna analiza",
+  "imageAnalysis": "Slikovna analiza",
+  "readOnlyBasemapsTooltip": "Dostop do temeljne karte je vključen.",
+  "privileges": {
+    "portal:user:viewOrgUsers": {
+      "label": "Ogled",
+      "description": "Dovoli uporabniku, da si ogleda uporabnike organizacije.",
+      "descriptionPortal": "Dovoli uporabniku, da si ogleda uporabnike portala.",
+      "descriptionApp": "Dovolite aplikaciji, da si ogleda uporabnike iz vaše organizacije."
+    },
+    "portal:user:createGroup": {
+      "label": "Ustvari, posodobi in izbriši",
+      "description": "Dovoli uporabniku, da ustvarja, ureja in izbriše svoje lastne skupine.",
+      "descriptionApp": "Dovolite aplikaciji, da ustvarja, ureja in izbriše skupine lastnika aplikacije."
+    },
+    "portal:user:joinGroup": {
+      "label": "Pridruži se organizacijskim skupinam",
+      "description": "Dovoli uporabniku, da se pridruži skupinam znotraj vaše organizacije.",
+      "descriptionPortal": "Dovoli uporabniku, da se pridruži skupinam znotraj vašega portala.",
+      "descriptionApp": "Dovolite aplikaciji, da spoji skupine znotraj vaše organizacije."
+    },
+    "portal:user:joinNonOrgGroup": {
+      "label": "Pridruži se zunanjim skupinam",
+      "description": "Dovoli uporabniku, da se pridruži skupinam zunaj vaše organizacije.",
+      "descriptionPortal": "Dovoli uporabniku, da se pridruži skupinam zunaj vašega portala.",
+      "descriptionApp": "Dovolite aplikaciji, da se pridruži skupinam zunaj vaše organizacije."
+    },
+    "portal:user:viewOrgGroups": {
+      "label": "Ogled skupin, deljenih z organizacijo",
+      "description": "Dovoli uporabniku, da si ogleda skupine, ki so deljene z organizacijo.",
+      "descriptionPortal": "Dovoli uporabniku, da si ogleda skupine, ki so deljene s portalom.",
+      "descriptionApp": "Dovolite aplikaciji, da si ogleda skupine, ki so deljene z organizacijo."
+    },
+    "portal:user:invitePartneredCollaborationMembers": {
+      "label": "Povabite uporabnike partnerskih organizacij",
+      "description": "Uporabnikom dovoli, da v skupine povabijo uporabnike iz organizacij partnerskega sodelovanja.",
+      "descriptionApp": "Dovolite aplikaciji, da v skupine povabi uporabnike iz organizacij partnerskega sodelovanja."
+    },
+    "portal:user:addExternalMembersToGroup": {
+      "label": "Dodaj uporabnike iz drugih organizacij",
+      "description": "Uporabnikom omogočite ustvarjanje skupin, ki uporabnikom iz drugih organizacij dovoljujejo vključitev ter pošiljanje povabil zunanjim uporabnikom v skupine.",
+      "descriptionApp": "Dovolite aplikaciji, da ustvari skupine, ki uporabnikom iz drugih organizacij dovoljujejo vključitev ter pošiljanje povabil zunanjim uporabnikom v skupine."
+    },
+    "portal:user:createItem": {
+      "label": "Ustvari, posodobi in izbriši",
+      "description": "Dovoli uporabniku, da ustvarja, ureja in izbriše svojo lastno vsebino.",
+      "descriptionApp": "Dovolite aplikaciji, da ustvarja, ureja in izbriše vsebino lastnika aplikacije."
+    },
+    "portal:publisher:publishFeatures": {
+      "label": "Objavi gostujoče geoobjektne sloje",
+      "description": "Dovoli uporabniku, da objavlja gostujoče geoobjektne sloje iz shapefilejev, CSV-jev itd.",
+      "descriptionApp": "Dovolite aplikaciji, da objavlja gostujoče geoobjektne sloje iz shapefilejev, CSV-jev itd."
+    },
+    "portal:publisher:publishTiles": {
+      "label": "Objavi gostujoče ploščične sloje",
+      "description": "Dovoli uporabniku, da objavlja gostujoče ploščične sloje iz paketov ploščičenja, geoobjektov itd.",
+      "descriptionApp": "Dovolite aplikaciji, da objavlja gostujoče ploščične sloje iz paketov ploščičenja, geoobjektov itd."
+    },
+    "portal:publisher:publishScenes": {
+      "label": "Objavi gostujoče sloje 3D-prizora",
+      "description": "Dovoli uporabniku, da objavlja gostujoče sloje 3D-prizora.",
+      "descriptionApp": "Dovolite aplikaciji, da objavlja gostujoče sloje 3D-prizora."
+    },
+    "portal:publisher:publishTiledImagery": {
+      "label": "Objavi gostujoče ploščične sloje slik",
+      "description": "Dovoli uporabniku, da objavlja gostujoče ploščične slikovne sloje iz posamezne slike ali zbirke slik. Zahteva razširitev tipa uporabnika ArcGIS Image for ArcGIS Online.",
+      "descriptionPortal": "Dovoli uporabniku, da objavlja gostujoče ploščične slikovne sloje iz posamezne slike ali zbirke slik.",
+      "descriptionApp": "Dovolite aplikaciji, da objavlja gostujoče ploščične slikovne sloje iz enojne slike ali zbirke slik. Zahteva licenco za gostovanje ArcGIS Image"
+    },
+    "portal:publisher:publishDynamicImagery": {
+      "label": "Objavi gostujoče dinamične sloje slik",
+      "description": "Dovoli uporabniku, da objavlja gostujoče dinamične slikovne sloje iz enojne slike ali zbirke slik.",
+      "descriptionApp": "Dovolite aplikaciji, da objavlja gostujoče dinamične slikovne sloje iz enojne slike ali zbirke slik."
+    },
+    "portal:publisher:publishServerServices": {
+      "label": "Objavi strežniške sloje",
+      "description": "Ta pravica omogoča zmožnost objave slojev, ki jih omogočajo storitve geoprocesiranja s strani federiranih strežnikov. Te storitve se pogosto sklicujejo na registrirane podatke iz geopodatkovnih baz ali virov podatkov na podlagi datotek."
+    },
+    "portal:publisher:publishKnowledgeGraph": {
+      "label": "Objavi gostujoče grafikone znanja",
+      "description": "Dovolite uporabniku, da objavi gostujoče grafikone znanja.",
+      "descriptionApp": "Dovolite aplikaciji, da objavi gostujoče grafikone znanja."
+    },
+    "portal:user:viewOrgItems": {
+      "label": "Ogled vsebine, deljene z organizacijo",
+      "description": "Dovoli uporabniku, da si ogleda vsebino, ki je deljena z organizacijo.",
+      "descriptionPortal": "Dovoli uporabniku, da si ogleda vsebino, ki je deljena s portalom.",
+      "descriptionApp": "Dovolite aplikaciji, da si ogleda vsebino, ki je deljena z organizacijo."
+    },
+    "premium:publisher:createNotebooks": {
+      "label": "Ustvarjanje in urejanje beležk",
+      "description": "uporabnikom omogočite ustvarjanje in urejanje interaktivnih beležk.",
+      "descriptionApp": "Dovolite aplikaciji, da ustvari in ureja interaktivne beležke."
+    },
+    "premium:publisher:scheduleNotebooks": {
+      "label": "Načrtuj beležke",
+      "description": "Uporabnikom omogočite načrtovanje prihodnjih samodejnih zagonov beležke.",
+      "descriptionApp": "Dovolite aplikaciji, da načrtuje prihodnje samodejne zagone beležke."
+    },
+    "portal:publisher:bulkPublishFromDataStores": {
+      "label": "Ustvarite množične geoobjektne sloje iz shrambe podatkov.",
+      "description": "Ta pravica dodeljuje sposobnost objave spletnih slojev iz registrirane shrambe podatkov."
+    },
+    "portal:publisher:registerDataStores": {
+      "label": "Registriraj shrambe podatkov",
+      "description": "Ta pravica omogoča registracijo shramb podatkov v portal."
+    },
+    "portal:user:viewTracks": {
+      "label": "Pogled sledenja lokacij",
+      "description": "Dovoli uporabniku, da si ogleda sledi lokacije uporabnikov prek deljenih ogledov sledi, kadar je omogočeno deljenje lokacije.",
+      "descriptionApp": "Dovolite aplikaciji, da si ogleda sledi lokacije uporabnikov prek deljenih ogledov sledi, kadar je omogočeno deljenje lokacije."
+    },
+    "portal:user:reassignItems": {
+      "label": "Znova dodeli vsebino",
+      "description": "Dovoli uporabniku, da znova dodeli samo svojo vsebino drugemu uporabniku s pravicami prejemanja vsebine.",
+      "descriptionApp": "Dovolite aplikaciji, da znova dodeli samo vsebino lastnika aplikacije drugemu uporabniku s pravicami prejemanja vsebine."
+    },
+    "portal:user:receiveItems": {
+      "label": "Prejmi vsebino",
+      "description": "Dovoli uporabniku, da prejme vsebino, ki mu jo je znova dodelil drug uporabnik s pravicami za ponovno dodelitev vsebine."
+    },
+    "portal:publisher:publishFeeds": {
+      "label": "Objavi vire",
+      "description": "Ta pravica omogoča objavljanje virov za vnos in prikaz podatkov v realnem času s pomočjo ArcGIS Velocity."
+    },
+    "portal:publisher:publishRealTimeAnalytics": {
+      "label": "Objavi analitike v realnem času",
+      "description": "Ta pravica omogoča objavljanje analitik v realnem času za analizo in obdelavo podatkov v realnem času s pomočjo ArcGIS Velocity."
+    },
+    "portal:publisher:publishBigDataAnalytics": {
+      "label": "Objava analitike velikih podatkov",
+      "description": "Ta pravica omogoča objavljanje analitik velikih podatkov za analizo podatkov zgodovinskih opazovanj s pomočjo ArcGIS Velocity."
+    },
+    "portal:publisher:createDataPipelines": {
+      "label": "Ustvari in zaženi podatkovne vode",
+      "description": "Uporabnikom dovoli ustvarjanje, urejanje in zagon podatkovnih vodov.",
+      "descriptionApp": "Dovolite aplikaciji ustvarjanje, urejanje in zagon podatkovnih vodov."
+    },
+    "portal:publisher:publishLivestreamVideo": {
+      "label": "Objavi videoposnetek v živo",
+      "description": "Dovolite članu, da objavi gostujoče sloje videoposnetka v živo, ki izvirajo iz omrežnih video oddaj in tokov.",
+      "descriptionApp": "Dovolite aplikaciji, da objavi gostujoče sloje videoposnetka v živo, ki izvirajo iz omrežnih video oddaj in tokov."
+    },
+    "portal:publisher:publishVideo": {
+      "label": "Objavi videoposnetek",
+      "description": "Dovolite članu, da objavi gostujoče sloje videoposnetka iz video datotek in podprtih metapodatkovnih datotek.",
+      "descriptionApp": "Dovolite aplikaciji, da objavi gostujoče sloje videoposnetka iz video datotek in podprtih metapodatkovnih datotek."
+    },
+    "portal:user:shareToGroup": {
+      "label": "Deli s skupinami",
+      "description": "Dovoli uporabniku, da deli vsebino s skupinami.",
+      "descriptionApp": "Dovolite aplikaciji, da deli vsebino s skupinami."
+    },
+    "portal:user:shareToOrg": {
+      "label": "Deli z organizacijo",
+      "labelPortal": "Deli s portalom",
+      "description": "Dovoli uporabniku, da deli vsebino z vašo organizacijo.",
+      "descriptionPortal": "Dovoli uporabniku, da deli vsebino z vašim portalom.",
+      "descriptionApp": "Dovolite aplikaciji, da deli vsebino z vašo organizacijo."
+    },
+    "portal:user:shareToPublic": {
+      "label": "Deli z javnostjo",
+      "description": "Omogočite članu, da javno deli svojo vsebino, če to dovoljuje pravilnik organizacije o javni delitvi.",
+      "descriptionApp": "Dovolite aplikaciji, da javno deli vsebino lastnika aplikacije, če to dovoljuje pravilnik organizacije o javni delitvi.",
+      "tooltip": "Če organizacija članom ne dovoljuje javne deljenja vsebine, bodo člani potrebovali skrbniški privilegij za deljenje članske vsebine z javnostjo."
+    },
+    "portal:user:shareGroupToOrg": {
+      "label": "Naredi skupine vidne organizaciji",
+      "labelPortal": "Naredi skupine vidne portalu",
+      "description": "Dovoli uporabniku, da deli vsebino z vašo organizacijo.",
+      "descriptionPortal": "Dovoli uporabniku, da deli vsebino z vašim portalom.",
+      "descriptionApp": "Dovolite aplikaciji, da deli vsebino z vašim portalom."
+    },
+    "portal:user:shareGroupToPublic": {
+      "label": "Postavi skupine, da bodo vidne javnosti",
+      "description": "Dovoli uporabniku, da skupinam omogoči, da jih javnost odkrije.",
+      "descriptionApp": "Dovoli aplikaciji, da skupinam omogoči, da jih javnost odkrije."
+    },
+    "opendata:user:designateGroup": {
+      "label": "Omogoči razpoložljivost skupin rešitvi Open Data",
+      "description": "Dovoli uporabniku, da določi skupine kot razpoložljive za uporabo v Open Data.",
+      "descriptionApp": "Dovolite aplikaciji, da določi skupine kot razpoložljive za uporabo v Open Data."
+    },
+    "premium:user:basemaps": {
+      "label": "Storitev Basemap Styles",
+      "descriptionLocationPlatform": "Dovolite aplikaciji, da dostopa do storitve Basemap Styles."
+    },
+    "premium:user:staticbasemaptiles": {
+      "label": "Statične ploščice temeljne karte",
+      "descriptionLocationPlatform": "Dovoli aplikaciji, da dostopa do storitve statičnih ploščic temeljne karte."
+    },
+    "premium:user:staticMaps": {
+      "label": "Storitev statičnih kart (beta)",
+      "descriptionLocationPlatform": "Dovoli aplikaciji, da dostopa do storitve statičnih kart."
+    },
+    "premium:user:elevation": {
+      "label": "Višinska storitev",
+      "descriptionLocationPlatform": "Dovolite aplikaciji, da dostopa do višinske storitve."
+    },
+    "premium:user:geocode": {
+      "label": "Geokoda",
+      "description": "Dovoli uporabniku, da izvede opravila geokodiranja, ki porabljajo kredite, s storitvijo ArcGIS Geocoding Service (ali pogledom tega lokatorja).",
+      "descriptionApp": "Dovolite aplikaciji, da izvede opravila geokodiranja, ki porabljajo kredite, s storitvijo ArcGIS World Geocoding Service (ali pogledom tega lokatorja)."
+    },
+    "premium:user:geocode:stored": {
+      "label": "Geookoda (shranjena)",
+      "descriptionLocationPlatform": "Dovolite aplikaciji, da dostopa do storitve geokodiranja in izvaja shranjene geokode."
+    },
+    "premium:user:geocode:temporary": {
+      "label": "Geokoda (ni shranjena)",
+      "descriptionLocationPlatform": "Dovolite aplikaciji, da dostopa do storitve geokodiranja in izvaja geokode, ki niso shranjene."
+    },
+    "premium:user:networkanalysis": {
+      "label": "Usmerjanje",
+      "description": "Dovoli uporabniku, da izvaja opravila mrežne analize, kot so usmerjanje in poligoni trajanja vožnje.",
+      "descriptionApp": "Dovolite aplikaciji, da dostopa do storitve usmerjanja."
+    },
+    "premium:user:networkanalysis:closestfacility": {
+      "label": "Najbližja lokacija storitve",
+      "descriptionLocationPlatform": "Dovolite aplikaciji, da dostopa do storitve usmerjanja in izvaja operacije usmerjanja najbližje lokacije storitve."
+    },
+    "premium:user:networkanalysis:lastmiledelivery": {
+      "label": "Dostava na zadnji milji",
+      "descriptionLocationPlatform": "Dovolite aplikaciji, da dostopa do storitve usmerjanja in izvaja operacije usmerjanja za dostavo na zadnji milji."
+    },
+    "premium:user:networkanalysis:snaptoroads": {
+      "label": "Privlačnost do cest",
+      "descriptionLocationPlatform": "Dovoli uporabniku, da izvaja opravila analize omrežja, kot je privlačenje točk GPS sledi na ceste."
+    },
+    "premium:user:networkanalysis:locationallocation": {
+      "label": "Dodelitev lokacije",
+      "descriptionLocationPlatform": "Dovolite aplikaciji, da dostopa do storitve usmerjanja in izvaja operacije dodelitve lokacije."
+    },
+    "premium:user:networkanalysis:routing": {
+      "label": "Preprosto usmerjanje",
+      "descriptionLocationPlatform": "Dovolite aplikaciji, da dostopa do storitve usmerjanja in izvaja standardne operacije usmerjanja."
+    },
+    "premium:user:networkanalysis:optimizedrouting": {
+      "label": "Optimizirano usmerjanje",
+      "descriptionLocationPlatform": "Dovolite aplikaciji, da dostopa do storitve usmerjanja in izvaja optimizirane operacije usmerjanja."
+    },
+    "premium:user:networkanalysis:vehiclerouting": {
+      "label": "Usmerjanje za več vozil",
+      "descriptionLocationPlatform": "Usmerjanje za več vozil omogoča aplikaciji dostop do storitve usmerjanja in izvajanje operacij usmerjanja voznega parka."
+    },
+    "premium:user:networkanalysis:origindestinationcostmatrix": {
+      "label": "Matrika stroškov izhodišča/cilja",
+      "descriptionLocationPlatform": "Dovolite aplikaciji, da dostopa do storitve usmerjanja in ustvarja matrike stroškov potovanja."
+    },
+    "premium:user:networkanalysis:servicearea": {
+      "label": "Storitveno območje",
+      "descriptionLocationPlatform": "Dovolite aplikaciji, da dostopa do storitve usmerjanja in ustvarja storitvena območja."
+    },
+    "premium:user:places": {
+      "label": "Storitev za kraje",
+      "descriptionLocationPlatform": "Dovolite aplikaciji, da dostopa do storitve za kraje."
+    },
+    "premium:user:spatialanalysis": {
+      "labelOld": "Storitev za prostorsko analizo",
+      "label": "Storitev za geoobjektno analizo",
+      "labelPortal": "Standardna geoobjektna analiza",
+      "description": "Dovoli uporabniku, da izvaja opravila geoobjektne analize.",
+      "descriptionPortal": "Ta pravica omogoča zmožnost izvajanja nalog standardne geoobjektne analize.",
+      "descriptionLocationPlatform": "Dovolite aplikaciji, da dostopa do storive geoobjektne analize.",
+      "descriptionApp": "Dovolite aplikaciji, da dostopa do storive geoobjektne analize."
+    },
+    "premium:user:geoenrichment": {
+      "label": "Geoobogatitvena storitev",
+      "description": "Dovoli uporabniku, da izvede geoobogatitev geoobjektov.",
+      "descriptionLocationPlatform": "Dovolite aplikaciji, da dostopa do storitve GeoEnrichment.",
+      "descriptionApp": "Dovolite aplikaciji, da dostopa do storitve GeoEnrichment."
+    },
+    "premium:user:demographics": {
+      "label": "Demografske karte",
+      "description": "Dovolite aplikaciji, da dostopa do premium demografskih kart v ArcGIS Living Atlas.",
+      "descriptionApp": "Dovolite aplikaciji, da dostopa do premium demografskih kart v ArcGIS Living Atlas.",
+      "descriptionLocationPlatform": "Dovolite aplikaciji, da dostopa do demografskih kart v ArcGIS Living Atlas."
+    },
+    "premium:publisher:geoanalytics": {
+      "label": "Geoanalitična geoobjektna analiza",
+      "description": "Ta pravica omogoča zmožnost izvajanja nalog geoanalitike."
+    },
+    "premium:publisher:rasteranalysis": {
+      "label": "Analiza slikovja",
+      "description": "Uporabniku dovoli, da izvaja opravila analize slikovja. Zahteva zmožnost za analizo ArcGIS Image.",
+      "descriptionPortal": "Uporabniku dovoli, da izvaja opravila analize slikovja.",
+      "descriptionApp": "Dovolite aplikaciji, da izvaja opravila analize slikovja. Zahteva zmožnost za analizo ArcGIS Image.",
+      "descriptionAppPortal": "Dovolite aplikaciji, da izvaja opravila analize slikovja."
+    },
+    "premium:publisher:createAdvancedNotebooks": {
+      "label": "Napredne beležke",
+      "description": "Uporabnikom omogočite uvoz in uporabo modulov ArcPy v beležkah.",
+      "descriptionApp": "Dovolite aplikaciji, da uvozi in uporabi module ArcPy v beležkah."
+    },
+    "portal:user:runWebTool": {
+      "label": "Zaženi spletna orodja",
+      "description": "Dovolite članom zagon spletnih orodij.",
+      "descriptionPortal": "Omogočite članom zagon spletnih orodij, objavljenih iz beležk.",
+      "descriptionApp": "Dovolite aplikaciji zagon spletnih orodij.",
+      "descriptionAppPortal": "Dovolite aplikaciji, da zažene spletna orodja, objavljena iz beležk."
+    },
+    "portal:user:generateApiTokens": {
+      "label": "Ustvari ključe API",
+      "description": "Dovolite uporabnikom, da ustvarijo ključe API."
+    },
+    "portal:user:assignPrivilegesToApps": {
+      "label": "Dodeli pravice aplikacijam OAuth 2.0",
+      "description": "Dovolite uporabnikom, da aplikaciji OAuth 2.0 dodelijo pravice."
+    },
+    "portal:user:createWorkflow": {
+      "label": "Ustvari element poteka dela",
+      "description": "Omogoči članu ustvarjanje elementov Workflow Manager"
+    },
+    "premium:user:featurereport": {
+      "label": "Poročilo geoobjektov",
+      "description": "Dovoli uporabniku, da v Survey123 ustvari poročila geoobjektov.",
+      "descriptionApp": "Dovolite aplikaciji, da v Survey123 ustvari poročila geoobjektov."
+    },
+    "premium:user:realitymapping": {
+      "label": "Resničnostno kartiranje",
+      "description": "Dovoli uporabniku, da izvaja opravila resničnostnega kartiranja."
+    },
+    "features:user:edit": {
+      "label": "Uredi",
+      "description": "Dovoli uporabniku, da uredi geoobjekte v uredljivih slojih, ki niso javni, in sicer na podlagi možnosti urejanja, omogočenih za sloj.",
+      "descriptionApp": "Dovolite aplikaciji, da uredi geoobjekte v uredljivih slojih, ki niso javni, in sicer na podlagi možnosti urejanja, omogočenih za sloj."
+    },
+    "features:user:fullEdit": {
+      "label": "Urejanje s popolnim nadzorom",
+      "description": "Dovoli uporabniku, da dodaja, briše in posodablja geoobjekte v uredljivem gostujočem geoobjektnem sloju, ne glede na možnosti urejanja, omogočenih za sloj.",
+      "descriptionApp": "Dovolite aplikaciji, da dodaja, briše in posodablja geoobjekte v uredljivem gostujočem geoobjektnem sloju, ne glede na možnosti urejanja, omogočenih za sloj."
+    },
+    "features:user:manageVersions": {
+      "label": "Upravljaj vse",
+      "description": "Omogočite članom upravljanje zaklepov različice in ogled, spreminjanje, brisanje, urejanje, usklajevanje ter objavljanje na vse različice, do katerih se dostopa prek geoobjektnih slojev strežnika ArcGIS.",
+      "descriptionApp": "Omogočite aplikaciji upravljanje zaklepov različice in ogled, spreminjanje, brisanje, urejanje, usklajevanje ter objavljanje na vse različice, do katerih se dostopa prek geoobjektnih slojev strežnika ArcGIS."
+    },
+    "portal:publisher:createFeatureWebhook": {
+      "label": "Geoobjektni sloj",
+      "description": "Dovoli uporabniku, da ustvarja, ureja in izbriše svoje lastne webhooks geoobjektnega sloja.",
+      "descriptionApp": "Dovolite aplikaciji, da ustvarja, ureja in izbriše svoje lastne webhooks geoobjektnega sloja."
+    },
+    "portal:admin:viewUsers": {
+      "label": "Ogled vseh",
+      "description": "Dovoli uporabniku, da si ogleda vse informacije o računu uporabnika znotraj vaše organizacije.",
+      "descriptionPortal": "Dovoli uporabniku, da si ogleda vse informacije o računu uporabnika znotraj vašega portala.",
+      "descriptionApp": "Dovolite aplikaciji, da si ogleda vse informacije o računu uporabnika znotraj vaše organizacije."
+    },
+    "portal:admin:updateUsers": {
+      "label": "Posodobi",
+      "description": "Dovoli članu, da ponastavi gesla, posodablja informacije o računu uporabnika in posodablja kategorije uporabnikov znotraj vaše organizacije.",
+      "descriptionPortal": "Dovolite članu, da ponastavi gesla, posodablja informacije o računu uporabnika in posodablja kategorije uporabnikov znotraj vašega portala.",
+      "descriptionApp": "Dovolite aplikaciji, da ponastavi gesla, posodablja informacije o računu uporabnika in posodablja kategorije uporabnikov znotraj vaše organizacije."
+    },
+    "portal:admin:deleteUsers": {
+      "label": "Izbriši",
+      "description": "Dovoli uporabniku, da izbriše račune uporabnikov znotraj vaše organizacije.",
+      "descriptionPortal": "Dovoli uporabniku, da izbriše račune uporabnikov znotraj vašega portala.",
+      "descriptionApp": "Dovolite aplikaciji, da izbriše račune uporabnikov znotraj vaše organizacije."
+    },
+    "portal:admin:inviteUsers": {
+      "label": "Dodaj",
+      "labelPortal": "Povabi",
+      "description": "Dovoli uporabniku, da povabi uporabnike k vaši organizaciji.",
+      "descriptionPortal": "Dovoli uporabniku, da povabi uporabnike k vašemu portalu.",
+      "descriptionApp": "Dovolite aplikaciji, da povabi uporabnike k vaši organizaciji."
+    },
+    "portal:admin:disableUsers": {
+      "label": "Onemogoči",
+      "description": "Dovoli uporabniku, da omogoča in onemogoča račune uporabnikov znotraj vaše organizacije.",
+      "descriptionPortal": "Dovoli uporabniku, da omogoča in onemogoča račune uporabnikov znotraj vašega portala.",
+      "descriptionApp": "Dovolite aplikaciji, da omogoča in onemogoča račune uporabnikov znotraj vaše organizacije."
+    },
+    "portal:admin:changeUserRoles": {
+      "label": "Spremeni vloge",
+      "description": "Dovoli uporabniku, da spremeni vlogo, ki je dodeljena računu uporabnika. Upoštevajte, da lahko samo uporabniki z vlogo administratorja dodelijo ali ne dodelijo vloge administratorja drugim računom.",
+      "descriptionPortal": "Dovoli uporabniku, da spremeni vlogo, ki je dodeljena računu uporabnika. Upoštevajte, da lahko samo uporabniki z vlogo administratorja dodelijo ali ne dodelijo vloge administratorja drugim računom.",
+      "descriptionApp": "Dovolite aplikaciji, da spremeni vlogo, ki je dodeljena računu uporabnika. Upoštevajte, da lahko samo uporabniki z vlogo administratorja dodelijo ali ne dodelijo vloge administratorja drugim računom."
+    },
+    "portal:admin:manageLicenses": {
+      "label": "Upravljaj licence",
+      "description": "Dovoli uporabniku, da dodeljuje licence uporabnikom vaše organizacije.",
+      "descriptionPortal": "Dovoli uporabniku, da dodeljuje licence uporabnikom vašega portala.",
+      "descriptionApp": "Dovolite aplikaciji, da dodeljuje licence uporabnikom vaše organizacije."
+    },
+    "portal:admin:updateMemberCategorySchema": {
+      "label": "Upravljaj kategorije",
+      "description": "Dovoli uporabniku, da konfigurira kategorije uporabnikov organizacije.",
+      "descriptionPortal": "Dovoli članu, da konfigurira kategorije uporabnikov portala.",
+      "descriptionApp": "Dovolite aplikaciji, da konfigurira kategorije članov organizacije."
+    },
+    "portal:admin:viewGroups": {
+      "label": "Ogled vseh",
+      "description": "Dovoli uporabniku, da si ogleda vse skupine znotraj vaše organizacije.",
+      "descriptionPortal": "Dovoli uporabniku, da si ogleda vse skupine znotraj vašega portala.",
+      "descriptionApp": "Dovolite aplikaciji, da si ogleda vse skupine znotraj vaše organizacije."
+    },
+    "portal:admin:updateGroups": {
+      "label": "Posodobi",
+      "description": "Dovoli uporabniku, da posodobi skupine znotraj vaše organizacije.",
+      "descriptionPortal": "Dovoli uporabniku, da posodobi skupine znotraj vašega portala.",
+      "descriptionApp": "Dovolite aplikaciji, da posodobi skupine znotraj vaše organizacije."
+    },
+    "portal:admin:deleteGroups": {
+      "label": "Izbriši",
+      "description": "Dovoli uporabniku, da izbriše skupine znotraj vaše organizacije.",
+      "descriptionPortal": "Dovoli uporabniku, da izbriše skupine znotraj vašega portala.",
+      "descriptionApp": "Dovolite aplikaciji, da izbriše skupine znotraj vaše organizacije."
+    },
+    "portal:admin:reassignGroups": {
+      "label": "Znova dodeli lastništvo",
+      "description": "Dovoli uporabniku, da ponovno dodeli skupine drugim uporabnikom znotraj vaše organizacije.",
+      "descriptionPortal": "Dovoli uporabniku, da ponovno dodeli skupine drugim uporabnikom znotraj vašega portala.",
+      "descriptionApp": "Dovolite aplikaciji, da ponovno dodeli skupine drugim uporabnikom znotraj vaše organizacije."
+    },
+    "portal:admin:assignToGroups": {
+      "label": "Dodeli člane",
+      "description": "Dovoli uporabniku, da vaše uporabnike dodeli v skupine, posodobi vlogo uporabnika vaše skupine ter odstrani vaše uporabniku iz skupin znotraj vaše organizacije.",
+      "descriptionPortal": "Dovoli uporabniku, da vaše uporabnike dodeli v skupine, posodobi vlogo uporabnika vaše skupine ter odstrani vaše uporabniku iz skupin znotraj vašega portala.",
+      "descriptionApp": "Dovolite aplikaciji, da vaše uporabnike dodeli v skupine, posodobi vlogo uporabnika vaše skupine ter odstrani vaše uporabniku iz skupin znotraj vaše organizacije."
+    },
+    "portal:admin:manageEnterpriseGroups": {
+      "label": "Povezava do skupine, specifične za organizacijo",
+      "description": "Dovoli uporabniku, da poveže članstvo v skupini s skupino, specifično za organizacijo.",
+      "descriptionApp": "Dovolite aplikaciji, da poveže članstvo v skupini s skupino, specifično za organizacijo."
+    },
+    "portal:admin:createUpdateCapableGroup": {
+      "label": "Ustvari z zmožnostmi posodabljanja",
+      "description": "Dovoli uporabniku, da ustvarja skupine za posodabljanje zmožnosti.",
+      "descriptionApp": "Dovolite aplikaciji, da ustvarja skupine za posodabljanje zmožnosti."
+    },
+    "portal:admin:createLeavingDisallowedGroup": {
+      "label": "Ustvarjanje z ohranjanjem nedovoljenega",
+      "description": "Dovolite članom ustvarjanje in lastništvo skupin, ki članom ne dovoljujejo izhoda (administrativne skupine).",
+      "descriptionApp": "Dovolite aplikaciji ustvarjanje in lastništvo skupin, ki aplikacijam ne dovoljujejo izhoda (administrativne skupine)."
+    },
+    "portal:admin:viewItems": {
+      "label": "Ogled vseh",
+      "description": "Dovoli uporabniku, da si ogleda vso vsebino znotraj vaše organizacije.",
+      "descriptionPortal": "Dovoli uporabniku, da si ogleda vso vsebino znotraj vašega portala.",
+      "descriptionApp": "Dovolite aplikaciji, da si ogleda vso vsebino znotraj vaše organizacije."
+    },
+    "portal:admin:updateItems": {
+      "label": "Posodobi",
+      "description": "Dovolite uporabniku, da posodobi in kategorizira vsebino ter ureja gostujoče geoobjektne sloje znotraj vaše organizacije.",
+      "descriptionPortal": "Dovolite uporabniku, da posodobi in kategorizira vsebino ter ureja gostujoče geoobjektne sloje na vašem portalu.",
+      "descriptionApp": "Dovolite aplikaciji, da posodobi in kategorizira vsebino ter ureja gostujoče geoobjektne sloje znotraj vaše organizacije."
+    },
+    "portal:admin:deleteItems": {
+      "label": "Izbriši",
+      "description": "Dovoli uporabniku, da izbriše vsebino znotraj vaše organizacije.",
+      "descriptionPortal": "Dovoli uporabniku, da izbriše vsebino znotraj vašega portala.",
+      "descriptionApp": "Dovolite aplikaciji, da izbriše vsebino znotraj vaše organizacije."
+    },
+    "portal:admin:reassignItems": {
+      "label": "Znova dodeli lastništvo",
+      "description": "Dovoli uporabniku, da ponovno dodeli vsebino drugim uporabnikom znotraj vaše organizacije.",
+      "descriptionPortal": "Dovoli uporabniku, da ponovno dodeli vsebino drugim uporabnikom znotraj vašega portala.",
+      "descriptionApp": "Dovolite aplikaciji, da ponovno dodeli vsebino drugim uporabnikom znotraj vaše organizacije."
+    },
+    "portal:admin:updateItemCategorySchema": {
+      "label": "Upravljaj kategorije",
+      "description": "Dovoli uporabniku, da konfigurira kategorije vsebine organizacije.",
+      "descriptionPortal": "Dovoli uporabniku, da konfigurira kategorije vsebine portala.",
+      "descriptionApp": "Dovolite aplikaciji, da konfigurira kategorije vsebine organizacije."
+    },
+    "portal:publisher:publishServerGPServices": {
+      "label": "Objavi spletna orodja",
+      "description": "Ta pravica omogoča zmožnost objave spletnih orodij, ki jih podpirajo storitve geoprocesiranja s strani federiranih strežnikov."
+    },
+    "portal:admin:shareToOrg": {
+      "label": "Deli vsebino uporabnika z organizacijo",
+      "description": "Dovolite uporabniku, da z organizacijo deli vsebino, ki je v lasti drugih uporabnikov v vaši organizaciji.",
+      "descriptionPortal": "Dovolite uporabniku, da s portalom deli vsebino, ki je v lasti drugih uporabnikov v vašem portalu.",
+      "descriptionApp": "Dovolite aplikaciji, da z organizacijo deli vsebino, ki je v lasti drugih uporabnikov v vaši organizaciji."
+    },
+    "portal:admin:shareToPublic": {
+      "label": "Deli vsebino uporabnika z javnostjo",
+      "description": "Dovolite uporabniku, da z javnostjo deli vsebino, ki je v lasti drugih uporabnikov v vaši organizaciji.",
+      "descriptionPortal": "Dovolite uporabniku, da z javnostjo deli vsebino, ki je v lasti drugih uporabnikov v vašem portalu.",
+      "descriptionApp": "Dovolite aplikaciji, da z javnostjo deli vsebino, ki je v lasti drugih uporabnikov v vaši organizaciji."
+    },
+    "portal:admin:createReports": {
+      "label": "Ustvari in upravljaj administrativna poročila",
+      "description": "Dovolite članom, da ustvarjajo in upravljajo administrativna poročila za vašo organizacijo.",
+      "descriptionPortal": "Dovolite članom, da ustvarjajo in upravljajo administrativna poročila za vaš portal.",
+      "descriptionApp": "Dovolite aplikaciji, da ustvarja in upravlja administrativna poročila za vašo organizacijo."
+    },
+    "marketplace:admin:manage": {
+      "label": "Ustvari in upravljaj",
+      "description": "Dovoli uporabniku, da ustvarja sezname elementov, upravlja naročnine v ArcGIS Marketplace, kot tudi upravlja nabavnike in kontaktne informacije za vašo organizacijo. Uporaba te pravice je odvisna organizacije, ki pridobi dostop do seznama izdelkov in objave v ArcGIS Marketplace."
+    },
+    "marketplace:admin:purchase": {
+      "label": "Nakup in prejem brezplačnih produktov",
+      "description": "Uporabniku dovoli, da pošlje zahtevo za nakup in dostopa do brezplačnih ponudnikov v ArcGIS Marketplace. Da bi uporabnikom omogočili nakup produktov s kreditnimi karticami, jih morate označiti kot nabavnike za Marketplace."
+    },
+    "marketplace:admin:startTrial": {
+      "label": "Začni uporabo preskusnih različic",
+      "description": "Dovoli uporabniku, da začne s preskusno naročnino znotraj ArcGIS Marketplace."
+    },
+    "portal:admin:manageSecurity": {
+      "label": "Varnost in infrastruktura",
+      "description": "Dovoli uporabniku, da upravljanja nastavitev varnosti in infrastrukture organizacije.",
+      "descriptionPortal": "Dovoli uporabniku, da upravljanja nastavitev varnosti in infrastrukture portala.",
+      "descriptionApp": "Dovolite aplikaciji, da upravljanja nastavitev varnosti in infrastrukture organizacije."
+    },
+    "portal:admin:manageWebsite": {
+      "label": "Spletna stran organizacije",
+      "description": "Dovoli uporabniku, da upravlja z nastavitvami spletne strani organizacije.",
+      "descriptionPortal": "Dovoli uporabniku, da upravlja z nastavitvami spletne strani portala.",
+      "descriptionApp": "Dovolite aplikaciji, da upravlja z nastavitvami spletnega mesta organizacije."
+    },
+    "portal:admin:manageCollaborations": {
+      "label": "Sodelovanja",
+      "description": "Dovoli uporabniku, da upravlja s sodelovanji organizacije.",
+      "descriptionPortal": "Dovoli uporabniku, da upravlja s sodelovanji portala.",
+      "descriptionApp": "Dovolite aplikaciji, da upravlja s sodelovanji organizacije."
+    },
+    "portal:admin:manageCredits": {
+      "label": "Krediti",
+      "description": "Dovoli uporabniku, da upravlja s organizacijskimi nastavitvami proračuna kreditov.",
+      "descriptionApp": "Dovolite aplikaciji, da upravlja s organizacijskimi nastavitvami proračuna kreditov."
+    },
+    "portal:admin:manageRoles": {
+      "label": "Vloge uporabnikov",
+      "description": "Dovoli uporabniku, da upravlja z vlogami uporabnikov organizacije.",
+      "descriptionPortal": "Dovoli uporabniku, da upravlja z vlogami uporabnikov portala.",
+      "descriptionApp": "Dovolite aplikaciji, da upravlja vloge članov organizacije."
+    },
+    "portal:admin:manageServers": {
+      "label": "Strežniki",
+      "description": "Ta pravica odobri zmožnost upravljanja nastavitev strežnika portala."
+    },
+    "portal:admin:manageUtilityServices": {
+      "label": "Pomožne storitve",
+      "description": "Dovoli uporabniku, da upravlja z nastavitvami pomožnih storitev organizacije.",
+      "descriptionPortal": "Dovoli uporabniku, da upravlja z nastavitvami pomožnih storitev portala.",
+      "descriptionApp": "Dovolite aplikaciji, da upravlja z nastavitvami pomožnih storitev organizacije."
+    },
+    "portal:admin:manageWebhooks": {
+      "label": "Webhooks",
+      "labelPortal": "Organizacija webhooks",
+      "description": "Dovoli uporabniku, da ustvarja, ureja in izbriše vse webhooks v vaši organizaciji.",
+      "descriptionApp": "Dovoli aplikaciji, da ustvarja, ureja in izbriše vse webhooks v vaši organizaciji.",
+      "descriptionPortal": "Uporabniku dovoli ustvarjanje, urejanje in brisanje organizacijskih webhookov ter upravljanje vseh webhookov znotraj portala.",
+      "descriptionAppPortal": "Dovolite aplikaciji, da ustvari, ureja in briše organizacijske webhooke ter upravlja vse webhooke znotraj portala."
+    },
+    "portal:admin:createGPWebhook": {
+      "label": "Geoprocesiranje",
+      "description": "Dovoli uporabniku, da ustvarja, ureja in izbriše svoje lastno geoprocesiranje webhooks.",
+      "descriptionApp": "Dovolite aplikaciji, da ustvarja, ureja in izbriše svoje lastno geoprocesiranje webhooks."
+    }
+  }
+}

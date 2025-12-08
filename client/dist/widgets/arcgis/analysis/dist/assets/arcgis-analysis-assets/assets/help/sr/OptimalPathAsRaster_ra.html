@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>Alat Optimalna putanja kao raster određuje optimalnu putanju rastera od odredi&scaron;ta do izvora.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputDestinationRasterOrFeatures">
+        <div>
+            <p>Sloj koji identifikuje odredi&scaron;ta od kojih se izračunava udaljenost do najjeftinijeg izvora.
+            </p>
+            <p>Ako je unos raster, on mora da se sastoji od ćelija koje imaju važeće vrednosti celog broja (nula je važeća vrednost) za odredi&scaron;ta i preostale ćelije moraju da imaju dodeljeno NoData.
+            </p>
+            <p class="toolPaneOnly">Za uzlaze geoobjekata, broj zavisi od dodatnih faktora kao &scaron;to su kriterijumi za filtriranje i obuhvat analize.
+            </p>
+        </div>
+    </div>
+    <div id="destinationField">
+        <div>
+            <p>Polje koje će se koristiti za pribavljanje vrednosti za lokacije odredi&scaron;ta.
+            </p>
+        </div>
+    </div>
+    <div id="inputDistanceAccumulationRaster">
+        <div>
+            <p>Raster koji određuje optimalnu putanju od odredi&scaron;ta do izvora.
+            </p>
+            <p>Raster akumulacije rastojanja se obično kreira pomoću alatki za akumulaciju rastojanja ili alokaciju rastojanja.
+            </p>
+        </div>
+    </div>
+    <div id="inputBackDirectionRaster">
+        <div>
+            <p>Raster koji sadrži izračunati smer u stepenima.
+            </p>
+            <p>Raster povratnog smera se obično kreira pomoću alatki za akumulaciju rastojanja ili alokaciju rastojanja.
+            </p>
+        </div>
+    </div>
+    <div id="pathType">
+        <div>
+            <p>Određuje kako će se vrednosti i zone u ulaznim odredi&scaron;nim podacima tumačiti u proračunima optimalne putanje.
+            </p>
+        </div>
+    </div>
+    <div id="outputRasterName">
+        <div>
+            <p>Naziv optimalne putanje kao sloja rastera koji će biti kreiran i dodat na mapu.
+            </p>
+        </div>
+    </div>
+    <div id="resultType">
+        <div>
+            <p>Tip izlaza koji će biti kreiran. Izlaz može biti sloj sa popločanim slikama ili sloj dinamičkih slika.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>Naziv fascikle u  <b>Mom sadržaju</b> u kojoj će rezultat biti sačuvan.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

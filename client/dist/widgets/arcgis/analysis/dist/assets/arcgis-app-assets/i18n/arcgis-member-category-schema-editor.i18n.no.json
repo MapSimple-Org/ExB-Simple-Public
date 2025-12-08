@@ -1,0 +1,22 @@
+{
+  "dialogHeading": "Konfigurer medlemskategorier",
+  "noticeTitle": "Rediger, slett eller endre rekkefølgen på kategorier i organisasjonen.",
+  "noticeDescription": "Du kan tilordne kategorier til medlemmer via kategorien Medlemmer.",
+  "defaultCategoryWarning": "Denne medlemskategorien er angitt som standard for nye medlemmer og kan ikke redigeres eller slettes.",
+  "warning": {
+    "deleteInUseCategory": {
+      "message": {
+        "single": "Ett medlem er tilordnet denne kategorien. Sletting av kategorien vil også fjerne den fra dette medlemmet.",
+        "multiple": "${number} medlemmer er tilordnet denne kategorien. Sletting av kategorien vil også fjerne den fra disse medlemmene.",
+        "unknown": "Medlemmer som er tilordnet denne kategorien: ${number}. Sletting av kategorien vil også fjerne den fra disse medlemmene."
+      }
+    },
+    "changeTitleInUseCategory": {
+      "message": {
+        "single": "Ett medlem er tilordnet denne kategorien. Oppdatering av kategorien vil oppdatere medlemmet til å bruke \"${newTitle}\".",
+        "multiple": "${number} medlemmer er tilordnet denne kategorien. Oppdatering av kategorien vil oppdatere medlemmene til å bruke \"${newTitle}\".",
+        "unknown": "Medlemmer som er tilordnet denne kategorien: ${number}. Oppdatering av kategorien vil oppdatere medlemmene til å bruke \"${newTitle}\"."
+      }
+    }
+  }
+}

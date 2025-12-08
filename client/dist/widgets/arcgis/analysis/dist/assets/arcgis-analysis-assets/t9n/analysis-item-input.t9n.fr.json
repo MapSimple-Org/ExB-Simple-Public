@@ -1,0 +1,15 @@
+{
+  "addDataStore": "Ajouter un data store",
+  "addFile": "Ajouter un fichier",
+  "addServiceConnection": "Ajouter une connexion",
+  "itemNotFound": "L’élément n’existe pas ou est inaccessible.",
+  "itemPermissionDenied": "Vous n’êtes pas autorisé à accéder à cet élément.",
+  "previewDetails": "Aperçu des détails",
+  "queryModelArgsErrMsg": "Échec de l’interrogation des arguments du modèle.",
+  "queryModelArgsMsg": "Interrogation des arguments du modèle...",
+  "removeItem": "Supprimer l’élément",
+  "replaceItem": "Remplacer l’élément",
+  "requiredInputMessage": "Ce paramètre est obligatoire.",
+  "selectItem": "Sélectionner un élément",
+  "viewDetails": "Afficher les détails"
+}

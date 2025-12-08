@@ -1,0 +1,22 @@
+{
+  "createbuffers_1": "Der kræves enten en bufferafstand eller et bufferfelt.",
+  "creditsDefault": "Credit-beregning mislykkedes. Rul ned, ret fejlene, og beregn credits igen.",
+  "default": "Jobafsendelse mislykkedes. Rul ned, ret fejlene, og kør analysen igen.",
+  "estimateCreditsCurrentParameters": "Credit-beregning mislykkedes. Analysen kan ikke køre med de aktuelle parametre.",
+  "extentRequired": "En udstrækning skal angives ved hjælp af enten udstrækningslaget eller miljøindstillingerne.",
+  "findArgumentStatistics_1": "Maksimumværdien skal være større end minimumværdien.",
+  "findHotSpots_1": "Analysefeltet og divideret med-feltet kan ikke være det samme.",
+  "findHotSpots_2": "Cellestørrelse skal være mindre end afstandsbåndet.",
+  "findHotSpots_3": "Der kræves enten et analysefelt eller en formtype.",
+  "findPointClusters_1": "Minimumantallet af punkter pr. klynge skal være mindre end eller lig med antallet af inputobjekter.",
+  "generateMultidimensionalAnomaly_1": "Referencerasteren skal have samme cellestørrelse og spatiale reference som inputrasteren.",
+  "generateTrendRaster_1": "Dimensionen for en Seasonal-Kendall-tendens skal være StdTime.",
+  "jobCurrentParameters": "Jobafsendelse mislykkedes. Analysen kan ikke køre med de aktuelle parametre.",
+  "joinFeatures_1": "Enten en spatial tilknytning eller en attribut-tilknytning er påkrævet.",
+  "mergeLayers_1": "Alle inputlag skal have samme geometritype",
+  "mergeLayers_2": "Kan ikke flette det samme lag med sig selv.",
+  "missingRequiredPrivileges": "Værktøjet kan ikke køres, fordi du ikke har de nødvendige rettigheder. <calcite-link target='_blank' href='${ docLink }'>Få flere oplysninger</calcite-link>",
+  "premiumTool": "Dette værktøj bruger premium-indhold og opkræver yderligere credits.<br /><calcite-link target='_blank' href='${ docLink }'>Få mere at vide</calcite-link>",
+  "summaryShapeRequired": "Feltstatistik skal angives, hvis den ikke er medtaget i den summerede geometri af objekter.",
+  "viewshedVerticalAngles": "Vertikal øvre vinkel skal være større end vertikal nedre vinkel."
+}
