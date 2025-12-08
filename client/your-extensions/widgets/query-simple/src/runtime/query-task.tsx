@@ -717,7 +717,10 @@ export function QueryTask (props: QueryTaskProps) {
                 selectedGroupQueryIndex,
                 selectedQueryIndex,
                 groupsKeys: groups ? Object.keys(groups) : [],
-                groupOrder: groupOrder || []
+                groupOrder: groupOrder || [],
+                willRenderSingleGroupOption: isSingleGroup,
+                willRenderMultipleGroups: !isSingleGroup && hasGroups,
+                willRenderUngroupedOption: hasUngrouped && !isSingleGroup
               })
               
               return (
@@ -775,15 +778,30 @@ export function QueryTask (props: QueryTaskProps) {
                         ) : (
                           <>
                             {/* Multiple groups: show all groups */}
-                            {groupOrder.map(groupId => (
-                              <option key={groupId} value={groupId}>
-                                {groups[groupId]?.displayName || groupId}
-                              </option>
-                            ))}
+                            {groupOrder.map(groupId => {
+                              const displayName = groups[groupId]?.displayName || groupId
+                              debugLogger.log('GROUP', {
+                                event: 'rendering-group-option',
+                                groupId,
+                                displayName
+                              })
+                              return (
+                                <option key={groupId} value={groupId}>
+                                  {displayName}
+                                </option>
+                              )
+                            })}
                             {/* Show "Ungrouped Queries" option if ungrouped exist */}
-                            {hasUngrouped && (
-                              <option value="">--- Ungrouped Queries ---</option>
-                            )}
+                            {hasUngrouped && (() => {
+                              debugLogger.log('GROUP', {
+                                event: 'rendering-ungrouped-option',
+                                hasUngrouped,
+                                ungroupedLength: ungrouped.length
+                              })
+                              return (
+                                <option value="">--- Ungrouped Queries ---</option>
+                              )
+                            })()}
                           </>
                         )}
                       </Select>
