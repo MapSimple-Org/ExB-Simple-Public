@@ -1,37 +1,6 @@
-# Dependencies
-node_modules/
+# Git ignore file
 
-# Build outputs
-dist/
-*.js.map
 
-# IDE/Editor files
-.vscode/
-.idea/
-*.swp
-*.swo
-*~
-
-# OS files
-.DS_Store
-Thumbs.db
-
-# Logs
-*.log
-npm-debug.log*
-
-# Temporary files
-*.tmp
-*.temp
-
-# Test artifacts
-client/tests/.auth/
-client/tests/test-results/
-client/tests/playwright-report/
-client/tests/node_modules/
-client/tests/.playwright/
-
-# Server public apps (runtime data, not source)
-server/public/apps/*/resources/
-server/public/apps/*/config.json
-server/public/apps/*/info.json
+# Exclude unwanted widgets
+client/your-extensions/widgets/kc-search/
+client/your-extensions/widgets/simple/
