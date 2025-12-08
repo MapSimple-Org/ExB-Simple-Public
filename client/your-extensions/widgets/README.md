@@ -7,6 +7,12 @@ This directory contains custom widgets for ArcGIS Experience Builder.
 ### QuerySimple (`query-simple/`)
 A query widget that allows users to query feature layers with support for attribute filters, spatial filters, and result display customization.
 
+**Widget Footer:**
+- Displays "QuerySimple by MapSimple.org v1.19.0" at the bottom of the widget
+- Appears in all arrangement modes (Popper, Dialog/Default, Inline)
+- Includes version number for reference
+- Stationary footer that stays at the bottom when content scrolls
+
 ### HelperSimple (`helper-simple/`)
 A helper widget that manages opening other widgets via hash parameters.
 
@@ -73,10 +79,9 @@ QuerySimple supports hash parameters for deep linking and automated query execut
 
 Debug logging can be controlled via URL query parameters:
 
-- **No `debug` parameter** - **All debug logging DISABLED** (default for production)
 - `?debug=all` - Enable all debug logs
 - `?debug=HASH,FORM` - Enable specific feature logs (comma-separated)
-- `?debug=false` - Explicitly disable all debug logs (same as no parameter)
+- `?debug=false` - Disable all debug logs
 
 ### Available Debug Features
 
@@ -85,11 +90,6 @@ Debug logging can be controlled via URL query parameters:
 - `TASK` - Query task management
 - `ZOOM` - Zoom behavior
 - `MAP-EXTENT` - Map extent changes
-- `DATA-ACTION` - Data action execution (Add to Map, etc.)
-- `UI` - UI interactions (tab switching, etc.)
-- `ERROR` - Error logging (console.error/warn calls)
-
-**Important**: When `?debug=false` is set, **ALL** console logging is disabled, including error logs. All code must respect this gate.
 
 ### Example Usage
 

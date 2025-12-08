@@ -76,6 +76,8 @@ const resultStyle = css`
     flex: 1 1 0;
     display: flex;
     flex-direction: column;
+    overflow: auto;
+    min-height: 0;
   }
 
   .query-result-info {
@@ -190,9 +192,7 @@ export function QueryTaskResult (props: QueryTasResultProps) {
           errorStack: error instanceof Error ? error.stack : undefined,
           recordCount: recordIds.length
         })
-        if (debugLogger.isFeatureEnabled('ERROR')) {
-          console.error('Error publishing selection message from query-result', error)
-        }
+        console.error('Error publishing selection message from query-result', error)
       }
     } else if (recordsChanged && records && records.length === 0) {
       // If records were cleared, reset the selection flag
@@ -261,9 +261,7 @@ export function QueryTaskResult (props: QueryTasResultProps) {
           errorStack: error instanceof Error ? error.stack : undefined,
           recordCount: recordIds.length
         })
-        if (debugLogger.isFeatureEnabled('ERROR')) {
-          console.error('Error publishing selection message from handleRenderDone', error)
-        }
+        console.error('Error publishing selection message from handleRenderDone', error)
       }
     }
   }, [outputDS, widgetId, removedRecordIds])

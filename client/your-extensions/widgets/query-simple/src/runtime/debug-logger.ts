@@ -2,10 +2,9 @@
  * Configurable debug logging utility for QuerySimple widget
  * 
  * Usage:
- * - No debug parameter: All debug logging DISABLED (default for production)
  * - Add ?debug=all to URL to see all debug logs
  * - Add ?debug=HASH,FORM to see specific feature logs
- * - Add ?debug=false to explicitly disable all debug logs (same as no parameter)
+ * - Add ?debug=false to disable all debug logs
  * 
  * Features:
  * - HASH: Hash parameter processing
@@ -14,18 +13,9 @@
  * - ZOOM: Zoom behavior
  * - MAP-EXTENT: Map extent changes
  * - DATA-ACTION: Data action execution (Add to Map, etc.)
- * - UI: UI interactions (tab switching, etc.)
- * - ERROR: Error logging (console.error/warn calls)
- * 
- * IMPORTANT: All console.log/error/warn calls must respect debug=false.
- * Use debugLogger.log() for feature-specific logs, or check debugLogger.isDebugEnabled()
- * before using console.error/warn for errors.
- * 
- * Default Behavior: Debug logging is DISABLED by default (no parameter = no logging).
- * This ensures production deployments don't have console noise.
  */
 
-type DebugFeature = 'HASH' | 'FORM' | 'TASK' | 'ZOOM' | 'MAP-EXTENT' | 'DATA-ACTION' | 'UI' | 'ERROR' | 'all' | 'false'
+type DebugFeature = 'HASH' | 'FORM' | 'TASK' | 'ZOOM' | 'MAP-EXTENT' | 'DATA-ACTION' | 'all' | 'false'
 
 class DebugLogger {
   private enabledFeatures: Set<DebugFeature> = new Set()
@@ -38,39 +28,33 @@ class DebugLogger {
     const urlParams = new URLSearchParams(window.location.search)
     const debugValue = urlParams.get('debug')
 
-    // Default behavior: No parameter = disabled (production-safe)
-    if (debugValue === null || debugValue === 'false') {
-      // Explicitly disabled or no parameter (default)
+    if (debugValue === 'false') {
+      // Explicitly disabled
       this.initialized = true
       return
     }
 
     if (debugValue === 'all') {
-      // Enable all features if debug=all
+      // Enable all features only if explicitly set to 'all'
       this.enabledFeatures.add('HASH')
       this.enabledFeatures.add('FORM')
       this.enabledFeatures.add('TASK')
       this.enabledFeatures.add('ZOOM')
       this.enabledFeatures.add('MAP-EXTENT')
       this.enabledFeatures.add('DATA-ACTION')
-      this.enabledFeatures.add('UI')
-      this.enabledFeatures.add('ERROR')
-    } else {
+    } else if (debugValue !== null) {
       // Parse comma-separated feature list
-      const features = debugValue.split(',').map(f => f.trim().toUpperCase())
+      const features = debugValue.split(',').map(f => f.trim().toUpperCase() as DebugFeature)
       features.forEach(feature => {
         if (feature === 'ALL') {
-          // Enable all features
           this.enabledFeatures.add('HASH')
           this.enabledFeatures.add('FORM')
           this.enabledFeatures.add('TASK')
           this.enabledFeatures.add('ZOOM')
           this.enabledFeatures.add('MAP-EXTENT')
           this.enabledFeatures.add('DATA-ACTION')
-          this.enabledFeatures.add('UI')
-          this.enabledFeatures.add('ERROR')
-        } else if (['HASH', 'FORM', 'TASK', 'ZOOM', 'MAP-EXTENT', 'DATA-ACTION', 'UI', 'ERROR'].includes(feature)) {
-          this.enabledFeatures.add(feature as DebugFeature)
+        } else if (['HASH', 'FORM', 'TASK', 'ZOOM', 'MAP-EXTENT', 'DATA-ACTION'].includes(feature)) {
+          this.enabledFeatures.add(feature)
         }
       })
     }
@@ -100,21 +84,6 @@ class DebugLogger {
     }
 
     console.log(`[QUERYSIMPLE-${feature}]`, JSON.stringify(logData, null, 2))
-  }
-
-  /**
-   * Check if debug logging is enabled (any feature enabled, not explicitly disabled)
-   */
-  isDebugEnabled(): boolean {
-    this.initialize()
-    return this.enabledFeatures.size > 0
-  }
-
-  /**
-   * Check if a specific debug feature is enabled
-   */
-  isFeatureEnabled(feature: DebugFeature): boolean {
-    return this.isEnabled(feature)
   }
 
   getConfig(): { enabledFeatures: string[], debugValue: string | null } {
