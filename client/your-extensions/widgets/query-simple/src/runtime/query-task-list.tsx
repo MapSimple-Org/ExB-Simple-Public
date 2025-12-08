@@ -134,6 +134,15 @@ export function QueryTaskList (props: QueryTaskListProps) {
       })
       return getQuerySelection.groupId
     }
+    // Default to first group if groups exist and no hash parameter
+    if (groupOrder.length > 0) {
+      debugLogger.log('GROUP', {
+        event: 'initial-group-selection-default',
+        groupId: groupOrder[0],
+        note: 'No hash parameter, defaulting to first group'
+      })
+      return groupOrder[0]
+    }
     return null
   })
   const [selectedGroupQueryIndex, setSelectedGroupQueryIndex] = React.useState(() => {
@@ -176,11 +185,32 @@ export function QueryTaskList (props: QueryTaskListProps) {
         setSelectedGroupId(null)
         setSelectedUngroupedIndex(getQuerySelection.index)
       }
+    } else {
+      // No hash parameter - ensure we have a default selection
+      // If groups exist, default to first group (already handled in useState initializer)
+      // But if no groups and we have ungrouped, ensure selectedUngroupedIndex is set
+      if (groupOrder.length === 0 && ungrouped.length > 0) {
+        debugLogger.log('GROUP', {
+          event: 'no-hash-parameter-default-ungrouped',
+          defaultIndex: 0
+        })
+        setSelectedUngroupedIndex(0)
+      }
     }
-  }, [getQuerySelection])
+  }, [getQuerySelection, groupOrder.length, ungrouped.length])
   
   // Get the currently selected query item
   const getSelectedQueryItem = (): ImmutableObject<QueryItemType> => {
+    debugLogger.log('GROUP', {
+      event: 'getSelectedQueryItem-called',
+      selectedGroupId,
+      hasSelectedGroup: selectedGroupId && groups[selectedGroupId],
+      selectedGroupQueryIndex,
+      selectedUngroupedIndex,
+      ungroupedLength: ungrouped.length,
+      groupOrderLength: groupOrder.length
+    })
+    
     // If a group is selected, get query from that group
     if (selectedGroupId && groups[selectedGroupId]) {
       const groupItems = groups[selectedGroupId].items

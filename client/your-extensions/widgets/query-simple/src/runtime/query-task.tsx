@@ -712,7 +712,12 @@ export function QueryTask (props: QueryTaskProps) {
                 hasUngrouped,
                 groupOrderLength: groupOrder?.length || 0,
                 ungroupedLength: ungrouped?.length || 0,
-                totalQueries: queryItems.length
+                totalQueries: queryItems.length,
+                selectedGroupId,
+                selectedGroupQueryIndex,
+                selectedQueryIndex,
+                groupsKeys: groups ? Object.keys(groups) : [],
+                groupOrder: groupOrder || []
               })
               
               return (
@@ -736,13 +741,16 @@ export function QueryTask (props: QueryTaskProps) {
                       </label>
                       <Select 
                         size="sm"
-                        value={selectedGroupId || ''} 
+                        value={selectedGroupId ?? ''} 
                         onChange={(e) => {
                           const groupId = e.target.value || null
                           debugLogger.log('GROUP', {
                             event: 'group-selected',
                             groupId,
-                            previousGroupId: selectedGroupId
+                            previousGroupId: selectedGroupId,
+                            eventTargetValue: e.target.value,
+                            hasUngrouped,
+                            ungroupedLength: ungrouped?.length || 0
                           })
                           if (onGroupChange) {
                             onGroupChange(groupId)
@@ -751,6 +759,10 @@ export function QueryTask (props: QueryTaskProps) {
                             onGroupQueryChange(0)
                           } else if (!groupId && hasUngrouped && onUngroupedChange) {
                             // "Ungrouped Queries" selected
+                            debugLogger.log('GROUP', {
+                              event: 'ungrouped-queries-selected-from-dropdown',
+                              ungroupedLength: ungrouped.length
+                            })
                             onUngroupedChange(0)
                           }
                         }}
