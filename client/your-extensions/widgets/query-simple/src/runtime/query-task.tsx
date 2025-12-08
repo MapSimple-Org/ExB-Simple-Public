@@ -758,8 +758,8 @@ export function QueryTask (props: QueryTaskProps) {
                 flex: 1;
                 display: flex;
                 flex-direction: column;
-                overflow: hidden;
                 min-height: 0;
+                height: 100%;
               `}
               onClick={(e) => {
                 // Prevent clicks from bubbling up when Results tab is active
