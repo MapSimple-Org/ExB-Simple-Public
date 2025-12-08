@@ -768,7 +768,14 @@ export function QueryTask (props: QueryTaskProps) {
                 }
               }}
             >
-              <QueryTaskResult
+              <div css={css`
+                flex: 1;
+                display: flex;
+                flex-direction: column;
+                overflow: hidden;
+                min-height: 0;
+              `}>
+                <QueryTaskResult
                 key={`${queryItem.configId}-${queryExecutionKeyRef.current}`}
                 widgetId={props.widgetId}
                 queryItem={queryItem}
@@ -798,6 +805,7 @@ export function QueryTask (props: QueryTaskProps) {
                   }
                 }}
               />
+              </div>
             </div>
           )}
         </Tab>
