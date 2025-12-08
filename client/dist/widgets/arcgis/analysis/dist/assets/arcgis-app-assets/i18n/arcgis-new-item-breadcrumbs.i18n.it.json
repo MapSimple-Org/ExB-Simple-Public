@@ -1,0 +1,12 @@
+{
+  "apiCredentialType": "Tipo di credenziale: chiave API",
+  "oauthCredentialType": "Tipo di credenziale: OAuth 2.0",
+  "itemAccess": "Accesso all'elemento",
+  "page": "Pagina: ${page}",
+  "currentPage": "Pagina corrente: ${page}",
+  "privileges": "Privilegi",
+  "itemDetails": "Dettagli elemento",
+  "settings": "Impostazioni",
+  "serviceScope": "Ambito del servizio",
+  "summary": "Riepilogo"
+}

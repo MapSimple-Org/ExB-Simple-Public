@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>&ldquo;丰富图层&rdquo;工具使用人口统计数据和景观数据增强输入要素。
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputLayer">
+        <div>
+            <p>将使用附加数据丰富的点、线或面要素。
+            </p>
+            <p class="toolPaneOnly">要素计数将取决于其他因素，例如过滤条件和分析范围。
+            </p>
+        </div>
+    </div>
+    <div id="analysisVariables">
+        <div>
+            <p>将作为属性添加到输入要素的变量。
+            </p>
+        </div>
+    </div>
+    <div id="bufferType">
+        <div>
+            
+            <p class="toolPaneOnly">将用于围绕输入点或线要素创建边界区域的方法。 该方法可以为直线距离或出行模式。 将丰富各要素周围的整个区域。
+            </p> 
+            <p class="modelBuilderOnly">将用于围绕输入点或线要素创建边界区域的方法。 目前，直线距离是模型支持的唯一方法。 将丰富各要素周围的整个区域。
+            </p>
+        </div>
+    </div>
+    <div id="distance">
+        <div>
+            <p>用于指定丰富区域将围绕每个输入要素延伸的距离或时间的数值。
+            </p>
+        </div>
+    </div>
+    <div id="units">
+        <div>
+            <p>将用于指定丰富区域将围绕每个输入要素延伸的距离或时间的单位。
+            </p>
+        </div>
+    </div>
+    <div id="returnBoundaries">
+        <div>
+            <p>指定输出图层是否包含 <b>丰富区域</b>设置（选中）或输入要素（未选中）定义的面要素。
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>要创建并添加至地图的图层的名称。
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p> <b>我的内容</b>中要保存结果的文件夹名称。
+            </p>
+        </div>
+    </div>
+</div>
+</html>

@@ -1,0 +1,13 @@
+{
+  "fieldCalcExpression": "Expresie calculare câmp",
+  "fieldCalculationGroupLabel": "Calculare câmp",
+  "fieldPlaceholderText": "Faceți clic pentru a selecta sau crea un câmp",
+  "fieldToCalculate": "Câmp de calculat",
+  "inputDatasetGroupLabel": "Introducere",
+  "itemProperties": {
+    "description": "Rezultatul generat din executarea instrumentului Calculare câmp în ModelBuilder.",
+    "snippet": "Strat tematic de obiecte spațiale generat de Calcul câmp"
+  },
+  "noFieldSpecified": "Specificați un câmp de calculat pentru a crea o expresie.",
+  "whereClause": "Aplicați calculul doar pentru anumite înregistrări"
+}

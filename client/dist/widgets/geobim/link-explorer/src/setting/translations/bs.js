@@ -1,0 +1,1 @@
+System.register([],function(e){return{execute:function(){e({settingsLabel:"Postavke za Link Explorer",selectModelViewer:"Odaberite widget za pregled dokumenata za prikaz povezanih dokumenata."})}}});

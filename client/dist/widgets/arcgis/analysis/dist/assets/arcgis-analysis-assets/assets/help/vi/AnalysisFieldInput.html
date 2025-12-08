@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>C&aacute;c t&iacute;nh năng điều khiển để th&ecirc;m trường mới trong c&ocirc;ng cụ ph&acirc;n t&iacute;ch.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="fieldName">
+        <div>
+            <p>X&aacute;c định t&ecirc;n cho trường mới. T&ecirc;n trường cũng c&oacute; thể được d&ugrave;ng l&agrave;m t&ecirc;n hiển thị.
+            </p>
+            <p>T&ecirc;n trường kh&ocirc;ng được giống với t&ecirc;n trường đ&atilde; tồn tại trong lớp, kh&ocirc;ng được chứa k&yacute; tự đặc biệt hoặc dấu c&aacute;ch v&agrave; kh&ocirc;ng được l&agrave; một từ kh&oacute;a SQL.
+            </p>
+        </div>
+    </div>
+    <div id="fieldType">
+        <div>
+            <p>Chọn loại trường cho trường mới.
+            </p>
+            <p>Loại trường x&aacute;c định loại gi&aacute; trị n&agrave;o được ph&eacute;p d&ugrave;ng trong trường mới.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

@@ -1,0 +1,9 @@
+{
+  "addToMap": "Patvirtinti ir pridėti žemėlapį",
+  "cancel": "Atšaukti",
+  "confirm": "Patvirtinti",
+  "header": "Pasirinkti elementą",
+  "select": "Pasirinkti",
+  "unsupportedLayer": "Šis parametras nepalaiko šių sluoksnių: ${layerName}.",
+  "viewDetails": "Peržiūrėti išsamią informaciją"
+}

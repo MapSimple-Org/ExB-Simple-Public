@@ -1,0 +1,1 @@
+System.register([],function(e){return{execute:function(){e({_widgetLabel:"Gambar",imageChooseShape:"Bentuk",imageCrop:"Potong",previousImage:"Gambar sebelumnya",nextImage:"Gambar berikutnya",imageViewer:"Penampil citra"})}}});

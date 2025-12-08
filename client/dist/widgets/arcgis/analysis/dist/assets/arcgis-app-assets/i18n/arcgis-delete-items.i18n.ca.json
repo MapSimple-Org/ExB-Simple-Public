@@ -1,0 +1,160 @@
+{
+  "deleteItem": "Suprimeix l'element",
+  "deleteItems": "Suprimeix els elements",
+  "deleteFolder": "Suprimeix la carpeta",
+  "recycleBin": "Paperera",
+  "delete": "Suprimeix",
+  "permanentlyDelete": "Suprimeix definitivament",
+  "next": "Següent",
+  "back": "Enrere",
+  "cancel": "Cancel·la",
+  "item": "element",
+  "items": "elements",
+  "cantDelete": "Els elements següents no es poden suprimir perquè estan protegits contra la supressió o tenen elements dependents.",
+  "proceed": "Voleu continuar amb la supressió dels elements restants?",
+  "showMore": "Mostra'n més",
+  "showLess": "Mostra'n menys",
+  "deletePermanently": "Suprimeix permanentment (aquesta acció no es pot desfer)",
+  "learnMore": "Més informació",
+  "summary": {
+    "select": "Selecciona",
+    "deselect": "Anul·la la selecció",
+    "selectedItems": "Elements seleccionats:",
+    "additionalDependentItems": "elements dependents addicionals:",
+    "permanentlyDelete": "Suprimeix definitivament:",
+    "permanentDelete": {
+      "notSupported": {
+        "single": "La paperera no admet aquest element.",
+        "multiple": "La paperera no admet aquests elements."
+      },
+      "unsynchronized": "Les edicions no sincronitzades fetes a capes d'entitats d'un grup de col·laboració distribuïda es perdran.",
+      "notSupportedAndUnsynchronized": "Alguns tipus d'element no són compatibles. Les edicions no sincronitzades fetes a capes d'entitats d'un grup de col·laboració distribuïda es perdran.",
+      "group": {
+        "notSupported": "No compatible",
+        "distributedCollaboration": "Part de col·laboració distribuïda"
+      }
+    },
+    "canBeRecovered": {
+      "single": "Aquest element se suprimirà permanentment d'aquí a ${days} dies.",
+      "multiple": "Aquests elements s'eliminaran permanentment d'aquí a ${days} dies.",
+      "unknown": "Aquests elements s'eliminaran permanentment d'aquí a ${days} dies."
+    },
+    "includesDependentItems": "Elements dependents addicionals:",
+    "willBeRecycled": "S'ha enviat a la paperera:",
+    "cannotDelete": "No es pot suprimir:",
+    "deleteDiscouraged": "No es recomana la supressió:",
+    "hasDependentItems": "Té elements dependents:",
+    "replacementItemFor": "Element de substitució per a:",
+    "someActionsMayNoLongerWork": {
+      "single": "Si envieu aquest element a la paperera, és possible que algunes accions que requereixen accés a l'element d'origen ja no funcionin com s'esperava.",
+      "multiple": "Si envieu aquests elements a la paperera, és possible que algunes accions que requereixen accés als elements d'origen ja no funcionin com s'esperava."
+    },
+    "deletePermanently": "Suprimeix permanentment: ${count} (aquesta acció no es pot desfer)",
+    "deleteAllPermanently": "Suprimeix tots els elements permanentment: ${count} (aquesta acció no es pot desfer)",
+    "deleteXPermanently": "Suprimeix ${subset} de ${total} elements permanentment (aquesta acció no es pot desfer)",
+    "unprotectedGroup": {
+      "deleteDiscouraged": {
+        "dependent": "Si elimineu aquest element, és possible que algunes accions que requereixen accés a l'element d'origen ja no funcionin com s'esperava. Segur que voleu suprimir l'element?",
+        "replacement": "Aquest element està seleccionat com a element de substitució. Segur que voleu suprimir l'element?",
+        "learnMore": "Més informació sobre la supressió d'elements d'origen"
+      }
+    },
+    "protectedGroup": {
+      "deleteProtected": "Protegit contra la supressió",
+      "deleteProtectedDescription": "Els elements que estan protegits contra eliminació no es poden eliminar.",
+      "hasDependentItems": "Té elements dependents",
+      "dependentItems": {
+        "single": "Element dependent:",
+        "multiple": "Elements dependents:"
+      },
+      "compositeDelete": "Aquest element depèn de:",
+      "compositeDeleteDescription": "Els elements dependents d'una relació composta no es poden eliminar sense l'element font associat corresponent.",
+      "hasDependentItemsDescription": {
+        "singleOneDependentItem": "Aquest element té un element dependent. S'han de suprimir junts.",
+        "singleMultipleDependentItems": "Aquest element té elements dependents. S'han de suprimir junts.",
+        "multiple": "Aquests elements tenen altres elements que en són dependents. S'han d'eliminar junts."
+      },
+      "protectedAndDependentDescription": "Els elements que estan protegits contra la supressió o tenen elements dependents no es poden suprimir.",
+      "deleteDiscouraged": "No es recomana la supressió",
+      "deleteDiscouragedDescription": {
+        "single": "Si aquest element se suprimeix, els elements dependents poden perdre funcionalitat. Pots suprimir aquest element de la pàgina de detalls de l'element.",
+        "multiple": "Si aquests elements se suprimeixen, els elements dependents poden perdre funcionalitat. Pots suprimir aquests elements individualment de la pàgina de detalls de l'element."
+      }
+    }
+  },
+  "willBePermanentlyDeleted": {
+    "single": "Aquest element se suprimirà permanentment perquè no s'admet a la paperera.",
+    "multiple": "Aquests elements se suprimiran permanentment perquè no s'admeten a la paperera.",
+    "unknown": "Aquests elements se suprimiran permanentment perquè no s'admeten a la paperera."
+  },
+  "willBePermanentlyDeletedCollaboration": {
+    "single": "L'element seleccionat pertany a un grup de col·laboració distribuïda i no es pot enviar a la paperera. Se suprimirà permanentment.",
+    "multiple": "Els elements seleccionats pertanyen a un grup de col·laboració distribuïda i no es poden enviar a la paperera. Se suprimiran permanentment.",
+    "unknown": "Els elements seleccionats pertanyen a un grup de col·laboració distribuïda i no es poden enviar a la paperera. Se suprimiran permanentment."
+  },
+  "areYouSure": {
+    "single": "Segur que voleu suprimir aquest element?",
+    "multiple": "Segur que voleu suprimir aquests elements?",
+    "unknown": "Segur que voleu suprimir aquests elements?"
+  },
+  "areYouSureRecycle": {
+    "single": "Aquest element romandrà a la paperera durant ${days} dies abans que s'elimini definitivament.",
+    "multiple": "Aquests elements romandran a la paperera durant ${days} dies abans que s'eliminin definitivament.",
+    "unknown": "Aquests elements romandran a la paperera durant ${days} dies abans que s'eliminin definitivament."
+  },
+  "areYouSurePermanent": {
+    "single": "Segur que voleu suprimir definitivament aquest element? Aquest element no es pot recuperar després de suprimir-lo de manera definitiva.",
+    "multiple": "Segur que voleu eliminar definitivament aquests elements? Aquests elements no es poden recuperar després d'eliminar-los de manera definitiva.",
+    "unknown": "Segur que voleu eliminar definitivament aquests elements? Aquests elements no es poden recuperar després d'eliminar-los de manera definitiva."
+  },
+  "deletes": {
+    "single": "Se suprimeix d'aquí a ${days} dia",
+    "multiple": "S'elimina d'aquí a ${days} dies",
+    "unknown": "Dies fins a la seva eliminació: ${days}"
+  },
+  "deleteOverride": {
+    "single": "Segur que voleu suprimir definitivament aquest element? Aquest element no es pot recuperar després de suprimir-lo de manera definitiva.",
+    "multiple": "Segur que voleu eliminar definitivament aquests elements? Aquests elements no es poden recuperar després d'eliminar-los de manera definitiva."
+  },
+  "restore": {
+    "restore": "Restaura",
+    "restoreTo": "Restaura a",
+    "restoreItem": "Restaura l'element",
+    "restoreItems": "Restaura els elements",
+    "noticeMessage": "Els elements restaurats es deixaran de compartir. Reviseu el vostre contacte abans de compartir-lo una altra vegada.",
+    "cannotBulkRestoreXItems": "No es poden restaurar de manera massiva més de ${number} elements, desseleccioneu-ne alguns.",
+    "cannotBulkRestoreMultipleOwners": "No es poden restaurar de manera massiva elements que de diferents propietaris. Seleccioneu elements d'un sol propietari per eliminar-los de manera massiva.",
+    "toRestore": {
+      "single": "Element que cal restaurar:",
+      "multiple": "Elements que calen restaurar:"
+    },
+    "cannotRestore": "No es pot restaurar:",
+    "dependentItems": {
+      "single": "Aquest element no es pot restaurar perquè depèn de <b>${parent}</b>. Restaura'ls alhora.",
+      "multiple": "Aquests elements no es poden restaurar perquè depenen d'altres elements de la paperera. Restaura'ls alhora: "
+    }
+  },
+  "onboarding": {
+    "checkItOut": "Us cal recuperar l'element suprimit accidentalment? Vegeu la nova paperera!",
+    "takeALook": "Feu un cop d'ull a la nova paperera!",
+    "learnMore": "Descobriu com restaurar els elements suprimits",
+    "heldInRecycleBin": "Els elements de la paperera se suprimiran permanentment al cap de ${days} dies.",
+    "goToUserRecycleBin": "Aneu a la ${linkStart}paperera${linkEnd} per restaurar elements o suprimir elements permanentment.",
+    "goToOrgRecycleBin": "Aneu a la ${linkStart}paperera de la vostra organització${linkEnd} per restaurar elements o suprimir elements permanentment. El contingut de la paperera segueix consumint crèdits."
+  },
+  "pageRangeWithTotalRecycleBinSize": {
+    "en": "${start} - ${end} de ${total} (${size}) a la paperera",
+    "other": "${start} - ${end}, total: ${total} (${size}) a la paperera"
+  },
+  "pageRangeWithGreaterThanTotalRecycleBinSize": {
+    "en": "${start} - ${end} de ${total} (>${size}) a la paperera",
+    "other": "${start} - ${end}, total: ${total} (>${size}) a la paperera"
+  },
+  "compositeDeleteDisclaimer": {
+    "oneToOne": "<strong>${item}</strong> té l'element dependent <strong>${dependentItem}</strong> que també cal suprimir.",
+    "oneToMany": "<strong>${item}</strong> té elements dependents que també cal suprimir.",
+    "manyToMany": "Alguns dels elements seleccionats tenen elements dependents que també cal suprimir.",
+    "additional": "Elements addicionals:",
+    "dependentOn": "Depèn de"
+  }
+}

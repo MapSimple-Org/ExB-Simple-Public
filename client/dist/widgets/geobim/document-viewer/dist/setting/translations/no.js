@@ -1,0 +1,1 @@
+System.register([],function(n){return{execute:function(){n({settingsLabel:"Innstillinger for dokumentvisning"})}}});

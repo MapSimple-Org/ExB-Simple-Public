@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>C&ocirc;ng cụ Lưu vực s&ocirc;ng x&aacute;c định khu vực hợp lưu ph&iacute;a tr&ecirc;n một tập hợp c&aacute;c cell trong một raster.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputFlowDirectionRaster">
+        <div>
+            <p>Hướng d&ograve;ng chảy ra từ mỗi cell.
+            </p>
+            <p>Phương ph&aacute;p D8 phải được sử dụng để x&aacute;c định hướng d&ograve;ng chảy.
+            </p>
+        </div>
+    </div>
+    <div id="inPourPointRasterOrFeatures">
+        <div>
+            <p>C&aacute;c vị tr&iacute; sẽ x&aacute;c định khu vực hợp lưu.
+            </p>
+            <p class="toolPaneOnly">Với đầu v&agrave;o đối tượng, số lượng phụ thuộc v&agrave;o c&aacute;c yếu tố bổ sung như ti&ecirc;u ch&iacute; lọc v&agrave; phạm vi ph&acirc;n t&iacute;ch.
+            </p>
+        </div>
+    </div>
+    <div id="pourPointField">
+        <div>
+            <p>Trường được sử dụng để g&aacute;n gi&aacute; trị cho c&aacute;c vị tr&iacute; điểm chảy.
+            </p> 
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>T&ecirc;n của lớp raster lưu vực s&ocirc;ng sẽ được tạo v&agrave; th&ecirc;m v&agrave;o bản đồ. Lớp chứa c&aacute;c lưu vực s&ocirc;ng kh&aacute;c nhau được biểu thị bằng c&aacute;c gi&aacute; trị cell kh&aacute;c nhau từ  <b>Trường điểm chảy</b>.
+            </p>
+        </div>
+    </div>
+    <div id="resultType">
+        <div>
+            <p>Loại đầu ra sẽ được tạo. Đầu ra c&oacute; thể l&agrave; lớp h&igrave;nh ảnh dạng tile hoặc lớp h&igrave;nh ảnh động.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>T&ecirc;n của thư mục trong  <b>Nội dung của t&ocirc;i</b> sẽ lưu trữ kết quả.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

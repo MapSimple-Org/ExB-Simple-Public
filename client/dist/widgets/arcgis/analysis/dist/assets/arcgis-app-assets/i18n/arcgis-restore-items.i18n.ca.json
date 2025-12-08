@@ -1,0 +1,31 @@
+{
+  "back": "Enrere",
+  "cancel": "Cancel·la",
+  "learnMore": "Més informació",
+  "restore": "Restaura",
+  "restoreTo": "Restaura a",
+  "restoreItem": "Restaura l'element",
+  "restoreItems": "Restaura els elements",
+  "noticeMessage": "Els elements restaurats es deixaran de compartir. Reviseu el vostre contacte abans de compartir-lo una altra vegada.",
+  "cannotBulkRestoreXItems": "No es poden restaurar de manera massiva més de ${number} elements, desseleccioneu-ne alguns.",
+  "cannotBulkRestoreMultipleOwners": "No es poden restaurar de manera massiva elements que de diferents propietaris. Seleccioneu elements d'un sol propietari per eliminar-los de manera massiva.",
+  "toRestore": {
+    "single": "Element que cal restaurar:",
+    "multiple": "Elements que calen restaurar:"
+  },
+  "cannotRestore": "No es pot restaurar:",
+  "dependentItems": {
+    "single": "Aquest element no es pot restaurar perquè depèn de <strong style='font-weight: 500'>${parent}</strong>. Restaura'ls alhora.",
+    "singleUnknown": "Aquest element no es pot restaurar perquè depèn d'un altre element de la paperera. Restaura'ls alhora.",
+    "multiple": "Aquests elements no es poden restaurar perquè depenen d'altres elements de la paperera. Restaura'ls alhora.",
+    "multipleSameSource": "Aquests elements no es poden restaurar perquè depenen de l'element <strong style='font-weight: 500'>${parent}</strong>. Restaura'ls alhora."
+  },
+  "pageRangeWithTotalRecycleBinSize": {
+    "en": "${start} - ${end} de ${total} (${size}) a la paperera",
+    "other": "${start} - ${end}, total: ${total} (${size}) a la paperera"
+  },
+  "pageRangeWithGreaterThanTotalRecycleBinSize": {
+    "en": "${start} - ${end} de ${total} (>${size}) a la paperera",
+    "other": "${start} - ${end}, total: ${total} (>${size}) a la paperera"
+  }
+}

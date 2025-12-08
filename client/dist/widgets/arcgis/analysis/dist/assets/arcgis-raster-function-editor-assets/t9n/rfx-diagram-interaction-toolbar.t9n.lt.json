@@ -1,0 +1,9 @@
+{
+  "zoomIn": "Artinti",
+  "zoomOut": "Tolinti",
+  "autoLayout": "Automatinis išdėstymas",
+  "stretch": "Pritaikyti peržiūrai",
+  "select": "Pasirinkti",
+  "pan": "Stumti",
+  "deleteSelectedItemsText": "Ištrinti pasirinktus elementus"
+}

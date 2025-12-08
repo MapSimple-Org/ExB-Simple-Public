@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>Virtalinkitys-ty&ouml;kalu m&auml;&auml;ritt&auml;&auml; yksil&ouml;lliset arvot lineaarisen rasteriverkon osiin joen yhtym&auml;kohtien v&auml;lill&auml;.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputStreamRaster">
+        <div>
+            <p>Rasteri, joka m&auml;&auml;ritt&auml;&auml; lineaarisen virtausverkoston.
+            </p>
+        </div>
+    </div>
+    <div id="inputFlowDirectionRaster">
+        <div>
+            <p>Rasteri, joka m&auml;&auml;ritt&auml;&auml; virtaussuunnan jokaisesta solusta.
+            </p>
+            <p>D8-menetelm&auml;&auml; on k&auml;ytett&auml;v&auml; virtaussuunnan m&auml;&auml;rityksess&auml;.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>Karttaan luotavan ja lis&auml;tt&auml;v&auml;n virtalinkityksen rasterikarttatason nimi.
+            </p>
+        </div>
+    </div>
+    <div id="resultType">
+        <div>
+            <p>Luotavan tulosaineiston tyyppi. Tulosaineisto voi olla tiilitetty kuva-aineistokarttataso tai dynaaminen kuvakarttataso.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>Sen  <b>Omassa sis&auml;ll&ouml;ss&auml;</b> olevan kansion nimi, johon tulos tallennetaan.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

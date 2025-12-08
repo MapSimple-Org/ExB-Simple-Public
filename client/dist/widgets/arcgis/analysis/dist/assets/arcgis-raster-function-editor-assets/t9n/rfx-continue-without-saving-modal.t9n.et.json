@@ -1,0 +1,6 @@
+{
+  "header": "Kas alustada uuesti ilma salvestamata?",
+  "content": "Teil on kohas ${rftTitle} salvestamata muudatusi. Kui alustate uuesti uue malliga, lähevad need muudatused kaotsi.",
+  "cancel": "Loobu",
+  "continue": "Jätka"
+}

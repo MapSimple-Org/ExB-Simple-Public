@@ -1,0 +1,16 @@
+{
+  "updateData": "Uppdatera data",
+  "cancel": "Avbryt",
+  "editStyle": "Ersätt lagrets formatfil med en uppdaterad version från din dator.",
+  "updatePackages": "Ersätt ${type} med en uppdaterad version från din dator. Den överförda filen måste ha samma namn som ${hostedLayerName}.",
+  "uploadStaticFiles": "Filen som överförs måste ha samma namn som originalfilen ${fileName}",
+  "sameFileNameDescription": "Filen som överförs måste ha samma namn och fältnamn som originalfilen ${fileName}",
+  "updating": "Uppdaterar...",
+  "error": "Fel",
+  "errors": {
+    "sameFileName": "För att uppdatera det här objektet måste du överföra en fil med namnet ${fileName}.",
+    "invalidStyleFileExtension": "Ogiltigt filtillägg. Den överförda stilen måste ha filtillägget .json.",
+    "errorWhileUpload": "Ett fel uppstod vid överföring av objektet.",
+    "errorUpdate": "Ett fel uppstod när objektet skrevs över."
+  }
+}

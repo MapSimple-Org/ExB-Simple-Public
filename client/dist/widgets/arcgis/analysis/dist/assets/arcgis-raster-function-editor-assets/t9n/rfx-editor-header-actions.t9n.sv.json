@@ -1,0 +1,11 @@
+{
+  "newTemplate": "Skapa ny mall",
+  "openTemplate": "Öppna mall",
+  "addTemplate": "Lägg till mall",
+  "addFunction": "Lägg till rasterfunktioner",
+  "addConstant": "Lägg till konstant",
+  "addRaster": "Lägg till rastervariabel",
+  "expand": "Expandera",
+  "editTemplateProperties": "Redigera mallegenskaper",
+  "viewTemplateProperties": "Visa mallegenskaper"
+}

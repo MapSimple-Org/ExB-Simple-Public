@@ -1,0 +1,20 @@
+{
+  "lrsLayers": [],
+  "networkLayers": [],
+  "eventLayers": [],
+  "intersectionLayers": [],
+  "defaultEvent": "",
+  "defaultNetwork": "",
+  "defaultFromMethod": "ROUTEANDMEASURE",
+  "defaultToMethod": "ROUTEANDMEASURE",
+  "defaultType": "SINGLE",
+  "hideType": false,
+  "hideEvent": false,
+  "hideNetwork": false,
+  "hideMethod": false,
+  "hideAttributeSet": false,
+  "hideMeasures": false,
+  "hideDates": false,
+  "useRouteStartEndDate": false,
+  "mode": "MAP"
+}

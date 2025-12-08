@@ -1,0 +1,9 @@
+{
+  "inputFlowDirectionRasterLabel": "Raster richting invoerstroom",
+  "inputLayerGroupText": "Kies de rasters voor invoerstroom en stroomrichting",
+  "inputStreamRasterLabel": "Raster invoerstroom",
+  "itemProperties": {
+    "description": "Uitvoer gegenereerd door uitvoering van de analysetool StreamLink",
+    "snippet": "Uitvoer gegenereerd door StreamLink"
+  }
+}

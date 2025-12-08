@@ -1,0 +1,1 @@
+System.register([],function(e){return{execute:function(){e({_widgetLabel:"Quadr\xedcula",widgetProperties:"Propietats del widget",widgetFunctions:"Funcions del widget",widgetName:"nom del widget:",widgetProps:"propietats del widget:",tips:"Quadr\xedcula"})}}});

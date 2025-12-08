@@ -1,0 +1,137 @@
+{
+  "next": "Dalej",
+  "addField": "Dodaj pole",
+  "selectDataType": "Wybierz typ danych, które będą przechowywane w polu",
+  "addGlobalIDNotice": "Pole zostanie automatycznie zapełnione danymi istniejącymi w warstwie lub tabeli. Po dodaniu tego pola nie można go edytować ani usunąć.",
+  "fieldName": "Nazwa pola",
+  "displayName": "Wyświetlana nazwa",
+  "length": "Długość",
+  "defaultValue": "Wartość domyślna (opcjonalnie)",
+  "fieldTypes": "Typy pól",
+  "fieldValueType": "Typ wartości pola (opcjonalnie)",
+  "fieldDescription": "Opis pola (opcjonalny)",
+  "allowNullValues": "Wartości puste dozwolone",
+  "valueRequiredError": "Ta wartość jest wymagana",
+  "fieldAdded": "Pomyślnie dodano pole",
+  "newFieldTypeNotice": "Niektóre klienty mogą nie obsługiwać w pełni pól tego typu.",
+  "addingField": "Dodawanie pola...",
+  "syncEnabled": "Niektórych typów pól nie można dodać, ponieważ synchronizacja jest włączona w warstwie.",
+  "newFeature": "Nowy obiekt",
+  "fieldAdditionUnsuccessful": "Dodanie pola nie powiodło się",
+  "error": "Błąd",
+  "noFieldTypeSelected": "Nie wybrano typu pola",
+  "nullFieldTypeError": "Aby kontynuować, należy wybrać typ pola.",
+  "fieldNameCharacterNotice": "Nazwy pól dłuższe niż 31 znaków nie są zgodne z wykorzystaniem w trybie offline.",
+  "suggestedHeader": "Sugerowane",
+  "otherHeader": "Inne",
+  "provideDescription": "Podaj opis informacji, które pole będzie zawierać",
+  "nullableTooltipInfo": "Tego ustawienia nie można edytować, jeśli warstwa zawiera już dane.",
+  "tooltipInfo": {
+    "globalIDExists": "Pole GlobalID już istnieje w tej usłudze. W warstwie lub tabeli może znajdować się tylko jedno pole GlobalID.",
+    "enterpriseTimestampOffset": "Oprogramowanie ArcGIS Enterprise nie obsługuje pól Przesunięcie datownika w hostowanych warstwach obiektowych."
+  },
+  "text": {
+    "title": "Tekst",
+    "description": "Wartości zawierające znaki alfanumeryczne lub specjalne.",
+    "types": {
+      "esriFieldTypeString": {
+        "title": "Ciąg znakowy",
+        "description": "Przechowywanie zestawu znaków alfanumerycznych o określonej długości."
+      }
+    }
+  },
+  "numbers": {
+    "title": "Liczby",
+    "description": "Wartości zawierające informacje liczbowe.",
+    "types": {
+      "esriFieldTypeDouble": {
+        "title": "Podwójnej precyzji",
+        "description": "Przechowywanie liczb z miejscami dziesiętnymi."
+      },
+      "esriFieldTypeInteger": {
+        "title": "Całkowite",
+        "description": "Przechowywanie liczb całkowitych z zakresu od ${lowerIntegerRange} do ${upperIntegerRange}."
+      },
+      "esriFieldTypeBigInteger": {
+        "title": "Duża liczba całkowita",
+        "description": "Przechowywanie liczb całkowitych z zakresu od -(2${startSup}53${endSup}-1) do 2${startSup}53${endSup}-1. Użyj tego typu pola, gdy używasz liczb spoza obsługiwanego zakresu pól całkowitych."
+      }
+    }
+  },
+  "dates": {
+    "title": "Daty",
+    "description": "Wartości zawierające informacje czasowe.",
+    "types": {
+      "esriFieldTypeDate": {
+        "title": "Data",
+        "description": "Przechowywanie wartości z datą i czasem."
+      },
+      "esriFieldTypeDateOnly": {
+        "title": "Tylko data",
+        "description": "Przechowywanie wartości daty bez wartości czasu."
+      },
+      "esriFieldTypeTimeOnly": {
+        "title": "Tylko czas",
+        "description": "Przechowywanie wartości czasu bez wartości daty."
+      },
+      "esriFieldTypeTimestampOffset": {
+        "title": "Przesunięcie datownika",
+        "description": "Przechowywanie wartości określających datę, czas i przesunięcie względem czasu UTC."
+      }
+    }
+  },
+  "globalIdentifiers": {
+    "title": "Identyfikatory globalne",
+    "description": "Wartości, które jednoznacznie identyfikują obiekt lub wiersz tabeli.",
+    "types": {
+      "esriFieldTypeGlobalID": {
+        "title": "GlobalID",
+        "description": "Zapisz 36-znakowy ciąg składający się z liter i cyfr używany do jednoznacznego identyfikowania obiektów."
+      },
+      "esriFieldTypeGUID": {
+        "title": "GUID",
+        "description": "Zapisz 36-znakowy ciąg składający się z liter i cyfr. Globalny unikatowy identyfikator (identyfikator GUID) jest często używany do zarządzania relacjami między obiektami."
+      }
+    }
+  },
+  "fieldValueTypes": {
+    "nameOrTitle": "Nazwa lub tytuł",
+    "description": "Opis",
+    "typeOrCategory": "Typ lub kategoria",
+    "countOrAmount": "Liczność lub ilość",
+    "percentageOrRatio": "Wartość procentowa lub współczynnik",
+    "measurement": "Pomiar",
+    "currency": "Waluta",
+    "uniqueIdentifier": "Unikalny identyfikator",
+    "phoneNumber": "Nr telefonu",
+    "emailAddress": "Adres e-mail",
+    "orderedOrRanked": "Uporządkowano lub uszeregowano",
+    "binary": "Binarny",
+    "locationOrPlaceName": "Nazwa lokalizacji lub miejsca",
+    "coordinate": "Współrzędne",
+    "dateAndTime": "Data i czas",
+    "none": "Brak"
+  },
+  "addFieldErrors": {
+    "invalidName": "Nieprawidłowa nazwa",
+    "invalidLength": "Nieprawidłowa długość",
+    "outOfRangeValueError": "Ta wartość jest spoza zakresu.",
+    "invalidValueError": "Wprowadzona wartość jest nieprawidłowa.",
+    "invalidFieldParameters": "Nieprawidłowe parametry pola",
+    "invalidInputsError": "Sprawdź, czy parametry pól są wypełnione poprawnie.",
+    "existingFieldNameError": "Nazwa pola nie może być taka sama jak istniejąca nazwa pola.",
+    "invalidNameInputSQLError": "Nazwa pola nie może być taka sama jak słowo kluczowe języka SQL.",
+    "invalidNameInputInvalidCharactersError": "Musi zaczynać się od litery i może zawierać tylko litery, cyfry i znak '_'.",
+    "valueIsRequiredError": "Ta wartość jest wymagana.",
+    "lengthExceeds": "Długość nazwy pola musi być mniejsza lub równa następującej liczbie znaków: ${maxFieldNameLength}.",
+    "defaultValueExceeds": "Wartość domyślna przekracza określoną długość pola.",
+    "savingFailed": "Zapisywanie warstwy ${layerName} zakończyło się niepowodzeniem",
+    "readOnlyErrorMessage": "W usłudze ArcGIS Online występują problemy z działaniem i przełączono ją w tryb tylko do odczytu. Niektóre funkcje mogą być ograniczone. Najnowsze informacje o tym, kiedy problemy zostaną rozwiązane, można znaleźć na Panelu stanu usługi ArcGIS Online.",
+    "readOnlyErrorMessageEnterprise": "W oprogramowaniu ArcGIS Enterprise występują problemy z działaniem i przełączono je w tryb tylko do odczytu. Niektóre funkcje mogą być ograniczone.",
+    "healthDashboard": "Panel stanu usługi ArcGIS Online",
+    "genericAddFieldError": {
+      "title": "Błąd",
+      "description": "Wystąpił błąd podczas dodawania pola."
+    }
+  }
+}

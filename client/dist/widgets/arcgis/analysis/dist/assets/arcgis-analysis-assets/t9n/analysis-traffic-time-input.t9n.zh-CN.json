@@ -1,0 +1,8 @@
+{
+  "arriveTime": "到达时间",
+  "modes": {
+    "custom": "自定义日期和时间",
+    "now": "当前时间",
+    "unspecified": "未指定时间"
+  }
+}

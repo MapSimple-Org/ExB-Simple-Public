@@ -1,0 +1,68 @@
+{
+  "addField": "הוסף שדה",
+  "addFieldErrors": {
+    "creatingFailed": "יצירת שדה ${fieldName} נכשלה.",
+    "existingFieldNameError": "שם השדה לא יכול להיות זהה לשם השדה הקיים.",
+    "invalidName": "שם לא חוקי",
+    "invalidNameInputInvalidCharactersError": "שם השדה חייב להתחיל באות ויכול להכיל רק אותיות, ספרות ואת התו '_'.",
+    "invalidNameInputSQLError": "שם השדה לא יכול להיות זהה למילת מפתח SQL.",
+    "valueIsRequiredError": "זהו ערך נדרש."
+  },
+  "cancel": "ביטול",
+  "createAndSelectField": "צור ובחר שדה",
+  "createNewFields": "צור שדה חדש",
+  "fieldLoadingErrorText": "לא ניתן לטעון את השדות.",
+  "fieldName": "שם שדה",
+  "fieldType": "סוג שדה",
+  "fieldTypesIncompatible": "אין שדות תואמים זמינים.",
+  "layerNotSelected": "לא נבחרה שכבה לאכלוס השדות.",
+  "loadingFields": "טוען שדות",
+  "noSearchResults": "לא נמצאו שדות תואמים.",
+  "requiredErrorLabelDefault": "שדה",
+  "requiredErrorMessage": "זהו פרמטר חובה.",
+  "selectFieldPicklistHeading": "בחר שדה",
+  "selectOkBtnText": "בחר",
+  "tooltip": "יש לציין שם שדה וסוג שדה חוקיים.",
+  "types": {
+    "big-integer": {
+      "description": "אחסן מספרים שלמים בטווח של -(2${startSup}53${endSup}-1) עד 2${startSup}53${endSup}-1. השתמש בסוג שדה זה בעת שימוש במספרים שהם מחוץ לטווח השדה הנתמך של מספרים שלמים.",
+      "title": "מספר שלם גדול"
+    },
+    "date": {
+      "description": "אכסן ערכים עם תאריך ושעה.",
+      "title": "תאריך"
+    },
+    "date-only": {
+      "description": "אחסן ערכי תאריך ללא ערכי שעה.",
+      "title": "תאריך בלבד"
+    },
+    "double": {
+      "description": "אחסן מספרים עם מקומות עשרוניים.",
+      "title": "כפול"
+    },
+    "global-id": {
+      "description": "אחסן מחרוזת באורך 36 תווים שמורכב מאותיות וממספרים לזיהוי ייחודי של ישות.",
+      "title": "GlobalID"
+    },
+    "guid": {
+      "description": "אחסן מחרוזת באורך 36 תווים שמורכב מאותיות וממספרים. מזהה יחודי גלובלי, שנקרא גם GUID, משמש לעתים קרובות לניהול קשרים בין ישויות.",
+      "title": "GUID"
+    },
+    "integer": {
+      "description": "אחסן מספרים שלמים בטווח של ${lowerIntegerRange} עד ${upperIntegerRange}.",
+      "title": "מספר שלם"
+    },
+    "string": {
+      "description": "אחסן סט של תווים אלפאנומריים",
+      "title": "מחרוזת"
+    },
+    "time-only": {
+      "description": "אחסן ערכי שעה ללא ערכי תאריך.",
+      "title": "שעה בלבד"
+    },
+    "timestamp-offset": {
+      "description": "אחסן ערכים שמציינים את התאריך, השעה והיסט מזמן אוניברסלי מתואם (UTC).",
+      "title": "היסט חותמת זמן"
+    }
+  }
+}

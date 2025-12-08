@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>เครื่องมือสร้างเทสเซลเลชัน จะสร้างกริดของโพลีกอน โดยอิงตามขอบเขต รูปทรง และขนาดที่ระบุ
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="binType">
+        <div>
+            <p>รูปทรงของเทสเซลเลชันที่จะสร้าง
+            </p>
+        </div>
+    </div>
+    <div id="sizeType">
+        <div>
+            <p>ระบุว่าขนาดเทสเซลเลชันจะถูกกำหนดตามค่าพื้นที่ (<b>พื้นที่</b>) หรือตามค่าระยะทาง (<b>ระยะทาง</b>)
+            </p>
+        </div>
+    </div>
+    <div id="binSize">
+        <div>
+            <p>ขนาด (พื้นที่หรือระยะทาง) ของเทสเซลเลชันที่สร้างขึ้น สำหรับสี่เหลี่ยม หกเหลี่ยม สามเหลี่ยม และเพชร ระยะทางจะกำหนดความสูงของเทสเซลเลชัน สำหรับหกเหลี่ยมตามขวาง ระยะทางจะกำหนดความกว้างของเทสเซลเลชัน
+            </p>
+        </div>
+    </div>
+    <div id="binResolution">
+        <div>
+            <p>ความละเอียด H3 ของเทสเซลเลชัน ช่วงความละเอียดจาก 0 ถึง 15 เมื่อเพิ่มแต่ละขนาดความละเอียด พื้นที่ของโพลีกอนจะลดขนาดลงหนึ่งในเจ็ดที่ความละเอียดต่ำลง
+            </p>
+        </div>
+    </div>
+    <div id="binSizeUnit">
+        <div>
+            <p>หน่วยที่จะใช้สำหรับขนาดของเทสเซลเลชัน
+            </p>
+        </div>
+    </div>
+    <div id="extentLayer">
+        <div>
+            <p>ขอบเขตที่เทสเซลเลชันจะครอบคลุม
+            </p>
+            <p class="toolPaneOnly">จำนวนของฟีเจอร์จะขึ้นอยู่กับปัจจัยเพิ่มเติม อาทิ เกณฑ์การกรองและขอบเขตการวิเคราะห์
+            </p>
+        </div>
+    </div>
+    <div id="intersectStudyArea">
+        <div>
+            <p>สำหรับชั้นข้อมูลฟีเจอร์ ให้ระบุว่าเทสเซลเลชันจะครอบคลุมขอบเขตทั้งหมด หรือเฉพาะพื้นที่ซึ่งเทสเซลเลชันตัดกับฟีเจอร์
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>ชื่อของชั้นข้อมูลที่จะสร้างและเพิ่มลงในแผนที่
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>ชื่อของโฟลเดอร์ใน  <b>เนื้อหาของฉัน</b> ที่จะทำการบันทึกผลลัพธ์
+            </p>
+        </div>
+    </div>
+</div>
+</html>

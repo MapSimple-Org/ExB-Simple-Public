@@ -1,0 +1,9 @@
+{
+  "weightedSumTable": "加权总和表",
+  "id": "ID",
+  "layer": "图层",
+  "field": "字段",
+  "weight": "权重",
+  "value": "值",
+  "selectLayer": "选择图层"
+}

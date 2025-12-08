@@ -1,0 +1,10 @@
+{
+  "forceFlowLabel": "Élen lévő cellák kifelé áramlásának kényszerítése",
+  "inputLayersGroupText": "Válassza ki a bemeneti felszínrasztert, és lehetőség szerint a lejtőadatokat és a súlyrasztert.",
+  "itemProperties": {
+    "description": "Az Áramlat származtatása raszterként eszköz futtatásával létrehozott kimenet",
+    "snippet": "Az Áramlat származtatása raszterként megoldással létrehozott kimenet"
+  },
+  "outputStreamRasterLabel": "Kimeneti áramlási raszter neve",
+  "streamSettingsGroupText": "Adja meg az akkumulációs küszöbértéket, az áramlatmegnevezési metódust, és hogy miként történjen az áramlás kezelése a bemeneti felszínraszter szélén."
+}

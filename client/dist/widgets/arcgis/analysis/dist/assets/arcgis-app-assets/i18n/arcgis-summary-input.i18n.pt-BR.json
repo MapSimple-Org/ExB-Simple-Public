@@ -1,0 +1,10 @@
+{
+  "summary": "Resumo",
+  "description": "Descrição",
+  "addSummary": "Adicione um resumo",
+  "addDescription": "Adicione uma descrição",
+  "charactersLeft": "Caracteres restantes: ${num}",
+  "invalid": "O resumo não pode conter nenhum destes caracteres: < ou >.",
+  "invalidDescription": "A descrição não pode conter nenhum desses caracteres: < ou >.",
+  "summaryReadOnly": "Resumo somente leitura."
+}

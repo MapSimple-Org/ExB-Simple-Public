@@ -1,0 +1,1 @@
+System.register([],function(e){return{execute:function(){e({settingsLabel:"Configuraci\xf3n del explorador de documentos",selectModelViewer:"Seleccione un widget de Visor de documentos para visualizar los documentos."})}}});

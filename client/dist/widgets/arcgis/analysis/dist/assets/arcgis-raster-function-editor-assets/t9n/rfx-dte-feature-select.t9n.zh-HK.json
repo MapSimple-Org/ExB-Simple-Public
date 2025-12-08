@@ -1,0 +1,8 @@
+{
+  "selectFeature": "選擇圖徵圖層",
+  "browseLayer": "瀏覽圖層",
+  "loading": "正在載入...",
+  "errorCodes": {
+    "required": "需要此參數。"
+  }
+}

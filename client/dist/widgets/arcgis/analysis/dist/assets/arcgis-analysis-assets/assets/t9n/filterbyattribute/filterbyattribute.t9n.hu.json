@@ -1,0 +1,8 @@
+{
+  "itemProperties": {
+    "description": "A Szűrés attribútumok szerint elemzőeszköz futtatásával kapott eredmény.",
+    "snippet": "A Szűrés attribútumok szerint segítségével kapott eredmény"
+  },
+  "noLayerDisabledTooltip": "Válasszon érvényes bemeneti adathalmazt.",
+  "queryCriteriaGroupLabel": "Lekérdezési kritériumok"
+}

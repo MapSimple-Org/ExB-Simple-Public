@@ -1,0 +1,8 @@
+{
+  "loading": "Cargando...",
+  "pleaseWait": "Espere, por favor.",
+  "loadingXMLRFT": "Carga de la plantilla de función ráster seleccionada en formato XML.",
+  "failedToOpen": "Error de apertura.",
+  "readingFailed": "Error al cargar la plantilla de función ráster seleccionada.",
+  "failedToLoadXML": "Error al cargar la plantilla de función ráster seleccionada en formato XML."
+}

@@ -1,0 +1,8 @@
+{
+  "fieldTypesIncompatible": "没有可用的兼容字段。",
+  "inputPlaceholderText": "选择字段",
+  "layerNotSelected": "没有选择图层来填充字段。",
+  "multiSelectFieldButtonText": "字段",
+  "removeField": "移除",
+  "replaceField": "替换字段"
+}

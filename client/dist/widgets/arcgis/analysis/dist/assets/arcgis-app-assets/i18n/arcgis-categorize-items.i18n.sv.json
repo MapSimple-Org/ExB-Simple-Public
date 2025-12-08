@@ -1,0 +1,11 @@
+{
+  "modalTitle": "Kategorisera objekt",
+  "save": "Spara",
+  "cancel": "Avbryt",
+  "loadingText": "Läser in...",
+  "assignCategory": "Tilldela kategori",
+  "errorMessage": "Det uppstod ett fel. Försök igen senare.",
+  "limited": "Objekt är begränsade till 20 kategorier. Ta bort en kategori innan du lägger till en annan.",
+  "undo": "Ångra",
+  "redo": "Upprepa"
+}

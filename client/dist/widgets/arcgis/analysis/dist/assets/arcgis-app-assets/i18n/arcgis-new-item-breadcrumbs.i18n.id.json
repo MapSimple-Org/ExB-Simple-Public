@@ -1,0 +1,12 @@
+{
+  "apiCredentialType": "Jenis kredensial: Kunci API",
+  "oauthCredentialType": "Jenis kredensial: OAuth 2.0",
+  "itemAccess": "Akses Item",
+  "page": "Halaman: ${page}",
+  "currentPage": "Halaman saat ini: ${page}",
+  "privileges": "Hak istimewa",
+  "itemDetails": "Detail item",
+  "settings": "Pengaturan",
+  "serviceScope": "Cakupan layanan",
+  "summary": "Ringkasan"
+}

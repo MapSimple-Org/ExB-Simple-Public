@@ -1,0 +1,13 @@
+{
+  "fieldCalcExpression": "تعبير حساب الحقل",
+  "fieldCalculationGroupLabel": "حساب الحقل",
+  "fieldPlaceholderText": "انقر لتحديد أو إنشاء حقل",
+  "fieldToCalculate": "فشل الحساب",
+  "inputDatasetGroupLabel": "الإدخال",
+  "itemProperties": {
+    "description": "النتيجة التي تم إنشاؤها من تشغيل أداة حساب الحقل في ModelBuilder.",
+    "snippet": "طبقة المعالم المُنشأة من \"حساب الحقل\""
+  },
+  "noFieldSpecified": "حدد الحقل الذي تريد حسابه لإنشاء تعبير.",
+  "whereClause": "تطبيق الحساب على سجلات معينة فقط"
+}

@@ -1,0 +1,417 @@
+{
+  "itemBrowser": {
+    "filters": "Bộ lọc",
+    "preview": "Xem trước",
+    "selectedLayers": "Lớp đã chọn",
+    "selectedItems": "Mục đã chọn",
+    "pageRange": "${start}-${end}, tổng: ${total}",
+    "pageRangeAria": "${start}-${end}, tổng số mục: ${total}",
+    "pageRangeWithRecycleBin": "${start}-${end}, tổng: ${total} (Tổng kích thước: ${recycleBinSize})",
+    "pageRangeAriaWithRecycleBin": "${start}-${end}, tổng số mục: ${total} (Tổng kích thước: ${recycleBinSize})",
+    "foundOnPage": "Kết quả trùng khớp trên trang hiện tại: ${total}",
+    "totalSize": "Tổng kích thước: ${totalSize}",
+    "selectedMultipleWithSize": "Đã chọn: ${num} (${totalSize})",
+    "selectedMultipleWithSizeSmall": "${num} (${totalSize})",
+    "noSelectedLayers": "Hiện không có lớp nào được chọn",
+    "noSelectedItems": "Hiện không có mục nào được chọn",
+    "sharingUpdated": "Đã cập nhật chia sẻ ${itemTitle}.",
+    "refineContent": "Tinh chỉnh nội dung"
+  },
+  "layerTypes": {
+    "point": "Lớp điểm",
+    "line": "Lớp đường",
+    "polygon": "Lớp vùng",
+    "multipatch": "Lớp Multipatch",
+    "multipoint": "Lớp Multipoint",
+    "table": "Bảng",
+    "catalog": "Lớp Catalog",
+    "oriented imagery": "Lớp hình ảnh định hướng",
+    "parcel": "Lớp Parcel",
+    "utility network": "Lớp Utility network",
+    "topology": "Lớp Topology",
+    "trace network": "Lớp Trace network"
+  },
+  "filterIndustry": {
+    "title": "Ngành nghề",
+    "Industry": "Ngành nghề: ${industry}",
+    "Build a layer": "Tạo một lớp dữ liệu",
+    "Agriculture": "Nông nghiệp",
+    "Electric Utilities": "Các Tiện ích ngành Điện",
+    "Environment": "Môi trường",
+    "Forestry": "Lâm nghiệp",
+    "Gas Utilities": "Các Tiện ích ngành Ga",
+    "General": "Chung",
+    "Natural Resources": "Tài nguyên Thiên nhiên",
+    "Petroleum": "Dầu khí",
+    "Public Safety": "An ninh Cộng đồng",
+    "Telecommunications": "Viễn thông",
+    "Transportation": "Giao thông vận tải",
+    "Water Utilities": "Các Tiện ích ngành Nước"
+  },
+  "filterItemType": {
+    "title": "Loại Mục",
+    "itemType": "Loại: ${itemType}",
+    "options": {
+      "maps": "Bản đồ",
+      "maps-webmaps": "Bản đồ web",
+      "maps-mapfiles": "Tệp bản đồ",
+      "layers": "Lớp",
+      "layers-weblayers": "Lớp web",
+      "layers-weblayers-features": "Lớp đối tượng",
+      "layers-weblayers-tiles": "Lớp tile",
+      "layers-weblayers-mapimage": "Lớp hình ảnh bản đồ",
+      "layers-weblayers-imagery": "Lớp hình ảnh",
+      "layers-weblayers-scenelayers": "Lớp scene",
+      "layers-weblayers-videolayers": "Lớp video",
+      "layers-weblayers-tiledimagelayers": "Lớp hình ảnh dạng tile",
+      "layers-weblayers-elevationlayers": "Lớp độ cao",
+      "layers-weblayers-feeds": "Nguồn cấp",
+      "layers-weblayers-tables": "Bảng",
+      "layers-layerfiles": "Các tệp lớp",
+      "scenes": "Scene",
+      "applications": "Ứng dụng",
+      "applications-web": "Ứng dụng web",
+      "applications-dashboards": "Bảng thông tin",
+      "applications-sites": "Sites",
+      "applications-pages": "Trang",
+      "applications-geobim-projects": "Dự án GeoBIM",
+      "applications-geobim-apps": "Ứng dụng GeoBIM",
+      "applications-instant-apps": "Instant Apps",
+      "applications-storymap": "Storymaps",
+      "applications-data-pipelines": "Data Pipelines",
+      "applications-experience": "Experience Builder",
+      "applications-wab": "Web AppBuilder",
+      "applications-mobile": "Ứng dụng di động",
+      "applications-desktop": "Ứng dụng dành cho máy tính",
+      "developer-credentials": "Chứng chỉ nhà phát triển",
+      "developer-credentials-oauth": "Thông tin xác thực OAuth 2.0",
+      "developer-credentials-api-token": "Thông tin xác thực khóa API",
+      "developer-credentials-api-key": "Khóa API (Kế thừa)",
+      "tools": "Công cụ",
+      "tools-locators": "Bộ định vị",
+      "tools-geodatabase": "Truy cập geodatabase",
+      "tools-geometric": "Thao tác hình học",
+      "tools-geoprocessing": "Tác vụ địa xử lý",
+      "tools-network": "Phân tích mạng lưới",
+      "tools-analytics": "Phân tích",
+      "files": "Tệp",
+      "files-document": "Tài liệu",
+      "files-image": "Hình ảnh",
+      "files-pdf": "Các bản PDF",
+      "files-csv": "CSV",
+      "files-report": "Báo cáo hành chính",
+      "files-raster": "Biểu mẫu hàm raster",
+      "notebooks": "Notebook",
+      "insights": "Insights",
+      "insights-workbooks": "Sổ làm việc",
+      "insights-pages": "Báo cáo",
+      "insights-models": "Mô hình",
+      "insights-themes": "Chủ đề",
+      "data-stores": "Kho dữ liệu",
+      "knowledge-graphs": "Sơ đồ tri thức"
+    }
+  },
+  "filterCategories": {
+    "categories": "Danh mục",
+    "groupCategories": "Danh mục nhóm",
+    "category": "Thể loại: ${category}",
+    "uncategorized": "Chưa được phân loại",
+    "noCategoriesTitle": "Chưa có danh mục nào",
+    "noCategories": "Danh mục cho phép thành viên tổ chức các mục một cách nhất quán và mang đến cách thức đơn giản để duyệt nội dung trong tổ chức.",
+    "noGroupCategoriesTitle": "Chưa có danh mục nhóm nào",
+    "noGroupCategories": "Danh mục cho phép thành viên nhóm tổ chức các mục một cách nhất quán và mang đến cách thức đơn giản để duyệt nội dung trong nhóm.",
+    "setupCategories": "Thiết lập danh mục nội dung",
+    "setupGroupCategories": "Thiết lập danh mục nhóm",
+    "configureCategories": "Cấu hình danh mục"
+  },
+  "filterRegion": {
+    "regions": "Khu vực",
+    "region": "Khu vực: ${region}"
+  },
+  "filterCollaborations": {
+    "title": "Nhóm cộng tác phân tán",
+    "label": "Nhóm cộng tác phân tán: ${name}",
+    "loading": "Đang tải nhóm cộng tác..."
+  },
+  "filterContentStatus": {
+    "title": "Trạng thái",
+    "label": "Trạng thái: ${contentStatus}",
+    "authoritative": "Đáng tin cậy",
+    "deprecated": "Không còn sử dụng"
+  },
+  "filterDeleteProtection": {
+    "title": "Xóa bảo vệ",
+    "label": "Xóa bảo vệ: ${deleteProtection}",
+    "enabled": "Đã bật",
+    "disabled": "Đã tắt"
+  },
+  "filterExpiration": {
+    "today": "Hôm nay",
+    "tomorrow": "Ngày mai",
+    "next7": "7 ngày tới",
+    "next30": "30 ngày tới",
+    "custom": "Phạm vi tùy chỉnh...",
+    "title": {
+      "expires": "Ngày hết hạn"
+    },
+    "expires": "Ngày hết hạn: ${date}"
+  },
+  "filterExtent": {
+    "label": "Trong khu vực bản đồ",
+    "title": "Chỉ hiển thị nội dung trong khu vực bản đồ"
+  },
+  "filterFolder": {
+    "folders": "Các Thư mục",
+    "placeholder": "Lọc thư mục",
+    "clear": "Xóa tìm kiếm",
+    "all": "Tất cả nội dung của tôi",
+    "allContentUser": "Tất cả nội dung của ${username}",
+    "recycleBin": "Thùng rác",
+    "label": "Thư mục: ${folder}",
+    "loading": "Đang tải thư mục...",
+    "folderOptions": "Tùy chọn thư mục",
+    "editFolder": "Chỉnh sửa thư mục",
+    "deleteFolder": "Xóa thư mục",
+    "delete": "Xóa",
+    "areYouSure": "Bạn có chắc chắn muốn xóa thư mục này không?",
+    "areYouSureExplanation": "Thư mục, <strong style='font-weight: 500'>${title}</strong>, sẽ bị xoá vĩnh viễn. Ngoài ra, tất cả các mục trong thư mục sẽ được đánh dấu để xóa. Bạn vẫn muốn tiếp tục xóa thư mục này?",
+    "cancel": "Hủy",
+    "save": "Lưu",
+    "createAFolder": "Tạo thư mục",
+    "folderName": "Tên thư mục",
+    "createFolder": "Tạo thư mục",
+    "error": {
+      "title": "Lỗi",
+      "noName": "Bạn phải cung cấp tên cho thư mục của bạn.",
+      "folderAlreadyExists": "Thư mục '${folder}' đã tồn tại. Vui lòng chọn tên khác.",
+      "invalidCharacters": {
+        "single": "Tên không được chứa ký tự này: ${invalidCharacters}.",
+        "multiple": "Tên không được chứa bất kỳ ký tự nào sau đây: ${invalidCharacters}.",
+        "unknown": "Tên không được chứa bất kỳ ký tự nào sau đây: ${invalidCharacters}."
+      },
+      "errorCreatingFolder": "Đã xảy ra lỗi khi tạo thư mục ${folderName}."
+    }
+  },
+  "filterGroup": {
+    "title": "Nhóm",
+    "groups": "Nhóm của tôi",
+    "placeholder": "Lọc nhóm",
+    "all": "Tất cả nội dung của nhóm tôi",
+    "label": "Nhóm: ${group}",
+    "loading": "Đang tải nhóm…"
+  },
+  "filterContentType": {
+    "contentType": "Loại nội dung",
+    "all": "Tất cả các nội dung của tổ chức tôi",
+    "recycle": "Thùng rác"
+  },
+  "filterLocation": {
+    "location": "Vị trí",
+    "label": "Vị trí: ${location}",
+    "findLocationText": "Tìm địa chỉ hoặc địa điểm",
+    "search": "Tìm kiếm vị trí",
+    "suggestions": "Đề xuất",
+    "noResults": "Không tìm thấy kết quả nào cho \"${searchTerm}\""
+  },
+  "filterSharing": {
+    "title": "Chia sẻ",
+    "label": "Đã chia sẻ: ${sharing}",
+    "owner": "Chủ sở hữu",
+    "shared": "Được chia sẻ với các nhóm",
+    "private": "Không được chia sẻ với các nhóm",
+    "account": "Tổ chức",
+    "public": "Mọi người (công khai)"
+  },
+  "filterTags": {
+    "title": "Thẻ",
+    "label": "Được gắn thẻ: ${tags}",
+    "selectTags": "Chọn thẻ"
+  },
+  "filterReportType": {
+    "title": "Loại báo cáo",
+    "label": "Loại báo cáo: ${reportType}",
+    "activity": "Hoạt động",
+    "credits": "Credit",
+    "users": "Thành viên",
+    "content": "Mục",
+    "item_usages": "Số lượt xem mục",
+    "service_usages": "Sử dụng dịch vụ"
+  },
+  "cardThumbnail": {
+    "loading": "Đang tải hình ảnh"
+  },
+  "card": {
+    "select": "Chọn mục: ${title}",
+    "lastUpdated": "Mục đã cập nhật: ${date}",
+    "viewItemDetails": "Xem thêm thông tin chi tiết về ${title}",
+    "preview": "Thông tin chi tiết khác",
+    "hidePreview": "Giảm bớt thông tin chi tiết",
+    "closeDetails": "Đóng chế độ xem trước",
+    "openDetails": "Xem trước",
+    "moreOptions": "Các tùy chọn khác"
+  },
+  "cardSublayerSelect": {
+    "select": "Chọn lớp",
+    "selectLayers": "Chọn lớp",
+    "selectedSingle": "Đã chọn",
+    "selectedLayers": "Lớp được chọn: ${num}",
+    "selectedMultiple": "Đã chọn: ${num}",
+    "selectedName": "Lớp đã chọn: ${name}",
+    "selectedTask": "Tác vụ đã chọn: ${task}",
+    "errorTitle": "Lỗi kết nối với dịch vụ.",
+    "errorBody": "Không thể kết nối thành công với dịch vụ. Dịch vụ không hoạt động hoặc yêu cầu xác thực.",
+    "notebookErrorBody": "Đã xuất bản công cụ này từ notebook. Tổ chức của bạn bị chặn truy cập vào ArcGIS Notebooks. Liên hệ với quản trị viên của bạn để điều chỉnh thiết lập.",
+    "retry": "Thử lại",
+    "selectTask": "Chọn tác vụ",
+    "selectTaskFrom": "Chọn một tác vụ từ ${title}"
+  },
+  "cardLayersList": {
+    "hideDetails": "Ẩn thông tin chi tiết",
+    "showDetails": "Hiện thông tin chi tiết",
+    "layersAndTables": "Lớp và bảng"
+  },
+  "content": {
+    "noResults": "Không tìm thấy mục phù hợp với tiêu chí của bạn. Hãy thử thay đổi cụm từ tìm kiếm hoặc xóa một số bộ lọc để hiển thị thêm các nội dung.",
+    "noContent": "Không có nội dung khả dụng.",
+    "loading": "Đang tải..."
+  },
+  "copy": {
+    "copy": "Sao chép",
+    "copied": "Đã sao chép"
+  },
+  "bucketSelect": {
+    "my": "Nội dung của tôi",
+    "org": "Tổ chức của tôi",
+    "group": "Nhóm của tôi",
+    "favorites": "Mục yêu thích của tôi",
+    "living atlas": "Tập bản đồ Sinh sống",
+    "living atlas analysis": "Các lớp phân tích Living Atlas",
+    "subscription content": "Nội dung gói đăng ký",
+    "all": "ArcGIS Online",
+    "catalog": "Danh mục hub",
+    "catalogLabel": "Danh mục"
+  },
+  "preview": {
+    "owner": "Chủ sở hữu",
+    "summary": "Thông tin tóm tắt",
+    "noSummary": "Không có thông tin tóm tắt nào được cung cấp",
+    "description": "Thông tin mô tả",
+    "noDescription": "Không có thông tin mô tả được cung cấp",
+    "thumbnail": "Hình đại diện",
+    "overview": "Tổng quan",
+    "details": "Thông tin chi tiết",
+    "termsOfUse": "Điều khoản sử dụng",
+    "noTermsOfUse": "Không có điều khoản sử dụng nào được cung cấp",
+    "itemManagedBy": "Mục được quản lý bởi: ${username}",
+    "fullItemDetails": "Thông tin chi tiết đầy đủ về mục",
+    "layersCount": "Lớp (${count})",
+    "layers": "Lớp",
+    "add": "Thêm",
+    "remove": "Gỡ bỏ",
+    "loading": "Đang tải...",
+    "shared": "Chia sẻ",
+    "created": "Đã tạo mục",
+    "updated": "Đã nâng cấp mục",
+    "fileSize": "Kích cỡ tệp",
+    "dataUpdated": "Đã cập nhật dữ liệu",
+    "schemaUpdated": "Đã cập nhật schema",
+    "ID": "ID",
+    "copyID": "Sao chép ID",
+    "URL": "URL",
+    "copyURL": "Sao chép URL",
+    "itemStatus": "Trạng thái",
+    "viewCount": "Số lượt xem",
+    "readMore": "Đọc thêm",
+    "dashboardViews": "Chế độ xem bảng điều khiển",
+    "dashboardMobile": "Máy tính, Di động",
+    "dashboardDesktop": "Desktop",
+    "sharing": {
+      "private": "Riêng tư",
+      "shared": "Nhóm",
+      "public": "Mọi người",
+      "org": "Tổ chức"
+    },
+    "groupCategories": "Danh mục nhóm",
+    "matched": "Đã khớp",
+    "matchedNumber": "Đã khớp (${num})",
+    "layerError": {
+      "title": "Không thể hiển thị lớp",
+      "message": "Không hỗ trợ xem trước lớp đối với dịch vụ bảo mật."
+    },
+    "noServiceMessage": "Dịch vụ đã chọn không tồn tại hoặc không thể truy cập được.",
+    "credits": "Ghi nhận",
+    "noCredits": "Không nguồn nào được ghi nhận.",
+    "geometryTypeTitle": "Loại hình học",
+    "layerTypeTitle": "Loại lớp",
+    "fields": "Trường",
+    "noFields": "Không có trường nào được cấu hình cho lớp này",
+    "geometryType": {
+      "esriGeometryPoint": "Lớp điểm",
+      "esriGeometryPolyline": "Lớp đường",
+      "esriGeometryPolygon": "Lớp vùng",
+      "esriGeometryMultiPatch": "Lớp Multipatch",
+      "table": "Bảng"
+    },
+    "layerActions": "Các hành động của lớp",
+    "itemError": {
+      "title": "Lỗi",
+      "subscription": "Mục này hiện không khả dụng. Gói đăng ký ArcGIS Online liên kết với mục này đã bị vô hiệu hóa.",
+      "unhandled": "Đã xảy ra lỗi khi tìm nạp mục này."
+    }
+  },
+  "table": {
+    "loading": "Đang tải...",
+    "caption": "Kết quả mục, tiêu đề cột có nút có thể sắp xếp được.",
+    "selectAll": "Chọn tất cả",
+    "selection": "Lựa chọn",
+    "headers": {
+      "title": "Tiêu đề",
+      "modified": "Đã chỉnh sửa",
+      "created": "Đã tạo",
+      "owner": "Chủ sở hữu",
+      "size": "Kích thước",
+      "deleted": "Ngày xóa",
+      "type": "Loại Mục",
+      "badges": "Trạng thái mục",
+      "favorite": "Yêu thích",
+      "sharing": "Cấp độ chia sẻ",
+      "details": "Xem thông tin chi tiết",
+      "actions": "Hành động về mục khác",
+      "dataset": "Bộ dữ liệu"
+    }
+  },
+  "tableRow": {
+    "deletesTomorrow": "Xóa vào ngày mai",
+    "deletes": {
+      "single": "Xoá sau ${number} ngày",
+      "multiple": "Xoá sau ${number} ngày",
+      "unknown": "Số ngày trước khi bị xoá: ${number}"
+    },
+    "restore": "Khôi phục",
+    "details": "Xem thông tin chi tiết",
+    "moreOptions": "Các tùy chọn khác",
+    "download": "Tải xuống"
+  },
+  "search": {
+    "searchName": "Tìm kiếm ${searchName}",
+    "searchAllContent": "Tìm kiếm Tất cả nội dung của tôi",
+    "searchAllUserContent": "Tìm kiếm Tất cả nội dung của ${username}",
+    "searchGroupsContent": "Tìm kiếm Nhóm của tôi",
+    "searchingGroupsContent": "Đang tìm kiếm Nhóm của tôi cho",
+    "searchFavoritesContent": "Tìm kiếm Mục yêu thích của tôi",
+    "searchOrganizationsContent": "Tìm kiếm Tổ chức của tôi",
+    "searchLivingAtlasContent": "Tìm kiếm Living Atlas",
+    "searchRecycleCurrentPage": "Tìm kiếm các tiêu đề mục trên trang hiện tại"
+  },
+  "find": {
+    "find": "Tìm",
+    "findOnPage": "Tìm trên trang",
+    "match": "Chỉ trả về văn bản trùng khớp với tiêu đề mục trên trang hiện tại."
+  },
+  "view": {
+    "view": "Xem",
+    "list": "Danh sách",
+    "grid": "Lưới",
+    "table": "Bảng"
+  }
+}

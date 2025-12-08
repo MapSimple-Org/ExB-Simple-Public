@@ -1,0 +1,85 @@
+{
+  "heading": "Bejelentkezési kategória létrehozása",
+  "select": "A kezdéshez használandó bejelentkezési kategória kiválasztása",
+  "selectCustomSignIn": "Bejelentkezési kategória kiválasztása",
+  "orgDefaults": "Szervezeti alapértelmezések",
+  "createNew": "Új létrehozása",
+  "name": "Cím",
+  "description": "Leírás",
+  "enterName": "Kategória címének megadása",
+  "enterDescription": "Kategória leírásának megadása",
+  "enterTitle": "Adjon meg egy címet ehhez a bejelentkezéshez",
+  "showOnTriage": "Bejelentkezési kategória engedélyezése",
+  "showOnTriageDescription": "A kategóriájához tartozó leírás csak akkor jelenik meg a kategóriaválasztó oldalon, ha legalább két kategóriát engedélyezett.",
+  "socialProviders": "Közösségi bejelentkezési szolgáltatók",
+  "authenticationProviders": "Hitelesítési módszerek",
+  "errorLabel": "Egyéni bejelentkezési kategória hiba",
+  "preview": "Előnézet",
+  "restrictions": "Ennek a kategóriának csak a címe és a leírása módosítható. Az összes többi beállítás a szervezet beállításaiból öröklődik.",
+  "loginNotAvailable": "Ezt a bejelentkezési metódust a szervezete letiltotta, ezért nem jelenik meg a felhasználók számára.",
+  "buttons": {
+    "editCategory": "Kategória mentése",
+    "next": "Tovább",
+    "back": "Vissza",
+    "createCategory": "Kategória létrehozása"
+  },
+  "errors": {
+    "nameRequired": "Minden bejelentkezési kategóriához kötelező címet megadni.",
+    "authenticationMethodsRequired": "Legalább egy bejelentkezési metódus megadása szükséges.",
+    "socialProviderRequired": "Legalább egy közösségi média bejelentkezési szolgáltatót meg kell adni."
+  },
+  "steps": {
+    "1": {
+      "title": "Kezdés módjának kiválasztása",
+      "description": "Kezdhet a szervezete bejelentkezési alapértelmezéseivel, módosíthat egy meglévő bejelentkezési kategóriát, vagy létrehozhat egy új bejelentkezési kategóriát."
+    },
+    "2": {
+      "title": "Cím és leírás",
+      "description": "Adja meg a bejelentkezési kategória címét és leírását."
+    },
+    "3": {
+      "title": "Bejelentkezési típusok",
+      "description": "Testreszabhatja és sorrendbe állíthatja az ennél a bejelentkezési kategóriánál megjelenő bejelentkezéseket."
+    }
+  },
+  "createAccount": {
+    "label": "Fiókhivatkozás létrehozása",
+    "description": "Engedélyezze egy új ArcGIS-fiók létrehozását ebben a szervezetben."
+  },
+  "switchOrganization": {
+    "label": "Szervezet hivatkozásának váltása",
+    "description": "Jelenítsen meg egy hivatkozást, amely lehetővé teszi a felhasználók számára, hogy egy másik szervezetbe jelentkezzenek be."
+  },
+  "authenticationMethods": {
+    "arcgis": {
+      "label": "ArcGIS bejelentkezés",
+      "description": "Engedélyezheti a felhasználók számára, hogy ArcGIS bejelentkezési adataikkal jelentkezzenek be.",
+      "required": "Az ArcGIS-bejelentkezési metódushoz kötelező címet megadni."
+    },
+    "saml": {
+      "label": "SAML-bejelentkezés",
+      "description": "Lehetővé teszi a felhasználók számára a SAML-fiókjukkal történő bejelentkezést.",
+      "required": "A SAML-bejelentkezési metódushoz kötelező címet megadni."
+    },
+    "oidc": {
+      "label": "OIDC bejelentkezés",
+      "description": "Lehetővé teszi a felhasználók számára az OIDC-fiókjukkal történő bejelentkezést.",
+      "required": "Az OIDC-bejelentkezési metódushoz kötelező címet megadni."
+    },
+    "social": {
+      "label": "Közösségi bejelentkezés",
+      "description": "Engedélyezheti tagjai számára, hogy a következő közösségimédia-hálózatokhoz tartozó bejelentkezési adataikkal jelentkezzenek be a szervezetébe.",
+      "github": "GitHub",
+      "facebook": "Facebook",
+      "google": "Google",
+      "apple": "Apple",
+      "required": "A közösségi bejelentkezési metódusokhoz kötelező címet megadni."
+    }
+  },
+  "confirmLeave": {
+    "title": "Nem mentett módosítások",
+    "message": "Nem mentett módosításai vannak. Biztosan el kívánja hagyni ezt az oldalt?",
+    "remain": "Maradok az oldalon",
+    "leave": "Kilépés mentés nélkül"
+  }
+}

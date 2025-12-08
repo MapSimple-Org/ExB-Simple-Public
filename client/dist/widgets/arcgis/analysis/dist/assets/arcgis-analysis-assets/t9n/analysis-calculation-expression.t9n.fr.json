@@ -1,0 +1,10 @@
+{
+  "cannotAssignValueToTargetField": "La valeur calculée et le type de champ ne correspondent pas.",
+  "createExpression": "Créer une expression",
+  "deleteExpression": "Supprimer l’expression",
+  "editExpression": "Modifier l’expression",
+  "expression": "Expression",
+  "isRequired": "Ce paramètre est obligatoire.",
+  "layerLoadError": "Impossible de charger la couche.",
+  "validationFailedInvalidSQL": "La validation de l’expression a échoué. L’expression SQL n’est pas valide."
+}

@@ -1,0 +1,15 @@
+{
+  "addDataStore": "إضافة مخزن بيانات",
+  "addFile": "إضافة ملف",
+  "addServiceConnection": "أضف اتصالاً",
+  "itemNotFound": "العنصر غير موجود أو لا يمكن الوصول إليه.",
+  "itemPermissionDenied": "لا تتوفر لديك الأذونات للوصول إلى هذا العنصر.",
+  "previewDetails": "معاينة التفاصيل",
+  "queryModelArgsErrMsg": "فشل الاستعلام عن وسائط النموذج.",
+  "queryModelArgsMsg": "جار الاستعلام عن وسيطات النموذج...",
+  "removeItem": "حذف العنصر",
+  "replaceItem": "استبدال العنصر",
+  "requiredInputMessage": "هذه المعلمة مطلوبة.",
+  "selectItem": "تحديد عنصر",
+  "viewDetails": "عرض التفاصيل"
+}

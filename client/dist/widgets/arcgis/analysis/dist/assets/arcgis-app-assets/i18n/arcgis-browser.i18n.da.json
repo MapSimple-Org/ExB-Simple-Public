@@ -1,0 +1,89 @@
+{
+  "browser": {
+    "refineContent": "Forfin indhold",
+    "filters": "Filtre",
+    "pageRange": "${start}-${end}, i alt: ${total}",
+    "pageRangeAria": "${start}-${end}, elementer i alt: ${total}",
+    "pageRangeWithRecycleBin": "${start}-${end}, i alt: ${total} (samlet størrelse: ${recycleBinSize})",
+    "pageRangeAriaWithRecycleBin": "${start}-${end}, elementer i alt: ${total} (samlet størrelse: ${recycleBinSize})",
+    "totalSize": "Samlet størrelse: ${totalSize}",
+    "loading": "Indlæser resultater",
+    "close": "Luk"
+  },
+  "actions": {
+    "more": "Mere"
+  },
+  "filter": {
+    "clear": "Ryd"
+  },
+  "filterDate": {
+    "today": "I dag",
+    "yesterday": "I går",
+    "last7": "Seneste 7 dage",
+    "last30": "Seneste 30 dage",
+    "never": "Aldrig",
+    "custom": "Tilpasset interval...",
+    "title": {
+      "created": "Oprettelsesdato",
+      "modified": "Ændringsdato",
+      "joined": "Dato for tilknytning",
+      "lastLogin": "Sidste login"
+    },
+    "created": "Oprettet: ${date}",
+    "modified": "Ændret: ${date}",
+    "joined": "Tilknyttet: ${date}",
+    "lastLogin": "Sidste login: ${date}"
+  },
+  "pagination": {
+    "next": "Næste side",
+    "prev": "Forrige side"
+  },
+  "search": {
+    "label": "Søg efter grupper",
+    "search": "Søg",
+    "clear": "Ryd søgeudtryk",
+    "wildcard": "Søgninger med jokertegn understøttes ikke"
+  },
+  "sort": {
+    "sortDirection": "Sorteringsretning",
+    "title": "Titel",
+    "relevance": "Relevans",
+    "modified": "Ændringsdato",
+    "deleted": "Dato slettet",
+    "created": "Oprettelsesdato",
+    "added": "Dato tilføjet",
+    "size": "Størrelse",
+    "owner": "Ejer",
+    "sizeAsc": "Mindst til størst",
+    "sizeDesc": "Størst til mindst",
+    "numviews": "Vis antal",
+    "numAsc": "Fra mindst til mest",
+    "numDesc": "Fra mest eller mindst",
+    "alphabeticalAsc": "I alfabetisk orden",
+    "alphabeticalDesc": "I omvendt alfabetisk orden",
+    "recentAsc": "Mindst nyligt",
+    "recentDesc": "Seneste",
+    "sort": "Sortering",
+    "sortBy": "Sortér efter",
+    "sortByColon": "Sortér efter:",
+    "fullname": "Navn",
+    "username": "Brugernavn",
+    "name": "Navn",
+    "membertype": "Grupperolle",
+    "joined": "Dato for tilknytning",
+    "lastlogin": "Sidste login",
+    "dataset": "Datasæt",
+    "mfaenabled": "Multifactor-godkendelse",
+    "defaultAsc": "Stigende",
+    "defaultDesc": "Faldende"
+  },
+  "topBar": {
+    "filter": "Filtrér"
+  },
+  "filterStatus": {
+    "clear": "Ryd",
+    "filters": "Filtre:",
+    "additional": "Flere aktive filtre",
+    "clearAllFilters": "Ryd alle filtre"
+  }
+}

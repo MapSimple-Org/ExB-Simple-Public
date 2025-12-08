@@ -1,0 +1,18 @@
+{
+  "add": "Adicionar",
+  "analysisSessionLayers": "Camadas de sessão de análise",
+  "browseAnalysisLayers": "Procurar camadas",
+  "cancel": "Cancelar",
+  "heading": "Selecionar camada",
+  "mapLayers": "Camadas de mapa",
+  "mesh": "Camada de rede",
+  "modelVariableLayers": "Camadas de variáveis de modelo",
+  "multipatch": "Camada de multipatch",
+  "multipoint": "Camada de multipontos",
+  "noCompatibleLayers": "O mapa não contém camadas compatíveis. Adicione camadas ao mapa ou pesquise camadas para realizar análises.",
+  "noMatchesFound": "Não foram encontradas correspondências para '${searchTerm}'.",
+  "point": "Camadas de pontos",
+  "polygon": "Camada de polígonos",
+  "polyline": "Camada de polilinhas",
+  "table": "Tabela"
+}

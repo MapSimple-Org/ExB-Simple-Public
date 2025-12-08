@@ -1,0 +1,7 @@
+{
+  "example": "Eksempel",
+  "input": "Input",
+  "output": "Output",
+  "optional": "Valgfrit",
+  "WNDWIHintText": "Værdien α:α skal være mellem 0 og 1; standardværdien er 0,5"
+}

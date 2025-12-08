@@ -1,0 +1,12 @@
+{
+  "name": "portfolio",
+  "type": "template",
+  "templateType": "screen-group",
+  "label": "Portfolio",
+  "thumbnail": "thumbnail.png",
+  "order": 8,
+  "tags": [],
+  "categoriesTags": [],
+  "thumbnailWidth": 400,
+  "thumbnailHeight": 240
+}

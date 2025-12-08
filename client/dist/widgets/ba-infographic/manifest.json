@@ -1,0 +1,71 @@
+{
+  "name": "ba-infographic",
+  "label": "Business Analyst",
+  "type": "widget",
+  "version": "1.19.0",
+  "exbVersion": "1.19.0",
+  "author": "Esri Inc.",
+  "description": "Display interactive Business Analyst infographic reports for a location.",
+  "copyright": "Copyright 2022 Esri Inc.",
+  "license": "http://www.apache.org/licenses/LICENSE-2.0",
+  "properties": {
+    "coverLayoutBackground": true,
+    "notShareDynamicModules": true,
+    "flipIcon": true
+  },
+  "messageActions": [
+    {
+      "name": "selectFeatureAction",
+      "label": "Select feature",
+      "uri": "message-actions/select-feature-action"
+    }
+  ],
+  "translatedLocales": [
+    "en",
+    "ar",
+    "bg",
+    "bs",
+    "ca",
+    "cs",
+    "da",
+    "de",
+    "el",
+    "es",
+    "et",
+    "fi",
+    "fr",
+    "he",
+    "hr",
+    "hu",
+    "id",
+    "it",
+    "ja",
+    "ko",
+    "lt",
+    "lv",
+    "no",
+    "nl",
+    "pl",
+    "pt-br",
+    "pt-pt",
+    "ro",
+    "ru",
+    "sk",
+    "sl",
+    "sr",
+    "sv",
+    "th",
+    "tr",
+    "zh-cn",
+    "uk",
+    "vi",
+    "zh-hk",
+    "zh-tw"
+  ],
+  "dependency": "jimu-arcgis",
+  "settingDependency": "jimu-arcgis",
+  "defaultSize": {
+    "width": 550,
+    "height": 361
+  }
+}

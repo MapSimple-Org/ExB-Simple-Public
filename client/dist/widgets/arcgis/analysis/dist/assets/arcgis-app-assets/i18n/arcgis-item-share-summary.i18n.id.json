@@ -1,0 +1,17 @@
+{
+  "sharing": "Berbagi",
+  "private": "Pemilik",
+  "shared": "Pemilik dan dibagikan dengan grup",
+  "org": "Organisasi",
+  "public": "Semua orang (publik)",
+  "privateGroups": "Pemilik",
+  "sharedGroups": "Pemilik + Grup (${num})",
+  "orgGroups": "Organisasi + Grup (${num})",
+  "publicGroups": "Semua orang (publik) + Grup (${num})",
+  "groups": "Grup (${num})",
+  "updateSharing": "Level berbagi: ${level}, perbarui pembagian",
+  "viewableBy": "Dapat Dilihat oleh: ${level}",
+  "everyone": "Semua orang (publik)",
+  "organization": "Organisasi",
+  "groupMembers": "Anggota grup"
+}

@@ -1,0 +1,7 @@
+{
+  "searchMembers": "البحث عن أعضاء",
+  "selectUser": "تحديد مستخدم",
+  "editSelection": "تحرير المستخدم المحدد. المحدد حاليًا: ${name}",
+  "clear": "مسح",
+  "members": "الأعضاء"
+}

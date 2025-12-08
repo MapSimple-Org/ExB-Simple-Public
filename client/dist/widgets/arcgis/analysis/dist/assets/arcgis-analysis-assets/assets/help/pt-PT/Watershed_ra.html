@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>A ferramenta Bacia Hidrogr&aacute;fica ir&aacute; determinar a &aacute;rea de contribui&ccedil;&atilde;o acima de um conjunto de c&eacute;lulas num raster.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputFlowDirectionRaster">
+        <div>
+            <p>A dire&ccedil;&atilde;o do fluxo para fora de cada c&eacute;lula.
+            </p>
+            <p>O m&eacute;todo D8 tem de ser utilizado para determinar a dire&ccedil;&atilde;o do fluxo.
+            </p>
+        </div>
+    </div>
+    <div id="inPourPointRasterOrFeatures">
+        <div>
+            <p>As localiza&ccedil;&otilde;es acima das quais a &aacute;rea de contribui&ccedil;&atilde;o ser&aacute; determinada.
+            </p>
+            <p class="toolPaneOnly">Para as entradas de elementos, a contagem depende de fatores adicionais, como os crit&eacute;rios de filtragem e a extens&atilde;o da an&aacute;lise.
+            </p>
+        </div>
+    </div>
+    <div id="pourPointField">
+        <div>
+            <p>O campo que ser&aacute; utilizado para atribuir valores aos pontos de escoamento.
+            </p> 
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>O nome da camada de raster de bacia hidrogr&aacute;fica que ser&aacute; criada e adicionada ao mapa. A camada cont&eacute;m diferentes bacias hidrogr&aacute;ficas representadas por diferentes valores de c&eacute;lula do campo  <b>Ponto de escoamento</b>.
+            </p>
+        </div>
+    </div>
+    <div id="resultType">
+        <div>
+            <p>O tipo de sa&iacute;da que ser&aacute; criado. A sa&iacute;da pode ser uma camada de imagens em mosaico ou uma camada de imagens din&acirc;micas.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>O nome da pasta em  <b>O meu conte&uacute;do</b> onde o resultado ser&aacute; guardado.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

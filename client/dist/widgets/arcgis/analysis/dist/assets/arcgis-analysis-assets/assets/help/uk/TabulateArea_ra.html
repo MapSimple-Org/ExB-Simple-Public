@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>Інструментом &laquo;Таблиця площі&raquo; обчислюються області перехресних таблиць між двома наборами даних, а результати виводяться у вигляді таблиці.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputZoneRasterOrFeatures">
+        <div>
+            <p>Вхідні дані, що визначають кордони зон.
+            </p>
+            <p class="toolPaneOnly">Для введення об'єктів підрахунок залежить від таких додаткових факторів як критерії фільтрування та екстент аналізу.
+            </p>
+        </div>
+    </div>
+    <div id="zoneField">
+        <div>
+            <p>Поле, що містить значення, котрі визначають кожну зону.
+            </p>
+        </div>
+    </div>
+    <div id="inputClassRasterOrFeatures">
+        <div>
+            <p>Вхідні дані, що визначають кордони класів, область яких обчислюватиметься.
+            </p>
+            <p class="toolPaneOnly">Для введення об'єктів підрахунок залежить від таких додаткових факторів як критерії фільтрування та екстент аналізу.
+            </p>
+        </div>
+    </div>
+    <div id="classField">
+        <div>
+            <p>Поле, що містить значення, які визначають кожен клас.
+            </p>
+        </div>
+    </div>
+    <div id="classesAsRows">
+        <div>
+            <p>Вказує, чи відображатимуться значення із вхідного растру класу в рядках у вихідній таблиці.
+            </p>
+            <p>Якщо прапорець знято, класи відображатимуться у полях. Якщо вибрано, класи відображатимуться у рядках.
+            </p>
+        </div>
+    </div>
+    <div id="analysisCellSize">
+        <div>
+            <p>Задає розмір осередку растру аналізу, який створюється для обчислення областей перехресних таблиць.
+            </p>
+        </div>
+    </div>
+    <div id="outputTableName">
+        <div>
+            <p>Імʼя шару таблиці згрупованої області, який буде створено та додано до карти.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>Назва папки в  <b>Моєму вмісті</b>, де буде збережено результат.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

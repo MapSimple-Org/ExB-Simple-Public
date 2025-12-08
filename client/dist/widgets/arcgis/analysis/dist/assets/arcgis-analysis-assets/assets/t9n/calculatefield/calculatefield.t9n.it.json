@@ -1,0 +1,13 @@
+{
+  "fieldCalcExpression": "Espressione calcolo di campo",
+  "fieldCalculationGroupLabel": "Calcolo di campo",
+  "fieldPlaceholderText": "Fai clic per selezionare o creare un campo",
+  "fieldToCalculate": "Campo per calcolare",
+  "inputDatasetGroupLabel": "Input",
+  "itemProperties": {
+    "description": "Risultato generato dall'esecuzione dello strumento Calcola campo in ModelBuilder.",
+    "snippet": "Feature layer generato da Calcola campo"
+  },
+  "noFieldSpecified": "Specifica un campo da calcolare per creare un'espressione.",
+  "whereClause": "Applica il calcolo solo a determinati record"
+}

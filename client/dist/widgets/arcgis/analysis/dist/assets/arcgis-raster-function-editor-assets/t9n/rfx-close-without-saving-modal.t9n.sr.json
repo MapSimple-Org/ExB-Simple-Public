@@ -1,0 +1,7 @@
+{
+  "header": "Uređivanje funkcije rastera",
+  "content": "Imate promene koje nisu sačuvane u '${rftTitle}'. Ako ne sačuvate, te promene biće izgubljene.",
+  "cancel": "Otkaži",
+  "dontSave": "Ne čuvaj",
+  "save": "Sačuvaj"
+}

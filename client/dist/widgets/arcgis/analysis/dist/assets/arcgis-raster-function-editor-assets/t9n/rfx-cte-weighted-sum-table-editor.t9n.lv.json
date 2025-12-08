@@ -1,0 +1,9 @@
+{
+  "weightedSumTable": "Svērtās summas tabula",
+  "id": "ID",
+  "layer": "Slānis",
+  "field": "Lauks",
+  "weight": "Svars",
+  "value": "Vērtība",
+  "selectLayer": "Izvēlieties slāni"
+}

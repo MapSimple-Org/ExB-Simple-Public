@@ -1,0 +1,8 @@
+{
+  "fieldTypesIncompatible": "Tidak kompatibel dengan kolom yang tersedia.",
+  "inputPlaceholderText": "Pilih kolom",
+  "layerNotSelected": "Tidak ada layer yang dipilih untuk mengisi kolom.",
+  "multiSelectFieldButtonText": "Kolom",
+  "removeField": "Hapus",
+  "replaceField": "Ganti kolom"
+}

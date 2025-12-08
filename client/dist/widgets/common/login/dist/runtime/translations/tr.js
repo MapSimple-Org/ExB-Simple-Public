@@ -1,0 +1,1 @@
+System.register([],function(e){return{execute:function(){e({_widgetLabel:"Oturum a\xe7",switchToLogin:"Giri\u015f yapmadan \xf6nce ge\xe7i\u015f yap",switchToLogout:"Giri\u015f yapt\u0131ktan sonra ge\xe7i\u015f yap",toggleSignInPreview:"Oturum a\xe7ma \xf6nizlemesini a\xe7/kapat",restrictedResources:"K\u0131s\u0131tlanm\u0131\u015f kaynaklar"})}}});

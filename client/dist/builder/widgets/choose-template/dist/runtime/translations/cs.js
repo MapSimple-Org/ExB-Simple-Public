@@ -1,0 +1,1 @@
+System.register([],function(e){return{execute:function(){e({_widgetLabel:"Vytvo\u0159it novou aplikaci",createNewApp:"Vytvo\u0159it novou aplikaci",largeDevices:"Za\u0159\xedzen\xed s velkou obrazovkou",mediumDevices:"Za\u0159\xedzen\xed se st\u0159edn\xed obrazovkou",smallDevices:"Za\u0159\xedzen\xed s malou obrazovkou"})}}});

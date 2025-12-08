@@ -1,0 +1,15 @@
+{
+  "addDataStore": "Додати сховище даних",
+  "addFile": "Додати файл",
+  "addServiceConnection": "Додати підключення",
+  "itemNotFound": "Елемент не існує або недоступний.",
+  "itemPermissionDenied": "Ви не маєте дозволу на доступ до цього елемента.",
+  "previewDetails": "Докладні відомості попереднього перегляду",
+  "queryModelArgsErrMsg": "Не вдалося запитати аргументи моделі",
+  "queryModelArgsMsg": "Запит аргументів моделі...",
+  "removeItem": "Вилучити елемент",
+  "replaceItem": "Замінити елемент",
+  "requiredInputMessage": "Цей параметр обов'язковий.",
+  "selectItem": "Вибрати елемент",
+  "viewDetails": "Переглянути детальну інформацію"
+}

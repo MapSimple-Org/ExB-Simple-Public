@@ -1,0 +1,22 @@
+{
+  "dialogHeading": "Tagkategóriák konfigurálása",
+  "noticeTitle": "Szerkesztheti, töröljeti vagy átrendezheti a szervezetén belüli kategóriákat.",
+  "noticeDescription": "A tagokhoz a Tagok lapon rendelhet kategóriákat.",
+  "defaultCategoryWarning": "Ez a tagkategória alapértelmezett értékként van beállítva az új tagok számára, ezért nem szerkeszthető és nem törölhető.",
+  "warning": {
+    "deleteInUseCategory": {
+      "message": {
+        "single": "Egy tag van a kategóriához rendelve. A kategória törlésével a tagból is törlődik.",
+        "multiple": "${number} tag van a kategóriához rendelve. A kategória törlésével a tagokból is törlődik.",
+        "unknown": "Az ehhez a kategóriához hozzárendelt tagok: ${number}. A kategória törlésével a tagokból is törlődik."
+      }
+    },
+    "changeTitleInUseCategory": {
+      "message": {
+        "single": "Egy tag van a kategóriához rendelve. A kategória frissítése a tagokat a(z) „${newTitle}” használatára frissíti.",
+        "multiple": "${number} tag van a kategóriához rendelve. A kategória frissítése a tagokat a(z) „${newTitle}” használatára frissíti.",
+        "unknown": "Az ehhez a kategóriához hozzárendelt tagok: ${number}. A kategória frissítése a tagokat a(z) „${newTitle}” használatára frissíti."
+      }
+    }
+  }
+}

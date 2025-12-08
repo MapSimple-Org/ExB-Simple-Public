@@ -1,0 +1,8 @@
+{
+  "itemProperties": {
+    "description": "執行「按屬性篩選」分析工具產生的結果。",
+    "snippet": "「按屬性篩選」所產生的結果"
+  },
+  "noLayerDisabledTooltip": "選擇有效的輸入資料集。",
+  "queryCriteriaGroupLabel": "查詢條件"
+}

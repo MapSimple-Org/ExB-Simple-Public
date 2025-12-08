@@ -1,0 +1,17 @@
+{
+  "sharing": "Delning",
+  "private": "Ägare",
+  "shared": "Ägare och delas med grupper",
+  "org": "Organisation",
+  "public": "Alla (publik)",
+  "privateGroups": "Ägare",
+  "sharedGroups": "Ägare + grupper (${num})",
+  "orgGroups": "Organisation + grupper (${num})",
+  "publicGroups": "Alla (publik) + grupper (${num})",
+  "groups": "Grupper (${num})",
+  "updateSharing": "Delningsnivå: ${level}, uppdatera delning",
+  "viewableBy": "Kan visas av: ${level}",
+  "everyone": "Alla (publik)",
+  "organization": "Organisation",
+  "groupMembers": "Gruppmedlemmar"
+}

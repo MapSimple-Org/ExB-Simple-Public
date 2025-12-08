@@ -1,0 +1,62 @@
+{
+    "tools": [
+        {
+            "id": "daylight", "enable": true, "activedOnLoad": false,
+            "config": {
+                "timezone": true,
+                "timeSliderSteps": 5,
+                "playButtons": true,
+                "playSpeedMultiplier": "1.0",
+                "dateTimeAutoPlay": false,
+                "datePicker": true,
+                "dateOrSeason": "date",
+                "currentSeason": "syncedWithMap",
+                "isShowShadows": true,
+                "dateTimeToggle": true
+            }
+        }, {
+            "id": "weather", "enable": true,  "activedOnLoad": false,
+            "config": {
+                "weatherType": "sunny",
+                "sunnyConfig": {
+                    "cloudCover": 0.5
+                },
+                "cloudyConfig": {
+                    "cloudCover": 0.5
+                },
+                "rainyConfig" : {
+                    "cloudCover": 0.5,
+                    "precipitation": 0.5
+                },
+                "snowyConfig": {
+                    "cloudCover": 0.5,
+                    "precipitation": 0.5
+                },
+                "foggyConfig" : {
+                    "fogStrength": 0.5
+                }
+            }
+        }, {
+            "id": "shadowcast", "enable": true,  "activedOnLoad": false,
+            "config": {
+                "visType": "threshold",
+                "timezone": true,
+                "datePicker": true
+            }
+        }, {
+            "id": "lineofsight", "enable": true,  "activedOnLoad": false,
+            "config": {}
+        }, {
+            "id": "slice", "enable": true,  "activedOnLoad": false,
+            "config": {
+                "tiltEnabled": false,
+                "excludeGroundSurface": true,
+                "analyses": []
+            }
+        }
+    ],
+    "arrangement": {
+        "style": "icon",
+        "direction": "horizontal"
+    }
+}

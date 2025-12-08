@@ -1,0 +1,11 @@
+{
+  "all": "Tot",
+  "inputLayersGroupText": "Trieu el ràster de superfície d'entrada i, si voleu, les dades de depressió i el ràster de pes.",
+  "itemProperties": {
+    "description": "Sortida generada en executar l'eina Deriva el curs d'aigua com a línia.",
+    "snippet": "Sortida generada des de Deriva el curs d'aigua com a ràster"
+  },
+  "outputStreamFeaturesLabel": "Nom de les entitats de sortida del curs d'aigua",
+  "simplifyLabel": "Simplifica les entitats",
+  "streamSettingsGroupText": "Especifiqueu el llindar d'acumulació, el mètode de designació del curs d'aigua i si les línies del curs d'aigua de sortida se suavitzaran en formes simples."
+}

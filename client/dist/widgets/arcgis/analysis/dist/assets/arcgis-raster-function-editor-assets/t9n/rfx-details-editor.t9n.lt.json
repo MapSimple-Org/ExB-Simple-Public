@@ -1,0 +1,22 @@
+{
+  "general": "Bendra",
+  "parameters": "Parametrai",
+  "variables": "Kintamieji",
+  "name": "Pavadinimas",
+  "namePlaceHolder": "Įveskite pavadinimą",
+  "description": "Aprašymas",
+  "parameter": "Parametras",
+  "isPublic": "IsPublic",
+  "isDataset": "IsDataset",
+  "unknownPixelType": "Nežinoma",
+  "outputPixelType": "Išvesties pikselių tipas",
+  "u8PixelType": "8 bitų, tik teigiami",
+  "s8PixelType": "8 bitų, ir neigiami",
+  "u16PixelType": "16 bitų, tik teigiami",
+  "s16PixelType": "16 bitų, ir neigiami",
+  "u32PixelType": "32 bitų, tik teigiami",
+  "s32PixelType": "32 bitų, ir neigiami",
+  "f32PixelType": "32 bitų, kintami",
+  "f64PixelType": "64 bitų, dvigubi",
+  "properties": "Savybės"
+}

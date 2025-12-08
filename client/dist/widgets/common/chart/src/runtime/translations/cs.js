@@ -1,0 +1,1 @@
+System.register([],function(e){return{execute:function(){e({_widgetLabel:"Graf",dataEmptyTip:"Nebyla nalezena \u017e\xe1dn\xe1 data."})}}});

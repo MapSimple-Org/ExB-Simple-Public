@@ -1,0 +1,68 @@
+{
+  "addField": "Pievienot lauku",
+  "addFieldErrors": {
+    "creatingFailed": "Izveidot lauku ${fieldName} neizdevās.",
+    "existingFieldNameError": "Lauka nosaukums nevar būt tāds pats kā esošs lauka nosaukums.",
+    "invalidName": "Nederīgs nosaukums",
+    "invalidNameInputInvalidCharactersError": "Lauka nosaukumam ir jāsākas ar burtu un tas drīkst saturēt tikai burtus, ciparus un “_”.",
+    "invalidNameInputSQLError": "Lauka nosaukums nevar būt tāds pats kā SQL atslēgvārds.",
+    "valueIsRequiredError": "Ir nepieciešama vērtība."
+  },
+  "cancel": "Atcelt",
+  "createAndSelectField": "Izveidot un atlasīt lauku",
+  "createNewFields": "Izveidot jaunu lauku",
+  "fieldLoadingErrorText": "Nevar ielādēt laukus.",
+  "fieldName": "Lauka nosaukums",
+  "fieldType": "Lauka veids",
+  "fieldTypesIncompatible": "Nav pieejami saderīgi lauki.",
+  "layerNotSelected": "Nav atlasīts neviens slānis, lai aizpildītu laukus.",
+  "loadingFields": "Notiek lauku ielāde",
+  "noSearchResults": "Nav atrasts neviens atbilstošs lauks.",
+  "requiredErrorLabelDefault": "Lauks",
+  "requiredErrorMessage": "Šis parametrs ir obligāts.",
+  "selectFieldPicklistHeading": "Izvēlēties lauku",
+  "selectOkBtnText": "Izvēlēties",
+  "tooltip": "Jānorāda derīgs lauka nosaukums un lauka veids.",
+  "types": {
+    "big-integer": {
+      "description": "Saglabājiet veselus skaitļus no -(2${startSup}53${endSup}-1) līdz 2${startSup}53${endSup}-1. Izmantojiet šo lauka veidu, ja izmantojat skaitļus, kas atrodas ārpus atbalstītā veselo skaitļu lauku diapazona.",
+      "title": "Liels vesels skaitlis"
+    },
+    "date": {
+      "description": "Saglabāt vērtības ar datumu un laiku.",
+      "title": "Datums"
+    },
+    "date-only": {
+      "description": "Saglabāt datuma vērtības bez laika vērtībām.",
+      "title": "Tikai datums"
+    },
+    "double": {
+      "description": "Saglabāt skaitļus ar decimāldaļām.",
+      "title": "Dubults"
+    },
+    "global-id": {
+      "description": "Saglabājiet 36 rakstzīmju virkni, ko veido burti un cipari, kurus izmanto, lai unikāli identificētu elementu.",
+      "title": "GlobalID"
+    },
+    "guid": {
+      "description": "Saglabājiet 36 rakstzīmju virkni, ko veido burti un cipari. Vispārēji unikāls identifikators jeb GUID bieži tiek izmantots, lai pārvaldītu elementu saistību.",
+      "title": "GUID"
+    },
+    "integer": {
+      "description": "Saglabāt veselus skaitļus no ${lowerIntegerRange} līdz ${upperIntegerRange}.",
+      "title": "Vesels skaitlis"
+    },
+    "string": {
+      "description": "Saglabājiet burtciparu rakstzīmju kopu",
+      "title": "Virkne"
+    },
+    "time-only": {
+      "description": "Saglabāt laika vērtības bez datuma vērtībām.",
+      "title": "Tikai laiks"
+    },
+    "timestamp-offset": {
+      "description": "Saglabāt vērtības, kas norāda datumu, laiku un nobīdi no universālā koordinētā laika (UTC).",
+      "title": "Laikspiedola nobīde"
+    }
+  }
+}

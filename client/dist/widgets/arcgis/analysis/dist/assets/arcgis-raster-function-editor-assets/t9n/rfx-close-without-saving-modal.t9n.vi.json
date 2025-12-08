@@ -1,0 +1,7 @@
+{
+  "header": "Raster Function Editor",
+  "content": "Bạn có những thay đổi chưa được lưu trong '${rftTitle}'. Nếu không lưu, những thay đổi này sẽ mất.",
+  "cancel": "Hủy",
+  "dontSave": "Không lưu",
+  "save": "Lưu"
+}

@@ -1,0 +1,22 @@
+{
+  "value": "Verdi",
+  "classname": "Klassenavn",
+  "color": "Farge",
+  "raster": "Raster",
+  "tableType": "Tabelltype",
+  "manual": "Manuell",
+  "external": "Ekstern",
+  "browseTable": "Se gjennom tabell",
+  "browseTableFrom": "Bla gjennom tabell fra",
+  "file": "Fil",
+  "dbfFile": "DBF-fil",
+  "layer": "Lag",
+  "unsupportedDataType": "Typen støttes ikke",
+  "failedToGetTableFromLayer": "Kunne ikke hente tabellen fra laget.",
+  "generate": "Generer tabell",
+  "minValue": "Minimum Value",
+  "maxValue": "Maximum Value",
+  "classBaseName": "Klassebasenavn",
+  "colorscheme": "Fargevalg",
+  "defaultClassName": "Etikett_"
+}

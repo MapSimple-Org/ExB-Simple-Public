@@ -1,0 +1,7 @@
+{
+  "header": "Editor de Funções Raster",
+  "content": "Tem alterações não guardadas em '${rftTitle}'. Se não guardar, essas alterações perder-se-ão.",
+  "cancel": "Cancelar",
+  "dontSave": "Não guardar",
+  "save": "Guardar"
+}

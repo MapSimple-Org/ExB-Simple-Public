@@ -1,0 +1,16 @@
+{
+  "updateData": "Ažuriraj podatke",
+  "cancel": "Otkaži",
+  "editStyle": "Zamenite datoteku sa stilovima sloja sa ažuriranom verzijom sa računara.",
+  "updatePackages": "Zamenite ${type} sa ažuriranom verzijom sa vašeg računara. Otpremljena datoteka mora imati isto ime kao ${hostedLayerName}.",
+  "uploadStaticFiles": "Datoteka koja se otprema mora imati isto ime kao originalna datoteka ${fileName}",
+  "sameFileNameDescription": "Datoteka koja se otprema mora imati isto ime i nazive polja kao originalna datoteka ${fileName}",
+  "updating": "Ažuriranje...",
+  "error": "Greška",
+  "errors": {
+    "sameFileName": "Da biste ažurirali ovu stavku, morate da otpremite datoteku pod nazivom ${fileName}.",
+    "invalidStyleFileExtension": "Nevažeća ekstenzija datoteke. Otpremljeni stil mora da ima .json oznaku tipa datoteke.",
+    "errorWhileUpload": "Došlo je do greške prilikom otpremanja stavke.",
+    "errorUpdate": "Došlo je do greške prilikom zamene stavke."
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "all": "הכל",
+  "inputLayersGroupText": "בחר את קלט רסטר פני השטח, ואופציונלית את נתוני השקע ורסט המשקל.",
+  "itemProperties": {
+    "description": "פלט הופק מהרצת הכלי 'גזור זרם כרסטר'.",
+    "snippet": "פלט הופק מ'גזור זרם כרסטר'"
+  },
+  "outputStreamFeaturesLabel": "שם ישות זרם של פלט",
+  "simplifyLabel": "הפשטת ‏ישויות",
+  "streamSettingsGroupText": "ציין את סף הצבירה, שיטת ציון הזרם והאם קווי זרם הפלט יוחלקו לצורות פשוטות."
+}

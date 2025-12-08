@@ -1,0 +1,26 @@
+{
+  "name": "chronology",
+  "type": "template",
+  "templateType": "full-screen-page",
+  "label": "Chronology",
+  "description": "Chronology uses the Timeline widget and Map widget to visualize temporal data patterns and the Print widget for printing. Next to the map, different types of charts show statistical information for the changing time periods.",
+  "thumbnail": "thumbnail.png",
+  "order": 18,
+  "tags": [
+    "Timeline",
+    "Map",
+    "List",
+    "Navigation",
+    "View",
+    "Section",
+    "Filter",
+    "Print",
+    "Chart"
+  ],
+  "categoriesTags": [
+    "Map centric",
+    "Fullscreen"
+  ],
+  "thumbnailWidth": 320,
+  "thumbnailHeight": 214
+}

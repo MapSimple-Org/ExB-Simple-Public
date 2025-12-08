@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>Alat Planiranje ruta kreira putne rute sa vi&scaron;e zaustavljanja za flotu vozila.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="startLayer">
+        <div>
+            <p>Karakteristike tačke koje određuju gde vozila počinju svoje rute.
+            </p>
+            <p class="toolPaneOnly">Broj geoobjekata zavisi od dodatnih faktora kao &scaron;to su kriterijumi filtriranja i obuhvat analize.
+            </p>
+        </div>
+    </div>
+    <div id="stopsLayer">
+        <div>
+            <p>Geoobjekti tačke koje vozila moraju posetiti na svojim rutama. Ova tačke postaju dodeljene ili nedodeljene stanice u izlazu.
+            </p>
+            <p class="toolPaneOnly">Broj geoobjekata zavisi od dodatnih faktora kao &scaron;to su kriterijumi filtriranja i obuhvat analize.
+            </p>
+        </div>
+    </div>
+    <div id="returnToStart">
+        <div>
+            
+            <p>Određuje da li se vozila moraju vratiti na svoju početnu lokaciju (omogućeno) ili zavr&scaron;iti na određenim lokacijama.
+            </p>
+        </div>
+    </div>
+    <div id="endLayer">
+        <div>
+            <p>Karakteristike tačke koje određuju gde vozila zavr&scaron;avaju svoje rute. Ako sloj uključuje samo jednu tačku, sva vozila se usmeravaju do zajedničke krajnje tačke. Ako sloj uključuje vi&scaron;e tačaka, svako vozilo se usmerava na jedinstvenu krajnju lokaciju.
+            </p>
+            <p class="toolPaneOnly">Broj geoobjekata zavisi od dodatnih faktora kao &scaron;to su kriterijumi filtriranja i obuhvat analize.
+            </p>
+        </div>
+    </div>
+    <div id="startLayerRouteIDField">
+        <div>
+            <p>Polje u početnom sloju koje jedinstveno identifikuje pojedinačne rute, vozila ili vozače. Ako vozila kreću sa vi&scaron;e lokacija i zavr&scaron;avaju na vi&scaron;e lokacija, ID-ovi ruta precizirani za početne i zavr&scaron;ne slojeve moraju da se podudaraju.
+            </p>
+        </div>
+    </div>
+    <div id="endLayerRouteIDField">
+        <div>
+            <p>Polje u zavr&scaron;nom sloju koje jedinstveno identifikuje pojedinačne rute, vozila ili vozače. Ako vozila kreću sa vi&scaron;e lokacija i zavr&scaron;avaju na vi&scaron;e lokacija, ID-ovi ruta precizirani za početne i zavr&scaron;ne slojeve moraju da se podudaraju.
+            </p>
+        </div>
+    </div>
+    <div id="pointBarrierLayer">
+        <div>
+            <p>Jedan ili vi&scaron;e tačaka geoobjekata koji će da predstavljaju privremena ograničenja (barijere) prilikom putovanja po pozadinskim ulicama. Kretanje je dozvoljeno na ulici, ali ne kroz barijeru.
+            </p>
+        </div>
+    </div>
+    <div id="lineBarrierLayer">
+        <div>
+            <p>Jedan ili vi&scaron;e linija geoobjekata koji će da predstavljaju privremena ograničenja (barijere) prilikom putovanja po pozadinskim ulicama. Linijske barijere zabranjuju putovanje svuda gde se barijere ukr&scaron;taju sa ulicama.
+            </p>
+        </div>
+    </div>
+    <div id="polygonBarrierLayer">
+        <div>
+            <p>Jedan ili vi&scaron;e poligona geoobjekata koji će da predstavljaju privremena ograničenja (barijere) prilikom putovanja po pozadinskim ulicama. Poligonalna barijera zabranjuje kretanje svuda gde poligon preseca ulice.
+            </p>
+        </div>
+    </div>
+    <div id="travelMode">
+        <div>
+            <p>Režim putovanja koji će biti kori&scaron;ćen za kreiranje ruta. Podržani su samo režimi putovanja zasnovani na vremenu.
+            </p>
+        </div>
+    </div>
+    <div id="routeStartTime">
+        <div>
+            <p>Datum i vreme polaska vozila.
+            </p>
+        </div>
+    </div>
+    <div id="routeCount">
+        <div>
+            
+            <p class="OnlineOnly">Maksimalan broj vozila dostupnih za posećivanje stanica. Ako vrednosti  <b>Početnog sloja</b> i <b>Zavr&scaron;nog sloja</b> svaka sadrže po jedan geoobjekat, možete da precizirate do 100 vozila. Ako bilo koji sloj sadrži vi&scaron;e od jedne karakteristike, podrazumevana vrednost se ne može menjati. </p> 
+            <p class="PortalOnly">Maksimalan broj vozila dostupnih za posećivanje stanica. Ako vrednosti  <b>Početnog sloja</b> i <b>Zavr&scaron;nog sloja</b> svaka sadrže po jedan geoobjekat, možete da precizirate maksimalni broj vozila. Ako bilo koji sloj sadrži vi&scaron;e od jedne karakteristike, podrazumevana vrednost se ne može menjati.
+            </p>
+        </div>
+    </div>
+    <div id="maxStopsPerRoute">
+        <div>
+            
+            <p class="OnlineOnly">Maksimalan broj zaustavljanja koje svako vozilo može napraviti na ruti. Možete da navedete vrednost između 1 i  200. </p> 
+            <p class="PortalOnly">Maksimalan broj zaustavljanja koje svako vozilo može napraviti na ruti.
+            </p>
+        </div>
+    </div>
+    <div id="stopServiceTime">
+        <div>
+            <p>Očekivano prosečno vreme usluge provedeno na svakoj stanici.
+            </p>
+        </div>
+    </div>
+    <div id="limitMaxRouteTimeCheckbox">
+        <div>
+            <p>Određuje da li se maksimalno vreme rutiranja primenjuje na vozila. Vreme rutiranja obuhvata očekivano vreme putovanja i vreme usluge provedeno na stanicama duž rute.
+            </p>
+        </div>
+    </div>
+    <div id="maxRouteTime">
+        <div>
+            <p>Maksimalno vreme tokom kojeg ruta može da traje od početka do kraja.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>Naziv sloja koji će biti kreiran i dodat mapi.
+            </p>
+        </div>
+    </div>
+    <div id="includeRouteLayers">
+        <div>
+            <p>Određuje da li će svaka ruta rezultata biti sačuvana kao sloj rute.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            
+            <p>Naziv fascikle u  <b>Mom sadržaju</b> u kojoj će rezultati biti sačuvani.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

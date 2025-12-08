@@ -1,0 +1,7 @@
+{
+  "addEntryButtonLabel": "Добавить",
+  "maxGroupsMessage": "Максимальное количество элементов составляет ${maxCount}.",
+  "minGroupsMessage": "Минимальное количество элементов составляет ${minCount}.",
+  "removeEntryButtonLabel": "Удалить запись",
+  "requiredMessage": "Это обязательный параметр."
+}

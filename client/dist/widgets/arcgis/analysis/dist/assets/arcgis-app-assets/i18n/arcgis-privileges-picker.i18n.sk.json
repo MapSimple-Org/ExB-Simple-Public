@@ -1,0 +1,592 @@
+{
+  "rolePrivileges": "Oprávnenia na roly",
+  "setFromExisting": "Nastavené z existujúcej úlohy",
+  "expandAll": "Rozbaliť všetko",
+  "generalPrivileges": "Všeobecné privilégiá",
+  "adminPrivileges": "Privilégiá správcu",
+  "enabledLabel": "Povolené:",
+  "enableAll": "Povoliť všetko",
+  "disableAll": "Zakázať všetko",
+  "members": "Členovia",
+  "groups": "Skupiny",
+  "content": "Obsah",
+  "sharing": "Zdieľanie",
+  "premiumContent": "Prémiový obsah",
+  "premiumContentServices": "Prémiový obsah a služby",
+  "contentAndAnalysis": "Obsah a analýza",
+  "features": "Prvky",
+  "versionMgmt": "Správa verzií",
+  "webhooks": "Webhooky",
+  "marketplaceSubscriptions": "Predplatné ArcGIS Marketplace",
+  "orgSettings": "Nastavenia organizácie",
+  "learnMore": "Zistiť viac",
+  "searchPrivileges": "Oprávnenia vyhľadávania",
+  "notebooks": "Notebooky",
+  "analysis": "Analýzy",
+  "networkAnalysis": "Sieťové analýzy",
+  "locationServices": "Lokalizačné služby",
+  "requiredService": "Požadovaná služba",
+  "availableServices": "Dostupné služby",
+  "basemaps": "Podkladové mapy",
+  "staticMaps": "Statické mapy",
+  "places": "Miesta",
+  "geocoding": "Geokódovanie",
+  "routing": "Trasovanie",
+  "dataEnrichment": "Obohatenie dát",
+  "boundaries": "Hranice",
+  "elevation": "Výška",
+  "spatialPrivileges": "Priestorové analýzy",
+  "featureAnalysis": "Analýzy prvkov",
+  "imageAnalysis": "Snímkové analýzy",
+  "readOnlyBasemapsTooltip": "Prístup k podkladovým mapám je zahrnutý.",
+  "privileges": {
+    "portal:user:viewOrgUsers": {
+      "label": "Zobraziť",
+      "description": "Umožniť členom zobraziť členov organizácie.",
+      "descriptionPortal": "Povoliť členovi zobraziť členov portálu.",
+      "descriptionApp": "Umožnite aplikácii zobrazovať členov organizácie."
+    },
+    "portal:user:createGroup": {
+      "label": "Vytvárajte, aktualizujte a odstraňujte",
+      "description": "Povoliť členom vytvárať, upravovať a mazať svoje vlastné skupiny.",
+      "descriptionApp": "Umožnite aplikácii vytvárať, editovať a mazať skupiny vlastníka aplikácie."
+    },
+    "portal:user:joinGroup": {
+      "label": "Pripojte sa k organizačným skupinám",
+      "description": "Povoliť členom, aby sa pripojil ku skupinám v rámci vašej organizácie.",
+      "descriptionPortal": "Povoliť členom pripojiť sa k skupinám v rámci vášho portálu.",
+      "descriptionApp": "Umožnite aplikácii pridávať sa do skupín vo vašej organizácii."
+    },
+    "portal:user:joinNonOrgGroup": {
+      "label": "Pripojte sa k externým skupinám",
+      "description": "Umožnite členom pripojiť sa k skupinám, ktoré sú mimo vašej organizácie.",
+      "descriptionPortal": "Povoliť členom pripojiť sa k skupinám, ktoré nie sú súčasťou vášho portálu.",
+      "descriptionApp": "Umožnite aplikácii pripojiť sa k skupinám, ktoré sú mimo vašej organizácie."
+    },
+    "portal:user:viewOrgGroups": {
+      "label": "Zobraziť skupiny zdieľané s organizáciou",
+      "description": "Povoliť členom zobraziť skupiny zdieľané s organizáciou.",
+      "descriptionPortal": "Povoliť členom zobraziť skupiny zdieľané s portálom.",
+      "descriptionApp": "Umožnite aplikácii zobraziť skupiny zdieľané s organizáciou."
+    },
+    "portal:user:invitePartneredCollaborationMembers": {
+      "label": "Pozvať členov partnerskej organizácie",
+      "description": "Povoliť členom pozývanie členov z organizácií partnerskej spolupráce do skupín.",
+      "descriptionApp": "Umožnite aplikácii pozývať členov z organizácií partnerskej spolupráce do skupín."
+    },
+    "portal:user:addExternalMembersToGroup": {
+      "label": "Pridanie členov z iných organizácií",
+      "description": "Povoliť členom vytváranie skupín s členmi z iných organizácií a pozývanie externých členov do skupín.",
+      "descriptionApp": "Umožnite aplikácii vytvárať skupiny s členmi z iných organizácií ako aj pozývať externých členov do skupín."
+    },
+    "portal:user:createItem": {
+      "label": "Vytvárajte, aktualizujte a odstraňujte",
+      "description": "Povoliť členovi vytvárať, upravovať a mazať svoj vlastný obsah.",
+      "descriptionApp": "Umožnite aplikácii vytvárať, editovať a mazať obsah vlastníka aplikácie."
+    },
+    "portal:publisher:publishFeatures": {
+      "label": "Publikovanie vrstiev hostovaných prvkov",
+      "description": "Povoliť členom publikovať hostené vrstvy funkcií z shapefiles, CSV atď.",
+      "descriptionApp": "Umožnite aplikácii publikovať hostované prvkové vrstvy zo shapefiles, CSV atď."
+    },
+    "portal:publisher:publishTiles": {
+      "label": "Zverejnite hostené vrstvy dlaždíc",
+      "description": "Povoliť členom publikovať hostené vrstvy dlaždíc z balíkov dlaždíc, funkcií atď.",
+      "descriptionApp": "Umožnite aplikácii publikovať hostované dlaždicové vrstvy z balíkov dlaždíc, prvkov atď."
+    },
+    "portal:publisher:publishScenes": {
+      "label": "Publikujte vrstvy hostovaných scén",
+      "description": "Povoliť členovi publikovať hostené vrstvy scény.",
+      "descriptionApp": "Umožnite aplikácii publikovať hostované scénové vrstvy."
+    },
+    "portal:publisher:publishTiledImagery": {
+      "label": "Publikovať hostované snímkové vrstvy dlaždíc",
+      "description": "Povoliť členom publikovať hostované dlaždicové snímkové vrstvy z jednej snímky alebo z kolekcie snímok. Vyžaduje sa extenzia pre používateľský typ ArcGIS Image for ArcGIS Online.",
+      "descriptionPortal": "Povoliť členom publikovať hostované dlaždicové snímkové vrstvy z jednej snímky alebo z kolekcie snímok.",
+      "descriptionApp": "Umožnite aplikácii publikovať hostované dlaždicové snímkové vrstvy z jednej snímky alebo z kolekcie snímok. Vyžaduje licenciu ArcGIS Image Hosting."
+    },
+    "portal:publisher:publishDynamicImagery": {
+      "label": "Publikovať hostované vrstvy dynamických snímok",
+      "description": "Povoliť členom publikovať hostované vrstvy dynamických snímok z jednej snímky alebo z kolekcie snímok.",
+      "descriptionApp": "Umožnite aplikácii publikovať hostované dynamické snímkové vrstvy z jednej snímky alebo z kolekcie snímok."
+    },
+    "portal:publisher:publishServerServices": {
+      "label": "Publikovanie vrstiev na serveri",
+      "description": "Toto privilégium poskytuje možnosť zverejňovať vrstvy využívané službami zo stránok federovaných serverov. Tieto služby často odkazujú na registrované údaje z geodatabáz alebo zo zdrojov údajov založených na súboroch."
+    },
+    "portal:publisher:publishKnowledgeGraph": {
+      "label": "Publikovať hostované Knowledge grafy",
+      "description": "Povoliť členovi publikovať hostované Knowledge grafy.",
+      "descriptionApp": "Umožnite aplikácii publikovať hostované znalostné grafy."
+    },
+    "portal:user:viewOrgItems": {
+      "label": "Zobraziť obsah zdieľaný s organizáciou",
+      "description": "Povoliť členovi prezerať obsah zdieľaný v organizácii.",
+      "descriptionPortal": "Povoliť členom prezerať obsah zdieľaný na portáli.",
+      "descriptionApp": "Umožnite aplikácii prezerať obsah zdieľaný v organizácii."
+    },
+    "premium:publisher:createNotebooks": {
+      "label": "Vytvárajte a upravujte zápisníky",
+      "description": "Povoliť členom vytváranie a úpravu interaktívnych notebookov.",
+      "descriptionApp": "Umožnite aplikácii vytvárať a editovať interaktívne notebooky."
+    },
+    "premium:publisher:scheduleNotebooks": {
+      "label": "Plánovanie notebookov",
+      "description": "Povoliť členom plánovanie budúcich automatických spustení notebooku.",
+      "descriptionApp": "Umožnite aplikácii plánovať budúce automatické spustenia notebooku."
+    },
+    "portal:publisher:bulkPublishFromDataStores": {
+      "label": "Hromadné vytváranie funkcií z úložiska údajov",
+      "description": "Toto privilégium poskytuje možnosť publikovať webové vrstvy z registrovaného úložiska údajov."
+    },
+    "portal:publisher:registerDataStores": {
+      "label": "Registrujte ukladané údaje",
+      "description": "Toto privilégium poskytuje možnosť zaregistrovať data store úložiská na portáli."
+    },
+    "portal:user:viewTracks": {
+      "label": "Prezeranie skladieb miesta",
+      "description": "Povoliť členovi zobraziť stopy polohy členov prostredníctvom zdieľaných pohľadov stôp, ak je povolené zdieľanie polohy.",
+      "descriptionApp": "Umožnite aplikácii zobraziť stopy polohy členov prostredníctvom zdieľaných zobrazení stôp, ak je povolené zdieľanie polohy."
+    },
+    "portal:user:reassignItems": {
+      "label": "Znovu prideliť obsah",
+      "description": "Umožnite členovi priradiť iba jeho obsah inému členovi s povolením prijímať obsah.",
+      "descriptionApp": "Umožnite aplikácii priradiť iba obsah vlastníka aplikácie inému členovi s oprávnením prijímať obsah."
+    },
+    "portal:user:receiveItems": {
+      "label": "Prijímať obsah",
+      "description": "Umožnite členovi prijímať obsah, ktorý mu opätovne priradil iný člen s povolením na opätovné priradenie obsahu."
+    },
+    "portal:publisher:publishFeeds": {
+      "label": "Publikovať kanály",
+      "description": "Toto privilégium umožňuje zverejňovať kanály na príjem a zobrazenie údajov v reálnom čase pomocou ArcGIS Velocity."
+    },
+    "portal:publisher:publishRealTimeAnalytics": {
+      "label": "Publikovať analytiku v reálnom čase",
+      "description": "Toto privilégium poskytuje možnosť publikovať analytiku v reálnom čase na analýzu a spracovanie údajov v reálnom čase pomocou ArcGIS Velocity."
+    },
+    "portal:publisher:publishBigDataAnalytics": {
+      "label": "Publikovať analytiku big data",
+      "description": "Toto privilégium poskytuje možnosť publikovať analytiku údajov BigData na analýzu historických údajov pomocou ArcGIS Velocity."
+    },
+    "portal:publisher:createDataPipelines": {
+      "label": "Vytváranie a spúšťanie dátových reťazcov",
+      "description": "Umožniť členovi vytvárať, upravovať a spúšťať dátové reťazce.",
+      "descriptionApp": "Umožnite aplikácii vytvárať, editovať a spúšťať dátové reťazce."
+    },
+    "portal:publisher:publishLivestreamVideo": {
+      "label": "Publikovať živé video vysielanie",
+      "description": "Umožniť členovi publikovať hostované video vrstvy živého vysielania zo sieťových živých vysielaní a streamov.",
+      "descriptionApp": "Umožnite aplikácii publikovať hostované video vrstvy živého vysielania zo sieťových vysielaní videa a streamov."
+    },
+    "portal:publisher:publishVideo": {
+      "label": "Publikovať video",
+      "description": "Umožniť členovi publikovať hostované video vrstvy z video súboru a podporovaných video metadátových súborov.",
+      "descriptionApp": "Umožnite aplikácii publikovať hostované video vrstvy z video súboru a podporovaných video metadátových súborov."
+    },
+    "portal:user:shareToGroup": {
+      "label": "Zdieľať so skupinami",
+      "description": "Povoliť členovi zdieľať obsah do skupín.",
+      "descriptionApp": "Umožnite aplikácii zdieľať obsah v skupinách."
+    },
+    "portal:user:shareToOrg": {
+      "label": "Zdieľajte s organizáciou",
+      "labelPortal": "Zdieľajte s portálom",
+      "description": "Povoliť členovi zdieľať obsah s vašou organizáciou.",
+      "descriptionPortal": "Povoliť členom zdieľať obsah na vašom portáli.",
+      "descriptionApp": "Umožnite aplikácii zdieľať obsah vo vašej organizácii."
+    },
+    "portal:user:shareToPublic": {
+      "label": "Zdieľajte s verejnosťou",
+      "description": "Umožniť členovi verejne zdieľať svoj obsah, ak to povoľujú pravidlá organizácie týkajúce sa verejného zdieľania.",
+      "descriptionApp": "Umožnite aplikácii zdieľať obsah vlastníka aplikácie verejne, ak to povoľujú pravidlá organizácie týkajúce sa verejného zdieľania.",
+      "tooltip": "Ak organizácia neumožňuje členom zdieľať obsah verejne, potom členovia budú potrebovať administratívne oprávnenie na zdieľanie členského obsahu s verejnosťou."
+    },
+    "portal:user:shareGroupToOrg": {
+      "label": "Nastaviť skupiny ako viditeľné pre organizáciu",
+      "labelPortal": "Nastaviť skupiny ako viditeľné pre portál",
+      "description": "Povoliť členovi zdieľať obsah s vašou organizáciou.",
+      "descriptionPortal": "Povoliť členom zdieľať obsah na vašom portáli.",
+      "descriptionApp": "Umožnite aplikácii zdieľať obsah na vašom portáli."
+    },
+    "portal:user:shareGroupToPublic": {
+      "label": "Zviditeľnite skupiny pre verejnosť",
+      "description": "Umožniť členom sprístupniť skupiny verejnosti.",
+      "descriptionApp": "Povoliť aplikácii sprístupniť skupiny verejnosti."
+    },
+    "opendata:user:designateGroup": {
+      "label": "Sprístupniť skupiny službe Open Data",
+      "description": "Povoliť členovi, aby označil skupiny za dostupné pre použitie v Open Data.",
+      "descriptionApp": "Umožnite aplikácii označiť skupiny ako dostupné na použitie v Open Data."
+    },
+    "premium:user:basemaps": {
+      "label": "Štýlovacia služba podkladových máp",
+      "descriptionLocationPlatform": "Umožnite aplikácii prístup k štýlovacej službe podkladových máp."
+    },
+    "premium:user:staticbasemaptiles": {
+      "label": "Statické dlaždice podkladovej mapy",
+      "descriptionLocationPlatform": "Umožnite aplikácii prístup k službe statických dlaždíc podkladových máp."
+    },
+    "premium:user:staticMaps": {
+      "label": "Služba statických máp (beta)",
+      "descriptionLocationPlatform": "Umožnite aplikácii prístup k službe statických máp."
+    },
+    "premium:user:elevation": {
+      "label": "Služba nadmorskej výšky",
+      "descriptionLocationPlatform": "Umožnite aplikácii prístup k službe nadmorskej výšky."
+    },
+    "premium:user:geocode": {
+      "label": "Geokódovanie",
+      "description": "Povoliť členom vykonávať geokódovacie úlohy čerpajúce kredity s geokódovacou službou ArcGIS (alebo s pohľadom tohto lokátora).",
+      "descriptionApp": "Umožnite aplikácii vykonávať geokódovacie úlohy čerpajúce kredity s ArcGIS World Geocoding Service (alebo s pohľadom tohto lokátora)."
+    },
+    "premium:user:geocode:stored": {
+      "label": "Geokódovanie (uložené)",
+      "descriptionLocationPlatform": "Umožnite aplikácii prístup ku geokódovacej službe a vykonávanie uložených geokódovaní."
+    },
+    "premium:user:geocode:temporary": {
+      "label": "Geokódovanie (neuložené)",
+      "descriptionLocationPlatform": "Umožnite aplikácii prístup ku geokódovacej službe a vykonávanie neuložených geokódovaní."
+    },
+    "premium:user:networkanalysis": {
+      "label": "Trasovanie",
+      "description": "Umožnite členom vykonávať úlohy sieťovej analýzy, ako sú oblasti smerovania a času jazdy.",
+      "descriptionApp": "Umožnite aplikácii prístup k službe trasovania."
+    },
+    "premium:user:networkanalysis:closestfacility": {
+      "label": "Najbližšie zariadenie",
+      "descriptionLocationPlatform": "Umožnite aplikácii prístup k službe trasovania a vykonávanie operácií trasovania najbližšieho zariadenia."
+    },
+    "premium:user:networkanalysis:lastmiledelivery": {
+      "label": "Doručenie na poslednej míli",
+      "descriptionLocationPlatform": "Umožnite aplikácii prístup k službe trasovania a vykonávanie operácií trasovania pre doručenie na poslednej míli."
+    },
+    "premium:user:networkanalysis:snaptoroads": {
+      "label": "Prichytiť na cesty",
+      "descriptionLocationPlatform": "Umožniť členovi vykonávať úlohy sieťových analýz, ako napríklad prichytávanie bodov GPS trasy k cestám."
+    },
+    "premium:user:networkanalysis:locationallocation": {
+      "label": "Pridelenie polohy",
+      "descriptionLocationPlatform": "Umožnite aplikácii prístup k službe trasovania a vykonávanie lokačno-alokačných operácií."
+    },
+    "premium:user:networkanalysis:routing": {
+      "label": "Jednoduché trasovanie",
+      "descriptionLocationPlatform": "Umožnite aplikácii prístup k službe trasovania a vykonávanie operácií štandardného trasovania."
+    },
+    "premium:user:networkanalysis:optimizedrouting": {
+      "label": "Optimalizované trasovanie",
+      "descriptionLocationPlatform": "Umožnite aplikácii prístup k službe trasovania a vykonávanie operácií optimalizovaného trasovania."
+    },
+    "premium:user:networkanalysis:vehiclerouting": {
+      "label": "Trasovanie viacerých vozidiel",
+      "descriptionLocationPlatform": "Trasovanie viacerých vozidiel umožňuje aplikácii pristupovať k službe trasovania a vykonávať operácie trasovania vozového parku."
+    },
+    "premium:user:networkanalysis:origindestinationcostmatrix": {
+      "label": "Matica nákladov Origin-Destination",
+      "descriptionLocationPlatform": "Umožnite aplikácii prístup k službe trasovania a generovanie matice cestovných nákladov."
+    },
+    "premium:user:networkanalysis:servicearea": {
+      "label": "Servisná oblasť",
+      "descriptionLocationPlatform": "Umožnite aplikácii prístup k službe trasovania a generovanie servisných oblastí."
+    },
+    "premium:user:places": {
+      "label": "Places service",
+      "descriptionLocationPlatform": "Umožnite aplikácii prístup k službe miest."
+    },
+    "premium:user:spatialanalysis": {
+      "labelOld": "Služba priestorových analýz",
+      "label": "Služba prvkových analýz",
+      "labelPortal": "Štandardná prvková analýza",
+      "description": "Umožnite členom vykonávať úlohy prvkových analýz.",
+      "descriptionPortal": "Toto privilégium poskytuje možnosť vykonávať štandardné úlohy analýzy funkcií.",
+      "descriptionLocationPlatform": "Umožnite aplikácii prístup k službe prvkových analýz.",
+      "descriptionApp": "Umožnite aplikácii prístup k službe prvkových analýz."
+    },
+    "premium:user:geoenrichment": {
+      "label": "Služba GeoEnrichment",
+      "description": "Povoliť členom geokódovať funkcie.",
+      "descriptionLocationPlatform": "Umožnite aplikácii prístup k službe GeoEnrichment.",
+      "descriptionApp": "Umožnite aplikácii prístup k službe GeoEnrichment."
+    },
+    "premium:user:demographics": {
+      "label": "Demografické mapy",
+      "description": "Umožnite aplikácii prístup k prémiovým demografickým mapám v ArcGIS Living Atlas.",
+      "descriptionApp": "Umožnite aplikácii prístup k prémiovým demografickým mapám v ArcGIS Living Atlas.",
+      "descriptionLocationPlatform": "Umožnite aplikácii prístup k demografickým mapám v ArcGIS Living Atlas."
+    },
+    "premium:publisher:geoanalytics": {
+      "label": "GeoAnalytics prvkové analýzy",
+      "description": "Toto privilégium poskytuje možnosť vykonávať úlohy GeoAnalytics."
+    },
+    "premium:publisher:rasteranalysis": {
+      "label": "Snímkové analýzy",
+      "description": "Umožnite členom vykonávať úlohy snímkových analýz. Vyžaduje funkcionalitu snímkových analýz ArcGIS.",
+      "descriptionPortal": "Umožnite členom vykonávať úlohy analýzy snímok.",
+      "descriptionApp": "Umožnite aplikácii vykonávať úlohy snímkových analýz. Vyžaduje funkcionalitu snímkových analýz ArcGIS.",
+      "descriptionAppPortal": "Povoliť aplikácii vykonávať úlohy snímkových analýz."
+    },
+    "premium:publisher:createAdvancedNotebooks": {
+      "label": "Pokročilé notebooky",
+      "description": "Povoliť členom importovanie a používanie modulov ArcPy v notebookoch.",
+      "descriptionApp": "Umožnite aplikácii importovať a používať moduly ArcPy v notebookoch."
+    },
+    "portal:user:runWebTool": {
+      "label": "Spustiť webové nástroje",
+      "description": "Umožniť členovi spúšťať webové nástroje.",
+      "descriptionPortal": "Povoliť členom spúšťať webové nástroje publikované z notebookov.",
+      "descriptionApp": "Umožniť aplikácii spúšťať webové nástroje.",
+      "descriptionAppPortal": "Umožnite aplikácii spúšťať webové nástroje publikované z notebookov."
+    },
+    "portal:user:generateApiTokens": {
+      "label": "Generovať API kľúče",
+      "description": "Umožnite členovi generovať API kľúče."
+    },
+    "portal:user:assignPrivilegesToApps": {
+      "label": "Priradiť oprávnenia pre aplikácie OAuth 2.0",
+      "description": "Umožnite členom priraďovať oprávnenia pre aplikácie OAuth 2.0."
+    },
+    "portal:user:createWorkflow": {
+      "label": "Vytvoriť položku pracovného postupu",
+      "description": "Povoliť členom vytvárať položky správcovského pracovného postupu"
+    },
+    "premium:user:featurereport": {
+      "label": "Prehľad funkcií",
+      "description": "Povoliť členom vytvárať prehľady funkcií v prieskume123.",
+      "descriptionApp": "Umožnite aplikácii vytvárať reporty prvkov v Survey123."
+    },
+    "premium:user:realitymapping": {
+      "label": "Reality Mapping",
+      "description": "Umožnite členom vykonávať úlohy reality mapping."
+    },
+    "features:user:edit": {
+      "label": "Editovať",
+      "description": "Povoliť členom editovať prvky v editovateľných vrstvách, ktoré nie sú verejné, na základe možností úprav povolených vo vrstve.",
+      "descriptionApp": "Umožnite aplikácii editovať prvky v editovateľných vrstvách, ktoré nie sú verejné, na základe možností editovania povolených na vrstve."
+    },
+    "features:user:fullEdit": {
+      "label": "Editujte s plnou kontrolou",
+      "description": "Povoliť členom pridávať, odstraňovať a aktualizovať prvky v upraviteľnej hostiteľskej funkčnej vrstve bez ohľadu na možnosti úprav povolených vo vrstve.",
+      "descriptionApp": "Umožnite aplikácii pridávať, mazať a aktualizovať prvky v editovateľnej, hostovanej prvkovej vrstve bez ohľadu na editačné možnosti povolené na vrstve."
+    },
+    "features:user:manageVersions": {
+      "label": "Spravovať všetky",
+      "description": "Umožnite členom spravovať zámky verzií a prezerať, meniť, mazať, upravovať, porovnávať a uverejňovať príspevky do všetkých verzií vetiev, ktoré sú prístupné cez vrstvy funkcií servera ArcGIS.",
+      "descriptionApp": "Umožnite aplikácii spravovať zámky verzií a prezerať, meniť, mazať, editovať, zosúlaďovať a odosielať do všetkých branch verzií, ku ktorým sa pristupuje cez prvkové vrstvy ArcGIS servera."
+    },
+    "portal:publisher:createFeatureWebhook": {
+      "label": "Prvková vrstva",
+      "description": "Umožniť členovi vytvárať, editovať a mazať vlastné webhooky prvkových vrstiev.",
+      "descriptionApp": "Umožnite aplikácii vytvárať, editovať a mazať vlastné webhooky prvkových vrstiev."
+    },
+    "portal:admin:viewUsers": {
+      "label": "Zobraziť všetko",
+      "description": "Umožnite členom zobraziť úplné informácie o účte člena vo vašej organizácii.",
+      "descriptionPortal": "Umožnite členom zobraziť úplné informácie o účte člena vo vašom portáli.",
+      "descriptionApp": "Umožnite aplikácii zobraziť úplné informácie o účte člena v rámci vašej organizácie."
+    },
+    "portal:admin:updateUsers": {
+      "label": "Aktualizovať",
+      "description": "Umožnite členom resetovať heslá, aktualizovať informácie o účtoch členov a aktualizovať kategórie členov v rámci vašej organizácie.",
+      "descriptionPortal": "Umožniť členovi resetovať heslá, aktualizovať informácie o členskom účte a aktualizovať členské kategórie v rámci portálu.",
+      "descriptionApp": "Umožnite aplikácii resetovať heslá, aktualizovať informácie o účtoch členov a aktualizovať kategórie členov v rámci vašej organizácie."
+    },
+    "portal:admin:deleteUsers": {
+      "label": "Zmazať",
+      "description": "Povoliť členovi mazať členské účty vo vašej organizácii.",
+      "descriptionPortal": "Povoliť členom odstraňovať členské účty z vášho portálu.",
+      "descriptionApp": "Umožnite aplikácii mazať členské účty vo vašej organizácii."
+    },
+    "portal:admin:inviteUsers": {
+      "label": "Pridať",
+      "labelPortal": "Pozvať",
+      "description": "Umožnite členom pozvať členov do vašej organizácie.",
+      "descriptionPortal": "Povoliť členom pozvať členov na váš portál.",
+      "descriptionApp": "Umožnite aplikácii pozvať členov do vašej organizácie."
+    },
+    "portal:admin:disableUsers": {
+      "label": "Zakázať",
+      "description": "Povoliť členovi povoliť a zakázať členské účty vo vašej organizácii.",
+      "descriptionPortal": "Povoliť členom povoliť a zakázať členské účty vo vašom portáli.",
+      "descriptionApp": "Umožnite aplikácii povoľovať a zakazovať členské účty vo vašej organizácii."
+    },
+    "portal:admin:changeUserRoles": {
+      "label": "Zmena rolí",
+      "description": "Povoliť členovi zmeniť rolu, ktorej je pridelený členský účet. Upozorňujeme, že iba členovia s rolou administrátora môžu priradiť alebo zrušiť priradenie roly administrátora k iným účtom.",
+      "descriptionPortal": "Povoliť členovi zmeniť rolu, ktorej je pridelený členský účet. Upozorňujeme, že iba členovia s rolou administrátora môžu priradiť alebo zrušiť priradenie roly administrátora k iným účtom.",
+      "descriptionApp": "Umožnite aplikácii zmeniť rolu, ku ktorej je pridelený účet člena. Upozorňujeme, že iba členovia s rolou administrátora môžu priradiť alebo zrušiť priradenie roly administrátora k iným účtom."
+    },
+    "portal:admin:manageLicenses": {
+      "label": "Spravovujte licencie",
+      "description": "Povoliť členom prideľovať licencie členom vašej organizácie.",
+      "descriptionPortal": "Povoliť členom prideľovať licencie členom vášho portálu.",
+      "descriptionApp": "Umožnite aplikácii prideľovať licencie členom vašej organizácie."
+    },
+    "portal:admin:updateMemberCategorySchema": {
+      "label": "Spravovať kategórie",
+      "description": "Povoliť členovi konfigurovať kategórie členov organizácie.",
+      "descriptionPortal": "Povoliť členovi konfigurovať kategórie členov portálu.",
+      "descriptionApp": "Umožnite aplikácii konfigurovať kategórie členov organizácie."
+    },
+    "portal:admin:viewGroups": {
+      "label": "Zobraziť všetko",
+      "description": "Povoliť členovi zobraziť všetky skupiny vo vašej organizácii.",
+      "descriptionPortal": "Povoliť členovi zobraziť všetky skupiny v rámci vášho portálu.",
+      "descriptionApp": "Umožnite aplikácii zobrazovať všetky skupiny v rámci vašej organizácie."
+    },
+    "portal:admin:updateGroups": {
+      "label": "Aktualizovať",
+      "description": "Povoliť členom aktualizovať skupiny vo vašej organizácii.",
+      "descriptionPortal": "Povoliť členom aktualizovať skupiny v rámci vášho portálu.",
+      "descriptionApp": "Umožnite aplikácii aktualizovať skupiny vo vašej organizácii."
+    },
+    "portal:admin:deleteGroups": {
+      "label": "Zmazať",
+      "description": "Povoliť členom odstraňovať skupiny vo vašej organizácii.",
+      "descriptionPortal": "Povoliť členom odstraňovať skupiny v rámci vášho portálu.",
+      "descriptionApp": "Umožnite aplikácii odstraňovať skupiny vo vašej organizácii."
+    },
+    "portal:admin:reassignGroups": {
+      "label": "Znovu prideliť vlastníctvo",
+      "description": "Umožnite členovi prideliť skupiny ďalším členom vašej organizácie.",
+      "descriptionPortal": "Povoliť členom, aby priradil skupiny ďalším členom vo vašom portáli.",
+      "descriptionApp": "Umožnite aplikácii zmeniť priradenie skupín ďalším členom vašej organizácie."
+    },
+    "portal:admin:assignToGroups": {
+      "label": "Priradiť členov",
+      "description": "Povoliť členom priradiť svojich členov, aktualizovať skupinovú úlohu člena a odstrániť svojich členov zo skupín vo vašej organizácii.",
+      "descriptionPortal": "Povoliť členom priradiť svojich členov, aktualizovať skupinovú úlohu člena a odstrániť svojich členov zo skupín v rámci vášho portálu.",
+      "descriptionApp": "Umožnite aplikácii priradiť vašich členov, aktualizovať rolu člena v skupine a odstrániť členov zo skupín v rámci vašej organizácie."
+    },
+    "portal:admin:manageEnterpriseGroups": {
+      "label": "Prepojenie na skupinu špecifickú pre organizáciu",
+      "description": "Povoliť členovi prepojiť členstvo v skupine so skupinou špecifickou pre organizáciu.",
+      "descriptionApp": "Umožnite aplikácii prepojiť členstvo v skupine so skupinou špecifickou pre organizáciu."
+    },
+    "portal:admin:createUpdateCapableGroup": {
+      "label": "Vytvoriť pomocou možností aktualizácie",
+      "description": "Povoliť členom vytvárať skupiny s možnosťou aktualizácie.",
+      "descriptionApp": "Umožnite aplikácii vytvárať skupiny s možnosťou aktualizácie."
+    },
+    "portal:admin:createLeavingDisallowedGroup": {
+      "label": "Vytvoriť pomocou zakázaného odchodu",
+      "description": "Umožniť členovi vytvárať a vlastniť skupiny, ktoré členom neumožňujú odísť (administratívne skupiny).",
+      "descriptionApp": "Povoliť aplikácii vytvárať a vlastniť skupiny, ktoré aplikáciám neumožňujú odísť (administratívne skupiny)."
+    },
+    "portal:admin:viewItems": {
+      "label": "Zobraziť všetko",
+      "description": "Povoliť členovi prezerať všetok obsah vo vašej organizácii.",
+      "descriptionPortal": "Povoliť členovi prezerať všetok obsah vo vašom portáli.",
+      "descriptionApp": "Umožnite aplikácii zobrazovať celý obsah v rámci vašej organizácie."
+    },
+    "portal:admin:updateItems": {
+      "label": "Aktualizovať",
+      "description": "Umožniť členovi aktualizovať a kategorizovať obsah a editovať hostované prvkové vrstvy vo vašej organizácii.",
+      "descriptionPortal": "Umožniť členovi aktualizovať a kategorizovať obsah a editovať hostované prvkové vrstvy na portáli.",
+      "descriptionApp": "Umožnite aplikácii aktualizovať a kategorizovať obsah a editovať hostované prvkové vrstvy vo vašej organizácii."
+    },
+    "portal:admin:deleteItems": {
+      "label": "Zmazať",
+      "description": "Povoliť členovi mazať obsah vo vašej organizácii.",
+      "descriptionPortal": "Povoliť členovi mazať obsah z vášho portálu.",
+      "descriptionApp": "Umožnite aplikácii mazať obsah vo vašej organizácii."
+    },
+    "portal:admin:reassignItems": {
+      "label": "Znovu prideliť vlastníctvo",
+      "description": "Umožnite členom preradiť obsah iným členom vašej organizácie.",
+      "descriptionPortal": "Povoliť členom, aby znovu pridelil obsah ostatným členom vo vašom portáli.",
+      "descriptionApp": "Umožnite aplikácii preradiť obsah iným členom vašej organizácie."
+    },
+    "portal:admin:updateItemCategorySchema": {
+      "label": "Spravovať kategórie",
+      "description": "Povoliť členovi konfigurovať kategórie obsahu organizácie.",
+      "descriptionPortal": "Povoliť členovi konfigurovať kategórie obsahu portálu.",
+      "descriptionApp": "Umožnite aplikácii konfigurovať kategórie obsahu organizácie."
+    },
+    "portal:publisher:publishServerGPServices": {
+      "label": "Publikovanie webových nástrojov",
+      "description": "Toto privilégium poskytuje možnosť publikovať webové nástroje podporované geoprocesnými službami z miest federatívnych serverov."
+    },
+    "portal:admin:shareToOrg": {
+      "label": "Zdieľať členský obsah s organizáciou",
+      "description": "Povoliť členovi zdieľať obsah, ktorý vlastnia iní členovia vašej organizácie, s organizáciou.",
+      "descriptionPortal": "Povoliť členovi zdieľať obsah, ktorý vlastnia iní členovia vášho portálu, s portálom.",
+      "descriptionApp": "Umožnite aplikácii zdieľať obsah, ktorý vlastnia iní členovia vašej organizácie, s organizáciou."
+    },
+    "portal:admin:shareToPublic": {
+      "label": "Zdieľať členský obsah s verejnosťou",
+      "description": "Povoliť členovi zdieľať obsah, ktorý vlastnia iní členovia vašej organizácie, s verejnosťou.",
+      "descriptionPortal": "Povoliť členovi zdieľať obsah, ktorý vlastnia iní členovia portálu, s verejnosťou.",
+      "descriptionApp": "Umožnite aplikácii zdieľať obsah, ktorý vlastnia iní členovia vašej organizácie, s verejnosťou."
+    },
+    "portal:admin:createReports": {
+      "label": "Vytvárať a spravovať administratívne reporty",
+      "description": "Umožniť členovi vytvárať a spravovať administratívne reporty pre vašu organizáciu.",
+      "descriptionPortal": "Umožniť členovi vytvárať a spravovať administratívne reporty pre váš portál.",
+      "descriptionApp": "Umožnite aplikácii vytvárať a spravovať administratívne reporty pre vašu organizáciu."
+    },
+    "marketplace:admin:manage": {
+      "label": "Vytvárajte a spravujte",
+      "description": "Umožnite členom vytvárať zoznamy, položky zoznamu, spravovať predplatné na ArcGIS Marketplace, ako aj spravovať nákupcov a kontaktné informácie pre vašu organizáciu. Použitie tohto privilégia závisí od toho, či vaša organizácia získa prístup k zoznamu a publikovaniu na trhu ArcGIS Marketplace."
+    },
+    "marketplace:admin:purchase": {
+      "label": "Nákup a získanie bezplatných produktov",
+      "description": "Umožnite členom odosielať žiadosti o nákup a prístup k bezplatným produktom od poskytovateľov na ArcGIS Marketplace. Ak chcete členom umožniť nákup produktov pomocou kreditných kariet, musíte ich označiť ako nákupcov trhu."
+    },
+    "marketplace:admin:startTrial": {
+      "label": "Začať skúšky",
+      "description": "Umožnite členom začať skúšobné odbery v rámci ArcGIS Marketplace."
+    },
+    "portal:admin:manageSecurity": {
+      "label": "Bezpečnosť a infraštruktúra",
+      "description": "Povoliť členom spravovať nastavenia zabezpečenia a infraštruktúry organizácie.",
+      "descriptionPortal": "Povoliť členom spravovať nastavenia zabezpečenia a infraštruktúry portálu.",
+      "descriptionApp": "Umožnite aplikácii spravovať nastavenia zabezpečenia a infraštruktúry organizácie."
+    },
+    "portal:admin:manageWebsite": {
+      "label": "Webová stránka organizácie",
+      "description": "Povoliť členovi spravovať nastavenia webových stránok organizácie.",
+      "descriptionPortal": "Povoliť členovi spravovať nastavenia webových stránok portálu.",
+      "descriptionApp": "Umožnite aplikácii spravovať nastavenia webovej lokality organizácie."
+    },
+    "portal:admin:manageCollaborations": {
+      "label": "spolupráca",
+      "description": "Povoliť členom spravovať spoluprácu organizácie.",
+      "descriptionPortal": "Povoliť členom spravovať spoluprácu portálu.",
+      "descriptionApp": "Umožnite aplikácii spravovať spolupráce organizácie."
+    },
+    "portal:admin:manageCredits": {
+      "label": "Kredity",
+      "description": "Povoliť členovi spravovať nastavenia rozpočtovania úverov organizácie.",
+      "descriptionApp": "Umožnite aplikácii spravovať nastavenia kreditového rozpočtu organizácie."
+    },
+    "portal:admin:manageRoles": {
+      "label": "Členské úlohy",
+      "description": "Povoliť členom spravovať členské úlohy organizácie.",
+      "descriptionPortal": "Povoliť členom spravovať členské role portálu.",
+      "descriptionApp": "Umožnite aplikácii spravovať roly členov organizácie."
+    },
+    "portal:admin:manageServers": {
+      "label": "Servery",
+      "description": "Toto privilégium poskytuje možnosť spravovať nastavenia servera portálu."
+    },
+    "portal:admin:manageUtilityServices": {
+      "label": "Utilitné služby",
+      "description": "Povoliť členovi spravovať nastavenia obslužných služieb organizácie.",
+      "descriptionPortal": "Povoliť členom spravovať nastavenia obslužných služieb portálu.",
+      "descriptionApp": "Umožnite aplikácii spravovať nastavenia utility služieb organizácie."
+    },
+    "portal:admin:manageWebhooks": {
+      "label": "Webhooky",
+      "labelPortal": "Webhooky organizácie",
+      "description": "Umožniť členovi vytvárať, editovať a mazať všetky webhooky vo vašej organizácii.",
+      "descriptionApp": "Umožniť aplikácii vytvárať, editovať a mazať všetky webhooky vo vašej organizácii.",
+      "descriptionPortal": "Umožniť členovi vytvárať, editovať a mazať webhooky organizácie a spravovať všetky webhooky v rámci portálu.",
+      "descriptionAppPortal": "Umožnite aplikácii vytvárať, editovať a mazať webhooky organizácie a spravovať všetky webhooky v rámci portálu."
+    },
+    "portal:admin:createGPWebhook": {
+      "label": "Geoprocessing",
+      "description": "Umožniť členovi vytvárať, editovať a mazať vlastné geoprocesné webhooky.",
+      "descriptionApp": "Umožnite aplikácii vytvárať, editovať a mazať vlastné geoprocesné webhooky."
+    }
+  }
+}

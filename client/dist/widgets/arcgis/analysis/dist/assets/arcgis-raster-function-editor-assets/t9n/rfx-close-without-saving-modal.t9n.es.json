@@ -1,0 +1,7 @@
+{
+  "header": "Editor de funciones ráster",
+  "content": "Hay cambios sin guardar en \"${rftTitle}\". Si no guarda, esos cambios se perderán.",
+  "cancel": "Cancelar",
+  "dontSave": "No guardar",
+  "save": "Guardar"
+}

@@ -1,0 +1,1 @@
+System.register([],function(e){return{execute:function(){e({_widgetLabel:"Versorgungsnetz-Verfolgung",_widgetDescription:"Ein Widget zum Verfolgen eines ArcGIS Utility Network",_action_filter_label:"Filtern"})}}});

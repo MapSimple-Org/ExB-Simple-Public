@@ -1,0 +1,17 @@
+{
+  "any": "Oricare",
+  "count": "Număr",
+  "field": "Câmp",
+  "fieldLoadingErrorText": "Imposibil de încărcat câmpuri.",
+  "first": "La început",
+  "isRequired": "Acest parametru este obligatoriu.",
+  "last": "La sfârşit",
+  "max": "Maximă",
+  "mean": "Medie",
+  "min": "Minimă",
+  "selectAll": "Selectare globală",
+  "standardDeviation": "Deviație standard",
+  "statistic": "Statistică",
+  "statisticNotSelected": "Este necesar cel puțin un tip static pentru fiecare câmp.",
+  "sum": "Sumă"
+}

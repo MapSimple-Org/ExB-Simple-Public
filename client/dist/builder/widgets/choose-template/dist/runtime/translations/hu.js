@@ -1,0 +1,1 @@
+System.register([],function(e){return{execute:function(){e({_widgetLabel:"\xdaj \xe9lm\xe9ny l\xe9trehoz\xe1sa",createNewApp:"\xdaj alkalmaz\xe1s l\xe9trehoz\xe1sa",largeDevices:"Nagy k\xe9perny\u0151j\u0171 eszk\xf6z\xf6k",mediumDevices:"K\xf6zepes k\xe9perny\u0151j\u0171 eszk\xf6z\xf6k",smallDevices:"Kis k\xe9perny\u0151j\u0171 eszk\xf6z\xf6k"})}}});

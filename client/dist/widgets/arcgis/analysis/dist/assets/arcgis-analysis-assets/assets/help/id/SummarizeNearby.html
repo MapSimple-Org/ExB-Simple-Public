@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>Alat Ringkas Sekitar menghitung statistik untuk fitur dalam jarak yang ditentukan dari fitur lain. Jarak dapat dihitung menggunakan jarak garis lurus atau mode perjalanan.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="summaryLayer">
+        <div>
+            <p>Layer yang akan diringkas dalam jarak dari layer sekitar.
+            </p>
+            <p class="toolPaneOnly">Jumlah fitur bergantung pada faktor tambahan seperti kriteria pemfilteran dan jangkauan analisis.
+            </p>
+        </div>
+    </div>
+    <div id="sumNearbyLayer">
+        <div>
+            <p>Titik, garis, atau layer poligon yang akan digunakan sebagai lokasi awal sekitar yang membatasi area akan dibuat untuk meringkas fitur sekitar.
+            </p>
+            <p class="toolPaneOnly">Jumlah fitur bergantung pada faktor tambahan seperti kriteria pemfilteran dan jangkauan analisis.
+            </p>
+        </div>
+    </div>
+    <div id="nearType">
+        <div>
+            
+            <p class="toolPaneOnly">Metode yang akan digunakan untuk membuat area pembatas. Metoda tersebut dapat berupa jarak garis lurus atau mode perjalanan.
+            </p> 
+            <p class="modelBuilderOnly">Metode yang akan digunakan untuk membuat area pembatas. Saat ini, jarak garis lurus adalah satu-satunya metode yang didukung untuk model.
+            </p>
+        </div>
+    </div>
+    <div id="distances">
+        <div>
+            <p>Jarak atau waktu yang akan digunakan untuk membuat area pembatas. Jika ada banyak nilai ditambahkan, tiap nilai akan digunakan untuk menghitung area pembatas untuk semua fitur input.
+            </p>
+        </div>
+    </div>
+    <div id="units">
+        <div>
+            <p>Unit yang akan digunakan untuk menentukan jarak atau waktu.
+            </p>
+        </div>
+    </div>
+    <div id="returnBoundaries">
+        <div>
+            <p>Menentukan apakah layer hasil akan berupa area pembatas (dicentang) atau geometri yang sama seperti layer di sekitar input (tidak dicentang).
+            </p>
+        </div>
+    </div>
+    <div id="sumShape">
+        <div>
+            <p>Menentukan apakah ukuran total dari fitur yang diringkas dalam tiap area pembatas akan dihitung. Untuk garis, panjang total akan dihitung. Untuk poligon, area total akan dihitung.
+            </p>
+        </div>
+    </div>
+    <div id="shapeUnits">
+        <div>
+            <p>Unit yang akan digunakan untuk menghitung ukuran total dari fitur yang diringkas.
+            </p>
+        </div>
+    </div>
+    <div id="summaryFields">
+        <div>
+            <p>Kolom jumlah atau tanggal dari layer input yang akan diringkas, dan akan digunakan statistiknya untuk menghitung setiap kolom.
+            </p>
+        </div>
+    </div>
+    <div id="groupByField">
+        <div>
+            <p>Kolom layer input yang akan digunakan untuk memisahkan data ke dalam kelompok yang berbeda untuk perhitungan statistik.
+            </p>
+        </div>
+    </div>
+    <div id="minorityMajority">
+        <div>
+            <p>Menentukan apakah akan menghitung kelompok minoritas (paling tidak dominan) dan mayoritas (paling dominan) dalam setiap area ringkasan.
+            </p>
+        </div>
+    </div>
+    <div id="percentShape">
+        <div>
+            <p>Menentukan apakah persentase fitur yang diringkas yang merupakan bagian dari tiap grup dalam setiap batasan akan dihitung.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>Nama layer yang akan dibuat dan ditambahkan ke peta.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>Nama folder di  <b>Konten saya</b> tempat penyimpanan hasil.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

@@ -1,0 +1,11 @@
+{
+  "newTemplate": "Izveidot jaunu veidni",
+  "openTemplate": "Atvērt veidni",
+  "addTemplate": "Pievienot veidni",
+  "addFunction": "Pievienot rastra funkcijas",
+  "addConstant": "Pievienot konstanti",
+  "addRaster": "Pievienot rastra mainīgo",
+  "expand": "Izvērst",
+  "editTemplateProperties": "Rediģēt veidnes rekvizītus",
+  "viewTemplateProperties": "Skatīt veidnes parametrus"
+}

@@ -1,0 +1,6 @@
+{
+  "header": "Recommencer sans enregistrer ?",
+  "content": "Certaines modifications ne sont pas enregistrées dans '${rftTitle}'. Si vous recommencez avec un nouveau modèle, ces modifications seront perdues.",
+  "cancel": "Annuler",
+  "continue": "Continuer"
+}

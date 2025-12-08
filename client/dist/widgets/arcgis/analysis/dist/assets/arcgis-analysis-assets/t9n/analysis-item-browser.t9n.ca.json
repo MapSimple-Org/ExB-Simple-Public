@@ -1,0 +1,9 @@
+{
+  "addToMap": "Confirma i afegeix al mapa",
+  "cancel": "Cancel·la",
+  "confirm": "Confirma",
+  "header": "Selecciona l'element",
+  "select": "Selecciona",
+  "unsupportedLayer": "Aquest paràmetre no admet les capes següents: ${layerName}.",
+  "viewDetails": "Mostra els detalls"
+}

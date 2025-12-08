@@ -1,0 +1,8 @@
+{
+  "loading": "Läser in...",
+  "pleaseWait": "Vänta.",
+  "loadingXMLRFT": "Läser in den valda rasterfunktionsmallen i XML-format.",
+  "failedToOpen": "Det gick inte att öppna.",
+  "readingFailed": "Det går inte att läsa in den valda rasterfunktionsmallen.",
+  "failedToLoadXML": "Det går inte att läsa in den valda rasterfunktionsmallen i XML-format."
+}

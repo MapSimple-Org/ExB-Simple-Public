@@ -1,0 +1,550 @@
+{
+  "layouts": {
+    "layout_1": {
+      "type": "FIXED",
+      "content": {
+        "8": {
+          "type": "WIDGET",
+          "widgetId": "widget_7",
+          "bbox": {
+            "left": "96.2%",
+            "right": "1.00%",
+            "top": "10.00%",
+            "bottom": "68.1%",
+            "width": "30.00px",
+            "height": "30.00px"
+          },
+          "setting": {
+            "autoProps": {
+              "right": false,
+              "left": true,
+              "top": false,
+              "bottom": true,
+              "height": {}
+            },
+            "vCenter": false,
+            "hCenter": false,
+            "heightMode": "ratio",
+            "aspectRatio": 1
+          }
+        },
+        "9": {
+          "type": "WIDGET",
+          "widgetId": "widget_3",
+          "bbox": {
+            "left": "135.00px",
+            "right": "37.5%",
+            "top": "15.00px",
+            "bottom": "61.1%",
+            "width": "70.00%",
+            "height": "32.00px"
+          },
+          "setting": {
+            "autoProps": {
+              "right": true,
+              "left": false,
+              "top": false,
+              "bottom": true
+            },
+            "vCenter": false,
+            "hCenter": false
+          }
+        },
+        "10": {
+          "type": "WIDGET",
+          "widgetId": "widget_4",
+          "bbox": {
+            "left": "135.00px",
+            "right": "55.8%",
+            "top": "49.00px",
+            "bottom": "36.2%",
+            "width": "70.00%",
+            "height": "30.00px"
+          },
+          "setting": {
+            "autoProps": {
+              "right": true,
+              "left": false,
+              "top": false,
+              "bottom": true
+            },
+            "vCenter": false,
+            "hCenter": false
+          }
+        },
+        "11": {
+          "type": "WIDGET",
+          "widgetId": "widget_6",
+          "bbox": {
+            "left": "283.00px",
+            "right": "63.3%",
+            "top": "70.7%",
+            "bottom": "10.00px",
+            "width": "11.0%",
+            "height": "28.00px"
+          },
+          "setting": {
+            "autoProps": {
+              "right": true,
+              "left": false,
+              "top": true,
+              "bottom": false,
+              "width": "AUTO"
+            },
+            "vCenter": false,
+            "hCenter": false
+          }
+        },
+        "12": {
+          "type": "WIDGET",
+          "widgetId": "widget_5",
+          "bbox": {
+            "left": "137.00px",
+            "right": "76.5%",
+            "top": "70.3%",
+            "bottom": "10.00px",
+            "width": "135.00px",
+            "height": "28.00px"
+          },
+          "setting": {
+            "autoProps": {
+              "right": true,
+              "left": false,
+              "top": true,
+              "bottom": false,
+              "width": "AUTO"
+            },
+            "vCenter": false,
+            "hCenter": false
+          }
+        },
+        "13": {
+          "type": "WIDGET",
+          "widgetId": "widget_2",
+          "bbox": {
+            "left": "20.00px",
+            "right": "89.7%",
+            "top": "50%",
+            "bottom": "12.6%",
+            "width": "100.00px",
+            "height": "90.00px"
+          },
+          "setting": {
+            "autoProps": {
+              "left": false,
+              "right": true,
+              "top": false,
+              "bottom": true
+            },
+            "vCenter": true,
+            "hCenter": false
+          }
+        }
+      },
+      "order": [
+        "8",
+        "9",
+        "10",
+        "11",
+        "12",
+        "13"
+      ],
+      "setting": {
+        "lockDescendants": true
+      }
+    },
+    "layout_2": {
+      "type": "FIXED",
+      "content": {
+        "8": {
+          "type": "WIDGET",
+          "widgetId": "widget_7",
+          "bbox": {
+            "left": "96.2%",
+            "right": "1.00%",
+            "top": "10.00%",
+            "bottom": "68.1%",
+            "width": "30.00px",
+            "height": "30.00px"
+          },
+          "setting": {
+            "autoProps": {
+              "right": false,
+              "left": true,
+              "top": false,
+              "bottom": true,
+              "height": {}
+            },
+            "vCenter": false,
+            "hCenter": false,
+            "heightMode": "ratio",
+            "aspectRatio": 1
+          }
+        },
+        "9": {
+          "type": "WIDGET",
+          "widgetId": "widget_3",
+          "bbox": {
+            "left": "75.00px",
+            "right": "37.5%",
+            "top": "15.00px",
+            "bottom": "61.1%",
+            "width": "70.00%",
+            "height": "32.00px"
+          },
+          "setting": {
+            "autoProps": {
+              "right": true,
+              "left": false,
+              "top": false,
+              "bottom": true
+            },
+            "vCenter": false,
+            "hCenter": false
+          }
+        },
+        "10": {
+          "type": "WIDGET",
+          "widgetId": "widget_4",
+          "bbox": {
+            "left": "75.00px",
+            "right": "55.8%",
+            "top": "49.00px",
+            "bottom": "36.2%",
+            "width": "70.00%",
+            "height": "30.00px"
+          },
+          "setting": {
+            "autoProps": {
+              "right": true,
+              "left": false,
+              "top": false,
+              "bottom": true
+            },
+            "vCenter": false,
+            "hCenter": false
+          }
+        },
+        "11": {
+          "type": "WIDGET",
+          "widgetId": "widget_6",
+          "bbox": {
+            "left": "223.00px",
+            "right": "63.3%",
+            "top": "70.7%",
+            "bottom": "10.00px",
+            "width": "11.0%",
+            "height": "28.00px"
+          },
+          "setting": {
+            "autoProps": {
+              "right": true,
+              "left": false,
+              "top": true,
+              "bottom": false,
+              "width": "AUTO"
+            },
+            "vCenter": false,
+            "hCenter": false
+          }
+        },
+        "12": {
+          "type": "WIDGET",
+          "widgetId": "widget_5",
+          "bbox": {
+            "left": "77.00px",
+            "right": "76.5%",
+            "top": "70.3%",
+            "bottom": "10.00px",
+            "width": "135.00px",
+            "height": "28.00px"
+          },
+          "setting": {
+            "autoProps": {
+              "right": true,
+              "left": false,
+              "top": true,
+              "bottom": false,
+              "width": "AUTO"
+            },
+            "vCenter": false,
+            "hCenter": false
+          }
+        },
+        "13": {
+          "type": "WIDGET",
+          "widgetId": "widget_2",
+          "bbox": {
+            "left": "10.00px",
+            "right": "89.7%",
+            "top": "50%",
+            "bottom": "12.6%",
+            "width": "60.00px",
+            "height": "60.00px"
+          },
+          "setting": {
+            "autoProps": {
+              "left": false,
+              "right": true,
+              "top": false,
+              "bottom": true
+            },
+            "vCenter": true,
+            "hCenter": false
+          }
+        }
+      },
+      "order": [
+        "8",
+        "9",
+        "10",
+        "11",
+        "12",
+        "13"
+      ],
+      "setting": {
+        "lockDescendants": true
+      }
+    }
+  },
+  "widgets": {
+    "widget_2": {
+      "uri": "widgets/common/image/",
+      "config": {
+        "functionConfig": {
+          "altText": "",
+          "toolTip": "",
+          "linkParam": {},
+          "scale": "Fit",
+          "imageParam": {},
+          "imageDisplayQualityMode": "ORIGINAL"
+        },
+        "styleConfig": {}
+      },
+      "id": "widget_2"
+    },
+    "widget_3": {
+      "uri": "widgets/common/text/",
+      "config": {
+        "text": "<p></p>",
+        "placeholder": "<p><strong style=\"font-size: 18px;\">${defaultTextPlaceholder}</strong></p>",
+        "style": {
+          "verticalAlign": "start",
+          "wrap": true
+        }
+      },
+      "id": "widget_3"
+    },
+    "widget_4": {
+      "uri": "widgets/common/text/",
+      "config": {
+        "text": "<p style=\"line-height: 1.5;\"><br></p>",
+        "placeholder": "<p><span style=\"font-size: 13px;\">Lorem ipsum dolor sit amet, ne debet assentior qui. Zril salutandi comprehensam an qui. An wisi efficiendi sit. Vel ea mentitum dissentiet.</span></p>",
+        "style": {
+          "verticalAlign": "start",
+          "wrap": true
+        }
+      },
+      "id": "widget_4"
+    },
+    "widget_5": {
+      "uri": "widgets/common/button/",
+      "config": {
+        "functionConfig": {
+          "icon": {
+            "data": {
+              "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" fill=\"none\" viewBox=\"0 0 16 16\"><path fill=\"#000\" fill-rule=\"evenodd\" d=\"M4.653 13.854a.485.485 0 0 1 0-.708L10.24 8 4.653 2.854a.485.485 0 0 1 0-.708.538.538 0 0 1 .738 0l5.956 5.5a.485.485 0 0 1 0 .708l-5.956 5.5a.538.538 0 0 1-.738 0\" clip-rule=\"evenodd\"></path></svg>",
+              "properties": {
+                "filename": "Swipe right arrow",
+                "originalName": "outlined/directional/right.svg",
+                "path": [
+                  "arrows",
+                  "arrowRight"
+                ],
+                "isUploaded": false,
+                "inlineSvg": true
+              }
+            },
+            "position": "RIGHT"
+          },
+          "text": "${variableButton}",
+          "textExpression": null
+        },
+        "styleConfig": {
+          "themeStyle": {
+            "quickStyleType": "link"
+          },
+          "useCustom": false,
+          "customStyle": {
+            "regular": {
+              "iconProps": {
+                "color": "#076fe5",
+                "size": 14
+              }
+            },
+            "hover": {
+              "iconProps": {
+                "color": "#005eca",
+                "size": 14
+              }
+            }
+          }
+        }
+      },
+      "id": "widget_5"
+    },
+    "widget_6": {
+      "uri": "widgets/common/button/",
+      "config": {
+        "functionConfig": {
+          "icon": {
+            "data": {
+              "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" fill=\"none\" viewBox=\"0 0 16 16\"><path fill=\"#000\" fill-rule=\"evenodd\" d=\"M4.653 13.854a.485.485 0 0 1 0-.708L10.24 8 4.653 2.854a.485.485 0 0 1 0-.708.538.538 0 0 1 .738 0l5.956 5.5a.485.485 0 0 1 0 .708l-5.956 5.5a.538.538 0 0 1-.738 0\" clip-rule=\"evenodd\"></path></svg>",
+              "properties": {
+                "filename": "Swipe right arrow",
+                "originalName": "outlined/directional/right.svg",
+                "path": [
+                  "arrows",
+                  "arrowRight"
+                ],
+                "isUploaded": false,
+                "inlineSvg": true
+              }
+            },
+            "position": "RIGHT"
+          },
+          "text": "${variableButton}",
+          "textExpression": null
+        },
+        "styleConfig": {
+          "themeStyle": {
+            "quickStyleType": "link"
+          },
+          "useCustom": false,
+          "customStyle": {
+            "regular": {
+              "iconProps": {
+                "color": "#076fe5",
+                "size": 14
+              }
+            },
+            "hover": {
+              "iconProps": {
+                "color": "#005eca",
+                "size": 14
+              }
+            }
+          }
+        }
+      },
+      "id": "widget_6"
+    },
+    "widget_7": {
+      "uri": "widgets/common/button/",
+      "config": {
+        "functionConfig": {
+          "icon": {
+            "data": {
+              "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" fill=\"none\" viewBox=\"0 0 16 16\"><path fill=\"#000\" d=\"m8.745 8 6.1 6.1a.527.527 0 1 1-.745.746L8 8.746l-6.1 6.1a.527.527 0 1 1-.746-.746l6.1-6.1-6.1-6.1a.527.527 0 0 1 .746-.746l6.1 6.1 6.1-6.1a.527.527 0 0 1 .746.746z\"></path></svg>",
+              "properties": {
+                "filename": "Close",
+                "originalName": "outlined/editor/close.svg",
+                "path": [
+                  "general",
+                  "close"
+                ],
+                "isUploaded": false,
+                "inlineSvg": true
+              }
+            },
+            "position": "LEFT"
+          },
+          "text": "",
+          "textExpression": null,
+          "linkParam": {
+            "linkType": "PAGE",
+            "value": "current_page",
+            "openType": "_self"
+          }
+        },
+        "styleConfig": {
+          "useCustom": false,
+          "themeStyle": {
+            "quickStyleType": "tertiary"
+          }
+        }
+      },
+      "id": "widget_7"
+    }
+  },
+  "views": {},
+  "sections": {},
+  "dialogs": {
+    "dialog_1": {
+      "id": "dialog_1",
+      "mode": "FIXED",
+      "blockPage": false,
+      "sizeMode": {
+        "LARGE": {
+          "position": "BOTTOM_CENTER",
+          "width": "96%",
+          "height": "120px",
+          "offsetX": 0,
+          "offsetY": -10,
+          "widthMode": "CUSTOM",
+          "heightMode": "CUSTOM"
+        },
+        "SMALL": {
+          "position": "BOTTOM_CENTER",
+          "width": "96%",
+          "height": "120px",
+          "offsetX": 0,
+          "offsetY": -10,
+          "widthMode": "CUSTOM",
+          "heightMode": "CUSTOM"
+        }
+      },
+      "interactionType": null,
+      "interactionStyles": null,
+      "confirmBeforeClose": true,
+      "alwaysShowConfirmation": false,
+      "dialogBackground": {
+        "color": "var(--sys-color-surface-overlay)",
+        "fillType": "fill"
+      },
+      "overlayColor": null,
+      "layout": {
+        "LARGE": "layout_1",
+        "SMALL": "layout_2"
+      },
+      "index": 0,
+      "isSplash": false,
+      "closeWhenClickOverlay": false,
+      "border": {
+        "color": "var(--sys-color-divider-secondary)",
+        "type": "solid",
+        "width": "2px"
+      },
+      "effect": {
+        "type": "FLOAT_IN",
+        "option": {
+          "direction": "BOTTOM",
+          "configType": "GENTLE"
+        }
+      },
+      "borderRadius": {
+        "number": [
+          20,
+          20,
+          20,
+          20
+        ],
+        "unit": "px"
+      }
+    }
+  },
+  "messageConfigs": {},
+  "customThemeOptions": {},
+  "publishTimestamp": 1759126848269,
+  "template": "footnote"
+}

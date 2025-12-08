@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>Alat Prediksi Menggunakan Raster Tren menghitung perkiraan layer citra multidimensi mengunakan layer citra tren ouput yang dibuat oleh alat Buat Raster tren.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputMultidimensionalRaster">
+        <div>
+            <p>Layer citra tren multidimensi yang akan digunakan untuk prediksi.
+            </p> 
+        </div>
+    </div>
+    <div id="variables">
+        <div>
+            <p>Variabel layer citra multidimensi yang akan digunakan untuk prediksi.
+            </p>
+        </div>
+    </div>
+    <div id="dimensionDefinition">
+        <div>
+            <p>Metode yang digunakan untuk memberikan nilai dimensi prediksi.
+            </p>
+        </div>
+    </div>
+    <div id="dimensionValues">
+        <div>
+            <p>Tentukan tanggal awal dan akhir, tinggi, atau kedalaman interval dimensi yang akan digunakan dalam prediksi.
+            </p>
+        </div>
+    </div>
+    <div id="start">
+        <div>
+            <p>Tanggal mulai, ketinggian, atau kedalaman interval dimensi yang akan digunakan dalam prediksi.
+            </p>
+        </div>
+    </div>
+    <div id="end">
+        <div>
+            <p>Tanggal akhir, ketinggian, atau kedalaman interval dimensi yang akan digunakan dalam prediksi.
+            </p>
+        </div>
+    </div>
+    <div id="intervalValue">
+        <div>
+            <p>Jumlah langkah antara nilai dua dimensi yang akan dimasukkan dalam prediksi.
+            </p>
+        </div>
+    </div>
+    <div id="intervalUnit">
+        <div>
+            <p>Unit yang akan digunakan untuk nilai interval.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>Nama layer yang akan dibuat dan ditambahkan ke peta.
+            </p>
+        </div>
+    </div>
+    <div id="resultType">
+        <div>
+            
+            <p>Jenis output yang akan dibuat. Output dapat berupa layer citra berpetak atau layer citra dinamis.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            
+            <p>Nama folder di  <b>Konten saya</b> tempat penyimpanan hasil.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

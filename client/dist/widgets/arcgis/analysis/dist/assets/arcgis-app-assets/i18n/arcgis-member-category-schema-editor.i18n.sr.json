@@ -1,0 +1,22 @@
+{
+  "dialogHeading": "Konfiguracija kategorija članova",
+  "noticeTitle": "Uređivanje, brisanje ili promena redosleda kategorije u vašoj organizaciji.",
+  "noticeDescription": "Možete dodeliti kategorije članovima preko kartice Članovi.",
+  "defaultCategoryWarning": "Ova kategorija članova je postavljena kao podrazumevane postavke novog člana i ne može se urediti ili izbrisati.",
+  "warning": {
+    "deleteInUseCategory": {
+      "message": {
+        "single": "Jedan član je dodeljen ovoj kategoriji. Brisanjem kategorije ona se uklanja ovom članu.",
+        "multiple": "${number} članovi su dodeljeni ovoj kategoriji. Brisanjem kategorije ona se uklanja ovim članovima.",
+        "unknown": "Članovi dodeljeni ovoj kategoriji: ${number}. Brisanjem kategorije ona se uklanja ovim članovima."
+      }
+    },
+    "changeTitleInUseCategory": {
+      "message": {
+        "single": "Jedan član je dodeljen ovoj kategoriji. Ažuriranjem kategorije ažuriraće se član za upotrebu \"${newTitle}\".",
+        "multiple": "${number} članovi su dodeljeni ovoj kategoriji. Ažuriranjem kategorije ažuriraju se članovi za upotrebu \"${newTitle}\".",
+        "unknown": "Članovi dodeljeni ovoj kategoriji: ${number}. Ažuriranjem kategorije ažuriraju se članovi za upotrebu \"${newTitle}\"."
+      }
+    }
+  }
+}

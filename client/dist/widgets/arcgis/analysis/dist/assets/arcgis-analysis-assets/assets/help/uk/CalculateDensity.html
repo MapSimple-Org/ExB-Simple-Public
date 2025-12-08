@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>Інструмент &laquo;Розрахувати щільність&raquo; обчислює оцінку щільності на основі точкових і лінійних об&rsquo;єктів. Інструмент створює вихідний об'єкт.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputLayer">
+        <div>
+            <p>Шар точок або ліній, на основі якого буде обчислюватись щільність.
+            </p>
+            <p class="toolPaneOnly">Кількість об'єктів залежить від таких додаткових факторів, як критерії фільтрування та екстент аналізу.
+            </p>
+        </div>
+    </div>
+    <div id="field">
+        <div>
+            <p>Поле, яке визначає кількість інцидентів у кожному місці розташування.
+            </p>
+        </div>
+    </div>
+    <div id="boundingPolygonLayer">
+        <div>
+            <p>Шар полігональних об'єктів, який визначає, де буде обчислюватися щільність.
+            </p>
+            <p class="toolPaneOnly">Кількість об'єктів залежить від таких додаткових факторів, як критерії фільтрування та екстент аналізу.
+            </p>
+        </div>
+    </div>
+    <div id="radius">
+        <div>
+            <p>Визначає відстань для пошуку точок або ліній під час обчислення щільності.
+            </p>
+        </div>
+    </div>
+    <div id="radiusUnits">
+        <div>
+            <p>Одиниці вимірювання, які будуть використовуватися для значення параметра  <b>Відстань пошуку</b>.
+            </p>
+        </div>
+    </div>
+    <div id="classificationType">
+        <div>
+            <p>Укажіть метод класифікації значень щільності по областям.
+            </p>
+        </div>
+    </div>
+    <div id="numClasses">
+        <div>
+            <p>Кількість класів (діапазон прогнозованих значень) у шарі результатів.
+            </p>
+        </div>
+    </div>
+    <div id="areaUnits">
+        <div>
+            <p>Одиниці, які будуть використовуватися для вихідної площі.
+            </p>
+            <p>Щільність &mdash; це кількість розділена на площу. Цей параметр визначає одиницю площі в обчисленні щільності.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>Назва шару, який буде створено та додано до карти.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>Назва папки в  <b>Моєму вмісті</b>, де буде збережено результати.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

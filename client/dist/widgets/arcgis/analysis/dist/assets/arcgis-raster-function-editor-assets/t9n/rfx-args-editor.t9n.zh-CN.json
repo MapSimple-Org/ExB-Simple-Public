@@ -1,0 +1,11 @@
+{
+  "unsupportedDataType": "不受支持的类型",
+  "currentlyUnsupported": " ${missingType} 的默认编辑器正在等待中，但即将推出。 临时占位符文本框，用于指定基于字符串的输入。",
+  "unsupportedOverrideWarning": "一款覆盖编辑器组件可以为使用以下参数提供更好的用户体验，该组件正在等待中，但即将推出：",
+  "overrideWidgetMissing": "覆盖编辑器组件缺失!",
+  "uiIncomplete": "作业提交失败。 该函数无法运行，因为 UI 中的某些必填字段不完整或缺失。",
+  "deprecatedBannerText": "此栅格函数模板包含一个或多个已弃用的栅格函数，并将在未来的版本中移除。",
+  "deprecatedBannerTextWithLink": "此栅格函数模板包含一个或多个已弃用的栅格函数，并将在未来的版本中移除。 <calcite-link target='_blank' href='${ docLink }'>了解关于如何替换已弃用的栅格函数的详细信息</calcite-link>。",
+  "unsupportedBannerText": "此栅格函数模板包含一个或多个不受支持的栅格函数。",
+  "unsupportedBannerTextWithLink": "此栅格函数模板包含一个或多个不受支持的栅格函数。 了解有关受支持的栅格函数的<calcite-link target='_blank' href='${ docLink }'>详细信息</calcite-link>。"
+}

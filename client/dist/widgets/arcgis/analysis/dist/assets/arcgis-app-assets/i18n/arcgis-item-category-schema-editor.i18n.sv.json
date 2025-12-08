@@ -1,0 +1,36 @@
+{
+  "modalHeader": "Konfigurera innehållskategorier",
+  "modalGroupHeader": "Konfigurera gruppkategorier",
+  "helpText": "Redigera, ta bort eller sortera om kategorier i din organisation.",
+  "helpTextGroup": "Redigera, ta bort eller ordna om kategorier för innehåll i den här gruppen.",
+  "helpTextDescription": "Tänk på att andra medlemmar i din organisation kanske redan har tilldelat dessa kategorier deras objekt och om du redigerar schemat uppdateras dessa objekt på motsvarande sätt",
+  "helpTextGroupDescription": "Tänk på att andra medlemmar i gruppen kanske redan har tilldelat dessa kategorier till deras objekt och om du redigerar schemat uppdateras dessa objekt på motsvarande sätt",
+  "warning": {
+    "deleteInUseCategory": {
+      "title": "Ta bort kategori",
+      "cta": "Ta bort kategori",
+      "message": {
+        "single": "Ett objekt är tilldelat till den här kategorin. Om du tar bort kategorin tas den också bort från objektet.",
+        "multiple": "${number} objekt är tilldelade till den här kategorin. Om du tar bort kategorin tas den också bort från objekten.",
+        "unknown": "Objekt tilldelade till den här kategorin: ${number}. Om du tar bort kategorin tas den också bort från objekten."
+      }
+    },
+    "changeTitleInUseCategory": {
+      "title": "Uppdatera kategori",
+      "message": {
+        "single": "Ett objekt är tilldelat till den här kategorin. Om du uppdaterar kategorin uppdateras objektet så att det använder \"${newTitle}\".",
+        "multiple": "${number} objekt är tilldelade till den här kategorin. Om du uppdaterar kategorin uppdateras objekten så att de använder \"${newTitle}\".",
+        "unknown": "Objekt tilldelade till den här kategorin: ${number}. Om du uppdaterar kategorin uppdateras objekten så att de använder \"${newTitle}\"."
+      },
+      "cta": "Uppdatera kategori"
+    }
+  },
+  "template": {
+    "templateList": {
+      "custom": {
+        "message": "Skapa dina egna kategorier för att organisera innehåll i organisationen.",
+        "messageGroup": "Skapa dina egna kategorier för att organisera innehåll i den här gruppen."
+      }
+    }
+  }
+}

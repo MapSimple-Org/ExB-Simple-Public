@@ -1,0 +1,8 @@
+{
+  "select": "Valitse kohde: ${title}",
+  "lastUpdated": "Kohde päivitetty: ${date}",
+  "viewItemDetails": "Näytä tiedot",
+  "preview": "Esikatselu",
+  "closePreview": "Sulje esikatselu",
+  "moreOptions": "Lisää asetuksia"
+}

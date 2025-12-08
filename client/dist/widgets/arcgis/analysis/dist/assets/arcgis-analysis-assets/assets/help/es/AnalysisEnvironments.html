@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>Configuraci&oacute;n de los entornos para el an&aacute;lisis en  Visor de mapas. </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="analysisProcessingExtent">
+        <div>
+            <p>Especifica el &aacute;rea que se utilizar&aacute; para el an&aacute;lisis. De forma predeterminada, se utilizar&aacute; la extensi&oacute;n completa.
+            </p>
+        </div>
+    </div>
+    <div id="rasterAnalysisProcessingExtent">
+        <div>
+            <p>Especifica el &aacute;rea que se utilizar&aacute; para las herramientas de an&aacute;lisis r&aacute;ster y las funciones r&aacute;ster cuando se habilita la opci&oacute;n  <b>Usar una extensi&oacute;n de procesamiento diferente para el an&aacute;lisis r&aacute;ster</b>. De forma predeterminada, utilizar&aacute; la extensi&oacute;n de visualizaci&oacute;n del mapa.
+            </p>
+        </div>
+    </div>
+    <div id="useDifferentExtentForRA">
+        <div>
+            <p>Especifica si se debe utilizar una extensi&oacute;n de procesamiento diferente para las herramientas de an&aacute;lisis r&aacute;ster y las funciones r&aacute;ster. Cuando est&aacute; habilitado, el an&aacute;lisis r&aacute;ster utilizar&aacute; el valor establecido para la  <b>Extensi&oacute;n de procesamiento de an&aacute;lisis r&aacute;ster</b>, que est&aacute; configurada para utilizar la extensi&oacute;n de visualizaci&oacute;n del mapa de manera predeterminada. Cuando est&aacute; deshabilitado, todos los tipos de an&aacute;lisis utilizar&aacute;n el valor establecido para la <b>Extensi&oacute;n de procesamiento de an&aacute;lisis</b>, que est&aacute; configurada para utilizar la extensi&oacute;n completa de manera predeterminada.
+            </p>
+        </div>
+    </div>
+    <div id="outSR">
+        <div>
+            <p>Especifica el sistema de coordenadas que se utilizar&aacute; para el an&aacute;lisis y la capa de resultados.
+            </p>
+        </div>
+    </div>
+    <div id="extent">
+        <div>
+            <p>Especifica el &aacute;rea que se utilizar&aacute; para el an&aacute;lisis.
+            </p>
+        </div>
+    </div>
+    <div id="snapRaster">
+        <div>
+            <p>Ajusta la extensi&oacute;n de la salida para que coincida con la alineaci&oacute;n de celda de la capa r&aacute;ster de alineaci&oacute;n especificada.
+            </p>
+        </div>
+    </div>
+    <div id="cellSize">
+        <div>
+            <p>Especifica el tama&ntilde;o de celda o la resoluci&oacute;n que se utilizar&aacute; para el an&aacute;lisis y para crear la capa r&aacute;ster de salida.
+            </p>
+            <p>Si se selecciona  <b>Seg&uacute;n lo especificado</b> y la referencia espacial de salida es diferente a la referencia espacial de entrada, el valor del tama&ntilde;o de celda no se reproyectar&aacute;.
+            </p>
+        </div>
+    </div>
+    <div id="mask">
+        <div>
+            <p>Especifica una capa de m&aacute;scara, en la que solo se utilizar&aacute;n para el an&aacute;lisis las celdas que se encuentren dentro del &aacute;rea de la m&aacute;scara.
+            </p>
+        </div>
+    </div>
+    <div id="resamplingMethod">
+        <div>
+            <p>Especifica c&oacute;mo se interpolar&aacute;n los valores de p&iacute;xel cuando los r&aacute;steres de entrada y salida no se alineen.
+            </p>
+        </div>
+    </div>
+    <div id="processorType">
+        <div>
+            <p>Especifica el tipo de procesador que se utilizar&aacute;. Las opciones son  <b>CPU</b>, <b>GPU</b> y <b>Autom&aacute;tico</b>. Cuando se especifica <b>Autom&aacute;tico</b>, la herramienta definir&aacute; el tipo de procesador.
+            </p>
+        </div>
+    </div>
+    <div id="parallelProcessingFactor">
+        <div>
+            <p>Especifique el n&uacute;mero de instancias de servicio de procesamiento de r&aacute;ster que se van a utilizar durante la ejecuci&oacute;n de la herramienta. Los valores admitidos incluyen cadenas de caracteres vac&iacute;as (la herramienta determinar&aacute; el n&uacute;mero de instancias del servicio de procesamiento de r&aacute;ster que se va a utilizar), n&uacute;meros enteros (0 o enteros positivos) y porcentajes. Los porcentajes deben incluir un signo de porcentaje (%) despu&eacute;s del valor de porcentaje.
+            </p>
+        </div>
+    </div>
+    <div id="askConfirmation">
+        <div>
+            <p>Especifica si aparecer&aacute; un mensaje de advertencia cuando el n&uacute;mero estimado de cr&eacute;ditos supere el umbral especificado (habilitado) o si se har&aacute; el an&aacute;lisis sin mostrar un mensaje con independencia del consumo de cr&eacute;ditos estimado (no habilitado). El an&aacute;lisis seguir&aacute; respetando la configuraci&oacute;n de la presupuestaci&oacute;n de cr&eacute;ditos de la organizaci&oacute;n.
+            </p>
+        </div>
+    </div>
+    <div id="creditThreshold">
+        <div>
+            <p>Especifica el umbral en el que aparecer&aacute; un mensaje de advertencia basado en el consumo de cr&eacute;ditos estimado a partir de la ejecuci&oacute;n del an&aacute;lisis. El an&aacute;lisis puede realizarse aunque la estimaci&oacute;n supere el umbral.
+            </p>
+        </div>
+    </div>
+    <div id="recycleProcessingWorkers">
+        <div>
+            <p>Especifica el n&uacute;mero de secciones de im&aacute;genes que se procesar&aacute;n antes de reiniciar los procesos de trabajador para evitar posibles fallos en procedimientos de larga ejecuci&oacute;n. El valor predeterminado es 0.
+            </p>
+        </div>
+    </div>
+    <div id="retryOnFailures">
+        <div>
+            <p>Especifica el n&uacute;mero de veces se intentar&aacute; el mismo proceso del trabajador cuando se produzca un fallo durante el procesamiento de un trabajo concreto. El valor predeterminado es 0.
+            </p>
+        </div>
+    </div>
+    <div id="geographicTransformations">
+        <div>
+            <p>Especifica los m&eacute;todos de transformaci&oacute;n que pueden utilizarse para proyectar los datos para el an&aacute;lisis.
+            </p>
+            <p>Actualmente, este entorno solo admite herramientas de An&aacute;lisis r&aacute;ster y Funciones r&aacute;ster.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

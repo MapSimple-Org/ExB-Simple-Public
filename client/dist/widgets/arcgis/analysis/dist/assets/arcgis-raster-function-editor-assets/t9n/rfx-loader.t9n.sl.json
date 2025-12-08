@@ -1,0 +1,8 @@
+{
+  "loading": "Nalaganje...",
+  "pleaseWait": "Počakajte.",
+  "loadingXMLRFT": "Nalaganje izbrane rastrske funkcije v obliki XML ni bilo mogoče naložiti.",
+  "failedToOpen": "Odpiranje ni uspelo.",
+  "readingFailed": "Izbrane predloge rastrske funkcije ni bilo mogoče naložiti.",
+  "failedToLoadXML": "Izbrane predloge rastrske funkcije v obliki XML ni bilo mogoče naložiti."
+}

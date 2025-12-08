@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>De tool Stroomaccumulatie genereert een raster van geaccumuleerde stroom naar elke cel vanuit een stroomrichtingsraster.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputFlowDirectionRaster">
+        <div>
+            <p>Het raster dat de stroomrichting uit elke cel bepaalt.
+            </p>
+            <p>Het kan worden gemaakt met de tool Stroomrichting.
+            </p>
+        </div>
+    </div>
+    <div id="inputWeightRaster">
+        <div>
+            <p>De rasterlaag die de fractie van de stroom bepaalt die bijdraagt tot de accumulatie van de stroom in elke cel.
+            </p>
+        </div>
+    </div>
+    <div id="flowDirectionType">
+        <div>
+            <p>Specificeert de het rastertype invoerstroomrichting.
+            </p>
+        </div>
+    </div>
+    <div id="dataType">
+        <div>
+            <p>Specificeert het gegevenstype van het uitvoerstroom-accumulatieraster.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>De naam van de stroomaccumulatie-rasterlaag die wordt zal worden aangemaakt en die aan de kaart zal worden toegevoegd.
+            </p>
+        </div>
+    </div>
+    <div id="resultType">
+        <div>
+            <p>Het type uitvoer dat zal worden gemaakt. De uitvoer kan bestaan uit getegelde beeldlagen of dynamische beeldlagen.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>De naam van de map in  <b>Mijn content</b> waarin de resultaten worden opgeslagen.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

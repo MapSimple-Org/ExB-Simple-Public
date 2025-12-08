@@ -1,0 +1,54 @@
+{
+  "updateSharing": "Granska delning",
+  "moreInfo": "Mer information",
+  "learnMore": "Läs mer",
+  "noItemToShare": "Inga delningsproblem upptäcktes",
+  "loadingInfo": "Läser in delningsinfo...",
+  "updatingSharing": "Uppdaterar delning...",
+  "updateItemsCount": "Objekt du har behörighet att uppdatera: {num}",
+  "updateItemsCountText": "Dessa beroende objekt kanske inte är synliga för andra eftersom de delas på ett annat sätt. Klicka på Uppdatera för att synkronisera delning av de beroende objekt som du har behörighet att uppdatera.",
+  "uneditableItemsCount": "Objekt du inte har behörighet att uppdatera: {num}",
+  "uneditableMessage": "Dessa beroende objekt kanske inte är synliga för andra eftersom de delas på ett annat sätt.",
+  "nonPublicItems": "Objekt som inte kan delas offentligt:",
+  "premiumItemsWebMap": "Den här webbkartan innehåller premium- eller abonnemangsinnehåll.",
+  "premiumMessage": "Dessa beroende objekt kanske inte är synliga för andra eftersom de kräver ett abonnemang.",
+  "premiumTextMap": "Läs mer om att dela kartor med prenumerations- eller premiuminnehåll",
+  "notice": "Följande objekt kanske inte är synliga för andra eftersom de delas på ett annat sätt eller kräver ett abonnemang för att visas. Klicka på <b>Uppdatera delning</b> för att synkronisera delning av de objekt som du har behörighet att uppdatera.",
+  "noticeEnterprise": "Följande objekt kanske inte är synliga för andra eftersom de delas på ett annat sätt. Klicka på <b>Uppdatera delning</b> för att synkronisera delning av de objekt som du har behörighet att uppdatera.",
+  "canBeUpdated": "Objekt som kan uppdateras: ${count}",
+  "cantBeUpdated": "Objekt som inte kan uppdateras: ${count}",
+  "update": "Uppdatera delning",
+  "cancel": "Uppdatera inte delning",
+  "ok": "OK",
+  "goToItem": "Visa fullständig information",
+  "unableToGetItem": "Det går inte att hämta objektinformation.",
+  "postShareDialog": {
+    "title": "Objektdelning har uppdaterats",
+    "description": "Det beroende objektet refererar andra objekt som kanske inte är synliga eftersom de delas på ett annat sätt. Granska delningen av dessa objekt.",
+    "confirm": "Granska delning"
+  },
+  "needShare": {
+    "noPermission": {
+      "notice": "Du saknar behörighet att uppdatera delning av det här objektet.",
+      "panel": "Du saknar behörighet att uppdatera delning av det här objektet. Objektet kanske inte är synligt för andra eftersom det delas på ett annat sätt."
+    },
+    "pdc": {
+      "notice": "Aktivera publik datainsamling innan du delar det här lagret offentligt.",
+      "panel": "Aktivera publik datainsamling innan du delar det här lagret offentligt. För optimal prestanda och dataintegritet kan du inaktivera redigering eller använda ett visningslager som inte går att redigera.",
+      "learnMore": "Läs mer om aktivering av redigering på publika lager."
+    },
+    "premium": {
+      "notice": "Premium- eller abonnemangsinnehåll kan kräva inloggning för att visas.",
+      "panel": "Premium- eller abonnemangsinnehåll kan kräva inloggning för att visas.",
+      "learnMore": "Läs mer om att dela premium- eller prenumerationsinnehåll."
+    },
+    "sharingPDCEnabled": {
+      "notice": "Om du delar det här redigerbara lagret publikt tillåts vem som helst att redigera det.",
+      "panel": "Om du delar det här redigerbara lagret publikt tillåts vem som helst att redigera det. För optimal prestanda och dataintegritet kan du inaktivera redigering eller använda ett visningslager som inte går att redigera."
+    },
+    "needsAuthentication": {
+      "notice": "Autentisering krävs.",
+      "panel": "Det här objektet kanske inte är tillgänglig för andra eftersom det innehåller platstjänster som kräver autentisering i applikationer som visar objektet."
+    }
+  }
+}

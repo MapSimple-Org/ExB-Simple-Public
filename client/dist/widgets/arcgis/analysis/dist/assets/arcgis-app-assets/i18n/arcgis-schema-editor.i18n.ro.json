@@ -1,0 +1,15 @@
+{
+  "expandAll": "Extindere toate",
+  "collapseAll": "Restrângere toate",
+  "categoryItem": {
+    "expand": "Extindere",
+    "collapse": "Restrângere",
+    "editCategory": "Editare categorie",
+    "deleteCategory": "Ștergere categorie",
+    "addSubcategory": "Adăugare subcategorie",
+    "addCategory": "Adaugă categorie",
+    "save": "Salvare",
+    "cancel": "Anulare",
+    "missingTitleMessage": "Titlul de categorie este obligatoriu."
+  }
+}

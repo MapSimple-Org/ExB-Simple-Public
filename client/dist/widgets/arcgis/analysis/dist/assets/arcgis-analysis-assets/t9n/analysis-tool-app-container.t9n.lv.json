@@ -1,0 +1,21 @@
+{
+  "backLabel": "Atpakaļ",
+  "cannotReopenTool": "Rīku nevarēja atvērt atkārtoti. Rīka parametriem ir atjaunoti noklusējuma iestatījumi.",
+  "cannotReopenWebTool": "Nevar atvērt tīmekļa rīku. <calcite-link target='_blank' href='${ docLink }'>Papildinformācija</calcite-link>",
+  "creditThresholdModal": {
+    "cancelRun": "Atcelt",
+    "continueRun": "Palaist tik un tā",
+    "creditEstimate": "Prognozētie servisa kredīti: ${cost}",
+    "creditThreshold": "Servisa kredītu slieksnis: ${threshold}",
+    "heading": "Pirms Jūs turpināt",
+    "learnMore": "Uzzināt vairāk par kredītu limitiem",
+    "thresholdExceeded": "Aptuvenās kredītu izmaksas šai analīzei pārsniedz tīmekļa kartes kredītu limitu:"
+  },
+  "failedToExecuteEstimate": "Iesniegšana neizdevās. Neizdevās izpildīt EstimateRasterAnalysisCost",
+  "missingPermissionForWebTool": "Šim rīkam nevar piekļūt. Pārliecinieties, vai rīks pastāv un vai lietotājam ir atļauja tam piekļūt.",
+  "runAnalysisLabel": "Palaist",
+  "toolPreviewNoParameters": "Šim modelim nav iestatīti parametri. Atgriezieties pie modeļa, lai pievienotu mainīgos un iestatītu tos kā parametrus.",
+  "toolPreviewNoParametersLink": "<calcite-link target='_blank' href='${ docLink }'>Uzzināt vairāk</calcite-link>",
+  "toolPreviewWebTool": "Lai šo modeli palaistu kā tīmekļa rīku, publicējiet to un atveriet no analīzes paneļa.",
+  "webToolJSONChanged": "Viens vai vairāki parametri ir atjaunināti. Dažus parametrus nevar atkārtoti aizpildīt no vēstures."
+}

@@ -1,0 +1,9 @@
+{
+  "weightedSumTable": "Tablica ponderiranih zbrojeva",
+  "id": "ID",
+  "layer": "Sloj",
+  "field": "Polje",
+  "weight": "Težina",
+  "value": "Vrijednost",
+  "selectLayer": "Odabir sloja"
+}

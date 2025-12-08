@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>L'eina Nibble substitueix les cel&middot;les d'un r&agrave;ster corresponents a una m&agrave;scara pel valor del ve&iacute; m&eacute;s proper.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputRaster">
+        <div>
+            <p>R&agrave;ster d'entrada amb les ubicacions emmascarades que se substituiran pel valor del ve&iacute; m&eacute;s proper.
+            </p>
+        </div>
+    </div>
+    <div id="inputMaskRaster">
+        <div>
+            <p>R&agrave;ster de m&agrave;scara que identifica les ubicacions al r&agrave;ster d'entrada que se substituiran. Es considera que les cel&middot;les amb el valor NoData s&oacute;n a l'&agrave;rea emmascarada.
+            </p>
+        </div>
+    </div>
+    <div id="inputZoneRaster">
+        <div>
+            <p>R&agrave;ster de zona d'entrada. Per a cada zona, les cel&middot;les d'entrada que s&oacute;n dins de la m&agrave;scara se substituiran nom&eacute;s pels valors de cel&middot;la m&eacute;s propers dins de la mateixa zona.
+            </p>
+        </div>
+    </div>
+    <div id="nibbleValues">
+        <div>
+            <p>Especifica si les cel&middot;les NoData del r&agrave;ster d'entrada poden substituir les de les &agrave;rees emmascarades si s&oacute;n el ve&iacute; m&eacute;s proper.
+            </p>
+            <p>Si aquesta opci&oacute; est&agrave; activada, les cel&middot;les NoData del r&agrave;ster d'entrada poden substituir les de l'&agrave;rea emmascarada. Si est&agrave; desactivada, nom&eacute;s les cel&middot;les v&agrave;lides del r&agrave;ster d'entrada poden substituir les de l'&agrave;rea emmascarada.
+            </p>
+        </div>
+    </div>
+    <div id="nibbleNodata">
+        <div>
+            <p>Especifica si les cel&middot;les NoData de l'&agrave;rea emmascarada es mantindran o se substituiran.
+            </p>
+            <p>Si aquesta opci&oacute; est&agrave; desactivada, les cel&middot;les NoData de l'&agrave;rea emmascarada es mantindran a la sortida. Si est&agrave; activada, les cel&middot;les NoData de l'&agrave;rea emmascarada se substituiran pel valor del ve&iacute; m&eacute;s proper que es trobi fora de l'&agrave;rea emmascarada.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>Nom de la capa r&agrave;ster substitu&iuml;da que es crear&agrave; i s'afegir&agrave; al mapa.
+            </p>
+        </div>
+    </div>
+    <div id="resultType">
+        <div>
+            <p>Tipus de sortida que es crear&agrave;. La sortida pot ser una capa d'imatges en mosaic o una capa d'imatges din&agrave;miques.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>Nom de la carpeta d' <b>El meu contingut</b> on es desaran els resultats.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

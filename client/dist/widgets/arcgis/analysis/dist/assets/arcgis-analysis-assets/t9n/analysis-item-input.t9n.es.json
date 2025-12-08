@@ -1,0 +1,15 @@
+{
+  "addDataStore": "Agregar data store",
+  "addFile": "Agregar archivo",
+  "addServiceConnection": "Agregar conexión",
+  "itemNotFound": "El elemento no existe o no es accesible.",
+  "itemPermissionDenied": "No tiene permisos para acceder a este elemento.",
+  "previewDetails": "Vista previa de los detalles",
+  "queryModelArgsErrMsg": "Error al consultar argumentos de modelo.",
+  "queryModelArgsMsg": "Consultando argumentos del modelo...",
+  "removeItem": "Eliminar elemento",
+  "replaceItem": "Sustituir elemento",
+  "requiredInputMessage": "Parámetro requerido.",
+  "selectItem": "Seleccionar elemento",
+  "viewDetails": "Ver detalles"
+}

@@ -1,0 +1,22 @@
+{
+  "dialogHeading": "Konfiguriraj kategorije uporabnikov",
+  "noticeTitle": "Uredite, izbrišite ali prerazporedite kategorije v svoji organizaciji.",
+  "noticeDescription": "Uporabnikom lahko dodelite kategorije v zavihku Uporabniki.",
+  "defaultCategoryWarning": "Ta kategorija članov je nastavljena kot privzeta za novega člana in je ni mogoče urejati ali brisati.",
+  "warning": {
+    "deleteInUseCategory": {
+      "message": {
+        "single": "Tej kategoriji je dodeljen en uporabnik. Izbris te kategorije jo bo odstranil tudi iz tega uporabnika.",
+        "multiple": "Tej kategoriji je dodeljenih ${number} uporabnikov. Izbris te kategorije jo bo odstranil tudi iz teh uporabnikov.",
+        "unknown": "Uporabniki, dodeljeni tej kategoriji: ${number}. Izbris te kategorije jo bo odstranil tudi iz teh uporabnikov."
+      }
+    },
+    "changeTitleInUseCategory": {
+      "message": {
+        "single": "Tej kategoriji je dodeljen en uporabnik. Posodabljanje kategorije bo posodobilo uporabnika za uporabo »${newTitle}«.",
+        "multiple": "Tej kategoriji je dodeljenih ${number} uporabnikov. Posodabljanje kategorije bo posodobilo uporabnika za uporabo »${newTitle}«.",
+        "unknown": "Uporabniki, dodeljeni tej kategoriji: ${number}. Posodabljanje kategorije bo posodobilo uporabnika za uporabo »${newTitle}«."
+      }
+    }
+  }
+}

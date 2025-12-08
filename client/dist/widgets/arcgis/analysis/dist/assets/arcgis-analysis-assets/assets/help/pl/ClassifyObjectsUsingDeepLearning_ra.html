@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>Narzędzie Klasyfikuj obiekty metodą Deep Learning wykorzystuje model Deep Learning do przypisania etykiety klasy lub kategorii do obiektu.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputRaster">
+        <div>
+            <p>Warstwa zobrazowań lub warstwa obiektowa, kt&oacute;ra zostanie użyta do klasyfikacji obiekt&oacute;w.
+            </p>
+        </div>
+    </div>
+    <div id="inputFeatures">
+        <div>
+            <p>Warstwa obiektowa, kt&oacute;ra identyfikuje lokalizację każdego obiektu, kt&oacute;ry zostanie sklasyfikowany lub oznaczony etykietą.
+            </p>
+            <p class="toolPaneOnly">Liczba obiekt&oacute;w zależy od dodatkowych czynnik&oacute;w, takich jak kryteria filtrowania i zasięg analizy.
+            </p>
+        </div>
+    </div>
+    <div id="processAllRasterItems">
+        <div>
+            <p>Określa spos&oacute;b przetwarzania element&oacute;w rastrowych w warstwie zobrazowań po ich mozaikowaniu: razem lub osobno.
+            </p>
+        </div>
+    </div>
+    <div id="model">
+        <div>
+            <p>Pakiet Deep Learning zawierający model, kt&oacute;ry zostanie użyty do klasyfikacji obiekt&oacute;w.
+            </p> 
+        </div>
+    </div>
+    <div id="modelArguments">
+        <div>
+            <p>Argumenty modelu i ich wartości domyślne, kt&oacute;re znajdują się w modelu Deep Learning.
+            </p>
+        </div>
+    </div>
+    <div id="classLabelField">
+        <div>
+            <p>Nazwa pola zawierającego etykietę klasyfikacji w wynikowej warstwie obiektowej.
+            </p>
+        </div>
+    </div>
+    <div id="outputFeatureClass">
+        <div>
+            <p>Nazwa warstwy, kt&oacute;ra zostanie utworzona i dodana do mapy.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            
+            <p>Nazwa folderu na stronie  <b>Moje zasoby</b>, w kt&oacute;rym zostanie zapisany wynik.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

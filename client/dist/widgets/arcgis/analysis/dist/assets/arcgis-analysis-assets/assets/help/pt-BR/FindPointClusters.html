@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>A ferramenta Localizar Agrupamentos de Pontos identifica agrupamentos de fei&ccedil;&otilde;es de ponto dentro do ru&iacute;do circundante com base em sua distribui&ccedil;&atilde;o espacial.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="analysisLayer">
+        <div>
+            <p>A camada de ponto de entrada que ser&aacute; agrupada em agrupamentos com base na distribui&ccedil;&atilde;o espacial das fei&ccedil;&otilde;es de ponto.
+            </p>
+        </div>
+    </div>
+    <div id="method">
+        <div>
+            <p>O m&eacute;todo que ser&aacute; usado para identificar agrupamentos.
+            </p>
+        </div>
+    </div>
+    <div id="minFeaturesCluster">
+        <div>
+            <p>O n&uacute;mero m&iacute;nimo de fei&ccedil;&otilde;es de ponto que ser&atilde;o consideradas um agrupamento.
+            </p>
+        </div>
+    </div>
+    <div id="searchDistance">
+        <div>
+            <p>Especifica a dist&acirc;ncia m&aacute;xima ao redor de cada fei&ccedil;&atilde;o de ponto para procurar pontos que podem ser inclu&iacute;dos no agrupamento. Se deixado em branco, o valor de  <b>Pesquisar dist&acirc;ncia</b> ser&aacute; a maior dist&acirc;ncia principal encontrada na camada, excluindo o 1% superior das dist&acirc;ncias principais.
+            </p>
+        </div>
+    </div>
+    <div id="searchDistanceUnit">
+        <div>
+            <p>Especifica as unidades que ser&atilde;o usadas para pesquisar dist&acirc;ncia.
+            </p>
+        </div>
+    </div>
+    <div id="sensitivity">
+        <div>
+            <p>Um n&uacute;mero inteiro entre 0 e 100 que determina a compacta&ccedil;&atilde;o dos agrupamentos. Se deixado em branco, o valor de  <b>Sensibilidade do agrupamento</b> ser&aacute; calculado usando a Diverg&ecirc;ncia de Kullback-Leibler.
+            </p>
+        </div>
+    </div>
+    <div id="timeField">
+        <div>
+            <p>O campo da camada de entrada que cont&eacute;m um carimbo de data/hora para cada fei&ccedil;&atilde;o.
+            </p>
+        </div>
+    </div>
+    <div id="searchTimeInterval">
+        <div>
+            <p>O intervalo de tempo que ser&aacute; usado para determinar se as fei&ccedil;&otilde;es formam um agrupamento de espa&ccedil;o-tempo. O intervalo de tempo de pesquisa abrange antes e depois do hor&aacute;rio de cada fei&ccedil;&atilde;o. Por exemplo, um intervalo de tempo de pesquisa de 3 dias em torno de uma fei&ccedil;&atilde;o incluir&aacute; todas as fei&ccedil;&otilde;es, come&ccedil;ando 3 dias antes e terminando 3 dias depois do hor&aacute;rio da fei&ccedil;&atilde;o.
+            </p>
+        </div>
+    </div>
+    <div id="searchTimeUnit">
+        <div>
+            <p>Especifica as unidades que ser&atilde;o utilizadas para o intervalo de tempo de pesquisa.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>O nome da camada que ser&aacute; criada e adicionada ao mapa.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>O nome da pasta em  <b>Meu conte&uacute;do</b> onde o resultado ser&aacute; salvo.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

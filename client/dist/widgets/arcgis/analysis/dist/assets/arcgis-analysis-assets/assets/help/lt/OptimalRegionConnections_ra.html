@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>Įrankis Optimalus susisiekimas tarp regionų apskaičiuoja optimalų ry&scaron;io tinklą tarp dviejų ar daugiau įvesties regionų.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputRegionRasterOrFeatures">
+        <div>
+            <p>Rastro arba elementų sluoksnis, kuriame nurodomi regionai, sujungti optimaliu tinklu.
+            </p>
+            <p class="toolPaneOnly">Elemento įvesties atveju skaičius priklauso nuo papildomų veiksnių, pavyzdžiui, filtravimo kriterijų ir analizės apimties.
+            </p>
+        </div>
+    </div>
+    <div id="inputBarrierRasterOrFeatures">
+        <div>
+            <p>Rastro arba elementų sluoksnis, kuriame nurodomos kliūtys, kurias reikia aplenkti.
+            </p>
+            <p>Gardelės, kuriose yra nurodyta reik&scaron;mė (įskaitant nulį) bus laikomos kliūtimis.
+            </p>
+            <p class="toolPaneOnly">Elemento įvesties atveju skaičius priklauso nuo papildomų veiksnių, pavyzdžiui, filtravimo kriterijų ir analizės apimties.
+            </p>
+        </div>
+    </div>
+    <div id="inputCostRaster">
+        <div>
+            <p>Rastrinis sluoksnis, apibrėžiantis kiekvienos gardelės judėjimo varžą arba kainą.
+            </p>
+            <p>Kiekvienos gardelės padėties reik&scaron;mė atspindi sąnaudos vienetui atstumą judant per gardelę. Jis negali būti neigiamas arba lygus nuliui.
+            </p>
+        </div>
+    </div>
+    <div id="distanceMethod">
+        <div>
+            <p>Nurodo, ar atstumas bus skaičiuojamas naudojant plok&scaron;tuminį (plok&scaron;čios žemės), ar geodezinį (elipsoido) metodą.
+            </p>
+        </div>
+    </div>
+    <div id="connectionsWithinRegions">
+        <div>
+            <p>Nurodo, ar keliai įvesties regionuose tęsiasi ir susijungia.
+            </p>
+        </div>
+    </div>
+    <div id="outputOptimalLinesName">
+        <div>
+            <p>Kiekvieną įvesties regioną jungiančio optimalaus kelių sluoksnio tinklo, kuris bus sukurtas ir pridėtas prie žemėlapio, pavadinimas.
+            </p>
+        </div>
+    </div>
+    <div id="outputNeighborConnectionsName">
+        <div>
+            <p>Sukurto ir į žemėlapį pridėto kaimyninių jungčių linijų sluoksnio pavadinimas. Sluoksnyje nustatomi visi keliai i&scaron; kiekvieno regiono į kiekvieną jo artimiausią arba ka&scaron;tų kaimyną.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>Puslapyje  <b>Mano turinys</b> esančio aplanko, kur bus įra&scaron;ytas rezultatas, pavadinimas.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

@@ -1,0 +1,1 @@
+System.register([],function(i){return{execute:function(){i({_widgetLabel:"Inicia la sessi\xf3",switchToLogin:"Canvia a abans d'iniciar la sessi\xf3",switchToLogout:"Canvia a despr\xe9s d'iniciar la sessi\xf3",toggleSignInPreview:"Activa/desactiva la visualitzaci\xf3 pr\xe8via d'inici de la sessi\xf3",restrictedResources:"Recursos restringits"})}}});

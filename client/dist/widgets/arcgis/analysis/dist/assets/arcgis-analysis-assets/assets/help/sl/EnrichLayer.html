@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>Orodje Obogati sloj obogati vhodne geoobjekte z demografskimi podatki in podatki pokrajine.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputLayer">
+        <div>
+            <p>Točkovni, linijski ali poligonski geoobjekti bodo obogateni z dodatnimi podatki.
+            </p>
+            <p class="toolPaneOnly">&Scaron;tevilo funkcij je odvisno od dodatnih dejavnikov, kot so kriteriji filtriranja in obseg analize.
+            </p>
+        </div>
+    </div>
+    <div id="analysisVariables">
+        <div>
+            <p>Spremenljivke bodo k vhodnim geoobjektom dodane kot atributi.
+            </p>
+        </div>
+    </div>
+    <div id="bufferType">
+        <div>
+            
+            <p class="toolPaneOnly">Metoda, ki bo uporabljena za ustvarjanje mejnih območij okoli vhodnih točkovnih ali linijskih geoobjektov. Ta metoda je lahko razdalja zračne linije ali način potovanja. Obogateno bo celotno območje okoli vsakega geoobjekta.
+            </p> 
+            <p class="modelBuilderOnly">Metoda, ki bo uporabljena za ustvarjanje mejnih območij okoli vhodnih točkovnih ali linijskih geoobjektov. Trenutno je razdalja zračne linij edina metoda, ki je podprta za modele. Obogateno bo celotno območje okoli vsakega geoobjekta.
+            </p>
+        </div>
+    </div>
+    <div id="distance">
+        <div>
+            <p>&Scaron;tevilčna vrednost, ki določa razdaljo ali čas, ki ga bo obogateno območje podalj&scaron;alo okoli vsakega vhodnega geoobjekta.
+            </p>
+        </div>
+    </div>
+    <div id="units">
+        <div>
+            <p>Enote, ki bodo uporabljene za določanje razdalje ali časa, ki ga bo obogateno območje podalj&scaron;alo okoli vsakega vhodnega geoobjekta.
+            </p>
+        </div>
+    </div>
+    <div id="returnBoundaries">
+        <div>
+            <p>Določi, ali bo izhodni sloj vseboval poligonske geoobjekte, opredeljene z nastavitvami  <b>Območja obogatitve</b> (obkljukano), ali vhodne geoobjekte (ni obkljukano).
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>Ime sloja, ki bo ustvarjen in dodan na karto.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>Ime mape v  <b>Moja vsebina</b>, kjer bo shranjen rezultat.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

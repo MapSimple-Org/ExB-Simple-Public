@@ -1,0 +1,25 @@
+{
+  "pages": {
+    "page_0": {
+      "id": "page_0",
+      "mode": "AUTO_SCROLL",
+      "type": "NORMAL",
+      "layout": {
+        "LARGE": "layout_0"
+      },
+      "isDefault": true
+    }
+  },
+  "layouts": {
+    "layout_0": {
+      "type": "FLOW",
+      "content": {},
+      "order": []
+    }
+  },
+  "widgets": {},
+  "views": {},
+  "sections": {},
+  "messageConfigs": {},
+  "template": "blankscrollable"
+}

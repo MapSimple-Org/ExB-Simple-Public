@@ -1,0 +1,7 @@
+{
+  "addEntryButtonLabel": "Tilføj",
+  "maxGroupsMessage": "Det maksimale antal poster er ${maxCount}.",
+  "minGroupsMessage": "Det mindste antal poster er ${minCount}.",
+  "removeEntryButtonLabel": "Fjern post",
+  "requiredMessage": "Denne parameter er påkrævet."
+}

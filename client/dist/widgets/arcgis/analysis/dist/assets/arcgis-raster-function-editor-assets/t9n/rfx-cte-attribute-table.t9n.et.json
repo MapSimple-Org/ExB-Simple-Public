@@ -1,0 +1,22 @@
+{
+  "value": "Väärtus",
+  "classname": "ClassName",
+  "color": "Värv",
+  "raster": "Raster",
+  "tableType": "Tabeli tüüp",
+  "manual": "Käsitsi",
+  "external": "Väline",
+  "browseTable": "Sirvi tabelit",
+  "browseTableFrom": "Sirvi tabeli vormi",
+  "file": "Fail",
+  "dbfFile": "DBF-fail",
+  "layer": "Kiht",
+  "unsupportedDataType": "Toetuseta tüüp",
+  "failedToGetTableFromLayer": "Tabeli hankimine kihist ebaõnnestus.",
+  "generate": "Genereeri tabel",
+  "minValue": "Miinimumväärtus",
+  "maxValue": "Maksimumväärtus",
+  "classBaseName": "Klassi baasnimi",
+  "colorscheme": "Värviskeem",
+  "defaultClassName": "Märgis_"
+}

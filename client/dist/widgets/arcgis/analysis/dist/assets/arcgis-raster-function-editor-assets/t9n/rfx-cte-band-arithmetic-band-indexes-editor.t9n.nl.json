@@ -1,0 +1,7 @@
+{
+  "example": "Voorbeeld",
+  "input": "Invoer",
+  "output": "Uitvoer",
+  "optional": "Optioneel",
+  "WNDWIHintText": "α:α-waarde moet tussen 0 en 1 liggen; standaardwaarde is 0.5"
+}

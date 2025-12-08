@@ -1,0 +1,16 @@
+{
+  "updateData": "Adat frissítése",
+  "cancel": "Mégse",
+  "editStyle": "Cserélje ki a réteg stílusfájlját a számítógépén található frissebb verzióra.",
+  "updatePackages": "Cserélje ki a következőt a számítógépén található frissebb verzióra: ${type}. A feltöltött fájl és a(z) ${hostedLayerName} nevének egyeznie kell.",
+  "uploadStaticFiles": "A feltöltött fájl nevének egyeznie kell az eredeti fájl nevével (${fileName}).",
+  "sameFileNameDescription": "A feltöltött fájlnak ugyanazzal a névvel és mezőnevekkel kell rendelkeznie, mint az eredeti ${fileName} fájlnak",
+  "updating": "Frissítés…",
+  "error": "Hiba",
+  "errors": {
+    "sameFileName": "Az elem frissítéséhez fel kell töltenie egy ${fileName} nevű fájlt.",
+    "invalidStyleFileExtension": "Érvénytelen fájlkiterjesztés. A feltöltött stílusnak .json fájlkiterjesztéssel kell rendelkeznie.",
+    "errorWhileUpload": "Hiba történt az elem feltöltésekor.",
+    "errorUpdate": "Hiba történt az elem felülírásakor."
+  }
+}

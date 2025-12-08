@@ -1,0 +1,17 @@
+{
+  "aboveMaximumMessage": "Vstupná hodnota musí byť menšia alebo rovná ${max}.",
+  "add": "Pridať",
+  "addDuplicateMessage": "Nie je možné pridať duplicitné hodnoty.",
+  "belowMinimumMessage": "Vstupná hodnota musí byť väčšia alebo rovná ${min}.",
+  "defaultPlaceholder": "Zadajte hodnotu a kliknite na tlačidlo Pridať",
+  "duplicateValueMessage": "Duplicitné hodnoty budú ignorované.",
+  "invalidDoubleMessage": "Vstupná hodnota musí byť dvojitá.",
+  "invalidIntegerMessage": "Vstupná hodnota musí byť celé číslo.",
+  "maxValuesMessage": "Musí sa tam nachádzať viac než ${maxValues} jedinečných vstupných hodnôt.",
+  "minValuesMessage": "Musí sa tam nachádzať aspoň ${minValues} jedinečných vstupných hodnôt.",
+  "remove": "Odstrániť",
+  "requiredInputMessage": "Tento parameter je povinný.",
+  "strictlyMaximumMessage": "Vstupná hodnota musí byť menšia ako ${max}.",
+  "strictlyMinimumMessage": "Vstupná hodnota musí byť väčšia než ${min}.",
+  "value": "Hodnota: ${value}"
+}

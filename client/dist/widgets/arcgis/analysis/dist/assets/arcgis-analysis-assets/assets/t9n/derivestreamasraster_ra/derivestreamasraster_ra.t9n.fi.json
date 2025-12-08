@@ -1,0 +1,10 @@
+{
+  "forceFlowLabel": "Pakota reunasolujen virtaus ulospäin",
+  "inputLayersGroupText": "Valitse lähtöaineiston pintarasteri ja valinnaisesti myös laskuaineisto sekä painoarvorasteri.",
+  "itemProperties": {
+    "description": "Tulosaineisto luotu Johda virta rasterina -työkalulla.",
+    "snippet": "Tulosaineisto luotu Johda virta rasterina -toiminnolla"
+  },
+  "outputStreamRasterLabel": "Tulosaineiston virran rasterin nimi",
+  "streamSettingsGroupText": "Määritä kertymän raja-arvo, virtauksen nimeämismenetelmä ja miten virtausta käsitellään lähtöaineiston pintarasterin reunassa."
+}

@@ -1,0 +1,13 @@
+{
+  "addField": "הוסף שדה",
+  "deselectAll": "הסר בחירה מהכל",
+  "done": "בוצע",
+  "noFieldsAvailable": "${layerName} לא מכיל שדות שעונות על דרישת סוג הנתונים. בחר שכבה אחרת כדי להמשיך.",
+  "noInputSelected": {
+    "withLayerInputLabel": "לא נבחרה שכבת קלט. בחר שכבה ב-${layerInputLabel} כדי להמשיך.",
+    "withoutLayerInputLabel": "לא נבחרה שכבת קלט. בחר שכבת קלט כדי להמשיך."
+  },
+  "noSearchResults": "לא נמצאו שדות תואמים.",
+  "selectAll": "בחר הכול",
+  "summaryFieldsPopover": "שדות סיכום"
+}

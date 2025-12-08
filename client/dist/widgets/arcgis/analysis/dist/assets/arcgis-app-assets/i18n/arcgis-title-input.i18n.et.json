@@ -1,0 +1,20 @@
+{
+  "title": "Pealkiri",
+  "addTitle": "Lisage pealkiri",
+  "validation": {
+    "error": "Tõrge",
+    "titleRequired": "Pealkiri on kohustuslik väli.",
+    "itemExists": "Üksus pealkirjaga \"${name}\" on selles kaustas juba olemas. Valige mingi muu nimi.",
+    "titleInUseService": "Kiht pealkirjaga \"${name}\" on juba olemas. Valige mingi muu nimi.",
+    "itemInRecycleBin": "Üksus nimega \"${name}\" on juba olemas ja on prügikastis Valige mingi muu nimi.",
+    "serviceNameInvalid": "Teenuse pealkiri tohib sisaldada ainult tähti ja numbreid või allkriipse ning see tohib olla kuni 90 tähemärgi pikkune.",
+    "dataStoreTitleInvalid": "Andmelao pealkiri tohib sisaldada ainult tähti ja numbreid või allkriipse ning see tohib olla kuni 90 tähemärgi pikkune.",
+    "titleInvalid": "Pealkiri peab olema vähem kui 250 tähemärgi pikkune ning see ei tohi sisaldada märki < ega >.",
+    "titleStartsWithNumber": "Pealkiri ei tohi alata numbriga.",
+    "invalidCharacters": {
+      "single": "Nimi ei tohi sisaldada seda tähemärki: ${invalidCharacters}.",
+      "multiple": "Nimi ei tohi sisaldada ühtegi järgnevatest tähemärkidest: ${invalidCharacters}.",
+      "unknown": "Nimi ei tohi sisaldada ühtegi järgnevatest tähemärkidest: ${invalidCharacters}."
+    }
+  }
+}

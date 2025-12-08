@@ -1,0 +1,69 @@
+{
+  "loadingText": "Nalaganje predlog sheme",
+  "cancel": "Prekliči",
+  "finishSetup": "Dokončaj nastavitev",
+  "hasUnsavedChanges": "Naredili ste spremembe kategorije, ki bodo izgubljene, če jih najprej ne shranite. Ali ste prepričani, da želite zapreti ta pogled, in izgubiti spremembe?",
+  "error": {
+    "generic": {
+      "title": "Napaka pri posodobitvi kategorij",
+      "message": "Nekaj je šlo narobe. Poskusite znova pozneje."
+    },
+    "maxDepthExceeded": {
+      "title": "Napaka pri posodobitvi kategorij",
+      "message": "Kategorij ne morete ugnezditi globlje kot 2 ravni."
+    },
+    "destinationHasSameName": {
+      "title": "Napaka pri posodobitvi kategorij",
+      "message": "Kategorija z istim imenom že obstaja v ciljni kategoriji."
+    },
+    "emptyTitle": {
+      "title": "Napaka pri posodobitvi kategorij",
+      "message": "Naslov kategorije ne sme biti prazen."
+    },
+    "noSchema": {
+      "title": "Shema ni bila najdena",
+      "message": "Shema elementa za uporabnika ni bila najdena."
+    },
+    "maxCharacter": {
+      "title": "Napaka pri posodobitvi kategorij",
+      "message": "Imena kategorij imajo lahko največ ${maxCharacter} znakov."
+    },
+    "invalidCharacters": {
+      "title": "Napaka pri posodobitvi kategorij",
+      "single": "Kategorija ne sme vsebovati naslednjega znaka: ${invalidCharacters}.",
+      "multiple": "Kategorija ne sme vsebovati nobenega od teh znakov: ${invalidCharacters}.",
+      "unknown": "Kategorija ne sme vsebovati nobenega od teh znakov: ${invalidCharacters}."
+    }
+  },
+  "warning": {
+    "deleteInUseCategory": {
+      "title": "Izbriši kategorijo",
+      "cta": "Izbriši kategorijo"
+    },
+    "changeTitleInUseCategory": {
+      "title": "Posodobi kategorijo",
+      "cta": "Posodobi kategorijo"
+    }
+  },
+  "template": {
+    "title": "Predloge kategorij",
+    "learnMore": "Več",
+    "templateList": {
+      "custom": {
+        "title": "Kategorije po meri"
+      },
+      "arcgis": {
+        "title": "Kategorije ArcGIS",
+        "message": "Kategorije ArcGIS vsebujejo izbor kategorij in podkategorij tem, ki jih je mogoče uporabiti za kategorizacijo številnih vrst vsebine geoprostora. Te kategorije se uporabljajo za podporo ArcGIS Living Atlas of the World."
+      },
+      "iso": {
+        "title": "Kategorije ISO",
+        "message": "Kategorije ISO vsebujejo tematske kategorije iz mednarodne organizacije za standardizacijo, ki zagotavljajo način opisovanja in katalogiziranja prostorskih informacij."
+      },
+      "inspire": {
+        "title": "Kategorije INSPIRE",
+        "message": "Kategorije INSPIRE vsebujejo celovit nabor tem prostorskih podatkov, določenih v direktivi INSPIRE."
+      }
+    }
+  }
+}

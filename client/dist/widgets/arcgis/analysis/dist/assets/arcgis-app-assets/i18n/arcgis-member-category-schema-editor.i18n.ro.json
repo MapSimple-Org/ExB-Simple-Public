@@ -1,0 +1,22 @@
+{
+  "dialogHeading": "Configurați categoriile de membri",
+  "noticeTitle": "Editați, ștergeți sau reordonați categoriile din organizația dvs.",
+  "noticeDescription": "Puteți atribui categorii membrilor prin fila Membri.",
+  "defaultCategoryWarning": "Această categorie de membru este setată implicit ca membru nou și nu poate fi editată sau ștearsă.",
+  "warning": {
+    "deleteInUseCategory": {
+      "message": {
+        "single": "Un membru este alocat pentru această categorie. Ștergerea categoriei o va elimina și de la acest membru.",
+        "multiple": "${number} membri sunt alocați pentru această categorie. Ștergerea categoriei o va elimina și de la acești membri.",
+        "unknown": "Membrii alocați pentru această categorie: ${number}. Ștergerea categoriei o va elimina și de la acești membri."
+      }
+    },
+    "changeTitleInUseCategory": {
+      "message": {
+        "single": "Un membru este alocat pentru această categorie. Actualizarea categoriei va actualiza membrul pentru a utiliza „${newTitle}”.",
+        "multiple": "${number} membri sunt alocați pentru această categorie. Actualizarea categoriei va actualiza membrul pentru a utiliza „${newTitle}”.",
+        "unknown": "Membrii alocați pentru această categorie: ${number}. Actualizarea categoriei va actualiza membrul pentru a utiliza „${newTitle}”."
+      }
+    }
+  }
+}

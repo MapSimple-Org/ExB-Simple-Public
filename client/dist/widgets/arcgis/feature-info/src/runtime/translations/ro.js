@@ -1,0 +1,1 @@
+System.register([],function(e){return{execute:function(){e({_widgetLabel:"Informa\u021bii despre obiectele spa\u021biale",noDataMessageDefaultText:"Nu au fost g\u0103site date.",featureNumbers:"{index} de {count}",featureInfoDataActionLabel:"\xcenregistrare curent\u0103 informa\u021bii obiect spa\u021bial {layer}"})}}});

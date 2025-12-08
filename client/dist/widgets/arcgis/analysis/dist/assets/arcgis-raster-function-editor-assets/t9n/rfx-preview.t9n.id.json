@@ -1,0 +1,13 @@
+{
+  "header": "Pratinjau",
+  "description": "Pratinjau hasilnya sebelum menjalankan analisis.",
+  "showPreview": "Tampilkan pratinjau",
+  "previewLayer": "Pratinjau Layer ${number}",
+  "update": "Pembaruan",
+  "newPreview": "Pratinjau baru",
+  "previewPopup": "Aktifkan pratinjau hasil analisis berdasarkan parameter input.",
+  "previewError": "Layer pratinjau ini tidak tersedia. Periksa parameter input dan perbarui lagi layer pratinjau ini.",
+  "updatePopover": "Perbarui layer pratinjau yang dipilih",
+  "createPopover": "Buat layer pratinjau baru",
+  "maxPreview": "Jumlah maksimum layer pratinjau yang diperbolehkan: ${maxCount}"
+}

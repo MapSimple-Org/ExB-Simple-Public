@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html dir="rtl">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>הכלי 'העשרת שכבה' מעשיר את ישויות הקלט עם נתונים דמוגרפיה ונוף.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputLayer">
+        <div>
+            <p>ישויות הנקודה, הקו או הפוליגון אשר יעושרו בנתונים נוספים.
+            </p>
+            <p class="toolPaneOnly">מספר היישויות תלוי בגורמים נוספים כגון קריטריונים לסינון ותיחום הניתוח.
+            </p>
+        </div>
+    </div>
+    <div id="analysisVariables">
+        <div>
+            <p>המשתנים שיתווספו כמאפיינים ליישויות הקלט.
+            </p>
+        </div>
+    </div>
+    <div id="bufferType">
+        <div>
+            
+            <p class="toolPaneOnly">השיטה אשר תשמש ליצירת האזורים התוחמים סביב ישויות הנקודה או הקו של הקלט. השיטה יכולה להיות מרחק קו ישר או מצב נסיעה. כל האזור סביב כל ישות יועשר.
+            </p> 
+            <p class="modelBuilderOnly">השיטה אשר תשמש ליצירת האזורים התוחמים סביב ישויות הנקודה או הקו של הקלט. נכון לעכשיו, מרחק בקו ישר זו השיטה היחידה שנתמכת עבור מודלים. כל האזור סביב כל ישות יועשר.
+            </p>
+        </div>
+    </div>
+    <div id="distance">
+        <div>
+            <p>ערך מספרי שמציין את המרחק או הזמן לתיחום האזור המועשר סביב כל ישות קלט.
+            </p>
+        </div>
+    </div>
+    <div id="units">
+        <div>
+            <p>היחידות שבהן יעשה שימוש לציון המרחק או הזמן לתיחום האזור המועשר סביב כל ישות קלט.
+            </p>
+        </div>
+    </div>
+    <div id="returnBoundaries">
+        <div>
+            <p>מציין האם שכבת הפלט תכיל ישויות פוליגון שמוגדרות על ידי הגדרות  <b>אזורי ההעשרה</b> (מסומן) או ישויות הקלט (לא מסומן).
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>שם השכבה שתיווצר ותתווסף למפה.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>שם התיקייה  <b>בתוכן שלי</b> שבה התוצאה תישמר.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>河川リンク ラスターの作成 (Stream Link) は、ラスターの線形ネットワークの交差部分に一意の値を割り当てます。
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputStreamRaster">
+        <div>
+            <p>線形河川ネットワークを定義するラスター。
+            </p>
+        </div>
+    </div>
+    <div id="inputFlowDirectionRaster">
+        <div>
+            <p>各セルからの流れの方向を定義するラスター。
+            </p>
+            <p>流向を決定するには、D8 方法を使用する必要があります。
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>作成されてマップに追加される河川リンク ラスター レイヤーの名前。
+            </p>
+        </div>
+    </div>
+    <div id="resultType">
+        <div>
+            <p>作成する出力のタイプ。 出力は、タイル イメージ レイヤーまたはダイナミック イメージ レイヤーです。
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>結果を保存する  <b>[マイ コンテンツ]</b> 内のフォルダーの名前。
+            </p>
+        </div>
+    </div>
+</div>
+</html>

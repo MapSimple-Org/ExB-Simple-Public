@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>Mit dem Werkzeug &quot;Mosaike generieren&quot; wird basierend auf der angegebenen Ausdehnung, Form und Gr&ouml;&szlig;e ein Raster aus Polygonen erstellt.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="binType">
+        <div>
+            <p>Die Form der Mosaike, die erstellt werden.
+            </p>
+        </div>
+    </div>
+    <div id="sizeType">
+        <div>
+            <p>Gibt an, ob die Mosaikgr&ouml;&szlig;e anhand der Fl&auml;che (<b>Fl&auml;che</b>) oder anhand eines Entfernungswertes (<b>Entfernung</b>) definiert wird.
+            </p>
+        </div>
+    </div>
+    <div id="binSize">
+        <div>
+            <p>Die Gr&ouml;&szlig;e (Fl&auml;che oder Entfernung) der generierten Mosaike. F&uuml;r Quadrate, Hexagone, Dreiecke und Rauten wird die H&ouml;he der Mosaike durch die Entfernung bestimmt. F&uuml;r transversale Hexagone wird die Breite der Mosaike durch die Entfernung bestimmt.
+            </p>
+        </div>
+    </div>
+    <div id="binResolution">
+        <div>
+            <p>Die H3-Aufl&ouml;sung der Mosaike. Die Aufl&ouml;sung reicht von 0 bis 15. Mit jeder Zunahme der Aufl&ouml;sungsgr&ouml;&szlig;e nimmt die Fl&auml;che der Polygone auf ein Siebtel der Gr&ouml;&szlig;e mit der geringeren Aufl&ouml;sung ab.
+            </p>
+        </div>
+    </div>
+    <div id="binSizeUnit">
+        <div>
+            <p>Die Einheiten, die f&uuml;r die Mosaikgr&ouml;&szlig;e verwendet werden.
+            </p>
+        </div>
+    </div>
+    <div id="extentLayer">
+        <div>
+            <p>Die von den Mosaiken abgedeckte Ausdehnung.
+            </p>
+            <p class="toolPaneOnly">Die Anzahl der Features ist abh&auml;ngig von zus&auml;tzlichen Faktoren wie Filterkriterien oder der Analyseausdehnung.
+            </p>
+        </div>
+    </div>
+    <div id="intersectStudyArea">
+        <div>
+            <p>Gibt f&uuml;r Feature-Layer an, ob die Mosaike die gesamte Ausdehnung abdecken oder ob sie nur die Schnittfl&auml;chen zwischen Mosaiken und Features abdecken.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>Der Name des Layers, der erstellt und der Karte hinzugef&uuml;gt wird.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>Der Name des Ordners in  <b>Eigene Inhalte</b>, in dem das Ergebnis gespeichert werden soll.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

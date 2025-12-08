@@ -1,0 +1,9 @@
+{
+  "inputFlowDirectionRasterLabel": "Input – flowretningsraster",
+  "inputLayerGroupText": "Vælg inputstrømmen og flowretningsrastere.",
+  "inputStreamRasterLabel": "Input-strømraster",
+  "itemProperties": {
+    "description": "Output, der er genereret ved at køre StreamLink-analyseværktøjet.",
+    "snippet": "Output, der er genereret fra StreamLink"
+  }
+}

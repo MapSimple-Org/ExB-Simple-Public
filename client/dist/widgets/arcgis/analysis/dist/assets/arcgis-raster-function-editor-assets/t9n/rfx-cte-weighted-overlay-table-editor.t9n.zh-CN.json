@@ -1,0 +1,13 @@
+{
+  "weightedOverlayTable": "加权叠加表",
+  "id": "ID",
+  "layer": "图层",
+  "field": "字段",
+  "influence": "影响力",
+  "sumOfInfluence": "影响力总和",
+  "value": "值",
+  "remapTable": "重映射表",
+  "scale": "缩放",
+  "scales": "比例",
+  "selectRaster": "选择栅格"
+}

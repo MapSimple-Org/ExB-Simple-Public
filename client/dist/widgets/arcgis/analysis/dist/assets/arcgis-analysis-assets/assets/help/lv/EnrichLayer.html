@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>Slāņa bagātinā&scaron;anas rīks uzlabo ievades datus ar demogrāfiskajiem un ainavas datiem.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputLayer">
+        <div>
+            <p>Punkta, līnijas vai laukuma elementi, kas tiks bagātināti ar papildu datiem.
+            </p>
+            <p class="toolPaneOnly">Elementu skaits ir atkarīgs no papildu faktoriem, piemēram, filtrē&scaron;anas kritērijiem un analīzes apjoma.
+            </p>
+        </div>
+    </div>
+    <div id="analysisVariables">
+        <div>
+            <p>Mainīgie, kas tiks pievienoti kā atribūti ievades elementiem.
+            </p>
+        </div>
+    </div>
+    <div id="bufferType">
+        <div>
+            
+            <p class="toolPaneOnly">Metode, kas tiks imantota, lai izveidotu sasaistes zonas ap ievades punktu vai līnijas elementiem. Metode var būt taisnas līnijas attālums vai pārvieto&scaron;anās režīms. Tiks bagātināta visa teritorija ap katru elementu.
+            </p> 
+            <p class="modelBuilderOnly">Metode, kas tiks imantota, lai izveidotu sasaistes zonas ap ievades punktu vai līnijas elementiem. Pa&scaron;laik vienīgā metode, kas ir atbalstīta modeļiem, ir taisnas līnijas attālums. Tiks bagātināta visa teritorija ap katru elementu.
+            </p>
+        </div>
+    </div>
+    <div id="distance">
+        <div>
+            <p>Skaitliskā vērtība, kas precizē attālumu vai laiku, kādā bagātinātā teritorija papla&scaron;ināsies ap katru ievades elementu.
+            </p>
+        </div>
+    </div>
+    <div id="units">
+        <div>
+            <p>Vienības, kas tiks izmantotas, lai norādītu attālumu vai laiku, kādā bagātinātā teritorija papla&scaron;ināsies ap katru ievades elementu.
+            </p>
+        </div>
+    </div>
+    <div id="returnBoundaries">
+        <div>
+            <p>Norāda, vai izvades slānis saturēs laukuma elementus, kas definēti  <b>Bagātinā&scaron;anas teritorijās</b> (atzīmēts) vai ievades elementus (neatzīmēts).
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>Tā slāņa nosaukums, kas tiks izveidots un pievienots kartei.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>Mapes nosaukums sadaļā  <b>Mans saturs</b>, kurā tiks saglabāts rezultāts.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

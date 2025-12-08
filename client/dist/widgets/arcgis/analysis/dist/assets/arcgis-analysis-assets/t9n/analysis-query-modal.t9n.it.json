@@ -1,0 +1,18 @@
+{
+  "add": "Aggiungi",
+  "attributeExpressionDescription": "Restringi le feature di interesse in base ai valori degli attributi in un campo.",
+  "attributeExpressionTitle": "Espressione attributi",
+  "cancel": "Annulla",
+  "expressionDescription": "Filtra i record di interesse in base ai valori dei campi.",
+  "expressionGroupDescription": "Raggruppa criteri per controllare l'ordine e le relazioni nell'interrogazione.",
+  "expressionGroupTitle": "Gruppo di espressioni",
+  "expressionTitle": "Espressione",
+  "header": "Generatore interrogazioni",
+  "helpActionText": "Guida",
+  "loading": "Caricamento in corso...",
+  "next": "Avanti",
+  "spatialExpressionDescription": "Restringi le feature di interesse in base alle relazioni con le feature in un altro layer.",
+  "spatialExpressionTitle": "Espressione spaziale",
+  "spatialExpressionTwoLayers": "Le espressioni spaziali richiedono almeno due layer distinti.",
+  "validationFailedScrollUp": "Convalida interrogazione non riuscita. Scorrere verso l'alto e correggere gli errori."
+}

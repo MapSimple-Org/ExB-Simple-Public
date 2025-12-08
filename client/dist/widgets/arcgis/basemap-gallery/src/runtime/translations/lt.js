@@ -1,0 +1,1 @@
+System.register([],function(e){return{execute:function(){e({_widgetLabel:"Pagrindo \u017eem\u0117lapi\u0173 galerija"})}}});

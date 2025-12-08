@@ -1,0 +1,13 @@
+{
+  "fieldCalcExpression": "Вираз обчислення поля",
+  "fieldCalculationGroupLabel": "Обчислення поля",
+  "fieldPlaceholderText": "Натисніть, щоб вибрати або створити поле",
+  "fieldToCalculate": "Поле для обчислення",
+  "inputDatasetGroupLabel": "Введення",
+  "itemProperties": {
+    "description": "Результат отриманий через запуск інструмента «Обчислити поле» в ModelBuilder.",
+    "snippet": "Векторний шар, згенерований в результаті операції «Обчислити поле»"
+  },
+  "noFieldSpecified": "Вкажіть поле для обчислення, щоб створити вираз.",
+  "whereClause": "Застосовувати обчислення лише до певних записів"
+}

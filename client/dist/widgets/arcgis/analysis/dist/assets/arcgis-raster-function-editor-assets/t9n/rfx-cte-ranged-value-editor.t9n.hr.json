@@ -1,0 +1,6 @@
+{
+  "greaterThanErrorMessage": "Ulazni broj mora biti veći od ${min}",
+  "lesserThanErrorMessage": "Ulazni broj mora biti manji od ${max}",
+  "greaterThanOrEqualErrorMessage": "Ulazni broj mora biti veći od ili jednak ${min}",
+  "lesserThanOrEqualErrorMessage": "Ulazni broj mora biti manji od ili jednak ${max}"
+}

@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>Інструмент &laquo;Оптимальний шлях як растр&raquo; визначає оптимальний растровий шлях від місць призначення до джерел.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputDestinationRasterOrFeatures">
+        <div>
+            <p>Рівень, який визначає пункти призначення, від яких обчислюється відстань до джерела з найменшою вартістю.
+            </p>
+            <p>Якщо вхідними даними є растр, він має складатися з осередків, які мають допустимі цілочисельні значення (нуль є допустимим значенням) для місць призначення, а решті осередків має бути призначено NoData.
+            </p>
+            <p class="toolPaneOnly">Для введення об'єктів підрахунок залежить від таких додаткових факторів як критерії фільтрування та екстент аналізу.
+            </p>
+        </div>
+    </div>
+    <div id="destinationField">
+        <div>
+            <p>Поле, яке буде використовуватися для отримання значень для місць розташування пункту призначення.
+            </p>
+        </div>
+    </div>
+    <div id="inputDistanceAccumulationRaster">
+        <div>
+            <p>Растр, який визначає оптимальний шлях від місць призначення до джерел.
+            </p>
+            <p>Растр сумарної відстані зазвичай створюється за допомогою інструментів &quot;Сумарна відстань&quot; або &quot;Розподіл відстані&quot;.
+            </p>
+        </div>
+    </div>
+    <div id="inputBackDirectionRaster">
+        <div>
+            <p>Растр, що містить обчислені напрямки у градусах.
+            </p>
+            <p>Растр зворотного напрямку зазвичай створюється за допомогою інструментів &quot;Сумарна відстань&quot; або &quot;Розподіл відстані&quot;.
+            </p>
+        </div>
+    </div>
+    <div id="pathType">
+        <div>
+            <p>Показує, як значення та зони з вхідних даних призначення будуть інтерпретовані при розрахунку оптимального шляху.
+            </p>
+        </div>
+    </div>
+    <div id="outputRasterName">
+        <div>
+            <p>Ім'я оптимального шляху як растрового шару, який буде створено та додано до карти.
+            </p>
+        </div>
+    </div>
+    <div id="resultType">
+        <div>
+            <p>Тип вихідних даних, які буде створено. Вихідними даними може бути шар зображень з тайлами або динамічний шар зображень.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>Назва папки в  <b>Моєму вмісті</b>, де буде збережено результат.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

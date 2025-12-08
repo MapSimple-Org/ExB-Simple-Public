@@ -1,0 +1,15 @@
+{
+  "addDataStore": "Afegeix un magatzem de dades",
+  "addFile": "Afegeix el fitxer",
+  "addServiceConnection": "Afegeix una connexió",
+  "itemNotFound": "L'element no existeix o no s'hi pot accedir.",
+  "itemPermissionDenied": "No teniu permisos per accedir a aquest element.",
+  "previewDetails": "Visualització prèvia dels detalls",
+  "queryModelArgsErrMsg": "No s'han pogut consultar els arguments del model.",
+  "queryModelArgsMsg": "S'estan consultant els arguments del model...",
+  "removeItem": "Elimina un element",
+  "replaceItem": "Substitueix l'element",
+  "requiredInputMessage": "Aquest paràmetre és obligatori.",
+  "selectItem": "Selecciona l'element",
+  "viewDetails": "Mostra els detalls"
+}

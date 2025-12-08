@@ -1,0 +1,36 @@
+{
+  "modalHeader": "Tartalomkategóriák konfigurálása",
+  "modalGroupHeader": "Csoportkategóriák konfigurálása",
+  "helpText": "Szerkesztheti, töröljeti vagy átrendezheti a szervezetén belüli kategóriákat.",
+  "helpTextGroup": "Szerkessze, törölje vagy rendezze át a csoport tartalomkategóriáit.",
+  "helpTextDescription": "Ne feledje, hogy a szervezet más tagjai már hozzárendelhették ezeket a kategóriákat az elemeikhez, ezért a séma frissítésével azok az elemek is ennek megfelelően frissülnek.",
+  "helpTextGroupDescription": "Ne feledje, hogy a csoport más tagjai már hozzárendelhették ezeket a kategóriákat az elemeikhez, ezért a séma frissítésével azok az elemek is ennek megfelelően frissülnek.",
+  "warning": {
+    "deleteInUseCategory": {
+      "title": "Kategória törlése",
+      "cta": "Kategória törlése",
+      "message": {
+        "single": "Egy elem van a kategóriához rendelve. A kategória törlésével ebből az elemből is törli.",
+        "multiple": "${number} elem van a kategóriához rendelve. A kategória törlésével ezekből az elemekből is törli.",
+        "unknown": "Az ehhez a kategóriához rendelt elemek: ${number}. A kategória törlésével ezekből az elemekből is törli."
+      }
+    },
+    "changeTitleInUseCategory": {
+      "title": "Kategória frissítése",
+      "message": {
+        "single": "Egy elem van a kategóriához rendelve. A kategória frissítése az elemet a(z) „${newTitle}” használatára frissíti.",
+        "multiple": "${number} elem van a kategóriához rendelve. A kategória frissítése az elemeket a(z) „${newTitle}” használatára frissíti.",
+        "unknown": "Az ehhez a kategóriához rendelt elemek: ${number}. A kategória frissítése az elemeket a(z) „${newTitle}” használatára frissíti."
+      },
+      "cta": "Kategória frissítése"
+    }
+  },
+  "template": {
+    "templateList": {
+      "custom": {
+        "message": "Hozzon létre saját kategóriákat a szervezeten belüli tartalmak rendszerezéséhez.",
+        "messageGroup": "Hozzon létre saját kategóriákat a csoporton belüli tartalmak rendszerezéséhez."
+      }
+    }
+  }
+}

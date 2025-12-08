@@ -1,0 +1,16 @@
+{
+  "backLabel": "뒤로",
+  "browseHeader": "레이어 선택",
+  "cannotReopenRasterFunction": "래스터 함수를 다시 열 수 없습니다.",
+  "creditThresholdModal": {
+    "cancelRun": "취소",
+    "continueRun": "무시하고 실행",
+    "creditEstimate": "예상되는 크레딧: ${cost}",
+    "creditThreshold": "크레딧 임계값: ${threshold}",
+    "heading": "진행하기 전에",
+    "learnMore": "크레딧 임계값에 대해 자세히 알아보기",
+    "thresholdExceeded": "이 분석의 예상 크레딧 비용이 웹 맵의 크레딧 임계값보다 큽니다."
+  },
+  "failedToExecuteEstimate": "제출에 실패했습니다. EstimateRasterAnalysisCost를 실행하는 데 실패함",
+  "runAnalysisLabel": "실행"
+}

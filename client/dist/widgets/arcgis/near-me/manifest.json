@@ -1,0 +1,92 @@
+{
+  "name": "near-me",
+  "label": "Near Me",
+  "type": "widget",
+  "version": "1.19.0",
+  "exbVersion": "1.19.0",
+  "author": "Esri R&D Center Beijing",
+  "description": "A widget to locate and analyze features within a specified distance of a defined location or the current extent of the map.",
+  "copyright": "",
+  "license": "http://www.apache.org/licenses/LICENSE-2.0",
+  "dependency": "jimu-arcgis",
+  "properties": {
+    "canConsumeDataAction": true,
+    "canGenerateMultipleOutputDataSources": true,
+    "needHiddenState": true,
+    "showDescription": true
+  },
+  "publishMessages": [
+    "DATA_RECORDS_SELECTION_CHANGE"
+  ],
+  "excludeDataActions": [
+    "table.*",
+    "elevation-profile.*",
+    "setFilter",
+    "arcgis-map.addToMap",
+    "dataStatistics",
+    "relatedData",
+    "directions.DirectionsTo",
+    "directions.DirectionsFrom"
+  ],
+  "messageActions": [
+    {
+      "name": "locate",
+      "label": "Set location",
+      "uri": "message-actions/set-location-message-action"
+    }
+  ],
+  "dataActions": [
+    {
+      "name": "locate",
+      "label": "Set location",
+      "uri": "data-actions/set-location-data-action",
+      "icon": "runtime/assets/icons/nearme-icon.svg"
+    }
+  ],
+  "translatedLocales": [
+    "en",
+    "ar",
+    "bg",
+    "bs",
+    "ca",
+    "cs",
+    "da",
+    "de",
+    "el",
+    "es",
+    "et",
+    "fi",
+    "fr",
+    "he",
+    "hr",
+    "hu",
+    "id",
+    "it",
+    "ja",
+    "ko",
+    "lt",
+    "lv",
+    "no",
+    "nl",
+    "pl",
+    "pt-br",
+    "pt-pt",
+    "ro",
+    "ru",
+    "sk",
+    "sl",
+    "sr",
+    "sv",
+    "th",
+    "tr",
+    "zh-cn",
+    "uk",
+    "vi",
+    "zh-hk",
+    "zh-tw"
+  ],
+  "defaultSize": {
+    "width": 350,
+    "height": 400
+  }
+}

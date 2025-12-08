@@ -1,0 +1,9 @@
+{
+  "inputFlowDirectionRasterLabel": "קלט רסטר כיוון זרימה",
+  "inputLayerGroupText": "בחר את זרם הקלט והרסטרים של כיוון זרימה.",
+  "inputStreamRasterLabel": "קלט רסטר זרימה",
+  "itemProperties": {
+    "description": "פלט הופק מהרצת כלי הניתוח StreamLink.",
+    "snippet": "פלט הופק מ-StreamLink"
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "itemProperties": {
+    "description": "Wynik wygenerowany po uruchomieniu narzędzia analizy Filtruj według atrybutów.",
+    "snippet": "Wynik wygenerowany przez filtrowanie według atrybutów"
+  },
+  "noLayerDisabledTooltip": "Wybierz prawidłowy wejściowy zestaw danych",
+  "queryCriteriaGroupLabel": "Kryteria zapytania"
+}

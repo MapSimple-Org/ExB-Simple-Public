@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>Substituir defini&ccedil;&otilde;es para an&aacute;lise no  Map Viewer. </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="resultType">
+        <div>
+            <p>Especifica o tipo de sa&iacute;da que ser&aacute; criado. A op&ccedil;&atilde;o  <b>Criar dados interm&eacute;dios</b> cria uma camada tempor&aacute;ria que pode ser utilizada como entrada para outra ferramenta, mas n&atilde;o pode ser guardada ou visualizada no mapa. A op&ccedil;&atilde;o <b>Criar camada alojada</b> publica uma nova camada de elementos alojada. A op&ccedil;&atilde;o <b>Substituir camada existente</b> atualiza uma camada existente com a sa&iacute;da da ferramenta.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>O nome da camada que ser&aacute; criada e adicionada ao mapa.
+            </p>
+        </div>
+    </div>
+    <div id="layerExistsAutomaticallyOverwrite">
+        <div>
+            <p>Especifica se a sa&iacute;da da ferramenta ir&aacute; substituir uma camada no seu conte&uacute;do que tenha o nome de sa&iacute;da especificado. Se esse nome de camada ainda n&atilde;o tiver sido utilizado na sua organiza&ccedil;&atilde;o, ser&aacute; criado um novo item. Tem de ser o propriet&aacute;rio da camada ou um administrador para a substituir.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>O nome da pasta em  <b>O meu conte&uacute;do</b> onde os resultados ser&atilde;o guardados.
+            </p>
+            <p>N&atilde;o &eacute; poss&iacute;vel atualizar se a camada j&aacute; existir.
+            </p>
+        </div>
+    </div>
+    <div id="existingLayerToOverwrite">
+        <div>
+            <p>A camada em  <b>O meu conte&uacute;do</b> que ser&aacute; substitu&iacute;da pela camada de sa&iacute;da. As refer&ecirc;ncias espaciais da camada de sa&iacute;da e da camada existente t&ecirc;m de corresponder.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

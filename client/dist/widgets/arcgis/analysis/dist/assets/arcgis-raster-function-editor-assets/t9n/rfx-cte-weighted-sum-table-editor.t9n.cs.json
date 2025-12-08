@@ -1,0 +1,9 @@
+{
+  "weightedSumTable": "Tabulka váženého součtu",
+  "id": "ID",
+  "layer": "Vrstva",
+  "field": "Pole",
+  "weight": "Váha",
+  "value": "Hodnota",
+  "selectLayer": "Vybrat vrstvu"
+}

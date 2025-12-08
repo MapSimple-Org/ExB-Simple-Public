@@ -1,0 +1,8 @@
+{
+  "itemProperties": {
+    "description": "Özniteliklere Göre Filtrele analiz aracının çalıştırılmasıyla elde edilen sonuç.",
+    "snippet": "Özniteliklere Göre Filtrele'den elde edilen sonuç"
+  },
+  "noLayerDisabledTooltip": "Geçerli bir girdi veri kümesi seçin.",
+  "queryCriteriaGroupLabel": "Sorgu kriterleri"
+}

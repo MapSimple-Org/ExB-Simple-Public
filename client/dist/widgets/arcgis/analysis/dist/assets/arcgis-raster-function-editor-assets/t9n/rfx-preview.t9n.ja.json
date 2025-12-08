@@ -1,0 +1,13 @@
+{
+  "header": "プレビュー",
+  "description": "解析を実行する前に結果をプレビューします。",
+  "showPreview": "プレビューの表示",
+  "previewLayer": "プレビュー レイヤー ${number}",
+  "update": "更新",
+  "newPreview": "新しいプレビュー",
+  "previewPopup": "入力パラメーターに基づく解析結果のプレビューを有効化します。",
+  "previewError": "このプレビュー レイヤーは利用できません。 入力パラメーターを確認して、このプレビュー レイヤーをもう一度更新してください。",
+  "updatePopover": "選択したプレビュー レイヤーの更新",
+  "createPopover": "新しいプレビュー レイヤーの作成",
+  "maxPreview": "プレビュー レイヤーの最大許容数: ${maxCount}"
+}

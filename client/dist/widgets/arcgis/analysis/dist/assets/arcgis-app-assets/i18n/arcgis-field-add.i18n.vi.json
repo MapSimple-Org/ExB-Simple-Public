@@ -1,0 +1,137 @@
+{
+  "next": "Tiếp",
+  "addField": "Thêm trường",
+  "selectDataType": "Chọn loại dữ liệu sẽ được lưu trữ trong trường",
+  "addGlobalIDNotice": "Trường sẽ được điền tự động cho các dữ liệu hiện tại trong lớp hoặc bảng. Không thể chỉnh sửa hoặc xóa trường này sau khi thêm.",
+  "fieldName": "Tên trường",
+  "displayName": "Tên hiển thị",
+  "length": "Độ dài",
+  "defaultValue": "Giá trị mặc định (tùy chọn)",
+  "fieldTypes": "Loại trường",
+  "fieldValueType": "Loại giá trị trường (tùy chọn)",
+  "fieldDescription": "Thông tin mô tả trường (tùy chọn)",
+  "allowNullValues": "Cho phép giá trị rỗng",
+  "valueRequiredError": "Giá trị này là bắt buộc",
+  "fieldAdded": "Thêm trường thành công",
+  "newFieldTypeNotice": "Loại trường này có thể không được hỗ trợ đầy đủ ở một số ứng dụng khách.",
+  "addingField": "Đang thêm trường...",
+  "syncEnabled": "Không thể thêm một số loại trường vì đồng bộ hóa đang được bật trên lớp.",
+  "newFeature": "Đối tượng mới",
+  "fieldAdditionUnsuccessful": "Bổ sung trường không thành công",
+  "error": "Lỗi",
+  "noFieldTypeSelected": "Chưa chọn loại trường nào",
+  "nullFieldTypeError": "Bạn phải chọn loại trường để tiếp tục.",
+  "fieldNameCharacterNotice": "Tên trường dài hơn 31 ký tự không tương thích với mục đích sử dụng ngoại tuyến.",
+  "suggestedHeader": "Đề xuất",
+  "otherHeader": "Khác",
+  "provideDescription": "Cung cấp mô tả thông tin trường sẽ chứa",
+  "nullableTooltipInfo": "Bạn không thể chỉnh sửa thiết lập này nếu lớp của bạn đã chứa dữ liệu.",
+  "tooltipInfo": {
+    "globalIDExists": "Trường GlobalID đã tồn tại trên dịch vụ này. Chỉ có thể hiện một trường GlobalID trên một lớp hoặc bảng.",
+    "enterpriseTimestampOffset": "ArcGIS Enterprise không hỗ trợ các trường Độ lệch Nhãn thời gian trong lớp đối tượng được lưu trữ."
+  },
+  "text": {
+    "title": "Văn bản",
+    "description": "Các giá trị chứa ký tự đặc biệt hoặc chữ và số.",
+    "types": {
+      "esriFieldTypeString": {
+        "title": "Chuỗi",
+        "description": "Lưu trữ tập hợp các ký tự chữ và số có độ dài đã chỉ định."
+      }
+    }
+  },
+  "numbers": {
+    "title": "Số",
+    "description": "Các giá trị chứa thông tin dạng số.",
+    "types": {
+      "esriFieldTypeDouble": {
+        "title": "Double",
+        "description": "Lưu trữ các số có chữ số thập phân."
+      },
+      "esriFieldTypeInteger": {
+        "title": "Số nguyên",
+        "description": "Lưu trữ các số nguyên từ ${lowerIntegerRange} đến ${upperIntegerRange}."
+      },
+      "esriFieldTypeBigInteger": {
+        "title": "Số nguyên Lớn",
+        "description": "Lưu trữ toàn bộ số nguyên từ -(2${startSup}53${endSup}-1) đến 2${startSup}53${endSup}-1. Sử dụng loại trường này khi sử dụng các số bên ngoài phạm vi trường số nguyên được hỗ trợ."
+      }
+    }
+  },
+  "dates": {
+    "title": "Ngày",
+    "description": "Các giá trị chứa thông tin dạng thời gian.",
+    "types": {
+      "esriFieldTypeDate": {
+        "title": "Ngày",
+        "description": "Lưu trữ các giá trị gồm ngày và giờ."
+      },
+      "esriFieldTypeDateOnly": {
+        "title": "Chỉ Ngày",
+        "description": "Lưu trữ các giá trị ngày và không có giá trị giờ."
+      },
+      "esriFieldTypeTimeOnly": {
+        "title": "Chỉ Giờ",
+        "description": "Lưu trữ các giá trị không bao gồm các giá trị ngày."
+      },
+      "esriFieldTypeTimestampOffset": {
+        "title": "Độ lệch Nhãn thời gian",
+        "description": "Lưu trữ các giá trị cho biết ngày, giờ và độ lệch từ Giờ Phối hợp Quốc tế (UTC)."
+      }
+    }
+  },
+  "globalIdentifiers": {
+    "title": "Mã định danh toàn cầu",
+    "description": "Các giá trị nhận dạng một đối tượng hoặc dòng bảng duy nhất.",
+    "types": {
+      "esriFieldTypeGlobalID": {
+        "title": "GlobalID",
+        "description": "Lưu trữ chuỗi 36 ký tự gồm chữ và số được sử dụng để nhận dạng duy nhất một đối tượng."
+      },
+      "esriFieldTypeGUID": {
+        "title": "GUID",
+        "description": "Lưu trữ chuỗi 36 ký tự gồm chữ và số. Mã định danh Duy nhất Toàn cầu, hay GUID, thường được dùng để quản lý mối quan hệ giữa các đối tượng."
+      }
+    }
+  },
+  "fieldValueTypes": {
+    "nameOrTitle": "Tên hoặc Tiêu đề",
+    "description": "Thông tin mô tả",
+    "typeOrCategory": "Loại hoặc Danh mục",
+    "countOrAmount": "Tổng số hoặc Số lượng",
+    "percentageOrRatio": "Phần trăm hoặc Tỷ lệ",
+    "measurement": "Đo lường",
+    "currency": "Tiền tệ",
+    "uniqueIdentifier": "Mã định danh Duy nhất",
+    "phoneNumber": "Số Điện thoại",
+    "emailAddress": "Địa chỉ Email",
+    "orderedOrRanked": "Thứ tự hoặc Xếp hạng",
+    "binary": "Nhị phân",
+    "locationOrPlaceName": "Tên Vị trí hoặc Địa điểm",
+    "coordinate": "Tọa độ",
+    "dateAndTime": "Ngày và Giờ",
+    "none": "Không có"
+  },
+  "addFieldErrors": {
+    "invalidName": "Tên không hợp lệ",
+    "invalidLength": "Độ dài không hợp lệ",
+    "outOfRangeValueError": "Giá trị này nằm ngoài khoảng.",
+    "invalidValueError": "Giá trị đã nhập không hợp lệ.",
+    "invalidFieldParameters": "Thông số trường không hợp lệ",
+    "invalidInputsError": "Kiểm tra đảm bảo đã điền chính xác thông số trường.",
+    "existingFieldNameError": "Tên trường không được giống với tên trường đã tồn tại.",
+    "invalidNameInputSQLError": "Tên trường không được giống từ khóa SQL.",
+    "invalidNameInputInvalidCharactersError": "Phải bắt đầu bằng một chữ cái và chỉ chứa các ký tự dạng chữ cái, số và dấu '_'.",
+    "valueIsRequiredError": "Giá trị này là bắt buộc.",
+    "lengthExceeds": "Độ dài tên trường phải ít hơn hoặc bằng ${maxFieldNameLength} ký tự.",
+    "defaultValueExceeds": "Giá trị mặc định vượt quá độ dài trường được chỉ định.",
+    "savingFailed": "Lưu ${layerName} không thành công",
+    "readOnlyErrorMessage": "ArcGIS Online đang gặp sự cố hoạt động và đã chuyển sang chế độ chỉ đọc. Một số chức năng có thể bị hạn chế. Để cập nhật thông in mới nhất về thời điểm sự cố được giải quyết, hãy truy cập Bảng thông tin Tình trạng ArcGIS Online.",
+    "readOnlyErrorMessageEnterprise": "ArcGIS Enterprise đang gặp sự cố hoạt động và đã chuyển sang chế độ chỉ đọc. Một số chức năng có thể bị hạn chế.",
+    "healthDashboard": "Bảng thông tin Tình trạng ArcGIS Online",
+    "genericAddFieldError": {
+      "title": "Lỗi",
+      "description": "Đã xảy ra lỗi khi thêm trường của bạn."
+    }
+  }
+}

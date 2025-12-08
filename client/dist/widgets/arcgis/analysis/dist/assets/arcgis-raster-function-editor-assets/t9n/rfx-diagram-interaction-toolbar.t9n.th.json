@@ -1,0 +1,9 @@
+{
+  "zoomIn": "ขยายภาพ",
+  "zoomOut": "ย่อภาพ",
+  "autoLayout": "โครงร่างอัตโนมัติ",
+  "stretch": "พอดีกับมุมมอง",
+  "select": "เลือก",
+  "pan": "เลื่อน",
+  "deleteSelectedItemsText": "ลบรายการที่เลือก"
+}

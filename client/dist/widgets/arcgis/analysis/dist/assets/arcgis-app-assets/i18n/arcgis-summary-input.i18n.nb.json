@@ -1,0 +1,9 @@
+{
+  "summary": "Sammendrag",
+  "description": "Beskrivelse",
+  "addSummary": "Legg til et sammendrag",
+  "addDescription": "Legg til en beskrivelse",
+  "charactersLeft": "Tegn igjen: ${num}",
+  "invalid": "Sammendraget kan ikke inneholde følgende tegn: < eller >.",
+  "invalidDescription": "Beskrivelsen kan ikke inneholde følgende tegn: < og >."
+}

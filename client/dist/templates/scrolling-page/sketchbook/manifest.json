@@ -1,0 +1,27 @@
+{
+  "name": "sketchbook",
+  "type": "template",
+  "templateType": "scrolling-page",
+  "label": "Sketchbook",
+  "description": "Sketchbook is a template that provides Card, Map, and Chart widgets for representing data, and a Draw widget for highlighting interesting areas on the map.",
+  "thumbnail": "thumbnail.png",
+  "order": 15,
+  "tags": [
+    "Logo",
+    "Title",
+    "Banner",
+    "Gallery",
+    "Card",
+    "Map",
+    "Draw",
+    "Measurement",
+    "Chart",
+    "Share"
+  ],
+  "categoriesTags": [
+    "Web page",
+    "Scrolling"
+  ],
+  "thumbnailWidth": 320,
+  "thumbnailHeight": 214
+}

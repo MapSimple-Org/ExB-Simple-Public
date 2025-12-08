@@ -1,0 +1,13 @@
+{
+  "weightedOverlayTable": "Weighted Overlay Table",
+  "id": "ID",
+  "layer": "Layer",
+  "field": "Field",
+  "influence": "Influence",
+  "sumOfInfluence": "Sum of Influence",
+  "value": "Value",
+  "remapTable": "Remap Table",
+  "scale": "Scale",
+  "scales": "Scales",
+  "selectRaster": "Select Raster"
+}

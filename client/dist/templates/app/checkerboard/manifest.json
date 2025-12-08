@@ -1,0 +1,31 @@
+{
+  "name": "checkerboard",
+  "type": "template",
+  "templateType": "app",
+  "label": "Checkerboard",
+  "description": "Checkerboard is a grid page template with a map widget in the middle and map related widgets around it.",
+  "thumbnail": "thumbnail.png",
+  "order": 29,
+  "tags": [
+    "Map",
+    "Logo",
+    "Title",
+    "Share",
+    "Grid",
+    "Legend",
+    "Fly Controller",
+    "Draw",
+    "Rotate fly",
+    "Route fly",
+    "Map Layers"
+  ],
+  "categoriesTags": [
+    "Map centric",
+    "Dashboard",
+    "Fullscreen grid"
+  ],
+  "isMultiplePage": false,
+  "isMapAware": true,
+  "thumbnailWidth": 320,
+  "thumbnailHeight": 214
+}

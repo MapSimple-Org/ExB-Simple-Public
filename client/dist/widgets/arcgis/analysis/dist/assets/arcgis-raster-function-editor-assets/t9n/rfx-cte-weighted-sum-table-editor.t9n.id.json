@@ -1,0 +1,9 @@
+{
+  "weightedSumTable": "Tabel Jumlah Berbobot",
+  "id": "ID",
+  "layer": "Layer",
+  "field": "Kolom",
+  "weight": "Berat",
+  "value": "Nilai",
+  "selectLayer": "Pilih Layer"
+}

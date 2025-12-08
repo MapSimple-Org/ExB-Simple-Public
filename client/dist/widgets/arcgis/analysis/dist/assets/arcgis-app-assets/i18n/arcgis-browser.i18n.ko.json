@@ -1,0 +1,89 @@
+{
+  "browser": {
+    "refineContent": "콘텐츠 세부 조정",
+    "filters": "필터",
+    "pageRange": "${start}~${end}, 총계: ${total}",
+    "pageRangeAria": "${start}~${end}, 총 항목: ${total}개",
+    "pageRangeWithRecycleBin": "${start}-${end}, 총: ${total}(총 크기: ${recycleBinSize})",
+    "pageRangeAriaWithRecycleBin": "${start}-${end}, 총 항목: ${total}(총 크기: ${recycleBinSize})",
+    "totalSize": "총 크기: ${totalSize}",
+    "loading": "결과 불러오는 중",
+    "close": "닫기"
+  },
+  "actions": {
+    "more": "더 보기"
+  },
+  "filter": {
+    "clear": "선택 해제"
+  },
+  "filterDate": {
+    "today": "오늘",
+    "yesterday": "어제",
+    "last7": "지난 7일",
+    "last30": "지난 30일",
+    "never": "없음",
+    "custom": "사용자 정의 범위...",
+    "title": {
+      "created": "생성일",
+      "modified": "수정일",
+      "joined": "가입일",
+      "lastLogin": "마지막 로그인"
+    },
+    "created": "생성: ${date}",
+    "modified": "수정: ${date}",
+    "joined": "가입: ${date}",
+    "lastLogin": "마지막 로그인: ${date}"
+  },
+  "pagination": {
+    "next": "다음 페이지",
+    "prev": "이전 페이지"
+  },
+  "search": {
+    "label": "그룹 검색",
+    "search": "검색",
+    "clear": "검색어 지우기",
+    "wildcard": "와일드카드 검색은 지원되지 않음"
+  },
+  "sort": {
+    "sortDirection": "정렬 방향",
+    "title": "제목",
+    "relevance": "관련성",
+    "modified": "수정일",
+    "deleted": "삭제일",
+    "created": "생성일",
+    "added": "추가일",
+    "size": "크기",
+    "owner": "소유자",
+    "sizeAsc": "가장 작은 항목부터 큰 항목 순으로",
+    "sizeDesc": "가장 큰 항목부터 작은 항목 순으로",
+    "numviews": "조회수",
+    "numAsc": "최소에서 최대",
+    "numDesc": "최대에서 최소",
+    "alphabeticalAsc": "알파벳순",
+    "alphabeticalDesc": "알파벳 역순",
+    "recentAsc": "오래된순",
+    "recentDesc": "최신순",
+    "sort": "정렬",
+    "sortBy": "정렬 기준",
+    "sortByColon": "정렬 기준:",
+    "fullname": "이름",
+    "username": "사용자 이름",
+    "name": "이름",
+    "membertype": "그룹 역할",
+    "joined": "가입일",
+    "lastlogin": "마지막 로그인",
+    "dataset": "데이터셋",
+    "mfaenabled": "다중 인자 인증",
+    "defaultAsc": "오름차순",
+    "defaultDesc": "내림차순"
+  },
+  "topBar": {
+    "filter": "필터"
+  },
+  "filterStatus": {
+    "clear": "선택 해제",
+    "filters": "필터:",
+    "additional": "추가 활성 필터",
+    "clearAllFilters": "모든 필터 선택 해제"
+  }
+}

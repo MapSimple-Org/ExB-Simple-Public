@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>「測地線視域」工具可識別點陣表面上對輸入觀察點位置可見的位置。
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputElevationSurface">
+        <div>
+            <p>將在其上計算視域的高程點陣。
+            </p>
+        </div>
+    </div>
+    <div id="inputObserverFeatures">
+        <div>
+            <p>將為其計算視域的觀察點位置。
+            </p>
+        </div>
+    </div>
+    <div id="optimizeFor">
+        <div>
+            <p>根據速度或準確度來最佳化視域計算。
+            </p>
+        </div>
+    </div>
+    <div id="verticalError">
+        <div>
+            <p> <b>輸入高程表面</b>值的高程值中的不確定性量。
+            </p>
+        </div>
+    </div>
+    <div id="refractivityCoefficient">
+        <div>
+            <p>空氣中可見光之折射率的係數。
+            </p>
+        </div>
+    </div>
+    <div id="maximumViewingDistanceField">
+        <div>
+            <p>視域計算的最大檢視距離。
+            </p>
+            <p>距離可由值及其單位定義，或者從 <b>輸入觀察點的點或線圖徵</b>值中的欄位定義。
+            </p>
+        </div>
+    </div>
+    <div id="minimumViewingDistanceField">
+        <div>
+            <p>視域計算的最小檢視距離。
+            </p>
+            <p>距離可由值及其單位定義，或者從 <b>輸入觀察點的點或線圖徵</b>值中的欄位定義。
+            </p>
+        </div>
+    </div>
+    <div id="viewingDistanceIs3D">
+        <div>
+            <p>指定是否以 3D 距離或 2D 距離測量最大和最小檢視距離。
+            </p>
+            <p>如果未勾選，會將檢視距離視為 2D 歐幾里德距離。 如果勾選，會將檢視距離視為 3D 距離。
+            </p>
+        </div>
+    </div>
+    <div id="observersElevationField">
+        <div>
+            <p>觀察點位置的表面高程。
+            </p>
+            <p>高程可由值及其單位定義，或者從 <b>輸入觀察點的點或線圖徵</b>值中的欄位定義。
+            </p>
+        </div>
+    </div>
+    <div id="observersHeightField">
+        <div>
+            <p>高於地面之觀察點的高度。
+            </p>
+            <p>高度可由值及其單位定義，或者從 <b>輸入觀察點的點或線圖徵</b>值中的欄位定義。
+            </p>
+        </div>
+    </div>
+    <div id="targetHeightField">
+        <div>
+            <p>地面上目標的高度。
+            </p>
+            <p>高度可由值及其單位定義，或者從 <b>輸入觀察點的點或線圖徵</b>值中的欄位定義。
+            </p>
+        </div>
+    </div>
+    <div id="horizontalStartAngle">
+        <div>
+            <p>水平掃描範圍的開始角度。
+            </p>
+            <p>角度可以由 0 到 360 之間的值定義，或者從 <b>輸入觀察點的點或線圖徵</b>值中的欄位定義。
+            </p>
+        </div>
+    </div>
+    <div id="horizontalEndAngle">
+        <div>
+            <p>水平掃描範圍的結束角度。
+            </p>
+            <p>角度可以由 0 到 360 之間的值定義，或者從 <b>輸入觀察點的點或線圖徵</b>值中的欄位定義。
+            </p>
+        </div>
+    </div>
+    <div id="verticalUpperAngle">
+        <div>
+            <p>掃描相對於水平面的垂直角度上限。
+            </p>
+            <p>角度可以由 -90 到 90 之間的值定義，或者從 <b>輸入觀察點的點或線圖徵</b>值中的欄位定義。
+            </p>
+        </div>
+    </div>
+    <div id="verticalLowerAngle">
+        <div>
+            <p>掃描相對於水平面的垂直角度下限。
+            </p>
+            <p>角度可以由 -90 到 90 之間的值定義，或者從 <b>輸入觀察點的點或線圖徵</b>值中的欄位定義。
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>將建立並新增到地圖的視域點陣圖層的名稱。 此圖層包含觀察點可以看到的可見區域，儲存格值則表示可以檢視儲存格的觀察點數量。
+            </p>
+        </div>
+    </div>
+    <div id="aboveGroundLevelOutputName">
+        <div>
+            <p>將建立並新增到地圖的高於地面 (AGL) 點陣圖層的名稱。
+            </p>
+        </div>
+    </div>
+    <div id="resultType">
+        <div>
+            <p>將建立之輸出的類型。 輸出可以是圖磚影像圖層或動態影像圖層。
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p> <b>我的內容</b>中將儲存結果的資料夾名稱。
+            </p>
+        </div>
+    </div>
+</div>
+</html>

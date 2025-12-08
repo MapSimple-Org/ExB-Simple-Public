@@ -1,0 +1,15 @@
+{
+  "expandAll": "Alles uitvouwen",
+  "collapseAll": "Alles samenvouwen",
+  "categoryItem": {
+    "expand": "Uitvouwen",
+    "collapse": "Samenvouwen",
+    "editCategory": "Categorie bewerken",
+    "deleteCategory": "Categorie verwijderen",
+    "addSubcategory": "Subcategorie toevoegen",
+    "addCategory": "Categorie toevoegen",
+    "save": "Opslaan",
+    "cancel": "Annuleren",
+    "missingTitleMessage": "De categorietitel is vereist."
+  }
+}

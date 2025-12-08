@@ -1,0 +1,9 @@
+{
+  "addToMap": "Potwierdź i dodaj do mapy",
+  "cancel": "Anuluj",
+  "confirm": "Potwierdź",
+  "header": "Wybierz element",
+  "select": "Wybierz",
+  "unsupportedLayer": "Ten parametr nie obsługuje następujących warstw: ${layerName}.",
+  "viewDetails": "Wyświetl szczegóły"
+}

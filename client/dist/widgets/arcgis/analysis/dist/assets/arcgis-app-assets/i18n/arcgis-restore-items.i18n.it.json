@@ -1,0 +1,31 @@
+{
+  "back": "Indietro",
+  "cancel": "Annulla",
+  "learnMore": "Ulteriori informazioni",
+  "restore": "Ripristina",
+  "restoreTo": "Ripristina",
+  "restoreItem": "Ripristina elemento",
+  "restoreItems": "Ripristina elementi",
+  "noticeMessage": "Gli elementi ripristinati non saranno condivisi. Revisionare i contenuti prima di condividerli di nuovo.",
+  "cannotBulkRestoreXItems": "Impossibile ripristinare in blocco più di ${number} elementi, deselezionare qualche elemento.",
+  "cannotBulkRestoreMultipleOwners": "Impossibile ripristinare in blocco elementi che appartengono a proprietari diversi. Seleziona elementi da un proprietario singolo per il ripristino in blocco.",
+  "toRestore": {
+    "single": "Elemento da ripristinare:",
+    "multiple": "Elementi da ripristinare:"
+  },
+  "cannotRestore": "Impossibile ripristinare:",
+  "dependentItems": {
+    "single": "L'elemento non può essere ripristinato perché dipende da <strong style='font-weight: 500'>${parent}</strong>. Ripristinali insieme.",
+    "singleUnknown": "Questo elemento non può essere ripristinato perché dipende da un altro elemento presente nel cestino. Ripristinali insieme.",
+    "multiple": "Gli elementi non possono essere ripristinati perché dipendono da altri elementi nel cestino. Ripristinali insieme.",
+    "multipleSameSource": "Questi elementi non possono essere ripristinati poiché dipendono da <strong style='font-weight: 500'>${parent}</strong>. Ripristinali insieme."
+  },
+  "pageRangeWithTotalRecycleBinSize": {
+    "en": "${start} - ${end} di ${total} (${size}) nel cestino",
+    "other": "${start} - ${end}, totale: ${total} (${size}) nel cestino"
+  },
+  "pageRangeWithGreaterThanTotalRecycleBinSize": {
+    "en": "${start} - ${end} di ${total} (>${size}) nel cestino",
+    "other": "${start} - ${end}, totale: ${total} (>${size}) nel cestino"
+  }
+}

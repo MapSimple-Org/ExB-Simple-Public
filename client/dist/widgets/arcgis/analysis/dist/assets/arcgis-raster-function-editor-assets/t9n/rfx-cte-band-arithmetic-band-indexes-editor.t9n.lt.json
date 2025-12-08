@@ -1,0 +1,7 @@
+{
+  "example": "Pavyzdys",
+  "input": "Įvestis",
+  "output": "Išvestis",
+  "optional": "Neprivalomas",
+  "WNDWIHintText": "α:α reikšmė turėtų būti nuo 0 iki 1; numatytoji reikšmė yra 0,5"
+}

@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>Įrankis Prognozuoti naudojant tendencijų rastrą apskaičiuoja prognozuojamą daugiamatį vaizdų sluoksnį, naudodamas i&scaron;vesties tendencijų vaizdų sluoksnį, sukurtą naudojant įrankį Generuoti tendencijų rastrą.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputMultidimensionalRaster">
+        <div>
+            <p>Įvesties daugiamatės tendencijos vaizdų sluoksnis, kuris bus naudojamas prognozavimui.
+            </p> 
+        </div>
+    </div>
+    <div id="variables">
+        <div>
+            <p>Daugiamatės tendencijos vaizdų sluoksnio kintamasis, kuris bus naudojamas prognozei.
+            </p>
+        </div>
+    </div>
+    <div id="dimensionDefinition">
+        <div>
+            <p>Metodas, kuris bus naudojamas prognozuojamoms dimensijų vertėms pateikti.
+            </p>
+        </div>
+    </div>
+    <div id="dimensionValues">
+        <div>
+            <p>Apibrėžkite matmens intervalo pradžios ir pabaigos datą, auk&scaron;tį arba gylį, naudojamą prognozei.
+            </p>
+        </div>
+    </div>
+    <div id="start">
+        <div>
+            <p>Dimensijos intervalo, kuris bus naudojamas prognozei, pradžios data, auk&scaron;tis arba gylis.
+            </p>
+        </div>
+    </div>
+    <div id="end">
+        <div>
+            <p>Galutinė data, auk&scaron;tis arba gylis matmenų intervalo, kuris bus naudojamas prognozuojant.
+            </p>
+        </div>
+    </div>
+    <div id="intervalValue">
+        <div>
+            <p>Į prognozę įtraukiamų žingsnių tarp dviejų matmenų verčių skaičius.
+            </p>
+        </div>
+    </div>
+    <div id="intervalUnit">
+        <div>
+            <p>Intervalo reik&scaron;mei naudojami matavimo vienetai.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>Sluoksnio, kuris bus sukurtas ir pridėtas į žemėlapį, pavadinimas.
+            </p>
+        </div>
+    </div>
+    <div id="resultType">
+        <div>
+            
+            <p>Sukuriamos i&scaron;vesties tipas. I&scaron;vestis gali būti i&scaron;klotinių vaizdų sluoksnis arba dinaminis vaizdų sluoksnis.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            
+            <p>Puslapyje  <b>Mano turinys</b> esančio aplanko, kur bus įra&scaron;ytas rezultatas, pavadinimas.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

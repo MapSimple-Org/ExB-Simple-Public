@@ -1,0 +1,11 @@
+{
+  "newTemplate": "Utwórz nowy szablon",
+  "openTemplate": "Otwórz szablon",
+  "addTemplate": "Dodaj szablon",
+  "addFunction": "Dodaj funkcje rastrowe",
+  "addConstant": "Dodaj stałą",
+  "addRaster": "Dodaj zmienną rastrową",
+  "expand": "Rozszerzanie",
+  "editTemplateProperties": "Edytuj właściwości szablonu",
+  "viewTemplateProperties": "Wyświetl właściwości szablonu"
+}

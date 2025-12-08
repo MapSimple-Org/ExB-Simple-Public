@@ -1,0 +1,1 @@
+System.register([],function(i){return{execute:function(){i({_widgetLabel:"Sudalinimas",quickStyleItem:"Spar\u010diai stilizuoti {index}"})}}});

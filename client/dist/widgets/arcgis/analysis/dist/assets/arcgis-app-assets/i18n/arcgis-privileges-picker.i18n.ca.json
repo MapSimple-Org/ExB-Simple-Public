@@ -1,0 +1,592 @@
+{
+  "rolePrivileges": "Permisos del rol",
+  "setFromExisting": "Defineix a partir del rol existent",
+  "expandAll": "Amplia-ho tot",
+  "generalPrivileges": "Permisos generals",
+  "adminPrivileges": "Permisos d'administració",
+  "enabledLabel": "Habilitat:",
+  "enableAll": "Habilita-ho tot",
+  "disableAll": "Deshabilita-ho tot",
+  "members": "Membres",
+  "groups": "Grups",
+  "content": "Contingut",
+  "sharing": "Ús compartit",
+  "premiumContent": "Contingut Premium",
+  "premiumContentServices": "Contingut i serveis Premium",
+  "contentAndAnalysis": "Contingut i anàlisi",
+  "features": "Entitats",
+  "versionMgmt": "Administració de versions",
+  "webhooks": "Webhooks",
+  "marketplaceSubscriptions": "Subscripcions a l'ArcGIS Marketplace",
+  "orgSettings": "Configuració de l'organització",
+  "learnMore": "Més informació",
+  "searchPrivileges": "Cerca permisos",
+  "notebooks": "Notebooks",
+  "analysis": "Anàlisi",
+  "networkAnalysis": "Anàlisi de xarxa",
+  "locationServices": "Serveis d'ubicació",
+  "requiredService": "Servei necessari",
+  "availableServices": "Serveis disponibles",
+  "basemaps": "Mapes base",
+  "staticMaps": "Mapes estàtics",
+  "places": "Llocs",
+  "geocoding": "Geocodificació",
+  "routing": "Assignació de rutes",
+  "dataEnrichment": "Enriquiment de dades",
+  "boundaries": "Límits",
+  "elevation": "Elevació",
+  "spatialPrivileges": "Anàlisi espacial",
+  "featureAnalysis": "Anàlisi d'entitats",
+  "imageAnalysis": "Anàlisi d'imatges",
+  "readOnlyBasemapsTooltip": "S'inclou accés als mapes de base.",
+  "privileges": {
+    "portal:user:viewOrgUsers": {
+      "label": "Visualitza",
+      "description": "Permeteu al membre visualitzar els membres de l'organització.",
+      "descriptionPortal": "Permeteu al membre visualitzar els membres del portal.",
+      "descriptionApp": "Permeteu a l'aplicació visualitzar membres de l'organització."
+    },
+    "portal:user:createGroup": {
+      "label": "Crea, actualitza i suprimeix",
+      "description": "Permeteu al membre crear, editar i suprimir els seus propis grups.",
+      "descriptionApp": "Permeteu a l'aplicació crear, editar i suprimir els grups del propietari de l'aplicació."
+    },
+    "portal:user:joinGroup": {
+      "label": "Unió a grups organitzacionals",
+      "description": "Permeteu al membre unir-se a grups de la vostra organització.",
+      "descriptionPortal": "Permeteu al membre unir-se a grups del vostre portal.",
+      "descriptionApp": "Permeteu a l'aplicació unir grups de la vostra organització."
+    },
+    "portal:user:joinNonOrgGroup": {
+      "label": "Unió a grups externs",
+      "description": "Permeteu al membre unir-se a grups aliens a la vostra organització.",
+      "descriptionPortal": "Permeteu al membre unir-se a grups aliens al vostre portal.",
+      "descriptionApp": "Permeteu a l'aplicació unir-se a grups aliens a la vostra organització."
+    },
+    "portal:user:viewOrgGroups": {
+      "label": "Visualitza els grups compartits amb l'organització",
+      "description": "Permeteu al membre visualitzar els grups compartits amb l'organització.",
+      "descriptionPortal": "Permeteu al membre visualitzar els grups compartits amb el portal.",
+      "descriptionApp": "Permeteu a l'aplicació visualitzar els grups compartits amb l'organització."
+    },
+    "portal:user:invitePartneredCollaborationMembers": {
+      "label": "Convida membres d'organitzacions associades",
+      "description": "Permeteu que un membre convidi als grups membres d'organitzacions de col·laboració associades.",
+      "descriptionApp": "Permeteu que una aplicació convidi als grups membres d'organitzacions de col·laboració associades."
+    },
+    "portal:user:addExternalMembersToGroup": {
+      "label": "Afegeix membres d'altres organitzacions",
+      "description": "Permeteu que un membre creï grups que admetin membres d'altres organitzacions, i que també pugui convidar membres externs a grups.",
+      "descriptionApp": "Permeteu que una aplicació creï grups que admetin membres d'altres organitzacions, i que també pugui convidar membres externs a grups."
+    },
+    "portal:user:createItem": {
+      "label": "Crea, actualitza i suprimeix",
+      "description": "Permeteu al membre crear, editar i suprimir el seu propi contingut.",
+      "descriptionApp": "Permeteu a l'aplicació crear, editar i suprimir el contingut del propietari de l'aplicació."
+    },
+    "portal:publisher:publishFeatures": {
+      "label": "Publica capes d'entitats allotjades",
+      "description": "Permeteu al membre publicar capes d'entitats allotjades de fitxers shapefile, CSV, etc.",
+      "descriptionApp": "Permeteu a l'aplicació publicar capes d'entitats allotjades de fitxers shapefile, CSV, etc."
+    },
+    "portal:publisher:publishTiles": {
+      "label": "Publica capes de tessel·les allotjades",
+      "description": "Permeteu al membre publicar capes de tessel·les allotjades de paquets de tessel·les, entitats, etc.",
+      "descriptionApp": "Permeteu a l'aplicació publicar capes de tessel·les allotjades de paquets de tessel·les, entitats, etc."
+    },
+    "portal:publisher:publishScenes": {
+      "label": "Publica capes d'escenes allotjades",
+      "description": "Permeteu al membre publicar capes d'escenes allotjades.",
+      "descriptionApp": "Permeteu a l'aplicació publicar capes d'escenes allotjades."
+    },
+    "portal:publisher:publishTiledImagery": {
+      "label": "Publica capes allotjades d'imatges amb tessel·les",
+      "description": "Permeteu que el membre publiqui capes allotjades d'imatges amb tessel·les a partir d'una sola imatge o d'una col·lecció d'imatges. Necessita una extensió de tipus d'usuari de l'ArcGIS Image per a l'ArcGIS Online.",
+      "descriptionPortal": "Permeteu que el membre publiqui capes allotjades d'imatges amb tessel·les a partir d'una sola imatge o d'una col·lecció d'imatges.",
+      "descriptionApp": "Permeteu que l'aplicació publiqui capes allotjades d'imatges amb tessel·les a partir d'una sola imatge o d'una col·lecció d'imatges. Necessita una llicència de l'ArcGIS Image Hosting."
+    },
+    "portal:publisher:publishDynamicImagery": {
+      "label": "Publica capes allotjades d'imatges dinàmiques",
+      "description": "Permeteu que el membre publiqui capes allotjades d'imatges dinàmiques a partir d'una sola imatge o d'una col·lecció d'imatges.",
+      "descriptionApp": "Permeteu que l'aplicació publiqui capes allotjades d'imatges dinàmiques a partir d'una sola imatge o d'una col·lecció d'imatges."
+    },
+    "portal:publisher:publishServerServices": {
+      "label": "Publica capes basades en servidor",
+      "description": "Aquest permís ofereix la possibilitat de publicar capes basades en serveis de llocs de servidors federats. Sovint, aquests serveis fan referència a dades registrades de geobases de dades o fonts de dades basades en fitxers."
+    },
+    "portal:publisher:publishKnowledgeGraph": {
+      "label": "Publica gràfics de coneixement allotjats",
+      "description": "Permeteu que el membre publiqui gràfics de coneixement allotjats.",
+      "descriptionApp": "Permeteu que l'aplicació publiqui gràfics de coneixement allotjats."
+    },
+    "portal:user:viewOrgItems": {
+      "label": "Visualitza el contingut compartit amb l'organització",
+      "description": "Permeteu al membre visualitzar contingut que s'ha compartit amb l'organització.",
+      "descriptionPortal": "Permeteu al membre visualitzar contingut que s'ha compartit amb el portal.",
+      "descriptionApp": "Permeteu a l'aplicació visualitzar contingut que s'ha compartit amb l'organització."
+    },
+    "premium:publisher:createNotebooks": {
+      "label": "Crea i edita notebooks",
+      "description": "Permeteu que un membre creï i editi notebooks interactius.",
+      "descriptionApp": "Permeteu que l'aplicació creï i editi notebooks interactius."
+    },
+    "premium:publisher:scheduleNotebooks": {
+      "label": "Programa notebooks",
+      "description": "Permeteu que un membre programi futures execucions automatitzades d'un notebook.",
+      "descriptionApp": "Permeteu que l'aplicació programi futures execucions automatitzades d'un notebook."
+    },
+    "portal:publisher:bulkPublishFromDataStores": {
+      "label": "Creeu capes d'entitats de manera massiva des d'un magatzem de dades",
+      "description": "Aquest permís ofereix la possibilitat de publicar capes web des d'un magatzem de dades registrat."
+    },
+    "portal:publisher:registerDataStores": {
+      "label": "Registra magatzems de dades",
+      "description": "Aquest permís ofereix la possibilitat de registrar magatzems de dades al portal."
+    },
+    "portal:user:viewTracks": {
+      "label": "Visualitza els seguiments d'ubicació",
+      "description": "Permeteu al membre visualitzar els seguiments d'ubicació dels membres a través de les visualitzacions de seguiment compartides quan l'ús compartit d'ubicació està habilitat.",
+      "descriptionApp": "Permeteu a l'aplicació visualitzar els seguiments d'ubicació dels membres a través de les visualitzacions de seguiment compartides quan l'ús compartit d'ubicació està habilitat."
+    },
+    "portal:user:reassignItems": {
+      "label": "Reassigna contingut",
+      "description": "Permeteu que el membre reassigni només el seu contingut a un altre membre amb permís per rebre contingut.",
+      "descriptionApp": "Permeteu que l'aplicació reassigni només el contingut del propietari de l'aplicació a un altre membre amb permís per rebre contingut."
+    },
+    "portal:user:receiveItems": {
+      "label": "Rep contingut",
+      "description": "Permeteu que el membre rebi contingut que els hagi reassignat un altre membre amb permís per reassignar contingut."
+    },
+    "portal:publisher:publishFeeds": {
+      "label": "Publica canals de continguts",
+      "description": "Aquest permís ofereix la possibilitat de publicar canals de continguts per a la ingesta i la visualització de dades en temps real mitjançant l'ArcGIS Velocity."
+    },
+    "portal:publisher:publishRealTimeAnalytics": {
+      "label": "Publica anàlisis en temps real",
+      "description": "Aquest permís ofereix la possibilitat de publicar anàlisis en temps real per a l'anàlisi i el processament de dades en temps real mitjançant l'ArcGIS Velocity."
+    },
+    "portal:publisher:publishBigDataAnalytics": {
+      "label": "Publica anàlisis de dades massives",
+      "description": "Aquest permís ofereix la possibilitat de publicar anàlisis de dades massives per a l'anàlisi de dades d'observacions històriques mitjançant l'ArcGIS Velocity."
+    },
+    "portal:publisher:createDataPipelines": {
+      "label": "Crear i executar pipelines de dades",
+      "description": "Permeteu que els membres creïn, editin i executin pipelines de dades.",
+      "descriptionApp": "Permeteu a l'aplicació crear, editar i executar pipelines de dades."
+    },
+    "portal:publisher:publishLivestreamVideo": {
+      "label": "Publica vídeo de la transmissió en directe",
+      "description": "Permeteu al membre publicar capes de vídeo de transmissió en directe allotjades provinents de difusions i transmissions de vídeo de la xarxa.",
+      "descriptionApp": "Permeteu a l'aplicació publicar capes de vídeo de transmissió en directe allotjades provinents de difusions i transmissions de vídeo de la xarxa."
+    },
+    "portal:publisher:publishVideo": {
+      "label": "Publica vídeo",
+      "description": "Permeteu al membre publicar capes de vídeo allotjades a partir d'un fitxer de vídeo i fitxers de metadades de vídeo compatibles.",
+      "descriptionApp": "Permeteu a l'aplicació publicar capes de vídeo allotjades a partir d'un fitxer de vídeo i fitxers de metadades de vídeo compatibles."
+    },
+    "portal:user:shareToGroup": {
+      "label": "Comparteix amb grups",
+      "description": "Permeteu al membre compartir contingut amb els grups.",
+      "descriptionApp": "Permeteu a l'aplicació compartir contingut amb els grups."
+    },
+    "portal:user:shareToOrg": {
+      "label": "Comparteix amb l'organització",
+      "labelPortal": "Comparteix amb el portal",
+      "description": "Permeteu al membre compartir contingut amb la vostra organització.",
+      "descriptionPortal": "Permeteu al membre compartir contingut amb el vostre portal.",
+      "descriptionApp": "Permeteu a l'aplicació compartir contingut amb la vostra organització."
+    },
+    "portal:user:shareToPublic": {
+      "label": "Comparteix amb el públic",
+      "description": "Permeteu al membre compartir contingut públicament si la política d'ús compartit públic ho permet.",
+      "descriptionApp": "Permeteu a l'aplicació compartir públicament contingut del propietari de l'aplicació si la política d'ús compartit públic ho permet.",
+      "tooltip": "Si l'organització no permet que els membres comparteixin contingut públicament, els membres necessitaran privilegis administratius per compartir el seu contingut públicament."
+    },
+    "portal:user:shareGroupToOrg": {
+      "label": "Fes que els grups siguin visibles per a l'organització",
+      "labelPortal": "Fes que els grups siguin visibles per al portal",
+      "description": "Permeteu al membre compartir contingut amb la vostra organització.",
+      "descriptionPortal": "Permeteu al membre compartir contingut amb el vostre portal.",
+      "descriptionApp": "Permeteu a l'aplicació compartir contingut amb el vostre portal."
+    },
+    "portal:user:shareGroupToPublic": {
+      "label": "Fes que els grups siguin visibles per al públic",
+      "description": "Permeteu al membre crear grups que el públic pugui trobar.",
+      "descriptionApp": "Permeteu a l'aplicació crear grups que el públic pugui trobar."
+    },
+    "opendata:user:designateGroup": {
+      "label": "Fes que els grups estiguin disponibles per a l'Open Data",
+      "description": "Permeteu al membre designar grups com a disponibles per utilitzar-los a l'Open Data.",
+      "descriptionApp": "Permeteu a l'aplicació designar grups com a disponibles per utilitzar-los a l'Open Data."
+    },
+    "premium:user:basemaps": {
+      "label": "Servei d'estils de mapes de base",
+      "descriptionLocationPlatform": "Permeteu que l'aplicació accedeixi al servei d'estils de mapes de base."
+    },
+    "premium:user:staticbasemaptiles": {
+      "label": "Tessel·les de mapa de base estàtiques",
+      "descriptionLocationPlatform": "Permeteu que l'aplicació accedeixi al servei de tessel·les de mapes de base estàtiques."
+    },
+    "premium:user:staticMaps": {
+      "label": "Servei de mapes estàtics (beta)",
+      "descriptionLocationPlatform": "Permeteu que l'aplicació accedeixi al servei de mapes estàtics."
+    },
+    "premium:user:elevation": {
+      "label": "Servei d'elevació",
+      "descriptionLocationPlatform": "Permeteu que l'aplicació accedeixi al servei d'elevació."
+    },
+    "premium:user:geocode": {
+      "label": "Geocodi",
+      "description": "Permeteu que el membre dugui a terme tasques de geocodificació que consumeixin crèdits amb el servei de geocodificació de l'ArcGIS (o una visualització d'aquest localitzador).",
+      "descriptionApp": "Permeteu que l'aplicació dugui a terme tasques de geocodificació que consumeixin crèdits amb l'ArcGIS World Geocoding Service (o una visualització d'aquest localitzador)."
+    },
+    "premium:user:geocode:stored": {
+      "label": "Geocodi (emmagatzemat)",
+      "descriptionLocationPlatform": "Permeteu que l'aplicació accedeixi al servei de geocodificació i utilitzi geocodis emmagatzemats."
+    },
+    "premium:user:geocode:temporary": {
+      "label": "Geocodi (no emmagatzemat)",
+      "descriptionLocationPlatform": "Permeteu que l'aplicació accedeixi al servei de geocodificació i utilitzi geocodis no emmagatzemats."
+    },
+    "premium:user:networkanalysis": {
+      "label": "Assignació de rutes",
+      "description": "Permeteu al membre dur a terme tasques d'anàlisi de xarxa, com ara assignar rutes i àrees de temps de recorregut.",
+      "descriptionApp": "Permeteu que l'aplicació accedeixi al servei d'assignació de rutes."
+    },
+    "premium:user:networkanalysis:closestfacility": {
+      "label": "Instal·lació més propera",
+      "descriptionLocationPlatform": "Permeteu que l'aplicació accedeixi al servei d'assignació de rutes i dugui a terme operacions d'assignació de rutes a la instal·lació més propera."
+    },
+    "premium:user:networkanalysis:lastmiledelivery": {
+      "label": "Lliurament a la darrera milla",
+      "descriptionLocationPlatform": "Permeteu que l'aplicació accedeixi al servei d'assignació de rutes i dugui a terme operacions d'assignació de rutes per a l'entrega d'últim quilòmetre."
+    },
+    "premium:user:networkanalysis:snaptoroads": {
+      "label": "Alinea amb les carreteres",
+      "descriptionLocationPlatform": "Permeteu que el membre dugui a terme tasques d'anàlisi de xarxa com ara l'alineació de punts de recorregut de GPS amb les carreteres."
+    },
+    "premium:user:networkanalysis:locationallocation": {
+      "label": "Assignació d'ubicació",
+      "descriptionLocationPlatform": "Permeteu que l'aplicació accedeixi al servei d'assignació de rutes i dugui a terme operacions d'assignació d'ubicació."
+    },
+    "premium:user:networkanalysis:routing": {
+      "label": "Assignació de rutes simple",
+      "descriptionLocationPlatform": "Permeteu que l'aplicació accedeixi al servei d'assignació de rutes i dugui a terme operacions d'assignació de rutes estàndard."
+    },
+    "premium:user:networkanalysis:optimizedrouting": {
+      "label": "Assignació de rutes optimitzada",
+      "descriptionLocationPlatform": "Permeteu que l'aplicació accedeixi al servei d'assignació de rutes i dugui a terme operacions d'assignació de rutes optimitzades."
+    },
+    "premium:user:networkanalysis:vehiclerouting": {
+      "label": "Assignació de rutes amb diversos vehicles",
+      "descriptionLocationPlatform": "L'assignació de rutes amb diversos vehicles permet que l'aplicació accedeixi al servei d'assignació de rutes i dugui a terme operacions d'assignació de rutes de flota."
+    },
+    "premium:user:networkanalysis:origindestinationcostmatrix": {
+      "label": "Matriu de costs d'origen-destinació",
+      "descriptionLocationPlatform": "Permeteu que l'aplicació accedeixi al servei d'assignació de rutes i generi matrius de cost del viatge."
+    },
+    "premium:user:networkanalysis:servicearea": {
+      "label": "Àrea de servei",
+      "descriptionLocationPlatform": "Permeteu que l'aplicació accedeixi al servei d'assignació de rutes i generi àrees de servei."
+    },
+    "premium:user:places": {
+      "label": "Servei de llocs",
+      "descriptionLocationPlatform": "Permeteu que l'aplicació accedeixi al servei de llocs."
+    },
+    "premium:user:spatialanalysis": {
+      "labelOld": "Servei d'anàlisi espacial",
+      "label": "Servei d'anàlisi d'entitats",
+      "labelPortal": "Anàlisi d'entitats estàndard",
+      "description": "Permeteu que el membre dugui a terme tasques d'anàlisi d'entitats.",
+      "descriptionPortal": "Aquest permís ofereix la possibilitat de dur a terme tasques d'anàlisi d'entitats estàndard.",
+      "descriptionLocationPlatform": "Permeteu que l'aplicació accedeixi al servei d'anàlisi d'entitats.",
+      "descriptionApp": "Permeteu que l'aplicació accedeixi al servei d'anàlisi d'entitats."
+    },
+    "premium:user:geoenrichment": {
+      "label": "Servei de geoenriquiment",
+      "description": "Permeteu al membre geoenriquir entitats.",
+      "descriptionLocationPlatform": "Permeteu que l'aplicació accedeixi al servei de geoenriquiment.",
+      "descriptionApp": "Permeteu que l'aplicació accedeixi al servei de geoenriquiment."
+    },
+    "premium:user:demographics": {
+      "label": "Mapes demogràfics",
+      "description": "Permeteu que l'aplicació accedeixi a mapes demogràfics prèmium a l'ArcGIS Living Atlas.",
+      "descriptionApp": "Permeteu que l'aplicació accedeixi a mapes demogràfics prèmium a l'ArcGIS Living Atlas.",
+      "descriptionLocationPlatform": "Permeteu que l'aplicació accedeixi a mapes demogràfics a l'ArcGIS Living Atlas."
+    },
+    "premium:publisher:geoanalytics": {
+      "label": "Anàlisi d'entitats del GeoAnalytics",
+      "description": "Aquest permís ofereix la possibilitat de dur a terme tasques del GeoAnalytics."
+    },
+    "premium:publisher:rasteranalysis": {
+      "label": "Anàlisi d'imatges",
+      "description": "Permeteu que el membre realitzi tasques d'anàlisi d'imatges. Requereix la funció d'anàlisi de l'ArcGIS Image.",
+      "descriptionPortal": "Permeteu que el membre realitzi tasques d'anàlisi d'imatges.",
+      "descriptionApp": "Permeteu que l'aplicació realitzi tasques d'anàlisi d'imatges. Requereix la funció d'anàlisi de l'ArcGIS Image.",
+      "descriptionAppPortal": "Permeteu que l'aplicació realitzi tasques d'anàlisi d'imatges."
+    },
+    "premium:publisher:createAdvancedNotebooks": {
+      "label": "Notebooks avançats",
+      "description": "Permeteu que un membre importi i utilitzi mòduls ArcPy als notebooks.",
+      "descriptionApp": "Permeteu que l'aplicació importi i utilitzi mòduls ArcPy als notebooks."
+    },
+    "portal:user:runWebTool": {
+      "label": "Executa eines web",
+      "description": "Permeteu al membre executar eines web.",
+      "descriptionPortal": "Permeteu que un membre executi eines web publicades des de notebooks.",
+      "descriptionApp": "Permeteu a l'aplicació executar eines web.",
+      "descriptionAppPortal": "Permeteu que l'aplicació executi eines web publicades des de notebooks."
+    },
+    "portal:user:generateApiTokens": {
+      "label": "Genera claus d'API",
+      "description": "Permeteu al membre generar claus d'API."
+    },
+    "portal:user:assignPrivilegesToApps": {
+      "label": "Assigna permisos a aplicacions de l'OAuth 2.0",
+      "description": "Permeteu que el membre assigni permisos a aplicacions de l'OAuth 2.0."
+    },
+    "portal:user:createWorkflow": {
+      "label": "Crea un element de flux de treball",
+      "description": "Permet que els membres creïn elements del Workflow Manager"
+    },
+    "premium:user:featurereport": {
+      "label": "Informe d'entitats",
+      "description": "Permeteu al membre crear informes d'entitats al Survey123.",
+      "descriptionApp": "Permeteu a l'aplicació crear informes d'entitats al Survey123."
+    },
+    "premium:user:realitymapping": {
+      "label": "Cartografia de la realitat",
+      "description": "Permeteu que el membre dugui a terme tasques de cartografia de la realitat."
+    },
+    "features:user:edit": {
+      "label": "Edita",
+      "description": "Permeteu al membre editar entitats a les capes editables que no són públiques, d'acord amb les opcions d'edició habilitades a la capa.",
+      "descriptionApp": "Permeteu a l'aplicació editar entitats a les capes editables que no són públiques, d'acord amb les opcions d'edició habilitades a la capa."
+    },
+    "features:user:fullEdit": {
+      "label": "Edita amb control total",
+      "description": "Permeteu al membre afegir, suprimir i actualitzar entitats en una capa d'entitats allotjades editable, independentment de les opcions d'edició habilitades a la capa.",
+      "descriptionApp": "Permeteu a l'aplicació afegir, suprimir i actualitzar entitats en una capa d'entitats allotjades editable, independentment de les opcions d'edició habilitades a la capa."
+    },
+    "features:user:manageVersions": {
+      "label": "Administra-ho tot",
+      "description": "Permeteu als membres administrar els bloquejos de les versions i visualitzar, modificar, suprimir, editar, conciliar i publicar en totes les versions de branca a què s'accedeix a través de les capes d'entitats de l'ArcGIS Server.",
+      "descriptionApp": "Permeteu a l'aplicació administrar els bloquejos de les versions i visualitzar, modificar, suprimir, editar, conciliar i publicar en totes les versions de branca a què s'accedeix a través de les capes d'entitats de l'ArcGIS Server."
+    },
+    "portal:publisher:createFeatureWebhook": {
+      "label": "Capa d'entitats",
+      "description": "Permeteu al membre crear, editar i suprimir els seus propis webhooks de capa d'entitats.",
+      "descriptionApp": "Permeteu a l'aplicació crear, editar i suprimir els seus propis webhooks de capa d'entitats."
+    },
+    "portal:admin:viewUsers": {
+      "label": "Visualitza-ho tot",
+      "description": "Permeteu al membre visualitzar tota la informació dels comptes dels membres de la vostra organització.",
+      "descriptionPortal": "Permeteu al membre visualitzar tota la informació dels comptes dels membres del vostre portal.",
+      "descriptionApp": "Permeteu a l'aplicació visualitzar tota la informació dels comptes dels membres de la vostra organització."
+    },
+    "portal:admin:updateUsers": {
+      "label": "Actualitza",
+      "description": "Permeteu al membre restablir contrasenyes, actualitzar la informació de comptes de membres i actualitzar les categories de membres a la vostra organització.",
+      "descriptionPortal": "Permeteu al membre restablir contrasenyes, actualitzar la informació de comptes de membres i actualitzar les categories de membres al vostre portal.",
+      "descriptionApp": "Permeteu a l'aplicació restablir contrasenyes, actualitzar la informació de comptes de membres i actualitzar les categories de membres a la vostra organització."
+    },
+    "portal:admin:deleteUsers": {
+      "label": "Suprimeix",
+      "description": "Permeteu al membre suprimir comptes de membres de la vostra organització.",
+      "descriptionPortal": "Permeteu al membre suprimir comptes de membres del vostre portal.",
+      "descriptionApp": "Permeteu a l'aplicació suprimir comptes de membres de la vostra organització."
+    },
+    "portal:admin:inviteUsers": {
+      "label": "Afegeix",
+      "labelPortal": "Convida",
+      "description": "Permeteu al membre convidar membres a la vostra organització.",
+      "descriptionPortal": "Permeteu al membre convidar membres al vostre portal.",
+      "descriptionApp": "Permeteu a l'aplicació convidar membres a la vostra organització."
+    },
+    "portal:admin:disableUsers": {
+      "label": "Deshabilita",
+      "description": "Permeteu al membre habilitar i deshabilitar comptes de membres de la vostra organització.",
+      "descriptionPortal": "Permeteu al membre habilitar i deshabilitar comptes de membres del vostre portal.",
+      "descriptionApp": "Permeteu a l'aplicació habilitar i deshabilitar comptes de membres de la vostra organització."
+    },
+    "portal:admin:changeUserRoles": {
+      "label": "Canvia els rols",
+      "description": "Permeteu al membre canviar el rol que s'ha assignat a un compte de membre. Tingueu en compte que només els membres amb el rol Administrador poden assignar el rol Administrador a altres comptes o desassignar-l'en.",
+      "descriptionPortal": "Permeteu al membre canviar el rol que s'ha assignat a un compte de membre. Tingueu en compte que només els membres amb el rol Administrador poden assignar el rol Administrador a altres comptes o desassignar-l'en.",
+      "descriptionApp": "Permeteu a l'aplicació canviar el rol que s'ha assignat a un compte de membre. Tingueu en compte que només els membres amb el rol Administrador poden assignar el rol Administrador a altres comptes o desassignar-l'en."
+    },
+    "portal:admin:manageLicenses": {
+      "label": "Administra les llicències",
+      "description": "Permeteu al membre assignar llicències a membres de la vostra organització.",
+      "descriptionPortal": "Permeteu al membre assignar llicències a membres del vostre portal.",
+      "descriptionApp": "Permeteu a l'aplicació assignar llicències a membres de la vostra organització."
+    },
+    "portal:admin:updateMemberCategorySchema": {
+      "label": "Administra les categories",
+      "description": "Permeteu al membre configurar les categories de membres de l'organització.",
+      "descriptionPortal": "Permeteu al membre configurar les categories de membres del portal.",
+      "descriptionApp": "Permeteu a l'aplicació configurar les categories de membre de l'organització."
+    },
+    "portal:admin:viewGroups": {
+      "label": "Visualitza-ho tot",
+      "description": "Permeteu al membre visualitzar tots els grups de la vostra organització.",
+      "descriptionPortal": "Permeteu al membre visualitzar tots els grups del vostre portal.",
+      "descriptionApp": "Permeteu a l'aplicació visualitzar tots els grups de la vostra organització."
+    },
+    "portal:admin:updateGroups": {
+      "label": "Actualitza",
+      "description": "Permeteu al membre actualitzar els grups de la vostra organització.",
+      "descriptionPortal": "Permeteu al membre actualitzar els grups del vostre portal.",
+      "descriptionApp": "Permeteu a l'aplicació actualitzar grups de la vostra organització."
+    },
+    "portal:admin:deleteGroups": {
+      "label": "Suprimeix",
+      "description": "Permeteu al membre suprimir grups de la vostra organització.",
+      "descriptionPortal": "Permeteu al membre suprimir grups del vostre portal.",
+      "descriptionApp": "Permeteu a l'aplicació suprimir grups de la vostra organització."
+    },
+    "portal:admin:reassignGroups": {
+      "label": "Reassigna la propietat",
+      "description": "Permeteu al membre reassignar grups a altres membres de la vostra organització.",
+      "descriptionPortal": "Permeteu al membre reassignar grups a altres membres del vostre portal.",
+      "descriptionApp": "Permeteu a l'aplicació reassignar grups a altres membres de la vostra organització."
+    },
+    "portal:admin:assignToGroups": {
+      "label": "Assigna membres",
+      "description": "Permeteu al membre assignar membres a grups de la vostra organització, eliminar-los-en i canviar-ne el rol de grup.",
+      "descriptionPortal": "Permeteu al membre assignar membres a grups del vostre portal, eliminar-los-en i canviar-ne el rol de grup.",
+      "descriptionApp": "Permeteu a l'aplicació assignar membres a grups de la vostra organització, eliminar-los-en i canviar-ne el rol de grup."
+    },
+    "portal:admin:manageEnterpriseGroups": {
+      "label": "Enllaç a un grup específic de l'organització",
+      "description": "Permeteu al membre enllaçar la pertinença al grup a un grup específic de l'organització.",
+      "descriptionApp": "Permeteu a l'aplicació enllaçar la pertinença al grup a un grup específic de l'organització."
+    },
+    "portal:admin:createUpdateCapableGroup": {
+      "label": "Crea amb funcions d'actualització",
+      "description": "Permeteu al membre crear grups amb funcions d'actualització.",
+      "descriptionApp": "Permeteu a l'aplicació crear grups amb funcions d'actualització."
+    },
+    "portal:admin:createLeavingDisallowedGroup": {
+      "label": "Crea sense permís per sortir",
+      "description": "Permeteu al membre crear grups que no permetin als membres sortir-ne (grups administratius) i ser-ne propietari.",
+      "descriptionApp": "Permeteu a l'aplicació crear grups que no permetin a les aplicacions sortir-ne (grups administratius) i ser-ne propietari."
+    },
+    "portal:admin:viewItems": {
+      "label": "Visualitza-ho tot",
+      "description": "Permeteu al membre visualitzar tot el contingut de la vostra organització.",
+      "descriptionPortal": "Permeteu al membre visualitzar tot el contingut del vostre portal.",
+      "descriptionApp": "Permeteu a l'aplicació visualitzar contingut de la vostra organització."
+    },
+    "portal:admin:updateItems": {
+      "label": "Actualitza",
+      "description": "Permeteu al membre actualitzar i classificar el contingut i editar les capes d'entitats allotjades de la vostra organització.",
+      "descriptionPortal": "Permeteu al membre actualitzar i classificar el contingut i editar les capes d'entitats allotjades al vostre portal.",
+      "descriptionApp": "Permeteu a l'aplicació actualitzar i classificar el contingut i editar les capes d'entitats allotjades de la vostra organització."
+    },
+    "portal:admin:deleteItems": {
+      "label": "Suprimeix",
+      "description": "Permeteu al membre suprimir contingut de la vostra organització.",
+      "descriptionPortal": "Permeteu al membre suprimir contingut del vostre portal.",
+      "descriptionApp": "Permeteu a l'aplicació suprimir contingut de la vostra organització."
+    },
+    "portal:admin:reassignItems": {
+      "label": "Reassigna la propietat",
+      "description": "Permeteu al membre reassignar contingut a altres membres de la vostra organització.",
+      "descriptionPortal": "Permeteu al membre reassignar contingut a altres membres del vostre portal.",
+      "descriptionApp": "Permeteu a l'aplicació reassignar contingut a altres membres de la vostra organització."
+    },
+    "portal:admin:updateItemCategorySchema": {
+      "label": "Administra les categories",
+      "description": "Permeteu al membre configurar les categories de contingut de l'organització.",
+      "descriptionPortal": "Permeteu al membre configurar les categories de contingut del portal.",
+      "descriptionApp": "Permeteu a l'aplicació configurar les categories de contingut de l'organització."
+    },
+    "portal:publisher:publishServerGPServices": {
+      "label": "Publica eines web",
+      "description": "Aquest permís ofereix la possibilitat de publicar eines web basades en serveis de geoprocessament de llocs de servidors federats."
+    },
+    "portal:admin:shareToOrg": {
+      "label": "Comparteix contingut de membre amb l'organització",
+      "description": "Permeteu al membre compartir a l'organització contingut que sigui propietat d'altres membres de la vostra organització.",
+      "descriptionPortal": "Permeteu al membre compartir al portal contingut que sigui propietat d'altres membres del vostre portal.",
+      "descriptionApp": "Permeteu a l'aplicació compartir a l'organització contingut que sigui propietat d'altres membres de la vostra organització."
+    },
+    "portal:admin:shareToPublic": {
+      "label": "Comparteix contingut de membre amb el públic",
+      "description": "Permeteu al membre compartir públicament contingut que sigui propietat d'altres membres de la vostra organització.",
+      "descriptionPortal": "Permeteu al membre compartir públicament contingut que sigui propietat d'altres membres del vostre portal.",
+      "descriptionApp": "Permeteu a l'aplicació compartir de manera pública contingut que sigui propietat d'altres membres de la vostra organització."
+    },
+    "portal:admin:createReports": {
+      "label": "Crear i gestionar informes administratius",
+      "description": "Permeteu que un membre creï i gestioni informes administratius per a la vostra organització.",
+      "descriptionPortal": "Permeteu que un membre creï i gestioni informes administratius per al vostre portal.",
+      "descriptionApp": "Permeteu a l'aplicació crear i gestionar informes administratius per a la vostra organització."
+    },
+    "marketplace:admin:manage": {
+      "label": "Crea i administra",
+      "description": "Permeteu al membre crear llistats, publicar elements i administrar subscripcions a l'ArcGIS Marketplace, així com administrar els compradors i la informació de contacte de la vostra organització. L'ús d'aquest permís depèn de si la vostra organització obté accés de publicació a l'ArcGIS Marketplace."
+    },
+    "marketplace:admin:purchase": {
+      "label": "Comprar i obtenir productes de franc",
+      "description": "Permeteu que el membre enviï sol·licituds de compra i tingui accés a productes de franc de proveïdors de l'ArcGIS Marketplace. Per permetre que els membres comprin productes amb la targeta de crèdit, heu de designar-los com a compradors del Marketplace."
+    },
+    "marketplace:admin:startTrial": {
+      "label": "Inicia proves",
+      "description": "Permet al membre iniciar les subscripcions de prova a l'ArcGIS Marketplace."
+    },
+    "portal:admin:manageSecurity": {
+      "label": "Seguretat i infraestructura",
+      "description": "Permeteu al membre administrar la configuració de seguretat i infraestructura de l'organització.",
+      "descriptionPortal": "Permeteu al membre administrar la configuració de seguretat i infraestructura del portal.",
+      "descriptionApp": "Permeteu a l'aplicació administrar la configuració de seguretat i infraestructura de l'organització."
+    },
+    "portal:admin:manageWebsite": {
+      "label": "Lloc web de l'organització",
+      "description": "Permeteu al membre administrar la configuració del lloc web de l'organització.",
+      "descriptionPortal": "Permeteu al membre administrar la configuració del lloc web del portal.",
+      "descriptionApp": "Permeteu a l'aplicació administrar la configuració del lloc web de l'organització."
+    },
+    "portal:admin:manageCollaborations": {
+      "label": "Col·laboracions",
+      "description": "Permeteu al membre administrar les col·laboracions de l'organització.",
+      "descriptionPortal": "Permeteu al membre administrar les col·laboracions del portal.",
+      "descriptionApp": "Permeteu a l'aplicació administrar les col·laboracions de l'organització."
+    },
+    "portal:admin:manageCredits": {
+      "label": "Crèdits",
+      "description": "Permeteu al membre administrar la configuració de pressupostació de crèdits de l'organització.",
+      "descriptionApp": "Permeteu a l'aplicació administrar la configuració de pressupostació de crèdits de l'organització."
+    },
+    "portal:admin:manageRoles": {
+      "label": "Rols de membre",
+      "description": "Permeteu al membre administrar els rols dels membres de l'organització.",
+      "descriptionPortal": "Permeteu al membre administrar els rols dels membres del portal.",
+      "descriptionApp": "Permeteu a l'aplicació administrar els rols de membre de l'organització."
+    },
+    "portal:admin:manageServers": {
+      "label": "Servidors",
+      "description": "Aquest permís ofereix la possibilitat d'administrar la configuració dels servidors del portal."
+    },
+    "portal:admin:manageUtilityServices": {
+      "label": "Serveis d'utilitats",
+      "description": "Permeteu al membre administrar la configuració dels serveis d'utilitats de l'organització.",
+      "descriptionPortal": "Permeteu al membre administrar la configuració dels serveis d'utilitats del portal.",
+      "descriptionApp": "Permeteu a l'aplicació administrar la configuració dels serveis d'utilitats de l'organització."
+    },
+    "portal:admin:manageWebhooks": {
+      "label": "Webhooks",
+      "labelPortal": "Webhooks de l'organització",
+      "description": "Permeteu al membre crear, editar i suprimir tots els webhooks de la vostra organització.",
+      "descriptionApp": "Permeteu a l'aplicació membre crear, editar i suprimir tots els webhooks de la vostra organització.",
+      "descriptionPortal": "Permeteu al membre crear, editar i suprimir webhooks de l'organització i administrar tots els webhooks del portal.",
+      "descriptionAppPortal": "Permeteu a l'aplicació crear, editar i suprimir webhooks de l'organització i administrar tots els webhooks del portal."
+    },
+    "portal:admin:createGPWebhook": {
+      "label": "Geoprocessament",
+      "description": "Permeteu al membre crear, editar i suprimir els seus propis webhooks de geoprocessament.",
+      "descriptionApp": "Permeteu a l'aplicació crear, editar i suprimir els seus propis webhooks de geoprocessament."
+    }
+  }
+}

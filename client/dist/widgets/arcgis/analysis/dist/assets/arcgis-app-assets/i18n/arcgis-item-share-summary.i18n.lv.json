@@ -1,0 +1,17 @@
+{
+  "sharing": "Koplietošana",
+  "private": "Īpašnieks",
+  "shared": "Īpašnieks un koplietots ar grupām.",
+  "org": "Organizācija",
+  "public": "Ikviens (publiski)",
+  "privateGroups": "Īpašnieks",
+  "sharedGroups": "Īpašnieks un grupas (${num})",
+  "orgGroups": "Organizācija un grupas (${num})",
+  "publicGroups": "Visi (publisks) un grupas (${num})",
+  "groups": "Grupas (${num})",
+  "updateSharing": "Koplietošanas līmenis: ${level}, atjaunināt koplietošanu",
+  "viewableBy": "Var skatīt: ${level}",
+  "everyone": "Ikviens (publiski)",
+  "organization": "Organizācija",
+  "groupMembers": "Grupas dalībnieki"
+}

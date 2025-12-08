@@ -1,0 +1,36 @@
+{
+  "modalHeader": "Konfigureeri sisukategooriad",
+  "modalGroupHeader": "Konfigureeri grupikategooriad",
+  "helpText": "Muutke või kustutage oma organisatsioonis kategooriaid või muutke nende järjestust.",
+  "helpTextGroup": "Muutke või kustutage selle grupi sisu kategooriaid või muutke nende järjestust.",
+  "helpTextDescription": "Pidage meeles, et teised organisatsiooni liikmed on võib-olla neid kategooriaid juba oma üksustele määranud ja skeemi muutmine uuendab neid üksusi vastavalt.",
+  "helpTextGroupDescription": "Pidage meeles, et teised grupi liikmed on võib-olla neid kategooriaid juba oma üksustele määranud ja skeemi muutmine uuendab neid üksusi vastavalt.",
+  "warning": {
+    "deleteInUseCategory": {
+      "title": "Kustuta kategooria",
+      "cta": "Kustuta kategooria",
+      "message": {
+        "single": "Sellele kategooriale on määratud üks üksus. Kategooria kustutamisel eemaldatakse kategooria ka sellelt üksuselt.",
+        "multiple": "Sellele kategooriale on määratud ${number} üksust. Kategooria kustutamisel eemaldatakse kategooria ka nendelt üksustelt.",
+        "unknown": "Sellele kategooriale määratud üksused: ${number}. Kategooria kustutamisel eemaldatakse kategooria ka nendelt üksustelt."
+      }
+    },
+    "changeTitleInUseCategory": {
+      "title": "Uuenda kategooriat",
+      "message": {
+        "single": "Sellele kategooriale on määratud üks üksus. Kategooria värskendamisel värskendatakse \"${newTitle}\" kasutamiseks ka üksust.",
+        "multiple": "Sellele kategooriale on määratud ${number} üksust. Kategooria värskendamisel värskendatakse \"${newTitle}\" kasutamiseks ka üksusi.",
+        "unknown": "Sellele kategooriale määratud üksused: ${number}. Kategooria värskendamisel värskendatakse \"${newTitle}\" kasutamiseks ka üksusi."
+      },
+      "cta": "Uuenda kategooriat"
+    }
+  },
+  "template": {
+    "templateList": {
+      "custom": {
+        "message": "Saate organisatsiooni sisu korrastamiseks oma kategooriaid luua.",
+        "messageGroup": "Saate selle grupi sisu korrastamiseks oma kategooriaid luua."
+      }
+    }
+  }
+}

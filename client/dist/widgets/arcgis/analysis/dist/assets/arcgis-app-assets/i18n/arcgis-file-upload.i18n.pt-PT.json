@@ -1,0 +1,16 @@
+{
+  "updateData": "Atualizar dados",
+  "cancel": "Cancelar",
+  "editStyle": "Substitua o ficheiro de estilo da camada por uma versão atualizada a partir do seu computador.",
+  "updatePackages": "Substitua o(a) ${type} por uma versão atualizada a partir do seu computador. O ficheiro carregado tem de ter o mesmo nome que ${hostedLayerName}.",
+  "uploadStaticFiles": "O ficheiro que está a ser carregado tem de ter o mesmo nome que o ficheiro original ${fileName}",
+  "sameFileNameDescription": "O ficheiro que está a ser carregado tem de ter o mesmo nome e nomes de campos que o ficheiro original ${fileName}",
+  "updating": "A atualizar...",
+  "error": "Erro",
+  "errors": {
+    "sameFileName": "Para atualizar este item, é necessário carregar um ficheiro com o nome ${fileName}.",
+    "invalidStyleFileExtension": "Extensão de ficheiro inválida. O estilo carregado tem de ter a extensão de ficheiro .json.",
+    "errorWhileUpload": "Ocorreu um erro ao carregar o item.",
+    "errorUpdate": "Ocorreu um erro ao substituir o item."
+  }
+}

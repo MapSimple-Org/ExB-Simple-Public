@@ -1,0 +1,1 @@
+System.register([],function(t){return{execute:function(){t({settingsLabel:"Saites p\u0101rl\u016bka iestat\u012bjumi",selectModelViewer:"Atlas\u012bt dokumentu skat\u012bt\u0101ja logr\u012bku, lai att\u0113lotu saist\u012btos dokumentus."})}}});

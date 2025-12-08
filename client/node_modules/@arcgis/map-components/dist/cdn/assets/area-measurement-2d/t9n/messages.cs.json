@@ -1,0 +1,1 @@
+{"componentLabel":"Měření plochy","hint":"Kliknutím do mapy umístěte první bod a zahajte měření","mode":"Režim","modes":{"auto":"Automaticky","planar":"Rovinná","geodesic":"Geodetická"},"newMeasurement":"Nové měření","perimeter":"Obvod","unit":"Jednotky","unsupported":"Měření plochy ve 2D je podporováno pouze v MapView."}

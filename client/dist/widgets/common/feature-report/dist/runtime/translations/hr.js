@@ -1,0 +1,1 @@
+System.register([],function(e){return{execute:function(){e({_widgetLabel:"Izvje\u0161\u0107e o geoobjektima"})}}});

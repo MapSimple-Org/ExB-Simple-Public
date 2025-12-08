@@ -1,0 +1,36 @@
+{
+  "modalHeader": "Konfigurasikan kategori konten",
+  "modalGroupHeader": "Konfigurasikan kategori grup",
+  "helpText": "Tambahkan, hapus, atau urutkan ulang kategori di organisasi Anda.",
+  "helpTextGroup": "Edit, hapus, atau urutkan ulang kategori untuk konten dalam grup.",
+  "helpTextDescription": "Perlu diingat bahwa anggota organisasi lainnya mungkin sudah menetapkan kategori tersebut ke item mereka, dan mengedit skema akan juga memperbarui item tersebut",
+  "helpTextGroupDescription": "Perlu diingat bahwa anggota grup lainnya mungkin sudah menetapkan kategori tersebut ke item mereka, dan mengedit skema akan juga memperbarui item tersebut",
+  "warning": {
+    "deleteInUseCategory": {
+      "title": "Hapus kategori",
+      "cta": "Hapus kategori",
+      "message": {
+        "single": "Satu item sudah ditetapkan ke kategori ini. Menghapus kategori juga akan menghapusnya dari item ini.",
+        "multiple": "${number} item sudah ditetapkan ke kategori ini. Menghapus kategori juga akan menghapusnya dari item ini.",
+        "unknown": "Item yang ditetapkan ke kategori ini: ${number}. Menghapus kategori juga akan menghapusnya dari item ini."
+      }
+    },
+    "changeTitleInUseCategory": {
+      "title": "Perbarui kategori",
+      "message": {
+        "single": "Satu item sudah ditetapkan ke kategori ini. Memperbarui kategori akan memperbarui item yang akan digunakan \"${newTitle}\".",
+        "multiple": "${number} item sudah ditetapkan ke kategori ini. Memperbarui kategori akan memperbarui item yang akan digunakan \"${newTitle}\".",
+        "unknown": "Item yang ditetapkan ke kategori ini: ${number}. Memperbarui kategori akan memperbarui item yang akan digunakan \"${newTitle}\"."
+      },
+      "cta": "Perbarui kategori"
+    }
+  },
+  "template": {
+    "templateList": {
+      "custom": {
+        "message": "Buat kategori Anda sendiri untuk mengorganisasikan konten dalam organisasi Anda.",
+        "messageGroup": "Buat kategori Anda sendiri untuk mengatur konten dalam grup ini."
+      }
+    }
+  }
+}

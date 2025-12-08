@@ -1,0 +1,36 @@
+{
+  "modalHeader": "Konfigurer innholdskategorier",
+  "modalGroupHeader": "Konfigurer gruppekategorier",
+  "helpText": "Rediger, slett eller endre rekkefølgen på kategorier i organisasjonen.",
+  "helpTextGroup": "Rediger, slett eller endre rekkefølgen på kategorier for innhold i denne gruppen.",
+  "helpTextDescription": "Husk at andre medlemmer i organisasjonen kan ha tilordnet disse kategoriene til elementer allerede. Hvis du redigerer skjemaet, oppdateres disse elementene i samsvar med endringene.",
+  "helpTextGroupDescription": "Husk at andre medlemmer i gruppen kan ha tilordnet disse kategoriene til elementer allerede. Hvis du redigerer skjemaet, oppdateres disse elementene i samsvar med endringene.",
+  "warning": {
+    "deleteInUseCategory": {
+      "title": "Slett kategori",
+      "cta": "Slett kategori",
+      "message": {
+        "single": "Ett element er tilordnet til denne kategorien. Hvis du sletter kategorien, fjernes den også fra dette elementet.",
+        "multiple": "${number} elementer er tilordnet til denne kategorien. Hvis du sletter kategorien, fjernes den også fra disse elementene.",
+        "unknown": "Elementer som er tilordnet til denne kategorien: ${number}. Hvis du sletter kategorien, fjernes den også fra disse elementene."
+      }
+    },
+    "changeTitleInUseCategory": {
+      "title": "Oppdater kategori",
+      "message": {
+        "single": "Ett element er tilordnet til denne kategorien. Hvis du oppdaterer kategorien, oppdateres elementet til å bruke ${newTitle}.",
+        "multiple": "${number} elementer er tilordnet til denne kategorien. Hvis du oppdaterer kategorien, oppdateres elementene til å bruke ${newTitle}.",
+        "unknown": "Elementer som er tilordnet til denne kategorien: ${number}. Hvis du oppdaterer kategorien, oppdateres elementene til å bruke ${newTitle}."
+      },
+      "cta": "Oppdater kategori"
+    }
+  },
+  "template": {
+    "templateList": {
+      "custom": {
+        "message": "Opprett egne kategorier for å organisere innhold i organisasjonen.",
+        "messageGroup": "Opprett egne kategorier for å ordne innholdet i denne gruppen."
+      }
+    }
+  }
+}

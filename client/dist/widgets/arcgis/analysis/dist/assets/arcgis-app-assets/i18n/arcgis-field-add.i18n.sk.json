@@ -1,0 +1,137 @@
+{
+  "next": "Ďalšie",
+  "addField": "Pridať stĺpec",
+  "selectDataType": "Vyberte typ dát, ktoré budú uložené v poli",
+  "addGlobalIDNotice": "Pole sa automaticky vyplní pre existujúce dáta vo vrstve alebo tabuľke. Po pridaní sa toto pole nebude dať editovať ani vymazať.",
+  "fieldName": "Názov stĺpca",
+  "displayName": "Názov na zobrazenie",
+  "length": "Dĺžka",
+  "defaultValue": "Predvolená hodnota (voliteľné)",
+  "fieldTypes": "Typy polí",
+  "fieldValueType": "Typ hodnoty poľa (voliteľné)",
+  "fieldDescription": "Popis poľa (voliteľné)",
+  "allowNullValues": "Povoliť null hodnoty",
+  "valueRequiredError": "Táto hodnota je vyžadovaná",
+  "fieldAdded": "Pole úspešne pridané",
+  "newFieldTypeNotice": "Tento typ poľa nemusí byť pri niektorých klientoch plne podporovaný.",
+  "addingField": "Pole sa pridáva...",
+  "syncEnabled": "Niektoré typy polí nie je možné pridať, pretože vo vrstve je povolená synchronizácia.",
+  "newFeature": "Nový prvok",
+  "fieldAdditionUnsuccessful": "Pridanie poľa bolo neúspešné",
+  "error": "Chyba",
+  "noFieldTypeSelected": "Nie je vybraný typ poľa",
+  "nullFieldTypeError": "Ak chcete pokračovať, musíte zvoliť typ poľa.",
+  "fieldNameCharacterNotice": "Názvy polí dlhšie ako 31 znakov nie sú kompatibilné s offline použitím.",
+  "suggestedHeader": "Navrhované",
+  "otherHeader": "Iné",
+  "provideDescription": "Zadajte popis informácií, ktoré bude pole obsahovať",
+  "nullableTooltipInfo": "Toto nastavenie nie je editovateľné, ak už vaša vrstva obsahuje dáta.",
+  "tooltipInfo": {
+    "globalIDExists": "V tejto službe už existuje pole GlobalID. Vo vrstve alebo tabuľke sa môže nachádzať len jedno pole GlobalID.",
+    "enterpriseTimestampOffset": "ArcGIS Enterprise nepodporuje polia Timestamp Offset v hostovaných prvkových vrstvách."
+  },
+  "text": {
+    "title": "Text",
+    "description": "Hodnoty, ktoré obsahujú alfanumerické alebo špeciálne znaky.",
+    "types": {
+      "esriFieldTypeString": {
+        "title": "Reťazec",
+        "description": "Uloženie súboru alfanumerických znakov zadanej dĺžky."
+      }
+    }
+  },
+  "numbers": {
+    "title": "Čísla",
+    "description": "Hodnoty, ktoré obsahujú číselné informácie.",
+    "types": {
+      "esriFieldTypeDouble": {
+        "title": "Double",
+        "description": "Uloženie čísla s desatinnými čiarkami."
+      },
+      "esriFieldTypeInteger": {
+        "title": "Integer",
+        "description": "Uložiť celé čísla od ${lowerIntegerRange} do ${upperIntegerRange}."
+      },
+      "esriFieldTypeBigInteger": {
+        "title": "Veľké celé číslo",
+        "description": "Uloženie celého čísla od -(2${startSup}53${endSup}-1) do 2${startSup}53${endSup}-1. Tento typ poľa použite, ak používate čísla, ktoré sú mimo podporovaného rozsahu celočíselných polí."
+      }
+    }
+  },
+  "dates": {
+    "title": "Dátumy",
+    "description": "Hodnoty, ktoré obsahujú časové informácie.",
+    "types": {
+      "esriFieldTypeDate": {
+        "title": "Dátum",
+        "description": "Uložiť hodnoty s dátumom a časom."
+      },
+      "esriFieldTypeDateOnly": {
+        "title": "Len dátum",
+        "description": "Uložiť dátumové hodnoty bez časových."
+      },
+      "esriFieldTypeTimeOnly": {
+        "title": "Len čas",
+        "description": "Uložiť časové hodnoty bez dátumových."
+      },
+      "esriFieldTypeTimestampOffset": {
+        "title": "Ofset časovej pečiatky",
+        "description": "Uložiť hodnoty indikujúce dátum, čas a ofset od koordinovaného svetového času (UTC)."
+      }
+    }
+  },
+  "globalIdentifiers": {
+    "title": "Globálne identifikátory",
+    "description": "Hodnoty, ktoré jednoznačne identifikujú prvok alebo riadok tabuľky.",
+    "types": {
+      "esriFieldTypeGlobalID": {
+        "title": "GlobalID",
+        "description": "Uložte reťazec 36 znakov pozostávajúci z písmen a čísel používaných na jedinečnú identifikáciu prvku."
+      },
+      "esriFieldTypeGUID": {
+        "title": "GUID",
+        "description": "Uložte reťazec 36 znakov pozostávajúceho z písmen a čísel. Globálne jedinečný identifikátor alebo GUID sa často používa na spravovanie vzťahov medzi prvkami."
+      }
+    }
+  },
+  "fieldValueTypes": {
+    "nameOrTitle": "Meno alebo názov",
+    "description": "Popis",
+    "typeOrCategory": "Typ alebo kategória",
+    "countOrAmount": "Počet alebo suma",
+    "percentageOrRatio": "Percento alebo pomer",
+    "measurement": "Meranie",
+    "currency": "Mena",
+    "uniqueIdentifier": "Jedinečný identifikátor",
+    "phoneNumber": "Telefónne číslo",
+    "emailAddress": "E-mailová adresa",
+    "orderedOrRanked": "Objednané alebo zoradené",
+    "binary": "Binárne",
+    "locationOrPlaceName": "Lokalita alebo názov miesta",
+    "coordinate": "Súradnica",
+    "dateAndTime": "Dátum a čas",
+    "none": "Žiadne"
+  },
+  "addFieldErrors": {
+    "invalidName": "Neplatný názov",
+    "invalidLength": "Neplatná dĺžka",
+    "outOfRangeValueError": "Táto hodnota je mimo rozsahu.",
+    "invalidValueError": "Zadaná hodnota je neplatná.",
+    "invalidFieldParameters": "Neplatné parametre poľa",
+    "invalidInputsError": "Skontrolujte, či sú parametre poľa vyplnené správne.",
+    "existingFieldNameError": "Názov poľa nemôže byť rovnaký ako názov existujúceho poľa.",
+    "invalidNameInputSQLError": "Názov stĺpca nemôže byť rovnaký ako kľúčové slovo SQL.",
+    "invalidNameInputInvalidCharactersError": "Musí začínať písmenom a môže obsahovať len písmená, číslice a znaky \"_\".",
+    "valueIsRequiredError": "Vyžaduje sa táto hodnota.",
+    "lengthExceeds": "Dĺžka názvu poľa by mala byť menšia alebo rovná ${maxFieldNameLength} znakom.",
+    "defaultValueExceeds": "Predvolená hodnota presahuje zadanú dĺžku poľa.",
+    "savingFailed": "Uloženie ${layerName} zlyhalo",
+    "readOnlyErrorMessage": "ArcGIS Online má prevádzkové problémy a prepol sa do režimu len na čítanie. Niektoré funkcionality môžu byť obmedzené. Najnovšie aktualizácie o tom, kedy sa to vyrieši, nájdete na ArcGIS Online Health Dashboard.",
+    "readOnlyErrorMessageEnterprise": "ArcGIS Enterprise má prevádzkové problémy a prepol sa do režimu len na čítanie. Niektoré funkcionality môžu byť obmedzené.",
+    "healthDashboard": "ArcGIS Online Health Dashboard",
+    "genericAddFieldError": {
+      "title": "Chyba",
+      "description": "Pri pridávaní poľa sa vyskytla chyba."
+    }
+  }
+}

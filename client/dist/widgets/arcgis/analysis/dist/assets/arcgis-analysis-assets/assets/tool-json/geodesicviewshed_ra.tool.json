@@ -1,0 +1,374 @@
+{
+  "name": "GeodesicViewshed",
+  "displayName": "GeodesicViewshed",
+  "description": "Determines the raster surface locations visible to a set of observer features using geodesic methods. ",
+  "category": "",
+  "helpUrl": "https://rasteranalysisdev.arcgis.com/arcgis/rest/directories/arcgisoutput/RasterAnalysisTools_GPServer/RasterAnalysisTools/GeodesicViewshed.htm",
+  "executionType": "esriExecutionTypeAsynchronous",
+  "parameters": [
+    {
+      "name": "inputElevationSurface",
+      "dataType": "GPString",
+      "displayName": "inputElevationSurface",
+      "description": "The elevation surface to use for calculating the viewshed. ",
+      "direction": "esriGPParameterDirectionInput",
+      "defaultValue": "",
+      "parameterType": "esriGPParameterTypeRequired",
+      "category": ""
+    },
+    {
+      "name": "inputObserverFeatures",
+      "dataType": "GPFeatureRecordSetLayer",
+      "displayName": "inputObserverFeatures",
+      "description": "The point features that represent the observer locations when calculating the viewsheds. ",
+      "direction": "esriGPParameterDirectionInput",
+      "defaultValue": {},
+      "parameterType": "esriGPParameterTypeRequired",
+      "category": ""
+    },
+    {
+      "name": "outputName",
+      "dataType": "GPString",
+      "displayName": "outputName",
+      "description": "The name of the output raster service. ",
+      "direction": "esriGPParameterDirectionInput",
+      "defaultValue": "",
+      "parameterType": "esriGPParameterTypeRequired",
+      "category": ""
+    },
+    {
+      "name": "optimizeFor",
+      "dataType": "GPString",
+      "displayName": "optimizeFor",
+      "description": "The optimization method to use for calculating the viewshed. SPEED—This method optimizes the processing speed, trading some accuracy in the result for higher performance. This is the default.ACCURACY—This method is optimized for accuracy in the results, at the expense of a longer processing time. ",
+      "direction": "esriGPParameterDirectionInput",
+      "defaultValue": "ACCURACY",
+      "parameterType": "esriGPParameterTypeOptional",
+      "category": "",
+      "choiceList": ["SPEED", "ACCURACY"]
+    },
+    {
+      "name": "analysisType",
+      "dataType": "GPString",
+      "displayName": "analysisType",
+      "description": "Specifies the type of visibility analysis you wish to perform, either determining how visible each cell is to the observers, or identifying for each surface location which observers are visible. FREQUENCY—The output records the number of times that each cell location in the input surface raster can be seen by the input observation locations (as points or as vertices for polyline observer features). This is the default. OBSERVERS—The output identifies exactly which observer points are visible from each raster surface location. The allowed maximum number of input observers is 32 with this analysis type. ",
+      "direction": "esriGPParameterDirectionInput",
+      "defaultValue": "FREQUENCY",
+      "parameterType": "esriGPParameterTypeOptional",
+      "category": "",
+      "choiceList": ["FREQUENCY", "OBSERVERS"]
+    },
+    {
+      "name": "verticalError",
+      "dataType": "GPLinearUnit",
+      "displayName": "verticalError",
+      "description": "The amount of uncertainty in the surface elevation values. ",
+      "direction": "esriGPParameterDirectionInput",
+      "parameterType": "esriGPParameterTypeOptional",
+      "category": ""
+    },
+    {
+      "name": "refractivityCoefficient",
+      "dataType": "GPDouble",
+      "displayName": "refractivityCoefficient",
+      "description": "The coefficient of the refraction of visible light in air. ",
+      "direction": "esriGPParameterDirectionInput",
+      "parameterType": "esriGPParameterTypeOptional",
+      "category": ""
+    },
+    {
+      "name": "maximumViewingDistance",
+      "dataType": "GPComposite",
+      "displayName": "maximumViewingDistance",
+      "description": "This is a cutoff distance, where the computation of visible areas stops.  ",
+      "direction": "esriGPParameterDirectionInput",
+      "defaultValue": {
+        "dataType": "GPLinearUnit",
+        "value": null
+      },
+      "parameterType": "esriGPParameterTypeOptional",
+      "category": "",
+      "parameterInfos": [
+        {
+          "name": "",
+          "dataType": "Field",
+          "displayName": ""
+        },
+        {
+          "name": "",
+          "dataType": "GPLinearUnit",
+          "displayName": ""
+        }
+      ]
+    },
+    {
+      "name": "minimumViewingDistance",
+      "dataType": "GPComposite",
+      "displayName": "minimumViewingDistance",
+      "description": "This is a distance where the computation of visible areas begins.  ",
+      "direction": "esriGPParameterDirectionInput",
+      "defaultValue": {
+        "dataType": "GPLinearUnit",
+        "value": null
+      },
+      "parameterType": "esriGPParameterTypeOptional",
+      "category": "",
+      "parameterInfos": [
+        {
+          "name": "",
+          "dataType": "Field",
+          "displayName": ""
+        },
+        {
+          "name": "",
+          "dataType": "GPLinearUnit",
+          "displayName": ""
+        }
+      ]
+    },
+    {
+      "name": "viewingDistancesAre3D",
+      "dataType": "GPBoolean",
+      "displayName": "viewingDistancesAre3D",
+      "description": "Specify whether the minimumViewingDistance and maximumViewingDistance parameters are measured in a three-dimensional way or a simpler, two-dimensional way.  False - The viewing distances are to be interpreted as a 2D distance. True - The viewing distances are to be interpreted as a 3D distance. ",
+      "direction": "esriGPParameterDirectionInput",
+      "parameterType": "esriGPParameterTypeOptional",
+      "category": ""
+    },
+    {
+      "name": "observersElevation",
+      "dataType": "GPComposite",
+      "displayName": "observersElevation",
+      "description": "This is the elevation of your observer locations. ",
+      "direction": "esriGPParameterDirectionInput",
+      "defaultValue": {
+        "dataType": "GPLinearUnit",
+        "value": null
+      },
+      "parameterType": "esriGPParameterTypeOptional",
+      "category": "",
+      "parameterInfos": [
+        {
+          "name": "",
+          "dataType": "Field",
+          "displayName": ""
+        },
+        {
+          "name": "",
+          "dataType": "GPLinearUnit",
+          "displayName": ""
+        }
+      ]
+    },
+    {
+      "name": "observersHeight",
+      "dataType": "GPComposite",
+      "displayName": "observersHeight",
+      "description": "This is the height used for your observer locations. ",
+      "direction": "esriGPParameterDirectionInput",
+      "defaultValue": {
+        "dataType": "GPLinearUnit",
+        "value": null
+      },
+      "parameterType": "esriGPParameterTypeOptional",
+      "category": "",
+      "parameterInfos": [
+        {
+          "name": "",
+          "dataType": "Field",
+          "displayName": ""
+        },
+        {
+          "name": "",
+          "dataType": "GPLinearUnit",
+          "displayName": ""
+        }
+      ]
+    },
+    {
+      "name": "targetHeight",
+      "dataType": "GPComposite",
+      "displayName": "targetHeight",
+      "description": "This is the height of structures or people on the ground used to establish visibility.  ",
+      "direction": "esriGPParameterDirectionInput",
+      "defaultValue": {
+        "dataType": "GPLinearUnit",
+        "value": null
+      },
+      "parameterType": "esriGPParameterTypeOptional",
+      "category": "",
+      "parameterInfos": [
+        {
+          "name": "",
+          "dataType": "Field",
+          "displayName": ""
+        },
+        {
+          "name": "",
+          "dataType": "GPLinearUnit",
+          "displayName": ""
+        }
+      ]
+    },
+    {
+      "name": "horizontalStartAngle",
+      "dataType": "GPComposite",
+      "displayName": "horizontalStartAngle",
+      "description": "The start angle of the horizontal scan range. ",
+      "direction": "esriGPParameterDirectionInput",
+      "defaultValue": {
+        "dataType": "GPDouble",
+        "value": null
+      },
+      "parameterType": "esriGPParameterTypeOptional",
+      "category": "",
+      "parameterInfos": [
+        {
+          "name": "",
+          "dataType": "GPDouble",
+          "displayName": ""
+        },
+        {
+          "name": "",
+          "dataType": "Field",
+          "displayName": ""
+        }
+      ]
+    },
+    {
+      "name": "horizontalEndAngle",
+      "dataType": "GPComposite",
+      "displayName": "horizontalEndAngle",
+      "description": "The end angle of the horizontal scan range. ",
+      "direction": "esriGPParameterDirectionInput",
+      "defaultValue": {
+        "dataType": "GPDouble",
+        "value": null
+      },
+      "parameterType": "esriGPParameterTypeOptional",
+      "category": "",
+      "parameterInfos": [
+        {
+          "name": "",
+          "dataType": "GPDouble",
+          "displayName": ""
+        },
+        {
+          "name": "",
+          "dataType": "Field",
+          "displayName": ""
+        }
+      ]
+    },
+    {
+      "name": "verticalUpperAngle",
+      "dataType": "GPComposite",
+      "displayName": "verticalUpperAngle",
+      "description": "The upper vertical angle limit of the scan relative to the horizontal plane. ",
+      "direction": "esriGPParameterDirectionInput",
+      "defaultValue": {
+        "dataType": "GPDouble",
+        "value": null
+      },
+      "parameterType": "esriGPParameterTypeOptional",
+      "category": "",
+      "parameterInfos": [
+        {
+          "name": "",
+          "dataType": "GPDouble",
+          "displayName": ""
+        },
+        {
+          "name": "",
+          "dataType": "Field",
+          "displayName": ""
+        }
+      ]
+    },
+    {
+      "name": "verticalLowerAngle",
+      "dataType": "GPComposite",
+      "displayName": "verticalLowerAngle",
+      "description": "The lower vertical angle limit of the scan relative to the horizontal plane. ",
+      "direction": "esriGPParameterDirectionInput",
+      "defaultValue": {
+        "dataType": "GPDouble",
+        "value": null
+      },
+      "parameterType": "esriGPParameterTypeOptional",
+      "category": "",
+      "parameterInfos": [
+        {
+          "name": "",
+          "dataType": "GPDouble",
+          "displayName": ""
+        },
+        {
+          "name": "",
+          "dataType": "Field",
+          "displayName": ""
+        }
+      ]
+    },
+    {
+      "name": "outputAboveGroundLevelRasterName",
+      "dataType": "GPString",
+      "displayName": "outputAboveGroundLevelRasterName",
+      "description": "The name of the output aboveground-level (AGL) raster.  ",
+      "direction": "esriGPParameterDirectionInput",
+      "defaultValue": "",
+      "parameterType": "esriGPParameterTypeOptional",
+      "category": ""
+    },
+    {
+      "name": "outputObserverRegionRelationshipTableName",
+      "dataType": "GPString",
+      "displayName": "outputObserverRegionRelationshipTableName",
+      "description": "The output table for identifying the regions that are visible to each observer. ",
+      "direction": "esriGPParameterDirectionInput",
+      "defaultValue": "",
+      "parameterType": "esriGPParameterTypeOptional",
+      "category": ""
+    },
+    {
+      "name": "context",
+      "dataType": "GPString",
+      "displayName": "context",
+      "description": "Specifies the analysis environments. ",
+      "direction": "esriGPParameterDirectionInput",
+      "defaultValue": "",
+      "parameterType": "esriGPParameterTypeOptional",
+      "category": ""
+    },
+    {
+      "name": "outputRaster",
+      "dataType": "GPString",
+      "displayName": "outputRaster",
+      "description": "",
+      "direction": "esriGPParameterDirectionOutput",
+      "defaultValue": "",
+      "parameterType": "esriGPParameterTypeDerived",
+      "category": ""
+    },
+    {
+      "name": "outputAboveGroundLevelRaster",
+      "dataType": "GPString",
+      "displayName": "outputAboveGroundLevelRaster",
+      "description": "",
+      "direction": "esriGPParameterDirectionOutput",
+      "defaultValue": "",
+      "parameterType": "esriGPParameterTypeDerived",
+      "category": ""
+    },
+    {
+      "name": "outputObserverRegionRelationshipTable",
+      "dataType": "GPString",
+      "displayName": "outputObserverRegionRelationshipTable",
+      "description": "",
+      "direction": "esriGPParameterDirectionOutput",
+      "defaultValue": "",
+      "parameterType": "esriGPParameterTypeDerived",
+      "category": ""
+    }
+  ]
+}

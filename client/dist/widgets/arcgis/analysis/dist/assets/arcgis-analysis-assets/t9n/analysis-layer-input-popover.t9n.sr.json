@@ -1,0 +1,18 @@
+{
+  "add": "Dodaj",
+  "analysisSessionLayers": "Slojevi sesije analize",
+  "browseAnalysisLayers": "Pretraži slojeve",
+  "cancel": "Otkaži",
+  "heading": "Izaberite sloj",
+  "mapLayers": "Slojevi mape",
+  "mesh": "Sloj mreže",
+  "modelVariableLayers": "Model promenljivih slojeva",
+  "multipatch": "Sloj sa više zakrpa",
+  "multipoint": "Sloj sa više tačaka",
+  "noCompatibleLayers": "Mapa ne sadrži kompatibilne slojeve. Dodajte slojeve na mapu ili pretražite slojeve da biste izvršili analizu.",
+  "noMatchesFound": "Nema stavki koje odgovaraju za '${searchTerm}'.",
+  "point": "Pointiraj sloj",
+  "polygon": "Sloj poligona",
+  "polyline": "Sloj polilinije",
+  "table": "Tabela"
+}

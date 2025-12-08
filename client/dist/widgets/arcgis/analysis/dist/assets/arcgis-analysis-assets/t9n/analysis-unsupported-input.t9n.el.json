@@ -1,0 +1,7 @@
+{
+  "defaultValue": "Μη υποστηριζόμενος τύπος παραμέτρου. Θα χρησιμοποιηθεί η προεπιλεγμένη τιμή <calcite-link target='_blank' href='${ docLink }'>Μάθετε περισσότερες πληροφορίες.</calcite-link>",
+  "requiredMessage": "Απαιτείται αυτή η παράμετρος.",
+  "unsupportedGPType": "Μη υποστηριζόμενος τύπος παραμέτρου. <calcite-link target='_blank' href='${ docLink }'>Μάθετε περισσότερες πληροφορίες.</calcite-link>",
+  "unsupportedParameterConfig": "Μη υποστηριζόμενη διαμόρφωση παραμέτρου <calcite-link target='_blank' href='${ docLink }'>Μάθετε περισσότερες πληροφορίες.</calcite-link>",
+  "unsupportedParameterConfigDefaultValue": "Μη υποστηριζόμενη διαμόρφωση παραμέτρου Θα χρησιμοποιηθεί η προεπιλεγμένη τιμή <calcite-link target='_blank' href='${ docLink }'>Μάθετε περισσότερες πληροφορίες.</calcite-link>"
+}

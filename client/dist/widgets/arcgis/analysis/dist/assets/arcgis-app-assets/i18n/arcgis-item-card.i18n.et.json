@@ -1,0 +1,8 @@
+{
+  "select": "Vali üksus: ${title}",
+  "lastUpdated": "Üksus on uuendatud: ${date}",
+  "viewItemDetails": "Kuva üksikasjad",
+  "preview": "Eelvaade",
+  "closePreview": "Sule eelvaade",
+  "moreOptions": "Rohkem valikuid"
+}

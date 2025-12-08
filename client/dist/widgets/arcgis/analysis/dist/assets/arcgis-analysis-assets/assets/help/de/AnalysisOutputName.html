@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>&Uuml;berschreibungseinstellungen f&uuml;r Analysen in  Map Viewer. </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="resultType">
+        <div>
+            <p>Gibt den Typ der erstellten Ausgabe an. Mit der Option  <b>Zwischendaten erstellen</b> wird einer tempor&auml;rer Layer erstellt, der als Eingabe f&uuml;r ein anderes Werkzeug verwendet werden kann, aber weder gespeichert noch auf der Karte angezeigt werden kann. Mit der Option <b>Gehosteten Layer erstellen</b> wird ein neuer gehosteter Feature-Layer ver&ouml;ffentlicht. Mit der Option <b>Vorhandenen Layer &uuml;berschreiben</b> wird ein vorhandener Layer mit der Ausgabe des Werkzeugs aktualisiert.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>Der Name des Layers, der erstellt und der Karte hinzugef&uuml;gt wird.
+            </p>
+        </div>
+    </div>
+    <div id="layerExistsAutomaticallyOverwrite">
+        <div>
+            <p>Gibt an, ob die Werkzeugausgabe einen Layer in den eigenen Inhalten &uuml;berschreibt, der den angegebenen Ausgabenamen tr&auml;gt. Sollte dieser Layer-Name noch nicht in Ihrer Organisation verwendet werden, wird ein neues Element erstellt. Zum &Uuml;berschreiben des Layers m&uuml;ssen Sie entweder der Layer-Besitzer oder Administrator sein.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>Der Name des Ordners in  <b>Eigene Inhalte</b>, in dem die Ergebnisse gespeichert werden sollen.
+            </p>
+            <p>Wenn der Layer bereits vorhanden ist, kann diese Angabe nicht aktualisiert werden.
+            </p>
+        </div>
+    </div>
+    <div id="existingLayerToOverwrite">
+        <div>
+            <p>Der Layer in  <b>Eigene Inhalte</b>, der durch den Ausgabe-Layer &uuml;berschrieben wird. Die Raumbez&uuml;ge der Ausgabe und des vorhandenen Layers m&uuml;ssen &uuml;bereinstimmen.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

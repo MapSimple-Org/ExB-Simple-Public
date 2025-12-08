@@ -1,0 +1,89 @@
+{
+  "browser": {
+    "refineContent": "Rafinați conținutul",
+    "filters": "Filtre",
+    "pageRange": "${start}-${end}, total: ${total}",
+    "pageRangeAria": "${start}-${end}, total elemente: ${total}",
+    "pageRangeWithRecycleBin": "${start}-${end}, total: ${total} (Dimensiune totală: ${recycleBinSize})",
+    "pageRangeAriaWithRecycleBin": "${start}-${end}, total elemente: ${total} (Dimensiune totală: ${recycleBinSize})",
+    "totalSize": "Dimensiune totală: ${totalSize}",
+    "loading": "Se încarcă rezultatele",
+    "close": "Închidere"
+  },
+  "actions": {
+    "more": "Mai mult"
+  },
+  "filter": {
+    "clear": "Golire"
+  },
+  "filterDate": {
+    "today": "Astăzi",
+    "yesterday": "Ieri",
+    "last7": "Ultimele 7 zile",
+    "last30": "Ultimele 30 de zile",
+    "never": "Niciodată",
+    "custom": "Interval personalizat...",
+    "title": {
+      "created": "Data creării",
+      "modified": "Data modificării",
+      "joined": "Data înscrierii",
+      "lastLogin": "Ultima autentificare"
+    },
+    "created": "Creat: ${date}",
+    "modified": "Modificat: ${date}",
+    "joined": "Înscris: ${date}",
+    "lastLogin": "Ultima conectare: ${date}"
+  },
+  "pagination": {
+    "next": "Pagina următoare",
+    "prev": "Pagina anterioară"
+  },
+  "search": {
+    "label": "Căutaţi grupuri",
+    "search": "Căutare",
+    "clear": "Golire termen de căutare",
+    "wildcard": "Căutările cu caractere de înlocuire nu sunt acceptate"
+  },
+  "sort": {
+    "sortDirection": "Direcție de sortare",
+    "title": "Titlu",
+    "relevance": "Relevanţă",
+    "modified": "Data modificării",
+    "deleted": "Dată selectată",
+    "created": "Data creării",
+    "added": "Data adăugării",
+    "size": "Dimensiune",
+    "owner": "Proprietar",
+    "sizeAsc": "De la cel mai mic la cel mai mare",
+    "sizeDesc": "De la cel mai mare la cel mai mic",
+    "numviews": "Număr de vizualizări",
+    "numAsc": "De la cel mai puțin la cel mai mult",
+    "numDesc": "De la cel mai mult la cel mai puțin",
+    "alphabeticalAsc": "Alfabetic",
+    "alphabeticalDesc": "Inversare alfabetică",
+    "recentAsc": "Cel mai puțin recent",
+    "recentDesc": "Cele mai recente",
+    "sort": "Sortare",
+    "sortBy": "Sortare după",
+    "sortByColon": "Sortare după:",
+    "fullname": "Nume",
+    "username": "Nume de utilizator",
+    "name": "Nume",
+    "membertype": "Rol grup",
+    "joined": "Data înscrierii",
+    "lastlogin": "Ultima autentificare",
+    "dataset": "Set de date",
+    "mfaenabled": "Autentificare multi-factor",
+    "defaultAsc": "Ascendent",
+    "defaultDesc": "Descendent"
+  },
+  "topBar": {
+    "filter": "Filtrare"
+  },
+  "filterStatus": {
+    "clear": "Golire",
+    "filters": "Filtre:",
+    "additional": "Filtre active suplimentare",
+    "clearAllFilters": "Golire toate filtrele"
+  }
+}

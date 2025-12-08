@@ -1,0 +1,8 @@
+{
+  "arriveTime": "Varış saati",
+  "modes": {
+    "custom": "Özel tarih ve saat",
+    "now": "Şimdi",
+    "unspecified": "Zaman belirtilmemiş"
+  }
+}

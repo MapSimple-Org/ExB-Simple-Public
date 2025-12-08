@@ -1,0 +1,9 @@
+{
+  "disconnect": "Deconectare de la variabilă",
+  "overwriteTo": "Suprascriere strat tematic: <span style='font-weight: var(--calcite-font-weight-normal)'>${val}</span>",
+  "resultType": "Tip rezultat: <span style='font-weight: var(--calcite-font-weight-normal)'>${val}</span>",
+  "saveTo": "Nume rezultat: <span style='font-weight: var(--calcite-font-weight-normal)'>${val}</span>",
+  "variableLabel": "Etichetă: <span style='font-weight: var(--calcite-font-weight-normal)'>${val}</span>",
+  "variableNode": "Nod variabilă",
+  "variableVal": "Valoare: <span style='font-weight: var(--calcite-font-weight-normal)'>${val}</span>"
+}

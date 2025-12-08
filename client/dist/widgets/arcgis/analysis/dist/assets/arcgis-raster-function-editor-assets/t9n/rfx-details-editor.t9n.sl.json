@@ -1,0 +1,22 @@
+{
+  "general": "Splošno",
+  "parameters": "Parametri",
+  "variables": "Spremenljivke",
+  "name": "Ime",
+  "namePlaceHolder": "Vnesi ime",
+  "description": "Opis",
+  "parameter": "Parameter",
+  "isPublic": "Je javno",
+  "isDataset": "Je sklop podatkov",
+  "unknownPixelType": "Neznano",
+  "outputPixelType": "Tip izhodnih pikslov",
+  "u8PixelType": "8 bit nepodpisano",
+  "s8PixelType": "8 bit podpisano",
+  "u16PixelType": "16 bit nepodpisano",
+  "s16PixelType": "16 bit podpisano",
+  "u32PixelType": "32 bit nepodpisano",
+  "s32PixelType": "32 bit podpisano",
+  "f32PixelType": "32 bit decimalno enojno",
+  "f64PixelType": "64 bit decimalno dvojno",
+  "properties": "Lastnosti"
+}

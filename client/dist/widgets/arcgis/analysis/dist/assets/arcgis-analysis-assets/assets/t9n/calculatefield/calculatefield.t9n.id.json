@@ -1,0 +1,13 @@
+{
+  "fieldCalcExpression": "Ekspresi perhitungan kolom",
+  "fieldCalculationGroupLabel": "Perhitungan kolom",
+  "fieldPlaceholderText": "Klik untuk memilih atau membuat kolom",
+  "fieldToCalculate": "Kolom penghitung",
+  "inputDatasetGroupLabel": "Input",
+  "itemProperties": {
+    "description": "Hasil yang dibuat dari menjalankan alat Hitung Kolom di ModelBuilder.",
+    "snippet": "Feature layer yang dihasilkan dari Hitung Kolom"
+  },
+  "noFieldSpecified": "Tentukan kolom untuk menghitung untuk membuat sebuah ekspresi.",
+  "whereClause": "Hanya terapkan perhitungan ke catatan tertentu"
+}

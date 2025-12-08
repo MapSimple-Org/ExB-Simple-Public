@@ -1,0 +1,10 @@
+{
+  "cannotAssignValueToTargetField": "Hesaplanan değer ve alan türü eşleşmiyor.",
+  "createExpression": "İfade oluştur",
+  "deleteExpression": "İfadeyi sil",
+  "editExpression": "İfadeyi düzenle",
+  "expression": "İfade",
+  "isRequired": "Bu parametre gerekli.",
+  "layerLoadError": "Katman yüklenemedi.",
+  "validationFailedInvalidSQL": "İfade doğrulama başarısız oldu. İfade geçerli SQL değil."
+}

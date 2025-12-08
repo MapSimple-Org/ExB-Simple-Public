@@ -1,0 +1,27 @@
+{
+  "area": "المنطقة",
+  "binResolution": "دقة خانة H3",
+  "binSize": "حجم السلة",
+  "binSizeUnit": "وحدة",
+  "binType": "نوع شكل الخانة",
+  "diamondBins": "حاويات ماسية",
+  "distance": "المسافة",
+  "extentLayer": "طبقة مدى",
+  "extentOverrideMessage": "ستُستخدم طبقة النطاق هذه بدلاً من أي نطاق معالجة محدد في البيئات.",
+  "extentSectionLabel": "إعدادات النطاق",
+  "extentSectionText": "حدد طبقة نطاق يجب أن تغطيها المضلعات الرباعية.",
+  "h3hexagonBins": "حاويات سداسية H3",
+  "hexagon": "سداسي أضلاع",
+  "intersectStudyArea": "الاحتفاظ فقط بالمضلعات المربعة المتقاطعة",
+  "itemProperties": {
+    "description": "طبقة المعالم المُنشأة من تشغيل أداة التحليل \"إنشاء مضلعات مربعة\".",
+    "snippet": "طبقة المعلم المُنشأة من إنشاء مضلعات مربعة"
+  },
+  "outputAreasSectionText": "أدخل اسم لشبكة المضلعات المربعة.",
+  "sizeType": "قياس حجم الخانة",
+  "square": "مربع",
+  "tessellationSettingsLabel": "إعدادات المضلعات الرباعية",
+  "tessellationSettingsSummaryText": "حدد شكل وحجم الخانة المراد إنشائها.",
+  "thexagonBins": "حاويات سداسية مستعرضة",
+  "triangleBins": "حاويات مثلثة"
+}

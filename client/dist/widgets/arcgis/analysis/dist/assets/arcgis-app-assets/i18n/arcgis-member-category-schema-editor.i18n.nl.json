@@ -1,0 +1,22 @@
+{
+  "dialogHeading": "Ledencategorieën configureren",
+  "noticeTitle": "Wijzig, verwijder of herschik categorieën in uw organisatie.",
+  "noticeDescription": "U kunt categorieën toewijzen aan leden via het tabblad Leden.",
+  "defaultCategoryWarning": "Deze ledencategorie wordt als standaard ingesteld voor nieuwe leden en kan niet worden bewerkt of verwijderd.",
+  "warning": {
+    "deleteInUseCategory": {
+      "message": {
+        "single": "Er is aan deze categorie één lid toegewezen. Het verwijderen van de categorie verwijdert deze categorie ook bij dit lid.",
+        "multiple": "Er zijn ${number} leden aan deze categorie toegewezen. Het verwijderen van de categorie verwijdert deze categorie ook bij deze leden.",
+        "unknown": "Leden die aan deze categorie zijn toegewezen: ${number}. Het verwijderen van de categorie verwijdert deze categorie ook bij deze leden."
+      }
+    },
+    "changeTitleInUseCategory": {
+      "message": {
+        "single": "Er is aan deze categorie één lid toegewezen. Als deze categorie wordt bijgewerkt, wordt het lid bijgewerkt zodat hij of zij \"${newTitle}\" gebruikt.",
+        "multiple": "Er zijn ${number} leden aan deze categorie toegewezen. Als deze categorie wordt bijgewerkt, worden de leden bijgewerkt zodat zij \"${newTitle}\" gebruiken.",
+        "unknown": "Leden die aan deze categorie zijn toegewezen: ${number}. Als deze categorie wordt bijgewerkt, worden de leden bijgewerkt zodat zij \"${newTitle}\" gebruiken."
+      }
+    }
+  }
+}

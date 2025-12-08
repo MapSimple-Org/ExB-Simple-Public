@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>河川をラスターとして生成 (Derive Stream As Raster) ツールは、入力サーフェス ラスターから、事前にシンクや窪地を平滑化せずに河川ラスターを生成します。
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputSurfaceRaster">
+        <div>
+            <p>計算に使用する標高ラスター。
+            </p>
+        </div>
+    </div>
+    <div id="inputDepressionsData">
+        <div>
+            <p>水が流れ込んでも、流れ出ることができない実際の窪地やシンクの場所を定義する入力。
+            </p>
+            <p class="toolPaneOnly">フィーチャ入力の場合、カウントはフィルター処理条件や解析の範囲などのその他の要因によって異なります。
+            </p>
+        </div>
+    </div>
+    <div id="inputWeightRaster">
+        <div>
+            <p>フローのうち各セルの累積流量に関与する割合を定義するラスター レイヤー。
+            </p>
+        </div>
+    </div>
+    <div id="accumulationThreshold">
+        <div>
+            <p>セルに流れ込む全流域面積の観点から、そのセルが河川の一部であるかどうかを判断するための閾値。
+            </p>
+        </div>
+    </div>
+    <div id="streamDesignationMethod">
+        <div>
+            <p>出力内の河川セグメントに定数値を設定するか、個別値を設定するか、順序を付けるかを指定します。
+            </p>
+        </div>
+    </div>
+    <div id="forceFlow">
+        <div>
+            <p>エッジ セルが通常のフロー規則に従うか、常に外向きに流れるかを指定します。
+            </p>
+            <p>オフの場合、フローは Z 値で最も急な下り坂である、内側のセルに向かいます。 ただし、降下が 0 またはそれより小さい場合、そのセルはサーフェス ラスターから外側に流れ出ます。 オンの場合は、フロー方向がサーフェス ラスターから外向きになります。
+            </p>
+        </div>
+    </div>
+    <div id="outputStreamRasterName">
+        <div>
+            <p>作成され、マップに追加されるストリーム ラスター レイヤーの名前。
+            </p>
+        </div>
+    </div>
+    <div id="resultType">
+        <div>
+            <p>作成する出力のタイプ。 出力は、タイル イメージ レイヤーまたはダイナミック イメージ レイヤーです。
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>結果を保存する  <b>[マイ コンテンツ]</b> 内のフォルダーの名前。
+            </p>
+        </div>
+    </div>
+</div>
+</html>

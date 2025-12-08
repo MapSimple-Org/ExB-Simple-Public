@@ -1,0 +1,23 @@
+{
+  "CPU": "CPU",
+  "GPU": "GPU",
+  "asSpecified": "Wie angegeben",
+  "automatic": "Automatisch",
+  "bilinear": "Bilineare Interpolation (für kontinuierliche Daten)",
+  "cellSize": "Zellengröße",
+  "cubic": "Kubische Faltung (für kontinuierliche Daten)",
+  "default": "Standard",
+  "fromLayer": "Aus Layer",
+  "mask": "Maske",
+  "maxOf": "Maximum der Eingabedaten",
+  "minOf": "Minimum der Eingabedaten",
+  "nearest": "Nächster Nachbar (für diskontinuierliche Daten)",
+  "parallelProcessingFactor": "Faktor für parallele Verarbeitung",
+  "parallelProcessingFactorPlaceholderText": "Zahl oder Prozentsatz eingeben...",
+  "processorType": "Prozessortyp",
+  "recycleProcessingWorkers": "Recycling-Intervall bei der Worker-Verarbeitung",
+  "resamplingMethod": "Resampling-Methode",
+  "retryOnFailures": "Anzahl der Wiederholungen bei Fehlern",
+  "selectCellSize": "Zellengröße auswählen...",
+  "snapRaster": "Fang-Raster"
+}

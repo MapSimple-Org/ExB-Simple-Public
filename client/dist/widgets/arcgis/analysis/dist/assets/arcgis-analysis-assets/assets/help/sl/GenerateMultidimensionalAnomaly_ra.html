@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>Orodje Ustvarjanje večdimenzionalne anomalije izračuna anomalijo za vsak izsek v obstoječem večdimenzionalnem slikovnem sloju, da ustvari nov večdimenzionalni slikovni sloj
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputMultidimensionalRaster">
+        <div>
+            <p>Večdimenzionalni slikovni sloj, ki bo analiziran.
+            </p>
+        </div>
+    </div>
+    <div id="variables">
+        <div>
+            <p>Spremenljivka večdimenzionalnega sloja, ki bo uporabljena za iskanje anomalij.
+            </p>
+        </div>
+    </div>
+    <div id="method">
+        <div>
+            <p>Metoda, ki bo uporabljena za izračun anomalij v slikovnem sloju.
+            </p>
+        </div>
+    </div>
+    <div id="calculationInterval">
+        <div>
+            <p>Časovni interval, ki bo uporabljen za izračun srednje vrednosti.
+            </p>
+        </div>
+    </div>
+    <div id="referenceMeanRaster">
+        <div>
+            <p>Referenčni slikovni sloj, ki vsebuje izračunane srednje vrednosti za vsak piksel.
+            </p>
+        </div>
+    </div>
+    <div id="ignoreNodata">
+        <div>
+            <p>Določi ali se bo v analizi prezrlo vrednosti brez podatkov ali manjkajoče vrednosti.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>Ime sloja, ki bo ustvarjen in dodan na karto.
+            </p>
+        </div>
+    </div>
+    <div id="resultType">
+        <div>
+            <p>Vrsta rezultata, ki bo ustvarjen. Rezultat je lahko plo&scaron;čični slikovni sloj ali dinamični slikovni sloj.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>Ime mape v  <b>Moja vsebina</b>, kjer bo shranjen rezultat.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

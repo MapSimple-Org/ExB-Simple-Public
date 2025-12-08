@@ -1,0 +1,14 @@
+{
+  "outputRaster": "UtdataRaster",
+  "rfxVariable": "RasterFunctionVariable",
+  "selectLayer": "Velg lag",
+  "allowScalar": "Velg et lag eller angi en konstant",
+  "browseLayer": "Bla gjennom lag",
+  "loading": "Laster inn...",
+  "layerMissing": "Ett eller flere bildelag fra kartet vises ikke her fordi egenskapen for å tillate analysetjeneste ikke er aktivert.",
+  "layerFailedToLoad": "Kan ikke laste inn laget.",
+  "learnMore": "Mer informasjon",
+  "errorCodes": {
+    "required": "Denne parameteren kreves."
+  }
+}

@@ -1,0 +1,1 @@
+System.register([],function(e){return{execute:function(){e({distance:"Distanza",area:"Area",atLeastOne:"Deve essere selezionato almeno uno strumento",toolbar:"Barra degli strumenti",disableSnapping:"Disabilita la gestione delle tolleranze nella mappa 2D"})}}});

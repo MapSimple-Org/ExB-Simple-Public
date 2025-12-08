@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>流向ツールは、D8、MFD (Multi-Flow Direction)、DINF (D-Infinity) のいずれかの方法を使用して、各セルから下降傾斜の近傍セルへの流向ラスターを作成します。
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputSurfaceRaster">
+        <div>
+            <p>計算に使用する標高ラスター。
+            </p>
+        </div>
+    </div>
+    <div id="flowDirectionType">
+        <div>
+            <p>流向の計算に使用するフロー タイプを指定します。
+            </p>
+        </div>
+    </div>
+    <div id="forceFlow">
+        <div>
+            <p>エッジ セルが通常のフロー規則に従うか、常に外向きに流れるかを指定します。
+            </p>
+            <p>オフの場合、フローは Z 値で最も急な下り坂である、内側のセルに向かいます。 ただし、降下が 0 またはそれより小さい場合、そのセルはサーフェス ラスターから外側に流れ出ます。 オンの場合は、フロー方向がサーフェス ラスターから外向きになります。
+            </p>
+        </div>
+    </div>
+    <div id="outputFlowDirectionName">
+        <div>
+            <p>作成され、マップに追加される流向ラスター レイヤーの名前。
+            </p>
+        </div>
+    </div>
+    <div id="outputDropName">
+        <div>
+            <p>作成され、マップに追加される降下率ラスター レイヤーの名前。 このレイヤーには、標高の最大変化とフロー方向に沿ったパス長さの比率の割合が含まれます。
+            </p>
+        </div>
+    </div>
+    <div id="resultType">
+        <div>
+            <p>作成する出力のタイプ。 出力は、タイル イメージ レイヤーまたはダイナミック イメージ レイヤーです。
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>結果を保存する  <b>[マイ コンテンツ]</b> 内のフォルダーの名前。
+            </p>
+        </div>
+    </div>
+</div>
+</html>

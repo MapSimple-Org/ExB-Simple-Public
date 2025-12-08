@@ -1,0 +1,8 @@
+{
+  "itemProperties": {
+    "description": "Resultat har genererats från körning av analysverktyget Filtrera efter attribut.",
+    "snippet": "Resultat har genererats från Filtrera efter attribut"
+  },
+  "noLayerDisabledTooltip": "Välj ett giltigt indataset.",
+  "queryCriteriaGroupLabel": "Frågekriterier"
+}

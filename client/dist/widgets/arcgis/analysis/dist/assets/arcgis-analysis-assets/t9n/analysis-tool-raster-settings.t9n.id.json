@@ -1,0 +1,23 @@
+{
+  "CPU": "CPU",
+  "GPU": "GPU",
+  "asSpecified": "Sebagaimana ditentukan",
+  "automatic": "Otomatis",
+  "bilinear": "Interpolasi Bilinear (untuk data berkelanjutan)",
+  "cellSize": "Ukuran sel",
+  "cubic": "Konvolusi kubik (untuk data berkelanjutan)",
+  "default": "Default",
+  "fromLayer": "Dari layer",
+  "mask": "Selubung",
+  "maxOf": "Input maksimal",
+  "minOf": "Input minimal",
+  "nearest": "Lingkungan terdekat (untuk data diskret)",
+  "parallelProcessingFactor": "Faktor pemrosesan paralel",
+  "parallelProcessingFactorPlaceholderText": "Masukkan nomor atau persentase...",
+  "processorType": "Jenis prosesor",
+  "recycleProcessingWorkers": "Interval daur ulang dari pekerja pemrosesan",
+  "resamplingMethod": "Metode pengambilan sampel ulang",
+  "retryOnFailures": "Jumlah percobaan ulang pada kegagalan",
+  "selectCellSize": "Pilih ukuran sel...",
+  "snapRaster": "Raster tangkapan"
+}

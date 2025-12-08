@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>Інструмент &laquo;Отримати потік як лінію&raquo; створює обʼєкти потокових ліній на основі вхідного растра поверхні без потреби в попередньому заповненні локального пониження або заглиблення.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputSurfaceRaster">
+        <div>
+            <p>Растр висот, який використовуватиметься для розрахунку.
+            </p>
+        </div>
+    </div>
+    <div id="inputDepressionsData">
+        <div>
+            <p>Вхідні дані, що визначають місця розташування справжніх заглиблень або понижень, куди вода може втікати, але не витікати.
+            </p>
+            <p class="toolPaneOnly">Для введення об'єктів підрахунок залежить від таких додаткових факторів як критерії фільтрування та екстент аналізу.
+            </p>
+        </div>
+    </div>
+    <div id="inputWeightRaster">
+        <div>
+            <p>Растровий шар, який визначає частку потоку, яка сприяє накопиченню потоку в кожному осередку.
+            </p>
+        </div>
+    </div>
+    <div id="accumulationThreshold">
+        <div>
+            <p>Порогове значення для визначення того, чи є даний осередок частиною потоку з точки зору загальної площі, яка впадає в такий осередок.
+            </p>
+        </div>
+    </div>
+    <div id="streamDesignationMethod">
+        <div>
+            <p>Визначає, чи будуть сегменти потоку у вихідних даних мати постійні значення, унікальні значення чи впорядковані значення.
+            </p>
+        </div>
+    </div>
+    <div id="simplify">
+        <div>
+            <p>Визначає, чи будуть лінії вихідного водотоку згладжені до простих форм.
+            </p>
+            <p>Якщо вибрано, обʼєкти потокових ліній згладжуватимуться за алгоритмом Дугласа-Пекера з допуском sqrt(0.5) * розмір осередку. Це значення за замовчуванням. Якщо не відмічено, обʼєкти потокових ліній не згладжуватимуться.
+            </p>
+        </div>
+    </div>
+    <div id="outputStreamFeaturesName">
+        <div>
+            <p>Імʼя потокового шару лінійних обʼєктів, який буде створено та додано до карти.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>Назва папки в  <b>Моєму вмісті</b>, де буде збережено результати.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

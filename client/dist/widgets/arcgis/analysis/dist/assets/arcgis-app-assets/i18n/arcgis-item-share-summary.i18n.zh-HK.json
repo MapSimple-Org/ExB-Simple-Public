@@ -1,0 +1,17 @@
+{
+  "sharing": "分享",
+  "private": "擁有者",
+  "shared": "擁有者及與群組分享",
+  "org": "組織",
+  "public": "任何人（公眾）",
+  "privateGroups": "擁有者",
+  "sharedGroups": "擁有者 +　群組 (${num})",
+  "orgGroups": "組織 + 群組 (${num})",
+  "publicGroups": "任何人 (公眾) +　群組　（${num}）",
+  "groups": "群組 (${num})",
+  "updateSharing": "分享級別: ${level}，更新分享",
+  "viewableBy": "可檢視者: ${level}",
+  "everyone": "任何人（公眾）",
+  "organization": "組織",
+  "groupMembers": "群組成員"
+}

@@ -1,0 +1,23 @@
+{
+  "CPU": "CPU",
+  "GPU": "GPU",
+  "asSpecified": "على النحو المحدد",
+  "automatic": "تلقائي",
+  "bilinear": "الاستيفاء الثنائي (للبيانات المستمرة)",
+  "cellSize": "حجم الخلية",
+  "cubic": "الالتفاف التكعيبي (للبيانات المستمرة)",
+  "default": "الافتراضي",
+  "fromLayer": "من الطبقة",
+  "mask": "قناع",
+  "maxOf": "الحد الأقصى للإدخالات",
+  "minOf": "الحد الأدنى للإدخالات",
+  "nearest": "المجاور الأقرب (للبيانات المنفصلة)",
+  "parallelProcessingFactor": "معامل المعالجة المتوازية",
+  "parallelProcessingFactorPlaceholderText": "أدخل رقمًا أو نسبة مئوية...",
+  "processorType": "نوع المعالج",
+  "recycleProcessingWorkers": "أعد بدء فاصل معالجة العمال",
+  "resamplingMethod": "طريقة إعادة أخذ العينات",
+  "retryOnFailures": "عدد مرات إعادة المحاولة الفاشلة",
+  "selectCellSize": "جارٍ تحديد حجم الخلية...",
+  "snapRaster": "التقاط البيانات النقطية"
+}

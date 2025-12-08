@@ -1,0 +1,1 @@
+System.register([],function(e){return{execute:function(){e({customizeLayer:"Personalizare straturi tematice",selectLayers:"Selecta\u021bi straturile tematice",noDataSourceWarning:"Widgetul de hart\u0103 selectat nu con\u021bine o hart\u0103 web sau o scen\u0103 web."})}}});

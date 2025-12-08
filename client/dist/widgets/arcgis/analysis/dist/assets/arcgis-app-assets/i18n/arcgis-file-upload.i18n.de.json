@@ -1,0 +1,16 @@
+{
+  "updateData": "Daten aktualisieren",
+  "cancel": "Abbrechen",
+  "editStyle": "Die Style-Datei des Layers durch eine aktualisierte Version von Ihrem Computer ersetzen.",
+  "updatePackages": "Die ${type} durch eine aktualisierte Version von Ihrem Computer ersetzen. Die hochgeladene Datei muss denselben Namen wie ${hostedLayerName} aufweisen.",
+  "uploadStaticFiles": "Die hochgeladene Datei muss denselben Namen aufweisen wie die ursprüngliche Datei \"${fileName}\".",
+  "sameFileNameDescription": "Die hochgeladene Datei muss denselben Dateinamen und dieselben Feldnamen wie die ursprüngliche Datei \"${fileName}\" aufweisen.",
+  "updating": "Wird aktualisiert...",
+  "error": "Fehler",
+  "errors": {
+    "sameFileName": "Zum Aktualisieren dieses Elements müssen Sie eine Datei namens \"${fileName}\" hochladen.",
+    "invalidStyleFileExtension": "Ungültige Dateierweiterung. Der hochgeladene Style muss eine JSON-Dateierweiterung aufweisen.",
+    "errorWhileUpload": "Beim Hochladen des Elements ist ein Fehler aufgetreten.",
+    "errorUpdate": "Beim Überschreiben des Elements ist ein Fehler aufgetreten."
+  }
+}

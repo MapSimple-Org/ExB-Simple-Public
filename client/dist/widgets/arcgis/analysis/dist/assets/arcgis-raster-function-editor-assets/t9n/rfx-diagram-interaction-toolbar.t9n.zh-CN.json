@@ -1,0 +1,9 @@
+{
+  "zoomIn": "放大",
+  "zoomOut": "缩小",
+  "autoLayout": "自动布局",
+  "stretch": "适应视图",
+  "select": "选择",
+  "pan": "平移",
+  "deleteSelectedItemsText": "删除所选项目"
+}

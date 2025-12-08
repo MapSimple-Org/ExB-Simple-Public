@@ -1,0 +1,1 @@
+System.register([],function(n){return{execute:function(){n({subMenuExpandMode:"Re\u017eim rozbalen\xed podnab\xeddky",mainMenu:"Hlavn\xed nab\xeddka",subMenu:"Podnab\xeddka",navArrowColor:"Barva \u0161ipky navigace"})}}});

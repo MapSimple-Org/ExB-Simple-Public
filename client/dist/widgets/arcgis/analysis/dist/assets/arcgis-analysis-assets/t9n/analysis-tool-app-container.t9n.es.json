@@ -1,0 +1,21 @@
+{
+  "backLabel": "Atrás",
+  "cannotReopenTool": "No se pudo volver a abrir la herramienta. Los parámetros de la herramienta se han revertido a los valores predeterminados.",
+  "cannotReopenWebTool": "No se puede abrir la herramienta web. <calcite-link target='_blank' href='${ docLink }'>Más información</calcite-link>",
+  "creditThresholdModal": {
+    "cancelRun": "Cancelar",
+    "continueRun": "Ejecutar de todas formas",
+    "creditEstimate": "Créditos estimados: ${cost}",
+    "creditThreshold": "Umbral de créditos: ${threshold}",
+    "heading": "Antes de continuar",
+    "learnMore": "Más información sobre los umbrales de crédito",
+    "thresholdExceeded": "El coste estimado de los créditos para este análisis es superior al umbral de créditos del mapa web:"
+  },
+  "failedToExecuteEstimate": "Error al enviar. Error al ejecutar EstimateRasterAnalysisCost",
+  "missingPermissionForWebTool": "No se puede acceder a esta herramienta. Asegúrese de que la herramienta existe y que el usuario tiene permiso para acceder a ella.",
+  "runAnalysisLabel": "Ejecutar",
+  "toolPreviewNoParameters": "No se ha definido ningún parámetro para este modelo. Vuelva al modelo para agregar variables y configurarlas como parámetros.",
+  "toolPreviewNoParametersLink": "<calcite-link target='_blank' href='${ docLink }'>Más información</calcite-link>",
+  "toolPreviewWebTool": "Para ejecutar este modelo como una herramienta web, publíquelo y ábralo desde el panel Análisis.",
+  "webToolJSONChanged": "Se ha actualizado uno o varios parámetros. No se puede volver a introducir algunos parámetros de la historia."
+}

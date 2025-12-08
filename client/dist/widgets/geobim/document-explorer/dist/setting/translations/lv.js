@@ -1,0 +1,1 @@
+System.register([],function(e){return{execute:function(){e({settingsLabel:"Dokumentu p\u0101rl\u016bka iestat\u012bjumi",selectModelViewer:"Izv\u0113lieties dokumentu skat\u012b\u0161anas logr\u012bku, lai att\u0113lotu dokumentus."})}}});

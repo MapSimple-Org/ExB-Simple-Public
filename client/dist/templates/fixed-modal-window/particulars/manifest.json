@@ -1,0 +1,18 @@
+{
+  "name": "particulars",
+  "type": "template",
+  "templateType": "fixed-modal-window",
+  "label": "Particulars",
+  "thumbnail": "thumbnail.png",
+  "order": 9,
+  "tags": [
+    "Gallery",
+    "Chart",
+    "Table",
+    "Share",
+    "List"
+  ],
+  "categoriesTags": [],
+  "thumbnailWidth": 320,
+  "thumbnailHeight": 268
+}

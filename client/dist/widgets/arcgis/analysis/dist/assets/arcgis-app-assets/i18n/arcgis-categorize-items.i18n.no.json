@@ -1,0 +1,11 @@
+{
+  "modalTitle": "Kategoriser elementer",
+  "save": "Lagre",
+  "cancel": "Avbryt",
+  "loadingText": "Laster inn...",
+  "assignCategory": "Tilordne kategori",
+  "errorMessage": "Noe gikk galt. Prøv igjen senere.",
+  "limited": "Elementer er begrenset til 20 kategorier. Fjern en kategori før du legger til en ny.",
+  "undo": "Angre",
+  "redo": "Gjør om"
+}

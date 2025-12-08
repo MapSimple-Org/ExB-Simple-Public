@@ -1,0 +1,1 @@
+System.register([],function(e){return{execute:function(){e({_widgetLabel:"Korrusefilter",floorfilter_noMap:"Korrusefilter",floorfilter_notFloorAware:"Valitud kaart ei ole korruseteadlik"})}}});

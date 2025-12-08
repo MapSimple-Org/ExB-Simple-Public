@@ -1,0 +1,11 @@
+{
+  "all": "Alle",
+  "inputLayersGroupText": "Das Eingabe-Oberflächen-Raster und optional die Muldendaten und das Gewichtungs-Raster auswählen.",
+  "itemProperties": {
+    "description": "Durch Ausführung des Werkzeugs \"Wasserlauf als Raster ableiten\" generierte Ausgabe.",
+    "snippet": "Über \"Wasserlauf als Raster ableiten\" generierte Ausgabe"
+  },
+  "outputStreamFeaturesLabel": "Name der Ausgabe-Gewässer-Features",
+  "simplifyLabel": "Features vereinfachen",
+  "streamSettingsGroupText": "Legen Sie den Akkumulationsschwellenwert und die Methode zur Bezeichnung von Wasserläufen fest, und geben Sie an, ob die Ausgabe-Wasserlauf-Linien zu einfachen Formen geglättet werden."
+}

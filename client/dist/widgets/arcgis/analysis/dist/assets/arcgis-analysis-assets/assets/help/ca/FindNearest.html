@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>L'eina Cerca el m&eacute;s proper cerca i classifica les entitats m&eacute;s properes a les ubicacions especificades.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="analysisLayer">
+        <div>
+            
+            <p class="OnlineOnly">Capa inicial al voltant de la qual es dibuixar&agrave; un interval de cerca per trobar les entitats m&eacute;s properes de la capa propera. Es retornaran entitats de la capa propera en funci&oacute; de la seva proximitat a la capa d'entrada. S'admeten capes que tenen fins a  cinc mil entitats. </p>  
+            <p class="PortalOnly">Capa inicial al voltant de la qual es dibuixar&agrave; un interval de cerca per trobar les entitats m&eacute;s properes de la capa propera. Es retornaran entitats de la capa propera en funci&oacute; de la seva proximitat a la capa d'entrada.
+            </p>
+            <p class="toolPaneOnly">El recompte de les entitats dep&egrave;n d'altres factors com ara els criteris de filtratge i l'extensi&oacute; d'an&agrave;lisi.
+            </p>
+        </div>
+    </div>
+    <div id="nearLayer">
+        <div>
+             
+            <p class="OnlineOnly">Entitats trobades en funci&oacute; de la proximitat a la capa d'entrada. S'admeten capes que tenen fins a  cinc mil entitats. </p> 
+            <p class="PortalOnly">Entitats trobades en funci&oacute; de la proximitat a la capa d'entrada.
+            </p>
+            <p class="toolPaneOnly">El recompte de les entitats dep&egrave;n d'altres factors com ara els criteris de filtratge i l'extensi&oacute; d'an&agrave;lisi.
+            </p>
+        </div>
+    </div>
+    <div id="pointBarrierLayer">
+        <div>
+            <p>Una o diverses entitats de punt que actuen com a restriccions temporals (barreres) quan viatgeu per carrers subjacents. Es pot viatjar pel carrer, per&ograve; no creuar la barrera.
+            </p>
+        </div>
+    </div>
+    <div id="lineBarrierLayer">
+        <div>
+            <p>Una o diverses entitats de l&iacute;nia que actuen com a restriccions temporals (barreres) quan viatgeu per carrers subjacents. Les barreres de l&iacute;nia prohibeixen la circulaci&oacute; a qualsevol punt en qu&egrave; les barreres intersequen els carrers.
+            </p>
+        </div>
+    </div>
+    <div id="polygonBarrierLayer">
+        <div>
+            <p>Una o diverses entitats de pol&iacute;gon que actuen com a restriccions temporals (barreres) quan viatgeu per carrers subjacents. Les barreres de pol&iacute;gon prohibeixen viatjar a qualsevol lloc on els pol&iacute;gons intersequen amb els carrers.
+            </p>
+        </div>
+    </div>
+    <div id="measurementType">
+        <div>
+            <p>M&egrave;tode que s'utilitzar&agrave; per mesurar la dist&agrave;ncia o el temps. El m&egrave;tode pot ser una dist&agrave;ncia de l&iacute;nia o un mode de viatge.
+            </p>
+        </div>
+    </div>
+    <div id="timeOfDay">
+        <div>
+            <p>Data i hora en qu&egrave; el viatger surt de les ubicacions del valor  <b>Capa d'entrada</b>.
+            </p>
+        </div>
+    </div>
+    <div id="limitNearNumberCheckbox">
+        <div>
+            
+            <p>Especifica si s'utilitza un nombre m&agrave;xim personalitzat d'entitats m&eacute;s properes (habilitat) o el m&agrave;xim per defecte de 100.
+            </p>
+        </div>
+    </div>
+    <div id="maxCount">
+        <div>
+            <p>Nombre m&agrave;xim de les entitats m&eacute;s properes que es poden trobar per a cada entitat d'entrada.
+            </p>
+        </div>
+    </div>
+    <div id="limitSearchRangeCheckbox">
+        <div>
+            
+            <p>Especifica si s'utilitza un interval de cerca m&agrave;xim (habilitat) o si l'interval de cerca &eacute;s il&middot;limitat.
+            </p>
+        </div>
+    </div>
+    <div id="searchCutoff">
+        <div>
+            <p>Interval de cerca m&agrave;xim per trobar les entitats m&eacute;s properes.
+            </p>
+        </div>
+    </div>
+    <div id="searchCutoffUnits">
+        <div>
+            <p>Unitats utilitzades per especificar l'interval de cerca.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>Nom de la capa que es crear&agrave; i s'afegir&agrave; al mapa.
+            </p>
+        </div>
+    </div>
+    <div id="includeRouteLayers">
+        <div>
+            <p>Especifica si les rutes resultants es desaran com una capa de ruta.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>Nom de la carpeta d' <b>El meu contingut</b> on es desaran els resultats.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

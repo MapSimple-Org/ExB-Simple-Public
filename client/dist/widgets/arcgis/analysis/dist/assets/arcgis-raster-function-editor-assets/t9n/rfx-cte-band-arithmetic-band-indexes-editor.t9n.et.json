@@ -1,0 +1,7 @@
+{
+  "example": "Näide",
+  "input": "Sisend",
+  "output": "Väljund",
+  "optional": "Valikuline",
+  "WNDWIHintText": "α:α väärtus peab olema vahemikus 0 kuni 1; vaikeväärtus on 0,5"
+}

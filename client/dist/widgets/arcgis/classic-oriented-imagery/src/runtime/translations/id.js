@@ -1,0 +1,1 @@
+System.register([],function(t){return{execute:function(){t({_widgetLabel:"Pencitraan yang Diorientasi Klasik",toggleButtonOn:"Nonaktifkan untuk memilih fitur di peta",toggleButtonOff:"Aktifkan untuk memilih titik fokus di peta guna melihat gambar",viewImage:"Klik di sini untuk melihat fitur yang dipilih dalam gambar",updateButton:"Pembaruan",deleteButton:"Hapus"})}}});

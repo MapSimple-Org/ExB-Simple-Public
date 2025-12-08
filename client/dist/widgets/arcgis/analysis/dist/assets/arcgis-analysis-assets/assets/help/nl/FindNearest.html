@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>De tool Dichtstbijzijnde zoeken zoekt en rangschikt de objecten die het dichtst bij gespecificeerde locaties liggen.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="analysisLayer">
+        <div>
+            
+            <p class="OnlineOnly">De startlaag waaromheen een zoekbereik zal worden getekend om de dichtstbijzijnde objecten uit de nabije laag te vinden. Objecten in de nabije laag worden geretourneerd op basis van hun nabijheid tot de invoerlaag. Lagen met maximaal  vijfduizend objecten worden ondersteund. </p>  
+            <p class="PortalOnly">De startlaag waaromheen een zoekbereik zal worden getekend om de dichtstbijzijnde objecten uit de nabije laag te vinden. Objecten in de nabije laag worden geretourneerd op basis van hun nabijheid tot de invoerlaag.
+            </p>
+            <p class="toolPaneOnly">Het aantal objecten is afhankelijk van aanvullende factoren als de filtercriteria en de analyse-extent.
+            </p>
+        </div>
+    </div>
+    <div id="nearLayer">
+        <div>
+             
+            <p class="OnlineOnly">De gevonden objecten zijn gebaseerd op de nabijheid van de invoerlaag. Lagen met maximaal  vijfduizend objecten worden ondersteund. </p> 
+            <p class="PortalOnly">De gevonden objecten zijn gebaseerd op de nabijheid van de invoerlaag.
+            </p>
+            <p class="toolPaneOnly">Het aantal objecten is afhankelijk van aanvullende factoren als de filtercriteria en de analyse-extent.
+            </p>
+        </div>
+    </div>
+    <div id="pointBarrierLayer">
+        <div>
+            <p>E&eacute;n of meerdere puntobjecten die dienen als tijdelijke beperkingen (barri&egrave;res) tijdens het reizen op de onderliggende straten. Verkeer heeft toegang tot de straat maar kan de barri&egrave;re niet passeren.
+            </p>
+        </div>
+    </div>
+    <div id="lineBarrierLayer">
+        <div>
+            <p>E&eacute;n of meerdere lijnobjecten die dienen als tijdelijke beperkingen (barri&egrave;res) tijdens het reizen op de onderliggende straten. De lijnbarri&egrave;res verbieden het verkeer overal waar de barri&egrave;res de straten kruisen.
+            </p>
+        </div>
+    </div>
+    <div id="polygonBarrierLayer">
+        <div>
+            <p>E&eacute;n of meerdere polygoonobjecten die dienen als tijdelijke beperkingen (barri&egrave;res) tijdens het reizen op de onderliggende straten. De polygoonbarri&egrave;res verbieden het verkeer overal waar de polygonen de straten kruisen.
+            </p>
+        </div>
+    </div>
+    <div id="measurementType">
+        <div>
+            <p>De methode die zal worden gebruikt om afstand of tijd te meten. De methode kan een lijnafstand of een reismethode zijn.
+            </p>
+        </div>
+    </div>
+    <div id="timeOfDay">
+        <div>
+            <p>De datum en tijd waarop de reiziger vertrekt van de locaties in de  <b>Invoerlaag</b>-waarde.
+            </p>
+        </div>
+    </div>
+    <div id="limitNearNumberCheckbox">
+        <div>
+            
+            <p>Specificeert of een aangepast maximumaantal dichtstbijzijnde objecten wordt gebruikt (ingeschakeld) of dat de standaardmaximumwaarde 100 van de tool wordt gebruikt.
+            </p>
+        </div>
+    </div>
+    <div id="maxCount">
+        <div>
+            <p>Het maximale aantal dichtstbijzijnde objecten dat voor elk invoerobject kan worden gevonden.
+            </p>
+        </div>
+    </div>
+    <div id="limitSearchRangeCheckbox">
+        <div>
+            
+            <p>Specificeert of een maximaal zoekbereik wordt gebruikt (ingeschakeld) of dat een onbeperkt zoekbereik geldt.
+            </p>
+        </div>
+    </div>
+    <div id="searchCutoff">
+        <div>
+            <p>Het maximale zoekbereik voor het vinden van de dichtstbijzijnde objecten.
+            </p>
+        </div>
+    </div>
+    <div id="searchCutoffUnits">
+        <div>
+            <p>De eenheden die worden gebruikt om het zoekbereik te specificeren.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>De naam van de laag die wordt aangemaakt en toegevoegd aan de kaart.
+            </p>
+        </div>
+    </div>
+    <div id="includeRouteLayers">
+        <div>
+            <p>Specificeert of elke resultaatroute al routelaag zal worden opgeslagen.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>De naam van de map in  <b>Mijn content</b> waarin de resultaten worden opgeslagen.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

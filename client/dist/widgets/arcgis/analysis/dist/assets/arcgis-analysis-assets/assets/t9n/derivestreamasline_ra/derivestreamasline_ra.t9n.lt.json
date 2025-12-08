@@ -1,0 +1,11 @@
+{
+  "all": "Viskas",
+  "inputLayersGroupText": "Pasirinkite įvesties paviršiaus rastrą ir neprivalomai įdubimo duomenis bei svorio rastrą.",
+  "itemProperties": {
+    "description": "Išvestis sugeneruota paleidus įrankį Išvesti srautą kaip rastrą.",
+    "snippet": "Išvestis sugeneruota paleidus „Išvesti srautą kaip rastrą“"
+  },
+  "outputStreamFeaturesLabel": "Išvesties srauto elemento pavadinimas",
+  "simplifyLabel": "Supaprastinti elementus",
+  "streamSettingsGroupText": "Nurodykite sankaupos ribą, srauto žymėjimo metodą ir ar išvesties srauto linijos bus išlygintos į paprastas formas."
+}

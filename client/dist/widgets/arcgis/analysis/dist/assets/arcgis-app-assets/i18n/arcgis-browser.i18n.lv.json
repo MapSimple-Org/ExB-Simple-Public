@@ -1,0 +1,89 @@
+{
+  "browser": {
+    "refineContent": "Precizēt saturu",
+    "filters": "Filtri",
+    "pageRange": "${start}-${end}, kopā: ${total}",
+    "pageRangeAria": "${start}-${end}, vienības kopā: ${total}",
+    "pageRangeWithRecycleBin": "${start}-${end}, kopā: ${total} (kopējais izmērs: ${recycleBinSize})",
+    "pageRangeAriaWithRecycleBin": "${start}-${end}, vienību kopskaits: ${total} (kopējais izmērs: ${recycleBinSize})",
+    "totalSize": "Kopējais izmērs: ${totalSize}",
+    "loading": "Notiek rezultātu ielāde",
+    "close": "Aizvērt"
+  },
+  "actions": {
+    "more": "Vairāk"
+  },
+  "filter": {
+    "clear": "Notīrīt"
+  },
+  "filterDate": {
+    "today": "Šodien",
+    "yesterday": "Vakar",
+    "last7": "Pēdējās 7 dienas",
+    "last30": "Pēdējās 30 dienas",
+    "never": "Nekad",
+    "custom": "Pielāgots diapazons…",
+    "title": {
+      "created": "Izveides datums",
+      "modified": "Izmaiņu datums",
+      "joined": "Pievienošanās datums",
+      "lastLogin": "Pēdējā pierakstīšanās reize"
+    },
+    "created": "Izveidots: ${date}",
+    "modified": "Mainīts: ${date}",
+    "joined": "Pievienojās: ${date}",
+    "lastLogin": "Pēdējā pierakstīšanās reize: ${date}"
+  },
+  "pagination": {
+    "next": "Nākamā lapa",
+    "prev": "Iepriekšējā lapa"
+  },
+  "search": {
+    "label": "Meklēt grupas",
+    "search": "Meklēt",
+    "clear": "Notīrīt meklējamo terminu",
+    "wildcard": "Aizstājējzīmes meklēšana netiek atbalstīta"
+  },
+  "sort": {
+    "sortDirection": "Kārtošanas virziens",
+    "title": "Nosaukums",
+    "relevance": "Svarīgums",
+    "modified": "Izmaiņu datums",
+    "deleted": "Dzēšanas datums",
+    "created": "Izveides datums",
+    "added": "Pievienošanas datums",
+    "size": "Izmērs",
+    "owner": "Īpašnieks",
+    "sizeAsc": "No mazākā uz lielāko",
+    "sizeDesc": "No lielākā uz mazāko",
+    "numviews": "Skatījumu skaits",
+    "numAsc": "No mazākā uz lielāko",
+    "numDesc": "No lielākā uz mazāko",
+    "alphabeticalAsc": "Alfabētiskā secībā",
+    "alphabeticalDesc": "Apgrieztā alfabēta secībā",
+    "recentAsc": "Senākais",
+    "recentDesc": "Jaunākais",
+    "sort": "Kārtot",
+    "sortBy": "Kārtot pēc",
+    "sortByColon": "Kārtot pēc:",
+    "fullname": "Nosaukums",
+    "username": "Lietotājvārds",
+    "name": "Nosaukums",
+    "membertype": "Grupas loma",
+    "joined": "Pievienošanās datums",
+    "lastlogin": "Pēdējā pierakstīšanās reize",
+    "dataset": "Datu kopa",
+    "mfaenabled": "Daudzfaktoru autentifikācija",
+    "defaultAsc": "Augošā secībā",
+    "defaultDesc": "Dilstošā secībā"
+  },
+  "topBar": {
+    "filter": "Filtrs"
+  },
+  "filterStatus": {
+    "clear": "Notīrīt",
+    "filters": "Filtri:",
+    "additional": "Papildu aktīvie filtri",
+    "clearAllFilters": "Notīrīt visus filtrus"
+  }
+}

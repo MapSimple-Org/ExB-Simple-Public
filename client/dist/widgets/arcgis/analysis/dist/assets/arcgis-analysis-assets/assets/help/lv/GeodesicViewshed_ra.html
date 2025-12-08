@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>Ģeodēziskās redzamības lauka rīks identificē rastra virsmas vietas, kas redzamas ievades vērotāja atra&scaron;anās vietās.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputElevationSurface">
+        <div>
+            <p>Augstuma rastrs, kuram tiks aprēķināts redzamības lauks.
+            </p>
+        </div>
+    </div>
+    <div id="inputObserverFeatures">
+        <div>
+            <p>Vērotāja atra&scaron;anās vietas, kurām tiks aprēķināts redzamības lauks.
+            </p>
+            <p class="toolPaneOnly">Elementu skaits ir atkarīgs no papildu faktoriem, piemēram, filtrē&scaron;anas kritērijiem un analīzes apjoma.
+            </p>
+        </div>
+    </div>
+    <div id="optimizeFor">
+        <div>
+            <p>Optimizē redzamības lauka aprēķinu atkarībā no ātruma vai precizitātes.
+            </p>
+        </div>
+    </div>
+    <div id="verticalError">
+        <div>
+            <p> <b>Ievades augstuma virsmas vērtības</b> augstuma vērtību nenoteiktības apjoms.
+            </p>
+        </div>
+    </div>
+    <div id="refractivityCoefficient">
+        <div>
+            <p>Redzamās gaismas lau&scaron;anas koeficients gaisā.
+            </p>
+        </div>
+    </div>
+    <div id="maximumViewingDistance">
+        <div>
+            <p>Maksimālais skatī&scaron;anās attālums redzamības lauka aprēķinam.
+            </p>
+            <p>Attālumu var definēt ar vērtību un tās vienībām vai no lauka  <b>ievades novērotāja punkta vai līnijas elementu</b> vērtības.
+            </p>
+        </div>
+    </div>
+    <div id="minimumViewingDistance">
+        <div>
+            <p>Minimālais skatī&scaron;anās attālums redzamības lauka aprēķinam.
+            </p>
+            <p>Attālumu var definēt ar vērtību un tās vienībām vai no lauka  <b>ievades novērotāja punkta vai līnijas elementu</b> vērtības.
+            </p>
+        </div>
+    </div>
+    <div id="viewingDistancesAre3D">
+        <div>
+            <p>Norāda, vai maksimālais un minimālais skatī&scaron;anās attālums tiks mērīts 3D vai 2D attālumā.
+            </p>
+            <p>Ja nav atzīmēts, skatī&scaron;anās attālumi tiek uzskatīti par divdimensiju Eiklīda attālumiem. Ja ir atzīmēts, skatī&scaron;anas attālumi tiek uzskatīti par trīsdimensiju attālumiem.
+            </p>
+        </div>
+    </div>
+    <div id="observersElevation">
+        <div>
+            <p>Vērotāja atra&scaron;anās vietu virsmas augstums.
+            </p>
+            <p>Paaugstinājumu var definēt ar vērtību un tās vienībām vai no lauka  <b>ievades novērotāja punkta vai līnijas pazīmju</b> vērtības.
+            </p>
+        </div>
+    </div>
+    <div id="observersHeight">
+        <div>
+            <p>Novērotāju augstums virs zemes.
+            </p>
+            <p>Paaugstinājumu var definēt ar vērtību un tās vienībām vai no lauka  <b>ievades novērotāja punkta vai līnijas pazīmju</b> vērtības.
+            </p>
+        </div>
+    </div>
+    <div id="targetHeight">
+        <div>
+            <p>Mērķu augstums no zemes.
+            </p>
+            <p>Paaugstinājumu var definēt ar vērtību un tās vienībām vai no lauka  <b>ievades novērotāja punkta vai līnijas pazīmju</b> vērtības.
+            </p>
+        </div>
+    </div>
+    <div id="horizontalStartAngle">
+        <div>
+            <p>Horizontālās skenē&scaron;anas diapazona sākuma leņķis
+            </p>
+            <p>Leņķi var definēt ar vērtību no 0 līdz 360 vai no lauka  <b>ievades novērotāja punkta vai līnijas elementu </b> vērtības.
+            </p>
+        </div>
+    </div>
+    <div id="horizontalEndAngle">
+        <div>
+            <p>Horizontālās skenē&scaron;anas beigu leņķis.
+            </p>
+            <p>Leņķi var definēt ar vērtību no 0 līdz 360 vai no lauka  <b>ievades novērotāja punkta vai līnijas elementu </b> vērtības.
+            </p>
+        </div>
+    </div>
+    <div id="verticalUpperAngle">
+        <div>
+            <p>Skenē&scaron;anas aug&scaron;ējā vertikālā leņķa robeža attiecībā pret horizontālo plakni.
+            </p>
+            <p>Leņķi var definēt ar vērtību no &ndash;90 līdz 90 vai no lauka  <b>ievades novērotāja punkta vai līnijas elementu </b> vērtības.
+            </p>
+        </div>
+    </div>
+    <div id="verticalLowerAngle">
+        <div>
+            <p>Skenē&scaron;anas apak&scaron;ējā vertikālā leņķa robeža attiecībā pret horizontālo plakni.
+            </p>
+            <p>Leņķi var definēt ar vērtību no &ndash;90 līdz 90 vai no lauka  <b>ievades novērotāja punkta vai līnijas elementu </b> vērtības.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>Redzamības lauka rastra slāņa nosaukums, kas tiks izveidots un pievienots kartei. &Scaron;ajā slānī ir redzamās zonas, kuras novērotāji var redzēt, un &scaron;ūnu vērtības norāda novērotāju skaitu, kas var skatīt &scaron;ūnas.
+            </p>
+        </div>
+    </div>
+    <div id="outputAboveGroundLevelRasterName">
+        <div>
+            <p>Virs jūras līmeļa rastra slāņa nosaukums, kas tiks izveidots un pievienots kartei.
+            </p>
+        </div>
+    </div>
+    <div id="resultType">
+        <div>
+            <p>Izveidotās izvades veids. Izvade var būt mozaīkas attēlu slānis vai dinamisks attēlu slānis.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>Mapes nosaukums sadaļā  <b>Mans saturs</b>, kurā tiks saglabāts rezultāts.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

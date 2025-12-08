@@ -1,0 +1,36 @@
+{
+  "modalHeader": "Konfiguriraj kategorije sadržaja",
+  "modalGroupHeader": "Konfiguriraj kategorije grupe",
+  "helpText": "Uredite, izbrišite ili preuredite kategorije u svojoj organizaciji.",
+  "helpTextGroup": "Uredite, izbrišite ili preuredite kategorije za saržaj u ovoj grupi.",
+  "helpTextDescription": "Ne zaboravite da su drugi članovi vaše organizacije možda već dodijelili ove kategorije svojim stavkama, a uređivanjem sheme ažurirat će se te stavke u skladu s tim",
+  "helpTextGroupDescription": "Ne zaboravite da su drugi članovi grupe možda već dodijelili ove kategorije svojim stavkama, a uređivanjem sheme ažurirat će se te stavke u skladu s tim",
+  "warning": {
+    "deleteInUseCategory": {
+      "title": "Izbriši kategoriju",
+      "cta": "Izbriši kategoriju",
+      "message": {
+        "single": "Jedna je stavka dodijeljena ovoj kategoriji. Brisanjem kategorije također će se ona ukloniti iz ove stavke.",
+        "multiple": "${number} je stavki dodijeljeno ovoj kategoriji. Brisanjem kategorije također će se ona ukloniti iz ovih stavki.",
+        "unknown": "Stavke dodijeljene ovoj kategoriji: ${number}. Brisanjem kategorije također će se ona ukloniti iz ovih stavki."
+      }
+    },
+    "changeTitleInUseCategory": {
+      "title": "Ažuriraj kategoriju",
+      "message": {
+        "single": "Jedna je stavka dodijeljena ovoj kategoriji. Ažuriranjem kategorije stavka će se ažurirati da koristi \"${newTitle}\".",
+        "multiple": "${number} je stavki dodijeljeno ovoj kategoriji. Ažuriranjem kategorije stavke će se ažurirati da koriste \"${newTitle}\".",
+        "unknown": "Stavke dodijeljene ovoj kategoriji: ${number}. Ažuriranjem kategorije stavke će se ažurirati da koriste \"${newTitle}\"."
+      },
+      "cta": "Ažuriraj kategoriju"
+    }
+  },
+  "template": {
+    "templateList": {
+      "custom": {
+        "message": "Stvorite vlastite kategorije da biste organizirali sadržaj unutar organizacije.",
+        "messageGroup": "Kreirajte svoje vlastite kategorije i organizirajte sadržaj unutar ove grupe."
+      }
+    }
+  }
+}

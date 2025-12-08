@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>A ferramenta Nibble substitui c&eacute;lulas de um raster que corresponde a uma m&aacute;scara com o valor do vizinho mais pr&oacute;ximo.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputRaster">
+        <div>
+            <p>O raster de entrada com as localiza&ccedil;&otilde;es mascaradas que ser&atilde;o substitu&iacute;das pelo valor do seu vizinho mais pr&oacute;ximo.
+            </p>
+        </div>
+    </div>
+    <div id="inputMaskRaster">
+        <div>
+            <p>O raster de m&aacute;scara que identifica as localiza&ccedil;&otilde;es no raster de entrada que ser&atilde;o substitu&iacute;das. As c&eacute;lulas com um valor de NoData s&atilde;o consideradas como estando dentro da &aacute;rea mascarada.
+            </p>
+        </div>
+    </div>
+    <div id="inputZoneRaster">
+        <div>
+            <p>O raster de zona de entrada. Para cada zona, as c&eacute;lulas de entrada que est&atilde;o dentro da m&aacute;scara ser&atilde;o substitu&iacute;das apenas pelos valores de c&eacute;lula mais pr&oacute;ximos dentro dessa mesma zona.
+            </p>
+        </div>
+    </div>
+    <div id="nibbleValues">
+        <div>
+            <p>Especifica se as c&eacute;lulas NoData no raster de entrada podem substituir c&eacute;lulas nas &aacute;reas mascaradas se forem o vizinho mais pr&oacute;ximo.
+            </p>
+            <p>Se selecionada, as c&eacute;lulas NoData no raster de entrada podem substituir as c&eacute;lulas na &aacute;rea mascarada. Se desselecionada, apenas as c&eacute;lulas v&aacute;lidas no raster de entrada podem substituir as c&eacute;lulas na &aacute;rea mascarada.
+            </p>
+        </div>
+    </div>
+    <div id="nibbleNodata">
+        <div>
+            <p>Especifica se as c&eacute;lulas NoData na &aacute;rea mascarada ser&atilde;o mantidas ou substitu&iacute;das.
+            </p>
+            <p>Se desselecionada, todas as c&eacute;lulas NoData que est&atilde;o dentro da &aacute;rea mascarada ser&atilde;o mantidas na sa&iacute;da. Se a op&ccedil;&atilde;o estiver selecionada, as c&eacute;lulas NoData dentro da &aacute;rea mascarada ser&atilde;o substitu&iacute;das pelo valor do vizinho mais pr&oacute;ximo que est&aacute; fora da &aacute;rea mascarada.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>O nome da camada de raster substitu&iacute;da que ser&aacute; criada e adicionada ao mapa.
+            </p>
+        </div>
+    </div>
+    <div id="resultType">
+        <div>
+            <p>O tipo de sa&iacute;da que ser&aacute; criado. A sa&iacute;da pode ser uma camada de imagens em mosaico ou uma camada de imagens din&acirc;micas.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>O nome da pasta em  <b>O meu conte&uacute;do</b> onde os resultados ser&atilde;o guardados.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

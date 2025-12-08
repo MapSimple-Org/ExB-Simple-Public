@@ -1,0 +1,55 @@
+{
+  "beginningOnLabel": "Dimulai pada",
+  "repeatTypeLabel": "Jenis pengulangan",
+  "endingOnTypeLabel": "Berakhir dalam",
+  "endingOnDateLabel": "Tanggal akhir",
+  "endingOnCountLabel": "Count",
+  "endingOnCountPlaceholder": "misalnya: 1, 10, 30",
+  "dailyRepeatIntervalLabel": "Ulangi interval",
+  "dailyTimeLabel": "Waktu",
+  "weeklyDaysOfWeekLabel": "Hari dalam minggu",
+  "weeklyTimeLabel": "Waktu",
+  "monthlyDayOfMonthLabel": "Hari dalam bulan",
+  "monthlyDayOfMonthPlaceholder": "misalnya 1 - 31",
+  "monthlyRepeatIntervalLabel": "Ulangi interval",
+  "monthlyTimeLabel": "Waktu",
+  "repeatTypeOptions": {
+    "day": "Hari",
+    "week": "Minggu",
+    "month": "Bulan"
+  },
+  "endingOnType": {
+    "never": "Jangan pernah",
+    "date": "Tanggal",
+    "count": "Aktif"
+  },
+  "dailyRepeatInterval": {
+    "everyDay": "Setiap hari",
+    "everyOtherDay": "Setiap hari lainnya",
+    "everyThreeDays": "Setiap tiga hari",
+    "everyFourDays": "Setiap empat hari",
+    "everyFiveDays": "Setiap lima hari",
+    "everySixDays": "Setiap enam hari",
+    "everySevenDays": "Setiap tujuh hari",
+    "everyFourteenDays": "Setiap empat belas hari"
+  },
+  "weekDays": {
+    "all": "Semua",
+    "allWeekdays": "Semua hari kerja",
+    "sunday": "Minggu",
+    "monday": "Senin",
+    "tuesday": "Selasa",
+    "wednesday": "Rabu",
+    "thursday": "Kamis",
+    "friday": "Jumat",
+    "saturday": "Sabtu"
+  },
+  "monthlyRepeatInterval": {
+    "everyMonth": "Setiap bulan",
+    "everyTwoMonths": "Setiap dua bulan",
+    "everyThreeMonths": "Setiap tiga bulan",
+    "everyFourMonths": "Setiap empat bulan",
+    "everyFiveMonths": "Setiap lima bulan",
+    "everySixMonths": "Setiap enam bulan"
+  }
+}

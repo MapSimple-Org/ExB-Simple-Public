@@ -1,0 +1,9 @@
+{
+  "inputLayerGroupText": "Scegliere il layer di input per calcolare la geometria dei confini della zona.",
+  "itemProperties": {
+    "description": "Tabella di output generata dall'esecuzione della geometria zonale come strumento di analisi tabella.",
+    "snippet": "Tabella di output generata dalla geometria zonale come tabella."
+  },
+  "zonalGeometrySettingGroupLabel": "Impostazione della geometria zonale",
+  "zonalGeometrySettingGroupText": "Per il calcolo specificare la dimensione cella."
+}

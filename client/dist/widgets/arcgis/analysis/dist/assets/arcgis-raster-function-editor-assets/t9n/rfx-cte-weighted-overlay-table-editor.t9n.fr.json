@@ -1,0 +1,13 @@
+{
+  "weightedOverlayTable": "Table de superposition pondérée",
+  "id": "ID",
+  "layer": "Couche",
+  "field": "Terrain",
+  "influence": "Influence",
+  "sumOfInfluence": "Somme des influences",
+  "value": "Valeur",
+  "remapTable": "Table de classification",
+  "scale": "Echelle",
+  "scales": "Échelles",
+  "selectRaster": "Sélectionner un raster"
+}

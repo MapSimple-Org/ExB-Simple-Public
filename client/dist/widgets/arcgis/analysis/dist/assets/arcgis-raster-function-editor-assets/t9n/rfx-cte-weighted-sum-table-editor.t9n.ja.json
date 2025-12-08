@@ -1,0 +1,9 @@
+{
+  "weightedSumTable": "加重合計テーブル",
+  "id": "ID",
+  "layer": "レイヤー",
+  "field": "フィールド",
+  "weight": "重み付け",
+  "value": "値",
+  "selectLayer": "レイヤーの選択"
+}

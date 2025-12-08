@@ -1,0 +1,7 @@
+{
+  "header": "Rasterfunktionseditor",
+  "content": "Du har ændringer, der ikke er gemt, i '${rftTitle}'. Hvis du ikke gemmer, går disse ændringer tabt.",
+  "cancel": "Annuller",
+  "dontSave": "Gem ikke",
+  "save": "Gem"
+}

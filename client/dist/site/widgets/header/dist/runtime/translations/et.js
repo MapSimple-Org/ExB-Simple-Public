@@ -1,0 +1,1 @@
+System.register([],function(e){return{execute:function(){e({createNew:"Loo uus",newExperience:"Uus Experience projekt",developerEdition:"Developer Edition",linkToHome:"Avakuva",linkToMapViewer:"Kaardid",linkToSceneViewer:"Stseen",linkToNotebooks:"M\xe4rkmikud",linkToGroups:"Grupid",linkToContent:"Sisu",linkToOrganization:"Ettev\xf5te",expressModeLabel:"Kiirre\u017eiim"})}}});

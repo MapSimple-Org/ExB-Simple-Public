@@ -1,0 +1,1 @@
+System.register([],function(e){return{execute:function(){e({_widgetLabel:"Att\u0113ls",imageChooseShape:"Forma",imageCrop:"Apgriezt",previousImage:"Iepriek\u0161\u0113jais att\u0113ls",nextImage:"N\u0101kamais att\u0113ls",imageViewer:"Att\u0113lu skat\u012bt\u0101js"})}}});

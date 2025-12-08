@@ -1,0 +1,27 @@
+{
+  "hosted": "hostede",
+  "hostedView": "hostede, visning",
+  "hostedPhotos": "hostede, fotos",
+  "hostedCollection": "hostet, samling",
+  "hostedMultidimensional": "hostet, multidimensionel",
+  "hostedCollectionMultidimensional": "hostet, samling, multidimensionel",
+  "collectionMultidimensional": "samling, multidimensionel",
+  "multidimensional": "multidimensionel",
+  "collection": "kollektion",
+  "photoLocations": "fotos",
+  "locatorView": "visning",
+  "utilityNetwork": "Utility Network",
+  "Integrated Mesh": "Integreret mesh",
+  "3D Object": "3D-objekt",
+  "Point": "punkt",
+  "Point Cloud": "punktsky",
+  "Building Scene Layer": "bygningsscenelag",
+  "Voxel Scene Layer": "Voxel-scenelag",
+  "dataStore": {
+    "bigdata": "big data-fildeling",
+    "cloud": "sky",
+    "cloudStorage": "skylager",
+    "database": "database",
+    "folder": "mappe"
+  }
+}

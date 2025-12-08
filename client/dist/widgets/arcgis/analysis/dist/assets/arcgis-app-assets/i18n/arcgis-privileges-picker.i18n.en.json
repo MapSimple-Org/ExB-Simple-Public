@@ -1,0 +1,592 @@
+{
+  "rolePrivileges": "Role privileges",
+  "setFromExisting": "Set from existing role",
+  "expandAll": "Expand all",
+  "generalPrivileges": "General privileges",
+  "adminPrivileges": "Admin privileges",
+  "enabledLabel": "Enabled:",
+  "enableAll": "Enable all",
+  "disableAll": "Disable all",
+  "members": "Members",
+  "groups": "Groups",
+  "content": "Content",
+  "sharing": "Sharing",
+  "premiumContent": "Premium content",
+  "premiumContentServices": "Premium content and services",
+  "contentAndAnalysis": "Content and analysis",
+  "features": "Features",
+  "versionMgmt": "Version management",
+  "webhooks": "Webhooks",
+  "marketplaceSubscriptions": "ArcGIS Marketplace subscriptions",
+  "orgSettings": "Organization settings",
+  "learnMore": "Learn more",
+  "searchPrivileges": "Search privileges",
+  "notebooks": "Notebooks",
+  "analysis": "Analysis",
+  "networkAnalysis": "Network analysis",
+  "locationServices": "Location services",
+  "requiredService": "Required service",
+  "availableServices": "Available services",
+  "basemaps": "Basemaps",
+  "staticMaps": "Static maps",
+  "places": "Places",
+  "geocoding": "Geocoding",
+  "routing": "Routing",
+  "dataEnrichment": "Data enrichment",
+  "boundaries": "Boundaries",
+  "elevation": "Elevation",
+  "spatialPrivileges": "Spatial analysis",
+  "featureAnalysis": "Feature analysis",
+  "imageAnalysis": "Image analysis",
+  "readOnlyBasemapsTooltip": "Access to basemaps is included.",
+  "privileges": {
+    "portal:user:viewOrgUsers": {
+      "label": "View",
+      "description": "Allow member to view members of the organization.",
+      "descriptionPortal": "Allow member to view members of the portal.",
+      "descriptionApp": "Allow application to view members of the organization."
+    },
+    "portal:user:createGroup": {
+      "label": "Create, update, and delete",
+      "description": "Allow member to create, edit, and delete their own groups.",
+      "descriptionApp": "Allow application to create, edit, and delete the application owner's groups."
+    },
+    "portal:user:joinGroup": {
+      "label": "Join organizational groups",
+      "description": "Allow member to join groups within your organization.",
+      "descriptionPortal": "Allow member to join groups within your portal.",
+      "descriptionApp": "Allow application to join groups within your organization."
+    },
+    "portal:user:joinNonOrgGroup": {
+      "label": "Join external groups",
+      "description": "Allow member to join groups external to your organization.",
+      "descriptionPortal": "Allow member to join groups external to your portal.",
+      "descriptionApp": "Allow application to join groups external to your organization."
+    },
+    "portal:user:viewOrgGroups": {
+      "label": "View groups shared with organization",
+      "description": "Allow member to view groups shared with the organization.",
+      "descriptionPortal": "Allow member to view groups shared with the portal.",
+      "descriptionApp": "Allow application to view groups shared with the organization."
+    },
+    "portal:user:invitePartneredCollaborationMembers": {
+      "label": "Invite partnered organization members",
+      "description": "Allow member to invite members from partnered collaboration organizations to groups.",
+      "descriptionApp": "Allow application to invite members from partnered collaboration organizations to groups."
+    },
+    "portal:user:addExternalMembersToGroup": {
+      "label": "Add members from other organizations",
+      "description": "Allow member to create groups that allow members from other organizations, as well as invite external members to groups.",
+      "descriptionApp": "Allow application to create groups that allow members from other organizations, as well as invite external members to groups."
+    },
+    "portal:user:createItem": {
+      "label": "Create, update, and delete",
+      "description": "Allow member to create, edit, and delete their own content.",
+      "descriptionApp": "Allow application to create, edit, and delete the application owner's content."
+    },
+    "portal:publisher:publishFeatures": {
+      "label": "Publish hosted feature layers",
+      "description": "Allow member to publish hosted feature layers from shapefiles, CSVs, etc.",
+      "descriptionApp": "Allow application to publish hosted feature layers from shapefiles, CSVs, etc."
+    },
+    "portal:publisher:publishTiles": {
+      "label": "Publish hosted tile layers",
+      "description": "Allow member to publish hosted tile layers from tile packages, features, etc.",
+      "descriptionApp": "Allow application to publish hosted tile layers from tile packages, features, etc."
+    },
+    "portal:publisher:publishScenes": {
+      "label": "Publish hosted scene layers",
+      "description": "Allow member to publish hosted scene layers.",
+      "descriptionApp": "Allow application to publish hosted scene layers."
+    },
+    "portal:publisher:publishTiledImagery": {
+      "label": "Publish hosted tiled imagery layers",
+      "description": "Allow member to publish hosted tiled imagery layers from a single image or collection of images. Requires an ArcGIS Image for ArcGIS Online user type extension.",
+      "descriptionPortal": "Allow member to publish hosted tiled imagery layers from a single image or collection of images.",
+      "descriptionApp": "Allow application to publish hosted tiled imagery layers from a single image or collection of images. Requires an ArcGIS Image Hosting license."
+    },
+    "portal:publisher:publishDynamicImagery": {
+      "label": "Publish hosted dynamic imagery layers",
+      "description": "Allow member to publish hosted dynamic imagery layers from a single image or collection of images.",
+      "descriptionApp": "Allow application to publish hosted dynamic imagery layers from a single image or collection of images."
+    },
+    "portal:publisher:publishServerServices": {
+      "label": "Publish server-based layers",
+      "description": "This privilege grants the ability to publish layers powered by services from federated server sites. These services often reference registered data from geodatabases or file-based data sources."
+    },
+    "portal:publisher:publishKnowledgeGraph": {
+      "label": "Publish hosted knowledge graphs",
+      "description": "Allow member to publish hosted knowledge graphs.",
+      "descriptionApp": "Allow application to publish hosted knowledge graphs."
+    },
+    "portal:user:viewOrgItems": {
+      "label": "View content shared with organization",
+      "description": "Allow member to view content shared to the organization.",
+      "descriptionPortal": "Allow member to view content shared to the portal.",
+      "descriptionApp": "Allow application to view content shared to the organization."
+    },
+    "premium:publisher:createNotebooks": {
+      "label": "Create and edit notebooks",
+      "description": "Allow member to create and edit interactive notebooks.",
+      "descriptionApp": "Allow application to create and edit interactive notebooks."
+    },
+    "premium:publisher:scheduleNotebooks": {
+      "label": "Schedule notebooks",
+      "description": "Allow member to schedule future automated runs of a notebook.",
+      "descriptionApp": "Allow application to schedule future automated runs of a notebook."
+    },
+    "portal:publisher:bulkPublishFromDataStores": {
+      "label": "Create feature layers in bulk from a data store",
+      "description": "This privilege grants the ability to publish web layers from a registered data store."
+    },
+    "portal:publisher:registerDataStores": {
+      "label": "Register data stores",
+      "description": "This privilege grants the ability to register data stores to the portal."
+    },
+    "portal:user:viewTracks": {
+      "label": "View location tracks",
+      "description": "Allow member to view members's location tracks via shared track views when location sharing is enabled.",
+      "descriptionApp": "Allow application to view members' location tracks via shared track views when location sharing is enabled."
+    },
+    "portal:user:reassignItems": {
+      "label": "Reassign content",
+      "description": "Allow member to reassign only their content to another member with the privilege to receive content.",
+      "descriptionApp": "Allow application to reassign only the application owner's content to another member with the privilege to receive content."
+    },
+    "portal:user:receiveItems": {
+      "label": "Receive content",
+      "description": "Allow member to receive content that is reassigned to them by another member with the privilege to reassign content."
+    },
+    "portal:publisher:publishFeeds": {
+      "label": "Publish feeds",
+      "description": "This privilege grants the ability to publish feeds to ingest and display real-time data using ArcGIS Velocity."
+    },
+    "portal:publisher:publishRealTimeAnalytics": {
+      "label": "Publish real-time analytics",
+      "description": "This privilege grants the ability to publish real-time analytics to analyze and process real-time data using ArcGIS Velocity."
+    },
+    "portal:publisher:publishBigDataAnalytics": {
+      "label": "Publish big data analytics",
+      "description": "This privilege grants the ability to publish big data analytics to analyze historical observation data using ArcGIS Velocity."
+    },
+    "portal:publisher:createDataPipelines": {
+      "label": "Create and run data pipelines",
+      "description": "Allow member to create, edit, and run data pipelines.",
+      "descriptionApp": "Allow application to create, edit, and run data pipelines."
+    },
+    "portal:publisher:publishLivestreamVideo": {
+      "label": "Publish livestream video",
+      "description": "Allow member to publish hosted livestream video layers sourced from network video broadcasts and streams.",
+      "descriptionApp": "Allow application to publish hosted livestream video layers sourced from network video broadcasts and streams."
+    },
+    "portal:publisher:publishVideo": {
+      "label": "Publish video",
+      "description": "Allow member to publish hosted video layers from video file and supported video metadata files.",
+      "descriptionApp": "Allow application to publish hosted video layers from video file and supported video metadata files."
+    },
+    "portal:user:shareToGroup": {
+      "label": "Share with groups",
+      "description": "Allow member to share content to groups.",
+      "descriptionApp": "Allow application to share content to groups."
+    },
+    "portal:user:shareToOrg": {
+      "label": "Share with organization",
+      "labelPortal": "Share with portal",
+      "description": "Allow member to share content to your organization.",
+      "descriptionPortal": "Allow member to share content to your portal.",
+      "descriptionApp": "Allow application to share content to your organization."
+    },
+    "portal:user:shareToPublic": {
+      "label": "Share with public",
+      "description": "Allow member to share their content publicly if permitted by the organization's public sharing policy.",
+      "descriptionApp": "Allow application to share the application owner's content publicly if permitted by the organization's public sharing policy.",
+      "tooltip": "If the organization doesn't allow members to share content publicly, then members will require the administrative privilege to share member content with public."
+    },
+    "portal:user:shareGroupToOrg": {
+      "label": "Make groups visible to organization",
+      "labelPortal": "Make groups visible to portal",
+      "description": "Allow member to share content to your organization.",
+      "descriptionPortal": "Allow member to share content to your portal.",
+      "descriptionApp": "Allow application to share content to your portal."
+    },
+    "portal:user:shareGroupToPublic": {
+      "label": "Make groups visible to public",
+      "description": "Allow member to make groups discoverable by the public.",
+      "descriptionApp": "Allow application to make groups discoverable by the public."
+    },
+    "opendata:user:designateGroup": {
+      "label": "Make groups available to Open Data",
+      "description": "Allow member to designate groups as being available for use in Open Data.",
+      "descriptionApp": "Allow application to designate groups as being available for use in Open Data."
+    },
+    "premium:user:basemaps": {
+      "label": "Basemap styles service",
+      "descriptionLocationPlatform": "Allow application to access the basemap styles service."
+    },
+    "premium:user:staticbasemaptiles": {
+      "label": "Static basemap tiles",
+      "descriptionLocationPlatform": "Allow application to access the static basemap tiles service."
+    },
+    "premium:user:staticMaps": {
+      "label": "Static maps service (beta)",
+      "descriptionLocationPlatform": "Allow application to access the static maps service."
+    },
+    "premium:user:elevation": {
+      "label": "Elevation service",
+      "descriptionLocationPlatform": "Allow application to access the elevation service."
+    },
+    "premium:user:geocode": {
+      "label": "Geocode",
+      "description": "Allow member to perform credit-consuming geocoding tasks with ArcGIS Geocoding service (or a view of this locator).",
+      "descriptionApp": "Allow application to perform credit-consuming geocoding tasks with ArcGIS World Geocoding Service (or a view of this locator)."
+    },
+    "premium:user:geocode:stored": {
+      "label": "Geocode (stored)",
+      "descriptionLocationPlatform": "Allow application to access the geocoding service and perform stored geocodes."
+    },
+    "premium:user:geocode:temporary": {
+      "label": "Geocode (not stored)",
+      "descriptionLocationPlatform": "Allow application to access the geocoding service and perform geocodes that are not stored."
+    },
+    "premium:user:networkanalysis": {
+      "label": "Routing",
+      "description": "Allow member to perform network analysis tasks such as routing and drive-time areas.",
+      "descriptionApp": "Allow application to access the routing service."
+    },
+    "premium:user:networkanalysis:closestfacility": {
+      "label": "Closest facility",
+      "descriptionLocationPlatform": "Allow application to access the routing service and perform closest facility routing operations."
+    },
+    "premium:user:networkanalysis:lastmiledelivery": {
+      "label": "Last mile delivery",
+      "descriptionLocationPlatform": "Allow application to access the routing service and perform routing operations for last mile delivery."
+    },
+    "premium:user:networkanalysis:snaptoroads": {
+      "label": "Snap To Roads",
+      "descriptionLocationPlatform": "Allow member to perform network analysis tasks such as snap GPS track points to roads."
+    },
+    "premium:user:networkanalysis:locationallocation": {
+      "label": "Location allocation",
+      "descriptionLocationPlatform": "Allow application to access the routing service and perform location allocation operations."
+    },
+    "premium:user:networkanalysis:routing": {
+      "label": "Simple routing",
+      "descriptionLocationPlatform": "Allow application to access the routing service and perform standard routing operations."
+    },
+    "premium:user:networkanalysis:optimizedrouting": {
+      "label": "Optimized routing",
+      "descriptionLocationPlatform": "Allow application to access the routing service and perform optimized routing operations."
+    },
+    "premium:user:networkanalysis:vehiclerouting": {
+      "label": "Multi-vehicle routing",
+      "descriptionLocationPlatform": "Multi-vehicle routing allow application to access the routing service and perform fleet routing operations."
+    },
+    "premium:user:networkanalysis:origindestinationcostmatrix": {
+      "label": "Origin/destination cost matrix",
+      "descriptionLocationPlatform": "Allow application to access the routing service and generate travel cost matrices."
+    },
+    "premium:user:networkanalysis:servicearea": {
+      "label": "Service area",
+      "descriptionLocationPlatform": "Allow application to access the routing service and generate service areas."
+    },
+    "premium:user:places": {
+      "label": "Places service",
+      "descriptionLocationPlatform": "Allow application to access the places service."
+    },
+    "premium:user:spatialanalysis": {
+      "labelOld": "Spatial analysis service",
+      "label": "Feature analysis service",
+      "labelPortal": "Standard feature analysis",
+      "description": "Allow member to perform feature analysis tasks.",
+      "descriptionPortal": "This privilege grants the ability to perform standard feature analysis tasks.",
+      "descriptionLocationPlatform": "Allow application to access feature analysis service.",
+      "descriptionApp": "Allow application to access feature analysis service."
+    },
+    "premium:user:geoenrichment": {
+      "label": "GeoEnrichment service",
+      "description": "Allow member to geoenrich features.",
+      "descriptionLocationPlatform": "Allow application to access the GeoEnrichment service.",
+      "descriptionApp": "Allow application to access the GeoEnrichment service."
+    },
+    "premium:user:demographics": {
+      "label": "Demographic Maps",
+      "description": "Allow application to access premium demographic maps in ArcGIS Living Atlas.",
+      "descriptionApp": "Allow application to access premium demographic maps in ArcGIS Living Atlas.",
+      "descriptionLocationPlatform": "Allow application to access demographic maps in ArcGIS Living Atlas."
+    },
+    "premium:publisher:geoanalytics": {
+      "label": "GeoAnalytics feature analysis",
+      "description": "This privilege grants the ability to perform GeoAnalytics tasks."
+    },
+    "premium:publisher:rasteranalysis": {
+      "label": "Imagery analysis",
+      "description": "Allow member to perform imagery analysis tasks. Requires ArcGIS Image analysis capability.",
+      "descriptionPortal": "Allow member to perform imagery analysis tasks.",
+      "descriptionApp": "Allow application to perform imagery analysis tasks. Requires ArcGIS Image analysis capability.",
+      "descriptionAppPortal": "Allow application to perform imagery analysis tasks."
+    },
+    "premium:publisher:createAdvancedNotebooks": {
+      "label": "Advanced notebooks",
+      "description": "Allow member to import and use ArcPy modules in notebooks.",
+      "descriptionApp": "Allow application to import and use ArcPy modules in notebooks."
+    },
+    "portal:user:runWebTool": {
+      "label": "Run web tools",
+      "description": "Allow member to run web tools.",
+      "descriptionPortal": "Allow member to run web tools published from notebooks.",
+      "descriptionApp": "Allow application to run web tools.",
+      "descriptionAppPortal": "Allow application to run web tools published from notebooks."
+    },
+    "portal:user:generateApiTokens": {
+      "label": "Generate API keys",
+      "description": "Allow member to generate API keys."
+    },
+    "portal:user:assignPrivilegesToApps": {
+      "label": "Assign privileges to OAuth 2.0 applications",
+      "description": "Allow member to assign privileges to OAuth 2.0 applications."
+    },
+    "portal:user:createWorkflow": {
+      "label": "Create workflow item",
+      "description": "Allow member to create Workflow Manager items"
+    },
+    "premium:user:featurereport": {
+      "label": "Feature report",
+      "description": "Allow member to create feature reports in Survey123.",
+      "descriptionApp": "Allow application to create feature reports in Survey123."
+    },
+    "premium:user:realitymapping": {
+      "label": "Reality Mapping",
+      "description": "Allow member to perform reality mapping tasks."
+    },
+    "features:user:edit": {
+      "label": "Edit",
+      "description": "Allow member to edit features in editable layers that are not public, based on the edit options enabled on the layer.",
+      "descriptionApp": "Allow application to edit features in editable layers that are not public, based on the edit options enabled on the layer."
+    },
+    "features:user:fullEdit": {
+      "label": "Edit with full control",
+      "description": "Allow member to add, delete, and update features in an editable, hosted feature layer, regardless of the editing options enabled on the layer.",
+      "descriptionApp": "Allow application to add, delete, and update features in an editable, hosted feature layer, regardless of the editing options enabled on the layer."
+    },
+    "features:user:manageVersions": {
+      "label": "Manage all",
+      "description": "Allow members to manage version locks and view, alter, delete, edit, reconcile, and post to all branch versions accessed through ArcGIS Server feature layers.",
+      "descriptionApp": "Allow application to manage version locks and view, alter, delete, edit, reconcile, and post to all branch versions accessed through ArcGIS Server feature layers."
+    },
+    "portal:publisher:createFeatureWebhook": {
+      "label": "Feature layer",
+      "description": "Allow member to create, edit, and delete their own feature layer webhooks.",
+      "descriptionApp": "Allow application to create, edit, and delete their own feature layer webhooks."
+    },
+    "portal:admin:viewUsers": {
+      "label": "View all",
+      "description": "Allow member to view full member account information within your organization.",
+      "descriptionPortal": "Allow member to view full member account information within your portal.",
+      "descriptionApp": "Allow application to view full member account information within your organization."
+    },
+    "portal:admin:updateUsers": {
+      "label": "Update",
+      "description": "Allow member to reset passwords, update member account information, and update member categories within your organization.",
+      "descriptionPortal": "Allow member to reset passwords, update member account information, and update member categories within your portal.",
+      "descriptionApp": "Allow application to reset passwords, update member account information, and update member categories within your organization."
+    },
+    "portal:admin:deleteUsers": {
+      "label": "Delete",
+      "description": "Allow member to delete member accounts within your organization.",
+      "descriptionPortal": "Allow member to delete member accounts within your portal.",
+      "descriptionApp": "Allow application to delete member accounts within your organization."
+    },
+    "portal:admin:inviteUsers": {
+      "label": "Add",
+      "labelPortal": "Invite",
+      "description": "Allow member to invite members to your organization.",
+      "descriptionPortal": "Allow member to  invite members to your portal.",
+      "descriptionApp": "Allow application to invite members to your organization."
+    },
+    "portal:admin:disableUsers": {
+      "label": "Disable",
+      "description": "Allow member to enable and disable member accounts within your organization.",
+      "descriptionPortal": "Allow member to enable and disable member accounts within your portal.",
+      "descriptionApp": "Allow application to enable and disable member accounts within your organization."
+    },
+    "portal:admin:changeUserRoles": {
+      "label": "Change roles",
+      "description": "Allow member to change the role a member account is assigned. Note, only members with the Administrator role can assign or unassign the Administrator role to other accounts.",
+      "descriptionPortal": "Allow member to change the role a member account is assigned. Note, only members with the Administrator role can assign or unassign the Administrator role to other accounts.",
+      "descriptionApp": "Allow application to change the role a member account is assigned. Note, only members with the Administrator role can assign or unassign the Administrator role to other accounts."
+    },
+    "portal:admin:manageLicenses": {
+      "label": "Manage licenses",
+      "description": "Allow member to assign licenses to members of your organization.",
+      "descriptionPortal": "Allow member to assign licenses to members of your portal.",
+      "descriptionApp": "Allow application to assign licenses to members of your organization."
+    },
+    "portal:admin:updateMemberCategorySchema": {
+      "label": "Manage categories",
+      "description": "Allow member to configure organization member categories.",
+      "descriptionPortal": "Allow member to configure portal member categories.",
+      "descriptionApp": "Allow application to configure organization member categories."
+    },
+    "portal:admin:viewGroups": {
+      "label": "View all",
+      "description": "Allow member to view all groups within your organization.",
+      "descriptionPortal": "Allow member to view all groups within your portal.",
+      "descriptionApp": "Allow application to view all groups within your organization."
+    },
+    "portal:admin:updateGroups": {
+      "label": "Update",
+      "description": "Allow member to update groups within your organization.",
+      "descriptionPortal": "Allow member to update groups within your portal.",
+      "descriptionApp": "Allow application to update groups within your organization."
+    },
+    "portal:admin:deleteGroups": {
+      "label": "Delete",
+      "description": "Allow member to delete groups within your organization.",
+      "descriptionPortal": "Allow member to delete groups within your portal.",
+      "descriptionApp": "Allow application to delete groups within your organization."
+    },
+    "portal:admin:reassignGroups": {
+      "label": "Reassign ownership",
+      "description": "Allow member to reassign groups to other members within your organization.",
+      "descriptionPortal": "Allow member to reassign groups to other members within your portal.",
+      "descriptionApp": "Allow application to reassign groups to other members within your organization."
+    },
+    "portal:admin:assignToGroups": {
+      "label": "Assign members",
+      "description": "Allow member to assign your members to, update your member's group role, and remove your members from groups within your organization.",
+      "descriptionPortal": "Allow member to assign your members to, update your member's group role, and remove your members from groups within your portal.",
+      "descriptionApp": "Allow application to assign your members to, update your member's group role, and remove your members from groups within your organization."
+    },
+    "portal:admin:manageEnterpriseGroups": {
+      "label": "Link to organization-specific group",
+      "description": "Allow member to link group membership to an organization-specific group.",
+      "descriptionApp": "Allow application to link group membership to an organization-specific group."
+    },
+    "portal:admin:createUpdateCapableGroup": {
+      "label": "Create with update capabilities",
+      "description": "Allow member to create groups with update capabilities.",
+      "descriptionApp": "Allow application to create groups with update capabilities."
+    },
+    "portal:admin:createLeavingDisallowedGroup": {
+      "label": "Create with leaving disallowed",
+      "description": "Allow member to create and own groups that do not allow members to leave (administrative groups).",
+      "descriptionApp": "Allow application to create and own groups that do not allow applications to leave (administrative groups)."
+    },
+    "portal:admin:viewItems": {
+      "label": "View all",
+      "description": "Allow member to view all content within your organization.",
+      "descriptionPortal": "Allow member to view all content within your portal.",
+      "descriptionApp": "Allow application to view all content within your organization."
+    },
+    "portal:admin:updateItems": {
+      "label": "Update",
+      "description": "Allow member to update and categorize content and edit hosted feature layers in your organization.",
+      "descriptionPortal": "Allow member to update and categorize content and edit hosted feature layers in your portal.",
+      "descriptionApp": "Allow application to update and categorize content and edit hosted feature layers in your organization."
+    },
+    "portal:admin:deleteItems": {
+      "label": "Delete",
+      "description": "Allow member to delete content within your organization.",
+      "descriptionPortal": "Allow member to delete content within your portal.",
+      "descriptionApp": "Allow application to delete content within your organization."
+    },
+    "portal:admin:reassignItems": {
+      "label": "Reassign ownership",
+      "description": "Allow member to reassign content to other members within your organization.",
+      "descriptionPortal": "Allow member to reassign content to other members within your portal.",
+      "descriptionApp": "Allow application to reassign content to other members within your organization."
+    },
+    "portal:admin:updateItemCategorySchema": {
+      "label": "Manage categories",
+      "description": "Allow member to configure organization content categories.",
+      "descriptionPortal": "Allow member to configure portal content categories.",
+      "descriptionApp": "Allow application to configure organization content categories."
+    },
+    "portal:publisher:publishServerGPServices": {
+      "label": "Publish web tools",
+      "description": "This privilege grants the ability to publish web tools backed by geoprocessing services from federated server sites."
+    },
+    "portal:admin:shareToOrg": {
+      "label": "Share member content with organization",
+      "description": "Allow member to share content owned by other members in your organization with the organization.",
+      "descriptionPortal": "Allow member to share content owned by other members in your portal with the portal.",
+      "descriptionApp": "Allow application to share content owned by other members in your organization with the organization."
+    },
+    "portal:admin:shareToPublic": {
+      "label": "Share member content with public",
+      "description": "Allow member to share content owned by other members in your organization with the public.",
+      "descriptionPortal": "Allow member to share content owned by other members in your portal with the public.",
+      "descriptionApp": "Allow application to share content owned by other members in your organization with the public."
+    },
+    "portal:admin:createReports": {
+      "label": "Create and manage administrative reports",
+      "description": "Allow member to create and manage administrative reports for your organization.",
+      "descriptionPortal": "Allow member to create and manage administrative reports for your portal.",
+      "descriptionApp": "Allow application to create and manage administrative reports for your organization."
+    },
+    "marketplace:admin:manage": {
+      "label": "Create and manage",
+      "description": "Allow member to create listings, list items, manage subscriptions within ArcGIS Marketplace, as well as manage purchasers and contact information for your organization. Use of this privilege depends on your organization obtaining listing and publishing access to the ArcGIS Marketplace."
+    },
+    "marketplace:admin:purchase": {
+      "label": "Purchase and get free products",
+      "description": "Allow member to send purchase requests and access free products from providers in ArcGIS Marketplace. To allow members to purchase products using credit cards, you must designate them as Marketplace purchasers."
+    },
+    "marketplace:admin:startTrial": {
+      "label": "Start trials",
+      "description": "Allow member to start trial subscriptions within ArcGIS Marketplace."
+    },
+    "portal:admin:manageSecurity": {
+      "label": "Security and infrastructure",
+      "description": "Allow member to manage the organization's security and infrastructure settings.",
+      "descriptionPortal": "Allow member to manage the portal's security and infrastructure settings.",
+      "descriptionApp": "Allow application to manage the organization's security and infrastructure settings."
+    },
+    "portal:admin:manageWebsite": {
+      "label": "Organization website",
+      "description": "Allow member to manage the organization's website settings.",
+      "descriptionPortal": "Allow member to manage the portal's website settings.",
+      "descriptionApp": "Allow application to manage the organization's website settings."
+    },
+    "portal:admin:manageCollaborations": {
+      "label": "Collaborations",
+      "description": "Allow member to manage the organization's collaborations.",
+      "descriptionPortal": "Allow member to manage the portal's collaborations.",
+      "descriptionApp": "Allow application to manage the organization's collaborations."
+    },
+    "portal:admin:manageCredits": {
+      "label": "Credits",
+      "description": "Allow member to manage the organization's credit budgeting settings.",
+      "descriptionApp": "Allow application to manage the organization's credit budgeting settings."
+    },
+    "portal:admin:manageRoles": {
+      "label": "Member roles",
+      "description": "Allow member to manage the organization's member roles.",
+      "descriptionPortal": "Allow member to manage the portal's member roles.",
+      "descriptionApp": "Allow application to manage the organization's member roles."
+    },
+    "portal:admin:manageServers": {
+      "label": "Servers",
+      "description": "This privilege grants the ability to manage the portal's server settings."
+    },
+    "portal:admin:manageUtilityServices": {
+      "label": "Utility services",
+      "description": "Allow member to manage the organization's utility service settings.",
+      "descriptionPortal": "Allow member to manage the portal's utility service settings.",
+      "descriptionApp": "Allow application to manage the organization's utility service settings."
+    },
+    "portal:admin:manageWebhooks": {
+      "label": "Webhooks",
+      "labelPortal": "Organization webhooks",
+      "description": "Allow member to create, edit, and delete all webhooks in your organization.",
+      "descriptionApp": "Allow application to create, edit, and delete all webhooks in your organization.",
+      "descriptionPortal": "Allow member to create, edit, and delete organizational webhooks and manage all webhooks within the portal.",
+      "descriptionAppPortal": "Allow application to create, edit, and delete organizational webhooks and manage all webhooks within the portal."
+    },
+    "portal:admin:createGPWebhook": {
+      "label": "Geoprocessing",
+      "description": "Allow member to create, edit, and delete their own geoprocessing webhooks.",
+      "descriptionApp": "Allow application to create, edit, and delete their own geoprocessing webhooks."
+    }
+  }
+}

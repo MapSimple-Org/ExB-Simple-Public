@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>เครื่องมือสร้างลุ่มน้ำ จะระบุพื้นที่ที่มีส่วนร่วมอัพสตรีมสำหรับจุดที่กำหนด
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputLayer">
+        <div>
+            <p>ตำแหน่งที่จะทำการสร้างพื้นที่รับน้ำจากอัพสตรีม (ลุ่มน้ำ) จะถูกสร้างขึ้น
+            </p>
+            <p class="toolPaneOnly">จำนวนของฟีเจอร์จะขึ้นอยู่กับปัจจัยเพิ่มเติม อาทิ เกณฑ์การกรองและขอบเขตการวิเคราะห์
+            </p>
+        </div>
+    </div>
+    <div id="searchDistance">
+        <div>
+            <p>ระยะทางสูงสุดที่อนุญาตในการย้ายตำแหน่งของจุดอินพุทไปยังเส้นทางระบายน้ำที่อยู่ใกล้ที่สุด หรือการสะสมการไหลที่สูงที่สุด
+            </p>
+        </div>
+    </div>
+    <div id="searchUnits">
+        <div>
+            <p>หน่วยที่จะใช้สำหรับพารามิเตอร์  <b>ค้นหาระยะทาง</b>
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>ชื่อของชั้นข้อมูลฟีเจอร์ที่มีโพลีกอนลุ่มน้ำ และจุดเทที่ปรับแต่งแล้ว ซึ่งจะถูกสร้างและเพิ่มลงในแผนที่
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>ชื่อของโฟลเดอร์ใน  <b>เนื้อหาของฉัน</b> ที่จะทำการบันทึกผลลัพธ์
+            </p>
+        </div>
+    </div>
+</div>
+</html>

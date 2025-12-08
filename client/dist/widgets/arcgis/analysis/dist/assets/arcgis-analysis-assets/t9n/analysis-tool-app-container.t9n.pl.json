@@ -1,0 +1,21 @@
+{
+  "backLabel": "Wstecz",
+  "cannotReopenTool": "Nie można ponownie otworzyć narzędzia. Przywrócono domyślne wartości parametrów narzędzia.",
+  "cannotReopenWebTool": "Nie można otworzyć narzędzia internetowego. <calcite-link target='_blank' href='${ docLink }'>Dowiedz się więcej</calcite-link>",
+  "creditThresholdModal": {
+    "cancelRun": "Anuluj",
+    "continueRun": "Uruchom mimo to",
+    "creditEstimate": "Szacowana liczba kredytów: ${cost}",
+    "creditThreshold": "Próg kredytów: ${threshold}",
+    "heading": "Przed kontynuowaniem",
+    "learnMore": "Dowiedz się więcej na temat progów kredytów",
+    "thresholdExceeded": "Szacowany koszt kredytów tej analizy jest wyższy niż próg kredytów mapy internetowej:"
+  },
+  "failedToExecuteEstimate": "Uruchomienie nie powiodło się. Nie udało się wykonać obiektu EstimateRasterAnalysisCost",
+  "missingPermissionForWebTool": "Nie można uzyskać dostępu do tego narzędzia. Upewnij się, że narzędzie istnieje i użytkownik ma uprawnienia dostępu do niego.",
+  "runAnalysisLabel": "Uruchom",
+  "toolPreviewNoParameters": "Dla tego modelu nie ustawiono żadnych parametrów. Wróć do modelu i dodaj zmienne, a następnie ustaw je jako parametry.",
+  "toolPreviewNoParametersLink": "<calcite-link target='_blank' href='${ docLink }'>Dowiedz się więcej</calcite-link>",
+  "toolPreviewWebTool": "Aby uruchomić ten model jako narzędzie internetowe, opublikuj go i otwórz z poziomu panelu Analiza.",
+  "webToolJSONChanged": "Zaktualizowano jeden lub większą liczbę parametrów. Niektórych parametrów nie można ponownie wypełnić z historii."
+}

@@ -1,0 +1,110 @@
+{
+  "Authoritative": {
+    "title": "Usaldusväärne",
+    "tooltip": {
+      "org": "Teie organisatsiooni poolt soovitatav",
+      "public": "Soovitas ${name}"
+    }
+  },
+  "Deprecated": {
+    "title": "Aegunud",
+    "tooltip": "Kasutamine pole soovitatav"
+  },
+  "Has Replacement": {
+    "title": "Omab asendust",
+    "tooltip": "Sellel üksusel on soovitatud asendus. Asenduse leidmiseks ja kasutamiseks vaadake üksuse üksikasju.",
+    "itemPageTooltip": "Sellel üksusel on soovitatud asendus.",
+    "link": "Kuva asendusüksus"
+  },
+  "DeprecatedItem": {
+    "title": "Aegunud üksusetüüp"
+  },
+  "Living Atlas": {
+    "title": "Elukoha atlas",
+    "tooltip": "Esri poolt hallatud sisu"
+  },
+  "Subscriber": {
+    "title": "Tellija",
+    "tooltip": {
+      "org": "Eksklusiivne sisu tellijatele",
+      "public": "Eksklusiivne sisu tellijatele. Kasutamiseks logige sisse ArcGIS Online'i tellimusega."
+    }
+  },
+  "Premium": {
+    "title": "Premium",
+    "tooltip": {
+      "org": "Eksklusiivne sisu tellijatele. Kasutab teenuskrediite.",
+      "public": "Tellijatele mõeldud eksklusiivne sisu, mis kasutab krediiti. Kasutamiseks logige sisse ArcGIS Online'i tellimusega."
+    }
+  },
+  "Open Data": {
+    "title": "Ava andmed",
+    "tooltip": "Saadaval avalikuks kasutamiseks"
+  },
+  "Marketplace": {
+    "title": "Rakenduste pood",
+    "tooltip": "Saadaval ArcGIS-i rakenduste poes"
+  },
+  "Collaboration": {
+    "title": "Jagatud koostöö",
+    "tooltip": "See üksus saadi hajutatud koostööst"
+  },
+  "Retired": {
+    "title": "Vananenud",
+    "tooltip": {
+      "general": "Kirjutuskaitstud",
+      "cityEngine": "CityEngine Web Viewerit ja CityEngine Web Scenesi ei toetata enam.",
+      "storyMap": "Classic Esri kaardilugu, mida kasutatakse selle rakenduse loomiseks, on ArcGIS Enterprise'is vananenud. Uute lugude loomiseks kasutage ArcGIS Storymapsi.",
+      "app": "Konfigureeritavate rakenduste mall, mida kasutatakse selle rakenduse loomiseks, on ArcGIS Enterprise'is vananenud. See üksus ei ole töökorras ja selle võib kustutada. Uue rakenduse loomiseks kasutage rakendusi ArcGIS Instant Apps, ArcGIS Storymaps, ArcGIS Dashboards või ArcGIS Experience Builder",
+      "webAppBuilder": "ArcGIS Web AppBuilder on ArcGIS Enterprise'is kasutuselt võetud. See üksus ei ole töökorras ja selle võib kustutada. Uue rakenduse loomiseks kasutage ArcGIS Experience Builderit.",
+      "insights": "ArcGIS Insights on ArcGIS Enterprise'is kasutusest võetud. See üksus ei ole töökorras ja selle võib kustutada.",
+      "bdfs": "Suurte andmefailide jagamine ArcGIS Enterprise'is on vananenud. See üksus ei ole töökorras ja selle võib kustutada."
+    }
+  },
+  "Public Data Collection": {
+    "title": "Andmete kogumine avalikkuse jaoks",
+    "tooltip": "Andmete kogumine avalikkuse jaoks on heaks kiidetud."
+  },
+  "Solution": {
+    "title": "ArcGIS Solution",
+    "tooltip": "Esri toetatav lahendus"
+  },
+  "Registered": {
+    "title": "OAuth 2.0",
+    "tooltip": {
+      "online": "Registreeritud OAuth 2.0 rakendus. Võib kasutada tasulist või tellija sisu.",
+      "enterprise": "Registreeritud OAuth 2.0 rakendus."
+    }
+  },
+  "Registered API Key Credentials (Standard)": {
+    "title": {
+      "online": "API-võtme mandaadid – standardne",
+      "enterprise": "API-võtme sisselogimise andmed"
+    },
+    "tooltip": "Annab juurdepääsu teenustele."
+  },
+  "Registered API Key Credentials (Personal)": {
+    "title": "API-võtme mandaadid – isiklik",
+    "tooltip": "Annab isiklikud õigused. Turvalisuse huvides peaksite neid mandaate kaitsma sama hoolikalt kui oma kasutajanime ja parooli."
+  },
+  "Registered OAuth 2.0 Credentials (Standard)": {
+    "title": {
+      "online": "OAuth 2.0 mandaadid – standardne",
+      "enterprise": "OAuth 2.0 sisselogimise andmed"
+    },
+    "tooltip": "Annab juurdepääsu teenustele."
+  },
+  "Registered OAuth 2.0 Credentials (Personal)": {
+    "title": "OAuth 2.0 mandaadid – isiklik",
+    "tooltip": "Annab isiklikud õigused. Turvalisuse huvides peaksite neid mandaate kaitsma sama hoolikalt kui oma kasutajanime ja parooli."
+  },
+  "Registered Application": {
+    "title": "OAuth 2.0 rakendus",
+    "tooltip": "Registreeritud OAuth 2.0 rakendus"
+  },
+  "Personal credential": {
+    "title": "Isiklik",
+    "tooltip": "Annate sellele mandaadile isikliku õiguse. Turvalisuse huvides peaksite kaitsma kõiki nende mandaatidega loodud juurdepääsulubasid sama hoolikalt kui oma kasutajanime ja parooli. Tutvuge kasutustingimustega."
+  },
+  "loading": "Laadimine..."
+}

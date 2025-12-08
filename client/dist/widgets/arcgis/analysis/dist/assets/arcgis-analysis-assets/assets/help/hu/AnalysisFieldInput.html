@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>Vez&eacute;rlőelemek &uacute;j mező hozz&aacute;ad&aacute;s&aacute;hoz az elemzőeszk&ouml;z&ouml;kben.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="fieldName">
+        <div>
+            <p>Megadja az &uacute;j mező nev&eacute;t. A mezőnevet a rendszer megjelen&iacute;t&eacute;si n&eacute;vk&eacute;nt is haszn&aacute;lni fogja.
+            </p>
+            <p>A mezőn&eacute;v nem egyezhet meg a r&eacute;tegben m&aacute;r l&eacute;tező mezőn&eacute;vvel, nem tartalmazhat speci&aacute;lis karaktereket vagy sz&oacute;k&ouml;z&ouml;ket, &eacute;s nem lehet SQL-kulcssz&oacute;.
+            </p>
+        </div>
+    </div>
+    <div id="fieldType">
+        <div>
+            <p>V&aacute;lassza ki az &uacute;j mező mezőt&iacute;pus&aacute;t.
+            </p>
+            <p>A mezőt&iacute;pus hat&aacute;rozza meg, hogy az &uacute;j mezőben milyen t&iacute;pus&uacute; &eacute;rt&eacute;kek enged&eacute;lyezettek.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

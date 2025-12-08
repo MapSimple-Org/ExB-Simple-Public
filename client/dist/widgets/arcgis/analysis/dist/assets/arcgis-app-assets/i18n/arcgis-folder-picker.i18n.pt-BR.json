@@ -1,0 +1,21 @@
+{
+  "folder": "Pasta",
+  "folders": "Pastas",
+  "searchFolders": "Pesquisar pastas",
+  "enterFolder": "Inserir nome de pasta",
+  "createNewFolder": "Criar nova pasta",
+  "noFoldersFoundCreate": "Nenhuma pasta localizada com este nome. Criar '${folder}'?",
+  "noFoldersFound": "Nenhuma pasta localizada com este nome.",
+  "create": "Criar '${folder}'?",
+  "loading": "Carregando pastas",
+  "error": {
+    "noName": "Você deve fornecer um nome para a pasta.",
+    "folderAlreadyExists": "Uma pasta '${folder}' já existe. Escolha outro nome.",
+    "title": "Erro",
+    "invalidCharacters": {
+      "single": "O nome não pode conter este caractere: ${invalidCharacters}",
+      "multiple": "O nome não pode conter nenhum destes caracteres: ${invalidCharacters}.",
+      "unknown": "O nome não pode conter nenhum destes caracteres: ${invalidCharacters}."
+    }
+  }
+}

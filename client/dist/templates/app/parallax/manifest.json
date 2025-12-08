@@ -1,0 +1,29 @@
+{
+  "name": "parallax",
+  "type": "template",
+  "templateType": "app",
+  "label": "Parallax",
+  "description": "Parallax allows you to add a hero image layout in your experience.",
+  "thumbnail": "thumbnail.png",
+  "order": 54,
+  "tags": [
+    "Logo",
+    "Title",
+    "Banner",
+    "Screen Group",
+    "Card",
+    "Gallery",
+    "Map",
+    "Bookmark",
+    "Slides",
+    "Share"
+  ],
+  "categoriesTags": [
+    "Web page",
+    "Scrolling"
+  ],
+  "isMultiplePage": false,
+  "isMapAware": true,
+  "thumbnailWidth": 320,
+  "thumbnailHeight": 214
+}

@@ -1,0 +1,17 @@
+{
+  "sharing": "Delen",
+  "private": "Eigenaar",
+  "shared": "Eigenaar en gedeeld met groepen",
+  "org": "Organisatie",
+  "public": "Iedereen (openbaar)",
+  "privateGroups": "Eigenaar",
+  "sharedGroups": "Eigenaar + Groepen (${num})",
+  "orgGroups": "Organisatie + Groepen (${num})",
+  "publicGroups": "Iedereen (openbaar) + Groepen (${num})",
+  "groups": "Groepen (${num})",
+  "updateSharing": "Deelniveau: ${level}, delen bijwerken",
+  "viewableBy": "Raadpleegbaar door: ${level}",
+  "everyone": "Iedereen (openbaar)",
+  "organization": "Organisatie",
+  "groupMembers": "Groepsleden"
+}

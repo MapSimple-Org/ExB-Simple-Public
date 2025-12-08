@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="16" height="48" viewBox="0 0 16 48">
+  <defs>
+    <linearGradient id="linear-gradient" x1="8" x2="8" y2="48" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#573880"/>
+      <stop offset="0.05" stop-color="#5f4186"/>
+      <stop offset="0.13" stop-color="#735995"/>
+      <stop offset="0.24" stop-color="#9581af"/>
+      <stop offset="0.36" stop-color="#c3b8d2"/>
+      <stop offset="0.5" stop-color="#fefefe"/>
+      <stop offset="0.5" stop-color="#fff"/>
+      <stop offset="1" stop-color="#fff"/>
+    </linearGradient>
+  </defs>
+  <g style="isolation: isolate">
+    <g id="Layer_1" data-name="Layer 1">
+      <rect width="16" height="48" rx="2" style="fill: url(#linear-gradient)"/>
+      <g style="mix-blend-mode: multiply">
+        <path d="M14,1a1,1,0,0,1,1,1V46a1,1,0,0,1-1,1H2a1,1,0,0,1-1-1V2A1,1,0,0,1,2,1H14m0-1H2A2,2,0,0,0,0,2V46a2,2,0,0,0,2,2H14a2,2,0,0,0,2-2V2a2,2,0,0,0-2-2Z" style="fill: #eaeaea"/>
+      </g>
+    </g>
+  </g>
+</svg>

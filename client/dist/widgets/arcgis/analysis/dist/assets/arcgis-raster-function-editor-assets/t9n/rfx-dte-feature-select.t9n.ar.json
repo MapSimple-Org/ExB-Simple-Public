@@ -1,0 +1,8 @@
+{
+  "selectFeature": "تحديد طبقة المعالم",
+  "browseLayer": "استعراض الطبقات",
+  "loading": "جارِ التحميل...",
+  "errorCodes": {
+    "required": "هذه المعلمة مطلوبة."
+  }
+}

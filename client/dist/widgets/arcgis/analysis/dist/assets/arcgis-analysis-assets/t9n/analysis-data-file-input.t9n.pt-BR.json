@@ -1,0 +1,14 @@
+{
+  "AddDataFromUrl": "Adicionar dados da URL",
+  "addData": "Adicionar dados",
+  "clear": "Limpar",
+  "file": "Arquivo",
+  "fileNotFound": "Falha ao carregar o arquivo.",
+  "invalidUrl": "URL ou extensão de arquivo inválida.",
+  "layerNotFound": "Falha ao carregar a camada.",
+  "replaceData": "Substituir dados",
+  "required": "Este parâmetro é exigido.s",
+  "uploadData": "Transferir dados",
+  "uploadFailureMsg": "Erro ao executar a operação de transferência, tamanho ou tipo de arquivo não compatível com este serviço.",
+  "url": "Url"
+}

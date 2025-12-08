@@ -1,0 +1,8 @@
+{
+  "select": "アイテムの選択: ${title}",
+  "lastUpdated": "アイテムの更新日: ${date}",
+  "viewItemDetails": "詳細の表示",
+  "preview": "プレビュー",
+  "closePreview": "プレビューを閉じる",
+  "moreOptions": "その他のオプション"
+}

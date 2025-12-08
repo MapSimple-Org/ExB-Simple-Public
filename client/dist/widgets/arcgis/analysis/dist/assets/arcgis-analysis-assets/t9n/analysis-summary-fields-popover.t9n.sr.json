@@ -1,0 +1,13 @@
+{
+  "addField": "Dodaj polje",
+  "deselectAll": "Opozovi izbor svega",
+  "done": "Završeno",
+  "noFieldsAvailable": "${layerName} ne sadrži polja koja ispunjavaju uslov za tip podataka. Selektujte drugi sloj da biste nastavili.",
+  "noInputSelected": {
+    "withLayerInputLabel": "Nije selektovan nijedan ulazni sloj. Selektujte sloj u ${layerInputLabel} da biste nastavili.",
+    "withoutLayerInputLabel": "Nije selektovan nijedan ulazni sloj. Selektujte ulazni sloj da biste nastavili."
+  },
+  "noSearchResults": "Nije pronađeno nijedno podudarajuće polje.",
+  "selectAll": "Izaberi sve",
+  "summaryFieldsPopover": "Polja rezimea"
+}

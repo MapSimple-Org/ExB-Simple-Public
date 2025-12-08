@@ -1,0 +1,26 @@
+{
+  "CCIAnalysisSettingGroupLabel": "Indexbeállítások",
+  "CCIAnalysisSettingGroupText": "Adja meg, hogy történjen az index kiszámítása.",
+  "geomeanPercentileLabel": "Összetett rangsorok (percentilisek geometriai átlaga)",
+  "geomeanRawLabel": "Összetett nyers értékek (nyers értékek geometriai átlaga)",
+  "geomeanScaledLabel": "Összetett skálázott értékek (skálázott értékek geometriai átlaga)",
+  "indexMethodLabel": "A változók skálázásának és kombinálásának módszere",
+  "inputFeaturesOrTableLabel": "Bemeneti vektoros elemek vagy tábla",
+  "inputLayerGroupText": "Válassza ki azokat a vektoros elemeket vagy táblát, amelyekkel létre kívánja hozni az indexet.",
+  "inputVariablesLabel": "Bementi változók",
+  "itemProperties": {
+    "description": "A Kompozitindex kiszámítása elemzőeszköz futtatásával létrehozott vektoros réteg.",
+    "snippet": "A Kompozitindex kiszámítása művelettel létrehozott vektoros réteg"
+  },
+  "meanPercentileLabel": "Rangsorrendek kombinálása (percentilisek középértéke)",
+  "meanRawLabel": "Nyers értékek kombinálása (nyers értékek átlaga)",
+  "meanScaledLabel": "Skálázott értékek kombinálása (skálázott értékek átlaga)",
+  "outputIndexMaxLabel": "Maximum",
+  "outputIndexMinLabel": "Minimum",
+  "outputIndexMinMaxLabel": "Minimum és maximum értékek indexálása",
+  "outputIndexReverseLabel": "Indexértékek megfordítása",
+  "reverseVariableLabel": "Irány megfordítása",
+  "sumFlagsPercentileLabel": "Szélsőértékek kiemelése (a 90. percentilis feletti értékek száma)",
+  "toolName": "Kompozitindex kiszámítása",
+  "weight": "Súly"
+}

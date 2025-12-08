@@ -1,0 +1,6 @@
+{
+  "description": "Popis",
+  "addDescription": "Pridať popis",
+  "charactersLeft": "Zostávajúcich znakov: ${num}",
+  "invalid": "Popis nemôže obsahovať žiadny z týchto znakov: < alebo >."
+}

@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>Instrumentul Derivare curs ca instrument Raster generează un raster de curs dintr-un raster de suprafață de intrare fără umplere prealabilă pentru scufundare sau cobor&acirc;re necesară.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputSurfaceRaster">
+        <div>
+            <p>Rasterul de elevație care va fi folosit pentru calcul.
+            </p>
+        </div>
+    </div>
+    <div id="inputDepressionsData">
+        <div>
+            <p>Intrarea care definește locațiile depresiunilor sau dolinelor reale, &icirc;n care apa poate curge, dar din care nu poate ieși.
+            </p>
+            <p class="toolPaneOnly">Pentru intrările de obiecte spațiale, numărul depinde de factori suplimentari, cum ar fi criteriile de filtrare și extinderea analizei.
+            </p>
+        </div>
+    </div>
+    <div id="inputWeightRaster">
+        <div>
+            <p>Stratul tematic de raster care definește fracțiunea de curgere care contribuie la acumularea debitului &icirc;n fiecare celulă.
+            </p>
+        </div>
+    </div>
+    <div id="accumulationThreshold">
+        <div>
+            <p>Pragul pentru care se stabilește dacă o anumită celulă face parte dintr-un curs &icirc;n ceea ce privește suprafața totală care curge &icirc;ntr-o astfel de celulă.
+            </p>
+        </div>
+    </div>
+    <div id="streamDesignationMethod">
+        <div>
+            <p>Specifică dacă segmentele de curs din ieșire vor avea o valoare constantă, valori unice sau sunt ordonate.
+            </p>
+        </div>
+    </div>
+    <div id="forceFlow">
+        <div>
+            <p>Specifică dacă curgerea la celulele din margine va urma regulile de curgere normală sau la curge &icirc;ntotdeauna spre exterior.
+            </p>
+            <p>Dacă este neselectată, curgerea va fi spre celula interioară cu cea mai abruptă cădere &icirc;n valoarea z. Cu toate acestea, &icirc;n cazul &icirc;n care căderea este mai mică sau egală cu zero, celula va curge spre exterior față de rasterul de suprafață. Dacă este selectată, direcția de curgere va fi spre exterior față de rasterul de suprafață.
+            </p>
+        </div>
+    </div>
+    <div id="outputStreamRasterName">
+        <div>
+            <p>Numele stratului tematic de raster de flux care va fi creat și adăugat pe hartă.
+            </p>
+        </div>
+    </div>
+    <div id="resultType">
+        <div>
+            <p>Tipul de ieșire care va fi creată. Ieșirea poate fi un strat tematic de imagini satelitare cu structură tile sau un strat tematic de imagini satelitare dinamic.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>Numele folderului din  <b>Resursele mele</b> &icirc;n care va fi salvat rezultatul.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

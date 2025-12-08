@@ -1,0 +1,110 @@
+{
+  "Authoritative": {
+    "title": "Wiarygodne",
+    "tooltip": {
+      "org": "Polecane przez Twoją instytucję",
+      "public": "Polecane przez ${name}"
+    }
+  },
+  "Deprecated": {
+    "title": "Nieaktualne",
+    "tooltip": "Użycie nie jest zalecane"
+  },
+  "Has Replacement": {
+    "title": "Ma element zastępczy",
+    "tooltip": "Ten element ma zalecany element zastępczy. Wyświetl szczegóły elementu, aby znaleźć element zastępczy i go użyć.",
+    "itemPageTooltip": "Ten element ma zalecany element zastępczy.",
+    "link": "Wyświetl element zastępczy"
+  },
+  "DeprecatedItem": {
+    "title": "Nieaktualny typ elementu"
+  },
+  "Living Atlas": {
+    "title": "Living Atlas",
+    "tooltip": "Zasoby obsługiwane przez firmę Esri"
+  },
+  "Subscriber": {
+    "title": "Subskrybent",
+    "tooltip": {
+      "org": "Zasoby wyłącznie dla subskrybentów",
+      "public": "Zasoby wyłącznie dla subskrybentów. Aby użyć, zaloguj się w ramach subskrypcji ArcGIS Online."
+    }
+  },
+  "Premium": {
+    "title": "Premium",
+    "tooltip": {
+      "org": "Zasoby wyłącznie dla subskrybentów. Wykorzystuje kredyty.",
+      "public": "Zasoby wyłącznie dla subskrybentów, które powodują zużywanie kredytów. Aby użyć, zaloguj się w ramach subskrypcji ArcGIS Online."
+    }
+  },
+  "Open Data": {
+    "title": "Open Data",
+    "tooltip": "Dostępne do użytku publicznego"
+  },
+  "Marketplace": {
+    "title": "Marketplace",
+    "tooltip": "Znajduje się w witrynie ArcGIS Marketplace"
+  },
+  "Collaboration": {
+    "title": "Kooperacja rozproszona",
+    "tooltip": "Ten element został otrzymany w ramach rozproszonej kooperacji"
+  },
+  "Retired": {
+    "title": "Wycofane",
+    "tooltip": {
+      "general": "Tylko do odczytu",
+      "cityEngine": "Aplikacja CityEngine Web Viewer i sceny internetowe CityEngine nie są już obsługiwane.",
+      "storyMap": "Klasyczne mapy narracyjne Esri Story Maps używane do utworzenia tej aplikacji zostały wycofane z oprogramowania ArcGIS Enterprise. Aby utworzyć nowe narracje, użyj aplikacji ArcGIS Storymaps.",
+      "app": "Szablon Configurable Apps używany do utworzenia tej aplikacji został wycofany z oprogramowania ArcGIS Enterprise. Ten element nie działa i można go usunąć. Aby utworzyć nową aplikację, użyj aplikacji ArcGIS Instant Apps, ArcGIS Storymaps, ArcGIS Dashboards lub ArcGIS Experience Builder.",
+      "webAppBuilder": "Aplikacja ArcGIS Web AppBuilder została wycofana z platformy ArcGIS Enterprise. Ten element nie działa i można go usunąć. Aby utworzyć nową aplikację, użyj aplikacji ArcGIS Experience Builder.",
+      "insights": "Aplikacja ArcGIS Insights została wycofana z platformy ArcGIS Enterprise. Ten element nie działa i można go usunąć.",
+      "bdfs": "Udostępnione pliki dużych zbiorów danych zostały wycofane z oprogramowania ArcGIS Enterprise. Ten element nie działa i można go usunąć."
+    }
+  },
+  "Public Data Collection": {
+    "title": "Publiczne zbieranie danych",
+    "tooltip": "Zatwierdzona do publicznego zbierania danych."
+  },
+  "Solution": {
+    "title": "ArcGIS Solution",
+    "tooltip": "Rozwiązanie obsługiwane przez Esri"
+  },
+  "Registered": {
+    "title": "OAuth 2.0",
+    "tooltip": {
+      "online": "Zarejestrowana aplikacja OAuth 2.0. Może korzystać z zasobów subskrybenta lub premium.",
+      "enterprise": "Zarejestrowana aplikacja OAuth 2.0."
+    }
+  },
+  "Registered API Key Credentials (Standard)": {
+    "title": {
+      "online": "Poświadczenia klucza API — Standardowe",
+      "enterprise": "Poświadczenia klucza API"
+    },
+    "tooltip": "Przyznaje dostęp do usług."
+  },
+  "Registered API Key Credentials (Personal)": {
+    "title": "Poświadczenia klucza API — Osobiste",
+    "tooltip": "Przyznaje uprawnienia osobiste. Ze względów bezpieczeństwa należy chronić te poświadczenia tak samo, jak swoją nazwę użytkownika i hasło."
+  },
+  "Registered OAuth 2.0 Credentials (Standard)": {
+    "title": {
+      "online": "Poświadczenia OAuth 2.0 — Standardowe",
+      "enterprise": "Poświadczenia OAuth 2.0"
+    },
+    "tooltip": "Przyznaje dostęp do usług."
+  },
+  "Registered OAuth 2.0 Credentials (Personal)": {
+    "title": "Poświadczenia OAuth 2.0 — Osobiste",
+    "tooltip": "Przyznaje uprawnienia osobiste. Ze względów bezpieczeństwa należy chronić te poświadczenia tak samo, jak swoją nazwę użytkownika i hasło."
+  },
+  "Registered Application": {
+    "title": "Aplikacja OAuth 2.0",
+    "tooltip": "Zarejestrowana aplikacja OAuth 2.0"
+  },
+  "Personal credential": {
+    "title": "Osobiste",
+    "tooltip": "Udzielasz osobistego uprawnienia do tego poświadczenia. Ze względów bezpieczeństwa należy chronić każdy token dostępu utworzony przy użyciu tych poświadczeń tak samo, jak swoją nazwę użytkownika i hasło. Zapoznaj się z warunkami użytkowania."
+  },
+  "loading": "Wczytywanie..."
+}

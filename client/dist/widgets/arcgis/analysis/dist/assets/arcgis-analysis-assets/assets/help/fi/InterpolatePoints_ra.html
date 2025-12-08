@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>Interpoloi pisteet -ty&ouml;kalu ennustaa uusien sijaintien arvoja pistemittausten perusteella. Ty&ouml;kalu luo rasterin tulosaineiston.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputPointFeatures">
+        <div>
+            <p>Pistekerros, joka sis&auml;lt&auml;&auml; pisteet, joiden arvot on mitattu.
+            </p>
+            <p class="toolPaneOnly">Kohteiden m&auml;&auml;r&auml; riippuu ylim&auml;&auml;r&auml;isist&auml; tekij&ouml;ist&auml;, kuten suodatusehdoista ja analyysin laajuudesta.
+            </p>
+        </div>
+    </div>
+    <div id="interpolateField">
+        <div>
+            <p>Numerokentt&auml;, joka sis&auml;lt&auml;&auml; interpoloitavat arvot.
+            </p>
+        </div>
+    </div>
+    <div id="optimizeFor">
+        <div>
+            <p>M&auml;&auml;ritt&auml;&auml;, optimoidaanko nopeus tai tarkkuus. Tarkkojen ennusteiden laskeminen kest&auml;&auml; kauemmin.
+            </p>
+            <p>T&auml;m&auml; parametri muuttaa useiden muiden parametrien oletusarvot.
+            </p>
+        </div>
+    </div>
+    <div id="outputCellSize">
+        <div>
+            <p>Tulosaineiston rasterien solun koko ja yksikk&ouml;.
+            </p>
+        </div>
+    </div>
+    <div id="transformData">
+        <div>
+            <p>M&auml;&auml;ritt&auml;&auml;, muunnetaanko aineistoa vai ei. Interpolointi on kaikkein tarkinta tiedoille, jotka noudattavat normaalia (kellon muotoista) jakaumaa.
+            </p> 
+        </div>
+    </div>
+    <div id="sizeOfLocalModels">
+        <div>
+            <p>Niiden paikallisten interpolointimallien koko, jotka yhdistet&auml;&auml;n lopullisen ennustekartan luontia varten.
+            </p>
+        </div>
+    </div>
+    <div id="numberOfNeighbors">
+        <div>
+            <p>K&auml;ytett&auml;vien naapurien m&auml;&auml;r&auml;. Suuremman vierekk&auml;isten pisteiden m&auml;&auml;r&auml;n k&auml;ytt&auml;minen tekee yleens&auml; tuloksista tarkempia, mutta se pident&auml;&auml; tulosten laskemiseen tarvittavaa aikaa.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>Karttaan luotavan ja lis&auml;tt&auml;v&auml;n interpoloidun rasterikarttatason nimi.
+            </p>
+        </div>
+    </div>
+    <div id="outputPredictionError">
+        <div>
+            <p>Valitse, haluatko luoda my&ouml;s valinnaisen keskivirheiden rasterin ennustetuille arvoille.
+            </p>
+            <p>Jos valitaan, tulosaineiston keskivirheiden rasterin nimi on sama kuin  <b>tulosrasterin nimi</b>, mutta siihen on lis&auml;tty sana Virheit&auml;/Errors. Karttataso luodaan ja lis&auml;t&auml;&auml;n karttaan.
+            </p>
+        </div>
+    </div>
+    <div id="resultType">
+        <div>
+            <p>Luotavien tulosaineistojen tyypit. Tulosaineistot voivat olla tiilitettyj&auml; kuva-aineistokarttatasoja tai dynaamisia kuvakarttatasoja.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>Sen  <b>Omassa sis&auml;ll&ouml;ss&auml;</b> olevan kansion nimi, johon tulokset tallennetaan.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

@@ -1,0 +1,14 @@
+{
+  "AddDataFromUrl": "Dodaj podatke iz URL",
+  "addData": "Dodaj podatke",
+  "clear": "Počisti",
+  "file": "Datoteka",
+  "fileNotFound": "Ni bilo mogoče naložiti datoteke.",
+  "invalidUrl": "Neveljaven URL ali razširitev datoteke.",
+  "layerNotFound": "Nalaganje sloja ni uspelo.",
+  "replaceData": "Zamenjaj podatke",
+  "required": "Ta parameter je obvezen.",
+  "uploadData": "Naloži podatke",
+  "uploadFailureMsg": "Napaka pri izvajanju postopka nalaganja, velikost ali tip datoteke ni podprt za to storitev.",
+  "url": "Url"
+}

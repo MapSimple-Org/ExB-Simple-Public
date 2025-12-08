@@ -1,0 +1,9 @@
+{
+  "addToMap": "Onaylayın ve haritaya ekleyin",
+  "cancel": "İptal",
+  "confirm": "Onayla",
+  "header": "Öge seç",
+  "select": "Seç",
+  "unsupportedLayer": "Bu parametre aşağıdaki katmanları desteklememektedir: ${layerName}.",
+  "viewDetails": "Ayrıntıları görüntüle"
+}

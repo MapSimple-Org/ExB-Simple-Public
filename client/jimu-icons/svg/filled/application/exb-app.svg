@@ -1,0 +1,12 @@
+<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="EXB-icon-16" clip-path="url(#clip0_5431_3865)">
+<path id="Combined-Shape" fill-rule="evenodd" clip-rule="evenodd" d="M0 9L4 11V16L0 14V9ZM4 2L8 4V9L4 7V2ZM8 9L12 11V16L8 14V9Z" fill="#00C9DD"/>
+<path id="Combined-Shape_2" fill-rule="evenodd" clip-rule="evenodd" d="M0 9L4 7L8 9L4 11L0 9ZM4 2L8 0L12 2L8 4L4 2ZM8 9L12 7L16 9L12 11L8 9Z" fill="#70F2FF"/>
+<path id="Combined-Shape_3" fill-rule="evenodd" clip-rule="evenodd" d="M4 11L8 9V14L4 16V11ZM8 4L12 2V7L8 9V4ZM12 11L16 9V13.6667L12 16V11Z" fill="#008197"/>
+</g>
+<defs>
+<clipPath id="clip0_5431_3865">
+<rect width="16" height="16" fill="white"/>
+</clipPath>
+</defs>
+</svg>

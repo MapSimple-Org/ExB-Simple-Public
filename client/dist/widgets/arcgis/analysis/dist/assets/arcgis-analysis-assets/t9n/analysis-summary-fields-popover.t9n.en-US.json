@@ -1,0 +1,13 @@
+{
+  "addField": "Add field",
+  "deselectAll": "Deselect all",
+  "done": "Done",
+  "noFieldsAvailable": "${layerName} contains no fields that meet the data type requirement. Select a different layer to continue.",
+  "noInputSelected": {
+    "withLayerInputLabel": "No input layer selected. Select a layer in ${layerInputLabel} to continue.",
+    "withoutLayerInputLabel": "No input layer selected. Select an input layer to continue."
+  },
+  "noSearchResults": "No matching fields found.",
+  "selectAll": "Select all",
+  "summaryFieldsPopover": "Summary Fields"
+}

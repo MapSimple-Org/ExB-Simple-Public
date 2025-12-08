@@ -1,0 +1,14 @@
+{
+  "outputRaster": "出力ラスター",
+  "rfxVariable": "RasterFunctionVariable",
+  "selectLayer": "レイヤーの選択",
+  "allowScalar": "レイヤーを選択するか定数を入力します",
+  "browseLayer": "レイヤーの参照",
+  "loading": "読み込んでいます...",
+  "layerMissing": "解析を許可するサービス プロパティが有効化されていないため、マップの 1 つ以上のイメージ レイヤーがここにリストされていません。",
+  "layerFailedToLoad": "レイヤーを読み込めませんでした。",
+  "learnMore": "詳細",
+  "errorCodes": {
+    "required": "このパラメーターは必須です。"
+  }
+}

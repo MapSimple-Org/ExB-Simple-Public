@@ -1,0 +1,13 @@
+{
+  "addField": "เพิ่มฟิลด์",
+  "deselectAll": "ไม่เลือกทั้งหมด",
+  "done": "สำเร็จ",
+  "noFieldsAvailable": "${layerName} ไม่มีฟิลด์ที่ตรงตามข้อกำหนดประเภทข้อมูล เลือกชั้นข้อมูลอื่นเพื่อดำเนินการต่อ",
+  "noInputSelected": {
+    "withLayerInputLabel": "ไม่ได้เลือกชั้นข้อมูลอินพุท เลือกชั้นข้อมูลใน ${layerInputLabel} เพื่อดำเนินการต่อ",
+    "withoutLayerInputLabel": "ไม่ได้เลือกชั้นข้อมูลอินพุท เลือกชั้นข้อมูลอินพุทเพื่อดำเนินการต่อ"
+  },
+  "noSearchResults": "ไม่พบฟิลด์ที่ตรงกัน",
+  "selectAll": "เลือกทั้งหมด",
+  "summaryFieldsPopover": "ฟิลด์สรุป"
+}

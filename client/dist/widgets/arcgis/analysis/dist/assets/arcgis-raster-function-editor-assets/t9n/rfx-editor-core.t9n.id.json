@@ -1,0 +1,15 @@
+{
+  "addRaster": "Tambahkan Variabel Raster",
+  "addScalar": "Tambahkan Konstan",
+  "raster": "Raster",
+  "scalar": "Skalar",
+  "defaultModelName": "Template Fungsi Raster",
+  "defaultRasterName": "Raster",
+  "invalidRFTMessage": "Template fungsi raster tidak valid.",
+  "deprecated": "Ditolak",
+  "deprecatedHoverText": "Fungsi raster ini sudah usang dan akan dihapus pada rilis selanjutnya.",
+  "unsupported": "Tidak didukung",
+  "unsupportedHoverText": "Fungsi raster ini tidak didukung dan mungkin tersedia pada rilis selanjutnya.",
+  "userStartDirection": "Pilih sebuah fungsi untuk mulai mengembangkan template fungsi raster.",
+  "learnMore": "Pelajari selengkapnya"
+}

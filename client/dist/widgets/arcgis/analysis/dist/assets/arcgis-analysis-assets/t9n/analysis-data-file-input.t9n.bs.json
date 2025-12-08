@@ -1,0 +1,14 @@
+{
+  "AddDataFromUrl": "Dodajte podatke s URL-a",
+  "addData": "Dodaj podatke",
+  "clear": "Ukloni",
+  "file": "Datoteka",
+  "fileNotFound": "Učitavanje datoteke nije uspjelo.",
+  "invalidUrl": "Nevažeći URL ili proširenje datoteke.",
+  "layerNotFound": "Nije uspjelo učitavanje sloja.",
+  "replaceData": "Zamijeni podatke",
+  "required": "Ovaj parametar je obavezan.",
+  "uploadData": "Učitaj podatke",
+  "uploadFailureMsg": "Pogreška pri izvođenju operacije prijenosa, veličina ili vrsta datoteke nije podržana za ovu uslugu.",
+  "url": "URL"
+}

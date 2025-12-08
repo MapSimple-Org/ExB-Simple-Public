@@ -1,0 +1,17 @@
+{
+  "any": "Mikä tahansa",
+  "count": "Määrä",
+  "field": "Kenttä",
+  "fieldLoadingErrorText": "Kenttiä ei voi ladata.",
+  "first": "Ensimmäinen",
+  "isRequired": "Tämä parametri on pakollinen.",
+  "last": "Viimeinen",
+  "max": "Maksimiarvo",
+  "mean": "Keskiarvo",
+  "min": "Minimiarvo",
+  "selectAll": "Valitse kaikki",
+  "standardDeviation": "Keskihajonta",
+  "statistic": "Tilastotiedot",
+  "statisticNotSelected": "Vähintään yksi tilastotietotyyppi on pakollinen jokaisessa kentässä.",
+  "sum": "Summa"
+}

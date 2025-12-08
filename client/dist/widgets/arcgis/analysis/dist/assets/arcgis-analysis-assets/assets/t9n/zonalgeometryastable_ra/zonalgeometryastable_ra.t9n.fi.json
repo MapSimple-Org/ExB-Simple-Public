@@ -1,0 +1,9 @@
+{
+  "inputLayerGroupText": "Valitse lähtöaineiston karttataso, jotta voit laskea vyöhykerajojen geometrian.",
+  "itemProperties": {
+    "description": "Tulosaineistotaulu luotiin suorittamalla Vyöhykegeometria taulukossa -analyysityökalu.",
+    "snippet": "Tulosaineistotaulu luotiin Vyöhykegeometria taulukossa -työkalulla"
+  },
+  "zonalGeometrySettingGroupLabel": "Vyöhykegeometria-asetus",
+  "zonalGeometrySettingGroupText": "Määritä laskettava solukoko."
+}

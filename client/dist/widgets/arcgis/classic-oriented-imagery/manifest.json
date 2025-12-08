@@ -1,0 +1,69 @@
+{
+  "name": "classic-oriented-imagery",
+  "label": "Classic Oriented Imagery",
+  "type": "widget",
+  "dependency": [
+    "jimu-arcgis",
+    "https://oi1.img.arcgis.com/api/v2.21/main.js"
+  ],
+  "version": "1.19.0",
+  "exbVersion": "1.19.0",
+  "author": "Esri",
+  "description": "This is an Oriented Imagery Experience Builder widget",
+  "copyright": "",
+  "license": "http://www.apache.org/licenses/LICENSE-2.0",
+  "defaultSize": {
+    "width": 800,
+    "height": 800
+  },
+  "extensions": [
+    {
+      "name": "OI store",
+      "point": "REDUX_STORE",
+      "uri": "extensions/oi-store"
+    }
+  ],
+  "translatedLocales": [
+    "en",
+    "ar",
+    "bg",
+    "bs",
+    "ca",
+    "cs",
+    "da",
+    "de",
+    "el",
+    "es",
+    "et",
+    "fi",
+    "fr",
+    "he",
+    "hr",
+    "hu",
+    "id",
+    "it",
+    "ja",
+    "ko",
+    "lt",
+    "lv",
+    "no",
+    "nl",
+    "pl",
+    "pt-br",
+    "pt-pt",
+    "ro",
+    "ru",
+    "sk",
+    "sl",
+    "sr",
+    "sv",
+    "th",
+    "tr",
+    "zh-cn",
+    "uk",
+    "vi",
+    "zh-hk",
+    "zh-tw"
+  ],
+  "properties": {}
+}

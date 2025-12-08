@@ -1,0 +1,7 @@
+{
+  "addEntryButtonLabel": "Añadir",
+  "maxGroupsMessage": "El número máximo de entradas es de ${maxCount}.",
+  "minGroupsMessage": "El número mínimo de entradas es de ${minCount}.",
+  "removeEntryButtonLabel": "Quitar entrada",
+  "requiredMessage": "Parámetro requerido."
+}

@@ -1,0 +1,9 @@
+{
+  "inputLayerGroupText": "Ak chcete vypočítať geometriu hraníc zóny, vyberte vstupnú vrstvu.",
+  "itemProperties": {
+    "description": "Výstupná tabuľka vygenerovaná spustením analytického nástroja Zonálna geometria ako tabuľka.",
+    "snippet": "Výstupná tabuľka vygenerovaná nástrojom Zonálna geometria ako tabuľka"
+  },
+  "zonalGeometrySettingGroupLabel": "Nastavenie zonálnej geometrie",
+  "zonalGeometrySettingGroupText": "Zadajte veľkosť bunky na výpočet."
+}

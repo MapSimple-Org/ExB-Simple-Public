@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html dir="rtl">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>إعدادات استبدال التحليل في  Map Viewer. </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="resultType">
+        <div>
+            <p>يحدد نوع الإخراج الذي سيتم إنشاؤه. يقوم خيار  <b>إنشاء البيانات المتوسطة</b> بإنشاء طبقة مؤقتة يمكن استخدامها كمدخل لأداة أخرى ولكن لا يمكن حفظها أو عرضها على الخريطة. ينشر خيار <b>إنشاء طبقة مستضافة</b> طبقة معالم مستضافة جديدة. يقوم خيار <b>استبدال الطبقة الموجودة</b> بتحديث الطبقة الموجودة بمخرجات الأداة.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>اسم الطبقة التي سيتم إنشاؤها وإضافتها إلى الخريطة.
+            </p>
+        </div>
+    </div>
+    <div id="layerExistsAutomaticallyOverwrite">
+        <div>
+            <p>يحدد ما إذا كانت مخرجات الأداة ستحل محل طبقة في المحتوى الخاص بك لها اسم المخرجات المحدد. إذا لم يكن اسم الطبقة هذا مستخدمًا مسبقًا في مؤسستك، فسيتم إنشاء عنصر جديد. يجب أن تكون إما مالك الطبقة أو مسؤولاً لتتمكن من استبدالها.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>اسم المجلد الموجود في  <b>المحتوى الخاص بي</b> الذي سيتم حفظ النتائج فيه.
+            </p>
+            <p>لا يمكن تحديث هذا إذا كانت الطبقة موجودة بالفعل.
+            </p>
+        </div>
+    </div>
+    <div id="existingLayerToOverwrite">
+        <div>
+            <p>الطبقة الموجودة في  <b>المحتوى الخاص بي</b> والتي سيتم استبدالها بالطبقة الناتجة. يجب أن يتطابق الإسناد المكاني للمخرجات مع الطبقة الموجودة.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

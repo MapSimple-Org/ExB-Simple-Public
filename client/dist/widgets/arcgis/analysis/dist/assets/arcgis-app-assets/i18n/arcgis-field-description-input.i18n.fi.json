@@ -1,0 +1,6 @@
+{
+  "description": "Kuvaus",
+  "addDescription": "Lisää kuvaus",
+  "charactersLeft": "Merkkejä jäljellä: ${num}",
+  "invalid": "Kuvaus ei voi sisältää mitään seuraavista merkeistä: < tai >."
+}

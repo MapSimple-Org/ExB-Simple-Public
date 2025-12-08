@@ -1,0 +1,20 @@
+{
+  "title": "Naslov",
+  "addTitle": "Dodaj ime",
+  "validation": {
+    "error": "Napaka",
+    "titleRequired": "Naslov je obvezno polje.",
+    "itemExists": "Element z naslovom \"${name}\" že obstaja v tej mapi. Izberite drugačno ime.",
+    "titleInUseService": "Sloj z naslovom \"${name}\" že obstaja. Izberite drugačno ime.",
+    "itemInRecycleBin": "Element z naslovom \"${name}\" že obstaja in je v košu. Izberite drugačno ime.",
+    "serviceNameInvalid": "Ime storitve lahko vsebuje le alfanumerične znake ali podčrtaje in ima lahko največ 90 znakov.",
+    "dataStoreTitleInvalid": "Ime shrambe podatkov lahko vsebuje le alfanumerične znake ali podčrtaje in ima lahko največ 90 znakov.",
+    "titleInvalid": "Ime mora vsebovati manj kot 250 znakov in ne sme vsebovati < ali >.",
+    "titleStartsWithNumber": "Ime se ne sme začeti s številko.",
+    "invalidCharacters": {
+      "single": "Ime ne sme vsebovati naslednjega znaka: ${invalidCharacters}.",
+      "multiple": "Ime ne sme vsebovati nobenega od naslednjih znakov: ${invalidCharacters}.",
+      "unknown": "Ime ne sme vsebovati nobenega od naslednjih znakov: ${invalidCharacters}."
+    }
+  }
+}

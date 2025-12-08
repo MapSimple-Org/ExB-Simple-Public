@@ -1,0 +1,7 @@
+{
+  "browseRFT": "ラスター関数テンプレートの参照",
+  "rfxVariable": "RasterFunctionVariable",
+  "outputRaster": "出力ラスター",
+  "previewDetails": "詳細のプレビュー",
+  "readingFailed": "選択したラスター関数テンプレートを読み込めませんでした。"
+}

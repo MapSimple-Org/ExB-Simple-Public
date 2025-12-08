@@ -1,0 +1,27 @@
+{
+  "hosted": "托管",
+  "hostedView": "托管，视图",
+  "hostedPhotos": "托管，照片",
+  "hostedCollection": "托管，集合",
+  "hostedMultidimensional": "托管，多维度",
+  "hostedCollectionMultidimensional": "托管，集合，多维度",
+  "collectionMultidimensional": "集合，多维度",
+  "multidimensional": "多维度",
+  "collection": "集合",
+  "photoLocations": "照片",
+  "locatorView": "查看",
+  "utilityNetwork": "公共设施网络",
+  "Integrated Mesh": "集成网格",
+  "3D Object": "3D 对象",
+  "Point": "点",
+  "Point Cloud": "点云",
+  "Building Scene Layer": "建筑物场景图层",
+  "Voxel Scene Layer": "体素场景图层",
+  "dataStore": {
+    "bigdata": "大数据文件共享",
+    "cloud": "云",
+    "cloudStorage": "云存储",
+    "database": "数据库",
+    "folder": "文件夹"
+  }
+}

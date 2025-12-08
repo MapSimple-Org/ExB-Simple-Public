@@ -1,0 +1,14 @@
+{
+  "outputRaster": "Raster en sortie",
+  "rfxVariable": "RasterFunctionVariable",
+  "selectLayer": "Sélectionner une couche",
+  "allowScalar": "Sélectionner une couche ou saisir une constante",
+  "browseLayer": "Rechercher des couches",
+  "loading": "Chargement...",
+  "layerMissing": "Une ou plusieurs couches d’imagerie de la carte ne sont pas répertoriées ici car la propriété de service Autoriser l’analyse n’est pas activée.",
+  "layerFailedToLoad": "Échec du chargement de la couche.",
+  "learnMore": "En savoir plus",
+  "errorCodes": {
+    "required": "Ce paramètre est obligatoire."
+  }
+}

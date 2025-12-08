@@ -1,0 +1,8 @@
+{
+  "arriveTime": "Vrijeme dolaska",
+  "modes": {
+    "custom": "Prilagođeni datum i vrijeme",
+    "now": "Sada",
+    "unspecified": "Vrijeme nije određeno"
+  }
+}

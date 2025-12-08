@@ -1,0 +1,110 @@
+{
+  "Authoritative": {
+    "title": "Otoritatif",
+    "tooltip": {
+      "org": "Disarankan oleh organisasi Anda",
+      "public": "Disarankan oleh ${name}"
+    }
+  },
+  "Deprecated": {
+    "title": "Ditolak",
+    "tooltip": "Tidak disarankan untuk digunakan"
+  },
+  "Has Replacement": {
+    "title": "Memiliki pengganti",
+    "tooltip": "Item ini memiliki pengganti yang direkomendasikan. Lihat detail item untuk menemukan dan menggunakan pengganti.",
+    "itemPageTooltip": "Item ini menggunakan pengganti yang direkomendasikan.",
+    "link": "Lihat item pengganti"
+  },
+  "DeprecatedItem": {
+    "title": "Jenis item tidak digunakan lagi"
+  },
+  "Living Atlas": {
+    "title": "Living Atlas",
+    "tooltip": "Konten yang dikurasi Esri"
+  },
+  "Subscriber": {
+    "title": "Pelanggan",
+    "tooltip": {
+      "org": "Konten eksklusif untuk pelanggan",
+      "public": "Konten eksklusif untuk pelanggan. Untuk menggunakannya, masuk dengan langganan ArcGIS Online."
+    }
+  },
+  "Premium": {
+    "title": "Premium",
+    "tooltip": {
+      "org": "Konten eksklusif untuk pelanggan. Menggunakan kredit.",
+      "public": "Konten eksklusif untuk pelanggan yang menggunakan kredit. Untuk menggunakannya, masuk dengan langganan ArcGIS Online."
+    }
+  },
+  "Open Data": {
+    "title": "Open Data",
+    "tooltip": "Tersedia untuk penggunaan publik"
+  },
+  "Marketplace": {
+    "title": "Marketplace",
+    "tooltip": "Tercantum di ArcGIS Marketplace"
+  },
+  "Collaboration": {
+    "title": "Kolaborasi terdistribusi",
+    "tooltip": "Item ini diterima dari kolaborasi terdistribusi"
+  },
+  "Retired": {
+    "title": "Berhenti",
+    "tooltip": {
+      "general": "Hanya baca",
+      "cityEngine": "CityEngine Web Viewer dan CityEngine Web Scene tidak didukung lagi.",
+      "storyMap": "Classic Esri Story Map yang digunakan untuk membuat aplikasi ini telah dihentikan di ArcGIS Enterprise. Untuk membuat cerita baru, harap gunakan ArcGIS Storymaps.",
+      "app": "Template Configurable Apps yang digunakan untuk membuat aplikasi ini telah dihentikan di ArcGIS Enterprise. Item ini bersifat non-operasional dan bisa dihapus. Untuk membuat aplikasi baru, gunakan ArcGIS Instant Apps, ArcGIS Storymaps, ArcGIS Dashboards, atau ArcGIS Experience Builder",
+      "webAppBuilder": "ArcGIS Web AppBuilder dihentikan di ArcGIS Enterprise. Item ini bersifat non-operasional dan bisa dihapus. Untuk membuat aplikasi baru, harap gunakan ArcGIS Experience Builder.",
+      "insights": "ArcGIS Insights dihentikan di ArcGIS Enterprise. Item ini bersifat non-operasional dan bisa dihapus.",
+      "bdfs": "Berbagi File Big Data telah dihentikan di ArcGIS Enterprise. Item ini bersifat non-operasional dan bisa dihapus."
+    }
+  },
+  "Public Data Collection": {
+    "title": "Pengumpulan data publik",
+    "tooltip": "Disetujui untuk pengumpulan data publik."
+  },
+  "Solution": {
+    "title": "ArcGIS Solution",
+    "tooltip": "Solusi yang didukung Esri"
+  },
+  "Registered": {
+    "title": "OAuth 2.0",
+    "tooltip": {
+      "online": "Aplikasi OAuth 2.0 terdaftar. Bisa menggunakan konten premium atau konten pelanggan.",
+      "enterprise": "Aplikasi OAuth 2.0 terdaftar."
+    }
+  },
+  "Registered API Key Credentials (Standard)": {
+    "title": {
+      "online": "Kredensial kunci API - Standar",
+      "enterprise": "Kredensial kunci API"
+    },
+    "tooltip": "Memberikan akses ke layanan."
+  },
+  "Registered API Key Credentials (Personal)": {
+    "title": "Kredensial kunci API - Pribadi",
+    "tooltip": "Memberikan hak istimewa pribadi. Demi tujuan keamanan, Anda harus menjaga kredensial ini sebagaimana Anda menjaga nama pengguna dan kata sandi Anda."
+  },
+  "Registered OAuth 2.0 Credentials (Standard)": {
+    "title": {
+      "online": "Kredensial OAuth 2.0 - Standar",
+      "enterprise": "Kredensial OAuth 2.0"
+    },
+    "tooltip": "Memberikan akses ke layanan."
+  },
+  "Registered OAuth 2.0 Credentials (Personal)": {
+    "title": "Kredensial OAuth 2.0 - Pribadi",
+    "tooltip": "Memberikan hak istimewa pribadi. Demi tujuan keamanan, Anda harus menjaga kredensial ini sebagaimana Anda menjaga nama pengguna dan kata sandi Anda."
+  },
+  "Registered Application": {
+    "title": "Aplikasi OAuth 2.0",
+    "tooltip": "Aplikasi OAuth 2.0 yang telah terdaftar"
+  },
+  "Personal credential": {
+    "title": "Pribadi",
+    "tooltip": "Anda telah memberikan hak istimewa pribadi ke kredensial ini. Demi tujuan keamanan, Anda harus menjaga semua token akses yang dibuat dengan kredensial tersebut sebagaimana Anda menjaga nama pengguna dan kata sandi Anda. Tinjau ketentuan penggunaan."
+  },
+  "loading": "Memuat..."
+}

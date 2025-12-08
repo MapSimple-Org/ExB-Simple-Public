@@ -1,0 +1,27 @@
+{
+  "area": "Plocha",
+  "binResolution": "Rozlíšenie H3 bunky",
+  "binSize": "Veľkosť bunky",
+  "binSizeUnit": "Jednotka",
+  "binType": "Typ tvaru bunky",
+  "diamondBins": "Diamantové bunky",
+  "distance": "Vzdialenosť",
+  "extentLayer": "Vrstva rozsahu",
+  "extentOverrideMessage": "Táto vrstva rozsahu bude použitá namiesto akéhokoľvek rozsahu nastaveného v prostrediach.",
+  "extentSectionLabel": "Nastavenia rozsahu",
+  "extentSectionText": "Špecifikujte vrstvu rozsahu, ktorú by mala teselácia pokryť.",
+  "h3hexagonBins": "H3 šesťuholníkové bunky",
+  "hexagon": "Šesťuholník",
+  "intersectStudyArea": "Zachovať iba pretínajúce sa Voronoiove polygóny",
+  "itemProperties": {
+    "description": "Prvková vrstva vygenerovaná spustením nástroja Generovanie teselácií.",
+    "snippet": "Prvková vrstva vygenerovaná nástrojom Generovať teselácie"
+  },
+  "outputAreasSectionText": "Zadajte názov pre teselačnú mriežku.",
+  "sizeType": "Meranie veľkosti bunky",
+  "square": "Štvorec",
+  "tessellationSettingsLabel": "Nastavenia teselácie",
+  "tessellationSettingsSummaryText": "Špecifikujte tvar a veľkosť buniek na generovanie.",
+  "thexagonBins": "Priečne šesťuholníkové bunky",
+  "triangleBins": "Trojuholníkové bunky"
+}

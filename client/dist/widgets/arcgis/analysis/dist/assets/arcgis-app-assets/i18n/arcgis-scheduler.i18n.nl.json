@@ -1,0 +1,55 @@
+{
+  "beginningOnLabel": "Begint op",
+  "repeatTypeLabel": "Type herhalen",
+  "endingOnTypeLabel": "Eindigt op",
+  "endingOnDateLabel": "Einddatum",
+  "endingOnCountLabel": "Aantal",
+  "endingOnCountPlaceholder": "bijvoorbeeld: 1, 10, 30",
+  "dailyRepeatIntervalLabel": "Herhaalinterval",
+  "dailyTimeLabel": "Tijd",
+  "weeklyDaysOfWeekLabel": "Dag van de week",
+  "weeklyTimeLabel": "Tijd",
+  "monthlyDayOfMonthLabel": "Dag van de maand",
+  "monthlyDayOfMonthPlaceholder": "bijvoorbeeld 1 - 31",
+  "monthlyRepeatIntervalLabel": "Herhaalinterval",
+  "monthlyTimeLabel": "Tijd",
+  "repeatTypeOptions": {
+    "day": "Dag",
+    "week": "Week",
+    "month": "Maand"
+  },
+  "endingOnType": {
+    "never": "Nooit",
+    "date": "Datum",
+    "count": "Aan"
+  },
+  "dailyRepeatInterval": {
+    "everyDay": "Elke dag",
+    "everyOtherDay": "Om de andere dag",
+    "everyThreeDays": "Elke drie dagen",
+    "everyFourDays": "Elke vier dagen",
+    "everyFiveDays": "Elke vijf dagen",
+    "everySixDays": "Elke zes dagen",
+    "everySevenDays": "Elke zeven dagen",
+    "everyFourteenDays": "Elke veertien dagen"
+  },
+  "weekDays": {
+    "all": "Alle",
+    "allWeekdays": "Alle werkdagen",
+    "sunday": "Zondag",
+    "monday": "Maandag",
+    "tuesday": "Dinsdag",
+    "wednesday": "Woensdag",
+    "thursday": "Donderdag",
+    "friday": "Vrijdag",
+    "saturday": "Zaterdag"
+  },
+  "monthlyRepeatInterval": {
+    "everyMonth": "Elke maand",
+    "everyTwoMonths": "Elke twee maanden",
+    "everyThreeMonths": "Elke drie maanden",
+    "everyFourMonths": "Elke vier maanden",
+    "everyFiveMonths": "Elke vijf maanden",
+    "everySixMonths": "Elke zes maanden"
+  }
+}

@@ -1,0 +1,1 @@
+System.register([],function(e){return{execute:function(){e({_widgetLabel:"Meting",selectToStart:"Selecteer een tool om de meting te starten.",measureDistance:"Afstand meten",measureArea:"Oppervlakte meten",clearMeasurement:"Meting wissen",measureUnit:"Maateenheid"})}}});

@@ -1,0 +1,55 @@
+{
+  "beginningOnLabel": "시작:",
+  "repeatTypeLabel": "반복 유형",
+  "endingOnTypeLabel": "종료:",
+  "endingOnDateLabel": "종료일",
+  "endingOnCountLabel": "개수",
+  "endingOnCountPlaceholder": "예시: 1, 10, 30",
+  "dailyRepeatIntervalLabel": "반복 간격",
+  "dailyTimeLabel": "시간",
+  "weeklyDaysOfWeekLabel": "요일",
+  "weeklyTimeLabel": "시간",
+  "monthlyDayOfMonthLabel": "일",
+  "monthlyDayOfMonthPlaceholder": "예시: 1 - 31",
+  "monthlyRepeatIntervalLabel": "반복 간격",
+  "monthlyTimeLabel": "시간",
+  "repeatTypeOptions": {
+    "day": "일",
+    "week": "주",
+    "month": "월"
+  },
+  "endingOnType": {
+    "never": "없음",
+    "date": "날짜",
+    "count": "On"
+  },
+  "dailyRepeatInterval": {
+    "everyDay": "매일",
+    "everyOtherDay": "2일마다",
+    "everyThreeDays": "3일마다",
+    "everyFourDays": "4일마다",
+    "everyFiveDays": "5일마다",
+    "everySixDays": "6일마다",
+    "everySevenDays": "7일마다",
+    "everyFourteenDays": "14일마다"
+  },
+  "weekDays": {
+    "all": "모두",
+    "allWeekdays": "주중 모두",
+    "sunday": "일요일",
+    "monday": "월요일",
+    "tuesday": "화요일",
+    "wednesday": "수요일",
+    "thursday": "목요일",
+    "friday": "금요일",
+    "saturday": "토요일"
+  },
+  "monthlyRepeatInterval": {
+    "everyMonth": "매달",
+    "everyTwoMonths": "2개월마다",
+    "everyThreeMonths": "3개월마다",
+    "everyFourMonths": "4개월마다",
+    "everyFiveMonths": "5개월마다",
+    "everySixMonths": "6개월마다"
+  }
+}

@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html dir="rtl">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>הכלי 'ערוך שטח בטבלה' מחשב את השטחים המצטלבים בטבלה בין שני סטים של נתונים ומדווח את התוצאות כטבלה.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputZoneRasterOrFeatures">
+        <div>
+            <p>הקלט שמגדיר את הגבולות של האזורים.
+            </p>
+            <p class="toolPaneOnly">עבור קלטי ישויות, הספירה תלויה בגורמים נוספים כגון קריטריונים לסינון ותיחום הניתוח.
+            </p>
+        </div>
+    </div>
+    <div id="zoneField">
+        <div>
+            <p>השדה שמכיל את הערכים שמגדירים כל אזור.
+            </p>
+        </div>
+    </div>
+    <div id="inputClassRasterOrFeatures">
+        <div>
+            <p>הקלט שמגדיר את הגבולות של הקבוצות שהשטח שלהן יחושב.
+            </p>
+            <p class="toolPaneOnly">עבור קלטי ישויות, הספירה תלויה בגורמים נוספים כגון קריטריונים לסינון ותיחום הניתוח.
+            </p>
+        </div>
+    </div>
+    <div id="classField">
+        <div>
+            <p>השדה שמכיל את הערכים שמגדירים כל קבוצה.
+            </p>
+        </div>
+    </div>
+    <div id="classesAsRows">
+        <div>
+            <p>מציין האם הערכים מרסטר קבוצת הקלט ייוצגו כשורות בטבלת הפלט.
+            </p>
+            <p>אם לא מסומן, קבוצות ייצוגו כשדות. אם מסומן, קבוצות ייצוגו כשורות.
+            </p>
+        </div>
+    </div>
+    <div id="analysisCellSize">
+        <div>
+            <p>מציין את גודל התא של רסטר הניתוח אשר ייווצר לחישוב השטחים המצטלבים בטבלה.
+            </p>
+        </div>
+    </div>
+    <div id="outputTableName">
+        <div>
+            <p>שם שכבת טבלת השטחים המצטלבים בטבלה שתיווצר ותתווסף למפה.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>שם התיקייה  <b>בתוכן שלי</b> שבה התוצאה תישמר.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

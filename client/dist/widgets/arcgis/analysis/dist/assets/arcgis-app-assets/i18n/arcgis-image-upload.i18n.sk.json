@@ -1,0 +1,18 @@
+{
+  "save": "Uložiť",
+  "cancel": "Zrušiť",
+  "dragDrop": "Pretiahnite súbor JPG, PNG alebo GIF.",
+  "browse": "Prechádzať...",
+  "chooseDiff": "Vybrať iný obrázok",
+  "zoom": "Priblížiť:",
+  "bestSize": "Najlepšie výsledky dosiahnu obrázky s rozmermi 300 x 300 pixelov.",
+  "or": "alebo",
+  "fromMap": "Vytvoriť miniatúru z mapy",
+  "fromMapDesc": "Vytvoriť vlastnú miniatúru nastavením rozsahu a úrovne zväčšenia",
+  "changeBasemap": "Zmeniť základnú mapu",
+  "loading": "Načítava sa",
+  "imageRequired": "Vyžaduje sa platný obrázok.",
+  "imageSizeError": "Maximálna veľkosť súboru je 10 MB.",
+  "deleteImage": "Odstrániť obrázok",
+  "unableToLoadItem": "Nie je možné načítať položku"
+}

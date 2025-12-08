@@ -1,0 +1,12 @@
+{
+  "dynamicLayer": "Dynamická snímková vrstva",
+  "outputDescription": "Výstup vygenerovaný spustením rastrovej funkcie ${rfxName}",
+  "outputDescriptionRFT": "Výstup vygenerovaný spustením šablóny rastrovej funkcie ${rfxName}",
+  "outputName": "Názov výstupu",
+  "outputNamePlaceHolder": "Vložte jedinečný názov...",
+  "resultLayer": "Výsledná vrstva",
+  "resultType": "Typ výsledku",
+  "saveFolder": "Uložiť do priečinku",
+  "summaryText": "Poskytnite názov pre vrstvu výsledkov.",
+  "tileImagery": "Dlaždicová snímková vrstva"
+}

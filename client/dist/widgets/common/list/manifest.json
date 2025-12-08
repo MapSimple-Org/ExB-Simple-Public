@@ -1,0 +1,104 @@
+{
+  "name": "list",
+  "label": "List",
+  "type": "widget",
+  "version": "1.19.0",
+  "exbVersion": "1.19.0",
+  "author": "Esri R&D Center Beijing",
+  "description": "A widget to display data in a list view.",
+  "copyright": "",
+  "license": "http://www.apache.org/licenses/LICENSE-2.0",
+  "publishMessages": [
+    "DATA_RECORDS_SELECTION_CHANGE",
+    "DATA_SOURCE_FILTER_CHANGE"
+  ],
+  "defaultSize": {
+    "width": 620,
+    "height": 275
+  },
+  "properties": {
+    "hasEmbeddedLayout": true,
+    "lockChildren": true,
+    "flipIcon": true,
+    "canConsumeDataAction": true,
+    "canProvideRepeatDataSource": true,
+    "showDescription": true,
+    "hasBuilderSupportModule": true,
+    "hasGuide": true,
+    "guideType": "PROGRAM"
+  },
+  "excludeDataActions": [
+    "arcgis-map.addToMap"
+  ],
+  "extensions": [
+    {
+      "name": "appConfigOperations",
+      "point": "APP_CONFIG_OPERATIONS",
+      "uri": "tools/app-config-operations"
+    },
+    {
+      "name": "builderOperations",
+      "point": "BUILDER_OPERATIONS",
+      "uri": "tools/builder-operations"
+    }
+  ],
+  "layouts": [
+    {
+      "name": "DEFAULT",
+      "label": "Default",
+      "type": "FIXED"
+    },
+    {
+      "name": "SELECTED",
+      "label": "Selected",
+      "type": "FIXED"
+    },
+    {
+      "name": "HOVER",
+      "label": "Hover",
+      "type": "FIXED"
+    }
+  ],
+  "translatedLocales": [
+    "en",
+    "ar",
+    "bg",
+    "bs",
+    "ca",
+    "cs",
+    "da",
+    "de",
+    "el",
+    "es",
+    "et",
+    "fi",
+    "fr",
+    "he",
+    "hr",
+    "hu",
+    "id",
+    "it",
+    "ja",
+    "ko",
+    "lt",
+    "lv",
+    "no",
+    "nl",
+    "pl",
+    "pt-br",
+    "pt-pt",
+    "ro",
+    "ru",
+    "sk",
+    "sl",
+    "sr",
+    "sv",
+    "th",
+    "tr",
+    "zh-cn",
+    "uk",
+    "vi",
+    "zh-hk",
+    "zh-tw"
+  ]
+}

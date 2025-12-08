@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>Johda virta viivana -ty&ouml;kalu luo virtaviivakohteita l&auml;ht&ouml;aineiston pintarasterista. Aiempaa vajoamaa tai laskut&auml;ytt&ouml;&auml; ei vaadita.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputSurfaceRaster">
+        <div>
+            <p>Laskentaan k&auml;ytett&auml;v&auml; korkeusrasteri.
+            </p>
+        </div>
+    </div>
+    <div id="inputDepressionsData">
+        <div>
+            <p>L&auml;ht&ouml;aineisto, joka m&auml;&auml;ritt&auml;&auml; niiden todellisten laskujen tai vajoamien sijainnit, joihin vesi voi virrata mutta joista vesi ei p&auml;&auml;se virtaamaan pois.
+            </p>
+            <p class="toolPaneOnly">Kohteen l&auml;ht&ouml;aineistoissa m&auml;&auml;r&auml; riippuu ylim&auml;&auml;r&auml;isist&auml; tekij&ouml;ist&auml;, kuten suodatusehdoista ja analyysin laajuudesta.
+            </p>
+        </div>
+    </div>
+    <div id="inputWeightRaster">
+        <div>
+            <p>Rasterikarttataso, joka m&auml;&auml;ritt&auml;&auml; kunkin solun virtauskertym&auml;&auml;n vaikuttavan virtauksen murtoluvun.
+            </p>
+        </div>
+    </div>
+    <div id="accumulationThreshold">
+        <div>
+            <p>Kynnysarvo sen m&auml;&auml;ritt&auml;miselle, onko tietty solu osa virtaa. Kynnysarvo m&auml;&auml;r&auml;ytyy t&auml;llaiseen soluun virtaavan kokonaispinta-alan mukaan.
+            </p>
+        </div>
+    </div>
+    <div id="streamDesignationMethod">
+        <div>
+            <p>M&auml;&auml;ritt&auml;&auml;, onko l&auml;ht&ouml;aineiston virran segmenteill&auml; vakioarvo, yksil&ouml;llisi&auml; arvoja vai onko ne j&auml;rjestetty tiettyyn j&auml;rjestykseen.
+            </p>
+        </div>
+    </div>
+    <div id="simplify">
+        <div>
+            <p>M&auml;&auml;ritt&auml;&auml;, tasoitetaanko tulosaineiston virtaviivat yksinkertaisiksi muodoksi.
+            </p>
+            <p>Jos t&auml;m&auml; valitaan, virtaviivakohteet yksinkertaistetaan k&auml;ytt&auml;m&auml;ll&auml; Douglas-Peucke-algoritmia ja toleranssia neli&ouml;juuri(0,5) * solukoko. T&auml;m&auml; on oletusarvo. Jos t&auml;t&auml; ei valita, virtaviivakohteita ei tasoiteta.
+            </p>
+        </div>
+    </div>
+    <div id="outputStreamFeaturesName">
+        <div>
+            <p>Luotavan ja karttaan lis&auml;tt&auml;v&auml;n virtaviivakohdekarttatason nimi.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>Sen  <b>Omassa sis&auml;ll&ouml;ss&auml;</b> olevan kansion nimi, johon tulokset tallennetaan.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

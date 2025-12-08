@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html dir="rtl">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>ستضيف أداة &quot;ضم المعالم&quot; البيانات الجدولية من طبقة أو جدول إلى آخر استنادًا إلى علاقات مكانية وجدولية محددة. اختياريًا، يمكن حساب الإحصائيات عند وجود سجلات مطابقة متعددة.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="targetLayer">
+        <div>
+            <p>الجدول أو الطبقة التي ستحتوي على بيانات جدولية من طبقة الضم ملحقة بجدول البيانات الجدولية الخاص بها.
+            </p> 
+            <p class="toolPaneOnly">يعتمد عدد المعالم على عوامل إضافية مثل معايير التصفية ومدى التحليل.
+            </p> 
+            <p class="modelBuilderOnly"> <b>الطبقة</b> محددة افتراضيًا في حال عدم تجميع <b>الطبقة الهدف</b>. لإضافة جدول مدخل، حدد <b>جدول</b> قبل إضافة مجموعة بيانات.
+            </p>
+        </div>
+    </div>
+    <div id="joinLayer">
+        <div>
+            <p>الجدول أو الطبقة التي تحتوي على البيانات الجدولية التي سيتم إلحاقها بالطبقة المستهدفة.
+            </p> 
+            <p class="toolPaneOnly">يعتمد عدد المعالم على عوامل إضافية مثل معايير التصفية ومدى التحليل.
+            </p> 
+            <p class="modelBuilderOnly"> <b>الطبقة</b> محددة افتراضيًا في حال عدم تجميع <b>طبقة الضم</b>. لإضافة جدول مدخل، حدد <b>جدول</b> قبل إضافة مجموعة بيانات.
+            </p>
+        </div>
+    </div>
+    <div id="useSpatialRelationship">
+        <div>
+            <p>يحدد ما إذا كانت الطبقات ستنضم بناءً على علاقة مكانية. وهو ما يتطلب أن تكون كلتا الطبقتين شكلاً هندسيًا.
+            </p>
+        </div>
+    </div>
+    <div id="spatialRelationship">
+        <div>
+            <p>يحدد العلاقة المكانية التي تحدد المعالم التي سيتم ضمها. سيتم ضم المعالم الموجودة في طبقة الضم التي لها علاقة محددة بالطبقة المستهدفة. تعتمد العلاقات المتاحة على نوع الشكل الهندسي للمدخلات.
+            </p>
+        </div>
+    </div>
+    <div id="spatialRelationshipDistance">
+        <div>
+            <p>المسافة من المعالم في الطبقة المستهدفة التي ستستخدم لتحديد ما إذا كانت المعالم سيتم ضمها.
+            </p>
+        </div>
+    </div>
+    <div id="spatialRelationshipDistanceUnits">
+        <div>
+            <p>الوحدات التي ستُستخدم لتحديد المسافة.
+            </p>
+        </div>
+    </div>
+    <div id="useAttributeRelationship">
+        <div>
+            <p>يحدد ما إذا كانت الطبقات ستنضم بناءً على قيم الحقول المطابقة. إذا كان أحد المدخلات أو أكثر عبارة عن جدول، فلا يمكن تحديد الانضمام إلا باستخدام علاقة بيانات جدولية.
+            </p>
+        </div>
+    </div>
+    <div id="attributeRelationship">
+        <div>
+            <p>علاقة البيانات الجدولية التي تحدد المعالم التي سيتم ضمها. يتم مطابقة المعالم عندما تكون قيم الحقل في طبقة الضم مساوية لقيم الحقل في الطبقة الهدف.
+            </p>
+        </div>
+    </div>
+    <div id="joinOperation">
+        <div>
+            <p>يحدد كيفية التعامل مع عمليات الضم إذا كانت سجلات متعددة من طبقة الانضمام تلبي معايير الانضمام. اختر من الخيارات التالية:
+                <ul>
+                    <li> <b>الانضمام واحد إلى واحد</b>&mdash;سيتم ضم سجل واحد من طبقة الانضمام إلى كل معلم في الطبقة المستهدفة.
+                    </li>
+                    <li> <b>الانضمام واحد إلى العديد</b>&mdash;سيتم ضم جميع المعالم المطابقة من طبقة الانضمام إلى الطبقة المستهدفة. ستحتوي الطبقة الناتجة على سجلات متعددة للمعلم الهدف.
+                    </li>
+                </ul>
+                
+            </p>
+        </div>
+    </div>
+    <div id="handleMatchingRecords">
+        <div>
+            <p>عندما تتطابق معالم متعددة في طبقة الانضمام مع معالم مستهدفة، تحدد هذه المعلمة ما إذا كان سيتم ضم سجل واحد من طبقة الانضمام، أو سيتم حساب إحصائيات ملخص لحقل مختار لجميع السجلات المطابقة من طبقة الانضمام، أو سيتم حساب عدد السجلات المطابقة فقط.
+            </p>
+        </div>
+    </div>
+    <div id="summaryFields">
+        <div>
+            <p>عند وجود العديد من معالم الضم والتي تتطابق مع المعلم المستهدف، سيتم حساب الإحصائيات الموجزة لجميع السجلات المطابقة. حدد حقول الأرقام أو التواريخ من طبقة الانضمام والإحصائيات التي سيتم حسابها لكل حقل.
+            </p>
+        </div>
+    </div>
+    <div id="recordsToMatch">
+        <div>
+            <p>عند وجود العديد من معالم الضم التي تتطابق مع المعلم المستهدف، سيتم تضمين السجل الأول من جدول بيانات طبقة الضم في الإخراج. اختياريًا، اختر حقل رقم أو تاريخ وترتيب الفرز الذي سيحدد ترتيب جدول البيانات.
+            </p>
+        </div>
+    </div>
+    <div id="joinType">
+        <div>
+            <p>يحدد ما إذا كان سيتم تضمين معالم الهدف غير المطابقة في المخرجات. يعيد خيار  <b>الانضمام الداخلي</b> سجلات الهدف المطابقة فقط، بينما يعيد خيار <b>الانضمام الأيسر</b> جميع سجلات الهدف، حتى إذا لم يكن للمعلم المستهدف تطابق في طبقة الانضمام.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>اسم الجدول أو الطبقة التي سيتم إنشاؤها وإضافتها إلى الخريطة.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>اسم المجلد الموجود في  <b>المحتوى الخاص بي</b> الذي سيتم حفظ النتيجة فيه.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

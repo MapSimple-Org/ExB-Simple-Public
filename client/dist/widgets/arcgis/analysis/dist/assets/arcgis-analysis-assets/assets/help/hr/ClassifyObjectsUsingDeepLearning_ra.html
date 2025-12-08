@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>Alat Klasificiranje objekata pomoću dubokog učenja koristi model dubokog učenja za dodjelu oznake klase ili kategorije objektu ili geoobjektu.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputRaster">
+        <div>
+            <p>Snimka ili sloj geoobjekta koji će se koristiti za klasificiranje objekata.
+            </p>
+        </div>
+    </div>
+    <div id="inputFeatures">
+        <div>
+            <p>Sloj geoobjekta koji identificira mjesto svakog objekta koji će se klasificirati ili označiti.
+            </p>
+            <p class="toolPaneOnly">Broj geoprojekata ovisi o dodatnim čimbenicima kao &scaron;to su kriteriji filtriranja i obuhvat analize.
+            </p>
+        </div>
+    </div>
+    <div id="processAllRasterItems">
+        <div>
+            <p>Određuje kako će se rasterske stavke u sloju slike obrađivati nakon izrade mozaika: zajedno ili pojedinačno.
+            </p>
+        </div>
+    </div>
+    <div id="model">
+        <div>
+            <p>Paket dubokog učenja koji sadrži model koji će se koristiti za klasifikaciju objekata.
+            </p> 
+        </div>
+    </div>
+    <div id="modelArguments">
+        <div>
+            <p>Argumenti modela i njihove zadane vrijednosti koje se nalaze u modelu dubokog učenja.
+            </p>
+        </div>
+    </div>
+    <div id="classLabelField">
+        <div>
+            <p>Naziv polja koje će sadržavati klasifikacijsku oznaku u izlaznom sloju geoobjekata.
+            </p>
+        </div>
+    </div>
+    <div id="outputFeatureClass">
+        <div>
+            <p>Naziv sloja koji će se stvoriti i dodati karti.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            
+            <p>Naziv mape u opciji  <b>My sadržaj</b> gdje će se spremiti rezultat.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

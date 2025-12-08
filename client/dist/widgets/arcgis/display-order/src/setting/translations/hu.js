@@ -1,0 +1,1 @@
+System.register([],function(e){return{execute:function(){e({customizeLayer:"R\xe9tegek testreszab\xe1sa",selectLayers:"R\xe9tegek kiv\xe1laszt\xe1sa",noDataSourceWarning:"A kiv\xe1lasztott T\xe9rk\xe9pwidget nem tartalmaz webt\xe9rk\xe9pet vagy webes 3D t\xe9rk\xe9pet."})}}});

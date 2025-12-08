@@ -1,0 +1,17 @@
+{
+  "aboveMaximumMessage": "Vhodna vrednost mora biti manjša ali enaka ${max}.",
+  "add": "Dodaj",
+  "addDuplicateMessage": "Podvojenih vrednosti ni mogoče dodati.",
+  "belowMinimumMessage": "Vhodna vrednost mora biti večja ali enaka ${min}.",
+  "defaultPlaceholder": "Vnesite vrednost in kliknite Dodaj",
+  "duplicateValueMessage": "Podvojene vrednosti bodo prezrte.",
+  "invalidDoubleMessage": "Vhodna vrednost mora biti decimalno število.",
+  "invalidIntegerMessage": "Vhodna vrednost mora biti celo število",
+  "maxValuesMessage": "Ne sme biti več kot ${maxValues} vhodnih vrednosti.",
+  "minValuesMessage": "Obstajati mora vsaj ${minValues} različnih vhodnih vrednosti.",
+  "remove": "Odstrani",
+  "requiredInputMessage": "Ta parameter je obvezen.",
+  "strictlyMaximumMessage": "Vhodna vrednost mora biti manjša od ${max}.",
+  "strictlyMinimumMessage": "Vhodna vrednost mora biti večja od ${min}.",
+  "value": "Vrednost: ${value}"
+}

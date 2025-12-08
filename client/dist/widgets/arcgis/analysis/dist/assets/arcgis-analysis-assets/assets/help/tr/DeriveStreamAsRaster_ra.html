@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>Akışı Raster olarak T&uuml;ret aracı, &ouml;nceden &ccedil;ukur veya &ccedil;&ouml;k&uuml;nt&uuml; doldurmaya gerek kalmadan bir girdi y&uuml;zey rasterından akış rasterı oluşturur.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputSurfaceRaster">
+        <div>
+            <p>Hesaplama i&ccedil;in kullanılacak y&uuml;kselti rasterı.
+            </p>
+        </div>
+    </div>
+    <div id="inputDepressionsData">
+        <div>
+            <p>Suyun i&ccedil;ine akabileceği ancak dışarı akamayacağı ger&ccedil;ek &ccedil;&ouml;k&uuml;nt&uuml;lerin veya &ccedil;ukurların yerlerini tanımlayan girdi.
+            </p>
+            <p class="toolPaneOnly">Detay girdileri i&ccedil;in sayı, filtreleme kriterleri ve analiz yayılımı gibi ek fakt&ouml;rlere bağlıdır.
+            </p>
+        </div>
+    </div>
+    <div id="inputWeightRaster">
+        <div>
+            <p>Her h&uuml;crede akış birikimine katkıda bulunan akış b&ouml;l&uuml;m&uuml;n&uuml; tanımlayan raster katmanı.
+            </p>
+        </div>
+    </div>
+    <div id="accumulationThreshold">
+        <div>
+            <p>Belirli bir h&uuml;crenin, b&ouml;yle bir h&uuml;creye akan toplam alan a&ccedil;ısından bir akışın par&ccedil;ası olup olmadığının belirlenmesine y&ouml;nelik eşik.
+            </p>
+        </div>
+    </div>
+    <div id="streamDesignationMethod">
+        <div>
+            <p>&Ccedil;ıktıdaki akış b&ouml;l&uuml;mlerinin sabit bir değere mi, benzersiz değerlere mi sahip olacağını yoksa sıralı mı olacağını belirtir.
+            </p>
+        </div>
+    </div>
+    <div id="forceFlow">
+        <div>
+            <p>Kenar h&uuml;crelerindeki akışın, normal akış kurallarını mı takip edeceğini, yoksa daima dışarı doğru mu akacağını belirtir.
+            </p>
+            <p>İşaretlenmezse, akış z değerinde en dik d&uuml;ş&uuml;şe sahip i&ccedil; h&uuml;creye doğru olacaktır. Bununla birlikte, d&uuml;ş&uuml;ş sıfıra eşit veya sıfırdan k&uuml;&ccedil;&uuml;kse h&uuml;cre, y&uuml;zey rasterından dışarı doğru akacaktır. İşaretlenirse, akış doğrultusu y&uuml;zey rasterından dışarı doğru olacaktır.
+            </p>
+        </div>
+    </div>
+    <div id="outputStreamRasterName">
+        <div>
+            <p>Oluşturulacak ve haritaya eklenecek akış raster katmanının adı.
+            </p>
+        </div>
+    </div>
+    <div id="resultType">
+        <div>
+            <p>Oluşturulacak &ccedil;ıktının t&uuml;r&uuml;. &Ccedil;ıktı, d&ouml;şemeli g&ouml;r&uuml;nt&uuml; katmanı veya dinamik g&ouml;r&uuml;nt&uuml; katmanı olabilir.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p> <b>İ&ccedil;eriğim</b> i&ccedil;inde sonu&ccedil;ların kaydedileceği klas&ouml;r&uuml;n adı.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

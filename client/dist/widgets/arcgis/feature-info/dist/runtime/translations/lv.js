@@ -1,0 +1,1 @@
+System.register([],function(e){return{execute:function(){e({_widgetLabel:"Inform\u0101cija par elementu",noDataMessageDefaultText:"Dati nav atrasti.",featureNumbers:"{index} no {count}",featureInfoDataActionLabel:"{layer} elementa inform\u0101cija pa\u0161reiz\u0113jam ierakstam"})}}});

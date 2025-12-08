@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>Luo matkustusalueet -ty&ouml;kalu luo alueita, joihin voi p&auml;&auml;st&auml; m&auml;&auml;ritetyss&auml; matkustusajassa tai jotka ovat m&auml;&auml;ritetyll&auml; et&auml;isyydell&auml;.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputLayer">
+        <div>
+            <p>Pistekohteet, joiden l&auml;hist&ouml;ll&auml; olevat alueet lasketaan.
+            </p>
+            <p class="toolPaneOnly">Kohteiden m&auml;&auml;r&auml; riippuu ylim&auml;&auml;r&auml;isist&auml; tekij&ouml;ist&auml;, kuten suodatusehdoista ja analyysin laajuudesta.
+            </p>
+        </div>
+    </div>
+    <div id="pointBarrierLayer">
+        <div>
+            <p>V&auml;hint&auml;&auml;n yksi pistekohde, joka toimii tilap&auml;isen&auml; rajoitteena (esteen&auml;) liikuttaessa taustalla olevilla kaduilla. Liikkuminen on sallittu kadulla, mutta ei esteen kohdalla.
+            </p>
+        </div>
+    </div>
+    <div id="lineBarrierLayer">
+        <div>
+            <p>V&auml;hint&auml;&auml;n yksi viivakohde, joka toimii tilap&auml;isen&auml; rajoitteena (esteen&auml;) liikuttaessa taustalla olevilla kaduilla. Viivaesteet est&auml;v&auml;t liikkumisen miss&auml; tahansa kohdassa, jossa esteet riste&auml;v&auml;t katujen kanssa.
+            </p>
+        </div>
+    </div>
+    <div id="polygonBarrierLayer">
+        <div>
+            <p>V&auml;hint&auml;&auml;n yksi aluekohde, joka toimii tilap&auml;isen&auml; rajoitteena (esteen&auml;) liikuttaessa taustalla olevilla kaduilla. Alue-esteet est&auml;v&auml;t liikkumisen miss&auml; tahansa kohdassa, jossa alueet riste&auml;v&auml;t katujen kanssa.
+            </p>
+        </div>
+    </div>
+    <div id="travelMode">
+        <div>
+            <p>Matkustustapa, jota k&auml;ytet&auml;&auml;n matkustusalueiden luomiseen. Matkustustapa voi perustua et&auml;isyyteen tai aikaan.
+            </p>
+        </div>
+    </div>
+    <div id="breakValues">
+        <div>
+            <p>Kunkin l&auml;ht&ouml;pisteen matkustuset&auml;isyys tai aikaraja. Jos useita arvoja lis&auml;t&auml;&auml;n, jokaista arvoa k&auml;ytet&auml;&auml;n matkustusalueen laskentaan kaikissa l&auml;ht&ouml;pisteiss&auml;.
+            </p>
+        </div>
+    </div>
+    <div id="breakUnits">
+        <div>
+            <p>Yksik&ouml;t, joita k&auml;ytet&auml;&auml;n matkustuset&auml;isyyden tai -ajan m&auml;&auml;ritt&auml;miseen.  <b>Raja-arvo</b> tulkitaan n&auml;iss&auml; yksik&ouml;iss&auml;.
+            </p>
+        </div>
+    </div>
+    <div id="travelDirection">
+        <div>
+            <p>M&auml;&auml;ritt&auml;&auml;, ovatko matkustamista varten luodut matkustusalueet poisp&auml;in l&auml;ht&ouml;pisteist&auml; vai niit&auml; kohti.
+            </p>
+        </div>
+    </div>
+    <div id="timeOfDay">
+        <div>
+            <p>P&auml;iv&auml;m&auml;&auml;r&auml; ja aika, jolloin matkustaja l&auml;htee l&auml;ht&ouml;sijainnista tai saapuu siihen.
+            </p>
+        </div>
+    </div>
+    <div id="overlapPolicy">
+        <div>
+            <p>M&auml;&auml;ritt&auml;&auml;, miten eri l&auml;ht&ouml;sijainneista alkavat jaetut alueet k&auml;sitell&auml;&auml;n, kun ne saavuttavat toisensa.
+            </p>
+        </div>
+    </div>
+    <div id="showHoles">
+        <div>
+            <p>M&auml;&auml;ritt&auml;&auml;, onko jokainen tulosaineiston alue jatkuva aluekohde (ei valintaa) vai sis&auml;lt&auml;&auml;k&ouml; se aukkoja kaduilla, joita ei voida saavuttaa mutta joita ymp&auml;r&ouml;iv&auml;t kadut ovat saavutettavissa (valinta).
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>Karttaan luotavan ja lis&auml;tt&auml;v&auml;n karttatason nimi.
+            </p>
+        </div>
+    </div>
+    <div id="includeReachableStreets">
+        <div>
+            <p>M&auml;&auml;ritt&auml;&auml;, sis&auml;llytet&auml;&auml;nk&ouml; matkustusalueiden luontiin k&auml;ytett&auml;v&auml;t kadut tuloskarttatasona.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            
+            <p>Sen  <b>Omassa sis&auml;ll&ouml;ss&auml;</b> olevan kansion nimi, johon tulokset tallennetaan.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

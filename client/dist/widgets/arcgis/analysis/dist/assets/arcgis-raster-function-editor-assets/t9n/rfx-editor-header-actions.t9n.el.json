@@ -1,0 +1,11 @@
+{
+  "newTemplate": "Δημιουργία νέου προτύπου",
+  "openTemplate": "Άνοιγμα προτύπου",
+  "addTemplate": "Προσθήκη προτύπου",
+  "addFunction": "Προσθήκη συναρτήσεων raster",
+  "addConstant": "Προσθήκη σταθεράς",
+  "addRaster": "Προσθήκη μεταβλητής raster",
+  "expand": "Ανάπτυξη",
+  "editTemplateProperties": "Επεξεργασία ιδιοτήτων προτύπου",
+  "viewTemplateProperties": "Προβολή ιδιοτήτων προτύπου"
+}

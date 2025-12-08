@@ -1,0 +1,35 @@
+.widget-setting-floorfilter-section {
+  margin-bottom: 1.5rem;
+}
+
+.widget-setting-floorfilter-section-b {
+  margin-bottom: 1rem;
+}
+
+.widget-setting-floorfilter-section-c {
+  margin-inline-start: 1.5rem;
+  margin-top: 0.4rem;
+}
+
+.widget-setting-floorfilter-label {
+  overflow-wrap: break-word;
+}
+
+.widget-setting-floorfilter-checkbox-label,
+.widget-setting-floorfilter-radio-label {
+  margin: 0 6px;
+}
+
+.widget-setting-floorfilter-section-b .jimu-checkbox {
+  vertical-align: middle;
+}
+
+.widget-setting-floorfilter-note {
+  overflow-wrap: break-word;
+  font-size: 11px;
+  font-style: italic;
+}
+
+.widget-setting-floorfilter-note-br {
+  margin-top: 10px;
+}

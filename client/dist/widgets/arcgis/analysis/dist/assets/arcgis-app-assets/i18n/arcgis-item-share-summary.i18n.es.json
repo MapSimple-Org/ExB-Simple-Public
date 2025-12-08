@@ -1,0 +1,17 @@
+{
+  "sharing": "Uso compartido",
+  "private": "Propietario",
+  "shared": "Propietario y uso compartido con grupos",
+  "org": "Organización",
+  "public": "Todos (público)",
+  "privateGroups": "Propietario",
+  "sharedGroups": "Propietario + grupos (${num})",
+  "orgGroups": "Organización + grupos (${num})",
+  "publicGroups": "Todos (público) + grupos (${num})",
+  "groups": "Grupos (${num})",
+  "updateSharing": "Compartir nivel: ${level}, actualizar uso compartido",
+  "viewableBy": "Visible para: ${level}",
+  "everyone": "Todos (público)",
+  "organization": "Organización",
+  "groupMembers": "Miembros del grupo"
+}

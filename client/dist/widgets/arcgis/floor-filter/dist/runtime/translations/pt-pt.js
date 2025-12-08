@@ -1,0 +1,1 @@
+System.register([],function(o){return{execute:function(){o({_widgetLabel:"Filtro de Pisos",floorfilter_noMap:"Filtro de Pisos",floorfilter_notFloorAware:"O mapa selecionado n\xe3o tem pisos"})}}});

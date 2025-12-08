@@ -1,0 +1,14 @@
+{
+  "AddDataFromUrl": "Dodaj dane z adresu URL",
+  "addData": "Dodaj dane",
+  "clear": "Wyczyść",
+  "file": "Plik",
+  "fileNotFound": "Nie udało się wczytać pliku.",
+  "invalidUrl": "Nieprawidłowy adres URL lub rozszerzenie pliku.",
+  "layerNotFound": "Nie udało się wczytać warstwy.",
+  "replaceData": "Zastąp dane",
+  "required": "Ten parametr jest wymagany.",
+  "uploadData": "Prześlij dane",
+  "uploadFailureMsg": "Błąd podczas wykonywania operacji przesyłania; rozmiar i typ pliku nie są obsługiwane w przypadku tej usługi.",
+  "url": "Adres URL"
+}

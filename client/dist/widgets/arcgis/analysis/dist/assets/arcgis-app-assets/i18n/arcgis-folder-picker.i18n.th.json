@@ -1,0 +1,21 @@
+{
+  "folder": "โฟลเดอร์",
+  "folders": "โฟลเดอร์",
+  "searchFolders": "ค้นหาโฟลเดอร์",
+  "enterFolder": "ป้อนชื่อโฟลเดอร์",
+  "createNewFolder": "สร้างโฟลเดอร์ใหม่",
+  "noFoldersFoundCreate": "ไม่พบโฟลเดอร์ที่ใช้ชื่อนี้ สร้าง '${folder}' หรือไม่",
+  "noFoldersFound": "ไม่พบโฟลเดอร์ที่ใช้ชื่อนี้",
+  "create": "สร้าง '${folder}' หรือไม่",
+  "loading": "กำลังโหลดโฟลเดอร์",
+  "error": {
+    "noName": "คุณต้องกำหนดชื่อสำหรับโฟเดอร์ของคุณ",
+    "folderAlreadyExists": "มีโฟลเดอร์ '${folder}' อยู่แล้ว โปรดเลือกชื่ออื่น",
+    "title": "ข้อผิดพลาด",
+    "invalidCharacters": {
+      "single": "ชื่อต้องไม่มีอักขระนี้: ${invalidCharacters}",
+      "multiple": "ชื่อต้องไม่มีอักขระใดๆ เหล่านี้: ${invalidCharacters}",
+      "unknown": "ชื่อต้องไม่มีอักขระใดๆ เหล่านี้: ${invalidCharacters}"
+    }
+  }
+}

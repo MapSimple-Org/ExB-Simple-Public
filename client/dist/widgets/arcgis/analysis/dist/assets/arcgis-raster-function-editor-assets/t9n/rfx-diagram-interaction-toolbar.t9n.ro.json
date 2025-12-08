@@ -1,0 +1,9 @@
+{
+  "zoomIn": "Mărire",
+  "zoomOut": "Micşorare",
+  "autoLayout": "Configurație automată",
+  "stretch": "Potrivire pentru vizualizare",
+  "select": "Selectare",
+  "pan": "Panoramare",
+  "deleteSelectedItemsText": "Ștergeți elementele selectate"
+}

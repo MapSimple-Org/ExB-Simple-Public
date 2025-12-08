@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>Alat Gabungkan Batas menemukan poligon yang tumpang tindih atau memiliki batas yang sama dan menggabungkan mereka ke satu bentuk poligon.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputLayer">
+        <div>
+            <p>Layer yang berisi fitur poligon akan digabungkan.
+            </p>
+            <p class="toolPaneOnly">Jumlah fitur bergantung pada faktor tambahan seperti kriteria pemfilteran dan jangkauan analisis.
+            </p>
+        </div>
+    </div>
+    <div id="useDissolveFields">
+        <div>
+            <p>Menentukan apakah alat hanya akan menggabungkan poligon yang tumpang tindih atau memiliki batas yang sama dan juga nilai kolom yang sama (diaktifkan) atau menggabungkan seluruh poligon yang tumpang tindih dan memiliki batas yang sama (dinonaktifkan).
+            </p>
+        </div>
+    </div>
+    <div id="dissolveFields">
+        <div>
+            <p>Menentukan kolom yang akan digunakan untuk menggabungkan poligon berdasarkan nilai yang sesuai.
+            </p>
+        </div>
+    </div>
+    <div id="multiPartFeatures">
+        <div>
+            <p>Menentukan output dapat berisi fitur poligon multibagian, yang artinya beberapa poligon ditetapkan sebagai satu fitur (diaktifkan), atau hanya berisi satu fitur (dinonaktifkan).
+            </p>
+        </div>
+    </div>
+    <div id="useSummaryFields">
+        <div>
+            <p>Menentukan apakah statistik ringkasan akan dihitung untuk poligon yang digabungkan.
+            </p>
+        </div>
+    </div>
+    <div id="summaryFields">
+        <div>
+            <p>Kolom jumlah atau tanggal dari layer input yang akan diringkas, dan akan digunakan statistiknya untuk menghitung setiap kolom.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>Nama layer yang akan dibuat dan ditambahkan ke peta.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>Nama folder di  <b>Konten saya</b> tempat penyimpanan hasil.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

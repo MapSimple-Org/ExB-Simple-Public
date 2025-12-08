@@ -1,0 +1,13 @@
+{
+  "addField": "Tambahkan kolom",
+  "deselectAll": "Batalkan semua pilihan",
+  "done": "Selesai",
+  "noFieldsAvailable": "${layerName} tidak berisi bidang yang memenuhi persyaratan tipe data. Pilih layer yang berbeda untuk melanjutkan.",
+  "noInputSelected": {
+    "withLayerInputLabel": "Tidak ada layer input yang dipilih. Pilih layer di ${layerInputLabel} untuk melanjutkan.",
+    "withoutLayerInputLabel": "Tidak ada layer input yang dipilih. Pilih layer input untuk melanjutkan."
+  },
+  "noSearchResults": "Tidak ditemukan kolom yang sesuai.",
+  "selectAll": "Pilih semua",
+  "summaryFieldsPopover": "Kolom Ringkasan"
+}

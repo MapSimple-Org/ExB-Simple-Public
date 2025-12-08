@@ -1,0 +1,19 @@
+import plugin from 'eslint-plugin-import';
+const usage = {
+    pluginName: 'import',
+    plugin,
+    rules: {
+        'enforce-node-protocol-usage': ['error', 'always'],
+        export: ['error'],
+        first: ['error'],
+        'no-absolute-path': [
+            'error',
+            { esmodule: true, commonjs: true, amd: false },
+        ],
+        'no-duplicates': ['error'],
+        'no-named-default': ['error'],
+        'no-webpack-loader-syntax': ['error'],
+    },
+};
+export default usage;
+//# sourceMappingURL=import.js.map

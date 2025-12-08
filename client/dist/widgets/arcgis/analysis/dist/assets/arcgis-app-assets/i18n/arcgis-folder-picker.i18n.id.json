@@ -1,0 +1,21 @@
+{
+  "folder": "Folder",
+  "folders": "Folder",
+  "searchFolders": "Cari folder",
+  "enterFolder": "Masukkan nama folder",
+  "createNewFolder": "Buat folder baru",
+  "noFoldersFoundCreate": "Tidak ditemukan folder dengan nama ini. Buat '${folder}'?",
+  "noFoldersFound": "Tidak ditemukan folder dengan nama ini.",
+  "create": "Buat '${folder}'?",
+  "loading": "Memuat folder",
+  "error": {
+    "noName": "Anda harus memberi nama folder Anda.",
+    "folderAlreadyExists": "Folder '${folder}' sudah ada. Harap pilih nama lain.",
+    "title": "Kesalahan",
+    "invalidCharacters": {
+      "single": "Nama tidak boleh berisi karakter ini: ${invalidCharacters}.",
+      "multiple": "Nama tidak boleh berisi salah satu karakter ini: ${invalidCharacters}.",
+      "unknown": "Nama tidak boleh berisi salah satu karakter ini: ${invalidCharacters}."
+    }
+  }
+}

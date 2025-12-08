@@ -1,0 +1,68 @@
+{
+  "addField": "Добавяне на поле",
+  "addFieldErrors": {
+    "creatingFailed": "Неуспешно създаване на поле ${fieldName}.",
+    "existingFieldNameError": "Името на полето не може да бъде същото като съществуващо име на поле.",
+    "invalidName": "Невалидно име",
+    "invalidNameInputInvalidCharactersError": "Името на полето трябва да започва с буква и може да съдържа само букви, цифри и „_“.",
+    "invalidNameInputSQLError": "Името на полето не може да бъде същото като SQL ключова дума.",
+    "valueIsRequiredError": "Тази стойност е задължителна."
+  },
+  "cancel": "Отказ",
+  "createAndSelectField": "Създаване и избор на поле",
+  "createNewFields": "Създаване на ново поле",
+  "fieldLoadingErrorText": "Невъзможност за зареждане на полета.",
+  "fieldName": "Име на поле",
+  "fieldType": "Тип на поле",
+  "fieldTypesIncompatible": "Няма налични съвместими полета.",
+  "layerNotSelected": "Не е избран слой за попълване на полетата.",
+  "loadingFields": "Зареждане на полета",
+  "noSearchResults": "Не са намерени съвпадащи полета.",
+  "requiredErrorLabelDefault": "Поле",
+  "requiredErrorMessage": "Този параметър е задължителен.",
+  "selectFieldPicklistHeading": "Избор на поле",
+  "selectOkBtnText": "Избор",
+  "tooltip": "Трябва да се посочи валидно име на поле и тип на полето.",
+  "types": {
+    "big-integer": {
+      "description": "Запазване на целите числа от -(2${startSup}53${endSup}-1) и 2${startSup}53${endSup}-1. Използвайте този тип поле, когато използвате числа извън поддържания диапазон цели числа.",
+      "title": "Голямо цяло число"
+    },
+    "date": {
+      "description": "Запазване на стойности с дата и час.",
+      "title": "Дата"
+    },
+    "date-only": {
+      "description": "Запазване на стойности без данни за час.",
+      "title": "Само дата"
+    },
+    "double": {
+      "description": "Запазване на числа с десетични части.",
+      "title": "Двоен"
+    },
+    "global-id": {
+      "description": "Съхранете низ от 36 знака, състоящ се от букви и цифри, използвани за уникално идентифициране на обект.",
+      "title": "GlobalID"
+    },
+    "guid": {
+      "description": "Съхранете низ от 36 знака, състоящ се от букви и цифри. Глобалният уникален идентификатор или GUID се използва често за управление на връзките между обекти.",
+      "title": "Глобален уникален идентификатор (GUID)"
+    },
+    "integer": {
+      "description": "Запазване на целите числа от${lowerIntegerRange} до ${upperIntegerRange}.",
+      "title": "Цяло число"
+    },
+    "string": {
+      "description": "Съхраняване на набор от буквено-цифрови знаци",
+      "title": "Текст"
+    },
+    "time-only": {
+      "description": "Запазване на стойности без данни за дата.",
+      "title": "Само час"
+    },
+    "timestamp-offset": {
+      "description": "Запазване на стойности, указващи дата, час и изместване от Координирано универсално време (UTC).",
+      "title": "Изместване на индикатора за време"
+    }
+  }
+}

@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>Orodje Najdi gruče točk prepozna gruče točkovnih geoobjektov v okoli&scaron;kem &scaron;umu glede na njihovo prostorsko razporeditev.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="analysisLayer">
+        <div>
+            <p>Vhodni točkovni sloj, ki bo združen v gruče na podlagi prostorske razporeditve točkovnih geoobjektov.
+            </p>
+        </div>
+    </div>
+    <div id="method">
+        <div>
+            <p>Ta metoda bo uporabljena za prepoznavanje gruč.
+            </p>
+        </div>
+    </div>
+    <div id="minFeaturesCluster">
+        <div>
+            <p>Najmanj&scaron;e &scaron;tevilo točkovnih geoobjektov, ki bodo veljali za gručo.
+            </p>
+        </div>
+    </div>
+    <div id="searchDistance">
+        <div>
+            <p>Določi največjo razdaljo okoli vsakega točkovnega geoobjekta za iskanje točk, ki jih je mogoče vključiti v gručo. Če je prazno, bo vrednost  <b>Iskalne razdalje</b> največja osnovna razdalja, ki jo je mogoče najti v sloju, razen zgornjega 1&nbsp;% osnovnih razdalj.
+            </p>
+        </div>
+    </div>
+    <div id="searchDistanceUnit">
+        <div>
+            <p>Določa enote, ki bodo uporabljena za iskalno razdaljo.
+            </p>
+        </div>
+    </div>
+    <div id="sensitivity">
+        <div>
+            <p>Celo &scaron;tevilo med 0 in 100, ki določa kompaktnost gruč. Če je prazno, bo vrednost  <b>Občutljivost gruče</b> izračunana s pomočjo divergence Kullback-Leibler.
+            </p>
+        </div>
+    </div>
+    <div id="timeField">
+        <div>
+            <p>Polje iz vhodnega sloja, ki vsebuje časovni žig za vsak geoobjekt.
+            </p>
+        </div>
+    </div>
+    <div id="searchTimeInterval">
+        <div>
+            <p>Časovni interval, ki bo uporabljen za določanje, ali geoobjekti tvorijo prostorsko-časovni skupek. Časovni interval iskanja se začne pred in konča za časom vsakega geoobjekta; npr. interval časa iskanja 3 dni okrog geoobjekta bo vključeval vse geoobjekte, z začetkom 3 dni pred in z zaključkom 3 dni po času geoobjekta.
+            </p>
+        </div>
+    </div>
+    <div id="searchTimeUnit">
+        <div>
+            <p>Določa enote, ki bodo uporabljena za interval časa iskanja.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>Ime sloja, ki bo ustvarjen in dodan na karto.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>Ime mape v  <b>Moja vsebina</b>, kjer bo shranjen rezultat.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

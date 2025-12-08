@@ -1,0 +1,8 @@
+{
+  "loading": "Ladataan...",
+  "pleaseWait": "Odota.",
+  "loadingXMLRFT": "Ladataan valittua rasteritoimintomallia XML-muodossa.",
+  "failedToOpen": "Kohteen avaaminen epäonnistui.",
+  "readingFailed": "Valitun rasteritoimintomallin lataus epäonnistui.",
+  "failedToLoadXML": "Valitun rasteritoimintomallin lataus XML-muodossa epäonnistui."
+}

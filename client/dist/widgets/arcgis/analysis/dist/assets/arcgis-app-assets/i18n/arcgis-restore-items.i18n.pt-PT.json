@@ -1,0 +1,31 @@
+{
+  "back": "Retroceder",
+  "cancel": "Cancelar",
+  "learnMore": "Saiba mais",
+  "restore": "Restaurar",
+  "restoreTo": "Restaurar para",
+  "restoreItem": "Restaurar Item",
+  "restoreItems": "Restaurar Itens",
+  "noticeMessage": "Os itens restaurados deixarão de ser partilhados. Reveja o seu conteúdo antes de o partilhar novamente.",
+  "cannotBulkRestoreXItems": "Não é possível restaurar em massa mais do que ${number} itens. Anule a seleção de alguns itens.",
+  "cannotBulkRestoreMultipleOwners": "Não é possível restaurar em massa itens pertencentes a diferentes proprietários. Selecione itens de um único proprietário para restaurar em massa.",
+  "toRestore": {
+    "single": "Item a Restaurar:",
+    "multiple": "Itens a Restaurar:"
+  },
+  "cannotRestore": "Não é possível restaurar:",
+  "dependentItems": {
+    "single": "Este item não pode ser restaurado porque é dependente de <strong style='font-weight: 500'>${parent}</strong>. Restaure-os em conjunto.",
+    "singleUnknown": "Este item não pode ser restaurado porque está dependente de outro item na reciclagem. Restaure-os em conjunto.",
+    "multiple": "Estes itens não podem ser restaurados porque dependem de outros itens na reciclagem. Restaure-os em conjunto.",
+    "multipleSameSource": "Estes itens não podem ser restaurados porque são dependentes de <strong style='font-weight: 500'>${parent}</strong>. Restaure-os em conjunto."
+  },
+  "pageRangeWithTotalRecycleBinSize": {
+    "en": "${start} - ${end} de ${total} (${size}) na reciclagem",
+    "other": "${start} - ${end}, total: ${total} (${size}) na reciclagem"
+  },
+  "pageRangeWithGreaterThanTotalRecycleBinSize": {
+    "en": "${start} - ${end} de ${total} (>${size}) na reciclagem",
+    "other": "${start} - ${end}, total: ${total} (>${size}) na reciclagem"
+  }
+}

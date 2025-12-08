@@ -1,0 +1,14 @@
+{
+  "AddDataFromUrl": "Daten aus URL hinzufügen",
+  "addData": "Daten hinzufügen",
+  "clear": "Löschen",
+  "file": "Datei",
+  "fileNotFound": "Fehler beim Laden der Datei.",
+  "invalidUrl": "Ungültige URL oder Dateierweiterung.",
+  "layerNotFound": "Fehler beim Laden des Layers.",
+  "replaceData": "Daten ersetzen",
+  "required": "Dieser Parameter ist erforderlich.",
+  "uploadData": "Daten hochladen",
+  "uploadFailureMsg": "Fehler beim Durchführen des Uploadvorgangs, Dateigröße oder -typ für diesen Service wird nicht unterstützt.",
+  "url": "URL"
+}

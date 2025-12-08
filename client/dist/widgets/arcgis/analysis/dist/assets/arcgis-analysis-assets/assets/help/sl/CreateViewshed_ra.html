@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>Orodje Geodetsko območje vidnosti prepozna lokacije na rastrski povr&scaron;ini, ki so vidne vhodnim lokacijam opazovalca.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputElevationSurface">
+        <div>
+            <p>Raster vi&scaron;ine na katerem bo izračunano območje vidnosti.
+            </p>
+        </div>
+    </div>
+    <div id="inputObserverFeatures">
+        <div>
+            <p>Lokacije opazovalca, za katere je bil izračunano območje vidnosti.
+            </p>
+        </div>
+    </div>
+    <div id="optimizeFor">
+        <div>
+            <p>Optimizira izračun območja vidnosti na podlagi hitrosti ali natančnosti.
+            </p>
+        </div>
+    </div>
+    <div id="verticalError">
+        <div>
+            <p>Količina negotovosti pri vrednostih dviga vrednosti  <b>Vnos vi&scaron;inskega dviga povr&scaron;ine</b>.
+            </p>
+        </div>
+    </div>
+    <div id="refractivityCoefficient">
+        <div>
+            <p>Koeficient loma vidne svetlobe v zraku.
+            </p>
+        </div>
+    </div>
+    <div id="maximumViewingDistanceField">
+        <div>
+            <p>Največja razdalja gledanja za izračun območja vidnosti.
+            </p>
+            <p>Razdaljo je mogoče določiti z vrednostjo in njenimi enotami ali iz polja v vrednosti  <b>Vhodni točkovni ali linijski geoobjekti opazovalca</b>.
+            </p>
+        </div>
+    </div>
+    <div id="minimumViewingDistanceField">
+        <div>
+            <p>Najmanj&scaron;a razdalja gledanja za izračun območja vidnosti.
+            </p>
+            <p>Razdaljo je mogoče določiti z vrednostjo in njenimi enotami ali iz polja v vrednosti  <b>Vhodni točkovni ali linijski geoobjekti opazovalca</b>.
+            </p>
+        </div>
+    </div>
+    <div id="viewingDistanceIs3D">
+        <div>
+            <p>Določi, ali bo največja in najmanj&scaron;a razdalja gledanja izmerjena na 3D- ali 2D-razdalji.
+            </p>
+            <p>Če možnost ni obkljukana, bodo razdalje gledanja obravnavane kot 2D-evklidske razdalje. Če je možnost obkljukana, bodo razdalje gledanja obravnavane kot 3D-razdalje.
+            </p>
+        </div>
+    </div>
+    <div id="observersElevationField">
+        <div>
+            <p>Vi&scaron;inski dvig povr&scaron;ine lokacij opazovalca.
+            </p>
+            <p>Vi&scaron;inski dvig je mogoče določiti z vrednostjo in njenimi enotami ali iz polja v vrednosti  <b>Vhodni točkovni ali linijski geoobjekti opazovalca</b>.
+            </p>
+        </div>
+    </div>
+    <div id="observersHeightField">
+        <div>
+            <p>Vi&scaron;ina opazovalcev nad tlemi.
+            </p>
+            <p>Vi&scaron;ino je mogoče določiti z vrednostjo in njenimi enotami ali iz polja v vrednosti  <b>Vhodni točkovni ali linijski geoobjekti opazovalca</b>.
+            </p>
+        </div>
+    </div>
+    <div id="targetHeightField">
+        <div>
+            <p>Vi&scaron;ina ciljev nad tlemi.
+            </p>
+            <p>Vi&scaron;ino je mogoče določiti z vrednostjo in njenimi enotami ali iz polja v vrednosti  <b>Vhodni točkovni ali linijski geoobjekti opazovalca</b>.
+            </p>
+        </div>
+    </div>
+    <div id="horizontalStartAngle">
+        <div>
+            <p>Začetni kot horizontalnega razpona skeniranja.
+            </p>
+            <p>Kot je mogoče določiti z vrednostjo od 0 do 360 ali iz polja v vrednosti  <b>Vhodni točkovni ali linijski geoobjekti opazovalca</b>.
+            </p>
+        </div>
+    </div>
+    <div id="horizontalEndAngle">
+        <div>
+            <p>Končni kot horizontalnega razpona skeniranja.
+            </p>
+            <p>Kot je mogoče določiti z vrednostjo od 0 do 360 ali iz polja v vrednosti  <b>Vhodni točkovni ali linijski geoobjekti opazovalca</b>.
+            </p>
+        </div>
+    </div>
+    <div id="verticalUpperAngle">
+        <div>
+            <p>Omejitev zgornjega vertikalnega kota skeniranja glede na horizontalno ravnino.
+            </p>
+            <p>Kot je mogoče določiti z vrednostjo od &ndash;90 do 90 ali iz polja v vrednosti  <b>Vhodni točkovni ali linijski geoobjekti opazovalca</b>.
+            </p>
+        </div>
+    </div>
+    <div id="verticalLowerAngle">
+        <div>
+            <p>Omejitev spodnjega vertikalnega kota skeniranja glede na horizontalno ravnino.
+            </p>
+            <p>Kot je mogoče določiti z vrednostjo od &ndash;90 do 90 ali iz polja v vrednosti  <b>Vhodni točkovni ali linijski geoobjekti opazovalca</b>.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>Ime rastrskega sloja območja vidnosti, ki bo ustvarjen in dodan na karto. Sloj vsebuje vidna območja, kjer lahko opazovalci vidijo, vrednosti celice pa predstavljajo &scaron;tevilo opazovalcev, ki lahko vidijo celice.
+            </p>
+        </div>
+    </div>
+    <div id="aboveGroundLevelOutputName">
+        <div>
+            <p>Ime rastrskega sloja nad nivojem tal (AGL), ki bo ustvarjen in dodan na karto.
+            </p>
+        </div>
+    </div>
+    <div id="resultType">
+        <div>
+            <p>Vrsta rezultata, ki bo ustvarjen. Rezultat je lahko plo&scaron;čični slikovni sloj ali dinamični slikovni sloj.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>Ime mape v  <b>Moja vsebina</b>, kjer bo shranjen rezultat.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

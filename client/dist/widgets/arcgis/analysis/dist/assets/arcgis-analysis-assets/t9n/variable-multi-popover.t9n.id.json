@@ -1,0 +1,11 @@
+{
+  "addBtn": "Selesai",
+  "cancelBtn": "Batalkan",
+  "header": "Pilih variabel",
+  "multipleVariables": "Variabel multi-nilai",
+  "noFound": "Tidak ditemukan variabel yang kompatibel",
+  "search": "Cari variabel",
+  "singleVariables": "Variabel nilai-tunggal",
+  "variableLabel": "Label: <span style='font-weight: var(--calcite-font-weight-normal)'>${val}</span>",
+  "variableVal": "Nilai: <span style='font-weight: var(--calcite-font-weight-normal)'>${val}</span>"
+}

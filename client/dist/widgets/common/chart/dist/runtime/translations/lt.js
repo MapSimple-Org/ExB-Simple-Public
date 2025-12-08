@@ -1,0 +1,1 @@
+System.register([],function(e){return{execute:function(){e({_widgetLabel:"Diagrama",dataEmptyTip:"Duomen\u0173 rasti nepavyko."})}}});

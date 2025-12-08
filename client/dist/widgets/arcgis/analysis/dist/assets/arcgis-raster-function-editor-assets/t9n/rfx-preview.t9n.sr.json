@@ -1,0 +1,13 @@
+{
+  "header": "Pregled",
+  "description": "Pregledajte rezultat pre pokretanja analize.",
+  "showPreview": "Prikaži pregled",
+  "previewLayer": "Pregled sloja ${number}",
+  "update": "Ažuriraj",
+  "newPreview": "Novi pregled",
+  "previewPopup": "Omogućite pregled rezultata analize na osnovu ulaznih parametara.",
+  "previewError": "Ovaj sloj za pregled nije dostupan. Proverite ulazne parametre i ponovo ažurirajte ovaj sloj za pregled.",
+  "updatePopover": "Ažurirajte izabrani sloj za pregled",
+  "createPopover": "Kreirajte novi sloj za pregled",
+  "maxPreview": "Dozvoljen maksimalan broj slojeva za pregled: ${maxCount}"
+}

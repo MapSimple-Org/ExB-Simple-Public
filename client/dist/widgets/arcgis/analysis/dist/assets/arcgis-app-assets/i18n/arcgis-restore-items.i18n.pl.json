@@ -1,0 +1,31 @@
+{
+  "back": "Wstecz",
+  "cancel": "Anuluj",
+  "learnMore": "Dowiedz się więcej",
+  "restore": "Przywróć",
+  "restoreTo": "Przywróć do",
+  "restoreItem": "Przywróć element",
+  "restoreItems": "Przywróć elementy",
+  "noticeMessage": "Przywrócone elementy nie będą udostępniane. Sprawdź zasoby, zanim ponownie je udostępnisz.",
+  "cannotBulkRestoreXItems": "Nie można zbiorczo przywrócić więcej niż ${number} elementów. Usuń zaznaczenie niektórych elementów.",
+  "cannotBulkRestoreMultipleOwners": "Nie można zbiorczo przywrócić elementów, które mają różnych właścicieli. Aby przywrócić zbiorczo, wybierz elementy tego samego właściciela.",
+  "toRestore": {
+    "single": "Element do przywrócenia:",
+    "multiple": "Elementy do przywrócenia:"
+  },
+  "cannotRestore": "Nie można przywrócić:",
+  "dependentItems": {
+    "single": "Nie można przywrócić tego elementu, ponieważ zależy on od elementu <strong style='font-weight: 500'>${parent}</strong>. Należy przywrócić je razem.",
+    "singleUnknown": "Nie można przywrócić tego elementu, ponieważ zależy od innego elementu znajdującego się w koszu. Należy przywrócić je razem.",
+    "multiple": "Nie można przywrócić tych elementów, ponieważ zależą od innych elementów znajdujących się w koszu. Należy przywrócić je razem.",
+    "multipleSameSource": "Nie można przywrócić tych elementów, ponieważ zależą one od elementu <strong style='font-weight: 500'>${parent}</strong>. Należy przywrócić je razem."
+  },
+  "pageRangeWithTotalRecycleBinSize": {
+    "en": "${start}–${end} z ${total} (${size}) w koszu",
+    "other": "${start}–${end}, łącznie: ${total} (${size}) w koszu"
+  },
+  "pageRangeWithGreaterThanTotalRecycleBinSize": {
+    "en": "${start}–${end} z ${total} (ponad ${size}) w koszu",
+    "other": "${start}–${end}, łącznie: ${total} (ponad ${size}) w koszu"
+  }
+}

@@ -1,0 +1,177 @@
+{
+  "memberBrowser": {
+    "filters": "סינונים",
+    "pageRange": "${start}-${end}, סה\"כ: ${total}",
+    "pageRangeAria": "${start}-${end}, סה\"כ חברים: ${total}",
+    "selectedMembers": "חברים שנבחרו",
+    "noSelectedMembers": "אין כרגע חברים שנבחרו",
+    "noUsersFound": "לא נמצאו משתמשים שעומדים בקריטריונים שלך. נסה לנקות חלק מהמסננים או לשנות את מונחי החיפוש כדי להציג משתמשים נוספים.",
+    "enterTermExternal": "הזן מונח חיפוש כדי למצוא חברים בכל רחבי ArcGIS Online",
+    "noUsers": "אין משתמשים זמינים",
+    "coordinator": "מתאם שיתוף פעולה"
+  },
+  "search": {
+    "searchMembers": "חפש חברים"
+  },
+  "filterUserTypes": {
+    "title": "סוג משתמש",
+    "label": "סוג משתמש: ${name}",
+    "loading": "טוען סוגי משתמשים..."
+  },
+  "filterRoles": {
+    "title": "תפקיד",
+    "label": "תפקיד: ${name}",
+    "loading": "טוען תפקידים...",
+    "searchRoles": "חיפוש תפקידים"
+  },
+  "filterOrgGroups": {
+    "title": "קבוצות ארגון",
+    "label": "קבוצה: ${name}",
+    "loading": "טוען קבוצות ארגון...",
+    "searchGroups": "חיפוש קבוצות",
+    "noGroupsFound": "לא נמצאה אף קבוצה. נסה לשנות את מונח החיפוש כדי להציג קבוצות נוספות."
+  },
+  "filterMyGroups": {
+    "title": "הקבוצות שלי",
+    "label": "קבוצה: ${name}",
+    "loading": "טוען את הקבוצות שלי...",
+    "searchMyGroups": "חיפוש בקבוצות שלי"
+  },
+  "filterCategories": {
+    "title": "קטגוריות",
+    "label": "קטגוריה: ${name}",
+    "loading": "טוען קטגוריות...",
+    "noCategoriesTitle": "אין עדיין קטגוריות חברים",
+    "noCategories": "קטגוריות משתמשים מאפשרות למנהל מערכת לארגן את החברים בספרייה כדי לייעל פעולות ניהול על חברים. חברי ארגון יכולים גם להשתמש בספרייה זו כדי למצוא חברים אחרים.",
+    "setupCategories": "הגדר קטגוריות חברים",
+    "configureCategories": "הגדר קטגוריות",
+    "noCategoriesAssigned": "לא הוקצו קטגוריות"
+  },
+  "filterPartnerCollabs": {
+    "title": "שיתופי פעולה עם שותפים",
+    "label": "שיתופי פעולה עם שותפים: ${name}",
+    "loading": "טוען שיתופי פעולה עם שותפים...",
+    "coordinatorsOnly": "מתאמי שיתוף פעולה בלבד",
+    "coordinatorsDescription": "מתאמי שיתוף פעולה הם נציגים משיתופי פעולה עם שותפים, שניתן להוסיף לקבוצה בלי לבצע אימות.",
+    "coordinatorsInfoLabel": "מידע נוסף על מתאמי שיתוף פעולה."
+  },
+  "filterSearchSwitch": {
+    "searchAll": "חפש בכל החברים בארגון ArcGIS Online",
+    "searchPartners": "כלל חברים מארגון זה ומהארגון השותף"
+  },
+  "table": {
+    "caption": "תוצאות חברים, ניתן למיין כותרות עמודות עם לחצנים.",
+    "selectAll": "בחר הכול",
+    "selection": "בחירה",
+    "headers": {
+      "name": "שם",
+      "membertype": "תפקיד קבוצה",
+      "affiliation": "שיוך ארגוני",
+      "joined": "הצטרף",
+      "credits": "קרדיטים שנותרו",
+      "remainingCredits": "סך הקרדיטים שנותרו ${num}",
+      "lastlogin": "התחברות אחרונה",
+      "usertype": "סוג משתמש",
+      "role": "תפקיד",
+      "mfaenabled": "אימות מרובה גורמים"
+    }
+  },
+  "tableRow": {
+    "moreOptions": "עוד אפשרויות",
+    "groupManager": "מנהל קבוצה",
+    "owner": "יוצר",
+    "member": "חבר",
+    "myOrg": "הארגון שלי",
+    "other": "אחר",
+    "coordinator": "מתאם שיתוף פעולה",
+    "noLimit": "ללא מגבלה",
+    "creditsNumber": "${remain} מתוך ${total}",
+    "today": "היום",
+    "yesterday": "אתמול",
+    "never": "אף פעם",
+    "role": "תפקיד",
+    "memberIsCoordinator": "משתמש זה הוא מתאם שיתוף פעולה",
+    "rolesForCoordinator": "למתאמי שיתוף פעולה יכולים להיות תפקידי Administrator או Facilitator בלבד.",
+    "memberIsContact": "חבר זה הוא איש קשר מנהלי",
+    "removeFromContact": "אם ברצונך לשנות את התפקיד של חבר זה, תחילה עליך להסיר אותו ${linkStart}מרשימת אנשי הקשר של מנהלי מערכת${linkEnd}."
+  },
+  "listCard": {
+    "moreOptions": "עוד אפשרויות",
+    "lastLoggedIn": "התחברות אחרונה ב: ${value}",
+    "today": "היום",
+    "yesterday": "אתמול",
+    "hasNotLoggedIn": "עדיין לא התחבר",
+    "neverSignedInTooltip": "חבר זה מעולם לא התחבר לחשבונו, שנוצר ב: ${date}",
+    "userType": "סוג משתמש",
+    "role": "תפקיד",
+    "creditsRemaining": "קרדיטים שנותרו",
+    "noLimit": "ללא מגבלה",
+    "creditsNumber": "${remain} מתוך ${total}",
+    "addonLicenses": "רישיונות הרחבה",
+    "configureLicenses": "הגדר רישיונות",
+    "groups": "קבוצות",
+    "configureGroups": "הגדר קבוצות",
+    "viewGroups": "הצג קבוצות"
+  },
+  "myOrg": {
+    "myOrgView": "תצוגת הארגון שלי"
+  },
+  "filterGroupRole": {
+    "title": "תפקיד קבוצה",
+    "label": "תפקיד קבוצה: ${role}",
+    "admins": "בעלים ומנהלי הקבוצה",
+    "member": "חבר"
+  },
+  "filterAffiliation": {
+    "title": "שיוך ארגוני",
+    "label": "שיוך: ${name}",
+    "myOrg": "הארגון שלי",
+    "other": "אחר"
+  },
+  "filterCreditsRemain": {
+    "title": "קרדיטים שנותרו",
+    "noLimit": "ללא מגבלה",
+    "lessThan": "קטן מ-",
+    "credits": "קרדיטים",
+    "labelNoLimit": "קרדיטים: ללא מגבלה",
+    "labelLess": "קרדיטים: פחות מ-${value}",
+    "invalidValue": "הערך שהוזן אינו חוקי."
+  },
+  "filterEmailVerification": {
+    "title": "סטטוס אימות דוא\"ל",
+    "unverified": "כתובות דוא\"ל שלא אומתו",
+    "verified": "כתובות דוא\"ל שאומתו",
+    "label": "סטטוס אימות דוא\"ל: ${status}"
+  },
+  "filterLoginType": {
+    "title": "סוג כניסה",
+    "label": "סוג כניסה: ${type}",
+    "social": "מדיה חברתית"
+  },
+  "filterApp": {
+    "title": "אפליקציה",
+    "label": "יישום: ${app}"
+  },
+  "filterMFA": {
+    "title": "אימות מרובה גורמים",
+    "enabled": "מופעל",
+    "disabled": "מושבת",
+    "label": "אימות מרובה גורמים: ${status}"
+  },
+  "roles": {
+    "user": "משתמש",
+    "publisher": "מפרסם",
+    "admin": "מנהל מערכת",
+    "viewer": "צפיין",
+    "editor": "עורך נתונים",
+    "facilitator": "Facilitator"
+  },
+  "view": {
+    "view": "הצג",
+    "list": "רשימה",
+    "table": "טבלה"
+  },
+  "assignedLicenses": "הצג רק את החברים שרישיון זה הוקצה להם",
+  "onlyDoubleAssigned": "הצג רק את החברים שהרישיון הזה הוקצה להם פעמיים",
+  "maxSelected": "ניתן לבחור ${number} חברים בלבד בכל פעם."
+}

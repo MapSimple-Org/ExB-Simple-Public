@@ -1,0 +1,7 @@
+{
+  "addEntryButtonLabel": "Hozzáadás",
+  "maxGroupsMessage": "A bejegyzések maximális száma ${maxCount}.",
+  "minGroupsMessage": "A bejegyzések minimális száma ${minCount}.",
+  "removeEntryButtonLabel": "Bejegyzés eltávolítása",
+  "requiredMessage": "Ez a paraméter kötelező."
+}

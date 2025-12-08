@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>V&aelig;rkt&oslash;jet Tabuleret omr&aring;de beregnes de krydstabulerede omr&aring;der mellem to datas&aelig;t og rapporterer resultaterne som en tabel.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputZoneRasterOrFeatures">
+        <div>
+            <p>Det input, der definerer gr&aelig;nserne for zonerne.
+            </p>
+            <p class="toolPaneOnly">Med hensyn til objektinput afh&aelig;nger opt&aelig;llingen af yderligere faktorer s&aring;som filtreringskriterier og analyseudstr&aelig;kningen.
+            </p>
+        </div>
+    </div>
+    <div id="zoneField">
+        <div>
+            <p>Det felt, der indeholder de v&aelig;rdier, der definerer hver zone.
+            </p>
+        </div>
+    </div>
+    <div id="inputClassRasterOrFeatures">
+        <div>
+            <p>Det input, der definerer gr&aelig;nserne for klasserne, hvis omr&aring;de beregnes.
+            </p>
+            <p class="toolPaneOnly">Med hensyn til objektinput afh&aelig;nger opt&aelig;llingen af yderligere faktorer s&aring;som filtreringskriterier og analyseudstr&aelig;kningen.
+            </p>
+        </div>
+    </div>
+    <div id="classField">
+        <div>
+            <p>Feltet indeholder de v&aelig;rdier, der definerer hver klasse.
+            </p>
+        </div>
+    </div>
+    <div id="classesAsRows">
+        <div>
+            <p>Angiver, om v&aelig;rdien fra inptklasserasteren repr&aelig;senteres som r&aelig;kker i outputtabellen.
+            </p>
+            <p>Hvis indstillingen er ikke markeret, repr&aelig;senteres klasserne som felter. Hvis indstillingen er markeret, repr&aelig;senteres klasserne som r&aelig;kker.
+            </p>
+        </div>
+    </div>
+    <div id="analysisCellSize">
+        <div>
+            <p>Angiver cellest&oslash;rrelsen for analyserasteren, der oprettes til at beregne de krydstabulerede omr&aring;der.
+            </p>
+        </div>
+    </div>
+    <div id="outputTableName">
+        <div>
+            <p>Navnet p&aring; tabellaget for det krydstabulerede omr&aring;de, der oprettes og f&oslash;jes til kortet.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>Navnet p&aring; mappen  <b>Mit indhold</b>, hvor resultatet gemmes.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

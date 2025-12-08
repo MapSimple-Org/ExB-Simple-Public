@@ -1,0 +1,12 @@
+{
+  "name": "footnote",
+  "type": "template",
+  "templateType": "fixed-non-modal-window",
+  "label": "Footnote",
+  "thumbnail": "thumbnail.png",
+  "order": 1,
+  "tags": [],
+  "categoriesTags": [],
+  "thumbnailWidth": 320,
+  "thumbnailHeight": 268
+}

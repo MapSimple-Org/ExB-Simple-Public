@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>Naudojant įrankį I&scaron;vesti srautą kaip rastrą sugeneruojami srauto linijų elementai i&scaron; įvesties pavir&scaron;iaus rastro, prie&scaron; tai neužpildžius smukimo ar įdubimo.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputSurfaceRaster">
+        <div>
+            <p>Auk&scaron;čio rastras, kuris bus naudojamas skaičiavimams.
+            </p>
+        </div>
+    </div>
+    <div id="inputDepressionsData">
+        <div>
+            <p>Įvestis, kuri apibrėžia tikrų įdubimų arba įdubų, į kurias vanduo gali įtekėti, bet negali i&scaron;tekėti, vietas.
+            </p>
+            <p class="toolPaneOnly">Elemento įvesties atveju skaičius priklauso nuo papildomų veiksnių, pavyzdžiui, filtravimo kriterijų ir analizės apimties.
+            </p>
+        </div>
+    </div>
+    <div id="inputWeightRaster">
+        <div>
+            <p>Rastrinis sluoksnis, apibrėžiantis tėkmės dalį, kuri prisideda prie tėkmės kaupimosi kiekviename langelyje.
+            </p>
+        </div>
+    </div>
+    <div id="accumulationThreshold">
+        <div>
+            <p>Slenkstis, naudojamas nustatant, ar nurodyta gardelė priklauso srautui, atsižvelgiant į bendrą plotą, kuris teka į tokią gardelę.
+            </p>
+        </div>
+    </div>
+    <div id="streamDesignationMethod">
+        <div>
+            <p>Nurodo, ar i&scaron;vesties srauto segmentai bus su pastovia reik&scaron;me, unikaliomis reik&scaron;mėmis arba yra surū&scaron;iuoti.
+            </p>
+        </div>
+    </div>
+    <div id="simplify">
+        <div>
+            <p>Nurodoma, ar i&scaron;vesties srauto linijos bus i&scaron;lygintos į paprastesnes formas.
+            </p>
+            <p>Jei pažymėta, srauto linijų emelentai bus supaprastinti naudojant Duglaso-Pekerio algoritmą ir gardelės dydžio &radic;(0,5)* paklaida. Tai yra numatytasis nustatymas. Jei nepažymėta, srauto linijų funkcijos nebus i&scaron;lygintos.
+            </p>
+        </div>
+    </div>
+    <div id="outputStreamFeaturesName">
+        <div>
+            <p>Srovės linijų elementų sluoksnio, kuris bus sukurtas ir pridėtas prie žemėlapio, pavadinimas.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>Puslapyje  <b>Mano turinys</b> esančio aplanko, kur bus įra&scaron;yti rezultatai, pavadinimas.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

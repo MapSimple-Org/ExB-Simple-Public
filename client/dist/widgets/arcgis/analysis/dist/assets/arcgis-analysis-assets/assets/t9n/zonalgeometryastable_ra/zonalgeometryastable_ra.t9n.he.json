@@ -1,0 +1,9 @@
+{
+  "inputLayerGroupText": "בחר את שכבת הקלט כדי לחשב את הגיאומטריה של גבולות האזור.",
+  "itemProperties": {
+    "description": "טבלת פלט הופקה מהרצת כלי הניתוח 'גיאומטריה אזורית כטבלה'.",
+    "snippet": "טבלת פלט הופקה מ'גיאומטריה אזורית כטבלה'"
+  },
+  "zonalGeometrySettingGroupLabel": "הגדרת גיאומטריה אזורית",
+  "zonalGeometrySettingGroupText": "ציין את גודל התא לחישוב."
+}

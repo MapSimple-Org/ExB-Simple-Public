@@ -1,0 +1,1 @@
+System.register([],function(e){return{execute:function(){e({_widgetLabel:"Iniciar sess\xe3o",switchToLogin:"Mudar para antes de iniciar sess\xe3o",switchToLogout:"Mudar para depois de iniciar sess\xe3o",toggleSignInPreview:"Ativar/Desativar pr\xe9-visualiza\xe7\xe3o de in\xedcio de sess\xe3o",restrictedResources:"Recursos restritos"})}}});

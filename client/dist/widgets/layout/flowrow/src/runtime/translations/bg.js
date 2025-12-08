@@ -1,0 +1,1 @@
+System.register([],function(e){return{execute:function(){e({_widgetLabel:"\u0420\u0435\u0434 \u0437\u0430 \u043f\u043e\u0442\u043e\u043a"})}}});

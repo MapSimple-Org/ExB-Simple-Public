@@ -1,0 +1,31 @@
+{
+  "back": "Geri",
+  "cancel": "İptal",
+  "learnMore": "Daha fazla bilgi",
+  "restore": "Geri Yükle",
+  "restoreTo": "Şuna geri yükle",
+  "restoreItem": "Ögeyi Geri Yükle",
+  "restoreItems": "Ögeleri Geri Yükle",
+  "noticeMessage": "Geri yüklenen ögeler paylaşımdan kaldırılacak. Lütfen tekrar paylaşmadan önce içeriğinizi inceleyin.",
+  "cannotBulkRestoreXItems": "${number}'den fazla ögeyi toplu olarak geri yükleyemezsiniz, lütfen bazı ögelerin seçimini kaldırın.",
+  "cannotBulkRestoreMultipleOwners": "Farklı sahiplere ait ögeleri toplu halde geri yükleyemezsiniz. Toplu geri yükleme için tek bir sahibin ögelerini seçin.",
+  "toRestore": {
+    "single": "Geri Yüklenecek Öge:",
+    "multiple": "Geri Yüklenecek Ögeler:"
+  },
+  "cannotRestore": "Geri yüklenemez:",
+  "dependentItems": {
+    "single": "Bu öge <strong style='font-weight: 500'>${parent}</strong>'e bağımlı olduğu için geri yüklenemez. Birlikte geri yükleyin.",
+    "singleUnknown": "Bu öge, geri dönüşüm kutusundaki başka bir ögeye bağlı olduğu için geri yüklenemez. Birlikte geri yükleyin.",
+    "multiple": "Bu ögeler geri dönüşüm kutusundaki diğer ögelere bağımlı oldukları için geri yüklenemez. Birlikte geri yükleyin.",
+    "multipleSameSource": "<strong style='font-weight: 500'>${parent}</strong> ögesine bağımlı oldukları için bu ögeler geri yüklenemez. Birlikte geri yükleyin."
+  },
+  "pageRangeWithTotalRecycleBinSize": {
+    "en": "${start} - ${end} / ${total} (${size}) geri dönüşüm kutusunda",
+    "other": "${start} - ${end}, toplam: ${total} (${size}) geri dönüşüm kutusunda"
+  },
+  "pageRangeWithGreaterThanTotalRecycleBinSize": {
+    "en": "${start} - ${end} / ${total} (>${size}) geri dönüşüm kutusunda",
+    "other": "${start} - ${end}, toplam: ${total} (>${size}) geri dönüşüm kutusunda"
+  }
+}

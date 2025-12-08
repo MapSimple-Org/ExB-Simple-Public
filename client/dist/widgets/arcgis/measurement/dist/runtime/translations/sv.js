@@ -1,0 +1,1 @@
+System.register([],function(e){return{execute:function(){e({_widgetLabel:"M\xe4tning",selectToStart:"V\xe4lj ett verktyg f\xf6r att b\xf6rja m\xe4ta.",measureDistance:"M\xe4t avst\xe5nd",measureArea:"M\xe4t area",clearMeasurement:"Rensa m\xe4tning",measureUnit:"M\xe5ttenhet"})}}});

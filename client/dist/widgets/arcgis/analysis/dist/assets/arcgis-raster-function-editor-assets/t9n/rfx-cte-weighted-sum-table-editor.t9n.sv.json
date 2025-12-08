@@ -1,0 +1,9 @@
+{
+  "weightedSumTable": "Viktad summeringstabell",
+  "id": "ID",
+  "layer": "Lager",
+  "field": "Fält",
+  "weight": "Vikt",
+  "value": "Värde",
+  "selectLayer": "Välj lager"
+}

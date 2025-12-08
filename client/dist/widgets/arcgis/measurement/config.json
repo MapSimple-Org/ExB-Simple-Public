@@ -1,0 +1,7 @@
+{
+  "enableDistance": true,
+  "defaultDistanceUnit": "metric",
+  "enableArea": true,
+  "defaultAreaUnit": "metric",
+  "arrangement": "CLASSIC"
+}

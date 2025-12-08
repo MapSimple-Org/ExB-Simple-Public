@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html dir="rtl">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>הכלי 'גזור זרם כרסטר' מפיק רסטר זרם מרסטר פני שטח של קלט ללא צורך במילוי אגן או שקע קודם.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputSurfaceRaster">
+        <div>
+            <p>רסטר קו הגובה אשר ישמש לחישוב.
+            </p>
+        </div>
+    </div>
+    <div id="inputDepressionsData">
+        <div>
+            <p>הקלט שמגדיר את המיקומים של שקעים או אגנים אמיתיים, שמים יכולים לזרום לתוכם פנימה אך לא מהם החוצה.
+            </p>
+            <p class="toolPaneOnly">עבור קלטי ישויות, הספירה תלויה בגורמים נוספים כגון קריטריונים לסינון ותיחום הניתוח.
+            </p>
+        </div>
+    </div>
+    <div id="inputWeightRaster">
+        <div>
+            <p>שכבת הרסטר שמגדירה את חלק הזרימה שתורם לצבירת זרימה בכל תא.
+            </p>
+        </div>
+    </div>
+    <div id="accumulationThreshold">
+        <div>
+            <p>סף הקביעה האם תא נתון הוא חלק מזרם במונחים של השטח הכולל שזורם לתוך תא שכזה.
+            </p>
+        </div>
+    </div>
+    <div id="streamDesignationMethod">
+        <div>
+            <p>מציין האם מקטעי הזרם בפלט יהיו בעלי ערך קבוע, ערכים ייחודיים או יאורגנו לפי סדר.
+            </p>
+        </div>
+    </div>
+    <div id="forceFlow">
+        <div>
+            <p>מציין האם זרימה בתאי קצוות ימלאו את כללי הזרימה הרגילים או תמיד יזרמו כלפי חוץ.
+            </p>
+            <p>אם לא מסומן, הזרימה תהיה לכיוון התא הפנימי עם הנפילה התלולה ביותר בערך Z. עם זאת, אם הנפילה היא פחות מאפס או שווה לאפס, התא יזרום כלפי חוץ מרסטר פני השטח. אם מסומן, כיוון הזרימה יהיה כלפי חוץ מרסטר פני השטח.
+            </p>
+        </div>
+    </div>
+    <div id="outputStreamRasterName">
+        <div>
+            <p>השם של שכבת רסטר הזרם שתיווצר ותתווסף למפה.
+            </p>
+        </div>
+    </div>
+    <div id="resultType">
+        <div>
+            <p>סוג הקלט שייווצר. הפלט יכול להיות שכבת תצלומים באריחים או שכבת תצלומים דינמית.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>שם התיקייה  <b>בתוכן שלי</b> שבה התוצאות יישמרו.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

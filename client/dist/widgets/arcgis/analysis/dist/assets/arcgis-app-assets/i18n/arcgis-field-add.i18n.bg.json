@@ -1,0 +1,137 @@
+{
+  "next": "Напред",
+  "addField": "Добавяне на поле",
+  "selectDataType": "Изберете типа данни, които искате да бъдат запазени в това поле",
+  "addGlobalIDNotice": "В полето автоматично ще бъдат добавени съществуващите данни в слоя или от таблица. След добавяне това поле не може да се редактира или изтрива.",
+  "fieldName": "Име на поле",
+  "displayName": "Показване на име",
+  "length": "Дължина",
+  "defaultValue": "Стойност по подразбиране (по избор)",
+  "fieldTypes": "Типове полета",
+  "fieldValueType": "Тип стойност на поле (по избор)",
+  "fieldDescription": "Описание на поле (по избор)",
+  "allowNullValues": "Позволяване на стойности null",
+  "valueRequiredError": "Тази стойност е задължителна",
+  "fieldAdded": "Полето е добавено успешно",
+  "newFieldTypeNotice": "Този тип поле може да не се поддържа напълно в някои клиенти.",
+  "addingField": "Добавяне на поле...",
+  "syncEnabled": "Някои типове полета не могат да се добавят, тъй като в слоя е активирана синхронизация.",
+  "newFeature": "Нов обект",
+  "fieldAdditionUnsuccessful": "Добавянето на поле е неуспешно",
+  "error": "Грешка",
+  "noFieldTypeSelected": "Не е избран тип поле",
+  "nullFieldTypeError": "Трябва д изберете тип поле, за да продължите.",
+  "fieldNameCharacterNotice": "Имена на полета, по-дълги от 31 знака, не са съвместими за използване в офлайн.",
+  "suggestedHeader": "Предложени",
+  "otherHeader": "Друго",
+  "provideDescription": "Предоставете описание на информацията, която ще съдържа полето",
+  "nullableTooltipInfo": "Тази настройка не може да се редактира, ако Вашият слой вече съдържа данни.",
+  "tooltipInfo": {
+    "globalIDExists": "В тази услуга вече съществува поле GlobalID. В един слой или таблица може да има само едно поле GlobalID.",
+    "enterpriseTimestampOffset": "ArcGIS Enterprise не поддържа полета за отместване на времеви маркери в хоствани обектни слоеве."
+  },
+  "text": {
+    "title": "Текст",
+    "description": "Стойности, които съдържат букви, цифри или специални символи.",
+    "types": {
+      "esriFieldTypeString": {
+        "title": "Текстово",
+        "description": "Запазване на набор от букви и цифри с определена дължина."
+      }
+    }
+  },
+  "numbers": {
+    "title": "Номера",
+    "description": "Стойности, които съдържат цифрова информация.",
+    "types": {
+      "esriFieldTypeDouble": {
+        "title": "Двойно",
+        "description": "Запазване на числа с десетични части."
+      },
+      "esriFieldTypeInteger": {
+        "title": "Цяло число",
+        "description": "Запазване на целите числа от${lowerIntegerRange} до ${upperIntegerRange}."
+      },
+      "esriFieldTypeBigInteger": {
+        "title": "Голямо цяло число",
+        "description": "Запазване на целите числа от -(2${startSup}53${endSup}-1) и 2${startSup}53${endSup}-1. Използвайте този тип поле, когато използвате числа извън поддържания диапазон цели числа."
+      }
+    }
+  },
+  "dates": {
+    "title": "Дати",
+    "description": "Стойности, които съдържат времева информация.",
+    "types": {
+      "esriFieldTypeDate": {
+        "title": "Дата",
+        "description": "Запазване на стойности с дата и час."
+      },
+      "esriFieldTypeDateOnly": {
+        "title": "Само дата",
+        "description": "Запазване на стойности без данни за час."
+      },
+      "esriFieldTypeTimeOnly": {
+        "title": "Само час",
+        "description": "Запазване на стойности без данни за дата."
+      },
+      "esriFieldTypeTimestampOffset": {
+        "title": "Изместване на индикатора за време",
+        "description": "Запазване на стойности, указващи дата, час и изместване от Координирано универсално време (UTC)."
+      }
+    }
+  },
+  "globalIdentifiers": {
+    "title": "Глобални идентификатори",
+    "description": "Стойности, които уникално идентифицират обек или ред в таблица.",
+    "types": {
+      "esriFieldTypeGlobalID": {
+        "title": "GlobalID",
+        "description": "Съхранете низ от 36 знака, състоящ се от букви и цифри, използвани за уникално идентифициране на обект."
+      },
+      "esriFieldTypeGUID": {
+        "title": "Глобален уникален идентификатор (GUID)",
+        "description": "Съхранете низ от 36 знака, състоящ се от букви и цифри. Глобалният уникален идентификатор или GUID се използва често за управление на връзките между обекти."
+      }
+    }
+  },
+  "fieldValueTypes": {
+    "nameOrTitle": "Име или Заглавие",
+    "description": "Описание",
+    "typeOrCategory": "Тип или Категория",
+    "countOrAmount": "Брой или Сума",
+    "percentageOrRatio": "Процент или Съотношение",
+    "measurement": "Измерване",
+    "currency": "Валута",
+    "uniqueIdentifier": "Уникален Идентификатор",
+    "phoneNumber": "Телефонен номер",
+    "emailAddress": "Имейл адрес",
+    "orderedOrRanked": "Подредено или Степенувано",
+    "binary": "Бинарен",
+    "locationOrPlaceName": "Местоположение или Име на населено място",
+    "coordinate": "Координата",
+    "dateAndTime": "Дата и Час",
+    "none": "Няма"
+  },
+  "addFieldErrors": {
+    "invalidName": "Невалидно име",
+    "invalidLength": "Невалидна дължина",
+    "outOfRangeValueError": "Стойността е извън диапазона.",
+    "invalidValueError": "Въведената стойност е невалидна.",
+    "invalidFieldParameters": "Невалидни параметри на полето",
+    "invalidInputsError": "Проверете дали параметрите на вашето поле са правилно попълнени.",
+    "existingFieldNameError": "Името на полето не може да бъде същото като съществуващо име на поле.",
+    "invalidNameInputSQLError": "Името на полето не може да бъде същото като SQL ключова дума.",
+    "invalidNameInputInvalidCharactersError": "Трябва да започва с буква и може да съдържа само букви, цифри и „_“.",
+    "valueIsRequiredError": "Тази стойност е задължителна.",
+    "lengthExceeds": "Дължината на името на полето трябва да бъде по-малка или равна на ${maxFieldNameLength} символа.",
+    "defaultValueExceeds": "Стойността по подразбиране надвишава посочената дължина на полето.",
+    "savingFailed": "Неуспешно запазване на ${layerName}",
+    "readOnlyErrorMessage": "ArcGIS Online изпитва оперативни проблеми и е преминал в режим само за четене. Някои възможности може да са ограничени. За най-новите актуализации относно кога проблемът ще бъде оправен, посетете Таблото за управление за състоянието на ArcGIS Online.",
+    "readOnlyErrorMessageEnterprise": "ArcGIS Enterprise изпитва оперативни проблеми и е преминал в режим само за четене. Някои възможности може да са ограничени.",
+    "healthDashboard": "Табло за управлние на състоянието на ArcGIS Online",
+    "genericAddFieldError": {
+      "title": "Грешка",
+      "description": "Докато добавяхме Вашия файл възникна грешка."
+    }
+  }
+}

@@ -1,0 +1,1 @@
+System.register([],function(t){return{execute:function(){t({_widgetLabel:"Diagramma",dataEmptyTip:"Dati nav atrasti."})}}});

@@ -1,0 +1,11 @@
+{
+  "all": "Kaikki",
+  "inputLayersGroupText": "Valitse lähtöaineiston pintarasteri ja valinnaisesti myös laskuaineisto sekä painoarvorasteri.",
+  "itemProperties": {
+    "description": "Tulosaineisto luotu Johda virta rasterina -työkalulla.",
+    "snippet": "Tulosaineisto luotu Johda virta rasterina -toiminnolla"
+  },
+  "outputStreamFeaturesLabel": "Tulosaineiston virran kohteiden nimi",
+  "simplifyLabel": "Yksinkertaista kohteet",
+  "streamSettingsGroupText": "Määritä kertymän raja-arvo, virtauksen nimeämismenetelmä ja se, pehmennetäänkö tulosaineiston virtausviivat yksinkertaisiksi muodoiksi."
+}

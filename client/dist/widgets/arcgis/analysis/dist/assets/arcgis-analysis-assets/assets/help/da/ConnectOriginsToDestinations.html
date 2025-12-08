@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>Beregn rejseomkostninger-v&aelig;rkt&oslash;jet m&aring;ler rejsetiden eller -afstanden mellem parpunkter.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="originsLayer">
+        <div>
+            
+            <p class="OnlineOnly">Det punktlag, der repr&aelig;senterer udgangspositionerne hvorfra rejseomkostningerne beregnes. Lag med op til  fem tusind objekter underst&oslash;ttes. </p>  
+            <p class="PortalOnly">Det punktlag, der repr&aelig;senterer udgangspositionerne, hvorfra rejseomkostningerne beregnes.
+            </p>
+            <p class="toolPaneOnly">Antallet af objekter afh&aelig;nger af yderligere faktorer s&aring;som filtreringskriterier og analysens omfang.
+            </p>
+        </div>
+    </div>
+    <div id="destinationsLayer">
+        <div>
+            
+            <p class="OnlineOnly">Det punktlag, der repr&aelig;senterer de destinationspositioner, mod hvilke rejseomkostningerne beregnes. Lag med op til  fem tusind objekter underst&oslash;ttes. </p> 
+            <p class="PortalOnly">Det punktlag, der repr&aelig;senterer de destinationspositioner mod hvilke rejseomkostningerne beregnes.
+            </p>
+            <p class="toolPaneOnly">Antallet af objekter afh&aelig;nger af yderligere faktorer s&aring;som filtreringskriterier og analysens omfang.
+            </p>
+        </div>
+    </div>
+    <div id="originsLayerRouteIDField">
+        <div>
+            
+            <p>Feltet i  <b>Fra lag</b>, der definerer de forh&aring;ndstildelte par med udgangsposition/destination. Hvis der er flere udgangspositions- og destinationspositioner, matcher dette id en v&aelig;rdi i <b>Til lagrute-ID</b>-felt.
+            </p>
+        </div>
+    </div>
+    <div id="destinationsLayerRouteIDField">
+        <div>
+            
+            <p>Feltet i  <b>Til lag</b>, der definerer de forh&aring;ndstildelte par med udgangsposition/destination. Hvis der er flere udgangspunkts- og destinationspositioner, matcher dette id en v&aelig;rdi i <b>Fra lagrute-ID</b>-felt.
+            </p>
+        </div>
+    </div>
+    <div id="pointBarrierLayer">
+        <div>
+            <p>Et eller flere punktobjekter, der fungerer som midlertidige begr&aelig;nsninger (barrierer) under transport p&aring; de underliggende gader. Transport er tilladt p&aring; gaden, men ikke gennem gr&aelig;nsen (barrieren).
+            </p>
+        </div>
+    </div>
+    <div id="lineBarrierLayer">
+        <div>
+            <p>Et eller flere linjeobjekter, der fungerer som midlertidige begr&aelig;nsninger (barrierer) under transport p&aring; de underliggende gader. Linjebarriererne forhindrer rejse, hvor som helst barriererne gennemsk&aelig;rer gaderne.
+            </p>
+        </div>
+    </div>
+    <div id="polygonBarrierLayer">
+        <div>
+            <p>Et eller flere polygonobjekter, der fungerer som midlertidige begr&aelig;nsninger (barrierer) under transport p&aring; de underliggende gader. Polygonbarriererne forhindrer transport alle steder, hvor polygonen gennemsk&aelig;rer gaderne.
+            </p>
+        </div>
+    </div>
+    <div id="measurementType">
+        <div>
+            <p>Den rejsemetode, der bruges at m&aring;le afstand eller tid. Metoden kan v&aelig;re linjeafstand eller en rejseafstand.
+            </p>
+        </div>
+    </div>
+    <div id="timeOfDay">
+        <div>
+            <p>Datoen og klokkesl&aelig;ttet for afgangen fra afgangspositionerne i Fra-laget-datas&aelig;ttet.
+            </p>
+        </div>
+    </div>
+    <div id="routeShape">
+        <div>
+            <p>Angiver, om udgangspositionerne og destinationerne er forbundet via edderkoppelinjer eller desire-linjer (<b>fugleflugt</b>) eller gader p&aring; det underliggende gadenetv&aelig;rk (<b>F&oslash;lg gader</b>).
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>Navnet p&aring; det lag, der oprettes og f&oslash;jes til kortet.
+            </p>
+        </div>
+    </div>
+    <div id="includeRouteLayers">
+        <div>
+            <p>Angiver, om hvert enkel resulterende rute gemmes som et rutelag.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            
+            <p>Navnet p&aring; mappen  <b>Mit indhold</b>, hvor resultaterne gemmes.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

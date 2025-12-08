@@ -1,0 +1,10 @@
+{
+  "forceFlowLabel": "Prisilite rubne ćelije da se kreću prema van",
+  "inputLayersGroupText": "Odaberite raster ulazne površine, a po izboru podatke o depresiji i raster težine.",
+  "itemProperties": {
+    "description": "Izlaz generiran izvođenjem alata Derive Stream As Raster.",
+    "snippet": "Izlaz generiran iz Izvedi strujanje kao raster"
+  },
+  "outputStreamRasterLabel": "Naziv rastera izlaznog toka",
+  "streamSettingsGroupText": "Odredite prag akumulacije, metodu označavanja strujanja i kako se rukuje protokom na rubu rastera ulazne površine."
+}

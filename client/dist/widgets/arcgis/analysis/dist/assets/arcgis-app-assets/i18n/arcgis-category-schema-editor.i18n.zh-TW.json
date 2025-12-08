@@ -1,0 +1,69 @@
+{
+  "loadingText": "正在載入結構描述樣板",
+  "cancel": "取消",
+  "finishSetup": "完成設定",
+  "hasUnsavedChanges": "您已進行類別變更，如果未事先儲存，這些變更將遺失。 是否確定要關閉此視圖並放棄變更?",
+  "error": {
+    "generic": {
+      "title": "更新類別時出錯",
+      "message": "發生錯誤。 請稍候再試。"
+    },
+    "maxDepthExceeded": {
+      "title": "更新類別時出錯",
+      "message": "類別的嵌入深度不能超過 2 層。"
+    },
+    "destinationHasSameName": {
+      "title": "更新類別時出錯",
+      "message": "目的地類別中已存在同名類別。"
+    },
+    "emptyTitle": {
+      "title": "更新類別時出錯",
+      "message": "類別標題不能為空。"
+    },
+    "noSchema": {
+      "title": "找不到結構描述",
+      "message": "找不到使用者的項目結構描述。"
+    },
+    "maxCharacter": {
+      "title": "更新類別時出錯",
+      "message": "類別名稱最長可有 ${maxCharacter} 個字元。"
+    },
+    "invalidCharacters": {
+      "title": "更新類別時出錯",
+      "single": "類別不能包含此字元: ${invalidCharacters}。",
+      "multiple": "類別不能包含以下任何字元: ${invalidCharacters}。",
+      "unknown": "類別不能包含以下任何字元: ${invalidCharacters}。"
+    }
+  },
+  "warning": {
+    "deleteInUseCategory": {
+      "title": "刪除類別",
+      "cta": "刪除類別"
+    },
+    "changeTitleInUseCategory": {
+      "title": "更新類別",
+      "cta": "更新類別"
+    }
+  },
+  "template": {
+    "title": "類別樣板",
+    "learnMore": "瞭解詳細資訊",
+    "templateList": {
+      "custom": {
+        "title": "自訂類別"
+      },
+      "arcgis": {
+        "title": "ArcGIS 類別",
+        "message": "ArcGIS 類別包含主題類別和子類別選項，可用來分類許多類型的地理空間內容。 這些類別是用來支援 ArcGIS Living Atlas of the World。"
+      },
+      "iso": {
+        "title": "ISO 類別",
+        "message": "ISO 類別包含來自國際標準化組織的主題類別，其提供說明和編目地理資訊的方法。"
+      },
+      "inspire": {
+        "title": "INSPIRE 類別",
+        "message": "INSPIRE 類別包含 INSPIRE 準則中設定之廣泛的空間資料主題集。"
+      }
+    }
+  }
+}

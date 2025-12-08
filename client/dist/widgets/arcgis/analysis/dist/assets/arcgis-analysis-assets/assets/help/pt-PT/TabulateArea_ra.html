@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>A ferramenta Tabular &aacute;rea calcula as &aacute;reas de tabula&ccedil;&atilde;o cruzada entre dois conjuntos de dados e apresenta os resultados como uma tabela.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputZoneRasterOrFeatures">
+        <div>
+            <p>A entrada que define os limites das zonas.
+            </p>
+            <p class="toolPaneOnly">Para as entradas de elementos, a contagem depende de fatores adicionais, como os crit&eacute;rios de filtragem e a extens&atilde;o da an&aacute;lise.
+            </p>
+        </div>
+    </div>
+    <div id="zoneField">
+        <div>
+            <p>O campo que cont&eacute;m os valores que definem cada zona.
+            </p>
+        </div>
+    </div>
+    <div id="inputClassRasterOrFeatures">
+        <div>
+            <p>A entrada que define os limites das classes cuja &aacute;rea ser&aacute; calculada.
+            </p>
+            <p class="toolPaneOnly">Para as entradas de elementos, a contagem depende de fatores adicionais, como os crit&eacute;rios de filtragem e a extens&atilde;o da an&aacute;lise.
+            </p>
+        </div>
+    </div>
+    <div id="classField">
+        <div>
+            <p>O campo que cont&eacute;m os valores que definem cada classe.
+            </p>
+        </div>
+    </div>
+    <div id="classesAsRows">
+        <div>
+            <p>Especifica se os valores do raster de classe de entrada ser&atilde;o representados como linhas na tabela de sa&iacute;da.
+            </p>
+            <p>Se n&atilde;o estiver selecionada, as classes ser&atilde;o representadas como campos. Se estiver selecionada, as classes ser&atilde;o representadas como linhas.
+            </p>
+        </div>
+    </div>
+    <div id="analysisCellSize">
+        <div>
+            <p>Especifica o tamanho da c&eacute;lula do raster de an&aacute;lise que ser&aacute; criado para calcular as &aacute;reas de tabula&ccedil;&atilde;o cruzada.
+            </p>
+        </div>
+    </div>
+    <div id="outputTableName">
+        <div>
+            <p>O nome da camada de tabela de &aacute;rea tabulada que ser&aacute; criada e adicionada ao mapa.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>O nome da pasta em  <b>O meu conte&uacute;do</b> onde o resultado ser&aacute; guardado.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

@@ -1,0 +1,9 @@
+{
+  "inputFlowDirectionRasterLabel": "Raster de direction de flux en entrée",
+  "inputLayerGroupText": "Sélectionner les rasters d’écoulement et de direction de flux en entrée.",
+  "inputStreamRasterLabel": "Raster d’écoulement en entrée",
+  "itemProperties": {
+    "description": "Sortie générée en exécutant l’outil d’analyse Liaison d’écoulement.",
+    "snippet": "Sortie générée avec Liaison d’écoulement"
+  }
+}
