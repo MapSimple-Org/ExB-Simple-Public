@@ -214,12 +214,6 @@ export function QueryTask (props: QueryTaskProps) {
   })
 
 
-  React.useEffect(() => {
-    if (queryItem.useDataSource?.dataSourceId) {
-      DataSourceManager.getInstance().destroyDataSource(queryItem.outputDataSourceId)
-    }
-  }, [queryItem.useDataSource?.dataSourceId, queryItem.outputDataSourceId])
-
   // Watch for when results are ready and switch to Results tab
   // This ensures we wait for React to render results, not just for the query to complete
   // This approach matches the behavior of manual input where results are rendered before tab switch
