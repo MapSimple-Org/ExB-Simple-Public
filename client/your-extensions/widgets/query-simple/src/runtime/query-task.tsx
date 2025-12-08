@@ -133,6 +133,10 @@ export function QueryTask (props: QueryTaskProps) {
   const [selectionError, setSelectionError] = React.useState<string>(null)
   const [zoomError, setZoomError] = React.useState<string>(null)
 
+  const currentItem = Object.assign({}, DEFAULT_QUERY_ITEM, queryItem)
+  const { icon, name, displayLabel } = currentItem
+  const dsExists: boolean = useDataSourceExists({ widgetId: props.widgetId, useDataSourceId: currentItem.useDataSource?.dataSourceId })
+
   // Debug logging for tab content rendering
   React.useEffect(() => {
     debugLogger.log('TASK', {
@@ -157,10 +161,6 @@ export function QueryTask (props: QueryTaskProps) {
       })
     }
   }, [activeTab, queryItem.configId])
-
-  const currentItem = Object.assign({}, DEFAULT_QUERY_ITEM, queryItem)
-  const { icon, name, displayLabel } = currentItem
-  const dsExists: boolean = useDataSourceExists({ widgetId: props.widgetId, useDataSourceId: currentItem.useDataSource?.dataSourceId })
 
   hooks.useEffectOnce(() => {
     // focus the back button when it is rendered
