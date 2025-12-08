@@ -63,7 +63,7 @@ const getFormStyle = (isAutoHeight: boolean) => {
     .query-form__actions {
       flex-shrink: 0;
       margin-top: 0;
-      padding-top: 12px;
+      padding-top: 8px;
       padding-bottom: 12px;
     }
   `
