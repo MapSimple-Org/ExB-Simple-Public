@@ -52,6 +52,7 @@ const getFormStyle = (isAutoHeight: boolean) => {
       font-weight: 500;
       font-size: 0.8125rem;
       line-height: 1.5;
+      margin-top: 0 !important;
     }
     .query-form__content {
       flex: 1 1 ${isAutoHeight ? 'auto' : 'auto'};
@@ -63,7 +64,6 @@ const getFormStyle = (isAutoHeight: boolean) => {
       flex-shrink: 0;
       margin-top: 0;
       padding-top: 8px;
-      padding-bottom: 12px;
     }
   `
 }
@@ -481,7 +481,12 @@ export function QueryTaskForm (props: QueryTaskItemProps) {
       <div className='query-form' css={getFormStyle(isAutoHeight)}>
         <div ref={formContentRef} className='query-form__content' onKeyDown={handleKeyDown}>
           {showAttributeFilter && (
-            <div role='group' className='px-4' aria-label={attributeFilterLabel}>
+            <div 
+              role='group' 
+              className='px-4' 
+              css={css`padding-top: 8px;`}
+              aria-label={attributeFilterLabel}
+            >
               <div className={classNames('form-title my-2 d-flex align-items-center', { 'd-none': !attributeFilterLabel && !attributeFilterDesc })}>
                 {attributeFilterLabel && <div className='mr-2 title2'>{attributeFilterLabel}</div>}
                 {attributeFilterDesc && (
