@@ -13,9 +13,10 @@
  * - ZOOM: Zoom behavior
  * - MAP-EXTENT: Map extent changes
  * - DATA-ACTION: Data action execution (Add to Map, etc.)
+ * - GROUP: Query grouping and dropdown selection
  */
 
-type DebugFeature = 'HASH' | 'FORM' | 'TASK' | 'ZOOM' | 'MAP-EXTENT' | 'DATA-ACTION' | 'all' | 'false'
+type DebugFeature = 'HASH' | 'FORM' | 'TASK' | 'ZOOM' | 'MAP-EXTENT' | 'DATA-ACTION' | 'GROUP' | 'all' | 'false'
 
 class DebugLogger {
   private enabledFeatures: Set<DebugFeature> = new Set()
@@ -42,6 +43,7 @@ class DebugLogger {
       this.enabledFeatures.add('ZOOM')
       this.enabledFeatures.add('MAP-EXTENT')
       this.enabledFeatures.add('DATA-ACTION')
+      this.enabledFeatures.add('GROUP')
     } else if (debugValue !== null) {
       // Parse comma-separated feature list
       const features = debugValue.split(',').map(f => f.trim().toUpperCase() as DebugFeature)
@@ -53,7 +55,8 @@ class DebugLogger {
           this.enabledFeatures.add('ZOOM')
           this.enabledFeatures.add('MAP-EXTENT')
           this.enabledFeatures.add('DATA-ACTION')
-        } else if (['HASH', 'FORM', 'TASK', 'ZOOM', 'MAP-EXTENT', 'DATA-ACTION'].includes(feature)) {
+          this.enabledFeatures.add('GROUP')
+        } else if (['HASH', 'FORM', 'TASK', 'ZOOM', 'MAP-EXTENT', 'DATA-ACTION', 'GROUP'].includes(feature)) {
           this.enabledFeatures.add(feature)
         }
       })
