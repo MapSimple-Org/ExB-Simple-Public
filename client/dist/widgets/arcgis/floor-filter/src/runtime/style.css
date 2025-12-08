@@ -1,0 +1,88 @@
+.widget-floorfilter {
+  width: 100%;
+  height: 100%; 
+}
+
+.widget-floorfilter-header {
+  margin: 10px 10px 5px;
+  font-weight: bold;
+}
+
+.widget-floorfilter-msg {
+  padding: 12px;
+  height: 48px;
+}
+
+.widget-floorfilter-container {
+  overflow-y: auto;
+  height: 100%;
+}
+
+.widget-floorfilter .esri-floor-filter__zoom-button.esri-button--disabled {
+  opacity: 1;
+}
+
+.widget-floorfilter-container .esri-floor-filter .esri-floor-filter__filter-menu,
+.widget-floorfilter-container .esri-floor-filter .esri-floor-filter__filter-menu .esri-floor-filter__filter-menu-items .esri-floor-filter__filter-menu-site, 
+.widget-floorfilter-container .esri-floor-filter .esri-floor-filter__filter-menu .esri-floor-filter__filter-menu-items .esri-floor-filter__filter-menu-facility,
+.widget-floorfilter-container .esri-floor-filter .esri-floor-filter__filter-menu .esri-floor-filter__filter-menu-items .esri-floor-filter__filter-menu-site:active, 
+.widget-floorfilter-container .esri-floor-filter .esri-floor-filter__filter-menu .esri-floor-filter__filter-menu-items .esri-floor-filter__filter-menu-facility:active,
+.widget-floorfilter-container .esri-floor-filter .esri-floor-filter__filter-menu .esri-floor-filter__filter-menu-header-back,
+.widget-floorfilter-container .esri-floor-filter .esri-floor-filter__filter-menu .esri-floor-filter__filter-menu-header .esri-floor-filter__icon-close,
+.widget-floorfilter-container .esri-floor-filter .esri-floor-filter__browse-button,
+.widget-floorfilter-container .esri-floor-filter .esri-floor-filter__zoom-button,
+.widget-floorfilter-container .esri-floor-filter .esri-floor-filter__zoom-button--levels,
+.widget-floorfilter-container .esri-floor-filter .esri-floor-filter__minimize-toggle-button,
+.widget-floorfilter-container .esri-floor-filter .esri-floor-filter__levels-container .esri-floor-filter__level-button {
+  color: var(--sys-color-surface-paper-text);
+  background-color: var(--sys-color-surface-paper);
+}
+
+.widget-floorfilter-container .esri-floor-filter .esri-floor-filter__filter-menu .esri-floor-filter__filter-menu-items .esri-floor-filter__filter-menu-site:hover, 
+.widget-floorfilter-container .esri-floor-filter .esri-floor-filter__filter-menu .esri-floor-filter__filter-menu-items .esri-floor-filter__filter-menu-facility:hover,
+.widget-floorfilter-container .esri-floor-filter .esri-floor-filter__filter-menu .esri-floor-filter__filter-menu-header-back:hover,
+.widget-floorfilter-container .esri-floor-filter .esri-floor-filter__filter-menu .esri-floor-filter__filter-menu-header .esri-floor-filter__icon-close:hover,
+.widget-floorfilter-container .esri-floor-filter .esri-floor-filter__browse-button:hover,
+.widget-floorfilter-container .esri-floor-filter .esri-floor-filter__browse-button.esri-widget--button-active,
+.widget-floorfilter-container .esri-floor-filter .esri-floor-filter__zoom-button:hover,
+.widget-floorfilter-container .esri-floor-filter .esri-floor-filter__zoom-button--levels:hover,
+.widget-floorfilter-container .esri-floor-filter .esri-floor-filter__minimize-toggle-button:hover,
+.widget-floorfilter-container .esri-floor-filter .esri-floor-filter__levels-container .esri-floor-filter__level-button:hover {
+  color: var(--sys-color-action-text);
+  background-color: var(--sys-color-action-hover);
+}
+
+.widget-floorfilter-container .esri-floor-filter .esri-floor-filter__levels-container .esri-floor-filter__level-button.esri-widget--button-active,
+.widget-floorfilter-container .esri-floor-filter .esri-floor-filter__levels-container .esri-floor-filter__level-button.esri-widget--button-active:focus {
+  color: var(--sys-color-action-selected-text);
+  background-color: var(--sys-color-action-selected);
+}
+
+.widget-floorfilter-container .esri-floor-filter .esri-floor-filter__zoom-button {
+  color: var(--sys-color-action-disabled-text);
+}
+
+.widget-floorfilter-container .esri-floor-filter.esri-widget.esri-floor-filter__layout--expanded,
+.widget-floorfilter-container .esri-floor-filter.esri-widget.esri-floor-filter__layout--collapsed {
+  background-color: transparent;
+}
+
+.widget-floorfilter-container .esri-floor-filter .esri-floor-filter__filter-menu .esri-floor-filter__filter-menu-search {
+  box-shadow: 0 0.5px var(--sys-color-divider-input-field);
+}
+
+.widget-floorfilter-container .esri-floor-filter .esri-floor-filter__filter-menu .esri-floor-filter__filter-menu-search,
+.widget-floorfilter-container .esri-floor-filter .esri-floor-filter__filter-menu .esri-floor-filter__filter-menu-search .esri-floor-filter__icon-close,
+.widget-floorfilter-container .esri-floor-filter .esri-floor-filter__filter-menu .esri-floor-filter__filter-menu-search .esri-floor-filter__filter-menu-search-input {
+  color: var(--sys-color-action-input-field-text);
+  background-color: var(--sys-color-action-input-field);
+}
+
+.widget-floorfilter-container .esri-floor-filter .esri-floor-filter__filter-menu .esri-floor-filter__filter-menu-search .esri-floor-filter__icon-close:hover {
+  color: var(--sys-color-action-text);
+  background-color: var(--sys-color-action-hover);
+}
+
+.widget-floorfilter-container .esri-floor-filter .esri-floor-filter__filter-menu .esri-floor-filter__filter-menu-search .esri-floor-filter__filter-menu-search-input::placeholder {
+  color: var(--sys-color-action-input-field-placeholder);
+}

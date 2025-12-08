@@ -1,0 +1,110 @@
+{
+  "Authoritative": {
+    "title": "Đáng tin cậy",
+    "tooltip": {
+      "org": "Được tổ chức của bạn khuyên dùng",
+      "public": "Được ${name} khuyên dùng"
+    }
+  },
+  "Deprecated": {
+    "title": "Không còn sử dụng",
+    "tooltip": "Không khuyên dùng"
+  },
+  "Has Replacement": {
+    "title": "Có mục thay thế",
+    "tooltip": "Mục này có mục thay thế được đề xuất. Xem thông tin chi tiết mục để tìm và sử dụng mục thay thế.",
+    "itemPageTooltip": "Mục này có mục thay thế được đề xuất.",
+    "link": "Xem mục thay thế"
+  },
+  "DeprecatedItem": {
+    "title": "Loại mục không còn sử dụng"
+  },
+  "Living Atlas": {
+    "title": "Tập bản đồ Sinh sống",
+    "tooltip": "Nội dung được Esri giám sát"
+  },
+  "Subscriber": {
+    "title": "Người đăng ký",
+    "tooltip": {
+      "org": "Nội dung độc quyền cho những người đăng ký",
+      "public": "Nội dung độc quyền cho những người đăng ký. Để sử dụng, hãy đăng nhập bằng gói đăng ký ArcGIS Online."
+    }
+  },
+  "Premium": {
+    "title": "Cao cấp",
+    "tooltip": {
+      "org": "Nội dung độc quyền cho những người đăng ký. Sử dụng credit.",
+      "public": "Nội dung độc quyền cho những người đăng ký có sử dụng credit. Để sử dụng, hãy đăng nhập bằng gói đăng ký ArcGIS Online."
+    }
+  },
+  "Open Data": {
+    "title": "Dữ liệu Mở",
+    "tooltip": "Có sẵn để sử dụng công khai"
+  },
+  "Marketplace": {
+    "title": "Marketplace",
+    "tooltip": "Được liệt kê trên ArcGIS Marketplace"
+  },
+  "Collaboration": {
+    "title": "Phân phối cộng tác",
+    "tooltip": "Mục này đã được nhận từ một nhóm phân phối cộng tác"
+  },
+  "Retired": {
+    "title": "Đã ngưng sử dụng",
+    "tooltip": {
+      "general": "Chỉ đọc",
+      "cityEngine": "Trình xem CityEngine Web và CityEngine Web Scene không còn được hỗ trợ.",
+      "storyMap": "Esri Story Map Cổ điển từng được sử dụng để tạo ứng dụng này đã ngưng sử dụng trong ArcGIS Enterprise. Để tạo các câu chuyện mới, vui lòng sử dụng ArcGIS StoryMaps.",
+      "app": "Biểu mẫu Configurable Apps từng được sử dụng để tạo ứng dụng này đã ngưng sử dụng trong ArcGIS Enterprise. Mục này không hoạt động và có thể bị xóa. Để tạo một ứng dụng mới, vui lòng sử dụng ArcGIS Instant Apps, ArcGIS StoryMaps, ArcGIS Dashboards hoặc ArcGIS Experience Builder",
+      "webAppBuilder": "ArcGIS Web AppBuilder không còn được sử dụng trong ArcGIS Enterprise. Mục này không hoạt động và có thể bị xóa. Để tạo một ứng dụng mới, vui lòng sử dụng ArcGIS Experience Builder.",
+      "insights": "ArcGIS Insights không còn được sử dụng trong ArcGIS Enterprise. Mục này không hoạt động và có thể bị xóa.",
+      "bdfs": "Chia sẻ Tệp Dữ liệu Lớn không còn được sử dụng trong ArcGIS Enterprise. Mục này không hoạt động và có thể bị xóa."
+    }
+  },
+  "Public Data Collection": {
+    "title": "Thu thập dữ liệu công khai",
+    "tooltip": "Phê duyệt thu thập dữ liệu công khai."
+  },
+  "Solution": {
+    "title": "ArcGIS Solution",
+    "tooltip": "Giải pháp được Esri hỗ trợ"
+  },
+  "Registered": {
+    "title": "OAuth 2.0",
+    "tooltip": {
+      "online": "Ứng dụng OAuth 2.0 đã đăng ký. Có thể sử dụng nội dung đăng ký hoặc nội dung cao cấp.",
+      "enterprise": "Ứng dụng OAuth 2.0 đã đăng ký."
+    }
+  },
+  "Registered API Key Credentials (Standard)": {
+    "title": {
+      "online": "Thông tin xác thực khóa API - Tiêu chuẩn",
+      "enterprise": "Thông tin xác thực khóa API"
+    },
+    "tooltip": "Cấp quyền truy cập vào dịch vụ."
+  },
+  "Registered API Key Credentials (Personal)": {
+    "title": "Thông tin xác thực khóa API - Cá nhân",
+    "tooltip": "Cấp đặc quyền cá nhân. Đối với mục đích bảo mật, bạn nên bảo vệ các thông tin xác thực này như cách bạn bảo vệ tên đăng nhập và mật khẩu của mình."
+  },
+  "Registered OAuth 2.0 Credentials (Standard)": {
+    "title": {
+      "online": "Thông tin xác thực OAuth 2.0 - Tiêu chuẩn",
+      "enterprise": "Thông tin xác thực OAuth 2.0"
+    },
+    "tooltip": "Cấp quyền truy cập vào dịch vụ."
+  },
+  "Registered OAuth 2.0 Credentials (Personal)": {
+    "title": "Thông tin xác thực OAuth 2.0 - Cá nhân",
+    "tooltip": "Cấp đặc quyền cá nhân. Đối với mục đích bảo mật, bạn nên bảo vệ các thông tin xác thực này như cách bạn bảo vệ tên đăng nhập và mật khẩu của mình."
+  },
+  "Registered Application": {
+    "title": "Ứng dụng OAuth 2.0",
+    "tooltip": "Ứng dụng OAuth 2.0 đã đăng ký"
+  },
+  "Personal credential": {
+    "title": "Cá nhân",
+    "tooltip": "Bạn đang cấp đặc quyền cá nhân cho thông tin xác thực này. Đối với mục đích bảo mật, bạn nên bảo vệ mọi mã token truy cập được tạo bằng các thông tin xác thực này như cách bạn bảo vệ tên đăng nhập và mật khẩu của mình. Vui lòng xem lại điều khoản sử dụng."
+  },
+  "loading": "Đang tải..."
+}

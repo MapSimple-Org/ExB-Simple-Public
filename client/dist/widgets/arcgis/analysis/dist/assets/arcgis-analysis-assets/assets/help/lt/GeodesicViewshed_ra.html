@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>Įrankis Geodezinis matymo laukas identifikuoja rastro pavir&scaron;iaus vietas, kurios matomos įvesties stebėtojo padėtyse.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputElevationSurface">
+        <div>
+            <p>Auk&scaron;čio rastras, pagal kurį bus apskaičiuojamas matymo laukas.
+            </p>
+        </div>
+    </div>
+    <div id="inputObserverFeatures">
+        <div>
+            <p>Stebėtojų vietos, kurioms bus apskaičiuojamas matymo laukas.
+            </p>
+            <p class="toolPaneOnly">Elementų skaičius priklauso nuo papildomų veiksnių, pavyzdžiui, filtravimo kriterijų ir analizės apimties.
+            </p>
+        </div>
+    </div>
+    <div id="optimizeFor">
+        <div>
+            <p>Optimizuoja matymo lauko skaičiavimą pagal greitį arba tikslumą.
+            </p>
+        </div>
+    </div>
+    <div id="verticalError">
+        <div>
+            <p> <b>Įvesties auk&scaron;čio pavir&scaron;iaus</b> auk&scaron;čio reik&scaron;mių neapibrėžtumo lygis.
+            </p>
+        </div>
+    </div>
+    <div id="refractivityCoefficient">
+        <div>
+            <p>Regimosios &scaron;viesos lūžio ore koeficientas.
+            </p>
+        </div>
+    </div>
+    <div id="maximumViewingDistance">
+        <div>
+            <p>Didžiausias matymo atstumas, kuriuo skaičiuojamas matymo laukas.
+            </p>
+            <p>Atstumas gali būti apibrėžiamas verte ir jos vienetais arba kaip lauko  <b>Įvesties stebėtojo ta&scaron;kų ar linijų elementai</b> reik&scaron;mė.
+            </p>
+        </div>
+    </div>
+    <div id="minimumViewingDistance">
+        <div>
+            <p>Mažiausias matymo atstumas, kuriuo skaičiuojamas matymo laukas.
+            </p>
+            <p>Atstumas gali būti apibrėžiamas verte ir jos vienetais arba kaip lauko  <b>Įvesties stebėtojo ta&scaron;kų ar linijų elementai</b> reik&scaron;mė.
+            </p>
+        </div>
+    </div>
+    <div id="viewingDistancesAre3D">
+        <div>
+            <p>Nurodoma, ar didžiausias ir mažiausias matymo atstumas bus matuojamas kaip trimatis atstumas, ar kaip dvimatis atstumas.
+            </p>
+            <p>Jei nepažymėta, matymo atstumai bus laikomi dvimačiais Euklido atstumais. Pažymėjus matomumo atstumas laikomas trimačiu atstumu.
+            </p>
+        </div>
+    </div>
+    <div id="observersElevation">
+        <div>
+            <p>Stebėtojų vietų pavir&scaron;iaus auk&scaron;tis.
+            </p>
+            <p>Auk&scaron;tis gali būti apibrėžiamas verte ir jos vienetais arba kaip lauko  <b>Įvesties stebėtojo ta&scaron;kų ar linijų elementai</b> reik&scaron;mė.
+            </p>
+        </div>
+    </div>
+    <div id="observersHeight">
+        <div>
+            <p>Stebėtojų auk&scaron;tis vir&scaron; žemės pavir&scaron;iaus.
+            </p>
+            <p>Auk&scaron;tis gali būti apibrėžiamas verte ir jos vienetais arba kaip lauko  <b>Įvesties stebėtojo ta&scaron;kų ar linijų elementai</b> reik&scaron;mė.
+            </p>
+        </div>
+    </div>
+    <div id="targetHeight">
+        <div>
+            <p>Ant žemės esančių paskirties vietų auk&scaron;tis.
+            </p>
+            <p>Auk&scaron;tis gali būti apibrėžiamas verte ir jos vienetais arba kaip lauko  <b>Įvesties stebėtojo ta&scaron;kų ar linijų elementai</b> reik&scaron;mė.
+            </p>
+        </div>
+    </div>
+    <div id="horizontalStartAngle">
+        <div>
+            <p>Horizontalaus nuskaitymo intervalo pradžios kampas.
+            </p>
+            <p>Kampas gali būti apibrėžiamas kaip vertė nuo 0 iki 360 arba kaip lauko  <b>Įvesties stebėtojo ta&scaron;kų ar linijų elementai</b> reik&scaron;mė.
+            </p>
+        </div>
+    </div>
+    <div id="horizontalEndAngle">
+        <div>
+            <p>Horizontalaus nuskaitymo intervalo pabaigos kampas.
+            </p>
+            <p>Kampas gali būti apibrėžiamas kaip vertė nuo 0 iki 360 arba kaip lauko  <b>Įvesties stebėtojo ta&scaron;kų ar linijų elementai</b> reik&scaron;mė.
+            </p>
+        </div>
+    </div>
+    <div id="verticalUpperAngle">
+        <div>
+            <p>Vir&scaron;utinio vertikalaus nuskaitymo kampo riba vir&scaron; horizontalios plok&scaron;tumos.
+            </p>
+            <p>Kampas gali būti apibrėžiamas kaip vertė nuo &ndash;90 iki 90 arba kaip lauko  <b>Įvesties stebėtojo ta&scaron;kų ar linijų elementai</b> reik&scaron;mė.
+            </p>
+        </div>
+    </div>
+    <div id="verticalLowerAngle">
+        <div>
+            <p>Apatinio vertikalaus nuskaitymo kampo riba vir&scaron; horizontalios plok&scaron;tumos.
+            </p>
+            <p>Kampas gali būti apibrėžiamas kaip vertė nuo &ndash;90 iki 90 arba kaip lauko  <b>Įvesties stebėtojo ta&scaron;kų ar linijų elementai</b> reik&scaron;mė.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>Matymo lauko rastrinio sluoksnio, kuris bus sukurtas ir pridėtas prie žemėlapio, pavadinimas. &Scaron;iame sluoksnyje yra matomos sritys, kurias gali matyti stebėtojai, o gardelių reik&scaron;mės rodo stebėtojų, galinčių matyti gardeles, skaičių.
+            </p>
+        </div>
+    </div>
+    <div id="outputAboveGroundLevelRasterName">
+        <div>
+            <p>Vir&scaron; žemės lygio (AGL) rastrinio sluoksnio, kuris bus sukurtas ir pridėtas prie žemėlapio, pavadinimas.
+            </p>
+        </div>
+    </div>
+    <div id="resultType">
+        <div>
+            <p>Sukuriamos i&scaron;vesties tipas. I&scaron;vestis gali būti i&scaron;klotinių vaizdų sluoksnis arba dinaminis vaizdų sluoksnis.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>Puslapyje  <b>Mano turinys</b> esančio aplanko, kur bus įra&scaron;ytas rezultatas, pavadinimas.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

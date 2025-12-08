@@ -1,0 +1,9 @@
+{
+  "inputFlowDirectionRasterLabel": "Raster hướng dòng chảy đầu vào",
+  "inputLayerGroupText": "Chọn raster dòng chảy và hướng dòng chảy đầu vào.",
+  "inputStreamRasterLabel": "Raster dòng chảy đầu vào",
+  "itemProperties": {
+    "description": "Đầu ra được tạo từ việc chạy công cụ phân tích StreamLink.",
+    "snippet": "Đầu ra được tạo từ StreamLink"
+  }
+}

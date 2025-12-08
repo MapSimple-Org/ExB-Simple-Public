@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>C&ocirc;ng cụ Nội suy D&ograve;ng chảy th&agrave;nh Đường tạo c&aacute;c đối tượng đường d&ograve;ng chảy từ một raster bề mặt đầu v&agrave;o m&agrave; kh&ocirc;ng cần lấp đầy chỗ l&otilde;m hoặc điểm trũng trước đ&oacute;.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputSurfaceRaster">
+        <div>
+            <p>Raster độ cao sẽ được sử dụng để t&iacute;nh to&aacute;n.
+            </p>
+        </div>
+    </div>
+    <div id="inputDepressionsData">
+        <div>
+            <p>Th&ocirc;ng tin đầu v&agrave;o x&aacute;c định vị tr&iacute; của chỗ l&otilde;m hoặc điểm trũng thực, nơi nước c&oacute; thể chảy v&agrave;o nhưng kh&ocirc;ng thể chảy ra.
+            </p>
+            <p class="toolPaneOnly">Với đầu v&agrave;o đối tượng, số lượng phụ thuộc v&agrave;o c&aacute;c yếu tố bổ sung như ti&ecirc;u ch&iacute; lọc v&agrave; phạm vi ph&acirc;n t&iacute;ch.
+            </p>
+        </div>
+    </div>
+    <div id="inputWeightRaster">
+        <div>
+            <p>Lớp raster x&aacute;c định phần d&ograve;ng chảy g&oacute;p phần t&iacute;ch lũy lưu lượng tại mỗi cell.
+            </p>
+        </div>
+    </div>
+    <div id="accumulationThreshold">
+        <div>
+            <p>Ngưỡng để x&aacute;c định xem một cell nhất định c&oacute; phải l&agrave; một phần của d&ograve;ng chảy hay kh&ocirc;ng, x&eacute;t theo tổng diện t&iacute;ch chảy v&agrave;o cell đ&oacute;.
+            </p>
+        </div>
+    </div>
+    <div id="streamDesignationMethod">
+        <div>
+            <p>Chỉ định xem c&aacute;c ph&acirc;n v&ugrave;ng d&ograve;ng chảy ở đầu ra sẽ c&oacute; gi&aacute; trị kh&ocirc;ng đổi, gi&aacute; trị duy nhất hay được sắp xếp theo thứ tự.
+            </p>
+        </div>
+    </div>
+    <div id="simplify">
+        <div>
+            <p>X&aacute;c định xem c&aacute;c đường d&ograve;ng chảy đầu ra c&oacute; được l&agrave;m mịn th&agrave;nh c&aacute;c h&igrave;nh dạng đơn giản hơn hay kh&ocirc;ng.
+            </p>
+            <p>Nếu được chọn, đối tượng đường d&ograve;ng chảy sẽ được đơn giản h&oacute;a bằng thuật to&aacute;n Douglas-Peucker c&oacute; dung sai l&agrave; căn bậc hai của (0.5) * k&iacute;ch thước cell. Đ&acirc;y l&agrave; mặc định. Nếu kh&ocirc;ng được chọn, đối tượng đường d&ograve;ng chảy sẽ kh&ocirc;ng được l&agrave;m mịn.
+            </p>
+        </div>
+    </div>
+    <div id="outputStreamFeaturesName">
+        <div>
+            <p>T&ecirc;n của lớp c&aacute;c đối tượng đường d&ograve;ng chảy sẽ được tạo v&agrave; th&ecirc;m v&agrave;o bản đồ.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>T&ecirc;n của thư mục trong  <b>Nội dung của t&ocirc;i</b> sẽ lưu trữ kết quả.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

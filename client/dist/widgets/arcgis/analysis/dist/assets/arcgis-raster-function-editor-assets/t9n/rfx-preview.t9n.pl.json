@@ -1,0 +1,13 @@
+{
+  "header": "Podgląd",
+  "description": "Wyświetl podgląd wyniku przed uruchomieniem analizy.",
+  "showPreview": "Wyświetl podgląd",
+  "previewLayer": "Wyświetl podgląd warstwy ${number}",
+  "update": "Zmień",
+  "newPreview": "Nowy podgląd",
+  "previewPopup": "Włącz podgląd wyników analizy na podstawie parametrów wejściowych.",
+  "previewError": "Ta warstwa podglądu nie jest dostępna. Sprawdź parametry wejściowe i jeszcze raz zaktualizuj tę warstwę podglądu.",
+  "updatePopover": "Zaktualizuj wybraną warstwę podglądu",
+  "createPopover": "Utwórz nową warstwę podglądu",
+  "maxPreview": "Maksymalna liczba dozwolonych warstw podglądu: ${maxCount}"
+}

@@ -1,0 +1,14 @@
+{
+  "outputRaster": "OutputRaster",
+  "rfxVariable": "RasterFunctieVariable",
+  "selectLayer": "Kaartlaag selecteren",
+  "allowScalar": "Selecteer een laag of voer een constante in",
+  "browseLayer": "Blader door lagen",
+  "loading": "Bezig met laden...",
+  "layerMissing": "Een of meer beeldlagen uit de kaart worden hier niet vermeld omdat de eigenschap analyseservice toestaan niet is ingeschakeld.",
+  "layerFailedToLoad": "Kan laag niet laden.",
+  "learnMore": "Meer informatie",
+  "errorCodes": {
+    "required": "Deze parameter is vereist."
+  }
+}

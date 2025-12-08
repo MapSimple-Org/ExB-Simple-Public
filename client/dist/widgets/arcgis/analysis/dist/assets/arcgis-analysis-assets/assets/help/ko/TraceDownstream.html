@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>하류 추적 도구는 지정한 입력 위치에서 하류 흐름 경로를 확인합니다.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputLayer">
+        <div>
+            <p>각 하류 추적 라인의 시작 위치로 사용될 포인트 피처입니다.
+            </p>
+            <p class="toolPaneOnly">피처 개수는 필터링 기준 및 분석 범위와 같은 추가 요소에 따라 달라집니다.
+            </p>
+        </div>
+    </div>
+    <div id="splitDistance">
+        <div>
+            <p>추적 라인이 분할될 개별 세그먼트의 길이입니다.
+            </p>
+        </div>
+    </div>
+    <div id="splitUnits">
+        <div>
+            <p> <b>거리 분할</b> 매개변수에 사용될 단위입니다.
+            </p>
+        </div>
+    </div>
+    <div id="maxDistance">
+        <div>
+            <p>반환될 추적 라인의 총 길이입니다.
+            </p>
+        </div>
+    </div>
+    <div id="maxDistanceUnits">
+        <div>
+            <p> <b>최대 하류 추적 거리</b> 매개변수에 사용될 단위입니다.
+            </p>
+        </div>
+    </div>
+    <div id="boundingPolygonLayer">
+        <div>
+            <p>추적 라인을 클립할 영역을 설명하는 폴리곤 피처 레이어입니다.
+            </p>
+            <p>이 매개변수는  <b>최대 하류 추적 거리</b> 매개변수 값을 대체합니다.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>생성되고 맵에 추가될 하류 추적 경로 레이어의 이름입니다.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>결과를 저장할  <b>내 콘텐츠</b>의 폴더 이름입니다.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

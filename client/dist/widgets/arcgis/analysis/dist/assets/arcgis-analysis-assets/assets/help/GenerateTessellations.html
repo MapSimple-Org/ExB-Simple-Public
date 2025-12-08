@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>The Generate Tessellations tool creates a grid of polygons based on the specified extent, shape, and size.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="binType">
+        <div>
+            <p>The shape of the tessellations that will be created.
+            </p>
+        </div>
+    </div>
+    <div id="sizeType">
+        <div>
+            <p>Specifies whether the tessellation size will be defined by its area (<b>Area</b>) or by a distance value (<b>Distance</b>).
+            </p>
+        </div>
+    </div>
+    <div id="binSize">
+        <div>
+            <p>The size (area or distance) of the generated tessellations. For squares, hexagons, triangles, and diamonds, the distance determines the height of the tessellations. For transverse hexagons, the distance determines the width of the tessellations.
+            </p>
+        </div>
+    </div>
+    <div id="binResolution">
+        <div>
+            <p>The H3 resolution of the tessellations. Resolution ranges from 0 to 15. With each increasing resolution size, the area of the polygons will decrease to one seventh the size at the lower resolution.
+            </p>
+        </div>
+    </div>
+    <div id="binSizeUnit">
+        <div>
+            <p>The units that will be used for the tessellation size.
+            </p>
+        </div>
+    </div>
+    <div id="extentLayer">
+        <div>
+            <p>The extent that the tessellations will cover.
+            </p>
+            <p class="toolPaneOnly">The count of features depends on additional factors such as filtering criteria and the analysis extent.
+            </p>
+        </div>
+    </div>
+    <div id="intersectStudyArea">
+        <div>
+            <p>For feature layers, specifies whether the tessellations will cover the entire extent or only the areas where the tessellations intersect features.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>The name of the layer that will be created and added to the map.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>The name of the folder in  <b>My content</b> where the result will be saved.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

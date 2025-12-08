@@ -1,0 +1,13 @@
+{
+  "weightedOverlayTable": "Taula de superposició ponderada",
+  "id": "ID",
+  "layer": "Capa",
+  "field": "Camp",
+  "influence": "Influència",
+  "sumOfInfluence": "Suma d'influència",
+  "value": "Valor",
+  "remapTable": "Taula de nova representació geogràfica",
+  "scale": "Escala",
+  "scales": "Escales",
+  "selectRaster": "Seleccioneu un ràster"
+}

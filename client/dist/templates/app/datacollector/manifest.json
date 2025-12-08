@@ -1,0 +1,28 @@
+{
+  "name": "datacollector",
+  "type": "template",
+  "templateType": "app",
+  "label": "Data collector",
+  "description": "Data collector is a template that features the Edit widget with a map and provides the ability to add, delete, and edit features. Along with chart, text, and list in the left collapsed panel, it displays the key metrics of your live data.",
+  "thumbnail": "thumbnail.png",
+  "order": 22,
+  "tags": [
+    "Map",
+    "Sidebar",
+    "Edit",
+    "Logo",
+    "Title",
+    "Chart",
+    "List",
+    "Card",
+    "Pop up"
+  ],
+  "categoriesTags": [
+    "Map centric",
+    "Fullscreen"
+  ],
+  "isMultiplePage": false,
+  "isMapAware": true,
+  "thumbnailWidth": 320,
+  "thumbnailHeight": 214
+}

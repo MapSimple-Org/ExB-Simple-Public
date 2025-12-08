@@ -1,0 +1,31 @@
+{
+  "name": "harbor",
+  "type": "template",
+  "templateType": "app",
+  "label": "Harbor",
+  "description": "Harbor is a map-centric template featuring collapsible filter groups in an accordion layout. Users can interact with dynamic filter panels to refine visible data, while contextual buttons open related windows or panels for additional detail.",
+  "thumbnail": "thumbnail.png",
+  "order": 14,
+  "templateCreateVersion": "1.18.0",
+  "tags": [
+    "Map",
+    "Legend",
+    "Filter",
+    "Accordion",
+    "Window",
+    "Logo",
+    "Title",
+    "Share",
+    "List",
+    "Gallery"
+  ],
+  "categoriesTags": [
+    "Web page",
+    "Fullscreen",
+    "Map centric"
+  ],
+  "isMultiplePage": false,
+  "isMapAware": false,
+  "thumbnailWidth": 320,
+  "thumbnailHeight": 214
+}

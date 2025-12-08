@@ -1,0 +1,68 @@
+{
+  "addField": "Mező hozzáadása",
+  "addFieldErrors": {
+    "creatingFailed": "A(z) ${fieldName} mező létrehozása nem sikerült.",
+    "existingFieldNameError": "A mező neve nem lehet ugyanaz, mint egy meglévő mezőnév.",
+    "invalidName": "Érvénytelen név",
+    "invalidNameInputInvalidCharactersError": "A mezőnévnek betűvel kell kezdődnie, és csak betűket, számokat, valamint alulvonást („_”) tartalmazhat.",
+    "invalidNameInputSQLError": "A mezőnév nem egyezhet meg egy SQL-kulcsszóval.",
+    "valueIsRequiredError": "Ezt az értéket kötelező megadni."
+  },
+  "cancel": "Mégse",
+  "createAndSelectField": "Mező létrehozása és kiválasztása",
+  "createNewFields": "Új mező létrehozása",
+  "fieldLoadingErrorText": "A mezők betöltése nem sikerült.",
+  "fieldName": "Mező neve",
+  "fieldType": "Mezőtípus",
+  "fieldTypesIncompatible": "Nem állnak rendelkezésre kompatibilis mezők.",
+  "layerNotSelected": "Nincs kiválasztott réteg a mezők kitöltéséhez.",
+  "loadingFields": "Mezők betöltése",
+  "noSearchResults": "A rendszer nem talált egyező mezőket.",
+  "requiredErrorLabelDefault": "Egy mező",
+  "requiredErrorMessage": "Ez a paraméter kötelező.",
+  "selectFieldPicklistHeading": "Mező kiválasztása",
+  "selectOkBtnText": "Kiválasztás",
+  "tooltip": "Érvényes mezőnevet és mezőtípust kell megadni.",
+  "types": {
+    "big-integer": {
+      "description": "Tároljon egész számokat a -(2${startSup}53${endSup}-1) és a 2${startSup}53${endSup}-1 közötti tartományban. Ezt a mezőtípust akkor használja, ha a támogatott egész szám mezőtartományon kívül eső számokat használ.",
+      "title": "Nagy egész szám"
+    },
+    "date": {
+      "description": "Értékek tárolása dátummal és idővel.",
+      "title": "Dátum"
+    },
+    "date-only": {
+      "description": "Dátumértékek tárolása időértékek nélkül.",
+      "title": "Csak dátum"
+    },
+    "double": {
+      "description": "Számok tárolása tizedesjegyekkel.",
+      "title": "Nem egész szám"
+    },
+    "global-id": {
+      "description": "A vektoros elem egyedi azonosítására szolgáló, 36 karakteres, betűkből és számokból álló karakterlánc tárolása.",
+      "title": "GlobalID"
+    },
+    "guid": {
+      "description": "Betűkből és számokból álló, 36 karakteres karakterlánc tárolása. A globális egyedi azonosítót (Globally Unique Identifier vagy GUID) gyakran használják a vektoros elemek közötti kapcsolatok kezelésére.",
+      "title": "GUID"
+    },
+    "integer": {
+      "description": "Egész számok tárolása: ${lowerIntegerRange}–${upperIntegerRange}.",
+      "title": "Egész szám"
+    },
+    "string": {
+      "description": "Egy alfanumerikus karakterekből álló készlet tárolása",
+      "title": "Karakterlánc"
+    },
+    "time-only": {
+      "description": "Időértékek tárolása dátumértékek nélkül.",
+      "title": "Csak idő"
+    },
+    "timestamp-offset": {
+      "description": "A dátum, az idő és a koordinált világidőhöz (UTC) viszonyított eltolódást jelző értékek tárolása.",
+      "title": "Időbélyeg eltolása"
+    }
+  }
+}

@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>Elementu savieno&scaron;anas rīks pievieno atribūtus no viena slāņa vai tabulas citai, ņemot vērā noteiktās telpiskās un atribūtu saistības. Pēc izvēles statistiku var aprēķināt, ja ir vairāki atbilsto&scaron;i ieraksti.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="targetLayer">
+        <div>
+            <p>Slānis vai tabula, kurai ir atribūti no savienojuma slāņa, kas pievienots tā atribūtu tabulai.
+            </p> 
+            <p class="toolPaneOnly">Elementu skaits ir atkarīgs no papildu faktoriem, piemēram, filtrē&scaron;anas kritērijiem un analīzes apjoma.
+            </p> 
+            <p class="modelBuilderOnly"> <b>Slānis</b> ir norādīts pēc noklusējuma, kad <b>Mērķa slānis</b> nav aizpildīts. Lai pievienotu ievades tabulu, pirms datu kopas pievieno&scaron;anas izvēlieties <b>Tabula</b>.
+            </p>
+        </div>
+    </div>
+    <div id="joinLayer">
+        <div>
+            <p>Slānis vai tabula ar atribūtiem, kas tiks pievienoti mērķa slānim.
+            </p> 
+            <p class="toolPaneOnly">Elementu skaits ir atkarīgs no papildu faktoriem, piemēram, filtrē&scaron;anas kritērijiem un analīzes apjoma.
+            </p> 
+            <p class="modelBuilderOnly"> <b>Slānis</b> ir norādīts pēc noklusējuma, kad <b>Savieno&scaron;anas slānis</b> nav aizpildīts. Lai pievienotu ievades tabulu, pirms datu kopas pievieno&scaron;anas izvēlieties <b>Tabula</b>.
+            </p>
+        </div>
+    </div>
+    <div id="useSpatialRelationship">
+        <div>
+            <p>Norāda, vai slāņi tiks savienoti, pamatojoties uz telpisko attiecību. &Scaron;im nolūkam abiem slāņiem nepiecie&scaron;ama ģeometrija.
+            </p>
+        </div>
+    </div>
+    <div id="spatialRelationship">
+        <div>
+            <p>Norāda telpisko attiecību, kas nosaka to, kuri elementi tiks savienoti. Savieno&scaron;anas slānī tiks pievienoti tie elementi, kuriem ir norādītā saistība ar mērķa slāni. Pieejamās saistības ir atkarīgas no ievades ģeometrijas veida.
+            </p>
+        </div>
+    </div>
+    <div id="spatialRelationshipDistance">
+        <div>
+            <p>Attālums no mērķa slāņa elementiem, kas tiks izmantoti, lai noteiktu, vai elementi tiks apvienoti.
+            </p>
+        </div>
+    </div>
+    <div id="spatialRelationshipDistanceUnits">
+        <div>
+            <p>Vienības, kas tiks izmantotas attāluma norādī&scaron;anai.
+            </p>
+        </div>
+    </div>
+    <div id="useAttributeRelationship">
+        <div>
+            <p>Norāda, vai slāņi tiks savienoti, pamatojoties uz atbilsto&scaron;ajām lauka vērtībām. Ja viena vai vairākas ievades ir tabula, savienojumu var definēt, izmantojot atribūtu attiecību.
+            </p>
+        </div>
+    </div>
+    <div id="attributeRelationship">
+        <div>
+            <p>Atribūta saistība, kas nosaka, kuri elementi tiks savienoti. Elementi tiks saskaņoti kā atbilsto&scaron;i, ja savienojamā slāņa lauku vērtības ir vienādas ar mērķa slāņa lauku vērtībām.
+            </p>
+        </div>
+    </div>
+    <div id="joinOperation">
+        <div>
+            <p>Norāda, kā tiks apstrādāti savienojumi gadījumā, ja vairāki ieraksti no savienojuma slāņa būs atbilsto&scaron;i savieno&scaron;anas kritērijiem. Izvēlieties kādu no &scaron;īm opcijām:
+                <ul>
+                    <li> <b>Savienot vienu ar vienu</b>&mdash;katram elementam mērķa slānī tiks pievienots viens ieraksts savieno&scaron;anas slānī tiks.
+                    </li>
+                    <li> <b>Savienot vienu ar daudziem</b>&mdash;Visi atbilsto&scaron;ie elementi savienojuma slānī tiks pievienoti mērķa slānim. Rezultātu slānis iekļaus vairākus mērķa elementa ierakstus.
+                    </li>
+                </ul>
+                
+            </p>
+        </div>
+    </div>
+    <div id="handleMatchingRecords">
+        <div>
+            <p>Ja vairāki savieno&scaron;anas slāņa elementi atbilst mērķa elementam, &scaron;is parametrs norāda, vai tiks pievienots viens ieraksts no savienojuma slāņa, un kopsavilkuma statistika tiks aprēķināta izvēlētajam laukam visiem atbilsto&scaron;ajiem ierakstiem no savienojuma slāņa, vai arī tiks aprēķināts tikai atbilsto&scaron;o ierakstu skaits.
+            </p>
+        </div>
+    </div>
+    <div id="summaryFields">
+        <div>
+            <p>Ja ir vairāki savienojuma elementi, kas atbilst mērķa elementam, tiek aprēķināta visu atbilsto&scaron;o ierakstu kopsavilkuma statistika. Norādiet skaitļu vai datumu laukus no savienojuma slāņa un statistiku, kas tiks aprēķināta katram laukam.
+            </p>
+        </div>
+    </div>
+    <div id="recordsToMatch">
+        <div>
+            <p>Ja ir vairāki savienojuma elementi, kas atbilst mērķa elementam, izvadē tiks iekļauts pirmais ieraksts no savienojuma slāņa atribūtu tabulas. Izvēlieties skaitli vai datuma lauku un kārto&scaron;anas secību, kas noteiks atribūtu tabulas kārto&scaron;anu.
+            </p>
+        </div>
+    </div>
+    <div id="joinType">
+        <div>
+            <p>Norāda, vai izvadē tiks iekļauti neatbilsto&scaron;i mērķa elementi. Opcija <b>Iek&scaron;ējais savienojums</b> atgriež tikai atbilsto&scaron;os mērķa ierakstus, bet <b>Kreisais savienojums</b> opcija atgriež visus mērķa ierakstus pat tad, ja mērķa elementam nav atbilstības savienojuma slānī.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>Tā slāņa vai tabulas nosaukums, kas tiks izveidots un pievienots kartei.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>Mapes nosaukums sadaļā  <b>Mans saturs</b>, kurā tiks saglabāts rezultāts.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

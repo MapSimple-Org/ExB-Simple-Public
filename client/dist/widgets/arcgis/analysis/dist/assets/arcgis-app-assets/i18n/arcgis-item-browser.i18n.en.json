@@ -1,0 +1,417 @@
+{
+  "itemBrowser": {
+    "filters": "Filters",
+    "preview": "Preview",
+    "selectedLayers": "Selected layers",
+    "selectedItems": "Selected items",
+    "pageRange": "${start}-${end}, total: ${total}",
+    "pageRangeAria": "${start}-${end}, total items: ${total}",
+    "pageRangeWithRecycleBin": "${start}-${end}, total: ${total} (Total size: ${recycleBinSize})",
+    "pageRangeAriaWithRecycleBin": "${start}-${end}, total items: ${total} (Total size: ${recycleBinSize})",
+    "foundOnPage": "Matching results on current page: ${total}",
+    "totalSize": "Total size: ${totalSize}",
+    "selectedMultipleWithSize": "Selected: ${num} (${totalSize})",
+    "selectedMultipleWithSizeSmall": "${num} (${totalSize})",
+    "noSelectedLayers": "No layers currently selected",
+    "noSelectedItems": "No items currently selected",
+    "sharingUpdated": "${itemTitle} sharing updated.",
+    "refineContent": "Refine content"
+  },
+  "layerTypes": {
+    "point": "Point layer",
+    "line": "Line layer",
+    "polygon": "Polygon layer",
+    "multipatch": "Multipatch layer",
+    "multipoint": "Multipoint layer",
+    "table": "Table",
+    "catalog": "Catalog layer",
+    "oriented imagery": "Oriented imagery layer",
+    "parcel": "Parcel layer",
+    "utility network": "Utility network layer",
+    "topology": "Topology layer",
+    "trace network": "Trace network layer"
+  },
+  "filterIndustry": {
+    "title": "Industry",
+    "Industry": "Industry: ${industry}",
+    "Build a layer": "Build a layer",
+    "Agriculture": "Agriculture",
+    "Electric Utilities": "Electric Utilities",
+    "Environment": "Environment",
+    "Forestry": "Forestry",
+    "Gas Utilities": "Gas Utilities",
+    "General": "General",
+    "Natural Resources": "Natural Resources",
+    "Petroleum": "Petroleum",
+    "Public Safety": "Public Safety",
+    "Telecommunications": "Telecommunications",
+    "Transportation": "Transportation",
+    "Water Utilities": "Water Utilities"
+  },
+  "filterItemType": {
+    "title": "Item type",
+    "itemType": "Type: ${itemType}",
+    "options": {
+      "maps": "Maps",
+      "maps-webmaps": "Web maps",
+      "maps-mapfiles": "Map files",
+      "layers": "Layers",
+      "layers-weblayers": "Web layers",
+      "layers-weblayers-features": "Feature layers",
+      "layers-weblayers-tiles": "Tile layers",
+      "layers-weblayers-mapimage": "Map image layers",
+      "layers-weblayers-imagery": "Imagery layers",
+      "layers-weblayers-scenelayers": "Scene layers",
+      "layers-weblayers-videolayers": "Video layers",
+      "layers-weblayers-tiledimagelayers": "Tiled imagery layers",
+      "layers-weblayers-elevationlayers": "Elevation layers",
+      "layers-weblayers-feeds": "Feeds",
+      "layers-weblayers-tables": "Tables",
+      "layers-layerfiles": "Layer files",
+      "scenes": "Scenes",
+      "applications": "Apps",
+      "applications-web": "Web apps",
+      "applications-dashboards": "Dashboards",
+      "applications-sites": "Sites",
+      "applications-pages": "Pages",
+      "applications-geobim-projects": "GeoBIM projects",
+      "applications-geobim-apps": "GeoBIM applications",
+      "applications-instant-apps": "Instant Apps",
+      "applications-storymap": "Storymaps",
+      "applications-data-pipelines": "Data Pipelines",
+      "applications-experience": "Experience Builder",
+      "applications-wab": "Web AppBuilder",
+      "applications-mobile": "Mobile apps",
+      "applications-desktop": "Desktop apps",
+      "developer-credentials": "Developer credentials",
+      "developer-credentials-oauth": "OAuth 2.0 credentials",
+      "developer-credentials-api-token": "API key credentials",
+      "developer-credentials-api-key": "API key (Legacy)",
+      "tools": "Tools",
+      "tools-locators": "Locators",
+      "tools-geodatabase": "Geodatabase access",
+      "tools-geometric": "Geometric operations",
+      "tools-geoprocessing": "Geoprocessing tasks",
+      "tools-network": "Network analysis",
+      "tools-analytics": "Analytics",
+      "files": "Files",
+      "files-document": "Documents",
+      "files-image": "Images",
+      "files-pdf": "PDFs",
+      "files-csv": "CSVs",
+      "files-report": "Administrative reports",
+      "files-raster": "Raster function templates",
+      "notebooks": "Notebooks",
+      "insights": "Insights",
+      "insights-workbooks": "Workbooks",
+      "insights-pages": "Reports",
+      "insights-models": "Models",
+      "insights-themes": "Themes",
+      "data-stores": "Data stores",
+      "knowledge-graphs": "Knowledge graphs"
+    }
+  },
+  "filterCategories": {
+    "categories": "Categories",
+    "groupCategories": "Group categories",
+    "category": "Category: ${category}",
+    "uncategorized": "Uncategorized",
+    "noCategoriesTitle": "No categories yet",
+    "noCategories": "Categories allow members to organize items consistently and provide a simple way to browse content in the organization.",
+    "noGroupCategoriesTitle": "No group categories yet",
+    "noGroupCategories": "Categories allow group members to organize items consistently and provide a simple way to browse content in the group.",
+    "setupCategories": "Set up content categories",
+    "setupGroupCategories": "Set up group categories",
+    "configureCategories": "Configure categories"
+  },
+  "filterRegion": {
+    "regions": "Regions",
+    "region": "Region: ${region}"
+  },
+  "filterCollaborations": {
+    "title": "Distributed collaborations",
+    "label": "Distributed collaborations: ${name}",
+    "loading": "Loading collaborations..."
+  },
+  "filterContentStatus": {
+    "title": "Status",
+    "label": "Status: ${contentStatus}",
+    "authoritative": "Authoritative",
+    "deprecated": "Deprecated"
+  },
+  "filterDeleteProtection": {
+    "title": "Delete protection",
+    "label": "Delete protection: ${deleteProtection}",
+    "enabled": "Enabled",
+    "disabled": "Disabled"
+  },
+  "filterExpiration": {
+    "today": "Today",
+    "tomorrow": "Tomorrow",
+    "next7": "Next 7 days",
+    "next30": "Next 30 days",
+    "custom": "Custom range...",
+    "title": {
+      "expires": "Expiration date"
+    },
+    "expires": "Expiration date: ${date}"
+  },
+  "filterExtent": {
+    "label": "Within map area",
+    "title": "Only show content within map area"
+  },
+  "filterFolder": {
+    "folders": "Folders",
+    "placeholder": "Filter folders",
+    "clear": "Clear search",
+    "all": "All my content",
+    "allContentUser": "All of ${username}'s content",
+    "recycleBin": "Recycle bin",
+    "label": "Folder: ${folder}",
+    "loading": "Loading folders...",
+    "folderOptions": "Folder options",
+    "editFolder": "Edit folder",
+    "deleteFolder": "Delete folder",
+    "delete": "Delete",
+    "areYouSure": "Are you sure you want to delete this folder?",
+    "areYouSureExplanation": "Folder, <strong style='font-weight: 500'>${title}</strong>, will be permanently deleted. Additionally, all items within the folder will be marked for deletion. Do you still want to continue deleting this folder?",
+    "cancel": "Cancel",
+    "save": "Save",
+    "createAFolder": "Create a folder",
+    "folderName": "Folder name",
+    "createFolder": "Create folder",
+    "error": {
+      "title": "Error",
+      "noName": "You must provide a name for your folder.",
+      "folderAlreadyExists": "A folder '${folder}' already exists. Please choose another name.",
+      "invalidCharacters": {
+        "single": "The name cannot contain this character: ${invalidCharacters}.",
+        "multiple": "The name cannot contain any of these characters: ${invalidCharacters}.",
+        "unknown": "The name cannot contain any of these characters: ${invalidCharacters}."
+      },
+      "errorCreatingFolder": "There was an error creating ${folderName} folder."
+    }
+  },
+  "filterGroup": {
+    "title": "Groups",
+    "groups": "My groups",
+    "placeholder": "Filter groups",
+    "all": "All my groups' content",
+    "label": "Group: ${group}",
+    "loading": "Loading groups..."
+  },
+  "filterContentType": {
+    "contentType": "Content type",
+    "all": "All my organization's content",
+    "recycle": "Recycle bin"
+  },
+  "filterLocation": {
+    "location": "Location",
+    "label": "Location: ${location}",
+    "findLocationText": "Find address or place",
+    "search": "Search for locations",
+    "suggestions": "Suggestions",
+    "noResults": "No results found for \"${searchTerm}\""
+  },
+  "filterSharing": {
+    "title": "Sharing",
+    "label": "Shared: ${sharing}",
+    "owner": "Owner",
+    "shared": "Shared with groups",
+    "private": "Not shared with groups",
+    "account": "Organization",
+    "public": "Everyone (public)"
+  },
+  "filterTags": {
+    "title": "Tags",
+    "label": "Tagged: ${tags}",
+    "selectTags": "Select tags"
+  },
+  "filterReportType": {
+    "title": "Report type",
+    "label": "Report type: ${reportType}",
+    "activity": "Activity",
+    "credits": "Credit",
+    "users": "Member",
+    "content": "Item",
+    "item_usages": "Item view count",
+    "service_usages": "Service usage"
+  },
+  "cardThumbnail": {
+    "loading": "Loading image"
+  },
+  "card": {
+    "select": "Select item: ${title}",
+    "lastUpdated": "Item updated: ${date}",
+    "viewItemDetails": "View more details about ${title}",
+    "preview": "More details",
+    "hidePreview": "Less details",
+    "closeDetails": "Close preview",
+    "openDetails": "Preview",
+    "moreOptions": "More options"
+  },
+  "cardSublayerSelect": {
+    "select": "Select layer",
+    "selectLayers": "Select layers",
+    "selectedSingle": "Selected",
+    "selectedLayers": "Selected layers: ${num}",
+    "selectedMultiple": "Selected: ${num}",
+    "selectedName": "Selected layer: ${name}",
+    "selectedTask": "Selected task: ${task}",
+    "errorTitle": "Error connecting to service.",
+    "errorBody": "Unable to successfully connect to the service. The service is either down or requires authentication.",
+    "notebookErrorBody": "This tool was published from a notebook. Access to ArcGIS Notebooks is blocked for your organization. Contact your administrator to adjust the setting.",
+    "retry": "Retry",
+    "selectTask": "Select task",
+    "selectTaskFrom": "Select a task from ${title}"
+  },
+  "cardLayersList": {
+    "hideDetails": "Hide details",
+    "showDetails": "Show details",
+    "layersAndTables": "Layers and tables"
+  },
+  "content": {
+    "noResults": "No items found that meet your criteria. Try changing your search term or clearing some filters to show more items.",
+    "noContent": "No content available.",
+    "loading": "Loading..."
+  },
+  "copy": {
+    "copy": "Copy",
+    "copied": "Copied"
+  },
+  "bucketSelect": {
+    "my": "My content",
+    "org": "My organization",
+    "group": "My groups",
+    "favorites": "My favorites",
+    "living atlas": "Living Atlas",
+    "living atlas analysis": "Living Atlas analysis layers",
+    "subscription content": "Subscription content",
+    "all": "ArcGIS Online",
+    "catalog": "Hub catalogs",
+    "catalogLabel": "Catalog"
+  },
+  "preview": {
+    "owner": "Owner",
+    "summary": "Summary",
+    "noSummary": "No summary provided",
+    "description": "Description",
+    "noDescription": "No description provided",
+    "thumbnail": "Thumbnail",
+    "overview": "Overview",
+    "details": "Details",
+    "termsOfUse": "Terms of use",
+    "noTermsOfUse": "No terms of use provided",
+    "itemManagedBy": "Item managed by: ${username}",
+    "fullItemDetails": "Full item details",
+    "layersCount": "Layers (${count})",
+    "layers": "Layers",
+    "add": "Add",
+    "remove": "Remove",
+    "loading": "Loading...",
+    "shared": "Sharing",
+    "created": "Item created",
+    "updated": "Item updated",
+    "fileSize": "File size",
+    "dataUpdated": "Data updated",
+    "schemaUpdated": "Schema updated",
+    "ID": "ID",
+    "copyID": "Copy ID",
+    "URL": "URL",
+    "copyURL": "Copy URL",
+    "itemStatus": "Status",
+    "viewCount": "View count",
+    "readMore": "Read more",
+    "dashboardViews": "Dashboard views",
+    "dashboardMobile": "Desktop, Mobile",
+    "dashboardDesktop": "Desktop",
+    "sharing": {
+      "private": "Private",
+      "shared": "Groups",
+      "public": "Everyone",
+      "org": "Organization"
+    },
+    "groupCategories": "Group categories",
+    "matched": "Matched",
+    "matchedNumber": "Matched (${num})",
+    "layerError": {
+      "title": "Unable to display layers",
+      "message": "Layer preview not supported for secured services."
+    },
+    "noServiceMessage": "Selected service does not exist or is inaccessible.",
+    "credits": "Acknowledgments",
+    "noCredits": "No source acknowledged.",
+    "geometryTypeTitle": "Geometry type",
+    "layerTypeTitle": "Layer type",
+    "fields": "Fields",
+    "noFields": "No fields configured for this layer",
+    "geometryType": {
+      "esriGeometryPoint": "Point layer",
+      "esriGeometryPolyline": "Line layer",
+      "esriGeometryPolygon": "Polygon layer",
+      "esriGeometryMultiPatch": "Multipatch layer",
+      "table": "Table"
+    },
+    "layerActions": "Layer actions",
+    "itemError": {
+      "title": "Error",
+      "subscription": "This item is not currently available. The ArcGIS Online subscription associated with this item has been disabled.",
+      "unhandled": "There was an error while fetching this item."
+    }
+  },
+  "table": {
+    "loading": "Loading...",
+    "caption": "Item results, column headers with buttons are sortable.",
+    "selectAll": "Select all",
+    "selection": "Selection",
+    "headers": {
+      "title": "Title",
+      "modified": "Modified",
+      "created": "Created",
+      "owner": "Owner",
+      "size": "Size",
+      "deleted": "Date deleted",
+      "type": "Item type",
+      "badges": "Item status",
+      "favorite": "Favorite",
+      "sharing": "Share level",
+      "details": "View details",
+      "actions": "More item actions",
+      "dataset": "Dataset"
+    }
+  },
+  "tableRow": {
+    "deletesTomorrow": "Deletes tomorrow",
+    "deletes": {
+      "single": "Deletes in ${number} day",
+      "multiple": "Deletes in ${number} days",
+      "unknown": "Days until delete: ${number}"
+    },
+    "restore": "Restore",
+    "details": "View details",
+    "moreOptions": "More options",
+    "download": "Download"
+  },
+  "search": {
+    "searchName": "Search ${searchName}",
+    "searchAllContent": "Search All my content",
+    "searchAllUserContent": "Search All of ${username}'s content",
+    "searchGroupsContent": "Search My Groups",
+    "searchingGroupsContent": "Searching My Groups for",
+    "searchFavoritesContent": "Search My Favorites",
+    "searchOrganizationsContent": "Search My Organization",
+    "searchLivingAtlasContent": "Search Living Atlas",
+    "searchRecycleCurrentPage": "Search item titles on current page"
+  },
+  "find": {
+    "find": "Find",
+    "findOnPage": "Find on page",
+    "match": "Returns text matches for item titles on the current page only."
+  },
+  "view": {
+    "view": "View",
+    "list": "List",
+    "grid": "Grid",
+    "table": "Table"
+  }
+}

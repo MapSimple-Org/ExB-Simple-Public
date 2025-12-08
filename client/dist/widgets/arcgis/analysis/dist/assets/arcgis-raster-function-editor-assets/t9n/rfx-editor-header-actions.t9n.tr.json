@@ -1,0 +1,11 @@
+{
+  "newTemplate": "Yeni şablon oluştur",
+  "openTemplate": "Şablonu aç",
+  "addTemplate": "Şablon ekle",
+  "addFunction": "Raster işlevleri ekle",
+  "addConstant": "Sabit ekle",
+  "addRaster": "Raster değişkeni ekle",
+  "expand": "Genişletme",
+  "editTemplateProperties": "Şablon özelliklerini düzenle",
+  "viewTemplateProperties": "Şablon özelliklerini görüntüle"
+}

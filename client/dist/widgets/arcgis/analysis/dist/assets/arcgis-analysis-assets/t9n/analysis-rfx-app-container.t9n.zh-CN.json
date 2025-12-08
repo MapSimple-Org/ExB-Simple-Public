@@ -1,0 +1,16 @@
+{
+  "backLabel": "返回",
+  "browseHeader": "选择图层",
+  "cannotReopenRasterFunction": "无法重新打开栅格函数。",
+  "creditThresholdModal": {
+    "cancelRun": "取消",
+    "continueRun": "仍然运行",
+    "creditEstimate": "预估配额：${cost}",
+    "creditThreshold": "配额阈值：${threshold}",
+    "heading": "在继续之前",
+    "learnMore": "了解有关配额阈值的详细信息",
+    "thresholdExceeded": "此分析的预估配额成本高于web地图的配额阈值。"
+  },
+  "failedToExecuteEstimate": "提交失败。 执行 EstimateRasterAnalysisCost 失败",
+  "runAnalysisLabel": "运行"
+}

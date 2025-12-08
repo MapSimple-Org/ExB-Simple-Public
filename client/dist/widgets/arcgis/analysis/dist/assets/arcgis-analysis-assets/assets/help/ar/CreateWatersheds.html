@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html dir="rtl">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>تحدد أداة &quot;إنشاء مستجمعات المياه&quot; منطقة التوزيع الخاصة بالمنبع لنقاط محددة.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputLayer">
+        <div>
+            <p>المواقع حيث سيتم إنشاء المجمعات المائية (مستجمع مياه) عند المنبع.
+            </p>
+            <p class="toolPaneOnly">يعتمد عدد المعالم على عوامل إضافية مثل معايير التصفية ومدى التحليل.
+            </p>
+        </div>
+    </div>
+    <div id="searchDistance">
+        <div>
+            <p>أقصى مسافة مسموح بها لنقل موقع نقطة إدخال إلى أقرب خط صرف أو أعلى تراكم للتدفق.
+            </p>
+        </div>
+    </div>
+    <div id="searchUnits">
+        <div>
+            <p>الوحدات المراد استخدامها لمعلمة  <b>البحث عن المسافة</b>.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>اسم طبقة المعالم التي تحتوي على مضلعات مستجمع المياه ونقاط الصب المعدلة التي سيتم إنشاؤها وإضافتها إلى الخريطة.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>اسم المجلد الموجود في  <b>المحتوى الخاص بي</b> الذي سيتم حفظ النتيجة فيه.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

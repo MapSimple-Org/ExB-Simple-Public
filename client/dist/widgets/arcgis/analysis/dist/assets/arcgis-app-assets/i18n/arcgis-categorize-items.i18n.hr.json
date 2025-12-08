@@ -1,0 +1,11 @@
+{
+  "modalTitle": "Kategoriziraj stavke",
+  "save": "Spremi",
+  "cancel": "Odustani",
+  "loadingText": "Učitavanje u tijeku...",
+  "assignCategory": "Dodijeli kategoriju",
+  "errorMessage": "Nešto je pošlo po zlu. Pokušajte ponovo kasnije.",
+  "limited": "Stavke su ograničene na 20 kategorija. Uklonite kategoriju prije dodavanja nove.",
+  "undo": "Poništi",
+  "redo": "Ponovi"
+}

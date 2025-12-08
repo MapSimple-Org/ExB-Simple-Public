@@ -1,0 +1,85 @@
+{
+  "heading": "Créer une catégorie de connexion",
+  "select": "Sélectionner une catégorie de connexion existante",
+  "selectCustomSignIn": "Sélectionner une catégorie de connexion",
+  "orgDefaults": "Paramètres par défaut de l’organisation",
+  "createNew": "Créer",
+  "name": "Titre",
+  "description": "Description",
+  "enterName": "Saisir un titre pour la catégorie",
+  "enterDescription": "Saisir une description pour la catégorie",
+  "enterTitle": "Saisir un titre pour cette connexion",
+  "showOnTriage": "Activer la catégorie de connexion",
+  "showOnTriageDescription": "La description de la catégorie s’affiche sur la page de sélection d’une catégorie uniquement si deux catégories au moins sont activées.",
+  "socialProviders": "Fournisseurs de connexion via les réseaux sociaux",
+  "authenticationProviders": "Méthodes d’authentification",
+  "errorLabel": "Erreur liée à la catégorie de connexion personnalisée",
+  "preview": "Aperçu",
+  "restrictions": "Seuls le titre et la description de cette catégorie peuvent être modifiés. Toutes les autres options sont héritées des paramètres de l’organisation.",
+  "loginNotAvailable": "Cette méthode de connexion a été désactivée par votre organisation et ne sera pas présentée aux utilisateurs.",
+  "buttons": {
+    "editCategory": "Enregistrer la catégorie",
+    "next": "Suivant",
+    "back": "Retour",
+    "createCategory": "Créer une catégorie"
+  },
+  "errors": {
+    "nameRequired": "Un titre est requis pour toutes les catégories de connexion.",
+    "authenticationMethodsRequired": "Au moins une méthode de connexion est requise.",
+    "socialProviderRequired": "Au moins un fournisseur de connexion via les réseaux sociaux est requis."
+  },
+  "steps": {
+    "1": {
+      "title": "Choisir une option de départ",
+      "description": "Vous avez la possibilité de partir des paramètres de connexion par défaut de votre organisation, de modifier une catégorie de connexion existante ou de créer une nouvelle catégorie de connexion."
+    },
+    "2": {
+      "title": "Titre et description",
+      "description": "Saisir le titre et la description de la catégorie de connexion."
+    },
+    "3": {
+      "title": "Types de connexion",
+      "description": "Personnaliser et organiser les options de connexion qui s’affichent pour cette catégorie de connexion."
+    }
+  },
+  "createAccount": {
+    "label": "Lien de création de compte",
+    "description": "Autoriser la création d’un nouveau compte ArcGIS dans cette organisation."
+  },
+  "switchOrganization": {
+    "label": "Lien de changement d’organisation",
+    "description": "Afficher un lien permettant aux utilisateurs de se connecter à une autre organisation."
+  },
+  "authenticationMethods": {
+    "arcgis": {
+      "label": "Connexion via l’identifiant ArcGIS",
+      "description": "Donner aux utilisateurs la possibilité se connecter à l’aide de leur identifiant ArcGIS.",
+      "required": "Un titre est requis pour la méthode de connexion ArcGIS."
+    },
+    "saml": {
+      "label": "Connexion SAML",
+      "description": "Donner aux utilisateurs la possibilité de se connecter à l’aide de leur compte SAML.",
+      "required": "Un titre est requis pour la méthode de connexion SAML."
+    },
+    "oidc": {
+      "label": "Connexion OIDC",
+      "description": "Donner aux utilisateurs la possibilité de se connecter à l’aide de leur compte OIDC.",
+      "required": "Un titre est requis pour la méthode de connexion OIDC."
+    },
+    "social": {
+      "label": "Connexion via les réseaux sociaux",
+      "description": "Donner aux membres la possibilité de se connecter à l’organisation à l’aide de leurs identifiants de connexion aux réseaux sociaux ci-après.",
+      "github": "GitHub",
+      "facebook": "Facebook",
+      "google": "Google",
+      "apple": "Apple",
+      "required": "Un titre est requis pour la méthode de connexion via les réseaux sociaux."
+    }
+  },
+  "confirmLeave": {
+    "title": "Modifications non enregistrées",
+    "message": "Certaines modifications ne sont pas enregistrées. Voulez-vous vraiment quitter cette page ?",
+    "remain": "Rester sur la page",
+    "leave": "Quitter sans enregistrer"
+  }
+}

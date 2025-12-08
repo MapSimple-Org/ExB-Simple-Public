@@ -1,0 +1,23 @@
+{
+  "add": "Tambahkan",
+  "arcade": "Arcade",
+  "arcadeExpressionEditor": "Editor ekspresi Arcade",
+  "badSyntaxSQLExpression": "Sintaks yang salah pada ekspresi SQL. Perbaiki kesalahan.",
+  "calculationExpressionEditor": "Editor ekspresi perhitungan",
+  "cancel": "Batalkan",
+  "chooseLanguage": "Pilih bahasa",
+  "fieldToCalculate": "Kolom untuk menghitung: ${fieldName}",
+  "idealFor": "Ideal untuk;",
+  "languageSelect": "Pilih bahasa",
+  "layerLoadFailNoFields": "Layer gagal dimuat. Kolom tidak dapat diambil untuk editor.",
+  "next": "Selanjutnya",
+  "noLayerProvidedNoFields": "Tidak ada layer yang disediakan. Kolom tidak dapat diambil untuk editor.",
+  "sql": "SQL",
+  "sqlExpressionEditor": "Editor ekspresi SQL",
+  "tileSelectArcadeUseCase1": "Penghitungan yang memerlukan lebih banyak fungsi selain SQL menyertakan operasi spasial",
+  "tileSelectArcadeUseCase2": "Pemecahan masalah yang ditingkatkan",
+  "tileSelectSqlUseCase1": "Kinerja tercepat",
+  "tileSelectSqlUseCase2": "Penghitungan yang dapat diekspresikan menggunakan SQL",
+  "tileSelectSqlUseCase3": "Layer dengan Sinkronisasi atau mengaktifkan Terus lacak dari fitur yang telah dibuat atau diperbarui",
+  "valueCannotBeBlank": "Nilai tidak boleh kosong."
+}

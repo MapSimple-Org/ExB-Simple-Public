@@ -1,0 +1,12 @@
+{
+  "aboveMaximumMessage": "Vstupná hodnota musí byť menšia alebo rovná ${max}.",
+  "belowMinimumMessage": "Vstupná hodnota musí byť väčšia alebo rovná ${min}.",
+  "invalidDoubleMessage": "Vstupná hodnota musí byť typu double.",
+  "invalidIntegerMessage": "Vstupná hodnota musí byť celé číslo.",
+  "maxValuesMessage": "Musí sa tam nachádzať menej než ${maxValues} jedinečných vstupných hodnôt.",
+  "minValuesMessage": "Musí sa tam nachádzať aspoň ${minValues} jedinečných vstupných hodnôt.",
+  "requiredInputMessage": "Tento parameter je povinný.",
+  "strictlyMaximumMessage": "Vstupná hodnota musí byť menšia než ${max}.",
+  "strictlyMinimumMessage": "Vstupná hodnota musí byť väčšia než ${min}.",
+  "placeholder": "Zadajte hodnotu ..."
+}

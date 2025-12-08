@@ -1,0 +1,8 @@
+{
+  "loading": "Caricamento in corso...",
+  "pleaseWait": "Attendere.",
+  "loadingXMLRFT": "Caricamento del modello di funzione raster in formato XML.",
+  "failedToOpen": "Impossibile aprire.",
+  "readingFailed": "Impossibile caricare il modello di funzione raster selezionato.",
+  "failedToLoadXML": "Impossibile caricare il modello di funzione raster selezionato in formato XML."
+}

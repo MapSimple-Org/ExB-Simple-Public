@@ -1,0 +1,116 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e2]:
+  - generic [ref=e15]:
+    - application "Map" [ref=e21]
+    - generic [ref=e32]:
+      - button "Enhanced Search" [expanded] [ref=e35] [cursor=pointer]:
+        - img [ref=e37]
+      - button "QuerySimple" [ref=e42] [cursor=pointer]:
+        - img [ref=e44]
+    - generic:
+      - generic:
+        - generic:
+          - generic [ref=e54] [cursor=pointer]:
+            - generic "Zoom in" [ref=e55]:
+              - button "Zoom in" [ref=e57]:
+                - img [ref=e59]
+            - generic "Zoom out" [ref=e61]:
+              - button "Zoom out" [ref=e63]:
+                - img [ref=e65]
+          - generic "Default map view" [ref=e71] [cursor=pointer]:
+            - button "Home" [ref=e73]:
+              - img [ref=e75]
+        - generic [ref=e80]:
+          - generic [ref=e81]:
+            - button "Select by rectangle ∙ New selection (Draw a shape) ∙ Add to the current selection (Shift + Draw) ∙ Remove from current selection (Ctrl + Draw) ∙ Select subset from the current selection (Shift + Ctrl + Draw)" [ref=e82] [cursor=pointer]:
+              - img [ref=e83]
+            - button "More selection tools" [ref=e85] [cursor=pointer]:
+              - img [ref=e86]
+          - button "Clear selection" [active] [ref=e88] [cursor=pointer]:
+            - img [ref=e89]
+      - generic:
+        - button "Search" [ref=e92] [cursor=pointer]:
+          - img [ref=e93]
+        - button "Layers" [ref=e96] [cursor=pointer]:
+          - img [ref=e97]
+      - generic:
+        - 'button "Selected features: 0" [ref=e100] [cursor=pointer]':
+          - img [ref=e101]
+          - text: "Selected features: 0"
+        - generic [ref=e104]:
+          - generic [ref=e105]: King County
+          - generic [ref=e106]:
+            - text: Powered by
+            - link "Esri" [ref=e107] [cursor=pointer]:
+              - /url: https://www.esri.com/
+  - dialog "Enhanced Search" [ref=e108]:
+    - generic [ref=e109]:
+      - generic "Enhanced Search" [ref=e110]
+      - generic [ref=e111]:
+        - button "Collapse" [ref=e112] [cursor=pointer]:
+          - img [ref=e114]
+        - button "Close" [ref=e116] [cursor=pointer]:
+          - img [ref=e118]
+    - generic [ref=e123]:
+      - heading "Enhanced Search" [level=3] [ref=e125]
+      - generic [ref=e126]:
+        - generic [ref=e127]:
+          - generic [ref=e128]: Search Layer
+          - combobox [ref=e130] [cursor=pointer]:
+            - generic [ref=e132]: King County Parcels - Parcel
+            - img [ref=e134]
+        - generic [ref=e138]:
+          - generic [ref=e139]:
+            - generic "King County Parcels - Parcel" [ref=e142]
+            - button "Clear results" [ref=e143] [cursor=pointer]:
+              - img [ref=e145]
+          - generic [ref=e148]:
+            - button "Query" [ref=e149] [cursor=pointer]
+            - button "Results(1)" [ref=e150] [cursor=pointer]:
+              - text: Results
+              - generic [ref=e151]: (1)
+          - listbox "Results" [ref=e154]:
+            - generic [ref=e155]:
+              - button "Back" [ref=e156] [cursor=pointer]:
+                - img [ref=e158]
+              - text: Results
+              - button "Clear results" [ref=e160] [cursor=pointer]:
+                - img [ref=e162]
+              - button "Actions" [ref=e167] [cursor=pointer]:
+                - generic [ref=e168]:
+                  - generic [ref=e169]: Actions
+                  - img [ref=e171]
+            - generic [ref=e173]:
+              - alert [ref=e174]:
+                - generic [ref=e175]: "Features displayed: 1 / 1"
+                - button "Collapse all" [ref=e176] [cursor=pointer]:
+                  - img [ref=e178]
+              - listbox [ref=e181]:
+                - 'option "Collapse Parcel: 2223059013 Parcel number: 2223059013 Address: 15205 140TH WAY SE Renton 98058 Assessor''s Report Districts & Development Report Lot lines are approximate. Not for legal use. See our terms of use. Remove record" [selected] [ref=e182] [cursor=pointer]':
+                  - generic [ref=e183]:
+                    - button "Collapse" [ref=e184]:
+                      - img [ref=e186]
+                    - generic [ref=e190]:
+                      - 'heading "Parcel: 2223059013" [level=2] [ref=e191]'
+                      - generic [ref=e196]:
+                        - paragraph [ref=e197]:
+                          - text: "Parcel number: 2223059013"
+                          - text: "Address: 15205 140TH WAY SE"
+                          - text: Renton 98058
+                        - paragraph [ref=e198]:
+                          - link "Assessor's Report" [ref=e199]:
+                            - /url: https://blue.kingcounty.com/Assessor/eRealProperty/Dashboard.aspx?ParcelNbr=2223059013
+                          - link "Districts & Development Report" [ref=e200]:
+                            - /url: https://district-conditions-report.kingcounty.gov/?PIN=2223059013
+                        - paragraph [ref=e201]:
+                          - text: Lot lines are approximate. Not for legal use. See our
+                          - link "terms of use" [ref=e202]:
+                            - /url: https://www.kingcounty.gov/services/gis/Maps/terms-of-use.aspx
+                          - text: .
+                  - button "Remove record" [ref=e203]:
+                    - img [ref=e205]
+    - slider "Press arrow keys to resize" [ref=e208]:
+      - img [ref=e210]
+```

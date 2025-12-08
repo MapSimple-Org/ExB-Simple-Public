@@ -1,0 +1,36 @@
+{
+  "modalHeader": "Configurar categorías de contenido",
+  "modalGroupHeader": "Configurar categorías de grupo",
+  "helpText": "Edite, elimine o reordene las categorías de su organización.",
+  "helpTextGroup": "Edite, elimine o reordene las categorías para el contenido de este grupo.",
+  "helpTextDescription": "Recuerde que los demás miembros de su organización pueden tener ya asignadas estas categorías a sus elementos y que, al editar el esquema, se actualizan correspondientemente tales elementos.",
+  "helpTextGroupDescription": "Recuerde que los demás miembros del grupo pueden tener ya asignadas estas categorías a sus elementos y que, al editar el esquema, se actualizan correspondientemente tales elementos.",
+  "warning": {
+    "deleteInUseCategory": {
+      "title": "Eliminar categoría",
+      "cta": "Eliminar categoría",
+      "message": {
+        "single": "Hay un elemento asignado a esta categoría. Si elimina la categoría, también se eliminará de este elemento.",
+        "multiple": "Hay ${number} elementos asignados a esta categoría. Si elimina la categoría, también se eliminará de dichos elemento.",
+        "unknown": "Elementos asignados a esta categoría: ${number}. Si elimina la categoría, también se eliminará de dichos elemento."
+      }
+    },
+    "changeTitleInUseCategory": {
+      "title": "Actualizar categoría",
+      "message": {
+        "single": "Hay un elemento asignado a esta categoría. Si actualiza la categoría, se actualizará el elemento para utilizar \"${newTitle}\".",
+        "multiple": "Hay ${number} elementos asignados a esta categoría. Si actualiza la categoría, se actualizarán los elementos para utilizar \"${newTitle}\".",
+        "unknown": "Elementos asignados a esta categoría: ${number}. Si actualiza la categoría, se actualizarán los elementos para utilizar \"${newTitle}\"."
+      },
+      "cta": "Actualizar categoría"
+    }
+  },
+  "template": {
+    "templateList": {
+      "custom": {
+        "message": "Cree sus propias categorías para organizar el contenido de su organización.",
+        "messageGroup": "Cree sus propias categorías para organizar el contenido en este grupo."
+      }
+    }
+  }
+}

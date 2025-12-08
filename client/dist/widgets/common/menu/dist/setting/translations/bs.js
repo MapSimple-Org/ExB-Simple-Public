@@ -1,0 +1,1 @@
+System.register([],function(n){return{execute:function(){n({subMenuExpandMode:"Pro\u0161irenje na\u010dina podizbornika",mainMenu:"Glavni izbornik",subMenu:"Podizbornik",navArrowColor:"Boja navigacijske strelice"})}}});

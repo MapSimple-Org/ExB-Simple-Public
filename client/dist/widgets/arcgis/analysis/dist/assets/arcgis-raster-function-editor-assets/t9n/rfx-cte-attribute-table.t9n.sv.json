@@ -1,0 +1,22 @@
+{
+  "value": "Värde",
+  "classname": "ClassName",
+  "color": "Färg",
+  "raster": "Raster",
+  "tableType": "Tabelltyp",
+  "manual": "Manuell",
+  "external": "Extern",
+  "browseTable": "Bläddra i tabell",
+  "browseTableFrom": "Bläddra i tabell från",
+  "file": "Fil",
+  "dbfFile": "DBF-fil",
+  "layer": "Lager",
+  "unsupportedDataType": "Typen stöds inte",
+  "failedToGetTableFromLayer": "Det gick inte att hämta tabell från lagret.",
+  "generate": "Skapa tabell",
+  "minValue": "Minsta värde",
+  "maxValue": "Maximalt värde",
+  "classBaseName": "Klassbasnamn",
+  "colorscheme": "Färgschema",
+  "defaultClassName": "Label_"
+}

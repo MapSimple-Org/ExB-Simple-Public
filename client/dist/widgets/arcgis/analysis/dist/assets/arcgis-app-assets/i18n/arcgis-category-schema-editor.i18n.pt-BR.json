@@ -1,0 +1,69 @@
+{
+  "loadingText": "Carregando modelos de esquema",
+  "cancel": "Cancelar",
+  "finishSetup": "Concluir instalação",
+  "hasUnsavedChanges": "Você fez alterações de categoria que serão perdidas se você não salvar primeiro. Tem certeza que deseja fechar esta visualização e perder suas alterações?",
+  "error": {
+    "generic": {
+      "title": "Erro ao atualizar categorias",
+      "message": "Aconteceu algo errado. Tente novamente mais tarde."
+    },
+    "maxDepthExceeded": {
+      "title": "Erro ao atualizar categorias",
+      "message": "Você não pode agrupar categorias com mais de 2 níveis de profundidade."
+    },
+    "destinationHasSameName": {
+      "title": "Erro ao atualizar categorias",
+      "message": "Já existe uma categoria com o mesmo nome na categoria de destino."
+    },
+    "emptyTitle": {
+      "title": "Erro ao atualizar categorias",
+      "message": "O título da categoria não pode ficar vazio."
+    },
+    "noSchema": {
+      "title": "Esquema não encontrado",
+      "message": "Esquema de item não encontrado para o usuário."
+    },
+    "maxCharacter": {
+      "title": "Erro ao atualizar categorias",
+      "message": "Os nomes das categorias podem ter no máximo ${maxCharacter} caracteres."
+    },
+    "invalidCharacters": {
+      "title": "Erro ao atualizar categorias",
+      "single": "A categoria não pode conter este caractere: ${invalidCharacters}.",
+      "multiple": "A categoria não pode conter nenhum destes caracteres: ${invalidCharacters}.",
+      "unknown": "A categoria não pode conter nenhum destes caracteres: ${invalidCharacters}."
+    }
+  },
+  "warning": {
+    "deleteInUseCategory": {
+      "title": "Excluir categoria",
+      "cta": "Excluir categoria"
+    },
+    "changeTitleInUseCategory": {
+      "title": "Atualizar categoria",
+      "cta": "Atualizar categoria"
+    }
+  },
+  "template": {
+    "title": "Modelos de categoria",
+    "learnMore": "Saiba mais",
+    "templateList": {
+      "custom": {
+        "title": "Categorias personalizadas"
+      },
+      "arcgis": {
+        "title": "Categorias do ArcGIS",
+        "message": "As categorias do ArcGIS incluem uma seleção de categorias e subcategorias de tópicos que podem ser usadas para categorizar muitos tipos de conteúdo geoespacial. Estas categorias são utilizadas para suportar ArcGIS Living Atlas of the World."
+      },
+      "iso": {
+        "title": "Categorias ISO",
+        "message": "As categorias ISO incluem categorias de tópico da Organização Internacional para Padronização que fornece um método para descrever e catalogar informações geográficas."
+      },
+      "inspire": {
+        "title": "Categorias INSPIRE",
+        "message": "As categorias INSPIRE inclui um conjunto completo de temas de dados espaciais que partem do INSPIRE Directive."
+      }
+    }
+  }
+}

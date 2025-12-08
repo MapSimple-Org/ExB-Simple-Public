@@ -1,0 +1,8 @@
+{
+  "arriveTime": "Thời gian đến",
+  "modes": {
+    "custom": "Ngày và giờ tùy chỉnh",
+    "now": "Bây giờ",
+    "unspecified": "Chưa xác định thời gian"
+  }
+}

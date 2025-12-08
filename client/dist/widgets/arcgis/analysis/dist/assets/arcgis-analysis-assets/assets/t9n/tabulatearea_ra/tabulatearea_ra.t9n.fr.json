@@ -1,0 +1,12 @@
+{
+  "classField": "Champ de classe",
+  "classesAsRowsLabel": "Classes en tant que lignes dans la table en sortie",
+  "inputClassRasterOrFeatures": "Entités ou raster de classe en entrée",
+  "inputLayerGroupText": "Sélectionner la couche de zones et de classes en entrée à utiliser pour calculer les surfaces croisées entre les deux jeux de données.",
+  "itemProperties": {
+    "description": "Table en sortie générée en exécutant l’outil d’analyse Croiser les superficies.",
+    "snippet": "Table en sortie générée avec Croiser les superficies"
+  },
+  "tabulateAreaSettingsGroupLabel": "Paramètres de croisement des superficies",
+  "tabulateAreaSettingsGroupText": "Sélectionner le mode de gestion des classes dans la table en sortie. Indiquer la taille de cellule à utiliser pour le calcul. "
+}

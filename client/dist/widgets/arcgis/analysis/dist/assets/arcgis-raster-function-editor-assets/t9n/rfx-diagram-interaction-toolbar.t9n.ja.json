@@ -1,0 +1,9 @@
+{
+  "zoomIn": "拡大",
+  "zoomOut": "縮小",
+  "autoLayout": "自動レイアウト",
+  "stretch": "ビューに合わせる",
+  "select": "選択",
+  "pan": "画面移動",
+  "deleteSelectedItemsText": "選択アイテムの削除"
+}

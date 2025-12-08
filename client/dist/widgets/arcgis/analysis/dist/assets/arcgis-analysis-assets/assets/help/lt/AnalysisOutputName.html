@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>Analizės perra&scaron;ymo nustatymai  Map Viewer. </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="resultType">
+        <div>
+            <p>Nurodoma i&scaron;vesties, kuri bus sukurta, tipas. Naudojant parinktį  <b>Sukurti tarpinius duomenis</b> sukuriamas laikinas sluoksnis, kuris gali būti naudojamas kaip kito įrankio įvestis, bet jo negalima įra&scaron;yti arba peržiūrėti žemėlapyje. Naudojant parinktį <b>Kurti talpinamą sluoksnį</b> publikuojamas nujas talpinamas elementų sluoksnis. Naudojant parrinktį <b>Perra&scaron;yti esamą sluoksnį</b> atnaujinamas esamas sluoksnis pasitelkiant įrankio i&scaron;vestį.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>Sluoksnio, kuris bus sukurtas ir pridėtas į žemėlapį, pavadinimas.
+            </p>
+        </div>
+    </div>
+    <div id="layerExistsAutomaticallyOverwrite">
+        <div>
+            <p>Nurodoma, ar įrankio i&scaron;vestis pakeis jūsų turinio, kuriame yra nurodytas i&scaron;vesties pavadinimas, sluoksnį. Jei tas sluoksnio pavadinimas dar nenaudojamas jūsų organizacijoje, bus sukurtas naujas elementas. Norėdami perra&scaron;yti, turite būti sluoksnio savininkai arba administratoriai.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>Puslapyje  <b>Mano turinys</b> esančio aplanko, kur bus įra&scaron;yti rezultatai, pavadinimas.
+            </p>
+            <p>Jei sluoksnis jau yra, to atnaujinti negalima.
+            </p>
+        </div>
+    </div>
+    <div id="existingLayerToOverwrite">
+        <div>
+            <p>Sluoksnis  <b>Mano turinyje</b>, kuris bus pakeistas i&scaron;vesties sluoksniu. I&scaron;vesties erdvinė atskaita ir esamas sluoksnis turi sutapti.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>Інструмент &laquo;Геодезична обопільна видимість&raquo; визначає місця розташування на поверхні растра, видимі вхідним місцям розташування спостерігачів.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputElevationSurface">
+        <div>
+            <p>Растр висот, на основі якого буде розраховано обопільну видимість.
+            </p>
+        </div>
+    </div>
+    <div id="inputObserverFeatures">
+        <div>
+            <p>Місця розташування спостерігача, для якого обчислюватиметься обопільна видимість.
+            </p>
+            <p class="toolPaneOnly">Кількість об'єктів залежить від таких додаткових факторів, як критерії фільтрування та екстент аналізу.
+            </p>
+        </div>
+    </div>
+    <div id="optimizeFor">
+        <div>
+            <p>Оптимізує розрахунок обопільної видимості на основі швидкості або точності.
+            </p>
+        </div>
+    </div>
+    <div id="verticalError">
+        <div>
+            <p>Ступінь невизначеності у значеннях висоти значення  <b>Вхідна поверхня висоти</b>.
+            </p>
+        </div>
+    </div>
+    <div id="refractivityCoefficient">
+        <div>
+            <p>Коефіцієнт заломлення видимого світла в повітрі.
+            </p>
+        </div>
+    </div>
+    <div id="maximumViewingDistance">
+        <div>
+            <p>Максимальна відстань огляду для обчислення обопільної видимості.
+            </p>
+            <p>Відстань може бути визначена значенням і його одиницями або з поля у значенні  <b>Вхідні точкові або лінійні об'єкти спостерігача</b>.
+            </p>
+        </div>
+    </div>
+    <div id="minimumViewingDistance">
+        <div>
+            <p>Мінімальна відстань огляду для обчислення обопільної видимості.
+            </p>
+            <p>Відстань може бути визначена значенням і його одиницями або з поля у значенні  <b>Вхідні точкові або лінійні об'єкти спостерігача</b>.
+            </p>
+        </div>
+    </div>
+    <div id="viewingDistancesAre3D">
+        <div>
+            <p>Визначає, чи вимірюватимуться максимальна та мінімальна відстані огляду у 3D-відстані або у 2D-відстані.
+            </p>
+            <p>Якщо не вибрано, відстані огляду розглядаються як двовимірні евклідові відстані. Якщо вибрано, відстані огляду розглядаються як тривимірні відстані.
+            </p>
+        </div>
+    </div>
+    <div id="observersElevation">
+        <div>
+            <p>Висота над поверхнею місця розташування спостерігача.
+            </p>
+            <p>Висота може бути визначена значенням і його одиницями або з поля у значенні  <b>Вхідні точкові або лінійні об'єкти спостерігача</b>.
+            </p>
+        </div>
+    </div>
+    <div id="observersHeight">
+        <div>
+            <p>Висота спостерігачів над землею.
+            </p>
+            <p>Висота може бути визначена значенням і його одиницями або з поля у значенні  <b>Вхідні точкові або лінійні об'єкти спостерігача</b>.
+            </p>
+        </div>
+    </div>
+    <div id="targetHeight">
+        <div>
+            <p>Висота цілей на землі.
+            </p>
+            <p>Висота може бути визначена значенням і його одиницями або з поля у значенні  <b>Вхідні точкові або лінійні об'єкти спостерігача</b>.
+            </p>
+        </div>
+    </div>
+    <div id="horizontalStartAngle">
+        <div>
+            <p>Початковий кут діапазону горизонтального сканування.
+            </p>
+            <p>Кут може бути визначена значенням від 0 до 360 або з поля у значенні  <b>Вхідні точкові або лінійні об'єкти спостерігача</b>.
+            </p>
+        </div>
+    </div>
+    <div id="horizontalEndAngle">
+        <div>
+            <p>Кінцевий кут діапазону горизонтального сканування.
+            </p>
+            <p>Кут може бути визначена значенням від 0 до 360 або з поля у значенні  <b>Вхідні точкові або лінійні об'єкти спостерігача</b>.
+            </p>
+        </div>
+    </div>
+    <div id="verticalUpperAngle">
+        <div>
+            <p>Верхня границя вертикального кута сканування відносно горизонтальної площини.
+            </p>
+            <p>Кут може бути визначена значенням від -90 до 90 або з поля у значенні  <b>Вхідні точкові або лінійні об'єкти спостерігача</b>.
+            </p>
+        </div>
+    </div>
+    <div id="verticalLowerAngle">
+        <div>
+            <p>Нижня границя вертикального кута сканування відносно горизонтальної площини.
+            </p>
+            <p>Кут може бути визначена значенням від -90 до 90 або з поля у значенні  <b>Вхідні точкові або лінійні об'єкти спостерігача</b>.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>Ім'я растрового шару зони обопільної видимості, який буде створено та додано до карти. Цей шар містить видимі області, які можуть бачити спостерігачі, а значення осередків представляють кількість спостерігачів, які можуть бачити осередки.
+            </p>
+        </div>
+    </div>
+    <div id="outputAboveGroundLevelRasterName">
+        <div>
+            <p>Ім'я растрового шару над рівнем землі (AGL), який буде створено та додано до карти.
+            </p>
+        </div>
+    </div>
+    <div id="resultType">
+        <div>
+            <p>Тип вихідних даних, які буде створено. Вихідними даними може бути шар зображень з тайлами або динамічний шар зображень.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>Назва папки в  <b>Моєму вмісті</b>, де буде збережено результат.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

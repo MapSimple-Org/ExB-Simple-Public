@@ -1,0 +1,11 @@
+import type { AppConfig, IMAppConfig } from '../types/app-config';
+export declare const isFullReplace: (appConfig: IMAppConfig | AppConfig, keyPath: Array<string | number>) => boolean;
+export declare const matchBlobUrl: (value: string) => boolean;
+export declare const fullMatchBlobUrl: (value?: string) => boolean;
+export declare const APP_RESOURCE_URL = "${appResourceUrl}";
+export declare const matchResourceUrl: (value: string) => boolean;
+export declare const fullMatchResourceUrl: (value: string) => boolean;
+export declare const getResourceUrlsInString: (value: string) => [] | RegExpMatchArray;
+export declare function getRealAppResourceUrl(): string;
+export declare function processResourceUrl(value: string): string;
+export declare function restoreResourceUrl(value: string): string;

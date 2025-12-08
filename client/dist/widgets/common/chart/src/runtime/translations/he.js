@@ -1,0 +1,1 @@
+System.register([],function(e){return{execute:function(){e({_widgetLabel:"\u05ea\u05e8\u05e9\u05d9\u05dd",dataEmptyTip:"\u05dc\u05d0 \u05e0\u05de\u05e6\u05d0\u05d5 \u05e0\u05ea\u05d5\u05e0\u05d9\u05dd."})}}});

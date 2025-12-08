@@ -1,0 +1,12 @@
+{
+  "apiCredentialType": "Τύπος διαπιστευτηρίων: Κλειδί API",
+  "oauthCredentialType": "Τύπος διαπιστευτηρίων: OAuth 2.0",
+  "itemAccess": "Πρόσβαση αντικειμένων",
+  "page": "Σελίδα: ${page}",
+  "currentPage": "Τρέχουσα σελίδα: ${page}",
+  "privileges": "Δικαιώματα",
+  "itemDetails": "Λεπτομέρειες αντικειμένου",
+  "settings": "Ρυθμίσεις",
+  "serviceScope": "Πεδίο εφαρμογής",
+  "summary": "Σύνοψη"
+}

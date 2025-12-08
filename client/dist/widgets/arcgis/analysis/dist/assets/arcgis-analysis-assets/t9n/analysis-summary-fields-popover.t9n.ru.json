@@ -1,0 +1,13 @@
+{
+  "addField": "Добавить поле",
+  "deselectAll": "Очистить все",
+  "done": "Готово",
+  "noFieldsAvailable": "${layerName} не содержит полей, соответствующих требованиям типа данных. Выберите другой слой, чтобы продолжить.",
+  "noInputSelected": {
+    "withLayerInputLabel": "Входной слой не выбран. Выберите слой в ${layerInputLabel}, чтобы продолжить.",
+    "withoutLayerInputLabel": "Входной слой не выбран. Выберите входной слой, чтобы продолжить."
+  },
+  "noSearchResults": "Сопоставленных полей не найдено.",
+  "selectAll": "Выбрать все",
+  "summaryFieldsPopover": "Поля суммирования"
+}

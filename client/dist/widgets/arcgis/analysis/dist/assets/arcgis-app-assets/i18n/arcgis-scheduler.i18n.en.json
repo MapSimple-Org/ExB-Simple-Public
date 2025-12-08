@@ -1,0 +1,55 @@
+{
+  "beginningOnLabel": "Beginning on",
+  "repeatTypeLabel": "Repeat type",
+  "endingOnTypeLabel": "Ending on",
+  "endingOnDateLabel": "End date",
+  "endingOnCountLabel": "Count",
+  "endingOnCountPlaceholder": "for example: 1, 10, 30",
+  "dailyRepeatIntervalLabel": "Repeat interval",
+  "dailyTimeLabel": "Time",
+  "weeklyDaysOfWeekLabel": "Day of week",
+  "weeklyTimeLabel": "Time",
+  "monthlyDayOfMonthLabel": "Day of month",
+  "monthlyDayOfMonthPlaceholder": "for example, 1 - 31",
+  "monthlyRepeatIntervalLabel": "Repeat interval",
+  "monthlyTimeLabel": "Time",
+  "repeatTypeOptions": {
+    "day": "Day",
+    "week": "Week",
+    "month": "Month"
+  },
+  "endingOnType": {
+    "never": "Never",
+    "date": "Date",
+    "count": "On"
+  },
+  "dailyRepeatInterval": {
+    "everyDay": "Every day",
+    "everyOtherDay": "Every other day",
+    "everyThreeDays": "Every three days",
+    "everyFourDays": "Every four days",
+    "everyFiveDays": "Every five days",
+    "everySixDays": "Every six days",
+    "everySevenDays": "Every seven days",
+    "everyFourteenDays": "Every fourteen days"
+  },
+  "weekDays": {
+    "all": "All",
+    "allWeekdays": "All weekdays",
+    "sunday": "Sunday",
+    "monday": "Monday",
+    "tuesday": "Tuesday",
+    "wednesday": "Wednesday",
+    "thursday": "Thursday",
+    "friday": "Friday",
+    "saturday": "Saturday"
+  },
+  "monthlyRepeatInterval": {
+    "everyMonth": "Every month",
+    "everyTwoMonths": "Every two months",
+    "everyThreeMonths": "Every three months",
+    "everyFourMonths": "Every four months",
+    "everyFiveMonths": "Every five months",
+    "everySixMonths": "Every six months"
+  }
+}

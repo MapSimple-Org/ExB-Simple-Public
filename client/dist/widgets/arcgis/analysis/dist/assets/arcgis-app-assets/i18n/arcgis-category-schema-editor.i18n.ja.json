@@ -1,0 +1,69 @@
+{
+  "loadingText": "スキーマ テンプレートの読み込み",
+  "cancel": "キャンセル",
+  "finishSetup": "設定の完了",
+  "hasUnsavedChanges": "はじめに保存しないと、カテゴリーの変更が失われます。 このビューを閉じると変更内容が破棄されますがよろしいですか？",
+  "error": {
+    "generic": {
+      "title": "カテゴリの更新中にエラーが発生しました",
+      "message": "問題が発生しました。 後でもう一度お試しください。"
+    },
+    "maxDepthExceeded": {
+      "title": "カテゴリの更新中にエラーが発生しました",
+      "message": "カテゴリを 2 レベル以上ネストすることはできません。"
+    },
+    "destinationHasSameName": {
+      "title": "カテゴリの更新中にエラーが発生しました",
+      "message": "同じ名前のカテゴリーが、関連先カテゴリーにすでに存在します。"
+    },
+    "emptyTitle": {
+      "title": "カテゴリの更新中にエラーが発生しました",
+      "message": "カテゴリーのタイトルは空にできません。"
+    },
+    "noSchema": {
+      "title": "スキーマが見つかりません",
+      "message": "ユーザーのアイテム スキーマが見つかりません。"
+    },
+    "maxCharacter": {
+      "title": "カテゴリの更新中にエラーが発生しました",
+      "message": "カテゴリー名には、最大で ${maxCharacter} 文字まで入力できます。"
+    },
+    "invalidCharacters": {
+      "title": "カテゴリの更新中にエラーが発生しました",
+      "single": "カテゴリーに次の文字を含めることはできません: ${invalidCharacters}",
+      "multiple": "カテゴリーに ${invalidCharacters} は使用できません。",
+      "unknown": "カテゴリーに ${invalidCharacters} は使用できません。"
+    }
+  },
+  "warning": {
+    "deleteInUseCategory": {
+      "title": "カテゴリーの削除",
+      "cta": "カテゴリーの削除"
+    },
+    "changeTitleInUseCategory": {
+      "title": "カテゴリーの更新",
+      "cta": "カテゴリーの更新"
+    }
+  },
+  "template": {
+    "title": "カテゴリー テンプレート",
+    "learnMore": "詳細",
+    "templateList": {
+      "custom": {
+        "title": "カスタム カテゴリ"
+      },
+      "arcgis": {
+        "title": "ArcGIS カテゴリ",
+        "message": "ArcGIS カテゴリには、多くの種類の地理空間コンテンツを分類する際に使用できるトピック カテゴリとサブカテゴリの選択肢が含まれています。 これらのカテゴリは、ArcGIS Living Atlas of the World をサポートするために使用されます。"
+      },
+      "iso": {
+        "title": "ISO カテゴリ",
+        "message": "ISO カテゴリには、国際標準化機構によるトピック カテゴリが含まれています。これらのカテゴリは、地理情報を記述しカタログ化するための方法を提供します。"
+      },
+      "inspire": {
+        "title": "INSPIRE カテゴリ",
+        "message": "INSPIRE カテゴリには、INSPIRE 指令に規定された空間データ テーマの包括的なセットが含まれています。"
+      }
+    }
+  }
+}

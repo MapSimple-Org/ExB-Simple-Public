@@ -1,0 +1,11 @@
+{
+  "addBtn": "Fet",
+  "cancelBtn": "Cancel·la",
+  "header": "Seleccioneu una variable",
+  "multipleVariables": "Variables de valors múltiples",
+  "noFound": "No s'ha trobat cap variable compatible",
+  "search": "Cerca les variables",
+  "singleVariables": "Variables de valor únic",
+  "variableLabel": "Etiqueta: <span style='font-weight: var(--calcite-font-weight-normal)'>${val}</span>",
+  "variableVal": "Valor: <span style='font-weight: var(--calcite-font-weight-normal)'>${val}</span>"
+}

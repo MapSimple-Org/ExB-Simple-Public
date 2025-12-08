@@ -1,0 +1,69 @@
+{
+  "loadingText": "S'estan carregant les plantilles d'esquema",
+  "cancel": "Cancel·la",
+  "finishSetup": "Finalitza la configuració",
+  "hasUnsavedChanges": "Heu fet canvis de categoria que es perdran si no els deseu abans. Segur que voleu tancar aquesta visualització i perdre els canvis?",
+  "error": {
+    "generic": {
+      "title": "Error en actualitzar les categories",
+      "message": "Hi ha hagut algun problema. Torneu-ho a provar més tard."
+    },
+    "maxDepthExceeded": {
+      "title": "Error en actualitzar les categories",
+      "message": "No podeu niar categories amb més de dos nivells de profunditat."
+    },
+    "destinationHasSameName": {
+      "title": "Error en actualitzar les categories",
+      "message": "Ja existeix una categoria amb el mateix nom a la categoria de destinació."
+    },
+    "emptyTitle": {
+      "title": "Error en actualitzar les categories",
+      "message": "El títol de la categoria no pot estar buit."
+    },
+    "noSchema": {
+      "title": "No s'ha trobat l'esquema",
+      "message": "No s'ha trobat l'esquema d'elements de l'usuari."
+    },
+    "maxCharacter": {
+      "title": "Error en actualitzar les categories",
+      "message": "Els noms de categoria poden tenir ${maxCharacter} caràcters de longitud com a màxim."
+    },
+    "invalidCharacters": {
+      "title": "Error en actualitzar les categories",
+      "single": "La categoria no pot contenir aquest caràcter: ${invalidCharacters}.",
+      "multiple": "La categoria no pot contenir cap d'aquests caràcters: ${invalidCharacters}.",
+      "unknown": "La categoria no pot contenir cap d'aquests caràcters: ${invalidCharacters}."
+    }
+  },
+  "warning": {
+    "deleteInUseCategory": {
+      "title": "Suprimeix la categoria",
+      "cta": "Suprimeix la categoria"
+    },
+    "changeTitleInUseCategory": {
+      "title": "Actualitza la categoria",
+      "cta": "Actualitza la categoria"
+    }
+  },
+  "template": {
+    "title": "Plantilles de categoria",
+    "learnMore": "Més informació",
+    "templateList": {
+      "custom": {
+        "title": "Categories personalitzades"
+      },
+      "arcgis": {
+        "title": "Categories de l'ArcGIS",
+        "message": "Les categories de l'ArcGIS inclouen una selecció de categories i subcategories de temes que es poden utilitzar per classificar molts tipus de contingut geoespacial. Aquestes categories s'utilitzen per donar suport a l'ArcGIS Living Atlas of the World."
+      },
+      "iso": {
+        "title": "Categories ISO",
+        "message": "Les categories ISO inclouen categories temàtiques de la International Organization for Standardization que proporcionen un mètode per descriure i catalogar informació geogràfica."
+      },
+      "inspire": {
+        "title": "Categories INSPIRE",
+        "message": "Les categories INSPIRE inclouen un conjunt complet de temes de dades espacials que s'estableix a la Directiva INSPIRE."
+      }
+    }
+  }
+}

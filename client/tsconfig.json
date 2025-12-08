@@ -1,0 +1,48 @@
+{
+  "compileOnSave": false,
+  "buildOnSave": false,
+  "compilerOptions": {
+    "allowSyntheticDefaultImports": true,
+    "sourceMap": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "target": "es6",
+    "skipLibCheck": true,
+    "lib": [
+      "dom",
+      "es6",
+      "scripthost",
+      "es2015",
+      "es2020.Promise"
+    ],
+    "jsx": "react-jsx",
+    "jsxImportSource": "@emotion/react",
+    "noEmitHelpers": false,
+    "noUnusedLocals": false,
+    "allowUnreachableCode": true,
+    "allowJs": true,
+    "strictNullChecks": false,
+    "baseUrl": ".",
+    "paths": {
+      "arcgis-charts-components": ["jimu-ui/arcgis-charts-components"],
+      "arcgis-map-components": ["jimu-ui/arcgis-map-components"],
+      "arcgis-coding-components": ["jimu-ui/arcgis-coding-components"],
+      "arcgis-portal-components": ["jimu-ui/arcgis-portal-components"],
+      "calcite-components": ["jimu-ui/calcite-components"],
+      "esri/*": ["./node_modules/@arcgis/core/*"],
+      "widgets/*": ["./your-extensions/widgets/*"]
+    }
+  },
+  "include": [
+    "dist/widgets",
+    "your-extensions",
+    "types",
+    "jimu-core/lib/types",
+    "node_modules/@esri/**/dist/types/react.d.ts",
+    "node_modules/@arcgis/**/dist/types/react.d.ts"
+  ],
+  "exclude": [
+    "arcgis-js-api",
+    "**/*.js"
+  ]
+}

@@ -1,0 +1,1 @@
+System.register([],function(e){return{execute:function(){e({_widgetLabel:"Elementu p\u0101rskats"})}}});

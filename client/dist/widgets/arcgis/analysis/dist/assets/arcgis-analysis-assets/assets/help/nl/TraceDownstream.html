@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>De tool Stroomafwaarts traceren bepaalt de stroomafwaartse stroomtrajecten van bepaalde locaties.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputLayer">
+        <div>
+            <p>De puntobjecten die gebruikt worden als de startlocaties voor elk spoor stroomafwaarts.
+            </p>
+            <p class="toolPaneOnly">Het aantal objecten is afhankelijk van aanvullende factoren als de filtercriteria en de analyse-extent.
+            </p>
+        </div>
+    </div>
+    <div id="splitDistance">
+        <div>
+            <p>De lengte van de afzonderlijke segmenten waarin de lijn wordt verdeeld.
+            </p>
+        </div>
+    </div>
+    <div id="splitUnits">
+        <div>
+            <p>De eenheden die zullen worden gebruikt voor de parameter <b>Splitsingsafstand</b>.
+            </p>
+        </div>
+    </div>
+    <div id="maxDistance">
+        <div>
+            <p>De totale lengte van de lijn die wordt geretourneerd.
+            </p>
+        </div>
+    </div>
+    <div id="maxDistanceUnits">
+        <div>
+            <p>De eenheden die zullen worden gebruikt voor de parameter  <b>Maximale stroomafwaartse spoorafstand</b>.
+            </p>
+        </div>
+    </div>
+    <div id="boundingPolygonLayer">
+        <div>
+            <p>Een polygoonlaag die het gebied beschrijft waarop de traceerlijn wordt afgesneden.
+            </p>
+            <p>Deze parameter overschrijft de waarde van de parameter  <b>Maximale stroomafwaartse spoorafstand</b> .
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>De naam van de laag Stroomafwaarts traceren die wordt aangemaakt en toegevoegd aan de kaart.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>De naam van de map in  <b>Mijn content</b> waarin het resultaat wordt opgeslagen.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

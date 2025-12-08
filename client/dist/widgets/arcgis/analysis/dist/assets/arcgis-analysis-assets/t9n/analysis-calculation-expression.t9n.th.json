@@ -1,0 +1,10 @@
+{
+  "cannotAssignValueToTargetField": "ค่าที่คำนวณและประเภทฟิลด์ไม่ตรงกัน",
+  "createExpression": "สร้างนิพจน์",
+  "deleteExpression": "ลบนิพจน์",
+  "editExpression": "แก้ไขนิพจน์",
+  "expression": "สูตรคำนวณ",
+  "isRequired": "จำเป็นต้องใช้พารามิเตอร์นี้",
+  "layerLoadError": "ไม่สามารถโหลดชั้นข้อมูลได้",
+  "validationFailedInvalidSQL": "ตรวจสอบความถูกต้องนิพจน์ไม่สำเร็จ นิพจน์ไม่ใช่ SQL ที่ใช้งานได้"
+}

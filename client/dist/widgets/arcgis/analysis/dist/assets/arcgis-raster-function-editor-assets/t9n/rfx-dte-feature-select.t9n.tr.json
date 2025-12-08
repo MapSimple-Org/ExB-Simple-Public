@@ -1,0 +1,8 @@
+{
+  "selectFeature": "Bir detay katmanı seç",
+  "browseLayer": "Katmanlara gözat",
+  "loading": "Yükleniyor...",
+  "errorCodes": {
+    "required": "Bu parametre gerekli."
+  }
+}

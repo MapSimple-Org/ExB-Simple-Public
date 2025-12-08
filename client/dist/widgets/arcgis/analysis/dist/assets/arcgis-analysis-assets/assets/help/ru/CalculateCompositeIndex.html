@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>Вычислить составной индекс комбинирует несколько числовых переменных для создания единого индекса.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputLayer">
+        <div>
+            <p>Таблица или объекты, содержащие переменные, которые будут объединены в индекс.
+            </p>
+            <p class="toolPaneOnly">Количество объектов зависит от дополнительных факторов, таких как критерии фильтрации и экстент анализа.
+            </p> 
+            <p class="modelBuilderOnly"> <b>Слой</b> задается по умолчанию, когда <b>Входной объект или таблица</b> не указан. Чтобы добавить входную таблицу, выберите <b>Таблица</b> перед добавлением набора данных.
+            </p>
+        </div>
+    </div>
+    <div id="inputVariables">
+        <div>
+            <p>Поля, содержащие переменные, которые будут объединены для создания индекса.  <b>Обратить направление</b> указывает, будут ли значения переменной изменены на противоположные. <b>Вес</b> &mdash; это относительное влияние каждой переменной на индекс.
+            </p>
+        </div>
+    </div>
+    <div id="indexMethod">
+        <div>
+            <p>Определяет метод, который будет использоваться для пересчета входных переменных и объединения пересчитанных переменных для создания индекса.
+            </p>
+        </div>
+    </div>
+    <div id="outputIndexReverse">
+        <div>
+            <p>Определяет, будут ли выходные значения индекса изменены на противоположные. Если отмечено, высокие значения будут рассматриваться как низкие значения и наоборот.
+            </p>
+        </div>
+    </div>
+    <div id="outputIndexMinMax">
+        <div>
+            <p>Минимальное и максимальное значения выходного индекса.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>Имя слоя, который будет создан и добавлен на карту.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>Имя папки в разделе  <b>Мои ресурсы</b>, в которую будет сохранен результат.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

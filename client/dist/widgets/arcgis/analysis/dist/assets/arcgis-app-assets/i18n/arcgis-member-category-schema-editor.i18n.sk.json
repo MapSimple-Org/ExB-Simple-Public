@@ -1,0 +1,22 @@
+{
+  "dialogHeading": "Konfigurovať kategórie členov",
+  "noticeTitle": "Editovať, zmazať alebo zmeniť poradie kategórií vo vašej organizácii.",
+  "noticeDescription": "Kategórie môžete členom priradiť prostredníctvom karty Členovia.",
+  "defaultCategoryWarning": "Táto kategória členov je nastavená ako predvolená kategória nových členov a nie je možné ju editovať ani zmazať.",
+  "warning": {
+    "deleteInUseCategory": {
+      "message": {
+        "single": "Jeden člen je priradený k tejto kategórii. Zmazaním kategórie ju odstránite aj od tohto člena.",
+        "multiple": "${number} členov je priradených k tejto kategórii. Zmazaním kategórie ju odstránite aj od týchto členov.",
+        "unknown": "Členovia priradení do tejto kategórie: ${number}. Zmazaním kategórie ju odstránite aj od týchto členov."
+      }
+    },
+    "changeTitleInUseCategory": {
+      "message": {
+        "single": "Jeden člen je priradený k tejto kategórii. Aktualizáciou kategórie bude člen aktualizovaný tak, aby používal \"${newTitle}\".",
+        "multiple": "${number} členov je priradených k tejto kategórii. Aktualizáciou kategórie budú členovia aktualizovaní tak, aby používali \"${newTitle}\".",
+        "unknown": "Členovia priradení do tejto kategórie: ${number}. Aktualizáciou kategórie budú členovia aktualizovaní tak, aby používali \"${newTitle}\"."
+      }
+    }
+  }
+}

@@ -1,0 +1,85 @@
+{
+  "browser": {
+    "refineContent": "Forbedre innhold",
+    "filters": "Filtre",
+    "pageRange": "${start}–${end}, totalt: ${total}",
+    "pageRangeAria": "${start}–${end}, totalt antall elementer: ${total}",
+    "pageRangeWithRecycleBin": "${start}-${end}, samlet: ${total} (Samlet størrelse: ${recycleBinSize})",
+    "pageRangeAriaWithRecycleBin": "${start}-${end}, samlet antall elementer: ${total} (Samlet størrelse: ${recycleBinSize})",
+    "totalSize": "Samlet størrelse: ${totalSize}",
+    "loading": "Laster inn resultater",
+    "close": "Lukk"
+  },
+  "actions": {
+    "more": "Mer"
+  },
+  "filter": {
+    "clear": "Fjern"
+  },
+  "filterDate": {
+    "today": "I dag",
+    "yesterday": "I går",
+    "last7": "Siste 7 dager",
+    "last30": "Siste 30 dager",
+    "custom": "Egendefinert område...",
+    "title": {
+      "created": "Opprettingsdato",
+      "modified": "Oppdatert dato",
+      "joined": "Dato for innmelding",
+      "lastLogin": "Siste pålogging"
+    },
+    "created": "Opprettet: ${date}",
+    "modified": "Endret: ${date}",
+    "joined": "Innmeldt: ${date}",
+    "lastLogin": "Siste pålogging: ${date}"
+  },
+  "pagination": {
+    "next": "Neste side",
+    "prev": "Forrige side"
+  },
+  "search": {
+    "label": "Søk i grupper",
+    "search": "Søk",
+    "clear": "Fjern søkeord",
+    "wildcard": "Jokertegn i søk støttes ikke"
+  },
+  "sort": {
+    "sortDirection": "Sorteringsretning",
+    "title": "Tittel",
+    "relevance": "Relevans",
+    "modified": "Oppdatert dato",
+    "deleted": "Slettet dato",
+    "created": "Opprettingsdato",
+    "added": "Dato lagt til",
+    "size": "Størrelse",
+    "owner": "Eier",
+    "sizeAsc": "Minst til størst",
+    "sizeDesc": "Størst til minst",
+    "numviews": "Vis antall",
+    "numAsc": "Minst til mest",
+    "numDesc": "Mest til minst",
+    "alphabeticalAsc": "Alfabetisk",
+    "alphabeticalDesc": "Omvendt alfabetisk",
+    "recentAsc": "Eldst",
+    "recentDesc": "Nyest",
+    "sort": "Sorter",
+    "sortBy": "Sorter etter",
+    "sortByColon": "Sorter etter:",
+    "fullname": "Navn",
+    "username": "Brukernavn",
+    "name": "Navn",
+    "membertype": "Grupperolle",
+    "joined": "Dato for innmelding",
+    "lastlogin": "Siste pålogging",
+    "dataset": "å_Dataset_______________ø"
+  },
+  "topBar": {
+    "filter": "Filter"
+  },
+  "filterStatus": {
+    "clear": "Fjern",
+    "filters": "Filtre:",
+    "additional": "Flere aktive filtre",
+    "clearAllFilters": "Fjern alle filtre"
+  }
+}

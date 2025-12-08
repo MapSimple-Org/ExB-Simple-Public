@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>L&rsquo;outil Champ de vision g&eacute;od&eacute;sique identifie les emplacements sur une surface raster qui sont visibles depuis les emplacements de point d&rsquo;observation en entr&eacute;e.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputElevationSurface">
+        <div>
+            <p>Raster d'altitude sur lequel le champ de vision doit &ecirc;tre calcul&eacute;.
+            </p>
+        </div>
+    </div>
+    <div id="inputObserverFeatures">
+        <div>
+            <p>Localisations des observateurs pour lesquelles le champ de vision doit &ecirc;tre calcul&eacute;.
+            </p>
+        </div>
+    </div>
+    <div id="optimizeFor">
+        <div>
+            <p>Optimise le calcul du champ de vision en fonction de la vitesse ou de l'exactitude.
+            </p>
+        </div>
+    </div>
+    <div id="verticalError">
+        <div>
+            <p>Degr&eacute; d&rsquo;incertitude des valeurs d&rsquo;&eacute;l&eacute;vation de la valeur  <b>Input elevation surface (Surface d&rsquo;&eacute;l&eacute;vation en entr&eacute;e)</b>.
+            </p>
+        </div>
+    </div>
+    <div id="refractivityCoefficient">
+        <div>
+            <p>Coefficient de r&eacute;fraction de la lumi&egrave;re visible dans l&rsquo;air.
+            </p>
+        </div>
+    </div>
+    <div id="maximumViewingDistanceField">
+        <div>
+            <p>Distance d&rsquo;affichage maximale pour le calcul du champ de vision.
+            </p>
+            <p>La distance peut &ecirc;tre d&eacute;finie par une valeur et ses unit&eacute;s ou &agrave; partir d&rsquo;un champ dans la valeur  <b>Input observer point or line features (Entit&eacute;s lin&eacute;aires ou de points d&rsquo;observation en entr&eacute;e)</b>.
+            </p>
+        </div>
+    </div>
+    <div id="minimumViewingDistanceField">
+        <div>
+            <p>Distance d&rsquo;affichage minimale pour le calcul du champ de vision.
+            </p>
+            <p>La distance peut &ecirc;tre d&eacute;finie par une valeur et ses unit&eacute;s ou &agrave; partir d&rsquo;un champ dans la valeur  <b>Input observer point or line features (Entit&eacute;s lin&eacute;aires ou de points d&rsquo;observation en entr&eacute;e)</b>.
+            </p>
+        </div>
+    </div>
+    <div id="viewingDistanceIs3D">
+        <div>
+            <p>Indique si les distances d&rsquo;affichage maximum et minimum sont mesur&eacute;es en distances&nbsp;3D ou 2D.
+            </p>
+            <p>Si ce param&egrave;tre est d&eacute;sactiv&eacute;, les distances d&rsquo;affichage sont trait&eacute;es comme des distances euclidiennes&nbsp;2D. Si ce param&egrave;tre est activ&eacute;, les distances d&rsquo;affichage sont trait&eacute;es comme des distances&nbsp;3D.
+            </p>
+        </div>
+    </div>
+    <div id="observersElevationField">
+        <div>
+            <p>&Eacute;l&eacute;vation de surface des localisations des observateurs.
+            </p>
+            <p>L&rsquo;&eacute;l&eacute;vation peut &ecirc;tre d&eacute;finie par une valeur et ses unit&eacute;s ou &agrave; partir d&rsquo;un champ dans la valeur  <b>Input observer point or line features (Entit&eacute;s lin&eacute;aires ou de points d&rsquo;observation en entr&eacute;e)</b>.
+            </p>
+        </div>
+    </div>
+    <div id="observersHeightField">
+        <div>
+            <p>Hauteur des observateurs au-dessus du sol.
+            </p>
+            <p>La hauteur peut &ecirc;tre d&eacute;finie par une valeur et ses unit&eacute;s ou &agrave; partir d&rsquo;un champ dans la valeur  <b>Input observer point or line features (Entit&eacute;s lin&eacute;aires ou de points d&rsquo;observation en entr&eacute;e)</b>.
+            </p>
+        </div>
+    </div>
+    <div id="targetHeightField">
+        <div>
+            <p>Hauteur des cibles au sol.
+            </p>
+            <p>La hauteur peut &ecirc;tre d&eacute;finie par une valeur et ses unit&eacute;s ou &agrave; partir d&rsquo;un champ dans la valeur  <b>Input observer point or line features (Entit&eacute;s lin&eacute;aires ou de points d&rsquo;observation en entr&eacute;e)</b>.
+            </p>
+        </div>
+    </div>
+    <div id="horizontalStartAngle">
+        <div>
+            <p>Angle de d&eacute;part de la plage d&rsquo;analyse horizontale.
+            </p>
+            <p>L&rsquo;angle peut &ecirc;tre d&eacute;fini par une valeur comprise entre 0 et 360 ou &agrave; partir d&rsquo;un champ dans la valeur  <b>Input observer point or line features (Entit&eacute;s lin&eacute;aires ou de points d&rsquo;observation en entr&eacute;e)</b>.
+            </p>
+        </div>
+    </div>
+    <div id="horizontalEndAngle">
+        <div>
+            <p>Angle de fin de la plage d&rsquo;analyse horizontale.
+            </p>
+            <p>L&rsquo;angle peut &ecirc;tre d&eacute;fini par une valeur comprise entre 0 et 360 ou &agrave; partir d&rsquo;un champ dans la valeur  <b>Input observer point or line features (Entit&eacute;s lin&eacute;aires ou de points d&rsquo;observation en entr&eacute;e)</b>.
+            </p>
+        </div>
+    </div>
+    <div id="verticalUpperAngle">
+        <div>
+            <p>Limite de l&rsquo;angle vertical sup&eacute;rieur de l&rsquo;analyse par rapport au plan horizontal.
+            </p>
+            <p>L&rsquo;angle peut &ecirc;tre d&eacute;fini par une valeur comprise entre -90 et 90 ou &agrave; partir d&rsquo;un champ dans la valeur  <b>Input observer point or line features (Entit&eacute;s lin&eacute;aires ou de points d&rsquo;observation en entr&eacute;e)</b>.
+            </p>
+        </div>
+    </div>
+    <div id="verticalLowerAngle">
+        <div>
+            <p>Limite de l&rsquo;angle vertical inf&eacute;rieur de l&rsquo;analyse par rapport au plan horizontal.
+            </p>
+            <p>L&rsquo;angle peut &ecirc;tre d&eacute;fini par une valeur comprise entre -90 et 90 ou &agrave; partir d&rsquo;un champ dans la valeur  <b>Input observer point or line features (Entit&eacute;s lin&eacute;aires ou de points d&rsquo;observation en entr&eacute;e)</b>.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>Nom de la couche raster de champs de vision &agrave; cr&eacute;er et ajouter &agrave; la carte. Cette couche contient les zones visibles par les observateurs et les valeurs de cellule repr&eacute;sentent le nombre d&rsquo;observateurs qui peuvent voir les cellules.
+            </p>
+        </div>
+    </div>
+    <div id="aboveGroundLevelOutputName">
+        <div>
+            <p>Nom de la couche raster au-dessus du niveau du sol (AGL) &agrave; cr&eacute;er et ajouter &agrave; la carte.
+            </p>
+        </div>
+    </div>
+    <div id="resultType">
+        <div>
+            <p>Type de sortie &agrave; cr&eacute;er. La sortie peut &ecirc;tre une couche d&rsquo;imagerie tuil&eacute;e ou une couche d&rsquo;imagerie dynamique.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>Nom du dossier de  <b>My content (Mon contenu)</b> dans lequel est enregistr&eacute; le r&eacute;sultat.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

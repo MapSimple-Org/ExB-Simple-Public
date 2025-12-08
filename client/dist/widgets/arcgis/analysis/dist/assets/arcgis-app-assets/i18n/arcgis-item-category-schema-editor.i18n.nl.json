@@ -1,0 +1,36 @@
+{
+  "modalHeader": "Contentcategorieën configureren",
+  "modalGroupHeader": "Groepscategorieën configureren",
+  "helpText": "Wijzig, verwijder of herschik categorieën in uw organisatie.",
+  "helpTextGroup": "Content in deze groep bewerken, verwijderen of de categorieën hiervoor opnieuw rangschikken.",
+  "helpTextDescription": "Houd er rekening mee dat andere leden van uw organisatie deze categorieën mogelijk al aan hun items hebben toegewezen. Als u het schema bewerkt, worden deze items dienovereenkomstig bijgewerkt.",
+  "helpTextGroupDescription": "Houd er rekening mee dat andere leden van de groep deze categorieën mogelijk al aan hun items hebben toegewezen. Als u het schema bewerkt, worden deze items dienovereenkomstig bijgewerkt.",
+  "warning": {
+    "deleteInUseCategory": {
+      "title": "Categorie verwijderen",
+      "cta": "Categorie verwijderen",
+      "message": {
+        "single": "Er is één item aan deze categorie toegewezen. Als u de categorie verwijdert, wordt deze ook uit dit item verwijderd.",
+        "multiple": "Er zijn ${number} items aan deze categorie toegewezen. Als u de categorie verwijdert, wordt deze ook uit deze items verwijderd.",
+        "unknown": "Items die aan deze categorie zijn toegewezen: ${number} Als u de categorie verwijdert, wordt deze ook uit deze items verwijderd."
+      }
+    },
+    "changeTitleInUseCategory": {
+      "title": "Categorie bijwerken",
+      "message": {
+        "single": "Er is één item aan deze categorie toegewezen. Als de categorie wordt bijgewerkt, wordt het item zo bijgewerkt dat het \"${newTitle}\" gebruikt.",
+        "multiple": "Er zijn ${number} items aan deze categorie toegewezen. Als de categorie wordt bijgewerkt, worden de items zo bijgewerkt dat ze \"${newTitle}\" gebruiken.",
+        "unknown": "Items die aan deze categorie zijn toegewezen: ${number} Als de categorie wordt bijgewerkt, worden de items zo bijgewerkt dat ze \"${newTitle}\" gebruiken."
+      },
+      "cta": "Categorie bijwerken"
+    }
+  },
+  "template": {
+    "templateList": {
+      "custom": {
+        "message": "Maak uw eigen categorieën om content te organiseren binnen uw organisatie.",
+        "messageGroup": "Maak uw eigen categorieën voor het organiseren van content in deze groep."
+      }
+    }
+  }
+}

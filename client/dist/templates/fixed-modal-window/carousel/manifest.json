@@ -1,0 +1,16 @@
+{
+  "name": "carousel",
+  "type": "template",
+  "templateType": "fixed-modal-window",
+  "label": "Carousel",
+  "thumbnail": "thumbnail.png",
+  "order": 8,
+  "tags": [
+    "Section",
+    "View",
+    "Navigation"
+  ],
+  "categoriesTags": [],
+  "thumbnailWidth": 320,
+  "thumbnailHeight": 268
+}

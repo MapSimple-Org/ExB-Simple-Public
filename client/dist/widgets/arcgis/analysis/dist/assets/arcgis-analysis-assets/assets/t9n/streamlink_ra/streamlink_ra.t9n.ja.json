@@ -1,0 +1,9 @@
+{
+  "inputFlowDirectionRasterLabel": "入力流向ラスター",
+  "inputLayerGroupText": "入力河川と流向ラスターを選択します。",
+  "inputStreamRasterLabel": "入力河川ラスター",
+  "itemProperties": {
+    "description": "河川リンク ラスターの作成解析ツールを実行して生成される出力。",
+    "snippet": "河川リンク ラスターの作成から生成される出力"
+  }
+}

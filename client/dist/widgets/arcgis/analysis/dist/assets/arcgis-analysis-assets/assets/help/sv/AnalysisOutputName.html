@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>&Ouml;verskrivningsinst&auml;llningar f&ouml;r analys i  Map Viewer. </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="resultType">
+        <div>
+            <p>Anger typen av utdata som skapas. Alternativet  <b>Skapa mellanliggande data</b> skapar ett tillf&auml;lligt lager som kan anv&auml;ndas som indata f&ouml;r ett annat verktyg men kan inte sparas eller visas p&aring; kartan. Alternativet <b>Skapa driftat lager</b> publicerar ett nytt driftat geoobjektlager. Alternativet <b>Skriv &ouml;ver ett befintligt lager</b> uppdaterar ett befintligt lager med verktygsutdata.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>Namnet p&aring; lagret som skapas och l&auml;ggs till i kartan.
+            </p>
+        </div>
+    </div>
+    <div id="layerExistsAutomaticallyOverwrite">
+        <div>
+            <p>Anger om utdata f&ouml;r verktyget ska skriva &ouml;ver ett lager i ditt inneh&aring;ll som har det angivna utdatanamnet. Om det lagernamnet &auml;nnu inte anv&auml;nds i din organisation kommer ett nytt objekt att skapas. Du m&aring;ste vara antingen &auml;gare till lagret eller administrat&ouml;r f&ouml;r att skriva &ouml;ver det.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>Namnet p&aring; mappen i  <b>Mitt inneh&aring;ll</b> d&auml;r resultaten ska sparas.
+            </p>
+            <p>Detta kan inte uppdateras om lagret redan finns.
+            </p>
+        </div>
+    </div>
+    <div id="existingLayerToOverwrite">
+        <div>
+            <p>Lagret i  <b>Mitt inneh&aring;ll</b> som skrivs &ouml;ver av utdatalagret. De spatiala referenserna f&ouml;r utdata och det befintliga lagret m&aring;ste matcha.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

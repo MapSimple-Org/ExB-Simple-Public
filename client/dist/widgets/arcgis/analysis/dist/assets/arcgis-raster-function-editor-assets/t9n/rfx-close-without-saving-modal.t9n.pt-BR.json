@@ -1,0 +1,7 @@
+{
+  "header": "Editor de Função do Raster",
+  "content": "Você tem alterações não salvas no '${rftTitle}'. Se você não salvar, essas alterações serão perdidas.",
+  "cancel": "Cancelar",
+  "dontSave": "Não salvar",
+  "save": "Salvar"
+}

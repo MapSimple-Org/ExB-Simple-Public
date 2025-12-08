@@ -1,0 +1,16 @@
+{
+  "updateData": "Cập nhật dữ liệu",
+  "cancel": "Hủy",
+  "editStyle": "Thay thế tệp kiểu lớp bằng một phiên bản cập nhật từ máy tính.",
+  "updatePackages": "Thay thế ${type} bằng một phiên bản cập nhật từ máy tính. Tệp được tải lên phải có cùng tên với ${hostedLayerName}.",
+  "uploadStaticFiles": "Tệp đang được tải lên phải có cùng tên với tệp gốc ${fileName}",
+  "sameFileNameDescription": "Tệp đang được tải lên phải có cùng tên và tên trường với tệp gốc ${fileName}",
+  "updating": "Đang cập nhật...",
+  "error": "Lỗi",
+  "errors": {
+    "sameFileName": "Để cập nhật mục này, bạn phải cập nhật tệp có tên ${fileName}.",
+    "invalidStyleFileExtension": "Phần mở rộng tệp không hợp lệ. Kiểu đã tải lên phải có phần mở rộng tệp .json.",
+    "errorWhileUpload": "Đã xảy ra lỗi khi tải lên mục.",
+    "errorUpdate": "Đã xảy ra lỗi khi ghi đè mục."
+  }
+}

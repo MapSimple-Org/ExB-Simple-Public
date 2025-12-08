@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>ディープ ラーニングを使用したピクセルの分類ツールは、トレーニング済みディープ ラーニング モデルを入力画像に対して使用し、分類ラスターを生成します。
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputRaster">
+        <div>
+            <p>ピクセルの分類に使用するイメージ レイヤー。
+            </p> 
+        </div>
+    </div>
+    <div id="processAllRasterItems">
+        <div>
+            <p>イメージ レイヤーのラスター アイテムをモザイク化した後に処理する方法を指定します (すべて処理するか、個別に処理する)。
+            </p>
+        </div>
+    </div>
+    <div id="model">
+        <div>
+            <p>ピクセルの分類に使用するモデルを含むディープ ラーニング パッケージ。
+            </p>
+        </div>
+    </div>
+    <div id="modelArguments">
+        <div>
+            <p>ディープ ラーニング モデルに存在するモデル引数と、そのデフォルト値。
+            </p>
+        </div>
+    </div>
+    <div id="outputClassifiedRaster">
+        <div>
+            <p>分類される出力イメージ レイヤーの名前。
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>作成されマップに追加されるレイヤーの名前。
+            </p>
+        </div>
+    </div>
+    <div id="resultType">
+        <div>
+            
+            <p>作成する出力のタイプ。 出力は、タイル イメージ レイヤーまたはダイナミック イメージ レイヤーです。
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            
+            <p>結果を保存する  <b>[マイ コンテンツ]</b> 内のフォルダーの名前。
+            </p>
+        </div>
+    </div>
+</div>
+</html>

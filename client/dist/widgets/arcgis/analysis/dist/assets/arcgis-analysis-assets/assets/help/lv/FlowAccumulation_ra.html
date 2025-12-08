@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>Plūsmas akumulē&scaron;anas rīks ģenerē akumulētās plūsmas rastru katrā &scaron;ūnā no plūsmas virziena rastra.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputFlowDirectionRaster">
+        <div>
+            <p>Rastrs, kas nosaka plūsmas virzienu no katras &scaron;ūnas.
+            </p>
+            <p>To var izveidot, izmantojot plūsmas virziena rīku.
+            </p>
+        </div>
+    </div>
+    <div id="inputWeightRaster">
+        <div>
+            <p>Rastra slānis, kas nosaka plūsmas frakciju, kas veicina plūsmas uzkrā&scaron;anos katrā &scaron;ūnā.
+            </p>
+        </div>
+    </div>
+    <div id="flowDirectionType">
+        <div>
+            <p>Norāda ievades plūsmas virziena rastra veidu.
+            </p>
+        </div>
+    </div>
+    <div id="dataType">
+        <div>
+            <p>Norāda izvades plūsmas akumulē&scaron;anas rastra datu veidu.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>Plūsmas uzkrā&scaron;anās rastra slāņa nosaukums, kas tiks izveidots un pievienots kartei.
+            </p>
+        </div>
+    </div>
+    <div id="resultType">
+        <div>
+            <p>Izveidojamais izvažu veids. Izvades var būt mozaīkas attēlu slāņi vai dinamiski attēlu slāņi.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>Mapes nosaukums sadaļā  <b>Mans saturs</b>, kurā tiks saglabāti rezultāti.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

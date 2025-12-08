@@ -1,0 +1,1 @@
+System.register([],function(e){return{execute:function(){e({_widgetLabel:"\u0414\u0438\u0430\u0433\u0440\u0430\u043c\u0430",dataEmptyTip:"\u041d\u044f\u043c\u0430 \u043d\u0430\u043c\u0435\u0440\u0435\u043d\u0438 \u0434\u0430\u043d\u043d\u0438"})}}});

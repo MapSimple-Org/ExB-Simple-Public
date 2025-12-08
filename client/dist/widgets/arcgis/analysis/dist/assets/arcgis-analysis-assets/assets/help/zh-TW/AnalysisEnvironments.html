@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p> Map Viewer 中分析的環境設定。 </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="analysisProcessingExtent">
+        <div>
+            <p>指定將用於分析的區域。 預設情況下，它將使用完整範圍。
+            </p>
+        </div>
+    </div>
+    <div id="rasterAnalysisProcessingExtent">
+        <div>
+            <p>指定在啟用 <b>使用不同的處理範圍進行點陣分析</b>時將用於點陣分析工具和點陣函數的區域。 預設情況下，它將使用地圖的顯示範圍。
+            </p>
+        </div>
+    </div>
+    <div id="useDifferentExtentForRA">
+        <div>
+            <p>指定是否對點陣分析工具和點陣函數使用不同的處理範圍。 啟用後，點陣分析將使用 <b>點陣分析處理範圍</b>設定的值，預設為使用地圖的顯示範圍。 停用後，所有類型的分析都將使用為 <b>分析處理範圍</b>設定的值，該值預設為使用完整範圍。
+            </p>
+        </div>
+    </div>
+    <div id="outSR">
+        <div>
+            <p>指定將用於分析和結果圖層的座標系統。
+            </p>
+        </div>
+    </div>
+    <div id="extent">
+        <div>
+            <p>指定將用於分析的區域。
+            </p>
+        </div>
+    </div>
+    <div id="snapRaster">
+        <div>
+            <p>調整輸出的範圍，使其符合指定的對齊點陣圖層的儲存格對齊。
+            </p>
+        </div>
+    </div>
+    <div id="cellSize">
+        <div>
+            <p>指定將用於分析並用來建立輸出點陣圖層的儲存格大小或解析度。
+            </p>
+            <p>如果選擇 <b>按指定</b>，且輸出空間參考與輸入空間參考不同，則不會重新投影儲存格大小值。
+            </p>
+        </div>
+    </div>
+    <div id="mask">
+        <div>
+            <p>指定遮罩圖層，其中只會將位於遮罩區域內的儲存格用於分析。
+            </p>
+        </div>
+    </div>
+    <div id="resamplingMethod">
+        <div>
+            <p>指定當輸入和輸出點陣不對齊時如何插值像素值。
+            </p>
+        </div>
+    </div>
+    <div id="processorType">
+        <div>
+            <p>指定將使用的處理器類型。 選項為  <b>CPU</b>、 <b>GPU</b> 和 <b>自動</b>。 若指定 <b>自動</b>，工具將定義處理器類型。
+            </p>
+        </div>
+    </div>
+    <div id="parallelProcessingFactor">
+        <div>
+            <p>指定工具執行期間所使用的點陣處理服務執行個體的數量。 支援的值包括空字串 (此工具將確定要使用的點陣處理服務執行個體的數量)、整數 (0 或正整數) 和百分比。 百分比必須在百分比值後方包含百分號 (%)。
+            </p>
+        </div>
+    </div>
+    <div id="askConfirmation">
+        <div>
+            <p>指定如果估計的點數超過指定的閾值是否顯示警告訊息 (啟用)，或者無論估計的點數消耗量為何，都將執行分析而不顯示訊息 (未啟用)。 此分析仍將遵循組織的點數預算設定。
+            </p>
+        </div>
+    </div>
+    <div id="creditThreshold">
+        <div>
+            <p>指定根據執行分析所估計的點數消耗量，將顯示警告訊息的閾值。 如果估計值超過閾值，仍可執行分析。
+            </p>
+        </div>
+    </div>
+    <div id="recycleProcessingWorkers">
+        <div>
+            <p>指定在重新啟動工作者程序之前將處理的圖像部分數量，以防止長時間執行程序所可能發生的失敗情況。 預設值是 0。
+            </p>
+        </div>
+    </div>
+    <div id="retryOnFailures">
+        <div>
+            <p>指定在處理特定工作期間發生故障時，將嘗試相同工作者程序的次數。 預設值是 0。
+            </p>
+        </div>
+    </div>
+    <div id="geographicTransformations">
+        <div>
+            <p>指定可用於投影資料以進行分析的轉換方法。
+            </p>
+            <p>此環境目前僅支援點陣分析工具和點陣函數。
+            </p>
+        </div>
+    </div>
+</div>
+</html>

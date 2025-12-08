@@ -1,0 +1,8 @@
+{
+  "itemProperties": {
+    "description": "Resultaat dat is gegenereerd door het uitvoeren van de analysetool Filteren op attributen.",
+    "snippet": "Resultaat dat is gegenereerd via Filteren op attributen"
+  },
+  "noLayerDisabledTooltip": "Selecteer een geldige invoer-gegevensset.",
+  "queryCriteriaGroupLabel": "Querycriteria"
+}

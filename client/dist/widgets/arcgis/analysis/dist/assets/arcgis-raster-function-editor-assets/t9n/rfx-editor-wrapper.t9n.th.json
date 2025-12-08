@@ -1,0 +1,6 @@
+{
+  "dialogTitle": "Raster Function Editor",
+  "defaultTemplateName": "เทมเพลตฟังก์ชั่นภาพ",
+  "readOnlyModeTitle": "อ่านเท่านั้น",
+  "readOnlyModeMessage": "รายการเทมเพลตฟังก์ชันแรสเตอร์เป็นแบบอ่านอย่างเดียว ไม่สามารถบันทึกการเปลี่ยนแปลงได้"
+}

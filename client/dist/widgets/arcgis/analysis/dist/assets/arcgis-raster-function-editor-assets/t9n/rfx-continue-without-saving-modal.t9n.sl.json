@@ -1,0 +1,6 @@
+{
+  "header": "Želite začeti znova brez shranjevanja?",
+  "content": "Imate neshranjene spremembe v \"${rftTitle}\". Če pričnete ponovno z novo predlogo, bodo tiste spremembe izgubljene.",
+  "cancel": "Prekliči",
+  "continue": "Nadaljuj"
+}

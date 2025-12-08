@@ -1,0 +1,12 @@
+{
+  "classField": "Klassfält",
+  "classesAsRowsLabel": "Klasser som rader i utdatatabell",
+  "inputClassRasterOrFeatures": "Klassraster eller geoobjekt som indata",
+  "inputLayerGroupText": "Välj indatazonen och klasslagret för att beräkna korstabulerade områden mellan de två dataseten.",
+  "itemProperties": {
+    "description": "Utdatatabellen har genererats från körning av analysverktyget Tabulera yta.",
+    "snippet": "Utdatatabellen har genererats från Tabulera yta"
+  },
+  "tabulateAreaSettingsGroupLabel": "Inställningar för Tabulera yta",
+  "tabulateAreaSettingsGroupText": "Välj hur klasserna i utdatatabellen ska hanteras. Ange cellstorleken som ska beräknas. "
+}

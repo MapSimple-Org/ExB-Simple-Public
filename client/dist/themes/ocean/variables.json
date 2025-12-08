@@ -1,0 +1,27 @@
+{
+  "src": {
+    "primary": {
+      "color": "#007AC2",
+      "harmonize": true
+    },
+    "secondary": {
+      "color": "#00BAB5",
+      "harmonize": true
+    }
+  },
+  "sys": {
+    "color": {
+      "mode": "light",
+      "light": {
+        "primary": {
+          "main": "#007AC2"
+        }
+      }
+    },
+    "shape": {
+      "shape1": "0px",
+      "shape2": "0px",
+      "inputField": "0px"
+    }
+  }
+}

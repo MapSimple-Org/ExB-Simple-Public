@@ -1,0 +1,11 @@
+{
+  "all": "全部",
+  "inputLayersGroupText": "选择输入表面栅格，以及可选的洼地数据和权重栅格。",
+  "itemProperties": {
+    "description": "运行“派生流作为栅格”工具生成的输出。",
+    "snippet": "“派生流作为栅格”生成的输出"
+  },
+  "outputStreamFeaturesLabel": "输出流要素名称",
+  "simplifyLabel": "简化要素",
+  "streamSettingsGroupText": "指定积累阈值、流标识方法，以及输出的流线是否将被平滑为简单形状。"
+}

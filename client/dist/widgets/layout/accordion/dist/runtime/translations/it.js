@@ -1,0 +1,1 @@
+System.register([],function(t){return{execute:function(){t({_widgetLabel:"Comando a soffietto",tips:"Comando a soffietto"})}}});

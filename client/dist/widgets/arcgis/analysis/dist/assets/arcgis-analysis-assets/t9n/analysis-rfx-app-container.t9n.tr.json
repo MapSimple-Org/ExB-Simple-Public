@@ -1,0 +1,16 @@
+{
+  "backLabel": "Geri",
+  "browseHeader": "Katman seç",
+  "cannotReopenRasterFunction": "Raster fonksiyonu tekrar açılamadı.",
+  "creditThresholdModal": {
+    "cancelRun": "İptal",
+    "continueRun": "Yine de çalıştır",
+    "creditEstimate": "Tahmini krediler: ${cost}",
+    "creditThreshold": "Kredi eşiği: ${threshold}",
+    "heading": "Devam etmeden önce",
+    "learnMore": "Kredi eşikleri hakkında daha fazla bilgi edinin.",
+    "thresholdExceeded": "Bu analiz için tahmini kredi maliyeti, web haritasının kredi eşiğinden daha yüksek:"
+  },
+  "failedToExecuteEstimate": "Gönderim başarısız oldu. EstimateRasterAnalysisCost yürütülemedi",
+  "runAnalysisLabel": "Çalıştır"
+}

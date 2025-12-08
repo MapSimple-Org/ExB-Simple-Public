@@ -1,0 +1,19 @@
+{
+  "name": "general",
+  "type": "template",
+  "templateType": "scrolling-page",
+  "label": "General",
+  "description": "General provides a long scrolling template created to share the stories behind your content.",
+  "thumbnail": "thumbnail.png",
+  "order": 2,
+  "tags": [
+    "Title",
+    "Gallery"
+  ],
+  "categoriesTags": [
+    "Web page",
+    "Scrolling"
+  ],
+  "thumbnailWidth": 320,
+  "thumbnailHeight": 214
+}

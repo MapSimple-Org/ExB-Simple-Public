@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>The Tabulate Area tool calculates the cross-tabulated areas between two datasets and reports the results as a table.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputZoneRasterOrFeatures">
+        <div>
+            <p>The input that defines the boundaries of the zones.
+            </p>
+            <p class="toolPaneOnly">For feature inputs, the count depends on additional factors such as filtering criteria and the analysis extent.
+            </p>
+        </div>
+    </div>
+    <div id="zoneField">
+        <div>
+            <p>The field that contains the values that define each zone.
+            </p>
+        </div>
+    </div>
+    <div id="inputClassRasterOrFeatures">
+        <div>
+            <p>The input that defines the boundaries of the classes whose area will be calculated.
+            </p>
+            <p class="toolPaneOnly">For feature inputs, the count depends on additional factors such as filtering criteria and the analysis extent.
+            </p>
+        </div>
+    </div>
+    <div id="classField">
+        <div>
+            <p>The field that contains the values that define each class.
+            </p>
+        </div>
+    </div>
+    <div id="classesAsRows">
+        <div>
+            <p>Specifies whether the values from the input class raster will be represented as rows in the output table.
+            </p>
+            <p>If unchecked, classes will be represented as fields. If checked, classes will be represented as rows.
+            </p>
+        </div>
+    </div>
+    <div id="analysisCellSize">
+        <div>
+            <p>Specifies the cell size of the analysis raster that will be created to calculate the cross-tabulated areas.
+            </p>
+        </div>
+    </div>
+    <div id="outputTableName">
+        <div>
+            <p>The name of the tabulated area table layer that will be created and added to the map.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>The name of the folder in  <b>My content</b> where the result will be saved.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

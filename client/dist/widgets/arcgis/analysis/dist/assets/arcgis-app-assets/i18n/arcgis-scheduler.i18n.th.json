@@ -1,0 +1,55 @@
+{
+  "beginningOnLabel": "เริ่มต้นเมื่อ",
+  "repeatTypeLabel": "พิมพ์ซ้ำ",
+  "endingOnTypeLabel": "สิ้นสุดเมื่อ",
+  "endingOnDateLabel": "วันที่สิ้นสุด",
+  "endingOnCountLabel": "นับ",
+  "endingOnCountPlaceholder": "เช่น: 1, 10, 30",
+  "dailyRepeatIntervalLabel": "ช่วงเวลาการทำซ้ำ",
+  "dailyTimeLabel": "เวลา",
+  "weeklyDaysOfWeekLabel": "วันของสัปดาห์",
+  "weeklyTimeLabel": "เวลา",
+  "monthlyDayOfMonthLabel": "วันของเดือน",
+  "monthlyDayOfMonthPlaceholder": "เช่น, 1 - 31",
+  "monthlyRepeatIntervalLabel": "ช่วงเวลาการทำซ้ำ",
+  "monthlyTimeLabel": "เวลา",
+  "repeatTypeOptions": {
+    "day": "วัน",
+    "week": "สัปดาห์",
+    "month": "เดือน"
+  },
+  "endingOnType": {
+    "never": "ไม่เคย",
+    "date": "วันที่",
+    "count": "เปิด"
+  },
+  "dailyRepeatInterval": {
+    "everyDay": "ทุกวัน",
+    "everyOtherDay": "ทุกวันเว้นวัน",
+    "everyThreeDays": "ทุกสามวัน",
+    "everyFourDays": "ทุกสี่วัน",
+    "everyFiveDays": "ทุกห้าวัน",
+    "everySixDays": "ทุกหกวัน",
+    "everySevenDays": "ทุกเจ็ดวัน",
+    "everyFourteenDays": "ทุกสิบสี่วัน"
+  },
+  "weekDays": {
+    "all": "ทั้งหมด",
+    "allWeekdays": "วันธรรมดาทั้งหมด",
+    "sunday": "วันอาทิตย์",
+    "monday": "วันจันทร์",
+    "tuesday": "วันอังคาร",
+    "wednesday": "วันพุธ",
+    "thursday": "วันพฤหัสบดี",
+    "friday": "วันศุกร์",
+    "saturday": "วันเสาร์"
+  },
+  "monthlyRepeatInterval": {
+    "everyMonth": "ทุกเดือน",
+    "everyTwoMonths": "ทุกสองเดือน",
+    "everyThreeMonths": "ทุกสามเดือน",
+    "everyFourMonths": "ทุกสี่เดือน",
+    "everyFiveMonths": "ทุกห้าเดือน",
+    "everySixMonths": "ทุกหกเดือน"
+  }
+}

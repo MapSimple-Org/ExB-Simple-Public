@@ -1,0 +1,160 @@
+{
+  "deleteItem": "Supprimer l’élément",
+  "deleteItems": "Supprimer les éléments",
+  "deleteFolder": "Supprimer le dossier",
+  "recycleBin": "Corbeille",
+  "delete": "Supprimer",
+  "permanentlyDelete": "Supprimer définitivement",
+  "next": "Suivant",
+  "back": "Retour",
+  "cancel": "Annuler",
+  "item": "élément",
+  "items": "éléments",
+  "cantDelete": "Les éléments suivants ne peuvent pas être supprimés car ils sont protégés contre la suppression ou comportent des éléments dépendants.",
+  "proceed": "Poursuivre et supprimer les éléments restants ?",
+  "showMore": "Afficher plus",
+  "showLess": "Afficher moins",
+  "deletePermanently": "Supprimer définitivement (cette action est irréversible)",
+  "learnMore": "En savoir plus",
+  "summary": {
+    "select": "Sélectionner",
+    "deselect": "Désélectionner",
+    "selectedItems": "Éléments sélectionnés :",
+    "additionalDependentItems": "éléments dépendants supplémentaires :",
+    "permanentlyDelete": "Supprimer définitivement :",
+    "permanentDelete": {
+      "notSupported": {
+        "single": "Cet élément n’est pas pris en charge par la corbeille.",
+        "multiple": "Ces éléments ne sont pas pris en charge par la corbeille."
+      },
+      "unsynchronized": "Les modifications non synchronisées apportées aux couches d’entités d’un groupe de collaboration distribuée seront perdues.",
+      "notSupportedAndUnsynchronized": "Certains types d’élément ne sont pas pris en charge. Les modifications non synchronisées apportées aux couches d’entités d’un groupe de collaboration distribuée seront perdues.",
+      "group": {
+        "notSupported": "Non pris en charge",
+        "distributedCollaboration": "Appartient à une collaboration distribuée"
+      }
+    },
+    "canBeRecovered": {
+      "single": "Cet élément sera supprimé définitivement au bout de ${days} jours.",
+      "multiple": "Ces éléments seront supprimés définitivement au bout de ${days} jours.",
+      "unknown": "Ces éléments seront supprimés définitivement au bout de ${days} jours."
+    },
+    "includesDependentItems": "Éléments dépendants supplémentaires :",
+    "willBeRecycled": "Placer dans la corbeille :",
+    "cannotDelete": "Suppression impossible :",
+    "deleteDiscouraged": "Suppression déconseillée :",
+    "hasDependentItems": "Possède un élément dépendant :",
+    "replacementItemFor": "Élément de remplacement pour :",
+    "someActionsMayNoLongerWork": {
+      "single": "Si vous placez cet élément dans la corbeille, certaines actions qui nécessitent l’accès à l’élément source risquent de ne plus fonctionner comme prévu.",
+      "multiple": "Si vous placez ces éléments dans la corbeille, certaines actions qui nécessitent l’accès aux éléments sources risquent de ne plus fonctionner comme prévu."
+    },
+    "deletePermanently": "Supprimer définitivement : ${count} (cette action est irréversible)",
+    "deleteAllPermanently": "Supprimer définitivement tous les éléments : ${count} (cette action est irréversible)",
+    "deleteXPermanently": "Supprimer définitivement ${subset} éléments sur ${total} (cette action est irréversible)",
+    "unprotectedGroup": {
+      "deleteDiscouraged": {
+        "dependent": "Si vous supprimez ces éléments, certaines actions qui nécessitent d’accéder à l’élément source risquent de ne plus fonctionner comme prévu. Voulez-vous vraiment supprimer cet élément ?",
+        "replacement": "Cet élément est sélectionné comme élément de remplacement. Voulez-vous vraiment supprimer cet élément ?",
+        "learnMore": "En savoir plus sur la suppression des éléments sources"
+      }
+    },
+    "protectedGroup": {
+      "deleteProtected": "Protégé contre la suppression",
+      "deleteProtectedDescription": "Les éléments protégés contre la suppression ne peuvent pas être supprimés.",
+      "hasDependentItems": "Possède un élément dépendant",
+      "dependentItems": {
+        "single": "Élément dépendant :",
+        "multiple": "Éléments dépendants :"
+      },
+      "compositeDelete": "Cet élément dépend de :",
+      "compositeDeleteDescription": "Les éléments dépendants faisant partie d’une relation composite ne peuvent pas être supprimés sans l’élément source qui leur est associé.",
+      "hasDependentItemsDescription": {
+        "singleOneDependentItem": "Cet élément possède un élément dépendant. Ils doivent être supprimés ensemble.",
+        "singleMultipleDependentItems": "Cet élément possède des éléments dépendants. Ils doivent être supprimés ensemble.",
+        "multiple": "Ces éléments possèdent des éléments dépendants. Ils doivent être supprimés ensemble."
+      },
+      "protectedAndDependentDescription": "Les éléments protégés contre la suppression ou qui comportent des éléments dépendants ne peuvent pas être supprimés.",
+      "deleteDiscouraged": "Suppression déconseillée",
+      "deleteDiscouragedDescription": {
+        "single": "Si cet élément est supprimé, des éléments dépendants risquent de perdre une partie de leurs fonctionnalités. Vous pouvez supprimer cet élément à partir de sa page des détails.",
+        "multiple": "Si ces éléments sont supprimés, des éléments dépendants risquent de perdre une partie de leurs fonctionnalités. Vous pouvez supprimer ces éléments un par un à partir de leur page des détails."
+      }
+    }
+  },
+  "willBePermanentlyDeleted": {
+    "single": "Cet élément sera supprimé définitivement car il n’est pas pris en charge par la corbeille.",
+    "multiple": "Ces éléments seront supprimés définitivement car ils ne sont pas pris en charge par la corbeille.",
+    "unknown": "Ces éléments seront supprimés définitivement car ils ne sont pas pris en charge par la corbeille."
+  },
+  "willBePermanentlyDeletedCollaboration": {
+    "single": "L’élément sélectionné appartient à un groupe de collaboration distribuée et ne peut pas être placé dans la corbeille. Il sera supprimé définitivement.",
+    "multiple": "Les éléments sélectionnés appartiennent à un groupe de collaboration distribuée et ne peuvent pas être placés dans la corbeille. Ils seront supprimés définitivement.",
+    "unknown": "Les éléments sélectionnés appartiennent à un groupe de collaboration distribuée et ne peuvent pas être placés dans la corbeille. Ils seront supprimés définitivement."
+  },
+  "areYouSure": {
+    "single": "Voulez-vous vraiment supprimer cet élément ?",
+    "multiple": "Voulez-vous vraiment supprimer ces éléments ?",
+    "unknown": "Voulez-vous vraiment supprimer ces éléments ?"
+  },
+  "areYouSureRecycle": {
+    "single": "Cet élément restera dans la corbeille pendant ${days} jours avant sa suppression définitive.",
+    "multiple": "Ces éléments resteront dans la corbeille pendant ${days} jours avant leur suppression définitive.",
+    "unknown": "Ces éléments resteront dans la corbeille pendant ${days} jours avant leur suppression définitive."
+  },
+  "areYouSurePermanent": {
+    "single": "Voulez-vous vraiment supprimer définitivement cet élément ? Une fois supprimé définitivement, cet élément ne pourra pas être récupéré.",
+    "multiple": "Voulez-vous vraiment supprimer définitivement ces éléments ? Une fois supprimés définitivement, ces éléments ne pourront pas être récupérés.",
+    "unknown": "Voulez-vous vraiment supprimer définitivement ces éléments ? Une fois supprimés définitivement, ces éléments ne pourront pas être récupérés."
+  },
+  "deletes": {
+    "single": "Suppression dans ${days} jour",
+    "multiple": "Suppression dans ${days} jours",
+    "unknown": "Nombre de jours avant la suppression : ${days}"
+  },
+  "deleteOverride": {
+    "single": "Voulez-vous vraiment supprimer définitivement cet élément ? Une fois supprimé définitivement, cet élément ne pourra pas être récupéré.",
+    "multiple": "Voulez-vous vraiment supprimer définitivement ces éléments ? Une fois supprimés définitivement, ces éléments ne pourront pas être récupérés."
+  },
+  "restore": {
+    "restore": "Restaurer",
+    "restoreTo": "Restaurer dans",
+    "restoreItem": "Restaurer l’élément",
+    "restoreItems": "Restaurer les éléments",
+    "noticeMessage": "Le partage des éléments restaurés sera annulé. Examinez les contenus avant de les partager à nouveau.",
+    "cannotBulkRestoreXItems": "Il n’est pas possible de restaurer en bloc plus de ${number} éléments. Désélectionnez-en quelques-uns.",
+    "cannotBulkRestoreMultipleOwners": "Il n’est pas possible de restaurer en bloc des éléments appartenant à des propriétaires différents. Sélectionnez les éléments d’un seul propriétaire pour la restauration en bloc.",
+    "toRestore": {
+      "single": "Élément à restaurer :",
+      "multiple": "Éléments à restaurer :"
+    },
+    "cannotRestore": "Impossible de restaurer :",
+    "dependentItems": {
+      "single": "Cet élément ne peut pas être restauré car il dépend de <b>${parent}</b>. Restaurez ces deux éléments ensemble.",
+      "multiple": "Ces éléments ne peuvent pas être restaurés car ils dépendent d’autres éléments qui se trouvent dans la corbeille. Restaurez-les ensemble : "
+    }
+  },
+  "onboarding": {
+    "checkItOut": "Vous devez récupérer un élément supprimé accidentellement ? Découvrez la nouvelle corbeille !",
+    "takeALook": "Jetez un œil à la nouvelle corbeille !",
+    "learnMore": "En savoir plus sur la restauration des éléments supprimés",
+    "heldInRecycleBin": "Les éléments placés dans la corbeille sont supprimés définitivement au bout de ${days} jours.",
+    "goToUserRecycleBin": "Accédez à votre ${linkStart}corbeille${linkEnd} pour restaurer des éléments ou les supprimer définitivement.",
+    "goToOrgRecycleBin": "Accédez à la ${linkStart}corbeille de votre organisation${linkEnd} pour restaurer des éléments ou les supprimer définitivement. Le contenu situé dans la corbeille continue à consommer des crédits."
+  },
+  "pageRangeWithTotalRecycleBinSize": {
+    "en": "${start}-${end} sur ${total} (${size}) dans la corbeille",
+    "other": "${start}-${end}, total : ${total} (${size}) dans la corbeille"
+  },
+  "pageRangeWithGreaterThanTotalRecycleBinSize": {
+    "en": "${start}-${end} sur ${total} (> ${size}) dans la corbeille",
+    "other": "${start}-${end}, total : ${total} (> ${size}) dans la corbeille"
+  },
+  "compositeDeleteDisclaimer": {
+    "oneToOne": "L’élément <strong>${item}</strong> comporte un élément dépendant (<strong>${dependentItem}</strong>) qui doit être supprimé avec lui.",
+    "oneToMany": "L’élément <strong>${item}</strong> comporte des éléments dépendants qui doivent être supprimés avec lui.",
+    "manyToMany": "Certains éléments sélectionnés comportent des éléments dépendants qui doivent être supprimés avec eux.",
+    "additional": "Éléments supplémentaires :",
+    "dependentOn": "Dépend de :"
+  }
+}

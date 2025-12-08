@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>Alatka Tabulisanje oblasti izračunava unakrsno tabulisane oblasti između dva skupa podataka i rezultate prikazuje u obliku tabele.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputZoneRasterOrFeatures">
+        <div>
+            <p>Ulaz koji defini&scaron;e granice zona.
+            </p>
+            <p class="toolPaneOnly">Za uzlaze geoobjekata, broj zavisi od dodatnih faktora kao &scaron;to su kriterijumi za filtriranje i obuhvat analize.
+            </p>
+        </div>
+    </div>
+    <div id="zoneField">
+        <div>
+            <p>Polje koje sadrži vrednosti koje određuju svaku zonu.
+            </p>
+        </div>
+    </div>
+    <div id="inputClassRasterOrFeatures">
+        <div>
+            <p>Ulaz koji defini&scaron;e granice klasa čija će oblast biti izračunata.
+            </p>
+            <p class="toolPaneOnly">Za uzlaze geoobjekata, broj zavisi od dodatnih faktora kao &scaron;to su kriterijumi za filtriranje i obuhvat analize.
+            </p>
+        </div>
+    </div>
+    <div id="classField">
+        <div>
+            <p>Polje koje sadrži vrednosti koje defini&scaron;u svaku klasu.
+            </p>
+        </div>
+    </div>
+    <div id="classesAsRows">
+        <div>
+            <p>Precizira da li će vrednosti iz rastera ulazne klase biti predstavljene kao redovi u izlaznoj tabeli.
+            </p>
+            <p>Ako nije označeno, klase će biti predstavljene kao polja. Ako je označeno, klase će biti predstavljene kao redovi.
+            </p>
+        </div>
+    </div>
+    <div id="analysisCellSize">
+        <div>
+            <p>Određuje veličinu ćelije rastera za analizu koja će biti kreirana za izračunavanje unakrsno tabulisanih oblasti.
+            </p>
+        </div>
+    </div>
+    <div id="outputTableName">
+        <div>
+            <p>Naziv sloja tabele tabulisane oblasti koji će biti kreiran i dodat mapi.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>Naziv fascikle u  <b>Mom sadržaju</b> u kojoj će rezultat biti sačuvan.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

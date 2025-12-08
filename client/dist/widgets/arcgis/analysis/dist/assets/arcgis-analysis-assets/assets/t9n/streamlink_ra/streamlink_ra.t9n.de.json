@@ -1,0 +1,9 @@
+{
+  "inputFlowDirectionRasterLabel": "Eingabe-Fließrichtungs-Raster",
+  "inputLayerGroupText": "Die Eingabe-Wasserlauf- und Eingabe-Fließrichtungs-Raster auswählen.",
+  "inputStreamRasterLabel": "Eingabe-Wasserlauf-Raster",
+  "itemProperties": {
+    "description": "Durch Ausführung des Analysewerkzeugs \"StreamLink\" generierte Ausgabe.",
+    "snippet": "Über StreamLink generierte Ausgabe"
+  }
+}

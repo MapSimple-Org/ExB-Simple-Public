@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>The Multidimensional Principal Components tool transforms the multidimensional imagery layers into a reduced number of components that account for the variance of the data, so that spatial and temporal patterns can be readily identified.
+
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputMultidimensionalRaster">
+        <div>
+            <p>The multidimensional imagery layer that will be analyzed.
+
+            </p> 
+        </div>
+    </div>
+    <div id="mode">
+        <div>
+            <p>The method that will be used to perform the principal component analysis. The options include  <b>Dimension reduction</b> and <b>Spatial reduction</b>.
+            </p>
+        </div>
+    </div>
+    <div id="dimension">
+        <div>
+            <p>The dimension of the multidimensional imagery layer along which the variable will be analyzed. 
+
+            </p>
+        </div>
+    </div>
+    <div id="outputPrincipalComponentsName">
+        <div>
+            <p>The name of the output imagery layer or table layer showing the principal components found depending on the following choices of mode: 
+                <ul>
+                    <li>Dimension reduction output will be a multiband imagery layer.
+
+                    </li>
+                    <li>Spatial reduction output will be a table layer.
+                    </li>
+                </ul>
+                
+            </p>
+        </div>
+    </div>
+    <div id="outputLoadingsName">
+        <div>
+            <p>The name of the output imagery layer or table layer showing the supporting data in the principal components choice depending on the following choices of mode: 
+                <ul>
+                    <li>Dimension reduction output will be a table layer.
+                    </li>
+                    <li>Spatial reduction output will be an imagery layer.
+                    </li>
+                </ul>
+                
+            </p>
+        </div>
+    </div>
+    <div id="outputEigenValuesTableName">
+        <div>
+            <p>The name of the Eigenvalues table, which indicates the variance percentage of each component. 
+
+            </p>
+        </div>
+    </div>
+    <div id="variable">
+        <div>
+            <p>The name of the variable of the input multidimensional imagery layer used in the computation. 
+
+            </p>
+        </div>
+    </div>
+    <div id="numberOfPrincipalComponents">
+        <div>
+            <p>The number of principal components to compute, usually fewer than the  number of input rasters.
+
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>The name of the layer that will be created and added to the map.
+            </p>
+        </div>
+    </div>
+    <div id="resultType">
+        <div>
+            
+            <p>The type of outputs that will be created. The outputs can be tiled imagery layers or dynamic imagery layers.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            
+            <p>The name of the folder in  <b>My content</b> where the results will be saved.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

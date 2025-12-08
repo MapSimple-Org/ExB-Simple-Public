@@ -1,0 +1,89 @@
+{
+  "browser": {
+    "refineContent": "تحسين المحتوى",
+    "filters": "عوامل تصفية",
+    "pageRange": "${start}-${end}، الإجمالي: ${total}",
+    "pageRangeAria": "${start}-${end}، إجمالي العناصر: ${total}",
+    "pageRangeWithRecycleBin": "${start}-${end}، الإجمالي: ${total} (الحجم الإجمالي: ${recycleBinSize})",
+    "pageRangeAriaWithRecycleBin": "${start}-${end}، إجمالي العناصر: ${total} (الحجم الإجمالي: ${recycleBinSize})",
+    "totalSize": "الحجم الإجمالي: ${totalSize}",
+    "loading": "تحميل النتائج",
+    "close": "إغلاق"
+  },
+  "actions": {
+    "more": "المزيد"
+  },
+  "filter": {
+    "clear": "مسح"
+  },
+  "filterDate": {
+    "today": "اليوم",
+    "yesterday": "أمس",
+    "last7": "آخر 7 أيام",
+    "last30": "آخر 30 يومًا",
+    "never": "أبدًا",
+    "custom": "نطاق مُخصّص...",
+    "title": {
+      "created": "التاريخ الذي تم إنشائه",
+      "modified": "تاريخ التعديل",
+      "joined": "تاريخ الانضمام",
+      "lastLogin": "أخر تسجيل دخول"
+    },
+    "created": "تاريخ الإنشاء: ${date}",
+    "modified": "تاريخ التعديل: ${date}",
+    "joined": "منضم: ${date}",
+    "lastLogin": "آخر تسجيل دخول: ${date}"
+  },
+  "pagination": {
+    "next": "الصفحة التالية",
+    "prev": "الصفحة السابقة"
+  },
+  "search": {
+    "label": "البحث في المجموعات",
+    "search": "بحث",
+    "clear": "مسح مصطلح البحث",
+    "wildcard": "البحث بطريقة الحرف البدل غير مدعوم"
+  },
+  "sort": {
+    "sortDirection": "اتجاه الفرز",
+    "title": "اللقب",
+    "relevance": "صلة",
+    "modified": "تاريخ التعديل",
+    "deleted": "تم حذف التاريخ",
+    "created": "التاريخ الذي تم إنشائه",
+    "added": "تمت إضافة التاريخ",
+    "size": "الحجم",
+    "owner": "المالك",
+    "sizeAsc": "من الأصغر إلى الأكبر",
+    "sizeDesc": "من الأكبر إلى الأصغر",
+    "numviews": "عرض الأعداد",
+    "numAsc": "أقل إلى الأكثر",
+    "numDesc": "الأكثر إلى الأقل",
+    "alphabeticalAsc": "أبجدي",
+    "alphabeticalDesc": "الترتيب الأبجدي العكسي",
+    "recentAsc": "الأقل حداثة",
+    "recentDesc": "الأحدث",
+    "sort": "فرز",
+    "sortBy": "فرز بواسطة",
+    "sortByColon": "الفرز حسب:",
+    "fullname": "الاسم",
+    "username": "اسم المستخدم",
+    "name": "الاسم",
+    "membertype": "دور المجموعة",
+    "joined": "تاريخ الانضمام",
+    "lastlogin": "أخر تسجيل دخول",
+    "dataset": "مجموعة البيانات",
+    "mfaenabled": "مصادقة متعددة العوامل",
+    "defaultAsc": "تصاعدي",
+    "defaultDesc": "تنازليًا"
+  },
+  "topBar": {
+    "filter": "تصفية"
+  },
+  "filterStatus": {
+    "clear": "مسح",
+    "filters": "عوامل تصفية:",
+    "additional": "عوامل تصفية نشطة إضافية",
+    "clearAllFilters": "مسح جميع عوامل التصفية"
+  }
+}

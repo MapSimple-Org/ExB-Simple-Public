@@ -1,0 +1,21 @@
+{
+  "backLabel": "กลับ",
+  "cannotReopenTool": "ไม่สามารถเปิดเครื่องมือใหม่อีกครั้งได้ พารามิเตอร์เครื่องมือถูกแปลงกลับเป็นค่าเริ่มต้นแล้ว",
+  "cannotReopenWebTool": "ไม่สามารถเปิดเครื่องมือเว็บได้ <calcite-link target='_blank' href='${ docLink }'>เรียนรู้เพิ่มเติม</calcite-link>",
+  "creditThresholdModal": {
+    "cancelRun": "ยกเลิก",
+    "continueRun": "ยืนยันการรัน",
+    "creditEstimate": "เครดิตโดยประมาณ: ${cost}",
+    "creditThreshold": "ค่าเกณฑ์เครดิต: ${threshold}",
+    "heading": "ก่อนที่คุณจะดำเนินการต่อ",
+    "learnMore": "ศึกษาข้อมูลเพิ่มเติมเกี่ยวกับค่าเกณฑ์เครดิต",
+    "thresholdExceeded": "ต้นทุนเครดิตโดยประมาณสำหรับการวิเคราะห์นี้สูงกว่าค่าเกณฑ์เครดิตของเว็บแมป:"
+  },
+  "failedToExecuteEstimate": "การส่งล้มเหลว ล้มเหลวในการดำเนินการ EstimateRasterAnalysisCost",
+  "missingPermissionForWebTool": "ไม่สามารถเข้าถึงเครื่องมือนี้ได้ ตรวจสอบให้แน่ใจว่ามีเครื่องมืออยู่ และผู้ใช้มีสิทธิ์ในการเข้าถึง",
+  "runAnalysisLabel": "ทำงาน",
+  "toolPreviewNoParameters": "ไม่ได้ตั้งค่าพารามิเตอร์สำหรับแบบจำลองนี้ กลับไปที่แบบจำลองเพื่อเพิ่มตัวแปรและตั้งค่าเป็นพารามิเตอร์",
+  "toolPreviewNoParametersLink": "<calcite-link target='_blank' href='${ docLink }'>เรียนรู้เพิ่มเติม</calcite-link>",
+  "toolPreviewWebTool": "หากต้องการรันแบบจำลองนี้ในรูปแบบเครื่องมือเว็บ ให้เผยแพร่และเปิดจากหน้าต่างการวิเคราะห์",
+  "webToolJSONChanged": "อัปเดตแล้วอย่างน้อยหนึ่งพารามิเตอร์ บางพารามิเตอร์อาจไม่ได้รับการเติมจากประวัติ"
+}

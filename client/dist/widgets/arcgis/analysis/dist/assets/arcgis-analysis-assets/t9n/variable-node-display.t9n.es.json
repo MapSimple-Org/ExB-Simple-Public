@@ -1,0 +1,9 @@
+{
+  "disconnect": "Desconectar de variable",
+  "overwriteTo": "Sobrescribir capa: <span style='font-weight: var(--calcite-font-weight-normal)'>${val}</span>",
+  "resultType": "Tipo de resultado: <span style='font-weight: var(--calcite-font-weight-normal)'>${val}</span>",
+  "saveTo": "Nombre de salida: <span style='font-weight: var(--calcite-font-weight-normal)'>${val}</span>",
+  "variableLabel": "Etiqueta: <span style='font-weight: var(--calcite-font-weight-normal)'>${val}</span>",
+  "variableNode": "Nodo de variable",
+  "variableVal": "Valor: <span style='font-weight: var(--calcite-font-weight-normal)'>${val}</span>"
+}

@@ -1,0 +1,11 @@
+{
+  "newTemplate": "Tạo biểu mẫu mới",
+  "openTemplate": "Mở biểu mẫu",
+  "addTemplate": "Thêm biểu mẫu",
+  "addFunction": "Thêm hàm raster",
+  "addConstant": "Thêm hằng số",
+  "addRaster": "Thêm biến raster",
+  "expand": "Expand (Mở rộng)",
+  "editTemplateProperties": "Chỉnh sửa thuộc tính biểu mẫu",
+  "viewTemplateProperties": "Xem thuộc tính biểu mẫu"
+}

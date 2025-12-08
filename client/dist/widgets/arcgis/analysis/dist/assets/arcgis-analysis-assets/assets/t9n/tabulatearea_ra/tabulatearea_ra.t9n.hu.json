@@ -1,0 +1,12 @@
+{
+  "classField": "Osztálymező",
+  "classesAsRowsLabel": "Osztályok kimeneti tábla soraiként",
+  "inputClassRasterOrFeatures": "Bemenetiosztály-raszter vagy vektoros elemek",
+  "inputLayerGroupText": "Válassza ki a beviteli zónát és az osztályréteget a két adatkészlet közötti kereszttabulált területek kiszámításához.",
+  "itemProperties": {
+    "description": "A Terület táblázatba rendezése elemzőeszköz futtatása nyomán generált kimeneti tábla.",
+    "snippet": "A Terület táblázatba rendezése függvényből létrehozott kimeneti tábla"
+  },
+  "tabulateAreaSettingsGroupLabel": "Területbeállítások tabulálása",
+  "tabulateAreaSettingsGroupText": "Válassza ki, hogy miként történjen az osztályok kezelése a kimeneti táblában. Adja meg a kiszámítandó cellaméretet. "
+}

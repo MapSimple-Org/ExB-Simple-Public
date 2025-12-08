@@ -1,0 +1,31 @@
+{
+  "back": "Kembali",
+  "cancel": "Batalkan",
+  "learnMore": "Pelajari selengkapnya",
+  "restore": "Pulihkan",
+  "restoreTo": "Pulihkan ke",
+  "restoreItem": "Kembalikan Item",
+  "restoreItems": "Kembalikan Item",
+  "noticeMessage": "Item yang dipulihkan tidak akan dibagikan. Harap tinjau konten Anda sebelum membagikannya lagi.",
+  "cannotBulkRestoreXItems": "Tidak dapat memulihkan secara massal lebih dari ${number} item, harap batalkan pilihan beberapa item.",
+  "cannotBulkRestoreMultipleOwners": "Tidak dapat memulihkan secara massal item milik pemilik yang berbeda. Pilih item dari satu pemilik untuk dipulihkan secara massal.",
+  "toRestore": {
+    "single": "Item yang akan Dipulihkan:",
+    "multiple": "Item yang akan Dipulihkan:"
+  },
+  "cannotRestore": "Tidak dapat memulihkan:",
+  "dependentItems": {
+    "single": "Item ini tidak dapat dipulihkan karena terkait dengan <strong style='font-weight: 500'>${parent}</strong>. Kembalikan semuanya secara bersamaan.",
+    "singleUnknown": "Item ini tidak dapat dipulihkan karena terkait dengan item lain di tempat sampah. Kembalikan semuanya secara bersamaan.",
+    "multiple": "Item ini tidak dapat dipulihkan karena terkait dengan item lain di tempat sampah. Kembalikan semuanya secara bersamaan.",
+    "multipleSameSource": "Item ini tidak dapat dipulihkan karena terkait dengan <strong style='font-weight: 500'>${parent}</strong>. Kembalikan semuanya secara bersamaan."
+  },
+  "pageRangeWithTotalRecycleBinSize": {
+    "en": "${start} - ${end} dari ${total} (${size}) di tempat sampah",
+    "other": "${start} - ${end}, total: ${total} (${size}) di tempat sampah"
+  },
+  "pageRangeWithGreaterThanTotalRecycleBinSize": {
+    "en": "${start} - ${end} dari ${total} (>${size}) di tempat sampah",
+    "other": "${start} - ${end}, total: ${total} (>${size}) di tempat sampah"
+  }
+}

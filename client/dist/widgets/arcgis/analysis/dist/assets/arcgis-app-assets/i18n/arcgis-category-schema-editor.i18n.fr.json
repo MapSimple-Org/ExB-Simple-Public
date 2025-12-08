@@ -1,0 +1,69 @@
+{
+  "loadingText": "Chargement des modèles de structure",
+  "cancel": "Annuler",
+  "finishSetup": "Terminer la configuration",
+  "hasUnsavedChanges": "Les modifications que vous avez apportées aux catégories seront perdues si vous ne les enregistrez pas au préalable. Êtes-vous sûr de vouloir fermer cette vue et perdre vos modifications ?",
+  "error": {
+    "generic": {
+      "title": "Erreur lors de la mise à jour des catégories",
+      "message": "Un problème est survenu. Réessayez ultérieurement."
+    },
+    "maxDepthExceeded": {
+      "title": "Erreur lors de la mise à jour des catégories",
+      "message": "Vous ne pouvez pas imbriquer les catégories sur plus de 2 niveaux."
+    },
+    "destinationHasSameName": {
+      "title": "Erreur lors de la mise à jour des catégories",
+      "message": "Il existe déjà une catégorie portant le même nom dans la catégorie de destination."
+    },
+    "emptyTitle": {
+      "title": "Erreur lors de la mise à jour des catégories",
+      "message": "Le titre des catégories doit être renseigné."
+    },
+    "noSchema": {
+      "title": "Structure introuvable",
+      "message": "La structure des éléments est introuvable pour l’utilisateur."
+    },
+    "maxCharacter": {
+      "title": "Erreur lors de la mise à jour des catégories",
+      "message": "La longueur maximale du nom des catégories est de ${maxCharacter} caractères."
+    },
+    "invalidCharacters": {
+      "title": "Erreur lors de la mise à jour des catégories",
+      "single": "La catégorie ne peut pas contenir le caractère suivant : ${invalidCharacters}.",
+      "multiple": "La catégorie ne peut pas contenir les caractères suivants : ${invalidCharacters}.",
+      "unknown": "La catégorie ne peut pas contenir les caractères suivants : ${invalidCharacters}."
+    }
+  },
+  "warning": {
+    "deleteInUseCategory": {
+      "title": "Supprimer la catégorie",
+      "cta": "Supprimer la catégorie"
+    },
+    "changeTitleInUseCategory": {
+      "title": "Mettre à jour la catégorie",
+      "cta": "Mettre à jour la catégorie"
+    }
+  },
+  "template": {
+    "title": "Modèles de catégorie",
+    "learnMore": "En savoir plus",
+    "templateList": {
+      "custom": {
+        "title": "Catégories personnalisées"
+      },
+      "arcgis": {
+        "title": "Catégories ArcGIS",
+        "message": "Les catégories ArcGIS incluent une sélection de catégories et de sous-catégories thématiques qui peuvent être utilisées pour classer de nombreux types de contenu géospatial. Ces catégories sont utilisées pour la prise en charge d’ArcGIS Living Atlas of the World."
+      },
+      "iso": {
+        "title": "Catégories ISO",
+        "message": "Les catégories ISO incluent les catégories thématiques de l’Organisation internationale de normalisation qui permettent de décrire et classifier les informations géographiques."
+      },
+      "inspire": {
+        "title": "Catégories INSPIRE",
+        "message": "Les catégories INSPIRE comprennent un ensemble complet de thèmes de données spatiales définis dans la directive INSPIRE."
+      }
+    }
+  }
+}

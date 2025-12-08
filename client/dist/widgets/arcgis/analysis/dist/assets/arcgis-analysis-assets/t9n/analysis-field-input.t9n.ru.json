@@ -1,0 +1,68 @@
+{
+  "addField": "Добавить поле",
+  "addFieldErrors": {
+    "creatingFailed": "Создание поля ${fieldName} не удалось.",
+    "existingFieldNameError": "Имя поля не может совпадать с существующим именем поля.",
+    "invalidName": "Недопустимое имя",
+    "invalidNameInputInvalidCharactersError": "Имя поля должно начинаться с буквы и содержать только буквы, числа и '_'.",
+    "invalidNameInputSQLError": "Имя поля не может совпадать с ключевым словом SQL.",
+    "valueIsRequiredError": "Это значение является обязательным."
+  },
+  "cancel": "Отмена",
+  "createAndSelectField": "Создать и выбрать поле",
+  "createNewFields": "Создать новое поле",
+  "fieldLoadingErrorText": "Не удалось загрузить поля.",
+  "fieldName": "Имя поля",
+  "fieldType": "Тип поля",
+  "fieldTypesIncompatible": "Нет совместимых полей.",
+  "layerNotSelected": "Не выбран слой для заполнения полей.",
+  "loadingFields": "Загрузка полей",
+  "noSearchResults": "Сопоставленных полей не найдено.",
+  "requiredErrorLabelDefault": "Поле",
+  "requiredErrorMessage": "Это обязательный параметр.",
+  "selectFieldPicklistHeading": "Выбрать поле",
+  "selectOkBtnText": "Выбрать",
+  "tooltip": "Необходимо указать корректное имя поля и тип данных.",
+  "types": {
+    "big-integer": {
+      "description": "Хранит целые числа от -(2${startSup}53${endSup}-1) до 2${startSup}53${endSup}-1. Используйте этот тип поля для чисел, которые находятся за пределами поддерживаемого диапазона целочисленных полей.",
+      "title": "Big Integer"
+    },
+    "date": {
+      "description": "Хранит значения с датой и временем.",
+      "title": "Date"
+    },
+    "date-only": {
+      "description": "Хранит значения дат без значений времени.",
+      "title": "Date Only"
+    },
+    "double": {
+      "description": "Хранит числа с десятичными знаками после запятой.",
+      "title": "Double"
+    },
+    "global-id": {
+      "description": "Хранит строку из 36 буквенно-цифровых символов и используется для уникальной идентификации объекта.",
+      "title": "GlobalID"
+    },
+    "guid": {
+      "description": "Хранит строку из 36 буквенно-цифровых символов. Глобальный уникальный идентификатор, или GUID, часто используется для управления отношениями между объектами.",
+      "title": "GUID"
+    },
+    "integer": {
+      "description": "Хранит целые числа от ${lowerIntegerRange} до ${upperIntegerRange}.",
+      "title": "Integer"
+    },
+    "string": {
+      "description": "Хранит набор буквенно-цифровых символов.",
+      "title": "String"
+    },
+    "time-only": {
+      "description": "Хранит значения времени без значений дат.",
+      "title": "Time Only"
+    },
+    "timestamp-offset": {
+      "description": "Хранит значения даты, времени и смещения от всемирного координированного времени (UTC).",
+      "title": "Timestamp Offset"
+    }
+  }
+}

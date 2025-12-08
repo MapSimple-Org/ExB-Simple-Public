@@ -1,0 +1,21 @@
+{
+  "folder": "Klasör",
+  "folders": "Klasörler",
+  "searchFolders": "Klasörleri ara",
+  "enterFolder": "Klasör adı gir",
+  "createNewFolder": "Yeni klasör oluştur",
+  "noFoldersFoundCreate": "Bu ada sahip klasör bulunamadı. '${folder}' oluşturulsun mu?",
+  "noFoldersFound": "Bu ada sahip klasör bulunamadı.",
+  "create": "'${folder}' oluşturulsun mu?",
+  "loading": "Klasörler yükleniyor",
+  "error": {
+    "noName": "Klasörünüz için ad girmelisiniz.",
+    "folderAlreadyExists": "'${folder}' klasörü zaten var. Lütfen başka bir ad seçin.",
+    "title": "Hata",
+    "invalidCharacters": {
+      "single": "Ad şu karakteri içeremez: ${invalidCharacters}.",
+      "multiple": "Ad, aşağıdaki karakterleri içeremez: ${invalidCharacters}.",
+      "unknown": "Ad, aşağıdaki karakterleri içeremez: ${invalidCharacters}."
+    }
+  }
+}

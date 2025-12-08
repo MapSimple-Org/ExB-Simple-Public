@@ -1,0 +1,98 @@
+{
+  "name": "analysis",
+  "label": "Analysis",
+  "type": "widget",
+  "version": "1.19.0",
+  "exbVersion": "1.19.0",
+  "author": "Esri R&D Center Beijing",
+  "description": "This is the widget used in developer guide",
+  "copyright": "",
+  "license": "http://www.apache.org/licenses/LICENSE-2.0",
+  "messageActions": [],
+  "defaultSize": {
+    "width": 358,
+    "height": 478
+  },
+  "properties": {
+    "coverLayoutBackground": true,
+    "flipIcon": true,
+    "canConsumeDataAction": true,
+    "notShareDynamicModules": true,
+    "supportAutoSize": false
+  },
+  "dependency": "jimu-arcgis",
+  "settingDependency": "jimu-arcgis",
+  "excludeDataActions": [
+    "setFilter",
+    "near-me.locate",
+    "arcgis-map.showOnMap",
+    "arcgis-map.showPopup",
+    "arcgis-map.addMarker",
+    "directions.*",
+    "elevation-profile.*",
+    "table.viewInTable",
+    "relatedData"
+  ],
+  "dataActions": [
+    {
+      "name": "setAsAnalysisInput",
+      "label": "Set as Analysis input",
+      "uri": "data-actions/set-as-analysis-input",
+      "icon": "runtime/assets/set-as-analysis-input.svg"
+    }
+  ],
+  "extensions": [
+    {
+      "name": "appConfigOperations",
+      "point": "APP_CONFIG_OPERATIONS",
+      "uri": "tools/app-config-operations"
+    },
+    {
+      "name": "builderOperations",
+      "point": "BUILDER_OPERATIONS",
+      "uri": "tools/builder-operations"
+    }
+  ],
+  "translatedLocales": [
+    "en",
+    "ar",
+    "bg",
+    "bs",
+    "ca",
+    "cs",
+    "da",
+    "de",
+    "el",
+    "es",
+    "et",
+    "fi",
+    "fr",
+    "he",
+    "hr",
+    "hu",
+    "id",
+    "it",
+    "ja",
+    "ko",
+    "lt",
+    "lv",
+    "no",
+    "nl",
+    "pl",
+    "pt-br",
+    "pt-pt",
+    "ro",
+    "ru",
+    "sk",
+    "sl",
+    "sr",
+    "sv",
+    "th",
+    "tr",
+    "zh-cn",
+    "uk",
+    "vi",
+    "zh-hk",
+    "zh-tw"
+  ]
+}

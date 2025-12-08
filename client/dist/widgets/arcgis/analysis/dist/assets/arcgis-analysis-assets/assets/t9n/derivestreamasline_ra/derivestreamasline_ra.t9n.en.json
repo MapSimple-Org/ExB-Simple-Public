@@ -1,0 +1,11 @@
+{
+  "all": "All",
+  "inputLayersGroupText": "Choose the input surface raster, and optionally the depression data and the weight raster.",
+  "itemProperties": {
+    "description": "Output generated from running the Derive Stream As Raster tool.",
+    "snippet": "Output generated from Derive Stream As Raster"
+  },
+  "outputStreamFeaturesLabel": "Output stream features name",
+  "simplifyLabel": "Simplify features",
+  "streamSettingsGroupText": "Specify the accumulation threshold, the stream designation method, and whether the output stream lines will be smoothed into simple shapes."
+}

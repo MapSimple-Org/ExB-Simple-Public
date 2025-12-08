@@ -1,0 +1,8 @@
+{
+  "arriveTime": "Ankomsttid",
+  "modes": {
+    "custom": "Brugerdefineret dato/tid.",
+    "now": "Nu",
+    "unspecified": "Tid ikke angivet"
+  }
+}

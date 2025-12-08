@@ -1,0 +1,13 @@
+{
+  "fieldCalcExpression": "字段计算表达式",
+  "fieldCalculationGroupLabel": "字段计算",
+  "fieldPlaceholderText": "单击选择或创建字段",
+  "fieldToCalculate": "要计算的字段",
+  "inputDatasetGroupLabel": "输入",
+  "itemProperties": {
+    "description": "通过运行Calculate Field tool in ModelBuilder生成的结果。",
+    "snippet": "通过计算字段生成的要素图层"
+  },
+  "noFieldSpecified": "指定要计算的字段，以便创建表达式。",
+  "whereClause": "仅将计算应用到某些记录"
+}

@@ -1,0 +1,13 @@
+{
+  "addField": "Thêm trường",
+  "deselectAll": "Bỏ chọn tất cả",
+  "done": "Hoàn tất",
+  "noFieldsAvailable": "${layerName} không chứa trường nào đáp ứng yêu cầu về loại dữ liệu. Chọn lớp khác để tiếp tục.",
+  "noInputSelected": {
+    "withLayerInputLabel": "Không có lớp đầu vào nào được chọn. Chọn một lớp trong ${layerInputLabel} để tiếp tục.",
+    "withoutLayerInputLabel": "Không có lớp đầu vào nào được chọn. Chọn một lớp đầu vào để tiếp tục."
+  },
+  "noSearchResults": "Không tìm thấy trường trùng khớp.",
+  "selectAll": "Chọn tất cả",
+  "summaryFieldsPopover": "Các trường Tóm tắt"
+}

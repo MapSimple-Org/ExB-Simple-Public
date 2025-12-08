@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>Overskriv innstillinger for analyse i  Map Viewer. </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="resultType">
+        <div>
+            <p>Angir typen utdata som blir opprettet. Alternativet  <b>Opprett mellomdata</b> oppretter et midlertidig lag som kan brukes som inndata til et annet verkt&oslash;y, men kan verken lagres eller vises p&aring; kartet. Alternativet <b>Opprett hostet lag</b> publiserer et nytt hostet geoobjektlag. Alternativet <b>Overskriv eksisterende lag</b> oppdaterer et eksisterende lag med utdata fra verkt&oslash;yet.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>Navnet p&aring; laget som opprettes og legges til kartet.
+            </p>
+        </div>
+    </div>
+    <div id="layerExistsAutomaticallyOverwrite">
+        <div>
+            <p>Angir om utdataene fra verkt&oslash;yet skal overskrive et lag i innholdet ditt som har det angitte utdatanavnet. Hvis det lagnavnet fortsatt ikke er i bruk i organisasjonen din, blir det opprettet et nytt element. Du m&aring; enten v&aelig;re eieren av laget eller administrator for &aring; overskrive det.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>Navnet p&aring; mappen i  <b>Mitt innhold</b> der resultatene blir lagret.
+            </p>
+            <p>Dette kan ikke oppdateres hvis laget allerede finnes.
+            </p>
+        </div>
+    </div>
+    <div id="existingLayerToOverwrite">
+        <div>
+            <p>Laget i  <b>Mitt innhold</b> som blir overskrevet av utdatalaget. De romlige referansene i utdataene og det eksisterende laget m&aring; samsvare.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

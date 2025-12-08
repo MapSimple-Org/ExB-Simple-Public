@@ -1,0 +1,137 @@
+{
+  "next": "Avanti",
+  "addField": "Aggiungi campo",
+  "selectDataType": "Selezionare il tipo di dati che saranno memorizzati nel campo",
+  "addGlobalIDNotice": "Il campo sarà completato automaticamente con i dati esistenti nel layer o nella tabella. Una volta aggiunto, questo campo non può essere modificato o eliminato.",
+  "fieldName": "Nome campo",
+  "displayName": "Nome visualizzato",
+  "length": "Lunghezza",
+  "defaultValue": "Valore predefinito (facoltativo)",
+  "fieldTypes": "Tipi di campo",
+  "fieldValueType": "Tipo di valore del campo (facoltativo)",
+  "fieldDescription": "Descrizione campo (facoltativa)",
+  "allowNullValues": "Consenti valori null",
+  "valueRequiredError": "Il valore è obbligatorio",
+  "fieldAdded": "Campo aggiunto correttamente",
+  "newFieldTypeNotice": "Questo tipo di campo potrebbe non essere interamente supportato in alcuni client.",
+  "addingField": "Aggiunta del campo...",
+  "syncEnabled": "Alcuni tipi di campi non possono essere aggiunti perché la sincronizzazione è abilitata sul layer.",
+  "newFeature": "Nuova feature",
+  "fieldAdditionUnsuccessful": "Aggiunta campo non riuscita",
+  "error": "Errore",
+  "noFieldTypeSelected": "Non è stato selezionato alcun tipo di campo",
+  "nullFieldTypeError": "Selezionare un tipo di campo per continuare.",
+  "fieldNameCharacterNotice": "I nomi più lunghi di 31 caratteri non sono compatibili con l'uso offline.",
+  "suggestedHeader": "Suggerito",
+  "otherHeader": "Altro",
+  "provideDescription": "Fornire una descrizione delle informazioni che conterrà il campo",
+  "nullableTooltipInfo": "Questa impostazione non è modificabile se il layer contiene già dei dati.",
+  "tooltipInfo": {
+    "globalIDExists": "Un campo GlobalID esiste già in questo servizio. In un layer o in una tabella può essere presente un solo campo GlobalID.",
+    "enterpriseTimestampOffset": "ArcGIS Enterprise non supporta i campi offset timestamp nei feature layer ospitati."
+  },
+  "text": {
+    "title": "Testo",
+    "description": "Valori che contengono caratteri alfanumerici o speciali.",
+    "types": {
+      "esriFieldTypeString": {
+        "title": "Stringa",
+        "description": "Memorizzare una serie di caratteri alfanumerici di una lunghezza specificata."
+      }
+    }
+  },
+  "numbers": {
+    "title": "Numeri",
+    "description": "Valori contenenti informazioni numeriche.",
+    "types": {
+      "esriFieldTypeDouble": {
+        "title": "Doppio",
+        "description": "Memorizzare i numeri con posizioni decimali."
+      },
+      "esriFieldTypeInteger": {
+        "title": "Intero",
+        "description": "Memorizza i numeri interi da ${lowerIntegerRange} a ${upperIntegerRange}."
+      },
+      "esriFieldTypeBigInteger": {
+        "title": "Intero grande",
+        "description": "Memorizza i numeri interi tra -(2${startSup}53${endSup}-1) e 2${startSup}53${endSup}-1. Usare questo tipo quando si utilizzano numeri che non rientrano nell'intervallo dei campi di interi supportati."
+      }
+    }
+  },
+  "dates": {
+    "title": "Date",
+    "description": "Valori che contengono informazioni temporali.",
+    "types": {
+      "esriFieldTypeDate": {
+        "title": "Data",
+        "description": "Memorizzare i valori con data e ora."
+      },
+      "esriFieldTypeDateOnly": {
+        "title": "Solo data",
+        "description": "Memorizzare i valori di data senza i valori di ora."
+      },
+      "esriFieldTypeTimeOnly": {
+        "title": "Solo ora",
+        "description": "Memorizzare i valori di ora senza i valori di data."
+      },
+      "esriFieldTypeTimestampOffset": {
+        "title": "Offset timestamp",
+        "description": "Memorizzare i valori indicando data, ora e offset dal tempo coordinato universale (UTC)."
+      }
+    }
+  },
+  "globalIdentifiers": {
+    "title": "Identificatori globali",
+    "description": "Valori che identificano in modo univoco una feature o una riga di tabella.",
+    "types": {
+      "esriFieldTypeGlobalID": {
+        "title": "GlobalID",
+        "description": "Memorizza una stringa di 36 caratteri composta da lettere e numeri utilizzata per identificare in modo univoco una feature."
+      },
+      "esriFieldTypeGUID": {
+        "title": "GUID",
+        "description": "Memorizza una stringa di 36 caratteri composta da lettere e numeri. Un Globally Unique Identifier, o GUID, è spesso utilizzato per gestire le relazioni tra le feature."
+      }
+    }
+  },
+  "fieldValueTypes": {
+    "nameOrTitle": "Nome o titolo",
+    "description": "Descrizione",
+    "typeOrCategory": "Tipo o categoria",
+    "countOrAmount": "Conteggio o quantità",
+    "percentageOrRatio": "Percentuale o rapporto",
+    "measurement": "Misura",
+    "currency": "Valuta",
+    "uniqueIdentifier": "Identificatore univoco",
+    "phoneNumber": "Numero di telefono",
+    "emailAddress": "Indirizzo e-mail",
+    "orderedOrRanked": "Ordinato o classificato",
+    "binary": "Binario",
+    "locationOrPlaceName": "Posizione o nome località",
+    "coordinate": "Coordinata",
+    "dateAndTime": "Data e ora",
+    "none": "Nessuno"
+  },
+  "addFieldErrors": {
+    "invalidName": "Nome non valido",
+    "invalidLength": "Lunghezza non valida",
+    "outOfRangeValueError": "Questo valore è fuori dall'intervallo.",
+    "invalidValueError": "Il valore immesso non è valido.",
+    "invalidFieldParameters": "Parametri di campo non validi",
+    "invalidInputsError": "Controlla che i parametri dei campi siano compilati correttamente.",
+    "existingFieldNameError": "Il nome del campo non può corrispondere al nome di un campo esistente.",
+    "invalidNameInputSQLError": "Il nome del campo non può corrispondere a una parola chiave SQL.",
+    "invalidNameInputInvalidCharactersError": "Deve iniziare con una lettera e può contenere solo lettere, numeri e \"_\".",
+    "valueIsRequiredError": "Valore obbligatorio.",
+    "lengthExceeds": "La lunghezza del nome del campo deve essere inferiore o uguale a ${maxFieldNameLength} caratteri.",
+    "defaultValueExceeds": "Il valore predefinito supera la lunghezza del campo specificata.",
+    "savingFailed": "Salvataggio di ${layerName} non riuscito",
+    "readOnlyErrorMessage": "ArcGIS Online sta riscontrando problemi operativi ed è passato alla modalità di sola lettura. Alcune funzionalità potrebbero essere limitate. Per gli ultimi aggiornamenti su quando verrà risolto questo problema, visitare il dashboard sullo stato di ArcGIS Online.",
+    "readOnlyErrorMessageEnterprise": "ArcGIS Enterprise sta riscontrando problemi operativi ed è passato alla modalità di sola lettura. Alcune funzionalità potrebbero essere limitate.",
+    "healthDashboard": "Dashboard sullo stato di ArcGIS Online",
+    "genericAddFieldError": {
+      "title": "Errore",
+      "description": "Si è verificato un errore durante l'aggiunta del campo."
+    }
+  }
+}

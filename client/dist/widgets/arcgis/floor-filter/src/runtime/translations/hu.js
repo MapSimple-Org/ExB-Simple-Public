@@ -1,0 +1,1 @@
+System.register([],function(e){return{execute:function(){e({_widgetLabel:"Emelet sz\u0171r\u0151",floorfilter_noMap:"Emelet sz\u0171r\u0151",floorfilter_notFloorAware:"A kiv\xe1lasztott t\xe9rk\xe9p nem veszi figyelembe az emeleteket"})}}});

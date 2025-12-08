@@ -1,0 +1,1 @@
+System.register([],function(e){return{execute:function(){e({_widgetLabel:"Schaltfl\xe4che",dynamicStyleExpressionsLabel:"Schaltfl\xe4chentextinhalt verwenden"})}}});

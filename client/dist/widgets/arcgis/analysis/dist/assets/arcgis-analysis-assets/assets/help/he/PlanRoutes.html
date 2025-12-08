@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html dir="rtl">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>הכלי 'תכנן מסלולים' יוצר מסלולי נסיעה עם עצירות מרובות עבור צי רכבים.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="startLayer">
+        <div>
+            <p>ישויות הנקודה אשר מציינות היכן כלי הרכב מתחילים את המסלולים שלהם.
+            </p>
+            <p class="toolPaneOnly">מספר היישויות תלוי בגורמים נוספים כגון קריטריונים לסינון ותיחום הניתוח.
+            </p>
+        </div>
+    </div>
+    <div id="stopsLayer">
+        <div>
+            <p>ישויות הנקודה שבהן כלי הרכב חייבים לבקר במהלך המסלולים שלהם. נקודות אלה יהפכו לנקודות שהוקצו, או שלא הוקצו, בפלט.
+            </p>
+            <p class="toolPaneOnly">מספר היישויות תלוי בגורמים נוספים כגון קריטריונים לסינון ותיחום הניתוח.
+            </p>
+        </div>
+    </div>
+    <div id="returnToStart">
+        <div>
+            
+            <p>מציין האם כלי הרכב חייבים לחזור למיקום ההתחלה שלהם (מופעל) או לסיים במיקומים שצוינו.
+            </p>
+        </div>
+    </div>
+    <div id="endLayer">
+        <div>
+            <p>ישויות הנקודה אשר מציינות היכן כלי הרכב מסיימים את המסלולים שלהם. אם השכבה כוללת נקודה אחת בלבד, כל כלי הרכב מנותבים לקודת יעד משותפת. אם השכבה כוללת נקודות מרובות, כל כלי רכב מנותב למיקום יעד ייחודי.
+            </p>
+            <p class="toolPaneOnly">מספר היישויות תלוי בגורמים נוספים כגון קריטריונים לסינון ותיחום הניתוח.
+            </p>
+        </div>
+    </div>
+    <div id="startLayerRouteIDField">
+        <div>
+            <p>השדה בשכבת ההתחלה שמזהה ייחודית את המסלולים, כלי הרכב והנהגים השונים. אם כלי הרכב מתחילים במספר מיקומים ומסיימים במספר מיקומים, מזהי המסלולים שצוינו עבור שכבות ההתחלה והסיום חייבים להתאים.
+            </p>
+        </div>
+    </div>
+    <div id="endLayerRouteIDField">
+        <div>
+            <p>השדה בשכבת הסיום שמזהה ייחודית את המסלולים, כלי הרכב והנהגים השונים. אם כלי הרכב מתחילים במספר מיקומים ומסיימים במספר מיקומים, מזהי המסלולים שצוינו עבור שכבות ההתחלה והסיום חייבים להתאים.
+            </p>
+        </div>
+    </div>
+    <div id="pointBarrierLayer">
+        <div>
+            <p>ישות נקודות אחת או יותר אשר משמשות כמגבלות זמניות (מחסומים) בעת נסיעה ברחובות שמתחת. התנועה ברחוב מותרת, אבל לא בקטע החסום.
+            </p>
+        </div>
+    </div>
+    <div id="lineBarrierLayer">
+        <div>
+            <p>ישות קו אחת או יותר אשר משמשות כמגבלות זמניות (מחסומים) בעת נסיעה ברחובות שמתחת. מחסומי הקו אוסרים נסיעה לכל מקום שבו המחסומים חותכים את הרחובות.
+            </p>
+        </div>
+    </div>
+    <div id="polygonBarrierLayer">
+        <div>
+            <p>ישות פליגון אחת או יותר אשר משמשות כמגבלות זמניות (מחסומים) בעת נסיעה ברחובות שמתחת. מחסומי הפוליגון אוסרים על הנסיעה בכל מקום שבו הפוליגונים מצטלבים עם הרחובות.
+            </p>
+        </div>
+    </div>
+    <div id="travelMode">
+        <div>
+            <p>אופן נסיעה אשר ישמש ליצירת המסלולים. רק אופני נסיעה מבוסס-זמן נתמכים.
+            </p>
+        </div>
+    </div>
+    <div id="routeStartTime">
+        <div>
+            <p>התאריך והשעה של היציאה עבור כלי רכב.
+            </p>
+        </div>
+    </div>
+    <div id="routeCount">
+        <div>
+            
+            <p class="OnlineOnly">מספר כלי הרכב המקסימלי שזמינים לבקר בתחנות. אם גם ערכי  <b>שכבת ההתחלה</b> ו <b>שכבת הסיום</b> מכילות ישות אחת כל אחת, ניתן לציין עד 100 כלי רכב. אם לפחות אחת מהשכבות מכילים יותר מיישות אחת, לא ניתן לערוך את ערך ברירת המחדל. </p> 
+            <p class="PortalOnly">מספר כלי הרכב המקסימלי שזמינים לבקר בתחנות. אם גם ערכי  <b>שכבת ההתחלה</b> ו <b>שכבת הסיום</b> מכילם ישות אחת כל אחת, ניתן לציין מספר מקסימלי של כלי רכב. אם לפחות אחת מהשכבות מכילים יותר מיישות אחת, לא ניתן לערוך את ערך ברירת המחדל.
+            </p>
+        </div>
+    </div>
+    <div id="maxStopsPerRoute">
+        <div>
+            
+            <p class="OnlineOnly">המספר המרבי של עצירות שיכול לעשות כל כלי רכב לאורך מסלול. באפשרותך לציין ערך בין 1 ל- 200. </p> 
+            <p class="PortalOnly">המספר המרבי של עצירות שיכול לעשות כל כלי רכב לאורך מסלול.
+            </p>
+        </div>
+    </div>
+    <div id="stopServiceTime">
+        <div>
+            <p>זמן השירות הממוצע הצפוי בכל תחנה.
+            </p>
+        </div>
+    </div>
+    <div id="limitMaxRouteTimeCheckbox">
+        <div>
+            <p>מציין האם זמן הניתוב המקסימלי מוחל על כלי רכב. זמן הניתוב כולל זמן נסיעה צפוי וזמני שירות בתחנות לאורך המסלול.
+            </p>
+        </div>
+    </div>
+    <div id="maxRouteTime">
+        <div>
+            <p>משך הזמן המקסימלי שמסלול יכול להימשך מתחילתו ועד סופו.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>שם השכבה שתיווצר ותתווסף למפה.
+            </p>
+        </div>
+    </div>
+    <div id="includeRouteLayers">
+        <div>
+            <p>מציין אם כל מסלול תוצאה יישמר כשכבת מסלול.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            
+            <p>שם התיקייה  <b>בתוכן שלי</b> שבה התוצאות יישמרו.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

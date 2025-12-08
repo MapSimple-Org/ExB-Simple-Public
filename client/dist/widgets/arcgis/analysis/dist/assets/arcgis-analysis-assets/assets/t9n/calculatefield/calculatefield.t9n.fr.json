@@ -1,0 +1,13 @@
+{
+  "fieldCalcExpression": "Expression de calcul de champ",
+  "fieldCalculationGroupLabel": "Calcul de champ",
+  "fieldPlaceholderText": "Cliquer pour sélectionner ou créer un champ",
+  "fieldToCalculate": "Champ à calculer",
+  "inputDatasetGroupLabel": "Entrée",
+  "itemProperties": {
+    "description": "Résultat généré en exécutant l’outil Calculer un champ dans ModelBuilder.",
+    "snippet": "Couche d’entités générée avec l’outil Calculer un champ"
+  },
+  "noFieldSpecified": "Indiquez un champ à calculer pour pouvoir créer une expression.",
+  "whereClause": "Appliquer le calcul à certains enregistrements uniquement"
+}

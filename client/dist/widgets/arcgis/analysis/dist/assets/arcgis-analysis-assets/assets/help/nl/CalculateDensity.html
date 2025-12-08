@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>De tool Dichtheid berekenen berekent een dichtheidsschatting uit punt- en lijnobjecten. De tool cre&euml;ert een objectuitvoer.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputLayer">
+        <div>
+            <p>De punten- of lijnenlaag waarmee de dichtheid wordt berekend.
+            </p>
+            <p class="toolPaneOnly">Het aantal objecten is afhankelijk van aanvullende factoren als de filtercriteria en de analyse-extent.
+            </p>
+        </div>
+    </div>
+    <div id="field">
+        <div>
+            <p>Het veld dat het aantal incidenten op elke locatie weergeeft.
+            </p>
+        </div>
+    </div>
+    <div id="boundingPolygonLayer">
+        <div>
+            <p>De polygoonobjectlaag die bepaalt waar de dichtheden worden berekend.
+            </p>
+            <p class="toolPaneOnly">Het aantal objecten is afhankelijk van aanvullende factoren als de filtercriteria en de analyse-extent.
+            </p>
+        </div>
+    </div>
+    <div id="radius">
+        <div>
+            <p>Bepaalt de afstand om te zoeken naar punten of lijnen bij het berekenen van de dichtheid.
+            </p>
+        </div>
+    </div>
+    <div id="radiusUnits">
+        <div>
+            <p>De eenheden die zullen worden gebruikt voor de parameterwaarde  <b>Zoekafstand</b> .
+            </p>
+        </div>
+    </div>
+    <div id="classificationType">
+        <div>
+            <p>Specificeer hoe dichtheidswaarden worden geclassificeerd in gebieden.
+            </p>
+        </div>
+    </div>
+    <div id="numClasses">
+        <div>
+            <p>Het aantal klassen (bereik van voorspelde waarden) in de resultaatlaag.
+            </p>
+        </div>
+    </div>
+    <div id="areaUnits">
+        <div>
+            <p>De eenheden die worden gebruikt voor het uitvoergebied.
+            </p>
+            <p>Dichtheid is een telling gedeeld door gebied en deze parameter geeft de eenheid van het gebied op in de berekening van de dichtheid.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>De naam van de laag die wordt aangemaakt en toegevoegd aan de kaart.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>De naam van de map in  <b>Mijn content</b> waarin de resultaten worden opgeslagen.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

@@ -1,0 +1,1 @@
+System.register([],function(e){return{execute:function(){e({_widgetLabel:"\ud53c\ucc98 \ubcf4\uace0\uc11c"})}}});

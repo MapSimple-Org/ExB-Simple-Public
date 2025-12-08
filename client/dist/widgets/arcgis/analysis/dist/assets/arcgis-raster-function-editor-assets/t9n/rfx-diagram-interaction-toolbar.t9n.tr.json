@@ -1,0 +1,9 @@
+{
+  "zoomIn": "Yakınlaştır",
+  "zoomOut": "Uzaklaştır",
+  "autoLayout": "Otomatik çıktı düzeni",
+  "stretch": "Görüntüye sığdır",
+  "select": "Seç",
+  "pan": "Kaydır",
+  "deleteSelectedItemsText": "Seçili ögeleri sil"
+}

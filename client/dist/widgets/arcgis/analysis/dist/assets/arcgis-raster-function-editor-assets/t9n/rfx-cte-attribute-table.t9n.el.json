@@ -1,0 +1,22 @@
+{
+  "value": "Τιμή",
+  "classname": "Όνομα κλάσης",
+  "color": "Χρώμα",
+  "raster": "Raster",
+  "tableType": "Τύπος πίνακα",
+  "manual": "Μη αυτόματα",
+  "external": "Εξωτερικά",
+  "browseTable": "Περιήγηση στον πίνακα",
+  "browseTableFrom": "Περιήγηση στον πίνακα από",
+  "file": "Αρχείο",
+  "dbfFile": "Αρχείο DBF",
+  "layer": "Θεματικό επίπεδο",
+  "unsupportedDataType": "Μη υποστηριζόμενος τύπος",
+  "failedToGetTableFromLayer": "Η λήψη του πίνακα από το θεματικό επίπεδο απέτυχε.",
+  "generate": "Δημιουργία πίνακα",
+  "minValue": "Ελάχιστη τιμή",
+  "maxValue": "Μέγιστη τιμή",
+  "classBaseName": "Τιμή βάσης κλάσης",
+  "colorscheme": "Χρωματικός συνδυασμός",
+  "defaultClassName": "Ετικέτα_"
+}

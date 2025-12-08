@@ -1,0 +1,13 @@
+{
+  "weightedOverlayTable": "Tabella di sovrapposizione pesata",
+  "id": "ID",
+  "layer": "Layer",
+  "field": "Campo",
+  "influence": "Influenza",
+  "sumOfInfluence": "Somma di influenza",
+  "value": "Valore",
+  "remapTable": "Rimappa tabella",
+  "scale": "Scala",
+  "scales": "Scale",
+  "selectRaster": "Seleziona raster"
+}

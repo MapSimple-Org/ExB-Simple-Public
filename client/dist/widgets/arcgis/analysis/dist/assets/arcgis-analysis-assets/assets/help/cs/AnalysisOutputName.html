@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>Nastaven&iacute; přeps&aacute;n&iacute; pro anal&yacute;zu v  Map Viewer. </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="resultType">
+        <div>
+            <p>Určuje typ v&yacute;stupu, kter&yacute; se vytvoř&iacute;. Pomoc&iacute; možnosti  <b>Vytvořit dočasn&aacute; data</b> vytvoř&iacute;te dočasnou vrstvu, kterou lze použ&iacute;t jako vstup pro jin&yacute; n&aacute;stroj, ale nelze ji uložit ani zobrazit v mapě. Pomoc&iacute; možnosti <b>Vytvořit hostovanou vrstvu</b> publikujete novou hostovanou vrstvu prvků. Pomoc&iacute; možnosti <b>Přepsat st&aacute;vaj&iacute;c&iacute; vrstvu</b> aktualizujete st&aacute;vaj&iacute;c&iacute; vrstvu v&yacute;stupem n&aacute;stroje.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>N&aacute;zev vrstvy, kter&aacute; bude vytvořena a přid&aacute;na do mapy.
+            </p>
+        </div>
+    </div>
+    <div id="layerExistsAutomaticallyOverwrite">
+        <div>
+            <p>Určuje, zda v&yacute;stup n&aacute;stroje přep&iacute;&scaron;e vrstvu ve va&scaron;em obsahu, kter&yacute; m&aacute; zadan&yacute; v&yacute;stupn&iacute; n&aacute;zev. Pokud tento n&aacute;zev vrstvy je&scaron;tě nen&iacute; ve va&scaron;&iacute; organizaci použ&iacute;v&aacute;n, bude vytvořena nov&aacute; položka. Aby bylo možn&eacute; prov&eacute;st přeps&aacute;n&iacute;, mus&iacute;te b&yacute;t vlastn&iacute;kem vrstvy nebo spr&aacute;vcem.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>N&aacute;zev složky v č&aacute;sti  <b>Můj obsah,</b> do kter&eacute; budou v&yacute;sledky uloženy.
+            </p>
+            <p>Pokud vrstva již existuje, nelze prov&eacute;st aktualizaci.
+            </p>
+        </div>
+    </div>
+    <div id="existingLayerToOverwrite">
+        <div>
+            <p>Vrstva v  <b>Můj obsah</b>, kter&aacute; bude přeps&aacute;na v&yacute;stupn&iacute; vrstvou. Souřadnicov&eacute; syst&eacute;my v&yacute;stupu a st&aacute;vaj&iacute;c&iacute; vrstvy se mus&iacute; shodovat.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

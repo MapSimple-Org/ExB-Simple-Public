@@ -1,0 +1,6 @@
+{
+  "greaterThanErrorMessage": "Įvesties skaičius turi būti didesnis už ${min}",
+  "lesserThanErrorMessage": "Įvesties skaičius turi būti mažesnis už ${max}",
+  "greaterThanOrEqualErrorMessage": "Įvesties skaičius turi būti didesnis arba lygus ${min}",
+  "lesserThanOrEqualErrorMessage": "Įvesties skaičius turi būti mažesnis arba lygus ${max}"
+}

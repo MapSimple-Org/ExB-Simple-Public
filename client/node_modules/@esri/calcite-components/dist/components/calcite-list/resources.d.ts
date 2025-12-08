@@ -1,0 +1,16 @@
+export declare const CSS: {
+    container: string;
+    table: string;
+    scrim: string;
+    stack: string;
+    tableContainer: string;
+    sticky: string;
+    assistiveText: string;
+    containerHeight: string;
+};
+export type SelectionAppearance = "border" | "icon";
+export declare const SLOTS: {
+    filterNoResults: string;
+    filterActionsStart: string;
+    filterActionsEnd: string;
+};

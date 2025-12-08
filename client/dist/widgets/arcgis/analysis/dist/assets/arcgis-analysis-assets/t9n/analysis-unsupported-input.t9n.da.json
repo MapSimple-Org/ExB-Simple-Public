@@ -1,0 +1,7 @@
+{
+  "defaultValue": "Ikke-understøttet parametertype. Standardværdien bruges. <calcite-link target='_blank' href='${ docLink }'>Få flere oplysninger</calcite-link>",
+  "requiredMessage": "Denne parameter er påkrævet.",
+  "unsupportedGPType": "Ikke-understøttet parametertype. <calcite-link target='_blank' href='${ docLink }'>Få flere oplysninger</calcite-link>",
+  "unsupportedParameterConfig": "Konfiguration af ikke-understøttede parametre. <calcite-link target='_blank' href='${ docLink }'>Få flere oplysninger</calcite-link>",
+  "unsupportedParameterConfigDefaultValue": "Konfiguration af ikke-understøttede parametre. Standardværdien bruges. <calcite-link target='_blank' href='${ docLink }'>Få flere oplysninger</calcite-link>"
+}

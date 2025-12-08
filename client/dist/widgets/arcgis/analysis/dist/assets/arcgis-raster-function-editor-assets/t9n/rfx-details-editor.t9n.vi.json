@@ -1,0 +1,22 @@
+{
+  "general": "Tổng quan",
+  "parameters": "Thông số",
+  "variables": "Biến số",
+  "name": "Tên",
+  "namePlaceHolder": "Nhập tên",
+  "description": "Thông tin mô tả",
+  "parameter": "Tham số",
+  "isPublic": "IsPublic",
+  "isDataset": "IsDataset",
+  "unknownPixelType": "Không xác định",
+  "outputPixelType": "Loại Pixel Đầu ra",
+  "u8PixelType": "8 Bit Unsigned",
+  "s8PixelType": "8 Bit Signed",
+  "u16PixelType": "16 Bit Unsigned",
+  "s16PixelType": "16 Bit Signed",
+  "u32PixelType": "32 Bit Unsigned",
+  "s32PixelType": "32 Bit Signed",
+  "f32PixelType": "32 Bit Float",
+  "f64PixelType": "64 Bit Double",
+  "properties": "Thuộc tính"
+}

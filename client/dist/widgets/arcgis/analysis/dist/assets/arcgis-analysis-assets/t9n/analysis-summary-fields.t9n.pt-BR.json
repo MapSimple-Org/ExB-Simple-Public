@@ -1,0 +1,17 @@
+{
+  "any": "Qualquer",
+  "count": "Contagem",
+  "field": "Campo",
+  "fieldLoadingErrorText": "Não foi possível carregar campos.",
+  "first": "Primeiro",
+  "isRequired": "Este parâmetro é exigido.s",
+  "last": "Último",
+  "max": "Máx",
+  "mean": "Médio",
+  "min": "Mín",
+  "selectAll": "Selecionar todos",
+  "standardDeviation": "Desvio padrão",
+  "statistic": "Estatística",
+  "statisticNotSelected": "Pelo menos um tipo de estatística é necessário para cada campo.",
+  "sum": "Soma"
+}

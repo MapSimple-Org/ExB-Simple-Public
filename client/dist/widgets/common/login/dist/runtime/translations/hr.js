@@ -1,0 +1,1 @@
+System.register([],function(e){return{execute:function(){e({_widgetLabel:"Prijava",switchToLogin:"Prebaci na prije prijave",switchToLogout:"Prebaci na nakon prijave",toggleSignInPreview:"Uklju\u010divanje/isklju\u010divanje pretpregleda prijave",restrictedResources:"Ograni\u010deni resursi"})}}});

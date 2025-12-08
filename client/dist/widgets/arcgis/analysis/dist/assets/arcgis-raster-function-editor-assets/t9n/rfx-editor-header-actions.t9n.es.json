@@ -1,0 +1,11 @@
+{
+  "newTemplate": "Crear nueva plantilla",
+  "openTemplate": "Abrir plantilla",
+  "addTemplate": "Agregar plantilla",
+  "addFunction": "Agregar funciones de ráster",
+  "addConstant": "Agregar constante",
+  "addRaster": "Agregar variable de ráster",
+  "expand": "Expandir",
+  "editTemplateProperties": "Editar propiedades de plantilla",
+  "viewTemplateProperties": "Ver propiedades de plantilla"
+}

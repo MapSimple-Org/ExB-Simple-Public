@@ -1,0 +1,12 @@
+{
+  "name": "showcase",
+  "type": "template",
+  "templateType": "screen-group",
+  "label": "Showcase",
+  "thumbnail": "thumbnail.png",
+  "order": 6,
+  "tags": [],
+  "categoriesTags": [],
+  "thumbnailWidth": 400,
+  "thumbnailHeight": 240
+}

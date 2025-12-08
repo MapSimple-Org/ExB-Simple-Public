@@ -1,0 +1,23 @@
+{
+  "add": "Добавить",
+  "arcade": "Arcade",
+  "arcadeExpressionEditor": "Редактор выражения Arcade",
+  "badSyntaxSQLExpression": "Неверный синтаксис выражения SQL. Исправить ошибки.",
+  "calculationExpressionEditor": "Редактор выражений вычислений",
+  "cancel": "Отмена",
+  "chooseLanguage": "Выбрать язык",
+  "fieldToCalculate": "Поле для вычисления: ${fieldName}",
+  "idealFor": "Подходит для:",
+  "languageSelect": "Выбор языка",
+  "layerLoadFailNoFields": "Не удалось загрузить слой. Невозможно получить поля для редактора.",
+  "next": "Далее",
+  "noLayerProvidedNoFields": "Слой не указан. Невозможно получить поля для редактора.",
+  "sql": "SQL",
+  "sqlExpressionEditor": "Редактор выражений SQL",
+  "tileSelectArcadeUseCase1": "Вычисления, требующие большей функциональности, чем SQL, включая пространственные операции",
+  "tileSelectArcadeUseCase2": "Улучшенное устранение неполадок",
+  "tileSelectSqlUseCase1": "Самая высокая производительность",
+  "tileSelectSqlUseCase2": "Вычисления, которые можно выразить в SQL",
+  "tileSelectSqlUseCase3": "Слои с включенной синхронизацией или отслеживанием создания и обновления объектов",
+  "valueCannotBeBlank": "Значение не может быть пустым."
+}

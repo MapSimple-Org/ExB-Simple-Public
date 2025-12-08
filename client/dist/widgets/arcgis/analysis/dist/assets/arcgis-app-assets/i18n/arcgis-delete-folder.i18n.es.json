@@ -1,0 +1,22 @@
+{
+  "deleteFolder": "Eliminar carpeta",
+  "delete": "Eliminar",
+  "permanentlyDelete": "Eliminar de forma permanente",
+  "back": "Atrás",
+  "cancel": "Cancelar",
+  "success": "La carpeta '${title}' se ha eliminado correctamente",
+  "deleteProtectedItemsInFolder": "La carpeta no se puede eliminar porque algunos de los elementos están protegidos contra eliminación o tienen elementos dependientes.",
+  "message": {
+    "empty": "¿Seguro que desea eliminar la carpeta <strong style='font-weight: 500'>${title}</strong>?",
+    "recycleAll": "¿Desea realmente eliminar la carpeta <strong style='font-weight: 500'>${title}</strong> y enviar su contenido a la papelera de reciclaje?",
+    "mustBeEmpty": "La carpeta <strong style='font-weight: 500'>${title}</strong> debe vaciarse para poder eliminarla.",
+    "aFewCannotBeDeleted": "Algunos elementos no se pueden eliminar. ¿Desea continuar con la eliminación del resto?",
+    "canBeEmptied": "La carpeta <strong style='font-weight: 500'>${title}</strong> debe vaciarse para poder eliminarla. ¿Desea continuar con la eliminación de estos elementos?",
+    "cannotBeDeleted": "La carpeta <strong style='font-weight: 500'>${title}</strong> no se puede eliminar porque sus elementos no se pueden eliminar."
+  },
+  "disabledMessage": {
+    "single": "Hay <span style='color:red'>1 elemento</span> en esta carpeta, <b>${label}</b>.<br/></br/>¿Seguro que desea eliminar esta carpeta y su elemento?",
+    "multiple": "Hay <span style='color:red'>${number} elementos</span> en esta carpeta, <b>${label}</b>.<br/></br/>¿Seguro que desea eliminar esta carpeta y todos sus elementos?",
+    "unknown": "¿Seguro que desea eliminar esta carpeta, <b>${label}</b>?"
+  }
+}

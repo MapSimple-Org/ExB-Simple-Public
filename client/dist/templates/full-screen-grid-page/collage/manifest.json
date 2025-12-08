@@ -1,0 +1,21 @@
+{
+  "name": "collage",
+  "type": "template",
+  "templateType": "full-screen-grid-page",
+  "label": "Collage",
+  "description": "Collage is a grid page template that displays multiple Image widgets around the Fixed Panel widget.",
+  "thumbnail": "thumbnail.png",
+  "order": 6,
+  "templateCreateVersion": "1.11.0",
+  "tags": [
+    "Title",
+    "Gallery",
+    "Grid"
+  ],
+  "categoriesTags": [
+    "Web page",
+    "Fullscreen grid"
+  ],
+  "thumbnailWidth": 320,
+  "thumbnailHeight": 214
+}

@@ -1,0 +1,15 @@
+{
+  "addRaster": "Přidat proměnnou rastru",
+  "addScalar": "Přidat konstantu",
+  "raster": "Rastr",
+  "scalar": "Skalár",
+  "defaultModelName": "Šablona rastrové funkce",
+  "defaultRasterName": "Rastr",
+  "invalidRFTMessage": "Šablona rastrové funkce je neplatná.",
+  "deprecated": "Zastaralé",
+  "deprecatedHoverText": "Tato rastrová funkce je zastaralá a bude odstraněna v některé z příštích verzí.",
+  "unsupported": "Nepodporováno",
+  "unsupportedHoverText": "Tato rastrová funkce není podporována a může být k dispozici v některé z budoucích verzí.",
+  "userStartDirection": "Vybrat funkci pro zahájení vytváření šablony rastrové funkce.",
+  "learnMore": "Další informace"
+}

@@ -1,0 +1,11 @@
+{
+  "newTemplate": "新建模板",
+  "openTemplate": "打开模板",
+  "addTemplate": "添加模板",
+  "addFunction": "添加栅格函数",
+  "addConstant": "添加常量",
+  "addRaster": "添加栅格变量",
+  "expand": "扩展",
+  "editTemplateProperties": "编辑模板属性",
+  "viewTemplateProperties": "查看模板属性"
+}

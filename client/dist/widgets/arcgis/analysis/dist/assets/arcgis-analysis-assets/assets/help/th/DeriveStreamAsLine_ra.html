@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>เครื่องมือรับสตรีมในรูปแบบเส้น จะสร้างฟีเจอร์เส้นสตรีมจากราสเตอร์พื้นผิวอินพุท โดยไม่จำเป็นต้องเติมซิงค์หรือดีเพรสชันก่อน
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputSurfaceRaster">
+        <div>
+            <p>แรสเตอร์ระดับความสูงที่จะใช้ในการคำนวณ
+            </p>
+        </div>
+    </div>
+    <div id="inputDepressionsData">
+        <div>
+            <p>อินพุทที่กำหนดตำแหน่งของดีเพรสชันหรือซิงค์ที่แท้จริง ซึ่งน้ำสามารถไหลเข้าได้แต่ออกไม่ได้
+            </p>
+            <p class="toolPaneOnly">สำหรับอินพุทฟีเจอร์ จำนวนจะขึ้นอยู่กับปัจจัยเพิ่มเติม อาทิ เกณฑ์การกรองและขอบเขตการวิเคราะห์
+            </p>
+        </div>
+    </div>
+    <div id="inputWeightRaster">
+        <div>
+            <p>ชั้นข้อมูลแรสเตอร์ที่กำหนดส่วนย่อยของการไหลซึ่งมีส่วนต่อการสะสมการไหล ณ แต่ละเซลล์
+            </p>
+        </div>
+    </div>
+    <div id="accumulationThreshold">
+        <div>
+            <p>ค่าเกณฑ์ในการตัดสินว่าเซลล์ที่กำหนดเป็นส่วนหนึ่งของสตรีม ในแง่ของพื้นที่ทั้งหมดที่ไหลเข้าสู่เซลล์ดังกล่าวหรือไม่
+            </p>
+        </div>
+    </div>
+    <div id="streamDesignationMethod">
+        <div>
+            <p>ระบุว่าเซกเมนต์สตรีมในเอาท์พุท จะมีค่าคงที่ ค่าไม่ซ้ำกัน หรือจะเรียงลำดับหรือไม่
+            </p>
+        </div>
+    </div>
+    <div id="simplify">
+        <div>
+            <p>ระบุว่าจะปรับสมูธเส้นสตรีมเอาท์พุทเป็นรูปทรงที่ซับซ้อนน้อยลงหรือไม่
+            </p>
+            <p>เมื่อเลือก ฟีเจอร์เส้นสตรีมจะถูกปรับให้ซับซ้อนน้อยลงด้วยอัลกอริธึม Douglas-Peucker ที่ค่าความคลาดเคลื่อน sqrt(0.5) * ขนาดเซลล์ นี้คือค่าตั้งต้น หากไม่เลือก จะไม่ปรับสมูธฟีเจอร์เส้นสตรีม
+            </p>
+        </div>
+    </div>
+    <div id="outputStreamFeaturesName">
+        <div>
+            <p>ชื่อของชั้นข้อมูลฟีเจอร์เส้นสตรีมที่จะสร้างและเพิ่มลงในแผนที่
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>ชื่อของโฟลเดอร์ใน  <b>เนื้อหาของฉัน</b> ที่จะทำการบันทึกผลลัพธ์
+            </p>
+        </div>
+    </div>
+</div>
+</html>

@@ -1,0 +1,89 @@
+{
+  "browser": {
+    "refineContent": "Upřesnit obsah",
+    "filters": "Filtry",
+    "pageRange": "${start}-${end}, celkem: ${total}",
+    "pageRangeAria": "${start}–${end}, celkových položek: ${total}",
+    "pageRangeWithRecycleBin": "${start}–${end}, celkem: ${total} (celková velikost: ${recycleBinSize})",
+    "pageRangeAriaWithRecycleBin": "${start}–${end}, celkem položek: ${total} (celková velikost: ${recycleBinSize})",
+    "totalSize": "Celková velikost: ${totalSize}",
+    "loading": "Načítání výsledků",
+    "close": "Zavřít"
+  },
+  "actions": {
+    "more": "Více"
+  },
+  "filter": {
+    "clear": "Vymazat"
+  },
+  "filterDate": {
+    "today": "Dnes",
+    "yesterday": "Včera",
+    "last7": "Posledních 7 dní",
+    "last30": "Posledních 30 dní",
+    "never": "Nikdy",
+    "custom": "Vlastní rozsah...",
+    "title": {
+      "created": "Datum vytvoření",
+      "modified": "Datum změny",
+      "joined": "Datum připojení",
+      "lastLogin": "Poslední přihlášení"
+    },
+    "created": "Vytvořeno: ${date}",
+    "modified": "Změněno: ${date}",
+    "joined": "Připojeno: ${date}",
+    "lastLogin": "Poslední přihlášení: ${date}"
+  },
+  "pagination": {
+    "next": "Další stránka",
+    "prev": "Předchozí stránka"
+  },
+  "search": {
+    "label": "Hledat skupiny",
+    "search": "Vyhledávání",
+    "clear": "Vymazat vyhledávaný pojem",
+    "wildcard": "Vyhledávání pomocí zástupných znaků není podporováno"
+  },
+  "sort": {
+    "sortDirection": "Směr řazení",
+    "title": "Nadpis",
+    "relevance": "Relevance",
+    "modified": "Datum změny",
+    "deleted": "Datum odstranění",
+    "created": "Datum vytvoření",
+    "added": "Datum přidání",
+    "size": "Velikost",
+    "owner": "Vlastník",
+    "sizeAsc": "Od nejmenšího po největší",
+    "sizeDesc": "Od největšího po nejmenší",
+    "numviews": "Počty zobrazení",
+    "numAsc": "Nejméně po nejvíce",
+    "numDesc": "Nejvíce po nejméně",
+    "alphabeticalAsc": "A–Z",
+    "alphabeticalDesc": "Z–A",
+    "recentAsc": "Nejstarší",
+    "recentDesc": "Nejnovější",
+    "sort": "Seřadit",
+    "sortBy": "Seřadit podle",
+    "sortByColon": "Seřadit podle:",
+    "fullname": "Název",
+    "username": "Uživatelské jméno",
+    "name": "Název",
+    "membertype": "Skupinová role",
+    "joined": "Datum připojení",
+    "lastlogin": "Poslední přihlášení",
+    "dataset": "Datová sada",
+    "mfaenabled": "Vícefaktorové ověření",
+    "defaultAsc": "Vzestupně",
+    "defaultDesc": "Sestupně"
+  },
+  "topBar": {
+    "filter": "Filtr"
+  },
+  "filterStatus": {
+    "clear": "Vymazat",
+    "filters": "Filtry:",
+    "additional": "Další aktivní filtry",
+    "clearAllFilters": "Vymazat všechny filtry"
+  }
+}

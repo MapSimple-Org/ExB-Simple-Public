@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>Orodje Območna statistika povzema vrednosti rastra znotraj območij drugega sklopa podatkov.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputZoneRasterOrFeatures">
+        <div>
+            <p>Vnos, ki določa meje območij ali povr&scaron;in, ki bodo povzete.
+            </p>
+            <p class="toolPaneOnly">Za vnose funkcij je &scaron;tevilo odvisno od dodatnih dejavnikov, kot so kriteriji filtriranja in obseg analize.
+            </p>
+        </div>
+    </div>
+    <div id="zoneField">
+        <div>
+            <p>Polje, ki vsebuje vrednosti, ki določajo vsako območje.
+            </p>
+        </div>
+    </div>
+    <div id="inputValueRaster">
+        <div>
+            <p>Rastrski sloj, ki vsebuje vrednosti celic, ki bodo uporabljene za izračun statistike.
+            </p>
+        </div>
+    </div>
+    <div id="statisticType">
+        <div>
+            <p>Določi tip statistike, ki bo izračunana.
+            </p>
+        </div>
+    </div>
+    <div id="percentileValue">
+        <div>
+            <p>Določa vrednost percentila, ki bo izračunana.
+            </p>
+        </div>
+    </div>
+    <div id="percentileInterpolationType">
+        <div>
+            <p>Določi metodo, ki bo uporabljena, kadar je &scaron;tevilo vrednosti iz vhodnega rastra, ki bo izračunano, sodo &scaron;tevilo.
+            </p>
+        </div>
+    </div>
+    <div id="circularCalculation">
+        <div>
+            <p>Določi način obdelave vrednosti celic  <b>Vhodnega rastra vrednosti</b> za krožne podatke.
+            </p>
+            <p>Če možnost ni obkljukana, bo izračunana običajna aritmetična (linearna) statistika. Če je možnost obkljukana, bo izračunana krožna statistika.
+            </p>
+        </div>
+    </div>
+    <div id="circularWrapValue">
+        <div>
+            <p>Določi vrednost, ki bo uporabljena za zaokrožitev linearne vrednosti na območje dane krožne statistike.
+            </p>
+        </div>
+    </div>
+    <div id="ignoreNodata">
+        <div>
+            <p>Določi, ali bodo celice NoData v  <b>Vhodnem rastru vrednosti</b> prezrte v rezultatih območji v katera spadajo.
+            </p>
+            <p>Če je možnost obkljukana, bodo celice NoData v rastru vrednosti prezrte v statističnem izračunu prezrte. Če možnost ni obkljukana, celice NoData ne bodo prezrte in celotno območje bo prejelo vrednost NoData v izhodnem rastru.
+            </p>
+        </div>
+    </div>
+    <div id="processAsMultidimensional">
+        <div>
+            <p>Določi, kako bodo vhodni rastri obdelani, če bodo večdimenzionalni.
+            </p>
+            <p>Če je možnost obkljukana, bo statistika izračunana za vse dimenzije vhodnega večdimenzionalnega sklopa podatkov. Če možnost ni obkljukana, bo statistika izračunana iz trenutnega prereza vhodnega večdimenzionalnega sklopa podatkov.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>Ime rastrskega sloja območne statistike, ki bo ustvarjen in dodan na karto.
+            </p>
+        </div>
+    </div>
+    <div id="resultType">
+        <div>
+            <p>Vrsta rezultata, ki bo ustvarjen. Rezultat je lahko plo&scaron;čični slikovni sloj ali dinamični slikovni sloj.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>Ime mape v  <b>Moja vsebina</b>, kjer bo shranjen rezultat.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

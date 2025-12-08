@@ -1,0 +1,16 @@
+{
+    "updateData": "Update data",
+    "cancel": "Cancel",
+    "editStyle": "Replace the layer's style file with an updated version from your computer.",
+    "updatePackages": "Replace the ${type} with an updated version from your computer. The uploaded file must have the same name as ${hostedLayerName}.",
+    "uploadStaticFiles": "The file being uploaded must have the same name as the original file ${fileName}",
+    "sameFileNameDescription": "The file being uploaded must have the same name and field names as the original file ${fileName}",
+    "updating": "Updating...",
+    "error": "Error",
+    "errors": {
+       "sameFileName": "To update this item, you must upload a file named ${fileName}.",
+       "invalidStyleFileExtension": "Invalid file extension. Uploaded style must have .json file extension.",
+       "errorWhileUpload": "An error happened while uploading the item.",
+       "errorUpdate": "An error occurred while overwriting the item."
+    }
+}

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>Az elemz&eacute;s be&aacute;ll&iacute;t&aacute;sainak fel&uuml;l&iacute;r&aacute;sa a  Map Viewer alkalmaz&aacute;sban. </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="resultType">
+        <div>
+            <p>Megadja a l&eacute;trej&ouml;vő kimenet t&iacute;pus&aacute;t. Az  <b>&Aacute;tmeneti adatok l&eacute;trehoz&aacute;sa</b> opci&oacute; egy ideiglenes r&eacute;teget hoz l&eacute;tre, amely bemenetk&eacute;nt haszn&aacute;lhat&oacute; egy m&aacute;sik eszk&ouml;zh&ouml;z, de nem menthető vagy tekinthető meg a t&eacute;rk&eacute;pen. A <b>K&ouml;zpontilag t&aacute;rolt r&eacute;teg l&eacute;trehoz&aacute;sa</b> opci&oacute; k&ouml;zz&eacute;tesz egy &uacute;j k&ouml;zpontilag t&aacute;rolt vektoroselem-r&eacute;teget. A <b>Megl&eacute;vő r&eacute;teg fel&uuml;l&iacute;r&aacute;sa</b> opci&oacute; a megl&eacute;vő r&eacute;teget az eszk&ouml;z kimenet&eacute;vel friss&iacute;ti.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>A l&eacute;trehozni &eacute;s a t&eacute;rk&eacute;phez hozz&aacute;adni k&iacute;v&aacute;nt r&eacute;teg neve.
+            </p>
+        </div>
+    </div>
+    <div id="layerExistsAutomaticallyOverwrite">
+        <div>
+            <p>Megadja, hogy az eszk&ouml;z kimenete fel&uuml;l fog-e &iacute;rni egy r&eacute;teget egy olyan tartalomban, amely a megadott kimeneti n&eacute;vvel rendelkezik. Ha ezt a r&eacute;tegnevet m&eacute;g nem haszn&aacute;lj&aacute;k a szervezet&eacute;n bel&uuml;l, a rendszer &uacute;j elemet hoz l&eacute;tre. A fel&uuml;l&iacute;r&aacute;shoz a r&eacute;teg tulajdonos&aacute;nak vagy egy adminisztr&aacute;tornak kell lennie.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>A  <b>Saj&aacute;t tartalom </b>azon mapp&aacute;j&aacute;nak neve, ahov&aacute; az eredm&eacute;nyek ment&eacute;se t&ouml;rt&eacute;nik.
+            </p>
+            <p>Ez nem friss&iacute;thető, ha a r&eacute;teg m&aacute;r l&eacute;tezik.
+            </p>
+        </div>
+    </div>
+    <div id="existingLayerToOverwrite">
+        <div>
+            <p>A  <b>Saj&aacute;t tartalom</b> azon r&eacute;tege, amely fel&uuml;l lesz &iacute;rva a kimeneti r&eacute;teggel. A kimenet &eacute;s a megl&eacute;vő r&eacute;teg t&eacute;rbeli hivatkoz&aacute;sainak meg kell egyezni&uuml;k.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

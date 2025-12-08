@@ -1,0 +1,8 @@
+{
+  "loading": "Nahrávání…",
+  "pleaseWait": "Počkejte prosím.",
+  "loadingXMLRFT": "Načítají se vybrané šablony rastrových funkcí v XML formátu.",
+  "failedToOpen": "Nepodařilo se otevřít.",
+  "readingFailed": "Nepodařilo se načíst vybrané šablony rastrových funkcí.",
+  "failedToLoadXML": "Nepodařilo se načíst vybrané šablony rastrových funkcí v XML formátu."
+}

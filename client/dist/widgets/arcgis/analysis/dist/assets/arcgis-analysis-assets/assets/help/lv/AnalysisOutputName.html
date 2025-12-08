@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>Analīzes pārrakstī&scaron;anas iestatījumi  Map Viewer. </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="resultType">
+        <div>
+            <p>Norāda izvades veidu, kas tiks radīts. Opcija  <b>Izvedot starpdatus</b> izveido īslaicīgu slāni, ko var izmantot kā ievades elementu citam rīkam, bet to nevar ne saglabāt, ne redzēt kartē. Opcija <b>Izveidot viesotu elementu slāni</b> publicē jaunu viesotu elementu slāni. Opcija <b>Pārrakstīt eso&scaron;u slāni</b> atjauno eso&scaron;o slāni ar rīka izvadi.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>Tā slāņa nosaukums, kas tiks izveidots un pievienots kartei.
+            </p>
+        </div>
+    </div>
+    <div id="layerExistsAutomaticallyOverwrite">
+        <div>
+            <p>Norāda, vai rīka izvade pārrakstīs slāni jūsu saturā, kuram ir norādītais izvades nosaukums. Ja &scaron;is slāņa nosaukums Jūsu organizācijā vēl netiek izmantots, tiks izveidota jauna vienība. Lai to pārrakstītu, Jums ir jābūt slāņa īpa&scaron;niekam vai administratoram.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>Mapes nosaukums sadaļā  <b>Mans saturs</b>, kurā tiks saglabāti rezultāti.
+            </p>
+            <p>&Scaron;o nevar atjaunot, ja slānis jau pastāv.
+            </p>
+        </div>
+    </div>
+    <div id="existingLayerToOverwrite">
+        <div>
+            <p>Slānis  <b>My content</b>, kas tiks pārrakstīts ar izvades slāni. Izvades un eso&scaron;ā slāņa telpiskajām atsaucēm ir jāsakrīt.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

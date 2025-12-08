@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html dir="rtl">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>כלי Calculate Field מחשב ערכים עבור שדה חדש או קיים.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputTable">
+        <div>
+            <p>שכבת או טבלת הקלט שעבורה יחושב שדה.
+            </p>
+            <p class="modelBuilderOnly"> <b>שכבה</b> מוגדרת כברירת מחדל כאשר <b>סט נתוני קלט</b> לא מאוכלס. להוספת טבלת קלט, בחר <b>טבלה</b> לפני הוספת סט נתונים.
+            </p>
+        </div>
+    </div>
+    <div id="whereClause">
+        <div>
+            <p>שאילתת המאפיינים שקובעת על איזה סט משנה של רשומות חישוב השדה יוחל. להחלת החישוב על כל הרשומות, השאר פרמטר זה ריק.
+            </p>
+        </div>
+    </div>
+    <div id="field">
+        <div>
+            <p>השדה שאליו הערכים המחושבים יתווספו. ניתן לבחור שדה קיים או ליצור שדה. 
+            </p>
+        </div>
+    </div>
+    <div id="fieldCalcExpression">
+        <div>
+            <p>ביטוי SQL המשמש לחישוב ערכים עבור  <b>שדה לחישוב</b>.
+            </p>
+            <p>הביטוי יכול להכיל שמות שדות, פונקציות ואופרטורים בסיסיים וחייב ליצור ערכים שתואמים לסוג השדה עבור  <b>שדה לחישוב</b>.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

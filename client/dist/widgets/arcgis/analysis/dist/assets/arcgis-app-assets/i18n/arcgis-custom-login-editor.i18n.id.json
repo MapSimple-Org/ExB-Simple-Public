@@ -1,0 +1,85 @@
+{
+  "heading": "Buat kategori masuk",
+  "select": "Pilih kategori masuk untuk memulai",
+  "selectCustomSignIn": "Pilih kategori masuk",
+  "orgDefaults": "Default organisasi",
+  "createNew": "Buat baru",
+  "name": "Judul",
+  "description": "Deskripsi",
+  "enterName": "Masukkan judul kategori",
+  "enterDescription": "Masukkan deskripsi kategori",
+  "enterTitle": "Masukkan judul untuk login ini",
+  "showOnTriage": "Aktifkan kategori masuk",
+  "showOnTriageDescription": "Deskripsi kategori Anda hanya akan muncul pada halaman pemilihan kategori jika Anda mengaktifkan dua kategori atau lebih.",
+  "socialProviders": "Penyedia login sosial",
+  "authenticationProviders": "Metode autentikasi",
+  "errorLabel": "Kesalahan kategori masuk kustom",
+  "preview": "Pratinjau",
+  "restrictions": "Hanya judul dan deskripsi kategori ini yang dapat diubah. Semua opsi lainnya diwarisi dari pengaturan organisasi.",
+  "loginNotAvailable": "Metode login dinonaktifkan oleh organisasi Anda dan tidak akan ditampilkan kepada pengguna.",
+  "buttons": {
+    "editCategory": "Simpan kategori",
+    "next": "Selanjutnya",
+    "back": "Kembali",
+    "createCategory": "Buat kategori"
+  },
+  "errors": {
+    "nameRequired": "Diperlukan judul untuk semua kategori masuk.",
+    "authenticationMethodsRequired": "Diperlukan setidaknya satu metode masuk.",
+    "socialProviderRequired": "Diperlukan setidaknya satu penyedia login sosial."
+  },
+  "steps": {
+    "1": {
+      "title": "Pilih cara memulai",
+      "description": "Anda dapat memulai dengan default login organisasi, mengedit kategori masuk yang ada, atau membuat kategori masuk baru."
+    },
+    "2": {
+      "title": "Judul dan deskripsi",
+      "description": "Masukkan judul dan deskripsi kategori masuk Anda."
+    },
+    "3": {
+      "title": "Jenis login",
+      "description": "Sesuaikan dan urutkan login yang muncul untuk kategori masuk ini."
+    }
+  },
+  "createAccount": {
+    "label": "Buat tautan akun",
+    "description": "Izinkan pembuatan akun ArcGIS baru di organisasi ini."
+  },
+  "switchOrganization": {
+    "label": "Ubah tautan organisasi",
+    "description": "Tampilkan tautan yang mengizinkan pengguna masuk ke organisasi yang berbeda."
+  },
+  "authenticationMethods": {
+    "arcgis": {
+      "label": "Login ArcGIS",
+      "description": "Izinkan pengguna untuk masuk dengan login ArcGIS.",
+      "required": "Diperlukan judul untuk metode login ArcGIS."
+    },
+    "saml": {
+      "label": "Login SAML",
+      "description": "Izinkan pengguna masuk dengan akun SAML.",
+      "required": "Diperlukan judul untuk metode login SAML."
+    },
+    "oidc": {
+      "label": "Login IODC",
+      "description": "Izinkan pengguna masuk dengan akun OIDC.",
+      "required": "Diperlukan judul untuk metode login OIDC."
+    },
+    "social": {
+      "label": "Login sosial",
+      "description": "Izinkan anggota untuk masuk ke organisasi Anda menggunakan login dari jaringan sosial berikut.",
+      "github": "GitHub",
+      "facebook": "Facebook",
+      "google": "Google",
+      "apple": "Apple",
+      "required": "Diperlukan judul untuk metode login sosial."
+    }
+  },
+  "confirmLeave": {
+    "title": "Perubahan belum disimpan",
+    "message": "Anda memiliki perubahan yang belum disimpan. Anda yakin ingin meninggalkan halaman ini?",
+    "remain": "Tetap di halaman",
+    "leave": "Keluar tanpa menyimpan"
+  }
+}

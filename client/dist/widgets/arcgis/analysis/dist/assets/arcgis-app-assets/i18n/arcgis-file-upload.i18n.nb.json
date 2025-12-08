@@ -1,0 +1,16 @@
+{
+  "updateData": "Oppdater data",
+  "cancel": "Avbryt",
+  "editStyle": "Erstatt stilfilen for laget med en oppdatert versjon fra datamaskinen.",
+  "updatePackages": "Erstatt ${type} med en oppdatert versjon fra datamaskinen din. Den opplastede filen må ha samme navn som ${hostedLayerName}.",
+  "uploadStaticFiles": "Filen som lastes opp, må ha samme navn som den opprinnelige filen ${fileName}",
+  "sameFileNameDescription": "Filen som lastes opp, må ha samme navn og feltnavn som den opprinnelige filen ${fileName}",
+  "updating": "Oppdaterer...",
+  "error": "Feil",
+  "errors": {
+    "sameFileName": "Hvis du vil oppdatere dette elementet, må du laste opp en fil med navnet ${fileName}.",
+    "invalidStyleFileExtension": "Ugyldig filtype. Den opplastede stilen må ha filtypen JSON.",
+    "errorWhileUpload": "Det oppsto en feil når elementet skulle føyes til.",
+    "errorUpdate": "Det oppstod en feil under overskriving av elementet."
+  }
+}

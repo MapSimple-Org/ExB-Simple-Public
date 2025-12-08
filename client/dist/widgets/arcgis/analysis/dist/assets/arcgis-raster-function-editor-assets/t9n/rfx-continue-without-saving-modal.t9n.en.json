@@ -1,0 +1,6 @@
+{
+  "header": "Start over without saving?",
+  "content": "You have unsaved changes in '${rftTitle}'. If you start over with a new template, those changes will be lost.",
+  "cancel": "Cancel",
+  "continue": "Continue"
+}

@@ -1,0 +1,23 @@
+{
+  "name": "collage",
+  "type": "template",
+  "templateType": "app",
+  "label": "Collage",
+  "description": "Collage is a grid page template that displays multiple Image widgets around the Fixed Panel widget.",
+  "thumbnail": "thumbnail.png",
+  "order": 34,
+  "templateCreateVersion": "1.11.0",
+  "tags": [
+    "Title",
+    "Gallery",
+    "Grid"
+  ],
+  "categoriesTags": [
+    "Web page",
+    "Fullscreen grid"
+  ],
+  "isMultiplePage": false,
+  "isMapAware": false,
+  "thumbnailWidth": 320,
+  "thumbnailHeight": 214
+}

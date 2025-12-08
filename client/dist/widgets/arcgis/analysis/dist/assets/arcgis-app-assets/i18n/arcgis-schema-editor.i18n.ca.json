@@ -1,0 +1,15 @@
+{
+  "expandAll": "Amplia-ho tot",
+  "collapseAll": "Redueix-ho tot",
+  "categoryItem": {
+    "expand": "Amplia",
+    "collapse": "Redueix",
+    "editCategory": "Edita la categoria",
+    "deleteCategory": "Suprimeix la categoria",
+    "addSubcategory": "Afegeix una subcategoria",
+    "addCategory": "Afegeix una categoria",
+    "save": "Desa",
+    "cancel": "Cancel·la",
+    "missingTitleMessage": "El títol de la categoria és obligatori."
+  }
+}

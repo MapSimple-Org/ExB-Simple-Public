@@ -1,0 +1,7 @@
+{
+  "header": "Editor funzioni raster",
+  "content": "Sono presenti modifiche non salvate in '${rftTitle}'. Se non saranno salvate, le modifiche andranno perse.",
+  "cancel": "Cancella",
+  "dontSave": "Non salvare",
+  "save": "Salva"
+}

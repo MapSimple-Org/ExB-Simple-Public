@@ -1,0 +1,9 @@
+{
+  "inputLayerGroupText": "입력 레이어를 선택하여 구역 경계의 지오메트리를 계산합니다.",
+  "itemProperties": {
+    "description": "구역 지오메트리 테이블 분석 도구를 실행하여 생성된 결과 테이블입니다.",
+    "snippet": "구역 지오메트리 테이블에서 생성된 결과 테이블"
+  },
+  "zonalGeometrySettingGroupLabel": "구역 지오메트리 설정",
+  "zonalGeometrySettingGroupText": "계산할 셀 크기를 지정하세요."
+}

@@ -1,0 +1,55 @@
+{
+  "beginningOnLabel": "Börjar på",
+  "repeatTypeLabel": "Upprepa typ",
+  "endingOnTypeLabel": "Slutar på",
+  "endingOnDateLabel": "Slutdatum",
+  "endingOnCountLabel": "Antal",
+  "endingOnCountPlaceholder": "till exempel: 1, 10, 30",
+  "dailyRepeatIntervalLabel": "Upprepa intervall",
+  "dailyTimeLabel": "Tid",
+  "weeklyDaysOfWeekLabel": "Veckodag",
+  "weeklyTimeLabel": "Tid",
+  "monthlyDayOfMonthLabel": "Dag i månaden",
+  "monthlyDayOfMonthPlaceholder": "till exempel: 1 - 31",
+  "monthlyRepeatIntervalLabel": "Upprepa intervall",
+  "monthlyTimeLabel": "Tid",
+  "repeatTypeOptions": {
+    "day": "Dag",
+    "week": "Vecka",
+    "month": "Månad"
+  },
+  "endingOnType": {
+    "never": "Aldrig",
+    "date": "Datum",
+    "count": "På"
+  },
+  "dailyRepeatInterval": {
+    "everyDay": "Varje dag",
+    "everyOtherDay": "Varannan dag",
+    "everyThreeDays": "Var 3:e dag",
+    "everyFourDays": "Var 4:e dag",
+    "everyFiveDays": "Var 5:e dag",
+    "everySixDays": "Var 6:e dag",
+    "everySevenDays": "Var 7:e dag",
+    "everyFourteenDays": "Var 14:e dag"
+  },
+  "weekDays": {
+    "all": "Alla",
+    "allWeekdays": "Alla veckodagar",
+    "sunday": "söndag",
+    "monday": "måndag",
+    "tuesday": "tisdag",
+    "wednesday": "onsdag",
+    "thursday": "torsdag",
+    "friday": "fredag",
+    "saturday": "lördag"
+  },
+  "monthlyRepeatInterval": {
+    "everyMonth": "Varje månad",
+    "everyTwoMonths": "Varannan månad",
+    "everyThreeMonths": "Var 3:e månad",
+    "everyFourMonths": "Var 4:e månad",
+    "everyFiveMonths": "Var 5:e månad",
+    "everySixMonths": "Var 6:e månad"
+  }
+}

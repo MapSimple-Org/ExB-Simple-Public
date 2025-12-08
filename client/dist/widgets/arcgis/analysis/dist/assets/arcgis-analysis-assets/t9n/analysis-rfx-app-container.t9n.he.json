@@ -1,0 +1,16 @@
+{
+  "backLabel": "חזור",
+  "browseHeader": "בחר שכבה",
+  "cannotReopenRasterFunction": "לא ניתן לפתוח מחדש את פונקציית הרסטר.",
+  "creditThresholdModal": {
+    "cancelRun": "ביטול",
+    "continueRun": "הפעל בכל זאת",
+    "creditEstimate": "אומדן קרדיטים: ${cost}",
+    "creditThreshold": "סף קרדיט: ${threshold}",
+    "heading": "לפני שתמשיך",
+    "learnMore": "מידע נוסף על ערכי סף של קרדיטים",
+    "thresholdExceeded": "עלות הקרדיטים המשוערת של ניתוח זה גדולה מסף הקרדיט של מפת הווב:"
+  },
+  "failedToExecuteEstimate": "השליחה נכשלה. ביצוע EstimateRasterAnalysisCost נכשל",
+  "runAnalysisLabel": "הרץ"
+}

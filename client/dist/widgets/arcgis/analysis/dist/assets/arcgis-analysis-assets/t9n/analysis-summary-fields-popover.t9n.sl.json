@@ -1,0 +1,13 @@
+{
+  "addField": "Dodaj polje",
+  "deselectAll": "Počisti vse",
+  "done": "Končano",
+  "noFieldsAvailable": "${layerName} ne vsebuje polj, ki se skladajo z zahtevo tipa podatkov. Za nadaljevanje izberite drugačen sloj.",
+  "noInputSelected": {
+    "withLayerInputLabel": "Izbran ni noben vhodni sloj. Izberite sloj v ${layerInputLabel} za nadaljevanje.",
+    "withoutLayerInputLabel": "Izbran ni noben vhodni sloj en vhodni sloj. Za nadaljevanje izberite vhodni sloj."
+  },
+  "noSearchResults": "Brez najdenih ujemajočih se polj.",
+  "selectAll": "Izberi vse",
+  "summaryFieldsPopover": "Področja povzetka"
+}

@@ -1,0 +1,9 @@
+{
+  "zoomIn": "Uvećanje",
+  "zoomOut": "Umanjenje",
+  "autoLayout": "Automatski raspored",
+  "stretch": "Uklopi za prikaz",
+  "select": "Selektujte",
+  "pan": "Pomeri",
+  "deleteSelectedItemsText": "Izbriši selektovane stavke"
+}

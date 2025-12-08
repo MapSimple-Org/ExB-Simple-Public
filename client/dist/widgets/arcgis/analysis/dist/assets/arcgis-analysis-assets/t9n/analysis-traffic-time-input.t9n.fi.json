@@ -1,0 +1,8 @@
+{
+  "arriveTime": "Saapumisaika",
+  "modes": {
+    "custom": "Mukautettu päivämäärä ja aika",
+    "now": "Nyt",
+    "unspecified": "Määrittämätön aika"
+  }
+}

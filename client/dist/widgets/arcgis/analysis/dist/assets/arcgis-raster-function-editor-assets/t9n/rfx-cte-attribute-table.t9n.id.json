@@ -1,0 +1,22 @@
+{
+  "value": "Nilai",
+  "classname": "ClassName",
+  "color": "Warna",
+  "raster": "Raster",
+  "tableType": "Jenis Tabel",
+  "manual": "Manual",
+  "external": "Eksternal",
+  "browseTable": "Jelajahi Tabel",
+  "browseTableFrom": "Telusuri Tabel Dari",
+  "file": "File",
+  "dbfFile": "File DBF",
+  "layer": "Layer",
+  "unsupportedDataType": "Jenis tidak didukung",
+  "failedToGetTableFromLayer": "Gagal mendapatkan tabel dari layer.",
+  "generate": "Buat Tabel",
+  "minValue": "Nilai Minimum",
+  "maxValue": "Nilai Maksimum",
+  "classBaseName": "Nama Dasar Kelas",
+  "colorscheme": "Skema Warna",
+  "defaultClassName": "Label_"
+}

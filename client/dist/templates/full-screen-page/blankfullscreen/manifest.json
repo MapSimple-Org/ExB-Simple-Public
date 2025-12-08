@@ -1,0 +1,15 @@
+{
+  "name": "blankfullscreen",
+  "type": "template",
+  "templateType": "full-screen-page",
+  "label": "Blank fullscreen",
+  "description": "A blank template to create your own design in a fullscreen app.",
+  "thumbnail": "thumbnail.png",
+  "order": 1,
+  "tags": [],
+  "categoriesTags": [
+    "Blank"
+  ],
+  "thumbnailWidth": 320,
+  "thumbnailHeight": 214
+}

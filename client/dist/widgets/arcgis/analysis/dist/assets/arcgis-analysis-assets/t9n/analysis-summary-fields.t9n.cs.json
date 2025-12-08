@@ -1,0 +1,17 @@
+{
+  "any": "Libovolný",
+  "count": "Počet",
+  "field": "Pole",
+  "fieldLoadingErrorText": "Pole se nedaří načíst.",
+  "first": "První",
+  "isRequired": "Tento parametr je povinný.",
+  "last": "Poslední",
+  "max": "Max.",
+  "mean": "Průměr",
+  "min": "Min.",
+  "selectAll": "Vybrat vše",
+  "standardDeviation": "Směrodatná odchylka",
+  "statistic": "Statistika",
+  "statisticNotSelected": "Pro každé pole je vyžadován alespoň jeden typ statistiky.",
+  "sum": "Suma"
+}

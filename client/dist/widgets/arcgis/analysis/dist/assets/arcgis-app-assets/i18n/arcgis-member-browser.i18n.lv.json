@@ -1,0 +1,177 @@
+{
+  "memberBrowser": {
+    "filters": "Filtri",
+    "pageRange": "${start}-${end}, kopā: ${total}",
+    "pageRangeAria": "${start}-${end}, dalībnieku kopskaits: ${total}",
+    "selectedMembers": "Izvēlētie dalībnieki",
+    "noSelectedMembers": "Pašlaik nav izvēlēts neviens dalībnieks",
+    "noUsersFound": "Nav atrasts neviens lietotājs, kas atbilst jūsu meklēšanas kritērijiem. Mēģiniet notīrīt dažus filtrus vai mainīt meklēšanas kritērijus, lai parādītu vairāk lietotāju.",
+    "enterTermExternal": "Ievadiet meklējamo vārdu, lai atrastu lietotājus visā ArcGIS Online",
+    "noUsers": "Nav pieejams neviens lietotājs",
+    "coordinator": "Sadarbības koordinators"
+  },
+  "search": {
+    "searchMembers": "Meklēt dalībniekus"
+  },
+  "filterUserTypes": {
+    "title": "Lietotāja veids",
+    "label": "Lietotāja veids: ${name}",
+    "loading": "Lietotāja lomu ielādēšana..."
+  },
+  "filterRoles": {
+    "title": "Loma",
+    "label": "Loma: ${name}",
+    "loading": "Lomu ielādēšana...",
+    "searchRoles": "Meklēt lomas"
+  },
+  "filterOrgGroups": {
+    "title": "Organizācijas grupas",
+    "label": "Grupa: ${name}",
+    "loading": "Ielādē organizācijas grupas...",
+    "searchGroups": "Meklēt grupas",
+    "noGroupsFound": "Nav atrasta neviena grupa. Mēģiniet mainīt savu meklēšanas kritēriju, lai redzētu vairāk grupu."
+  },
+  "filterMyGroups": {
+    "title": "Manas grupas",
+    "label": "Grupa: ${name}",
+    "loading": "Manu grupu ielādēšana…",
+    "searchMyGroups": "Meklēt manās grupās"
+  },
+  "filterCategories": {
+    "title": "Kategorijas",
+    "label": "Kategorija: ${name}",
+    "loading": "Kategoriju ielādēšana...",
+    "noCategoriesTitle": "Vēl nav nevienas dalībnieku kategorijas",
+    "noCategories": "Dalībnieku kategorijas ļauj administratoriem organizēt savus dalībniekus direktorijā, lai racionalizētu dalībnieku administratīvās darbības. Organizācijas dalībnieki var arī izmantot šo direktoriju, lai atrastu citus dalībniekus.",
+    "setupCategories": "Iestatīt dalībnieku kategorijas",
+    "configureCategories": "Konfigurēt kategorijas",
+    "noCategoriesAssigned": "Nav piešķirta neviena kategorija"
+  },
+  "filterPartnerCollabs": {
+    "title": "Partneru sadarbība",
+    "label": "Partneru sadarbība: ${name}",
+    "loading": "Partneru sadarbību ielādēšana...",
+    "coordinatorsOnly": "Tikai sadarbības koordinatori",
+    "coordinatorsDescription": "Sadarbības koordinatori ir pārstāvji no partneru sadarbības loka, kurus var pievienot grupai, neprasot apstiprinājumu.",
+    "coordinatorsInfoLabel": "Plašāka informācija par sadarbības koordinatoriem"
+  },
+  "filterSearchSwitch": {
+    "searchAll": "Meklēt visus ArcGIS Online organizācijas dalībniekus",
+    "searchPartners": "Ietvert partnerorganizāciju dalībniekus"
+  },
+  "table": {
+    "caption": "Dalībnieku rezultāti, kolonnu galvenes ar pogām ir kārtojamas.",
+    "selectAll": "Izvēlēties visu",
+    "selection": "Atlase",
+    "headers": {
+      "name": "Nosaukums",
+      "membertype": "Grupas loma",
+      "affiliation": "Piederība",
+      "joined": "Pievienots",
+      "credits": "Atlikušie servisa kredīti",
+      "remainingCredits": "Kopējais atlikušo kredītu skaits ${num}",
+      "lastlogin": "Pēdējā pierakstīšanās reize",
+      "usertype": "Lietotāja veids",
+      "role": "Loma",
+      "mfaenabled": "Daudzfaktoru autentifikācija"
+    }
+  },
+  "tableRow": {
+    "moreOptions": "Vairāk iespēju",
+    "groupManager": "Grupas pārvaldnieks",
+    "owner": "Īpašnieks",
+    "member": "Dalībnieks",
+    "myOrg": "Mana organizācija",
+    "other": "Cits",
+    "coordinator": "Sadarbības koordinators",
+    "noLimit": "Bez ierobežojuma",
+    "creditsNumber": "${remain} no ${total}",
+    "today": "Šodien",
+    "yesterday": "Vakar",
+    "never": "Nekad",
+    "role": "Loma",
+    "memberIsCoordinator": "Šis dalībnieks ir sadarbības koordinators",
+    "rolesForCoordinator": "Sadarbības koordinatoriem var būt tikai loma Administrator vai Facilitator.",
+    "memberIsContact": "Šis dalībnieks ir administratīvā kontaktpersona",
+    "removeFromContact": "Ja vēlaties mainīt šī dalībnieka lomu, vispirms noņemiet to no ${linkStart} administratīvo kontaktpersonu saraksta${linkEnd}."
+  },
+  "listCard": {
+    "moreOptions": "Vairāk iespēju",
+    "lastLoggedIn": "Pēdējā pierakstīšanās: ${value}",
+    "today": "Šodien",
+    "yesterday": "Vakar",
+    "hasNotLoggedIn": "Pierakstīšanās nav notikusi",
+    "neverSignedInTooltip": "Šis dalībnieks nekad nav pierakstījies savā kontā, kas izveidots ${date}",
+    "userType": "Lietotāja veids",
+    "role": "Loma",
+    "creditsRemaining": "Atlikušie servisa kredīti",
+    "noLimit": "Bez ierobežojuma",
+    "creditsNumber": "${remain} no ${total}",
+    "addonLicenses": "Papildinājumprogrammu licences",
+    "configureLicenses": "Konfigurēt licences",
+    "groups": "Grupas",
+    "configureGroups": "Konfigurēt grupas",
+    "viewGroups": "Skatīt grupas"
+  },
+  "myOrg": {
+    "myOrgView": "Mans organizācijas skats"
+  },
+  "filterGroupRole": {
+    "title": "Grupas loma",
+    "label": "Grupas loma: ${role}",
+    "admins": "Īpašnieks un grupas pārvaldnieki",
+    "member": "Dalībnieks"
+  },
+  "filterAffiliation": {
+    "title": "Piederība",
+    "label": "Piederība: ${name}",
+    "myOrg": "Mana organizācija",
+    "other": "Cits"
+  },
+  "filterCreditsRemain": {
+    "title": "Atlikušie servisa kredīti",
+    "noLimit": "Bez ierobežojuma",
+    "lessThan": "Mazāk nekā",
+    "credits": "Servisa kredīti",
+    "labelNoLimit": "Servisa kredīti: bez ierobežojuma",
+    "labelLess": "Servisa kredīti: mazāk nekā ${value}",
+    "invalidValue": "Ievadītā vērtība nav derīga."
+  },
+  "filterEmailVerification": {
+    "title": "E-pasta pārbaudes statuss",
+    "unverified": "Nepārbaudītas e-pasta adreses",
+    "verified": "Pārbaudītas e-pasta adreses",
+    "label": "E-pasta verifikācijas statuss: ${status}"
+  },
+  "filterLoginType": {
+    "title": "Pieteikšanās veids",
+    "label": "Pieteikšanās veids: ${type}",
+    "social": "Sociālie tīkli"
+  },
+  "filterApp": {
+    "title": "Lietotne",
+    "label": "Lietotne: ${app}"
+  },
+  "filterMFA": {
+    "title": "Daudzfaktoru autentifikācija",
+    "enabled": "Iespējots",
+    "disabled": "Atspējots",
+    "label": "Daudzfaktoru autentifikācija: ${status}"
+  },
+  "roles": {
+    "user": "Lietotājs",
+    "publisher": "Izdevējs",
+    "admin": "Administrators",
+    "viewer": "Skatītājs",
+    "editor": "Datu redaktors",
+    "facilitator": "Koordinators"
+  },
+  "view": {
+    "view": "Skatīt",
+    "list": "Saraksts",
+    "table": "Tabula"
+  },
+  "assignedLicenses": "Rādīt tikai ar šo licenci saistītos dalībniekus",
+  "onlyDoubleAssigned": "Rādīt tikai tos dalībniekus, kuriem šī licence ir piešķirta divreiz",
+  "maxSelected": "Vienā reizē var atlasīt tikai ${number} dalībniekus."
+}

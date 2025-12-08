@@ -1,0 +1,14 @@
+{
+  "outputRaster": "Raster ieșire",
+  "rfxVariable": "Funcția raster variabilă",
+  "selectLayer": "Selectați stratul tematic",
+  "allowScalar": "Selectați un strat tematic sau introduceți o constantă",
+  "browseLayer": "Răsfoirea straturilor tematice",
+  "loading": "Se încarcă...",
+  "layerMissing": "Unui sau mai multe straturi tematice de imagini satelitare din hartă nu sunt listate aici deoarece proprietatea de permisiune a serviciului de analiză nu le-a activat.",
+  "layerFailedToLoad": "Nu s-a reușit încărcarea stratului tematic.",
+  "learnMore": "Aflați mai multe",
+  "errorCodes": {
+    "required": "Acest parametru este obligatoriu."
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "weightedSumTable": "Súlyozott összegek táblája",
+  "id": "Azonosító",
+  "layer": "Réteg",
+  "field": "Mező",
+  "weight": "Súly",
+  "value": "Érték",
+  "selectLayer": "Réteg kiválasztása"
+}

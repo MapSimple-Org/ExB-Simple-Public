@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>L'eina Deriva el flux continu genera un r&agrave;ster de flux acumulat a cada cel&middot;la des d'un r&agrave;ster de superf&iacute;cie d'entrada sense necessitat pr&egrave;via d'emplenament de depressi&oacute; ni d'embornal.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputSurfaceRaster">
+        <div>
+            <p>R&agrave;ster d'elevaci&oacute; que s'utilitzar&agrave; per al c&agrave;lcul.
+            </p> 
+        </div>
+    </div>
+    <div id="inputDepressionsData">
+        <div>
+            <p>Capa que defineix depressions reals, on l'aigua pot entrar per&ograve; no sortir.
+            </p>
+            <p class="toolPaneOnly">En el cas d'entrades d'entitats, el recompte dep&egrave;n d'altres factors com ara els criteris de filtratge i l'extensi&oacute; d'an&agrave;lisi.
+            </p> 
+        </div>
+    </div>
+    <div id="inputWeightRaster">
+        <div>
+            <p>Capa r&agrave;ster que defineix la fracci&oacute; de flux que contribueix a l'acumulaci&oacute; de flux a cada cel&middot;la.
+            </p>
+        </div>
+    </div>
+    <div id="flowDirectionType">
+        <div>
+            <p>Especifica el tipus de m&egrave;tode de flux que s'utilitzar&agrave; en calcular la direcci&oacute; del flux.
+            </p>
+            <p>El m&egrave;tode D8 assigna la direcci&oacute; del flux al ve&iacute; de pendent descendent m&eacute;s pronunciada. El m&egrave;tode MFD divideix la direcci&oacute; del flux entre els ve&iuml;ns de pendent descendent segons un exponent de divisi&oacute; adaptatiu.
+            </p>
+        </div>
+    </div>
+    <div id="forceFlow">
+        <div>
+            <p>Especifica si el flux de les cel&middot;les de vores seguir&agrave; les regles de flux normals o sempre fluir&agrave; cap enfora.
+            </p>
+            <p>Si aquesta opci&oacute; no est&agrave; seleccionada, el flux es dirigir&agrave; cap a la cel&middot;la interior amb el pendent m&eacute;s pronunciat en el valor z. Malgrat tot, si el pendent &eacute;s menor o igual a zero, la cel&middot;la fluir&agrave; cap enfora des del r&agrave;ster de superf&iacute;cie. Si est&agrave; seleccionada, la direcci&oacute; del flux sempre ser&agrave; cap enfora des del r&agrave;ster de superf&iacute;cie.
+            </p>
+        </div>
+    </div>
+    <div id="outputFlowAccumulationRasterName">
+        <div>
+            <p>Nom de la capa de r&agrave;ster d'acumulaci&oacute; de flux que es crear&agrave; i s'afegir&agrave; al mapa.
+            </p>
+        </div>
+    </div>
+    <div id="outputFlowDirectionRasterName">
+        <div>
+            <p>Nom de la capa r&agrave;ster de direcci&oacute; de flux que es crear&agrave; i s'afegir&agrave; al mapa.
+            </p>
+        </div>
+    </div>
+    <div id="resultType">
+        <div>
+            <p>Tipus de sortides que es crearan. Les sortides poden ser capes d'imatges en mosaic o capes d'imatges din&agrave;miques.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>Nom de la carpeta d' <b>El meu contingut</b> on es desaran els resultats.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

@@ -1,0 +1,7 @@
+{
+  "defaultValue": "Toetuseta parameetritüüp. Kasutatakse vaikeväärtust. <calcite-link target='_blank' href='${ docLink }'>Lisateave</calcite-link>",
+  "requiredMessage": "See parameeter on nõutav.",
+  "unsupportedGPType": "Toetuseta parameetritüüp. <calcite-link target='_blank' href='${ docLink }'>Lisateave</calcite-link>",
+  "unsupportedParameterConfig": "Toetuseta parameetrikonfiguratsioon. <calcite-link target='_blank' href='${ docLink }'>Lisateave</calcite-link>",
+  "unsupportedParameterConfigDefaultValue": "Toetuseta parameetrikonfiguratsioon. Kasutatakse vaikeväärtust. <calcite-link target='_blank' href='${ docLink }'>Lisateave</calcite-link>"
+}

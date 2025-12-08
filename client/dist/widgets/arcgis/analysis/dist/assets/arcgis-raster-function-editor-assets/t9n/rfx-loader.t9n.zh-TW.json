@@ -1,0 +1,8 @@
+{
+  "loading": "正在載入...",
+  "pleaseWait": "請稍候。",
+  "loadingXMLRFT": "正在以 XML 格式載入選擇的點陣函數樣板。",
+  "failedToOpen": "無法開啟。",
+  "readingFailed": "無法載入選擇的點陣函數樣板。",
+  "failedToLoadXML": "無法以 XML 格式載入選擇的點陣函數樣板。"
+}

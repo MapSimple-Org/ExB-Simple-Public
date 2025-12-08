@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>Ymp&auml;rist&ouml;asetukset analyysille ohjelmissa  Map Viewer. </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="analysisProcessingExtent">
+        <div>
+            <p>M&auml;&auml;ritt&auml;&auml; analyysissa k&auml;ytett&auml;v&auml;n alueen. Siin&auml; k&auml;ytet&auml;&auml;n t&auml;ytt&auml; laajuutta oletuksena.
+            </p>
+        </div>
+    </div>
+    <div id="rasterAnalysisProcessingExtent">
+        <div>
+            <p>M&auml;&auml;ritt&auml;&auml; alueen, jota k&auml;ytet&auml;&auml;n rasterianalyysity&ouml;kaluissa ja rasteritoiminnoissa, jos  <b>K&auml;yt&auml; eri k&auml;sittelylaajuutta rasterianalyysissa</b> on k&auml;yt&ouml;ss&auml;. Siin&auml; k&auml;ytet&auml;&auml;n kartan n&auml;ytt&ouml;laajuutta oletuksena.
+            </p>
+        </div>
+    </div>
+    <div id="useDifferentExtentForRA">
+        <div>
+            <p>M&auml;&auml;ritt&auml;&auml;, k&auml;ytet&auml;&auml;nk&ouml; rasterianalyysity&ouml;kaluille ja rasteritoiminnoille eri k&auml;sittelylaajuutta. Jos asetus on k&auml;yt&ouml;ss&auml;, rasterianalyysissa k&auml;ytet&auml;&auml;n  <b>Rasterianalyysin k&auml;sittelylaajuus</b> -arvoa, jonka mukaan k&auml;ytet&auml;&auml;n kartan n&auml;ytt&ouml;laajuutta oletuksena. Jos asetus ei ole k&auml;yt&ouml;ss&auml;, kaikissa analyyseissa k&auml;ytet&auml;&auml;n <b>Analyysin k&auml;sittelylaajuus</b> -arvoa, jonka mukaan k&auml;ytet&auml;&auml;n t&auml;ytt&auml; laajuutta oletuksena.
+            </p>
+        </div>
+    </div>
+    <div id="outSR">
+        <div>
+            <p>M&auml;&auml;ritt&auml;&auml; koordinaattij&auml;rjestelm&auml;n, jota k&auml;ytet&auml;&auml;n analyysissa ja tuloskarttatasossa.
+            </p>
+        </div>
+    </div>
+    <div id="extent">
+        <div>
+            <p>M&auml;&auml;ritt&auml;&auml; analyysissa k&auml;ytett&auml;v&auml;n alueen.
+            </p>
+        </div>
+    </div>
+    <div id="snapRaster">
+        <div>
+            <p>S&auml;&auml;t&auml;&auml; tulosaineiston laajuutta, jotta se vastaa m&auml;&auml;ritetyn kohdistusrasteritason solujen kohdistusta.
+            </p>
+        </div>
+    </div>
+    <div id="cellSize">
+        <div>
+            <p>M&auml;&auml;ritt&auml;&auml; solukoon tai tarkkuuden, jota k&auml;ytet&auml;&auml;n analyysiin ja tulosaineiston rasteritason luontiin.
+            </p>
+            <p>Jos  <b>Kuten m&auml;&auml;ritetty</b> valitaan ja tulosaineiston koordinaatistotieto on eri kuin l&auml;ht&ouml;aineiston koordinaatistotieto, solukoon arvoa ei projisoida uudelleen.
+            </p>
+        </div>
+    </div>
+    <div id="mask">
+        <div>
+            <p>M&auml;&auml;ritt&auml;&auml; maskitason, jossa vain maskitasolla olevia soluja k&auml;ytet&auml;&auml;n analyysiin.
+            </p>
+        </div>
+    </div>
+    <div id="resamplingMethod">
+        <div>
+            <p>M&auml;&auml;ritt&auml;&auml;, miten pikseliarvoja interpoloidaan, kun l&auml;ht&ouml;- ja tulosaineistorasterit eiv&auml;t ole vastaavia pikselikooltaan.
+            </p>
+        </div>
+    </div>
+    <div id="processorType">
+        <div>
+            <p>M&auml;&auml;ritt&auml;&auml; k&auml;ytett&auml;v&auml;n suorittimen tyypin. Vaihtoehdot ovat  <b>suoritin</b>, <b>grafiikkasuoritin</b> ja <b>automaattinen</b>. Jos <b>automaattinen</b> valitaan, ty&ouml;kalu m&auml;&auml;ritt&auml;&auml; suorittimen tyypin.
+            </p>
+        </div>
+    </div>
+    <div id="parallelProcessingFactor">
+        <div>
+            <p>M&auml;&auml;ritt&auml;&auml; ty&ouml;kalun suorittamisessa k&auml;ytett&auml;vien rasterin k&auml;sittelypalvelun esiintymien m&auml;&auml;r&auml;n. Tuettuja arvoja ovat tyhj&auml;t merkkijonot (ty&ouml;kalu m&auml;&auml;ritt&auml;&auml; k&auml;ytett&auml;vien rasterien k&auml;sittelypalvelun esiintymien m&auml;&auml;r&auml;n), kokonaiset luvut (0 tai positiiviset kokonaisluvut) ja prosenttiosuudet. Prosenttiosuuksissa on oltava prosenttimerkki (%) prosenttiosuusarvon j&auml;lkeen.
+            </p>
+        </div>
+    </div>
+    <div id="askConfirmation">
+        <div>
+            <p>M&auml;&auml;ritt&auml;&auml;, n&auml;ytet&auml;&auml;nk&ouml; varoitusviesti, jos krediittien arvioitu m&auml;&auml;r&auml; ylitt&auml;&auml; m&auml;&auml;ritetyn raja-arvon (k&auml;yt&ouml;ss&auml;), vai suoritetaanko analyysi n&auml;ytt&auml;m&auml;tt&auml; viesti&auml; riippumatta arvioidusta krediittien kulutuksesta (ei k&auml;yt&ouml;ss&auml;). Analyysi noudattaa silti organisaation krediittien budjetointiasetuksia.
+            </p>
+        </div>
+    </div>
+    <div id="creditThreshold">
+        <div>
+            <p>M&auml;&auml;ritt&auml;&auml; raja-arvon, jossa varoitusviesti n&auml;ytet&auml;&auml;n analyysin suorittamisesta saadun krediittien arvioidun kulutuksen perusteella. Analyysi voidaan silti suorittaa, jos arvio ylitt&auml;&auml; raja-arvon.
+            </p>
+        </div>
+    </div>
+    <div id="recycleProcessingWorkers">
+        <div>
+            <p>M&auml;&auml;ritt&auml;&auml;, miten monta kuvaosiota k&auml;sitell&auml;&auml;n ennen ty&ouml;prosessien uudelleenaloitusta mahdollisten virheiden est&auml;miseksi pitk&auml;aikaisissa prosesseissa. Oletusarvo on 0.
+            </p>
+        </div>
+    </div>
+    <div id="retryOnFailures">
+        <div>
+            <p>M&auml;&auml;ritt&auml;&auml;, miten monta kertaa yritet&auml;&auml;n samaa ty&ouml;prosessia, jos tietyn ty&ouml;n k&auml;sittelyn aikana on tapahtunut virhe. Oletusarvo on 0.
+            </p>
+        </div>
+    </div>
+    <div id="geographicTransformations">
+        <div>
+            <p>M&auml;&auml;ritt&auml;&auml; transformaatiomenetelm&auml;t, joita voidaan k&auml;ytt&auml;&auml; aineiston projisoimiseen analyysia varten.
+            </p>
+            <p>Ympr&auml;rist&ouml; tukee t&auml;ll&auml; hetkell&auml; vain rasterianalyysity&ouml;kaluja ja rasteritoimintoja.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

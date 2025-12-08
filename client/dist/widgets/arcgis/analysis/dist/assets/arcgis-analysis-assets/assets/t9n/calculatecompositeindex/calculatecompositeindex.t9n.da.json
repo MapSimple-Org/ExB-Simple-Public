@@ -1,0 +1,26 @@
+{
+  "CCIAnalysisSettingGroupLabel": "Indeksindstillinger",
+  "CCIAnalysisSettingGroupText": "Angiv, hvordan indekset skal beregnes.",
+  "geomeanPercentileLabel": "Sammenlæg rangordninger (geometrisk middelværdi af percentiler)",
+  "geomeanRawLabel": "Sammenlæg råværdier (geometrisk middelværdi af råværdier)",
+  "geomeanScaledLabel": "Sammenlæg skalerede værdier (geometrisk middelværdi af skalerede værdier)",
+  "indexMethodLabel": "Metode til at skalere og kombinere variabler",
+  "inputFeaturesOrTableLabel": "Input-objekter eller -tabel",
+  "inputLayerGroupText": "Vælg objekterne eller tabellen og variablerne, som indekset skal oprettes med.",
+  "inputVariablesLabel": "Input-variabler",
+  "itemProperties": {
+    "description": "Objektlag genereret ud fra kørsel af Beregn sammensat indeks-analyseværktøjet.",
+    "snippet": "Objektlag genereret ud fra Beregn sammensat indeks"
+  },
+  "meanPercentileLabel": "Kombinér rangordninger (middelværdi af percentiler)",
+  "meanRawLabel": "Kombinér råværdier (middelværdi af råværdier)",
+  "meanScaledLabel": "Kombinér skalerede værdier (middelværdi af skalerede værdier)",
+  "outputIndexMaxLabel": "Maksimum",
+  "outputIndexMinLabel": "Minimum",
+  "outputIndexMinMaxLabel": "Minimums- og maksimumsværdier for indeks",
+  "outputIndexReverseLabel": "Modsatte indeksværdier",
+  "reverseVariableLabel": "Modsat retning",
+  "sumFlagsPercentileLabel": "Fremhæv ekstreme værdier (antal værdier over 90. percentil)",
+  "toolName": "Beregn sammensat indeks",
+  "weight": "Vægt"
+}

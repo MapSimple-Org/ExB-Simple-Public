@@ -1,0 +1,1 @@
+System.register([],function(e){return{execute:function(){e({subMenuExpandMode:"Erweiterungsmodus f\xfcr das Untermen\xfc",mainMenu:"Hauptmen\xfc",subMenu:"Untermen\xfc",navArrowColor:"Farbe des Navigationspfeils"})}}});

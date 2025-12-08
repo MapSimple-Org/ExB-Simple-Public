@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>A ferramenta Criar Bacias Hidrogr&aacute;ficas determina a &aacute;rea de contribui&ccedil;&atilde;o a montante para pontos especificados.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputLayer">
+        <div>
+            <p>As localiza&ccedil;&otilde;es onde a capta&ccedil;&atilde;o de &aacute;gua a montante (bacia hidrogr&aacute;fica) ser&aacute; criada.
+            </p>
+            <p class="toolPaneOnly">A contagem de elementos depende de fatores adicionais, como os crit&eacute;rios de filtragem e a extens&atilde;o da an&aacute;lise.
+            </p>
+        </div>
+    </div>
+    <div id="searchDistance">
+        <div>
+            <p>A dist&acirc;ncia m&aacute;xima permitida para mover a localiza&ccedil;&atilde;o de um ponto de entrada para a linha de drenagem mais pr&oacute;xima ou para a maior acumula&ccedil;&atilde;o de fluxo.
+            </p>
+        </div>
+    </div>
+    <div id="searchUnits">
+        <div>
+            <p>As unidades que ser&atilde;o utilizadas para o par&acirc;metro  <b>Dist&acirc;ncia de pesquisa</b>.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>O nome da camada de elementos que cont&eacute;m pol&iacute;gonos da bacia hidrogr&aacute;fica e pontos de escoamento ajustados que ser&atilde;o criados e adicionados ao mapa.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>O nome da pasta em  <b>O meu conte&uacute;do</b> onde o resultado ser&aacute; guardado.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

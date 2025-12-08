@@ -1,0 +1,9 @@
+{
+  "inputLayerGroupText": "选择输入图层以计算分区边界的几何。",
+  "itemProperties": {
+    "description": "通过运行“以表格显示分区几何统计”分析工具生成的输出表。",
+    "snippet": "通过“以表格显示分区几何统计”生成的输出表"
+  },
+  "zonalGeometrySettingGroupLabel": "分区几何统计设置",
+  "zonalGeometrySettingGroupText": "指定要计算的像元大小。"
+}

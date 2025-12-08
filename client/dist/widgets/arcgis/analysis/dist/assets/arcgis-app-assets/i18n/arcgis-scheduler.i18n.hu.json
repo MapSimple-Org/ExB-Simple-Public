@@ -1,0 +1,55 @@
+{
+  "beginningOnLabel": "Kezdés időpontja:",
+  "repeatTypeLabel": "Ismétlés típusa",
+  "endingOnTypeLabel": "Befejezés időpontja:",
+  "endingOnDateLabel": "Befejező dátum",
+  "endingOnCountLabel": "Darabszám",
+  "endingOnCountPlaceholder": "például: 1, 10, 30",
+  "dailyRepeatIntervalLabel": "Ismétlési időköz",
+  "dailyTimeLabel": "Időpont",
+  "weeklyDaysOfWeekLabel": "Hét napja",
+  "weeklyTimeLabel": "Időpont",
+  "monthlyDayOfMonthLabel": "Hónap napja",
+  "monthlyDayOfMonthPlaceholder": "például 1–31",
+  "monthlyRepeatIntervalLabel": "Ismétlési időköz",
+  "monthlyTimeLabel": "Időpont",
+  "repeatTypeOptions": {
+    "day": "Nap",
+    "week": "Hét",
+    "month": "hónap"
+  },
+  "endingOnType": {
+    "never": "Soha",
+    "date": "Dátum",
+    "count": "Be"
+  },
+  "dailyRepeatInterval": {
+    "everyDay": "Naponta",
+    "everyOtherDay": "Kétnaponta",
+    "everyThreeDays": "Három naponta",
+    "everyFourDays": "Négy naponta",
+    "everyFiveDays": "Öt naponta",
+    "everySixDays": "Hat naponta",
+    "everySevenDays": "Hét naponta",
+    "everyFourteenDays": "Tizennégy naponta"
+  },
+  "weekDays": {
+    "all": "Összes",
+    "allWeekdays": "Minden hétköznap",
+    "sunday": "vasárnap",
+    "monday": "hétfő",
+    "tuesday": "kedd",
+    "wednesday": "Szerda",
+    "thursday": "csütörtök",
+    "friday": "Péntek",
+    "saturday": "szombat"
+  },
+  "monthlyRepeatInterval": {
+    "everyMonth": "Havonta",
+    "everyTwoMonths": "Kettő havonta",
+    "everyThreeMonths": "Három havonta",
+    "everyFourMonths": "Négy havonta",
+    "everyFiveMonths": "Öt havonta",
+    "everySixMonths": "Hat havonta"
+  }
+}

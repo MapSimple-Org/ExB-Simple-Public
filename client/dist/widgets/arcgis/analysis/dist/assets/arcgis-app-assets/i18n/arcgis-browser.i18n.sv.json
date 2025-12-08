@@ -1,0 +1,89 @@
+{
+  "browser": {
+    "refineContent": "Förfina innehåll",
+    "filters": "Filter",
+    "pageRange": "${start}-${end}, totalt: ${total}",
+    "pageRangeAria": "${start}-${end}, totalt antal objekt: ${total}",
+    "pageRangeWithRecycleBin": "${start}-${end}, totalt: ${total} (Total storlek: ${recycleBinSize})",
+    "pageRangeAriaWithRecycleBin": "${start}-${end}, totalt antal objekt: ${total} (Total storlek: ${recycleBinSize})",
+    "totalSize": "Total storlek: ${totalSize}",
+    "loading": "Läser in resultat",
+    "close": "Stäng"
+  },
+  "actions": {
+    "more": "Mer"
+  },
+  "filter": {
+    "clear": "Radera"
+  },
+  "filterDate": {
+    "today": "Idag",
+    "yesterday": "Igår",
+    "last7": "Senaste 7 dagarna",
+    "last30": "Senaste 30 dagarna",
+    "never": "Aldrig",
+    "custom": "Anpassat intervall...",
+    "title": {
+      "created": "Skapad den",
+      "modified": "Ändringsdatum",
+      "joined": "Anslutningsdatum",
+      "lastLogin": "Senaste inloggning"
+    },
+    "created": "Skapad: ${date}",
+    "modified": "Ändrades: ${date}",
+    "joined": "Gick med: ${date}",
+    "lastLogin": "Senaste inloggning: ${date}"
+  },
+  "pagination": {
+    "next": "Nästa sida",
+    "prev": "Föregående sida"
+  },
+  "search": {
+    "label": "Sök efter grupper",
+    "search": "Sök",
+    "clear": "Rensa sökterm",
+    "wildcard": "Sökningar med jokertecken stöds inte."
+  },
+  "sort": {
+    "sortDirection": "Sorteringsordning",
+    "title": "Titel",
+    "relevance": "Relevans",
+    "modified": "Ändringsdatum",
+    "deleted": "Datum har tagits bort",
+    "created": "Skapad den",
+    "added": "Tillagd datum",
+    "size": "Storlek",
+    "owner": "Ägare",
+    "sizeAsc": "Minst till störst",
+    "sizeDesc": "Störst till minst",
+    "numviews": "Visa antal",
+    "numAsc": "Minst till mest",
+    "numDesc": "Mest till minst",
+    "alphabeticalAsc": "Alfabetisk",
+    "alphabeticalDesc": "Omvänd alfabetisk",
+    "recentAsc": "Minst nyligen",
+    "recentDesc": "Senaste",
+    "sort": "Sortera",
+    "sortBy": "Sortera efter",
+    "sortByColon": "Sortera efter:",
+    "fullname": "Namn",
+    "username": "Användarnamn",
+    "name": "Namn",
+    "membertype": "Grupproll",
+    "joined": "Anslutningsdatum",
+    "lastlogin": "Senaste inloggning",
+    "dataset": "Dataset",
+    "mfaenabled": "Multifaktorautentisering",
+    "defaultAsc": "Stigande",
+    "defaultDesc": "Fallande"
+  },
+  "topBar": {
+    "filter": "Filter"
+  },
+  "filterStatus": {
+    "clear": "Radera",
+    "filters": "Filter:",
+    "additional": "Ytterligare aktiva filter",
+    "clearAllFilters": "Rensa alla filter"
+  }
+}

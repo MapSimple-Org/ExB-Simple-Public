@@ -1,0 +1,89 @@
+{
+  "browser": {
+    "refineContent": "Βελτίωση περιεχομένου",
+    "filters": "Φίλτρα",
+    "pageRange": "${start}-${end}, σύνολο: ${total}",
+    "pageRangeAria": "${start}-${end}, συνολικά στοιχεία: ${total}",
+    "pageRangeWithRecycleBin": "${start}-${end}, σύνολο: ${total} (Συνολικό μέγεθος: ${recycleBinSize})",
+    "pageRangeAriaWithRecycleBin": "${start}-${end}, σύνολο αντικειμένων: ${total} (Συνολικό μέγεθος: ${recycleBinSize})",
+    "totalSize": "Συνολικό μέγεθος: ${totalSize}",
+    "loading": "Φόρτωση αποτελεσμάτων",
+    "close": "Κλείσιμο"
+  },
+  "actions": {
+    "more": "Περισσότερα"
+  },
+  "filter": {
+    "clear": "Απαλοιφή"
+  },
+  "filterDate": {
+    "today": "Σήμερα",
+    "yesterday": "Χθες",
+    "last7": "Τελευταίες 7 ημέρες",
+    "last30": "Τελευταίες 30 ημέρες",
+    "never": "Ποτέ",
+    "custom": "Προσαρμοσμένο εύρος...",
+    "title": {
+      "created": "Ημερομηνία δημιουργίας",
+      "modified": "Ημερομηνία τροποποίησης",
+      "joined": "Ημερομηνία εγγραφής μέλους",
+      "lastLogin": "Τελευταία σύνδεση"
+    },
+    "created": "Δημιουργία: ${date}",
+    "modified": "Τροποποίηση: ${date}",
+    "joined": "Έγινε μέλος: ${date}",
+    "lastLogin": "Τελευταία σύνδεση: ${date}"
+  },
+  "pagination": {
+    "next": "Επόμενη σελίδα",
+    "prev": "Προηγούμενη σελίδα"
+  },
+  "search": {
+    "label": "Αναζήτηση ομάδων",
+    "search": "Αναζήτηση",
+    "clear": "Απαλοιφή όρου αναζήτησης",
+    "wildcard": "Οι αναζητήσεις με wildcards δεν υποστηρίζονται."
+  },
+  "sort": {
+    "sortDirection": "Κατεύθυνση ταξινόμησης",
+    "title": "Τίτλος",
+    "relevance": "Συνάφεια",
+    "modified": "Ημερομηνία τροποποίησης",
+    "deleted": "Η ημερομηνία διαγράφηκε",
+    "created": "Ημερομηνία δημιουργίας",
+    "added": "Ημερομηνία προσθήκης",
+    "size": "Μέγεθος",
+    "owner": "Κάτοχος",
+    "sizeAsc": "Από το μικρότερο στο μεγαλύτερο",
+    "sizeDesc": "Από το μεγαλύτερο στο μικρότερο",
+    "numviews": "Προβολή αριθμού",
+    "numAsc": "Από το λιγότερο στο περισσότερο",
+    "numDesc": "Από το περισσότερο στο λιγότερο",
+    "alphabeticalAsc": "Με αλφαβητική σειρά",
+    "alphabeticalDesc": "Με αντίστροφη αλφαβητική σειρά",
+    "recentAsc": "Λιγότερο πρόσφατο",
+    "recentDesc": "Πιο πρόσφατο",
+    "sort": "Ταξινόμηση",
+    "sortBy": "Ταξινόμηση κατά",
+    "sortByColon": "Ταξινόμηση κατά:",
+    "fullname": "Όνομα",
+    "username": "Όνομα χρήστη",
+    "name": "Όνομα",
+    "membertype": "Ρόλος στην ομάδα",
+    "joined": "Ημερομηνία εγγραφής μέλους",
+    "lastlogin": "Τελευταία σύνδεση",
+    "dataset": "Σύνολο δεδομένων",
+    "mfaenabled": "Έλεγχος ταυτότητας πολλών παραγόντων",
+    "defaultAsc": "Αύξουσα",
+    "defaultDesc": "Φθίνουσα"
+  },
+  "topBar": {
+    "filter": "Φίλτρο"
+  },
+  "filterStatus": {
+    "clear": "Απαλοιφή",
+    "filters": "Φίλτρα:",
+    "additional": "Πρόσθετα ενεργά φίλτρα",
+    "clearAllFilters": "Απαλοιφή όλων των φίλτρων"
+  }
+}

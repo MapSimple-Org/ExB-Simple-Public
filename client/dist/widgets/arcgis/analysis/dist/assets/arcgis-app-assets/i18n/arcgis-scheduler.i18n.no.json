@@ -1,0 +1,55 @@
+{
+  "beginningOnLabel": "Begynner",
+  "repeatTypeLabel": "Gjentakelsestype",
+  "endingOnTypeLabel": "Slutter",
+  "endingOnDateLabel": "Sluttdato",
+  "endingOnCountLabel": "Antall",
+  "endingOnCountPlaceholder": "for eksempel: 1, 10, 30",
+  "dailyRepeatIntervalLabel": "Gjenta intervall",
+  "dailyTimeLabel": "Tid",
+  "weeklyDaysOfWeekLabel": "Ukedag",
+  "weeklyTimeLabel": "Tid",
+  "monthlyDayOfMonthLabel": "Dag i måned",
+  "monthlyDayOfMonthPlaceholder": "for eksempel, 1 – 31",
+  "monthlyRepeatIntervalLabel": "Gjenta intervall",
+  "monthlyTimeLabel": "Tid",
+  "repeatTypeOptions": {
+    "day": "Dag",
+    "week": "Uke",
+    "month": "Måned"
+  },
+  "endingOnType": {
+    "never": "Aldri",
+    "date": "Dato",
+    "count": "På"
+  },
+  "dailyRepeatInterval": {
+    "everyDay": "Hver dag",
+    "everyOtherDay": "Annenhver dag",
+    "everyThreeDays": "Hver 3. dag",
+    "everyFourDays": "Hver 4. dag",
+    "everyFiveDays": "Hver 5. dag",
+    "everySixDays": "Hver 6. dag",
+    "everySevenDays": "Hver 7. dag",
+    "everyFourteenDays": "Hver 14. dag"
+  },
+  "weekDays": {
+    "all": "Alle",
+    "allWeekdays": "Alle hverdager",
+    "sunday": "Søndag",
+    "monday": "Mandag",
+    "tuesday": "Tirsdag",
+    "wednesday": "Onsdag",
+    "thursday": "Torsdag",
+    "friday": "Fredag",
+    "saturday": "Lørdag"
+  },
+  "monthlyRepeatInterval": {
+    "everyMonth": "Hver måned",
+    "everyTwoMonths": "Annenhver måned",
+    "everyThreeMonths": "Hver 3. måned",
+    "everyFourMonths": "Hver 4. måned",
+    "everyFiveMonths": "Hver 5. måned",
+    "everySixMonths": "Hver 6. måned"
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "inputFlowDirectionRasterLabel": "Bemeneti áramlási irány raszter",
+  "inputLayerGroupText": "Válassza ki a bemeneti áramlat és az áramlási irány rasztereket.",
+  "inputStreamRasterLabel": "Bemeneti áramlási raszter",
+  "itemProperties": {
+    "description": "A StreamLink elemzőeszköz futtatásából létrehozott kimenet.",
+    "snippet": "A StreamLink megoldással létrehozott kimenet"
+  }
+}

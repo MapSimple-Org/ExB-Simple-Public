@@ -1,0 +1,12 @@
+{
+  "choiceList": "Lista izbora",
+  "choiceListBadInput": "Uneta vrednost sadrži nevažeći unos.",
+  "comboboxPlaceholderText": "Selektujte opciju...",
+  "inputPlaceholderText": "Unesite vrednost...",
+  "invalidCharacterError": "Uneta vrednost sadrži nevažeće znakove.",
+  "maxLengthError": "Uneta vrednost ne može biti veća od ${maxLength} znakova.",
+  "minLengthError": "Uneta vrednost ne može biti manja od ${minLength} znakova.",
+  "multiSelectComboboxPlaceholderText": "Izaberite jednu ili više opcija...",
+  "requiredError": "Ovaj parametar je obavezan.",
+  "selectAll": "Izaberi sve"
+}

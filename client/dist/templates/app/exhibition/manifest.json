@@ -1,0 +1,35 @@
+{
+  "name": "exhibition",
+  "type": "template",
+  "templateType": "app",
+  "label": "Exhibition",
+  "description": "Exhibition provides a multi-page layout for building a website that highlights your images and content using cards, list, and map widgets.",
+  "thumbnail": "thumbnail.png",
+  "order": 69,
+  "tags": [
+    "Logo",
+    "Menu",
+    "Navigation",
+    "Card",
+    "Section",
+    "View",
+    "Embed",
+    "Map",
+    "List",
+    "Gallery",
+    "Share",
+    "Window",
+    "Divider",
+    "Bookmark",
+    "Flow",
+    "Title"
+  ],
+  "categoriesTags": [
+    "Website",
+    "Multipage"
+  ],
+  "isMultiplePage": true,
+  "isMapAware": false,
+  "thumbnailWidth": 320,
+  "thumbnailHeight": 214
+}

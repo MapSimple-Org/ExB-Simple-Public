@@ -1,0 +1,12 @@
+{
+  "aboveMaximumMessage": "Vhodna vrednost mora biti manjša ali enaka ${max}.",
+  "belowMinimumMessage": "Vhodna vrednost mora biti večja ali enaka ${min}.",
+  "invalidDoubleMessage": "Vhodna vrednost mora biti dvojna.",
+  "invalidIntegerMessage": "Vhodna vrednost mora biti celo število",
+  "maxValuesMessage": "Ne sme biti več kot ${maxValues} vhodnih vrednosti.",
+  "minValuesMessage": "Obstajati mora vsaj ${minValues} različnih vhodnih vrednosti.",
+  "requiredInputMessage": "Ta parameter je obvezen.",
+  "strictlyMaximumMessage": "Vhodna vrednost mora biti manjša od ${max}.",
+  "strictlyMinimumMessage": "Vhodna vrednost mora biti večja od ${min}.",
+  "placeholder": "Vnesi vrednost ..."
+}

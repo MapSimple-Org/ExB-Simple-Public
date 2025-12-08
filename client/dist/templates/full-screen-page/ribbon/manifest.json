@@ -1,0 +1,20 @@
+{
+  "name": "ribbon",
+  "type": "template",
+  "templateType": "full-screen-page",
+  "label": "Ribbon",
+  "description": "Ribbon is a template designed with the emphasis on the bookmark to control the navigation of the map.",
+  "thumbnail": "thumbnail.png",
+  "order": 7,
+  "tags": [
+    "Map",
+    "Bookmark",
+    "Slides"
+  ],
+  "categoriesTags": [
+    "Map centric",
+    "Fullscreen"
+  ],
+  "thumbnailWidth": 320,
+  "thumbnailHeight": 214
+}

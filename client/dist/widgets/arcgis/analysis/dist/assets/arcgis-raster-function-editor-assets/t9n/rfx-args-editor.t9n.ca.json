@@ -1,0 +1,11 @@
+{
+  "unsupportedDataType": "Tipus no compatible",
+  "currentlyUnsupported": " Hi ha un editor predeterminat per a ${missingType}, estarà disponible properament. Quadre de text de marcador de posició temporal per especificar entrades basades en cadena.",
+  "unsupportedOverrideWarning": "Properament, hi haurà disponible un editor d'invalidació que oferirà una UX millor per treballar amb els paràmetres següents:",
+  "overrideWidgetMissing": "Falta un component de l'editor d'invalidació.",
+  "uiIncomplete": "No s'ha pogut enviar el treball. La funció no es pot executar perquè alguns dels camps necessaris no són compatibles o no apareixen a la UI.",
+  "deprecatedBannerText": "Aquesta plantilla de funció ràster conté alguna funció ràster obsoleta i s'eliminarà en una versió futura.",
+  "deprecatedBannerTextWithLink": "Aquesta plantilla de funció ràster conté alguna funció ràster obsoleta i s'eliminarà en una versió futura. <calcite-link target='_blank' href='${ docLink }'>Obteniu més informació</calcite-link> sobre com substituir una funció ràster obsoleta.",
+  "unsupportedBannerText": "Aquesta plantilla de funció ràster conté una o diverses funcions ràster que no s'admeten.",
+  "unsupportedBannerTextWithLink": "Aquesta plantilla de funció ràster conté una o diverses funcions ràster que no s'admeten. <calcite-link target='_blank' href='${ docLink }'>Obteniu més informació</calcite-link> sobre les funcions ràster que s'admeten."
+}

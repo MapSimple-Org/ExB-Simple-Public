@@ -1,0 +1,13 @@
+{
+  "addField": "Dodaj polje",
+  "deselectAll": "Odznači sve",
+  "done": "Gotovo",
+  "noFieldsAvailable": "${layerName} ne sadrži polja koja zadovoljavaju zahtjeve vrste podataka. Odaberite drugi sloj za nastavak.",
+  "noInputSelected": {
+    "withLayerInputLabel": "Nije odabran ulazni sloj. Odaberite sloj u ${layerInputLabel} za nastavak.",
+    "withoutLayerInputLabel": "Nije odabran ulazni sloj. Odaberite ulazni sloj za nastavak."
+  },
+  "noSearchResults": "Nisu pronađena podudarna polja.",
+  "selectAll": "Odaberi sve",
+  "summaryFieldsPopover": "Polja sažetaka"
+}

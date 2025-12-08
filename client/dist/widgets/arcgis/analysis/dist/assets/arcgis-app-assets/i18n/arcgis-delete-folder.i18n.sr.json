@@ -1,0 +1,22 @@
+{
+  "deleteFolder": "Izbriši fasciklu",
+  "delete": "Izbriši",
+  "permanentlyDelete": "Trajno obriši",
+  "back": "Nazad",
+  "cancel": "Otkaži",
+  "success": "Fascikla '${title}' je uspešno izbrisana",
+  "deleteProtectedItemsInFolder": "Fasciklu nije moguće izbrisati jer su neke od stavki zaštićene od brisanja ili imaju zavisne stavke.",
+  "message": {
+    "empty": "Želite li zaista da izbrišete fasciklu <strong style='font-weight: 500'>${title}</strong>?",
+    "recycleAll": "Da li ste sigurni da želite da izbrišete ovu fasciklu <strong style='font-weight: 500'>${title}</strong> i da pošaljete njen sadržaj u korpu za otpatke?",
+    "mustBeEmpty": "Fascikla <strong style='font-weight: 500'>${title}</strong> mora da se isprazni da bi se obrisala.",
+    "aFewCannotBeDeleted": "Nekoliko stavki se ne može izbrisati. Da li želite da nastavite sa brisanjem ostatka?",
+    "canBeEmptied": "Fascikla <strong style='font-weight: 500'>${title}</strong> mora da se isprazni da bi se obrisala. Da li želite da nastavite sa brisanjem tih stavki?",
+    "cannotBeDeleted": "Fascikla <strong style='font-weight: 500'>${title}</strong> se ne može izbrisati jer se njene stavke ne mogu izbrisati."
+  },
+  "disabledMessage": {
+    "single": "Postoji <span style='color:red'>1 stavka</span> u ovoj fascikli, <b>${label}</b>.<br/></br/>Da li ste sigurni da želite da izbrištet ovu fasciklu i tu stavku?",
+    "multiple": "Postoje/postoji <span style='color:red'>${number} stavke/stavki</span> u ovoj fascikli, <b>${label}</b>.<br/></br/>Da li ste sigurni da želite da izbrišete ovu fasciklu i sve te stavke?",
+    "unknown": "Želite li zaista da izbrišete ovu fasciklu, <b>${label}</b>?"
+  }
+}

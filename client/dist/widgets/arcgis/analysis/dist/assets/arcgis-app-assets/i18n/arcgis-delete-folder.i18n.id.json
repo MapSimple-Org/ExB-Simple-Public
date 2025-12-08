@@ -1,0 +1,22 @@
+{
+  "deleteFolder": "Hapus folder",
+  "delete": "Hapus",
+  "permanentlyDelete": "Hapus secara permanen",
+  "back": "Kembali",
+  "cancel": "Batalkan",
+  "success": "Folder '${title}' berhasil dihapus",
+  "deleteProtectedItemsInFolder": "Folder tidak dapat dihapus karena beberapa item dilindungi terhadap penghapusan atau memiliki item dependen.",
+  "message": {
+    "empty": "Apakah Anda ingin menghapus folder <strong style='font-weight: 500'>${title}</strong>?",
+    "recycleAll": "Apakah Anda yakin ingin menghapus folder <strong style='font-weight: 500'>${title}</strong> dan mengirim kontennya ke tempat sampah?",
+    "mustBeEmpty": "Folder <strong style='font-weight: 500'>${title}</strong> harus dikosongkan agar dapat dihapus.",
+    "aFewCannotBeDeleted": "Beberapa item tidak dapat dihapus. Anda ingin melanjutkan penghapusan sisanya?",
+    "canBeEmptied": "Folder <strong style='font-weight: 500'>${title}</strong> harus dikosongkan agar dapat dihapus. Anda ingin melanjutkan penghapusan item ini?",
+    "cannotBeDeleted": "Folder <strong style='font-weight: 500'>${title}</strong> tidak dapat dihapus karena item di dalamnya tidak dapat dihapus."
+  },
+  "disabledMessage": {
+    "single": "Ada <span style='color:red'>1 item</span> dalam folder ini, <b>${label}</b>.<br/></br/>Anda yakin ingin menghapus folder ini dan item di dalamnya?",
+    "multiple": "Ada <span style='color:red'>${number} item</span> dalam folder ini, <b>${label}</b>.<br/></br/>Anda yakin ingin menghapus folder ini dan semua item di dalamnya?",
+    "unknown": "Apakah Anda ingin menghapus folder ini, <b>${label}</b>?"
+  }
+}

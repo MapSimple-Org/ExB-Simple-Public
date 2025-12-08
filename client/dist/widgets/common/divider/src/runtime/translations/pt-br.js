@@ -1,0 +1,1 @@
+System.register([],function(e){return{execute:function(){e({_widgetLabel:"Divisor",quickStyleItem:"Estilo r\xe1pido {index}"})}}});

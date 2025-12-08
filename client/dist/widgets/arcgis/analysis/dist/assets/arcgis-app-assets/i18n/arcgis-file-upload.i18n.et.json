@@ -1,0 +1,16 @@
+{
+  "updateData": "Uuenda andmeid",
+  "cancel": "Loobu",
+  "editStyle": "Asendage kihi stiilifail oma arvutis oleva uuendatud versiooniga.",
+  "updatePackages": "Asendage ${type} uuendatud versiooniga oma arvutist. Üleslaaditud faili nimi peab olema sama, mis ${hostedLayerName}.",
+  "uploadStaticFiles": "Üleslaaditaval failil peab olema sama nimi nagu algsel failil ${fileName}",
+  "sameFileNameDescription": "Üleslaaditaval failil peab olema sama nimi ja väljanimed nagu algsel failil ${fileName}",
+  "updating": "Uuendamine...",
+  "error": "Tõrge",
+  "errors": {
+    "sameFileName": "Selle üksuse uuendamiseks peate laadima üles faili nimega ${fileName}.",
+    "invalidStyleFileExtension": "Sobimatu faililaiend. Üleslaaditud stiilifailil peab olema failinimelaiend .json.",
+    "errorWhileUpload": "Üksuse üleslaadimisel ilmnes tõrge.",
+    "errorUpdate": "Üksuse ülekirjutamisel ilmnes tõrge."
+  }
+}

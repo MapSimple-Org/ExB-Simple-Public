@@ -1,0 +1,13 @@
+{
+  "header": "Előnézet",
+  "description": "Az elemzés futtatása előtt az eredmény előnézete.",
+  "showPreview": "Előnézet megjelenítése",
+  "previewLayer": "${number} Réteg előnézetének megtekintése",
+  "update": "Frissítés",
+  "newPreview": "Új előnézet",
+  "previewPopup": "Az elemzési eredmények előnézetének engedélyezése a bemeneti paraméterek alapján.",
+  "previewError": "Ez az előnézeti réteg nem érhető el. Ellenőrizze a bemeneti paramétereket, és frissítse újra ezt az előnézeti réteget.",
+  "updatePopover": "A kiválasztott előnézeti réteg frissítése",
+  "createPopover": "Új előnézeti réteg létrehozása",
+  "maxPreview": "A megengedett előnézeti rétegek maximális száma: ${maxCount}"
+}

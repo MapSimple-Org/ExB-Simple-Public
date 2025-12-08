@@ -1,0 +1,1 @@
+System.register([],function(a){return{execute:function(){a({distance:"Jarak",area:"Luas",atLeastOne:"Paling sedikit satu alat harus dipilih",toolbar:"Bilah alat",disableSnapping:"Nonaktifkan penangkapan dalam peta 2D"})}}});

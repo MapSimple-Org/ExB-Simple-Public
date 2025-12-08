@@ -1,0 +1,1 @@
+{"componentLabel":"Verfolgungseingaben","labels":{"utilityNetwork":"Versorgungsnetz","traceConfiguration":"Verfolgungskonfiguration","traceInputs":"Verfolgungseingaben"},"errors":{"noMapError":"Keine Karte verfügbar","noUtilityNetworkError":"Keine Versorgungsnetze in der Karte gefunden","noTraceConfigurationError":"Keine benannten Verfolgungskonfigurationen verfügbar"}}

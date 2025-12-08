@@ -1,0 +1,1 @@
+System.register([],function(e){return{execute:function(){e({_widgetLabel:"Bot\xf3n",dynamicStyleExpressionsLabel:"Utilizar contenido de texto del bot\xf3n"})}}});

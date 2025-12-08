@@ -1,0 +1,13 @@
+{
+  "addField": "Dodaj pole",
+  "deselectAll": "Usuń wybór wszystkich",
+  "done": "Gotowe",
+  "noFieldsAvailable": "Warstwa ${layerName} nie zawiera pól, które spełniają wymagania dotyczące typu danych. Wybierz inną warstwę, aby kontynuować.",
+  "noInputSelected": {
+    "withLayerInputLabel": "Nie wybrano warstwy wejściowej. Wybierz warstwę w ${layerInputLabel}, aby kontynuować.",
+    "withoutLayerInputLabel": "Nie wybrano warstwy wejściowej. Wybierz warstwę wejściową, aby kontynuować."
+  },
+  "noSearchResults": "Nie znaleziono zgodnych pól.",
+  "selectAll": "Wybierz wszystkie",
+  "summaryFieldsPopover": "Pola podsumowania"
+}

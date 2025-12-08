@@ -1,0 +1,1 @@
+System.register([],function(e){return{execute:function(){e({_widgetLabel:"Izradi novo iskustvo",createNewApp:"Kreiraj novu aplikaciju",largeDevices:"Ure\u0111aji s velikim zaslonom",mediumDevices:"Ure\u0111aji sa srednje velikim zaslonom",smallDevices:"Ure\u0111aji s malim zaslonom"})}}});

@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>Narzędzie Interpoluj punkty umożliwia prognozowanie wartości w nowych lokalizacjach na podstawie pomiar&oacute;w punktowych. Narzędzie tworzy rastrowe dane wynikowe.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputPointFeatures">
+        <div>
+            <p>Warstwa punktowa zawierająca punkty, w kt&oacute;rych wartości zostały zmierzone.
+            </p>
+            <p class="toolPaneOnly">Liczba obiekt&oacute;w zależy od dodatkowych czynnik&oacute;w, takich jak kryteria filtrowania i zasięg analizy.
+            </p>
+        </div>
+    </div>
+    <div id="interpolateField">
+        <div>
+            <p>Pole liczbowe zawierające wartości, kt&oacute;re będą interpolowane.
+            </p>
+        </div>
+    </div>
+    <div id="optimizeFor">
+        <div>
+            <p>Określa, czy optymalizowana będzie szybkość czy dokładność. Wykonanie bardziej precyzyjnych prognoz zajmuje więcej czasu.
+            </p>
+            <p>Ten parametr modyfikuje wartości domyślne kilku innych parametr&oacute;w.
+            </p>
+        </div>
+    </div>
+    <div id="outputCellSize">
+        <div>
+            <p>Wielkość kom&oacute;rki i jednostka dla rastr&oacute;w wynikowych.
+            </p>
+        </div>
+    </div>
+    <div id="transformData">
+        <div>
+            <p>Określa, czy dane zostaną przekształcone. Interpolacja jest najbardziej dokładna dla danych o rozkładzie normalnym (krzywa dzwonowa).
+            </p> 
+        </div>
+    </div>
+    <div id="sizeOfLocalModels">
+        <div>
+            <p>Rozmiar lokalnych modeli interpolacji, kt&oacute;re zostaną połączone w celu utworzenia końcowej mapy prognozy.
+            </p>
+        </div>
+    </div>
+    <div id="numberOfNeighbors">
+        <div>
+            <p>Liczba używanych element&oacute;w sąsiadujących. Użycie większej liczby element&oacute;w sąsiadujących wygeneruje dokładniejsze wyniki, ale obliczenia tych wynik&oacute;w potrwają dłużej.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>Nazwa interpolowanej warstwy rastrowej, kt&oacute;ra zostanie utworzona i dodana do mapy.
+            </p>
+        </div>
+    </div>
+    <div id="outputPredictionError">
+        <div>
+            <p>Wybierz, czy także tworzyć opcjonalny raster błęd&oacute;w standardowych dla przewidywanych wartości.
+            </p>
+            <p>Jeśli opcja jest zaznaczona, wynikowy raster błęd&oacute;w standardowych będzie miał taką samą nazwę jak wartość w polu  <b>Nazwa rastra wynikowego</b>, ale z dodanym do niej słowem Errors (Błędy). Warstwa zostanie utworzona i dodana do mapy.
+            </p>
+        </div>
+    </div>
+    <div id="resultType">
+        <div>
+            <p>Typ danych wynikowych, kt&oacute;re zostaną utworzone. Danymi wynikowymi mogą być warstwy zobrazowań kafelkowych lub dynamiczne warstwy zobrazowań.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>Nazwa folderu na stronie  <b>Moje zasoby</b>, w kt&oacute;rym zostaną zapisane wyniki.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

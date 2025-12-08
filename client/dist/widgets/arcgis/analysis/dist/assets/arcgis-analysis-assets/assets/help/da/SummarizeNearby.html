@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>Summ&eacute;r i n&aelig;rheden-v&aelig;rkt&oslash;jet beregner statistik for objekter inden for en angivet afstand af andre objekter. Afstanden kan beregnes som en afstand i fugleflugtslinje eller en rejsetilstand.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="summaryLayer">
+        <div>
+            <p>Laget, der summeres inden for en afstand af n&aelig;rliggende lag.
+            </p>
+            <p class="toolPaneOnly">Antallet af objekter afh&aelig;nger af yderligere faktorer s&aring;som filtreringskriterier og analysens omfang.
+            </p>
+        </div>
+    </div>
+    <div id="sumNearbyLayer">
+        <div>
+            <p>Det punkt-, linje eller omr&aring;delag, der skal bruges som startpositioner, omkring hvilke gr&aelig;nseomr&aring;der oprettes til at opsummere objekter i n&aelig;rheden.
+            </p>
+            <p class="toolPaneOnly">Antallet af objekter afh&aelig;nger af yderligere faktorer s&aring;som filtreringskriterier og analysens omfang.
+            </p>
+        </div>
+    </div>
+    <div id="nearType">
+        <div>
+            
+            <p class="toolPaneOnly">Den metode, der bruges til at oprette gr&aelig;nseomr&aring;der. Metoden kan v&aelig;re en afstand i fugleflugtslinje eller en rejsetilstand.
+            </p> 
+            <p class="modelBuilderOnly">Den metode, der bruges til at oprette gr&aelig;nseomr&aring;der. I &oslash;jeblikket er fugleflugtdistancen den eneste metode, der underst&oslash;ttes for modeller.
+            </p>
+        </div>
+    </div>
+    <div id="distances">
+        <div>
+            <p>Den afstand eller tid, der bruges til at oprette gr&aelig;nseomr&aring;der. Hvis der tilf&oslash;jes flere v&aelig;rdier, bruges hver enkelt v&aelig;rdi til at beregne gr&aelig;nseomr&aring;derne for alle inputobjekter.
+            </p>
+        </div>
+    </div>
+    <div id="units">
+        <div>
+            <p>De enheder, der bruges til at angive afstande og tid.
+            </p>
+        </div>
+    </div>
+    <div id="returnBoundaries">
+        <div>
+            <p>Angiv, om resultatlaget er gr&aelig;nseomr&aring;der (markeret) eller den samme geometri som det angivne n&aelig;rliggende lag (ikke markeret).
+            </p>
+        </div>
+    </div>
+    <div id="sumShape">
+        <div>
+            <p>Angiver, om den samlede st&oslash;rrelse af de objekter, der er summeret i hvert gr&aelig;nseomr&aring;de, beregnes. For linjer beregnes den samlede l&aelig;ngde. For polygoner beregnes det samlede omr&aring;de.
+            </p>
+        </div>
+    </div>
+    <div id="shapeUnits">
+        <div>
+            <p>De enheder, der bruges til at beregne den samlede st&oslash;rrelse af alle summerede objekter.
+            </p>
+        </div>
+    </div>
+    <div id="summaryFields">
+        <div>
+            <p>De tal- eller datofelter fra inputlaget, der opsummeres, og den statistik, der beregnes for hvert felt.
+            </p>
+        </div>
+    </div>
+    <div id="groupByField">
+        <div>
+            <p>Feltet fra det inputlag, der bruges til at opdele data i forskellige grupper til statistiske beregninger.
+            </p>
+        </div>
+    </div>
+    <div id="minorityMajority">
+        <div>
+            <p>Angiver, hvorvidt grupper, der er minoritet (mindst dominerende) og majoritet (mest dominerende), skal beregnes inden for hvert summeringsomr&aring;de.
+            </p>
+        </div>
+    </div>
+    <div id="percentShape">
+        <div>
+            <p>Angiver, om procentdelen af summerede objekter, der h&oslash;rer til hver gruppe inden for hver gr&aelig;nse, beregnes.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>Navnet p&aring; det lag, der oprettes og f&oslash;jes til kortet.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>Navnet p&aring; mappen  <b>Mit indhold</b>, hvor resultaterne gemmes.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

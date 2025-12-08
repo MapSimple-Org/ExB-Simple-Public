@@ -1,0 +1,27 @@
+{
+  "hosted": "розміщений на хості",
+  "hostedView": "розміщений на хості, вид",
+  "hostedPhotos": "розміщені на хості, фото",
+  "hostedCollection": "розміщений на хості, колекція",
+  "hostedMultidimensional": "розміщений на хості, багатовимірний",
+  "hostedCollectionMultidimensional": "розміщений на хості, колекція, багатовимірний",
+  "collectionMultidimensional": "колекція, багатовимірний",
+  "multidimensional": "багатовимірний",
+  "collection": "колекція",
+  "photoLocations": "фото",
+  "locatorView": "вид",
+  "utilityNetwork": "інженерно-комунікаційні мережі",
+  "Integrated Mesh": "інтегрована модель mesh",
+  "3D Object": "3D-обʼєкт",
+  "Point": "точка",
+  "Point Cloud": "хмара точок",
+  "Building Scene Layer": "шар сцени будівель",
+  "Voxel Scene Layer": "шар сцени вокселів",
+  "dataStore": {
+    "bigdata": "спільний ресурс файлу великих даних",
+    "cloud": "хмара",
+    "cloudStorage": "хмарне сховище",
+    "database": "база даних",
+    "folder": "папка"
+  }
+}

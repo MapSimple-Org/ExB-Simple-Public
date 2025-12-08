@@ -1,0 +1,13 @@
+{
+  "header": "Visualització prèvia",
+  "description": "Mostra una visualització prèvia del resultat abans d'executar l'anàlisi.",
+  "showPreview": "Mostra la visualització prèvia",
+  "previewLayer": "Visualització prèvia de la capa ${number}",
+  "update": "Actualitza",
+  "newPreview": "Visualització prèvia nova",
+  "previewPopup": "Habiliteu la visualització prèvia dels resultats de l'anàlisi en funció dels paràmetres d'entrada.",
+  "previewError": "Aquesta capa de visualització prèvia no està disponible. Comproveu els paràmetres d'entada i torneu a actualitzar aquesta capa de visualització prèvia.",
+  "updatePopover": "Actualitza la capa de visualització prèvia seleccionada",
+  "createPopover": "Crea una capa de visualització prèvia nova",
+  "maxPreview": "Nombre màxim de capes de visualització prèvia permeses: ${maxCount}"
+}

@@ -1,0 +1,22 @@
+{
+  "deleteFolder": "Ștergere folder",
+  "delete": "Ștergere",
+  "permanentlyDelete": "Ștergere definitivă",
+  "back": "Înapoi",
+  "cancel": "Anulare",
+  "success": "Folderul „${title}” a fost șters cu succes.",
+  "deleteProtectedItemsInFolder": "Imposibil de șters folderul, unele elemente sunt protejate la ștergere sau au elemente dependente.",
+  "message": {
+    "empty": "Sigur doriți să ștergeți folderul <strong style='font-weight: 500'>${title}</strong>?",
+    "recycleAll": "Folderul <strong style='font-weight: 500'>${title}</strong> nu poate fi șters pentru că elementele sale nu pot fi șterse.",
+    "mustBeEmpty": "Folderul <strong style='font-weight: 500'>${title}</strong> trebuie să fie golit pentru a fi șters.",
+    "aFewCannotBeDeleted": "Câteva elemente nu pot fi șterse. Doriți să continuați cu ștergerea restului?",
+    "canBeEmptied": "Folderul <strong style='font-weight: 500'>${title}</strong> trebuie să fie golit pentru a fi șters. Doriți să continuați cu ștergerea acestor elemente?",
+    "cannotBeDeleted": "Folderul <strong style='font-weight: 500'>${title}</strong> nu poate fi șters pentru că elementele sale nu pot fi șterse."
+  },
+  "disabledMessage": {
+    "single": "Există <span style='color:red'>1 element</span> în acest folder, <b>${label}</b>.<br/></br/>Sigur doriți să ștergeți acest folder și elementul său?",
+    "multiple": "Există <span style='color:red'>${number} elemente</span> în acest folder, <b>${label}</b>.<br/></br/>Sigur doriți să ștergeți acest folder și toate elementele sale?",
+    "unknown": "Sigur doriți să ștergeți acest folder, <b>${label}</b>?"
+  }
+}

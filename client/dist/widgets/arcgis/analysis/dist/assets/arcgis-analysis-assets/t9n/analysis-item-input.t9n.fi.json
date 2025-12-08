@@ -1,0 +1,15 @@
+{
+  "addDataStore": "Lisää aineistosäilö",
+  "addFile": "Lisää tiedosto",
+  "addServiceConnection": "Lisää yhteys",
+  "itemNotFound": "Kohdetta ei ole, tai se ei ole käytettävissä.",
+  "itemPermissionDenied": "Sinulla ei ole tämän kohteen käyttöoikeuksia.",
+  "previewDetails": "Esikatsele tietoja",
+  "queryModelArgsErrMsg": "Mallin argumenttien kysely epäonnistui.",
+  "queryModelArgsMsg": "Suoritetaan mallin argumenttien kyselyä...",
+  "removeItem": "Poista kohde",
+  "replaceItem": "Korvaa kohde",
+  "requiredInputMessage": "Tämä parametri on pakollinen.",
+  "selectItem": "Valitse kohde",
+  "viewDetails": "Näytä tiedot"
+}

@@ -1,0 +1,12 @@
+{
+  "apiCredentialType": "ประเภทข้อมูลประจำตัว: คีย์ API",
+  "oauthCredentialType": "ประเภทข้อมูลประจำตัว: OAuth 2.0",
+  "itemAccess": "การเข้าถึงรายการ",
+  "page": "หน้า: ${page}",
+  "currentPage": "หน้าปัจจุบัน: ${page}",
+  "privileges": "สิทธิ์",
+  "itemDetails": "รายละเอียดข้อมูล",
+  "settings": "การตั้งค่า",
+  "serviceScope": "ขอบเขตบริการ",
+  "summary": "สรุป"
+}

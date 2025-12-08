@@ -1,0 +1,8 @@
+{
+  "itemProperties": {
+    "description": "Rezultatas sugeneruotas paleidus filtravimo pagal atributus analizės įrankį.",
+    "snippet": "Rezultatas sugeneruotas filtruojant pagal atributus"
+  },
+  "noLayerDisabledTooltip": "Pasirinkite tinkamą įvesties duomenų rinkinį.",
+  "queryCriteriaGroupLabel": "Užklausos kriterijai"
+}

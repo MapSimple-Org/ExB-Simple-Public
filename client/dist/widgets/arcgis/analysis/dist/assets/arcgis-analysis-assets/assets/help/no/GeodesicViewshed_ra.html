@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>Verkt&oslash;yet Geodetisk synsfelt idenfiserer lokasjonene p&aring; en rasterflate som er synlige for angitte observat&oslash;rlokasjoner.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputElevationSurface">
+        <div>
+            <p>H&oslash;yderasteret som synsfeltet beregnes p&aring;.
+            </p>
+        </div>
+    </div>
+    <div id="inputObserverFeatures">
+        <div>
+            <p>Observat&oslash;rlokasjonene som synsfeltet skal beregnes for.
+            </p>
+            <p class="toolPaneOnly">Antallet geoobjekter avhenger av flere faktorer, blant annet filtreringskriterier og analysens utstrekning.
+            </p>
+        </div>
+    </div>
+    <div id="optimizeFor">
+        <div>
+            <p>Optimaliserer synsfeltberegningen basert p&aring; enten hastighet eller n&oslash;yaktighet.
+            </p>
+        </div>
+    </div>
+    <div id="verticalError">
+        <div>
+            <p>Mengden usikkerhet i h&oslash;ydeverdien i verdien  <b>Legg inn h&oslash;ydeflate</b>.
+            </p>
+        </div>
+    </div>
+    <div id="refractivityCoefficient">
+        <div>
+            <p>Koeffisienten for refraksjonen av synlig lys i luften.
+            </p>
+        </div>
+    </div>
+    <div id="maximumViewingDistance">
+        <div>
+            <p>Maksimum betraktningsavstand for synsfeltberegningen.
+            </p>
+            <p>Avstanden kan angis av en verdi og enheter eller fra et felt i verdien  <b>Legg inn observat&oslash;rpunkt- eller linjegeoobjekter</b>.
+            </p>
+        </div>
+    </div>
+    <div id="minimumViewingDistance">
+        <div>
+            <p>Minimum betraktningsavstand for synsfeltberegningen.
+            </p>
+            <p>Avstanden kan angis av en verdi og enheter eller fra et felt i verdien  <b>Legg inn observat&oslash;rpunkt- eller linjegeoobjekter</b>.
+            </p>
+        </div>
+    </div>
+    <div id="viewingDistancesAre3D">
+        <div>
+            <p>Angir om maksimum og minimum betraktningsavstand skal m&aring;les i 3D-avstand eller 2D-avstand.
+            </p>
+            <p>N&aring;r alternativet ikke er valgt, behandles betraktningsavstander som 2D euklidske avstander. Hvis det er avmerket blir visningsavstandene behandlet som 3D-avstander.
+            </p>
+        </div>
+    </div>
+    <div id="observersElevation">
+        <div>
+            <p>Overflateh&oslash;yden for observat&oslash;rlokasjonene.
+            </p>
+            <p>H&oslash;yden kan angis av en verdi og enheter eller fra et felt i verdien  <b>Legg inn observat&oslash;rpunkt- eller linjegeoobjekter</b>.
+            </p>
+        </div>
+    </div>
+    <div id="observersHeight">
+        <div>
+            <p>Observat&oslash;renes h&oslash;yde over bakken.
+            </p>
+            <p>H&oslash;yden kan angis av en verdi og enheter eller fra et felt i verdien  <b>Legg inn observat&oslash;rpunkt- eller linjegeoobjekter</b>.
+            </p>
+        </div>
+    </div>
+    <div id="targetHeight">
+        <div>
+            <p>H&oslash;yden p&aring; m&aring;lene p&aring; bakken.
+            </p>
+            <p>H&oslash;yden kan angis av en verdi og enheter eller fra et felt i verdien  <b>Legg inn observat&oslash;rpunkt- eller linjegeoobjekter</b>.
+            </p>
+        </div>
+    </div>
+    <div id="horizontalStartAngle">
+        <div>
+            <p>Startvinkelen for det vannrette skanneomr&aring;det.
+            </p>
+            <p>Vinkelen kan angis av en verdi og en verdi fra 0 til 360 eller fra et felt i verdien  <b>Legg inn observat&oslash;rpunkt- eller linjegeoobjekter</b>.
+            </p>
+        </div>
+    </div>
+    <div id="horizontalEndAngle">
+        <div>
+            <p>Sluttvinkelen for det vannrette skanneomr&aring;det.
+            </p>
+            <p>Vinkelen kan angis av en verdi og en verdi fra 0 til 360 eller fra et felt i verdien  <b>Legg inn observat&oslash;rpunkt- eller linjegeoobjekter</b>.
+            </p>
+        </div>
+    </div>
+    <div id="verticalUpperAngle">
+        <div>
+            <p>Den &oslash;vre vertikale vinkelgrensen for skanningen i forhold til det horisontale planet.
+            </p>
+            <p>Vinkelen kan angis av en verdi og en verdi fra &ndash;90 til 90 eller fra et felt i verdien  <b>Legg inn observat&oslash;rpunkt- eller linjegeoobjekter</b>.
+            </p>
+        </div>
+    </div>
+    <div id="verticalLowerAngle">
+        <div>
+            <p>Den nedre vertikale vinkelgrensen for skanningen i forhold til det horisontale planet.
+            </p>
+            <p>Vinkelen kan angis av en verdi og en verdi fra &ndash;90 til 90 eller fra et felt i verdien  <b>Legg inn observat&oslash;rpunkt- eller linjegeoobjekter</b>.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>Navnet p&aring; synsfeltrasterlaget som opprettes og legges til kartet. Laget inneholder de synlige omr&aring;dene som observat&oslash;rene kan se, og celleverdiene representerer antallet observat&oslash;rer som kan se cellene.
+            </p>
+        </div>
+    </div>
+    <div id="outputAboveGroundLevelRasterName">
+        <div>
+            <p>Navnet p&aring; rasterlaget for over bakkeniv&aring; som opprettes og legges til kartet.
+            </p>
+        </div>
+    </div>
+    <div id="resultType">
+        <div>
+            <p>Typen utdata som blir opprettet. Utdata kan v&aelig;re et flisinndelt bildelag eller et dynamisk bildelag.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>Navnet p&aring; mappen i  <b>Mitt innhold</b> der resultatet blir lagret.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

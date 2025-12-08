@@ -1,0 +1,177 @@
+{
+  "memberBrowser": {
+    "filters": "عوامل تصفية",
+    "pageRange": "${start}-${end}، الإجمالي: ${total}",
+    "pageRangeAria": "${start}ـ${end}، إجمالي الأعضاء: ${total}",
+    "selectedMembers": "الأعضاء المُحددون",
+    "noSelectedMembers": "لم يتم تحديد أي أعضاء حاليًا",
+    "noUsersFound": "لم يتم العثور على أي مستخدمين يلبون المعايير الخاصة بك. جرّب مسح بعض عوامل التصفية أو تغيير بحثك لإظهار مزيد من المستخدمين.",
+    "enterTermExternal": "أدخل مصطلح بحث للعثور على المستخدمين في جميع أنحاء ArcGIS Online",
+    "noUsers": "لا يوجد مستخدمين متاحين",
+    "coordinator": "مُنسق التعاون"
+  },
+  "search": {
+    "searchMembers": "البحث عن أعضاء"
+  },
+  "filterUserTypes": {
+    "title": "نوع المستخدم",
+    "label": "نوع المستخدم: ${name}",
+    "loading": "جارِ تحميل أنواع المستخدمين..."
+  },
+  "filterRoles": {
+    "title": "الدور",
+    "label": "الدور: ${name}",
+    "loading": "جارٍ تحميل الأدوار...",
+    "searchRoles": "البحث عن الأدوار"
+  },
+  "filterOrgGroups": {
+    "title": "مجموعات المؤسسة",
+    "label": "المجموعة: ${name}",
+    "loading": "جارِ تحميل مجموعات المؤسسة...",
+    "searchGroups": "البحث في المجموعات",
+    "noGroupsFound": "لم يتم العثور على أي مجموعات. حاول تغيير مصطلح البحث لعرض المزيد من المجموعات."
+  },
+  "filterMyGroups": {
+    "title": "المجموعات",
+    "label": "المجموعة: ${name}",
+    "loading": "جار تحميل مجموعاتي...",
+    "searchMyGroups": "البحث عن مجموعاتي"
+  },
+  "filterCategories": {
+    "title": "الفئات",
+    "label": "الفئة: ${name}",
+    "loading": "جارٍ تحميل الفئات...",
+    "noCategoriesTitle": "لا توجد فئات أعضاء حتى الآن",
+    "noCategories": "تسمح فئات الأعضاء للمسؤولين بتنظيم أعضائها في دليل لتبسيط الإجراءات الإدارية على الأعضاء. يمكن لأعضاء المؤسسة أيضًا استخدام هذا الدليل للعثور على أعضاء آخرين.",
+    "setupCategories": "إعداد فئات الأعضاء",
+    "configureCategories": "تكوين الفئات",
+    "noCategoriesAssigned": "لم يتم تعيين فئات"
+  },
+  "filterPartnerCollabs": {
+    "title": "أنشطة التعاون المشترك",
+    "label": "أنشطة التعاون المشترك: ${name}",
+    "loading": "جارٍ تحميل أنشطة التعاون المشترك...",
+    "coordinatorsOnly": "مُنسقو التعاون فقط",
+    "coordinatorsDescription": "منسقو التعاون هم ممثلون من أنشطة التعاون المشترك الذين يمكن إضافتهم إلى مجموعة دون الحاجة إلى تأكيد.",
+    "coordinatorsInfoLabel": "مزيد من المعلومات عن مُنسقي التعاون"
+  },
+  "filterSearchSwitch": {
+    "searchAll": "البحث عن كل أعضاء مؤسسة ArcGIS Online",
+    "searchPartners": "تضمين هذا وأعضاء المؤسسات الشريكة"
+  },
+  "table": {
+    "caption": "نتائج العنصر وعناوين الأعمدة ذات الأزرار قابلة للفرز.",
+    "selectAll": "تحديد الكل",
+    "selection": "تحديد",
+    "headers": {
+      "name": "الاسم",
+      "membertype": "دور المجموعة",
+      "affiliation": "التبعية",
+      "joined": "منضم",
+      "credits": "الاعتمادات المتبقية",
+      "remainingCredits": "إجمالي الاعتمادات المتبقية ${num}",
+      "lastlogin": "أخر تسجيل دخول",
+      "usertype": "نوع المستخدم",
+      "role": "الدور",
+      "mfaenabled": "مصادقة متعددة العوامل"
+    }
+  },
+  "tableRow": {
+    "moreOptions": "مزيد من الخيارات",
+    "groupManager": "مدير المجموعة",
+    "owner": "المالك",
+    "member": "عضو",
+    "myOrg": "المنظمة",
+    "other": "أخرى",
+    "coordinator": "مُنسق التعاون",
+    "noLimit": "لا يوجد حد",
+    "creditsNumber": "${remain} من ${total}",
+    "today": "اليوم",
+    "yesterday": "أمس",
+    "never": "أبدًا",
+    "role": "الدور",
+    "memberIsCoordinator": "هذا العضو هو منسق التعاون",
+    "rolesForCoordinator": "يمكن لمنسقي التعاون الاضطلاع بأدوار المسؤول أو المُيسّر فقط.",
+    "memberIsContact": "هذا العضو هو جهة اتصال إدارية",
+    "removeFromContact": "إذا كنت ترغب في تغيير دور هذا العضو، فيجب عليك أولاً إزالته من ${linkStart}قائمة جهات الاتصال الإدارية${linkEnd}."
+  },
+  "listCard": {
+    "moreOptions": "مزيد من الخيارات",
+    "lastLoggedIn": "آخر تسجيل دخول في ${value}",
+    "today": "اليوم",
+    "yesterday": "أمس",
+    "hasNotLoggedIn": "لم يتم تسجيل الدخول بعد",
+    "neverSignedInTooltip": "هذا العضو لم يسجل الدخول إلى حسابه الذي تم إنشاؤه في ${date}",
+    "userType": "نوع المستخدم",
+    "role": "الدور",
+    "creditsRemaining": "الاعتمادات المتبقية",
+    "noLimit": "لا يوجد حد",
+    "creditsNumber": "${remain} من ${total}",
+    "addonLicenses": "التراخيص الإضافية",
+    "configureLicenses": "تكوين تراخيص",
+    "groups": "المجموعات",
+    "configureGroups": "تكوين مجموعات",
+    "viewGroups": "عرض المجموعات"
+  },
+  "myOrg": {
+    "myOrgView": "عرض مؤسستي"
+  },
+  "filterGroupRole": {
+    "title": "دور المجموعة",
+    "label": "دور المجموعة: ${role}",
+    "admins": "المالك ومدراء المجموعة",
+    "member": "عضو"
+  },
+  "filterAffiliation": {
+    "title": "التبعية",
+    "label": "التبعية: ${name}",
+    "myOrg": "المنظمة",
+    "other": "أخرى"
+  },
+  "filterCreditsRemain": {
+    "title": "الاعتمادات المتبقية",
+    "noLimit": "لا يوجد حد",
+    "lessThan": "أقل من",
+    "credits": "الأرصدة",
+    "labelNoLimit": "الاعتمادات: لا يوجد حد",
+    "labelLess": "الاعتمادات: أقل من ${value}",
+    "invalidValue": "القيمة التي تم إدخالها غير صالحة."
+  },
+  "filterEmailVerification": {
+    "title": "حالة التحقق من البريد الإلكتروني",
+    "unverified": "عناوين البريد الإلكتروني التي لم يتم التحقق منها",
+    "verified": "عناوين البريد الإلكتروني التي تم التحقق منها",
+    "label": "حالة التحقق من البريد الإلكتروني: ${status}"
+  },
+  "filterLoginType": {
+    "title": "نوع تسجيل الدخول",
+    "label": "نوع تسجيل الدخول: ${type}",
+    "social": "اجتماعي"
+  },
+  "filterApp": {
+    "title": "التطبيق",
+    "label": "التطبيق: ${app}"
+  },
+  "filterMFA": {
+    "title": "مصادقة متعددة العوامل",
+    "enabled": "تم التمكين",
+    "disabled": "معطل",
+    "label": "المصادقة متعددة العوامل: ${status}"
+  },
+  "roles": {
+    "user": "مستخدم",
+    "publisher": "الناشر",
+    "admin": "المسؤول",
+    "viewer": "العارض",
+    "editor": "محرر البيانات",
+    "facilitator": "المُيسّر"
+  },
+  "view": {
+    "view": "عرض",
+    "list": "قائمة",
+    "table": "جدول"
+  },
+  "assignedLicenses": "إظهار فقط الأعضاء الذين تم تعيين هذا الترخيص لهم",
+  "onlyDoubleAssigned": "إظهار الأعضاء الذين تم تعيين هذا الترخيص لهم مرتين فقط",
+  "maxSelected": "يمكن تحديد ${number} من الأعضاء فقط في كل مرة."
+}

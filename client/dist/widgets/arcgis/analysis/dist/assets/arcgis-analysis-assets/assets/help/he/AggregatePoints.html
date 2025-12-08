@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html dir="rtl">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>הכלי 'קבץ נקודות' מחשב ספירת נקודות ונתונים סטטיסטיים אחרים בתוך תאים או פוליגונים שצוינו.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="pointLayer">
+        <div>
+            <p>שכבת הנקודות שתקובץ לתוך אזורי הסיכום.
+            </p>
+            <p class="toolPaneOnly">מספר היישויות תלוי בגורמים נוספים כגון קריטריונים לסינון ותיחום הניתוח.
+            </p>
+        </div>
+    </div>
+    <div id="polygonLayer">
+        <div>
+            <p>שכבת הפוליגון שבה הנקודות יצטברו.
+            </p>
+            <p class="toolPaneOnly">מספר היישויות תלוי בגורמים נוספים כגון קריטריונים לסינון ותיחום הניתוח.
+            </p>
+        </div>
+    </div>
+    <div id="binType">
+        <div>
+            <p>סוג ישויות האיחוד שבתוכן תתבצע צבירה של נקודות הקלט. זו יכולה להיות שכבת פוליגון או גריד שיבוץ בפסיפס של תאים מרובעים או משושים שמופקים בעת הרצת הכלי.
+            </p>
+        </div>
+    </div>
+    <div id="binSize">
+        <div>
+            <p>גודל התאים שנוצרים. עבור תאים מרובעים, המספר והיחידות שצוינו קובעים את הגובה והאורך של הריבוע. עבור תאים משושים, המספר והיחידות שצוינו קובעים את המרחק בין צדדים מקבילים.
+            </p>
+        </div>
+    </div>
+    <div id="binSizeUnit">
+        <div>
+            <p>היחידות אשר ישמשו לציון גודל התא.
+            </p>
+        </div>
+    </div>
+    <div id="keepBoundariesWithNoPoints">
+        <div>
+            <p>מציין האם היישויות שאין בהן נקודות יופיעו בשכבת התוצאה. כאשר אפשרות זו לא מסומנת, ישויות ללא נקודות לא יופיעו בתוצאה. כאשר אפשרות זו מסומנת, ישויות ללא נקודות יופיעו בתוצאה.
+            </p>
+        </div>
+    </div>
+    <div id="summaryFields">
+        <div>
+            <p>שדות התאריך או המספר משכבת הקלט לסיכום, והסטטיסטיקה שתחושב עבור כל שדה.
+            </p>
+        </div>
+    </div>
+    <div id="groupByField">
+        <div>
+            <p>השדה משכבת הקלט אשר ישמש להפרדת הנתונים לקבוצות נבדלות עבור חישובים סטטיסטיים.
+            </p>
+        </div>
+    </div>
+    <div id="minorityMajority">
+        <div>
+            <p>מציין האם לחשב את קבוצות המיעוט (הכי פחות דומיננטיות) והרוב (הכי דומיננטיות) בתוך כל אזור סיכום.
+            </p>
+        </div>
+    </div>
+    <div id="percentPoints">
+        <div>
+            <p>מציין האם האחוז של נקודות השייכות לכל קבוצה בתוך כל אזור סיכום יחושב.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>שם השכבה שתיווצר ותתווסף למפה.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>שם התיקייה  <b>בתוכן שלי</b> שבה התוצאה תישמר.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

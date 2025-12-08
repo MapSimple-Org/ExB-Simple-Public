@@ -1,0 +1,11 @@
+{
+  "addBtn": "Gotovo",
+  "cancelBtn": "Odustani",
+  "header": "Odaberi varijablu",
+  "multipleVariables": "Viševrijednosne varijable",
+  "noFound": "Nisu pronađene kompatibilne varijable",
+  "search": "Pretraži varijable",
+  "singleVariables": "Jednovrijednosne varijable",
+  "variableLabel": "Oznaka: <span style='font-weight: var(--calcite-font-weight-normal)'>${val}</span>",
+  "variableVal": "Vrijednost: <span style='font-weight: var(--calcite-font-weight-normal)'>${val}</span>"
+}

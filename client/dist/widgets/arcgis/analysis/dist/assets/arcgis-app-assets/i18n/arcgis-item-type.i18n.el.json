@@ -1,0 +1,27 @@
+{
+  "hosted": "hosted",
+  "hostedView": "hosted, view",
+  "hostedPhotos": "hosted, φωτογραφίες",
+  "hostedCollection": "hosted, συλλογή",
+  "hostedMultidimensional": "hosted, πολυδιάστατος",
+  "hostedCollectionMultidimensional": "hosted, συλλογή, πολυδιάστατος",
+  "collectionMultidimensional": "συλλογή, πολυδιάστατος",
+  "multidimensional": "πολυδιάστατος",
+  "collection": "συλλογή",
+  "photoLocations": "φωτογραφίες",
+  "locatorView": "προβολή",
+  "utilityNetwork": "δίκτυο υπηρεσιών κοινής ωφέλειας",
+  "Integrated Mesh": "Ενσωματωμένο πλέγμα",
+  "3D Object": "3D αντικείμενο",
+  "Point": "σημείο",
+  "Point Cloud": "νέφος σημείων",
+  "Building Scene Layer": "θεματικό επίπεδο προβολής 3D κτιρίων",
+  "Voxel Scene Layer": "Θεματικό επίπεδο 3D προβολής με ογκοεικονοστοιχείο (voxel)",
+  "dataStore": {
+    "bigdata": "Κοινοποίηση αρχείων Big Data",
+    "cloud": "cloud",
+    "cloudStorage": "Cloud storage",
+    "database": "βάση δεδομένων",
+    "folder": "φάκελος"
+  }
+}

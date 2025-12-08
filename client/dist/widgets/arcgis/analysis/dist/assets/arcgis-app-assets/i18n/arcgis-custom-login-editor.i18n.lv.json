@@ -1,0 +1,85 @@
+{
+  "heading": "Izveidot pieteikšanās kategoriju",
+  "select": "Atlasīt pieteikšanās kategoriju, no kuras sākt",
+  "selectCustomSignIn": "Atlasīt pieteikšanās kategoriju",
+  "orgDefaults": "Organizācijas noklusējumi",
+  "createNew": "Izveidot jaunu",
+  "name": "Nosaukums",
+  "description": "Apraksts",
+  "enterName": "Ievadiet kategorijas nosaukumu",
+  "enterDescription": "Ievadiet kategorijas aprakstu",
+  "enterTitle": "Ievadiet šīs pieteikšanās nosaukumu",
+  "showOnTriage": "Iespējot pieteikšanās kategoriju",
+  "showOnTriageDescription": "Jūsu kategorijas apraksts tiks rādīts tikai kategoriju izvēles lapā, ja būs iespējotas divas vai vairāk kategorijas.",
+  "socialProviders": "Sociālo tīklu pieteikšanās nodrošinātāji",
+  "authenticationProviders": "Autentifikācijas metodes",
+  "errorLabel": "Pielāgotas pieteikšanās kategorijas kļūda",
+  "preview": "Priekšskatījums",
+  "restrictions": "Šajā kategorijā var mainīt tikai nosaukumu un aprakstu. Visas pārējās opcijas tiek pārņemtas no organizācijas iestatījumiem.",
+  "loginNotAvailable": "Šī pierakstīšanās metode ir atslēgta Jūsu organizācijā un netiks rādīta lietotājiem.",
+  "buttons": {
+    "editCategory": "Saglabāt kategoriju",
+    "next": "Nākošais",
+    "back": "Atpakaļ",
+    "createCategory": "Izveidot kategoriju"
+  },
+  "errors": {
+    "nameRequired": "Visām pieteikšanās kategorijām ir jānorāda virsraksts.",
+    "authenticationMethodsRequired": "Ir nepieciešama vismaz viena pieteikšanās metode.",
+    "socialProviderRequired": "Ir nepieciešams vismaz viens sociālās pieteikšanās nodrošinātājs."
+  },
+  "steps": {
+    "1": {
+      "title": "Izvēlieties, kā sākt",
+      "description": "Jūs varat sākt ar savas organizācijas noklusējuma pieteikšanos, rediģēt esošu pieteikšanās kategoriju vai izveidot jaunu pieteikšanās kategoriju."
+    },
+    "2": {
+      "title": "Virsrakstu un aprakstu",
+      "description": "Ievadiet savas pieteikšanās kategorijas virsrakstu un aprakstu."
+    },
+    "3": {
+      "title": "Pieteikšanās veidi",
+      "description": "Pielāgojiet un sakārtojiet pieteikšanās veidus, kas tiek rādīti šajā pieteikšanās kategorijā."
+    }
+  },
+  "createAccount": {
+    "label": "Izveidot konta saiti",
+    "description": "Atļaut jauna ArcGIS konta izveidi šajā organizācijā."
+  },
+  "switchOrganization": {
+    "label": "Mainīt organizācijas saiti",
+    "description": "Rādīt saiti, kas ļauj lietotājiem pieteikties citā organizācijā."
+  },
+  "authenticationMethods": {
+    "arcgis": {
+      "label": "ArcGIS pieteikšanās",
+      "description": "Ļaujiet lietotājiem pierakstīties, izmantojot ArcGIS Online pieteikšanās datus.",
+      "required": "ArcGIS pierakstīšanās metodei ir nepieciešams nosaukums."
+    },
+    "saml": {
+      "label": "SAML pieteikšanās",
+      "description": "Atļaut lietotājiem pieteikties ar savu SAML kontu.",
+      "required": "SAML pierakstīšanās metodei ir nepieciešams nosaukums."
+    },
+    "oidc": {
+      "label": "OIDC pieteikšanās",
+      "description": "Atļaut lietotājiem pieteikties ar savu OIDC kontu.",
+      "required": "OIDC pierakstīšanās metodei ir nepieciešams nosaukums."
+    },
+    "social": {
+      "label": "Pieteikšanās ar sociālo tīklu kontiem",
+      "description": "Atļaut dalībniekiem pierakstīties Jūsu organizācijā, izmantojot pieteikšanās datus no šādām sociālo tīklu vietnēm.",
+      "github": "GitHub",
+      "facebook": "Facebook",
+      "google": "Google",
+      "apple": "Apple",
+      "required": "Sociālo tīklu pierakstīšanās metodei ir nepieciešams nosaukums."
+    }
+  },
+  "confirmLeave": {
+    "title": "Nesaglabātas izmaiņas",
+    "message": "Jums ir nesaglabātas izmaiņas. Vai tiešām vēlaties aizvērt šo lapu?",
+    "remain": "Palikt lapā",
+    "leave": "Aizvērt nesaglabājot"
+  }
+}

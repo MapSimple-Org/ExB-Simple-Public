@@ -1,0 +1,137 @@
+{
+  "next": "Suivant",
+  "addField": "Ajouter un champ",
+  "selectDataType": "Sélectionner le type de données à stocker dans le champ",
+  "addGlobalIDNotice": "Le champ est automatiquement rempli pour les données existantes de la couche ou table. Une fois ajouté, ce champ ne peut être ni modifié, ni supprimé",
+  "fieldName": "Nom du champ",
+  "displayName": "Nom d’affichage",
+  "length": "Longueur",
+  "defaultValue": "Valeur par défaut (facultatif)",
+  "fieldTypes": "Types de champ",
+  "fieldValueType": "Type de valeur du champ (facultatif)",
+  "fieldDescription": "Description du champ (facultatif)",
+  "allowNullValues": "Autoriser les valeurs nulles",
+  "valueRequiredError": "Cette valeur est obligatoire",
+  "fieldAdded": "Le champ a été ajouté",
+  "newFieldTypeNotice": "Ce type de champ n’est peut-être pas entièrement pris en charge dans certains clients.",
+  "addingField": "Ajout du champ…",
+  "syncEnabled": "Certains types de champ ne peuvent pas être ajoutés car la synchronisation est activée sur la couche.",
+  "newFeature": "Nouvelle entité",
+  "fieldAdditionUnsuccessful": "Échec de l’ajout du champ",
+  "error": "Erreur",
+  "noFieldTypeSelected": "Aucun type de champ sélectionné",
+  "nullFieldTypeError": "Vous devez sélectionner un type de champ pour continuer.",
+  "fieldNameCharacterNotice": "Les noms de champ de plus de 31 caractères ne sont pas compatibles avec une utilisation hors connexion.",
+  "suggestedHeader": "Suggéré",
+  "otherHeader": "Autre",
+  "provideDescription": "Indiquez une description des informations que va contenir le champ",
+  "nullableTooltipInfo": "Ce paramètre n’est pas modifiable si la couche contient déjà des données.",
+  "tooltipInfo": {
+    "globalIDExists": "Il existe déjà un champ GlobalID sur ce service. Les couches ou tables ne peuvent comporter qu’un seul champ GlobalID.",
+    "enterpriseTimestampOffset": "ArcGIS Enterprise ne prend pas en charge les champs Décalage de l’horodatage dans les couches d’entités hébergées."
+  },
+  "text": {
+    "title": "Texte",
+    "description": "Valeurs contenant des caractères alphanumériques ou spéciaux.",
+    "types": {
+      "esriFieldTypeString": {
+        "title": "Chaîne",
+        "description": "Stockez un ensemble de caractères alphanumériques d’une longueur spécifique."
+      }
+    }
+  },
+  "numbers": {
+    "title": "Nombres",
+    "description": "Valeurs contenant des informations numériques.",
+    "types": {
+      "esriFieldTypeDouble": {
+        "title": "Double",
+        "description": "Stockez des nombres comportant des décimales."
+      },
+      "esriFieldTypeInteger": {
+        "title": "Entier",
+        "description": "Stockez des nombres entiers allant de ${lowerIntegerRange} à ${upperIntegerRange}."
+      },
+      "esriFieldTypeBigInteger": {
+        "title": "Entier très grand",
+        "description": "Stockez des nombres entiers allant de -(2${startSup}53${endSup}-1) à 2${startSup}53${endSup}-1. Utilisez ce type de champ pour les nombres se trouvant en dehors de la plage prise en charge par les champs de type entier."
+      }
+    }
+  },
+  "dates": {
+    "title": "Dates",
+    "description": "Valeurs contenant des informations temporelles.",
+    "types": {
+      "esriFieldTypeDate": {
+        "title": "Date",
+        "description": "Stockez des valeurs de date et d’heure."
+      },
+      "esriFieldTypeDateOnly": {
+        "title": "Date uniquement",
+        "description": "Stockez des valeurs de date sans valeurs d’heure."
+      },
+      "esriFieldTypeTimeOnly": {
+        "title": "Heure uniquement",
+        "description": "Stockez des valeurs d’heure sans valeurs de date."
+      },
+      "esriFieldTypeTimestampOffset": {
+        "title": "Décalage de l’horodatage",
+        "description": "Stockez des valeurs indiquant la date, l’heure et le décalage par rapport à UTC (temps universel coordonné)."
+      }
+    }
+  },
+  "globalIdentifiers": {
+    "title": "Identifiants globaux",
+    "description": "Valeurs qui identifient de manière unique une entité ou une ligne de table.",
+    "types": {
+      "esriFieldTypeGlobalID": {
+        "title": "GlobalID",
+        "description": "Stockez une chaîne de 36 caractères, composée de lettres et de chiffres, servant à identifier une entité de manière unique."
+      },
+      "esriFieldTypeGUID": {
+        "title": "GUID",
+        "description": "Stockez une chaîne de 36 caractères, composée de lettres et de chiffres. Un identifiant unique global (GUID) est fréquemment utilisé pour gérer les relations entre les entités."
+      }
+    }
+  },
+  "fieldValueTypes": {
+    "nameOrTitle": "Nom ou titre",
+    "description": "Description",
+    "typeOrCategory": "Type ou catégorie",
+    "countOrAmount": "Total ou quantité",
+    "percentageOrRatio": "Pourcentage ou ratio",
+    "measurement": "Mesure",
+    "currency": "Devise",
+    "uniqueIdentifier": "Identifiant unique",
+    "phoneNumber": "Numéro de téléphone",
+    "emailAddress": "Adresse e-mail",
+    "orderedOrRanked": "Ordonné ou classé",
+    "binary": "Binaire",
+    "locationOrPlaceName": "Localisation ou nom de lieu",
+    "coordinate": "Coordonnées",
+    "dateAndTime": "Date et heure",
+    "none": "Aucun"
+  },
+  "addFieldErrors": {
+    "invalidName": "Nom incorrect",
+    "invalidLength": "Longueur non valide",
+    "outOfRangeValueError": "Cette valeur se trouve hors de la plage.",
+    "invalidValueError": "La valeur saisie n’est pas valide.",
+    "invalidFieldParameters": "Paramètres de champ non valides",
+    "invalidInputsError": "Vérifiez que vos paramètres de champ sont correctement remplis.",
+    "existingFieldNameError": "Le nom du champ ne peut pas être identique au nom d’un champ existant.",
+    "invalidNameInputSQLError": "Le nom du champ ne peut pas être identique à un mot-clé SQL.",
+    "invalidNameInputInvalidCharactersError": "Doit commencer par une lettre et ne peut contenir que des lettres, des chiffres et '_'.",
+    "valueIsRequiredError": "Cette valeur est obligatoire.",
+    "lengthExceeds": "Le nom du champ ne doit pas comporter plus de ${maxFieldNameLength} caractères.",
+    "defaultValueExceeds": "La valeur par défaut dépasse la longueur de champ spécifiée.",
+    "savingFailed": "Échec de l’enregistrement de la couche ${layerName}",
+    "readOnlyErrorMessage": "ArcGIS Online rencontre des problèmes d’ordre opérationnel et est entré en mode de lecture seule. Certaines fonctionnalités risquent d’être limitées. Pour obtenir les informations les plus récentes sur la résolution future de ces problèmes, consultez la page ArcGIS Online Health Dashboard.",
+    "readOnlyErrorMessageEnterprise": "ArcGIS Enterprise rencontre des problèmes d’ordre opérationnel et est entré en mode de lecture seule. Certaines fonctionnalités risquent d’être limitées.",
+    "healthDashboard": "ArcGIS Online Health Dashboard",
+    "genericAddFieldError": {
+      "title": "Erreur",
+      "description": "Une erreur s’est produite lors de l’ajout du champ."
+    }
+  }
+}

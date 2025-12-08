@@ -1,0 +1,13 @@
+{
+  "cancel": "Отмена",
+  "creditUsage": "Кредитование",
+  "envSettings": "Параметры среды",
+  "envSettingsDescription": "Укажите дополнительные параметры, влияющие на способ выполнения анализа.",
+  "generalSettings": "Общие параметры среды",
+  "geoanalytics": "Геоаналитика",
+  "noEnvSettings": "Нет параметров среды",
+  "processingExtentEnv": "Параметр среды Экстент обработки",
+  "rasterAnalysis": "Параметры среды растров",
+  "resetDefaults": "Вернуть настройки по умолчанию",
+  "save": "Сохранить"
+}

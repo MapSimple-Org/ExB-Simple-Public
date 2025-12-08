@@ -1,0 +1,9 @@
+{
+  "addToMap": "Potvrdit a přidat do mapy",
+  "cancel": "Storno",
+  "confirm": "Potvrdit",
+  "header": "Vybrat položku",
+  "select": "Vybrat",
+  "unsupportedLayer": "Tento parametr nepodporuje následující vrstvy: ${layerName}.",
+  "viewDetails": "Zobrazit podrobnosti"
+}

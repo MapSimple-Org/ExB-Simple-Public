@@ -1,0 +1,31 @@
+{
+  "back": "Back",
+  "cancel": "Cancel",
+  "learnMore": "Learn more",
+  "restore": "Restore",
+  "restoreTo": "Restore to",
+  "restoreItem": "Restore Item",
+  "restoreItems": "Restore Items",
+  "noticeMessage": "Restored items will be unshared. Please review your content before sharing it again.",
+  "cannotBulkRestoreXItems": "Cannot bulk restore more than ${number} items, please deselect a few items.",
+  "cannotBulkRestoreMultipleOwners": "Cannot bulk restore items that belong to different owners. Select items from a single owner to bulk restore.",
+  "toRestore": {
+    "single": "Item to Restore:",
+    "multiple": "Items to Restore:"
+  },
+  "cannotRestore": "Cannot restore:",
+  "dependentItems": {
+    "single": "This item cannot be restored because it is dependent on <strong style='font-weight: 500'>${parent}</strong>. Restore them together.",
+    "singleUnknown": "This item cannot be restored because it is dependent on another item in the recycle bin. Restore them together.",
+    "multiple": "These items cannot be restored because they are dependent on other items in the recycle bin. Restore them together.",
+    "multipleSameSource": "These items cannot be restored because they are dependent on <strong style='font-weight: 500'>${parent}</strong>. Restore them together."
+  },
+  "pageRangeWithTotalRecycleBinSize": {
+    "en": "${start} - ${end} of ${total} (${size}) in recycle bin",
+    "other": "${start} - ${end}, total: ${total} (${size}) in recycle bin"
+  },
+  "pageRangeWithGreaterThanTotalRecycleBinSize": {
+    "en": "${start} - ${end} of ${total} (>${size}) in recycle bin",
+    "other": "${start} - ${end}, total: ${total} (>${size}) in recycle bin"
+  }
+}

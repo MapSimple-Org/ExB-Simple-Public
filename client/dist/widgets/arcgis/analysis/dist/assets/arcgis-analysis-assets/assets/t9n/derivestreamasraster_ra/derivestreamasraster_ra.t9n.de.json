@@ -1,0 +1,10 @@
+{
+  "forceFlowLabel": "Abfluss von Randzellen nach außen erzwingen",
+  "inputLayersGroupText": "Das Eingabe-Oberflächen-Raster und optional die Muldendaten und das Gewichtungs-Raster auswählen.",
+  "itemProperties": {
+    "description": "Durch Ausführung des Werkzeugs \"Wasserlauf als Raster ableiten\" generierte Ausgabe.",
+    "snippet": "Über \"Wasserlauf als Raster ableiten\" generierte Ausgabe"
+  },
+  "outputStreamRasterLabel": "Name des Ausgabe-Fluss-Rasters",
+  "streamSettingsGroupText": "Legen Sie den Akkumulationsschwellenwert und die Methode zur Bezeichnung von Wasserläufen fest, und geben Sie an, wie der Fluss am Rand des Eingabe-Oberflächen-Rasters behandelt wird."
+}

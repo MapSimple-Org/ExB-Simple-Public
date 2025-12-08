@@ -1,0 +1,1 @@
+System.register([],function(e){return{execute:function(){e({_widgetLabel:"\uc544\ucf54\ub514\uc628",tips:"\uc544\ucf54\ub514\uc628"})}}});

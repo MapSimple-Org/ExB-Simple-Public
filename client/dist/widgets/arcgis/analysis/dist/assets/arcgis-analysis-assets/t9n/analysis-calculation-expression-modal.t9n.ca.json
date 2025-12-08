@@ -1,0 +1,23 @@
+{
+  "add": "Afegeix",
+  "arcade": "Arcade",
+  "arcadeExpressionEditor": "Editor d'expressions de l'Arcade",
+  "badSyntaxSQLExpression": "La sintaxi de l'expressió SQL no és correcta. Corregiu-ne els errors.",
+  "calculationExpressionEditor": "Editor d'expressions de càlcul",
+  "cancel": "Cancel·la",
+  "chooseLanguage": "Trieu una llengua",
+  "fieldToCalculate": "Camp que es calcularà: ${fieldName}",
+  "idealFor": "Ideal per a:",
+  "languageSelect": "Seleccioneu la llengua",
+  "layerLoadFailNoFields": "No s'ha pogut carregar la capa. No s'han pogut recuperar camps per a l'editor.",
+  "next": "Següent",
+  "noLayerProvidedNoFields": "No s'ha proporcionat cap capa. No s'han pogut recuperar camps per a l'editor.",
+  "sql": "SQL",
+  "sqlExpressionEditor": "Editor d'expressions SQL",
+  "tileSelectArcadeUseCase1": "Càlculs que necessiten més funcionalitat que SQL, incloses les operacions espacials",
+  "tileSelectArcadeUseCase2": "Solució de problemes millorada",
+  "tileSelectSqlUseCase1": "Rendiment més ràpid",
+  "tileSelectSqlUseCase2": "Els càlculs es poden expressar en SQL",
+  "tileSelectSqlUseCase3": "Capes que tenen habilitada l'opció Sincronitza o l'opció Feu un seguiment de les entitats creades o actualitzades",
+  "valueCannotBeBlank": "El valor no pot estar en blanc."
+}

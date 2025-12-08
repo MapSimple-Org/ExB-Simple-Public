@@ -1,0 +1,10 @@
+{
+  "forceFlowLabel": "Force edge cells to flow outwards",
+  "inputLayersGroupText": "Choose the input surface raster, and optionally the depression data and the weight raster.",
+  "itemProperties": {
+    "description": "Output generated from running the Derive Stream As Raster tool.",
+    "snippet": "Output generated from Derive Stream As Raster"
+  },
+  "outputStreamRasterLabel": "Output stream raster name",
+  "streamSettingsGroupText": "Specify the accumulation threshold, the stream designation method, and how flow is handled at the input surface raster edge."
+}

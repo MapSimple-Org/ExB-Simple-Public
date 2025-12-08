@@ -1,0 +1,7 @@
+{
+  "addEntryButtonLabel": "Lägg till",
+  "maxGroupsMessage": "Maximalt antal uppgifter är ${maxCount}.",
+  "minGroupsMessage": "Minsta antal uppgifter är ${minCount}.",
+  "removeEntryButtonLabel": "Ta bort post",
+  "requiredMessage": "Denna parameter är obligatorisk."
+}

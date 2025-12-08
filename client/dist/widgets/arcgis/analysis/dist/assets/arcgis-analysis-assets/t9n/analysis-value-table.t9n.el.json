@@ -1,0 +1,7 @@
+{
+  "addEntryButtonLabel": "Προσθήκη",
+  "maxGroupsMessage": "Ο μέγιστος αριθμός καταχωρίσεων είναι ${maxCount}.",
+  "minGroupsMessage": "Ο ελάχιστος αριθμός καταχωρίσεων είναι ${minCount}.",
+  "removeEntryButtonLabel": "Αφαίρεση εγγραφής",
+  "requiredMessage": "Απαιτείται αυτή η παράμετρος."
+}

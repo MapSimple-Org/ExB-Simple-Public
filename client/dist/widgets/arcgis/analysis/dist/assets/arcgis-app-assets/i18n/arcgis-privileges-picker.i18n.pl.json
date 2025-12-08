@@ -1,0 +1,592 @@
+{
+  "rolePrivileges": "Uprawnienia nadane roli",
+  "setFromExisting": "Skonfiguruj na podstawie istniejącej roli",
+  "expandAll": "Rozwiń wszystko",
+  "generalPrivileges": "Uprawnienia ogólne",
+  "adminPrivileges": "Uprawnienia administratora",
+  "enabledLabel": "Włączone:",
+  "enableAll": "Włącz wszystko",
+  "disableAll": "Wyłącz wszystko",
+  "members": "Członkowie",
+  "groups": "Grupy",
+  "content": "Zawartość",
+  "sharing": "Udostępnianie",
+  "premiumContent": "Zasoby Premium",
+  "premiumContentServices": "Zasoby i usługi Premium",
+  "contentAndAnalysis": "Zasoby i analiza",
+  "features": "Obiekty",
+  "versionMgmt": "Zarządzanie wersjami",
+  "webhooks": "Elementy webhook",
+  "marketplaceSubscriptions": "Subskrypcje ArcGIS Marketplace",
+  "orgSettings": "Ustawienia instytucji",
+  "learnMore": "Dowiedz się więcej",
+  "searchPrivileges": "Wyszukiwanie uprawnień",
+  "notebooks": "Notatniki",
+  "analysis": "Analiza",
+  "networkAnalysis": "Analiza sieciowa",
+  "locationServices": "Usługi lokalizacyjne",
+  "requiredService": "Wymagana usługa",
+  "availableServices": "Dostępne usługi",
+  "basemaps": "Mapy bazowe",
+  "staticMaps": "Mapy statyczne",
+  "places": "Miejsca",
+  "geocoding": "Geokodowanie",
+  "routing": "Wyznaczanie tras",
+  "dataEnrichment": "Wzbogacanie danych",
+  "boundaries": "Granice",
+  "elevation": "Wysokości",
+  "spatialPrivileges": "Analiza przestrzenna",
+  "featureAnalysis": "Analiza obiektowa",
+  "imageAnalysis": "Analiza obrazów",
+  "readOnlyBasemapsTooltip": "Dostęp do map bazowych jest uwzględniony.",
+  "privileges": {
+    "portal:user:viewOrgUsers": {
+      "label": "Wyświetl",
+      "description": "Zezwól członkowi na wyświetlanie członków instytucji.",
+      "descriptionPortal": "Zezwól członkowi na wyświetlanie członków portalu.",
+      "descriptionApp": "Zezwól aplikacji na wyświetlanie członków instytucji."
+    },
+    "portal:user:createGroup": {
+      "label": "Tworzenie, aktualizacja i usuwanie",
+      "description": "Zezwól członkowi na tworzenie, edytowanie i usuwanie własnych grup.",
+      "descriptionApp": "Zezwól aplikacji na tworzenie, edytowanie i usuwanie grup właściciela aplikacji."
+    },
+    "portal:user:joinGroup": {
+      "label": "Przystępowanie do grup w obrębie instytucji",
+      "description": "Zezwól członkowi na dołączanie do grup w instytucji.",
+      "descriptionPortal": "Zezwól członkowi na dołączanie do grup w portalu.",
+      "descriptionApp": "Zezwól aplikacji na dołączanie do grup w instytucji."
+    },
+    "portal:user:joinNonOrgGroup": {
+      "label": "Przystępowanie do grup zewnętrznych",
+      "description": "Zezwól członkowi na dołączanie do grup na zewnątrz instytucji.",
+      "descriptionPortal": "Zezwól członkowi na dołączanie do grup na zewnątrz portalu.",
+      "descriptionApp": "Zezwól aplikacji na dołączanie do grup na zewnątrz instytucji."
+    },
+    "portal:user:viewOrgGroups": {
+      "label": "Wyświetlanie grup udostępnionych w instytucji",
+      "description": "Zezwól członkowi na wyświetlanie grup udostępnionych w instytucji.",
+      "descriptionPortal": "Zezwól członkowi na wyświetlanie grup udostępnionych w portalu.",
+      "descriptionApp": "Zezwól aplikacji na wyświetlanie grup udostępnionych w instytucji."
+    },
+    "portal:user:invitePartneredCollaborationMembers": {
+      "label": "Zapraszanie członków instytucji partnerskiej",
+      "description": "Zezwól członkowi na zapraszanie do grup członków instytucji kooperacji partnerskiej.",
+      "descriptionApp": "Zezwól aplikacji na zapraszanie do grup członków instytucji kooperacji partnerskiej."
+    },
+    "portal:user:addExternalMembersToGroup": {
+      "label": "Dodawanie członków innych instytucji",
+      "description": "Zezwól członkowi na tworzenie grup, które dopuszczają członków z innych instytucji oraz na zapraszanie do grup członków z zewnątrz.",
+      "descriptionApp": "Zezwól aplikacji na tworzenie grup, które dopuszczają członków z innych instytucji oraz na zapraszanie do grup członków z zewnątrz."
+    },
+    "portal:user:createItem": {
+      "label": "Tworzenie, aktualizacja i usuwanie",
+      "description": "Zezwól członkowi na tworzenie, edytowanie i usuwanie utworzonych przez siebie zasobów.",
+      "descriptionApp": "Zezwól aplikacji na tworzenie, edytowanie i usuwanie zasobów właściciela aplikacji."
+    },
+    "portal:publisher:publishFeatures": {
+      "label": "Publikowanie hostowanych warstw obiektowych",
+      "description": "Zezwól członkowi na publikowanie hostowanych warstw obiektowych z plików shape, plików CSV itp.",
+      "descriptionApp": "Zezwól aplikacji na publikowanie hostowanych warstw obiektowych z plików shape, plików CSV itp."
+    },
+    "portal:publisher:publishTiles": {
+      "label": "Publikowanie hostowanych warstw kafli",
+      "description": "Zezwól członkowi na publikowanie hostowanych warstw kafli z pakietów kafli, obiektów itp.",
+      "descriptionApp": "Zezwól aplikacji na publikowanie hostowanych warstw kafli z pakietów kafli, obiektów itp."
+    },
+    "portal:publisher:publishScenes": {
+      "label": "Publikowanie hostowanych warstw scen",
+      "description": "Zezwól członkowi na publikowanie hostowanych warstw scen.",
+      "descriptionApp": "Zezwól aplikacji na publikowanie hostowanych warstw scen."
+    },
+    "portal:publisher:publishTiledImagery": {
+      "label": "Publikowanie hostowanych warstw zobrazowań kafelkowych",
+      "description": "Zezwól członkowi na publikowanie hostowanych warstw zobrazowań kafelkowych na podstawie jednego obrazu lub zbioru obrazów. Wymaga to rozszerzenia typu użytkownika ArcGIS Image for ArcGIS Online.",
+      "descriptionPortal": "Zezwól członkowi na publikowanie hostowanych warstw zobrazowań kafelkowych na podstawie jednego obrazu lub zbioru obrazów.",
+      "descriptionApp": "Zezwól aplikacji na publikowanie hostowanych warstw zobrazowań kafelkowych na podstawie jednego obrazu lub zbioru obrazów. Wymaga licencji na hostowanie ArcGIS Image."
+    },
+    "portal:publisher:publishDynamicImagery": {
+      "label": "Publikowanie hostowanych dynamicznych warstw zobrazowań",
+      "description": "Zezwól członkowi na publikowanie hostowanych dynamicznych warstw zobrazowań na podstawie jednego obrazu lub zbioru obrazów.",
+      "descriptionApp": "Zezwól aplikacji na publikowanie hostowanych dynamicznych warstw zobrazowań na podstawie jednego obrazu lub zbioru obrazów."
+    },
+    "portal:publisher:publishServerServices": {
+      "label": "Publikowanie warstw z serwera",
+      "description": "To uprawnienie umożliwia publikowanie warstw generowanych przez usługi z witryny serwerów sfederowanych. W usługach tych często występują dane zarejestrowane z geobaz lub plikowych źródeł danych."
+    },
+    "portal:publisher:publishKnowledgeGraph": {
+      "label": "Publikowanie hostowanych wykresów wiedzy",
+      "description": "Zezwól członkowi na publikowanie hostowanych wykresów wiedzy.",
+      "descriptionApp": "Zezwól aplikacji na publikowanie hostowanych wykresów wiedzy."
+    },
+    "portal:user:viewOrgItems": {
+      "label": "Wyświetlanie zasobów udostępnionych w instytucji",
+      "description": "Zezwól członkowi na wyświetlanie zasobów udostępnionych w instytucji.",
+      "descriptionPortal": "Zezwól członkowi na wyświetlanie zasobów udostępnionych w portalu.",
+      "descriptionApp": "Zezwól aplikacji na wyświetlanie zasobów udostępnionych w instytucji."
+    },
+    "premium:publisher:createNotebooks": {
+      "label": "Tworzenie i edytowanie notatników",
+      "description": "Zezwól członkowi na tworzenie i edytowanie interaktywnych notatników.",
+      "descriptionApp": "Zezwól aplikacji na tworzenie i edytowanie interaktywnych notatników."
+    },
+    "premium:publisher:scheduleNotebooks": {
+      "label": "Planowanie notatników",
+      "description": "Zezwól członkowi na zaplanowanie automatycznego uruchamiania notatnika w przyszłości.",
+      "descriptionApp": "Zezwól aplikacji na zaplanowanie automatycznego uruchamiania notatnika w przyszłości."
+    },
+    "portal:publisher:bulkPublishFromDataStores": {
+      "label": "Tworzenie zbiorcze warstw obiektowych z magazynu danych",
+      "description": "To uprawnienie pozwala publikować warstwy internetowe z zarejestrowanego magazynu danych."
+    },
+    "portal:publisher:registerDataStores": {
+      "label": "Rejestrowanie magazynów danych",
+      "description": "To uprawnienie umożliwia rejestrowanie magazynów danych w portalu."
+    },
+    "portal:user:viewTracks": {
+      "label": "Wyświetlanie ścieżek lokalizacji",
+      "description": "Zezwól członkowi na wyświetlanie ścieżek lokalizacji członków za pośrednictwem widoków udostępnionych ścieżek, kiedy włączone jest udostępnianie lokalizacji.",
+      "descriptionApp": "Zezwól aplikacji na wyświetlanie ścieżek lokalizacji członków za pośrednictwem widoków udostępnionych ścieżek, kiedy włączone jest udostępnianie lokalizacji."
+    },
+    "portal:user:reassignItems": {
+      "label": "Ponowne przypisywanie zasobów",
+      "description": "Zezwól członkowi na ponowne przypisywanie tylko jego zasobów innemu członkowi z uprawnieniami do odbierania zasobów.",
+      "descriptionApp": "Zezwól aplikacji na ponowne przypisywanie tylko zasobów właściciela aplikacji innemu członkowi z uprawnieniami do odbierania zasobów."
+    },
+    "portal:user:receiveItems": {
+      "label": "Odbieranie zasobów",
+      "description": "Zezwól członkowi na odbieranie zasobów, które zostały ponownie przypisane przez innego członka z uprawnieniami do ponownego przypisywania zasobów."
+    },
+    "portal:publisher:publishFeeds": {
+      "label": "Publikowanie źródeł",
+      "description": "To uprawnienie umożliwia publikowanie źródeł w celu spożytkowania i wyświetlenia danych czasu rzeczywistego za pomocą aplikacji ArcGIS Velocity."
+    },
+    "portal:publisher:publishRealTimeAnalytics": {
+      "label": "Publikowanie analiz w czasie rzeczywistym",
+      "description": "To uprawnienie umożliwia publikowanie analiz w czasie rzeczywistym w celu analizy i przetworzenia danych czasu rzeczywistego za pomocą aplikacji ArcGIS Velocity."
+    },
+    "portal:publisher:publishBigDataAnalytics": {
+      "label": "Publikowanie analiz dużych zbiorów danych",
+      "description": "To uprawnienie umożliwia publikowanie analiz dużych zbiorów danych w celu przeanalizowania historycznych danych obserwacyjnych za pomocą aplikacji ArcGIS Velocity."
+    },
+    "portal:publisher:createDataPipelines": {
+      "label": "Tworzenie i uruchamianie potoków danych",
+      "description": "Zezwól członkowi grupy na tworzenie, edytowanie i uruchamianie potoków danych.",
+      "descriptionApp": "Zezwól aplikacji na tworzenie, edytowanie i uruchamianie potoków danych."
+    },
+    "portal:publisher:publishLivestreamVideo": {
+      "label": "Publikowanie transmisji wideo na żywo",
+      "description": "Zezwalaj członkom na publikowanie hostowanych warstw transmisji wideo na żywo pochodzących z sieciowych transmisji i strumieni wideo.",
+      "descriptionApp": "Zezwalaj aplikacji na publikowanie hostowanych warstw transmisji wideo na żywo pochodzących z sieciowych transmisji i strumieni wideo."
+    },
+    "portal:publisher:publishVideo": {
+      "label": "Publikowanie wideo",
+      "description": "Zezwalaj członkom na publikowanie hostowanych warstw wideo z pliku wideo i obsługiwanych plików metadanych wideo.",
+      "descriptionApp": "Zezwól aplikacji na publikowanie hostowanych warstw wideo z pliku wideo i obsługiwanych plików metadanych wideo."
+    },
+    "portal:user:shareToGroup": {
+      "label": "Udostępnij grupom",
+      "description": "Zezwól członkowi na udostępnianie zasobów grupom.",
+      "descriptionApp": "Zezwól aplikacji na udostępnianie zasobów grupom."
+    },
+    "portal:user:shareToOrg": {
+      "label": "Udostępnianie instytucji",
+      "labelPortal": "Udostępnianie w portalu",
+      "description": "Zezwól członkowi na udostępnianie zasobów w instytucji.",
+      "descriptionPortal": "Zezwól członkowi na udostępnianie zasobów w portalu.",
+      "descriptionApp": "Zezwól aplikacji na udostępnianie zasobów w instytucji."
+    },
+    "portal:user:shareToPublic": {
+      "label": "Udostępnianie publiczne",
+      "description": "Zezwól członkowi na publiczne udostępnianie zasobów, jeśli jest to dozwolone przez zasady udostępniania publicznego instytucji.",
+      "descriptionApp": "Zezwól aplikacji na publiczne udostępnianie zasobów właściciela aplikacji, jeśli jest to dozwolone przez zasady udostępniania publicznego instytucji.",
+      "tooltip": "Jeśli instytucja nie zezwala członkom na publiczne udostępnianie zasobów, wówczas członkowie będą potrzebować uprawnienia administracyjnego do udostępniania zasobów członków wszystkim użytkownikom."
+    },
+    "portal:user:shareGroupToOrg": {
+      "label": "Udostępnianie grup w instytucji",
+      "labelPortal": "Udostępnianie grup w portalu",
+      "description": "Zezwól członkowi na udostępnianie zasobów w instytucji.",
+      "descriptionPortal": "Zezwól członkowi na udostępnianie zasobów w portalu.",
+      "descriptionApp": "Zezwól aplikacji na udostępnianie zasobów w portalu."
+    },
+    "portal:user:shareGroupToPublic": {
+      "label": "Publiczne udostępnianie grup",
+      "description": "Zezwól członkowi na włączanie publicznej widoczności grup.",
+      "descriptionApp": "Zezwól aplikacji na włączanie publicznej widoczności grup."
+    },
+    "opendata:user:designateGroup": {
+      "label": "Udostępnianie grup dla Open Data",
+      "description": "Zezwól członkowi na wyznaczanie grup, które mogą być używane w witrynie Open Data.",
+      "descriptionApp": "Zezwól aplikacji na wyznaczanie grup, które mogą być używane w witrynie Open Data."
+    },
+    "premium:user:basemaps": {
+      "label": "Usługa stylów map bazowych",
+      "descriptionLocationPlatform": "Zezwól aplikacji na dostęp do usługi stylów map bazowych."
+    },
+    "premium:user:staticbasemaptiles": {
+      "label": "Statyczne kafle mapy bazowej",
+      "descriptionLocationPlatform": "Zezwól aplikacji na dostęp do usługi statycznych kafli mapy bazowej."
+    },
+    "premium:user:staticMaps": {
+      "label": "Usługa map statycznych (beta)",
+      "descriptionLocationPlatform": "Zezwól aplikacji na dostęp do usługi map statycznych."
+    },
+    "premium:user:elevation": {
+      "label": "Usługa wysokościowa",
+      "descriptionLocationPlatform": "Zezwól aplikacji na dostęp do usługi wysokościowej."
+    },
+    "premium:user:geocode": {
+      "label": "Geokodowanie",
+      "description": "Zezwól członkowi na wykonywanie zadań geoprzetwarzania wykorzystujących kredyty za pomocą usługi ArcGIS Geocoding service (lub widoku tego lokalizatora).",
+      "descriptionApp": "Zezwól aplikacji na wykonywanie zadań geoprzetwarzania wykorzystujących kredyty za pomocą usługi ArcGIS World Geocoding Service (lub widoku tego lokalizatora)."
+    },
+    "premium:user:geocode:stored": {
+      "label": "Geokodowanie (zapisane)",
+      "descriptionLocationPlatform": "Zezwalaj aplikacji na dostęp do usługi geokodowania i wykonywanie przechowywanych geokodów."
+    },
+    "premium:user:geocode:temporary": {
+      "label": "Geokodowanie (niezapisane)",
+      "descriptionLocationPlatform": "Zezwól aplikacji na dostęp do usługi geokodowania i wykonywanie geokodów, które nie są przechowywane."
+    },
+    "premium:user:networkanalysis": {
+      "label": "Wyznaczanie tras",
+      "description": "Zezwól członkowi na wykonywanie zadań z zakresu analizy sieciowej, takich jak wyznaczanie tras oraz obszarów czasu przejazdu.",
+      "descriptionApp": "Zezwól aplikacji na dostęp do usługi wyznaczania tras."
+    },
+    "premium:user:networkanalysis:closestfacility": {
+      "label": "Najbliższy obiekt",
+      "descriptionLocationPlatform": "Zezwól aplikacji na dostęp do usługi wyznaczania tras i wykonywanie operacji wyznaczania trasy do najbliższego obiektu."
+    },
+    "premium:user:networkanalysis:lastmiledelivery": {
+      "label": "Dostawa na ostatnim etapie",
+      "descriptionLocationPlatform": "Zezwól aplikacji na dostęp do usługi wyznaczania tras i wykonywanie operacji wyznaczania tras dla dostaw na ostatnim etapie."
+    },
+    "premium:user:networkanalysis:snaptoroads": {
+      "label": "Dociągaj do dróg",
+      "descriptionLocationPlatform": "Zezwalaj członkom na wykonywanie zadań analizy sieciowej, takich jak dociąganie punktów trasy GPS do dróg."
+    },
+    "premium:user:networkanalysis:locationallocation": {
+      "label": "Lokalizacja i przydzielanie",
+      "descriptionLocationPlatform": "Zezwól aplikacji na dostęp do usługi wyznaczania tras i wykonywanie operacji alokacji lokalizacji."
+    },
+    "premium:user:networkanalysis:routing": {
+      "label": "Proste wyznaczanie tras",
+      "descriptionLocationPlatform": "Zezwól aplikacji na dostęp do usługi wyznaczania tras i wykonywanie standardowych operacji wyznaczania tras."
+    },
+    "premium:user:networkanalysis:optimizedrouting": {
+      "label": "Wyznaczanie optymalnych tras",
+      "descriptionLocationPlatform": "Zezwól aplikacji na dostęp do usługi wyznaczania tras i wykonywanie zoptymalizowanych operacji wyznaczania tras."
+    },
+    "premium:user:networkanalysis:vehiclerouting": {
+      "label": "Trasy dla wielu pojazdów",
+      "descriptionLocationPlatform": "Funkcja wyznaczania tras dla wielu pojazdów umożliwia aplikacji dostęp do usługi wyznaczania tras i wykonywanie operacji wyznaczania tras dla floty."
+    },
+    "premium:user:networkanalysis:origindestinationcostmatrix": {
+      "label": "Macierz kosztów źródło-cel",
+      "descriptionLocationPlatform": "Zezwól aplikacji na dostęp do usługi wyznaczania tras i generowania macierzy kosztów podróży."
+    },
+    "premium:user:networkanalysis:servicearea": {
+      "label": "Obszar obsługiwany",
+      "descriptionLocationPlatform": "Zezwól aplikacji na dostęp do usługi wyznaczania tras i generowania obsługiwanych obszarów."
+    },
+    "premium:user:places": {
+      "label": "Usługa Miejsca",
+      "descriptionLocationPlatform": "Zezwól aplikacji na dostęp do usługi miejsc."
+    },
+    "premium:user:spatialanalysis": {
+      "labelOld": "Usługa analizy przestrzennej",
+      "label": "Usługa analizy obiektowej",
+      "labelPortal": "Standardowa analiza obiektowa",
+      "description": "Zezwól członkowi na wykonywanie zadań analizy obiektów.",
+      "descriptionPortal": "To uprawnienie umożliwia wykonywanie zadań z zakresu standardowej analizy obiektowej.",
+      "descriptionLocationPlatform": "Zezwól aplikacji na dostęp do usługi analizy obiektowej.",
+      "descriptionApp": "Zezwól aplikacji na dostęp do usługi analizy obiektowej."
+    },
+    "premium:user:geoenrichment": {
+      "label": "Usługa GeoEnrichment",
+      "description": "Zezwól członkowi na wzbogacanie przestrzenne obiektów.",
+      "descriptionLocationPlatform": "Zezwól aplikacji na dostęp do usługi wzbogacania danych przestrzennych (GeoEnrichment).",
+      "descriptionApp": "Zezwól aplikacji na dostęp do usługi wzbogacania danych przestrzennych (GeoEnrichment)."
+    },
+    "premium:user:demographics": {
+      "label": "Mapy demograficzne",
+      "description": "Zezwól aplikacji na dostęp do map demograficznych premium w atlasie ArcGIS Living Atlas.",
+      "descriptionApp": "Zezwól aplikacji na dostęp do map demograficznych premium w atlasie ArcGIS Living Atlas.",
+      "descriptionLocationPlatform": "Zezwól aplikacji na dostęp do map demograficznych w atlasie ArcGIS Living Atlas."
+    },
+    "premium:publisher:geoanalytics": {
+      "label": "Analiza obiektowa analiz geoprzestrzennych",
+      "description": "To uprawnienie umożliwia wykonywanie zadań analiz geoprzestrzennych."
+    },
+    "premium:publisher:rasteranalysis": {
+      "label": "Analiza zobrazowań",
+      "description": "Zezwól członkowi na wykonywanie zadań związanych z analizą zobrazowań. Wymaga funkcji analitycznych aplikacji ArcGIS Image.",
+      "descriptionPortal": "Zezwól członkowi na wykonywanie zadań związanych z analizą zobrazowań.",
+      "descriptionApp": "Zezwól aplikacji na wykonywanie zadań związanych z analizą zobrazowań. Wymaga funkcji analitycznych aplikacji ArcGIS Image.",
+      "descriptionAppPortal": "Zezwól aplikacji na wykonywanie zadań związanych z analizą zobrazowań."
+    },
+    "premium:publisher:createAdvancedNotebooks": {
+      "label": "Notatniki zaawansowane",
+      "description": "Zezwól członkowi na importowanie i używanie modułów ArcPy w notatnikach.",
+      "descriptionApp": "Zezwól aplikacji na importowanie i używanie modułów ArcPy w notatnikach."
+    },
+    "portal:user:runWebTool": {
+      "label": "Uruchamianie narzędzi internetowych",
+      "description": "Zezwól członkowi na uruchamianie narzędzi internetowych.",
+      "descriptionPortal": "Pozwól członkowi na uruchamianie narzędzi internetowych publikowanych z notebooków.",
+      "descriptionApp": "Zezwól aplikacji na uruchamianie narzędzi internetowych.",
+      "descriptionAppPortal": "Zezwól aplikacji na uruchamianie narzędzi internetowych publikowanych z notebooków."
+    },
+    "portal:user:generateApiTokens": {
+      "label": "Generowanie kluczy API",
+      "description": "Zezwól członkowi na generowanie kluczy API."
+    },
+    "portal:user:assignPrivilegesToApps": {
+      "label": "Przypisywanie uprawnień do aplikacji OAuth 2.0",
+      "description": "Zezwól członkowi na przypisywanie uprawnień do aplikacji OAuth 2.0."
+    },
+    "portal:user:createWorkflow": {
+      "label": "Tworzenie elementu procedury wykonywania zadań",
+      "description": "Zezwól członkowi na utworzenie elementów Workflow Manager"
+    },
+    "premium:user:featurereport": {
+      "label": "Raport o obiektach",
+      "description": "Zezwól członkowi na tworzenie raportów o obiektach w aplikacji Survey123.",
+      "descriptionApp": "Zezwól aplikacji na tworzenie raportów o obiektach w aplikacji Survey123."
+    },
+    "premium:user:realitymapping": {
+      "label": "Tworzenie map rzeczywistości",
+      "description": "Zezwól członkowi na wykonywanie zadań związanych z tworzeniem map rzeczywistości."
+    },
+    "features:user:edit": {
+      "label": "Edycja",
+      "description": "Zezwól członkowi na edytowanie obiektów w warstwach edytowalnych, które nie są publiczne, zgodnie z opcjami edycji włączonymi dla danej warstwy.",
+      "descriptionApp": "Zezwól aplikacji na edytowanie obiektów w warstwach edytowalnych, które nie są publiczne, zgodnie z opcjami edycji włączonymi dla danej warstwy."
+    },
+    "features:user:fullEdit": {
+      "label": "Edycja z pełną kontrolą",
+      "description": "Zezwól członkowi na dodawanie, usuwanie i aktualizowanie obiektów w edytowalnej, hostowanej warstwie obiektowej, niezależnie od opcji edycji włączonych dla danej warstwy.",
+      "descriptionApp": "Zezwól aplikacji na dodawanie, usuwanie i aktualizowanie obiektów w edytowalnej, hostowanej warstwie obiektowej, niezależnie od opcji edycji włączonych dla danej warstwy."
+    },
+    "features:user:manageVersions": {
+      "label": "Zarządzanie wszystkimi",
+      "description": "Zezwól członkom na zarządzanie blokadami wersji oraz wyświetlanie, zmianę, usuwanie, edycję, uzgadnianie i publikowanie do wszystkich wersji gałęzi dostępnych za pośrednictwem warstw obiektowych serwera ArcGIS Server.",
+      "descriptionApp": "Zezwól aplikacji na zarządzanie blokadami wersji oraz wyświetlanie, zmianę, usuwanie, edycję, uzgadnianie i publikowanie do wszystkich wersji gałęzi dostępnych za pośrednictwem warstw obiektowych serwera ArcGIS Server."
+    },
+    "portal:publisher:createFeatureWebhook": {
+      "label": "Warstwa obiektowa",
+      "description": "Zezwól członkowi na tworzenie, edytowanie i usuwanie własnych elementów webhook warstwy obiektowej.",
+      "descriptionApp": "Zezwól aplikacji na tworzenie, edytowanie i usuwanie własnych elementów webhook warstwy obiektowej."
+    },
+    "portal:admin:viewUsers": {
+      "label": "Wyświetlanie wszystkich",
+      "description": "Zezwól członkowi na wyświetlanie pełnych informacji o kontach członków w instytucji.",
+      "descriptionPortal": "Zezwól członkowi na wyświetlanie pełnych informacji o kontach członków w portalu.",
+      "descriptionApp": "Zezwól aplikacji na wyświetlanie pełnych informacji o kontach członków w instytucji."
+    },
+    "portal:admin:updateUsers": {
+      "label": "Aktualizacja",
+      "description": "Zezwól członkowi na resetowanie haseł, aktualizowanie informacji o kontach członków i aktualizowanie kategorii członków w instytucji.",
+      "descriptionPortal": "Zezwól członkom na resetowanie haseł, aktualizowanie informacji o kontach członków i aktualizowanie kategorii członków w portalu.",
+      "descriptionApp": "Zezwól aplikacji na resetowanie haseł, aktualizowanie informacji o kontach członków i aktualizowanie kategorii członków w instytucji."
+    },
+    "portal:admin:deleteUsers": {
+      "label": "Usuń",
+      "description": "Zezwól członkowi na usuwanie kont członków w instytucji.",
+      "descriptionPortal": "Zezwól członkowi na usuwanie kont członków w portalu.",
+      "descriptionApp": "Zezwól aplikacji na usuwanie kont członków w instytucji."
+    },
+    "portal:admin:inviteUsers": {
+      "label": "Dodaj",
+      "labelPortal": "Zapraszanie",
+      "description": "Zezwól członkowi na zapraszanie członków do instytucji.",
+      "descriptionPortal": "Zezwól członkowi na zapraszanie członków do portalu.",
+      "descriptionApp": "Zezwól aplikacji na zapraszanie członków do instytucji."
+    },
+    "portal:admin:disableUsers": {
+      "label": "Wyłączanie",
+      "description": "Zezwól członkowi na aktywowanie i dezaktywowanie kont członków w instytucji.",
+      "descriptionPortal": "Zezwól członkowi na aktywowanie i dezaktywowanie kont członków w portalu.",
+      "descriptionApp": "Zezwól aplikacji na aktywowanie i dezaktywowanie kont członków w instytucji."
+    },
+    "portal:admin:changeUserRoles": {
+      "label": "Zmiana ról",
+      "description": "Zezwól członkowi na zmianę roli, do której jest przypisane jego konto. Uwaga, tylko członkowie z rolą Administrator mogą przypisywać rolę Administrator do innych kont i usuwać przypisanie tej roli.",
+      "descriptionPortal": "Zezwól członkowi na zmianę roli, do której jest przypisane jego konto. Uwaga, tylko członkowie z rolą Administrator mogą przypisywać rolę Administrator do innych kont i usuwać przypisanie tej roli.",
+      "descriptionApp": "Zezwól aplikacji na zmianę roli, do której jest przypisane jego konto. Uwaga, tylko członkowie z rolą Administrator mogą przypisywać rolę Administrator do innych kont i usuwać przypisanie tej roli."
+    },
+    "portal:admin:manageLicenses": {
+      "label": "Zarządzanie licencjami",
+      "description": "Zezwól członkowi na przypisywanie licencji członkom instytucji.",
+      "descriptionPortal": "Zezwól członkowi na przypisywanie licencji członkom portalu.",
+      "descriptionApp": "Zezwól aplikacji na przypisywanie licencji członkom instytucji."
+    },
+    "portal:admin:updateMemberCategorySchema": {
+      "label": "Zarządzanie kategoriami",
+      "description": "Zezwól członkowi na konfigurowanie kategorii członków instytucji.",
+      "descriptionPortal": "Zezwól członkowi na konfigurowanie kategorii członków portalu.",
+      "descriptionApp": "Zezwól aplikacji na konfigurowanie kategorii członków instytucji."
+    },
+    "portal:admin:viewGroups": {
+      "label": "Wyświetlanie wszystkich",
+      "description": "Zezwól członkowi na wyświetlanie wszystkich grup w instytucji.",
+      "descriptionPortal": "Zezwól członkowi na wyświetlanie wszystkich grup w portalu.",
+      "descriptionApp": "Zezwól aplikacji na wyświetlanie wszystkich grup w instytucji."
+    },
+    "portal:admin:updateGroups": {
+      "label": "Aktualizacja",
+      "description": "Zezwól członkowi na aktualizowanie grup w instytucji.",
+      "descriptionPortal": "Zezwól członkowi na aktualizowanie grup w portalu.",
+      "descriptionApp": "Zezwól aplikacji na aktualizowanie grup w instytucji."
+    },
+    "portal:admin:deleteGroups": {
+      "label": "Usuń",
+      "description": "Zezwól członkowi na usuwanie grup w instytucji.",
+      "descriptionPortal": "Zezwól członkowi na usuwanie grup w portalu.",
+      "descriptionApp": "Zezwól aplikacji na usuwanie grup w instytucji."
+    },
+    "portal:admin:reassignGroups": {
+      "label": "Zmiana właściciela",
+      "description": "Zezwól członkowi na ponowne przypisywanie grup do innych członków w instytucji.",
+      "descriptionPortal": "Zezwól członkowi na ponowne przypisywanie grup do innych członków w portalu.",
+      "descriptionApp": "Zezwól aplikacji na ponowne przypisywanie grup do innych członków w instytucji."
+    },
+    "portal:admin:assignToGroups": {
+      "label": "Przypisywanie członków",
+      "description": "Zezwól członkowi na przypisywanie członków, aktualizowanie roli członka w grupie i usuwanie członków z grup w instytucji.",
+      "descriptionPortal": "Zezwól członkowi na przypisywanie członków, aktualizowanie roli członka w grupie i usuwanie członków z grup w portalu.",
+      "descriptionApp": "Zezwól aplikacji na przypisywanie członków, aktualizowanie roli członka w grupie i usuwanie członków z grup w instytucji."
+    },
+    "portal:admin:manageEnterpriseGroups": {
+      "label": "Połączenie z grupą właściwą dla instytucji",
+      "description": "Zezwól członkowi na połączenie członkostwa w grupie z grupą właściwą dla instytucji.",
+      "descriptionApp": "Zezwól aplikacji na połączenie członkostwa w grupie z grupą właściwą dla instytucji."
+    },
+    "portal:admin:createUpdateCapableGroup": {
+      "label": "Tworzenie z możliwością aktualizacji",
+      "description": "Zezwól członkowi na tworzenie grup z możliwością aktualizacji.",
+      "descriptionApp": "Zezwól aplikacji na tworzenie grup z możliwością aktualizacji."
+    },
+    "portal:admin:createLeavingDisallowedGroup": {
+      "label": "Tworzenie z niedozwolonym opuszczaniem",
+      "description": "Zezwól członkowi na tworzenie i posiadanie grup, które nie zezwalają członkom na ich opuszczanie (grupy administracyjne).",
+      "descriptionApp": "Zezwól aplikacji na tworzenie i posiadanie grup, które nie zezwalają aplikacjom na ich opuszczanie (grupy administracyjne)."
+    },
+    "portal:admin:viewItems": {
+      "label": "Wyświetlanie wszystkich",
+      "description": "Zezwól członkowi na wyświetlanie wszystkich zasobów w instytucji.",
+      "descriptionPortal": "Zezwól członkowi na wyświetlanie wszystkich zasobów w portalu.",
+      "descriptionApp": "Zezwól aplikacji na wyświetlanie wszystkich zasobów w instytucji."
+    },
+    "portal:admin:updateItems": {
+      "label": "Aktualizacja",
+      "description": "Zezwól członkowi na aktualizowanie i klasyfikowanie zasobów i edycję hostowanych warstw obiektowych w instytucji.",
+      "descriptionPortal": "Zezwól członkowi na aktualizowanie i klasyfikowanie zasobów i edycję hostowanych warstw obiektowych w portalu.",
+      "descriptionApp": "Zezwól aplikacji na aktualizowanie i klasyfikowanie zasobów i edycję hostowanych warstw obiektowych w instytucji."
+    },
+    "portal:admin:deleteItems": {
+      "label": "Usuwanie",
+      "description": "Zezwól członkowi na usuwanie zasobów w instytucji.",
+      "descriptionPortal": "Zezwól członkowi na usuwanie zasobów w portalu.",
+      "descriptionApp": "Zezwól aplikacji na usuwanie zasobów w instytucji."
+    },
+    "portal:admin:reassignItems": {
+      "label": "Zmiana właściciela",
+      "description": "Zezwól członkowi na ponowne przypisywanie zasobów do innych członków w instytucji.",
+      "descriptionPortal": "Zezwól członkowi na ponowne przypisywanie zasobów do innych członków w portalu.",
+      "descriptionApp": "Zezwól aplikacji na ponowne przypisywanie zasobów do innych członków w instytucji."
+    },
+    "portal:admin:updateItemCategorySchema": {
+      "label": "Zarządzanie kategoriami",
+      "description": "Zezwól członkowi na konfigurowanie kategorii zasobów instytucji.",
+      "descriptionPortal": "Zezwól członkowi na konfigurowanie kategorii zasobów portalu.",
+      "descriptionApp": "Zezwól aplikacji na konfigurowanie kategorii zasobów instytucji."
+    },
+    "portal:publisher:publishServerGPServices": {
+      "label": "Publikowanie narzędzi internetowych",
+      "description": "To uprawnienie umożliwia publikowanie narzędzi internetowych obsługiwanych przez usługi geoprzetwarzania z witryny serwerów sfederowanych."
+    },
+    "portal:admin:shareToOrg": {
+      "label": "Udostępnianie zasobów członków w instytucji",
+      "description": "Zezwól członkowi na udostępnianie w instytucji zasobów należących do innych członków instytucji.",
+      "descriptionPortal": "Zezwól członkowi na udostępnianie w portalu zasobów należących do innych członków portalu.",
+      "descriptionApp": "Zezwól aplikacji na udostępnianie w instytucji zasobów należących do innych członków instytucji."
+    },
+    "portal:admin:shareToPublic": {
+      "label": "Udostępnianie publicznie zasobów członków",
+      "description": "Zezwól członkowi na udostępnianie publiczne zasobów należących do innych członków instytucji.",
+      "descriptionPortal": "Zezwól członkowi na udostępnianie publiczne zasobów należących do innych członków portalu.",
+      "descriptionApp": "Zezwól aplikacji na udostępnianie publiczne zasobów należących do innych członków instytucji."
+    },
+    "portal:admin:createReports": {
+      "label": "Tworzenie raportów administracyjnych i zarządzanie nimi",
+      "description": "Zezwól członkowi na tworzenie raportów administracyjnych dla instytucji i zarządzanie nimi.",
+      "descriptionPortal": "Zezwól członkowi na tworzenie raportów administracyjnych dla portalu i zarządzanie nimi.",
+      "descriptionApp": "Zezwól aplikacji na tworzenie raportów administracyjnych dla instytucji i zarządzanie nimi."
+    },
+    "marketplace:admin:manage": {
+      "label": "Tworzenie i zarządzanie",
+      "description": "Zezwól członkowi na tworzenie pozycji zestawień, elementów list, zarządzenie subskrypcjami w witrynie ArcGIS Marketplace, a także zarządzanie kupującymi i danymi kontaktowymi w instytucji. Użycie tego uprawnienia zależy od tego, czy instytucja uzyskała dostęp do pozycji zestawień i publikowania w witrynie ArcGIS Marketplace."
+    },
+    "marketplace:admin:purchase": {
+      "label": "Kupowanie i uzyskiwanie produktów bezpłatnych",
+      "description": "Zezwól członkowi na wysyłanie zamówień zakupu i uzyskiwanie dostępu do bezpłatnych produktów od dostawców w witrynie ArcGIS Marketplace. Aby zezwolić członkom na kupowanie produktów przy użyciu kart kredytowych, należy ich wyznaczyć jako kupujących w witrynie Marketplace."
+    },
+    "marketplace:admin:startTrial": {
+      "label": "Rozpoczynanie subskrypcji próbnych",
+      "description": "Zezwól członkowi na rozpoczynanie subskrypcji próbnych w ArcGIS Marketplace."
+    },
+    "portal:admin:manageSecurity": {
+      "label": "Zabezpieczenia i infrastruktura",
+      "description": "Zezwól członkowi na zarządzanie ustawieniami zabezpieczeń i infrastruktury instytucji.",
+      "descriptionPortal": "Zezwól członkowi na zarządzanie ustawieniami zabezpieczeń i infrastruktury portalu.",
+      "descriptionApp": "Zezwól aplikacji na zarządzanie ustawieniami zabezpieczeń i infrastruktury instytucji."
+    },
+    "portal:admin:manageWebsite": {
+      "label": "Witryna internetowa instytucji",
+      "description": "Zezwól członkowi na zarządzanie ustawieniami witryny internetowej instytucji.",
+      "descriptionPortal": "Zezwól członkowi na zarządzanie ustawieniami witryny internetowej portalu.",
+      "descriptionApp": "Zezwól aplikacji na zarządzanie ustawieniami witryny internetowej instytucji."
+    },
+    "portal:admin:manageCollaborations": {
+      "label": "Kooperacje",
+      "description": "Zezwól członkowi na zarządzania kooperacjami w instytucji.",
+      "descriptionPortal": "Zezwól członkowi na zarządzanie kooperacjami w portalu.",
+      "descriptionApp": "Zezwól aplikacji na zarządzania kooperacjami w instytucji."
+    },
+    "portal:admin:manageCredits": {
+      "label": "Kredyty",
+      "description": "Zezwól członkowi na zarządzanie ustawieniami budżetowania kredytów instytucji.",
+      "descriptionApp": "Zezwól aplikacji na zarządzanie ustawieniami budżetowania kredytów instytucji."
+    },
+    "portal:admin:manageRoles": {
+      "label": "Role członków",
+      "description": "Zezwól członkowi na zarządzanie rolami członków w instytucji.",
+      "descriptionPortal": "Zezwól członkowi na zarządzanie rolami członków w portalu.",
+      "descriptionApp": "Zezwól aplikacji na zarządzanie rolami członków w instytucji."
+    },
+    "portal:admin:manageServers": {
+      "label": "Serwery",
+      "description": "To uprawnienie umożliwia zarządzanie ustawieniami serwera portalu."
+    },
+    "portal:admin:manageUtilityServices": {
+      "label": "Usługi narzędziowe",
+      "description": "Zezwól członkowi na zarządzanie ustawieniami usług narzędziowych instytucji.",
+      "descriptionPortal": "Zezwól członkowi na zarządzanie ustawieniami usług narzędziowych portalu.",
+      "descriptionApp": "Zezwól aplikacji na zarządzanie ustawieniami usług narzędziowych instytucji."
+    },
+    "portal:admin:manageWebhooks": {
+      "label": "Elementy webhook",
+      "labelPortal": "Elementy webhook instytucji",
+      "description": "Zezwól członkowi na tworzenie, edytowanie i usuwanie wszystkich elementów webhook w instytucji.",
+      "descriptionApp": "Zezwól aplikacji na tworzenie, edytowanie i usuwanie wszystkich elementów webhook w instytucji.",
+      "descriptionPortal": "Zezwól członkowi na tworzenie, edytowanie i usuwanie elementów webhook instytucji oraz zarządzanie wszystkimi elementami webhook w portalu.",
+      "descriptionAppPortal": "Zezwól aplikacji na tworzenie, edytowanie i usuwanie elementów webhook instytucji oraz zarządzanie wszystkimi elementami webhook w portalu."
+    },
+    "portal:admin:createGPWebhook": {
+      "label": "Geoprzetwarzanie",
+      "description": "Zezwól członkowi na tworzenie, edytowanie i usuwanie własnych elementów webhook geoprzetwarzania.",
+      "descriptionApp": "Zezwól aplikacji na tworzenie, edytowanie i usuwanie własnych elementów webhook geoprzetwarzania."
+    }
+  }
+}

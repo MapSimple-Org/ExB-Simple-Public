@@ -1,0 +1,6 @@
+{
+  "greaterThanErrorMessage": "Wejściowa wartość liczbowa musi być większa niż ${min}",
+  "lesserThanErrorMessage": "Wejściowa wartość liczbowa musi być mniejsza niż ${max}",
+  "greaterThanOrEqualErrorMessage": "Wejściowa wartość liczbowa musi być większa niż lub równa ${min}",
+  "lesserThanOrEqualErrorMessage": "Wejściowa wartość liczbowa musi być mniejsza niż lub równa ${max}"
+}

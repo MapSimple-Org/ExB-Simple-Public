@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>テーブルから位置をジオコーディング ツールは、入力テーブルやファイルの住所や場所を座標に変換します。
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputType">
+        <div>
+            <p>入力がテーブル アイテム (<b>[ホスト テーブル</b>]) になるか、 <code>.csv</code> または Excel ファイル (<b>[CSV/Excel]</b>) になるかを指定します。
+            </p>
+        </div>
+    </div>
+    <div id="inputFileItem">
+        <div>
+            <p>ジオコーディングされる住所や場所がある入力ファイル。 入力は、ホスト  <code>.csv</code> または Excel ファイルである必要があります。 </p>
+        </div>
+    </div>
+    <div id="inputTable">
+        <div>
+            <p>ジオコーディングされる住所や場所がある入力テーブル。 入力はホスト テーブル アイテムである必要があります。
+            </p>
+            <p>テーブル名の下にフィーチャの数が表示されます。 この数には、フィルターを使用して削除されたフィーチャを除く、テーブル内のすべてのフィーチャが含まれます。
+            </p>
+        </div>
+    </div>
+    <div id="geocodeServiceURL">
+        <div>
+            <p>ジオコーディングに使用されるロケーター サービス。 使用するロケーター サービスがドロップダウン メニューにない場合は、管理者に連絡してロケーター サービスをユーティリティ サービスとして追加してください。
+            </p>
+        </div>
+    </div>
+    <div id="singleOrMultiFieldSwitch">
+        <div>
+            <p>入力データを単一のフィールドに格納するか複数のフィールドに格納するかを指定します。
+            </p>
+        </div>
+    </div>
+    <div id="geocodeUIParameters">
+        <div>
+            <p>データの場所を決定するために、ロケーターが使用するフィールド。 住所、都市、州、郵便番号など、データ内に存在すると想定されているフィールドがあります。
+            </p>
+        </div>
+    </div>
+    <div id="sourceCountry">
+        <div>
+            <p>データが存在する国。 すべての住所が 1 つの国の住所である場合、最も正確な結果を得るためにその国名を選択します。 それ以外の場合は、このパラメーターは空のままにしておきます。
+            </p>
+        </div>
+    </div>
+    <div id="outputFields">
+        <div>
+            <p>出力データセットに含めるフィールドを指定します。 次のようなオプションがあります。
+            </p>
+            <ul>
+                <li> <b>[すべて]</b> - 使用可能なすべてのロケーター出力フィールドがジオコードの結果に含まれます。
+                </li>
+                <li> <b>[最小]</b> - ロケーターのフィールドのサブセットと、入力テーブルのフィールドが結果に含まれます。
+                </li>
+                <li> <b>[場所のみ]</b> - ロケーターの <i>Shape</i> フィールドと、入力テーブルのフィールドが結果に含まれます。
+                </li>
+            </ul>
+            
+        </div>
+    </div>
+    <div id="outputType">
+        <div>
+            <p>作成する出力のタイプ。 フィーチャ サービス、 <code>.csv</code> ファイル、 <code>.xls</code> ファイルを出力できます。
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p> <b>[マイ コンテンツ]</b> に作成されるレイヤーやファイルの名前。
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>結果を保存する  <b>[マイ コンテンツ]</b> 内のフォルダーの名前。
+            </p>
+        </div>
+    </div>
+</div>
+</html>

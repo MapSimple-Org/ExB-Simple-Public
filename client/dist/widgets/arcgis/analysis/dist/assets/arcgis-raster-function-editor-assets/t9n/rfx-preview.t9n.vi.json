@@ -1,0 +1,13 @@
+{
+  "header": "Xem trước",
+  "description": "Xem trước kết quả trước khi chạy phân tích.",
+  "showPreview": "Hiển thị bản xem trước",
+  "previewLayer": "Xem trước lớp ${number}",
+  "update": "Cập nhật",
+  "newPreview": "Chế độ xem trước mới",
+  "previewPopup": "Cho phép xem trước kết quả phân tích theo thông số đầu vào.",
+  "previewError": "Lớp xem trước này không khả dụng. Kiểm tra thông số đầu vào và cập nhật lại lớp xem trước này.",
+  "updatePopover": "Cập nhật lớp xem trước đã chọn",
+  "createPopover": "Tạo lớp xem trước mới",
+  "maxPreview": "Số lớp xem trước tối đa được phép: ${maxCount}"
+}

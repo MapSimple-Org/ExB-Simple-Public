@@ -1,0 +1,7 @@
+{
+  "addEntryButtonLabel": "추가",
+  "maxGroupsMessage": "최대 항목 수는 ${maxCount}입니다.",
+  "minGroupsMessage": "최소 항목 수는 ${minCount}입니다.",
+  "removeEntryButtonLabel": "항목 제거",
+  "requiredMessage": "이 매개변수는 필수입니다."
+}

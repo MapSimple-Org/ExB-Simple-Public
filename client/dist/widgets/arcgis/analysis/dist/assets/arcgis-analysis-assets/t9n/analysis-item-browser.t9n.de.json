@@ -1,0 +1,9 @@
+{
+  "addToMap": "Bestätigen und zur Karte hinzufügen",
+  "cancel": "Abbrechen",
+  "confirm": "Bestätigen",
+  "header": "Element auswählen",
+  "select": "Auswählen",
+  "unsupportedLayer": "Dieser Parameter unterstützt die folgenden Layer nicht: ${layerName}",
+  "viewDetails": "Details anzeigen"
+}

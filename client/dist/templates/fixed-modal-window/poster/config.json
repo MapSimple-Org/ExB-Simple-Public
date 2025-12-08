@@ -1,0 +1,88 @@
+{
+  "layouts": {
+    "layout_1": {
+      "type": "FIXED",
+      "content": {
+        "0": {
+          "type": "WIDGET",
+          "widgetId": "widget_8",
+          "bbox": {
+            "left": "50%",
+            "right": "0.0000%",
+            "top": "50%",
+            "bottom": "0.0000%",
+            "width": "90.00%",
+            "height": "90.00%"
+          },
+          "setting": {
+            "vCenter": true,
+            "hCenter": true
+          }
+        }
+      },
+      "order": [
+        "0"
+      ],
+      "setting": {
+        "lockDescendants": true
+      }
+    }
+  },
+  "widgets": {
+    "widget_8": {
+      "uri": "widgets/common/text/",
+      "config": {
+        "text": "<p><span style=\"font-size: 18px;\">Lorem ipsum dolor sit amet</span></p><p><br></p><p><img src=\"data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTYiIGhlaWdodD0iMTYiIHZpZXdCb3g9IjAgMCAxNiAxNiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBjbGlwLXBhdGg9InVybCgjY2xpcDBfNjE1XzIxODEpIj48cGF0aCBmaWxsLXJ1bGU9ImV2ZW5vZGQiIGNsaXAtcnVsZT0iZXZlbm9kZCIgZD0iTTE2IDBIMFYxNkgxNlYwWk03LjUgNS43NUM3LjUgNi4xNjQyMSA3LjE2NDIxIDYuNSA2Ljc1IDYuNUM2LjMzNTc5IDYuNSA2IDYuMTY0MjEgNiA1Ljc1QzYgNS4zMzU3OSA2LjMzNTc5IDUgNi43NSA1QzcuMTY0MjEgNSA3LjUgNS4zMzU3OSA3LjUgNS43NVpNNy4yODU3MSA5Ljg0NDM1TDUuNSA3LjUzMzI0TDMgMTAuOTk5OUgxM0w5Ljc4NTcyIDYuMzc3NjlMNy4yODU3MSA5Ljg0NDM1WiIgZmlsbD0iI2NjYyIvPjwvZz48ZGVmcz48Y2xpcFBhdGggaWQ9ImNsaXAwXzYxNV8yMTgxIj48cmVjdCB3aWR0aD0iMTYiIGhlaWdodD0iMTYiIGZpbGw9IiM0NDQiLz48L2NsaXBQYXRoPjwvZGVmcz48L3N2Zz4=\" data-name=\"svg+xml;base64,PHN2ZyB3aWR0aD0iMTYiIGhlaWdodD0iMTYiIHZpZXdCb3g9IjAgMCAxNiAxNiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBjbGlwLXBhdGg9InVybCgjY2xpcDBfNjE1XzIxODEpIj48cGF0aCBmaWxsLXJ1bGU9ImV2ZW5vZGQiIGNsaXAtcnVsZT0iZXZlbm9kZCIgZD0iTTE2IDBIMFYxNkgxNlYwWk03LjUgNS43NUM3LjUgNi4xNjQyMSA3LjE2NDIxIDYuNSA2Ljc1IDYuNUM2LjMzNTc5IDYuNSA2IDYuMTY0MjEgNiA1Ljc1QzYgNS4zMzU3OSA2LjMzNTc5IDUgNi43NSA1QzcuMTY0MjEgNSA3LjUgNS4zMzU3OSA3LjUgNS43NVpNNy4yODU3MSA5Ljg0NDM1TDUuNSA3LjUzMzI0TDMgMTAuOTk5OUgxM0w5Ljc4NTcyIDYuMzc3NjlMNy4yODU3MSA5Ljg0NDM1WiIgZmlsbD0iI2NjYyIvPjwvZz48ZGVmcz48Y2xpcFBhdGggaWQ9ImNsaXAwXzYxNV8yMTgxIj48cmVjdCB3aWR0aD0iMTYiIGhlaWdodD0iMTYiIGZpbGw9IiM0NDQiLz48L2NsaXBQYXRoPjwvZGVmcz48L3N2Zz4=\" width=\"145\" style=\"display: block; float: left; margin: 0px 0.9em 0.9em 0px; width: 31.66%;\">Ne debet assentior qui. Zril salutandi comprehensam an qui, nam no semper temporibus dissentiet, eleifend antiopam evertitur at sed. An wisi efficiendi sit.</p><p><br></p><p>Vel ea mentitum dissentiet, partem saperet accumsan vim ex, meliore repudiare consetetur et has.</p><p><br></p><p>Eu nostrum volutpat maluisset has, per ea homero utamur, ius ut wisi nominati. Sumo denique appareat.</p><p><br></p><p>Inermis vituperatoribus et ius. Aeque tritani eu qui, ne pri euripidis, mandamus reprimique te vix. Ei case atqui sonet vim.</p>",
+        "placeholder": "Double click to edit text"
+      },
+      "id": "widget_8"
+    }
+  },
+  "views": {},
+  "sections": {},
+  "dialogs": {
+    "dialog_1": {
+      "id": "dialog_1",
+      "mode": "FIXED",
+      "blockPage": true,
+      "sizeMode": {
+        "LARGE": {
+          "position": "MIDDLE_CENTER",
+          "width": "480px",
+          "height": "360px",
+          "offsetX": 0,
+          "offsetY": 0,
+          "widthMode": "CUSTOM",
+          "heightMode": "CUSTOM"
+        }
+      },
+      "interactionType": null,
+      "interactionStyles": null,
+      "confirmBeforeClose": true,
+      "alwaysShowConfirmation": false,
+      "dialogBackground": {
+        "color": "var(--sys-color-surface-overlay)",
+        "fillType": "fill",
+        "image": {
+          "url": ""
+        }
+      },
+      "overlayColor": "#000000",
+      "layout": {
+        "LARGE": "layout_1"
+      },
+      "index": 0,
+      "isSplash": false,
+      "border": {
+        "color": "var(--sys-color-divider-secondary)",
+        "type": "solid",
+        "width": "2px"
+      },
+      "closeWhenClickOverlay": true
+    }
+  },
+  "messageConfigs": {},
+  "customThemeOptions": {},
+  "publishTimestamp": 1759126749779,
+  "template": "poster"
+}

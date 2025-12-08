@@ -1,0 +1,14 @@
+{
+  "AddDataFromUrl": "Afegeix dades des d'un URL",
+  "addData": "Afegeix dades",
+  "clear": "Esborra",
+  "file": "Fitxer",
+  "fileNotFound": "No s'ha pogut carregar el fitxer.",
+  "invalidUrl": "L'URL o l'extensió del fitxer no són vàlids.",
+  "layerNotFound": "No s'ha pogut carregar la capa.",
+  "replaceData": "Substitueix les dades",
+  "required": "Aquest paràmetre és obligatori.",
+  "uploadData": "Puja les dades",
+  "uploadFailureMsg": "S'ha produït un error en dur a terme l'operació de pujada perquè la mida del fitxer o el tipus de fitxer no s'admeten per a aquest servei.",
+  "url": "URL"
+}

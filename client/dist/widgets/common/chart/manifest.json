@@ -1,0 +1,81 @@
+{
+  "name": "chart",
+  "label": "Chart",
+  "type": "widget",
+  "version": "1.19.0",
+  "exbVersion": "1.19.0",
+  "author": "Esri R&D Center Beijing",
+  "description": "This is the widget used in developer guide",
+  "copyright": "",
+  "license": "http://www.apache.org/licenses/LICENSE-2.0",
+  "dependency": "jimu-arcgis",
+  "settingDependency": "jimu-arcgis",
+  "publishMessages": [
+    {
+      "messageType": "DATA_RECORDS_SELECTION_CHANGE",
+      "messageCarryData": "OUTPUT_DATA_SOURCE"
+    }
+  ],
+  "defaultSize": {
+    "width": 540,
+    "height": 360
+  },
+  "properties": {
+    "hasSettingPage": true,
+    "canConsumeDataAction": true,
+    "coverLayoutBackground": true,
+    "notAutoLoadUsedFieldsData": true
+  },
+  "excludeDataActions": [
+    "arcgis-map.*",
+    "setFilter",
+    "near-me.locate",
+    "elevation-profile.*",
+    "directions.*",
+    "relatedData",
+    "edit.edit"
+  ],
+  "extensions": [],
+  "translatedLocales": [
+    "en",
+    "ar",
+    "bg",
+    "bs",
+    "ca",
+    "cs",
+    "da",
+    "de",
+    "el",
+    "es",
+    "et",
+    "fi",
+    "fr",
+    "he",
+    "hr",
+    "hu",
+    "id",
+    "it",
+    "ja",
+    "ko",
+    "lt",
+    "lv",
+    "no",
+    "nl",
+    "pl",
+    "pt-br",
+    "pt-pt",
+    "ro",
+    "ru",
+    "sk",
+    "sl",
+    "sr",
+    "sv",
+    "th",
+    "tr",
+    "zh-cn",
+    "uk",
+    "vi",
+    "zh-hk",
+    "zh-tw"
+  ]
+}

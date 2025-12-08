@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>Akıntı Y&ouml;n&uuml;nde İzle aracı, belirli girdi konumlarından akıntı y&ouml;n&uuml;ndeki akım yollarını belirler.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputLayer">
+        <div>
+            <p>Her bir akıntı y&ouml;n&uuml;ndeki iz &ccedil;izgisi i&ccedil;in başlangı&ccedil; konumu olarak kullanılacak nokta detayları.
+            </p>
+            <p class="toolPaneOnly">Detay sayısı, filtreleme kriterleri ve analiz yayılımı gibi ek fakt&ouml;rlere bağlıdır.
+            </p>
+        </div>
+    </div>
+    <div id="splitDistance">
+        <div>
+            <p>İz &ccedil;izgisinin b&ouml;l&uuml;neceği ayrı segmentlerin uzunluğu.
+            </p>
+        </div>
+    </div>
+    <div id="splitUnits">
+        <div>
+            <p> <b>Ayırma mesafesi</b> parametresi i&ccedil;in kullanılacak birimler.
+            </p>
+        </div>
+    </div>
+    <div id="maxDistance">
+        <div>
+            <p>Geri d&ouml;nd&uuml;r&uuml;lecek iz &ccedil;izgisinin toplam uzunluğu.
+            </p>
+        </div>
+    </div>
+    <div id="maxDistanceUnits">
+        <div>
+            <p> <b>Maksimum akıntı y&ouml;n&uuml;ndeki iz mesafesi</b> parametresi i&ccedil;in kullanılacak birimler.
+            </p>
+        </div>
+    </div>
+    <div id="boundingPolygonLayer">
+        <div>
+            <p>İz &ccedil;izgisinin kırpılacağı alanı tanımlayan bir &ccedil;okgen detayı katmanı.
+            </p>
+            <p>Bu parametre  <b>Maksimum akıntı &ouml;n&uuml;ndeki iz mesafesi</b> parametre değerini ge&ccedil;ersiz kılar.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>Oluşturulacak ve haritaya eklenecek akıntı y&ouml;n&uuml;ndeki iz yolu katmanının adı.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p> <b>İ&ccedil;eriğim</b> i&ccedil;inde sonucun kaydedileceği klas&ouml;r&uuml;n adı.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

@@ -1,0 +1,135 @@
+{
+  "next": "Neste",
+  "addField": "Legg til felt",
+  "selectDataType": "Velg datatypen som skal lagres i feltet",
+  "addGlobalIDNotice": "Feltet blir automatisk fylt inn for eksisterende data i laget eller tabellen. Når det er lagt til, kan ikke dette feltet redigeres eller slettes.",
+  "fieldName": "Visningsnavn",
+  "displayName": "Visningsnavn",
+  "length": "Lengde",
+  "defaultValue": "Standardverdi (valgfritt)",
+  "fieldTypes": "å_Field types____________ø",
+  "fieldValueType": "Feltverditype (valgfritt)",
+  "fieldDescription": "Feltbeskrivelse (valgfritt)",
+  "allowNullValues": "Tillat nullverdier",
+  "valueRequiredError": "Denne verdien er obligatorisk",
+  "fieldAdded": "Feltet ble lagt til",
+  "newFieldTypeNotice": "Denne felttypen støttes kanskje ikke fullt ut i enkelte klienter.",
+  "addingField": "Legger til felt ...",
+  "syncEnabled": "Enkelte felttyper kan ikke legges til fordi synkronisering er aktivert for laget.",
+  "newFeature": "Nytt geoobjekt",
+  "fieldAdditionUnsuccessful": "Feltet ble ikke lagt til",
+  "error": "Feil",
+  "noFieldTypeSelected": "Ingen felttype er valgt",
+  "nullFieldTypeError": "Du må velge en felttype for å fortsette.",
+  "fieldNameCharacterNotice": "Feltnavn som er lengre enn 31 tegn, er ikke kompatible med frakoblet bruk.",
+  "suggestedHeader": "Foreslått",
+  "otherHeader": "Annet",
+  "provideDescription": "Gi en beskrivelse av informasjonen som feltet vil inneholde",
+  "tooltipInfo": {
+    "globalIDExists": "Det finnes allerede et GlobalID-felt på denne tjenesten. Det kan bare være ett GlobalID-felt på et lag eller en tabell.",
+    "enterpriseTimestampOffset": "ArcGIS Enterprise støtter ikke felter for tidsstempelforskyvning i hostede geoobjektlag."
+  },
+  "text": {
+    "title": "Tekst",
+    "description": "Verdier som inneholder alfanumeriske tegn eller spesialtegn.",
+    "types": {
+      "esriFieldTypeString": {
+        "title": "Streng",
+        "description": "Lagre et sett med alfanumeriske tegn som har en spesifisert lengde."
+      }
+    }
+  },
+  "numbers": {
+    "title": "Tall",
+    "description": "Verdiene må inneholde tallrelatert informasjon.",
+    "types": {
+      "esriFieldTypeDouble": {
+        "title": "Dobbel",
+        "description": "Lagre tall med desimalplasser."
+      },
+      "esriFieldTypeInteger": {
+        "title": "Heltall",
+        "description": "Lagre hele tall fra -2 147 483 648 til 2 147 483 647."
+      },
+      "esriFieldTypeBigInteger": {
+        "title": "Stort heltall",
+        "description": "Lagre hele tall fra -(2${startSup}53${endSup}-1) til 2${startSup}53${endSup}-1. Bruk denne felttypen når du bruker tall som er utenfor det støttede heltallfeltområdet."
+      }
+    }
+  },
+  "dates": {
+    "title": "Datoer",
+    "description": "Verdiene må inneholde tidsrelatert informasjon.",
+    "types": {
+      "esriFieldTypeDate": {
+        "title": "Dato",
+        "description": "Lagre verdier med dato og klokkeslett."
+      },
+      "esriFieldTypeDateOnly": {
+        "title": "Kun dato",
+        "description": "Lagre datoverdier uten tidsverdier."
+      },
+      "esriFieldTypeTimeOnly": {
+        "title": "Kun klokkeslett",
+        "description": "Lagre tidsverdier uten datoverdier."
+      },
+      "esriFieldTypeTimestampOffset": {
+        "title": "Tidsstempelforskyvning",
+        "description": "Lagre verdier der dato, klokkeslett og forskyvning fra universell tid (UTC)."
+      }
+    }
+  },
+  "globalIdentifiers": {
+    "title": "Globale identifikatorer",
+    "description": "Verdier som unikt identifiserer et geoobjekt eller en tabellrad.",
+    "types": {
+      "esriFieldTypeGlobalID": {
+        "title": "GlobalID",
+        "description": "Lagre en streng som består av 36 tegn, som består av tall og bokstaver for unikt å identifisere et geoobjekt."
+      },
+      "esriFieldTypeGUID": {
+        "title": "GUID",
+        "description": "Lagre en streng som består av 36 tegn som består av bokstaver og tall. En Globally Unique Identifier (GUID) brukes ofte til å håndtere relasjoner mellom geoobjekter."
+      }
+    }
+  },
+  "fieldValueTypes": {
+    "nameOrTitle": "Navn eller tittel",
+    "description": "Beskrivelse",
+    "typeOrCategory": "Type eller kategori",
+    "countOrAmount": "Antall eller mengde",
+    "percentageOrRatio": "Prosent eller forhold",
+    "measurement": "Mål",
+    "currency": "Valuta",
+    "uniqueIdentifier": "Unik ID",
+    "phoneNumber": "Telefonnummer",
+    "emailAddress": "E-postadresse",
+    "orderedOrRanked": "Sortert eller rangert",
+    "binary": "Binær",
+    "locationOrPlaceName": "Lokasjon eller stedsnavn",
+    "coordinate": "Koordinat",
+    "dateAndTime": "Dato og klokkeslett",
+    "none": "Ingen"
+  },
+  "addFieldErrors": {
+    "invalidName": "Ugyldig navn",
+    "invalidLength": "Ugyldig lengde",
+    "outOfRangeValueError": "Verdien er utenfor området.",
+    "invalidValueError": "Den angitte verdien er ugyldig.",
+    "invalidFieldParameters": "Ugyldige feltparametere",
+    "invalidInputsError": "Sjekk at feltparameterne dine er fylt ut riktig.",
+    "existingFieldNameError": "Feltnavnet kan ikke være det samme som et eksisterende feltnavn.",
+    "invalidNameInputSQLError": "Feltnavnet kan ikke være det samme som et SQL-nøkkelord.",
+    "invalidNameInputInvalidCharactersError": "Må begynne med en bokstav og kan bare inneholde bokstaver, tall og understrekingstegn (_).",
+    "valueIsRequiredError": "Denne verdien er obligatorisk.",
+    "lengthExceeds": "Feltnavnet må inneholde færre enn eller lik ${maxFieldNameLength} tegn.",
+    "defaultValueExceeds": "Standardverdien overstiger den angitte feltlengden.",
+    "savingFailed": "å_Saving ${layerName} failed___________________________ø",
+    "readOnlyErrorMessage": "å_ArcGIS Online is experiencing operational issues and has switched to read-only mode. Some capabilities may be limited. For the latest updates on when this will be resolved, visit the ArcGIS Online Health Dashboard____________________________________________________________________________________________________________ø.",
+    "healthDashboard": "å_ArcGIS Online Health Dashboard_______________________________ø",
+    "genericAddFieldError": {
+      "title": "Feil",
+      "description": "Det oppstod en feil ved tillegging av feltet."
+    }
+  }
+}

@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>เครื่องมือคำนวณต้นทุนการเดินทางจะวัดเวลาหรือระยะทางการเดินทางระหว่างคู่จุด
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="originsLayer">
+        <div>
+            
+            <p class="OnlineOnly">ชั้นข้อมูลจุดที่แสดงถึงตำแหน่งต้นทาง ซึ่งจะใช้เพื่อคำนวณต้นทุนการเดินทาง รองรับชั้นข้อมูลสูงสุด  ห้าพัน ฟีเจอร์ </p>  
+            <p class="PortalOnly">ชั้นข้อมูลจุดที่แสดงถึงตำแหน่งต้นทาง ซึ่งจะใช้เพื่อคำนวณต้นทุนการเดินทาง
+            </p>
+            <p class="toolPaneOnly">จำนวนของฟีเจอร์จะขึ้นอยู่กับปัจจัยเพิ่มเติม อาทิ เกณฑ์การกรองและขอบเขตการวิเคราะห์
+            </p>
+        </div>
+    </div>
+    <div id="destinationsLayer">
+        <div>
+            
+            <p class="OnlineOnly">ชั้นข้อมูลจุดที่แสดงตำแหน่งปลายทางที่จะเดินทางไป ซึ่งจะใช้เพื่อคำนวณต้นทุนการเดินทาง รองรับชั้นข้อมูลสูงสุด  ห้าพัน ฟีเจอร์ </p> 
+            <p class="PortalOnly">ชั้นข้อมูลจุดที่แสดงตำแหน่งปลายทางที่จะเดินทางไป ซึ่งจะใช้เพื่อคำนวณต้นทุนการเดินทาง
+            </p>
+            <p class="toolPaneOnly">จำนวนของฟีเจอร์จะขึ้นอยู่กับปัจจัยเพิ่มเติม อาทิ เกณฑ์การกรองและขอบเขตการวิเคราะห์
+            </p>
+        </div>
+    </div>
+    <div id="originsLayerRouteIDField">
+        <div>
+            
+            <p>ฟิลด์ในชุดข้อมูล  <b>ชั้นข้อมูลจาก</b> ซึ่งใช้กำหนดคู่ต้นทางปลายทางที่กำหนดไว้ล่วงหน้า หากมีหลายตำแหน่งต้นทางและปลายทาง ID นี้จะต้องตรงกับค่าใน ฟิลด์ <b>ID เส้นทางชั้นข้อมูลถึง</b>
+            </p>
+        </div>
+    </div>
+    <div id="destinationsLayerRouteIDField">
+        <div>
+            
+            <p>ฟิลด์ในชุดข้อมูล  <b>ชั้นข้อมูลถึง</b> ซึ่งใช้กำหนดคู่ต้นทางปลายทางที่กำหนดไว้ล่วงหน้า หากมีหลายตำแหน่งต้นทางและปลายทาง ID นี้จะต้องตรงกับค่าใน ฟิลด์ <b>ID เส้นทางชั้นข้อมูลจาก</b>
+            </p>
+        </div>
+    </div>
+    <div id="pointBarrierLayer">
+        <div>
+            <p>มีอย่างน้อยหนึ่งฟีเจอร์จุดที่ทำหน้าที่เป็นข้อจำกัดชั่วคราว (อุปสรรค) ขณะเดินทางบนถนนพื้นฐาน จะสามารถเดินทางบนถนนนั้นได้ตามปกติ แต่จะไม่สามารถผ่านอุปสรรคไปได้
+            </p>
+        </div>
+    </div>
+    <div id="lineBarrierLayer">
+        <div>
+            <p>มีอย่างน้อยฟีเจอร์เส้นที่ทำหน้าที่เป็นข้อจำกัดชั่วคราว (อุปสรรค) ขณะเดินทางบนถนนพื้นฐาน อุปสรรคเส้น จะห้ามการเดินทางไปยังที่ใดก็ตามที่อุปสรรคตัดกับถนน
+            </p>
+        </div>
+    </div>
+    <div id="polygonBarrierLayer">
+        <div>
+            <p>มีอย่างน้อยหนึ่งฟีเจอร์โพลีกอนทำหน้าที่เป็นข้อจำกัดชั่วคราว (อุปสรรค) ขณะเดินทางบนถนนพื้นฐาน อุปสรรคโพลีกอน จะห้ามการเดินทางไปยังที่ใดก็ตามที่โพลีกอนตัดกับถนน
+            </p>
+        </div>
+    </div>
+    <div id="measurementType">
+        <div>
+            <p>วิธีการที่จะใช้ในการวัดระยะทางหรือเวลา วิธีการสามารถเป็นระยะทางเส้นหรือโหมดการเดินทางก็ได้
+            </p>
+        </div>
+    </div>
+    <div id="timeOfDay">
+        <div>
+            <p>วันที่และเวลาของการออกเดินทางจากตำแหน่งต้นทางในชุดข้อมูล ชั้นข้อมูลจาก
+            </p>
+        </div>
+    </div>
+    <div id="routeShape">
+        <div>
+            <p>ระบุว่าจะเชื่อมต่อต้นทางและปลายทางโดยใช้เส้นแบบใยแมุมมองหรือเส้นที่ต้องการ (<b>เส้นตรง</b>) หรือถนนบนเครือข่ายถนนพื้นฐาน (<b>ตามถนน</b>)
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>ชื่อของชั้นข้อมูลที่จะสร้างและเพิ่มลงในแผนที่
+            </p>
+        </div>
+    </div>
+    <div id="includeRouteLayers">
+        <div>
+            <p>ระบุว่าแต่ละเส้นทางผลลัพธ์ จะถูกบันทึกเป็นชั้นข้อมูลเส้นทางหรือไม่
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            
+            <p>ชื่อของโฟลเดอร์ใน  <b>เนื้อหาของฉัน</b> ที่จะทำการบันทึกผลลัพธ์
+            </p>
+        </div>
+    </div>
+</div>
+</html>

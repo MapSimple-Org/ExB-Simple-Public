@@ -1,0 +1,27 @@
+{
+  "hosted": "barındırılan",
+  "hostedView": "barındırılan, görünüm",
+  "hostedPhotos": "barındırılan, fotoğraflar",
+  "hostedCollection": "barındırılan, koleksiyon",
+  "hostedMultidimensional": "barındırılan, çok boyutlu",
+  "hostedCollectionMultidimensional": "barındırılan, koleksiyon, çok boyutlu",
+  "collectionMultidimensional": "koleksiyon, çok boyutlu",
+  "multidimensional": "çok boyutlu",
+  "collection": "koleksiyon",
+  "photoLocations": "fotoğraflar",
+  "locatorView": "görünüm",
+  "utilityNetwork": "utility network",
+  "Integrated Mesh": "entegre örgü ağı",
+  "3D Object": "3B nesne",
+  "Point": "nokta",
+  "Point Cloud": "nokta bulutu",
+  "Building Scene Layer": "bina sahne katmanı",
+  "Voxel Scene Layer": "voksel sahne katmanı",
+  "dataStore": {
+    "bigdata": "büyük veri dosya paylaşımı",
+    "cloud": "bulut",
+    "cloudStorage": "bulut depolama",
+    "database": "veri tabanı",
+    "folder": "klasör"
+  }
+}

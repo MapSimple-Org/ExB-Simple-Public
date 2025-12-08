@@ -1,0 +1,23 @@
+{
+  "cancel": "Avbryt",
+  "reset": "Tilbakestill",
+  "resetting": "Tilbakestiller...",
+  "save": "Lagre",
+  "saving": "Lagrer ...",
+  "itemClassificationLabel": "Klassifisering",
+  "itemClassificationCategoryLabel": "Etikett for elementklassifiseringskategori",
+  "itemClassificationEditLabel": "Rediger klassifisering",
+  "itemClassificationValidateError": "Valideringen mislyktes. Klassifiseringsverdien fylles ikke ut for elementet. Rediger og lagre en ny.",
+  "classificationValueSaved": "Klassifiseringsverdien er lagret",
+  "classificationNotificationHandler": "Klassifiseringsvarselbehandler",
+  "openModal": "Åpne modal",
+  "currentSelections": "Gjeldende utvalg",
+  "fieldSelectionError": "Dette er et obligatorisk felt.",
+  "selectAnOption": "Velg et alternativ",
+  "selectOptions": "Velg alternativ(er)",
+  "singleSelectionLabel": "Rullegardinmeny for enkeltvalg",
+  "multipleSelectionLabel": "Rullegardinmeny for flere valg",
+  "singleAttributeError": "Innholdet MÅ spesifisere en ${attributeName}. Se gjennom valgene dine.",
+  "multipleAttributeErrors": "Innholdet MÅ spesifisere en ${attributeString} og ${lastAttributeName}. Se gjennom valgene dine.",
+  "classificationSectionLabel": "Klassifisering"
+}

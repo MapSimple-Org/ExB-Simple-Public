@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>Das Werkzeug &quot;Kontinuierlichen Fluss ableiten&quot; erstellt ein Raster der Abflussakkumulation in jede Zelle aus einem Eingabe-Oberfl&auml;chen-Raster, ohne dass daf&uuml;r zuerst Senken oder Mulden gef&uuml;llt werden m&uuml;ssen.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputSurfaceRaster">
+        <div>
+            <p>Das H&ouml;hen-Raster, das f&uuml;r die Berechnung verwendet wird.
+            </p> 
+        </div>
+    </div>
+    <div id="inputDepressionsData">
+        <div>
+            <p>Der Layer, der echte Mulden oder Senken definiert, in denen Wasser hinein- aber nicht herausflie&szlig;en kann.
+            </p>
+            <p class="toolPaneOnly">Bei Feature-Eingaben ist die Anzahl abh&auml;ngig von zus&auml;tzlichen Faktoren wie Filterkriterien oder der Analyseausdehnung.
+            </p> 
+        </div>
+    </div>
+    <div id="inputWeightRaster">
+        <div>
+            <p>Der Raster-Layer, der den Teil des Flusses definiert, der bei den einzelnen Zellen zur Abflussakkumulation beitr&auml;gt.
+            </p>
+        </div>
+    </div>
+    <div id="flowDirectionType">
+        <div>
+            <p>Gibt die bei der Berechnung der Flie&szlig;richtung verwendete Abflussmethode an.
+            </p>
+            <p>Bei der Methode D8 wird die Flie&szlig;richtung dem Nachbarn mit der steilsten Neigung zugewiesen. Bei der Methode MFD wird die Flie&szlig;richtung gem&auml;&szlig; einem adaptiven Exponenten f&uuml;r Partitionen &uuml;ber alle niedrigeren Nachbarn hinweg partitioniert.
+            </p>
+        </div>
+    </div>
+    <div id="forceFlow">
+        <div>
+            <p>Gibt an, ob der Fluss an Randzellen den normalen Flie&szlig;regeln folgt oder immer nach au&szlig;en flie&szlig;t.
+            </p>
+            <p>Wenn die Option deaktiviert ist, verl&auml;uft der Fluss zur inneren Zelle mit der st&auml;rksten Absenkung im Z-Wert. Wenn die Absenkung jedoch kleiner oder gleich 0 ist, erfolgt der Fluss bei der Zelle aus dem Oberfl&auml;chen-Raster hinaus. Ist die Option aktiviert, verl&auml;uft die Flie&szlig;richtung immer aus dem Oberfl&auml;chen-Raster heraus.
+            </p>
+        </div>
+    </div>
+    <div id="outputFlowAccumulationRasterName">
+        <div>
+            <p>Der Name des Abflussakkumulations-Raster-Layers, der erstellt und der Karte hinzugef&uuml;gt wird.
+            </p>
+        </div>
+    </div>
+    <div id="outputFlowDirectionRasterName">
+        <div>
+            <p>Der Name des Flie&szlig;richtungs-Raster-Layers, der erstellt und der Karte hinzugef&uuml;gt wird.
+            </p>
+        </div>
+    </div>
+    <div id="resultType">
+        <div>
+            <p>Der Typ der zu erstellenden Ausgaben. Die Ausgaben k&ouml;nnen gekachelte Bilddaten-Layer oder dynamische Bilddaten-Layer sein.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>Der Name des Ordners in  <b>Eigene Inhalte</b>, in dem die Ergebnisse gespeichert werden sollen.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

@@ -1,0 +1,31 @@
+{
+  "back": "Vissza",
+  "cancel": "Mégse",
+  "learnMore": "További információ",
+  "restore": "Visszaállítás",
+  "restoreTo": "Visszaállítás ide:",
+  "restoreItem": "Elem visszaállítása",
+  "restoreItems": "Elemek visszaállítása",
+  "noticeMessage": "A visszaállított elemek nem lesznek megosztva. Kérjük, mielőtt újból megosztaná tartalmát, ellenőrizze.",
+  "cannotBulkRestoreXItems": "Nem lehet ${number} elemnél több elemet tömegesen visszaállítani: kérjük, törölje néhány elem kijelölését.",
+  "cannotBulkRestoreMultipleOwners": "Nem lehet tömegesen visszaállítani a különböző tulajdonosokhoz tartozó elemeket. Válassza ki egyetlen tulajdonos tömegesen visszaállítani kívánt elemeit.",
+  "toRestore": {
+    "single": "Visszaállítani kívánt elem:",
+    "multiple": "Visszaállítani kívánt elemek:"
+  },
+  "cannotRestore": "Nem lehet visszaállítani a következőt:",
+  "dependentItems": {
+    "single": "Az elem nem állítható vissza, mert a következőtől függ: <strong style='font-weight: 500'>${parent}</strong>. Állítsa vissza őket együtt.",
+    "singleUnknown": "Az elem nem állítható vissza, mert egy, a lomtárban lévő másik elemtől függ. Állítsa vissza őket együtt.",
+    "multiple": "Ezek az elemek nem állíthatók vissza, mert a lomtárban lévő más elemektől függenek. Állítsa vissza őket együtt.",
+    "multipleSameSource": "Ezek az elemek nem állíthatók vissza, mert a következőtől függenek: <strong style='font-weight: 500'>${parent}</strong>. Állítsa vissza őket együtt."
+  },
+  "pageRangeWithTotalRecycleBinSize": {
+    "en": "${total}/${start} – ${end} (${size}) van a lomtárban",
+    "other": "${start} – ${end}, összesen: ${total} (${size}) a lomtárban"
+  },
+  "pageRangeWithGreaterThanTotalRecycleBinSize": {
+    "en": "${total}/${start} – ${end} (>${size}) a lomtárban",
+    "other": "${start} – ${end}, összesen: ${total} (>${size}) a lomtárban"
+  }
+}

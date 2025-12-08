@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>ポイント クラスターの検索ツールは、空間分布に基づき周辺ノイズ内でポイント フィーチャのクラスターを検索します。
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="analysisLayer">
+        <div>
+            <p>ポイント フィーチャの空間分布に基づき、クラスターにグループ化する入力ポイント レイヤー。
+            </p>
+        </div>
+    </div>
+    <div id="method">
+        <div>
+            <p>クラスターの特定に使用する方法。
+            </p>
+        </div>
+    </div>
+    <div id="minFeaturesCluster">
+        <div>
+            <p>クラスターと見なされるフィーチャの最小数。
+            </p>
+        </div>
+    </div>
+    <div id="searchDistance">
+        <div>
+            <p>クラスターに含まれるポイントを検索するための、各ポイント フィーチャ周辺の最大距離を指定します。 空白のままにすると、 <b>[検索距離]</b> 値はレイヤーで見つかった最大の中心距離になります (ただし、中心距離の上位 1 パーセントを除く)。
+            </p>
+        </div>
+    </div>
+    <div id="searchDistanceUnit">
+        <div>
+            <p>検索距離で使用する単位を指定します。
+            </p>
+        </div>
+    </div>
+    <div id="sensitivity">
+        <div>
+            <p>クラスターの密集度を決定する 0 ～ 100 の整数。 空白のままにすると、 <b>[クラスター感度]</b> 値は Kullback-Leibler Divergence を使用して計算されます。
+            </p>
+        </div>
+    </div>
+    <div id="timeField">
+        <div>
+            <p>各フィーチャのタイムスタンプが含まれている入力レイヤー内のフィールド。
+            </p>
+        </div>
+    </div>
+    <div id="searchTimeInterval">
+        <div>
+            <p>各フィーチャが時空間クラスターを形成しているかどうかの確認に使用する時間間隔。 検索時間間隔は、各フィーチャの時間の前後になります。たとえば、検索時間間隔がフィーチャの時間の前後 3 日間の場合は、そのフィーチャの時間の 3 日前に始まり、3 日後に終わるフィーチャがすべて含まれます。
+            </p>
+        </div>
+    </div>
+    <div id="searchTimeUnit">
+        <div>
+            <p>検索時間間隔に使用する単位を指定します。
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>作成されマップに追加されるレイヤーの名前。
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>結果を保存する  <b>[マイ コンテンツ]</b> 内のフォルダーの名前。
+            </p>
+        </div>
+    </div>
+</div>
+</html>

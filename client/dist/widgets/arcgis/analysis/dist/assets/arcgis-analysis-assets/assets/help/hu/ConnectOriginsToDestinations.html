@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>A Calculate Travel Cost eszk&ouml;z pontp&aacute;rok k&ouml;z&ouml;tti &uacute;tidőt vagy &uacute;ti t&aacute;vols&aacute;got sz&aacute;m&iacute;t ki.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="originsLayer">
+        <div>
+            
+            <p class="OnlineOnly">Az azokat a kiindul&aacute;si helyeket jel&ouml;lő pontr&eacute;teg, ahonnan az utaz&aacute;si k&ouml;lts&eacute;g ki lesz sz&aacute;m&iacute;tva. A megold&aacute;s a legfeljebb  ötezer vektoros elemet tartalmaz&oacute; r&eacute;tegeket t&aacute;mogatja. </p>  
+            <p class="PortalOnly">Az azokat a kiindul&aacute;si helyeket jel&ouml;lő pontr&eacute;teg, ahonnan az utaz&aacute;si k&ouml;lts&eacute;g ki lesz sz&aacute;m&iacute;tva.
+            </p>
+            <p class="toolPaneOnly">A vektoros elemek sz&aacute;ma olyan tov&aacute;bbi t&eacute;nyezőktől f&uuml;gg, mint p&eacute;ld&aacute;ul szűr&eacute;si krit&eacute;rium &eacute;s elemz&eacute;s kiterjeszt&eacute;se.
+            </p>
+        </div>
+    </div>
+    <div id="destinationsLayer">
+        <div>
+            
+            <p class="OnlineOnly">Az azokat a c&eacute;l&aacute;llom&aacute;sokat jel&ouml;lő pontr&eacute;teg, amelyek fel&eacute; az utaz&aacute;si k&ouml;lts&eacute;g ki lesz sz&aacute;m&iacute;tva. A megold&aacute;s a legfeljebb  ötezer vektoros elemet tartalmaz&oacute; r&eacute;tegeket t&aacute;mogatja. </p> 
+            <p class="PortalOnly">Az azokat a c&eacute;l&aacute;llom&aacute;sokat jel&ouml;lő pontr&eacute;teg, amelyek fel&eacute; az utaz&aacute;si k&ouml;lts&eacute;g ki lesz sz&aacute;m&iacute;tva.
+            </p>
+            <p class="toolPaneOnly">A vektoros elemek sz&aacute;ma olyan tov&aacute;bbi t&eacute;nyezőktől f&uuml;gg, mint p&eacute;ld&aacute;ul szűr&eacute;si krit&eacute;rium &eacute;s elemz&eacute;s kiterjeszt&eacute;se.
+            </p>
+        </div>
+    </div>
+    <div id="originsLayerRouteIDField">
+        <div>
+            
+            <p>A  <b>Kiindul&aacute;si r&eacute;teg</b> adathalmaz azon mezője, amely az előre hozz&aacute;rendelt kiindul&aacute;si hely&ndash;c&eacute;l&aacute;llom&aacute;s p&aacute;rt hat&aacute;rozza meg. Ha t&ouml;bb kiindul&aacute;si hely &eacute;s c&eacute;l&aacute;llom&aacute;s hely van, ennek az azonos&iacute;t&oacute;nak meg kell egyeznie a <b>C&eacute;l r&eacute;teg &uacute;tvonalazonos&iacute;t&oacute;</b> mezőj&eacute;ben szereplő &eacute;rt&eacute;kkel.
+            </p>
+        </div>
+    </div>
+    <div id="destinationsLayerRouteIDField">
+        <div>
+            
+            <p>Az  <b>&Eacute;rkez&eacute;si r&eacute;teg</b> adathalmaz azon mezője, amely az előre hozz&aacute;rendelt kiindul&aacute;si hely&ndash;c&eacute;l&aacute;llom&aacute;s p&aacute;rt hat&aacute;rozza meg. Ha t&ouml;bb kiindul&aacute;si hely &eacute;s c&eacute;l&aacute;llom&aacute;s hely van, ennek az azonos&iacute;t&oacute;nak meg kell egyeznie a <b>Kiindul&aacute;si r&eacute;teg &uacute;tvonalazonos&iacute;t&oacute;</b> mezőj&eacute;ben szereplő &eacute;rt&eacute;kkel.
+            </p>
+        </div>
+    </div>
+    <div id="pointBarrierLayer">
+        <div>
+            <p>Egy vagy t&ouml;bb olyan pontszerű vektoros elem, amely ideiglenes korl&aacute;toz&aacute;sk&eacute;nt (hat&aacute;rk&eacute;nt) szolg&aacute;l az &eacute;rintett utc&aacute;kon val&oacute; halad&aacute;skor. A k&ouml;zleked&eacute;s enged&eacute;lyezett az utc&aacute;n, de a hat&aacute;ron kereszt&uuml;l m&aacute;r nem.
+            </p>
+        </div>
+    </div>
+    <div id="lineBarrierLayer">
+        <div>
+            <p>Egy vagy t&ouml;bb olyan vonalas vektoros elem, amely ideiglenes korl&aacute;toz&aacute;sk&eacute;nt (hat&aacute;rk&eacute;nt) szolg&aacute;l az &eacute;rintett utc&aacute;kon val&oacute; halad&aacute;skor. A vonalas hat&aacute;rok minden olyan helyen akad&aacute;lyozz&aacute;k a tov&aacute;bbhalad&aacute;st, ahol a hat&aacute;rok keresztezik az utc&aacute;kat.
+            </p>
+        </div>
+    </div>
+    <div id="polygonBarrierLayer">
+        <div>
+            <p>Egy vagy t&ouml;bb olyan polygon vektoros elem, amely ideiglenes korl&aacute;toz&aacute;sk&eacute;nt (hat&aacute;rk&eacute;nt) szolg&aacute;l az &eacute;rintett utc&aacute;kon val&oacute; halad&aacute;skor. A polygon hat&aacute;rok megakad&aacute;lyozz&aacute;k a halad&aacute;st minden&uuml;tt, ahol a polygonok utc&aacute;t kereszteznek.
+            </p>
+        </div>
+    </div>
+    <div id="measurementType">
+        <div>
+            <p>A m&oacute;dszer, amelyet a t&aacute;vols&aacute;g vagy az idő m&eacute;r&eacute;s&eacute;re fog haszn&aacute;lni. A met&oacute;dus vonalszerű t&aacute;vols&aacute;g vagy utaz&aacute;si m&oacute;d lehet.
+            </p>
+        </div>
+    </div>
+    <div id="timeOfDay">
+        <div>
+            <p>A kiindul&aacute;si helyekről val&oacute; indul&aacute;s d&aacute;tuma &eacute;s időpontja a Kiindul&aacute;si r&eacute;teg adathalmazban.
+            </p>
+        </div>
+    </div>
+    <div id="routeShape">
+        <div>
+            <p>Megadja, hogy a kiindul&aacute;si &eacute;s a c&eacute;l&aacute;llom&aacute;sokat p&oacute;kvonalak vagy k&iacute;v&aacute;ns&aacute;gvonalak (<b>Egyenes vonal</b>) vagy az alapul szolg&aacute;l&oacute; k&ouml;z&uacute;ti h&aacute;l&oacute;zat utc&aacute;i (<b>Utc&aacute;k k&ouml;vet&eacute;se</b>) fogj&aacute;k-e &ouml;sszek&ouml;tni.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>A l&eacute;trehozni &eacute;s a t&eacute;rk&eacute;phez hozz&aacute;adni k&iacute;v&aacute;nt r&eacute;teg neve.
+            </p>
+        </div>
+    </div>
+    <div id="includeRouteLayers">
+        <div>
+            <p>Megadja, hogy minden egyes eredm&eacute;ny &uacute;tvonal el legyen mentve &uacute;tvonalr&eacute;tegk&eacute;nt.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            
+            <p>A  <b>Saj&aacute;t tartalom </b>azon mapp&aacute;j&aacute;nak neve, ahov&aacute; az eredm&eacute;nyek ment&eacute;se t&ouml;rt&eacute;nik.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

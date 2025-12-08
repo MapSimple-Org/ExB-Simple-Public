@@ -1,0 +1,22 @@
+{
+  "value": "Værdi",
+  "classname": "ClassName",
+  "color": "Farve",
+  "raster": "Raster",
+  "tableType": "Tabeltype",
+  "manual": "Manuel",
+  "external": "Ekstern",
+  "browseTable": "Gennemse tabel",
+  "browseTableFrom": "Gennemse tabel fra",
+  "file": "Fil",
+  "dbfFile": "DBF-fil",
+  "layer": "Lag",
+  "unsupportedDataType": "Ikke-understøttet type",
+  "failedToGetTableFromLayer": "Kunne ikke hente tabel fra laget.",
+  "generate": "Generer tabel",
+  "minValue": "Minimumværdi",
+  "maxValue": "Maksimumværdi",
+  "classBaseName": "Klassebasisnavn",
+  "colorscheme": "Farveskema",
+  "defaultClassName": "Label_"
+}

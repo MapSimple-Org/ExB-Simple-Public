@@ -1,0 +1,27 @@
+{
+  "hosted": "isännöity",
+  "hostedView": "isännöity, näkymä",
+  "hostedPhotos": "isännöidyt, valokuvat",
+  "hostedCollection": "isännöity, kokoelma",
+  "hostedMultidimensional": "isännöity, moniulotteinen",
+  "hostedCollectionMultidimensional": "isännöity, kokoelma, moniulotteinen",
+  "collectionMultidimensional": "kokoelma, moniulotteinen",
+  "multidimensional": "moniulotteinen",
+  "collection": "kokoelma",
+  "photoLocations": "valokuvat",
+  "locatorView": "näkymä",
+  "utilityNetwork": "jakeluverkko",
+  "Integrated Mesh": "integroitu verkko",
+  "3D Object": "3D-objekti",
+  "Point": "piste",
+  "Point Cloud": "pistepilvi",
+  "Building Scene Layer": "rakennusmaisemakarttataso",
+  "Voxel Scene Layer": "vokselimaisemakarttataso",
+  "dataStore": {
+    "bigdata": "big data -tiedostojako",
+    "cloud": "pilvi",
+    "cloudStorage": "pilvitallennustila",
+    "database": "tietokanta",
+    "folder": "kansio"
+  }
+}

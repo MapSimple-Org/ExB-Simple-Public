@@ -1,0 +1,23 @@
+{
+  "add": "添加",
+  "arcade": "Arcade",
+  "arcadeExpressionEditor": "Arcade 表达式编辑器",
+  "badSyntaxSQLExpression": "糟糕的SQL表达式语法。 更正错误。",
+  "calculationExpressionEditor": "计算表达式编辑器",
+  "cancel": "取消",
+  "chooseLanguage": "选择语言",
+  "fieldToCalculate": "要计算的字段：${fieldName}",
+  "idealFor": "非常适用于：",
+  "languageSelect": "语言选择",
+  "layerLoadFailNoFields": "图层加载失败。 无法针对该编辑器检索字段。",
+  "next": "前进",
+  "noLayerProvidedNoFields": "未提供图层。 无法针对该编辑器检索字段。",
+  "sql": "SQL",
+  "sqlExpressionEditor": "SQL表达式编辑器",
+  "tileSelectArcadeUseCase1": "相比于包含空间操作的 SQL 来说，计算需要更多功能",
+  "tileSelectArcadeUseCase2": "改进的疑难解答",
+  "tileSelectSqlUseCase1": "最高性能",
+  "tileSelectSqlUseCase2": "可以用 SQL 表示的计算",
+  "tileSelectSqlUseCase3": "已启用同步或“追踪已创建要素或已更新要素”图层",
+  "valueCannotBeBlank": "值不能为空。"
+}

@@ -1,0 +1,1 @@
+System.register([],function(e){return{execute:function(){e({settingsLabel:"Link set\u0103ri explorer",selectModelViewer:"Selecta\u021bi un widget Vizualizator de documente pentru a afi\u0219a documentele asociate."})}}});

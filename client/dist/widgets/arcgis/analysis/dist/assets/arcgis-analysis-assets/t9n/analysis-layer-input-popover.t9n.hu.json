@@ -1,0 +1,18 @@
+{
+  "add": "Hozzáadás",
+  "analysisSessionLayers": "Elemzési munkamenet rétegei",
+  "browseAnalysisLayers": "Rétegek tallózása",
+  "cancel": "Mégse",
+  "heading": "Réteg kijelölése",
+  "mapLayers": "Térképrétegek",
+  "mesh": "Hálóréteg",
+  "modelVariableLayers": "Modellváltozó rétegek",
+  "multipatch": "Multipatch réteg",
+  "multipoint": "Multipoint réteg",
+  "noCompatibleLayers": "A térkép nem tartalmaz kompatibilis rétegeket. Rétegek hozzáadása a térképhez vagy rétegek tallózása az elemzés elvégzéséhez.",
+  "noMatchesFound": "Nincs találat erre: ${searchTerm}.",
+  "point": "Pontréteg",
+  "polygon": "Polygonréteg",
+  "polyline": "Vonallánc réteg",
+  "table": "Táblázat"
+}

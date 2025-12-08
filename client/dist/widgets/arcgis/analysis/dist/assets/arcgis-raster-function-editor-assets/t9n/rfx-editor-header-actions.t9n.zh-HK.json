@@ -1,0 +1,11 @@
+{
+  "newTemplate": "建立新樣板",
+  "openTemplate": "開啟樣板",
+  "addTemplate": "新增樣板",
+  "addFunction": "新增點陣函數",
+  "addConstant": "新增常數",
+  "addRaster": "新增點陣變數",
+  "expand": "展開",
+  "editTemplateProperties": "編輯樣板屬性",
+  "viewTemplateProperties": "檢視樣板屬性"
+}

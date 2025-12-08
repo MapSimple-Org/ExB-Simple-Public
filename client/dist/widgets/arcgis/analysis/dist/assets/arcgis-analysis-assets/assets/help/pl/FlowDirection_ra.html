@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>Narzędzie Kierunek przepływu tworzy raster kierunku przepływu od każdej kom&oacute;rki do kom&oacute;rek sąsiednich w kierunku spadku przy użyciu metody D8, Multi-Flow Direction (MFD) lub D-Infinity (DINF).
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputSurfaceRaster">
+        <div>
+            <p>Raster danych wysokościowych, kt&oacute;ry zostanie użyty do obliczeń.
+            </p>
+        </div>
+    </div>
+    <div id="flowDirectionType">
+        <div>
+            <p>Określa typ przepływu, kt&oacute;ry zostanie użyty do obliczenia kierunku przepływu.
+            </p>
+        </div>
+    </div>
+    <div id="forceFlow">
+        <div>
+            <p>Określa, czy przepływ w kom&oacute;rkach krawędziowych będzie zgodny z normalnymi regułami przepływu, czy też zawsze będzie skierowany na zewnątrz.
+            </p>
+            <p>Jeśli opcja nie jest zaznaczona, przepływ będzie się odbywał w stronę kom&oacute;rki wewnętrznej o największym spadku wartości Z. Jeśli jednak spadek jest mniejszy lub r&oacute;wny zeru, kom&oacute;rka będzie wypływać na zewnątrz z rastra powierzchni. Jeśli opcja jest zaznaczona, przepływ będzie skierowany na zewnątrz rastra powierzchni.
+            </p>
+        </div>
+    </div>
+    <div id="outputFlowDirectionName">
+        <div>
+            <p>Nazwa warstwy rastrowej kierunku przepływu, kt&oacute;ra zostanie utworzona i dodana do mapy.
+            </p>
+        </div>
+    </div>
+    <div id="outputDropName">
+        <div>
+            <p>Nazwa warstwy rastrowej spadku, kt&oacute;ra zostanie utworzona i dodana do mapy. Ta warstwa zawiera wartości procentowe wsp&oacute;łczynnika między maksymalną zmianą wysokości, a długością ścieżki wzdłuż kierunku przepływu.
+            </p>
+        </div>
+    </div>
+    <div id="resultType">
+        <div>
+            <p>Typ danych wynikowych, kt&oacute;re zostaną utworzone. Danymi wynikowymi mogą być warstwy zobrazowań kafelkowych lub dynamiczne warstwy zobrazowań.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>Nazwa folderu na stronie  <b>Moje zasoby</b>, w kt&oacute;rym zostaną zapisane wyniki.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

@@ -1,0 +1,7 @@
+{
+  "searchMembers": "Rechercher des membres",
+  "selectUser": "Sélectionner un utilisateur",
+  "editSelection": "Modifier l’utilisateur sélectionné. Sélection actuelle : ${name}",
+  "clear": "Effacer",
+  "members": "Membres"
+}

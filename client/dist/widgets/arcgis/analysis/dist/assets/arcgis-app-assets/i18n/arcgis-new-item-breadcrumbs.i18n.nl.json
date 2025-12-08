@@ -1,0 +1,12 @@
+{
+  "apiCredentialType": "Type verificatie-item: API-sleutel",
+  "oauthCredentialType": "Type verificatie-item: OAuth 2.0",
+  "itemAccess": "Itemtoegang",
+  "page": "Pagina: ${page}",
+  "currentPage": "Huidige pagina: ${page}",
+  "privileges": "Machtigingen",
+  "itemDetails": "Itemdetails",
+  "settings": "Instellingen",
+  "serviceScope": "Reikwijdte service",
+  "summary": "Samenvatting"
+}

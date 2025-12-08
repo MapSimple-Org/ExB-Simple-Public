@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html dir="rtl">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>تستبدل أداة Nibble خلايا البيانات النقطية التي تتوافق مع القناع بقيمة أقرب جار.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputRaster">
+        <div>
+            <p>البيانات النقطية المدخلة مع المواقع المُقنَّعة التي سيتم استبدالها بقيمة أقرب جار لها.
+            </p>
+        </div>
+    </div>
+    <div id="inputMaskRaster">
+        <div>
+            <p>البيانات النقطية للقناع التي تحدد المواقع في البيانات النقطية المدخلة التي سيتم استبدالها. تعتبر الخلايا التي تحمل قيمة NoData موجودة ضمن المنطقة المقنعة.
+            </p>
+        </div>
+    </div>
+    <div id="inputZoneRaster">
+        <div>
+            <p>البيانات النقطية لمنطقة الإدخال. بالنسبة لكل منطقة، سيتم استبدال الخلايا المدخلة الموجودة داخل القناع فقط بقيم الخلايا الأقرب داخل نفس المنطقة.
+            </p>
+        </div>
+    </div>
+    <div id="nibbleValues">
+        <div>
+            <p>يحدد ما إذا كانت الخلايا NoData الموجودة في البيانات النقطية المدخلة يمكنها استبدال الخلايا في المناطق المُقنَّعة إذا كانت هي أقرب جار.
+            </p>
+            <p>إذا تم التحديد، فإن الخلايا NoData في البيانات النقطية المدخلة يمكن أن تحل محل الخلايا في المنطقة المُقنَّعة. إذا لم يتم التحديد، فإن الخلايا الصالحة في البيانات النقطية المدخلة فقط يمكن أن تحل محل الخلايا في المنطقة المُقنَّعة.
+            </p>
+        </div>
+    </div>
+    <div id="nibbleNodata">
+        <div>
+            <p>يحدد ما إذا كان سيتم الاحتفاظ بخلايا NoData الموجودة في المنطقة المُقنّعة أو استبدالها.
+            </p>
+            <p>إذا لم يتم التحديد، فسيتم الاحتفاظ بأي خلايا NoData داخل المنطقة المُقنَّعة في المخرجات. إذا تم التحديد، فسيتم استبدال خلايا NoData الموجودة في المنطقة المُقنَّعة بقيمة أقرب جار يقع خارج المنطقة المُقنَّعة.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>اسم طبقة البيانات النقطية المستبدلة التي ستتم إنشائها وإضافتها إلى الخريطة.
+            </p>
+        </div>
+    </div>
+    <div id="resultType">
+        <div>
+            <p>نوع المخرجات التي سيتم إنشاؤها. يمكن أن تكون المخرجات عبارة عن طبقة صور متجانبة أو طبقة صور ديناميكية.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>اسم المجلد الموجود في  <b>المحتوى الخاص بي</b> الذي سيتم حفظ النتائج فيه.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

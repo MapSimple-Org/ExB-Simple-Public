@@ -1,0 +1,68 @@
+{
+  "addField": "Pridať pole",
+  "addFieldErrors": {
+    "creatingFailed": "Vytváranie poľa ${fieldName} zlyhalo.",
+    "existingFieldNameError": "Názov poľa nemôže byť rovnaký ako názov existujúceho poľa.",
+    "invalidName": "Neplatný názov",
+    "invalidNameInputInvalidCharactersError": "Názov poľa musí začínať písmenom a môže obsahovať len písmená, číslice a znak \"_\".",
+    "invalidNameInputSQLError": "Názov poľa nemôže byť rovnaký ako kľúčové slovo SQL.",
+    "valueIsRequiredError": "Táto hodnota je vyžadovaná."
+  },
+  "cancel": "Zrušiť",
+  "createAndSelectField": "Vytvoriť a vybrať pole",
+  "createNewFields": "Vytvoriť nové pole",
+  "fieldLoadingErrorText": "Nie je možné načítať polia.",
+  "fieldName": "Názov poľa",
+  "fieldType": "Typ poľa",
+  "fieldTypesIncompatible": "Nie sú k dispozícii žiadne kompatibilné polia.",
+  "layerNotSelected": "Na vyplnenie polí nie je vybraná žiadna vrstva.",
+  "loadingFields": "Načítanie polí",
+  "noSearchResults": "Nenašli sa žiadne zhodné polia.",
+  "requiredErrorLabelDefault": "Pridať pole",
+  "requiredErrorMessage": "Tento parameter je povinný.",
+  "selectFieldPicklistHeading": "Vyberte pole",
+  "selectOkBtnText": "Vybrať",
+  "tooltip": "Je potrebné zadať platný názov poľa a typ poľa.",
+  "types": {
+    "big-integer": {
+      "description": "Uloženie celého čísla od -(2${startSup}53${endSup}-1) do 2${startSup}53${endSup}-1. Tento typ poľa použite, ak používate čísla, ktoré sú mimo podporovaného rozsahu celočíselných polí.",
+      "title": "Big integer"
+    },
+    "date": {
+      "description": "Uložiť hodnoty s dátumom a časom.",
+      "title": "Dátum"
+    },
+    "date-only": {
+      "description": "Uložiť dátumové hodnoty bez časových.",
+      "title": "Len dátum"
+    },
+    "double": {
+      "description": "Uloženie čísla s desatinnými čiarkami.",
+      "title": "Double"
+    },
+    "global-id": {
+      "description": "Uložte reťazec 36 znakov pozostávajúci z písmen a čísel používaných na jedinečnú identifikáciu prvku.",
+      "title": "GlobalID"
+    },
+    "guid": {
+      "description": "Uložte reťazec 36 znakov pozostávajúceho z písmen a čísel. Globálne jedinečný identifikátor alebo GUID sa často používa na spravovanie vzťahov medzi prvkami.",
+      "title": "GUID"
+    },
+    "integer": {
+      "description": "Uložiť celé čísla od ${lowerIntegerRange} do ${upperIntegerRange}.",
+      "title": "Integer"
+    },
+    "string": {
+      "description": "Uložiť sadu alfanumerických znakov",
+      "title": "Reťazec"
+    },
+    "time-only": {
+      "description": "Uložiť časové hodnoty bez dátumových.",
+      "title": "Len čas"
+    },
+    "timestamp-offset": {
+      "description": "Uložiť hodnoty indikujúce dátum, čas a ofset od koordinovaného svetového času (UTC).",
+      "title": "Ofset časovej pečiatky"
+    }
+  }
+}

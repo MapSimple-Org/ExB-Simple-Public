@@ -1,0 +1,13 @@
+{
+  "header": "Previsualización",
+  "description": "Obtenga una vista previa del resultado antes de ejecutar el análisis.",
+  "showPreview": "Mostrar vista previa",
+  "previewLayer": "Capa de vista previa ${number}",
+  "update": "Actualizar",
+  "newPreview": "Nueva vista previa",
+  "previewPopup": "Habilite la vista previa de los resultados del análisis según los parámetros de entrada.",
+  "previewError": "Esta capa de vista previa no está disponible. Compruebe los parámetros de entrada y vuelva a actualizar esta capa de vista previa.",
+  "updatePopover": "Actualizar la capa de vista previa seleccionada",
+  "createPopover": "Crear nueva capa de vista previa",
+  "maxPreview": "Número máximo de capas de vista previa permitidas: ${maxCount}"
+}

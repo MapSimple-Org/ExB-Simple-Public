@@ -1,0 +1,7 @@
+{
+  "defaultValue": "Loại thông số không được hỗ trợ. Giá trị mặc định sẽ được sử dụng. <calcite-link target='_blank' href='${ docLink }'>Tìm hiểu thêm</calcite-link>",
+  "requiredMessage": "Thông số này là thông tin bắt buộc.",
+  "unsupportedGPType": "Loại thông số không được hỗ trợ. <calcite-link target='_blank' href='${ docLink }'>Tìm hiểu thêm</calcite-link>",
+  "unsupportedParameterConfig": "Cấu hình thông số không được hỗ trợ. <calcite-link target='_blank' href='${ docLink }'>Tìm hiểu thêm</calcite-link>",
+  "unsupportedParameterConfigDefaultValue": "Cấu hình thông số không được hỗ trợ. Giá trị mặc định sẽ được sử dụng. <calcite-link target='_blank' href='${ docLink }'>Tìm hiểu thêm</calcite-link>"
+}

@@ -1,0 +1,23 @@
+{
+  "CPU": "CPE",
+  "GPU": "GPE",
+  "asSpecified": "Kot je določeno",
+  "automatic": "Samodejno",
+  "bilinear": "Bilinearna interpolacija (za neprekinjene podatke)",
+  "cellSize": "Velikost celice",
+  "cubic": "Kubična konvolucija (za neprekinjene podatke)",
+  "default": "Privzeto",
+  "fromLayer": "Iz sloja",
+  "mask": "Maska",
+  "maxOf": "Največ vnosov",
+  "minOf": "Najmanj vnosov",
+  "nearest": "Najbližji sosed (za diskretne podatke)",
+  "parallelProcessingFactor": "Faktor vzporednega procesiranja",
+  "parallelProcessingFactorPlaceholderText": "Vnesi število ali odstotek ...",
+  "processorType": "Tip procesorja",
+  "recycleProcessingWorkers": "Reciklirni interval obdelovalnih delavcev",
+  "resamplingMethod": "Metoda ponovnega vzorčenja",
+  "retryOnFailures": "Število ponovnih poskusov ob neuspehih",
+  "selectCellSize": "Izberite velikost celice...",
+  "snapRaster": "Privlačnost rastra"
+}

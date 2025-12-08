@@ -1,0 +1,143 @@
+{
+  "memberBrowser": {
+    "filters": "Filtre",
+    "pageRange": "${start}–${end}, totalt: ${total}",
+    "pageRangeAria": "${start}-${end}, totalt antall medlemmer: ${total}",
+    "selectedMembers": "Valgte medlemmer",
+    "noSelectedMembers": "Ingen medlemmer er for tiden valgt",
+    "noUsersFound": "Finner ingen brukere som oppfyller kriteriene. Prøv å fjerne noen filtre eller endre søket for å vise flere brukere.",
+    "enterTermExternal": "Skriv inn et søkeord for å finne brukere i hele ArcGIS Online",
+    "noUsers": "Ingen brukere er tilgjengelig",
+    "coordinator": "Samarbeidskoordinator"
+  },
+  "search": {
+    "searchMembers": "Søke etter medlemmer"
+  },
+  "filterUserTypes": {
+    "title": "Brukertype",
+    "label": "Brukertype: ${name}",
+    "loading": "Laster inn brukertyper ..."
+  },
+  "filterRoles": {
+    "title": "Rolle",
+    "label": "Rolle: ${name}",
+    "loading": "Laster inn roller ...",
+    "searchRoles": "Søk roller"
+  },
+  "filterOrgGroups": {
+    "title": "Organisasjonsgrupper",
+    "label": "Gruppe: ${name}",
+    "loading": "Laster organisasjonsgrupper",
+    "searchGroups": "Søk i grupper"
+  },
+  "filterMyGroups": {
+    "title": "Mine grupper",
+    "label": "Gruppe: ${name}",
+    "loading": "Laster inn mine grupper …",
+    "searchMyGroups": "Søk i mine grupper"
+  },
+  "filterCategories": {
+    "title": "Kategorier",
+    "label": "Kategori: ${name}",
+    "loading": "Laster inn kategorier ...",
+    "noCategoriesTitle": "Ingen kategorier ennå",
+    "noCategories": "Med kategorier kan medlemmer ordne elementer på en konsekvent måte. Kategoriene gjør det også enkelt å bla gjennom innhold i organisasjonen.",
+    "setupCategories": "Sett opp medlemskategorier",
+    "configureCategories": "Konfigurer kategorier",
+    "noCategoriesAssigned": "Ingen kategorier er tilordnet"
+  },
+  "filterPartnerCollabs": {
+    "title": "Partnersamarbeid",
+    "label": "Partnersamarbeid: ${name}",
+    "loading": "Laster inn partnersamarbeid ...",
+    "coordinatorsOnly": "Bare samarbeidskoordinatorer",
+    "coordinatorsDescription": "Samarbeidskoordinatorer er representanter fra partnersamarbeid som kan legges til en gruppe uten bekreftelse.",
+    "coordinatorsInfoLabel": "Mer informasjon om samarbeidskoordinatorer"
+  },
+  "filterSearchSwitch": {
+    "searchAll": "Søk i alle ArcGIS Online-organisasjonsmedlemmer",
+    "searchPartners": "Inkluder medlemmer av denne organisasjonen og partnerorganisasjoner"
+  },
+  "table": {
+    "caption": "Medlemsresultater, kolonneoverskrifter med knapper kan sorteres.",
+    "selectAll": "Velg alle",
+    "selection": "Utvalg",
+    "headers": {
+      "name": "Navn",
+      "membertype": "Grupperolle",
+      "affiliation": "Tilknytning",
+      "joined": "Innmeldt",
+      "credits": "Gjenværende credits",
+      "lastlogin": "Siste pålogging",
+      "usertype": "Brukertype",
+      "role": "Rolle"
+    }
+  },
+  "tableRow": {
+    "moreOptions": "Flere alternativer",
+    "groupManager": "Gruppeadministrasjon",
+    "owner": "Eier",
+    "member": "Medlem",
+    "myOrg": "Min organisasjon",
+    "other": "Annet",
+    "coordinator": "Samarbeidskoordinator",
+    "noLimit": "Ingen begrensning",
+    "creditsNumber": "${remain} av ${total}",
+    "today": "I dag",
+    "yesterday": "I går",
+    "never": "Aldri"
+  },
+  "myOrg": {
+    "myOrgView": "Min organisasjon-visning"
+  },
+  "filterGroupRole": {
+    "title": "Grupperolle",
+    "label": "Grupperolle: ${role}",
+    "admins": "Eier og gruppeadministratorer",
+    "member": "Medlem"
+  },
+  "filterAffiliation": {
+    "title": "Tilknytning",
+    "label": "Tilknytning: ${name}",
+    "myOrg": "Min organisasjon",
+    "other": "Annet"
+  },
+  "filterCreditsRemain": {
+    "title": "Gjenværende credits",
+    "noLimit": "Ingen begrensning",
+    "lessThan": "Mindre enn",
+    "credits": "Credits",
+    "labelNoLimit": "Credits: Ingen begrensning",
+    "labelLess": "Credits: Færre enn ${value}",
+    "invalidValue": "Den angitte verdien er ugyldig."
+  },
+  "filterEmailVerification": {
+    "title": "Status for e-postbekreftelse",
+    "unverified": "Ubekreftede e-postadresser",
+    "verified": "Bekreftede e-postadresser",
+    "label": "Status for e-postbekreftelse: ${status}"
+  },
+  "filterLoginType": {
+    "title": "Type pålogging",
+    "label": "Type pålogging: ${type}",
+    "social": "Sosialt"
+  },
+  "filterApp": {
+    "title": "App",
+    "label": "App: ${app}"
+  },
+  "filterMFA": {
+    "title": "Godkjenning med flere faktorer",
+    "enabled": "Aktivert",
+    "disabled": "Deaktivert",
+    "label": "Flerfaktorautentisering: ${status}"
+  },
+  "roles": {
+    "user": "Bruker",
+    "publisher": "Publisher",
+    "admin": "Administrator",
+    "viewer": "Viewer",
+    "editor": "Data Editor",
+    "facilitator": "Facilitator"
+  }
+}

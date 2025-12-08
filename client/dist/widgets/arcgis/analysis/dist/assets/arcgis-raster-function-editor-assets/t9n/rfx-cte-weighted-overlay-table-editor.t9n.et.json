@@ -1,0 +1,13 @@
+{
+  "weightedOverlayTable": "Kaalutud ülekatte tabel",
+  "id": "ID",
+  "layer": "Kiht",
+  "field": "Väli",
+  "influence": "Mõju",
+  "sumOfInfluence": "Mõju summa",
+  "value": "Väärtus",
+  "remapTable": "Vastenduste tabel",
+  "scale": "Mõõtkava",
+  "scales": "Mõõtkavad",
+  "selectRaster": "Vali raster"
+}

@@ -1,0 +1,13 @@
+{
+  "weightedOverlayTable": "Tablica ponderiranih preklapanja",
+  "id": "ID",
+  "layer": "Sloj",
+  "field": "Polje",
+  "influence": "Utjecaj",
+  "sumOfInfluence": "Zbroj utjecaja",
+  "value": "Vrijednost",
+  "remapTable": "Ponovno kartiraj tablicu",
+  "scale": "Mjerilo",
+  "scales": "Ljestvice",
+  "selectRaster": "Odaberi raster"
+}

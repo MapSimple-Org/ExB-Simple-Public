@@ -1,0 +1,8 @@
+{
+  "fieldTypesIncompatible": "Det finns inga kompatibla fält tillgängliga.",
+  "inputPlaceholderText": "Välj fält",
+  "layerNotSelected": "Inget lager har valts för att fylla i fälten.",
+  "multiSelectFieldButtonText": "Fält",
+  "removeField": "Ta bort",
+  "replaceField": "Ersätt fält"
+}

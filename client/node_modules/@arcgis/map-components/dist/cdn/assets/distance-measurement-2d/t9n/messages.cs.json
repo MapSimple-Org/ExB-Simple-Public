@@ -1,0 +1,1 @@
+{"componentLabel":"Měření vzdálenosti","distance":"Vzdálenost","hint":"Kliknutím do mapy umístěte první bod a zahajte měření","mode":"Režim","modes":{"auto":"Automaticky","planar":"Rovinná","geodesic":"Geodetická"},"newMeasurement":"Nové měření","unit":"Jednotky","unsupported":"Měření vzdálenosti ve 2D je podporováno pouze v MapView."}

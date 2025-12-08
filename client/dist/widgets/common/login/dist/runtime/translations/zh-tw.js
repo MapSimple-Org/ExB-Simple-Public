@@ -1,0 +1,1 @@
+System.register([],function(e){return{execute:function(){e({_widgetLabel:"\u767b\u5165",switchToLogin:"\u5207\u63db\u5230\u767b\u5165\u524d",switchToLogout:"\u5207\u63db\u5230\u767b\u5165\u5f8c",toggleSignInPreview:"\u5207\u63db\u767b\u5165\u9810\u89bd",restrictedResources:"\u53d7\u9650\u8cc7\u6e90"})}}});

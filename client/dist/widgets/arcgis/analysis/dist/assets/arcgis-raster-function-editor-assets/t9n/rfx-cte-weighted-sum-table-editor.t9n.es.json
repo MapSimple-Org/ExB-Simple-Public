@@ -1,0 +1,9 @@
+{
+  "weightedSumTable": "Tabla de sumas ponderadas",
+  "id": "Id.",
+  "layer": "Capa",
+  "field": "Campo",
+  "weight": "Peso",
+  "value": "Valor",
+  "selectLayer": "Seleccionar capa"
+}

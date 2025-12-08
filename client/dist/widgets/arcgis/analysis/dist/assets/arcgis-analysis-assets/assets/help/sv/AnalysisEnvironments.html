@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>Milj&ouml;inst&auml;llningar f&ouml;r analys i  Map Viewer. </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="analysisProcessingExtent">
+        <div>
+            <p>Anger det omr&aring;de som ska anv&auml;ndas f&ouml;r analys. Som standard kommer den att anv&auml;nda den fulla utbredningen.
+            </p>
+        </div>
+    </div>
+    <div id="rasterAnalysisProcessingExtent">
+        <div>
+            <p>Anger omr&aring;det som ska anv&auml;ndas f&ouml;r rasteranalysverktyg och rasterfunktioner n&auml;r  <b>Anv&auml;nd en annan bearbetningsutbredning f&ouml;r rasteranalys</b> &auml;r aktiverat. Som standard kommer den att anv&auml;nda visningsutbredningen f&ouml;r kartan.
+            </p>
+        </div>
+    </div>
+    <div id="useDifferentExtentForRA">
+        <div>
+            <p>Anger om en annan bearbetningsutbredning ska anv&auml;ndas f&ouml;r rasteranalysverktyg och rasterfunktioner. N&auml;r alternativet &auml;r aktiverat anv&auml;nder rasteranalysen v&auml;rdet som &auml;r inst&auml;llt f&ouml;r  <b>Bearbetningsutbredning f&ouml;r rasteranalys</b>, som har st&auml;llts in till att anv&auml;nda visningsutbredningen f&ouml;r kartan som standard. N&auml;r alternativet &auml;r inaktiverat anv&auml;nder alla typer av analyser v&auml;rdet som &auml;r inst&auml;llt f&ouml;r <b>Bearbetningsutbredning f&ouml;r analys</b>, som har st&auml;llts in till att anv&auml;nda den fulla utbredningen som standard.
+            </p>
+        </div>
+    </div>
+    <div id="outSR">
+        <div>
+            <p>Anger koordinatsystemet som ska anv&auml;ndas f&ouml;r analysen och resultatlagret.
+            </p>
+        </div>
+    </div>
+    <div id="extent">
+        <div>
+            <p>Anger det omr&aring;de som ska anv&auml;ndas f&ouml;r analys.
+            </p>
+        </div>
+    </div>
+    <div id="snapRaster">
+        <div>
+            <p>Justerar utbredningen f&ouml;r utdata s&aring; att den matchar celljusteringen f&ouml;r det angivna snapprasterlagret.
+            </p>
+        </div>
+    </div>
+    <div id="cellSize">
+        <div>
+            <p>Anger cellstorlek eller uppl&ouml;sning som ska anv&auml;ndas f&ouml;r analys och f&ouml;r att skapa utdatarasterlagret.
+            </p>
+            <p>Om  <b>Enligt vad som anges</b> &auml;r valt och den spatiala referensen f&ouml;r utdata skiljer sig fr&aring;n den spatiala referensen f&ouml;r indata projiceras cellstorleksv&auml;rdet inte om.
+            </p>
+        </div>
+    </div>
+    <div id="mask">
+        <div>
+            <p>Anger ett masklager i vilket endast de celler som ligger inom maskomr&aring;det kommer att anv&auml;ndas f&ouml;r analys.
+            </p>
+        </div>
+    </div>
+    <div id="resamplingMethod">
+        <div>
+            <p>Anger hur pixelv&auml;rden ska interpoleras n&auml;r indata- och utdatalager inte &ouml;verensst&auml;mmer.
+            </p>
+        </div>
+    </div>
+    <div id="processorType">
+        <div>
+            <p>Anger vilken typ av processor som ska anv&auml;ndas. Alternativen &auml;r  <b>CPU</b>, <b>GPU</b> och <b>Automatisk</b>. Om <b>Automatisk</b> har angivits definierar verktyget processortypen.
+            </p>
+        </div>
+    </div>
+    <div id="parallelProcessingFactor">
+        <div>
+            <p>Anger antalet rasterbearbetningstj&auml;nstinstanser som anv&auml;nds under k&ouml;rningen av verktyget. V&auml;rden som st&ouml;ds inkluderar tomma str&auml;ngar (verktyget fastst&auml;ller antalet rasterbearbetningstj&auml;nstinstanser som ska anv&auml;ndas), heltal (0 eller positiva heltal) och procenttal. Procental m&aring;ste inkludera ett procenttecken (%) efter procentv&auml;rdet.
+            </p>
+        </div>
+    </div>
+    <div id="askConfirmation">
+        <div>
+            <p>Anger om ett varningsmeddelande ska visas om det ber&auml;knade antalet krediter &ouml;verstiger det specifika tr&ouml;skelv&auml;rdet (aktiverat) eller om analysen k&ouml;rs utan att visa ett meddelande oavsett den ber&auml;knade kreditf&ouml;rbrukningen (inte aktiverat). Analysen f&ouml;ljer fortfarande kreditbudgeteringsinst&auml;llningarna f&ouml;r organisationen.
+            </p>
+        </div>
+    </div>
+    <div id="creditThreshold">
+        <div>
+            <p>Anger tr&ouml;skelv&auml;rdet f&ouml;r n&auml;r ett varningsmeddelande ska visas baserat p&aring; den ber&auml;knade kreditf&ouml;rbrukningen fr&aring;n att k&ouml;ra analysen. Analysen kan fortfarande k&ouml;ras om ber&auml;kningen &ouml;verstiger gr&auml;nsen.
+            </p>
+        </div>
+    </div>
+    <div id="recycleProcessingWorkers">
+        <div>
+            <p>Anger antalet bildsektioner som ska bearbetas innan arbetarprocesser startas om, f&ouml;r att f&ouml;rhindra potentiella fel i tidskr&auml;vande processer. Standard &auml;r 0.
+            </p>
+        </div>
+    </div>
+    <div id="retryOnFailures">
+        <div>
+            <p>Anger antalet nya f&ouml;rs&ouml;k samma arbetarprocess ska g&ouml;ra n&auml;r det uppst&aring;r ett fel vid bearbetningen av ett visst jobb. Standard &auml;r 0.
+            </p>
+        </div>
+    </div>
+    <div id="geographicTransformations">
+        <div>
+            <p>Anger transformationsmetoder som kan anv&auml;ndas f&ouml;r att projicera data f&ouml;r analys.
+            </p>
+            <p>Milj&ouml;n st&ouml;der f&ouml;r n&auml;rvarande endast rasteranalysverkyg och rasterfunktioner.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

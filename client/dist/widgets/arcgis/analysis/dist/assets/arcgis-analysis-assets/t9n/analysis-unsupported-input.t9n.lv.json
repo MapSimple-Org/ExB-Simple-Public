@@ -1,0 +1,7 @@
+{
+  "defaultValue": "Neatbalstīts parametra veids. Tiks izmantota noklusējuma vērtība. <calcite-link target='_blank' href='${ docLink }'>Papildinformācija</calcite-link>",
+  "requiredMessage": "Šis parametrs ir obligāts.",
+  "unsupportedGPType": "Neatbalstīts parametra veids. <calcite-link target='_blank' href='${ docLink }'>Papildinformācija</calcite-link>",
+  "unsupportedParameterConfig": "Neatbalstīta parametru konfigurācija. <calcite-link target='_blank' href='${ docLink }'>Papildinformācija</calcite-link>",
+  "unsupportedParameterConfigDefaultValue": "Neatbalstīta parametru konfigurācija. Tiks izmantota noklusējuma vērtība. <calcite-link target='_blank' href='${ docLink }'>Papildinformācija</calcite-link>"
+}

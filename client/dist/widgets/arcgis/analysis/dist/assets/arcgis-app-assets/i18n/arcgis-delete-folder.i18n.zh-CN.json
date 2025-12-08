@@ -1,0 +1,22 @@
+{
+  "deleteFolder": "删除文件夹",
+  "delete": "删除",
+  "permanentlyDelete": "永久删除",
+  "back": "返回",
+  "cancel": "取消",
+  "success": "已成功删除‘${title}’文件夹",
+  "deleteProtectedItemsInFolder": "无法删除文件夹，因为某些项目受删除保护或具有依赖项目。",
+  "message": {
+    "empty": "是否确定删除文件夹 <strong style='font-weight: 500'>${title}</strong>?",
+    "recycleAll": "是否确定要删除文件夹 <strong style='font-weight: 500'>${title}</strong>，并将其内容发送到回收站?",
+    "mustBeEmpty": "文件夹 <strong style='font-weight: 500'>${title}</strong> 必须为空，才能将其删除。",
+    "aFewCannotBeDeleted": "无法删除少量项目。 是否要继续删除其余项目?",
+    "canBeEmptied": "文件夹 <strong style='font-weight: 500'>${title}</strong> 必须为空，才能将其删除。 是否要继续删除这些项目?",
+    "cannotBeDeleted": "无法删除文件夹 <strong style='font-weight: 500'>${title}</strong>，因为无法删除其项目。"
+  },
+  "disabledMessage": {
+    "single": "此文件夹中存在 <span style='color:red'>1 个项目</span>，<b>${label}</b>。<br/></br/>是否确定要删除此文件夹及其项目?",
+    "multiple": "此文件夹中存在 <span style='color:red'>${number} 个项目</span>，<b>${label}</b>。<br/></br/>是否确定要删除此文件夹及其所有项目?",
+    "unknown": "是否确定删除此文件夹 <b>${label}</b>?"
+  }
+}

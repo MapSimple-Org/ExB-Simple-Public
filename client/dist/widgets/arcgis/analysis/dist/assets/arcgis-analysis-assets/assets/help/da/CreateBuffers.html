@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>Opret buffere-v&aelig;rkt&oslash;jet opretter polygoner, der d&aelig;kker en angivet afstand fra inputobjekter.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputLayer">
+        <div>
+            <p>Punkt-, linje- eller polygonobjekter, der placeres i bufferen.
+            </p>
+            <p class="toolPaneOnly">Antallet af objekter afh&aelig;nger af yderligere faktorer s&aring;som filtreringskriterier og analysens omfang.
+            </p>
+        </div>
+    </div>
+    <div id="distanceType">
+        <div>
+            <p>Angiver, om bufferafstanden defineres af en konstant (<b>v&aelig;rdi</b>) eller et numerisk felt (<b>felt</b>).
+            </p>
+        </div>
+    </div>
+    <div id="distances">
+        <div>
+            <p>Den afstand, der bruges til at oprette bufferen. Hvis der tilf&oslash;jes flere v&aelig;rdier, vil hver enkelt v&aelig;rdi blive brugt til at oprette en buffer ved hver eneste inputobjekt.
+            </p> 
+            <p class="modelBuilderOnly">Der kr&aelig;ves enten  <b>afstandsv&aelig;rdier</b> eller <b>afstandsfelt</b>. Hvis begge parametre angives, anvendes <b>afstandsfelt</b>.
+            </p>
+        </div>
+    </div>
+    <div id="field">
+        <div>
+            <p>Feltet indeholder bufferafstanden for hvert objekt.
+            </p> 
+            <p class="modelBuilderOnly">Der kr&aelig;ves enten  <b>afstandsv&aelig;rdier</b> eller <b>afstandsfelt</b>. Hvis begge parametre angives, anvendes <b>afstandsfelt</b>.
+            </p>
+        </div>
+    </div>
+    <div id="units">
+        <div>
+            <p>De enheder, bruges til at angive bufferafstanden.
+            </p>
+        </div>
+    </div>
+    <div id="dissolveType">
+        <div>
+            <p>Angiver, hvordan buffere fra forskellige inputobjekter h&aring;ndteres, n&aring;r de overlapper.
+            </p>
+        </div>
+    </div>
+    <div id="ringType">
+        <div>
+            
+            <p>Angiver, om buffere med flere afstande er koncentriske buffere, der overlapper (<b>overlappende skiver</b>), eller ringe, der ikke overlapper (<b>s&aelig;rskilte ringe</b>).
+            </p>
+        </div>
+    </div>
+    <div id="sideType">
+        <div>
+            <p>For linjeobjekter angiver det, om bufferen oprettes p&aring; begge sider af linjen (<b>omkring</b>), kun den venstre side (<b>venstre</b>) eller p&aring; den h&oslash;jre side (<b>h&oslash;jre</b>).
+            </p>
+            <p>For polygonobjekter angiver det, om input-polygonobjekter medtages i bufferen (<b>Inkluder</b>) eller udelukkes fra bufferen (<b>Udeluk</b>).
+            </p>
+        </div>
+    </div>
+    <div id="endType">
+        <div>
+            <p>Angiver, om formen af bufferen i enden af et linjeobjekt vil v&aelig;re rund (<b>rund</b>) eller flad (<b>flad</b>).
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>Navnet p&aring; det lag, der oprettes og f&oslash;jes til kortet.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>Navnet p&aring; mappen  <b>Mit indhold</b>, hvor resultatet gemmes.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

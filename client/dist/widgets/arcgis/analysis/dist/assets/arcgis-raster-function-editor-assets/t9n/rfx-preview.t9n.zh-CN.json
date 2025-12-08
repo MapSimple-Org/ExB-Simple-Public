@@ -1,0 +1,13 @@
+{
+  "header": "预览",
+  "description": "在运行分析之前，请预览结果。",
+  "showPreview": "显示预览",
+  "previewLayer": "预览图层 ${number}",
+  "update": "更新",
+  "newPreview": "新建预览",
+  "previewPopup": "启用基于输入参数预览分析结果。",
+  "previewError": "此预览图层不可用。 请检查输入参数，然后再次更新此预览图层。",
+  "updatePopover": "更新所选预览图层",
+  "createPopover": "新建预览图层",
+  "maxPreview": "允许的最大预览图层数量：${maxCount}"
+}

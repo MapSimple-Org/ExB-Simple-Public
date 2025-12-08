@@ -1,0 +1,54 @@
+{
+  "updateSharing": "Pregledajte dijeljenje",
+  "moreInfo": "Više informacija",
+  "learnMore": "Saznajte više",
+  "noItemToShare": "Nema otkrivenih problema s dijeljenjem",
+  "loadingInfo": "Učitavanje informacija o dijeljenju...",
+  "updatingSharing": "Ažuriranje dijeljenja...",
+  "updateItemsCount": "Stavka/e za koje imate dopuštenje za ažuriranje: {num}",
+  "updateItemsCountText": "Ove zavisne stavke možda neće biti vidljive drugima jer se ne dijele na jednak način. Kliknite Ažuriraj kako biste sinkronizirali dijeljenje zavisnih stavki za koje imate dopuštenje za ažuriranje.",
+  "uneditableItemsCount": "Stavka/e za koje nemate dopuštenje za ažuriranje: {num}",
+  "uneditableMessage": "Ove zavisne stavke možda neće biti vidljive drugima jer se ne dijele na jednak način.",
+  "nonPublicItems": "Neki slojevi se ne mogu podijeliti javno.",
+  "premiumItemsWebMap": "Ova web karta sadrži premium ili pretplatnički sadržaj.",
+  "premiumMessage": "Ove zavisne stavke možda neće biti vidljive drugima zbog toga što zahtijevaju pretplatu.",
+  "premiumTextMap": "Saznajte više o dijeljenju karti s pretplatničkim ili premium sadržajem",
+  "notice": "Sljedeće stavke možda neće biti vidljive drugima jer se dijele drugačije ili zahtijevaju pretplatu za pregled. Kliknite <b>Ažuriraj dijeljenje</b> za sinkronizaciju dijeljenja stavki za koje imate dopuštenje za ažuriranje.",
+  "noticeEnterprise": "Sljedeće stavke možda neće biti vidljive drugima jer se ne dijele na jednak način. Kliknite <b>Ažuriraj dijeljenje</b> za sinkronizaciju dijeljenja stavki za koje imate dopuštenje za ažuriranje.",
+  "canBeUpdated": "Stavke koje se mogu ažurirati: ${count}",
+  "cantBeUpdated": "Stavke koje se ne mogu ažurirati: ${count}",
+  "update": "Ažuriraj dijeljenje",
+  "cancel": "Nemoj ažurirati dijeljenje",
+  "ok": "U redu",
+  "goToItem": "Prikaži sve pojedinosti",
+  "unableToGetItem": "Nije moguće dobiti pojedinosti o stavci",
+  "postShareDialog": {
+    "title": "Dijeljenje stavke uspješno je ažurirano",
+    "description": "Dijeljena stavka(e) upućuje na druge stavke koje možda nisu vidljive jer se dijele na drugačiji način. Pregledajte dijeljenje ovih stavki.",
+    "confirm": "Pregledajte dijeljenje"
+  },
+  "needShare": {
+    "noPermission": {
+      "notice": "Nemate dopuštenje za ažuriranje dijeljenja ove stavke.",
+      "panel": "Nemate dopuštenje za ažuriranje dijeljenja ove stavke. Ova stavka možda neće biti vidljiva drugima jer se dijeli na drugi način."
+    },
+    "pdc": {
+      "notice": "Omogućite javno prikupljanje podataka prije javnog dijeljenja ovog sloja.",
+      "panel": "Omogućite javno prikupljanje podataka prije javnog dijeljenja ovog sloja. Za optimalne performanse i integritet podataka, molimo razmislite o onemogućivanju uređivanja ili upotrebi sloja za pregled bez mogućnosti uređivanja.",
+      "learnMore": "Saznajte više o omogućavanju uređivanja na javnim slojevima."
+    },
+    "premium": {
+      "notice": "Premium i pretplatnički sadržaj može zahtijevati prijavu za gledanje.",
+      "panel": "Premium i pretplatnički sadržaj može zahtijevati prijavu za gledanje.",
+      "learnMore": "Saznajte više o dijeljenju premium ili pretplatničkog sadržaja."
+    },
+    "sharingPDCEnabled": {
+      "notice": "Javno dijeljenje ovog sloja koji se može uređivati omogućit će svakome da ga uređuje.",
+      "panel": "Javno dijeljenje ovog sloja koji se može uređivati omogućit će svakome da ga uređuje. Za optimalne performanse i integritet podataka, molimo razmislite o onemogućivanju uređivanja ili upotrebi sloja za pregled bez mogućnosti uređivanja."
+    },
+    "needsAuthentication": {
+      "notice": "Potrebna je provjera autentičnosti.",
+      "panel": "Ova stavka možda neće biti dostupna drugim korisnicima jer sadrži usluge lokacije koje zahtijevaju provjeru autentičnosti u aplikacijama koje prikazuju stavku."
+    }
+  }
+}

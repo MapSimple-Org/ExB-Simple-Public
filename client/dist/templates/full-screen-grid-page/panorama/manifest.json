@@ -1,0 +1,29 @@
+{
+  "name": "panorama",
+  "type": "template",
+  "templateType": "full-screen-grid-page",
+  "label": "Panorama",
+  "description": "Panorama features a central map surrounded by dual Chart widgets in a grid layout. Users can interact with Chart, List, and Filter widgets to interpret mapped data from different perspectives.",
+  "thumbnail": "thumbnail.png",
+  "order": 8,
+  "templateCreateVersion": "1.13.0",
+  "tags": [
+    "Map",
+    "Logo",
+    "Title",
+    "Share",
+    "Chart",
+    "Grid",
+    "Feature Info",
+    "Card",
+    "List",
+    "Filter"
+  ],
+  "categoriesTags": [
+    "Map centric",
+    "Web page",
+    "Fullscreen grid"
+  ],
+  "thumbnailWidth": 320,
+  "thumbnailHeight": 214
+}

@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>A Summarize Within eszk&ouml;z statisztikai adatokat sz&aacute;m&iacute;t megadott gyűjtők&ouml;n vagy polygonokon bel&uuml;li vektoros elemekre vonatkoz&oacute;an.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="summaryLayer">
+        <div>
+            <p>Az &ouml;sszes&iacute;tendő r&eacute;teg.
+            </p>
+            <p class="toolPaneOnly">A vektoros elemek sz&aacute;ma olyan tov&aacute;bbi t&eacute;nyezőktől f&uuml;gg, mint p&eacute;ld&aacute;ul szűr&eacute;si krit&eacute;rium &eacute;s elemz&eacute;s kiterjeszt&eacute;se.
+            </p>
+        </div>
+    </div>
+    <div id="binType">
+        <div>
+            <p>A hat&aacute;rol&oacute; vektoros elemek t&iacute;pusa, amelyeken bel&uuml;l a bemeneti vektoros elemekk &ouml;sszegezve lesznek. Ez lehet poligon r&eacute;teg vagy tesszell&aacute;ci&oacute;s r&aacute;cs, amely n&eacute;gyzet vagy hatsz&ouml;g alak&uacute; gyűjtőkből &aacute;ll, &eacute;s amely az eszk&ouml;z futtat&aacute;sakor gener&aacute;l&oacute;dik.
+            </p>
+        </div>
+    </div>
+    <div id="sumWithinLayer">
+        <div>
+            <p>Az a polygon r&eacute;teg, amelyen bel&uuml;l a bemeneti vektoros elemek &ouml;sszegezve lesznek.
+            </p>
+            <p class="toolPaneOnly">A vektoros elemek sz&aacute;ma olyan tov&aacute;bbi t&eacute;nyezőktől f&uuml;gg, mint p&eacute;ld&aacute;ul szűr&eacute;si krit&eacute;rium &eacute;s elemz&eacute;s kiterjeszt&eacute;se.
+            </p>
+        </div>
+    </div>
+    <div id="binSize">
+        <div>
+            <p>A l&eacute;trehozott gyűjtők m&eacute;rete. N&eacute;gysz&ouml;g alak&uacute; gyűjtők eset&eacute;n a megadott sz&aacute;m &eacute;s a m&eacute;rt&eacute;kegys&eacute;gek a n&eacute;gysz&ouml;g magass&aacute;g&aacute;t &eacute;s hossz&uacute;s&aacute;g&aacute;t hat&aacute;rozz&aacute;k meg. Hatsz&ouml;g alak&uacute; gyűjtők eset&eacute;n a megadott sz&aacute;m &eacute;s a m&eacute;rt&eacute;kegys&eacute;gek a p&aacute;rhuzamos oldalak k&ouml;z&ouml;tti t&aacute;vols&aacute;got hat&aacute;rozz&aacute;k meg.
+            </p>
+        </div>
+    </div>
+    <div id="binSizeUnit">
+        <div>
+            <p>A gyűjtő m&eacute;ret&eacute;nek megad&aacute;s&aacute;hoz haszn&aacute;lni k&iacute;v&aacute;nt m&eacute;rt&eacute;kegys&eacute;gek.
+            </p>
+        </div>
+    </div>
+    <div id="sumShape">
+        <div>
+            <p>Meghat&aacute;rozza, hogy az egyes hat&aacute;rol&oacute; polygonokban &ouml;sszefoglalt vektoros elemek teljes m&eacute;rete kisz&aacute;m&iacute;t&aacute;sra ker&uuml;lj&ouml;n-e. A vonalak eset&eacute;ben a teljes hossz ki lesz sz&aacute;m&iacute;tva. A polygonok eset&eacute;ben a teljes ter&uuml;letet ki lesz sz&aacute;m&iacute;tva.
+            </p>
+        </div>
+    </div>
+    <div id="shapeUnits">
+        <div>
+            <p>Az &ouml;sszegzett vektoros elemek teljes m&eacute;ret&eacute;nek kisz&aacute;m&iacute;t&aacute;s&aacute;hoz haszn&aacute;lt m&eacute;rt&eacute;kegys&eacute;gek
+            </p>
+        </div>
+    </div>
+    <div id="summaryFields">
+        <div>
+            <p>Az &ouml;sszes&iacute;tendő bemeneti r&eacute;teg sz&aacute;m- vagy d&aacute;tummezői, valamint az egyes mezőkre kisz&aacute;m&iacute;tand&oacute; statisztik&aacute;k.
+            </p>
+        </div>
+    </div>
+    <div id="groupByField">
+        <div>
+            <p>A bemeneti r&eacute;teg azon mezője, amely az adatok statisztikai sz&aacute;m&iacute;t&aacute;sok c&eacute;lj&aacute;b&oacute;l t&ouml;rt&eacute;nő csoportos&iacute;t&aacute;s&aacute;ra szolg&aacute;l.
+            </p>
+        </div>
+    </div>
+    <div id="minorityMajority">
+        <div>
+            <p>Megadja, hogy a kisebbs&eacute;gi (legkev&eacute;sb&eacute; domin&aacute;ns) &eacute;s a t&ouml;bbs&eacute;gi (legink&aacute;bb domin&aacute;ns) csoport legyen-e kisz&aacute;m&iacute;tva az egyes &ouml;sszefoglal&oacute; ter&uuml;leteken bel&uuml;l.
+            </p>
+        </div>
+    </div>
+    <div id="percentShape">
+        <div>
+            <p>Meghat&aacute;rozza, hogy az egyes &ouml;sszefoglal&oacute; ter&uuml;leteken bel&uuml;l az egyes csoportokhoz tartoz&oacute; &ouml;sszes&iacute;tett vektoros elemek sz&aacute;zal&eacute;kos ar&aacute;nya kisz&aacute;m&iacute;t&aacute;sra ker&uuml;lj&ouml;n-e.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>A l&eacute;trehozni &eacute;s a t&eacute;rk&eacute;phez hozz&aacute;adni k&iacute;v&aacute;nt r&eacute;teg neve.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>A  <b>Saj&aacute;t tartalom </b>azon mapp&aacute;j&aacute;nak neve, ahov&aacute; az eredm&eacute;nyek ment&eacute;se t&ouml;rt&eacute;nik.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

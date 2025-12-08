@@ -1,0 +1,85 @@
+{
+  "heading": "Crea una categoria d'inici de sessió",
+  "select": "Seleccioneu una categoria d'inici de sessió a partir de la qual començar",
+  "selectCustomSignIn": "Seleccioneu una categoria d'inici de sessió",
+  "orgDefaults": "Valors per defecte de l'organització",
+  "createNew": "Crea'n un de nou",
+  "name": "Títol",
+  "description": "Descripció",
+  "enterName": "Introduïu el títol de la categoria",
+  "enterDescription": "Introduïu una descripció de la categoria",
+  "enterTitle": "Introduïu un títol per a aquest inici de sessió",
+  "showOnTriage": "Habilita la categoria d'inici de sessió",
+  "showOnTriageDescription": "Si teniu dues categories o més habilitades, la descripció de la vostra categoria només apareixerà a la pàgina de selecció de la categoria.",
+  "socialProviders": "Proveïdors d'inici de sessió a través de xarxes socials",
+  "authenticationProviders": "Mètodes d'autenticació",
+  "errorLabel": "Error de la categoria d'inici de sessió personalitzada",
+  "preview": "Visualització prèvia",
+  "restrictions": "Només es poden canviar el títol i la descripció d'aquesta categoria. Totes les altres opcions s'heretaran de la configuració de l'organització.",
+  "loginNotAvailable": "La vostra organització ha inhabilitat aquest mètode d'inici de sessió i no es mostrarà als usuaris.",
+  "buttons": {
+    "editCategory": "Desa la categoria",
+    "next": "Següent",
+    "back": "Enrere",
+    "createCategory": "Crea una categoria"
+  },
+  "errors": {
+    "nameRequired": "Cal un título per a totes les categories d'inici de sessió.",
+    "authenticationMethodsRequired": "Cal com a mínim un mètode d'inici de sessió.",
+    "socialProviderRequired": "Cal com a mínim proveïdor d'inici de sessió de xarxa social."
+  },
+  "steps": {
+    "1": {
+      "title": "Trieu com voleu començar",
+      "description": "Podeu començar amb els valors per defecte d'inici de sessió de la vostra organització, editar una categoria d'inici de sessió existent o crear-ne una de nova."
+    },
+    "2": {
+      "title": "Títol i descripció",
+      "description": "Introduïu el títol i la descripció de la vostra categoria d'inici de sessió."
+    },
+    "3": {
+      "title": "Tipus d'inici de sessió",
+      "description": "Personalitzeu i ordeneu els inicis de sessió que apareixen per a aquesta categoria d'inici de sessió."
+    }
+  },
+  "createAccount": {
+    "label": "Enllaç de creació d'un compte",
+    "description": "Permeteu crear un compte nou d'ArcGIS en aquesta organització."
+  },
+  "switchOrganization": {
+    "label": "Enllaç per canviar d'organització",
+    "description": "Mostreu un enllaç que permeti als usuaris iniciar sessió en una altra organització."
+  },
+  "authenticationMethods": {
+    "arcgis": {
+      "label": "Inici de sessió de l'ArcGIS",
+      "description": "Permeteu que els usuaris iniciïn sessió amb el seu inici de sessió de l'ArcGIS.",
+      "required": "Cal un títol per al mètode d'inici de sessió de l'ArcGIS."
+    },
+    "saml": {
+      "label": "Inici de sessió de SAML",
+      "description": "Permeteu que els usuaris iniciïn la sessió amb el seu compte de SAML.",
+      "required": "Cal un títol per al mètode d'inici de sessió de SAML."
+    },
+    "oidc": {
+      "label": "Inici de sessió d'OIDC",
+      "description": "Permeteu que els usuaris iniciïn la sessió amb el seu compte d'OIDC.",
+      "required": "Cal un títol per al mètode d'inici de sessió d'OIDC."
+    },
+    "social": {
+      "label": "Inicis de sessió socials",
+      "description": "Permeteu als membres registrar-se a la vostra organització mitjançant el seu inici de sessió de les xarxes socials següents.",
+      "github": "GitHub",
+      "facebook": "Facebook",
+      "google": "Google",
+      "apple": "Apple",
+      "required": "Cal un títol per al mètode d'inicis de sessió a través de xarxes socials."
+    }
+  },
+  "confirmLeave": {
+    "title": "Canvis sense desar",
+    "message": "Teniu canvis sense desar. Segur que voleu sortir d'aquesta pàgina?",
+    "remain": "Roman a la pàgina",
+    "leave": "Surt sense desar"
+  }
+}

@@ -1,0 +1,1 @@
+System.register([],function(e){return{execute:function(){e({_widgetLabel:"Informa\xe7\xe3o da Fei\xe7\xe3o",noDataMessageDefaultText:"Nenhum dado localizado.",featureNumbers:"{index} de {count}",featureInfoDataActionLabel:"registro atual de informa\xe7\xf5es da fei\xe7\xe3o de {layer}"})}}});

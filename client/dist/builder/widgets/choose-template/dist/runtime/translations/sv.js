@@ -1,0 +1,1 @@
+System.register([],function(e){return{execute:function(){e({_widgetLabel:"Skapa en ny upplevelse",createNewApp:"Skapa ny app",largeDevices:"Enheter med stora sk\xe4rmar",mediumDevices:"Enheter med medelstora sk\xe4rmar",smallDevices:"Enheter med sm\xe5 sk\xe4rmar"})}}});

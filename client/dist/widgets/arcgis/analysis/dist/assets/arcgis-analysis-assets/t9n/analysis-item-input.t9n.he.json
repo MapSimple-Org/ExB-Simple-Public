@@ -1,0 +1,15 @@
+{
+  "addDataStore": "הוסף מאגר נתונים",
+  "addFile": "הוסף קובץ",
+  "addServiceConnection": "הוסף חיבור",
+  "itemNotFound": "הפריט לא קיים או לא נגיש.",
+  "itemPermissionDenied": "אין לך הרשאות לגשת לפריט זה.",
+  "previewDetails": "תצוגה מקדימה של פרטים",
+  "queryModelArgsErrMsg": "תשאול ארגומנטים של מודל נכשל.",
+  "queryModelArgsMsg": "מבוצעת שאילתה של ארגומנטים למודל...",
+  "removeItem": "הסר פריט",
+  "replaceItem": "החלף פריט",
+  "requiredInputMessage": "זהו פרמטר חובה.",
+  "selectItem": "בחר פריט",
+  "viewDetails": "הצג פרטים"
+}

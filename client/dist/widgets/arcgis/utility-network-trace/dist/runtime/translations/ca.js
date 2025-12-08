@@ -1,0 +1,1 @@
+System.register([],function(e){return{execute:function(){e({_widgetLabel:"Tra\xe7at de xarxa de serveis",_widgetDescription:"Widget per tra\xe7ar una ArcGIS Utility Network",_action_filter_label:"Filtre"})}}});

@@ -1,0 +1,252 @@
+{
+    "widgetId": "widget_x",
+    "config": {
+        "layouts": {
+            "layout_91": {
+                "content": {
+                    "0": {
+                        "type": "WIDGET",
+                        "widgetId": "widget_171",
+                        "bbox": {
+                            "width": "120.00px",
+                            "height": "NaNpx"
+                        },
+                        "setting": {
+                            "autoProps": {
+                                "height": "AUTO"
+                            },
+                            "heightMode": "ratio",
+                            "aspectRatio": "100:100",
+                            "style": {
+                                "alignSelf": "center"
+                            },
+                            "lockParent": true
+                        }
+                    },
+                    "2": {
+                        "type": "WIDGET",
+                        "widgetId": "widget_173",
+                        "bbox": {
+                            "width": "178.00px",
+                            "height": "108.00px"
+                        },
+                        "setting": {
+                            "autoProps": {
+                                "height": "CUSTOM",
+                                "width": "STRETCH"
+                            },
+                            "style": {
+                                "alignSelf": "center"
+                            },
+                            "lockParent": true
+                        }
+                    },
+                    "3": {
+                        "type": "WIDGET",
+                        "widgetId": "widget_174",
+                        "bbox": {
+                            "width": "60.00px",
+                            "height": "26.00px"
+                        },
+                        "setting": {
+                            "autoProps": {
+                                "height": "CUSTOM"
+                            },
+                            "style": {
+                                "alignSelf": "center"
+                            },
+                            "lockParent": true
+                        }
+                    }
+                },
+                "type": "FLEX_ROW",
+                "label": "Default",
+                "order": [
+                    "0",
+                    "2",
+                    "3"
+                ],
+                "setting": {
+                    "justifyContent": "flex-start",
+                    "padding": {
+                        "number": [
+                            0,
+                            10,
+                            0,
+                            10
+                        ],
+                        "unit": "px"
+                    },
+                    "space": 15
+                }
+            }
+        },
+        "widgets": {
+            "widget_171": {
+                "uri": "widgets/common/image/",
+                "config": {
+                    "functionConfig": {
+                        "altText": "",
+                        "toolTip": "",
+                        "linkParam": { },
+                        "scale": "Fit",
+                        "imageParam": {
+                            "cropParam": {
+                                "svgViewBox": "0 0 16 16",
+                                "svgPath": "M0 0h16v16H0z",
+                                "cropShape": "square"
+                            }
+                        },
+                        "imageDisplayQualityMode": "ORIGINAL"
+                    },
+                    "styleConfig": { }
+                },
+                "parent": {
+                    "LARGE": [
+                        {
+                            "layoutId": "layout_91",
+                            "layoutItemId": "0"
+                        }
+                    ]
+                }
+            },
+            "widget_173": {
+                "uri": "widgets/common/text/",
+                "config": {
+                    "placeholder": "<p style=\"text-align: left;\"><span style=\"font-size: 13px;color: var(--dark-800);\">${contentTextPlaceholder} </span></p>",
+                    "text": "<p></p>"
+                },
+                "parent": {
+                    "LARGE": [
+                        {
+                            "layoutId": "layout_91",
+                            "layoutItemId": "2"
+                        }
+                    ]
+                }
+            },
+            "widget_174": {
+                "uri": "widgets/common/button/",
+                "config": {
+                    "functionConfig": { },
+                    "styleConfig": {
+                        "themeStyle": {
+                            "quickStyleType": "primary"
+                        },
+                        "useCustom": true,
+                        "customStyle": {
+                            "hover": { },
+                            "regular": { }
+                        }
+                    }
+                },
+                "parent": {
+                    "LARGE": [
+                        {
+                            "layoutId": "layout_91",
+                            "layoutItemId": "3"
+                        }
+                    ]
+                }
+            },
+            "widget_x": {
+                "uri": "widgets/common/list/",
+                "config": {
+                    "maxItems": 100,
+                    "space": 10,
+                    "verticalSpace": 10,
+                    "horizontalSpace": 10,
+                    "itemsPerPage": 10,
+                    "isItemStyleConfirm": true,
+                    "isInitialed": true,
+                    "pageStyle": "SCROLL",
+                    "itemStyle": "STYLE10",
+                    "hoverType": "HOVER0",
+                    "selectedStyle": "STYLE0",
+                    "differentOddEven": false,
+                    "scrollBarOpen": true,
+                    "direction": "VERTICAL",
+                    "alignType": "CENTER",
+                    "scrollStep": 2,
+                    "cardConfigs": {
+                        "DEFAULT": {
+                            "cardSize": {
+                                "LARGE": {
+                                    "width": "47.5%",
+                                    "height": "160px"
+                                }
+                            },
+                            "enable": true,
+                            "backgroundStyle": {
+                                "border": {
+                                    "type": "solid",
+                                    "color": "var(--sys-color-divider-secondary)",
+                                    "width": "1px"
+                                }
+                            },
+                            "listLayout": "Custom"
+                        },
+                        "HOVER": {
+                            "cardSize": {
+                                "LARGE": {
+                                    "width": "47.5%",
+                                    "height": "160px"
+                                }
+                            },
+                            "enable": false,
+                            "backgroundStyle": {
+                                "border": {
+                                    "type": "solid",
+                                    "color": "var(--sys-color-divider-secondary)",
+                                    "width": "1px"
+                                }
+                            },
+                            "listLayout": "Auto"
+                        },
+                        "SELECTED": {
+                            "cardSize": {
+                                "LARGE": {
+                                    "width": "47.5%",
+                                    "height": "160px"
+                                }
+                            },
+                            "backgroundStyle": {
+                                "border": {
+                                    "type": "solid",
+                                    "color": "var(--sys-color-action-selected)",
+                                    "width": "1px"
+                                }
+                            },
+                            "selectionMode": "SINGLE",
+                            "listLayout": "Auto"
+                        }
+                    },
+                    "style": {
+                        "id": "default"
+                    },
+                    "isCheckEmptyTemplate": false,
+                    "filters": null,
+                    "isShowAutoRefresh": false,
+                    "layoutType": "GRID",
+                    "keepAspectRatio": false,
+                    "gridAlignment": "center"
+                },
+                "layouts": {
+                    "DEFAULT": {
+                        "LARGE": "layout_91"
+                    }
+                },
+                "parent": {
+                    "LARGE": [
+                        {
+                            "layoutId": "layout_85",
+                            "layoutItemId": "1"
+                        }
+                    ]
+                }
+            }
+        },
+        "views": { },
+        "sections": { }
+    }
+}

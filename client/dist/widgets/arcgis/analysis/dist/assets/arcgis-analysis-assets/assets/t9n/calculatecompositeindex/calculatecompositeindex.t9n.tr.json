@@ -1,0 +1,26 @@
+{
+  "CCIAnalysisSettingGroupLabel": "Dizin ayarları",
+  "CCIAnalysisSettingGroupText": "Dizinin nasıl hesaplanması gerektiğini belirtir.",
+  "geomeanPercentileLabel": "Bileşik sıralar (yüzdelik değerlerin geometrik ortalaması)",
+  "geomeanRawLabel": "Bileşik ham değerler (Ham değerlerin geometrik ortalaması)",
+  "geomeanScaledLabel": "Bileşik ölçekli değerler (Ölçeklendirilmiş değerlerin geometrik ortalaması)",
+  "indexMethodLabel": "Değişken ölçeklendirme ve birleştirme yöntemi",
+  "inputFeaturesOrTableLabel": "Girdi detaylar ve tablo",
+  "inputLayerGroupText": "Dizinin oluşturulacağı detayları veya tablo ve değişkenleri seçin.",
+  "inputVariablesLabel": "Girdi değişkenler",
+  "itemProperties": {
+    "description": "Kompozit İndeksi Hesapla analiz aracı çalıştırılarak oluşturulan detay katmanı.",
+    "snippet": "Kompozit İndeksi Hesapla aracından oluşturulan detay katmanı"
+  },
+  "meanPercentileLabel": "Sıraları birleştirin (Yüzdelik dilimlerin ortalaması)",
+  "meanRawLabel": "Ham değerleri birleştir (Ham değerlerin ortalaması)",
+  "meanScaledLabel": "Ölçeklendirilmiş değerleri birleştir (Ölçeklendirilmiş değerlerin ortalaması)",
+  "outputIndexMaxLabel": "Maksimum",
+  "outputIndexMinLabel": "Minimum",
+  "outputIndexMinMaxLabel": "Minimum ve maksimum değerleri indeksle",
+  "outputIndexReverseLabel": "İndeks değerlerini tersine çevir",
+  "reverseVariableLabel": "Yönü tersine çevir",
+  "sumFlagsPercentileLabel": "Aşırı uçları vurgula (90. yüzdelik dilimin üzerindeki değerlerin sayısı)",
+  "toolName": "Kompozit İndeks Hesapla",
+  "weight": "Ağırlık"
+}

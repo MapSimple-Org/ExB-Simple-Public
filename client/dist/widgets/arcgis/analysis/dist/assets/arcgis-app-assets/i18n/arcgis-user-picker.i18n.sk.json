@@ -1,0 +1,7 @@
+{
+  "searchMembers": "Vyhľadať členov",
+  "selectUser": "Vybrať používateľa",
+  "editSelection": "Upraviť vybraného používateľa. Aktuálne vybraný: ${name}",
+  "clear": "Vyčistiť",
+  "members": "Členovia"
+}

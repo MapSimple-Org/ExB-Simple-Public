@@ -1,0 +1,1 @@
+System.register([],function(e){return{execute:function(){e({settingsLabel:"Configuraci\xf3 del visor de documents"})}}});

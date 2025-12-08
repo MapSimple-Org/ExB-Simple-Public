@@ -1,0 +1,6 @@
+{
+  "header": "Starte på nytt uten å lagre?",
+  "content": "Du har endringer som ikke er lagret i \"${rftTitle}\". Hvis du begynner på nytt med en ny mal, går disse endringene tapt.",
+  "cancel": "Avbryt",
+  "continue": "Fortsett"
+}

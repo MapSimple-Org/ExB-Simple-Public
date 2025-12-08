@@ -1,0 +1,1 @@
+{"componentLabel":"Đo Diện tích","hint":"Bắt đầu đo bằng cách bấm vào bản đồ để đặt điểm đầu tiên của bạn","mode":"Chế độ","modes":{"auto":"Tự động","planar":"Phẳng","geodesic":"Trắc địa"},"newMeasurement":"Phép đo lường mới","perimeter":"Chu vi","unit":"Đơn vị","unsupported":"Chức năng đo diện tích 2D chỉ được hỗ trợ trong MapView."}

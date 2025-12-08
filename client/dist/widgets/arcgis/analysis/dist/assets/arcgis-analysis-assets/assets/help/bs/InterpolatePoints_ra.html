@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>Alat Interpoliraj točke predviđa vrijednosti na novim lokacijama na temelju točkastih mjerenja. Alat stvara izlaz rastera.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputPointFeatures">
+        <div>
+            <p>Točkasti sloj koji sadrži točke gdje su vrijednosti izmjerene.
+            </p>
+            <p class="toolPaneOnly">Broj geoprojekata ovisi o dodatnim čimbenicima kao &scaron;to su kriteriji filtriranja i obuhvat analize.
+            </p>
+        </div>
+    </div>
+    <div id="interpolateField">
+        <div>
+            <p>Numeričko polje koje sadrži vrijednosti koje će biti interpolirane.
+            </p>
+        </div>
+    </div>
+    <div id="optimizeFor">
+        <div>
+            <p>Određuje hoće li se optimizirati brzina ili točnost. Točnija predviđanja duže se računaju.
+            </p>
+            <p>Ovaj parametar mijenja zadane vrijednosti nekoliko ostalih parametara.
+            </p>
+        </div>
+    </div>
+    <div id="outputCellSize">
+        <div>
+            <p>Veličina ćelije i jedinica za rezultate rastera.
+            </p>
+        </div>
+    </div>
+    <div id="transformData">
+        <div>
+            <p>Određuje hoće li se podaci transformirati ili ne. Interpolacija je najpreciznija za podatke koji prate normalnu distribuciju (u obliku zvona).
+            </p> 
+        </div>
+    </div>
+    <div id="sizeOfLocalModels">
+        <div>
+            <p>Veličina lokalnih interpolacijskih modela koji će se kombinirati za izradu konačne karte predviđanja.
+            </p>
+        </div>
+    </div>
+    <div id="numberOfNeighbors">
+        <div>
+            <p>Broj susjeda koji će se koristiti. Veći broj susjeda općenito daje točnije rezultate, ali izračunavanje rezultata traje dulje.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>Naziv interpoliranog rasterskog sloja koji će se izraditi i dodati na kartu.
+            </p>
+        </div>
+    </div>
+    <div id="outputPredictionError">
+        <div>
+            <p>Odaberite želite li također stvoriti izborni raster standardnih pogre&scaron;aka za predviđene vrijednosti.
+            </p>
+            <p>Ako je označeno, izlazni raster standardne pogre&scaron;ke imat će isti naziv kao i  <b>Naziv izlaznog rastera</b>, ali s pridodanom riječju Pogre&scaron;ke. Sloj koji će se stvoriti i dodati karti.
+            </p>
+        </div>
+    </div>
+    <div id="resultType">
+        <div>
+            <p>Vrsta izlaza koji će se kreirati. Izlaz mogu biti slojevi s pločastom slikom ili slojevi s dinamičnom slikom.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>Naziv mape u opciji  <b>Moj sadržaj</b> gdje će se spremiti rezultati.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

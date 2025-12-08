@@ -1,0 +1,22 @@
+{
+  "value": "Arvo",
+  "classname": "LuokanNimi",
+  "color": "Väri",
+  "raster": "Rasteri",
+  "tableType": "Taulutyyppi",
+  "manual": "Manuaalinen",
+  "external": "Ulkoinen",
+  "browseTable": "Selaa taulua",
+  "browseTableFrom": "Selaa taulua kohteesta",
+  "file": "Tiedosto",
+  "dbfFile": "DBF-tiedosto",
+  "layer": "Karttataso",
+  "unsupportedDataType": "Tyyppiä ei tueta",
+  "failedToGetTableFromLayer": "Taulun nouto karttatasosta epäonnistui.",
+  "generate": "Luo taulu",
+  "minValue": "Vähimmäisarvo",
+  "maxValue": "Enimmäisarvo",
+  "classBaseName": "Luokan perusnimi",
+  "colorscheme": "Värimalli",
+  "defaultClassName": "Selite_"
+}

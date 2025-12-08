@@ -1,0 +1,137 @@
+{
+  "next": "Următorul",
+  "addField": "Adăugare câmp",
+  "selectDataType": "Selectați tipul de date care vor fi stocate în câmp",
+  "addGlobalIDNotice": "Câmpul va fi populat automat pentru data existentă în stratul tematic sau tabel. După adăugare, acest câmp nu poate fi editat sau șters.",
+  "fieldName": "Nume câmp",
+  "displayName": "Nume de afișare",
+  "length": "Lungime",
+  "defaultValue": "Valoare implicită (opțională)",
+  "fieldTypes": "Tipuri de câmpuri",
+  "fieldValueType": "Tip valoare câmp (opțional)",
+  "fieldDescription": "Descriere câmp (opțională)",
+  "allowNullValues": "Permitere valori nule",
+  "valueRequiredError": "Această valoare este obligatorie",
+  "fieldAdded": "Câmp adăugat cu succes",
+  "newFieldTypeNotice": "Acest tip de câmp poate să nu fie complet acceptat la unii clienți.",
+  "addingField": "Se adaugă câmpul...",
+  "syncEnabled": "Unele tipuri de câmpuri nu pot fi adăugate deoarece sincronizarea este activată pe stratul tematic.",
+  "newFeature": "Obiect spațial nou",
+  "fieldAdditionUnsuccessful": "Adăugarea câmpului nu a reușit",
+  "error": "Eroare",
+  "noFieldTypeSelected": "Nu este selectat niciun tip de câmp",
+  "nullFieldTypeError": "Trebuie să selectați un tip de câmp pentru a continua.",
+  "fieldNameCharacterNotice": "Denumirile câmpurilor mai lungi de 31 de caractere nu sunt compatibile cu utilizarea offline.",
+  "suggestedHeader": "Sugerat",
+  "otherHeader": "Altele",
+  "provideDescription": "Furnizați o descriere a informațiilor pe care le va conține câmpul",
+  "nullableTooltipInfo": "Această setare nu este editabilă dacă stratul tematic conține deja date.",
+  "tooltipInfo": {
+    "globalIDExists": "Un câmp ID global există deja la acest serviciu. Un singur câmp ID global poate fi prezent la un strat tematic sau tabel.",
+    "enterpriseTimestampOffset": "ArcGIS Enterprise nu acceptă câmpurile Decalaj marcare timp în straturile tematice de obiecte spațiale găzduite."
+  },
+  "text": {
+    "title": "Text",
+    "description": "Valori care conține caractere alfanumerice sau speciale.",
+    "types": {
+      "esriFieldTypeString": {
+        "title": "Şir",
+        "description": "Stocați un set de caractere alfanumerice de o lungime specificată."
+      }
+    }
+  },
+  "numbers": {
+    "title": "Numere",
+    "description": "Valori care conțin informații numerice.",
+    "types": {
+      "esriFieldTypeDouble": {
+        "title": "Dublu",
+        "description": "Stocați numere cu zecimale."
+      },
+      "esriFieldTypeInteger": {
+        "title": "Număr întreg",
+        "description": "Stocați numere întregi de la ${lowerIntegerRange} la ${upperIntegerRange}."
+      },
+      "esriFieldTypeBigInteger": {
+        "title": "Număr întreg mare",
+        "description": "Stocați numere întregi din -(2${startSup}53${endSup}-1) la 2${startSup}53${endSup}-1. Utilizați acest câmp când utilizați numere care sunt în afara intervalului câmpului de numere întregi acceptat."
+      }
+    }
+  },
+  "dates": {
+    "title": "Date",
+    "description": "Valori care conțin informații temporale.",
+    "types": {
+      "esriFieldTypeDate": {
+        "title": "Data",
+        "description": "Stocați valorile cu data și ora."
+      },
+      "esriFieldTypeDateOnly": {
+        "title": "Doar dată",
+        "description": "Stocați valorile despre dată fără valori de oră."
+      },
+      "esriFieldTypeTimeOnly": {
+        "title": "Doar oră",
+        "description": "Stocați valorile despre oră fără valori despre dată."
+      },
+      "esriFieldTypeTimestampOffset": {
+        "title": "Decalaj marcare temporală",
+        "description": "Stocați valorile care indică data, ora și decalajul de la Ora coordonată universală (UTC)."
+      }
+    }
+  },
+  "globalIdentifiers": {
+    "title": "Identificatori globali",
+    "description": "Valorile care identifică unic un obiect spațial sau un rând de tabel.",
+    "types": {
+      "esriFieldTypeGlobalID": {
+        "title": "ID global",
+        "description": "Stocați un șir de 36 de caractere constând din litere și cifre utilizate pentru a identifica în mod unic un obiect spațial."
+      },
+      "esriFieldTypeGUID": {
+        "title": "GUID",
+        "description": "Stocați un șir de 36 de caractere constând din litere și cifre Un identificator unic global sau GUID este utilizat frecvent pentru a gestiona relațiile dintre obiecte spațiale."
+      }
+    }
+  },
+  "fieldValueTypes": {
+    "nameOrTitle": "Denumire sau titlu",
+    "description": "Descriere",
+    "typeOrCategory": "Tip sau categorie",
+    "countOrAmount": "Număr sau sumă",
+    "percentageOrRatio": "Procentaj sau raport",
+    "measurement": "Măsurare",
+    "currency": "Monedă",
+    "uniqueIdentifier": "Identificator unic",
+    "phoneNumber": "Număr de telefon",
+    "emailAddress": "Adresă de e-mail",
+    "orderedOrRanked": "Ordonat sau evaluat",
+    "binary": "Binar",
+    "locationOrPlaceName": "Denumire locație sau loc",
+    "coordinate": "Coordonată",
+    "dateAndTime": "Dată și oră",
+    "none": "Fără"
+  },
+  "addFieldErrors": {
+    "invalidName": "Nume nevalid",
+    "invalidLength": "Lungime nevalidă",
+    "outOfRangeValueError": "Această valoare este în afara intervalului.",
+    "invalidValueError": "Valoarea introdusă nu este validă.",
+    "invalidFieldParameters": "Parametri de câmp nevalizi",
+    "invalidInputsError": "Verificați dacă toți parametrii câmpului sunt completați corect.",
+    "existingFieldNameError": "Denumirea câmpului nu poate fi aceeași cu cea a unui câmp existent.",
+    "invalidNameInputSQLError": "Denumirea câmpului nu poate fi identică cu un cuvânt-cheie SQL.",
+    "invalidNameInputInvalidCharactersError": "Trebuie să înceapă cu o literă și poate numai litere, numere și „_”.",
+    "valueIsRequiredError": "Această valoare este obligatorie.",
+    "lengthExceeds": "Lungimea denumirii câmpului rezultat trebuie să fie mai mică sau egală cu ${maxFieldNameLength} caractere.",
+    "defaultValueExceeds": "Valoarea implicită depășește lungimea de câmp specificată.",
+    "savingFailed": "Salvarea ${layerName} a eșuat",
+    "readOnlyErrorMessage": "ArcGIS Online experimentează probleme operaționale și a trecut în modul numai citire. Unele capacități pot fi limitate. Pentru cele mai recente actualizări despre momentul când va fi rezolvată, vizitați panoul de bord despre starea ArcGIS Online.",
+    "readOnlyErrorMessageEnterprise": "ArcGIS Enterprise întâmpină probleme operaționale și a trecut în modul numai citire. Unele capacități pot fi limitate.",
+    "healthDashboard": "Panoul de bord privind starea ArcGIS Online",
+    "genericAddFieldError": {
+      "title": "Eroare",
+      "description": "A apărut o eroare la adăugarea câmpului dvs."
+    }
+  }
+}

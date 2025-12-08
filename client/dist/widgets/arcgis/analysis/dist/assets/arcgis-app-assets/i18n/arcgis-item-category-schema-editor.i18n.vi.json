@@ -1,0 +1,36 @@
+{
+  "modalHeader": "Cấu hình danh mục nội dung",
+  "modalGroupHeader": "Cấu hình danh mục nhóm",
+  "helpText": "Chỉnh sửa, xóa hoặc sắp xếp lại các danh mục trong tổ chức của bạn.",
+  "helpTextGroup": "Chỉnh sửa, xóa hoặc sắp xếp lại các danh mục cho nội dung trong nhóm này.",
+  "helpTextDescription": "Nhớ rằng các thành viên khác trong tổ chức của bạn có thể đã chỉ định các danh mục này cho các mục của mình và việc thêm sơ đồ sẽ cập nhật các mục đó tương ứng",
+  "helpTextGroupDescription": "Nhớ rằng các thành viên khác trong nhóm có thể đã chỉ định các danh mục này cho các mục của mình và việc thêm sơ đồ sẽ cập nhật các mục đó tương ứng",
+  "warning": {
+    "deleteInUseCategory": {
+      "title": "Xóa danh mục",
+      "cta": "Xóa danh mục",
+      "message": {
+        "single": "Một mục được chỉ định cho danh mục này. Xóa danh mục cũng sẽ xóa luôn nó khỏi mục này.",
+        "multiple": "${number} mục được chỉ định cho danh mục này. Xóa danh mục cũng sẽ xóa luôn nó khỏi những mục này.",
+        "unknown": "Các mục được chỉ định cho danh mục này: ${number}. Xóa danh mục cũng sẽ xóa luôn nó khỏi những mục này."
+      }
+    },
+    "changeTitleInUseCategory": {
+      "title": "Cập nhật danh mục",
+      "message": {
+        "single": "Một mục được chỉ định cho danh mục này. Cập nhật danh mục sẽ cập nhật mục để sử dụng \"${newTitle}\".",
+        "multiple": "${number} mục được chỉ định cho danh mục này. Cập nhật danh mục sẽ cập nhật mục để sử dụng\"${newTitle}\".",
+        "unknown": "Các mục được chỉ định cho danh mục này: ${number}. Cập nhật danh mục sẽ cập nhật mục để sử dụng\"${newTitle}\"."
+      },
+      "cta": "Cập nhật danh mục"
+    }
+  },
+  "template": {
+    "templateList": {
+      "custom": {
+        "message": "Tạo danh mục riêng để tổ chức nội dung trong tổ chức của bạn.",
+        "messageGroup": "Tạo danh mục của riêng bạn để tổ chức nội dung trong nhóm này."
+      }
+    }
+  }
+}

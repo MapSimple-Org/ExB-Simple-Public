@@ -1,0 +1,9 @@
+{
+  "inputLayerGroupText": "Choose the input layer to calculate the geometry of the zone boundaries.",
+  "itemProperties": {
+    "description": "Output table generated from running the Zonal Geometry as Table analysis tool.",
+    "snippet": "Output table generated from Zonal Geometry as Table"
+  },
+  "zonalGeometrySettingGroupLabel": "Zonal geometry setting",
+  "zonalGeometrySettingGroupText": "Specify the cell size to calculate."
+}

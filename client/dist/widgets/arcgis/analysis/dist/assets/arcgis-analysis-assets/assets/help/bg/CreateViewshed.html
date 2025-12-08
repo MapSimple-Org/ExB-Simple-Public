@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>Инструментът Създаване на зона на видимост използва услугата на Esri за анализ на кота, за да идентифицира области, които са видими от определени места на наблюдател.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputLayer">
+        <div>
+            <p>Точковите обекти, които ще се използват за местоположения на наблюдател.
+            </p>
+            <p class="toolPaneOnly">Броят на обектите зависи от допълнителни фактори, като например критериите за филтриране и обхвата за анализ.
+            </p>
+        </div>
+    </div>
+    <div id="observerHeight">
+        <div>
+            <p>Определя височината на наблюдателите над земята.
+            </p>
+        </div>
+    </div>
+    <div id="observerHeightUnits">
+        <div>
+            <p>Мерните единици, които ще се използват за параметъра  <b>Височина на наблюдател</b>.
+            </p>
+        </div>
+    </div>
+    <div id="targetHeight">
+        <div>
+            <p>Определя височината на целите на земята.
+            </p>
+        </div>
+    </div>
+    <div id="targetHeightUnits">
+        <div>
+            <p>Мерните единици, които ще се използват за параметъра  <b>Височина на цел</b>.
+            </p>
+        </div>
+    </div>
+    <div id="maximumDistance">
+        <div>
+            <p>Определя максималното разстояние за зона на видимост за изчисление на видимостта.
+            </p>
+        </div>
+    </div>
+    <div id="maxDistanceUnits">
+        <div>
+            <p>Мерните единици, които ще се използват за параметъра  <b>Максимално разстояние на видимост</b>.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>Името на полигоновия слой за зона на видимост, който ще бъде създаден и добавен към картата. Този слой съдържа видимите области, където наблюдателите могат да видят, а броят на наблюдателите се записва в честотното поле.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>Името на папка в  <b>Моето съдържание</b>, където резултатите ще бъдат запазени.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

@@ -1,0 +1,15 @@
+{
+  "name": "blankfullscreengrid",
+  "type": "template",
+  "templateType": "full-screen-grid-page",
+  "label": "Blank grid",
+  "description": "A blank template to create your own design in a grid page.",
+  "thumbnail": "thumbnail.png",
+  "order": 1,
+  "tags": [],
+  "categoriesTags": [
+    "Blank"
+  ],
+  "thumbnailWidth": 320,
+  "thumbnailHeight": 214
+}

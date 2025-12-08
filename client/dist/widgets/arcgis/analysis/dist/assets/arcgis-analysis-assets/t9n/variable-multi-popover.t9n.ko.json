@@ -1,0 +1,11 @@
+{
+  "addBtn": "완료",
+  "cancelBtn": "취소",
+  "header": "변수 선택",
+  "multipleVariables": "다중 값 변수",
+  "noFound": "호환되는 변수가 없음",
+  "search": "변수 검색",
+  "singleVariables": "단일 값 변수",
+  "variableLabel": "레이블: <span style='font-weight: var(--calcite-font-weight-normal)'>${val}</span>",
+  "variableVal": "값: <span style='font-weight: var(--calcite-font-weight-normal)'>${val}</span>"
+}

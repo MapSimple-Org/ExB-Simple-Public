@@ -1,0 +1,15 @@
+{
+  "addDataStore": "Dodaj skladište za podatke",
+  "addFile": "Dodaj datoteku",
+  "addServiceConnection": "Dodaj konekciju",
+  "itemNotFound": "Stavka ne postoji ili je nedostupna.",
+  "itemPermissionDenied": "Nemate dozvole za pristupanje ovoj stavki.",
+  "previewDetails": "Pregledajte detalje",
+  "queryModelArgsErrMsg": "Neuspešan upit argumenata modela.",
+  "queryModelArgsMsg": "Izvršavanje upita za argumente modela...",
+  "removeItem": "Ukloni stavku",
+  "replaceItem": "Zameni stavku",
+  "requiredInputMessage": "Ovaj parametar je obavezan.",
+  "selectItem": "Selektujte stavku",
+  "viewDetails": "Prikaži detalje"
+}

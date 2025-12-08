@@ -1,0 +1,138 @@
+{
+  "name": "CalculateCompositeIndex",
+  "displayName": "CalculateCompositeIndex",
+  "description": "",
+  "category": "",
+  "helpUrl": "http://ArcGISInternal:8443/arcgis/rest/directories/arcgisoutput/tasks_GPServer/tasks/CalculateCompositeIndex.htm",
+  "executionType": "esriExecutionTypeAsynchronous",
+  "parameters": [
+    {
+      "name": "inputLayer",
+      "dataType": "GPRecordSet",
+      "displayName": "inputLayer",
+      "description": "",
+      "direction": "esriGPParameterDirectionInput",
+      "defaultValue": {},
+      "parameterType": "esriGPParameterTypeRequired",
+      "category": ""
+    },
+    {
+      "name": "inputVariables",
+      "dataType": "GPValueTable",
+      "displayName": "inputVariables",
+      "description": "",
+      "direction": "esriGPParameterDirectionInput",
+      "defaultValue": [],
+      "parameterType": "esriGPParameterTypeRequired",
+      "category": "",
+      "parameterInfos": [
+        {
+          "name": "field",
+          "dataType": "GPString",
+          "displayName": "field"
+        },
+        {
+          "name": "reverseVariable",
+          "dataType": "GPBoolean",
+          "displayName": "reverseVariable"
+        },
+        {
+          "name": "weight",
+          "dataType": "GPDouble",
+          "displayName": "weight"
+        }
+      ]
+    },
+    {
+      "name": "indexMethod",
+      "dataType": "GPString",
+      "displayName": "indexMethod",
+      "description": "",
+      "direction": "esriGPParameterDirectionInput",
+      "defaultValue": "meanScaled",
+      "parameterType": "esriGPParameterTypeOptional",
+      "category": "",
+      "choiceList": [
+        "meanScaled",
+        "meanPercentile",
+        "geomeanScaled",
+        "sumFlagsPercentile",
+        "meanRaw",
+        "geomeanPercentile",
+        "geomeanRaw"
+      ]
+    },
+    {
+      "name": "outputIndexReverse",
+      "dataType": "GPBoolean",
+      "displayName": "outputIndexReverse",
+      "description": "",
+      "direction": "esriGPParameterDirectionInput",
+      "defaultValue": false,
+      "parameterType": "esriGPParameterTypeOptional",
+      "category": ""
+    },
+    {
+      "name": "outputIndexMinMax",
+      "dataType": "GPValueTable",
+      "displayName": "outputIndexMinMax",
+      "description": "",
+      "direction": "esriGPParameterDirectionInput",
+      "defaultValue": [],
+      "parameterType": "esriGPParameterTypeOptional",
+      "category": "",
+      "parameterInfos": [
+        {
+          "name": "min",
+          "displayName": "min",
+          "dataType": "GPDouble"
+        },
+        {
+          "name": "max",
+          "displayName": "max",
+          "dataType": "GPDouble"
+        }
+      ]
+    },
+    {
+      "name": "outputName",
+      "dataType": "GPString",
+      "displayName": "outputName",
+      "description": "",
+      "direction": "esriGPParameterDirectionInput",
+      "defaultValue": "",
+      "parameterType": "esriGPParameterTypeOptional",
+      "category": ""
+    },
+    {
+      "name": "context",
+      "dataType": "GPString",
+      "displayName": "context",
+      "description": "",
+      "direction": "esriGPParameterDirectionInput",
+      "defaultValue": "",
+      "parameterType": "esriGPParameterTypeOptional",
+      "category": ""
+    },
+    {
+      "name": "indexResultLayer",
+      "dataType": "GPRecordSet",
+      "displayName": "indexResultLayer",
+      "description": "",
+      "direction": "esriGPParameterDirectionOutput",
+      "defaultValue": {},
+      "parameterType": "esriGPParameterTypeDerived",
+      "category": ""
+    },
+    {
+      "name": "processInfo",
+      "dataType": "GPString",
+      "displayName": "processInfo",
+      "description": "",
+      "direction": "esriGPParameterDirectionOutput",
+      "defaultValue": "",
+      "parameterType": "esriGPParameterTypeDerived",
+      "category": ""
+    }
+  ]
+}

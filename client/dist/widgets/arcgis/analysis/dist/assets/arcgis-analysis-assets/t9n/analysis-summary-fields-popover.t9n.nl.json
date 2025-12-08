@@ -1,0 +1,13 @@
+{
+  "addField": "Veld toevoegen",
+  "deselectAll": "Alles deselecteren",
+  "done": "Gereed",
+  "noFieldsAvailable": "${layerName} bevat geen velden die aan de vereiste datatype voldoen. Selecteer een andere laag om door te gaan.",
+  "noInputSelected": {
+    "withLayerInputLabel": "Geen invoerlaag geselecteerd. Selecteer een laag in ${layerInputLabel} om door te gaan.",
+    "withoutLayerInputLabel": "Geen invoerlaag geselecteerd. Selecteer een invoerlaag om door te gaan."
+  },
+  "noSearchResults": "Kan geen overeenkomende velden vinden.",
+  "selectAll": "Alles selecteren",
+  "summaryFieldsPopover": "Samenvattingsvelden"
+}

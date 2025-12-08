@@ -1,0 +1,6 @@
+{
+  "greaterThanErrorMessage": "Input-tallet skal være større end ${min}",
+  "lesserThanErrorMessage": "Input-tallet skal være mindre end ${max}",
+  "greaterThanOrEqualErrorMessage": "Input-tallet skal være større end eller lig med ${min}",
+  "lesserThanOrEqualErrorMessage": "Input-tallet skal være mindre end eller lig med ${max}"
+}

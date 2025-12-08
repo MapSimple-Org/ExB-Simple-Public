@@ -1,0 +1,1 @@
+{"componentLabel":"Trasavimo įvestys","labels":{"utilityNetwork":"Komunaliniai tinklai","traceConfiguration":"Sekti konfigūraciją","traceInputs":"Sekti įvestis"},"errors":{"noMapError":"Nėra pasiekiamo žemėlapio","noUtilityNetworkError":"Komunalinių tinklų žemėlapio nerasta","noTraceConfigurationError":"Nėra pasiekiamų pavadintų trasavimo konfigūracijų"}}

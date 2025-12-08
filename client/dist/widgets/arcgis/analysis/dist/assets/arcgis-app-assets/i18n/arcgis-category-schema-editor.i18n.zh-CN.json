@@ -1,0 +1,69 @@
+{
+  "loadingText": "正在加载方案模板",
+  "cancel": "取消",
+  "finishSetup": "完成设置",
+  "hasUnsavedChanges": "如果未事先保存，那么您对类别所做的更改将丢失。 确定要关闭此视图而不保存更改?",
+  "error": {
+    "generic": {
+      "title": "更新类别时出错",
+      "message": "发生了一些错误。 请稍后再试。"
+    },
+    "maxDepthExceeded": {
+      "title": "更新类别时出错",
+      "message": "类别的嵌套深度不能超过 2 级。"
+    },
+    "destinationHasSameName": {
+      "title": "更新类别时出错",
+      "message": "目标类别中已存在同名类别。"
+    },
+    "emptyTitle": {
+      "title": "更新类别时出错",
+      "message": "类别标题不能为空。"
+    },
+    "noSchema": {
+      "title": "未找到方案",
+      "message": "未找到用户的项目方案。"
+    },
+    "maxCharacter": {
+      "title": "更新类别时出错",
+      "message": "类别名称最长为 ${maxCharacter} 个字符。"
+    },
+    "invalidCharacters": {
+      "title": "更新类别时出错",
+      "single": "类别不能包含此字符：${invalidCharacters}。",
+      "multiple": "类别不能包含以下任何字符：${invalidCharacters}。",
+      "unknown": "类别不能包含以下任何字符：${invalidCharacters}。"
+    }
+  },
+  "warning": {
+    "deleteInUseCategory": {
+      "title": "删除类别",
+      "cta": "删除类别"
+    },
+    "changeTitleInUseCategory": {
+      "title": "更新类别",
+      "cta": "更新类别"
+    }
+  },
+  "template": {
+    "title": "类别模板",
+    "learnMore": "了解详细信息",
+    "templateList": {
+      "custom": {
+        "title": "自定义类别"
+      },
+      "arcgis": {
+        "title": "ArcGIS 类别",
+        "message": "ArcGIS 类别包括一系列主题类别和子类别，可用于对多种类型的地理空间内容进行分类。 这些类别旨在支持 ArcGIS Living Atlas of the World。"
+      },
+      "iso": {
+        "title": "ISO 类别",
+        "message": "ISO 类别包括来自国际标准化组织的主题类别，提供了描述和分类地理信息的方法。"
+      },
+      "inspire": {
+        "title": "INSPIRE 类别",
+        "message": "INSPIRE 类别包括 INSPIRE Directive 中列出的全套空间数据主题。"
+      }
+    }
+  }
+}

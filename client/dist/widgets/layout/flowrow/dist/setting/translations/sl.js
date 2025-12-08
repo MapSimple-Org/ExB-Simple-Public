@@ -1,0 +1,1 @@
+System.register([],function(e){return{execute:function(){e({verticalAlign:"Vertikalna poravnava",spaceAround:"Prostor okrog",spaceBetween:"Prostor med",spaceEvenly:"Razmakni enakomerno",horizontalAlign:"Horizontalna poravnava",scrollable:"Drsno pomikanje"})}}});

@@ -1,0 +1,1 @@
+System.register([],function(e){return{execute:function(){e({settingsLabel:"Nastavenia prieskumn\xedka dokumentov",selectModelViewer:"Ak chcete zobrazi\u0165 dokumenty, vyberte widget Prehliada\u010d dokumentov."})}}});

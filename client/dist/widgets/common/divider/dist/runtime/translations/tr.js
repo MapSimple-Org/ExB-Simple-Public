@@ -1,0 +1,1 @@
+System.register([],function(e){return{execute:function(){e({_widgetLabel:"B\xf6l\xfcc\xfc",quickStyleItem:"H\u0131zl\u0131 stil {index}"})}}});

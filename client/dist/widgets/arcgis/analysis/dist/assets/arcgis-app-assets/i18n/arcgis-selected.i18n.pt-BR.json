@@ -1,0 +1,8 @@
+{
+  "selected": "Selecionado: ${number}",
+  "selectPage": "Selecionar página",
+  "selectAll": "Selecionar todos",
+  "deselect": "Desselecionar todos",
+  "selectingAll": "Selecionando tudo",
+  "clearAll": "Limpar todos"
+}

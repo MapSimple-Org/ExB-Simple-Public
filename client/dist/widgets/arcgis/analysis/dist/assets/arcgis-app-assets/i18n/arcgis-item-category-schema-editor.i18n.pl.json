@@ -1,0 +1,36 @@
+{
+  "modalHeader": "Konfiguruj kategorie zasobów",
+  "modalGroupHeader": "Konfiguruj kategorie grup",
+  "helpText": "Edytuj lub usuń kategorie w instytucji albo zmień ich kolejność.",
+  "helpTextGroup": "Edytuj, usuwaj lub zmieniaj kolejność kategorii zasobów w tej grupie.",
+  "helpTextDescription": "Pamiętaj, że inni członkowie instytucji mogli już przypisać te kategorie do swoich elementów i edycja schematu spowoduje zaktualizowanie tych elementów.",
+  "helpTextGroupDescription": "Pamiętaj, że inni członkowie grupy mogli już przypisać te kategorie do swoich elementów i edycja schematu spowoduje zaktualizowanie tych elementów.",
+  "warning": {
+    "deleteInUseCategory": {
+      "title": "Usuń kategorię",
+      "cta": "Usuń kategorię",
+      "message": {
+        "single": "Jeden element został już przypisany do tej kategorii. Usunięcie kategorii spowoduje również jej usunięcie z tego elementu.",
+        "multiple": "Do tej kategorii już przypisano następującą liczbę elementów: ${number}. Usunięcie kategorii spowoduje również jej usunięcie z tych elementów.",
+        "unknown": "Elementy przypisane do tej kategorii: ${number}. Usunięcie kategorii spowoduje również jej usunięcie z tych elementów."
+      }
+    },
+    "changeTitleInUseCategory": {
+      "title": "Zaktualizuj kategorię",
+      "message": {
+        "single": "Jeden element został już przypisany do tej kategorii. Zaktualizowanie kategorii spowoduje zaktualizowanie elementu tak, by korzystał z kategorii \"${newTitle}\".",
+        "multiple": "Do tej kategorii już przypisano następującą liczbę elementów: ${number}. Zaktualizowanie kategorii spowoduje zaktualizowanie elementów tak, by korzystały z kategorii „${newTitle}”.",
+        "unknown": "Elementy przypisane do tej kategorii: ${number}. Zaktualizowanie kategorii spowoduje zaktualizowanie elementów tak, by korzystały z kategorii „${newTitle}”."
+      },
+      "cta": "Zaktualizuj kategorię"
+    }
+  },
+  "template": {
+    "templateList": {
+      "custom": {
+        "message": "Utwórz własne kategorie w celu organizowania zasobów w instytucji.",
+        "messageGroup": "Utwórz własne kategorie w celu organizowania zasobów w tej grupie."
+      }
+    }
+  }
+}

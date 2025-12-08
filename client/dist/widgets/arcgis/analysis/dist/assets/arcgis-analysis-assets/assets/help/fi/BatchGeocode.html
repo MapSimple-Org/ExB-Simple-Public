@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>Geokoodaa sijainnit taulukosta&nbsp;-ty&ouml;kalu muuntaa l&auml;ht&ouml;aineistotaulun tai -tiedoston osoitteet tai paikat koordinaateiksi.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputType">
+        <div>
+            <p>M&auml;&auml;ritt&auml;&auml;, onko l&auml;ht&ouml;aineisto taulukohde (<b>Is&auml;nn&ouml;ity taulu</b>) vai <code>.csv</code>- tai Excel-tiedosto (<b>CSV/Excel</b>).
+            </p>
+        </div>
+    </div>
+    <div id="inputFileItem">
+        <div>
+            <p>Geokoodattavat osoitteet tai paikat sis&auml;lt&auml;v&auml; l&auml;ht&ouml;aineistotiedosto. L&auml;ht&ouml;aineiston on oltava is&auml;nn&ouml;ity  <code>.csv</code>- tai Excel-tiedosto. </p>
+        </div>
+    </div>
+    <div id="inputTable">
+        <div>
+            <p>Geokoodattavat osoitteet tai paikat sis&auml;lt&auml;v&auml; l&auml;ht&ouml;aineistotaulu. L&auml;ht&ouml;aineiston on oltava is&auml;nn&ouml;ity taulukohde.
+            </p>
+            <p>Kohteiden m&auml;&auml;r&auml; n&auml;kyy taulun nimen alapuolella. M&auml;&auml;r&auml; sis&auml;lt&auml;&auml; kaikki taulun kohteet lukuun ottamatta kohteita, jotka on poistettu suodattimen avulla.
+            </p>
+        </div>
+    </div>
+    <div id="geocodeServiceURL">
+        <div>
+            <p>Geokoodaukseen k&auml;ytett&auml;v&auml; paikannuspalvelu. Jos paikannuspalvelua, jota haluat k&auml;ytt&auml;&auml;, ei n&auml;y avattavassa valikossa, ota yhteytt&auml; p&auml;&auml;k&auml;ytt&auml;j&auml;&auml;n ja pyyd&auml; h&auml;nt&auml; lis&auml;&auml;m&auml;&auml;n paikannuspalvelu jakelupalveluna.
+            </p>
+        </div>
+    </div>
+    <div id="singleOrMultiFieldSwitch">
+        <div>
+            <p>M&auml;&auml;ritt&auml;&auml;, sis&auml;ltyyk&ouml; l&auml;ht&ouml;aineisto yhteen vai useaan kentt&auml;&auml;n.
+            </p>
+        </div>
+    </div>
+    <div id="geocodeUIParameters">
+        <div>
+            <p>Kent&auml;t, joita paikannin k&auml;ytt&auml;&auml; aineiston sijaintien m&auml;&auml;ritt&auml;miseen. Aineiston oletetaan sis&auml;lt&auml;v&auml;n tietyt kent&auml;t, kuten osoitteen, kaupungin, osavaltion ja postinumeron.
+            </p>
+        </div>
+    </div>
+    <div id="sourceCountry">
+        <div>
+            <p>Maa, jossa aineisto sijaitsee. Jos kaikki osoitteet ovat yhdest&auml; maasta, voit varmistaa mahdollisimman tarkat tulokset valitsemalla kyseisen maan nimen. J&auml;t&auml; muussa tapauksessa t&auml;m&auml; parametri tyhj&auml;ksi.
+            </p>
+        </div>
+    </div>
+    <div id="outputFields">
+        <div>
+            <p>M&auml;&auml;ritt&auml;&auml; kent&auml;t, jotka sis&auml;llytet&auml;&auml;n tulosaineiston aineistoryhm&auml;&auml;n. Asetukset ovat seuraavat:
+            </p>
+            <ul>
+                <li> <b>Kaikki</b> &ndash; kaikki k&auml;ytett&auml;viss&auml; olevat paikantimen tuloskent&auml;t sis&auml;llytet&auml;&auml;n geokoodaustuloksiin.
+                </li>
+                <li> <b>Minimaalinen</b> &ndash; tuloksiin sis&auml;llytet&auml;&auml;n kenttien osajoukko paikantimesta ja kent&auml;t l&auml;ht&ouml;aineistotaulusta.
+                </li>
+                <li> <b>Vain sijainti</b> &ndash; tuloksiin sis&auml;llytet&auml;&auml;n <i>Shape</i>-kentt&auml; paikantimesta ja kent&auml;t l&auml;ht&ouml;aineistotaulusta.
+                </li>
+            </ul>
+            
+        </div>
+    </div>
+    <div id="outputType">
+        <div>
+            <p>Luotavan tulosaineiston tyyppi. Tulosaineisto voi olla kohdepalvelu,  <code>.csv</code>-tieodosto tai <code>.xls</code>-tiedosto.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p> <b>Omaan sis&auml;lt&ouml;&ouml;n</b> luotavan karttatason tai tiedoston nimi.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>Sen  <b>Omassa sis&auml;ll&ouml;ss&auml;</b> olevan kansion nimi, johon tulos tallennetaan.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

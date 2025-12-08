@@ -1,0 +1,16 @@
+{
+  "updateData": "עדכן נתונים",
+  "cancel": "ביטול",
+  "editStyle": "החלף את קובץ הסגנון של השכבה בגרסה עדכנית מהמחשב.",
+  "updatePackages": "החלף את ${type} בגרסה עדכנית מהמחשב. לקובץ להעלאה חייב להיות אותו שם כמו ל-${hostedLayerName}.",
+  "uploadStaticFiles": "לקובץ שמועלה חייב להיות אותו שם כמו לקובץ המקורי ${fileName}",
+  "sameFileNameDescription": "לקובץ שמועלה צריך להיות אותו שם ואותם שמות שדות כמו בקובץ המקורי, ${fileName}.",
+  "updating": "מעדכן...",
+  "error": "שגיאה",
+  "errors": {
+    "sameFileName": "כדי לעדכן פריט זה, עליך להעלות קובץ בשם ${fileName}.",
+    "invalidStyleFileExtension": "סיומת קובץ לא חוקית. הסגנון שהועלה חייב לכלול סיומת ‎.json‏",
+    "errorWhileUpload": "אירעה שגיאה בעת העלאת הפריט.",
+    "errorUpdate": "אירעה שגיאה במהלך דריסת הפריט."
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "any": "Bármelyik",
+  "count": "Darabszám",
+  "field": "A mező",
+  "fieldLoadingErrorText": "A mezők betöltése nem sikerült.",
+  "first": "Első",
+  "isRequired": "Ez a paraméter kötelező.",
+  "last": "Utolsó",
+  "max": "Max.",
+  "mean": "Átlag",
+  "min": "Min",
+  "selectAll": "Összes kiválasztása",
+  "standardDeviation": "Szabványos szórás",
+  "statistic": "Statisztika",
+  "statisticNotSelected": "Minden mezőhöz legalább egy statisztikai típus szükséges.",
+  "sum": "Összeg"
+}

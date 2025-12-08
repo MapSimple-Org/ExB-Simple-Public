@@ -1,0 +1,6 @@
+{
+  "dialogTitle": "Éditeur de fonctions raster",
+  "defaultTemplateName": "Modèle de fonction raster",
+  "readOnlyModeTitle": "Lecture seule",
+  "readOnlyModeMessage": "L’élément de modèle de fonction raster est en lecture seule. Les modifications ne peuvent pas être enregistrées."
+}

@@ -1,0 +1,7 @@
+{
+  "example": "Primjer",
+  "input": "Unos",
+  "output": "Izlaz",
+  "optional": "Neobavezno",
+  "WNDWIHintText": "α:α vrijednost treba biti između 0 i 1; zadana vrijednost je 0,5"
+}

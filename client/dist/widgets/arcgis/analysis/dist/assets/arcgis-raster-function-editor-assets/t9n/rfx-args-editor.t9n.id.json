@@ -1,0 +1,11 @@
+{
+  "unsupportedDataType": "Jenis tidak didukung",
+  "currentlyUnsupported": " Editor default untuk ${missingType} sedang tertunda tetapi akan segera hadir. Kolom tulisan placeholder sementara untuk menentukan input berbasis string.",
+  "unsupportedOverrideWarning": "Komponen editor penimpa yang menyediakan UX yang lebih baik untuk bekerja dengan parameter berikut sedang tertunda tetapi akan segera hadir:",
+  "overrideWidgetMissing": "Timpa komponen editor yang hilang!",
+  "uiIncomplete": "Pengiriman pekerjaan gagal. Fungsi tidak dapat dijalankan karena beberapa bidang yang wajib diisi tidak lengkap atau hilang dari UI.",
+  "deprecatedBannerText": "Template fungsi raster ini berisi satu atau beberapa fungsi raster yang sudah usang dan akan dihapus pada rilis selanjutnya.",
+  "deprecatedBannerTextWithLink": "Template fungsi raster ini berisi satu atau beberapa fungsi raster yang sudah usang dan akan dihapus pada rilis selanjutnya. <calcite-link target='_blank' href='${ docLink }'>Pelajari selengkapnya</calcite-link> tentang cara mengganti fungsi raster yang sudah usang.",
+  "unsupportedBannerText": "Template fungsi raster ini berisi satu atau beberapa fungsi raster yang tidak didukung.",
+  "unsupportedBannerTextWithLink": "Template fungsi raster ini berisi satu atau beberapa fungsi raster yang tidak didukung. <calcite-link target='_blank' href='${ docLink }'>Pelajari selengkapnya </calcite-link> tentang raster apa saja yang didukung."
+}

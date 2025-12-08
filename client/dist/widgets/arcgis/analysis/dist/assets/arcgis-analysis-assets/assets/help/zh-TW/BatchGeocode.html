@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>表中的位置地理編碼工具可將輸入表或輸入檔的地址或地點轉換為座標。
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputType">
+        <div>
+            <p>指定輸入是表格項目 (<b>託管表</b>) 還是 <code>.csv</code> 或 Excel 檔案 (<b>CSV/Excel</b>)。
+            </p>
+        </div>
+    </div>
+    <div id="inputFileItem">
+        <div>
+            <p>包含要地理編碼之地址或地點的輸入檔。 輸入必須是託管的  <code>.csv</code> 或 Excel 檔案。 </p>
+        </div>
+    </div>
+    <div id="inputTable">
+        <div>
+            <p>包含要地理編碼之地址或地點的輸入表。 輸入必須是託管的表格項目。
+            </p>
+            <p>圖徵計數顯示在表格名稱下方。 此計數包括表格中的所有圖徵，已使用篩選器移除的圖徵除外。
+            </p>
+        </div>
+    </div>
+    <div id="geocodeServiceURL">
+        <div>
+            <p>將使用於地理編碼的定位器服務。 如果下拉式功能表沒有您要使用的定位器服務，請要求管理員將定位器服務新增為公用事業服務。
+            </p>
+        </div>
+    </div>
+    <div id="singleOrMultiFieldSwitch">
+        <div>
+            <p>指定輸入資料是包含在單一欄位還是多個欄位中。
+            </p>
+        </div>
+    </div>
+    <div id="geocodeUIParameters">
+        <div>
+            <p>定位器將使用這些欄位來決定資料的位置。 假定資料中包含某些欄位，例如地址、城市、州和郵遞區號。
+            </p>
+        </div>
+    </div>
+    <div id="sourceCountry">
+        <div>
+            <p>資料所在的國家/地區。 如果所有地址是來自某個國家，請選擇該國名稱以確保獲得最精確的結果。 否則留空此參數。
+            </p>
+        </div>
+    </div>
+    <div id="outputFields">
+        <div>
+            <p>指定將包含在輸出資料集中的欄位。 選項如下：
+            </p>
+            <ul>
+                <li> <b>全部</b> - 所有可用的定位器輸出欄位都將包含在地理編碼結果中。
+                </li>
+                <li> <b>最小</b> - 定位器中的欄位子集以及輸入表中的欄位將包含在結果中。
+                </li>
+                <li> <b>僅限位置</b> - 定位器中的 <i>Shape</i> 欄位以及輸入表中的欄位將包含在結果中。
+                </li>
+            </ul>
+            
+        </div>
+    </div>
+    <div id="outputType">
+        <div>
+            <p>將建立之輸出的類型。 輸出可以是圖徵服務、 <code>.csv</code> 檔案或 <code>.xls</code> 檔案。
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>將在 <b>我的內容</b>中建立圖層或檔案的名稱。
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p> <b>我的內容</b>中將儲存結果的資料夾名稱。
+            </p>
+        </div>
+    </div>
+</div>
+</html>

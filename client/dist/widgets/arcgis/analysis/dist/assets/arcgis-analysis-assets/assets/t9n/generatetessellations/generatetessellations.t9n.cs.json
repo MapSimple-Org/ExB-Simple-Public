@@ -1,0 +1,27 @@
+{
+  "area": "Plocha",
+  "binResolution": "H3 rozlišení přihrádky",
+  "binSize": "Velikost přihrádky",
+  "binSizeUnit": "Jednotky",
+  "binType": "Typ tvaru přihrádky",
+  "diamondBins": "Kosočtvercové přihrádky",
+  "distance": "Vzdálenost",
+  "extentLayer": "Vrstva rozsahu",
+  "extentOverrideMessage": "Tato vrstva rozsahu se použije místo jakéhokoli rozsahu zpracování nastaveného v prostředích.",
+  "extentSectionLabel": "Nastavení rozsahu",
+  "extentSectionText": "Zadejte vrstvu rozsahu, kterou má pravidelná mřížka polygonů pokrýt.",
+  "h3hexagonBins": "H3 šestiúhelníkové přihrádky",
+  "hexagon": "Šestiúhelník",
+  "intersectStudyArea": "Zachovat pouze protínající se pravidelné mřížky polygonů",
+  "itemProperties": {
+    "description": "Vrstva prvků vygenerovaná spuštěním analytického nástroje Generovat teselace.",
+    "snippet": "Vrstva prvků vygenerovaná řešením Generovat teselace."
+  },
+  "outputAreasSectionText": "Zadejte název teselační mřížky.",
+  "sizeType": "Měření velikosti přihrádky",
+  "square": "Čtverec",
+  "tessellationSettingsLabel": "Nastavení pravidelné mřížky polygonů",
+  "tessellationSettingsSummaryText": "Zadejte tvar a velikost přihrádek, které se mají vygenerovat.",
+  "thexagonBins": "Příčně šestiúhelníkové přihrádky",
+  "triangleBins": "Trojúhelníkové přihrádky"
+}

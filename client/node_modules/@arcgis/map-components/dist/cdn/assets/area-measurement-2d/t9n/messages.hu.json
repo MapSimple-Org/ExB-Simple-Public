@@ -1,0 +1,1 @@
+{"componentLabel":"Területmérés","hint":"Kezdje el a mérést úgy, hogy belekattint a térképbe az első pont elhelyezéséhez","mode":"Mód","modes":{"auto":"Automatikus","planar":"Síkbeli","geodesic":"Geodéziai"},"newMeasurement":"Új mérés","perimeter":"Kerület","unit":"Mértékegység","unsupported":"A 2D terület mérését csak a MapView támogatja."}

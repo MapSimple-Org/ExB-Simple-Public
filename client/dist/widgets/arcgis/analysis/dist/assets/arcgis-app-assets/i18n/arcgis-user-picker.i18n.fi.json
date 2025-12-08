@@ -1,0 +1,7 @@
+{
+  "searchMembers": "Hae jäseniä",
+  "selectUser": "Valitse käyttäjä",
+  "editSelection": "Muokkaa valittua käyttäjää. Tällä hetkellä valittu: ${name}",
+  "clear": "Tyhjennä",
+  "members": "Jäsenet"
+}

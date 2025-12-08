@@ -1,0 +1,31 @@
+{
+  "back": "Terug",
+  "cancel": "Annuleren",
+  "learnMore": "Meer informatie",
+  "restore": "Herstellen",
+  "restoreTo": "Herstellen naar",
+  "restoreItem": "Item herstellen",
+  "restoreItems": "Items herstellen",
+  "noticeMessage": "Delen wordt ongedaan gemaakt voor herstelde items. Graag beoordelen voordat u de inhoud opnieuw deelt.",
+  "cannotBulkRestoreXItems": "U kunt niet meer dan ${number} items tegelijk herstellen, deselecteer een paar items.",
+  "cannotBulkRestoreMultipleOwners": "U kunt geen items in bulk herstellen die toebehoren aan verschillende eigenaars. Selecteer items van een enkele eigenaar om ze in bulk te herstellen.",
+  "toRestore": {
+    "single": "Item om te herstellen:",
+    "multiple": "Items om te herstellen:"
+  },
+  "cannotRestore": "Kan niet herstellen:",
+  "dependentItems": {
+    "single": "Dit item kan niet worden hersteld omdat het afhankelijk is van <strong style='font-weight: 500'>${parent}</strong>. Herstel ze samen.",
+    "singleUnknown": "Kan dit item niet herstellen omdat het afhankelijk is van een ander item in de prullenbak. Herstel ze samen.",
+    "multiple": "Deze items kunnen niet worden hersteld omdat ze afhankelijk zijn van andere items in de prullenbak. Herstel ze samen.",
+    "multipleSameSource": "Kan deze items niet herstellen, ze zijn afhankelijk van <strong style='font-weight: 500'>${parent}</strong>. Herstel ze samen."
+  },
+  "pageRangeWithTotalRecycleBinSize": {
+    "en": "${start} - ${end} van ${total} (${size}) in prullenbak",
+    "other": "${start} - ${end}, totaal: ${total} (${size}) in prullenbak"
+  },
+  "pageRangeWithGreaterThanTotalRecycleBinSize": {
+    "en": "${start} - ${end} van ${total} (>${size}) in prullenbak",
+    "other": "${start} - ${end}, totaal: ${total} (>${size}) in prullenbak"
+  }
+}

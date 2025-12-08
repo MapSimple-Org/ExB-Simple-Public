@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>A ferramenta Derivar Fluxo como Raster gera um raster de caudal a partir de um raster de superf&iacute;cie de entrada, sem necessidade de enchimento pr&eacute;vio de depress&atilde;o ou coletor.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputSurfaceRaster">
+        <div>
+            <p>O raster de eleva&ccedil;&atilde;o que ser&aacute; utilizado para os c&aacute;lculos.
+            </p>
+        </div>
+    </div>
+    <div id="inputDepressionsData">
+        <div>
+            <p>A entrada que define as localiza&ccedil;&otilde;es de depress&otilde;es ou coletores reais, para onde a &aacute;gua pode entrar, mas n&atilde;o sair.
+            </p>
+            <p class="toolPaneOnly">Para as entradas de elementos, a contagem depende de fatores adicionais, como os crit&eacute;rios de filtragem e a extens&atilde;o da an&aacute;lise.
+            </p>
+        </div>
+    </div>
+    <div id="inputWeightRaster">
+        <div>
+            <p>A camada de raster que define a fra&ccedil;&atilde;o de fluxo que contribui para a acumula&ccedil;&atilde;o de fluxo em cada c&eacute;lula.
+            </p>
+        </div>
+    </div>
+    <div id="accumulationThreshold">
+        <div>
+            <p>O limite para determinar se uma determinada c&eacute;lula faz parte de um fluxo em termos da &aacute;rea total que flui para essa c&eacute;lula.
+            </p>
+        </div>
+    </div>
+    <div id="streamDesignationMethod">
+        <div>
+            <p>Especifica se os segmentos de fluxo na sa&iacute;da ter&atilde;o um valor constante, valores &uacute;nicos ou se est&atilde;o ordenados.
+            </p>
+        </div>
+    </div>
+    <div id="forceFlow">
+        <div>
+            <p>Especifica se o fluxo nas c&eacute;lulas de borda ir&aacute; seguir as regras de fluxo normal ou se ir&aacute; sempre fluir para fora.
+            </p>
+            <p>Se n&atilde;o for selecionada, o fluxo ir&aacute; em dire&ccedil;&atilde;o &agrave; c&eacute;lula interior com maior descida no valor z. No entanto, se a descida for menor ou igual a zero, a c&eacute;lula ir&aacute; fluir para fora do raster de superf&iacute;cie. Se for selecionada, a dire&ccedil;&atilde;o do fluxo ser&aacute; para fora do raster de superf&iacute;cie.
+            </p>
+        </div>
+    </div>
+    <div id="outputStreamRasterName">
+        <div>
+            <p>O nome da camada de raster de caudal que ser&aacute; criada e adicionada ao mapa.
+            </p>
+        </div>
+    </div>
+    <div id="resultType">
+        <div>
+            <p>O tipo de sa&iacute;da que ser&aacute; criado. A sa&iacute;da pode ser uma camada de imagens em mosaico ou uma camada de imagens din&acirc;micas.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>O nome da pasta em  <b>O meu conte&uacute;do</b> onde os resultados ser&atilde;o guardados.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

@@ -1,0 +1,22 @@
+{
+  "general": "عام",
+  "parameters": "المعلمات",
+  "variables": "متغيرات",
+  "name": "الاسم",
+  "namePlaceHolder": "إدخال اسم",
+  "description": "الوصف",
+  "parameter": "المعلمة",
+  "isPublic": "IsPublic",
+  "isDataset": "IsDataset",
+  "unknownPixelType": "غير معروف",
+  "outputPixelType": "نوع وحدة البيكسل الناتجة",
+  "u8PixelType": "8 بت غير معينة",
+  "s8PixelType": "8 بت معينة",
+  "u16PixelType": "16 بت غير معينة",
+  "s16PixelType": "16 بت معينة",
+  "u32PixelType": "32 بت غير معينة",
+  "s32PixelType": "32 بت معينة",
+  "f32PixelType": "32 بت عائم",
+  "f64PixelType": "64 بت مزدوج",
+  "properties": "خصائص"
+}

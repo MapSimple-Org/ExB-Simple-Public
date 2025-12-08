@@ -1,0 +1,13 @@
+{
+  "weightedOverlayTable": "ตารางโอเวอร์เลย์ที่ได้รับการถ่วงค่าน้ำหนัก",
+  "id": "ID",
+  "layer": "ชั้นข้อมูล",
+  "field": "ฟิลด์",
+  "influence": "อิทธิพล",
+  "sumOfInfluence": "ค่ารวมของอิทธิพล",
+  "value": "ค่า",
+  "remapTable": "รีแมปตาราง",
+  "scale": "มาตราส่วน",
+  "scales": "มาตราส่วน",
+  "selectRaster": "เลือกแรสเตอร์"
+}

@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>Инструментът Оптимален път като растер определя оптималния растерен път от дестинациите до източниците.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputDestinationRasterOrFeatures">
+        <div>
+            <p>Слоят, който идентифицира дестинациите, от които се изчислява разстоянието до най-евтиния източник.
+            </p>
+            <p>Ако входните данни са растер, той трябва да се състои от клетки с валидни цели стойности (нулата е валидна стойност) за дестинациите, а на останалите клетки трябва да се присвои NoData.
+            </p>
+            <p class="toolPaneOnly">За входните обекти броят зависи от допълнителни фактори, като например критериите за филтриране и обхвата на анализа.
+            </p>
+        </div>
+    </div>
+    <div id="destinationField">
+        <div>
+            <p>Полето, което ще се използва за получаване на стойности за местоположенията на дестинация.
+            </p>
+        </div>
+    </div>
+    <div id="inputDistanceAccumulationRaster">
+        <div>
+            <p>Растерът, който определя оптималния път от дестинациите до източниците.
+            </p>
+            <p>Растерът за натрупване на разстояние обикновено се създава с инструментите за Натрупване на разстояние и Разпределяне на разстояние.
+            </p>
+        </div>
+    </div>
+    <div id="inputBackDirectionRaster">
+        <div>
+            <p>Растерът, който съдържа изчислени посоки в градуси.
+            </p>
+            <p>Растерът с обратна посока обикновено се създава с инструментите за Натрупване на разстояние и Разпределяне на разстояние.
+            </p>
+        </div>
+    </div>
+    <div id="pathType">
+        <div>
+            <p>Указва как стойностите и зоните във входните данни за дестинация ще бъдат интерпретирани при изчисленията на оптималния път.
+            </p>
+        </div>
+    </div>
+    <div id="outputRasterName">
+        <div>
+            <p>Името на оптималния път като растерен слой, който ще бъде създаден и добавен към картата.
+            </p>
+        </div>
+    </div>
+    <div id="resultType">
+        <div>
+            <p>Типът резултат, който ще бъде създаден. Резултатът може да бъде слой с плочкови изображения или слой с динамични изображения.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>Името на папка в  <b>Моето съдържание</b>, където резултатите ще бъдат запазени.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

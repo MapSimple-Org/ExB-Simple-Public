@@ -1,0 +1,7 @@
+{
+  "searchMembers": "Tagok keresése",
+  "selectUser": "Felhasználó kiválasztása",
+  "editSelection": "Kiválasztott felhasználó szerkesztése. Jelenleg a következő van kiválasztva: ${name}",
+  "clear": "Törlés",
+  "members": "Tagok"
+}

@@ -1,0 +1,89 @@
+{
+  "browser": {
+    "refineContent": "Pročisti sadržaj",
+    "filters": "Filtri",
+    "pageRange": "${start}-${end}, ukupno: ${total}",
+    "pageRangeAria": "${start}-${end}, ukupno stavki: ${total}",
+    "pageRangeWithRecycleBin": "${start}-${end}, ukupno: ${total} (Ukupna veličina: ${recycleBinSize})",
+    "pageRangeAriaWithRecycleBin": "${start}-${end}, ukupno stavki: ${total} (Ukupna veličina: ${recycleBinSize})",
+    "totalSize": "Ukupna veličina: ${totalSize}",
+    "loading": "Učitavanje rezultata",
+    "close": "Zatvori"
+  },
+  "actions": {
+    "more": "Više"
+  },
+  "filter": {
+    "clear": "Ukloni"
+  },
+  "filterDate": {
+    "today": "Danas",
+    "yesterday": "Jučer",
+    "last7": "Posljednjih 7 dana",
+    "last30": "Posljednjih 30 dana",
+    "never": "Nikad",
+    "custom": "Prilagođeni raspon...",
+    "title": {
+      "created": "Datum izrade",
+      "modified": "Izmijenjen datum",
+      "joined": "Datum pridruživanja",
+      "lastLogin": "Posljednja prijava"
+    },
+    "created": "Stvoreno: ${date}",
+    "modified": "Izmijenjeno: ${date}",
+    "joined": "Pridružen/a: ${date}",
+    "lastLogin": "Posljednja prijava: ${date}"
+  },
+  "pagination": {
+    "next": "Sljedeća stranica",
+    "prev": "Prethodna stranica"
+  },
+  "search": {
+    "label": "Pretraži grupe",
+    "search": "Pretraživanje",
+    "clear": "Očisti izraz za pretragu",
+    "wildcard": "Pretraživanja sa zamjenskim znakom nisu podržana"
+  },
+  "sort": {
+    "sortDirection": "Sortiraj smjer",
+    "title": "Naziv",
+    "relevance": "Važnost",
+    "modified": "Izmijenjen datum",
+    "deleted": "Datum izbrisan",
+    "created": "Datum izrade",
+    "added": "Datum dodan",
+    "size": "Veličina",
+    "owner": "Vlasnik",
+    "sizeAsc": "Od najmanjeg do najvećeg",
+    "sizeDesc": "Od najvećeg do najmanjeg",
+    "numviews": "Broj prikaza",
+    "numAsc": "Od najstarijeg do najnovijeg",
+    "numDesc": "Od najnovijeg do najstarijeg",
+    "alphabeticalAsc": "Abecedno",
+    "alphabeticalDesc": "Obrnuto abecedno",
+    "recentAsc": "Najstarije",
+    "recentDesc": "Najnovije",
+    "sort": "Sortiraj",
+    "sortBy": "Sortiraj prema",
+    "sortByColon": "Sortiraj prema:",
+    "fullname": "Naziv",
+    "username": "Korisničko ime",
+    "name": "Naziv",
+    "membertype": "Uloga grupe",
+    "joined": "Datum pridruživanja",
+    "lastlogin": "Posljednja prijava",
+    "dataset": "Skup podataka",
+    "mfaenabled": "Višefaktorska provjera autentičnosti",
+    "defaultAsc": "Uzlazno",
+    "defaultDesc": "Silazno"
+  },
+  "topBar": {
+    "filter": "Filtriraj"
+  },
+  "filterStatus": {
+    "clear": "Ukloni",
+    "filters": "Filtri:",
+    "additional": "Dodatni aktivni filteri",
+    "clearAllFilters": "Očisti sve filtre"
+  }
+}

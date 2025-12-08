@@ -1,0 +1,14 @@
+{
+  "outputRaster": "Ausgabe-Raster",
+  "rfxVariable": "RasterFunctionVariable",
+  "selectLayer": "Layer auswählen",
+  "allowScalar": "Layer auswählen oder Konstante eingeben",
+  "browseLayer": "Layer durchsuchen",
+  "loading": "Wird geladen...",
+  "layerMissing": "Mindestens ein Bilddaten-Layer der Karte wird hier nicht aufgeführt, da die Service-Eigenschaft \"Analyse zulassen\" nicht aktiviert ist.",
+  "layerFailedToLoad": "Fehler beim Laden des Layers.",
+  "learnMore": "Weitere Informationen",
+  "errorCodes": {
+    "required": "Dieser Parameter ist erforderlich."
+  }
+}

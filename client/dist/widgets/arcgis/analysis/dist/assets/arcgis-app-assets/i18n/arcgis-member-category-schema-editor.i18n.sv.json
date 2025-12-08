@@ -1,0 +1,22 @@
+{
+  "dialogHeading": "Konfigurera medlemskategorier",
+  "noticeTitle": "Redigera, ta bort eller sortera om kategorier i din organisation.",
+  "noticeDescription": "Du kan tilldela kategorier till medlemmar via fliken Medlemmar.",
+  "defaultCategoryWarning": "Den här medlemskategorin är inställd som nytt standardvärde för medlemmar och kan inte redigeras eller tas bort.",
+  "warning": {
+    "deleteInUseCategory": {
+      "message": {
+        "single": "En medlem är tilldelad till den här kategorin. Om du tar bort kategorin tas den också bort från medlemmen.",
+        "multiple": "${number} medlemar är tilldelade till den här kategorin. Om du tar bort kategorin tas den också bort från dessa medlemmar.",
+        "unknown": "Medlemmar tilldelade till den här kategorin: ${number}. Om du tar bort kategorin tas den också bort från dessa medlemmar."
+      }
+    },
+    "changeTitleInUseCategory": {
+      "message": {
+        "single": "En medlem är tilldelad till den här kategorin. Om du uppdaterar kategorin uppdateras medlemmen så att han/hon använder \"${newTitle}\".",
+        "multiple": "${number} medlemar är tilldelade till den här kategorin. Om du uppdaterar kategorin uppdateras medlemmarna så att de använder \"${newTitle}\".",
+        "unknown": "Medlemmar tilldelade till den här kategorin: ${number}. Om du uppdaterar kategorin uppdateras medlemmarna så att de använder \"${newTitle}\"."
+      }
+    }
+  }
+}

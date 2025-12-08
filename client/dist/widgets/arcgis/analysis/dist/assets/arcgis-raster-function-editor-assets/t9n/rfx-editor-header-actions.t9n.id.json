@@ -1,0 +1,11 @@
+{
+  "newTemplate": "Buat template baru",
+  "openTemplate": "Buka template",
+  "addTemplate": "Tambahkan template",
+  "addFunction": "Tambahkan fungsi raster",
+  "addConstant": "Tambahkan konstanta",
+  "addRaster": "Tambahkan variabel raster",
+  "expand": "Perluas",
+  "editTemplateProperties": "Edit properti template",
+  "viewTemplateProperties": "Lihat properti template"
+}

@@ -1,0 +1,24 @@
+{
+  "name": "billboard",
+  "type": "template",
+  "templateType": "app",
+  "label": "Billboard",
+  "description": "Billboard was created with simplicity in mind; it contains a map and a controller widget.",
+  "thumbnail": "thumbnail.png",
+  "order": 24,
+  "tags": [
+    "Map",
+    "Search",
+    "Widget Controller",
+    "Splash window"
+  ],
+  "categoriesTags": [
+    "WAB classic",
+    "Map centric",
+    "Fullscreen"
+  ],
+  "isMultiplePage": false,
+  "isMapAware": true,
+  "thumbnailWidth": 320,
+  "thumbnailHeight": 214
+}

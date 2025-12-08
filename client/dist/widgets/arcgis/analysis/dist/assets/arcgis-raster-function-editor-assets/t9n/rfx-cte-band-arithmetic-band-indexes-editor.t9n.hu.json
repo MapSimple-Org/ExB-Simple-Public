@@ -1,0 +1,7 @@
+{
+  "example": "Példa",
+  "input": "Bemenet",
+  "output": "Kimenet",
+  "optional": "Opcionális",
+  "WNDWIHintText": "Az α:α értéknek 0 és 1 közé kell esnie; az alapértelmezett érték 0,5"
+}

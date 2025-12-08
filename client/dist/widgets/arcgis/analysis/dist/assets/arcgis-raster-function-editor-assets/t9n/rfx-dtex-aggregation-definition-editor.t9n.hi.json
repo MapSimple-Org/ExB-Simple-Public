@@ -1,0 +1,12 @@
+{
+  "aggregationType": "टाइप करें",
+  "valueInterval": "आ_Value Interval_______________ज",
+  "dimensionUnit": "आ_Unit_________ज",
+  "minValue": "न्यूनतम मान",
+  "maxValue": "अधिकतम मान",
+  "esriTimeUnitsHours": "आ_Hours___________ज",
+  "esriTimeUnitsDays": "आ_Days_________ज",
+  "esriTimeUnitsWeeks": "आ_Weeks___________ज",
+  "esriTimeUnitsMonths": "आ_Months_____________ज",
+  "esriTimeUnitsYears": "आ_Years___________ज"
+}

@@ -1,0 +1,26 @@
+{
+  "CCIAnalysisSettingGroupLabel": "Indexeinstellungen",
+  "CCIAnalysisSettingGroupText": "Geben Sie an, wie der Index berechnet werden soll.",
+  "geomeanPercentileLabel": "Rangstufen zusammensetzen (Geometrischer Mittelwert der Perzentile)",
+  "geomeanRawLabel": "Unverarbeitete Werte zusammensetzen (Geometrischer Mittelwert der unverarbeiteten Werte)",
+  "geomeanScaledLabel": "Skalierte Werte zusammensetzen (Geometrischer Mittelwert der skalierten Werte)",
+  "indexMethodLabel": "Methode zum Skalieren und Kombinieren der Variablen",
+  "inputFeaturesOrTableLabel": "Eingabe-Features oder -Tabelle",
+  "inputLayerGroupText": "Wählen Sie die Features oder die Tabelle und die Variablen aus, mit denen der Index erstellt werden soll.",
+  "inputVariablesLabel": "Eingabevariablen",
+  "itemProperties": {
+    "description": "Durch Ausführung des Analysewerkzeugs \"Zusammengesetzten Index berechnen\" generierter Feature-Layer.",
+    "snippet": "Über \"Zusammengesetzten Index berechnen\" erstellter Feature-Layer"
+  },
+  "meanPercentileLabel": "Kombinationsrangfolgen (Mittelwert der Perzentile)",
+  "meanRawLabel": "Unverarbeitete Werte kombinieren (Mittelwert der unverarbeiteten Werte)",
+  "meanScaledLabel": "Skalierte Werte kombinieren (Mittelwert der skalierten Werte)",
+  "outputIndexMaxLabel": "Maximum",
+  "outputIndexMinLabel": "Minimum",
+  "outputIndexMinMaxLabel": "Minimal- und Maximalwerte des Index",
+  "outputIndexReverseLabel": "Indexwerte umkehren",
+  "reverseVariableLabel": "Richtung umkehren",
+  "sumFlagsPercentileLabel": "Extremwerte hervorheben (Anzahl der Werte über dem 90. Perzentil)",
+  "toolName": "Zusammengesetzten Index berechnen",
+  "weight": "Gewichtung"
+}

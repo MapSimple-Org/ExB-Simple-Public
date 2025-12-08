@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>A Szűr&eacute;s attrib&uacute;tum szerint egy adathalmaz r&eacute;szhalmaz&aacute;t adja vissza egy attrib&uacute;tumlek&eacute;rdez&eacute;s alapj&aacute;n. Az eredm&eacute;ny egy &uacute;j adathalmaz, amely kiz&aacute;r&oacute;lag azokat a rekordokat tartalmazza, amelyek megfelelnek a lek&eacute;rdez&eacute;sben megadott felt&eacute;teleknek.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputRows">
+        <div>
+            <p>A szűrendő bemeneti r&eacute;teg vagy t&aacute;bla.
+            </p>
+            <p class="modelBuilderOnly">Alap&eacute;rtelmez&eacute;s szerint a  <b>R&eacute;teg</b> van megadva, ha a <b>Bemeneti adathalmaz</b> nincs kit&ouml;ltve. Egy bemeneti t&aacute;bla hozz&aacute;ad&aacute;s&aacute;hoz elősz&ouml;r v&aacute;lassza a <b>T&aacute;bla</b> lehetős&eacute;get, mielőtt hozz&aacute;adn&aacute; az adathalmazt.
+            </p>
+        </div>
+    </div>
+    <div id="whereClause">
+        <div>
+            <p>Az az attrib&uacute;tumlek&eacute;rdez&eacute;s, amelyet a bemeneti adathalmaz szűr&eacute;s&eacute;re fog haszn&aacute;lni.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>A l&eacute;trehozni &eacute;s a t&eacute;rk&eacute;phez hozz&aacute;adni k&iacute;v&aacute;nt r&eacute;teg neve.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            
+            <p>A  <b>Saj&aacute;t tartalom</b> azon mapp&aacute;j&aacute;nak neve, ahov&aacute; az eredm&eacute;ny ment&eacute;se t&ouml;rt&eacute;nik.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

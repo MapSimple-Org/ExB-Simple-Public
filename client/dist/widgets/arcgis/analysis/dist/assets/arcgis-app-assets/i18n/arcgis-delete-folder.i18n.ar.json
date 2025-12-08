@@ -1,0 +1,22 @@
+{
+  "deleteFolder": "حذف المجلد",
+  "delete": "حذف",
+  "permanentlyDelete": "حذف نهائي",
+  "back": "رجوع",
+  "cancel": "إلغاء الأمر",
+  "success": "تم حذف المجلد \"${title}\" بنجاح",
+  "deleteProtectedItemsInFolder": "يتعذر حذف المجلد نظرًا لأن بعض العناصر محمية ضد الحذف أو لديها عناصر تابعة.",
+  "message": {
+    "empty": "هل أنت متأكد من رغبتك في حذف هذا المجلد <strong style='font-weight: 500'>${title}</strong>؟",
+    "recycleAll": "هل أنت متأكد أنك تريد حذف هذا المجلد <strong style='font-weight: 500'>${title}</strong> وإرسال محتوياته إلى سلة المحذوفات؟",
+    "mustBeEmpty": "يجب أن يكون المجلد <strong style='font-weight: 500'>${title}</strong> فارغًا كي يُحذف.",
+    "aFewCannotBeDeleted": "لا يمكن حذف بعض العناصر. هل ترغب في متابعة حذف الباقي؟",
+    "canBeEmptied": "يجب أن يكون المجلد <strong style='font-weight: 500'>${title}</strong> فارغًا كي يُحذف. هل ترغب في متابعة حذف هذه العناصر؟",
+    "cannotBeDeleted": "لا يمكن حذف المجلد <strong style='font-weight: 500'>${title}</strong> لأن العناصر الموجودة به لا يمكن حذفها."
+  },
+  "disabledMessage": {
+    "single": "يوجد <span style='color:red'>عنصر واحد</span> في هذا المجلد، <b>${label}</b>.<br/></br/>هل أنت متأكد من رغبتك في حذف هذا المجلد والعنصر الموجود به؟",
+    "multiple": "توجد <span style='color:red'>${number} عناصر</span> في هذا المجلد، <b>${label}</b>.<br/></br/>هل أنت متأكد أنك تريد حذف هذا المجلد وجميع العناصر الموجودة به؟",
+    "unknown": "هل أنت متأكد أنك تريد حذف هذا المجلد، <b>${label}</b>؟"
+  }
+}

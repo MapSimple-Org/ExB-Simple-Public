@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>Alat Jarak Pandang Geodesik mengidentifikasi lokasi pada permukaan raster yang terlihat untuk lokasi pengamat input.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputElevationSurface">
+        <div>
+            <p>Raster elevasi tempat jarak pandang akan dihitung.
+            </p>
+        </div>
+    </div>
+    <div id="inputObserverFeatures">
+        <div>
+            <p>Lokasi pengamat yang jarak pandangnya akan dihitung.
+            </p>
+            <p class="toolPaneOnly">Jumlah fitur bergantung pada faktor tambahan seperti kriteria pemfilteran dan jangkauan analisis.
+            </p>
+        </div>
+    </div>
+    <div id="optimizeFor">
+        <div>
+            <p>Mengoptimalkan penghitungan jarak pandang berdasarkan kecepatan atau akurasi.
+            </p>
+        </div>
+    </div>
+    <div id="verticalError">
+        <div>
+            <p>Jumlah ketidakpastian dalam nilai elevasi pada nilai  <b>Permukaan elevasi input</b>.
+            </p>
+        </div>
+    </div>
+    <div id="refractivityCoefficient">
+        <div>
+            <p>Koefisien pembiasan cahaya tampak di udara.
+            </p>
+        </div>
+    </div>
+    <div id="maximumViewingDistance">
+        <div>
+            <p>Jarak pandang maksimum untuk perhitungan jarak pandang.
+            </p>
+            <p>Jarak dapat ditentukan oleh nilai dan satuannya, atau dari kolom di nilai  <b>Fitur titik atau garis pengamat input</b>.
+            </p>
+        </div>
+    </div>
+    <div id="minimumViewingDistance">
+        <div>
+            <p>Jarak pandang minimum untuk penghitungan jarak pandang.
+            </p>
+            <p>Jarak dapat ditentukan oleh nilai dan satuannya, atau dari kolom di nilai  <b>Fitur titik atau garis pengamat input</b>.
+            </p>
+        </div>
+    </div>
+    <div id="viewingDistancesAre3D">
+        <div>
+            <p>Menentukan apakah jarak pandang maksimum dan minimum akan diukur dalam jarak 3D atau jarak 2D.
+            </p>
+            <p>Jika tidak dicentang, jarak pandang akan dianggap sebagai jarak Euclidean 2D. Jika dicentang, jarak pandang akan dianggap sebagai jarak 3D.
+            </p>
+        </div>
+    </div>
+    <div id="observersElevation">
+        <div>
+            <p>Elevasi permukaan lokasi pengamat.
+            </p>
+            <p>Elevasi dapat ditentukan oleh nilai dan satuannya, atau dari kolom di nilai  <b>Fitur titik atau garis pengamat input</b>.
+            </p>
+        </div>
+    </div>
+    <div id="observersHeight">
+        <div>
+            <p>Ketinggian pengamat di atas tanah.
+            </p>
+            <p>Ketinggian dapat ditentukan oleh nilai dan satuannya, atau dari kolom di nilai  <b>Fitur titik atau garis pengamat input</b>.
+            </p>
+        </div>
+    </div>
+    <div id="targetHeight">
+        <div>
+            <p>Ketinggian target di atas tanah.
+            </p>
+            <p>Ketinggian dapat ditentukan oleh nilai dan satuannya, atau dari kolom di nilai  <b>Fitur titik atau garis pengamat input</b>.
+            </p>
+        </div>
+    </div>
+    <div id="horizontalStartAngle">
+        <div>
+            <p>Sudut awal rentang pemindaian horizontal.
+            </p>
+            <p>Sudut dapat ditentukan oleh nilai dari 0 hingga 360 atau dari kolom di nilai  <b>Fitur titik atau garis pengamat input</b>.
+            </p>
+        </div>
+    </div>
+    <div id="horizontalEndAngle">
+        <div>
+            <p>Ujung sudut rentang pemindaian horizontal.
+            </p>
+            <p>Sudut dapat ditentukan oleh nilai dari 0 hingga 360 atau dari kolom di nilai  <b>Fitur titik atau garis pengamat input</b>.
+            </p>
+        </div>
+    </div>
+    <div id="verticalUpperAngle">
+        <div>
+            <p>Batas sudut vertikal atas pemindaian yang relatif terhadap penampang horizontal.
+            </p>
+            <p>Sudut dapat ditentukan oleh nilai dari &ndash;90 hingga 90 atau dari kolom di nilai  <b>Fitur titik atau garis pengamat input</b>.
+            </p>
+        </div>
+    </div>
+    <div id="verticalLowerAngle">
+        <div>
+            <p>Batas sudut vertikal bawah pemindaian yang relatif terhadap penampang horizontal.
+            </p>
+            <p>Sudut dapat ditentukan oleh nilai dari &ndash;90 hingga 90 atau dari kolom di nilai  <b>Fitur titik atau garis pengamat input</b>.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>Nama layer raster jarak pandang yang akan dibuat dan ditambahkan ke peta. Layer ini berisi area yang terlihat tempat pengamat dapat melihat, dan nilai sel menunjukkan jumlah pengamat yang dapat melihat sel.
+            </p>
+        </div>
+    </div>
+    <div id="outputAboveGroundLevelRasterName">
+        <div>
+            <p>Nama layer raster above ground level (AGL) yang akan dibuat dan ditambahkan ke peta.
+            </p>
+        </div>
+    </div>
+    <div id="resultType">
+        <div>
+            <p>Jenis output yang akan dibuat. Output dapat berupa layer citra berpetak atau layer citra dinamis.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>Nama folder di  <b>Konten saya</b> tempat penyimpanan hasil.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

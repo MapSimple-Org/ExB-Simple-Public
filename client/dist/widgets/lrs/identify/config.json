@@ -1,0 +1,13 @@
+{
+    "lrsLayers": [],
+    "networkLayers": [],
+    "eventLayers": [],
+    "intersectionLayers": [],
+    "defaultEvent": "",
+    "defaultMethod": "ROUTEANDMEASURE",
+    "defaultType": "SINGLE",
+    "defaultAttributeSet": "",
+    "attributeSets": [],
+    "eventToggle": false,
+  "mode": "MAP"
+  }

@@ -1,0 +1,16 @@
+{
+  "name": "steps",
+  "type": "template",
+  "templateType": "anchored-window",
+  "label": "Steps",
+  "thumbnail": "thumbnail.png",
+  "order": 2,
+  "tags": [
+    "Section",
+    "View",
+    "Navigation"
+  ],
+  "categoriesTags": [],
+  "thumbnailWidth": 320,
+  "thumbnailHeight": 268
+}

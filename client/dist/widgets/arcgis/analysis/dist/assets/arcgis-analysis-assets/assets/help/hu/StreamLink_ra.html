@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>A Stream Link eszk&ouml;z egyedi &eacute;rt&eacute;keket rendel egy raszteres line&aacute;ris h&aacute;l&oacute;zat szekci&oacute;ihoz a metsz&eacute;spontok k&ouml;z&ouml;tt.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputStreamRaster">
+        <div>
+            <p>A line&aacute;ris &aacute;raml&aacute;sh&aacute;l&oacute;zatot meghat&aacute;roz&oacute; raszter neve.
+            </p>
+        </div>
+    </div>
+    <div id="inputFlowDirectionRaster">
+        <div>
+            <p>A raszter, amely az &aacute;raml&aacute;s ir&aacute;ny&aacute;t hat&aacute;rozza meg az egyes cell&aacute;kb&oacute;l.
+            </p>
+            <p>Az &aacute;raml&aacute;si ir&aacute;nye meghat&aacute;roz&aacute;s&aacute;hoz a DB8 met&oacute;dust kell haszn&aacute;lni.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>A l&eacute;trehozni &eacute;s a t&eacute;rk&eacute;phez hozz&aacute;adni k&iacute;v&aacute;nt &aacute;ramlatkapcsolati raszteres r&eacute;teg neve.
+            </p>
+        </div>
+    </div>
+    <div id="resultType">
+        <div>
+            <p>A l&eacute;trej&ouml;vő kimenet t&iacute;pusa. A kimenet csemp&eacute;zett t&aacute;v&eacute;rz&eacute;kel&eacute;si r&eacute;teg vagy pedig dinamikus t&aacute;v&eacute;rz&eacute;kel&eacute;si r&eacute;teg lehet.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>A  <b>Saj&aacute;t tartalom</b> azon mapp&aacute;j&aacute;nak neve, ahov&aacute; az eredm&eacute;ny ment&eacute;se t&ouml;rt&eacute;nik.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

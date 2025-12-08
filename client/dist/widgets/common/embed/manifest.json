@@ -1,0 +1,75 @@
+{
+  "name": "embed",
+  "label": "Embed",
+  "type": "widget",
+  "version": "1.19.0",
+  "exbVersion": "1.19.0",
+  "author": "Esri R&D Center Beijing",
+  "description": "This is a iframe widget, which is represented as a UI element, like an icon, text, or the composition.",
+  "copyright": "",
+  "license": "http://www.apache.org/licenses/LICENSE-2.0",
+  "properties": {
+    "hasSettingPage": true,
+    "coverLayoutBackground": true,
+    "supportAutoSize": false,
+    "handleA11yLabelInWidget": true
+  },
+  "defaultSize": {
+    "width": 400,
+    "height": 300
+  },
+  "extensions": [
+    {
+      "name": "appConfigOperations",
+      "point": "APP_CONFIG_OPERATIONS",
+      "uri": "tools/app-config-operations"
+    },
+    {
+      "name": "builderOperations",
+      "point": "BUILDER_OPERATIONS",
+      "uri": "tools/builder-operations"
+    }
+  ],
+  "translatedLocales": [
+    "en",
+    "ar",
+    "bg",
+    "bs",
+    "ca",
+    "cs",
+    "da",
+    "de",
+    "el",
+    "es",
+    "et",
+    "fi",
+    "fr",
+    "he",
+    "hr",
+    "hu",
+    "id",
+    "it",
+    "ja",
+    "ko",
+    "lt",
+    "lv",
+    "no",
+    "nl",
+    "pl",
+    "pt-br",
+    "pt-pt",
+    "ro",
+    "ru",
+    "sk",
+    "sl",
+    "sr",
+    "sv",
+    "th",
+    "tr",
+    "zh-cn",
+    "uk",
+    "vi",
+    "zh-hk",
+    "zh-tw"
+  ]
+}

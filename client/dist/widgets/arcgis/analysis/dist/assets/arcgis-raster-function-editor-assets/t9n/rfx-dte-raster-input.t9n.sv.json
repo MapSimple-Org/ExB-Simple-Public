@@ -1,0 +1,14 @@
+{
+  "outputRaster": "OutputRaster",
+  "rfxVariable": "RasterFunctionVariable",
+  "selectLayer": "Välj lager",
+  "allowScalar": "Välj ett lager eller ange en konstant",
+  "browseLayer": "Bläddra bland lager",
+  "loading": "Läser in...",
+  "layerMissing": "Ett eller flera bildlager från kartan listas inte här eftersom egenskapen tillåt analystjänst inte är aktiverad.",
+  "layerFailedToLoad": "Det gick inte att läsa in lagret.",
+  "learnMore": "Läs mer",
+  "errorCodes": {
+    "required": "Denna parameter är obligatorisk."
+  }
+}

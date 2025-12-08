@@ -1,0 +1,22 @@
+{
+  "dialogHeading": "Konfigūruoti narių kategorijas",
+  "noticeTitle": "Redaguokite, naikinkite arba pertvarkykite savo organizacijos kategorijas.",
+  "noticeDescription": "Nariams galite priskirti kategorijas per skirtuką „Nariai“.",
+  "defaultCategoryWarning": "Ši narių kategorija yra nustatyta kaip naujo nario numatytieji nustatymai ir negali būti redaguojama ar ištrinta.",
+  "warning": {
+    "deleteInUseCategory": {
+      "message": {
+        "single": "Šiai kategorijai priskirtas vienas narys. Ištrynus šią kategoriją, ji bus pašalinta ir šiam nariui.",
+        "multiple": "Šiai kategorijai priskirta narių: ${number}. Ištrynus šią kategoriją, ji bus pašalinta ir šiems nariams.",
+        "unknown": "Šiai kategorijai priskirta narių: ${number}. Ištrynus šią kategoriją, ji bus pašalinta ir šiems nariams."
+      }
+    },
+    "changeTitleInUseCategory": {
+      "message": {
+        "single": "Šiai kategorijai priskirtas vienas narys. Atnaujinus šią kategoriją, narys bus atnaujintas, kad naudotų ${newTitle}.",
+        "multiple": "Šiai kategorijai priskirta narių: ${number}. Atnaujinus šią kategoriją, nariai bus atnaujinti, kad naudotų ${newTitle}.",
+        "unknown": "Šiai kategorijai priskirta narių: ${number}. Atnaujinus šią kategoriją, nariai bus atnaujinti, kad naudotų ${newTitle}."
+      }
+    }
+  }
+}

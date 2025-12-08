@@ -1,0 +1,11 @@
+{
+  "unsupportedDataType": "Tip neacceptat",
+  "currentlyUnsupported": " Un editor implicit pentru ${missingType} este în așteptare, dar va sosi în curând. Casetă de text pentru substituent temporar pentru specificarea intrărilor bazate pe șiruri.",
+  "unsupportedOverrideWarning": "O componentă de editor de suprascriere care furnizează un mai bun UX pentru lucrul cu următorul(i) parametru(i) este în așteptare, dar va sosi în curând:",
+  "overrideWidgetMissing": "Componente editor suprascriere lipsă!",
+  "uiIncomplete": "Trimiterea lucrării nu a reușit. Funcția nu poate fi executată pentru că unele dintre câmpurile obligatorii sunt incomplete sau lipsesc din UI.",
+  "deprecatedBannerText": "Acest șablon de funcție raster conține una sau mai multe funcții raster perimate și va fi eliminat într-o versiune viitoare.",
+  "deprecatedBannerTextWithLink": "Acest șablon de funcție raster conține una sau mai multe funcții raster perimate și va fi eliminat într-o versiune viitoare. <calcite-link target='_blank' href='${ docLink }'>Aflați mai multe</calcite-link> despre cum să înlocuiți o funcție de raster perimată.",
+  "unsupportedBannerText": "Acest șablon de funcție raster conține una sau mai multe funcții raster neacceptate.",
+  "unsupportedBannerTextWithLink": "Acest șablon de funcție raster conține una sau mai multe funcții raster neacceptate. <calcite-link target='_blank' href='${ docLink }'>Aflați mai multe</calcite-link> despre funcțiile raster care sunt acceptate."
+}

@@ -1,0 +1,15 @@
+{
+  "expandAll": "Expandir todos",
+  "collapseAll": "Recolher todos",
+  "categoryItem": {
+    "expand": "Expandir",
+    "collapse": "Recolher",
+    "editCategory": "Editar categoria",
+    "deleteCategory": "Excluir categoria",
+    "addSubcategory": "Adicionar subcategoria",
+    "addCategory": "Adicionar categoria",
+    "save": "Salvar",
+    "cancel": "Cancelar",
+    "missingTitleMessage": "O título da categoria é exigido."
+  }
+}

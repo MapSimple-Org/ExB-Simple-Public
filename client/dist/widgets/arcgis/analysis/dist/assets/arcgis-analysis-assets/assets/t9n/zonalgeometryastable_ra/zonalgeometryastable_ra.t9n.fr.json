@@ -1,0 +1,9 @@
+{
+  "inputLayerGroupText": "Sélectionner la couche en entrée à utiliser pour calculer la géométrie des limites des zones.",
+  "itemProperties": {
+    "description": "Table en sortie générée en exécutant l’outil d’analyse Géométrie zonale (table).",
+    "snippet": "Table en sortie générée avec Géométrie zonale (table)"
+  },
+  "zonalGeometrySettingGroupLabel": "Paramètre de géométrie zonale",
+  "zonalGeometrySettingGroupText": "Indiquer la taille de cellule à utiliser pour le calcul."
+}

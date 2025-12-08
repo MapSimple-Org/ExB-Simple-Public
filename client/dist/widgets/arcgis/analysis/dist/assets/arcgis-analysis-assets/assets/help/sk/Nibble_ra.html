@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>N&aacute;stroj Nibble nahrad&iacute; bunky rastra zodpovedaj&uacute;ce maske hodnotou najbliž&scaron;ieho suseda.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputRaster">
+        <div>
+            <p>Vstupn&yacute; raster s maskovan&yacute;mi miestami, ktor&eacute; bud&uacute; nahraden&eacute; hodnotou ich najbliž&scaron;ieho suseda.
+            </p>
+        </div>
+    </div>
+    <div id="inputMaskRaster">
+        <div>
+            <p>Raster masky, ktor&yacute; identifikuje oblasti vo vstupnom rastri, ktor&eacute; bud&uacute; nahraden&eacute;. Bunky s hodnotou NoData s&uacute; považovan&eacute; za bunky v maskovanej oblasti.
+            </p>
+        </div>
+    </div>
+    <div id="inputZoneRaster">
+        <div>
+            <p>Vstupn&yacute; zon&aacute;lny raster. Pre každ&uacute; z&oacute;nu sa vstupn&eacute; bunky, ktor&eacute; sa nach&aacute;dzaj&uacute; v r&aacute;mci masky, nahradia len najbliž&scaron;&iacute;mi hodnotami buniek v r&aacute;mci tej istej z&oacute;ny.
+            </p>
+        </div>
+    </div>
+    <div id="nibbleValues">
+        <div>
+            <p>Určuje, či bunky NoData vo vstupnom rastri m&ocirc;žu nahradiť bunky v maskovan&yacute;ch oblastiach, ak s&uacute; ich najbliž&scaron;&iacute;mi susedmi.
+            </p>
+            <p>Ak je za&scaron;ktnut&eacute;, bunky NoData vo vstupnom rastri m&ocirc;žu nahradiť bunky v maskovanej oblasti. Ak nie je za&scaron;ktnut&eacute;, iba platn&eacute; bunky vo vstupnom rastri m&ocirc;žu nahradiť bunky v maskovanej oblasti.
+            </p>
+        </div>
+    </div>
+    <div id="nibbleNodata">
+        <div>
+            <p>Určuje, či sa bunky NoData v maskovanej oblasti zachovaj&uacute; alebo nahradia.
+            </p>
+            <p>Ak nie je za&scaron;ktnut&eacute;, v&scaron;etky bunky NoData, ktor&eacute; sa nach&aacute;dzaj&uacute; v maskovanej oblasti, bud&uacute; vo v&yacute;stupe zachovan&eacute;. Ak je za&scaron;ktnut&eacute;, bunky NoData v maskovanej oblasti sa nahradia hodnotou najbliž&scaron;ieho suseda, ktor&yacute; sa nach&aacute;dza mimo maskovanej oblasti.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>N&aacute;zov nahradenej rastrovej vrstvy, ktor&aacute; sa vytvor&iacute; a prid&aacute; do mapy.
+            </p>
+        </div>
+    </div>
+    <div id="resultType">
+        <div>
+            <p>Typ v&yacute;stupu, ktor&yacute; bude vytvoren&yacute;. V&yacute;stupom m&ocirc;že byť dlaždicov&aacute; sn&iacute;mkov&aacute; vrstva alebo dynamick&aacute; sn&iacute;mkov&aacute; vrstva.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>N&aacute;zov priečinka v r&aacute;mci  <b>M&ocirc;j obsah</b>, do ktor&eacute;ho sa ulož&iacute; v&yacute;sledok.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

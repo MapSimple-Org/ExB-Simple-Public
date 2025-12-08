@@ -1,0 +1,11 @@
+{
+  "newTemplate": "إنشاء قالب جديد",
+  "openTemplate": "فتح قالب",
+  "addTemplate": "إضافة قالب",
+  "addFunction": "إضافة دوال البيانات النقطية",
+  "addConstant": "إضافة ثابت",
+  "addRaster": "إضافة متغير البيانات النقطية",
+  "expand": "توسيع",
+  "editTemplateProperties": "تحرير خصائص القالب",
+  "viewTemplateProperties": "عرض خصائص القالب"
+}

@@ -1,0 +1,31 @@
+{
+  "back": "Natrag",
+  "cancel": "Odustani",
+  "learnMore": "Saznajte više",
+  "restore": "Vrati",
+  "restoreTo": "Vrati na",
+  "restoreItem": "Vrati stavku",
+  "restoreItems": "Vrati stavke",
+  "noticeMessage": "Vraćene stavke više neće biti dijeljene. Pregledajte svoj sadržaj prije ponovnog dijeljenja.",
+  "cannotBulkRestoreXItems": "Nije moguće skupno vratiti više od ${number} stavki, poništite odabir nekoliko stavki.",
+  "cannotBulkRestoreMultipleOwners": "Nije moguće skupno vratiti stavke koje pripadaju različitim vlasnicima. Odaberite stavke od jednog vlasnika za skupno vraćanje.",
+  "toRestore": {
+    "single": "Stavka za vraćanje:",
+    "multiple": "Stavke za vraćanje:"
+  },
+  "cannotRestore": "Nije moguće vratiti:",
+  "dependentItems": {
+    "single": "Ova se stavka ne može vratiti jer je zavisna o <strong style='font-weight: 500'>${parent}</strong>. Vratite ih zajedno.",
+    "singleUnknown": "Ovu stavku nije moguće vratiti jer ovisi o drugoj stavci u košu za smeće. Vratite ih zajedno.",
+    "multiple": "Te se stavke ne mogu vratiti jer zavise o drugim stavkama u košu za smeće. Vratite ih zajedno.",
+    "multipleSameSource": "Ove se stavke ne mogu vratiti jer ovise o <strong style='font-weight: 500'>${parent}</strong>. Vratite ih zajedno."
+  },
+  "pageRangeWithTotalRecycleBinSize": {
+    "en": "${start} – ${end} od ${total} (${size}) u košu za smeće",
+    "other": "${start} – ${end}, ukupno: ${total} (${size}) u košu za smeće"
+  },
+  "pageRangeWithGreaterThanTotalRecycleBinSize": {
+    "en": "${start} – ${end} od ${total} (>${size}) u košu za smeće",
+    "other": "${start} – ${end}, ukupno: ${total} (>${size}) u košu za smeće"
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "forceFlowLabel": "Forzar celdas de eje para que se desplacen hacia fuera",
+  "inputLayersGroupText": "Elija el ráster de superficie de entrada y, opcionalmente, los datos de depresión y el ráster de ponderación.",
+  "itemProperties": {
+    "description": "Salida generada al ejecutar la herramienta Derivar transmisión como ráster.",
+    "snippet": "Salida generada a partir de Derivar transmisión como ráster"
+  },
+  "outputStreamRasterLabel": "Nombre del ráster de transmisión de salida",
+  "streamSettingsGroupText": "Especifique el umbral de acumulación, el método de designación de curso de agua y cómo se maneja el flujo en el borde del ráster de superficie de entrada."
+}

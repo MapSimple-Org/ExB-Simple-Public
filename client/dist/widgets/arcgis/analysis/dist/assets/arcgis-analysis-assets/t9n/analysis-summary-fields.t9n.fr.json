@@ -1,0 +1,17 @@
+{
+  "any": "Tout",
+  "count": "Total",
+  "field": "Champ",
+  "fieldLoadingErrorText": "Impossible de charger les champs.",
+  "first": "Premier",
+  "isRequired": "Ce paramètre est obligatoire.",
+  "last": "Dernier",
+  "max": "Max",
+  "mean": "Moyenne",
+  "min": "Min",
+  "selectAll": "Sélectionner tout",
+  "standardDeviation": "Écart type",
+  "statistic": "Statistique",
+  "statisticNotSelected": "Au moins un type de statistique est requis pour chaque champ.",
+  "sum": "Somme"
+}

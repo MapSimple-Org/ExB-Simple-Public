@@ -1,0 +1,31 @@
+{
+  "back": "Atgal",
+  "cancel": "Atšaukti",
+  "learnMore": "Sužinokite daugiau",
+  "restore": "Grąžinti",
+  "restoreTo": "Atkurti į",
+  "restoreItem": "Atkurti elementą",
+  "restoreItems": "Atkurti elementus",
+  "noticeMessage": "Atkurtų elementų bendrinimas bus panaikintas. Peržiūrėkite savo turinį prieš vėl jį bendrindami.",
+  "cannotBulkRestoreXItems": "Negalima masiškai atkurti daugiau nei ${number} elementų, panaikinkite kelių elementų pasirinkimą.",
+  "cannotBulkRestoreMultipleOwners": "Negalima masiškai atkurti elementų, priklausančių skirtingiems savininkams. Norėdami masiškai atkurti, pasirinkite vieno savininko elementus.",
+  "toRestore": {
+    "single": "Atkuriamas elementas:",
+    "multiple": "Atkuriami elementai:"
+  },
+  "cannotRestore": "Negalima atkurti:",
+  "dependentItems": {
+    "single": "Šio elemento negalima atkurti, nes jis priklauso nuo <strong style='font-weight: 500'>${parent}</strong>. Atkurkite juos kartu.",
+    "singleUnknown": "Šio elemento negalima atkurti, nes jis priklausomas nuo kito elemento esančio šiukšliadėžėje. Atkurkite juos kartu.",
+    "multiple": "Šių elementų negalima atkurti, nes jie priklausomi nuo kitų elementų šiukšliadėžėje. Atkurkite juos kartu.",
+    "multipleSameSource": "Šių elementų negalima atkurti, nes jie priklauso nuo <strong style='font-weight: 500'>${parent}</strong>. Atkurkite juos kartu."
+  },
+  "pageRangeWithTotalRecycleBinSize": {
+    "en": "${start} – ${end} iš ${total} (${size}) šiukšliadėžėje",
+    "other": "${start} – ${end}, iš viso: ${total} (${size}) šiukšliadėžėje"
+  },
+  "pageRangeWithGreaterThanTotalRecycleBinSize": {
+    "en": "${start} – ${end} iš ${total} (>${size}) šiukšliadėžėje",
+    "other": "${start} – ${end}, iš viso: ${total} (>${size}) šiukšliadėžėje"
+  }
+}

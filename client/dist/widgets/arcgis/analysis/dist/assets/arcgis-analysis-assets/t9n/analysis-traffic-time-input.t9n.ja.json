@@ -1,0 +1,8 @@
+{
+  "arriveTime": "到着時間",
+  "modes": {
+    "custom": "カスタム日時",
+    "now": "現在",
+    "unspecified": "時間が指定されていません"
+  }
+}

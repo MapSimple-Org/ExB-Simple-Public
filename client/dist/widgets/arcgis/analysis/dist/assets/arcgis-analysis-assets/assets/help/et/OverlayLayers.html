@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>T&ouml;&ouml;riist &quot;Kattuvad kihid&quot; kombineerib kaks kihti ruumilise seose p&otilde;hjal &uuml;hte kihti.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputLayer">
+        <div>
+            <p>Punkti-, joone- v&otilde;i pol&uuml;goonikiht, mis kaetakse.
+            </p>
+            <p class="toolPaneOnly">Objektide arv s&otilde;ltub t&auml;iendavatest teguritest, n&auml;iteks filtreerimiskriteeriumidest ja anal&uuml;&uuml;si ulatusest.
+            </p>
+        </div>
+    </div>
+    <div id="overlayLayer">
+        <div>
+            <p>Kiht, millega kaetakse sisendkiht.
+            </p>
+            <p class="toolPaneOnly">Objektide arv s&otilde;ltub t&auml;iendavatest teguritest, n&auml;iteks filtreerimiskriteeriumidest ja anal&uuml;&uuml;si ulatusest.
+            </p>
+        </div>
+    </div>
+    <div id="overlayType">
+        <div>
+            <p>&Uuml;lekatte meetod, millega m&auml;&auml;ratakse, kuidas sisend- ja &uuml;lekattekihti kombineeritakse.
+            </p>
+        </div>
+    </div>
+    <div id="outputType">
+        <div>
+            <p>V&auml;ljundkihil loodavate objektide t&uuml;&uuml;p (punkt-, joon- v&otilde;i pol&uuml;goonobjekt).
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>Selle kihi nimi, mis luuakse ja lisatakse kaardile.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>Selle kausta nimi jaotises  <b>Minu sisu</b>, kuhu tulemus salvestatakse.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

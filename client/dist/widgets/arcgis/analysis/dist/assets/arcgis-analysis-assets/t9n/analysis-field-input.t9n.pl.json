@@ -1,0 +1,68 @@
+{
+  "addField": "Dodaj pole",
+  "addFieldErrors": {
+    "creatingFailed": "Tworzenie pola ${fieldName} nie powiodło się.",
+    "existingFieldNameError": "Nazwa pola nie może być taka sama jak istniejąca nazwa pola.",
+    "invalidName": "Nieprawidłowa nazwa",
+    "invalidNameInputInvalidCharactersError": "Nawa pola musi zaczynać się od litery i może zawierać tylko litery, cyfry i znak podkreślenia (_).",
+    "invalidNameInputSQLError": "Nazwa pola nie może być taka sama jak słowo kluczowe języka SQL.",
+    "valueIsRequiredError": "Ta wartość jest wymagana."
+  },
+  "cancel": "Anuluj",
+  "createAndSelectField": "Utwórz i wybierz pole",
+  "createNewFields": "Utwórz nowe pole",
+  "fieldLoadingErrorText": "Nie można wczytać pól.",
+  "fieldName": "Nazwa pola",
+  "fieldType": "Typ pola",
+  "fieldTypesIncompatible": "Nie ma dostępnych zgodnych pól.",
+  "layerNotSelected": "Nie wybrano warstwy do zapełnienia pól.",
+  "loadingFields": "Wczytywanie pól",
+  "noSearchResults": "Nie znaleziono zgodnych pól.",
+  "requiredErrorLabelDefault": "Pole",
+  "requiredErrorMessage": "Ten parametr jest wymagany.",
+  "selectFieldPicklistHeading": "Wybierz pole",
+  "selectOkBtnText": "Wybierz",
+  "tooltip": "Należy podać prawidłową nazwę i typ pola.",
+  "types": {
+    "big-integer": {
+      "description": "Przechowywanie liczb całkowitych z zakresu od -(2${startSup}53${endSup}-1) do 2${startSup}53${endSup}-1. Użyj tego typu pola, gdy używasz liczb spoza obsługiwanego zakresu pól całkowitych.",
+      "title": "Duża liczba całkowita"
+    },
+    "date": {
+      "description": "Przechowywanie wartości z datą i czasem.",
+      "title": "Data"
+    },
+    "date-only": {
+      "description": "Przechowywanie wartości daty bez wartości czasu.",
+      "title": "Tylko data"
+    },
+    "double": {
+      "description": "Przechowywanie liczb z miejscami dziesiętnymi.",
+      "title": "Podwójnej precyzji"
+    },
+    "global-id": {
+      "description": "Zapisz 36-znakowy ciąg składający się z liter i cyfr używany do jednoznacznego identyfikowania obiektów.",
+      "title": "GlobalID"
+    },
+    "guid": {
+      "description": "Zapisz 36-znakowy ciąg składający się z liter i cyfr. Globalny unikatowy identyfikator (identyfikator GUID) jest często używany do zarządzania relacjami między obiektami.",
+      "title": "GUID"
+    },
+    "integer": {
+      "description": "Przechowywanie liczb całkowitych z zakresu od ${lowerIntegerRange} do ${upperIntegerRange}.",
+      "title": "Całkowite"
+    },
+    "string": {
+      "description": "Zapisz zestaw znaków alfanumerycznych",
+      "title": "Ciąg znakowy"
+    },
+    "time-only": {
+      "description": "Przechowywanie wartości czasu bez wartości daty.",
+      "title": "Tylko czas"
+    },
+    "timestamp-offset": {
+      "description": "Przechowywanie wartości określających datę, czas i przesunięcie względem czasu UTC.",
+      "title": "Przesunięcie datownika"
+    }
+  }
+}

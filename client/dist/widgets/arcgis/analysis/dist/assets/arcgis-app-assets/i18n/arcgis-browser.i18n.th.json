@@ -1,0 +1,89 @@
+{
+  "browser": {
+    "refineContent": "ปรับแต่งเนื้อหา",
+    "filters": "ตัวกรอง",
+    "pageRange": "${start}-${end}, รวม: ${total}",
+    "pageRangeAria": "${start}-${end}, รายการทั้งหมด: ${total}",
+    "pageRangeWithRecycleBin": "${start}-${end}, ทั้งหมด: ${total} (ขนาดทั้งหมด: ${recycleBinSize})",
+    "pageRangeAriaWithRecycleBin": "${start}-${end}, รายการทั้งหมด: ${total} (ขนาดทั้งหมด: ${recycleBinSize})",
+    "totalSize": "ขนาดทั้งหมด: ${totalSize}",
+    "loading": "กำลังโหลดผลลัพธ์",
+    "close": "ปิด"
+  },
+  "actions": {
+    "more": "กว่า"
+  },
+  "filter": {
+    "clear": "ชัดเจน"
+  },
+  "filterDate": {
+    "today": "วันนี้",
+    "yesterday": "เมื่อวาน",
+    "last7": "7 วันที่แล้ว",
+    "last30": "30 วันที่แล้ว",
+    "never": "ไม่เคย",
+    "custom": "ปรับแต่งช่วงข้อมูล...",
+    "title": {
+      "created": "วันที่สร้าง",
+      "modified": "วันที่แก้ไข",
+      "joined": "วันที่เข้าร่วม",
+      "lastLogin": "เข้าสู่ระบบล่าสุด"
+    },
+    "created": "สร้างเมื่อ: ${date}",
+    "modified": "แก้ไขเมื่อ: ${date}",
+    "joined": "เข้าร่วมแล้ว: ${date}",
+    "lastLogin": "เข้าสู่ระบบล่าสุด: ${date}"
+  },
+  "pagination": {
+    "next": "หน้าถัดไป",
+    "prev": "หน้าก่อนนี้"
+  },
+  "search": {
+    "label": "ค้นหากลุ่ม",
+    "search": "ค้นหา",
+    "clear": "ล้างคำค้นหา",
+    "wildcard": "ไม่รองรับการค้นหาด้วยอักขระตัวแทน"
+  },
+  "sort": {
+    "sortDirection": "ทิศทางการเรียง",
+    "title": "คำนำหน้า",
+    "relevance": "สัมพันธ์",
+    "modified": "วันที่แก้ไข",
+    "deleted": "วันที่ที่ลบ",
+    "created": "วันที่สร้าง",
+    "added": "วันที่ที่เพิ่ม",
+    "size": "ขนาด",
+    "owner": "เจ้าของ",
+    "sizeAsc": "เล็กสุดถึงใหญ่สุด",
+    "sizeDesc": "ใหญ่สุดถึงเล็กสุด",
+    "numviews": "จำนวนการเข้าชม",
+    "numAsc": "น้อยสุดไปมากสุด",
+    "numDesc": "มากสุดไปน้อยสุด",
+    "alphabeticalAsc": "ตามตัวอักษร",
+    "alphabeticalDesc": "ย้อนกลับตามตัวอักษร",
+    "recentAsc": "น้อยสุด",
+    "recentDesc": "ล่าสุด",
+    "sort": "เรียงลำดับ",
+    "sortBy": "จัดลำดับตาม",
+    "sortByColon": "เรียงลำดับตาม:",
+    "fullname": "ชื่อ",
+    "username": "ชื่อผู้ใช้",
+    "name": "ชื่อ",
+    "membertype": "บทบาทของกลุ่ม",
+    "joined": "วันที่เข้าร่วม",
+    "lastlogin": "เข้าสู่ระบบล่าสุด",
+    "dataset": "ชุดข้อมูล",
+    "mfaenabled": "การรับรองความถูกต้องแบบหลายปัจจัย",
+    "defaultAsc": "เรียงจากน้อยไปมาก",
+    "defaultDesc": "เรียงจากมากไปน้อย"
+  },
+  "topBar": {
+    "filter": "ตัวกรอง"
+  },
+  "filterStatus": {
+    "clear": "ชัดเจน",
+    "filters": "ตัวกรอง:",
+    "additional": "ตัวกรองกิจกรรมเพิ่มเติม",
+    "clearAllFilters": "ล้างตัวกรองทั้งหมด"
+  }
+}

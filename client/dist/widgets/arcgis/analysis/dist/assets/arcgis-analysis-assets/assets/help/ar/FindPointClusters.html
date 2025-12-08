@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html dir="rtl">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>تحدد الأداة &quot;بحث عن مجموعات النقاط&quot; مجموعات معالم النقاط ضمن الضوضاء المحيطة بناءً على توزيعها المكاني.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="analysisLayer">
+        <div>
+            <p>طبقة النقاط المدخلة التي سيتم تجميعها في مجموعات بناءً على التوزيع المكاني لمعالم النقاط.
+            </p>
+        </div>
+    </div>
+    <div id="method">
+        <div>
+            <p>الطريقة التي سيتم استخدامها لتحديد المجموعات.
+            </p>
+        </div>
+    </div>
+    <div id="minFeaturesCluster">
+        <div>
+            <p>الحد الأدنى لعدد معالم النقاط التي يمكن اعتبارها مجموعة.
+            </p>
+        </div>
+    </div>
+    <div id="searchDistance">
+        <div>
+            <p>تحدد الحد الأقصى للمسافة حول كل معلم نقطة للبحث عن النقاط التي يمكن تضمينها في المجموعة. إذا تُركت فارغة، فستكون قيمة  <b>مسافة البحث</b> هي أعلى مسافة أساسية موجودة في الطبقة، باستثناء أعلى 1 بالمائة من مسافات الأساس.
+            </p>
+        </div>
+    </div>
+    <div id="searchDistanceUnit">
+        <div>
+            <p>يحدد الوحدات التي سيتم استخدامها لمسافة البحث.
+            </p>
+        </div>
+    </div>
+    <div id="sensitivity">
+        <div>
+            <p>عدد صحيح بين 0 و100 يحدد انضغاط المجموعات. إذا تُركت فارغة ، فسيتم حساب قيمة  <b>حساسية المجموعة</b> باستخدام Kullback-Leibler Divergence.
+            </p>
+        </div>
+    </div>
+    <div id="timeField">
+        <div>
+            <p>الحقل من الطبقة المدخلة الذي يحتوي على الطابع الزمني لكل معلم.
+            </p>
+        </div>
+    </div>
+    <div id="searchTimeInterval">
+        <div>
+            <p>الفاصل الزمني الذي سيُستخدم لتحديد ما إذا كانت المعالم تشكل كتلة مسافة - وقت. الفاصل الزمني للبحث يمتد قبل وبعد وقت كل معلم؛ على سبيل المثال، فإن فاصل زمني للبحث لمدة 3 أيام حول معلم سيشمل جميع المعالم التي تبدأ قبل 3 أيام وتنتهي بعد 3 أيام من وقت المعلم.
+            </p>
+        </div>
+    </div>
+    <div id="searchTimeUnit">
+        <div>
+            <p>يحدد الوحدات التي ستستخدم للفاصل الزمني للبحث.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>اسم الطبقة التي سيتم إنشاؤها وإضافتها إلى الخريطة.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>اسم المجلد الموجود في  <b>المحتوى الخاص بي</b> الذي سيتم حفظ النتيجة فيه.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

@@ -1,0 +1,21 @@
+{
+  "general": "सामान्य",
+  "parameters": "प्राचल",
+  "variables": "चर",
+  "name": "नाम",
+  "description": "विवरण",
+  "parameter": "प्राचल",
+  "isPublic": "IsPublic",
+  "isDataset": "IsDataset",
+  "unknownPixelType": "अज्ञात",
+  "outputPixelType": "आउटपुट पिक्सेल प्रकार",
+  "u8PixelType": "8 बिट अहस्ताक्षरित",
+  "s8PixelType": "8 बिट हस्ताक्षरित",
+  "u16PixelType": "16 बिट अहस्ताक्षरित",
+  "s16PixelType": "16 बिट हस्ताक्षरित",
+  "u32PixelType": "32 बिट अहस्ताक्षरित",
+  "s32PixelType": "32 बिट हस्ताक्षरित",
+  "f32PixelType": "32 बिट फ़्लोट",
+  "f64PixelType": "64 बिट डबल",
+  "properties": "गुण"
+}

@@ -1,0 +1,22 @@
+{
+  "dialogHeading": "Konfigurovat kategorie členů",
+  "noticeTitle": "Upravit, smazat nebo znovu seřadit kategorie ve vaší organizaci.",
+  "noticeDescription": "Kategorie můžete členům přiřazovat na kartě Členové.",
+  "defaultCategoryWarning": "Tato kategorie je nastavena jako výchozí hodnota nového člena a nelze ji upravit ani odstranit.",
+  "warning": {
+    "deleteInUseCategory": {
+      "message": {
+        "single": "Do této kategorie je zařazen jeden člen. Odstraněním kategorie ji odeberete také tomuto členovi.",
+        "multiple": "${number} členové jsou zařazeni do této kategorie. Odstraněním kategorie ji odeberete také těmto členům.",
+        "unknown": "Členové přiřazení do této kategorie: ${number}. Odstraněním kategorie ji odeberete také těmto členům."
+      }
+    },
+    "changeTitleInUseCategory": {
+      "message": {
+        "single": "Do této kategorie je zařazen jeden člen. Aktualizace kategorie se projeví u člena, který bude používat \"${newTitle}\".",
+        "multiple": "${number} členové jsou zařazeni do této kategorie. Aktualizace kategorie se projeví u členů, kteří budou používat \"${newTitle}\".",
+        "unknown": "Členové přiřazení do této kategorie: ${number}. Aktualizace kategorie se projeví u členů, kteří budou používat \"${newTitle}\"."
+      }
+    }
+  }
+}

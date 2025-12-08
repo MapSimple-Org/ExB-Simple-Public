@@ -1,0 +1,15 @@
+{
+  "addDataStore": "Tilføj datalager",
+  "addFile": "Tilføj fil",
+  "addServiceConnection": "Tilføj forbindelse",
+  "itemNotFound": "Elementet eksisterer ikke eller er ikke tilgængeligt.",
+  "itemPermissionDenied": "Du har ikke adgangsrettigheder til dette element.",
+  "previewDetails": "Forhåndsvis oplysninger",
+  "queryModelArgsErrMsg": "Kunne ikke forespørge på model-argumenter.",
+  "queryModelArgsMsg": "Forespørger om model-argumenter...",
+  "removeItem": "Fjern element",
+  "replaceItem": "Erstat element",
+  "requiredInputMessage": "Denne parameter er påkrævet.",
+  "selectItem": "Vælg element",
+  "viewDetails": "Vis oplysninger"
+}
