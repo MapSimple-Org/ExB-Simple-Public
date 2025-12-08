@@ -676,26 +676,18 @@ export function QueryTask (props: QueryTaskProps) {
               height: 100%;
             `}>
               {enabled && dsExists && (
-                <div css={css`
-                  flex: 1;
-                  display: flex;
-                  flex-direction: column;
-                  overflow: hidden;
-                  min-height: 0;
-                `}>
-                  <QueryTaskForm
-                    {...otherProps}
-                    configId={queryItem.configId}
-                    outputDS={outputDS}
-                    datasourceReady={dataSource != null}
-                    spatialFilterEnabled={spatialFilterEnabled}
-                    dataActionFilter = {dataActionFilter}
-                    onFormSubmit={handleFormSubmit}
-                    initialInputValue={initialInputValue}
-                    onHashParameterUsed={onHashParameterUsed}
-                    queryItemShortId={queryItem.shortId}
-                  />
-                </div>
+                <QueryTaskForm
+                  {...otherProps}
+                  configId={queryItem.configId}
+                  outputDS={outputDS}
+                  datasourceReady={dataSource != null}
+                  spatialFilterEnabled={spatialFilterEnabled}
+                  dataActionFilter = {dataActionFilter}
+                  onFormSubmit={handleFormSubmit}
+                  initialInputValue={initialInputValue}
+                  onHashParameterUsed={onHashParameterUsed}
+                  queryItemShortId={queryItem.shortId}
+                />
               )}
               <DataSourceTip
                 widgetId={props.widgetId}
