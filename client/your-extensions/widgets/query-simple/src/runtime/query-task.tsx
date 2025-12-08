@@ -360,7 +360,13 @@ export function QueryTask (props: QueryTaskProps) {
    * @param event - Optional mouse event to prevent default behavior
    */
   const handleTabChange = React.useCallback((tab: 'query' | 'results', event?: React.MouseEvent) => {
-    console.log('[TAB-SWITCH] handleTabChange called', { tab, currentTab: activeTab, resultCount, event: event?.type })
+    debugLogger.log('TASK', {
+      event: 'tab-change',
+      tab,
+      currentTab: activeTab,
+      resultCount,
+      eventType: event?.type
+    })
     
     if (event) {
       event.preventDefault()
@@ -368,13 +374,17 @@ export function QueryTask (props: QueryTaskProps) {
     }
     // Don't allow switching to results if there are no results
     if (tab === 'results' && resultCount === 0) {
-      console.log('[TAB-SWITCH] Blocked - no results')
+      debugLogger.log('TASK', {
+        event: 'tab-change-blocked',
+        reason: 'no-results',
+        tab,
+        resultCount
+      })
       return
     }
     
     // Mark this as a manual switch to prevent auto-switch useEffect from interfering
     manualTabSwitchRef.current = true
-    console.log('[TAB-SWITCH] Setting activeTab to', tab)
     setActiveTab(tab)
     
     // Reset the flag after a short delay to allow the state update to complete
@@ -663,20 +673,29 @@ export function QueryTask (props: QueryTaskProps) {
               flex-direction: column;
               overflow: hidden;
               min-height: 0;
+              height: 100%;
             `}>
               {enabled && dsExists && (
-                <QueryTaskForm
-                  {...otherProps}
-                  configId={queryItem.configId}
-                  outputDS={outputDS}
-                  datasourceReady={dataSource != null}
-                  spatialFilterEnabled={spatialFilterEnabled}
-                  dataActionFilter = {dataActionFilter}
-                  onFormSubmit={handleFormSubmit}
-                  initialInputValue={initialInputValue}
-                  onHashParameterUsed={onHashParameterUsed}
-                  queryItemShortId={queryItem.shortId}
-                />
+                <div css={css`
+                  flex: 1;
+                  display: flex;
+                  flex-direction: column;
+                  overflow: hidden;
+                  min-height: 0;
+                `}>
+                  <QueryTaskForm
+                    {...otherProps}
+                    configId={queryItem.configId}
+                    outputDS={outputDS}
+                    datasourceReady={dataSource != null}
+                    spatialFilterEnabled={spatialFilterEnabled}
+                    dataActionFilter = {dataActionFilter}
+                    onFormSubmit={handleFormSubmit}
+                    initialInputValue={initialInputValue}
+                    onHashParameterUsed={onHashParameterUsed}
+                    queryItemShortId={queryItem.shortId}
+                  />
+                </div>
               )}
               <DataSourceTip
                 widgetId={props.widgetId}
