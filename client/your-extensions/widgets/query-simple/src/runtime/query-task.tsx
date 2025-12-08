@@ -727,10 +727,10 @@ export function QueryTask (props: QueryTaskProps) {
                     })
                   }
                 } else {
-                  // Ungrouped query - use its display name
+                  // Ungrouped query - use item.name for first dropdown (not searchAlias/jimuFieldName)
                   queryOptions.push({
                     configId: item.configId,
-                    displayName: getQueryDisplayName(item),
+                    displayName: item.name || getQueryDisplayName(item),
                     groupId: null,
                     index: idx
                   })
