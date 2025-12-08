@@ -693,162 +693,160 @@ export function QueryTask (props: QueryTaskProps) {
             </div>
             {/* Search Layer / Group dropdowns - show based on grouping */}
             {(() => {
-              // Determine grouping scenario
-              const hasGroups = groups && groupOrder && groupOrder.length > 0
-              const isSingleGroup = hasGroups && groupOrder.length === 1 && (!ungrouped || ungrouped.length === 0)
-              const hasMultipleGroups = hasGroups && groupOrder.length > 1
-              const hasUngrouped = ungrouped && ungrouped.length > 0
-              
               // Only show dropdowns if multiple queries exist
               if (!queryItems || queryItems.length <= 1) {
                 return null
               }
               
+              // Build flat list of all queries with their display info
+              // For grouped queries, use group display name (only show once per group)
+              const queryOptions: Array<{
+                configId: string
+                displayName: string
+                groupId: string | null
+                index: number
+              }> = []
+              
+              // Track which groups we've already added to avoid duplicates
+              const addedGroups = new Set<string>()
+              
+              queryItems.forEach((item, idx) => {
+                if (item.groupId) {
+                  // For grouped queries, use group display name (only add once per group)
+                  if (!addedGroups.has(item.groupId)) {
+                    addedGroups.add(item.groupId)
+                    const groupDisplayName = groups?.[item.groupId]?.displayName || 
+                                           groups?.[item.groupId]?.items[0]?.name || 
+                                           item.name || 
+                                           `Group ${item.groupId}`
+                    queryOptions.push({
+                      configId: item.configId,
+                      displayName: groupDisplayName,
+                      groupId: item.groupId,
+                      index: idx
+                    })
+                  }
+                } else {
+                  // Ungrouped query - use its display name
+                  queryOptions.push({
+                    configId: item.configId,
+                    displayName: getQueryDisplayName(item),
+                    groupId: null,
+                    index: idx
+                  })
+                }
+              })
+              
+              // Determine currently selected query
+              const currentQueryItem = queryItem
+              const currentQueryGroupId = currentQueryItem.groupId || null
+              const isGroupedQuery = currentQueryGroupId !== null
+              
+              // Find the option index for the current query
+              const currentOptionIndex = queryOptions.findIndex(opt => {
+                if (isGroupedQuery) {
+                  return opt.groupId === currentQueryGroupId
+                } else {
+                  return opt.configId === currentQueryItem.configId
+                }
+              })
+              
               debugLogger.log('GROUP', {
                 event: 'rendering-dropdowns',
-                hasGroups,
-                isSingleGroup,
-                hasMultipleGroups,
-                hasUngrouped,
-                groupOrderLength: groupOrder?.length || 0,
-                ungroupedLength: ungrouped?.length || 0,
                 totalQueries: queryItems.length,
+                queryOptionsCount: queryOptions.length,
+                currentQueryGroupId,
+                isGroupedQuery,
+                currentOptionIndex,
                 selectedGroupId,
                 selectedGroupQueryIndex,
-                selectedQueryIndex,
-                groupsKeys: groups ? Object.keys(groups) : [],
-                groupOrder: groupOrder || [],
-                willRenderSingleGroupOption: isSingleGroup,
-                willRenderMultipleGroups: !isSingleGroup && hasGroups,
-                willRenderUngroupedOption: hasUngrouped && !isSingleGroup
+                currentQueryConfigId: currentQueryItem.configId
               })
               
               return (
                 <>
-                  {/* First Dropdown: Groups (if groups exist) or All Queries (if no groups) */}
-                  {hasGroups ? (
-                    // Groups exist - show group selector
-                    <div css={css`
-                      padding: 16px;
-                      border-bottom: 1px solid var(--sys-color-divider-secondary);
-                      flex-shrink: 0;
+                  {/* First Dropdown: All queries */}
+                  <div css={css`
+                    padding: 16px;
+                    border-bottom: 1px solid var(--sys-color-divider-secondary);
+                    flex-shrink: 0;
+                  `}>
+                    <label css={css`
+                      font-size: 0.875rem;
+                      font-weight: 500;
+                      color: var(--sys-color-text-primary);
+                      margin-bottom: 8px;
+                      display: block;
                     `}>
-                      <label css={css`
-                        font-size: 0.875rem;
-                        font-weight: 500;
-                        color: var(--sys-color-text-primary);
-                        margin-bottom: 8px;
-                        display: block;
-                      `}>
-                        {getI18nMessage('searchLayer')}
-                      </label>
-                      <Select 
-                        size="sm"
-                        value={selectedGroupId ?? ''} 
-                        onChange={(e) => {
-                          const groupId = e.target.value || null
-                          debugLogger.log('GROUP', {
-                            event: 'group-selected',
-                            groupId,
-                            previousGroupId: selectedGroupId,
-                            eventTargetValue: e.target.value,
-                            hasUngrouped,
-                            ungroupedLength: ungrouped?.length || 0
-                          })
+                      {getI18nMessage('searchLayer')}
+                    </label>
+                    <Select 
+                      size="sm"
+                      value={currentOptionIndex >= 0 ? currentOptionIndex : 0}
+                      onChange={(e) => {
+                        const optionIndex = parseInt(e.target.value)
+                        const selectedOption = queryOptions[optionIndex]
+                        
+                        debugLogger.log('GROUP', {
+                          event: 'query-option-selected',
+                          optionIndex,
+                          selectedOption,
+                          isGrouped: selectedOption.groupId !== null
+                        })
+                        
+                        if (selectedOption.groupId) {
+                          // Grouped query selected - set group and first query in group
                           if (onGroupChange) {
-                            onGroupChange(groupId)
+                            onGroupChange(selectedOption.groupId)
                           }
-                          if (groupId && onGroupQueryChange) {
+                          if (onGroupQueryChange) {
                             onGroupQueryChange(0)
-                          } else if (!groupId && hasUngrouped && onUngroupedChange) {
-                            // "Ungrouped Queries" selected
-                            debugLogger.log('GROUP', {
-                              event: 'ungrouped-queries-selected-from-dropdown',
-                              ungroupedLength: ungrouped.length
-                            })
-                            onUngroupedChange(0)
                           }
-                        }}
-                      >
-                        {/* Single group: still show dropdown for consistency */}
-                        {isSingleGroup ? (
-                          <option value={groupOrder[0]}>
-                            {groups[groupOrder[0]]?.displayName || groupOrder[0]}
-                          </option>
-                        ) : (
-                          <>
-                            {/* Multiple groups: show all groups */}
-                            {groupOrder.map(groupId => {
-                              const displayName = groups[groupId]?.displayName || groupId
-                              debugLogger.log('GROUP', {
-                                event: 'rendering-group-option',
-                                groupId,
-                                displayName
-                              })
-                              return (
-                                <option key={groupId} value={groupId}>
-                                  {displayName}
-                                </option>
-                              )
-                            })}
-                            {/* Show "Ungrouped Queries" option if ungrouped exist */}
-                            {hasUngrouped && (() => {
-                              debugLogger.log('GROUP', {
-                                event: 'rendering-ungrouped-option',
-                                hasUngrouped,
-                                ungroupedLength: ungrouped.length
-                              })
-                              return (
-                                <option value="">--- Ungrouped Queries ---</option>
-                              )
-                            })()}
-                          </>
-                        )}
-                      </Select>
-                    </div>
-                  ) : (
-                    // No groups - show single dropdown with all queries
-                    <div css={css`
-                      padding: 16px;
-                      border-bottom: 1px solid var(--sys-color-divider-secondary);
-                      flex-shrink: 0;
-                    `}>
-                      <label css={css`
-                        font-size: 0.875rem;
-                        font-weight: 500;
-                        color: var(--sys-color-text-primary);
-                        margin-bottom: 8px;
-                        display: block;
-                      `}>
-                        {getI18nMessage('searchLayer')}
-                      </label>
-                      <Select 
-                        size="sm"
-                        value={selectedQueryIndex !== undefined ? selectedQueryIndex : index} 
-                        onChange={(e) => {
-                          const newIndex = parseInt(e.target.value)
-                          debugLogger.log('GROUP', {
-                            event: 'ungrouped-query-selected',
-                            index: newIndex,
-                            queryItemConfigId: queryItems[newIndex]?.configId,
-                            queryDisplayName: getQueryDisplayName(queryItems[newIndex])
-                          })
-                          if (onQueryChange) {
-                            onQueryChange(newIndex)
+                        } else {
+                          // Ungrouped query selected - clear group selection
+                          if (onGroupChange) {
+                            onGroupChange(null)
                           }
-                        }}
-                      >
-                        {queryItems.map((item, idx) => (
-                          <option key={item.configId} value={idx}>
-                            {getQueryDisplayName(item)}
+                          if (onUngroupedChange) {
+                            // Find the ungrouped index
+                            const ungroupedIndex = ungrouped?.findIndex(({ item }) => 
+                              item.configId === selectedOption.configId
+                            ) ?? -1
+                            if (ungroupedIndex >= 0) {
+                              onUngroupedChange(ungroupedIndex)
+                            } else {
+                              // Fallback: use the index from queryItems
+                              debugLogger.log('GROUP', {
+                                event: 'ungrouped-fallback-to-index',
+                                selectedOptionIndex: selectedOption.index
+                              })
+                              if (onQueryChange) {
+                                onQueryChange(selectedOption.index)
+                              }
+                            }
+                          }
+                        }
+                      }}
+                    >
+                      {queryOptions.map((option, idx) => {
+                        debugLogger.log('GROUP', {
+                          event: 'rendering-query-option',
+                          index: idx,
+                          configId: option.configId,
+                          displayName: option.displayName,
+                          groupId: option.groupId
+                        })
+                        return (
+                          <option key={option.configId} value={idx}>
+                            {option.displayName}
                           </option>
-                        ))}
-                      </Select>
-                    </div>
-                  )}
+                        )
+                      })}
+                    </Select>
+                  </div>
                   
-                  {/* Second Dropdown: Queries within selected group (only if group selected) */}
-                  {hasGroups && selectedGroupId && groups && groups[selectedGroupId] && (
+                  {/* Second Dropdown: Queries within selected group (only if grouped query selected) */}
+                  {isGroupedQuery && currentQueryGroupId && groups && groups[currentQueryGroupId] && (
                     <div css={css`
                       padding: 16px;
                       border-bottom: 1px solid var(--sys-color-divider-secondary);
@@ -865,63 +863,22 @@ export function QueryTask (props: QueryTaskProps) {
                       </label>
                       <Select 
                         size="sm"
-                        value={selectedGroupQueryIndex !== undefined ? selectedGroupQueryIndex : 0} 
+                        value={selectedGroupQueryIndex !== undefined ? selectedGroupQueryIndex : 0}
                         onChange={(e) => {
                           const newIndex = parseInt(e.target.value)
                           debugLogger.log('GROUP', {
                             event: 'group-query-selected',
-                            groupId: selectedGroupId,
+                            groupId: currentQueryGroupId,
                             groupQueryIndex: newIndex,
-                            queryItemConfigId: groups[selectedGroupId].items[newIndex]?.configId,
-                            queryDisplayName: getQueryDisplayName(groups[selectedGroupId].items[newIndex])
+                            queryItemConfigId: groups[currentQueryGroupId].items[newIndex]?.configId,
+                            queryDisplayName: getQueryDisplayName(groups[currentQueryGroupId].items[newIndex])
                           })
                           if (onGroupQueryChange) {
                             onGroupQueryChange(newIndex)
                           }
                         }}
                       >
-                        {groups[selectedGroupId].items.map((item, idx) => (
-                          <option key={item.configId} value={idx}>
-                            {getQueryDisplayName(item)}
-                          </option>
-                        ))}
-                      </Select>
-                    </div>
-                  )}
-                  
-                  {/* Ungrouped queries dropdown (only if "Ungrouped Queries" selected and multiple exist) */}
-                  {hasGroups && !selectedGroupId && hasUngrouped && ungrouped.length > 1 && (
-                    <div css={css`
-                      padding: 16px;
-                      border-bottom: 1px solid var(--sys-color-divider-secondary);
-                      flex-shrink: 0;
-                    `}>
-                      <label css={css`
-                        font-size: 0.875rem;
-                        font-weight: 500;
-                        color: var(--sys-color-text-primary);
-                        margin-bottom: 8px;
-                        display: block;
-                      `}>
-                        Search Alias
-                      </label>
-                      <Select 
-                        size="sm"
-                        value={selectedQueryIndex !== undefined ? selectedQueryIndex : 0} 
-                        onChange={(e) => {
-                          const newIndex = parseInt(e.target.value)
-                          debugLogger.log('GROUP', {
-                            event: 'ungrouped-query-selected-from-dropdown',
-                            ungroupedIndex: newIndex,
-                            queryItemConfigId: ungrouped[newIndex]?.item.configId,
-                            queryDisplayName: getQueryDisplayName(ungrouped[newIndex].item)
-                          })
-                          if (onUngroupedChange) {
-                            onUngroupedChange(newIndex)
-                          }
-                        }}
-                      >
-                        {ungrouped.map(({ item }, idx) => (
+                        {groups[currentQueryGroupId].items.map((item, idx) => (
                           <option key={item.configId} value={idx}>
                             {getQueryDisplayName(item)}
                           </option>
