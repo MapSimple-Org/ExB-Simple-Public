@@ -12,3 +12,7 @@ client/your-extensions/widgets/TODO.md
 client/your-extensions/widgets/DEVELOPMENT_GUIDE.md
 client/your-extensions/widgets/MANUAL_TESTING_PLAN.md
 PR_DESCRIPTION.md
+
+# macOS system files
+.DS_Store
+**/.DS_Store
