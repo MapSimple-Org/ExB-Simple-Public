@@ -239,6 +239,68 @@ export function QueryTask (props: QueryTaskProps) {
     }
   }, [resultCount, stage, activeTab])
 
+  // Verify dropdowns are synchronized with hash parameter when present
+  // This is especially important for grouped queries where dropdowns need to be synchronized
+  React.useEffect(() => {
+    // Only verify if we have a hash parameter
+    if (!initialInputValue || !queryItem.shortId) {
+      return
+    }
+    
+    // Verify the current queryItem matches what we expect from hash parameter
+    const expectedShortId = queryItem.shortId
+    const isGroupedQuery = queryItem.groupId !== null && queryItem.groupId !== undefined
+    
+    // Check if dropdowns are correctly set for grouped queries
+    if (isGroupedQuery) {
+      const expectedGroupId = queryItem.groupId
+      const actualGroupId = selectedGroupId
+      const expectedQueryIndex = selectedGroupQueryIndex
+      
+      if (expectedGroupId !== actualGroupId) {
+        debugLogger.log('GROUP', {
+          event: 'dropdown-group-mismatch',
+          expectedGroupId,
+          actualGroupId,
+          queryItemShortId: expectedShortId,
+          warning: 'First dropdown may not be synchronized with hash parameter'
+        })
+      } else if (expectedQueryIndex !== undefined) {
+        // Verify the query index within the group matches
+        const groupItems = groups?.[expectedGroupId]?.items
+        if (groupItems && groupItems.length > expectedQueryIndex) {
+          const expectedQueryConfigId = groupItems[expectedQueryIndex]?.configId
+          const actualQueryConfigId = queryItem.configId
+          if (expectedQueryConfigId !== actualQueryConfigId) {
+            debugLogger.log('GROUP', {
+              event: 'dropdown-query-index-mismatch',
+              expectedQueryConfigId,
+              actualQueryConfigId,
+              expectedQueryIndex,
+              queryItemShortId: expectedShortId,
+              warning: 'Second dropdown may not be synchronized with hash parameter'
+            })
+          } else {
+            debugLogger.log('GROUP', {
+              event: 'dropdowns-synchronized',
+              queryItemShortId: expectedShortId,
+              groupId: expectedGroupId,
+              selectedGroupQueryIndex: expectedQueryIndex,
+              note: 'Dropdowns synchronized with hash parameter'
+            })
+          }
+        }
+      }
+    } else {
+      // Ungrouped query - verify it's selected
+      debugLogger.log('GROUP', {
+        event: 'dropdowns-synchronized-ungrouped',
+        queryItemShortId: expectedShortId,
+        note: 'Ungrouped query dropdown synchronized with hash parameter'
+      })
+    }
+  }, [initialInputValue, queryItem.shortId, queryItem.groupId, queryItem.configId, selectedGroupId, selectedGroupQueryIndex, groups])
+
   const useOutputDs: ImmutableObject<UseDataSource> = React.useMemo(
     () =>
       Immutable({

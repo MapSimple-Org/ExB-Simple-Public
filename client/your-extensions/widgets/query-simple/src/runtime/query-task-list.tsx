@@ -201,14 +201,33 @@ export function QueryTaskList (props: QueryTaskListProps) {
   
   // Get the currently selected query item
   const getSelectedQueryItem = (): ImmutableObject<QueryItemType> => {
+    // PRIORITY 1: If hash parameter matches a query, use that directly
+    // This ensures we always use the hash-matched query, regardless of state timing
+    // This is critical for grouped queries where dropdowns need to be synchronized
+    if (getQuerySelection && matchingQueryIndex >= 0) {
+      const hashMatchedItem = queryItems[matchingQueryIndex]
+      debugLogger.log('GROUP', {
+        event: 'getSelectedQueryItem-hash-match',
+        shortId: hashMatchedItem.shortId,
+        groupId: hashMatchedItem.groupId,
+        configId: hashMatchedItem.configId,
+        isGrouped: !!hashMatchedItem.groupId,
+        matchingQueryIndex,
+        note: 'Using hash-matched query (highest priority)'
+      })
+      return hashMatchedItem
+    }
+    
+    // PRIORITY 2: Otherwise use current state selection
     debugLogger.log('GROUP', {
-      event: 'getSelectedQueryItem-called',
+      event: 'getSelectedQueryItem-state-selection',
       selectedGroupId,
       hasSelectedGroup: selectedGroupId && groups[selectedGroupId],
       selectedGroupQueryIndex,
       selectedUngroupedIndex,
       ungroupedLength: ungrouped.length,
-      groupOrderLength: groupOrder.length
+      groupOrderLength: groupOrder.length,
+      note: 'No hash parameter, using state selection'
     })
     
     // If a group is selected, get query from that group
