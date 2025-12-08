@@ -55,7 +55,6 @@ const getFormStyle = (isAutoHeight: boolean) => {
     }
     .query-form__content {
       flex: 1 1 ${isAutoHeight ? 'auto' : 'auto'};
-      min-height: ${isAutoHeight ? 'auto' : '200px'};
       max-height: ${isAutoHeight ? '61.8vh' : 'none'};
       overflow: auto;
       padding-bottom: 0;
