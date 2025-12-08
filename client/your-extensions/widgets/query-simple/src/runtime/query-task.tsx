@@ -625,7 +625,7 @@ export function QueryTask (props: QueryTaskProps) {
             {/* Header with back button and query label - Query tab only */}
             <div className={classNames('query-form__header mx-4 align-items-center', { 'in-popper': isInPopper })} css={css`
               display: flex;
-              padding: 8px 0;
+              padding: 6px 0;
               border-bottom: 1px solid var(--sys-color-divider-secondary);
               flex-shrink: 0;
             `}>
