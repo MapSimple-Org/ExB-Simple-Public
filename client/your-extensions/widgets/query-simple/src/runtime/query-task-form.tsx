@@ -46,6 +46,7 @@ const getFormStyle = (isAutoHeight: boolean) => {
     flex: 1 1 auto;
     display: flex;
     flex-direction: column;
+    min-height: 0;
     .form-title {
       color: var(--sys-color-surface-paper-text);
       font-weight: 500;
@@ -53,7 +54,8 @@ const getFormStyle = (isAutoHeight: boolean) => {
       line-height: 1.5;
     }
     .query-form__content {
-      flex: 1 1 ${isAutoHeight ? 'auto' : 0};
+      flex: 1 1 ${isAutoHeight ? 'auto' : 'auto'};
+      min-height: ${isAutoHeight ? 'auto' : '200px'};
       max-height: ${isAutoHeight ? '61.8vh' : 'none'};
       overflow: auto;
     }
