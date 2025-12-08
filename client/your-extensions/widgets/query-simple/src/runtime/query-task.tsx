@@ -133,6 +133,31 @@ export function QueryTask (props: QueryTaskProps) {
   const [selectionError, setSelectionError] = React.useState<string>(null)
   const [zoomError, setZoomError] = React.useState<string>(null)
 
+  // Debug logging for tab content rendering
+  React.useEffect(() => {
+    debugLogger.log('TASK', {
+      event: 'query-tab-content-render',
+      activeTab,
+      enabled,
+      dsExists,
+      dataSource: dataSource ? 'exists' : 'null',
+      queryItemConfigId: queryItem.configId,
+      note: 'Query tab content state check'
+    })
+  }, [activeTab, enabled, dsExists, dataSource, queryItem.configId])
+
+  // Debug logging for Tab children rendering
+  React.useEffect(() => {
+    if (activeTab === 'query') {
+      debugLogger.log('TASK', {
+        event: 'query-tab-children-render',
+        activeTab,
+        queryItemConfigId: queryItem.configId,
+        note: 'Query Tab children should be rendering'
+      })
+    }
+  }, [activeTab, queryItem.configId])
+
   const currentItem = Object.assign({}, DEFAULT_QUERY_ITEM, queryItem)
   const { icon, name, displayLabel } = currentItem
   const dsExists: boolean = useDataSourceExists({ widgetId: props.widgetId, useDataSourceId: currentItem.useDataSource?.dataSourceId })
