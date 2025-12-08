@@ -564,7 +564,6 @@ export function QueryTask (props: QueryTaskProps) {
         type='underline'
         keepMount={true}
         css={css`
-          flex-shrink: 0;
           flex: 1;
           display: flex;
           flex-direction: column;
@@ -658,27 +657,35 @@ export function QueryTask (props: QueryTaskProps) {
                 </Select>
               </div>
             )}
-            {enabled && dsExists && (
-              <QueryTaskForm
-                {...otherProps}
-                configId={queryItem.configId}
-                outputDS={outputDS}
-                datasourceReady={dataSource != null}
-                spatialFilterEnabled={spatialFilterEnabled}
-                dataActionFilter = {dataActionFilter}
-                onFormSubmit={handleFormSubmit}
-                initialInputValue={initialInputValue}
-                onHashParameterUsed={onHashParameterUsed}
-                queryItemShortId={queryItem.shortId}
+            <div css={css`
+              flex: 1;
+              display: flex;
+              flex-direction: column;
+              overflow: hidden;
+              min-height: 0;
+            `}>
+              {enabled && dsExists && (
+                <QueryTaskForm
+                  {...otherProps}
+                  configId={queryItem.configId}
+                  outputDS={outputDS}
+                  datasourceReady={dataSource != null}
+                  spatialFilterEnabled={spatialFilterEnabled}
+                  dataActionFilter = {dataActionFilter}
+                  onFormSubmit={handleFormSubmit}
+                  initialInputValue={initialInputValue}
+                  onHashParameterUsed={onHashParameterUsed}
+                  queryItemShortId={queryItem.shortId}
+                />
+              )}
+              <DataSourceTip
+                widgetId={props.widgetId}
+                useDataSource={queryItem.useDataSource}
+                showMessage={true}
+                onStatusChange={handleStatusChange}
+                onDataSourceCreated={handleDataSourceCreated}
               />
-            )}
-            <DataSourceTip
-              widgetId={props.widgetId}
-              useDataSource={queryItem.useDataSource}
-              showMessage={true}
-              onStatusChange={handleStatusChange}
-              onDataSourceCreated={handleDataSourceCreated}
-            />
+            </div>
           </div>
         </Tab>
         <Tab
