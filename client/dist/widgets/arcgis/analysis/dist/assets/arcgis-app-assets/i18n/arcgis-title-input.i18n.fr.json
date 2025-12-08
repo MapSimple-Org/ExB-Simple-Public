@@ -1,0 +1,20 @@
+{
+  "title": "Titre",
+  "addTitle": "Ajouter un titre",
+  "validation": {
+    "error": "Erreur",
+    "titleRequired": "Vous devez renseigner le titre.",
+    "itemExists": "Il existe déjà un élément intitulé \"${name}\" dans ce dossier. Choisissez un autre titre.",
+    "titleInUseService": "Il existe déjà une couche intitulée \"${name}\". Choisissez un autre titre.",
+    "itemInRecycleBin": "Il existe déjà un élément nommé \"${name}\" qui se trouve dans la corbeille. Choisissez un autre titre.",
+    "serviceNameInvalid": "Le titre d’un service ne peut contenir que des caractères alphanumériques ou des traits de soulignement et ne doit pas dépasser 90 caractères.",
+    "dataStoreTitleInvalid": "Le titre d’un data store ne peut contenir que des caractères alphanumériques ou des traits de soulignement et ne doit pas dépasser 90 caractères.",
+    "titleInvalid": "Le titre doit comporter moins de 250 caractères et ne peut pas contenir < ou >.",
+    "titleStartsWithNumber": "Le titre ne peut pas commencer par un chiffre.",
+    "invalidCharacters": {
+      "single": "Le nom ne peut pas contenir le caractère suivant : ${invalidCharacters}.",
+      "multiple": "Le nom ne peut contenir aucun des caractères suivants : ${invalidCharacters}.",
+      "unknown": "Le nom ne peut contenir aucun des caractères suivants : ${invalidCharacters}."
+    }
+  }
+}

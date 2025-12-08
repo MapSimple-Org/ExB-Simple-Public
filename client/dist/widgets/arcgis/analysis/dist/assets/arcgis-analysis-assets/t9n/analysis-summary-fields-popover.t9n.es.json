@@ -1,0 +1,13 @@
+{
+  "addField": "Agregar campo",
+  "deselectAll": "Anular selección de todos",
+  "done": "Listo",
+  "noFieldsAvailable": "${layerName} no contiene campos que cumplan los requisitos de tipos de datos. Seleccione una capa diferente para continuar.",
+  "noInputSelected": {
+    "withLayerInputLabel": "No se ha seleccionado ninguna capa de entrada. Seleccione una capa en ${layerInputLabel} para continuar.",
+    "withoutLayerInputLabel": "No se ha seleccionado ninguna capa de entrada. Seleccione una capa de entrada para continuar."
+  },
+  "noSearchResults": "No se han encontrado campos coincidentes.",
+  "selectAll": "Seleccionar todo",
+  "summaryFieldsPopover": "Campos de resumen"
+}

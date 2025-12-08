@@ -1,0 +1,11 @@
+{
+  "all": "Wszystkie",
+  "inputLayersGroupText": "Wybierz wejściowy raster powierzchni oraz opcjonalnie dane depresji i raster wag.",
+  "itemProperties": {
+    "description": "Dane wynikowe wygenerowane w wyniku uruchomienia narzędzia Wyznacz strumień jako raster.",
+    "snippet": "Dane wynikowe wygenerowane z narzędzia Wyznacz strumień jako raster"
+  },
+  "outputStreamFeaturesLabel": "Nazwa obiektów strumienia wynikowego",
+  "simplifyLabel": "Uprość obiekty",
+  "streamSettingsGroupText": "Określ próg akumulacji, metodę wyznaczania strumienia i czy linie strumienia wyjściowego będą wygładzane do prostych kształtów."
+}

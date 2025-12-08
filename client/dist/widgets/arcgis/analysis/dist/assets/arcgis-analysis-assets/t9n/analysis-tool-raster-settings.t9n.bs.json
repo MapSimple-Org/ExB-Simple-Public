@@ -1,0 +1,23 @@
+{
+  "CPU": "CPU",
+  "GPU": "GPU",
+  "asSpecified": "Kako je navedeno",
+  "automatic": "Automatski",
+  "bilinear": "Bilinearna interpolacija (za kontinuirane podatke)",
+  "cellSize": "Veličina ćelije",
+  "cubic": "Kubična konvolucija (za kontinuirane podatke)",
+  "default": "Zadano",
+  "fromLayer": "Iz sloja",
+  "mask": "Maska",
+  "maxOf": "Maksimum unosa",
+  "minOf": "Minimum unosa",
+  "nearest": "Najbliži susjed (za diskretne podatke)",
+  "parallelProcessingFactor": "Faktor za paralelnu obradu",
+  "parallelProcessingFactorPlaceholderText": "Unesite broj ili postotak...",
+  "processorType": "Vrsta procesora",
+  "recycleProcessingWorkers": "Interval recikliranja radnika prerade",
+  "resamplingMethod": "Metoda ponovnog uzorkovanja",
+  "retryOnFailures": "Broj ponovnih pokušaja na neuspjesima",
+  "selectCellSize": "Odaberi veličinu ćelije...",
+  "snapRaster": "Poravnaj raster"
+}

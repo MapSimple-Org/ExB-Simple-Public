@@ -1,0 +1,1 @@
+System.register([],function(e){return{execute:function(){e({settingsLabel:"Configura\xe7\xf5es do Explorador de Documentos",selectModelViewer:"Selecione um widget Visualizador de Documentos para exibir documentos."})}}});

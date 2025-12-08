@@ -1,0 +1,22 @@
+{
+  "value": "Valoare",
+  "classname": "Denumire clasă",
+  "color": "Culoare",
+  "raster": "Raster",
+  "tableType": "Tip tabel",
+  "manual": "Manual",
+  "external": "Extern",
+  "browseTable": "Navigați la tabel",
+  "browseTableFrom": "Răsfoiți tabelul din",
+  "file": "Fişier",
+  "dbfFile": "Fișier DBF",
+  "layer": "Strat tematic",
+  "unsupportedDataType": "Tip neacceptat",
+  "failedToGetTableFromLayer": "Nu s-a reușit obținerea tabelului din stratul tematic.",
+  "generate": "Generați tabel",
+  "minValue": "Valoare minimă",
+  "maxValue": "Valoare maximă",
+  "classBaseName": "Denumire de bază clasă",
+  "colorscheme": "Schemă de culori",
+  "defaultClassName": "Etichetă_"
+}

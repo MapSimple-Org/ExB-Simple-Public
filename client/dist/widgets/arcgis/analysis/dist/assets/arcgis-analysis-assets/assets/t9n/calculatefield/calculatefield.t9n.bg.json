@@ -1,0 +1,13 @@
+{
+  "fieldCalcExpression": "Израз за изчисление на поле",
+  "fieldCalculationGroupLabel": "Изчисление на поле",
+  "fieldPlaceholderText": "Кликнете, за да изберете или създадете поле",
+  "fieldToCalculate": "Поле за изчисляване",
+  "inputDatasetGroupLabel": "Вход",
+  "itemProperties": {
+    "description": "Резултат, генериран от изпълнението на инструмента „Изчисляване на поле“ в ModelBuilder.",
+    "snippet": "Обектен слой, генериран от Изчисляване на поле"
+  },
+  "noFieldSpecified": "Задайте поле за изчисляване, за да създадете израз.",
+  "whereClause": "Приложете изчислението само към определени записи"
+}

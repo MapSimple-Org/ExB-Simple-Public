@@ -1,0 +1,26 @@
+/// <reference path="../../index.d.ts" />
+import { PropertyValues } from 'lit';
+import { PublicLitElement as LitElement, JsxNode, TargetedEvent } from '@arcgis/lumina';
+import { Appearance, Layout, Scale } from '../interfaces';
+import { IconNameOrString } from '../calcite-icon/interfaces';
+
+export declare class SegmentedControlItem extends LitElement {
+    /**
+     * When `true`, the component is checked.
+     *
+     * @default false
+     */
+    checked: boolean;
+    /** Specifies an icon to display at the end of the component. */
+    iconEnd: IconNameOrString;
+    /**
+     * When `true`, the icon will be flipped when the element direction is right-to-left (`"rtl"`).
+     *
+     * @default false
+     */
+    iconFlipRtl: boolean;
+    /** Specifies an icon to display at the start of the component. */
+    iconStart: IconNameOrString;
+    /** The component's value. */
+    value: any | null;
+}

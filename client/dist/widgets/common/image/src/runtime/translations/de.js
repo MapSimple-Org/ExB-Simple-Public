@@ -1,0 +1,1 @@
+System.register([],function(e){return{execute:function(){e({_widgetLabel:"Bild",imageChooseShape:"Form",imageCrop:"Zuschneiden",previousImage:"Vorheriges Bild",nextImage:"N\xe4chstes Bild",imageViewer:"Bildanzeige"})}}});

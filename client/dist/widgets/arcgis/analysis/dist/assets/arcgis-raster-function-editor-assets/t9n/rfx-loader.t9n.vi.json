@@ -1,0 +1,8 @@
+{
+  "loading": "Đang tải...",
+  "pleaseWait": "Vui lòng chờ.",
+  "loadingXMLRFT": "Tải biểu mẫu hàm raster đã chọn trong định dạng XML.",
+  "failedToOpen": "Không thể mở.",
+  "readingFailed": "Không thể tải raster function template đã chọn.",
+  "failedToLoadXML": "Không thể tải biểu mẫu hàm raster đã chọn trong định dạng XML."
+}

@@ -1,0 +1,89 @@
+{
+  "browser": {
+    "refineContent": "Tinh chỉnh nội dung",
+    "filters": "Bộ lọc",
+    "pageRange": "${start}-${end}, tổng: ${total}",
+    "pageRangeAria": "${start}-${end}, tổng số mục: ${total}",
+    "pageRangeWithRecycleBin": "${start}-${end}, tổng: ${total} (Tổng kích thước: ${recycleBinSize})",
+    "pageRangeAriaWithRecycleBin": "${start}-${end}, tổng số mục: ${total} (Tổng kích thước: ${recycleBinSize})",
+    "totalSize": "Tổng kích thước: ${totalSize}",
+    "loading": "Đang tải kết quả",
+    "close": "Đóng"
+  },
+  "actions": {
+    "more": "Thêm"
+  },
+  "filter": {
+    "clear": "Xóa"
+  },
+  "filterDate": {
+    "today": "Hôm nay",
+    "yesterday": "Hôm qua",
+    "last7": "7 ngày trước",
+    "last30": "30 ngày trước",
+    "never": "Không bao giờ",
+    "custom": "Phạm vi tùy chỉnh...",
+    "title": {
+      "created": "Ngày tạo",
+      "modified": "Ngày sửa đổi",
+      "joined": "Ngày tham gia",
+      "lastLogin": "Đăng nhập lần cuối"
+    },
+    "created": "Đã tạo: ${date}",
+    "modified": "Đã sửa đổi: ${date}",
+    "joined": "Đã tham gia: ${date}",
+    "lastLogin": "Đăng nhập lần cuối: ${date}"
+  },
+  "pagination": {
+    "next": "Trang tiếp theo",
+    "prev": "Trang trước"
+  },
+  "search": {
+    "label": "Tìm kiếm nhóm",
+    "search": "Tìm kiếm",
+    "clear": "Xóa thuật ngữ tìm kiếm",
+    "wildcard": "Tìm kiếm ký tự đại diện không được hỗ trợ"
+  },
+  "sort": {
+    "sortDirection": "Hướng sắp xếp",
+    "title": "Tiêu đề",
+    "relevance": "Liên quan",
+    "modified": "Ngày sửa đổi",
+    "deleted": "Ngày xóa",
+    "created": "Ngày tạo",
+    "added": "Ngày thêm",
+    "size": "Kích thước",
+    "owner": "Chủ sở hữu",
+    "sizeAsc": "Nhỏ nhất đến lớn nhất",
+    "sizeDesc": "Lớn nhất đến nhỏ nhất",
+    "numviews": "Số lượt xem",
+    "numAsc": "Mới nhất",
+    "numDesc": "Mới nhất đến cũ nhất",
+    "alphabeticalAsc": "Theo thứ tự chữ cái",
+    "alphabeticalDesc": "Ngược lại thứ tự chữ cái",
+    "recentAsc": "Cũ nhất",
+    "recentDesc": "Gần đây nhất",
+    "sort": "Sắp xếp",
+    "sortBy": "Sắp xếp theo",
+    "sortByColon": "Sắp xếp theo:",
+    "fullname": "Tên",
+    "username": "Tên người dùng",
+    "name": "Tên",
+    "membertype": "Vai trò nhóm",
+    "joined": "Ngày tham gia",
+    "lastlogin": "Đăng nhập lần cuối",
+    "dataset": "Bộ dữ liệu",
+    "mfaenabled": "Xác thực đa yếu tố",
+    "defaultAsc": "Tăng dần",
+    "defaultDesc": "Giảm dần"
+  },
+  "topBar": {
+    "filter": "Bộ lọc"
+  },
+  "filterStatus": {
+    "clear": "Xóa",
+    "filters": "Bộ lọc:",
+    "additional": "Bộ lọc hoạt động bổ sung",
+    "clearAllFilters": "Xóa tất cả bộ lọc"
+  }
+}

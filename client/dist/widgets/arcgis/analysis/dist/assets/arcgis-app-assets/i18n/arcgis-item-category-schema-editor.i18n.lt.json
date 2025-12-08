@@ -1,0 +1,36 @@
+{
+  "modalHeader": "Konfigūruoti turinio kategorijas",
+  "modalGroupHeader": "Konfigūruoti grupės kategorijas",
+  "helpText": "Redaguokite, naikinkite arba pertvarkykite savo organizacijos kategorijas.",
+  "helpTextGroup": "Redaguokite, ištrinkite arba pertvarkykite turinio kategorijas šioje grupėje.",
+  "helpTextDescription": "Atminkite, kad kiti jūsų organizacijos nariai galėjo jau priskirti šias kategorijas savo elementams ir paredagavus schemą šie elementai bus atitinkamai atnaujinti.",
+  "helpTextGroupDescription": "Atminkite, kad kiti grupės nariai galėjo jau priskirti šias kategorijas savo elementams ir paredagavus schemą šie elementai bus atitinkamai atnaujinti.",
+  "warning": {
+    "deleteInUseCategory": {
+      "title": "Ištrinti kategoriją",
+      "cta": "Ištrinti kategoriją",
+      "message": {
+        "single": "Šiai kategorijai priskirtas vienas elementas. Ištrynus šią kategoriją, ji bus pašalinta ir iš šio elemento.",
+        "multiple": "Šiai kategorijai priskirta elementų: ${number}. Ištrynus šią kategoriją, ji bus pašalinta ir iš šių elementų.",
+        "unknown": "Šiai kategorijai priskirta elementų: ${number}. Ištrynus šią kategoriją, ji bus pašalinta ir iš šių elementų."
+      }
+    },
+    "changeTitleInUseCategory": {
+      "title": "Atnaujinti kategoriją",
+      "message": {
+        "single": "Šiai kategorijai priskirtas vienas elementas. Atnaujinus šią kategoriją, elementas bus atnaujintas, kad naudotų ${newTitle}.",
+        "multiple": "Šiai kategorijai priskirta elementų: ${number}. Atnaujinus šią kategoriją, elementai bus atnaujinti, kad naudotų ${newTitle}.",
+        "unknown": "Šiai kategorijai priskirta elementų: ${number}. Atnaujinus šią kategoriją, elementai bus atnaujinti, kad naudotų ${newTitle}."
+      },
+      "cta": "Atnaujinti kategoriją"
+    }
+  },
+  "template": {
+    "templateList": {
+      "custom": {
+        "message": "Kurkite savo kategorijas norėdami tvarkyti savo organizacijos turinį.",
+        "messageGroup": "Kurkite savo kategorijas turiniui tvarkyti šioje grupėje."
+      }
+    }
+  }
+}

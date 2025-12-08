@@ -1,0 +1,1 @@
+System.register([],function(e){return{execute:function(){e({settingsLabel:"\ubb38\uc11c \ud0d0\uc0c9\uae30 \uc124\uc815",selectModelViewer:"\ubb38\uc11c \ubdf0\uc5b4 \uc704\uc82f\uc744 \uc120\ud0dd\ud558\uc5ec \ubb38\uc11c\ub97c \ud45c\uc2dc\ud569\ub2c8\ub2e4."})}}});

@@ -1,0 +1,35 @@
+<svg width="68" height="48" viewBox="0 0 68 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path fill-rule="evenodd" clip-rule="evenodd" d="M4 15.5C4 14.6716 4.67157 14 5.5 14H62.5C63.2797 14 63.9204 14.5949 63.9931 15.3555L64 15.5V42.5C64 43.3284 63.3284 44 62.5 44H5.5C4.67157 44 4 43.3284 4 42.5V15.5ZM63 15.5C63 15.2239 62.7761 15 62.5 15H5.5C5.22386 15 5 15.2239 5 15.5V42.5C5 42.7761 5.22386 43 5.5 43H62.5C62.7761 43 63 42.7761 63 42.5V15.5Z" fill="#363636"/>
+<rect x="8" y="18" width="4" height="4" fill="#363636"/>
+<rect x="38" y="18" width="4" height="4" fill="#363636"/>
+<rect x="33" y="18" width="1" height="22" fill="#363636"/>
+<rect x="14" y="18" width="4" height="4" fill="#363636"/>
+<rect x="44" y="18" width="4" height="4" fill="#363636"/>
+<rect x="20" y="18" width="4" height="4" fill="#363636"/>
+<rect x="50" y="18" width="4" height="4" fill="#363636"/>
+<rect x="26" y="18" width="4" height="4" fill="#363636"/>
+<rect x="56" y="18" width="4" height="4" fill="#363636"/>
+<rect x="8" y="30" width="4" height="4" fill="#363636"/>
+<rect x="38" y="30" width="4" height="4" fill="#363636"/>
+<rect x="14" y="30" width="4" height="4" fill="#363636"/>
+<rect x="44" y="30" width="4" height="4" fill="#363636"/>
+<rect x="50" y="30" width="4" height="4" fill="#363636"/>
+<rect x="20" y="30" width="4" height="4" fill="#363636"/>
+<rect x="26" y="30" width="4" height="4" fill="#363636"/>
+<rect x="56" y="30" width="4" height="4" fill="#363636"/>
+<rect x="8" y="36" width="4" height="4" fill="#363636"/>
+<rect x="38" y="36" width="4" height="4" fill="#363636"/>
+<rect x="14" y="36" width="4" height="4" fill="#363636"/>
+<rect x="44" y="36" width="4" height="4" fill="#363636"/>
+<rect x="20" y="36" width="4" height="4" fill="#363636"/>
+<rect x="8" y="24" width="4" height="4" fill="#363636"/>
+<rect x="38" y="24" width="4" height="4" fill="#363636"/>
+<rect x="14" y="24" width="4" height="4" fill="#6A6A6A"/>
+<rect x="44" y="24" width="4" height="4" fill="#363636"/>
+<rect x="20" y="24" width="4" height="4" fill="#363636"/>
+<rect x="50" y="24" width="4" height="4" fill="#363636"/>
+<rect x="26" y="24" width="4" height="4" fill="#363636"/>
+<rect x="56" y="24" width="4" height="4" fill="#363636"/>
+<rect x="4" y="4" width="60" height="8" rx="1" fill="#6A6A6A"/>
+<rect x="7" y="7" width="54" height="2" fill="#181818"/>
+</svg>

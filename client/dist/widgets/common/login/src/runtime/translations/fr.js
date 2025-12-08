@@ -1,0 +1,1 @@
+System.register([],function(e){return{execute:function(){e({_widgetLabel:"Connexion",switchToLogin:"Passer \xe0 la page de connexion",switchToLogout:"Passer \xe0 la page de d\xe9connexion",toggleSignInPreview:"Activer/d\xe9sactiver l\u2019aper\xe7u de la page de connexion",restrictedResources:"Ressources \xe0 acc\xe8s restreint"})}}});

@@ -1,0 +1,8 @@
+{
+  "loading": "Bezig met laden...",
+  "pleaseWait": "Even geduld a.u.b.",
+  "loadingXMLRFT": "Bezig met het laden van de geselecteerde rasterfunctiesjabloon in XML-indeling.",
+  "failedToOpen": "Kan niet openen.",
+  "readingFailed": "De geselecteerde rasterfunctietemplate kon niet worden geladen.",
+  "failedToLoadXML": "De geselecteerde rasterfunctietemplate kon niet worden geladen in XML-formaat."
+}

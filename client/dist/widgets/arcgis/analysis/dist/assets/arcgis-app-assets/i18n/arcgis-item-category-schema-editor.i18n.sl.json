@@ -1,0 +1,36 @@
+{
+  "modalHeader": "Konfiguriraj kategorije vsebine",
+  "modalGroupHeader": "Konfiguriraj kategorije skupine",
+  "helpText": "Uredite, izbrišite ali prerazporedite kategorije v svoji organizaciji.",
+  "helpTextGroup": "Uredite, izbrišite ali prerazporedite kategorije za vsebino v tej skupini.",
+  "helpTextDescription": "Ne pozabite, da so morda drugi uporabniki v vaši organizaciji te kategorije že dodelili svojim elementom in bo urejanje te sheme ustrezno posodobilo te elemente.",
+  "helpTextGroupDescription": "Ne pozabite, da so morda drugi uporabniki skupine te kategorije že dodelili svojim elementom in bo urejanje te sheme ustrezno posodobilo te elemente.",
+  "warning": {
+    "deleteInUseCategory": {
+      "title": "Izbriši kategorijo",
+      "cta": "Izbriši kategorijo",
+      "message": {
+        "single": "Tej kategoriji je dodeljen en element. Izbris te kategorije jo bo odstranil tudi iz tega elementa.",
+        "multiple": "${number} elementov, dodeljenih tej kategoriji. Izbris te kategorije jo bo odstranil tudi iz teh elementov.",
+        "unknown": "Elementi, dodeljeni tej kategoriji: ${number}. Izbris te kategorije jo bo odstranil tudi iz teh elementov."
+      }
+    },
+    "changeTitleInUseCategory": {
+      "title": "Posodobi kategorijo",
+      "message": {
+        "single": "Tej kategoriji je dodeljen en element. Posodabljanje kategorije bo posodobilo element za uporabo \"${newTitle}\".",
+        "multiple": "${number} elementov, dodeljenih tej kategoriji. Posodabljanje kategorije bo posodobilo elemente za uporabo \"${newTitle}\".",
+        "unknown": "Elementi, dodeljeni tej kategoriji: ${number}. Posodabljanje kategorije bo posodobilo elemente za uporabo \"${newTitle}\"."
+      },
+      "cta": "Posodobi kategorijo"
+    }
+  },
+  "template": {
+    "templateList": {
+      "custom": {
+        "message": "Ustvarite lastne kategorije za organiziranje vsebine v svoji organizaciji.",
+        "messageGroup": "Ustvarite lastne kategorije za organiziranje vsebine v tej skupini."
+      }
+    }
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "itemProperties": {
+    "description": "Rezultatul generat din executarea filtrului de instrumentul de analiză Atribute.",
+    "snippet": "Rezultatul generat din Filtrare după atribute"
+  },
+  "noLayerDisabledTooltip": "Selectați un set de date de intrare valid.",
+  "queryCriteriaGroupLabel": "Criterii interogare"
+}

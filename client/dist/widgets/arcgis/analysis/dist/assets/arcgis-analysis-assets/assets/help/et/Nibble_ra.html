@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>N&auml;ksimist&ouml;&ouml;riist asendab maskile vastava rastri pikslid l&auml;hima naabri v&auml;&auml;rtusega.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputRaster">
+        <div>
+            <p>Sisendraster koos maskeeritud kohtadega, mis asendatakse nende l&auml;hima naabri v&auml;&auml;rtusega.
+            </p>
+        </div>
+    </div>
+    <div id="inputMaskRaster">
+        <div>
+            <p>Maski raster, mis m&auml;&auml;ratleb kohad sisendrastris, mis asendatakse. Lahtrid, mille v&auml;&auml;rtus on NoData, loetakse maskeeritud piirkonnas olevaks.
+            </p>
+        </div>
+    </div>
+    <div id="inputZoneRaster">
+        <div>
+            <p>Sisendtsooni raster. Iga tsooni puhul asendatakse maski sees olevad sisendruudud ainult l&auml;himate sama tsooni sisendruutude v&auml;&auml;rtustega.
+            </p>
+        </div>
+    </div>
+    <div id="nibbleValues">
+        <div>
+            <p>M&auml;&auml;rab, kas NoData-lahtrid sisendrastris v&otilde;ivad asendada (n&auml;ksida) lahtrid maskeeritud aladel, kui need on l&auml;himad naabrid.
+            </p>
+            <p>Kui see on &auml;ra m&auml;rgitud, v&otilde;ivad NoData-pikslid sisendrastris asendada piksleid maskeeritud piirkonnas. Kui see ei ole m&auml;rgitud, v&otilde;ivad piksleid maskeeritud piirkonnas asendada ainult kehtivad pikslid sisendrastris.
+            </p>
+        </div>
+    </div>
+    <div id="nibbleNodata">
+        <div>
+            <p>M&auml;&auml;rab, kas maskeeritud ala NoData-lahtrid s&auml;ilitatakse v&otilde;i asendatakse.
+            </p>
+            <p>Kui see ei ole m&auml;rgitud, s&auml;ilivad maskeeritud ala sees olevad NoData-pikslid v&auml;ljundis. Kui see on m&auml;rgitud, asendatakse maskeeritud ala sees olevad NoData-pikslid l&auml;hima naabri v&auml;&auml;rtusega, mis asub v&auml;ljaspool maskeeritud ala.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>Asendatud rasterkihi nimi, mis luuakse ja lisatakse kaardile.
+            </p>
+        </div>
+    </div>
+    <div id="resultType">
+        <div>
+            <p>Loodava v&auml;ljundi t&uuml;&uuml;p. V&auml;ljund v&otilde;ib olla paanitud pildikiht v&otilde;i d&uuml;naamiline pildikiht.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>Selle kausta nimi jaotises  <b>Minu sisu</b>, kuhu tulemused salvestatakse.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

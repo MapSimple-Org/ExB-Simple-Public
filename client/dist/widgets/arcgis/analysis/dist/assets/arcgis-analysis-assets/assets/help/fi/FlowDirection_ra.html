@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>Virtaussuunta-ty&ouml;kalu luo virtaussuunnan rasterin jokaisesta solusta sen laskevaan naapuriin tai naapureihin k&auml;ytt&auml;m&auml;ll&auml; D8-, Multiple Flow Direction (MFD)- tai D-Infinity (DINF)&nbsp;-menetelm&auml;&auml;.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputSurfaceRaster">
+        <div>
+            <p>Laskentaan k&auml;ytett&auml;v&auml; korkeusrasteri.
+            </p>
+        </div>
+    </div>
+    <div id="flowDirectionType">
+        <div>
+            <p>M&auml;&auml;ritt&auml;&auml; virtaustyypin, jota k&auml;ytet&auml;&auml;n virtaussuuntaa laskettaessa.
+            </p>
+        </div>
+    </div>
+    <div id="forceFlow">
+        <div>
+            <p>M&auml;&auml;ritt&auml;&auml;, seuraako reunasolujen virtaus normaaleja virtauss&auml;&auml;nt&ouml;j&auml; vai onko virtaussuunta niiss&auml; aina ulosp&auml;in.
+            </p>
+            <p>Jos kohtaa ei valita, virtaussuunta on kohti sisemp&auml;&auml; solua, jonka z-arvossa on suurin pudotus. Jos pudotus on kuitenkin nolla tai alle nollan, solun virtaussuunta on ulosp&auml;in pintarasterista. Jos t&auml;m&auml; valitaan, virtaussuunta on ulosp&auml;in pintarasterista.
+            </p>
+        </div>
+    </div>
+    <div id="outputFlowDirectionName">
+        <div>
+            <p>Karttaan luotavan ja lis&auml;tt&auml;v&auml;n virtaussuuntarasteritason nimi.
+            </p>
+        </div>
+    </div>
+    <div id="outputDropName">
+        <div>
+            <p>Karttaan luotavan ja lis&auml;tt&auml;v&auml;n pudotusrasterikarttatason nimi. T&auml;m&auml; karttataso sis&auml;lt&auml;&auml; suhteen prosenttiosuuden korkeuden enimm&auml;ismuutoksen ja polun pituuden v&auml;lill&auml; virtausuuntaa pitkin.
+            </p>
+        </div>
+    </div>
+    <div id="resultType">
+        <div>
+            <p>Luotavien tulosaineistojen tyypit. Tulosaineistot voivat olla tiilitettyj&auml; kuva-aineistokarttatasoja tai dynaamisia kuvakarttatasoja.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>Sen  <b>Omassa sis&auml;ll&ouml;ss&auml;</b> olevan kansion nimi, johon tulokset tallennetaan.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

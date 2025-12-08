@@ -1,0 +1,16 @@
+{
+  "updateData": "Opdatér data",
+  "cancel": "Annuller",
+  "editStyle": "Erstat lagets typografi-fil med en opdateret version fra din computer.",
+  "updatePackages": "Erstat ${type} med en opdateret version fra din computer. Den overførte fil skal have det samme navn som ${hostedLayerName}.",
+  "uploadStaticFiles": "Den fil, der er ved at blive overført, skal have det samme navn som den oprindelige fil ${fileName}",
+  "sameFileNameDescription": "Den fil, der er ved at blive overført, skal have det samme navn som den oprindelige fil ${fileName}",
+  "updating": "Opdaterer...",
+  "error": "Fejl",
+  "errors": {
+    "sameFileName": "Hvis du vil opdatere dette element, skal du overføre en fil med navnet ${fileName}.",
+    "invalidStyleFileExtension": "Ugyldigt filtypenavn Den overførte typografi skal have filtypenavnet .json.",
+    "errorWhileUpload": "Der opstod en fejl under overførsel af elementet.",
+    "errorUpdate": "Der opstod en fejl under overskrivning af elementet."
+  }
+}

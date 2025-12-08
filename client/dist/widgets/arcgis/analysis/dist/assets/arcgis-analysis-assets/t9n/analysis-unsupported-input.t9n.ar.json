@@ -1,0 +1,7 @@
+{
+  "defaultValue": "نوع المعلمة غير مدعوم. سيتم استخدام القيمة الافتراضية. <calcite-link target='_blank' href='${ docLink }'>على المزيد عن</calcite-link>",
+  "requiredMessage": "هذه المعلمة مطلوبة.",
+  "unsupportedGPType": "نوع المعلمة غير مدعوم. <calcite-link target='_blank' href='${ docLink }'>على المزيد عن</calcite-link>",
+  "unsupportedParameterConfig": "تكوين المعلمة غير مدعوم. <calcite-link target='_blank' href='${ docLink }'>على المزيد عن</calcite-link>",
+  "unsupportedParameterConfigDefaultValue": "تكوين المعلمة غير مدعوم. سيتم استخدام القيمة الافتراضية. <calcite-link target='_blank' href='${ docLink }'>على المزيد عن</calcite-link>"
+}

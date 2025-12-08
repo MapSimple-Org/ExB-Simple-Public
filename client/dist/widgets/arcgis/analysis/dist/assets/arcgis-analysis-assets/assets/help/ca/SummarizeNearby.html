@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>L'eina Resumeix prop de calcula les estad&iacute;stiques de les entitats dins d'una dist&agrave;ncia especificada d'altres entitats. La dist&agrave;ncia es pot calcular mitjan&ccedil;ant una dist&agrave;ncia de l&iacute;nia recta o un mode de viatge.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="summaryLayer">
+        <div>
+            <p>Capa que es resumir&agrave; dins d'una dist&agrave;ncia de la capa propera.
+            </p>
+            <p class="toolPaneOnly">El recompte de les entitats dep&egrave;n d'altres factors com ara els criteris de filtratge i l'extensi&oacute; d'an&agrave;lisi.
+            </p>
+        </div>
+    </div>
+    <div id="sumNearbyLayer">
+        <div>
+            <p>Capa de punts, l&iacute;nies o pol&iacute;gons que s'utilitzar&agrave; com a ubicacions d'inici al voltant de les quals es crearan &agrave;rees de delimitaci&oacute; per resumir les entitats properes.
+            </p>
+            <p class="toolPaneOnly">El recompte de les entitats dep&egrave;n d'altres factors com ara els criteris de filtratge i l'extensi&oacute; d'an&agrave;lisi.
+            </p>
+        </div>
+    </div>
+    <div id="nearType">
+        <div>
+            
+            <p class="toolPaneOnly">M&egrave;tode que s'utilitzar&agrave; per crear les &agrave;rees de delimitaci&oacute;. El m&egrave;tode pot ser una dist&agrave;ncia en l&iacute;nia recta o un mode de viatge.
+            </p> 
+            <p class="modelBuilderOnly">M&egrave;tode que s'utilitzar&agrave; per crear les &agrave;rees de delimitaci&oacute;. Actualment, l'&uacute;nic m&egrave;tode adm&egrave;s per als models &eacute;s la dist&agrave;ncia en l&iacute;nia recta.
+            </p>
+        </div>
+    </div>
+    <div id="distances">
+        <div>
+            <p>Dist&agrave;ncia o temps que s'utilitzar&agrave; per crear &agrave;rees de delimitaci&oacute;. Si s'afegeixen diversos valors, cada valor s'utilitzar&agrave; per calcular les &agrave;rees de delimitaci&oacute; per a totes les entitats d'entrada.
+            </p>
+        </div>
+    </div>
+    <div id="units">
+        <div>
+            <p>Unitats que s'utilitzaran per especificar la dist&agrave;ncia o el temps.
+            </p>
+        </div>
+    </div>
+    <div id="returnBoundaries">
+        <div>
+            <p>Especifica si la capa de resultats ser&agrave; les &agrave;rees de delimitaci&oacute; (activat) o la mateixa geometria que la capa propera d'entrada (desactivat).
+            </p>
+        </div>
+    </div>
+    <div id="sumShape">
+        <div>
+            <p>Especifica si es calcular&agrave; la mida total de les entitats resumides en cada &agrave;rea de delimitaci&oacute;. Per a les l&iacute;nies, es calcular&agrave; la longitud total. Per als pol&iacute;gons, es calcular&agrave; l'&agrave;rea total.
+            </p>
+        </div>
+    </div>
+    <div id="shapeUnits">
+        <div>
+            <p>Unitats que s'utilitzaran per calcular la mida total de les entitats resumides.
+            </p>
+        </div>
+    </div>
+    <div id="summaryFields">
+        <div>
+            <p>Camps de nombre o de data de la capa d'entrada que es resumir&agrave;, i estad&iacute;stiques que es calcularan per a cada camp.
+            </p>
+        </div>
+    </div>
+    <div id="groupByField">
+        <div>
+            <p>Camp de la capa d'entrada que s'utilitzar&agrave; per separar les dades en diferents grups per a c&agrave;lculs estad&iacute;stics.
+            </p>
+        </div>
+    </div>
+    <div id="minorityMajority">
+        <div>
+            <p>Especifica si es calcularan els grups minoritaris (menys dominants) i majoritaris (m&eacute;s dominants) de cada &agrave;rea de resum.
+            </p>
+        </div>
+    </div>
+    <div id="percentShape">
+        <div>
+            <p>Especifica si es calcular&agrave; el percentatge de les entitats resumides que pertanyen a cada grup dins de cada l&iacute;mit.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>Nom de la capa que es crear&agrave; i s'afegir&agrave; al mapa.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>Nom de la carpeta d' <b>El meu contingut</b> on es desaran els resultats.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

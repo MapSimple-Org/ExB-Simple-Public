@@ -1,0 +1,15 @@
+{
+  "expandAll": "Розгорнути всі",
+  "collapseAll": "Згорнути всі",
+  "categoryItem": {
+    "expand": "Розширити",
+    "collapse": "Згорнути",
+    "editCategory": "Редагувати категорію",
+    "deleteCategory": "Видалити категорію",
+    "addSubcategory": "Додати підкатегорію",
+    "addCategory": "Додати категорію",
+    "save": "Зберегти",
+    "cancel": "Скасувати",
+    "missingTitleMessage": "Потрібно зазначити назву категорії."
+  }
+}

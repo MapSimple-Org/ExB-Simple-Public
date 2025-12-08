@@ -1,0 +1,17 @@
+{
+  "name": "blankfullscreengrid",
+  "type": "template",
+  "templateType": "app",
+  "label": "Blank grid",
+  "description": "A blank template to create your own design in a grid page.",
+  "thumbnail": "thumbnail.png",
+  "order": 2,
+  "tags": [],
+  "categoriesTags": [
+    "Blank"
+  ],
+  "isMultiplePage": false,
+  "isMapAware": true,
+  "thumbnailWidth": 320,
+  "thumbnailHeight": 214
+}

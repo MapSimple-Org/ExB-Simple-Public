@@ -1,0 +1,10 @@
+{
+  "summary": "Podsumowanie",
+  "description": "Opis",
+  "addSummary": "Dodaj podsumowanie",
+  "addDescription": "Dodaj opis",
+  "charactersLeft": "Pozostałe znaki: ${num}",
+  "invalid": "Podsumowanie nie może zawierać następujących znaków: < ani >.",
+  "invalidDescription": "Opis nie może zawierać znaków < ani >.",
+  "summaryReadOnly": "Podsumowanie jest tylko do odczytu."
+}

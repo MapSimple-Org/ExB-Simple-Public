@@ -1,0 +1,22 @@
+{
+  "deleteFolder": "Elimina cartella",
+  "delete": "Elimina",
+  "permanentlyDelete": "Elimina definitivamente",
+  "back": "Indietro",
+  "cancel": "Annulla",
+  "success": "Cartella '${title}' eliminata correttamente",
+  "deleteProtectedItemsInFolder": "Impossibile eliminare la cartella poiché alcuni elementi sono protetti dall'eliminazione o hanno elementi dipendenti.",
+  "message": {
+    "empty": "Eliminare la cartella <strong style='font-weight: 500'>${title}</strong>?",
+    "recycleAll": "Eliminare la cartella <strong style='font-weight: 500'>${title}</strong> e spostarne il contenuto nel cestino?",
+    "mustBeEmpty": "La cartella <strong style='font-weight: 500'>${title}</strong> deve essere vuota per poter essere eliminata.",
+    "aFewCannotBeDeleted": "Impossibile eliminare alcuni elementi. Eliminare quelli restanti?",
+    "canBeEmptied": "La cartella <strong style='font-weight: 500'>${title}</strong> deve essere vuota per poter essere eliminata. Eliminare questi elementi?",
+    "cannotBeDeleted": "La cartella <strong style='font-weight: 500'>${title}</strong> non può essere eliminata perché i suoi elementi non possono essere eliminati."
+  },
+  "disabledMessage": {
+    "single": "È presente <span style='color:red'>1 elemento</span> in questa cartella, <b>${label}</b>.<br/></br/>Eliminare questa cartella e l'elemento?",
+    "multiple": "Sono presenti <span style='color:red'>${number} elementi</span>in questa cartella, <b>${label}</b>.<br/></br/>Eliminare questa cartella e tutti i suoi elementi?",
+    "unknown": "Eliminare questa cartella, <b>${label}</b>?"
+  }
+}

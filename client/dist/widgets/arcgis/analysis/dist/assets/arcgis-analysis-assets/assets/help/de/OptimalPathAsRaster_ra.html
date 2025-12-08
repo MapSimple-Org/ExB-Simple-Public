@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>Mit dem Werkzeug &quot;Optimaler Pfad als Raster&quot; wird der optimale Raster-Pfad von Zielen zu Quellen bestimmt.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputDestinationRasterOrFeatures">
+        <div>
+            <p>Der Layer, der die Ziele identifiziert, von denen aus die Entfernung zur kosteng&uuml;nstigen Quelle berechnet wird.
+            </p>
+            <p>Wenn die Eingabe ein Raster ist, muss sie aus Zielzellen mit g&uuml;ltigen ganzzahligen Werten (0 ist ein g&uuml;ltiger Wert) bestehen, und den restlichen Zellen muss &quot;NoData&quot; zugewiesen werden.
+            </p>
+            <p class="toolPaneOnly">Bei Feature-Eingaben ist die Anzahl abh&auml;ngig von zus&auml;tzlichen Faktoren wie Filterkriterien oder der Analyseausdehnung.
+            </p>
+        </div>
+    </div>
+    <div id="destinationField">
+        <div>
+            <p>Das Feld, das verwendet werden soll, um Werte f&uuml;r die Zielpositionen zu erhalten.
+            </p>
+        </div>
+    </div>
+    <div id="inputDistanceAccumulationRaster">
+        <div>
+            <p>Das Raster, das den optimalen Pfad von den Zielen zu den Quellen bestimmt.
+            </p>
+            <p>Das Entfernungsakkumulations-Raster wird i.&nbsp;d.&nbsp;R. mit dem Werkzeug &quot;Entfernungsakkumulation&quot; oder &quot;Entfernungsallokation&quot; erstellt.
+            </p>
+        </div>
+    </div>
+    <div id="inputBackDirectionRaster">
+        <div>
+            <p>Das Raster, das berechnete Richtungen in Grad enth&auml;lt.
+            </p>
+            <p>Das Gegenrichtungs-Raster wird i.&nbsp;d.&nbsp;R. mit dem Werkzeug &quot;Entfernungsakkumulation&quot; oder &quot;Entfernungsallokation&quot; erstellt.
+            </p>
+        </div>
+    </div>
+    <div id="pathType">
+        <div>
+            <p>Gibt an, wie die Werte und Zonen in den Eingabezieldaten in den Berechnungen des optimalen Pfades interpretiert werden.
+            </p>
+        </div>
+    </div>
+    <div id="outputRasterName">
+        <div>
+            <p>Der Name des optimalen Pfads als Raster-Layer, der erstellt und der Karte hinzugef&uuml;gt wird.
+            </p>
+        </div>
+    </div>
+    <div id="resultType">
+        <div>
+            <p>Die Art der Ausgabe, die erstellt wird. Die Ausgabe kann ein gekachelter Bilddaten-Layer oder ein dynamischer Bilddaten-Layer sein.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>Der Name des Ordners in  <b>Eigene Inhalte</b>, in dem das Ergebnis gespeichert werden soll.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

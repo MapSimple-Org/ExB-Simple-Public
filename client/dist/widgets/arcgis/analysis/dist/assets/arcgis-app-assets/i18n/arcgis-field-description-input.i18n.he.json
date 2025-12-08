@@ -1,0 +1,6 @@
+{
+  "description": "תאור",
+  "addDescription": "הוסף תיאור",
+  "charactersLeft": "תווים נשארו: ${num}",
+  "invalid": "התיאור לא יכול להכיל אף אחד מהתווים הבאים: < או >."
+}

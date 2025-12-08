@@ -1,0 +1,22 @@
+{
+  "dialogHeading": "Üye kategorilerini yapılandır",
+  "noticeTitle": "Kuruluşunuzdaki kategorileri ekleyin, silin veya yeniden sıralayın.",
+  "noticeDescription": "Üyeler sekmesinden üyelere kategoriler atayabilirsiniz.",
+  "defaultCategoryWarning": "Bu üye kategorisi, bir yeni üye varsayılanı olarak ayarlanmıştır ve düzenlenemez veya silinemez.",
+  "warning": {
+    "deleteInUseCategory": {
+      "message": {
+        "single": "Bir üye bu kategoriye atandı. Kategoriyi silmek onu bu üyeden çıkarır.",
+        "multiple": "${number} üyeleri bu kategoriye atandı. Kategoriyi silmek onu bu üyelerden de kaldırır.",
+        "unknown": "Üyeler şu kategoriye atandı: ${number}. Kategoriyi silmek onu bu üyelerden de kaldırır."
+      }
+    },
+    "changeTitleInUseCategory": {
+      "message": {
+        "single": "Bir üye bu kategoriye atandı. Kategorinin güncellenmesi üyeyi \"${newTitle}\" kullanacak şekilde güncelleyecektir.",
+        "multiple": "${number} üyeleri bu kategoriye atandı. Kategorinin güncellenmesi üyeleri \"${newTitle}\" kullanacak şekilde güncelleyecektir.",
+        "unknown": "Üyeler şu kategoriye atandı: ${number}. Kategorinin güncellenmesi üyeleri \"${newTitle}\" kullanacak şekilde güncelleyecektir."
+      }
+    }
+  }
+}

@@ -1,0 +1,68 @@
+{
+  "addField": "Add field",
+  "addFieldErrors": {
+    "creatingFailed": "Creating field ${fieldName} failed.",
+    "existingFieldNameError": "The field name cannot be the same as an existing field name.",
+    "invalidName": "Invalid name",
+    "invalidNameInputInvalidCharactersError": "The field name must begin with a letter and can only contain letters, numbers, and '_'.",
+    "invalidNameInputSQLError": "The field name cannot be the same as an SQL keyword.",
+    "valueIsRequiredError": "This value is required."
+  },
+  "cancel": "Cancel",
+  "createAndSelectField": "Create and select field",
+  "createNewFields": "Create new field",
+  "fieldLoadingErrorText": "Unable to load fields.",
+  "fieldName": "Field name",
+  "fieldType": "Field type",
+  "fieldTypesIncompatible": "No compatible fields available.",
+  "layerNotSelected": "No layer selected to populate the fields.",
+  "loadingFields": "Loading fields",
+  "noSearchResults": "No matching fields found.",
+  "requiredErrorLabelDefault": "A field",
+  "requiredErrorMessage": "This parameter is required.",
+  "selectFieldPicklistHeading": "Select field",
+  "selectOkBtnText": "Select",
+  "tooltip": "A valid field name and field type must be specified.",
+  "types": {
+    "big-integer": {
+      "description": "Store whole numbers from -(2${startSup}53${endSup}-1) to 2${startSup}53${endSup}-1. Use this field type when using numbers that are outside of the supported integer field range.",
+      "title": "Big Integer"
+    },
+    "date": {
+      "description": "Store values with date and time.",
+      "title": "Date"
+    },
+    "date-only": {
+      "description": "Store date values with no time values.",
+      "title": "Date Only"
+    },
+    "double": {
+      "description": "Store numbers with decimal places.",
+      "title": "Double"
+    },
+    "global-id": {
+      "description": "Store a 36 character string consisting of letters and numbers used to uniquely identify a feature.",
+      "title": "GlobalID"
+    },
+    "guid": {
+      "description": "Store a 36 character string consisting of letters and numbers. A Globally Unique Identifier, or GUID, is frequently used to manage relationships between features.",
+      "title": "GUID"
+    },
+    "integer": {
+      "description": "Store whole numbers from ${lowerIntegerRange} to ${upperIntegerRange}.",
+      "title": "Integer"
+    },
+    "string": {
+      "description": "Store a set of alphanumeric characters",
+      "title": "String"
+    },
+    "time-only": {
+      "description": "Store time values with no date values.",
+      "title": "Time Only"
+    },
+    "timestamp-offset": {
+      "description": "Store values indicating the date, time, and offset from Coordinated Universal Time (UTC).",
+      "title": "Timestamp Offset"
+    }
+  }
+}

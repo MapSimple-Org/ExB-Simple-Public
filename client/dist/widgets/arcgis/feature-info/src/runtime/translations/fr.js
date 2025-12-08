@@ -1,0 +1,1 @@
+System.register([],function(e){return{execute:function(){e({_widgetLabel:"Informations sur l\u2019entit\xe9",noDataMessageDefaultText:"Aucune donn\xe9e trouv\xe9e.",featureNumbers:"{index} sur {count}",featureInfoDataActionLabel:"Enregistrement actuel pour les informations sur les entit\xe9s de la couche\xa0{layer}"})}}});

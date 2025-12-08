@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>De tool Punten aggregeren berekent het aantal punten en andere statistieken binnen gespecificeerde bins of polygonen.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="pointLayer">
+        <div>
+            <p>De puntlaag die in de samenvattingsgebieden wordt geaggregeerd.
+            </p>
+            <p class="toolPaneOnly">Het aantal objecten is afhankelijk van aanvullende factoren als de filtercriteria en de analyse-extent.
+            </p>
+        </div>
+    </div>
+    <div id="polygonLayer">
+        <div>
+            <p>De polygoonlaag waarnaar de punten worden geaggregeerd.
+            </p>
+            <p class="toolPaneOnly">Het aantal objecten is afhankelijk van aanvullende factoren als de filtercriteria en de analyse-extent.
+            </p>
+        </div>
+    </div>
+    <div id="binType">
+        <div>
+            <p>Het type begrenzende objecten waarbinnen de invoerpunten worden samengevoegd. Dit kan een polygoonlaag zijn of een betegelingraster van vierkante of zeshoekige bins die worden gegenereerd wanneer de tool wordt uitgevoerd.
+            </p>
+        </div>
+    </div>
+    <div id="binSize">
+        <div>
+            <p>De grootte van de gegenereerde bins. Voor vierkante bins bepalen het gespecificeerde aantal en de eenheden de hoogte en de lengte van het vierkant. Voor zeshoekige bins bepalen het gespecificeerde aantal en de eenheden de afstand tussen de evenwijdige zijden.
+            </p>
+        </div>
+    </div>
+    <div id="binSizeUnit">
+        <div>
+            <p>De eenheden die worden gebruikt om de bingrootte te specificeren.
+            </p>
+        </div>
+    </div>
+    <div id="keepBoundariesWithNoPoints">
+        <div>
+            <p>Specificeert of objecten die geen punten bevatten, in de resultatenlaag worden weergegeven. Als deze optie niet is aangevinkt, worden objecten zonder punten niet weergegeven in het resultaat. Als deze optie is aangevinkt, worden objecten zonder punten wel weergegeven in het resultaat.
+            </p>
+        </div>
+    </div>
+    <div id="summaryFields">
+        <div>
+            <p>Het aantal datumvelden uit de invoerlijst dat zal worden samengevat en de statistieken die voor elke veld zullen worden berekend.
+            </p>
+        </div>
+    </div>
+    <div id="groupByField">
+        <div>
+            <p>Het veld uit de invoerlaag dat zal worden gebruikt om de gegevens in afzonderlijke groepen te scheiden voor statistische berekeningen.
+            </p>
+        </div>
+    </div>
+    <div id="minorityMajority">
+        <div>
+            <p>Specificeert of de minderheids- (minst dominante) en meerderheids- (meest dominante) groepen binnen elk overzichtsgebied moeten worden berekend.
+            </p>
+        </div>
+    </div>
+    <div id="percentPoints">
+        <div>
+            <p>Specificeert of het percentage punten dat bij elke groep hoort, binnen elk groepssamenvattingsgebied zal worden berekend.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>De naam van de laag die wordt aangemaakt en toegevoegd aan de kaart.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>De naam van de map in  <b>Mijn content</b> waarin het resultaat wordt opgeslagen.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

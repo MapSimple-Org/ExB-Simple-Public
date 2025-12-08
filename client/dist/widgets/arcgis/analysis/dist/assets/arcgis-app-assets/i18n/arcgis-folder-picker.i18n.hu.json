@@ -1,0 +1,21 @@
+{
+  "folder": "Mappa",
+  "folders": "Mappák",
+  "searchFolders": "Keresés a mappákban",
+  "enterFolder": "Mappa nevének megadása",
+  "createNewFolder": "Új mappa létrehozása",
+  "noFoldersFoundCreate": "Nem található ilyen nevű mappa. Létrehozza a következőt: ${folder}?",
+  "noFoldersFound": "Nem található ilyen nevű mappa.",
+  "create": "Létrehozza a következőt: ${folder}?",
+  "loading": "Mappák betöltése",
+  "error": {
+    "noName": "Meg kell adnia a mappa nevét.",
+    "folderAlreadyExists": "Már létezik „${folder}” mappa. Válasszon másik nevet.",
+    "title": "Hiba",
+    "invalidCharacters": {
+      "single": "A név nem tartalmazhatja ezt a karaktert: ${invalidCharacters}.",
+      "multiple": "A név nem tartalmazhatja a következő karaktereket: ${invalidCharacters}.",
+      "unknown": "A név nem tartalmazhatja a következő karaktereket: ${invalidCharacters}."
+    }
+  }
+}

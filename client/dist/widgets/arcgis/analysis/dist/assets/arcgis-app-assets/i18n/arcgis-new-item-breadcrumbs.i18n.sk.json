@@ -1,0 +1,12 @@
+{
+  "apiCredentialType": "Typ poverenia: kľúč API",
+  "oauthCredentialType": "Typ poverenia: OAuth 2.0",
+  "itemAccess": "Prístup k položkám",
+  "page": "Stránka: ${page}",
+  "currentPage": "Aktuálna stránka: ${page}",
+  "privileges": "Oprávnenia",
+  "itemDetails": "Podrobnosti položky",
+  "settings": "Nastavenia",
+  "serviceScope": "Rozsah služby",
+  "summary": "Sumarizácia"
+}

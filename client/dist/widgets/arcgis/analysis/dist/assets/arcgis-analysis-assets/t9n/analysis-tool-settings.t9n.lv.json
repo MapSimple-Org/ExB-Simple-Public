@@ -1,0 +1,13 @@
+{
+  "cancel": "Atcelt",
+  "creditUsage": "Kreditēšana",
+  "envSettings": "Vides iestatījumi",
+  "envSettingsDescription": "Norādiet papildu iestatījumus, kas ietekmē analīzes izpildi.",
+  "generalSettings": "Vispārīga vide",
+  "geoanalytics": "GeoAnalytics",
+  "noEnvSettings": "Nav vides",
+  "processingExtentEnv": "Apstrādes pārklājuma vide",
+  "rasterAnalysis": "Rastra vide",
+  "resetDefaults": "Atiestatīt noklusējumus",
+  "save": "Saglabāt"
+}

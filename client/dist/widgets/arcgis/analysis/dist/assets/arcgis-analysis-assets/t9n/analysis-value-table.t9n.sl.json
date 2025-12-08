@@ -1,0 +1,7 @@
+{
+  "addEntryButtonLabel": "Dodaj",
+  "maxGroupsMessage": "Največje število vnosov znaša ${maxCount}.",
+  "minGroupsMessage": "Najmanjše število vnosov znaša ${minCount}.",
+  "removeEntryButtonLabel": "Odstrani vnos",
+  "requiredMessage": "Ta parameter je obvezen."
+}

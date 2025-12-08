@@ -1,0 +1,27 @@
+{
+  "hosted": "ที่โฮสต์",
+  "hostedView": "ที่โฮสต์, มุมมอง",
+  "hostedPhotos": "ที่โฮสต์, ภาพถ่าย",
+  "hostedCollection": "ที่โฮสต์, คอลเลกชัน",
+  "hostedMultidimensional": "ที่โฮสต์, หลายมิติ",
+  "hostedCollectionMultidimensional": "ที่โฮสต์, คอลเลกชัน, หลายมิติ",
+  "collectionMultidimensional": "คอลเลกชัน, หลายมิติ",
+  "multidimensional": "หลายมิติ",
+  "collection": "คอลเลกชัน",
+  "photoLocations": "ภาพถ่าย",
+  "locatorView": "มุมมอง",
+  "utilityNetwork": "เครือข่ายสาธารณูปโภค",
+  "Integrated Mesh": "ตาข่ายแบบผสาน",
+  "3D Object": "วัตถุ 3D",
+  "Point": "จุด",
+  "Point Cloud": "พอยต์คลาวด์",
+  "Building Scene Layer": "ชั้นข้อมูลซีนอาคาร",
+  "Voxel Scene Layer": "ชั้นข้อมูลซีนว็อกเซล",
+  "dataStore": {
+    "bigdata": "แชร์ไฟล์ข้อมูลขนาดใหญ่",
+    "cloud": "คลาวด์",
+    "cloudStorage": "ที่เก็บข้อมูลคลาวด์",
+    "database": "ฐานข้อมูล",
+    "folder": "โฟลเดอร์"
+  }
+}

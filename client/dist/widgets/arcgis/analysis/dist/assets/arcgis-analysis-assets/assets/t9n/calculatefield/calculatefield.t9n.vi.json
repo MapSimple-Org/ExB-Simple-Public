@@ -1,0 +1,13 @@
+{
+  "fieldCalcExpression": "Biểu thức tính toán trường",
+  "fieldCalculationGroupLabel": "Tính toán trường",
+  "fieldPlaceholderText": "Nhập để chọn hoặc tạo trường",
+  "fieldToCalculate": "Trường cần tính toán",
+  "inputDatasetGroupLabel": "Đầu vào",
+  "itemProperties": {
+    "description": "Kết quả được tạo khi chạy công cụ Tính toán Trường trong ModelBuilder.",
+    "snippet": "Lớp đối tượng được tạo từ Tính toán Trường"
+  },
+  "noFieldSpecified": "Chỉ định trường cần tính toán để tạo biểu thức.",
+  "whereClause": "Chỉ áp dụng tính toán cho một số bản ghi nhất định"
+}

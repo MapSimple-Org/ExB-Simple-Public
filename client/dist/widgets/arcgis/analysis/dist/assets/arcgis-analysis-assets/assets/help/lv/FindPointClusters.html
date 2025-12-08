@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>Punktu klasteru atra&scaron;anas rīks uz apkārtējo &quot;trok&scaron;ņu&quot; fona nosaka punktu elementu klasterus, ņemot vērā to telpisko sadalījumu.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="analysisLayer">
+        <div>
+            <p>Ievades punkta slānis, kas tiks grupēts klasteros, ņemot vērā punktu elementu telpisko sadalījumu.
+            </p>
+        </div>
+    </div>
+    <div id="method">
+        <div>
+            <p>Metode, kas tiks izmantota klasteru identificē&scaron;anai.
+            </p>
+        </div>
+    </div>
+    <div id="minFeaturesCluster">
+        <div>
+            <p>Minimālais punktu elementu skaits, kas tiks uzskatīts par klasteri.
+            </p>
+        </div>
+    </div>
+    <div id="searchDistance">
+        <div>
+            <p>Norāda maksimālo attālumu ap katru punkta elementu, lai meklētu punktus, kurus var iekļaut klasterī. Ja lauks ir atstāts tuk&scaron;s,  <b>meklē&scaron;anas attāluma</b> vērtība būs lielākais pamata attālums, kas atrasts slānī, izņemot 1% lielāko pamata attālumu.
+            </p>
+        </div>
+    </div>
+    <div id="searchDistanceUnit">
+        <div>
+            <p>Norāda vienības, kas tiks izmantotas meklē&scaron;anas attālumam.
+            </p>
+        </div>
+    </div>
+    <div id="sensitivity">
+        <div>
+            <p>Vesels skaitlis no 0 līdz 100, kas nosaka klasteru kompaktumu. Ja lauks ir atstāts tuk&scaron;s,  <b>klastera jutīguma</b> vērtība tiks aprēķināta, izmantojot Kullback-Leibler diverģenci.
+            </p>
+        </div>
+    </div>
+    <div id="timeField">
+        <div>
+            <p>Ievades slāņa lauks, kurā katram elementam ir laikspiedols.
+            </p>
+        </div>
+    </div>
+    <div id="searchTimeInterval">
+        <div>
+            <p>Laika intervāls, kas tiks izmantots, lai noteiktu, vai elementi veido telpas laika klasteri. Meklē&scaron;anas laika intervāls ilgst pirms un pēc katra elementa laika; piemēram, meklē&scaron;anas laika intervāls 3&nbsp;dienas pie elementa ietvers visus elementus, kas sākas 3&nbsp;dienas pirms un beidzas 3&nbsp;dienas pēc elementa laika.
+            </p>
+        </div>
+    </div>
+    <div id="searchTimeUnit">
+        <div>
+            <p>Norāda vienības, kas tiks izmantotas meklē&scaron;anas laika intervālam.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>Tā slāņa nosaukums, kas tiks izveidots un pievienots kartei.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>Mapes nosaukums sadaļā  <b>Mans saturs</b>, kurā tiks saglabāts rezultāts.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

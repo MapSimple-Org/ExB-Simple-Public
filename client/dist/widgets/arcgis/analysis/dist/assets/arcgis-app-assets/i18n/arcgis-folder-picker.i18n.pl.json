@@ -1,0 +1,21 @@
+{
+  "folder": "Folder",
+  "folders": "Foldery",
+  "searchFolders": "Przeszukaj foldery",
+  "enterFolder": "Wprowadź nazwę folderu",
+  "createNewFolder": "Utwórz nowy folder",
+  "noFoldersFoundCreate": "Nie znaleziono folderów o tej nazwie. Utworzyć '${folder}'?",
+  "noFoldersFound": "Nie znaleziono folderów o tej nazwie.",
+  "create": "Utworzyć '${folder}'?",
+  "loading": "Wczytywanie folderów",
+  "error": {
+    "noName": "Należy podać nazwę folderu.",
+    "folderAlreadyExists": "Folder '${folder}' już istnieje. Wybierz inną nazwę.",
+    "title": "Błąd",
+    "invalidCharacters": {
+      "single": "Nazwa nie może zawierać tego znaku: ${invalidCharacters}.",
+      "multiple": "Nazwa nie może zawierać żadnego z następujących znaków: ${invalidCharacters}.",
+      "unknown": "Nazwa nie może zawierać żadnego z następujących znaków: ${invalidCharacters}."
+    }
+  }
+}

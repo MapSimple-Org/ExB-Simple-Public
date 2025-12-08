@@ -1,0 +1,6 @@
+{
+  "description": "Apraksts",
+  "addDescription": "Pievienot aprakstu",
+  "charactersLeft": "Atlikušais rakstzīmju skaits: ${num}",
+  "invalid": "Aprakstā nedrīkst būt neviena no šīm rakstzīmēm: < vai >."
+}

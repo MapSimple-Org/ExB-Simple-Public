@@ -1,0 +1,6 @@
+{
+  "header": "Začít znovu bez uložení?",
+  "content": "Máte neuložené změny v '${rftTitle}'. Pokud začnete znovu s novou šablonou, budou tyto změny ztraceny.",
+  "cancel": "Storno",
+  "continue": "Pokračovat"
+}

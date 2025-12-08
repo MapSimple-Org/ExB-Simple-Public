@@ -1,0 +1,8 @@
+{
+  "selectFeature": "Vyberte prvkovú vrstvu",
+  "browseLayer": "Prehľadať vrstvy",
+  "loading": "Načítava sa...",
+  "errorCodes": {
+    "required": "Tento parameter je povinný."
+  }
+}

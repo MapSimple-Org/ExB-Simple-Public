@@ -1,0 +1,20 @@
+{
+  "title": "Antraštė",
+  "addTitle": "Įtraukite pavadinimą",
+  "validation": {
+    "error": "Klaida",
+    "titleRequired": "Būtina įvesti pavadinimą.",
+    "itemExists": "Šiame aplanke jau yra elementas pavadinimu „${name}“. Pasirinkite kitą pavadinimą.",
+    "titleInUseService": "Jau yra sluoksnis pavadinimu „${name}“. Pasirinkite kitą pavadinimą.",
+    "itemInRecycleBin": "Elementas pavadinimu „${name}“ jau yra šiukšliadėžėje. Pasirinkite kitą pavadinimą.",
+    "serviceNameInvalid": "Paslaugos pavadinimą gali sudaryti tik raidės, skaitmenys arba pabraukimo ženklai ir ne daugiau negu 90 simbolių.",
+    "dataStoreTitleInvalid": "Duomenų saugyklos pavadinimą gali sudaryti tik raidės, skaitmenys arba pabraukimo ženklai ir ne daugiau negu 90 simbolių.",
+    "titleInvalid": "Pavadinimą turi sudaryti ne daugiau negu 250 simbolių ir jame negali būti ženklų < or >.",
+    "titleStartsWithNumber": "Pavadinimas negali prasidėti skaičiumi.",
+    "invalidCharacters": {
+      "single": "Pavadinime negali būti šio simbolio: ${invalidCharacters}.",
+      "multiple": "Varde negali būti nė vieno iš šių ženklų: ${invalidCharacters}.",
+      "unknown": "Varde negali būti nė vieno iš šių ženklų: ${invalidCharacters}."
+    }
+  }
+}

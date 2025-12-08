@@ -1,0 +1,1 @@
+System.register([],function(e){return{execute:function(){e({_widgetLabel:"Obr\xe1zok",imageChooseShape:"Tvar",imageCrop:"Oreza\u0165",previousImage:"Predch\xe1dzaj\xfaci obr\xe1zok",nextImage:"\u010eal\u0161\xed obr\xe1zok",imageViewer:"Zobrazova\u010d sn\xedmok"})}}});

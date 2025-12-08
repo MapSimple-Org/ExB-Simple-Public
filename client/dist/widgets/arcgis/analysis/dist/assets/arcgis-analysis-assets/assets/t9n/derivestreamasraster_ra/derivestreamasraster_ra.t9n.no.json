@@ -1,0 +1,10 @@
+{
+  "forceFlowLabel": "Tving kantceller til å strømme utover",
+  "inputLayersGroupText": "Velg det innlagte overflaterasteret, og eventuelt rasteret for nedsenkningsdata og vektingsrasteret.",
+  "itemProperties": {
+    "description": "Utdata generert ved å kjøre verktøyet Utled vannløp som raster.",
+    "snippet": "Utdata generert fra Utled vannløp som raster"
+  },
+  "outputStreamRasterLabel": "Navn på utdataraster for vannløp",
+  "streamSettingsGroupText": "Spesifiser akkumuleringsterskel, metode for betegnelse av vannløp og hvordan flyten håndteres ved kanten i inndata-overflaterasteret."
+}

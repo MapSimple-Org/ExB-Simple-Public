@@ -1,0 +1,22 @@
+{
+  "general": "Üldine",
+  "parameters": "Parameetrid",
+  "variables": "Muutujad",
+  "name": "Nimi",
+  "namePlaceHolder": "Sisestage nimi",
+  "description": "Kirjeldus",
+  "parameter": "Parameeter",
+  "isPublic": "IsPublic",
+  "isDataset": "IsDataset",
+  "unknownPixelType": "Tundmatu",
+  "outputPixelType": "Väljundpiksli tüüp",
+  "u8PixelType": "8-bitine, allkirjastamata",
+  "s8PixelType": "8-bitine, allkirjastatud",
+  "u16PixelType": "16-bitine, allkirjastamata",
+  "s16PixelType": "16-bitine, allkirjastatud",
+  "u32PixelType": "32-bitine, allkirjastamata",
+  "s32PixelType": "32-bitine, allkirjastatud",
+  "f32PixelType": "32-bitine, ujuk",
+  "f64PixelType": "64-bitine, topelt",
+  "properties": "Omadused"
+}

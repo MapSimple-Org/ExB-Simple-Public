@@ -1,0 +1,12 @@
+{
+  "classField": "Camp de classe",
+  "classesAsRowsLabel": "Classes com a files a la taula de sortida",
+  "inputClassRasterOrFeatures": "Entitats o ràster de classes d'entrada",
+  "inputLayerGroupText": "Trieu la zona d'entrada i la capa de classes per calcular les àrees encreuades entre dos datasets.",
+  "itemProperties": {
+    "description": "Taula de sortida generada en executar l'eina d'anàlisi Àrea tabulada.",
+    "snippet": "Taula de sortida generada a partir d'Àrea tabulada"
+  },
+  "tabulateAreaSettingsGroupLabel": "Configuració de l'àrea tabulada",
+  "tabulateAreaSettingsGroupText": "Trieu com voleu que s'administrin les classes a la taula de sortida. Especifiqueu la mida de la cel·la per calcular. "
+}

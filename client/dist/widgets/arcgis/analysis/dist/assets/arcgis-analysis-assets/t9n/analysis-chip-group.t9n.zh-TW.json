@@ -1,0 +1,7 @@
+{
+  "deselectAll": "取消全選",
+  "ignoreFieldMessage": "由於未選擇統計資料類型，因此將忽略此欄位。",
+  "remove": "移除",
+  "requiredError": "需要此參數。",
+  "selectAll": "全選"
+}

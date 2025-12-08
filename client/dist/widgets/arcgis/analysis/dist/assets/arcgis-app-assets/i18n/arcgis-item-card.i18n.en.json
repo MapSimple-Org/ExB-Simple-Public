@@ -1,0 +1,8 @@
+{
+  "select": "Select item: ${title}",
+  "lastUpdated": "Item updated: ${date}",
+  "viewItemDetails": "View details",
+  "preview": "Preview",
+  "closePreview": "Close preview",
+  "moreOptions": "More options"
+}

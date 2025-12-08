@@ -1,0 +1,7 @@
+{
+  "defaultValue": "Parametrin tyyppiä ei tueta. Käyttöön otetaan oletusarvo. <calcite-link target='_blank' href='${ docLink }'>Lisätietoja</calcite-link>",
+  "requiredMessage": "Tämä parametri on pakollinen.",
+  "unsupportedGPType": "Parametrin tyyppiä ei tueta. <calcite-link target='_blank' href='${ docLink }'>Lisätietoja</calcite-link>",
+  "unsupportedParameterConfig": "Ei-tuettu parametrimääritys. <calcite-link target='_blank' href='${ docLink }'>Lisätietoja</calcite-link>",
+  "unsupportedParameterConfigDefaultValue": "Ei-tuettu parametrimääritys. Käyttöön otetaan oletusarvo. <calcite-link target='_blank' href='${ docLink }'>Lisätietoja</calcite-link>"
+}

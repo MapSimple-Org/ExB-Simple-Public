@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>La herramienta Trazado aguas abajo determina las rutas del flujo aguas abajo desde ubicaciones de entrada especificadas.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputLayer">
+        <div>
+            <p>Las entidades de puntos que se utilizar&aacute;n como ubicaci&oacute;n de inicio para cada l&iacute;nea de trazado aguas abajo.
+            </p>
+            <p class="toolPaneOnly">El recuento de entidades depende de factores adicionales como los criterios de filtrado y el alcance del an&aacute;lisis.
+            </p>
+        </div>
+    </div>
+    <div id="splitDistance">
+        <div>
+            <p>La longitud de los segmentos individuales en los que se dividir&aacute; la l&iacute;nea de trazado.
+            </p>
+        </div>
+    </div>
+    <div id="splitUnits">
+        <div>
+            <p>Las unidades que se usar&aacute;n para el par&aacute;metro  <b>Distancia de divisi&oacute;n</b>.
+            </p>
+        </div>
+    </div>
+    <div id="maxDistance">
+        <div>
+            <p>La longitud total de la l&iacute;nea de trazado que se devolver&aacute;.
+            </p>
+        </div>
+    </div>
+    <div id="maxDistanceUnits">
+        <div>
+            <p>Las unidades que se utilizar&aacute;n para el par&aacute;metro  <b>Distancia m&aacute;xima de trazado aguas abajo</b>.
+            </p>
+        </div>
+    </div>
+    <div id="boundingPolygonLayer">
+        <div>
+            <p>Una capa de entidades poligonales que describe el &aacute;rea a la que se recortar&aacute; la l&iacute;nea del trazado.
+            </p>
+            <p>Este par&aacute;metro invalida el valor del par&aacute;metro  <b>Distancia m&aacute;xima de trazado aguas abajo</b>.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>Nombre de la capa de ruta de trazado aguas abajo que se crear&aacute; y agregar&aacute; al mapa.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>El nombre de la carpeta de  <b>Mi contenido</b> en la que se guardar&aacute; el resultado.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

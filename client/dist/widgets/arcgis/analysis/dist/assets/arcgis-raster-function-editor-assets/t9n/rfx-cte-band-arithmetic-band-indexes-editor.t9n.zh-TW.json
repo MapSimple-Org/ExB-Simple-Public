@@ -1,0 +1,7 @@
+{
+  "example": "範例",
+  "input": "輸入",
+  "output": "輸出",
+  "optional": "可選",
+  "WNDWIHintText": "α：α 值應在 0 和 1 之間；預設值為 0.5"
+}

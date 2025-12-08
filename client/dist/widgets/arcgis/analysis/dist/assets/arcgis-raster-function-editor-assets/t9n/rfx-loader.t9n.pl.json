@@ -1,0 +1,8 @@
+{
+  "loading": "Wczytywanie...",
+  "pleaseWait": "Proszę czekać.",
+  "loadingXMLRFT": "Wczytywanie wybranego szablonu funkcji rastrowej w formacie XML.",
+  "failedToOpen": "Nie można otworzyć.",
+  "readingFailed": "Wczytywanie wybranego szablonu funkcji rastrowej nie powiodło się.",
+  "failedToLoadXML": "Wczytywanie wybranego szablonu funkcji rastrowej w formacie XML zakończyło się niepowodzeniem."
+}

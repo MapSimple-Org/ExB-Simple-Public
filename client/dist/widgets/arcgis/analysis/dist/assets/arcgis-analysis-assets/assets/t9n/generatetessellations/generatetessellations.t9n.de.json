@@ -1,0 +1,27 @@
+{
+  "area": "Fläche",
+  "binResolution": "H3-Abschnittsauflösung",
+  "binSize": "Abschnittsgröße",
+  "binSizeUnit": "Einheit",
+  "binType": "Abschnitts-Shape-Typ",
+  "diamondBins": "Abschnitte mit Rauten",
+  "distance": "Entfernung",
+  "extentLayer": "Ausdehnungs-Layer",
+  "extentOverrideMessage": "Dieser Ausdehnungs-Layer wird anstelle der in den Umgebungen festgelegten Verarbeitungsausdehnung verwendet.",
+  "extentSectionLabel": "Ausdehnungseinstellungen",
+  "extentSectionText": "Geben Sie einen Ausdehnungs-Layer an, der vom Mosaik abgedeckt werden sollte.",
+  "h3hexagonBins": "H3-Hexagonabschnitte",
+  "hexagon": "Sechseck",
+  "intersectStudyArea": "Nur überschneidende Mosaike beibehalten",
+  "itemProperties": {
+    "description": "Durch Ausführung des Analysewerkzeugs \"Mosaike generieren\" generierter Feature-Layer.",
+    "snippet": "Über \"Mosaike generieren\" generierter Feature-Layer"
+  },
+  "outputAreasSectionText": "Einen Namen für das Mosaik-Raster angeben.",
+  "sizeType": "Größenmaß für Abschnitte",
+  "square": "Quadrat",
+  "tessellationSettingsLabel": "Mosaik-Einstellungen",
+  "tessellationSettingsSummaryText": "Das Shape und die Größe der zu generierenden Abschnitte angeben.",
+  "thexagonBins": "Abschnitte mit transversalen Hexagonen",
+  "triangleBins": "Abschnitte mit Dreiecken"
+}

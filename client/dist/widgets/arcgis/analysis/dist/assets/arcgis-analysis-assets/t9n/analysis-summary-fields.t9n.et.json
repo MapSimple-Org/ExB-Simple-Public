@@ -1,0 +1,17 @@
+{
+  "any": "Kõik",
+  "count": "Kogus",
+  "field": "Veerg",
+  "fieldLoadingErrorText": "Välju ei saa laadida.",
+  "first": "Esimene",
+  "isRequired": "See parameeter on nõutav.",
+  "last": "Viimane",
+  "max": "Max",
+  "mean": "Keskmine",
+  "min": "Min",
+  "selectAll": "Vali kõik",
+  "standardDeviation": "Standardhälve",
+  "statistic": "Statistika",
+  "statisticNotSelected": "Iga välja jaoks on nõutav vähemalt üks statistika tüüp.",
+  "sum": "Summa"
+}

@@ -1,0 +1,27 @@
+{
+  "hosted": "託管",
+  "hostedView": "託管，視圖",
+  "hostedPhotos": "託管，相片",
+  "hostedCollection": "託管, 集合",
+  "hostedMultidimensional": "託管, 多維度",
+  "hostedCollectionMultidimensional": "託管, 集合, 多維度",
+  "collectionMultidimensional": "集合, 多維度",
+  "multidimensional": "多維度",
+  "collection": "集合",
+  "photoLocations": "相片",
+  "locatorView": "流覽",
+  "utilityNetwork": "公用事業網路",
+  "Integrated Mesh": "整合式網格",
+  "3D Object": "3D 物件",
+  "Point": "點",
+  "Point Cloud": "點雲端",
+  "Building Scene Layer": "建築物場景圖層",
+  "Voxel Scene Layer": "三維像素場景圖層",
+  "dataStore": {
+    "bigdata": "大數據檔分享",
+    "cloud": "雲端",
+    "cloudStorage": "雲端儲存體",
+    "database": "資料庫",
+    "folder": "資料夾"
+  }
+}

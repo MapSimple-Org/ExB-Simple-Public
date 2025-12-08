@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>Robežu sapludinā&scaron;anas rīks atrod laukumus, kas pārklājas vai kam ir kopīga robeža, un apvieno tos, veidojot vienu laukumu.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputLayer">
+        <div>
+            <p>Slānis, kas satur laukuma elementus, kuri tiks sapludināti.
+            </p>
+            <p class="toolPaneOnly">Elementu skaits ir atkarīgs no papildu faktoriem, piemēram, filtrē&scaron;anas kritērijiem un analīzes apjoma.
+            </p>
+        </div>
+    </div>
+    <div id="useDissolveFields">
+        <div>
+            <p>Norāda, vai rīks sapludināts tikai tos laukumus, kas pārklājas vai kam ir kopīga mala, kā arī ir vienāda lauka vērtība (iespējots), vai sapludinās visus laukumus, kas pārklājas vai kam ir kopīga mala (atspējots).
+            </p>
+        </div>
+    </div>
+    <div id="dissolveFields">
+        <div>
+            <p>Norāda lauku, kas tiks izmantots, lai sapludinātu laikumus, pamatojoties uz atbilsto&scaron;ām vērtībām.
+            </p>
+        </div>
+    </div>
+    <div id="multiPartFeatures">
+        <div>
+            <p>Norāda, vai izvade var ietvert vairākdaļu laukumu elementi, t.i., vairāki laukumi, kas definēti kā viens elements (iespējots), vai tikai atsevi&scaron;ķi elementi (atspējots).
+            </p>
+        </div>
+    </div>
+    <div id="useSummaryFields">
+        <div>
+            <p>Norāda, vai tiks aprēķināta kopsavilkuma statistika par sapludinātajiem laukumiem.
+            </p>
+        </div>
+    </div>
+    <div id="summaryFields">
+        <div>
+            <p>Skaitļu vai datumu lauki no ievades slāņa, kas tiks izmantoti apkopo&scaron;anai un statistika, kas tiks aprēķināta katram laukam.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>Tā slāņa nosaukums, kas tiks izveidots un pievienots kartei.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>Mapes nosaukums sadaļā  <b>Mans saturs</b>, kurā tiks saglabāts rezultāts.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

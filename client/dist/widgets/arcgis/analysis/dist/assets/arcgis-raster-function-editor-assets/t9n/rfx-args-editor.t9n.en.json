@@ -1,0 +1,11 @@
+{
+  "unsupportedDataType": "Unsupported type",
+  "currentlyUnsupported": " A default editor for the ${missingType} is pending but coming soon. Temporary placeholder text box for specifying string based inputs.",
+  "unsupportedOverrideWarning": "An override editor component providing a better UX for working with following parameter(s) is pending but coming soon:",
+  "overrideWidgetMissing": "Override editor component missing!",
+  "uiIncomplete": "Job submission failed. The function is unable to run because some of the required fields are incomplete or missing from the UI.",
+  "deprecatedBannerText": "This raster function template contains one or more deprecated raster function(s) and will be removed in a future release.",
+  "deprecatedBannerTextWithLink": "This raster function template contains one or more deprecated raster function(s) and will be removed in a future release. <calcite-link target='_blank' href='${ docLink }'>Learn more</calcite-link> on how to replace a deprecated raster function.",
+  "unsupportedBannerText": "This raster function template contains one or more unsupported raster function(s).",
+  "unsupportedBannerTextWithLink": "This raster function template contains one or more unsupported raster function(s). <calcite-link target='_blank' href='${ docLink }'>Learn more</calcite-link> on what raster functions are supported."
+}

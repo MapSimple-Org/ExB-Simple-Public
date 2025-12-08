@@ -1,0 +1,137 @@
+{
+  "next": "Nästa",
+  "addField": "Lägg till fält",
+  "selectDataType": "Välj datatyp som ska lagras i fältet",
+  "addGlobalIDNotice": "Fältet fylls i automatiskt för befintliga data i lagret eller tabellen. När det här fältet har lagts till kan det inte redigeras eller tas bort.",
+  "fieldName": "Fältnamn",
+  "displayName": "Visningsnamn",
+  "length": "Längd",
+  "defaultValue": "Standardvärde (valfritt)",
+  "fieldTypes": "Fälttyper",
+  "fieldValueType": "Fältvärdestyp (valfritt)",
+  "fieldDescription": "Fältbeskrivning (valfritt)",
+  "allowNullValues": "Tillåt nullvärden",
+  "valueRequiredError": "Detta värde är obligatoriskt",
+  "fieldAdded": "Fältet har lagts till",
+  "newFieldTypeNotice": "Den här fälttypen kanske inte stöds helt i vissa klienter.",
+  "addingField": "Lägger till fält...",
+  "syncEnabled": "Vissa fälttyper kan inte läggas till eftersom synkronisering är aktiverat på lagret.",
+  "newFeature": "Nytt geoobjekt",
+  "fieldAdditionUnsuccessful": "Tillägg av fält misslyckades",
+  "error": "Fel",
+  "noFieldTypeSelected": "Ingen fälttyp har valts",
+  "nullFieldTypeError": "Du måste välja en fälttyp för att fortsätta.",
+  "fieldNameCharacterNotice": "Fältnamn som är längre än 31 tecken är inte kompatibla med offlineanvändning.",
+  "suggestedHeader": "Föreslagen",
+  "otherHeader": "Annat",
+  "provideDescription": "Ange en kort beskrivning av informationen som fältet ska innehålla",
+  "nullableTooltipInfo": "Den här inställningen är inte redigerbar om ditt lager redan innehåller data.",
+  "tooltipInfo": {
+    "globalIDExists": "Ett GlobalID-fält finns redan för den här tjänsten. Endast ett GlobalID-fält kan finnas i ett lager eller en tabell.",
+    "enterpriseTimestampOffset": "ArcGIS Enterprise har inte stöd för tidsstämpeloffsetfält i driftade geoobjektlager."
+  },
+  "text": {
+    "title": "Text",
+    "description": "Värden som innehåller alfanumeriska tecken eller specialtecken.",
+    "types": {
+      "esriFieldTypeString": {
+        "title": "Sträng",
+        "description": "Lagra en uppsättning alfanumeriska tecken med en angiven längd."
+      }
+    }
+  },
+  "numbers": {
+    "title": "Siffror",
+    "description": "Värden som innehåller numerisk information.",
+    "types": {
+      "esriFieldTypeDouble": {
+        "title": "Dubbel",
+        "description": "Lagra tal med decimaler."
+      },
+      "esriFieldTypeInteger": {
+        "title": "Heltal",
+        "description": "Lagra heltal från ${lowerIntegerRange} till ${upperIntegerRange}."
+      },
+      "esriFieldTypeBigInteger": {
+        "title": "Stort heltal",
+        "description": "Lagra heltal från -(2${startSup}53${endSup}-1) till 2${startSup}53${endSup}-1. Använd den här fälttypen när du använder tal som är utanför heltalsfältintervallet som stöds."
+      }
+    }
+  },
+  "dates": {
+    "title": "Datum",
+    "description": "Värde som innehåller tidsinformation.",
+    "types": {
+      "esriFieldTypeDate": {
+        "title": "Datum",
+        "description": "Lagra värden med datum och tid."
+      },
+      "esriFieldTypeDateOnly": {
+        "title": "Endast datum",
+        "description": "Lagra datumvärden utan tidsvärden."
+      },
+      "esriFieldTypeTimeOnly": {
+        "title": "Endast tid",
+        "description": "Lagra tidsvärden utan datumvärden."
+      },
+      "esriFieldTypeTimestampOffset": {
+        "title": "Tidsstämpeloffset",
+        "description": "Lagra värden som anger datum, tid och offset från koordinerad universell tid (UTC)."
+      }
+    }
+  },
+  "globalIdentifiers": {
+    "title": "Globala identifierare",
+    "description": "Värden som unikt identifierar ett geoobjekt eller en tabellrad.",
+    "types": {
+      "esriFieldTypeGlobalID": {
+        "title": "GlobalID",
+        "description": "Lagra en sträng med 36 tecken som består av bokstäver och siffror som används för att unikt identifiera ett geoobjekt."
+      },
+      "esriFieldTypeGUID": {
+        "title": "GUID",
+        "description": "Lagra en sträng med 36 tecken som består av bokstäver och siffror. Ett globalt unikt ID, eller GUID, används ofta för att hantera relationer mellan geoobjekt."
+      }
+    }
+  },
+  "fieldValueTypes": {
+    "nameOrTitle": "Namn eller titel",
+    "description": "Beskrivning",
+    "typeOrCategory": "Typ eller kategori",
+    "countOrAmount": "Antal eller mängd",
+    "percentageOrRatio": "Procentandel eller proportion",
+    "measurement": "Mätning",
+    "currency": "Valuta",
+    "uniqueIdentifier": "Unikt ID",
+    "phoneNumber": "Telefonnummer",
+    "emailAddress": "E-postadress",
+    "orderedOrRanked": "Numrerad eller rangordnad",
+    "binary": "Binär",
+    "locationOrPlaceName": "Namn på plats",
+    "coordinate": "Koordinat",
+    "dateAndTime": "Datum och tid",
+    "none": "Inga"
+  },
+  "addFieldErrors": {
+    "invalidName": "Ogiltigt namn",
+    "invalidLength": "Ogiltig längd",
+    "outOfRangeValueError": "Det här värdet ligger utanför intervallet.",
+    "invalidValueError": "Det angivna värdet är ogiltigt.",
+    "invalidFieldParameters": "Ogiltiga fältparametrar",
+    "invalidInputsError": "Kontrollera att dina fältparametrar är rätt ifyllda.",
+    "existingFieldNameError": "Fältnamnet kan inte vara samma som ett befintligt fältnamn.",
+    "invalidNameInputSQLError": "Fältnamnet kan inte vara samma som ett SQL-nyckelord.",
+    "invalidNameInputInvalidCharactersError": "Måste börja med en bokstav och får bara innehålla bokstäver, siffror och '_'.",
+    "valueIsRequiredError": "Det här värdet krävs.",
+    "lengthExceeds": "Fältnamnet ska innehålla upp till ${maxFieldNameLength} tecken.",
+    "defaultValueExceeds": "Standardvärdet överskrider den angivna fältlängden.",
+    "savingFailed": "Det gick inte att spara ${layerName}",
+    "readOnlyErrorMessage": "ArcGIS Online har driftproblem och har växlat till skrivskyddat läge. Vissa funktioner kan vara begränsade. Besök sidan ArcGIS Online Hälsoinstrumentpanel för att få de senaste uppdateringarna om när detta kommer att lösas.",
+    "readOnlyErrorMessageEnterprise": "ArcGIS Enterprise har driftproblem och har växlat till skrivskyddat läge. Vissa funktioner kan vara begränsade.",
+    "healthDashboard": "ArcGIS Online Hälsoinstrumentpanel",
+    "genericAddFieldError": {
+      "title": "Fel",
+      "description": "Ett fel inträffade när ditt fält lades till."
+    }
+  }
+}

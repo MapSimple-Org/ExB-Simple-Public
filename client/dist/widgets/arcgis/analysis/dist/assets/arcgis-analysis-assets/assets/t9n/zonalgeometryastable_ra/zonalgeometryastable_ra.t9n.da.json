@@ -1,0 +1,9 @@
+{
+  "inputLayerGroupText": "Vælg inputlaget for at beregne geometrien af zonegrænserne.",
+  "itemProperties": {
+    "description": "Outputtabel genereret ved at køre analyseværktøjet Zonegeometri som tabel",
+    "snippet": "Output-tabel genereret ud fra Zonegeometri som tabel"
+  },
+  "zonalGeometrySettingGroupLabel": "Indstilling for zonegeometri",
+  "zonalGeometrySettingGroupText": "Angiv den cellestørrelse, der skal beregnes."
+}

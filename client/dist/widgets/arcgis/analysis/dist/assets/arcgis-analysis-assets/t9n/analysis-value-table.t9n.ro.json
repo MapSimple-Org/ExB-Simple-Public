@@ -1,0 +1,7 @@
+{
+  "addEntryButtonLabel": "Adăugare",
+  "maxGroupsMessage": "Numărul maxim de intrări este ${maxCount}.",
+  "minGroupsMessage": "Numărul minim de intrări este ${minCount}.",
+  "removeEntryButtonLabel": "Eliminare intrare",
+  "requiredMessage": "Acest parametru este obligatoriu."
+}

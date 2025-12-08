@@ -1,0 +1,7 @@
+{
+  "addEntryButtonLabel": "Tambahkan",
+  "maxGroupsMessage": "Jumlah maksimum entri adalah ${maxCount}.",
+  "minGroupsMessage": "Jumlah minimum entri adalah ${minCount}.",
+  "removeEntryButtonLabel": "Hapus entri",
+  "requiredMessage": "Parameter ini harus diisi."
+}

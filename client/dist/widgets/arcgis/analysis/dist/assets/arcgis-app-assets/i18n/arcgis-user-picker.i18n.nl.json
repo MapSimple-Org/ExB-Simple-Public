@@ -1,0 +1,7 @@
+{
+  "searchMembers": "Leden zoeken",
+  "selectUser": "Gebruiker selecteren",
+  "editSelection": "Bewerk de geselecteerde gebruiker. Momenteel geselecteerd: ${name}",
+  "clear": "Wissen",
+  "members": "Leden"
+}

@@ -1,0 +1,8 @@
+{
+  "showSummaryText": false,
+  "enableSketch": false,
+  "updateOutputName": true,
+  "deleteSaveResultIn": true,
+  "updateAnalysisSummaryFields": true,
+  "updateAnalysisLayerInput": true
+}

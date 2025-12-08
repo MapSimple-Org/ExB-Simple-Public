@@ -1,0 +1,11 @@
+{
+  "modalTitle": "Categorizar elementos",
+  "save": "Guardar",
+  "cancel": "Cancelar",
+  "loadingText": "Cargando...",
+  "assignCategory": "Asignar categoría",
+  "errorMessage": "Se ha producido un error. Inténtelo de nuevo más tarde.",
+  "limited": "Los elementos tienen un límite de 20 categorías. Quite una categoría antes de agregar otra.",
+  "undo": "Deshacer",
+  "redo": "Rehacer"
+}

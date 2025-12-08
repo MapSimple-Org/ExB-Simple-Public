@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>Verkt&oslash;yet Summer n&aelig;rliggende beregner statistikk for geoobjekter innenfor en angitt avstand fra andre geoobjekter. Avstand kan beregnes ved &aring; bruke luftlinjeavstand eller en angitt reisem&aring;te.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="summaryLayer">
+        <div>
+            <p>Laget som skal summeres innenfor en avstand til det n&aelig;rliggende laget.
+            </p>
+            <p class="toolPaneOnly">Antallet geoobjekter avhenger av flere faktorer, blant annet filtreringskriterier og analysens utstrekning.
+            </p>
+        </div>
+    </div>
+    <div id="sumNearbyLayer">
+        <div>
+            <p>Punkt-, linje- eller polygonlaget som skal brukes som startlokasjoner som det opprettes avgrensningsomr&aring;der rundt for &aring; summere n&aelig;rliggende geoobjekter.
+            </p>
+            <p class="toolPaneOnly">Antallet geoobjekter avhenger av flere faktorer, blant annet filtreringskriterier og analysens utstrekning.
+            </p>
+        </div>
+    </div>
+    <div id="nearType">
+        <div>
+            
+            <p class="toolPaneOnly">Metoden som skal brukes til &aring; opprette avgrensningsomr&aring;dene. Metoden kan v&aelig;re en luftlinje eller reisem&aring;te.
+            </p> 
+            <p class="modelBuilderOnly">Metoden som skal brukes til &aring; opprette avgrensningsomr&aring;dene. Avstand i rett linje er for tiden den eneste metoden som st&oslash;ttes for modeller.
+            </p>
+        </div>
+    </div>
+    <div id="distances">
+        <div>
+            <p>Avstanden eller tiden som brukes til &aring; opprette avgrensningsomr&aring;der. Hvis det legges til flere verdier, brukes hver enkelt verdi til &aring; beregne avgrensningsomr&aring;der for alle inndatageoobjektene.
+            </p>
+        </div>
+    </div>
+    <div id="units">
+        <div>
+            <p>Enhetene som brukes til &aring; angi avstand eller tid.
+            </p>
+        </div>
+    </div>
+    <div id="returnBoundaries">
+        <div>
+            <p>Angir om resultatlaget skal v&aelig;re avgrensningsomr&aring;dene (valgt) eller den samme geometrien som n&aelig;rliggende inndatalag (ikke valgt).
+            </p>
+        </div>
+    </div>
+    <div id="sumShape">
+        <div>
+            <p>Angir om den totale st&oslash;rrelsen for geoobjektene som summeres i hvert avgrensningsareale, skal beregnes. For linjer beregnes den totale lengden. For polygoner beregnes det totale arealet.
+            </p>
+        </div>
+    </div>
+    <div id="shapeUnits">
+        <div>
+            <p>Enhetene som brukes til &aring; beregne den totale st&oslash;rrelsen for summerte geobjekter.
+            </p>
+        </div>
+    </div>
+    <div id="summaryFields">
+        <div>
+            <p>Nummer- eller datofeltene fra inndatalaget som skal summeres, og statistikken som skal statistikken som skal beregnes for hvert felt.
+            </p>
+        </div>
+    </div>
+    <div id="groupByField">
+        <div>
+            <p>Feltet fra inndatalaget som skal brukes til &aring; dele dataene inn i distinkte grupper for statistiske beregninger.
+            </p>
+        </div>
+    </div>
+    <div id="minorityMajority">
+        <div>
+            <p>Angir om minoriteten (minst dominerende) og majoriteten (mest dominerende) skal beregnes for grupper innenfor hvert oppsummeringsomr&aring;de.
+            </p>
+        </div>
+    </div>
+    <div id="percentShape">
+        <div>
+            <p>Spesifiserer hvorvidt prosenten av de oppsummerte geoobjektene som tilh&oslash;rer hver gruppe innenfor hver avgrensning, blir beregnet.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>Navnet p&aring; laget som opprettes og legges til kartet.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>Navnet p&aring; mappen i  <b>Mitt innhold</b> der resultatene blir lagret.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

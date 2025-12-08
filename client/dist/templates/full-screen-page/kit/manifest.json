@@ -1,0 +1,16 @@
+{
+  "name": "kit",
+  "type": "template",
+  "templateType": "full-screen-page",
+  "label": "Kit",
+  "description": "Kit is a template that uses 3D Toolbox, Bookmark and Map widgets to display 3D effects for web scenes.",
+  "thumbnail": "thumbnail.png",
+  "order": 17,
+  "tags": [],
+  "categoriesTags": [
+    "Map centric",
+    "Fullscreen"
+  ],
+  "thumbnailWidth": 320,
+  "thumbnailHeight": 214
+}

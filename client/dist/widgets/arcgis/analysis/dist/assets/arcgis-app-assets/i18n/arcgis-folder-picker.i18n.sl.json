@@ -1,0 +1,21 @@
+{
+  "folder": "Mapa",
+  "folders": "Mape",
+  "searchFolders": "Išči v mapah",
+  "enterFolder": "Vnesi ime mape",
+  "createNewFolder": "Ustvari novo mapo",
+  "noFoldersFoundCreate": "Najdena ni bila nobena mapa s tem imenom. Želite ustvariti '${folder}'?",
+  "noFoldersFound": "Najdena ni bila nobena mapa s tem imenom.",
+  "create": "Želite ustvariti '${folder}'?",
+  "loading": "Nalaganje map",
+  "error": {
+    "noName": "Navesti morate ime za svojo mapo.",
+    "folderAlreadyExists": "Mapa '${folder}' že obstaja. Izberite drugo ime.",
+    "title": "Napaka",
+    "invalidCharacters": {
+      "single": "Ime ne sme vsebovati naslednjega znaka: ${invalidCharacters}.",
+      "multiple": "Ime ne sme vsebovati nobenega od naslednjih znakov: ${invalidCharacters}.",
+      "unknown": "Ime ne sme vsebovati nobenega od naslednjih znakov: ${invalidCharacters}."
+    }
+  }
+}

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>Le impostazioni di sovrascrittura per analisi in  Map Viewer. </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="resultType">
+        <div>
+            <p>Specifica il tipo di output che verr&agrave; creato. L'opzione  <b>Crea dati intermedi</b> genera un layer temporaneo che pu&ograve; essere utilizzato come input per un altro strumento ma non pu&ograve; essere salvato o visualizzato nella mappa. L'opzione <b>Crea layer ospitato</b> pubblica un nuovo feature layer ospitato. L'opzione <b>Sovrascrivi layer esistente aggiorna</b> un layer esistente con l'output dello strumento.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>Il nome del layer che sar&agrave; creato e aggiunto alla mappa.
+            </p>
+        </div>
+    </div>
+    <div id="layerExistsAutomaticallyOverwrite">
+        <div>
+            <p>Specifica se l'output dello strumento sovrascriver&agrave; un layer nel contenuto che ha il nome di output specificato. Se il nome layer non &egrave; ancora in uso nell'organizzazione, verr&agrave; creato un nuovo elemento. Per sovrascrivere dovrai essere il proprietario del layer o un amministratore.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>Il nome della cartella in  <b>I miei contenuti</b> in cui saranno salvati i risultati.
+            </p>
+            <p>L'aggiornamento non &egrave; possibile se il layer gi&agrave; esiste.
+            </p>
+        </div>
+    </div>
+    <div id="existingLayerToOverwrite">
+        <div>
+            <p>Il layer in  <b>I miei contenuti</b> che verr&agrave; sovrascritto dal layer di output. I riferimenti spaziali del layer di output e del layer esistente devono coincidere.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

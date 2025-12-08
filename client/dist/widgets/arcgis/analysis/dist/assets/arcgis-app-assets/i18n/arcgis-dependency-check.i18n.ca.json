@@ -1,0 +1,54 @@
+{
+  "updateSharing": "Reviseu l'ús compartit",
+  "moreInfo": "Més informació",
+  "learnMore": "Més informació",
+  "noItemToShare": "No s'ha detectat cap problema d'ús compartit",
+  "loadingInfo": "S'està carregant la informació d'ús compartit...",
+  "updatingSharing": "S'està actualitzant l'ús compartit...",
+  "updateItemsCount": "Elements que teniu permís per actualitzar: {num}",
+  "updateItemsCountText": "És possible que aquests elements dependents no siguin visibles per a altres usuaris perquè es comparteixen d'una altra manera. Feu clic a Actualitza per sincronitzar l'ús compartit d'elements dependents que teniu permís per actualitzar.",
+  "uneditableItemsCount": "Elements que no teniu permís per actualitzar: {num}",
+  "uneditableMessage": "És possible que aquests elements dependents no siguin visibles per a altres usuaris perquè es comparteixen d'una altra manera.",
+  "nonPublicItems": "Elements que no es poden compartir públicament:",
+  "premiumItemsWebMap": "Aquest mapa web inclou contingut prèmium o de subscriptor.",
+  "premiumMessage": "És possible que aquests elements dependents no siguin visibles per a altres usuaris perquè requereixen una subscripció.",
+  "premiumTextMap": "Més informació sobre l'ús compartit de mapes amb contingut prèmium o de subscriptor",
+  "notice": "És possible que els elements següents no siguin visibles per a altres usuaris perquè es comparteixen d'una altra manera o requereixen una subscripció per veure'ls. Feu clic a <b>Actualitza l'ús compartit</b> per sincronitzar l'ús compartit dels elements per als quals teniu permís d'actualització.",
+  "noticeEnterprise": "És possible que els elements següents no siguin visibles per a altres usuaris perquè es comparteixen d'una altra manera. Feu clic a <b>Actualitza l'ús compartit</b> per sincronitzar l'ús compartit dels elements per als quals teniu permís d'actualització.",
+  "canBeUpdated": "Elements que es poden actualitzar: ${count}",
+  "cantBeUpdated": "Elements que no es poden actualitzar: ${count}",
+  "update": "Actualitza l'ús compartit",
+  "cancel": "No actualitzis l'ús compartit",
+  "ok": "D'acord",
+  "goToItem": "Visualitza tots els detalls",
+  "unableToGetItem": "No es poden obtenir els detalls de l'element.",
+  "postShareDialog": {
+    "title": "L'ús compartit d'elements s'ha actualitzat correctament",
+    "description": "Els elements compartits fan referència a altres elements que pot ser que no siguin visibles perquè es comparteixen d'una altra manera. Reviseu l'ús compartit d'aquests elements.",
+    "confirm": "Reviseu l'ús compartit"
+  },
+  "needShare": {
+    "noPermission": {
+      "notice": "No teniu permís per actualitzar l'ús compartit d'aquest element.",
+      "panel": "No teniu permís per actualitzar l'ús compartit d'aquest element. És possible que aquest element no sigui visible per a altres persones perquè es comparteix d'una altra manera."
+    },
+    "pdc": {
+      "notice": "Habiliteu la recopilació de dades públiques abans de compartir aquesta capa públicament.",
+      "panel": "Habiliteu la recopilació de dades públiques abans de compartir aquesta capa públicament. Per obtenir un rendiment i una integritat de dades òptims, us recomanem que deshabiliteu l'edició o que utilitzeu una capa de visualització no editable.",
+      "learnMore": "Obteniu més informació sobre l'habilitació de l'edició en capes públiques."
+    },
+    "premium": {
+      "notice": "El contingut Premium o de subscriptor pot requerir iniciar la sessió per veure'l.",
+      "panel": "El contingut Premium o de subscriptor pot requerir iniciar la sessió per veure'l.",
+      "learnMore": "Més informació sobre l'ús compartit de contingut prèmium o de subscriptor."
+    },
+    "sharingPDCEnabled": {
+      "notice": "Compartir públicament aquesta capa editable permetrà que qualsevol persona l'editi.",
+      "panel": "Compartir públicament aquesta capa editable permetrà que qualsevol persona l'editi. Per obtenir un rendiment i una integritat de dades òptims, us recomanem que deshabiliteu l'edició o que utilitzeu una capa de visualització no editable."
+    },
+    "needsAuthentication": {
+      "notice": "Cal autenticació.",
+      "panel": "Pot ser que altres usuaris no tinguin accés a aquest element perquè inclou serveis d'ubicació que necessiten autenticació a les aplicacions que mostren l'element."
+    }
+  }
+}

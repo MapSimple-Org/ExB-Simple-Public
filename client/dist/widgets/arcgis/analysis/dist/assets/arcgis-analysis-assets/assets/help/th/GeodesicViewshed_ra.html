@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>เครื่องมือพื้นที่การมองเห็นแบบผิวหน้าโค้งจะระบุตำแหน่งบนพื้นผิวแรสเตอร์ที่ตำแหน่งตัวสังเกตการณ์อินพุทสามารถมองเห็นได้
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputElevationSurface">
+        <div>
+            <p>แรสเตอร์ระดับความสูงซึ่งจะทำการคำนวณพื้นที่การมองเห็น
+            </p>
+        </div>
+    </div>
+    <div id="inputObserverFeatures">
+        <div>
+            <p>ตำแหน่งของตัวสังเกตการณ์ที่จะทำการคำนวณพื้นที่การมองเห็น
+            </p>
+            <p class="toolPaneOnly">จำนวนของฟีเจอร์จะขึ้นอยู่กับปัจจัยเพิ่มเติม อาทิ เกณฑ์การกรองและขอบเขตการวิเคราะห์
+            </p>
+        </div>
+    </div>
+    <div id="optimizeFor">
+        <div>
+            <p>ปรับแต่งการคำนวณพื้นที่การมองเห็น โดยอิงตามความเร็วหรือความแม่นยำ
+            </p>
+        </div>
+    </div>
+    <div id="verticalError">
+        <div>
+            <p>ปริมาณความไม่แน่นอนในค่าความสูงของค่า  <b>พื้นผิวความสูงอินพุท</b>
+            </p>
+        </div>
+    </div>
+    <div id="refractivityCoefficient">
+        <div>
+            <p>ค่าสัมประสิทธิ์การหักเหของแสงที่มองเห็นในอากาศ
+            </p>
+        </div>
+    </div>
+    <div id="maximumViewingDistance">
+        <div>
+            <p>ระยะทางการมองสูงสุดสำหรับการคำนวณมุมมอง
+            </p>
+            <p>สามารถกำหนดระยะทางได้โดยใช้ค่าและหน่วยของค่า หรือจากฟิลด์ในค่า  <b>ฟีเจอร์จุดหรือเส้นตัวสังเกตการณ์อินพุท</b>
+            </p>
+        </div>
+    </div>
+    <div id="minimumViewingDistance">
+        <div>
+            <p>ระยะทางการมองขั้นต่ำสำหรับการคำนวณมุมมอง
+            </p>
+            <p>สามารถกำหนดระยะทางได้โดยใช้ค่าและหน่วยของค่า หรือจากฟิลด์ในค่า  <b>ฟีเจอร์จุดหรือเส้นตัวสังเกตการณ์อินพุท</b>
+            </p>
+        </div>
+    </div>
+    <div id="viewingDistancesAre3D">
+        <div>
+            <p>ระบุว่าจะวัดระยะทางการมองสูงสุดและขั้นต่ำในระยะทาง 3D หรือระยะทาง 2D
+            </p>
+            <p>หากไม่เลือก จะถือว่าระยะทางการดูเป็นระยะห่างแบบยูคลิด 2D หากเลือก จะถือว่าระยะทางการมองเป็นระยะทาง 3D
+            </p>
+        </div>
+    </div>
+    <div id="observersElevation">
+        <div>
+            <p>ระยะทางพื้นผิวของตำแหน่งที่ตั้งตัวสังเกตการณ์
+            </p>
+            <p>สามารถกำหนดระดับความสูงได้โดยใช้ค่าและหน่วยของค่า หรือจากฟิลด์ในค่า  <b>ฟีเจอร์จุดหรือเส้นตัวสังเกตการณ์อินพุท</b>
+            </p>
+        </div>
+    </div>
+    <div id="observersHeight">
+        <div>
+            <p>ความสูงเหนือพื้นดินของตัวสังเกตการณ์
+            </p>
+            <p>สามารถกำหนดความสูงได้โดยใช้ค่าและหน่วยของค่า หรือจากฟิลด์ในค่า  <b>ฟีเจอร์จุดหรือเส้นตัวสังเกตการณ์อินพุท</b>
+            </p>
+        </div>
+    </div>
+    <div id="targetHeight">
+        <div>
+            <p>ความสูงของเป้าหมายบนพื้นดิน
+            </p>
+            <p>สามารถกำหนดความสูงได้โดยใช้ค่าและหน่วยของค่า หรือจากฟิลด์ในค่า  <b>ฟีเจอร์จุดหรือเส้นตัวสังเกตการณ์อินพุท</b>
+            </p>
+        </div>
+    </div>
+    <div id="horizontalStartAngle">
+        <div>
+            <p>มุมเริ่มต้นของช่วงการสแกนแนวนอน
+            </p>
+            <p>สามารถกำหนดมุมได้โดยใช้ค่าจาก 0 ถึง 360 หรือจากฟิลด์ในค่า  <b>ฟีเจอร์จุดหรือเส้นตัวสังเกตการณ์อินพุท</b>
+            </p>
+        </div>
+    </div>
+    <div id="horizontalEndAngle">
+        <div>
+            <p>มุมสิ้นสุดของช่วงการสแกนแนวนอน
+            </p>
+            <p>สามารถกำหนดมุมได้โดยใช้ค่าจาก 0 ถึง 360 หรือจากฟิลด์ในค่า  <b>ฟีเจอร์จุดหรือเส้นตัวสังเกตการณ์อินพุท</b>
+            </p>
+        </div>
+    </div>
+    <div id="verticalUpperAngle">
+        <div>
+            <p>ขีดจำกัดมุมแนวตั้งบนของการสแกนที่สัมพันธ์กับระนาบแนวนอน
+            </p>
+            <p>สามารถกำหนดมุมได้โดยใช้ค่าจาก -90 ถึง 90 หรือจากฟิลด์ในค่า  <b>ฟีเจอร์จุดหรือเส้นตัวสังเกตการณ์อินพุท</b>
+            </p>
+        </div>
+    </div>
+    <div id="verticalLowerAngle">
+        <div>
+            <p>ขีดจำกัดมุมแนวตั้งล่างของการสแกนที่สัมพันธ์กับระนาบแนวนอน
+            </p>
+            <p>สามารถกำหนดมุมได้โดยใช้ค่าจาก -90 ถึง 90 หรือจากฟิลด์ในค่า  <b>ฟีเจอร์จุดหรือเส้นตัวสังเกตการณ์อินพุท</b>
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>ชื่อของชั้นข้อมูลแรสเตอร์พื้นที่การมองเห็นที่จะสร้างและเพิ่มลงในแผนที่ ชั้นข้อมูลนี้จะมีพื้นที่ที่มองเห็นได้ ซึ่งตัวสังเกตการณ์มองเห็น และค่าเซลล์ที่แสดงจำนวนตัวสังเกตการณ์ที่สามารถมองเห็นเซลล์ได้
+            </p>
+        </div>
+    </div>
+    <div id="outputAboveGroundLevelRasterName">
+        <div>
+            <p>ชื่อของชั้นข้อมูลแรสเตอร์ระดับเหนือพื้นดิน (AGL) ที่จะสร้างและเพิ่มลงในแผนที่
+            </p>
+        </div>
+    </div>
+    <div id="resultType">
+        <div>
+            <p>ประเภทของเอาท์พุทที่จะสร้างขึ้น เอาท์พุทสามารถเป็นชั้นข้อมูลภาพแบบไทล์หรือชั้นข้อมูลภาพแบบไดนามิก
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>ชื่อของโฟลเดอร์ใน  <b>เนื้อหาของฉัน</b> ที่จะทำการบันทึกผลลัพธ์
+            </p>
+        </div>
+    </div>
+</div>
+</html>

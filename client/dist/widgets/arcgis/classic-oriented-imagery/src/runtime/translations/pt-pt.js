@@ -1,0 +1,1 @@
+System.register([],function(e){return{execute:function(){e({_widgetLabel:"Imagens orientadas cl\xe1ssicas",toggleButtonOn:"Desativar para selecionar elementos no mapa",toggleButtonOff:"Ativar para selecionar um ponto de foco no mapa para visualizar a imagem",viewImage:"Clique aqui para ver o elemento selecionado na imagem",updateButton:"Atualizar",deleteButton:"Eliminar"})}}});

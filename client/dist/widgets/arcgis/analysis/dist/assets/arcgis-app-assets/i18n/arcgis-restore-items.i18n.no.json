@@ -1,0 +1,31 @@
+{
+  "back": "Tilbake",
+  "cancel": "Avbryt",
+  "learnMore": "Mer informasjon",
+  "restore": "Gjenopprett",
+  "restoreTo": "Gjenopprett til",
+  "restoreItem": "Gjenopprett element",
+  "restoreItems": "Gjenopprett elementer",
+  "noticeMessage": "Gjenopprettede elementer deles ikke lenger. Gjennomgå innholdet ditt før du deler det igjen.",
+  "cannotBulkRestoreXItems": "Kan ikke gjenopprette flere enn ${number} på en gang; fjern valget av noen elementer.",
+  "cannotBulkRestoreMultipleOwners": "Kan ikke gjenopprette flere elementer som tilhører ulike eiere på en gang. Velg elementer fra én enkelt eier å gjenopprette på en gang.",
+  "toRestore": {
+    "single": "Element å gjenopprette:",
+    "multiple": "Elementer å gjenopprette:"
+  },
+  "cannotRestore": "Kan ikke gjenopprette:",
+  "dependentItems": {
+    "single": "Dette elementet kan ikke gjenopprettes fordi det er avhengig av <strong style='font-weight: 500'>${parent}</strong>. Gjenopprett dem sammen.",
+    "singleUnknown": "Dette elementet kan ikke gjenopprettes fordi det er avhengig av et annet element i papirkurven. Gjenopprett dem sammen.",
+    "multiple": "Disse elementene kan ikke gjenopprettes fordi de er avhengige av andre elementer i papirkurven. Gjenopprett dem sammen.",
+    "multipleSameSource": "Disse elementene kan ikke gjenopprettes fordi de er avhengige av <strong style='font-weight: 500'>${parent}</strong>. Gjenopprett dem sammen."
+  },
+  "pageRangeWithTotalRecycleBinSize": {
+    "en": "${start} - ${end} av ${total} (${size}) i papirkurven",
+    "other": "${start} - ${end}, totalt: ${total} (${size}) i papirkurven"
+  },
+  "pageRangeWithGreaterThanTotalRecycleBinSize": {
+    "en": "${start} - ${end} av ${total} (>${size}) i papirkurven",
+    "other": "${start} - ${end}, totalt: ${total} (>${size}) i papirkurven"
+  }
+}

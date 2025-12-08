@@ -1,0 +1,41 @@
+{
+    "arrangement": "Panel",
+    "drawMode": "continuous",
+    "drawingTools": [
+        "point",
+        "polyline",
+        "polygon",
+        "rectangle",
+        "circle",
+        "text"
+    ],
+    "layerListMode": "hide",
+    "measurementsInfo": {
+        "enableMeasurements": false,
+        "fontsColor": [0, 0, 0, 1],
+        "fontsSize": 12,
+        "haloColor": [255, 255, 255, 1],
+        "haloSize": 2,
+        "decimalPlaces": {
+            "point": 5,
+            "line": 3,
+            "area": 3
+        }
+    },
+    "measurementsUnitsInfos": [],
+    "drawingElevationMode3D": "on-the-ground",
+    "drawOptions" : {
+        "snappingMode": "Flexible",
+        "tooltipEnabled": true,
+        "defaultTooltipEnabled": false,
+        "segmentLabelEnabled": false,
+        "defaultSegmentLabelEnabled": false,
+        "geometryGuidesEnabled": true,
+        "defaultGeometryGuidesEnabled": false,
+        "featureToFeatureEnabled": true,
+        "defaultFeatureToFeatureEnabled": false,
+        "gridEnabled": true,
+        "defaultGridEnabled": false,
+        "defaultSnappingLayers": []
+    }
+}

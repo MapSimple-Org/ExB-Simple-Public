@@ -1,0 +1,13 @@
+{
+  "addField": "Додати поле",
+  "deselectAll": "Скасувати вибір усіх",
+  "done": "Готово",
+  "noFieldsAvailable": "${layerName} не містить полів, які відповідають вимогам типу даних. Щоб продовжити, виберіть інший шар.",
+  "noInputSelected": {
+    "withLayerInputLabel": "Вхідний шар не вибрано. Виберіть шар ${layerInputLabel}, щоб продовжити.",
+    "withoutLayerInputLabel": "Вхідний шар не вибрано. Щоб продовжити, виберіть вхідний шар."
+  },
+  "noSearchResults": "Не знайдено полів, які збігаються.",
+  "selectAll": "Вибрати всі",
+  "summaryFieldsPopover": "Поля підсумовування"
+}

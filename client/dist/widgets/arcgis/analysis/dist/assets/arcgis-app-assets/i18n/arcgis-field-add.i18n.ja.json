@@ -1,0 +1,137 @@
+{
+  "next": "次へ",
+  "addField": "フィールドの追加",
+  "selectDataType": "フィールドに格納するデータ タイプの選択",
+  "addGlobalIDNotice": "フィールドには、レイヤーまたはテーブルの既存のデータが自動的に入力されます。 追加後は、このフィールドを編集または削除することはできません。",
+  "fieldName": "フィールド名",
+  "displayName": "表示名",
+  "length": "長さ",
+  "defaultValue": "デフォルト値 (オプション)",
+  "fieldTypes": "フィールド タイプ",
+  "fieldValueType": "フィールド値のタイプ (オプション)",
+  "fieldDescription": "フィールドの説明 (オプション)",
+  "allowNullValues": "NULL 値を許可",
+  "valueRequiredError": "この値は必須です",
+  "fieldAdded": "フィールドが正常に追加されました",
+  "newFieldTypeNotice": "このフィールド タイプは、一部のクライアントで完全にはサポートされていない場合があります。",
+  "addingField": "フィールドを追加しています...",
+  "syncEnabled": "レイヤーで同期が有効であるため、一部のフィールド タイプを追加できません。",
+  "newFeature": "新しいフィーチャ",
+  "fieldAdditionUnsuccessful": "フィールドの追加に失敗しました",
+  "error": "エラー",
+  "noFieldTypeSelected": "フィールド タイプが選択されていません",
+  "nullFieldTypeError": "続行するには、フィールド タイプを選択する必要があります。",
+  "fieldNameCharacterNotice": "31 文字を超えるフィールド名は、オフラインでの使用に対応していません。",
+  "suggestedHeader": "推奨",
+  "otherHeader": "その他",
+  "provideDescription": "フィールドに格納される情報の説明を入力",
+  "nullableTooltipInfo": "マップにレイヤーがすでに含まれている場合、この設定を編集できません。",
+  "tooltipInfo": {
+    "globalIDExists": "GlobalID フィールドは、このサービスにすでに存在します。 レイヤーまたはテーブルに存在できる GlobalID フィールドは 1 つのみです。",
+    "enterpriseTimestampOffset": "ArcGIS Enterprise は、ホスト フィーチャ レイヤーの Timestamp Offset フィールドをサポートしていません。"
+  },
+  "text": {
+    "title": "Text",
+    "description": "英数字または特殊文字を含む値。",
+    "types": {
+      "esriFieldTypeString": {
+        "title": "String",
+        "description": "特定の長さの英数字のセットを格納します。"
+      }
+    }
+  },
+  "numbers": {
+    "title": "数値",
+    "description": "数値情報を含む値。",
+    "types": {
+      "esriFieldTypeDouble": {
+        "title": "Double",
+        "description": "小数点以下の桁がある数字を格納します。"
+      },
+      "esriFieldTypeInteger": {
+        "title": "Integer",
+        "description": "${lowerIntegerRange} ～ ${upperIntegerRange} の整数を格納します。"
+      },
+      "esriFieldTypeBigInteger": {
+        "title": "Big Integer",
+        "description": "-(2${startSup}53${endSup}-1) ～ 2${startSup}53${endSup}-1 の整数を格納します。 このフィールド タイプは、サポートされている整数フィールドの範囲外にある数字を使用する場合に使用します。"
+      }
+    }
+  },
+  "dates": {
+    "title": "日付",
+    "description": "時系列情報を含む値。",
+    "types": {
+      "esriFieldTypeDate": {
+        "title": "Date",
+        "description": "日付と時間を含む値を格納します。"
+      },
+      "esriFieldTypeDateOnly": {
+        "title": "Date Only",
+        "description": "時間値を含まない日付値を格納します。"
+      },
+      "esriFieldTypeTimeOnly": {
+        "title": "Time Only",
+        "description": "日付値を含まない時間値を格納します。"
+      },
+      "esriFieldTypeTimestampOffset": {
+        "title": "Timestamp Offset",
+        "description": "日付、時間、協定世界時 (UTC) からのオフセットを示す値を格納します。"
+      }
+    }
+  },
+  "globalIdentifiers": {
+    "title": "Global ID",
+    "description": "フィーチャまたはテーブル行を一意に識別する値。",
+    "types": {
+      "esriFieldTypeGlobalID": {
+        "title": "GlobalID",
+        "description": "フィーチャを一意に識別するのに使用される、文字と数字で構成される 36 文字の文字列を保存します。"
+      },
+      "esriFieldTypeGUID": {
+        "title": "GUID",
+        "description": "文字と数字で構成される 36 文字の文字列を保存します。 グローバル一意識別子 (GUID) は、フィーチャ間のリレーションシップを管理するために頻繁に使用されます。"
+      }
+    }
+  },
+  "fieldValueTypes": {
+    "nameOrTitle": "名前またはタイトル",
+    "description": "説明",
+    "typeOrCategory": "タイプまたはカテゴリー",
+    "countOrAmount": "数または量",
+    "percentageOrRatio": "パーセンテージまたは比率",
+    "measurement": "計測",
+    "currency": "通貨",
+    "uniqueIdentifier": "一意識別子",
+    "phoneNumber": "電話番号",
+    "emailAddress": "電子メール アドレス",
+    "orderedOrRanked": "番号順またはランク順",
+    "binary": "バイナリ",
+    "locationOrPlaceName": "位置または地名",
+    "coordinate": "座標",
+    "dateAndTime": "日時",
+    "none": "なし"
+  },
+  "addFieldErrors": {
+    "invalidName": "名前が無効です",
+    "invalidLength": "長さが無効です",
+    "outOfRangeValueError": "この値は範囲外です。",
+    "invalidValueError": "入力された値が無効です。",
+    "invalidFieldParameters": "無効なフィールド パラメーター",
+    "invalidInputsError": "フィールド パラメーターが正しく入力されていることを確認してください。",
+    "existingFieldNameError": "既存のフィールド名と同じフィールド名を使用することはできません。",
+    "invalidNameInputSQLError": "SQL キーワードと同じフィールド名を使用することはできません。",
+    "invalidNameInputInvalidCharactersError": "文字で始まる必要があり、半角英数字、'_' のみを含めることができます。",
+    "valueIsRequiredError": "この値は必須です。",
+    "lengthExceeds": "フィールド名の長さは、${maxFieldNameLength} 文字以下で指定する必要があります。",
+    "defaultValueExceeds": "デフォルト値が指定されたフィールドの長さを超えています。",
+    "savingFailed": "${layerName} の保存に失敗しました",
+    "readOnlyErrorMessage": "ArcGIS Online で操作上の問題が発生しているため、読み取り専用モードに切り替わりました。 一部の機能は制限される場合があります。 この問題がいつ解決されるかについては、ArcGIS Online Health Dashboard の最新情報をご参照ください。",
+    "readOnlyErrorMessageEnterprise": "ArcGIS Enterprise で操作上の問題が発生しているため、読み取り専用モードに切り替わりました。 一部の機能は制限される場合があります。",
+    "healthDashboard": "ArcGIS Online Health Dashboard",
+    "genericAddFieldError": {
+      "title": "エラー",
+      "description": "フィールドの追加中にエラーが発生しました。"
+    }
+  }
+}

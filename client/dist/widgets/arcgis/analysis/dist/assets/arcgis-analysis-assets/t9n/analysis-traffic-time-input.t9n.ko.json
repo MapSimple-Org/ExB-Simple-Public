@@ -1,0 +1,8 @@
+{
+  "arriveTime": "도착 시간",
+  "modes": {
+    "custom": "사용자 설정 날짜 및 시간",
+    "now": "지금",
+    "unspecified": "시간이 지정되지 않음"
+  }
+}

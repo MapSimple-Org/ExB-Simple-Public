@@ -1,0 +1,11 @@
+{
+  "all": "すべて",
+  "inputLayersGroupText": "入力サーフェス ラスターを選択し、必要に応じてくぼ地データと加重ラスターを選択します。",
+  "itemProperties": {
+    "description": "河川をラスターとして生成ツールを実行して生成される出力。",
+    "snippet": "河川をラスターとして生成により作成される出力"
+  },
+  "outputStreamFeaturesLabel": "出力河川フィーチャ名",
+  "simplifyLabel": "フィーチャの単純化",
+  "streamSettingsGroupText": "累積閾値、河川の指定方法、および出力河川ラインを単純な形状にスムージングするかどうかを指定します。"
+}

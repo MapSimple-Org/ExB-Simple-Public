@@ -1,0 +1,11 @@
+{
+  "all": "Vse",
+  "inputLayersGroupText": "Izberite vhodni površinski raster in po želji podatke o vdolbini in rastru uteži.",
+  "itemProperties": {
+    "description": "Izhod, ustvarjen z izvajanjem orodja za analizo Pridobi pretok kot raster.",
+    "snippet": "Izhod, ustvarjen iz Pridobi pretok kot raster"
+  },
+  "outputStreamFeaturesLabel": "Ime izhodnega pretoka geoobjektov",
+  "simplifyLabel": "Poenostavi geoobjekte",
+  "streamSettingsGroupText": "Navedite prag akumulacije, način označevanja pretoka in ali bodo linije izhodnega pretoka zglajene v enostavne oblike."
+}

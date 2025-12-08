@@ -1,0 +1,12 @@
+{
+  "apiCredentialType": "Тип идентификационни данни: API ключ",
+  "oauthCredentialType": "Тип идентификационни данни: OAuth 2.0",
+  "itemAccess": "Достъп до елемент",
+  "page": "Страница ${page}",
+  "currentPage": "Текуща страница: ${page}",
+  "privileges": "Права",
+  "itemDetails": "Подробна информация за елемент",
+  "settings": "Настройки",
+  "serviceScope": "Обхват на услуга",
+  "summary": "Обобщение"
+}

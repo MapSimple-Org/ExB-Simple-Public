@@ -1,0 +1,206 @@
+{
+  "toolName": "DeriveStreamAsRaster",
+  "version": "0.1.0",
+  "rules": [
+    {
+      "ruleType": "expression",
+      "expression": "(($[Component].inputSurfaceRaster.user.portal NOT undefined) AND ($[Component].inputSurfaceRaster.user.portal.isPortal = true))",
+      "destination": "resultType",
+      "effectParams": {
+        "value": "DYNAMIC_IMAGERY_LAYER",
+        "visible": false
+      }
+    },
+    {
+      "ruleType": "expression",
+      "expression": "(('portal:publisher:publishDynamicImagery' IN $[Component].inputSurfaceRaster.user.privileges) AND ('portal:publisher:publishTiledImagery' NOT IN $[Component].inputSurfaceRaster.user.privileges))",
+      "destination": "resultType",
+      "effectParams": {
+        "choiceList": ["DYNAMIC_IMAGERY_LAYER"],
+        "choiceListIcons": {
+          "DYNAMIC_IMAGERY_LAYER": "image-layer"
+        },
+        "choiceListLabels": {
+          "DYNAMIC_IMAGERY_LAYER": "$dynamicImageryLayer"
+        },
+        "value": "DYNAMIC_IMAGERY_LAYER"
+      }
+    },
+    {
+      "ruleType": "expression",
+      "expression": "(('portal:publisher:publishDynamicImagery' NOT IN $[Component].inputSurfaceRaster.user.privileges) AND ('portal:publisher:publishTiledImagery' IN $[Component].inputSurfaceRaster.user.privileges))",
+      "destination": "resultType",
+      "effectParams": {
+        "choiceListIcons": {
+          "TILED_IMAGERY_LAYER": "tiled-imagery-layer"
+        },
+        "choiceListLabels": {
+          "TILED_IMAGERY_LAYER": "$tiledImageryLayer"
+        },
+        "value": "TILED_IMAGERY_LAYER"
+      }
+    }
+  ],
+  "environmentSettings": {
+    "raster": ["snapRaster", "cellSize", "mask"]
+  },
+  "UIparameters": [
+    {
+      "label": "$inputLayersGroupLabel",
+      "componentName": "analysis-block",
+      "summaryText": "$inputLayersGroupText",
+      "UIparameters": [
+        {
+          "name": "inputSurfaceRaster",
+          "label": "$inputSurfaceRasterLabel",
+          "componentName": "analysis-layer-input",
+          "layerFilterType": ["imagery"],
+          "required": true
+        },
+        {
+          "label": "$optionalLayersSectionLabel",
+          "componentName": "analysis-section",
+          "UIparameters": [
+            {
+              "name": "inputDepressionsData",
+              "label": "$inputDepressionsDataLabel",
+              "componentName": "analysis-layer-input",
+              "layerFilterType": ["feature", "imagery"],
+              "required": false,
+              "enableSketch": true
+            },
+            {
+              "name": "inputWeightRaster",
+              "label": "$inputWeightRasterLabel",
+              "componentName": "analysis-layer-input",
+              "layerFilterType": ["imagery"],
+              "required": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "label": "$streamSettingsGroupLabel",
+      "componentName": "analysis-block",
+      "summaryText": "$streamSettingsGroupText",
+      "UIparameters": [
+        {
+          "name": "accumulationThreshold",
+          "label": "$accumulationThresholdLabel",
+          "componentName": "analysis-gp-composite",
+          "initialDataType": "GPArealUnit",
+          "UIparameterInfos": [
+            {
+              "name": "accumulationThresholdValue",
+              "dataType": "GPArealUnit",
+              "choiceListLabels": {
+                "UNKNOWN": "$unknown",
+                "SQUAREKILOMETERS": "$squareKilometers",
+                "HECTARES": "$hectares",
+                "ARES": "$ares",
+                "SQUAREMETERS": "$squareMeters",
+                "SQUAREDECIMETERS": "$squareDecimeters",
+                "SQUARECENTIMETERS": "$squareCentimeters",
+                "SQUAREMILLIMETERS": "$squareMillimeters",
+                "SQUAREMILES": "$squareMilesInt",
+                "ACRES": "$acresInt",
+                "SQUAREYARDS": "$squareYardsInt",
+                "SQUAREFEET": "$squareFeetInt",
+                "SQUAREINCHES": "$squareInchesInt",
+                "SQUAREMILESUS": "$squareMilesUS",
+                "ACRESUS": "$acresUS",
+                "SQUAREYARDSUS": "$squareYardsUS",
+                "SQUAREFEETUS": "$squareFeetUS",
+                "SQUAREINCHESUS": "$squareInchesUS"
+              },
+              "unitChoiceList": [
+                "UNKNOWN",
+                "SQUAREKILOMETERS",
+                "HECTARES",
+                "ARES",
+                "SQUAREMETERS",
+                "SQUAREDECIMETERS",
+                "SQUARECENTIMETERS",
+                "SQUAREMILLIMETERS",
+                "SQUAREMILES",
+                "ACRES",
+                "SQUAREYARDS",
+                "SQUAREFEET",
+                "SQUAREINCHES",
+                "SQUAREMILESUS",
+                "ACRESUS",
+                "SQUAREYARDSUS",
+                "SQUAREFEETUS",
+                "SQUAREINCHESUS"
+              ],
+              "required": false,
+              "minimum": 0,
+              "excludeMinValue": true,
+              "placeholderText": "$accumulationThresholdText"
+            }
+          ]
+        },
+        {
+          "name": "streamDesignationMethod",
+          "label": "$streamDesignationMethodLabel",
+          "componentName": "analysis-string-input",
+          "selectionMode": "single",
+          "required": false,
+          "defaultValue": "CONSTANT",
+          "choiceList": ["CONSTANT", "UNIQUE", "STRAHLER", "SHREVE", "HACK"],
+          "choiceListLabels": {
+            "CONSTANT": "$constant",
+            "UNIQUE": "$unique",
+            "STRAHLER": "$strahler",
+            "SHREVE": "$shreve",
+            "HACK": "$hack"
+          }
+        },
+        {
+          "name": "forceFlow",
+          "label": "$forceFlowLabel",
+          "componentName": "analysis-boolean-input",
+          "required": false,
+          "displayStyle": "checkbox",
+          "labelLayout": "inline-space-between",
+          "visible": true
+        }
+      ]
+    },
+    {
+      "label": "$resultLayerGroupLabel",
+      "componentName": "analysis-block",
+      "summaryText": "$resultLayerGroupText",
+      "UIparameters": [
+        {
+          "name": "outputStreamRasterName",
+          "label": "$outputStreamRasterLabel",
+          "placeholderText": "$outputNamePlaceholderText",
+          "componentName": "analysis-string-input",
+          "required": true
+        },
+        {
+          "name": "resultType",
+          "label": "$resultType",
+          "componentName": "analysis-string-input",
+          "choiceList": ["TILED_IMAGERY_LAYER", "DYNAMIC_IMAGERY_LAYER"],
+          "choiceListIcons": {
+            "TILED_IMAGERY_LAYER": "tiled-imagery-layer",
+            "DYNAMIC_IMAGERY_LAYER": "image-layer"
+          },
+          "choiceListLabels": {
+            "TILED_IMAGERY_LAYER": "$tiledImageryLayer",
+            "DYNAMIC_IMAGERY_LAYER": "$dynamicImageryLayer"
+          },
+          "value": "TILED_IMAGERY_LAYER"
+        },
+        {
+          "name": "saveResultIn",
+          "label": "$saveResultIn",
+          "componentName": "analysis-folder-input"
+        }
+      ]
+    }
+  ]
+}

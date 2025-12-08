@@ -1,0 +1,16 @@
+{
+  "updateData": "Actualizare date",
+  "cancel": "Anulare",
+  "editStyle": "Înlocuiți fișierul de stil al stratului tematic cu o versiune actualizată de pe computer.",
+  "updatePackages": "Înlocuiți ${type} cu o versiune actualizată de pe computer. Fișierul actualizat trebuie să aibă același nume ca ${hostedLayerName}.",
+  "uploadStaticFiles": "Fișierul încărcat trebuie să aibă aceeași denumire ca și fișierul original ${fileName}",
+  "sameFileNameDescription": "Fișierul care este actualizat trebuie să aibă același nume și nume de câmpuri ca și fișierul original ${fileName}",
+  "updating": "Se actualizează...",
+  "error": "Eroare",
+  "errors": {
+    "sameFileName": "Pentru a actualiza acest element, trebuie să încărcați un fișier numit ${fileName}.",
+    "invalidStyleFileExtension": "Extensie fișier nevalidă. Stilul încărcat trebuie să aibă extensia de fișier .json.",
+    "errorWhileUpload": "S-a produs o eroare în timpul procesului de încărcare a elementului.",
+    "errorUpdate": "S-a produs o eroare la suprascrierea elementului."
+  }
+}

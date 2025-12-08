@@ -1,0 +1,8 @@
+{
+  "select": "Item selecteren: ${title}",
+  "lastUpdated": "Item bijgewerkt: ${date}",
+  "viewItemDetails": "Details weergeven",
+  "preview": "Voorbeeld",
+  "closePreview": "Voorbeeld sluiten",
+  "moreOptions": "Meer opties"
+}

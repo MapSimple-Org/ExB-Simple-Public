@@ -1,0 +1,13 @@
+{
+  "addField": "필드 추가",
+  "deselectAll": "모두 선택 취소",
+  "done": "완료",
+  "noFieldsAvailable": "${layerName}에 데이터 유형 요구 사항을 충족하는 필드가 없습니다. 계속하려면 다른 레이어를 선택하세요.",
+  "noInputSelected": {
+    "withLayerInputLabel": "선택한 입력 레이어가 없습니다. 계속하려면 ${layerInputLabel}의 레이어를 선택하세요.",
+    "withoutLayerInputLabel": "선택한 입력 레이어가 없습니다. 계속하려면 입력 레이어를 선택하세요."
+  },
+  "noSearchResults": "일치하는 필드가 없습니다.",
+  "selectAll": "모두 선택",
+  "summaryFieldsPopover": "요약 필드"
+}

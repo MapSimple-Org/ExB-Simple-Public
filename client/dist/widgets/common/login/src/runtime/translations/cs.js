@@ -1,0 +1,1 @@
+System.register([],function(e){return{execute:function(){e({_widgetLabel:"P\u0159ihl\xe1sit",switchToLogin:"P\u0159epnout na p\u0159ed p\u0159ihl\xe1\u0161en\xedm",switchToLogout:"P\u0159epnout na po p\u0159ihl\xe1\u0161en\xed",toggleSignInPreview:"P\u0159epnout n\xe1hled p\u0159ihl\xe1\u0161en\xed",restrictedResources:"Omezen\xe9 zdroje"})}}});

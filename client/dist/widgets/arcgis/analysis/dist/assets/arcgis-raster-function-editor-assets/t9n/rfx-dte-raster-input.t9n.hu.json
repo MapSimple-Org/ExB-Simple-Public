@@ -1,0 +1,14 @@
+{
+  "outputRaster": "Kimeneti raszter",
+  "rfxVariable": "RaszterFunkcióVáltozó",
+  "selectLayer": "Réteg kiválasztása",
+  "allowScalar": "Válasszon réteget, vagy pedig adja meg a kívánt állandót.",
+  "browseLayer": "Rétegek tallózása",
+  "loading": "Betöltés...",
+  "layerMissing": "A térkép legalább egy távérzékeltfelvétel-rétege nem szerepel itt, mert az Elemzés engedélyezése szolgáltatástulajdonság nincs engedélyezve.",
+  "layerFailedToLoad": "A réteg betöltése nem sikerült.",
+  "learnMore": "További információ",
+  "errorCodes": {
+    "required": "Ez a paraméter kötelező."
+  }
+}

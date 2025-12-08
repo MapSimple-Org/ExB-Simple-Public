@@ -1,0 +1,9 @@
+{
+  "inputLayerGroupText": "Alegeți stratul tematic de intrare pentru a calcula geometria limitelor zonei.",
+  "itemProperties": {
+    "description": "Tabelul rezultat generat din executarea instrumentului de analiză Geometrie zonală sub formă de tabel.",
+    "snippet": "Tabelul rezultat generat din geometria zonală sub formă de tabel"
+  },
+  "zonalGeometrySettingGroupLabel": "Setarea geometriei zonale",
+  "zonalGeometrySettingGroupText": "Specificați dimensiunea celulei de calculat."
+}

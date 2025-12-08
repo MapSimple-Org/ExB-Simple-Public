@@ -1,0 +1,26 @@
+{
+  "CCIAnalysisSettingGroupLabel": "Indexinställningar",
+  "CCIAnalysisSettingGroupText": "Ange hur index ska beräknas.",
+  "geomeanPercentileLabel": "Sammansatta rangordningar (geometriskt medelvärde för percentiler)",
+  "geomeanRawLabel": "Sammansatta råvärden (geometriskt medelvärde för råvärden)",
+  "geomeanScaledLabel": "Sammansatta skalade värden (geometriskt medelvärde för skalade värden)",
+  "indexMethodLabel": "Metod för att skala och kombinera variabler",
+  "inputFeaturesOrTableLabel": "Indatageoobjekt eller tabell",
+  "inputLayerGroupText": "Välj geoobjekt eller tabell och variabler som indexet ska skapas med.",
+  "inputVariablesLabel": "Indatavariabler",
+  "itemProperties": {
+    "description": "Geoobjektlager som genererats genom körning av analysverktyget Beräkna sammansatt index.",
+    "snippet": "Geoobjektlager som genererats av Beräkna sammansatt index"
+  },
+  "meanPercentileLabel": "Kombinera rangordningar (medelvärde för percentiler)",
+  "meanRawLabel": "Kombinera råvärden (medelvärde för råvärden)",
+  "meanScaledLabel": "Kombinera skalade värden (medelvärde för skalade värden)",
+  "outputIndexMaxLabel": "Maximum",
+  "outputIndexMinLabel": "Minimum",
+  "outputIndexMinMaxLabel": "Index för minimi- och maximivärden",
+  "outputIndexReverseLabel": "Omvända indexvärden",
+  "reverseVariableLabel": "Omvänd riktning",
+  "sumFlagsPercentileLabel": "Markera yttervärden (antal värden över den 90:e percentilen)",
+  "toolName": "Beräkna sammansatt index",
+  "weight": "Vikt"
+}

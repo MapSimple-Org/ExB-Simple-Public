@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>Įrankis Sukurti kelionės plotus sukuria plotus, kuriuos galima pasiekti per tam tikrą kelionės laiką arba atstumą.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputLayer">
+        <div>
+            <p>Ta&scaron;kų elementai, pagal kuriuos bus apskaičiuojami plotai.
+            </p>
+            <p class="toolPaneOnly">Elementų skaičius priklauso nuo papildomų veiksnių, pavyzdžiui, filtravimo kriterijų ir analizės apimties.
+            </p>
+        </div>
+    </div>
+    <div id="pointBarrierLayer">
+        <div>
+            <p>Vienas ar daugiau ta&scaron;kinių elementų, kurie veikia kaip laikini apribojimai (kliūtys) važiuojant pagrindinėmis gatvėmis. Galima judėti gatve, tačiau ne per &scaron;ią kliūtį.
+            </p>
+        </div>
+    </div>
+    <div id="lineBarrierLayer">
+        <div>
+            <p>Vienas ar daugiau linijos elementų, kurie veikia kaip laikini apribojimai (kliūtys) važiuojant pagrindinėmis gatvėmis. Linijiniai užtvarai draudžia važiuoti bet kurioje vietoje, kur užtvarai kerta gatves.
+            </p>
+        </div>
+    </div>
+    <div id="polygonBarrierLayer">
+        <div>
+            <p>Vienas ar daugiau poligono elementų, kurie veikia kaip laikini apribojimai (kliūtys) važiuojant pagrindinėmis gatvėmis. Poligonų užtvaros draudžia važiuoti visur, kur poligonai kerta gatves.
+            </p>
+        </div>
+    </div>
+    <div id="travelMode">
+        <div>
+            <p>Kelionės režimas, kuris bus naudojamas kelionės plotams kurti. Kelionės režimas gali būti nustatomas pagal atstumą arba laiką.
+            </p>
+        </div>
+    </div>
+    <div id="breakValues">
+        <div>
+            <p>Kiekvieno įvesties ta&scaron;ko kelionės atstumas arba laiko riba. Jei pridedamos kelios vertės, kiekviena vertė bus naudojama apskaičiuojant visų įvesties ta&scaron;kų kelionių plotus.
+            </p>
+        </div>
+    </div>
+    <div id="breakUnits">
+        <div>
+            <p>Vienetai, kurie bus naudojami kelionės atstumui arba laikui nurodyti.  <b>Ribinė</b> vertė interpretuojama &scaron;iais vienetais.
+            </p>
+        </div>
+    </div>
+    <div id="travelDirection">
+        <div>
+            <p>Nurodoma, ar kelionės plotai bus sukurti kelionei nuo įvesties ta&scaron;kų, ar link įvesties ta&scaron;kų.
+            </p>
+        </div>
+    </div>
+    <div id="timeOfDay">
+        <div>
+            <p>Data ir laikas, kada keliautojas i&scaron;vyksta i&scaron; įvesties vietų arba atvyksta į jas.
+            </p>
+        </div>
+    </div>
+    <div id="overlapPolicy">
+        <div>
+            <p>Nurodoma, kas vyksta su skirtingų įvesčių plotų ribomis, kai jos pasiekia viena kitą.
+            </p>
+        </div>
+    </div>
+    <div id="showHoles">
+        <div>
+            <p>Nurodoma, ar kiekvienas i&scaron;vesties plotas bus vienas i&scaron;tisinis poligonas (nepažymėta), ar į jį bus įtrauktos duobės gatvėse, kurios nepasiekiamos, bet yra visi&scaron;kai apsuptos pasiekiamų gatvių (pažymėta).
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>Sluoksnio, kuris bus sukurtas ir pridėtas į žemėlapį, pavadinimas.
+            </p>
+        </div>
+    </div>
+    <div id="includeReachableStreets">
+        <div>
+            <p>Nurodo, ar gatvės, kurios naudojamos kelionių plotams kurti, bus įtrauktos į i&scaron;vesties sluoksnį.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            
+            <p>Puslapyje  <b>Mano turinys</b> esančio aplanko, kur bus įra&scaron;yti rezultatai, pavadinimas.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

@@ -1,0 +1,14 @@
+{
+  "outputRaster": "TulosaineistonRasteri",
+  "rfxVariable": "RasterFunctionVariable",
+  "selectLayer": "Valitse karttataso",
+  "allowScalar": "Valitse karttataso tai anna vakio",
+  "browseLayer": "Selaa karttatasoja",
+  "loading": "Ladataan...",
+  "layerMissing": "Vähintään yhtä kuva-aineiston karttatasoa ei ole lueteltu tässä, koska Salli analyysipalvelu -ominaisuus ei ole käytössä.",
+  "layerFailedToLoad": "Karttatason lataus epäonnistui.",
+  "learnMore": "Lisätietoja",
+  "errorCodes": {
+    "required": "Tämä parametri on pakollinen."
+  }
+}

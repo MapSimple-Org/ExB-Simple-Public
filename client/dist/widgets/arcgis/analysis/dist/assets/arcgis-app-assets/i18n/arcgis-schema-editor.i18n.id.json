@@ -1,0 +1,15 @@
+{
+  "expandAll": "Bentangkan semua",
+  "collapseAll": "Tutup semua",
+  "categoryItem": {
+    "expand": "Bentang",
+    "collapse": "Tutup",
+    "editCategory": "Edit kategori",
+    "deleteCategory": "Hapus kategori",
+    "addSubcategory": "Tambahkan subkategori",
+    "addCategory": "Tambah kategori",
+    "save": "Simpan",
+    "cancel": "Batalkan",
+    "missingTitleMessage": "Judul kategori harus diisi."
+  }
+}

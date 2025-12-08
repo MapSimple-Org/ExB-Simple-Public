@@ -1,0 +1,6 @@
+{
+  "dialogTitle": "Rasterfunktsioonide redaktor",
+  "defaultTemplateName": "Rasterfunktsiooni mall",
+  "readOnlyModeTitle": "Kirjutuskaitstud",
+  "readOnlyModeMessage": "Rastrifunktsiooni malli üksus on kirjutuskaitsega. Muudatusi ei saa salvestada."
+}

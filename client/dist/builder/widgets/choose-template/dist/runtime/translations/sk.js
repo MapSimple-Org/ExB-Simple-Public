@@ -1,0 +1,1 @@
+System.register([],function(e){return{execute:function(){e({_widgetLabel:"Vytvori\u0165 nov\xfd z\xe1\u017eitok",createNewApp:"Vytvori\u0165 nov\xfa aplik\xe1ciu",largeDevices:"Zariadenia s ve\u013ekou obrazovkou",mediumDevices:"Zariadenia so stredne ve\u013ekou obrazovkou",smallDevices:"Zariadenia s malou obrazovkou"})}}});

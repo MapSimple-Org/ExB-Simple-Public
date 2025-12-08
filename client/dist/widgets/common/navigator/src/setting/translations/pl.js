@@ -1,0 +1,1 @@
+System.register([],function(a){return{execute:function(){a({_widgetLabel:"Nawigacja po widokach",tabStyle:"Styl karty",navBtnStyle:"Styl przycisku nawigacyjnego",stepTips:"Dzia\u0142a tylko wtedy, gdy dla odpowiedniego wid\u017cetu Sekcja zosta\u0142a ustawiona animacja przej\u015bcia.",paginationStyle:"Styl paginacji",navArrowColor:"Kolor strza\u0142ki nawigacji"})}}});

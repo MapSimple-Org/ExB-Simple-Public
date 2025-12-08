@@ -1,0 +1,22 @@
+{
+  "deleteFolder": "ลบโฟลเดอร์",
+  "delete": "ลบ",
+  "permanentlyDelete": "ลบถาวร",
+  "back": "กลับ",
+  "cancel": "ยกเลิก",
+  "success": "ลบโฟลเดอร์ '${title}' เรียบร้อยแล้ว",
+  "deleteProtectedItemsInFolder": "ไม่สามารถลบโฟลเดอร์ได้ เนื่องจากมีบางไอเท็มถูกป้องกันการลบไว้ หรือมีไอเท็มที่ขึ้นต่อกัน",
+  "message": {
+    "empty": "แน่ใจหรือว่าคุณต้องการลบโฟลเดอร์ <strong style='font-weight: 500'>${title}</strong>",
+    "recycleAll": "แน่ใจหรือว่าคุณต้องการลบโฟลเดอร์ <strong style='font-weight: 500'>${title}</strong> และส่งเนื้อหาไปยังถังรีไซเคิล",
+    "mustBeEmpty": "โฟลเดอร์ <strong style='font-weight: 500'>${title}</strong> ต้องว่างเปล่า จึงจะทำการลบได้",
+    "aFewCannotBeDeleted": "มีสองถึงสามรายการที่ไม่สามารถลบได้ คุณต้องการดำเนินการลบรายการที่เหลือหรือไม่",
+    "canBeEmptied": "โฟลเดอร์ <strong style='font-weight: 500'>${title}</strong> ต้องว่างเปล่า จึงจะทำการลบได้ คุณต้องการดำเนินการลบรายการเหล่านี้หรือไม่",
+    "cannotBeDeleted": "ไม่สามารถลบโฟลเดอร์ <strong style='font-weight: 500'>${title}</strong> ได้ เนื่องจากไม่สามารถลบรายการในโฟลเดอร์"
+  },
+  "disabledMessage": {
+    "single": "มี <span style='color:red'>1 รายการ</span> ในโฟลเดอร์นี้ <b>${label}</b><br/></br/>แน่ใจหรือว่าคุณต้องการลบโฟลเดอร์นี้ และรายการที่อยู่ในโฟลเดอร์",
+    "multiple": "มี <span style='color:red'>${number} รายการ</span> ในโฟลเดอร์นี้ <b>${label}</b><br/></br/>แน่ใจหรือว่าคุณต้องการลบโฟลเดอร์นี้และรายการทั้งหมด",
+    "unknown": "แน่ใจหรือว่าคุณต้องการลบโฟลเดอร์นี้ <b>${label}</b>"
+  }
+}

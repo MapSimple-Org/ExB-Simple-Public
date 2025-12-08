@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>Instrumentul &Icirc;mbogățire strat tematic &icirc;mbunătățește obiectele spațiale de intrare cu date demografice și de peisaj.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputLayer">
+        <div>
+            <p>Obiectele spațiale punctuale, liniare sau poligonale care vor fi &icirc;mbogățite cu date suplimentare.
+            </p>
+            <p class="toolPaneOnly">Numărul de obiecte spațiale depinde de factori suplimentari, cum ar fi criteriile de filtrare și extinderea analizei.
+            </p>
+        </div>
+    </div>
+    <div id="analysisVariables">
+        <div>
+            <p>Variabilele care vor fi adăugate ca atribute la obiectele spațiale de intrare.
+            </p>
+        </div>
+    </div>
+    <div id="bufferType">
+        <div>
+            
+            <p class="toolPaneOnly">Metoda care va fi utilizată pentru a crea zonele de legătură din jurul punctului de intrare sau obiectelor spațiale de linie. Metoda poate fi o distanță &icirc;n linie dreaptă sau un mod de deplasare. &Icirc;ntreaga zonă din jurul fiecărui obiect spațial va fi &icirc;mbogățită.
+            </p> 
+            <p class="modelBuilderOnly">Metoda care va fi utilizată pentru a crea zonele de legătură din jurul punctului de intrare sau obiectelor spațiale de linie. Momentan, distanța &icirc;n linie dreaptă este singura metodă acceptată pentru modele. &Icirc;ntreaga zonă din jurul fiecărui obiect spațial va fi &icirc;mbogățită.
+            </p>
+        </div>
+    </div>
+    <div id="distance">
+        <div>
+            <p>O valoare numerică ce specifică distanța sau timpul &icirc;n care zona &icirc;mbunătățită se va extinde &icirc;n jurul fiecărui obiect spațial de intrare.
+            </p>
+        </div>
+    </div>
+    <div id="units">
+        <div>
+            <p>Unitățile care vor fi utilizate pentru a specifica distanța sau timpul pe care zona &icirc;mbogățită le va extinde &icirc;n jurul fiecărui obiect spațial de intrare.
+            </p>
+        </div>
+    </div>
+    <div id="returnBoundaries">
+        <div>
+            <p>Specifică dacă stratul tematic de ieșire va conține obiecte spațiale poligonale definite de setările  <b>Zone de &icirc;mbogățire</b> (selectată) sau obiectele spațiale de intrare (neselectată).
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>Numele stratului tematic care va fi creat și adăugat pe hartă.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>Numele folderului din  <b>Resursele mele</b> &icirc;n care va fi salvat rezultatul.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

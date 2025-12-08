@@ -1,0 +1,27 @@
+{
+  "hosted": "مستضاف",
+  "hostedView": "مستضاف، عرض",
+  "hostedPhotos": "مستضاف، صور",
+  "hostedCollection": "مستضاف، مجموعة",
+  "hostedMultidimensional": "مستضاف، متعدد الأبعاد",
+  "hostedCollectionMultidimensional": "مستضاف، مجموعة، متعدد الأبعاد",
+  "collectionMultidimensional": "مجموعة، متعددة الأبعاد",
+  "multidimensional": "متعددة الأبعاد",
+  "collection": "مجموعة",
+  "photoLocations": "صور",
+  "locatorView": "عرض",
+  "utilityNetwork": "شبكة المرافق",
+  "Integrated Mesh": "شبكة متكاملة",
+  "3D Object": "كائن ثلاثي الأبعاد",
+  "Point": "نقطة",
+  "Point Cloud": "سحابة نقطية",
+  "Building Scene Layer": "إنشاء طبقة مشهد",
+  "Voxel Scene Layer": "طبقة مشهد فوكسل",
+  "dataStore": {
+    "bigdata": "مشاركة ملف البيانات الضخمة",
+    "cloud": "سحابة",
+    "cloudStorage": "التخزين السحابي",
+    "database": "قاعدة البيانات",
+    "folder": "مجلد"
+  }
+}

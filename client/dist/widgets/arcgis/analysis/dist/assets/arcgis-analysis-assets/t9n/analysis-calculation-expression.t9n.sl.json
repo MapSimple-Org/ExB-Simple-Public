@@ -1,0 +1,10 @@
+{
+  "cannotAssignValueToTargetField": "Izračunana vrednost in tip polja se ne ujemata",
+  "createExpression": "Ustvari izraz",
+  "deleteExpression": "Izbriši izraz",
+  "editExpression": "Uredi izraz",
+  "expression": "Izraz",
+  "isRequired": "Ta parameter je obvezen.",
+  "layerLoadError": "Sloja ni bilo mogoče naložiti.",
+  "validationFailedInvalidSQL": "Preverjanje veljavnosti izraza ni uspelo. Izraz ni veljaven SQL."
+}

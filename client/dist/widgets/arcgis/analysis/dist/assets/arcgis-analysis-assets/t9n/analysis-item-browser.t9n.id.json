@@ -1,0 +1,9 @@
+{
+  "addToMap": "Konfirmasi dan tambahkan ke peta",
+  "cancel": "Batalkan",
+  "confirm": "Konfirmasi",
+  "header": "Pilih item",
+  "select": "Pilih",
+  "unsupportedLayer": "Parameter ini tidak mendukung layer berikut ini: ${layerName}",
+  "viewDetails": "Lihat detail"
+}

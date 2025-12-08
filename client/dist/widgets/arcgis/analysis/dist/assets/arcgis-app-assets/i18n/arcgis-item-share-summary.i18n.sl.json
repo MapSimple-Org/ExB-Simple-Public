@@ -1,0 +1,17 @@
+{
+  "sharing": "Deljenje",
+  "private": "Lastnik",
+  "shared": "Lastnik in deljeno s skupinami",
+  "org": "Organizacija",
+  "public": "Vsi (javno)",
+  "privateGroups": "Lastnik",
+  "sharedGroups": "Lastnik + Skupine (${num})",
+  "orgGroups": "Organizacija + Skupine (${num})",
+  "publicGroups": "Vsi (javno) + Skupine (${num})",
+  "groups": "Skupine (${num})",
+  "updateSharing": "Nivo deljenja: ${level}, posodobi deljenje",
+  "viewableBy": "Vidno po: ${level}",
+  "everyone": "Vsi (javno)",
+  "organization": "Organizacija",
+  "groupMembers": "Člani skupine"
+}

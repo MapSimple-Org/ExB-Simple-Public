@@ -1,0 +1,1 @@
+System.register([],function(e){return{execute:function(){e({_widgetLabel:"M\xf5\xf5tmine",selectToStart:"Valige m\xf5\xf5tmise alustamiseks t\xf6\xf6riist.",measureDistance:"M\xf5\xf5da vahemaad",measureArea:"M\xf5\xf5da pindala",clearMeasurement:"T\xfchjenda m\xf5\xf5t",measureUnit:"M\xf5\xf5t\xfchik"})}}});

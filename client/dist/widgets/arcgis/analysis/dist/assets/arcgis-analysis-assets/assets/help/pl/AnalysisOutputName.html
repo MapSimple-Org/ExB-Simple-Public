@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>Ustawienia zastępowania na potrzeby analizy w przeglądarce  Map Viewer. </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="resultType">
+        <div>
+            <p>Określa typ danych wynikowych, kt&oacute;re zostaną utworzone. Opcja  <b>Utw&oacute;rz dane pośrednie</b> tworzy tymczasową warstwę, kt&oacute;rej można użyć jako danych wejściowych innego narzędzia, ale nie można jej zapisać ani wyświetlić na mapie. Opcja <b>Utw&oacute;rz warstwę hostowaną</b> publikuje nową hostowaną warstwę obiektową. Opcja <b>Zastąp istniejącą warstwę</b> aktualizuje istniejącą warstwę danymi wynikowymi narzędzia.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>Nazwa warstwy, kt&oacute;ra zostanie utworzona i dodana do mapy.
+            </p>
+        </div>
+    </div>
+    <div id="layerExistsAutomaticallyOverwrite">
+        <div>
+            <p>Określa, czy dane wynikowe narzędzia zastąpią warstwę w Twoich zasobach, kt&oacute;ra ma określoną nazwę wynikową. Jeśli ta nazwa warstwy nie jest jeszcze używana w instytucji, zostanie utworzony nowy element. Aby zastąpić warstwę, musisz być jej właścicielem lub administratorem.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>Nazwa folderu na stronie  <b>Moje zasoby</b>, w kt&oacute;rym zostaną zapisane wyniki.
+            </p>
+            <p>Aktualizacja nie jest możliwa, jeśli warstwa już istnieje.
+            </p>
+        </div>
+    </div>
+    <div id="existingLayerToOverwrite">
+        <div>
+            <p>Warstwa w obszarze  <b>Moje zasoby</b>, kt&oacute;ra zostanie zastąpiona warstwą wynikową. Odniesienia przestrzenne warstwy wynikowej i istniejącej muszą być zgodne.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

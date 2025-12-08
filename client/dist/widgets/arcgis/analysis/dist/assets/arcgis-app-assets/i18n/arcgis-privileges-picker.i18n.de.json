@@ -1,0 +1,592 @@
+{
+  "rolePrivileges": "Rollenberechtigungen",
+  "setFromExisting": "Anhand vorhandener Rolle festlegen",
+  "expandAll": "Alle einblenden",
+  "generalPrivileges": "Allgemeine Berechtigungen",
+  "adminPrivileges": "Admin-Berechtigungen",
+  "enabledLabel": "Aktiviert:",
+  "enableAll": "Alle aktivieren",
+  "disableAll": "Alle deaktivieren",
+  "members": "Mitglieder",
+  "groups": "Gruppen",
+  "content": "Inhalt",
+  "sharing": "Freigeben",
+  "premiumContent": "Premium-Inhalte",
+  "premiumContentServices": "Premium-Inhalte und -Services",
+  "contentAndAnalysis": "Inhalt und Analyse",
+  "features": "Features",
+  "versionMgmt": "Versionsmanagement",
+  "webhooks": "Webhooks",
+  "marketplaceSubscriptions": "ArcGIS Marketplace-Subskriptionen",
+  "orgSettings": "Organisationseinstellungen",
+  "learnMore": "Weitere Informationen",
+  "searchPrivileges": "Berechtigungen durchsuchen",
+  "notebooks": "Notebooks",
+  "analysis": "Analyse",
+  "networkAnalysis": "Netzwerkanalyse",
+  "locationServices": "Positionsservices",
+  "requiredService": "Erforderlicher Service",
+  "availableServices": "Verfügbare Services",
+  "basemaps": "Grundkarten",
+  "staticMaps": "Statische Karten",
+  "places": "Orte",
+  "geocoding": "Geokodierung",
+  "routing": "Routing",
+  "dataEnrichment": "Datenanreicherung",
+  "boundaries": "Grenzen",
+  "elevation": "Höhe",
+  "spatialPrivileges": "Räumliche Analyse",
+  "featureAnalysis": "Feature-Analyse",
+  "imageAnalysis": "Bildanalyse",
+  "readOnlyBasemapsTooltip": "Zugriff auf Grundkarten ist enthalten.",
+  "privileges": {
+    "portal:user:viewOrgUsers": {
+      "label": "Anzeigen",
+      "description": "Mitglied das Anzeigen von Mitgliedern der Organisation gestatten.",
+      "descriptionPortal": "Mitglied das Anzeigen von Mitgliedern des Portals gestatten.",
+      "descriptionApp": "Anwendung das Anzeigen von Mitgliedern der Organisation gestatten"
+    },
+    "portal:user:createGroup": {
+      "label": "Erstellen, aktualisieren und löschen",
+      "description": "Mitglied das Erstellen, Bearbeiten und Löschen der eigenen Gruppen gestatten.",
+      "descriptionApp": "Anwendung das Erstellen, Bearbeiten und Löschen der Gruppen des Anwendungsbesitzers gestatten"
+    },
+    "portal:user:joinGroup": {
+      "label": "Gruppen einer Organisation beitreten",
+      "description": "Mitglied das Beitreten zu Gruppen in der Organisation gestatten.",
+      "descriptionPortal": "Mitglied das Beitreten zu Gruppen im Portal gestatten.",
+      "descriptionApp": "Anwendung das Beitreten zu Gruppen innerhalb der Organisation gestatten"
+    },
+    "portal:user:joinNonOrgGroup": {
+      "label": "Externen Gruppen beitreten",
+      "description": "Mitglied das Beitreten zu Gruppen außerhalb der Organisation gestatten.",
+      "descriptionPortal": "Mitglied das Beitreten zu Gruppen außerhalb des Portals gestatten.",
+      "descriptionApp": "Anwendung das Beitreten zu Gruppen außerhalb der Organisation gestatten"
+    },
+    "portal:user:viewOrgGroups": {
+      "label": "Für die Organisation freigegebene Gruppen anzeigen",
+      "description": "Mitglied das Anzeigen von für die Organisation freigegebenen Gruppen gestatten.",
+      "descriptionPortal": "Mitglied das Anzeigen von für das Portal freigegebenen Gruppen gestatten.",
+      "descriptionApp": "Anwendung das Anzeigen von für die Organisation freigegebenen Gruppen gestatten"
+    },
+    "portal:user:invitePartneredCollaborationMembers": {
+      "label": "Mitglieder von Partnerorganisationen einladen",
+      "description": "Das Mitglied kann Mitglieder aus Partnerkollaborationsorganisationen in Gruppen einladen.",
+      "descriptionApp": "Anwendung das Einladen von Mitgliedern aus Partnerkollaborationsorganisationen in Gruppen gestatten"
+    },
+    "portal:user:addExternalMembersToGroup": {
+      "label": "Mitglieder aus anderen Organisationen hinzufügen",
+      "description": "Das Mitglied kann Gruppen erstellen, die Mitglieder aus anderen Organisationen zulassen, und externe Mitglieder in Gruppen einladen.",
+      "descriptionApp": "Anwendung das Erstellen von Gruppen, die Mitglieder aus anderen Organisationen zulassen, sowie das Einladen externer Mitglieder in Gruppen gestatten"
+    },
+    "portal:user:createItem": {
+      "label": "Erstellen, aktualisieren und löschen",
+      "description": "Mitglied das Erstellen, Bearbeiten und Löschen der eigenen Inhalte gestatten.",
+      "descriptionApp": "Anwendung das Erstellen, Bearbeiten und Löschen der Inhalte des Anwendungsbesitzers gestatten"
+    },
+    "portal:publisher:publishFeatures": {
+      "label": "Gehostete Feature-Layer veröffentlichen",
+      "description": "Mitglied das Veröffentlichen gehosteter Feature-Layer aus Shapefiles, CSV-Dateien usw. gestatten.",
+      "descriptionApp": "Anwendung das Veröffentlichen gehosteter Feature-Layer aus Shapefiles, CSV-Dateien usw. gestatten"
+    },
+    "portal:publisher:publishTiles": {
+      "label": "Gehostete Kachel-Layer veröffentlichen",
+      "description": "Mitglied das Veröffentlichen gehosteter Kachel-Layer aus Kachelpaketen, Features usw. gestatten.",
+      "descriptionApp": "Anwendung das Veröffentlichen gehosteter Kachel-Layer aus Kachelpaketen, Features usw. gestatten"
+    },
+    "portal:publisher:publishScenes": {
+      "label": "Gehostete Szenen-Layer veröffentlichen",
+      "description": "Mitglied das Veröffentlichen gehosteter Szenen-Layer gestatten.",
+      "descriptionApp": "Anwendung das Veröffentlichen gehosteter Szenen-Layer gestatten"
+    },
+    "portal:publisher:publishTiledImagery": {
+      "label": "Gehostete gekachelte Bilddaten-Layer veröffentlichen",
+      "description": "Mitgliedern das Veröffentlichen von gehosteten gekachelten Bilddaten-Layern aus einem einzelnen Bild oder einer Bildsammlung erlauben. Erfordert ein ArcGIS-Image für die ArcGIS Online-Benutzertyp-Erweiterung.",
+      "descriptionPortal": "Mitgliedern das Veröffentlichen von gehosteten gekachelten Bilddaten-Layern aus einem einzelnen Bild oder einer Bildsammlung erlauben.",
+      "descriptionApp": "Anwendung das Veröffentlichen von gehosteten Kachel-Layern aus einem einzelnen Bild oder einer Bildsammlung gestatten. Erfordert eine Lizenz für ArcGIS Image Hosting."
+    },
+    "portal:publisher:publishDynamicImagery": {
+      "label": "Gehostete dynamische Bilddaten-Layer veröffentlichen",
+      "description": "Mitgliedern das Veröffentlichen von gehosteten dynamischen Bilddaten-Layern aus einem einzelnen Bild oder einer Bildsammlung erlauben.",
+      "descriptionApp": "Anwendung das Veröffentlichen von gehosteten dynamischen Bilddaten-Layern aus einem einzelnen Bild oder einer Bildsammlung gestatten"
+    },
+    "portal:publisher:publishServerServices": {
+      "label": "Serverbasierte Layer veröffentlichen",
+      "description": "Mit dieser Berechtigung können Layer veröffentlicht werden, die von Services von Verbundserver-Sites unterstützt werden. Diese Services referenzieren häufig registrierte Daten aus Geodatabases oder dateibasierten Datenquellen."
+    },
+    "portal:publisher:publishKnowledgeGraph": {
+      "label": "Gehostete Knowledge Graphs veröffentlichen",
+      "description": "Mitglied das Veröffentlichen gehosteter Knowledge Graphs gestatten.",
+      "descriptionApp": "Anwendung das Veröffentlichen gehosteter Wissensgraphen gestatten"
+    },
+    "portal:user:viewOrgItems": {
+      "label": "Für die Organisation freigegebene Inhalte anzeigen",
+      "description": "Mitglied das Anzeigen von Inhalten gestatten, die für die Organisation freigegeben wurden.",
+      "descriptionPortal": "Mitglied das Anzeigen von Inhalten gestatten, die für das Portal freigegeben wurden.",
+      "descriptionApp": "Anwendung das Anzeigen von Inhalten gestatten, die für die Organisation freigegeben wurden"
+    },
+    "premium:publisher:createNotebooks": {
+      "label": "Notebooks erstellen und bearbeiten",
+      "description": "Das Mitglied kann interaktive Notebooks erstellen und bearbeiten.",
+      "descriptionApp": "Anwendung das Erstellen und Bearbeiten interaktiver Notebooks gestatten"
+    },
+    "premium:publisher:scheduleNotebooks": {
+      "label": "Zeitplan für Notebooks festlegen",
+      "description": "Das Mitglied kann zukünftige automatische Ausführungen eines Notebooks planen.",
+      "descriptionApp": "Anwendung das Planen zukünftiger automatisierter Ausführungen eines Notebooks gestatten"
+    },
+    "portal:publisher:bulkPublishFromDataStores": {
+      "label": "Mehrere Feature-Layer batchweise aus einem Data Store erstellen",
+      "description": "Mit dieser Berechtigung können Web-Layer über einen registrierten Data Store veröffentlicht werden."
+    },
+    "portal:publisher:registerDataStores": {
+      "label": "Data Stores registrieren",
+      "description": "Mit dieser Berechtigung können Data Stores beim Portal registriert werden."
+    },
+    "portal:user:viewTracks": {
+      "label": "Standort-Tracks anzeigen",
+      "description": "Mitglied das Anzeigen von Standort-Tracks von Mitgliedern über freigegebene Track-Ansichten gestatten, wenn die Positionsfreigabe aktiviert ist.",
+      "descriptionApp": "Anwendung das Anzeigen von Standort-Tracks von Mitgliedern über freigegebene Track-Ansichten gestatten, wenn die Positionsfreigabe aktiviert ist"
+    },
+    "portal:user:reassignItems": {
+      "label": "Inhalt neu zuweisen",
+      "description": "Gestatten Sie dem Mitglied das Neuzuweisen nur der eigenen Inhalte zu einem anderen Mitglied mit der Berechtigung zum Empfangen von Inhalten.",
+      "descriptionApp": "Anwendung das Neuzuweisen nur der Inhalte des Anwendungsbesitzers zu einem anderen Mitglied mit der Berechtigung zum Empfangen von Inhalten gestatten"
+    },
+    "portal:user:receiveItems": {
+      "label": "Inhalt empfangen",
+      "description": "Gestatten Sie dem Mitglied das Empfangen von Inhalten, die von einem anderen Mitglied mit der Berechtigung zum Neuzuweisen von Inhalten neu zugewiesen wurden."
+    },
+    "portal:publisher:publishFeeds": {
+      "label": "Feeds veröffentlichen",
+      "description": "Mit dieser Berechtigung können Feeds veröffentlicht werden, um mit ArcGIS Velocity Echtzeitdaten zu erfassen und anzuzeigen."
+    },
+    "portal:publisher:publishRealTimeAnalytics": {
+      "label": "Echtzeitanalysen veröffentlichen",
+      "description": "Mit dieser Berechtigung können Echtzeitanalysen veröffentlicht werden, um mit ArcGIS Velocity Echtzeitdaten zu analysieren und zu verarbeiten."
+    },
+    "portal:publisher:publishBigDataAnalytics": {
+      "label": "Big-Data-Analysen veröffentlichen",
+      "description": "Mit dieser Berechtigung können Big-Data-Analysen veröffentlicht werden, um mit ArcGIS Velocity historische Beobachtungsdaten zu analysieren."
+    },
+    "portal:publisher:createDataPipelines": {
+      "label": "Data Pipelines erstellen und ausführen",
+      "description": "Gestatten Sie dem Mitglied das Erstellen, Bearbeiten und Ausführen von Data Pipelines.",
+      "descriptionApp": "Anwendung das Erstellen, Bearbeiten und Ausführen von Data Pipelines gestatten"
+    },
+    "portal:publisher:publishLivestreamVideo": {
+      "label": "Livestream-Video veröffentlichen",
+      "description": "Mitglied das Veröffentlichen von aus Netzwerk-Videoübertragungen und -streams stammenden gehosteten Livestream-Video-Layern gestatten.",
+      "descriptionApp": "Anwendung das Veröffentlichen von aus Netzwerk-Videoübertragungen und -streams stammenden gehosteten Livestream-Video-Layern gestatten"
+    },
+    "portal:publisher:publishVideo": {
+      "label": "Video veröffentlichen",
+      "description": "Mitglied das Veröffentlichen von gehosteten Video-Layern aus Videodateien und unterstützten Video-Metadaten-Dateien gestatten.",
+      "descriptionApp": "Anwendung das Veröffentlichen von gehosteten Video-Layern aus Videodateien und unterstützten Video-Metadaten-Dateien gestatten"
+    },
+    "portal:user:shareToGroup": {
+      "label": "Für Gruppen freigeben",
+      "description": "Mitglied das Freigeben von Inhalten für Gruppen gestatten.",
+      "descriptionApp": "Anwendung das Freigeben von Inhalten für Gruppen gestatten"
+    },
+    "portal:user:shareToOrg": {
+      "label": "Für Organisation freigeben",
+      "labelPortal": "Für Portal freigeben",
+      "description": "Mitglied das Freigeben von Inhalten für die Organisation gestatten.",
+      "descriptionPortal": "Mitglied das Freigeben von Inhalten für das Portal gestatten.",
+      "descriptionApp": "Anwendung das Freigeben von Inhalten für die Organisation gestatten"
+    },
+    "portal:user:shareToPublic": {
+      "label": "Für die Öffentlichkeit freigeben",
+      "description": "Mitglied das Freigeben von Inhalten für die Öffentlichkeit gestatten, sofern die entsprechende Richtlinie der Organisation dies zulässt.",
+      "descriptionApp": "Anwendung das Freigeben von Inhalten des Anwendungsbesitzers für die Öffentlichkeit gestatten, sofern die entsprechende Richtlinie der Organisation dies zulässt",
+      "tooltip": "Wenn die Organisation Mitgliedern das Freigeben von Inhalten für die Öffentlichkeit nicht gestattet, benötigen die Mitglieder Administratorberechtigungen, um Inhalt der Mitglieder für die Öffentlichkeit freizugeben."
+    },
+    "portal:user:shareGroupToOrg": {
+      "label": "Gruppen für die Organisation sichtbar machen",
+      "labelPortal": "Gruppen für das Portal sichtbar machen",
+      "description": "Mitglied das Freigeben von Inhalten für die Organisation gestatten.",
+      "descriptionPortal": "Mitglied das Freigeben von Inhalten für das Portal gestatten.",
+      "descriptionApp": "Anwendung das Freigeben von Inhalten für das Portal gestatten"
+    },
+    "portal:user:shareGroupToPublic": {
+      "label": "Gruppen für die Öffentlichkeit sichtbarmachen",
+      "description": "Mitglied gestatten, Gruppen so einzurichten, dass sie von der Öffentlichkeit gefunden werden können.",
+      "descriptionApp": "Anwendung gestatten, Gruppen so einzurichten, dass sie von der Öffentlichkeit gefunden werden können."
+    },
+    "opendata:user:designateGroup": {
+      "label": "Gruppen für Open Data verfügbar machen",
+      "description": "Mitglied das Kennzeichnen von Gruppen als für den Gebrauch in Open Data verfügbar gestatten.",
+      "descriptionApp": "Anwendung das Kennzeichnen von Gruppen als für den Gebrauch in Open Data verfügbar gestatten"
+    },
+    "premium:user:basemaps": {
+      "label": "Basemap Styles Service",
+      "descriptionLocationPlatform": "Zugriff der Anwendung auf den Basemap Styles Service gestatten."
+    },
+    "premium:user:staticbasemaptiles": {
+      "label": "Statische Grundkartenkacheln",
+      "descriptionLocationPlatform": "Der Anwendung den Zugriff auf den Service \"Statische Grundkartenkacheln\" gestatten."
+    },
+    "premium:user:staticMaps": {
+      "label": "Statischer Kartenservice (Beta)",
+      "descriptionLocationPlatform": "Der Anwendung den Zugriff auf den statischen Kartenservice gestatten."
+    },
+    "premium:user:elevation": {
+      "label": "Höhenservice",
+      "descriptionLocationPlatform": "Anwendung den Zugriff auf den Höhenservice gestatten."
+    },
+    "premium:user:geocode": {
+      "label": "Geokodierung",
+      "description": "Mitgliedern das Durchführen von Geokodierungs-Tasks mit Credit-Verbrauch über den ArcGIS Geocoding Service (oder eine Sicht dieses Locators) erlauben.",
+      "descriptionApp": "Anwendung das Durchführen von Geokodierungs-Tasks mit Credit-Verbrauch über den ArcGIS World Geocoding Service (oder eine Sicht dieses Locators) erlauben."
+    },
+    "premium:user:geocode:stored": {
+      "label": "Geokodierung (gespeichert)",
+      "descriptionLocationPlatform": "Anwendung gestatten, auf den Geokodierungsservice zuzugreifen und gespeicherte Geokodierungen durchzuführen."
+    },
+    "premium:user:geocode:temporary": {
+      "label": "Geokodierung (nicht gespeichert)",
+      "descriptionLocationPlatform": "Anwendung gestatten, auf den Geokodierungsservice zuzugreifen und nicht gespeicherte Geokodierungen durchzuführen."
+    },
+    "premium:user:networkanalysis": {
+      "label": "Routing",
+      "description": "Mitglied das Durchführen von Netzwerkanalyse-Tasks, z. B. das Erstellen von Routen und Fahrzeitgebieten, gestatten.",
+      "descriptionApp": "Anwendung den Zugriff auf den Routing-Service gestatten."
+    },
+    "premium:user:networkanalysis:closestfacility": {
+      "label": "Nächstgelegene Einrichtung",
+      "descriptionLocationPlatform": "Anwendung gestatten, auf den Routing-Service zuzugreifen und Routing-Operationen vom Typ \"Nächstgelegene Einrichtung\" durchzuführen."
+    },
+    "premium:user:networkanalysis:lastmiledelivery": {
+      "label": "Last-Mile-Delivery",
+      "descriptionLocationPlatform": "Anwendung gestatten, auf den Routing-Service zuzugreifen und Routing-Operationen für Last-Mile-Delivery durchzuführen."
+    },
+    "premium:user:networkanalysis:snaptoroads": {
+      "label": "Snap To Roads",
+      "descriptionLocationPlatform": "Mitgliedern das Durchführen von Netzwerkanalyse-Tasks, z. B. das Fangen von GPS-Track-Punkten an Straßen, gestatten."
+    },
+    "premium:user:networkanalysis:locationallocation": {
+      "label": "Location-Allocation",
+      "descriptionLocationPlatform": "Anwendung gestatten, auf den Routing-Service zuzugreifen und Location-Allocation-Operationen durchzuführen."
+    },
+    "premium:user:networkanalysis:routing": {
+      "label": "Einfaches Routing",
+      "descriptionLocationPlatform": "Anwendung gestatten, auf den Routing-Service zuzugreifen und Standard-Routing-Operationen durchzuführen."
+    },
+    "premium:user:networkanalysis:optimizedrouting": {
+      "label": "Optimiertes Routing",
+      "descriptionLocationPlatform": "Anwendung gestatten, auf den Routing-Service zuzugreifen und optimierte Routing-Operationen durchzuführen."
+    },
+    "premium:user:networkanalysis:vehiclerouting": {
+      "label": "Routen für mehrere Fahrzeuge",
+      "descriptionLocationPlatform": "Routen für mehrere Fahrzeuge gestatten es der Anwendung, auf den Routing-Service zuzugreifen und Flotten-Routing-Operationen durchzuführen."
+    },
+    "premium:user:networkanalysis:origindestinationcostmatrix": {
+      "label": "Start-Ziel-Kostenmatrix",
+      "descriptionLocationPlatform": "Anwendung gestatten, auf den Routing-Service zuzugreifen und Reisekostenmatrizen zu generieren."
+    },
+    "premium:user:networkanalysis:servicearea": {
+      "label": "Einzugsgebiet",
+      "descriptionLocationPlatform": "Anwendung gestatten, auf den Routing-Service zuzugreifen und Einzugsgebiete zu generieren."
+    },
+    "premium:user:places": {
+      "label": "Orte-Service",
+      "descriptionLocationPlatform": "Anwendung den Zugriff auf den Orte-Service gestatten."
+    },
+    "premium:user:spatialanalysis": {
+      "labelOld": "Räumlicher Analyseservice",
+      "label": "Feature-Analyseservice",
+      "labelPortal": "Standard-Feature-Analyse",
+      "description": "Mitgliedern das Durchführen von Feature-Analyse-Tasks gestatten.",
+      "descriptionPortal": "Mit dieser Berechtigung können Standard-Feature-Analyse-Tasks ausgeführt werden.",
+      "descriptionLocationPlatform": "Anwendung den Zugriff auf den Feature-Analyse-Service gestatten.",
+      "descriptionApp": "Anwendung den Zugriff auf den Feature-Analyse-Service gestatten."
+    },
+    "premium:user:geoenrichment": {
+      "label": "GeoEnrichment-Service",
+      "description": "Mitglied das Anreichern von Features mit Geodaten gestatten.",
+      "descriptionLocationPlatform": "Anwendung den Zugriff auf den GeoEnrichment-Service gestatten.",
+      "descriptionApp": "Anwendung den Zugriff auf den GeoEnrichment-Service gestatten."
+    },
+    "premium:user:demographics": {
+      "label": "Demografische Karten",
+      "description": "Anwendung den Zugriff auf demografische Premium-Karten im ArcGIS Living Atlas gestatten.",
+      "descriptionApp": "Anwendung den Zugriff auf demografische Premium-Karten im ArcGIS Living Atlas gestatten.",
+      "descriptionLocationPlatform": "Anwendung den Zugriff auf demografische Karten im ArcGIS Living Atlas gestatten."
+    },
+    "premium:publisher:geoanalytics": {
+      "label": "GeoAnalytics-Feature-Analyse",
+      "description": "Mit dieser Berechtigung können räumliche GeoAnalytics-Tasks ausgeführt werden."
+    },
+    "premium:publisher:rasteranalysis": {
+      "label": "Bilddatenanalyse",
+      "description": "Mitgliedern das Durchführen von Bilddatenanalyse-Tasks gestatten. Erfordert die ArcGIS Image-Analysefunktion.",
+      "descriptionPortal": "Mitgliedern das Durchführen von Bilddatenanalyse-Tasks gestatten.",
+      "descriptionApp": "Anwendung das Durchführen von Bilddatenanalyse-Tasks gestatten. Erfordert die ArcGIS Image-Analysefunktion.",
+      "descriptionAppPortal": "Anwendung das Durchführen von Bilddatenanalyse-Tasks gestatten."
+    },
+    "premium:publisher:createAdvancedNotebooks": {
+      "label": "Erweiterte Notebooks",
+      "description": "Das Mitglied kann ArcPy-Module in Notebooks importieren und verwenden.",
+      "descriptionApp": "Anwendung das Importieren und Verwenden von ArcPy-Modulen in Notebooks gestatten"
+    },
+    "portal:user:runWebTool": {
+      "label": "Web-Werkzeuge ausführen",
+      "description": "Das Mitglied darf Web-Werkzeuge ausführen.",
+      "descriptionPortal": "Das Mitglied kann aus Notebooks veröffentlichte Web-Werkzeuge ausführen.",
+      "descriptionApp": "Die Anwendung darf Web-Werkzeuge ausführen.",
+      "descriptionAppPortal": "Anwendung das Ausführen von aus Notebooks veröffentlichten Web-Werkzeugen gestatten."
+    },
+    "portal:user:generateApiTokens": {
+      "label": "API-Schlüssel generieren",
+      "description": "Mitglied das Generieren von API-Schlüsseln gestatten"
+    },
+    "portal:user:assignPrivilegesToApps": {
+      "label": "Berechtigungen für OAuth-2.0-basierte Anwendungen zuweisen",
+      "description": "Mitglied das Zuweisen von Berechtigungen für OAuth-2.0-basierte Anwendungen gestatten"
+    },
+    "portal:user:createWorkflow": {
+      "label": "Workflow-Element erstellen",
+      "description": "Zulassen, dass Mitglieder Workflow Manager-Elemente erstellen"
+    },
+    "premium:user:featurereport": {
+      "label": "Feature-Bericht",
+      "description": "Mitglied das Erstellen von Feature-Berichten in Survey123 gestatten.",
+      "descriptionApp": "Anwendung das Erstellen von Feature-Berichten in Survey123 gestatten"
+    },
+    "premium:user:realitymapping": {
+      "label": "Reality-Mapping",
+      "description": "Mitglied das Durchführen von Reality-Mapping-Tasks gestatten."
+    },
+    "features:user:edit": {
+      "label": "Bearbeiten",
+      "description": "Mitglied das Bearbeiten von Features in editierbaren, nicht öffentlichen Layern basierend auf den für den Layer aktivierten Bearbeitungsoptionen gestatten.",
+      "descriptionApp": "Anwendung das Bearbeiten von Features in editierbaren, nicht öffentlichen Layern basierend auf den für den Layer aktivierten Bearbeitungsoptionen gestatten"
+    },
+    "features:user:fullEdit": {
+      "label": "Mit vollständiger Steuerung bearbeiten",
+      "description": "Mitglied das Hinzufügen, Löschen und Aktualisieren von Features in einem editierbaren, gehosteten Feature-Layer ungeachtet der für den Layer aktivierten Bearbeitungsoptionen gestatten.",
+      "descriptionApp": "Anwendung das Hinzufügen, Löschen und Aktualisieren von Features in einem editierbaren, gehosteten Feature-Layer ungeachtet der für den Layer aktivierten Bearbeitungsoptionen gestatten"
+    },
+    "features:user:manageVersions": {
+      "label": "Alle verwalten",
+      "description": "Mitgliedern das Verwalten von Versionssperren sowie das Anzeigen, Ändern, Löschen, Bearbeiten, Abgleichen und Zurückschreiben für alle Verzweigungsversionen ermöglichen, auf die über ArcGIS Server-Feature-Layer zugegriffen wird.",
+      "descriptionApp": "Anwendung das Verwalten von Versionssperren sowie das Anzeigen, Ändern, Löschen, Bearbeiten, Abgleichen und Zurückschreiben für alle Verzweigungsversionen ermöglichen, auf die über ArcGIS Server-Feature-Layer zugegriffen wird"
+    },
+    "portal:publisher:createFeatureWebhook": {
+      "label": "Feature-Layer",
+      "description": "Mitglied das Erstellen, Bearbeiten und Löschen der eigenen Feature-Layer-Webhooks gestatten.",
+      "descriptionApp": "Anwendung das Erstellen, Bearbeiten und Löschen der eigenen Feature-Layer-Webhooks gestatten"
+    },
+    "portal:admin:viewUsers": {
+      "label": "Alle anzeigen",
+      "description": "Mitglied das Anzeigen der vollständigen Informationen zu Mitgliedskonten in der Organisation gestatten.",
+      "descriptionPortal": "Mitglied das Anzeigen der vollständigen Informationen zu Mitgliedskonten im Portal gestatten.",
+      "descriptionApp": "Anwendung das Anzeigen der vollständigen Informationen zu Mitgliedskonten in der Organisation gestatten"
+    },
+    "portal:admin:updateUsers": {
+      "label": "Aktualisieren",
+      "description": "Mitglied das Zurücksetzen von Kennwörtern, das Aktualisieren der Informationen zu Mitgliedskonten und das Aktualisieren von Mitgliederkategorien in der Organisation gestatten.",
+      "descriptionPortal": "Mitglied das Zurücksetzen von Kennwörtern, das Aktualisieren der Informationen zu Mitgliedskonten und das Aktualisieren von Mitgliederkategorien im Portal gestatten.",
+      "descriptionApp": "Anwendung das Zurücksetzen von Kennwörtern, das Aktualisieren der Informationen zu Mitgliedskonten und das Aktualisieren von Mitgliederkategorien in der Organisation gestatten"
+    },
+    "portal:admin:deleteUsers": {
+      "label": "Löschen",
+      "description": "Mitglied das Löschen von Mitgliedskonten in der Organisation gestatten.",
+      "descriptionPortal": "Mitglied das Löschen von Mitgliedskonten im Portal gestatten.",
+      "descriptionApp": "Anwendung das Löschen von Mitgliedskonten in der Organisation gestatten"
+    },
+    "portal:admin:inviteUsers": {
+      "label": "Hinzufügen",
+      "labelPortal": "Einladen",
+      "description": "Mitglied das Einladen von Mitgliedern zur Organisation gestatten.",
+      "descriptionPortal": "Mitglied das Einladen von Mitgliedern zum Portal gestatten.",
+      "descriptionApp": "Anwendung das Einladen von Mitgliedern zur Organisation gestatten"
+    },
+    "portal:admin:disableUsers": {
+      "label": "Deaktivieren",
+      "description": "Mitglied das Aktivieren und Deaktivieren von Mitgliedskonten in der Organisation gestatten.",
+      "descriptionPortal": "Mitglied das Aktivieren und Deaktivieren von Mitgliedskonten im Portal gestatten.",
+      "descriptionApp": "Anwendung das Aktivieren und Deaktivieren von Mitgliedskonten in der Organisation gestatten"
+    },
+    "portal:admin:changeUserRoles": {
+      "label": "Rollen ändern",
+      "description": "Mitglied das Ändern der Rolle gestatten, die einem Mitgliedskonto zugewiesen ist. Beachten Sie, dass die Zuweisung der Administratorrolle zu anderen Konten und die Aufhebung der Zuweisung dieser Rolle nur durch Mitglieder mit der Administratorrolle erfolgen kann.",
+      "descriptionPortal": "Mitglied das Ändern der Rolle gestatten, die einem Mitgliedskonto zugewiesen ist. Beachten Sie, dass die Zuweisung der Administratorrolle zu anderen Konten und die Aufhebung der Zuweisung dieser Rolle nur durch Mitglieder mit der Administratorrolle erfolgen kann.",
+      "descriptionApp": "Anwendung das Ändern der Rolle gestatten, die einem Mitgliedskonto zugewiesen ist. Beachten Sie, dass die Zuweisung der Administratorrolle zu anderen Konten und die Aufhebung der Zuweisung dieser Rolle nur durch Mitglieder mit der Administratorrolle erfolgen kann."
+    },
+    "portal:admin:manageLicenses": {
+      "label": "Lizenzen verwalten",
+      "description": "Mitglied das Zuweisen von Lizenzen zu Mitgliedern der Organisation gestatten.",
+      "descriptionPortal": "Mitglied das Zuweisen von Lizenzen zu Mitgliedern des Portals gestatten.",
+      "descriptionApp": "Anwendung das Zuweisen von Lizenzen zu Mitgliedern der Organisation gestatten"
+    },
+    "portal:admin:updateMemberCategorySchema": {
+      "label": "Kategorien verwalten",
+      "description": "Mitglied das Konfigurieren von Organisationsmitgliederkategorien gestatten.",
+      "descriptionPortal": "Mitglied das Konfigurieren von Portalmitgliederkategorien gestatten.",
+      "descriptionApp": "Anwendung das Konfigurieren von Organisationsmitgliederkategorien gestatten"
+    },
+    "portal:admin:viewGroups": {
+      "label": "Alle anzeigen",
+      "description": "Mitglied das Anzeigen aller Gruppen in der Organisation gestatten.",
+      "descriptionPortal": "Mitglied das Anzeigen aller Gruppen im Portal gestatten.",
+      "descriptionApp": "Anwendung das Anzeigen aller Gruppen in der Organisation gestatten"
+    },
+    "portal:admin:updateGroups": {
+      "label": "Aktualisieren",
+      "description": "Mitglied das Aktualisieren von Gruppen in der Organisation gestatten.",
+      "descriptionPortal": "Mitglied das Aktualisieren von Gruppen im Portal gestatten.",
+      "descriptionApp": "Anwendung das Aktualisieren von Gruppen in der Organisation gestatten"
+    },
+    "portal:admin:deleteGroups": {
+      "label": "Löschen",
+      "description": "Mitglied das Löschen von Gruppen in der Organisation gestatten.",
+      "descriptionPortal": "Mitglied das Löschen von Gruppen im Portal gestatten.",
+      "descriptionApp": "Anwendung das Löschen von Gruppen in der Organisation gestatten"
+    },
+    "portal:admin:reassignGroups": {
+      "label": "Besitz neu zuweisen",
+      "description": "Mitglied das Neuzuweisen von Gruppen zu anderen Mitgliedern in der Organisation gestatten.",
+      "descriptionPortal": "Mitglied das Neuzuweisen von Gruppen zu anderen Mitgliedern im Portal gestatten.",
+      "descriptionApp": "Anwendung das Neuzuweisen von Gruppen zu anderen Mitgliedern in der Organisation gestatten"
+    },
+    "portal:admin:assignToGroups": {
+      "label": "Mitglieder zuweisen",
+      "description": "Mitglied das Zuweisen von Mitgliedern zur Rolle der Gruppe des Mitglieds oder das Aktualisieren der Rolle der Gruppe des Mitglieds und das Entfernen von Mitgliedern aus Gruppen in der Organisation gestatten.",
+      "descriptionPortal": "Mitglied das Zuweisen von Mitgliedern zur Rolle der Gruppe des Mitglieds oder das Aktualisieren der Rolle der Gruppe des Mitglieds und das Entfernen von Mitgliedern aus Gruppen im Portal gestatten.",
+      "descriptionApp": "Anwendung das Zuweisen von Mitgliedern zur Rolle der Gruppe des Mitglieds oder das Aktualisieren der Rolle der Gruppe des Mitglieds und das Entfernen von Mitgliedern aus Gruppen in der Organisation gestatten"
+    },
+    "portal:admin:manageEnterpriseGroups": {
+      "label": "Link zu einer organisationsspezifischen Gruppe",
+      "description": "Mitglied das Verbinden der Gruppenmitgliedschaft mit einer organisationsspezifischen Gruppe gestatten.",
+      "descriptionApp": "Anwendung das Verbinden der Gruppenmitgliedschaft mit einer organisationsspezifischen Gruppe gestatten"
+    },
+    "portal:admin:createUpdateCapableGroup": {
+      "label": "Mit Aktualisierungsfunktionen erstellen",
+      "description": "Mitglied das Erstellen von Gruppen mit Aktualisierungsfunktionen gestatten.",
+      "descriptionApp": "Anwendung das Erstellen von Gruppen mit Aktualisierungsfunktionen gestatten"
+    },
+    "portal:admin:createLeavingDisallowedGroup": {
+      "label": "Erstellen, wobei Verlassen nicht erlaubt ist",
+      "description": "Mitglied erlauben, Gruppen zu erstellen und zu besitzen, die von den Mitgliedern nicht verlassen werden dürfen (Administratorgruppen).",
+      "descriptionApp": "Anwendung gestatten, Gruppen zu erstellen und zu besitzen, die von den Anwendungen nicht verlassen werden dürfen (Administratorgruppen)."
+    },
+    "portal:admin:viewItems": {
+      "label": "Alle anzeigen",
+      "description": "Mitglied das Anzeigen aller Inhalte in der Organisation gestatten.",
+      "descriptionPortal": "Mitglied das Anzeigen aller Inhalte im Portal gestatten.",
+      "descriptionApp": "Anwendung das Anzeigen aller Inhalte in der Organisation gestatten"
+    },
+    "portal:admin:updateItems": {
+      "label": "Aktualisieren",
+      "description": "Mitglied das Aktualisieren und Kategorisieren von Inhalten und das Bearbeiten gehosteter Feature-Layer in der Organisation gestatten.",
+      "descriptionPortal": "Mitglied das Aktualisieren und Kategorisieren von Inhalten und das Bearbeiten gehosteter Feature-Layer im Portal gestatten.",
+      "descriptionApp": "Anwendung das Aktualisieren und Kategorisieren von Inhalten und das Bearbeiten gehosteter Feature-Layer in der Organisation gestatten"
+    },
+    "portal:admin:deleteItems": {
+      "label": "Löschen",
+      "description": "Mitglied das Löschen von Inhalten in der Organisation gestatten.",
+      "descriptionPortal": "Mitglied das Löschen von Inhalten im Portal gestatten.",
+      "descriptionApp": "Anwendung das Löschen von Inhalten in der Organisation gestatten"
+    },
+    "portal:admin:reassignItems": {
+      "label": "Besitz neu zuweisen",
+      "description": "Mitglied das Neuzuweisen von Inhalten zu anderen Mitgliedern in der Organisation gestatten.",
+      "descriptionPortal": "Mitglied das Neuzuweisen von Inhalten zu anderen Mitgliedern im Portal gestatten.",
+      "descriptionApp": "Anwendung das Neuzuweisen von Inhalten zu anderen Mitgliedern in der Organisation gestatten"
+    },
+    "portal:admin:updateItemCategorySchema": {
+      "label": "Kategorien verwalten",
+      "description": "Mitglied das Konfigurieren von Organisationsinhaltskategorien gestatten.",
+      "descriptionPortal": "Mitglied das Konfigurieren von Portalinhaltskategorien gestatten.",
+      "descriptionApp": "Anwendung das Konfigurieren von Organisationsinhaltskategorien gestatten"
+    },
+    "portal:publisher:publishServerGPServices": {
+      "label": "Web-Werkzeuge veröffentlichen",
+      "description": "Mit dieser Berechtigung können Web-Werkzeuge veröffentlicht werden, die von Geoverarbeitungsservices von Verbundserver-Sites unterstützt werden."
+    },
+    "portal:admin:shareToOrg": {
+      "label": "Inhalte von Mitgliedern für Organisation freigeben",
+      "description": "Mitglied gestatten, Inhalte, die im Besitz anderer Mitglieder Ihrer Organisation sind, für die Organisation freizugeben.",
+      "descriptionPortal": "Mitglied gestatten, Inhalte, die im Besitz anderer Mitglieder Ihres Portals sind, für das Portal freizugeben.",
+      "descriptionApp": "Anwendung gestatten, Inhalte, die im Besitz anderer Mitglieder Ihrer Organisation sind, für die Organisation freizugeben"
+    },
+    "portal:admin:shareToPublic": {
+      "label": "Inhalte von Mitgliedern für die Öffentlichkeit freigeben",
+      "description": "Mitglied gestatten, Inhalte, die im Besitz anderer Mitglieder Ihrer Organisation sind, für die Öffentlichkeit freizugeben.",
+      "descriptionPortal": "Mitglied gestatten, Inhalte, die im Besitz anderer Mitglieder Ihres Portals sind, für die Öffentlichkeit freizugeben.",
+      "descriptionApp": "Anwendung gestatten, Inhalte, die im Besitz anderer Mitglieder Ihrer Organisation sind, für die Öffentlichkeit freizugeben"
+    },
+    "portal:admin:createReports": {
+      "label": "Verwaltungsberichte erstellen und verwalten",
+      "description": "Mitglied das Erstellen und Verwalten von Verwaltungsberichten für die Organisation gestatten.",
+      "descriptionPortal": "Mitglied das Erstellen und Verwalten von Verwaltungsberichten für das Portal gestatten.",
+      "descriptionApp": "Anwendung das Erstellen und Verwalten von Verwaltungsberichten für die Organisation gestatten"
+    },
+    "marketplace:admin:manage": {
+      "label": "Erstellen und verwalten",
+      "description": "Mitglied das Erstellen von Einträgen, Auflisten von Elementen, Verwalten von Subskriptionen in ArcGIS Marketplace sowie das Verwalten von Käufer- und Kontaktinformationen für die Organisation gestatten. Die Verwendung dieser Berechtigung hängt davon ab, ob Ihre Organisation Zugriff auf die Einträge und Veröffentlichungszugriff für ArcGIS Marketplace hat."
+    },
+    "marketplace:admin:purchase": {
+      "label": "Erwerben und kostenfreie Produkte erhalten",
+      "description": "Mitglied das Senden von Kaufanforderungen an Anbieter auf ArcGIS Marketplace und den Zugriff auf deren kostenfreie Produkte gestatten. Um Mitgliedern den Kauf von Produkten mit einer Kreditkarte zu erlauben, müssen Sie die entsprechenden Mitglieder als Marketplace-Käufer festlegen."
+    },
+    "marketplace:admin:startTrial": {
+      "label": "Testversionen starten",
+      "description": "Mitglied das Initiieren von Testsubskriptionen in ArcGIS Marketplace gestatten."
+    },
+    "portal:admin:manageSecurity": {
+      "label": "Sicherheit und Infrastruktur",
+      "description": "Mitglied das Verwalten der Sicherheits- und Infrastruktureinstellungen der Organisation gestatten.",
+      "descriptionPortal": "Mitglied das Verwalten der Sicherheits- und Infrastruktureinstellungen des Portals gestatten.",
+      "descriptionApp": "Anwendung das Verwalten der Sicherheits- und Infrastruktureinstellungen der Organisation gestatten"
+    },
+    "portal:admin:manageWebsite": {
+      "label": "Website der Organisation",
+      "description": "Mitglied das Verwalten der Website-Einstellungen der Organisation gestatten.",
+      "descriptionPortal": "Mitglied das Verwalten der Website-Einstellungen des Portals gestatten.",
+      "descriptionApp": "Anwendung das Verwalten der Website-Einstellungen der Organisation gestatten"
+    },
+    "portal:admin:manageCollaborations": {
+      "label": "Kollaborationen",
+      "description": "Mitglied das Verwalten der Kollaborationen der Organisation gestatten.",
+      "descriptionPortal": "Mitglied das Verwalten der Kollaborationen des Portals gestatten.",
+      "descriptionApp": "Anwendung das Verwalten der Kollaborationen der Organisation gestatten"
+    },
+    "portal:admin:manageCredits": {
+      "label": "Credits",
+      "description": "Mitglied das Verwalten der Credit-Budgetierungseinstellungen der Organisation gestatten.",
+      "descriptionApp": "Anwendung das Verwalten der Credit-Budgetierungseinstellungen der Organisation gestatten"
+    },
+    "portal:admin:manageRoles": {
+      "label": "Mitgliedsrollen",
+      "description": "Mitglied das Verwalten der Mitgliedsrollen der Organisation gestatten.",
+      "descriptionPortal": "Mitglied das Verwalten der Mitgliedsrollen des Portals gestatten.",
+      "descriptionApp": "Anwendung das Verwalten der Mitgliedsrollen der Organisation gestatten"
+    },
+    "portal:admin:manageServers": {
+      "label": "Server",
+      "description": "Mit dieser Berechtigung können die Einstellungen für den Portal-Server verwaltet werden."
+    },
+    "portal:admin:manageUtilityServices": {
+      "label": "Utility-Services",
+      "description": "Mitglied das Verwalten der Utility-Service-Einstellungen der Organisation gestatten.",
+      "descriptionPortal": "Mitglied das Verwalten der Utility-Service-Einstellungen des Portals gestatten.",
+      "descriptionApp": "Anwendung das Verwalten der Utility-Service-Einstellungen der Organisation gestatten"
+    },
+    "portal:admin:manageWebhooks": {
+      "label": "Webhooks",
+      "labelPortal": "Organisations-Webhooks",
+      "description": "Mitglied das Erstellen, Bearbeiten und Löschen aller Webhooks in der Organisation gestatten.",
+      "descriptionApp": "Anwendung das Erstellen, Bearbeiten und Löschen aller Webhooks in der Organisation gestatten.",
+      "descriptionPortal": "Mitglied das Erstellen, Bearbeiten und Löschen von Organisations-Webhooks sowie das Verwalten aller Webhooks im Portal gestatten.",
+      "descriptionAppPortal": "Anwendung das Erstellen, Bearbeiten und Löschen von Organisations-Webhooks sowie das Verwalten aller Webhooks im Portal gestatten"
+    },
+    "portal:admin:createGPWebhook": {
+      "label": "Geoverarbeitung",
+      "description": "Mitglied das Erstellen, Bearbeiten und Löschen der eigenen Geoverarbeitungs-Webhooks gestatten.",
+      "descriptionApp": "Anwendung das Erstellen, Bearbeiten und Löschen der eigenen Geoverarbeitungs-Webhooks gestatten"
+    }
+  }
+}

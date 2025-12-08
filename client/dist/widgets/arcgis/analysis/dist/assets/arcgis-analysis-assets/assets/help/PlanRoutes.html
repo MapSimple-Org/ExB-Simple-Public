@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>The Plan Routes tool creates travel routes with multiple stops for a fleet of vehicles.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="startLayer">
+        <div>
+            <p>The point features that specify where the vehicles start their routes.
+            </p>
+            <p class="toolPaneOnly">The count of features depends on additional factors such as filtering criteria and the analysis extent.
+            </p>
+        </div>
+    </div>
+    <div id="stopsLayer">
+        <div>
+            <p>The point features the vehicles must visit on the course of their routes.  These points become assigned or unassigned stops in the output.
+            </p>
+            <p class="toolPaneOnly">The count of features depends on additional factors such as filtering criteria and the analysis extent.
+            </p>
+        </div>
+    </div>
+    <div id="returnToStart">
+        <div>
+            
+            <p>Specifies whether the vehicles must return to their start location (enabled) or end at specified locations.
+            </p>
+        </div>
+    </div>
+    <div id="endLayer">
+        <div>
+            <p>The point features that specify where the vehicles end their routes. If the layer includes only one point, all vehicles are routed to a common end point. If the layer includes multiple points, each vehicle is routed to a unique end location.
+            </p>
+            <p class="toolPaneOnly">The count of features depends on additional factors such as filtering criteria and the analysis extent.
+            </p>
+        </div>
+    </div>
+    <div id="startLayerRouteIDField">
+        <div>
+            <p>The field in the start layer that uniquely identifies the individual routes, vehicles, or drivers.
+If the vehicles are
+starting at multiple locations and ending at multiple locations,
+the route IDs specified for the starting and ending layers must
+match.
+            </p>
+        </div>
+    </div>
+    <div id="endLayerRouteIDField">
+        <div>
+            <p>The field in the end layer that uniquely identifies the individual routes, vehicles, or drivers.
+If the vehicles are
+starting at multiple locations and ending at multiple locations,
+the route IDs specified for the starting and ending layers must
+match.
+            </p>
+        </div>
+    </div>
+    <div id="pointBarrierLayer">
+        <div>
+            <p>One or more point features that act as temporary restrictions (barriers) when traveling on the underlying streets. 
+Travel is permitted on the street but not through the barrier.
+            </p>
+        </div>
+    </div>
+    <div id="lineBarrierLayer">
+        <div>
+            <p>One or more line features that act as temporary restrictions (barriers) when traveling on the underlying streets. The line barriers prohibit travel anywhere the barriers intersect the streets.
+            </p>
+        </div>
+    </div>
+    <div id="polygonBarrierLayer">
+        <div>
+            <p>One or more polygon features that act as temporary restrictions (barriers) when traveling on the underlying streets. The polygon
+barriers prohibit travel anywhere the polygons intersect the streets.
+            </p>
+        </div>
+    </div>
+    <div id="travelMode">
+        <div>
+            <p>The travel mode that will be used to create the routes. Only time-based travel modes are supported.
+            </p>
+        </div>
+    </div>
+    <div id="routeStartTime">
+        <div>
+            <p>The date and time of departure for vehicles.
+            </p>
+        </div>
+    </div>
+    <div id="routeCount">
+        <div>
+            
+            <p class="OnlineOnly">The maximum number of vehicles that are available to visit the stops. If the  <b>Start layer</b> and <b>End layer</b> values each contain one feature, you can specify  up to 100 vehicles. If either layer contains more than one feature, the default value cannot be edited. </p> 
+            <p class="PortalOnly">The maximum number of vehicles that are available to visit the stops. If the  <b>Start layer</b> and <b>End layer</b> values each contain one feature, you can specify  a maximum number of vehicles. If either layer contains more than one feature, the default value cannot be edited.
+            </p>
+        </div>
+    </div>
+    <div id="maxStopsPerRoute">
+        <div>
+            
+            <p class="OnlineOnly">The maximum number of stops that each vehicle can make on a route. You can specify a value between 1 and  200. </p> 
+            <p class="PortalOnly">The maximum number of stops that each vehicle can make on a route.
+            </p>
+        </div>
+    </div>
+    <div id="stopServiceTime">
+        <div>
+            <p>The expected average service time spent at each stop. 
+            </p>
+        </div>
+    </div>
+    <div id="limitMaxRouteTimeCheckbox">
+        <div>
+            <p>Specifies whether the maximum routing time is applied to vehicles. The routing time includes expected travel time and service times spent at stops along the route.
+            </p>
+        </div>
+    </div>
+    <div id="maxRouteTime">
+        <div>
+            <p>The maximum amount of time a route can last from start to finish.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>The name of the layer that will be created and added to the map.
+            </p>
+        </div>
+    </div>
+    <div id="includeRouteLayers">
+        <div>
+            <p>Specifies whether each result route will be saved as a route layer.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            
+            <p>The name of the folder in  <b>My content</b> where the results will be saved.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

@@ -1,0 +1,68 @@
+{
+  "addField": "Agregar campo",
+  "addFieldErrors": {
+    "creatingFailed": "Error al crear el campo ${fieldName}.",
+    "existingFieldNameError": "El nombre del campo no puede coincidir con un nombre de campo existente.",
+    "invalidName": "Nombre no válido",
+    "invalidNameInputInvalidCharactersError": "El nombre del campo debe comenzar con una letra y solo puede contener letras, números y «_».",
+    "invalidNameInputSQLError": "El nombre del campo no puede coincidir con una palabra clave de SQL.",
+    "valueIsRequiredError": "Este valor es obligatorio."
+  },
+  "cancel": "Cancelar",
+  "createAndSelectField": "Crear y seleccionar campo",
+  "createNewFields": "Crear nuevo campo",
+  "fieldLoadingErrorText": "No se pueden cargar los campos.",
+  "fieldName": "Nombre de campo",
+  "fieldType": "Tipo de campo",
+  "fieldTypesIncompatible": "No hay campos compatibles disponibles.",
+  "layerNotSelected": "No se han seleccionado capas para rellenar los campos.",
+  "loadingFields": "Cargando campos",
+  "noSearchResults": "No se han encontrado campos coincidentes.",
+  "requiredErrorLabelDefault": "Un campo",
+  "requiredErrorMessage": "Parámetro requerido.",
+  "selectFieldPicklistHeading": "Seleccionar campo",
+  "selectOkBtnText": "Seleccionar",
+  "tooltip": "Se debe especificar un nombre y un tipo de campo válidos.",
+  "types": {
+    "big-integer": {
+      "description": "Almacene números enteros a partir de -(2${startSup}53${endSup}-1) hasta 2${startSup}53${endSup}-1. Use este tipo de campo cuando utilice números que estén fuera del rango del campo de entero admitido.",
+      "title": "Entero grande"
+    },
+    "date": {
+      "description": "Valores almacenados con fecha y hora.",
+      "title": "Fecha"
+    },
+    "date-only": {
+      "description": "Valores de fecha almacenados sin valores de tiempo.",
+      "title": "Solo fecha"
+    },
+    "double": {
+      "description": "Almacene números con posiciones decimales.",
+      "title": "Doble"
+    },
+    "global-id": {
+      "description": "Almacene una cadena de 36 caracteres que conste de letras y números y que sirva para identificar una entidad de manera exclusiva.",
+      "title": "GlobalID"
+    },
+    "guid": {
+      "description": "Almacene una cadena de 36 caracteres que conste de letras y números. Con frecuencia se utiliza un identificador único a nivel mundial, o GUID, para administrar relaciones entre entidades.",
+      "title": "GUID"
+    },
+    "integer": {
+      "description": "Almacene números enteros de ${lowerIntegerRange} a ${upperIntegerRange}.",
+      "title": "Entero"
+    },
+    "string": {
+      "description": "Almacenar un conjunto de caracteres alfanuméricos",
+      "title": "Cadena de caracteres"
+    },
+    "time-only": {
+      "description": "Valores de tiempo almacenados sin valores de fecha.",
+      "title": "Solo hora"
+    },
+    "timestamp-offset": {
+      "description": "Almacene valores que indiquen la fecha, la hora y el desfase horario con respecto al Tiempo Universal Coordinado (UTC).",
+      "title": "Desfase de marca de tiempo"
+    }
+  }
+}

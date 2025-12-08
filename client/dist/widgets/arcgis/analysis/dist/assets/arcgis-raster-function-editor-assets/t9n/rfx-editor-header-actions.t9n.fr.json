@@ -1,0 +1,11 @@
+{
+  "newTemplate": "Créer un nouveau modèle",
+  "openTemplate": "Ouvrir un modèle",
+  "addTemplate": "Ajouter un modèle",
+  "addFunction": "Ajouter des fonctions raster",
+  "addConstant": "Ajouter une constante",
+  "addRaster": "Ajouter une variable raster",
+  "expand": "Étendre",
+  "editTemplateProperties": "Modifier les propriétés du modèle",
+  "viewTemplateProperties": "Afficher les propriétés du modèle"
+}

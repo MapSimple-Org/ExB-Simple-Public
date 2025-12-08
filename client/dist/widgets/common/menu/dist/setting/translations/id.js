@@ -1,0 +1,1 @@
+System.register([],function(n){return{execute:function(){n({subMenuExpandMode:"Mode bentang submenu",mainMenu:"Menu utama",subMenu:"Submenu",navArrowColor:"Warna panah navigasi"})}}});

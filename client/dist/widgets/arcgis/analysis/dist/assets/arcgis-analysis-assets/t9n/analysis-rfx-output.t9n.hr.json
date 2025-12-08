@@ -1,0 +1,12 @@
+{
+  "dynamicLayer": "Dinamični sloj sa snimkama",
+  "outputDescription": "Izlaz generiran pokretanjem ${rfxName} rasterske funkcije",
+  "outputDescriptionRFT": "Izlaz generiran pokretanjem ${rfxName} predloškom rasterske funkcije",
+  "outputName": "Naziv izlaza",
+  "outputNamePlaceHolder": "Unesite jedinstveni naziv...",
+  "resultLayer": "Sloj rezultata",
+  "resultType": "Vrsta rezultata",
+  "saveFolder": "Spremi u mapu",
+  "summaryText": "Navedite naziv za sloj rezultata.",
+  "tileImagery": "Nagnuti sloj sa snimkama"
+}

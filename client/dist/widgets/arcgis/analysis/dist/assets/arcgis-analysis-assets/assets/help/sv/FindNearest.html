@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>Verktyget Hitta n&auml;rmaste hittar och rangordnar geoobjekten som &auml;r n&auml;rmast angivna platser.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="analysisLayer">
+        <div>
+            
+            <p class="OnlineOnly">Startlagret runt vilket ett s&ouml;kintervall ritas f&ouml;r att hitta de n&auml;rmaste geoobjekten fr&aring;n det n&auml;rliggande lagret. Geoobjekt i det n&auml;rliggande lagret returneras baserat p&aring; deras n&auml;rhet till indatalagret. Lager med upp till  femtusen geoobjekt st&ouml;ds. </p>  
+            <p class="PortalOnly">Startlagret runt vilket ett s&ouml;kintervall ritas f&ouml;r att hitta de n&auml;rmaste geoobjekten fr&aring;n det n&auml;rliggande lagret. Geoobjekt i det n&auml;rliggande lagret returneras baserat p&aring; deras n&auml;rhet till indatalagret.
+            </p>
+            <p class="toolPaneOnly">Antalet geoobjekt beror p&aring; ytterligare faktorer som filtreringskriterier och analysutbredningen.
+            </p>
+        </div>
+    </div>
+    <div id="nearLayer">
+        <div>
+             
+            <p class="OnlineOnly">Geoobjekten som hittas baserat p&aring; n&auml;rhet till indatalagret. Lager med upp till  femtusen geoobjekt st&ouml;ds. </p> 
+            <p class="PortalOnly">Geoobjekten som hittas baserat p&aring; n&auml;rhet till indatalagret.
+            </p>
+            <p class="toolPaneOnly">Antalet geoobjekt beror p&aring; ytterligare faktorer som filtreringskriterier och analysutbredningen.
+            </p>
+        </div>
+    </div>
+    <div id="pointBarrierLayer">
+        <div>
+            <p>Ange ett eller flera punktgeoobjekt som fungerar som tillf&auml;lliga restriktioner (hinder) vid resor p&aring; de underliggande gatorna. Det &auml;r till&aring;tet att f&auml;rdas p&aring; gatan men inte genom hindret.
+            </p>
+        </div>
+    </div>
+    <div id="lineBarrierLayer">
+        <div>
+            <p>Ange ett eller flera linjegeoobjekt som fungerar som tillf&auml;lliga restriktioner (hinder) vid resor p&aring; de underliggande gatorna. Linjehindren f&ouml;rbjuder resor &ouml;verallt d&auml;r hindren korsar gatorna.
+            </p>
+        </div>
+    </div>
+    <div id="polygonBarrierLayer">
+        <div>
+            <p>Ett eller flera polygongeoobjekt som fungerar som tillf&auml;lliga restriktioner (hinder) vid resor p&aring; de underliggande gatorna. Polygonhindren f&ouml;rbjuder resor &ouml;verallt d&auml;r polygonerna korsar gatorna.
+            </p>
+        </div>
+    </div>
+    <div id="measurementType">
+        <div>
+            <p>Metoden som kommer att anv&auml;ndas f&ouml;r att m&auml;ta avst&aring;nd eller tid. Metoden kan vara linjeavst&aring;nd eller ett f&auml;rdl&auml;ge.
+            </p>
+        </div>
+    </div>
+    <div id="timeOfDay">
+        <div>
+            <p>Datum och tid d&aring; resen&auml;ren avreser fr&aring;n platserna i v&auml;rdet f&ouml;r  <b>Indatalagret</b>.
+            </p>
+        </div>
+    </div>
+    <div id="limitNearNumberCheckbox">
+        <div>
+            
+            <p>Anger om ett anpassat maximalt antal n&auml;rmaste geoobjekt anv&auml;nds (aktiverat) eller verktygets standardinst&auml;llning f&ouml;r maximum p&aring; 100 anv&auml;nds.
+            </p>
+        </div>
+    </div>
+    <div id="maxCount">
+        <div>
+            <p>Det maximala antalet n&auml;rmaste geoobjekt som kan hittas f&ouml;r varje indatageoobjekt.
+            </p>
+        </div>
+    </div>
+    <div id="limitSearchRangeCheckbox">
+        <div>
+            
+            <p>Anger om ett maximalt s&ouml;kavst&aring;nd anv&auml;nds (aktiverat) eller om s&ouml;kavst&aring;ndet &auml;r obegr&auml;nsat.
+            </p>
+        </div>
+    </div>
+    <div id="searchCutoff">
+        <div>
+            <p>Det maximala s&ouml;kavst&aring;ndet f&ouml;r s&ouml;kning efter de n&auml;rmaste geoobjekten.
+            </p>
+        </div>
+    </div>
+    <div id="searchCutoffUnits">
+        <div>
+            <p>Enheterna som anv&auml;nds f&ouml;r att ange s&ouml;kavst&aring;ndet.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>Namnet p&aring; lagret som skapas och l&auml;ggs till i kartan.
+            </p>
+        </div>
+    </div>
+    <div id="includeRouteLayers">
+        <div>
+            <p>Anger om varje resultatrutt sparas som ett ruttlager.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>Namnet p&aring; mappen i  <b>Mitt inneh&aring;ll</b> d&auml;r resultaten ska sparas.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

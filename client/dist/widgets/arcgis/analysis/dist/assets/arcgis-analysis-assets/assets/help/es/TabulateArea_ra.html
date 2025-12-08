@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>La herramienta &Aacute;rea tabulada calcula &aacute;reas tabuladas entre dos datasets y ofrece los resultados en forma de tabla.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputZoneRasterOrFeatures">
+        <div>
+            <p>Entrada que define los l&iacute;mites de las zonas.
+            </p>
+            <p class="toolPaneOnly">En el caso de las entradas de entidades, el recuento depende de factores adicionales como los criterios de filtrado y el alcance del an&aacute;lisis.
+            </p>
+        </div>
+    </div>
+    <div id="zoneField">
+        <div>
+            <p>El campo que contiene los valores que definen cada zona.
+            </p>
+        </div>
+    </div>
+    <div id="inputClassRasterOrFeatures">
+        <div>
+            <p>Entrada que define los l&iacute;mites de las clases cuya &aacute;rea se calcular&aacute;.
+            </p>
+            <p class="toolPaneOnly">En el caso de las entradas de entidades, el recuento depende de factores adicionales como los criterios de filtrado y el alcance del an&aacute;lisis.
+            </p>
+        </div>
+    </div>
+    <div id="classField">
+        <div>
+            <p>Campo que contiene los valores que definen cada clase.
+            </p>
+        </div>
+    </div>
+    <div id="classesAsRows">
+        <div>
+            <p>Especifica si el r&aacute;ster de clase de entrada se representar&aacute; como filas en la tabla de salida.
+            </p>
+            <p>Si se desactiva, las clases se representar&aacute;n como campos. Si se activa, las clases se representar&aacute;n como filas.
+            </p>
+        </div>
+    </div>
+    <div id="analysisCellSize">
+        <div>
+            <p>Especifica el tama&ntilde;o de celda del r&aacute;ster de an&aacute;lisis que se crear&aacute; para calcular &aacute;reas con tabulaci&oacute;n cruzada.
+            </p>
+        </div>
+    </div>
+    <div id="outputTableName">
+        <div>
+            <p>Nombre de la capa de la tabla de &aacute;reas tabuladas que se crear&aacute; y agregar&aacute; al mapa.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>El nombre de la carpeta de  <b>Mi contenido</b> en la que se guardar&aacute; el resultado.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

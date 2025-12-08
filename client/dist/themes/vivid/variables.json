@@ -1,0 +1,80 @@
+{
+  "colors": {
+    "primary": "#ff7121",
+    "secondary": "#2d1754",
+    "info": "#09acf8",
+    "success": "#00cca5",
+    "warning": "#ffab21",
+    "danger": "#f6146f",
+    "light": "#fff",
+    "dark": "#333"
+  },
+  "colorationVariants": {
+    "minimal": {
+      "header": {
+        "bg": "var(--light-300)",
+        "color": "var(--dark)"
+      },
+      "body": {
+        "bg": "var(--light-300)",
+        "color": "var(--dark)"
+      },
+      "footer": {
+        "bg": "var(--light-300)",
+        "color": "var(--dark)"
+      }
+    },
+    "default": {
+      "header": {
+        "bg": "var(--primary-600)",
+        "color": "var(--light)"
+      },
+      "body": {
+        "bg": "var(--light-300)",
+        "color": "var(--dark)"
+      },
+      "footer": {
+        "bg": "var(--light-300)",
+        "color": "var(--dark)"
+      }
+    }
+  },
+  "components": {
+    "button": {
+      "variants": {
+        "primary": {
+          "default": {
+            "color": "white"
+          }
+        }
+      }
+    },
+    "nav": {
+      "variants": {
+        "tabs": {
+          "item": {
+            "default": {
+              "color": "#404040",
+              "bg": "#fff"
+            },
+            "hover": {
+              "color": "var(--primary)",
+              "bg": "#fff"
+            },
+            "active": {
+              "border": {
+                "color": "#c7c7c7"
+              },
+              "color": "#fff",
+              "bg": "var(--primary)"
+            },
+            "disabled": {
+              "color": "#a7a7a7",
+              "bg": "#efefef"
+            }
+          }
+        }
+      }
+    }
+  }
+}

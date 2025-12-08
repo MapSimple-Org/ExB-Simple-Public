@@ -1,0 +1,9 @@
+{
+  "inputFlowDirectionRasterLabel": "Raster da direção do fluxo de entrada",
+  "inputLayerGroupText": "Selecione os rasters de direção do fluxo e curso de água de entrada.",
+  "inputStreamRasterLabel": "Raster de curso de água de entrada",
+  "itemProperties": {
+    "description": "Saída gerada através da execução da ferramenta de análise Ligação de Corrente.",
+    "snippet": "Saída gerada a partir de Ligação de Corrente"
+  }
+}

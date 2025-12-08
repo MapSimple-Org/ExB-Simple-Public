@@ -1,0 +1,11 @@
+/** @jsx jsx */
+import { type IMThemeVariables } from 'jimu-core';
+export interface ResizeHandlersProps {
+    left: boolean;
+    right: boolean;
+    top: boolean;
+    bottom: boolean;
+    builderTheme?: IMThemeVariables;
+    rotation?: number;
+}
+export declare function ResizeHandlers(props: ResizeHandlersProps): import("@emotion/react/jsx-runtime").JSX.Element;

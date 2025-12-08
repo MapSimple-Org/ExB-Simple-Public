@@ -1,0 +1,9 @@
+{
+  "inputFlowDirectionRasterLabel": "Входной растр направления стока",
+  "inputLayerGroupText": "Выберите входной растр водотоков и растр направления стока.",
+  "inputStreamRasterLabel": "Входной растр водотоков",
+  "itemProperties": {
+    "description": "Выходные данные, полученные в результате запуска инструмента анализа StreamLink.",
+    "snippet": "Выходные данные, созданные StreamLink"
+  }
+}

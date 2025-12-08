@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>Luo puskurit&nbsp;-ty&ouml;kalu luo alueita, jotka kattavat m&auml;&auml;ritetyn et&auml;isyyden l&auml;ht&ouml;aineiston kohteista.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputLayer">
+        <div>
+            <p>Puskuroitava piste-, viiva- tai aluekohdekarttataso.
+            </p>
+            <p class="toolPaneOnly">Kohteiden m&auml;&auml;r&auml; riippuu ylim&auml;&auml;r&auml;isist&auml; tekij&ouml;ist&auml;, kuten suodatusehdoista ja analyysin laajuudesta.
+            </p>
+        </div>
+    </div>
+    <div id="distanceType">
+        <div>
+            <p>M&auml;&auml;ritt&auml;&auml;, m&auml;&auml;ritet&auml;&auml;nk&ouml; puskuriet&auml;isyys k&auml;ytt&auml;m&auml;ll&auml; vakioarvoa (<b>arvo</b>) vai numerokentt&auml;&auml; (<b>kentt&auml;</b>).
+            </p>
+        </div>
+    </div>
+    <div id="distances">
+        <div>
+            <p>Et&auml;isyys, jota k&auml;ytet&auml;&auml;n puskurin luomiseen. Jos useita arvoja lis&auml;t&auml;&auml;n, jokaista arvoa k&auml;ytet&auml;&auml;n puskurin luomiseen kaikissa l&auml;ht&ouml;aineiston kohteissa.
+            </p> 
+            <p class="modelBuilderOnly">Joko  <b>et&auml;isyysarvot</b> tai <b>et&auml;isyyskentt&auml;</b> vaaditaan. Jos molemmat parametrit annetaan, k&auml;ytet&auml;&auml;n <b>et&auml;isyyskentt&auml;&auml;</b>.
+            </p>
+        </div>
+    </div>
+    <div id="field">
+        <div>
+            <p>Kentt&auml;, joka sis&auml;lt&auml;&auml; jokaisen kohteen puskuriet&auml;isyyden.
+            </p> 
+            <p class="modelBuilderOnly">Joko  <b>et&auml;isyysarvot</b> tai <b>et&auml;isyyskentt&auml;</b> vaaditaan. Jos molemmat parametrit annetaan, k&auml;ytet&auml;&auml;n <b>et&auml;isyyskentt&auml;&auml;</b>.
+            </p>
+        </div>
+    </div>
+    <div id="units">
+        <div>
+            <p>Yksik&ouml;t, joita k&auml;ytet&auml;&auml;n puskuriet&auml;isyyden m&auml;&auml;ritt&auml;miseen.
+            </p>
+        </div>
+    </div>
+    <div id="dissolveType">
+        <div>
+            <p>M&auml;&auml;ritt&auml;&auml;, kuinka eri kohteiden puskureita k&auml;sitell&auml;&auml;n, kun ne ovat p&auml;&auml;llekk&auml;in.
+            </p>
+        </div>
+    </div>
+    <div id="ringType">
+        <div>
+            
+            <p>M&auml;&auml;ritt&auml;&auml;, kuinka moni usean et&auml;isyyden puskuri on p&auml;&auml;llekk&auml;inen keskitetty puskuri (<b>p&auml;&auml;llekk&auml;iset kiekot</b>) tai rengas, joka ei ole p&auml;&auml;llekk&auml;in (<b>erottuvat renkaat</b>).
+            </p>
+        </div>
+    </div>
+    <div id="sideType">
+        <div>
+            <p>M&auml;&auml;ritt&auml;&auml; viivakohteille, luodaanko puskuri viivan molemmille puolille (<b>ymp&auml;ri</b>), vain vasemmalle puolelle (<b>vasen</b>), tai vain oikealle puolelle (<b>oikea</b>).
+            </p>
+            <p>M&auml;&auml;ritt&auml;&auml; aluekohteille, sis&auml;llytet&auml;&auml;nk&ouml; l&auml;ht&ouml;aineiston aluekohteet puskuriin (<b>sis&auml;llyt&auml;</b>) vai j&auml;tet&auml;&auml;nk&ouml; ne pois puskurista (<b>j&auml;t&auml; pois</b>).
+            </p>
+        </div>
+    </div>
+    <div id="endType">
+        <div>
+            <p>M&auml;&auml;ritt&auml;&auml;, onko viivakohteen p&auml;&auml;ss&auml; olevan puskurin muoto py&ouml;re&auml; (<b>py&ouml;re&auml;</b>) vai litte&auml; (<b>litte&auml;</b>).
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>Karttaan luotavan ja lis&auml;tt&auml;v&auml;n karttatason nimi.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>Sen  <b>Omassa sis&auml;ll&ouml;ss&auml;</b> olevan kansion nimi, johon tulos tallennetaan.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

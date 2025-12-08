@@ -1,0 +1,7 @@
+{
+  "addEntryButtonLabel": "追加",
+  "maxGroupsMessage": "エントリの最大数は ${maxCount} です。",
+  "minGroupsMessage": "エントリの最小数は ${minCount} です。",
+  "removeEntryButtonLabel": "入力の削除",
+  "requiredMessage": "このパラメーターは必須です。"
+}

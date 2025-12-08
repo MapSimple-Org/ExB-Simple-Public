@@ -1,0 +1,1 @@
+{"componentLabel":"면적 측정","hint":"맵에서 클릭해 첫 번째 포인트를 배치하여 측정을 시작합니다","mode":"모드","modes":{"auto":"자동","planar":"평면","geodesic":"측지"},"newMeasurement":"새 측정","perimeter":"둘레","unit":"유닛","unsupported":"맵 뷰에서는 2D 영역 측정만 지원됩니다."}

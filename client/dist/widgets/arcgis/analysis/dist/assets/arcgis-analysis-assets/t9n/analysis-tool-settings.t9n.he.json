@@ -1,0 +1,13 @@
+{
+  "cancel": "ביטול",
+  "creditUsage": "מתן קרדיט",
+  "envSettings": "הגדרות סביבה",
+  "envSettingsDescription": "ציין הגדרות נוספות שמשפיעות על אופן ביצוע הניתוח.",
+  "generalSettings": "סביבות כלליות",
+  "geoanalytics": "GeoAnalytics",
+  "noEnvSettings": "אין סביבות",
+  "processingExtentEnv": "עיבוד סביבת תיחום",
+  "rasterAnalysis": "סביבות רסטר",
+  "resetDefaults": "אפס ברירות מחדל",
+  "save": "שמור"
+}

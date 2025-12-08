@@ -1,0 +1,11 @@
+{
+  "modalTitle": "Items categoriseren",
+  "save": "Opslaan",
+  "cancel": "Annuleren",
+  "loadingText": "Bezig met laden...",
+  "assignCategory": "Categorie toewijzen",
+  "errorMessage": "Er is iets fout gegaan. Probeer het later opnieuw.",
+  "limited": "Items kunnen maximaal tot 20 categorieën behoren. Verwijder eerst een categorie voordat u een nieuwe toevoegt.",
+  "undo": "Ongedaan maken",
+  "redo": "Opnieuw uitvoeren"
+}

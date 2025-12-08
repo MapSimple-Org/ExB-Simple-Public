@@ -1,0 +1,22 @@
+{
+  "general": "Allmänt",
+  "parameters": "Parametrar",
+  "variables": "Variabler",
+  "name": "Namn",
+  "namePlaceHolder": "Ange ett namn",
+  "description": "Beskrivning",
+  "parameter": "Parameter",
+  "isPublic": "IsPublic",
+  "isDataset": "IsDataset",
+  "unknownPixelType": "Okänt",
+  "outputPixelType": "Pixeltyp för utdata",
+  "u8PixelType": "8-bitars osignerad",
+  "s8PixelType": "8-bitars signerad",
+  "u16PixelType": "16-bitars osignerad",
+  "s16PixelType": "16-bitars signerade",
+  "u32PixelType": "32-bitars osignerade",
+  "s32PixelType": "32-bitars signerad",
+  "f32PixelType": "32-bitars flyttal",
+  "f64PixelType": "64-bitars dubbel",
+  "properties": "Egenskaper"
+}

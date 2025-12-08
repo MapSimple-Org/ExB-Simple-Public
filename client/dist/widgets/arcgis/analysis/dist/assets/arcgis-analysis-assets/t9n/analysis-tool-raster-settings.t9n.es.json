@@ -1,0 +1,23 @@
+{
+  "CPU": "CPU",
+  "GPU": "GPU",
+  "asSpecified": "Según se especifica",
+  "automatic": "Automático",
+  "bilinear": "Interpolación bilineal (para datos continuos)",
+  "cellSize": "Tamaño de celda",
+  "cubic": "Convolución cúbica (para datos continuos)",
+  "default": "Predeterminado",
+  "fromLayer": "Desde capa",
+  "mask": "Máscara",
+  "maxOf": "Cantidad máxima de entradas",
+  "minOf": "Cantidad mínima de entradas",
+  "nearest": "Vecino más próximo (para datos discretos)",
+  "parallelProcessingFactor": "Factor de procesamiento en paralelo",
+  "parallelProcessingFactorPlaceholderText": "Introduzca un número o porcentaje...",
+  "processorType": "Tipo de procesador",
+  "recycleProcessingWorkers": "Intervalo de reciclaje de trabajadores de procesamiento",
+  "resamplingMethod": "Método de remuestreo",
+  "retryOnFailures": "Número de reintentos en caso de fallo",
+  "selectCellSize": "Seleccionar tamaño de celda...",
+  "snapRaster": "Ráster de alineación"
+}

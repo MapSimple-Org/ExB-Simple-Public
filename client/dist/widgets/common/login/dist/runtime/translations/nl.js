@@ -1,0 +1,1 @@
+System.register([],function(e){return{execute:function(){e({_widgetLabel:"Aanmelden",switchToLogin:"Overschakelen voor aanmelding",switchToLogout:"Overschakelen na aanmelding",toggleSignInPreview:"Voorbeeld aanmelding in-/uitschakelen",restrictedResources:"Beperkte hulpmiddelen"})}}});

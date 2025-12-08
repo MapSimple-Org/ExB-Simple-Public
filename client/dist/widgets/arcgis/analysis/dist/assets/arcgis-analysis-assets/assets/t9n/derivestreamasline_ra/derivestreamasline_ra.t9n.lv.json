@@ -1,0 +1,11 @@
+{
+  "all": "Viss",
+  "inputLayersGroupText": "Izvēlieties ievades virsmas rastru un, ja vēlaties, ieplakas datus un svara rastru.",
+  "itemProperties": {
+    "description": "Izvade, kas ģenerēta, palaižot rīku Iegūt straumi kā rastru.",
+    "snippet": "No Iegūt straumi kā rastru ģenerētā izvade"
+  },
+  "outputStreamFeaturesLabel": "Izvades straumes elementu nosaukums",
+  "simplifyLabel": "Vienkāršot elementus",
+  "streamSettingsGroupText": "Norādiet uzkrāšanas slieksni, plūsmas apzīmējuma metodi un to, vai izvades plūsmas rindas tiks izlīdzinātas vienkāršās formās."
+}

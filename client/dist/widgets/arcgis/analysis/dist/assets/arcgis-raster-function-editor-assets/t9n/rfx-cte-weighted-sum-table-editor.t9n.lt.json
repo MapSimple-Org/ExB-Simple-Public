@@ -1,0 +1,9 @@
+{
+  "weightedSumTable": "Svorinių sumų lentelė",
+  "id": "ID",
+  "layer": "Sluoksnis",
+  "field": "Darbui lauke",
+  "weight": "Svoris",
+  "value": "Reikšmė",
+  "selectLayer": "Pasirinkti sluoksnį"
+}

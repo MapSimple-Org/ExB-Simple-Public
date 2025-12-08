@@ -1,0 +1,31 @@
+{
+  "back": "Atrás",
+  "cancel": "Cancelar",
+  "learnMore": "Más información",
+  "restore": "Restaurar",
+  "restoreTo": "Restaurar en",
+  "restoreItem": "Restaurar elemento",
+  "restoreItems": "Restaurar elementos",
+  "noticeMessage": "Los elementos restaurados no se compartirán. Revise su contenido antes de compartirlo de nuevo.",
+  "cannotBulkRestoreXItems": "No se pueden restaurar de forma masiva más de ${number} elementos; anule la selección de algunos elementos.",
+  "cannotBulkRestoreMultipleOwners": "Los elementos que pertenecen a diferentes propietarios no se pueden restaurar de forma masiva. Seleccione elementos de un único propietario para realizar una restauración masiva.",
+  "toRestore": {
+    "single": "Elemento para restaurar:",
+    "multiple": "Elementos para restaurar:"
+  },
+  "cannotRestore": "No se puede restaurar:",
+  "dependentItems": {
+    "single": "Este elemento no se puede restaurar porque depende de <strong style='font-weight: 500'>${parent}</strong>. Debe restaurarlos juntos.",
+    "singleUnknown": "Este elemento no se puede restaurar porque depende de otro elemento de la papelera de reciclaje. Debe restaurarlos juntos.",
+    "multiple": "Estos elementos no se pueden restaurar porque dependen de otros elementos de la papelera de reciclaje. Debe restaurarlos juntos.",
+    "multipleSameSource": "Estos elementos no se pueden restaurar porque dependen de <strong style='font-weight: 500'>${parent}</strong>. Debe restaurarlos juntos."
+  },
+  "pageRangeWithTotalRecycleBinSize": {
+    "en": "${start} - ${end} de ${total} (${size}) en la papelera de reciclaje",
+    "other": "${start} - ${end}, total: ${total} (${size}) en la papelera de reciclaje"
+  },
+  "pageRangeWithGreaterThanTotalRecycleBinSize": {
+    "en": "${start} - ${end} de ${total} (>${size}) en la papelera de reciclaje",
+    "other": "${start} - ${end}, total: ${total} (>${size}) en la papelera de reciclaje"
+  }
+}

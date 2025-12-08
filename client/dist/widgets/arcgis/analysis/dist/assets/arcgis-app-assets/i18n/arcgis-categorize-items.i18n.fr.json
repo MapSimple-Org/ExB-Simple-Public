@@ -1,0 +1,11 @@
+{
+  "modalTitle": "Classer les éléments",
+  "save": "Enregistrer",
+  "cancel": "Annuler",
+  "loadingText": "Chargement...",
+  "assignCategory": "Attribuer une catégorie",
+  "errorMessage": "Un problème est survenu. Réessayez ultérieurement.",
+  "limited": "Les éléments sont limités à 20 catégories. Supprimez une catégorie avant d’en ajouter une autre.",
+  "undo": "Annuler",
+  "redo": "Rétablir"
+}

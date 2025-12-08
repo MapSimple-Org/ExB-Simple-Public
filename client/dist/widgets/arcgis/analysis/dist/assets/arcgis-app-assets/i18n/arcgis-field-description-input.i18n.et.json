@@ -1,0 +1,6 @@
+{
+  "description": "Kirjeldus",
+  "addDescription": "Lisage kirjeldus",
+  "charactersLeft": "Tähemärke jäänud: ${num}",
+  "invalid": "Kirjeldus ei tohi sisaldada järgmisi tähemärke: < või >."
+}

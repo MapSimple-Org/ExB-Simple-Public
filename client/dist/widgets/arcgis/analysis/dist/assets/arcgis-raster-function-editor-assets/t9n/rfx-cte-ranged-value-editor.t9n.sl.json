@@ -1,0 +1,6 @@
+{
+  "greaterThanErrorMessage": "Vhodna številka mora biti večja od ${min}",
+  "lesserThanErrorMessage": "Vhodna številka mora biti manjša od ${max}",
+  "greaterThanOrEqualErrorMessage": "Vhodna številka mora biti večja ali enaka ${min}",
+  "lesserThanOrEqualErrorMessage": "Vhodna številka mora biti manjša ali enaka ${max}"
+}

@@ -1,0 +1,120 @@
+{
+  "toolName": "TraceDownstream",
+  "version": "0.1.0",
+  "modelBuilderVersion": "V2",
+  "rules": [],
+  "environmentSettings": {
+    "raster": []
+  },
+  "UIparameters": [
+    {
+      "label": "$inputLayerGroupLabel",
+      "componentName": "analysis-block",
+      "summaryText": "$inputLayersGroupText",
+      "UIparameters": [
+        {
+          "name": "inputLayer",
+          "label": "$inputPointFeaturesLabel",
+          "componentName": "analysis-layer-input",
+          "layerFilterType": ["feature_point", "feature_multiPoint"],
+          "required": true,
+          "enableSketch": true
+        }
+      ]
+    },
+    {
+      "label": "$inputTraceSettingsGroupLabel",
+      "componentName": "analysis-block",
+      "summaryText": "$inputTraceSettingsGroupText",
+      "UIparameters": [
+        {
+          "layout": "horizontal",
+          "name": "splitDistanceUnitGroup",
+          "UIparameters": [
+            {
+              "name": "splitDistance",
+              "label": "$splitDistanceLabel",
+              "dataType": "GPLinearUnit",
+              "unitChoiceList": ["Kilometers", "Meters", "Miles", "Feet", "Yards"],
+              "choiceListLabels": {
+                "Kilometers": "$kilometers",
+                "Meters": "$meters",
+                "Miles": "$miles",
+                "Feet": "$feet",
+                "Yards": "$yards"
+              },
+              "excludeMinValue": true,
+              "required": false,
+              "minimum": 0,
+              "placeholderText": "$splitDistanceText"
+            }
+          ]
+        },
+        {
+          "layout": "horizontal",
+          "name": "maxDistanceUnitGroup",
+          "UIparameters": [
+            {
+              "name": "maxDistance",
+              "label": "$maxDistanceLabel",
+              "dataType": "GPLinearUnit",
+              "unitChoiceList": ["Kilometers", "Meters", "Miles", "Feet", "Yards"],
+              "choiceListLabels": {
+                "Kilometers": "$kilometers",
+                "Meters": "$meters",
+                "Miles": "$miles",
+                "Feet": "$feet",
+                "Yards": "$yards"
+              },
+              "excludeMinValue": true,
+              "required": false,
+              "minimum": 0,
+              "placeholderText": "$maxDistanceText"
+            }
+          ]
+        },
+        {
+          "name": "boundingPolygonLayer",
+          "label": "$clipOutputTo",
+          "componentName": "analysis-layer-input",
+          "layerFilterType": ["feature_polygon"],
+          "required": false,
+          "enableSketch": true
+        },
+        {
+          "name": "generalize",
+          "label": "$generalize",
+          "componentName": "analysis-boolean-input",
+          "required": false,
+          "visible": false
+        }
+      ]
+    },
+    {
+      "label": "$resultLayerGroupLabel",
+      "layout": "vertical",
+      "componentName": "analysis-block",
+      "summaryText": "$resultLayerGroupText",
+      "UIparameters": [
+        {
+          "name": "outputName",
+          "label": "$outputPolylineNameLabel",
+          "componentName": "analysis-string-input",
+          "placeholderText": "$outputNamePlaceholderText",
+          "required": true
+        },
+        {
+          "name": "saveResultIn",
+          "label": "$saveResultIn",
+          "componentName": "analysis-folder-input"
+        }
+      ]
+    }
+  ],
+  "outputParameters": [
+    {
+      "label": "$traceDownstreamOutput",
+      "name": "traceLayer"
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "addToMap": "Bekräfta och lägg till på karta",
+  "cancel": "Avbryt",
+  "confirm": "Bekräfta",
+  "header": "Välj objekt",
+  "select": "Välj",
+  "unsupportedLayer": "Den här parametern stöder inte följande lager: ${layerName}.",
+  "viewDetails": "Visa information"
+}

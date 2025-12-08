@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>T&ouml;&ouml;riist &quot;Geodeetiline vaatev&auml;li&quot; tuvastab rasterpinnal asukohad, mis on sisendi vaatluspunktides n&auml;htavad.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputElevationSurface">
+        <div>
+            <p>K&otilde;rgusraster, millelt arvutatakse vaatev&auml;li.
+            </p>
+        </div>
+    </div>
+    <div id="inputObserverFeatures">
+        <div>
+            <p>Vaatluspunktid, mille jaoks arvutatakse vaatev&auml;li.
+            </p>
+            <p class="toolPaneOnly">Objektide arv s&otilde;ltub t&auml;iendavatest teguritest, n&auml;iteks filtreerimiskriteeriumidest ja anal&uuml;&uuml;si ulatusest.
+            </p>
+        </div>
+    </div>
+    <div id="optimizeFor">
+        <div>
+            <p>Kiiruse v&otilde;i t&auml;psuse alusel optimeeritud vaatev&auml;lja arvutus.
+            </p>
+        </div>
+    </div>
+    <div id="verticalError">
+        <div>
+            <p> <b>Sisendk&otilde;rguspinna</b> v&auml;&auml;rtuse m&auml;&auml;ramatuse m&auml;&auml;r k&otilde;rguse v&auml;&auml;rtustes.
+            </p>
+        </div>
+    </div>
+    <div id="refractivityCoefficient">
+        <div>
+            <p>&Otilde;hus n&auml;htava valguse murdumistegur.
+            </p>
+        </div>
+    </div>
+    <div id="maximumViewingDistance">
+        <div>
+            <p>Maksimaalne vaatekaugus vaatev&auml;lja arvutamiseks.
+            </p>
+            <p>Kauguse saab m&auml;&auml;ratleda v&auml;&auml;rtuse ja selle &uuml;hikute abil v&otilde;i  <b>Sisendvaatluspunkti v&otilde;i jooneobjektide</b> v&auml;&auml;rtuse v&auml;ljal.
+            </p>
+        </div>
+    </div>
+    <div id="minimumViewingDistance">
+        <div>
+            <p>Minimaalne vaatekaugus vaatev&auml;lja arvutamiseks.
+            </p>
+            <p>Kauguse saab m&auml;&auml;ratleda v&auml;&auml;rtuse ja selle &uuml;hikute abil v&otilde;i  <b>Sisendvaatluspunkti v&otilde;i jooneobjektide</b> v&auml;&auml;rtuse v&auml;ljal.
+            </p>
+        </div>
+    </div>
+    <div id="viewingDistancesAre3D">
+        <div>
+            <p>M&auml;&auml;rab, kas maksimaalse ja minimaalse vaatamiskauguse m&otilde;&otilde;tmine toimub 3D v&otilde;i 2D vahemaana.
+            </p>
+            <p>Kui see on m&auml;rkimata, k&auml;sitletakse vaatamiskaugust 2D Eukleidilise kaugusena. Kui see on m&auml;rgitud, k&auml;sitletakse vaatamiskaugusi 3D vahemaadena.
+            </p>
+        </div>
+    </div>
+    <div id="observersElevation">
+        <div>
+            <p>Vaatluspunktide pinnak&otilde;rgus.
+            </p>
+            <p>K&otilde;rguse saab m&auml;&auml;ratleda v&auml;&auml;rtuse ja selle &uuml;hikute abil v&otilde;i  <b>Sisendvaatluspunkti v&otilde;i jooneobjektide</b> v&auml;&auml;rtuse v&auml;ljal.
+            </p>
+        </div>
+    </div>
+    <div id="observersHeight">
+        <div>
+            <p>Vaatleja k&otilde;rgus maapinnast.
+            </p>
+            <p>Selle k&otilde;rguse saab m&auml;&auml;ratleda v&auml;&auml;rtuse ja selle &uuml;hikute abil v&otilde;i  <b>Sisendvaatluspunkti v&otilde;i jooneobjektide</b> v&auml;&auml;rtuse v&auml;ljal.
+            </p>
+        </div>
+    </div>
+    <div id="targetHeight">
+        <div>
+            <p>Sihtm&auml;rkide k&otilde;rgus maapinnal.
+            </p>
+            <p>Selle k&otilde;rguse saab m&auml;&auml;ratleda v&auml;&auml;rtuse ja selle &uuml;hikute abil v&otilde;i  <b>Sisendvaatluspunkti v&otilde;i jooneobjektide</b> v&auml;&auml;rtuse v&auml;ljal.
+            </p>
+        </div>
+    </div>
+    <div id="horizontalStartAngle">
+        <div>
+            <p>Horisontaalse skannimisvahemiku algusnurk.
+            </p>
+            <p>Selle nurga saab m&auml;&auml;ratleda v&auml;&auml;rtusega 0 kuni 360 v&otilde;i  <b>Sisendvaatluspunkti v&otilde;i jooneobjektide</b> v&auml;&auml;rtuse v&auml;ljal.
+            </p>
+        </div>
+    </div>
+    <div id="horizontalEndAngle">
+        <div>
+            <p>Horisontaalse skannimisvahemiku l&otilde;ppnurk.
+            </p>
+            <p>Selle nurga saab m&auml;&auml;ratleda v&auml;&auml;rtusega 0 kuni 360 v&otilde;i  <b>Sisendvaatluspunkti v&otilde;i jooneobjektide</b> v&auml;&auml;rtuse v&auml;ljal.
+            </p>
+        </div>
+    </div>
+    <div id="verticalUpperAngle">
+        <div>
+            <p>Skannimise &uuml;lemise vertikaalse nurga piir horisontaaltasandi suhtes.
+            </p>
+            <p>Selle nurga saab m&auml;&auml;ratleda v&auml;&auml;rtusega &ndash;90 kuni 90 v&otilde;i  <b>Sisendvaatluspunkti v&otilde;i jooneobjektide</b> v&auml;&auml;rtuse v&auml;ljal.
+            </p>
+        </div>
+    </div>
+    <div id="verticalLowerAngle">
+        <div>
+            <p>Skannimise alumise vertikaalse nurga piir horisontaaltasandi suhtes
+            </p>
+            <p>Selle nurga saab m&auml;&auml;ratleda v&auml;&auml;rtusega &ndash;90 kuni 90 v&otilde;i  <b>Sisendvaatluspunkti v&otilde;i jooneobjektide</b> v&auml;&auml;rtuse v&auml;ljal.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>Selle vaatev&auml;lja rasterkihi nimi, mis luuakse jaotises ja lisatakse kaardile. See kiht sisaldab n&auml;htavaid alasid, mida vaatlejad saavad n&auml;ha, ja lahtrite v&auml;&auml;rtused n&auml;itavad vaatlejate arvu, kes saavad neid lahtreid n&auml;ha.
+            </p>
+        </div>
+    </div>
+    <div id="outputAboveGroundLevelRasterName">
+        <div>
+            <p>Maapinnast k&otilde;rgemal oleva (AGL) rasterkihi nimi, mis luuakse ja lisatakse kaardile.
+            </p>
+        </div>
+    </div>
+    <div id="resultType">
+        <div>
+            <p>Loodava v&auml;ljundi t&uuml;&uuml;p. V&auml;ljund v&otilde;ib olla paanitud pildikiht v&otilde;i d&uuml;naamiline pildikiht.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>Selle kausta nimi jaotises  <b>Minu sisu</b>, kuhu tulemus salvestatakse.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

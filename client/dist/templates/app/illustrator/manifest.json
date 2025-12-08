@@ -1,0 +1,33 @@
+{
+  "name": "illustrator",
+  "type": "template",
+  "templateType": "app",
+  "label": "Illustrator",
+  "description": "Illustrator allows you to fully describe a place in a multi-page layout with Image, Timeline, and Map widgets.",
+  "thumbnail": "thumbnail.png",
+  "order": 62,
+  "tags": [
+    "Map",
+    "Menu",
+    "Title",
+    "Share",
+    "Navigation",
+    "Screen Group",
+    "Gallery",
+    "Timeline",
+    "Filter",
+    "List",
+    "Chart",
+    "Print",
+    "Section",
+    "View"
+  ],
+  "categoriesTags": [
+    "Website",
+    "Multipage"
+  ],
+  "isMultiplePage": true,
+  "isMapAware": false,
+  "thumbnailWidth": 320,
+  "thumbnailHeight": 214
+}

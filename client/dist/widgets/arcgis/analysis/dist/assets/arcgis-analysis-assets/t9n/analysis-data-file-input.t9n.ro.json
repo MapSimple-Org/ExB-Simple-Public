@@ -1,0 +1,14 @@
+{
+  "AddDataFromUrl": "Adăugare date din URL",
+  "addData": "Adăugare date",
+  "clear": "Golire",
+  "file": "Fişier",
+  "fileNotFound": "Nu s-a reușit încărcarea fișierului.",
+  "invalidUrl": "URL sau extensie fișier nevalid(ă).",
+  "layerNotFound": "Nu s-a reușit încărcarea stratului tematic.",
+  "replaceData": "Înlocuire date",
+  "required": "Acest parametru este obligatoriu.",
+  "uploadData": "Încărcare date",
+  "uploadFailureMsg": "Eroare la efectuarea operației de încărcare, dimensiunea sau tipul fișierului nu sunt acceptate pentru acest serviciu.",
+  "url": "URL"
+}

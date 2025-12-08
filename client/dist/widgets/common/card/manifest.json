@@ -1,0 +1,86 @@
+{
+  "name": "card",
+  "label": "Card",
+  "type": "widget",
+  "version": "1.19.0",
+  "exbVersion": "1.19.0",
+  "author": "Esri R&D Center Beijing",
+  "description": "A widget to display data in a Card view.",
+  "copyright": "",
+  "license": "http://www.apache.org/licenses/LICENSE-2.0",
+  "defaultSize": {
+    "width": 300,
+    "height": 405
+  },
+  "properties": {
+    "hasEmbeddedLayout": true,
+    "canCrossLayoutBoundary": true,
+    "flipIcon": false,
+    "coverLayoutBackground": true,
+    "supportAutoSize": false,
+    "useDragHandler": true,
+    "useOwnBorder": true,
+    "hasBuilderSupportModule": true
+  },
+  "extensions": [
+    {
+      "name": "appConfigOperations",
+      "point": "APP_CONFIG_OPERATIONS",
+      "uri": "tools/app-config-operations"
+    }
+  ],
+  "layouts": [
+    {
+      "name": "DEFAULT",
+      "label": "Default",
+      "type": "FIXED"
+    },
+    {
+      "name": "HOVER",
+      "label": "Hover",
+      "type": "FIXED"
+    }
+  ],
+  "translatedLocales": [
+    "en",
+    "ar",
+    "bg",
+    "bs",
+    "ca",
+    "cs",
+    "da",
+    "de",
+    "el",
+    "es",
+    "et",
+    "fi",
+    "fr",
+    "he",
+    "hr",
+    "hu",
+    "id",
+    "it",
+    "ja",
+    "ko",
+    "lt",
+    "lv",
+    "no",
+    "nl",
+    "pl",
+    "pt-br",
+    "pt-pt",
+    "ro",
+    "ru",
+    "sk",
+    "sl",
+    "sr",
+    "sv",
+    "th",
+    "tr",
+    "zh-cn",
+    "uk",
+    "vi",
+    "zh-hk",
+    "zh-tw"
+  ]
+}

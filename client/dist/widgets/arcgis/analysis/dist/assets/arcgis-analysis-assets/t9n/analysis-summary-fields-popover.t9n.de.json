@@ -1,0 +1,13 @@
+{
+  "addField": "Feld hinzufügen",
+  "deselectAll": "Auswahl für alle aufheben",
+  "done": "Fertig",
+  "noFieldsAvailable": "\"${layerName}\" enthält keine Felder, die die Datentypanforderung erfüllen. Wählen Sie einen anderen Layer aus, um den Vorgang fortzusetzen.",
+  "noInputSelected": {
+    "withLayerInputLabel": "Kein Eingabe-Layer ausgewählt. Wählen Sie in ${layerInputLabel} einen Layer aus, um den Vorgang fortzusetzen.",
+    "withoutLayerInputLabel": "Kein Eingabe-Layer ausgewählt. Wählen Sie einen Eingabe-Layer aus, um den Vorgang fortzusetzen."
+  },
+  "noSearchResults": "Keine übereinstimmenden Felder gefunden",
+  "selectAll": "Alle auswählen",
+  "summaryFieldsPopover": "Zusammenfassungsfelder"
+}

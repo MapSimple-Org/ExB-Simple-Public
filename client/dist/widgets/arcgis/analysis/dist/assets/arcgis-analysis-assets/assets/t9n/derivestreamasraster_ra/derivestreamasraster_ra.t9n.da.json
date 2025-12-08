@@ -1,0 +1,10 @@
+{
+  "forceFlowLabel": "Tving kantceller til at strømme væk",
+  "inputLayersGroupText": "Vælg input-overfladerasteren og eventuelt nedsænkningsdata og vægtrasteren.",
+  "itemProperties": {
+    "description": "Output, der er genereret ud fra kørsel af Afled strøm som raster-værktøjet.",
+    "snippet": "Output, der er genereret fra Afled strøm som raster"
+  },
+  "outputStreamRasterLabel": "Rasternavn på output-strøm",
+  "streamSettingsGroupText": "Angiv akkumuleringsgrænsen, metoden til strømbetegnelsen, og hvordan flowet håndteres ved kanten af input-overfladerasteren."
+}

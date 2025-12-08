@@ -1,0 +1,10 @@
+{
+  "cannotAssignValueToTargetField": "Obliczona wartość nie jest zgodna z typem pola.",
+  "createExpression": "Utwórz wyrażenie",
+  "deleteExpression": "Usuń wyrażenie",
+  "editExpression": "Edytuj wyrażenie",
+  "expression": "Wyrażenie",
+  "isRequired": "Ten parametr jest wymagany.",
+  "layerLoadError": "Nie można wczytać warstwy.",
+  "validationFailedInvalidSQL": "Niepowodzenie weryfikacji wyrażenia. To wyrażenie nie jest prawidłowym wyrażeniem SQL."
+}

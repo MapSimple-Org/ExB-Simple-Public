@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>Lo strumento Filtra per attributi restituisce un sottoinsieme di un dataset basato su una interrogazione attributo. Il risultato &egrave; un nuovo dataset contenente solo i record che soddisfano le condizioni specificate nell'interrogazione.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputRows">
+        <div>
+            <p>Il layer o la tabella d'input da filtrare.
+            </p>
+            <p class="modelBuilderOnly"> <b>Layer</b> &egrave; specificato per impostazione predefinita quando <b>Dataset di input</b> non &egrave; popolato. Per aggiungere una tabella d'input, selezionare <b>Tabella</b> prima di aggiungere un dataset.
+            </p>
+        </div>
+    </div>
+    <div id="whereClause">
+        <div>
+            <p>L'interrogazione attributo che sar&agrave; utilizzata per filtrare il dataset d'input.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>Il nome del layer che sar&agrave; creato e aggiunto alla mappa.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            
+            <p>Il nome della cartella in  <b>I miei contenuti</b> in cui sar&agrave; salvato il risultato.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

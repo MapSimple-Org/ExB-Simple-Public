@@ -1,0 +1,9 @@
+{
+  "inputLayerGroupText": "Kies de invoerlaag als u de geometrie van de zonegrenzen wilt berekenen.",
+  "itemProperties": {
+    "description": "Uitvoertabel die wordt gegenereerd door het uitvoeren van de zonegeometrie als tabelanalysetool.",
+    "snippet": "Uitvoertabel die uit zonegeometrie wordt gegenereerd als tabel."
+  },
+  "zonalGeometrySettingGroupLabel": "Instelling zonegeometrie",
+  "zonalGeometrySettingGroupText": "Specificeer de celgrootte om te berekenen."
+}

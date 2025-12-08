@@ -1,0 +1,7 @@
+{
+  "addEntryButtonLabel": "הוספה",
+  "maxGroupsMessage": "מספר הרשומות המקסימלי הוא ${maxCount}.",
+  "minGroupsMessage": "מספר הרשומות המינימלי הוא ${minCount}.",
+  "removeEntryButtonLabel": "הסר ערך",
+  "requiredMessage": "זהו פרמטר חובה."
+}

@@ -1,0 +1,31 @@
+{
+  "name": "reveal",
+  "type": "template",
+  "templateType": "scrolling-page",
+  "label": "Reveal",
+  "description": "Reveal allows you to create a narrative tour highlighting important data points with the use of tables, charts, and bookmarks.",
+  "thumbnail": "thumbnail.png",
+  "order": 11,
+  "tags": [
+    "Logo",
+    "Title",
+    "Share",
+    "Link",
+    "Chart",
+    "Section",
+    "View",
+    "Navigation",
+    "Card",
+    "List",
+    "Table",
+    "Map",
+    "Bookmark",
+    "Slides"
+  ],
+  "categoriesTags": [
+    "Dashboard",
+    "Scrolling"
+  ],
+  "thumbnailWidth": 320,
+  "thumbnailHeight": 214
+}

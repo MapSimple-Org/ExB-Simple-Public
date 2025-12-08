@@ -1,0 +1,17 @@
+{
+  "any": "Bilo koji",
+  "count": "Zbroj",
+  "field": "Polje",
+  "fieldLoadingErrorText": "Nije moguće učitati polja.",
+  "first": "Prvo",
+  "isRequired": "Ovaj parametar je obavezan.",
+  "last": "Posljednje",
+  "max": "Maks",
+  "mean": "Prosjek",
+  "min": "Min",
+  "selectAll": "Odaberi sve",
+  "standardDeviation": "Standardno odstupanje",
+  "statistic": "Statistika",
+  "statisticNotSelected": "Za svako polje potrebna je najmanje jedna vrsta statistike.",
+  "sum": "Zbroj"
+}

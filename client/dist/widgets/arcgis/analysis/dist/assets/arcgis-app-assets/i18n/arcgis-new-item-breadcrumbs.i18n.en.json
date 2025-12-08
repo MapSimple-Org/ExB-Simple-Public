@@ -1,0 +1,12 @@
+{
+    "apiCredentialType": "Credential type: API key",
+    "oauthCredentialType": "Credential type: OAuth 2.0",
+    "itemAccess": "Item Access",
+    "page": "Page: ${page}",
+    "currentPage": "Current page: ${page}",
+    "privileges": "Privileges",
+    "itemDetails": "Item details",
+    "settings": "Settings",
+    "serviceScope": "Service scope",
+    "summary": "Summary"
+}

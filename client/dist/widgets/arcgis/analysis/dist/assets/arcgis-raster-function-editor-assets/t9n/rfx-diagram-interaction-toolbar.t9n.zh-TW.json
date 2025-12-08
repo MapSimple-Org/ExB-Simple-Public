@@ -1,0 +1,9 @@
+{
+  "zoomIn": "放大",
+  "zoomOut": "縮小",
+  "autoLayout": "自動進行版面配置",
+  "stretch": "配合視圖大小",
+  "select": "選擇",
+  "pan": "平移",
+  "deleteSelectedItemsText": "刪除所選項目"
+}

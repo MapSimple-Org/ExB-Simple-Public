@@ -1,0 +1,13 @@
+{
+  "aboveMaximumMessage": "Входната стойност трябва да е по-малка или равна на ${max}.",
+  "belowMinimumMessage": "Входната стойност трябва да е по-голяма или равна на ${min}.",
+  "choiceListBadInput": "Входната стойност съдържа невалиден запис.",
+  "defaultLabel": "Линейна мерна единица",
+  "inputPlaceholderText": "Въвеждане на стойност за разстояние...",
+  "invalidDoubleMessage": "Входната стойност трябва да е двойно число.",
+  "invalidIntegerMessage": "Входната стойност трябва да е цяло число.",
+  "requiredInputMessage": "Този параметър е задължителен.",
+  "strictlyMaximumMessage": "Входната стойност трябва да е по-малка от ${max}.",
+  "strictlyMinimumMessage": "Входната стойност трябва да е по-голяма от ${min}.",
+  "unitSelect": "Избор на единица"
+}

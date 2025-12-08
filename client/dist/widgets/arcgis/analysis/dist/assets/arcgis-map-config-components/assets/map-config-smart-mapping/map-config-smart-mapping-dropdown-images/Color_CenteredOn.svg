@@ -1,0 +1,123 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="16" height="48" viewBox="0 0 16 48">
+  <defs>
+    <linearGradient id="linear-gradient" x1="8" x2="8" y2="48" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#aa3f27" stop-opacity="0"/>
+      <stop offset="0.06" stop-color="#aa3f27" stop-opacity="0.05"/>
+      <stop offset="0.15" stop-color="#aa3f27" stop-opacity="0.2"/>
+      <stop offset="0.27" stop-color="#aa3f27" stop-opacity="0.43"/>
+      <stop offset="0.4" stop-color="#aa3f27" stop-opacity="0.75"/>
+      <stop offset="0.5" stop-color="#aa3f27"/>
+      <stop offset="0.6" stop-color="#aa3f27" stop-opacity="0.75"/>
+      <stop offset="0.73" stop-color="#aa3f27" stop-opacity="0.43"/>
+      <stop offset="0.85" stop-color="#aa3f27" stop-opacity="0.2"/>
+      <stop offset="0.94" stop-color="#aa3f27" stop-opacity="0.05"/>
+      <stop offset="1" stop-color="#aa3f27" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  <g style="isolation: isolate">
+    <g id="Layer_1" data-name="Layer 1">
+      <g>
+        <rect x="2" width="2" height="2" style="fill: #eaeaea"/>
+        <rect x="6" width="2" height="2" style="fill: #eaeaea"/>
+        <rect x="10" width="2" height="2" style="fill: #eaeaea"/>
+        <path d="M14,0h0V2h2A2,2,0,0,0,14,0Z" style="fill: #eaeaea"/>
+        <rect y="2" width="2" height="2" style="fill: #eaeaea"/>
+        <rect x="4" y="2" width="2" height="2" style="fill: #eaeaea"/>
+        <rect x="8" y="2" width="2" height="2" style="fill: #eaeaea"/>
+        <rect x="12" y="2" width="2" height="2" style="fill: #eaeaea"/>
+        <rect x="2" y="4" width="2" height="2" style="fill: #eaeaea"/>
+        <rect x="6" y="4" width="2" height="2" style="fill: #eaeaea"/>
+        <rect x="10" y="4" width="2" height="2" style="fill: #eaeaea"/>
+        <rect x="14" y="4" width="2" height="2" style="fill: #eaeaea"/>
+        <rect y="6" width="2" height="2" style="fill: #eaeaea"/>
+        <rect x="4" y="6" width="2" height="2" style="fill: #eaeaea"/>
+        <rect x="8" y="6" width="2" height="2" style="fill: #eaeaea"/>
+        <rect x="12" y="6" width="2" height="2" style="fill: #eaeaea"/>
+        <rect x="2" y="8" width="2" height="2" style="fill: #eaeaea"/>
+        <rect x="6" y="8" width="2" height="2" style="fill: #eaeaea"/>
+        <rect x="10" y="8" width="2" height="2" style="fill: #eaeaea"/>
+        <rect x="14" y="8" width="2" height="2" style="fill: #eaeaea"/>
+        <rect y="10" width="2" height="2" style="fill: #eaeaea"/>
+        <rect x="4" y="10" width="2" height="2" style="fill: #eaeaea"/>
+        <rect x="8" y="10" width="2" height="2" style="fill: #eaeaea"/>
+        <rect x="12" y="10" width="2" height="2" style="fill: #eaeaea"/>
+        <rect x="2" y="12" width="2" height="2" style="fill: #eaeaea"/>
+        <rect x="6" y="12" width="2" height="2" style="fill: #eaeaea"/>
+        <rect x="10" y="12" width="2" height="2" style="fill: #eaeaea"/>
+        <rect x="14" y="12" width="2" height="2" style="fill: #eaeaea"/>
+        <rect y="14" width="2" height="2" style="fill: #eaeaea"/>
+        <rect x="4" y="14" width="2" height="2" style="fill: #eaeaea"/>
+        <rect x="8" y="14" width="2" height="2" style="fill: #eaeaea"/>
+        <rect x="12" y="14" width="2" height="2" style="fill: #eaeaea"/>
+        <rect x="2" y="16" width="2" height="2" style="fill: #eaeaea"/>
+        <rect x="6" y="16" width="2" height="2" style="fill: #eaeaea"/>
+        <rect x="10" y="16" width="2" height="2" style="fill: #eaeaea"/>
+        <rect x="14" y="16" width="2" height="2" style="fill: #eaeaea"/>
+        <rect y="18" width="2" height="2" style="fill: #eaeaea"/>
+        <rect x="4" y="18" width="2" height="2" style="fill: #eaeaea"/>
+        <rect x="8" y="18" width="2" height="2" style="fill: #eaeaea"/>
+        <rect x="12" y="18" width="2" height="2" style="fill: #eaeaea"/>
+        <rect x="2" y="20" width="2" height="2" style="fill: #eaeaea"/>
+        <rect x="6" y="20" width="2" height="2" style="fill: #eaeaea"/>
+        <rect x="10" y="20" width="2" height="2" style="fill: #eaeaea"/>
+        <rect x="14" y="20" width="2" height="2" style="fill: #eaeaea"/>
+        <rect y="22" width="2" height="2" style="fill: #eaeaea"/>
+        <rect x="4" y="22" width="2" height="2" style="fill: #eaeaea"/>
+        <rect x="8" y="22" width="2" height="2" style="fill: #eaeaea"/>
+        <rect x="12" y="22" width="2" height="2" style="fill: #eaeaea"/>
+        <rect x="2" y="24" width="2" height="2" style="fill: #eaeaea"/>
+        <rect x="6" y="24" width="2" height="2" style="fill: #eaeaea"/>
+        <rect x="10" y="24" width="2" height="2" style="fill: #eaeaea"/>
+        <rect x="14" y="24" width="2" height="2" style="fill: #eaeaea"/>
+        <rect y="26" width="2" height="2" style="fill: #eaeaea"/>
+        <rect x="4" y="26" width="2" height="2" style="fill: #eaeaea"/>
+        <rect x="8" y="26" width="2" height="2" style="fill: #eaeaea"/>
+        <rect x="12" y="26" width="2" height="2" style="fill: #eaeaea"/>
+        <rect x="2" y="28" width="2" height="2" style="fill: #eaeaea"/>
+        <rect x="6" y="28" width="2" height="2" style="fill: #eaeaea"/>
+        <rect x="10" y="28" width="2" height="2" style="fill: #eaeaea"/>
+        <rect x="14" y="28" width="2" height="2" style="fill: #eaeaea"/>
+        <rect y="30" width="2" height="2" style="fill: #eaeaea"/>
+        <rect x="4" y="30" width="2" height="2" style="fill: #eaeaea"/>
+        <rect x="8" y="30" width="2" height="2" style="fill: #eaeaea"/>
+        <rect x="12" y="30" width="2" height="2" style="fill: #eaeaea"/>
+        <rect x="2" y="32" width="2" height="2" style="fill: #eaeaea"/>
+        <rect x="6" y="32" width="2" height="2" style="fill: #eaeaea"/>
+        <rect x="10" y="32" width="2" height="2" style="fill: #eaeaea"/>
+        <rect x="14" y="32" width="2" height="2" style="fill: #eaeaea"/>
+        <rect y="34" width="2" height="2" style="fill: #eaeaea"/>
+        <rect x="4" y="34" width="2" height="2" style="fill: #eaeaea"/>
+        <rect x="8" y="34" width="2" height="2" style="fill: #eaeaea"/>
+        <rect x="12" y="34" width="2" height="2" style="fill: #eaeaea"/>
+        <rect x="2" y="36" width="2" height="2" style="fill: #eaeaea"/>
+        <rect x="6" y="36" width="2" height="2" style="fill: #eaeaea"/>
+        <rect x="10" y="36" width="2" height="2" style="fill: #eaeaea"/>
+        <rect x="14" y="36" width="2" height="2" style="fill: #eaeaea"/>
+        <rect y="38" width="2" height="2" style="fill: #eaeaea"/>
+        <rect x="4" y="38" width="2" height="2" style="fill: #eaeaea"/>
+        <rect x="8" y="38" width="2" height="2" style="fill: #eaeaea"/>
+        <rect x="12" y="38" width="2" height="2" style="fill: #eaeaea"/>
+        <rect x="2" y="40" width="2" height="2" style="fill: #eaeaea"/>
+        <rect x="6" y="40" width="2" height="2" style="fill: #eaeaea"/>
+        <rect x="10" y="40" width="2" height="2" style="fill: #eaeaea"/>
+        <rect x="14" y="40" width="2" height="2" style="fill: #eaeaea"/>
+        <rect y="42" width="2" height="2" style="fill: #eaeaea"/>
+        <rect x="4" y="42" width="2" height="2" style="fill: #eaeaea"/>
+        <rect x="8" y="42" width="2" height="2" style="fill: #eaeaea"/>
+        <rect x="12" y="42" width="2" height="2" style="fill: #eaeaea"/>
+        <rect x="2" y="44" width="2" height="2" style="fill: #eaeaea"/>
+        <rect x="6" y="44" width="2" height="2" style="fill: #eaeaea"/>
+        <rect x="10" y="44" width="2" height="2" style="fill: #eaeaea"/>
+        <rect x="14" y="44" width="2" height="2" style="fill: #eaeaea"/>
+        <path d="M2,48H2V46H0A2,2,0,0,0,2,48Z" style="fill: #eaeaea"/>
+        <rect x="4" y="46" width="2" height="2" style="fill: #eaeaea"/>
+        <rect x="8" y="46" width="2" height="2" style="fill: #eaeaea"/>
+        <rect x="12" y="46" width="2" height="2" style="fill: #eaeaea"/>
+      </g>
+      <rect width="16" height="48" rx="2" style="fill: url(#linear-gradient)"/>
+      <g style="mix-blend-mode: multiply">
+        <path d="M14,1a1,1,0,0,1,1,1V46a1,1,0,0,1-1,1H2a1,1,0,0,1-1-1V2A1,1,0,0,1,2,1H14m0-1H2A2,2,0,0,0,0,2V46a2,2,0,0,0,2,2H14a2,2,0,0,0,2-2V2a2,2,0,0,0-2-2Z" style="fill: #eaeaea"/>
+      </g>
+    </g>
+  </g>
+</svg>

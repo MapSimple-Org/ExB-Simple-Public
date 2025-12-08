@@ -1,0 +1,27 @@
+{
+  "name": "voyage",
+  "type": "template",
+  "templateType": "full-screen-page",
+  "label": "Voyage",
+  "description": "Voyage is a template featuring interactive planned routes of the Fly Controller widget with 3D map data, together with the illustration of Text, Image, and Button widgets for tour attractions.",
+  "thumbnail": "thumbnail.png",
+  "order": 12,
+  "tags": [
+    "Map",
+    "View",
+    "Navigation",
+    "Section",
+    "Title",
+    "Fly Controller",
+    "Route fly",
+    "Rotate fly",
+    "Panel",
+    "Link"
+  ],
+  "categoriesTags": [
+    "Map centric",
+    "Fullscreen"
+  ],
+  "thumbnailWidth": 320,
+  "thumbnailHeight": 214
+}

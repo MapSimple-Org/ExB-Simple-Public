@@ -1,0 +1,9 @@
+{
+  "inputLayerGroupText": "Välj indatalager för att beräkna geometrin för zongränserna.",
+  "itemProperties": {
+    "description": "Utdatatabellen har genererats från körning av analysverktyget Zongeometri som tabell.",
+    "snippet": "Utdatatabellen har genererats från Zongeometri som tabell"
+  },
+  "zonalGeometrySettingGroupLabel": "Inställning för zongeometri",
+  "zonalGeometrySettingGroupText": "Ange cellstorleken som ska beräknas."
+}

@@ -1,0 +1,18 @@
+{
+  "add": "Hozzáadás",
+  "attributeExpressionDescription": "A vektoros elemek köre egy mezőben lévő attribútumértékek alapján szűkíthető.",
+  "attributeExpressionTitle": "Attribútumkifejezés",
+  "cancel": "Mégse",
+  "expressionDescription": "Az érdeklődésre számot tartó rekordok mezőértékek alapján szűrhetők.",
+  "expressionGroupDescription": "A lekérdezésen belül a sorrend és a kapcsolatok vezérlésére használható csoportkritériumok.",
+  "expressionGroupTitle": "Kifejezéscsoport",
+  "expressionTitle": "Kifejezés",
+  "header": "Lekérdezésszerkesztő",
+  "helpActionText": "Súgó",
+  "loading": "Betöltés...",
+  "next": "Tovább",
+  "spatialExpressionDescription": "A vektoros elemek köre egy másik rétegben lévő vektoros elemekkel való térbeli kapcsolat alapján szűkíthető.",
+  "spatialExpressionTitle": "Térbeli kifejezés",
+  "spatialExpressionTwoLayers": "A térbeli kifejezések legalább két különböző réteget igényelnek.",
+  "validationFailedScrollUp": "A lekérdezés érvényesítése meghiúsult. Görgessen fel, és javítsa az esetleges hibákat."
+}

@@ -1,0 +1,1 @@
+System.register([],function(e){return{execute:function(){e({customizeLayer:"Layer anpassen",selectLayers:"Layer ausw\xe4hlen",noDataSourceWarning:"Das ausgew\xe4hlte Karten-Widget enth\xe4lt keine Webkarte oder Webszene."})}}});

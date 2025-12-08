@@ -1,0 +1,20 @@
+{
+  "lrsLayers": [],
+  "highlightStyle": {
+    "color": "#00FFFF",
+    "size": 3
+  },
+  "labelStyle": {
+    "color": "#000000",
+    "size": 12
+  },
+  "resultConfig": {
+    "pageSize": 25,
+    "defaultReferentLayer": null,
+    "defaultOffsetUnit": ""
+  },
+  "defaultNetwork": "",
+  "hideMethod": false,
+  "hideNetwork": false,
+  "mode": "MAP"
+}

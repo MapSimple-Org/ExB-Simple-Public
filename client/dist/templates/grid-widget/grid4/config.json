@@ -1,0 +1,166 @@
+{
+  "layouts": {
+    "layout_4": {
+      "type": "GRID",
+      "order": [
+        "0",
+        "1",
+        "3",
+        "4",
+        "6",
+        "7",
+        "9",
+        "10",
+        "12"
+      ],
+      "content": {
+        "0": {
+          "type": "WIDGET",
+          "bbox": {
+            "width": 33.333333333333336
+          },
+          "gridType": 3,
+          "parent": "5"
+        },
+        "1": {
+          "type": "WIDGET",
+          "bbox": {
+            "width": 33.333333333333336
+          },
+          "gridType": 3,
+          "parent": "8"
+        },
+        "2": {
+          "gridType": 0,
+          "bbox": {
+            "width": 100
+          },
+          "children": [
+            "5",
+            "8",
+            "11"
+          ]
+        },
+        "3": {
+          "type": "WIDGET",
+          "setting": {
+            "style": {}
+          },
+          "bbox": {
+            "width": 33.333333333333336
+          },
+          "gridType": 3,
+          "parent": "11"
+        },
+        "4": {
+          "type": "WIDGET",
+          "bbox": {
+            "width": 33.333333333333336
+          },
+          "gridType": 3,
+          "parent": "5"
+        },
+        "5": {
+          "gridType": 1,
+          "parent": "2",
+          "bbox": {
+            "width": 33.333333333333336
+          },
+          "children": [
+            "0",
+            "4",
+            "6"
+          ]
+        },
+        "6": {
+          "type": "WIDGET",
+          "bbox": {
+            "width": 33.333333333333336
+          },
+          "gridType": 3,
+          "parent": "5"
+        },
+        "7": {
+          "type": "WIDGET",
+          "bbox": {
+            "width": 33.333333333333336
+          },
+          "gridType": 3,
+          "parent": "8",
+          "setting": {
+            "placeholderStyle": {
+              "background": {
+                "color": null,
+                "fillType": "fill"
+              }
+            }
+          }
+        },
+        "8": {
+          "gridType": 1,
+          "parent": "2",
+          "bbox": {
+            "width": 33.333333333333336
+          },
+          "children": [
+            "1",
+            "7",
+            "9"
+          ]
+        },
+        "9": {
+          "type": "WIDGET",
+          "bbox": {
+            "width": 33.333333333333336
+          },
+          "gridType": 3,
+          "parent": "8"
+        },
+        "10": {
+          "type": "WIDGET",
+          "bbox": {
+            "width": 33.333333333333336
+          },
+          "gridType": 3,
+          "parent": "11"
+        },
+        "11": {
+          "gridType": 1,
+          "parent": "2",
+          "bbox": {
+            "width": 33.333333333333336
+          },
+          "children": [
+            "3",
+            "10",
+            "12"
+          ]
+        },
+        "12": {
+          "type": "WIDGET",
+          "bbox": {
+            "width": 33.333333333333336
+          },
+          "gridType": 3,
+          "parent": "11"
+        }
+      },
+      "setting": {
+        "rootItem": "2"
+      }
+    }
+  },
+  "widgets": {
+    "widget_2": {
+      "uri": "widgets/layout/grid/",
+      "config": {},
+      "id": "widget_2",
+      "layouts": {
+        "DEFAULT": {
+          "LARGE": "layout_4"
+        }
+      }
+    }
+  },
+  "template": "grid4"
+}

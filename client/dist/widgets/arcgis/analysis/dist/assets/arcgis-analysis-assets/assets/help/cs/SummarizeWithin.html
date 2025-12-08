@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>N&aacute;stroj Sumarizace hodnot uvnitř polygonů (Summarize Within) poč&iacute;t&aacute; statistiky pro prvky uvnitř zadan&yacute;ch přihr&aacute;dek nebo polygonů.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="summaryLayer">
+        <div>
+            <p>Vrstva, kter&aacute; bude sumarizov&aacute;na.
+            </p>
+            <p class="toolPaneOnly">Počet prvků z&aacute;vis&iacute; na dal&scaron;&iacute;ch faktorech, jako jsou krit&eacute;ria filtrov&aacute;n&iacute; a rozsah anal&yacute;zy.
+            </p>
+        </div>
+    </div>
+    <div id="binType">
+        <div>
+            <p>Typ ohraničuj&iacute;c&iacute;ch prvků, uvnitř kter&yacute;ch budou vstupn&iacute; prvky sumarizov&aacute;ny. Může to b&yacute;t polygonov&aacute; vrstva nebo pravideln&aacute; mř&iacute;žka čtvercov&yacute;ch nebo &scaron;esti&uacute;heln&iacute;kov&yacute;ch přihr&aacute;dek, kter&aacute; se generuje při spu&scaron;těn&iacute; n&aacute;stroje.
+            </p>
+        </div>
+    </div>
+    <div id="sumWithinLayer">
+        <div>
+            <p>Polygonov&aacute; vrstva, ve kter&eacute; budou sumarizov&aacute;ny vstupn&iacute; prvky.
+            </p>
+            <p class="toolPaneOnly">Počet prvků z&aacute;vis&iacute; na dal&scaron;&iacute;ch faktorech, jako jsou krit&eacute;ria filtrov&aacute;n&iacute; a rozsah anal&yacute;zy.
+            </p>
+        </div>
+    </div>
+    <div id="binSize">
+        <div>
+            <p>Velikost vygenerovan&yacute;ch přihr&aacute;dek. U čtvercov&yacute;ch přihr&aacute;dek určuje zadan&yacute; počet a jednotky v&yacute;&scaron;ku a d&eacute;lku čtverce. U &scaron;esti&uacute;heln&iacute;kov&yacute;ch přihr&aacute;dek určuje zadan&yacute; počet a jednotky vzd&aacute;lenost mezi rovnoběžn&yacute;mi stranami.
+            </p>
+        </div>
+    </div>
+    <div id="binSizeUnit">
+        <div>
+            <p>Jednotky, kter&eacute; se použij&iacute; pro zad&aacute;n&iacute; velikosti přihr&aacute;dky.
+            </p>
+        </div>
+    </div>
+    <div id="sumShape">
+        <div>
+            <p>Určuje, zda se vypoč&iacute;t&aacute; celkov&aacute; velikost prvků shrnut&yacute;ch v každ&eacute;m ohraničuj&iacute;c&iacute;m polygonu. U lini&iacute; se vypoč&iacute;t&aacute; celkov&aacute; d&eacute;lka. U polygonů se vypoč&iacute;t&aacute; celkov&aacute; plocha.
+            </p>
+        </div>
+    </div>
+    <div id="shapeUnits">
+        <div>
+            <p>Jednotky, kter&eacute; se použij&iacute; pro v&yacute;počet celkov&eacute; velikosti sumarizovan&yacute;ch prvků.
+            </p>
+        </div>
+    </div>
+    <div id="summaryFields">
+        <div>
+            <p>Pole s č&iacute;slem nebo datem ze vstupn&iacute; vrstvy, kter&aacute; se maj&iacute; shrnout, a statistiky, kter&eacute; se vypoč&iacute;taj&iacute; pro každ&eacute; pole.
+            </p>
+        </div>
+    </div>
+    <div id="groupByField">
+        <div>
+            <p>Pole ze vstupn&iacute; vrstvy, kter&eacute; bude použito k&nbsp;rozdělen&iacute; dat do samostatn&yacute;ch skupin pro statistick&eacute; v&yacute;počty.
+            </p>
+        </div>
+    </div>
+    <div id="minorityMajority">
+        <div>
+            <p>Určuje, zda se maj&iacute; vypoč&iacute;tat minoritn&iacute; (nejm&eacute;ně dominantn&iacute;) a majoritn&iacute; (nejv&iacute;ce dominantn&iacute;) skupiny v r&aacute;mci každ&eacute; souhrnn&eacute; oblasti.
+            </p>
+        </div>
+    </div>
+    <div id="percentShape">
+        <div>
+            <p>Určuje, zda se vypoč&iacute;t&aacute; procentn&iacute; pod&iacute;l shrnut&yacute;ch prvků, kter&eacute; patř&iacute; do každ&eacute; skupiny v r&aacute;mci každ&eacute; oblasti shrnut&iacute;.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>N&aacute;zev vrstvy, kter&aacute; bude vytvořena a přid&aacute;na do mapy.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>N&aacute;zev složky v č&aacute;sti  <b>Můj obsah,</b> do kter&eacute; budou v&yacute;sledky uloženy.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

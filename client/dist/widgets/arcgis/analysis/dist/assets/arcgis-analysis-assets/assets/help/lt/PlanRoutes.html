@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>Įrankis Planuoti mar&scaron;rutus sukuria kelionių mar&scaron;rutus su keliais sustojimais automobiliams.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="startLayer">
+        <div>
+            <p>Ta&scaron;kiniai elementai, nurodantys, kur transporto priemonės pradeda mar&scaron;rutus.
+            </p>
+            <p class="toolPaneOnly">Elementų skaičius priklauso nuo papildomų veiksnių, pavyzdžiui, filtravimo kriterijų ir analizės apimties.
+            </p>
+        </div>
+    </div>
+    <div id="stopsLayer">
+        <div>
+            <p>Ta&scaron;kai, kuriuos transporto priemonės turi aplankyti savo mar&scaron;rutų metu. I&scaron;vestyje &scaron;ie ta&scaron;kai tampa priskirtomis arba nepriskirtomis sustojimo vietomis.
+            </p>
+            <p class="toolPaneOnly">Elementų skaičius priklauso nuo papildomų veiksnių, pavyzdžiui, filtravimo kriterijų ir analizės apimties.
+            </p>
+        </div>
+    </div>
+    <div id="returnToStart">
+        <div>
+            
+            <p>Nurodoma, ar transporto priemonės turi grįžti į pradžios vietą (įjungta), ar baigti nurodytose vietose.
+            </p>
+        </div>
+    </div>
+    <div id="endLayer">
+        <div>
+            <p>Ta&scaron;kiniai elementai, nurodantys, kur transporto priemonės baigia mar&scaron;rutus. Jei sluoksnis apima tik vieną ta&scaron;ką, visos transporto priemonės nukreipiamos į bendrą galinį ta&scaron;ką. Jei sluoksnis apima kelis ta&scaron;kus, kiekviena transporto priemonė nukreipiama į unikalią galutinę vietą.
+            </p>
+            <p class="toolPaneOnly">Elementų skaičius priklauso nuo papildomų veiksnių, pavyzdžiui, filtravimo kriterijų ir analizės apimties.
+            </p>
+        </div>
+    </div>
+    <div id="startLayerRouteIDField">
+        <div>
+            <p>Pradžios sluoksnio laukas, kuris unikaliai identifikuoja atskirus mar&scaron;rutus, transporto priemones arba vairuotojus. Jei transporto priemonės pradeda ir pabaigia mar&scaron;rutus skirtinguose ta&scaron;kuose, nurodyti mar&scaron;ruto ID pradžios ir pabaigos ta&scaron;kų sluoksniuose privalo sutapti.
+            </p>
+        </div>
+    </div>
+    <div id="endLayerRouteIDField">
+        <div>
+            <p>Pabaigos sluoksnio laukas, kuris unikaliai identifikuoja atskirus mar&scaron;rutus, transporto priemones arba vairuotojus. Jei transporto priemonės pradeda ir pabaigia mar&scaron;rutus skirtinguose ta&scaron;kuose, nurodyti mar&scaron;ruto ID pradžios ir pabaigos ta&scaron;kų sluoksniuose privalo sutapti.
+            </p>
+        </div>
+    </div>
+    <div id="pointBarrierLayer">
+        <div>
+            <p>Vienas ar daugiau ta&scaron;kinių elementų, kurie veikia kaip laikini apribojimai (kliūtys) važiuojant pagrindinėmis gatvėmis. Galima judėti gatve, tačiau ne per &scaron;ią kliūtį.
+            </p>
+        </div>
+    </div>
+    <div id="lineBarrierLayer">
+        <div>
+            <p>Vienas ar daugiau linijos elementų, kurie veikia kaip laikini apribojimai (kliūtys) važiuojant pagrindinėmis gatvėmis. Linijiniai užtvarai draudžia važiuoti bet kurioje vietoje, kur užtvarai kerta gatves.
+            </p>
+        </div>
+    </div>
+    <div id="polygonBarrierLayer">
+        <div>
+            <p>Vienas ar daugiau poligono elementų, kurie veikia kaip laikini apribojimai (kliūtys) važiuojant pagrindinėmis gatvėmis. Poligonų užtvaros draudžia važiuoti visur, kur poligonai kerta gatves.
+            </p>
+        </div>
+    </div>
+    <div id="travelMode">
+        <div>
+            <p>Kelionės režimas, kuris bus naudojamas mar&scaron;rutams kurti. Palaikomi tik laiku pagrįsti kelionės režimai.
+            </p>
+        </div>
+    </div>
+    <div id="routeStartTime">
+        <div>
+            <p>Transporto priemonių i&scaron;vykimo data ir laikas.
+            </p>
+        </div>
+    </div>
+    <div id="routeCount">
+        <div>
+            
+            <p class="OnlineOnly">Didžiausias transporto priemonių, kurios gali pasiekti sustojimus, skaičius. Jei  <b>pradinio sluoksnio</b> ir <b>galutinio sluoksnio</b> reik&scaron;mėse yra po vieną elementą, galite nurodyti iki 100 transporto priemonių. Jei kuriame nors sluoksnyje yra daugiau nei vienas elementas, numatytosios reik&scaron;mės redaguoti negalima. </p> 
+            <p class="PortalOnly">Didžiausias transporto priemonių, kurios gali pasiekti sustojimus, skaičius. Jei  <b>pradinio sluoksnio</b> ir <b>galutinio sluoksnio</b> reik&scaron;mėse yra po vieną elementą, galite nurodyti didžiausią transporto priemonių skaičių. Jei kuriame nors sluoksnyje yra daugiau nei vienas elementas, numatytosios reik&scaron;mės redaguoti negalima.
+            </p>
+        </div>
+    </div>
+    <div id="maxStopsPerRoute">
+        <div>
+            
+            <p class="OnlineOnly">Didžiausias sustojimų, kuriuos kiekviena transporto priemonė gali atlikti mar&scaron;rute, skaičius. Galima pasirinkti reik&scaron;mę nuo 1 iki  200. </p> 
+            <p class="PortalOnly">Didžiausias sustojimų, kuriuos kiekviena transporto priemonė gali atlikti mar&scaron;rute, skaičius.
+            </p>
+        </div>
+    </div>
+    <div id="stopServiceTime">
+        <div>
+            <p>Numatomas sustojimo kiekviename ta&scaron;ke laikas.
+            </p>
+        </div>
+    </div>
+    <div id="limitMaxRouteTimeCheckbox">
+        <div>
+            <p>Nurodoma, ar transporto priemonėms taikomas maksimalus mar&scaron;ruto sudarymo laikas. Mar&scaron;ruto sudarymo laikas apima kelionės laiką ir laiką, reikalingą kiekvienam sustojimui.
+            </p>
+        </div>
+    </div>
+    <div id="maxRouteTime">
+        <div>
+            <p>Maksimali mar&scaron;ruto trukmė nuo pradžios iki pabaigos.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>Sluoksnio, kuris bus sukurtas ir pridėtas į žemėlapį, pavadinimas.
+            </p>
+        </div>
+    </div>
+    <div id="includeRouteLayers">
+        <div>
+            <p>Nurodo, ar kiekvieno rezultato mar&scaron;rutas bus įra&scaron;omas kaip mar&scaron;ruto sluoksnis.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            
+            <p>Puslapyje  <b>Mano turinys</b> esančio aplanko, kur bus įra&scaron;yti rezultatai, pavadinimas.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

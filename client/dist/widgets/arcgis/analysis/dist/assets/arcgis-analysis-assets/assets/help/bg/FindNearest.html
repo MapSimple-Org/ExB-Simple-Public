@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>Инструментът Намерете най-близкия намира и класира обектите, които са най-близо до определени местоположения.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="analysisLayer">
+        <div>
+            
+            <p class="OnlineOnly">Началният слой, около който ще бъде очертан обхватът за търсене, за да се намерят най-близките обекти от близкия слой. Обектите в близкия слой ще бъдат върнати въз основа на тяхната близост до входния слой. Слоеве с до  пет хиляди обекта се поддържат. </p>  
+            <p class="PortalOnly">Началният слой, около който ще бъде очертан обхватът за търсене, за да се намерят най-близките обекти от близкия слой. Обектите в близкия слой ще бъдат върнати въз основа на тяхната близост до входния слой.
+            </p>
+            <p class="toolPaneOnly">Броят на обектите зависи от допълнителни фактори, като например критериите за филтриране и обхвата за анализ.
+            </p>
+        </div>
+    </div>
+    <div id="nearLayer">
+        <div>
+             
+            <p class="OnlineOnly">Обектите, открити въз основа на близостта до входния слой. Слоеве с до  пет хиляди обекта се поддържат. </p> 
+            <p class="PortalOnly">Обектите, открити въз основа на близостта до входния слой.
+            </p>
+            <p class="toolPaneOnly">Броят на обектите зависи от допълнителни фактори, като например критериите за филтриране и обхвата за анализ.
+            </p>
+        </div>
+    </div>
+    <div id="pointBarrierLayer">
+        <div>
+            <p>Един или повече точкови обекти, които действат като временни ограничения (бариери) при движение по основните улици. Движението по улицата е разрешено, но не и през бариерата.
+            </p>
+        </div>
+    </div>
+    <div id="lineBarrierLayer">
+        <div>
+            <p>Един или повече линейни обекти, които действат като временни ограничения (бариери) при движение по основните улици. Линейните бариери забраняват движението навсякъде, където бариерите пресичат улиците.
+            </p>
+        </div>
+    </div>
+    <div id="polygonBarrierLayer">
+        <div>
+            <p>Един или повече полигонови обекти, които действат като временни ограничения (бариери) при движение по основните улици. Полигоновите бариери забраняват движението навсякъде, където полигоните пресичат улиците.
+            </p>
+        </div>
+    </div>
+    <div id="measurementType">
+        <div>
+            <p>Методът, който ще се използва за измерване на разстоянието или времето. Методът може да бъде разстояние по линия или режим на пътуване.
+            </p>
+        </div>
+    </div>
+    <div id="timeOfDay">
+        <div>
+            <p>Датата и часът, в които пътникът тръгва от местоположенията в  <b>стойността на входния</b> слой.
+            </p>
+        </div>
+    </div>
+    <div id="limitNearNumberCheckbox">
+        <div>
+            
+            <p>Определя дали се използва персонализиран максимален брой на най-близки обекти (активирано) или се използва максималният брой по подразбиране на инструмента - 100.
+            </p>
+        </div>
+    </div>
+    <div id="maxCount">
+        <div>
+            <p>Максималният брой най-близки обекти, които могат да бъдат намерени за всички входни обекти.
+            </p>
+        </div>
+    </div>
+    <div id="limitSearchRangeCheckbox">
+        <div>
+            
+            <p>Определя дали се използва максимален обхват на търсене (активиран) или обхватът на търсене е неограничен.
+            </p>
+        </div>
+    </div>
+    <div id="searchCutoff">
+        <div>
+            <p>Максималният диапазон на търсене за намиране на най-близките обекти.
+            </p>
+        </div>
+    </div>
+    <div id="searchCutoffUnits">
+        <div>
+            <p>Единиците, използвани за определяне на диапазона на търсене.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>Името на слоя, който ще бъде създаден и добавен към картата.
+            </p>
+        </div>
+    </div>
+    <div id="includeRouteLayers">
+        <div>
+            <p>Указва дали всеки маршрут с резултат ще бъде запазен като маршрутен слой.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>Името на папката в  <b>Моето съдържание</b>, където резултатите ще бъдат запазени.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

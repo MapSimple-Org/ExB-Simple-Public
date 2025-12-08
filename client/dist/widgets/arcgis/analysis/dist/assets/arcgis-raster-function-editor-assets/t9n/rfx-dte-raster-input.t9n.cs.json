@@ -1,0 +1,14 @@
+{
+  "outputRaster": "OutputRaster",
+  "rfxVariable": "RasterFunctionVariable",
+  "selectLayer": "Vybrat vrstvu",
+  "allowScalar": "Vyberte vrstvu nebo zadejte konstantu",
+  "browseLayer": "Procházet vrstvy",
+  "loading": "Nahrávání…",
+  "layerMissing": "Jedna nebo více vrstev obrazových dat z mapy zde nejsou uvedeny, protože není aktivována vlastnost služby povolit analýzu.",
+  "layerFailedToLoad": "Nepodařilo se načíst vrstvu.",
+  "learnMore": "Další informace",
+  "errorCodes": {
+    "required": "Tento parametr je povinný."
+  }
+}

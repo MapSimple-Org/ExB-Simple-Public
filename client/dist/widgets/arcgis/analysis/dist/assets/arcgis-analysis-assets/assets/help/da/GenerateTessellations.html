@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>Generer underopdelinger-v&aelig;rkt&oslash;jet opretter et gitter af polygoner baseret p&aring; angivet udstr&aelig;kning, form og st&oslash;rrelse.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="binType">
+        <div>
+            <p>Formen af de underopdelinger, der oprettes.
+            </p>
+        </div>
+    </div>
+    <div id="sizeType">
+        <div>
+            <p>Angiver, om st&oslash;rrelsen p&aring; underopdelingen defineres af dets omr&aring;de (<b>omr&aring;de</b>) eller af en afstandsv&aelig;rdi (<b>afstand</b>).
+            </p>
+        </div>
+    </div>
+    <div id="binSize">
+        <div>
+            <p>St&oslash;rrelsen (omr&aring;de eller afstand) for de genererede underopdelinger. For kvadrater, sekskanter, trekanter og romber bestemmer afstanden h&oslash;jden p&aring; underopdelingerne. For tv&aelig;rg&aring;ende sekskanter bestemmer afstanden bredden p&aring; underopdelingerne.
+            </p>
+        </div>
+    </div>
+    <div id="binResolution">
+        <div>
+            <p>H3-opl&oslash;sningen af underopdelinger. Opl&oslash;sning g&aring;r fra 0 til 15. Med hver stigende st&oslash;rrelse af opl&oslash;sning reduceres arealet af polygonerne til en syvendedel af st&oslash;rrelsen ved den laveste opl&oslash;sning.
+            </p>
+        </div>
+    </div>
+    <div id="binSizeUnit">
+        <div>
+            <p>De enheder, der bruges til st&oslash;rrelsen p&aring; underopdelingerne.
+            </p>
+        </div>
+    </div>
+    <div id="extentLayer">
+        <div>
+            <p>Udstr&aelig;kningen, som underopdelingerne kommer til at d&aelig;kke.
+            </p>
+            <p class="toolPaneOnly">Antallet af objekter afh&aelig;nger af yderligere faktorer s&aring;som filtreringskriterier og analysens omfang.
+            </p>
+        </div>
+    </div>
+    <div id="intersectStudyArea">
+        <div>
+            <p>For objektlag angives, hvorvidt underopdelingerne d&aelig;kker hele udstr&aelig;kningen eller kun de omr&aring;der, hvor underopdelingerne krydser objekter.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>Navnet p&aring; det lag, der oprettes og f&oslash;jes til kortet.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>Navnet p&aring; mappen  <b>Mit indhold</b>, hvor resultatet gemmes.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

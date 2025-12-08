@@ -1,0 +1,18 @@
+{
+  "add": "Lägg till",
+  "analysisSessionLayers": "Analyssessionslager",
+  "browseAnalysisLayers": "Bläddra bland lager",
+  "cancel": "Avbryt",
+  "heading": "Välj lager",
+  "mapLayers": "Kartlager",
+  "mesh": "Rutnätslager",
+  "modelVariableLayers": "Modellvariabellager",
+  "multipatch": "Multipatch-lager",
+  "multipoint": "Multipunktlager",
+  "noCompatibleLayers": "Kartan innehåller inga kompatibla lager. Lägg till lager i kartan eller bläddra efter lager för att utföra analysen.",
+  "noMatchesFound": "Inga matchningar hittades för '${searchTerm}'.",
+  "point": "Punktlager",
+  "polygon": "Polygonlager",
+  "polyline": "Polylinjelager",
+  "table": "Tabell"
+}

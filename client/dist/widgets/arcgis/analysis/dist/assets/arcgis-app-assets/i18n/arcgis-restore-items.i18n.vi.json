@@ -1,0 +1,31 @@
+{
+  "back": "Quay lại",
+  "cancel": "Hủy",
+  "learnMore": "Tìm hiểu thêm",
+  "restore": "Khôi phục",
+  "restoreTo": "Khôi phục vào",
+  "restoreItem": "Khôi phục Mục",
+  "restoreItems": "Khôi phục Mục",
+  "noticeMessage": "Các mục đã khôi phục sẽ bị hủy chia sẻ. Vui lòng xem lại nội dung của bạn trước khi chia sẻ lại.",
+  "cannotBulkRestoreXItems": "Không thể khôi phục hàng loạt vượt quá ${number} mục, vui lòng bỏ chọn một số mục.",
+  "cannotBulkRestoreMultipleOwners": "Không thể khôi phục hàng loạt các mục thuộc về các chủ sở hữu khác nhau. Chọn các mục từ một chủ sở hữu duy nhất để khôi phục hàng loạt.",
+  "toRestore": {
+    "single": "Mục cần Khôi phục:",
+    "multiple": "Mục cần Khôi phục:"
+  },
+  "cannotRestore": "Không thể khôi phục:",
+  "dependentItems": {
+    "single": "Không thể khôi phục mục này vì mục phụ thuộc vào <strong style='font-weight: 500'>${parent}</strong>. Hãy khôi phục các mục cùng nhau.",
+    "singleUnknown": "Không thể khôi phục mục này vì mục này phụ thuộc vào mục khác nằm trong thùng rác. Hãy khôi phục các mục cùng nhau.",
+    "multiple": "Không khôi phục được vì các mục này phụ thuộc vào các mục khác nằm trong thùng rác. Hãy khôi phục các mục cùng nhau.",
+    "multipleSameSource": "Không thể khôi phục các mục này vì mục phụ thuộc vào <strong style='font-weight: 500'>${parent}</strong>. Hãy khôi phục các mục cùng nhau."
+  },
+  "pageRangeWithTotalRecycleBinSize": {
+    "en": "${start} - ${end} trong số ${total} (${size}) trong thùng rác",
+    "other": "${start} - ${end}, tổng cộng: ${total} (${size}) trong thùng rác"
+  },
+  "pageRangeWithGreaterThanTotalRecycleBinSize": {
+    "en": "${start} - ${end} trong số ${total} (>${size}) trong thùng rác",
+    "other": "${start} - ${end}, tổng cộng: ${total} (>${size}) trong thùng rác"
+  }
+}

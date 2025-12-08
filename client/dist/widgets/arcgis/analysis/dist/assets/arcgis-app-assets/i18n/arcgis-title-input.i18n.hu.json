@@ -1,0 +1,20 @@
+{
+  "title": "Cím",
+  "addTitle": "Cím megadása",
+  "validation": {
+    "error": "Hiba",
+    "titleRequired": "A cím mező kitöltése kötelező.",
+    "itemExists": "Ebben a mappában már létezik „${name}” nevű elem. Válasszon másik nevet.",
+    "titleInUseService": "Már létezik „${name}” nevű réteg. Válasszon másik nevet.",
+    "itemInRecycleBin": "A(z) „${name}” nevű elem már létezik, és a Lomtárban található. Válasszon másik nevet.",
+    "serviceNameInvalid": "Egy szolgáltatás címe csak alfanumerikus karaktereket és alulvonást tartalmazhat, és legfeljebb 90 karakterből állhat.",
+    "dataStoreTitleInvalid": "Az adattárcím csak alfanumerikus karaktereket és alulvonást tartalmazhat, és legfeljebb 90 karakterből állhat.",
+    "titleInvalid": "A feladat címének rövidebbnek kell lennie 250 karakternél és nem tartalmazhatja: < vagy >",
+    "titleStartsWithNumber": "A cím nem kezdődhet számmal.",
+    "invalidCharacters": {
+      "single": "A név nem tartalmazhatja ezt a karaktert: ${invalidCharacters}.",
+      "multiple": "A név nem tartalmazhatja a következő karaktereket: ${invalidCharacters}.",
+      "unknown": "A név nem tartalmazhatja a következő karaktereket: ${invalidCharacters}."
+    }
+  }
+}

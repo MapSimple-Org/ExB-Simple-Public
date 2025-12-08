@@ -1,0 +1,22 @@
+{
+  "general": "Γενικά",
+  "parameters": "Παράμετροι",
+  "variables": "Μεταβλητές",
+  "name": "Όνομα",
+  "namePlaceHolder": "Εισάγετε όνομα",
+  "description": "Περιγραφή",
+  "parameter": "Παράμετρος",
+  "isPublic": "IsPublic",
+  "isDataset": "IsDataset",
+  "unknownPixelType": "Άγνωστο",
+  "outputPixelType": "Τύπος pixel εξόδου",
+  "u8PixelType": "8 Bit χωρίς πρόσημο",
+  "s8PixelType": "8 Bit με πρόσημο",
+  "u16PixelType": "16 Bit χωρίς πρόσημο",
+  "s16PixelType": "16 Bit με πρόσημο",
+  "u32PixelType": "32 Bit χωρίς πρόσημο",
+  "s32PixelType": "32 Bit με πρόσημο",
+  "f32PixelType": "32 Bit με κινητή υποδιαστολή",
+  "f64PixelType": "64 Bit διπλής ακρίβειας",
+  "properties": "Ιδιότητες"
+}

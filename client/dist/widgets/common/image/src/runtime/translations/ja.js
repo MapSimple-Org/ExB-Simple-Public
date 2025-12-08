@@ -1,0 +1,1 @@
+System.register([],function(e){return{execute:function(){e({_widgetLabel:"\u753b\u50cf",imageChooseShape:"\u56f3\u5f62",imageCrop:"\u30c8\u30ea\u30df\u30f3\u30b0",previousImage:"\u524d\u306e\u753b\u50cf",nextImage:"\u6b21\u306e\u753b\u50cf",imageViewer:"\u30a4\u30e1\u30fc\u30b8 \u30d3\u30e5\u30fc\u30a2\u30fc"})}}});

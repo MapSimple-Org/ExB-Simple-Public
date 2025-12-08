@@ -1,0 +1,17 @@
+{
+  "sharing": "Sdílení",
+  "private": "Vlastník",
+  "shared": "Vlastník a sdíleno se skupinami",
+  "org": "Organizace",
+  "public": "Kdokoli (veřejně)",
+  "privateGroups": "Vlastník",
+  "sharedGroups": "Vlastník + Skupiny (${num})",
+  "orgGroups": "Organizace + Skupiny (${num})",
+  "publicGroups": "Všichni (veřejné) + Skupiny (${num})",
+  "groups": "Skupiny (${num})",
+  "updateSharing": "Úroveň sdílení: ${level}, aktualizovat sdílení",
+  "viewableBy": "Může si zobrazit: ${level}",
+  "everyone": "Kdokoli (veřejně)",
+  "organization": "Organizace",
+  "groupMembers": "Členové skupiny"
+}

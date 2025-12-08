@@ -1,0 +1,31 @@
+{
+  "back": "Späť",
+  "cancel": "Zrušiť",
+  "learnMore": "Zistiť viac",
+  "restore": "Obnoviť",
+  "restoreTo": "Obnoviť na",
+  "restoreItem": "Obnoviť položku",
+  "restoreItems": "Obnoviť položky",
+  "noticeMessage": "Obnovené položky nebudú zdieľané. Pred ďalším zdieľaním obsahu ho prosím skontrolujte.",
+  "cannotBulkRestoreXItems": "Nie je možné hromadne obnoviť viac ako ${number} položiek, zrušte prosím výber niekoľkých položiek.",
+  "cannotBulkRestoreMultipleOwners": "Nie je možné hromadne obnoviť položky, ktoré patria rôznym vlastníkom. Vyberte položky od jedného vlastníka na hromadné obnovenie.",
+  "toRestore": {
+    "single": "Položka na obnovu:",
+    "multiple": "Položky na obnovu:"
+  },
+  "cannotRestore": "Nebolo možné obnoviť:",
+  "dependentItems": {
+    "single": "Túto položku nie je možné obnoviť, pretože je závislá od <strong style='font-weight: 500'>${parent}</strong>. Obnovte ich spoločne.",
+    "singleUnknown": "Túto položku nie je možné obnoviť, pretože závisí od inej položky v koši. Obnovte ich spoločne.",
+    "multiple": "Tieto položky nie je možné obnoviť, pretože sú závislé od iných položiek v koši. Obnovte ich spoločne.",
+    "multipleSameSource": "Tieto položky nie je možné obnoviť, pretože sú závislé od <strong style='font-weight: 500'>${parent}</strong>. Obnovte ich spoločne."
+  },
+  "pageRangeWithTotalRecycleBinSize": {
+    "en": "${start} - ${end} z ${total} (${size}) v koši",
+    "other": "${start} - ${end}, celkovo: ${total} (${size}) v koši"
+  },
+  "pageRangeWithGreaterThanTotalRecycleBinSize": {
+    "en": "${start} - ${end} z ${total} (>${size}) v koši",
+    "other": "${start} - ${end}, celkovo: ${total} (>${size}) v koši"
+  }
+}

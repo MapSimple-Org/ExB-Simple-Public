@@ -1,0 +1,6 @@
+{
+  "greaterThanErrorMessage": "该输入数值必须大于 ${min}",
+  "lesserThanErrorMessage": "该输入数值必须小于 ${max}",
+  "greaterThanOrEqualErrorMessage": "该输入数值必须大于或等于 ${min}",
+  "lesserThanOrEqualErrorMessage": "该输入数值必须小于或等于 ${max}"
+}

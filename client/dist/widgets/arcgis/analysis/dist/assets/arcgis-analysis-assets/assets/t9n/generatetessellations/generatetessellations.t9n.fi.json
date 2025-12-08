@@ -1,0 +1,27 @@
+{
+  "area": "Pinta-ala",
+  "binResolution": "H3-lohkon resoluutio",
+  "binSize": "Lohkon koko",
+  "binSizeUnit": "Yksikkö",
+  "binType": "Lohkon muototyyppi",
+  "diamondBins": "Vinoneliölohkot",
+  "distance": "Etäisyys",
+  "extentLayer": "Laajuuskarttataso",
+  "extentOverrideMessage": "Tätä laajuuskarttatasoa käytetään ympäristöissä määritettyjen käsittelyn laajuuksien sijasta.",
+  "extentSectionLabel": "Laajuusasetukset",
+  "extentSectionText": "Määrittele laajuuskarttataso, joka tesseloinnin tulisi kattaa.",
+  "h3hexagonBins": "H3-kuusikulmiolohkot",
+  "hexagon": "Hexagon",
+  "intersectStudyArea": "Säilytä vain leikkaavat tesseloinnit",
+  "itemProperties": {
+    "description": "Kohdekarttataso, joka on luotu Luo tesseloinnit -analysointityökalulla.",
+    "snippet": "Luo tesseloinnit -toiminnon perusteella luotu kohdekarttataso"
+  },
+  "outputAreasSectionText": "Anna tesselointiruudukolle nimi.",
+  "sizeType": "Lohkon koon mitat",
+  "square": "Neliö",
+  "tessellationSettingsLabel": "Tesselointiasetukset",
+  "tessellationSettingsSummaryText": "Määritä luotavien lohkojen muoto ja koko.",
+  "thexagonBins": "Poikittaiset kuusikulmiolohkot",
+  "triangleBins": "Kolmiolohkot"
+}

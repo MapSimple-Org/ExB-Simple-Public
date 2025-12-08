@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>「加入圖徵」工具可根據指定的空間和屬性關係，將屬性從一個圖層或表格新增至另一個。 (選用) 當有多個符合記錄時，可以計算統計資料。
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="targetLayer">
+        <div>
+            <p>圖層或表格，將具有來自附加至其屬性表之加入圖層的屬性。
+            </p> 
+            <p class="toolPaneOnly">圖徵的計數取決於其他因素，例如篩選準則和分析範圍。
+            </p> 
+            <p class="modelBuilderOnly">當 <b>目標圖層</b>未填入時，預設指定 <b>圖層</b>。 要新增輸入表，請在新增資料集之前選擇 <b>表格</b>。
+            </p>
+        </div>
+    </div>
+    <div id="joinLayer">
+        <div>
+            <p>包含將附加至目標圖層之屬性的圖層或表格。
+            </p> 
+            <p class="toolPaneOnly">圖徵的計數取決於其他因素，例如篩選準則和分析範圍。
+            </p> 
+            <p class="modelBuilderOnly">當 <b>結合圖層</b>未填入時，預設指定 <b>圖層</b>。 要新增輸入表，請在新增資料集之前選擇 <b>表格</b>。
+            </p>
+        </div>
+    </div>
+    <div id="useSpatialRelationship">
+        <div>
+            <p>指定是否將根據空間關係加入圖層。 這需要兩個具有幾何的圖層。
+            </p>
+        </div>
+    </div>
+    <div id="spatialRelationship">
+        <div>
+            <p>指定用於決定將加入哪些圖徵的空間關係。 將加入與目標圖層具有指定關係的加入圖層中的圖徵。 可用的關係取決於輸入的幾何類型。
+            </p>
+        </div>
+    </div>
+    <div id="spatialRelationshipDistance">
+        <div>
+            <p>與目標圖層中圖徵的距離，將用於確定是否將加入圖徵。
+            </p>
+        </div>
+    </div>
+    <div id="spatialRelationshipDistanceUnits">
+        <div>
+            <p>將用於指定距離的單位。
+            </p>
+        </div>
+    </div>
+    <div id="useAttributeRelationship">
+        <div>
+            <p>指定是否根據符合的欄位值加入圖層。 如果一或多個輸入是表格，則只能使用屬性關係定義加入。
+            </p>
+        </div>
+    </div>
+    <div id="attributeRelationship">
+        <div>
+            <p>用於決定將加入哪些圖徵的屬性關係。 當加入圖層中的欄位值等於目標圖層中的欄位值，圖徵即符合。
+            </p>
+        </div>
+    </div>
+    <div id="joinOperation">
+        <div>
+            <p>指定如果來自加入圖層的多筆記錄符合加入條件，將如何處理加入。 從以下選項中選擇：
+                <ul>
+                    <li> <b>將一個加入到另一個</b> - 將加入圖層中的單一記錄加入到目標圖層中的每個圖徵。
+                    </li>
+                    <li> <b>將一個加入到多個</b> - 將加入圖層中所有符合的圖徵加入到目標圖層。 結果圖層將包含目標圖徵的多筆記錄。
+                    </li>
+                </ul>
+                
+            </p>
+        </div>
+    </div>
+    <div id="handleMatchingRecords">
+        <div>
+            <p>當加入圖層中的多個圖徵與目標圖徵相符時，此參數指定是否加入來自加入圖層的單一記錄，並對來自加入圖層的所有符合記錄的選定欄位計算摘要統計資料，或僅計算匹配記錄的計數。
+            </p>
+        </div>
+    </div>
+    <div id="summaryFields">
+        <div>
+            <p>當有多個加入圖徵與目標圖徵符合時，將計算所有符合記錄的摘要統計資料。 指定來自加入圖層的數字或日期欄位，以及將為每個欄位計算的統計資料。
+            </p>
+        </div>
+    </div>
+    <div id="recordsToMatch">
+        <div>
+            <p>當有多個加入圖徵與目標圖徵符合時，加入圖層屬性表中的第一筆記錄將包含在輸出中。 (選用) 選擇數字或日期欄位，以及將決定屬性表排序的排序順序。
+            </p>
+        </div>
+    </div>
+    <div id="joinType">
+        <div>
+            <p>指定輸出是否將包含不符合的目標圖徵。  <b>內部加入</b>選項僅傳回符合的目標記錄，而 <b>左加入</b>選項則傳回所有目標記錄，即使目標圖徵在加入圖層中沒有符合項。
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>將建立並新增到地圖之圖層或表格的名稱。
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p> <b>我的內容</b>中將儲存結果的資料夾名稱。
+            </p>
+        </div>
+    </div>
+</div>
+</html>

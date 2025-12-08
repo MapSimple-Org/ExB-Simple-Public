@@ -1,0 +1,22 @@
+{
+  "value": "ค่า",
+  "classname": "ClassName",
+  "color": "สี",
+  "raster": "แรสเตอร์",
+  "tableType": "ประเภทตาราง",
+  "manual": "คู่มือ",
+  "external": "ภายนอก",
+  "browseTable": "เรียกดูตาราง",
+  "browseTableFrom": "เรียกดูตารางจาก",
+  "file": "ไฟล์",
+  "dbfFile": "ไฟล์ DBF",
+  "layer": "ชั้นข้อมูล",
+  "unsupportedDataType": "ประเภทที่ไม่รองรับ",
+  "failedToGetTableFromLayer": "รับตารางจากชั้นข้อมูลไม่สำเร็จ",
+  "generate": "สร้างตาราง",
+  "minValue": "ค่าน้อยสุด",
+  "maxValue": "ค่ามากสุด",
+  "classBaseName": "ชื่อฐานคลาส",
+  "colorscheme": "โครงร่างสี",
+  "defaultClassName": "Label_"
+}

@@ -1,0 +1,13 @@
+{
+  "header": "Aperçu",
+  "description": "Affichez un aperçu du résultat avant d’exécuter l’analyse.",
+  "showPreview": "Afficher un aperçu",
+  "previewLayer": "Couche d’aperçu ${number}",
+  "update": "Mettre à jour",
+  "newPreview": "Nouvel aperçu",
+  "previewPopup": "Activer l’affichage d’un aperçu des résultats d’analyse en fonction des paramètres en entrée.",
+  "previewError": "Cette couche d’aperçu n’est pas disponible. Vérifiez les paramètres en entrée et procédez à une nouvelle mise à jour de cette couche d’aperçu.",
+  "updatePopover": "Mettre à jour la couche d’aperçu sélectionnée",
+  "createPopover": "Créer une nouvelle couche d’aperçu",
+  "maxPreview": "Nombre maximal de couches d’aperçu autorisé : ${maxCount}"
+}

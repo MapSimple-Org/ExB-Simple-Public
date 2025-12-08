@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>The Join Features tool adds attributes from one
+layer or table to another based on specified spatial and attribute
+relationships. Optionally, statistics can be calculated when there are multiple matching records.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="targetLayer">
+        <div>
+            <p>The layer or table that will have attributes from the join layer appended to its attribute  table.
+            </p> 
+            <p class="toolPaneOnly">The count of features depends on additional factors such as filtering criteria and the analysis extent.
+            </p> 
+            <p class="modelBuilderOnly"> <b>Layer</b> is specified by default when <b>Target layer</b> is not populated. To add an input table, select <b>Table</b> before adding a dataset.
+            </p>
+        </div>
+    </div>
+    <div id="joinLayer">
+        <div>
+            <p>The  layer or table   with the attributes that will be appended to the target  layer.
+            </p> 
+            <p class="toolPaneOnly">The count of features depends on additional factors such as filtering criteria and the analysis extent.
+            </p> 
+            <p class="modelBuilderOnly"> <b>Layer</b> is specified by default when <b>Join layer</b> is not populated. To add an input table, select <b>Table</b> before adding a dataset.
+            </p>
+        </div>
+    </div>
+    <div id="useSpatialRelationship">
+        <div>
+            <p>Specifies whether layers will be joined based on a spatial relationship. This requires that both layers have a geometry. 
+            </p>
+        </div>
+    </div>
+    <div id="spatialRelationship">
+        <div>
+            <p>Specifies the spatial relationship that determines which features will be joined. Features in the join layer that have the specified relationship to the target layer will be joined.
+The available relationships depend on the geometry  type of  the inputs.
+            </p>
+        </div>
+    </div>
+    <div id="spatialRelationshipDistance">
+        <div>
+            <p>The distance from the features in the target layer that will be used to determine whether features will be joined.
+
+            </p>
+        </div>
+    </div>
+    <div id="spatialRelationshipDistanceUnits">
+        <div>
+            <p>The units that will be used to specify the distance.
+
+            </p>
+        </div>
+    </div>
+    <div id="useAttributeRelationship">
+        <div>
+            <p>Specifies whether layers will be joined based on matching field values. If one or more of the inputs is a table, a join can only be defined using an attribute relationship.
+            </p>
+        </div>
+    </div>
+    <div id="attributeRelationship">
+        <div>
+            <p>The attribute relationship that determines which features will be joined. Features are matched when the field values in the join layer are equal to field values in the target layer.
+            </p>
+        </div>
+    </div>
+    <div id="joinOperation">
+        <div>
+            <p>Specifies how joins will be handled if multiple records from the join layer meet the join criteria. Choose from the following options:
+                <ul>
+                    <li> <b>Join one to one</b>&mdash;A single record in the join layer will be joined to each
+feature in the target layer.
+                    </li>
+                    <li> <b>Join one to many</b>&mdash;All the matching features in the join layer will be joined to the target layer.  The result layer will contain multiple records of the target feature.
+                    </li>
+                </ul>
+                
+            </p>
+        </div>
+    </div>
+    <div id="handleMatchingRecords">
+        <div>
+            <p>When multiple features in the join layer match a target feature, this parameter specifies whether a single record from the join layer will be joined, summary statistics will be calculated for a chosen field for all matching records from the join layer, or only the count of matching records will be calculated.
+            </p>
+        </div>
+    </div>
+    <div id="summaryFields">
+        <div>
+            <p>When there are multiple join features that match a target feature, summary statistics for all matching records will be calculated. Specify the number or date fields from the join layer and the statistics that will be calculated for each field.
+            </p>
+        </div>
+    </div>
+    <div id="recordsToMatch">
+        <div>
+            <p>When there are multiple join features that match a target feature, the first record from the join layer's attribute table will be included in the output. Optionally, choose a number or date field and the sort order that will determine the ordering of the attribute table.
+            </p>
+        </div>
+    </div>
+    <div id="joinType">
+        <div>
+            <p>Specifies whether unmatched target features will be included in the output. The  <b>Inner join</b> option returns only matched target records, whereas the <b>Left join</b> option returns all target records, even if the target feature does not have a match in the join layer.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>The name of the layer or table that will be created and added to the map.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>The name of the folder in  <b>My content</b> where the result will be saved.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

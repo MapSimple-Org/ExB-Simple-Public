@@ -1,0 +1,12 @@
+{
+  "dynamicLayer": "Dynaaminen kuvakarttataso",
+  "outputDescription": "${rfxName}-rasteritoiminnon suorittamisesta syntynyt tulosaineisto",
+  "outputDescriptionRFT": "${rfxName}-rasteritoiminnon mallin suorittamisesta syntynyt tulosaineisto",
+  "outputName": "Tulosaineiston nimi",
+  "outputNamePlaceHolder": "Anna yksilöllinen nimi...",
+  "resultLayer": "Tuloskarttataso",
+  "resultType": "Tulostyyppi",
+  "saveFolder": "Tallenna kansioon",
+  "summaryText": "Määritä tuloskarttatason nimi.",
+  "tileImagery": "Tiilitetty kuva-aineistokarttataso"
+}

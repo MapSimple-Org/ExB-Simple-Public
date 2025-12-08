@@ -1,0 +1,13 @@
+{
+  "weightedOverlayTable": "Vægtet overlay-tabel",
+  "id": "ID",
+  "layer": "Lag",
+  "field": "Felt",
+  "influence": "Påvirkning",
+  "sumOfInfluence": "Summen af påvirkning",
+  "value": "Værdi",
+  "remapTable": "Genberegn tabel",
+  "scale": "Målestok",
+  "scales": "Vægte",
+  "selectRaster": "Vælg raster"
+}

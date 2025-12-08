@@ -1,0 +1,13 @@
+{
+  "weightedOverlayTable": "جدول التراكب الموزون نسبيا",
+  "id": "المُعرّف",
+  "layer": "طبقة",
+  "field": "حقل",
+  "influence": "تأثير",
+  "sumOfInfluence": "مجموع التأثيرات",
+  "value": "قيمة",
+  "remapTable": "إعادة تعيين الجدول",
+  "scale": "مقياس",
+  "scales": "مقاييس رسم",
+  "selectRaster": "تحديد البيانات النقطية"
+}

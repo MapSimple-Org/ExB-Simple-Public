@@ -1,0 +1,10 @@
+{
+  "summary": "Summary",
+  "description": "Description",
+  "addSummary": "Add a summary",
+  "addDescription": "Add a description",
+  "charactersLeft": "Characters left: ${num}",
+  "invalid": "The summary cannot contain any of these characters: < or >.",
+  "invalidDescription": "The description cannot contain any of these characters: < or >.",
+  "summaryReadOnly": "Summary read-only."
+}

@@ -1,0 +1,14 @@
+{
+  "AddDataFromUrl": "Pievienot datus no URL",
+  "addData": "Pievienot datus",
+  "clear": "Notīrīt",
+  "file": "Fails",
+  "fileNotFound": "Neizdevās ielādēt failu.",
+  "invalidUrl": "Nederīgs URL vai faila paplašinājums.",
+  "layerNotFound": "Neizdevās ielādēt slāni.",
+  "replaceData": "Aizstāt datus",
+  "required": "Šis parametrs ir obligāts.",
+  "uploadData": "Augšupielādēt datus",
+  "uploadFailureMsg": "Kļūda, veicot augšupielādes operāciju, faila lielums vai veids šim pakalpojumam netiek atbalstīts.",
+  "url": "URL"
+}

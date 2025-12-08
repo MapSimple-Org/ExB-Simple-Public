@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>N&aacute;stroj Sumarizovať v bl&iacute;zkosti vypoč&iacute;ta &scaron;tatistiky pre prvky v zadanej vzdialenosti od in&yacute;ch prvkov. Vzdialenosť sa m&ocirc;že vypoč&iacute;tať pomocou priamej vzdialenosti alebo režimu jazdy.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="summaryLayer">
+        <div>
+            <p>Vrstva, ktor&aacute; bude sumarizovan&aacute; v r&aacute;mci vzdialenosti od vrstvy v bl&iacute;zkosti.
+            </p>
+            <p class="toolPaneOnly">Počet prvkov z&aacute;vis&iacute; od ďal&scaron;&iacute;ch faktorov, ako napr&iacute;klad filtrovacie krit&eacute;ri&aacute; a rozsah anal&yacute;zy.
+            </p>
+        </div>
+    </div>
+    <div id="sumNearbyLayer">
+        <div>
+            <p>Bodov&aacute;, l&iacute;niov&aacute; alebo polyg&oacute;nov&aacute; vrstva bude použit&aacute; ako v&yacute;chodiskov&eacute; lokality, okolo ktor&yacute;ch sa vytvoria ohraničen&eacute; oblasti na sumariz&aacute;ciu bl&iacute;zkych prvkov.
+            </p>
+            <p class="toolPaneOnly">Počet prvkov z&aacute;vis&iacute; od ďal&scaron;&iacute;ch faktorov, ako napr&iacute;klad filtrovacie krit&eacute;ri&aacute; a rozsah anal&yacute;zy.
+            </p>
+        </div>
+    </div>
+    <div id="nearType">
+        <div>
+            
+            <p class="toolPaneOnly">Met&oacute;da, ktor&aacute; sa použije na vytvorenie ohraničen&yacute;ch oblast&iacute;. Met&oacute;da m&ocirc;že byť priama vzdialenosť alebo cestovn&yacute; režim.
+            </p> 
+            <p class="modelBuilderOnly">Met&oacute;da, ktor&aacute; sa použije na vytvorenie ohraničen&yacute;ch oblast&iacute;. V s&uacute;časnosti je jedinou podporovanou met&oacute;dou pre modely priama vzdialenosť.
+            </p>
+        </div>
+    </div>
+    <div id="distances">
+        <div>
+            <p>Vzdialenosť alebo čas, ktor&yacute; sa použije na vytvorenie ohraničen&yacute;ch oblast&iacute;. Ak sa prid&aacute; viac hodn&ocirc;t, každ&aacute; hodnota sa použije na v&yacute;počet ohraničen&yacute;ch oblast&iacute; pre v&scaron;etky vstupn&eacute; prvky.
+            </p>
+        </div>
+    </div>
+    <div id="units">
+        <div>
+            <p>Jednotky, ktor&eacute; sa použij&uacute; na určenie vzdialenosti alebo času.
+            </p>
+        </div>
+    </div>
+    <div id="returnBoundaries">
+        <div>
+            <p>Určuje, či bude v&yacute;sledn&aacute; vrstva ohraničen&yacute;mi oblasťami (za&scaron;krtnut&eacute;) alebo rovnakou geometriou ako vstupn&aacute; vrstva v bl&iacute;zkosti (neza&scaron;krtnut&eacute;).
+            </p>
+        </div>
+    </div>
+    <div id="sumShape">
+        <div>
+            <p>Určuje, či sa vypoč&iacute;ta celkov&aacute; veľkosť sumarizovan&yacute;ch prvkov v každej ohraničuj&uacute;cej oblasti. Pre l&iacute;nie sa vypoč&iacute;ta celkov&aacute; dĺžka. Pre polyg&oacute;ny sa vypoč&iacute;ta celkov&aacute; plocha.
+            </p>
+        </div>
+    </div>
+    <div id="shapeUnits">
+        <div>
+            <p>Jednotky, ktor&eacute; sa použij&uacute; na v&yacute;počet celkovej veľkosti sumarizovan&yacute;ch prvkov.
+            </p>
+        </div>
+    </div>
+    <div id="summaryFields">
+        <div>
+            <p>Č&iacute;seln&eacute; alebo d&aacute;tumov&eacute; polia zo vstupnej vrstvy, ktor&eacute; bud&uacute; sumarizovan&eacute;, a &scaron;tatistiky, ktor&eacute; bud&uacute; vypoč&iacute;tan&eacute; pre každ&eacute; pole.
+            </p>
+        </div>
+    </div>
+    <div id="groupByField">
+        <div>
+            <p>Pole zo vstupnej vrstvy, ktor&eacute; bude použit&eacute; na rozdelenie d&aacute;t do samostatn&yacute;ch skup&iacute;n pre &scaron;tatistick&eacute; v&yacute;počty.
+            </p>
+        </div>
+    </div>
+    <div id="minorityMajority">
+        <div>
+            <p>Určuje, či sa maj&uacute; vypoč&iacute;tať minoritn&eacute; (najmenej dominantn&eacute;) a majoritn&eacute; (najviac dominantn&eacute;) skupiny v r&aacute;mci každej sumarizačnej oblasti.
+            </p>
+        </div>
+    </div>
+    <div id="percentShape">
+        <div>
+            <p>Určuje, či sa vypoč&iacute;ta percentu&aacute;lny podiel sumarizovan&yacute;ch prvkov, ktor&eacute; patria do každej skupiny v r&aacute;mci každej hranice.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>N&aacute;zov vrstvy, ktor&aacute; sa vytvor&iacute; a prid&aacute; do mapy.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>N&aacute;zov priečinka v r&aacute;mci  <b>M&ocirc;j obsah</b>, do ktor&eacute;ho sa ulož&iacute; v&yacute;sledok.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

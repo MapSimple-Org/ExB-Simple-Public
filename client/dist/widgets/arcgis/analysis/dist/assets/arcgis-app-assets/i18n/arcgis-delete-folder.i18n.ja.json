@@ -1,0 +1,22 @@
+{
+  "deleteFolder": "フォルダーの削除",
+  "delete": "削除",
+  "permanentlyDelete": "完全に削除",
+  "back": "戻る",
+  "cancel": "キャンセル",
+  "success": "フォルダー '${title}' は正常に削除されました",
+  "deleteProtectedItemsInFolder": "一部のアイテムが削除されないよう保護されているか、従属するアイテムを持っているため、フォルダーを削除できませんでした。",
+  "message": {
+    "empty": "フォルダー <strong style='font-weight: 500'>${title}</strong> を削除しますか？",
+    "recycleAll": "フォルダー <strong style='font-weight: 500'>${title}</strong> を削除して、コンテンツをゴミ箱に入れてもよろしいですか？",
+    "mustBeEmpty": "フォルダー <strong style='font-weight: 500'>${title}</strong> を削除するには、空にする必要があります。",
+    "aFewCannotBeDeleted": "いくつかのアイテムを削除できません。 残っているアイテムの削除を続行しますか？",
+    "canBeEmptied": "フォルダー <strong style='font-weight: 500'>${title}</strong> を削除するには、空にする必要があります。 これらのアイテムの削除を続行しますか？",
+    "cannotBeDeleted": "フォルダー <strong style='font-weight: 500'>${title}</strong> は、含まれているアイテムを削除できないため、削除することができません。"
+  },
+  "disabledMessage": {
+    "single": "このフォルダー <b>${label}</b> には <span style='color:red'>1 つのアイテム</span>があります。<br/></br/>このフォルダーとそのアイテムを削除しますか？",
+    "multiple": "このフォルダー <b>${label}</b> には <span style='color:red'>${number} 個のアイテム</span>があります。<br/></br/>このフォルダーとそのすべてのアイテムを削除しますか？",
+    "unknown": "このフォルダー <b>${label}</b> を削除しますか？"
+  }
+}

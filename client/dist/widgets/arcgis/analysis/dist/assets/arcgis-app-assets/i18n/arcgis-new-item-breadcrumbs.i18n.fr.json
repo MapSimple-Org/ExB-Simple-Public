@@ -1,0 +1,12 @@
+{
+  "apiCredentialType": "Type d’informations d’identification : clé d’API",
+  "oauthCredentialType": "Type d’informations d’identification : OAuth 2.0",
+  "itemAccess": "Accès aux éléments",
+  "page": "Page : ${page}",
+  "currentPage": "Page actuelle : ${page}",
+  "privileges": "Privilèges",
+  "itemDetails": "Détails de l’élément",
+  "settings": "Paramètres",
+  "serviceScope": "Périmètre du service",
+  "summary": "Résumé"
+}

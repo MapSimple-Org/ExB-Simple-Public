@@ -1,0 +1,1 @@
+{"componentLabel":"Đo Khoảng cách","distance":"Khoảng cách","hint":"Bắt đầu đo bằng cách nhấp vào bản đồ để đặt điểm đầu tiên của bạn","mode":"Chế độ","modes":{"auto":"Tự động","planar":"Phẳng","geodesic":"Trắc địa"},"newMeasurement":"Phép đo lường mới","unit":"Đơn vị","unsupported":"Chức năng đo khoảng cách 2D chỉ được hỗ trợ trong MapView."}

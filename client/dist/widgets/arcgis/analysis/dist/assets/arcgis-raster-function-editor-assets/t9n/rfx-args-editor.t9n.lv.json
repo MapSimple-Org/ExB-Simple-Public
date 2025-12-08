@@ -1,0 +1,11 @@
+{
+  "unsupportedDataType": "Neatbalstīts veids",
+  "currentlyUnsupported": " ${missingType} noklusējuma redaktors gaida, bet drīzumā būs pieejams. Pagaidu viettura tekstlodziņš ievadņu norādīšanai, pamatojoties uz virkni.",
+  "unsupportedOverrideWarning": "Ignorēšanas redaktora komponents, kas nodrošina labāku UX darbam ar šādiem parametriem, gaida, bet drīz būs pieejams:",
+  "overrideWidgetMissing": "Trūkst redaktora komponenta ignorēšanas!",
+  "uiIncomplete": "Darba iesniegšana neizdevās. Funkciju nevar palaist, jo daži no nepieciešamajiem laukiem lietotāja interfeiss ir nepilnīgs vai tā trūkst.",
+  "deprecatedBannerText": "Šajā rastra funkcijas veidnē ir viena vai vairākas novecojušas rastra funkcijas, un tās tiks noņemtas nākamajā laidienā.",
+  "deprecatedBannerTextWithLink": "Šajā rastra funkcijas veidnē ir viena vai vairākas novecojušas rastra funkcijas, un tās tiks noņemtas nākamajā laidienā. <calcite-link target='_blank' href='${ docLink }'>Uzziniet vairāk</calcite-link> par to, kā aizstāt novecojušu rastra funkciju.",
+  "unsupportedBannerText": "Šajā rastra funkcijas veidnē ir viena vai vairākas neatbalstītas rastra funkcija(-s).",
+  "unsupportedBannerTextWithLink": "Šajā rastra funkcijas veidnē ir viena vai vairākas neatbalstītas rastra funkcija(-s). <calcite-link target='_blank' href='${ docLink }'>Uzziniet vairāk</calcite-link> par to, kādas rastra funkcijas tiek atbalstītas."
+}

@@ -1,0 +1,14 @@
+{
+  "outputRaster": "输出栅格",
+  "rfxVariable": "RasterFunctionVariable",
+  "selectLayer": "选择图层",
+  "allowScalar": "选择图层或输入常数",
+  "browseLayer": "浏览图层",
+  "loading": "正在加载...",
+  "layerMissing": "此处未列出地图中的一个或多个影像图层，因为未启用允许分析服务属性。",
+  "layerFailedToLoad": "无法加载图层。",
+  "learnMore": "了解详细信息",
+  "errorCodes": {
+    "required": "必需参数。"
+  }
+}

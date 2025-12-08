@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>De tool Puntclusters zoeken identificeert clusters van puntobjecten binnen omringend geluid gebaseerd op hun ruimtelijke distributie.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="analysisLayer">
+        <div>
+            <p>De invoerpuntlaag die in clusters wordt gegroepeerd op basis van de ruimtelijke verdeling van de puntobjecten.
+            </p>
+        </div>
+    </div>
+    <div id="method">
+        <div>
+            <p>De methode die zal worden gebruikt om clusters te identificeren.
+            </p>
+        </div>
+    </div>
+    <div id="minFeaturesCluster">
+        <div>
+            <p>Het minimum aantal puntobjecten om als een cluster te worden beschouwd.
+            </p>
+        </div>
+    </div>
+    <div id="searchDistance">
+        <div>
+            <p>Specificeert de maximale afstand rond elk puntobject om te zoeken naar punten die in de cluster kunnen worden opgenomen. Indien dit leeg wordt gelaten, zal de waarde  <b>Zoekafstand</b> de hoogste kernafstand zijn die in de laag wordt gevonden, met uitzondering van het bovenste percentiel van de kernafstanden.
+            </p>
+        </div>
+    </div>
+    <div id="searchDistanceUnit">
+        <div>
+            <p>Specificeert de eenheden die voor de zoekafstand zullen worden gebruikt.
+            </p>
+        </div>
+    </div>
+    <div id="sensitivity">
+        <div>
+            <p>Een integer tussen 0 en 100 die de compactheid van de clusters bepaalt. Als dit leeg wordt gelaten, zal de waarde  <b>Clustergevoeligheid</b> worden berekend aan de hand van de Kullback-Leibler-divergentie.
+            </p>
+        </div>
+    </div>
+    <div id="timeField">
+        <div>
+            <p>Het veld in de invoerlaag dat een tijdstempel bevat voor elk object.
+            </p>
+        </div>
+    </div>
+    <div id="searchTimeInterval">
+        <div>
+            <p>De tijdsinterval die zal worden gebruikt om te bepalen of objecten een ruimte-tijdcluster vormen. De zoektijdsinterval reikt van voor tot na de tijd van elk object; een zoektijdsinterval van 3 dagen rond een object zal bijvoorbeeld alle objecten bevatten die 3 dagen voor de tijd van het object starten en 3 dagen na de tijd van het object eindigen.
+            </p>
+        </div>
+    </div>
+    <div id="searchTimeUnit">
+        <div>
+            <p>Specificeert de eenheden die voor de zoektijdsinterval zullen worden gebruikt.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>De naam van de laag die wordt aangemaakt en toegevoegd aan de kaart.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>De naam van de map in  <b>Mijn content</b> waarin het resultaat wordt opgeslagen.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

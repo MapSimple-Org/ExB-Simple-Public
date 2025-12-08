@@ -1,0 +1,11 @@
+{
+  "rasterInfoValue": "मान",
+  "rasterExtentTop": "शीर्ष",
+  "rasterExtentBottom": "नीचे",
+  "rasterExtentLeft": "बाएं",
+  "rasterExtentRight": "दाएं",
+  "bandName": "बैंड नाम",
+  "minimum": "न्यूनतम",
+  "maximum": "अधिकतम",
+  "mean": "माध्य"
+}

@@ -1,0 +1,10 @@
+{
+  "forceFlowLabel": "强制边缘像元向外流动",
+  "inputLayersGroupText": "选择输入表面栅格，以及可选的洼地数据和权重栅格。",
+  "itemProperties": {
+    "description": "运行“派生流作为栅格”工具生成的输出。",
+    "snippet": "“派生流作为栅格”生成的输出"
+  },
+  "outputStreamRasterLabel": "输出流栅格名称",
+  "streamSettingsGroupText": "指定累积阈值、流标识方法以及在输入表面栅格边缘处理流的方式。"
+}

@@ -1,0 +1,9 @@
+{
+  "addToMap": "Bekræft og tilføj kort",
+  "cancel": "Annuller",
+  "confirm": "Bekræft",
+  "header": "Vælg element",
+  "select": "Vælg",
+  "unsupportedLayer": "Denne parameter undersøtter ikke følgende lag: ${layerName}.",
+  "viewDetails": "Vis oplysninger"
+}

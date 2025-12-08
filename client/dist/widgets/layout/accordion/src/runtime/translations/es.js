@@ -1,0 +1,1 @@
+System.register([],function(e){return{execute:function(){e({_widgetLabel:"Panel lateral expandible",tips:"Panel lateral expandible"})}}});

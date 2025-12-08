@@ -1,0 +1,160 @@
+{
+  "deleteItem": "Usuń element",
+  "deleteItems": "Usuń elementy",
+  "deleteFolder": "Usuń folder",
+  "recycleBin": "Kosz",
+  "delete": "Usuń",
+  "permanentlyDelete": "Trwale usuń",
+  "next": "Dalej",
+  "back": "Wstecz",
+  "cancel": "Anuluj",
+  "item": "element",
+  "items": "elementy",
+  "cantDelete": "Nie można usunąć następujących elementów, ponieważ są chronione przed usunięciem lub mają elementy zależne.",
+  "proceed": "Czy kontynuować usuwanie pozostałych elementów?",
+  "showMore": "Pokaż więcej",
+  "showLess": "Pokaż mniej",
+  "deletePermanently": "Trwale usuń (brak możliwości cofnięcia)",
+  "learnMore": "Dowiedz się więcej",
+  "summary": {
+    "select": "Wybierz",
+    "deselect": "Anuluj zaznaczenie",
+    "selectedItems": "Wybrane elementy:",
+    "additionalDependentItems": "dodatkowe elementy zależne:",
+    "permanentlyDelete": "Trwale usuń:",
+    "permanentDelete": {
+      "notSupported": {
+        "single": "Kosz nie obsługuje tego elementu.",
+        "multiple": "Te elementy nie są obsługiwane przez kosz."
+      },
+      "unsynchronized": "Niezsynchronizowane zmiany warstw obiektowych w grupie kooperacji rozproszonej zostaną utracone.",
+      "notSupportedAndUnsynchronized": "Niektóre typy elementów nie są obsługiwane. Niezsynchronizowane zmiany warstw obiektowych w grupie kooperacji rozproszonej zostaną utracone.",
+      "group": {
+        "notSupported": "Nieobsługiwane",
+        "distributedCollaboration": "Część kooperacji rozproszonej"
+      }
+    },
+    "canBeRecovered": {
+      "single": "Ten element zostanie trwale usunięty po następującej liczbie dni: ${days}.",
+      "multiple": "Te elementy zostaną trwale usunięte po ${days} dniach.",
+      "unknown": "Te elementy zostaną trwale usunięte po ${days} dniach."
+    },
+    "includesDependentItems": "Dodatkowe elementy zależne:",
+    "willBeRecycled": "Wyślij do kosza:",
+    "cannotDelete": "Nie można usunąć:",
+    "deleteDiscouraged": "Usunięcie nie jest zalecane:",
+    "hasDependentItems": "Ma elementy zależne:",
+    "replacementItemFor": "Element zastępczy dla:",
+    "someActionsMayNoLongerWork": {
+      "single": "Jeśli wyślesz ten element do kosza, niektóre działania wymagające dostępu do elementu źródłowego mogą nie funkcjonować zgodnie z oczekiwaniami.",
+      "multiple": "Jeśli wyślesz te elementy do kosza, niektóre działania wymagające dostępu do elementów źródłowych mogą nie funkcjonować zgodnie z oczekiwaniami."
+    },
+    "deletePermanently": "Trwale usuń: ${count} (brak możliwości cofnięcia)",
+    "deleteAllPermanently": "Trwale usuń wszystkie elementy: ${count} (brak możliwości cofnięcia)",
+    "deleteXPermanently": "Trwale usuń ${subset} z następującej liczby elementów: ${total} (brak możliwości cofnięcia)",
+    "unprotectedGroup": {
+      "deleteDiscouraged": {
+        "dependent": "Jeśli usuniesz ten element, niektóre działania wymagające dostępu do elementu źródłowego mogą nie funkcjonować zgodnie z oczekiwaniami. Czy na pewno chcesz usunąć element?",
+        "replacement": "Ten element jest wybrany jako element zastępczy. Czy na pewno chcesz usunąć element?",
+        "learnMore": "Dowiedz się więcej na temat usuwania elementów źródłowych"
+      }
+    },
+    "protectedGroup": {
+      "deleteProtected": "Chronione przed usunięciem",
+      "deleteProtectedDescription": "Nie można usunąć elementów chronionych przed usunięciem.",
+      "hasDependentItems": "Ma elementy zależne",
+      "dependentItems": {
+        "single": "Element zależny:",
+        "multiple": "Elementy zależne:"
+      },
+      "compositeDelete": "Ten element zależy od:",
+      "compositeDeleteDescription": "Elementów zależnych w relacji złożonej nie można usuwać bez powiązanego z nimi elementu źródłowego.",
+      "hasDependentItemsDescription": {
+        "singleOneDependentItem": "Ten element ma element zależny. Należy usunąć je razem.",
+        "singleMultipleDependentItems": "Ten element ma elementy zależne. Należy usunąć je razem.",
+        "multiple": "Te elementy mają inne elementy zależne. Należy usunąć je razem."
+      },
+      "protectedAndDependentDescription": "Nie można usunąć elementów chronionych przed usunięciem lub mających elementy zależne.",
+      "deleteDiscouraged": "Usunięcie nie jest zalecane",
+      "deleteDiscouragedDescription": {
+        "single": "Jeśli ten element zostanie usunięty, elementy zależne mogą utracić niektóre funkcje. Ten element można usunąć na stronie szczegółów tego elementu.",
+        "multiple": "Jeśli te elementy zostaną usunięte, elementy zależne mogą utracić niektóre funkcje. Te elementy można usuwać pojedynczo na stronie szczegółów elementu."
+      }
+    }
+  },
+  "willBePermanentlyDeleted": {
+    "single": "Ten element zostanie trwale usunięty, ponieważ nie jest obsługiwany przez kosz.",
+    "multiple": "Te elementy zostaną trwale usunięte, ponieważ nie są obsługiwane przez kosz.",
+    "unknown": "Te elementy zostaną trwale usunięte, ponieważ nie są obsługiwane przez kosz."
+  },
+  "willBePermanentlyDeletedCollaboration": {
+    "single": "Wybrany element należy do grupy rozproszonej kooperacji i nie można go wysłać do kosza. Zostanie trwale usunięty.",
+    "multiple": "Wybrane elementy należą do grupy rozproszonej kooperacji i nie można ich wysłać do kosza. Zostaną trwale usunięte.",
+    "unknown": "Wybrane elementy należą do grupy rozproszonej kooperacji i nie można ich wysłać do kosza. Zostaną trwale usunięte."
+  },
+  "areYouSure": {
+    "single": "Czy na pewno chcesz usunąć ten element?",
+    "multiple": "Czy na pewno chcesz usunąć te elementy?",
+    "unknown": "Czy na pewno chcesz usunąć te elementy?"
+  },
+  "areYouSureRecycle": {
+    "single": "Ten element, zanim zostanie trwale usunięty, pozostanie w koszu przez następującą liczbę dni: ${days}.",
+    "multiple": "Te elementy, zanim zostaną trwale usunięte, pozostaną w koszu przez następującą liczbę dni: ${days}.",
+    "unknown": "Te elementy, zanim zostaną trwale usunięte, pozostaną w koszu przez następującą liczbę dni: ${days}."
+  },
+  "areYouSurePermanent": {
+    "single": "Czy na pewno chcesz trwale usunąć ten element? Po trwałym usunięciu tego elementu nie będzie można go przywrócić.",
+    "multiple": "Czy na pewno chcesz trwale usunąć te elementy? Po trwałym usunięciu tych elementów nie będzie można ich przywrócić.",
+    "unknown": "Czy na pewno chcesz trwale usunąć te elementy? Po trwałym usunięciu tych elementów nie będzie można ich przywrócić."
+  },
+  "deletes": {
+    "single": "Usunięcia w ciągu dni: ${days}",
+    "multiple": "Usunięcia w ciągu następującej liczby dni: ${days}",
+    "unknown": "Dni do usunięcia: ${days}"
+  },
+  "deleteOverride": {
+    "single": "Czy na pewno chcesz trwale usunąć ten element? Po trwałym usunięciu tego elementu nie będzie można go przywrócić.",
+    "multiple": "Czy na pewno chcesz trwale usunąć te elementy? Po trwałym usunięciu tych elementów nie będzie można ich przywrócić."
+  },
+  "restore": {
+    "restore": "Przywróć",
+    "restoreTo": "Przywróć do",
+    "restoreItem": "Przywróć element",
+    "restoreItems": "Przywróć elementy",
+    "noticeMessage": "Przywrócone elementy nie będą udostępniane. Sprawdź zasoby, zanim ponownie je udostępnisz.",
+    "cannotBulkRestoreXItems": "Nie można zbiorczo przywrócić więcej niż ${number} elementów. Usuń zaznaczenie niektórych elementów.",
+    "cannotBulkRestoreMultipleOwners": "Nie można zbiorczo przywrócić elementów, które mają różnych właścicieli. Aby przywrócić zbiorczo, wybierz elementy tego samego właściciela.",
+    "toRestore": {
+      "single": "Element do przywrócenia:",
+      "multiple": "Elementy do przywrócenia:"
+    },
+    "cannotRestore": "Nie można przywrócić:",
+    "dependentItems": {
+      "single": "Nie można przywrócić tego elementu, ponieważ zależy on od elementu <b>${parent}</b>. Należy przywrócić je razem.",
+      "multiple": "Nie można przywrócić tych elementów, ponieważ zależą od innych elementów znajdujących się w koszu. Należy przywrócić je razem: "
+    }
+  },
+  "onboarding": {
+    "checkItOut": "Czy chcesz przywrócić przypadkowo usunięty element? Sprawdź nowy kosz!",
+    "takeALook": "Zapoznaj się z nowym koszem.",
+    "learnMore": "Dowiedz się więcej na temat przywracania usuniętych elementów",
+    "heldInRecycleBin": "Elementy w koszu zostaną trwale usunięte po ${days} dniach.",
+    "goToUserRecycleBin": "Aby przywrócić lub trwale usunąć elementy, przejdź do ${linkStart}kosza${linkEnd}.",
+    "goToOrgRecycleBin": "Aby przywrócić lub trwale usunąć elementy, przejdź do ${linkStart}kosza instytucji${linkEnd}. Zasoby w koszu nadal zużywają kredyty."
+  },
+  "pageRangeWithTotalRecycleBinSize": {
+    "en": "${start}–${end} z ${total} (${size}) w koszu",
+    "other": "${start}–${end}, łącznie: ${total} (${size}) w koszu"
+  },
+  "pageRangeWithGreaterThanTotalRecycleBinSize": {
+    "en": "${start}–${end} z ${total} (ponad ${size}) w koszu",
+    "other": "${start}–${end}, łącznie: ${total} (ponad ${size}) w koszu"
+  },
+  "compositeDeleteDisclaimer": {
+    "oneToOne": "<strong>${item}</strong> ma element zależny <strong>${dependentItem}</strong>, który musi zostać usunięty wraz z nim.",
+    "oneToMany": "Element <strong>${item}</strong> ma elementy zależne, które należy wraz z nim usunąć.",
+    "manyToMany": "Niektóre wybrane elementy mają elementy zależne, które należy wraz z nimi usunąć.",
+    "additional": "Dodatkowe elementy:",
+    "dependentOn": "Zależy od"
+  }
+}

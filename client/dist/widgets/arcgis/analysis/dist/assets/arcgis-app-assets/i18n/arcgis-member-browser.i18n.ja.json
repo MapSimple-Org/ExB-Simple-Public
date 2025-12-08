@@ -1,0 +1,177 @@
+{
+  "memberBrowser": {
+    "filters": "フィルター",
+    "pageRange": "${start} ～ ${end}、合計: ${total}",
+    "pageRangeAria": "${start}-${end}、総メンバー数: ${total}",
+    "selectedMembers": "選択されたメンバー",
+    "noSelectedMembers": "メンバーが現在選択されていません",
+    "noUsersFound": "条件を満たすユーザーが見つかりません。 他のユーザーを表示するには、一部のフィルターを解除するか検索語句を変更してみてください。",
+    "enterTermExternal": "検索語句を入力して、ArcGIS Online のすべてのユーザーを検索します",
+    "noUsers": "利用可能なユーザーがいません",
+    "coordinator": "コラボレーション コーディネーター"
+  },
+  "search": {
+    "searchMembers": "メンバーの検索"
+  },
+  "filterUserTypes": {
+    "title": "ユーザー タイプ",
+    "label": "ユーザー タイプ: ${name}",
+    "loading": "ユーザー タイプを読み込んでいます..."
+  },
+  "filterRoles": {
+    "title": "ロール",
+    "label": "ロール: ${name}",
+    "loading": "ロールを読み込んでいます...",
+    "searchRoles": "ロールの検索"
+  },
+  "filterOrgGroups": {
+    "title": "組織のグループ",
+    "label": "グループ: ${name}",
+    "loading": "組織のグループを読み込んでいます...",
+    "searchGroups": "グループの検索",
+    "noGroupsFound": "グループが見つかりません。 検索語句を変更して、表示されるグループの数を増やしてください。"
+  },
+  "filterMyGroups": {
+    "title": "グループ",
+    "label": "グループ: ${name}",
+    "loading": "グループを読み込んでいます…",
+    "searchMyGroups": "グループの検索"
+  },
+  "filterCategories": {
+    "title": "カテゴリ",
+    "label": "カテゴリー: ${name}",
+    "loading": "カテゴリを読み込んでいます...",
+    "noCategoriesTitle": "メンバー カテゴリがまだありません",
+    "noCategories": "管理者はメンバー カテゴリーを使用して、メンバーをディレクトリに整理して、メンバーに対する管理作業を効率化することができます。 組織のメンバーはこのディレクトリーを使用して他のメンバーを見つけることもできます。",
+    "setupCategories": "メンバー カテゴリの設定",
+    "configureCategories": "カテゴリの構成",
+    "noCategoriesAssigned": "カテゴリが割り当てられていません"
+  },
+  "filterPartnerCollabs": {
+    "title": "パートナー コラボレーション",
+    "label": "パートナー コラボレーション: ${name}",
+    "loading": "パートナー コラボレーションを読み込んでいます...",
+    "coordinatorsOnly": "コラボレーション コーディネーターのみ",
+    "coordinatorsDescription": "コラボレーション コーディネーターは、確認メッセージを表示せずにグループに追加できるパートナー コラボレーションの代表です。",
+    "coordinatorsInfoLabel": "コラボレーション コーディネーターの詳細"
+  },
+  "filterSearchSwitch": {
+    "searchAll": "ArcGIS Online 組織のすべてのメンバーを検索します。",
+    "searchPartners": "これとパートナー組織のメンバーを含む"
+  },
+  "table": {
+    "caption": "メンバーの結果 (列ヘッダーにボタンがある) は並べ替えることができます。",
+    "selectAll": "すべて選択",
+    "selection": "選択",
+    "headers": {
+      "name": "名前",
+      "membertype": "グループ ロール",
+      "affiliation": "所属",
+      "joined": "加入済み",
+      "credits": "使用可能なクレジット数",
+      "remainingCredits": "残りのクレジットの合計数　${num}",
+      "lastlogin": "最終ログイン",
+      "usertype": "ユーザー タイプ",
+      "role": "ロール",
+      "mfaenabled": "多要素認証"
+    }
+  },
+  "tableRow": {
+    "moreOptions": "その他のオプション",
+    "groupManager": "グループの管理者",
+    "owner": "所有者",
+    "member": "メンバー",
+    "myOrg": "組織",
+    "other": "その他",
+    "coordinator": "コラボレーション コーディネーター",
+    "noLimit": "制限なし",
+    "creditsNumber": "${remain} / ${total}",
+    "today": "今日",
+    "yesterday": "昨日",
+    "never": "なし",
+    "role": "ロール",
+    "memberIsCoordinator": "このメンバーはコラボレーション コーディネーターです",
+    "rolesForCoordinator": "コラボレーション コーディネーターに割り当てられるのは管理者ロールかファシリテーター ロールのみです。",
+    "memberIsContact": "このメンバーは管理者の問い合わせ先です",
+    "removeFromContact": "このメンバーのロールを変更する場合は、まず ${linkStart}管理者の問い合わせ先リスト ${linkEnd} からメンバーを削除する必要があります。"
+  },
+  "listCard": {
+    "moreOptions": "その他のオプション",
+    "lastLoggedIn": "${value} の最終ログイン",
+    "today": "今日",
+    "yesterday": "昨日",
+    "hasNotLoggedIn": "まだログインしていません",
+    "neverSignedInTooltip": "このメンバーは ${date} に作成されたアカウントに一度もサイン インしていません",
+    "userType": "ユーザー タイプ",
+    "role": "ロール",
+    "creditsRemaining": "使用可能なクレジット数",
+    "noLimit": "制限なし",
+    "creditsNumber": "${remain} / ${total}",
+    "addonLicenses": "アドオン ライセンス",
+    "configureLicenses": "ライセンスの構成",
+    "groups": "グループ",
+    "configureGroups": "グループの構成",
+    "viewGroups": "グループの表示"
+  },
+  "myOrg": {
+    "myOrgView": "組織のビュー"
+  },
+  "filterGroupRole": {
+    "title": "グループ ロール",
+    "label": "グループ ロール: ${role}",
+    "admins": "所有者とグループの管理者",
+    "member": "メンバー"
+  },
+  "filterAffiliation": {
+    "title": "所属",
+    "label": "所属: ${name}",
+    "myOrg": "組織",
+    "other": "その他"
+  },
+  "filterCreditsRemain": {
+    "title": "使用可能なクレジット数",
+    "noLimit": "制限なし",
+    "lessThan": "未満",
+    "credits": "クレジット",
+    "labelNoLimit": "クレジット: 制限なし",
+    "labelLess": "クレジット: ${value} 未満",
+    "invalidValue": "入力された値が有効ではありません。"
+  },
+  "filterEmailVerification": {
+    "title": "電子メール確認ステータス",
+    "unverified": "未確認の電子メール アドレス",
+    "verified": "確認済みの電子メール アドレス",
+    "label": "電子メール確認ステータス: ${status}"
+  },
+  "filterLoginType": {
+    "title": "ログイン タイプ",
+    "label": "ログイン タイプ: ${type}",
+    "social": "ソーシャル"
+  },
+  "filterApp": {
+    "title": "アプリ",
+    "label": "アプリ: ${app}"
+  },
+  "filterMFA": {
+    "title": "多要素認証",
+    "enabled": "有効",
+    "disabled": "無効",
+    "label": "多要素認証: ${status}"
+  },
+  "roles": {
+    "user": "ユーザー",
+    "publisher": "公開者",
+    "admin": "管理者",
+    "viewer": "閲覧者",
+    "editor": "データ編集者",
+    "facilitator": "ファシリテーター"
+  },
+  "view": {
+    "view": "表示",
+    "list": "リスト",
+    "table": "テーブル"
+  },
+  "assignedLicenses": "このライセンスが割り当てられているメンバーのみ表示",
+  "onlyDoubleAssigned": "このライセンスが二重に割り当てられているメンバーのみ表示",
+  "maxSelected": "一度に ${number} 人のメンバーしか選択できません。"
+}

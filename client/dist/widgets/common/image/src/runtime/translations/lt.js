@@ -1,0 +1,1 @@
+System.register([],function(e){return{execute:function(){e({_widgetLabel:"Atvaizdas",imageChooseShape:"Forma",imageCrop:"Apkarpyti",previousImage:"Ankstesnis vaizdas",nextImage:"Kitas vaizdas",imageViewer:"Vaizd\u0173 per\u017ei\u016bros programa"})}}});

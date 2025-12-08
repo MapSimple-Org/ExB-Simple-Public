@@ -1,0 +1,89 @@
+{
+  "browser": {
+    "refineContent": "Tartalom pontosítása",
+    "filters": "Szűrők",
+    "pageRange": "${start}–${end}, összesen: ${total}",
+    "pageRangeAria": "${start}–${end}, összes elem: ${total}",
+    "pageRangeWithRecycleBin": "${start}–${end}, összesen:: ${total} (Teljes méret: ${recycleBinSize})",
+    "pageRangeAriaWithRecycleBin": "${start}–${end}, összes elem: ${total} (Teljes méret: ${recycleBinSize})",
+    "totalSize": "Teljes méret: ${totalSize}",
+    "loading": "Eredmények betöltése…",
+    "close": "Bezárás"
+  },
+  "actions": {
+    "more": "Továbbiak"
+  },
+  "filter": {
+    "clear": "Törlés"
+  },
+  "filterDate": {
+    "today": "Ma",
+    "yesterday": "Tegnap",
+    "last7": "Az elmúlt 7 nap",
+    "last30": "Az elmúlt 30 nap",
+    "never": "Soha",
+    "custom": "Egyéni tartomány...",
+    "title": {
+      "created": "Létrehozás dátuma",
+      "modified": "Módosítás dátuma",
+      "joined": "Csatlakozás dátuma",
+      "lastLogin": "Utolsó bejelentkezés"
+    },
+    "created": "Létrehozva: ${date}",
+    "modified": "Módosítva: ${date}",
+    "joined": "Csatlakozott: ${date}",
+    "lastLogin": "Utolsó bejelentkezés: ${date}"
+  },
+  "pagination": {
+    "next": "Következő oldal",
+    "prev": "Előző oldal"
+  },
+  "search": {
+    "label": "Csoportok keresése",
+    "search": "Keresés",
+    "clear": "Keresőkifejezés törlése",
+    "wildcard": "A helyettesítő karakterrel történő keresés nem támogatott"
+  },
+  "sort": {
+    "sortDirection": "Rendezés iránya",
+    "title": "Cím",
+    "relevance": "Fontosság",
+    "modified": "Módosítás dátuma",
+    "deleted": "Törlés dátuma",
+    "created": "Létrehozás dátuma",
+    "added": "Hozzáadás dátuma",
+    "size": "Méret",
+    "owner": "Tulajdonos",
+    "sizeAsc": "Legkisebbtől a legnagyobbig",
+    "sizeDesc": "Legnagyobbtól a legkisebbig",
+    "numviews": "Megtekintések száma",
+    "numAsc": "Legkevesebbtől a legtöbbig",
+    "numDesc": "Legnagyobbtól a legkisebbig",
+    "alphabeticalAsc": "Betűrend szerint",
+    "alphabeticalDesc": "Fordított betűrend szerint",
+    "recentAsc": "Legrégebbi",
+    "recentDesc": "Legfrissebb",
+    "sort": "Rendezés",
+    "sortBy": "Rendezési szempont",
+    "sortByColon": "Rendezési szempont:",
+    "fullname": "Név",
+    "username": "Felhasználónév",
+    "name": "Név",
+    "membertype": "Csoportszerep",
+    "joined": "Csatlakozás dátuma",
+    "lastlogin": "Utolsó bejelentkezés",
+    "dataset": "Adathalmaz",
+    "mfaenabled": "Többlépcsős hitelesítés",
+    "defaultAsc": "Növekvő",
+    "defaultDesc": "Csökkenő"
+  },
+  "topBar": {
+    "filter": "Szűrő"
+  },
+  "filterStatus": {
+    "clear": "Törlés",
+    "filters": "Szűrők:",
+    "additional": "További aktív szűrők",
+    "clearAllFilters": "Összes szűrő törlése"
+  }
+}

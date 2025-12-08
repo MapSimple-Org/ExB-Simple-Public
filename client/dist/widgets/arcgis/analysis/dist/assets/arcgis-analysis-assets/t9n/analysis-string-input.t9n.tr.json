@@ -1,0 +1,12 @@
+{
+  "choiceList": "Seçim listesi",
+  "choiceListBadInput": "Girdi değeri geçersiz bir giriş içeriyor.",
+  "comboboxPlaceholderText": "Bir seçenek seçin...",
+  "inputPlaceholderText": "Bir değer girin...",
+  "invalidCharacterError": "Girdi değeri geçersiz karakterler içeriyor.",
+  "maxLengthError": "Girdi değeri ${maxLength} karakterden daha fazla olamaz.",
+  "minLengthError": "Girdi değeri ${minLength} karakterden daha az olamaz.",
+  "multiSelectComboboxPlaceholderText": "Bir veya daha fazla seçeneği seçin...",
+  "requiredError": "Bu parametre gerekli.",
+  "selectAll": "Tümünü seç"
+}

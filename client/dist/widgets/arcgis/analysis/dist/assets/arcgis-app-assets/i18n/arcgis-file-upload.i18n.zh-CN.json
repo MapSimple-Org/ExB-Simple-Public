@@ -1,0 +1,16 @@
+{
+  "updateData": "更新数据",
+  "cancel": "取消",
+  "editStyle": "使用计算机上的更新版本文件替换图层样式文件。",
+  "updatePackages": "将 ${type} 替换为您计算机上的更新版本。 已上传的文件必须与 ${hostedLayerName} 具有相同名称。",
+  "uploadStaticFiles": "正在上传的文件必须与原始文件 ${fileName} 具有相同的名称",
+  "sameFileNameDescription": "正在上传的文件必须与原始文件 ${fileName} 具有相同的名称和字段名称",
+  "updating": "正在更新...",
+  "error": "错误",
+  "errors": {
+    "sameFileName": "要更新此项目，您必须上传名为 ${fileName} 的文件。",
+    "invalidStyleFileExtension": "文件扩展名无效。 上传的样式必须具有文件扩展名 .json。",
+    "errorWhileUpload": "上传项目时出错。",
+    "errorUpdate": "覆盖项目时出错。"
+  }
+}

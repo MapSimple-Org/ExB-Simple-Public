@@ -1,0 +1,60 @@
+
+.widget-setting-wro-section {
+  margin-bottom: 1.5rem;
+}
+
+.widget-setting-wro-section-b {
+  margin-bottom: 1rem;
+}
+
+.widget-setting-wro-section-b > label {
+  display: flex;
+}
+
+.widget-setting-wro-label {
+  /*height: 1.4rem;*/
+  overflow-wrap: anywhere;
+}
+
+.widget-setting-wro-checkbox-label,
+.widget-setting-wro-radio-label {
+  margin: 0 6px;
+}
+
+.widget-setting-wro-note {
+  overflow-wrap: break-word;
+  font-size: 11px;
+  font-style: italic;
+}
+
+.widget-setting-wro-note-br {
+  margin-top: 10px;
+}
+
+.widget-setting-wro-search-items {
+  list-style-type: none;
+  max-height: 200px;
+  padding: 0;
+  margin: 0;
+  overflow-y: auto;
+  background: var(--light-500);
+}
+
+.widget-setting-wro-search-item {
+  width: 100%;
+  font-size: 12px;
+  text-align: left;
+  overflow-wrap: break-word;
+}
+
+.jimu-rtl .widget-setting-wro-search-item {
+  text-align: right;
+}
+
+.widget-setting-wro-on {
+  display: block;
+}
+
+.widget-setting-wro-off {
+  display: none;
+}

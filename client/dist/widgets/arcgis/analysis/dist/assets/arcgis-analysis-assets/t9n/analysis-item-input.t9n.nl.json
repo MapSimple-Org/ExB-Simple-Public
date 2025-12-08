@@ -1,0 +1,15 @@
+{
+  "addDataStore": "Gegevensarchief toevoegen",
+  "addFile": "Bestand toevoegen",
+  "addServiceConnection": "Verbinding toevoegen",
+  "itemNotFound": "Het item bestaat niet of is niet toegankelijk.",
+  "itemPermissionDenied": "U heeft geen toegangsmachtigingen voor dit item.",
+  "previewDetails": "Details voorbeeld",
+  "queryModelArgsErrMsg": "Modelargumenten opvragen mislukt.",
+  "queryModelArgsMsg": "Modelargumenten opvragen...",
+  "removeItem": "Item verwijderen",
+  "replaceItem": "Item vervangen",
+  "requiredInputMessage": "Deze parameter is vereist.",
+  "selectItem": "Item selecteren",
+  "viewDetails": "Details weergeven"
+}

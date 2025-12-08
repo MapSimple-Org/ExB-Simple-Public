@@ -1,0 +1,31 @@
+{
+  "back": "Tilbage",
+  "cancel": "Annuller",
+  "learnMore": "Få mere at vide",
+  "restore": "Gendan",
+  "restoreTo": "Gendan til",
+  "restoreItem": "Gendan element",
+  "restoreItems": "Gendan elementer",
+  "noticeMessage": "Gendannede elementer deles ikke. Gennemse dit indhold, før du deler det igen.",
+  "cannotBulkRestoreXItems": "Kan ikke masse-gendanne mere end ${number} elementer, fravælg nogle få elementer.",
+  "cannotBulkRestoreMultipleOwners": "Kan ikke masse-gendanne elementer, der tilhører forskellige ejere. Vælg elementer fra en enkelt ejer for at masse-gendanne.",
+  "toRestore": {
+    "single": "Element, der skal gendannes:",
+    "multiple": "Elementer, der skal gendannes:"
+  },
+  "cannotRestore": "Kan ikke gendanne:",
+  "dependentItems": {
+    "single": "Dette element kan ikke gendannes, fordi det er afhængigt af <strong style='font-weight: 500'>${parent}</strong>. Gendan elementerne sammen.",
+    "singleUnknown": "Dette element kan ikke gendannes, fordi det er afhængigt af et andet element i papirkurven. Gendan elementerne sammen.",
+    "multiple": "Disse elementer kan ikke gendannes, fordi de er afhængige af andre elementer i papirkurven. Gendan elementerne sammen.",
+    "multipleSameSource": "Disse elementer kan ikke gendannes, fordi de er afhængige af <strong style='font-weight: 500'>${parent}</strong>. Gendan elementerne sammen."
+  },
+  "pageRangeWithTotalRecycleBinSize": {
+    "en": "${start} - ${end} af ${total} (${size}) i papirkurven",
+    "other": "${start} - ${end}, i alt: ${total} (${size}) i papirkurven"
+  },
+  "pageRangeWithGreaterThanTotalRecycleBinSize": {
+    "en": "${start} - ${end} af ${total} (>${size}) i papirkurven",
+    "other": "${start} - ${end}, i alt: ${total} (>${size}) i papirkurven"
+  }
+}

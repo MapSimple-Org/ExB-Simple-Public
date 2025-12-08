@@ -1,0 +1,22 @@
+{
+  "general": "Općenito",
+  "parameters": "Parametri",
+  "variables": "Varijable",
+  "name": "Naziv",
+  "namePlaceHolder": "Unesite naziv",
+  "description": "Opis",
+  "parameter": "Parametar",
+  "isPublic": "Javno je",
+  "isDataset": "Skup je podataka",
+  "unknownPixelType": "Nepoznato",
+  "outputPixelType": "Vrsta izlaznih piksela",
+  "u8PixelType": "Nepotpisano 8 bita",
+  "s8PixelType": "Potpisano 8 bita",
+  "u16PixelType": "Nepotpisano 16 bita",
+  "s16PixelType": "Potpisano 16 bita",
+  "u32PixelType": "Nepotpisano 32 bita",
+  "s32PixelType": "Potpisano 32 bita",
+  "f32PixelType": "Plutajuće 32 bita",
+  "f64PixelType": "Dvostruko 64 bita",
+  "properties": "Svojstva"
+}

@@ -1,0 +1,14 @@
+{
+  "outputRaster": "Raster di Output",
+  "rfxVariable": "RasterFunctionVariable",
+  "selectLayer": "Seleziona layer",
+  "allowScalar": "Selezionare un layer o inserire una costante",
+  "browseLayer": "Sfoglia layer",
+  "loading": "Caricamento in corso...",
+  "layerMissing": "Uno o più layer immagini della mappa non sono elencati qui perché la proprietà del servizio per consentire l'analisi non è abilitata.",
+  "layerFailedToLoad": "Impossibile caricare il layer.",
+  "learnMore": "Ulteriori informazioni",
+  "errorCodes": {
+    "required": "Questo parametro è obbligatorio."
+  }
+}

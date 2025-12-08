@@ -1,0 +1,8 @@
+{
+  "itemProperties": {
+    "description": "通过运行“按属性过滤”分析工具生成的结果。",
+    "snippet": "通过“按属性过滤”生成的结果"
+  },
+  "noLayerDisabledTooltip": "选择有效的输入数据集。",
+  "queryCriteriaGroupLabel": "查询条件"
+}

@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>Configura&ccedil;&otilde;es de ambiente para an&aacute;lise no  Map Viewer. </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="analysisProcessingExtent">
+        <div>
+            <p>Especifica a &aacute;rea que ser&aacute; usada para an&aacute;lise. Por padr&atilde;o, ele usar&aacute; a extens&atilde;o completa.
+            </p>
+        </div>
+    </div>
+    <div id="rasterAnalysisProcessingExtent">
+        <div>
+            <p>Especifica a &aacute;rea que ser&aacute; usada para ferramentas de an&aacute;lise raster e fun&ccedil;&otilde;es raster quando  <b>Usar uma extens&atilde;o de processamento diferente para an&aacute;lise raster</b> estiver habilitado. Por padr&atilde;o, ele usar&aacute; a extens&atilde;o de exibi&ccedil;&atilde;o do mapa.
+            </p>
+        </div>
+    </div>
+    <div id="useDifferentExtentForRA">
+        <div>
+            <p>Especifica se deve ser usada uma extens&atilde;o de processamento diferente para ferramentas de an&aacute;lise raster e fun&ccedil;&otilde;es raster. Quando habilitado, a an&aacute;lise raster usar&aacute; o valor definido para a  <b>Extens&atilde;o de processamento da an&aacute;lise raster </b>, que &eacute; definido para usar a extens&atilde;o de exibi&ccedil;&atilde;o do mapa por padr&atilde;o. Quando desabilitado, todos os tipos de an&aacute;lise usar&atilde;o o valor definido para a <b>Extens&atilde;o de processamento de an&aacute;lise</b>, que &eacute; definida para usar a extens&atilde;o completa por padr&atilde;o.
+            </p>
+        </div>
+    </div>
+    <div id="outSR">
+        <div>
+            <p>Especifica o sistema de coordenadas que ser&aacute; usado para an&aacute;lise e a camada resultante.
+            </p>
+        </div>
+    </div>
+    <div id="extent">
+        <div>
+            <p>Especifica a &aacute;rea que ser&aacute; usada para an&aacute;lise.
+            </p>
+        </div>
+    </div>
+    <div id="snapRaster">
+        <div>
+            <p>Ajusta a extens&atilde;o da sa&iacute;da para que corresponda ao alinhamento da c&eacute;lula da camada raster de ajuste especificada.
+            </p>
+        </div>
+    </div>
+    <div id="cellSize">
+        <div>
+            <p>Especifica o tamanho ou resolu&ccedil;&atilde;o da c&eacute;lula que ser&aacute; usada para an&aacute;lise e para criar a camada raster de sa&iacute;da.
+            </p>
+            <p>Se  <b>Conforme especificado</b> for selecionado e a refer&ecirc;ncia espacial de sa&iacute;da for diferente da refer&ecirc;ncia espacial de entrada, o valor do tamanho da c&eacute;lula n&atilde;o ser&aacute; reprojetado.
+            </p>
+        </div>
+    </div>
+    <div id="mask">
+        <div>
+            <p>Especifica uma camada de m&aacute;scara, na qual apenas as c&eacute;lulas que se enquadram na &aacute;rea de m&aacute;scara ser&atilde;o usadas para an&aacute;lise.
+            </p>
+        </div>
+    </div>
+    <div id="resamplingMethod">
+        <div>
+            <p>Especifica como os valores de pixel ser&atilde;o interpolados quando os rasters de entrada e sa&iacute;da n&atilde;o estiverem alinhados.
+            </p>
+        </div>
+    </div>
+    <div id="processorType">
+        <div>
+            <p>Especifica o tipo de processador que ser&aacute; usado. As op&ccedil;&otilde;es s&atilde;o  <b>CPU</b>, <b>GPU</b> e <b>Autom&aacute;tico</b>. Se <b>Autom&aacute;tico</b> for especificado, a ferramenta definir&aacute; o tipo de processador.
+            </p>
+        </div>
+    </div>
+    <div id="parallelProcessingFactor">
+        <div>
+            <p>Especifica o n&uacute;mero de inst&acirc;ncias de servi&ccedil;o de processamento raster usadas durante a execu&ccedil;&atilde;o da ferramenta. Os valores suportados incluem strings vazias (a ferramenta determinar&aacute; o n&uacute;mero de inst&acirc;ncias de servi&ccedil;o de processamento raster a serem usadas), n&uacute;meros inteiros (0 ou n&uacute;meros inteiros positivos) e porcentagens. As porcentagens devem incluir um sinal de porcentagem (%) ap&oacute;s o valor percentual.
+            </p>
+        </div>
+    </div>
+    <div id="askConfirmation">
+        <div>
+            <p>Especifica se uma mensagem de aviso aparecer&aacute; se o n&uacute;mero estimado de cr&eacute;ditos ultrapassar o limite especificado (habilitado) ou se a an&aacute;lise ser&aacute; executada sem exibir mensagem independentemente do consumo estimado de cr&eacute;ditos (n&atilde;o habilitado). A an&aacute;lise ainda respeitar&aacute; as configura&ccedil;&otilde;es de or&ccedil;amento de cr&eacute;dito da organiza&ccedil;&atilde;o.
+            </p>
+        </div>
+    </div>
+    <div id="creditThreshold">
+        <div>
+            <p>Especifica o limite no qual uma mensagem de aviso aparecer&aacute; com base no consumo de cr&eacute;dito estimado a partir da execu&ccedil;&atilde;o da an&aacute;lise. A an&aacute;lise ainda poder&aacute; ser executada se a estimativa ultrapassar o limite.
+            </p>
+        </div>
+    </div>
+    <div id="recycleProcessingWorkers">
+        <div>
+            <p>Especifica o n&uacute;mero de se&ccedil;&otilde;es da imagem que ser&atilde;o processadas antes de reiniciar os processos do trabalhador, para evitar poss&iacute;veis falhas em processos de longa execu&ccedil;&atilde;o. O padr&atilde;o &eacute; 0.
+            </p>
+        </div>
+    </div>
+    <div id="retryOnFailures">
+        <div>
+            <p>Especifica o n&uacute;mero de vezes que o mesmo processo de trabalho ser&aacute; tentado quando houver uma falha durante o processamento de um trabalho espec&iacute;fico. O padr&atilde;o &eacute; 0.
+            </p>
+        </div>
+    </div>
+    <div id="geographicTransformations">
+        <div>
+            <p>Especifica os m&eacute;todos de transforma&ccedil;&atilde;o que podem ser usados ​​para projetar os dados para an&aacute;lise.
+            </p>
+            <p>Atualmente, este ambiente suporta apenas ferramentas de an&aacute;lise raster e fun&ccedil;&otilde;es raster.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

@@ -1,0 +1,14 @@
+{
+  "outputRaster": "OutputRaster",
+  "rfxVariable": "RasterFunctionVariable",
+  "selectLayer": "레이어 선택",
+  "allowScalar": "레이어 선택 또는 상수 입력",
+  "browseLayer": "레이어 찾아보기",
+  "loading": "불러오는 중...",
+  "layerMissing": "분석 서비스 허용 등록정보가 활성화되지 않았으므로 맵에 있는 영상 레이어 중 하나 이상이 여기에 나열되지 않습니다.",
+  "layerFailedToLoad": "레이어를 불러오지 못했습니다.",
+  "learnMore": "자세한 정보",
+  "errorCodes": {
+    "required": "이 매개변수는 필수입니다."
+  }
+}

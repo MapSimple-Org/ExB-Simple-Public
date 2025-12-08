@@ -1,0 +1,89 @@
+{
+  "browser": {
+    "refineContent": "Inhalt verfeinern",
+    "filters": "Filter",
+    "pageRange": "${start}-${end}, gesamt: ${total}",
+    "pageRangeAria": "${start}–${end}, Elemente insgesamt: ${total}",
+    "pageRangeWithRecycleBin": "${start}–${end}, gesamt: ${total} (Gesamtgröße: ${recycleBinSize})",
+    "pageRangeAriaWithRecycleBin": "${start}–${end}, Elemente insgesamt: ${total} (Gesamtgröße: ${recycleBinSize})",
+    "totalSize": "Gesamtgröße: ${totalSize}",
+    "loading": "Ergebnisse werden geladen",
+    "close": "Schließen"
+  },
+  "actions": {
+    "more": "Mehr"
+  },
+  "filter": {
+    "clear": "Löschen"
+  },
+  "filterDate": {
+    "today": "Heute",
+    "yesterday": "Gestern",
+    "last7": "Letzte 7 Tage",
+    "last30": "Letzte 30 Tage",
+    "never": "Nie",
+    "custom": "Benutzerdefinierter Bereich...",
+    "title": {
+      "created": "Erstellungsdatum",
+      "modified": "Änderungsdatum",
+      "joined": "Beitrittsdatum",
+      "lastLogin": "Letzte Anmeldung"
+    },
+    "created": "Erstellt: ${date}",
+    "modified": "Geändert: ${date}",
+    "joined": "Beigetreten: ${date}",
+    "lastLogin": "Letzte Anmeldung: ${date}"
+  },
+  "pagination": {
+    "next": "Nächste Seite",
+    "prev": "Vorherige Seite"
+  },
+  "search": {
+    "label": "Gruppen durchsuchen",
+    "search": "Suchen",
+    "clear": "Suchbegriff löschen",
+    "wildcard": "Platzhaltersuchen werden nicht unterstützt"
+  },
+  "sort": {
+    "sortDirection": "Sortierrichtung",
+    "title": "Titel",
+    "relevance": "Relevanz",
+    "modified": "Änderungsdatum",
+    "deleted": "Löschdatum",
+    "created": "Erstellungsdatum",
+    "added": "Hinzugefügt am",
+    "size": "Größe",
+    "owner": "Besitzer",
+    "sizeAsc": "Aufsteigende Reihenfolge",
+    "sizeDesc": "Absteigende Reihenfolge",
+    "numviews": "Anzahl der Aufrufe",
+    "numAsc": "Aufsteigend",
+    "numDesc": "Absteigend",
+    "alphabeticalAsc": "Alphabetisch",
+    "alphabeticalDesc": "In umgekehrter alphabetischer Reihenfolge",
+    "recentAsc": "Älteste",
+    "recentDesc": "Neueste",
+    "sort": "Sortieren",
+    "sortBy": "Sortieren nach",
+    "sortByColon": "Sortieren nach:",
+    "fullname": "Name",
+    "username": "Benutzername",
+    "name": "Name",
+    "membertype": "Gruppenrolle",
+    "joined": "Beitrittsdatum",
+    "lastlogin": "Letzte Anmeldung",
+    "dataset": "Dataset",
+    "mfaenabled": "Multi-Faktor-Authentifizierung",
+    "defaultAsc": "Aufsteigend",
+    "defaultDesc": "Absteigend"
+  },
+  "topBar": {
+    "filter": "Filtern"
+  },
+  "filterStatus": {
+    "clear": "Löschen",
+    "filters": "Filter:",
+    "additional": "Weitere aktive Filter",
+    "clearAllFilters": "Alle Filter löschen"
+  }
+}

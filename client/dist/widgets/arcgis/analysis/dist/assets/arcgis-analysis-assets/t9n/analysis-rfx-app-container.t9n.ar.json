@@ -1,0 +1,16 @@
+{
+  "backLabel": "رجوع",
+  "browseHeader": "حدد الطبقة",
+  "cannotReopenRasterFunction": "تعذرت إعادة فتح دالة البيانات النقطية.",
+  "creditThresholdModal": {
+    "cancelRun": "إلغاء الأمر",
+    "continueRun": "التشغيل على أي حال",
+    "creditEstimate": "الأرصدة المقدرة: ${cost}",
+    "creditThreshold": "حد الرصيد: ${threshold}",
+    "heading": "قبل المتابعة",
+    "learnMore": "تعرّف على المزيد حول حدود الائتمان",
+    "thresholdExceeded": "إن تكلفة الائتمان المقدرة لهذا التحليل أكبر من حدود الائتمان الخاصة بخريطة الويب:"
+  },
+  "failedToExecuteEstimate": "فشل الإرسال. فشل تنفيذ EstimateRasterAnalysisCost",
+  "runAnalysisLabel": "تشغيل"
+}

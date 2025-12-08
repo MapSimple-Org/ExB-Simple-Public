@@ -1,0 +1,1 @@
+System.register([],function(e){return{execute:function(){e({customizeLayer:"Prilagodi sloje",selectLayers:"Izberi sloje",noDataSourceWarning:"Izbran pripomo\u010dek karte ne vsebuje spletne karte ali spletnega prizora."})}}});

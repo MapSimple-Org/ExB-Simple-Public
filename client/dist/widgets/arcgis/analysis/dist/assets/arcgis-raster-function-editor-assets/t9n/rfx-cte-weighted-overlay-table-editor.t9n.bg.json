@@ -1,0 +1,13 @@
+{
+  "weightedOverlayTable": "Таблица на претеглено наслагване",
+  "id": "ИД",
+  "layer": "Слой",
+  "field": "Поле",
+  "influence": "Влияние",
+  "sumOfInfluence": "Сума на влияние",
+  "value": "Стойност",
+  "remapTable": "Пренастройте таблица",
+  "scale": "Мащаб",
+  "scales": "Мащаби",
+  "selectRaster": "Изберете растер"
+}

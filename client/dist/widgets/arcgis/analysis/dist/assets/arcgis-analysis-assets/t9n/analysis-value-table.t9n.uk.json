@@ -1,0 +1,7 @@
+{
+  "addEntryButtonLabel": "Додати",
+  "maxGroupsMessage": "Максимальна кількість записів становить ${maxCount}.",
+  "minGroupsMessage": "Мінімальна кількість записів становить ${minCount}.",
+  "removeEntryButtonLabel": "Видалити запис",
+  "requiredMessage": "Цей параметр обов'язковий."
+}

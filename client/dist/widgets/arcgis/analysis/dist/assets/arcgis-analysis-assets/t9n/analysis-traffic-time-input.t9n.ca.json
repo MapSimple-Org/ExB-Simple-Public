@@ -1,0 +1,8 @@
+{
+  "arriveTime": "Hora d'arribada",
+  "modes": {
+    "custom": "Data i hora personalitzades",
+    "now": "Ara",
+    "unspecified": "Hora no especificada"
+  }
+}

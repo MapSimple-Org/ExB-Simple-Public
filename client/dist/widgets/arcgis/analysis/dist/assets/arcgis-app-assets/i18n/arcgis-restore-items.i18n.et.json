@@ -1,0 +1,31 @@
+{
+  "back": "Tagasi",
+  "cancel": "Loobu",
+  "learnMore": "Lisainfo",
+  "restore": "Taasta",
+  "restoreTo": "Taasta kausta",
+  "restoreItem": "Taasta üksus",
+  "restoreItems": "Taasta üksused",
+  "noticeMessage": "Taastatud üksuste jagamine tühistatakse. Vaadake sisu üle enne jagamist uuesti üle.",
+  "cannotBulkRestoreXItems": "Rohkem kui ${number} üksust ei saa hulgitaastada. Tühistage mõne üksuse valik.",
+  "cannotBulkRestoreMultipleOwners": "Erinevatele omanikele kuuluvaid üksusi ei saa hulgitaastada. Valige hulgitaastamiseks ühe omaniku üksused.",
+  "toRestore": {
+    "single": "Taastatav üksus:",
+    "multiple": "Taastatavad üksused:"
+  },
+  "cannotRestore": "Ei saa taastada:",
+  "dependentItems": {
+    "single": "Seda üksust ei saa taastada, kuna see sõltub üksusest <strong style='font-weight: 500'>${parent}</strong>. Taastage need koos.",
+    "singleUnknown": "Seda üksust ei saa taastada, sest see sõltub muust üksusest prügikastis. Taastage need koos.",
+    "multiple": "Neid üksusi ei saa taastada, kuna need sõltuvad muudest üksustest prügikastis. Taastage need koos.",
+    "multipleSameSource": "Neid üksuseid ei saa taastada, kuna need sõltuvad üksustest .<strong style='font-weight: 500'>${parent}</strong>. Taastage need koos."
+  },
+  "pageRangeWithTotalRecycleBinSize": {
+    "en": "${start} – ${end}/${total} (${size}) prügikastis",
+    "other": "${start} – ${end}, kokku: ${total} (${size}) prügikastis"
+  },
+  "pageRangeWithGreaterThanTotalRecycleBinSize": {
+    "en": "${start} – ${end}/${total} (>${size}) prügikastis",
+    "other": "${start} – ${end}, kokku: ${total} (>${size}) prügikastis"
+  }
+}

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>Nastavenia prep&iacute;sania pre anal&yacute;zu v  Map Viewer. </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="resultType">
+        <div>
+            <p>Určuje typ v&yacute;stupu, ktor&yacute; bude vytvoren&yacute;. Možnosť  <b>Vytvoriť dočasn&eacute; d&aacute;ta</b> vytvor&iacute; dočasn&uacute; vrstvu, ktor&uacute; je možn&eacute; použiť ako vstup do in&eacute;ho n&aacute;stroja, ale nie je možn&eacute; ju uložiť ani zobraziť v mape. Možnosť <b>Vytvoriť hostovan&uacute; vrstvu</b> publikuje nov&uacute; hostovan&uacute; prvkov&uacute; vrstvu. Možnosť <b>Prep&iacute;sať existuj&uacute;cu vrstvu</b> aktualizuje existuj&uacute;cu vrstvu v&yacute;stupom n&aacute;stroja.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>N&aacute;zov vrstvy, ktor&aacute; sa vytvor&iacute; a prid&aacute; do mapy.
+            </p>
+        </div>
+    </div>
+    <div id="layerExistsAutomaticallyOverwrite">
+        <div>
+            <p>Určuje, či v&yacute;stup n&aacute;stroja prep&iacute;&scaron;e vrstvu vo va&scaron;om obsahu, ktor&aacute; m&aacute; zadan&yacute; n&aacute;zov v&yacute;stupu. Ak sa tento n&aacute;zov vrstvy vo va&scaron;ej organiz&aacute;cii e&scaron;te nepouž&iacute;va, vytvor&iacute; sa nov&aacute; položka. Ak chcete vrstvu prep&iacute;sať, mus&iacute;te byť jej vlastn&iacute;kom alebo spr&aacute;vcom.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>N&aacute;zov priečinka v r&aacute;mci  <b>M&ocirc;j obsah</b>, do ktor&eacute;ho sa ulož&iacute; v&yacute;sledok.
+            </p>
+            <p>Aktualiz&aacute;cia nie je možn&aacute;, ak vrstva už existuje.
+            </p>
+        </div>
+    </div>
+    <div id="existingLayerToOverwrite">
+        <div>
+            <p>Vrstva v  <b>M&ocirc;j obsah</b>, ktor&aacute; bude prep&iacute;san&aacute; v&yacute;stupnou vrstvou. Priestorov&eacute; referencie v&yacute;stupu a existuj&uacute;cej vrstvy sa musia zhodovať.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

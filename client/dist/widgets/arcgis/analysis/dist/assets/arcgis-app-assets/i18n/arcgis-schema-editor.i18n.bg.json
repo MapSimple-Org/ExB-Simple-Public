@@ -1,0 +1,15 @@
+{
+  "expandAll": "Разгъване на всички",
+  "collapseAll": "Сгъване на всички",
+  "categoryItem": {
+    "expand": "Разгъване",
+    "collapse": "Сгъване",
+    "editCategory": "Редактиране на категория",
+    "deleteCategory": "Изтриване на категория",
+    "addSubcategory": "Добавяне на подкатегория",
+    "addCategory": "Добавяне на категория",
+    "save": "Запазване",
+    "cancel": "Отказ",
+    "missingTitleMessage": "Изисква се заглавие на категорията."
+  }
+}

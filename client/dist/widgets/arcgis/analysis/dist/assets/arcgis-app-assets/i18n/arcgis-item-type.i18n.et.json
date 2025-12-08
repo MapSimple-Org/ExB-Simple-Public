@@ -1,0 +1,27 @@
+{
+  "hosted": "majutatud",
+  "hostedView": "majutatud, vaade",
+  "hostedPhotos": "majutatud, fotod",
+  "hostedCollection": "majutatud, kogum",
+  "hostedMultidimensional": "majutatud, mitmemõõtmeline",
+  "hostedCollectionMultidimensional": "majutatud, kogum, mitmemõõtmeline",
+  "collectionMultidimensional": "kogum, mitmemõõtmeline",
+  "multidimensional": "mitmemõõtmeline",
+  "collection": "kogu",
+  "photoLocations": "fotod",
+  "locatorView": "vaade",
+  "utilityNetwork": "kommunaalvõrk",
+  "Integrated Mesh": "integreeritud võrk",
+  "3D Object": "3D-objekt",
+  "Point": "punkt",
+  "Point Cloud": "punktipilv",
+  "Building Scene Layer": "stseenikihi koostamine",
+  "Voxel Scene Layer": "voxeli stseenikiht",
+  "dataStore": {
+    "bigdata": "suurandmete failiketas",
+    "cloud": "pilv",
+    "cloudStorage": "pilvsalvestusruum",
+    "database": "andmebaas",
+    "folder": "kaust"
+  }
+}

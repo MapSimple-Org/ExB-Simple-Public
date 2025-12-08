@@ -1,0 +1,1 @@
+System.register([],function(e){return{execute:function(){e({settingsLabel:"Nastavenia prieskumn\xedka odkazov",selectModelViewer:"Ak chcete zobrazi\u0165 pripojen\xe9 dokumenty, vyberte widget Prehliada\u010d dokumentov."})}}});

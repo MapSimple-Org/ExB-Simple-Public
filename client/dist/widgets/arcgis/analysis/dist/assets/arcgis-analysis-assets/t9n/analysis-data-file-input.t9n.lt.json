@@ -1,0 +1,14 @@
+{
+  "AddDataFromUrl": "Pridėti duomenis iš URL",
+  "addData": "Pridėti duomenis",
+  "clear": "Valyti",
+  "file": "Failas",
+  "fileNotFound": "Failo įkelti nepavyko.",
+  "invalidUrl": "Netinkamas failas arba failo plėtinys.",
+  "layerNotFound": "Sluoksnio įkelti nepavyko.",
+  "replaceData": "Pakeisti duomenis",
+  "required": "Šis parametras yra būtinas.",
+  "uploadData": "Įkelti duomenis",
+  "uploadFailureMsg": "Atliekant įkėlimą, įvyko klaida. Failo dydis arba tipas šiai paslaugai nepalaikomas.",
+  "url": "URL"
+}

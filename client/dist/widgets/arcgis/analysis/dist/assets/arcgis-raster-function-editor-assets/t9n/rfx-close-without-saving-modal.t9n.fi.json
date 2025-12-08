@@ -1,0 +1,7 @@
+{
+  "header": "Rasteritoimintoeditori",
+  "content": "Sinulla on tallentamattomia muutoksia kohteessa \"${rftTitle}\". Jos et tallenna tietoja, muutokset häviävät.",
+  "cancel": "Peruuta",
+  "dontSave": "Älä tallenna",
+  "save": "Tallenna"
+}

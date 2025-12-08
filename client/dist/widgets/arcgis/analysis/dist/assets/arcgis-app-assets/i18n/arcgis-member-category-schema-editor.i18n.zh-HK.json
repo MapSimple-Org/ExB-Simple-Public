@@ -1,0 +1,22 @@
+{
+  "dialogHeading": "配置成員類別",
+  "noticeTitle": "在您的組織中編輯、刪除或重新排序類別。",
+  "noticeDescription": "您可以透過「成員」頁籤，將類別指派給成員。",
+  "defaultCategoryWarning": "此成員類別設為新成員預設值，無法編輯或刪除。",
+  "warning": {
+    "deleteInUseCategory": {
+      "message": {
+        "single": "已將一名成員指派至此類別。 刪除類別也會一併將它從此成員中移除。",
+        "multiple": "已將 ${number} 名成員指派至此類別。 刪除類別也會一併將它從這些成員中移除。",
+        "unknown": "已將成員指派至此類別: ${number}。 刪除類別也會一併將它從這些成員中移除。"
+      }
+    },
+    "changeTitleInUseCategory": {
+      "message": {
+        "single": "已將一名成員指派至此類別。 更新類別將會更新使用 \"${newTitle}\" 的成員。",
+        "multiple": "已將 ${number} 名成員指派至此類別。 更新類別將會更新使用 \"${newTitle}\" 的成員。",
+        "unknown": "已將成員指派至此類別: ${number}。 更新類別將會更新使用 \"${newTitle}\" 的成員。"
+      }
+    }
+  }
+}

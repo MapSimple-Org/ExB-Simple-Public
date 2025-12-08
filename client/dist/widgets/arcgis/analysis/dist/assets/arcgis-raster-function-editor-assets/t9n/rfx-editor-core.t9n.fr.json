@@ -1,0 +1,15 @@
+{
+  "addRaster": "Ajouter une variable raster",
+  "addScalar": "Ajouter une constante",
+  "raster": "Raster",
+  "scalar": "Scalaire",
+  "defaultModelName": "Modèle de fonction raster",
+  "defaultRasterName": "Raster",
+  "invalidRFTMessage": "Le modèle de fonction raster n’est pas valide.",
+  "deprecated": "Obsolète",
+  "deprecatedHoverText": "Cette fonction raster est obsolète et sera supprimée dans une version future.",
+  "unsupported": "Non prise en charge",
+  "unsupportedHoverText": "Cette fonction raster n’est pas prise en charge. Elle sera peut-être disponible dans une version future.",
+  "userStartDirection": "Sélectionnez une fonction pour commencer à générer un modèle de fonction raster.",
+  "learnMore": "En savoir plus"
+}

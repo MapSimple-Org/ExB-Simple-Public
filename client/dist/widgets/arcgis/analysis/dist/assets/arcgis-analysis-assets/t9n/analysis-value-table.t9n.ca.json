@@ -1,0 +1,7 @@
+{
+  "addEntryButtonLabel": "Afegeix",
+  "maxGroupsMessage": "El nombre màxim d'entrades és ${maxCount}.",
+  "minGroupsMessage": "El nombre mínim d'entrades és ${minCount}.",
+  "removeEntryButtonLabel": "Elimina l'entrada",
+  "requiredMessage": "Aquest paràmetre és obligatori."
+}

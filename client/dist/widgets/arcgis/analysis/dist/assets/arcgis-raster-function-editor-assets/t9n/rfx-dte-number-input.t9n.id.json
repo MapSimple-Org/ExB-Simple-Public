@@ -1,0 +1,12 @@
+{
+  "aboveMaximumMessage": "Nilai input harus kurang dari atau sama dengan ${max}.",
+  "belowMinimumMessage": "Nilai input harus lebih besar dari atau sama dengan ${min}.",
+  "invalidDoubleMessage": "Nilai input harus ganda.",
+  "invalidIntegerMessage": "Nilai input harus bilangan bulat.",
+  "maxValuesMessage": "Tidak boleh lebih dari ${maxValues} nilai input yang berbeda.",
+  "minValuesMessage": "Setidaknya harus ada ${minValues} nilai input yang berbeda.",
+  "requiredInputMessage": "Parameter ini harus diisi.",
+  "strictlyMaximumMessage": "Nilai input harus kurang dari ${max}.",
+  "strictlyMinimumMessage": "Nilai input harus lebih besar dari ${min}.",
+  "placeholder": "Masukkan nilai..."
+}

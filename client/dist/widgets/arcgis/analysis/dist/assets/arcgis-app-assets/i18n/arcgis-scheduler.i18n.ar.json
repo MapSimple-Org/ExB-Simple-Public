@@ -1,0 +1,55 @@
+{
+  "beginningOnLabel": "بداية في",
+  "repeatTypeLabel": "نوع التكرار",
+  "endingOnTypeLabel": "انتهاء في",
+  "endingOnDateLabel": "تاريخ الانتهاء",
+  "endingOnCountLabel": "عدد",
+  "endingOnCountPlaceholder": "على سبيل المثال: 1، 10، 30",
+  "dailyRepeatIntervalLabel": "الفاصل الزمني للتكرار",
+  "dailyTimeLabel": "الوقت",
+  "weeklyDaysOfWeekLabel": "اليوم من الأسبوع",
+  "weeklyTimeLabel": "الوقت",
+  "monthlyDayOfMonthLabel": "اليوم من الشهر",
+  "monthlyDayOfMonthPlaceholder": "على سبيل المثال، 1 - 31",
+  "monthlyRepeatIntervalLabel": "الفاصل الزمني للتكرار",
+  "monthlyTimeLabel": "الوقت",
+  "repeatTypeOptions": {
+    "day": "يوم",
+    "week": "أسبوع",
+    "month": "شهر"
+  },
+  "endingOnType": {
+    "never": "أبدًا",
+    "date": "تاريخ",
+    "count": "تشغيل"
+  },
+  "dailyRepeatInterval": {
+    "everyDay": "كل يوم",
+    "everyOtherDay": "كل يومين",
+    "everyThreeDays": "كل ثلاثة أيام",
+    "everyFourDays": "كل أربعة أيام",
+    "everyFiveDays": "كل خمسة أيام",
+    "everySixDays": "كل ستة أيام",
+    "everySevenDays": "كل سبعة أيام",
+    "everyFourteenDays": "كل أربعة عشر يومًا"
+  },
+  "weekDays": {
+    "all": "الكل",
+    "allWeekdays": "جميع أيام الأسبوع",
+    "sunday": "الأحد",
+    "monday": "الاثنين",
+    "tuesday": "الثلاثاء",
+    "wednesday": "الأربعاء",
+    "thursday": "الخميس",
+    "friday": "الجمعة",
+    "saturday": "السبت"
+  },
+  "monthlyRepeatInterval": {
+    "everyMonth": "كل شهر",
+    "everyTwoMonths": "كل شهرين",
+    "everyThreeMonths": "كل ثلاثة أشهر",
+    "everyFourMonths": "كل أربعة أشهر",
+    "everyFiveMonths": "كل خمسة أشهر",
+    "everySixMonths": "كل ستة أشهر"
+  }
+}

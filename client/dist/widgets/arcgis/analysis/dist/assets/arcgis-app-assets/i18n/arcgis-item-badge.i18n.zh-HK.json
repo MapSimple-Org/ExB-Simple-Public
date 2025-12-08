@@ -1,0 +1,110 @@
+{
+  "Authoritative": {
+    "title": "授權",
+    "tooltip": {
+      "org": "您的組織所建議",
+      "public": "由 ${name} 建議"
+    }
+  },
+  "Deprecated": {
+    "title": "棄用",
+    "tooltip": "不建議使用"
+  },
+  "Has Replacement": {
+    "title": "具有取代",
+    "tooltip": "此項目有建議的取代。 檢視項目詳細資訊以尋找並使用取代。",
+    "itemPageTooltip": "此項目有建議的取代。",
+    "link": "檢視取代項目"
+  },
+  "DeprecatedItem": {
+    "title": "棄用的項目類型"
+  },
+  "Living Atlas": {
+    "title": "Living Atlas",
+    "tooltip": "Esri 展現內容"
+  },
+  "Subscriber": {
+    "title": "訂閱者",
+    "tooltip": {
+      "org": "訂閱者的專屬內容",
+      "public": "訂閱者的專屬內容。 若要使用，請使用 ArcGIS Online 訂閱登入。"
+    }
+  },
+  "Premium": {
+    "title": "高級",
+    "tooltip": {
+      "org": "訂閱者的專屬內容。 使用點數。",
+      "public": "會消耗點數的訂閱者專屬內容。 若要使用，請使用 ArcGIS Online 訂閱登入。"
+    }
+  },
+  "Open Data": {
+    "title": "Open Data",
+    "tooltip": "適用於大眾"
+  },
+  "Marketplace": {
+    "title": "Marketplace",
+    "tooltip": "在 ArcGIS Marketplace 上列出"
+  },
+  "Collaboration": {
+    "title": "分散式協同作業",
+    "tooltip": "這是從分散式協同作業接收的項目"
+  },
+  "Retired": {
+    "title": "已淘汰",
+    "tooltip": {
+      "general": "唯讀",
+      "cityEngine": "不再支援 CityEngine Web 檢視器和 CityEngine Web 場景。",
+      "storyMap": "用於建立此應用程式的傳統 Esri Story Map 已在 ArcGIS Enterprise 中停用。 若要建立新的故事，請使用 ArcGIS Storymaps。",
+      "app": "用於建立此應用程式的可配置應用程式樣板已在 ArcGIS Enterprise 中停用。 此項目不可操作並可刪除。 要建立新應用程式，請使用 ArcGIS Instant Apps、ArcGIS Storymaps、ArcGIS Dashboards 或 ArcGIS Experience Builder",
+      "webAppBuilder": "ArcGIS Enterprise 中已淘汰 ArcGIS Web AppBuilder。 此項目不可操作並可刪除。 要建立新應用程式，請使用 ArcGIS Experience Builder。",
+      "insights": "ArcGIS Enterprise 中已淘汰 ArcGIS Insights。 此項目不可操作並可刪除。",
+      "bdfs": "ArcGIS Enterprise 中已淘汰大資料檔分享。 此項目不可操作並可刪除。"
+    }
+  },
+  "Public Data Collection": {
+    "title": "公開收集資料",
+    "tooltip": "核淮公開收集資料。"
+  },
+  "Solution": {
+    "title": "ArcGIS Solution",
+    "tooltip": "Esri 支援的解決方案"
+  },
+  "Registered": {
+    "title": "OAuth 2.0",
+    "tooltip": {
+      "online": "註冊的 OAuth 2.0 應用程式。 可使用高級或訂閱者內容。",
+      "enterprise": "註冊的 OAuth 2.0 應用程式。"
+    }
+  },
+  "Registered API Key Credentials (Standard)": {
+    "title": {
+      "online": "API 金鑰認證 - 標準",
+      "enterprise": "API 金鑰認證"
+    },
+    "tooltip": "授予服務的存取權。"
+  },
+  "Registered API Key Credentials (Personal)": {
+    "title": "API 金鑰認證 - 個人",
+    "tooltip": "授予個人權限。 出於安全目的，您應該像保護您的使用者名稱和密碼一樣保護這些認證。"
+  },
+  "Registered OAuth 2.0 Credentials (Standard)": {
+    "title": {
+      "online": "OAuth 2.0 認證 - 標準",
+      "enterprise": "OAuth 2.0 認證"
+    },
+    "tooltip": "授予服務的存取權。"
+  },
+  "Registered OAuth 2.0 Credentials (Personal)": {
+    "title": "OAuth 2.0 認證 - 個人",
+    "tooltip": "授予個人權限。 出於安全目的，您應該像保護您的使用者名稱和密碼一樣保護這些認證。"
+  },
+  "Registered Application": {
+    "title": "OAuth 2.0 應用程式",
+    "tooltip": "註冊的 OAuth 2.0 應用程式"
+  },
+  "Personal credential": {
+    "title": "個人",
+    "tooltip": "您正在授予此認證的個人權限。 出於安全目的，您應該保護使用這些認證建立的任何存取權杖，就像保護您的使用者名稱和密碼一樣。 請檢閱使用條款。"
+  },
+  "loading": "正在載入..."
+}

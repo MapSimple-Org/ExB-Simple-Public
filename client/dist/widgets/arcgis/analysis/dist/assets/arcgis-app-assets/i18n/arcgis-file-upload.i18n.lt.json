@@ -1,0 +1,16 @@
+{
+  "updateData": "Atnaujinti duomenis",
+  "cancel": "Atšaukti",
+  "editStyle": "Pakeiskite sluoksnio stiliaus failą į atnaujintą versiją iš kompiuterio.",
+  "updatePackages": "Pakeiskite ${type} į atnaujintą versiją iš savo kompiuterio. Įkelto failo pavadinimas turi būti toks pat kaip ${hostedLayerName}.",
+  "uploadStaticFiles": "Įkeliamo failo pavadinimas turi sutapti su pirminio failo ${fileName}",
+  "sameFileNameDescription": "Įkeliamas failas privalo turėti tokį patį pavadinimą ir laukų pavadinimus kaip pirminis failas ${fileName}",
+  "updating": "Atnaujinama...",
+  "error": "Klaida",
+  "errors": {
+    "sameFileName": "Kad atnaujintumėte šį elementą, turite įkelti failą pavadinimu ${fileName}.",
+    "invalidStyleFileExtension": "Netinkamas failo plėtinys. Nusiųsto stiliaus failo plėtinys turi būti .json.",
+    "errorWhileUpload": "Įkeliant elementą įvyko klaida.",
+    "errorUpdate": "Perrašant elementą įvyko klaida."
+  }
+}

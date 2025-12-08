@@ -1,0 +1,13 @@
+{
+  "weightedOverlayTable": "가중치 중첩 테이블(Weighted Overlay Table)",
+  "id": "ID",
+  "layer": "레이어",
+  "field": "필드",
+  "influence": "영향",
+  "sumOfInfluence": "영향의 합",
+  "value": "값",
+  "remapTable": "테이블 리맵",
+  "scale": "축척",
+  "scales": "축척",
+  "selectRaster": "래스터 선택"
+}

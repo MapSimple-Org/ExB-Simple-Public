@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>Seyahat Alanları Oluştur aracı, bir seyahat s&uuml;resi veya mesafe i&ccedil;inde ulaşılabilecek alanlar oluşturur.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputLayer">
+        <div>
+            <p>Etrafında alanların hesaplanacağı nokta detaylarıdır.
+            </p>
+            <p class="toolPaneOnly">Detay sayısı, filtreleme kriterleri ve analiz yayılımı gibi ek fakt&ouml;rlere bağlıdır.
+            </p>
+        </div>
+    </div>
+    <div id="pointBarrierLayer">
+        <div>
+            <p>Aşağıdaki sokaklarda seyahat ederken ge&ccedil;ici kısıtlamalar (engeller) işlevi g&ouml;recek bir ya da daha fazla nokta detayı. Sokakta harekete izin verilir ancak engel ge&ccedil;ilemez.
+            </p>
+        </div>
+    </div>
+    <div id="lineBarrierLayer">
+        <div>
+            <p>Aşağıdaki sokaklarda seyahat ederken ge&ccedil;ici kısıtlamalar (engeller) işlevi g&ouml;recek bir ya da daha fazla &ccedil;izgi detayı. &Ccedil;izgi engelleri, engellerin sokaklarla kesiştiği her yerde seyahati engeller.
+            </p>
+        </div>
+    </div>
+    <div id="polygonBarrierLayer">
+        <div>
+            <p>Aşağıdaki sokaklarda seyahat ederken ge&ccedil;ici kısıtlamalar (engeller) işlevi g&ouml;recek bir ya da daha fazla &ccedil;okgen detayı. &Ccedil;okgen engeller, &ccedil;okgenlerin sokaklarla kesiştiği her yerde seyahati engeller.
+            </p>
+        </div>
+    </div>
+    <div id="travelMode">
+        <div>
+            <p>Seyahat alanlarını oluşturmak i&ccedil;in kullanılacak seyahat modu. Seyahat modu, mesafe veya s&uuml;reye dayanabilir.
+            </p>
+        </div>
+    </div>
+    <div id="breakValues">
+        <div>
+            <p>Her bir girdi noktası i&ccedil;in seyahat mesafesi veya zaman sınırı. Birden fazla değer eklenirse her bir değer t&uuml;m girdi noktalarının seyahat alanlarını hesaplamak i&ccedil;in kullanılacaktır.
+            </p>
+        </div>
+    </div>
+    <div id="breakUnits">
+        <div>
+            <p>Seyahat mesafesi veya s&uuml;reyi belirtmek i&ccedil;in kullanılacak birimler. Bu birimlerde  <b>Kesme</b> değeri yorumlanır.
+            </p>
+        </div>
+    </div>
+    <div id="travelDirection">
+        <div>
+            <p>Seyahat alanlarının, girdi noktalarından uzağa gitmek i&ccedil;in mi, yoksa girdi noktalarına doğru gitmek i&ccedil;in mi oluşturulacağını belirtir.
+            </p>
+        </div>
+    </div>
+    <div id="timeOfDay">
+        <div>
+            <p>Seyahat edenin girdi konumlarından ayrılma veya girdi konumlarına varma tarihi ve saati.
+            </p>
+        </div>
+    </div>
+    <div id="overlapPolicy">
+        <div>
+            <p>Farklı girdi noktalarından paylaşılan alanların bir diğerine eriştiğinde nasıl işleneceğini belirtir.
+            </p>
+        </div>
+    </div>
+    <div id="showHoles">
+        <div>
+            <p>Her bir &ccedil;ıktı alanının s&uuml;rekli bir &ccedil;okgen mi olacağı (işaretsiz), yoksa erişilebilir olmayan, fakat erişilebilir caddelerle &ccedil;evrelenmiş caddelere deliklerin mi dahil edileceğini (işaretli) belirtir.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>Oluşturulacak ve haritaya eklenecek katmanın adı.
+            </p>
+        </div>
+    </div>
+    <div id="includeReachableStreets">
+        <div>
+            <p>Seyahat alanları oluşturmak i&ccedil;in kullanılan sokakların bir &ccedil;ıktı katmanı olarak dahil edilip edilmeyeceğini belirtir.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            
+            <p> <b>İ&ccedil;eriğim</b> i&ccedil;inde sonu&ccedil;ların kaydedileceği klas&ouml;r&uuml;n adı.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

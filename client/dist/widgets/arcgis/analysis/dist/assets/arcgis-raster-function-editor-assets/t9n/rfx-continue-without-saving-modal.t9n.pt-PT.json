@@ -1,0 +1,6 @@
+{
+  "header": "Recomeçar sem guardar?",
+  "content": "Tem alterações não guardadas em '${rftTitle}'. Se começar novamente com um novo template, essas alterações perder-se-ão.",
+  "cancel": "Cancelar",
+  "continue": "Continuar"
+}

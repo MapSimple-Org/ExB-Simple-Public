@@ -1,0 +1,89 @@
+{
+  "browser": {
+    "refineContent": "コンテンツの調整",
+    "filters": "フィルター",
+    "pageRange": "${start} ～ ${end}、合計: ${total}",
+    "pageRangeAria": "${start} ～ ${end}、アイテムの合計数: ${total}",
+    "pageRangeWithRecycleBin": "${start} - ${end}、合計: ${total} (合計サイズ: ${recycleBinSize})",
+    "pageRangeAriaWithRecycleBin": "${start} - ${end}、合計アイテム: ${total} (合計サイズ: ${recycleBinSize})",
+    "totalSize": "合計サイズ: ${totalSize}",
+    "loading": "結果の読み込み",
+    "close": "閉じる"
+  },
+  "actions": {
+    "more": "その他"
+  },
+  "filter": {
+    "clear": "消去"
+  },
+  "filterDate": {
+    "today": "今日",
+    "yesterday": "昨日",
+    "last7": "直近 7 日",
+    "last30": "直近 30 日",
+    "never": "なし",
+    "custom": "ユーザー設定の範囲...",
+    "title": {
+      "created": "作成日",
+      "modified": "更新日",
+      "joined": "加入日",
+      "lastLogin": "最終ログイン"
+    },
+    "created": "作成日: ${date}",
+    "modified": "更新日: ${date}",
+    "joined": "加入日: ${date}",
+    "lastLogin": "最終ログイン: ${date}"
+  },
+  "pagination": {
+    "next": "次のページ",
+    "prev": "前のページ"
+  },
+  "search": {
+    "label": "グループの検索",
+    "search": "検索",
+    "clear": "検索語句の消去",
+    "wildcard": "ワイルドカード検索はサポートされていません"
+  },
+  "sort": {
+    "sortDirection": "並べ替え方向",
+    "title": "タイトル",
+    "relevance": "関連性",
+    "modified": "更新日",
+    "deleted": "削除日",
+    "created": "作成日",
+    "added": "追加日",
+    "size": "サイズ",
+    "owner": "所有者",
+    "sizeAsc": "最小から最大",
+    "sizeDesc": "最大から最小",
+    "numviews": "ビュー数",
+    "numAsc": "最小から最大",
+    "numDesc": "最大から最小",
+    "alphabeticalAsc": "アルファベット順",
+    "alphabeticalDesc": "逆アルファベット順",
+    "recentAsc": "古い順",
+    "recentDesc": "新しい順",
+    "sort": "並べ替え",
+    "sortBy": "並べ替え",
+    "sortByColon": "並べ替えの基準:",
+    "fullname": "名前",
+    "username": "ユーザー名",
+    "name": "名前",
+    "membertype": "グループ ロール",
+    "joined": "加入日",
+    "lastlogin": "最終ログイン",
+    "dataset": "データセット",
+    "mfaenabled": "多要素認証",
+    "defaultAsc": "昇順",
+    "defaultDesc": "降順"
+  },
+  "topBar": {
+    "filter": "フィルター"
+  },
+  "filterStatus": {
+    "clear": "消去",
+    "filters": "フィルター:",
+    "additional": "追加のアクティブ フィルター",
+    "clearAllFilters": "すべてのフィルターを削除"
+  }
+}

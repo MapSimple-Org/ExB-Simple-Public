@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>Suunnittele reitit -ty&ouml;kalu luo matkareittej&auml; useilla pys&auml;hdyksill&auml; ajoneuvokalustolle.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="startLayer">
+        <div>
+            <p>Pistekohteet, jotka m&auml;&auml;rittelev&auml;t ajoneuvojen reitin l&auml;ht&ouml;pisteen.
+            </p>
+            <p class="toolPaneOnly">Kohteiden m&auml;&auml;r&auml; riippuu ylim&auml;&auml;r&auml;isist&auml; tekij&ouml;ist&auml;, kuten suodatusehdoista ja analyysin laajuudesta.
+            </p>
+        </div>
+    </div>
+    <div id="stopsLayer">
+        <div>
+            <p>Pistekohteet, joissa ajoneuvojen on k&auml;yt&auml;v&auml; reittins&auml; varrella. N&auml;ist&auml; pisteist&auml; tulee tulosaineiston m&auml;&auml;ritettyj&auml; tai m&auml;&auml;ritt&auml;m&auml;tt&ouml;mi&auml; pys&auml;hdyksi&auml;.
+            </p>
+            <p class="toolPaneOnly">Kohteiden m&auml;&auml;r&auml; riippuu ylim&auml;&auml;r&auml;isist&auml; tekij&ouml;ist&auml;, kuten suodatusehdoista ja analyysin laajuudesta.
+            </p>
+        </div>
+    </div>
+    <div id="returnToStart">
+        <div>
+            
+            <p>M&auml;&auml;ritt&auml;&auml;, onko ajoneuvojen palattava l&auml;ht&ouml;pisteeseens&auml; (k&auml;yt&ouml;ss&auml;) vai lopetettava reitti m&auml;&auml;ritettyyn sijaintiin.
+            </p>
+        </div>
+    </div>
+    <div id="endLayer">
+        <div>
+            <p>Pistekohteet, jotka m&auml;&auml;rittelev&auml;t ajoneuvojen reitin p&auml;&auml;tepisteen. Jos karttatasolla on vain yksi piste, kaikki ajoneuvot reititet&auml;&auml;n yhteiseen p&auml;&auml;tepisteeseen. Jos karttatasolla on useita pisteit&auml;, kukin ajoneuvo reititet&auml;&auml;n yksil&ouml;lliseen p&auml;&auml;tepisteeseen.
+            </p>
+            <p class="toolPaneOnly">Kohteiden m&auml;&auml;r&auml; riippuu ylim&auml;&auml;r&auml;isist&auml; tekij&ouml;ist&auml;, kuten suodatusehdoista ja analyysin laajuudesta.
+            </p>
+        </div>
+    </div>
+    <div id="startLayerRouteIDField">
+        <div>
+            <p>Aloituskarttatason kentt&auml;, joka yksil&ouml;llisesti m&auml;&auml;ritt&auml;&auml; yksitt&auml;iset reitit, ajoneuvot tai kuljettajat. Jos ajoneuvot l&auml;htev&auml;t liikkeelle useasta sijainnista ja lopettavat useaan sijaintiin, aloitus- ja lopetuskarttatasoille m&auml;&auml;ritettyjen reittien tunnusten on vastattava toisiaan.
+            </p>
+        </div>
+    </div>
+    <div id="endLayerRouteIDField">
+        <div>
+            <p>Lopetuskarttatason kentt&auml;, joka yksil&ouml;llisesti m&auml;&auml;ritt&auml;&auml; yksitt&auml;iset reitit, ajoneuvot tai kuskit. Jos ajoneuvot l&auml;htev&auml;t liikkeelle useasta sijainnista ja lopettavat useaan sijaintiin, aloitus- ja lopetuskarttatasoille m&auml;&auml;ritettyjen reittien tunnusten on vastattava toisiaan.
+            </p>
+        </div>
+    </div>
+    <div id="pointBarrierLayer">
+        <div>
+            <p>V&auml;hint&auml;&auml;n yksi pistekohde, joka toimii tilap&auml;isen&auml; rajoitteena (esteen&auml;) liikuttaessa taustalla olevilla kaduilla. Liikkuminen on sallittu kadulla, mutta ei esteen kohdalla.
+            </p>
+        </div>
+    </div>
+    <div id="lineBarrierLayer">
+        <div>
+            <p>V&auml;hint&auml;&auml;n yksi viivakohde, joka toimii tilap&auml;isen&auml; rajoitteena (esteen&auml;) liikuttaessa taustalla olevilla kaduilla. Viivaesteet est&auml;v&auml;t liikkumisen miss&auml; tahansa kohdassa, jossa esteet riste&auml;v&auml;t katujen kanssa.
+            </p>
+        </div>
+    </div>
+    <div id="polygonBarrierLayer">
+        <div>
+            <p>V&auml;hint&auml;&auml;n yksi aluekohde, joka toimii tilap&auml;isen&auml; rajoitteena (esteen&auml;) liikuttaessa taustalla olevilla kaduilla. Alue-esteet est&auml;v&auml;t liikkumisen miss&auml; tahansa kohdassa, jossa alueet riste&auml;v&auml;t katujen kanssa.
+            </p>
+        </div>
+    </div>
+    <div id="travelMode">
+        <div>
+            <p>Reittien luomiseen k&auml;ytett&auml;v&auml; matkustustapa. Vain aikaan perustuvia matkustustapoja tuetaan.
+            </p>
+        </div>
+    </div>
+    <div id="routeStartTime">
+        <div>
+            <p>Ajoneuvojen l&auml;ht&ouml;p&auml;iv&auml;m&auml;&auml;r&auml; ja -aika.
+            </p>
+        </div>
+    </div>
+    <div id="routeCount">
+        <div>
+            
+            <p class="OnlineOnly">Pys&auml;hdyspaikoissa k&auml;yvien ajoneuvojen suurin saatavilla oleva m&auml;&auml;r&auml;. Jos  <b>aloituskarttataso</b> ja <b>lopetuskarttataso</b> sis&auml;lt&auml;v&auml;t kummatkin yhden kohteen, voit m&auml;&auml;ritt&auml;&auml; enint&auml;&auml;n 100 ajoneuvoa. Jos jommalla kummalla karttatasolla on enemm&auml;n kuin yksi kohde, oletusarvoa ei voi muokata. </p> 
+            <p class="PortalOnly">Pys&auml;hdyspaikoissa k&auml;yvien ajoneuvojen suurin saatavilla oleva m&auml;&auml;r&auml;. Jos  <b>aloituskarttataso</b> ja <b>lopetuskarttataso</b> sis&auml;lt&auml;v&auml;t kummatkin yhden kohteen, voit m&auml;&auml;ritt&auml;&auml; enimm&auml;ism&auml;&auml;r&auml;n ajoneuvoja. Jos jommalla kummalla karttatasolla on enemm&auml;n kuin yksi kohde, oletusarvoa ei voi muokata.
+            </p>
+        </div>
+    </div>
+    <div id="maxStopsPerRoute">
+        <div>
+            
+            <p class="OnlineOnly">Kunkin ajoneuvon reitin varrella tekemien pys&auml;hdysten suurin m&auml;&auml;r&auml;. Voit m&auml;&auml;ritt&auml;&auml; arvoksi 1- 200. </p> 
+            <p class="PortalOnly">Kunkin ajoneuvon reitin varrella tekemien pys&auml;hdysten suurin m&auml;&auml;r&auml;.
+            </p>
+        </div>
+    </div>
+    <div id="stopServiceTime">
+        <div>
+            <p>Kullakin pys&auml;hdyspaikalla vietetty odotettu keskim&auml;&auml;r&auml;inen palveluaika.
+            </p>
+        </div>
+    </div>
+    <div id="limitMaxRouteTimeCheckbox">
+        <div>
+            <p>M&auml;&auml;ritt&auml;&auml;, sovelletaanko suurinta reititysaikaa kaikkiin ajoneuvoihin. Reititysaika sis&auml;lt&auml;&auml; odotetun matkustusajan ja reitin kullakin pys&auml;hdyspaikalla kuluneen palveluajan.
+            </p>
+        </div>
+    </div>
+    <div id="maxRouteTime">
+        <div>
+            <p>Reitin enimm&auml;iskestoaika alusta loppuun.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>Karttaan luotavan ja lis&auml;tt&auml;v&auml;n karttatason nimi.
+            </p>
+        </div>
+    </div>
+    <div id="includeRouteLayers">
+        <div>
+            <p>M&auml;&auml;ritt&auml;&auml;, tallennetaanko jokainen tulosreitti reittikarttatasona.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            
+            <p>Sen  <b>Omassa sis&auml;ll&ouml;ss&auml;</b> olevan kansion nimi, johon tulokset tallennetaan.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

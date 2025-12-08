@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>A Ter&uuml;let t&aacute;bl&aacute;zatba rendez&eacute;se eszk&ouml;z kisz&aacute;m&iacute;tja a kereszttabul&aacute;lt ter&uuml;leteket k&eacute;t adatk&eacute;szlet k&ouml;z&ouml;tt, &eacute;s az eredm&eacute;nyeket t&aacute;bl&aacute;zatk&eacute;nt jelenti.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputZoneRasterOrFeatures">
+        <div>
+            <p>A z&oacute;n&aacute;k hat&aacute;rait meghat&aacute;roz&oacute; bemenet.
+            </p>
+            <p class="toolPaneOnly">A vektoros elem bemenetekn&eacute;l a sz&aacute;m olyan tov&aacute;bbi t&eacute;nyezőktől f&uuml;gg, mint p&eacute;ld&aacute;ul szűr&eacute;si krit&eacute;rium &eacute;s elemz&eacute;s kiterjeszt&eacute;se.
+            </p>
+        </div>
+    </div>
+    <div id="zoneField">
+        <div>
+            <p>Az egyes z&oacute;n&aacute;kat meghat&aacute;roz&oacute; &eacute;rt&eacute;keket tartalmaz&oacute; mező.
+            </p>
+        </div>
+    </div>
+    <div id="inputClassRasterOrFeatures">
+        <div>
+            <p>Az a bemenet, amely meghat&aacute;rozza azon oszt&aacute;lyok hat&aacute;rait, amelyek ter&uuml;let&eacute;t ki kell sz&aacute;m&iacute;tani.
+            </p>
+            <p class="toolPaneOnly">A vektoros elem bemenetekn&eacute;l a sz&aacute;m olyan tov&aacute;bbi t&eacute;nyezőktől f&uuml;gg, mint p&eacute;ld&aacute;ul szűr&eacute;si krit&eacute;rium &eacute;s elemz&eacute;s kiterjeszt&eacute;se.
+            </p>
+        </div>
+    </div>
+    <div id="classField">
+        <div>
+            <p>Az egyes oszt&aacute;lyokat meghat&aacute;roz&oacute; &eacute;rt&eacute;keket tartalmaz&oacute; mező.
+            </p>
+        </div>
+    </div>
+    <div id="classesAsRows">
+        <div>
+            <p>Meghat&aacute;rozza, hogy a bemenetioszt&aacute;ly-raszter &eacute;rt&eacute;kei sorokk&eacute;nt jelenjenek-e meg a kimeneti t&aacute;bl&aacute;zatban.
+            </p>
+            <p>Ha nincsenek bejel&ouml;lve, az oszt&aacute;lyok mezőkk&eacute;nt jelennek meg. Ha be vannak jel&ouml;lve, az oszt&aacute;lyok sorokk&eacute;nt jelennek meg.
+            </p>
+        </div>
+    </div>
+    <div id="analysisCellSize">
+        <div>
+            <p>Megadja a kereszttabul&aacute;lt ter&uuml;letek kisz&aacute;m&iacute;t&aacute;s&aacute;hoz l&eacute;trehozand&oacute; elemz&eacute;si raszter cellam&eacute;ret&eacute;t.
+            </p>
+        </div>
+    </div>
+    <div id="outputTableName">
+        <div>
+            <p>A l&eacute;trehozni &eacute;s a t&eacute;rk&eacute;phez hozz&aacute;adni k&iacute;v&aacute;nt tabul&aacute;lt ter&uuml;let t&aacute;bl&aacute;zatr&eacute;teg&eacute;nek neve.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>A  <b>Saj&aacute;t tartalom</b> azon mapp&aacute;j&aacute;nak neve, ahov&aacute; az eredm&eacute;ny ment&eacute;se t&ouml;rt&eacute;nik.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

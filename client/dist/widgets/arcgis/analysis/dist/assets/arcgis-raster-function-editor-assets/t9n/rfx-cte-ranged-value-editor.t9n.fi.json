@@ -1,0 +1,6 @@
+{
+  "greaterThanErrorMessage": "Lähtöaineiston numeron on oltava suurempi kuin ${min}",
+  "lesserThanErrorMessage": "Lähtöaineiston numeron on oltava pienempi kuin ${max}",
+  "greaterThanOrEqualErrorMessage": "Lähtöaineiston numeron on oltava suurempi tai yhtä suuri kuin ${min}",
+  "lesserThanOrEqualErrorMessage": "Lähtöaineiston numeron on oltava pienempi tai yhtä suuri kuin ${max}"
+}

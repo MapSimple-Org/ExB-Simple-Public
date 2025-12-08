@@ -1,0 +1,137 @@
+{
+  "next": "Siguiente",
+  "addField": "Agregar campo",
+  "selectDataType": "Seleccionar el tipo de datos que se almacenará en el campo",
+  "addGlobalIDNotice": "El campo se rellenará automáticamente con los datos actuales de la capa o la tabla. Este campo no se puede editar ni eliminar una vez que se agrega.",
+  "fieldName": "Nombre de campo",
+  "displayName": "Nombre de visualización",
+  "length": "Longitud",
+  "defaultValue": "Valor predeterminado (opcional)",
+  "fieldTypes": "Tipos de campo",
+  "fieldValueType": "Tipo de valor de campo (opcional)",
+  "fieldDescription": "Descripción de campo (opcional)",
+  "allowNullValues": "Permitir valores nulos",
+  "valueRequiredError": "Este valor es obligatorio",
+  "fieldAdded": "El campo se ha agregado correctamente",
+  "newFieldTypeNotice": "Es posible que este tipo de campo no sea totalmente compatible con algunos clientes.",
+  "addingField": "Agregando campo...",
+  "syncEnabled": "Algunos tipos de campos no se pueden agregar porque la sincronización está habilitada en la capa.",
+  "newFeature": "Nueva entidad",
+  "fieldAdditionUnsuccessful": "El campo no se ha agregado correctamente",
+  "error": "Error",
+  "noFieldTypeSelected": "Ningún tipo de campo seleccionado",
+  "nullFieldTypeError": "Debe seleccionar un tipo de campo para continuar.",
+  "fieldNameCharacterNotice": "Los nombres de campo de más de 31 caracteres son incompatibles con el uso sin conexión.",
+  "suggestedHeader": "Sugerido",
+  "otherHeader": "Otro",
+  "provideDescription": "Proporcione una descripción de la información que contendrá el campo",
+  "nullableTooltipInfo": "Este ajuste no puede editarse si la capa ya contiene datos.",
+  "tooltipInfo": {
+    "globalIDExists": "Ya existe un campo GlobalID en este servicio. En una tabla o capa solo puede haber un campo GlobalID.",
+    "enterpriseTimestampOffset": "ArcGIS Enterprise no admite campos de Desfase de marca de tiempo en capas de entidades alojadas."
+  },
+  "text": {
+    "title": "Texto",
+    "description": "Valores que contienen caracteres alfanuméricos o especiales.",
+    "types": {
+      "esriFieldTypeString": {
+        "title": "Cadena de caracteres",
+        "description": "Almacene un conjunto de caracteres alfanuméricos de una longitud especificada."
+      }
+    }
+  },
+  "numbers": {
+    "title": "Números",
+    "description": "Valores que contienen información numérica.",
+    "types": {
+      "esriFieldTypeDouble": {
+        "title": "Doble",
+        "description": "Almacene números con posiciones decimales."
+      },
+      "esriFieldTypeInteger": {
+        "title": "Entero",
+        "description": "Almacene números enteros de ${lowerIntegerRange} a ${upperIntegerRange}."
+      },
+      "esriFieldTypeBigInteger": {
+        "title": "Entero grande",
+        "description": "Almacene números enteros a partir de -(2${startSup}53${endSup}-1) hasta 2${startSup}53${endSup}-1. Use este tipo de campo cuando utilice números que estén fuera del rango del campo de entero admitido."
+      }
+    }
+  },
+  "dates": {
+    "title": "Fechas",
+    "description": "Valores que contienen información temporal.",
+    "types": {
+      "esriFieldTypeDate": {
+        "title": "Fecha",
+        "description": "Valores almacenados con fecha y hora."
+      },
+      "esriFieldTypeDateOnly": {
+        "title": "Solo fecha",
+        "description": "Valores de fecha almacenados sin valores de tiempo."
+      },
+      "esriFieldTypeTimeOnly": {
+        "title": "Solo hora",
+        "description": "Valores de tiempo almacenados sin valores de fecha."
+      },
+      "esriFieldTypeTimestampOffset": {
+        "title": "Desfase de marca de tiempo",
+        "description": "Almacene valores que indiquen la fecha, la hora y el desfase horario con respecto al Tiempo Universal Coordinado (UTC)."
+      }
+    }
+  },
+  "globalIdentifiers": {
+    "title": "Identificadores globales",
+    "description": "Valores que identifican de forma única una entidad o fila de la tabla.",
+    "types": {
+      "esriFieldTypeGlobalID": {
+        "title": "GlobalID",
+        "description": "Almacene una cadena de 36 caracteres que conste de letras y números y que sirva para identificar una entidad de manera exclusiva."
+      },
+      "esriFieldTypeGUID": {
+        "title": "GUID",
+        "description": "Almacene una cadena de 36 caracteres que conste de letras y números. Con frecuencia se utiliza un identificador único a nivel mundial, o GUID, para administrar relaciones entre entidades."
+      }
+    }
+  },
+  "fieldValueTypes": {
+    "nameOrTitle": "Nombre o título",
+    "description": "Descripción",
+    "typeOrCategory": "Tipo o categoría",
+    "countOrAmount": "Recuento o cantidad",
+    "percentageOrRatio": "Porcentaje o ratio",
+    "measurement": "Medición",
+    "currency": "Moneda",
+    "uniqueIdentifier": "Identificador único",
+    "phoneNumber": "Número de teléfono",
+    "emailAddress": "Dirección de correo electrónico",
+    "orderedOrRanked": "Ordenado o clasificado",
+    "binary": "Binario",
+    "locationOrPlaceName": "Ubicación o nombre de lugar",
+    "coordinate": "Coordenada",
+    "dateAndTime": "Fecha y hora",
+    "none": "Ninguno"
+  },
+  "addFieldErrors": {
+    "invalidName": "Nombre no válido",
+    "invalidLength": "Longitud no válida",
+    "outOfRangeValueError": "El valor de entrada está fuera de rango.",
+    "invalidValueError": "El valor introducido no es válido.",
+    "invalidFieldParameters": "Parámetros de campo no válidos",
+    "invalidInputsError": "Compruebe que sus parámetros de campo se han rellenado correctamente.",
+    "existingFieldNameError": "El nombre del campo no puede coincidir con un nombre de campo existente.",
+    "invalidNameInputSQLError": "El nombre del campo no puede coincidir con una palabra clave de SQL.",
+    "invalidNameInputInvalidCharactersError": "Debe comenzar por una letra y solo puede contener letras, números y '_'.",
+    "valueIsRequiredError": "Este valor es obligatorio.",
+    "lengthExceeds": "La longitud del nombre de campo debe ser menor o igual a ${maxFieldNameLength} caracteres.",
+    "defaultValueExceeds": "El valor predeterminado supera la longitud de campo especificada.",
+    "savingFailed": "Error al guardar ${layerName}",
+    "readOnlyErrorMessage": "ArcGIS Online está experimentando problemas operativos y ha cambiado al modo de solo lectura. Algunas capacidades podrían estar limitadas. Consulte la información más reciente sobre el momento en que se resolverá en ArcGIS Online Health Dashboard.",
+    "readOnlyErrorMessageEnterprise": "ArcGIS Enterprise está experimentando problemas operativos y ha cambiado al modo de solo lectura. Algunas capacidades podrían estar limitadas.",
+    "healthDashboard": "ArcGIS Online Health Dashboard",
+    "genericAddFieldError": {
+      "title": "Error",
+      "description": "Ha ocurrido un error al agregar su campo."
+    }
+  }
+}

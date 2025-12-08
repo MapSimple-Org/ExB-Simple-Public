@@ -1,0 +1,11 @@
+{
+  "unsupportedDataType": "지원되지 않는 유형",
+  "currentlyUnsupported": " ${missingType}의 기본 편집기가 보류 중이지만 곧 출시될 예정입니다. 문자열 기반 입력을 지정하기 위한 임시 플레이스 홀더 텍스트 상자입니다.",
+  "unsupportedOverrideWarning": "다음 매개변수 작업을 위한 개선된 UX를 제공하는 재정의 편집기 컴포넌트가 보류 중이지만 곧 출시될 예정입니다.",
+  "overrideWidgetMissing": "재정의 편집기 컴포넌트가 없습니다!",
+  "uiIncomplete": "작업을 제출하지 못했습니다. 일부 필수 필드가 불완전하거나 UI에서 누락되어 함수를 실행할 수 없습니다.",
+  "deprecatedBannerText": "이 래스터 함수 템플릿에는 더 이상 사용되지 않는 래스터 함수가 하나 이상 포함되어 있으며 향후 릴리즈에서 제거될 예정입니다.",
+  "deprecatedBannerTextWithLink": "이 래스터 함수 템플릿에는 더 이상 사용되지 않는 래스터 함수가 하나 이상 포함되어 있으며 향후 릴리즈에서 제거될 예정입니다. 더 이상 사용되지 않는 래스터 함수를 바꾸는 방법에 대해 <calcite-link target='_blank' href='${ docLink }'>자세히 알아보세요</calcite-link>.",
+  "unsupportedBannerText": "이 래스터 함수 템플릿에는 지원되지 않는 래스터 함수가 하나 이상 포함되어 있습니다.",
+  "unsupportedBannerTextWithLink": "이 래스터 함수 템플릿에는 지원되지 않는 래스터 함수가 하나 이상 포함되어 있습니다. 지원되는 래스터 함수에 대해 <calcite-link target='_blank' href='${ docLink }'>자세히 알아보세요</calcite-link>."
+}

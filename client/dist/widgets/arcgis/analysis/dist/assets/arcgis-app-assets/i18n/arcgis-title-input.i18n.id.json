@@ -1,0 +1,20 @@
+{
+  "title": "Judul",
+  "addTitle": "Tambahkan judul",
+  "validation": {
+    "error": "Kesalahan",
+    "titleRequired": "Judul adalah kolom yang wajib diisi.",
+    "itemExists": "Item berjudul \"${name}\" sudah ada di folder ini. Pilihlah judul yang lain.",
+    "titleInUseService": "Layer berjudul \"${name}\" sudah ada. Pilihlah judul yang lain.",
+    "itemInRecycleBin": "Item berjudul \"${name}\" sudah ada dan ada di tempat sampah. Pilihlah judul yang lain.",
+    "serviceNameInvalid": "Judul layanan hanya boleh berisi karakter alfanumerik atau garis bawah dan sebanyak 90 karakter atau kurang.",
+    "dataStoreTitleInvalid": "Judul data store hanya boleh berisi karakter alfanumerik atau garis bawah dan maksimal berjumlah 90 karakter.",
+    "titleInvalid": "Judul harus kurang dari 250 karakter dan tidak boleh berisi < atau >.",
+    "titleStartsWithNumber": "Judul tidak boleh dimulai dengan angka.",
+    "invalidCharacters": {
+      "single": "Nama tidak boleh berisi karakter ini: ${invalidCharacters}.",
+      "multiple": "Nama tidak boleh berisi salah satu karakter ini: ${invalidCharacters}.",
+      "unknown": "Nama tidak boleh berisi salah satu karakter ini: ${invalidCharacters}."
+    }
+  }
+}

@@ -1,0 +1,29 @@
+<svg width="108" height="108" viewBox="0 0 108 108" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect x="8" y="8" width="92" height="16" fill="#363636"/>
+<rect x="13" y="13" width="73" height="6" fill="#6A6A6A"/>
+<path d="M8 86H100V87H8V86Z" fill="#363636"/>
+<path d="M16.9147 95L17.5905 95.7372L20.7198 92.8686L17.5905 90L16.9147 90.7372L19.2399 92.8686L16.9147 95Z" fill="#6A6A6A"/>
+<path d="M11.8051 90.7372L11.1294 90.0001L8 92.8687L11.1294 95.7372L11.8051 95.0001L9.47989 92.8687L11.8051 90.7372Z" fill="#6A6A6A"/>
+<path d="M96 18L90 18L93 15L96 18Z" fill="#6A6A6A"/>
+<rect x="8" y="27" width="50" height="4" fill="#6A6A6A"/>
+<rect x="80" y="92" width="20" height="2" fill="#363636"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M99 35H20V42H99V35ZM19 34V43H100V34H19Z" fill="#363636"/>
+<rect x="8" y="34" width="9" height="9" fill="#363636"/>
+<rect x="19" y="58" width="21" height="4" fill="#6A6A6A"/>
+<rect x="45" y="58" width="22" height="4" fill="#6A6A6A"/>
+<rect x="73" y="58" width="27" height="4" fill="#6A6A6A"/>
+<circle cx="12" cy="60" r="3" fill="#999999"/>
+<rect x="19" y="67" width="21" height="4" fill="#363636"/>
+<rect x="45" y="67" width="22" height="4" fill="#363636"/>
+<rect x="73" y="67" width="27" height="4" fill="#363636"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M12 71C13.1046 71 14 70.1046 14 69C14 67.8954 13.1046 67 12 67C10.8954 67 10 67.8954 10 69C10 70.1046 10.8954 71 12 71ZM12 72C13.6569 72 15 70.6569 15 69C15 67.3431 13.6569 66 12 66C10.3431 66 9 67.3431 9 69C9 70.6569 10.3431 72 12 72Z" fill="#363636"/>
+<rect x="8" y="46" width="92" height="8" fill="#363636"/>
+<rect x="10" y="48" width="4" height="4" fill="#6A6A6A"/>
+<rect x="19" y="48" width="16" height="4" fill="#6A6A6A"/>
+<rect x="45" y="48" width="17" height="4" fill="#6A6A6A"/>
+<rect x="73" y="48" width="23" height="4" fill="#6A6A6A"/>
+<rect x="19" y="78" width="21" height="4" fill="#363636"/>
+<rect x="45" y="78" width="22" height="4" fill="#363636"/>
+<rect x="73" y="78" width="27" height="4" fill="#363636"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M12 82C13.1046 82 14 81.1046 14 80C14 78.8954 13.1046 78 12 78C10.8954 78 10 78.8954 10 80C10 81.1046 10.8954 82 12 82ZM12 83C13.6569 83 15 81.6569 15 80C15 78.3431 13.6569 77 12 77C10.3431 77 9 78.3431 9 80C9 81.6569 10.3431 83 12 83Z" fill="#363636"/>
+</svg>

@@ -1,0 +1,1 @@
+{"componentLabel":"Merenje rastojanja","distance":"Rastojanje","hint":"Započnite merenje klikom na mapu kako biste postavili svoju prvu tačku","mode":"Režim","modes":{"auto":"Automatski","planar":"Planarno","geodesic":"Geodetski"},"newMeasurement":"Novo merenje","unit":"Jedinica","unsupported":"2D merenje rastojanja je podržano samo u aplikaciji MapView."}

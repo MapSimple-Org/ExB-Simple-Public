@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>L'outil Classify Objects Using Deep Learning (Classer des objets &agrave; l&rsquo;aide d&rsquo;algorithmes de Deep Learning) utilise un mod&egrave;le de Deep Learning pour attribuer une &eacute;tiquette de classe ou une cat&eacute;gorie &agrave; un objet ou une entit&eacute;.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputRaster">
+        <div>
+            <p>Couche d'imagerie ou d'entit&eacute;s &agrave; utiliser pour classer les objets.
+            </p>
+        </div>
+    </div>
+    <div id="inputFeatures">
+        <div>
+            <p>Couche d&rsquo;entit&eacute;s qui identifie la localisation de chaque objet &agrave; classer ou &eacute;tiqueter.
+            </p>
+            <p class="toolPaneOnly">Le nombre d&rsquo;entit&eacute;s d&eacute;pend de facteurs suppl&eacute;mentaires, tels que les crit&egrave;res de filtrage et l&rsquo;&eacute;tendue d&rsquo;analyse.
+            </p>
+        </div>
+    </div>
+    <div id="processAllRasterItems">
+        <div>
+            <p>Sp&eacute;cifie le mode de traitement des &eacute;l&eacute;ments raster dans une couche d&rsquo;imagerie une fois qu'ils ont &eacute;t&eacute; mosa&iuml;qu&eacute;s&nbsp;: ensemble ou individuellement.
+            </p>
+        </div>
+    </div>
+    <div id="model">
+        <div>
+            <p>Paquetage de Deep Learning qui contient le mod&egrave;le &agrave; utiliser pour classer les objets.
+            </p> 
+        </div>
+    </div>
+    <div id="modelArguments">
+        <div>
+            <p>Arguments de mod&egrave;le et leurs valeurs par d&eacute;faut qui se trouvent dans le mod&egrave;le de Deep Learning.
+            </p>
+        </div>
+    </div>
+    <div id="classLabelField">
+        <div>
+            <p>Le nom du champ qui contiendra l&rsquo;&eacute;tiquette de classification dans la couche d&rsquo;entit&eacute;s en sortie.
+            </p>
+        </div>
+    </div>
+    <div id="outputFeatureClass">
+        <div>
+            <p>Nom de la couche &agrave; cr&eacute;er et ajouter &agrave; la carte.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            
+            <p>Nom du dossier de  <b>My content (Mon contenu)</b> dans lequel est enregistr&eacute; le r&eacute;sultat.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

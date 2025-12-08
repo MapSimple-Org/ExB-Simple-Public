@@ -1,0 +1,13 @@
+{
+  "addField": "Pridať stĺpec",
+  "deselectAll": "Zrušiť výber všetkého",
+  "done": "Hotovo",
+  "noFieldsAvailable": "${layerName} neobsahuje žiadne polia, ktoré by spĺňali požiadavku na dátový typ. Pre pokračovanie vyberte inú vrstvu.",
+  "noInputSelected": {
+    "withLayerInputLabel": "Nie je vybratá žiadna vstupná vrstva. Ak chcete pokračovať, vyberte vrstvu v ${layerInputLabel}.",
+    "withoutLayerInputLabel": "Nie je vybratá žiadna vstupná vrstva. Pre pokračovanie vyberte vstupnú vrstvu."
+  },
+  "noSearchResults": "Nenašli sa žiadne zhodné polia.",
+  "selectAll": "Vybrať všetko",
+  "summaryFieldsPopover": "Polia pre sumarizáciu"
+}

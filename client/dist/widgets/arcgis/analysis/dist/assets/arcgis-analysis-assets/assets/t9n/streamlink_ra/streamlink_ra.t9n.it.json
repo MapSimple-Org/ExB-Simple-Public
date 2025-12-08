@@ -1,0 +1,9 @@
+{
+  "inputFlowDirectionRasterLabel": "Raster di input di direzione di flusso",
+  "inputLayerGroupText": "Scegliere i raster di direzione flusso e flusso di input.",
+  "inputStreamRasterLabel": "Raster flusso di input",
+  "itemProperties": {
+    "description": "Output generato dall'esecuzione dello strumento StreamLink.",
+    "snippet": "Output generato da StreamLink"
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "addBtn": "完了",
+  "cancelBtn": "キャンセル",
+  "header": "変数の選択",
+  "multipleVariables": "複数値変数",
+  "noFound": "互換性のある変数が見つかりませんでした",
+  "search": "変数の検索",
+  "singleVariables": "単一の値変数",
+  "variableLabel": "ラベル: <span style='font-weight: var(--calcite-font-weight-normal)'>${val}</span>",
+  "variableVal": "値: <span style='font-weight: var(--calcite-font-weight-normal)'>${val}</span>"
+}

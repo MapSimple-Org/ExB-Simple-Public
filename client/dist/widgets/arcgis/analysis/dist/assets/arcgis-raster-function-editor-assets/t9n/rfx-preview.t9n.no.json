@@ -1,0 +1,13 @@
+{
+  "header": "Forhåndsvisning",
+  "description": "Forhåndsvis resultatene før du kjører analysen.",
+  "showPreview": "Vis forhåndsvisning",
+  "previewLayer": "Forhåndsvis laget ${number}",
+  "update": "Oppdater",
+  "newPreview": "Ny forhåndsvisning",
+  "previewPopup": "Aktiver forhåndsvisning av analyseresultatene basert på inndataparameterne.",
+  "previewError": "Dette forhåndsvisningslaget er ikke tilgjengelig. Kontroller inndataparameterne, og oppdater dette forhåndsvisningslaget igjen.",
+  "updatePopover": "Oppdater det valgte forhåndsvisningslaget",
+  "createPopover": "Opprett nytt forhåndsvisningslag",
+  "maxPreview": "Maks. antall tillatte forhåndsvisningslag: ${maxCount}"
+}

@@ -1,0 +1,160 @@
+{
+  "deleteItem": "Delete item",
+  "deleteItems": "Delete items",
+  "deleteFolder": "Delete folder",
+  "recycleBin": "Recycle bin",
+  "delete": "Delete",
+  "permanentlyDelete": "Permanently delete",
+  "next": "Next",
+  "back": "Back",
+  "cancel": "Cancel",
+  "item": "item",
+  "items": "items",
+  "cantDelete": "The following items can't be deleted because they are delete protected or have dependent items.",
+  "proceed": "Proceed with deleting the remaining items?",
+  "showMore": "Show more",
+  "showLess": "Show less",
+  "deletePermanently": "Delete permanently (cannot be undone)",
+  "learnMore": "Learn more",
+  "summary": {
+    "select": "Select",
+    "deselect": "Deselect",
+    "selectedItems": "Selected items:",
+    "additionalDependentItems": "additional dependent items:",
+    "permanentlyDelete": "Permanently delete:",
+    "permanentDelete": {
+      "notSupported": {
+        "single": "This item is not supported by the recycle bin.",
+        "multiple": "These items are not supported by the recycle bin."
+      },
+      "unsynchronized": "Unsynchronized edits made to feature layers in a distributed collaboration group will be lost.",
+      "notSupportedAndUnsynchronized": "Some item types are not supported. Unsynchronized edits made to feature layers in a distributed collaboration group will be lost.",
+      "group": {
+        "notSupported": "Not supported",
+        "distributedCollaboration": "Part of distributed collaboration"
+      }
+    },
+    "canBeRecovered": {
+      "single": "This item will be permanently deleted after ${days} days.",
+      "multiple": "These items will be permanently deleted after ${days} days.",
+      "unknown": "These items will be permanently deleted after ${days} days."
+    },
+    "includesDependentItems": "Additional dependent items:",
+    "willBeRecycled": "Send to the recycle bin:",
+    "cannotDelete": "Cannot delete:",
+    "deleteDiscouraged": "Delete discouraged:",
+    "hasDependentItems": "Has dependent items:",
+    "replacementItemFor": "Replacement item for:",
+    "someActionsMayNoLongerWork": {
+      "single": "If you send this item to the recycle bin, some actions that require access to the source item may no longer work as expected.",
+      "multiple": "If you send these items to the recycle bin, some actions that require access to the source items may no longer work as expected."
+    },
+    "deletePermanently": "Delete permanently: ${count} (cannot be undone)",
+    "deleteAllPermanently": "Delete all items permanently: ${count} (cannot be undone)",
+    "deleteXPermanently": "Delete ${subset} of ${total} items permanently (cannot be undone)",
+    "unprotectedGroup": {
+      "deleteDiscouraged": {
+        "dependent": "If you delete this item, some actions that require access to the source item may no longer work as expected. Are you sure you want to delete the item?",
+        "replacement": "This item is selected as a replacement item. Are you sure you want to delete the item?",
+        "learnMore": "Learn more about deleting source items"
+      }
+    },
+    "protectedGroup": {
+      "deleteProtected": "Delete protected",
+      "deleteProtectedDescription": "Items that are delete protected cannot be deleted.",
+      "hasDependentItems": "Has dependent items",
+      "dependentItems": {
+        "single": "Dependent item:",
+        "multiple": "Dependent items:"
+      },
+      "compositeDelete": "This item is dependent on:",
+      "compositeDeleteDescription": "Dependent items in a composite relationship cannot be deleted without their associated source item.",
+      "hasDependentItemsDescription": {
+        "singleOneDependentItem": "This item has a dependent item. They must be deleted together.",
+        "singleMultipleDependentItems": "This item has dependent items. They must be deleted together.",
+        "multiple": "These items have other items dependent on them. They must be deleted together."
+      },
+      "protectedAndDependentDescription": "Items that are delete protected or have dependent items cannot be deleted.",
+      "deleteDiscouraged": "Delete discouraged",
+      "deleteDiscouragedDescription": {
+        "single": "If this item is deleted, dependent items may lose some functionality. You can delete this item from the item details page.",
+        "multiple": "If these items are deleted, dependent items may lose some functionality. You can delete these items individually from the item details page."
+      }
+    }
+  },
+  "willBePermanentlyDeleted": {
+    "single": "This item will be permanently deleted because it is not supported by the recycle bin.",
+    "multiple": "These items will be permanently deleted because they are not supported by the recycle bin.",
+    "unknown": "These items will be permanently deleted because they are not supported by the recycle bin."
+  },
+  "willBePermanentlyDeletedCollaboration": {
+    "single": "The selected item belongs to a distributed collaboration group and cannot be sent to the recycle bin. It will be permanently deleted.",
+    "multiple": "The selected items belong to a distributed collaboration group and cannot be sent to the recycle bin. They will be permanently deleted.",
+    "unknown": "The selected items belong to a distributed collaboration group and cannot be sent to the recycle bin. They will be permanently deleted."
+  },
+  "areYouSure": {
+    "single": "Are you sure you want to delete this item?",
+    "multiple": "Are you sure you want to delete these items?",
+    "unknown": "Are you sure you want to delete these items?"
+  },
+  "areYouSureRecycle": {
+    "single": "This item will stay in the recycle bin for ${days} days before it is permanently deleted.",
+    "multiple": "These items will stay in the recycle bin for ${days} days before they are permanently deleted.",
+    "unknown": "These items will stay in the recycle bin for ${days} days before they are permanently deleted."
+  },
+  "areYouSurePermanent": {
+    "single": "Are you sure you want to permanently delete this item? This item cannot be recovered after it has been permanently deleted.",
+    "multiple": "Are you sure you want to permanently delete these items? These items cannot be recovered after they have been permanently deleted.",
+    "unknown": "Are you sure you want to permanently delete these items? These items cannot be recovered after they have been permanently deleted."
+  },
+  "deletes": {
+    "single": "Deletes in ${days} day",
+    "multiple": "Deletes in ${days} days",
+    "unknown": "Days until delete: ${days}"
+  },
+  "deleteOverride": {
+    "single": "Are you sure you want to permanently delete this item? This item cannot be recovered after it has been permanently deleted.",
+    "multiple": "Are you sure you want to permanently delete these items? These items cannot be recovered after they have been permanently deleted."
+  },
+  "restore": {
+    "restore": "Restore",
+    "restoreTo": "Restore to",
+    "restoreItem": "Restore Item",
+    "restoreItems": "Restore Items",
+    "noticeMessage": "Restored items will be unshared. Please review your content before sharing it again.",
+    "cannotBulkRestoreXItems": "Cannot bulk restore more than ${number} items, please deselect a few items.",
+    "cannotBulkRestoreMultipleOwners": "Cannot bulk restore items that belong to different owners. Select items from a single owner to bulk restore.",
+    "toRestore": {
+      "single": "Item to Restore:",
+      "multiple": "Items to Restore:"
+    },
+    "cannotRestore": "Cannot restore:",
+    "dependentItems": {
+      "single": "This item cannot be restored because it is dependent on <b>${parent}</b>. Restore them together.",
+      "multiple": "These items cannot be restored because they are dependent on other items in the recycle bin. Restore them together: "
+    }
+  },
+  "onboarding": {
+    "checkItOut": "Need to recover that accidentally deleted item? Check out the new recycle bin!",
+    "takeALook": "Take a look at the new recycle bin!",
+    "learnMore": "Learn more about restoring deleted items",
+    "heldInRecycleBin": "Items in the recycle bin will be permanently deleted after ${days} days.",
+    "goToUserRecycleBin": "Go to your ${linkStart}recycle bin${linkEnd} to restore or permanently delete items.",
+    "goToOrgRecycleBin": "Go to your ${linkStart}organization's recycle bin${linkEnd} to restore or permanently delete items. Content in the recycle bin continues to consume credits."
+  },
+  "pageRangeWithTotalRecycleBinSize": {
+    "en": "${start} - ${end} of ${total} (${size}) in recycle bin",
+    "other": "${start} - ${end}, total: ${total} (${size}) in recycle bin"
+  },
+  "pageRangeWithGreaterThanTotalRecycleBinSize": {
+    "en": "${start} - ${end} of ${total} (>${size}) in recycle bin",
+    "other": "${start} - ${end}, total: ${total} (>${size}) in recycle bin"
+  },
+  "compositeDeleteDisclaimer": {
+    "oneToOne": "<strong>${item}</strong> has the dependent item <strong>${dependentItem}</strong> that must be deleted with it.",
+    "oneToMany": "<strong>${item}</strong> has dependent items that must be deleted with it.",
+    "manyToMany": "Some selected items have dependent items that must be deleted with them.",
+    "additional": "Additional items:",
+    "dependentOn": "Dependent on"
+  }
+}

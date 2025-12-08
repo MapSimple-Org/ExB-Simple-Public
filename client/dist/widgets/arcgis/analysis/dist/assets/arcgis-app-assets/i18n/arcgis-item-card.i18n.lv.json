@@ -1,0 +1,8 @@
+{
+  "select": "Izvēlēties vienību: ${title}",
+  "lastUpdated": "Atjauninātā vienība: ${date}",
+  "viewItemDetails": "Skatīt detalizētu informāciju",
+  "preview": "Priekšskatījums",
+  "closePreview": "Aizvērt priekšskatījumu",
+  "moreOptions": "Vairāk iespēju"
+}

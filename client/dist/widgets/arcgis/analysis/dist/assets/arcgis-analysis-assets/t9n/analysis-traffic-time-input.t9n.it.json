@@ -1,0 +1,8 @@
+{
+  "arriveTime": "Ora di arrivo",
+  "modes": {
+    "custom": "Personalizza data e ora",
+    "now": "Adesso",
+    "unspecified": "Ora non specificata"
+  }
+}

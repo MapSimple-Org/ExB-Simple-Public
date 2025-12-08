@@ -1,0 +1,137 @@
+{
+  "next": "Далі",
+  "addField": "Додати поле",
+  "selectDataType": "Виберіть тип даних, які будуть зберігатися в полі",
+  "addGlobalIDNotice": "Поле буде автоматично заповнено наявними даними в шарі або таблиці. Після додавання це поле не можна редагувати чи видаляти.",
+  "fieldName": "Ім'я поля",
+  "displayName": "Відображуване ім’я",
+  "length": "Довжина",
+  "defaultValue": "Значення за замовчуванням (опціонально)",
+  "fieldTypes": "Типи полів",
+  "fieldValueType": "Тип значень поля (опціонально)",
+  "fieldDescription": "Опис поля (необов’язково)",
+  "allowNullValues": "Дозволити значення Null",
+  "valueRequiredError": "Це значення є обов’язковим",
+  "fieldAdded": "Поле успішно додано",
+  "newFieldTypeNotice": "Цей тим поля може підтримуватися неповністю в деяких клієнтах.",
+  "addingField": "Додавання поля...",
+  "syncEnabled": "Деякі типи полів неможливо додати, оскільки на шарі ввімкнено синхронізацію.",
+  "newFeature": "Новий об'єкт",
+  "fieldAdditionUnsuccessful": "Додавання поля не вдалось",
+  "error": "Помилка",
+  "noFieldTypeSelected": "Тип поля не вибрано",
+  "nullFieldTypeError": "Потрібно вибрати тип поля для продовження.",
+  "fieldNameCharacterNotice": "Імена полів довжиною понад 31 символ несумісні з використанням в автономному режимі.",
+  "suggestedHeader": "Пропоноване",
+  "otherHeader": "Інше",
+  "provideDescription": "Зазначте опис інформації, що міститиметься у полі",
+  "nullableTooltipInfo": "Цей параметр недоступний для редагування, якщо на шарі вже містяться дані.",
+  "tooltipInfo": {
+    "globalIDExists": "Поле GlobalID уже існує в цьому сервісі. У шарі або таблиці може бути лише одне поле GlobalID.",
+    "enterpriseTimestampOffset": "ArcGIS Enterprise не підтримує поля зміщення позначки часу у розміщених на хості векторних шарах."
+  },
+  "text": {
+    "title": "Текст",
+    "description": "Значення, що містять буквено-цифрові або спеціальні символи.",
+    "types": {
+      "esriFieldTypeString": {
+        "title": "Рядок",
+        "description": "Зберігає набір буквено-цифрових символів заданої довжини."
+      }
+    }
+  },
+  "numbers": {
+    "title": "Номери",
+    "description": "Значення, що містять числову інформацію.",
+    "types": {
+      "esriFieldTypeDouble": {
+        "title": "Подвійний",
+        "description": "Зберігайте числа з десятковими знаками."
+      },
+      "esriFieldTypeInteger": {
+        "title": "Ціле число",
+        "description": "Зберегти цілі числа з ${lowerIntegerRange} в ${upperIntegerRange}."
+      },
+      "esriFieldTypeBigInteger": {
+        "title": "Велике ціле число",
+        "description": "Зберігайте цілі числа від -(2${startSup}53${endSup}-1) до 2${startSup}53${endSup}-1. Використовуйте цей тип поля, якщо ви використовуєте числа, які виходять за межі підтримуваного діапазону цілочисельних полів."
+      }
+    }
+  },
+  "dates": {
+    "title": "Дати",
+    "description": "Значення, що містять часову інформацію.",
+    "types": {
+      "esriFieldTypeDate": {
+        "title": "Дата",
+        "description": "Зберігання значень з датою та часом."
+      },
+      "esriFieldTypeDateOnly": {
+        "title": "Тільки дата",
+        "description": "Зберігання значень дати без значень часу."
+      },
+      "esriFieldTypeTimeOnly": {
+        "title": "Тільки час",
+        "description": "Зберігання значень часу без значень дати."
+      },
+      "esriFieldTypeTimestampOffset": {
+        "title": "Зміщення позначки часу",
+        "description": "Зберігайте значення, що вказують на дату, час і зміщення відносно всесвітнього координованого часу (UTC)."
+      }
+    }
+  },
+  "globalIdentifiers": {
+    "title": "Глобальні ідентифікатори",
+    "description": "Значення, які унікально ідентифікують об'єкт або рядок таблиці.",
+    "types": {
+      "esriFieldTypeGlobalID": {
+        "title": "GlobalID",
+        "description": "Зберігайте рядок із 36 символів, що складається з літер і цифр, які використовуються для унікальної ідентифікації об'єкта."
+      },
+      "esriFieldTypeGUID": {
+        "title": "GUID",
+        "description": "Зберігайте рядок із 36 символів, що складається з літер і цифр. Глобальний унікальний ідентифікатор, або GUID, часто використовується для керування відношеннями між об’єктами."
+      }
+    }
+  },
+  "fieldValueTypes": {
+    "nameOrTitle": "Ім'я або заголовок",
+    "description": "Опис",
+    "typeOrCategory": "Тип або категорія",
+    "countOrAmount": "Лічильник або кількість",
+    "percentageOrRatio": "Відсоток або частка",
+    "measurement": "Вимірювання",
+    "currency": "Валюта",
+    "uniqueIdentifier": "Унікальний ідентифікатор",
+    "phoneNumber": "Номер телефону",
+    "emailAddress": "Адреса електронної пошти",
+    "orderedOrRanked": "Упорядковані або ранжовані",
+    "binary": "Бінарні",
+    "locationOrPlaceName": "Назва місця розташування або місця",
+    "coordinate": "Координата",
+    "dateAndTime": "Дата та час",
+    "none": "Немає"
+  },
+  "addFieldErrors": {
+    "invalidName": "Неприпустиме ім'я",
+    "invalidLength": "Недійсна довжина",
+    "outOfRangeValueError": "Це значення виходить за межі діапазону.",
+    "invalidValueError": "Введене значення недійсне.",
+    "invalidFieldParameters": "Недійсні параметри поля.",
+    "invalidInputsError": "Перевірте правильність заповнення параметрів поля.",
+    "existingFieldNameError": "Ім'я поля не може бути таким самим, як існуюче ім'я поля.",
+    "invalidNameInputSQLError": "Ім'я поля не може бути таким самим, як ключове слово SQL.",
+    "invalidNameInputInvalidCharactersError": "Має починатися з літери і може містити лише літери, цифри та '_'.",
+    "valueIsRequiredError": "Це значення є обов'язковим.",
+    "lengthExceeds": "Довжина імені поля має становити не більше ${maxFieldNameLength} символів.",
+    "defaultValueExceeds": "Значення за замовчуванням перевищує визначену довжину поля.",
+    "savingFailed": "Збереження ${layerName} не вдалося",
+    "readOnlyErrorMessage": "ArcGIS Online має проблеми з роботою і переведено у режим тільки для читання. Деякі можливості можуть бути обмежені. Для отримання актуальної інформації щодо вирішення цих проблем відвідайте Панель візуального відображення стану ArcGIS Online.",
+    "readOnlyErrorMessageEnterprise": "ArcGIS Enterprise має проблеми з роботою і переведено в режим тільки для читання. Деякі можливості можуть бути обмежені.",
+    "healthDashboard": "Панель візуального відображення стану ArcGIS Online",
+    "genericAddFieldError": {
+      "title": "Помилка",
+      "description": "Під час додавання поля сталася помилка."
+    }
+  }
+}

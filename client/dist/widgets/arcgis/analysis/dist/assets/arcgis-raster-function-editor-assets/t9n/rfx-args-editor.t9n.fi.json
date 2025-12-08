@@ -1,0 +1,11 @@
+{
+  "unsupportedDataType": "Tyyppiä ei tueta",
+  "currentlyUnsupported": " Tyypin oletuseditori ${missingType} odottaa valmistumista ja saapuu pian. Tilapäinen paikkamerkin tekstiruutu merkkijonoon perustuvien lähtöaineistojen määrittämiseen.",
+  "unsupportedOverrideWarning": "Ohituseditorin komponentti odottaa valmistumista ja saapuu pian, ja se mahdollistaa paremman käyttökokemuksen seuraavia parametreja käytettäessä:",
+  "overrideWidgetMissing": "Ohituseditorin komponentti puuttuu.",
+  "uiIncomplete": "Työn lähetys epäonnistui. Toimintoa ei voi suorittaa, koska jotkin pakollisista kentistä eivät ole yhteensopivia tai ne puuttuvat käyttöliitymästä.",
+  "deprecatedBannerText": "Tämä rasteritoimintomalli sisältää yhden tai useamman käytöstä poistetun rasteritoiminnon, ja ne poistetaan tulevassa julkaisussa.",
+  "deprecatedBannerTextWithLink": "Tämä rasteritoimintomalli sisältää yhden tai useamman käytöstä poistetun rasteritoiminnon, ja ne poistetaan tulevassa julkaisussa. <calcite-link target='_blank' href='${ docLink }'>Lue lisää</calcite-link> käytöstä poistetun rasteritoiminnon korvaamisesta.",
+  "unsupportedBannerText": "Tämä rasteritoimintomalli sisältää yhden tai useamman ei-tuetun rasteritoiminnon.",
+  "unsupportedBannerTextWithLink": "Tämä rasteritoimintomalli sisältää yhden tai useamman ei-tuetun rasteritoiminnon. <calcite-link target='_blank' href='${ docLink }'>Lue lisää</calcite-link> tuetuista rasteritoiminnoista."
+}

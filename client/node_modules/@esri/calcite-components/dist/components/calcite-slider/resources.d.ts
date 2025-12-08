@@ -1,0 +1,35 @@
+import { Scale } from '../interfaces';
+export declare const CSS: {
+    container: string;
+    containerRange: string;
+    graph: string;
+    handle: string;
+    handleExtension: string;
+    handleLabel: string;
+    handleLabelMinValue: string;
+    handleLabelValue: string;
+    hyphen: string;
+    hyphenWrap: string;
+    static: string;
+    thumb: string;
+    thumbActive: string;
+    thumbContainer: string;
+    thumbMinValue: string;
+    thumbPrecise: string;
+    thumbValue: string;
+    tick: string;
+    tickActive: string;
+    tickLabel: string;
+    tickMax: string;
+    tickMin: string;
+    ticks: string;
+    track: string;
+    trackRange: string;
+    transformed: string;
+    scale: (scale: Scale) => "scale--s" | "scale--m" | "scale--l";
+};
+export declare const IDS: {
+    readonly validationMessage: "validationMessage";
+    readonly host: (id: any) => string;
+};
+export declare const maxTickElementThreshold = 250;

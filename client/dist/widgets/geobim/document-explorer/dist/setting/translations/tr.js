@@ -1,0 +1,1 @@
+System.register([],function(e){return{execute:function(){e({settingsLabel:"Belge Gezgini Ayarlar\u0131",selectModelViewer:"Belgeleri g\xf6r\xfcnt\xfclemek i\xe7in bir Belge G\xf6r\xfcnt\xfcleyici arac\u0131 se\xe7in."})}}});

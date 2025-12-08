@@ -1,0 +1,11 @@
+{
+  "modalTitle": "Kategorizēt vienības",
+  "save": "Saglabāt",
+  "cancel": "Atcelt",
+  "loadingText": "Ielādē...",
+  "assignCategory": "Piešķirt kategoriju",
+  "errorMessage": "Radās kāda problēma. Lūdzu, vēlāk mēģiniet vēlreiz.",
+  "limited": "Vienības ir ierobežotas līdz 20 kategorijām. Lūdzu, noņemiet kategoriju, pirms pievienojat citu.",
+  "undo": "Atsaukt",
+  "redo": "Atcelt atsaukšanu"
+}

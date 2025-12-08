@@ -1,0 +1,22 @@
+{
+  "general": "Algemeen",
+  "parameters": "Parameters",
+  "variables": "Variabelen",
+  "name": "Naam",
+  "namePlaceHolder": "Naam invoeren",
+  "description": "Beschrijving",
+  "parameter": "Parameter",
+  "isPublic": "IsOpenbaar",
+  "isDataset": "IsDataset",
+  "unknownPixelType": "Onbekend",
+  "outputPixelType": "Uitvoerpixeltype",
+  "u8PixelType": "8 bits niet-ondertekend",
+  "s8PixelType": "8 bits ondertekend",
+  "u16PixelType": "16 bits niet-ondertekend",
+  "s16PixelType": "16 bits ondertekend",
+  "u32PixelType": "32 bits niet-ondertekend",
+  "s32PixelType": "32 bits ondertekend",
+  "f32PixelType": "32 bits zwevend",
+  "f64PixelType": "64 bits dubbel",
+  "properties": "Eigenschappen"
+}

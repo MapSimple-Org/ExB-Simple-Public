@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>L&rsquo;outil Calculer un indice composite combine plusieurs variables num&eacute;riques pour cr&eacute;er un indice unique.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputLayer">
+        <div>
+            <p>Table ou entit&eacute;s contenant les variables &agrave; combiner pour former l&rsquo;indice.
+            </p>
+            <p class="toolPaneOnly">Le nombre d&rsquo;entit&eacute;s d&eacute;pend de facteurs suppl&eacute;mentaires, tels que les crit&egrave;res de filtrage et l&rsquo;&eacute;tendue d&rsquo;analyse.
+            </p> 
+            <p class="modelBuilderOnly">Le param&egrave;tre  <b>Layer (Couche)</b> est sp&eacute;cifi&eacute; par d&eacute;faut lorsque le param&egrave;tre <b>Input features or table (Table ou entit&eacute;s en entr&eacute;e)</b> n&rsquo;est pas renseign&eacute;. Pour ajouter une table en entr&eacute;e, s&eacute;lectionnez <b>Table</b> avant d&rsquo;ajouter un jeu de donn&eacute;es.
+            </p>
+        </div>
+    </div>
+    <div id="inputVariables">
+        <div>
+            <p>Champs contenant les variables &agrave; combiner pour cr&eacute;er l&rsquo;indice. Le param&egrave;tre  <b>Reverse direction (Inverser le sens)</b> indique si les valeurs des variables seront invers&eacute;es. Le param&egrave;tre <b>Weight (Pond&eacute;ration)</b> d&eacute;signe l&rsquo;influence relative de chaque variable sur l&rsquo;indice.
+            </p>
+        </div>
+    </div>
+    <div id="indexMethod">
+        <div>
+            <p>Sp&eacute;cifie la m&eacute;thode &agrave; utiliser pour mettre &agrave; l&rsquo;&eacute;chelle les variables en entr&eacute;e et combiner les variables mises &agrave; l&rsquo;&eacute;chelle afin de cr&eacute;er l&rsquo;indice.
+            </p>
+        </div>
+    </div>
+    <div id="outputIndexReverse">
+        <div>
+            <p>Indique si le sens des valeurs de l&rsquo;indice en sortie sera invers&eacute;. Lorsque cette option est activ&eacute;e, les valeurs &eacute;lev&eacute;es sont trait&eacute;es comme des valeurs d&rsquo;indice faibles et inversement.
+            </p>
+        </div>
+    </div>
+    <div id="outputIndexMinMax">
+        <div>
+            <p>Valeurs minimale et maximale des valeurs de l&rsquo;indice en sortie.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>Nom de la couche &agrave; cr&eacute;er et ajouter &agrave; la carte.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>Nom du dossier de  <b>My content (Mon contenu)</b> dans lequel est enregistr&eacute; le r&eacute;sultat.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

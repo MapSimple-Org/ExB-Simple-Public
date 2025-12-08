@@ -1,0 +1,9 @@
+{
+  "inputLayerGroupText": "Odaberite ulazni sloj za izračun geometrije granica zone.",
+  "itemProperties": {
+    "description": "Izlazna tablica generirana pokretanjem alata za analizu zonske geometrije kao tablice.",
+    "snippet": "Izlazna tablica generirana iz zonske geometrije kao tablice"
+  },
+  "zonalGeometrySettingGroupLabel": "Postavka zonske geometrije",
+  "zonalGeometrySettingGroupText": "Za izračun navedite veličinu ćelije."
+}

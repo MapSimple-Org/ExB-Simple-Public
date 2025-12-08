@@ -1,0 +1,240 @@
+{
+  "widgetId": "widget_x",
+  "config": {
+    "layouts": {
+      "layout_6": {
+        "type": "FIXED",
+        "content": {
+          "0": {
+            "type": "WIDGET",
+            "bbox": {
+              "left": "10px",
+              "top": "10px",
+              "width": "76px",
+              "height": "120px",
+              "right": "10px"
+            },
+            "widgetId": "widget_8",
+            "setting": {
+              "lockParent": true,
+              "vCenter": false,
+              "hCenter": false,
+              "autoProps": {
+                "width": true
+              }
+            },
+            "isPending": false
+          },
+          "1": {
+            "type": "WIDGET",
+            "bbox": {
+              "left": "7px",
+              "top": "169px",
+              "width": "174px",
+              "height": "50px",
+              "right": "7px",
+              "bottom": "50px"
+            },
+            "widgetId": "widget_9",
+            "setting": {
+              "lockParent": true,
+              "autoProps": {
+                "width": true,
+                "height": true
+              },
+              "vCenter": false,
+              "hCenter": false
+            },
+            "isPending": false
+          },
+          "2": {
+            "type": "WIDGET",
+            "bbox": {
+              "left": "10px",
+              "top": "210px",
+              "width": "196px",
+              "height": "30px",
+              "right": "10px",
+              "bottom": "10px"
+            },
+            "widgetId": "widget_11",
+            "setting": {
+              "lockParent": true,
+              "autoProps": {
+                "width": true,
+                "top": true
+              }
+            }
+          },
+          "3": {
+            "type": "WIDGET",
+            "bbox": {
+              "left": "7px",
+              "top": "144px",
+              "width": "180px",
+              "height": "30px",
+              "right": "7px"
+            },
+            "widgetId": "widget_10",
+            "setting": {
+              "lockParent": true,
+              "autoProps": {
+                "width": true
+              },
+              "vCenter": false
+            }
+          }
+        },
+        "order": [
+          "0",
+          "1",
+          "2",
+          "3"
+        ],
+        "label": "Default"
+      }
+    },
+    "widgets": {
+      "widget_x": {
+        "config": {
+          "maxItems": 100,
+          "space": 10,
+          "verticalSpace": 10,
+					"horizontalSpace": 10,
+          "itemsPerPage": 10,
+          "isItemStyleConfirm": false,
+          "isInitialed": false,
+          "pageStyle": "SCROLL",
+          "itemStyle": "STYLE2",
+          "hoverType": "HOVER0",
+          "selectedStyle": "STYLE0",
+          "differentOddEven": false,
+          "scrollBarOpen": true,
+          "direction": "HORIZON",
+          "layoutType": "COLUMN",
+          "alignType": "CENTER",
+          "scrollStep": 2,
+          "cardConfigs": {
+            "DEFAULT": {
+              "cardSize": {
+                "LARGE": {
+                  "width": 200,
+                  "height": 275
+                }
+              },
+              "enable": true,
+              "backgroundStyle": {
+                "border": {
+                  "type": "solid",
+                  "color": "var(--sys-color-divider-secondary)",
+                  "width": "1px"
+                }
+              },
+              "listLayout": "Custom"
+            },
+            "HOVER": {
+              "cardSize": {
+                "LARGE": {
+                  "width": 200,
+                  "height": 275
+                }
+              },
+              "enable": false,
+              "backgroundStyle": {
+                "border": {
+                  "type": "solid",
+                  "color": "var(--sys-color-divider-secondary)",
+                  "width": "1px"
+                }
+              },
+              "listLayout": "Auto"
+            },
+            "SELECTED": {
+              "cardSize": {
+                "LARGE": {
+                  "width": 200,
+                  "height": 275
+                }
+              },
+              "backgroundStyle": {
+                "border": {
+                  "type": "solid",
+                  "color": "var(--sys-color-action-selected)",
+                  "width": "1px"
+                }
+              },
+              "selectionMode": "SINGLE",
+              "listLayout": "Auto"
+            }
+          },
+          "style": {
+            "id": "default"
+          }
+        },
+        "layouts": {
+          "DEFAULT": {
+            "LARGE": "layout_6"
+          }
+        }
+      },
+      "widget_8": {
+        "uri": "widgets/common/image/",
+        "config": {
+          "functionConfig": {
+            "altText": "",
+            "toolTip": "",
+            "linkParam": {},
+            "scale": "Fit",
+            "imageParam": {}
+          },
+          "styleConfig": {}
+        }
+      },
+      "widget_9": {
+        "uri": "widgets/common/text/",
+        "config": {
+          "text": "",
+          "placeholder": "<p><span style=\"font-size: 13px;color: var(--dark-800);\">Lorem ipsum dolor sit amet, consectetur  adipiscing elit</span></p>",
+          "style": {
+            "verticalAlign": "start",
+            "wrap": true,
+            "overflow": "scroll",
+            "padding": "p-1"
+          }
+        }
+      },
+      "widget_10": {
+        "uri": "widgets/common/text/",
+        "config": {
+          "text": "",
+          "placeholder": "<p><span style=\"font-size: 16px;color: var(--dark-800);\">${textPlaceholder}</span></p>",
+          "style": {
+            "verticalAlign": "start",
+            "wrap": true
+          }
+        }
+      },
+      "widget_11": {
+        "uri": "widgets/common/button/",
+        "config": {
+          "functionConfig": {
+            "text": "${buttonText}",
+            "toolTip": "",
+            "linkParam": {}
+          },
+          "styleConfig": {
+            "name": "Default",
+            "themeStyle": {},
+            "customStyle": {
+              "regular": {},
+              "hover": {},
+              "clicked": {}
+            }
+          }
+        }
+      }
+    },
+    "views": {},
+    "sections": {}
+  }
+}

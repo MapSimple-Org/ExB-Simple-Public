@@ -1,0 +1,7 @@
+{
+  "defaultValue": "Nem támogatott paramétertípus. A rendszer az alapértelmezett értéket fogja használni. <calcite-link target='_blank' href='${ docLink }'>További információ</calcite-link>",
+  "requiredMessage": "Ez a paraméter kötelező.",
+  "unsupportedGPType": "Nem támogatott paramétertípus. <calcite-link target='_blank' href='${ docLink }'>További információ</calcite-link>",
+  "unsupportedParameterConfig": "Nem támogatott paraméterkonfiguráció. <calcite-link target='_blank' href='${ docLink }'>További információ</calcite-link>",
+  "unsupportedParameterConfigDefaultValue": "Nem támogatott paraméterkonfiguráció. A rendszer az alapértelmezett értéket fogja használni. <calcite-link target='_blank' href='${ docLink }'>További információ</calcite-link>"
+}

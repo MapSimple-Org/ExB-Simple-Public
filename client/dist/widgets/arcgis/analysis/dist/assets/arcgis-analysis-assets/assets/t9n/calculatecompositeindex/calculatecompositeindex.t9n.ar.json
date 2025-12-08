@@ -1,0 +1,26 @@
+{
+  "CCIAnalysisSettingGroupLabel": "إعدادات الفهرس",
+  "CCIAnalysisSettingGroupText": "حدد كيفية حساب الفهرس.",
+  "geomeanPercentileLabel": "الرتب المركبة (المتوسط الهندسي للنسب المئوية)",
+  "geomeanRawLabel": "القيم المركبة الأولية (المتوسط الهندسي للقيم الأولية)",
+  "geomeanScaledLabel": "القيم المركبة التي تم قياسها (المتوسط الهندسي للقيم التي تم قياسها)",
+  "indexMethodLabel": "طريقة القياس والجمع بين المتغيرات",
+  "inputFeaturesOrTableLabel": "معالم الإدخال أو الجدول",
+  "inputLayerGroupText": "اختر المعالم أو الجدول والمتغيرات لإنشاء الفهرس بها.",
+  "inputVariablesLabel": "متغيرات الإدخال",
+  "itemProperties": {
+    "description": "طبقة المعالم التي تم إنشاؤها من تنفيذ أداة تحليل حساب الفهرس المركب.",
+    "snippet": "طبقة المعالم التي تم إنشاؤها من حساب الفهرس المركب"
+  },
+  "meanPercentileLabel": "الجمع بين الرتب (متوسط ​​النسب المئوية)",
+  "meanRawLabel": "دمج القيم الأولية (المتوسط الحسابي للقيم الأولية)",
+  "meanScaledLabel": "دمج القيم التي تم قياسها (المتوسط الحسابي للقيم التي تم قياسها)",
+  "outputIndexMaxLabel": "الحد الأقصى",
+  "outputIndexMinLabel": "الحد الأدنى",
+  "outputIndexMinMaxLabel": "قيم الحد الأدنى والأقصى للفهرس",
+  "outputIndexReverseLabel": "عكس قيم الفهرس",
+  "reverseVariableLabel": "عكس الاتجاه",
+  "sumFlagsPercentileLabel": "تمييز الحدود القصوى (عدد القيم فوق النسبة المئوية 90)",
+  "toolName": "حساب الفهرس المركب",
+  "weight": "الترجيح"
+}

@@ -1,0 +1,1 @@
+System.register([],function(e){return{execute:function(){e({_widgetLabel:"Grafikon",dataEmptyTip:"Nema prona\u0111enih podataka."})}}});

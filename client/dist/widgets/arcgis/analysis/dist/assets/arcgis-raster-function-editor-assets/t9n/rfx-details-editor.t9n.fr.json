@@ -1,0 +1,22 @@
+{
+  "general": "Généralités",
+  "parameters": "Paramètres",
+  "variables": "Variables",
+  "name": "Nom",
+  "namePlaceHolder": "Saisir un nom",
+  "description": "Description",
+  "parameter": "Paramètre",
+  "isPublic": "EstPublic",
+  "isDataset": "Jeu de données",
+  "unknownPixelType": "Inconnu",
+  "outputPixelType": "Type de pixel en sortie",
+  "u8PixelType": "Non signé 8 bits",
+  "s8PixelType": "Signé 8 bits",
+  "u16PixelType": "Non signé 16 bits",
+  "s16PixelType": "Signé 16 bits",
+  "u32PixelType": "Non signé 32 bits",
+  "s32PixelType": "Signé 32 bits",
+  "f32PixelType": "Flottant 32 bits",
+  "f64PixelType": "Double 64 bits",
+  "properties": "Propriétés"
+}

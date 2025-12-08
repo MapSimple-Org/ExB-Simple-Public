@@ -1,0 +1,8 @@
+{
+  "fieldTypesIncompatible": "対応するフィールドがありません。",
+  "inputPlaceholderText": "フィールドの選択",
+  "layerNotSelected": "フィールドにデータを読み込むためのレイヤーが選択されていません。",
+  "multiSelectFieldButtonText": "フィールド",
+  "removeField": "削除",
+  "replaceField": "フィールドの置換"
+}

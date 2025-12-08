@@ -1,0 +1,1 @@
+System.register([],function(e){return{execute:function(){e({_widgetLabel:"\u05de\u05e4\u05e8\u05d9\u05d3",quickStyleItem:"\u05e1\u05d2\u05e0\u05d5\u05df \u05de\u05d4\u05d9\u05e8 {index}"})}}});

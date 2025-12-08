@@ -1,0 +1,10 @@
+{
+  "cannotAssignValueToTargetField": "Apskaičiuota reikšmė ir lauko tipas nesutampa.",
+  "createExpression": "Kurti išraišką",
+  "deleteExpression": "Ištrinti išraišką",
+  "editExpression": "Redaguoti išraišką",
+  "expression": "Išraiška",
+  "isRequired": "Šis parametras yra būtinas.",
+  "layerLoadError": "Sluoksnio įkelti nepavyko.",
+  "validationFailedInvalidSQL": "Nepavyko patikrinti išraiškos. Išraiška nėra galiojanti SQL."
+}

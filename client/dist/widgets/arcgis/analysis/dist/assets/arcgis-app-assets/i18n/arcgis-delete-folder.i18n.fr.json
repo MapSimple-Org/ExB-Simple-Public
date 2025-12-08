@@ -1,0 +1,22 @@
+{
+  "deleteFolder": "Supprimer le dossier",
+  "delete": "Supprimer",
+  "permanentlyDelete": "Supprimer définitivement",
+  "back": "Retour",
+  "cancel": "Annuler",
+  "success": "Le dossier '${title}' a été supprimé",
+  "deleteProtectedItemsInFolder": "Le dossier n’a pas pu être supprimé car certains de ses éléments sont protégés contre la suppression ou comportent des éléments dépendants.",
+  "message": {
+    "empty": "Voulez-vous vraiment supprimer le dossier <strong style='font-weight: 500'>${title}</strong> ?",
+    "recycleAll": "Voulez-vous vraiment supprimer le dossier <strong style='font-weight: 500'>${title}</strong> et envoyer son contenu dans la corbeille ?",
+    "mustBeEmpty": "Le dossier <strong style='font-weight: 500'>${title}</strong> doit être vide pour pouvoir être supprimé.",
+    "aFewCannotBeDeleted": "Quelques éléments ne peuvent pas être supprimés. Voulez-vous vraiment poursuivre la suppression des autres éléments ?",
+    "canBeEmptied": "Le dossier <strong style='font-weight: 500'>${title}</strong> doit être vide pour pouvoir être supprimé. Voulez-vous vraiment poursuivre la suppression de ces éléments ?",
+    "cannotBeDeleted": "Le dossier <strong style='font-weight: 500'>${title}</strong> ne peut pas être supprimé car ses éléments ne peuvent pas l’être non plus."
+  },
+  "disabledMessage": {
+    "single": "Il existe <span style='color:red'>1 élément</span> dans le dossier <b>${label}</b>.<br/></br/>Voulez-vous vraiment supprimer ce dossier et l’élément qu’il contient ?",
+    "multiple": "Il existe <span style='color:red'>${number} éléments</span> dans le dossier <b>${label}</b>.<br/></br/>Voulez-vous vraiment supprimer ce dossier et tous les éléments qu’il contient ?",
+    "unknown": "Voulez-vous vraiment supprimer le dossier <b>${label}</b> ?"
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "title": "タイトル",
+  "addTitle": "タイトルの追加",
+  "validation": {
+    "error": "エラー",
+    "titleRequired": "タイトルは必須フィールドです。",
+    "itemExists": "「${name}」というタイトルのアイテムがこのフォルダーにすでに存在します。 別のタイトルを選択してください。",
+    "titleInUseService": "「${name}」というタイトルのレイヤーはすでに存在します。 別のタイトルを選択してください。",
+    "itemInRecycleBin": "「${name}」というタイトルのアイテムはすでに存在し、ゴミ箱にあります。 別のタイトルを選択してください。",
+    "serviceNameInvalid": "サービスのタイトルは 90 文字以下で、英数字またはアンダースコアのみを使用できます。",
+    "dataStoreTitleInvalid": "データ ストアのタイトルは 90 文字以下で、英数字またはアンダースコアのみを使用できます。",
+    "titleInvalid": "タイトルは 250 文字未満である必要があり、< や > は使用できません。",
+    "titleStartsWithNumber": "タイトルを数字で始めることはできません。",
+    "invalidCharacters": {
+      "single": "名前に次の文字を含めることはできません: ${invalidCharacters}",
+      "multiple": "名前に次の文字を含めることはできません: ${invalidCharacters}",
+      "unknown": "名前に次の文字を含めることはできません: ${invalidCharacters}"
+    }
+  }
+}

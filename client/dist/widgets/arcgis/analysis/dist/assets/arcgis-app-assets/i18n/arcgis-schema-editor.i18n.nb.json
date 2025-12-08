@@ -1,0 +1,14 @@
+{
+  "expandAll": "Utvid alle",
+  "collapseAll": "Skjul alle",
+  "categoryItem": {
+    "expand": "Utvid",
+    "collapse": "Skjul",
+    "editCategory": "Rediger kategori",
+    "deleteCategory": "Slett kategori",
+    "addSubcategory": "Legg til underkategori",
+    "addCategory": "Legg til kategori",
+    "save": "Lagre",
+    "cancel": "Avbryt"
+  }
+}

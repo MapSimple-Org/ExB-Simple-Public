@@ -1,0 +1,11 @@
+{
+  "addBtn": "Готово",
+  "cancelBtn": "Отмена",
+  "header": "Выбрать переменную",
+  "multipleVariables": "Переменные с несколькими значениями",
+  "noFound": "Не найдено совместимых переменных",
+  "search": "Поиск переменных",
+  "singleVariables": "Переменные с одним значением",
+  "variableLabel": "Надпись: <span style='font-weight: var(--calcite-font-weight-normal)'>${val}</span>",
+  "variableVal": "Значение: <span style='font-weight: var(--calcite-font-weight-normal)'>${val}</span>"
+}

@@ -1,0 +1,11 @@
+{
+  "all": "Tout",
+  "inputLayersGroupText": "Sélectionner le raster de surface en entrée et éventuellement les données de dépression et le raster de pondération.",
+  "itemProperties": {
+    "description": "Sortie générée en exécutant l’outil Générer un raster de cours d’eau.",
+    "snippet": "Sortie générée avec Générer un raster de cours d’eau"
+  },
+  "outputStreamFeaturesLabel": "Nom des entités de cours d’eau en sortie",
+  "simplifyLabel": "Simplifier les entités",
+  "streamSettingsGroupText": "Spécifier le seuil d’accumulation et la méthode de désignation des cours d’eau, et indiquer si les lignes de cours d’eau en sortie doivent être lissées pour donner des formes simples."
+}

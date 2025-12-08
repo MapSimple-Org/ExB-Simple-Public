@@ -1,0 +1,8 @@
+{
+  "loading": "正在加载...",
+  "pleaseWait": "请稍候。",
+  "loadingXMLRFT": "正在以 XML 格式加载所选栅格函数模板。",
+  "failedToOpen": "无法打开。",
+  "readingFailed": "加载所选栅格函数模板失败。",
+  "failedToLoadXML": "无法以 XML 格式加载所选栅格函数模板。"
+}

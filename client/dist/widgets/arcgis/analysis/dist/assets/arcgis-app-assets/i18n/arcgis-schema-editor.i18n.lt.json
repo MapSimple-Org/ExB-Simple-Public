@@ -1,0 +1,15 @@
+{
+  "expandAll": "Išskleisti viską",
+  "collapseAll": "Sutraukti viską",
+  "categoryItem": {
+    "expand": "Išskleisti",
+    "collapse": "Suskleisti",
+    "editCategory": "Redaguoti kategoriją",
+    "deleteCategory": "Ištrinti kategoriją",
+    "addSubcategory": "Pridėti subkategoriją",
+    "addCategory": "Pridėti kategoriją",
+    "save": "Įrašyti",
+    "cancel": "Atšaukti",
+    "missingTitleMessage": "Antraštės pavadinimas yra privalomas."
+  }
+}

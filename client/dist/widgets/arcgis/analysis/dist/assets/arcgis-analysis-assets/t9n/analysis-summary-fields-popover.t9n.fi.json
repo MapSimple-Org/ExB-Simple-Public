@@ -1,0 +1,13 @@
+{
+  "addField": "Lisää kenttä",
+  "deselectAll": "Poista kaikkien valinta",
+  "done": "Valmis",
+  "noFieldsAvailable": "${layerName} ei sisällä kenttiä, jotka täyttävät aineistotyyppivaatimukset. Jatka valitsemalla toinen karttataso.",
+  "noInputSelected": {
+    "withLayerInputLabel": "Lähtöaineiston karttatasoa ei ole valittu. Jatka valitsemalla karttataso kohteessa ${layerInputLabel}.",
+    "withoutLayerInputLabel": "Lähtöaineiston karttatasoa ei ole valittu. Jatka valitsemalla lähtöaineiston karttataso."
+  },
+  "noSearchResults": "Vastaavia kenttiä ei löytynyt.",
+  "selectAll": "Valitse kaikki",
+  "summaryFieldsPopover": "Yhteenvetokentät"
+}

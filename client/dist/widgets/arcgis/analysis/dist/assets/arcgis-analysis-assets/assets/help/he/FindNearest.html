@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html dir="rtl">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>הכלי 'מצא את הקרוב ביותר' מוצא ומדרג את היישויות שהן הקרובות ביותר למיקומים שצוינו.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="analysisLayer">
+        <div>
+            
+            <p class="OnlineOnly">שכבת ההתחלה שסביבה טווח חיפוש יסומן כדי למצוא את היישויות הקרובות ביותר מהשכבה הקרובה. ישויות בשכבה הקרובה יוחזרו בהתבסס על קרבתם לשכבת הקלט. שכבות עם עד  חמשת אלפים ישויות נתמכות. </p>  
+            <p class="PortalOnly">שכבת ההתחלה שסביבה טווח חיפוש יסומן כדי למצוא את היישויות הקרובות ביותר מהשכבה הקרובה. ישויות בשכבה הקרובה יוחזרו בהתבסס על קרבתם לשכבת הקלט.
+            </p>
+            <p class="toolPaneOnly">מספר היישויות תלוי בגורמים נוספים כגון קריטריונים לסינון ותיחום הניתוח.
+            </p>
+        </div>
+    </div>
+    <div id="nearLayer">
+        <div>
+             
+            <p class="OnlineOnly">היישויות שנמצאו בהתבסס על קרבה לשכבת הקלט. שכבות עם עד  חמשת אלפים ישויות נתמכות. </p> 
+            <p class="PortalOnly">היישויות שנמצאו בהתבסס על קרבה לשכבת הקלט.
+            </p>
+            <p class="toolPaneOnly">מספר היישויות תלוי בגורמים נוספים כגון קריטריונים לסינון ותיחום הניתוח.
+            </p>
+        </div>
+    </div>
+    <div id="pointBarrierLayer">
+        <div>
+            <p>ישות נקודות אחת או יותר אשר משמשות כמגבלות זמניות (מחסומים) בעת נסיעה ברחובות שמתחת. התנועה ברחוב מותרת, אבל לא בקטע החסום.
+            </p>
+        </div>
+    </div>
+    <div id="lineBarrierLayer">
+        <div>
+            <p>ישות קו אחת או יותר אשר משמשות כמגבלות זמניות (מחסומים) בעת נסיעה ברחובות שמתחת. מחסומי הקו אוסרים נסיעה לכל מקום שבו המחסומים חותכים את הרחובות.
+            </p>
+        </div>
+    </div>
+    <div id="polygonBarrierLayer">
+        <div>
+            <p>ישות פליגון אחת או יותר אשר משמשות כמגבלות זמניות (מחסומים) בעת נסיעה ברחובות שמתחת. מחסומי הפוליגון אוסרים על הנסיעה בכל מקום שבו הפוליגונים מצטלבים עם הרחובות.
+            </p>
+        </div>
+    </div>
+    <div id="measurementType">
+        <div>
+            <p>השיטה שתשמש למדידת המרחק או הזמן. השיטה יכולה להיות מרחק קו או מצב נסיעה.
+            </p>
+        </div>
+    </div>
+    <div id="timeOfDay">
+        <div>
+            <p>התאריך והשעה שהנוסע יוצא מהמיקומים בערך  <b>שכבת הקלט</b>.
+            </p>
+        </div>
+    </div>
+    <div id="limitNearNumberCheckbox">
+        <div>
+            
+            <p>מציין האם נעשה שימוש במספר מקסימום מותאם אישית של היישויות הקרובות ביותר (מופעל) או שנעשה שימוש בברירת המחדל של הכלי למקסימום של 100.
+            </p>
+        </div>
+    </div>
+    <div id="maxCount">
+        <div>
+            <p>המספר המקסימלי של היישויות הקרובות ביותר שניתן למצוא עבור כל ישות קלט.
+            </p>
+        </div>
+    </div>
+    <div id="limitSearchRangeCheckbox">
+        <div>
+            
+            <p>מציין האם נעשה שימוש בטווח חיפוש מקסילי (מופעל) או שטווח החיפוש לא מוגבל.
+            </p>
+        </div>
+    </div>
+    <div id="searchCutoff">
+        <div>
+            <p>טווח החיפוש המקסימלי למציאת היישויות הקרובות ביותר.
+            </p>
+        </div>
+    </div>
+    <div id="searchCutoffUnits">
+        <div>
+            <p>היחידות שבהן נעשה שימוש לציון טווח החיפוש.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>שם השכבה שתיווצר ותתווסף למפה.
+            </p>
+        </div>
+    </div>
+    <div id="includeRouteLayers">
+        <div>
+            <p>מציין אם כל מסלול תוצאה יישמר כשכבת מסלול.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>שם התיקייה  <b>בתוכן שלי</b> שבה התוצאות יישמרו.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

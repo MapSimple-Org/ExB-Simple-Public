@@ -1,0 +1,137 @@
+{
+  "next": "Volgende",
+  "addField": "Veld toevoegen",
+  "selectDataType": "Selecteer het gegevenstype dat in het veld zal worden opgeslagen",
+  "addGlobalIDNotice": "Het veld wordt automatisch ingevuld met gegevens die in de laag of tabel voorkomen. Zodra dit veld is toegevoegd, kan het niet meer worden bewerkt of verwijderd.",
+  "fieldName": "Naam veld",
+  "displayName": "Weergavenaam",
+  "length": "Lengte",
+  "defaultValue": "Standaardwaarde (optioneel)",
+  "fieldTypes": "Veldtypes",
+  "fieldValueType": "Type waarde veld (optioneel)",
+  "fieldDescription": "Beschrijving veld (optioneel)",
+  "allowNullValues": "Null-waarden toestaan",
+  "valueRequiredError": "Deze waarde is vereist",
+  "fieldAdded": "Veld is toegevoegd",
+  "newFieldTypeNotice": "Dit veldtype wordt wellicht niet volledig ondersteund bij sommige clients.",
+  "addingField": "Bezig met toevoegen veld...",
+  "syncEnabled": "Kan sommige veldtypes niet toevoegen omdat synchronisatie is ingeschakeld voor de laag.",
+  "newFeature": "Nieuw object",
+  "fieldAdditionUnsuccessful": "Kan veld niet toevoegen",
+  "error": "Fout",
+  "noFieldTypeSelected": "Er is geen veldtype geselecteerd",
+  "nullFieldTypeError": "U moet een veldtype selecteren om door te gaan.",
+  "fieldNameCharacterNotice": "Veldnamen die langer zijn dan 31 tekens zijn niet compatibel met offline gebruik.",
+  "suggestedHeader": "Gesuggereerd",
+  "otherHeader": "Overige",
+  "provideDescription": "Geef een beschrijving op van de informatie die in het veld zal worden opgenomen.",
+  "nullableTooltipInfo": "Deze instelling kan niet worden bewerkt als uw laag al gegevens bevat.",
+  "tooltipInfo": {
+    "globalIDExists": "Er bestaat al een GlobalID-veld voor deze service. Er kan maar één GlobalID-veld aanwezig zijn in een laag of tabel.",
+    "enterpriseTimestampOffset": "ArcGIS Enterprise biedt geen ondersteuning voor tijdstempel-offsetvelden in gehoste objectlagen."
+  },
+  "text": {
+    "title": "Tekst",
+    "description": "Waarden die alfanumerieke of speciale tekens bevatten.",
+    "types": {
+      "esriFieldTypeString": {
+        "title": "Tekenreeks",
+        "description": "Een set alfanumerieke tekens met een opgegeven lengte opslaan."
+      }
+    }
+  },
+  "numbers": {
+    "title": "Getallen",
+    "description": "Waarden die numerieke gegevens bevatten.",
+    "types": {
+      "esriFieldTypeDouble": {
+        "title": "Double",
+        "description": "Getallen met decimalen opslaan."
+      },
+      "esriFieldTypeInteger": {
+        "title": "Integer",
+        "description": "Sla gehele getallen op die tussen ${lowerIntegerRange} en ${upperIntegerRange} liggen."
+      },
+      "esriFieldTypeBigInteger": {
+        "title": "Grote integer",
+        "description": "Sla gehele getallen die tussen -(2${startSup}53${endSup}-1) en 2${startSup}53${endSup}-1 liggen. Gebruik dit veldtype wanneer u getallen gebruikt die buiten het ondersteunde veldbereik voor gehele getallen vallen."
+      }
+    }
+  },
+  "dates": {
+    "title": "Datums",
+    "description": "Waarden die tijdsgegevens bevatten.",
+    "types": {
+      "esriFieldTypeDate": {
+        "title": "Datum",
+        "description": "Waarden met datum en tijd opslaan."
+      },
+      "esriFieldTypeDateOnly": {
+        "title": "Alleen datum",
+        "description": "Datumwaarden zonder tijdwaarden opslaan."
+      },
+      "esriFieldTypeTimeOnly": {
+        "title": "Alleen tijd",
+        "description": "Tijdwaarden zonder datumwaarden opslaan."
+      },
+      "esriFieldTypeTimestampOffset": {
+        "title": "Tijdstempel offset",
+        "description": "Waarden opslaan die de datum, tijd en verschil met UTC (gecoördineerde universele tijd) aangeven."
+      }
+    }
+  },
+  "globalIdentifiers": {
+    "title": "Globale id's",
+    "description": "Waarden die een unieke identificatie vormen voor een object of een rij in een tabel.",
+    "types": {
+      "esriFieldTypeGlobalID": {
+        "title": "GlobalID",
+        "description": "Sla een tekenreeks van 36 tekens op, die bestaat uit letters en cijfers en die wordt gebruikt als unieke id voor een object."
+      },
+      "esriFieldTypeGUID": {
+        "title": "GUID",
+        "description": "Sla een tekenreeks van 36 tekens op die bestaat uit letters en cijfers. Er wordt vaak een GUID (Globally Unique ID) gebruikt om de relaties tussen objecten te beheren."
+      }
+    }
+  },
+  "fieldValueTypes": {
+    "nameOrTitle": "Naam of titel",
+    "description": "Beschrijving",
+    "typeOrCategory": "Type of categorie",
+    "countOrAmount": "Telling of hoeveelheid",
+    "percentageOrRatio": "Percentage of verhouding",
+    "measurement": "Meting",
+    "currency": "Valuta",
+    "uniqueIdentifier": "Unieke identifier",
+    "phoneNumber": "Telefoonnummer",
+    "emailAddress": "E-mailadres",
+    "orderedOrRanked": "Geordend of gerangschikt",
+    "binary": "Binair",
+    "locationOrPlaceName": "Locatie of plaatsnaam",
+    "coordinate": "Coördinaat",
+    "dateAndTime": "Datum en tijdstip",
+    "none": "Geen"
+  },
+  "addFieldErrors": {
+    "invalidName": "Ongeldige naam",
+    "invalidLength": "Ongeldige lengte",
+    "outOfRangeValueError": "Deze waarde ligt buiten het bereik.",
+    "invalidValueError": "De ingevoerde waarde is ongeldig.",
+    "invalidFieldParameters": "Ongeldige veldparameters",
+    "invalidInputsError": "Controleer of uw veldparameters correct zijn ingevuld.",
+    "existingFieldNameError": "De veldnaam kan niet identiek zijn aan een bestaande veldnaam.",
+    "invalidNameInputSQLError": "De veldnaam kan niet identiek zijn aan een SQL-trefwoord.",
+    "invalidNameInputInvalidCharactersError": "Moet beginnen met een letter en kan alleen letters, cijfers en '_' bevatten",
+    "valueIsRequiredError": "Deze waarde is vereist.",
+    "lengthExceeds": "De lengte van de veldnaam moet kleiner dan of gelijk zijn aan ${maxFieldNameLength} tekens.",
+    "defaultValueExceeds": "De standaardwaarde overschrijdt de opgegeven veldlengte.",
+    "savingFailed": "Kan ${layerName} niet opslaan",
+    "readOnlyErrorMessage": "ArcGIS Online is in de modus alleen-lezen gezet vanwege operationele problemen. Er kunnen beperkingen gelden voor de aanwezige mogelijkheden. Ga naar het ArcGIS Online Health Dashboard voor de laatste updates over het verhelpen van dit probleem.",
+    "readOnlyErrorMessageEnterprise": "ArcGIS Enterprise is in de modus alleen-lezen gezet vanwege operationele problemen. Er kunnen beperkingen gelden voor de aanwezige mogelijkheden.",
+    "healthDashboard": "ArcGIS Online Health Dashboard",
+    "genericAddFieldError": {
+      "title": "Fout",
+      "description": "Er is een fout opgetreden bij het toevoegen van uw veld."
+    }
+  }
+}

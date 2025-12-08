@@ -1,0 +1,14 @@
+{
+  "AddDataFromUrl": "Thêm dữ liệu từ URL",
+  "addData": "Thêm dữ liệu",
+  "clear": "Xóa",
+  "file": "Tệp",
+  "fileNotFound": "Không thể tải tệp.",
+  "invalidUrl": "Phần mở rộng tệp hoặc URL không hợp lệ.",
+  "layerNotFound": "Không thể tải lớp.",
+  "replaceData": "Thay thế dữ liệu",
+  "required": "Thông số này là thông tin bắt buộc.",
+  "uploadData": "Tải dữ liệu",
+  "uploadFailureMsg": "Lỗi khi thực hiện thao tác tải lên, kích thước hoặc loại tệp không được hỗ trợ cho dịch vụ này.",
+  "url": "Url"
+}

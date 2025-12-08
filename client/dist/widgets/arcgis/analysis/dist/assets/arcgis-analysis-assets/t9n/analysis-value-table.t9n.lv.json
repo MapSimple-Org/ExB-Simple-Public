@@ -1,0 +1,7 @@
+{
+  "addEntryButtonLabel": "Pievienot",
+  "maxGroupsMessage": "Maksimālais ierakstu skaits ir ${maxCount}.",
+  "minGroupsMessage": "Minimālais ierakstu skaits ir ${minCount}.",
+  "removeEntryButtonLabel": "Noņemt ierakstu",
+  "requiredMessage": "Šis parametrs ir obligāts."
+}

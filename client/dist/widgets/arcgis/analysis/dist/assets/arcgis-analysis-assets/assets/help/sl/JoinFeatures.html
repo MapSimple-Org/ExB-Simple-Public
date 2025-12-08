@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>Orodje Spoji geoobjekte dodaja atribute iz enega sloja ali tabele na drugega, na podlagi prostorskih in atributnih relacij. Izbirno, je statistiko mogoče izračunati, kadar obstaja več ujemajočih se zapisov.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="targetLayer">
+        <div>
+            <p>Sloj ali tabela, ki bo imel atribute s spojitvenega sloja, dodane v njegovo tabelo atributov.
+            </p> 
+            <p class="toolPaneOnly">&Scaron;tevilo funkcij je odvisno od dodatnih dejavnikov, kot so kriteriji filtriranja in obseg analize.
+            </p> 
+            <p class="modelBuilderOnly"> <b>Sloj</b> je privzeto določen, če <b>Ciljni sloj</b> ni izpolnjen. Za dodajanje vhodne tabele, izberite <b>Tabela</b>, preden dodate sklop podatkov.
+            </p>
+        </div>
+    </div>
+    <div id="joinLayer">
+        <div>
+            <p>Sloj ali tabela z atributi, ki bodo dodani k ciljnemu sloju.
+            </p> 
+            <p class="toolPaneOnly">&Scaron;tevilo funkcij je odvisno od dodatnih dejavnikov, kot so kriteriji filtriranja in obseg analize.
+            </p> 
+            <p class="modelBuilderOnly"> <b>Sloj</b> je privzeto določen, če <b>Spojitveni sloj</b> ni izpolnjen. Za dodajanje vhodne tabele, izberite <b>Tabela</b>, preden dodate sklop podatkov.
+            </p>
+        </div>
+    </div>
+    <div id="useSpatialRelationship">
+        <div>
+            <p>Določa, ali se bodo sloji spojili na podlagi prostorske relacije. To zahteva, da imata oba sloja geometrijo.
+            </p>
+        </div>
+    </div>
+    <div id="spatialRelationship">
+        <div>
+            <p>Določa prostorsko relacije, ki določa, kateri geoobjekti se bodo spojili. Pridruženi bodo geoobjekti v spojitvenem sloji, ki imajo določene relacije do ciljnega sloja. Razpoložljive relacije so odvisne od vrste geometrije vhodov.
+            </p>
+        </div>
+    </div>
+    <div id="spatialRelationshipDistance">
+        <div>
+            <p>Razdalja od geoobjektov v ciljnem sloju, ki bo uporabljena za določanje, ali se bodo geoobjekti spojili.
+            </p>
+        </div>
+    </div>
+    <div id="spatialRelationshipDistanceUnits">
+        <div>
+            <p>Enote, ki bodo uporabljene za določanje razdalje.
+            </p>
+        </div>
+    </div>
+    <div id="useAttributeRelationship">
+        <div>
+            <p>Določa, ali se bodo sloji spojili na podlagi ujemajočih se vrednosti polj. Če je eden ali več vhodov tabela, je spoj mogoče definirati le z uporabo atributne relacije.
+            </p>
+        </div>
+    </div>
+    <div id="attributeRelationship">
+        <div>
+            <p>Atributna relacija, ki določa kateri geoobjekti bodo spojeni. Geoobjekti se ujemajo, ko so vrednosti polj v spojitvenem sloju enake vrednostim polj ciljnega sloja.
+            </p>
+        </div>
+    </div>
+    <div id="joinOperation">
+        <div>
+            <p>Določa, kako bo potekalo spajanje, če več zapisov iz spojitvenega sloja ustreza kriterijem. Izberite izmed naslednjih možnosti:
+                <ul>
+                    <li> <b>Spoji enega z enim</b> &mdash; En zapis v spojitvenem sloju bo spojen z vsakim geoobjektom v ciljnem sloju.
+                    </li>
+                    <li> <b>Spoji enega z večimi</b> &mdash; Vsi ujemajoči se geoobjekti v spojitvenem sloju bodo spojeni v ciljni sloj. Sloj z rezultati bo vseboval več zapisov ciljnega geobjekta.
+                    </li>
+                </ul>
+                
+            </p>
+        </div>
+    </div>
+    <div id="handleMatchingRecords">
+        <div>
+            <p>Kadar se več geoobjektov v spojitvenem sloju ujema s ciljnim geoobjektom, ta parameter določa, ali bo spojen en sam zapis iz spojitvenega sloja, ali bo povzetek statistike izračunan iz izbranega polja za vse ujemajoče se zapise iz spojitvenega sloja ali se bo izračunalo samo &scaron;tevilo ujemajočih se zapisov.
+            </p>
+        </div>
+    </div>
+    <div id="summaryFields">
+        <div>
+            <p>Kadar obstaja več spojitvenih geoobjektov, ki se ujemajo s ciljnim geoobjektom, bo izračunan poveztek statistike za vse ujemajoče se zapise. Določite &scaron;tevilo ali datumska polja iz spojitvenega sloja in statistiko, ki bo izračunana za vsako polje.
+            </p>
+        </div>
+    </div>
+    <div id="recordsToMatch">
+        <div>
+            <p>Kadar obstaja več spojitvenih geoobjektov, ki se ujemajo s ciljnim geoobjektom, bo prvi zapis iz atributne tabele spojitvenega sloja vključen v rezultat. Izbirno lahko izberete &scaron;tevilo ali datumsko polje ter vrstni red razvr&scaron;čanja, ki bo določal razvr&scaron;čanje atributne tabele.
+            </p>
+        </div>
+    </div>
+    <div id="joinType">
+        <div>
+            <p>Določa, ali bodo neujemajoči se ciljni geoobjekti vključeni v rezultat. Možnost  <b>notranjega združevanja</b> vrne samo ujemajoče se ciljne zapise, medtem ko možnost <b>Levo združevanje</b> vrne vse ciljne zapise, četudi ciljni geoobjekt nima ujemanja v spojitvenem sloju.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>Ime sloja ali tabele, ki bo ustvarjen in dodan na karto.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>Ime mape v  <b>Moja vsebina</b>, kjer bo shranjen rezultat.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

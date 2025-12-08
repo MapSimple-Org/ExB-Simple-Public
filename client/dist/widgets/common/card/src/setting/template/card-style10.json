@@ -1,0 +1,65 @@
+{
+  "widgetId": "widget_x",
+  "config": {
+    "layouts": {
+      "layout_3": {
+        "type": "FIXED",
+        "content": {},
+        "order": [],
+        "label": "Default"
+      }
+    },
+    "widgets": {
+      "widget_x": {
+        "config": {
+          "DEFAULT": {
+            "enable": true,
+            "backgroundStyle": {
+              "border": {
+                "type": "solid",
+                "color": "var(--sys-color-divider-secondary)",
+                "width": "1px"
+              }
+            }
+          },
+          "HOVER": {
+            "enable": false,
+            "backgroundStyle": {
+              "border": {
+                "type": "solid",
+                "color": "var(--sys-color-divider-secondary)",
+                "width": "1px"
+              },
+              "boxShadow": {
+                "offsetX": "0",
+                "offsetY": "0",
+                "blur": "0",
+                "spread": "0",
+                "color": "var(--dark-100)"
+              }
+            }
+          },
+          "itemStyle": "STYLE1",
+          "direction": "Horizontal",
+          "isItemStyleConfirm": false,
+          "isInitialed": true,
+          "isOpenAdvabceSetting": false,
+          "transitionInfo": {
+            "transition": {
+              "type": "None",
+              "direction": "H"
+            },
+            "oneByOneEffect": null
+          }
+        },
+        "layouts": {
+          "DEFAULT": {
+            "LARGE": "layout_3"
+          }
+        }
+      }
+    },
+    "views": {},
+    "sections": {}
+  }
+}

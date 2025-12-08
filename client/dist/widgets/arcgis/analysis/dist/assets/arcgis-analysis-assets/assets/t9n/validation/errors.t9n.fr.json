@@ -1,0 +1,22 @@
+{
+  "createbuffers_1": "Champ ou valeur de distance de la zone tampon requis.",
+  "creditsDefault": "Échec de l’estimation des crédits. Faites défiler vers le bas, corrigez les erreurs et relancez l’estimation des crédits.",
+  "default": "Échec de l’envoi de la tâche. Faites défiler vers le bas, corrigez les erreurs et réexécutez l’analyse.",
+  "estimateCreditsCurrentParameters": "Échec de l’estimation des crédits. Impossible d’exécuter l’analyse avec les paramètres actuels.",
+  "extentRequired": "Une étendue doit être spécifiée à l’aide de la couche d’étendue ou des paramètres d’environnement.",
+  "findArgumentStatistics_1": "La valeur maximale doit être supérieure à la valeur minimale.",
+  "findHotSpots_1": "Le champ d’analyse et le champ de division ne peuvent pas être identiques.",
+  "findHotSpots_2": "La taille de cellule doit être inférieure à la bande de distance.",
+  "findHotSpots_3": "Un champ d’analyse ou un type de forme est requis.",
+  "findPointClusters_1": "Le nombre minimal de points par agrégat doit être inférieur ou égal au nombre d’entités en entrée.",
+  "generateMultidimensionalAnomaly_1": "Le raster de référence doit comporter la même taille de cellule et la même référence spatiale que le raster en entrée.",
+  "generateTrendRaster_1": "La dimension d’une tendance Kendall saisonnier doit être StdTime.",
+  "jobCurrentParameters": "Échec de l’envoi de la tâche. Impossible d’exécuter l’analyse avec les paramètres actuels.",
+  "joinFeatures_1": "Une jointure spatiale ou attributaire est requise.",
+  "mergeLayers_1": "Toutes les couches en entrée doivent avoir le même type de géométrie.",
+  "mergeLayers_2": "Impossible de fusionner une couche avec elle-même.",
+  "missingRequiredPrivileges": "Cet outil ne peut pas être exécuté car vous ne disposez pas des privilèges requis. <calcite-link target='_blank' href='${ docLink }'>En savoir plus</calcite-link>",
+  "premiumTool": "Cet outil utilise du contenu Premium et consomme des crédits supplémentaires.<br /><calcite-link target='_blank' href='${ docLink }'>En savoir plus</calcite-link>",
+  "summaryShapeRequired": "Les statistiques de champ doivent être spécifiées si la géométrie synthétisée des entités n’est pas incluse.",
+  "viewshedVerticalAngles": "L’angle supérieur vertical doit être plus grand que l’angle inférieur vertical."
+}

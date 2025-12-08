@@ -1,0 +1,15 @@
+{
+  "expandAll": "Expand all",
+  "collapseAll": "Collapse all",
+  "categoryItem": {
+    "expand": "Expand",
+    "collapse": "Collapse",
+    "editCategory": "Edit category",
+    "deleteCategory": "Delete category",
+    "addSubcategory": "Add subcategory",
+    "addCategory": "Add category",
+    "save": "Save",
+    "cancel": "Cancel",
+    "missingTitleMessage": "The category title is required."
+  }
+}

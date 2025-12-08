@@ -1,0 +1,7 @@
+{
+  "header": "Pasirinkite kintamąjį",
+  "noFound": "Suderinamų kintamųjų nerasta",
+  "search": "Ieškoti kintamųjų",
+  "variableLabel": "Užrašas: <span style='font-weight: var(--calcite-font-weight-normal)'>${val}</span>",
+  "variableVal": "Reikšmė: <span style='font-weight: var(--calcite-font-weight-normal)'>${val}</span>"
+}

@@ -1,0 +1,8 @@
+{
+  "select": "Item selecionado: ${title}",
+  "lastUpdated": "Item atualizado: ${date}",
+  "viewItemDetails": "Ver detalhes",
+  "preview": "Pré-visualizar",
+  "closePreview": "Fechar pré-visualização",
+  "moreOptions": "Mais opções"
+}

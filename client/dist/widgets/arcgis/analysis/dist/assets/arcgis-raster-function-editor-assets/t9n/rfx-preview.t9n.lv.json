@@ -1,0 +1,13 @@
+{
+  "header": "Priekšskatījums",
+  "description": "Priekšskatiet rezultātu pirms analīzes veikšanas.",
+  "showPreview": "Rādīt priekšskatījumu",
+  "previewLayer": "Priekšskatīt slāni ${number}",
+  "update": "Atjaunināt",
+  "newPreview": "Jauns priekšskatījums",
+  "previewPopup": "Iespējojiet analīzes rezultātu priekšskatījumu, pamatojoties uz ievades parametriem.",
+  "previewError": "Šis priekšskatījuma slānis nav pieejams. Pārbaudiet ievades parametrus un vēlreiz atjauniniet šo priekšskatījuma slāni.",
+  "updatePopover": "Atjaunināt atlasīto priekšskatījuma slāni",
+  "createPopover": "Izveidot jaunu priekšskatījuma slāni",
+  "maxPreview": "Maksimālais atļautais priekšskatījuma slāņu skaits: ${maxCount}"
+}

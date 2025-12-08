@@ -1,0 +1,1 @@
+System.register([],function(e){return{execute:function(){e({_widgetLabel:"Mre\u017ea",widgetProperties:"Svojstva widgeta",widgetFunctions:"Funkcije widgeta",widgetName:"naziv widgeta:",widgetProps:"svojstva widgeta:",tips:"Mre\u017ea"})}}});

@@ -1,0 +1,21 @@
+{
+  "folder": "תיקייה",
+  "folders": "תיקיות",
+  "searchFolders": "חיפוש תיקיות",
+  "enterFolder": "הזן שם תיקייה",
+  "createNewFolder": "צור תיקייה חדשה",
+  "noFoldersFoundCreate": "לא נמצאו תיקיות בשם זה. ליצור את '${folder}'?",
+  "noFoldersFound": "לא נמצאו תיקיות בשם זה.",
+  "create": "ליצור את '${folder}'?",
+  "loading": "טוען תיקיות",
+  "error": {
+    "noName": "עליך לספק שם עבור התיקייה שלך.",
+    "folderAlreadyExists": "תיקייה '${folder}' כבר קיימת. בחר שם אחר.",
+    "title": "שגיאה",
+    "invalidCharacters": {
+      "single": "השם לא יכול להכיל את התו הבא: ${invalidCharacters}.",
+      "multiple": "השם לא יכול להכיל את התווים הבאים: ${invalidCharacters}.",
+      "unknown": "השם לא יכול להכיל את התווים הבאים: ${invalidCharacters}."
+    }
+  }
+}

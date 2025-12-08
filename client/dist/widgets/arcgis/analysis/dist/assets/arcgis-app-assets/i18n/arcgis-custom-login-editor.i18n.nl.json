@@ -1,0 +1,85 @@
+{
+  "heading": "Aanmeldingscategorie maken",
+  "select": "Selecteer een aanmeldingscategorie waarmee u wilt beginnen",
+  "selectCustomSignIn": "Selecteer een aanmeldingscategorie",
+  "orgDefaults": "Standaardwaarden organisatie",
+  "createNew": "Nieuwe maken",
+  "name": "Titel",
+  "description": "Beschrijving",
+  "enterName": "Voer een titel in voor de categorie",
+  "enterDescription": "Voer een beschrijving in voor de categorie",
+  "enterTitle": "Voer een titel in voor deze login",
+  "showOnTriage": "Aanmeldingscategorie inschakelen",
+  "showOnTriageDescription": "De beschrijving van uw categorie wordt alleen op de categorieselectiepagina weergegeven als u twee of meer categorieën hebt ingeschakeld.",
+  "socialProviders": "Aanbieders aanmelding via sociale media",
+  "authenticationProviders": "Verificatiemethodes",
+  "errorLabel": "Fout bij aangepaste aanmeldingscategorie",
+  "preview": "Voorbeeld",
+  "restrictions": "U kunt voor deze categorie alleen de titel en de beschrijving wijzigen. Alle andere opties worden overgenomen uit de instellingen van de organisatie.",
+  "loginNotAvailable": "Uw organisatie heeft deze aanmeldingsmethode uitgeschakeld en deze wordt daarom niet weergegeven voor gebruikers.",
+  "buttons": {
+    "editCategory": "Categorie opslaan",
+    "next": "Volgende",
+    "back": "Terug",
+    "createCategory": "Categorie maken"
+  },
+  "errors": {
+    "nameRequired": "Er is voor alle aanmeldingscategorieën een titel vereist.",
+    "authenticationMethodsRequired": "Er is minstens één aanmeldingsmethode vereist.",
+    "socialProviderRequired": "Er is minstens één provider voor aanmelding via sociale media vereist."
+  },
+  "steps": {
+    "1": {
+      "title": "Kies hoe u wilt starten",
+      "description": "U kunt beginnen met de standaardwaarden voor aanmelding van uw organisatie; u kunt een bestaande aanmeldingscategorie bewerken of u kunt een nieuwe aanmeldingscategorie maken."
+    },
+    "2": {
+      "title": "Titel en beschrijving",
+      "description": "Voer de titel en beschrijving in voor uw aanmeldingscategorie."
+    },
+    "3": {
+      "title": "Types aanmelding",
+      "description": "Pas de aanmeldingen aan die voor deze categorie worden weergegeven en rangschik deze."
+    }
+  },
+  "createAccount": {
+    "label": "Accountlink maken",
+    "description": "Sta toe dat een nieuwe ArcGIS-account wordt aangemaakt in deze organisatie."
+  },
+  "switchOrganization": {
+    "label": "Link voor wisselen van organisatie",
+    "description": "Geef een link weer waarmee gebruikers zich kunnen aanmelden bij een andere organisatie."
+  },
+  "authenticationMethods": {
+    "arcgis": {
+      "label": "ArcGIS-aanmelding",
+      "description": "Sta gebruikers toe zich aan te melden met hun ArcGIS-account",
+      "required": "Er is een titel vereist voor de ArcGIS-aanmeldingsmethode."
+    },
+    "saml": {
+      "label": "SAML-aanmelding",
+      "description": "Sta gebruikers toe zich aan te melden met hun SAML-account",
+      "required": "Er is een titel vereist voor de SAML-aanmeldingsmethode."
+    },
+    "oidc": {
+      "label": "OIDC-aanmelding",
+      "description": "Sta gebruikers toe zich aan te melden met hun OIDC-account",
+      "required": "Er is een titel vereist voor de OIDC-aanmeldingsmethode."
+    },
+    "social": {
+      "label": "Aanmeldingen via sociale media",
+      "description": "Sta leden toe zich bij uw organisatie aan te melden met hun aanmelding bij een van de volgende sociale netwerken.",
+      "github": "GitHub",
+      "facebook": "Facebook",
+      "google": "Google",
+      "apple": "Apple",
+      "required": "Er is een titel vereist voor aanmeldingsmethode die via sociale media verloopt."
+    }
+  },
+  "confirmLeave": {
+    "title": "Niet-opgeslagen wijzigingen",
+    "message": "Er zijn niet-opgeslagen wijzigingen. Weet u zeker dat u deze pagina wilt verlaten?",
+    "remain": "Op pagina blijven",
+    "leave": "Afsluiten zonder opslaan"
+  }
+}

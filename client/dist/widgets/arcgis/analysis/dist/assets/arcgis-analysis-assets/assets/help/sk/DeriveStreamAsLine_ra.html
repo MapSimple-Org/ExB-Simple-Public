@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>N&aacute;stroj Odvodiť pr&uacute;d ako čiaru generuje l&iacute;niov&eacute; prvky pr&uacute;du zo vstupn&eacute;ho povrchov&eacute;ho rastra bez potreby predch&aacute;dzaj&uacute;ceho vyplnenia depresn&yacute;ch oblast&iacute; alebo priehlb&iacute;n.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputSurfaceRaster">
+        <div>
+            <p>V&yacute;&scaron;kov&yacute; raster, ktor&yacute; sa použije na v&yacute;počet.
+            </p>
+        </div>
+    </div>
+    <div id="inputDepressionsData">
+        <div>
+            <p>Vstup, ktor&yacute; definuje miesta skutočn&yacute;ch depresi&iacute; alebo priehlb&iacute;n, do ktor&yacute;ch m&ocirc;že voda pr&uacute;diť, ale nem&ocirc;že z nich odtekať.
+            </p>
+            <p class="toolPaneOnly">Počet pre prvkov&eacute; vstupy z&aacute;vis&iacute; od ďal&scaron;&iacute;ch skutočnost&iacute;, ako napr&iacute;klad filtrovacie krit&eacute;ri&aacute; a rozsah anal&yacute;zy
+            </p>
+        </div>
+    </div>
+    <div id="inputWeightRaster">
+        <div>
+            <p>Rastrov&aacute; vrstva, ktor&aacute; definuje podiel prietoku, ktor&yacute; prispieva k akumul&aacute;cii prietoku v každej bunke.
+            </p>
+        </div>
+    </div>
+    <div id="accumulationThreshold">
+        <div>
+            <p>Prahov&aacute; hodnota na určenie, či je dan&aacute; bunka s&uacute;časťou streamu z hľadiska celkovej plochy, ktor&aacute; do takejto bunky pr&uacute;di.
+            </p>
+        </div>
+    </div>
+    <div id="streamDesignationMethod">
+        <div>
+            <p>Určuje, či segmenty streamu vo v&yacute;stupe bud&uacute; mať kon&scaron;tantn&uacute; hodnotu, jedinečn&eacute; hodnoty alebo bud&uacute; usporiadan&eacute;.
+            </p>
+        </div>
+    </div>
+    <div id="simplify">
+        <div>
+            <p>Určuje, či bud&uacute; v&yacute;stupn&eacute; l&iacute;nie pr&uacute;du vyhladen&eacute; do jednoduch&scaron;&iacute;ch tvarov.
+            </p>
+            <p>Ak je za&scaron;krtnut&eacute;, l&iacute;niov&eacute; prvky pr&uacute;du sa zjednodu&scaron;ia pomocou Douglas-Peucker algoritmu s toleranciou sqrt(0,5) * veľkosť bunky. Toto je prednastaven&aacute; voľba. Ak nie je za&scaron;krtnut&eacute;, l&iacute;niov&eacute; prvky pr&uacute;du sa nevyhladia.
+            </p>
+        </div>
+    </div>
+    <div id="outputStreamFeaturesName">
+        <div>
+            <p>N&aacute;zov l&iacute;niovej prvkovej vrstvy pr&uacute;du, ktor&aacute; sa vytvor&iacute; a prid&aacute; do mapy.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>N&aacute;zov priečinka v r&aacute;mci  <b>M&ocirc;j obsah</b>, do ktor&eacute;ho sa ulož&iacute; v&yacute;sledok.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

@@ -1,0 +1,26 @@
+{
+  "CCIAnalysisSettingGroupLabel": "指数设置",
+  "CCIAnalysisSettingGroupText": "指定计算该指数的方式。",
+  "geomeanPercentileLabel": "复合等级(百分位数几何平均值)",
+  "geomeanRawLabel": "复合原始值(原始值的几何平均值)",
+  "geomeanScaledLabel": "复合缩放值(缩放值的几何平均值)",
+  "indexMethodLabel": "缩放和组合变量的方法",
+  "inputFeaturesOrTableLabel": "输入要素或表",
+  "inputLayerGroupText": "选择用于创建指数的要素或表和变量。",
+  "inputVariablesLabel": "输入变量",
+  "itemProperties": {
+    "description": "通过运行“计算复合指数”分析工具生成的要素图层。",
+    "snippet": "通过“计算复合指数”生成的要素图层"
+  },
+  "meanPercentileLabel": "组合等级(百分位数平均值)",
+  "meanRawLabel": "组合原始值(原始值的平均值)",
+  "meanScaledLabel": "组合缩放值(缩放值的平均值)",
+  "outputIndexMaxLabel": "最大值",
+  "outputIndexMinLabel": "最小值",
+  "outputIndexMinMaxLabel": "指数最小值和最大值",
+  "outputIndexReverseLabel": "对指数值取反",
+  "reverseVariableLabel": "反转方向",
+  "sumFlagsPercentileLabel": "高亮显示极值(高于 90% 的值计数)",
+  "toolName": "计算复合指数",
+  "weight": "权重"
+}
