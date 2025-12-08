@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>La herramienta Calcular &iacute;ndice compuesto combina varias variables num&eacute;ricas para crear un &uacute;nico &iacute;ndice.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputLayer">
+        <div>
+            <p>La tabla o entidades que contienen las variables que se combinar&aacute;n en el &iacute;ndice.
+            </p>
+            <p class="toolPaneOnly">El recuento de entidades depende de factores adicionales como los criterios de filtrado y el alcance del an&aacute;lisis.
+            </p> 
+            <p class="modelBuilderOnly"> <b>Capa</b> se especifica de forma predeterminada cuando <b>Tabla o entidades de entrada</b> no se ha rellenado. Para agregar una tabla de entrada, seleccione <b>Tabla</b> antes de agregar un dataset.
+            </p>
+        </div>
+    </div>
+    <div id="inputVariables">
+        <div>
+            <p>Los campos que contienen las variables que se combinar&aacute;n para crear el &iacute;ndice.  <b>Invertir direcci&oacute;n</b> especifica si se invertir&aacute;n los valores de las variables. <b>Peso</b> es la influencia relativa de cada variable en el &iacute;ndice.
+            </p>
+        </div>
+    </div>
+    <div id="indexMethod">
+        <div>
+            <p>Especifica el m&eacute;todo que se utilizar&aacute; para escalar las variables de entrada y combinar las variables escaladas para crear el &iacute;ndice.
+            </p>
+        </div>
+    </div>
+    <div id="outputIndexReverse">
+        <div>
+            <p>Especifica si se invertir&aacute; la direcci&oacute;n de los valores del &iacute;ndice de salida. Si se selecciona, los valores altos se tratar&aacute;n como valores de &iacute;ndice bajos y viceversa.
+            </p>
+        </div>
+    </div>
+    <div id="outputIndexMinMax">
+        <div>
+            <p>El m&iacute;nimo y m&aacute;ximo de los valores del &iacute;ndice de salida.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>El nombre de la capa que se crear&aacute; y se agregar&aacute; al mapa.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>El nombre de la carpeta de  <b>Mi contenido</b> en la que se guardar&aacute; el resultado.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

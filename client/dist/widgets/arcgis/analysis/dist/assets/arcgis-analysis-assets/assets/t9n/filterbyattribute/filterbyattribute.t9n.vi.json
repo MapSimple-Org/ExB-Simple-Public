@@ -1,0 +1,8 @@
+{
+  "itemProperties": {
+    "description": "Kết quả được tạo từ việc chạy công cụ phân tích Lọc theo Thuộc tính.",
+    "snippet": "Kết quả được tạo từ công cụ Lọc theo Thuộc tính"
+  },
+  "noLayerDisabledTooltip": "Chọn một bộ dữ liệu đầu vào hợp lệ.",
+  "queryCriteriaGroupLabel": "Tiêu chí truy vấn"
+}

@@ -1,0 +1,22 @@
+{
+  "value": "Valor",
+  "classname": "ClassName",
+  "color": "Cor",
+  "raster": "Raster",
+  "tableType": "Tipo de Tabela",
+  "manual": "Manual",
+  "external": "Externo",
+  "browseTable": "Procurar Tabela",
+  "browseTableFrom": "Procura Da Tabela",
+  "file": "Arquivo",
+  "dbfFile": "Arquivo DBF",
+  "layer": "Camada",
+  "unsupportedDataType": "Tipo não suportado",
+  "failedToGetTableFromLayer": "Falha ao obter tabela da camada.",
+  "generate": "Gerar Tabela",
+  "minValue": "Valor Mínimo",
+  "maxValue": "Valor Máximo",
+  "classBaseName": "Nome de Base de Classe",
+  "colorscheme": "Esquema de Cores",
+  "defaultClassName": "Label_"
+}

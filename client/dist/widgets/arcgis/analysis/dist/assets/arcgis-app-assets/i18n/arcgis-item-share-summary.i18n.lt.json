@@ -1,0 +1,17 @@
+{
+  "sharing": "Bendrinimas",
+  "private": "Savininkas",
+  "shared": "Savininkas ir bendrinama su grupėmis",
+  "org": "Organizacija",
+  "public": "Visi (vieša)",
+  "privateGroups": "Savininkas",
+  "sharedGroups": "Savininkas + grupės (${num})",
+  "orgGroups": "Organizacija + grupės (${num})",
+  "publicGroups": "Visi (vieša) + grupės (${num})",
+  "groups": "Grupės (${num})",
+  "updateSharing": "Bendrinti sluoksnį: ${level}, atnaujinti bendrinimą",
+  "viewableBy": "Gali peržiūrėti: ${level}",
+  "everyone": "Visi (vieša)",
+  "organization": "Organizacija",
+  "groupMembers": "Grupės nariai"
+}

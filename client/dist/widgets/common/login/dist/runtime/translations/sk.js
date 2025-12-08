@@ -1,0 +1,1 @@
+System.register([],function(e){return{execute:function(){e({_widgetLabel:"Prihl\xe1senie",switchToLogin:"Prepn\xfa\u0165 na pred prihl\xe1sen\xedm",switchToLogout:"Prepn\xfa\u0165 na po prihl\xe1sen\xed",toggleSignInPreview:"Prepn\xfa\u0165 n\xe1h\u013ead prihl\xe1senia",restrictedResources:"Obmedzen\xe9 zdroje"})}}});

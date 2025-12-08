@@ -1,0 +1,71 @@
+{
+  "name": "link-explorer",
+  "label": "Link Explorer",
+  "type": "widget",
+  "version": "1.19.0",
+  "exbVersion": "1.19.0",
+  "author": "GeoBIM Dev",
+  "description": "A widget to display linked Autodesk Construction Cloud documents of features in web maps and web scenes.",
+  "copyright": "",
+  "license": "",
+  "dependency": "jimu-arcgis",
+  "publishMessages": [],
+  "messageActions": [],
+  "properties": {
+    "showDescription": true
+  },
+  "requireLicense": "Autodesk",
+  "extensions": [
+    {
+      "name": "GeoBIM Store",
+      "point": "REDUX_STORE",
+      "uri": "extensions/geobim-store"
+    }
+  ],
+  "translatedLocales": [
+    "en",
+    "ar",
+    "bg",
+    "bs",
+    "ca",
+    "cs",
+    "da",
+    "de",
+    "el",
+    "es",
+    "et",
+    "fi",
+    "fr",
+    "he",
+    "hr",
+    "hu",
+    "id",
+    "it",
+    "ja",
+    "ko",
+    "lt",
+    "lv",
+    "no",
+    "nl",
+    "pl",
+    "pt-br",
+    "pt-pt",
+    "ro",
+    "ru",
+    "sk",
+    "sl",
+    "sr",
+    "sv",
+    "th",
+    "tr",
+    "zh-cn",
+    "uk",
+    "vi",
+    "zh-hk",
+    "zh-tw"
+  ],
+  "defaultSize": {
+    "width": 450,
+    "height": 350
+  }
+}

@@ -1,0 +1,78 @@
+{
+  "name": "elevation-profile",
+  "label": "Elevation Profile",
+  "type": "widget",
+  "version": "1.19.0",
+  "exbVersion": "1.19.0",
+  "author": "Esri Solutions",
+  "description": "A widget for creating elevation profiles from single- or multi-segment lines on a web map or scene.",
+  "copyright": "",
+  "license": "http://www.apache.org/licenses/LICENSE-2.0",
+  "dependency": "jimu-arcgis",
+  "properties": {
+    "coverLayoutBackground": true,
+    "needHiddenState": true,
+    "showDescription": true
+  },
+  "messageActions": [
+    {
+      "name": "select",
+      "label": "View profile",
+      "uri": "message-actions/select-line-message-action"
+    }
+  ],
+  "dataActions": [
+    {
+      "name": "view",
+      "label": "View Elevation Profile",
+      "uri": "data-actions/view-profile-data-action",
+      "icon": "runtime/assets/icons/elevation-icon.svg"
+    }
+  ],
+  "translatedLocales": [
+    "en",
+    "ar",
+    "bg",
+    "bs",
+    "ca",
+    "cs",
+    "da",
+    "de",
+    "el",
+    "es",
+    "et",
+    "fi",
+    "fr",
+    "he",
+    "hr",
+    "hu",
+    "id",
+    "it",
+    "ja",
+    "ko",
+    "lt",
+    "lv",
+    "no",
+    "nl",
+    "pl",
+    "pt-br",
+    "pt-pt",
+    "ro",
+    "ru",
+    "sk",
+    "sl",
+    "sr",
+    "sv",
+    "th",
+    "tr",
+    "zh-cn",
+    "uk",
+    "vi",
+    "zh-hk",
+    "zh-tw"
+  ],
+  "defaultSize": {
+    "width": 600,
+    "height": 400
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "all": "Alle",
+  "inputLayersGroupText": "Kies de invoer oppervlakteraster en optioneel de depressiedata en het gewichtsraster.",
+  "itemProperties": {
+    "description": "Uitvoer die wordt gegenereerd door het uitvoeren van de tool Stroom als raster afleiden",
+    "snippet": "Uitvoer die door Stroom als raster afleiden is gegenereerd"
+  },
+  "outputStreamFeaturesLabel": "Naam objecten uitvoerstroom",
+  "simplifyLabel": "Objecten vereenvoudigen",
+  "streamSettingsGroupText": "Specificeer de accumulatiedrempel, de stroomaanduidingsmethode en/of de uitvoerstroomlijnen tot eenvoudige vormen zullen worden versimpeld."
+}

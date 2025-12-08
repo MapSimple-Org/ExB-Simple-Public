@@ -1,0 +1,9 @@
+{
+  "inputFlowDirectionRasterLabel": "Įvesties tėkmės krypties rastras",
+  "inputLayerGroupText": "Pasirinkite įvesties srauto ir srauto krypties rastrus.",
+  "inputStreamRasterLabel": "Įvesties srauto rastras",
+  "itemProperties": {
+    "description": "Išvestis sugeneruota paleidus StreamLink analizės įrankį.",
+    "snippet": "Išvestis sugeneruota iš StreamLink"
+  }
+}

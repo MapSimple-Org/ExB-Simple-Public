@@ -1,0 +1,1 @@
+System.register([],function(e){return{execute:function(){e({settingsLabel:"Pengaturan Penampil Dokumen"})}}});

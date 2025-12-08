@@ -1,0 +1,6 @@
+{
+  "defaultToolDescription": "Outil d’analyse ${toolTitle}.",
+  "noResults": "Aucun résultat trouvé",
+  "openToolText": "Ouvrir l’outil",
+  "toolDropdownText": "Menu déroulant de l’outil"
+}

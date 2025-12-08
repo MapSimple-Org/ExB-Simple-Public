@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>L&rsquo;outil Calculer un champ calcule les valeurs pour un champ nouveau ou existant.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputTable">
+        <div>
+            <p>Couche ou table en entr&eacute;e pour laquelle un champ sera calcul&eacute;.
+            </p>
+            <p class="modelBuilderOnly">Le param&egrave;tre  <b>Layer (Couche)</b> est sp&eacute;cifi&eacute; par d&eacute;faut lorsque <b>Input dataset (Jeu de donn&eacute;es en entr&eacute;e)</b> n&rsquo;est pas renseign&eacute;. Pour ajouter une table en entr&eacute;e, s&eacute;lectionnez <b>Table</b> avant d&rsquo;ajouter un jeu de donn&eacute;es.
+            </p>
+        </div>
+    </div>
+    <div id="whereClause">
+        <div>
+            <p>Requ&ecirc;te attributaire qui d&eacute;termine le sous-ensemble d&rsquo;enregistrements auquel le calcul de champ sera appliqu&eacute;. Pour appliquer le calcul &agrave; tous les enregistrements, laissez ce param&egrave;tre vide.
+            </p>
+        </div>
+    </div>
+    <div id="field">
+        <div>
+            <p>Champ dans lequel les valeurs calcul&eacute;es seront ajout&eacute;es. Vous pouvez s&eacute;lectionner un champ existant ou cr&eacute;er un champ. 
+            </p>
+        </div>
+    </div>
+    <div id="fieldCalcExpression">
+        <div>
+            <p>Expression&nbsp;SQL &agrave; utiliser pour calculer des valeurs pour  <b>Field to calculate (Champ &agrave; calculer)</b>.
+            </p>
+            <p>L&rsquo;expression peut inclure des op&eacute;rateurs de base, des fonctions et des noms de champ et doit cr&eacute;er des valeurs correspondant au type de champ pour  <b>Field to calculate (Champ &agrave; calculer)</b>.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

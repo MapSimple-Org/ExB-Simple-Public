@@ -1,0 +1,592 @@
+{
+  "rolePrivileges": "Rollens behörigheter",
+  "setFromExisting": "Ställ in från befintlig roll",
+  "expandAll": "Visa alla",
+  "generalPrivileges": "Allmänna behörigheter",
+  "adminPrivileges": "Administratörsbehörigheter",
+  "enabledLabel": "Aktiverad:",
+  "enableAll": "Aktivera alla",
+  "disableAll": "Inaktivera alla",
+  "members": "Medlemmar",
+  "groups": "Grupper",
+  "content": "Innehåll",
+  "sharing": "Delning",
+  "premiumContent": "Premiuminnehåll",
+  "premiumContentServices": "Premiuminnehåll och -tjänster",
+  "contentAndAnalysis": "Innehåll och analys",
+  "features": "Geoobjekt",
+  "versionMgmt": "Versionshantering",
+  "webhooks": "Webhooks",
+  "marketplaceSubscriptions": "ArcGIS Marketplace-abonnemang",
+  "orgSettings": "Organisationsinställningar",
+  "learnMore": "Läs mer",
+  "searchPrivileges": "Sök behörigheter",
+  "notebooks": "Notebooks",
+  "analysis": "Analys",
+  "networkAnalysis": "Nätverksanalys",
+  "locationServices": "Platstjänster",
+  "requiredService": "Obligatorisk tjänst",
+  "availableServices": "Tillgängliga tjänster",
+  "basemaps": "Baskartor",
+  "staticMaps": "Statiska kartor",
+  "places": "Platser",
+  "geocoding": "Geokodning",
+  "routing": "Rutter",
+  "dataEnrichment": "Databerikning",
+  "boundaries": "Gränser",
+  "elevation": "Höjd",
+  "spatialPrivileges": "Spatial analys",
+  "featureAnalysis": "Analys av geoobjekt",
+  "imageAnalysis": "Bildanalys",
+  "readOnlyBasemapsTooltip": "Åtkomst till baskartor ingår.",
+  "privileges": {
+    "portal:user:viewOrgUsers": {
+      "label": "Visa",
+      "description": "Tillåt medlemmen att visa organisationens medlemmar.",
+      "descriptionPortal": "Tillåt medlemmen att visa portalens medlemmar.",
+      "descriptionApp": "Tillåt applikationen att visa organisationens medlemmar."
+    },
+    "portal:user:createGroup": {
+      "label": "Skapa, uppdatera och ta bort",
+      "description": "Tillåt medlemmen att skapa, redigera och ta bort sina egna grupper.",
+      "descriptionApp": "Tillåt applikationen att skapa, redigera och ta bort applikationsägarens grupper."
+    },
+    "portal:user:joinGroup": {
+      "label": "Gå med i organisationens grupper",
+      "description": "Tillåt medlemmen att gå med i grupper i din organisation.",
+      "descriptionPortal": "Tillåt medlemmen att gå med i grupper i din portal.",
+      "descriptionApp": "Tillåt applikationen att gå med i grupper i din organisation."
+    },
+    "portal:user:joinNonOrgGroup": {
+      "label": "Gå med i externa grupper",
+      "description": "Tillåt medlemmen att gå med i grupper utanför din organisation.",
+      "descriptionPortal": "Tillåt medlemmen att gå med i grupper utanför din portal.",
+      "descriptionApp": "Tillåt applikationen att gå med i grupper utanför din organisation."
+    },
+    "portal:user:viewOrgGroups": {
+      "label": "Visa grupper som delas med organisationen",
+      "description": "Tillåt medlemmen att visa grupper som delas med organisationen.",
+      "descriptionPortal": "Tillåt medlemmen att visa grupper som delas med portalen.",
+      "descriptionApp": "Tillåt applikationen att visa grupper som delas med organisationen."
+    },
+    "portal:user:invitePartneredCollaborationMembers": {
+      "label": "Bjud in medlemmar från partnerorganisationer",
+      "description": "Tillåt att en medlem bjuder in medlemmar från partnersamarbetsorganisationer till grupper.",
+      "descriptionApp": "Tillåt applikationen att bjuda in medlemmar från partnersamarbetsorganisationer till grupper."
+    },
+    "portal:user:addExternalMembersToGroup": {
+      "label": "Lägga till medlemmar från andra organisationer",
+      "description": "Tillåt att en medlem skapar grupper som tillåter medlemmar från andra organisationer och bjuder in externa medlemmar till grupper.",
+      "descriptionApp": "Tillåt applikationen att skapa grupper som tillåter medlemmar från andra organisationer och att bjuda in externa medlemmar till grupper."
+    },
+    "portal:user:createItem": {
+      "label": "Skapa, uppdatera och ta bort",
+      "description": "Tillåt medlemmen att skapa, redigera och ta bort sitt eget innehåll.",
+      "descriptionApp": "Tillåt applikationen att skapa, redigera och ta bort applikationsägarens innehåll."
+    },
+    "portal:publisher:publishFeatures": {
+      "label": "Publicera driftade geoobjektslager",
+      "description": "Tillåt medlemmen att publicera driftade geoobjektlager från shapefiler, CSV-filer o.s.v.",
+      "descriptionApp": "Tillåt applikationen att publicera driftade geoobjektlager från shapefiler, CSV-filer o.s.v."
+    },
+    "portal:publisher:publishTiles": {
+      "label": "Publicera driftade tilelager",
+      "description": "Tillåt medlemmen att publicera driftade tilelager från tilepaket, geoobjekt o.s.v.",
+      "descriptionApp": "Tillåt applikationen att publicera driftade tilelager från tilepaket, geoobjekt o.s.v."
+    },
+    "portal:publisher:publishScenes": {
+      "label": "Publicera driftade scenlager",
+      "description": "Tillåt medlemmen att publicera driftade scenlager.",
+      "descriptionApp": "Tillåt applikationen att publicera driftade scenlager."
+    },
+    "portal:publisher:publishTiledImagery": {
+      "label": "Publicera driftade tilebildlager",
+      "description": "Tillåt medlemmen att publicera driftade tilebildlager från en bild eller en samling av bilder. Kräver användartypstillägget ArcGIS Image for ArcGIS Online.",
+      "descriptionPortal": "Tillåt medlemmen att publicera driftade tilebildlager från en bild eller en samling av bilder.",
+      "descriptionApp": "Tillåt applikationen att publicera driftade tilebildlager från en bild eller en samling av bilder. Kräver en licens för ArcGIS Image-värdtjänster."
+    },
+    "portal:publisher:publishDynamicImagery": {
+      "label": "Publicera driftade dynamiska bildlager",
+      "description": "Tillåt medlemmen att publicera driftade dynamiska bildlager från en bild eller en samling av bilder.",
+      "descriptionApp": "Tillåt applikationen att publicera driftade dynamiska bildlager från en bild eller en samling av bilder."
+    },
+    "portal:publisher:publishServerServices": {
+      "label": "Publicera serverbaserade lager",
+      "description": "Den här behörigheten ger tillstånd att publicera lager som drivs av tjänster från federerade serverwebbplatser. Dessa tjänster refererar ofta till registrerade data från geodatabaser eller filbaserade datakällor."
+    },
+    "portal:publisher:publishKnowledgeGraph": {
+      "label": "Publicera driftade kunskapsdiagram",
+      "description": "Tillåt medlemmen att publicera driftade kunskapsdiagram.",
+      "descriptionApp": "Tillåt applikationen att publicera driftade kunskapsdiagram."
+    },
+    "portal:user:viewOrgItems": {
+      "label": "Visa innehåll som delas med organisationen",
+      "description": "Tillåt medlemmen att visa innehåll som delas med organisationen.",
+      "descriptionPortal": "Tillåt medlemmen att visa innehåll som delas med portalen.",
+      "descriptionApp": "Tillåt applikationen att visa innehåll som delas med organisationen."
+    },
+    "premium:publisher:createNotebooks": {
+      "label": "Skapa och redigera notebooks",
+      "description": "Tillåt att en medlem skapar och redigerar interaktiva notebooks.",
+      "descriptionApp": "Tillåt applikationen att skapa och redigera interaktiva notebooks."
+    },
+    "premium:publisher:scheduleNotebooks": {
+      "label": "Schemalägg notebooks",
+      "description": "Tillåt att en medlem schemalägger automatiska körningar av en notebook i framtiden.",
+      "descriptionApp": "Tillåt applikationen att schemalägga automatiska körningar av en notebook i framtiden."
+    },
+    "portal:publisher:bulkPublishFromDataStores": {
+      "label": "Skapa flera geoobjektlager på en gång från ett datalager",
+      "description": "Den här behörigheten ger möjlighet att publicera webblager från ett registrerat datalager."
+    },
+    "portal:publisher:registerDataStores": {
+      "label": "Registrera datalager",
+      "description": "Den här behörigheten ger möjlighet att registrera datalager i portalen."
+    },
+    "portal:user:viewTracks": {
+      "label": "Visa platsspår",
+      "description": "Tillåt medlemmen att visa medlemmarnas platsspår via delade spårvyer när platsdelning är aktiverad.",
+      "descriptionApp": "Tillåt applikationen att visa medlemmarnas platsspår via delade spårvyer när platsdelning är aktiverad."
+    },
+    "portal:user:reassignItems": {
+      "label": "Omfördela innehåll",
+      "description": "Tillåt medlemmen att bara omfördela sitt eget innehåll till en annan medlem med behörigheten att ta emot innehåll.",
+      "descriptionApp": "Tillåt applikationen att bara omfördela applikationsägarens innehåll till en annan medlem med behörigheten att ta emot innehåll."
+    },
+    "portal:user:receiveItems": {
+      "label": "Ta emot innehåll",
+      "description": "Tillåt medlemmen att ta emot innehåll som är omfördelat till honom/henne av en annan medlem med behörigheten att omfördela innehåll."
+    },
+    "portal:publisher:publishFeeds": {
+      "label": "Publicera feeds",
+      "description": "Den här behörigheten gör det möjligt att publicera feeds för att ta in och visa data i realtid med ArcGIS Velocity."
+    },
+    "portal:publisher:publishRealTimeAnalytics": {
+      "label": "Publicera realtidsanalyser",
+      "description": "Den här behörigheten gör det möjligt att publicera realtidsanalyser för analys och bearbetning av data i realtid med ArcGIS Velocity."
+    },
+    "portal:publisher:publishBigDataAnalytics": {
+      "label": "Publicera Big Data-analys",
+      "description": "Den här behörigheten gör det möjligt att publicera Big Data-analyser för analys av historiska observationsdata med ArcGIS Velocity."
+    },
+    "portal:publisher:createDataPipelines": {
+      "label": "Skapa och kör datapipelines",
+      "description": "Tillåt medlemmen att skapa, redigera och köra datapipelines.",
+      "descriptionApp": "Tillåt applikationen att skapa, redigera och köra datapipelines."
+    },
+    "portal:publisher:publishLivestreamVideo": {
+      "label": "Publicera liveströmvideo",
+      "description": "Tillåt medlemmen att publicera driftade liveströmvideolager från nätverksvideosändningar och strömmar.",
+      "descriptionApp": "Tillåt applikationen att publicera driftade liveströmvideolager från nätverksvideosändningar och strömmar."
+    },
+    "portal:publisher:publishVideo": {
+      "label": "Publicera video",
+      "description": "Tillåt medlemmen att publicera driftade videolager från videofiler och videometadatafiler som stöds.",
+      "descriptionApp": "Tillåt applikationen att publicera driftade videolager från videofiler och videometadatafiler som stöds."
+    },
+    "portal:user:shareToGroup": {
+      "label": "Dela med grupper",
+      "description": "Tillåt medlemmen att dela innehåll med grupper.",
+      "descriptionApp": "Tillåt applikationen att dela innehåll med grupper."
+    },
+    "portal:user:shareToOrg": {
+      "label": "Dela med organisationen",
+      "labelPortal": "Dela till portalen",
+      "description": "Tillåt medlemmen att dela innehåll med din organisation.",
+      "descriptionPortal": "Tillåt medlemmen att dela innehåll med din portal.",
+      "descriptionApp": "Tillåt applikationen att dela innehåll med din organisation."
+    },
+    "portal:user:shareToPublic": {
+      "label": "Dela offentligt",
+      "description": "Tillåt medlemmen att dela sitt innehåll offentligt om det tillåts av organisationens policy för offentlig delning.",
+      "descriptionApp": "Tillåt applikationen att dela applikationsägarens innehåll offentligt om det tillåts av organisationens policy för offentlig delning.",
+      "tooltip": "Om organisationen inte tillåter att medlemmarna delar innehåll offentligt måste medlemmarna ha administratörsbehörighet för att dela medlemsinnehåll offentligt."
+    },
+    "portal:user:shareGroupToOrg": {
+      "label": "Gör grupper synliga för organisationen",
+      "labelPortal": "Gör grupper synliga för portalen",
+      "description": "Tillåt medlemmen att dela innehåll med din organisation.",
+      "descriptionPortal": "Tillåt medlemmen att dela innehåll med din portal.",
+      "descriptionApp": "Tillåt applikationen att dela innehåll med din portal."
+    },
+    "portal:user:shareGroupToPublic": {
+      "label": "Gör grupper synliga för allmänheten",
+      "description": "Tillåt medlemmen att göra så att grupper kan upptäckas offentligt.",
+      "descriptionApp": "Tillåt applikationen att göra så att grupper kan upptäckas offentligt."
+    },
+    "opendata:user:designateGroup": {
+      "label": "Gör grupper tillgängliga för Open Data",
+      "description": "Tillåt medlemmen att utse grupper som tillgängliga för användning i Open Data.",
+      "descriptionApp": "Tillåt applikationen att utse grupper som tillgängliga för användning i Open Data."
+    },
+    "premium:user:basemaps": {
+      "label": "Tjänst för baskartestil",
+      "descriptionLocationPlatform": "Tillåt att applikationen får åtkomst till tjänsten för baskartestilar."
+    },
+    "premium:user:staticbasemaptiles": {
+      "label": "Statiska baskartetiles",
+      "descriptionLocationPlatform": "Tillåt att applikationen får åtkomst till tjänsten för statiska baskartetiles."
+    },
+    "premium:user:staticMaps": {
+      "label": "Tjänst för statiska kartor (betaversion)",
+      "descriptionLocationPlatform": "Tillåt att applikationen får åtkomst till tjänsten för statiska kartor."
+    },
+    "premium:user:elevation": {
+      "label": "Höjdtjänst",
+      "descriptionLocationPlatform": "Tillåt att applikationen får åtkomst till höjdtjänsten."
+    },
+    "premium:user:geocode": {
+      "label": "Geokodning",
+      "description": "Tillåt medlemmen att utföra kreditförbrukande geokodningsuppgifter med ArcGIS geokodningstjänst (eller en vy över denna lokaliseringsfil).",
+      "descriptionApp": "Tillåt applikationen att utföra kreditförbrukande geokodningsuppgifter med ArcGIS World Geocoding Service (eller en vy över denna lokaliseringsfil)."
+    },
+    "premium:user:geocode:stored": {
+      "label": "Geokodning (lagrad)",
+      "descriptionLocationPlatform": "Tillåt att applikationen får åtkomst till geokodningstjänsten och utför lagrade geokodningar."
+    },
+    "premium:user:geocode:temporary": {
+      "label": "Geokodning (inte lagrad)",
+      "descriptionLocationPlatform": "Tillåt att applikationen får åtkomst till geokodningstjänsten och utför geokodningar som inte är lagrade."
+    },
+    "premium:user:networkanalysis": {
+      "label": "Rutter",
+      "description": "Tillåt medlemmen att utföra nätverksanalysuppgifter, till exempel att skapa rutter och körtidsområden.",
+      "descriptionApp": "Tillåt att applikationen får åtkomst till ruttjänsten."
+    },
+    "premium:user:networkanalysis:closestfacility": {
+      "label": "Närmaste inrättning",
+      "descriptionLocationPlatform": "Tillåt att applikationen får åtkomst till ruttjänsten och utför ruttåtgärder för närmaste inrättning."
+    },
+    "premium:user:networkanalysis:lastmiledelivery": {
+      "label": "Leverans den sista sträckan",
+      "descriptionLocationPlatform": "Tillåt att applikationen får åtkomst till ruttjänsten och utför ruttåtgärder för leverans den sista sträckan."
+    },
+    "premium:user:networkanalysis:snaptoroads": {
+      "label": "Snappa till vägar",
+      "descriptionLocationPlatform": "Tillåt medlemmen att utföra nätverksanalysuppgifter, t.ex. att snappa GPS-spårpunkter till vägar."
+    },
+    "premium:user:networkanalysis:locationallocation": {
+      "label": "Platsallokering",
+      "descriptionLocationPlatform": "Tillåt att applikationen får åtkomst till ruttjänsten och utför platsallokeringsåtgärder."
+    },
+    "premium:user:networkanalysis:routing": {
+      "label": "Enkla rutter",
+      "descriptionLocationPlatform": "Tillåt att applikationen får åtkomst till ruttjänsten och utför standardruttåtgärder."
+    },
+    "premium:user:networkanalysis:optimizedrouting": {
+      "label": "Optimerade rutter",
+      "descriptionLocationPlatform": "Tillåt att applikationen får åtkomst till ruttjänsten och utför optimerade ruttåtgärder."
+    },
+    "premium:user:networkanalysis:vehiclerouting": {
+      "label": "Flerfordonsrutter",
+      "descriptionLocationPlatform": "Flerfordonsrutter tillåter att applikationen får åtkomst till ruttjänsten och utför flottruttåtgärder."
+    },
+    "premium:user:networkanalysis:origindestinationcostmatrix": {
+      "label": "Kostnadsmatris för startpunkt-destination",
+      "descriptionLocationPlatform": "Tillåt att applikationen får åtkomst till ruttjänsten och genererar resekostnadsmatriser."
+    },
+    "premium:user:networkanalysis:servicearea": {
+      "label": "Tjänsteområde",
+      "descriptionLocationPlatform": "Tillåt att applikationen får åtkomst till ruttjänsten och genererar tjänstområden."
+    },
+    "premium:user:places": {
+      "label": "Platstjänst",
+      "descriptionLocationPlatform": "Tillåt att applikationen får åtkomst till platstjänsten."
+    },
+    "premium:user:spatialanalysis": {
+      "labelOld": "Spatial analystjänst",
+      "label": "Tjänst för analys av geoobjekt",
+      "labelPortal": "Standardanalys av geoobjekt",
+      "description": "Tillåt medlemmen att utföra analyser av geoobjekt.",
+      "descriptionPortal": "Den här behörigheten ger tillstånd att utföra standardanalyser av geoobjekt.",
+      "descriptionLocationPlatform": "Tillåt att applikationen får åtkomst till tjänsten för analys av geoobjekt.",
+      "descriptionApp": "Tillåt att applikationen får åtkomst till tjänsten för analys av geoobjekt."
+    },
+    "premium:user:geoenrichment": {
+      "label": "Tjänsten GeoEnrichment",
+      "description": "Tillåt medlemmen att geoberika geoobjekt.",
+      "descriptionLocationPlatform": "Tillåt att applikationen får åtkomst till GeoEnrichment-tjänsten.",
+      "descriptionApp": "Tillåt att applikationen får åtkomst till GeoEnrichment-tjänsten."
+    },
+    "premium:user:demographics": {
+      "label": "Demografikartor",
+      "description": "Tillåt att applikationen får åtkomst till demografiska premiumkartor i ArcGIS Living Atlas.",
+      "descriptionApp": "Tillåt att applikationen får åtkomst till demografiska premiumkartor i ArcGIS Living Atlas.",
+      "descriptionLocationPlatform": "Tillåt att applikationen får åtkomst till demografiska kartor i ArcGIS Living Atlas."
+    },
+    "premium:publisher:geoanalytics": {
+      "label": "GeoAnalytics-analys av geoobjekt",
+      "description": "Den här behörigheten ger tillstånd att utföra GeoAnalytics-analyser."
+    },
+    "premium:publisher:rasteranalysis": {
+      "label": "Bildanalys",
+      "description": "Tillåt medlemmen att utföra bildanalysuppgifter. Kräver ArcGIS Image analysfunktion.",
+      "descriptionPortal": "Tillåt medlemmen att utföra bildanalysuppgifter.",
+      "descriptionApp": "Tillåt applikationen att utföra bildanalysuppgifter. Kräver ArcGIS Image analysfunktion.",
+      "descriptionAppPortal": "Tillåt applikationen att utföra bildanalysuppgifter."
+    },
+    "premium:publisher:createAdvancedNotebooks": {
+      "label": "Avancerade notebooks",
+      "description": "Tillåt att en medlem importerar och använder ArcPy-modulerna i notebooks.",
+      "descriptionApp": "Tillåt applikationen att importera och använda ArcPy-modulerna i notebooks."
+    },
+    "portal:user:runWebTool": {
+      "label": "Kör webbverktyg",
+      "description": "Tillåt att en medlem kör webbverktyg.",
+      "descriptionPortal": "Tillåt att en medlem kör webbverktyg som publiceras från notebooks.",
+      "descriptionApp": "Tillåt att applikationen kör webbverktyg.",
+      "descriptionAppPortal": "Tillåt applikationen att köra webbverktyg som publiceras från notebooks."
+    },
+    "portal:user:generateApiTokens": {
+      "label": "Generera API-nycklar",
+      "description": "Tillåt medlemmen att generera API-nycklar."
+    },
+    "portal:user:assignPrivilegesToApps": {
+      "label": "Tilldela behörigheter till OAuth 2.0-applikationer",
+      "description": "Tillåt medlemmen att tilldela behörigheter till OAuth 2.0-applikationer."
+    },
+    "portal:user:createWorkflow": {
+      "label": "Skapa arbetsflödesobjekt",
+      "description": "Tillåt medlemmen att skapa Workflow Manager-objekt"
+    },
+    "premium:user:featurereport": {
+      "label": "Geoobjektrapport",
+      "description": "Tillåt medlemmen att skapa geoobjektrapporter i Survey123.",
+      "descriptionApp": "Tillåt applikationen att skapa geoobjektrapporter i Survey123."
+    },
+    "premium:user:realitymapping": {
+      "label": "Reality Mapping",
+      "description": "Tillåt medlemmen att utföra Reality Mapping-uppgifter."
+    },
+    "features:user:edit": {
+      "label": "Redigera",
+      "description": "Tillåt medlemmen att redigera geoobjekt i redigerbara lager som inte är offentliga, i enlighet med de redigeringsalternativ som har aktiverats för lagret.",
+      "descriptionApp": "Tillåt applikationen att redigera geoobjekt i redigerbara lager som inte är offentliga, i enlighet med de redigeringsalternativ som har aktiverats för lagret."
+    },
+    "features:user:fullEdit": {
+      "label": "Redigera med fullständig kontroll",
+      "description": "Tillåt medlemmen att lägga till, ta bort och uppdatera geoobjekt i ett redigerbart, driftat geoobjektlager, oavsett vilka redigeringsalternativ som har aktiverats för lagret.",
+      "descriptionApp": "Tillåt applikationen att lägga till, ta bort och uppdatera geoobjekt i ett redigerbart, driftat geoobjektlager, oavsett vilka redigeringsalternativ som har aktiverats för lagret."
+    },
+    "features:user:manageVersions": {
+      "label": "Hantera alla",
+      "description": "Tillåt medlemmar att hantera versionslås och visa, ändra, ta bort, redigera, jämka och kommentera alla grenversioner som nås via ArcGIS Servers geoobjektlager.",
+      "descriptionApp": "Tillåt applikationen att hantera versionslås och visa, ändra, ta bort, redigera, jämka och kommentera alla grenversioner som nås via ArcGIS Servers geoobjektlager."
+    },
+    "portal:publisher:createFeatureWebhook": {
+      "label": "Geoobjektlager",
+      "description": "Tillåt medlemmen att skapa, redigera och ta bort sina egna webhooks för geoobjektlager.",
+      "descriptionApp": "Tillåt applikationen att skapa, redigera och ta bort sina egna webhooks för geoobjektlager."
+    },
+    "portal:admin:viewUsers": {
+      "label": "Visa alla",
+      "description": "Tillåt medlemmen att visa fullständig information om medlemskonton i din organisation.",
+      "descriptionPortal": "Tillåt medlemmen att visa fullständig information om medlemskonton i din portal.",
+      "descriptionApp": "Tillåt applikationen att visa fullständig information om medlemskonton i din organisation."
+    },
+    "portal:admin:updateUsers": {
+      "label": "Uppdatera",
+      "description": "Tillåt medlemmen att återställa lösenord, uppdatera uppgifter för medlemskonton och uppdatera medlemskategorier i din organisation.",
+      "descriptionPortal": "Tillåt medlemmen att återställa lösenord, uppdatera uppgifter för medlemskonton och uppdatera medlemskategorier i din portal.",
+      "descriptionApp": "Tillåt applikationen att återställa lösenord, uppdatera uppgifter för medlemskonton och uppdatera medlemskategorier i din organisation."
+    },
+    "portal:admin:deleteUsers": {
+      "label": "Ta bort",
+      "description": "Tillåt medlemmen att ta bort medlemskonton i din organisation.",
+      "descriptionPortal": "Tillåt medlemmen att ta bort medlemskonton i din portal.",
+      "descriptionApp": "Tillåt applikationen att ta bort medlemskonton i din organisation."
+    },
+    "portal:admin:inviteUsers": {
+      "label": "Lägg till",
+      "labelPortal": "Bjud in",
+      "description": "Tillåt medlemmen att bjuda in medlemmar till din organisation.",
+      "descriptionPortal": "Tillåt medlemmen att bjuda in medlemmar till din portal.",
+      "descriptionApp": "Tillåt applikationen att bjuda in medlemmar till din organisation."
+    },
+    "portal:admin:disableUsers": {
+      "label": "Inaktivera",
+      "description": "Tillåt medlemmen att aktivera och inaktivera medlemskonton i din organisation.",
+      "descriptionPortal": "Tillåt medlemmen att aktivera och inaktivera medlemskonton i din portal.",
+      "descriptionApp": "Tillåt applikationen att aktivera och inaktivera medlemskonton i din organisation."
+    },
+    "portal:admin:changeUserRoles": {
+      "label": "Ändra roller",
+      "description": "Tillåt medlemmen att ändra den roll som ett medlemskonto har tilldelats. Observera att det endast är medlemmar med administratörsrollen som kan tilldela eller ta bort administratörsrollen för andra konton.",
+      "descriptionPortal": "Tillåt medlemmen att ändra den roll som ett medlemskonto har tilldelats. Observera att det endast är medlemmar med administratörsrollen som kan tilldela eller ta bort administratörsrollen för andra konton.",
+      "descriptionApp": "Tillåt applikationen att ändra den roll som ett medlemskonto har tilldelats. Observera att det endast är medlemmar med administratörsrollen som kan tilldela eller ta bort administratörsrollen för andra konton."
+    },
+    "portal:admin:manageLicenses": {
+      "label": "Hantera licenser",
+      "description": "Tillåt medlemmen att tilldela licenser till medlemmar av din organisation.",
+      "descriptionPortal": "Tillåt medlemmen att tilldela licenser till medlemmar av din portal.",
+      "descriptionApp": "Tillåt applikationen att tilldela licenser till medlemmar av din organisation."
+    },
+    "portal:admin:updateMemberCategorySchema": {
+      "label": "Hantera kategorier",
+      "description": "Tillåt medlemmen att konfigurera organisationens medlemskategorier.",
+      "descriptionPortal": "Tillåt medlemmen att konfigurera portalens medlemskategorier.",
+      "descriptionApp": "Tillåt applikationen att konfigurera organisationens medlemskategorier."
+    },
+    "portal:admin:viewGroups": {
+      "label": "Visa alla",
+      "description": "Tillåt medlemmen att visa alla grupper i din organisation.",
+      "descriptionPortal": "Tillåt medlemmen att visa alla grupper i din portal.",
+      "descriptionApp": "Tillåt applikationen att visa grupper i din organisation."
+    },
+    "portal:admin:updateGroups": {
+      "label": "Uppdatera",
+      "description": "Tillåt medlemmen att uppdatera grupper i din organisation.",
+      "descriptionPortal": "Tillåt medlemmen att uppdatera grupper i din portal.",
+      "descriptionApp": "Tillåt applikationen att uppdatera grupper i din organisation."
+    },
+    "portal:admin:deleteGroups": {
+      "label": "Ta bort",
+      "description": "Tillåt medlemmen att ta bort grupper i din organisation.",
+      "descriptionPortal": "Tillåt medlemmen att ta bort grupper i din portal.",
+      "descriptionApp": "Tillåt applikationen att ta bort grupper i din organisation."
+    },
+    "portal:admin:reassignGroups": {
+      "label": "Omfördela ägande",
+      "description": "Tillåt medlemmen att omfördela grupper till andra medlemmar i din organisation.",
+      "descriptionPortal": "Tillåt medlemmen att omfördela grupper till andra medlemmar i din portal.",
+      "descriptionApp": "Tillåt applikationen att omfördela grupper till andra medlemmar i din organisation."
+    },
+    "portal:admin:assignToGroups": {
+      "label": "Tilldela medlemmar",
+      "description": "Tillåt medlemmen att tilldela dina medlemmar till, uppdatera dina medlemmars grupproller för och ta bort medlemmar från grupper i din organisation.",
+      "descriptionPortal": "Tillåt medlemmen att tilldela dina medlemmar till, uppdatera dina medlemmars grupproller för och ta bort medlemmar från grupper i din portal.",
+      "descriptionApp": "Tillåt applikationen att tilldela dina medlemmar till, uppdatera dina medlemmars grupproller för och ta bort medlemmar från grupper i din organisation."
+    },
+    "portal:admin:manageEnterpriseGroups": {
+      "label": "Länk till organisationsspecifik grupp",
+      "description": "Tillåt medlemmen att länka gruppmedlemskap till en organisationsspecifik grupp.",
+      "descriptionApp": "Tillåt applikationen att länka gruppmedlemskap till en organisationsspecifik grupp."
+    },
+    "portal:admin:createUpdateCapableGroup": {
+      "label": "Skapa med uppdateringsmöjligheter",
+      "description": "Tillåt medlemmen att skapa grupper med uppdateringsmöjligheter.",
+      "descriptionApp": "Tillåt applikationen att skapa grupper med uppdateringsmöjligheter."
+    },
+    "portal:admin:createLeavingDisallowedGroup": {
+      "label": "Skapa med otillåtet utträde",
+      "description": "Tillåt att en medlem skapar och äger grupper som inte tillåter medlemmar att lämna gruppen (administrativa grupper).",
+      "descriptionApp": "Tillåt applikationen att skapa och äga grupper som inte tillåter applikationer att lämna gruppen (administrativa grupper)."
+    },
+    "portal:admin:viewItems": {
+      "label": "Visa alla",
+      "description": "Tillåt medlemmen att visa allt innehåll i din organisation.",
+      "descriptionPortal": "Tillåt medlemmen att visa allt innehåll i din portal.",
+      "descriptionApp": "Tillåt applikationen att visa allt innehåll i din organisation."
+    },
+    "portal:admin:updateItems": {
+      "label": "Uppdatera",
+      "description": "Tillåt medlemmen att uppdatera och kategorisera innehåll och redigera driftade geoobjektlager i din organisation.",
+      "descriptionPortal": "Tillåt medlemmen att uppdatera och kategorisera innehåll och redigera driftade geoobjektlager i din portal.",
+      "descriptionApp": "Tillåt applikationen att uppdatera och kategorisera innehåll och redigera driftade geoobjektlager i din organisation."
+    },
+    "portal:admin:deleteItems": {
+      "label": "Ta bort",
+      "description": "Tillåt medlemmen att ta bort innehåll i din organisation.",
+      "descriptionPortal": "Tillåt medlemmen att ta bort innehåll i din portal.",
+      "descriptionApp": "Tillåt applikationen att ta bort innehåll i din organisation."
+    },
+    "portal:admin:reassignItems": {
+      "label": "Omfördela ägande",
+      "description": "Tillåt medlemmen att omfördela innehåll till andra medlemmar i din organisation.",
+      "descriptionPortal": "Tillåt medlemmen att omfördela innehåll till andra medlemmar i din portal.",
+      "descriptionApp": "Tillåt applikationen att omfördela innehåll till andra medlemmar i din organisation."
+    },
+    "portal:admin:updateItemCategorySchema": {
+      "label": "Hantera kategorier",
+      "description": "Tillåt medlemmen att konfigurera organisationens innehållskategorier.",
+      "descriptionPortal": "Tillåt medlemmen att konfigurera portalens innehållskategorier.",
+      "descriptionApp": "Tillåt applikationen att konfigurera organisationens innehållskategorier."
+    },
+    "portal:publisher:publishServerGPServices": {
+      "label": "Publicera webbverktyg",
+      "description": "Den här behörigheten ger tillstånd att publicera webbverktyg som backas av geokodningstjänster från federerade serverwebbplatser."
+    },
+    "portal:admin:shareToOrg": {
+      "label": "Dela medlemsinnehåll med organisationen",
+      "description": "Tillåt medlemmen att dela innehåll som ägs av andra medlemmar i din organisation med organisationen.",
+      "descriptionPortal": "Tillåt medlemmen att dela innehåll som ägs av andra medlemmar i din portal med portalen.",
+      "descriptionApp": "Tillåt applikationen att dela innehåll som ägs av andra medlemmar i din organisation med organisationen."
+    },
+    "portal:admin:shareToPublic": {
+      "label": "Dela medlemsinnehåll offentligt",
+      "description": "Tillåt medlemmen att dela innehåll som ägs av andra medlemmar i din organisation med allmänheten.",
+      "descriptionPortal": "Tillåt medlemmen att dela innehåll som ägs av andra medlemmar i din portal med allmänheten.",
+      "descriptionApp": "Tillåt applikationen att dela innehåll som ägs av andra medlemmar i din organisation med allmänheten."
+    },
+    "portal:admin:createReports": {
+      "label": "Skapa och hantera administrativa rapporter",
+      "description": "Tillåt medlemmen att skapa och hantera administrativa rapporter för din organisation.",
+      "descriptionPortal": "Tillåt medlemmen att skapa och hantera administrativa rapporter för din portal.",
+      "descriptionApp": "Tillåt applikationen att skapa och hantera administrativa rapporter för din organisation."
+    },
+    "marketplace:admin:manage": {
+      "label": "Skapa och hantera",
+      "description": "Tillåt medlemmen att skapa listor, listobjekt, hantera prenumerationer inom ArcGIS Marketplace och hantera köp och kontaktinformation för din organisation. Användning av den här behörigheten kräver att din organisation får åtkomst till listor och publicering i ArcGIS Marketplace."
+    },
+    "marketplace:admin:purchase": {
+      "label": "Köp och få kostnadsfria produkter",
+      "description": "Tillåt medlemmen att skicka köpförfrågningar och få åtkomst till kostnadsfria produkter från leverantörer inom ArcGIS Marketplace. För att tillåta medlemmar att köpa produkter med betalkort måste du först utse dem till Marketplace-inköpare."
+    },
+    "marketplace:admin:startTrial": {
+      "label": "Starta provperioder",
+      "description": "Tillåt medlemmen att starta provabonnemang inom ArcGIS Marketplace."
+    },
+    "portal:admin:manageSecurity": {
+      "label": "Säkerhet och infrastruktur",
+      "description": "Tillåt medlemmen att hantera organisationens säkerhets- och infrastrukturinställningar.",
+      "descriptionPortal": "Tillåt medlemmen att hantera portalens säkerhets- och infrastrukturinställningar.",
+      "descriptionApp": "Tillåt applikationen att hantera organisationens säkerhets- och infrastrukturinställningar."
+    },
+    "portal:admin:manageWebsite": {
+      "label": "Organisationswebbplats",
+      "description": "Tillåt medlemmen att hantera organisationens webbplatsinställningar.",
+      "descriptionPortal": "Tillåt medlemmen att hantera portalens webbplatsinställningar.",
+      "descriptionApp": "Tillåt applikationen att hantera organisationens webbplatsinställningar."
+    },
+    "portal:admin:manageCollaborations": {
+      "label": "Samarbeten",
+      "description": "Tillåt medlemmen att hantera organisationens samarbeten.",
+      "descriptionPortal": "Tillåt medlemmen att hantera portalens samarbeten.",
+      "descriptionApp": "Tillåt applikationen att hantera organisationens samarbeten."
+    },
+    "portal:admin:manageCredits": {
+      "label": "Krediter",
+      "description": "Tillåt medlemmen att hantera organisationens inställningar för kreditbudget.",
+      "descriptionApp": "Tillåt applikationen att hantera organisationens inställningar för kreditbudget."
+    },
+    "portal:admin:manageRoles": {
+      "label": "Medlemsroller",
+      "description": "Tillåt medlemmen att hantera organisationens medlemsroller.",
+      "descriptionPortal": "Tillåt medlemmen att hantera portalens medlemsroller.",
+      "descriptionApp": "Tillåt applikationen att hantera organisationens medlemsroller."
+    },
+    "portal:admin:manageServers": {
+      "label": "Servrar",
+      "description": "Den här behörigheten ger möjlighet att hantera portalens serverinställningar."
+    },
+    "portal:admin:manageUtilityServices": {
+      "label": "Infrastrukturtjänster",
+      "description": "Tillåt medlemmen att hantera organisationens inställningar för infrastrukturtjänster.",
+      "descriptionPortal": "Tillåt medlemmen att hantera portalens inställningar för infrastrukturtjänster.",
+      "descriptionApp": "Tillåt applikationen att hantera organisationens inställningar för infrastrukturtjänster."
+    },
+    "portal:admin:manageWebhooks": {
+      "label": "Webhooks",
+      "labelPortal": "Webhooks för organisationen",
+      "description": "Tillåt medlemmen att skapa, redigera och ta bort alla webhooks i din organisation.",
+      "descriptionApp": "Tillåt applikationen att skapa, redigera och ta bort alla webhooks i din organisation.",
+      "descriptionPortal": "Tillåt medlemmen att skapa, redigera och ta bort webhooks för organisationen och hantera alla webhooks i portalen.",
+      "descriptionAppPortal": "Tillåt applikationen att skapa, redigera och ta bort webhooks för organisationen och hantera alla webhooks i portalen."
+    },
+    "portal:admin:createGPWebhook": {
+      "label": "Geobearbetning",
+      "description": "Tillåt medlemmen att skapa, redigera och ta bort sina egna webhooks för geobearbetning.",
+      "descriptionApp": "Tillåt applikationen att skapa, redigera och ta bort sina egna webhooks för geobearbetning."
+    }
+  }
+}

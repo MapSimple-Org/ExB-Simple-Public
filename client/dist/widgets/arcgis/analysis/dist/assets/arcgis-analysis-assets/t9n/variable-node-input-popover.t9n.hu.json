@@ -1,0 +1,7 @@
+{
+  "header": "Változó kiválasztása",
+  "noFound": "Nem találhatók kompatibilis változók",
+  "search": "Változók keresése",
+  "variableLabel": "Felirat: <span style='font-weight: var(--calcite-font-weight-normal)'>${val}</span>",
+  "variableVal": "Érték: <span style='font-weight: var(--calcite-font-weight-normal)'>${val}</span>"
+}

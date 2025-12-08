@@ -1,0 +1,25 @@
+{
+  "name": "booth",
+  "type": "template",
+  "templateType": "app",
+  "label": "Booth",
+  "description": "Booth organizes content in a grid of card widgets, with detailed views accessible in a window for focused exploration.",
+  "thumbnail": "thumbnail.png",
+  "order": 48,
+  "templateCreateVersion": "1.17.0",
+  "tags": [
+    "Title",
+    "Logo",
+    "Gallery",
+    "Card",
+    "Divider"
+  ],
+  "categoriesTags": [
+    "Web page",
+    "Scrolling"
+  ],
+  "isMultiplePage": false,
+  "isMapAware": false,
+  "thumbnailWidth": 320,
+  "thumbnailHeight": 214
+}

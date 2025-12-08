@@ -1,0 +1,12 @@
+{
+  "apiCredentialType": "Loại thông tin xác thực: khóa API",
+  "oauthCredentialType": "Loại thông tin xác thực: OAuth 2.0",
+  "itemAccess": "Quyền truy cập Mục",
+  "page": "Trang: ${page}",
+  "currentPage": "Trang hiện tại: ${page}",
+  "privileges": "Quyền",
+  "itemDetails": "Thông tin chi tiết mục",
+  "settings": "Thiết lập",
+  "serviceScope": "Phạm vi dịch vụ",
+  "summary": "Thông tin tóm tắt"
+}

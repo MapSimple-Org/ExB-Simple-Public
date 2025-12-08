@@ -1,0 +1,17 @@
+{
+  "aboveMaximumMessage": "入力値は ${max} 以下である必要があります。",
+  "add": "追加",
+  "addDuplicateMessage": "重複する値は追加できません。",
+  "belowMinimumMessage": "入力値は ${min} 以上である必要があります。",
+  "defaultPlaceholder": "値を入力して追加をクリックします",
+  "duplicateValueMessage": "重複する値は無視されます。",
+  "invalidDoubleMessage": "入力値は double でなければなりません。",
+  "invalidIntegerMessage": "入力値は整数でなければなりません。",
+  "maxValuesMessage": "異なる入力値は ${maxValues} 個以下でなければなりません。",
+  "minValuesMessage": "少なくとも ${minValues} 個の異なる入力値が必要です。",
+  "remove": "削除",
+  "requiredInputMessage": "このパラメーターは必須です。",
+  "strictlyMaximumMessage": "入力値は ${max} より小さくなければなりません。",
+  "strictlyMinimumMessage": "入力値は ${min} より大きくなければなりません。",
+  "value": "値: ${value}"
+}

@@ -1,0 +1,7 @@
+{
+  "searchMembers": "구성원 검색",
+  "selectUser": "사용자 선택",
+  "editSelection": "선택한 사용자를 편집합니다. 현재 선택함: ${name}",
+  "clear": "선택 해제",
+  "members": "구성원"
+}

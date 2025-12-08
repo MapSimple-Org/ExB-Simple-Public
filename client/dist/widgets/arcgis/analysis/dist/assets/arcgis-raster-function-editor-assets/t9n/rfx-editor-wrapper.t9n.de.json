@@ -1,0 +1,6 @@
+{
+  "dialogTitle": "Raster-Funktions-Editor",
+  "defaultTemplateName": "Raster-Funktionsvorlage",
+  "readOnlyModeTitle": "Schreibgeschützt",
+  "readOnlyModeMessage": "Die Vorlagenelement für Raster-Funktionen ist schreibgeschützt. Änderungen können nicht gespeichert werden."
+}

@@ -1,0 +1,12 @@
+{
+  "classField": "クラス フィールド",
+  "classesAsRowsLabel": "出力テーブルでクラスを行にする",
+  "inputClassRasterOrFeatures": "入力クラス ラスターまたはフィーチャ",
+  "inputLayerGroupText": "2 つのデータセット間のクロス集計をするために、入力ゾーンとクラス レイヤーを選択します。",
+  "itemProperties": {
+    "description": "クロス集計 (Tabulate Area) 解析ツールを実行して生成される出力テーブル。",
+    "snippet": "クロス集計 (Tabulate Area) から生成される出力テーブル"
+  },
+  "tabulateAreaSettingsGroupLabel": "クロス集計の設定",
+  "tabulateAreaSettingsGroupText": "出力テーブルのクラスを処理する方法を選択します。 計算するセル サイズを指定します。 "
+}

@@ -1,0 +1,1 @@
+System.register([],function(e){return{execute:function(){e({_widgetLabel:"H\xecnh \u1ea3nh",imageChooseShape:"H\xecnh d\u1ea1ng",imageCrop:"C\u1eaft",previousImage:"H\xecnh \u1ea3nh tr\u01b0\u1edbc",nextImage:"H\xecnh \u1ea3nh ti\u1ebfp",imageViewer:"Tr\xecnh xem h\xecnh \u1ea3nh"})}}});

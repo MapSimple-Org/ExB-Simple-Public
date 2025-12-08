@@ -1,0 +1,18 @@
+{
+  "add": "Toevoegen",
+  "analysisSessionLayers": "Analyse sessielagen",
+  "browseAnalysisLayers": "Blader door lagen",
+  "cancel": "Annuleren",
+  "heading": "Kaartlaag selecteren",
+  "mapLayers": "Kaartlagen",
+  "mesh": "Meshlaag",
+  "modelVariableLayers": "Variabele lagen modelleren",
+  "multipatch": "Multipatchlaag",
+  "multipoint": "Multipuntlaag",
+  "noCompatibleLayers": "De kaart bevat geen compatibele lagen. Voeg lagen toe aan de kaart of blader naar lagen om een analyse uit te voeren.",
+  "noMatchesFound": "Geen overeenkomsten gevonden voor '${searchTerm}'.",
+  "point": "Puntlaag",
+  "polygon": "Polygoonlaag",
+  "polyline": "Polylijnlaag",
+  "table": "Tabel"
+}

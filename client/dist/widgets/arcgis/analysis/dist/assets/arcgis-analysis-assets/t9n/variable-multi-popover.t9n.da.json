@@ -1,0 +1,11 @@
+{
+  "addBtn": "Udført",
+  "cancelBtn": "Annullér",
+  "header": "Vælg variabel",
+  "multipleVariables": "Variabler med flere værdier",
+  "noFound": "Der blev ikke fundet nogen kompatible variabler",
+  "search": "Søgevariabler",
+  "singleVariables": "Variabler med én værdi",
+  "variableLabel": "Etiket: <span style='font-weight: var(--calcite-font-weight-normal)'>${val}</span>",
+  "variableVal": "Værdi: <span style='font-weight: var(--calcite-font-weight-normal)'>${val}</span>"
+}

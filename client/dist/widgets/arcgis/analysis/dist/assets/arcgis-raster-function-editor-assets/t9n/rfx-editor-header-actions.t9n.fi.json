@@ -1,0 +1,11 @@
+{
+  "newTemplate": "Luo uusi malli",
+  "openTemplate": "Avaa malli",
+  "addTemplate": "Lisää malli",
+  "addFunction": "Lisää rasteritoiminnot",
+  "addConstant": "Lisää vakio",
+  "addRaster": "Lisää rasterin muuttuja",
+  "expand": "Laajenna",
+  "editTemplateProperties": "Muokkaa mallin ominaisuuksia",
+  "viewTemplateProperties": "Tarkastele mallin ominaisuuksia"
+}

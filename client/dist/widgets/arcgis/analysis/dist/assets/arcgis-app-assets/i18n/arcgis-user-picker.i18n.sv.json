@@ -1,0 +1,7 @@
+{
+  "searchMembers": "Sök efter medlemmar",
+  "selectUser": "Välj användare",
+  "editSelection": "Redigera vald användare. Valt för närvarande: ${name}",
+  "clear": "Radera",
+  "members": "Medlemmar"
+}

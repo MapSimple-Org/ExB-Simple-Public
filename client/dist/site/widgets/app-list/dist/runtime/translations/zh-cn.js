@@ -1,0 +1,1 @@
+System.register([],function(e){return{execute:function(){e({_widgetLabel:"\u5e94\u7528\u7a0b\u5e8f\u5217\u8868"})}}});

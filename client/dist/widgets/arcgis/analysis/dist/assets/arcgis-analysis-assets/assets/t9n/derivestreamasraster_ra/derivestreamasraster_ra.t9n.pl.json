@@ -1,0 +1,10 @@
+{
+  "forceFlowLabel": "Wymuś wypływanie na zewnątrz komórek krawędziowych",
+  "inputLayersGroupText": "Wybierz wejściowy raster powierzchni oraz opcjonalnie dane depresji i raster wag.",
+  "itemProperties": {
+    "description": "Dane wynikowe wygenerowane w wyniku uruchomienia narzędzia Wyznacz strumień jako raster.",
+    "snippet": "Dane wynikowe wygenerowane z narzędzia Wyznacz strumień jako raster"
+  },
+  "outputStreamRasterLabel": "Nazwa rastra strumienia wynikowego",
+  "streamSettingsGroupText": "Określ próg przepływu zbiorczego, metodę wyznaczania strumienia i sposób obsługi przepływu na brzegu wejściowego rastra powierzchni."
+}

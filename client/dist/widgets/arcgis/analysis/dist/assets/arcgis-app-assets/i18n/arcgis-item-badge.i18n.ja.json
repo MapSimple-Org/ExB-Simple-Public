@@ -1,0 +1,110 @@
+{
+  "Authoritative": {
+    "title": "信頼済み",
+    "tooltip": {
+      "org": "組織で推奨されています",
+      "public": "${name} で推奨されています"
+    }
+  },
+  "Deprecated": {
+    "title": "非推奨",
+    "tooltip": "使用を推奨されていません"
+  },
+  "Has Replacement": {
+    "title": "代替を含む",
+    "tooltip": "このアイテムには推奨される代替アイテムがあります。 アイテム詳細を表示し、代替アイテムを検索して使用します。",
+    "itemPageTooltip": "このアイテムには推奨される代替アイテムがあります。",
+    "link": "代替アイテムの表示"
+  },
+  "DeprecatedItem": {
+    "title": "非推奨のアイテム タイプ"
+  },
+  "Living Atlas": {
+    "title": "Living Atlas",
+    "tooltip": "Esri 管理コンテンツ"
+  },
+  "Subscriber": {
+    "title": "登録者",
+    "tooltip": {
+      "org": "サブスクリプション専用コンテンツです",
+      "public": "サブスクリプション専用コンテンツです。 使用するには、ArcGIS Online サブスクリプションでサイン インします。"
+    }
+  },
+  "Premium": {
+    "title": "プレミアム",
+    "tooltip": {
+      "org": "サブスクリプション専用コンテンツです。 クレジットを消費します。",
+      "public": "クレジットを消費するサブスクリプション専用コンテンツです。 使用するには、ArcGIS Online サブスクリプションでサイン インします。"
+    }
+  },
+  "Open Data": {
+    "title": "オープンデータ",
+    "tooltip": "一般ユーザーが使用可能"
+  },
+  "Marketplace": {
+    "title": "Marketplace",
+    "tooltip": "ArcGIS Marketplace に表示"
+  },
+  "Collaboration": {
+    "title": "分散コラボレーション",
+    "tooltip": "このアイテムは分散コラボレーションから受信しました"
+  },
+  "Retired": {
+    "title": "廃止",
+    "tooltip": {
+      "general": "読み取り専用",
+      "cityEngine": "CityEngine Web ビューアーおよび CityEngine Web シーンのサポートは終了しました。",
+      "storyMap": "このアプリケーションの作成に使用された従来の Esri ストーリー マップは ArcGIS Enterprise で廃止されました。 新しいストーリーを作成するには、ArcGIS StoryMaps を使用してください。",
+      "app": "このアプリケーションの作成に使用されたテンプレートは ArcGIS Enterprise で廃止されました。 このアイテムは稼働していないため、削除できます。 新しいアプリケーションを作成するには、ArcGIS Instant Apps、ArcGIS StoryMaps、ArcGIS Dashboards、または ArcGIS Experience Builder を使用してください",
+      "webAppBuilder": "ArcGIS Web AppBuilder は ArcGIS Enterprise で廃止されました。 このアイテムは稼働していないため、削除できます。 新しいアプリケーションを作成するには、ArcGIS Experience Builder を使用してください。",
+      "insights": "ArcGIS Insights は ArcGIS Enterprise で廃止されました。 このアイテムは稼働していないため、削除できます。",
+      "bdfs": "ビッグ データ ファイル共有は ArcGIS Enterprise で廃止されました。 このアイテムは稼働していないため、削除できます。"
+    }
+  },
+  "Public Data Collection": {
+    "title": "パブリック データ コレクション",
+    "tooltip": "パブリック データ コレクションに承認されました。"
+  },
+  "Solution": {
+    "title": "ArcGIS Solution",
+    "tooltip": "Esri がサポートするソリューション"
+  },
+  "Registered": {
+    "title": "OAuth 2.0",
+    "tooltip": {
+      "online": "登録済み OAuth 2.0 アプリケーション。 プレミアムまたはサブスクリプション コンテンツを使用する場合があります。",
+      "enterprise": "登録済み OAuth 2.0 アプリケーション。"
+    }
+  },
+  "Registered API Key Credentials (Standard)": {
+    "title": {
+      "online": "API キーの認証情報 - 標準",
+      "enterprise": "API キーの認証情報"
+    },
+    "tooltip": "サービスのアクセス権を付与します。"
+  },
+  "Registered API Key Credentials (Personal)": {
+    "title": "API キーの認証情報 - 個人",
+    "tooltip": "個人権限を付与します。 セキュリティー上の理由から、ユーザー名およびパスワードの保護と同様に、これらの認証情報を保護する必要があります。"
+  },
+  "Registered OAuth 2.0 Credentials (Standard)": {
+    "title": {
+      "online": "OAuth 2.0 の認証情報 - 標準",
+      "enterprise": "OAuth 2.0 の認証情報"
+    },
+    "tooltip": "サービスのアクセス権を付与します。"
+  },
+  "Registered OAuth 2.0 Credentials (Personal)": {
+    "title": "OAuth 2.0 の認証情報 - 個人",
+    "tooltip": "個人権限を付与します。 セキュリティー上の理由から、ユーザー名およびパスワードの保護と同様に、これらの認証情報を保護する必要があります。"
+  },
+  "Registered Application": {
+    "title": "OAuth 2.0 アプリケーション",
+    "tooltip": "登録済み OAuth 2.0 アプリケーション"
+  },
+  "Personal credential": {
+    "title": "個人",
+    "tooltip": "この認証情報に個人権限を付与しようとしています。 セキュリティー上の理由から、ユーザー名およびパスワードの保護と同様に、これらの認証情報を使用して作成されたアクセス トークンを保護する必要があります。 利用規約をご確認ください。"
+  },
+  "loading": "読み込んでいます..."
+}

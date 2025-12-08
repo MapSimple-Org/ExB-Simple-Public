@@ -1,0 +1,11 @@
+{
+  "addToMap": "Potrdi in dodaj na karto",
+  "cancel": "Prekliči",
+  "confirm": "Potrdi",
+  "header": "Izberi element",
+  "select": "Izberi",
+  "selectTask": "Izberi opravilo",
+  "unsupportedLayer": "Ta parameter ne podpira naslednjih slojev: ${layerName}.",
+  "viewDetails": "Ogled podrobnosti",
+  "layerLoadFailure": "Nalaganje sloja ni uspelo."
+}

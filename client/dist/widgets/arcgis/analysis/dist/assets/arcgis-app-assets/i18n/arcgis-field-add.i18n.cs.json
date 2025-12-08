@@ -1,0 +1,137 @@
+{
+  "next": "Další",
+  "addField": "Přidat pole",
+  "selectDataType": "Vyberte typ dat, která se uloží v poli",
+  "addGlobalIDNotice": "Pole se automaticky vyplní stávajícími daty ve vrstvě nebo tabulce. Po přidání nelze toto pole upravit ani odstranit.",
+  "fieldName": "Název pole",
+  "displayName": "Zobrazovaný název",
+  "length": "Délka",
+  "defaultValue": "Výchozí hodnota (volitelná)",
+  "fieldTypes": "Typy polí",
+  "fieldValueType": "Typ hodnoty pole (volitelný)",
+  "fieldDescription": "Popis pole (nepovinné)",
+  "allowNullValues": "Povolit nulové hodnoty",
+  "valueRequiredError": "Tato hodnota je povinná",
+  "fieldAdded": "Pole úspěšně přidáno",
+  "newFieldTypeNotice": "Tento typ pole nemusí být v některých klientech plně podporován.",
+  "addingField": "Probíhá přidávání pole...",
+  "syncEnabled": "Některé typy polí nelze přidat, protože má vrstva zapnutou synchronizaci.",
+  "newFeature": "Nový prvek",
+  "fieldAdditionUnsuccessful": "Přidání pole se nezdařilo",
+  "error": "Chyba",
+  "noFieldTypeSelected": "Není vybrán žádný typ pole",
+  "nullFieldTypeError": "Chcete-li pokračovat, je nutné vybrat typ pole.",
+  "fieldNameCharacterNotice": "Názvy polí delší než 31 znaků nejsou kompatibilní s použitím v režimu offline.",
+  "suggestedHeader": "Doporučeno",
+  "otherHeader": "Jiné",
+  "provideDescription": "Uveďte popis informací, které bude pole obsahovat",
+  "nullableTooltipInfo": "Toto nastavení nelze upravovat, pokud již vrstva obsahuje data.",
+  "tooltipInfo": {
+    "globalIDExists": "Pole GlobalID v této službě již existuje. Ve vrstvě nebo tabulce může být jen jedno pole GlobalID.",
+    "enterpriseTimestampOffset": "ArcGIS Enterprise nepodporuje pole časových údajů s posunem v hostovaných vrstvách prvků."
+  },
+  "text": {
+    "title": "Text",
+    "description": "Hodnoty, které obsahují alfanumerické nebo speciální znaky.",
+    "types": {
+      "esriFieldTypeString": {
+        "title": "Řetězec",
+        "description": "Ukládá sadu alfanumerických znaků specifikované délky."
+      }
+    }
+  },
+  "numbers": {
+    "title": "Čísla",
+    "description": "Hodnoty, které obsahují číselné informace.",
+    "types": {
+      "esriFieldTypeDouble": {
+        "title": "Desetinné číslo (s dvojitou přesností)",
+        "description": "Ukládá čísla s desetinnými místy."
+      },
+      "esriFieldTypeInteger": {
+        "title": "Celé číslo",
+        "description": "Ukládá celá čísla od ${lowerIntegerRange} do ${upperIntegerRange}."
+      },
+      "esriFieldTypeBigInteger": {
+        "title": "Celé číslo - velké",
+        "description": "Ukládá celá čísla od -(2${startSup}53${endSup}-1) do 2${startSup}53${endSup}-1. Použijte tento typ pole, pokud používáte čísla mimo podporovaný rozsah celočíselných polí."
+      }
+    }
+  },
+  "dates": {
+    "title": "Kalendářní data",
+    "description": "Hodnoty, které obsahují časové informace.",
+    "types": {
+      "esriFieldTypeDate": {
+        "title": "Datum",
+        "description": "Ukládá hodnoty s datem a časem."
+      },
+      "esriFieldTypeDateOnly": {
+        "title": "Pouze datum",
+        "description": "Ukládání hodnot dat bez údajů o čase."
+      },
+      "esriFieldTypeTimeOnly": {
+        "title": "Pouze čas",
+        "description": "Ukládá hodnoty času bez údajů o datu."
+      },
+      "esriFieldTypeTimestampOffset": {
+        "title": "Časový údaj s posunem",
+        "description": "Ukládá hodnoty značících datum, čas a posun od koordinovaného světového času (UTC)."
+      }
+    }
+  },
+  "globalIdentifiers": {
+    "title": "Globální identifikátory",
+    "description": "Hodnoty, které jedinečně identifikují prvek nebo řádek tabulky.",
+    "types": {
+      "esriFieldTypeGlobalID": {
+        "title": "GlobalID",
+        "description": "Ukládá řetězec o 36 znacích skládající se z písmen a číslic, který se používá k jedinečné identifikaci prvku."
+      },
+      "esriFieldTypeGUID": {
+        "title": "GUID",
+        "description": "Ukládá řetězec o 36 znacích skládající se z písmen a číslic. Globální jedinečný identifikátor (GUID) se často používá ke správě vztahů mezi prvky."
+      }
+    }
+  },
+  "fieldValueTypes": {
+    "nameOrTitle": "Název",
+    "description": "Popis",
+    "typeOrCategory": "Typ nebo kategorie",
+    "countOrAmount": "Počet nebo množství",
+    "percentageOrRatio": "Procenta nebo poměr",
+    "measurement": "Měření",
+    "currency": "Měna",
+    "uniqueIdentifier": "Jedinečný identifikátor",
+    "phoneNumber": "Telefonní číslo",
+    "emailAddress": "E-mailová adresa",
+    "orderedOrRanked": "Seřazeno",
+    "binary": "Binární",
+    "locationOrPlaceName": "Poloha nebo název místa",
+    "coordinate": "Souřadnice",
+    "dateAndTime": "Datum a čas",
+    "none": "Žádný"
+  },
+  "addFieldErrors": {
+    "invalidName": "Neplatný název",
+    "invalidLength": "Neplatná délka",
+    "outOfRangeValueError": "Tato hodnota je mimo rozsah.",
+    "invalidValueError": "Zadaná hodnota je neplatná.",
+    "invalidFieldParameters": "Neplatné parametry pole",
+    "invalidInputsError": "Zkontrolujte, zda jsou parametry pole správně vyplněny.",
+    "existingFieldNameError": "Název pole se nesmí shodovat s názvem existujícího pole.",
+    "invalidNameInputSQLError": "Název pole se nesmí shodovat s klíčovým slovem SQL.",
+    "invalidNameInputInvalidCharactersError": "Musí začínat písmenem a smí obsahovat pouze písmena, číslice a znaky '_'.",
+    "valueIsRequiredError": "Tato hodnota je povinná.",
+    "lengthExceeds": "Název pole nesmí mít více znaků než ${maxFieldNameLength}.",
+    "defaultValueExceeds": "Výchozí hodnota přesahuje zadanou délku pole.",
+    "savingFailed": "Uložení vrstvy ${layerName} se nezdařilo",
+    "readOnlyErrorMessage": "Služba ArcGIS Online se potýká s provozními problémy a byla přepnuta do režimu pouze ke čtení. Některé funkce mohou být omezeny. Poslední aktualizace ohledně očekávané doby vyřešení naleznete na stránkách Informační panel o stavu ArcGIS Online.",
+    "readOnlyErrorMessageEnterprise": "ArcGIS Enterprise se potýká s provozními problémy a byla přepnuta do režimu pouze ke čtení. Některé funkce mohou být omezeny.",
+    "healthDashboard": "Informační panel o stavu ArcGIS Online",
+    "genericAddFieldError": {
+      "title": "Chyba",
+      "description": "Při přidávání pole došlo k chybě."
+    }
+  }
+}

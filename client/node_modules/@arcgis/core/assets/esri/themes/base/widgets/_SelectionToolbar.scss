@@ -1,0 +1,36 @@
+@mixin selectionToolbar() {
+  $border: 1px solid $border-color;
+
+  .esri-selection-toolbar {
+    display: flex;
+    flex: 1 1 0;
+    width: 100%;
+    height: 100%;
+
+    calcite-action-bar {
+      width: 100%;
+    }
+
+    calcite-chip {
+      display: flex;
+      align-self: center;
+      margin-inline: var(--calcite-spacing-xxs);
+      line-height: initial;
+    }
+
+    calcite-dropdown {
+      calcite-icon {
+        margin-inline-start: var(--calcite-spacing-xxs);
+      }
+    }
+  }
+
+  .esri-selection-toolbar__container {
+    display: flex;
+    width: 100%;
+  }
+}
+
+@if $include_SelectionToolbar == true {
+  @include selectionToolbar();
+}

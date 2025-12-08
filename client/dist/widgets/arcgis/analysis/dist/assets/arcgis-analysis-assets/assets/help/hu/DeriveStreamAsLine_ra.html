@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>Az Adatfolyam sz&aacute;rmaztat&aacute;sa vonalk&eacute;nt eszk&ouml;z adatfolyam-vonalas vektoros elemeket hoz l&eacute;tre bemeneti fel&uuml;leti raszterből előzetes helyi er&oacute;zi&oacute;b&aacute;zis vagy depresszi&oacute;felt&ouml;lt&eacute;s ig&eacute;nye n&eacute;lk&uuml;l.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputSurfaceRaster">
+        <div>
+            <p>A sz&aacute;m&iacute;t&aacute;shoz haszn&aacute;lt magass&aacute;gi raszter.
+            </p>
+        </div>
+    </div>
+    <div id="inputDepressionsData">
+        <div>
+            <p>Az a bemenet, amely azoknak a val&oacute;di m&eacute;lyed&eacute;seknek vagy helyi er&oacute;zi&oacute;b&aacute;zisokat hat&aacute;roz meg, ahov&aacute; a v&iacute;z be tud &aacute;ramlani, de onnan ki nem.
+            </p>
+            <p class="toolPaneOnly">A vektoros elem bemenetekn&eacute;l a sz&aacute;m olyan tov&aacute;bbi t&eacute;nyezőktől f&uuml;gg, mint p&eacute;ld&aacute;ul szűr&eacute;si krit&eacute;rium &eacute;s elemz&eacute;s kiterjeszt&eacute;se.
+            </p>
+        </div>
+    </div>
+    <div id="inputWeightRaster">
+        <div>
+            <p>Az a raszteres r&eacute;teg, amely meghat&aacute;rozza az egyes cell&aacute;kban az &aacute;raml&aacute;s felhalmoz&oacute;d&aacute;s&aacute;hoz hozz&aacute;j&aacute;rul&oacute; &aacute;raml&aacute;si h&aacute;nyadot.
+            </p>
+        </div>
+    </div>
+    <div id="accumulationThreshold">
+        <div>
+            <p>K&uuml;sz&ouml;b&eacute;rt&eacute;k annak meghat&aacute;roz&aacute;s&aacute;hoz, hogy egy adott cella az ilyen cell&aacute;ba &aacute;raml&oacute; teljes ter&uuml;let alapj&aacute;n egy &aacute;ramlat r&eacute;sze-e.
+            </p>
+        </div>
+    </div>
+    <div id="streamDesignationMethod">
+        <div>
+            <p>Meghat&aacute;rozza, hogy a kimeneti &aacute;ramlatszegmensek &aacute;lland&oacute; &eacute;rt&eacute;kkel, egyedi &eacute;rt&eacute;kekkel vagy rendezett &eacute;rt&eacute;kekkel rendelkezzenek.
+            </p>
+        </div>
+    </div>
+    <div id="simplify">
+        <div>
+            <p>Megadja, hogy a kimeneti adatfolyam vonalak egyszerűbb alakzatokba simuljanak-e.
+            </p>
+            <p>Ha be van jel&ouml;lve, akkor az adatfolyam-vonalas vektoros elemek a Douglas-Peucker-algoritmussal egyszerűs&ouml;dnek, sqrt(0,5) * cellam&eacute;ret toleranci&aacute;val. Ez az alap&eacute;rtelmez&eacute;s. Ha nincs bejel&ouml;lve, az adatfolyam-vonalas vektoros elemek nem lesznek sim&iacute;tva.
+            </p>
+        </div>
+    </div>
+    <div id="outputStreamFeaturesName">
+        <div>
+            <p>A l&eacute;trehozni &eacute;s a t&eacute;rk&eacute;phez vonalas r&eacute;tegk&eacute;nt hozz&aacute;adni k&iacute;v&aacute;nt adatfolyam-vonalas vektoros elemek r&eacute;teg neve.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>A  <b>Saj&aacute;t tartalom </b>azon mapp&aacute;j&aacute;nak neve, ahov&aacute; az eredm&eacute;nyek ment&eacute;se t&ouml;rt&eacute;nik.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

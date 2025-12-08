@@ -1,0 +1,13 @@
+{
+  "weightedOverlayTable": "Svorinių perdangų lentelė",
+  "id": "ID",
+  "layer": "Sluoksnis",
+  "field": "Darbui lauke",
+  "influence": "Poveikis",
+  "sumOfInfluence": "Poveikių suma",
+  "value": "Reikšmė",
+  "remapTable": "Iš naujo susieti lentelę",
+  "scale": "Mastelis",
+  "scales": "Masteliai",
+  "selectRaster": "Pasirinkti rastrą"
+}

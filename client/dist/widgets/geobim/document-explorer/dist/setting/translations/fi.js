@@ -1,0 +1,1 @@
+System.register([],function(e){return{execute:function(){e({settingsLabel:"Document Explorerin asetukset",selectModelViewer:"Valitse Document Viewer -pienoisohjelma, jos haluat n\xe4ytt\xe4\xe4 dokumentit."})}}});

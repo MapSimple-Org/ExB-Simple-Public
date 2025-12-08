@@ -1,0 +1,15 @@
+{
+  "name": "iteminfo",
+  "type": "template",
+  "templateType": "fixed-non-modal-window",
+  "label": "Item info",
+  "thumbnail": "thumbnail.png",
+  "order": 2,
+  "tags": [
+    "Share",
+    "Link"
+  ],
+  "categoriesTags": [],
+  "thumbnailWidth": 320,
+  "thumbnailHeight": 268
+}

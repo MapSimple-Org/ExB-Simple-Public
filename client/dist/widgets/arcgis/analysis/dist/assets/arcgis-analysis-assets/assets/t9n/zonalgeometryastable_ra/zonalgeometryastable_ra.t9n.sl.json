@@ -1,0 +1,9 @@
+{
+  "inputLayerGroupText": "Izberite vhodni sloj za izračun geometrije meja območja.",
+  "itemProperties": {
+    "description": "Izhodna tabela, ustvarjena z izvajanjem orodja za analizo Območna geometrija kot tabela.",
+    "snippet": "Izhodna tabela, ustvarjena iz Območna geometrija kot tabela"
+  },
+  "zonalGeometrySettingGroupLabel": "Nastavitev območne geometrije",
+  "zonalGeometrySettingGroupText": "Določite velikost celice za izračun."
+}

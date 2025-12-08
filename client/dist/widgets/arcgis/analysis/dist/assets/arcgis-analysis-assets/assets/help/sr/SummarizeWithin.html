@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>Alat Sumiraj u okviru izračunava statistiku za geoobjekte unutar navedenih blokova ili poligona.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="summaryLayer">
+        <div>
+            <p>Sloj koji će biti sumarizovan.
+            </p>
+            <p class="toolPaneOnly">Broj geoobjekata zavisi od dodatnih faktora kao &scaron;to su kriterijumi filtriranja i obuhvat analize.
+            </p>
+        </div>
+    </div>
+    <div id="binType">
+        <div>
+            <p>Tip graničnih geoobjekata u okviru kojih će se sumirati ulazne karakteristike. Ovo može biti sloj poligona ili teselaciona mreža od kvadratnih ili &scaron;estougaonih korpi koje se generi&scaron;u kada se alatka pokrene.
+            </p>
+        </div>
+    </div>
+    <div id="sumWithinLayer">
+        <div>
+            <p>Sloj poligona u okviru kojih će se sumirati ulazne karakteristike.
+            </p>
+            <p class="toolPaneOnly">Broj geoobjekata zavisi od dodatnih faktora kao &scaron;to su kriterijumi filtriranja i obuhvat analize.
+            </p>
+        </div>
+    </div>
+    <div id="binSize">
+        <div>
+            <p>Veličina generisanih korpi. Za kvadratne korpe, navedeni broj i jedinice određuju visinu i dužinu kvadrata. Za &scaron;estougaone korpe, navedeni broj i jedinice određuju rastojanje između paralelnih stranica.
+            </p>
+        </div>
+    </div>
+    <div id="binSizeUnit">
+        <div>
+            <p>Jedinice koje će se koristiti za određivanje veličine korpe.
+            </p>
+        </div>
+    </div>
+    <div id="sumShape">
+        <div>
+            <p>Određuje da li će biti izračunata ukupna veličina geoobjekata sažeta u svakom graničnom poligonu. Za linije će biti izračunata ukupna dužina. Za poligone će biti izračunata ukupna povr&scaron;ina.
+            </p>
+        </div>
+    </div>
+    <div id="shapeUnits">
+        <div>
+            <p>Jedinice koje će se koristiti za izračunavanje ukupne veličine sažetih karakteristika.
+            </p>
+        </div>
+    </div>
+    <div id="summaryFields">
+        <div>
+            <p>Polja sa brojem ili datumom iz ulaznog sloja biće sumiranje i statistika koja će se izračunati za svako polje.
+            </p>
+        </div>
+    </div>
+    <div id="groupByField">
+        <div>
+            <p>Polje iz ulaznog sloja koje će se koristiti za razdvajanje podataka u različite grupe za statistička izračunavanja.
+            </p>
+        </div>
+    </div>
+    <div id="minorityMajority">
+        <div>
+            <p>Precizira da li treba izračunati manjinske (najmanje dominantne) ili većinske (najdominantnije) grupe unutar svake zbirne oblasti.
+            </p>
+        </div>
+    </div>
+    <div id="percentShape">
+        <div>
+            <p>Određuje da li će biti izračunat procenat sažetih geoobjekata koji pripadaju svakoj grupi unutar svake zbirne oblasti.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>Naziv sloja koji će biti kreiran i dodat mapi.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>Naziv fascikle u  <b>Mom sadržaju</b> u kojoj će rezultati biti sačuvani.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

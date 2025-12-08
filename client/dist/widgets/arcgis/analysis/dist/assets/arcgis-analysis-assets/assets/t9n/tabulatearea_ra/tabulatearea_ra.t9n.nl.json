@@ -1,0 +1,12 @@
+{
+  "classField": "Klasseveld",
+  "classesAsRowsLabel": "Klasses als rijen in uitvoertabel",
+  "inputClassRasterOrFeatures": "Klasseraster of objecten invoeren",
+  "inputLayerGroupText": "Kies de invoerzone en klasselaag om de kruistabel tussen de twee gegevenssets te berekenen.",
+  "itemProperties": {
+    "description": "Uitvoertabel die is gegenereerd door de analysetool Gebied tabelliseren uit te voeren.",
+    "snippet": "Uitvoertabel die is gegenereerd via Gebied tabelliseren"
+  },
+  "tabulateAreaSettingsGroupLabel": "Gebiedsinstellingen tabellariseren",
+  "tabulateAreaSettingsGroupText": "Kies hoe u de klasses in de uitvoertabel wilt afhandelen. Specificeer de celgrootte om te berekenen. "
+}

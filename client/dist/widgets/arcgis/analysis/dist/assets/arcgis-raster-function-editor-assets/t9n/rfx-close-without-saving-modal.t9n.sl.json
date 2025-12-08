@@ -1,0 +1,7 @@
+{
+  "header": "Urejevalnik rastrske funkcije",
+  "content": "Imate neshranjene spremembe v \"${rftTitle}\". Če ne shranite, bodo te spremembe izgubljene.",
+  "cancel": "Prekliči",
+  "dontSave": "Ne shrani",
+  "save": "Shrani"
+}

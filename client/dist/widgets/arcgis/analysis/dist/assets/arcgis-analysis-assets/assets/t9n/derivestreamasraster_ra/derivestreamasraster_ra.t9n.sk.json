@@ -1,0 +1,10 @@
+{
+  "forceFlowLabel": "Vynútiť, aby okrajové bunky smerovali von",
+  "inputLayersGroupText": "Vyberte vstupný raster povrchu a voliteľne dáta o priehlbinách a raster váh.",
+  "itemProperties": {
+    "description": "Výstup vygenerovaný z nástroja Odvodiť prúd ako raster",
+    "snippet": "Výstup vygenerovaný z Odvodiť prúd ako raster"
+  },
+  "outputStreamRasterLabel": "Názov rastra výstupného prúdu",
+  "streamSettingsGroupText": "Zadajte prahovú hodnotu akumulácie, metódu označenia toku a spôsob spracovania toku na okraji rastra vstupného povrchu."
+}

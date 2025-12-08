@@ -1,0 +1,16 @@
+{
+  "updateData": "Atjaunināt datus",
+  "cancel": "Atcelt",
+  "editStyle": "Aizstājiet slāņa stila failu ar atjauninātu versiju no datora.",
+  "updatePackages": "Aizstājiet ${type} ar atjauninātu versiju no datora. Augšupielādētajam failam jābūt ar tādu pašu nosaukumu kā ${hostedLayerName}.",
+  "uploadStaticFiles": "Augšupielādētajam failam ir jābūt ar tādu pašu nosaukumu kā oriģinālajam failam ${fileName}",
+  "sameFileNameDescription": "Augšupielādētajam failam ir jābūt ar tādu pašu nosaukumu un lauku nosaukumiem kā oriģinālajam failam ${fileName}",
+  "updating": "Notiek atjaunināšana...",
+  "error": "Kļūda",
+  "errors": {
+    "sameFileName": "Lai atjauninātu šo vienumu, ir jāaugšupielādē fails ar nosaukumu ${fileName}.",
+    "invalidStyleFileExtension": "Nederīgs faila paplašinājums. Augšupielādētajam stilam jābūt .json faila paplašinājumam.",
+    "errorWhileUpload": "Augšupielādējot vienību, radās kļūda.",
+    "errorUpdate": "Pārrakstot vienību, radās kļūda."
+  }
+}

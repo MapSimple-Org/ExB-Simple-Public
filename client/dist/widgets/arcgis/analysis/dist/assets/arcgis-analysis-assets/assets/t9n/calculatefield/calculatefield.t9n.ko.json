@@ -1,0 +1,13 @@
+{
+  "fieldCalcExpression": "필드 계산 식",
+  "fieldCalculationGroupLabel": "필드 계산",
+  "fieldPlaceholderText": "클릭하여 필드 선택 또는 생성",
+  "fieldToCalculate": "계산할 필드",
+  "inputDatasetGroupLabel": "입력",
+  "itemProperties": {
+    "description": "ModelBuilder에서 필드 계산 도구를 실행하여 생성된 결과입니다.",
+    "snippet": "필드 계산에서 생성된 피처 레이어"
+  },
+  "noFieldSpecified": "식을 생성하기 위해 계산할 필드를 지정합니다.",
+  "whereClause": "계산을 특정 레코드에만 적용"
+}

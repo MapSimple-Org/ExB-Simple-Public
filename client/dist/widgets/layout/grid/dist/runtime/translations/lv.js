@@ -1,0 +1,1 @@
+System.register([],function(e){return{execute:function(){e({_widgetLabel:"Re\u017e\u0123is",widgetProperties:"Logr\u012bka \u012bpa\u0161\u012bbas",widgetFunctions:"Logr\u012bka funkcijas",widgetName:"logr\u012bka nosaukums:",widgetProps:"logr\u012bka \u012bpa\u0161\u012bbas:",tips:"Re\u017e\u0123is"})}}});

@@ -1,0 +1,9 @@
+{
+  "weightedSumTable": "טבלת סכום משוקלל",
+  "id": "מזהה",
+  "layer": "שכבה",
+  "field": "שדה",
+  "weight": "משקל",
+  "value": "ערך",
+  "selectLayer": "בחר שכבה"
+}

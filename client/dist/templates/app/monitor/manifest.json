@@ -1,0 +1,33 @@
+{
+  "name": "monitor",
+  "type": "template",
+  "templateType": "app",
+  "label": "Monitor",
+  "description": "Monitor is a single-page template that includes a combination of widgets built to organize, track, and display your data visualizations using a dashboard layout.",
+  "thumbnail": "thumbnail.png",
+  "order": 25,
+  "tags": [
+    "Map",
+    "Chart",
+    "Section",
+    "View",
+    "Navigation",
+    "Table",
+    "Query",
+    "Card",
+    "Indicator",
+    "Window",
+    "Logo",
+    "Title",
+    "Share"
+  ],
+  "categoriesTags": [
+    "Map centric",
+    "Dashboard",
+    "Fullscreen"
+  ],
+  "isMultiplePage": false,
+  "isMapAware": true,
+  "thumbnailWidth": 320,
+  "thumbnailHeight": 214
+}

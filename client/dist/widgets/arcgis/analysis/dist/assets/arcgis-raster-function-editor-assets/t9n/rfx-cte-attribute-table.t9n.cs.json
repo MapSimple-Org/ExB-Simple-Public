@@ -1,0 +1,22 @@
+{
+  "value": "Hodnota",
+  "classname": "ClassName",
+  "color": "Barva",
+  "raster": "Rastr",
+  "tableType": "Typ tabulky",
+  "manual": "Manuální",
+  "external": "Externí",
+  "browseTable": "Procházet tabulku",
+  "browseTableFrom": "Procházet tabulku z",
+  "file": "Soubor",
+  "dbfFile": "Soubor DBF",
+  "layer": "Vrstva",
+  "unsupportedDataType": "Nepodporovaný typ",
+  "failedToGetTableFromLayer": "Načtení tabulky z vrstvy se nezdařilo.",
+  "generate": "Generovat tabulku",
+  "minValue": "Minimální hodnota",
+  "maxValue": "Maximální hodnota",
+  "classBaseName": "Základní název třídy",
+  "colorscheme": "Barevné schéma",
+  "defaultClassName": "Popisek_"
+}

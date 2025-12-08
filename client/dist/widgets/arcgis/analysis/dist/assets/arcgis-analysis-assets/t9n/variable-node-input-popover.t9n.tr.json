@@ -1,0 +1,7 @@
+{
+  "header": "Değişken seç",
+  "noFound": "Uyumlu değişken bulunamadı",
+  "search": "Değişken ara",
+  "variableLabel": "Etiket: <span style='font-weight: var(--calcite-font-weight-normal)'>${val}</span>",
+  "variableVal": "Değer: <span style='font-weight: var(--calcite-font-weight-normal)'>${val}</span>"
+}

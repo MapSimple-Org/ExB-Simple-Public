@@ -1,0 +1,117 @@
+{
+  "version": "24.0.0",
+  "id": "gauge",
+  "type": "chart",
+  "innerRadius": 70,
+  "startAngle": -200,
+  "endAngle": 20,
+  "dataSource": {
+    "query": {
+      "outStatistics": []
+    }
+  },
+  "colorMatch": false,
+  "series": [
+    {
+      "type": "gaugeSeries"
+    }
+  ],
+  "axes": [
+    {
+      "type": "chartAxis",
+      "visible": true,
+      "title": {
+        "type": "chartText",
+        "visible": false,
+        "content": {
+          "type": "esriTS",
+          "color": "var(--sys-color-surface-paper-text)",
+          "font": {
+            "family": "inherit",
+            "size": 14,
+            "style": "normal",
+            "weight": "normal",
+            "decoration": "none"
+          },
+          "horizontalAlignment": "center",
+          "verticalAlignment": "middle"
+        }
+      },
+      "labels": {
+        "type": "chartText",
+        "visible": true,
+        "content": {
+          "type": "esriTS",
+          "color": "var(--sys-color-surface-paper-hint)",
+          "font": {
+            "family": "inherit",
+            "size": 12,
+            "style": "normal",
+            "weight": "normal",
+            "decoration": "none"
+          },
+          "horizontalAlignment": "center",
+          "verticalAlignment": "middle"
+        }
+      },
+      "innerLabel": {
+        "type": "chartText",
+        "visible": true,
+        "content": {
+          "type": "esriTS",
+          "color": "var(--sys-color-surface-paper-text)",
+          "font": {
+            "family": "inherit",
+            "size": 18,
+            "style": "normal",
+            "weight": "bold",
+            "decoration": "none"
+          },
+          "horizontalAlignment": "center",
+          "verticalAlignment": "bottom",
+          "yoffset": "22%"
+        }
+      },
+      "needle": {
+        "type": "gaugeNeedle",
+        "visible": true,
+        "startWidth": 12,
+        "endWidth": 2,
+        "innerRadius": 0,
+        "displayPin": false,
+        "symbol": {
+          "type": "esriSFS",
+          "color": "var(--sys-color-primary-main)",
+          "outline": {
+            "type": "esriSLS",
+            "style": "esriSLSSolid",
+            "color": "var(--sys-color-divider-secondary)",
+            "width": 0
+          }
+        }
+      },
+      "ticks": {
+        "type": "gaugeAxisTick",
+        "visible": true
+      },
+      "guides": [],
+      "valueFormat": {
+        "type": "number",
+        "intlOptions": {
+          "style": "decimal",
+          "notation": "standard",
+          "minimumFractionDigits": 0,
+          "maximumFractionDigits": 2
+        }
+      },
+      "minimum": 0,
+      "maximum": 1000,
+      "lineSymbol": {
+        "type": "esriSLS",
+        "style": "esriSLSSolid",
+        "color": "var(--sys-color-divider-primary)",
+        "width": 3
+      }
+    }
+  ]
+}

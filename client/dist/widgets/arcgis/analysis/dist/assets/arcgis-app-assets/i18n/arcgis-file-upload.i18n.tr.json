@@ -1,0 +1,16 @@
+{
+  "updateData": "Verileri güncelle",
+  "cancel": "İptal",
+  "editStyle": "Servis stili dosyasını bilgisayarınızdaki daha güncel bir sürümle değiştirin.",
+  "updatePackages": "${type} yerine, bilgisayarınızdan güncellenmiş bir versiyon kullanın. Yüklenen dosyanın adı ${hostedLayerName} ile aynı olmalıdır.",
+  "uploadStaticFiles": "Yüklenen dosya, orijinal dosya ${fileName} ile aynı ada sahip olmalıdır",
+  "sameFileNameDescription": "Yüklenen dosya, orijinal dosya ${fileName} ile aynı ada ve alan adlarına sahip olmalıdır",
+  "updating": "Güncelleniyor...",
+  "error": "Hata",
+  "errors": {
+    "sameFileName": "Bu ögeyi güncellemek için ${fileName} adlı bir dosyayı yüklemeniz gerekiyor.",
+    "invalidStyleFileExtension": "Geçersiz dosya ek bileşeni. Yüklenen stilin .json dosya ek bileşeni olması gerekir.",
+    "errorWhileUpload": "Öge yüklenirken bir hata oluştu.",
+    "errorUpdate": "Ögenin üzerine yazılırken bir hata oluştu."
+  }
+}

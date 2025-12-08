@@ -1,0 +1,9 @@
+{
+  "disconnect": "Atjungti nuo kintamojo",
+  "overwriteTo": "Perrašyti sluoksnį: <span style='font-weight: var(--calcite-font-weight-normal)'>${val}</span>",
+  "resultType": "Rezultato tipas: <span style='font-weight: var(--calcite-font-weight-normal)'>${val}</span>",
+  "saveTo": "Išvesties pavadinimas: <span style='font-weight: var(--calcite-font-weight-normal)'>${val}</span>",
+  "variableLabel": "Užrašas: <span style='font-weight: var(--calcite-font-weight-normal)'>${val}</span>",
+  "variableNode": "Kintamojo mazgas",
+  "variableVal": "Reikšmė: <span style='font-weight: var(--calcite-font-weight-normal)'>${val}</span>"
+}

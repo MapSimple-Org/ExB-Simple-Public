@@ -1,0 +1,22 @@
+{
+  "value": "Значение",
+  "classname": "ClassName",
+  "color": "Цвет",
+  "raster": "Растр",
+  "tableType": "Тип таблицы",
+  "manual": "Вручную",
+  "external": "Внешний",
+  "browseTable": "Найти таблицу",
+  "browseTableFrom": "Найти таблицу из",
+  "file": "Файл",
+  "dbfFile": "Файл DBF",
+  "layer": "Слой",
+  "unsupportedDataType": "Неподдерживаемый тип",
+  "failedToGetTableFromLayer": "Не удалось получить таблицу из слоя.",
+  "generate": "Построить таблицу",
+  "minValue": "Минимальное значение",
+  "maxValue": "Максимальное значение",
+  "classBaseName": "Базовое имя класса",
+  "colorscheme": "Цветовая схема",
+  "defaultClassName": "Надпись_"
+}

@@ -1,0 +1,23 @@
+{
+  "add": "Toevoegen",
+  "arcade": "Arcade",
+  "arcadeExpressionEditor": "Expressie-editor Arcade",
+  "badSyntaxSQLExpression": "Slechte syntaxis in SQL-expressie. Corrigeer de fouten.",
+  "calculationExpressionEditor": "Berekeningsexpressie-editor",
+  "cancel": "Annuleren",
+  "chooseLanguage": "Kies een taal",
+  "fieldToCalculate": "Te berekenen veld: ${fieldName}",
+  "idealFor": "Ideaal voor:",
+  "languageSelect": "Taalselectie",
+  "layerLoadFailNoFields": "Kan laag niet laden. Kan velden niet ophalen voor de editor.",
+  "next": "Volgende",
+  "noLayerProvidedNoFields": "Er is geen laag opgegeven. Kan velden niet ophalen voor de editor.",
+  "sql": "SQL",
+  "sqlExpressionEditor": "SQL-expressie-editor",
+  "tileSelectArcadeUseCase1": "Berekeningen waarvoor meer functionaliteit nodig is dan aanwezig is in SQL, waaronder ruimtelijke bewerkingen",
+  "tileSelectArcadeUseCase2": "Verbeterde probleemoplossing",
+  "tileSelectSqlUseCase1": "Snelste prestatie",
+  "tileSelectSqlUseCase2": "Berekeningen die in SQL kunnen worden uitgedrukt",
+  "tileSelectSqlUseCase3": "Lagen met synchronisatie of lagen waarvoor het volgen van gemaakte of bijgewerkte objecten is ingeschakeld",
+  "valueCannotBeBlank": "De waarde mag niet leeg zijn."
+}

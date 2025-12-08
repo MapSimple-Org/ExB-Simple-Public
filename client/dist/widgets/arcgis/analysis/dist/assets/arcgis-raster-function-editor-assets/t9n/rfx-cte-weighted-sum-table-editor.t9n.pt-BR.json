@@ -1,0 +1,9 @@
+{
+  "weightedSumTable": "Tabela de Soma Ponderada",
+  "id": "ID",
+  "layer": "Camada",
+  "field": "Campo",
+  "weight": "Peso",
+  "value": "Valor",
+  "selectLayer": "Selecionar Camada"
+}

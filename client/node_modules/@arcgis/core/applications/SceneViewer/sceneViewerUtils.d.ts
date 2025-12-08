@@ -1,0 +1,20 @@
+import "../../interfaces";
+
+export const canSaveAs: __esri.sceneViewerUtils["canSaveAs"];
+export const closeCatalogLayer: __esri.sceneViewerUtils["closeCatalogLayer"];
+export const createTilingScheme: __esri.sceneViewerUtils["createTilingScheme"];
+export const editorHasPendingEdits: __esri.sceneViewerUtils["editorHasPendingEdits"];
+export const editorNavigateBack: __esri.sceneViewerUtils["editorNavigateBack"];
+export const fetchPopupFeaturesFromGraphics: __esri.sceneViewerUtils["fetchPopupFeaturesFromGraphics"];
+export const getCompatibleTileInfoForVTL: __esri.sceneViewerUtils["getCompatibleTileInfoForVTL"];
+export const getSourceLayerFromBuildingComponentSublayerGraphic: __esri.sceneViewerUtils["getSourceLayerFromBuildingComponentSublayerGraphic"];
+export const initializeSchemaValidators: __esri.sceneViewerUtils["initializeSchemaValidators"];
+export const isHostedAgolServiceUrl: __esri.sceneViewerUtils["isHostedAgolServiceUrl"];
+export const isSchemaValidationError: __esri.sceneViewerUtils["isSchemaValidationError"];
+export const isSpatialReferenceSupported: __esri.sceneViewerUtils["isSpatialReferenceSupported"];
+export const isSupportedTileInfo: __esri.sceneViewerUtils["isSupportedTileInfo"];
+export const renderSVG: __esri.sceneViewerUtils["renderSVG"];
+export const saveStateWarning: __esri.sceneViewerUtils["saveStateWarning"];
+export const setDefaultsFromMapSettings: __esri.sceneViewerUtils["setDefaultsFromMapSettings"];
+export const setSourceLayerOfBuildingComponentSublayerGraphic: __esri.sceneViewerUtils["setSourceLayerOfBuildingComponentSublayerGraphic"];
+export const zoomDragBeginPoint: __esri.sceneViewerUtils["zoomDragBeginPoint"];

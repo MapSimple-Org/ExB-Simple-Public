@@ -1,0 +1,13 @@
+{
+  "addField": "Lisa väli",
+  "deselectAll": "Tühista kõik valikud",
+  "done": "Valmis",
+  "noFieldsAvailable": "Kihis ${layerName} pole ühtegi andmetüübi nõudele vastavat välja. Jätkamiseks valige mõni muu kiht.",
+  "noInputSelected": {
+    "withLayerInputLabel": "Sisendkihti pole valitud. Jätkamiseks valige kiht kohas ${layerInputLabel}.",
+    "withoutLayerInputLabel": "Sisendkihti pole valitud. Jätkamiseks valige sisendkiht."
+  },
+  "noSearchResults": "Vastavaid välju ei leitud.",
+  "selectAll": "Vali kõik",
+  "summaryFieldsPopover": "Kokkuvõtteväljad"
+}

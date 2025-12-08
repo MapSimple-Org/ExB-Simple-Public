@@ -1,0 +1,177 @@
+{
+  "memberBrowser": {
+    "filters": "Filter",
+    "pageRange": "${start}-${end}, totalt: ${total}",
+    "pageRangeAria": "${start}-${end}, totalt antal medlemmar: ${total}",
+    "selectedMembers": "Valda medlemmar",
+    "noSelectedMembers": "Inga medlemmar är valda för närvarande",
+    "noUsersFound": "Inga användare hittades som passar in på dina kriterier. Prova att rensa några filter eller ändra din sökning så att det kan visas fler användare.",
+    "enterTermExternal": "Ange ett sökord för att hitta användare i hela ArcGIS Online",
+    "noUsers": "Inga användare tillgängliga",
+    "coordinator": "Samarbetskoordinator"
+  },
+  "search": {
+    "searchMembers": "Sök efter medlemmar"
+  },
+  "filterUserTypes": {
+    "title": "Användartyp",
+    "label": "Användartyp: ${name}",
+    "loading": "Läser in användartyper..."
+  },
+  "filterRoles": {
+    "title": "Roll",
+    "label": "Roll: ${name}",
+    "loading": "Läser in roller...",
+    "searchRoles": "Sök roller"
+  },
+  "filterOrgGroups": {
+    "title": "Organisationens grupper",
+    "label": "Grupp: ${name}",
+    "loading": "Läser in organisationens grupper...",
+    "searchGroups": "Sök efter grupper",
+    "noGroupsFound": "Inga grupper hittades. Prova att ändra sökvillkoret för att visa fler grupper."
+  },
+  "filterMyGroups": {
+    "title": "Mina grupper",
+    "label": "Grupp: ${name}",
+    "loading": "Läser in mina grupper...",
+    "searchMyGroups": "Sök i mina grupper"
+  },
+  "filterCategories": {
+    "title": "Kategorier",
+    "label": "Kategori: ${name}",
+    "loading": "Läser in kategorier...",
+    "noCategoriesTitle": "Inga medlemskategorier ännu",
+    "noCategories": "Medlemskategorier gör det möjligt för administratörer att organisera sina medlemmar i en katalog för att förenkla administrativa åtgärder för medlemmar. Organisationsmedlemmar kan även använda den här katalogen för att hitta andra medlemmar.",
+    "setupCategories": "Ställ in medlemskategorier",
+    "configureCategories": "Konfigurera kategorier",
+    "noCategoriesAssigned": "Inga kategorier tilldelade"
+  },
+  "filterPartnerCollabs": {
+    "title": "Partnersamarbeten",
+    "label": "Partnersamarbeten: ${name}",
+    "loading": "Läser in partnersamarbeten...",
+    "coordinatorsOnly": "Endast samarbetskoordinatorer",
+    "coordinatorsDescription": "Samarbetskoordinatorer är representanter från partnersamarbeten som kan läggas till i en grupp utan att kräva bekräftelse.",
+    "coordinatorsInfoLabel": "Mer information om samarbetskoordinatorer"
+  },
+  "filterSearchSwitch": {
+    "searchAll": "Sök alla ArcGIS Online-organisationsmedlemmar",
+    "searchPartners": "Inkludera denna och medlemmar från partnerorganisationer"
+  },
+  "table": {
+    "caption": "Medlemsresultat, kolumnrubriker med knappar är sorteringsbara.",
+    "selectAll": "Markera alla",
+    "selection": "Val",
+    "headers": {
+      "name": "Namn",
+      "membertype": "Grupproll",
+      "affiliation": "Anknytning",
+      "joined": "Gick med",
+      "credits": "Återstående krediter",
+      "remainingCredits": "Totalt antal återstående krediter ${num}",
+      "lastlogin": "Senaste inloggning",
+      "usertype": "Användartyp",
+      "role": "Roll",
+      "mfaenabled": "Multifaktorautentisering"
+    }
+  },
+  "tableRow": {
+    "moreOptions": "Fler alternativ",
+    "groupManager": "Gruppledare",
+    "owner": "Ägare",
+    "member": "Medlem",
+    "myOrg": "Min organisation",
+    "other": "Annat",
+    "coordinator": "Samarbetskoordinator",
+    "noLimit": "Ingen gräns",
+    "creditsNumber": "${remain} av ${total}",
+    "today": "Idag",
+    "yesterday": "Igår",
+    "never": "Aldrig",
+    "role": "Roll",
+    "memberIsCoordinator": "Den här medlemmen är en samarbetskoordinator",
+    "rolesForCoordinator": "Samarbetskoordinatorer kan endast ha administratörs- eller facilitatorroller.",
+    "memberIsContact": "Den här medlemmen är en administrativ kontakt",
+    "removeFromContact": "Om du vill ändra den här medlemmens roll måste du först ta bort dem från ${linkStart}listan över administrativa kontakter${linkEnd}."
+  },
+  "listCard": {
+    "moreOptions": "Fler alternativ",
+    "lastLoggedIn": "Senast inloggad i ${value}",
+    "today": "Idag",
+    "yesterday": "Igår",
+    "hasNotLoggedIn": "Har inte loggat in ännu",
+    "neverSignedInTooltip": "Den här medlemmen har aldrig loggat in på sitt konto som skapades den ${date}",
+    "userType": "Användartyp",
+    "role": "Roll",
+    "creditsRemaining": "Återstående krediter",
+    "noLimit": "Ingen gräns",
+    "creditsNumber": "${remain} av ${total}",
+    "addonLicenses": "Tilläggslicenser",
+    "configureLicenses": "Konfigurera licenser",
+    "groups": "Grupper",
+    "configureGroups": "Konfigurera grupper",
+    "viewGroups": "Visa grupper"
+  },
+  "myOrg": {
+    "myOrgView": "Min organisationsvy"
+  },
+  "filterGroupRole": {
+    "title": "Grupproll",
+    "label": "Grupproll: ${role}",
+    "admins": "Ägare och gruppledare",
+    "member": "Medlem"
+  },
+  "filterAffiliation": {
+    "title": "Anknytning",
+    "label": "Anknytning: ${name}",
+    "myOrg": "Min organisation",
+    "other": "Annat"
+  },
+  "filterCreditsRemain": {
+    "title": "Återstående krediter",
+    "noLimit": "Ingen gräns",
+    "lessThan": "Mindre än",
+    "credits": "Krediter",
+    "labelNoLimit": "Krediter: Ingen gräns",
+    "labelLess": "Krediter: Mindre än ${value}",
+    "invalidValue": "Det angivna värdet är ogiltigt."
+  },
+  "filterEmailVerification": {
+    "title": "E-postverifieringsstatus",
+    "unverified": "Overifierade e-postadresser",
+    "verified": "Verifierade e-postadresser",
+    "label": "E-postverifieringsstatus: ${status}"
+  },
+  "filterLoginType": {
+    "title": "Inloggningsinformation",
+    "label": "Inloggningsinformation: ${type}",
+    "social": "Socialt"
+  },
+  "filterApp": {
+    "title": "App",
+    "label": "App: ${app}"
+  },
+  "filterMFA": {
+    "title": "Multifaktorautentisering",
+    "enabled": "Aktiverad",
+    "disabled": "Inaktiverad",
+    "label": "Multifaktorautentisering: ${status}"
+  },
+  "roles": {
+    "user": "Användare",
+    "publisher": "Utgivare",
+    "admin": "Administratör",
+    "viewer": "Visningsprogram",
+    "editor": "Dataredigerare",
+    "facilitator": "Facilitator"
+  },
+  "view": {
+    "view": "Visa",
+    "list": "Lista",
+    "table": "Tabell"
+  },
+  "assignedLicenses": "Visa endast medlemmar som tilldelats denna licens",
+  "onlyDoubleAssigned": "Visa endast medlemmar som tilldelats denna licens två gånger",
+  "maxSelected": "Högst ${number} medlemmar kan väljas åt gången."
+}

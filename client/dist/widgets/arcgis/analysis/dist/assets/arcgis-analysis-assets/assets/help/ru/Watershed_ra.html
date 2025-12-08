@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>Инструмент Водосборная область определяет водосборную область, расположенную выше набора ячеек растра.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputFlowDirectionRaster">
+        <div>
+            <p>Направление стока для каждой ячейки.
+            </p>
+            <p>Для определения направления стока необходимо использовать метод D8.
+            </p>
+        </div>
+    </div>
+    <div id="inPourPointRasterOrFeatures">
+        <div>
+            <p>Местоположения, для которых будет определяться расположенная выше них водосборная область.
+            </p>
+            <p class="toolPaneOnly">Для входных объектов количество зависит от дополнительных факторов, таких как критерии фильтрации и экстент анализа.
+            </p>
+        </div>
+    </div>
+    <div id="pourPointField">
+        <div>
+            <p>Поле, используемое для присвоения значений местоположениям точек устьев.
+            </p> 
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>Имя растрового слоя водосборной области, который будет создан и добавлен на карту. Слой содержит разные водосборные области, представленные разными значениями ячеек из  <b>поля Pour point</b>.
+            </p>
+        </div>
+    </div>
+    <div id="resultType">
+        <div>
+            <p>Тип создаваемых выходных данных. Результатом может быть слой листов изображений или динамический слой изображений.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>Имя папки в разделе  <b>Мои ресурсы</b>, в которую будет сохранен результат.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

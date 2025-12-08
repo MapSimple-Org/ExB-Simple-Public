@@ -1,0 +1,22 @@
+{
+  "general": "Загальна інформація",
+  "parameters": "Параметри",
+  "variables": "Змінні",
+  "name": "Ім'я",
+  "namePlaceHolder": "Введіть назву",
+  "description": "Опис",
+  "parameter": "Параметр",
+  "isPublic": "IsPublic",
+  "isDataset": "IsDataset",
+  "unknownPixelType": "Невідомий",
+  "outputPixelType": "Тип вихідних пікселів",
+  "u8PixelType": "8-бітний, непідписаний",
+  "s8PixelType": "8-бітний, підписаний",
+  "u16PixelType": "16-бітний, непідписаний",
+  "s16PixelType": "16-бітний, підписаний",
+  "u32PixelType": "32-бітний, непідписаний",
+  "s32PixelType": "32-бітний, підписаний",
+  "f32PixelType": "32-бітний, плаваючий",
+  "f64PixelType": "64-бітний, подвійний",
+  "properties": "Властивості"
+}

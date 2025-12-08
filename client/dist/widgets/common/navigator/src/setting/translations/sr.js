@@ -1,0 +1,1 @@
+System.register([],function(a){return{execute:function(){a({_widgetLabel:"Navigacija prikaza",tabStyle:"Stil kartice",navBtnStyle:"Stil dugmeta za navigaciju",stepTips:"Radi samo kada se animacija tranzicije postavi za odgovaraju\u0107i vid\u017eet Odeljak.",paginationStyle:"Stil paginacije",navArrowColor:"Boja strelice za navigaciju"})}}});

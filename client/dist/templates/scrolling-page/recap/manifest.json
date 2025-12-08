@@ -1,0 +1,26 @@
+{
+  "name": "recap",
+  "type": "template",
+  "templateType": "scrolling-page",
+  "label": "Recap",
+  "description": "Recap has a clean and crisp design that focuses mainly on the content. Images and text are organized into blocks and separated by whitespace for clear topic divisions.",
+  "thumbnail": "thumbnail.png",
+  "order": 20,
+  "templateCreateVersion": "1.16.0",
+  "tags": [
+    "Title",
+    "Logo",
+    "Banner",
+    "Section",
+    "Navigation",
+    "View",
+    "Share",
+    "Grid"
+  ],
+  "categoriesTags": [
+    "Web page",
+    "Scrolling"
+  ],
+  "thumbnailWidth": 320,
+  "thumbnailHeight": 214
+}

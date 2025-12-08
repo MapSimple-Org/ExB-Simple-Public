@@ -1,0 +1,147 @@
+{
+  "name": "FindPointClusters",
+  "displayName": "FindPointClusters",
+  "description": "",
+  "category": "",
+  "helpUrl": "http://ArcGISInternal:8443/arcgis/rest/directories/arcgisoutput/tasks_GPServer/tasks/FindPointClusters.htm",
+  "executionType": "esriExecutionTypeAsynchronous",
+  "parameters": [
+    {
+      "name": "analysisLayer",
+      "dataType": "GPFeatureRecordSetLayer",
+      "displayName": "analysisLayer",
+      "description": "",
+      "direction": "esriGPParameterDirectionInput",
+      "filter": {
+        "type": "featureClass",
+        "list": ["esriGeometryPoint"]
+      },
+      "defaultValue": {},
+      "parameterType": "esriGPParameterTypeRequired",
+      "category": ""
+    },
+    {
+      "name": "minFeaturesCluster",
+      "dataType": "GPLong",
+      "displayName": "minFeaturesCluster",
+      "description": "",
+      "direction": "esriGPParameterDirectionInput",
+      "defaultValue": null,
+      "parameterType": "esriGPParameterTypeRequired",
+      "category": ""
+    },
+    {
+      "name": "searchDistance",
+      "dataType": "GPDouble",
+      "displayName": "searchDistance",
+      "description": "",
+      "direction": "esriGPParameterDirectionInput",
+      "defaultValue": null,
+      "parameterType": "esriGPParameterTypeOptional",
+      "category": ""
+    },
+    {
+      "name": "searchDistanceUnit",
+      "dataType": "GPString",
+      "displayName": "searchDistanceUnit",
+      "description": "",
+      "direction": "esriGPParameterDirectionInput",
+      "defaultValue": "",
+      "parameterType": "esriGPParameterTypeOptional",
+      "category": "",
+      "choiceList": ["Feet", "Miles", "Meters", "Kilometers"]
+    },
+    {
+      "name": "outputName",
+      "dataType": "GPString",
+      "displayName": "outputName",
+      "description": "",
+      "direction": "esriGPParameterDirectionInput",
+      "defaultValue": "",
+      "parameterType": "esriGPParameterTypeOptional",
+      "category": ""
+    },
+    {
+      "name": "context",
+      "dataType": "GPString",
+      "displayName": "context",
+      "description": "",
+      "direction": "esriGPParameterDirectionInput",
+      "defaultValue": "",
+      "parameterType": "esriGPParameterTypeOptional",
+      "category": ""
+    },
+    {
+      "name": "method",
+      "dataType": "GPString",
+      "displayName": "clusteringMethod",
+      "description": "",
+      "direction": "esriGPParameterDirectionInput",
+      "defaultValue": "",
+      "parameterType": "esriGPParameterTypeOptional",
+      "category": "",
+      "choiceList": ["DBSCAN", "HDBSCAN", "OPTICS"]
+    },
+    {
+      "name": "sensitivity",
+      "dataType": "GPLong",
+      "displayName": "sensitivity",
+      "description": "",
+      "direction": "esriGPParameterDirectionInput",
+      "defaultValue": null,
+      "parameterType": "esriGPParameterTypeOptional",
+      "category": ""
+    },
+    {
+      "name": "timeField",
+      "dataType": "GPString",
+      "displayName": "timeField",
+      "description": "",
+      "direction": "esriGPParameterDirectionInput",
+      "defaultValue": "",
+      "parameterType": "esriGPParameterTypeOptional",
+      "category": ""
+    },
+    {
+      "name": "searchTimeInterval",
+      "dataType": "GPDouble",
+      "displayName": "searchTimeInterval",
+      "description": "",
+      "direction": "esriGPParameterDirectionInput",
+      "defaultValue": null,
+      "parameterType": "esriGPParameterTypeOptional",
+      "category": ""
+    },
+    {
+      "name": "searchTimeUnit",
+      "dataType": "GPString",
+      "displayName": "searchTimeUnit",
+      "description": "",
+      "direction": "esriGPParameterDirectionInput",
+      "defaultValue": "",
+      "parameterType": "esriGPParameterTypeOptional",
+      "category": "",
+      "choiceList": ["Seconds", "Minutes", "Hours", "Days", "Weeks", "Months", "Years"]
+    },
+    {
+      "name": "pointClustersResultLayer",
+      "dataType": "GPString",
+      "displayName": "pointClustersResultLayer",
+      "description": "",
+      "direction": "esriGPParameterDirectionOutput",
+      "defaultValue": "",
+      "parameterType": "esriGPParameterTypeDerived",
+      "category": ""
+    },
+    {
+      "name": "processInfo",
+      "dataType": "GPString",
+      "displayName": "processInfo",
+      "description": "",
+      "direction": "esriGPParameterDirectionOutput",
+      "defaultValue": "",
+      "parameterType": "esriGPParameterTypeDerived",
+      "category": ""
+    }
+  ]
+}

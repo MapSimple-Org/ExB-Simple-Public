@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>&Sigma;&tau;&omicron;&iota;&chi;&epsilon;ί&alpha; &epsilon;&lambda;έ&gamma;&chi;&omicron;&upsilon; &gamma;&iota;&alpha; &tau;&eta;&nu; &pi;&rho;&omicron;&sigma;&theta;ή&kappa;&eta; &epsilon;&nu;ό&sigmaf; &nu;έ&omicron;&upsilon; &pi;&epsilon;&delta;ί&omicron;&upsilon; &sigma;&tau;&alpha; &epsilon;&rho;&gamma;&alpha;&lambda;&epsilon;ί&alpha; &alpha;&nu;ά&lambda;&upsilon;&sigma;&eta;&sigmaf;.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="fieldName">
+        <div>
+            <p>&Kappa;&alpha;&theta;&omicron;&rho;ί&zeta;&epsilon;&iota; &tau;&omicron; ό&nu;&omicron;&mu;&alpha; &tau;&omicron;&upsilon; &nu;έ&omicron;&upsilon; &pi;&epsilon;&delta;ί&omicron;&upsilon;. &Tau;&omicron; ό&nu;&omicron;&mu;&alpha; &pi;&epsilon;&delta;ί&omicron;&upsilon; &theta;&alpha; &chi;&rho;&eta;&sigma;&iota;&mu;&omicron;&pi;&omicron;&iota;&eta;&theta;&epsilon;ί &epsilon;&pi;ί&sigma;&eta;&sigmaf; &omega;&sigmaf; &epsilon;&mu;&phi;&alpha;&nu;&iota;&zeta;ό&mu;&epsilon;&nu;&omicron; ό&nu;&omicron;&mu;&alpha;.
+            </p>
+            <p>&Tau;&omicron; ό&nu;&omicron;&mu;&alpha; &tau;&omicron;&upsilon; &pi;&epsilon;&delta;ί&omicron;&upsilon; &delta;&epsilon;&nu; &mu;&pi;&omicron;&rho;&epsilon;ί &nu;&alpha; &epsilon;ί&nu;&alpha;&iota; &tau;&omicron; ί&delta;&iota;&omicron; &mu;&epsilon; έ&nu;&alpha; &upsilon;&pi;ά&rho;&chi;&omicron;&nu; ό&nu;&omicron;&mu;&alpha; &pi;&epsilon;&delta;ί&omicron;&upsilon; &sigma;&tau;&omicron; &theta;&epsilon;&mu;&alpha;&tau;&iota;&kappa;ό &epsilon;&pi;ί&pi;&epsilon;&delta;&omicron;, &delta;&epsilon;&nu; &mu;&pi;&omicron;&rho;&epsilon;ί &nu;&alpha; &pi;&epsilon;&rho;&iota;έ&chi;&epsilon;&iota; &epsilon;&iota;&delta;&iota;&kappa;&omicron;ύ&sigmaf; &chi;&alpha;&rho;&alpha;&kappa;&tau;ή&rho;&epsilon;&sigmaf; ή &chi;&alpha;&rho;&alpha;&kappa;&tau;ή&rho;&epsilon;&sigmaf; &delta;&iota;&alpha;&sigma;&tau;ή&mu;&alpha;&tau;&omicron;&sigmaf; &kappa;&alpha;&iota; &delta;&epsilon;&nu; &mu;&pi;&omicron;&rho;&epsilon;ί &nu;&alpha; &epsilon;ί&nu;&alpha;&iota; &lambda;έ&xi;&eta;-&kappa;&lambda;&epsilon;&iota;&delta;ί SQL.
+            </p>
+        </div>
+    </div>
+    <div id="fieldType">
+        <div>
+            <p>&Epsilon;&pi;&iota;&lambda;έ&xi;&tau;&epsilon; έ&nu;&alpha;&nu; &tau;ύ&pi;&omicron; &pi;&epsilon;&delta;ί&omicron;&upsilon; &gamma;&iota;&alpha; &tau;&omicron; &nu;έ&omicron; &pi;&epsilon;&delta;ί&omicron;.
+            </p>
+            <p>&Omicron; &tau;ύ&pi;&omicron;&sigmaf; &pi;&epsilon;&delta;ί&omicron;&upsilon; &pi;&rho;&omicron;&sigma;&delta;&iota;&omicron;&rho;ί&zeta;&epsilon;&iota; &tau;&omicron;&upsilon;&sigmaf; &tau;ύ&pi;&omicron;&upsilon;&sigmaf; &tau;&iota;&mu;ώ&nu; &pi;&omicron;&upsilon; &theta;&alpha; &epsilon;&pi;&iota;&tau;&rho;έ&pi;&omicron;&nu;&tau;&alpha;&iota; &sigma;&tau;&omicron; &nu;έ&omicron; &pi;&epsilon;&delta;ί&omicron;.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

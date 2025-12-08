@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html dir="rtl">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>تجمع أداة حساب المؤشر المركب بين متغيرات رقمية متعددة لإنشاء مؤشر واحد.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputLayer">
+        <div>
+            <p>الجدول أو المعالم التي تحتوي على المتغيرات التي سيتم دمجها في المؤشر.
+            </p>
+            <p class="toolPaneOnly">يعتمد عدد المعالم على عوامل إضافية مثل معايير التصفية ومدى التحليل.
+            </p> 
+            <p class="modelBuilderOnly"> <b>الطبقة</b> محددة افتراضيًا في حال عدم تجميع <b>المعالم أو الجدول المدخل</b>. لإضافة جدول مدخل، حدد <b>جدول</b> قبل إضافة مجموعة بيانات.
+            </p>
+        </div>
+    </div>
+    <div id="inputVariables">
+        <div>
+            <p>الحقول التي تحتوي على المتغيرات التي سيتم دمجها لإنشاء المؤشر. يحدد  <b>عكس الاتجاه</b> ما إذا كان سيتم عكس قيم المتغيرات أم لا. <b>الترجيح</b> هو التأثير النسبي لكل متغير على المؤشر.
+            </p>
+        </div>
+    </div>
+    <div id="indexMethod">
+        <div>
+            <p>يحدد الطريقة التي ستُستخدم لقياس متغيرات الإدخال ودمج المتغيرات المقيسة لإنشاء المؤشر.
+            </p>
+        </div>
+    </div>
+    <div id="outputIndexReverse">
+        <div>
+            <p>يحدد ما إذا كان سيتم عكس اتجاه قيم المؤشر الناتج. عند تحديد الخيار، سيتم التعامل مع القيم المرتفعة كقيم مؤشر منخفضة والعكس صحيح.
+            </p>
+        </div>
+    </div>
+    <div id="outputIndexMinMax">
+        <div>
+            <p>الحدان الأدنى والأقصى لقيم المؤشر الناتج.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>اسم الطبقة التي سيتم إنشاؤها وإضافتها إلى الخريطة.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>اسم المجلد الموجود في  <b>المحتوى الخاص بي</b> الذي سيتم حفظ النتيجة فيه.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

@@ -1,0 +1,7 @@
+{
+  "defaultValue": "Tip de parametru nesuportat. Va fi utilizată valoarea implicită. <calcite-link target='_blank' href='${ docLink }'>Aflați mai multe</calcite-link>",
+  "requiredMessage": "Acest parametru este obligatoriu.",
+  "unsupportedGPType": "Tip de parametru nesuportat. <calcite-link target='_blank' href='${ docLink }'>Aflați mai multe</calcite-link>",
+  "unsupportedParameterConfig": "Configurare parametru neacceptată. <calcite-link target='_blank' href='${ docLink }'>Aflați mai multe</calcite-link>",
+  "unsupportedParameterConfigDefaultValue": "Configurare parametru neacceptată. Va fi utilizată valoarea implicită. <calcite-link target='_blank' href='${ docLink }'>Aflați mai multe</calcite-link>"
+}

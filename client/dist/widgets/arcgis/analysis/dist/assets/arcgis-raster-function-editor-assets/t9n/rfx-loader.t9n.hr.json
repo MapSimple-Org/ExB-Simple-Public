@@ -1,0 +1,8 @@
+{
+  "loading": "Učitavanje u tijeku...",
+  "pleaseWait": "Pričekajte.",
+  "loadingXMLRFT": "Učitavanje odabranog predloška rasterske funkcije u XML formatu.",
+  "failedToOpen": "Neuspješno otvaranje.",
+  "readingFailed": "Učitavanje odabranog predloška rasterske funkcije nije uspjelo.",
+  "failedToLoadXML": "Učitavanje odabranog predloška rasterske funkcije u XML formatu nije uspjelo."
+}

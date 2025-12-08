@@ -1,0 +1,8 @@
+{
+  "loading": "Indlæser...",
+  "pleaseWait": "Vent.",
+  "loadingXMLRFT": "Indlæsning af den valgte rasterfunktionskabelon i XML-format.",
+  "failedToOpen": "Kunne ikke åbnes.",
+  "readingFailed": "Kunne ikke indlæse den valgte skabelon til rasterfunktionen.",
+  "failedToLoadXML": "Kan ikke indlæse den valgte skabelon til rasterfunktionen i XML-format."
+}

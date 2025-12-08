@@ -1,0 +1,99 @@
+{
+  "layouts": {
+    "layout_2": {
+      "type": "GRID",
+      "order": [
+        "0",
+        "1",
+        "3",
+        "5"
+      ],
+      "content": {
+        "0": {
+          "type": "WIDGET",
+          "bbox": {
+            "width": 50
+          },
+          "gridType": 3,
+          "parent": "2"
+        },
+        "1": {
+          "type": "WIDGET",
+          "bbox": {
+            "width": 33.333333333333336
+          },
+          "parent": "4",
+          "gridType": 3,
+          "setting": {
+            "placeholderStyle": {
+              "background": {
+                "color": null,
+                "fillType": "fill"
+              },
+              "borderRadius": null,
+              "border": {
+                "color": null,
+                "type": "solid",
+                "width": "2px"
+              }
+            }
+          }
+        },
+        "2": {
+          "gridType": 1,
+          "bbox": {
+            "width": 100
+          },
+          "children": [
+            "0",
+            "4"
+          ]
+        },
+        "3": {
+          "type": "WIDGET",
+          "bbox": {
+            "width": 33.333333333333336
+          },
+          "parent": "4",
+          "gridType": 3
+        },
+        "4": {
+          "gridType": 0,
+          "parent": "2",
+          "bbox": {
+            "width": 50
+          },
+          "children": [
+            "1",
+            "3",
+            "5"
+          ]
+        },
+        "5": {
+          "type": "WIDGET",
+          "bbox": {
+            "width": 33.333333333333336
+          },
+          "parent": "4",
+          "gridType": 3
+        }
+      },
+      "setting": {
+        "rootItem": "2"
+      }
+    }
+  },
+  "widgets": {
+    "widget_1": {
+      "uri": "widgets/layout/grid/",
+      "config": {},
+      "id": "widget_1",
+      "layouts": {
+        "DEFAULT": {
+          "LARGE": "layout_2"
+        }
+      }
+    }
+  },
+  "template": "grid2"
+}

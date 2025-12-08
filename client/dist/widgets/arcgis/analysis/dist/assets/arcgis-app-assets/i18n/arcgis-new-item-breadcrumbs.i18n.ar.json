@@ -1,0 +1,12 @@
+{
+  "apiCredentialType": "نوع بيانات الاعتماد: مفتاح واجهة برمجة التطبيقات (API)",
+  "oauthCredentialType": "نوع بيانات الاعتماد: OAuth 2.0",
+  "itemAccess": "الوصول إلى العنصر",
+  "page": "الصفحة: ${page}",
+  "currentPage": "الصفحة الحالية: ${page}",
+  "privileges": "الامتيازات",
+  "itemDetails": "تفاصيل العنصر",
+  "settings": "الإعدادات",
+  "serviceScope": "نطاق الخدمة",
+  "summary": "الملخص"
+}

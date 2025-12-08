@@ -1,0 +1,19 @@
+{
+  "name": "showroom",
+  "type": "template",
+  "templateType": "full-screen-page",
+  "label": "Showroom",
+  "description": "Showroom is a template with four equal-sized Card widgets which show more details when hovered over.",
+  "thumbnail": "thumbnail.png",
+  "order": 15,
+  "tags": [
+    "Card",
+    "Gallery"
+  ],
+  "categoriesTags": [
+    "Web page",
+    "Fullscreen"
+  ],
+  "thumbnailWidth": 320,
+  "thumbnailHeight": 214
+}

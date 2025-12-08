@@ -1,0 +1,22 @@
+{
+  "deleteFolder": "Удалить папку",
+  "delete": "Удалить",
+  "permanentlyDelete": "Удалить окончательно",
+  "back": "Назад",
+  "cancel": "Отмена",
+  "success": "Папка '${title}' успешно удалена",
+  "deleteProtectedItemsInFolder": "Папка не может быть удалена, т.к. некоторые ее элементы защищены от удаления или имеют зависимые элементы.",
+  "message": {
+    "empty": "Вы уверены, что хотите удалить эту папку <strong style='font-weight: 500'>${title}</strong>?",
+    "recycleAll": "Вы уверены, что хотите удалить папку <strong style='font-weight: 500'>${title}</strong> и отправить все ее содержание в корзину?",
+    "mustBeEmpty": "Для удаления папка <strong style='font-weight: 500'>${title}</strong> должна быть пустой.",
+    "aFewCannotBeDeleted": "Некоторые элементы невозможно удалить. Вы хотите продолжить удаление остальных элементов?",
+    "canBeEmptied": "Для удаления папка <strong style='font-weight: 500'>${title}</strong> должна быть пустой. Вы хотите продолжить удаление этих элементов?",
+    "cannotBeDeleted": "Папку <strong style='font-weight: 500'>${title}</strong> невозможно удалить, поскольку ее элементы не могут быть удалены."
+  },
+  "disabledMessage": {
+    "single": "В этой папке есть <span style='color:red'>1 элемент</span>, <b>${label}</b>.<br/></br/>Вы уверены, что хотите удалить эту папку и ее элементы?",
+    "multiple": "В этой папке есть <span style='color:red'>${number} элементов</span>, <b>${label}</b>.<br/></br/>Вы уверены, что хотите удалить эту папку и все ее элементы?",
+    "unknown": "Вы уверены, что хотите удалить эту папку, <b>${label}</b>?"
+  }
+}

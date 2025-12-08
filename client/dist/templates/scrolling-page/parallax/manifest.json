@@ -1,0 +1,27 @@
+{
+  "name": "parallax",
+  "type": "template",
+  "templateType": "scrolling-page",
+  "label": "Parallax",
+  "description": "Parallax allows you to add a hero image layout in your experience.",
+  "thumbnail": "thumbnail.png",
+  "order": 9,
+  "tags": [
+    "Logo",
+    "Title",
+    "Banner",
+    "Screen Group",
+    "Card",
+    "Gallery",
+    "Map",
+    "Bookmark",
+    "Slides",
+    "Share"
+  ],
+  "categoriesTags": [
+    "Web page",
+    "Scrolling"
+  ],
+  "thumbnailWidth": 320,
+  "thumbnailHeight": 214
+}

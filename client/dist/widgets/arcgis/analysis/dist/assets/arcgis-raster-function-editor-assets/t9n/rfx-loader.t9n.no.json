@@ -1,0 +1,8 @@
+{
+  "loading": "Laster inn...",
+  "pleaseWait": "Vent litt.",
+  "loadingXMLRFT": "Laster inn den valgte rasterfunksjonsmal i XML-format.",
+  "failedToOpen": "Kan ikke åpne.",
+  "readingFailed": "Kan ikke laste inn valgt rasterfunksjonsmal.",
+  "failedToLoadXML": "Kan ikke laste inn valgt rasterfunksjonsmal i XML-format."
+}

@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>Інструмент &laquo;Отримати потік як растр&raquo; створює растр водотоку на основі вхідного растра поверхні без потреби в попередньому заповненні локального пониження або заглиблення.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputSurfaceRaster">
+        <div>
+            <p>Растр висот, який використовуватиметься для розрахунку.
+            </p>
+        </div>
+    </div>
+    <div id="inputDepressionsData">
+        <div>
+            <p>Вхідні дані, що визначають місця розташування справжніх заглиблень або понижень, куди вода може втікати, але не витікати.
+            </p>
+            <p class="toolPaneOnly">Для введення об'єктів підрахунок залежить від таких додаткових факторів як критерії фільтрування та екстент аналізу.
+            </p>
+        </div>
+    </div>
+    <div id="inputWeightRaster">
+        <div>
+            <p>Растровий шар, який визначає частку потоку, яка сприяє накопиченню потоку в кожному осередку.
+            </p>
+        </div>
+    </div>
+    <div id="accumulationThreshold">
+        <div>
+            <p>Порогове значення для визначення того, чи є даний осередок частиною потоку з точки зору загальної площі, яка впадає в такий осередок.
+            </p>
+        </div>
+    </div>
+    <div id="streamDesignationMethod">
+        <div>
+            <p>Визначає, чи будуть сегменти потоку у вихідних даних мати постійні значення, унікальні значення чи впорядковані значення.
+            </p>
+        </div>
+    </div>
+    <div id="forceFlow">
+        <div>
+            <p>Визначає, чи буде потік на крайових осередках відповідати звичайним правилам потоку чи завжди витікати назовні.
+            </p>
+            <p>Якщо не вибрано, потік буде направлений до внутрішнього осередку з найкрутішим падінням z-значення. Однак, якщо падіння менше або дорівнює нулю, осередок буде текти назовні з растра поверхні. Якщо вибрано, напрямок потоку буде назовні від растра поверхні.
+            </p>
+        </div>
+    </div>
+    <div id="outputStreamRasterName">
+        <div>
+            <p>Імʼя растрового шару водотоку, який буде створено та додано до карти.
+            </p>
+        </div>
+    </div>
+    <div id="resultType">
+        <div>
+            <p>Тип вихідних даних, які буде створено. Вихідними даними може бути шар зображень з тайлами або динамічний шар зображень.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>Назва папки в  <b>Моєму вмісті</b>, де буде збережено результати.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

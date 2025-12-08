@@ -1,0 +1,13 @@
+{
+  "cancel": "Atšaukti",
+  "creditUsage": "Kredito suteikimas",
+  "envSettings": "Aplinkos nustatymai",
+  "envSettingsDescription": "Nurodykite papildomus nustatymus, kurie nulems, kaip bus atliekama analizė.",
+  "generalSettings": "Bendros aplinkos",
+  "geoanalytics": "GeoAnalytics",
+  "noEnvSettings": "Nėra aplinkų",
+  "processingExtentEnv": "Apdorojimo aprėpties aplinka",
+  "rasterAnalysis": "Rastrų aplinkos",
+  "resetDefaults": "Nustatyti numatytuosius nustatymus",
+  "save": "Įrašyti"
+}

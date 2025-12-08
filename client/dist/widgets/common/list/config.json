@@ -1,0 +1,77 @@
+{
+  "maxItems": 100,
+  "space": 10,
+  "verticalSpace": 10,
+  "horizontalSpace": 10,
+  "itemsPerPage": 10,
+  "isItemStyleConfirm": false,
+  "keepAspectRatio": false,
+  "isInitialed": false,
+  "pageStyle": "SCROLL",
+  "itemStyle": "STYLE5",
+  "isCheckEmptyTemplate": false,
+  "hoverType": "HOVER0",
+  "selectedStyle": "STYLE0",
+  "differentOddEven": false,
+  "scrollBarOpen": true,
+  "direction": "VERTICAL",
+  "layoutType": "ROW",
+  "alignType": "CENTER",
+  "scrollStep": 2,
+  "gridAlignment": "center",
+  "showRecordCount": false,
+  "hidePageTotal": false,
+  "cardConfigs": {
+    "DEFAULT": {
+      "cardSize": {
+        "LARGE": {
+          "width": 620,
+          "height": 88
+        }
+      },
+      "enable": true,
+      "backgroundStyle": {
+        "border": {
+          "type": "solid",
+          "color": "var(--sys-color-divider-secondary)",
+          "width": "1px"
+        }
+      }
+    },
+    "HOVER": {
+      "cardSize": {
+        "LARGE": {
+          "width": 620,
+          "height": 88
+        }
+      },
+      "enable": false,
+      "backgroundStyle": {
+        "border": {
+          "type": "solid",
+          "color": "var(--sys-color-divider-secondary)",
+          "width": "1px"
+        }
+      }
+    },
+    "SELECTED": {
+      "cardSize": {
+        "LARGE": {
+          "width": 620,
+          "height": 88
+        }
+      },
+      "backgroundStyle": {
+        "border": {
+          "type": "solid",
+          "color": "var(--sys-color-action-selected)",
+          "width": "1px"
+        }
+      },
+      "selectionMode": "SINGLE"
+    }
+  },
+  "style": {
+    "id": "default"
+  }
+}

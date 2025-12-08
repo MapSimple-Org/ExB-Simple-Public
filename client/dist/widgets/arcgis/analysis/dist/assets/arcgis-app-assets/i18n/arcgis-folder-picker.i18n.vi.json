@@ -1,0 +1,21 @@
+{
+  "folder": "Thư mục",
+  "folders": "Các Thư mục",
+  "searchFolders": "Tìm kiếm thư mục",
+  "enterFolder": "Nhập tên thư mục",
+  "createNewFolder": "Tạo thư mục mới",
+  "noFoldersFoundCreate": "Không tìm thấy thư mục có tên này. Bạn muốn tạo '${folder}'?",
+  "noFoldersFound": "Không tìm thấy thư mục có tên này.",
+  "create": "Bạn muốn tạo '${folder}'?",
+  "loading": "Đang tải thư mục",
+  "error": {
+    "noName": "Bạn phải cung cấp tên cho thư mục của bạn.",
+    "folderAlreadyExists": "Thư mục '${folder}' đã tồn tại. Vui lòng chọn tên khác.",
+    "title": "Lỗi",
+    "invalidCharacters": {
+      "single": "Tên không được chứa ký tự này: ${invalidCharacters}.",
+      "multiple": "Tên không được chứa bất kỳ ký tự nào sau đây: ${invalidCharacters}.",
+      "unknown": "Tên không được chứa bất kỳ ký tự nào sau đây: ${invalidCharacters}."
+    }
+  }
+}

@@ -1,0 +1,1 @@
+System.register([],function(e){return{execute:function(){e({_widgetLabel:"\u30dc\u30bf\u30f3",dynamicStyleExpressionsLabel:"\u30dc\u30bf\u30f3 \u30c6\u30ad\u30b9\u30c8 \u30b3\u30f3\u30c6\u30f3\u30c4\u306e\u4f7f\u7528"})}}});

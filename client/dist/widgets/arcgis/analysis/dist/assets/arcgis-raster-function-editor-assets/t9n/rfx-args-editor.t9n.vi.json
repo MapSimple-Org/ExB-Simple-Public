@@ -1,0 +1,11 @@
+{
+  "unsupportedDataType": "Loại không được hỗ trợ",
+  "currentlyUnsupported": " Trình chỉnh sửa mặc định cho ${missingType} đang chờ xử lý nhưng sắp ra mắt. Hộp văn bản giữ chỗ tạm thời dùng để chỉ định chuỗi dựa trên thông tin đầu vào.",
+  "unsupportedOverrideWarning": "Một thành phần trình chỉnh sửa ghi đè cung cấp UX phù hợp hơn với (các) thông số sau đang chờ xử lý nhưng sắp ra mắt:",
+  "overrideWidgetMissing": "Thiếu thành phần trình chỉnh sửa ghi đè!",
+  "uiIncomplete": "Gửi công việc thất bại. Không thể chạy hàm do một số trường bắt buộc chưa được điền đầy đủ hoặc bị thiếu trong UI.",
+  "deprecatedBannerText": "Biểu mẫu hàm raster này chứa một hoặc nhiều hàm raster không còn sử dụng và sẽ bị xóa khỏi bản phát hành trong tương lai.",
+  "deprecatedBannerTextWithLink": "Biểu mẫu hàm raster này chứa một hoặc nhiều hàm raster không còn sử dụng và sẽ bị xóa khỏi bản phát hành trong tương lai. <calcite-link target='_blank' href='${ docLink }'>Tìm hiểu thêm</calcite-link> về cách thay thế hàm raster không còn sử dụng.",
+  "unsupportedBannerText": "Biểu mẫu hàm raster này chứa một hoặc nhiều hàm raster không được hỗ trợ.",
+  "unsupportedBannerTextWithLink": "Biểu mẫu hàm raster này chứa một hoặc nhiều hàm raster không được hỗ trợ. <calcite-link target='_blank' href='${ docLink }'>Tìm hiểu thêm</calcite-link> về những hàm raster được hỗ trợ."
+}

@@ -1,0 +1,1 @@
+System.register([],function(e){return{execute:function(){e({settingsLabel:"Ustawienia Przegl\u0105darki dokument\xf3w"})}}});

@@ -1,0 +1,12 @@
+{
+  "classField": "Pole triedy",
+  "classesAsRowsLabel": "Triedy ako riadky vo výstupnej tabuľke",
+  "inputClassRasterOrFeatures": "Vstupná trieda rastra alebo prvkov",
+  "inputLayerGroupText": "Vyberte vstupnú zónu a vrstvu tried na výpočet krížových tabuľkových oblastí medzi dvoma datasetmi.",
+  "itemProperties": {
+    "description": "Výstupná tabuľka vygenerovaná zo spustenia analytického nástroja Tabuľková plocha.",
+    "snippet": "Výstupná tabuľka vygenerované z nástroja Tabuľková plocha"
+  },
+  "tabulateAreaSettingsGroupLabel": "Nastavenia nástroja Tabuľková plocha",
+  "tabulateAreaSettingsGroupText": "Zvoľte spôsob spracovania tried vo výstupnej tabuľke. Zadajte veľkosť bunky na výpočet. "
+}

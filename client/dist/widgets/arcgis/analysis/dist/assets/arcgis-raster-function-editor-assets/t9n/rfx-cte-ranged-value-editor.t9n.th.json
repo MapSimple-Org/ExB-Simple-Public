@@ -1,0 +1,6 @@
+{
+  "greaterThanErrorMessage": "ตัวเลขอินพุทต้องมากกว่า ${min}",
+  "lesserThanErrorMessage": "ตัวเลขอินพุทต้องน้อยกว่า ${max}",
+  "greaterThanOrEqualErrorMessage": "ตัวเลขอินพุทต้องมากกว่าหรือเท่ากับ ${min}",
+  "lesserThanOrEqualErrorMessage": "ตัวเลขอินพุทต้องน้อยกว่าหรือเท่ากับ ${max}"
+}

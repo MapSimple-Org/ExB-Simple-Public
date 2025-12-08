@@ -1,0 +1,7 @@
+{
+  "deselectAll": "Anular selección de todos",
+  "ignoreFieldMessage": "Este campo se ignorará, ya que no se ha seleccionado ningún tipo de estadísticas.",
+  "remove": "Eliminar",
+  "requiredError": "Parámetro requerido.",
+  "selectAll": "Seleccionar todo"
+}

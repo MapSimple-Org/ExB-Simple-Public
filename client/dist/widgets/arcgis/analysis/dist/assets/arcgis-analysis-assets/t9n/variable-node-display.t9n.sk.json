@@ -1,0 +1,9 @@
+{
+  "disconnect": "Odpojiť od premennej",
+  "overwriteTo": "Prepísať vrstvu: <span style='font-weight: var(--calcite-font-weight-normal)'>${val}</span>",
+  "resultType": "Typ výsledku: <span style='font-weight: var(--calcite-font-weight-normal)'>${val}</span>",
+  "saveTo": "Názov výstupu: <span style='font-weight: var(--calcite-font-weight-normal)'>${val}</span>",
+  "variableLabel": "Vrstva: <span style='font-weight: var(--calcite-font-weight-normal)'>${val}</span>",
+  "variableNode": "Variabilný uzol",
+  "variableVal": "Hodnota: <span style='font-weight: var(--calcite-font-weight-normal)'>${val}</span>"
+}

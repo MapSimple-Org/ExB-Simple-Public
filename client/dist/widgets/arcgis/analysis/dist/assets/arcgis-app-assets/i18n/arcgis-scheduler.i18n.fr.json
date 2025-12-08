@@ -1,0 +1,55 @@
+{
+  "beginningOnLabel": "Début :",
+  "repeatTypeLabel": "Type de répétition",
+  "endingOnTypeLabel": "Fin :",
+  "endingOnDateLabel": "Date de fin",
+  "endingOnCountLabel": "Nombre",
+  "endingOnCountPlaceholder": "par exemple : 1, 10, 30",
+  "dailyRepeatIntervalLabel": "Intervalle de répétition",
+  "dailyTimeLabel": "Heure",
+  "weeklyDaysOfWeekLabel": "Jour de la semaine",
+  "weeklyTimeLabel": "Heure",
+  "monthlyDayOfMonthLabel": "Jour du mois",
+  "monthlyDayOfMonthPlaceholder": "par exemple, 1 – 31",
+  "monthlyRepeatIntervalLabel": "Intervalle de répétition",
+  "monthlyTimeLabel": "Heure",
+  "repeatTypeOptions": {
+    "day": "Jour",
+    "week": "Semaine",
+    "month": "Mois"
+  },
+  "endingOnType": {
+    "never": "Jamais",
+    "date": "Date",
+    "count": "Le"
+  },
+  "dailyRepeatInterval": {
+    "everyDay": "Tous les jours",
+    "everyOtherDay": "Tous les deux jours",
+    "everyThreeDays": "Tous les trois jours",
+    "everyFourDays": "Tous les quatre jours",
+    "everyFiveDays": "Tous les cinq jours",
+    "everySixDays": "Tous les six jours",
+    "everySevenDays": "Tous les sept jours",
+    "everyFourteenDays": "Tous les quatorze jours"
+  },
+  "weekDays": {
+    "all": "Tout",
+    "allWeekdays": "Tous les jours de la semaine",
+    "sunday": "Dimanche",
+    "monday": "Lundi",
+    "tuesday": "Mardi",
+    "wednesday": "Mercredi",
+    "thursday": "Jeudi",
+    "friday": "Vendredi",
+    "saturday": "Samedi"
+  },
+  "monthlyRepeatInterval": {
+    "everyMonth": "Tous les mois",
+    "everyTwoMonths": "Tous les deux mois",
+    "everyThreeMonths": "Tous les trois mois",
+    "everyFourMonths": "Tous les quatre mois",
+    "everyFiveMonths": "Tous les cinq mois",
+    "everySixMonths": "Tous les six mois"
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "AddDataFromUrl": "Tambahkan data dari URL",
+  "addData": "Tambahkan data",
+  "clear": "Hapus",
+  "file": "File",
+  "fileNotFound": "Gagal memuat file.",
+  "invalidUrl": "URL atau ekstensi file tidak valid.",
+  "layerNotFound": "Gagal memuat layer.",
+  "replaceData": "Ganti data",
+  "required": "Parameter ini harus diisi.",
+  "uploadData": "Unggah data",
+  "uploadFailureMsg": "Terjadi kesalahan saat melakukan operasi pengunggahan, ukuran atau jenis file tidak didukung untuk layanan ini.",
+  "url": "Url"
+}

@@ -1,0 +1,17 @@
+{
+  "sharing": "Chia sẻ",
+  "private": "Chủ sở hữu",
+  "shared": "Chủ sở hữu và được chia sẻ với các nhóm",
+  "org": "Tổ chức",
+  "public": "Mọi người (công khai)",
+  "privateGroups": "Chủ sở hữu",
+  "sharedGroups": "Chủ sở hữu + Nhóm (${num})",
+  "orgGroups": "Tổ chức + Nhóm (${num})",
+  "publicGroups": "Mọi người (công khai) + Nhóm (${num})",
+  "groups": "Nhóm (${num})",
+  "updateSharing": "Cấp độ chia sẻ: ${level}, cập nhật mục chia sẻ",
+  "viewableBy": "Có thể xem bởi: ${level}",
+  "everyone": "Mọi người (công khai)",
+  "organization": "Tổ chức",
+  "groupMembers": "Thành viên nhóm"
+}

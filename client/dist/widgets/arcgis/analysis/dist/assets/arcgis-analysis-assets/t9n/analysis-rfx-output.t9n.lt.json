@@ -1,0 +1,12 @@
+{
+  "dynamicLayer": "Dinaminis vaizdų sluoksnis",
+  "outputDescription": "Išvestis sugeneruota vykdant ${rfxName} rastrų funkciją",
+  "outputDescriptionRFT": "Išvestis sugeneruota taikant ${rfxName} apdorojimo šabloną",
+  "outputName": "Išvesties pavadinimas",
+  "outputNamePlaceHolder": "Įveskite unikalų pavadinimą...",
+  "resultLayer": "Rezultatų sluoksnis",
+  "resultType": "Rezultato tipas",
+  "saveFolder": "Įrašyti kataloge",
+  "summaryText": "Nurodykite rezultatų sluoksnio pavadinimą",
+  "tileImagery": "Vaizdų išklotinės sluoksnis"
+}

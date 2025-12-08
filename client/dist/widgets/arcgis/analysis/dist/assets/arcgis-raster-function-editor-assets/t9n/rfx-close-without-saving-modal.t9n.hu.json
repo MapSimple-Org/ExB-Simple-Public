@@ -1,0 +1,7 @@
+{
+  "header": "Raszteres funkciószerkesztő",
+  "content": "Önnek nem mentett módosításai vannak itt: ${rftTitle}. Mentés nélkül a nem mentett módosítások elvesznek.",
+  "cancel": "Mégse",
+  "dontSave": "Ne mentse",
+  "save": "Mentés"
+}

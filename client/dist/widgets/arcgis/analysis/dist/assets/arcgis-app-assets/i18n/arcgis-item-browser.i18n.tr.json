@@ -1,0 +1,417 @@
+{
+  "itemBrowser": {
+    "filters": "Filtreler",
+    "preview": "Önizleme",
+    "selectedLayers": "Seçili katmanlar",
+    "selectedItems": "Seçili ögeler",
+    "pageRange": "${start}-${end}, toplam: ${total}",
+    "pageRangeAria": "${start}-${end}, toplam öge: ${total}",
+    "pageRangeWithRecycleBin": "${start}-${end}, toplam: ${total} (Toplam boyut: ${recycleBinSize})",
+    "pageRangeAriaWithRecycleBin": "${start}-${end}, toplam öge: ${total} (Toplam boyut: ${recycleBinSize})",
+    "foundOnPage": "Geçerli sayfada eşleşen sonuçlar: ${total}",
+    "totalSize": "Toplam boyut: ${totalSize}",
+    "selectedMultipleWithSize": "Seçilen: ${num} (${totalSize})",
+    "selectedMultipleWithSizeSmall": "${num} (${totalSize})",
+    "noSelectedLayers": "Şu anda seçilmiş olan herhangi bir katman yok",
+    "noSelectedItems": "Şu anda seçilmiş olan herhangi bir öge yok",
+    "sharingUpdated": "${itemTitle} paylaşımı güncellendi.",
+    "refineContent": "İçeriği ayrıntılandır"
+  },
+  "layerTypes": {
+    "point": "Nokta katmanı",
+    "line": "Çizgi katmanı",
+    "polygon": "Çokgen katmanı",
+    "multipatch": "Çoklu yüzey katmanı",
+    "multipoint": "Çoklu nokta katmanı",
+    "table": "Tablo",
+    "catalog": "Katalog katmanı",
+    "oriented imagery": "Yönelimli görüntü katmanı",
+    "parcel": "Parsel katmanı",
+    "utility network": "Utility network katmanı",
+    "topology": "Topoloji katmanı",
+    "trace network": "İzleme ağı katmanı"
+  },
+  "filterIndustry": {
+    "title": "Endüstri",
+    "Industry": "Sektör: ${industry}",
+    "Build a layer": "Bir katman oluştur",
+    "Agriculture": "Ziraat",
+    "Electric Utilities": "Elektrik Dağıtım Şebekesi",
+    "Environment": "Çevre",
+    "Forestry": "Ormancılık",
+    "Gas Utilities": "Gaz Dağıtım Şebekesi",
+    "General": "Genel",
+    "Natural Resources": "Doğal Kaynaklar",
+    "Petroleum": "Petrol",
+    "Public Safety": "Kamu Güvenliği",
+    "Telecommunications": "Telekomünikasyon",
+    "Transportation": "Ulaşım",
+    "Water Utilities": "Su Dağıtım Şebekesi"
+  },
+  "filterItemType": {
+    "title": "Öge türü",
+    "itemType": "Tür: ${itemType}",
+    "options": {
+      "maps": "Haritalar",
+      "maps-webmaps": "Web haritaları",
+      "maps-mapfiles": "Harita dosyaları",
+      "layers": "Katmanlar",
+      "layers-weblayers": "Web katmanları",
+      "layers-weblayers-features": "Detay katmanları",
+      "layers-weblayers-tiles": "Döşeme katmanları",
+      "layers-weblayers-mapimage": "Harita görüntüsü katmanları",
+      "layers-weblayers-imagery": "Görüntü katmanları",
+      "layers-weblayers-scenelayers": "Sahne katmanları",
+      "layers-weblayers-videolayers": "Video katmanları",
+      "layers-weblayers-tiledimagelayers": "Döşemeli görüntü katmanları",
+      "layers-weblayers-elevationlayers": "Yükselti katmanları",
+      "layers-weblayers-feeds": "Akışlar",
+      "layers-weblayers-tables": "Tablolar",
+      "layers-layerfiles": "Katman dosyaları",
+      "scenes": "Sahneler",
+      "applications": "Uygulamalar",
+      "applications-web": "Web uygulamaları",
+      "applications-dashboards": "Dashboards",
+      "applications-sites": "Siteler",
+      "applications-pages": "Sayfalar",
+      "applications-geobim-projects": "GeoBIM projeleri",
+      "applications-geobim-apps": "GeoBIM uygulamaları",
+      "applications-instant-apps": "Instant Apps",
+      "applications-storymap": "Storymaps",
+      "applications-data-pipelines": "Data Pipelines",
+      "applications-experience": "Experience Builder",
+      "applications-wab": "Web AppBuilder",
+      "applications-mobile": "Mobil uygulamalar",
+      "applications-desktop": "Masaüstü uygulamaları",
+      "developer-credentials": "Geliştirici kimlik bilgileri",
+      "developer-credentials-oauth": "OAuth 2.0 kimlik bilgileri",
+      "developer-credentials-api-token": "API anahtarı kimlik bilgileri",
+      "developer-credentials-api-key": "API anahtarı (Eski)",
+      "tools": "Araçlar",
+      "tools-locators": "Konumlandırıcılar",
+      "tools-geodatabase": "Coğrafi Veri Tabanı erişimi",
+      "tools-geometric": "Geometrik işlemler",
+      "tools-geoprocessing": "Coğrafi İşlem görevleri",
+      "tools-network": "Ağ analizi",
+      "tools-analytics": "Analitikler",
+      "files": "Dosyalar",
+      "files-document": "Belgeler",
+      "files-image": "Görüntüler",
+      "files-pdf": "PDF'ler",
+      "files-csv": "CSV'ler",
+      "files-report": "İdari raporlar",
+      "files-raster": "Raster fonksiyonu şablonları",
+      "notebooks": "Notebooks",
+      "insights": "Insights",
+      "insights-workbooks": "Çalışma Kitapları",
+      "insights-pages": "Raporlar",
+      "insights-models": "Modeller",
+      "insights-themes": "Temalar",
+      "data-stores": "Veri depoları",
+      "knowledge-graphs": "Bilgi grafikleri"
+    }
+  },
+  "filterCategories": {
+    "categories": "Kategoriler",
+    "groupCategories": "Grup kategorileri",
+    "category": "Kategori: ${category}",
+    "uncategorized": "Kategorize edilmemiş",
+    "noCategoriesTitle": "Henüz bir kategori yok",
+    "noCategories": "Kategoriler, üyelerin ögeleri tutarlı olarak düzenlemesine olanak tanır ve kuruluştaki içeriğe göz atmak için basit bir yol sağlar.",
+    "noGroupCategoriesTitle": "Henüz grup kategorisi yok",
+    "noGroupCategories": "Kategoriler, grup üyelerinin ögeleri tutarlı olarak düzenlemesine olanak tanır ve gruptaki içeriğe göz atmak için basit bir yol sağlar.",
+    "setupCategories": "İçerik kategorileri ayarla",
+    "setupGroupCategories": "Grup kategorileri ayarla",
+    "configureCategories": "Kategorileri yapılandır"
+  },
+  "filterRegion": {
+    "regions": "Bölgeler",
+    "region": "Bölge: ${region}"
+  },
+  "filterCollaborations": {
+    "title": "Dağıtılmış iş birlikleri",
+    "label": "Dağıtılmış iş birlikleri: ${name}",
+    "loading": "İş birlikleri yükleniyor..."
+  },
+  "filterContentStatus": {
+    "title": "Durum",
+    "label": "Durum: ${contentStatus}",
+    "authoritative": "Yetkili",
+    "deprecated": "Kullanım dışı olma Tarihi"
+  },
+  "filterDeleteProtection": {
+    "title": "Silme Koruması",
+    "label": "Korumayı sil: ${deleteProtection}",
+    "enabled": "Etkin",
+    "disabled": "Devre Dışı"
+  },
+  "filterExpiration": {
+    "today": "Bugün",
+    "tomorrow": "Yarın",
+    "next7": "Sonraki 7 gün",
+    "next30": "Sonraki 30 Gün",
+    "custom": "Özel aralık...",
+    "title": {
+      "expires": "Geçerlilik sonu tarihi"
+    },
+    "expires": "Geçerlilik sonu tarihi: ${date}"
+  },
+  "filterExtent": {
+    "label": "Harita alanı içinde",
+    "title": "Sadece harita alanındaki içeriği göster"
+  },
+  "filterFolder": {
+    "folders": "Klasörler",
+    "placeholder": "Klasörleri filtrele",
+    "clear": "Aramayı temizle",
+    "all": "Tüm içeriğim",
+    "allContentUser": "${username} içeriğinin tamamı",
+    "recycleBin": "Geri dönüşüm kutusu",
+    "label": "Klasör: ${folder}",
+    "loading": "Klasörler yükleniyor...",
+    "folderOptions": "Klasör seçenekleri",
+    "editFolder": "Klasörü düzenle",
+    "deleteFolder": "Klasörü sil",
+    "delete": "Sil",
+    "areYouSure": "Bu klasörü silmek istediğinizden emin misiniz?",
+    "areYouSureExplanation": "<strong style='font-weight: 500'>${title}</strong> klasörü kalıcı olarak silinecek. Ayrıca klasör içindeki tüm ögeler silme için işaretlenecektir. Bu klasörü silmeye devam etmeyi hala istiyor musunuz?",
+    "cancel": "İptal",
+    "save": "Kaydet",
+    "createAFolder": "Bir klasör oluştur",
+    "folderName": "Klasör adı",
+    "createFolder": "Klasör oluştur",
+    "error": {
+      "title": "Hata",
+      "noName": "Klasörünüz için bir ad girmelisiniz.",
+      "folderAlreadyExists": "'${folder}' klasörü zaten var. Lütfen başka bir ad seçin.",
+      "invalidCharacters": {
+        "single": "Ad şu karakteri içeremez: ${invalidCharacters}.",
+        "multiple": "Ad, aşağıdaki karakterleri içeremez: ${invalidCharacters}.",
+        "unknown": "Ad, aşağıdaki karakterleri içeremez: ${invalidCharacters}."
+      },
+      "errorCreatingFolder": "${folderName} klasörü oluşturulurken bir hata oluştu."
+    }
+  },
+  "filterGroup": {
+    "title": "Gruplar",
+    "groups": "Gruplarım",
+    "placeholder": "Grupları filtrele",
+    "all": "Tüm gruplarımın içeriği",
+    "label": "Grup: ${group}",
+    "loading": "Gruplar yükleniyor…"
+  },
+  "filterContentType": {
+    "contentType": "İçerik türü",
+    "all": "Kuruluşumun tüm içeriği",
+    "recycle": "Geri dönüşüm kutusu"
+  },
+  "filterLocation": {
+    "location": "Konum",
+    "label": "Konum: ${location}",
+    "findLocationText": "Adres veya yer bul",
+    "search": "Konumları ara",
+    "suggestions": "Öneriler",
+    "noResults": "\"${searchTerm}\" için sonuç bulunamadı"
+  },
+  "filterSharing": {
+    "title": "Paylaşım",
+    "label": "Paylaşıldı: ${sharing}",
+    "owner": "Sahip",
+    "shared": "Gruplarla paylaşıldı",
+    "private": "Gruplarla paylaşılmadı",
+    "account": "Kuruluş",
+    "public": "Herkes (genel)"
+  },
+  "filterTags": {
+    "title": "Etiketler",
+    "label": "Etiketli: ${tags}",
+    "selectTags": "Etiketleri seç"
+  },
+  "filterReportType": {
+    "title": "Rapor türü",
+    "label": "Rapor türü: ${reportType}",
+    "activity": "Etkinlik",
+    "credits": "Kredi",
+    "users": "Üye",
+    "content": "Öge",
+    "item_usages": "Öge görüntüleme sayısı",
+    "service_usages": "Servis kullanımı"
+  },
+  "cardThumbnail": {
+    "loading": "Görüntü yükleniyor"
+  },
+  "card": {
+    "select": "Öge seç: ${title}",
+    "lastUpdated": "Güncellenen öge: ${date}",
+    "viewItemDetails": "${title} hakkında daha fazla ayrıntı görüntüle",
+    "preview": "Daha fazla ayrıntı",
+    "hidePreview": "Daha az ayrıntı",
+    "closeDetails": "Önizlemeyi kapat",
+    "openDetails": "Önizleme",
+    "moreOptions": "Daha fazla seçenek"
+  },
+  "cardSublayerSelect": {
+    "select": "Katman seç",
+    "selectLayers": "Katmanları seç",
+    "selectedSingle": "Seçilen",
+    "selectedLayers": "Seçilen katmanlar: ${num}",
+    "selectedMultiple": "Seçilen: ${num}",
+    "selectedName": "Seçili katman: ${name}",
+    "selectedTask": "Seçilen görev: ${task}",
+    "errorTitle": "Servise bağlanırken hata oluştu.",
+    "errorBody": "Servise başarıyla bağlanılamıyor. Servis kapalı veya kimlik doğrulaması gerektiriyor.",
+    "notebookErrorBody": "Bu araç bir notebook'tan yayınlandı. Kuruluşunuz için ArcGIS Notebooks'a erişim engellenmiş. Ayarı değiştirmesi için yöneticinizle iletişim kurun.",
+    "retry": "Yeniden dene",
+    "selectTask": "Görev seçin",
+    "selectTaskFrom": "Şuradan bir görev seçin: ${title}"
+  },
+  "cardLayersList": {
+    "hideDetails": "Ayrıntıları gizle",
+    "showDetails": "Ayrıntıları göster",
+    "layersAndTables": "Katmanlar ve tablolar"
+  },
+  "content": {
+    "noResults": "Ölçütlerinizi karşılayan öğe bulunamadı. Daha fazla öge göstermek için arama terimini değiştirmeyi veya bazı filtreleri temizlemeyi deneyin.",
+    "noContent": "İçerik mevcut değil.",
+    "loading": "Yükleniyor..."
+  },
+  "copy": {
+    "copy": "Kopyala",
+    "copied": "Kopyalandı"
+  },
+  "bucketSelect": {
+    "my": "İçeriğim",
+    "org": "Kuruluşum",
+    "group": "Gruplarım",
+    "favorites": "Sık kullandıklarım",
+    "living atlas": "Living Atlas",
+    "living atlas analysis": "Living Atlas analiz katmanları",
+    "subscription content": "Abonelik içeriği",
+    "all": "ArcGIS Online",
+    "catalog": "Hub katalogları",
+    "catalogLabel": "Katalog"
+  },
+  "preview": {
+    "owner": "Sahip",
+    "summary": "Özet",
+    "noSummary": "Özet sağlanmadı",
+    "description": "Açıklama",
+    "noDescription": "Açıklama girilmedi",
+    "thumbnail": "Küçük resim",
+    "overview": "Genel Bakış",
+    "details": "Ayrıntılar",
+    "termsOfUse": "Kullanım koşulları",
+    "noTermsOfUse": "Kullanım koşulları sağlanmadı",
+    "itemManagedBy": "Şunun tarafından yönetilen ögeler: ${username}",
+    "fullItemDetails": "Tam öge ayrıntıları",
+    "layersCount": "Katmanlar (${count})",
+    "layers": "Katmanlar",
+    "add": "Ekle",
+    "remove": "Kaldır",
+    "loading": "Yükleniyor...",
+    "shared": "Paylaşım",
+    "created": "Öge oluşturuldu",
+    "updated": "Öge güncellendi",
+    "fileSize": "Dosya boyutu",
+    "dataUpdated": "Veriler güncellendi",
+    "schemaUpdated": "Şema güncellendi",
+    "ID": "Kimlik",
+    "copyID": "Kimliği kopyala",
+    "URL": "URL",
+    "copyURL": "URL'yi kopyala",
+    "itemStatus": "Durum",
+    "viewCount": "Görüntülenme sayısı",
+    "readMore": "Daha fazla oku",
+    "dashboardViews": "Gösterge paneli görünümleri",
+    "dashboardMobile": "Masaüstü, Mobil",
+    "dashboardDesktop": "Masaüstü",
+    "sharing": {
+      "private": "Özel",
+      "shared": "Gruplar",
+      "public": "Herkes",
+      "org": "Kuruluş"
+    },
+    "groupCategories": "Grup kategorileri",
+    "matched": "Eşleşti",
+    "matchedNumber": "Eşleşti (${num})",
+    "layerError": {
+      "title": "Katmanlar görüntülenemiyor",
+      "message": "Katman ön izlemesi güvenli servisler için desteklenmez."
+    },
+    "noServiceMessage": "Seçilen servis yok veya servise erişilemiyor.",
+    "credits": "Onaylar",
+    "noCredits": "Bir kaynak onaylanmadı.",
+    "geometryTypeTitle": "Geometri tipi",
+    "layerTypeTitle": "Katman türü",
+    "fields": "Alanlar",
+    "noFields": "Bu katman için herhangi bir alan yapılandırılmadı",
+    "geometryType": {
+      "esriGeometryPoint": "Nokta katmanı",
+      "esriGeometryPolyline": "Çizgi katmanı",
+      "esriGeometryPolygon": "Çokgen katmanı",
+      "esriGeometryMultiPatch": "Çoklu yüzey katmanı",
+      "table": "Tablo"
+    },
+    "layerActions": "Katman işlemleri",
+    "itemError": {
+      "title": "Hata",
+      "subscription": "Bu öge şu anda kullanılabilir değil. Bu ögeyle ilişkilendirilen ArcGIS Online aboneliği devre dışı bırakıldı.",
+      "unhandled": "Bu öge alınırken hata oluştu."
+    }
+  },
+  "table": {
+    "loading": "Yükleniyor...",
+    "caption": "Öge sonuçları, düğmeli sütun başlıkları sıralanabilir.",
+    "selectAll": "Tümünü seç",
+    "selection": "Seçim",
+    "headers": {
+      "title": "Başlık",
+      "modified": "Değişiklik yapılma Tarihi",
+      "created": "Oluşturulma",
+      "owner": "Sahip",
+      "size": "Boyut",
+      "deleted": "Tarih silindi",
+      "type": "Öge türü",
+      "badges": "Öge durumu",
+      "favorite": "Sık kullanılan",
+      "sharing": "Paylaşım seviyesi",
+      "details": "Ayrıntıları görüntüle",
+      "actions": "Daha fazla öge eylemi",
+      "dataset": "Veri kümesi"
+    }
+  },
+  "tableRow": {
+    "deletesTomorrow": "Yarın siler",
+    "deletes": {
+      "single": "${number} gün içinde silinir",
+      "multiple": "${number} gün içinde siler",
+      "unknown": "Silinmesi için kalan gün sayısı: ${number}"
+    },
+    "restore": "Geri Yükle",
+    "details": "Ayrıntıları görüntüle",
+    "moreOptions": "Daha fazla seçenek",
+    "download": "İndir"
+  },
+  "search": {
+    "searchName": "${searchName} ara",
+    "searchAllContent": "Tüm içeriklerimde ara",
+    "searchAllUserContent": "${username}'nin tüm içeriklerinde ara",
+    "searchGroupsContent": "Gruplarımda ara",
+    "searchingGroupsContent": "Gruplarım içinde şu aranıyor:",
+    "searchFavoritesContent": "Favorilerimde ara",
+    "searchOrganizationsContent": "Kuruluşlarımda ara",
+    "searchLivingAtlasContent": "Living Atlas'ta ara",
+    "searchRecycleCurrentPage": "Mevcut sayfada öge başlıkları ara"
+  },
+  "find": {
+    "find": "Bul",
+    "findOnPage": "Sayfada bul",
+    "match": "Yalnızca geçerli sayfadaki öge başlıkları için metin eşleşmelerini döndürür."
+  },
+  "view": {
+    "view": "Görüntüle",
+    "list": "Liste",
+    "grid": "Grid",
+    "table": "Tablo"
+  }
+}

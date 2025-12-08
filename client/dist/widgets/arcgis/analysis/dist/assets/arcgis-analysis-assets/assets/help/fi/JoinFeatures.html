@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>Liit&auml; kohteet&nbsp;-ty&ouml;kalu lis&auml;&auml; ominaisuustietoja karttatasosta tai taulukosta toiseen sijainnin ja ominaisuustietojen perusteella. Tilastotiedot voidaan my&ouml;s laskea, jos t&auml;sm&auml;&auml;vi&auml; tietueita on monta.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="targetLayer">
+        <div>
+            <p>Karttataso tai taulu, jonka ominaisuustietotaulukkoon on lis&auml;tty liitoskarttatason ominaisuustiedot.
+            </p> 
+            <p class="toolPaneOnly">Kohteiden m&auml;&auml;r&auml; riippuu ylim&auml;&auml;r&auml;isist&auml; tekij&ouml;ist&auml;, kuten suodatusehdoista ja analyysin laajuudesta.
+            </p> 
+            <p class="modelBuilderOnly"> <b>Karttataso</b> m&auml;&auml;ritet&auml;&auml;n oletuksena, jos <b>Kohdekarttataso</b>-tietoja ei ole t&auml;ytetty. Jos haluat lis&auml;t&auml; l&auml;ht&ouml;aineistotaulun, valitse <b>Taulu</b> ennen aineistoryhm&auml;n lis&auml;&auml;mist&auml;.
+            </p>
+        </div>
+    </div>
+    <div id="joinLayer">
+        <div>
+            <p>Karttataso tai taulu, jonka ominaisuustiedot lis&auml;t&auml;&auml;n kohdekarttatasoon.
+            </p> 
+            <p class="toolPaneOnly">Kohteiden m&auml;&auml;r&auml; riippuu ylim&auml;&auml;r&auml;isist&auml; tekij&ouml;ist&auml;, kuten suodatusehdoista ja analyysin laajuudesta.
+            </p> 
+            <p class="modelBuilderOnly"> <b>Karttataso</b> m&auml;&auml;ritet&auml;&auml;n oletuksena, jos <b>Liitoskarttataso</b>-tietoja ei ole t&auml;ytetty. Jos haluat lis&auml;t&auml; l&auml;ht&ouml;aineistotaulun, valitse <b>Taulu</b> ennen aineistoryhm&auml;n lis&auml;&auml;mist&auml;.
+            </p>
+        </div>
+    </div>
+    <div id="useSpatialRelationship">
+        <div>
+            <p>M&auml;&auml;ritt&auml;&auml;, liitet&auml;&auml;nk&ouml; karttatasot sijaintisuhteen perusteella. T&auml;m&auml; edellytt&auml;&auml;, ett&auml; molemmilla karttatasoilla on geometria.
+            </p>
+        </div>
+    </div>
+    <div id="spatialRelationship">
+        <div>
+            <p>M&auml;&auml;ritt&auml;&auml; sijaintisuhteen, joka m&auml;&auml;ritt&auml;&auml; liitett&auml;v&auml;t kohteet. Liitoskarttatasossa liitet&auml;&auml;n kohteet, joilla on m&auml;&auml;ritetty suhde kohdekarttatasoon. K&auml;ytett&auml;viss&auml; olevat suhteet m&auml;&auml;r&auml;ytyv&auml;t l&auml;ht&ouml;aineistojen geometriatyypin perusteella.
+            </p>
+        </div>
+    </div>
+    <div id="spatialRelationshipDistance">
+        <div>
+            <p>Kohdekarttatasossa olevien kohteiden et&auml;isyys, jonka avulla m&auml;&auml;ritet&auml;&auml;n, liitet&auml;&auml;nk&ouml; kohteita vai ei.
+            </p>
+        </div>
+    </div>
+    <div id="spatialRelationshipDistanceUnits">
+        <div>
+            <p>Yksik&ouml;t, joita k&auml;ytet&auml;&auml;n et&auml;isyyden m&auml;&auml;ritt&auml;miseen.
+            </p>
+        </div>
+    </div>
+    <div id="useAttributeRelationship">
+        <div>
+            <p>M&auml;&auml;ritt&auml;&auml;, liitet&auml;&auml;nk&ouml; karttatasot vastaavien kentt&auml;arvojen perusteella. Jos v&auml;hint&auml;&auml;n yksi l&auml;ht&ouml;aineisto on taulu, liitos voidaan m&auml;&auml;ritt&auml;&auml; ominaisuustietosuhteen avulla.
+            </p>
+        </div>
+    </div>
+    <div id="attributeRelationship">
+        <div>
+            <p>Ominaisuustietosuhde, joka m&auml;&auml;ritt&auml;&auml; liitett&auml;v&auml;t kohteet. Kohteet t&auml;sm&auml;ytet&auml;&auml;n, kun liitoskarttatason kenttien arvot vastaavat kohdekarttatason kenttien arvoja.
+            </p>
+        </div>
+    </div>
+    <div id="joinOperation">
+        <div>
+            <p>M&auml;&auml;ritt&auml;&auml; liitosten k&auml;sittelytavan, jos liitoskarttatasossa on useita ehdot t&auml;ytt&auml;vi&auml; tietueita. Valitse seuraavista vaihtoehdoista:
+                <ul>
+                    <li> <b>Liit&auml; yksi yhteen</b> &ndash; yksi liitoskarttatason tietue liitet&auml;&auml;n jokaiseen kohdekarttatason kohteeseen.
+                    </li>
+                    <li> <b>Liit&auml; yksi useaan</b> &ndash; kaikki liitoskarttatason t&auml;sm&auml;&auml;v&auml;t kohteet liitet&auml;&auml;n kohdekarttatasoon. Tuloskarttataso sis&auml;lt&auml;&auml; useita kohdekarttatason kohdetietueita.
+                    </li>
+                </ul>
+                
+            </p>
+        </div>
+    </div>
+    <div id="handleMatchingRecords">
+        <div>
+            <p>Jos useat kohteet liitoskarttatasossa t&auml;sm&auml;&auml;v&auml;t kohdekohteeseen, t&auml;m&auml; parametri m&auml;&auml;ritt&auml;&auml;, liitet&auml;&auml;nk&ouml; liitoskarttatasosta yksi tietue, lasketaanko kaikkien liitoskarttatason t&auml;sm&auml;&auml;vien tietueiden valitusta kent&auml;st&auml; yhteenvetotilasto vai lasketaan vain t&auml;sm&auml;&auml;vien tietueiden m&auml;&auml;r&auml;.
+            </p>
+        </div>
+    </div>
+    <div id="summaryFields">
+        <div>
+            <p>Jos vastaavia liitoskohteita on useita, lasketaan kaikkien t&auml;sm&auml;&auml;vien tietueiden yhteenvetotilasto. M&auml;&auml;rit&auml; p&auml;iv&auml;m&auml;&auml;r&auml;kenttien m&auml;&auml;r&auml; liitoskarttatasosta ja jokaisesta kent&auml;st&auml; laskettavat tilastotiedot.
+            </p>
+        </div>
+    </div>
+    <div id="recordsToMatch">
+        <div>
+            <p>Kun vastaavia liitoskohteita on useita, tulosaineistoon sis&auml;llytet&auml;&auml;n ensimm&auml;inen tietue liitoskarttatason ominaisuustietotaulusta. Voit my&ouml;s valita numero- tai p&auml;iv&auml;m&auml;&auml;r&auml;kent&auml;n ja lajitteluj&auml;rjestyksen, joka m&auml;&auml;ritt&auml;&auml; ominaisuustietotaulun j&auml;rjestyksen.
+            </p>
+        </div>
+    </div>
+    <div id="joinType">
+        <div>
+            <p>M&auml;&auml;ritt&auml;&auml;, sis&auml;llytet&auml;&auml;nk&ouml; tulosaineistoon kohdekohteita, jotka eiv&auml;t t&auml;sm&auml;&auml;.  <b>Sis&auml;liitos</b>-asetus palauttaa vain t&auml;sm&auml;&auml;v&auml;t kohdetietueet. <b>Vasen liitos</b> -asetus palauttaa puolestaan kaikki kohdetietueet, vaikka liitoskarttatasossa ei olisi t&auml;sm&auml;&auml;vi&auml; kohteita.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>Karttaan luotavan ja lis&auml;tt&auml;v&auml;n karttatason tai taulun nimi.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>Sen  <b>Omassa sis&auml;ll&ouml;ss&auml;</b> olevan kansion nimi, johon tulos tallennetaan.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

@@ -1,0 +1,27 @@
+{
+  "hosted": "di-host",
+  "hostedView": "di-host, tampilan",
+  "hostedPhotos": "di-host, foto",
+  "hostedCollection": "di-hosting, kumpulan",
+  "hostedMultidimensional": "di-hosting, multidimensi",
+  "hostedCollectionMultidimensional": "di-hosting, kumpulan, multidimensi",
+  "collectionMultidimensional": "kumpulan, multidimensi",
+  "multidimensional": "multidimensi",
+  "collection": "koleksi",
+  "photoLocations": "foto",
+  "locatorView": "tampilkan",
+  "utilityNetwork": "jaringan utilitas",
+  "Integrated Mesh": "mesh terintegrasi",
+  "3D Object": "Objek 3D",
+  "Point": "titik",
+  "Point Cloud": "cloud titik",
+  "Building Scene Layer": "layer scene bangunan",
+  "Voxel Scene Layer": "scene layer voxel",
+  "dataStore": {
+    "bigdata": "berbagi file big data",
+    "cloud": "cloud",
+    "cloudStorage": "penyimpanan cloud",
+    "database": "database",
+    "folder": "folder"
+  }
+}

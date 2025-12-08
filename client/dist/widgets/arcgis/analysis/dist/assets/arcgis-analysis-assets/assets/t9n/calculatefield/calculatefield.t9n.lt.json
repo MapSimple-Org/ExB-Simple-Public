@@ -1,0 +1,13 @@
+{
+  "fieldCalcExpression": "Lauko skaičiavimo išraiška",
+  "fieldCalculationGroupLabel": "Lauko skaičiavimas",
+  "fieldPlaceholderText": "Paspauskite pasirinkti ar sukurti lauką",
+  "fieldToCalculate": "Laukas, kurio reikšmę norite apskaičiuoti",
+  "inputDatasetGroupLabel": "Įvestis",
+  "itemProperties": {
+    "description": "Rezultatas, gautas naudojant „ModelBuilder“ įrankį „Skaičiuoti lauką“.",
+    "snippet": "Elemento sluoksnis, sukurtas naudojant Skaičiuoti lauką"
+  },
+  "noFieldSpecified": "Nurodykite lauką, kurį reikia apskaičiuoti, kad būtų sukurta išraiška.",
+  "whereClause": "Taikykite skaičiavimą tik tam tikriems įrašams"
+}

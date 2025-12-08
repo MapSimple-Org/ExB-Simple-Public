@@ -1,0 +1,1 @@
+System.register([],function(e){return{execute:function(){e({settingsLabel:"\u05d4\u05d2\u05d3\u05e8\u05d5\u05ea \u05de\u05e6\u05d9\u05d2 \u05d4\u05e1\u05de\u05db\u05d9\u05dd"})}}});

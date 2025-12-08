@@ -1,0 +1,13 @@
+{
+  "addField": "Legg til felt",
+  "deselectAll": "Fjern merkingen på alle",
+  "done": "Ferdig",
+  "noFieldsAvailable": "${layerName} inneholder ingen felt som oppfyller datatypekravet. Velg et annet lag for å fortsette.",
+  "noInputSelected": {
+    "withLayerInputLabel": "Det er ikke valgt et inndatalag. Velg et lag i ${layerInputLabel} for å fortsette.",
+    "withoutLayerInputLabel": "Det er ikke valgt et inndatalag. Velg et inndatalag for å fortsette."
+  },
+  "noSearchResults": "Fant ingen samsvarende felter.",
+  "selectAll": "Velg alle",
+  "summaryFieldsPopover": "Oppsummeringsfelter"
+}

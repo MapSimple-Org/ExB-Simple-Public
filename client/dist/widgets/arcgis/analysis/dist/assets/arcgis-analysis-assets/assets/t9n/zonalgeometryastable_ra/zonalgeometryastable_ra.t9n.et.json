@@ -1,0 +1,9 @@
+{
+  "inputLayerGroupText": "Valige sisendkiht tsoonipiiride geomeetria arvutamiseks.",
+  "itemProperties": {
+    "description": "Väljundtabel, mis on genereeritud tsoonipõhise geomeetria tabelina analüüsimise tööriista käivitamisel.",
+    "snippet": "Väljundtabel, mis on genereeritud tsoonipõhise geomeetria tabel"
+  },
+  "zonalGeometrySettingGroupLabel": "Tsoonipõhise geomeetria seadistus",
+  "zonalGeometrySettingGroupText": "Määrake arvutamiseks lahtri suurus."
+}

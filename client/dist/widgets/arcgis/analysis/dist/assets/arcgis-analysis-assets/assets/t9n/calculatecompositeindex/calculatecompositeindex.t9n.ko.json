@@ -1,0 +1,26 @@
+{
+  "CCIAnalysisSettingGroupLabel": "색인 설정",
+  "CCIAnalysisSettingGroupText": "색인 계산 방법을 지정합니다.",
+  "geomeanPercentileLabel": "순위 조합(백분위수의 기하 평균)",
+  "geomeanRawLabel": "원시 값 조합(원시 값의 기하 평균)",
+  "geomeanScaledLabel": "크기 조정된 값 조합(크기 조정된 값의 기하 평균)",
+  "indexMethodLabel": "변수 크기 조정 및 결합 방법",
+  "inputFeaturesOrTableLabel": "입력 피처 또는 테이블",
+  "inputLayerGroupText": "색인을 생성하는 데 사용할 피처나 테이블 및 변수를 선택합니다.",
+  "inputVariablesLabel": "입력 변수",
+  "itemProperties": {
+    "description": "복합 색인 계산 분석 도구를 실행하여 생성된 피처 레이어입니다.",
+    "snippet": "복합 색인 계산을 통해 생성된 피처 레이어"
+  },
+  "meanPercentileLabel": "순위 결합(백분위수의 평균)",
+  "meanRawLabel": "원시 값 결합(원시 값의 평균)",
+  "meanScaledLabel": "크기 조정된 값 결합(크기 조정된 값의 평균)",
+  "outputIndexMaxLabel": "최대",
+  "outputIndexMinLabel": "최소",
+  "outputIndexMinMaxLabel": "색인 최소값 및 최대값",
+  "outputIndexReverseLabel": "색인 값 되돌리기",
+  "reverseVariableLabel": "역방향",
+  "sumFlagsPercentileLabel": "극한값 강조(90번째 백분위수를 초과하는 값의 개수)",
+  "toolName": "복합 색인 계산",
+  "weight": "가중치"
+}

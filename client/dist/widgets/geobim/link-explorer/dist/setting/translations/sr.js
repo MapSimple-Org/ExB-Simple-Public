@@ -1,0 +1,1 @@
+System.register([],function(e){return{execute:function(){e({settingsLabel:"Postavke Link Explorer-a",selectModelViewer:"Izaberite vid\u017eet Document Viewer da biste prikazali povezane dokumente."})}}});

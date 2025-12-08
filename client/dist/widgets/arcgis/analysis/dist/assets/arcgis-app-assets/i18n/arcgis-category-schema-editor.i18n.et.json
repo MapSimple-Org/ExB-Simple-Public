@@ -1,0 +1,69 @@
+{
+  "loadingText": "Skeemimallide laadimine",
+  "cancel": "Loobu",
+  "finishSetup": "Lõpeta seadistamine",
+  "hasUnsavedChanges": "Olete teinud kategooriates muudatusi, mis lähevad kaotsi, kui te neid esmalt ei salvesta. Kas soovite selle vaate kindlasti sulgeda ja kõik muudatused tühistada?",
+  "error": {
+    "generic": {
+      "title": "Kategooriate uuendamisel ilmnes tõrge",
+      "message": "Midagi läks valesti. Proovige hiljem uuesti."
+    },
+    "maxDepthExceeded": {
+      "title": "Kategooriate uuendamisel ilmnes tõrge",
+      "message": "Kategooriaid saate pesastada ainult kaks taset allapoole."
+    },
+    "destinationHasSameName": {
+      "title": "Kategooriate uuendamisel ilmnes tõrge",
+      "message": "Sama nimega kategooria on sihtkategoorias juba olemas."
+    },
+    "emptyTitle": {
+      "title": "Kategooriate uuendamisel ilmnes tõrge",
+      "message": "Kategooria pealkirjaväli ei tohi olla tühi."
+    },
+    "noSchema": {
+      "title": "Skeemi ei leitud.",
+      "message": "Kasutaja jaoks ei leitud sisüksuse skeemi."
+    },
+    "maxCharacter": {
+      "title": "Kategooriate uuendamisel ilmnes tõrge",
+      "message": "Kategooriate nimedes võib olla kuni ${maxCharacter} märki."
+    },
+    "invalidCharacters": {
+      "title": "Kategooriate uuendamisel ilmnes tõrge",
+      "single": "Kategooria ei tohi sisaldada seda tähemärki: ${invalidCharacters}.",
+      "multiple": "Kategooria ei tohi sisaldada järgmisi tähemärke: ${invalidCharacters}.",
+      "unknown": "Kategooria ei tohi sisaldada järgmisi tähemärke: ${invalidCharacters}."
+    }
+  },
+  "warning": {
+    "deleteInUseCategory": {
+      "title": "Kustuta kategooria",
+      "cta": "Kustuta kategooria"
+    },
+    "changeTitleInUseCategory": {
+      "title": "Uuenda kategooriat",
+      "cta": "Uuenda kategooriat"
+    }
+  },
+  "template": {
+    "title": "Kategooriamallid",
+    "learnMore": "Lisainfo",
+    "templateList": {
+      "custom": {
+        "title": "Kohaldatud kategooriad"
+      },
+      "arcgis": {
+        "title": "ArcGIS-i kategooriad",
+        "message": "ArcGIS-i kategooriate hulka kuulub valik teemakategooriaid ja alamkategooriaid, mida saab kasutada mitmesugust tüüpi georuumilise sisu kategoriseerimiseks. Need kategooriad toetavad ArcGIS-i maailma elukoha atlast Living Atlas of the World."
+      },
+      "iso": {
+        "title": "ISO kategooriad",
+        "message": "ISO kategooriad hõlmavad Rahvusvahelise Standardiorganisatsiooni (International Organization for Standardization) teemakategooriaid geograafilise teabe kirjeldamiseks ja kataloogimiseks."
+      },
+      "inspire": {
+        "title": "INSPIRE kategooriad",
+        "message": "INSPIRE kategooriad hõlmavad koordinaatandmeteemade ulatuslikku komplekti, mis on kehtestatud INSPIRE direktiiviga."
+      }
+    }
+  }
+}

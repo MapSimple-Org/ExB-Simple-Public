@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>N&aacute;stroj &Uacute;sek toku přiřad&iacute; jedinečn&eacute; hodnoty &uacute;sekům line&aacute;rn&iacute; s&iacute;tě rastru mezi průseč&iacute;ky.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputStreamRaster">
+        <div>
+            <p>Rastr, kter&yacute; určuje line&aacute;rn&iacute; s&iacute;ť vodn&iacute;ch toků.
+            </p>
+        </div>
+    </div>
+    <div id="inputFlowDirectionRaster">
+        <div>
+            <p>Rastr, kter&yacute; určuje směr odtoku z&nbsp;každ&eacute; buňky.
+            </p>
+            <p>Pro určen&iacute; směru prouděn&iacute; je třeba použ&iacute;t metodu D8.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>N&aacute;zev rastrov&eacute; vrstvy &uacute;seku toku, kter&aacute; bude vytvořena a&nbsp;přid&aacute;na do mapy.
+            </p>
+        </div>
+    </div>
+    <div id="resultType">
+        <div>
+            <p>Typ v&yacute;stupu, kter&yacute; bude vytvořen. V&yacute;stupem může b&yacute;t vrstva dlaždicov&yacute;ch sn&iacute;mků nebo vrstva dynamick&yacute;ch sn&iacute;mků.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>N&aacute;zev složky v č&aacute;sti  <b>Můj obsah</b>, do kter&eacute; bude v&yacute;sledek uložen.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

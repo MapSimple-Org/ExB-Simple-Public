@@ -1,0 +1,154 @@
+{
+  "toolName": "DeriveStreamAsLine",
+  "version": "0.1.0",
+  "rules": [],
+  "environmentSettings": {
+    "raster": []
+  },
+  "UIparameters": [
+    {
+      "label": "$inputLayersGroupLabel",
+      "componentName": "analysis-block",
+      "summaryText": "$inputLayersGroupText",
+      "UIparameters": [
+        {
+          "name": "inputSurfaceRaster",
+          "label": "$inputSurfaceRasterLabel",
+          "componentName": "analysis-layer-input",
+          "layerFilterType": ["imagery"],
+          "required": true
+        },
+        {
+          "label": "$optionalLayersSectionLabel",
+          "componentName": "analysis-section",
+          "UIparameters": [
+            {
+              "name": "inputDepressionsData",
+              "label": "$inputDepressionsDataLabel",
+              "componentName": "analysis-layer-input",
+              "layerFilterType": ["feature", "imagery"],
+              "required": false,
+              "enableSketch": true
+            },
+            {
+              "name": "inputWeightRaster",
+              "label": "$inputWeightRasterLabel",
+              "componentName": "analysis-layer-input",
+              "layerFilterType": ["imagery"],
+              "required": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "label": "$streamSettingsGroupLabel",
+      "componentName": "analysis-block",
+      "summaryText": "$streamSettingsGroupText",
+      "UIparameters": [
+        {
+          "name": "accumulationThreshold",
+          "label": "$accumulationThresholdLabel",
+          "componentName": "analysis-gp-composite",
+          "initialDataType": "GPArealUnit",
+          "UIparameterInfos": [
+            {
+              "name": "accumulationThresholdValue",
+              "dataType": "GPArealUnit",
+              "choiceListLabels": {
+                "UNKNOWN": "$unknown",
+                "SQUAREKILOMETERS": "$squareKilometers",
+                "HECTARES": "$hectares",
+                "ARES": "$ares",
+                "SQUAREMETERS": "$squareMeters",
+                "SQUAREDECIMETERS": "$squareDecimeters",
+                "SQUARECENTIMETERS": "$squareCentimeters",
+                "SQUAREMILLIMETERS": "$squareMillimeters",
+                "SQUAREMILES": "$squareMilesInt",
+                "ACRES": "$acresInt",
+                "SQUAREYARDS": "$squareYardsInt",
+                "SQUAREFEET": "$squareFeetInt",
+                "SQUAREINCHES": "$squareInchesInt",
+                "SQUAREMILESUS": "$squareMilesUS",
+                "ACRESUS": "$acresUS",
+                "SQUAREYARDSUS": "$squareYardsUS",
+                "SQUAREFEETUS": "$squareFeetUS",
+                "SQUAREINCHESUS": "$squareInchesUS"
+              },
+              "unitChoiceList": [
+                "UNKNOWN",
+                "SQUAREKILOMETERS",
+                "HECTARES",
+                "ARES",
+                "SQUAREMETERS",
+                "SQUAREDECIMETERS",
+                "SQUARECENTIMETERS",
+                "SQUAREMILLIMETERS",
+                "SQUAREMILES",
+                "ACRES",
+                "SQUAREYARDS",
+                "SQUAREFEET",
+                "SQUAREINCHES",
+                "SQUAREMILESUS",
+                "ACRESUS",
+                "SQUAREYARDSUS",
+                "SQUAREFEETUS",
+                "SQUAREINCHESUS"
+              ],
+              "required": false,
+              "minimum": 0,
+              "excludeMinValue": true,
+              "placeholderText": "$accumulationThresholdText"
+            }
+          ]
+        },
+        {
+          "name": "streamDesignationMethod",
+          "label": "$streamDesignationMethodLabel",
+          "componentName": "analysis-string-input",
+          "selectionMode": "single",
+          "required": false,
+          "defaultValue": "CONSTANT",
+          "choiceList": ["CONSTANT", "UNIQUE", "STRAHLER", "SHREVE", "HACK", "ALL"],
+          "choiceListLabels": {
+            "CONSTANT": "$constant",
+            "UNIQUE": "$unique",
+            "STRAHLER": "$strahler",
+            "SHREVE": "$shreve",
+            "HACK": "$hack",
+            "ALL": "$all"
+          }
+        },
+        {
+          "name": "simplify",
+          "label": "$simplifyLabel",
+          "componentName": "analysis-boolean-input",
+          "required": false,
+          "displayStyle": "checkbox",
+          "labelLayout": "inline-space-between",
+          "defaultValue": true,
+          "visible": true
+        }
+      ]
+    },
+    {
+      "label": "$resultLayerGroupLabel",
+      "componentName": "analysis-block",
+      "summaryText": "$resultLayerGroupText",
+      "UIparameters": [
+        {
+          "name": "outputStreamFeaturesName",
+          "label": "$outputStreamFeaturesLabel",
+          "placeholderText": "$outputNamePlaceholderText",
+          "componentName": "analysis-string-input",
+          "required": true
+        },
+        {
+          "name": "saveResultIn",
+          "label": "$saveResultIn",
+          "componentName": "analysis-folder-input"
+        }
+      ]
+    }
+  ]
+}

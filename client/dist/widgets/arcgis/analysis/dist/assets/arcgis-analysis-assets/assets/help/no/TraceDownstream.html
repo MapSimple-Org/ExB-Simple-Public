@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>Verkt&oslash;yet Spor nedstr&oslash;ms fastsetter str&oslash;mningslinjene i nedstr&oslash;ms retning fra angitte inndatalokasjoner.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputLayer">
+        <div>
+            <p>Punktgeoobjektene som brukes som startlokasjon for hver nedstr&oslash;ms sporingslinje.
+            </p>
+            <p class="toolPaneOnly">Antallet geoobjekter avhenger av flere faktorer, blant annet filtreringskriterier og analysens utstrekning.
+            </p>
+        </div>
+    </div>
+    <div id="splitDistance">
+        <div>
+            <p>Lengden p&aring; de individuelle segmentene som sporingslinjen deles opp i.
+            </p>
+        </div>
+    </div>
+    <div id="splitUnits">
+        <div>
+            <p>Enhetene som brukes for parameteren  <b>Del opp avstand</b>.
+            </p>
+        </div>
+    </div>
+    <div id="maxDistance">
+        <div>
+            <p>Den totale lengden p&aring; sporingslinjen som returneres.
+            </p>
+        </div>
+    </div>
+    <div id="maxDistanceUnits">
+        <div>
+            <p>Enhetene som brukes for parameteren  <b>Maksimum nedstr&oslash;ms sporingsavstand</b>.
+            </p>
+        </div>
+    </div>
+    <div id="boundingPolygonLayer">
+        <div>
+            <p>Et polygongeoobjektlag som beskriver omr&aring;det som sporingslinjen klippes til.
+            </p>
+            <p>Denne parameteren overstyrer parameterverdien for  <b>Maksimum nedstr&oslash;ms sporingsavstand</b>.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>Navnet p&aring; laget med nedstr&oslash;ms sporingslinje som opprettes og legges til kartet.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>Navnet p&aring; mappen i  <b>Mitt innhold</b> der resultatet blir lagret.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

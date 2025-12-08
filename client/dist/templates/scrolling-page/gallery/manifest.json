@@ -1,0 +1,22 @@
+{
+  "name": "gallery",
+  "type": "template",
+  "templateType": "scrolling-page",
+  "label": "Gallery",
+  "description": "Gallery is a template designed with prominent thumbnail images to highlight your rich content.",
+  "thumbnail": "thumbnail.png",
+  "order": 4,
+  "tags": [
+    "Gallery",
+    "Title",
+    "Logo",
+    "Banner",
+    "Card"
+  ],
+  "categoriesTags": [
+    "Web page",
+    "Scrolling"
+  ],
+  "thumbnailWidth": 320,
+  "thumbnailHeight": 214
+}

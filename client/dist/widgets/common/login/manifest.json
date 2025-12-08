@@ -1,0 +1,80 @@
+{
+  "name": "login",
+  "label": "Login",
+  "type": "widget",
+  "version": "1.19.0",
+  "exbVersion": "1.19.0",
+  "author": "Esri R&D Center Beijing",
+  "description": "This is a sign-in widget.",
+  "copyright": "",
+  "license": "http://www.apache.org/licenses/LICENSE-2.0",
+  "properties": {
+    "hasSettingPage": true,
+    "defaultOffPanel": true,
+    "canCrossLayoutBoundary": true,
+    "useOwnBorder": true,
+    "coverLayoutBackground": true,
+    "hasBuilderSupportModule": true
+  },
+  "extensions": [
+    {
+      "name": "quick-style",
+      "point": "CONTEXT_TOOL",
+      "uri": "tools/quick-style"
+    },
+    {
+      "name": "mode-switch",
+      "point": "CONTEXT_TOOL",
+      "uri": "tools/mode-switch"
+    }
+  ],
+  "defaultSize": {
+    "width": 150,
+    "height": 50,
+    "autoWidth": true,
+    "autoHeight": true
+  },
+  "publishMessages": [],
+  "translatedLocales": [
+    "en",
+    "ar",
+    "bg",
+    "bs",
+    "ca",
+    "cs",
+    "da",
+    "de",
+    "el",
+    "es",
+    "et",
+    "fi",
+    "fr",
+    "he",
+    "hr",
+    "hu",
+    "id",
+    "it",
+    "ja",
+    "ko",
+    "lt",
+    "lv",
+    "no",
+    "nl",
+    "pl",
+    "pt-br",
+    "pt-pt",
+    "ro",
+    "ru",
+    "sk",
+    "sl",
+    "sr",
+    "sv",
+    "th",
+    "tr",
+    "zh-cn",
+    "uk",
+    "vi",
+    "zh-hk",
+    "zh-tw"
+  ]
+}

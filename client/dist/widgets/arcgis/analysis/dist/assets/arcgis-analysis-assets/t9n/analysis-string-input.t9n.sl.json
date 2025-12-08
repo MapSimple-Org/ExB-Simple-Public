@@ -1,0 +1,12 @@
+{
+  "choiceList": "Seznam izbir",
+  "choiceListBadInput": "Vhodna vrednost vsebuje neveljaven vnos.",
+  "comboboxPlaceholderText": "Izberite možnost...",
+  "inputPlaceholderText": "Vnesi vrednost ...",
+  "invalidCharacterError": "Vhodna vrednost vsebuje neveljavne znake.",
+  "maxLengthError": "Vhodna vrednost ne more biti daljša od ${maxLength} znakov.",
+  "minLengthError": "Vhodna vrednost ne more biti krajša od ${minLength} znakov.",
+  "multiSelectComboboxPlaceholderText": "Izberite eno ali več možnosti ...",
+  "requiredError": "Ta parameter je obvezen.",
+  "selectAll": "Izberi vse"
+}

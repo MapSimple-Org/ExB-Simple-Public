@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>การตั้งค่าสภาพแวดล้อมสำหรับการวิเคราะห์ใน  Map Viewer </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="analysisProcessingExtent">
+        <div>
+            <p>ระบุพื้นที่ซึ่งจะใช้สำหรับการวิเคราะห์ ตามค่าเริ่มต้น จะใช้ขอบเขตทั้งหมด
+            </p>
+        </div>
+    </div>
+    <div id="rasterAnalysisProcessingExtent">
+        <div>
+            <p>ระบุพื้นที่ที่จะใช้สำหรับเครื่องมือการวิเคราะห์ราสเตอร์และฟังก์ชันราสเตอร์ เมื่อเปิดใช้งาน  <b>ใช้ขอบเขตการประมวลผลอื่นสำหรับการวิเคราะห์ราสเตอร์</b> ไว้ ตามค่าเริ่มต้น จะใช้ขอบเขตการแสดงผลของแผนที่
+            </p>
+        </div>
+    </div>
+    <div id="useDifferentExtentForRA">
+        <div>
+            <p>ระบุว่าจะใช้ขอบเขตการประมวลผลอื่นสำหรับเครื่องมือการวิเคราะห์ราสเตอร์และฟังก์ชันราสเตอร์ เมื่อเปิดใช้งาน การวิเคราะห์ราสเตอร์จะใช้ค่าที่ตั้งไว้สำหรับ  <b>ขอบเขตการประมวลผลการวิเคราะห์ราสเตอร์</b> ซึ่งถูกตั้งค่าไว้ให้ใช้ขอบเขตการแสดงผลของแผนที่ตามค่าเริ่มต้น เมื่อปิดใช้งาน การวิเคราะห์ทุกประเภทจะใช้ค่าที่ตั้งไว้สำหรับ <b>ขอบเขตการประมวลผลการวิเคราะห์</b> ซึ่งถูกตั้งค่าไว้ให้ใช้ขอบเขตทั้งหมดตามค่าเริ่มต้น
+            </p>
+        </div>
+    </div>
+    <div id="outSR">
+        <div>
+            <p>ระบุระบบพิกัดที่จะใช้สำหรับการวิเคราะห์ และชั้นข้อมูลผลลัพธ์
+            </p>
+        </div>
+    </div>
+    <div id="extent">
+        <div>
+            <p>ระบุพื้นที่ซึ่งจะใช้สำหรับการวิเคราะห์
+            </p>
+        </div>
+    </div>
+    <div id="snapRaster">
+        <div>
+            <p>ปรับขอบเขตของเอาท์พุท เพื่อให้ตรงกับการจัดแนวเซลล์ของชั้นข้อมูลสแน็ปราสเตอร์ที่กำหนด
+            </p>
+        </div>
+    </div>
+    <div id="cellSize">
+        <div>
+            <p>ระบุขนาดของเซลล์หรือความละเอียดที่จะนำมาใช้เพื่อสร้างชั้นข้อมูลแรสเตอร์เอาท์พุท
+            </p>
+            <p>หากเลือก  <b>ตามที่ระบุไว้</b> และการอ้างอิงเชิงพื้นที่เอาท์พุทนั้นแตกต่างจากการอ้างอิงเชิงพื้นที่อินพุท ค่าขนาดเซลล์จะไม่ถูกรีโปรเจกต์
+            </p>
+        </div>
+    </div>
+    <div id="mask">
+        <div>
+            <p>ระบุชั้นข้อมูลมมาสก์ ซึ่งมีเฉพาะเซลล์ที่อยู่ภายในพื้นที่มาสก์เท่านั้น ที่จะใช้สำหรับการวิเคราะห์
+            </p>
+        </div>
+    </div>
+    <div id="resamplingMethod">
+        <div>
+            <p>ระบุว่าจะประมาณค่าพิกเซลในช่วงอย่างไร เมื่อแรสเตอร์อินพุทและเอาท์พุทไม่อยู่ในแนวเดียวกัน
+            </p>
+        </div>
+    </div>
+    <div id="processorType">
+        <div>
+            <p>ระบุประเภทของโปรเซสเซอร์ที่จะใช้ ตัวเลือกได้แก่  <b>CPU</b>, <b>GPU</b> และ <b>อัตโนมัติ</b> หากระบุ <b>อัตโนมัติ</b> ไว้ เครื่องมือจะเป็นตัวกำหนดประเภทโปรเซสเซอร์
+            </p>
+        </div>
+    </div>
+    <div id="parallelProcessingFactor">
+        <div>
+            <p>ระบุจำนวนของอินสแตนซ์บริการประมวลผลแรสเตอร์ที่ใช้ในระหว่างการรันเครื่องมือ ค่าที่รองรับได้แก่ สตริงเปล่า (เครื่องมือจะกำหนดจำนวนของอินสแตนซ์บริการประมวลผลแรสเตอร์ที่จะใช้) จำนวนเต็ม (0 หรือจำนวนเต็มบวก) และเปอร์เซ็นต์ เปอร์เซ็นต์จะต้องมีเครื่องหมายเปอร์เซ็นต์ (%) ตามหลังค่าเปอร์เซ็นต์
+            </p>
+        </div>
+    </div>
+    <div id="askConfirmation">
+        <div>
+            <p>ระบุว่าข้อความเตือนจะปรากฎขึ้นหรือไม่ หากจำนวนเครดิตโดยประมาณเกินค่าเกณฑ์ที่กำหนดไว้ (เมื่อเปิดใช้งาน) หรือจะรันการวิเคราะห์โดยไม่แสดงข้อความ และไม่สนใจการใช้เครดิตโดยประมาณ (เมื่อไม่เปิดใช้งาน) การวิเคราะห์จะยังคงทำงานตามการตั้งค่างบประมาณเครดิตสำหรับองค์กร
+            </p>
+        </div>
+    </div>
+    <div id="creditThreshold">
+        <div>
+            <p>ระบุค่าเกณฑ์ที่จะแสดงข้อความคำเตือน อิงตามการใช้เครดิตโดยประมาณจากการรันการวิเคราะห์ จะยังคงสามารถรันการวิเคราะห์ได้ แม้การประมาณการจะเกินค่าเกณฑ์
+            </p>
+        </div>
+    </div>
+    <div id="recycleProcessingWorkers">
+        <div>
+            <p>ระบุจำนวนของส่วนรูปภาพที่จะถูกประมวลผลก่อนที่จะเริ่มกระบวนการทำงานใหม่ ทั้งนี้ เพื่อป้องกันความผิดพลาดที่อาจเกิดขึ้นในกระบวนการทำงานที่ยาวนาน ค่าเริ่มต้นคือ 0
+            </p>
+        </div>
+    </div>
+    <div id="retryOnFailures">
+        <div>
+            <p>ระบุจำนวนครั้งที่จะพยายามดำเนินกระบวนการผู้ปฏิบัติงานเดียวกัน เมื่อเกิดความล้มเหลวขึ้นในระหว่างการประมวลผลงานใดงานหนึ่งโดยเฉพาะ ค่าเริ่มต้นคือ 0
+            </p>
+        </div>
+    </div>
+    <div id="geographicTransformations">
+        <div>
+            <p>ระบุวิธีการแปลงที่สามารถใช้เพื่อโปรเจกต์ข้อมูลสำหรับการวิเคราะห์ได้
+            </p>
+            <p>ในปัจจุบัน สภาพแวดล้อมนี้รองรับเฉพาะเครื่องมือการวิเคราะห์ราสเตอร์และฟังก์ชันราสเตอร์
+            </p>
+        </div>
+    </div>
+</div>
+</html>

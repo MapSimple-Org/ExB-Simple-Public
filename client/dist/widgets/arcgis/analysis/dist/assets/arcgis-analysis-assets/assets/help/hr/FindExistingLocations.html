@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>Alat Pronađi prema atributima i lokaciji stvara novi sloj geoobjekata ili dijelova geoobjekata koji zadovoljava specificirane prostorne ili atributne kriterije.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputLayers">
+        <div>
+            <p>Točkasti, linijski ili poligonalni sloj za koji će se pronaći geoobjekti na temelju kombinacije atributa i prostornih upita.
+            </p>
+        </div>
+    </div>
+    <div id="queryBuilder">
+        <div>
+            <p>Prostorni ili atributni kriteriji koji će se koristiti za pronalaženje geoobjekata. Pritisnite gumb  <b>Izradi novi upit</b> za definiranje jednog ili vi&scaron;e prostornih ili atributnih kriterija. Oni geoobjekti ili dijelovi geoobjekata koji zadovoljavaju sve kriterije bit će zapisani u sloj rezultata.
+            </p>
+        </div>
+    </div>
+    <div id="expressions">
+        <div>
+            <p> Prostorni ili atributni kriteriji koji će se koristiti za pronalaženje geoobjekata. Pritisnite gumb <b>Izradi novi upit</b> za definiranje jednog ili vi&scaron;e prostornih ili atributnih kriterija. Oni geoobjekti ili dijelovi geoobjekata koji zadovoljavaju sve kriterije bit će zapisani u sloj rezultata.
+            </p>
+        </div>
+    </div>
+    <div id="clipFeatures">
+        <div>
+            <p>Kada samo dio geoobjekta zadovoljava kriterije, određuje uključuje li rezultat cijeli geoobjektili samo dio geoobjekta koji zadovoljava sve kriterije. Kada je označeno, vratit će se samo dijelovi geoobjekta koji zadovoljavaju sve kriterije. Kada nije označeno, vratit će se cijeli geoobjekt pod uvjetom da barem dio geoobjekta ispunjava sve kriterije.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>Naziv sloja koji će se stvoriti i dodati karti.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>Naziv mape u opciji  <b>My sadržaj</b> gdje će se spremiti rezultat.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

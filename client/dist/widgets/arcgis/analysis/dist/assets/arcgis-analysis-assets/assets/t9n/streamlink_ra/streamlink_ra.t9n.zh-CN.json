@@ -1,0 +1,9 @@
+{
+  "inputFlowDirectionRasterLabel": "输入流向栅格",
+  "inputLayerGroupText": "选择输入流栅格和流向栅格。",
+  "inputStreamRasterLabel": "输入流栅格",
+  "itemProperties": {
+    "description": "通过运行 StreamLink 分析工具生成的输出。",
+    "snippet": "StreamLink 生成的输出"
+  }
+}

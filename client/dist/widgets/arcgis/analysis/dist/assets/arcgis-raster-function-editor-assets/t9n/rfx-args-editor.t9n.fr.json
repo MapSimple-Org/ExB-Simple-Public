@@ -1,0 +1,11 @@
+{
+  "unsupportedDataType": "Type non pris en charge",
+  "currentlyUnsupported": " Un éditeur par défaut pour ${missingType} est en attente, mais sera bientôt disponible. Espace réservé temporaire pour la zone de texte destinée à la spécification des entrées sous forme de chaînes.",
+  "unsupportedOverrideWarning": "Un composant d’éditeur de remplacement proposant une expérience utilisateur améliorée pour l’utilisation des paramètres suivants est en attente, mais sera bientôt disponible :",
+  "overrideWidgetMissing": "Composant d’éditeur de remplacement manquant.",
+  "uiIncomplete": "Échec de l’envoi de la tâche. La fonction ne peut pas s’exécuter car certains champs obligatoires sont incomplets ou manquants dans l’interface utilisateur.",
+  "deprecatedBannerText": "Ce modèle de fonction raster contient une ou plusieurs fonctions raster obsolètes et sera supprimé dans une version future.",
+  "deprecatedBannerTextWithLink": "Ce modèle de fonction raster contient une ou plusieurs fonctions raster obsolètes et sera supprimé dans une version future. <calcite-link target='_blank' href='${ docLink }'>En savoir plus</calcite-link> sur le remplacement d’une fonction raster obsolète.",
+  "unsupportedBannerText": "Ce modèle de fonction raster contient une ou plusieurs fonctions raster non prises en charge.",
+  "unsupportedBannerTextWithLink": "Ce modèle de fonction raster contient une ou plusieurs fonctions raster non prises en charge. <calcite-link target='_blank' href='${ docLink }'>En savoir plus</calcite-link> sur les fonctions raster prises en charge."
+}

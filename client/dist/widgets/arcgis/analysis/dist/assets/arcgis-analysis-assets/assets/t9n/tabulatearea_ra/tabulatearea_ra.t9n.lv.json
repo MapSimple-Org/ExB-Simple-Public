@@ -1,0 +1,12 @@
+{
+  "classField": "Klases lauks",
+  "classesAsRowsLabel": "Klases kā rindas izvades tabulā",
+  "inputClassRasterOrFeatures": "Ievades klases rastrs vai funkcijas",
+  "inputLayerGroupText": "Izvēlieties ievades zonu un klases slāni, lai aprēķinātu salīdzināmo tabulu apgabalus starp abām datu kopām.",
+  "itemProperties": {
+    "description": "Izvades tabula, kas ģenerēta, palaižot Tabulate area analīzes rīku.",
+    "snippet": "Izvades tabula ģenerēta no Tabulate area"
+  },
+  "tabulateAreaSettingsGroupLabel": "Tabulate area iestatījumi",
+  "tabulateAreaSettingsGroupText": "Izvēlieties, kā rīkoties ar klasēm izvades tabulā. Norādiet aprēķināmo šūnas izmēru. "
+}

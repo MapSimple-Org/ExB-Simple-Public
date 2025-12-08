@@ -1,0 +1,14 @@
+{
+  "AddDataFromUrl": "Lägg till data från URL",
+  "addData": "Lägg till data",
+  "clear": "Radera",
+  "file": "Fil",
+  "fileNotFound": "Det gick inte att läsa in filen.",
+  "invalidUrl": "Ogiltig URL eller ogiltigt filtillägg.",
+  "layerNotFound": "Det gick inte att läsa in lagret.",
+  "replaceData": "Ersätt data",
+  "required": "Denna parameter är obligatorisk.",
+  "uploadData": "Överför data",
+  "uploadFailureMsg": "Ett fel uppstod när inläsningsåtgärden utfördes, filstorlek eller -typ har inte stöd för den här tjänsten.",
+  "url": "Url"
+}

@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>La herramienta Resumir dentro de calcula estad&iacute;sticas para entidades dentro de bins o pol&iacute;gonos especificados.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="summaryLayer">
+        <div>
+            <p>La capa que se resumir&aacute;.
+            </p>
+            <p class="toolPaneOnly">El recuento de entidades depende de factores adicionales como los criterios de filtrado y el alcance del an&aacute;lisis.
+            </p>
+        </div>
+    </div>
+    <div id="binType">
+        <div>
+            <p>El tipo de entidades de delimitaci&oacute;n en las que se resumir&aacute;n las entidades de entrada. Puede ser una capa de pol&iacute;gonos o una cuadr&iacute;cula de teselaci&oacute;n de bins cuadrados o hexagonales que se generan cuando se ejecuta la herramienta.
+            </p>
+        </div>
+    </div>
+    <div id="sumWithinLayer">
+        <div>
+            <p>La capa de pol&iacute;gonos dentro de la cual se resumir&aacute;n las entidades de entrada.
+            </p>
+            <p class="toolPaneOnly">El recuento de entidades depende de factores adicionales como los criterios de filtrado y el alcance del an&aacute;lisis.
+            </p>
+        </div>
+    </div>
+    <div id="binSize">
+        <div>
+            <p>El tama&ntilde;o de los bins generados. Para los bins cuadrados, el n&uacute;mero y las unidades especificados determinan la altura y la longitud del cuadrado. Para los bins hexagonales, el n&uacute;mero y las unidades especificados determinan la distancia entre los lados paralelos.
+            </p>
+        </div>
+    </div>
+    <div id="binSizeUnit">
+        <div>
+            <p>Las unidades que se utilizar&aacute;n para especificar el tama&ntilde;o de bin.
+            </p>
+        </div>
+    </div>
+    <div id="sumShape">
+        <div>
+            <p>Especifica si se calcular&aacute; el tama&ntilde;o total de las entidades resumidas en cada pol&iacute;gono de delimitaci&oacute;n. En el caso de las l&iacute;neas, se calcular&aacute; la longitud total. En el caso de los pol&iacute;gonos, se calcular&aacute; el &aacute;rea total.
+            </p>
+        </div>
+    </div>
+    <div id="shapeUnits">
+        <div>
+            <p>Las unidades que se utilizar&aacute;n para calcular el tama&ntilde;o total de las entidades resumidas.
+            </p>
+        </div>
+    </div>
+    <div id="summaryFields">
+        <div>
+            <p>Campos de n&uacute;mero o fecha de la capa de entrada que se va a resumir y estad&iacute;sticas que se calcular&aacute;n para cada campo.
+            </p>
+        </div>
+    </div>
+    <div id="groupByField">
+        <div>
+            <p>Campo de la capa de entrada que se utilizar&aacute; para separar los datos en grupos distintos para c&aacute;lculos estad&iacute;sticos.
+            </p>
+        </div>
+    </div>
+    <div id="minorityMajority">
+        <div>
+            <p>Especifica si se va a calcular los grupos minoritarios (menos dominantes) y mayoritarios (m&aacute;s dominantes) dentro de cada &aacute;rea de resumen.
+            </p>
+        </div>
+    </div>
+    <div id="percentShape">
+        <div>
+            <p>Especifica si se calcular&aacute; el porcentaje de las entidades resumidas que pertenecen a cada grupo dentro de cada &aacute;rea de resumen.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>El nombre de la capa que se crear&aacute; y se agregar&aacute; al mapa.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>El nombre de la carpeta de  <b>Mi contenido</b> en la que se guardar&aacute;n los resultados.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

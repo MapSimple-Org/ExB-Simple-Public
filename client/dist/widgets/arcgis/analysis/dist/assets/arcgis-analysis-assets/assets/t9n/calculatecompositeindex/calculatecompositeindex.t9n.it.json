@@ -1,0 +1,26 @@
+{
+  "CCIAnalysisSettingGroupLabel": "Impostazioni indice",
+  "CCIAnalysisSettingGroupText": "Specificare la modalità di calcolo dell'indice.",
+  "geomeanPercentileLabel": "Ranghi composti (media geometrica dei percentili)",
+  "geomeanRawLabel": "Valori grezzi composti (media geometrica dei valori grezzi)",
+  "geomeanScaledLabel": "Valori scalati composti (media geometrica dei valori scalati)",
+  "indexMethodLabel": "Metodo per scalare e combinare variabili",
+  "inputFeaturesOrTableLabel": "Tabella o feaure di input",
+  "inputLayerGroupText": "Scegliere le feature o la tabella e le variabili con cui creare l'indice.",
+  "inputVariablesLabel": "Variabili di input",
+  "itemProperties": {
+    "description": "Feature layer generato dall'esecuzione dello strumento Calcola indice composto.",
+    "snippet": "Feature layer generato da Calcolo indice composto"
+  },
+  "meanPercentileLabel": "Combina ranghi (media dei percentili)",
+  "meanRawLabel": "Combina valori grezzi (media dei valori grezzi)",
+  "meanScaledLabel": "Combina valori scalati (media dei valori scalati)",
+  "outputIndexMaxLabel": "Massimo",
+  "outputIndexMinLabel": "Minimo",
+  "outputIndexMinMaxLabel": "Valori minino e massimo dell'indice",
+  "outputIndexReverseLabel": "Inverti valori indice",
+  "reverseVariableLabel": "Inverti direzione",
+  "sumFlagsPercentileLabel": "Evidenzia estremi (conteggio dei valori al di sopra del 90° percentile)",
+  "toolName": "Calcola indice composto",
+  "weight": "Peso"
+}

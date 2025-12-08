@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>Narzędzie Znajdź klastry punkt&oacute;w służy do identyfikowania klastr&oacute;w obiekt&oacute;w punktowych wśr&oacute;d otaczającego szumu w oparciu o ich rozkład przestrzenny.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="analysisLayer">
+        <div>
+            <p>Wejściowa warstwa punktowa, kt&oacute;ra zostanie pogrupowana w klastry na podstawie przestrzennego rozkładu obiekt&oacute;w punktowych.
+            </p>
+        </div>
+    </div>
+    <div id="method">
+        <div>
+            <p>Metoda, kt&oacute;ra będzie używana do identyfikowania klastr&oacute;w.
+            </p>
+        </div>
+    </div>
+    <div id="minFeaturesCluster">
+        <div>
+            <p>Minimalna liczba obiekt&oacute;w punktowych, kt&oacute;re są uznawane za klaster.
+            </p>
+        </div>
+    </div>
+    <div id="searchDistance">
+        <div>
+            <p>Określa maksymalną odległość wok&oacute;ł każdego obiektu punktowego w celu wyszukania punkt&oacute;w, kt&oacute;re mogą zostać włączone do klastra. Jeśli to pole pozostanie puste, wartością  <b>Odległość wyszukiwania</b> będzie największa wartość podstawowej odległości znaleziona w warstwie przy pominięciu 1% największych odległości podstawowych.
+            </p>
+        </div>
+    </div>
+    <div id="searchDistanceUnit">
+        <div>
+            <p>Określa jednostki, kt&oacute;re będą używane w odniesieniu do odległości wyszukiwania.
+            </p>
+        </div>
+    </div>
+    <div id="sensitivity">
+        <div>
+            <p>Liczba całkowita z zakresu od 0 do 100, kt&oacute;re określa kompaktowość klastr&oacute;w. Jeśli to pole pozostanie puste, wartość  <b>Czułość klastra</b> będzie obliczana z użyciem dywergencji Kullbacka-Leiblera.
+            </p>
+        </div>
+    </div>
+    <div id="timeField">
+        <div>
+            <p>Pole z warstwy wejściowej zawierające datownik dla każdego obiektu.
+            </p>
+        </div>
+    </div>
+    <div id="searchTimeInterval">
+        <div>
+            <p>Interwał czasu, kt&oacute;ry zostanie użyty do określenia, czy obiekty tworzą klaster czasoprzestrzenny. Interwał czasu wyszukiwania obejmuje czas przed czasem każdego obiektu i po nim; na przykład interwał czasu wyszukiwania wynoszący 3 dni wok&oacute;ł obiektu obejmie wszystkie obiekty począwszy od 3 dni przed i skończywszy na 3 dniach po czasie obiektu.
+            </p>
+        </div>
+    </div>
+    <div id="searchTimeUnit">
+        <div>
+            <p>Określa jednostki, kt&oacute;re będą używane dla interwału czasu wyszukiwania.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>Nazwa warstwy, kt&oacute;ra zostanie utworzona i dodana do mapy.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>Nazwa folderu na stronie  <b>Moje zasoby</b>, w kt&oacute;rym zostanie zapisany wynik.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

@@ -1,0 +1,17 @@
+{
+  "sharing": "Sharing",
+  "private": "Owner",
+  "shared": "Owner and shared with groups",
+  "org": "Organization",
+  "public": "Everyone (public)",
+  "privateGroups": "Owner",
+  "sharedGroups": "Owner + Groups (${num})",
+  "orgGroups": "Organization + Groups (${num})",
+  "publicGroups": "Everyone (public) + Groups (${num})",
+  "groups": "Groups (${num})",
+  "updateSharing": "Share level: ${level}, update sharing",
+  "viewableBy": "Viewable by: ${level}",
+  "everyone": "Everyone (public)",
+  "organization": "Organization",
+  "groupMembers": "Group members"
+}

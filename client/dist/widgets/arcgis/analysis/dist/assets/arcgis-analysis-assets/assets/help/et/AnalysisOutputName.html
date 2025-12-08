@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p> Map Viewer-i anal&uuml;&uuml;si &uuml;lekirjutamise seaded. </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="resultType">
+        <div>
+            <p>M&auml;&auml;rab loodava v&auml;ljundi t&uuml;&uuml;bi. Valik  <b>Loo vaheandmed</b> loob ajutise kihi, mida saab kasutada teise t&ouml;&ouml;riista sisendina, kuid mida ei saa salvestada ega kaardil vaadata. Valik <b>Loo majutatud kiht</b> avaldab uue majutatud objektikihi. Valik <b>Kirjuta olemasolev kiht &uuml;le</b> uuendab olemasolevat kihti t&ouml;&ouml;riista v&auml;ljundiga.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>Selle kihi nimi, mis luuakse ja lisatakse kaardile.
+            </p>
+        </div>
+    </div>
+    <div id="layerExistsAutomaticallyOverwrite">
+        <div>
+            <p>M&auml;&auml;rab, kas t&ouml;&ouml;riista v&auml;ljundiga kirjutatakse &uuml;le teie sisu kiht, millel on m&auml;&auml;ratud v&auml;ljundnimi. Kui see kihi nimi ei ole teie organisatsioonis veel kasutusel, luuakse uus &uuml;ksus. &Uuml;lekirjutamiseks peate olema kas kihi omanik v&otilde;i administraator.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>Selle kausta nimi jaotises  <b>Minu sisu</b>, kuhu tulemused salvestatakse.
+            </p>
+            <p>Seda ei saa uuendada, kui kiht on juba olemas.
+            </p>
+        </div>
+    </div>
+    <div id="existingLayerToOverwrite">
+        <div>
+            <p> <b>Minu sisu</b> kiht, mis kirjutatakse &uuml;le v&auml;ljundkihiga. V&auml;ljundi ja olemasoleva kihi koordinaats&uuml;steemid peavad &uuml;htima.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

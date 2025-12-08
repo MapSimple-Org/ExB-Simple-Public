@@ -1,0 +1,22 @@
+{
+  "dialogHeading": "Cấu hình danh mục thành viên",
+  "noticeTitle": "Chỉnh sửa, xóa hoặc sắp xếp lại các danh mục trong tổ chức của bạn.",
+  "noticeDescription": "Bạn có thể chỉ định danh mục cho các thành viên thông qua tab Thành viên.",
+  "defaultCategoryWarning": "Danh mục thành viên này được đặt làm mặc định của thành viên mới và không thể chỉnh sửa hoặc xóa.",
+  "warning": {
+    "deleteInUseCategory": {
+      "message": {
+        "single": "Một thành viên được chỉ định cho danh mục này. Xóa danh mục cũng sẽ xóa luôn nó khỏi thành viên này.",
+        "multiple": "${number} thành viên được chỉ định cho danh mục này. Xóa danh mục cũng sẽ xóa luôn nó khỏi các thành viên này.",
+        "unknown": "Thành viên được chỉ định cho danh mục này: ${number}. Xóa danh mục cũng sẽ xóa luôn nó khỏi các thành viên này."
+      }
+    },
+    "changeTitleInUseCategory": {
+      "message": {
+        "single": "Một thành viên được chỉ định cho danh mục này. Cập nhật danh mục sẽ cập nhật thành viên để sử dụng \"${newTitle}\".",
+        "multiple": "${number} thành viên được chỉ định cho danh mục này. Cập nhật danh mục sẽ cập nhật các thành viên để sử dụng \"${newTitle}\".",
+        "unknown": "Thành viên được chỉ định cho danh mục này: ${number}. Cập nhật danh mục sẽ cập nhật các thành viên để sử dụng \"${newTitle}\"."
+      }
+    }
+  }
+}

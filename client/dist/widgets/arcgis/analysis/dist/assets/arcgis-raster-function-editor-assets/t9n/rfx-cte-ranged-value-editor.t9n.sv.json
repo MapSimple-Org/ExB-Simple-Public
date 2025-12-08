@@ -1,0 +1,6 @@
+{
+  "greaterThanErrorMessage": "Indataantalet måste vara större än ${min}",
+  "lesserThanErrorMessage": "Indataantalet måste vara lägre än ${max}",
+  "greaterThanOrEqualErrorMessage": "Indataantalet måste vara större än eller lika med ${min}",
+  "lesserThanOrEqualErrorMessage": "Indataantalet måste vara lägre än eller lika med ${max}"
+}

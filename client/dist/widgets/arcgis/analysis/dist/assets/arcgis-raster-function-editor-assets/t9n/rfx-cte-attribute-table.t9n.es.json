@@ -1,0 +1,22 @@
+{
+  "value": "Valor",
+  "classname": "ClassName",
+  "color": "Color",
+  "raster": "Calculadora ráster",
+  "tableType": "Tipo de tabla",
+  "manual": "Manual",
+  "external": "Externo",
+  "browseTable": "Tabla de explorador",
+  "browseTableFrom": "Explorar tabla desde",
+  "file": "Archivo",
+  "dbfFile": "Archivo DBF",
+  "layer": "Capa",
+  "unsupportedDataType": "Tipo no admitido",
+  "failedToGetTableFromLayer": "No se pudo obtener la tabla de la capa.",
+  "generate": "Generar tabla",
+  "minValue": "Valor mínimo",
+  "maxValue": "Valor máximo",
+  "classBaseName": "Nombre base de clase",
+  "colorscheme": "Esquema de colores",
+  "defaultClassName": "Etiqueta_"
+}

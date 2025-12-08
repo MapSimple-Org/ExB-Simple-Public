@@ -1,0 +1,22 @@
+{
+  "value": "值",
+  "classname": "ClassName",
+  "color": "颜色",
+  "raster": "栅格",
+  "tableType": "表类型",
+  "manual": "手动",
+  "external": "外部",
+  "browseTable": "浏览表",
+  "browseTableFrom": "浏览表来源",
+  "file": "文件",
+  "dbfFile": "DBF 文件",
+  "layer": "图层",
+  "unsupportedDataType": "不受支持的类型",
+  "failedToGetTableFromLayer": "无法从图层获取表。",
+  "generate": "生成表格",
+  "minValue": "最小值",
+  "maxValue": "最大值",
+  "classBaseName": "类基本名称",
+  "colorscheme": "配色方案",
+  "defaultClassName": "标注_"
+}

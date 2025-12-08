@@ -1,0 +1,1 @@
+System.register([],function(e){return{execute:function(){e({_widgetLabel:"Filter kata",floorfilter_noMap:"Filter kata",floorfilter_notFloorAware:"Odabrana karta nije svjesna katova"})}}});

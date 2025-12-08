@@ -1,0 +1,22 @@
+{
+  "general": "Общ",
+  "parameters": "Параметри",
+  "variables": "Променливи",
+  "name": "Име",
+  "namePlaceHolder": "Въведете име",
+  "description": "Описание",
+  "parameter": "Параметър",
+  "isPublic": "е публично",
+  "isDataset": "е набор от данни",
+  "unknownPixelType": "Непознато",
+  "outputPixelType": "Тип изходен пиксел",
+  "u8PixelType": "8 бита без подпис",
+  "s8PixelType": "8 бита подписани",
+  "u16PixelType": "16 бита неподписани",
+  "s16PixelType": "16 бита подписани",
+  "u32PixelType": "32 бита неподписани",
+  "s32PixelType": "32 бита подписани",
+  "f32PixelType": "32 бита плаващи",
+  "f64PixelType": "64 бита двойни",
+  "properties": "Свойства"
+}

@@ -1,0 +1,21 @@
+{
+  "folder": "مجلد",
+  "folders": "المجلدات",
+  "searchFolders": "بحث في المجلدات",
+  "enterFolder": "أدخل اسم المجلد",
+  "createNewFolder": "إنشاء مجلد جديد",
+  "noFoldersFoundCreate": "لم يُعثر على مجلدات بهذا الاسم. إنشاء '${folder}'؟",
+  "noFoldersFound": "لم يُعثر على مجلدات بهذا الاسم.",
+  "create": "إنشاء '${folder}'؟",
+  "loading": "تحميل مجلدات",
+  "error": {
+    "noName": "يجب تسمية المجلد.",
+    "folderAlreadyExists": "مجلد '${folder}' موجود بالفعل. الرجاء اختيار اسم آخر.",
+    "title": "خطأ",
+    "invalidCharacters": {
+      "single": "لا يمكن أن يحتوي الاسم على هذا الحرف: ${invalidCharacters}.",
+      "multiple": "لا يمكن أن يحتوي الاسم على أي من الأحرف التالية: ${invalidCharacters}.",
+      "unknown": "لا يمكن أن يحتوي الاسم على أي من الأحرف التالية: ${invalidCharacters}."
+    }
+  }
+}

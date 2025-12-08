@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>T&ouml;&ouml;riistaga &quot;Teisenda objekt rastriks&quot; saab teisendada objekti andmed rasterandmestikuks.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputFeature">
+        <div>
+            <p>Teisendatavad objektiandmed. Sisendkiht v&otilde;ib sisaldada punkt-, joon- v&otilde;i pol&uuml;goonobjekte.
+            </p>
+            <p class="toolPaneOnly">Objektide arv s&otilde;ltub t&auml;iendavatest teguritest, n&auml;iteks filtreerimiskriteeriumidest ja anal&uuml;&uuml;si ulatusest.
+            </p>
+        </div>
+    </div>
+    <div id="valueField">
+        <div>
+            <p>V&auml;li, mida kasutatakse v&auml;ljundrastrile v&auml;&auml;rtuste m&auml;&auml;ramiseks.
+            </p>
+        </div>
+    </div>
+    <div id="outputCellSize">
+        <div>
+            <p>The cell size and unit for the output rasters.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>Selle rasterkihi nimi, mis luuakse ja lisatakse kaardile.
+            </p>
+        </div>
+    </div>
+    <div id="resultType">
+        <div>
+            <p>Loodava v&auml;ljundi t&uuml;&uuml;p. V&auml;ljund v&otilde;ib olla paanitud pildikiht v&otilde;i d&uuml;naamiline pildikiht.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>Selle kausta nimi jaotises  <b>Minu sisu</b>, kuhu tulemus salvestatakse.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

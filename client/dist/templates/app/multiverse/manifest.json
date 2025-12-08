@@ -1,0 +1,41 @@
+{
+  "name": "multiverse",
+  "type": "template",
+  "templateType": "app",
+  "label": "Multiverse",
+  "description": "Multiverse is a template designed for working with multiple data sources. Its Add Data widget simplifies the process of importing data from various sources, empowering users to compare and analyze multiple data sources through maps and tables.",
+  "thumbnail": "thumbnail.png",
+  "order": 30,
+  "templateCreateVersion": "1.12.0",
+  "tags": [
+    "Map",
+    "Logo",
+    "Title",
+    "Share",
+    "Grid",
+    "Section",
+    "View",
+    "Navigation",
+    "Table",
+    "Card",
+    "Add Data",
+    "Feature Info",
+    "Legend",
+    "Map Layers",
+    "Coordinates",
+    "Add to map",
+    "Draw",
+    "Measurement",
+    "Bookmark",
+    "Slides"
+  ],
+  "categoriesTags": [
+    "Map centric",
+    "Web page",
+    "Fullscreen grid"
+  ],
+  "isMultiplePage": false,
+  "isMapAware": true,
+  "thumbnailWidth": 320,
+  "thumbnailHeight": 214
+}

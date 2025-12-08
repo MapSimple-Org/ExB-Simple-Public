@@ -1,0 +1,17 @@
+{
+  "aboveMaximumMessage": "Вхідне значення має становити менше або дорівнювати ${max}.",
+  "add": "Додати",
+  "addDuplicateMessage": "Неможливо додати повторювані значення.",
+  "belowMinimumMessage": "Вхідне значення має становити більше або дорівнювати ${min}.",
+  "defaultPlaceholder": "Уведіть значення та клацніть «Додати»",
+  "duplicateValueMessage": "Повторювані значення будуть проігноровані.",
+  "invalidDoubleMessage": "Вхідне значення має бути подвійним.",
+  "invalidIntegerMessage": "Вхідне значення має бути цілим числом.",
+  "maxValuesMessage": "Повинно бути не більше ${maxValues} окремих вхідних значень.",
+  "minValuesMessage": "Потрібно щонайменше ${minValues} окремих вхідних значень.",
+  "remove": "Вилучити",
+  "requiredInputMessage": "Цей параметр обов'язковий.",
+  "strictlyMaximumMessage": "Вхідне значення має становити менше ${max}.",
+  "strictlyMinimumMessage": "Вхідне значення має становити більше ${min}.",
+  "value": "Значення: ${value}"
+}

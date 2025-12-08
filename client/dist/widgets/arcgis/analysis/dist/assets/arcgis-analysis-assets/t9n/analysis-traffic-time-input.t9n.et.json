@@ -1,0 +1,8 @@
+{
+  "arriveTime": "Saabumisaeg",
+  "modes": {
+    "custom": "Kohandatud kuupäev ja kellaaeg",
+    "now": "Praegu",
+    "unspecified": "Määramata aeg"
+  }
+}

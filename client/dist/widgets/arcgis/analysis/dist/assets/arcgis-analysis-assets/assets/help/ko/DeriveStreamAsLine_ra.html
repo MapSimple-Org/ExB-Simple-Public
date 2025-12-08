@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>라인으로 하천 취득 도구는 사전에 싱크 또는 침강을 채울 필요가 없이 입력 표면 래스터에서 하천 라인 피처를 생성합니다.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputSurfaceRaster">
+        <div>
+            <p>계산에 사용될 고도 래스터입니다.
+            </p>
+        </div>
+    </div>
+    <div id="inputDepressionsData">
+        <div>
+            <p>물이 안으로는 흐르고 밖으로는 흐르지 않는 실제 침체 또는 싱크의 위치를 정의하는 입력입니다.
+            </p>
+            <p class="toolPaneOnly">피처 입력의 경우 개수는 필터링 기준 및 분석 범위와 같은 추가 요소에 따라 달라집니다.
+            </p>
+        </div>
+    </div>
+    <div id="inputWeightRaster">
+        <div>
+            <p>각 셀에서 흐름 누적에 기여하는 흐름의 비율을 정의하는 래스터 레이어입니다.
+            </p>
+        </div>
+    </div>
+    <div id="accumulationThreshold">
+        <div>
+            <p>지정된 셀이 스트림의 일부인지 여부를 해당 셀로 흐르는 총 면적 측면에서 결정하기 위한 임계값입니다.
+            </p>
+        </div>
+    </div>
+    <div id="streamDesignationMethod">
+        <div>
+            <p>결과의 스트림 구간이 상수 값을 가질지, 고유한 값을 가질지, 또는 순서대로 정렬될지 지정합니다.
+            </p>
+        </div>
+    </div>
+    <div id="simplify">
+        <div>
+            <p>결과로 나온 하천 라인을 더 단순한 모양으로 스무싱할지 여부를 지정합니다.
+            </p>
+            <p>선택하는 경우 허용오차가 0.5의 제곱근*셀 크기인 더글러스 패커 알고리즘을 통해 하천 라인 피처가 간소화됩니다. 이 옵션이 기본 설정입니다. 선택하지 않는 경우 하천 라인 피처가 스무싱되지 않습니다.
+            </p>
+        </div>
+    </div>
+    <div id="outputStreamFeaturesName">
+        <div>
+            <p>생성되고 맵에 추가될 하천 라인 피처 레이어의 이름입니다.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>결과를 저장할  <b>내 콘텐츠</b>의 폴더 이름입니다.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

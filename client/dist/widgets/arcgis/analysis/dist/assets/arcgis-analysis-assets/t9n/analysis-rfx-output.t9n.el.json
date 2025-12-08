@@ -1,0 +1,12 @@
+{
+  "dynamicLayer": "Δυναμικό imagery layer",
+  "outputDescription": "Δημιουργήθηκε έξοδος από την εκτέλεση της συνάρτησης raster ${rfxName}",
+  "outputDescriptionRFT": "Δημιουργήθηκε έξοδος από την εκτέλεση του προτύπου συνάρτησης raster ${rfxName}",
+  "outputName": "Όνομα εξόδου",
+  "outputNamePlaceHolder": "Καταχωρίστε ένα μοναδικό όνομα...",
+  "resultLayer": "Θεματικό επίπεδο αποτελέσματος",
+  "resultType": "Τύπος αποτελέσματος",
+  "saveFolder": "Αποθήκευση σε φάκελο",
+  "summaryText": "Καταχωρίστε ένα όνομα για το θεματικό επίπεδο αποτελέσματος.",
+  "tileImagery": "Tiled imagery layer"
+}

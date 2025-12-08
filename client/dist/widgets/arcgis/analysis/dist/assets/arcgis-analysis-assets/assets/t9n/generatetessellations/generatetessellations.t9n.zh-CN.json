@@ -1,0 +1,27 @@
+{
+  "area": "面积",
+  "binResolution": "H3 立方图格分辨率",
+  "binSize": "图格大小",
+  "binSizeUnit": "单位",
+  "binType": "图格形状类型",
+  "diamondBins": "菱形图格",
+  "distance": "距离",
+  "extentLayer": "范围图层",
+  "extentOverrideMessage": "将使用此范围图层，而非环境设置中指定的任何处理范围。",
+  "extentSectionLabel": "范围设置",
+  "extentSectionText": "指定细分面应覆盖的范围图层。",
+  "h3hexagonBins": "H3 六边形图格",
+  "hexagon": "六边形",
+  "intersectStudyArea": "只保留相交的细分面",
+  "itemProperties": {
+    "description": "通过运行“生成细分面”分析工具生成的要素图层。",
+    "snippet": "通过生成细分面生成的要素图层"
+  },
+  "outputAreasSectionText": "为细分格网提供名称。",
+  "sizeType": "图格大小测量",
+  "square": "正方形",
+  "tessellationSettingsLabel": "细分面设置",
+  "tessellationSettingsSummaryText": "指定要生成的图格的形状和大小。",
+  "thexagonBins": "横向六边形图格",
+  "triangleBins": "三角形图格"
+}

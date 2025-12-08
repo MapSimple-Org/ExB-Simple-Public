@@ -1,0 +1,12 @@
+{
+  "classField": "Polje klase",
+  "classesAsRowsLabel": "Klase kao redovi u izlaznoj tabeli",
+  "inputClassRasterOrFeatures": "Raster ili geoobjekti ulazne klase",
+  "inputLayerGroupText": "Izaberite ulaznu zonu i sloj klase da izračunate unakrsno tabulisane oblasti između dva skupa podataka.",
+  "itemProperties": {
+    "description": "Izlazna tabela generisana iz pokrenute alatke za analizu Tabulisanje oblasti.",
+    "snippet": "Izlazna tabela generisana iz funkcije Tabulisanje oblasti"
+  },
+  "tabulateAreaSettingsGroupLabel": "Postavke tabulisanja oblasti",
+  "tabulateAreaSettingsGroupText": "Izaberite kako da rukujete klasama u izlaznoj tabeli. Precizirajte veličinu ćelije za izračunavanje. "
+}

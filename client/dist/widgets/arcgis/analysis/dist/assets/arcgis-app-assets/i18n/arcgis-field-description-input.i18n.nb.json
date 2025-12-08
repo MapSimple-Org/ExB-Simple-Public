@@ -1,0 +1,6 @@
+{
+  "description": "Beskrivelse",
+  "addDescription": "Legg til en beskrivelse",
+  "charactersLeft": "Tegn igjen: ${num}",
+  "invalid": "Beskrivelsen kan ikke inneholde følgende tegn: < og >."
+}

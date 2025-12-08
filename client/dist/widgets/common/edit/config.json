@@ -1,0 +1,17 @@
+{
+  "layersConfig": [],
+  "editMode": "GEOMETRY",
+  "selfSnapping": false,
+  "featureSnapping": false,
+  "defaultSelfEnabled": false,
+  "defaultFeatureEnabled": false,
+  "defaultSnapLayers": [],
+  "tooltip": true,
+  "templateFilter": true,
+  "liveDataEditing": false,
+  "initialReshapeMode": false,
+  "relatedRecords": true,
+  "description": "",
+  "noDataMessage": "",
+  "snapSettingMode": "FLEXIBLE"
+}

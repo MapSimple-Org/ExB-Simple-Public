@@ -1,0 +1,9 @@
+{
+  "inputFlowDirectionRasterLabel": "Raster κατεύθυνσης ροής εισόδου",
+  "inputLayerGroupText": "Επιλέξτε τα raster ροής και κατεύθυνσης ροής εισόδου.",
+  "inputStreamRasterLabel": "Raster ροής εισόδου",
+  "itemProperties": {
+    "description": "Αποτέλεσμα που δημιουργείται από την εκτέλεση του εργαλείου ανάλυσης StreamLink.",
+    "snippet": "Αποτέλεσμα που δημιουργείται από το StreamLink"
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "loading": "Se încarcă...",
+  "pleaseWait": "Așteptați.",
+  "loadingXMLRFT": "Se încarcă șablonul funcției de raster respective în format XML.",
+  "failedToOpen": "Deschiderea nu a reușit.",
+  "readingFailed": "A eşuat încărcarea șablonului de funcție raster selectat.",
+  "failedToLoadXML": "A eșuat încărcarea șablonului de funcție raster selectat în format XML."
+}

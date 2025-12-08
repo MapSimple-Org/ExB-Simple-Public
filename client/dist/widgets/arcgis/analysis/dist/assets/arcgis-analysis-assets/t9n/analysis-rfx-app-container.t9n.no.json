@@ -1,0 +1,16 @@
+{
+  "backLabel": "Tilbake",
+  "browseHeader": "Velg lag",
+  "cannotReopenRasterFunction": "Rasterfunksjonen kunne ikke åpnes på nytt.",
+  "creditThresholdModal": {
+    "cancelRun": "Avbryt",
+    "continueRun": "Kjør likevel",
+    "creditEstimate": "Estimerte credits: ${cost}",
+    "creditThreshold": "Creditterskel: ${threshold}",
+    "heading": "Før du fortsetter",
+    "learnMore": "Få mer informasjon om creditgrenser",
+    "thresholdExceeded": "Den anslåtte creditkostnaden for denne analysen er høyere enn webkartets creditgrense:"
+  },
+  "failedToExecuteEstimate": "Innsending mislyktes. Kan ikke kjøre EstimateRasterAnalysisCost",
+  "runAnalysisLabel": "Kjør"
+}

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>A Mező sz&aacute;m&iacute;t&aacute;sa eszk&ouml;z &eacute;rt&eacute;keket sz&aacute;m&iacute;t ki egy &uacute;j vagy l&eacute;tező mezőh&ouml;z.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputTable">
+        <div>
+            <p>Az a bemenő r&eacute;teg vagy t&aacute;bla, amelyhez egy mező sz&aacute;m&iacute;t&aacute;sa fog t&ouml;rt&eacute;nni.
+            </p>
+            <p class="modelBuilderOnly">Alap&eacute;rtelmez&eacute;s szerint a  <b>R&eacute;teg</b> van megadva, ha a <b>Bemeneti adathalmaz</b> nincs kit&ouml;ltve. Egy bemeneti t&aacute;bla hozz&aacute;ad&aacute;s&aacute;hoz elősz&ouml;r v&aacute;lassza a <b>T&aacute;bla</b> lehetős&eacute;get, mielőtt hozz&aacute;adn&aacute; az adathalmazt.
+            </p>
+        </div>
+    </div>
+    <div id="whereClause">
+        <div>
+            <p>Az az attrib&uacute;tumlek&eacute;rdez&eacute;s, amely meghat&aacute;rozza, hogy a rendszer a rekordok mely r&eacute;szhalmaz&aacute;ra alkalmazza a mezősz&aacute;m&iacute;t&aacute;st. Ha a sz&aacute;m&iacute;t&aacute;st minden rekordra alkalmazni szeretn&eacute;, hagyja ezt a param&eacute;tert &uuml;resen.
+            </p>
+        </div>
+    </div>
+    <div id="field">
+        <div>
+            <p>Az a mező, ahov&aacute; a kisz&aacute;m&iacute;tott &eacute;rt&eacute;keket hozz&aacute; lesznek adva. V&aacute;laszthat egy megl&eacute;vő mezőt, vagy l&eacute;trehozhat egy &uacute;j mezőt. 
+            </p>
+        </div>
+    </div>
+    <div id="fieldCalcExpression">
+        <div>
+            <p>Az az SQL-kifejez&eacute;s, amely a  <b>Kisz&aacute;m&iacute;tand&oacute; mező</b> &eacute;rt&eacute;keinek meghat&aacute;roz&aacute;s&aacute;ra haszn&aacute;latos.
+            </p>
+            <p>A kifejez&eacute;s alapvető oper&aacute;torokat, funkci&oacute;kat &eacute;s mezőneveket tartalmazhat, &eacute;s olyan &eacute;rt&eacute;keket kell l&eacute;trehoznia, amelyek megfelelnek  <b>Kisz&aacute;m&iacute;tand&oacute; mező</b> mezőt&iacute;pus&aacute;nak.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

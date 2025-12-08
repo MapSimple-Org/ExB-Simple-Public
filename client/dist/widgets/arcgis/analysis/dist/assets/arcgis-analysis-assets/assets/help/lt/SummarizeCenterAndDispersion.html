@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>Įrankis Sumuoti centrą ir i&scaron;sisklaidymą randa elementų rinkinio centrinį elementą, centrinę tendenciją ir standartinę nuokrypio elipsę.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="analysisLayer">
+        <div>
+            <p>Ta&scaron;ko, tiesės arba poligono elementai, kuriems bus skaičiuojamas centrinis objektas, centrinė tendencija ir standartinė nuokrypio elipsė.
+            </p>
+        </div>
+    </div>
+    <div id="summarizeType">
+        <div>
+            <p>Nurodo būdus, kurie apibendrina elementų centrą ir i&scaron;sisklaidymą.
+            </p>
+        </div>
+    </div>
+    <div id="ellipseSize">
+        <div>
+            <p>Nurodo eliptinio poligono dydį esant standartiniams nuokrypiams. Jei atstumas tarp suvidurkinto centro ir elemento vietų atitinka Rayleigh pasiskirstymą, parinktys  <b>1 standartinis nuokrypis</b>, <b>2 standartiniai nuokrypiai</b> ir <b>3 standartiniai nuokrypiai</b> pateiks elipsės formos poligoną, atitinkamai apimantį 68 proc., 95 proc. ir 99 proc. elementų.
+            </p>
+        </div>
+    </div>
+    <div id="weightField">
+        <div>
+            <p>Laukas, kuris bus naudojamas elemento svoriui nustatyti.
+            </p>
+        </div>
+    </div>
+    <div id="groupField">
+        <div>
+            <p>Laukas, kuris bus naudojamas elementams tarpusavyje grupuoti. Kiekvienai grupei bus apskaičiuotos pasirinktos  <b>Suvestinių tipų</b> reik&scaron;mės.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>Sluoksnio, kuris bus sukurtas ir pridėtas į žemėlapį, pavadinimas.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>Puslapyje  <b>Mano turinys</b> esančio aplanko, kur bus įra&scaron;ytas rezultatas, pavadinimas.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

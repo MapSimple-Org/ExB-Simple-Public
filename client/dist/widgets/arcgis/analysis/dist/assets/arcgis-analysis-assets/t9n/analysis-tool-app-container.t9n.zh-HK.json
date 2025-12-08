@@ -1,0 +1,21 @@
+{
+  "backLabel": "上一步",
+  "cannotReopenTool": "無法重新開啟工具。 已將工具參數回復到預設值。",
+  "cannotReopenWebTool": "無法開啟 Web 工具。 <calcite-link target='_blank' href='${ docLink }'>瞭解詳細資訊</calcite-link>",
+  "creditThresholdModal": {
+    "cancelRun": "取消",
+    "continueRun": "一律執行",
+    "creditEstimate": "估計的點數: ${cost}",
+    "creditThreshold": "點數閾值: ${threshold}",
+    "heading": "繼續前",
+    "learnMore": "深入瞭解點數閾值",
+    "thresholdExceeded": "此分析的估計點數成本大於 Web 地圖的點數閾值:"
+  },
+  "failedToExecuteEstimate": "提交失敗。 無法執行 EstimateRasterAnalysisCost",
+  "missingPermissionForWebTool": "無法存取此工具。 確定工具存在，且您的使用者有權存取它。",
+  "runAnalysisLabel": "執行",
+  "toolPreviewNoParameters": "尚未為此模型設定參數。 返回模型新增變數，並將其設定為參數。",
+  "toolPreviewNoParametersLink": "<calcite-link target='_blank' href='${ docLink }'>瞭解詳細資訊</calcite-link>",
+  "toolPreviewWebTool": "要將此模型作為 Web 工具執行，請發佈它並從「分析」窗格中開啟它。",
+  "webToolJSONChanged": "一或多個參數已更新。 某些參數可能無法從歷史記錄中重新填充。"
+}

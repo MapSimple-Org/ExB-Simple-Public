@@ -1,0 +1,6 @@
+{
+  "header": "Početi ispočetka bez spremanja?",
+  "content": "Imate promjene koje nisu spremljene u „${rftTitle}”. Ako počnete ispočetka s novim predloškom, te će se promjene izgubiti.",
+  "cancel": "Odustani",
+  "continue": "Nastavak"
+}

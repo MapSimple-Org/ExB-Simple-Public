@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>N&aacute;stroj Geodetick&aacute; viditeľn&aacute; plocha identifikuje lokality na rastrovom povrchu, ktor&eacute; s&uacute; viditeľn&eacute; vzhľadom k vstupn&yacute;m miestam pozorovateľa.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputElevationSurface">
+        <div>
+            <p>V&yacute;&scaron;kov&yacute; raster, na z&aacute;klade ktor&eacute;ho sa vypoč&iacute;ta viditeľn&aacute; plocha.
+            </p>
+        </div>
+    </div>
+    <div id="inputObserverFeatures">
+        <div>
+            <p>Lokality pozorovateľov, pre ktor&eacute; sa vypoč&iacute;ta viditeľn&aacute; plocha.
+            </p>
+        </div>
+    </div>
+    <div id="optimizeFor">
+        <div>
+            <p>Optimalizuje v&yacute;počet viditeľnej plochy na z&aacute;klade r&yacute;chlosti alebo presnosti.
+            </p>
+        </div>
+    </div>
+    <div id="verticalError">
+        <div>
+            <p>Veľkosť neistoty v hodnot&aacute;ch nadmorskej v&yacute;&scaron;ky pre položku  <b>Vstupn&yacute; povrch nadmorskej v&yacute;&scaron;ky</b>.
+            </p>
+        </div>
+    </div>
+    <div id="refractivityCoefficient">
+        <div>
+            <p>Koeficient lomu viditeľn&eacute;ho svetla vo vzduchu.
+            </p>
+        </div>
+    </div>
+    <div id="maximumViewingDistanceField">
+        <div>
+            <p>Maxim&aacute;lna zobrazovacia vzdialenosť pre v&yacute;počet viditeľnej plochy.
+            </p>
+            <p>Vzdialenosť m&ocirc;že byť definovan&aacute; hodnotou a jej jednotkami alebo z poľa hodnoty  <b>Vstupn&eacute; observačn&eacute; bodov&eacute; alebo l&iacute;niov&eacute; prvky</b>.
+            </p>
+        </div>
+    </div>
+    <div id="minimumViewingDistanceField">
+        <div>
+            <p>Minim&aacute;lna zobrazovacia vzdialenosť pre v&yacute;počet viditeľnej plochy.
+            </p>
+            <p>Vzdialenosť m&ocirc;že byť definovan&aacute; hodnotou a jej jednotkami alebo z poľa hodnoty  <b>Vstupn&eacute; observačn&eacute; bodov&eacute; alebo l&iacute;niov&eacute; prvky</b>.
+            </p>
+        </div>
+    </div>
+    <div id="viewingDistanceIs3D">
+        <div>
+            <p>Určuje, či sa maxim&aacute;lna a minim&aacute;lna vzdialenosť zobrazenia bude merať v 3D vzdialenosti alebo 2D vzdialenosti.
+            </p>
+            <p>Ak nie je neza&scaron;krtnut&eacute;, vzdialenosti zobrazenia sa bud&uacute; považovať za 2D euklidovsk&eacute; vzdialenosti. Ak je za&scaron;krtnut&eacute;, vzdialenosti zobrazenia sa bud&uacute; považovať za 3D vzdialenosti.
+            </p>
+        </div>
+    </div>
+    <div id="observersElevationField">
+        <div>
+            <p>Nadmorsk&aacute; v&yacute;&scaron;ka povrchu miest pozorovateľov.
+            </p>
+            <p>Nadmorsk&uacute; v&yacute;&scaron;ku možno definovať pomocou hodnoty a jej jednotiek alebo z poľa hodnoty  <b>Vstupn&eacute; observačn&eacute; bodov&eacute; alebo l&iacute;niov&eacute; prvky</b>.
+            </p>
+        </div>
+    </div>
+    <div id="observersHeightField">
+        <div>
+            <p>V&yacute;&scaron;ka pozorovateľov nad zemou.
+            </p>
+            <p>V&yacute;&scaron;ku možno definovať pomocou hodnoty a jej jednotiek alebo z poľa hodnoty  <b>Vstupn&eacute; observačn&eacute; bodov&eacute; alebo l&iacute;niov&eacute; prvky</b>.
+            </p>
+        </div>
+    </div>
+    <div id="targetHeightField">
+        <div>
+            <p>V&yacute;&scaron;ka cieľov na zemi.
+            </p>
+            <p>V&yacute;&scaron;ku možno definovať pomocou hodnoty a jej jednotiek alebo z poľa hodnoty  <b>Vstupn&eacute; observačn&eacute; bodov&eacute; alebo l&iacute;niov&eacute; prvky</b>.
+            </p>
+        </div>
+    </div>
+    <div id="horizontalStartAngle">
+        <div>
+            <p>Počiatočn&yacute; uhol rozsahu horizont&aacute;lneho skenovania.
+            </p>
+            <p>Uhol m&ocirc;že byť definovan&yacute; hodnotou od 0 do 360 alebo z poľa hodnoty  <b>Vstupn&eacute; observačn&eacute; bodov&eacute; alebo l&iacute;niov&eacute; prvky</b>.
+            </p>
+        </div>
+    </div>
+    <div id="horizontalEndAngle">
+        <div>
+            <p>Koncov&yacute; uhol rozsahu horizont&aacute;lneho skenovania.
+            </p>
+            <p>Uhol m&ocirc;že byť definovan&yacute; hodnotou od 0 do 360 alebo z poľa hodnoty  <b>Vstupn&eacute; observačn&eacute; bodov&eacute; alebo l&iacute;niov&eacute; prvky</b>.
+            </p>
+        </div>
+    </div>
+    <div id="verticalUpperAngle">
+        <div>
+            <p>Horn&aacute; hranica vertik&aacute;lneho uhla skenovania vzhľadom na horizont&aacute;lnu rovinu.
+            </p>
+            <p>Uhol m&ocirc;že byť definovan&yacute; hodnotou od &ndash;90 do 90 alebo z poľa hodnoty  <b>Vstupn&eacute; observačn&eacute; bodov&eacute; alebo l&iacute;niov&eacute; prvky</b>.
+            </p>
+        </div>
+    </div>
+    <div id="verticalLowerAngle">
+        <div>
+            <p>Doln&aacute; hranica vertik&aacute;lneho uhla skenovania vzhľadom na horizont&aacute;lnu rovinu.
+            </p>
+            <p>Uhol m&ocirc;že byť definovan&yacute; hodnotou od &ndash;90 do 90 alebo z poľa hodnoty  <b>Vstupn&eacute; observačn&eacute; bodov&eacute; alebo l&iacute;niov&eacute; prvky</b>.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>N&aacute;zov rastrovej vrstvy viditeľnej plochy, ktor&aacute; sa vytvor&iacute; a prid&aacute; do mapy. T&aacute;to vrstva obsahuje viditeľn&eacute; oblasti, ktor&eacute; m&ocirc;žu pozorovatelia vidieť, a hodnoty buniek predstavuj&uacute; počet pozorovateľov, ktor&iacute; m&ocirc;žu tieto bunky vidieť.
+            </p>
+        </div>
+    </div>
+    <div id="aboveGroundLevelOutputName">
+        <div>
+            <p>N&aacute;zov rastrovej vrstvy nad &uacute;rovňou ter&eacute;nu (AGL), ktor&aacute; sa vytvor&iacute; a prid&aacute; do mapy.
+            </p>
+        </div>
+    </div>
+    <div id="resultType">
+        <div>
+            <p>Typ v&yacute;stupu, ktor&yacute; bude vytvoren&yacute;. V&yacute;stupom m&ocirc;že byť dlaždicov&aacute; sn&iacute;mkov&aacute; vrstva alebo dynamick&aacute; sn&iacute;mkov&aacute; vrstva.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>N&aacute;zov priečinka v r&aacute;mci  <b>M&ocirc;j obsah</b>, do ktor&eacute;ho sa ulož&iacute; v&yacute;sledok.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

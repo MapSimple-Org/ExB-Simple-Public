@@ -1,0 +1,22 @@
+{
+  "dialogHeading": "Konfigureerige liikmete kategooriad",
+  "noticeTitle": "Muutke või kustutage oma organisatsioonis kategooriaid või muutke nende järjestust.",
+  "noticeDescription": "Saate liikmetele kategooriaid määrata vahekaardi Liikmed kaudu.",
+  "defaultCategoryWarning": "See liikmekategooria on seatud uue liikme vaikekategooriaks ja seda ei saa muuta ega kustutada.",
+  "warning": {
+    "deleteInUseCategory": {
+      "message": {
+        "single": "Sellele kategooriale on määratud üks üksus. Kategooria kustutamisel eemaldatakse kategooria ka sellelt liikmelt.",
+        "multiple": "Sellele kategooriale on määratud ${number} liiget. Kategooria kustutamisel eemaldatakse kategooria ka nendelt liikmetelt.",
+        "unknown": "Sellele kategooriale määratud liikmed: ${number}. Kategooria kustutamisel eemaldatakse kategooria ka nendelt liikmetelt."
+      }
+    },
+    "changeTitleInUseCategory": {
+      "message": {
+        "single": "Sellele kategooriale on määratud üks üksus. Kategooria värskendamisel värskendatakse kasutamiseks ka üksusi \"${newTitle}\".",
+        "multiple": "Sellele kategooriale on määratud ${number} liiget. Kategooria värskendamisel värskendatakse kasutamiseks ka üksusi \"${newTitle}\".",
+        "unknown": "Sellele kategooriale määratud liikmed: ${number}. Kategooria värskendamisel värskendatakse kasutamiseks ka üksusi \"${newTitle}\"."
+      }
+    }
+  }
+}

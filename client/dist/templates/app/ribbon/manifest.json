@@ -1,0 +1,22 @@
+{
+  "name": "ribbon",
+  "type": "template",
+  "templateType": "app",
+  "label": "Ribbon",
+  "description": "Ribbon is a template designed with the emphasis on the bookmark to control the navigation of the map.",
+  "thumbnail": "thumbnail.png",
+  "order": 23,
+  "tags": [
+    "Map",
+    "Bookmark",
+    "Slides"
+  ],
+  "categoriesTags": [
+    "Map centric",
+    "Fullscreen"
+  ],
+  "isMultiplePage": false,
+  "isMapAware": true,
+  "thumbnailWidth": 320,
+  "thumbnailHeight": 214
+}

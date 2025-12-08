@@ -1,0 +1,15 @@
+{
+  "addDataStore": "新增資料儲存庫",
+  "addFile": "新增檔案",
+  "addServiceConnection": "新增連線",
+  "itemNotFound": "此項目不存在或無法存取。",
+  "itemPermissionDenied": "您沒有存取此項目的權限。",
+  "previewDetails": "預覽詳細資訊",
+  "queryModelArgsErrMsg": "無法查詢模型引數。",
+  "queryModelArgsMsg": "正在查詢模型引數...",
+  "removeItem": "移除項目",
+  "replaceItem": "取代項目",
+  "requiredInputMessage": "需要此參數。",
+  "selectItem": "選擇項目",
+  "viewDetails": "檢視詳細資訊"
+}

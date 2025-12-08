@@ -1,0 +1,55 @@
+{
+  "beginningOnLabel": "התחלה ב-",
+  "repeatTypeLabel": "סוג חזרה",
+  "endingOnTypeLabel": "סיום ב-",
+  "endingOnDateLabel": "תאריך סיום",
+  "endingOnCountLabel": "מונה",
+  "endingOnCountPlaceholder": "לדוגמה: 1, 10, 30",
+  "dailyRepeatIntervalLabel": "מרווח חזרה",
+  "dailyTimeLabel": "זמן",
+  "weeklyDaysOfWeekLabel": "יום בשבוע",
+  "weeklyTimeLabel": "זמן",
+  "monthlyDayOfMonthLabel": "יום בחודש",
+  "monthlyDayOfMonthPlaceholder": "לדוגמה, 1 - 31",
+  "monthlyRepeatIntervalLabel": "מרווח חזרה",
+  "monthlyTimeLabel": "זמן",
+  "repeatTypeOptions": {
+    "day": "יום",
+    "week": "שבוע",
+    "month": "חודש"
+  },
+  "endingOnType": {
+    "never": "אף פעם",
+    "date": "תאריך",
+    "count": "ב:"
+  },
+  "dailyRepeatInterval": {
+    "everyDay": "כל יום",
+    "everyOtherDay": "כל יומיים",
+    "everyThreeDays": "כל שלושה ימים",
+    "everyFourDays": "כל ארבעה ימים",
+    "everyFiveDays": "כל חמישה ימים",
+    "everySixDays": "כל שישה ימים",
+    "everySevenDays": "כל שבעה ימים",
+    "everyFourteenDays": "כל ארבע-עשר ימים"
+  },
+  "weekDays": {
+    "all": "הכל",
+    "allWeekdays": "כל ימי החול",
+    "sunday": "ראשון",
+    "monday": "שני",
+    "tuesday": "שלישי",
+    "wednesday": "רביעי",
+    "thursday": "חמישי",
+    "friday": "שישי",
+    "saturday": "שבת"
+  },
+  "monthlyRepeatInterval": {
+    "everyMonth": "כל חודש",
+    "everyTwoMonths": "כל חודשיים",
+    "everyThreeMonths": "כל שלושה חודשים",
+    "everyFourMonths": "כל ארבעה חודשים",
+    "everyFiveMonths": "כל חמישה חודשים",
+    "everySixMonths": "כל שישה חודשים"
+  }
+}

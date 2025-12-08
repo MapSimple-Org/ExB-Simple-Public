@@ -1,0 +1,6 @@
+{
+  "dialogTitle": "點陣函數編輯器",
+  "defaultTemplateName": "點陣函數範本",
+  "readOnlyModeTitle": "唯讀",
+  "readOnlyModeMessage": "點陣函數樣板項目為唯讀。 無法儲存變更。"
+}

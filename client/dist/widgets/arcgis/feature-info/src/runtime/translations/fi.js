@@ -1,0 +1,1 @@
+System.register([],function(e){return{execute:function(){e({_widgetLabel:"Kohteen tiedot",noDataMessageDefaultText:"Aineistoa ei l\xf6ytynyt.",featureNumbers:"{index}/{count}",featureInfoDataActionLabel:"Karttatason {layer} kohteen tietojen nykyinen tietue"})}}});

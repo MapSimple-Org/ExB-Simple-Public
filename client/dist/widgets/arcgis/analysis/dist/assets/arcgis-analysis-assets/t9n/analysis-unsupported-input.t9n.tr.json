@@ -1,0 +1,7 @@
+{
+  "defaultValue": "Desteklenmeyen parametre türü. Varsayılan değer kullanılacak. <calcite-link target='_blank' href='${ docLink }'>Daha fazla bilgi</calcite-link>",
+  "requiredMessage": "Bu parametre gerekli.",
+  "unsupportedGPType": "Desteklenmeyen parametre türü. <calcite-link target='_blank' href='${ docLink }'>Daha fazla bilgi</calcite-link>",
+  "unsupportedParameterConfig": "Desteklenmeyen parametre yapılandırması. <calcite-link target='_blank' href='${ docLink }'>Daha fazla bilgi</calcite-link>",
+  "unsupportedParameterConfigDefaultValue": "Desteklenmeyen parametre yapılandırması. Varsayılan değer kullanılacak. <calcite-link target='_blank' href='${ docLink }'>Daha fazla bilgi</calcite-link>"
+}

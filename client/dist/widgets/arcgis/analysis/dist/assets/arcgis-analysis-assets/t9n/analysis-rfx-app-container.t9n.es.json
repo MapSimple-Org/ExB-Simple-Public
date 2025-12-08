@@ -1,0 +1,16 @@
+{
+  "backLabel": "Atrás",
+  "browseHeader": "Seleccionar capa",
+  "cannotReopenRasterFunction": "No se pudo volver a abrir la función ráster.",
+  "creditThresholdModal": {
+    "cancelRun": "Cancelar",
+    "continueRun": "Ejecutar de todas formas",
+    "creditEstimate": "Créditos estimados: ${cost}",
+    "creditThreshold": "Umbral de créditos: ${threshold}",
+    "heading": "Antes de continuar",
+    "learnMore": "Más información sobre los umbrales de crédito",
+    "thresholdExceeded": "El coste estimado de los créditos para este análisis es superior al umbral de créditos del mapa web:"
+  },
+  "failedToExecuteEstimate": "Error al enviar. Error al ejecutar EstimateRasterAnalysisCost",
+  "runAnalysisLabel": "Ejecutar"
+}

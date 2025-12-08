@@ -1,0 +1,8 @@
+{
+  "itemProperties": {
+    "description": "Ergebnis der Ausführung des Analysewerkzeugs \"Nach Attributen filtern\".",
+    "snippet": "Von \"Nach Attributen filtern\" generiertes Ergebnis"
+  },
+  "noLayerDisabledTooltip": "Wählen Sie ein gültiges Eingabe-Dataset aus.",
+  "queryCriteriaGroupLabel": "Abfragekriterien"
+}

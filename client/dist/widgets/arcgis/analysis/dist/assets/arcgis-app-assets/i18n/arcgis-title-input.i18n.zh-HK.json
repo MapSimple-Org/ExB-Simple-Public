@@ -1,0 +1,20 @@
+{
+  "title": "標題",
+  "addTitle": "新增標題",
+  "validation": {
+    "error": "錯誤",
+    "titleRequired": "標題是必要欄位。",
+    "itemExists": "此資料夾已存在標題「${name}」的項目。 請選擇其他標題。",
+    "titleInUseService": "標題「${name}」的圖層已存在。 請選擇其他標題。",
+    "itemInRecycleBin": "標題 \"${name}\" 的項目已存在且位於資源回收筒中。 請選擇其他標題。",
+    "serviceNameInvalid": "服務標題可能包含英數字元或底線，且不得超過 90 個字元。",
+    "dataStoreTitleInvalid": "資料儲存庫的標題可能包含英數字元或底線，且不得超過 90 個字元。",
+    "titleInvalid": "標題必須少於 250 個字元且不可包含 < 或 >。",
+    "titleStartsWithNumber": "標題不能以數字開頭。",
+    "invalidCharacters": {
+      "single": "名稱不能包含此字元: ${invalidCharacters}。",
+      "multiple": "名稱不能包含下列任何字元: ${invalidCharacters}。",
+      "unknown": "名稱不能包含下列任何字元: ${invalidCharacters}。"
+    }
+  }
+}

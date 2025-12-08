@@ -1,0 +1,7 @@
+{
+  "addEntryButtonLabel": "Добавяне",
+  "maxGroupsMessage": "Максималният брой записи е ${maxCount}.",
+  "minGroupsMessage": "Минималният брой записи е ${minCount}.",
+  "removeEntryButtonLabel": "Премахване на запис",
+  "requiredMessage": "Този параметър е задължителен."
+}

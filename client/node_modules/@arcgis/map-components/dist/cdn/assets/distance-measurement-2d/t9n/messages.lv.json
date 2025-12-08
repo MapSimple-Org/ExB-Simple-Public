@@ -1,0 +1,1 @@
+{"componentLabel":"Attāluma mērījums","distance":"Attālums","hint":"Sāciet mērīšanu, noklikšķinot uz kartes, lai novietotu pirmo punktu","mode":"Režīms","modes":{"auto":"Automātiski","planar":"Planārs","geodesic":"Ģeodēzisks"},"newMeasurement":"Jauna mērvienība","unit":"Vienība","unsupported":"2D attāluma mērīšana tiek atbalstīta tikai MapView režīmā."}

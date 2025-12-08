@@ -1,0 +1,30 @@
+<svg width="400" height="400" viewBox="0 0 400 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect x="132" y="64" width="20" height="87" transform="rotate(90 132 64)" fill="black"/>
+<rect x="195" y="64" width="20" height="61" transform="rotate(90 195 64)" fill="black"/>
+<rect x="350" y="64" width="20" height="153" transform="rotate(90 350 64)" fill="black"/>
+<rect x="188" y="124" width="20" height="143" transform="rotate(90 188 124)" fill="black"/>
+<rect x="286" y="124" width="20" height="96" transform="rotate(90 286 124)" fill="black"/>
+<rect x="350" y="124" width="20" height="62" transform="rotate(90 350 124)" fill="black"/>
+<rect x="158" y="184" width="20" height="113" transform="rotate(90 158 184)" fill="black"/>
+<rect x="234" y="184" width="20" height="74" transform="rotate(90 234 184)" fill="black"/>
+<rect x="350" y="184" width="20" height="114" transform="rotate(90 350 184)" fill="black"/>
+<rect x="114" y="246" width="20" height="69" transform="rotate(90 114 246)" fill="black"/>
+<rect x="272" y="246" width="20" height="156" transform="rotate(90 272 246)" fill="black"/>
+<rect x="350" y="246" width="20" height="76" transform="rotate(90 350 246)" fill="black"/>
+<rect x="100" y="307" width="20" height="55" transform="rotate(90 100 307)" fill="black"/>
+<rect x="184" y="307" width="20" height="82" transform="rotate(90 184 307)" fill="black"/>
+<rect x="350" y="307" width="20" height="164" transform="rotate(90 350 307)" fill="black"/>
+<rect x="24" y="79" width="8" height="16" transform="rotate(-90 24 79)" fill="black"/>
+<rect x="24" y="140" width="8" height="16" transform="rotate(-90 24 140)" fill="black"/>
+<rect x="24" y="200" width="8" height="16" transform="rotate(-90 24 200)" fill="black"/>
+<rect x="24" y="262" width="8" height="16" transform="rotate(-90 24 262)" fill="black"/>
+<rect x="24" y="323" width="8" height="16" transform="rotate(-90 24 323)" fill="black"/>
+<rect x="135" y="372" width="8" height="24" transform="rotate(-90 135 372)" fill="black"/>
+<rect x="85" y="372" width="8" height="24" transform="rotate(-90 85 372)" fill="black"/>
+<rect x="33" y="372" width="8" height="24" transform="rotate(-90 33 372)" fill="black"/>
+<rect x="185" y="372" width="8" height="24" transform="rotate(-90 185 372)" fill="black"/>
+<rect x="237" y="372" width="8" height="24" transform="rotate(-90 237 372)" fill="black"/>
+<rect x="289" y="372" width="8" height="24" transform="rotate(-90 289 372)" fill="black"/>
+<rect x="341" y="372" width="8" height="24" transform="rotate(-90 341 372)" fill="black"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M376 350.501L376 351.5L300.5 351.5L300.5 355.5L299.5 355.5L299.5 351.5L249.5 351.5L249.5 355.5L248.5 355.5L248.5 351.5L198.5 351.5L198.5 355.5L197.5 355.5L197.5 351.5L147.5 351.5L147.5 355.5L146.5 355.5L146.5 351.5L96.5 351.5L96.5 355.5L95.5 355.5L95.5 351.5L45.5 351.5L45.5 355.5L44.5 355.5L44.5 351.5L40.5 351.5L40.5 350.5L44.5 350.5L44.5 290.5L40.5 290.5L40.5 289.5L44.5 289.5L44.5 229.5L40.5 229.5L40.5 228.5L44.5 228.5L44.5 168.5L40.5 168.5L40.5 167.5L44.5 167.5L44.5 107.5L40.5 107.5L40.5 106.5L44.5 106.5L44.5 46.5L40.5 46.5L40.5 45.5L44.5 45.5L44.5 23.5L45.4983 23.5L45.4984 350.501L376 350.501ZM351.5 351.5L351.5 355.5L350.5 355.5L350.5 351.5L351.5 351.5Z" fill="black"/>
+</svg>

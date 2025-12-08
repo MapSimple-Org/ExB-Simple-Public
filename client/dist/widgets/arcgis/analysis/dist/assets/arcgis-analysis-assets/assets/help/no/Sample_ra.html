@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>Sample-verkt&oslash;yet oppretter en tabell eller en punktgeoobjektklasse som viser pikselverdiene fra et raster eller rastersett p&aring; definerte lokasjoner.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inRasters">
+        <div>
+            <p>Bildelagene som inneholder verdiene som skal samples basert p&aring; lokasjonsinndataene.
+            </p> 
+        </div>
+    </div>
+    <div id="inLocationData">
+        <div>
+            <p>Laget som inneholder lokasjonene for hver sample.
+            </p>
+            <p class="toolPaneOnly">Til geoobjektinndata avhenger antallet av flere faktorer, blant annet filtreringskriterier og analysens utstrekning.
+            </p>
+        </div>
+    </div>
+    <div id="resamplingType">
+        <div>
+            <p>Resamplingsalgoritmen som blir brukt i samplingsprosessen.
+            </p>
+        </div>
+    </div>
+    <div id="uniqueIdField">
+        <div>
+            <p>Et felt i laget som inneholder en forskjellig verdi for hver lokasjon eller hvert inndatageoobjekt.
+            </p>
+        </div>
+    </div>
+    <div id="processMultidimension">
+        <div>
+            <p>Angir om inndatabildelaget inneholder flerdimensjonale data.
+            </p>
+        </div>
+    </div>
+    <div id="acquisitionDefinition">
+        <div>
+            <p>Angir tidspunktet, dybden eller andre innhentingsdata forbundet med lokasjongeoobjektene.
+            </p>
+        </div>
+    </div>
+    <div id="dimension">
+        <div>
+            <p>Dimensjonen for det flerdimensjonale inndatalaget.
+            </p>
+        </div>
+    </div>
+    <div id="startFieldOrVal">
+        <div>
+            <p>Feltet som brukes til &aring; starte tidsintervallet for det flerdimensjonale inndatalaget.
+            </p>
+        </div>
+    </div>
+    <div id="endFieldOrVal">
+        <div>
+            <p>Feltet som brukes til &aring; avslutte tidsintervallet for det flerdimensjonale inndatalaget.
+            </p>
+        </div>
+    </div>
+    <div id="before">
+        <div>
+            <p>Et ikke-negativt tall som blir lagt til  <b>Dimensjon</b>-parameteren, eller en verdi som definerer starten p&aring; verdiomr&aring;det for en dimensjon.
+            </p>
+        </div>
+    </div>
+    <div id="after">
+        <div>
+            <p>Et ikke-negativt tall som blir lagt til  <b>Dimensjon</b>-parameteren, eller en verdi som definerer slutten p&aring; verdiomr&aring;det for en dimensjon.
+            </p>
+        </div>
+    </div>
+    <div id="statisticsType">
+        <div>
+            <p>Statistikken som blir generert ved behandling av flerdimensjonale bildelag.
+            </p>
+        </div>
+    </div>
+    <div id="percentileValue">
+        <div>
+            <p>Prosentverdien som brukes for statistikktypen persentil.
+            </p>
+        </div>
+    </div>
+    <div id="bufferDistance">
+        <div>
+            <p>Bufferavstanden som brukes p&aring; inndatalokasjonene.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>Navnet p&aring; laget som opprettes og legges til kartet.
+            </p>
+        </div>
+    </div>
+    <div id="generateFeatureClass">
+        <div>
+            <p>Angir om utdatatypen er et geoobjekt eller en tabell.
+            </p>
+        </div>
+    </div>
+    <div id="layout">
+        <div>
+            <p>Angir om utdataene er ordnet i rader eller kolonner.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>Navnet p&aring; mappen i  <b>Mitt innhold</b> der resultatet blir lagret.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

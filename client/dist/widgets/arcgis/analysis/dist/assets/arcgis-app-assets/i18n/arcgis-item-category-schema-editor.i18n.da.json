@@ -1,0 +1,36 @@
+{
+  "modalHeader": "Konfigurér indholdskategorier",
+  "modalGroupHeader": "Konfigurér gruppekategorier",
+  "helpText": "Redigér, slet eller skift rækkefølge for kategorier i din organisation.",
+  "helpTextGroup": "Redigér, slet eller skift rækkefølge af kategorier for indhold i denne gruppe.",
+  "helpTextDescription": "Husk, at andre medlemmer af din organisation måske allerede har tildelt disse kategorier til deres elementer, og at redigering af skemaet vil opdatere disse elementer i overensstemmelse hermed",
+  "helpTextGroupDescription": "Husk, at andre medlemmer af gruppen måske allerede har tildelt disse kategorier til deres elementer, og at redigering af skemaet vil opdatere disse elementer i overensstemmelse hermed",
+  "warning": {
+    "deleteInUseCategory": {
+      "title": "Slet kategori",
+      "cta": "Slet kategori",
+      "message": {
+        "single": "Et element er tildelt til denne kategori. Hvis du sletter kategorien, fjernes den også fra dette element.",
+        "multiple": "${number} elementer er tildelt til denne kategori. Hvis du sletter kategorien, fjernes den også fra disse elementer.",
+        "unknown": "Elementer tildelt denne kategori: ${number}. Hvis du sletter kategorien, fjernes den også fra disse elementer."
+      }
+    },
+    "changeTitleInUseCategory": {
+      "title": "Opdater kategori",
+      "message": {
+        "single": "Et element er tildelt til denne kategori. Hvis du opdaterer kategorien, opdateres elementet til at bruge \"${newTitle}\".",
+        "multiple": "${number} elementer er tildelt til denne kategori. Hvis du opdaterer kategorien, opdateres elementerne til at bruge \"${newTitle}\".",
+        "unknown": "Elementer tildelt denne kategori: ${number}. Hvis du opdaterer kategorien, opdateres elementerne til at bruge \"${newTitle}\"."
+      },
+      "cta": "Opdater kategori"
+    }
+  },
+  "template": {
+    "templateList": {
+      "custom": {
+        "message": "Opret dine egne kategorier for at organisere indhold inden for din organisation.",
+        "messageGroup": "Opret dine egne kategorier for at organisere indhold inden for denne gruppe."
+      }
+    }
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "CPU": "CPU",
+  "GPU": "GPU",
+  "asSpecified": "Nagu määratud",
+  "automatic": "Automaatne",
+  "bilinear": "Bilineaarne interpolatsioon (pidevatel andmetel)",
+  "cellSize": "Piksli suurus",
+  "cubic": "Kuupkonvolutsioon (pidevatel andmetel)",
+  "default": "Vaikimisi",
+  "fromLayer": "Kihilt",
+  "mask": "Mask",
+  "maxOf": "Sisendite maksimumarv",
+  "minOf": "Sisendite miinimumarv",
+  "nearest": "Lähim naaber (diskreetandmetel)",
+  "parallelProcessingFactor": "Paralleeltöötluse tegur",
+  "parallelProcessingFactorPlaceholderText": "Sisestage number või protsent...",
+  "processorType": "Protsessori tüüp",
+  "recycleProcessingWorkers": "Töötlevate töötajate ringluse intervall",
+  "resamplingMethod": "Andmete teisendamise meetod",
+  "retryOnFailures": "Korduvate katsete arv nurjumise korral",
+  "selectCellSize": "Vali piksli suurus",
+  "snapRaster": "Haagi raster"
+}

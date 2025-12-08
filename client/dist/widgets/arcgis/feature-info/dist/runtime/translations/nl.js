@@ -1,0 +1,1 @@
+System.register([],function(e){return{execute:function(){e({_widgetLabel:"Info over object",noDataMessageDefaultText:"Kan geen gegevens vinden.",featureNumbers:"{index} van {count}",featureInfoDataActionLabel:"Huidige record info {layer}-object"})}}});

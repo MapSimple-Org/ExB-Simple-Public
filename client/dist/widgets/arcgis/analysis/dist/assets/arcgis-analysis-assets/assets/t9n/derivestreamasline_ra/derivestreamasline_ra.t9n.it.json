@@ -1,0 +1,11 @@
+{
+  "all": "Tutte",
+  "inputLayersGroupText": "Scegliere il raster della superficie di input e, facoltativamente, i dati della depressione e il raster del peso.",
+  "itemProperties": {
+    "description": "Output generato dall'esecuzione dello strumento Deriva flusso come raster.",
+    "snippet": "Output generato da Deriva flusso come raster"
+  },
+  "outputStreamFeaturesLabel": "Nome feature flusso di output",
+  "simplifyLabel": "Semplifica feature",
+  "streamSettingsGroupText": "Specificare la soglia di accumulo, il metodo di designazione del flusso e se le linee di flusso di output saranno smussate in forme semplici."
+}

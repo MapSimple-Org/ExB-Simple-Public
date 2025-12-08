@@ -1,0 +1,6 @@
+{
+  "header": "Opnieuw beginnen zonder op te slaan?",
+  "content": "Er zijn niet-opgeslagen wijzigingen in '${rftTitle}'. Als u opnieuw begint met een nieuwe sjabloon, gaan al die wijzigingen verloren.",
+  "cancel": "Afbreken",
+  "continue": "Doorgaan"
+}

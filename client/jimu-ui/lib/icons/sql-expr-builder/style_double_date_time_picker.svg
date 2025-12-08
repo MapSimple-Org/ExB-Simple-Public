@@ -1,0 +1,34 @@
+<svg width="68" height="48" viewBox="0 0 68 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path fill-rule="evenodd" clip-rule="evenodd" d="M4 15.5C4 14.6716 4.67157 14 5.5 14H62.5C63.2797 14 63.9204 14.5949 63.9931 15.3555L64 15.5V42.5C64 43.3284 63.3284 44 62.5 44H5.5C4.67157 44 4 43.3284 4 42.5V15.5ZM63 15.5C63 15.2239 62.7761 15 62.5 15H5.5C5.22386 15 5 15.2239 5 15.5V42.5C5 42.7761 5.22386 43 5.5 43H62.5C62.7761 43 63 42.7761 63 42.5V15.5Z" fill="#363636"/>
+<rect x="8" y="18" width="4" height="4" fill="#363636"/>
+<rect x="38" y="18" width="4" height="4" fill="#6A6A6A"/>
+<rect x="33" y="18" width="1" height="22" fill="#363636"/>
+<rect x="14" y="18" width="4" height="4" fill="#363636"/>
+<rect x="44" y="18" width="4" height="4" fill="#6A6A6A"/>
+<rect x="20" y="18" width="4" height="4" fill="#363636"/>
+<rect x="50" y="18" width="4" height="4" fill="#6A6A6A"/>
+<rect x="26" y="18" width="4" height="4" fill="#363636"/>
+<rect x="56" y="18" width="4" height="4" fill="#6A6A6A"/>
+<rect x="8" y="30" width="4" height="4" fill="#363636"/>
+<rect x="38" y="30" width="4" height="4" fill="#363636"/>
+<rect x="14" y="30" width="4" height="4" fill="#363636"/>
+<rect x="20" y="30" width="4" height="4" fill="#363636"/>
+<rect x="26" y="30" width="4" height="4" fill="#363636"/>
+<rect x="8" y="36" width="4" height="4" fill="#363636"/>
+<rect x="38" y="36" width="4" height="4" fill="#363636"/>
+<rect x="14" y="36" width="4" height="4" fill="#6A6A6A"/>
+<rect x="20" y="36" width="4" height="4" fill="#6A6A6A"/>
+<rect x="8" y="24" width="4" height="4" fill="#363636"/>
+<rect x="38" y="24" width="4" height="4" fill="#6A6A6A"/>
+<rect x="14" y="24" width="4" height="4" fill="#363636"/>
+<rect x="44" y="24" width="4" height="4" fill="#6A6A6A"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M54.5 41C50.9098 41 48 38.0902 48 34.5C48 30.9104 50.9098 28 54.5 28C58.0902 28 61 30.9098 61 34.5C61 38.0902 58.0902 41 54.5 41ZM54.5 29.218C51.5831 29.218 49.2188 31.5825 49.2188 34.4995C49.2188 37.4164 51.5831 39.7809 54.5 39.7809C57.4158 39.7809 59.7818 37.4164 59.7818 34.4995C59.7818 31.5831 57.4158 29.218 54.5 29.218ZM54.5 35.109H57.1395C57.3008 35.1099 57.4558 35.0461 57.5702 34.9318C57.6847 34.8176 57.7492 34.6622 57.7495 34.5C57.7495 34.1634 57.4775 33.891 57.1401 33.891H55.1088V30.8434C55.1088 30.5067 54.8369 30.2344 54.5 30.2344C54.1636 30.2344 53.8906 30.5067 53.8906 30.8434V34.4995C53.8906 34.8366 54.1636 35.109 54.5 35.109Z" fill="#6A6A6A"/>
+<rect x="20" y="24" width="4" height="4" fill="#363636"/>
+<rect x="26" y="24" width="4" height="4" fill="#363636"/>
+<rect x="4" y="4" width="28" height="8" rx="1" fill="#6A6A6A"/>
+<rect x="36" y="4" width="28" height="8" rx="1" fill="#6A6A6A"/>
+<rect x="7" y="7" width="13" height="2" fill="#181818"/>
+<rect x="39" y="7" width="13" height="2" fill="#181818"/>
+<rect x="22" y="7" width="7" height="2" fill="#181818"/>
+<rect x="54" y="7" width="7" height="2" fill="#181818"/>
+</svg>

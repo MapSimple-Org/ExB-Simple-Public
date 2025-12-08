@@ -1,0 +1,9 @@
+{
+  "logicalOperator": "AND",
+  "filterItems": [],
+  "arrangeType": "BLOCK",
+  "triggerType": "TOGGLE",
+  "omitInternalStyle": false,
+  "resetAll": false,
+  "turnOffAll": false
+}

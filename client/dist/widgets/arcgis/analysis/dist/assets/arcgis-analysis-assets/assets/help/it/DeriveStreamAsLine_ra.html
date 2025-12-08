@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>Lo strumento Deriva flusso come linea genera feature linea di flusso da un raster superficie di input senza prima richiedere il riempimento di sink o depressioni.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputSurfaceRaster">
+        <div>
+            <p>Il raster di elevazione che verr&agrave; utilizzato per il calcolo.
+            </p>
+        </div>
+    </div>
+    <div id="inputDepressionsData">
+        <div>
+            <p>L'input che definisce le posizioni delle depressioni o degli avvallamenti reali, in cui l'acqua pu&ograve; confluire ma non defluire.
+            </p>
+            <p class="toolPaneOnly">Per le feature input, il conteggio dipende da altri fattori, come i criteri di filtraggio e l'estensione analisi.
+            </p>
+        </div>
+    </div>
+    <div id="inputWeightRaster">
+        <div>
+            <p>Il layer raster che definisce la frazione di flusso che contribuisce all'accumulo di flusso in ogni cella.
+            </p>
+        </div>
+    </div>
+    <div id="accumulationThreshold">
+        <div>
+            <p>La soglia che determina se una determinata cella fa parte di un flusso in termini di area totale che confluisce in tale cella.
+            </p>
+        </div>
+    </div>
+    <div id="streamDesignationMethod">
+        <div>
+            <p>Specifica se i segmenti del flusso nell'output avranno un valore costante, valori univoci o se sono ordinati.
+            </p>
+        </div>
+    </div>
+    <div id="simplify">
+        <div>
+            <p>Specifica se le linee di flusso di output saranno smussate in forme pi&ugrave; semplici.
+            </p>
+            <p>Se selezionata, le feature linea di flusso saranno semplificate tramite algoritmo Douglas-Peucker con una tolleranza di sqrt(0,5) * dimensione cella. Si tratta dell'impostazione predefinita. Se non selezionata, le feature linea di flusso non saranno smussate.
+            </p>
+        </div>
+    </div>
+    <div id="outputStreamFeaturesName">
+        <div>
+            <p>Il nome del feature layer della linea di flusso che verr&agrave; creato e aggiunto alla mappa.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>Il nome della cartella in  <b>I miei contenuti</b> in cui saranno salvati i risultati.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

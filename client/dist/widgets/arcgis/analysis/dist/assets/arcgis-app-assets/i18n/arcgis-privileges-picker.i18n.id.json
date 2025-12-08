@@ -1,0 +1,592 @@
+{
+  "rolePrivileges": "Hak istimewa peran",
+  "setFromExisting": "Atur dari peran yang ada",
+  "expandAll": "Bentangkan semua",
+  "generalPrivileges": "Hak istimewa umum",
+  "adminPrivileges": "Hak istimewa admin",
+  "enabledLabel": "Diaktifkan:",
+  "enableAll": "Aktifkan semua",
+  "disableAll": "Nonaktifkan semua",
+  "members": "Anggota",
+  "groups": "Grup",
+  "content": "Konten",
+  "sharing": "Berbagi",
+  "premiumContent": "Konten premium",
+  "premiumContentServices": "Konten dan layanan premium",
+  "contentAndAnalysis": "Konten dan analisis",
+  "features": "Fitur",
+  "versionMgmt": "Manajemen versi",
+  "webhooks": "Webhook",
+  "marketplaceSubscriptions": "Langganan ArcGIS Marketplace",
+  "orgSettings": "Pengaturan organisasi",
+  "learnMore": "Pelajari selengkapnya",
+  "searchPrivileges": "Hak istimewa pencarian",
+  "notebooks": "Notebook",
+  "analysis": "Analisis",
+  "networkAnalysis": "Analisis jaringan",
+  "locationServices": "Layanan lokasi",
+  "requiredService": "Layanan yang diperlukan",
+  "availableServices": "Layanan tersedia",
+  "basemaps": "Peta Dasar",
+  "staticMaps": "Peta statis",
+  "places": "Tempat",
+  "geocoding": "Geocoding",
+  "routing": "Perutean",
+  "dataEnrichment": "Pengayaan data",
+  "boundaries": "Batas",
+  "elevation": "Elevasi",
+  "spatialPrivileges": "Analisis spasial",
+  "featureAnalysis": "Analisis fitur",
+  "imageAnalysis": "Analisis gambar",
+  "readOnlyBasemapsTooltip": "Akses ke peta dasar disertakan.",
+  "privileges": {
+    "portal:user:viewOrgUsers": {
+      "label": "Lihat",
+      "description": "Izinkan anggota melihat anggota organisasi.",
+      "descriptionPortal": "Izinkan anggota melihat anggota portal.",
+      "descriptionApp": "Izinkan aplikasi melihat anggota organisasi."
+    },
+    "portal:user:createGroup": {
+      "label": "Buat, perbarui, dan hapus",
+      "description": "Izinkan anggota membuat, mengedit, dan menghapus grup mereka sendiri.",
+      "descriptionApp": "Izinkan aplikasi membuat, mengedit, dan menghapus grup pemilik aplikasi."
+    },
+    "portal:user:joinGroup": {
+      "label": "Bergabung dengan grup organisasi",
+      "description": "Izinkan anggota bergabung dengan grup dalam organisasi Anda.",
+      "descriptionPortal": "Izinkan anggota bergabung dengan grup dalam portal Anda.",
+      "descriptionApp": "Izinkan aplikasi bergabung dengan grup dalam organisasi Anda."
+    },
+    "portal:user:joinNonOrgGroup": {
+      "label": "Bergabung dengan grup eksternal",
+      "description": "Izinkan anggota bergabung dengan grup di luar organisasi Anda.",
+      "descriptionPortal": "Izinkan anggota bergabung dengan grup di luar portal Anda.",
+      "descriptionApp": "Izinkan aplikasi bergabung dengan grup di luar organisasi Anda."
+    },
+    "portal:user:viewOrgGroups": {
+      "label": "Lihat grup yang dibagikan dengan organisasi",
+      "description": "Izinkan anggota melihat grup yang dibagikan dengan organisasi.",
+      "descriptionPortal": "Izinkan anggota melihat grup yang dibagikan dengan portal.",
+      "descriptionApp": "Izinkan aplikasi melihat grup yang dibagikan dengan organisasi."
+    },
+    "portal:user:invitePartneredCollaborationMembers": {
+      "label": "Undang anggota organisasi mitra",
+      "description": "Memungkinkan anggota untuk mengundang anggota dari organisasi kolaborasi mitra ke grup.",
+      "descriptionApp": "Memungkinkan aplikasi untuk mengundang anggota dari organisasi kolaborasi mitra ke grup."
+    },
+    "portal:user:addExternalMembersToGroup": {
+      "label": "Tambah anggota dari organisasi lain",
+      "description": "Memungkinkan anggota untuk membuat grup yang mengizinkan anggota dari organisasi lain serta mengundang anggota eksternal ke grup.",
+      "descriptionApp": "Memungkinkan aplikasi untuk membuat grup yang mengizinkan anggota dari organisasi lain serta mengundang anggota eksternal ke grup."
+    },
+    "portal:user:createItem": {
+      "label": "Buat, perbarui, dan hapus",
+      "description": "Izinkan anggota membuat, mengedit, dan menghapus konten mereka sendiri.",
+      "descriptionApp": "Izinkan aplikasi membuat, mengedit, dan menghapus konten pemilik aplikasi."
+    },
+    "portal:publisher:publishFeatures": {
+      "label": "Publikasikan feature layer yang di-host",
+      "description": "Izinkan anggota menerbitkan feature layer yang di-host dari shapefile, CSV, dll.",
+      "descriptionApp": "Izinkan aplikasi menerbitkan feature layer yang di-host dari shapefile, CSV, dll."
+    },
+    "portal:publisher:publishTiles": {
+      "label": "Terbitkan lapisan ubin yang di-host",
+      "description": "Izinkan anggota menerbitkan layer tile yang di-host dari paket ubin, fitur, dll.",
+      "descriptionApp": "Izinkan aplikasi menerbitkan layer tile yang di-host dari paket ubin, fitur, dll."
+    },
+    "portal:publisher:publishScenes": {
+      "label": "Terbitkan layer scene yang di-host",
+      "description": "Izinkan anggota menerbitkan scene layer yang di-host.",
+      "descriptionApp": "Izinkan aplikasi menerbitkan scene layer yang di-host."
+    },
+    "portal:publisher:publishTiledImagery": {
+      "label": "Terbitkan layer citra berubin yang dihosting",
+      "description": "Izinkan anggota untuk menerbitkan layer citra berubin yang di-host dari gambar tunggal atau kumpulan gambar. Memerlukan ekstensi jenis pengguna ArcGIS Image for ArcGIS Online.",
+      "descriptionPortal": "Izinkan anggota untuk menerbitkan layer citra berubin yang di-host dari gambar tunggal atau kumpulan gambar.",
+      "descriptionApp": "Izinkan aplikasi untuk menerbitkan layer citra berubin yang di-host dari gambar tunggal atau kumpulan gambar. Memerlukan lisensi Hosting ArcGIS Image."
+    },
+    "portal:publisher:publishDynamicImagery": {
+      "label": "Terbitkan layer citra dinamis yang dihosting",
+      "description": "Izinkan anggota untuk menerbitkan layer citra dinamis yang dihosting dari gambar tunggal atau kumpulan gambar.",
+      "descriptionApp": "Izinkan aplikasi untuk menerbitkan layer citra dinamis yang dihosting dari gambar tunggal atau kumpulan gambar."
+    },
+    "portal:publisher:publishServerServices": {
+      "label": "Terbitkan layar berbasis server",
+      "description": "Hak istimewa ini memberikan kemampuan untuk menerbitkan layer yang didukung oleh layanan dari situs server terfederasi. Layanan ini sering kali merujuk pada data terdaftar dari geodatabase atau sumber data berbasis file."
+    },
+    "portal:publisher:publishKnowledgeGraph": {
+      "label": "Terbitkan grafik pengetahuan yang di-host",
+      "description": "Izinkan anggota menerbitkan grafik pengetahuan yang di-host.",
+      "descriptionApp": "Izinkan aplikasi menerbitkan grafik pengetahuan yang di-host."
+    },
+    "portal:user:viewOrgItems": {
+      "label": "Lihat konten yang dibagikan dengan organisasi",
+      "description": "Izinkan anggota melihat konten yang dibagikan kepada organisasi.",
+      "descriptionPortal": "Izinkan anggota melihat konten yang dibagikan ke portal.",
+      "descriptionApp": "Izinkan aplikasi melihat konten yang dibagikan kepada organisasi."
+    },
+    "premium:publisher:createNotebooks": {
+      "label": "Buat dan edit notebook",
+      "description": "Memungkinkan anggota untuk membuat dan mengedit notebook interaktif.",
+      "descriptionApp": "Memungkinkan aplikasi untuk membuat dan mengedit notebook interaktif."
+    },
+    "premium:publisher:scheduleNotebooks": {
+      "label": "Jadwalkan notebook",
+      "description": "Memungkinkan anggota untuk menjadwalkan penggunaan notebook secara otomatis di masa mendatang.",
+      "descriptionApp": "Memungkinkan aplikasi untuk menjadwalkan penggunaan notebook secara otomatis di masa mendatang."
+    },
+    "portal:publisher:bulkPublishFromDataStores": {
+      "label": "Buat feature layer secara massal dari data store",
+      "description": "Hak istimewa ini memberikan kemampuan untuk menerbitkan layer web dari penyimpanan data terdaftar."
+    },
+    "portal:publisher:registerDataStores": {
+      "label": "Daftarkan data store",
+      "description": "Hak istimewa ini memberikan kemampuan untuk mendaftarkan penyimpanan data ke portal."
+    },
+    "portal:user:viewTracks": {
+      "label": "Lihat pelacakan lokasi",
+      "description": "Izinkan anggota melihat pelacakan lokasi anggota melalui tampilan pelacakan bersama saat berbagi lokasi diaktifkan.",
+      "descriptionApp": "Izinkan aplikasi melihat pelacakan lokasi anggota melalui tampilan pelacakan bersama saat berbagi lokasi diaktifkan."
+    },
+    "portal:user:reassignItems": {
+      "label": "Menetapkan kembali konten",
+      "description": "Izinkan anggota hanya untuk menetapkan kembali konten mereka ke anggota lain dengan hak istimewa untuk menerima konten.",
+      "descriptionApp": "Izinkan aplikasi hanya untuk menetapkan kembali konten pemilik aplikasi ke anggota lain dengan hak istimewa untuk menerima konten."
+    },
+    "portal:user:receiveItems": {
+      "label": "Menerima konten",
+      "description": "Izinkan anggota untuk menerima konten yang ditetapkan kembali kepada mereka oleh anggota lain dengan hak istimewa untuk menetapkan kembali konten."
+    },
+    "portal:publisher:publishFeeds": {
+      "label": "Terbitkan umpan",
+      "description": "Hak istimewa ini memberikan kemampuan untuk menerbitkan umpan untuk mencerna dan menampilkan data waktu nyata menggunakan ArcGIS Velocity."
+    },
+    "portal:publisher:publishRealTimeAnalytics": {
+      "label": "Terbitkan analitik waktu nyata",
+      "description": "Hak istimewa ini memberikan kemampuan untuk menerbitkan analitik waktu nyata untuk menganalisis dan memproses data waktu nyata menggunakan ArcGIS Velocity."
+    },
+    "portal:publisher:publishBigDataAnalytics": {
+      "label": "Terbitkan analitik data besar",
+      "description": "Hak istimewa ini memberikan kemampuan untuk menerbitkan analitik data besar untuk menganalisis data pengamatan historis menggunakan ArcGIS Velocity."
+    },
+    "portal:publisher:createDataPipelines": {
+      "label": "Buat dan jalankan data pipeline",
+      "description": "Izinkan anggota membuat, mengedit, dan menjalankan data pipeline.",
+      "descriptionApp": "Izinkan aplikasi membuat, mengedit, dan menjalankan data pipeline."
+    },
+    "portal:publisher:publishLivestreamVideo": {
+      "label": "Terbitkan video livestream",
+      "description": "Izinkan anggota untuk menerbitkan layer video livestream yang di-host yang bersumber dari streaming dan siaran video jaringan.",
+      "descriptionApp": "Izinkan aplikasi untuk menerbitkan layer video livestream yang di-host yang bersumber dari streaming dan siaran video jaringan."
+    },
+    "portal:publisher:publishVideo": {
+      "label": "Terbitkan video",
+      "description": "Izinkan anggota menerbitkan layer video yang di-host dari file video dan file metadata video yang didukung.",
+      "descriptionApp": "Izinkan aplikasi menerbitkan layer video yang di-host dari file video dan file metadata video yang didukung."
+    },
+    "portal:user:shareToGroup": {
+      "label": "Bagikan ke grup",
+      "description": "Izinkan anggota membagikan konten ke grup.",
+      "descriptionApp": "Izinkan aplikasi membagikan konten ke grup."
+    },
+    "portal:user:shareToOrg": {
+      "label": "Bagikan dengan organisasi",
+      "labelPortal": "Bagikan dengan portal",
+      "description": "Izinkan anggota membagikan konten ke organisasi Anda.",
+      "descriptionPortal": "Izinkan anggota membagikan konten ke portal Anda.",
+      "descriptionApp": "Izinkan aplikasi membagikan konten ke organisasi Anda."
+    },
+    "portal:user:shareToPublic": {
+      "label": "Bagikan ke publik",
+      "description": "Izinkan anggota membagikan konten mereka kepada publik jika diizinkan oleh kebijakan pembagian publik dari organisasi.",
+      "descriptionApp": "Izinkan aplikasi membagikan konten pemilik aplikasi kepada publik jika diizinkan oleh kebijakan pembagian publik dari organisasi.",
+      "tooltip": "Jika organisasi tidak mengizinkan anggotanya berbagi konten secara publik, maka anggota memerlukan hak istimewa administratif untuk membagikan konten anggota dengan publik."
+    },
+    "portal:user:shareGroupToOrg": {
+      "label": "Jadikan grup terlihat oleh organisasi",
+      "labelPortal": "Jadikan grup terlihat oleh portal",
+      "description": "Izinkan anggota membagikan konten ke organisasi Anda.",
+      "descriptionPortal": "Izinkan anggota membagikan konten ke portal Anda.",
+      "descriptionApp": "Izinkan aplikasi membagikan konten ke portal Anda."
+    },
+    "portal:user:shareGroupToPublic": {
+      "label": "Jadikan grup terlihat oleh publik",
+      "description": "Izinkan anggota membuat grup dapat ditemukan oleh publik.",
+      "descriptionApp": "Izinkan aplikasi menjadikan grup dapat ditemukan oleh publik."
+    },
+    "opendata:user:designateGroup": {
+      "label": "Jadikan grup tersedia untuk Data Terbuka",
+      "description": "Izinkan anggota menunjuk kelompok sebagai tersedia untuk digunakan dalam Data Terbuka.",
+      "descriptionApp": "Izinkan aplikasi menunjuk kelompok sebagai tersedia untuk digunakan dalam Data Terbuka."
+    },
+    "premium:user:basemaps": {
+      "label": "Basemap styles service",
+      "descriptionLocationPlatform": "Izinkan aplikasi mengakses basemap style service."
+    },
+    "premium:user:staticbasemaptiles": {
+      "label": "Tile peta dasar statis",
+      "descriptionLocationPlatform": "Izinkan aplikasi untuk mengakses layanan tile peta dasar statis."
+    },
+    "premium:user:staticMaps": {
+      "label": "Layanan peta statis (beta)",
+      "descriptionLocationPlatform": "Izinkan aplikasi mengakses layanan peta statis."
+    },
+    "premium:user:elevation": {
+      "label": "Elevation service",
+      "descriptionLocationPlatform": "Izinkan aplikasi mengakses layanan elevasi."
+    },
+    "premium:user:geocode": {
+      "label": "Geocode",
+      "description": "Izinkan anggota melakukan tugas geocoding yang menggunakan kredit dengan ArcGIS Geocoding Service (atau tampilan dari pencari lokasi ini).",
+      "descriptionApp": "Izinkan aplikasi untuk melakukan tugas geocoding yang menggunakan kredit dengan ArcGIS World Geocoding Service (atau tampilan dari pencari lokasi ini)."
+    },
+    "premium:user:geocode:stored": {
+      "label": "Geocode (tersimpan)",
+      "descriptionLocationPlatform": "Izinkan aplikasi mengakses geocoding service dan menjalankan geocode tersimpan."
+    },
+    "premium:user:geocode:temporary": {
+      "label": "Geocode (tidak tersimpan)",
+      "descriptionLocationPlatform": "Izinkan aplikasi mengakses geocoding service dan menjalankan geocode yang tidak tersimpan."
+    },
+    "premium:user:networkanalysis": {
+      "label": "Perutean",
+      "description": "Izinkan anggota melakukan tugas analisis jaringan seperti area perutean dan waktu berkendara.",
+      "descriptionApp": "Izinkan aplikasi mengakses routing service."
+    },
+    "premium:user:networkanalysis:closestfacility": {
+      "label": "Fasilitas terdekat",
+      "descriptionLocationPlatform": "Izinkan aplikasi mengakses routing service dan menjalankan operasi perutean fasilitas terdekat."
+    },
+    "premium:user:networkanalysis:lastmiledelivery": {
+      "label": "Pengiriman mil terakhir",
+      "descriptionLocationPlatform": "Izinkan aplikasi mengakses routing service dan menjalankan operasi perutean untuk pengiriman mil terakhir."
+    },
+    "premium:user:networkanalysis:snaptoroads": {
+      "label": "Snap To Roads",
+      "descriptionLocationPlatform": "Izinkan anggota melakukan tugas analisis jaringan seperti melacak titik GPS ke jalan."
+    },
+    "premium:user:networkanalysis:locationallocation": {
+      "label": "Alokasi lokasi",
+      "descriptionLocationPlatform": "Izinkan aplikasi mengakses routing service dan menjalankan operasi alokasi tempat."
+    },
+    "premium:user:networkanalysis:routing": {
+      "label": "Perutean sederhana",
+      "descriptionLocationPlatform": "Izinkan aplikasi mengakses routing service dan menjalankan operasi perutean standar."
+    },
+    "premium:user:networkanalysis:optimizedrouting": {
+      "label": "Perutean yang dioptimalkan",
+      "descriptionLocationPlatform": "Izinkan aplikasi mengakses routing service dan menjalankan operasi perutean yang dioptimalkan."
+    },
+    "premium:user:networkanalysis:vehiclerouting": {
+      "label": "Perutean multi-kendaraan",
+      "descriptionLocationPlatform": "Perutean banyak kendaraan mengozinkan aplikasi mengakses routing service dan menjalankan operasi perutean armada."
+    },
+    "premium:user:networkanalysis:origindestinationcostmatrix": {
+      "label": "Matriks biaya asal/tujuan",
+      "descriptionLocationPlatform": "Izinkan aplikasi mengakses routing service dan membuat matriks biaya perjalanan."
+    },
+    "premium:user:networkanalysis:servicearea": {
+      "label": "Area layanan",
+      "descriptionLocationPlatform": "Izinkan aplikasi mengakses routing service dan menghasilkan area layanan."
+    },
+    "premium:user:places": {
+      "label": "Places service",
+      "descriptionLocationPlatform": "Izinkan aplikasi mengakses places service."
+    },
+    "premium:user:spatialanalysis": {
+      "labelOld": "Layanan analisis spasial",
+      "label": "Layanan analisis fitur",
+      "labelPortal": "Analisis fitur standar",
+      "description": "Izinkan anggota melakukan tugas analisis fitur.",
+      "descriptionPortal": "Hak istimewa ini memberikan kemampuan untuk melakukan pekerjaan analisis fitur standar.",
+      "descriptionLocationPlatform": "Izinkan anggota mengakses layanan analisis fitur.",
+      "descriptionApp": "Izinkan aplikasi mengakses layanan analisis fitur."
+    },
+    "premium:user:geoenrichment": {
+      "label": "GeoEnrichment service",
+      "description": "Izinkan anggota untuk fitur geoenrich.",
+      "descriptionLocationPlatform": "Izinkan aplikasi mengakses GeoEnrichment service.",
+      "descriptionApp": "Izinkan aplikasi mengakses GeoEnrichment service."
+    },
+    "premium:user:demographics": {
+      "label": "Peta Demografik",
+      "description": "Izinkan aplikasi mengakses peta demografis premium di ArcGIS Living Atlas.",
+      "descriptionApp": "Izinkan aplikasi mengakses peta demografis premium di ArcGIS Living Atlas.",
+      "descriptionLocationPlatform": "Izinkan aplikasi mengakses peta demografis di ArcGIS Living Atlas."
+    },
+    "premium:publisher:geoanalytics": {
+      "label": "Analisis fitur GeoAnalytics",
+      "description": "Hak ini memberikan kemampuan untuk melakukan tugas GeoAnalytics."
+    },
+    "premium:publisher:rasteranalysis": {
+      "label": "Analisis citra",
+      "description": "Izinkan anggota untuk melakukan tugas analisis citra. Memerlukan kemampuan analisis ArcGIS Image.",
+      "descriptionPortal": "Izinkan anggota untuk melakukan tugas analisis citra.",
+      "descriptionApp": "Izinkan aplikasi untuk melakukan tugas analisis citra. Memerlukan kemampuan analisis ArcGIS Image.",
+      "descriptionAppPortal": "Izinkan aplikasi untuk melakukan tugas analisis citra."
+    },
+    "premium:publisher:createAdvancedNotebooks": {
+      "label": "Notebook lanjutan",
+      "description": "Memungkinkan anggota mengimpor dan menggunakan modul ArcPy di notebook.",
+      "descriptionApp": "Memungkinkan aplikasi mengimpor dan menggunakan modul ArcPy di notebook."
+    },
+    "portal:user:runWebTool": {
+      "label": "Jalankan alat web",
+      "description": "Izinkan anggota untuk menjalankan alat web.",
+      "descriptionPortal": "Izinkan anggota untuk menjalankan alat web yang diterbitkan dari notebooks.",
+      "descriptionApp": "Izinkan aplikasi untuk menjalankan alat web.",
+      "descriptionAppPortal": "Izinkan aplikasi untuk menjalankan alat web yang diterbitkan dari notebooks."
+    },
+    "portal:user:generateApiTokens": {
+      "label": "Buat kunci API",
+      "description": "Izinkan anggota membuat kunci API."
+    },
+    "portal:user:assignPrivilegesToApps": {
+      "label": "Berikan hak istimewa untuk aplikasi OAuth 2.0",
+      "description": "Izinkan anggota memberikan hak istimewa ke aplikasi OAuth 2.0"
+    },
+    "portal:user:createWorkflow": {
+      "label": "Buat item alur kerja",
+      "description": "Izinkan anggota untuk membuat item Workflow Manager"
+    },
+    "premium:user:featurereport": {
+      "label": "Laporan fitur",
+      "description": "Izinkan anggota membuat laporan fitur di Survey123.",
+      "descriptionApp": "Izinkan aplikasi membuat laporan fitur di Survey123."
+    },
+    "premium:user:realitymapping": {
+      "label": "Pemetaan Realitas",
+      "description": "Izinkan anggota melakukan tugas pemetaan realitas."
+    },
+    "features:user:edit": {
+      "label": "Edit",
+      "description": "Izinkan anggota untuk mengedit fitur dalam layer yang dapat diedit dan bukan publik, berdasarkan opsi edit yang diaktifkan pada layer.",
+      "descriptionApp": "Izinkan aplikasi untuk mengedit fitur dalam layer yang dapat diedit dan bukan publik, berdasarkan opsi edit yang diaktifkan pada layer."
+    },
+    "features:user:fullEdit": {
+      "label": "Edit dengan kontrol penuh",
+      "description": "Izinkan anggota untuk menambah, menghapus, dan memperbarui fitur dalam feature layer yang di-host dan dapat diedit, terlepas apakah opsi pengeditan diaktifkan pada layer atau tidak.",
+      "descriptionApp": "Izinkan aplikasi untuk menambah, menghapus, dan memperbarui fitur dalam feature layer yang di-host dan dapat diedit, terlepas apakah opsi pengeditan diaktifkan pada layer atau tidak."
+    },
+    "features:user:manageVersions": {
+      "label": "Kelola semua",
+      "description": "Izinkan anggota untuk mengelola penguncian versi dan melihat, mengubah, menghapus, mengedit, mencocokkan, dan memposting ke semua versi cabang yang diakses melalui feature layer ArcGIS Server.",
+      "descriptionApp": "Izinkan aplikasi untuk mengelola penguncian versi dan melihat, mengubah, menghapus, mengedit, mencocokkan, dan memposting ke semua versi cabang yang diakses melalui feature layer ArcGIS Server."
+    },
+    "portal:publisher:createFeatureWebhook": {
+      "label": "Feature layer",
+      "description": "Izinkan anggota untuk membuat, mengedit, dan menghapus webhook feature layer mereka sendiri.",
+      "descriptionApp": "Izinkan aplikasi untuk membuat, mengedit, dan menghapus webhook feature layer mereka sendiri."
+    },
+    "portal:admin:viewUsers": {
+      "label": "Lihat semua",
+      "description": "Izinkan anggota melihat informasi akun anggota lengkap dalam organisasi Anda.",
+      "descriptionPortal": "Izinkan anggota melihat informasi akun anggota lengkap dalam portal Anda.",
+      "descriptionApp": "Izinkan aplikasi melihat informasi akun anggota lengkap dalam organisasi Anda."
+    },
+    "portal:admin:updateUsers": {
+      "label": "Pembaruan",
+      "description": "Izinkan anggota untuk mengatur ulang kata sandi, memperbarui informasi akun anggota, dan memperbarui kategori anggota dalam organisasi Anda.",
+      "descriptionPortal": "Izinkan anggota untuk mengatur ulang kata sandi, memperbarui informasi akun anggota, dan memperbarui kategori anggota dalam portal Anda.",
+      "descriptionApp": "Izinkan aplikasi untuk mengatur ulang kata sandi, memperbarui informasi akun anggota, dan memperbarui kategori anggota dalam organisasi Anda."
+    },
+    "portal:admin:deleteUsers": {
+      "label": "Hapus",
+      "description": "Izinkan anggota menghapus akun anggota dalam organisasi Anda.",
+      "descriptionPortal": "Izinkan anggota menghapus akun anggota dalam portal Anda.",
+      "descriptionApp": "Izinkan aplikasi menghapus akun anggota dalam organisasi Anda."
+    },
+    "portal:admin:inviteUsers": {
+      "label": "Tambahkan",
+      "labelPortal": "Undang",
+      "description": "Izinkan anggota mengundang anggota ke organisasi Anda.",
+      "descriptionPortal": "Izinkan anggota mengundang anggota ke portal Anda.",
+      "descriptionApp": "Izinkan anggota mengundang anggota ke organisasi Anda."
+    },
+    "portal:admin:disableUsers": {
+      "label": "Nonaktifkan",
+      "description": "Izinkan anggota mengaktifkan dan menonaktifkan akun anggota dalam organisasi Anda.",
+      "descriptionPortal": "Izinkan anggota mengaktifkan dan menonaktifkan akun anggota dalam portal Anda.",
+      "descriptionApp": "Izinkan aplikasi mengaktifkan dan menonaktifkan akun anggota dalam organisasi Anda."
+    },
+    "portal:admin:changeUserRoles": {
+      "label": "Ubah peran",
+      "description": "Izinkan anggota mengubah peran yang ditetapkan akun anggota. Catatan, hanya anggota dengan peran Administrator yang dapat menetapkan atau membatalkan penetapan peran Administrator ke akun lain.",
+      "descriptionPortal": "Izinkan anggota mengubah peran yang ditetapkan akun anggota. Catatan, hanya anggota dengan peran Administrator yang dapat menetapkan atau membatalkan penetapan peran Administrator ke akun lain.",
+      "descriptionApp": "Izinkan aplikasi mengubah peran yang ditetapkan akun anggota. Catatan, hanya anggota dengan peran Administrator yang dapat menetapkan atau membatalkan penetapan peran Administrator ke akun lain."
+    },
+    "portal:admin:manageLicenses": {
+      "label": "Kelola lisensi",
+      "description": "Izinkan anggota menetapkan lisensi kepada anggota organisasi Anda.",
+      "descriptionPortal": "Izinkan anggota menetapkan lisensi kepada anggota portal Anda.",
+      "descriptionApp": "Izinkan aplikasi menetapkan lisensi kepada anggota organisasi Anda."
+    },
+    "portal:admin:updateMemberCategorySchema": {
+      "label": "Kelola kategori",
+      "description": "Izinkan anggota mengonfigurasi kategori anggota organisasi.",
+      "descriptionPortal": "Izinkan anggota mengonfigurasi kategori anggota portal.",
+      "descriptionApp": "Izinkan aplikasi mengonfigurasi kategori anggota organisasi."
+    },
+    "portal:admin:viewGroups": {
+      "label": "Lihat semua",
+      "description": "Izinkan anggota melihat semua grup dalam organisasi Anda.",
+      "descriptionPortal": "Izinkan anggota melihat semua grup dalam portal Anda.",
+      "descriptionApp": "Izinkan aplikasi melihat semua grup dalam organisasi Anda."
+    },
+    "portal:admin:updateGroups": {
+      "label": "Pembaruan",
+      "description": "Izinkan anggota memperbarui grup dalam organisasi Anda.",
+      "descriptionPortal": "Izinkan anggota memperbarui grup dalam portal Anda.",
+      "descriptionApp": "Izinkan aplikasi memperbarui grup dalam organisasi Anda."
+    },
+    "portal:admin:deleteGroups": {
+      "label": "Hapus",
+      "description": "Izinkan anggota menghapus grup dalam organisasi Anda.",
+      "descriptionPortal": "Izinkan anggota menghapus grup di dalam portal Anda.",
+      "descriptionApp": "Izinkan aplikasi menghapus grup dalam organisasi Anda."
+    },
+    "portal:admin:reassignGroups": {
+      "label": "Tugaskan ulang kepemilikan",
+      "description": "Izinkan anggota menetapkan kembali grup ke anggota lain dalam organisasi Anda.",
+      "descriptionPortal": "Izinkan anggota menetapkan kembali grup ke anggota lain dalam portal Anda.",
+      "descriptionApp": "Izinkan aplikasi menetapkan kembali grup ke anggota lain dalam organisasi Anda."
+    },
+    "portal:admin:assignToGroups": {
+      "label": "Tugaskan anggota",
+      "description": "Izinkan anggota menetapkan anggota Anda, memperbarui peran grup anggota, dan menghapus anggota dari grup dalam organisasi Anda.",
+      "descriptionPortal": "Izinkan anggota menetapkan anggota Anda, memperbarui peran grup anggota, dan menghapus anggota dari grup di dalam portal Anda.",
+      "descriptionApp": "Izinkan aplikasi menetapkan anggota Anda, memperbarui peran grup anggota, dan menghapus anggota dari grup dalam organisasi Anda."
+    },
+    "portal:admin:manageEnterpriseGroups": {
+      "label": "Tautan ke grup khusus organisasi",
+      "description": "Izinkan anggota untuk menautkan keanggotaan grup ke grup khusus organisasi.",
+      "descriptionApp": "Izinkan aplikasi untuk menautkan keanggotaan grup ke grup khusus organisasi."
+    },
+    "portal:admin:createUpdateCapableGroup": {
+      "label": "Buat dengan kemampuan pembaruan",
+      "description": "Izinkan anggota membuat grup dengan kemampuan pembaruan.",
+      "descriptionApp": "Izinkan aplikasi membuat grup dengan kemampuan pembaruan."
+    },
+    "portal:admin:createLeavingDisallowedGroup": {
+      "label": "Buat dengan melarang meninggalkan grup",
+      "description": "Izinkan anggota membuat dan memiliki grup yang tidak mengizinkan anggota meninggalkan grup (grup administratif).",
+      "descriptionApp": "Izinkan aplikasi membuat dan memiliki grup yang tidak mengizinkan aplikasi meninggalkan grup (grup administratif)."
+    },
+    "portal:admin:viewItems": {
+      "label": "Lihat semua",
+      "description": "Izinkan anggota melihat semua konten dalam organisasi Anda.",
+      "descriptionPortal": "Izinkan anggota melihat semua konten dalam portal Anda.",
+      "descriptionApp": "Izinkan aplikasi melihat semua konten dalam organisasi Anda."
+    },
+    "portal:admin:updateItems": {
+      "label": "Pembaruan",
+      "description": "Izinkan anggota untuk memperbarui dan mengategorikan konten dan mengedit feature layer yang diselenggarakan di organisasi Anda.",
+      "descriptionPortal": "Izinkan anggota untuk memperbarui dan mengategorikan konten dan mengedit feature layer yang diselenggarakan di portal Anda.",
+      "descriptionApp": "Izinkan aplikasi untuk memperbarui dan mengategorikan konten dan mengedit feature layer yang diselenggarakan di organisasi Anda."
+    },
+    "portal:admin:deleteItems": {
+      "label": "Hapus",
+      "description": "Izinkan anggota menghapus konten dalam organisasi Anda.",
+      "descriptionPortal": "Izinkan anggota menghapus konten dalam portal Anda.",
+      "descriptionApp": "Izinkan aplikasi menghapus konten dalam organisasi Anda."
+    },
+    "portal:admin:reassignItems": {
+      "label": "Tugaskan ulang kepemilikan",
+      "description": "Izinkan anggota menetapkan kembali konten ke anggota lain dalam organisasi Anda.",
+      "descriptionPortal": "Izinkan anggota menetapkan kembali konten ke anggota lain dalam portal Anda.",
+      "descriptionApp": "Izinkan aplikasi menetapkan kembali konten ke anggota lain dalam organisasi Anda."
+    },
+    "portal:admin:updateItemCategorySchema": {
+      "label": "Kelola kategori",
+      "description": "Izinkan anggota mengonfigurasi kategori konten organisasi.",
+      "descriptionPortal": "Izinkan anggota mengonfigurasi kategori konten portal.",
+      "descriptionApp": "Izinkan aplikasi mengonfigurasi kategori konten organisasi."
+    },
+    "portal:publisher:publishServerGPServices": {
+      "label": "Terbitkan alat web",
+      "description": "Hak istimewa ini memberikan kemampuan untuk menerbitkan alat web yang didukung oleh layanan geoprocessing dari situs server terfederasi."
+    },
+    "portal:admin:shareToOrg": {
+      "label": "Bagikan konten anggota ke organisasi",
+      "description": "Izinkan anggota membagikan konten yang dimiliki anggota lain di organisasi Anda ke organisasi.",
+      "descriptionPortal": "Izinkan anggota membagikan konten yang dimiliki anggota lain di portal Anda ke portal.",
+      "descriptionApp": "Izinkan aplikasi membagikan konten yang dimiliki anggota lain di organisasi Anda ke organisasi."
+    },
+    "portal:admin:shareToPublic": {
+      "label": "Bagikan konten anggota ke publik",
+      "description": "Izinkan anggota membagikan konten yang dimiliki anggota lain di organisasi ke publik.",
+      "descriptionPortal": "Izinkan anggota membagikan konten yang dimiliki anggota lain di portal Anda ke publik.",
+      "descriptionApp": "Izinkan aplikasi membagikan konten yang dimiliki anggota lain di organisasi ke publik."
+    },
+    "portal:admin:createReports": {
+      "label": "Membuat dan mengelola laporan administratif",
+      "description": "Izinkan anggota membuat dan mengelola laporan administratif untuk organisasi Anda.",
+      "descriptionPortal": "Izinkan anggota membuat dan mengelola laporan administratif untuk portal Anda.",
+      "descriptionApp": "Izinkan aplikasi membuat dan mengelola laporan administratif untuk organisasi Anda."
+    },
+    "marketplace:admin:manage": {
+      "label": "Buat dan kelola",
+      "description": "Izinkan anggota membuat penawaran, mencantumkan item, mengelola langganan di dalam ArcGIS Marketplace, serta mengelola informasi kontak dan pembeli untuk organisasi Anda. Penggunaan hak istimewa ini bergantung pada organisasi Anda yang mendapatkan penawaran dan menerbitkan akses ke ArcGIS Marketplace."
+    },
+    "marketplace:admin:purchase": {
+      "label": "Beli dan dapatkan produk gratis",
+      "description": "Izinkan anggota untuk mengirimkan permintaan pembelian dan mengakses produk gratis dari penyedia di ArcGIS Marketplace. Untuk mengizinkan anggota untuk membeli produk dengan menggunakan kartu kredit, Anda harus menunjuknya sebagai pembeli Marketplace."
+    },
+    "marketplace:admin:startTrial": {
+      "label": "Mulai uji coba",
+      "description": "Izinkan anggota memulai langganan uji coba dalam ArcGIS Marketplace."
+    },
+    "portal:admin:manageSecurity": {
+      "label": "Keamanan dan infrastruktur",
+      "description": "Izinkan anggota mengelola pengaturan keamanan dan infrastruktur organisasi.",
+      "descriptionPortal": "Izinkan anggota mengelola pengaturan keamanan dan infrastruktur portal.",
+      "descriptionApp": "Izinkan aplikasi mengelola pengaturan keamanan dan infrastruktur organisasi."
+    },
+    "portal:admin:manageWebsite": {
+      "label": "Situs web organisasi",
+      "description": "Izinkan anggota mengelola pengaturan situs web organisasi.",
+      "descriptionPortal": "Izinkan anggota mengelola pengaturan situs web portal.",
+      "descriptionApp": "Izinkan aplikasi mengelola pengaturan situs web organisasi."
+    },
+    "portal:admin:manageCollaborations": {
+      "label": "Kolaborasi",
+      "description": "Izinkan anggota mengelola kolaborasi organisasi.",
+      "descriptionPortal": "Izinkan anggota mengelola kolaborasi portal.",
+      "descriptionApp": "Izinkan aplikasi mengelola kolaborasi organisasi."
+    },
+    "portal:admin:manageCredits": {
+      "label": "Kredit",
+      "description": "Izinkan anggota mengelola pengaturan penganggaran kredit organisasi.",
+      "descriptionApp": "Izinkan aplikasi mengelola pengaturan penganggaran kredit organisasi."
+    },
+    "portal:admin:manageRoles": {
+      "label": "Peran anggota",
+      "description": "Izinkan anggota mengelola peran anggota organisasi.",
+      "descriptionPortal": "Izinkan anggota mengelola peran anggota portal.",
+      "descriptionApp": "Izinkan aplikasi mengelola peran anggota organisasi."
+    },
+    "portal:admin:manageServers": {
+      "label": "Server",
+      "description": "Hak istimewa ini memberikan kemampuan untuk mengelola pengaturan server portal."
+    },
+    "portal:admin:manageUtilityServices": {
+      "label": "Layanan utilitas",
+      "description": "Izinkan anggota mengelola pengaturan layanan utilitas organisasi.",
+      "descriptionPortal": "Izinkan anggota mengelola pengaturan layanan utilitas portal.",
+      "descriptionApp": "Izinkan aplikasi mengelola pengaturan layanan utilitas organisasi."
+    },
+    "portal:admin:manageWebhooks": {
+      "label": "Webhook",
+      "labelPortal": "Webhook organisasi",
+      "description": "Izinkan anggota untuk membuat, mengedit, dan menghapus semua webhook dalam organisasi Anda.",
+      "descriptionApp": "Izinkan aplikasi untuk membuat, mengedit, dan menghapus webhook dalam organisasi Anda.",
+      "descriptionPortal": "Izinkan anggota untuk membuat, mengedit, dan menghapus webhook organisasi dan mengelola semua webhook dalam portal.",
+      "descriptionAppPortal": "Izinkan aplikasi untuk membuat, mengedit, dan menghapus webhook organisasi dan mengelola semua webhook dalam portal."
+    },
+    "portal:admin:createGPWebhook": {
+      "label": "Geoprocessing",
+      "description": "Izinkan anggota untuk membuat, mengedit, dan menghapus webhook geoprosesing mereka sendiri.",
+      "descriptionApp": "Izinkan aplikasi untuk membuat, mengedit, dan menghapus webhook geoprosesing mereka sendiri."
+    }
+  }
+}

@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>Geokode-positioner fra tabelv&aelig;rkt&oslash;jet konverterer adresser eller steder fra en inputtabel eller fil til koordinater.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputType">
+        <div>
+            <p>Angiver, om inputtet er et tabelelement (<b>hostet tabel</b>) eller en <code>.csv</code>- eller Excel-fil (<b>CSV/Excel</b>).
+            </p>
+        </div>
+    </div>
+    <div id="inputFileItem">
+        <div>
+            <p>Inputfilen med de adresser eller steder, der skal geokodes. Inputtet skal v&aelig;re en hostet  <code>.csv</code>- eller Excel-fil. </p>
+        </div>
+    </div>
+    <div id="inputTable">
+        <div>
+            <p>Inputtabel med de adresser eller steder, der skal geokodes. Inputtet skal v&aelig;re et hostet tabelelement.
+            </p>
+            <p>En t&aelig;lling af objekter vises under tabelnavnet. T&aelig;llingen omfatter alle objekter i tabellen, bortset fra dem, der er blevet fjernet ved hj&aelig;lp af et filter.
+            </p>
+        </div>
+    </div>
+    <div id="geocodeServiceURL">
+        <div>
+            <p>Den lokatortjeneste, der skal anvendes til geokodning. Hvis den lokatortjeneste, som du vil anvende, ikke findes i rullemenuen, skal du kontakte din administrator for at f&aring; lokatortjenesten tilf&oslash;jet som en utility-tjeneste.
+            </p>
+        </div>
+    </div>
+    <div id="singleOrMultiFieldSwitch">
+        <div>
+            <p>Angiver, om inputdata er indeholdt i et enkelt felt eller flere felter.
+            </p>
+        </div>
+    </div>
+    <div id="geocodeUIParameters">
+        <div>
+            <p>De felter, som lokatoren skal bruge til at bestemme dataenes positioner. Der forventes at v&aelig;re visse felter i dataene, s&aring;som adresse, by og postnummer.
+            </p>
+        </div>
+    </div>
+    <div id="sourceCountry">
+        <div>
+            <p>Det land, hvor dataene er placeret. Hvis alle adresserne er fra &eacute;t land, skal du v&aelig;lge det p&aring;g&aelig;ldende landenavn for at sikre mere pr&aelig;cise resultater. Eller skal du lade denne parameter st&aring; tom.
+            </p>
+        </div>
+    </div>
+    <div id="outputFields">
+        <div>
+            <p>Angiver de felter, der inkluderes i output-datas&aelig;ttet. Der er f&oslash;lgende indstillinger:
+            </p>
+            <ul>
+                <li> <b>Alle</b> &mdash; alle tilg&aelig;ngelige lokator-outputfelter inkluderes i geokoderesultaterne.
+                </li>
+                <li> <b>Minimalt</b> &mdash; en undergruppe af felter fra lokatoren samt felterne fra inputtabellen inkluderes i resultaterne.
+                </li>
+                <li> <b>Kun placering</b> &mdash; feltet <i>Shape</i> fra lokatoren samt feltet fra inputtabellen inkluderes i resultaterne.
+                </li>
+            </ul>
+            
+        </div>
+    </div>
+    <div id="outputType">
+        <div>
+            <p>Den type output, der oprettes. Output kan v&aelig;re en featuretjeneste,  <code>.csv</code>-fil eller <code>.xls</code>-fil.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>Navnet p&aring; det lag eller den fil, som oprettes under  <b>Mit indhold</b>.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>Navnet p&aring; mappen  <b>Mit indhold</b>, hvor resultatet gemmes.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

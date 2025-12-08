@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>The Nibble tool replaces cells of a raster corresponding to a mask with the value of the nearest neighbor.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputRaster">
+        <div>
+            <p>The input raster with the masked locations that will be replaced by the value of their nearest neighbor.
+            </p>
+        </div>
+    </div>
+    <div id="inputMaskRaster">
+        <div>
+            <p>The mask raster that identifies the locations in the input raster that will be replaced. Cells with a value of NoData are considered to be within the masked area.
+            </p>
+        </div>
+    </div>
+    <div id="inputZoneRaster">
+        <div>
+            <p>The input zone raster. For each zone, input cells that are within the mask will be replaced only by the nearest cell values within that same zone.
+            </p>
+        </div>
+    </div>
+    <div id="nibbleValues">
+        <div>
+            <p>Specifies whether NoData cells in the input raster can replace cells in the masked areas if they are the nearest neighbor.
+            </p>
+            <p>If checked, NoData cells in the input raster can replace cells in the masked area. If unchecked, only valid cells in the input raster can replace cells in the masked area.
+            </p>
+        </div>
+    </div>
+    <div id="nibbleNodata">
+        <div>
+            <p>Specifies whether NoData cells in the masked area will be preserved or replaced.
+            </p>
+            <p>If unchecked, any NoData cells that are within the masked area will be preserved in the output. If checked, NoData cells within the masked area will be replaced with the value of the nearest neighbor that is outside the masked area.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>The name of the replaced raster layer that will be created and added to the map.
+            </p>
+        </div>
+    </div>
+    <div id="resultType">
+        <div>
+            <p>The type of output that will be created. The output can be a tiled imagery layer or a dynamic imagery layer.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>The name of the folder in  <b>My content</b> where the results will be saved.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

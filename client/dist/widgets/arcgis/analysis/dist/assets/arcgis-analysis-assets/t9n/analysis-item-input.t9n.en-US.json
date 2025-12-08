@@ -1,0 +1,15 @@
+{
+  "addDataStore": "Add data store",
+  "addFile": "Add file",
+  "addServiceConnection": "Add connection",
+  "itemNotFound": "The item does not exist or is inaccessible.",
+  "itemPermissionDenied": "You do not have permissions to access this item.",
+  "previewDetails": "Preview details",
+  "queryModelArgsErrMsg": "Failed to query model arguments.",
+  "queryModelArgsMsg": "Querying model arguments...",
+  "removeItem": "Remove item",
+  "replaceItem": "Replace item",
+  "requiredInputMessage": "This parameter is required.",
+  "selectItem": "Select item",
+  "viewDetails": "View details"
+}

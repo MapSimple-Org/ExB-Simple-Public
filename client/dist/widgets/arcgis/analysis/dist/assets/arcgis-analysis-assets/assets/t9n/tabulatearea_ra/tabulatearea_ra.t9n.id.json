@@ -1,0 +1,12 @@
+{
+  "classField": "Kolom kelas",
+  "classesAsRowsLabel": "Kelas sebagai baris dalam tabel output",
+  "inputClassRasterOrFeatures": "Raster kelas input atau fitur",
+  "inputLayerGroupText": "Pilih zona input dan layer kelas untuk menghitung area tabulasi silang antara dua kumpulan data.",
+  "itemProperties": {
+    "description": "Tabel output yang dihasilkan dari menjalankan alat analisis Tabulasi Area.",
+    "snippet": "Tabel output yang dihasilkan dari Tabulasi Area."
+  },
+  "tabulateAreaSettingsGroupLabel": "Pengaturan Tabulasi area",
+  "tabulateAreaSettingsGroupText": "Pilih cara menangani kelas dalam tabel output. Tentukan ukuran sel untuk menghitung. "
+}

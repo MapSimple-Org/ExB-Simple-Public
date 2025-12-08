@@ -1,0 +1,12 @@
+{
+  "classField": "类字段",
+  "classesAsRowsLabel": "类作为输出表中的行",
+  "inputClassRasterOrFeatures": "输入类栅格或要素",
+  "inputLayerGroupText": "选择输入分区和类图层以计算两个数据集之间交叉制表的区域。",
+  "itemProperties": {
+    "description": "通过运行“区域制表”分析工具生成的输出表。",
+    "snippet": "由“区域制表”生成的输出表"
+  },
+  "tabulateAreaSettingsGroupLabel": "区域制表设置",
+  "tabulateAreaSettingsGroupText": "选择处理输出表中的类的方式。 指定要计算的像元大小。 "
+}

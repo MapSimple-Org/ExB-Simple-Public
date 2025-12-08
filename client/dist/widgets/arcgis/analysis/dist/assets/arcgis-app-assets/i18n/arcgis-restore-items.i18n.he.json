@@ -1,0 +1,31 @@
+{
+  "back": "חזור",
+  "cancel": "ביטול",
+  "learnMore": "מידע נוסף",
+  "restore": "שחזר",
+  "restoreTo": "שחזר אל",
+  "restoreItem": "שחזר פריט",
+  "restoreItems": "שחזר פריטים",
+  "noticeMessage": "שיתוף הפריטים המשוחזרים יבוטל. בדוק את התוכן שלך לפני שתשתף אותו שוב.",
+  "cannotBulkRestoreXItems": "לא ניתן לשחזר באצווה יותר מ-${number} פריטים, בטל את הבחירה במספר פריטים.",
+  "cannotBulkRestoreMultipleOwners": "לא ניתן לשחזר באצווה פריטים אשר שייכים לבעלים שונים. בחר פריטים מבעלים אחד כדי לשחזר באצווה.",
+  "toRestore": {
+    "single": "פריט לשחזור:",
+    "multiple": "פריטים לשחזור:"
+  },
+  "cannotRestore": "לא ניתן לשחזר:",
+  "dependentItems": {
+    "single": "לא ניתן לשחזר פריט זה מכיוון שהוא תלוי ב-<strong style='font-weight: 500'>${parent}</strong>. שחזר אותם יחד.",
+    "singleUnknown": "לא ניתן לשחזר פריט זה מכיוון שהוא תלוי בפריט אחר בסל המיחזור. שחזר אותם יחד.",
+    "multiple": "לא ניתן לשחזר פריטם אלה מכיוון שהם תלויים בפריטים אחרים בסל המיחזור. שחזר אותם יחד.",
+    "multipleSameSource": "לא ניתן לשחזר פריטים אלה מכיוון שהם תלויים ב-<strong style='font-weight: 500'>${parent}</strong>. שחזר אותם יחד."
+  },
+  "pageRangeWithTotalRecycleBinSize": {
+    "en": "${start} - ${end} מתוך ${total} (${size}) בסל המיחזור",
+    "other": "${start} - ${end}, סה\"כ: ${total} (${size}) בסל המיחזור"
+  },
+  "pageRangeWithGreaterThanTotalRecycleBinSize": {
+    "en": "${start} - ${end} מתוך ${total} (>${size}) בסל המיחזור",
+    "other": "${start} - ${end}, סה\"כ: ${total} (>${size}) בסל המיחזור"
+  }
+}

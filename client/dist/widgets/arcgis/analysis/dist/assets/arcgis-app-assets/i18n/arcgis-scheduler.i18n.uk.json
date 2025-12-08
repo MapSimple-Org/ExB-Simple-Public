@@ -1,0 +1,55 @@
+{
+  "beginningOnLabel": "Починаючи",
+  "repeatTypeLabel": "Тип повторювання",
+  "endingOnTypeLabel": "Закінчуючи",
+  "endingOnDateLabel": "Кінцева дата",
+  "endingOnCountLabel": "Лічильник",
+  "endingOnCountPlaceholder": "наприклад: 1, 10, 30",
+  "dailyRepeatIntervalLabel": "Інтервал повторювання",
+  "dailyTimeLabel": "Час",
+  "weeklyDaysOfWeekLabel": "День тижня",
+  "weeklyTimeLabel": "Час",
+  "monthlyDayOfMonthLabel": "День місяця",
+  "monthlyDayOfMonthPlaceholder": "наприклад, 1 - 31",
+  "monthlyRepeatIntervalLabel": "Інтервал повторювання",
+  "monthlyTimeLabel": "Час",
+  "repeatTypeOptions": {
+    "day": "День",
+    "week": "Тиждень",
+    "month": "Місяць"
+  },
+  "endingOnType": {
+    "never": "Ніколи",
+    "date": "Дата",
+    "count": "Увімкн."
+  },
+  "dailyRepeatInterval": {
+    "everyDay": "Кожного дня",
+    "everyOtherDay": "Кожного іншого дня",
+    "everyThreeDays": "Кожні три дні",
+    "everyFourDays": "Кожні чотири години",
+    "everyFiveDays": "Кожні п'ять днів",
+    "everySixDays": "Кожні шість днів",
+    "everySevenDays": "Кожні сім днів",
+    "everyFourteenDays": "Кожні чотирнадцять днів"
+  },
+  "weekDays": {
+    "all": "Все",
+    "allWeekdays": "Усі будні",
+    "sunday": "Неділя",
+    "monday": "Понеділок",
+    "tuesday": "Вівторок",
+    "wednesday": "Середа",
+    "thursday": "Четвер",
+    "friday": "П’ятниця",
+    "saturday": "Субота"
+  },
+  "monthlyRepeatInterval": {
+    "everyMonth": "Кожного місяця",
+    "everyTwoMonths": "Кожні два місяці",
+    "everyThreeMonths": "Кожні три місяці",
+    "everyFourMonths": "Кожні чотири місяці",
+    "everyFiveMonths": "Кожні п'ять місяців",
+    "everySixMonths": "Кожні шість місяців"
+  }
+}

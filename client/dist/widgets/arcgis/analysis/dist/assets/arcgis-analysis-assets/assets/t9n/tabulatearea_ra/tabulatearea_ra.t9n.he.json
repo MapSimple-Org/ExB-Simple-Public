@@ -1,0 +1,12 @@
+{
+  "classField": "שדה קבוצה",
+  "classesAsRowsLabel": "קבוצות כשורות בטבלת פלט",
+  "inputClassRasterOrFeatures": "קלט ישויות או רסטר קבוצה",
+  "inputLayerGroupText": "בחר את אזור הקלט ושכבת הקבוצה לחישוב אזורים בארגון צולב בטבלה בין שני מסדי הנתונים.",
+  "itemProperties": {
+    "description": "פלט הופק מהרצת כלי הניתוח 'ארגון אזור בטבלה'.",
+    "snippet": "פלט הופק מ'ארגון אזור בטבלה'"
+  },
+  "tabulateAreaSettingsGroupLabel": "הגדרות עריכת אזור בטבלה",
+  "tabulateAreaSettingsGroupText": "בחר כיצד לטפל בקבוצות בטבלת הקלט. ציין את גודל התא לחישוב. "
+}

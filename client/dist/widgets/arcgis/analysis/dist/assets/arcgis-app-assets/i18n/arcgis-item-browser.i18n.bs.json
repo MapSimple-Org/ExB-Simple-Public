@@ -1,0 +1,417 @@
+{
+  "itemBrowser": {
+    "filters": "Filtri",
+    "preview": "Pretpregled",
+    "selectedLayers": "Odabrani slojevi",
+    "selectedItems": "Odabrane stavke",
+    "pageRange": "${start}-${end}, ukupno: ${total}",
+    "pageRangeAria": "${start}-${end}, ukupno stavki: ${total}",
+    "pageRangeWithRecycleBin": "${start}-${end}, ukupno: ${total} (Ukupna veličina: ${recycleBinSize})",
+    "pageRangeAriaWithRecycleBin": "${start}-${end}, ukupno stavki: ${total} (Ukupna veličina: ${recycleBinSize})",
+    "foundOnPage": "Podudarajući rezultati na stranici: ${total}",
+    "totalSize": "Ukupna veličina: ${totalSize}",
+    "selectedMultipleWithSize": "Odabrano: ${num} (${totalSize})",
+    "selectedMultipleWithSizeSmall": "${num} (${totalSize})",
+    "noSelectedLayers": "Trenutno nema odabranih slojeva",
+    "noSelectedItems": "Trenutno nema odabranih stavki",
+    "sharingUpdated": "${itemTitle} dijeljenje ažurirano.",
+    "refineContent": "Pročisti sadržaj"
+  },
+  "layerTypes": {
+    "point": "Točkasti sloj",
+    "line": "Linijski sloj",
+    "polygon": "Poligonski sloj",
+    "multipatch": "Poliedarni sloj",
+    "multipoint": "Sloj s više točaka",
+    "table": "Tablica",
+    "catalog": "Sloj iz kataloga",
+    "oriented imagery": "Sloj orijentiranih snimki",
+    "parcel": "Sloj parcele",
+    "utility network": "Sloj komunalne mreže",
+    "topology": "Topološki sloj",
+    "trace network": "Trace Network sloj"
+  },
+  "filterIndustry": {
+    "title": "Industrija",
+    "Industry": "Industrja: ${industry}",
+    "Build a layer": "Izgradi sloj",
+    "Agriculture": "Poljoprivreda",
+    "Electric Utilities": "Opskrba struje",
+    "Environment": "Okoliš",
+    "Forestry": "Šumarstvo",
+    "Gas Utilities": "Opskrba plina",
+    "General": "Općenito",
+    "Natural Resources": "Prirodni resursi",
+    "Petroleum": "Naftna industrija",
+    "Public Safety": "Javna sigurnost",
+    "Telecommunications": "Telekomunikacije",
+    "Transportation": "Prijevoz",
+    "Water Utilities": "Opskrba vode"
+  },
+  "filterItemType": {
+    "title": "Vrsta stavke",
+    "itemType": "Vrsta: ${itemType}",
+    "options": {
+      "maps": "Karte",
+      "maps-webmaps": "Web-karte",
+      "maps-mapfiles": "Datoteke karte",
+      "layers": "Slojeve",
+      "layers-weblayers": "Web-slojevi",
+      "layers-weblayers-features": "Slojevi geoobjekta",
+      "layers-weblayers-tiles": "Pločasti slojevi",
+      "layers-weblayers-mapimage": "Slojevi slike karte",
+      "layers-weblayers-imagery": "Slojevi sa snimkama",
+      "layers-weblayers-scenelayers": "Slojevi scene",
+      "layers-weblayers-videolayers": "Slojevi s videozapisom",
+      "layers-weblayers-tiledimagelayers": "Popločeni slojevi sa slikama",
+      "layers-weblayers-elevationlayers": "Slojevi visine terena",
+      "layers-weblayers-feeds": "Sažeci sadržaja",
+      "layers-weblayers-tables": "Tablice",
+      "layers-layerfiles": "Datoteke sloja",
+      "scenes": "Scene",
+      "applications": "Aplikacije",
+      "applications-web": "Web-aplikacije",
+      "applications-dashboards": "Nadzorne ploče",
+      "applications-sites": "Web-mjesta",
+      "applications-pages": "Stranice",
+      "applications-geobim-projects": "GeoBIM projekti",
+      "applications-geobim-apps": "GeoBIM aplikacije",
+      "applications-instant-apps": "Instant Apps",
+      "applications-storymap": "Storymaps",
+      "applications-data-pipelines": "Data Pipelines",
+      "applications-experience": "Experience Builder",
+      "applications-wab": "Web AppBuilder",
+      "applications-mobile": "Mobilne aplikacije",
+      "applications-desktop": "Desktop aplikacije",
+      "developer-credentials": "Vjerodajnice razvojnog programera",
+      "developer-credentials-oauth": "OAuth 2.0 vjerodajnice",
+      "developer-credentials-api-token": "API ključ vjerodajnice",
+      "developer-credentials-api-key": "API ključ (Naslijeđeno)",
+      "tools": "Alati",
+      "tools-locators": "Lokatori",
+      "tools-geodatabase": "Pristup geobazi podataka",
+      "tools-geometric": "Geometrijske radnje",
+      "tools-geoprocessing": "Zadaci geoprocesiranja",
+      "tools-network": "Mrežna analiza",
+      "tools-analytics": "Analitika",
+      "files": "Datoteke",
+      "files-document": "Dokumenti",
+      "files-image": "Slike",
+      "files-pdf": "PDF-ovi",
+      "files-csv": "CSV-i",
+      "files-report": "Administrativna izvješća",
+      "files-raster": "Predlošci rasterske funkcije",
+      "notebooks": "Notebooks",
+      "insights": "Insights",
+      "insights-workbooks": "Woorkbooks",
+      "insights-pages": "Izvješća",
+      "insights-models": "Modeli",
+      "insights-themes": "Teme",
+      "data-stores": "Pohrane podataka",
+      "knowledge-graphs": "Grafovi znanja"
+    }
+  },
+  "filterCategories": {
+    "categories": "Kategorije",
+    "groupCategories": "Kategorije grupa",
+    "category": "Kategorija: ${category}",
+    "uncategorized": "Nije kategorizirano",
+    "noCategoriesTitle": "Još nema kategorija",
+    "noCategories": "Kategorije omogućuju članovima da dosljedno organiziraju stavke i pružaju jednostavan način za pregledavanje sadržaja u organizaciji.",
+    "noGroupCategoriesTitle": "Još nema kategorija grupa",
+    "noGroupCategories": "Kategorije omogućuju članovima grupe da dosljedno organiziraju stavke i pružaju jednostavan način za pregledavanje sadržaja u grupi.",
+    "setupCategories": "Postavi kategorije sadržaja",
+    "setupGroupCategories": "Postavi kategorije grupe",
+    "configureCategories": "Konfiguriraj kategorije"
+  },
+  "filterRegion": {
+    "regions": "Regije",
+    "region": "Regija: ${region}"
+  },
+  "filterCollaborations": {
+    "title": "Distribuirane suradnje",
+    "label": "Distribuirane suradnje: ${name}",
+    "loading": "Učitavanje suradnji..."
+  },
+  "filterContentStatus": {
+    "title": "Status",
+    "label": "Status: ${contentStatus}",
+    "authoritative": "Mjerodavno",
+    "deprecated": "Zastarjelo"
+  },
+  "filterDeleteProtection": {
+    "title": "Zaštita od brisanja",
+    "label": "Zaštita od brisanja: ${deleteProtection}",
+    "enabled": "Omogućeno",
+    "disabled": "Onemogućeno"
+  },
+  "filterExpiration": {
+    "today": "Danas",
+    "tomorrow": "Sutra",
+    "next7": "Sljedećih 7 dana",
+    "next30": "Sljedećih 30 dana",
+    "custom": "Prilagođeni raspon...",
+    "title": {
+      "expires": "Datum isteka"
+    },
+    "expires": "Datum isteka: ${date}"
+  },
+  "filterExtent": {
+    "label": "Unutar područja karte",
+    "title": "Prikaži samo sadržaj unutar područja karte"
+  },
+  "filterFolder": {
+    "folders": "Mape",
+    "placeholder": "Filtriraj mape",
+    "clear": "Očisti pretragu",
+    "all": "Sav moj sadržaj",
+    "allContentUser": "Sav sadržaj od ${username}",
+    "recycleBin": "Koš za smeće",
+    "label": "Mapa: ${folder}",
+    "loading": "Učitavanje mapa...",
+    "folderOptions": "Opcije mape",
+    "editFolder": "Uredi mapu",
+    "deleteFolder": "Izbriši mapu",
+    "delete": "Izbriši",
+    "areYouSure": "Jeste li sigurni da želite izbrisati ovu mapu?",
+    "areYouSureExplanation": "Mapa, <strong style='font-weight: 500'>${title}</strong>, će biti trajno izbrisana. Osim toga, sve stavke unutar mape bit će označene za brisanje. Želite li i dalje nastaviti s brisanjem ove mape?",
+    "cancel": "Odustani",
+    "save": "Spremi",
+    "createAFolder": "Stvori mapu",
+    "folderName": "Naziv mape",
+    "createFolder": "Stvori mapu",
+    "error": {
+      "title": "Pogreška",
+      "noName": "Morate navesti naziv za mapu.",
+      "folderAlreadyExists": "Datoteka '${folder}' već postoji. Odaberite drugi naziv.",
+      "invalidCharacters": {
+        "single": "Naziv ne može saržavati ovaj znak: ${invalidCharacters}.",
+        "multiple": "Naziv ne može sadržavati niti jedan od ovih znakova: ${invalidCharacters}.",
+        "unknown": "Naziv ne može sadržavati niti jedan od ovih znakova: ${invalidCharacters}."
+      },
+      "errorCreatingFolder": "Došlo je do pogreške pri stvaranju mape ${folderName}."
+    }
+  },
+  "filterGroup": {
+    "title": "Grupe",
+    "groups": "Moje grupe",
+    "placeholder": "Filtriraj grupe",
+    "all": "Sav sadržaj moje grupe",
+    "label": "Grupa: ${group}",
+    "loading": "Učitavanje grupa…"
+  },
+  "filterContentType": {
+    "contentType": "Vrsta sadržaja",
+    "all": "Sav sadržaj moje organizacije",
+    "recycle": "Koš za smeće"
+  },
+  "filterLocation": {
+    "location": "Lokacija",
+    "label": "Lokacija: ${location}",
+    "findLocationText": "Pronađi adresu ili mjesto",
+    "search": "Traži lokacije",
+    "suggestions": "Prijedlozi",
+    "noResults": "Nisu pronađeni rezultati za \"${searchTerm}\""
+  },
+  "filterSharing": {
+    "title": "Dijeljenje",
+    "label": "Podijeljeno: ${sharing}",
+    "owner": "Vlasnik",
+    "shared": "Podijeljeno s grupama",
+    "private": "Nije podijeljeno s grupama",
+    "account": "Organizacija",
+    "public": "Svi (javno)"
+  },
+  "filterTags": {
+    "title": "Oznake",
+    "label": "Označeno: ${tags}",
+    "selectTags": "Odaberi oznake"
+  },
+  "filterReportType": {
+    "title": "Vrsta izvješća",
+    "label": "Vrsta izvješća: ${reportType}",
+    "activity": "Aktivnost",
+    "credits": "Kredit",
+    "users": "Član",
+    "content": "Stavka",
+    "item_usages": "Broj prikaza stavke",
+    "service_usages": "Upotreba usluge"
+  },
+  "cardThumbnail": {
+    "loading": "Učitavanje slike"
+  },
+  "card": {
+    "select": "Odaberi stavku: ${title}",
+    "lastUpdated": "Stavka ažurirana: ${date}",
+    "viewItemDetails": "Pogledajte više pojedinosti o ${title}",
+    "preview": "Više pojedinosti",
+    "hidePreview": "Manje pojedinosti",
+    "closeDetails": "Zatvori pretpregled",
+    "openDetails": "Pretpregled",
+    "moreOptions": "Više opcija"
+  },
+  "cardSublayerSelect": {
+    "select": "Odaberi sloj",
+    "selectLayers": "Odaberite slojeve",
+    "selectedSingle": "Odabrano",
+    "selectedLayers": "Odabrani slojevi: ${num}",
+    "selectedMultiple": "Odabrano: ${num}",
+    "selectedName": "Odabrani sloj: ${name}",
+    "selectedTask": "Odabrani zadatak: ${task}",
+    "errorTitle": "Pogreška pri spajanju na uslugu",
+    "errorBody": "Nije moguće uspješno povezati se s uslugom. Usluga ili ne radi ili zahtijeva autentifikaciju.",
+    "notebookErrorBody": "Ovaj alat objavljen je iz usluge notebook. Pristup usluzi ArcGIS Notebooks blokirala je vaša organizacija. Za podešavanje postavki obratite se svom administratoru.",
+    "retry": "Pokušaj ponovno",
+    "selectTask": "Odaberi zadatak",
+    "selectTaskFrom": "Odaberi zadatak iz ${title}"
+  },
+  "cardLayersList": {
+    "hideDetails": "Sakrij pojedinosti",
+    "showDetails": "Prikaži pojedinosti",
+    "layersAndTables": "Slojevi i tablice"
+  },
+  "content": {
+    "noResults": "Nema stavki koje ispunjavaju vaše kriterije. Pokušajte promijeniti pojam za pretraživanje ili očistiti neke filtre da bi se prikazalo više stavki.",
+    "noContent": "Nema dostupnog sadržaja.",
+    "loading": "Učitavanje u tijeku..."
+  },
+  "copy": {
+    "copy": "Kopiraj",
+    "copied": "Kopirano"
+  },
+  "bucketSelect": {
+    "my": "Moj sadržaj",
+    "org": "Moja organizacija",
+    "group": "Moje grupe",
+    "favorites": "Moji favoriti",
+    "living atlas": "Living Atlas",
+    "living atlas analysis": "Slojevi za analizu Living Atlasa",
+    "subscription content": "Sadržaj pretplate",
+    "all": "ArcGIS Online",
+    "catalog": "Hub katalozi",
+    "catalogLabel": "Katalog"
+  },
+  "preview": {
+    "owner": "Vlasnik",
+    "summary": "Sažetak",
+    "noSummary": "Nema sažetka",
+    "description": "Opis",
+    "noDescription": "Nema opisa",
+    "thumbnail": "Sličica",
+    "overview": "Pregledaj",
+    "details": "Pojedinosti",
+    "termsOfUse": "Uvjeti korištenja",
+    "noTermsOfUse": "Nisu navedeni uvjeti korištenja",
+    "itemManagedBy": "Stavkom upravlja: ${username}",
+    "fullItemDetails": "Sve pojedinosti o stavci",
+    "layersCount": "Slojevi (${count})",
+    "layers": "Slojeve",
+    "add": "Dodaj",
+    "remove": "Ukloni",
+    "loading": "Učitavanje u tijeku...",
+    "shared": "Dijeljenje",
+    "created": "Stavka stvorena",
+    "updated": "Stavka ažurirana",
+    "fileSize": "Veličina datoteke",
+    "dataUpdated": "Podaci ažurirani",
+    "schemaUpdated": "Shema ažurirana",
+    "ID": "ID",
+    "copyID": "Kopiraj ID oznaku",
+    "URL": "URL",
+    "copyURL": "Kopiraj URL",
+    "itemStatus": "Status",
+    "viewCount": "Broj prikaza",
+    "readMore": "Pročitajte više",
+    "dashboardViews": "Prikazi nadzorne ploče",
+    "dashboardMobile": "Desktop, Mobile",
+    "dashboardDesktop": "Desktop",
+    "sharing": {
+      "private": "Privatno",
+      "shared": "Grupe",
+      "public": "Svi",
+      "org": "Organizacija"
+    },
+    "groupCategories": "Kategorije grupa",
+    "matched": "Podudara se",
+    "matchedNumber": "Podudara se (${num})",
+    "layerError": {
+      "title": "Nije moguće prikazati slojeve",
+      "message": "Predpregled sloja nije podržan za zaštićene usluge."
+    },
+    "noServiceMessage": "Odabrana usluga ne postoji ili nije dostupna.",
+    "credits": "Potvrde",
+    "noCredits": "Nema potvrđenog izvora.",
+    "geometryTypeTitle": "Vrsta geometrije",
+    "layerTypeTitle": "Vrsta sloja",
+    "fields": "Polja",
+    "noFields": "Nema konfiguriranih polja za ovaj sloj",
+    "geometryType": {
+      "esriGeometryPoint": "Točkasti sloj",
+      "esriGeometryPolyline": "Linijski sloj",
+      "esriGeometryPolygon": "Poligonski sloj",
+      "esriGeometryMultiPatch": "Poliedarni sloj",
+      "table": "Tablica"
+    },
+    "layerActions": "Radnje sloja",
+    "itemError": {
+      "title": "Pogreška",
+      "subscription": "Ova stavka trenutno nije dostupna. Onemogućena je pretplata za ArcGIS Online koja je povezana s ovom stavkom.",
+      "unhandled": "Došlo je do pogreške prilikom dohvaćanja ove stavke."
+    }
+  },
+  "table": {
+    "loading": "Učitavanje u tijeku...",
+    "caption": "Rezultati stavki, zaglavlja stupaca s gumbima mogu se sortirati.",
+    "selectAll": "Odaberi sve",
+    "selection": "Odabir",
+    "headers": {
+      "title": "Naziv",
+      "modified": "Izmijenjeno",
+      "created": "Stvoreno",
+      "owner": "Vlasnik",
+      "size": "Veličina",
+      "deleted": "Datum izbrisan",
+      "type": "Vrsta stavke",
+      "badges": "Status stavke",
+      "favorite": "Favorit",
+      "sharing": "Razina dijeljenja",
+      "details": "Prikaži pojedinosti",
+      "actions": "Više radnji stavke",
+      "dataset": "Skup podataka"
+    }
+  },
+  "tableRow": {
+    "deletesTomorrow": "Sutra se briše",
+    "deletes": {
+      "single": "Briše se za ${number} dana",
+      "multiple": "Briše se za ${number} dana",
+      "unknown": "Dana do brisanja: ${number}"
+    },
+    "restore": "Vrati",
+    "details": "Prikaži pojedinosti",
+    "moreOptions": "Više opcija",
+    "download": "Preuzmi"
+  },
+  "search": {
+    "searchName": "Pretraži ${searchName}",
+    "searchAllContent": "Pretraži Sav moj sadržaj",
+    "searchAllUserContent": "Pretraži Sav sadržaj od ${username}",
+    "searchGroupsContent": "Pretraži Moje grupe",
+    "searchingGroupsContent": "Pretraživanje Mojih grupa za",
+    "searchFavoritesContent": "Pretraži Moje favorite",
+    "searchOrganizationsContent": "Pretraži Moju organizaciju",
+    "searchLivingAtlasContent": "Pretraži Living Atlas",
+    "searchRecycleCurrentPage": "Pretraži naslove stavki na trenutnoj stranici"
+  },
+  "find": {
+    "find": "Pronađi",
+    "findOnPage": "Pronađi na stranici",
+    "match": "Vraća podudaranja teksta samo za naslove stavki na trenutnoj stranici."
+  },
+  "view": {
+    "view": "Prikaži",
+    "list": "Popis",
+    "grid": "Mreža",
+    "table": "Tablica"
+  }
+}

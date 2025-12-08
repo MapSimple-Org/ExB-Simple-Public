@@ -1,0 +1,10 @@
+{
+  "cannotAssignValueToTargetField": "A számított érték és a mezőtípus nem egyezik.",
+  "createExpression": "Kifejezés létrehozása",
+  "deleteExpression": "Kifejezés törlése",
+  "editExpression": "Kifejezés szerkesztése",
+  "expression": "Kifejezés",
+  "isRequired": "Ez a paraméter kötelező.",
+  "layerLoadError": "A réteg betöltése nem sikerült.",
+  "validationFailedInvalidSQL": "A kifejezés érvényesítése meghiúsult. A kifejezés nem érvényes SQL."
+}

@@ -1,0 +1,30 @@
+{
+  "name": "plateau",
+  "type": "template",
+  "templateType": "full-screen-page",
+  "label": "Plateau",
+  "description": "Plateau is a basic modern app template that features a flat toolbar and widget container at the top of the page.",
+  "thumbnail": "thumbnail.png",
+  "order": 22,
+  "templateCreateVersion": "1.14.0",
+  "tags": [
+    "Map",
+    "Widget Controller",
+    "Panel",
+    "Table",
+    "Search",
+    "Legend",
+    "Sidebar",
+    "Basemap Gallery",
+    "Logo",
+    "Title",
+    "Map Layers"
+  ],
+  "categoriesTags": [
+    "WAB classic",
+    "Fullscreen",
+    "Map centric"
+  ],
+  "thumbnailWidth": 320,
+  "thumbnailHeight": 214
+}

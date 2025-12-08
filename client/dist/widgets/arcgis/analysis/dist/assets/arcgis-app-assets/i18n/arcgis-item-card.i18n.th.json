@@ -1,0 +1,8 @@
+{
+  "select": "เลือกรายการ ${title}",
+  "lastUpdated": "อัปเดตรายการ: ${date}",
+  "viewItemDetails": "ดูรายละเอียด",
+  "preview": "แสดงตัวอย่าง",
+  "closePreview": "ปิดการแสดงตัวอย่าง",
+  "moreOptions": "ตัวเลือกอื่นๆ"
+}

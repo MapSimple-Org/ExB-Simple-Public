@@ -1,0 +1,6 @@
+{
+  "header": "Mulai lagi tanpa menyimpan?",
+  "content": "Anda memiliki perubahan yang belum disimpan di '${rftTitle}'. Jika Anda memulai kembali dengan template baru, perubahan tersebut akan hilang.",
+  "cancel": "Batalkan",
+  "continue": "Terus-menerus (kontinyu)"
+}

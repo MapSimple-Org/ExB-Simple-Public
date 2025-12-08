@@ -1,0 +1,9 @@
+{
+  "addToMap": "Potvrdi i dodaj na mapu",
+  "cancel": "Otkaži",
+  "confirm": "Potvrdi",
+  "header": "Selektujte stavku",
+  "select": "Selektujte",
+  "unsupportedLayer": "Ovaj parametar ne podržava sledeće slojeve: ${layerName}.",
+  "viewDetails": "Prikaži detalje"
+}

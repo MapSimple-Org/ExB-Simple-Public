@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>下流解析ツールでは、指定した入力位置から下流への流路を特定します。
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputLayer">
+        <div>
+            <p>各下流経路の開始位置として使用するポイント フィーチャ。
+            </p>
+            <p class="toolPaneOnly">フィーチャのカウントはフィルター処理条件や解析の範囲などのその他の要因によって異なります。
+            </p>
+        </div>
+    </div>
+    <div id="splitDistance">
+        <div>
+            <p>経路ラインを分割する際の、個々のセグメントの長さ。
+            </p>
+        </div>
+    </div>
+    <div id="splitUnits">
+        <div>
+            <p> <b>[距離の分割]</b> パラメーターで使用する単位。
+            </p>
+        </div>
+    </div>
+    <div id="maxDistance">
+        <div>
+            <p>返される経路ラインの全長。
+            </p>
+        </div>
+    </div>
+    <div id="maxDistanceUnits">
+        <div>
+            <p> <b>[下流解析の最大距離]</b> パラメーターで使用する単位。
+            </p>
+        </div>
+    </div>
+    <div id="boundingPolygonLayer">
+        <div>
+            <p>経路ラインをクリップするエリアを説明するポリゴン フィーチャ レイヤー。
+            </p>
+            <p>このパラメーターは  <b>[下流解析の最大距離]</b> パラメーター値を上書きします。
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>作成され、マップに追加される下流解析経路レイヤーの名前。
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>結果を保存する  <b>[マイ コンテンツ]</b> 内のフォルダーの名前。
+            </p>
+        </div>
+    </div>
+</div>
+</html>

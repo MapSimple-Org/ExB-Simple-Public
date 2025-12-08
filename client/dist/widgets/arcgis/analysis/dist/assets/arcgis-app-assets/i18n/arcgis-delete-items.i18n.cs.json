@@ -1,0 +1,160 @@
+{
+  "deleteItem": "Odstranit položku",
+  "deleteItems": "Odstranit položky",
+  "deleteFolder": "Smazat složku",
+  "recycleBin": "Koš",
+  "delete": "Smazat",
+  "permanentlyDelete": "Trvale odstranit",
+  "next": "Další",
+  "back": "Zpět",
+  "cancel": "Storno",
+  "item": "položka",
+  "items": "položky",
+  "cantDelete": "Následující položky nemohou být smazány, protože jsou chráněny proti smazání nebo k nim jsou připojeny závislé položky.",
+  "proceed": "Pokračovat v mazání zbývajících položek?",
+  "showMore": "Zobrazit více",
+  "showLess": "Zobrazit méně",
+  "deletePermanently": "Trvale odstranit (akci nelze vrátit zpět)",
+  "learnMore": "Další informace",
+  "summary": {
+    "select": "Vybrat",
+    "deselect": "Zrušit výběr",
+    "selectedItems": "Vybrané položky:",
+    "additionalDependentItems": "další závislé položky:",
+    "permanentlyDelete": "Trvale odstranit:",
+    "permanentDelete": {
+      "notSupported": {
+        "single": "Tuto položku koš nepodporuje.",
+        "multiple": "Tyto položky koš nepodporuje."
+      },
+      "unsynchronized": "Nesynchronizované úpravy vrstev prvků ve skupině distribuované spolupráce budou ztraceny.",
+      "notSupportedAndUnsynchronized": "Některé typy položek nejsou podporovány. Nesynchronizované úpravy vrstev prvků ve skupině distribuované spolupráce budou ztraceny.",
+      "group": {
+        "notSupported": "Není podporováno",
+        "distributedCollaboration": "Součást distribuované spolupráce"
+      }
+    },
+    "canBeRecovered": {
+      "single": "Tato položka bude po ${days} dnech trvale odstraněna.",
+      "multiple": "Tyto položky budou trvale odstraněny po ${days} dnech.",
+      "unknown": "Tyto položky budou trvale odstraněny po ${days} dnech."
+    },
+    "includesDependentItems": "Další závislé položky:",
+    "willBeRecycled": "Přesunout do koše:",
+    "cannotDelete": "Nelze smazat:",
+    "deleteDiscouraged": "Odstranění nedoporučeno:",
+    "hasDependentItems": "Má závislé položky:",
+    "replacementItemFor": "Položka nahrazení pro:",
+    "someActionsMayNoLongerWork": {
+      "single": "Pokud tuto položku přesunete do koše, některé akce, které vyžadují přístup ke zdrojové položce, již nemusí fungovat podle očekávání.",
+      "multiple": "Pokud tyto položky přesunete do koše, některé akce, které vyžadují přístup ke zdrojovým položkám, již nemusí fungovat podle očekávání."
+    },
+    "deletePermanently": "Trvale odstranit: ${count} (akci nelze vrátit zpět)",
+    "deleteAllPermanently": "Trvale odstranit všechny položky: ${count} (akci nelze vrátit zpět)",
+    "deleteXPermanently": "Trvale odstranit ${subset} z ${total} položek (akci nelze vrátit zpět)",
+    "unprotectedGroup": {
+      "deleteDiscouraged": {
+        "dependent": "Pokud tuto položku odstraníte, některé akce, které vyžadují přístup ke zdrojové položce, již nemusí fungovat podle očekávání. Určitě chcete položku odstranit?",
+        "replacement": "Tato položka je vybrána jako položka nahrazení. Určitě chcete položku odstranit?",
+        "learnMore": "Další informace o odstraňování zdrojových položek"
+      }
+    },
+    "protectedGroup": {
+      "deleteProtected": "Chráněné proti smazání",
+      "deleteProtectedDescription": "Položky, které jsou chráněny proti smazání, nelze odstranit.",
+      "hasDependentItems": "Má závislé položky",
+      "dependentItems": {
+        "single": "Závislá položka:",
+        "multiple": "Závislé položky:"
+      },
+      "compositeDelete": "Tato položka je závislá na:",
+      "compositeDeleteDescription": "Závislé položky v závislé relaci nelze odstranit bez jejich přidružené zdrojové položky.",
+      "hasDependentItemsDescription": {
+        "singleOneDependentItem": "Tato položka má závislou položku. Musí být odstraněny společně.",
+        "singleMultipleDependentItems": "Tato položka má závislé položky. Musí být odstraněny společně.",
+        "multiple": "Tyto položky mají další položky, které jsou na nich závislé. Musí být odstraněny společně."
+      },
+      "protectedAndDependentDescription": "Položky, které jsou chráněny proti smazání nebo mají závislé položky, nelze odstranit.",
+      "deleteDiscouraged": "Odstranění se nedoporučuje",
+      "deleteDiscouragedDescription": {
+        "single": "Pokud je tato položka odstraněna, mohou závislé položky ztratit některé funkce. Tuto položku můžete odstranit na stránce s podrobnostmi o položce.",
+        "multiple": "Pokud jsou tyto položky odstraněny, mohou závislé položky ztratit některé funkce. Tyto položky můžete odstranit jednotlivě na stránce s podrobnostmi o položce."
+      }
+    }
+  },
+  "willBePermanentlyDeleted": {
+    "single": "Tato položka bude trvale odstraněna, protože ji nepodporuje koš.",
+    "multiple": "Tyto položky budou trvale odstraněny, protože je nepodporuje koš.",
+    "unknown": "Tyto položky budou trvale odstraněny, protože je nepodporuje koš."
+  },
+  "willBePermanentlyDeletedCollaboration": {
+    "single": "Vybraná položka patří do skupiny distribuované spolupráce a nelze ji přesunout do koše. Bude trvale smazána.",
+    "multiple": "Vybrané položky patří do skupiny distribuované spolupráce a nelze je přesunout do koše. Budou trvale odstraněny.",
+    "unknown": "Vybrané položky patří do skupiny distribuované spolupráce a nelze je přesunout do koše. Budou trvale odstraněny."
+  },
+  "areYouSure": {
+    "single": "Určitě chcete tuto položku odstranit?",
+    "multiple": "Určitě chcete tyto položky odstranit?",
+    "unknown": "Určitě chcete tyto položky odstranit?"
+  },
+  "areYouSureRecycle": {
+    "single": "Tato položka zůstane v koši ${days} dní, než bude trvale odstraněna.",
+    "multiple": "Tyto položky zůstanou v koši ${days} dní, než budou trvale odstraněny.",
+    "unknown": "Tyto položky zůstanou v koši ${days} dní, než budou trvale odstraněny."
+  },
+  "areYouSurePermanent": {
+    "single": "Opravdu chcete tuto položku trvale odstranit? Tuto položku nelze po trvalém odstranění obnovit.",
+    "multiple": "Opravdu chcete tyto položky trvale odstranit? Tyto položky nelze po trvalém odstranění obnovit.",
+    "unknown": "Opravdu chcete tyto položky trvale odstranit? Tyto položky nelze po trvalém odstranění obnovit."
+  },
+  "deletes": {
+    "single": "Smaže se za ${days} dnů",
+    "multiple": "Smaže se za ${days} dnů",
+    "unknown": "Počet dnů do smazání: ${days}"
+  },
+  "deleteOverride": {
+    "single": "Opravdu chcete tuto položku trvale odstranit? Tuto položku nelze po trvalém odstranění obnovit.",
+    "multiple": "Opravdu chcete tyto položky trvale odstranit? Tyto položky nelze po trvalém odstranění obnovit."
+  },
+  "restore": {
+    "restore": "Obnovit",
+    "restoreTo": "Obnovit do",
+    "restoreItem": "Obnovit položku",
+    "restoreItems": "Obnovit položky",
+    "noticeMessage": "Obnovené položky nebudou sdíleny. Před dalším sdílením si obsah zkontrolujte.",
+    "cannotBulkRestoreXItems": "${number} položek nelze hromadně obnovit, zrušte výběr několika položek.",
+    "cannotBulkRestoreMultipleOwners": "Nelze hromadně obnovit položky, které patří různým vlastníkům. K hromadnému obnovení vyberte položky s jedním vlastníkem.",
+    "toRestore": {
+      "single": "Položka k obnovení:",
+      "multiple": "Položky k obnovení:"
+    },
+    "cannotRestore": "Nelze obnovit:",
+    "dependentItems": {
+      "single": "Tato položka nemůže být obnovena, protože je závislá na <b>${parent}</b>. Obnovte je společně.",
+      "multiple": "Tyto položky nelze obnovit, protože jsou závislé na jiných položkách v koši. Obnovte je společně: "
+    }
+  },
+  "onboarding": {
+    "checkItOut": "Potřebujete obnovit nechtěně smazanou položku? Vyzkoušejte nový koš!",
+    "takeALook": "Podívejte se, co umí nový koš!",
+    "learnMore": "Další informace o obnově smazaných položek",
+    "heldInRecycleBin": "Položky v koši budou trvale odstraněny po ${days} dnech.",
+    "goToUserRecycleBin": "Přejděte do ${linkStart}koše${linkEnd}, chcete-li položky obnovit nebo je trvale odstranit.",
+    "goToOrgRecycleBin": "Přejděte do ${linkStart}koše organizace${linkEnd}, chcete-li položky obnovit nebo je trvale odstranit. Obsah v koši nadále spotřebovává kredity."
+  },
+  "pageRangeWithTotalRecycleBinSize": {
+    "en": "${start} – ${end} z ${total} (${size}) v koši",
+    "other": "${start} – ${end}, celkem: ${total} (${size}) v koši"
+  },
+  "pageRangeWithGreaterThanTotalRecycleBinSize": {
+    "en": "${start} – ${end} z ${total} (>${size}) v koši",
+    "other": "${start} – ${end}, celkem: ${total} (>${size}) v koši"
+  },
+  "compositeDeleteDisclaimer": {
+    "oneToOne": "Položka <strong>${item}</strong> má závislou položku <strong>${dependentItem}</strong>, kterou je nutné odstranit spolu s ní.",
+    "oneToMany": "Položka <strong>${item}</strong> má závislé položky, které je nutné odstranit spolu s ní.",
+    "manyToMany": "Některé vybrané položky mají závislé položky, které je nutné odstranit spolu s nimi.",
+    "additional": "Další položky:",
+    "dependentOn": "Závislé na"
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "defaultValue": "Nepalaikomas parametro tipas. Bus naudojama numatytoji reikšmė. <calcite-link target='_blank' href='${ docLink }'>Sužinokite daugiau </calcite-link>",
+  "requiredMessage": "Šis parametras yra būtinas.",
+  "unsupportedGPType": "Nepalaikomas parametro tipas. <calcite-link target='_blank' href='${ docLink }'>Sužinokite daugiau </calcite-link>",
+  "unsupportedParameterConfig": "Nepalaikoma parametro konfigūracija. <calcite-link target='_blank' href='${ docLink }'>Sužinokite daugiau </calcite-link>",
+  "unsupportedParameterConfigDefaultValue": "Nepalaikoma parametro konfigūracija. Bus naudojama numatytoji reikšmė. <calcite-link target='_blank' href='${ docLink }'>Sužinokite daugiau </calcite-link>"
+}

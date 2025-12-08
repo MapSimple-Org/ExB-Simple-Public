@@ -1,0 +1,13 @@
+{
+  "header": "Förhandsgranska",
+  "description": "Förhandsgranska resultatet innan du kör analysen.",
+  "showPreview": "Visa förhandsgranskning",
+  "previewLayer": "Förhandsgranska lager ${number}",
+  "update": "Uppdatera",
+  "newPreview": "Ny förhandsgranskning",
+  "previewPopup": "Aktivera förhandsgranskningen av analysresultaten baserat på indataparametrarna.",
+  "previewError": "Detta förhandsvisningslager är ej tillgängligt. Kontrollera indataparametrarna och uppdatera det här förhandsvisningslagret igen.",
+  "updatePopover": "Uppdatera valt förhandsvisningslager",
+  "createPopover": "Skapa nytt förhandsvisningslager",
+  "maxPreview": "Högsta antal tillåtna förhandsvisningslager: ${maxCount}"
+}

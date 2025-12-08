@@ -1,0 +1,17 @@
+{
+  "any": "Qualsevol",
+  "count": "Recompte",
+  "field": "Camp",
+  "fieldLoadingErrorText": "No es poden carregar els camps.",
+  "first": "Primer",
+  "isRequired": "Aquest paràmetre és obligatori.",
+  "last": "Últim",
+  "max": "Màx.",
+  "mean": "Valor mitjà",
+  "min": "Mín.",
+  "selectAll": "Selecciona-ho tot",
+  "standardDeviation": "Desviació estàndard",
+  "statistic": "Estadística",
+  "statisticNotSelected": "Cal almenys un tipus d'estadística per a cada camp.",
+  "sum": "Suma"
+}

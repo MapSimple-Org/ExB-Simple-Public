@@ -1,0 +1,6 @@
+{
+  "description": "Açıklama",
+  "addDescription": "Bir açıklama ekleyin",
+  "charactersLeft": "Kalan karakter: ${num}",
+  "invalid": "Açıklama şu karakterlerden herhangi birini içeremez: < veya >."
+}

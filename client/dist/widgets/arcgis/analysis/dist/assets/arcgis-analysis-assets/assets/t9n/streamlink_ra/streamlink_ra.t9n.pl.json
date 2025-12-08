@@ -1,0 +1,9 @@
+{
+  "inputFlowDirectionRasterLabel": "Wejściowy raster kierunku przepływu",
+  "inputLayerGroupText": "Wybierz strumień wejściowy i rastry kierunku przepływu.",
+  "inputStreamRasterLabel": "Wejściowy raster strumieniowy",
+  "itemProperties": {
+    "description": "Dane wynikowe wygenerowane przy użyciu narzędzia analizy StreamLink.",
+    "snippet": "Dane wynikowe wygenerowane przy użyciu narzędzia StreamLink"
+  }
+}

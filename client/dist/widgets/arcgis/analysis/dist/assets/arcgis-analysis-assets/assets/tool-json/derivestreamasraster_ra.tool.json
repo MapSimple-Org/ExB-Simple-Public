@@ -1,0 +1,114 @@
+{
+  "name": "DeriveStreamAsRaster",
+  "displayName": "DeriveStreamAsRaster",
+  "description": "Generates stream raster from an input surface raster with no prior sink or depression filling required.",
+  "category": "",
+  "helpUrl": "https://rasteranalysisdev.arcgis.com/arcgis/rest/directories/arcgisoutput/RasterAnalysisTools_GPServer/System_RasterAnalysisTools/DeriveStreamAsRaster.htm",
+  "executionType": "esriExecutionTypeAsynchronous",
+  "parameters": [
+    {
+      "name": "inputSurfaceRaster",
+      "dataType": "GPString",
+      "displayName": "inputSurfaceRaster",
+      "description": "",
+      "direction": "esriGPParameterDirectionInput",
+      "defaultValue": "",
+      "parameterType": "esriGPParameterTypeRequired",
+      "category": ""
+    },
+    {
+      "name": "outputStreamRasterName",
+      "dataType": "GPString",
+      "displayName": "outputStreamRasterName",
+      "description": "",
+      "direction": "esriGPParameterDirectionInput",
+      "defaultValue": "",
+      "parameterType": "esriGPParameterTypeRequired",
+      "category": ""
+    },
+    {
+      "name": "inputDepressionsData",
+      "dataType": "GPString",
+      "displayName": "inputDepressionsData",
+      "description": "",
+      "direction": "esriGPParameterDirectionInput",
+      "defaultValue": "",
+      "parameterType": "esriGPParameterTypeOptional",
+      "category": ""
+    },
+    {
+      "name": "inputWeightRaster",
+      "dataType": "GPString",
+      "displayName": "inputWeightRaster",
+      "description": "",
+      "direction": "esriGPParameterDirectionInput",
+      "defaultValue": "",
+      "parameterType": "esriGPParameterTypeOptional",
+      "category": ""
+    },
+    {
+      "name": "accumulationThreshold",
+      "dataType": "GPComposite",
+      "displayName": "accumulationThreshold",
+      "description": "",
+      "direction": "esriGPParameterDirectionInput",
+      "defaultValue": {
+        "dataType": "GPArealUnit",
+        "value": null
+      },
+      "parameterType": "esriGPParameterTypeOptional",
+      "category": "",
+      "parameterInfos": [
+        {
+          "name": "",
+          "dataType": "GPArealUnit",
+          "displayName": ""
+        },
+        {
+          "name": "",
+          "dataType": "GPString",
+          "displayName": ""
+        }
+      ]
+    },
+    {
+      "name": "streamDesignationMethod",
+      "dataType": "GPString",
+      "displayName": "streamDesignationMethod",
+      "description": "",
+      "direction": "esriGPParameterDirectionInput",
+      "defaultValue": "",
+      "parameterType": "esriGPParameterTypeOptional",
+      "category": ""
+    },
+    {
+      "name": "forceFlow",
+      "dataType": "GPBoolean",
+      "displayName": "forceFlow",
+      "description": "",
+      "direction": "esriGPParameterDirectionInput",
+      "parameterType": "esriGPParameterTypeOptional",
+      "category": ""
+    },
+    {
+      "name": "context",
+      "dataType": "GPString",
+      "displayName": "context",
+      "description": "",
+      "direction": "esriGPParameterDirectionInput",
+      "defaultValue": "",
+      "parameterType": "esriGPParameterTypeOptional",
+      "category": ""
+    },
+    {
+      "name": "outputStreamRaster",
+      "dataType": "GPString",
+      "displayName": "outputStreamRaster",
+      "description": "",
+      "direction": "esriGPParameterDirectionOutput",
+      "defaultValue": "",
+      "parameterType": "esriGPParameterTypeDerived",
+      "category": ""
+    }
+  ]
+}

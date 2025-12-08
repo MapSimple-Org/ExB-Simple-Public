@@ -1,0 +1,22 @@
+{
+  "value": "Valor",
+  "classname": "ClassName",
+  "color": "Color",
+  "raster": "Ràster",
+  "tableType": "Tipus de taula",
+  "manual": "Manual",
+  "external": "Extern",
+  "browseTable": "Navegueu per la taula",
+  "browseTableFrom": "Navega per la taula des de",
+  "file": "Fitxer",
+  "dbfFile": "Fitxer DBF",
+  "layer": "Capa",
+  "unsupportedDataType": "Tipus no compatible",
+  "failedToGetTableFromLayer": "No s'ha pogut obtenir la taula de la capa.",
+  "generate": "Genera la taula",
+  "minValue": "Valor mínim",
+  "maxValue": "Valor màxim",
+  "classBaseName": "Nom de base de la classe",
+  "colorscheme": "Esquema de colors",
+  "defaultClassName": "Label_"
+}

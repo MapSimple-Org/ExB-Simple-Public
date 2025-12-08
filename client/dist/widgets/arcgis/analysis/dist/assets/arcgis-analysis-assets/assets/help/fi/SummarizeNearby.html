@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>Yhteenveto, l&auml;hist&ouml; -ty&ouml;kalu laskee tilastotiedot kohteille, jotka ovat m&auml;&auml;ritetyll&auml; et&auml;isyydell&auml; muista kohteista. Et&auml;isyyden voi laskea k&auml;ytt&auml;m&auml;ll&auml; suoraa et&auml;isyytt&auml; tai matkustustapaa.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="summaryLayer">
+        <div>
+            <p>Karttataso, josta tehd&auml;&auml;n yhteenveto l&auml;hist&ouml;karttatason et&auml;isyydell&auml;.
+            </p>
+            <p class="toolPaneOnly">Kohteiden m&auml;&auml;r&auml; riippuu ylim&auml;&auml;r&auml;isist&auml; tekij&ouml;ist&auml;, kuten suodatusehdoista ja analyysin laajuudesta.
+            </p>
+        </div>
+    </div>
+    <div id="sumNearbyLayer">
+        <div>
+            <p>Piste-, viiva- tai aluekarttataso, joita k&auml;ytet&auml;&auml;n aloitussijainteina, joiden ymp&auml;rille luodaan rajaavat alueet l&auml;hist&ouml;ll&auml; olevien kohteiden yhteenvetoa varten.
+            </p>
+            <p class="toolPaneOnly">Kohteiden m&auml;&auml;r&auml; riippuu ylim&auml;&auml;r&auml;isist&auml; tekij&ouml;ist&auml;, kuten suodatusehdoista ja analyysin laajuudesta.
+            </p>
+        </div>
+    </div>
+    <div id="nearType">
+        <div>
+            
+            <p class="toolPaneOnly">Menetelm&auml;, jota k&auml;ytet&auml;&auml;n rajaavien alueiden luomiseen. Menetelm&auml; voi olla suoraviivainen et&auml;isyys tai matkustustapa.
+            </p> 
+            <p class="modelBuilderOnly">Menetelm&auml;, jota k&auml;ytet&auml;&auml;n rajaavien alueiden luomiseen. T&auml;ll&auml; hetkell&auml; suoraviivainen et&auml;isyys on ainoa menetelm&auml;, jota tuetaan malleissa.
+            </p>
+        </div>
+    </div>
+    <div id="distances">
+        <div>
+            <p>Et&auml;isyys tai aika, jota k&auml;ytet&auml;&auml;n rajaavien alueiden luomiseen. Jos useita arvoja lis&auml;t&auml;&auml;n, jokaista arvoa k&auml;ytet&auml;&auml;n rajaavien alueiden laskentaan kaikissa l&auml;ht&ouml;aineiston kohteissa.
+            </p>
+        </div>
+    </div>
+    <div id="units">
+        <div>
+            <p>Yksik&ouml;t, joita k&auml;ytet&auml;&auml;n et&auml;isyyden tai ajan m&auml;&auml;ritt&auml;miseen.
+            </p>
+        </div>
+    </div>
+    <div id="returnBoundaries">
+        <div>
+            <p>M&auml;&auml;rit&auml;, pit&auml;&auml;k&ouml; tuloskarttatason olla rajaavat alueet (valittu) vai sama geometria kuin l&auml;ht&ouml;aineiston l&auml;hist&ouml;karttataso (ei valittu).
+            </p>
+        </div>
+    </div>
+    <div id="sumShape">
+        <div>
+            <p>M&auml;&auml;ritt&auml;&auml;, lasketaanko kullakin rajaavalla alueella yhteenvedettyjen kohteiden yhteiskoko. Viivoille lasketaan kokonaispituus. Alueille lasketaan kokonaispinta-ala.
+            </p>
+        </div>
+    </div>
+    <div id="shapeUnits">
+        <div>
+            <p>Yksik&ouml;t, joita k&auml;ytet&auml;&auml;n yhteenvedettyjen kohteiden yhteenlasketun koon laskentaan.
+            </p>
+        </div>
+    </div>
+    <div id="summaryFields">
+        <div>
+            <p>L&auml;ht&ouml;aineiston karttatason numero- tai p&auml;iv&auml;m&auml;&auml;r&auml;kent&auml;t, joista lasketaan yhteenveto, ja jokaisesta kent&auml;st&auml; laskettavat tilastotiedot.
+            </p>
+        </div>
+    </div>
+    <div id="groupByField">
+        <div>
+            <p>L&auml;ht&ouml;aineiston karttatason kentt&auml;, jonka perusteella aineisto erotetaan erillisiksi ryhmiksi tilastolaskentaa varten.
+            </p>
+        </div>
+    </div>
+    <div id="minorityMajority">
+        <div>
+            <p>M&auml;&auml;ritt&auml;&auml;, lasketaanko kunkin yhteenvetoalueen v&auml;hemmist&ouml;- (v&auml;hiten hallitsevat) ja enemmist&ouml;ryhm&auml;t (hallitsevimmat).
+            </p>
+        </div>
+    </div>
+    <div id="percentShape">
+        <div>
+            <p>M&auml;&auml;ritt&auml;&auml;, lasketaanko kuhunkin ryhm&auml;&auml;n kuuluvien yhteenvedettyjen kohteiden prosenttiosuus kunkin rajan sis&auml;ll&auml;.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>Karttaan luotavan ja lis&auml;tt&auml;v&auml;n karttatason nimi.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>Sen  <b>Omassa sis&auml;ll&ouml;ss&auml;</b> olevan kansion nimi, johon tulokset tallennetaan.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

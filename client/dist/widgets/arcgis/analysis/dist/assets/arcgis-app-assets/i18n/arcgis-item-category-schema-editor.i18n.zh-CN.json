@@ -1,0 +1,36 @@
+{
+  "modalHeader": "配置内容类别",
+  "modalGroupHeader": "配置群组类别",
+  "helpText": "在组织中对类别进行编辑、删除或重新排序。",
+  "helpTextGroup": "编辑、删除或重新排列此群组中的内容类别。",
+  "helpTextDescription": "请记住，组织中的其他成员可能已将这些类别分配给他们的项目、编辑该方案会相应地更新这些项目",
+  "helpTextGroupDescription": "请记住，组织中的其他成员可能已将这些类别分配给他们的项目、编辑该方案会相应地更新这些项目",
+  "warning": {
+    "deleteInUseCategory": {
+      "title": "删除类别",
+      "cta": "删除类别",
+      "message": {
+        "single": "一个项目将分配给此类别。 删除此类别也会将其从该项目中删除。",
+        "multiple": "${number} 个项目将分配给此类别。 删除此类别也会将其从这些项目中删除。",
+        "unknown": "已分配给此类别的项目：${number}。 删除此类别也会将其从这些项目中删除。"
+      }
+    },
+    "changeTitleInUseCategory": {
+      "title": "更新类别",
+      "message": {
+        "single": "一个项目将分配给此类别。 更新类别将更新使用“${newTitle}”的项目。",
+        "multiple": "${number} 个项目将分配给此类别。 更新类别将更新使用“${newTitle}”的项目。",
+        "unknown": "已分配给此类别的项目：${number}。 更新类别将更新使用“${newTitle}”的项目。"
+      },
+      "cta": "更新类别"
+    }
+  },
+  "template": {
+    "templateList": {
+      "custom": {
+        "message": "创建您自己的类别以组织您组织中的内容。",
+        "messageGroup": "创建您自己的类别，以组织此群组中的内容。"
+      }
+    }
+  }
+}

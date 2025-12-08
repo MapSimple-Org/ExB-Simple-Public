@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>&ldquo;对表格中的位置进行地理编码&rdquo;工具用于将输入表或文件中的地址或地点转换为坐标。
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputType">
+        <div>
+            <p>指定输入将为表格项目（ <b>托管表格</b>），还是 <code>.csv</code> 或 Excel 文件 (<b>CSV/Excel</b>)。
+            </p>
+        </div>
+    </div>
+    <div id="inputFileItem">
+        <div>
+            <p>包含要进行地理编码的地址或地点的输入文件。 输入必须为托管  <code>.csv</code> 或 Excel 文件。 </p>
+        </div>
+    </div>
+    <div id="inputTable">
+        <div>
+            <p>包含要进行地理编码的地址或地点的输入表。 输入必须为托管表格项目。
+            </p>
+            <p>要素计数将显示在表格名称下方。 计数将包含表格中的所有要素，但已使用过滤器移除的要素除外。
+            </p>
+        </div>
+    </div>
+    <div id="geocodeServiceURL">
+        <div>
+            <p>将用于地理编码的定位器服务。 如果下拉菜单中没有您希望使用的定位器服务，请联系您的管理员将定位器服务添加为实用程序服务。
+            </p>
+        </div>
+    </div>
+    <div id="singleOrMultiFieldSwitch">
+        <div>
+            <p>指定输入数据是包含在单个字段中还是多个字段中。
+            </p>
+        </div>
+    </div>
+    <div id="geocodeUIParameters">
+        <div>
+            <p>定位器要用于确定数据位置的字段。 某些字段需要位于数据中，例如地址、城市、州和邮政编码。
+            </p>
+        </div>
+    </div>
+    <div id="sourceCountry">
+        <div>
+            <p>数据所在的国家/地区。 如果所有地址均来自同一国家/地区，请选择该国家/地区名称以确保获得最精确的结果。 否则，请将此参数留空。
+            </p>
+        </div>
+    </div>
+    <div id="outputFields">
+        <div>
+            <p>指定要包含在输出数据集中的字段。 选项如下：
+            </p>
+            <ul>
+                <li> <b>全部</b> - 将在地理编码结果中包含所有可用定位器输出字段。
+                </li>
+                <li> <b>最低</b> - 将在结果中包含定位器中的一部分字段以及输入表中的字段。
+                </li>
+                <li> <b>仅位置</b> - 将在结果中包含定位器中的 <i>Shape</i> 字段以及输入表中的字段。
+                </li>
+            </ul>
+            
+        </div>
+    </div>
+    <div id="outputType">
+        <div>
+            <p>要创建的输出的类型。 输出可以为要素服务、 <code>.csv</code> 文件或 <code>.xls</code> 文件。
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>将在 <b>我的内容</b>中创建的图层或文件的名称。
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p> <b>我的内容</b>中要保存结果的文件夹名称。
+            </p>
+        </div>
+    </div>
+</div>
+</html>

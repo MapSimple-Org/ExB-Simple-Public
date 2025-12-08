@@ -1,0 +1,7 @@
+{
+  "searchMembers": "Cari anggota",
+  "selectUser": "Pilih pengguna",
+  "editSelection": "Edit pengguna yang dipilih. Dipilih saat ini: ${name}",
+  "clear": "Hapus",
+  "members": "Anggota"
+}

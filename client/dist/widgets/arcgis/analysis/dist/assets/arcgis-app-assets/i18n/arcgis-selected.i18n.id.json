@@ -1,0 +1,8 @@
+{
+  "selected": "Terpilih:${number}",
+  "selectPage": "Pilih halaman",
+  "selectAll": "Pilih semua",
+  "deselect": "Batalkan semua pilihan",
+  "selectingAll": "Memilih semua",
+  "clearAll": "Hapus semua"
+}

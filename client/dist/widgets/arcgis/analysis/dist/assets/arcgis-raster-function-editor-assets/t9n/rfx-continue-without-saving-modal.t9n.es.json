@@ -1,0 +1,6 @@
+{
+  "header": "¿Empezar de nuevo sin guardar?",
+  "content": "Hay cambios sin guardar en \"${rftTitle}\". Si vuelve a empezar con una plantilla nueva, esos cambios se perderán.",
+  "cancel": "Cancelar",
+  "continue": "Continuar"
+}

@@ -1,0 +1,22 @@
+{
+  "general": "常规",
+  "parameters": "参数",
+  "variables": "变量",
+  "name": "名称",
+  "namePlaceHolder": "输入名称",
+  "description": "描述",
+  "parameter": "参数",
+  "isPublic": "IsPublic",
+  "isDataset": "IsDataset",
+  "unknownPixelType": "未知",
+  "outputPixelType": "输出像素类型",
+  "u8PixelType": "8 位无符号",
+  "s8PixelType": "8 位有符号",
+  "u16PixelType": "16 位无符号",
+  "s16PixelType": "16 位有符号",
+  "u32PixelType": "32 位无符号",
+  "s32PixelType": "32 位有符号",
+  "f32PixelType": "32 位浮点型",
+  "f64PixelType": "64 位双精度型",
+  "properties": "属性"
+}

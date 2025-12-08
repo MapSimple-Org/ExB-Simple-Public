@@ -1,0 +1,9 @@
+{
+  "inputFlowDirectionRasterLabel": "إدخال اتجاه تدفق البيانات النقطية",
+  "inputLayerGroupText": "اختر البيانات النقطية للتدفقات المدخلة واتجاه التدفق",
+  "inputStreamRasterLabel": "إدخال دفق البيانات النقطية",
+  "itemProperties": {
+    "description": "المخرجات الناتجة من تنفيذ أداة تحليل StreamLink.",
+    "snippet": "المخرجات الناتجة عن StreamLink"
+  }
+}

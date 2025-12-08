@@ -1,0 +1,13 @@
+{
+  "addField": "Aggiungi campo",
+  "deselectAll": "Deseleziona tutto",
+  "done": "Completato",
+  "noFieldsAvailable": "${layerName} non contiene campi che soddisfano il requisito del tipo di dati. Seleziona un layer diverso per continuare.",
+  "noInputSelected": {
+    "withLayerInputLabel": "Nessun layer di input selezionato. Seleziona un layer in ${layerInputLabel} per continuare.",
+    "withoutLayerInputLabel": "Nessun layer di input selezionato. Seleziona un layer di input per continuare."
+  },
+  "noSearchResults": "Non sono stati trovati campi corrispondenti.",
+  "selectAll": "Seleziona tutto",
+  "summaryFieldsPopover": "Campi sommario"
+}

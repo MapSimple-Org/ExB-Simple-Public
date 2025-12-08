@@ -1,0 +1,12 @@
+{
+  "classField": "Klassefelt",
+  "classesAsRowsLabel": "Klasser som rader i utdatatabell",
+  "inputClassRasterOrFeatures": "Inndataklasserastere eller geoobjekter",
+  "inputLayerGroupText": "Velg inndatasone og klasselag for å beregne de krysstabulerte arealene mellom de to datasettene.",
+  "itemProperties": {
+    "description": "Utdatatabell generert ved kjøring av analyseverktøyet Tabuler areal.",
+    "snippet": "Tabell generert fra Tabuler areal"
+  },
+  "tabulateAreaSettingsGroupLabel": "Innstillinger for tabulering av areal",
+  "tabulateAreaSettingsGroupText": "Velg hvordan klassene i utdatatabellen skal håndteres. Spesifiser cellestørrelsen som skal beregnes. "
+}

@@ -1,0 +1,32 @@
+{
+  "layersConfig": [],
+  "mapViewsConfig": {},
+  "tableMode": "MAP",
+  "respectMapRange": false,
+  "arrangeType": "TABS",
+  "pagingStyle": "SCROLL",
+  "pageSize": 50,
+
+  "enableRelatedRecords": false,
+  "enableAttachments": false,
+  "columnSetting": {
+    "responsiveType": "FIXED",
+    "columnWidth": 200,
+    "wrapText": false,
+    "textAlign": "start"
+  },
+  "headerFontSetting": {
+    "backgroundColor": "",
+    "fontSize": 14,
+    "bold": false,
+    "color": ""
+  },
+  "enableSelect": true,
+  "selectMode": "SINGLE",
+  "enableRefresh": true,
+  "enableDelete": false,
+  "enableShowHideColumn": true,
+  "showCount": true,
+  "enableMapExtentFilter": true,
+  "defaultExtentFilterEnabled": false
+}

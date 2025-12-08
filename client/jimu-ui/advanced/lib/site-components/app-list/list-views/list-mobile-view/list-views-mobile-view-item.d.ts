@@ -1,0 +1,4 @@
+import { ListViewsAction } from '../list-views-action';
+export declare class ListViewsMobileViewItem extends ListViewsAction {
+    render(): import("@emotion/react/jsx-runtime").JSX.Element;
+}

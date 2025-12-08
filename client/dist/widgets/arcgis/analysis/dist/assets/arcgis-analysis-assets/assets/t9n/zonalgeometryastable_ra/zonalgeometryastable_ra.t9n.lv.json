@@ -1,0 +1,9 @@
+{
+  "inputLayerGroupText": "Izvēlieties ievades slāni, lai aprēķinātu zonas robežu ģeometriju.",
+  "itemProperties": {
+    "description": "Izvades tabula, kas ir ģenerēta, palaižot Zonālo ģeometriju kā Tabulas analīzes rīku.",
+    "snippet": "Izvades tabula ir ģenerēta, izmantojot Zonālo ģeometriju kā Tabulu"
+  },
+  "zonalGeometrySettingGroupLabel": "Zonālās ģeometrijas rīka uzstādījums",
+  "zonalGeometrySettingGroupText": "Norādiet aprēķināmo šūnas izmēru."
+}

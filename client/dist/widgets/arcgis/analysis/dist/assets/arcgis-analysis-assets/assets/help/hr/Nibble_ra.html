@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>Alat Nibble zamjenjue ćelije rastera koje odgovaraju maski vrijedno&scaron;ću najbližeg susjeda.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputRaster">
+        <div>
+            <p>Ulazni raster s maskiranim lokacijama koje će biti zamijenjene vrijedno&scaron;ću svog najbližeg susjeda.
+            </p>
+        </div>
+    </div>
+    <div id="inputMaskRaster">
+        <div>
+            <p>Raster maske koji identificira lokacije u ulaznom rasteru koje će biti zamijenjene. Smatra se da su ćelije s vrijedno&scaron;ću bez podataka unutar maskiranog područja.
+            </p>
+        </div>
+    </div>
+    <div id="inputZoneRaster">
+        <div>
+            <p>Zona ulaznog rastera. Za svaku zonu, ulazne ćelije koje su unutar maske bit će zamijenjene samo najbližim vrijednostima ćelija unutar te iste zone.
+            </p>
+        </div>
+    </div>
+    <div id="nibbleValues">
+        <div>
+            <p>Određuje mogu li ćelije bez podataka u ulaznom rasteru zamijeniti ćelije u maskiranim područjima ako su one najbliže.
+            </p>
+            <p>Ako je označeno, ćelije bez podataka u ulaznom rasteru mogu zamijeniti ćelije u maskiranom području. Ako nije označeno, samo važeće ćelije u ulaznom rasteru mogu zamijeniti ćelije u maskiranom području.
+            </p>
+        </div>
+    </div>
+    <div id="nibbleNodata">
+        <div>
+            <p>Određuje hoće li ćelije bez podataka u maskiranom području biti održane ili zamijenjene.
+            </p>
+            <p>Ako nije označeno, sve ćelije koje su bez podataka unutar maskiranog područja bit će zadržane u izlazu. Ako je označeno, ćelije bez podataka unutar maskiranog područja bit će zamijenjene vrijedno&scaron;ću najbliže susjedne ćelije koja je izvan maskiranog područja.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>Naziv zamijenjenog rasterskog sloja koji će se izraditi i dodati na kartu.
+            </p>
+        </div>
+    </div>
+    <div id="resultType">
+        <div>
+            <p>Vrsta izlaza koji će se stvoriti. Izlaz može biti sloj s pločastom slikom ili sloj s dinamičnom slikom.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>Naziv mape u opciji  <b>Moj sadržaj</b> gdje će se spremiti rezultati.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

@@ -1,0 +1,27 @@
+{
+  "hosted": "호스팅",
+  "hostedView": "호스팅, 뷰",
+  "hostedPhotos": "호스팅, 사진",
+  "hostedCollection": "호스팅, 컬렉션",
+  "hostedMultidimensional": "호스팅, 다차원",
+  "hostedCollectionMultidimensional": "호스팅, 컬렉션, 다차원",
+  "collectionMultidimensional": "컬렉션, 다차원",
+  "multidimensional": "다차원",
+  "collection": "컬렉션",
+  "photoLocations": "사진",
+  "locatorView": "조회수",
+  "utilityNetwork": "유틸리티 네트워크",
+  "Integrated Mesh": "통합 메시",
+  "3D Object": "3D 객체",
+  "Point": "포인트",
+  "Point Cloud": "포인트 클라우드",
+  "Building Scene Layer": "건물 씬 레이어",
+  "Voxel Scene Layer": "복셀 씬 레이어",
+  "dataStore": {
+    "bigdata": "빅데이터 파일 공유",
+    "cloud": "클라우드",
+    "cloudStorage": "클라우드 저장소",
+    "database": "데이터베이스",
+    "folder": "폴더"
+  }
+}

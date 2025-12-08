@@ -1,0 +1,12 @@
+{
+  "choiceList": "Izvēles saraksts",
+  "choiceListBadInput": "Ievades vērtība satur nederīgu ierakstu.",
+  "comboboxPlaceholderText": "Izvēlēties opciju...",
+  "inputPlaceholderText": "Ievadiet vērtību",
+  "invalidCharacterError": "Ievades vērtība satur nederīgas rakstzīmes.",
+  "maxLengthError": "Ievades vērtība nedrīkst pārsniegt ${maxLength} rakstzīmes.",
+  "minLengthError": "Ievades vērtība nedrīkst būt īsāka par ${minLength} rakstzīmēm.",
+  "multiSelectComboboxPlaceholderText": "Atlasiet vienu vai vairākas opcijas...",
+  "requiredError": "Šis parametrs ir obligāts.",
+  "selectAll": "Izvēlēties visu"
+}

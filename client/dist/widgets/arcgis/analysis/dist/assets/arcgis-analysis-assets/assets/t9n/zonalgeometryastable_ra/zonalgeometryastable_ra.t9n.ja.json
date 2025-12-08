@@ -1,0 +1,9 @@
+{
+  "inputLayerGroupText": "ゾーン境界のジオメトリを計算する入力レイヤーを選択します。",
+  "itemProperties": {
+    "description": "ゾーンのジオメトリをテーブルに出力 (Zonal Geometry As Table) 解析ツールを実行して生成された出力テーブル。",
+    "snippet": "ゾーンのジオメトリをテーブルに出力 (Zonal Geometry As Table) から生成された出力テーブル"
+  },
+  "zonalGeometrySettingGroupLabel": "ゾーンのジオメトリの設定",
+  "zonalGeometrySettingGroupText": "計算するセル サイズを指定します。"
+}

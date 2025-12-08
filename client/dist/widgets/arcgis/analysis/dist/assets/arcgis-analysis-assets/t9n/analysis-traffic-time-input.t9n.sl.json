@@ -1,0 +1,8 @@
+{
+  "arriveTime": "Čas prihoda",
+  "modes": {
+    "custom": "Datum in čas po meri",
+    "now": "Zdaj",
+    "unspecified": "Nedoločen čas"
+  }
+}

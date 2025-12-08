@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>Инструментът Обогатяване на слой подобрява входните данни с демографски и пейзажни данни.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputLayer">
+        <div>
+            <p>Обектите на точката, линията или полигона, които ще бъдат обогатени с допълнителни данни.
+            </p>
+            <p class="toolPaneOnly">Броят на обектите зависи от допълнителни фактори, като например критериите за филтриране и обхвата за анализ.
+            </p>
+        </div>
+    </div>
+    <div id="analysisVariables">
+        <div>
+            <p>Променливите, които ще бъдат добавени като атрибути към входните данни.
+            </p>
+        </div>
+    </div>
+    <div id="bufferType">
+        <div>
+            
+            <p class="toolPaneOnly">Методът, който ще се използва за създаване на ограничаващите области около въведените точкови или линейни обекти. Методът може да бъде разстояние по права линия или режим на пътуване. Цялата зона около всеки елемент ще бъде обогатена.
+            </p> 
+            <p class="modelBuilderOnly">Методът, който ще се използва за създаване на ограничаващите области около въведените точкови или линейни обекти. Понастоящем разстоянието по права линия е единственият метод, който се поддържа за моделите. Цялата зона около всеки елемент ще бъде обогатена.
+            </p>
+        </div>
+    </div>
+    <div id="distance">
+        <div>
+            <p>Цифрова стойност, която определя разстоянието или времето, за което обогатената област ще се разшири около всички входни данни.
+            </p>
+        </div>
+    </div>
+    <div id="units">
+        <div>
+            <p>Мерните единици, които ще се използват за указване на разстоянието или времето, което обогатената област ще се простира около всички входни данни.
+            </p>
+        </div>
+    </div>
+    <div id="returnBoundaries">
+        <div>
+            <p>Указва дали изходният слой ще съдържа полигонови обекти, дефинирани от настройките на  <b>зоните за обогатяване</b> (отметнати) или входните данни (неотметнати).
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>Името на слоя, който ще бъде създаден и добавен към картата.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>Името на папка в  <b>Моето съдържание</b>, където резултатите ще бъдат запазени.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

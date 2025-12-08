@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>Verktyget Planera rutter skapar resrutter med flera stopp f&ouml;r en fordonsflotta.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="startLayer">
+        <div>
+            <p>De punktgeoobjekt som anger var fordonen startar sina rutter.
+            </p>
+            <p class="toolPaneOnly">Antalet geoobjekt beror p&aring; ytterligare faktorer som filtreringskriterier och analysutbredningen.
+            </p>
+        </div>
+    </div>
+    <div id="stopsLayer">
+        <div>
+            <p>De punktgeoobjekt som fordonen m&aring;ste bes&ouml;ka under rutternas g&aring;ng. De h&auml;r punkterna blir till tilldelade eller icke tilldelade stopp i utdata.
+            </p>
+            <p class="toolPaneOnly">Antalet geoobjekt beror p&aring; ytterligare faktorer som filtreringskriterier och analysutbredningen.
+            </p>
+        </div>
+    </div>
+    <div id="returnToStart">
+        <div>
+            
+            <p>Anger om fordonen m&aring;ste &aring;terv&auml;nda till sin startplats (aktiverat) eller sluta p&aring; angivna platser.
+            </p>
+        </div>
+    </div>
+    <div id="endLayer">
+        <div>
+            <p>De punktgeoobjekt som anger var fordonen slutar sina rutter. Om lagret bara inkluderar en punkt dirigeras alla fordon till en gemensam slutpunkt. Om lagret inkluderar flera punkter dirigeras varje fordon till en unik slutplats.
+            </p>
+            <p class="toolPaneOnly">Antalet geoobjekt beror p&aring; ytterligare faktorer som filtreringskriterier och analysutbredningen.
+            </p>
+        </div>
+    </div>
+    <div id="startLayerRouteIDField">
+        <div>
+            <p>F&auml;ltet i startlagret som p&aring; ett unikt s&auml;tt identifierar de enskilda rutterna, fordonen eller f&ouml;rarna. Om fordonen startar p&aring; flera platser och slutar p&aring; flera platser m&aring;ste rutt-ID som angivits f&ouml;r start- och slutlagren matcha.
+            </p>
+        </div>
+    </div>
+    <div id="endLayerRouteIDField">
+        <div>
+            <p>F&auml;ltet i slutlagret som p&aring; ett unikt s&auml;tt identifierar de enskilda rutterna, fordonen eller f&ouml;rarna. Om fordonen startar p&aring; flera platser och slutar p&aring; flera platser m&aring;ste rutt-ID som angivits f&ouml;r start- och slutlagren matcha.
+            </p>
+        </div>
+    </div>
+    <div id="pointBarrierLayer">
+        <div>
+            <p>Ange ett eller flera punktgeoobjekt som fungerar som tillf&auml;lliga restriktioner (hinder) vid resor p&aring; de underliggande gatorna. Det &auml;r till&aring;tet att f&auml;rdas p&aring; gatan men inte genom hindret.
+            </p>
+        </div>
+    </div>
+    <div id="lineBarrierLayer">
+        <div>
+            <p>Ange ett eller flera linjegeoobjekt som fungerar som tillf&auml;lliga restriktioner (hinder) vid resor p&aring; de underliggande gatorna. Linjehindren f&ouml;rbjuder resor &ouml;verallt d&auml;r hindren korsar gatorna.
+            </p>
+        </div>
+    </div>
+    <div id="polygonBarrierLayer">
+        <div>
+            <p>Ett eller flera polygongeoobjekt som fungerar som tillf&auml;lliga restriktioner (hinder) vid resor p&aring; de underliggande gatorna. Polygonhindren f&ouml;rbjuder resor &ouml;verallt d&auml;r polygonerna korsar gatorna.
+            </p>
+        </div>
+    </div>
+    <div id="travelMode">
+        <div>
+            <p>Det f&auml;rdl&auml;ge som ska anv&auml;ndas f&ouml;r att skapa rutterna. Endast tidsbaserade f&auml;rdl&auml;gen st&ouml;ds.
+            </p>
+        </div>
+    </div>
+    <div id="routeStartTime">
+        <div>
+            <p>Datum och avg&aring;ngstid f&ouml;r fordon.
+            </p>
+        </div>
+    </div>
+    <div id="routeCount">
+        <div>
+            
+            <p class="OnlineOnly">Maximalt antal fordon som &auml;r tillg&auml;ngliga f&ouml;r att stanna vid stoppen. Om v&auml;rdena f&ouml;r b&aring;de  <b>startlagret</b> och <b>slutlagret</b> inneh&aring;ller ett geoobjekt kan du ange upp till 100 fordon. Om inget av lagren inneh&aring;ller fler &auml;n ett geoobjekt kan standardv&auml;rdet inte redigeras. </p> 
+            <p class="PortalOnly">Maximalt antal fordon som &auml;r tillg&auml;ngliga f&ouml;r att stanna vid stoppen. Om v&auml;rdena f&ouml;r b&aring;de  <b>startlagret</b> och <b>slutlagret</b> inneh&aring;ller ett geoobjekt kan du ange ett maximalt antal fordon. Om inget av lagren inneh&aring;ller fler &auml;n ett geoobjekt kan standardv&auml;rdet inte redigeras.
+            </p>
+        </div>
+    </div>
+    <div id="maxStopsPerRoute">
+        <div>
+            
+            <p class="OnlineOnly">Det maximala antalet stopp som varje fordon kan g&ouml;ra p&aring; en rutt. Du kan ange ett v&auml;rde mellan 1 och  200. </p> 
+            <p class="PortalOnly">Det maximala antalet stopp som varje fordon kan g&ouml;ra p&aring; en rutt.
+            </p>
+        </div>
+    </div>
+    <div id="stopServiceTime">
+        <div>
+            <p>Den f&ouml;rv&auml;ntade genomsnittliga servicetiden spenderad vid varje stopp.
+            </p>
+        </div>
+    </div>
+    <div id="limitMaxRouteTimeCheckbox">
+        <div>
+            <p>Anger om den maximala ruttiden till&auml;mpas p&aring; fordon. Ruttiden inkluderar f&ouml;rv&auml;ntad resetid och servicetider spenderade vid stopp l&auml;ngs rutten.
+            </p>
+        </div>
+    </div>
+    <div id="maxRouteTime">
+        <div>
+            <p>Den maximala tiden en rutt f&aring;r ta fr&aring;n start till slut.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>Namnet p&aring; lagret som skapas och l&auml;ggs till i kartan.
+            </p>
+        </div>
+    </div>
+    <div id="includeRouteLayers">
+        <div>
+            <p>Anger om varje resultatrutt sparas som ett ruttlager.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            
+            <p>Namnet p&aring; mappen i  <b>Mitt inneh&aring;ll</b> d&auml;r resultaten ska sparas.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

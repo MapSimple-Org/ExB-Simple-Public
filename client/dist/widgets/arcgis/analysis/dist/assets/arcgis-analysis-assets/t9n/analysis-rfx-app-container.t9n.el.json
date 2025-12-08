@@ -1,0 +1,16 @@
+{
+  "backLabel": "Πίσω",
+  "browseHeader": "Επιλογή θεματικού επιπέδου",
+  "cannotReopenRasterFunction": "Δεν ήταν δυνατό το άνοιγμα της raster συνάρτησης.",
+  "creditThresholdModal": {
+    "cancelRun": "Ακύρωση",
+    "continueRun": "Εκτέλεση οπωσδήποτε",
+    "creditEstimate": "Εκτιμώμενες μονάδες κατανάλωσης: ${cost}",
+    "creditThreshold": "Όριο μονάδων κατανάλωσης: ${threshold}",
+    "heading": "Πριν να προχωρήσετε",
+    "learnMore": "Μάθετε περισσότερα για τα κατώφλια μονάδων κατανάλωσης",
+    "thresholdExceeded": "Το εκτιμώμενο κόστος μονάδων κατανάλωσης για αυτή την ανάλυση είναι υψηλότερο από το κατώφλι μονάδων κατανάλωσης του web χάρτη."
+  },
+  "failedToExecuteEstimate": "Η υποβολή απέτυχε. Αποτυχία εκτέλεσης της παραμέτρου EstimateRasterAnalysisCost",
+  "runAnalysisLabel": "Εκτέλεση"
+}

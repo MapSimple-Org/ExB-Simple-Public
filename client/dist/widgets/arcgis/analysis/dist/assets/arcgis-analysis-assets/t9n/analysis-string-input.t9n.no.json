@@ -1,0 +1,12 @@
+{
+  "choiceList": "Valgliste",
+  "choiceListBadInput": "Inndataverdien inneholder en ugyldig oppføring.",
+  "comboboxPlaceholderText": "Velg et alternativ...",
+  "inputPlaceholderText": "Angi en verdi...",
+  "invalidCharacterError": "Inndataverdien inneholder ugyldige tegn.",
+  "maxLengthError": "Inndataverdien kan ikke inneholde flere enn ${maxLength} tegn.",
+  "minLengthError": "Inndataverdien kan ikke inneholde færre enn ${minLength} tegn.",
+  "multiSelectComboboxPlaceholderText": "Velg ett eller flere alternativer…",
+  "requiredError": "Denne parameteren kreves.",
+  "selectAll": "Velg alle"
+}

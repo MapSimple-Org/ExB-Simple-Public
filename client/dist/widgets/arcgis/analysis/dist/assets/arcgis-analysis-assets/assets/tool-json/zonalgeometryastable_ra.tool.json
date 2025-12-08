@@ -1,0 +1,85 @@
+{
+  "name": "ZonalGeometryAsTable",
+  "displayName": "ZonalGeometryAsTable",
+  "description": "Calculates the geometry measures (area, perimeter, thickness, and the characteristics of an ellipse) for each zone in a dataset and reports the results as a table.  ",
+  "category": "",
+  "helpUrl": "https://rasteranalysisdev.arcgis.com/arcgis/rest/directories/arcgisoutput/RasterAnalysisTools_GPServer/RasterAnalysisTools/ZonalGeometryAsTable.htm",
+  "executionType": "esriExecutionTypeAsynchronous",
+  "parameters": [
+    {
+      "name": "inputZoneRasterOrFeatures",
+      "dataType": "GPString",
+      "displayName": "inputZoneRasterOrFeatures",
+      "description": "The input that defines the boundaries of the zones, or areas. ",
+      "direction": "esriGPParameterDirectionInput",
+      "defaultValue": "",
+      "parameterType": "esriGPParameterTypeRequired",
+      "category": ""
+    },
+    {
+      "name": "zoneField",
+      "dataType": "GPString",
+      "displayName": "zoneField",
+      "description": "The field that contains the values that define each zone. ",
+      "direction": "esriGPParameterDirectionInput",
+      "defaultValue": "",
+      "parameterType": "esriGPParameterTypeRequired",
+      "category": ""
+    },
+    {
+      "name": "outputTableName",
+      "dataType": "GPString",
+      "displayName": "outputTableName",
+      "description": "The name of the zonal geometry table that will be created. ",
+      "direction": "esriGPParameterDirectionInput",
+      "defaultValue": "",
+      "parameterType": "esriGPParameterTypeRequired",
+      "category": ""
+    },
+    {
+      "name": "analysisCellSize",
+      "dataType": "GPComposite",
+      "displayName": "analysisCellSize",
+      "description": "The cell size of the analysis raster that will be created. ",
+      "direction": "esriGPParameterDirectionInput",
+      "defaultValue": {
+        "dataType": "GPLinearUnit",
+        "value": null
+      },
+      "parameterType": "esriGPParameterTypeOptional",
+      "category": "",
+      "parameterInfos": [
+        {
+          "name": "",
+          "dataType": "GPString",
+          "displayName": ""
+        },
+        {
+          "name": "",
+          "dataType": "GPLinearUnit",
+          "displayName": ""
+        }
+      ]
+    },
+    {
+      "name": "context",
+      "dataType": "GPString",
+      "displayName": "context",
+      "description": "Specifies the analysis environments. ",
+      "direction": "esriGPParameterDirectionInput",
+      "defaultValue": "",
+      "parameterType": "esriGPParameterTypeOptional",
+      "category": ""
+    },
+    {
+      "name": "outputTable",
+      "dataType": "GPString",
+      "displayName": "outputTable",
+      "description": "",
+      "direction": "esriGPParameterDirectionOutput",
+      "defaultValue": "",
+      "parameterType": "esriGPParameterTypeDerived",
+      "category": ""
+    }
+  ]
+}

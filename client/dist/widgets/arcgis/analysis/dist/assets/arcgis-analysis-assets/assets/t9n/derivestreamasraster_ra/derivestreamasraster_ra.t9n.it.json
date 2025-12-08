@@ -1,0 +1,10 @@
+{
+  "forceFlowLabel": "Forza i bordi cella a fluire all'esterno",
+  "inputLayersGroupText": "Scegliere il raster della superficie di input e, facoltativamente, i dati della depressione e il raster del peso.",
+  "itemProperties": {
+    "description": "Output generato dall'esecuzione dello strumento Deriva flusso come raster.",
+    "snippet": "Output generato da Deriva flusso come raster"
+  },
+  "outputStreamRasterLabel": "Nome raster di flusso di output",
+  "streamSettingsGroupText": "Specificare la soglia di accumulo, il metodo di designazione del flusso e la modalità di gestione del flusso sul bordo raster di superficie di input."
+}

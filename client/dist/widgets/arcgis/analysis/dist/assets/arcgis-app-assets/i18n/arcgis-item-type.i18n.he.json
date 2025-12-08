@@ -1,0 +1,27 @@
+{
+  "hosted": "מתארח",
+  "hostedView": "מתארח, תצוגה",
+  "hostedPhotos": "מתארח, תמונות",
+  "hostedCollection": "מתארח, אוסף",
+  "hostedMultidimensional": "מתארח, רב-ממדי",
+  "hostedCollectionMultidimensional": "מתארח, אוסף, רב-ממדי",
+  "collectionMultidimensional": "אוסף, רב-ממדי",
+  "multidimensional": "רב-ממדי",
+  "collection": "אוסף",
+  "photoLocations": "תמונות",
+  "locatorView": "תצוגה",
+  "utilityNetwork": "רשת תשתית",
+  "Integrated Mesh": "רשת משולבת",
+  "3D Object": "אובייקט תלת-ממד",
+  "Point": "נקודה",
+  "Point Cloud": "ענן נקודות",
+  "Building Scene Layer": "שכבת סצנת בניין",
+  "Voxel Scene Layer": "שכבת סצנת voxel",
+  "dataStore": {
+    "bigdata": "שיתוף קבצים של Big Data",
+    "cloud": "ענן",
+    "cloudStorage": "אחסון בענן",
+    "database": "בסיס נתונים",
+    "folder": "תיקייה"
+  }
+}

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>La herramienta Detectar cambios con aprendizaje profundo utiliza un modelo de aprendizaje profundo para detectar cambios entre dos capas r&aacute;ster.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="fromRaster">
+        <div>
+            <p>Capa de im&aacute;genes de entrada anterior al cambio que se utilizar&aacute; como base durante la comparaci&oacute;n.
+            </p>
+        </div>
+    </div>
+    <div id="toRaster">
+        <div>
+            <p>Capa de im&aacute;genes de entrada posterior al cambio que se utilizar&aacute; en la comparaci&oacute;n con la original.
+            </p>
+        </div>
+    </div>
+    <div id="outputClassifiedRasterName">
+        <div>
+            <p>Capa de im&aacute;genes clasificadas de salida que muestra el cambio.
+            </p>
+        </div>
+    </div>
+    <div id="modelArguments">
+        <div>
+            <p>Los argumentos de modelo que est&aacute;n presentes en el modelo de aprendizaje profundo junto con sus valores predeterminados.
+            </p>
+        </div>
+    </div>
+    <div id="modelDefinition">
+        <div>
+            <p>Paquete de aprendizaje profundo que contiene el modelo que se utilizar&aacute; para detectar cambios entre capas de im&aacute;genes.
+            </p>
+        </div>
+    </div>
+    <div id="resultType">
+        <div>
+            <p>El tipo de salida que se crear&aacute;. La salida puede ser una capa de im&aacute;genes en teselas o una capa de im&aacute;genes din&aacute;micas.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>El nombre de la carpeta de  <b>Mi contenido</b> en la que se guardar&aacute; el resultado.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

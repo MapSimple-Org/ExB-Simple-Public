@@ -1,0 +1,8 @@
+{
+  "arriveTime": "Oră sosire",
+  "modes": {
+    "custom": "Dată și oră particularizate",
+    "now": "Acum",
+    "unspecified": "Timp nespecificat"
+  }
+}

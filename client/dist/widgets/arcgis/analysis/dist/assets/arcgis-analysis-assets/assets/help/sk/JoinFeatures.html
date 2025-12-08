@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>N&aacute;stroj Pripojiť prvky prid&aacute;va atrib&uacute;ty z jednej vrstvy alebo tabuľky do druhej na z&aacute;klade zadan&yacute;ch priestorov&yacute;ch a atrib&uacute;tov&yacute;ch vzťahov. Voliteľne je možn&eacute; vypoč&iacute;tať &scaron;tatistiky, ak existuje viacero sp&aacute;rovan&yacute;ch z&aacute;znamov.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="targetLayer">
+        <div>
+            <p>Vrstva alebo tabuľka, ktorej bud&uacute; do atrib&uacute;tovej tabuľky pridan&eacute; atrib&uacute;ty z pripojovacej vrstvy.
+            </p> 
+            <p class="toolPaneOnly">Počet prvkov z&aacute;vis&iacute; od ďal&scaron;&iacute;ch faktorov, ako napr&iacute;klad filtrovacie krit&eacute;ri&aacute; a rozsah anal&yacute;zy.
+            </p> 
+            <p class="modelBuilderOnly"> <b>Vrstva</b> je predvolene definovan&aacute;, keď nie je vyplnen&aacute; <b>cieľov&aacute; vrstva</b>. Ak chcete pridať vstupn&uacute; tabuľku, pred pridan&iacute;m datasetu vyberte <b>tabuľku</b>.
+            </p>
+        </div>
+    </div>
+    <div id="joinLayer">
+        <div>
+            <p>Vrstva alebo tabuľka s atrib&uacute;tami, ktor&eacute; bud&uacute; pripojen&eacute; k cieľovej vrstve.
+            </p> 
+            <p class="toolPaneOnly">Počet prvkov z&aacute;vis&iacute; od ďal&scaron;&iacute;ch faktorov, ako napr&iacute;klad filtrovacie krit&eacute;ri&aacute; a rozsah anal&yacute;zy.
+            </p> 
+            <p class="modelBuilderOnly"> <b>Vrstva</b> je predvolene definovan&aacute;, keď nie je vyplnen&aacute; <b>pripojovacia vrstva</b>. Ak chcete pridať vstupn&uacute; tabuľku, pred pridan&iacute;m datasetu vyberte <b>tabuľku</b>.
+            </p>
+        </div>
+    </div>
+    <div id="useSpatialRelationship">
+        <div>
+            <p>Určuje, či bud&uacute; vrstvy pripojen&eacute; na z&aacute;klade priestorov&eacute;ho vzťahu. T&aacute;to voľba vyžaduje, aby obe vrstvy mali geometriu.
+            </p>
+        </div>
+    </div>
+    <div id="spatialRelationship">
+        <div>
+            <p>Určuje priestorov&yacute; vzťah, ktor&yacute; stanovuje, ktor&eacute; prvky bud&uacute; pripojen&eacute;. Prvky v pripojovacej vrstve, ktor&eacute; maj&uacute; zadan&yacute; vzťah k cieľovej vrstve, sa pripoja. Dostupn&eacute; vzťahy z&aacute;visia od typu geometrie vstupov.
+            </p>
+        </div>
+    </div>
+    <div id="spatialRelationshipDistance">
+        <div>
+            <p>Vzdialenosť od prvkov v cieľovej vrstve, ktor&aacute; sa použije na určenie, či bud&uacute; prvky pripojen&eacute;.
+            </p>
+        </div>
+    </div>
+    <div id="spatialRelationshipDistanceUnits">
+        <div>
+            <p>Jednotky, ktor&eacute; sa použij&uacute; na určenie vzdialenosti.
+            </p>
+        </div>
+    </div>
+    <div id="useAttributeRelationship">
+        <div>
+            <p>Určuje, či bud&uacute; vrstvy spojen&eacute; na z&aacute;klade zhodn&yacute;ch hodn&ocirc;t pol&iacute;. Ak je jedn&yacute;m alebo viacer&yacute;mi vstupmi tabuľka, pripojenie možno definovať len pomocou atrib&uacute;tov&eacute;ho vzťahu.
+            </p>
+        </div>
+    </div>
+    <div id="attributeRelationship">
+        <div>
+            <p>Atrib&uacute;tov&yacute; vzťah, ktor&yacute; určuje, ktor&eacute; prvky bud&uacute; pripojen&eacute;. Prvky s&uacute; sp&aacute;rovan&eacute;, keď hodnoty pol&iacute; v pripojovacej vrstve s&uacute; rovnak&eacute; ako hodnoty pol&iacute; v cieľovej vrstve.
+            </p>
+        </div>
+    </div>
+    <div id="joinOperation">
+        <div>
+            <p>Určuje, ako sa bude postupovať pri prip&aacute;jan&iacute;, ak krit&eacute;ri&aacute; prip&aacute;jania spĺňa viacero z&aacute;znamov z pripojovacej vrstvy. Vyberte si z nasleduj&uacute;cich možnost&iacute;:
+                <ul>
+                    <li> <b>Pripojenie jeden k jedn&eacute;mu</b> &mdash; Ku každ&eacute;mu prvku v cieľovej vrstve sa pripoj&iacute; jeden z&aacute;znam z pripojovacej vrstvy.
+                    </li>
+                    <li> <b>Pripojenie jeden k viacer&yacute;m</b> &mdash; V&scaron;etky sp&aacute;rovan&eacute; prvky v pripojovacej vrstve bud&uacute; pripojen&eacute; k cieľovej vrstve. V&yacute;sledn&aacute; vrstva bude obsahovať n&aacute;sobn&eacute; z&aacute;znamy cieľov&yacute;ch prvkov.
+                    </li>
+                </ul>
+                
+            </p>
+        </div>
+    </div>
+    <div id="handleMatchingRecords">
+        <div>
+            <p>Ak sa viacer&eacute; prvky v pripojovacej vrstve zhoduj&uacute; s cieľov&yacute;m prvkom, tento parameter určuje, či sa pripoj&iacute; jeden z&aacute;znam z pripojovacej vrstvy, či sa pre vybran&eacute; pole vypoč&iacute;ta s&uacute;hrnn&aacute; &scaron;tatistika pre v&scaron;etky zhodn&eacute; z&aacute;znamy z pripojovacej vrstvy, alebo sa vypoč&iacute;ta len počet zhodn&yacute;ch z&aacute;znamov.
+            </p>
+        </div>
+    </div>
+    <div id="summaryFields">
+        <div>
+            <p>Ak existuje viac pripojovac&iacute;ch prvkov, ktor&eacute; s&uacute; sp&aacute;rovan&eacute; s cieľov&yacute;m prvkom, vypoč&iacute;taj&uacute; sa s&uacute;hrnn&eacute; &scaron;tatistiky pre v&scaron;etky sp&aacute;rovan&eacute; z&aacute;znamy. Zadajte č&iacute;seln&eacute; alebo d&aacute;tumov&eacute; polia z pripojovacej vrstvy a &scaron;tatistiky, ktor&eacute; sa vypoč&iacute;taj&uacute; pre každ&eacute; pole.
+            </p>
+        </div>
+    </div>
+    <div id="recordsToMatch">
+        <div>
+            <p>Ak existuje viac pripojovac&iacute;ch prvkov, ktor&eacute; s&uacute; sp&aacute;rovan&eacute; s cieľov&yacute;m prvkom, do v&yacute;stupu sa zahrnie prv&yacute; z&aacute;znam z atrib&uacute;tovej tabuľky pripojovacej vrstvy. Voliteľne vyberte č&iacute;seln&eacute; alebo d&aacute;tumov&eacute; pole a sp&ocirc;sob zoradenia pre usporiadanie atrib&uacute;tovej tabuľky.
+            </p>
+        </div>
+    </div>
+    <div id="joinType">
+        <div>
+            <p>Určuje, či sa do v&yacute;stupu zahrn&uacute; nesp&aacute;rovan&eacute; cieľov&eacute; prvky. Možnosť  <b>Vn&uacute;torn&eacute; pripojenie</b> vr&aacute;ti len sp&aacute;rovan&eacute; cieľov&eacute; z&aacute;znamy, zatiaľ čo možnosť <b>Ľav&eacute; pripojenie</b> vr&aacute;ti v&scaron;etky cieľov&eacute; z&aacute;znamy, aj keď cieľov&yacute; prvok nemal sp&aacute;rovanie v pripojovacej vrstve.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>N&aacute;zov vrstvy alebo tabuľky, ktor&aacute; sa vytvor&iacute; a prid&aacute; do mapy.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>N&aacute;zov priečinka v r&aacute;mci  <b>M&ocirc;j obsah</b>, do ktor&eacute;ho sa ulož&iacute; v&yacute;sledok.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>レイヤーのマージ ツールは、2 つのレイヤーのフィーチャを 1 つの新しいレイヤーにコピーします。 入力レイヤーのフィールドを結合およびコピーする方法を制御できます。
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputLayer">
+        <div>
+            <p>マージ レイヤーにマージするポイント、ライン、ポリゴン フィーチャ。
+            </p>
+            <p class="toolPaneOnly">フィーチャのカウントはフィルター処理条件や解析の範囲などのその他の要因によって異なります。
+            </p>
+        </div>
+    </div>
+    <div id="mergeLayer">
+        <div>
+            <p>入力レイヤーにマージされるレイヤー。
+            </p>
+            <p class="toolPaneOnly">フィーチャのカウントはフィルター処理条件や解析の範囲などのその他の要因によって異なります。
+            </p>
+        </div>
+    </div>
+    <div id="mergingAttributes">
+        <div>
+            <p>フィールドのマージ方法を指定します。
+            </p>
+            <p>両方のレイヤーに同じ名前とデータ タイプのフィールドが含まれている場合、両方のフィールドの内容がその名前の 1 つのフィールドにマージされます。 これは、 <b>[操作]</b> パラメーター値として <b>[一致]</b> が使用されている場合には、フィールドに適用されません。 
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>作成されマップに追加されるレイヤーの名前。
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>結果を保存する  <b>[マイ コンテンツ]</b> 内のフォルダーの名前。
+            </p>
+        </div>
+    </div>
+</div>
+</html>

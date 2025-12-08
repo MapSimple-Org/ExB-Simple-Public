@@ -1,0 +1,9 @@
+{
+  "inputFlowDirectionRasterLabel": "Входен растер на посоката на поток",
+  "inputLayerGroupText": "Изберете входните растери на потока и посока на потока.",
+  "inputStreamRasterLabel": "Входен растер на поток",
+  "itemProperties": {
+    "description": "Резултат, генериран от стартирането на инструмента за анализ StreamLink.",
+    "snippet": "Резултат, генериран от StreamLink"
+  }
+}

@@ -1,0 +1,1 @@
+System.register([],function(e){return{execute:function(){e({settingsLabel:"Nastaven\xed Prohl\xed\u017ee\u010de dokument\u016f"})}}});

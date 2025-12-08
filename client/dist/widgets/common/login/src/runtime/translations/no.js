@@ -1,0 +1,1 @@
+System.register([],function(e){return{execute:function(){e({_widgetLabel:"P\xe5logging",switchToLogin:"Bytt til f\xf8r p\xe5logging",switchToLogout:"Bytt til etter p\xe5logging",toggleSignInPreview:"Veksle forh\xe5ndsvisning av p\xe5logging",restrictedResources:"Begrensede ressurser"})}}});

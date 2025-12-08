@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>Redzamības lauka izveides rīks izmanto Esri augstuma analīzes servisu, lai noteiktu teritorijas, kas ir redzamas no noteiktām vērotāja atra&scaron;anās vietām.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputLayer">
+        <div>
+            <p>Punkta elementi , kas tiks izmantotai kā vērotāja atra&scaron;anās vietas.
+            </p>
+            <p class="toolPaneOnly">Elementu skaits ir atkarīgs no papildu faktoriem, piemēram, filtrē&scaron;anas kritērijiem un analīzes apjoma.
+            </p>
+        </div>
+    </div>
+    <div id="observerHeight">
+        <div>
+            <p>Norāda vērotāju augstumu virs zemes.
+            </p>
+        </div>
+    </div>
+    <div id="observerHeightUnits">
+        <div>
+            <p>Mērvienības, kas tiks izmantotas  <b>vērotāja augstuma</b> parametram.
+            </p>
+        </div>
+    </div>
+    <div id="targetHeight">
+        <div>
+            <p>Norāda mērķu augstumu virs zemes.
+            </p>
+        </div>
+    </div>
+    <div id="targetHeightUnits">
+        <div>
+            <p>Mērvienības, kas tiks izmantotas  <b>mērķa augstuma</b> parametram.
+            </p>
+        </div>
+    </div>
+    <div id="maximumDistance">
+        <div>
+            <p>Norāda maksimālo skatī&scaron;anas attālumu redzamības lauka aprēķinam.
+            </p>
+        </div>
+    </div>
+    <div id="maxDistanceUnits">
+        <div>
+            <p>Mērvienības, kas tiks izmantotas  <b>maksimālajam skatī&scaron;anas attāluma</b> parametram.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>Redzamības lauka slāņa nosaukums, kas tiks izveidots un pievienots kartei. &Scaron;ajā slānī ir vietas, kuras var redzēt vērotāji, un frekvenču laukā ir ierakstīts vērotāju skaits.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>Mapes nosaukums sadaļā  <b>Mans saturs</b>, kurā tiks saglabāts rezultāts.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

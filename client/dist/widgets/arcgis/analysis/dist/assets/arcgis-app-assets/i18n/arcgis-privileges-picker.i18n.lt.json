@@ -1,0 +1,592 @@
+{
+  "rolePrivileges": "Vaidmens teisės",
+  "setFromExisting": "Nustatyti pagal esamą vaidmenį",
+  "expandAll": "Išskleisti viską",
+  "generalPrivileges": "Bendros teisės",
+  "adminPrivileges": "Administratoriaus teisės",
+  "enabledLabel": "Įjungta:",
+  "enableAll": "Įjungti viską",
+  "disableAll": "Išjungti viską",
+  "members": "Nariai",
+  "groups": "Grupės",
+  "content": "Turinys",
+  "sharing": "Bendrinimas",
+  "premiumContent": "Premium turinys",
+  "premiumContentServices": "Premium turinys ir paslaugos",
+  "contentAndAnalysis": "Turinys ir analizė",
+  "features": "Elementai",
+  "versionMgmt": "Versijų valdymas",
+  "webhooks": "Webhooks",
+  "marketplaceSubscriptions": "ArcGIS Marketplace prenumeratos",
+  "orgSettings": "Organizacijos nustatymai",
+  "learnMore": "Sužinokite daugiau",
+  "searchPrivileges": "Ieškoti teisių",
+  "notebooks": "Užrašinės",
+  "analysis": "Analizė",
+  "networkAnalysis": "Tinklo analizė",
+  "locationServices": "Vietos nustatymo paslaugos",
+  "requiredService": "Privaloma paslauga",
+  "availableServices": "Prieinamos paslaugos",
+  "basemaps": "Pagrindo žemėlapiai",
+  "staticMaps": "Statiniai žemėlapiai",
+  "places": "Vietos",
+  "geocoding": "Geokodavimas",
+  "routing": "Maršruto nustatymas",
+  "dataEnrichment": "Duomenų praturtinimas",
+  "boundaries": "Ribos",
+  "elevation": "Aukštis",
+  "spatialPrivileges": "Erdvinė analizė",
+  "featureAnalysis": "Elementų analizė",
+  "imageAnalysis": "Vaizdų analizė",
+  "readOnlyBasemapsTooltip": "Prieiga prie pagrindo žemėlapių pridėta.",
+  "privileges": {
+    "portal:user:viewOrgUsers": {
+      "label": "Peržiūra",
+      "description": "Leisti nariui peržiūrėti organizacijos narius.",
+      "descriptionPortal": "Leisti nariui peržiūrėti portalo narius.",
+      "descriptionApp": "Leisti programėlei peržiūrėti organizacijos narius."
+    },
+    "portal:user:createGroup": {
+      "label": "Kurti, naujinti ir trinti",
+      "description": "Leisti nariui kurti, redaguoti ir trinti savo grupes.",
+      "descriptionApp": "Leisti programėlei kurti, redaguoti ir trinti programėlės savininko grupes."
+    },
+    "portal:user:joinGroup": {
+      "label": "Prisijungti prie organizacijos grupių",
+      "description": "Leisti nariui prisijungti prie organizacijos grupių.",
+      "descriptionPortal": "Leisti nariui prisijungti prie portalo grupių.",
+      "descriptionApp": "Leisti programėlei prisijungti prie organizacijos grupių."
+    },
+    "portal:user:joinNonOrgGroup": {
+      "label": "Prisijungti prie išorinių grupių",
+      "description": "Leisti nariui prisijungti prie organizacijai nepriklausančių grupių.",
+      "descriptionPortal": "Leisti nariui prisijungti prie portalui nepriklausančių grupių.",
+      "descriptionApp": "Leisti programėlei prisijungti prie organizacijai nepriklausančių grupių."
+    },
+    "portal:user:viewOrgGroups": {
+      "label": "Peržiūrėti grupes, bendrinamas su organizacija",
+      "description": "Leisti nariui peržiūrėti grupes, bendrinamas su organizacija.",
+      "descriptionPortal": "Leisti nariui peržiūrėti grupes, bendrinamas su portalu.",
+      "descriptionApp": "Leisti programėlei peržiūrėti grupes, bendrinamas su organizacija."
+    },
+    "portal:user:invitePartneredCollaborationMembers": {
+      "label": "Kviesti bendradarbiaujančius organizacijos narius",
+      "description": "Leisti nariams į grupes kviesti narius iš bendradarbiaujančių organizacijų.",
+      "descriptionApp": "Leisti programėlei į grupes kviesti narius iš bendradarbiaujančių organizacijų."
+    },
+    "portal:user:addExternalMembersToGroup": {
+      "label": "Įtraukti narių iš kitų organizacijų",
+      "description": "Leiskite nariams kurti grupes, leidžiančias narius iš kitų organizacijų, taip pat kviesti organizacijai nepriklausančius narius į grupes.",
+      "descriptionApp": "Leisti programėlei kurti grupes, leidžiančias narius iš kitų organizacijų, taip pat kviesti organizacijai nepriklausančius narius į grupes."
+    },
+    "portal:user:createItem": {
+      "label": "Kurti, naujinti ir trinti",
+      "description": "Leisti nariui kurti, redaguoti ir trinti savo turinį.",
+      "descriptionApp": "Leisti programėlei kurti, redaguoti ir trinti programėlės savininko turinį."
+    },
+    "portal:publisher:publishFeatures": {
+      "label": "Publikuoti talpinamus elementų sluoksnius",
+      "description": "Leisti nariui publikuoti talpinamus elementų sluoksnius iš shape failų, CSV ir t. t.",
+      "descriptionApp": "Leisti programėlei publikuoti talpinamus elementų sluoksnius iš shape failų, CSV ir t. t."
+    },
+    "portal:publisher:publishTiles": {
+      "label": "Publikuoti talpinamus išklotinių sluoksnius",
+      "description": "Leisti nariui publikuoti talpinamus išklotinių sluoksnius iš išklotinių paketų, elementų ir t. t.",
+      "descriptionApp": "Leisti programėlei publikuoti talpinamus išklotinių sluoksnius iš išklotinių paketų, elementų ir t. t."
+    },
+    "portal:publisher:publishScenes": {
+      "label": "Publikuoti talpinamus scenų sluoksnius",
+      "description": "Leisti nariui publikuoti talpinamus scenų sluoksnius.",
+      "descriptionApp": "Leisti programėlei publikuoti talpinamus scenų sluoksnius."
+    },
+    "portal:publisher:publishTiledImagery": {
+      "label": "Publikuoti talpinamus vaizdų išklotinių sluoksnius",
+      "description": "Leisti nariui publikuoti talpinamus vaizdų išklotinių sluoksnius iš vieno vaizdo arba vaizdų rinkinio. Reikalingas ArcGIS Image, skirtos ArcGIS Online, naudotojo tipo plėtinys.",
+      "descriptionPortal": "Leisti nariui publikuoti talpinamus vaizdų išklotinių sluoksnius iš vieno vaizdo arba vaizdų rinkinio.",
+      "descriptionApp": "Leisti programėlei publikuoti talpinamus vaizdų išklotinių sluoksnius iš vieno vaizdo arba vaizdų rinkinio. Reikalinga ArcGIS vaizdų talpinimo licencija."
+    },
+    "portal:publisher:publishDynamicImagery": {
+      "label": "Publikuoti talpinamus dinaminius vaizdų sluoksnius",
+      "description": "Leisti nariui publikuoti talpinamus dinaminius vaizdų sluoksnius iš vieno vaizdo arba vaizdų rinkinio.",
+      "descriptionApp": "Leisti programėlei publikuoti talpinamus dinaminius vaizdų sluoksnius iš vieno vaizdo arba vaizdų rinkinio."
+    },
+    "portal:publisher:publishServerServices": {
+      "label": "Publikuoti serveryje esančius sluoksnius",
+      "description": "Ši teisė leidžia publikuoti internetinius sluoksnius, palaikomus paslaugų iš federacinių serverių. Šios paslaugos dažnai nurodo registruotus duomenis iš geoduomenų bazių arba failų duomenų šaltinių."
+    },
+    "portal:publisher:publishKnowledgeGraph": {
+      "label": "Publikuoti talpinamus Knowledge grafikus",
+      "description": "Leisti nariui publikuoti talpinamus Knowledge grafikus",
+      "descriptionApp": "Leisti programėlei publikuoti talpinamas žinių diagramas."
+    },
+    "portal:user:viewOrgItems": {
+      "label": "Peržiūrėti turinį, bendrinamą su organizacija",
+      "description": "Leisti nariui peržiūrėti turinį, bendrinamą su organizacija.",
+      "descriptionPortal": "Leisti nariui peržiūrėti turinį, bendrinamą su portalu.",
+      "descriptionApp": "Leisti programėlei peržiūrėti turinį, bendrinamą su organizacija."
+    },
+    "premium:publisher:createNotebooks": {
+      "label": "Kurti ir redaguoti užrašines",
+      "description": "Leiskite nariams kurti ir redaguoti interaktyviąsias užrašines.",
+      "descriptionApp": "Leisti programėlei kurti ir redaguoti interaktyviąsias užrašines."
+    },
+    "premium:publisher:scheduleNotebooks": {
+      "label": "Planuoti užrašines",
+      "description": "Leiskite nariams planuoti būsimus automatizuotus užrašinių vykdymus.",
+      "descriptionApp": "Leisti programėlei planuoti būsimus automatizuotus užrašinės vykdymus."
+    },
+    "portal:publisher:bulkPublishFromDataStores": {
+      "label": "Masiškai kurti elementų sluoksnius iš duomenų saugyklos",
+      "description": "Ši teisė leidžia publikuoti internetinius sluoksnius iš registruotų duomenų saugyklų."
+    },
+    "portal:publisher:registerDataStores": {
+      "label": "Registruoti duomenų saugyklas",
+      "description": "Ši teisė suteikia galimybę portale registruoti duomenų saugyklas."
+    },
+    "portal:user:viewTracks": {
+      "label": "Rodyti padėties sekimą",
+      "description": "Leisti nariui peržiūrėti narių padėties trajektorijas naudojant bendrinamas trajektorijų peržiūras, kai įjungtas padėties bendrinimas.",
+      "descriptionApp": "Leisti programėlei peržiūrėti narių padėties trajektorijas naudojant bendrinamas trajektorijų peržiūras, kai įjungtas padėties bendrinimas."
+    },
+    "portal:user:reassignItems": {
+      "label": "Perskirti turinį",
+      "description": "Leisti nariui perskirti tik savo turinį kitam nariui, turinčiam teisę gauti turinį.",
+      "descriptionApp": "Leisti programėlei perskirti tik programėlės savininko turinį kitam nariui, turinčiam teisę gauti turinį."
+    },
+    "portal:user:receiveItems": {
+      "label": "Gauti turinį",
+      "description": "Leisti nariui gauti turinį, kurį jam (jai) perskiria kitas narys, turintis teisę perskirti turinį."
+    },
+    "portal:publisher:publishFeeds": {
+      "label": "Publikuoti teikiamus duomenis",
+      "description": "Ši teisė suteikia galimybę publikuoti teikiamus duomenis, kad būtų galima įtraukti turinį ir rodyti duomenis realiuoju laiku, naudojant ArcGIS Velocity."
+    },
+    "portal:publisher:publishRealTimeAnalytics": {
+      "label": "Publikuoti realaus laiko analizę",
+      "description": "Ši teisė suteikia galimybę publikuoti realaus laiko analizę, kad būtų galima analizuoti ir apdoroti duomenis realiuoju laiku, naudojant ArcGIS Velocity."
+    },
+    "portal:publisher:publishBigDataAnalytics": {
+      "label": "Publikuoti didelių duomenų analizę",
+      "description": "Ši teisė suteikia galimybę publikuoti didelių duomenų analizę, kad būtų galima analizuoti istorinių stebėjimų duomenis, naudojant ArcGIS Velocity."
+    },
+    "portal:publisher:createDataPipelines": {
+      "label": "Kurti ir vykdyti duomenų srautus",
+      "description": "Leiskite nariui kurti, redaguoti ir vykdyti duomenų srautus.",
+      "descriptionApp": "Leisti programėlei kurti, redaguoti ir vykdyti duomenų srautus."
+    },
+    "portal:publisher:publishLivestreamVideo": {
+      "label": "Publikuoti tiesioginės transliacijos vaizdo įrašą",
+      "description": "Leiskite nariui publikuoti talpinamus tiesioginės transliacijos vaizdo įrašų sluoksnius, gautus iš tinklo vaizdo įrašų transliacijų ir srautų.",
+      "descriptionApp": "Leisti programėlei publikuoti talpinamus tiesioginės transliacijos vaizdo įrašų sluoksnius, gautus iš tinklo vaizdo įrašų transliacijų ir srautų."
+    },
+    "portal:publisher:publishVideo": {
+      "label": "Publikuoti vaizdo įrašą",
+      "description": "Leiskite nariui publikuoti talpinamus tiesioginės transliacijos vaizdo įrašų sluoksnius iš vaizdo įrašų failų ir palaikomų vaizdo įrašų metaduomenų failų.",
+      "descriptionApp": "Leisti programėlei publikuoti talpinamus vaizdo įrašų sluoksnius iš vaizdo įrašų failų ir palaikomų vaizdo įrašų metaduomenų failų."
+    },
+    "portal:user:shareToGroup": {
+      "label": "Bendrinti tarp grupių",
+      "description": "Leisti nariui bendrinti turinį su grupėmis.",
+      "descriptionApp": "Leisti programėlei bendrinti turinį su grupėmis."
+    },
+    "portal:user:shareToOrg": {
+      "label": "Bendrinti su organizacija",
+      "labelPortal": "Bendrinti su portalu",
+      "description": "Leisti nariui bendrinti turinį su organizacija.",
+      "descriptionPortal": "Leisti nariui bendrinti turinį su portalu.",
+      "descriptionApp": "Leisti programėlei bendrinti turinį su jūsų organizacija."
+    },
+    "portal:user:shareToPublic": {
+      "label": "Bendrinti viešai",
+      "description": "Leiskite nariui viešai bendrinti savo turinį, jei tai leidžia organizacijos viešo bendrinimo politika.",
+      "descriptionApp": "Leisti programėlei viešai bendrinti programėlės savininko turinį, jei tai leidžia organizacijos viešo bendrinimo politika.",
+      "tooltip": "Jei organizacija neleidžia nariams viešai bendrinti turinio, nariams reikės administratoriaus teisių, kad galėtų viešai bendrinti narių turinį."
+    },
+    "portal:user:shareGroupToOrg": {
+      "label": "Padaryti grupes matomas organizacijoje",
+      "labelPortal": "Padaryti grupes matomas portale",
+      "description": "Leisti nariui bendrinti turinį su organizacija.",
+      "descriptionPortal": "Leisti nariui bendrinti turinį su portalu.",
+      "descriptionApp": "Leisti programėlei bendrinti turinį su jūsų portalu."
+    },
+    "portal:user:shareGroupToPublic": {
+      "label": "Padaryti grupes matomas viešai",
+      "description": "Leisti nariui grupes padaryti matomas viešai.",
+      "descriptionApp": "Leisti programėlei grupes padaryti matomas viešai."
+    },
+    "opendata:user:designateGroup": {
+      "label": "Grupės, prieinamos atviriems duomenims",
+      "description": "Leisti nariui paskirti grupes, kurias galima naudoti atviriems duomenims.",
+      "descriptionApp": "Leisti programėlei paskirti grupes, kurias galima naudoti atviriems duomenims."
+    },
+    "premium:user:basemaps": {
+      "label": "Pagrindo žemėlapio stilių paslauga",
+      "descriptionLocationPlatform": "Leisti aplikacijai pasiekti pagrindo žemėlapio stilių paslaugą."
+    },
+    "premium:user:staticbasemaptiles": {
+      "label": "Statinės pagrindo žemėlapio išklotinės",
+      "descriptionLocationPlatform": "Leisti aplikacijai pasiekti statinio pagrindo žemėlapio išklotinių paslaugą."
+    },
+    "premium:user:staticMaps": {
+      "label": "Statinių žemėlapių paslauga (beta)",
+      "descriptionLocationPlatform": "Leiskite programėlei pasiekti statinių žemėlapių paslaugą."
+    },
+    "premium:user:elevation": {
+      "label": "Elevation service",
+      "descriptionLocationPlatform": "Leisti programai pasiekti aukščio paslaugą."
+    },
+    "premium:user:geocode": {
+      "label": "Geokodas",
+      "description": "Leisti nariui atlikti kreditų kainuojančias geokodavimo užduotis naudojant ArcGIS Geocoding Service (arba šio lokatoriaus rodinį).",
+      "descriptionApp": "Leisti programėlei atlikti kreditų kainuojančias geokodavimo užduotis naudojant ArcGIS World Geocoding Service (arba šio lokatoriaus rodinį)."
+    },
+    "premium:user:geocode:stored": {
+      "label": "Geokodas (saugomas)",
+      "descriptionLocationPlatform": "Leisti programai pasiekti geokodavimo paslaugą ir vykdyti saugomus geokodus."
+    },
+    "premium:user:geocode:temporary": {
+      "label": "Geokodavimas (nesaugomas)",
+      "descriptionLocationPlatform": "Leisti programai pasiekti geokodavimo paslaugą ir vykdyti nesaugomus geokodus."
+    },
+    "premium:user:networkanalysis": {
+      "label": "Maršruto nustatymas",
+      "description": "Leisti nariui atlikti tinklo analizės užduotis, pvz., maršrutų sudarymas ar pasiekiamumo teritorijos.",
+      "descriptionApp": "Leisti programai pasiekti maršruto parinkimo paslaugą."
+    },
+    "premium:user:networkanalysis:closestfacility": {
+      "label": "Artimiausias objektas",
+      "descriptionLocationPlatform": "Leisti programai pasiekti maršruto parinkimo paslaugą ir atlikti artimiausios vietos maršruto parinkimo operacijas."
+    },
+    "premium:user:networkanalysis:lastmiledelivery": {
+      "label": "Paskutinės mylios pristatymas",
+      "descriptionLocationPlatform": "Leisti programai pasiekti maršruto parinkimo paslaugą ir atlikti vietos maršruto parinkimo operacijas paskutinės mylios pristatymui."
+    },
+    "premium:user:networkanalysis:snaptoroads": {
+      "label": "Pakoreguoti pagal kelius",
+      "descriptionLocationPlatform": "Leisti nariui atlikti tinklo analizės užduotis, pvz., pakoreguoti GPS maršruto taškus pagal kelius."
+    },
+    "premium:user:networkanalysis:locationallocation": {
+      "label": "Vietos priskyrimas",
+      "descriptionLocationPlatform": "Leisti programai pasiekti maršruto parinkimo paslaugą ir atlikti vietos parinkimo operacijas."
+    },
+    "premium:user:networkanalysis:routing": {
+      "label": "Paprastas maršruto nustatymas",
+      "descriptionLocationPlatform": "Leisti programai pasiekti maršruto parinkimo paslaugą ir atlikti standartinio maršruto parinkimo operacijas."
+    },
+    "premium:user:networkanalysis:optimizedrouting": {
+      "label": "Optimizuoto maršruto nustatymas",
+      "descriptionLocationPlatform": "Leisti programai pasiekti maršruto parinkimo paslaugą ir atlikti optimizuoto maršruto parinkimo operacijas."
+    },
+    "premium:user:networkanalysis:vehiclerouting": {
+      "label": "Kelių transporto priemonių maršruto parinkimas",
+      "descriptionLocationPlatform": "Kelių transporto priemonių maršrutų parinkimas leidžia programai pasiekti maršruto parinkimo paslaugą ir atlikti transporto priemonių parko maršrutų parinkimo operacijas."
+    },
+    "premium:user:networkanalysis:origindestinationcostmatrix": {
+      "label": "Išvykimo / atvykimo kainos matrica",
+      "descriptionLocationPlatform": "Leisti programai pasiekti maršruto parinkimo paslaugą ir generuoti kelionės kaštų matricas."
+    },
+    "premium:user:networkanalysis:servicearea": {
+      "label": "Aptarnavimo teritorija",
+      "descriptionLocationPlatform": "Leisti programai pasiekti maršruto parinkimo paslaugą ir generuoti paslaugos sritis."
+    },
+    "premium:user:places": {
+      "label": "Places service",
+      "descriptionLocationPlatform": "Leisti programai pasiekti vietų paslaugą."
+    },
+    "premium:user:spatialanalysis": {
+      "labelOld": "Erdvinės analizės paslauga",
+      "label": "Elementų analizės paslauga",
+      "labelPortal": "Standartinė elementų analizė",
+      "description": "Leisti nariui atlikti elementų analizės užduotis.",
+      "descriptionPortal": "Ši teisė leidžia atlikti standartinės elementų analizės užduotis.",
+      "descriptionLocationPlatform": "Leisti programai pasiekti elementų analizės paslaugą.",
+      "descriptionApp": "Leisti programai pasiekti elementų analizės paslaugą."
+    },
+    "premium:user:geoenrichment": {
+      "label": "Geopraturtinimo paslauga",
+      "description": "Leisti nariui atlikti elementų geopraturtinimą.",
+      "descriptionLocationPlatform": "Leisti programai pasiekti geopraturtinimo paslaugą.",
+      "descriptionApp": "Leisti programai pasiekti geopraturtinimo paslaugą."
+    },
+    "premium:user:demographics": {
+      "label": "Demografiniai žemėlapiai",
+      "description": "Leisti programai pasiekti premium demografinius žemėlapius ArcGIS gyvojo pasaulio atlase.",
+      "descriptionApp": "Leisti programai pasiekti premium demografinius žemėlapius ArcGIS gyvojo pasaulio atlase.",
+      "descriptionLocationPlatform": "Leisti programai pasiekti demografinius žemėlapius ArcGIS gyvojo pasaulio atlase."
+    },
+    "premium:publisher:geoanalytics": {
+      "label": "GeoAnalytics elementų analizė",
+      "description": "Ši teisė leidžia atlikti GeoAnalytics analizės užduotis."
+    },
+    "premium:publisher:rasteranalysis": {
+      "label": "Vaizdų analizė",
+      "description": "Leisti nariui atlikti vaizdų analizės užduotis. Reikalinga ArcGIS Image analizės funkcija.",
+      "descriptionPortal": "Leisti nariui atlikti vaizdų analizės užduotis.",
+      "descriptionApp": "Leisti programėlei atlikti vaizdų analizės užduotis. Reikalinga ArcGIS Image analizės funkcija.",
+      "descriptionAppPortal": "Leisti programėlei atlikti vaizdų analizės užduotis."
+    },
+    "premium:publisher:createAdvancedNotebooks": {
+      "label": "Pažangios užrašinės",
+      "description": "Leiskite nariams užrašinėse importuoti ir naudoti ArcPy modulius.",
+      "descriptionApp": "Leisti programėlei užrašinėse importuoti ir naudoti ArcPy modulius."
+    },
+    "portal:user:runWebTool": {
+      "label": "Paleisti internetinius įrankius",
+      "description": "Leisti nariui paleisti internetinius įrankius.",
+      "descriptionPortal": "Leisti nariui paleisti internetinius įrankius, publikuotus iš užrašinių.",
+      "descriptionApp": "Leisti programėlei paleisti internetinius įrankius.",
+      "descriptionAppPortal": "Leisti programėlei paleisti internetinius įrankius, publikuotus iš užrašinių."
+    },
+    "portal:user:generateApiTokens": {
+      "label": "Generuoti API raktus",
+      "description": "Leisti nariui generuoti API raktus."
+    },
+    "portal:user:assignPrivilegesToApps": {
+      "label": "Priskirti teises OAuth 2.0 programėlėms",
+      "description": "Leisti nariui priskirti teises OAuth 2.0 programėlėms"
+    },
+    "portal:user:createWorkflow": {
+      "label": "Kurti darbo eigos elementą",
+      "description": "Leisti nariui kurti „Workflow Manager“ elementus"
+    },
+    "premium:user:featurereport": {
+      "label": "Elementų ataskaita",
+      "description": "Leisti nariui kurti elementų ataskaitas Survey123.",
+      "descriptionApp": "Leisti programėlei kurti elementų ataskaitas Survey123."
+    },
+    "premium:user:realitymapping": {
+      "label": "Realybės žemėlapių sudarymas",
+      "description": "Leiskite nariui atlikti realybės žemėlapių sudarymo užduotis."
+    },
+    "features:user:edit": {
+      "label": "Redaguoti",
+      "description": "Leisti nariui redaguoti elementus redaguojamuose sluoksniuose, kurie nėra vieši, atsižvelgiant į sluoksnio redagavimo parinktis.",
+      "descriptionApp": "Leisti programėlei redaguoti elementus redaguojamuose sluoksniuose, kurie nėra vieši, atsižvelgiant į sluoksnio redagavimo parinktis."
+    },
+    "features:user:fullEdit": {
+      "label": "Redaguoti turint pilną valdymą",
+      "description": "Leisti nariui įtraukti, pašalinti ir atnaujinti elementus redaguojamame talpinamame elementų sluoksnyje, nepaisant sluoksnio redagavimo nustatymų.",
+      "descriptionApp": "Leisti programėlei įtraukti, pašalinti ir atnaujinti elementus redaguojamame talpinamame elementų sluoksnyje, nepaisant sluoksnio redagavimo parinkčių."
+    },
+    "features:user:manageVersions": {
+      "label": "Tvarkyti viską",
+      "description": "Leisti nariams valdyti versijų užraktus ir peržiūrėti, keisti, šalinti, redaguoti, derinti ir skelbti visose filialų versijose, prieinamose per ArcGIS Server elementų sluoksnius.",
+      "descriptionApp": "Leisti programėlei valdyti versijų užraktus ir peržiūrėti, keisti, šalinti, redaguoti, suderinti ir skelbti visose filialų versijose, prieinamose per ArcGIS Server elementų sluoksnius."
+    },
+    "portal:publisher:createFeatureWebhook": {
+      "label": "Elementų sluoksnis",
+      "description": "Leiskite nariui kurti, redaguoti ir trinti savo elemenų sluoksnio webhooks.",
+      "descriptionApp": "Leisti programėlei kurti, redaguoti ir trinti savo elemenų sluoksnio webhooks."
+    },
+    "portal:admin:viewUsers": {
+      "label": "Peržiūrėti viską",
+      "description": "Leisti nariui peržiūrėti išsamią organizacijos narių paskyrų informaciją.",
+      "descriptionPortal": "Leisti nariui peržiūrėti išsamią portalo narių paskyrų informaciją.",
+      "descriptionApp": "Leisti programėlei peržiūrėti išsamią organizacijos narių paskyrų informaciją."
+    },
+    "portal:admin:updateUsers": {
+      "label": "Atnaujinti",
+      "description": "Leisti nariui organizacijoje atkurti slaptažodžius, naujinti narių paskyrų informaciją ir naujinti narių kategorijas.",
+      "descriptionPortal": "Leisti nariui organizacijoje atkurti slaptažodžius, naujinti narių paskyrų informaciją ir naujinti narių kategorijas jūsų portale.",
+      "descriptionApp": "Leisti programėlei organizacijoje atkurti slaptažodžius, naujinti narių paskyrų informaciją ir naujinti narių kategorijas."
+    },
+    "portal:admin:deleteUsers": {
+      "label": "Pašalinti",
+      "description": "Leisti nariui ištrinti organizacijos narių paskyras.",
+      "descriptionPortal": "Leisti nariui ištrinti portalo narių paskyras.",
+      "descriptionApp": "Leisti programėlei ištrinti organizacijos narių paskyras."
+    },
+    "portal:admin:inviteUsers": {
+      "label": "Pridėti",
+      "labelPortal": "Pakviesti",
+      "description": "Leisti nariui kviesti narius į organizaciją.",
+      "descriptionPortal": "Leisti nariui kviesti narius į portalą.",
+      "descriptionApp": "Leisti programėlei kviesti narius į organizaciją."
+    },
+    "portal:admin:disableUsers": {
+      "label": "Išjungti",
+      "description": "Leisti nariui įjungti ir išjungti organizacijos narių paskyras.",
+      "descriptionPortal": "Leisti nariui įjungti ir išjungti portalo narių paskyras.",
+      "descriptionApp": "Leisti programėlei įjungti ir išjungti organizacijos narių paskyras."
+    },
+    "portal:admin:changeUserRoles": {
+      "label": "Keisti vaidmenis",
+      "description": "Leisti nariui keisti vaidmenį, kuriam priskirta nario paskyra. Atminkite, kad tik administratoriaus vaidmenį turintys nariai gali priskirti administratoriaus vaidmenį kitoms paskyroms arba panaikinti jo priskyrimą.",
+      "descriptionPortal": "Leisti nariui keisti vaidmenį, kuriam priskirta nario paskyra. Atminkite, kad tik administratoriaus vaidmenį turintys nariai gali priskirti administratoriaus vaidmenį kitoms paskyroms arba panaikinti jo priskyrimą.",
+      "descriptionApp": "Leisti programėlei keisti nario paskyrai priskirtą vaidmenį. Atminkite, kad tik administratoriaus vaidmenį turintys nariai gali priskirti administratoriaus vaidmenį kitoms paskyroms arba panaikinti jo priskyrimą."
+    },
+    "portal:admin:manageLicenses": {
+      "label": "Valdyti licencijas",
+      "description": "Leisti nariui organizacijos nariams priskirti licencijas.",
+      "descriptionPortal": "Leisti nariui portalo nariams priskirti licencijas.",
+      "descriptionApp": "Leisti programėlei organizacijos nariams priskirti licencijas."
+    },
+    "portal:admin:updateMemberCategorySchema": {
+      "label": "Kategorijų valdymas",
+      "description": "Leisti nariui konfigūruoti organizacijos narių kategorijas.",
+      "descriptionPortal": "Leisti nariui konfigūruoti portalo narių kategorijas.",
+      "descriptionApp": "Leisti programėlei konfigūruoti organizacijos narių kategorijas."
+    },
+    "portal:admin:viewGroups": {
+      "label": "Peržiūrėti viską",
+      "description": "Leisti nariui peržiūrėti visas organizacijos grupes.",
+      "descriptionPortal": "Leisti nariui peržiūrėti visas portalo grupes.",
+      "descriptionApp": "Leisti programėlei peržiūrėti visas organizacijos grupes."
+    },
+    "portal:admin:updateGroups": {
+      "label": "Atnaujinti",
+      "description": "Leisti nariui naujinti visas organizacijos grupes.",
+      "descriptionPortal": "Leisti nariui naujinti visas portalo grupes.",
+      "descriptionApp": "Leisti programėlei naujinti organizacijos grupes."
+    },
+    "portal:admin:deleteGroups": {
+      "label": "Pašalinti",
+      "description": "Leisti nariui ištrinti visas organizacijos grupes.",
+      "descriptionPortal": "Leisti nariui ištrinti visas portalo grupes.",
+      "descriptionApp": "Leisti programėlei ištrinti organizacijos grupes."
+    },
+    "portal:admin:reassignGroups": {
+      "label": "Perskirti nuosavybę",
+      "description": "Leisti nariui priskirti iš naujo grupes kitiems jūsų organizacijos nariams.",
+      "descriptionPortal": "Leisti nariui priskirti iš naujo grupes kitiems jūsų portalo nariams.",
+      "descriptionApp": "Leisti programėlei priskirti iš naujo grupes kitiems jūsų organizacijos nariams."
+    },
+    "portal:admin:assignToGroups": {
+      "label": "Priskirti narius",
+      "description": "Leisti nariui priskirti narius, atnaujinti nario grupės vaidmenį ir pašalinti narius iš organizacijos grupių.",
+      "descriptionPortal": "Leisti nariui priskirti narius, atnaujinti nario grupės vaidmenį ir pašalinti narius iš portalo grupių.",
+      "descriptionApp": "Leisti programėlei priskirti narius, atnaujinti nario grupės vaidmenį ir pašalinti narius iš organizacijos grupių."
+    },
+    "portal:admin:manageEnterpriseGroups": {
+      "label": "Susieti su konkrečia organizacijos grupe",
+      "description": "Leisti nariui susieti grupės narystę su konkrečia organizacijos grupe.",
+      "descriptionApp": "Leisti programėlei susieti grupės narystę su konkrečia organizacijos grupe."
+    },
+    "portal:admin:createUpdateCapableGroup": {
+      "label": "Kurti su naujinimo galimybėmis",
+      "description": "Leisti nariui kurti grupes su naujinimo galimybėmis.",
+      "descriptionApp": "Leisti programėlei kurti grupes su naujinimo galimybėmis."
+    },
+    "portal:admin:createLeavingDisallowedGroup": {
+      "label": "Kurti grupes, iš kurių negalima išeiti",
+      "description": "Leiskite nariui kurti ir turėti grupes, iš kurių nariai negali išeiti (administracinės grupės).",
+      "descriptionApp": "Leiskite programėlei kurti ir turėti grupes, iš kurių programėlės negali išeiti (administracinės grupės)."
+    },
+    "portal:admin:viewItems": {
+      "label": "Peržiūrėti viską",
+      "description": "Leisti nariui peržiūrėti visą organizacijos turinį.",
+      "descriptionPortal": "Leisti nariui peržiūrėti visą portalo turinį.",
+      "descriptionApp": "Leisti programėlei peržiūrėti visą organizacijos turinį."
+    },
+    "portal:admin:updateItems": {
+      "label": "Atnaujinti",
+      "description": "Leisti nariams atnaujinti ir skirstyti į kategorijas turinį, taip pat redaguoti talpinamus elementų sluoksnius jūsų organizacijoje.",
+      "descriptionPortal": "Leisti nariams atnaujinti ir skirstyti į kategorijas turinį, taip pat redaguoti talpinamus elementų sluoksnius jūsų portale.",
+      "descriptionApp": "Leisti programėlei atnaujinti ir skirstyti į kategorijas turinį, taip pat redaguoti talpinamus elementų sluoksnius jūsų organizacijoje."
+    },
+    "portal:admin:deleteItems": {
+      "label": "Pašalinti",
+      "description": "Leisti nariui ištrinti organizacijos turinį.",
+      "descriptionPortal": "Leisti nariui ištrinti portalo turinį.",
+      "descriptionApp": "Leisti programėlei ištrinti organizacijos turinį."
+    },
+    "portal:admin:reassignItems": {
+      "label": "Perskirti nuosavybę",
+      "description": "Leisti nariui priskirti iš naujo turinį kitiems organizacijos nariams.",
+      "descriptionPortal": "Leisti nariui priskirti iš naujo turinį kitiems portalo nariams.",
+      "descriptionApp": "Leisti programėlei priskirti iš naujo turinį kitiems organizacijos nariams."
+    },
+    "portal:admin:updateItemCategorySchema": {
+      "label": "Kategorijų valdymas",
+      "description": "Leisti nariui konfigūruoti organizacijos turinio kategorijas.",
+      "descriptionPortal": "Leisti nariui konfigūruoti portalo turinio kategorijas.",
+      "descriptionApp": "Leisti programėlei konfigūruoti organizacijos turinio kategorijas."
+    },
+    "portal:publisher:publishServerGPServices": {
+      "label": "Publikuoti internetinius įrankius",
+      "description": "Ši teisė leidžia publikuoti internetinius įrankius, kuriuos palaiko geoapdorojimo paslaugos iš federacinių serverių."
+    },
+    "portal:admin:shareToOrg": {
+      "label": "Bendrinti narių turinį su organizacija",
+      "description": "Leisti nariui organizacijoje bendrinti turinį, priklausantį kitiems jūsų organizacijos nariams.",
+      "descriptionPortal": "Leisti nariui portale bendrinti turinį, priklausantį kitiems jūsų portalo nariams.",
+      "descriptionApp": "Leisti programėlei organizacijoje bendrinti turinį, priklausantį kitiems organizacijos nariams."
+    },
+    "portal:admin:shareToPublic": {
+      "label": "Bendrinti narių turinį viešai",
+      "description": "Leisti nariui viešai bendrinti turinį, priklausantį kitiems jūsų organizacijos nariams.",
+      "descriptionPortal": "Leisti nariui viešai bendrinti turinį, priklausantį kitiems jūsų portalo nariams.",
+      "descriptionApp": "Leisti programėlei viešai bendrinti turinį, priklausantį kitiems jūsų organizacijos nariams."
+    },
+    "portal:admin:createReports": {
+      "label": "Kurkite ir tvarkykite administracines ataskaitas",
+      "description": "Leiskite nariams kurti ir tvarkyti jūsų organizacijos administracines ataskaitas.",
+      "descriptionPortal": "Leiskite nariams kurti ir tvarkyti jūsų portalo administracines ataskaitas.",
+      "descriptionApp": "Leisti programėlei kurti ir tvarkyti jūsų organizacijos administracines ataskaitas."
+    },
+    "marketplace:admin:manage": {
+      "label": "Kurti ir tvarkyti",
+      "description": "Leisti nariui teikti elementus bei valdyti prenumeratas ArcGIS Marketplace, valdyti pirkėjus ir jūsų organizacijos kontaktinę informaciją. Šios teisės naudojimas priklauso nuo organizacijos įsigyjamo sąrašo ir publikavimo prieigos prie ArcGIS Marketplace."
+    },
+    "marketplace:admin:purchase": {
+      "label": "Įsigykite ir gaukite nemokamų produktų",
+      "description": "Leisti nariui siųsti įsigijimo užklausas ir pasiekti nemokamus produktus iš ArcGIS Marketplace teikėjų. Norėdami leisti nariams įsigyti produktų naudojant kredito korteles, turite juos nurodyti kaip paskirtuosius Marketplace pirkėjus."
+    },
+    "marketplace:admin:startTrial": {
+      "label": "Pradėti naudoti bandomąsias versijas",
+      "description": "Leisti nariui pradėti naudoti bandomąsias versijas ArcGIS Marketplace."
+    },
+    "portal:admin:manageSecurity": {
+      "label": "Saugumas ir infrastruktūra",
+      "description": "Leisti nariui valdyti organizacijos saugos ir infrastruktūros nustatymus.",
+      "descriptionPortal": "Leisti nariui valdyti portalo saugos ir infrastruktūros nustatymus.",
+      "descriptionApp": "Leisti programėlei valdyti organizacijos saugos ir infrastruktūros nustatymus."
+    },
+    "portal:admin:manageWebsite": {
+      "label": "Organizacijos svetainė",
+      "description": "Leisti nariui valdyti organizacijos svetainės nustatymus.",
+      "descriptionPortal": "Leisti nariui valdyti portalo svetainės nustatymus.",
+      "descriptionApp": "Leisti programėlei valdyti organizacijos svetainės nustatymus."
+    },
+    "portal:admin:manageCollaborations": {
+      "label": "Bendradarbiavimas",
+      "description": "Leisti nariui valdyti organizacijos bendradarbiavimus.",
+      "descriptionPortal": "Leisti nariui valdyti portalo bendradarbiavimus.",
+      "descriptionApp": "Leisti programėlei valdyti organizacijos bendradarbiavimus."
+    },
+    "portal:admin:manageCredits": {
+      "label": "Kreditai",
+      "description": "Leisti nariui valdyti organizacijos kreditų biudžeto nustatymus.",
+      "descriptionApp": "Leisti programėlei valdyti organizacijos kreditų biudžeto nustatymus."
+    },
+    "portal:admin:manageRoles": {
+      "label": "Narių vaidmenys",
+      "description": "Leisti nariui valdyti organizacijos narių vaidmenis.",
+      "descriptionPortal": "Leisti nariui valdyti portalo narių vaidmenis.",
+      "descriptionApp": "Leisti programėlei valdyti organizacijos narių vaidmenis."
+    },
+    "portal:admin:manageServers": {
+      "label": "Serveriai",
+      "description": "Ši teisė leidžia valdyti portalo serverio nustatymus."
+    },
+    "portal:admin:manageUtilityServices": {
+      "label": "Papildomos paslaugos",
+      "description": "Leisti nariui valdyti organizacijos paslaugų programos nustatymus.",
+      "descriptionPortal": "Leisti nariui valdyti portalo paslaugų programos nustatymus.",
+      "descriptionApp": "Leisti programėlei valdyti organizacijos paslaugų programos nustatymus."
+    },
+    "portal:admin:manageWebhooks": {
+      "label": "Webhooks",
+      "labelPortal": "Organizacijos webhooks",
+      "description": "Leisti nariui kurti, redaguoti ir trinti visus webhooks jūsų organizacijoje.",
+      "descriptionApp": "Leisti programėlei kurti, redaguoti ir trinti visu webhooks jūsų organizacijoje.",
+      "descriptionPortal": "Leisti nariui kurti, redaguoti ir ištrinti organizacijos webhooks ir valdyti visus webhooks portale.",
+      "descriptionAppPortal": "Leisti programėlei kurti, redaguoti ir ištrinti organizacijos webhooks ir valdyti visus webhooks portale."
+    },
+    "portal:admin:createGPWebhook": {
+      "label": "Geoduomenų apdorojimas",
+      "description": "Leiskite nariui kurti, redaguoti ir trinti savo geografinio apdorojimo webhooks.",
+      "descriptionApp": "Leisti programėlei kurti, redaguoti ir trinti savo geoduomenų apdorojimo webhooks."
+    }
+  }
+}

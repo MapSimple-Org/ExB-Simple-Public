@@ -1,0 +1,10 @@
+{
+  "forceFlowLabel": "Paksa sel tepian untuk mengalir ke luar",
+  "inputLayersGroupText": "Pilih raster permukaan input, dan secara opsional data penurunan dan raster bobot.",
+  "itemProperties": {
+    "description": "Output yang dibuat dari menjalankan alat Dapatkan Aliran sebagai Raster.",
+    "snippet": "Output yang dibuat dari Dapatkan Aliran sebagai Raster."
+  },
+  "outputStreamRasterLabel": "Nama raster aliran output",
+  "streamSettingsGroupText": "Tentukan batas akumulasi, metode tujuan aliran, dan bagaimana aliran ditangani di tepi raster permukaan input."
+}

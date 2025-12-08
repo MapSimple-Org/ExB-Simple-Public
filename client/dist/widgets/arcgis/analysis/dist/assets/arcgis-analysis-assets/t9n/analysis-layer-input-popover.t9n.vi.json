@@ -1,0 +1,18 @@
+{
+  "add": "Thêm",
+  "analysisSessionLayers": "Lớp phiên phân tích",
+  "browseAnalysisLayers": "Duyệt tìm lớp",
+  "cancel": "Hủy",
+  "heading": "Chọn lớp",
+  "mapLayers": "Lớp bản đồ",
+  "mesh": "Lớp lưới",
+  "modelVariableLayers": "Lớp biến số mô hình",
+  "multipatch": "Lớp Multipatch",
+  "multipoint": "Lớp đa điểm",
+  "noCompatibleLayers": "Bản đồ không chứa các lớp tương thích. Thêm lớp vào bản đồ hoặc duyệt tìm lớp để thực hiện phân tích.",
+  "noMatchesFound": "Không tìm thấy các mục trùng khớp cho '${searchTerm}'.",
+  "point": "Lớp điểm",
+  "polygon": "Lớp vùng",
+  "polyline": "Lớp đường",
+  "table": "Bảng"
+}

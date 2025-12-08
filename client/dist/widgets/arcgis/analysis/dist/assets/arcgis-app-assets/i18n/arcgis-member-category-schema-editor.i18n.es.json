@@ -1,0 +1,22 @@
+{
+  "dialogHeading": "Configurar categorías de miembros",
+  "noticeTitle": "Edite, elimine o reordene las categorías de su organización.",
+  "noticeDescription": "Puede asignar categorías a los miembros a través de la pestaña Miembros.",
+  "defaultCategoryWarning": "Esta categoría de miembro está establecida como nuevo miembro predeterminado y no se puede editar ni eliminar.",
+  "warning": {
+    "deleteInUseCategory": {
+      "message": {
+        "single": "Hay un miembro asignado a esta categoría. Si elimina la categoría, también se eliminará de este miembro.",
+        "multiple": "Se han asignado ${number} miembros a esta categoría. Si elimina la categoría, también se eliminará de estos miembros.",
+        "unknown": "Miembros asignados a esta categoría: ${number}. Si elimina la categoría, también se eliminará de estos miembros."
+      }
+    },
+    "changeTitleInUseCategory": {
+      "message": {
+        "single": "Hay un miembro asignado a esta categoría. Si actualiza la categoría, se actualizará el miembro para utilizar \"${newTitle}\".",
+        "multiple": "Se han asignado ${number} miembros a esta categoría. Si actualiza la categoría, se actualizarán los miembros para utilizar \"${newTitle}\".",
+        "unknown": "Miembros asignados a esta categoría: ${number}. Si actualiza la categoría, se actualizarán los miembros para utilizar \"${newTitle}\"."
+      }
+    }
+  }
+}

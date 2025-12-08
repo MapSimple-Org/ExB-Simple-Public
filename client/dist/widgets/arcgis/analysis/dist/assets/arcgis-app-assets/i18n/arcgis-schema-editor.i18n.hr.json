@@ -1,0 +1,15 @@
+{
+  "expandAll": "Proširi sve",
+  "collapseAll": "Sažmi sve",
+  "categoryItem": {
+    "expand": "Proširi",
+    "collapse": "Sažmi",
+    "editCategory": "Uredi kategoriju",
+    "deleteCategory": "Izbriši kategoriju",
+    "addSubcategory": "Dodaj potkategoriju",
+    "addCategory": "Dodaj kategoriju",
+    "save": "Spremi",
+    "cancel": "Odustani",
+    "missingTitleMessage": "Naziv kategorije je obavezan."
+  }
+}

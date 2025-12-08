@@ -1,0 +1,26 @@
+{
+  "CCIAnalysisSettingGroupLabel": "Nastavenia indexu",
+  "CCIAnalysisSettingGroupText": "Určite, ako sa má index vypočítať.",
+  "geomeanPercentileLabel": "Zložené poradie (Geometrický priemer percentilov)",
+  "geomeanRawLabel": "Zložené surové hodnoty (geometrický priemer surových hodnôt)",
+  "geomeanScaledLabel": "Zložené škálované hodnoty (Geometrický priemer škálovaných hodnôt)",
+  "indexMethodLabel": "Metóda škálovania a kombinovania premenných",
+  "inputFeaturesOrTableLabel": "Vstupné funkcie alebo tabuľka",
+  "inputLayerGroupText": "Vyberte funkcie alebo tabuľku a premenné, s ktorými chcete vytvoriť index.",
+  "inputVariablesLabel": "Premenné vstupu",
+  "itemProperties": {
+    "description": "Vrstva prvkov vygenerovaná na základe spustenia analytického nástroja Calculate Composite Index.",
+    "snippet": "Vrstva prvkov vygenerovaná z Calculate Composite Index."
+  },
+  "meanPercentileLabel": "Kombinácia hodnôt (priemer percentilov)",
+  "meanRawLabel": "Kombinácia surových hodnôt (Priemer surových hodnôt)",
+  "meanScaledLabel": "Kombinácia škálovaných hodnôt (Priemer škálovaných hodnôt)",
+  "outputIndexMaxLabel": "Maximum",
+  "outputIndexMinLabel": "Minimum",
+  "outputIndexMinMaxLabel": "Minimálne a maximálne hodnoty indexu",
+  "outputIndexReverseLabel": "Obrátené hodnoty indexu",
+  "reverseVariableLabel": "Obrátený smer",
+  "sumFlagsPercentileLabel": "Zvýraznenie extrémov (počet hodnôt nad 90. percentilom)",
+  "toolName": "Výpočet kompozitného indexu",
+  "weight": "Váha"
+}

@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>L&rsquo;outil Generate Tessellations (G&eacute;n&eacute;rer des tessellations) cr&eacute;e une grille de polygones en fonction de l&rsquo;&eacute;tendue, la forme et la taille sp&eacute;cifi&eacute;es.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="binType">
+        <div>
+            <p>Forme des tessellations &agrave; cr&eacute;er.
+            </p>
+        </div>
+    </div>
+    <div id="sizeType">
+        <div>
+            <p>Indique si la taille de la tessellation est d&eacute;finie par sa surface (<b>Area (Surface)</b>) ou une valeur de distance (<b>Distance (Distance)</b>).
+            </p>
+        </div>
+    </div>
+    <div id="binSize">
+        <div>
+            <p>Taille (surface ou distance) des tessellations g&eacute;n&eacute;r&eacute;es. Pour les carr&eacute;s, hexagones, triangles et losanges, la distance d&eacute;termine la hauteur des tessellations. Pour les hexagones transversaux, la distance d&eacute;termine la largeur des tessellations.
+            </p>
+        </div>
+    </div>
+    <div id="binResolution">
+        <div>
+            <p>R&eacute;solution H3 et tessellations. La r&eacute;solution est comprise entre 0 et 15. Avec chaque taille de r&eacute;solution croissante, la surface des polygones diminue d&rsquo;un septi&egrave;me de la taille &agrave; la r&eacute;solution inf&eacute;rieure.
+            </p>
+        </div>
+    </div>
+    <div id="binSizeUnit">
+        <div>
+            <p>Unit&eacute;s &agrave; utiliser pour la taille des tessellations.
+            </p>
+        </div>
+    </div>
+    <div id="extentLayer">
+        <div>
+            <p>&Eacute;tendue couverte par les tessellations.
+            </p>
+            <p class="toolPaneOnly">Le nombre d&rsquo;entit&eacute;s d&eacute;pend de facteurs suppl&eacute;mentaires, tels que les crit&egrave;res de filtrage et l&rsquo;&eacute;tendue d&rsquo;analyse.
+            </p>
+        </div>
+    </div>
+    <div id="intersectStudyArea">
+        <div>
+            <p>Pour les couches d&rsquo;entit&eacute;s, indique si les tessellations couvrent toute l&rsquo;&eacute;tendue ou uniquement les surfaces o&ugrave; elles intersectent des entit&eacute;s.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>Nom de la couche &agrave; cr&eacute;er et ajouter &agrave; la carte.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>Nom du dossier de  <b>My content (Mon contenu)</b> dans lequel est enregistr&eacute; le r&eacute;sultat.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

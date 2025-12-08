@@ -1,0 +1,27 @@
+{
+  "area": "Área",
+  "binResolution": "Resolución del bin H3",
+  "binSize": "Tamaño de bin",
+  "binSizeUnit": "Unidad",
+  "binType": "Tipo de forma de bin",
+  "diamondBins": "Bins romboidales",
+  "distance": "Distancia",
+  "extentLayer": "Capa de extensión",
+  "extentOverrideMessage": "Se utilizará esta capa de extensión en lugar de la extensión de procesamiento establecida en los entornos.",
+  "extentSectionLabel": "Configuración de extensión",
+  "extentSectionText": "Especifique una capa de extensión que deba cubrir la teselación.",
+  "h3hexagonBins": "Bins hexagonales H3",
+  "hexagon": "Hexágono",
+  "intersectStudyArea": "Conservar solo las teselaciones intersecantes",
+  "itemProperties": {
+    "description": "Capa de entidades generada al ejecutar la herramienta de análisis Generar teselaciones.",
+    "snippet": "Capa de entidades generada a partir de Generar teselaciones"
+  },
+  "outputAreasSectionText": "Proporcione un nombre para la cuadrícula de teselación.",
+  "sizeType": "Medición del tamaño de bin",
+  "square": "Cuadrado",
+  "tessellationSettingsLabel": "Configuración de teselación",
+  "tessellationSettingsSummaryText": "Especifique la forma y el tamaño de los bins que desea generar.",
+  "thexagonBins": "Bins hexagonales transversales",
+  "triangleBins": "Bins triangulares"
+}

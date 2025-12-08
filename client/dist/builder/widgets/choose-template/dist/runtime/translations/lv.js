@@ -1,0 +1,1 @@
+System.register([],function(e){return{execute:function(){e({_widgetLabel:"Izveidot jaunu Experience lietotni",createNewApp:"Izveidot jaunu lietotni",largeDevices:"Ier\u012bces ar lielu ekr\u0101nu",mediumDevices:"Ier\u012bces ar vid\u0113ji lielu ekr\u0101nu",smallDevices:"Ier\u012bces ar mazu ekr\u0101nu"})}}});

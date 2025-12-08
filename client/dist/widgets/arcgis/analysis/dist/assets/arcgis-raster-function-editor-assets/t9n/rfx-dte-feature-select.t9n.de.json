@@ -1,0 +1,8 @@
+{
+  "selectFeature": "Feature-Layer auswählen",
+  "browseLayer": "Layer durchsuchen",
+  "loading": "Wird geladen...",
+  "errorCodes": {
+    "required": "Dieser Parameter ist erforderlich."
+  }
+}

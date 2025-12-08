@@ -1,0 +1,6 @@
+{
+  "greaterThanErrorMessage": "De invoerwaarde moet groter zijn dan ${min}",
+  "lesserThanErrorMessage": "De invoerwaarde moet kleiner zijn dan ${max}",
+  "greaterThanOrEqualErrorMessage": "De invoerwaarde moet groter dan of gelijk zijn aan ${min}",
+  "lesserThanOrEqualErrorMessage": "De invoerwaarde moet kleiner dan of gelijk zijn aan ${max}"
+}

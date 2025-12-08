@@ -1,0 +1,11 @@
+{
+  "newTemplate": "Створити новий шаблон",
+  "openTemplate": "Відкрити шаблон",
+  "addTemplate": "Додати шаблон",
+  "addFunction": "Додати функції растру",
+  "addConstant": "Додати константу",
+  "addRaster": "Додати змінну растру",
+  "expand": "Розширити",
+  "editTemplateProperties": "Редагувати властивості шаблону",
+  "viewTemplateProperties": "Перегляд властивостей шаблону"
+}

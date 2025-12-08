@@ -1,0 +1,23 @@
+{
+  "name": "beacon",
+  "type": "template",
+  "templateType": "scrolling-page",
+  "label": "Beacon",
+  "description": "Beacon is a template designed to combine rich visuals with structured information. It supports large imagery, key highlights, and clear text sections to guide users through a topic or concept.",
+  "thumbnail": "thumbnail.png",
+  "order": 24,
+  "templateCreateVersion": "1.18.0",
+  "tags": [
+    "Banner",
+    "Divider",
+    "Gallery",
+    "Card",
+    "Title"
+  ],
+  "categoriesTags": [
+    "Web page",
+    "Scrolling"
+  ],
+  "thumbnailWidth": 320,
+  "thumbnailHeight": 214
+}

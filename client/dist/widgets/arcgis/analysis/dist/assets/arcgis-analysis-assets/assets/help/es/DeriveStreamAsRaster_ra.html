@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>La herramienta Calcular curso de agua como r&aacute;ster genera un r&aacute;ster de curso de agua a partir de un r&aacute;ster de superficie de entrada sin necesidad de rellenar sumideros ni depresiones previamente.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputSurfaceRaster">
+        <div>
+            <p>El r&aacute;ster de elevaci&oacute;n que se utilizar&aacute; para el c&aacute;lculo.
+            </p>
+        </div>
+    </div>
+    <div id="inputDepressionsData">
+        <div>
+            <p>La entrada que define las ubicaciones de las depresiones o sumideros reales, en los que el agua puede entrar pero no salir.
+            </p>
+            <p class="toolPaneOnly">En el caso de las entradas de entidades, el recuento depende de factores adicionales como los criterios de filtrado y el alcance del an&aacute;lisis.
+            </p>
+        </div>
+    </div>
+    <div id="inputWeightRaster">
+        <div>
+            <p>La capa r&aacute;ster que define la fracci&oacute;n de flujo que contribuye a la acumulaci&oacute;n de flujo en cada celda.
+            </p>
+        </div>
+    </div>
+    <div id="accumulationThreshold">
+        <div>
+            <p>El umbral para determinar si una celda dada forma parte de un curso de agua en t&eacute;rminos del &aacute;rea total que fluye hacia dicha celda.
+            </p>
+        </div>
+    </div>
+    <div id="streamDesignationMethod">
+        <div>
+            <p>Especifica si los segmentos de curso de agua en la salida tendr&aacute;n un valor constante, valores &uacute;nicos o estar&aacute;n ordenados.
+            </p>
+        </div>
+    </div>
+    <div id="forceFlow">
+        <div>
+            <p>Especifica si el flujo en las celdas del borde seguir&aacute; las reglas de flujo normales o si siempre fluir&aacute; hacia fuera.
+            </p>
+            <p>Si est&aacute; desactivada, la direcci&oacute;n del flujo ser&aacute; hacia la celda interior con la ca&iacute;da m&aacute;s pronunciada en el valor z. Sin embargo, si la ca&iacute;da es menor o igual que cero, la celda fluir&aacute; hacia fuera del r&aacute;ster de superficie. Si est&aacute; activada, la direcci&oacute;n del flujo ser&aacute; hacia fuera del r&aacute;ster de superficie.
+            </p>
+        </div>
+    </div>
+    <div id="outputStreamRasterName">
+        <div>
+            <p>El nombre de la capa r&aacute;ster de curso que se crear&aacute; y se agregar&aacute; al mapa.
+            </p>
+        </div>
+    </div>
+    <div id="resultType">
+        <div>
+            <p>El tipo de salida que se crear&aacute;. La salida puede ser una capa de im&aacute;genes en teselas o una capa de im&aacute;genes din&aacute;micas.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>El nombre de la carpeta de  <b>Mi contenido</b> en la que se guardar&aacute;n los resultados.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

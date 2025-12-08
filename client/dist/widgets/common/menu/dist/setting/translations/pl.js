@@ -1,0 +1,1 @@
+System.register([],function(n){return{execute:function(){n({subMenuExpandMode:"Tryb rozwijania podmenu",mainMenu:"Menu g\u0142\xf3wne",subMenu:"Podmenu",navArrowColor:"Kolor strza\u0142ki nawigacji"})}}});

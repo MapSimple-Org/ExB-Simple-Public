@@ -1,0 +1,177 @@
+{
+  "memberBrowser": {
+    "filters": "Filtrid",
+    "pageRange": "${start}–${end}, kokku: ${total}",
+    "pageRangeAria": "${start}-${end}, liikmeid kokku: ${total}",
+    "selectedMembers": "Valitud liikmed",
+    "noSelectedMembers": "Praegu valitud liikmeid pole",
+    "noUsersFound": "Teie kriteeriumidele vastavaid kasutajaid ei leitud. Proovige eemaldada mõni filter või muutke otsingut, et kuvada rohkem kasutajaid.",
+    "enterTermExternal": "Sisestage otsingutermin, et otsida kasutajaid kogu ArcGIS Online’ist",
+    "noUsers": "Kasutajaid pole saadaval",
+    "coordinator": "Koostöökoordinaator"
+  },
+  "search": {
+    "searchMembers": "Otsi liikmeid"
+  },
+  "filterUserTypes": {
+    "title": "Kasutajatüüp",
+    "label": "Kasutajatüüp: ${name}",
+    "loading": "Kasutajatüüpide laadimine..."
+  },
+  "filterRoles": {
+    "title": "Roll",
+    "label": "Roll: ${name}",
+    "loading": "Rollide laadimine...",
+    "searchRoles": "Otsi rolle"
+  },
+  "filterOrgGroups": {
+    "title": "Organisatsiooni grupid",
+    "label": "Grupp: ${name}",
+    "loading": "Laaditakse organisatsiooni gruppe...",
+    "searchGroups": "Otsi gruppe",
+    "noGroupsFound": "Gruppe ei leitud. Proovige muuta oma otsingusõna, et kuvada rohkem gruppe."
+  },
+  "filterMyGroups": {
+    "title": "Minu grupid",
+    "label": "Grupp: ${name}",
+    "loading": "Laadin minu gruppe...",
+    "searchMyGroups": "Otsi minu gruppidest"
+  },
+  "filterCategories": {
+    "title": "Kategooriad",
+    "label": "Kategooria: ${name}",
+    "loading": "Kategooriate laadimine...",
+    "noCategoriesTitle": "Liikmete kategooriaid veel ei ole",
+    "noCategories": "Liikmete kategooriad võimaldavad administraatoritel organiseerida oma liikmed kataloogi selleks, et lihtsustada liikmete haldustoiminguid. Organisatsiooni liikmed saavad seda kataloogi kasutada ka teiste liikmete leidmiseks.",
+    "setupCategories": "Määrake liikmete kategooriad",
+    "configureCategories": "Konfigureeri kategooriad",
+    "noCategoriesAssigned": "Ühtegi kategooriat pole määratud"
+  },
+  "filterPartnerCollabs": {
+    "title": "Partnerkoostööd",
+    "label": "Partnerkoostööd: ${name}",
+    "loading": "Partnerkoostööde laadimine...",
+    "coordinatorsOnly": "Ainult koostöökoordinaatorid",
+    "coordinatorsDescription": "Koostöökoordinaatorid on partnerorganisatsioonide esindajad, kelle saab gruppi lisada ilma kinnitust nõudmata.",
+    "coordinatorsInfoLabel": "Lisateave koostöökoordinaatorite kohta"
+  },
+  "filterSearchSwitch": {
+    "searchAll": "Otsi kõiki ArcGIS Online'i organisatsiooni liikmeid",
+    "searchPartners": "Kaasa see ja partnerorganisatsioonide liikmed"
+  },
+  "table": {
+    "caption": "Liikmete tulemused, nuppudega veerupäised on sorditavad.",
+    "selectAll": "Vali kõik",
+    "selection": "Valik",
+    "headers": {
+      "name": "Nimi",
+      "membertype": "Grupi roll",
+      "affiliation": "Ohutüüp",
+      "joined": "Liitunud",
+      "credits": "Järelejäänud krediit",
+      "remainingCredits": "Järelejäänud krediiti kokku ${num}",
+      "lastlogin": "Viimane sisselogimine",
+      "usertype": "Kasutajatüüp",
+      "role": "Roll",
+      "mfaenabled": "Mitmikautentimine"
+    }
+  },
+  "tableRow": {
+    "moreOptions": "Rohkem valikuid",
+    "groupManager": "Grupihaldur",
+    "owner": "Omanik",
+    "member": "Liige",
+    "myOrg": "Minu organisatsioon",
+    "other": "Muud",
+    "coordinator": "Koostöökoordinaator",
+    "noLimit": "Piiranguta",
+    "creditsNumber": "${remain}/${total}",
+    "today": "Täna",
+    "yesterday": "Eile",
+    "never": "Mitte kunagi",
+    "role": "Roll",
+    "memberIsCoordinator": "See liige on koostöökoordinaator",
+    "rolesForCoordinator": "Koostöökoordinaatoritel saab olla ainult administraatori või vahendaja roll.",
+    "memberIsContact": "See liige on halduskontakt",
+    "removeFromContact": "Kui soovite muuta selle liikme rolli, peate esmalt eemaldama nad ${linkStart}halduskontaktide loendist${linkEnd}."
+  },
+  "listCard": {
+    "moreOptions": "Rohkem valikuid",
+    "lastLoggedIn": "Viimane sisselogimine ${value}",
+    "today": "Täna",
+    "yesterday": "Eile",
+    "hasNotLoggedIn": "Pole veel sisse loginud",
+    "neverSignedInTooltip": "See liige pole kordagi sisse loginud oma kontole, mis loodi ${date}",
+    "userType": "Kasutajatüüp",
+    "role": "Roll",
+    "creditsRemaining": "Järelejäänud krediit",
+    "noLimit": "Piiranguta",
+    "creditsNumber": "${remain}/${total}",
+    "addonLicenses": "Täiendavad litsentsid",
+    "configureLicenses": "Konfigureeri litsentsid",
+    "groups": "Grupid",
+    "configureGroups": "Konfigureeri grupid",
+    "viewGroups": "Kuva grupid"
+  },
+  "myOrg": {
+    "myOrgView": "Minu organisatsiooni vaade"
+  },
+  "filterGroupRole": {
+    "title": "Grupi roll",
+    "label": "Grupi roll: ${role}",
+    "admins": "Omanik ja grupihaldurid",
+    "member": "Liige"
+  },
+  "filterAffiliation": {
+    "title": "Ohutüüp",
+    "label": "Ohutüüp: ${name}",
+    "myOrg": "Minu organisatsioon",
+    "other": "Muud"
+  },
+  "filterCreditsRemain": {
+    "title": "Järelejäänud krediit",
+    "noLimit": "Piiranguta",
+    "lessThan": "Väiksem kui",
+    "credits": "Krediidid",
+    "labelNoLimit": "Krediidid: piiranguta",
+    "labelLess": "Krediidid: vähem kui ${value}",
+    "invalidValue": "Sisestatud väärtus ei sobi."
+  },
+  "filterEmailVerification": {
+    "title": "Meiliaadressi kinnitamise olek",
+    "unverified": "Kinnitamata meiliaadressid",
+    "verified": "Kinnitatud meiliaadressid",
+    "label": "Meiliaadressi kinnitamise olek: ${status}"
+  },
+  "filterLoginType": {
+    "title": "Sisselogimise tüüp",
+    "label": "Sisselogimise tüüp: ${type}",
+    "social": "Sotsiaalne"
+  },
+  "filterApp": {
+    "title": "Rakendus",
+    "label": "Rakendus: ${app}"
+  },
+  "filterMFA": {
+    "title": "Mitmikautentimine",
+    "enabled": "Lubatud",
+    "disabled": "Keelatud",
+    "label": "Mitmikautentimine: ${status}"
+  },
+  "roles": {
+    "user": "Kasutaja",
+    "publisher": "Avaldaja",
+    "admin": "Administraator",
+    "viewer": "Viewer",
+    "editor": "Andmete muutja",
+    "facilitator": "Vahendaja"
+  },
+  "view": {
+    "view": "Kuva",
+    "list": "Loend",
+    "table": "Tabel"
+  },
+  "assignedLicenses": "Kuva ainult liikmed, kellele on see litsents määratud",
+  "onlyDoubleAssigned": "Kuva ainult liikmed, kellele on see litsents topelt määratud",
+  "maxSelected": "Korraga saab valida ainult ${number} liiget."
+}

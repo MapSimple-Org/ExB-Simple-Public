@@ -1,0 +1,9 @@
+{
+  "inputLayerGroupText": "選擇輸入圖層來計算區域邊界的幾何。",
+  "itemProperties": {
+    "description": "執行「作為表格的地區幾何」分析工具產生的輸出表。",
+    "snippet": "「作為表格的地區幾何」所產生的輸出表"
+  },
+  "zonalGeometrySettingGroupLabel": "地區幾何設定",
+  "zonalGeometrySettingGroupText": "指定要計算的儲存格大小。"
+}

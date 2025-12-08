@@ -1,0 +1,22 @@
+{
+  "general": "全般",
+  "parameters": "パラメーター",
+  "variables": "変数",
+  "name": "名前",
+  "namePlaceHolder": "名前を入力",
+  "description": "説明",
+  "parameter": "パラメーター",
+  "isPublic": "IsPublic",
+  "isDataset": "IsDataset",
+  "unknownPixelType": "不明",
+  "outputPixelType": "出力ピクセル タイプ",
+  "u8PixelType": "符号なし 8 ビット",
+  "s8PixelType": "符号あり 8 ビット",
+  "u16PixelType": "符号なし 16 ビット",
+  "s16PixelType": "符号あり 16 ビット",
+  "u32PixelType": "符号なし 32 ビット",
+  "s32PixelType": "符号あり 32 ビット",
+  "f32PixelType": "32 ビット浮動小数点",
+  "f64PixelType": "64 ビット倍精度",
+  "properties": "プロパティ"
+}

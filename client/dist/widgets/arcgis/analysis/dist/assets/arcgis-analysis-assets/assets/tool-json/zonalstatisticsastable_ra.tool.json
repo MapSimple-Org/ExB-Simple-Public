@@ -1,0 +1,171 @@
+{
+  "name": "ZonalStatisticsAsTable",
+  "displayName": "ZonalStatisticsAsTable",
+  "description": "Calculates  the values of a raster within the zones of another dataset and reports the results to a table.",
+  "category": "",
+  "helpUrl": "https://rasteranalysisdev.arcgis.com/arcgis/rest/directories/arcgisoutput/RasterAnalysisTools_GPServer/System_RasterAnalysisTools/ZonalStatisticsAsTable.htm",
+  "executionType": "esriExecutionTypeAsynchronous",
+  "parameters": [
+    {
+      "name": "inputZoneRasterOrFeatures",
+      "dataType": "GPString",
+      "displayName": "inputZoneRasterOrFeatures",
+      "description": "The input that defines the boundaries of the zones, or areas, that will be summarized.",
+      "direction": "esriGPParameterDirectionInput",
+      "defaultValue": "",
+      "parameterType": "esriGPParameterTypeRequired",
+      "category": ""
+    },
+    {
+      "name": "inputValueRaster",
+      "dataType": "GPString",
+      "displayName": "inputValueRaster",
+      "description": "The raster layer that contains the cell values that will be used to calculate statistics. ",
+      "direction": "esriGPParameterDirectionInput",
+      "defaultValue": "",
+      "parameterType": "esriGPParameterTypeRequired",
+      "category": ""
+    },
+    {
+      "name": "outputTableName",
+      "dataType": "GPString",
+      "displayName": "outputTableName",
+      "description": "The name of the zonal statistics raster layer that will be created.",
+      "direction": "esriGPParameterDirectionInput",
+      "defaultValue": "",
+      "parameterType": "esriGPParameterTypeRequired",
+      "category": ""
+    },
+    {
+      "name": "zoneField",
+      "dataType": "GPString",
+      "displayName": "zoneField",
+      "description": "The field that contains the values that define each zone.",
+      "direction": "esriGPParameterDirectionInput",
+      "defaultValue": "",
+      "parameterType": "esriGPParameterTypeRequired",
+      "category": ""
+    },
+    {
+      "name": "ignoreNodata",
+      "dataType": "GPBoolean",
+      "displayName": "ignoreNodata",
+      "description": "Specifies whether NoData cells in the Input value raster will be ignored in the results of the zones they fall within. True—NoData cells in the value raster will be ignored in the statistic calculation. False—NoData cells will not be ignored, and the entire zone will receive the NoData value on the output raster. ",
+      "direction": "esriGPParameterDirectionInput",
+      "defaultValue": true,
+      "parameterType": "esriGPParameterTypeOptional",
+      "category": ""
+    },
+    {
+      "name": "statisticType",
+      "dataType": "GPString",
+      "displayName": "statisticType",
+      "description": "Specifies the statistic type that will be calculated.",
+      "direction": "esriGPParameterDirectionInput",
+      "defaultValue": "ALL",
+      "parameterType": "esriGPParameterTypeOptional",
+      "category": "",
+      "choiceList": [
+        "ALL",
+        "MEAN",
+        "MAJORITY",
+        "MAJORITY_COUNT",
+        "MAJORITY_PERCENT",
+        "MAXIMUM",
+        "MEDIAN",
+        "MINIMUM",
+        "MINORITY",
+        "MINORITY_COUNT",
+        "MINORITY_PERCENT",
+        "PERCENTILE",
+        "RANGE",
+        "STD",
+        "SUM",
+        "VARIETY",
+        "MIN_MAX",
+        "MEAN_STD",
+        "MIN_MAX_MEAN",
+        "MAJORITY_VALUE_COUNT_PERCENT",
+        "MINORITY_VALUE_COUNT_PERCENT"
+      ]
+    },
+    {
+      "name": "percentileValues",
+      "dataType": "GPMultiValue:GPDouble",
+      "displayName": "percentileValues",
+      "description": "Specifies the percentile values that will be calculated. ",
+      "direction": "esriGPParameterDirectionInput",
+      "defaultValue": [90],
+      "parameterType": "esriGPParameterTypeRequired",
+      "category": "",
+      "parameterInfos": [
+        {
+          "name": "",
+          "dataType": "GPDouble",
+          "displayName": ""
+        }
+      ]
+    },
+    {
+      "name": "processAsMultidimensional",
+      "dataType": "GPBoolean",
+      "displayName": "processAsMultidimensional",
+      "description": "Specifies how the input rasters will be processed if they are multidimensional. False—The statistics will be calculated from the current slice of the input multidimensional dataset. True—The statistics will be calculated for all dimensions of the input multidimensional dataset.  ",
+      "direction": "esriGPParameterDirectionInput",
+      "defaultValue": false,
+      "parameterType": "esriGPParameterTypeOptional",
+      "category": ""
+    },
+    {
+      "name": "percentileInterpolationType",
+      "dataType": "GPString",
+      "displayName": "percentileInterpolationType",
+      "description": "Specifies the method that will be used when the number of values from the input raster to be calculated is an even number. ",
+      "direction": "esriGPParameterDirectionInput",
+      "defaultValue": "AUTO_DETECT",
+      "parameterType": "esriGPParameterTypeOptional",
+      "category": "",
+      "choiceList": ["AUTO_DETECT", "NEAREST", "LINEAR"]
+    },
+    {
+      "name": "circularCalculation",
+      "dataType": "GPBoolean",
+      "displayName": "circularCalculation",
+      "description": "Specifies how the Input value raster cell values will be processed for circular data. False—Ordinary arithmetic (linear) statistics will be calculated.  True—Circular statistics will be calculated. ",
+      "direction": "esriGPParameterDirectionInput",
+      "defaultValue": false,
+      "parameterType": "esriGPParameterTypeOptional",
+      "category": ""
+    },
+    {
+      "name": "circularWrapValue",
+      "dataType": "GPDouble",
+      "displayName": "circularWrapValue",
+      "description": "Specifies the value that will be used to round a linear value to the range of a given circular statistic.",
+      "direction": "esriGPParameterDirectionInput",
+      "defaultValue": 360,
+      "parameterType": "esriGPParameterTypeOptional",
+      "category": ""
+    },
+    {
+      "name": "context",
+      "dataType": "GPString",
+      "displayName": "context",
+      "description": "Specifies the analysis environments. ",
+      "direction": "esriGPParameterDirectionInput",
+      "defaultValue": "",
+      "parameterType": "esriGPParameterTypeOptional",
+      "category": ""
+    },
+    {
+      "name": "outputTable",
+      "dataType": "GPString",
+      "displayName": "outputTable",
+      "description": "",
+      "direction": "esriGPParameterDirectionOutput",
+      "defaultValue": "",
+      "parameterType": "esriGPParameterTypeDerived",
+      "category": ""
+    }
+  ]
+}

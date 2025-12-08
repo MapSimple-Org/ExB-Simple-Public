@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>Pārvieto&scaron;anās izmaksu aprēķinā&scaron;anas rīks nosaka pārvieto&scaron;anās laiku vai attālumu starp punktu pāriem.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="originsLayer">
+        <div>
+            
+            <p class="OnlineOnly">Punktu slānis, kas apzīmē izcelsmes vietas, no kurām tiks aprēķinātas ceļa izmaksas. Tiek atbalstīti slāņi ar līdz pat  pieci tūkstoši elementiem. </p>  
+            <p class="PortalOnly">Punktu slānis, kas apzīmē izcelsmes vietas, no kurām tiks aprēķinātas ceļa izmaksas.
+            </p>
+            <p class="toolPaneOnly">Elementu skaits ir atkarīgs no papildu faktoriem, piemēram, filtrē&scaron;anas kritērijiem un analīzes apjoma.
+            </p>
+        </div>
+    </div>
+    <div id="destinationsLayer">
+        <div>
+            
+            <p class="OnlineOnly">Punktu slānis, kas apzīmē galamērķa vietas, uz kurām tiks aprēķinātas ceļa izmaksas. Tiek atbalstīti slāņi ar līdz pat  pieci tūkstoši elementiem. </p> 
+            <p class="PortalOnly">Punktu slānis, kas apzīmē galamērķa vietas, uz kurām tiks aprēķinātas ceļa izmaksas.
+            </p>
+            <p class="toolPaneOnly">Elementu skaits ir atkarīgs no papildu faktoriem, piemēram, filtrē&scaron;anas kritērijiem un analīzes apjoma.
+            </p>
+        </div>
+    </div>
+    <div id="originsLayerRouteIDField">
+        <div>
+            
+            <p>Lauks  <b>no slāņa</b> datu kopas, kas definē iepriek&scaron; pie&scaron;ķirto izcelsmes-mērķa pāri. Ja ir vairākas sākuma un galamērķa atra&scaron;anās vietas, &scaron;im ID ir jāatbilst vērtībai <b>slāņa mar&scaron;ruta ID</b> laukā.
+            </p>
+        </div>
+    </div>
+    <div id="destinationsLayerRouteIDField">
+        <div>
+            
+            <p>Lauks  <b>uz slāņa</b> datu kopas, kas definē iepriek&scaron; pie&scaron;ķirto izcelsmes-mērķa pāri. Ja ir vairākas izcelsmes un galamērķa atra&scaron;anās vietas, &scaron;im ID ir jāatbilst vērtībai <b>slāņa mar&scaron;ruta ID</b> laukā.
+            </p>
+        </div>
+    </div>
+    <div id="pointBarrierLayer">
+        <div>
+            <p>Viens vai vairāki punktu elementi, kas darbojas kā īslaicīgi ierobežojumi (barjeras), braucot pa ielām. Brauk&scaron;ana ir atļauta pa ielu, ne&scaron;ķērsojot barjeru.
+            </p>
+        </div>
+    </div>
+    <div id="lineBarrierLayer">
+        <div>
+            <p>Viens vai vairāki punktu elementi, kas darbojas kā īslaicīgi ierobežojumi (barjeras), braucot pa ielām. Līnijas barjeras aizliedz pārvietoties jebkur, kur barjeras &scaron;ķērso ielas.
+            </p>
+        </div>
+    </div>
+    <div id="polygonBarrierLayer">
+        <div>
+            <p>Viens vai vairāki laukuma elementi, kas darbojas kā īslaicīgi ierobežojumi (barjeras), braucot pa ielām. Laukuma barjeras aizliedz pārvietoties jebkur, kur laukums &scaron;ķērso ielas.
+            </p>
+        </div>
+    </div>
+    <div id="measurementType">
+        <div>
+            <p>Metode, kas tiks izmantota attāluma vai laika mērī&scaron;anai. Metode var būt līnijas attālums vai pārvieto&scaron;anās režīms.
+            </p>
+        </div>
+    </div>
+    <div id="timeOfDay">
+        <div>
+            <p>Datums un laiks, kad notikusi izbrauk&scaron;ana no izcelsmes vietām slāņa datu kopā.
+            </p>
+        </div>
+    </div>
+    <div id="routeShape">
+        <div>
+            <p>Norāda, vai sākumpunkts un galamērķis tiks savienoti, izmantojot zirnekļa tīkla tipa līnijas vai vēlamās līnijas (<b>Taisna līnija</b>), vai ielas pamatā eso&scaron;o ielu tīklu (<b>Sekot ielām</b>).
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>Tā slāņa nosaukums, kas tiks izveidots un pievienots kartei.
+            </p>
+        </div>
+    </div>
+    <div id="includeRouteLayers">
+        <div>
+            <p>Norāda, vai katrs rezultātu mar&scaron;ruts tiks saglabāts kā mar&scaron;ruta slānis.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            
+            <p>Mapes nosaukums sadaļā  <b>Mans saturs</b>, kurā tiks saglabāti rezultāti.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

@@ -1,0 +1,69 @@
+{
+  "loadingText": "Sémasablonok betöltése",
+  "cancel": "Mégse",
+  "finishSetup": "Beállítás befejezése",
+  "hasUnsavedChanges": "Módosításokat hajtott végre a kategórián, amelyek elvesznek, ha nem menti előtte. Biztosan bezárja ezt a nézetet, és elveti a módosításokat?",
+  "error": {
+    "generic": {
+      "title": "Hiba a kategóriák frissítésekor.",
+      "message": "Hiba történt. Próbálja meg újra később."
+    },
+    "maxDepthExceeded": {
+      "title": "Hiba a kategóriák frissítésekor.",
+      "message": "Nem ágyazhat egymásba kategóriákat 2 szintnél mélyebben."
+    },
+    "destinationHasSameName": {
+      "title": "Hiba a kategóriák frissítésekor.",
+      "message": "Már létezik ilyen nevű kategória a célkategóriában."
+    },
+    "emptyTitle": {
+      "title": "Hiba a kategóriák frissítésekor.",
+      "message": "A kategória címe nem lehet üres."
+    },
+    "noSchema": {
+      "title": "A séma nem található.",
+      "message": "Az elemséma nem található a felhasználónál."
+    },
+    "maxCharacter": {
+      "title": "Hiba a kategóriák frissítésekor.",
+      "message": "A kategórianevek legfeljebb ${maxCharacter} karakter hosszúak lehetnek."
+    },
+    "invalidCharacters": {
+      "title": "Hiba a kategóriák frissítésekor.",
+      "single": "A kategória nem tartalmazhatja ezt a karaktert: ${invalidCharacters}.",
+      "multiple": "A kategória nem tartalmazhatja a következő karaktereket: ${invalidCharacters}.",
+      "unknown": "A kategória nem tartalmazhatja a következő karaktereket: ${invalidCharacters}."
+    }
+  },
+  "warning": {
+    "deleteInUseCategory": {
+      "title": "Kategória törlése",
+      "cta": "Kategória törlése"
+    },
+    "changeTitleInUseCategory": {
+      "title": "Kategória frissítése",
+      "cta": "Kategória frissítése"
+    }
+  },
+  "template": {
+    "title": "Kategóriasablonok",
+    "learnMore": "További információ",
+    "templateList": {
+      "custom": {
+        "title": "Egyéni kategóriák"
+      },
+      "arcgis": {
+        "title": "ArcGIS-kategóriák",
+        "message": "Az ArcGIS-kategóriák a térinformatikai tartalmak kategorizálására szolgáló témakör-kategóriák és -alkategóriák. Az ArcGIS-kategóriákat az ArcGIS Living Atlas of the World támogatására használják."
+      },
+      "iso": {
+        "title": "ISO-kategóriák",
+        "message": "Az ISO-kategóriák a Nemzetközi Szabványügyi Szervezet témakör-kategóriái, amelyek módszert kínálnak a földrajzi adatok leírására és katalogizálására."
+      },
+      "inspire": {
+        "title": "INSPIRE-kategóriák",
+        "message": "Az INSPIRE-kategóriák téradatokra vonatkozó témaköröket tartalmaznak, ill. ezen témakörök átfogó rendszerét alkotják (lásd INSPIRE-irányelv)."
+      }
+    }
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "weightedOverlayTable": "Tabela nakładania ważonego",
+  "id": "ID",
+  "layer": "Warstwa",
+  "field": "Pole",
+  "influence": "Wpływ",
+  "sumOfInfluence": "Suma oddziaływania",
+  "value": "Wartość",
+  "remapTable": "Tabela ponownego przyporządkowania",
+  "scale": "Skala",
+  "scales": "Skale",
+  "selectRaster": "Wybierz raster"
+}

@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html dir="rtl">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>הכלי 'סיווג פיקסלים באמצעות למידה עמוקה' משתמש במודל למידה עמוקה מאומן על תמונת קלט כדי להפיק רסטר מסווג.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputRaster">
+        <div>
+            <p>שכבת הצלומים אשר תשמש לסיווג פיקסלים.
+            </p> 
+        </div>
+    </div>
+    <div id="processAllRasterItems">
+        <div>
+            <p>מציין כיצד פריטי רסטר בשכבת תצלומים יעובדו לאחר הפיכתם למוזאיקה: ביחד או בנפרד.
+            </p>
+        </div>
+    </div>
+    <div id="model">
+        <div>
+            <p>החבילה של למידה עמוקה שמכילה את המודל אשר ישמש לסיווג הפיקסלים
+            </p>
+        </div>
+    </div>
+    <div id="modelArguments">
+        <div>
+            <p>הארגומנטים של המודל שנוכחים במודל הלמידה העמוקה ביחד עם ערכי ברירת המחדל שלהם.
+            </p>
+        </div>
+    </div>
+    <div id="outputClassifiedRaster">
+        <div>
+            <p>שם שכבת התצלומים של הפלט אשר תסווג.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>שם השכבה שתיווצר ותתווסף למפה.
+            </p>
+        </div>
+    </div>
+    <div id="resultType">
+        <div>
+            
+            <p>סוג הקלט שייווצר. הפלט יכול להיות שכבת תצלומים באריחים או שכבת תצלומים דינמית.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            
+            <p>שם התיקייה  <b>בתוכן שלי</b> שבה התוצאה תישמר.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

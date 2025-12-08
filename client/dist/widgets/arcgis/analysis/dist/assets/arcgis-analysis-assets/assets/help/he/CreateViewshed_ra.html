@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html dir="rtl">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>הכלי 'קו ראייה גיאודזי' מזהה את המיקומים על פני שטח רסטר שהם גלויים למיקומי הצופה של הקלט.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputElevationSurface">
+        <div>
+            <p>רסטר קו הגובה שעליו יחושב קו הראייה.
+            </p>
+        </div>
+    </div>
+    <div id="inputObserverFeatures">
+        <div>
+            <p>מיקומי הצופה שעבורם קו הראייה יחושב.
+            </p>
+        </div>
+    </div>
+    <div id="optimizeFor">
+        <div>
+            <p>ממטב חישוב קו ראייה על בסיס מהירות או דיוק.
+            </p>
+        </div>
+    </div>
+    <div id="verticalError">
+        <div>
+            <p>כמות אי-הוודאות בערכי הגובה של ערך  <b>פני שטח גובה קלט</b>.
+            </p>
+        </div>
+    </div>
+    <div id="refractivityCoefficient">
+        <div>
+            <p>המקדם של שבירת אור הנראה באוויר.
+            </p>
+        </div>
+    </div>
+    <div id="maximumViewingDistanceField">
+        <div>
+            <p>מרחק הראייה המקסימלי לחישוב קו הראייה.
+            </p>
+            <p>ניתן להגדיר את המרחק באמצעות ערך והיחידות שלו או משדה בערך  <b>קלט תכונת קו או נקודה של צופה</b>.
+            </p>
+        </div>
+    </div>
+    <div id="minimumViewingDistanceField">
+        <div>
+            <p>מרחק הראייה המינימלי לחישוב קו הראייה.
+            </p>
+            <p>ניתן להגדיר את המרחק באמצעות ערך והיחידות שלו או משדה בערך  <b>קלט תכונת קו או נקודה של צופה</b>.
+            </p>
+        </div>
+    </div>
+    <div id="viewingDistanceIs3D">
+        <div>
+            <p>מציין האם סוג מרחקי הצפייה המקסימלי והמינימלי יימדדו במרחק תלת-ממד או דו-ממד.
+            </p>
+            <p>אם לא מסומן, מרחקי הצפייה יטופלו כמרחקים אוקלידיים דו-ממדיים. אם מסומן, מרחקי הצפייה יטופלו כמרחקים תלת-ממדיים.
+            </p>
+        </div>
+    </div>
+    <div id="observersElevationField">
+        <div>
+            <p>קו גובה פני השטח של מיקומי הצופה.
+            </p>
+            <p>ניתן להגדיר את קו הגובה באמצעות ערך והיחידות שלו או משדה בערך  <b>קלט ישויות קו או נקודה של צופה</b>.
+            </p>
+        </div>
+    </div>
+    <div id="observersHeightField">
+        <div>
+            <p>הגובה של הצופה מעל הקרקע.
+            </p>
+            <p>ניתן להגדיר את הגובה באמצעות ערך והיחידות שלו או משדה בערך  <b>קלט תכונת קו או נקודה של צופה</b>.
+            </p>
+        </div>
+    </div>
+    <div id="targetHeightField">
+        <div>
+            <p>הגובה של מטרות על הקרקע.
+            </p>
+            <p>ניתן להגדיר את הגובה באמצעות ערך והיחידות שלו או משדה הערך  <b>קלט תכונת קו או נקודה של צופה</b>.
+            </p>
+        </div>
+    </div>
+    <div id="horizontalStartAngle">
+        <div>
+            <p>זווית ההתחלה של טווח הסריקה האופקי.
+            </p>
+            <p>ניתן להגדיר את הזווית באמצעות ערך מ-0 עד 360 או משדה הערך  <b>קלט ישויות קו או נקודה של צופה</b>.
+            </p>
+        </div>
+    </div>
+    <div id="horizontalEndAngle">
+        <div>
+            <p>זווית הסיום של טווח הסריקה האופקי.
+            </p>
+            <p>ניתן להגדיר את הזווית באמצעות ערך מ-0 עד 360 או משדה הערך  <b>קלט ישויות קו או נקודה של צופה</b>.
+            </p>
+        </div>
+    </div>
+    <div id="verticalUpperAngle">
+        <div>
+            <p>הגבול העליון של הזווית האנכית של הסריקה יחסית למישור האופקי.
+            </p>
+            <p>ניתן להגדיר את הזווית באמצעות ערך בין -90 עד 90 או משדה הערך  <b>קלט ישויות קו או נקודה של צופה</b>.
+            </p>
+        </div>
+    </div>
+    <div id="verticalLowerAngle">
+        <div>
+            <p>הגבול התחתון של הזווית האנכית של הסריקה יחסית למישור האופקי.
+            </p>
+            <p>ניתן להגדיר את הזווית באמצעות ערך בין -90 עד 90 או משדה הערך  <b>קלט ישויות קו או נקודה של צופה</b>.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>השם של שכבת רסטר קו הראייה שתיווצר ותתווסף למפה. שכבה זו מכילה את האזורים הנראים שהצופים יכולים לראות, וערכי התא מייצגים את מספר הצופים שיכולים לצפות בתאים.
+            </p>
+        </div>
+    </div>
+    <div id="aboveGroundLevelOutputName">
+        <div>
+            <p>שם שכבת הרסטר של הרמה מעל הקרקע (AGL) שתיווצר ותתווסף למפה.
+            </p>
+        </div>
+    </div>
+    <div id="resultType">
+        <div>
+            <p>סוג הקלט שייווצר. הפלט יכול להיות שכבת תצלומים באריחים או שכבת תצלומים דינמית.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>שם התיקייה  <b>בתוכן שלי</b> שבה התוצאה תישמר.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

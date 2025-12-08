@@ -1,0 +1,18 @@
+{
+  "add": "הוספה",
+  "analysisSessionLayers": "שכבות הפעלת ניתוח",
+  "browseAnalysisLayers": "עיין בשכבות",
+  "cancel": "ביטול",
+  "heading": "בחר שכבה",
+  "mapLayers": "שכבות מפה",
+  "mesh": "שכבת Mesh",
+  "modelVariableLayers": "שכבות משתני מודל",
+  "multipatch": "שכבת MultiPatch",
+  "multipoint": "שכבת Multipoint",
+  "noCompatibleLayers": "המפה לא מכילה שכבות תואמות. הוסף שכבות למפה או דפדף לאיתור שכבות לביצוע ניתוח.",
+  "noMatchesFound": "לא נמצאו התאמות עבור '${searchTerm}'.",
+  "point": "שכבת נקודות",
+  "polygon": "שכבת פוליגון",
+  "polyline": "שכבת פולי קו",
+  "table": "טבלה"
+}

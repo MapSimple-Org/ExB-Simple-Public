@@ -1,0 +1,15 @@
+{
+  "addDataStore": "Tambahkan data store",
+  "addFile": "Tambahkan file",
+  "addServiceConnection": "Tambahkan koneksi",
+  "itemNotFound": "Item tidak ada atau tidak dapat diakses.",
+  "itemPermissionDenied": "Anda tidak memiliki izin untuk mengakses item ini.",
+  "previewDetails": "Pratinjau detail",
+  "queryModelArgsErrMsg": "Gagal membuat kueri argumen model.",
+  "queryModelArgsMsg": "Argumen model pembuatan kueri...",
+  "removeItem": "Hapus item",
+  "replaceItem": "Ganti item",
+  "requiredInputMessage": "Parameter ini diperlukan.",
+  "selectItem": "Pilih item",
+  "viewDetails": "Lihat detail"
+}

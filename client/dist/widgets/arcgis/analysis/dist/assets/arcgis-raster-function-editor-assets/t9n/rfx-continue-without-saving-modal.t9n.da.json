@@ -1,0 +1,6 @@
+{
+  "header": "Vil du starte forfra uden at gemme?",
+  "content": "Du har ændringer, der ikke er gemt, i '${rftTitle}'. Hvis du starter forfra med en ny skabelon, går disse ændringer tabt.",
+  "cancel": "Annuller",
+  "continue": "Fortsæt"
+}

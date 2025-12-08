@@ -1,0 +1,10 @@
+{
+  "forceFlowLabel": "Buộc các ô ở cạnh mép chảy ra ngoài",
+  "inputLayersGroupText": "Chọn raster bề mặt đầu vào và tùy chọn dữ liệu vị trí lõm và raster trọng số.",
+  "itemProperties": {
+    "description": "Đầu ra được tạo từ việc chạy công cụ Nội suy Dòng chảy Thành Raster.",
+    "snippet": "Đầu ra được tạo từ công cụ Nội suy Dòng chảy Thành Raster."
+  },
+  "outputStreamRasterLabel": "Tên raster dòng chảy đầu ra",
+  "streamSettingsGroupText": "Chỉ định ngưỡng tích lũy, phương pháp chỉ định dòng chảy và cách xử lý dòng chảy ở cạnh raster bề mặt đầu vào."
+}

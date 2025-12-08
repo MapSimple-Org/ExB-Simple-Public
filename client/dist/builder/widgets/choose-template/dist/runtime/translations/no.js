@@ -1,0 +1,1 @@
+System.register([],function(e){return{execute:function(){e({_widgetLabel:"Opprett ny opplevelse",createNewApp:"Lag en ny app",largeDevices:"Enheter med stor skjerm",mediumDevices:"Enheter med middels stor skjerm",smallDevices:"Enheter med liten skjerm"})}}});

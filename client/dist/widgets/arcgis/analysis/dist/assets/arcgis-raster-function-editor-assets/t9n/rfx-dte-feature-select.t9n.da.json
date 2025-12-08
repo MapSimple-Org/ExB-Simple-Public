@@ -1,0 +1,8 @@
+{
+  "selectFeature": "Vælg objektlag",
+  "browseLayer": "Gennemse lag",
+  "loading": "Indlæser...",
+  "errorCodes": {
+    "required": "Denne parameter er påkrævet."
+  }
+}

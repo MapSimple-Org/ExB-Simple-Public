@@ -4,3 +4,11 @@
 # Exclude unwanted widgets
 client/your-extensions/widgets/kc-search/
 client/your-extensions/widgets/simple/
+
+# Internal documentation (keep locally, don't commit to main)
+client/your-extensions/widgets/BLOG_ARTICLE_IDEAS.md
+client/your-extensions/widgets/BLOG_GROUPING_IMPLEMENTATION.md
+client/your-extensions/widgets/TODO.md
+client/your-extensions/widgets/DEVELOPMENT_GUIDE.md
+client/your-extensions/widgets/MANUAL_TESTING_PLAN.md
+PR_DESCRIPTION.md

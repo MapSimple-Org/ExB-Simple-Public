@@ -1,0 +1,1 @@
+System.register([],function(e){return{execute:function(){e({_widgetLabel:"Ligne avec d\xe9bordement automatique"})}}});

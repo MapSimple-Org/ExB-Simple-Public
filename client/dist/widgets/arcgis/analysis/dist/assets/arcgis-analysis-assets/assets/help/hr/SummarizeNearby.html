@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>Alat Sažmi u blizini izračunava statistiku za geoobjekte unutar određene udaljenosti od drugih geoobjekata. Udaljenost se može izračunati kori&scaron;tenjem ravnolinijske udaljenosti ili načina putovanja.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="summaryLayer">
+        <div>
+            <p>Sloj koji će se sažeti unutar udaljenosti od obližnjeg sloja.
+            </p>
+            <p class="toolPaneOnly">Broj geoprojekata ovisi o dodatnim čimbenicima kao &scaron;to su kriteriji filtriranja i obuhvat analize.
+            </p>
+        </div>
+    </div>
+    <div id="sumNearbyLayer">
+        <div>
+            <p>Sloj točke, linije ili poligona koji će se upotrebljavati kao početna lokacija oko koje će se stvoriti granična područja za sažetak obližnjih geoobjekata.
+            </p>
+            <p class="toolPaneOnly">Broj geoprojekata ovisi o dodatnim čimbenicima kao &scaron;to su kriteriji filtriranja i obuhvat analize.
+            </p>
+        </div>
+    </div>
+    <div id="nearType">
+        <div>
+            
+            <p class="toolPaneOnly">Metoda koja će se upotrebljavati za stvaranje graničnih područja. Metoda može biti ravnolinijska udaljenost ili način putovanja.
+            </p> 
+            <p class="modelBuilderOnly">Metoda koja će se upotrebljavati za stvaranje graničnih područja. Trenutačno je ravnolinijska udaljenost jedina metoda podržana za modele.
+            </p>
+        </div>
+    </div>
+    <div id="distances">
+        <div>
+            <p>Udaljenost ili vrijeme koje će se koristiti za stvaranje graničnih područja. Ako se doda vi&scaron;e vrijednosti, svaka će se vrijednost koristiti za izračun graničnih područja za sve ulazne geoobjekte.
+            </p>
+        </div>
+    </div>
+    <div id="units">
+        <div>
+            <p>Jedinice koje će se koristiti za određivanje udaljenosti ili vremena.
+            </p>
+        </div>
+    </div>
+    <div id="returnBoundaries">
+        <div>
+            <p>Određuje hoće li sloj rezultata biti granična područja (označeno) ili iste geometrije kao ulazni obližnji sloj (neoznačeno).
+            </p>
+        </div>
+    </div>
+    <div id="sumShape">
+        <div>
+            <p>Određuje hoće li se izračunati ukupna veličina geoobjekata sažetih u svakom graničnom području. Za linije će se izračunti ukupna duljina. Za poligone će se izračunati ukupna povr&scaron;ina.
+            </p>
+        </div>
+    </div>
+    <div id="shapeUnits">
+        <div>
+            <p>Jedinice koje će se koristiti za izračun ukupne veličine sažetih geoobjekata.
+            </p>
+        </div>
+    </div>
+    <div id="summaryFields">
+        <div>
+            <p>Polja brojeva ili datuma iz ulaznog sloja koja će biti sažeta i statistika koja će se izračunati za svako polje.
+            </p>
+        </div>
+    </div>
+    <div id="groupByField">
+        <div>
+            <p>Polje iz ulaznog sloja koje će se koristiti za odvajanje podataka u različite grupe za statističke izračune.
+            </p>
+        </div>
+    </div>
+    <div id="minorityMajority">
+        <div>
+            <p>Određuje treba li izračunati manjinske (najmanje dominantne) i većinske (najdominantnije) skupine unutar svakog područja sažetka.
+            </p>
+        </div>
+    </div>
+    <div id="percentShape">
+        <div>
+            <p>Određuje hoće li se izračunati postotak sažetih geoobjekata koji pripadaju svakoj grupi unutar svake granice.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>Naziv sloja koji će se stvoriti i dodati karti.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>Naziv mape u opciji  <b>Moj sadržaj</b> gdje će se spremiti rezultati.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

@@ -1,0 +1,8 @@
+{
+  "loading": "Loading...",
+  "pleaseWait": "Please wait.",
+  "loadingXMLRFT": "Loading the selected raster function template in XML format.",
+  "failedToOpen": "Failed to open.",
+  "readingFailed": "Failed to load the selected raster function template.",
+  "failedToLoadXML": "Failed to load the selected raster function template in XML format."
+}

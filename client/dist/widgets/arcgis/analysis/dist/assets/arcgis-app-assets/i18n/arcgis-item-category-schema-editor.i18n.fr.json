@@ -1,0 +1,36 @@
+{
+  "modalHeader": "Configurer des catégories de contenu",
+  "modalGroupHeader": "Configurer des catégories de groupe",
+  "helpText": "Modifiez, supprimez ou réorganisez les catégories de votre organisation.",
+  "helpTextGroup": "Modifiez, supprimez ou réorganisez les catégories de contenu de ce groupe.",
+  "helpTextDescription": "Gardez à l’esprit que d’autres membres de votre organisation ont peut-être déjà attribué ces catégories à leurs éléments et que la modification de la structure entraînera la mise à jour de ces éléments en conséquence",
+  "helpTextGroupDescription": "Gardez à l’esprit que d’autres membres du groupe ont peut-être déjà attribué ces catégories à leurs éléments et que la modification de la structure entraînera la mise à jour de ces éléments en conséquence",
+  "warning": {
+    "deleteInUseCategory": {
+      "title": "Supprimer la catégorie",
+      "cta": "Supprimer la catégorie",
+      "message": {
+        "single": "Un élément est attribué à cette catégorie. La suppression de la catégorie entraînera également sa suppression pour cet élément.",
+        "multiple": "${number} éléments sont attribués à cette catégorie. La suppression de la catégorie entraînera également sa suppression pour ces éléments.",
+        "unknown": "Éléments attribués à cette catégorie : ${number}. La suppression de la catégorie entraînera également sa suppression pour ces éléments."
+      }
+    },
+    "changeTitleInUseCategory": {
+      "title": "Mettre à jour la catégorie",
+      "message": {
+        "single": "Un élément est attribué à cette catégorie. La mise à jour de la catégorie entraînera la mise à jour de l’élément pour qu’il utilise \"${newTitle}\".",
+        "multiple": "${number} éléments sont attribués à cette catégorie. La mise à jour de la catégorie entraînera la mise à jour des éléments pour qu’ils utilisent \"${newTitle}\".",
+        "unknown": "Éléments attribués à cette catégorie : ${number}. La mise à jour de la catégorie entraînera la mise à jour des éléments pour qu’ils utilisent \"${newTitle}\"."
+      },
+      "cta": "Mettre à jour la catégorie"
+    }
+  },
+  "template": {
+    "templateList": {
+      "custom": {
+        "message": "Créez vos propres catégories pour organiser le contenu de votre organisation.",
+        "messageGroup": "Créez vos propres catégories pour organiser le contenu de ce groupe."
+      }
+    }
+  }
+}

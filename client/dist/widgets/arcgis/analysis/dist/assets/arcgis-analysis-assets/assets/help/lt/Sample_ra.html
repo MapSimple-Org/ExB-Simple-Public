@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>Įrankis Pavyzdys sukuria lentelę arba ta&scaron;kinių elementų klasę, kurioje rodomos rastro arba rastrų rinkinio pikselių vertės apibrėžtose vietose.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inRasters">
+        <div>
+            <p>Vaizdų sluoksniai su vertėmis, kurių imtys bus imamos pagal įvesties vietos duomenis.
+            </p> 
+        </div>
+    </div>
+    <div id="inLocationData">
+        <div>
+            <p>Sluoksnis, kuriame yra kiekvieno mėginio vietos.
+            </p>
+            <p class="toolPaneOnly">Elemento įvesties atveju skaičius priklauso nuo papildomų veiksnių, pavyzdžiui, filtravimo kriterijų ir analizės apimties.
+            </p>
+        </div>
+    </div>
+    <div id="resamplingType">
+        <div>
+            <p>Pakartotinės atrankos algoritmas, kuris bus naudojamas imties ėmimo proceso metu.
+            </p>
+        </div>
+    </div>
+    <div id="uniqueIdField">
+        <div>
+            <p>Sluoksnio laukas, kuriame kiekvienai vietovei arba įvesties elementui nurodoma skirtinga reik&scaron;mė.
+            </p>
+        </div>
+    </div>
+    <div id="processMultidimension">
+        <div>
+            <p>Nurodo, ar įvesties vaizdų sluoksniuose yra daugiamačių duomenų.
+            </p>
+        </div>
+    </div>
+    <div id="acquisitionDefinition">
+        <div>
+            <p>Nurodomas laikas, gylis ar kiti su vietos elementais susiję gavimo duomenys.
+            </p>
+        </div>
+    </div>
+    <div id="dimension">
+        <div>
+            <p>Daugiamatės įvesties sluoksnio matmuo.
+            </p>
+        </div>
+    </div>
+    <div id="startFieldOrVal">
+        <div>
+            <p>Laukas, kuris bus naudojamas daugiamačio įvesties sluoksnio laiko intervalui pradėti.
+            </p>
+        </div>
+    </div>
+    <div id="endFieldOrVal">
+        <div>
+            <p>Laukas, kuris bus naudojamas daugiamatės įvesties sluoksnio laiko intervalui užbaigti.
+            </p>
+        </div>
+    </div>
+    <div id="before">
+        <div>
+            <p>Ne neigiamas skaičius, kuris bus pridėtas prie parametro  <b>Dimension</b>, arba vertė, apibrėžianti matmens verčių intervalo pradžią.
+            </p>
+        </div>
+    </div>
+    <div id="after">
+        <div>
+            <p>Ne neigiamas skaičius, kuris bus pridėtas prie parametro  <b>Dimension</b>, arba vertė, apibrėžianti matmens verčių intervalo pabaigą.
+            </p>
+        </div>
+    </div>
+    <div id="statisticsType">
+        <div>
+            <p>Statistiniai duomenys, kurie bus generuojami apdorojant daugiamatį vaizdų sluoksnį.
+            </p>
+        </div>
+    </div>
+    <div id="percentileValue">
+        <div>
+            <p>Procentinė vertė, kuri bus naudojama procentilių statistikos tipui.
+            </p>
+        </div>
+    </div>
+    <div id="bufferDistance">
+        <div>
+            <p>Buferinis atstumas, kuris bus taikomas įvesties vietoms.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>Sluoksnio, kuris bus sukurtas ir pridėtas į žemėlapį, pavadinimas.
+            </p>
+        </div>
+    </div>
+    <div id="generateFeatureClass">
+        <div>
+            <p>Nurodo, ar i&scaron;vesties tipas bus elementas, ar lentelė.
+            </p>
+        </div>
+    </div>
+    <div id="layout">
+        <div>
+            <p>Nurodo, ar i&scaron;vestis bus pateikiama pagal eilutes, ar pagal stulpelius.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>Puslapyje  <b>Mano turinys</b> esančio aplanko, kur bus įra&scaron;ytas rezultatas, pavadinimas.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

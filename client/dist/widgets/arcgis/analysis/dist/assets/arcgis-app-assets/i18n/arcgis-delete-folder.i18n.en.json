@@ -1,0 +1,22 @@
+{
+  "deleteFolder": "Delete folder",
+  "delete": "Delete",
+  "permanentlyDelete": "Permanently delete",
+  "back": "Back",
+  "cancel": "Cancel",
+  "success": "Folder '${title}' successfully deleted",
+  "deleteProtectedItemsInFolder": "Folder could not be deleted since some of the items are delete protected or have dependent items.",
+  "message": {
+    "empty": "Are you sure you want to delete the folder <strong style='font-weight: 500'>${title}</strong>?",
+    "recycleAll": "Are you sure you want to delete the folder <strong style='font-weight: 500'>${title}</strong> and send its contents to the recycle bin?",
+    "mustBeEmpty": "The folder <strong style='font-weight: 500'>${title}</strong> must be emptied in order to be deleted.",
+    "aFewCannotBeDeleted": "A few items cannot be deleted. Do you want to proceed with deleting the rest?",
+    "canBeEmptied": "The folder <strong style='font-weight: 500'>${title}</strong> must be emptied in order to be deleted. Do you want to proceed with deleting these items?",
+    "cannotBeDeleted": "The folder <strong style='font-weight: 500'>${title}</strong> cannot be deleted because its items cannot be deleted."
+  },
+  "disabledMessage": {
+    "single": "There is <span style='color:red'>1 item</span> in this folder, <b>${label}</b>.<br/></br/>Are you sure you want to delete this folder and its item?",
+    "multiple": "There are <span style='color:red'>${number} items</span> in this folder, <b>${label}</b>.<br/></br/>Are you sure you want to delete this folder and all its items?",
+    "unknown": "Are you sure you want to delete this folder, <b>${label}</b>?"
+  }
+}

@@ -1,0 +1,69 @@
+{
+  "loadingText": "Indlæser skemaskabeloner",
+  "cancel": "Annuller",
+  "finishSetup": "Afslut opsætning",
+  "hasUnsavedChanges": "Du har foretaget kategoriændringer, der går tabt, hvis du ikke gemmer først. Er du sikker på, at du vil lukke denne visning og miste dine ændringer?",
+  "error": {
+    "generic": {
+      "title": "Fejl under opdatering af kategorier",
+      "message": "Der gik noget galt. Prøv igen senere."
+    },
+    "maxDepthExceeded": {
+      "title": "Fejl under opdatering af kategorier",
+      "message": "Du kan ikke indlejre kategorier i mere end 2 niveauer."
+    },
+    "destinationHasSameName": {
+      "title": "Fejl under opdatering af kategorier",
+      "message": "Der findes allerede en kategori med samme navn i destinationskategorien."
+    },
+    "emptyTitle": {
+      "title": "Fejl under opdatering af kategorier",
+      "message": "Kategorititlen kan ikke være tom."
+    },
+    "noSchema": {
+      "title": "Skema ikke fundet",
+      "message": "Elementskema ikke fundet for brugeren."
+    },
+    "maxCharacter": {
+      "title": "Fejl under opdatering af kategorier",
+      "message": "Kategorinavne må højst være på ${maxCharacter} tegn."
+    },
+    "invalidCharacters": {
+      "title": "Fejl under opdatering af kategorier",
+      "single": "Kategorien må ikke indeholde dette tegn: ${invalidCharacters}.",
+      "multiple": "Kategorien må ikke indeholde nogen af disse tegn: ${invalidCharacters}.",
+      "unknown": "Kategorien må ikke indeholde nogen af disse tegn: ${invalidCharacters}."
+    }
+  },
+  "warning": {
+    "deleteInUseCategory": {
+      "title": "Slet kategori",
+      "cta": "Slet kategori"
+    },
+    "changeTitleInUseCategory": {
+      "title": "Opdater kategori",
+      "cta": "Opdater kategori"
+    }
+  },
+  "template": {
+    "title": "Kategoriskabeloner",
+    "learnMore": "Få mere at vide",
+    "templateList": {
+      "custom": {
+        "title": "Brugerdefinerede kategorier"
+      },
+      "arcgis": {
+        "title": "ArcGIS-kategorier",
+        "message": "ArcGIS-kategorier omfatter en række emnekategorier og underkategorier, som kan bruges til at kategorisere mange typer geospatialt indhold. Disse kategorier bruges til at understøtte ArcGIS Living Atlas of the World."
+      },
+      "iso": {
+        "title": "ISO-kategorier",
+        "message": "ISO-kategorier inkluderer emnekategorier fra The International Organization for Standardization, der tilbyder en metode til beskrivelse og katalogisering af geografisk information."
+      },
+      "inspire": {
+        "title": "INSPIRE-kategorier",
+        "message": "INSPIRE-kategorier indeholder et omfattende sæt spatiale datatemaer, der er beskrevet i INSPIRE-direktivet."
+      }
+    }
+  }
+}

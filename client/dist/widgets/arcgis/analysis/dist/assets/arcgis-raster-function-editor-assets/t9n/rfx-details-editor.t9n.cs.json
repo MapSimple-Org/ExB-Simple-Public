@@ -1,0 +1,22 @@
+{
+  "general": "Obecné",
+  "parameters": "Parametry",
+  "variables": "Proměnné",
+  "name": "Jméno",
+  "namePlaceHolder": "Zadat název",
+  "description": "Popis",
+  "parameter": "Parametr",
+  "isPublic": "IsPublic",
+  "isDataset": "IsDataset",
+  "unknownPixelType": "neznámé",
+  "outputPixelType": "Výstupní typ pixelů",
+  "u8PixelType": "Bez znaménka (8bit)",
+  "s8PixelType": "Se znaménkem (8bit)",
+  "u16PixelType": "Bez znaménka (16bit)",
+  "s16PixelType": "Se znaménkem (16bit)",
+  "u32PixelType": "Bez znaménka (32bit)",
+  "s32PixelType": "Se znaménkem (32bit)",
+  "f32PixelType": "Desetinné číslo s jednoduchou přesností (32bit)",
+  "f64PixelType": "Desetinné číslo s dvojitou přesností (64bit)",
+  "properties": "Vlastnosti"
+}

@@ -1,0 +1,9 @@
+{
+  "inputFlowDirectionRasterLabel": "Vhodni raster smeri toka",
+  "inputLayerGroupText": "Izberite vhodni raster smeri toka in pretoka.",
+  "inputStreamRasterLabel": "Raster vhodnega toka",
+  "itemProperties": {
+    "description": "Geoobjektni sloj, ustvarjen z izvajanjem orodja za analizo StreamLink.",
+    "snippet": "Izhod, ustvarjen iz StreamLink"
+  }
+}

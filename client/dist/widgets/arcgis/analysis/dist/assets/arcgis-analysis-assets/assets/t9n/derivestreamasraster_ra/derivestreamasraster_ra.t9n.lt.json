@@ -1,0 +1,10 @@
+{
+  "forceFlowLabel": "Priversti kraštines gardeles tekėti laukan",
+  "inputLayersGroupText": "Pasirinkite įvesties paviršiaus rastrą ir neprivalomai įdubimo duomenis bei svorio rastrą.",
+  "itemProperties": {
+    "description": "Išvestis sugeneruota paleidus įrankį Išvesti srautą kaip rastrą.",
+    "snippet": "Išvestis sugeneruota paleidus „Išvesti srautą kaip rastrą“"
+  },
+  "outputStreamRasterLabel": "Išvesties srauto rastro pavadinimas",
+  "streamSettingsGroupText": "Nurodykite sankaupos ribą, srauto paskirties metodą ir tai, kaip srautas tvarkomas ties įvesties paviršiaus rastro kraštu."
+}

@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>L&rsquo;outil Find Point Clusters (Rechercher des agr&eacute;gats de points) identifie les agr&eacute;gats d&rsquo;entit&eacute;s ponctuelles dans le bruit environnant en fonction de leur distribution spatiale.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="analysisLayer">
+        <div>
+            <p>Couche ponctuelle en entr&eacute;e &agrave; regrouper en agr&eacute;gats en fonction de la distribution spatiale des entit&eacute;s ponctuelles.
+            </p>
+        </div>
+    </div>
+    <div id="method">
+        <div>
+            <p>M&eacute;thode utilis&eacute;e pour identifier les agr&eacute;gats.
+            </p>
+        </div>
+    </div>
+    <div id="minFeaturesCluster">
+        <div>
+            <p>Nombre minimal d&rsquo;entit&eacute;s ponctuelles consid&eacute;r&eacute; comme un agr&eacute;gat.
+            </p>
+        </div>
+    </div>
+    <div id="searchDistance">
+        <div>
+            <p>Sp&eacute;cifie la distance maximale autour de chaque entit&eacute; ponctuelle jusqu&rsquo;&agrave; laquelle les points pouvant &ecirc;tre inclus dans l&rsquo;agr&eacute;gat doivent &ecirc;tre recherch&eacute;s. Si elle n&rsquo;est pas indiqu&eacute;e, la valeur  <b>Search distance (Distance de recherche)</b> correspond &agrave; la distance principale la plus &eacute;lev&eacute;e trouv&eacute;e dans la couche, &agrave; l&rsquo;exclusion des meilleures 1&nbsp;% de distances principales.
+            </p>
+        </div>
+    </div>
+    <div id="searchDistanceUnit">
+        <div>
+            <p>Sp&eacute;cifie les unit&eacute;s &agrave; utiliser pour la distance de recherche.
+            </p>
+        </div>
+    </div>
+    <div id="sensitivity">
+        <div>
+            <p>Entier compris entre 0 et 100 d&eacute;terminant la densit&eacute; des agr&eacute;gats. Si elle n&rsquo;est pas indiqu&eacute;e, la valeur  <b>Cluster sensitivity (Sensibilit&eacute; d&rsquo;agr&eacute;gat)</b> est calcul&eacute;e &agrave; l&rsquo;aide de la divergence de Kullback-Leibler.
+            </p>
+        </div>
+    </div>
+    <div id="timeField">
+        <div>
+            <p>Champ de la couche en entr&eacute;e contenant un horodatage pour chaque entit&eacute;.
+            </p>
+        </div>
+    </div>
+    <div id="searchTimeInterval">
+        <div>
+            <p>Intervalle utilis&eacute; pour d&eacute;terminer si les entit&eacute;s constituent un agr&eacute;gat spatio-temporel. L&rsquo;intervalle de recherche s&rsquo;&eacute;tend avant et apr&egrave;s l&rsquo;heure de chaque entit&eacute; (par exemple, un intervalle de recherche de trois jours autour d&rsquo;une entit&eacute; inclut toutes les entit&eacute;s comprises entre trois jours avant et trois jours apr&egrave;s l&rsquo;heure de l&rsquo;entit&eacute;).
+            </p>
+        </div>
+    </div>
+    <div id="searchTimeUnit">
+        <div>
+            <p>Sp&eacute;cifie les unit&eacute;s &agrave; utiliser pour l&rsquo;intervalle de recherche.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>Nom de la couche &agrave; cr&eacute;er et ajouter &agrave; la carte.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            <p>Nom du dossier de  <b>My content (Mon contenu)</b> dans lequel est enregistr&eacute; le r&eacute;sultat.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

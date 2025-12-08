@@ -1,0 +1,10 @@
+{
+  "forceFlowLabel": "Kenar hücrelerini dışarı doğru akışa zorla",
+  "inputLayersGroupText": "Girdi yüzeyi rasterını ve isteğe bağlı olarak çöküntü verilerini ve ağırlık rasterını seçin.",
+  "itemProperties": {
+    "description": "Raster Olarak Akış Türet aracının çalıştırılmasından oluşturulan çıktı.",
+    "snippet": "Raster Olarak Akış Türet aracından oluşturulan çıktı."
+  },
+  "outputStreamRasterLabel": "Çıktı akış rasterı adı",
+  "streamSettingsGroupText": "Birikim eşiğini, akış atama yöntemini ve giriş yüzeyi raster kenarında akışın nasıl işleneceğini belirtin."
+}

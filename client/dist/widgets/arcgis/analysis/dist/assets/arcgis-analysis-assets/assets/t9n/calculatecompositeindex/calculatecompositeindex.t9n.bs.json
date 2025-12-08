@@ -1,0 +1,26 @@
+{
+  "CCIAnalysisSettingGroupLabel": "Postavke indeksa",
+  "CCIAnalysisSettingGroupText": "Odredite kako treba izračunati indeks.",
+  "geomeanPercentileLabel": "Složi rangove (geometrijska sredina percentila)",
+  "geomeanRawLabel": "Složi sirove vrijednosti (geometrijska sredina sirovih vrijednosti)",
+  "geomeanScaledLabel": "Složi skalirane vrijednosti (geometrijska sredina skaliranih vrijednosti)",
+  "indexMethodLabel": "Metoda skaliranja i kombiniranja varijabli",
+  "inputFeaturesOrTableLabel": "Unos geoobjekata ili tablice",
+  "inputLayerGroupText": "Odaberite geoobjekte ili tablicu i varijable za izradu indeksa.",
+  "inputVariablesLabel": "Ulazne varijable",
+  "itemProperties": {
+    "description": "Sloj značajki generiran pokretanjem alata za analizu za izračun kompozitnog indeksa.",
+    "snippet": "Sloj geoobjekata koji je generiran funkcijom Izračunaj kompozitni indeks"
+  },
+  "meanPercentileLabel": "Kombinirajte rangove (srednja vrijednost percentila)",
+  "meanRawLabel": "Kombiniraj sirove vrijednosti (srednja vrijednost sirovih vrijednosti)",
+  "meanScaledLabel": "Kombiniraj skalirane vrijednosti (srednja vrijednost skaliranih vrijednosti)",
+  "outputIndexMaxLabel": "Maksimum",
+  "outputIndexMinLabel": "Minimum",
+  "outputIndexMinMaxLabel": "Indeks minimalne i maksimalne vrijednosti",
+  "outputIndexReverseLabel": "Obrnute vrijednosti indeksa",
+  "reverseVariableLabel": "Obrni smjer",
+  "sumFlagsPercentileLabel": "Istakni ekstreme (Broj vrijednosti iznad 90. percentila)",
+  "toolName": "Izračunaj kompozitni indeks",
+  "weight": "Težina"
+}

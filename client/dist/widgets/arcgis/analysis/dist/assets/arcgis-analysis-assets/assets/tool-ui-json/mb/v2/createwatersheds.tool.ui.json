@@ -1,0 +1,70 @@
+{
+  "toolName": "CreateWatersheds",
+  "version": "0.1.0",
+  "modelBuilderVersion": "V2",
+  "rules": [],
+  "environmentSettings": {
+    "raster": []
+  },
+  "UIparameters": [
+    {
+      "label": "$inputLayerGroupLabel",
+      "componentName": "analysis-block",
+      "UIparameters": [
+        {
+          "name": "inputLayer",
+          "label": "$inputLayerLabel",
+          "componentName": "analysis-layer-input",
+          "layerFilterType": ["feature_point", "feature_multiPoint"],
+          "required": true,
+          "enableSketch": false,
+          "hideAddToMap": true,
+          "ignoreTimeExtent": true
+        }
+      ]
+    },
+    {
+      "label": "$inputPourPointSettingsGroupLabel",
+      "componentName": "analysis-block",
+      "UIparameters": [
+        {
+          "name": "searchDistance",
+          "label": "$searchDistanceLabel",
+          "required": false,
+          "minimum": 0,
+          "unitChoiceList": ["Meters", "Kilometers", "Feet", "Miles", "Yards"],
+          "choiceListLabels": {
+            "Meters": "$meters",
+            "Kilometers": "$kilometers",
+            "Feet": "$feet",
+            "Miles": "$miles",
+            "Yards": "$yards"
+          }
+        }
+      ]
+    },
+    {
+      "label": "$resultLayerGroupLabel",
+      "componentName": "analysis-block",
+      "UIparameters": [
+        {
+          "name": "outputName",
+          "label": "$outputPolygonNameLabel",
+          "componentName": "analysis-output-name",
+          "required": true,
+          "placeholderText": "$outputNamePlaceholderText"
+        }
+      ]
+    }
+  ],
+  "outputParameters": [
+    {
+      "label": "$snapPourPtsLayerOutput",
+      "name": "snapPourPtsLayer"
+    },
+    {
+      "label": "$watershedLayerOutput",
+      "name": "watershedLayer"
+    }
+  ]
+}

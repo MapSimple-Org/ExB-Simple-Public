@@ -1,0 +1,13 @@
+{
+  "weightedOverlayTable": "Tabla Superposición ponderada",
+  "id": "Id.",
+  "layer": "Capa",
+  "field": "Campo",
+  "influence": "Influencia",
+  "sumOfInfluence": "Suma de influencia",
+  "value": "Valor",
+  "remapTable": "Volver a representar la tabla",
+  "scale": "Escala",
+  "scales": "Escalas",
+  "selectRaster": "Seleccionar ráster"
+}

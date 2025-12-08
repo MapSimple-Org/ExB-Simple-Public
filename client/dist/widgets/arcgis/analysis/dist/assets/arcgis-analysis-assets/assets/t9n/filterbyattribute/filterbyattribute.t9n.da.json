@@ -1,0 +1,8 @@
+{
+  "itemProperties": {
+    "description": "Resultater, der er genereret ved at køre Filtrér efter attributter-analyseværktøjet.",
+    "snippet": "Resultat, der er genereret via Filtrér efter attributter"
+  },
+  "noLayerDisabledTooltip": "Vælg et gyldigt inputdatasæt.",
+  "queryCriteriaGroupLabel": "Forespørgselskriterier"
+}

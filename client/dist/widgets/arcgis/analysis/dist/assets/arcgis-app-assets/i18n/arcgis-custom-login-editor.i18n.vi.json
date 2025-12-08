@@ -1,0 +1,85 @@
+{
+  "heading": "Tạo danh mục đăng nhập",
+  "select": "Chọn danh mục đăng nhập để bắt đầu từ",
+  "selectCustomSignIn": "Chọn danh mục đăng nhập",
+  "orgDefaults": "Thông tin mặc định của tổ chức",
+  "createNew": "Tạo mới",
+  "name": "Tiêu đề",
+  "description": "Thông tin mô tả",
+  "enterName": "Nhập tiêu đề danh mục",
+  "enterDescription": "Nhập thông tin mô tả danh mục",
+  "enterTitle": "Nhập tiêu đề cho lần đăng nhập này",
+  "showOnTriage": "Bật danh mục đăng nhập",
+  "showOnTriageDescription": "Thông tin mô tả của danh mục sẽ chỉ hiển thị trên trang chọn danh mục nếu bạn đã bật từ hai danh mục trở lên.",
+  "socialProviders": "Nhà cung cấp thông tin đăng nhập mạng xã hội",
+  "authenticationProviders": "Phương thức xác thực",
+  "errorLabel": "Lỗi danh mục đăng nhập tùy chọn",
+  "preview": "Xem trước",
+  "restrictions": "Chỉ có thể thay đổi tiêu đề và mô tả của danh mục này. Mọi tùy chọn khác được kế thừa từ thiết lập của tổ chức.",
+  "loginNotAvailable": "Phương thức đăng nhập này đã bị tổ chức của bạn tắt và sẽ không hiển thị với người dùng.",
+  "buttons": {
+    "editCategory": "Lưu danh mục",
+    "next": "Tiếp",
+    "back": "Quay lại",
+    "createCategory": "Tạo danh mục"
+  },
+  "errors": {
+    "nameRequired": "Tiêu đề là thông tin bắt buộc cho tất cả danh mục đăng nhập.",
+    "authenticationMethodsRequired": "Cần có ít nhất một phương thức đăng nhập.",
+    "socialProviderRequired": "Cần có ít nhất một nhà cung cấp thông tin đăng nhập mạng xã hội."
+  },
+  "steps": {
+    "1": {
+      "title": "Chọn cách bắt đầu",
+      "description": "Bạn có thể bắt đầu với thông tin đăng nhập mặc định tổ chức của mình, chỉnh sửa danh mục đăng nhập hiện có hoặc tạo danh mục đăng nhập mới."
+    },
+    "2": {
+      "title": "Tiêu đề và thông tin mô tả",
+      "description": "Nhập tiêu đề và thông tin mô tả danh mục đăng nhập."
+    },
+    "3": {
+      "title": "Loại thông tin đăng nhập",
+      "description": "Tùy chỉnh và sắp xếp thứ tự thông tin đăng nhập xuất hiện trong danh mục đăng nhập này."
+    }
+  },
+  "createAccount": {
+    "label": "Tạo liên kết tài khoản",
+    "description": "Cho phép tạo tài khoản ArcGIS mới trong tổ chức này."
+  },
+  "switchOrganization": {
+    "label": "Chuyển liên kết tổ chức",
+    "description": "Hiển thị liên kết cho phép người dùng đăng nhập vào tổ chức khác."
+  },
+  "authenticationMethods": {
+    "arcgis": {
+      "label": "Đăng nhập ArcGIS",
+      "description": "Cho phép người dùng đăng nhập bằng thông tin tài khoản ArcGIS của họ.",
+      "required": "Phương pháp đăng nhập ArcGIS cần có tiêu đề."
+    },
+    "saml": {
+      "label": "Đăng nhập SAML",
+      "description": "Cho phéo người dùng đăng nhập bằng tài khoản OIDC của họ.",
+      "required": "Phương pháp đăng nhập SAML cần có tiêu đề."
+    },
+    "oidc": {
+      "label": "Đăng nhập OIDC",
+      "description": "Cho phéo người dùng đăng nhập bằng tài khoản OIDC của họ.",
+      "required": "Phương pháp đăng nhập OIDC cần có tiêu đề."
+    },
+    "social": {
+      "label": "Đăng nhập mạng xã hội",
+      "description": "Cho phép các thành viên đăng nhập vào tổ chức của bạn bằng thông tin đăng nhập từ các mạng xã hội dưới đây.",
+      "github": "GitHub",
+      "facebook": "Facebook",
+      "google": "Google",
+      "apple": "Apple",
+      "required": "Phương pháp đăng nhập mạng xã hội cần có tiêu đề."
+    }
+  },
+  "confirmLeave": {
+    "title": "Thay đổi chưa được lưu",
+    "message": "Bạn có những thay đổi chưa được lưu. Bạn có chắc chắn muốn rời khỏi trang này không?",
+    "remain": "Ở lại trang này",
+    "leave": "Thoát mà không cần lưu"
+  }
+}

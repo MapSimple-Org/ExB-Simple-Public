@@ -1,0 +1,1 @@
+System.register([],function(e){return{execute:function(){e({_widgetLabel:"Gr\xe1fico",dataEmptyTip:"Nenhum dado localizado."})}}});

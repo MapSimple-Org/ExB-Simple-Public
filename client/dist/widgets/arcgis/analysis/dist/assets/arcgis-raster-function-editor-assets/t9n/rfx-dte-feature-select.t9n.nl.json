@@ -1,0 +1,8 @@
+{
+  "selectFeature": "Feature layer selecteren",
+  "browseLayer": "Blader door lagen",
+  "loading": "Bezig met laden...",
+  "errorCodes": {
+    "required": "Deze parameter is vereist."
+  }
+}

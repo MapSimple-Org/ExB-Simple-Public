@@ -1,0 +1,9 @@
+{
+  "addToMap": "Apstiprināt un pievienot kartei",
+  "cancel": "Atcelt",
+  "confirm": "Apstiprināt",
+  "header": "Izvēlēties vienību",
+  "select": "Izvēlēties",
+  "unsupportedLayer": "Šis parametrs neatbalsta šādus slāņus: ${layerName}.",
+  "viewDetails": "Skatīt detalizētu informāciju"
+}

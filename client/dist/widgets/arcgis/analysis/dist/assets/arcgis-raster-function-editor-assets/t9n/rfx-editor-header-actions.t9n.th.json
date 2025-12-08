@@ -1,0 +1,11 @@
+{
+  "newTemplate": "สร้างเทมเพลตใหม่",
+  "openTemplate": "เปิดเทมเพลต",
+  "addTemplate": "เพิ่มเทมเพลต",
+  "addFunction": "เพิ่มฟังก์ชันแรสเตอร์",
+  "addConstant": "เพิ่มค่าคงที่",
+  "addRaster": "เพิ่มตัวแปรแรสเตอร์",
+  "expand": "ขยาย",
+  "editTemplateProperties": "แก้ไขคุณสมบัติเทมเพลต",
+  "viewTemplateProperties": "ดูคุณสมบัติเทมเพลต"
+}

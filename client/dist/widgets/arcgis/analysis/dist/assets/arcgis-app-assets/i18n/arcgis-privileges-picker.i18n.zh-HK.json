@@ -1,0 +1,592 @@
+{
+  "rolePrivileges": "角色權限",
+  "setFromExisting": "從現有角色中設定",
+  "expandAll": "全部展開",
+  "generalPrivileges": "一般權限",
+  "adminPrivileges": "管理員權限",
+  "enabledLabel": "已啟用:",
+  "enableAll": "全部啟用",
+  "disableAll": "全部停用",
+  "members": "成員",
+  "groups": "群組",
+  "content": "內容",
+  "sharing": "分享",
+  "premiumContent": "高級內容",
+  "premiumContentServices": "高級內容與服務",
+  "contentAndAnalysis": "內容和分析",
+  "features": "圖徽",
+  "versionMgmt": "版本管理",
+  "webhooks": "Webhook",
+  "marketplaceSubscriptions": "ArcGIS Marketplace 訂閱",
+  "orgSettings": "組織設定",
+  "learnMore": "瞭解詳細資訊",
+  "searchPrivileges": "搜尋權限",
+  "notebooks": "筆記本",
+  "analysis": "分析",
+  "networkAnalysis": "網路分析",
+  "locationServices": "位置服務",
+  "requiredService": "必要服務",
+  "availableServices": "可用服務",
+  "basemaps": "底圖",
+  "staticMaps": "靜態地圖",
+  "places": "地點",
+  "geocoding": "地理編碼",
+  "routing": "路線規劃",
+  "dataEnrichment": "資料豐富",
+  "boundaries": "邊界",
+  "elevation": "高程",
+  "spatialPrivileges": "空間分析",
+  "featureAnalysis": "圖徵分析",
+  "imageAnalysis": "圖像分析",
+  "readOnlyBasemapsTooltip": "包含底圖的存取權。",
+  "privileges": {
+    "portal:user:viewOrgUsers": {
+      "label": "查看",
+      "description": "允許成員檢視組織的成員。",
+      "descriptionPortal": "允許成員檢視入口網站的成員。",
+      "descriptionApp": "允許應用程式檢視組織的成員。"
+    },
+    "portal:user:createGroup": {
+      "label": "建立、更新和刪除",
+      "description": "允許成員建立、編輯和刪除其自有的群組。",
+      "descriptionApp": "允許應用程式建議、編輯和刪除應用程式擁有者的群組。"
+    },
+    "portal:user:joinGroup": {
+      "label": "加入組織群組",
+      "description": "允許成員加入組織中的群組。",
+      "descriptionPortal": "允許成員加入入口網站中的群組。",
+      "descriptionApp": "允許應用程式加入組織中的群組。"
+    },
+    "portal:user:joinNonOrgGroup": {
+      "label": "加入外部群組",
+      "description": "允許成員加入組織的外部群組。",
+      "descriptionPortal": "允許成員加入入口網站的外部群組。",
+      "descriptionApp": "允許應用程式加入組織的外部群組。"
+    },
+    "portal:user:viewOrgGroups": {
+      "label": "檢視與組織分享的群組",
+      "description": "允許成員檢視與組織分享的群組。",
+      "descriptionPortal": "允許成員檢視與入口網站分享的群組。",
+      "descriptionApp": "允許應用程式檢視與組織分享的群組。"
+    },
+    "portal:user:invitePartneredCollaborationMembers": {
+      "label": "邀請合作組織成員",
+      "description": "允許成員邀請夥伴式協同作業組織的成員加入群組。",
+      "descriptionApp": "允許應用程式邀請夥伴式協同作業組織的成員加入群組。"
+    },
+    "portal:user:addExternalMembersToGroup": {
+      "label": "新增其他組織的成員",
+      "description": "允許成員建立群組來允許其他組織成員加入，以及邀請外部成員加入群組。",
+      "descriptionApp": "允許應用程式建立群組來允許其他組織成員加入，以及邀請外部成員加入群組。"
+    },
+    "portal:user:createItem": {
+      "label": "建立、更新和刪除",
+      "description": "允許成員建立、編輯和刪除其自有的內容。",
+      "descriptionApp": "允許應用程式建議、編輯和刪除應用程式擁有者的內容。"
+    },
+    "portal:publisher:publishFeatures": {
+      "label": "發佈託管圖徵圖層",
+      "description": "允許成員從 shapefile、CSV 等發佈託管圖徵圖層。",
+      "descriptionApp": "允許應用程式從 shapefile、CSV 等發佈託管圖徵圖層。"
+    },
+    "portal:publisher:publishTiles": {
+      "label": "發佈託管的圖磚圖層",
+      "description": "允許成員從圖磚套件、圖徵等發佈託管圖磚圖層。",
+      "descriptionApp": "允許應用程式從圖磚套件、圖徵等發佈託管圖磚圖層。"
+    },
+    "portal:publisher:publishScenes": {
+      "label": "發佈託管場景圖層",
+      "description": "允許成員發佈託管場景圖層。",
+      "descriptionApp": "允許應用程式發佈託管場景圖層。"
+    },
+    "portal:publisher:publishTiledImagery": {
+      "label": "發佈託管圖磚影像圖層",
+      "description": "允許成員從單一影像或影像集合發佈託管圖磚影像圖層。 需要 ArcGIS Image for ArcGIS Online 使用者類型延伸模組。",
+      "descriptionPortal": "允許成員從單一影像或影像集合發佈託管圖磚影像圖層。",
+      "descriptionApp": "允許應用程式從單一影像或影像集合發佈託管圖磚影像圖層。 須有 ArcGIS Image Hosting 授權。"
+    },
+    "portal:publisher:publishDynamicImagery": {
+      "label": "發佈託管動態影像圖層",
+      "description": "允許成員從單一影像或影像集合發佈託管動態影像圖層。",
+      "descriptionApp": "允許應用程式從單一影像或影像集合發佈託管動態影像圖層。"
+    },
+    "portal:publisher:publishServerServices": {
+      "label": "發佈伺服器式圖層",
+      "description": "此權限授予發佈聯合伺服器網站的服務所啟動之圖層的能力。 這些服務通常參考地理資料庫或檔案式資料資源的註冊資料。"
+    },
+    "portal:publisher:publishKnowledgeGraph": {
+      "label": "發佈託管知識圖",
+      "description": "允許成員發佈託管知識圖。",
+      "descriptionApp": "允許應用程式發佈託管知識圖。"
+    },
+    "portal:user:viewOrgItems": {
+      "label": "檢視與組織分享的內容",
+      "description": "允許成員檢視分享到組織的內容。",
+      "descriptionPortal": "允許成員檢視分享到入口網站的內容。",
+      "descriptionApp": "允許應用程式檢視分享到組織的內容。"
+    },
+    "premium:publisher:createNotebooks": {
+      "label": "建立和編輯筆記本",
+      "description": "允許成員建立和編輯互動式筆記本。",
+      "descriptionApp": "允許應用程式建立和編輯互動式筆記本。"
+    },
+    "premium:publisher:scheduleNotebooks": {
+      "label": "排程筆記本",
+      "description": "允許成員排定在將來自動執行筆記本。",
+      "descriptionApp": "允許應用程式排定在將來自動執行筆記本。"
+    },
+    "portal:publisher:bulkPublishFromDataStores": {
+      "label": "從資料儲存庫批次建立圖徵圖層",
+      "description": "此權限授與從註冊的資料儲存庫發佈 Web 圖層的能力。"
+    },
+    "portal:publisher:registerDataStores": {
+      "label": "註冊資料儲存庫",
+      "description": "此權限授與向入口網站註冊資料儲存庫的能力。"
+    },
+    "portal:user:viewTracks": {
+      "label": "檢視位置軌跡",
+      "description": "在啟用位置分享時，允許成員透過分享的追蹤視圖來檢視成員的位置軌跡。",
+      "descriptionApp": "在啟用位置分享時，允許應用程式透過分享的追蹤視圖來檢視成員的位置軌跡。"
+    },
+    "portal:user:reassignItems": {
+      "label": "重新指派內容",
+      "description": "允許成員只能將自己的內容重新指派給具有接收內容權限的另一成員。",
+      "descriptionApp": "允許應用程式只能將應用程式擁有者的內容重新指派給具有接收內容權限的另一成員。"
+    },
+    "portal:user:receiveItems": {
+      "label": "接收內容",
+      "description": "允許成員接收具有重新指派內容權限的其他成員重新指派給他們的內容。"
+    },
+    "portal:publisher:publishFeeds": {
+      "label": "發佈摘要",
+      "description": "透過此權限，可使用 ArcGIS Velocity 來發佈要擷取的摘要和顯示即時資料。"
+    },
+    "portal:publisher:publishRealTimeAnalytics": {
+      "label": "發佈即時分析",
+      "description": "透過此權限，可使用 ArcGIS Velocity 來發佈要分析的即時分析和處理即時資料。"
+    },
+    "portal:publisher:publishBigDataAnalytics": {
+      "label": "發佈大數據分析",
+      "description": "透過此權限，可使用 ArcGIS Velocity 來發佈要分析的大數據分析，從而分析歷史觀察資料。"
+    },
+    "portal:publisher:createDataPipelines": {
+      "label": "建立和執行資料管線",
+      "description": "允許成員建立、編輯和執行資料管線。",
+      "descriptionApp": "允許應用程式建立、編輯和執行資料管線。"
+    },
+    "portal:publisher:publishLivestreamVideo": {
+      "label": "發佈直播影片",
+      "description": "允許成員發佈源自網路影片廣播和串流的託管式直播影片圖層。",
+      "descriptionApp": "允許應用程式發佈源自網路影片廣播和串流的託管式直播影片圖層。"
+    },
+    "portal:publisher:publishVideo": {
+      "label": "發佈影片",
+      "description": "允許成員從影片檔和支援的影片中繼資料檔，發佈託管式影片圖層。",
+      "descriptionApp": "允許應用程式從影片檔和支援的影片中繼資料檔，發佈託管式影片圖層。"
+    },
+    "portal:user:shareToGroup": {
+      "label": "與群組分享",
+      "description": "允許成員將內容分享到群組。",
+      "descriptionApp": "允許應用程式將內容分享到群組。"
+    },
+    "portal:user:shareToOrg": {
+      "label": "與組織分享",
+      "labelPortal": "與入口網站分享",
+      "description": "允許成員將內容分享到組織。",
+      "descriptionPortal": "允許成員將內容分享到入口網站。",
+      "descriptionApp": "允許應用程式將內容分享到組織。"
+    },
+    "portal:user:shareToPublic": {
+      "label": "與公眾分享",
+      "description": "如果組織的公開分享政策允許，則允許成員公開分享他們的內容。",
+      "descriptionApp": "如果組織的公開分享政策允許，則允許應用程式公開分享應用程式擁有者的內容。",
+      "tooltip": "如果組織不允許成員公開分享內容，則成員將需要管理權限才能與公眾分享成員內容。"
+    },
+    "portal:user:shareGroupToOrg": {
+      "label": "將群組設置為對組織可見",
+      "labelPortal": "將群組設置為對入口網站可見",
+      "description": "允許成員將內容分享到組織。",
+      "descriptionPortal": "允許成員將內容分享到入口網站。",
+      "descriptionApp": "允許應用程式將內容分享到入口網站。"
+    },
+    "portal:user:shareGroupToPublic": {
+      "label": "將群組設置為對公眾可見",
+      "description": "允許成員讓大眾探索群組。",
+      "descriptionApp": "允許應用程式讓大眾探索群組。"
+    },
+    "opendata:user:designateGroup": {
+      "label": "使群組可用於 Open Data",
+      "description": "允許成員將群組指定在 Open Data 中使用。",
+      "descriptionApp": "允許應用程式將群組指定在 Open Data 中使用。"
+    },
+    "premium:user:basemaps": {
+      "label": "Basemap Styles service",
+      "descriptionLocationPlatform": "允許應用程式存取底圖樣式服務。"
+    },
+    "premium:user:staticbasemaptiles": {
+      "label": "靜態底圖圖磚",
+      "descriptionLocationPlatform": "允許應用程式存取靜態底圖圖磚服務。"
+    },
+    "premium:user:staticMaps": {
+      "label": "靜態地圖服務 (beta)",
+      "descriptionLocationPlatform": "允許應用程式存取靜態地圖服務。"
+    },
+    "premium:user:elevation": {
+      "label": "高程服務",
+      "descriptionLocationPlatform": "允許應用程式存取高程服務。"
+    },
+    "premium:user:geocode": {
+      "label": "地理編碼",
+      "description": "允許成員使用 ArcGIS Geocoding service (或此定位器的視圖) 執行耗用點數的地理編碼任務。",
+      "descriptionApp": "允許應用程式使用 ArcGIS World Geocoding Service (或此定位器的視圖) 執行耗用點數的地理編碼任務。"
+    },
+    "premium:user:geocode:stored": {
+      "label": "地理編碼 (已儲存)",
+      "descriptionLocationPlatform": "允許應用程式存取地理編碼服務並執行儲存的地理編碼。"
+    },
+    "premium:user:geocode:temporary": {
+      "label": "地理編碼 (未儲存)",
+      "descriptionLocationPlatform": "允許應用程式存取地理編碼服務並執行未儲存的地理編碼。"
+    },
+    "premium:user:networkanalysis": {
+      "label": "路線規劃",
+      "description": "允許成員執行網路分析任務，例如路線規劃和行駛時間區域。",
+      "descriptionApp": "允許應用程式存取路線規劃服務。"
+    },
+    "premium:user:networkanalysis:closestfacility": {
+      "label": "最近設施點",
+      "descriptionLocationPlatform": "允許應用程式存取路線規劃服務並執行最近的機構路線規劃操作。"
+    },
+    "premium:user:networkanalysis:lastmiledelivery": {
+      "label": "最後一哩傳遞",
+      "descriptionLocationPlatform": "允許應用程式存取路線規劃服務並執行最後一哩傳遞的路線規劃操作。"
+    },
+    "premium:user:networkanalysis:snaptoroads": {
+      "label": "對齊至道路",
+      "descriptionLocationPlatform": "允許成員執行網路分析任務，例如將 GPS 軌跡點對齊到道路。"
+    },
+    "premium:user:networkanalysis:locationallocation": {
+      "label": "位置分配",
+      "descriptionLocationPlatform": "允許應用程式存取路線規劃服務並執行位置分配操作。"
+    },
+    "premium:user:networkanalysis:routing": {
+      "label": "簡單路線規劃",
+      "descriptionLocationPlatform": "允許應用程式存取路線規劃服務並執行標準路線規劃操作。"
+    },
+    "premium:user:networkanalysis:optimizedrouting": {
+      "label": "最佳化路線規劃",
+      "descriptionLocationPlatform": "允許應用程式存取路線規劃服務並執行最佳化路線規劃操作。"
+    },
+    "premium:user:networkanalysis:vehiclerouting": {
+      "label": "多條車輛路線規劃",
+      "descriptionLocationPlatform": "多車輛路線規劃允許應用程式存取路線規劃服務並執行車隊路線規劃操作。"
+    },
+    "premium:user:networkanalysis:origindestinationcostmatrix": {
+      "label": "原點-目的地成本矩陣",
+      "descriptionLocationPlatform": "允許應用程式存取路線規劃服務並產生行進成本指標。"
+    },
+    "premium:user:networkanalysis:servicearea": {
+      "label": "服務區",
+      "descriptionLocationPlatform": "允許應用程式存取路線規劃服務並產生服務區域。"
+    },
+    "premium:user:places": {
+      "label": "地點服務",
+      "descriptionLocationPlatform": "允許應用程式存取地點服務。"
+    },
+    "premium:user:spatialanalysis": {
+      "labelOld": "空間分析服務",
+      "label": "圖徵分析服務",
+      "labelPortal": "標準圖徵分析",
+      "description": "允許成員執行圖徵分析任務。",
+      "descriptionPortal": "此權限授予執行標準圖徵分析任務的能力。",
+      "descriptionLocationPlatform": "允許應用程式存取圖徵分析服務。",
+      "descriptionApp": "允許應用程式存取圖徵分析服務。"
+    },
+    "premium:user:geoenrichment": {
+      "label": "GeoEnrichment 服務",
+      "description": "允許成員地理豐富圖徵。",
+      "descriptionLocationPlatform": "允許應用程式存取 GeoEnrichment service。",
+      "descriptionApp": "允許應用程式存取 GeoEnrichment service。"
+    },
+    "premium:user:demographics": {
+      "label": "人口統計地圖",
+      "description": "允許應用程式存取 ArcGIS Living Atlas 中的高級人口統計地圖。",
+      "descriptionApp": "允許應用程式存取 ArcGIS Living Atlas 中的高級人口統計地圖。",
+      "descriptionLocationPlatform": "允許應用程式存取 ArcGIS Living Atlas 中的人口統計地圖。"
+    },
+    "premium:publisher:geoanalytics": {
+      "label": "GeoAnalytics 圖徵分析",
+      "description": "此權限授予執行 GeoAnalytics 任務的能力。"
+    },
+    "premium:publisher:rasteranalysis": {
+      "label": "影像分析",
+      "description": "允許成員執行影像分析任務。 需要 ArcGIS Image 分析能力。",
+      "descriptionPortal": "允許成員執行影像分析任務。",
+      "descriptionApp": "允許應用程式執行影像分析任務。 需要 ArcGIS Image 分析能力。",
+      "descriptionAppPortal": "允許應用程式執行影像分析任務。"
+    },
+    "premium:publisher:createAdvancedNotebooks": {
+      "label": "進階筆記本",
+      "description": "允許成員在筆記本中匯入和使用 ArcPy 模組。",
+      "descriptionApp": "允許應用程式在筆記本中匯入和使用 ArcPy 模組。"
+    },
+    "portal:user:runWebTool": {
+      "label": "執行 Web 工具",
+      "description": "允許成員執行 Web 工具。",
+      "descriptionPortal": "允許成員執行從筆記本發佈的 Web 工具。",
+      "descriptionApp": "允許應用程式執行 Web 工具。",
+      "descriptionAppPortal": "允許應用程式執行從筆記本發佈的 Web 工具。"
+    },
+    "portal:user:generateApiTokens": {
+      "label": "產生 API 金鑰",
+      "description": "允許成員產生 API 金鑰。"
+    },
+    "portal:user:assignPrivilegesToApps": {
+      "label": "指派權限給 OAuth 2.0 應用程式",
+      "description": "允許成員指派權限給 OAuth 2.0 應用程式。"
+    },
+    "portal:user:createWorkflow": {
+      "label": "建立工作流程項目",
+      "description": "允許成員建立 Workflow Manager 項目"
+    },
+    "premium:user:featurereport": {
+      "label": "圖徵報告",
+      "description": "允許成員在 Survey123 中建立圖徵報告。",
+      "descriptionApp": "允許應用程式在 Survey123 中建立圖徵報告。"
+    },
+    "premium:user:realitymapping": {
+      "label": "實境製圖",
+      "description": "允許成員執行實境製圖任務。"
+    },
+    "features:user:edit": {
+      "label": "編輯",
+      "description": "允許成員根據圖層上啟用的編輯選項，編輯非公用的可編輯圖層中的圖徵。",
+      "descriptionApp": "允許應用程式根據圖層上啟用的編輯選項，編輯非公用的可編輯圖層中的圖徵。"
+    },
+    "features:user:fullEdit": {
+      "label": "以完全控制功能編輯",
+      "description": "允許成員新增、刪除和更新可編輯的託管圖徵圖層中的圖徵，不論圖層是否啟用編輯選項。",
+      "descriptionApp": "允許應用程式新增、刪除和更新可編輯的託管圖徵圖層中的圖徵，不論圖層是否啟用編輯選項。"
+    },
+    "features:user:manageVersions": {
+      "label": "管理所有",
+      "description": "允許成員管理版本鎖定，以及檢視、改變、刪除、編輯、調整並張貼至透過 ArcGIS Server 圖徵圖層所存取的分支版本。",
+      "descriptionApp": "允許應用程式管理版本鎖定，以及檢視、改變、刪除、編輯、調整並張貼至透過 ArcGIS Server 圖徵圖層所存取的分支版本。"
+    },
+    "portal:publisher:createFeatureWebhook": {
+      "label": "圖徵圖層",
+      "description": "允許成員建立、編輯和刪除他們自己的圖徵圖層 webhook。",
+      "descriptionApp": "允許應用程式建立、編輯和刪除他們自己的圖徵圖層 webhook。"
+    },
+    "portal:admin:viewUsers": {
+      "label": "檢視所有",
+      "description": "允許成員在組織中檢視完整的成員帳號資訊。",
+      "descriptionPortal": "允許成員在入口網站中檢視完整的成員帳號資訊。",
+      "descriptionApp": "允許應用程式在組織中檢視完整的成員帳號資訊。"
+    },
+    "portal:admin:updateUsers": {
+      "label": "更新",
+      "description": "允許成員在組織中重設密碼、更新成員帳號資訊和更新成員類別。",
+      "descriptionPortal": "允許成員在入口網站中重設密碼、更新成員帳號資訊和更新成員類別。",
+      "descriptionApp": "允許應用程式在組織中重設密碼、更新成員帳號資訊和更新成員類別。"
+    },
+    "portal:admin:deleteUsers": {
+      "label": "刪除",
+      "description": "允許成員在帳織中刪除成員帳號。",
+      "descriptionPortal": "允許成員在入口網站中刪除成員帳號。",
+      "descriptionApp": "允許應用程式在帳織中刪除成員帳號。"
+    },
+    "portal:admin:inviteUsers": {
+      "label": "新增",
+      "labelPortal": "邀請",
+      "description": "允許成員邀請成員加入組織。",
+      "descriptionPortal": "允許成員邀請成員加入入口網站。",
+      "descriptionApp": "允許應用程式邀請成員加入組織。"
+    },
+    "portal:admin:disableUsers": {
+      "label": "停用",
+      "description": "允許成員在組織中啟用和停用成員帳號。",
+      "descriptionPortal": "允許成員在入口網站中啟用和停用成員帳號。",
+      "descriptionApp": "允許應用程式在組織中啟用和停用成員帳號。"
+    },
+    "portal:admin:changeUserRoles": {
+      "label": "變更角色",
+      "description": "允許成員變更指派給成員帳號的角色。 請注意，唯有具備管理員角色的成員能將管理員角色指派給其他帳號，或取消該指派。",
+      "descriptionPortal": "允許成員變更指派給成員帳號的角色。 請注意，唯有具備管理員角色的成員能將管理員角色指派給其他帳號，或取消該指派。",
+      "descriptionApp": "允許應用程式變更指派給成員帳號的角色。 請注意，唯有具備管理員角色的成員能將管理員角色指派給其他帳號，或取消該指派。"
+    },
+    "portal:admin:manageLicenses": {
+      "label": "管理授權",
+      "description": "允許成員將授權指派給組織成員。",
+      "descriptionPortal": "允許成員將授權指派給入口網站成員。",
+      "descriptionApp": "允許應用程式將授權指派給組織成員。"
+    },
+    "portal:admin:updateMemberCategorySchema": {
+      "label": "管理類別",
+      "description": "允許成員配置組織成員類別。",
+      "descriptionPortal": "允許成員配置入口網站成員類別。",
+      "descriptionApp": "允許應用程式配置組織成員類別。"
+    },
+    "portal:admin:viewGroups": {
+      "label": "檢視所有",
+      "description": "允許成員在組織中檢視所有群組。",
+      "descriptionPortal": "允許成員在入口網站中檢視所有群組。",
+      "descriptionApp": "允許應用程式檢視組織內的所有群組。"
+    },
+    "portal:admin:updateGroups": {
+      "label": "更新",
+      "description": "允許成員在組織中更新群組。",
+      "descriptionPortal": "允許成員在入口網站中更新群組。",
+      "descriptionApp": "允許應用程式更新組織內的群組。"
+    },
+    "portal:admin:deleteGroups": {
+      "label": "刪除",
+      "description": "允許成員在組織中刪除群組。",
+      "descriptionPortal": "允許成員在入口網站中刪除群組。",
+      "descriptionApp": "允許應用程式在組織中刪除群組。"
+    },
+    "portal:admin:reassignGroups": {
+      "label": "重新指派所有權",
+      "description": "允許成員將群組重新指派給組織中的其他成員。",
+      "descriptionPortal": "允許成員將群組重新指派給入口網站中的其他成員。",
+      "descriptionApp": "允許應用程式將群組重新指派給組織中的其他成員。"
+    },
+    "portal:admin:assignToGroups": {
+      "label": "指派成員",
+      "description": "允許成員在組織中指派成員、更新成員的群組角色，及移除群組的成員。",
+      "descriptionPortal": "允許成員在入口網站中指派成員、更新成員的群組角色，及移除群組的成員。",
+      "descriptionApp": "允許應用程式在組織中指派成員、更新成員的群組角色，及移除群組的成員。"
+    },
+    "portal:admin:manageEnterpriseGroups": {
+      "label": "連結至組織的特定群組",
+      "description": "允許成員將群組成員資格連結到組織的特定群組。",
+      "descriptionApp": "允許應用程式將群組成員資格連結到組織的特定群組。"
+    },
+    "portal:admin:createUpdateCapableGroup": {
+      "label": "使用更新功能建立",
+      "description": "允許成員建立含更新功能的群組。",
+      "descriptionApp": "允許應用程式建立含更新功能的群組。"
+    },
+    "portal:admin:createLeavingDisallowedGroup": {
+      "label": "使用禁止離開建立",
+      "description": "允許成員建立和擁有不允許成員離開的群組 (管理群組)。",
+      "descriptionApp": "允許應用程式建立和擁有不允許應用程式離開的群組 (管理群組)。"
+    },
+    "portal:admin:viewItems": {
+      "label": "檢視所有",
+      "description": "允許成員在組織中檢視所有內容。",
+      "descriptionPortal": "允許成員在入口網站中檢視所有內容。",
+      "descriptionApp": "允許應用程式檢視組織內的所有內容。"
+    },
+    "portal:admin:updateItems": {
+      "label": "更新",
+      "description": "允許成員在組織中更新和分類內容和編輯託管圖徵圖層。",
+      "descriptionPortal": "允許成員在入口網站中更新和分類內容和編輯託管圖徵圖層。",
+      "descriptionApp": "允許應用程式在組織中更新和分類內容和編輯託管圖徵圖層。"
+    },
+    "portal:admin:deleteItems": {
+      "label": "刪除",
+      "description": "允許成員在組織中刪除內容。",
+      "descriptionPortal": "允許成員在入口網站中刪除內容。",
+      "descriptionApp": "允許應用程式在組織中刪除內容。"
+    },
+    "portal:admin:reassignItems": {
+      "label": "重新指派所有權",
+      "description": "允許成員將內容重新指派給組織中的其他成員。",
+      "descriptionPortal": "允許成員將內容重新指派給入口網站中的其他成員。",
+      "descriptionApp": "允許應用程式將內容重新指派給組織中的其他成員。"
+    },
+    "portal:admin:updateItemCategorySchema": {
+      "label": "管理類別",
+      "description": "允許成員配置組織內容類別。",
+      "descriptionPortal": "允許成員配置入口網站內容類別。",
+      "descriptionApp": "允許應用程式配置組織內容類別。"
+    },
+    "portal:publisher:publishServerGPServices": {
+      "label": "發佈 Web 工具",
+      "description": "此權限授予發佈聯合伺服器網站的地理處理服務所支援之 Web 工具的能力。"
+    },
+    "portal:admin:shareToOrg": {
+      "label": "與組織分享成員內容",
+      "description": "允許成員將組織中其他成員所擁有的內容與組織分享。",
+      "descriptionPortal": "允許成員將入口網站中其他成員所擁有的內容與入口網站分享。",
+      "descriptionApp": "允許應用程式將組織中其他成員所擁有的內容與組織分享。"
+    },
+    "portal:admin:shareToPublic": {
+      "label": "與公眾分享成員內容",
+      "description": "允許成員將組織中其他成員所擁有的內容與公眾分享。",
+      "descriptionPortal": "允許成員將入口網站中其他成員所擁有的內容與公眾分享。",
+      "descriptionApp": "允許應用程式將組織中其他成員所擁有的內容與公眾分享。"
+    },
+    "portal:admin:createReports": {
+      "label": "建立和管理管理報告",
+      "description": "允許成員為您的組織建立和管理管理報告。",
+      "descriptionPortal": "允許成員為您的入口網站建立和管理管理報告。",
+      "descriptionApp": "允許應用程式為您的組織建立和管理管理報告。"
+    },
+    "marketplace:admin:manage": {
+      "label": "建立和管理",
+      "description": "允許成員在 ArcGIS Marketplace 中建立清單、清單項目和管理訂閱，以及為您的組織管理買家和聯絡資訊。 此權限的使用取決於您的組織是否取得 ArcGIS Marketplace 的條列和發佈權限。"
+    },
+    "marketplace:admin:purchase": {
+      "label": "購買並取得免費產品",
+      "description": "允許成員向 ArcGIS Marketplace 中的提供者傳送購買申請及從中存取免費產品。 要允許成員使用信用卡購買產品，必須將其指定為 Marketplace 購買者。"
+    },
+    "marketplace:admin:startTrial": {
+      "label": "開始試用",
+      "description": "允許成員在 ArcGIS Marketplace 中啟動試用訂閱。"
+    },
+    "portal:admin:manageSecurity": {
+      "label": "安全性和基礎結構",
+      "description": "允許成員管理組織的安全性和基礎結構設定。",
+      "descriptionPortal": "允許成員管理入口網站的安全性和基礎結構設定。",
+      "descriptionApp": "允許應用程式管理組織的安全性和基礎結構設定。"
+    },
+    "portal:admin:manageWebsite": {
+      "label": "組織網站",
+      "description": "允許成員管理組織的網站設定。",
+      "descriptionPortal": "允許成員管理入口網站的網站設定。",
+      "descriptionApp": "允許應用程式管理組織的網站設定。"
+    },
+    "portal:admin:manageCollaborations": {
+      "label": "協同作業",
+      "description": "允許成員管理組織的協同作業。",
+      "descriptionPortal": "允許成員管理入口網站的協同作業。",
+      "descriptionApp": "允許應用程式管理組織的協同作業。"
+    },
+    "portal:admin:manageCredits": {
+      "label": "點數",
+      "description": "允許成員管理組織的點數預算設定。",
+      "descriptionApp": "允許應用程式管理組織的點數預算設定。"
+    },
+    "portal:admin:manageRoles": {
+      "label": "成員角色",
+      "description": "允許成員管理組織的成員角色。",
+      "descriptionPortal": "允許成員管理入口網站的成員角色。",
+      "descriptionApp": "允許應用程式管理組織的成員角色。"
+    },
+    "portal:admin:manageServers": {
+      "label": "伺服器",
+      "description": "此權限授與管理入口網站之伺服器設定的能力。"
+    },
+    "portal:admin:manageUtilityServices": {
+      "label": "公用程式服務",
+      "description": "允許成員管理組織的公用程式服務設定。",
+      "descriptionPortal": "允許成員管理入口網站的公用程式服務設定。",
+      "descriptionApp": "允許應用程式管理組織的公用程式服務設定。"
+    },
+    "portal:admin:manageWebhooks": {
+      "label": "Webhook",
+      "labelPortal": "組織 webhook",
+      "description": "允許成員建立、編輯和刪除組織中的所有 webhook。",
+      "descriptionApp": "允許應用程式建立、編輯和刪除您組織中的所有 webhook。",
+      "descriptionPortal": "允許成員建立、編輯和刪除組織 webhook 並管理入口網站內的所有 webhook。",
+      "descriptionAppPortal": "允許應用程式建立、編輯和刪除組織 webhook 並管理入口網站內的所有 webhook。"
+    },
+    "portal:admin:createGPWebhook": {
+      "label": "地理處理",
+      "description": "允許成員建立、編輯和刪除他們自己的地理處理 webhook。",
+      "descriptionApp": "允許應用程式建立、編輯和刪除他們自己的地理處理 webhook。"
+    }
+  }
+}

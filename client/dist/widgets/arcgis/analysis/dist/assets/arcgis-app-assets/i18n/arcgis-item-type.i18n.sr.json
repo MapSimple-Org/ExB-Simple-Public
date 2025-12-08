@@ -1,0 +1,27 @@
+{
+  "hosted": "hostovani",
+  "hostedView": "hostovani, prikaz",
+  "hostedPhotos": "hostovane, fotografije",
+  "hostedCollection": "hostovani, kolekcija",
+  "hostedMultidimensional": "hostovani, višedimenzionalno",
+  "hostedCollectionMultidimensional": "hostovani, kolekcija, višedimenzionalno",
+  "collectionMultidimensional": "kolekcija, višedimenzionalno",
+  "multidimensional": "višedimenzionalno",
+  "collection": "kolekcija",
+  "photoLocations": "fotografije",
+  "locatorView": "prikaz",
+  "utilityNetwork": "uslužna mreža",
+  "Integrated Mesh": "integrisana mreža",
+  "3D Object": "3D objekat",
+  "Point": "tačka",
+  "Point Cloud": "oblak tačaka",
+  "Building Scene Layer": "sloj za izgradnju scene",
+  "Voxel Scene Layer": "sloj scene voksela",
+  "dataStore": {
+    "bigdata": "deljenje velikih datoteka",
+    "cloud": "oblak",
+    "cloudStorage": "skladište u oblaku",
+    "database": "baza podataka",
+    "folder": "fascikla"
+  }
+}

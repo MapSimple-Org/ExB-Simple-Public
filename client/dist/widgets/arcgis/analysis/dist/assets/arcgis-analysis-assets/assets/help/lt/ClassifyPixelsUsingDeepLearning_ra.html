@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>Įrankis Klasifikuoti pikselius naudojant gilųjį mokymąsi naudoja apmokytą gilaus mokymosi modelį įvesties vaizdui ir sukuria klasifikuotą rastrą.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputRaster">
+        <div>
+            <p>Vaizdų sluoksnis, kuris bus naudojamas pikseliams klasifikuoti.
+            </p> 
+        </div>
+    </div>
+    <div id="processAllRasterItems">
+        <div>
+            <p>Nurodo, kaip bus apdorojami rastriniai elementai vaizdų sluoksnyje po mozaikinio sujungimo: kartu arba atskirai.
+            </p>
+        </div>
+    </div>
+    <div id="model">
+        <div>
+            <p>Gilaus mokymosi paketas, kuriame yra modelis, naudojamas pikseliams klasifikuoti.
+            </p>
+        </div>
+    </div>
+    <div id="modelArguments">
+        <div>
+            <p>Modelio argumentai, esantys gilaus mokymosi modelyje, ir jų numatytoji reik&scaron;mė.
+            </p>
+        </div>
+    </div>
+    <div id="outputClassifiedRaster">
+        <div>
+            <p>Klasifikuojamo i&scaron;vesties vaizdų sluoksnio pavadinimas.
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>Sluoksnio, kuris bus sukurtas ir pridėtas į žemėlapį, pavadinimas.
+            </p>
+        </div>
+    </div>
+    <div id="resultType">
+        <div>
+            
+            <p>Sukuriamos i&scaron;vesties tipas. I&scaron;vestis gali būti i&scaron;klotinių vaizdų sluoksnis arba dinaminis vaizdų sluoksnis.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            
+            <p>Puslapyje  <b>Mano turinys</b> esančio aplanko, kur bus įra&scaron;ytas rezultatas, pavadinimas.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

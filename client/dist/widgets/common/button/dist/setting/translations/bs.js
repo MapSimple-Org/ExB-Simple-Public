@@ -1,0 +1,1 @@
+System.register([],function(e){return{execute:function(){e({_widgetLabel:"Gumb",dynamicStyleExpressionsLabel:"Koristi sadr\u017eaj teksta gumba"})}}});

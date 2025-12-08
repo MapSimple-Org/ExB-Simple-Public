@@ -1,0 +1,6 @@
+{
+  "header": "Újrakezdi mentés nélkül?",
+  "content": "Önnek nem mentett módosításai vannak itt: ${rftTitle}. Ha új sablonnal kezdi újra, akkor ezek a változtatások elvesznek.",
+  "cancel": "Mégse",
+  "continue": "Folytatás"
+}

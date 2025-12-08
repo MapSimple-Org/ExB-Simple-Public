@@ -1,0 +1,160 @@
+{
+  "deleteItem": "Dzēst vienību",
+  "deleteItems": "Dzēst vienības",
+  "deleteFolder": "Dzēst mapi",
+  "recycleBin": "Atkritne",
+  "delete": "Dzēst",
+  "permanentlyDelete": "Neatgriezeniski dzēst",
+  "next": "Tālāk",
+  "back": "Atpakaļ",
+  "cancel": "Atcelt",
+  "item": "vienība",
+  "items": "vienības",
+  "cantDelete": "Zemāk norādītās vienības nevar izdzēst, jo tās ir aizsargātas pret dzēšanu vai tām ir atkarīgas vienības.",
+  "proceed": "Vai turpināt ar atlikušo vienību dzēšanu?",
+  "showMore": "Rādīt vairāk",
+  "showLess": "Rādīt mazāk",
+  "deletePermanently": "Dzēst neatgriezeniski (nevar atsaukt)",
+  "learnMore": "Uzzināt vairāk",
+  "summary": {
+    "select": "Izvēlēties",
+    "deselect": "Noņemt izvēli",
+    "selectedItems": "Atlasītās vienības:",
+    "additionalDependentItems": "papildu atkarīgas vienības:",
+    "permanentlyDelete": "Neatgriezeniski dzēst:",
+    "permanentDelete": {
+      "notSupported": {
+        "single": "Šo vienību nevar ievietot atkritnē.",
+        "multiple": "Atkritne neatbalsta šīs vienības."
+      },
+      "unsynchronized": "Nesinhronizētie labojumi, kas veikti dalītās sadarbības grupas elementu slāņos, tiks zaudēti.",
+      "notSupportedAndUnsynchronized": "Daži vienību veidi netiek atbalstīti. Nesinhronizētie labojumi, kas veikti dalītās sadarbības grupas elementu slāņos, tiks zaudēti.",
+      "group": {
+        "notSupported": "Netiek atbalstīts",
+        "distributedCollaboration": "Daļa no dalītās sadarbības"
+      }
+    },
+    "canBeRecovered": {
+      "single": "Šī vienība tiks neatgriezeniski izdzēsta pēc ${days} dienām.",
+      "multiple": "Šīs vienības tiks neatgriezeniski izdzēstas pēc ${days} dienām.",
+      "unknown": "Šīs vienības tiks neatgriezeniski izdzēstas pēc ${days} dienām."
+    },
+    "includesDependentItems": "Papildu atkarīgas vienības:",
+    "willBeRecycled": "Nosūtīt uz atkritni:",
+    "cannotDelete": "Nevar izdzēst:",
+    "deleteDiscouraged": "Dzēst atturētos:",
+    "hasDependentItems": "Ir atkarīgas vienības:",
+    "replacementItemFor": "Aizvietojamā vienība šim:",
+    "someActionsMayNoLongerWork": {
+      "single": "Ja ievietojat šo vienību atkritnē, dažas darbības, kurām nepieciešama piekļuve avota vienībai, var netikt veiktas, kā paredzēts.",
+      "multiple": "Ja ievietojat šīs vienības atkritnē, dažas darbības, kurām nepieciešama piekļuve avota vienībām, var netikt veiktas, kā paredzēts."
+    },
+    "deletePermanently": "Dzēst neatgriezeniski: ${count} (nevar atsaukt)",
+    "deleteAllPermanently": "Neatgriezeniski dzēst visas vienības: ${count} (nevar atsaukt)",
+    "deleteXPermanently": "Neatgriezeniski dzēst ${subset} no ${total} vienībām (nevar atsaukt)",
+    "unprotectedGroup": {
+      "deleteDiscouraged": {
+        "dependent": "Ja šī vienība tiek dzēsta, dažas darbības, kurām nepieciešama piekļuve avota vienībai, var netikt veiktas, kā paredzēts. Vai tiešām vēlaties dzēst vienību?",
+        "replacement": "Šī vienība ir izvēlēta kā aizvietojamā vienība. Vai tiešām vēlaties dzēst vienību?",
+        "learnMore": "Uzziniet vairāk par avota vienību dzēšanu"
+      }
+    },
+    "protectedGroup": {
+      "deleteProtected": "Aizsargātas pret dzēšanu",
+      "deleteProtectedDescription": "Nevar izdzēst vienības, kas aizsargātas pret dzēšanu.",
+      "hasDependentItems": "Ir atkarīgas vienības",
+      "dependentItems": {
+        "single": "Atkarīgā vienība:",
+        "multiple": "Atkarīgās vienības:"
+      },
+      "compositeDelete": "Šī vienība ir atkarīga no:",
+      "compositeDeleteDescription": "Atkarīgās vienības saliktajā saistībā nevar izdzēst bez to saistītās avota vienības.",
+      "hasDependentItemsDescription": {
+        "singleOneDependentItem": "Šai vienībai ir atkarīga vienība. Tās ir jādzēš vienlaikus.",
+        "singleMultipleDependentItems": "Šai vienībai ir atkarīgas vienības. Tās ir jādzēš vienlaikus.",
+        "multiple": "Šīm vienībām ir citas no tām atkarīgas vienības. Tās ir jādzēš vienlaikus."
+      },
+      "protectedAndDependentDescription": "Nevar izdzēst vienības, kas aizsargātas pret dzēšanu, vai kurām ir atkarīgas vienības.",
+      "deleteDiscouraged": "Dzēst atturētos",
+      "deleteDiscouragedDescription": {
+        "single": "Ja šī vienība tiek izdzēsta, atkarīgās vienības var zaudēt funkcionalitāti. Šo vienību var izdzēst vienības detalizētās informācijas lapā.",
+        "multiple": "Ja šīs vienības tiek izdzēstas, atkarīgās vienības var zaudēt funkcionalitāti. Šīs vienības var dzēst atsevišķi vienības detalizētās informācijas lapā."
+      }
+    }
+  },
+  "willBePermanentlyDeleted": {
+    "single": "Šī vienība tiks neatgriezeniski dzēsta, jo atkritne to neatbalsta.",
+    "multiple": "Šīs vienības tiks neatgriezeniski dzēstas, jo atkritne tās neatbalsta.",
+    "unknown": "Šīs vienības tiks neatgriezeniski dzēstas, jo atkritne tās neatbalsta."
+  },
+  "willBePermanentlyDeletedCollaboration": {
+    "single": "Izvēlētā vienība pieder dalīta kopdarba grupai, un to nevar nosūtīt uz atkritni. Tā tiks neatgriezeniski izdzēsta.",
+    "multiple": "Izvēlētā vienība pieder dalīta kopdarba grupai, un to nevar nosūtīt uz atkritni. Tās tiks neatgriezeniski izdzēstas.",
+    "unknown": "Izvēlētās vienības pieder dalīta kopdarba grupai, un tās nevar nosūtīt uz atkritni. Tās tiks neatgriezeniski izdzēstas."
+  },
+  "areYouSure": {
+    "single": "Vai tiešām vēlaties dzēst šo vienību?",
+    "multiple": "Vai tiešām vēlaties dzēst šīs vienības?",
+    "unknown": "Vai tiešām vēlaties dzēst šīs vienības?"
+  },
+  "areYouSureRecycle": {
+    "single": "Šī vienība atkritnē paliks ${days} dienas, līdz tā tiks neatgriezeniski izdzēsta.",
+    "multiple": "Šīs vienības atkritnē paliks ${days} dienas, līdz tās tiks neatgriezeniski izdzēstas.",
+    "unknown": "Šīs vienības atkritnē paliks ${days} dienas, līdz tās tiks neatgriezeniski izdzēstas."
+  },
+  "areYouSurePermanent": {
+    "single": "Vai tiešām vēlaties neatgriezeniski dzēst šo vienību? Šo vienību nevar atkopt pēc tam, kad tā ir neatgriezeniski izdzēsta.",
+    "multiple": "Vai tiešām vēlaties neatgriezeniski dzēst šīs vienības? Pēc tam, kad šīs vienības ir neatgriezeniski izdzēstas, tās nevar atkopt.",
+    "unknown": "Vai tiešām vēlaties neatgriezeniski dzēst šīs vienības? Pēc tam, kad šīs vienības ir neatgriezeniski izdzēstas, tās nevar atkopt."
+  },
+  "deletes": {
+    "single": "Tiks dzēsts pēc ${days} dienām",
+    "multiple": "Tiks dzēsts pēc ${days} dienām",
+    "unknown": "Dienu skaits, kas atlicis līdz dzēšanai: ${days}"
+  },
+  "deleteOverride": {
+    "single": "Vai tiešām vēlaties neatgriezeniski dzēst šo vienību? Šo vienību nevar atkopt pēc tam, kad tā ir neatgriezeniski izdzēsta.",
+    "multiple": "Vai tiešām vēlaties neatgriezeniski dzēst šīs vienības? Pēc tam, kad šīs vienības ir neatgriezeniski izdzēstas, tās nevar atjaunot."
+  },
+  "restore": {
+    "restore": "Atjaunot",
+    "restoreTo": "Atjaunot uz",
+    "restoreItem": "Atjaunot vienību",
+    "restoreItems": "Atjaunot vienības",
+    "noticeMessage": "Atjaunotās vienības netiks koplietotas. Lūdzu, pārskatiet saturu, pirms to atkal koplietojat.",
+    "cannotBulkRestoreXItems": "Nevar veikt lielapjoma atjaunināšanu, iekļaujot vairāk par ${number} vienībām. Lūdzu, noņemiet dažas vienības.",
+    "cannotBulkRestoreMultipleOwners": "Nevar veikt tādu vienību lielapjoma atjaunināšanu, kas pieder dažādiem īpašniekiem. Atlasiet viena īpašnieka vienības, lai veiktu lielapjoma atjaunošanu.",
+    "toRestore": {
+      "single": "Atjaunojamā vienība:",
+      "multiple": "Atjaunojamās vienības:"
+    },
+    "cannotRestore": "Nevar atjaunot:",
+    "dependentItems": {
+      "single": "Šo vienību nevar atjaunot, jo tā ir atkarīga no <b>${parent}</b>. Atjaunojiet tās kopā.",
+      "multiple": "Šīs vienības nevar atjaunot, jo tās ir atkarīgas no citām vienībām atkritnē. Atjaunojiet tās kopā: "
+    }
+  },
+  "onboarding": {
+    "checkItOut": "Vai atkopt šo nejauši izdzēsto vienību? Skatiet jauno atkritni!",
+    "takeALook": "Iepazīstiet jauno atkritni!",
+    "learnMore": "Uzzināt vairāk par dzēsto vienību atjaunošanu",
+    "heldInRecycleBin": "Vienības atkritnē tiks neatgriezeniski izdzēstas pēc ${days} dienām.",
+    "goToUserRecycleBin": "Atveriet ${linkStart}atkritni${linkEnd}, lai atjaunotu vai neatgriezeniski dzēstu vienības.",
+    "goToOrgRecycleBin": "Atveriet ${linkStart}organizācijas atkritni${linkEnd}, lai atjaunotu vai neatgriezeniski dzēstu vienības. Atkritnes saturs turpina patērēt ArcGIS Online pakalpojuma kredītus."
+  },
+  "pageRangeWithTotalRecycleBinSize": {
+    "en": "${start} - ${end} no ${total} (${size}) atkritnē",
+    "other": "${start} - ${end}, kopā: ${total} (${size}) atkritnē"
+  },
+  "pageRangeWithGreaterThanTotalRecycleBinSize": {
+    "en": "${start} - ${end} no ${total} (>${size}) atkritnē",
+    "other": "${start} - ${end}, kopā: ${total} (>${size}) atkritnē"
+  },
+  "compositeDeleteDisclaimer": {
+    "oneToOne": "<strong>${item}</strong> ir atkarīga vienība <strong>${dependentItem}</strong>, kas jāizdzēš kopā ar to.",
+    "oneToMany": "<strong>${item}</strong> ir atkarīgas vienības, kas jāizdzēš kopā ar to.",
+    "manyToMany": "Dažām atlasītajām vienībām ir atkarīgas vienības, kas jāizdzēš kopā ar tām.",
+    "additional": "Papildu vienības:",
+    "dependentOn": "Atkarīgs no"
+  }
+}

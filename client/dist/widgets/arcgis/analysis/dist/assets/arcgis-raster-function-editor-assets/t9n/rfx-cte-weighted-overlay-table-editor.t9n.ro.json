@@ -1,0 +1,13 @@
+{
+  "weightedOverlayTable": "Tabel suprapus ponderat",
+  "id": "ID",
+  "layer": "Strat tematic",
+  "field": "Field",
+  "influence": "Influenţă",
+  "sumOfInfluence": "Suma influenței",
+  "value": "Valoare",
+  "remapTable": "Recartografiere tabel",
+  "scale": "Scară",
+  "scales": "Scări",
+  "selectRaster": "Selectați raster"
+}

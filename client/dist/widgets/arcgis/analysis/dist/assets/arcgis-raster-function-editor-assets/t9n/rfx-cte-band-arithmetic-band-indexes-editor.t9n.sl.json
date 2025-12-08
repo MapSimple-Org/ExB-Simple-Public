@@ -1,0 +1,7 @@
+{
+  "example": "Primer",
+  "input": "Vnos",
+  "output": "Izhod",
+  "optional": "Izbirno",
+  "WNDWIHintText": "Vrednost α:α mora biti med 0 in 1; privzeta vrednost je 0,5"
+}

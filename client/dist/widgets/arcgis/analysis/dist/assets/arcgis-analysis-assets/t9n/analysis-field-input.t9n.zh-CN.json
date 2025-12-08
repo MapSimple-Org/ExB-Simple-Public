@@ -1,0 +1,68 @@
+{
+  "addField": "添加字段",
+  "addFieldErrors": {
+    "creatingFailed": "创建字段 ${fieldName} 失败。",
+    "existingFieldNameError": "字段名称不能与现有的字段名称相同。",
+    "invalidName": "无效名称",
+    "invalidNameInputInvalidCharactersError": "字段名称必须以字母开头，并且只能包含字母、数字和“_”。",
+    "invalidNameInputSQLError": "字段名称不能与 SQL 关键字相同。",
+    "valueIsRequiredError": "此值为必填项。"
+  },
+  "cancel": "取消",
+  "createAndSelectField": "创建并选择字段",
+  "createNewFields": "创建新字段",
+  "fieldLoadingErrorText": "无法加载字段。",
+  "fieldName": "字段名",
+  "fieldType": "字段类型",
+  "fieldTypesIncompatible": "没有可用的兼容字段。",
+  "layerNotSelected": "没有选择图层来填充字段。",
+  "loadingFields": "正在加载字段",
+  "noSearchResults": "未找到任何匹配的字段。",
+  "requiredErrorLabelDefault": "一个字段",
+  "requiredErrorMessage": "必需参数。",
+  "selectFieldPicklistHeading": "选择字段",
+  "selectOkBtnText": "选择",
+  "tooltip": "必须指定有效的字段名称和字段类型。",
+  "types": {
+    "big-integer": {
+      "description": "存储 -(2${startSup}53${endSup}-1) 到 2${startSup}53${endSup}-1 之间的整数。 对于超出整数字段支持范围的数值，应使用此字段类型。",
+      "title": "大整型"
+    },
+    "date": {
+      "description": "存储带有日期和时间的值。",
+      "title": "日期"
+    },
+    "date-only": {
+      "description": "仅存储日期值，不包括时间值。",
+      "title": "仅日期"
+    },
+    "double": {
+      "description": "存储小数。",
+      "title": "双精度"
+    },
+    "global-id": {
+      "description": "存储由字母和数字组成的 36 个字符的字符串，用于唯一识别要素。",
+      "title": "GlobalID"
+    },
+    "guid": {
+      "description": "存储由字母和数字组成的 36 个字符的字符串。 全局唯一标识符或 GUID 通常用于管理要素之间的关系。",
+      "title": "GUID"
+    },
+    "integer": {
+      "description": "存储 ${lowerIntegerRange} 至 ${upperIntegerRange} 范围内的整数。",
+      "title": "整型"
+    },
+    "string": {
+      "description": "存储一组字母数字字符",
+      "title": "字符串"
+    },
+    "time-only": {
+      "description": "仅存储时间值，不包括日期值。",
+      "title": "仅时间"
+    },
+    "timestamp-offset": {
+      "description": "存储指示日期、时间及与协调世界时(UTC)的偏移量的值。",
+      "title": "时间戳偏移"
+    }
+  }
+}

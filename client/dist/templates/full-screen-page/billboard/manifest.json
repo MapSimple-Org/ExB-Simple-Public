@@ -1,0 +1,21 @@
+{
+  "name": "billboard",
+  "type": "template",
+  "templateType": "full-screen-page",
+  "label": "Billboard",
+  "description": "Billboard was created with simplicity in mind; it contains a map and a controller widget.",
+  "thumbnail": "thumbnail.png",
+  "order": 5,
+  "tags": [
+    "Map",
+    "Search",
+    "Widget Controller"
+  ],
+  "categoriesTags": [
+    "WAB classic",
+    "Map centric",
+    "Fullscreen"
+  ],
+  "thumbnailWidth": 320,
+  "thumbnailHeight": 214
+}

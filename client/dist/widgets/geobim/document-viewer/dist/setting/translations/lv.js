@@ -1,0 +1,1 @@
+System.register([],function(t){return{execute:function(){t({settingsLabel:"Dokumentu skat\u012bt\u0101ja iestat\u012bjumi"})}}});

@@ -1,0 +1,22 @@
+{
+  "general": "Umum",
+  "parameters": "Parameter",
+  "variables": "Variabel",
+  "name": "Nama",
+  "namePlaceHolder": "Masukkan nama",
+  "description": "Deskripsi",
+  "parameter": "Parameter",
+  "isPublic": "IsPublic",
+  "isDataset": "IsDataset",
+  "unknownPixelType": "Tidak Diketahui",
+  "outputPixelType": "Jenis Piksel Output",
+  "u8PixelType": "8 Bit Dibatalkan Tanda Tangannya",
+  "s8PixelType": "8 Bit Ditanda Tangani",
+  "u16PixelType": "16 Bit Dibatalkan Tanda Tangannya",
+  "s16PixelType": "16 Bit Ditanda Tangani",
+  "u32PixelType": "32 Bit Dibatalkan Tanda Tangannya",
+  "s32PixelType": "32 Bit Ditanda Tangani",
+  "f32PixelType": "32 Bit Mengambang",
+  "f64PixelType": "64 Bit Ganda",
+  "properties": "Properti"
+}

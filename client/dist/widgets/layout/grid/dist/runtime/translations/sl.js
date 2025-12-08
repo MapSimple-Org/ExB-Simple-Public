@@ -1,0 +1,1 @@
+System.register([],function(e){return{execute:function(){e({_widgetLabel:"Mre\u017ea",widgetProperties:"Lastnosti pripomo\u010dka",widgetFunctions:"Funkcije pripomo\u010dka",widgetName:"ime pripomo\u010dka:",widgetProps:"lastnosti pripomo\u010dka:",tips:"Mre\u017ea"})}}});

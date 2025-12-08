@@ -1,0 +1,68 @@
+{
+  "addField": "Veld toevoegen",
+  "addFieldErrors": {
+    "creatingFailed": "Kan veld ${fieldName} niet maken.",
+    "existingFieldNameError": "De veldnaam kan niet identiek zijn aan een bestaande veldnaam.",
+    "invalidName": "Ongeldige naam",
+    "invalidNameInputInvalidCharactersError": "De veldnaam moet beginnen met een letter en mag alleen letters, cijfers en '_' bevatten.",
+    "invalidNameInputSQLError": "De veldnaam kan niet identiek zijn aan een SQL-trefwoord.",
+    "valueIsRequiredError": "Deze waarde is vereist."
+  },
+  "cancel": "Annuleren",
+  "createAndSelectField": "Veld maken en selecteren",
+  "createNewFields": "Nieuw veld maken",
+  "fieldLoadingErrorText": "Kan velden niet laden.",
+  "fieldName": "Naam veld",
+  "fieldType": "Type veld",
+  "fieldTypesIncompatible": "Geen compatibele velden beschikbaar.",
+  "layerNotSelected": "Geen kaartlaag geselecteerd om de velden te vullen.",
+  "loadingFields": "Bezig met laden velden",
+  "noSearchResults": "Kan geen overeenkomende velden vinden.",
+  "requiredErrorLabelDefault": "Een veld",
+  "requiredErrorMessage": "Deze parameter is vereist.",
+  "selectFieldPicklistHeading": "Veld selecteren",
+  "selectOkBtnText": "Selecteren",
+  "tooltip": "U moet een geldige veldnaam en veldtype opgeven.",
+  "types": {
+    "big-integer": {
+      "description": "Sla gehele getallen die tussen -(2${startSup}53${endSup}-1) en 2${startSup}53${endSup}-1 liggen. Gebruik dit veldtype wanneer u getallen gebruikt die buiten het ondersteunde veldbereik voor gehele getallen vallen.",
+      "title": "Grote integer"
+    },
+    "date": {
+      "description": "Waarden met datum en tijd opslaan.",
+      "title": "Datum"
+    },
+    "date-only": {
+      "description": "Datumwaarden zonder tijdwaarden opslaan.",
+      "title": "Alleen datum"
+    },
+    "double": {
+      "description": "Getallen met decimalen opslaan.",
+      "title": "Dubbel"
+    },
+    "global-id": {
+      "description": "Sla een tekenreeks van 36 tekens op, die bestaat uit letters en cijfers en die wordt gebruikt als unieke id voor een object.",
+      "title": "GlobalID"
+    },
+    "guid": {
+      "description": "Sla een tekenreeks van 36 tekens op die bestaat uit letters en cijfers. Er wordt vaak een GUID (Globally Unique ID) gebruikt om de relaties tussen objecten te beheren.",
+      "title": "GUID"
+    },
+    "integer": {
+      "description": "Sla gehele getallen op die tussen ${lowerIntegerRange} en ${upperIntegerRange} liggen.",
+      "title": "Integer"
+    },
+    "string": {
+      "description": "Een set alfanumerieke tekens opslaan",
+      "title": "Tekenreeks"
+    },
+    "time-only": {
+      "description": "Tijdwaarden zonder datumwaarden opslaan.",
+      "title": "Alleen tijd"
+    },
+    "timestamp-offset": {
+      "description": "Waarden opslaan die de datum, tijd en verschil met UTC (gecoördineerde universele tijd) aangeven.",
+      "title": "Tijdstempel-offset"
+    }
+  }
+}

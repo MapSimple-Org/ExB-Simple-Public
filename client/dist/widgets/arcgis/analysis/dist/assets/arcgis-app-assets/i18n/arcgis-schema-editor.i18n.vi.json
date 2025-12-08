@@ -1,0 +1,15 @@
+{
+  "expandAll": "Mở rộng tất cả",
+  "collapseAll": "Thu gọn tất cả",
+  "categoryItem": {
+    "expand": "Mở rộng",
+    "collapse": "Thu gọn",
+    "editCategory": "Chỉnh sửa danh mục",
+    "deleteCategory": "Xóa danh mục",
+    "addSubcategory": "Thêm danh mục con",
+    "addCategory": "Thêm danh mục",
+    "save": "Lưu",
+    "cancel": "Hủy",
+    "missingTitleMessage": "Tiêu đề danh mục là thông tin bắt buộc."
+  }
+}

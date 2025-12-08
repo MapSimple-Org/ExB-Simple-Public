@@ -1,0 +1,9 @@
+{
+  "weightedSumTable": "가중치 합계 테이블",
+  "id": "ID",
+  "layer": "레이어",
+  "field": "필드",
+  "weight": "가중치",
+  "value": "값",
+  "selectLayer": "레이어 선택"
+}

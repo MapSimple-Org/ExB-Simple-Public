@@ -1,0 +1,34 @@
+{
+  "name": "logbook",
+  "type": "template",
+  "templateType": "app",
+  "label": "Logbook",
+  "description": "Logbook is a multi-page template that allows for multi-faceted data exploration by recording key statistics on the home page and exploring those data in more depth using maps, images, charts, and tables on other scrolling pages.",
+  "thumbnail": "thumbnail.png",
+  "order": 65,
+  "templateCreateVersion": "1.15.0",
+  "tags": [
+    "Gallery",
+    "Card",
+    "Grid",
+    "Title",
+    "Link",
+    "Menu",
+    "Section",
+    "View",
+    "Navigation",
+    "Banner",
+    "Bookmark",
+    "Slides",
+    "Table",
+    "Chart"
+  ],
+  "categoriesTags": [
+    "Website",
+    "Multipage"
+  ],
+  "isMultiplePage": true,
+  "isMapAware": false,
+  "thumbnailWidth": 320,
+  "thumbnailHeight": 214
+}

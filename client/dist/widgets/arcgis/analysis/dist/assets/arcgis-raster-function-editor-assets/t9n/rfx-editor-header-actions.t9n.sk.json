@@ -1,0 +1,11 @@
+{
+  "newTemplate": "Vytvoriť novú šablónu",
+  "openTemplate": "Otvoriť šablónu",
+  "addTemplate": "Pridať šablónu",
+  "addFunction": "Pridať rastrové funkcie",
+  "addConstant": "Pridať konštantu",
+  "addRaster": "Pridať rastrovú premennú",
+  "expand": "Rozbaliť",
+  "editTemplateProperties": "Editovať vlastnosti šablóny",
+  "viewTemplateProperties": "Zobraziť vlastnosti šablóny"
+}

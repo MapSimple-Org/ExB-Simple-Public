@@ -1,0 +1,1 @@
+System.register([],function(e){return{execute:function(){e({_widgetLabel:"Mesura",selectToStart:"Seleccioneu una eina per comen\xe7ar a mesurar.",measureDistance:"Mesurar dist\xe0ncies",measureArea:"\xc0rea de mesura",clearMeasurement:"Esborra la mesura",measureUnit:"Unitat de mesura"})}}});

@@ -1,0 +1,1 @@
+System.register([],function(e){return{execute:function(){e({verticalAlign:"Verticaal uitlijnen",spaceAround:"Ruimte rondom",spaceBetween:"Ruimte tussen",spaceEvenly:"Gelijkmatig spreiden",horizontalAlign:"Horizontaal uitlijnen",scrollable:"Scrolbaar"})}}});

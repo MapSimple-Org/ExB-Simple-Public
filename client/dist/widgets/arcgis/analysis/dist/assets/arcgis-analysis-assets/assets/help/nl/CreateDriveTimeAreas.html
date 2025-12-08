@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpEnvFilters, envContent, hideNodes, hideEnvClass, hideEnvNodes, hideModeClass, hideModeNodes;
+                helpInfo = window.location.hash.substring(1);
+                if (helpInfo.indexOf("-")) {
+                    [helpId, ...helpEnvFilters] = helpInfo.split("-");
+                    helpEnvFilters = helpEnvFilters.join("-");
+                }
+                else {
+                    helpId = helpInfo;
+                }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                hideEnvClass = (helpEnvFilters.includes("OnlineOnly") ? "PortalOnly": "OnlineOnly");
+                hideModeClass = (helpEnvFilters.includes("toolPaneOnly") ? "modelBuilderOnly": "toolPaneOnly");
+                if(document.getElementsByClassName) {
+                    hideEnvNodes = document.getElementsByClassName(hideEnvClass);
+                    hideModeNodes = document.getElementsByClassName(hideModeClass);
+                }
+                else {
+                    hideNodes = document.querySelectorAll(hideEnvClass);
+                }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                }
+                for(i=0; i < hideEnvNodes.length; i++) {
+                    hideEnvNodes[i].style.display = "none";
+                }
+                for(i=0; i < hideModeNodes.length; i++) {
+                    hideModeNodes[i].style.display = "none";
+                }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="smallsize">
+    <p>De tool Reisgebieden genereren cre&euml;ert gebieden die binnen een reistijd of afstand kunnen worden bereikt.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputLayer">
+        <div>
+            <p>De puntobjecten waaromheen gebieden worden berekend.
+            </p>
+            <p class="toolPaneOnly">Het aantal objecten is afhankelijk van aanvullende factoren als de filtercriteria en de analyse-extent.
+            </p>
+        </div>
+    </div>
+    <div id="pointBarrierLayer">
+        <div>
+            <p>E&eacute;n of meerdere puntobjecten die dienen als tijdelijke beperkingen (barri&egrave;res) tijdens het reizen op de onderliggende straten. Verkeer heeft toegang tot de straat maar kan de barri&egrave;re niet passeren.
+            </p>
+        </div>
+    </div>
+    <div id="lineBarrierLayer">
+        <div>
+            <p>E&eacute;n of meerdere lijnobjecten die dienen als tijdelijke beperkingen (barri&egrave;res) tijdens het reizen op de onderliggende straten. De lijnbarri&egrave;res verbieden het verkeer overal waar de barri&egrave;res de straten kruisen.
+            </p>
+        </div>
+    </div>
+    <div id="polygonBarrierLayer">
+        <div>
+            <p>E&eacute;n of meerdere polygoonobjecten die dienen als tijdelijke beperkingen (barri&egrave;res) tijdens het reizen op de onderliggende straten. De polygoonbarri&egrave;res verbieden het verkeer overal waar de polygonen de straten kruisen.
+            </p>
+        </div>
+    </div>
+    <div id="travelMode">
+        <div>
+            <p>De reismodus die zal worden gebruikt om de reisgebieden te maken. De reismethode kan gebaseerd zijn op afstand of tijd.
+            </p>
+        </div>
+    </div>
+    <div id="breakValues">
+        <div>
+            <p>De reisafstand of tijdslimiet voor elk ingevoerd punt. Indien meerdere waarden worden toegevoegd, wordt elke waarde gebruikt om de reisgebieden voor alle ingevoerde punten te berekenen.
+            </p>
+        </div>
+    </div>
+    <div id="breakUnits">
+        <div>
+            <p>De eenheden die worden gebruikt om de reisafstand of -tijd te specificeren. De waarde  <b>Cutoff</b> wordt in deze eenheden ge&iuml;nterpreteerd.
+            </p>
+        </div>
+    </div>
+    <div id="travelDirection">
+        <div>
+            <p>Specificeert of reisgebieden zullen worden gemaakt voor reizen die wegvoeren van de ingevoerde punten of die in de richting van de ingevoerde punten gaan.
+            </p>
+        </div>
+    </div>
+    <div id="timeOfDay">
+        <div>
+            <p>De datum en tijd waarop de reiziger vertrekt van of aankomt op de ingevoerde locaties.
+            </p>
+        </div>
+    </div>
+    <div id="overlapPolicy">
+        <div>
+            <p>Specificeert hoe gedeelde gebieden uit verschillende invoerbronnen worden afgehandeld wanneer ze elkaar bereiken.
+            </p>
+        </div>
+    </div>
+    <div id="showHoles">
+        <div>
+            <p>Geeft aan of elk uitvoergebied &eacute;&eacute;n ononderbroken polygoon zal zijn (niet aangevinkt) of gaten zal bevatten in straten die niet bereikbaar zijn, maar volledig omgeven zijn door bereikbare straten (aangevinkt).
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div>
+            <p>De naam van de laag die wordt aangemaakt en toegevoegd aan de kaart.
+            </p>
+        </div>
+    </div>
+    <div id="includeReachableStreets">
+        <div>
+            <p>Specificeert of de straten die voor het maken van de reisgebieden worden gebruikt, zullen worden opgenomen in de uitvoerlaag.
+            </p>
+        </div>
+    </div>
+    <div id="saveResultIn">
+        <div>
+            
+            <p>De naam van de map in  <b>Mijn content</b> waarin de resultaten worden opgeslagen.
+            </p>
+        </div>
+    </div>
+</div>
+</html>
