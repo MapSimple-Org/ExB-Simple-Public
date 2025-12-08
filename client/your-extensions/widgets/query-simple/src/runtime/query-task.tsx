@@ -604,6 +604,10 @@ export function QueryTask (props: QueryTaskProps) {
           flex-direction: column;
           overflow: hidden;
           min-height: 0;
+          /* Reduce tab navigation header padding */
+          .jimu-tab-nav {
+            padding: 6px 16px;
+          }
         `}
       >
         <Tab
