@@ -708,12 +708,14 @@ export function QueryTask (props: QueryTaskProps) {
               flex-direction: column;
               overflow: hidden;
               min-height: 0;
+              padding-top: 0 !important;
             `}
           >
             {/* Header with back button and query label - Query tab only */}
             <div className={classNames('query-form__header mx-4 align-items-center', { 'in-popper': isInPopper })} css={css`
               display: flex;
               padding: 6px 0;
+              padding-top: 8px;
               border-bottom: 1px solid var(--sys-color-divider-secondary);
               flex-shrink: 0;
             `}>
@@ -823,8 +825,7 @@ export function QueryTask (props: QueryTaskProps) {
                 <>
                   {/* First Dropdown: All queries */}
                   <div css={css`
-                    padding: 16px;
-                    border-bottom: 1px solid var(--sys-color-divider-secondary);
+                    padding: 8px 16px;
                     flex-shrink: 0;
                   `}>
                     <label css={css`
@@ -904,8 +905,7 @@ export function QueryTask (props: QueryTaskProps) {
                   {/* Second Dropdown: Queries within selected group (only if grouped query selected) */}
                   {isGroupedQuery && currentQueryGroupId && groups && groups[currentQueryGroupId] && (
                     <div css={css`
-                      padding: 16px;
-                      border-bottom: 1px solid var(--sys-color-divider-secondary);
+                      padding: 8px 16px;
                       flex-shrink: 0;
                     `}>
                       <label css={css`
@@ -1013,6 +1013,7 @@ export function QueryTask (props: QueryTaskProps) {
                 flex-direction: column;
                 min-height: 0;
                 height: 100%;
+                padding-top: 0 !important;
               `}
               onClick={(e) => {
                 // Prevent clicks from bubbling up when Results tab is active
