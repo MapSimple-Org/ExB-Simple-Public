@@ -191,123 +191,7 @@ export function QueryTaskList (props: QueryTaskListProps) {
         overflow: auto;
       }
     `}>
-      {showDropdown && (
-        <div className="query-selector">
-          <label className="query-selector-label">
-            {getI18nMessage('searchLayer')}
-          </label>
-          
-          {/* ====================================================================
-              TEMPORARILY DISABLED: Grouping UI Functionality
-              ====================================================================
-              
-              REASON FOR DISABLING:
-              The grouping functionality was partially implemented but not working correctly.
-              When groupId was set, it was showing two dropdowns - one with queries and one 
-              with a grouped option, causing confusion. The grouping logic needs to be 
-              completed before it can be used.
-              
-              WHAT WAS DISABLED:
-              - Group dropdown that shows when groupOrder.length > 0
-              - Second dropdown for selecting queries within a group
-              - Logic to separate grouped vs ungrouped queries in the UI
-              
-              WHAT STILL WORKS:
-              - groupQueries() function still processes queries and groups them
-              - groupId field in config is still available and can be set
-              - All grouping state variables are still initialized (for future use)
-              
-              TO RE-ENABLE GROUPING:
-              1. Change the condition below from `false &&` to just check `groupOrder.length > 0`
-              2. Restore the original getSelectedQueryItem() logic that checks selectedGroupId
-              3. Update selectedUngroupedIndex initialization to work with grouped queries
-              4. Test the grouping UI thoroughly, especially:
-                 - Single group scenario (should show only one dropdown)
-                 - Multiple groups scenario
-                 - Mixed grouped/ungrouped queries
-                 - Hash parameter handling with grouped queries
-              
-              RELATED TODO:
-              See TODO.md - "grouping-simplify-single-group-ui" for desired behavior
-              ==================================================================== */}
-          
-          {false && groupOrder.length > 0 ? (
-            // DISABLED: Group dropdown UI - see comment block above
-            // This code is preserved for when grouping is re-enabled
-            <>
-              <Select 
-                size="sm"
-                value={selectedGroupId || ''} 
-                onChange={(e) => {
-                  const groupId = e.target.value || null
-                  setSelectedGroupId(groupId)
-                  if (groupId) {
-                    setSelectedGroupQueryIndex(0)
-                  }
-                }}
-              >
-                {groupOrder.map(groupId => (
-                  <option key={groupId} value={groupId}>
-                    {groups[groupId].displayName}
-                  </option>
-                ))}
-                {ungrouped.length > 0 && (
-                  <option value="">--- Ungrouped Queries ---</option>
-                )}
-              </Select>
-              
-              {selectedGroupId && groups[selectedGroupId] && groups[selectedGroupId].items.length > 1 && (
-                <Select 
-                  size="sm"
-                  value={selectedGroupQueryIndex} 
-                  onChange={(e) => {
-                    setSelectedGroupQueryIndex(parseInt(e.target.value))
-                  }}
-                >
-                  {groups[selectedGroupId].items.map((item, idx) => (
-                    <option key={item.configId} value={idx}>
-                      {item.searchAlias || item.name || `Option ${idx + 1}`}
-                    </option>
-                  ))}
-                </Select>
-              )}
-              
-              {!selectedGroupId && ungrouped.length > 0 && (
-                <Select 
-                  size="sm"
-                  value={selectedUngroupedIndex} 
-                  onChange={(e) => {
-                    setSelectedUngroupedIndex(parseInt(e.target.value))
-                  }}
-                >
-                  {ungrouped.map(({ item }, idx) => (
-                    <option key={item.configId} value={idx}>
-                      {item.name || `Query ${idx + 1}`}
-                    </option>
-                  ))}
-                </Select>
-              )}
-            </>
-          ) : (
-            // ACTIVE: Simple single dropdown showing all queries
-            // This is the current active code path - shows all queries in a single dropdown
-            // Note: Using queryItems directly instead of ungrouped so all queries appear
-            <Select 
-              size="sm"
-              value={selectedUngroupedIndex} 
-              onChange={(e) => {
-                setSelectedUngroupedIndex(parseInt(e.target.value))
-              }}
-            >
-              {queryItems.map((item, idx) => (
-                <option key={item.configId} value={idx}>
-                  {item.name || `Query ${idx + 1}`}
-                </option>
-              ))}
-            </Select>
-          )}
-        </div>
-      )}
+      {/* Search Layer dropdown moved to QueryTask Query tab content */}
       
       {/* Show selected query form directly below */}
       {selectedQueryItem && (
@@ -321,6 +205,9 @@ export function QueryTaskList (props: QueryTaskListProps) {
             isInPopper={isInPopper}
             initialInputValue={selectedQueryItem.shortId === initialQueryValue?.shortId ? initialQueryValue?.value : undefined}
             onHashParameterUsed={onHashParameterUsed}
+            queryItems={queryItems}
+            selectedQueryIndex={selectedUngroupedIndex}
+            onQueryChange={(index) => setSelectedUngroupedIndex(index)}
             // No onNavBack - no navigation needed
           />
         </div>

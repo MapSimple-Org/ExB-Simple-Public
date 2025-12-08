@@ -23,10 +23,10 @@ import { DEFAULT_QUERY_ITEM } from '../default-query-item'
 import defaultMessage from './translations/default'
 import { QueryTaskSpatialForm } from './query-task-spatial-form'
 import { useAutoHeight } from './useAutoHeight'
+import { debugLogger } from './debug-logger'
 import { QueryTaskContext } from './query-task-context'
 import { InfoOutlined } from 'jimu-icons/outlined/suggested/info'
 import { clearSelectionInDataSources } from './selection-utils'
-import { debugLogger } from './debug-logger'
 
 export interface QueryTaskItemProps {
   widgetId: string
@@ -34,12 +34,11 @@ export interface QueryTaskItemProps {
   spatialFilterEnabled: boolean
   datasourceReady: boolean
   outputDS?: DataSource
-  onFormSubmit: (sqlExprObj: IMSqlExpression, spatialFilter: SpatialFilterObj, zoomToSelected?: boolean, isHashTriggered?: boolean) => void
+  onFormSubmit: (sqlExprObj: IMSqlExpression, spatialFilter: SpatialFilterObj, zoomToSelected?: boolean) => void
   dataActionFilter?: SqlQueryParams
   initialInputValue?: string
   onHashParameterUsed?: (shortId: string) => void
   queryItemShortId?: string
-  onSwitchToQueryTab?: () => void // Callback to switch to Query tab when hash parameter detected while on Results tab
 }
 
 const getFormStyle = (isAutoHeight: boolean) => {
@@ -47,6 +46,7 @@ const getFormStyle = (isAutoHeight: boolean) => {
     flex: 1 1 auto;
     display: flex;
     flex-direction: column;
+    min-height: 0;
     .form-title {
       color: var(--sys-color-surface-paper-text);
       font-weight: 500;
@@ -54,15 +54,22 @@ const getFormStyle = (isAutoHeight: boolean) => {
       line-height: 1.5;
     }
     .query-form__content {
-      flex: 1 1 ${isAutoHeight ? 'auto' : 0};
+      flex: 1 1 ${isAutoHeight ? 'auto' : 'auto'};
       max-height: ${isAutoHeight ? '61.8vh' : 'none'};
       overflow: auto;
+      padding-bottom: 0;
+    }
+    .query-form__actions {
+      flex-shrink: 0;
+      margin-top: 0;
+      padding-top: 8px;
+      padding-bottom: 12px;
     }
   `
 }
 
 export function QueryTaskForm (props: QueryTaskItemProps) {
-  const { widgetId, configId, outputDS, spatialFilterEnabled, datasourceReady, onFormSubmit, dataActionFilter, initialInputValue, onHashParameterUsed, queryItemShortId, onSwitchToQueryTab } = props
+  const { widgetId, configId, outputDS, spatialFilterEnabled, datasourceReady, onFormSubmit, dataActionFilter, initialInputValue, onHashParameterUsed, queryItemShortId } = props
   const preDataActionFilter = hooks.usePrevious(dataActionFilter)
   const queryItem: ImmutableObject<QueryItemType> = ReactRedux.useSelector((state: IMState) => {
     const widgetJson = state.appConfig.widgets[widgetId]
@@ -113,7 +120,6 @@ export function QueryTaskForm (props: QueryTaskItemProps) {
   const initialValueSetRef = React.useRef<string | null>(null) // Track which configId we've set the value for
   const lastValueSetRef = React.useRef<string | null>(null) // Track the last value that was set
   const hashTriggeredRef = React.useRef<boolean>(false) // Track if query was triggered via hash parameter
-  const hashTriggeredSubmissionRef = React.useRef<boolean>(false) // Track if current submission is hash-triggered
 
   const originDS = outputDS?.getOriginDataSources()[0]
 
@@ -161,285 +167,68 @@ export function QueryTaskForm (props: QueryTaskItemProps) {
         
         // Also set the value directly on the input element after a delay to ensure component is rendered
         // This is necessary because SqlExpressionRuntime may not sync from the expression prop alone
-        // CRITICAL: We need to verify the form is visible (Query tab is active) before setting values
-        // and clicking Apply, otherwise the query executes with empty input when switching from Results tab
-        let retryAttempt = 0
-        const maxRetries = 20 // 20 attempts = 2 seconds max wait (100ms * 20)
-        
-        const verifyAndSetValue = () => {
-          retryAttempt++
-          
+        const timeoutId = setTimeout(() => {
           // Find the input element within SqlExpressionRuntime
           const formElement = document.querySelector(`[data-widget-id="${widgetId}"]`)?.closest('.query-form') || 
                              document.querySelector('.query-form')
           
-          if (!formElement) {
-            if (retryAttempt < maxRetries) {
-              debugLogger.log('FORM', {
-                event: 'hash-triggered-form-not-found-retry',
-                configId,
-                queryItemShortId,
-                initialInputValue,
-                attempt: retryAttempt,
-                maxRetries
-              })
-              setTimeout(verifyAndSetValue, 100)
-            } else {
-              debugLogger.log('FORM', {
-                event: 'hash-triggered-form-not-found-failed',
-                configId,
-                queryItemShortId,
-                initialInputValue,
-                attempts: retryAttempt
-              })
-            }
-            return
-          }
-          
-          // CRITICAL: Check if form is visible (Query tab must be active)
-          // Form is hidden when Results tab is active (visibility: hidden, opacity: 0)
-          const formStyle = window.getComputedStyle(formElement)
-          const isFormVisible = formStyle.visibility !== 'hidden' && formStyle.opacity !== '0' && formStyle.display !== 'none'
-          
-          if (!isFormVisible) {
-            // Form is hidden (on Results tab) - trigger tab switch if callback provided
-            // Only trigger on first attempt to avoid multiple tab switches
-            if (onSwitchToQueryTab && retryAttempt === 1) {
-              debugLogger.log('FORM', {
-                event: 'hash-triggered-switching-to-query-tab',
-                configId,
-                queryItemShortId,
-                initialInputValue,
-                note: 'Form hidden (on Results tab), triggering tab switch to Query tab'
-              })
-              onSwitchToQueryTab()
-            }
+          if (formElement) {
+            // Look for text input elements
+            const textInputs = formElement.querySelectorAll('input[type="text"]')
             
-            if (retryAttempt < maxRetries) {
-              debugLogger.log('FORM', {
-                event: 'hash-triggered-form-not-visible-retry',
-                configId,
-                queryItemShortId,
-                initialInputValue,
-                attempt: retryAttempt,
-                maxRetries,
-                visibility: formStyle.visibility,
-                opacity: formStyle.opacity,
-                display: formStyle.display,
-                tabSwitchTriggered: retryAttempt === 1 && !!onSwitchToQueryTab,
-                note: 'Form not visible (likely on Results tab), waiting for Query tab to become active...'
-              })
-              setTimeout(verifyAndSetValue, 100)
-            } else {
-              debugLogger.log('FORM', {
-                event: 'hash-triggered-form-not-visible-failed',
-                configId,
-                queryItemShortId,
-                initialInputValue,
-                attempts: retryAttempt,
-                visibility: formStyle.visibility,
-                opacity: formStyle.opacity,
-                display: formStyle.display
-              })
-            }
-            return
-          }
-          
-          // Form is visible, proceed with setting input value
-          // Look for text input elements
-          const textInputs = formElement.querySelectorAll('input[type="text"]')
-          
-          if (textInputs.length === 0) {
-            if (retryAttempt < maxRetries) {
-              debugLogger.log('FORM', {
-                event: 'hash-triggered-no-inputs-retry',
-                configId,
-                queryItemShortId,
-                initialInputValue,
-                attempt: retryAttempt,
-                maxRetries
-              })
-              setTimeout(verifyAndSetValue, 100)
-            } else {
-              debugLogger.log('FORM', {
-                event: 'hash-triggered-no-inputs-failed',
-                configId,
-                queryItemShortId,
-                initialInputValue,
-                attempts: retryAttempt
-              })
-            }
-            return
-          }
-          
-          let inputValueSet = false
-          textInputs.forEach((input: HTMLInputElement) => {
-            // Update the value if input is empty OR if the value has changed (hash parameter updated)
-            const shouldUpdate = !input.value || 
-                                input.value.trim() === '' || 
-                                input.value !== initialInputValue
-            
-            if (shouldUpdate) {
-              // Focus the input first
-              input.focus()
+            textInputs.forEach((input: HTMLInputElement) => {
+              // Update the value if input is empty OR if the value has changed (hash parameter updated)
+              const shouldUpdate = !input.value || 
+                                  input.value.trim() === '' || 
+                                  input.value !== initialInputValue
               
-              // Set the value
-              input.value = initialInputValue
-              
-              // Create and dispatch input event with proper properties
-              const inputEvent = new Event('input', { bubbles: true, cancelable: true })
-              Object.defineProperty(inputEvent, 'target', { value: input, enumerable: true })
-              input.dispatchEvent(inputEvent)
-              
-              // Create and dispatch change event
-              const changeEvent = new Event('change', { bubbles: true, cancelable: true })
-              Object.defineProperty(changeEvent, 'target', { value: input, enumerable: true })
-              input.dispatchEvent(changeEvent)
-              
-              // Also try React's synthetic event approach using native value setter
-              const nativeInputValueSetter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value')?.set
-              if (nativeInputValueSetter) {
-                nativeInputValueSetter.call(input, initialInputValue)
-                const reactEvent = new Event('input', { bubbles: true })
-                input.dispatchEvent(reactEvent)
-              }
-              
-              // Blur to trigger any validation or state updates
-              input.blur()
-              
-              inputValueSet = true
-            } else if (input.value === initialInputValue) {
-              // Value already matches, mark as set
-              inputValueSet = true
-            }
-          })
-          
-          // Verify input value is actually set before proceeding
-          if (!inputValueSet && initialInputValue) {
-            if (retryAttempt < maxRetries) {
-              debugLogger.log('FORM', {
-                event: 'hash-triggered-input-not-set-retry',
-                configId,
-                queryItemShortId,
-                initialInputValue,
-                attempt: retryAttempt,
-                maxRetries,
-                foundInputs: textInputs.length,
-                inputValues: Array.from(textInputs).map((inp: HTMLInputElement) => inp.value),
-                note: 'Input value not set yet, retrying...'
-              })
-              setTimeout(verifyAndSetValue, 100)
-            } else {
-              debugLogger.log('FORM', {
-                event: 'hash-triggered-input-not-set-failed',
-                configId,
-                queryItemShortId,
-                initialInputValue,
-                attempts: retryAttempt,
-                foundInputs: textInputs.length,
-                inputValues: Array.from(textInputs).map((inp: HTMLInputElement) => inp.value)
-              })
-            }
-            return
-          }
-          
-          // Input value is set, now verify and click Apply button
-          const verifyAndApply = () => {
-            // Double-check input value is still set (in case form was remounted)
-            const currentInputs = formElement.querySelectorAll('input[type="text"]')
-            let currentValueMatches = false
-            
-            currentInputs.forEach((input: HTMLInputElement) => {
-              if (input.value === initialInputValue) {
-                currentValueMatches = true
+              if (shouldUpdate) {
+                // Focus the input first
+                input.focus()
+                
+                // Set the value
+                input.value = initialInputValue
+                
+                // Create and dispatch input event with proper properties
+                const inputEvent = new Event('input', { bubbles: true, cancelable: true })
+                Object.defineProperty(inputEvent, 'target', { value: input, enumerable: true })
+                input.dispatchEvent(inputEvent)
+                
+                // Create and dispatch change event
+                const changeEvent = new Event('change', { bubbles: true, cancelable: true })
+                Object.defineProperty(changeEvent, 'target', { value: input, enumerable: true })
+                input.dispatchEvent(changeEvent)
+                
+                // Also try React's synthetic event approach using native value setter
+                const nativeInputValueSetter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value')?.set
+                if (nativeInputValueSetter) {
+                  nativeInputValueSetter.call(input, initialInputValue)
+                  const reactEvent = new Event('input', { bubbles: true })
+                  input.dispatchEvent(reactEvent)
+                }
+                
+                // Blur to trigger any validation or state updates
+                input.blur()
               }
             })
             
-            if (!currentValueMatches && initialInputValue) {
-              debugLogger.log('FORM', {
-                event: 'hash-triggered-apply-value-mismatch',
-                configId,
-                queryItemShortId,
-                initialInputValue,
-                currentValues: Array.from(currentInputs).map((inp: HTMLInputElement) => inp.value),
-                note: 'Input value changed after setting, aborting Apply'
-              })
-              return
-            }
-            
-            // Verify form is still visible
-            const currentFormStyle = window.getComputedStyle(formElement)
-            const stillVisible = currentFormStyle.visibility !== 'hidden' && 
-                                currentFormStyle.opacity !== '0' && 
-                                currentFormStyle.display !== 'none'
-            
-            if (!stillVisible) {
-              debugLogger.log('FORM', {
-                event: 'hash-triggered-apply-form-hidden',
-                configId,
-                queryItemShortId,
-                initialInputValue,
-                note: 'Form became hidden before Apply, aborting'
-              })
-              return
-            }
-            
-            // All checks passed, proceed with Apply
-            if (applyButtonRef.current && !applyButtonRef.current.disabled && datasourceReady) {
-              debugLogger.log('FORM', {
-                event: 'hash-triggered-apply',
-                configId,
-                queryItemShortId,
-                initialInputValue,
-                buttonDisabled: applyButtonRef.current.disabled,
-                datasourceReady,
-                inputValueSet: currentValueMatches,
-                formVisible: stillVisible,
-                retryAttempts: retryAttempt
-              })
-              
-              // Set hashTriggeredRef to force zoom for hash-triggered queries
-              hashTriggeredRef.current = true
-              hashTriggeredSubmissionRef.current = true // Mark this submission as hash-triggered
-              
-              // Remove hash parameter from URL before Apply is triggered to prevent re-execution
-              if (onHashParameterUsed && queryItemShortId) {
-                debugLogger.log('FORM', {
-                  event: 'hash-parameter-removed',
-                  queryItemShortId
-                })
-                onHashParameterUsed(queryItemShortId)
-              }
+            // After setting values and blurring, remove hash parameter and trigger Apply button
+            setTimeout(() => {
+              if (applyButtonRef.current && !applyButtonRef.current.disabled && datasourceReady) {
+                // Set hashTriggeredRef to force zoom for hash-triggered queries
+                hashTriggeredRef.current = true
+                
+                // Remove hash parameter from URL before Apply is triggered to prevent re-execution
+                if (onHashParameterUsed && queryItemShortId) {
+                  onHashParameterUsed(queryItemShortId)
+                }
 
-              // Auto-trigger Apply button to execute the query with the populated value
-              debugLogger.log('FORM', {
-                event: 'hash-triggered-apply-click',
-                configId,
-                queryItemShortId,
-                initialInputValue
-              })
-              applyButtonRef.current.click()
-            } else {
-              debugLogger.log('FORM', {
-                event: 'hash-triggered-apply-skipped',
-                configId,
-                queryItemShortId,
-                hasApplyButton: !!applyButtonRef.current,
-                buttonDisabled: applyButtonRef.current?.disabled,
-                datasourceReady,
-                inputValueSet: currentValueMatches,
-                formVisible: stillVisible,
-                reason: !applyButtonRef.current ? 'no-button' : applyButtonRef.current.disabled ? 'button-disabled' : 'datasource-not-ready'
-              })
-            }
+                // Auto-trigger Apply button to execute the query with the populated value
+                applyButtonRef.current.click()
+              }
+            }, 200) // Small delay after blur to ensure state is synced
           }
-          
-          // Small delay after blur to ensure state is synced, then verify and apply
-          setTimeout(verifyAndApply, 200)
-        }
-        
-        // Start verification after initial delay
-        const timeoutId = setTimeout(verifyAndSetValue, 200) // Reduced from 500ms since we have retry logic
+        }, 500) // Longer delay to ensure component is fully rendered
         
         return () => clearTimeout(timeoutId)
       }
@@ -478,7 +267,6 @@ export function QueryTaskForm (props: QueryTaskItemProps) {
 
     // Force zoom for hash-triggered queries, otherwise use runtime preference
     const zoomToUse = hashTriggeredRef.current ? true : runtimeZoomToSelected
-    const isHashTriggered = hashTriggeredSubmissionRef.current
 
     let rel = spatialRelationRef.current
     if (spatialFilterObjRef.current?.geometry && rel == null) {
@@ -486,23 +274,22 @@ export function QueryTaskForm (props: QueryTaskItemProps) {
     }
     if (Array.isArray(spatialFilterObjRef.current?.geometry)) {
       if (spatialFilterObjRef.current.geometry.length === 1) {
-        onFormSubmit(attributeFilterSqlExprObj, { ...spatialFilterObjRef.current, geometry: spatialFilterObjRef.current.geometry[0], relation: rel, buffer: bufferRef.current }, zoomToUse, isHashTriggered)
+        onFormSubmit(attributeFilterSqlExprObj, { ...spatialFilterObjRef.current, geometry: spatialFilterObjRef.current.geometry[0], relation: rel, buffer: bufferRef.current }, zoomToUse)
       } else {
         loadArcGISJSAPIModules([
           'esri/geometry/operators/unionOperator'
         ]).then(modules => {
           const operator: (typeof __esri.unionOperator) = modules[0]
           const geometry = operator.executeMany(spatialFilterObjRef.current.geometry)
-          onFormSubmit(attributeFilterSqlExprObj, { ...spatialFilterObjRef.current, geometry, relation: rel, buffer: bufferRef.current }, zoomToUse, isHashTriggered)
+          onFormSubmit(attributeFilterSqlExprObj, { ...spatialFilterObjRef.current, geometry, relation: rel, buffer: bufferRef.current }, zoomToUse)
         })
       }
     } else {
-      onFormSubmit(attributeFilterSqlExprObj, { ...spatialFilterObjRef.current, relation: rel, buffer: bufferRef.current }, zoomToUse, isHashTriggered)
+      onFormSubmit(attributeFilterSqlExprObj, { ...spatialFilterObjRef.current, relation: rel, buffer: bufferRef.current }, zoomToUse)
     }
     
     // Reset hashTriggeredRef after use
     hashTriggeredRef.current = false
-    hashTriggeredSubmissionRef.current = false // Reset hash-triggered submission flag
   }, [onFormSubmit, outputDS, attributeFilterSqlExprObj, runtimeZoomToSelected])
 
   const handleKeyDown = React.useCallback((event: React.KeyboardEvent) => {
@@ -570,10 +357,77 @@ export function QueryTaskForm (props: QueryTaskItemProps) {
   const showAttributeFilter = useAttributeFilter && sqlExprObj != null
   const showSpatialFilter = spatialFilterEnabled && useSpatialFilter && (spatialFilterTypes.length > 0 || spatialIncludeRuntimeData || spatialRelationUseDataSources?.length > 0)
 
+  // Debug logging for form rendering
+  React.useEffect(() => {
+    debugLogger.log('FORM', {
+      event: 'form-render-check',
+      configId,
+      datasourceReady,
+      useAttributeFilter,
+      sqlExprObj: sqlExprObj ? 'exists' : 'null',
+      sqlExprObjParts: sqlExprObj?.parts?.length || 0,
+      showAttributeFilter,
+      originDS: originDS ? 'exists' : 'null',
+      originDSId: originDS?.id || 'none',
+      showSpatialFilter,
+      isAutoHeight,
+      outputDS: outputDS ? 'exists' : 'null'
+    })
+  }, [configId, datasourceReady, useAttributeFilter, sqlExprObj, showAttributeFilter, originDS, showSpatialFilter, isAutoHeight, outputDS])
+
+  // Log when form content should render
+  React.useEffect(() => {
+    if (showAttributeFilter && originDS) {
+      debugLogger.log('FORM', {
+        event: 'attribute-filter-ready',
+        configId,
+        originDSId: originDS.id,
+        sqlExprObjParts: sqlExprObj?.parts?.length || 0,
+        attributeFilterLabel,
+        note: 'Input field should be visible'
+      })
+    } else {
+      debugLogger.log('FORM', {
+        event: 'attribute-filter-not-ready',
+        configId,
+        showAttributeFilter,
+        originDS: originDS ? 'exists' : 'null',
+        useAttributeFilter,
+        sqlExprObj: sqlExprObj ? 'exists' : 'null',
+        reason: !showAttributeFilter ? 'showAttributeFilter is false' : 'originDS is null'
+      })
+    }
+  }, [showAttributeFilter, originDS, configId, sqlExprObj, useAttributeFilter, attributeFilterLabel])
+
+  // Check DOM visibility after render
+  const formContentRef = React.useRef<HTMLDivElement>(null)
+  React.useEffect(() => {
+    if (formContentRef.current) {
+      const computedStyle = window.getComputedStyle(formContentRef.current)
+      const rect = formContentRef.current.getBoundingClientRect()
+      debugLogger.log('FORM', {
+        event: 'form-content-dom-check',
+        configId,
+        exists: !!formContentRef.current,
+        display: computedStyle.display,
+        visibility: computedStyle.visibility,
+        opacity: computedStyle.opacity,
+        height: computedStyle.height,
+        maxHeight: computedStyle.maxHeight,
+        flex: computedStyle.flex,
+        flexBasis: computedStyle.flexBasis,
+        rectHeight: rect.height,
+        rectWidth: rect.width,
+        isVisible: rect.height > 0 && rect.width > 0,
+        parentHeight: formContentRef.current.parentElement?.clientHeight || 0
+      })
+    }
+  }, [configId, showAttributeFilter, originDS])
+
   return (
     <QueryTaskContext.Provider value={{ resetSymbol }}>
       <div className='query-form' css={getFormStyle(isAutoHeight)}>
-        <div className='query-form__content' onKeyDown={handleKeyDown}>
+        <div ref={formContentRef} className='query-form__content' onKeyDown={handleKeyDown}>
           {showAttributeFilter && (
             <div role='group' className='px-4' aria-label={attributeFilterLabel}>
               <div className={classNames('form-title my-2 d-flex align-items-center', { 'd-none': !attributeFilterLabel && !attributeFilterDesc })}>
