@@ -354,9 +354,7 @@ export function QueryTaskForm (props: QueryTaskItemProps) {
     debugLogger.log('FORM', {
       event: 'form-render-check',
       configId,
-      enabled: enabled !== undefined ? enabled : 'undefined',
-      dsExists: dsExists !== undefined ? dsExists : 'undefined',
-      datasourceReady: datasourceReady !== undefined ? datasourceReady : 'undefined',
+      datasourceReady,
       useAttributeFilter,
       sqlExprObj: sqlExprObj ? 'exists' : 'null',
       sqlExprObjParts: sqlExprObj?.parts?.length || 0,
@@ -367,7 +365,7 @@ export function QueryTaskForm (props: QueryTaskItemProps) {
       isAutoHeight,
       outputDS: outputDS ? 'exists' : 'null'
     })
-  }, [configId, enabled, dsExists, datasourceReady, useAttributeFilter, sqlExprObj, showAttributeFilter, originDS, showSpatialFilter, isAutoHeight, outputDS])
+  }, [configId, datasourceReady, useAttributeFilter, sqlExprObj, showAttributeFilter, originDS, showSpatialFilter, isAutoHeight, outputDS])
 
   // Log when form content should render
   React.useEffect(() => {
