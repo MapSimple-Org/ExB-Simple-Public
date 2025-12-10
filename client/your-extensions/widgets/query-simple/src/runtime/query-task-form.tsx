@@ -23,7 +23,9 @@ import { DEFAULT_QUERY_ITEM } from '../default-query-item'
 import defaultMessage from './translations/default'
 import { QueryTaskSpatialForm } from './query-task-spatial-form'
 import { useAutoHeight } from './useAutoHeight'
-import { debugLogger } from './debug-logger'
+import { createQuerySimpleDebugLogger } from 'widgets/shared-code/common'
+
+const debugLogger = createQuerySimpleDebugLogger()
 import { QueryTaskContext } from './query-task-context'
 import { InfoOutlined } from 'jimu-icons/outlined/suggested/info'
 import { clearSelectionInDataSources } from './selection-utils'

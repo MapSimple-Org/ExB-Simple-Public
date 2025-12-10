@@ -5,7 +5,9 @@ import type { QueryItemType } from '../config'
 import { QueryTask } from './query-task'
 import { FOCUSABLE_CONTAINER_CLASS } from 'jimu-ui'
 import defaultMessages from './translations/default'
-import { debugLogger } from './debug-logger'
+import { createQuerySimpleDebugLogger } from 'widgets/shared-code/common'
+
+const debugLogger = createQuerySimpleDebugLogger()
 
 export interface QueryTaskListProps {
   widgetId: string

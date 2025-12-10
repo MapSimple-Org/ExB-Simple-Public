@@ -9,7 +9,9 @@
 
 import { type DataRecordSet, type DataAction, DataLevel, type IntlShape, DataActionManager, type DataSource } from 'jimu-core'
 import { selectRecordsAndPublish } from '../runtime/selection-utils'
-import { debugLogger } from '../runtime/debug-logger'
+import { createQuerySimpleDebugLogger } from 'widgets/shared-code/common'
+
+const debugLogger = createQuerySimpleDebugLogger()
 import type { FeatureDataRecord } from 'jimu-core'
 import type { QueryItemType } from '../config'
 

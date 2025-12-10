@@ -22,12 +22,13 @@ A powerful query widget that allows users to query feature layers with support f
 
 ### HelperSimple (`helper-simple/`)
 
-A helper widget that manages opening other widgets via hash parameters. Useful for deep linking and automated widget opening.
+A helper widget that manages opening other widgets via hash parameters and maintains QuerySimple widget selections when identify tool is used.
 
 **Features:**
 - Monitors URL hash changes
 - Automatically opens widgets based on hash parameters
 - Supports `#qsopen=true` for QuerySimple widget
+- **Selection Restoration**: Automatically restores QuerySimple selections when identify popup closes (configurable)
 
 ## Installation
 
@@ -143,6 +144,12 @@ Configure hash parameters for deep linking:
 1. **Set Managed Widget**
    - In HelperSimple settings, select the widget to manage (e.g., QuerySimple)
    - HelperSimple will monitor hash parameters and open the widget when needed
+
+2. **Selection Restoration** (Optional)
+   - **Maintain selected set when identify occurs**: Enable/disable automatic restoration of QuerySimple selections when identify popup closes
+   - Default: Enabled
+   - When enabled: If identify clears QuerySimple selection, HelperSimple will restore it when the identify popup closes
+   - See `helper-simple/SELECTION_RESTORATION.md` for detailed documentation
 
 ## Usage Examples
 
