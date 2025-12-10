@@ -48,7 +48,9 @@ import defaultMessage from './translations/default'
 import { ArrowLeftOutlined } from 'jimu-icons/outlined/directional/arrow-left'
 import { LoadingResult } from './loading-result'
 import { clearSelectionInDataSources, selectRecordsAndPublish, findClearResultsButton } from './selection-utils'
-import { debugLogger } from './debug-logger'
+import { createQuerySimpleDebugLogger } from 'widgets/shared-code/common'
+
+const debugLogger = createQuerySimpleDebugLogger()
 
 export interface QueryTaskProps {
   widgetId: string

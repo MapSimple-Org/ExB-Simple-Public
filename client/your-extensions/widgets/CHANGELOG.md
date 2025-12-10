@@ -27,15 +27,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Respects zoom preferences
 - **Debug Logging System**: Production-safe debug logging controlled via URL parameters
   - `?debug=all` - Enable all logs
-  - `?debug=HASH,FORM` - Enable specific features
+  - `?debug=HASH,FORM,SELECTION,RESTORE` - Enable specific features
   - `?debug=false` - Disable all logs (default)
+  - Features: HASH, FORM, TASK, ZOOM, MAP-EXTENT, DATA-ACTION, GROUP, SELECTION, WIDGET-STATE, RESTORE
 - **Result Pagination**: Support for multi-page and lazy load pagination styles
 - **Widget Footer**: Displays "QuerySimple by MapSimple.org v1.19.0" in all arrangement modes
+- **Selection Restoration**: Automatically restores map selection when identify popup closes
+  - Only restores when widget panel is open
+  - Maintains query context after using identify tool
+  - Clears selection from map when widget closes (clean UX)
+  - Restores selection to map when widget reopens (if it has selection)
+  - Comprehensive debug logging for troubleshooting
 
 #### HelperSimple
 - **Hash Parameter Monitoring**: Monitors URL hash changes and opens managed widgets
 - **Widget Opening**: Automatically opens QuerySimple widget based on hash parameters
 - **Deep Linking Support**: Enables deep linking from external sources
+- **Debug Logging**: Tracks selection events and identify popup state for debugging (does not perform restoration)
 
 #### Shared Code
 - **Shared Components**: Common utilities and components shared between widgets

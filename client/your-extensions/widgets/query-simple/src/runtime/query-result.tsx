@@ -41,9 +41,51 @@ import {
   selectRecordsAndPublish,
   publishSelectionMessage 
 } from './selection-utils'
-import { debugLogger } from './debug-logger'
+import { createQuerySimpleDebugLogger } from 'widgets/shared-code/common'
+
+const debugLogger = createQuerySimpleDebugLogger()
 import { ErrorMessage } from 'widgets/shared-code/common'
 const { iconMap } = getWidgetRuntimeDataMap()
+
+/**
+ * Custom event name for requesting restoration when identify popup closes.
+ */
+const RESTORE_ON_IDENTIFY_CLOSE_EVENT = 'querysimple-restore-on-identify-close'
+
+/**
+ * Detects if an identify popup is currently visible in the DOM.
+ * Uses verified selectors based on Experience Builder's identify popup structure.
+ * 
+ * @returns true if identify popup is detected and visible, false otherwise
+ */
+function isIdentifyPopupOpen(): boolean {
+  // Primary selector: .esri-popup with role="dialog"
+  const popup = document.querySelector('.esri-popup[role="dialog"]')
+  
+  if (!popup) {
+    return false
+  }
+  
+  // Verify it's visible (not hidden)
+  const ariaHidden = popup.getAttribute('aria-hidden')
+  if (ariaHidden === 'true') {
+    return false
+  }
+  
+  // Additional check: verify computed style shows it's visible
+  const style = window.getComputedStyle(popup)
+  if (style.display === 'none' || style.visibility === 'hidden' || style.opacity === '0') {
+    return false
+  }
+  
+  // Verify it contains esri-features (identify popup structure)
+  const hasFeatures = popup.querySelector('.esri-features')
+  if (!hasFeatures) {
+    return false
+  }
+  
+  return true
+}
 
 export interface QueryTasResultProps {
   widgetId: string
@@ -100,6 +142,8 @@ export function QueryTaskResult (props: QueryTasResultProps) {
   const hasSelectedRef = React.useRef(false)
   // Track the last records we selected to detect when new records come in
   const lastSelectedRecordsRef = React.useRef<string[]>([])
+  // Track the last selected FeatureDataRecords for restoration (if needed)
+  const lastSelectedFeatureRecordsRef = React.useRef<FeatureDataRecord[]>([])
   // Error state for user-facing errors
   const [selectionError, setSelectionError] = React.useState<string>(null)
 
@@ -183,6 +227,23 @@ export function QueryTaskResult (props: QueryTasResultProps) {
         selectRecordsAndPublish(widgetId, outputDS, recordIds, fdr)
         hasSelectedRef.current = true // Mark as selected
         lastSelectedRecordsRef.current = recordIds // Store the IDs we selected
+        lastSelectedFeatureRecordsRef.current = fdr // Store the full records for potential restoration
+        
+        // Notify HelperSimple of selection change
+        const originDS = outputDS.getOriginDataSources()?.[0] as FeatureLayerDataSource
+        const dataSourceId = originDS?.id
+        const selectionEvent = new CustomEvent('querysimple-selection-changed', {
+          detail: {
+            widgetId,
+            recordIds,
+            dataSourceId,
+            outputDsId: outputDS.id,
+            queryItemConfigId: queryItem.configId
+          },
+          bubbles: true,
+          cancelable: true
+        })
+        window.dispatchEvent(selectionEvent)
       } catch (error) {
         const errorMessage = error instanceof Error ? error.message : 'Failed to select query results'
         setSelectionError(errorMessage)
@@ -192,7 +253,6 @@ export function QueryTaskResult (props: QueryTasResultProps) {
           errorStack: error instanceof Error ? error.stack : undefined,
           recordCount: recordIds.length
         })
-        console.error('Error publishing selection message from query-result', error)
       }
     } else if (recordsChanged && records && records.length === 0) {
       // If records were cleared, reset the selection flag
@@ -214,6 +274,166 @@ export function QueryTaskResult (props: QueryTasResultProps) {
   React.useEffect(() => {
     setExpandAll(currentItem.resultExpandByDefault ?? false)
   }, [queryItem.configId, queryItem.resultExpandByDefault])
+
+  /**
+   * Monitor origin data source selection changes to detect when other widgets (like map identify)
+   * clear our selections. Enhanced with identify popup detection for testing scenarios.
+   * Watches the origin data source's selection state directly via polling.
+   */
+  React.useEffect(() => {
+    if (!outputDS) return
+
+    const originDS = outputDS.getOriginDataSources()?.[0] as FeatureLayerDataSource
+    if (!originDS) return
+
+    const originDSId = originDS.id
+    let previousSelectedIds: string[] = []
+    let identifyPopupWasOpen = false
+    let lastLogTime = 0
+    const LOG_THROTTLE_MS = 1000 // Throttle logs to once per second
+    
+    // Initial check
+    previousSelectedIds = originDS.getSelectedRecordIds() || []
+    identifyPopupWasOpen = isIdentifyPopupOpen()
+
+    // Watch for selection changes on the origin data source
+    const checkSelection = () => {
+      const currentSelectedIds = originDS.getSelectedRecordIds() || []
+      const ourExpectedIds = lastSelectedRecordsRef.current
+      const hasOurSelection = ourExpectedIds.length > 0
+      const identifyPopupIsOpen = isIdentifyPopupOpen()
+      
+      // Detect if selection was cleared or changed externally
+      const wasCleared = previousSelectedIds.length > 0 && currentSelectedIds.length === 0
+      const wasChanged = previousSelectedIds.length > 0 && 
+        (currentSelectedIds.length !== previousSelectedIds.length ||
+         !currentSelectedIds.every(id => previousSelectedIds.includes(id)))
+      
+      // NEW: Detect if selection was added (went from empty to having records)
+      const wasAdded = previousSelectedIds.length === 0 && currentSelectedIds.length > 0
+      
+      // Track identify popup state changes
+      const identifyPopupJustOpened = !identifyPopupWasOpen && identifyPopupIsOpen
+      const identifyPopupJustClosed = identifyPopupWasOpen && !identifyPopupIsOpen
+      const identifyPopupStillOpen = identifyPopupWasOpen && identifyPopupIsOpen
+      
+      // Log identify popup state changes
+      const now = Date.now()
+      if (identifyPopupJustOpened || identifyPopupJustClosed) {
+        debugLogger.log('SELECTION', {
+          event: identifyPopupJustOpened ? 'identify-popup-opened' : 'identify-popup-closed',
+          originDSId,
+          ourSelectionCount: ourExpectedIds.length,
+          currentSelectionCount: currentSelectedIds.length,
+          timestamp: new Date().toISOString()
+        })
+        
+        // If identify popup just closed and selection was cleared, dispatch restore event
+        if (identifyPopupJustClosed && wasCleared && hasOurSelection && ourExpectedIds.length > 0) {
+          const restoreEvent = new CustomEvent(RESTORE_ON_IDENTIFY_CLOSE_EVENT, {
+            detail: {
+              widgetId,
+              recordIds: ourExpectedIds,
+              outputDsId: outputDS.id,
+              queryItemConfigId: queryItem.configId
+            },
+            bubbles: true,
+            cancelable: true
+          })
+          window.dispatchEvent(restoreEvent)
+          
+          debugLogger.log('SELECTION', {
+            event: 'identify-popup-closed-restore-requested',
+            widgetId,
+            recordCount: ourExpectedIds.length,
+            outputDsId: outputDS.id,
+            queryItemConfigId: queryItem.configId
+          })
+        }
+      }
+      
+      // Log ALL selection changes (not just when we have our own selection)
+      if (wasCleared || wasChanged || wasAdded) {
+        // Check if this matches our expected selection
+        const matchesOurSelection = hasOurSelection && 
+          ourExpectedIds.length === currentSelectedIds.length &&
+          ourExpectedIds.every(id => currentSelectedIds.includes(id))
+        
+        // Determine what would happen (for testing/logging)
+        const wouldRestore = wasCleared && identifyPopupIsOpen && hasOurSelection && ourExpectedIds.length > 0
+        
+        // Determine scenario
+        let scenario = 'Unknown'
+        if (wasAdded && !hasOurSelection) {
+          scenario = 'TEST SCENARIO 4: Another widget selected records (we have no selection)'
+        } else if (wasChanged && !matchesOurSelection && !hasOurSelection) {
+          scenario = 'TEST SCENARIO 5: Another widget changed selection (we have no selection)'
+        } else if (wasChanged && !matchesOurSelection && hasOurSelection) {
+          scenario = identifyPopupIsOpen
+            ? 'TEST SCENARIO 2: Query → Identify (selection changed, not cleared) → Would NOT restore'
+            : 'TEST SCENARIO 3: Query → Another QuerySimple widget → Would NOT restore'
+        } else if (wasCleared && hasOurSelection) {
+          scenario = identifyPopupIsOpen
+            ? 'TEST SCENARIO 1: Query → Identify → Would restore'
+            : 'TEST SCENARIO 3: Query → Another QuerySimple widget (cleared) → Would NOT restore'
+        } else if (wasAdded && hasOurSelection) {
+          scenario = matchesOurSelection
+            ? 'Our widget selected records'
+            : 'Another widget selected different records'
+        }
+        
+        // Log detection with identify popup state (throttled)
+        if (now - lastLogTime > LOG_THROTTLE_MS) {
+          debugLogger.log('SELECTION', {
+            event: wasCleared ? 'selection-cleared' : wasChanged ? 'selection-changed' : 'selection-added',
+            originDSId,
+            ourExpectedCount: ourExpectedIds.length,
+            previousSelectedCount: previousSelectedIds.length,
+            currentSelectedCount: currentSelectedIds.length,
+            wasCleared,
+            wasChanged,
+            wasAdded,
+            hasOurSelection,
+            matchesOurSelection,
+            identifyPopupIsOpen,
+            identifyPopupJustOpened,
+            identifyPopupStillOpen,
+            identifyPopupJustClosed,
+            wouldRestore,
+            ourExpectedIds: ourExpectedIds.slice(0, 5),
+            previousSelectedIds: previousSelectedIds.slice(0, 5),
+            currentSelectedIds: currentSelectedIds.slice(0, 5),
+            timestamp: new Date().toISOString(),
+            note: wouldRestore 
+              ? 'Would restore selection (cleared + identify popup open)'
+              : identifyPopupIsOpen && wasChanged
+                ? 'Identify popup open but selection changed (not cleared) - would not restore'
+                : wasCleared && !identifyPopupIsOpen
+                  ? 'Selection cleared, checking if identify popup opens...'
+                  : wasAdded
+                    ? hasOurSelection && matchesOurSelection
+                      ? 'Our widget selected records'
+                      : hasOurSelection && !matchesOurSelection
+                        ? 'Another widget selected different records'
+                        : 'Selection added (by another widget or external source)'
+                    : 'No identify popup detected - would not restore'
+          })
+          
+          lastLogTime = now
+        }
+      }
+      
+      previousSelectedIds = [...currentSelectedIds]
+      identifyPopupWasOpen = identifyPopupIsOpen
+    }
+
+    // Check periodically (every 500ms)
+    const intervalId = setInterval(checkSelection, 500)
+    
+    return () => {
+      clearInterval(intervalId)
+    }
+  }, [outputDS])
 
   /**
    * Clears all results. Resets local state and delegates to parent's clearResult method.
@@ -261,7 +481,6 @@ export function QueryTaskResult (props: QueryTasResultProps) {
           errorStack: error instanceof Error ? error.stack : undefined,
           recordCount: recordIds.length
         })
-        console.error('Error publishing selection message from handleRenderDone', error)
       }
     }
   }, [outputDS, widgetId, removedRecordIds])

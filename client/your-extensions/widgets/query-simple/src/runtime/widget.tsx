@@ -1,5 +1,5 @@
 /** @jsx jsx */
-import { React, jsx, css, type AllWidgetProps } from 'jimu-core'
+import { React, jsx, css, type AllWidgetProps, DataSourceManager, type FeatureLayerDataSource, type FeatureDataRecord, MessageManager, DataRecordsSelectionChangeMessage } from 'jimu-core'
 import { Paper, WidgetPlaceholder } from 'jimu-ui'
 import { type IMConfig, QueryArrangeType } from '../config'
 import defaultMessages from './translations/default'
@@ -10,15 +10,35 @@ import { QueryTaskList } from './query-task-list'
 import { TaskListInline } from './query-task-list-inline'
 import { TaskListPopperWrapper } from './query-task-list-popper-wrapper'
 import { QueryWidgetContext } from './widget-context'
-import { debugLogger } from './debug-logger'
+import { createQuerySimpleDebugLogger } from 'widgets/shared-code/common'
+
+const debugLogger = createQuerySimpleDebugLogger()
 import { WIDGET_VERSION } from '../version'
 
 const { iconMap } = getWidgetRuntimeDataMap()
 
-export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>, { initialQueryValue?: { shortId: string, value: string } }> {
+/**
+ * Custom event name for QuerySimple to notify HelperSimple of selection changes.
+ */
+const QUERYSIMPLE_SELECTION_EVENT = 'querysimple-selection-changed'
+
+/**
+ * Custom event name for QuerySimple to notify HelperSimple of widget open/close state.
+ */
+const QUERYSIMPLE_WIDGET_STATE_EVENT = 'querysimple-widget-state-changed'
+
+/**
+ * Custom event name for requesting restoration when identify popup closes.
+ */
+const RESTORE_ON_IDENTIFY_CLOSE_EVENT = 'querysimple-restore-on-identify-close'
+
+export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>, { initialQueryValue?: { shortId: string, value: string }, isPanelVisible?: boolean, hasSelection?: boolean, selectionRecordCount?: number, lastSelection?: { recordIds: string[], outputDsId: string, queryItemConfigId: string } }> {
   static versionManager = versionManager
 
-  state: { initialQueryValue?: { shortId: string, value: string } } = {}
+  state: { initialQueryValue?: { shortId: string, value: string }, isPanelVisible?: boolean, hasSelection?: boolean, selectionRecordCount?: number, lastSelection?: { recordIds: string[], outputDsId: string, queryItemConfigId: string } } = {}
+  private widgetRef = React.createRef<HTMLDivElement>()
+  private visibilityObserver: IntersectionObserver | null = null
+  private visibilityCheckInterval: number | null = null
 
   componentDidMount() {
     this.checkQueryStringForShortIds()
@@ -26,6 +46,32 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
     // This is needed when HelperSimple opens the widget with a hash parameter
     // or when hash parameters change while the widget is already mounted
     window.addEventListener('hashchange', this.checkQueryStringForShortIds)
+    
+    // Set up visibility detection
+    this.setupVisibilityDetection()
+    
+    // Listen for selection changes from query-result
+    window.addEventListener(QUERYSIMPLE_SELECTION_EVENT, this.handleSelectionChange as EventListener)
+    
+    // Listen for restore requests when identify popup closes
+    window.addEventListener(RESTORE_ON_IDENTIFY_CLOSE_EVENT, this.handleRestoreOnIdentifyClose as EventListener)
+    
+    // Notify HelperSimple that this widget is now open
+    const openEvent = new CustomEvent(QUERYSIMPLE_WIDGET_STATE_EVENT, {
+      detail: {
+        widgetId: this.props.id,
+        isOpen: true
+      },
+      bubbles: true,
+      cancelable: true
+    })
+    window.dispatchEvent(openEvent)
+    debugLogger.log('WIDGET-STATE', {
+      event: 'widget-opened',
+      widgetId: this.props.id,
+      isOpen: true,
+      timestamp: new Date().toISOString()
+    })
     
     // Also check after a short delay to catch cases where hash was already present
     // when widget was opened (e.g., by HelperSimple opening the widget)
@@ -37,12 +83,499 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
   componentWillUnmount() {
     // Clean up hashchange listener
     window.removeEventListener('hashchange', this.checkQueryStringForShortIds)
+    
+    // Clean up selection change listener
+    window.removeEventListener(QUERYSIMPLE_SELECTION_EVENT, this.handleSelectionChange as EventListener)
+    
+    // Clean up restore on identify close listener
+    window.removeEventListener(RESTORE_ON_IDENTIFY_CLOSE_EVENT, this.handleRestoreOnIdentifyClose as EventListener)
+    
+    // Clean up visibility detection
+    this.cleanupVisibilityDetection()
+    
+    // Notify HelperSimple that this widget is now closed
+    const closeEvent = new CustomEvent(QUERYSIMPLE_WIDGET_STATE_EVENT, {
+      detail: {
+        widgetId: this.props.id,
+        isOpen: false
+      },
+      bubbles: true,
+      cancelable: true
+    })
+    window.dispatchEvent(closeEvent)
+    debugLogger.log('WIDGET-STATE', {
+      event: 'widget-closed',
+      widgetId: this.props.id,
+      isOpen: false,
+      timestamp: new Date().toISOString()
+    })
   }
 
   componentDidUpdate(prevProps: AllWidgetProps<IMConfig>) {
     if (prevProps.config.queryItems !== this.props.config.queryItems) {
       this.checkQueryStringForShortIds()
     }
+  }
+
+  /**
+   * Notifies HelperSimple of selection changes.
+   * Called by QueryTaskResult when selection is made.
+   * 
+   * @param recordIds - Array of selected record IDs
+   * @param dataSourceId - Optional data source ID
+   */
+  notifyHelperSimpleOfSelection = (recordIds: string[], dataSourceId?: string) => {
+    const { id } = this.props
+    
+    const event = new CustomEvent(QUERYSIMPLE_SELECTION_EVENT, {
+      detail: {
+        widgetId: id,
+        recordIds,
+        dataSourceId
+      },
+      bubbles: true,
+      cancelable: true
+    })
+    window.dispatchEvent(event)
+  }
+
+  /**
+   * Sets up visibility detection to track when the widget panel is open/closed.
+   * Uses IntersectionObserver if available, falls back to periodic checking.
+   */
+  setupVisibilityDetection = () => {
+    // Wait for next tick to ensure ref is set
+    setTimeout(() => {
+      if (!this.widgetRef.current) {
+        debugLogger.log('WIDGET-STATE', {
+          event: 'visibility-detection-setup-failed',
+          widgetId: this.props.id,
+          reason: 'widget-ref-not-available'
+        })
+        return
+      }
+
+      const element = this.widgetRef.current
+
+      // Method 1: IntersectionObserver (most efficient)
+      if ('IntersectionObserver' in window) {
+        this.visibilityObserver = new IntersectionObserver(
+          (entries) => {
+            const entry = entries[0]
+            const isVisible = entry.isIntersecting && entry.intersectionRatio > 0
+            
+            // Only log if state changed
+            if (this.state.isPanelVisible !== isVisible) {
+              this.setState({ isPanelVisible: isVisible })
+              this.logVisibilityChange(isVisible, 'IntersectionObserver')
+              this.notifyHelperSimpleOfPanelState(isVisible)
+            }
+          },
+          {
+            threshold: [0, 0.1, 1.0], // Trigger at 0%, 10%, and 100% visibility
+            rootMargin: '0px'
+          }
+        )
+        
+        this.visibilityObserver.observe(element)
+        debugLogger.log('WIDGET-STATE', {
+          event: 'visibility-detection-setup',
+          widgetId: this.props.id,
+          method: 'IntersectionObserver'
+        })
+      } else {
+        // Method 2: Fallback to periodic checking
+        this.visibilityCheckInterval = window.setInterval(() => {
+          const isVisible = this.checkVisibility()
+          if (this.state.isPanelVisible !== isVisible) {
+            this.setState({ isPanelVisible: isVisible })
+            this.logVisibilityChange(isVisible, 'periodic-check')
+            this.notifyHelperSimpleOfPanelState(isVisible)
+          }
+        }, 250) // Check every 250ms
+        
+        debugLogger.log('WIDGET-STATE', {
+          event: 'visibility-detection-setup',
+          widgetId: this.props.id,
+          method: 'periodic-check'
+        })
+      }
+    }, 100)
+  }
+
+  /**
+   * Cleans up visibility detection observers/intervals.
+   */
+  cleanupVisibilityDetection = () => {
+    if (this.visibilityObserver) {
+      this.visibilityObserver.disconnect()
+      this.visibilityObserver = null
+    }
+    
+    if (this.visibilityCheckInterval !== null) {
+      clearInterval(this.visibilityCheckInterval)
+      this.visibilityCheckInterval = null
+    }
+  }
+
+  /**
+   * Checks if the widget element is currently visible.
+   * Fallback method when IntersectionObserver is not available.
+   */
+  checkVisibility = (): boolean => {
+    if (!this.widgetRef.current) return false
+    
+    const element = this.widgetRef.current
+    const style = window.getComputedStyle(element)
+    const rect = element.getBoundingClientRect()
+    
+    const isVisible = (
+      style.display !== 'none' &&
+      style.visibility !== 'hidden' &&
+      style.opacity !== '0' &&
+      rect.width > 0 &&
+      rect.height > 0 &&
+      rect.top < window.innerHeight &&
+      rect.bottom > 0 &&
+      rect.left < window.innerWidth &&
+      rect.right > 0
+    )
+    
+    return isVisible
+  }
+
+  /**
+   * Tracks selection changes from query-result.
+   */
+  handleSelectionChange = (event: Event) => {
+    const customEvent = event as CustomEvent<{ widgetId: string, recordIds: string[], dataSourceId?: string, outputDsId?: string, queryItemConfigId?: string }>
+    const { id } = this.props
+    
+    // Only track if this is for our widget
+    if (customEvent.detail.widgetId !== id) {
+      return
+    }
+    
+    const hasSelection = customEvent.detail.recordIds && customEvent.detail.recordIds.length > 0
+    this.setState({
+      hasSelection,
+      selectionRecordCount: hasSelection ? customEvent.detail.recordIds.length : 0,
+      lastSelection: hasSelection && customEvent.detail.outputDsId && customEvent.detail.queryItemConfigId
+        ? {
+            recordIds: customEvent.detail.recordIds,
+            outputDsId: customEvent.detail.outputDsId,
+            queryItemConfigId: customEvent.detail.queryItemConfigId
+          }
+        : undefined
+    })
+  }
+
+  /**
+   * Handles restore request when identify popup closes.
+   * Only restores if widget panel is open.
+   */
+  private handleRestoreOnIdentifyClose = (event: Event) => {
+    const customEvent = event as CustomEvent<{ 
+      widgetId: string, 
+      recordIds: string[], 
+      outputDsId: string,
+      queryItemConfigId: string
+    }>
+    const { id } = this.props
+    
+    // Only handle if this is for our widget
+    if (customEvent.detail.widgetId !== id) {
+      return
+    }
+    
+    const isWidgetOpen = this.state.isPanelVisible === true
+    
+    debugLogger.log('RESTORE', {
+      event: 'identify-popup-closed-restore-requested',
+      widgetId: id,
+      isWidgetOpen,
+      recordCount: customEvent.detail.recordIds.length,
+      outputDsId: customEvent.detail.outputDsId,
+      queryItemConfigId: customEvent.detail.queryItemConfigId
+    })
+    
+    // Only restore if widget is open
+    if (!isWidgetOpen) {
+      debugLogger.log('RESTORE', {
+        event: 'identify-popup-closed-restore-skipped-widget-closed',
+        widgetId: id,
+        recordCount: customEvent.detail.recordIds.length
+      })
+      return
+    }
+    
+    // Check if we have matching selection state
+    if (!this.state.hasSelection || !this.state.lastSelection) {
+      debugLogger.log('RESTORE', {
+        event: 'identify-popup-closed-restore-skipped-no-selection',
+        widgetId: id,
+        hasSelection: this.state.hasSelection,
+        hasLastSelection: !!this.state.lastSelection
+      })
+      return
+    }
+    
+    // Verify the outputDsId matches
+    if (this.state.lastSelection.outputDsId !== customEvent.detail.outputDsId) {
+      debugLogger.log('RESTORE', {
+        event: 'identify-popup-closed-restore-skipped-ds-mismatch',
+        widgetId: id,
+        ourOutputDsId: this.state.lastSelection.outputDsId,
+        requestedOutputDsId: customEvent.detail.outputDsId
+      })
+      return
+    }
+    
+    // Verify the queryItemConfigId matches (optional but good to check)
+    if (this.state.lastSelection.queryItemConfigId !== customEvent.detail.queryItemConfigId) {
+      debugLogger.log('RESTORE', {
+        event: 'identify-popup-closed-restore-skipped-query-mismatch',
+        widgetId: id,
+        ourQueryItemConfigId: this.state.lastSelection.queryItemConfigId,
+        requestedQueryItemConfigId: customEvent.detail.queryItemConfigId
+      })
+      return
+    }
+    
+    // Restore selection to map (reuse existing method)
+    debugLogger.log('RESTORE', {
+      event: 'identify-popup-closed-restoring-selection',
+      widgetId: id,
+      recordCount: customEvent.detail.recordIds.length,
+      outputDsId: customEvent.detail.outputDsId
+    })
+    
+    this.addSelectionToMap()
+  }
+
+  /**
+   * Adds selection to map when widget opens (reuses Add to Map logic).
+   */
+  private addSelectionToMap = () => {
+    const { lastSelection } = this.state
+    const { id, config } = this.props
+    
+    if (!lastSelection) {
+      return
+    }
+
+    const dsManager = DataSourceManager.getInstance()
+    const outputDS = dsManager.getDataSource(lastSelection.outputDsId) as FeatureLayerDataSource
+    
+    if (!outputDS) {
+      debugLogger.log('RESTORE', {
+        event: 'panel-opened-output-ds-not-found',
+        widgetId: id,
+        outputDsId: lastSelection.outputDsId
+      })
+      return
+    }
+
+    // Get records from output DS (same as Add to Map)
+    const allRecords = outputDS.getAllLoadedRecords() || []
+    const recordsToSelect = allRecords.filter(record => 
+      lastSelection.recordIds.includes(record.getId())
+    ) as FeatureDataRecord[]
+    
+    if (recordsToSelect.length === 0) {
+      debugLogger.log('RESTORE', {
+        event: 'panel-opened-no-matching-records',
+        widgetId: id,
+        ourRecordCount: lastSelection.recordIds.length
+      })
+      return
+    }
+
+    // Same logic as Add to Map action - selectRecordsAndPublish handles duplicate checking
+    // Don't zoom when restoring on widget open (Add to Map action handles zoom for manual clicks)
+    try {
+      const { selectRecordsAndPublish } = require('./selection-utils')
+      selectRecordsAndPublish(id, outputDS, lastSelection.recordIds, recordsToSelect, true)
+      
+      debugLogger.log('RESTORE', {
+        event: 'panel-opened-selection-added-to-map',
+        widgetId: id,
+        recordCount: recordsToSelect.length,
+        zoomExecuted: false
+      })
+    } catch (error) {
+      debugLogger.log('RESTORE', {
+        event: 'panel-opened-add-to-map-failed',
+        widgetId: id,
+        error: error instanceof Error ? error.message : String(error)
+      })
+    }
+  }
+
+  /**
+   * Clears selection from map only (keeps selection in widget's internal state).
+   * Called when widget panel closes to remove selection from map while preserving widget state.
+   */
+  private clearSelectionFromMap = () => {
+    const { lastSelection } = this.state
+    const { id } = this.props
+    
+    debugLogger.log('RESTORE', {
+      event: 'panel-closed-clearing-selection-from-map',
+      widgetId: id,
+      hasLastSelection: !!lastSelection,
+      selectionRecordCount: lastSelection?.recordIds.length || 0
+    })
+    
+    if (!lastSelection) {
+      debugLogger.log('RESTORE', {
+        event: 'panel-closed-no-selection-to-clear',
+        widgetId: id
+      })
+      return
+    }
+
+    const dsManager = DataSourceManager.getInstance()
+    const outputDS = dsManager.getDataSource(lastSelection.outputDsId) as FeatureLayerDataSource
+    
+    if (!outputDS) {
+      debugLogger.log('RESTORE', {
+        event: 'panel-closed-output-ds-not-found',
+        widgetId: id,
+        outputDsId: lastSelection.outputDsId
+      })
+      return
+    }
+
+    try {
+      // Get origin DS (the map layer)
+      const originDS = outputDS.getOriginDataSources()?.[0] as FeatureLayerDataSource
+      
+      if (!originDS) {
+        debugLogger.log('RESTORE', {
+          event: 'panel-closed-origin-ds-not-found',
+          widgetId: id,
+          outputDsId: lastSelection.outputDsId
+        })
+        return
+      }
+
+      // Check current selection state before clearing
+      const currentSelectedIds = originDS.getSelectedRecordIds() || []
+      const ourRecordIds = lastSelection.recordIds
+      const matchesOurSelection = ourRecordIds.length === currentSelectedIds.length &&
+        ourRecordIds.every(recordId => currentSelectedIds.includes(recordId))
+      
+      debugLogger.log('RESTORE', {
+        event: 'panel-closed-checking-map-selection',
+        widgetId: id,
+        ourRecordCount: ourRecordIds.length,
+        mapSelectedCount: currentSelectedIds.length,
+        matchesOurSelection,
+        ourRecordIds: ourRecordIds.slice(0, 5),
+        mapSelectedIds: currentSelectedIds.slice(0, 5)
+      })
+
+      if (typeof originDS.selectRecordsByIds === 'function') {
+        // Clear selection from originDS (map) only - don't touch outputDS (widget state)
+        originDS.selectRecordsByIds([], [])
+        
+        debugLogger.log('RESTORE', {
+          event: 'panel-closed-cleared-origin-ds-selection',
+          widgetId: id,
+          originDSId: originDS.id
+        })
+        
+        // Publish clear message so map knows to clear
+        MessageManager.getInstance().publishMessage(
+          new DataRecordsSelectionChangeMessage(id, [], [originDS.id])
+        )
+        
+        debugLogger.log('RESTORE', {
+          event: 'panel-closed-published-clear-message',
+          widgetId: id,
+          originDSId: originDS.id
+        })
+        
+        // Verify selection was cleared
+        const afterClearIds = originDS.getSelectedRecordIds() || []
+        debugLogger.log('RESTORE', {
+          event: 'panel-closed-selection-cleared-from-map',
+          widgetId: id,
+          recordCount: lastSelection.recordIds.length,
+          originDSId: originDS.id,
+          selectionAfterClear: afterClearIds.length,
+          verifiedCleared: afterClearIds.length === 0
+        })
+      } else {
+        debugLogger.log('RESTORE', {
+          event: 'panel-closed-origin-ds-no-select-method',
+          widgetId: id,
+          originDSId: originDS.id,
+          hasSelectMethod: typeof originDS.selectRecordsByIds === 'function'
+        })
+      }
+    } catch (error) {
+      debugLogger.log('RESTORE', {
+        event: 'panel-closed-clear-from-map-failed',
+        widgetId: id,
+        error: error instanceof Error ? error.message : String(error),
+        errorStack: error instanceof Error ? error.stack : undefined
+      })
+    }
+  }
+
+  /**
+   * Logs visibility state changes.
+   */
+  logVisibilityChange = (isVisible: boolean, method: string) => {
+    debugLogger.log('WIDGET-STATE', {
+      event: isVisible ? 'panel-opened' : 'panel-closed',
+      widgetId: this.props.id,
+      isVisible,
+      method,
+      timestamp: new Date().toISOString()
+    })
+    
+    if (isVisible) {
+      // When panel opens, log if we have selection and add to map
+      debugLogger.log('RESTORE', {
+        event: 'panel-opened-checking-selection',
+        widgetId: this.props.id,
+        hasSelection: this.state.hasSelection || false,
+        selectionRecordCount: this.state.selectionRecordCount || 0
+      })
+      
+      // Add selection to map if we have one
+      if (this.state.hasSelection) {
+        this.addSelectionToMap()
+      }
+    } else {
+      // When panel closes, clear selection from map only (keep widget state)
+      if (this.state.hasSelection) {
+        this.clearSelectionFromMap()
+      } else {
+        debugLogger.log('RESTORE', {
+          event: 'panel-closed-no-selection-to-clear',
+          widgetId: this.props.id
+        })
+      }
+    }
+  }
+
+  /**
+   * Notifies HelperSimple of panel visibility state changes.
+   */
+  notifyHelperSimpleOfPanelState = (isVisible: boolean) => {
+    const event = new CustomEvent(QUERYSIMPLE_WIDGET_STATE_EVENT, {
+      detail: {
+        widgetId: this.props.id,
+        isOpen: isVisible
+      },
+      bubbles: true,
+      cancelable: true
+    })
+    window.dispatchEvent(event)
   }
 
   /**
@@ -209,7 +742,7 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
     }
 
     return (
-      <Paper variant='flat' className='jimu-widget runtime-query' css={css`
+      <Paper ref={this.widgetRef} variant='flat' className='jimu-widget runtime-query' css={css`
         display: flex;
         flex-direction: column;
         height: 100%;
