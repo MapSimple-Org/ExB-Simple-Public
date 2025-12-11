@@ -1555,6 +1555,9 @@ export function QueryTask (props: QueryTaskProps) {
                 defaultPageSize={defaultPageSize}
                 outputDS={outputDS}
                 runtimeZoomToSelected={lastRuntimeZoomToSelectedRef.current}
+                resultsMode={resultsMode}
+                accumulatedRecords={accumulatedRecords}
+                onAccumulatedRecordsChange={onAccumulatedRecordsChange}
                 onNavBack={(clearResults = false) => {
                   // Handle navigation from QueryTaskResult
                   // If clearResults is true, clear everything and go to query tab

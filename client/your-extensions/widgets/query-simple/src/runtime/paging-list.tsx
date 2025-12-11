@@ -36,6 +36,8 @@ export interface PagingListProps {
   onRenderDone?: (options: { dataItems: any[], pageSize?: number, page?: number }) => void
   onSelectChange: (data: FeatureDataRecord) => void
   onRemove: (data: FeatureDataRecord) => void
+  /** Set of record IDs that have been removed and should be filtered out */
+  removedRecordIds?: Set<string>
 }
 
 const getStyle = (isAutoHeight: boolean) => {
@@ -94,6 +96,7 @@ export function PagingList (props: PagingListProps) {
     onRemove,
     direction,
     onEscape,
+    removedRecordIds,
     defaultPageSize = CONSTANTS.DEFAULT_QUERY_PAGE_SIZE
   } = props
   const [dataItems, setDataItems] = useState(records)
@@ -134,13 +137,21 @@ export function PagingList (props: PagingListProps) {
     setLoadStatus(EntityStatusType.Loading)
     const result = await executeQuery(widgetId, queryItem, outputDS, { ...queryParams, page: currentPage, pageSize: size })
     setDataItems(result.records)
+    
+    // Filter out removed records before passing to onRenderDone
+    // This prevents removed records from being re-selected during pagination
+    const allLoadedRecords = outputDS.getAllLoadedRecords() || []
+    const filteredRecords = removedRecordIds && removedRecordIds.size > 0
+      ? allLoadedRecords.filter(record => !removedRecordIds.has(record.getId()))
+      : allLoadedRecords
+    
     onRenderDone?.({
-      dataItems: outputDS.getAllLoadedRecords(),
+      dataItems: filteredRecords,
       pageSize: size,
       page: pageRef.current
     })
     setLoadStatus(EntityStatusType.Loaded)
-  }, [onRenderDone, outputDS, queryItem, queryParams, widgetId])
+  }, [onRenderDone, outputDS, queryItem, queryParams, widgetId, removedRecordIds])
 
   React.useEffect(() => {
     if (defaultPageSize !== pageSizeRef.current) {
