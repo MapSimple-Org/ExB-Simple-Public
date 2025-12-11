@@ -1,6 +1,6 @@
 # Current Work Status
 
-**Last Updated:** 2025-12-11 (Results Management Modes Complete)  
+**Last Updated:** 2025-12-11 (Scroll Position Fix Complete)  
 **Branch:** `feature/results-management-modes`  
 **Developer:** Adam Cabrera
 
@@ -9,7 +9,7 @@
 ### Current Task
 - **What:** Implementing Results Management Modes - Adding "Add to current results" and "Remove from current results" functionality to QuerySimple widget
 - **Why:** Users want to build up a collection of parcels from multiple searches (e.g., multiple PIN searches + a Major number search) and then export or perform actions on the combined set
-- **Status:** ✅ **COMPLETE** - Both "Add to" and "Remove from" modes are fully implemented and working
+- **Status:** ✅ **COMPLETE** - Both "Add to" and "Remove from" modes are fully implemented and working. Scroll position preservation fix also complete.
 - **Files Modified:** 
   - `query-simple/src/runtime/widget.tsx` - Added resultsMode state
   - `query-simple/src/runtime/query-task.tsx` - Added UI buttons for mode selection
@@ -53,10 +53,17 @@
   - Prevents bugs when hash parameters entered in accumulation modes
   - Clears accumulated records automatically
 
+### What We Just Completed
+- ✅ **Scroll Position Preservation Fix:** Fixed scroll position resetting when removing records from lazy-loaded results
+  - Separated scroll reset logic: only resets on new query (resultCount change)
+  - Preserves scroll position when records are filtered/removed
+  - Uses useLayoutEffect for synchronous scroll restoration before paint
+  - Clamps scroll position to valid range to prevent browser resets
+  - Release number incremented to r012
+
 ### Next Up
-- Documentation updates
-- Blog article about results management modes
-- Final testing and code review
+- More testing with hash parameters and other edge cases
+- Final code review
 
 ## Important Decisions Made
 - **Mode Persistence:** Mode persists across queries and clear operations (does NOT reset)
