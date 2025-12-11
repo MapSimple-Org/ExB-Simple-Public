@@ -1131,14 +1131,14 @@ export function QueryTask (props: QueryTaskProps) {
                 <>
                   {/* First Dropdown: All queries */}
                   <div css={css`
-                    padding: 8px 16px;
+                    padding: 4px 16px;
                     flex-shrink: 0;
                   `}>
                     <label css={css`
                       font-size: 0.875rem;
                       font-weight: 500;
                       color: var(--sys-color-text-primary);
-                      margin-bottom: 8px;
+                      margin-bottom: 4px;
                       display: block;
                     `}>
                       {getI18nMessage('searchLayer')}
@@ -1211,14 +1211,14 @@ export function QueryTask (props: QueryTaskProps) {
                   {/* Second Dropdown: Queries within selected group (only if grouped query selected) */}
                   {isGroupedQuery && currentQueryGroupId && groups && groups[currentQueryGroupId] && (
                     <div css={css`
-                      padding: 8px 16px;
+                      padding: 4px 16px;
                       flex-shrink: 0;
                     `}>
                       <label css={css`
                         font-size: 0.875rem;
                         font-weight: 500;
                         color: var(--sys-color-text-primary);
-                        margin-bottom: 8px;
+                        margin-bottom: 4px;
                         display: block;
                       `}>
                         Search Alias
@@ -1248,13 +1248,16 @@ export function QueryTask (props: QueryTaskProps) {
                       </Select>
                     </div>
                   )}
-                  
-                  {/* Results Mode Button Group - Compact horizontal radio buttons with heading */}
-                  <div css={css`
-                    padding: 4px 16px 8px 16px;
+                </>
+              )
+            })()}
+            
+            {/* Results Mode Button Group - Always show, regardless of query count */}
+            <div css={css`
+                    padding: 4px 16px 4px 16px;
                     flex-shrink: 0;
                   `}>
-                    <div className="d-flex align-items-center mb-2">
+                    <div className="d-flex align-items-center mb-1">
                       <div className="mr-2 title2" css={css`
                         font-size: 0.875rem;
                         font-weight: 500;
@@ -1301,7 +1304,7 @@ export function QueryTask (props: QueryTaskProps) {
                         css={css`
                           flex: 1;
                           font-size: 0.75rem;
-                          padding: 6px 8px;
+                          padding: 4px 8px;
                           min-height: 28px;
                           white-space: nowrap;
                           text-overflow: ellipsis;
@@ -1368,7 +1371,7 @@ export function QueryTask (props: QueryTaskProps) {
                         css={css`
                           flex: 1;
                           font-size: 0.75rem;
-                          padding: 6px 8px;
+                          padding: 4px 8px;
                           min-height: 28px;
                           white-space: nowrap;
                           text-overflow: ellipsis;
@@ -1437,12 +1440,10 @@ export function QueryTask (props: QueryTaskProps) {
                         title={(!accumulatedRecords || accumulatedRecords.length === 0) 
                           ? getI18nMessage('resultsModeDisabledRemove')
                           : getI18nMessage('removeFromCurrentResults')}
-                        title={getI18nMessage('removeFromCurrentResults')}
-                        disabled={false} // TODO: Disable when accumulatedCount === 0
                         css={css`
                           flex: 1;
                           font-size: 0.75rem;
-                          padding: 6px 8px;
+                          padding: 4px 8px;
                           min-height: 28px;
                           white-space: nowrap;
                           text-overflow: ellipsis;
@@ -1466,9 +1467,6 @@ export function QueryTask (props: QueryTaskProps) {
                       }
                     </div>
                   </div>
-                </>
-              )
-            })()}
             <div css={css`
               flex: 1;
               display: flex;

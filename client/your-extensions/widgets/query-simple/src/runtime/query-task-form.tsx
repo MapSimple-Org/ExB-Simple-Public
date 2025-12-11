@@ -65,7 +65,7 @@ const getFormStyle = (isAutoHeight: boolean) => {
     .query-form__actions {
       flex-shrink: 0;
       margin-top: 0;
-      padding-top: 8px;
+      padding-top: 4px;
     }
   `
 }
@@ -486,7 +486,7 @@ export function QueryTaskForm (props: QueryTaskItemProps) {
             <div 
               role='group' 
               className='px-4' 
-              css={css`padding-top: 8px;`}
+              css={css`padding-top: 4px;`}
               aria-label={attributeFilterLabel}
             >
               <div className={classNames('form-title my-2 d-flex align-items-center', { 'd-none': !attributeFilterLabel && !attributeFilterDesc })}>
