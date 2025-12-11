@@ -17,6 +17,7 @@
  * - SELECTION: Selection detection and identify popup tracking
  * - WIDGET-STATE: Widget lifecycle events (open/close handshake)
  * - RESTORE: Selection restoration when widget opens
+ * - RESULTS-MODE: Results management mode selection (Create new, Add to, Remove from)
  * 
  * Features (HelperSimple):
  * - HASH: Hash parameter monitoring and widget opening
@@ -25,7 +26,7 @@
  * - RESTORE: Selection restoration attempts and results
  */
 
-type DebugFeature = 'HASH' | 'FORM' | 'TASK' | 'ZOOM' | 'MAP-EXTENT' | 'DATA-ACTION' | 'GROUP' | 'SELECTION' | 'WIDGET-STATE' | 'RESTORE' | 'all' | 'false'
+type DebugFeature = 'HASH' | 'FORM' | 'TASK' | 'ZOOM' | 'MAP-EXTENT' | 'DATA-ACTION' | 'GROUP' | 'SELECTION' | 'WIDGET-STATE' | 'RESTORE' | 'RESULTS-MODE' | 'all' | 'false'
 
 interface DebugLoggerOptions {
   widgetName: string
@@ -126,7 +127,7 @@ class DebugLogger {
 export function createQuerySimpleDebugLogger() {
   return new DebugLogger({
     widgetName: 'QUERYSIMPLE',
-    features: ['HASH', 'FORM', 'TASK', 'ZOOM', 'MAP-EXTENT', 'DATA-ACTION', 'GROUP', 'SELECTION', 'WIDGET-STATE', 'RESTORE']
+    features: ['HASH', 'FORM', 'TASK', 'ZOOM', 'MAP-EXTENT', 'DATA-ACTION', 'GROUP', 'SELECTION', 'WIDGET-STATE', 'RESTORE', 'RESULTS-MODE']
   })
 }
 
