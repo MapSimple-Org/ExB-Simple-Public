@@ -1,7 +1,7 @@
 /** @jsx jsx */
-import { jsx, css, React, type ImmutableArray, Immutable, type ImmutableObject, hooks } from 'jimu-core'
+import { jsx, css, React, type ImmutableArray, Immutable, type ImmutableObject, hooks, type FeatureLayerDataSource, type FeatureDataRecord } from 'jimu-core'
 import { Select } from 'jimu-ui'
-import type { QueryItemType } from '../config'
+import type { QueryItemType, SelectionType } from '../config'
 import { QueryTask } from './query-task'
 import { FOCUSABLE_CONTAINER_CLASS } from 'jimu-ui'
 import defaultMessages from './translations/default'
@@ -17,6 +17,10 @@ export interface QueryTaskListProps {
   className?: string
   initialQueryValue?: { shortId: string, value: string }
   onHashParameterUsed?: (shortId: string) => void
+  resultsMode?: SelectionType
+  onResultsModeChange?: (mode: SelectionType) => void
+  accumulatedRecords?: FeatureDataRecord[]
+  onAccumulatedRecordsChange?: (records: FeatureDataRecord[]) => void
 }
 
 interface GroupedQueries {
@@ -85,7 +89,7 @@ const getQueryDisplayName = (item: ImmutableObject<QueryItemType>): string => {
 }
 
 export function QueryTaskList (props: QueryTaskListProps) {
-  const { queryItems, widgetId, defaultPageSize, isInPopper = false, className = '', initialQueryValue, onHashParameterUsed } = props
+  const { queryItems, widgetId, defaultPageSize, isInPopper = false, className = '', initialQueryValue, onHashParameterUsed, resultsMode, onResultsModeChange, accumulatedRecords, onAccumulatedRecordsChange } = props
   const getI18nMessage = hooks.useTranslation(defaultMessages)
   
   const { groups, ungrouped, groupOrder } = React.useMemo(() => groupQueries(queryItems), [queryItems])
@@ -329,6 +333,10 @@ export function QueryTaskList (props: QueryTaskListProps) {
             onGroupChange={(groupId) => setSelectedGroupId(groupId)}
             onGroupQueryChange={(index) => setSelectedGroupQueryIndex(index)}
             onUngroupedChange={(index) => setSelectedUngroupedIndex(index)}
+            resultsMode={resultsMode}
+            onResultsModeChange={onResultsModeChange}
+            accumulatedRecords={accumulatedRecords}
+            onAccumulatedRecordsChange={onAccumulatedRecordsChange}
             // No onNavBack - no navigation needed
           />
         </div>
