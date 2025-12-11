@@ -4,7 +4,7 @@
  */
 
 import type { FeatureLayerDataSource, FeatureDataRecord, DataRecord } from 'jimu-core'
-import { DataSourceManager, DataSourceStatus, MessageManager, DataRecordSetChangeMessage, RecordSetChangeType } from 'jimu-core'
+import { DataSourceManager, DataSourceStatus, MessageManager, DataRecordSetChangeMessage, RecordSetChangeType, DataRecordsSelectionChangeMessage } from 'jimu-core'
 import { createQuerySimpleDebugLogger } from 'widgets/shared-code/common'
 
 const debugLogger = createQuerySimpleDebugLogger()
@@ -183,25 +183,48 @@ export function mergeResultsIntoAccumulated(
 }
 
 /**
- * Removes matching records from existing records in an output data source.
+ * Removes matching records from widget-level accumulated records.
  * Matches records using composite keys (originDSId_objectId).
  * 
- * @param outputDS - The output data source containing existing records
- * @param recordsToRemove - Records to remove
+ * This function removes records from existing accumulated records that were captured
+ * before the query executed. The caller is responsible for storing the remaining
+ * records (typically in recordsRef or state).
+ * 
+ * @param outputDS - The output data source (used for key generation)
+ * @param recordsToRemove - Records to remove (from query results)
+ * @param existingAccumulatedRecords - Existing accumulated records captured before query execution (optional, defaults to empty array)
  * @returns Array of remaining records after removal
  */
 export function removeResultsFromAccumulated(
   outputDS: FeatureLayerDataSource,
-  recordsToRemove: FeatureDataRecord[]
+  recordsToRemove: FeatureDataRecord[],
+  existingAccumulatedRecords: FeatureDataRecord[] = []
 ): FeatureDataRecord[] {
   debugLogger.log('RESULTS-MODE', {
     event: 'removing-results-start',
     outputDSId: outputDS.id,
-    recordsToRemoveCount: recordsToRemove.length
+    recordsToRemoveCount: recordsToRemove.length,
+    existingAccumulatedRecordsCount: existingAccumulatedRecords.length
   })
   
-  // Get existing records from output DS
-  const existingRecords = (outputDS.getAllLoadedRecords() || []) as FeatureDataRecord[]
+  // If no accumulated records, nothing to remove
+  if (existingAccumulatedRecords.length === 0) {
+    debugLogger.log('RESULTS-MODE', {
+      event: 'no-accumulated-records-to-remove',
+      outputDSId: outputDS.id
+    })
+    return []
+  }
+  
+  // If no records to remove, return existing records unchanged
+  if (recordsToRemove.length === 0) {
+    debugLogger.log('RESULTS-MODE', {
+      event: 'no-records-to-remove',
+      outputDSId: outputDS.id,
+      existingAccumulatedRecordsCount: existingAccumulatedRecords.length
+    })
+    return existingAccumulatedRecords
+  }
   
   // Build Set of keys to remove for fast lookup
   const removeKeys = new Set(
@@ -210,33 +233,175 @@ export function removeResultsFromAccumulated(
   
   debugLogger.log('RESULTS-MODE', {
     event: 'remove-keys-built',
-    existingRecordsCount: existingRecords.length,
+    existingAccumulatedRecordsCount: existingAccumulatedRecords.length,
     removeKeysCount: removeKeys.size
   })
   
   // Filter out records that match keys to remove
-  const remainingRecords = existingRecords.filter(record => {
+  const remainingRecords: FeatureDataRecord[] = []
+  const removedRecords: FeatureDataRecord[] = []
+  
+  existingAccumulatedRecords.forEach(record => {
     const key = getRecordKey(record, outputDS)
     const shouldRemove = removeKeys.has(key)
     
     if (shouldRemove) {
+      removedRecords.push(record)
       debugLogger.log('RESULTS-MODE', {
-        event: 'record-removed',
+        event: 'record-marked-for-removal',
         key,
-        objectId: record.getId()
+        objectId: record.getId(),
+        originDSId: (record.getDataSource?.() as FeatureLayerDataSource)?.getOriginDataSources()?.[0]?.id || 'unknown'
       })
+    } else {
+      remainingRecords.push(record)
     }
-    
-    return !shouldRemove
   })
   
   debugLogger.log('RESULTS-MODE', {
     event: 'removal-complete',
-    recordsRemoved: existingRecords.length - remainingRecords.length,
-    remainingRecordsCount: remainingRecords.length
+    recordsRemoved: removedRecords.length,
+    remainingRecordsCount: remainingRecords.length,
+    recordsToRemoveCount: recordsToRemove.length,
+    matchedRecordsCount: removedRecords.length,
+    unmatchedRecordsCount: recordsToRemove.length - removedRecords.length
   })
   
   return remainingRecords
+}
+
+/**
+ * Removes records from origin data source selections.
+ * Groups records by their origin data source and updates each origin DS's selection separately.
+ * This ensures map selection is updated correctly when records come from multiple origin layers.
+ * 
+ * @param widgetId - The widget ID for publishing messages
+ * @param recordsToRemove - Records to remove from selection
+ * @param outputDS - The output data source (used for key generation)
+ */
+export function removeRecordsFromOriginSelections(
+  widgetId: string,
+  recordsToRemove: FeatureDataRecord[],
+  outputDS: FeatureLayerDataSource
+): void {
+  debugLogger.log('RESULTS-MODE', {
+    event: 'removing-records-from-origin-selections-start',
+    widgetId,
+    recordsToRemoveCount: recordsToRemove.length,
+    outputDSId: outputDS.id
+  })
+  
+  if (recordsToRemove.length === 0) {
+    debugLogger.log('RESULTS-MODE', {
+      event: 'no-records-to-remove-from-selection',
+      widgetId
+    })
+    return
+  }
+  
+  // Group records by their origin data source
+  const recordsByOriginDS = new Map<FeatureLayerDataSource, FeatureDataRecord[]>()
+  
+  recordsToRemove.forEach(record => {
+    const recordDS = record.getDataSource?.() as FeatureLayerDataSource
+    let originDS: FeatureLayerDataSource | null = null
+    
+    if (recordDS) {
+      originDS = recordDS.getOriginDataSources()?.[0] as FeatureLayerDataSource || recordDS
+    } else {
+      // Fallback: try to get origin from outputDS
+      originDS = outputDS.getOriginDataSources()?.[0] as FeatureLayerDataSource || null
+    }
+    
+    if (originDS) {
+      if (!recordsByOriginDS.has(originDS)) {
+        recordsByOriginDS.set(originDS, [])
+      }
+      recordsByOriginDS.get(originDS)!.push(record)
+    }
+  })
+  
+  debugLogger.log('RESULTS-MODE', {
+    event: 'records-grouped-by-origin',
+    widgetId,
+    originDSCount: recordsByOriginDS.size,
+    recordsByOriginDS: Array.from(recordsByOriginDS.entries()).map(([ds, records]) => ({
+      originDSId: ds.id,
+      recordCount: records.length
+    }))
+  })
+  
+  // For each origin DS, get current selection and remove matching records
+  recordsByOriginDS.forEach((recordsToRemoveForOrigin, originDS) => {
+    try {
+      // Get current selected records from this origin DS
+      const currentSelectedRecords = originDS.getSelectedRecords() || []
+      const currentSelectedIds = originDS.getSelectedRecordIds() || []
+      
+      debugLogger.log('RESULTS-MODE', {
+        event: 'processing-origin-ds-removal',
+        widgetId,
+        originDSId: originDS.id,
+        currentSelectedCount: currentSelectedRecords.length,
+        recordsToRemoveCount: recordsToRemoveForOrigin.length
+      })
+      
+      // Build Set of IDs to remove for fast lookup
+      const idsToRemove = new Set(
+        recordsToRemoveForOrigin.map(record => record.getId())
+      )
+      
+      // Filter out records that match IDs to remove
+      const remainingRecords = currentSelectedRecords.filter(record => {
+        const recordId = record.getId()
+        return !idsToRemove.has(recordId)
+      })
+      
+      const remainingIds = remainingRecords.map(record => record.getId())
+      
+      debugLogger.log('RESULTS-MODE', {
+        event: 'origin-ds-removal-filtered',
+        widgetId,
+        originDSId: originDS.id,
+        removedCount: currentSelectedRecords.length - remainingRecords.length,
+        remainingCount: remainingRecords.length
+      })
+      
+      // Update selection in origin DS
+      if (typeof originDS.selectRecordsByIds === 'function') {
+        originDS.selectRecordsByIds(remainingIds, remainingRecords as FeatureDataRecord[])
+      }
+      
+      // Publish selection change message for this origin DS
+      MessageManager.getInstance().publishMessage(
+        new DataRecordsSelectionChangeMessage(widgetId, remainingRecords as FeatureDataRecord[], [originDS.id])
+      )
+      
+      debugLogger.log('RESULTS-MODE', {
+        event: 'origin-ds-selection-updated',
+        widgetId,
+        originDSId: originDS.id,
+        remainingRecordsCount: remainingRecords.length,
+        messagePublished: true
+      })
+    } catch (error) {
+      debugLogger.log('RESULTS-MODE', {
+        event: 'origin-ds-removal-error',
+        widgetId,
+        originDSId: originDS.id,
+        error: error instanceof Error ? error.message : 'Unknown error',
+        errorStack: error instanceof Error ? error.stack : undefined
+      })
+      console.error(`Error removing records from origin DS ${originDS.id}:`, error)
+    }
+  })
+  
+  debugLogger.log('RESULTS-MODE', {
+    event: 'removing-records-from-origin-selections-complete',
+    widgetId,
+    originDSCount: recordsByOriginDS.size,
+    totalRecordsRemoved: recordsToRemove.length
+  })
 }
 
 /**

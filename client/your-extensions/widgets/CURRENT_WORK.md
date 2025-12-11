@@ -1,6 +1,6 @@
 # Current Work Status
 
-**Last Updated:** 2025-12-10 (Added "Remove from" mode strategy documentation)  
+**Last Updated:** 2025-12-11 (Results Management Modes Complete)  
 **Branch:** `feature/results-management-modes`  
 **Developer:** Adam Cabrera
 
@@ -9,7 +9,7 @@
 ### Current Task
 - **What:** Implementing Results Management Modes - Adding "Add to current results" and "Remove from current results" functionality to QuerySimple widget
 - **Why:** Users want to build up a collection of parcels from multiple searches (e.g., multiple PIN searches + a Major number search) and then export or perform actions on the combined set
-- **Status:** "Add to" mode ✅ Complete and working. "Remove from" mode - Strategy documented, pending implementation
+- **Status:** ✅ **COMPLETE** - Both "Add to" and "Remove from" modes are fully implemented and working
 - **Files Modified:** 
   - `query-simple/src/runtime/widget.tsx` - Added resultsMode state
   - `query-simple/src/runtime/query-task.tsx` - Added UI buttons for mode selection
@@ -33,24 +33,30 @@
 - ✅ Translations for mode labels and descriptions
 - ✅ Debug logging infrastructure for RESULTS-MODE
 
-### What We're Working On Now
-- **Implementing "Add to" mode:**
-  - ✅ Created utility functions file (`results-management-utils.ts`) with:
-    - `getRecordKey()` - Composite key generation (`${originDSId}_${objectId}`)
-    - `createAccumulatedResultsDataSource()` - DS creation helper
-    - `mergeResultsIntoAccumulated()` - Merge with deduplication
-    - `removeResultsFromAccumulated()` - Remove matching records
-    - `clearAccumulatedResults()` - Clear accumulated DS
-  - **Next:** Create accumulated results data source on widget mount
-  - **Next:** Integrate "Add to" mode logic into `handleFormSubmit`
-  - **Next:** Update results display to show accumulated results when in Add/Remove mode
-  - **Next:** Handle widget lifecycle (clear on close, restore on open)
+### What We Just Completed
+- ✅ **"Add to" mode:** Fully implemented and tested
+  - Widget-level accumulated records state management
+  - Merge logic with deduplication using composite keys
+  - Preserves accumulated records when switching queries
+  - Re-selects records on map after query switches
+  - Groups records by origin data source for DataActionList
+- ✅ **"Remove from" mode:** Fully implemented and tested
+  - Remove logic using composite key matching
+  - Removes records from origin data source selections
+  - Auto-clears when all records removed
+  - Preserves remaining records when switching queries
+- ✅ **Selection restoration:** Fixed for accumulated records
+  - Restores accumulated records when widget opens
+  - Clears accumulated records when widget closes
+  - Handles multiple origin data sources correctly
+- ✅ **Hash parameter handling:** Resets to "New" mode when hash parameter detected
+  - Prevents bugs when hash parameters entered in accumulation modes
+  - Clears accumulated records automatically
 
 ### Next Up
-- Implement "Remove from" mode
-- Test accumulated results across multiple queries
-- Handle edge cases (different origin data sources, empty results, etc.)
-- Consider restructuring "New" mode if needed
+- Documentation updates
+- Blog article about results management modes
+- Final testing and code review
 
 ## Important Decisions Made
 - **Mode Persistence:** Mode persists across queries and clear operations (does NOT reset)
@@ -159,9 +165,9 @@ Instead of creating a new data source, we'll:
 
 ---
 
-## Next: "Remove from" Mode Strategy
+## "Remove from" Mode Strategy
 
-**Status:** Planning - Not yet implemented
+**Status:** ✅ **COMPLETE** - Fully implemented and working
 
 ### Core Approach
 Mirror "Add to" mode but remove instead of merge:
