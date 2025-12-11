@@ -38,6 +38,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Clears selection from map when widget closes (clean UX)
   - Restores selection to map when widget reopens (if it has selection)
   - Comprehensive debug logging for troubleshooting
+- **Results Management Modes**: Three modes for managing query results
+  - **New Selection** (default): Clears previous results and starts fresh
+  - **Add to Current Selection**: Merges new query results with existing accumulated results
+    - Preserves accumulated records when switching queries
+    - Groups records by origin data source for proper DataActionList recognition
+    - Uses composite key (`${originDSId}_${objectId}`) for deduplication
+  - **Remove from Current Selection**: Removes matching records from accumulated results
+    - Auto-clears when all records removed
+    - Preserves remaining records when switching queries
+  - Selection restoration works correctly for accumulated records
+  - Hash parameters automatically reset to "New" mode to avoid bugs
 
 #### HelperSimple
 - **Hash Parameter Monitoring**: Monitors URL hash changes and opens managed widgets

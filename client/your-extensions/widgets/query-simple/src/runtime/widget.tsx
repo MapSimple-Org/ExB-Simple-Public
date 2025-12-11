@@ -248,6 +248,7 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
 
   /**
    * Tracks selection changes from query-result.
+   * In "Add to" or "Remove from" modes, uses accumulated records count for restoration.
    */
   handleSelectionChange = (event: Event) => {
     const customEvent = event as CustomEvent<{ widgetId: string, recordIds: string[], dataSourceId?: string, outputDsId?: string, queryItemConfigId?: string }>
@@ -259,9 +260,39 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
     }
     
     const hasSelection = customEvent.detail.recordIds && customEvent.detail.recordIds.length > 0
+    
+    // In "Add to" or "Remove from" mode, use accumulated records count for restoration
+    // The accumulated records are the source of truth for what should be restored
+    const isAccumulationMode = this.state.resultsMode === SelectionType.AddToSelection || 
+                               this.state.resultsMode === SelectionType.RemoveFromSelection
+    const accumulatedRecordsCount = this.state.accumulatedRecords?.length || 0
+    const selectionCount = isAccumulationMode && accumulatedRecordsCount > 0
+      ? accumulatedRecordsCount
+      : (hasSelection ? customEvent.detail.recordIds.length : 0)
+    
+    debugLogger.log('RESTORE', {
+      event: 'handleSelectionChange-updating-state',
+      widgetId: id,
+      resultsMode: this.state.resultsMode,
+      isAccumulationMode,
+      eventRecordIdsCount: customEvent.detail.recordIds.length,
+      hasSelectionFromEvent: hasSelection,
+      accumulatedRecordsCountBefore: accumulatedRecordsCount,
+      calculatedSelectionCount: selectionCount,
+      'will-set-hasSelection': selectionCount > 0,
+      'will-set-lastSelection': hasSelection && !!customEvent.detail.outputDsId && !!customEvent.detail.queryItemConfigId,
+      decisionLogic: {
+        'isAccumulationMode': isAccumulationMode,
+        'accumulatedRecordsCount > 0': accumulatedRecordsCount > 0,
+        'use-accumulated-count': isAccumulationMode && accumulatedRecordsCount > 0,
+        'use-event-count': !(isAccumulationMode && accumulatedRecordsCount > 0)
+      }
+    })
+    
     this.setState({
-      hasSelection,
-      selectionRecordCount: hasSelection ? customEvent.detail.recordIds.length : 0,
+      hasSelection: selectionCount > 0,
+      selectionRecordCount: selectionCount,
+      // Store lastSelection for compatibility, but restoration will use accumulatedRecords in Add/Remove modes
       lastSelection: hasSelection && customEvent.detail.outputDsId && customEvent.detail.queryItemConfigId
         ? {
             recordIds: customEvent.detail.recordIds,
@@ -270,11 +301,23 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
           }
         : undefined
     })
+    
+    debugLogger.log('RESTORE', {
+      event: 'handleSelectionChange-state-updated',
+      widgetId: id,
+      'new-hasSelection': selectionCount > 0,
+      'new-selectionRecordCount': selectionCount,
+      'new-lastSelection-recordIds-count': hasSelection && customEvent.detail.outputDsId && customEvent.detail.queryItemConfigId
+        ? customEvent.detail.recordIds.length
+        : 0,
+      'note': 'lastSelection-only-contains-current-query-records-not-all-accumulated-records'
+    })
   }
 
   /**
    * Handles restore request when identify popup closes.
    * Only restores if widget panel is open.
+   * In "Add to" or "Remove from" modes, restores all accumulated records.
    */
   private handleRestoreOnIdentifyClose = (event: Event) => {
     const customEvent = event as CustomEvent<{ 
@@ -291,12 +334,20 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
     }
     
     const isWidgetOpen = this.state.isPanelVisible === true
+    const isAccumulationMode = this.state.resultsMode === SelectionType.AddToSelection || 
+                               this.state.resultsMode === SelectionType.RemoveFromSelection
     
     debugLogger.log('RESTORE', {
       event: 'identify-popup-closed-restore-requested',
       widgetId: id,
       isWidgetOpen,
-      recordCount: customEvent.detail.recordIds.length,
+      resultsMode: this.state.resultsMode,
+      isAccumulationMode,
+      eventRecordIdsCount: customEvent.detail.recordIds.length,
+      hasSelection: this.state.hasSelection || false,
+      accumulatedRecordsCount: this.state.accumulatedRecords?.length || 0,
+      hasLastSelection: !!this.state.lastSelection,
+      lastSelectionRecordCount: this.state.lastSelection?.recordIds.length || 0,
       outputDsId: customEvent.detail.outputDsId,
       queryItemConfigId: customEvent.detail.queryItemConfigId
     })
@@ -311,6 +362,59 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
       return
     }
     
+    // HYPOTHESIS: Should always check accumulatedRecords first, regardless of mode
+    if (this.state.accumulatedRecords && this.state.accumulatedRecords.length > 0) {
+      debugLogger.log('RESTORE', {
+        event: 'identify-popup-closed-found-accumulated-records',
+        widgetId: id,
+        resultsMode: this.state.resultsMode,
+        isAccumulationMode,
+        accumulatedRecordsCount: this.state.accumulatedRecords.length,
+        'should-use-accumulated': true,
+        'current-condition-check': isAccumulationMode,
+        'condition-result': isAccumulationMode
+      })
+    }
+    
+    // In Add/Remove modes, check accumulated records instead of lastSelection
+    if (isAccumulationMode) {
+      if (!this.state.hasSelection || !this.state.accumulatedRecords || this.state.accumulatedRecords.length === 0) {
+        debugLogger.log('RESTORE', {
+          event: 'identify-popup-closed-restore-skipped-no-accumulated-records',
+          widgetId: id,
+          hasSelection: this.state.hasSelection,
+          accumulatedRecordsCount: this.state.accumulatedRecords?.length || 0,
+          'hypothesis': 'hasSelection-is-false-or-no-accumulated-records',
+          'maybe-hasSelection-should-be-based-on-accumulated-records': true
+        })
+        return
+      }
+      
+      // Restore all accumulated records (grouped by origin DS)
+      debugLogger.log('RESTORE', {
+        event: 'identify-popup-closed-restoring-accumulated-records',
+        widgetId: id,
+        accumulatedRecordsCount: this.state.accumulatedRecords.length
+      })
+      
+      this.addSelectionToMap()
+      return
+    }
+    
+    // HYPOTHESIS: Maybe accumulatedRecords exist but we're not in accumulation mode?
+    if (this.state.accumulatedRecords && this.state.accumulatedRecords.length > 0 && !isAccumulationMode) {
+      debugLogger.log('RESTORE', {
+        event: 'identify-popup-closed-accumulated-records-exist-but-not-accumulation-mode',
+        widgetId: id,
+        resultsMode: this.state.resultsMode,
+        isAccumulationMode,
+        accumulatedRecordsCount: this.state.accumulatedRecords.length,
+        'hypothesis': 'accumulated-records-exist-but-mode-is-not-add-or-remove',
+        'should-we-still-use-them': 'NEEDS-INVESTIGATION'
+      })
+    }
+    
+    // For "New" mode, use original validation logic
     // Check if we have matching selection state
     if (!this.state.hasSelection || !this.state.lastSelection) {
       debugLogger.log('RESTORE', {
@@ -357,12 +461,187 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
 
   /**
    * Adds selection to map when widget opens (reuses Add to Map logic).
+   * In "Add to" or "Remove from" modes, restores all accumulated records grouped by origin data source.
    */
   private addSelectionToMap = () => {
-    const { lastSelection } = this.state
-    const { id, config } = this.props
+    const { lastSelection, accumulatedRecords, resultsMode } = this.state
+    const { id } = this.props
     
+    debugLogger.log('RESTORE', {
+      event: 'addSelectionToMap-called',
+      widgetId: id,
+      resultsMode,
+      hasAccumulatedRecords: !!(accumulatedRecords && accumulatedRecords.length > 0),
+      accumulatedRecordsCount: accumulatedRecords?.length || 0,
+      hasLastSelection: !!lastSelection,
+      lastSelectionRecordCount: lastSelection?.recordIds.length || 0,
+      lastSelectionOutputDsId: lastSelection?.outputDsId
+    })
+    
+    // In Add/Remove modes, use accumulated records for restoration
+    const isAccumulationMode = resultsMode === SelectionType.AddToSelection || 
+                              resultsMode === SelectionType.RemoveFromSelection
+    
+    // HYPOTHESIS: Should always check accumulatedRecords first, regardless of mode
+    // Adding log to see if accumulatedRecords exist but we're not using them
+    if (accumulatedRecords && accumulatedRecords.length > 0) {
+      debugLogger.log('RESTORE', {
+        event: 'addSelectionToMap-found-accumulated-records',
+        widgetId: id,
+        resultsMode,
+        isAccumulationMode,
+        accumulatedRecordsCount: accumulatedRecords.length,
+        'should-use-accumulated': true,
+        'current-condition-check': isAccumulationMode && accumulatedRecords && accumulatedRecords.length > 0,
+        'condition-result': isAccumulationMode && accumulatedRecords && accumulatedRecords.length > 0
+      })
+    } else {
+      debugLogger.log('RESTORE', {
+        event: 'addSelectionToMap-no-accumulated-records',
+        widgetId: id,
+        resultsMode,
+        isAccumulationMode,
+        accumulatedRecordsCount: 0,
+        'will-fallback-to-lastSelection': !!lastSelection
+      })
+    }
+    
+    if (isAccumulationMode && accumulatedRecords && accumulatedRecords.length > 0) {
+      // Group accumulated records by origin data source
+      const recordsByOriginDS = new Map<FeatureLayerDataSource, FeatureDataRecord[]>()
+      const dsManager = DataSourceManager.getInstance()
+      
+      accumulatedRecords.forEach((record, index) => {
+        const recordId = record.getId()
+        let originDS: FeatureLayerDataSource | null = null
+        
+        // Method 1: Try to get from record.getDataSource()
+        const recordDS = record.getDataSource?.() as FeatureLayerDataSource
+        if (recordDS) {
+          originDS = recordDS.getOriginDataSources()?.[0] as FeatureLayerDataSource || recordDS
+          
+          debugLogger.log('RESTORE', {
+            event: 'found-origin-ds-from-record-ds',
+            widgetId: id,
+            recordIndex: index,
+            recordId,
+            originDSId: originDS?.id || 'null',
+            method: 'record.getDataSource()'
+          })
+        }
+        
+        // Method 2: If that failed, search all data sources for a record with matching ID
+        if (!originDS) {
+          const dsMap = dsManager.getDataSources()
+          const allDataSources = Object.values(dsMap)
+          
+          for (const ds of allDataSources) {
+            // Check if this is a FeatureLayerDataSource by checking for getAllLoadedRecords method
+            if (ds && typeof (ds as any).getAllLoadedRecords === 'function') {
+              try {
+                // Check if this DS has the record
+                const allRecords = (ds as any).getAllLoadedRecords() || []
+                const matchingRecord = allRecords.find((r: FeatureDataRecord) => r.getId() === recordId)
+                
+                if (matchingRecord) {
+                  // Found the record - get origin DS from this DS
+                  originDS = (ds as any).getOriginDataSources()?.[0] as FeatureLayerDataSource || ds as FeatureLayerDataSource
+                  
+                  debugLogger.log('RESTORE', {
+                    event: 'found-origin-ds-via-search',
+                    widgetId: id,
+                    recordIndex: index,
+                    recordId,
+                    originDSId: originDS.id,
+                    method: 'searched-all-data-sources',
+                    searchedDSId: ds.id
+                  })
+                  break
+                }
+              } catch (error) {
+                // Continue searching
+              }
+            }
+          }
+        }
+        
+        if (originDS) {
+          if (!recordsByOriginDS.has(originDS)) {
+            recordsByOriginDS.set(originDS, [])
+          }
+          recordsByOriginDS.get(originDS)!.push(record)
+        } else {
+          debugLogger.log('RESTORE', {
+            event: 'could-not-find-origin-ds-for-record',
+            widgetId: id,
+            recordIndex: index,
+            recordId,
+            warning: 'record-will-be-skipped'
+          })
+        }
+      })
+      
+      debugLogger.log('RESTORE', {
+        event: 'panel-opened-restoring-accumulated-records',
+        widgetId: id,
+        resultsMode,
+        accumulatedRecordsCount: accumulatedRecords.length,
+        originDSCount: recordsByOriginDS.size
+      })
+      
+      // Restore selection for each origin data source
+      const { selectRecordsAndPublish } = require('./selection-utils')
+      recordsByOriginDS.forEach((records, originDS) => {
+        const recordIds = records.map(r => r.getId())
+        try {
+          // Use originDS directly (not outputDS) since records are selected in origin layers
+          selectRecordsAndPublish(id, originDS, recordIds, records, true)
+          
+          debugLogger.log('RESTORE', {
+            event: 'panel-opened-restored-origin-ds',
+            widgetId: id,
+            originDSId: originDS.id,
+            recordCount: records.length,
+            zoomExecuted: false
+          })
+        } catch (error) {
+          debugLogger.log('RESTORE', {
+            event: 'panel-opened-restore-origin-ds-failed',
+            widgetId: id,
+            originDSId: originDS.id,
+            error: error instanceof Error ? error.message : String(error),
+            errorStack: error instanceof Error ? error.stack : undefined
+          })
+        }
+      })
+      
+      return
+    }
+    
+    // HYPOTHESIS: Maybe accumulatedRecords exist but we're not in accumulation mode?
+    // Or maybe we should always check accumulatedRecords first?
+    if (accumulatedRecords && accumulatedRecords.length > 0 && !isAccumulationMode) {
+      debugLogger.log('RESTORE', {
+        event: 'addSelectionToMap-accumulated-records-exist-but-not-accumulation-mode',
+        widgetId: id,
+        resultsMode,
+        isAccumulationMode,
+        accumulatedRecordsCount: accumulatedRecords.length,
+        'hypothesis': 'accumulated-records-exist-but-mode-is-not-add-or-remove',
+        'should-we-still-use-them': 'NEEDS-INVESTIGATION'
+      })
+    }
+    
+    // Fall back to original logic for "New" mode
     if (!lastSelection) {
+      debugLogger.log('RESTORE', {
+        event: 'addSelectionToMap-no-lastSelection-exiting',
+        widgetId: id,
+        resultsMode,
+        hasAccumulatedRecords: !!(accumulatedRecords && accumulatedRecords.length > 0),
+        accumulatedRecordsCount: accumulatedRecords?.length || 0,
+        'hypothesis': 'no-lastSelection-so-exiting-early-maybe-should-check-accumulated-records-first'
+      })
       return
     }
 
@@ -461,22 +740,179 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
   /**
    * Clears selection from map only (keeps selection in widget's internal state).
    * Called when widget panel closes to remove selection from map while preserving widget state.
+   * Always clears accumulated records if they exist, regardless of current mode.
    */
   private clearSelectionFromMap = () => {
-    const { lastSelection } = this.state
+    const { lastSelection, accumulatedRecords, resultsMode } = this.state
     const { id } = this.props
     
+    const isAccumulationMode = resultsMode === SelectionType.AddToSelection || 
+                               resultsMode === SelectionType.RemoveFromSelection
+    
     debugLogger.log('RESTORE', {
-      event: 'panel-closed-clearing-selection-from-map',
+      event: 'clearSelectionFromMap-called',
       widgetId: id,
+      resultsMode,
+      isAccumulationMode,
       hasLastSelection: !!lastSelection,
-      selectionRecordCount: lastSelection?.recordIds.length || 0
+      lastSelectionRecordCount: lastSelection?.recordIds.length || 0,
+      hasAccumulatedRecords: !!(accumulatedRecords && accumulatedRecords.length > 0),
+      accumulatedRecordsCount: accumulatedRecords?.length || 0,
+      selectionRecordCount: this.state.selectionRecordCount || 0
     })
     
+    // Always clear accumulated records if they exist (regardless of mode)
+    // This handles the case where mode might have changed but records still exist
+    debugLogger.log('RESTORE', {
+      event: 'clearSelectionFromMap-checking-accumulated-records',
+      widgetId: id,
+      'condition': 'accumulatedRecords && accumulatedRecords.length > 0',
+      'condition-result': !!(accumulatedRecords && accumulatedRecords.length > 0),
+      accumulatedRecordsCount: accumulatedRecords?.length || 0
+    })
+    
+    if (accumulatedRecords && accumulatedRecords.length > 0) {
+      // Group accumulated records by origin data source
+      const recordsByOriginDS = new Map<FeatureLayerDataSource, FeatureDataRecord[]>()
+      const dsManager = DataSourceManager.getInstance()
+      
+      accumulatedRecords.forEach((record, index) => {
+        const recordId = record.getId()
+        let originDS: FeatureLayerDataSource | null = null
+        
+        // Method 1: Try to get from record.getDataSource()
+        const recordDS = record.getDataSource?.() as FeatureLayerDataSource
+        if (recordDS) {
+          originDS = recordDS.getOriginDataSources()?.[0] as FeatureLayerDataSource || recordDS
+          
+          debugLogger.log('RESTORE', {
+            event: 'clear-found-origin-ds-from-record-ds',
+            widgetId: id,
+            recordIndex: index,
+            recordId,
+            originDSId: originDS?.id || 'null',
+            method: 'record.getDataSource()'
+          })
+        }
+        
+        // Method 2: If that failed, search all data sources for a record with matching ID
+        if (!originDS) {
+          const dsMap = dsManager.getDataSources()
+          const allDataSources = Object.values(dsMap)
+          
+          for (const ds of allDataSources) {
+            // Check if this is a FeatureLayerDataSource by checking for getAllLoadedRecords method
+            if (ds && typeof (ds as any).getAllLoadedRecords === 'function') {
+              try {
+                // Check if this DS has the record
+                const allRecords = (ds as any).getAllLoadedRecords() || []
+                const matchingRecord = allRecords.find((r: FeatureDataRecord) => r.getId() === recordId)
+                
+                if (matchingRecord) {
+                  // Found the record - get origin DS from this DS
+                  originDS = (ds as any).getOriginDataSources()?.[0] as FeatureLayerDataSource || ds as FeatureLayerDataSource
+                  
+                  debugLogger.log('RESTORE', {
+                    event: 'clear-found-origin-ds-via-search',
+                    widgetId: id,
+                    recordIndex: index,
+                    recordId,
+                    originDSId: originDS.id,
+                    method: 'searched-all-data-sources',
+                    searchedDSId: ds.id
+                  })
+                  break
+                }
+              } catch (error) {
+                // Continue searching
+              }
+            }
+          }
+        }
+        
+        if (originDS) {
+          if (!recordsByOriginDS.has(originDS)) {
+            recordsByOriginDS.set(originDS, [])
+          }
+          recordsByOriginDS.get(originDS)!.push(record)
+        } else {
+          debugLogger.log('RESTORE', {
+            event: 'clear-could-not-find-origin-ds-for-record',
+            widgetId: id,
+            recordIndex: index,
+            recordId,
+            warning: 'record-will-be-skipped'
+          })
+        }
+      })
+      
+      debugLogger.log('RESTORE', {
+        event: 'panel-closed-clearing-accumulated-records-from-map',
+        widgetId: id,
+        accumulatedRecordsCount: accumulatedRecords.length,
+        originDSCount: recordsByOriginDS.size
+      })
+      
+      // Clear selection from each origin data source
+      recordsByOriginDS.forEach((records, originDS) => {
+        try {
+          if (typeof originDS.selectRecordsByIds === 'function') {
+            // Clear selection from originDS (map) only
+            originDS.selectRecordsByIds([], [])
+            
+            // Publish clear message so map knows to clear
+            MessageManager.getInstance().publishMessage(
+              new DataRecordsSelectionChangeMessage(id, [], [originDS.id])
+            )
+            
+            debugLogger.log('RESTORE', {
+              event: 'panel-closed-cleared-origin-ds-selection',
+              widgetId: id,
+              originDSId: originDS.id,
+              recordCount: records.length
+            })
+          }
+        } catch (error) {
+          debugLogger.log('RESTORE', {
+            event: 'panel-closed-clear-origin-ds-failed',
+            widgetId: id,
+            originDSId: originDS.id,
+            error: error instanceof Error ? error.message : String(error)
+          })
+        }
+      })
+      
+      debugLogger.log('RESTORE', {
+        event: 'clearSelectionFromMap-cleared-accumulated-records-returning',
+        widgetId: id,
+        'will-not-fallback-to-lastSelection': true
+      })
+      return
+    }
+    
+    // HYPOTHESIS: Maybe accumulatedRecords exist but we didn't enter the if block?
+    // Or maybe we should always clear accumulated records if they exist?
+    if (accumulatedRecords && accumulatedRecords.length > 0) {
+      debugLogger.log('RESTORE', {
+        event: 'clearSelectionFromMap-accumulated-records-exist-but-not-clearing',
+        widgetId: id,
+        resultsMode,
+        isAccumulationMode,
+        accumulatedRecordsCount: accumulatedRecords.length,
+        'hypothesis': 'accumulated-records-exist-but-condition-failed-why',
+        'condition-was': 'accumulatedRecords && accumulatedRecords.length > 0',
+        'condition-result': !!(accumulatedRecords && accumulatedRecords.length > 0)
+      })
+    }
+    
+    // Fall back to original logic for "New" mode
     if (!lastSelection) {
       debugLogger.log('RESTORE', {
-        event: 'panel-closed-no-selection-to-clear',
-        widgetId: id
+        event: 'clearSelectionFromMap-no-lastSelection-exiting',
+        widgetId: id,
+        hasAccumulatedRecords: !!(accumulatedRecords && accumulatedRecords.length > 0),
+        accumulatedRecordsCount: accumulatedRecords?.length || 0,
+        'hypothesis': 'no-lastSelection-so-exiting-maybe-should-have-cleared-accumulated-records-first'
       })
       return
     }
@@ -584,26 +1020,100 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
     })
     
     if (isVisible) {
-      // When panel opens, log if we have selection and add to map
+      // When panel opens, check if we have selection to restore
+      const isAccumulationMode = this.state.resultsMode === SelectionType.AddToSelection || 
+                                 this.state.resultsMode === SelectionType.RemoveFromSelection
+      const hasAccumulatedRecords = this.state.accumulatedRecords && this.state.accumulatedRecords.length > 0
+      const hasSelectionState = this.state.hasSelection || false
+      const hasSelectionToRestore = isAccumulationMode 
+        ? hasAccumulatedRecords 
+        : hasSelectionState
+      
       debugLogger.log('RESTORE', {
         event: 'panel-opened-checking-selection',
         widgetId: this.props.id,
-        hasSelection: this.state.hasSelection || false,
-        selectionRecordCount: this.state.selectionRecordCount || 0
+        resultsMode: this.state.resultsMode,
+        isAccumulationMode,
+        hasSelection: hasSelectionState,
+        hasAccumulatedRecords,
+        accumulatedRecordsCount: this.state.accumulatedRecords?.length || 0,
+        selectionRecordCount: this.state.selectionRecordCount || 0,
+        hasLastSelection: !!this.state.lastSelection,
+        lastSelectionRecordCount: this.state.lastSelection?.recordIds.length || 0,
+        hasSelectionToRestore,
+        decisionLogic: {
+          'isAccumulationMode': isAccumulationMode,
+          'hasAccumulatedRecords': hasAccumulatedRecords,
+          'hasSelectionState': hasSelectionState,
+          'calculated-hasSelectionToRestore': hasSelectionToRestore,
+          'will-call-addSelectionToMap': hasSelectionToRestore
+        }
       })
       
       // Add selection to map if we have one
-      if (this.state.hasSelection) {
+      if (hasSelectionToRestore) {
+        debugLogger.log('RESTORE', {
+          event: 'panel-opened-calling-addSelectionToMap',
+          widgetId: this.props.id,
+          reason: 'hasSelectionToRestore-is-true'
+        })
         this.addSelectionToMap()
+      } else {
+        debugLogger.log('RESTORE', {
+          event: 'panel-opened-skipping-addSelectionToMap',
+          widgetId: this.props.id,
+          reason: 'hasSelectionToRestore-is-false',
+          why: isAccumulationMode 
+            ? 'no-accumulated-records' 
+            : 'no-hasSelection-state'
+        })
       }
     } else {
       // When panel closes, clear selection from map only (keep widget state)
-      if (this.state.hasSelection) {
+      const isAccumulationMode = this.state.resultsMode === SelectionType.AddToSelection || 
+                                 this.state.resultsMode === SelectionType.RemoveFromSelection
+      const hasAccumulatedRecords = this.state.accumulatedRecords && this.state.accumulatedRecords.length > 0
+      const hasSelectionState = this.state.hasSelection || false
+      const hasSelectionToClear = isAccumulationMode 
+        ? hasAccumulatedRecords 
+        : hasSelectionState
+      
+      debugLogger.log('RESTORE', {
+        event: 'panel-closed-checking-selection',
+        widgetId: this.props.id,
+        resultsMode: this.state.resultsMode,
+        isAccumulationMode,
+        hasSelection: hasSelectionState,
+        hasAccumulatedRecords,
+        accumulatedRecordsCount: this.state.accumulatedRecords?.length || 0,
+        selectionRecordCount: this.state.selectionRecordCount || 0,
+        hasLastSelection: !!this.state.lastSelection,
+        lastSelectionRecordCount: this.state.lastSelection?.recordIds.length || 0,
+        hasSelectionToClear,
+        decisionLogic: {
+          'isAccumulationMode': isAccumulationMode,
+          'hasAccumulatedRecords': hasAccumulatedRecords,
+          'hasSelectionState': hasSelectionState,
+          'calculated-hasSelectionToClear': hasSelectionToClear,
+          'will-call-clearSelectionFromMap': hasSelectionToClear
+        }
+      })
+      
+      if (hasSelectionToClear) {
+        debugLogger.log('RESTORE', {
+          event: 'panel-closed-calling-clearSelectionFromMap',
+          widgetId: this.props.id,
+          reason: 'hasSelectionToClear-is-true'
+        })
         this.clearSelectionFromMap()
       } else {
         debugLogger.log('RESTORE', {
           event: 'panel-closed-no-selection-to-clear',
-          widgetId: this.props.id
+          widgetId: this.props.id,
+          reason: 'hasSelectionToClear-is-false',
+          why: isAccumulationMode 
+            ? 'no-accumulated-records' 
+            : 'no-hasSelection-state'
         })
       }
     }
@@ -715,7 +1225,27 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
             previousShortId: this.state.initialQueryValue?.shortId,
             previousValue: this.state.initialQueryValue?.value
           })
-          this.setState({ initialQueryValue: { shortId, value } })
+          
+          // Reset to New mode when hash parameter is detected to avoid bugs with accumulation modes
+          const needsModeReset = this.state.resultsMode !== SelectionType.NewSelection
+          
+          this.setState({ 
+            initialQueryValue: { shortId, value },
+            // Reset to New mode and clear accumulatedRecords (same as handleResultsModeChange does)
+            ...(needsModeReset ? { 
+              resultsMode: SelectionType.NewSelection,
+              accumulatedRecords: []
+            } : {})
+          })
+          
+          if (needsModeReset) {
+            debugLogger.log('HASH', {
+              event: 'hash-reset-mode-to-new',
+              widgetId: this.props.id,
+              previousMode: this.state.resultsMode,
+              reason: 'hash-parameter-detected'
+            })
+          }
         } else {
           debugLogger.log('HASH', {
             event: 'hash-skipped',
