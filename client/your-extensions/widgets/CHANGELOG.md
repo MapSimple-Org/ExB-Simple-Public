@@ -95,6 +95,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Improved flex container layout
   - Fixed height and overflow issues
 - **Results Tab Scrolling**: Fixed results not scrolling when content exceeds tab height
+- **Scroll Position Reset**: Fixed scroll position resetting to top when removing records from lazy-loaded results
+  - Preserves scroll position when records are filtered/removed
+  - Only resets scroll on new query (resultCount change)
+  - Clamps scroll position to valid range to prevent browser resets
+  - Uses useLayoutEffect for synchronous scroll restoration before paint
 
 ### Technical Details
 
