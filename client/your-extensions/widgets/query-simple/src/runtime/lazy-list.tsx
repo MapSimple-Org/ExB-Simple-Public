@@ -36,6 +36,8 @@ export interface LazyListProps {
   onRenderDone?: (options: { dataItems: any[] }) => void
   onSelectChange: (data: FeatureDataRecord) => void
   onRemove: (data: FeatureDataRecord) => void
+  /** Set of record IDs that have been removed and should be filtered out */
+  removedRecordIds?: Set<string>
 }
 
 const getStyle = (isAutoHeight: boolean) => {
@@ -90,6 +92,7 @@ export function LazyList (props: LazyListProps) {
     onEscape,
     onSelectChange,
     onRemove,
+    removedRecordIds,
     defaultPageSize = CONSTANTS.DEFAULT_QUERY_PAGE_SIZE
   } = props
   const [dataItems, setDataItems] = useState(records)
@@ -104,12 +107,47 @@ export function LazyList (props: LazyListProps) {
   const resultContainerRef = useRef<HTMLDivElement>(undefined)
   const el = useRef(null)
   const isAutoHeight = useAutoHeight()
+  const previousRecordIdsRef = useRef<string[]>([])
+  const scrollPosRef = useRef<number>(0)
 
+  // Update dataItems when records change (filtering, etc.) - Preserve scroll position
+  React.useEffect(() => {
+    // Check if records have actually changed by comparing IDs
+    const currentRecordIds = records?.map(r => r.getId()) || []
+    const previousRecordIds = previousRecordIdsRef.current || []
+    const recordsChanged = currentRecordIds.length !== previousRecordIds.length ||
+      currentRecordIds.some((id, index) => id !== previousRecordIds[index])
+    
+    if (recordsChanged) {
+      // Capture current scroll position before updating
+      scrollPosRef.current = resultContainerRef.current?.scrollTop || 0
+      setDataItems(records)
+      previousRecordIdsRef.current = currentRecordIds
+    }
+  }, [records])
+
+  // Restore scroll position synchronously after DOM updates but before paint
+  React.useLayoutEffect(() => {
+    if (scrollPosRef.current > 0 && resultContainerRef.current) {
+      const container = resultContainerRef.current
+      const maxScroll = container.scrollHeight - container.clientHeight
+      // Clamp scroll position to valid range to prevent browser from resetting
+      const clampedScroll = Math.min(scrollPosRef.current, Math.max(0, maxScroll))
+      container.scrollTop = clampedScroll
+      scrollPosRef.current = 0 // Reset after restoring
+    }
+  })
+
+  // Only reset scroll when resultCount changes (new query)
   React.useEffect(() => {
     pageRef.current = 1
-    resultContainerRef.current.scrollTop = 0
-    setDataItems(records)
-  }, [records])
+    if (resultContainerRef.current) {
+      resultContainerRef.current.scrollTop = 0
+    }
+    // Reset previous record IDs when resultCount changes (new query)
+    previousRecordIdsRef.current = []
+    scrollPosRef.current = 0
+  }, [resultCount])
 
   const loadByPages = async () => {
     if (allDataItemsLoadedRef.current || loadStatusRef.current === EntityStatusType.Loading) {
@@ -130,8 +168,16 @@ export function LazyList (props: LazyListProps) {
     }
     const updatedItems = dataItemsRef.current.concat(records)
     setDataItems(updatedItems)
+    
+    // Filter out removed records before passing to onRenderDone
+    // This prevents removed records from being re-selected during lazy loading
+    const allLoadedRecords = outputDS.getAllLoadedRecords() || []
+    const filteredRecords = removedRecordIds && removedRecordIds.size > 0
+      ? allLoadedRecords.filter(record => !removedRecordIds.has(record.getId()))
+      : allLoadedRecords
+    
     onRenderDone?.({
-      dataItems: outputDS.getAllLoadedRecords()
+      dataItems: filteredRecords
     })
     setLoadStatus(EntityStatusType.Loaded)
   }

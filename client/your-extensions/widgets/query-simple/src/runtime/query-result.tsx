@@ -25,7 +25,7 @@ import {
 } from 'jimu-core'
 import { Button, Icon, Tooltip, DataActionList, DataActionListStyle } from 'jimu-ui'
 import { getWidgetRuntimeDataMap } from './widget-config'
-import { type QueryItemType, FieldsType, PagingType, ListDirection, ResultSelectMode } from '../config'
+import { type QueryItemType, FieldsType, PagingType, ListDirection, ResultSelectMode, SelectionType } from '../config'
 import defaultMessage from './translations/default'
 import { LazyList } from './lazy-list'
 import { PagingList } from './paging-list'
@@ -41,6 +41,7 @@ import {
   selectRecordsAndPublish,
   publishSelectionMessage 
 } from './selection-utils'
+import { removeResultsFromAccumulated, removeRecordsFromOriginSelections } from './results-management-utils'
 import { createQuerySimpleDebugLogger } from 'widgets/shared-code/common'
 
 const debugLogger = createQuerySimpleDebugLogger()
@@ -98,6 +99,9 @@ export interface QueryTasResultProps {
   records: DataRecord[]
   runtimeZoomToSelected?: boolean
   onNavBack: (clearResults?: boolean) => void
+  resultsMode?: SelectionType
+  accumulatedRecords?: FeatureDataRecord[]
+  onAccumulatedRecordsChange?: (records: FeatureDataRecord[]) => void
 }
 
 const resultStyle = css`
@@ -128,7 +132,7 @@ const resultStyle = css`
 `
 
 export function QueryTaskResult (props: QueryTasResultProps) {
-  const { queryItem, queryParams, resultCount, maxPerPage, records, defaultPageSize, widgetId, outputDS, runtimeZoomToSelected, onNavBack } = props
+  const { queryItem, queryParams, resultCount, maxPerPage, records, defaultPageSize, widgetId, outputDS, runtimeZoomToSelected, onNavBack, resultsMode, accumulatedRecords, onAccumulatedRecordsChange } = props
   const getI18nMessage = hooks.useTranslation(defaultMessage)
   const intl = useIntl()
   const [queryData, setQueryData] = React.useState(null)
@@ -142,8 +146,17 @@ export function QueryTaskResult (props: QueryTasResultProps) {
   const hasSelectedRef = React.useRef(false)
   // Track the last records we selected to detect when new records come in
   const lastSelectedRecordsRef = React.useRef<string[]>([])
+  // Track the original query record IDs (not selected IDs) to detect when query results change
+  const lastQueryRecordIdsRef = React.useRef<string[]>([])
   // Track the last selected FeatureDataRecords for restoration (if needed)
   const lastSelectedFeatureRecordsRef = React.useRef<FeatureDataRecord[]>([])
+  // Ref to track removedRecordIds for use in callbacks (avoids stale closure issues)
+  const removedRecordIdsRef = React.useRef<Set<string>>(new Set())
+  
+  // Sync ref whenever removedRecordIds state changes
+  React.useEffect(() => {
+    removedRecordIdsRef.current = removedRecordIds
+  }, [removedRecordIds])
   // Error state for user-facing errors
   const [selectionError, setSelectionError] = React.useState<string>(null)
 
@@ -282,6 +295,13 @@ export function QueryTaskResult (props: QueryTasResultProps) {
     return dataSets
   }, [selectedRecords, outputDS, queryData, currentItem, records, widgetId])
 
+  // Memoize filtered records to prevent unnecessary re-renders that reset scroll position
+  // This ensures the records prop only changes when the actual data changes, not just the array reference
+  const filteredRecordsForList = React.useMemo(() => {
+    return queryData?.records?.filter((record: DataRecord) => !removedRecordIds.has(record.getId())) || 
+           (records?.filter(record => !removedRecordIds.has(record.getId())) || [])
+  }, [queryData?.records, records, removedRecordIds])
+
   hooks.useEffectOnce(() => {
     // focus the back button when it is rendered
     focusElementInKeyboardMode(backBtnRef.current)
@@ -293,16 +313,47 @@ export function QueryTaskResult (props: QueryTasResultProps) {
    * Also handles auto-selection of records when they first arrive.
    */
   React.useEffect(() => {
+    // Check if these are new records (different from what we last queried)
+    // IMPORTANT: Compare against original query results, not selected results
+    // This prevents removedRecordIds from being reset when records are removed
+    const currentRecordIds = records?.map(record => record.getId()) || []
+    const recordsChanged = currentRecordIds.length !== lastQueryRecordIdsRef.current.length ||
+      currentRecordIds.some((id, index) => id !== lastQueryRecordIdsRef.current[index])
+    
     // Debug: Log when records prop changes
     debugLogger.log('RESULTS-MODE', {
       event: 'records-prop-changed',
       widgetId: widgetId,
       recordsCount: records?.length || 0,
-      willSetQueryData: records && records.length > 0
+      willSetQueryData: records && records.length > 0,
+      removedRecordIdsCount: removedRecordIds.size,
+      hasSelectedRef: hasSelectedRef.current,
+      recordsChanged: recordsChanged,
+      lastQueryRecordIdsCount: lastQueryRecordIdsRef.current.length,
+      currentRecordIdsCount: currentRecordIds.length
     })
     
-    // Reset removed records when new query results come in
-    setRemovedRecordIds(new Set())
+    // IMPORTANT: Only reset removed records if this is truly a NEW query with different records
+    // Don't reset if records are the same (just a re-render or lazy load)
+    if (recordsChanged) {
+      debugLogger.log('RESULTS-MODE', {
+        event: 'records-truly-changed-resetting-removed',
+        widgetId: widgetId,
+        oldRecordIdsCount: lastQueryRecordIdsRef.current.length,
+        newRecordIdsCount: currentRecordIds.length
+      })
+      setRemovedRecordIds(new Set())
+      // Update the original query record IDs ref
+      lastQueryRecordIdsRef.current = currentRecordIds
+    } else {
+      debugLogger.log('RESULTS-MODE', {
+        event: 'records-not-changed-preserving-removed',
+        widgetId: widgetId,
+        recordIdsCount: currentRecordIds.length,
+        removedRecordIdsCount: removedRecordIds.size
+      })
+    }
+    
     // Reset expand all to queryItem's resultExpandByDefault setting
     setExpandAll(currentItem.resultExpandByDefault ?? false)
     setQueryData({
@@ -311,16 +362,14 @@ export function QueryTaskResult (props: QueryTasResultProps) {
       page: 1
     })
     
-    // Check if these are new records (different from what we last selected)
-    const currentRecordIds = records?.map(record => record.getId()) || []
-    const recordsChanged = currentRecordIds.length !== lastSelectedRecordsRef.current.length ||
-      currentRecordIds.some((id, index) => id !== lastSelectedRecordsRef.current[index])
-    
     // Only auto-select records if:
     // 1. We have records and outputDS
     // 2. We haven't already selected these records (hasSelectedRef is false)
     // 3. OR the records have actually changed (new query results)
-    if (records && records.length > 0 && outputDS && (!hasSelectedRef.current || recordsChanged)) {
+    // 4. AND we don't have any removed records (to prevent re-selecting removed ones)
+    if (records && records.length > 0 && outputDS && 
+        (!hasSelectedRef.current || recordsChanged) && 
+        removedRecordIds.size === 0) {
       const recordIds = records.map(record => record.getId())
       const fdr = records as FeatureDataRecord[]
       
@@ -362,8 +411,17 @@ export function QueryTaskResult (props: QueryTasResultProps) {
       hasSelectedRef.current = false
       lastSelectedRecordsRef.current = []
       setSelectionError(null) // Clear errors when clearing records
+    } else if (removedRecordIds.size > 0) {
+      debugLogger.log('RESULTS-MODE', {
+        event: 'skipping-reselection-due-to-removed-records',
+        widgetId: widgetId,
+        removedRecordIdsCount: removedRecordIds.size,
+        recordsCount: records?.length || 0,
+        hasSelectedRef: hasSelectedRef.current,
+        recordsChanged: recordsChanged
+      })
     }
-  }, [records, defaultPageSize, outputDS, widgetId, queryItem.configId, queryItem.resultExpandByDefault])
+  }, [records, defaultPageSize, outputDS, widgetId, queryItem.configId, queryItem.resultExpandByDefault, removedRecordIds])
 
   React.useEffect(() => {
     // clear selection when resultSelectMode changed
@@ -556,37 +614,82 @@ export function QueryTaskResult (props: QueryTasResultProps) {
   }
 
   const handleRenderDone = React.useCallback(({ dataItems, pageSize, page }) => {
-    // Filter out removed records - check if dataItems exists first
-    const filteredItems = dataItems?.filter(item => !removedRecordIds.has(item.getId())) || []
+    // Use ref to get latest removedRecordIds (avoids stale closure issues with lazy loading)
+    const currentRemovedIds = removedRecordIdsRef.current
     
-    setQueryData({
-      records: filteredItems,
-      pageSize,
-      page
-    })
+    // Filter out removed records FIRST - before any selection logic
+    // This ensures removed records stay removed even during lazy loading
+    const filteredItems = dataItems?.filter(item => !currentRemovedIds.has(item.getId())) || []
     
-    // Ensure all loaded records remain selected (for lazy loading)
-    // This keeps records selected as they're loaded incrementally
+    // Check if queryData has actually changed before updating state
+    // This prevents unnecessary re-renders that reset scroll position
+    const currentRecords = queryData?.records || []
+    const currentRecordIds = currentRecords.map(r => r.getId()).sort()
+    const newRecordIds = filteredItems.map(r => r.getId()).sort()
+    const dataChanged = currentRecordIds.length !== newRecordIds.length ||
+      !currentRecordIds.every((id, idx) => id === newRecordIds[idx]) ||
+      queryData?.pageSize !== pageSize ||
+      queryData?.page !== page
+    
+    // Only update state if data has actually changed
+    if (dataChanged) {
+      setQueryData({
+        records: filteredItems,
+        pageSize,
+        page
+      })
+    }
+    
+    // Only select records that are NOT removed
+    // IMPORTANT: Only re-select if the selection has actually changed to avoid resetting scroll position
     if (filteredItems && filteredItems.length > 0 && outputDS) {
       const recordIds = filteredItems.map(record => record.getId())
       const fdr = filteredItems as FeatureDataRecord[]
       
-      // Select all records and publish selection message using utility function
-      try {
-        setSelectionError(null) // Clear previous errors
-        selectRecordsAndPublish(widgetId, outputDS, recordIds, fdr)
-      } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : 'Failed to select query results'
-        setSelectionError(errorMessage)
-        debugLogger.log('TASK', {
-          event: 'selection-failed-handleRenderDone',
-          error: errorMessage,
-          errorStack: error instanceof Error ? error.stack : undefined,
-          recordCount: recordIds.length
+      // Check what's currently selected to avoid unnecessary re-selection (which resets scroll)
+      const currentlySelectedIds = outputDS.getSelectedRecordIds() || []
+      const selectionChanged = currentlySelectedIds.length !== recordIds.length ||
+        !recordIds.every(id => currentlySelectedIds.includes(id))
+      
+      // Only select if the selection has actually changed
+      if (selectionChanged) {
+        try {
+          setSelectionError(null) // Clear previous errors
+          selectRecordsAndPublish(widgetId, outputDS, recordIds, fdr)
+          
+          debugLogger.log('RESULTS-MODE', {
+            event: 'handleRenderDone-selecting-filtered-records',
+            widgetId: widgetId,
+            dataItemsCount: dataItems?.length || 0,
+            filteredItemsCount: filteredItems.length,
+            removedRecordIdsCount: currentRemovedIds.size,
+            selectionChanged: true,
+            currentlySelectedCount: currentlySelectedIds.length,
+            newSelectionCount: recordIds.length
+          })
+        } catch (error) {
+          const errorMessage = error instanceof Error ? error.message : 'Failed to select query results'
+          setSelectionError(errorMessage)
+          debugLogger.log('TASK', {
+            event: 'selection-failed-handleRenderDone',
+            error: errorMessage,
+            errorStack: error instanceof Error ? error.stack : undefined,
+            recordCount: recordIds.length
+          })
+        }
+      } else {
+        debugLogger.log('RESULTS-MODE', {
+          event: 'handleRenderDone-skipping-reselection',
+          widgetId: widgetId,
+          dataItemsCount: dataItems?.length || 0,
+          filteredItemsCount: filteredItems.length,
+          removedRecordIdsCount: currentRemovedIds.size,
+          reason: 'selection-unchanged',
+          currentlySelectedCount: currentlySelectedIds.length
         })
       }
     }
-  }, [outputDS, widgetId, removedRecordIds])
+  }, [outputDS, widgetId, queryData])
 
   const handleDataSourceInfoChange = React.useCallback(() => {
     const ds = DataSourceManager.getInstance().getDataSource(outputDS?.id)
@@ -605,7 +708,8 @@ export function QueryTaskResult (props: QueryTasResultProps) {
       selectedRecordsFromDS: dsRecords?.length || 0,
       selectedIdsFromDS: selectedIds.length,
       currentSelectedRecordsState: selectedRecords?.length || 0,
-      recordsPropCount: recordsProp?.length || 0
+      recordsPropCount: recordsProp?.length || 0,
+      removedRecordIdsCount: removedRecordIds.size
     })
     
     // If we have records in the prop (accumulated records) but DS shows 0 selected,
@@ -622,11 +726,30 @@ export function QueryTaskResult (props: QueryTasResultProps) {
       return // Skip updating - re-selection is coming
     }
     
+    // IMPORTANT: Filter out removed records from DS selection before comparing/syncing
+    // This prevents removed records from being re-added when scrolling triggers this callback
+    const filteredDsRecords = dsRecords?.filter((record: DataRecord) => !removedRecordIds.has(record.getId())) ?? []
+    const filteredSelectedIds = selectedIds.filter(id => !removedRecordIds.has(id))
+    
+    // If DS has more selected than our state, but the difference is entirely removed records, don't sync
+    if (filteredSelectedIds.length === (selectedRecords?.length || 0) && selectedIds.length > filteredSelectedIds.length) {
+      debugLogger.log('RESULTS-MODE', {
+        event: 'handleDataSourceInfoChange-skipping-sync-due-to-removed-records',
+        widgetId: widgetId,
+        reason: 'ds-selection-includes-removed-records',
+        dsSelectedCount: selectedIds.length,
+        filteredCount: filteredSelectedIds.length,
+        componentStateCount: selectedRecords?.length || 0,
+        removedRecordIdsCount: removedRecordIds.size
+      })
+      return // Skip syncing - the mismatch is due to removed records
+    }
+    
     let shouldUpdate = false
-    if (selectedIds.length !== selectedRecords?.length) {
+    if (filteredSelectedIds.length !== selectedRecords?.length) {
       shouldUpdate = true
     } else { // equal length
-      shouldUpdate = selectedIds.some(id => {
+      shouldUpdate = filteredSelectedIds.some(id => {
         const target = selectedRecords.find((item) => item.getId() === id)
         return target == null
       })
@@ -636,9 +759,10 @@ export function QueryTaskResult (props: QueryTasResultProps) {
         event: 'handleDataSourceInfoChange-updating-selectedRecords',
         widgetId: widgetId,
         oldCount: selectedRecords?.length || 0,
-        newCount: dsRecords?.length || 0
+        newCount: filteredDsRecords.length,
+        note: 'filtered-out-removed-records'
       })
-      setSelectedRecords(dsRecords)
+      setSelectedRecords(filteredDsRecords)
     } else {
       debugLogger.log('RESULTS-MODE', {
         event: 'handleDataSourceInfoChange-skipping-update',
@@ -646,7 +770,7 @@ export function QueryTaskResult (props: QueryTasResultProps) {
         reason: 'no-change-detected'
       })
     }
-  }, [outputDS?.id, selectedRecords, widgetId, records])
+  }, [outputDS?.id, selectedRecords, widgetId, records, removedRecordIds])
 
   /**
    * Generates the tip message showing how many features are displayed.
@@ -776,16 +900,59 @@ export function QueryTaskResult (props: QueryTasResultProps) {
       }
     })
     
-    const selectedDatas = outputDS.getSelectedRecords() ?? []
-    const selectedIds = outputDS.getSelectedRecordIds() ?? []
+    // ALWAYS remove from origin data source selections (same as Remove mode)
+    // This properly removes records from the map selection, handling single or multiple origin sources
+    removeRecordsFromOriginSelections(widgetId, [data], outputDS as FeatureLayerDataSource)
     
-    // Remove the record from selection
+    // Update outputDS selection
+    const selectedDatas = outputDS.getSelectedRecords() ?? []
     const updatedSelectedDatas = selectedDatas.filter(record => record.getId() !== dataId)
     const recordIds = updatedSelectedDatas.map(record => record.getId())
     
-    // Update selection on the origin layer and publish message using utility function
-    selectRecordsAndPublish(widgetId, outputDS, recordIds, updatedSelectedDatas as FeatureDataRecord[], true)
-  }, [outputDS, widgetId, resultCount, onNavBack])
+    // Update outputDS selection
+    if (typeof outputDS.selectRecordsByIds === 'function') {
+      outputDS.selectRecordsByIds(recordIds, updatedSelectedDatas as FeatureDataRecord[])
+    }
+    
+    // IMPORTANT: Publish custom event so widget can update lastSelection state
+    // This ensures restoration restores the correct (updated) count
+    const originDS = (outputDS as FeatureLayerDataSource).getOriginDataSources()?.[0] as FeatureLayerDataSource
+    const dataSourceId = originDS?.id
+    const selectionEvent = new CustomEvent('querysimple-selection-changed', {
+      detail: {
+        widgetId,
+        recordIds, // Updated record IDs (with removed record excluded)
+        dataSourceId,
+        outputDsId: outputDS.id,
+        queryItemConfigId: queryItem.configId
+      },
+      bubbles: true,
+      cancelable: true
+    })
+    window.dispatchEvent(selectionEvent)
+    
+    // If in accumulation mode, also remove from accumulated records
+    const isAccumulationMode = resultsMode === SelectionType.AddToSelection || 
+                               resultsMode === SelectionType.RemoveFromSelection
+    if (isAccumulationMode && onAccumulatedRecordsChange && accumulatedRecords && accumulatedRecords.length > 0) {
+      const remainingRecords = removeResultsFromAccumulated(
+        outputDS as FeatureLayerDataSource,
+        [data],
+        accumulatedRecords
+      )
+      
+      debugLogger.log('RESULTS-MODE', {
+        event: 'x-button-removed-from-accumulated',
+        widgetId,
+        removedRecordId: dataId,
+        accumulatedRecordsCountBefore: accumulatedRecords.length,
+        remainingRecordsCount: remainingRecords.length,
+        wasRemoved: remainingRecords.length < accumulatedRecords.length
+      })
+      
+      onAccumulatedRecordsChange(remainingRecords)
+    }
+  }, [outputDS, widgetId, resultCount, onNavBack, resultsMode, accumulatedRecords, onAccumulatedRecordsChange, queryItem.configId])
 
   return (
     <div className='query-result h-100' css={resultStyle} role='listbox' aria-label={getI18nMessage('results')}>
@@ -854,13 +1021,14 @@ export function QueryTaskResult (props: QueryTasResultProps) {
             outputDS={outputDS as any}
             queryParams={queryParams}
             resultCount={resultCount}
-            records={queryData?.records?.filter((record: DataRecord) => !removedRecordIds.has(record.getId())) || (records?.filter(record => !removedRecordIds.has(record.getId())) || [])}
+            records={filteredRecordsForList}
             direction={direction}
             onRenderDone={handleRenderDone}
             onEscape={handleEscape}
             onSelectChange={toggleSelection}
             onRemove={removeRecord}
             expandByDefault={expandAll}
+            removedRecordIds={removedRecordIds}
           />
         )}
         {pagingType === PagingType.MultiPage && resultCount > 0 && (
@@ -872,7 +1040,7 @@ export function QueryTaskResult (props: QueryTasResultProps) {
             queryParams={queryParams}
             resultCount={resultCount}
             maxPerPage={maxPerPage}
-            records={queryData?.records?.filter((record: DataRecord) => !removedRecordIds.has(record.getId())) || (records?.filter(record => !removedRecordIds.has(record.getId())) || [])}
+            records={filteredRecordsForList}
             direction={direction}
             onRenderDone={handleRenderDone}
             onEscape={handleEscape}
@@ -880,6 +1048,7 @@ export function QueryTaskResult (props: QueryTasResultProps) {
             onSelectChange={toggleSelection}
             onRemove={removeRecord}
             expandByDefault={expandAll}
+            removedRecordIds={removedRecordIds}
           />
         )}
       </div>
