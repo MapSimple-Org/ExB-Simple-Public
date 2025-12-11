@@ -1,7 +1,7 @@
 /** @jsx jsx */
 import { React, jsx, css, type AllWidgetProps, DataSourceManager, type FeatureLayerDataSource, type FeatureDataRecord, MessageManager, DataRecordsSelectionChangeMessage } from 'jimu-core'
 import { Paper, WidgetPlaceholder } from 'jimu-ui'
-import { type IMConfig, QueryArrangeType } from '../config'
+import { type IMConfig, QueryArrangeType, SelectionType } from '../config'
 import defaultMessages from './translations/default'
 import { getWidgetRuntimeDataMap } from './widget-config'
 
@@ -32,10 +32,12 @@ const QUERYSIMPLE_WIDGET_STATE_EVENT = 'querysimple-widget-state-changed'
  */
 const RESTORE_ON_IDENTIFY_CLOSE_EVENT = 'querysimple-restore-on-identify-close'
 
-export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>, { initialQueryValue?: { shortId: string, value: string }, isPanelVisible?: boolean, hasSelection?: boolean, selectionRecordCount?: number, lastSelection?: { recordIds: string[], outputDsId: string, queryItemConfigId: string } }> {
+export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>, { initialQueryValue?: { shortId: string, value: string }, isPanelVisible?: boolean, hasSelection?: boolean, selectionRecordCount?: number, lastSelection?: { recordIds: string[], outputDsId: string, queryItemConfigId: string }, resultsMode?: SelectionType, accumulatedRecords?: FeatureDataRecord[] }> {
   static versionManager = versionManager
 
-  state: { initialQueryValue?: { shortId: string, value: string }, isPanelVisible?: boolean, hasSelection?: boolean, selectionRecordCount?: number, lastSelection?: { recordIds: string[], outputDsId: string, queryItemConfigId: string } } = {}
+  state: { initialQueryValue?: { shortId: string, value: string }, isPanelVisible?: boolean, hasSelection?: boolean, selectionRecordCount?: number, lastSelection?: { recordIds: string[], outputDsId: string, queryItemConfigId: string }, resultsMode?: SelectionType, accumulatedRecords?: FeatureDataRecord[] } = {
+    resultsMode: SelectionType.NewSelection // Default mode
+  }
   private widgetRef = React.createRef<HTMLDivElement>()
   private visibilityObserver: IntersectionObserver | null = null
   private visibilityCheckInterval: number | null = null
@@ -413,6 +415,50 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
   }
 
   /**
+   * Handles results mode change from dropdown.
+   * Updates widget state and logs the change for debugging.
+   */
+  private handleResultsModeChange = (mode: SelectionType) => {
+    debugLogger.log('RESULTS-MODE', {
+      event: 'mode-changed',
+      widgetId: this.props.id,
+      previousMode: this.state.resultsMode,
+      newMode: mode,
+      timestamp: new Date().toISOString()
+    })
+    
+    // If switching to "New" mode, clear accumulated records
+    if (mode === SelectionType.NewSelection) {
+      debugLogger.log('RESULTS-MODE', {
+        event: 'clearing-accumulated-records-on-mode-switch',
+        widgetId: this.props.id,
+        previousMode: this.state.resultsMode
+      })
+      this.setState({ resultsMode: mode, accumulatedRecords: [] })
+    } else {
+      this.setState({ resultsMode: mode })
+    }
+  }
+
+  private handleAccumulatedRecordsChange = (records: FeatureDataRecord[]) => {
+    debugLogger.log('RESULTS-MODE', {
+      event: 'accumulated-records-updated',
+      widgetId: this.props.id,
+      recordsCount: records.length
+    })
+    this.setState({ accumulatedRecords: records })
+  }
+
+  /**
+   * NOTE: No longer needed - we use existing output DS instead of creating new one.
+   * Kept for reference but not used.
+   */
+  private getOrCreateAccumulatedResultsDS = async (originDS: FeatureLayerDataSource): Promise<FeatureLayerDataSource> => {
+    // This is no longer used - we merge records into existing output DS
+    throw new Error('This method is deprecated - use existing output DS instead')
+  }
+
+  /**
    * Clears selection from map only (keeps selection in widget's internal state).
    * Called when widget panel closes to remove selection from map while preserving widget state.
    */
@@ -717,7 +763,19 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
             minSize={config.sizeMap?.arrangementIconPopper?.minSize}
             defaultSize={config.sizeMap?.arrangementIconPopper?.defaultSize}
           >
-            <QueryTaskList widgetId={id} isInPopper queryItems={config.queryItems} defaultPageSize={config.defaultPageSize} className='pb-4' initialQueryValue={this.state.initialQueryValue} onHashParameterUsed={this.removeHashParameter} />
+            <QueryTaskList 
+              widgetId={id} 
+              isInPopper 
+              queryItems={config.queryItems} 
+              defaultPageSize={config.defaultPageSize} 
+              className='pb-4' 
+              initialQueryValue={this.state.initialQueryValue} 
+              onHashParameterUsed={this.removeHashParameter}
+              resultsMode={this.state.resultsMode}
+              onResultsModeChange={this.handleResultsModeChange}
+              accumulatedRecords={this.state.accumulatedRecords}
+              onAccumulatedRecordsChange={this.handleAccumulatedRecordsChange}
+            />
           </TaskListPopperWrapper>
         </QueryWidgetContext.Provider>
       )
@@ -772,7 +830,17 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
             overflow: auto;
           `}>
             <QueryWidgetContext.Provider value={`${layoutId}:${layoutItemId}`}>
-              <QueryTaskList widgetId={id} queryItems={config.queryItems} defaultPageSize={config.defaultPageSize} initialQueryValue={this.state.initialQueryValue} onHashParameterUsed={this.removeHashParameter}/>
+              <QueryTaskList 
+                widgetId={id} 
+                queryItems={config.queryItems} 
+                defaultPageSize={config.defaultPageSize} 
+                initialQueryValue={this.state.initialQueryValue} 
+                onHashParameterUsed={this.removeHashParameter}
+                resultsMode={this.state.resultsMode}
+                onResultsModeChange={this.handleResultsModeChange}
+                accumulatedRecords={this.state.accumulatedRecords}
+                onAccumulatedRecordsChange={this.handleAccumulatedRecordsChange}
+              />
             </QueryWidgetContext.Provider>
           </div>
           {/* Stationary footer */}

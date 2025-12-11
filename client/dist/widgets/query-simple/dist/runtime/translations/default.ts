@@ -33,7 +33,16 @@ export default {
   resultsTab: 'Results',
   expandAll: 'Expand all',
   collapseAll: 'Collapse all',
-  addToMap: 'Add to map'
+  addToMap: 'Add to map',
+  resultsMode: 'Results mode',
+  createNewResults: 'Create new results',
+  addToCurrentResults: 'Add to current results',
+  removeFromCurrentResults: 'Remove from current results',
+  resultsModeDisabledRemove: 'Remove from current results (no accumulated results)',
+  resultsModeDesc: 'Controls how query results are combined:\n• New: Each query replaces previous results\n• Add: New results are added to existing results\n• Remove: Matching results are removed from existing results',
+  resultsModeNew: 'New',
+  resultsModeAdd: 'Add',
+  resultsModeRemove: 'Remove'
 }
 
 

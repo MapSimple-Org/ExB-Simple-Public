@@ -35,14 +35,16 @@ import {
   type FeatureDataRecord
 } from 'jimu-core'
 import { Button, Tooltip, FOCUSABLE_CONTAINER_CLASS, Tabs, Tab, Select } from 'jimu-ui'
+import { InfoOutlined } from 'jimu-icons/outlined/suggested/info'
 import { TrashOutlined } from 'jimu-icons/outlined/editor/trash'
-import { PagingType, type QueryItemType, type SpatialFilterObj } from '../config'
+import { PagingType, type QueryItemType, type SpatialFilterObj, SelectionType } from '../config'
 import { QueryTaskForm } from './query-task-form'
 import { QueryTaskResult } from './query-result'
 import { DataSourceTip, useDataSourceExists, ErrorMessage } from 'widgets/shared-code/common'
 import { QueryTaskLabel } from './query-task-label'
 import { DEFAULT_QUERY_ITEM } from '../default-query-item'
 import { generateQueryParams, executeQuery, executeCountQuery } from './query-utils'
+import { mergeResultsIntoAccumulated } from './results-management-utils'
 import { MenuOutlined } from 'jimu-icons/outlined/editor/menu'
 import defaultMessage from './translations/default'
 import { ArrowLeftOutlined } from 'jimu-icons/outlined/directional/arrow-left'
@@ -78,6 +80,11 @@ export interface QueryTaskProps {
   onGroupChange?: (groupId: string | null) => void
   onGroupQueryChange?: (index: number) => void
   onUngroupedChange?: (index: number) => void
+  // Results mode props
+  resultsMode?: SelectionType
+  onResultsModeChange?: (mode: SelectionType) => void
+  accumulatedRecords?: FeatureDataRecord[]
+  onAccumulatedRecordsChange?: (records: FeatureDataRecord[]) => void
 }
 
 // Helper function to get display name for query in dropdown
@@ -138,7 +145,7 @@ const style = css`
 `
 
 export function QueryTask (props: QueryTaskProps) {
-  const { queryItem, onNavBack, total, isInPopper = false, defaultPageSize = CONSTANTS.DEFAULT_QUERY_PAGE_SIZE, wrappedInPopper = false, className = '', index, initialInputValue, onHashParameterUsed, queryItems, selectedQueryIndex, onQueryChange, groups, ungrouped, groupOrder, selectedGroupId, selectedGroupQueryIndex, onGroupChange, onGroupQueryChange, onUngroupedChange, ...otherProps } = props
+  const { queryItem, onNavBack, total, isInPopper = false, defaultPageSize = CONSTANTS.DEFAULT_QUERY_PAGE_SIZE, wrappedInPopper = false, className = '', index, initialInputValue, onHashParameterUsed, queryItems, selectedQueryIndex, onQueryChange, groups, ungrouped, groupOrder, selectedGroupId, selectedGroupQueryIndex, onGroupChange, onGroupQueryChange, onUngroupedChange, resultsMode, onResultsModeChange, accumulatedRecords, onAccumulatedRecordsChange, ...otherProps } = props
   const getI18nMessage = hooks.useTranslation(defaultMessage)
   const [stage, setStage] = React.useState(0) // 0 = form, 1 = results, 2 = loading
   const [activeTab, setActiveTab] = React.useState<'query' | 'results'>('query')
@@ -359,6 +366,15 @@ export function QueryTask (props: QueryTaskProps) {
     // Clear selection directly from data source using utility function
     clearSelectionInDataSources(outputDS)
     
+    // Clear widget-level accumulated records when clearing results
+    if (onAccumulatedRecordsChange) {
+      onAccumulatedRecordsChange([])
+      debugLogger.log('RESULTS-MODE', {
+        event: 'accumulated-records-cleared-on-clear-results',
+        widgetId: props.widgetId
+      })
+    }
+    
     publishDataClearedMsg()
     // Switch back to Query tab when clearing results
     setActiveTab('query')
@@ -369,7 +385,7 @@ export function QueryTask (props: QueryTaskProps) {
     // Clear error states when clearing results
     setSelectionError(null)
     setZoomError(null)
-  }, [outputDS, publishDataClearedMsg, props.widgetId, queryItem.configId])
+  }, [outputDS, publishDataClearedMsg, props.widgetId, queryItem.configId, onAccumulatedRecordsChange])
 
   /**
    * Handles data source creation when switching between query items.
@@ -380,16 +396,27 @@ export function QueryTask (props: QueryTaskProps) {
    * @param ds - The newly created data source for the selected query item
    */
   const handleDataSourceCreated = React.useCallback((ds: DataSource) => {
-    // Clear old results by programmatically clicking the trash can button when switching query items
-    // Try ref first, then fall back to utility function if ref isn't set yet
+    // In "Add to" mode, preserve accumulated records and selection - don't clear
+    if (resultsMode === SelectionType.AddToSelection && accumulatedRecords && accumulatedRecords.length > 0) {
+      debugLogger.log('RESULTS-MODE', {
+        event: 'preserving-selection-on-query-switch-handleDataSourceCreated',
+        widgetId: props.widgetId,
+        accumulatedRecordsCount: accumulatedRecords.length
+      })
+      
+      setDataSource(ds)
+      updateDataSource(ds)
+      setStage(0)
+      setActiveTab('query')
+      return // Skip clearing - preserve selection
+    }
+    
+    // For "New" mode, clear old results as before
     let clearButton = clearResultBtnRef.current
     if (!clearButton) {
-      // Try to find the button using utility function
       clearButton = findClearResultsButton()
     }
     
-    // Click the button if it exists and there are results to clear
-    // Otherwise, call clearResult() directly
     if (clearButton && resultCount > 0) {
       clearButton.click()
     } else {
@@ -399,22 +426,91 @@ export function QueryTask (props: QueryTaskProps) {
     updateDataSource(ds)
     setStage(0)
     setActiveTab('query') // Return to Query tab when switching queries
-  }, [updateDataSource, clearResult, resultCount])
+  }, [updateDataSource, clearResult, resultCount, resultsMode, accumulatedRecords, props.widgetId])
 
   const handleOutputDataSourceCreated = React.useCallback((ds: DataSource) => {
     setOutputDS(ds)
-  }, [])
+    
+    // If in "Add to" mode and we have accumulated records, re-select them
+    // This uses the same logic as after query completion - selectRecordsAndPublish
+    // This ensures records are selected both on the map and in the Results tab
+    if (resultsMode === SelectionType.AddToSelection && accumulatedRecords && accumulatedRecords.length > 0) {
+      // Use a small delay to ensure the DS is fully ready
+      setTimeout(() => {
+        const featureDS = ds as FeatureLayerDataSource
+        if (featureDS && accumulatedRecords && accumulatedRecords.length > 0) {
+          const recordIds = accumulatedRecords.map(record => record.getId())
+          try {
+            // Use the same selectRecordsAndPublish that's used after query completion
+            // This will select records on the map and trigger handleDataSourceInfoChange
+            // in query-result.tsx to update selectedRecords state for the Results tab
+            selectRecordsAndPublish(
+              props.widgetId,
+              featureDS,
+              recordIds,
+              accumulatedRecords
+            )
+            
+            // Update recordsRef so results tab shows accumulated records
+            recordsRef.current = accumulatedRecords
+            setResultCount(accumulatedRecords.length)
+            
+            debugLogger.log('RESULTS-MODE', {
+              event: 're-selected-accumulated-records-after-query-switch',
+              widgetId: props.widgetId,
+              outputDSId: featureDS.id,
+              recordsCount: accumulatedRecords.length
+            })
+            
+            // Verify what's actually selected in the DS after a delay
+            setTimeout(() => {
+              const ds = DataSourceManager.getInstance().getDataSource(featureDS.id)
+              const selectedInDS = ds?.getSelectedRecords()
+              const selectedIdsInDS = ds?.getSelectedRecordIds() ?? []
+              
+              debugLogger.log('RESULTS-MODE', {
+                event: 'verify-records-after-reselection',
+                widgetId: props.widgetId,
+                outputDSId: featureDS.id,
+                expectedCount: accumulatedRecords.length,
+                actualSelectedInDS: selectedInDS?.length || 0,
+                selectedIdsInDS: selectedIdsInDS.length,
+                recordsMatch: selectedInDS?.length === accumulatedRecords.length
+              })
+            }, 200)
+          } catch (error) {
+            debugLogger.log('RESULTS-MODE', {
+              event: 're-selection-failed-after-switch',
+              widgetId: props.widgetId,
+              error: error instanceof Error ? error.message : 'Unknown error',
+              errorStack: error instanceof Error ? error.stack : undefined
+            })
+          }
+        }
+      }, 100)
+    }
+  }, [resultsMode, accumulatedRecords, props.widgetId])
 
   // Clear results when query item changes (e.g., when new hash parameter triggers different query)
   React.useEffect(() => {
     // Only clear if we're actually switching to a different query (not just re-rendering)
     const isSwitchingQueries = previousConfigIdRef.current !== queryItem.configId
     
-    if (isSwitchingQueries && resultCount > 0) {
+    // Only clear results when switching queries if we're in "New" mode
+    // In "Add to" mode, we want to preserve accumulated records across query switches
+    if (isSwitchingQueries && resultCount > 0 && resultsMode === SelectionType.NewSelection) {
       // Store the old configId before updating
       const oldConfigId = previousConfigIdRef.current
       // Update the ref to track the new query
       previousConfigIdRef.current = queryItem.configId
+      
+      debugLogger.log('RESULTS-MODE', {
+        event: 'clearing-results-on-query-switch-new-mode',
+        widgetId: props.widgetId,
+        oldConfigId,
+        newConfigId: queryItem.configId,
+        resultsMode
+      })
       
       // Clear immediately when switching queries, but wrap in try-catch to handle
       // race conditions with feature info windows that might be rendering
@@ -436,10 +532,20 @@ export function QueryTask (props: QueryTaskProps) {
         // Don't set error state - this is expected in some scenarios
       }
     } else if (isSwitchingQueries) {
-      // Update ref even if no results to clear
+      // Just update the ref - don't clear results if in "Add to" mode or no results
       previousConfigIdRef.current = queryItem.configId
+      
+      if (resultsMode === SelectionType.AddToSelection) {
+        debugLogger.log('RESULTS-MODE', {
+          event: 'preserving-accumulated-records-on-query-switch',
+          widgetId: props.widgetId,
+          oldConfigId: previousConfigIdRef.current,
+          newConfigId: queryItem.configId,
+          accumulatedRecordsCount: accumulatedRecords?.length || 0
+        })
+      }
     }
-  }, [queryItem.configId, clearResult, resultCount])
+  }, [queryItem.configId, clearResult, resultCount, resultsMode, accumulatedRecords, props.widgetId])
 
   const navToForm = React.useCallback((clearResults = false) => {
     if (clearResults) {
@@ -534,10 +640,22 @@ export function QueryTask (props: QueryTaskProps) {
     // Load the first page
     const featureDS = outputDS as FeatureLayerDataSource
     
-    // Clear old results by programmatically clicking the trash can button when starting a new query
-    // If the button exists, it means there are results to clear
-    // This ensures we use the exact same logic without code duplication
-    if (clearResultBtnRef.current) {
+    // For "Add to" mode, use widget-level accumulated records
+    // These persist across query switches, unlike query-item-level records
+    let existingRecordsForMerge: FeatureDataRecord[] = []
+    if (resultsMode === SelectionType.AddToSelection) {
+      existingRecordsForMerge = accumulatedRecords || []
+      debugLogger.log('RESULTS-MODE', {
+        event: 'using-widget-level-accumulated-records',
+        widgetId: props.widgetId,
+        existingRecordsCount: existingRecordsForMerge.length,
+        outputDSId: outputDS.id
+      })
+    }
+    
+    // For "New" mode, clear old results by programmatically clicking the trash can button
+    // For "Add to" mode, we keep accumulated results, so skip clearing
+    if (resultsMode === SelectionType.NewSelection && clearResultBtnRef.current) {
       clearResultBtnRef.current.click()
       // Small delay to ensure the click handler completes before proceeding
       await new Promise(resolve => setTimeout(resolve, 0))
@@ -546,7 +664,11 @@ export function QueryTask (props: QueryTaskProps) {
     // Set loading stage
     setStage(2)
     
-    await publishDataClearedMsg()
+    // For "New" mode, clear data cleared message
+    // For "Add to" mode, skip clearing to preserve existing records
+    if (resultsMode === SelectionType.NewSelection) {
+      await publishDataClearedMsg()
+    }
     
     // Determine page size based on pagination style
     // For single-page (LazyLoad) mode, use the configured initial page size (defaults to 100)
@@ -570,29 +692,70 @@ export function QueryTask (props: QueryTaskProps) {
         featureDS.updateQueryParams(queryParamRef.current, props.widgetId)
         return executeQuery(props.widgetId, queryItem, featureDS, queryParamRef.current)
       })
-      .then((result) => {
-        recordsRef.current = result.records
+      .then(async (result) => {
+        let recordsToDisplay = result.records
+        let dsToUse = outputDS
+        
+        // Handle "Add to" mode: merge new results with widget-level accumulated records
+        if (resultsMode === SelectionType.AddToSelection && result.records && result.records.length > 0) {
+          try {
+            // Merge new query results with widget-level accumulated records
+            const mergedRecords = mergeResultsIntoAccumulated(
+              outputDS, // Use outputDS for key generation
+              result.records as FeatureDataRecord[],
+              existingRecordsForMerge // Widget-level accumulated records
+            )
+            
+            recordsToDisplay = mergedRecords
+            
+            // Update widget-level accumulated records so they persist across query switches
+            if (onAccumulatedRecordsChange) {
+              onAccumulatedRecordsChange(mergedRecords)
+            }
+            
+            debugLogger.log('RESULTS-MODE', {
+              event: 'add-mode-merge-complete',
+              widgetId: props.widgetId,
+              existingRecordsCount: existingRecordsForMerge.length,
+              newRecordsCount: result.records.length,
+              mergedRecordsCount: mergedRecords.length,
+              outputDSId: outputDS.id,
+              widgetLevelRecordsUpdated: true
+            })
+          } catch (error) {
+            debugLogger.log('RESULTS-MODE', {
+              event: 'add-mode-error',
+              widgetId: props.widgetId,
+              error: error instanceof Error ? error.message : 'Unknown error',
+              errorStack: error instanceof Error ? error.stack : undefined
+            })
+            // Fall back to normal behavior on error
+            recordsToDisplay = result.records
+          }
+        } else if (resultsMode === SelectionType.NewSelection) {
+          // For "New" mode, clear widget-level accumulated records
+          if (onAccumulatedRecordsChange) {
+            onAccumulatedRecordsChange([])
+          }
+        }
+        
+        recordsRef.current = recordsToDisplay
         // Reset selection flag for new query results
         hasSelectedRecordsRef.current = false
         
-        // Select query results in output data source - this tells the map to highlight features
-        // This must happen BEFORE zoom to ensure selection is visible
-        // Selection happens once when results first come back - not on every tab switch
-        // This prevents duplicate selections and ensures features are only added to
-        // the map's selection set once per query execution
-        
-        // Select records directly on the origin layer (parcel layer)
-        if (result.records && result.records.length > 0 && outputDS) {
-          const recordIds = result.records.map(record => record.getId())
+        // Select records in the output DS
+        // For "Add to" mode, select merged records; for "New" mode, select query results
+        if (recordsToDisplay && recordsToDisplay.length > 0 && dsToUse) {
+          const recordIdsToSelect = recordsToDisplay.map(record => record.getId())
           
           // Select records and publish selection message using utility function
           try {
             setSelectionError(null) // Clear previous errors
             selectRecordsAndPublish(
               props.widgetId,
-              outputDS,
-              recordIds,
-              result.records as FeatureDataRecord[]
+              dsToUse,
+              recordIdsToSelect,
+              recordsToDisplay as FeatureDataRecord[]
             )
             hasSelectedRecordsRef.current = true // Mark as selected
           } catch (error) {
@@ -602,10 +765,17 @@ export function QueryTask (props: QueryTaskProps) {
               event: 'selection-failed',
               error: errorMessage,
               errorStack: error instanceof Error ? error.stack : undefined,
-              recordCount: recordIds.length
+              recordCount: recordIdsToSelect.length
             })
             console.error('Error publishing selection message', error)
           }
+        }
+        
+        // Update result count - use merged count for "Add to" mode, query count for "New" mode
+        if (resultsMode === SelectionType.AddToSelection) {
+          setResultCount(recordsToDisplay.length)
+        } else {
+          setResultCount(queryResultCount)
         }
 
         // Trigger the existing zoomToFeature data action (same as clicking "Zoom To" in the menu)
@@ -614,12 +784,16 @@ export function QueryTask (props: QueryTaskProps) {
           ? runtimeZoomToSelected 
           : (queryItem.zoomToSelected !== false)
         
-        if (result.records && result.records.length > 0 && outputDS && shouldZoom) {
-          // Create a data set from the output data source and selected records
+        // Use the output DS and merged records
+        const recordsForZoom = recordsToDisplay || result.records
+        const dsForZoom = dsToUse || outputDS
+        
+        if (recordsForZoom && recordsForZoom.length > 0 && dsForZoom && shouldZoom) {
+          // Create a data set from the appropriate data source and records
           const dataSet: DataRecordSet = {
-            dataSource: outputDS,
-            records: result.records,
-            name: outputDS.getLabel()
+            dataSource: dsForZoom,
+            records: recordsForZoom,
+            name: dsForZoom.getLabel()
           }
 
           // Get available data actions and find the zoomToFeature action
@@ -665,7 +839,7 @@ export function QueryTask (props: QueryTaskProps) {
         // This ensures we wait for React to actually render results before switching tabs
         // This matches the behavior of manual input where results are rendered before tab switch
       })
-  }, [currentItem, queryItem, props.widgetId, outputDS, defaultPageSize, pagingTypeInConfig, lazyLoadInitialPageSize, publishDataClearedMsg, clearResult])
+  }, [currentItem, queryItem, props.widgetId, outputDS, defaultPageSize, pagingTypeInConfig, lazyLoadInitialPageSize, publishDataClearedMsg, clearResult, resultsMode, accumulatedRecords, onAccumulatedRecordsChange])
 
   const { useAttributeFilter, sqlExprObj, useSpatialFilter, spatialFilterTypes, spatialIncludeRuntimeData, spatialRelationUseDataSources} = currentItem
   const showAttributeFilter = useAttributeFilter && sqlExprObj != null
@@ -944,6 +1118,184 @@ export function QueryTask (props: QueryTaskProps) {
                       </Select>
                     </div>
                   )}
+                  
+                  {/* Results Mode Button Group - Compact horizontal radio buttons with heading */}
+                  <div css={css`
+                    padding: 4px 16px 8px 16px;
+                    flex-shrink: 0;
+                  `}>
+                    <div className="d-flex align-items-center mb-2">
+                      <div className="mr-2 title2" css={css`
+                        font-size: 0.875rem;
+                        font-weight: 500;
+                        color: var(--sys-color-text-primary);
+                      `}>
+                        {getI18nMessage('results')}:
+                      </div>
+                      <Tooltip placement='bottom' css={css`white-space: pre-line;`} title={getI18nMessage('resultsModeDesc')}>
+                        <Button size='sm' icon type='tertiary' aria-label={getI18nMessage('resultsModeDesc')}>
+                          <InfoOutlined color='var(--sys-color-primary-main)' size='s'/>
+                        </Button>
+                      </Tooltip>
+                    </div>
+                    <div 
+                      role="radiogroup"
+                      aria-label={getI18nMessage('resultsMode')}
+                      css={css`
+                        display: flex;
+                        gap: 4px;
+                        align-items: stretch;
+                      `}
+                    >
+                      <Button
+                        size="sm"
+                        variant={resultsMode === SelectionType.NewSelection ? 'contained' : 'outlined'}
+                        color={resultsMode === SelectionType.NewSelection ? 'primary' : 'default'}
+                        onClick={() => {
+                          const newMode = SelectionType.NewSelection
+                          debugLogger.log('RESULTS-MODE', {
+                            event: 'button-mode-changed',
+                            widgetId: props.widgetId,
+                            queryItemConfigId: queryItem.configId,
+                            previousMode: resultsMode || SelectionType.NewSelection,
+                            newMode,
+                            timestamp: new Date().toISOString()
+                          })
+                          if (onResultsModeChange) {
+                            onResultsModeChange(newMode)
+                          }
+                        }}
+                        aria-pressed={resultsMode === SelectionType.NewSelection}
+                        aria-label={`${getI18nMessage('createNewResults')}: ${getI18nMessage('resultsModeDesc').split('\n')[1]?.trim() || ''}`}
+                        title={getI18nMessage('createNewResults')}
+                        css={css`
+                          flex: 1;
+                          font-size: 0.75rem;
+                          padding: 6px 8px;
+                          min-height: 28px;
+                          white-space: nowrap;
+                          text-overflow: ellipsis;
+                          overflow: hidden;
+                        `}
+                      >
+                        {getI18nMessage('resultsModeNew')}
+                      </Button>
+                      <Button
+                        size="sm"
+                        variant={resultsMode === SelectionType.AddToSelection ? 'contained' : 'outlined'}
+                        color={resultsMode === SelectionType.AddToSelection ? 'primary' : 'default'}
+                        onClick={() => {
+                          const newMode = SelectionType.AddToSelection
+                          const previousMode = resultsMode || SelectionType.NewSelection
+                          
+                          debugLogger.log('RESULTS-MODE', {
+                            event: 'button-mode-changed',
+                            widgetId: props.widgetId,
+                            queryItemConfigId: queryItem.configId,
+                            previousMode,
+                            newMode,
+                            timestamp: new Date().toISOString()
+                          })
+                          
+                          // If switching FROM "New" TO "Add to" mode and we have current results,
+                          // merge them with existing accumulated records before changing mode
+                          if (previousMode === SelectionType.NewSelection && 
+                              newMode === SelectionType.AddToSelection &&
+                              recordsRef.current && 
+                              recordsRef.current.length > 0 &&
+                              outputDS &&
+                              onAccumulatedRecordsChange) {
+                            const currentRecords = recordsRef.current as FeatureDataRecord[]
+                            const existingAccumulated = accumulatedRecords || []
+                            
+                            // Merge current results with existing accumulated records
+                            const mergedRecords = mergeResultsIntoAccumulated(
+                              outputDS as FeatureLayerDataSource,
+                              currentRecords,
+                              existingAccumulated
+                            )
+                            
+                            debugLogger.log('RESULTS-MODE', {
+                              event: 'capturing-current-results-on-mode-switch',
+                              widgetId: props.widgetId,
+                              previousMode,
+                              newMode,
+                              currentRecordsCount: currentRecords.length,
+                              existingAccumulatedCount: existingAccumulated.length,
+                              mergedRecordsCount: mergedRecords.length
+                            })
+                            
+                            onAccumulatedRecordsChange(mergedRecords)
+                          }
+                          
+                          if (onResultsModeChange) {
+                            onResultsModeChange(newMode)
+                          }
+                        }}
+                        aria-pressed={resultsMode === SelectionType.AddToSelection}
+                        aria-label={`${getI18nMessage('addToCurrentResults')}: ${getI18nMessage('resultsModeDesc').split('\n')[2]?.trim() || ''}`}
+                        title={getI18nMessage('addToCurrentResults')}
+                        css={css`
+                          flex: 1;
+                          font-size: 0.75rem;
+                          padding: 6px 8px;
+                          min-height: 28px;
+                          white-space: nowrap;
+                          text-overflow: ellipsis;
+                          overflow: hidden;
+                        `}
+                      >
+                        {getI18nMessage('resultsModeAdd')}
+                      </Button>
+                      <Button
+                        size="sm"
+                        variant={resultsMode === SelectionType.RemoveFromSelection ? 'contained' : 'outlined'}
+                        color={resultsMode === SelectionType.RemoveFromSelection ? 'primary' : 'default'}
+                        onClick={() => {
+                          const newMode = SelectionType.RemoveFromSelection
+                          debugLogger.log('RESULTS-MODE', {
+                            event: 'button-mode-changed',
+                            widgetId: props.widgetId,
+                            queryItemConfigId: queryItem.configId,
+                            previousMode: resultsMode || SelectionType.NewSelection,
+                            newMode,
+                            timestamp: new Date().toISOString()
+                          })
+                          if (onResultsModeChange) {
+                            onResultsModeChange(newMode)
+                          }
+                        }}
+                        aria-pressed={resultsMode === SelectionType.RemoveFromSelection}
+                        aria-label={`${getI18nMessage('removeFromCurrentResults')}: ${getI18nMessage('resultsModeDesc').split('\n')[3]?.trim() || ''}`}
+                        title={getI18nMessage('removeFromCurrentResults')}
+                        disabled={false} // TODO: Disable when accumulatedCount === 0
+                        css={css`
+                          flex: 1;
+                          font-size: 0.75rem;
+                          padding: 6px 8px;
+                          min-height: 28px;
+                          white-space: nowrap;
+                          text-overflow: ellipsis;
+                          overflow: hidden;
+                        `}
+                      >
+                        {getI18nMessage('resultsModeRemove')}
+                      </Button>
+                    </div>
+                    <div 
+                      id={`results-mode-description-${props.widgetId}`}
+                      className="sr-only"
+                      aria-live="polite"
+                      role="status"
+                    >
+                      {resultsMode === SelectionType.NewSelection 
+                        ? getI18nMessage('createNewResults')
+                        : resultsMode === SelectionType.AddToSelection
+                        ? getI18nMessage('addToCurrentResults')
+                        : getI18nMessage('removeFromCurrentResults')
+                      }
+                    </div>
+                  </div>
                 </>
               )
             })()}

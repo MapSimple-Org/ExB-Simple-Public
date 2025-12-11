@@ -167,25 +167,120 @@ export function QueryTaskResult (props: QueryTasResultProps) {
   const pagingType = pagingTypeInConfig ?? PagingType.MultiPage
   const direction = directionTypeInConfig ?? ListDirection.Vertical
 
-  const actionDataSet: DataRecordSet = React.useMemo(() => {
-    const dataSet: DataRecordSet = {
-      dataSource: outputDS,
-      type: selectedRecords?.length > 0 ? 'selected' : 'loaded',
-      records: selectedRecords?.length > 0 ? selectedRecords : (queryData?.records || []),
-      name: outputDS?.id,
-      label: outputDS?.getLabel()
-    }
-    if (currentItem.resultFieldsType === FieldsType.SelectAttributes && currentItem.resultDisplayFields != null) {
-      dataSet.fields = combineFields(currentItem.resultDisplayFields, currentItem.resultTitleExpression)
-    } else if (outputDS && 'getPopupInfo' in outputDS) {
-      // use fields in popup template
-      const popupInfo = (outputDS as FeatureLayerDataSource).getPopupInfo()
-      if (popupInfo?.fieldInfos) {
-        dataSet.fields = popupInfo.fieldInfos.filter((fieldInfo) => fieldInfo.visible).map((fieldInfo) => fieldInfo.fieldName)
+  // Group records by origin data source for DataActionList
+  // This ensures DataActionList recognizes records even when they come from different queries/origins
+  const actionDataSets: DataRecordSet[] = React.useMemo(() => {
+    // Debug: Log what records are available
+    debugLogger.log('RESULTS-MODE', {
+      event: 'actionDataSets-calculation-start',
+      widgetId: widgetId,
+      selectedRecordsCount: selectedRecords?.length || 0,
+      queryDataRecordsCount: queryData?.records?.length || 0,
+      recordsPropCount: records?.length || 0,
+      outputDSId: outputDS?.id,
+      hasSelectedRecords: selectedRecords?.length > 0,
+      hasQueryDataRecords: queryData?.records?.length > 0,
+      hasRecordsProp: records?.length > 0
+    })
+    
+    const recordsToUse = selectedRecords?.length > 0 
+      ? selectedRecords 
+      : (queryData?.records?.length > 0 ? queryData.records : (records || []))
+    
+    // If no records, return single DataRecordSet with empty records using outputDS
+    if (!recordsToUse || recordsToUse.length === 0) {
+      const emptyDataSet: DataRecordSet = {
+        dataSource: outputDS,
+        type: 'loaded',
+        records: [],
+        name: outputDS?.id,
+        label: outputDS?.getLabel()
       }
+      debugLogger.log('RESULTS-MODE', {
+        event: 'actionDataSets-empty-records',
+        widgetId: widgetId,
+        dataSetDataSourceId: emptyDataSet.dataSource?.id
+      })
+      return [emptyDataSet]
     }
-    return dataSet
-  }, [selectedRecords, outputDS, queryData, currentItem])
+    
+    // Group records by their origin data source
+    const recordsByOriginDS = new Map<FeatureLayerDataSource, FeatureDataRecord[]>()
+    
+    recordsToUse.forEach(record => {
+      const recordDS = (record as FeatureDataRecord).getDataSource?.() as FeatureLayerDataSource
+      let originDS: FeatureLayerDataSource | null = null
+      
+      if (recordDS) {
+        originDS = recordDS.getOriginDataSources()?.[0] as FeatureLayerDataSource || recordDS
+      } else if (outputDS) {
+        // Fallback: use outputDS's origin if record doesn't have dataSource
+        originDS = outputDS.getOriginDataSources()?.[0] as FeatureLayerDataSource || outputDS as FeatureLayerDataSource
+      }
+      
+      if (originDS) {
+        if (!recordsByOriginDS.has(originDS)) {
+          recordsByOriginDS.set(originDS, [])
+        }
+        recordsByOriginDS.get(originDS).push(record as FeatureDataRecord)
+      }
+    })
+    
+    // Create a DataRecordSet for each origin data source
+    const dataSets: DataRecordSet[] = Array.from(recordsByOriginDS.entries()).map(([originDS, originRecords]) => {
+      const dataSet: DataRecordSet = {
+        dataSource: originDS, // Use origin DS, not outputDS
+        type: 'selected',
+        records: originRecords,
+        name: originDS.id,
+        label: originDS.getLabel()
+      }
+      
+      // Add fields if needed (use currentItem's field settings)
+      if (currentItem.resultFieldsType === FieldsType.SelectAttributes && currentItem.resultDisplayFields != null) {
+        dataSet.fields = combineFields(currentItem.resultDisplayFields, currentItem.resultTitleExpression)
+      } else if (originDS && 'getPopupInfo' in originDS) {
+        // use fields in popup template from origin DS
+        const popupInfo = originDS.getPopupInfo()
+        if (popupInfo?.fieldInfos) {
+          dataSet.fields = popupInfo.fieldInfos.filter((fieldInfo) => fieldInfo.visible).map((fieldInfo) => fieldInfo.fieldName)
+        }
+      }
+      
+      return dataSet
+    })
+    
+    // Debug: Log what the final dataSets contain
+    debugLogger.log('RESULTS-MODE', {
+      event: 'actionDataSets-final',
+      widgetId: widgetId,
+      dataSetsCount: dataSets.length,
+      totalRecordsCount: recordsToUse.length,
+      dataSetsByOrigin: dataSets.map(ds => ({
+        originDSId: ds.dataSource?.id,
+        recordsCount: ds.records?.length || 0,
+        type: ds.type
+      }))
+    })
+    
+    // If we couldn't group by origin (shouldn't happen), fallback to single DataRecordSet with outputDS
+    if (dataSets.length === 0 && outputDS) {
+      debugLogger.log('RESULTS-MODE', {
+        event: 'actionDataSets-fallback-to-outputDS',
+        widgetId: widgetId,
+        reason: 'could-not-determine-origin-ds'
+      })
+      return [{
+        dataSource: outputDS,
+        type: recordsToUse.length > 0 ? 'selected' : 'loaded',
+        records: recordsToUse,
+        name: outputDS.id,
+        label: outputDS.getLabel()
+      }]
+    }
+    
+    return dataSets
+  }, [selectedRecords, outputDS, queryData, currentItem, records, widgetId])
 
   hooks.useEffectOnce(() => {
     // focus the back button when it is rendered
@@ -198,6 +293,14 @@ export function QueryTaskResult (props: QueryTasResultProps) {
    * Also handles auto-selection of records when they first arrive.
    */
   React.useEffect(() => {
+    // Debug: Log when records prop changes
+    debugLogger.log('RESULTS-MODE', {
+      event: 'records-prop-changed',
+      widgetId: widgetId,
+      recordsCount: records?.length || 0,
+      willSetQueryData: records && records.length > 0
+    })
+    
     // Reset removed records when new query results come in
     setRemovedRecordIds(new Set())
     // Reset expand all to queryItem's resultExpandByDefault setting
@@ -487,8 +590,38 @@ export function QueryTaskResult (props: QueryTasResultProps) {
 
   const handleDataSourceInfoChange = React.useCallback(() => {
     const ds = DataSourceManager.getInstance().getDataSource(outputDS?.id)
-    const records = ds?.getSelectedRecords()
+    const dsRecords = ds?.getSelectedRecords()
     const selectedIds = ds?.getSelectedRecordIds() ?? []
+    
+    // Capture records prop before using it (to avoid shadowing)
+    const recordsProp = records
+    
+    // Debug: Log what handleDataSourceInfoChange sees
+    debugLogger.log('RESULTS-MODE', {
+      event: 'handleDataSourceInfoChange-fired',
+      widgetId: widgetId,
+      outputDSId: outputDS?.id,
+      dsId: ds?.id,
+      selectedRecordsFromDS: dsRecords?.length || 0,
+      selectedIdsFromDS: selectedIds.length,
+      currentSelectedRecordsState: selectedRecords?.length || 0,
+      recordsPropCount: recordsProp?.length || 0
+    })
+    
+    // If we have records in the prop (accumulated records) but DS shows 0 selected,
+    // and we currently have selectedRecords, this is likely a query switch in "Add to" mode
+    // where re-selection hasn't happened yet. Don't clear selectedRecords - wait for re-selection.
+    if (recordsProp && recordsProp.length > 0 && selectedIds.length === 0 && selectedRecords && selectedRecords.length > 0) {
+      debugLogger.log('RESULTS-MODE', {
+        event: 'handleDataSourceInfoChange-skipping-clear-during-query-switch',
+        widgetId: widgetId,
+        reason: 'waiting-for-reselection',
+        recordsPropCount: recordsProp.length,
+        currentSelectedRecordsCount: selectedRecords.length
+      })
+      return // Skip updating - re-selection is coming
+    }
+    
     let shouldUpdate = false
     if (selectedIds.length !== selectedRecords?.length) {
       shouldUpdate = true
@@ -499,9 +632,21 @@ export function QueryTaskResult (props: QueryTasResultProps) {
       })
     }
     if (shouldUpdate) {
-      setSelectedRecords(records)
+      debugLogger.log('RESULTS-MODE', {
+        event: 'handleDataSourceInfoChange-updating-selectedRecords',
+        widgetId: widgetId,
+        oldCount: selectedRecords?.length || 0,
+        newCount: dsRecords?.length || 0
+      })
+      setSelectedRecords(dsRecords)
+    } else {
+      debugLogger.log('RESULTS-MODE', {
+        event: 'handleDataSourceInfoChange-skipping-update',
+        widgetId: widgetId,
+        reason: 'no-change-detected'
+      })
     }
-  }, [outputDS?.id, selectedRecords])
+  }, [outputDS?.id, selectedRecords, widgetId, records])
 
   /**
    * Generates the tip message showing how many features are displayed.
@@ -675,7 +820,7 @@ export function QueryTaskResult (props: QueryTasResultProps) {
                 <div css={css`width: 1px; height: 16px; background-color: var(--sys-color-divider-input);`}></div>
                 <DataActionList
                   widgetId={widgetId}
-                  dataSets={[actionDataSet]}
+                  dataSets={actionDataSets}
                   listStyle={DataActionListStyle.Dropdown}
                   buttonSize='sm'
                   buttonType='tertiary'
