@@ -44,7 +44,7 @@ import { DataSourceTip, useDataSourceExists, ErrorMessage } from 'widgets/shared
 import { QueryTaskLabel } from './query-task-label'
 import { DEFAULT_QUERY_ITEM } from '../default-query-item'
 import { generateQueryParams, executeQuery, executeCountQuery } from './query-utils'
-import { mergeResultsIntoAccumulated } from './results-management-utils'
+import { mergeResultsIntoAccumulated, removeResultsFromAccumulated, removeRecordsFromOriginSelections } from './results-management-utils'
 import { MenuOutlined } from 'jimu-icons/outlined/editor/menu'
 import defaultMessage from './translations/default'
 import { ArrowLeftOutlined } from 'jimu-icons/outlined/directional/arrow-left'
@@ -396,11 +396,13 @@ export function QueryTask (props: QueryTaskProps) {
    * @param ds - The newly created data source for the selected query item
    */
   const handleDataSourceCreated = React.useCallback((ds: DataSource) => {
-    // In "Add to" mode, preserve accumulated records and selection - don't clear
-    if (resultsMode === SelectionType.AddToSelection && accumulatedRecords && accumulatedRecords.length > 0) {
+    // In "Add to" and "Remove from" modes, preserve accumulated records and selection - don't clear
+    if ((resultsMode === SelectionType.AddToSelection || resultsMode === SelectionType.RemoveFromSelection) 
+        && accumulatedRecords && accumulatedRecords.length > 0) {
       debugLogger.log('RESULTS-MODE', {
         event: 'preserving-selection-on-query-switch-handleDataSourceCreated',
         widgetId: props.widgetId,
+        resultsMode,
         accumulatedRecordsCount: accumulatedRecords.length
       })
       
@@ -431,10 +433,11 @@ export function QueryTask (props: QueryTaskProps) {
   const handleOutputDataSourceCreated = React.useCallback((ds: DataSource) => {
     setOutputDS(ds)
     
-    // If in "Add to" mode and we have accumulated records, re-select them
+    // If in "Add to" or "Remove from" mode and we have accumulated records, re-select them
     // This uses the same logic as after query completion - selectRecordsAndPublish
     // This ensures records are selected both on the map and in the Results tab
-    if (resultsMode === SelectionType.AddToSelection && accumulatedRecords && accumulatedRecords.length > 0) {
+    if ((resultsMode === SelectionType.AddToSelection || resultsMode === SelectionType.RemoveFromSelection) 
+        && accumulatedRecords && accumulatedRecords.length > 0) {
       // Use a small delay to ensure the DS is fully ready
       setTimeout(() => {
         const featureDS = ds as FeatureLayerDataSource
@@ -497,7 +500,7 @@ export function QueryTask (props: QueryTaskProps) {
     const isSwitchingQueries = previousConfigIdRef.current !== queryItem.configId
     
     // Only clear results when switching queries if we're in "New" mode
-    // In "Add to" mode, we want to preserve accumulated records across query switches
+    // In "Add to" and "Remove from" modes, we want to preserve accumulated records across query switches
     if (isSwitchingQueries && resultCount > 0 && resultsMode === SelectionType.NewSelection) {
       // Store the old configId before updating
       const oldConfigId = previousConfigIdRef.current
@@ -532,13 +535,14 @@ export function QueryTask (props: QueryTaskProps) {
         // Don't set error state - this is expected in some scenarios
       }
     } else if (isSwitchingQueries) {
-      // Just update the ref - don't clear results if in "Add to" mode or no results
+      // Just update the ref - don't clear results if in "Add to" or "Remove from" mode or no results
       previousConfigIdRef.current = queryItem.configId
       
-      if (resultsMode === SelectionType.AddToSelection) {
+      if (resultsMode === SelectionType.AddToSelection || resultsMode === SelectionType.RemoveFromSelection) {
         debugLogger.log('RESULTS-MODE', {
           event: 'preserving-accumulated-records-on-query-switch',
           widgetId: props.widgetId,
+          resultsMode,
           oldConfigId: previousConfigIdRef.current,
           newConfigId: queryItem.configId,
           accumulatedRecordsCount: accumulatedRecords?.length || 0
@@ -640,21 +644,22 @@ export function QueryTask (props: QueryTaskProps) {
     // Load the first page
     const featureDS = outputDS as FeatureLayerDataSource
     
-    // For "Add to" mode, use widget-level accumulated records
+    // For "Add to" and "Remove from" modes, use widget-level accumulated records
     // These persist across query switches, unlike query-item-level records
     let existingRecordsForMerge: FeatureDataRecord[] = []
-    if (resultsMode === SelectionType.AddToSelection) {
+    if (resultsMode === SelectionType.AddToSelection || resultsMode === SelectionType.RemoveFromSelection) {
       existingRecordsForMerge = accumulatedRecords || []
       debugLogger.log('RESULTS-MODE', {
         event: 'using-widget-level-accumulated-records',
         widgetId: props.widgetId,
+        resultsMode,
         existingRecordsCount: existingRecordsForMerge.length,
         outputDSId: outputDS.id
       })
     }
     
     // For "New" mode, clear old results by programmatically clicking the trash can button
-    // For "Add to" mode, we keep accumulated results, so skip clearing
+    // For "Add to" and "Remove from" modes, we keep accumulated results, so skip clearing
     if (resultsMode === SelectionType.NewSelection && clearResultBtnRef.current) {
       clearResultBtnRef.current.click()
       // Small delay to ensure the click handler completes before proceeding
@@ -665,7 +670,7 @@ export function QueryTask (props: QueryTaskProps) {
     setStage(2)
     
     // For "New" mode, clear data cleared message
-    // For "Add to" mode, skip clearing to preserve existing records
+    // For "Add to" and "Remove from" modes, skip clearing to preserve existing records
     if (resultsMode === SelectionType.NewSelection) {
       await publishDataClearedMsg()
     }
@@ -732,6 +737,87 @@ export function QueryTask (props: QueryTaskProps) {
             // Fall back to normal behavior on error
             recordsToDisplay = result.records
           }
+        } else if (resultsMode === SelectionType.RemoveFromSelection) {
+          // Handle "Remove from" mode: remove matching records from widget-level accumulated records
+          try {
+            // Check if we have accumulated records to remove from
+            if (existingRecordsForMerge.length === 0) {
+              debugLogger.log('RESULTS-MODE', {
+                event: 'remove-mode-no-accumulated-records',
+                widgetId: props.widgetId,
+                queryRecordsCount: result.records?.length || 0,
+                note: 'No accumulated records to remove from - no-op'
+              })
+              // No accumulated records, so nothing to remove - show empty results
+              recordsToDisplay = []
+            } else if (result.records && result.records.length > 0) {
+              // Remove matching records from accumulated records
+              const remainingRecords = removeResultsFromAccumulated(
+                outputDS, // Use outputDS for key generation
+                result.records as FeatureDataRecord[],
+                existingRecordsForMerge // Widget-level accumulated records
+              )
+              
+              recordsToDisplay = remainingRecords
+              
+              // Update widget-level accumulated records
+              if (onAccumulatedRecordsChange) {
+                onAccumulatedRecordsChange(remainingRecords)
+              }
+              
+              // Remove records from origin data source selections (map highlighting)
+              removeRecordsFromOriginSelections(
+                props.widgetId,
+                result.records as FeatureDataRecord[],
+                outputDS
+              )
+              
+              debugLogger.log('RESULTS-MODE', {
+                event: 'remove-mode-complete',
+                widgetId: props.widgetId,
+                existingAccumulatedRecordsCount: existingRecordsForMerge.length,
+                queryRecordsCount: result.records.length,
+                remainingRecordsCount: remainingRecords.length,
+                recordsRemoved: existingRecordsForMerge.length - remainingRecords.length,
+                outputDSId: outputDS.id,
+                widgetLevelRecordsUpdated: true,
+                originSelectionsUpdated: true
+              })
+              
+              // If all records removed, auto-clear (consistent with user expectation)
+              if (remainingRecords.length === 0) {
+                debugLogger.log('RESULTS-MODE', {
+                  event: 'remove-mode-all-records-removed',
+                  widgetId: props.widgetId,
+                  note: 'All accumulated records removed - auto-clearing'
+                })
+                // Clear widget-level accumulated records
+                if (onAccumulatedRecordsChange) {
+                  onAccumulatedRecordsChange([])
+                }
+              }
+            } else {
+              // Query returned no results - nothing to remove
+              debugLogger.log('RESULTS-MODE', {
+                event: 'remove-mode-no-query-results',
+                widgetId: props.widgetId,
+                existingAccumulatedRecordsCount: existingRecordsForMerge.length,
+                note: 'Query returned no results - no records to remove'
+              })
+              // Keep existing accumulated records displayed
+              recordsToDisplay = existingRecordsForMerge
+            }
+          } catch (error) {
+            debugLogger.log('RESULTS-MODE', {
+              event: 'remove-mode-error',
+              widgetId: props.widgetId,
+              error: error instanceof Error ? error.message : 'Unknown error',
+              errorStack: error instanceof Error ? error.stack : undefined
+            })
+            // Fall back to showing query results on error
+            recordsToDisplay = result.records || []
+            console.error('Error in remove mode:', error)
+          }
         } else if (resultsMode === SelectionType.NewSelection) {
           // For "New" mode, clear widget-level accumulated records
           if (onAccumulatedRecordsChange) {
@@ -744,35 +830,79 @@ export function QueryTask (props: QueryTaskProps) {
         hasSelectedRecordsRef.current = false
         
         // Select records in the output DS
-        // For "Add to" mode, select merged records; for "New" mode, select query results
+        // For "Add to" mode, select merged records
+        // For "Remove from" mode, select remaining records (already updated via removeRecordsFromOriginSelections)
+        // For "New" mode, select query results
         if (recordsToDisplay && recordsToDisplay.length > 0 && dsToUse) {
           const recordIdsToSelect = recordsToDisplay.map(record => record.getId())
           
-          // Select records and publish selection message using utility function
+          // For "Remove from" mode, selection was already updated via removeRecordsFromOriginSelections
+          // But we still need to select in the outputDS for widget state consistency
+          if (resultsMode === SelectionType.RemoveFromSelection) {
+            // Selection was already updated in origin DSs via removeRecordsFromOriginSelections
+            // Just update outputDS selection for widget state consistency
+            try {
+              if (typeof dsToUse.selectRecordsByIds === 'function') {
+                dsToUse.selectRecordsByIds(recordIdsToSelect, recordsToDisplay as FeatureDataRecord[])
+              }
+              hasSelectedRecordsRef.current = true
+              debugLogger.log('RESULTS-MODE', {
+                event: 'remove-mode-output-ds-selection-updated',
+                widgetId: props.widgetId,
+                recordCount: recordsToDisplay.length
+              })
+            } catch (error) {
+              debugLogger.log('RESULTS-MODE', {
+                event: 'remove-mode-output-ds-selection-error',
+                widgetId: props.widgetId,
+                error: error instanceof Error ? error.message : 'Unknown error'
+              })
+            }
+          } else {
+            // For "Add to" and "New" modes, select records normally
+            try {
+              setSelectionError(null) // Clear previous errors
+              selectRecordsAndPublish(
+                props.widgetId,
+                dsToUse,
+                recordIdsToSelect,
+                recordsToDisplay as FeatureDataRecord[]
+              )
+              hasSelectedRecordsRef.current = true // Mark as selected
+            } catch (error) {
+              const errorMessage = error instanceof Error ? error.message : 'Failed to select query results'
+              setSelectionError(errorMessage)
+              debugLogger.log('TASK', {
+                event: 'selection-failed',
+                error: errorMessage,
+                errorStack: error instanceof Error ? error.stack : undefined,
+                recordCount: recordIdsToSelect.length
+              })
+              console.error('Error publishing selection message', error)
+            }
+          }
+        } else if (resultsMode === SelectionType.RemoveFromSelection && recordsToDisplay.length === 0) {
+          // All records removed - clear selection
           try {
-            setSelectionError(null) // Clear previous errors
-            selectRecordsAndPublish(
-              props.widgetId,
-              dsToUse,
-              recordIdsToSelect,
-              recordsToDisplay as FeatureDataRecord[]
-            )
-            hasSelectedRecordsRef.current = true // Mark as selected
-          } catch (error) {
-            const errorMessage = error instanceof Error ? error.message : 'Failed to select query results'
-            setSelectionError(errorMessage)
-            debugLogger.log('TASK', {
-              event: 'selection-failed',
-              error: errorMessage,
-              errorStack: error instanceof Error ? error.stack : undefined,
-              recordCount: recordIdsToSelect.length
+            clearSelectionInDataSources(dsToUse)
+            hasSelectedRecordsRef.current = false
+            debugLogger.log('RESULTS-MODE', {
+              event: 'remove-mode-all-records-removed-selection-cleared',
+              widgetId: props.widgetId
             })
-            console.error('Error publishing selection message', error)
+          } catch (error) {
+            debugLogger.log('RESULTS-MODE', {
+              event: 'remove-mode-clear-selection-error',
+              widgetId: props.widgetId,
+              error: error instanceof Error ? error.message : 'Unknown error'
+            })
           }
         }
         
-        // Update result count - use merged count for "Add to" mode, query count for "New" mode
-        if (resultsMode === SelectionType.AddToSelection) {
+        // Update result count
+        // For "Add to" and "Remove from" modes, use accumulated/remaining count
+        // For "New" mode, use query count
+        if (resultsMode === SelectionType.AddToSelection || resultsMode === SelectionType.RemoveFromSelection) {
           setResultCount(recordsToDisplay.length)
         } else {
           setResultCount(queryResultCount)
@@ -1251,22 +1381,62 @@ export function QueryTask (props: QueryTaskProps) {
                         size="sm"
                         variant={resultsMode === SelectionType.RemoveFromSelection ? 'contained' : 'outlined'}
                         color={resultsMode === SelectionType.RemoveFromSelection ? 'primary' : 'default'}
+                        disabled={!accumulatedRecords || accumulatedRecords.length === 0}
                         onClick={() => {
                           const newMode = SelectionType.RemoveFromSelection
+                          const previousMode = resultsMode || SelectionType.NewSelection
+                          
                           debugLogger.log('RESULTS-MODE', {
                             event: 'button-mode-changed',
                             widgetId: props.widgetId,
                             queryItemConfigId: queryItem.configId,
-                            previousMode: resultsMode || SelectionType.NewSelection,
+                            previousMode,
                             newMode,
+                            accumulatedRecordsCount: accumulatedRecords?.length || 0,
                             timestamp: new Date().toISOString()
                           })
+                          
+                          // If switching FROM "New" TO "Remove from" mode and we have current results,
+                          // merge them with existing accumulated records before changing mode
+                          // (same pattern as "Add to" mode)
+                          if (previousMode === SelectionType.NewSelection && 
+                              newMode === SelectionType.RemoveFromSelection &&
+                              recordsRef.current && 
+                              recordsRef.current.length > 0 &&
+                              outputDS &&
+                              onAccumulatedRecordsChange) {
+                            const currentRecords = recordsRef.current as FeatureDataRecord[]
+                            const existingAccumulated = accumulatedRecords || []
+                            
+                            // Merge current results with existing accumulated records
+                            const mergedRecords = mergeResultsIntoAccumulated(
+                              outputDS as FeatureLayerDataSource,
+                              currentRecords,
+                              existingAccumulated
+                            )
+                            
+                            debugLogger.log('RESULTS-MODE', {
+                              event: 'capturing-current-results-on-mode-switch-to-remove',
+                              widgetId: props.widgetId,
+                              previousMode,
+                              newMode,
+                              currentRecordsCount: currentRecords.length,
+                              existingAccumulatedCount: existingAccumulated.length,
+                              mergedRecordsCount: mergedRecords.length
+                            })
+                            
+                            onAccumulatedRecordsChange(mergedRecords)
+                          }
+                          
                           if (onResultsModeChange) {
                             onResultsModeChange(newMode)
                           }
                         }}
                         aria-pressed={resultsMode === SelectionType.RemoveFromSelection}
                         aria-label={`${getI18nMessage('removeFromCurrentResults')}: ${getI18nMessage('resultsModeDesc').split('\n')[3]?.trim() || ''}`}
+                        title={(!accumulatedRecords || accumulatedRecords.length === 0) 
+                          ? getI18nMessage('resultsModeDisabledRemove')
+                          : getI18nMessage('removeFromCurrentResults')}
                         title={getI18nMessage('removeFromCurrentResults')}
                         disabled={false} // TODO: Disable when accumulatedCount === 0
                         css={css`
