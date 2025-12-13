@@ -6,7 +6,7 @@
  * To increment: Update RELEASE_NUMBER (e.g., 001 -> 002) before building.
  */
 const BASE_VERSION = '1.19.0'
-const RELEASE_NUMBER = '012' // Increment this on each build (001, 002, 003, ...)
+const RELEASE_NUMBER = '014' // Increment this on each build (001, 002, 003, ...)
 
 export const WIDGET_VERSION = `${BASE_VERSION}-r${RELEASE_NUMBER}`
 

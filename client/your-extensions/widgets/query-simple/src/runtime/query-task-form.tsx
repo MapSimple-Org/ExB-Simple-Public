@@ -486,10 +486,13 @@ export function QueryTaskForm (props: QueryTaskItemProps) {
             <div 
               role='group' 
               className='px-4' 
-              css={css`padding-top: 4px;`}
+              css={css`padding-top: 2px;`}
               aria-label={attributeFilterLabel}
             >
-              <div className={classNames('form-title my-2 d-flex align-items-center', { 'd-none': !attributeFilterLabel && !attributeFilterDesc })}>
+              <div className={classNames('form-title d-flex align-items-center', { 'd-none': !attributeFilterLabel && !attributeFilterDesc })} css={css`
+                margin-top: 0;
+                margin-bottom: 4px;
+              `}>
                 {attributeFilterLabel && <div className='mr-2 title2'>{attributeFilterLabel}</div>}
                 {attributeFilterDesc && (
                   <Tooltip placement='bottom' css={css`white-space: pre-line;`} title={attributeFilterDesc}>
@@ -498,13 +501,15 @@ export function QueryTaskForm (props: QueryTaskItemProps) {
                 )}
               </div>
               {originDS && (
-                <SqlExpressionRuntime
-                  key={`${configId}-${initialInputValue || 'default'}`}
-                  widgetId={widgetId}
-                  dataSource={originDS}
-                  expression={attributeFilterSqlExprObj}
-                  onChange={handleSqlExprObjChange}
-                />
+                <div css={css`margin: -10px 0px;`}>
+                  <SqlExpressionRuntime
+                    key={`${configId}-${initialInputValue || 'default'}`}
+                    widgetId={widgetId}
+                    dataSource={originDS}
+                    expression={attributeFilterSqlExprObj}
+                    onChange={handleSqlExprObjChange}
+                  />
+                </div>
               )}
             </div>
           )}
