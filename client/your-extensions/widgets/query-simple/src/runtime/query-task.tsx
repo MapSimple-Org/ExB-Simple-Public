@@ -168,6 +168,8 @@ export function QueryTask (props: QueryTaskProps) {
   const previousConfigIdRef = React.useRef<string>(queryItem.configId)
   // Track manual tab switches to prevent auto-switch useEffect from interfering
   const manualTabSwitchRef = React.useRef(false)
+  // Track when a query was just executed - only auto-switch after query execution completes
+  const queryJustExecutedRef = React.useRef(false)
   // Store the last runtime zoom override value from the form for use by Add to Map action
   const lastRuntimeZoomToSelectedRef = React.useRef<boolean | undefined>(undefined)
   // Error states for user-facing errors
@@ -224,23 +226,27 @@ export function QueryTask (props: QueryTaskProps) {
 
 
   // Watch for when results are ready and switch to Results tab
-  // This ensures we wait for React to render results, not just for the query to complete
-  // This approach matches the behavior of manual input where results are rendered before tab switch
+  // ONLY auto-switch when a query was just executed and results are loaded
   React.useEffect(() => {
     // Don't auto-switch if user manually switched tabs
     if (manualTabSwitchRef.current) {
       return
     }
     
-    // Only switch tabs if:
-    // 1. We have results (resultCount > 0)
-    // 2. Records are actually loaded (recordsRef.current has data)
-    // 3. We're in results stage (stage === 1)
+    // ONLY auto-switch when:
+    // 1. A query was just executed (queryJustExecutedRef.current === true)
+    // 2. We have results (resultCount > 0)
+    // 3. Records are actually loaded (recordsRef.current has data)
     // 4. We're currently on the query tab (don't switch if already on results)
-    if (resultCount > 0 && recordsRef.current && recordsRef.current.length > 0 && stage === 1 && activeTab === 'query') {
+    if (queryJustExecutedRef.current && 
+        resultCount > 0 && 
+        recordsRef.current && 
+        recordsRef.current.length > 0 && 
+        activeTab === 'query') {
       setActiveTab('results')
+      queryJustExecutedRef.current = false // Reset after switching
     }
-  }, [resultCount, stage, activeTab])
+  }, [resultCount, activeTab])
 
   // Verify dropdowns are synchronized with hash parameter when present
   // This is especially important for grouped queries where dropdowns need to be synchronized
@@ -965,8 +971,8 @@ export function QueryTask (props: QueryTaskProps) {
           spatialFilter.layer.removeAll()
         }
         setStage(1)
-        // Tab switching is now handled by useEffect that watches for resultCount, recordsRef.current, and stage
-        // This ensures we wait for React to actually render results before switching tabs
+        queryJustExecutedRef.current = true // Mark that query just executed - this will trigger auto-switch
+        // Tab switching is now handled by useEffect that watches for queryJustExecutedRef and results
         // This matches the behavior of manual input where results are rendered before tab switch
       })
   }, [currentItem, queryItem, props.widgetId, outputDS, defaultPageSize, pagingTypeInConfig, lazyLoadInitialPageSize, publishDataClearedMsg, clearResult, resultsMode, accumulatedRecords, onAccumulatedRecordsChange])
@@ -1254,32 +1260,41 @@ export function QueryTask (props: QueryTaskProps) {
             
             {/* Results Mode Button Group - Always show, regardless of query count */}
             <div css={css`
-                    padding: 4px 16px 4px 16px;
+                    padding: 8px 16px;
                     flex-shrink: 0;
                   `}>
-                    <div className="d-flex align-items-center mb-1">
-                      <div className="mr-2 title2" css={css`
+                    <div className="d-flex align-items-center" css={css`
+                      gap: 0.5rem;
+                      flex-wrap: nowrap;
+                    `}>
+                      {/* Results label and info button */}
+                      <div className="title2" css={css`
                         font-size: 0.875rem;
                         font-weight: 500;
                         color: var(--sys-color-text-primary);
+                        white-space: nowrap;
+                        flex-shrink: 0;
                       `}>
                         {getI18nMessage('results')}:
                       </div>
                       <Tooltip placement='bottom' css={css`white-space: pre-line;`} title={getI18nMessage('resultsModeDesc')}>
-                        <Button size='sm' icon type='tertiary' aria-label={getI18nMessage('resultsModeDesc')}>
+                        <Button size='sm' icon type='tertiary' aria-label={getI18nMessage('resultsModeDesc')} css={css`flex-shrink: 0;`}>
                           <InfoOutlined color='var(--sys-color-primary-main)' size='s'/>
                         </Button>
                       </Tooltip>
-                    </div>
-                    <div 
-                      role="radiogroup"
-                      aria-label={getI18nMessage('resultsMode')}
-                      css={css`
-                        display: flex;
-                        gap: 4px;
-                        align-items: stretch;
-                      `}
-                    >
+                      
+                      {/* Mode buttons */}
+                      <div 
+                        role="radiogroup"
+                        aria-label={getI18nMessage('resultsMode')}
+                        css={css`
+                          display: flex;
+                          gap: 4px;
+                          align-items: stretch;
+                          flex: 1;
+                          min-width: 0;
+                        `}
+                      >
                       <Button
                         size="sm"
                         variant={resultsMode === SelectionType.NewSelection ? 'contained' : 'outlined'}
@@ -1452,6 +1467,7 @@ export function QueryTask (props: QueryTaskProps) {
                       >
                         {getI18nMessage('resultsModeRemove')}
                       </Button>
+                      </div>
                     </div>
                     <div 
                       id={`results-mode-description-${props.widgetId}`}
