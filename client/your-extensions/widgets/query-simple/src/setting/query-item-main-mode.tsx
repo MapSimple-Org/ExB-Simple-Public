@@ -74,6 +74,7 @@ export function QueryItemSettingMain (props: Props) {
   const [searchAliasValue, setSearchAliasValue] = React.useState('')
   const [shortIdValue, setShortIdValue] = React.useState('')
   const [groupIdValue, setGroupIdValue] = React.useState('')
+  const [displayOrderValue, setDisplayOrderValue] = React.useState('')
   const currentItem = Object.assign({}, DEFAULT_QUERY_ITEM, queryItem)
   const stageChangeTrigger = React.useRef<HTMLElement>(undefined)
   const useDataSources = currentItem.useDataSource != null ? Immutable([currentItem.useDataSource]) : undefined
@@ -110,6 +111,14 @@ export function QueryItemSettingMain (props: Props) {
       setGroupIdValue('')
     }
   }, [queryItem?.groupId, queryItem?.configId])
+
+  React.useEffect(() => {
+    if (queryItem?.order !== undefined && queryItem.order !== null) {
+      setDisplayOrderValue(queryItem.order.toString())
+    } else {
+      setDisplayOrderValue('')
+    }
+  }, [queryItem?.order, queryItem?.configId])
 
   React.useEffect(() => {
     if (visible && stageChangeTrigger.current) {
@@ -301,6 +310,37 @@ export function QueryItemSettingMain (props: Props) {
                   }}
                   placeholder='e.g., Parcel Number, Major'
                 />
+              </SettingRow>
+            </SettingSection>
+            <SettingSection role='group' aria-label={getI18nMessage('displayOrder')} title={getI18nMessage('displayOrder')}>
+              <SettingRow flow='wrap' label={getI18nMessage('displayOrder')}>
+                <TextInput
+                  aria-label={getI18nMessage('displayOrder')}
+                  className='w-100'
+                  size='sm'
+                  type='number'
+                  value={displayOrderValue}
+                  onChange={(e) => { setDisplayOrderValue(e.target.value) }}
+                  onAcceptValue={(value) => {
+                    const trimmedValue = value.trim()
+                    const numValue = trimmedValue ? parseInt(trimmedValue, 10) : null
+                    if (numValue !== null && !isNaN(numValue)) {
+                      updateProperty('order', numValue)
+                    } else {
+                      updateProperty('order', null)
+                      setDisplayOrderValue('')
+                    }
+                  }}
+                  placeholder='e.g., 1, 2, 3'
+                />
+                <div css={css`
+                  font-size: 0.75rem;
+                  color: var(--dark-400);
+                  margin-top: 0.25rem;
+                  line-height: 1.4;
+                `}>
+                  {getI18nMessage('displayOrderDescription')}
+                </div>
               </SettingRow>
             </SettingSection>
             <AttributeFilterSetting

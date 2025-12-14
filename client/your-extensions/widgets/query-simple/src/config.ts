@@ -169,6 +169,8 @@ export interface QueryItemType {
   searchAlias?: string
   shortId?: string
   zoomToSelected?: boolean
+  // Display order (lower numbers appear first, optional)
+  order?: number
 }
 
 export interface SizeMap {
