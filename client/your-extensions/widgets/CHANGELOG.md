@@ -112,6 +112,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - **Remove Button**: Changed from X icon (20x20px) to trash icon (32x32px) for better touch targets
   - **Expand/Collapse Button**: Increased size to 32x32px with larger icons for better usability
   - **Reduced Padding**: Changed feature-info component from 8px to 4px padding for more compact design
+- **Hash Parameter Info Button (v1.19.0-r016.5)**: Added info button next to layer title showing hash parameter search options
+  - Displays info button when queries from the same layer have shortIds configured
+  - Tooltip shows all available shortIds for that layer with usage examples
+  - Format: "This layer can be searched using the shortIds pin and major using #shortId=value in the URL"
+  - Example: "Parcel number: #pin=value"
 
 ### Technical Details
 
