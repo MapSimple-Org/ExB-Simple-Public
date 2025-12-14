@@ -100,6 +100,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Only resets scroll on new query (resultCount change)
   - Clamps scroll position to valid range to prevent browser resets
   - Uses useLayoutEffect for synchronous scroll restoration before paint
+- **SimpleList Implementation (v1.19.0-r016)**: Switched from lazy loading to simple list rendering
+  - Forces `PagingType.Simple` everywhere (ignores config)
+  - Removed lazy loading complexity and edge cases
+  - Query execution fetches all records (up to maxRecordCount) instead of paginated
+  - Much more stable and easier to maintain
+- **Race Condition Fix (v1.19.0-r016.1)**: Fixed `feature-info.tsx` error when component unmounts during async module loading
+  - Added null check before appending DOM elements
+  - Prevents `Cannot read properties of null` errors
+- **UI Improvements (v1.19.0-r016.2-016.4)**:
+  - **Remove Button**: Changed from X icon (20x20px) to trash icon (32x32px) for better touch targets
+  - **Expand/Collapse Button**: Increased size to 32x32px with larger icons for better usability
+  - **Reduced Padding**: Changed feature-info component from 8px to 4px padding for more compact design
 
 ### Technical Details
 

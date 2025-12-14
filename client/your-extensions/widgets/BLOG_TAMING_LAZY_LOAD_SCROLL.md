@@ -1,11 +1,15 @@
-# Taming the Lazy Load: Preserving Scroll Position in Dynamic Lists
+# Opting for Simple over Lazy: Why We Switched from Lazy Loading to Simple List Rendering
 
 **Status:** ✅ Complete  
 **Date:** December 2025  
 **Widget:** QuerySimple for ArcGIS Experience Builder  
-**Version:** v1.19.0-r012
+**Version:** v1.19.0-r016
 
-## The Problem
+## The Journey: From Lazy Loading to Simple Rendering
+
+This blog post documents our journey from trying to fix lazy loading issues to ultimately deciding that **simple is better**. We started by attempting to preserve scroll position in lazy-loaded lists, but after encountering numerous edge cases and complexity, we made the pragmatic decision to switch to rendering all records at once - a much simpler and more reliable approach.
+
+## The Original Problem
 
 When users removed records from the middle of a lazy-loaded results list, the scroll position would reset to the top. This was a frustrating UX issue - users would scroll down, remove a record, and suddenly find themselves back at the top of the list, losing their place.
 
@@ -235,15 +239,61 @@ React.useEffect(() => {
 }, [resultCount])
 ```
 
+## The Pivot: Why We Switched to SimpleList
+
+After implementing scroll preservation fixes for lazy loading, we continued to encounter edge cases and complexity:
+
+- Scroll position would still reset occasionally ("every now and then")
+- Expand/collapse state management was complex with lazy loading
+- Record removal required careful state synchronization
+- Multiple data sources in accumulation mode added complexity
+- The "spinny thing" (loading indicator) appeared unnecessarily when scrolling
+
+### The Decision: Simple Over Lazy
+
+We made the pragmatic decision: **Force SimpleList everywhere and remove lazy loading entirely.**
+
+**Why SimpleList is Better:**
+- ✅ **Simpler code**: No complex scroll preservation logic needed
+- ✅ **Fewer bugs**: No edge cases with scroll position, expand/collapse, or record removal
+- ✅ **Better UX**: No loading indicators, instant rendering, predictable behavior
+- ✅ **Easier to maintain**: Less state management, fewer moving parts
+- ✅ **Works reliably**: No race conditions or timing issues
+
+**Trade-offs:**
+- ⚠️ **Performance**: Renders all records at once (but modern browsers handle 1000+ records easily)
+- ⚠️ **Memory**: All records in DOM (but acceptable for typical use cases)
+
+### Implementation
+
+We forced `PagingType.Simple` in the runtime code, ignoring widget configuration:
+
+```typescript
+// FORCE SimpleList - ignore config, we're done with lazy loading issues
+const pagingType = PagingType.Simple
+```
+
+We also updated query execution to fetch all records (up to maxRecordCount) instead of just a page:
+
+```typescript
+// Fetch ALL records, not just a page
+const maxRecordCount = (featureDS as any).getMaxRecordCount?.() ?? 10000
+let pageSize = maxRecordCount
+```
+
+**Result:** Way fewer issues. Way easier to deal with. Much more stable.
+
 ## Related Files
 
-- `query-simple/src/runtime/lazy-list.tsx` - Lazy loading component with scroll preservation
-- `query-simple/src/runtime/query-result.tsx` - Results display component
-- `query-simple/src/runtime/paging-list.tsx` - Pagination component (similar pattern)
+- `query-simple/src/runtime/simple-list.tsx` - Simple list component (renders all records)
+- `query-simple/src/runtime/query-result.tsx` - Results display component (forces SimpleList)
+- `query-simple/src/runtime/query-task.tsx` - Query execution (fetches all records)
 
 ## Conclusion
 
-Preserving scroll position in dynamic lists requires careful separation of concerns and understanding React's render cycle. By using `useLayoutEffect` for synchronous DOM updates and clamping scroll positions to valid ranges, we achieved a smooth user experience that maintains context even when content changes.
+While we initially tried to fix lazy loading scroll issues with complex scroll preservation logic, we ultimately realized that **simple is better**. By switching to SimpleList and rendering all records at once, we eliminated countless edge cases and complexity, resulting in a much more stable and maintainable solution.
 
-The key is recognizing that **not all state changes should reset scroll** - only intentional user actions (like new queries) should reset, while filtering and removal should preserve the user's place in the list.
+**Key Takeaway:** Sometimes the best solution is to simplify, not to add more complexity. Lazy loading seemed like a good idea for performance, but the complexity it introduced wasn't worth it. SimpleList is easier to deal with, has way fewer issues, and provides a better user experience.
+
+The lesson: **Don't optimize prematurely.** Simple solutions are often better than complex ones, especially when the complexity introduces more problems than it solves.
 

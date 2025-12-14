@@ -27,8 +27,8 @@ import { Button, Icon, Tooltip, DataActionList, DataActionListStyle } from 'jimu
 import { getWidgetRuntimeDataMap } from './widget-config'
 import { type QueryItemType, FieldsType, PagingType, ListDirection, ResultSelectMode, SelectionType } from '../config'
 import defaultMessage from './translations/default'
-import { LazyList } from './lazy-list'
-import { PagingList } from './paging-list'
+// FORCED: Always SimpleList - LazyList and PagingList removed
+import { SimpleList } from './simple-list'
 import { combineFields } from './query-utils'
 import { DEFAULT_QUERY_ITEM } from '../default-query-item'
 import { ArrowLeftOutlined } from 'jimu-icons/outlined/directional/arrow-left'
@@ -141,7 +141,20 @@ export function QueryTaskResult (props: QueryTasResultProps) {
   
   const currentItem = Object.assign({}, DEFAULT_QUERY_ITEM, queryItem)
   const [expandAll, setExpandAll] = React.useState(currentItem.resultExpandByDefault ?? false)
+  // Track individual item expansion states to maintain state when items are removed
+  const [itemExpandStates, setItemExpandStates] = React.useState<Map<string, boolean>>(new Map())
   const backBtnRef = React.useRef<HTMLButtonElement>(undefined)
+  
+  // Track expandAll changes for debugging
+  React.useEffect(() => {
+    debugLogger.log('RESULTS-MODE', {
+      event: 'expandAll-state-changed',
+      widgetId,
+      expandAll,
+      queryItemConfigId: queryItem.configId,
+      timestamp: Date.now()
+    })
+  }, [expandAll, widgetId, queryItem.configId])
   // Track if we've already selected these records to prevent re-selection when switching tabs
   const hasSelectedRef = React.useRef(false)
   // Track the last records we selected to detect when new records come in
@@ -177,7 +190,8 @@ export function QueryTaskResult (props: QueryTasResultProps) {
     const widgetJson = state.appConfig.widgets[widgetId]
     return widgetJson.config.resultListDirection
   })
-  const pagingType = pagingTypeInConfig ?? PagingType.MultiPage
+  // FORCE SimpleList - ignore config, we're done with lazy loading issues
+  const pagingType = PagingType.Simple
   const direction = directionTypeInConfig ?? ListDirection.Vertical
 
   // Group records by origin data source for DataActionList
@@ -433,8 +447,19 @@ export function QueryTaskResult (props: QueryTasResultProps) {
 
   // Update expandAll when queryItem changes (e.g., switching between queries)
   React.useEffect(() => {
-    setExpandAll(currentItem.resultExpandByDefault ?? false)
-  }, [queryItem.configId, queryItem.resultExpandByDefault])
+    const newExpandAll = currentItem.resultExpandByDefault ?? false
+    debugLogger.log('RESULTS-MODE', {
+      event: 'expandAll-reset-by-queryItem-change',
+      widgetId,
+      queryItemConfigId: queryItem.configId,
+      resultExpandByDefault: currentItem.resultExpandByDefault,
+      newExpandAll,
+      timestamp: Date.now()
+    })
+    setExpandAll(newExpandAll)
+    // Reset individual expansion states when query changes
+    setItemExpandStates(new Map())
+  }, [queryItem.configId, queryItem.resultExpandByDefault, widgetId])
 
   /**
    * Monitor origin data source selection changes to detect when other widgets (like map identify)
@@ -614,6 +639,16 @@ export function QueryTaskResult (props: QueryTasResultProps) {
   }
 
   const handleRenderDone = React.useCallback(({ dataItems, pageSize, page }) => {
+    console.log('[QueryResult] handleRenderDone called', {
+      event: 'handleRenderDone-called',
+      widgetId,
+      queryItemConfigId: queryItem.configId,
+      dataItemsCount: dataItems?.length || 0,
+      pageSize,
+      page,
+      timestamp: Date.now()
+    })
+    
     // Use ref to get latest removedRecordIds (avoids stale closure issues with lazy loading)
     const currentRemovedIds = removedRecordIdsRef.current
     
@@ -709,7 +744,8 @@ export function QueryTaskResult (props: QueryTasResultProps) {
       selectedIdsFromDS: selectedIds.length,
       currentSelectedRecordsState: selectedRecords?.length || 0,
       recordsPropCount: recordsProp?.length || 0,
-      removedRecordIdsCount: removedRecordIds.size
+      removedRecordIdsCount: removedRecordIds.size,
+      timestamp: Date.now()
     })
     
     // If we have records in the prop (accumulated records) but DS shows 0 selected,
@@ -762,12 +798,23 @@ export function QueryTaskResult (props: QueryTasResultProps) {
         newCount: filteredDsRecords.length,
         note: 'filtered-out-removed-records'
       })
+      debugLogger.log('RESULTS-MODE', {
+        event: 'handleDataSourceInfoChange-updating-selectedRecords',
+        widgetId: widgetId,
+        oldCount: selectedRecords?.length || 0,
+        newCount: filteredDsRecords.length,
+        oldSelectedIds: (selectedRecords || []).map(r => r.getId()).slice(0, 5),
+        newSelectedIds: filteredSelectedIds.slice(0, 5),
+        note: 'filtered-out-removed-records',
+        timestamp: Date.now()
+      })
       setSelectedRecords(filteredDsRecords)
     } else {
       debugLogger.log('RESULTS-MODE', {
         event: 'handleDataSourceInfoChange-skipping-update',
         widgetId: widgetId,
-        reason: 'no-change-detected'
+        reason: 'no-change-detected',
+        timestamp: Date.now()
       })
     }
   }, [outputDS?.id, selectedRecords, widgetId, records, removedRecordIds])
@@ -784,9 +831,8 @@ export function QueryTaskResult (props: QueryTasResultProps) {
       const displayedRecords = queryData.records.filter((record: DataRecord) => !removedRecordIds.has(record.getId()))
       const displayedCount = displayedRecords.length
       
-      if (pagingType === PagingType.LazyLoad) {
-        return `${getI18nMessage('featuresDisplayed')}: ${displayedCount} / ${resultCount}`
-      }
+      // FORCED: Always SimpleList, so always use simple display format
+      return `${getI18nMessage('featuresDisplayed')}: ${displayedCount} / ${resultCount}`
       const { page = 1, pageSize = defaultPageSize } = queryData
       const from = (page - 1) * pageSize + 1
       const to = from + pageSize - 1
@@ -801,10 +847,41 @@ export function QueryTaskResult (props: QueryTasResultProps) {
   /**
    * Toggles expand/collapse state for all result items.
    * When toggled, all result items will be expanded or collapsed together.
+   * Updates individual item expansion states in the map to maintain state when items are removed.
    */
   const toggleExpandAll = React.useCallback(() => {
-    setExpandAll(prev => !prev)
-  }, [])
+    setExpandAll(prev => {
+      const newValue = !prev
+      debugLogger.log('EXPAND-COLLAPSE', {
+        event: 'toggleExpandAll-clicked',
+        widgetId,
+        previousValue: prev,
+        newValue,
+        timestamp: Date.now()
+      })
+      
+      // Update all current items in the map with the new expansion state
+      setItemExpandStates(prevMap => {
+        const newMap = new Map(prevMap)
+        // Get all current record IDs from filtered records
+        const allRecordIds = filteredRecordsForList.map(r => r.getId())
+        allRecordIds.forEach(id => {
+          newMap.set(id, newValue)
+        })
+        debugLogger.log('EXPAND-COLLAPSE', {
+          event: 'itemExpandStates-updated',
+          widgetId,
+          newValue,
+          updatedCount: allRecordIds.length,
+          recordIds: allRecordIds.slice(0, 10), // Log first 10 IDs
+          timestamp: Date.now()
+        })
+        return newMap
+      })
+      
+      return newValue
+    })
+  }, [widgetId, filteredRecordsForList])
 
   const resultUseOutputDataSource = React.useMemo(() => {
     return Immutable({
@@ -874,15 +951,67 @@ export function QueryTaskResult (props: QueryTasResultProps) {
    */
   const removeRecord = React.useCallback((data: FeatureDataRecord) => {
     const dataId = data.getId()
+    const currentExpandAll = expandAll
+    
+    debugLogger.log('EXPAND-COLLAPSE', {
+      event: 'removeRecord-started',
+      widgetId,
+      removedRecordId: dataId,
+      currentExpandAll,
+      timestamp: Date.now()
+    })
+    
+    // Remove from expansion states map
+    setItemExpandStates(prevMap => {
+      const newMap = new Map(prevMap)
+      newMap.delete(dataId)
+      debugLogger.log('EXPAND-COLLAPSE', {
+        event: 'itemExpandStates-cleaned-up',
+        widgetId,
+        removedRecordId: dataId,
+        remainingCount: newMap.size,
+        timestamp: Date.now()
+      })
+      return newMap
+    })
     
     // Add to removed records set
     setRemovedRecordIds(prev => {
       const newSet = new Set(prev).add(dataId)
       
       // If all records are now removed, clear everything by calling trash can logic
-      // Check: if the new set size equals the total result count, all records are removed
-      if (newSet.size === resultCount) {
-        // All records removed - clear everything (same as clicking trash can button)
+      // IMPORTANT: Compare against actual displayed records count, not resultCount
+      // resultCount only reflects the latest query, but in "Add to" mode we display accumulated records
+      // Use queryData.records.length (before filtering) as the source of truth for displayed records
+      // Fall back to accumulatedRecords.length if in accumulation mode, or resultCount as last resort
+      let currentDisplayedCount = queryData?.records?.length || 0
+      if (currentDisplayedCount === 0) {
+        // If queryData doesn't have records yet, check if we're in accumulation mode
+        const isAccumulationMode = resultsMode === SelectionType.AddToSelection || 
+                                   resultsMode === SelectionType.RemoveFromSelection
+        if (isAccumulationMode && accumulatedRecords && accumulatedRecords.length > 0) {
+          currentDisplayedCount = accumulatedRecords.length
+        } else {
+          // Last resort: use resultCount (but this might be incorrect in accumulation mode)
+          currentDisplayedCount = resultCount
+        }
+      }
+      
+      debugLogger.log('RESULTS-MODE', {
+        event: 'removeRecord-checking-all-removed',
+        widgetId,
+        removedRecordIdsSize: newSet.size,
+        currentDisplayedCount,
+        resultCount,
+        queryDataRecordsCount: queryData?.records?.length || 0,
+        accumulatedRecordsCount: accumulatedRecords?.length || 0,
+        resultsMode,
+        willNavigateBack: newSet.size === currentDisplayedCount && currentDisplayedCount > 0,
+        timestamp: Date.now()
+      })
+      
+      if (newSet.size === currentDisplayedCount && currentDisplayedCount > 0) {
+        // All displayed records removed - clear everything (same as clicking trash can button)
         onNavBack(true)
         return newSet
       }
@@ -952,7 +1081,21 @@ export function QueryTaskResult (props: QueryTasResultProps) {
       
       onAccumulatedRecordsChange(remainingRecords)
     }
-  }, [outputDS, widgetId, resultCount, onNavBack, resultsMode, accumulatedRecords, onAccumulatedRecordsChange, queryItem.configId])
+    
+    // Log after removeRecord completes to check if expandAll changed
+    setTimeout(() => {
+      debugLogger.log('RESULTS-MODE', {
+        event: 'removeRecord-completed',
+        widgetId,
+        removedRecordId: dataId,
+        expandAllBefore: currentExpandAll,
+        expandAllAfter: expandAll,
+        expandAllChanged: currentExpandAll !== expandAll,
+        expandByDefaultProp: expandAll, // What will be passed to SimpleList
+        timestamp: Date.now()
+      })
+    }, 0)
+  }, [outputDS, widgetId, resultCount, onNavBack, resultsMode, accumulatedRecords, onAccumulatedRecordsChange, queryItem.configId, expandAll])
 
   return (
     <div className='query-result h-100' css={resultStyle} role='listbox' aria-label={getI18nMessage('results')}>
@@ -1001,54 +1144,36 @@ export function QueryTaskResult (props: QueryTasResultProps) {
       <div className='query-result-container mt-1'>
         <div className='query-result-info mb-2 px-4 d-flex align-items-center justify-content-between' role='alert' aria-live='polite'>
           <span>{getTipMessage()}</span>
-          <Tooltip title={expandAll ? getI18nMessage('collapseAll') : getI18nMessage('expandAll')} placement='top'>
-            <Button
-              size='sm'
-              type='tertiary'
-              icon
-              onClick={toggleExpandAll}
-              aria-label={expandAll ? getI18nMessage('collapseAll') : getI18nMessage('expandAll')}
-            >
-              {expandAll ? <CollapseAllOutlined /> : <ExpandAllOutlined />}
-            </Button>
-          </Tooltip>
+          <div className='d-flex align-items-center'>
+            <Tooltip title={expandAll ? getI18nMessage('collapseAll') : getI18nMessage('expandAll')} placement='top'>
+              <Button
+                size='sm'
+                type='tertiary'
+                icon
+                onClick={toggleExpandAll}
+                aria-label={expandAll ? getI18nMessage('collapseAll') : getI18nMessage('expandAll')}
+              >
+                {expandAll ? <CollapseAllOutlined /> : <ExpandAllOutlined />}
+              </Button>
+            </Tooltip>
+          </div>
         </div>
-        {pagingType === PagingType.LazyLoad && resultCount > 0 && (
-          <LazyList
-            key={`lazy-${expandAll}`}
+        {/* FORCED: Always SimpleList - LazyLoad and MultiPage removed */}
+        {resultCount > 0 && (
+          <SimpleList
+            key='simple'
             widgetId={widgetId}
             queryItem={queryItem}
             outputDS={outputDS as any}
-            queryParams={queryParams}
-            resultCount={resultCount}
             records={filteredRecordsForList}
             direction={direction}
-            onRenderDone={handleRenderDone}
             onEscape={handleEscape}
             onSelectChange={toggleSelection}
             onRemove={removeRecord}
             expandByDefault={expandAll}
+            itemExpandStates={itemExpandStates}
             removedRecordIds={removedRecordIds}
-          />
-        )}
-        {pagingType === PagingType.MultiPage && resultCount > 0 && (
-          <PagingList
-            key={`paging-${expandAll}`}
-            widgetId={widgetId}
-            queryItem={queryItem}
-            outputDS={outputDS as any}
-            queryParams={queryParams}
-            resultCount={resultCount}
-            maxPerPage={maxPerPage}
-            records={filteredRecordsForList}
-            direction={direction}
             onRenderDone={handleRenderDone}
-            onEscape={handleEscape}
-            defaultPageSize={defaultPageSize}
-            onSelectChange={toggleSelection}
-            onRemove={removeRecord}
-            expandByDefault={expandAll}
-            removedRecordIds={removedRecordIds}
           />
         )}
       </div>

@@ -230,23 +230,74 @@ export function QueryTask (props: QueryTaskProps) {
   React.useEffect(() => {
     // Don't auto-switch if user manually switched tabs
     if (manualTabSwitchRef.current) {
+      debugLogger.log('TASK', {
+        event: 'auto-switch-skipped',
+        reason: 'manual-tab-switch-flag-set',
+        widgetId: props.widgetId,
+        queryItemConfigId: queryItem.configId,
+        activeTab,
+        resultCount,
+        queryJustExecutedRef: queryJustExecutedRef.current,
+        timestamp: Date.now()
+      })
       return
     }
+    
+    // FORCED: Always use SimpleList - we're done with lazy loading issues
+    // Records are available immediately, so we can switch as soon as resultCount > 0
+    const isSimpleList = true
     
     // ONLY auto-switch when:
     // 1. A query was just executed (queryJustExecutedRef.current === true)
     // 2. We have results (resultCount > 0)
-    // 3. Records are actually loaded (recordsRef.current has data)
+    // 3. Records are actually loaded:
+    //    - For SimpleList: resultCount > 0 is sufficient (records available immediately)
+    //    - For LazyLoad: recordsRef.current must have data (wait for lazy loading)
     // 4. We're currently on the query tab (don't switch if already on results)
+    const hasRecords = isSimpleList 
+      ? resultCount > 0 
+      : (recordsRef.current && recordsRef.current.length > 0)
+    
+    debugLogger.log('TASK', {
+      event: 'auto-switch-check',
+      widgetId: props.widgetId,
+      queryItemConfigId: queryItem.configId,
+      activeTab,
+      resultCount,
+      queryJustExecutedRef: queryJustExecutedRef.current,
+      isSimpleList,
+      pagingTypeInConfig,
+      hasRecords,
+      recordsRefLength: recordsRef.current?.length || 0,
+      manualTabSwitchRef: manualTabSwitchRef.current,
+      willAutoSwitch: queryJustExecutedRef.current && resultCount > 0 && hasRecords && activeTab === 'query',
+      timestamp: Date.now()
+    })
+    
     if (queryJustExecutedRef.current && 
         resultCount > 0 && 
-        recordsRef.current && 
-        recordsRef.current.length > 0 && 
+        hasRecords && 
         activeTab === 'query') {
+      debugLogger.log('TASK', {
+        event: 'auto-switch-triggered',
+        widgetId: props.widgetId,
+        queryItemConfigId: queryItem.configId,
+        fromTab: activeTab,
+        toTab: 'results',
+        resultCount,
+        timestamp: Date.now()
+      })
       setActiveTab('results')
       queryJustExecutedRef.current = false // Reset after switching
+      debugLogger.log('TASK', {
+        event: 'auto-switch-completed',
+        widgetId: props.widgetId,
+        queryItemConfigId: queryItem.configId,
+        queryJustExecutedRefReset: queryJustExecutedRef.current,
+        timestamp: Date.now()
+      })
     }
-  }, [resultCount, activeTab])
+  }, [resultCount, activeTab, pagingTypeInConfig])
 
   // Verify dropdowns are synchronized with hash parameter when present
   // This is especially important for grouped queries where dropdowns need to be synchronized
@@ -681,14 +732,10 @@ export function QueryTask (props: QueryTaskProps) {
       await publishDataClearedMsg()
     }
     
-    // Determine page size based on pagination style
-    // For single-page (LazyLoad) mode, use the configured initial page size (defaults to 100)
-    // For multi-page mode, use the default page size from props
-    let pageSize = defaultPageSize
-    if (pagingTypeInConfig === PagingType.LazyLoad) {
-      // Use configured lazy load initial page size, falling back to 100 if not set
-      pageSize = lazyLoadInitialPageSize ?? 100
-    }
+    // FORCED: Always use SimpleList - fetch ALL records, not just a page
+    // Use data source's max record count, or fall back to a large number (10000)
+    const maxRecordCount = (featureDS as any).getMaxRecordCount?.() ?? 10000
+    let pageSize = maxRecordCount
     const queryParams = generateQueryParams(featureDS, sqlExpr, spatialFilter, currentItem, 1, pageSize)
     queryParamRef.current = queryParams
     // Change output ds status to unloaded before use it to load count/records.
@@ -698,7 +745,8 @@ export function QueryTask (props: QueryTaskProps) {
     executeCountQuery(props.widgetId, featureDS, queryParams)
       .then((count) => {
         queryResultCount = count // Store count for use in finally block
-        setResultCount(count)
+        // Don't set resultCount here - wait until query completes and queryJustExecutedRef is set
+        // This ensures auto-switch useEffect runs with queryJustExecutedRef.current === true
         // update ds in order to execute query
         featureDS.updateQueryParams(queryParamRef.current, props.widgetId)
         return executeQuery(props.widgetId, queryItem, featureDS, queryParamRef.current)
@@ -905,14 +953,35 @@ export function QueryTask (props: QueryTaskProps) {
           }
         }
         
+        // Mark that query just executed BEFORE updating resultCount
+        // This ensures the auto-switch useEffect sees queryJustExecutedRef.current === true
+        queryJustExecutedRef.current = true
+        debugLogger.log('TASK', {
+          event: 'query-executed-flag-set',
+          widgetId: props.widgetId,
+          queryItemConfigId: queryItem.configId,
+          resultsMode,
+          recordsToDisplayCount: recordsToDisplay.length,
+          queryResultCount,
+          timestamp: Date.now()
+        })
+        
         // Update result count
         // For "Add to" and "Remove from" modes, use accumulated/remaining count
         // For "New" mode, use query count
-        if (resultsMode === SelectionType.AddToSelection || resultsMode === SelectionType.RemoveFromSelection) {
-          setResultCount(recordsToDisplay.length)
-        } else {
-          setResultCount(queryResultCount)
-        }
+        const newResultCount = resultsMode === SelectionType.AddToSelection || resultsMode === SelectionType.RemoveFromSelection
+          ? recordsToDisplay.length
+          : queryResultCount
+        
+        setResultCount(newResultCount)
+        debugLogger.log('TASK', {
+          event: 'result-count-set',
+          widgetId: props.widgetId,
+          queryItemConfigId: queryItem.configId,
+          newResultCount,
+          resultsMode,
+          timestamp: Date.now()
+        })
 
         // Trigger the existing zoomToFeature data action (same as clicking "Zoom To" in the menu)
         // Use runtime preference if provided, otherwise fall back to config setting (defaults to true)
@@ -971,7 +1040,7 @@ export function QueryTask (props: QueryTaskProps) {
           spatialFilter.layer.removeAll()
         }
         setStage(1)
-        queryJustExecutedRef.current = true // Mark that query just executed - this will trigger auto-switch
+        // queryJustExecutedRef.current is now set BEFORE setResultCount (moved up)
         // Tab switching is now handled by useEffect that watches for queryJustExecutedRef and results
         // This matches the behavior of manual input where results are rendered before tab switch
       })
