@@ -91,6 +91,7 @@ export enum ListDirection {
 export enum PagingType {
   MultiPage = 'MultiPage',
   LazyLoad = 'LazyLoad',
+  Simple = 'Simple', // Render all records at once, no lazy loading or pagination
 }
 
 export enum FieldsType {

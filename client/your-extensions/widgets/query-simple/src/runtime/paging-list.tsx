@@ -30,6 +30,8 @@ export interface PagingListProps {
   queryParams: QueryParams
   /** Whether result items should be expanded by default. Controlled by expand/collapse all button. */
   expandByDefault?: boolean
+  /** Map of individual item expansion states. Falls back to expandByDefault if not in map. */
+  itemExpandStates?: Map<string, boolean>
   onEscape: () => void
   direction?: ListDirection
   defaultPageSize?: number
@@ -188,19 +190,25 @@ export function PagingList (props: PagingListProps) {
   return (
     <div onKeyUp={handleKeyUp} onKeyDown={handleKeyDown} className={classNames({ vertical: direction === ListDirection.Vertical })} css={getStyle(isAutoHeight)}>
       <div className='list_items mb-2 px-4 py-1' role='listbox'>
-        {dataItems?.map((dataItem) => (
-          <QueryResultItem
-            key={dataItem.getId()}
-            data={dataItem as FeatureDataRecord}
-            dataSource={outputDS}
-            widgetId={widgetId}
-            popupTemplate={popupTemplate}
-            defaultPopupTemplate={defaultPopupTemplate}
-            expandByDefault={props.expandByDefault ?? true}
-            onClick={onSelectChange}
-            onRemove={onRemove}
-          />
-        ))}
+        {dataItems?.map((dataItem) => {
+          const recordId = dataItem.getId()
+          // Use individual state from map if available, otherwise fall back to expandByDefault
+          const individualExpandState = props.itemExpandStates?.get(recordId)
+          const expandByDefault = individualExpandState !== undefined ? individualExpandState : (props.expandByDefault ?? true)
+          return (
+            <QueryResultItem
+              key={recordId}
+              data={dataItem as FeatureDataRecord}
+              dataSource={outputDS}
+              widgetId={widgetId}
+              popupTemplate={popupTemplate}
+              defaultPopupTemplate={defaultPopupTemplate}
+              expandByDefault={expandByDefault}
+              onClick={onSelectChange}
+              onRemove={onRemove}
+            />
+          )
+        })}
       </div>
       {loadStatus === EntityStatusType.Loading && <Loading type={LoadingType.Donut}/>}
       {resultCount > 0 && (

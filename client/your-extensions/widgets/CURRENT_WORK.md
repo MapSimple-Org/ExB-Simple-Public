@@ -1,8 +1,9 @@
 # Current Work Status
 
-**Last Updated:** 2025-12-11 (Scroll Position Fix Complete)  
+**Last Updated:** 2025-12-14 (Release 016.4 - SimpleList Forced, UI Improvements)  
 **Branch:** `feature/results-management-modes`  
-**Developer:** Adam Cabrera
+**Developer:** Adam Cabrera  
+**Current Version:** v1.19.0-r016.4
 
 ## Active Work
 
@@ -61,9 +62,84 @@
   - Clamps scroll position to valid range to prevent browser resets
   - Release number incremented to r012
 
+### Latest Changes (Release 016.4)
+
+**Status:** ✅ **COMPLETE** - Build is stable and ready for testing
+
+#### SimpleList Implementation (Release 016)
+- ✅ **Forced SimpleList everywhere** - Removed lazy loading complexity
+  - Runtime code forces `PagingType.Simple` regardless of config
+  - Removed LazyLoad and MultiPage rendering blocks
+  - Removed unused imports (`LazyList`, `PagingList`)
+  - Query execution fetches all records (up to maxRecordCount) instead of paginated
+  - **Result:** Way fewer issues, way easier to deal with, much more stable
+
+#### UI Improvements (Release 016.2-016.4)
+- ✅ **Larger remove button** - Changed from X icon (20x20px) to trash icon (32x32px)
+  - Better touch targets for mobile devices
+  - Larger icon (18px instead of 14px)
+  - More padding (6px instead of 4px)
+- ✅ **Larger expand/collapse button** - Increased from default small to 32x32px
+  - Better touch targets
+  - Larger icon (size 'm' instead of 's')
+  - More padding for easier clicking
+- ✅ **Reduced padding** - Changed feature-info component from `p-2` (8px) to `p-1` (4px)
+  - More compact vertical spacing
+  - Better use of screen real estate
+
+#### Bug Fixes (Release 016.1)
+- ✅ **Race condition fix** - Added null check in `feature-info.tsx` to prevent errors when component unmounts during async module loading
+  - Prevents `Cannot read properties of null (reading 'appendChild')` errors
+  - Component checks if still mounted before appending DOM elements
+
+#### Current State
+- **Version:** v1.19.0-r016.4
+- **Build Status:** ✅ Stable and ready for testing
+- **Key Features:**
+  - SimpleList rendering (no lazy loading)
+  - Results Management Modes (New/Add/Remove) fully working
+  - Improved UI with larger, more touch-friendly buttons
+  - All records properly selected when adding from multiple sources
+  - Expand/collapse state persistence working
+  - Selection restoration working correctly
+
 ### Next Up
-- More testing with hash parameters and other edge cases
+- More testing with edge cases
+- Update settings UI to show Simple/MultiPage options (TODO #6)
 - Final code review
+
+## Rolled Back Changes (2025-12-12)
+
+### SimpleList Component
+- **Status:** Rolled back - documented for future implementation
+- **Reason:** Need to stabilize current implementation first
+- **Documentation:** See TODO.md entry #7 for details
+- **What Was Removed:**
+  - `query-simple/src/runtime/simple-list.tsx` (deleted)
+  - `PagingType.Simple` enum value from `config.ts`
+  - SimpleList rendering logic from `query-result.tsx`
+  - Default changed back to `PagingType.LazyLoad`
+
+### Refresh Button
+- **Status:** Rolled back - documented for future consideration
+- **Reason:** May not be needed with expand/collapse state persistence fix
+- **Documentation:** See TODO.md entry #8 for details
+- **What Was Removed:**
+  - `refreshKey` state and `handleRefresh` function from `query-result.tsx`
+  - Refresh button UI (RefreshOutlined icon and button)
+  - `refreshKey` from component keys (LazyList, PagingList)
+  - `refreshResults` translation
+
+### Expand/Collapse State Persistence
+- **Status:** ✅ **KEPT** - Working well
+- **Implementation:** Uses `itemExpandStates` Map to track individual item expansion states
+- **Files:** `query-result.tsx`, `lazy-list.tsx`, `paging-list.tsx`
+- **How It Works:**
+  - `itemExpandStates` Map tracks expansion state per record ID
+  - `toggleExpandAll` updates all current items in the map
+  - `removeRecord` cleans up removed items from the map
+  - `LazyList` and `PagingList` use individual states from map, falling back to `expandByDefault`
+  - Prevents state loss when items are removed or components remount
 
 ## Important Decisions Made
 - **Mode Persistence:** Mode persists across queries and clear operations (does NOT reset)
