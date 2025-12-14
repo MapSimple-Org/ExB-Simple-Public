@@ -1147,7 +1147,7 @@ export function QueryTask (props: QueryTaskProps) {
                     return `${queryName}: #${item.shortId}=value`
                   })
                   
-                  const tooltipTitle = `This layer can be searched using the shortIds ${sameLayerQueries.map(q => q.shortId).join(' and ')} using #shortId=value in the URL.\n\n${queryLines.join('\n')}\n\nExample: ${queryLines[0]}`
+                  const tooltipTitle = `This layer can be searched using the shortIds ${sameLayerQueries.map(q => q.shortId).join(' and ')} using #shortId=value in the URL.\n\n${queryLines.join('\n')}`
                   
                   return (
                     <Tooltip 

@@ -13,8 +13,11 @@ A powerful query widget that allows users to query feature layers with support f
 - Spatial filtering (buffer, draw, map extent)
 - Query grouping for organized query management
 - Hash parameter support for deep linking
+- Hash parameter info button (discoverable deep linking)
+- Display order for query prioritization
 - Result pagination (multi-page or lazy load)
 - Selection management and map integration
+- Results management modes (New, Add to, Remove from)
 - Custom data actions (Add to Map)
 - Debug logging for troubleshooting
 
@@ -130,6 +133,37 @@ Configure hash parameters for deep linking:
 2. **Usage**
    - `#pin=2223059013` - Execute query with shortId "pin" and value "2223059013"
    - `#major=12345` - Execute query with shortId "major" and value "12345"
+
+3. **Hash Parameter Info Button**
+   - An info button (ℹ️) appears next to layer titles when queries have shortIds configured
+   - Clicking the button shows a tooltip with all available shortIds for that layer
+   - Makes hash parameter search capability discoverable to end users
+   - Example tooltip: "This layer can be searched using the shortIds pin and major using #shortId=value in the URL"
+
+#### Display Order
+
+Prioritize queries without manually reordering or recreating them:
+
+1. **Set Display Order**
+   - In query configuration, set `order` (e.g., 1, 2, 3...)
+   - Lower numbers appear first
+   - Leave empty to maintain default order
+
+2. **Use Cases**
+   - **New Query at Top**: Set `order: 1` on a new query to make it appear first
+   - **Featured Queries**: Prioritize important queries with lower order numbers
+   - **Managing Many Queries**: When you have 15-20+ queries, easily reorder without config editing
+
+3. **Behavior**
+   - Queries with order values are sorted by order (lower numbers first)
+   - Queries without order maintain their original relative positions
+   - Default selection respects display order (selects query with lowest order value)
+
+**Example:**
+- Recent Sales: `order: 1` ← appears first and selected by default
+- Popular Trails: `order: 2` ← appears second
+- Parcels by PIN (no order) ← maintains original position
+- Parcels by Major (no order) ← maintains original position
 
 #### Result Display Options
 

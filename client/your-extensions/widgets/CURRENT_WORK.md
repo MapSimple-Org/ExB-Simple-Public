@@ -1,9 +1,9 @@
 # Current Work Status
 
-**Last Updated:** 2025-12-14 (Release 016.5 - Hash Parameter Info Button)  
+**Last Updated:** 2025-12-14 (Release 016.7 - Display Order & Hash Parameter Info)  
 **Branch:** `feature/results-management-modes`  
 **Developer:** Adam Cabrera  
-**Current Version:** v1.19.0-r016.5
+**Current Version:** v1.19.0-r016.7
 
 ## Active Work
 
@@ -62,18 +62,30 @@
   - Clamps scroll position to valid range to prevent browser resets
   - Release number incremented to r012
 
-### Latest Changes (Release 016.5)
+### Latest Changes (Release 016.7)
 
 **Status:** ✅ **COMPLETE** - Build is stable and ready for testing
 
-#### Hash Parameter Info Button (Release 016.5)
+#### Display Order Feature (Release 016.6-016.7)
+- ✅ **Optional display order field** - Allows prioritizing queries without recreating them
+  - Added `order?: number` field to `QueryItemType` config
+  - Number input in query item settings (optional field)
+  - Lower numbers appear first (e.g., order: 1, 2, 3...)
+  - Queries without order maintain their original relative positions
+  - Sorting applied before grouping and display
+  - Default selection respects display order (selects query with lowest order value)
+  - **Use Case:** When you have 15-20 queries and create a new one you want at the top, you can simply set its order to 1 instead of manually reordering in config or recreating all queries
+  - **Impact:** Small feature, big time-saver for managing many queries
+
+#### Hash Parameter Info Button (Release 016.5-016.6)
 - ✅ **Info button next to layer title** - Shows hash parameter search information
   - Appears when queries from the same layer have shortIds configured
   - Tooltip displays all available shortIds for that layer with usage examples
   - Format: "This layer can be searched using the shortIds pin and major using #shortId=value in the URL"
-  - Example: "Parcel number: #pin=value"
+  - Lists each query with its shortId: "Parcel number: #pin=value"
   - Only shows for layers with queries that have shortIds
   - Uses same InfoOutlined icon pattern as other info buttons
+  - **User Benefit:** Exposes hash parameter search capability to end users, making deep linking discoverable
 
 ### Previous Changes (Release 016.4)
 

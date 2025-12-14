@@ -112,11 +112,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - **Remove Button**: Changed from X icon (20x20px) to trash icon (32x32px) for better touch targets
   - **Expand/Collapse Button**: Increased size to 32x32px with larger icons for better usability
   - **Reduced Padding**: Changed feature-info component from 8px to 4px padding for more compact design
-- **Hash Parameter Info Button (v1.19.0-r016.5)**: Added info button next to layer title showing hash parameter search options
+- **Hash Parameter Info Button (v1.19.0-r016.5-016.6)**: Added info button next to layer title showing hash parameter search options
   - Displays info button when queries from the same layer have shortIds configured
   - Tooltip shows all available shortIds for that layer with usage examples
   - Format: "This layer can be searched using the shortIds pin and major using #shortId=value in the URL"
-  - Example: "Parcel number: #pin=value"
+  - Lists each query with its shortId: "Parcel number: #pin=value"
+  - Makes hash parameter search capability discoverable to end users
+- **Display Order Feature (v1.19.0-r016.6-016.7)**: Added optional display order field for query items
+  - Optional `order` number field in query item settings
+  - Lower numbers appear first (e.g., order: 1, 2, 3...)
+  - Queries without order maintain their original relative positions
+  - Default selection respects display order (selects query with lowest order value)
+  - Solves the problem of having to manually reorder queries in config or recreate them when you want a new query at the top
+  - Particularly valuable when managing 15-20+ queries
 
 ### Technical Details
 

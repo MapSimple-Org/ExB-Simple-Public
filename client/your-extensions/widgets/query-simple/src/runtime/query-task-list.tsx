@@ -29,6 +29,33 @@ interface GroupedQueries {
   groupOrder: string[]
 }
 
+// Helper function to sort queries by display order (lower numbers appear first)
+// Queries without order maintain their original relative positions
+function sortQueryItemsByOrder(queryItems: ImmutableArray<QueryItemType>): ImmutableArray<QueryItemType> {
+  // Handle null/undefined/empty cases
+  if (!queryItems || queryItems.length === 0) {
+    return queryItems || Immutable([])
+  }
+  
+  // Safely convert to regular array for sorting
+  // Handle both ImmutableArray (has toArray method) and regular arrays
+  const itemsArray = (queryItems && typeof queryItems.toArray === 'function') 
+    ? queryItems.toArray() 
+    : (Array.isArray(queryItems) ? queryItems : [])
+  
+  const itemsWithIndex = itemsArray.map((item, index) => ({ item, originalIndex: index }))
+  itemsWithIndex.sort((a, b) => {
+    const orderA = a.item.order ?? Infinity
+    const orderB = b.item.order ?? Infinity
+    if (orderA !== orderB) {
+      return orderA - orderB
+    }
+    // If order is equal (both Infinity or same number), maintain original index order
+    return a.originalIndex - b.originalIndex
+  })
+  return Immutable(itemsWithIndex.map(({ item }) => item))
+}
+
 // Helper function to group queries by groupId
 const groupQueries = (queryItems: ImmutableArray<QueryItemType>): GroupedQueries => {
   const groups: { [groupId: string]: { items: ImmutableArray<QueryItemType>, displayName: string, icon?: any } } = {}
@@ -92,21 +119,31 @@ export function QueryTaskList (props: QueryTaskListProps) {
   const { queryItems, widgetId, defaultPageSize, isInPopper = false, className = '', initialQueryValue, onHashParameterUsed, resultsMode, onResultsModeChange, accumulatedRecords, onAccumulatedRecordsChange } = props
   const getI18nMessage = hooks.useTranslation(defaultMessages)
   
-  const { groups, ungrouped, groupOrder } = React.useMemo(() => groupQueries(queryItems), [queryItems])
+  // Sort queries by display order before grouping
+  // Handle case where queryItems might be undefined/null or not an ImmutableArray
+  const sortedQueryItems = React.useMemo(() => {
+    if (!queryItems) {
+      return Immutable([])
+    }
+    return sortQueryItemsByOrder(queryItems)
+  }, [queryItems])
+  
+  const { groups, ungrouped, groupOrder } = React.useMemo(() => groupQueries(sortedQueryItems), [sortedQueryItems])
   
   // Find the query item matching the initialQueryValue shortId from URL hash
+  // Use sortedQueryItems to ensure we find the item in the sorted order
   const matchingQueryIndex = React.useMemo(() => {
     if (!initialQueryValue?.shortId) {
       return -1
     }
-    return queryItems.findIndex(item => item.shortId === initialQueryValue.shortId)
-  }, [queryItems, initialQueryValue])
+    return sortedQueryItems.findIndex(item => item.shortId === initialQueryValue.shortId)
+  }, [sortedQueryItems, initialQueryValue])
   
   // Determine which group/ungrouped index the matching query is at
   const getQuerySelection = React.useMemo(() => {
     if (matchingQueryIndex < 0) return null
     
-    const item = queryItems[matchingQueryIndex]
+    const item = sortedQueryItems[matchingQueryIndex]
     if (item.groupId) {
       const groupItems = groups[item.groupId]?.items || Immutable([])
       const indexInGroup = groupItems.findIndex(q => q.configId === item.configId)
@@ -129,52 +166,72 @@ export function QueryTaskList (props: QueryTaskListProps) {
       })
       return { type: 'ungrouped' as const, index: indexInUngrouped >= 0 ? indexInUngrouped : 0 }
     }
-  }, [matchingQueryIndex, queryItems, groups, ungrouped])
+  }, [matchingQueryIndex, sortedQueryItems, groups, ungrouped])
   
-  // Track selected query - initialize with matching query if found from URL hash
+  // Helper to determine default selection based on display order
+  const getDefaultSelection = React.useMemo(() => {
+    if (getQuerySelection) {
+      return getQuerySelection
+    }
+    
+    // No hash parameter - determine default based on display order
+    // Compare first ungrouped query vs first query in first group
+    const firstUngroupedOrder = ungrouped.length > 0 ? (ungrouped[0].item.order ?? Infinity) : Infinity
+    const firstGroupOrder = groupOrder.length > 0 && groups[groupOrder[0]]?.items?.length > 0
+      ? (groups[groupOrder[0]].items[0].order ?? Infinity)
+      : Infinity
+    
+    // Select whichever has lower order (or first if equal)
+    if (firstUngroupedOrder < firstGroupOrder) {
+      return { type: 'ungrouped' as const, index: 0 }
+    } else if (firstGroupOrder < Infinity || groupOrder.length > 0) {
+      return { type: 'group' as const, groupId: groupOrder[0], index: 0 }
+    } else if (ungrouped.length > 0) {
+      return { type: 'ungrouped' as const, index: 0 }
+    }
+    return null
+  }, [getQuerySelection, ungrouped, groups, groupOrder])
+  
+  // Track selected query - initialize with matching query if found from URL hash, or default based on display order
   const [selectedGroupId, setSelectedGroupId] = React.useState<string | null>(() => {
-    if (getQuerySelection?.type === 'group') {
+    if (getDefaultSelection?.type === 'group') {
       debugLogger.log('GROUP', {
         event: 'initial-group-selection',
-        groupId: getQuerySelection.groupId
+        groupId: getDefaultSelection.groupId,
+        note: getQuerySelection ? 'Hash-matched' : 'Default based on display order'
       })
-      return getQuerySelection.groupId
-    }
-    // Default to first group if groups exist and no hash parameter
-    if (groupOrder.length > 0) {
-      debugLogger.log('GROUP', {
-        event: 'initial-group-selection-default',
-        groupId: groupOrder[0],
-        note: 'No hash parameter, defaulting to first group'
-      })
-      return groupOrder[0]
+      return getDefaultSelection.groupId
     }
     return null
   })
   const [selectedGroupQueryIndex, setSelectedGroupQueryIndex] = React.useState(() => {
-    if (getQuerySelection?.type === 'group') {
+    if (getDefaultSelection?.type === 'group') {
       debugLogger.log('GROUP', {
         event: 'initial-group-query-index',
-        index: getQuerySelection.index
+        index: getDefaultSelection.index,
+        note: getQuerySelection ? 'Hash-matched' : 'Default based on display order'
       })
-      return getQuerySelection.index
+      return getDefaultSelection.index
     }
     return 0
   })
   const [selectedUngroupedIndex, setSelectedUngroupedIndex] = React.useState(() => {
-    if (getQuerySelection?.type === 'ungrouped') {
+    if (getDefaultSelection?.type === 'ungrouped') {
       debugLogger.log('GROUP', {
         event: 'initial-ungrouped-index',
-        index: getQuerySelection.index
+        index: getDefaultSelection.index,
+        note: getQuerySelection ? 'Hash-matched' : 'Default based on display order'
       })
-      return getQuerySelection.index
+      return getDefaultSelection.index
     }
     return 0
   })
   
   // Update selection when initialQueryValue changes (e.g., when URL hash is detected)
+  // Also update when default selection changes (e.g., when display order changes)
   React.useEffect(() => {
     if (getQuerySelection) {
+      // Hash parameter matched - use that selection
       if (getQuerySelection.type === 'group') {
         debugLogger.log('GROUP', {
           event: 'selection-changed-to-group',
@@ -191,19 +248,29 @@ export function QueryTaskList (props: QueryTaskListProps) {
         setSelectedGroupId(null)
         setSelectedUngroupedIndex(getQuerySelection.index)
       }
-    } else {
-      // No hash parameter - ensure we have a default selection
-      // If groups exist, default to first group (already handled in useState initializer)
-      // But if no groups and we have ungrouped, ensure selectedUngroupedIndex is set
-      if (groupOrder.length === 0 && ungrouped.length > 0) {
+    } else if (getDefaultSelection) {
+      // No hash parameter - use default selection based on display order
+      if (getDefaultSelection.type === 'group') {
         debugLogger.log('GROUP', {
-          event: 'no-hash-parameter-default-ungrouped',
-          defaultIndex: 0
+          event: 'default-selection-to-group',
+          groupId: getDefaultSelection.groupId,
+          index: getDefaultSelection.index,
+          note: 'Based on display order'
         })
-        setSelectedUngroupedIndex(0)
+        setSelectedGroupId(getDefaultSelection.groupId)
+        setSelectedGroupQueryIndex(getDefaultSelection.index)
+        setSelectedUngroupedIndex(0) // Reset ungrouped index
+      } else {
+        debugLogger.log('GROUP', {
+          event: 'default-selection-to-ungrouped',
+          index: getDefaultSelection.index,
+          note: 'Based on display order'
+        })
+        setSelectedGroupId(null)
+        setSelectedUngroupedIndex(getDefaultSelection.index)
       }
     }
-  }, [getQuerySelection, groupOrder.length, ungrouped.length])
+  }, [getQuerySelection, getDefaultSelection])
   
   // Get the currently selected query item
   const getSelectedQueryItem = (): ImmutableObject<QueryItemType> => {
@@ -211,7 +278,7 @@ export function QueryTaskList (props: QueryTaskListProps) {
     // This ensures we always use the hash-matched query, regardless of state timing
     // This is critical for grouped queries where dropdowns need to be synchronized
     if (getQuerySelection && matchingQueryIndex >= 0) {
-      const hashMatchedItem = queryItems[matchingQueryIndex]
+      const hashMatchedItem = sortedQueryItems[matchingQueryIndex]
       debugLogger.log('GROUP', {
         event: 'getSelectedQueryItem-hash-match',
         shortId: hashMatchedItem.shortId,
@@ -271,16 +338,16 @@ export function QueryTaskList (props: QueryTaskListProps) {
       event: 'selected-query-fallback',
       note: 'No groups or ungrouped queries, using first item'
     })
-    return queryItems[0]
+    return sortedQueryItems[0]
   }
   
   const selectedQueryItem = getSelectedQueryItem()
   const selectedQueryRealIndex = React.useMemo(() => {
-    return queryItems.findIndex(q => q.configId === selectedQueryItem.configId)
-  }, [queryItems, selectedQueryItem])
+    return sortedQueryItems.findIndex(q => q.configId === selectedQueryItem.configId)
+  }, [sortedQueryItems, selectedQueryItem])
   
   // If only one query total, don't show dropdown
-  const showDropdown = queryItems.length > 1 || groupOrder.length > 0
+  const showDropdown = sortedQueryItems.length > 1 || groupOrder.length > 0
   
   return (
     <div className={`runtime-query__query-list h-100 ${className}`} css={css`
@@ -315,13 +382,13 @@ export function QueryTaskList (props: QueryTaskListProps) {
           <QueryTask
             widgetId={widgetId}
             index={selectedQueryRealIndex >= 0 ? selectedQueryRealIndex : 0}
-            total={queryItems.length}
+            total={sortedQueryItems.length}
             queryItem={selectedQueryItem}
             defaultPageSize={defaultPageSize}
             isInPopper={isInPopper}
             initialInputValue={selectedQueryItem.shortId === initialQueryValue?.shortId ? initialQueryValue?.value : undefined}
             onHashParameterUsed={onHashParameterUsed}
-            queryItems={queryItems}
+            queryItems={sortedQueryItems}
             selectedQueryIndex={selectedUngroupedIndex}
             onQueryChange={(index) => setSelectedUngroupedIndex(index)}
             // Grouping props
