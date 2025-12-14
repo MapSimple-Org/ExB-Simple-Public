@@ -10,7 +10,7 @@ import {
   classNames
 } from 'jimu-core'
 import { Button } from 'jimu-ui'
-import { CloseOutlined } from 'jimu-icons/outlined/editor/close'
+import { TrashOutlined } from 'jimu-icons/outlined/editor/trash'
 import FeatureInfo from './components/feature-info'
 import { ListDirection } from '../config'
 
@@ -47,6 +47,10 @@ const style = css`
     &:hover {
       opacity: 1;
     }
+    
+    // Larger touch target for mobile/accessibility
+    min-width: 32px;
+    min-height: 32px;
   }
 `
 
@@ -54,11 +58,23 @@ const style = css`
  * QueryResultItem component - displays a single query result record
  * Features:
  * - Clicking the item zooms to the feature on the map
- * - Remove button (X) in upper-right corner to remove record from results
+ * - Remove button (trash icon) in upper-right corner to remove record from results
  * - Records are expanded by default to show full feature information
  */
 export const QueryResultItem = (props: ResultItemProps) => {
   const { widgetId, data, dataSource, popupTemplate, defaultPopupTemplate, onClick, onRemove, expandByDefault = false } = props
+  
+  const recordId = data.getId()
+  
+  // Log when QueryResultItem renders
+  React.useEffect(() => {
+    console.log('[QueryResultItem] rendered', {
+      event: 'QueryResultItem-render',
+      recordId,
+      expandByDefault,
+      timestamp: Date.now()
+    })
+  }, [recordId, expandByDefault])
   
   // Check if this record is currently selected
   const selected = ReactRedux.useSelector((state: IMState) =>
@@ -122,13 +138,16 @@ export const QueryResultItem = (props: ResultItemProps) => {
         onClick={handleRemove}
         aria-label="Remove record"
         css={css`
-          padding: 4px;
-          min-width: auto;
-          width: 20px;
-          height: 20px;
+          padding: 6px;
+          min-width: 32px;
+          width: 32px;
+          height: 32px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
         `}
       >
-        <CloseOutlined size={14} />
+        <TrashOutlined size={18} />
       </Button>
     </div>
   )

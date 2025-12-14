@@ -30,6 +30,8 @@ export interface LazyListProps {
   queryParams: QueryParams
   /** Whether result items should be expanded by default. Controlled by expand/collapse all button. */
   expandByDefault?: boolean
+  /** Map of individual item expansion states. Falls back to expandByDefault if not in map. */
+  itemExpandStates?: Map<string, boolean>
   direction: ListDirection
   onEscape: () => void
   defaultPageSize?: number
@@ -121,6 +123,17 @@ export function LazyList (props: LazyListProps) {
     if (recordsChanged) {
       // Capture current scroll position before updating
       scrollPosRef.current = resultContainerRef.current?.scrollTop || 0
+      
+      console.log('[LazyList] records changed - updating dataItems', {
+        event: 'LazyList-records-changed',
+        previousRecordIds: previousRecordIdsRef.current.slice(0, 5),
+        currentRecordIds: currentRecordIds.slice(0, 5),
+        previousCount: previousRecordIdsRef.current.length,
+        currentCount: currentRecordIds.length,
+        expandByDefault: props.expandByDefault,
+        timestamp: Date.now()
+      })
+      
       setDataItems(records)
       previousRecordIdsRef.current = currentRecordIds
     }
@@ -148,6 +161,34 @@ export function LazyList (props: LazyListProps) {
     previousRecordIdsRef.current = []
     scrollPosRef.current = 0
   }, [resultCount])
+
+  // Call onRenderDone when dataItems are initially loaded or updated
+  // This ensures records are selected even if all records fit on screen (no lazy loading needed)
+  React.useEffect(() => {
+    if (dataItems && dataItems.length > 0 && onRenderDone) {
+      // Filter out removed records before passing to onRenderDone
+      const allLoadedRecords = outputDS.getAllLoadedRecords() || []
+      const filteredRecords = removedRecordIds && removedRecordIds.size > 0
+        ? allLoadedRecords.filter(record => !removedRecordIds.has(record.getId()))
+        : allLoadedRecords
+      
+      // Only call onRenderDone if we have records to report
+      if (filteredRecords.length > 0) {
+        console.log('[LazyList] calling onRenderDone on initial load', {
+          event: 'LazyList-onRenderDone-initial-load',
+          widgetId,
+          queryItemConfigId: queryItem.configId,
+          dataItemsCount: dataItems.length,
+          filteredRecordsCount: filteredRecords.length,
+          removedRecordIdsCount: removedRecordIds?.size || 0,
+          timestamp: Date.now()
+        })
+        onRenderDone({
+          dataItems: filteredRecords
+        })
+      }
+    }
+  }, [dataItems, onRenderDone, outputDS, removedRecordIds, widgetId, queryItem.configId])
 
   const loadByPages = async () => {
     if (allDataItemsLoadedRef.current || loadStatusRef.current === EntityStatusType.Loading) {
@@ -220,19 +261,25 @@ export function LazyList (props: LazyListProps) {
   return (
     <div onKeyUp={handleKeyUp} onKeyDown={handleKeyDown} className={classNames({ vertical: direction === ListDirection.Vertical })} css={getStyle(isAutoHeight)} ref={resultContainerRef}>
       <div className='list-items px-4 py-1' role='listbox'>
-        {dataItems?.map((dataItem) => (
-          <QueryResultItem
-            key={dataItem.getId()}
-            data={dataItem as FeatureDataRecord}
-            dataSource={outputDS}
-            widgetId={widgetId}
-            popupTemplate={popupTemplate}
-            defaultPopupTemplate={defaultPopupTemplate}
-            expandByDefault={props.expandByDefault ?? true}
-            onClick={onSelectChange}
-            onRemove={onRemove}
-          />
-        ))}
+        {dataItems?.map((dataItem) => {
+          const recordId = dataItem.getId()
+          // Use individual state from map if available, otherwise fall back to expandByDefault
+          const individualExpandState = props.itemExpandStates?.get(recordId)
+          const expandByDefault = individualExpandState !== undefined ? individualExpandState : (props.expandByDefault ?? true)
+          return (
+            <QueryResultItem
+              key={recordId}
+              data={dataItem as FeatureDataRecord}
+              dataSource={outputDS}
+              widgetId={widgetId}
+              popupTemplate={popupTemplate}
+              defaultPopupTemplate={defaultPopupTemplate}
+              expandByDefault={expandByDefault}
+              onClick={onSelectChange}
+              onRemove={onRemove}
+            />
+          )
+        })}
       </div>
       <div ref={el} className='lazyload-detector'>
         &nbsp;
