@@ -1,9 +1,9 @@
 # Current Work Status
 
-**Last Updated:** 2025-12-14 (Release 016.4 - SimpleList Forced, UI Improvements)  
+**Last Updated:** 2025-12-14 (Release 016.5 - Hash Parameter Info Button)  
 **Branch:** `feature/results-management-modes`  
 **Developer:** Adam Cabrera  
-**Current Version:** v1.19.0-r016.4
+**Current Version:** v1.19.0-r016.5
 
 ## Active Work
 
@@ -62,7 +62,20 @@
   - Clamps scroll position to valid range to prevent browser resets
   - Release number incremented to r012
 
-### Latest Changes (Release 016.4)
+### Latest Changes (Release 016.5)
+
+**Status:** ✅ **COMPLETE** - Build is stable and ready for testing
+
+#### Hash Parameter Info Button (Release 016.5)
+- ✅ **Info button next to layer title** - Shows hash parameter search information
+  - Appears when queries from the same layer have shortIds configured
+  - Tooltip displays all available shortIds for that layer with usage examples
+  - Format: "This layer can be searched using the shortIds pin and major using #shortId=value in the URL"
+  - Example: "Parcel number: #pin=value"
+  - Only shows for layers with queries that have shortIds
+  - Uses same InfoOutlined icon pattern as other info buttons
+
+### Previous Changes (Release 016.4)
 
 **Status:** ✅ **COMPLETE** - Build is stable and ready for testing
 

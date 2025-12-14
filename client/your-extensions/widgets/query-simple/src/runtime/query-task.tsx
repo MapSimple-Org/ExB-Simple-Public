@@ -1100,7 +1100,16 @@ export function QueryTask (props: QueryTaskProps) {
               border-bottom: 1px solid var(--sys-color-divider-secondary);
               flex-shrink: 0;
             `}>
-              <div className={classNames('nav-action align-items-center', { 'd-none': wrappedInPopper })}>
+              <div className={classNames('nav-action align-items-center', { 'd-none': wrappedInPopper })} css={css`
+                flex: 1 1 0;
+                overflow: hidden;
+                display: flex;
+                align-items: center;
+                gap: 4px;
+                .jimu-btn {
+                  min-width: 26px;
+                }
+              `}>
                 <Button
                   className={classNames('p-0 mr-2', { 'd-none': total === 1 || !onNavBack })}
                   size='sm'
@@ -1113,6 +1122,53 @@ export function QueryTask (props: QueryTaskProps) {
                   <ArrowLeftOutlined autoFlip/>
                 </Button>
                 <QueryTaskLabel icon={icon} name={displayLabel ? name : ''} />
+                {/* Hash parameter info button - shows queries from same layer with shortIds */}
+                {(() => {
+                  if (!queryItems || queryItems.length <= 1) return null
+                  
+                  // Get current query's origin data source ID
+                  const currentOriginDSId = queryItem.useDataSource?.dataSourceId
+                  
+                  if (!currentOriginDSId) return null
+                  
+                  // Find all queries from the same origin data source that have shortIds
+                  const sameLayerQueries = queryItems.filter(item => 
+                    item.useDataSource?.dataSourceId === currentOriginDSId && 
+                    item.shortId && 
+                    item.shortId.trim() !== ''
+                  )
+                  
+                  // Only show info button if there are queries with shortIds
+                  if (sameLayerQueries.length === 0) return null
+                  
+                  // Build tooltip content
+                  const queryLines = sameLayerQueries.map(item => {
+                    const queryName = getQueryDisplayName(item)
+                    return `${queryName}: #${item.shortId}=value`
+                  })
+                  
+                  const tooltipTitle = `This layer can be searched using the shortIds ${sameLayerQueries.map(q => q.shortId).join(' and ')} using #shortId=value in the URL.\n\n${queryLines.join('\n')}\n\nExample: ${queryLines[0]}`
+                  
+                  return (
+                    <Tooltip 
+                      placement='bottom' 
+                      css={css`white-space: pre-line;`} 
+                      title={tooltipTitle}
+                    >
+                      <Button 
+                        size='sm' 
+                        icon 
+                        type='tertiary' 
+                        aria-label='Hash parameter search information'
+                        css={css`
+                          flex-shrink: 0;
+                        `}
+                      >
+                        <InfoOutlined color='var(--sys-color-primary-main)' size='s'/>
+                      </Button>
+                    </Tooltip>
+                  )
+                })()}
               </div>
               {resultCount > 0 && (
                 <Tooltip title={getI18nMessage('clearResult')} placement='bottom'>
