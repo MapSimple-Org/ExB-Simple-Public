@@ -416,7 +416,7 @@
           },
           {
             "configId": "12739964857494834",
-            "name": "Regional trails by name",
+            "name": "Regional Trails",
             "useDataSource": {
               "dataSourceId": "dataSource_1-KingCo_ParksTrails_9094_2708-0-2",
               "mainDataSourceId": "dataSource_1-KingCo_ParksTrails_9094_2708-0-2",
@@ -809,7 +809,7 @@
   "attributes": {
     "portalUrl": "https://kingcounty.maps.arcgis.com"
   },
-  "timestamp": 1765303284200,
+  "timestamp": 1765751550435,
   "sharedThemeVariables": {
     "header": {
       "bg": "#187089",
@@ -906,7 +906,7 @@
     },
     "widget_12_output_12739964857494834": {
       "id": "widget_12_output_12739964857494834",
-      "label": "Regional trails by name result",
+      "label": "Regional Trails result",
       "type": "FEATURE_LAYER",
       "geometryType": "esriGeometryPolyline",
       "url": "https://gismaps.kingcounty.gov/arcgis/rest/services/Parks/KingCo_ParksTrails/MapServer/2",
@@ -933,5 +933,5 @@
     }
   ],
   "useAutoSortInFixedLayout": true,
-  "publishTimestamp": 1765303285769
+  "publishTimestamp": 1765751550995
 }
