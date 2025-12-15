@@ -13,6 +13,9 @@ import { Button } from 'jimu-ui'
 import { TrashOutlined } from 'jimu-icons/outlined/editor/trash'
 import FeatureInfo from './components/feature-info'
 import { ListDirection } from '../config'
+import { createQuerySimpleDebugLogger } from 'widgets/shared-code/common'
+
+const debugLogger = createQuerySimpleDebugLogger()
 
 export interface ResultItemProps {
   widgetId: string
@@ -68,7 +71,7 @@ export const QueryResultItem = (props: ResultItemProps) => {
   
   // Log when QueryResultItem renders
   React.useEffect(() => {
-    console.log('[QueryResultItem] rendered', {
+    debugLogger.log('EXPAND-COLLAPSE', {
       event: 'QueryResultItem-render',
       recordId,
       expandByDefault,

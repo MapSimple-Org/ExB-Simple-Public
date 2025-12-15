@@ -207,7 +207,6 @@ export function createAddToMapAction(
           error: error instanceof Error ? error.message : String(error),
           errorStack: error instanceof Error ? error.stack : undefined
         })
-        console.error('Error executing Add to Map action:', error)
         return false
       }
     },
