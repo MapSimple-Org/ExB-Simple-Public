@@ -5,6 +5,9 @@ import { loadArcGISJSAPIModules } from 'jimu-arcgis'
 import { Button } from 'jimu-ui'
 import { RightFilled } from 'jimu-icons/filled/directional/right'
 import { DownFilled } from 'jimu-icons/filled/directional/down'
+import { createQuerySimpleDebugLogger } from 'widgets/shared-code/common'
+
+const debugLogger = createQuerySimpleDebugLogger()
 
 export enum LoadStatus {
   Pending = 'Pending',
@@ -74,7 +77,7 @@ class FeatureInfo extends React.PureComponent<Props & ExtraProps, State> {
     const recordId = this.props.graphic?.attributes?.OBJECTID || this.props.graphic?.attributes?.objectid || 'unknown'
     const initialShowContent = !togglable || expandByDefault
     
-    console.log('[FeatureInfo] constructor', {
+    debugLogger.log('EXPAND-COLLAPSE', {
       event: 'FeatureInfo-constructor',
       recordId,
       togglable,
@@ -112,8 +115,7 @@ class FeatureInfo extends React.PureComponent<Props & ExtraProps, State> {
       const { togglable = false, expandByDefault } = this.props
       const recordId = this.props.graphic?.attributes?.OBJECTID || this.props.graphic?.attributes?.objectid || 'unknown'
       
-      // Log expandByDefault changes (using console.log since debugLogger might not be available here)
-      console.log('[FeatureInfo] expandByDefault changed', {
+      debugLogger.log('EXPAND-COLLAPSE', {
         event: 'expandByDefault-prop-changed',
         recordId,
         prevExpandByDefault: prevProps.expandByDefault,
@@ -126,7 +128,7 @@ class FeatureInfo extends React.PureComponent<Props & ExtraProps, State> {
       
       if (togglable) {
         this.setState({ showContent: expandByDefault }, () => {
-          console.log('[FeatureInfo] state updated after expandByDefault change', {
+          debugLogger.log('EXPAND-COLLAPSE', {
             event: 'FeatureInfo-state-updated',
             recordId,
             newShowContent: this.state.showContent,
@@ -141,7 +143,7 @@ class FeatureInfo extends React.PureComponent<Props & ExtraProps, State> {
     if (prevProps.graphic !== this.props.graphic || 
         prevProps.popupTemplate !== this.props.popupTemplate ||
         prevProps.defaultPopupTemplate !== this.props.defaultPopupTemplate) {
-      console.log('[FeatureInfo] componentDidUpdate - props changed that trigger recreate', {
+      debugLogger.log('EXPAND-COLLAPSE', {
         event: 'FeatureInfo-props-changed-recreate',
         recordId,
         graphicChanged: prevProps.graphic !== this.props.graphic,

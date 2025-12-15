@@ -14,10 +14,12 @@ import {
 } from 'jimu-core'
 import { Loading, LoadingType } from 'jimu-ui'
 import { type QueryItemType, ListDirection } from '../config'
-import { EntityStatusType } from 'widgets/shared-code/common'
+import { EntityStatusType, createQuerySimpleDebugLogger } from 'widgets/shared-code/common'
 import { QueryResultItem } from './query-result-item'
 import { executeQuery, getPopupTemplate } from './query-utils'
 import { useAutoHeight } from './useAutoHeight'
+
+const debugLogger = createQuerySimpleDebugLogger()
 
 const { useRef, useState } = React
 
@@ -124,7 +126,7 @@ export function LazyList (props: LazyListProps) {
       // Capture current scroll position before updating
       scrollPosRef.current = resultContainerRef.current?.scrollTop || 0
       
-      console.log('[LazyList] records changed - updating dataItems', {
+      debugLogger.log('RESULTS-MODE', {
         event: 'LazyList-records-changed',
         previousRecordIds: previousRecordIdsRef.current.slice(0, 5),
         currentRecordIds: currentRecordIds.slice(0, 5),
@@ -174,7 +176,7 @@ export function LazyList (props: LazyListProps) {
       
       // Only call onRenderDone if we have records to report
       if (filteredRecords.length > 0) {
-        console.log('[LazyList] calling onRenderDone on initial load', {
+        debugLogger.log('RESULTS-MODE', {
           event: 'LazyList-onRenderDone-initial-load',
           widgetId,
           queryItemConfigId: queryItem.configId,

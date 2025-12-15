@@ -121,39 +121,6 @@ export default class Setting extends React.PureComponent<AllWidgetSettingProps<I
     })
   }
 
-  handleResultPageStyleChange = (e) => {
-    this.props.onSettingChange({
-      id: this.props.id,
-      config: this.props.config.set('resultPagingStyle', e.target.value)
-    })
-  }
-
-  /**
-   * Handles changes to the default page size for multi-page pagination.
-   * This controls how many records are shown per page when using multi-page mode.
-   */
-  handleDefaultPageSizeChange = (value: number) => {
-    if (value != null) {
-      this.props.onSettingChange({
-        id: this.props.id,
-        config: this.props.config.set('defaultPageSize', value)
-      })
-    }
-  }
-
-  /**
-   * Handles changes to the initial page size for single-page (LazyLoad) pagination.
-   * This controls how many records are loaded initially when using single-page mode.
-   * Users can scroll to load more records, but this sets the initial batch size.
-   */
-  handleLazyLoadInitialPageSizeChange = (value: number) => {
-    if (value != null) {
-      this.props.onSettingChange({
-        id: this.props.id,
-        config: this.props.config.set('lazyLoadInitialPageSize', value)
-      })
-    }
-  }
 
 
   tryRemoveQueryItem = (index: number) => {
@@ -291,13 +258,10 @@ export default class Setting extends React.PureComponent<AllWidgetSettingProps<I
 
   render () {
     const { config } = this.props
-    // use the first item's direction and paging style if they are not exist in the config
-    let { resultListDirection, resultPagingStyle, defaultPageSize, lazyLoadInitialPageSize } = config
+    // use the first item's direction if it doesn't exist in the config
+    let { resultListDirection } = config
     if (!resultListDirection) {
       resultListDirection = config.queryItems?.[0]?.resultListDirection ?? ListDirection.Vertical
-    }
-    if (!resultPagingStyle) {
-      resultPagingStyle = config.queryItems?.[0]?.resultPagingStyle ?? PagingType.MultiPage
     }
     return (
       <div className='jimu-widget-setting setting-query__setting-content h-100'>
@@ -327,43 +291,6 @@ export default class Setting extends React.PureComponent<AllWidgetSettingProps<I
                 onChange={this.handleResultDirectionChange}
               />
             </SettingRow>
-            <SettingRow flow='wrap' label={this.getI18nMessage('pagingStyle')}>
-              <Select
-                aria-label={this.getI18nMessage('pagingStyle')}
-                className='w-100'
-                size='sm'
-                value={resultPagingStyle}
-                onChange={this.handleResultPageStyleChange}
-              >
-                <option value={PagingType.MultiPage}>{this.getI18nMessage('pagingStyle_MultiPage')}</option>
-                <option value={PagingType.LazyLoad}>{this.getI18nMessage('pagingStyle_LazyLoad')}</option>
-              </Select>
-            </SettingRow>
-            {/* Page size configuration for multi-page pagination */}
-            {resultPagingStyle === PagingType.MultiPage && (
-              <SettingRow flow='wrap' label={this.getI18nMessage('defaultPageSize')}>
-                <NumericInput
-                  className='w-100'
-                  value={defaultPageSize ?? 100}
-                  precision={0}
-                  min={10}
-                  max={1000}
-                  onAcceptValue={this.handleDefaultPageSizeChange}/>
-              </SettingRow>
-            )}
-            {/* Page size configuration for single-page (LazyLoad) pagination */}
-            {/* This controls the initial number of records loaded when using single-page mode */}
-            {resultPagingStyle === PagingType.LazyLoad && (
-              <SettingRow flow='wrap' label={this.getI18nMessage('defaultPageSize')}>
-                <NumericInput
-                  className='w-100'
-                  value={lazyLoadInitialPageSize ?? 100}
-                  precision={0}
-                  min={10}
-                  max={1000}
-                  onAcceptValue={this.handleLazyLoadInitialPageSizeChange}/>
-              </SettingRow>
-            )}
           </SettingSection>
         )}
         <DataSourceRemoveWarningPopup

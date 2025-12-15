@@ -184,7 +184,6 @@ export interface SettingConfig {
   arrangeWrap?: boolean
   resultListDirection?: ListDirection
   resultPagingStyle?: PagingType
-  defaultPageSize?: number
   lazyLoadInitialPageSize?: number
   sizeMap?: {
     arrangementIconPopper?: SizeMap

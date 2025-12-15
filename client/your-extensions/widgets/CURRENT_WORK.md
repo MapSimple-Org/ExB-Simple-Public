@@ -1,13 +1,29 @@
 # Current Work Status
 
-**Last Updated:** 2025-12-14 (Release 016.7 - Display Order & Hash Parameter Info)  
+**Last Updated:** 2025-12-16 (Release 016.8 - Debug Logging Fix)  
 **Branch:** `feature/results-management-modes`  
 **Developer:** Adam Cabrera  
-**Current Version:** v1.19.0-r016.7
+**Current Version:** v1.19.0-r016.8
 
 ## Active Work
 
 ### Current Task
+- **What:** Debug Logging Cleanup - Fixed all console.log statements that were bypassing debug gates
+- **Why:** Console logs were appearing even when no debug switch was set, violating the debug logging system
+- **Status:** ✅ **COMPLETE** - All console.log statements replaced with debugLogger.log(). Development Guide updated to mandate debugLogger usage.
+- **Files Modified:**
+  - `query-simple/src/runtime/components/feature-info.tsx` - 4 console.log statements fixed
+  - `query-simple/src/runtime/query-result-item.tsx` - 1 console.log statement fixed
+  - `query-simple/src/runtime/simple-list.tsx` - 1 console.log statement fixed
+  - `query-simple/src/runtime/query-result.tsx` - 1 console.log statement fixed
+  - `query-simple/src/runtime/lazy-list.tsx` - 2 console.log statements fixed
+  - `query-simple/src/runtime/results-management-utils.ts` - Removed redundant console.error
+  - `query-simple/src/runtime/query-task.tsx` - Removed 2 redundant console.error statements
+  - `query-simple/src/data-actions/add-to-map-action.tsx` - Removed redundant console.error
+  - `DEVELOPMENT_GUIDE.md` - Updated to mandate ALWAYS using debugLogger, NEVER console.log
+  - `query-simple/src/version.ts` - Incremented to r016.8
+
+### Previous Task (Complete)
 - **What:** Implementing Results Management Modes - Adding "Add to current results" and "Remove from current results" functionality to QuerySimple widget
 - **Why:** Users want to build up a collection of parcels from multiple searches (e.g., multiple PIN searches + a Major number search) and then export or perform actions on the combined set
 - **Status:** ✅ **COMPLETE** - Both "Add to" and "Remove from" modes are fully implemented and working. Scroll position preservation fix also complete.

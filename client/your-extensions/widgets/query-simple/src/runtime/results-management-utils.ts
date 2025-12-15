@@ -392,7 +392,6 @@ export function removeRecordsFromOriginSelections(
         error: error instanceof Error ? error.message : 'Unknown error',
         errorStack: error instanceof Error ? error.stack : undefined
       })
-      console.error(`Error removing records from origin DS ${originDS.id}:`, error)
     }
   })
   

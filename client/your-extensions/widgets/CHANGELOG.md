@@ -5,6 +5,26 @@ All notable changes to MapSimple Experience Builder widgets will be documented i
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.19.0-r016.8] - 2025-12-16
+
+### Fixed
+- **Debug Logging**: Fixed all console.log statements that were bypassing debug gates
+  - Replaced all direct `console.log()` calls with `debugLogger.log()` in:
+    - `feature-info.tsx` (constructor, componentDidUpdate, expandByDefault changes)
+    - `query-result-item.tsx` (render logging)
+    - `simple-list.tsx` (onRenderDone logging)
+    - `query-result.tsx` (handleRenderDone logging)
+    - `lazy-list.tsx` (records changed, onRenderDone logging)
+  - Removed redundant `console.error()` statements that already had debugLogger.log equivalents
+  - All debug logging now properly respects `?debug=` URL parameters
+  - No console output will appear unless explicitly enabled via debug switches
+
+### Changed
+- **Development Guide**: Updated to mandate ALWAYS using `debugLogger`, NEVER using `console.log()` directly
+  - Added clear rules emphasizing debugLogger usage
+  - Updated examples to show correct pattern
+  - Added requirement to replace any existing `console.log()` statements found in code
+
 ## [1.19.0] - 2025-01-XX
 
 ### Added

@@ -13,6 +13,9 @@ import { type QueryItemType, ListDirection } from '../config'
 import { QueryResultItem } from './query-result-item'
 import { getPopupTemplate } from './query-utils'
 import { useAutoHeight } from './useAutoHeight'
+import { createQuerySimpleDebugLogger } from 'widgets/shared-code/common'
+
+const debugLogger = createQuerySimpleDebugLogger()
 
 export interface SimpleListProps {
   widgetId: string
@@ -92,7 +95,7 @@ export function SimpleList (props: SimpleListProps) {
   // Notify parent when records are rendered (for auto-switch logic)
   React.useEffect(() => {
     if (onRenderDone && filteredRecords.length > 0) {
-      console.log('[SimpleList] calling onRenderDone', {
+      debugLogger.log('RESULTS-MODE', {
         event: 'SimpleList-onRenderDone-called',
         widgetId,
         queryItemConfigId: queryItem.configId,

@@ -95,7 +95,6 @@ export interface QueryTasResultProps {
   queryParams: QueryParams
   outputDS: DataSource
   queryItem: ImmutableObject<QueryItemType>
-  defaultPageSize: number
   records: DataRecord[]
   runtimeZoomToSelected?: boolean
   onNavBack: (clearResults?: boolean) => void
@@ -132,7 +131,7 @@ const resultStyle = css`
 `
 
 export function QueryTaskResult (props: QueryTasResultProps) {
-  const { queryItem, queryParams, resultCount, maxPerPage, records, defaultPageSize, widgetId, outputDS, runtimeZoomToSelected, onNavBack, resultsMode, accumulatedRecords, onAccumulatedRecordsChange } = props
+  const { queryItem, queryParams, resultCount, maxPerPage, records, widgetId, outputDS, runtimeZoomToSelected, onNavBack, resultsMode, accumulatedRecords, onAccumulatedRecordsChange } = props
   const getI18nMessage = hooks.useTranslation(defaultMessage)
   const intl = useIntl()
   const [queryData, setQueryData] = React.useState(null)
@@ -372,7 +371,6 @@ export function QueryTaskResult (props: QueryTasResultProps) {
     setExpandAll(currentItem.resultExpandByDefault ?? false)
     setQueryData({
       records,
-      pageSize: defaultPageSize,
       page: 1
     })
     
@@ -435,7 +433,7 @@ export function QueryTaskResult (props: QueryTasResultProps) {
         recordsChanged: recordsChanged
       })
     }
-  }, [records, defaultPageSize, outputDS, widgetId, queryItem.configId, queryItem.resultExpandByDefault, removedRecordIds])
+  }, [records, outputDS, widgetId, queryItem.configId, queryItem.resultExpandByDefault, removedRecordIds])
 
   React.useEffect(() => {
     // clear selection when resultSelectMode changed
@@ -639,7 +637,7 @@ export function QueryTaskResult (props: QueryTasResultProps) {
   }
 
   const handleRenderDone = React.useCallback(({ dataItems, pageSize, page }) => {
-    console.log('[QueryResult] handleRenderDone called', {
+    debugLogger.log('RESULTS-MODE', {
       event: 'handleRenderDone-called',
       widgetId,
       queryItemConfigId: queryItem.configId,
