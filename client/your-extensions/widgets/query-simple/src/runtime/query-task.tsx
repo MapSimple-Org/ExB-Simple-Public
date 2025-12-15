@@ -59,7 +59,6 @@ export interface QueryTaskProps {
   index: number
   total: number
   queryItem: ImmutableObject<QueryItemType>
-  defaultPageSize?: number
   wrappedInPopper?: boolean
   className?: string
   isInPopper?: boolean
@@ -145,7 +144,7 @@ const style = css`
 `
 
 export function QueryTask (props: QueryTaskProps) {
-  const { queryItem, onNavBack, total, isInPopper = false, defaultPageSize = CONSTANTS.DEFAULT_QUERY_PAGE_SIZE, wrappedInPopper = false, className = '', index, initialInputValue, onHashParameterUsed, queryItems, selectedQueryIndex, onQueryChange, groups, ungrouped, groupOrder, selectedGroupId, selectedGroupQueryIndex, onGroupChange, onGroupQueryChange, onUngroupedChange, resultsMode, onResultsModeChange, accumulatedRecords, onAccumulatedRecordsChange, ...otherProps } = props
+  const { queryItem, onNavBack, total, isInPopper = false, wrappedInPopper = false, className = '', index, initialInputValue, onHashParameterUsed, queryItems, selectedQueryIndex, onQueryChange, groups, ungrouped, groupOrder, selectedGroupId, selectedGroupQueryIndex, onGroupChange, onGroupQueryChange, onUngroupedChange, resultsMode, onResultsModeChange, accumulatedRecords, onAccumulatedRecordsChange, ...otherProps } = props
   const getI18nMessage = hooks.useTranslation(defaultMessage)
   const [stage, setStage] = React.useState(0) // 0 = form, 1 = results, 2 = loading
   const [activeTab, setActiveTab] = React.useState<'query' | 'results'>('query')
@@ -870,7 +869,6 @@ export function QueryTask (props: QueryTaskProps) {
             })
             // Fall back to showing query results on error
             recordsToDisplay = result.records || []
-            console.error('Error in remove mode:', error)
           }
         } else if (resultsMode === SelectionType.NewSelection) {
           // For "New" mode, clear widget-level accumulated records
@@ -932,7 +930,6 @@ export function QueryTask (props: QueryTaskProps) {
                 errorStack: error instanceof Error ? error.stack : undefined,
                 recordCount: recordIdsToSelect.length
               })
-              console.error('Error publishing selection message', error)
             }
           }
         } else if (resultsMode === SelectionType.RemoveFromSelection && recordsToDisplay.length === 0) {
@@ -1044,7 +1041,7 @@ export function QueryTask (props: QueryTaskProps) {
         // Tab switching is now handled by useEffect that watches for queryJustExecutedRef and results
         // This matches the behavior of manual input where results are rendered before tab switch
       })
-  }, [currentItem, queryItem, props.widgetId, outputDS, defaultPageSize, pagingTypeInConfig, lazyLoadInitialPageSize, publishDataClearedMsg, clearResult, resultsMode, accumulatedRecords, onAccumulatedRecordsChange])
+  }, [currentItem, queryItem, props.widgetId, outputDS, publishDataClearedMsg, clearResult, resultsMode, accumulatedRecords, onAccumulatedRecordsChange])
 
   const { useAttributeFilter, sqlExprObj, useSpatialFilter, spatialFilterTypes, spatialIncludeRuntimeData, spatialRelationUseDataSources} = currentItem
   const showAttributeFilter = useAttributeFilter && sqlExprObj != null
@@ -1693,7 +1690,6 @@ export function QueryTask (props: QueryTaskProps) {
                 resultCount={resultCount}
                 maxPerPage={(dataSource as QueriableDataSource)?.getMaxRecordCount?.()}
                 records={recordsRef.current}
-                defaultPageSize={defaultPageSize}
                 outputDS={outputDS}
                 runtimeZoomToSelected={lastRuntimeZoomToSelectedRef.current}
                 resultsMode={resultsMode}
