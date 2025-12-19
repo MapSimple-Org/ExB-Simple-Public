@@ -49,7 +49,7 @@ import { MenuOutlined } from 'jimu-icons/outlined/editor/menu'
 import defaultMessage from './translations/default'
 import { ArrowLeftOutlined } from 'jimu-icons/outlined/directional/arrow-left'
 import { LoadingResult } from './loading-result'
-import { clearSelectionInDataSources, selectRecordsAndPublish, findClearResultsButton } from './selection-utils'
+import { clearSelectionInDataSources, selectRecordsAndPublish, findClearResultsButton, dispatchSelectionEvent } from './selection-utils'
 import { createQuerySimpleDebugLogger } from 'widgets/shared-code/common'
 
 const debugLogger = createQuerySimpleDebugLogger()
@@ -84,6 +84,12 @@ export interface QueryTaskProps {
   onResultsModeChange?: (mode: SelectionType) => void
   accumulatedRecords?: FeatureDataRecord[]
   onAccumulatedRecordsChange?: (records: FeatureDataRecord[]) => void
+  // Graphics layer props
+  useGraphicsLayerForHighlight?: boolean
+  graphicsLayer?: __esri.GraphicsLayer
+  mapView?: __esri.MapView | __esri.SceneView
+  onInitializeGraphicsLayer?: (outputDS: DataSource) => Promise<void>
+  onClearGraphicsLayer?: () => void
 }
 
 // Helper function to get display name for query in dropdown
@@ -144,7 +150,7 @@ const style = css`
 `
 
 export function QueryTask (props: QueryTaskProps) {
-  const { queryItem, onNavBack, total, isInPopper = false, wrappedInPopper = false, className = '', index, initialInputValue, onHashParameterUsed, queryItems, selectedQueryIndex, onQueryChange, groups, ungrouped, groupOrder, selectedGroupId, selectedGroupQueryIndex, onGroupChange, onGroupQueryChange, onUngroupedChange, resultsMode, onResultsModeChange, accumulatedRecords, onAccumulatedRecordsChange, ...otherProps } = props
+  const { queryItem, onNavBack, total, isInPopper = false, wrappedInPopper = false, className = '', index, initialInputValue, onHashParameterUsed, queryItems, selectedQueryIndex, onQueryChange, groups, ungrouped, groupOrder, selectedGroupId, selectedGroupQueryIndex, onGroupChange, onGroupQueryChange, onUngroupedChange, resultsMode, onResultsModeChange, accumulatedRecords, onAccumulatedRecordsChange, useGraphicsLayerForHighlight, graphicsLayer, mapView, onInitializeGraphicsLayer, onClearGraphicsLayer, ...otherProps } = props
   const getI18nMessage = hooks.useTranslation(defaultMessage)
   const [stage, setStage] = React.useState(0) // 0 = form, 1 = results, 2 = loading
   const [activeTab, setActiveTab] = React.useState<'query' | 'results'>('query')
@@ -414,13 +420,37 @@ export function QueryTask (props: QueryTaskProps) {
    * publishes a cleared message to the map, switches back to the Query tab,
    * and increments the query execution key to force QueryTaskResult to remount with fresh state.
    */
-  const clearResult = React.useCallback(() => {
+  const clearResult = React.useCallback(async () => {
+    debugLogger.log('TASK', {
+      event: 'clearResult-called',
+      widgetId: props.widgetId,
+      hasOutputDS: !!outputDS,
+      timestamp: Date.now()
+    })
+
     recordsRef.current = null
     outputDS?.setStatus(DataSourceStatus.NotReady)
     setResultCount(0)
     
+    // NOTE: Graphics layer clearing is now handled inside clearSelectionInDataSources
+    // called below. We ensure this is awaited to prevent race conditions.
+    
     // Clear selection directly from data source using utility function
-    clearSelectionInDataSources(outputDS)
+    try {
+      await clearSelectionInDataSources(props.widgetId, outputDS, useGraphicsLayerForHighlight, graphicsLayer)
+      debugLogger.log('TASK', {
+        event: 'clearResult-selection-cleared',
+        widgetId: props.widgetId,
+        timestamp: Date.now()
+      })
+    } catch (error) {
+      debugLogger.log('TASK', {
+        event: 'clearResult-selection-clear-failed',
+        widgetId: props.widgetId,
+        error: error instanceof Error ? error.message : String(error),
+        timestamp: Date.now()
+      })
+    }
     
     // Clear widget-level accumulated records when clearing results
     if (onAccumulatedRecordsChange) {
@@ -431,7 +461,7 @@ export function QueryTask (props: QueryTaskProps) {
       })
     }
     
-    publishDataClearedMsg()
+    await publishDataClearedMsg()
     // Switch back to Query tab when clearing results
     setActiveTab('query')
     setStage(0)
@@ -441,17 +471,29 @@ export function QueryTask (props: QueryTaskProps) {
     // Clear error states when clearing results
     setSelectionError(null)
     setZoomError(null)
-  }, [outputDS, publishDataClearedMsg, props.widgetId, queryItem.configId, onAccumulatedRecordsChange])
+
+    debugLogger.log('TASK', {
+      event: 'clearResult-complete',
+      widgetId: props.widgetId,
+      timestamp: Date.now()
+    })
+  }, [outputDS, publishDataClearedMsg, props.widgetId, queryItem.configId, onAccumulatedRecordsChange, useGraphicsLayerForHighlight, graphicsLayer])
 
   /**
    * Handles data source creation when switching between query items.
    * When a new query item is selected (e.g., switching from Parcel to Major),
-   * this clears old results by programmatically clicking the trash can button
-   * to ensure all cleanup logic runs properly.
+   * this clears old results to ensure all cleanup logic runs properly.
    * 
    * @param ds - The newly created data source for the selected query item
    */
-  const handleDataSourceCreated = React.useCallback((ds: DataSource) => {
+  const handleDataSourceCreated = React.useCallback(async (ds: DataSource) => {
+    debugLogger.log('TASK', {
+      event: 'handleDataSourceCreated-start',
+      widgetId: props.widgetId,
+      resultsMode,
+      timestamp: Date.now()
+    })
+
     // In "Add to" and "Remove from" modes, preserve accumulated records and selection - don't clear
     if ((resultsMode === SelectionType.AddToSelection || resultsMode === SelectionType.RemoveFromSelection) 
         && accumulatedRecords && accumulatedRecords.length > 0) {
@@ -469,86 +511,163 @@ export function QueryTask (props: QueryTaskProps) {
       return // Skip clearing - preserve selection
     }
     
-    // For "New" mode, clear old results as before
-    let clearButton = clearResultBtnRef.current
-    if (!clearButton) {
-      clearButton = findClearResultsButton()
-    }
-    
-    if (clearButton && resultCount > 0) {
-      clearButton.click()
-    } else {
-      clearResult()
-    }
+    // For "New" mode, clear old results
+    debugLogger.log('TASK', {
+      event: 'handleDataSourceCreated-clearing-results-for-new-mode',
+      widgetId: props.widgetId,
+      timestamp: Date.now()
+    })
+    await clearResult()
+
     setDataSource(ds)
     updateDataSource(ds)
     setStage(0)
     setActiveTab('query') // Return to Query tab when switching queries
   }, [updateDataSource, clearResult, resultCount, resultsMode, accumulatedRecords, props.widgetId])
 
-  const handleOutputDataSourceCreated = React.useCallback((ds: DataSource) => {
+  const handleOutputDataSourceCreated = React.useCallback(async (ds: DataSource) => {
     setOutputDS(ds)
+    
+    // CHECK rootDataSource.map to see how framework accesses map view
+    try {
+      const originDataSources = ds.getOriginDataSources()
+      const originDS = originDataSources?.[0]
+      if (originDS) {
+        const rootDS = originDS.getRootDataSource()
+        if (rootDS) {
+          // Expose rootDS to window for console inspection
+          ;(window as any).__querySimpleRootDS = rootDS
+          ;(window as any).__querySimpleRootDSMap = (rootDS as any).map
+          ;(window as any).__querySimpleOriginDS = originDS
+          
+          debugLogger.log('GRAPHICS-LAYER', {
+            event: 'check-root-datasource-map',
+            widgetId: props.widgetId,
+            outputDSId: ds.id,
+            originDSId: originDS.id,
+            rootDSId: rootDS.id,
+            rootDSType: rootDS.type,
+            hasRootDSMap: !!(rootDS as any).map,
+            rootDSMapType: (rootDS as any).map ? typeof (rootDS as any).map : 'none',
+            rootDSMapId: (rootDS as any).map?.id || 'none',
+            hasRootDSMapView: !!(rootDS as any).map?.view,
+            hasRootDSMapViews: !!(rootDS as any).map?.views,
+            rootDSMapViewsLength: (rootDS as any).map?.views?.length || 0,
+            // Log some map properties if it exists
+            rootDSMapKeys: (rootDS as any).map ? Object.keys((rootDS as any).map).filter(key => 
+              !key.startsWith('_') && 
+              typeof (rootDS as any).map[key] !== 'function'
+            ).slice(0, 20) : [],
+            // Log that objects are available on window for console inspection
+            consoleInspection: 'Check window.__querySimpleRootDS, window.__querySimpleRootDSMap, window.__querySimpleOriginDS',
+            timestamp: Date.now()
+          })
+          
+          // If map exists, check its view
+          const rootMap = (rootDS as any).map
+          if (rootMap) {
+            const view = rootMap.view || 
+                         (rootMap.views?.getItemAt?.(0)) ||
+                         (rootMap.views?.length > 0 ? rootMap.views[0] : null)
+            
+            debugLogger.log('GRAPHICS-LAYER', {
+              event: 'check-root-datasource-map-view',
+              widgetId: props.widgetId,
+              hasView: !!view,
+              viewType: view?.type || 'none',
+              viewId: view?.id || 'none',
+              timestamp: Date.now()
+            })
+          }
+        }
+      }
+    } catch (error) {
+      debugLogger.log('GRAPHICS-LAYER', {
+        event: 'check-root-datasource-map-error',
+        widgetId: props.widgetId,
+        error: error instanceof Error ? error.message : String(error),
+        errorStack: error instanceof Error ? error.stack : undefined,
+        timestamp: Date.now()
+      })
+    }
+    
+    // Initialize graphics layer lazily if enabled and not already initialized
+    if (useGraphicsLayerForHighlight && onInitializeGraphicsLayer) {
+      await onInitializeGraphicsLayer(ds)
+      // After initialization, graphicsLayer and mapView props should be updated
+      // But since props come from refs, we need to wait for widget re-render
+      // For now, use the props that will be updated on next render
+    }
     
     // If in "Add to" or "Remove from" mode and we have accumulated records, re-select them
     // This uses the same logic as after query completion - selectRecordsAndPublish
     // This ensures records are selected both on the map and in the Results tab
     if ((resultsMode === SelectionType.AddToSelection || resultsMode === SelectionType.RemoveFromSelection) 
         && accumulatedRecords && accumulatedRecords.length > 0) {
-      // Use a small delay to ensure the DS is fully ready
+      // Use a delay to ensure the DS is fully ready and graphics layer props are updated after widget re-render
+      // If graphics layer was just initialized, wait a bit longer for props to update
+      const delay = (useGraphicsLayerForHighlight && onInitializeGraphicsLayer) ? 200 : 100
       setTimeout(() => {
         const featureDS = ds as FeatureLayerDataSource
         if (featureDS && accumulatedRecords && accumulatedRecords.length > 0) {
           const recordIds = accumulatedRecords.map(record => record.getId())
-          try {
-            // Use the same selectRecordsAndPublish that's used after query completion
-            // This will select records on the map and trigger handleDataSourceInfoChange
-            // in query-result.tsx to update selectedRecords state for the Results tab
-            selectRecordsAndPublish(
-              props.widgetId,
-              featureDS,
-              recordIds,
-              accumulatedRecords
-            )
-            
-            // Update recordsRef so results tab shows accumulated records
-            recordsRef.current = accumulatedRecords
-            setResultCount(accumulatedRecords.length)
-            
-            debugLogger.log('RESULTS-MODE', {
-              event: 're-selected-accumulated-records-after-query-switch',
-              widgetId: props.widgetId,
-              outputDSId: featureDS.id,
-              recordsCount: accumulatedRecords.length
-            })
-            
-            // Verify what's actually selected in the DS after a delay
-            setTimeout(() => {
-              const ds = DataSourceManager.getInstance().getDataSource(featureDS.id)
-              const selectedInDS = ds?.getSelectedRecords()
-              const selectedIdsInDS = ds?.getSelectedRecordIds() ?? []
+          // Use the same selectRecordsAndPublish that's used after query completion
+          // This will select records on the map and trigger handleDataSourceInfoChange
+          // in query-result.tsx to update selectedRecords state for the Results tab
+          // Use graphics layer if enabled (props should be updated after widget re-render)
+          ;(async () => {
+            try {
+                await selectRecordsAndPublish(
+                  props.widgetId,
+                  featureDS,
+                  recordIds,
+                  accumulatedRecords,
+                  false,
+                  useGraphicsLayerForHighlight,
+                  graphicsLayer,
+                  mapView
+                )
               
-              debugLogger.log('RESULTS-MODE', {
-                event: 'verify-records-after-reselection',
-                widgetId: props.widgetId,
-                outputDSId: featureDS.id,
-                expectedCount: accumulatedRecords.length,
-                actualSelectedInDS: selectedInDS?.length || 0,
-                selectedIdsInDS: selectedIdsInDS.length,
-                recordsMatch: selectedInDS?.length === accumulatedRecords.length
-              })
-            }, 200)
-          } catch (error) {
-            debugLogger.log('RESULTS-MODE', {
-              event: 're-selection-failed-after-switch',
-              widgetId: props.widgetId,
-              error: error instanceof Error ? error.message : 'Unknown error',
-              errorStack: error instanceof Error ? error.stack : undefined
-            })
-          }
+                // Update recordsRef so results tab shows accumulated records
+                recordsRef.current = accumulatedRecords
+                setResultCount(accumulatedRecords.length)
+                
+                debugLogger.log('RESULTS-MODE', {
+                  event: 're-selected-accumulated-records-after-query-switch',
+                  widgetId: props.widgetId,
+                  outputDSId: featureDS.id,
+                  recordsCount: accumulatedRecords.length
+                })
+                
+                // Verify what's actually selected in the DS after a delay
+                setTimeout(() => {
+                  const ds = DataSourceManager.getInstance().getDataSource(featureDS.id)
+                  const selectedInDS = ds?.getSelectedRecords()
+                  const selectedIdsInDS = ds?.getSelectedRecordIds() ?? []
+                  
+                  debugLogger.log('RESULTS-MODE', {
+                    event: 'verify-records-after-reselection',
+                    widgetId: props.widgetId,
+                    outputDSId: featureDS.id,
+                    expectedCount: accumulatedRecords.length,
+                    actualSelectedInDS: selectedInDS?.length || 0,
+                    selectedIdsInDS: selectedIdsInDS.length,
+                    recordsMatch: selectedInDS?.length === accumulatedRecords.length
+                  })
+                }, 200)
+              } catch (error) {
+                debugLogger.log('RESULTS-MODE', {
+                  event: 're-selection-failed-after-switch',
+                  widgetId: props.widgetId,
+                  error: error instanceof Error ? error.message : 'Unknown error',
+                  errorStack: error instanceof Error ? error.stack : undefined
+                })
+              }
+            })()
         }
       }, 100)
     }
-  }, [resultsMode, accumulatedRecords, props.widgetId])
+  }, [resultsMode, accumulatedRecords, props.widgetId, useGraphicsLayerForHighlight, onInitializeGraphicsLayer])
 
   // Clear results when query item changes (e.g., when new hash parameter triggers different query)
   React.useEffect(() => {
@@ -607,10 +726,10 @@ export function QueryTask (props: QueryTaskProps) {
     }
   }, [queryItem.configId, clearResult, resultCount, resultsMode, accumulatedRecords, props.widgetId])
 
-  const navToForm = React.useCallback((clearResults = false) => {
+  const navToForm = React.useCallback(async (clearResults = false) => {
     if (clearResults) {
       // Use the centralized clearResult method instead of duplicating logic
-      clearResult()
+      await clearResult()
       return
     }
     // Switch to query tab but don't clear results unless explicitly requested
@@ -692,6 +811,13 @@ export function QueryTask (props: QueryTaskProps) {
     setSelectionError(null)
     setZoomError(null)
     
+    debugLogger.log('TASK', {
+      event: 'handleFormSubmit-start',
+      widgetId: props.widgetId,
+      resultsMode,
+      timestamp: Date.now()
+    })
+
     // Store the runtime zoom override for use by Add to Map action
     lastRuntimeZoomToSelectedRef.current = runtimeZoomToSelected
     
@@ -714,22 +840,19 @@ export function QueryTask (props: QueryTaskProps) {
       })
     }
     
-    // For "New" mode, clear old results by programmatically clicking the trash can button
-    // For "Add to" and "Remove from" modes, we keep accumulated results, so skip clearing
-    if (resultsMode === SelectionType.NewSelection && clearResultBtnRef.current) {
-      clearResultBtnRef.current.click()
-      // Small delay to ensure the click handler completes before proceeding
-      await new Promise(resolve => setTimeout(resolve, 0))
+    // For "New" mode, clear old results and graphics layer
+    // We call clearResult() directly and AWAIT it to ensure it's finished before query execution starts
+    if (resultsMode === SelectionType.NewSelection) {
+      debugLogger.log('TASK', {
+        event: 'handleFormSubmit-clearing-results-for-new-mode',
+        widgetId: props.widgetId,
+        timestamp: Date.now()
+      })
+      await clearResult()
     }
     
     // Set loading stage
     setStage(2)
-    
-    // For "New" mode, clear data cleared message
-    // For "Add to" and "Remove from" modes, skip clearing to preserve existing records
-    if (resultsMode === SelectionType.NewSelection) {
-      await publishDataClearedMsg()
-    }
     
     // FORCED: Always use SimpleList - fetch ALL records, not just a page
     // Use data source's max record count, or fall back to a large number (10000)
@@ -751,7 +874,7 @@ export function QueryTask (props: QueryTaskProps) {
         return executeQuery(props.widgetId, queryItem, featureDS, queryParamRef.current)
       })
       .then(async (result) => {
-        let recordsToDisplay = result.records
+        let recordsToDisplay = result.records || []
         let dsToUse = outputDS
         
         // Handle "Add to" mode: merge new results with widget-level accumulated records
@@ -819,10 +942,13 @@ export function QueryTask (props: QueryTaskProps) {
               }
               
               // Remove records from origin data source selections (map highlighting)
+              // Also removes graphics from graphics layer if using graphics layer highlighting
               removeRecordsFromOriginSelections(
                 props.widgetId,
                 result.records as FeatureDataRecord[],
-                outputDS
+                outputDS,
+                useGraphicsLayerForHighlight,
+                graphicsLayer
               )
               
               debugLogger.log('RESULTS-MODE', {
@@ -912,42 +1038,58 @@ export function QueryTask (props: QueryTaskProps) {
             }
           } else {
             // For "Add to" and "New" modes, select records normally
-            try {
-              setSelectionError(null) // Clear previous errors
-              selectRecordsAndPublish(
-                props.widgetId,
-                dsToUse,
-                recordIdsToSelect,
-                recordsToDisplay as FeatureDataRecord[]
-              )
-              hasSelectedRecordsRef.current = true // Mark as selected
-            } catch (error) {
-              const errorMessage = error instanceof Error ? error.message : 'Failed to select query results'
-              setSelectionError(errorMessage)
-              debugLogger.log('TASK', {
-                event: 'selection-failed',
-                error: errorMessage,
-                errorStack: error instanceof Error ? error.stack : undefined,
-                recordCount: recordIdsToSelect.length
-              })
-            }
+            setSelectionError(null) // Clear previous errors
+            ;(async () => {
+              try {
+                await selectRecordsAndPublish(
+                  props.widgetId,
+                  dsToUse,
+                  recordIdsToSelect,
+                  recordsToDisplay as FeatureDataRecord[],
+                  false,
+                  useGraphicsLayerForHighlight,
+                  graphicsLayer,
+                  mapView
+                )
+                hasSelectedRecordsRef.current = true // Mark as selected
+                
+                // Dispatch custom selection event so Widget state is updated immediately
+                // This is crucial for hash-based execution where QueryTask handles selection
+                dispatchSelectionEvent(props.widgetId, recordIdsToSelect, dsToUse, queryItem.configId)
+              } catch (error) {
+                const errorMessage = error instanceof Error ? error.message : 'Failed to select query results'
+                setSelectionError(errorMessage)
+                debugLogger.log('TASK', {
+                  event: 'selection-failed',
+                  error: errorMessage,
+                  errorStack: error instanceof Error ? error.stack : undefined,
+                  recordCount: recordIdsToSelect.length
+                })
+              }
+            })()
           }
         } else if (resultsMode === SelectionType.RemoveFromSelection && recordsToDisplay.length === 0) {
           // All records removed - clear selection
-          try {
-            clearSelectionInDataSources(dsToUse)
-            hasSelectedRecordsRef.current = false
-            debugLogger.log('RESULTS-MODE', {
-              event: 'remove-mode-all-records-removed-selection-cleared',
-              widgetId: props.widgetId
-            })
-          } catch (error) {
-            debugLogger.log('RESULTS-MODE', {
-              event: 'remove-mode-clear-selection-error',
-              widgetId: props.widgetId,
-              error: error instanceof Error ? error.message : 'Unknown error'
-            })
-          }
+          ;(async () => {
+            try {
+              await clearSelectionInDataSources(props.widgetId, dsToUse, useGraphicsLayerForHighlight, graphicsLayer)
+              hasSelectedRecordsRef.current = false
+              
+              // Notify Widget that selection is cleared
+              dispatchSelectionEvent(props.widgetId, [], dsToUse, queryItem.configId)
+              
+              debugLogger.log('RESULTS-MODE', {
+                event: 'remove-mode-all-records-removed-selection-cleared',
+                widgetId: props.widgetId
+              })
+            } catch (error) {
+              debugLogger.log('RESULTS-MODE', {
+                event: 'remove-mode-clear-selection-error',
+                widgetId: props.widgetId,
+                error: error instanceof Error ? error.message : 'Unknown error'
+              })
+            }
+          })()
         }
         
         // Mark that query just executed BEFORE updating resultCount
@@ -1041,11 +1183,19 @@ export function QueryTask (props: QueryTaskProps) {
         // Tab switching is now handled by useEffect that watches for queryJustExecutedRef and results
         // This matches the behavior of manual input where results are rendered before tab switch
       })
-  }, [currentItem, queryItem, props.widgetId, outputDS, publishDataClearedMsg, clearResult, resultsMode, accumulatedRecords, onAccumulatedRecordsChange])
+  }, [currentItem, queryItem, props.widgetId, outputDS, publishDataClearedMsg, clearResult, resultsMode, accumulatedRecords, onAccumulatedRecordsChange, onClearGraphicsLayer])
 
   const { useAttributeFilter, sqlExprObj, useSpatialFilter, spatialFilterTypes, spatialIncludeRuntimeData, spatialRelationUseDataSources} = currentItem
   const showAttributeFilter = useAttributeFilter && sqlExprObj != null
   const showSpatialFilter = spatialFilterEnabled && useSpatialFilter && (spatialFilterTypes.length > 0 || spatialIncludeRuntimeData || spatialRelationUseDataSources?.length > 0)
+
+  // DETECT SWITCH IN RENDER
+  const isSwitchingQueries = previousConfigIdRef.current !== queryItem.configId
+  const isVirtualClearActive = isSwitchingQueries && resultsMode === SelectionType.NewSelection
+  
+  // Use these "effective" values for the UI
+  const effectiveResultCount = isVirtualClearActive ? 0 : resultCount
+  const effectiveRecords = isVirtualClearActive ? [] : (recordsRef.current || [])
 
   return (
     <div className={classNames('query-task h-100', className, { wrapped: wrappedInPopper })} css={css`
@@ -1167,7 +1317,7 @@ export function QueryTask (props: QueryTaskProps) {
                   )
                 })()}
               </div>
-              {resultCount > 0 && (
+              {effectiveResultCount > 0 && (
                 <Tooltip title={getI18nMessage('clearResult')} placement='bottom'>
                   <Button
                     ref={clearResultBtnRef}
@@ -1256,7 +1406,7 @@ export function QueryTask (props: QueryTaskProps) {
               })
               
               return (
-                <>
+                <React.Fragment>
                   {/* First Dropdown: All queries */}
                   <div css={css`
                     padding: 4px 16px;
@@ -1274,7 +1424,7 @@ export function QueryTask (props: QueryTaskProps) {
                     <Select 
                       size="sm"
                       value={currentOptionIndex >= 0 ? currentOptionIndex : 0}
-                      onChange={(e) => {
+                      onChange={async (e) => {
                         const optionIndex = parseInt(e.target.value)
                         const selectedOption = queryOptions[optionIndex]
                         
@@ -1284,6 +1434,11 @@ export function QueryTask (props: QueryTaskProps) {
                           selectedOption,
                           isGrouped: selectedOption.groupId !== null
                         })
+
+                        // START CLEARING IMMEDIATELY IF SWITCHING
+                        if (resultsMode === SelectionType.NewSelection) {
+                          await clearResult()
+                        }
                         
                         if (selectedOption.groupId) {
                           // Grouped query selected - set group and first query in group
@@ -1354,7 +1509,7 @@ export function QueryTask (props: QueryTaskProps) {
                       <Select 
                         size="sm"
                         value={selectedGroupQueryIndex !== undefined ? selectedGroupQueryIndex : 0}
-                        onChange={(e) => {
+                        onChange={async (e) => {
                           const newIndex = parseInt(e.target.value)
                           debugLogger.log('GROUP', {
                             event: 'group-query-selected',
@@ -1363,6 +1518,12 @@ export function QueryTask (props: QueryTaskProps) {
                             queryItemConfigId: groups[currentQueryGroupId].items[newIndex]?.configId,
                             queryDisplayName: getQueryDisplayName(groups[currentQueryGroupId].items[newIndex])
                           })
+
+                          // START CLEARING IMMEDIATELY IF SWITCHING
+                          if (resultsMode === SelectionType.NewSelection) {
+                            await clearResult()
+                          }
+
                           if (onGroupQueryChange) {
                             onGroupQueryChange(newIndex)
                           }
@@ -1376,7 +1537,7 @@ export function QueryTask (props: QueryTaskProps) {
                       </Select>
                     </div>
                   )}
-                </>
+                </React.Fragment>
               )
             })()}
             
@@ -1471,11 +1632,11 @@ export function QueryTask (props: QueryTaskProps) {
                           // merge them with existing accumulated records before changing mode
                           if (previousMode === SelectionType.NewSelection && 
                               newMode === SelectionType.AddToSelection &&
-                              recordsRef.current && 
-                              recordsRef.current.length > 0 &&
+                              effectiveRecords && 
+                              effectiveRecords.length > 0 &&
                               outputDS &&
                               onAccumulatedRecordsChange) {
-                            const currentRecords = recordsRef.current as FeatureDataRecord[]
+                            const currentRecords = effectiveRecords as FeatureDataRecord[]
                             const existingAccumulated = accumulatedRecords || []
                             
                             // Merge current results with existing accumulated records
@@ -1541,11 +1702,11 @@ export function QueryTask (props: QueryTaskProps) {
                           // (same pattern as "Add to" mode)
                           if (previousMode === SelectionType.NewSelection && 
                               newMode === SelectionType.RemoveFromSelection &&
-                              recordsRef.current && 
-                              recordsRef.current.length > 0 &&
+                              effectiveRecords && 
+                              effectiveRecords.length > 0 &&
                               outputDS &&
                               onAccumulatedRecordsChange) {
-                            const currentRecords = recordsRef.current as FeatureDataRecord[]
+                            const currentRecords = effectiveRecords as FeatureDataRecord[]
                             const existingAccumulated = accumulatedRecords || []
                             
                             // Merge current results with existing accumulated records
@@ -1649,20 +1810,20 @@ export function QueryTask (props: QueryTaskProps) {
           title={
             <span>
               {getI18nMessage('resultsTab')}
-              {resultCount > 0 && (
+              {effectiveResultCount > 0 && (
                 <span css={css`
                   margin-left: 6px;
                   font-size: 0.75rem;
                   opacity: 0.7;
                 `}>
-                  ({resultCount})
+                  ({effectiveResultCount})
                 </span>
               )}
             </span>
           }
-          disabled={resultCount === 0}
+          disabled={effectiveResultCount === 0}
         >
-          {resultCount > 0 && (
+          {effectiveResultCount > 0 && (
             <div 
               className={classNames('query-task__content', {
                 [FOCUSABLE_CONTAINER_CLASS]: isInPopper && activeTab === 'results'
@@ -1687,21 +1848,24 @@ export function QueryTask (props: QueryTaskProps) {
                 widgetId={props.widgetId}
                 queryItem={queryItem}
                 queryParams={queryParamRef.current}
-                resultCount={resultCount}
+                resultCount={effectiveResultCount}
                 maxPerPage={(dataSource as QueriableDataSource)?.getMaxRecordCount?.()}
-                records={recordsRef.current}
+                records={effectiveRecords}
                 outputDS={outputDS}
                 runtimeZoomToSelected={lastRuntimeZoomToSelectedRef.current}
                 resultsMode={resultsMode}
+                useGraphicsLayerForHighlight={useGraphicsLayerForHighlight}
+                graphicsLayer={graphicsLayer}
+                mapView={mapView}
                 accumulatedRecords={accumulatedRecords}
                 onAccumulatedRecordsChange={onAccumulatedRecordsChange}
-                onNavBack={(clearResults = false) => {
+                onNavBack={async (clearResults = false) => {
                   // Handle navigation from QueryTaskResult
                   // If clearResults is true, clear everything and go to query tab
                   // If false, just switch to query tab without clearing
                   if (clearResults) {
                     hasSelectedRecordsRef.current = false // Reset flag when clearing
-                    navToForm(true)
+                    await navToForm(true)
                   } else {
                     // Just switch tabs, don't clear results
                     // Mark as manual switch to prevent auto-switch useEffect from interfering

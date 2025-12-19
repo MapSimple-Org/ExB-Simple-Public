@@ -39,7 +39,8 @@ import {
   selectRecordsInDataSources, 
   clearSelectionInDataSources, 
   selectRecordsAndPublish,
-  publishSelectionMessage 
+  publishSelectionMessage,
+  dispatchSelectionEvent 
 } from './selection-utils'
 import { removeResultsFromAccumulated, removeRecordsFromOriginSelections } from './results-management-utils'
 import { createQuerySimpleDebugLogger } from 'widgets/shared-code/common'
@@ -97,7 +98,10 @@ export interface QueryTasResultProps {
   queryItem: ImmutableObject<QueryItemType>
   records: DataRecord[]
   runtimeZoomToSelected?: boolean
-  onNavBack: (clearResults?: boolean) => void
+  onNavBack: (clearResults?: boolean) => Promise<void> | void
+  useGraphicsLayerForHighlight?: boolean
+  graphicsLayer?: __esri.GraphicsLayer
+  mapView?: __esri.MapView | __esri.SceneView
   resultsMode?: SelectionType
   accumulatedRecords?: FeatureDataRecord[]
   onAccumulatedRecordsChange?: (records: FeatureDataRecord[]) => void
@@ -131,7 +135,7 @@ const resultStyle = css`
 `
 
 export function QueryTaskResult (props: QueryTasResultProps) {
-  const { queryItem, queryParams, resultCount, maxPerPage, records, widgetId, outputDS, runtimeZoomToSelected, onNavBack, resultsMode, accumulatedRecords, onAccumulatedRecordsChange } = props
+  const { queryItem, queryParams, resultCount, maxPerPage, records, widgetId, outputDS, runtimeZoomToSelected, onNavBack, resultsMode, accumulatedRecords, onAccumulatedRecordsChange, useGraphicsLayerForHighlight, graphicsLayer, mapView } = props
   const getI18nMessage = hooks.useTranslation(defaultMessage)
   const intl = useIntl()
   const [queryData, setQueryData] = React.useState(null)
@@ -386,38 +390,37 @@ export function QueryTaskResult (props: QueryTasResultProps) {
       const fdr = records as FeatureDataRecord[]
       
       // Select records and publish selection message using utility function
-      try {
-        setSelectionError(null) // Clear previous errors
-        selectRecordsAndPublish(widgetId, outputDS, recordIds, fdr)
-        hasSelectedRef.current = true // Mark as selected
-        lastSelectedRecordsRef.current = recordIds // Store the IDs we selected
-        lastSelectedFeatureRecordsRef.current = fdr // Store the full records for potential restoration
-        
-        // Notify HelperSimple of selection change
-        const originDS = outputDS.getOriginDataSources()?.[0] as FeatureLayerDataSource
-        const dataSourceId = originDS?.id
-        const selectionEvent = new CustomEvent('querysimple-selection-changed', {
-          detail: {
-            widgetId,
-            recordIds,
-            dataSourceId,
-            outputDsId: outputDS.id,
-            queryItemConfigId: queryItem.configId
-          },
-          bubbles: true,
-          cancelable: true
-        })
-        window.dispatchEvent(selectionEvent)
-      } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : 'Failed to select query results'
-        setSelectionError(errorMessage)
-        debugLogger.log('TASK', {
-          event: 'selection-failed-query-result',
-          error: errorMessage,
-          errorStack: error instanceof Error ? error.stack : undefined,
-          recordCount: recordIds.length
-        })
-      }
+      // Use async IIFE since useEffect can't be async
+      ;(async () => {
+        try {
+          setSelectionError(null) // Clear previous errors
+          await selectRecordsAndPublish(
+            widgetId, 
+            outputDS, 
+            recordIds, 
+            fdr, 
+            false, 
+            useGraphicsLayerForHighlight, 
+            graphicsLayer, 
+            mapView
+          )
+          hasSelectedRef.current = true // Mark as selected
+          lastSelectedRecordsRef.current = recordIds // Store the IDs we selected
+          lastSelectedFeatureRecordsRef.current = fdr // Store the full records for potential restoration
+          
+          // Notify Widget and HelperSimple of selection change
+          dispatchSelectionEvent(widgetId, recordIds, outputDS, queryItem.configId)
+        } catch (error) {
+          const errorMessage = error instanceof Error ? error.message : 'Failed to select query results'
+          setSelectionError(errorMessage)
+          debugLogger.log('TASK', {
+            event: 'selection-failed-query-result',
+            error: errorMessage,
+            errorStack: error instanceof Error ? error.stack : undefined,
+            recordCount: recordIds.length
+          })
+        }
+      })()
     } else if (recordsChanged && records && records.length === 0) {
       // If records were cleared, reset the selection flag
       hasSelectedRef.current = false
@@ -438,10 +441,10 @@ export function QueryTaskResult (props: QueryTasResultProps) {
   React.useEffect(() => {
     // clear selection when resultSelectMode changed
     if (outputDS) {
-      clearSelectionInDataSources(outputDS)
+      clearSelectionInDataSources(outputDS, useGraphicsLayerForHighlight, graphicsLayer)
       publishSelectionMessage(widgetId, [], outputDS, true)
     }
-  }, [queryItem.resultSelectMode, outputDS, widgetId])
+  }, [queryItem.resultSelectMode, outputDS, widgetId, useGraphicsLayerForHighlight, graphicsLayer])
 
   // Update expandAll when queryItem changes (e.g., switching between queries)
   React.useEffect(() => {
@@ -622,7 +625,24 @@ export function QueryTaskResult (props: QueryTasResultProps) {
   /**
    * Clears all results. Resets local state and delegates to parent's clearResult method.
    */
-  const clearResults = () => {
+  const clearResults = async () => {
+    // Log hash state before clearing
+    const hashBefore = window.location.hash.substring(1)
+    const urlParamsBefore = new URLSearchParams(hashBefore)
+    const hashParamsBefore: { [key: string]: string } = {}
+    urlParamsBefore.forEach((value, key) => {
+      hashParamsBefore[key] = value
+    })
+    
+    debugLogger.log('HASH', {
+      event: 'clearResults-called',
+      widgetId,
+      hashBefore: hashBefore,
+      hashParamsBefore: hashParamsBefore,
+      hashParamsCount: Object.keys(hashParamsBefore).length,
+      timestamp: Date.now()
+    })
+    
     // Reset local selection flags
     hasSelectedRef.current = false
     lastSelectedRecordsRef.current = []
@@ -633,7 +653,31 @@ export function QueryTaskResult (props: QueryTasResultProps) {
     setSelectionError(null)
     // Delegate to parent's clearResult method (via onNavBack) which handles
     // clearing selection from map, publishing messages, etc.
-    onNavBack(true)
+    await onNavBack(true)
+    
+    // Log hash state after clearing (with delay to catch async updates)
+    setTimeout(() => {
+      const hashAfter = window.location.hash.substring(1)
+      const urlParamsAfter = new URLSearchParams(hashAfter)
+      const hashParamsAfter: { [key: string]: string } = {}
+      urlParamsAfter.forEach((value, key) => {
+        hashParamsAfter[key] = value
+      })
+      
+      debugLogger.log('HASH', {
+        event: 'clearResults-completed',
+        widgetId,
+        hashBefore: hashBefore,
+        hashAfter: hashAfter,
+        hashParamsBefore: hashParamsBefore,
+        hashParamsAfter: hashParamsAfter,
+        hashParamsRemoved: Object.keys(hashParamsBefore).length - Object.keys(hashParamsAfter).length,
+        hashParamsCountBefore: Object.keys(hashParamsBefore).length,
+        hashParamsCountAfter: Object.keys(hashParamsAfter).length,
+        stillHasHashParams: Object.keys(hashParamsAfter).length > 0,
+        timestamp: Date.now()
+      })
+    }, 100)
   }
 
   const handleRenderDone = React.useCallback(({ dataItems, pageSize, page }) => {
@@ -951,11 +995,29 @@ export function QueryTaskResult (props: QueryTasResultProps) {
     const dataId = data.getId()
     const currentExpandAll = expandAll
     
+    // Log hash state when removing individual record
+    const hash = window.location.hash.substring(1)
+    const urlParams = new URLSearchParams(hash)
+    const hashParams: { [key: string]: string } = {}
+    urlParams.forEach((value, key) => {
+      hashParams[key] = value
+    })
+    
     debugLogger.log('EXPAND-COLLAPSE', {
       event: 'removeRecord-started',
       widgetId,
       removedRecordId: dataId,
       currentExpandAll,
+      timestamp: Date.now()
+    })
+    
+    debugLogger.log('HASH', {
+      event: 'removeRecord-called',
+      widgetId,
+      removedRecordId: dataId,
+      hash: hash,
+      hashParams: hashParams,
+      hashParamsCount: Object.keys(hashParams).length,
       timestamp: Date.now()
     })
     
@@ -1029,7 +1091,14 @@ export function QueryTaskResult (props: QueryTasResultProps) {
     
     // ALWAYS remove from origin data source selections (same as Remove mode)
     // This properly removes records from the map selection, handling single or multiple origin sources
-    removeRecordsFromOriginSelections(widgetId, [data], outputDS as FeatureLayerDataSource)
+    // Also removes graphics from graphics layer if using graphics layer highlighting
+    removeRecordsFromOriginSelections(
+      widgetId, 
+      [data], 
+      outputDS as FeatureLayerDataSource,
+      useGraphicsLayerForHighlight,
+      graphicsLayer
+    )
     
     // Update outputDS selection
     const selectedDatas = outputDS.getSelectedRecords() ?? []
