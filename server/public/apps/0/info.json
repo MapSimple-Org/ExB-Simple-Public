@@ -1,12 +1,12 @@
 {
-  "created": 1763948097780,
+  "created": 1766093636339,
   "description": "",
   "id": "0",
-  "modified": 1765751551005,
-  "owner": "cabreraa_kingcounty",
+  "modified": 1766164319830,
+  "owner": "adamsimple",
   "tags": [],
   "thumbnail": null,
-  "title": "AC ExB Dev Sandbox",
+  "title": "AC MapSimple Sandbox",
   "type": "Web Experience",
   "snippet": "",
   "typeKeywords": [
@@ -15,12 +15,12 @@
     "JavaScript",
     "status: Published",
     "version:1.19.0",
-    "modified: 1765751550480",
+    "modified: 1766164319047",
     "publishVersion:1.19.0"
   ],
-  "portalUrl": "https://kingcounty.maps.arcgis.com",
-  "username": "cabreraa_kingcounty",
-  "name": "AC ExB Dev Sandbox",
-  "isLocalApp": true,
-  "url": null
+  "portalUrl": "https://mapsimple.maps.arcgis.com",
+  "username": "adamsimple",
+  "url": null,
+  "name": "AC MapSimple Sandbox",
+  "isLocalApp": true
 }

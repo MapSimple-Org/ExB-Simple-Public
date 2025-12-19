@@ -20,7 +20,12 @@
 
 ---
 
-### 3. Refactor & Simplify (Code Quality)
+### 3. Structural Refactor (Class to Hooks)
+**Status:** 🔴 DEFERRED (User requested rollback)  
+**Priority:** Low  
+**Source:** Development Strategy
+
+**Update**: An attempt was made to refactor `widget.tsx` into Custom Hooks, but it was rolled back to maintain the stable, high-performance r017.39 build. This task is currently on hold.
 **Status:** Pending  
 **Priority:** High  
 **Source:** Code Review - "Simple is Key"
