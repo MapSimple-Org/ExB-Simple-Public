@@ -26,6 +26,8 @@ export interface QueryTaskListProps {
   mapView?: __esri.MapView | __esri.SceneView
   onInitializeGraphicsLayer?: (outputDS: DataSource) => Promise<void>
   onClearGraphicsLayer?: () => void
+  activeTab?: 'query' | 'results'
+  onTabChange?: (tab: 'query' | 'results') => void
 }
 
 interface GroupedQueries {
@@ -121,7 +123,7 @@ const getQueryDisplayName = (item: ImmutableObject<QueryItemType>): string => {
 }
 
 export function QueryTaskList (props: QueryTaskListProps) {
-  const { queryItems, widgetId, defaultPageSize, isInPopper = false, className = '', initialQueryValue, onHashParameterUsed, resultsMode, onResultsModeChange, accumulatedRecords, onAccumulatedRecordsChange, useGraphicsLayerForHighlight, graphicsLayer, mapView, onInitializeGraphicsLayer, onClearGraphicsLayer } = props
+  const { queryItems, widgetId, defaultPageSize, isInPopper = false, className = '', initialQueryValue, onHashParameterUsed, resultsMode, onResultsModeChange, accumulatedRecords, onAccumulatedRecordsChange, useGraphicsLayerForHighlight, graphicsLayer, mapView, onInitializeGraphicsLayer, onClearGraphicsLayer, activeTab, onTabChange } = props
   const getI18nMessage = hooks.useTranslation(defaultMessages)
   
   // Sort queries by display order before grouping
@@ -135,14 +137,36 @@ export function QueryTaskList (props: QueryTaskListProps) {
   
   const { groups, ungrouped, groupOrder } = React.useMemo(() => groupQueries(sortedQueryItems), [sortedQueryItems])
   
-  // Find the query item matching the initialQueryValue shortId from URL hash
-  // Use sortedQueryItems to ensure we find the item in the sorted order
+  // Determine if we have an initial query value from the URL hash
+  const initialQueryValueFromHash = React.useMemo(() => {
+    const hash = window.location.hash.substring(1)
+    if (!hash) return null
+    
+    const params = new URLSearchParams(hash)
+    const allQueryItems = [...ungrouped.map(u => u.item), ...Object.values(groups).flatMap(g => g.items)]
+    
+    for (const item of allQueryItems) {
+      if (item.shortId && params.has(item.shortId)) {
+        return {
+          shortId: item.shortId,
+          value: params.get(item.shortId)
+        }
+      }
+    }
+    return null
+  }, [ungrouped, groups])
+
+  // Use the prop initialQueryValue if provided, otherwise fallback to our own hash parsing
+  const effectiveInitialQueryValue = initialQueryValue || initialQueryValueFromHash
+
+  // Find the query item matching the shortId from URL hash
   const matchingQueryIndex = React.useMemo(() => {
-    if (!initialQueryValue?.shortId) {
+    const shortId = effectiveInitialQueryValue?.shortId
+    if (!shortId) {
       return -1
     }
-    return sortedQueryItems.findIndex(item => item.shortId === initialQueryValue.shortId)
-  }, [sortedQueryItems, initialQueryValue])
+    return sortedQueryItems.findIndex(item => item.shortId === shortId)
+  }, [sortedQueryItems, effectiveInitialQueryValue])
   
   // Determine which group/ungrouped index the matching query is at
   const getQuerySelection = React.useMemo(() => {
@@ -381,6 +405,8 @@ export function QueryTaskList (props: QueryTaskListProps) {
             onResultsModeChange={onResultsModeChange}
             accumulatedRecords={accumulatedRecords}
             onAccumulatedRecordsChange={onAccumulatedRecordsChange}
+            activeTab={activeTab}
+            onTabChange={onTabChange}
             // No onNavBack - no navigation needed
           />
         </div>

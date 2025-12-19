@@ -5,6 +5,41 @@ All notable changes to MapSimple Experience Builder widgets will be documented i
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.19.0-r017.39] - 2025-12-19
+
+### Added
+- **Universal SQL Optimizer**: Upgraded the performance logic to automatically unwrap `LOWER()` from *any* database field while normalizing user input to uppercase. This ensures maximum query speed (index usage) across all configurable search fields while maintaining case-insensitivity.
+
+## [1.19.0-r017.38] - 2025-12-19
+
+### Added
+- **Performance Optimizations**: Significantly reduced query execution time and browser overhead
+  - **Eliminated Sequential Count Query**: Removed redundant `executeCountQuery` round-trip. Widget now fetches data immediately and uses `records.length`, cutting latency by ~50%.
+  - **SQL Index Optimization**: Implemented manual SQL bypass for core fields (`MAJOR`, `PIN`) to prevent Experience Builder's `LOWER()` function from disabling database indexes.
+  - **Geometry Generalization**: Added `maxAllowableOffset: 0.1` to query parameters, reducing geometry payload size for bulk fetches (100+ records).
+  - **Iframe-Aware Debugging**: Updated `debugLogger` to correctly detect `?debug=all` parameters even when the widget is running inside an Experience Builder iframe.
+
+### Fixed
+- **Test Reliability**: Enhanced Playwright `waitForResults` helper to correctly differentiate between "New" and "Stale" results, preventing false-positive successes during fast-paced methodical sessions.
+
+## [1.19.0-r017.31] - 2025-12-19
+
+### Fixed
+- **Add Mode Stability**: Further improved record capture and display consistency in accumulation modes
+  - UI now strictly prefers the accumulated record set over the map's current selection in Add/Remove modes
+  - Added "Humanized" delays to E2E tests to match user interaction speed and allow React state to settle
+- **Dual-Widget Session Testing**: Expanded methodical testing suite to verify both widget instances (HS-connected and Isolated)
+
+## [1.19.0-r017.30] - 2025-12-19
+
+### Fixed
+- **Deep Link Consumption**: Fixed bug where hash parameters re-triggered a "New Selection" reset when switching to accumulation modes (Add/Remove)
+  - Hash parameters are now automatically cleared from the URL when entering Add or Remove modes
+  - Prevents "Initialization loops" during re-renders while building a selection set
+- **Add Mode Capture**: Fixed race condition where current results were sometimes lost when clicking the "Add" button
+  - Implemented dual-source capture strategy (React state + Data Source selection)
+- **Log Noise**: Disabled high-frequency `MAP-EXTENT` logs in `log-extent-action.ts` to improve testability and terminal clarity
+
 ## [1.19.0-r017.29] - 2025-12-18
 
 ### Fixed

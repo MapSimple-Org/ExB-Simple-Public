@@ -29,11 +29,39 @@ const QUERYSIMPLE_WIDGET_STATE_EVENT = 'querysimple-widget-state-changed'
  */
 const RESTORE_ON_IDENTIFY_CLOSE_EVENT = 'querysimple-restore-on-identify-close'
 
-export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>, { initialQueryValue?: { shortId: string, value: string }, isPanelVisible?: boolean, hasSelection?: boolean, selectionRecordCount?: number, lastSelection?: { recordIds: string[], outputDsId: string, queryItemConfigId: string }, resultsMode?: SelectionType, accumulatedRecords?: FeatureDataRecord[], graphicsLayerInitialized?: boolean, jimuMapView?: JimuMapView }> {
+export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>, { 
+  initialQueryValue?: { shortId: string, value: string }, 
+  isPanelVisible?: boolean, 
+  hasSelection?: boolean, 
+  selectionRecordCount?: number, 
+  lastSelection?: { recordIds: string[], outputDsId: string, queryItemConfigId: string }, 
+  resultsMode?: SelectionType, 
+  accumulatedRecords?: FeatureDataRecord[], 
+  graphicsLayerInitialized?: boolean, 
+  jimuMapView?: JimuMapView,
+  activeTab?: 'query' | 'results'
+}> {
   static versionManager = versionManager
+  private lastProcessedHash: string = ''
 
-  state: { initialQueryValue?: { shortId: string, value: string }, isPanelVisible?: boolean, hasSelection?: boolean, selectionRecordCount?: number, lastSelection?: { recordIds: string[], outputDsId: string, queryItemConfigId: string }, resultsMode?: SelectionType, accumulatedRecords?: FeatureDataRecord[], graphicsLayerInitialized?: boolean, jimuMapView?: JimuMapView } = {
-    resultsMode: SelectionType.NewSelection // Default mode
+  state: { 
+    initialQueryValue?: { shortId: string, value: string }, 
+    isPanelVisible?: boolean, 
+    hasSelection?: boolean, 
+    selectionRecordCount?: number, 
+    lastSelection?: { recordIds: string[], outputDsId: string, queryItemConfigId: string }, 
+    resultsMode?: SelectionType, 
+    accumulatedRecords?: FeatureDataRecord[], 
+    graphicsLayerInitialized?: boolean, 
+    jimuMapView?: JimuMapView,
+    activeTab?: 'query' | 'results'
+  } = {
+    resultsMode: SelectionType.NewSelection, // Default mode
+    activeTab: 'query'
+  }
+
+  handleTabChange = (activeTab: 'query' | 'results') => {
+    this.setState({ activeTab })
   }
   private widgetRef = React.createRef<HTMLDivElement>()
   private visibilityObserver: IntersectionObserver | null = null
@@ -914,13 +942,27 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
    */
   private handleResultsModeChange = (mode: SelectionType) => {
     debugLogger.log('RESULTS-MODE', {
-      event: 'mode-changed',
+      event: 'handleResultsModeChange-triggered',
       widgetId: this.props.id,
       previousMode: this.state.resultsMode,
       newMode: mode,
-      timestamp: new Date().toISOString()
+      currentAccumulatedCount: this.state.accumulatedRecords?.length || 0,
+      timestamp: Date.now()
     })
     
+    // Consume deep link when switching to accumulation modes
+    if (mode === SelectionType.AddToSelection || mode === SelectionType.RemoveFromSelection) {
+      if (this.state.initialQueryValue?.shortId) {
+        debugLogger.log('HASH', {
+          event: 'consuming-hash-on-mode-switch',
+          widgetId: this.props.id,
+          mode,
+          shortId: this.state.initialQueryValue.shortId
+        })
+        this.removeHashParameter(this.state.initialQueryValue.shortId)
+      }
+    }
+
     // If switching to "New" mode, clear accumulated records
     if (mode === SelectionType.NewSelection) {
       debugLogger.log('RESULTS-MODE', {
@@ -934,11 +976,42 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
     }
   }
 
+  private removeHashParameter = (shortId: string) => {
+    if (!shortId) return
+    
+    const hash = window.location.hash.substring(1)
+    const urlParams = new URLSearchParams(hash)
+    
+    if (urlParams.has(shortId)) {
+      urlParams.delete(shortId)
+      const newHash = urlParams.toString()
+      
+      debugLogger.log('HASH', {
+        event: 'removeHashParameter',
+        shortId,
+        newHash: newHash ? `#${newHash}` : '(empty)',
+        timestamp: Date.now()
+      })
+      
+      // Update the URL without triggering a reload
+      window.history.replaceState(null, '', 
+        newHash ? `#${newHash}` : window.location.pathname + window.location.search
+      )
+      
+      // Also clear the state so it won't trigger again
+      if (this.state.initialQueryValue?.shortId === shortId) {
+        this.setState({ initialQueryValue: undefined })
+      }
+    }
+  }
+
   private handleAccumulatedRecordsChange = (records: FeatureDataRecord[]) => {
     debugLogger.log('RESULTS-MODE', {
-      event: 'accumulated-records-updated',
+      event: 'handleAccumulatedRecordsChange-triggered',
       widgetId: this.props.id,
-      recordsCount: records.length
+      previousCount: this.state.accumulatedRecords?.length || 0,
+      newCount: records.length,
+      timestamp: Date.now()
     })
     this.setState({ accumulatedRecords: records })
   }
@@ -1337,98 +1410,28 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
   }
 
   /**
-   * Removes a hash parameter from the URL after it has been used to populate a query.
-   * This prevents the parameter from being re-applied when switching between queries.
+   * NOTIFY that a hash parameter has been used.
+   * Previously this removed the hash from the URL, but per updated requirements,
+   * user-entered hashes should remain in the URL.
+   * 
+   * @param shortId - The shortId parameter that was used
    */
-  removeHashParameter = (shortId: string) => {
-    const hash = window.location.hash.substring(1)
-    if (!hash) {
-      debugLogger.log('HASH', {
-        event: 'removeHashParameter-no-hash',
-        widgetId: this.props.id,
-        shortId: shortId,
-        timestamp: Date.now()
-      })
-      return
-    }
+  handleHashParameterUsed = (shortId: string) => {
+    const { id } = this.props
+    const { initialQueryValue } = this.state
     
-    const urlParams = new URLSearchParams(hash)
-    
-    // Log all hash params before removal
-    const allParamsBefore: { [key: string]: string } = {}
-    urlParams.forEach((value, key) => {
-      allParamsBefore[key] = value
+    debugLogger.log('HASH', {
+      event: 'handleHashParameterUsed-notified',
+      widgetId: id,
+      shortId: shortId,
+      currentInitialQueryValue: initialQueryValue,
+      note: 'Hash remains in URL per user requirement',
+      timestamp: Date.now()
     })
-    
-    if (urlParams.has(shortId)) {
-      const value = urlParams.get(shortId)
-      urlParams.delete(shortId)
-      const newHash = urlParams.toString()
-      
-      // Log all hash params after removal
-      const allParamsAfter: { [key: string]: string } = {}
-      urlParams.forEach((value, key) => {
-        allParamsAfter[key] = value
-      })
-      
-      // Update URL without triggering navigation
-      // If no hash params remain, remove hash entirely, otherwise keep the hash
-      const newUrl = newHash 
-        ? `${window.location.pathname}${window.location.search}#${newHash}` 
-        : `${window.location.pathname}${window.location.search}`
-      
-      debugLogger.log('HASH', {
-        event: 'hash-removed',
-        widgetId: this.props.id,
-        shortId: shortId,
-        value: value,
-        hashBefore: hash,
-        hashAfter: newHash,
-        allParamsBefore: allParamsBefore,
-        allParamsAfter: allParamsAfter,
-        paramsCountBefore: Object.keys(allParamsBefore).length,
-        paramsCountAfter: Object.keys(allParamsAfter).length,
-        newUrl: newUrl,
-        willRemoveHashEntirely: !newHash,
-        timestamp: Date.now()
-      })
-      
-      window.history.replaceState(null, '', newUrl)
-      
-      // Verify hash was actually updated
-      setTimeout(() => {
-        const actualHash = window.location.hash.substring(1)
-        const actualParams: { [key: string]: string } = {}
-        new URLSearchParams(actualHash).forEach((value, key) => {
-          actualParams[key] = value
-        })
-        
-        debugLogger.log('HASH', {
-          event: 'hash-removed-verified',
-          widgetId: this.props.id,
-          shortId: shortId,
-          expectedHash: newHash,
-          actualHash: actualHash,
-          expectedParams: allParamsAfter,
-          actualParams: actualParams,
-          matches: newHash === actualHash,
-          timestamp: Date.now()
-        })
-      }, 50)
-      
-      // Clear the state so it won't trigger again
-      if (this.state.initialQueryValue?.shortId === shortId) {
-        this.setState({ initialQueryValue: undefined })
-      }
-    } else {
-      debugLogger.log('HASH', {
-        event: 'removeHashParameter-shortId-not-found',
-        widgetId: this.props.id,
-        shortId: shortId,
-        allParamsInHash: allParamsBefore,
-        hash: hash,
-        timestamp: Date.now()
-      })
+
+    // Clear the state so it won't trigger again within this session/mount
+    if (this.state.initialQueryValue?.shortId === shortId) {
+      this.setState({ initialQueryValue: undefined })
     }
   }
 
@@ -1459,6 +1462,14 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
     const hash = window.location.hash.substring(1) // Remove the #
     const urlParams = new URLSearchParams(hash)
     
+    // Check if we've already processed this specific hash string
+    if (this.lastProcessedHash === hash) {
+      return
+    }
+    
+    // Update immediately to prevent re-entry race conditions
+    this.lastProcessedHash = hash
+
     // Log all hash params for debugging
     const allHashParams: { [key: string]: string } = {}
     urlParams.forEach((value, key) => {
@@ -1500,6 +1511,16 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
           // Reset to New mode when hash parameter is detected to avoid bugs with accumulation modes
           const needsModeReset = this.state.resultsMode !== SelectionType.NewSelection
           
+          debugLogger.log('HASH', {
+            event: 'hash-detected-setting-state',
+            widgetId: this.props.id,
+            shortId,
+            value,
+            needsModeReset,
+            currentMode: this.state.resultsMode,
+            timestamp: Date.now()
+          })
+
           this.setState({ 
             initialQueryValue: { shortId, value },
             // Reset to New mode and clear accumulatedRecords (same as handleResultsModeChange does)
@@ -1555,7 +1576,9 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
         allHashParams: allHashParams,
         timestamp: Date.now()
       })
-      this.setState({ initialQueryValue: undefined })
+      this.setState({ 
+        initialQueryValue: undefined
+      })
     }
   }
 
@@ -1586,7 +1609,7 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
                 defaultPageSize={config.defaultPageSize} 
                 className='pb-4' 
                 initialQueryValue={this.state.initialQueryValue} 
-                onHashParameterUsed={this.removeHashParameter}
+                onHashParameterUsed={this.handleHashParameterUsed}
                 resultsMode={this.state.resultsMode}
                 onResultsModeChange={this.handleResultsModeChange}
                 accumulatedRecords={this.state.accumulatedRecords}
@@ -1596,6 +1619,8 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
                 mapView={this.mapViewRef.current || undefined}
                 onInitializeGraphicsLayer={this.initializeGraphicsLayerFromOutputDS}
                 onClearGraphicsLayer={this.clearGraphicsLayerIfExists}
+                activeTab={this.state.activeTab}
+                onTabChange={this.handleTabChange}
               />
           </TaskListPopperWrapper>
         </QueryWidgetContext.Provider>
@@ -1614,14 +1639,14 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
             defaultSize={config.sizeMap?.arrangementIconPopper?.defaultSize}
             defaultPageSize={config.defaultPageSize}
             initialQueryValue={this.state.initialQueryValue}
-            onHashParameterUsed={this.removeHashParameter}
+            onHashParameterUsed={this.handleHashParameterUsed}
           />
         </QueryWidgetContext.Provider>
       )
     }
 
     return (
-      <Paper ref={this.widgetRef} variant='flat' className='jimu-widget runtime-query' css={css`
+      <Paper ref={this.widgetRef} variant='flat' className='jimu-widget runtime-query' data-widgetid={id} css={css`
         display: flex;
         flex-direction: column;
         height: 100%;
@@ -1664,7 +1689,7 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
                 queryItems={config.queryItems} 
                 defaultPageSize={config.defaultPageSize} 
                 initialQueryValue={this.state.initialQueryValue} 
-                onHashParameterUsed={this.removeHashParameter}
+                onHashParameterUsed={this.handleHashParameterUsed}
                 resultsMode={this.state.resultsMode}
                 onResultsModeChange={this.handleResultsModeChange}
                 accumulatedRecords={this.state.accumulatedRecords}
@@ -1673,6 +1698,9 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
                 graphicsLayer={this.graphicsLayerRef.current || undefined}
                 mapView={this.mapViewRef.current || undefined}
                 onInitializeGraphicsLayer={this.initializeGraphicsLayerFromOutputDS}
+                onClearGraphicsLayer={this.clearGraphicsLayerIfExists}
+                activeTab={this.state.activeTab}
+                onTabChange={this.handleTabChange}
               />
             </QueryWidgetContext.Provider>
           </div>

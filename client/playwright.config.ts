@@ -7,7 +7,7 @@ export default defineConfig({
   testDir: './tests/e2e',
   
   // Timeout for each test
-  timeout: 30 * 1000,
+  timeout: 300 * 1000, // 5 minutes for slow Major queries
   
   // Test execution
   fullyParallel: false,

@@ -22,94 +22,54 @@ When switching queries in "New" mode, the graphics layer retained graphics from 
 
 ## Bug #2: Hash Parameters Not Being Cleaned Up Properly / Resetting Selection
 
-**Status:** ✅ RESOLVED (r017.29)  
+**Status:** ✅ RESOLVED (r017.30)  
 **Priority:** Medium  
-**Version:** r017.29  
-**Date Updated:** 2025-12-18
+**Version:** r017.30  
+**Date Updated:** 2025-12-19
 
 ### Description
-URL hash parameters (like `#pin=...`) were causing the widget to reset to the first query in the display order as soon as the parameter was removed from the URL, even if the results were still active. Additionally, hash parameters were sometimes not being cleaned up correctly.
+URL hash parameters (like `#pin=...`) were causing the widget to reset to the first query in the display order as soon as the parameter was removed from the URL, even if the results were still active. Additionally, hash parameters were sometimes re-triggering "New Mode" resets when the user tried to switch to "Add" or "Remove" modes, because the hash remained in the URL and triggered the initialization logic again.
 
-### Solution (r017.29)
-Modified `QueryTaskList.tsx` to make the selection "sticky." The widget now uses the hash to *set* the active query but no longer resets to the default order when the hash is cleared. This ensures the correct query remains active for restoration when the panel is closed and reopened. The cleanup of the hash itself was also verified and improved by standardizing the selection event lifecycle.
+### Solution (r017.30)
+1.  **Deep Link Consumption**: Modified `widget.tsx` to automatically clear hash parameters from the URL when the user switches to **"Add"** or **"Remove"** results management modes. This signals that the deep link has been "consumed" and prevents the widget from re-initializing and resetting the mode during re-renders.
+2.  **Sticky Selection**: Improved `QueryTaskList.tsx` to make the selection "sticky" so it doesn't reset when the hash is removed.
+
+## Bug #3: Record Capture Failure when Switching to "Add" Mode
+
+**Status:** ✅ RESOLVED (r017.31)  
+**Priority:** High  
+**Version:** r017.31  
+**Date Updated:** 2025-12-19
+
+### Description
+When a user had results visible in "New" mode and clicked the "Add" button, the existing results were sometimes lost. This happened because the capture logic was only looking at the React `records` prop, which might be empty during a render transition.
+
+### Solution (r017.31)
+1.  **Dual-Source Capture Strategy**: Modified `QueryTask.tsx` to check both the internal `effectiveRecords` state AND the current `outputDS.getSelectedRecords()`.
+2.  **Strict Record Preference**: Updated `query-result.tsx` to strictly prefer the `records` prop (the accumulated set) when in accumulation modes (Add/Remove). This ensures the UI remains consistent even if the underlying data source's selection briefly fluctuates during query execution.
+3.  **Humanized Testing**: Added 1-second "breathing room" delays to Playwright tests to better simulate human interaction speed and allow React state updates to complete.
 
 ---
 
 ## Performance Issue #1: Query Execution Speed
 
-**Status:** 🟡 INVESTIGATION NEEDED  
-**Priority:** Medium  
-**Version:** r017.22  
-**Date Reported:** 2025-01-19
+**Status:** ✅ RESOLVED (r017.39)  
+**Priority:** High  
+**Version:** r017.39  
+**Date Updated:** 2025-12-19
 
 ### Description
-Query execution seems slow. Need to investigate whether the slowness is:
-1. In our code (widget logic, data processing, graphics layer operations)
-2. In Experience Builder framework (data source queries, SQL generation)
-3. In the SQL query itself (server-side performance)
+Query execution was significantly slower than the same queries in Web AppBuilder (WAB). For some datasets, like Major Number searches, fetch times were exceeding 20 seconds.
 
-### Potential Bottlenecks
+### Solution (r017.39)
+We identified and "killed" four major bottlenecks:
+1.  **Universal SQL Optimizer**: Automatically detects and "unwraps" the framework's `LOWER()` function from database fields in the `WHERE` clause. This restores the database's ability to use attribute indexes (SARGable queries). It simultaneously normalizes the user's input to uppercase to maintain case-insensitivity.
+2.  **Attribute Stripping**: Forced the widget to request only the specific fields needed for the Result Title and List. This eliminated "Field Bloat" where the framework was requesting `*` (all fields), causing massive server-side overhead.
+3.  **Geometry Generalization**: Forced `maxAllowableOffset: 0.1` for all display queries. This reduces the network payload by simplifying complex polygon geometries (like parcels) for faster transfer.
+4.  **Instant UI (Spinner Bypass)**: Decoupled the "Retrieving results..." spinner from the map zoom animation. The spinner now hides the microsecond data arrives, allowing user interaction while the map zooms in the background.
+5.  **Round-Trip Reduction**: Eliminated the separate `executeCountQuery` call, deriving the record count directly from the main `executeQuery` result.
 
-1. **SQL Query Generation (Black Box)**
-   - Experience Builder's SQL expression builder is a "black box"
-   - May be generating inefficient SQL
-   - No direct control over SQL optimization
-
-2. **Our Code Performance**
-   - Graphics layer operations (adding 121 graphics)
-   - Record processing and selection
-   - Data source operations
-   - Multiple re-renders or unnecessary work
-
-3. **Data Source Operations**
-   - `executeQuery` and `executeCountQuery` calls
-   - Data source status updates
-   - Selection operations
-
-### Next Steps to Explore
-
-1. **Add performance timing logs**
-   - Add timestamps at key points:
-     - Start of `handleFormSubmit`
-     - After SQL generation
-     - After count query
-     - After main query execution
-     - After graphics layer operations
-     - After selection operations
-   - Calculate time spent in each phase
-
-2. **Profile graphics layer operations**
-   - Time how long it takes to:
-     - Clear graphics layer
-     - Add 121 graphics to layer
-     - Check for duplicates
-   - See if graphics operations are the bottleneck
-
-3. **Profile data source operations**
-   - Time `executeQuery` vs `executeCountQuery`
-   - Check if count query is necessary or can be optimized
-   - See if we can parallelize operations
-
-4. **Check for unnecessary re-renders**
-   - Use React DevTools Profiler
-   - Identify components re-rendering unnecessarily
-   - Optimize with React.memo, useMemo, useCallback where needed
-
-5. **Investigate SQL query performance**
-   - If possible, log the actual SQL being generated
-   - Check if indexes exist on queried fields
-   - See if we can optimize the query structure
-
-6. **Batch operations where possible**
-   - Graphics layer: Add all graphics at once instead of one-by-one
-   - Selection: Batch selection operations
-   - Data source updates: Minimize status changes
-
-### Related Files
-- `client/your-extensions/widgets/query-simple/src/runtime/query-task.tsx` - `handleFormSubmit`, query execution
-- `client/your-extensions/widgets/query-simple/src/runtime/query-utils.ts` - `executeQuery`, `executeCountQuery`
-- `client/your-extensions/widgets/query-simple/src/runtime/graphics-layer-utils.ts` - Graphics operations
-- `client/your-extensions/widgets/query-simple/src/runtime/selection-utils.ts` - Selection operations
+**Result**: Fetch times dropped from **21.3s** to **1.4s** for the same 121-record query.
 
 ---
 
