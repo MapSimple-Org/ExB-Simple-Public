@@ -6,6 +6,7 @@
 import type { FeatureLayerDataSource, FeatureDataRecord, DataRecord } from 'jimu-core'
 import { DataSourceManager, DataSourceStatus, MessageManager, DataRecordSetChangeMessage, RecordSetChangeType, DataRecordsSelectionChangeMessage } from 'jimu-core'
 import { createQuerySimpleDebugLogger } from 'widgets/shared-code/common'
+import { removeHighlightGraphics } from './graphics-layer-utils'
 
 const debugLogger = createQuerySimpleDebugLogger()
 
@@ -274,21 +275,28 @@ export function removeResultsFromAccumulated(
  * Removes records from origin data source selections.
  * Groups records by their origin data source and updates each origin DS's selection separately.
  * This ensures map selection is updated correctly when records come from multiple origin layers.
+ * Also removes graphics from graphics layer if using graphics layer highlighting.
  * 
  * @param widgetId - The widget ID for publishing messages
  * @param recordsToRemove - Records to remove from selection
  * @param outputDS - The output data source (used for key generation)
+ * @param useGraphicsLayer - Whether to remove graphics from graphics layer (default: false)
+ * @param graphicsLayer - Graphics layer instance (required if useGraphicsLayer is true)
  */
 export function removeRecordsFromOriginSelections(
   widgetId: string,
   recordsToRemove: FeatureDataRecord[],
-  outputDS: FeatureLayerDataSource
+  outputDS: FeatureLayerDataSource,
+  useGraphicsLayer?: boolean,
+  graphicsLayer?: __esri.GraphicsLayer
 ): void {
   debugLogger.log('RESULTS-MODE', {
     event: 'removing-records-from-origin-selections-start',
     widgetId,
     recordsToRemoveCount: recordsToRemove.length,
-    outputDSId: outputDS.id
+    outputDSId: outputDS.id,
+    useGraphicsLayer: !!useGraphicsLayer,
+    hasGraphicsLayer: !!graphicsLayer
   })
   
   if (recordsToRemove.length === 0) {
@@ -297,6 +305,18 @@ export function removeRecordsFromOriginSelections(
       widgetId
     })
     return
+  }
+  
+  // Remove from graphics layer if using graphics layer highlighting
+  if (useGraphicsLayer && graphicsLayer) {
+    const recordIdsToRemove = recordsToRemove.map(record => record.getId())
+    debugLogger.log('RESULTS-MODE', {
+      event: 'removing-graphics-from-layer',
+      widgetId,
+      recordIdsCount: recordIdsToRemove.length,
+      graphicsLayerId: graphicsLayer.id
+    })
+    removeHighlightGraphics(graphicsLayer, recordIdsToRemove)
   }
   
   // Group records by their origin data source

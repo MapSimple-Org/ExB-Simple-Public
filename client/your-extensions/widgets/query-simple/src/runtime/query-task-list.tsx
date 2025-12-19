@@ -1,5 +1,5 @@
 /** @jsx jsx */
-import { jsx, css, React, type ImmutableArray, Immutable, type ImmutableObject, hooks, type FeatureLayerDataSource, type FeatureDataRecord } from 'jimu-core'
+import { jsx, css, React, type ImmutableArray, Immutable, type ImmutableObject, hooks, type FeatureLayerDataSource, type FeatureDataRecord, type DataSource } from 'jimu-core'
 import { Select } from 'jimu-ui'
 import type { QueryItemType, SelectionType } from '../config'
 import { QueryTask } from './query-task'
@@ -21,6 +21,11 @@ export interface QueryTaskListProps {
   onResultsModeChange?: (mode: SelectionType) => void
   accumulatedRecords?: FeatureDataRecord[]
   onAccumulatedRecordsChange?: (records: FeatureDataRecord[]) => void
+  useGraphicsLayerForHighlight?: boolean
+  graphicsLayer?: __esri.GraphicsLayer
+  mapView?: __esri.MapView | __esri.SceneView
+  onInitializeGraphicsLayer?: (outputDS: DataSource) => Promise<void>
+  onClearGraphicsLayer?: () => void
 }
 
 interface GroupedQueries {
@@ -116,7 +121,7 @@ const getQueryDisplayName = (item: ImmutableObject<QueryItemType>): string => {
 }
 
 export function QueryTaskList (props: QueryTaskListProps) {
-  const { queryItems, widgetId, defaultPageSize, isInPopper = false, className = '', initialQueryValue, onHashParameterUsed, resultsMode, onResultsModeChange, accumulatedRecords, onAccumulatedRecordsChange } = props
+  const { queryItems, widgetId, defaultPageSize, isInPopper = false, className = '', initialQueryValue, onHashParameterUsed, resultsMode, onResultsModeChange, accumulatedRecords, onAccumulatedRecordsChange, useGraphicsLayerForHighlight, graphicsLayer, mapView, onInitializeGraphicsLayer, onClearGraphicsLayer } = props
   const getI18nMessage = hooks.useTranslation(defaultMessages)
   
   // Sort queries by display order before grouping
@@ -228,70 +233,37 @@ export function QueryTaskList (props: QueryTaskListProps) {
   })
   
   // Update selection when initialQueryValue changes (e.g., when URL hash is detected)
-  // Also update when default selection changes (e.g., when display order changes)
+  // We only want to update based on the hash if one is PRESENT.
+  // If the hash is removed (initialQueryValue becomes null), we DON'T want to reset to default.
   React.useEffect(() => {
     if (getQuerySelection) {
-      // Hash parameter matched - use that selection
+      // Hash parameter matched - use that selection and STAY THERE
       if (getQuerySelection.type === 'group') {
         debugLogger.log('GROUP', {
-          event: 'selection-changed-to-group',
+          event: 'selection-changed-to-group-from-hash',
           groupId: getQuerySelection.groupId,
-          index: getQuerySelection.index
+          index: getQuerySelection.index,
+          note: 'Sticky selection from hash parameter'
         })
         setSelectedGroupId(getQuerySelection.groupId)
         setSelectedGroupQueryIndex(getQuerySelection.index)
       } else {
         debugLogger.log('GROUP', {
-          event: 'selection-changed-to-ungrouped',
-          index: getQuerySelection.index
+          event: 'selection-changed-to-ungrouped-from-hash',
+          index: getQuerySelection.index,
+          note: 'Sticky selection from hash parameter'
         })
         setSelectedGroupId(null)
         setSelectedUngroupedIndex(getQuerySelection.index)
       }
-    } else if (getDefaultSelection) {
-      // No hash parameter - use default selection based on display order
-      if (getDefaultSelection.type === 'group') {
-        debugLogger.log('GROUP', {
-          event: 'default-selection-to-group',
-          groupId: getDefaultSelection.groupId,
-          index: getDefaultSelection.index,
-          note: 'Based on display order'
-        })
-        setSelectedGroupId(getDefaultSelection.groupId)
-        setSelectedGroupQueryIndex(getDefaultSelection.index)
-        setSelectedUngroupedIndex(0) // Reset ungrouped index
-      } else {
-        debugLogger.log('GROUP', {
-          event: 'default-selection-to-ungrouped',
-          index: getDefaultSelection.index,
-          note: 'Based on display order'
-        })
-        setSelectedGroupId(null)
-        setSelectedUngroupedIndex(getDefaultSelection.index)
-      }
     }
-  }, [getQuerySelection, getDefaultSelection])
+  }, [getQuerySelection])
   
   // Get the currently selected query item
   const getSelectedQueryItem = (): ImmutableObject<QueryItemType> => {
-    // PRIORITY 1: If hash parameter matches a query, use that directly
-    // This ensures we always use the hash-matched query, regardless of state timing
-    // This is critical for grouped queries where dropdowns need to be synchronized
-    if (getQuerySelection && matchingQueryIndex >= 0) {
-      const hashMatchedItem = sortedQueryItems[matchingQueryIndex]
-      debugLogger.log('GROUP', {
-        event: 'getSelectedQueryItem-hash-match',
-        shortId: hashMatchedItem.shortId,
-        groupId: hashMatchedItem.groupId,
-        configId: hashMatchedItem.configId,
-        isGrouped: !!hashMatchedItem.groupId,
-        matchingQueryIndex,
-        note: 'Using hash-matched query (highest priority)'
-      })
-      return hashMatchedItem
-    }
-    
-    // PRIORITY 2: Otherwise use current state selection
+    // PRIORITY 1: Use current state selection
+    // The state is initialized with the hash match (if present) or default order,
+    // and updated via useEffect if the hash changes later.
     debugLogger.log('GROUP', {
       event: 'getSelectedQueryItem-state-selection',
       selectedGroupId,
@@ -300,7 +272,7 @@ export function QueryTaskList (props: QueryTaskListProps) {
       selectedUngroupedIndex,
       ungroupedLength: ungrouped.length,
       groupOrderLength: groupOrder.length,
-      note: 'No hash parameter, using state selection'
+      note: 'Using state selection (hash-aware)'
     })
     
     // If a group is selected, get query from that group
@@ -384,7 +356,6 @@ export function QueryTaskList (props: QueryTaskListProps) {
             index={selectedQueryRealIndex >= 0 ? selectedQueryRealIndex : 0}
             total={sortedQueryItems.length}
             queryItem={selectedQueryItem}
-            defaultPageSize={defaultPageSize}
             isInPopper={isInPopper}
             initialInputValue={selectedQueryItem.shortId === initialQueryValue?.shortId ? initialQueryValue?.value : undefined}
             onHashParameterUsed={onHashParameterUsed}
@@ -394,6 +365,12 @@ export function QueryTaskList (props: QueryTaskListProps) {
             // Grouping props
             groups={groups}
             ungrouped={ungrouped}
+            // Graphics layer props
+            useGraphicsLayerForHighlight={useGraphicsLayerForHighlight}
+            graphicsLayer={graphicsLayer}
+            mapView={mapView}
+            onInitializeGraphicsLayer={onInitializeGraphicsLayer}
+            onClearGraphicsLayer={onClearGraphicsLayer}
             groupOrder={groupOrder}
             selectedGroupId={selectedGroupId}
             selectedGroupQueryIndex={selectedGroupQueryIndex}

@@ -5,6 +5,25 @@ All notable changes to MapSimple Experience Builder widgets will be documented i
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.19.0-r017.29] - 2025-12-18
+
+### Fixed
+- **Graphics Layer Clearing**: Resolved deep race condition where graphics from previous queries persisted on the map
+  - Implemented "Virtual Clear" render guard to immediately hide stale results
+  - Centralized selection dispatching to ensure all components sync simultaneously
+  - Ensured graphics layer cleanup is fully awaited before new queries execute
+- **Sticky Selection**: Fixed bug where widget would reset to the default query as soon as a hash parameter was removed from the URL
+  - Modified `QueryTaskList.tsx` to preserve active query after hash consumption
+  - Stabilized restoration logic for hash-triggered queries when closing/reopening the panel
+- **Map Selection Sync**: Fixed persisting blue highlight boxes when clearing results or closing the widget
+  - Updated `selection-utils.ts` to explicitly publish empty selection messages
+  - Improved `getOriginDataSource` robustness to handle varied data source hierarchies
+- **Footer Text**: Updated brand name to "by MapSimple" across all widget footers
+
+### Changed
+- **Centralized Selection**: Standardized selection handling via `dispatchSelectionEvent` and `clearSelectionInDataSources` utilities
+- **Version Tracking**: Incremented to r017.29 for production stability
+
 ## [1.19.0-r016.8] - 2025-12-16
 
 ### Fixed
@@ -51,7 +70,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `?debug=false` - Disable all logs (default)
   - Features: HASH, FORM, TASK, ZOOM, MAP-EXTENT, DATA-ACTION, GROUP, SELECTION, WIDGET-STATE, RESTORE
 - **Result Pagination**: Support for multi-page and lazy load pagination styles
-- **Widget Footer**: Displays "QuerySimple by MapSimple.org v1.19.0" in all arrangement modes
+- **Widget Footer**: Displays "QuerySimple by MapSimple v1.19.0" in all arrangement modes
 - **Selection Restoration**: Automatically restores map selection when identify popup closes
   - Only restores when widget panel is open
   - Maintains query context after using identify tool

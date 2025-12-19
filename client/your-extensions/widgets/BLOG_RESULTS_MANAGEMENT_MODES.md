@@ -323,3 +323,6 @@ All shared logic is extracted into reusable utility functions:
 
 *This blog post documents the implementation of Results Management Modes in QuerySimple widget for ArcGIS Experience Builder Developer Edition 1.19.*
 
+
+
+

@@ -1,9 +1,10 @@
 /** @jsx jsx */
-import { React, jsx, css, type AllWidgetProps, DataSourceManager, type FeatureLayerDataSource, type FeatureDataRecord, MessageManager, DataRecordsSelectionChangeMessage } from 'jimu-core'
+import { React, jsx, css, type AllWidgetProps, DataSourceManager, type FeatureLayerDataSource, type FeatureDataRecord, MessageManager, DataRecordsSelectionChangeMessage, type DataSource } from 'jimu-core'
 import { Paper, WidgetPlaceholder } from 'jimu-ui'
 import { type IMConfig, QueryArrangeType, SelectionType } from '../config'
 import defaultMessages from './translations/default'
 import { getWidgetRuntimeDataMap } from './widget-config'
+import { JimuMapViewComponent, type JimuMapView } from 'jimu-arcgis'
 
 import { versionManager } from '../version-manager'
 import { QueryTaskList } from './query-task-list'
@@ -11,16 +12,12 @@ import { TaskListInline } from './query-task-list-inline'
 import { TaskListPopperWrapper } from './query-task-list-popper-wrapper'
 import { QueryWidgetContext } from './widget-context'
 import { createQuerySimpleDebugLogger } from 'widgets/shared-code/common'
-
-const debugLogger = createQuerySimpleDebugLogger()
+import { createOrGetGraphicsLayer, cleanupGraphicsLayer } from './graphics-layer-utils'
+import { QUERYSIMPLE_SELECTION_EVENT } from './selection-utils'
 import { WIDGET_VERSION } from '../version'
 
+const debugLogger = createQuerySimpleDebugLogger()
 const { iconMap } = getWidgetRuntimeDataMap()
-
-/**
- * Custom event name for QuerySimple to notify HelperSimple of selection changes.
- */
-const QUERYSIMPLE_SELECTION_EVENT = 'querysimple-selection-changed'
 
 /**
  * Custom event name for QuerySimple to notify HelperSimple of widget open/close state.
@@ -32,15 +29,17 @@ const QUERYSIMPLE_WIDGET_STATE_EVENT = 'querysimple-widget-state-changed'
  */
 const RESTORE_ON_IDENTIFY_CLOSE_EVENT = 'querysimple-restore-on-identify-close'
 
-export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>, { initialQueryValue?: { shortId: string, value: string }, isPanelVisible?: boolean, hasSelection?: boolean, selectionRecordCount?: number, lastSelection?: { recordIds: string[], outputDsId: string, queryItemConfigId: string }, resultsMode?: SelectionType, accumulatedRecords?: FeatureDataRecord[] }> {
+export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>, { initialQueryValue?: { shortId: string, value: string }, isPanelVisible?: boolean, hasSelection?: boolean, selectionRecordCount?: number, lastSelection?: { recordIds: string[], outputDsId: string, queryItemConfigId: string }, resultsMode?: SelectionType, accumulatedRecords?: FeatureDataRecord[], graphicsLayerInitialized?: boolean, jimuMapView?: JimuMapView }> {
   static versionManager = versionManager
 
-  state: { initialQueryValue?: { shortId: string, value: string }, isPanelVisible?: boolean, hasSelection?: boolean, selectionRecordCount?: number, lastSelection?: { recordIds: string[], outputDsId: string, queryItemConfigId: string }, resultsMode?: SelectionType, accumulatedRecords?: FeatureDataRecord[] } = {
+  state: { initialQueryValue?: { shortId: string, value: string }, isPanelVisible?: boolean, hasSelection?: boolean, selectionRecordCount?: number, lastSelection?: { recordIds: string[], outputDsId: string, queryItemConfigId: string }, resultsMode?: SelectionType, accumulatedRecords?: FeatureDataRecord[], graphicsLayerInitialized?: boolean, jimuMapView?: JimuMapView } = {
     resultsMode: SelectionType.NewSelection // Default mode
   }
   private widgetRef = React.createRef<HTMLDivElement>()
   private visibilityObserver: IntersectionObserver | null = null
   private visibilityCheckInterval: number | null = null
+  private graphicsLayerRef = React.createRef<__esri.GraphicsLayer | null>()
+  private mapViewRef = React.createRef<__esri.MapView | __esri.SceneView | null>()
 
   componentDidMount() {
     this.checkQueryStringForShortIds()
@@ -80,6 +79,8 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
     setTimeout(() => {
       this.checkQueryStringForShortIds()
     }, 100)
+    
+    // Graphics layer will be initialized when map view becomes available via JimuMapViewComponent
   }
 
   componentWillUnmount() {
@@ -94,6 +95,9 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
     
     // Clean up visibility detection
     this.cleanupVisibilityDetection()
+    
+    // Clean up graphics layer
+    this.cleanupGraphicsLayer()
     
     // Notify HelperSimple that this widget is now closed
     const closeEvent = new CustomEvent(QUERYSIMPLE_WIDGET_STATE_EVENT, {
@@ -116,6 +120,14 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
   componentDidUpdate(prevProps: AllWidgetProps<IMConfig>) {
     if (prevProps.config.queryItems !== this.props.config.queryItems) {
       this.checkQueryStringForShortIds()
+    }
+    
+    // Clean up graphics layer if config changed to disabled
+    if (prevProps.config.useGraphicsLayerForHighlight !== this.props.config.useGraphicsLayerForHighlight) {
+      if (!this.props.config.useGraphicsLayerForHighlight) {
+        this.cleanupGraphicsLayer()
+      }
+      // If enabled, initialization will happen when map view becomes available via JimuMapViewComponent
     }
   }
 
@@ -221,6 +233,168 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
   }
 
   /**
+   * Handles map view change from JimuMapViewComponent.
+   * When map view becomes available, initialize graphics layer if enabled.
+   */
+  private handleJimuMapViewChanged = (jimuMapView: JimuMapView | null) => {
+    const { id, config } = this.props
+    
+    debugLogger.log('GRAPHICS-LAYER', {
+      event: 'handleJimuMapViewChanged',
+      widgetId: id,
+      hasJimuMapView: !!jimuMapView,
+      hasView: !!(jimuMapView?.view),
+      viewType: jimuMapView?.view?.type || 'none',
+      timestamp: Date.now()
+    })
+    
+    // Store JimuMapView in state
+    this.setState({ jimuMapView: jimuMapView || undefined })
+    
+    // If map view is available and graphics layer is enabled, initialize it
+    if (jimuMapView?.view && config.useGraphicsLayerForHighlight && !this.graphicsLayerRef.current) {
+      this.initializeGraphicsLayer(jimuMapView.view)
+    }
+  }
+
+  /**
+   * Initializes the graphics layer using the provided map view.
+   */
+  private initializeGraphicsLayer = async (mapView: __esri.MapView | __esri.SceneView) => {
+    const { id } = this.props
+    
+    try {
+      // Create or get graphics layer
+      const graphicsLayer = await createOrGetGraphicsLayer(id, mapView)
+      if (!graphicsLayer) {
+        debugLogger.log('GRAPHICS-LAYER', {
+          event: 'initializeGraphicsLayer-failed',
+          widgetId: id,
+          reason: 'graphics-layer-creation-failed',
+          timestamp: Date.now()
+        })
+        return
+      }
+
+      // Store references
+      this.mapViewRef.current = mapView
+      this.graphicsLayerRef.current = graphicsLayer
+
+      // Update state to force re-render and update props
+      this.setState({ graphicsLayerInitialized: true })
+
+      debugLogger.log('GRAPHICS-LAYER', {
+        event: 'initializeGraphicsLayer-success',
+        widgetId: id,
+        graphicsLayerId: graphicsLayer.id,
+        viewType: mapView.type || 'unknown',
+        timestamp: Date.now()
+      })
+    } catch (error) {
+      debugLogger.log('GRAPHICS-LAYER', {
+        event: 'initializeGraphicsLayer-error',
+        widgetId: id,
+        error: error instanceof Error ? error.message : String(error),
+        errorStack: error instanceof Error ? error.stack : undefined,
+        timestamp: Date.now()
+      })
+    }
+  }
+
+  /**
+   * Initializes graphics layer lazily when outputDS becomes available.
+   * Now uses the map view from JimuMapViewComponent instead of trying to get it from data source.
+   */
+  public initializeGraphicsLayerFromOutputDS = async (outputDS: DataSource) => {
+    const { id, config } = this.props
+    
+    // Only initialize if enabled and not already initialized
+    if (!config.useGraphicsLayerForHighlight || this.graphicsLayerRef.current) {
+      debugLogger.log('GRAPHICS-LAYER', {
+        event: 'initializeGraphicsLayerFromOutputDS-skipped',
+        widgetId: id,
+        reason: !config.useGraphicsLayerForHighlight ? 'not-enabled' : 'already-initialized',
+        timestamp: Date.now()
+      })
+      return
+    }
+
+    // Use map view from JimuMapViewComponent if available
+    const mapView = this.state.jimuMapView?.view || this.mapViewRef.current
+    if (!mapView) {
+      debugLogger.log('GRAPHICS-LAYER', {
+        event: 'initializeGraphicsLayerFromOutputDS-skipped',
+        widgetId: id,
+        reason: 'map-view-not-available-yet',
+        outputDSId: outputDS.id,
+        hasJimuMapView: !!this.state.jimuMapView,
+        timestamp: Date.now()
+      })
+      return
+    }
+
+    // Initialize graphics layer with the map view
+    await this.initializeGraphicsLayer(mapView)
+  }
+
+  /**
+   * Cleans up the graphics layer when widget unmounts or config changes.
+   */
+  private cleanupGraphicsLayer = () => {
+    const { id } = this.props
+    const mapView = this.mapViewRef.current
+
+    if (mapView) {
+      cleanupGraphicsLayer(id, mapView)
+      this.mapViewRef.current = null
+      this.graphicsLayerRef.current = null
+
+      debugLogger.log('GRAPHICS-LAYER', {
+        event: 'cleanupGraphicsLayer-complete',
+        widgetId: id,
+        timestamp: Date.now()
+      })
+    }
+  }
+
+  /**
+   * Clears the graphics layer if it exists.
+   * This is called when clearing results or switching queries in New mode to ensure graphics are removed.
+   */
+  public clearGraphicsLayerIfExists = () => {
+    const { config } = this.props
+    const graphicsLayer = this.graphicsLayerRef.current
+    
+    if (config.useGraphicsLayerForHighlight && graphicsLayer) {
+      debugLogger.log('GRAPHICS-LAYER', {
+        event: 'clearGraphicsLayerIfExists-called',
+        widgetId: this.props.id,
+        graphicsLayerId: graphicsLayer.id,
+        graphicsCount: graphicsLayer.graphics.length,
+        timestamp: Date.now()
+      })
+      
+      const { clearGraphicsLayer } = require('./graphics-layer-utils')
+      clearGraphicsLayer(graphicsLayer)
+      
+      debugLogger.log('GRAPHICS-LAYER', {
+        event: 'clearGraphicsLayerIfExists-complete',
+        widgetId: this.props.id,
+        graphicsLayerId: graphicsLayer.id,
+        timestamp: Date.now()
+      })
+    } else {
+      debugLogger.log('GRAPHICS-LAYER', {
+        event: 'clearGraphicsLayerIfExists-skipped',
+        widgetId: this.props.id,
+        reason: !config.useGraphicsLayerForHighlight ? 'not-enabled' : 'no-graphics-layer',
+        hasGraphicsLayer: !!graphicsLayer,
+        timestamp: Date.now()
+      })
+    }
+  }
+
+  /**
    * Checks if the widget element is currently visible.
    * Fallback method when IntersectionObserver is not available.
    */
@@ -261,6 +435,18 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
     
     const hasSelection = customEvent.detail.recordIds && customEvent.detail.recordIds.length > 0
     
+    // If the panel is NOT visible, and we are receiving an EMPTY selection,
+    // it's almost certainly our own 'clearSelectionFromMap' logic firing.
+    // We should IGNORE this so we don't wipe out the lastSelection state.
+    if (!this.state.isPanelVisible && !hasSelection) {
+      debugLogger.log('RESTORE', {
+        event: 'handleSelectionChange-ignoring-empty-selection-while-panel-closed',
+        widgetId: id,
+        timestamp: Date.now()
+      })
+      return
+    }
+    
     // In "Add to" or "Remove from" mode, use accumulated records count for restoration
     // The accumulated records are the source of truth for what should be restored
     const isAccumulationMode = this.state.resultsMode === SelectionType.AddToSelection || 
@@ -269,6 +455,12 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
     const selectionCount = isAccumulationMode && accumulatedRecordsCount > 0
       ? accumulatedRecordsCount
       : (hasSelection ? customEvent.detail.recordIds.length : 0)
+    
+    // If selection is cleared and we're in Remove mode, reset to NewSelection mode
+    // Remove mode requires selection to function, so it should be disabled when selection is empty
+    const shouldResetMode = !hasSelection && 
+                            selectionCount === 0 && 
+                            this.state.resultsMode === SelectionType.RemoveFromSelection
     
     debugLogger.log('RESTORE', {
       event: 'handleSelectionChange-updating-state',
@@ -281,11 +473,13 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
       calculatedSelectionCount: selectionCount,
       'will-set-hasSelection': selectionCount > 0,
       'will-set-lastSelection': hasSelection && !!customEvent.detail.outputDsId && !!customEvent.detail.queryItemConfigId,
+      'will-reset-mode': shouldResetMode,
       decisionLogic: {
         'isAccumulationMode': isAccumulationMode,
         'accumulatedRecordsCount > 0': accumulatedRecordsCount > 0,
         'use-accumulated-count': isAccumulationMode && accumulatedRecordsCount > 0,
-        'use-event-count': !(isAccumulationMode && accumulatedRecordsCount > 0)
+        'use-event-count': !(isAccumulationMode && accumulatedRecordsCount > 0),
+        'should-reset-mode': shouldResetMode
       }
     })
     
@@ -299,7 +493,12 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
             outputDsId: customEvent.detail.outputDsId,
             queryItemConfigId: customEvent.detail.queryItemConfigId
           }
-        : undefined
+        : undefined,
+      // Reset mode to NewSelection if selection is cleared in Remove mode
+      ...(shouldResetMode ? {
+        resultsMode: SelectionType.NewSelection,
+        accumulatedRecords: [] // Also clear accumulated records when resetting mode
+      } : {})
     })
     
     debugLogger.log('RESTORE', {
@@ -310,7 +509,11 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
       'new-lastSelection-recordIds-count': hasSelection && customEvent.detail.outputDsId && customEvent.detail.queryItemConfigId
         ? customEvent.detail.recordIds.length
         : 0,
-      'note': 'lastSelection-only-contains-current-query-records-not-all-accumulated-records'
+      'mode-reset': shouldResetMode,
+      'new-mode': shouldResetMode ? SelectionType.NewSelection : this.state.resultsMode,
+      'note': shouldResetMode 
+        ? 'Mode reset to NewSelection because selection was cleared in Remove mode'
+        : 'lastSelection-only-contains-current-query-records-not-all-accumulated-records'
     })
   }
 
@@ -591,11 +794,18 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
       
       // Restore selection for each origin data source
       const { selectRecordsAndPublish } = require('./selection-utils')
+      const useGraphicsLayer = this.props.config.useGraphicsLayerForHighlight
+      const graphicsLayer = this.graphicsLayerRef.current || undefined
+      const mapView = this.mapViewRef.current || undefined
+      
       recordsByOriginDS.forEach((records, originDS) => {
         const recordIds = records.map(r => r.getId())
         try {
           // Use originDS directly (not outputDS) since records are selected in origin layers
-          selectRecordsAndPublish(id, originDS, recordIds, records, true)
+          // Use async IIFE since forEach callback can't be async
+          ;(async () => {
+            await selectRecordsAndPublish(id, originDS, recordIds, records, true, useGraphicsLayer, graphicsLayer, mapView)
+          })()
           
           debugLogger.log('RESTORE', {
             event: 'panel-opened-restored-origin-ds',
@@ -676,7 +886,12 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
     // Don't zoom when restoring on widget open (Add to Map action handles zoom for manual clicks)
     try {
       const { selectRecordsAndPublish } = require('./selection-utils')
-      selectRecordsAndPublish(id, outputDS, lastSelection.recordIds, recordsToSelect, true)
+      const useGraphicsLayer = this.props.config.useGraphicsLayerForHighlight
+      const graphicsLayer = this.graphicsLayerRef.current || undefined
+      const mapView = this.mapViewRef.current || undefined
+      ;(async () => {
+        await selectRecordsAndPublish(id, outputDS, lastSelection.recordIds, recordsToSelect, true, useGraphicsLayer, graphicsLayer, mapView)
+      })()
       
       debugLogger.log('RESTORE', {
         event: 'panel-opened-selection-added-to-map',
@@ -854,24 +1069,24 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
       })
       
       // Clear selection from each origin data source
+      const { clearSelectionInDataSources } = require('./selection-utils')
+      const useGraphicsLayer = this.props.config.useGraphicsLayerForHighlight
+      const graphicsLayer = this.graphicsLayerRef.current || undefined
+      
       recordsByOriginDS.forEach((records, originDS) => {
         try {
-          if (typeof originDS.selectRecordsByIds === 'function') {
-            // Clear selection from originDS (map) only
-            originDS.selectRecordsByIds([], [])
-            
-            // Publish clear message so map knows to clear
-            MessageManager.getInstance().publishMessage(
-              new DataRecordsSelectionChangeMessage(id, [], [originDS.id])
-            )
+          // Use async IIFE since forEach callback can't be async
+          ;(async () => {
+            await clearSelectionInDataSources(id, originDS, useGraphicsLayer, graphicsLayer)
             
             debugLogger.log('RESTORE', {
               event: 'panel-closed-cleared-origin-ds-selection',
               widgetId: id,
               originDSId: originDS.id,
-              recordCount: records.length
+              recordCount: records.length,
+              usedGraphicsLayer: useGraphicsLayer
             })
-          }
+          })()
         } catch (error) {
           debugLogger.log('RESTORE', {
             event: 'panel-closed-clear-origin-ds-failed',
@@ -958,25 +1173,19 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
         mapSelectedIds: currentSelectedIds.slice(0, 5)
       })
 
-      if (typeof originDS.selectRecordsByIds === 'function') {
-        // Clear selection from originDS (map) only - don't touch outputDS (widget state)
-        originDS.selectRecordsByIds([], [])
+      // Use clearSelectionInDataSources utility which supports graphics layer
+      const { clearSelectionInDataSources } = require('./selection-utils')
+      const useGraphicsLayer = this.props.config.useGraphicsLayerForHighlight
+      const graphicsLayer = this.graphicsLayerRef.current || undefined
+      
+      ;(async () => {
+        await clearSelectionInDataSources(id, originDS, useGraphicsLayer, graphicsLayer)
         
         debugLogger.log('RESTORE', {
           event: 'panel-closed-cleared-origin-ds-selection',
           widgetId: id,
-          originDSId: originDS.id
-        })
-        
-        // Publish clear message so map knows to clear
-        MessageManager.getInstance().publishMessage(
-          new DataRecordsSelectionChangeMessage(id, [], [originDS.id])
-        )
-        
-        debugLogger.log('RESTORE', {
-          event: 'panel-closed-published-clear-message',
-          widgetId: id,
-          originDSId: originDS.id
+          originDSId: originDS.id,
+          usedGraphicsLayer: useGraphicsLayer
         })
         
         // Verify selection was cleared
@@ -989,14 +1198,7 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
           selectionAfterClear: afterClearIds.length,
           verifiedCleared: afterClearIds.length === 0
         })
-      } else {
-        debugLogger.log('RESTORE', {
-          event: 'panel-closed-origin-ds-no-select-method',
-          widgetId: id,
-          originDSId: originDS.id,
-          hasSelectMethod: typeof originDS.selectRecordsByIds === 'function'
-        })
-      }
+      })()
     } catch (error) {
       debugLogger.log('RESTORE', {
         event: 'panel-closed-clear-from-map-failed',
@@ -1141,15 +1343,34 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
   removeHashParameter = (shortId: string) => {
     const hash = window.location.hash.substring(1)
     if (!hash) {
+      debugLogger.log('HASH', {
+        event: 'removeHashParameter-no-hash',
+        widgetId: this.props.id,
+        shortId: shortId,
+        timestamp: Date.now()
+      })
       return
     }
     
     const urlParams = new URLSearchParams(hash)
     
+    // Log all hash params before removal
+    const allParamsBefore: { [key: string]: string } = {}
+    urlParams.forEach((value, key) => {
+      allParamsBefore[key] = value
+    })
+    
     if (urlParams.has(shortId)) {
       const value = urlParams.get(shortId)
       urlParams.delete(shortId)
       const newHash = urlParams.toString()
+      
+      // Log all hash params after removal
+      const allParamsAfter: { [key: string]: string } = {}
+      urlParams.forEach((value, key) => {
+        allParamsAfter[key] = value
+      })
+      
       // Update URL without triggering navigation
       // If no hash params remain, remove hash entirely, otherwise keep the hash
       const newUrl = newHash 
@@ -1161,16 +1382,53 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
         widgetId: this.props.id,
         shortId: shortId,
         value: value,
-        newHash: newHash,
-        newUrl: newUrl
+        hashBefore: hash,
+        hashAfter: newHash,
+        allParamsBefore: allParamsBefore,
+        allParamsAfter: allParamsAfter,
+        paramsCountBefore: Object.keys(allParamsBefore).length,
+        paramsCountAfter: Object.keys(allParamsAfter).length,
+        newUrl: newUrl,
+        willRemoveHashEntirely: !newHash,
+        timestamp: Date.now()
       })
       
       window.history.replaceState(null, '', newUrl)
+      
+      // Verify hash was actually updated
+      setTimeout(() => {
+        const actualHash = window.location.hash.substring(1)
+        const actualParams: { [key: string]: string } = {}
+        new URLSearchParams(actualHash).forEach((value, key) => {
+          actualParams[key] = value
+        })
+        
+        debugLogger.log('HASH', {
+          event: 'hash-removed-verified',
+          widgetId: this.props.id,
+          shortId: shortId,
+          expectedHash: newHash,
+          actualHash: actualHash,
+          expectedParams: allParamsAfter,
+          actualParams: actualParams,
+          matches: newHash === actualHash,
+          timestamp: Date.now()
+        })
+      }, 50)
       
       // Clear the state so it won't trigger again
       if (this.state.initialQueryValue?.shortId === shortId) {
         this.setState({ initialQueryValue: undefined })
       }
+    } else {
+      debugLogger.log('HASH', {
+        event: 'removeHashParameter-shortId-not-found',
+        widgetId: this.props.id,
+        shortId: shortId,
+        allParamsInHash: allParamsBefore,
+        hash: hash,
+        timestamp: Date.now()
+      })
     }
   }
 
@@ -1200,20 +1458,31 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
     // Get URL hash fragment parameters (ExB uses # for params)
     const hash = window.location.hash.substring(1) // Remove the #
     const urlParams = new URLSearchParams(hash)
+    
+    // Log all hash params for debugging
+    const allHashParams: { [key: string]: string } = {}
+    urlParams.forEach((value, key) => {
+      allHashParams[key] = value
+    })
 
     // Log hash check for debugging
     debugLogger.log('HASH', {
       event: 'hash-check',
       widgetId: this.props.id,
       hash: hash,
+      allHashParams: allHashParams,
+      hashParamsCount: Object.keys(allHashParams).length,
       availableShortIds: shortIds,
-      currentState: this.state.initialQueryValue
+      currentState: this.state.initialQueryValue,
+      timestamp: Date.now()
     })
 
     // Find the first matching shortId (prioritize first match in query items order)
     // This ensures we only set state once per check and maintains consistent behavior
+    let foundMatch = false
     for (const shortId of shortIds) {
       if (urlParams.has(shortId)) {
+        foundMatch = true
         const value = urlParams.get(shortId)
         // Only update if the value has changed to avoid unnecessary re-renders
         if (this.state.initialQueryValue?.shortId !== shortId || this.state.initialQueryValue?.value !== value) {
@@ -1223,7 +1492,9 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
             shortId: shortId,
             value: value,
             previousShortId: this.state.initialQueryValue?.shortId,
-            previousValue: this.state.initialQueryValue?.value
+            previousValue: this.state.initialQueryValue?.value,
+            allHashParams: allHashParams,
+            timestamp: Date.now()
           })
           
           // Reset to New mode when hash parameter is detected to avoid bugs with accumulation modes
@@ -1258,6 +1529,19 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
         return // Exit after first match
       }
     }
+    
+    // If no hash parameters match any shortId, log what's in the hash
+    if (!foundMatch && Object.keys(allHashParams).length > 0) {
+      debugLogger.log('HASH', {
+        event: 'hash-check-no-matching-shortId',
+        widgetId: this.props.id,
+        hash: hash,
+        allHashParams: allHashParams,
+        availableShortIds: shortIds,
+        note: 'Hash contains params but none match configured shortIds',
+        timestamp: Date.now()
+      })
+    }
 
     // If no hash parameters match any shortId, clear the state
     // This handles cases where hash parameters were removed
@@ -1267,7 +1551,9 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
         widgetId: this.props.id,
         previousShortId: this.state.initialQueryValue.shortId,
         previousValue: this.state.initialQueryValue.value,
-        reason: 'no-matching-hash-params'
+        reason: 'no-matching-hash-params',
+        allHashParams: allHashParams,
+        timestamp: Date.now()
       })
       this.setState({ initialQueryValue: undefined })
     }
@@ -1293,19 +1579,24 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
             minSize={config.sizeMap?.arrangementIconPopper?.minSize}
             defaultSize={config.sizeMap?.arrangementIconPopper?.defaultSize}
           >
-            <QueryTaskList 
-              widgetId={id} 
-              isInPopper 
-              queryItems={config.queryItems} 
-              defaultPageSize={config.defaultPageSize} 
-              className='pb-4' 
-              initialQueryValue={this.state.initialQueryValue} 
-              onHashParameterUsed={this.removeHashParameter}
-              resultsMode={this.state.resultsMode}
-              onResultsModeChange={this.handleResultsModeChange}
-              accumulatedRecords={this.state.accumulatedRecords}
-              onAccumulatedRecordsChange={this.handleAccumulatedRecordsChange}
-            />
+              <QueryTaskList 
+                widgetId={id} 
+                isInPopper 
+                queryItems={config.queryItems} 
+                defaultPageSize={config.defaultPageSize} 
+                className='pb-4' 
+                initialQueryValue={this.state.initialQueryValue} 
+                onHashParameterUsed={this.removeHashParameter}
+                resultsMode={this.state.resultsMode}
+                onResultsModeChange={this.handleResultsModeChange}
+                accumulatedRecords={this.state.accumulatedRecords}
+                onAccumulatedRecordsChange={this.handleAccumulatedRecordsChange}
+                useGraphicsLayerForHighlight={config.useGraphicsLayerForHighlight}
+                graphicsLayer={this.graphicsLayerRef.current || undefined}
+                mapView={this.mapViewRef.current || undefined}
+                onInitializeGraphicsLayer={this.initializeGraphicsLayerFromOutputDS}
+                onClearGraphicsLayer={this.clearGraphicsLayerIfExists}
+              />
           </TaskListPopperWrapper>
         </QueryWidgetContext.Provider>
       )
@@ -1335,6 +1626,14 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
         flex-direction: column;
         height: 100%;
       `}>
+        {/* Hidden JimuMapViewComponent to get map view for graphics layer */}
+        {/* Uses explicit map widget ID from config (widget-level binding) */}
+        {config.useGraphicsLayerForHighlight && config.highlightMapWidgetId && (
+          <JimuMapViewComponent
+            useMapWidgetId={config.highlightMapWidgetId}
+            onActiveViewChange={this.handleJimuMapViewChanged}
+          />
+        )}
         <div className="widget-header" css={css`
           padding: 6px 16px;
           border-bottom: 1px solid var(--sys-color-divider-secondary);
@@ -1370,6 +1669,10 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
                 onResultsModeChange={this.handleResultsModeChange}
                 accumulatedRecords={this.state.accumulatedRecords}
                 onAccumulatedRecordsChange={this.handleAccumulatedRecordsChange}
+                useGraphicsLayerForHighlight={config.useGraphicsLayerForHighlight}
+                graphicsLayer={this.graphicsLayerRef.current || undefined}
+                mapView={this.mapViewRef.current || undefined}
+                onInitializeGraphicsLayer={this.initializeGraphicsLayerFromOutputDS}
               />
             </QueryWidgetContext.Provider>
           </div>
@@ -1406,7 +1709,7 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
                 <polyline points="16 18 22 12 16 6"/>
                 <polyline points="8 6 2 12 8 18"/>
               </svg>
-              QuerySimple by MapSimple.org
+              QuerySimple by MapSimple
               <span css={css`
                 margin-left: 6px;
                 opacity: 0.5;
