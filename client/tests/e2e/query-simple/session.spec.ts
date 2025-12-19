@@ -53,7 +53,7 @@ test.describe('QuerySimple Methodical Session', () => {
     await page.goto(`${baseURL}${APP_URL}?debug=all`, { waitUntil: 'networkidle' });
 
     // Determine labels based on widgetId
-    const layerLabel = widgetId === WIDGET_1_ID ? 'King County Parcels' : 'Parcels';
+    const layerLabel = widgetId === WIDGET_1_ID ? 'King County Parcels' : 'KC Parcels';
     const aliasLabel = widgetId === WIDGET_1_ID ? 'Parcel number' : 'PIN';
     const majorAliasLabel = widgetId === WIDGET_1_ID ? 'Major number' : 'MAJOR';
 
