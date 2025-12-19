@@ -29,6 +29,7 @@ export default class LogExtentAction extends AbstractMessageAction {
     const extent = message?.extent
     const viewPoint = message?.viewPoint
     
+    /* 
     debugLogger.log('MAP-EXTENT', {
       extent: extent ? {
         xmin: extent.xmin,
@@ -44,6 +45,7 @@ export default class LogExtentAction extends AbstractMessageAction {
       } : null,
       widgetId: this.widgetId
     })
+    */
     
     return true
   }

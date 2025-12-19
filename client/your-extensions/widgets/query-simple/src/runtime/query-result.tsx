@@ -89,7 +89,7 @@ function isIdentifyPopupOpen(): boolean {
   return true
 }
 
-export interface QueryTasResultProps {
+export interface QueryTaskResultProps {
   widgetId: string
   resultCount: number
   maxPerPage: number
@@ -134,7 +134,7 @@ const resultStyle = css`
   }
 `
 
-export function QueryTaskResult (props: QueryTasResultProps) {
+export function QueryTaskResult (props: QueryTaskResultProps) {
   const { queryItem, queryParams, resultCount, maxPerPage, records, widgetId, outputDS, runtimeZoomToSelected, onNavBack, resultsMode, accumulatedRecords, onAccumulatedRecordsChange, useGraphicsLayerForHighlight, graphicsLayer, mapView } = props
   const getI18nMessage = hooks.useTranslation(defaultMessage)
   const intl = useIntl()
@@ -213,9 +213,13 @@ export function QueryTaskResult (props: QueryTasResultProps) {
       hasRecordsProp: records?.length > 0
     })
     
-    const recordsToUse = selectedRecords?.length > 0 
-      ? selectedRecords 
-      : (queryData?.records?.length > 0 ? queryData.records : (records || []))
+    const isAccumulationMode = resultsMode === SelectionType.AddToSelection || resultsMode === SelectionType.RemoveFromSelection
+    
+    // In accumulation modes (Add/Remove), prefer the 'records' prop (the accumulated set)
+    // because outputDS.getSelectedRecords() will only return records that match the current query's where clause.
+    const recordsToUse = isAccumulationMode
+      ? (records || [])
+      : (selectedRecords?.length > 0 ? selectedRecords : (queryData?.records?.length > 0 ? queryData.records : (records || [])))
     
     // If no records, return single DataRecordSet with empty records using outputDS
     if (!recordsToUse || recordsToUse.length === 0) {
