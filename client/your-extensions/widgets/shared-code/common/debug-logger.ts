@@ -49,9 +49,19 @@ class DebugLogger {
   private initialize(): void {
     if (this.initialized) return
 
-    // Check URL parameters
-    const urlParams = new URLSearchParams(window.location.search)
-    const debugValue = urlParams.get('debug')
+    // Check URL parameters (both current window and parent for iframes)
+    let urlParams = new URLSearchParams(window.location.search)
+    let debugValue = urlParams.get('debug')
+
+    // If not found in current window, check parent (needed for ExB iframes)
+    if (debugValue === null && window.parent !== window) {
+      try {
+        urlParams = new URLSearchParams(window.parent.location.search)
+        debugValue = urlParams.get('debug')
+      } catch (e) {
+        // Cross-origin restriction might prevent access to parent location
+      }
+    }
 
     if (debugValue === 'false') {
       // Explicitly disabled
@@ -66,6 +76,7 @@ class DebugLogger {
           this.enabledFeatures.add(feature)
         }
       })
+      console.log(`[${this.widgetName}-DEBUG] Enabled ALL features:`, Array.from(this.enabledFeatures))
     } else if (debugValue !== null) {
       // Parse comma-separated feature list
       const requestedFeatures = debugValue.split(',').map(f => f.trim().toUpperCase() as DebugFeature)

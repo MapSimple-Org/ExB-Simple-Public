@@ -90,6 +90,8 @@ export interface QueryTaskProps {
   mapView?: __esri.MapView | __esri.SceneView
   onInitializeGraphicsLayer?: (outputDS: DataSource) => Promise<void>
   onClearGraphicsLayer?: () => void
+  activeTab?: 'query' | 'results'
+  onTabChange?: (tab: 'query' | 'results') => void
 }
 
 // Helper function to get display name for query in dropdown
@@ -150,10 +152,20 @@ const style = css`
 `
 
 export function QueryTask (props: QueryTaskProps) {
-  const { queryItem, onNavBack, total, isInPopper = false, wrappedInPopper = false, className = '', index, initialInputValue, onHashParameterUsed, queryItems, selectedQueryIndex, onQueryChange, groups, ungrouped, groupOrder, selectedGroupId, selectedGroupQueryIndex, onGroupChange, onGroupQueryChange, onUngroupedChange, resultsMode, onResultsModeChange, accumulatedRecords, onAccumulatedRecordsChange, useGraphicsLayerForHighlight, graphicsLayer, mapView, onInitializeGraphicsLayer, onClearGraphicsLayer, ...otherProps } = props
+  const { queryItem, onNavBack, total, isInPopper = false, wrappedInPopper = false, className = '', index, initialInputValue, onHashParameterUsed, queryItems, selectedQueryIndex, onQueryChange, groups, ungrouped, groupOrder, selectedGroupId, selectedGroupQueryIndex, onGroupChange, onGroupQueryChange, onUngroupedChange, resultsMode, onResultsModeChange, accumulatedRecords, onAccumulatedRecordsChange, useGraphicsLayerForHighlight, graphicsLayer, mapView, onInitializeGraphicsLayer, onClearGraphicsLayer, activeTab: propActiveTab, onTabChange: propOnTabChange, ...otherProps } = props
   const getI18nMessage = hooks.useTranslation(defaultMessage)
   const [stage, setStage] = React.useState(0) // 0 = form, 1 = results, 2 = loading
-  const [activeTab, setActiveTab] = React.useState<'query' | 'results'>('query')
+  const [internalActiveTab, setInternalActiveTab] = React.useState<'query' | 'results'>('query')
+  
+  // Controlled tab state: use prop if provided, otherwise internal state
+  const activeTab = propActiveTab || internalActiveTab
+  const setActiveTab = React.useCallback((tab: 'query' | 'results') => {
+    if (propOnTabChange) {
+      propOnTabChange(tab)
+    } else {
+      setInternalActiveTab(tab)
+    }
+  }, [propOnTabChange])
   const [enabled, setEnabled] = React.useState(true)
   const [resultCount, setResultCount] = React.useState(0)
   // Track if we've already selected records for the current query results
@@ -420,11 +432,12 @@ export function QueryTask (props: QueryTaskProps) {
    * publishes a cleared message to the map, switches back to the Query tab,
    * and increments the query execution key to force QueryTaskResult to remount with fresh state.
    */
-  const clearResult = React.useCallback(async () => {
+  const clearResult = React.useCallback(async (reason: string = 'unknown') => {
     debugLogger.log('TASK', {
       event: 'clearResult-called',
       widgetId: props.widgetId,
       hasOutputDS: !!outputDS,
+      reason,
       timestamp: Date.now()
     })
 
@@ -517,7 +530,7 @@ export function QueryTask (props: QueryTaskProps) {
       widgetId: props.widgetId,
       timestamp: Date.now()
     })
-    await clearResult()
+    await clearResult('handleDataSourceCreated-new-mode')
 
     setDataSource(ds)
     updateDataSource(ds)
@@ -693,7 +706,7 @@ export function QueryTask (props: QueryTaskProps) {
       // Clear immediately when switching queries, but wrap in try-catch to handle
       // race conditions with feature info windows that might be rendering
       try {
-        clearResult()
+        clearResult('query-item-switch-new-mode')
       } catch (error) {
         // Log for debugging but don't show to user (framework race condition)
         // The error is in framework code (feature-info.tsx), not our code
@@ -729,7 +742,7 @@ export function QueryTask (props: QueryTaskProps) {
   const navToForm = React.useCallback(async (clearResults = false) => {
     if (clearResults) {
       // Use the centralized clearResult method instead of duplicating logic
-      await clearResult()
+      await clearResult('navToForm-clearResults')
       return
     }
     // Switch to query tab but don't clear results unless explicitly requested
@@ -830,13 +843,25 @@ export function QueryTask (props: QueryTaskProps) {
     // These persist across query switches, unlike query-item-level records
     let existingRecordsForMerge: FeatureDataRecord[] = []
     if (resultsMode === SelectionType.AddToSelection || resultsMode === SelectionType.RemoveFromSelection) {
-      existingRecordsForMerge = accumulatedRecords || []
+      // Robust capture strategy:
+      // 1. Try records from props (already merged by parent)
+      // 2. Fallback to currently selected records in DS (captured during mode switch)
+      const fromProp = accumulatedRecords || []
+      const fromDS = outputDS?.getSelectedRecords() as FeatureDataRecord[] || []
+      
+      existingRecordsForMerge = fromProp.length > 0 ? fromProp : fromDS
+      
       debugLogger.log('RESULTS-MODE', {
-        event: 'using-widget-level-accumulated-records',
+        event: 'captured-existing-records-diagnostic',
         widgetId: props.widgetId,
         resultsMode,
-        existingRecordsCount: existingRecordsForMerge.length,
-        outputDSId: outputDS.id
+        fromPropCount: fromProp.length,
+        fromDSCount: fromDS.length,
+        finalCapturedCount: existingRecordsForMerge.length,
+        firstRecordId: existingRecordsForMerge[0]?.getId?.() || 'none',
+        allRecordIds: existingRecordsForMerge.map(r => r.getId?.()).slice(0, 10),
+        outputDSId: outputDS.id,
+        timestamp: Date.now()
       })
     }
     
@@ -848,7 +873,7 @@ export function QueryTask (props: QueryTaskProps) {
         widgetId: props.widgetId,
         timestamp: Date.now()
       })
-      await clearResult()
+      await clearResult('handleFormSubmit-new-mode')
     }
     
     // Set loading stage
@@ -860,31 +885,70 @@ export function QueryTask (props: QueryTaskProps) {
     let pageSize = maxRecordCount
     const queryParams = generateQueryParams(featureDS, sqlExpr, spatialFilter, currentItem, 1, pageSize)
     queryParamRef.current = queryParams
+    
+    debugLogger.log('TASK', {
+      event: 'handleFormSubmit-executing-query',
+      widgetId: props.widgetId,
+      where: queryParams.where,
+      resultsMode,
+      timestamp: Date.now()
+    })
     // Change output ds status to unloaded before use it to load count/records.
     featureDS.setStatus(DataSourceStatus.Unloaded)
     featureDS.setCountStatus(DataSourceStatus.Unloaded)
-    let queryResultCount = 0 // Capture count from promise chain to use in finally block
-    executeCountQuery(props.widgetId, featureDS, queryParams)
-      .then((count) => {
-        queryResultCount = count // Store count for use in finally block
-        // Don't set resultCount here - wait until query completes and queryJustExecutedRef is set
-        // This ensures auto-switch useEffect runs with queryJustExecutedRef.current === true
-        // update ds in order to execute query
-        featureDS.updateQueryParams(queryParamRef.current, props.widgetId)
-        return executeQuery(props.widgetId, queryItem, featureDS, queryParamRef.current)
-      })
+    let queryResultCount = 0 // Capture count from records to use in finally block
+    const startTime = performance.now()
+    
+    debugLogger.log('TASK', {
+      event: 'perf-query-chain-start',
+      widgetId: props.widgetId,
+      resultsMode,
+      where: queryParams.where,
+      timestamp: Date.now()
+    })
+
+    // PERFORMANCE OPTIMIZATION: Removed redundant executeCountQuery() round-trip.
+    // Since we fetch ALL records (pageSize = maxRecordCount), we can just use records.length.
+    featureDS.updateQueryParams(queryParamRef.current, props.widgetId)
+    
+    const fetchStartTime = performance.now()
+    executeQuery(props.widgetId, queryItem, featureDS, queryParamRef.current)
       .then(async (result) => {
+        const fetchDurationMs = Math.round(performance.now() - fetchStartTime)
+        const processingStartTime = performance.now()
+        
+        queryResultCount = result.records?.length || 0
+        
+        debugLogger.log('RESULTS-MODE', {
+          event: 'query-execution-complete',
+          widgetId: props.widgetId,
+          resultsMode,
+          recordsReturned: queryResultCount,
+          fetchDurationMs,
+          existingCapturedCount: existingRecordsForMerge.length,
+          timestamp: Date.now()
+        })
+
         let recordsToDisplay = result.records || []
         let dsToUse = outputDS
         
         // Handle "Add to" mode: merge new results with widget-level accumulated records
         if (resultsMode === SelectionType.AddToSelection && result.records && result.records.length > 0) {
           try {
+            debugLogger.log('RESULTS-MODE', {
+              event: 'add-mode-starting-merge-diagnostic',
+              widgetId: props.widgetId,
+              existingCount: existingRecordsForMerge.length,
+              existingIds: existingRecordsForMerge.map(r => r.getId?.()).slice(0, 5),
+              newCount: result.records.length,
+              newIds: result.records.map((r: any) => r.getId?.()).slice(0, 5),
+              timestamp: Date.now()
+            })
             // Merge new query results with widget-level accumulated records
             const mergedRecords = mergeResultsIntoAccumulated(
-              outputDS, // Use outputDS for key generation
+              outputDS as FeatureLayerDataSource, // Use outputDS for key generation
               result.records as FeatureDataRecord[],
-              existingRecordsForMerge // Widget-level accumulated records
+              existingRecordsForMerge // Use consistently captured records
             )
             
             recordsToDisplay = mergedRecords
@@ -895,13 +959,11 @@ export function QueryTask (props: QueryTaskProps) {
             }
             
             debugLogger.log('RESULTS-MODE', {
-              event: 'add-mode-merge-complete',
+              event: 'add-mode-merge-complete-diagnostic',
               widgetId: props.widgetId,
-              existingRecordsCount: existingRecordsForMerge.length,
-              newRecordsCount: result.records.length,
               mergedRecordsCount: mergedRecords.length,
-              outputDSId: outputDS.id,
-              widgetLevelRecordsUpdated: true
+              mergedIds: mergedRecords.map(r => r.getId?.()).slice(0, 10),
+              timestamp: Date.now()
             })
           } catch (error) {
             debugLogger.log('RESULTS-MODE', {
@@ -916,6 +978,12 @@ export function QueryTask (props: QueryTaskProps) {
         } else if (resultsMode === SelectionType.RemoveFromSelection) {
           // Handle "Remove from" mode: remove matching records from widget-level accumulated records
           try {
+            debugLogger.log('RESULTS-MODE', {
+              event: 'remove-mode-starting-merge',
+              widgetId: props.widgetId,
+              existingCount: existingRecordsForMerge.length,
+              removeCount: result.records?.length || 0
+            })
             // Check if we have accumulated records to remove from
             if (existingRecordsForMerge.length === 0) {
               debugLogger.log('RESULTS-MODE', {
@@ -929,9 +997,9 @@ export function QueryTask (props: QueryTaskProps) {
             } else if (result.records && result.records.length > 0) {
               // Remove matching records from accumulated records
               const remainingRecords = removeResultsFromAccumulated(
-                outputDS, // Use outputDS for key generation
+                outputDS as FeatureLayerDataSource, // Use outputDS for key generation
                 result.records as FeatureDataRecord[],
-                existingRecordsForMerge // Widget-level accumulated records
+                existingRecordsForMerge // Use consistently captured records
               )
               
               recordsToDisplay = remainingRecords
@@ -946,7 +1014,7 @@ export function QueryTask (props: QueryTaskProps) {
               removeRecordsFromOriginSelections(
                 props.widgetId,
                 result.records as FeatureDataRecord[],
-                outputDS,
+                outputDS as FeatureLayerDataSource,
                 useGraphicsLayerForHighlight,
                 graphicsLayer
               )
@@ -1113,10 +1181,18 @@ export function QueryTask (props: QueryTaskProps) {
           : queryResultCount
         
         setResultCount(newResultCount)
+        
+        // INSTANT UI FIX (The "Spinner Bypass"): 
+        // Decouple the "Retrieving results..." spinner from asynchronous actions like zooming. 
+        // By calling setStage(1) now, the user sees the result list immediately while 
+        // the map animation continues in the background.
+        setStage(1) 
+        
         debugLogger.log('TASK', {
-          event: 'result-count-set',
+          event: 'perf-processing-complete',
           widgetId: props.widgetId,
-          queryItemConfigId: queryItem.configId,
+          processingDurationMs: Math.round(performance.now() - processingStartTime),
+          totalChainDurationMs: Math.round(performance.now() - startTime),
           newResultCount,
           resultsMode,
           timestamp: Date.now()
@@ -1174,14 +1250,21 @@ export function QueryTask (props: QueryTaskProps) {
         }
         return Promise.resolve(true)
       })
+      .catch(error => {
+        debugLogger.log('TASK', {
+          event: 'query-chain-failed-diagnostic',
+          widgetId: props.widgetId,
+          error: error instanceof Error ? error.message : String(error),
+          errorStack: error instanceof Error ? error.stack : undefined,
+          timestamp: Date.now()
+        })
+        setStage(1) // Return to results or form stage even on error
+      })
       .finally(() => {
         if (spatialFilter?.layer && spatialFilter?.clearAfterApply) {
           spatialFilter.layer.removeAll()
         }
-        setStage(1)
-        // queryJustExecutedRef.current is now set BEFORE setResultCount (moved up)
-        // Tab switching is now handled by useEffect that watches for queryJustExecutedRef and results
-        // This matches the behavior of manual input where results are rendered before tab switch
+        // setStage(1) // Removed from here; now called in the main chain before background actions
       })
   }, [currentItem, queryItem, props.widgetId, outputDS, publishDataClearedMsg, clearResult, resultsMode, accumulatedRecords, onAccumulatedRecordsChange, onClearGraphicsLayer])
 
@@ -1197,8 +1280,15 @@ export function QueryTask (props: QueryTaskProps) {
   const effectiveResultCount = isVirtualClearActive ? 0 : resultCount
   const effectiveRecords = isVirtualClearActive ? [] : (recordsRef.current || [])
 
+  // Create a unique key for the current query result set to help E2E tests detect fresh data
+  const resultQueryKey = React.useMemo(() => {
+    return `${queryItem.configId}_${Date.now()}`
+  }, [queryItem.configId, resultCount])
+
   return (
-    <div className={classNames('query-task h-100', className, { wrapped: wrappedInPopper })} css={css`
+    <div className={classNames('query-task h-100', className, { wrapped: wrappedInPopper })} 
+      data-result-query-key={resultQueryKey}
+      css={css`
       ${style}
       position: relative;
       display: flex;
@@ -1437,7 +1527,7 @@ export function QueryTask (props: QueryTaskProps) {
 
                         // START CLEARING IMMEDIATELY IF SWITCHING
                         if (resultsMode === SelectionType.NewSelection) {
-                          await clearResult()
+                          await clearResult('dropdown-layer-switch-new-mode')
                         }
                         
                         if (selectedOption.groupId) {
@@ -1521,7 +1611,7 @@ export function QueryTask (props: QueryTaskProps) {
 
                           // START CLEARING IMMEDIATELY IF SWITCHING
                           if (resultsMode === SelectionType.NewSelection) {
-                            await clearResult()
+                            await clearResult('dropdown-alias-switch-new-mode')
                           }
 
                           if (onGroupQueryChange) {
@@ -1630,19 +1720,21 @@ export function QueryTask (props: QueryTaskProps) {
                           
                           // If switching FROM "New" TO "Add to" mode and we have current results,
                           // merge them with existing accumulated records before changing mode
+                          const recordsToCapture = (effectiveRecords && effectiveRecords.length > 0) 
+                            ? (effectiveRecords as FeatureDataRecord[])
+                            : (outputDS?.getSelectedRecords() as FeatureDataRecord[] || [])
+
                           if (previousMode === SelectionType.NewSelection && 
                               newMode === SelectionType.AddToSelection &&
-                              effectiveRecords && 
-                              effectiveRecords.length > 0 &&
+                              recordsToCapture.length > 0 &&
                               outputDS &&
                               onAccumulatedRecordsChange) {
-                            const currentRecords = effectiveRecords as FeatureDataRecord[]
                             const existingAccumulated = accumulatedRecords || []
                             
                             // Merge current results with existing accumulated records
                             const mergedRecords = mergeResultsIntoAccumulated(
                               outputDS as FeatureLayerDataSource,
-                              currentRecords,
+                              recordsToCapture,
                               existingAccumulated
                             )
                             
@@ -1651,7 +1743,7 @@ export function QueryTask (props: QueryTaskProps) {
                               widgetId: props.widgetId,
                               previousMode,
                               newMode,
-                              currentRecordsCount: currentRecords.length,
+                              capturedRecordsCount: recordsToCapture.length,
                               existingAccumulatedCount: existingAccumulated.length,
                               mergedRecordsCount: mergedRecords.length
                             })
@@ -1700,19 +1792,21 @@ export function QueryTask (props: QueryTaskProps) {
                           // If switching FROM "New" TO "Remove from" mode and we have current results,
                           // merge them with existing accumulated records before changing mode
                           // (same pattern as "Add to" mode)
+                          const recordsToCaptureForRemove = (effectiveRecords && effectiveRecords.length > 0) 
+                            ? (effectiveRecords as FeatureDataRecord[])
+                            : (outputDS?.getSelectedRecords() as FeatureDataRecord[] || [])
+
                           if (previousMode === SelectionType.NewSelection && 
                               newMode === SelectionType.RemoveFromSelection &&
-                              effectiveRecords && 
-                              effectiveRecords.length > 0 &&
+                              recordsToCaptureForRemove.length > 0 &&
                               outputDS &&
                               onAccumulatedRecordsChange) {
-                            const currentRecords = effectiveRecords as FeatureDataRecord[]
                             const existingAccumulated = accumulatedRecords || []
                             
                             // Merge current results with existing accumulated records
                             const mergedRecords = mergeResultsIntoAccumulated(
                               outputDS as FeatureLayerDataSource,
-                              currentRecords,
+                              recordsToCaptureForRemove,
                               existingAccumulated
                             )
                             
@@ -1721,7 +1815,7 @@ export function QueryTask (props: QueryTaskProps) {
                               widgetId: props.widgetId,
                               previousMode,
                               newMode,
-                              currentRecordsCount: currentRecords.length,
+                              capturedRecordsCount: recordsToCaptureForRemove.length,
                               existingAccumulatedCount: existingAccumulated.length,
                               mergedRecordsCount: mergedRecords.length
                             })

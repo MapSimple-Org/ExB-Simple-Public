@@ -119,25 +119,78 @@ export function generateQueryParams (
   }
 
   const { useAttributeFilter, useSpatialFilter, sortOptions, resultFieldsType, resultDisplayFields, resultTitleExpression } = queryItem
-  let outputFields: string[] | ImmutableArray<string> = resultDisplayFields
-  if (resultDisplayFields == null) {
-    // return all fields by default
-    const allFieldsSchema = outputDS.getSchema()
-    outputFields = allFieldsSchema?.fields ? Object.values(allFieldsSchema.fields).map(field => field.jimuName) : []
+  
+  // DETERMINE MINIMAL FIELDS (The "Field Shredder" Optimization)
+  // To achieve performance parity with Web AppBuilder, we must avoid fetching every 
+  // column in the database (* or all). We surgically request only the fields 
+  // needed for the Title, the Attribute List, and the ID field.
+  let outputFields: string[] = []
+  if (resultFieldsType === FieldsType.SelectAttributes && resultDisplayFields) {
+    outputFields = combineFields(resultDisplayFields as any, resultTitleExpression || '', outputDS.getIdField())
+  } else {
+    // Popup mode: Get only visible fields from popup info
+    const popupInfo = currentOriginDs.getPopupInfo()
+    const fieldNames = Object.values(currentOriginDs.getSchema().fields ?? {}).map(f => f.name)
+    const validFieldInfos = popupInfo?.fieldInfos?.filter(fieldInfo => fieldInfo.visible !== false && fieldNames.includes(fieldInfo.fieldName))
+    outputFields = validFieldInfos?.map(fieldInfo => fieldInfo.fieldName) || []
+    
+    // Always ensure ID field is included
+    const idField = outputDS.getIdField()
+    if (idField && !outputFields.includes(idField)) {
+      outputFields.push(idField)
+    }
   }
+
   const mergedQueryParams = outputDS.mergeQueryParams(currentOriginDs.getCurrentQueryParams() ?? {}, {
     where: (useAttributeFilter && sqlExpr?.sql) ? dataSourceUtils.getArcGISSQL(sqlExpr, outputDS).sql : '1=1',
-    sqlExpression: (useAttributeFilter && sqlExpr?.sql) ? sqlExpr : null
+    sqlExpression: (useAttributeFilter && sqlExpr?.sql) ? sqlExpr : null,
+    // FORCE minimal fields here to override any framework "*" or "all"
+    outFields: outputFields
   } as any)
+
+  // PERFORMANCE OPTIMIZATION: Universal SQL Optimizer
+  // We normalize the user's input to UPPERCASE to ensure case-insensitivity while 
+  // unwrapping any LOWER() function around the field name. This allows the database 
+  // to use its attribute indexes (SARGable query).
+  if (mergedQueryParams.where && mergedQueryParams.where.includes('LOWER(')) {
+    const optimizedWhere = mergedQueryParams.where.replace(/LOWER\(([^)]+)\)\s*(=|LIKE)\s*'([^']*)'/gi, (match, field, operator, value) => {
+      // Normalize both sides to UPPERCASE. This works for ANY field name.
+      // We keep the field name "naked" so the index is used.
+      return `${field} ${operator} '${value.toUpperCase()}'`
+    })
+    
+    if (optimizedWhere !== mergedQueryParams.where) {
+      console.log(`[QUERYSIMPLE-PERF] Universal SQL Optimization: ${mergedQueryParams.where} -> ${optimizedWhere}`)
+      mergedQueryParams.where = optimizedWhere
+    }
+  }
 
   // compose query params for query
   const queryParams: FeatureLayerQueryParams = {
     // url: ds.url,
     returnGeometry: true,
+    /** 
+     * PERFORMANCE OPTIMIZATION: Force lower precision for all display queries.
+     */
+    maxAllowableOffset: 0.1, 
     page,
-    pageSize,
+    // Limit pageSize to a sane default if not provided or too large
+    pageSize: (pageSize && pageSize < 1000) ? pageSize : 1000,
     ...mergedQueryParams
   }
+
+  // Final override to ensure no "*" leaks through from any merge operation
+  if (!queryParams.outFields || queryParams.outFields.includes('*')) {
+    queryParams.outFields = outputFields
+  }
+
+  // Diagnostic log: Show exactly WHICH fields are being sent
+  console.log(`[QUERYSIMPLE-PERF] Requesting data: 
+    - Fields Count: ${queryParams.outFields?.length} 
+    - Fields: ${queryParams.outFields?.join(', ')}
+    - PageSize: ${queryParams.pageSize}
+    - Offset: ${queryParams.maxAllowableOffset}`)
+
   if (useSpatialFilter && spatialFilter?.geometry) {
     const { geometry, relation = SpatialRelation.Intersect, buffer } = spatialFilter
 
@@ -157,22 +210,6 @@ export function generateQueryParams (
     })
   }
 
-  if (resultFieldsType === FieldsType.SelectAttributes) {
-    const fields = combineFields(outputFields as any, resultTitleExpression, outputDS.getIdField())
-    Object.assign(queryParams, {
-      outFields: fields
-    })
-  } else {
-    // use popup setting
-    const popupInfo = currentOriginDs.getPopupInfo()
-    // popupInfo may have expressions in its fieldInfos
-    const fieldNames = Object.values(currentOriginDs.getSchema().fields ?? {}).map(f => f.name)
-    // eslint-disable-next-line @typescript-eslint/no-unnecessary-boolean-literal-compare
-    const validFieldInfos = popupInfo?.fieldInfos?.filter(fieldInfo => fieldInfo.visible !== false && fieldNames.includes(fieldInfo.fieldName))
-    Object.assign(queryParams, {
-      outFields: validFieldInfos?.map(fieldInfo => fieldInfo.fieldName)
-    })
-  }
   return queryParams
 }
 
@@ -212,12 +249,21 @@ export async function executeQuery (
   //   ? Object.keys(fields).filter((jimuName) => selectedFieldNames.includes(fields[jimuName].name))
   //   : []
   // outputDS.setSelectedFields(selectedFieldJimuNames)
+  const startTime = performance.now()
   let records = await outputDS.load(queryParams, { widgetId })
+  const fetchTime = performance.now() - startTime
+  
   if (records == null) {
     records = []
   }
   const originDs: FeatureLayerDataSource = outputDS.getOriginDataSources()[0] as FeatureLayerDataSource
+  
+  const layerStartTime = performance.now()
   const layerObject = await getLayerObject(originDs)
+  const layerTime = performance.now() - layerStartTime
+
+  console.log(`[QUERYSIMPLE-PERF] executeQuery complete. Fetch: ${Math.round(fetchTime)}ms, Layer: ${Math.round(layerTime)}ms, Total: ${Math.round(performance.now() - startTime)}ms, Count: ${records.length}`)
+  
   records.forEach((record) => {
     const feature = (record as any).feature
     if (layerObject) {
