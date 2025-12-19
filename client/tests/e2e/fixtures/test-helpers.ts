@@ -225,13 +225,40 @@ export class KCSearchHelpers {
   }
 
   /**
+   * Ensure the results list is collapsed (compact mode)
+   */
+  async ensureResultsCollapsed(widgetId: string) {
+    console.log(`📏 Ensuring results are collapsed in ${widgetId}`);
+    const widget = this.getWidget(widgetId);
+    
+    // Look for the "Collapse all" button. If it's present, it means things are expanded.
+    const collapseBtn = widget.locator('button[aria-label*="collapse all" i]').first();
+    
+    if (await collapseBtn.isVisible()) {
+      console.log('🤏 Records are expanded. Collapsing for reliable interaction...');
+      await collapseBtn.click({ force: true });
+      await this.page.waitForTimeout(1000); // Wait for the "shrink" animation
+    } else {
+      console.log('✅ Records already compact');
+    }
+  }
+
+  /**
    * Manually remove the Nth result item
    */
   async removeResultItem(n: number, widgetId: string) {
     console.log(`🗑️ Manually removing result item #${n} in ${widgetId}`);
+    
+    // 1. Ensure records are collapsed so we can see more of them
+    await this.ensureResultsCollapsed(widgetId);
+    
     const widget = this.getWidget(widgetId);
     const resultItem = widget.locator('.query-result-item').nth(n);
-    // Find the trash icon / remove button inside the item
+    
+    // 2. Scroll the specific item into view
+    await resultItem.scrollIntoViewIfNeeded();
+    
+    // 3. Find and click the trash icon
     const removeBtn = resultItem.locator('button[aria-label*="remove" i], button .jimu-icon-delete').first();
     await removeBtn.click({ force: true });
     await this.page.waitForTimeout(500);
