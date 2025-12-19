@@ -59,7 +59,11 @@ export default {
   shortIdDescription: 'The hash parameter used to execute a query using #shortid=value in the URL.',
   groupIdDescription: 'Used to group queries together. Example: if you have multiple queries on the parcel layer, one for Parcel number and one for Major number, you can use the Group ID to group these together.',
   displayOrder: 'Display Order',
-  displayOrderDescription: 'Lower numbers appear first. Leave empty to maintain default order.'
+  displayOrderDescription: 'Lower numbers appear first. Leave empty to maintain default order.',
+  highlightOptions: 'Highlight Options',
+  useGraphicsLayerForHighlight: 'Use graphics layer for highlighting',
+  useGraphicsLayerForHighlightDescription: 'When enabled, highlights will display even when the layer is turned off. Uses the map\'s default highlight color.',
+  selectMapForHighlight: 'Select map widget'
 }
 
 

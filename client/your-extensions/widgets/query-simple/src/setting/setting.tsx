@@ -2,6 +2,7 @@
 import {
   React,
   jsx,
+  css,
   Immutable,
   type UseDataSource,
   DataSourceManager,
@@ -18,8 +19,8 @@ import {
   DataSourceRemoveWaringReason,
   dataComponentsUtils
 } from 'jimu-ui/advanced/data-source-selector'
-import { NumericInput, Select, defaultMessages as jimuUIDefaultMessages } from 'jimu-ui'
-import { SettingRow, SettingSection, DirectionSelector } from 'jimu-ui/advanced/setting-components'
+import { NumericInput, Select, Switch, defaultMessages as jimuUIDefaultMessages } from 'jimu-ui'
+import { SettingRow, SettingSection, DirectionSelector, MapWidgetSelector } from 'jimu-ui/advanced/setting-components'
 import { type IMConfig, type QueryArrangeType, type QueryItemType, PagingType, ListDirection, FieldsType } from '../config'
 import defaultMessages from './translations/default'
 import { createGetI18nMessage } from 'widgets/shared-code/common'
@@ -291,6 +292,44 @@ export default class Setting extends React.PureComponent<AllWidgetSettingProps<I
                 onChange={this.handleResultDirectionChange}
               />
             </SettingRow>
+          </SettingSection>
+        )}
+        {this.props.config.queryItems.length > 0 && (
+          <SettingSection role='group' aria-label={this.getI18nMessage('highlightOptions')} title={this.getI18nMessage('highlightOptions')}>
+            <SettingRow label={this.getI18nMessage('useGraphicsLayerForHighlight')}>
+              <Switch
+                aria-label={this.getI18nMessage('useGraphicsLayerForHighlight')}
+                checked={config.useGraphicsLayerForHighlight ?? false}
+                onChange={(e) => {
+                  this.updateConfigForOptions(['useGraphicsLayerForHighlight', e.target.checked])
+                }}
+              />
+            </SettingRow>
+            <SettingRow flow='wrap'>
+              <div css={css`
+                font-size: 0.75rem;
+                color: var(--dark-400);
+                line-height: 1.4;
+                width: 100%;
+              `}>
+                {this.getI18nMessage('useGraphicsLayerForHighlightDescription')}
+              </div>
+            </SettingRow>
+            {config.useGraphicsLayerForHighlight && (
+              <SettingSection role='group' title={this.getI18nMessage('selectMapForHighlight')} className='text-truncate'>
+                <SettingRow>
+                  <MapWidgetSelector
+                    onSelect={(mapWidgetIds) => {
+                      const selectedMapWidgetId = mapWidgetIds && mapWidgetIds.length > 0 ? mapWidgetIds[0] : null
+                      this.updateConfigForOptions(['highlightMapWidgetId', selectedMapWidgetId])
+                    }}
+                    useMapWidgetIds={config.highlightMapWidgetId 
+                      ? Immutable([String(config.highlightMapWidgetId)] as string[]) 
+                      : undefined}
+                  />
+                </SettingRow>
+              </SettingSection>
+            )}
           </SettingSection>
         )}
         <DataSourceRemoveWarningPopup

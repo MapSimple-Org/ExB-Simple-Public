@@ -185,6 +185,8 @@ export interface SettingConfig {
   resultListDirection?: ListDirection
   resultPagingStyle?: PagingType
   lazyLoadInitialPageSize?: number
+  useGraphicsLayerForHighlight?: boolean // Use graphics layer for highlighting (independent of layer visibility)
+  highlightMapWidgetId?: string // Map widget ID to use for graphics layer highlighting
   sizeMap?: {
     arrangementIconPopper?: SizeMap
   }
