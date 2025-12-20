@@ -9,7 +9,8 @@ import {
   DataRecordSetChangeMessage,
   RecordSetChangeType,
   type ImmutableArray,
-  dataSourceUtils
+  dataSourceUtils,
+  Immutable
 } from 'jimu-core'
 import type { IFieldInfo } from '@esri/arcgis-rest-feature-service'
 import { type QueryItemType, SpatialRelation, type SpatialFilterObj, FieldsType, mapJSAPIUnitToDsUnit, mapJSAPISpatialRelToDsSpatialRel } from '../config'
@@ -28,6 +29,56 @@ export function combineFields (resultDisplayFields: ImmutableArray<string>, resu
     fields.add(idField)
   }
   return Array.from(fields)
+}
+
+/**
+ * Sanitizes user input for query tasks.
+ * 1. Strips leading and trailing whitespace.
+ * 2. Prevents basic SQL injection by escaping single quotes.
+ * 3. Handles empty or whitespace-only strings.
+ * 
+ * @param input - The raw user input string
+ * @returns Sanitized string or null if input is empty
+ */
+export function sanitizeQueryInput (input: string): string | null {
+  if (!input || typeof input !== 'string') {
+    return null
+  }
+  
+  const trimmed = input.trim()
+  if (trimmed === '') {
+    return null
+  }
+  
+  // Basic SQL escaping: replace single quotes with double single quotes
+  // This is a safety measure in case jimu-core's getArcGISSQL fails to catch something.
+  return trimmed.replace(/'/g, "''")
+}
+
+/**
+ * Sanitizes all values within an IMSqlExpression object.
+ * 
+ * @param sqlExpr - The raw SQL expression object
+ * @returns A new sanitized IMSqlExpression object
+ */
+export function sanitizeSqlExpression (sqlExpr: IMSqlExpression): IMSqlExpression {
+  if (!sqlExpr || !sqlExpr.parts) {
+    return sqlExpr
+  }
+
+  let sanitizedExpr = sqlExpr
+  sqlExpr.parts.forEach((part, index) => {
+    if (part.type === 'SINGLE' && part.valueOptions?.value !== undefined) {
+      const rawValue = part.valueOptions.value
+      const sanitizedValue = sanitizeQueryInput(String(rawValue))
+      
+      if (sanitizedValue !== rawValue) {
+        sanitizedExpr = sanitizedExpr.setIn(['parts', index, 'valueOptions', 'value'], sanitizedValue)
+      }
+    }
+  })
+
+  return sanitizedExpr
 }
 
 export async function getPopupTemplate (

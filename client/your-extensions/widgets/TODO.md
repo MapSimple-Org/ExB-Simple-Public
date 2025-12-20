@@ -19,6 +19,24 @@
 
 ---
 
+## Future Considerations & Best Practices (Thinking Phase)
+
+### 1. SQL Injection & Input Validation
+**Status:** 💭 Thinking  
+**Priority:** High  
+**Source:** User Request (r17.41)  
+**Goal:** Prevent "fool things" from being entered into search queries.
+- **SQL Injection Protection**: Ensure user input is properly escaped/sanitized before being injected into `WHERE` clauses (beyond `DataSourceUtils`).
+- **Input Sanitization**: Automatically strip leading/trailing whitespace from all query inputs.
+- **Empty Query Prevention**: Block execution of queries with empty strings or whitespace-only inputs.
+- **Configurable Validation Rules**: 
+  - Add per-query config options for validation (e.g., `minCharacters`, `regexPattern`).
+  - Example: A "Major" query might require exactly 6 digits.
+  - Expose these settings in the Widget Setting page so authors can tailor them.
+- **UI Feedback**: Show clear validation errors to the user before they click "Apply."
+
+---
+
 ## High Priority - Immediate Next Steps
 
 ### 1. Solidify Playwright Testing & Auth
@@ -119,6 +137,22 @@
 ### 11. Enhance Widget Context Structure
 **Status:** Pending  
 **Priority:** Low  
+
+---
+
+## Feature Requests & Future Work
+
+### 1. Map Identify to QS Integration (The "Add to Results" Action)
+**Status:** 💭 Planned (r17/r18)  
+**Priority:** Medium/High  
+**Source:** User Request (Dec 2025)  
+**Goal**: Allow users to identify features on the map and add them to the current QS result list.
+- **Data Action**: Create a custom Data Action that appears in Map Popups.
+- **Smart Visibility**: Action only appears if a QS widget is **Open** AND its **config allows it**.
+- **Dynamic Toggle**: Automatically switches between "Add to" and "Remove from" based on current results.
+- **Mode Evolution**: Automatically upgrades "New" mode to "Add" mode to prevent data loss.
+- **Event Bus**: Use custom events to pass identified features to the active QS widget.
+- **Documentation**: See [MAP_IDENTIFY_INTEGRATION.md](./MAP_IDENTIFY_INTEGRATION.md) for the full architecture.
 
 ---
 

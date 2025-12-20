@@ -21,8 +21,8 @@ module.exports = {
     }
   },
   transform: {
-    "^.+\\.tsx?$": ["ts-jest", { isolatedModules: true }],
-    "^.+(node_modules).+\\.js$": ["ts-jest", { isolatedModules: true }],
+    "^.+\\.tsx?$": "ts-jest",
+    "^.+(node_modules).+\\.js$": "ts-jest",
     "\\.js$": "./jest-systemjs-transformer.js"
   },
   transformIgnorePatterns: [
@@ -79,6 +79,7 @@ module.exports = {
     "^jimu-data-source/(.*)": "<rootDir>/dist/jimu-data-source/$1",
     "^builder/(.*)": "<rootDir>/dist/builder/$1",
     "^site/(.*)": "<rootDir>/dist/site/$1",
+    "^widgets/(.*)": "<rootDir>/your-extensions/widgets/$1",
 
     'arcgis-charts-components': '<rootDir>/dist/arcgis-charts-components/index.js',
     'arcgis-map-components': '<rootDir>/dist/arcgis-map-components/index.js',
