@@ -22,6 +22,7 @@
     "allowUnreachableCode": true,
     "allowJs": true,
     "strictNullChecks": false,
+    "isolatedModules": true,
     "baseUrl": ".",
     "paths": {
       "arcgis-charts-components": ["jimu-ui/arcgis-charts-components"],

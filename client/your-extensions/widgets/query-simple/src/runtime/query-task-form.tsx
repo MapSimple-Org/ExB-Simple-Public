@@ -20,6 +20,7 @@ import { loadArcGISJSAPIModules } from 'jimu-arcgis'
 import { SqlExpressionRuntime, getShownClauseNumberByExpression } from 'jimu-ui/basic/sql-expression-runtime'
 import { type QueryItemType, type SpatialFilterObj, SpatialRelation, type UnitType } from '../config'
 import { DEFAULT_QUERY_ITEM } from '../default-query-item'
+import { sanitizeSqlExpression } from './query-utils'
 import defaultMessage from './translations/default'
 import { QueryTaskSpatialForm } from './query-task-spatial-form'
 import { useAutoHeight } from './useAutoHeight'
@@ -322,24 +323,27 @@ export function QueryTaskForm (props: QueryTaskItemProps) {
     // Force zoom for hash-triggered queries, otherwise use runtime preference
     const zoomToUse = hashTriggeredRef.current ? true : runtimeZoomToSelected
 
+    // Sanitize user input before submission
+    const sanitizedSqlExprObj = sanitizeSqlExpression(attributeFilterSqlExprObj)
+
     let rel = spatialRelationRef.current
     if (spatialFilterObjRef.current?.geometry && rel == null) {
       rel = SpatialRelation.Intersect
     }
     if (Array.isArray(spatialFilterObjRef.current?.geometry)) {
       if (spatialFilterObjRef.current.geometry.length === 1) {
-        onFormSubmit(attributeFilterSqlExprObj, { ...spatialFilterObjRef.current, geometry: spatialFilterObjRef.current.geometry[0], relation: rel, buffer: bufferRef.current }, zoomToUse)
+        onFormSubmit(sanitizedSqlExprObj, { ...spatialFilterObjRef.current, geometry: spatialFilterObjRef.current.geometry[0], relation: rel, buffer: bufferRef.current }, zoomToUse)
       } else {
         loadArcGISJSAPIModules([
           'esri/geometry/operators/unionOperator'
         ]).then(modules => {
           const operator: (typeof __esri.unionOperator) = modules[0]
           const geometry = operator.executeMany(spatialFilterObjRef.current.geometry)
-          onFormSubmit(attributeFilterSqlExprObj, { ...spatialFilterObjRef.current, geometry, relation: rel, buffer: bufferRef.current }, zoomToUse)
+          onFormSubmit(sanitizedSqlExprObj, { ...spatialFilterObjRef.current, geometry, relation: rel, buffer: bufferRef.current }, zoomToUse)
         })
       }
     } else {
-      onFormSubmit(attributeFilterSqlExprObj, { ...spatialFilterObjRef.current, relation: rel, buffer: bufferRef.current }, zoomToUse)
+      onFormSubmit(sanitizedSqlExprObj, { ...spatialFilterObjRef.current, relation: rel, buffer: bufferRef.current }, zoomToUse)
     }
     
     // Reset hashTriggeredRef after use
