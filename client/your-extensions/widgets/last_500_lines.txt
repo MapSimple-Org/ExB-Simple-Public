@@ -1,0 +1,500 @@
+
+[1A[2K[Browser] [QUERYSIMPLE-DATA-ACTION] {
+  "feature": "DATA-ACTION",
+  "timestamp": "2025-12-19T13:36:17.029Z",
+  "action": "addToMap-isSupported",
+  "result": true,
+  "hasRecords": true,
+  "recordsCount": 2
+}
+
+[1A[2K[Browser] [QUERYSIMPLE-DATA-ACTION] {
+  "feature": "DATA-ACTION",
+  "timestamp": "2025-12-19T13:36:17.029Z",
+  "action": "addToMap-isSupported",
+  "widgetId": "widget_15",
+  "actionWidgetId": "widget_15",
+  "dataLevel": "DATA_SOURCE",
+  "dataSetsCount": 1,
+  "hasOutputDS": true
+}
+
+[1A[2K[Browser] [QUERYSIMPLE-DATA-ACTION] {
+  "feature": "DATA-ACTION",
+  "timestamp": "2025-12-19T13:36:17.029Z",
+  "action": "addToMap-isSupported",
+  "result": false,
+  "reason": "Not Records level"
+}
+
+[1A[2K[Browser] [QUERYSIMPLE-DATA-ACTION] {
+  "feature": "DATA-ACTION",
+  "timestamp": "2025-12-19T13:36:17.029Z",
+  "action": "addToMap-isSupported",
+  "widgetId": "widget_15",
+  "actionWidgetId": "widget_15",
+  "dataLevel": "RECORDS",
+  "dataSetsCount": 1,
+  "hasOutputDS": true
+}
+
+[1A[2K[Browser] [QUERYSIMPLE-DATA-ACTION] {
+  "feature": "DATA-ACTION",
+  "timestamp": "2025-12-19T13:36:17.029Z",
+  "action": "addToMap-isSupported",
+  "result": true,
+  "hasRecords": true,
+  "recordsCount": 2
+}
+
+[1A[2K[Browser] [QUERYSIMPLE-DATA-ACTION] {
+  "feature": "DATA-ACTION",
+  "timestamp": "2025-12-19T13:36:17.029Z",
+  "action": "addToMap-isSupported",
+  "widgetId": "widget_15",
+  "actionWidgetId": "widget_15",
+  "dataLevel": "RECORDS",
+  "dataSetsCount": 1,
+  "hasOutputDS": true
+}
+
+[1A[2K[Browser] [QUERYSIMPLE-DATA-ACTION] {
+  "feature": "DATA-ACTION",
+  "timestamp": "2025-12-19T13:36:17.029Z",
+  "action": "addToMap-isSupported",
+  "result": true,
+  "hasRecords": true,
+  "recordsCount": 2
+}
+
+[1A[2K[Browser] [QUERYSIMPLE-DATA-ACTION] {
+  "feature": "DATA-ACTION",
+  "timestamp": "2025-12-19T13:36:17.029Z",
+  "action": "addToMap-isSupported",
+  "widgetId": "widget_15",
+  "actionWidgetId": "widget_15",
+  "dataLevel": "RECORDS",
+  "dataSetsCount": 1,
+  "hasOutputDS": true
+}
+
+[1A[2K[Browser] [QUERYSIMPLE-DATA-ACTION] {
+  "feature": "DATA-ACTION",
+  "timestamp": "2025-12-19T13:36:17.029Z",
+  "action": "addToMap-isSupported",
+  "result": true,
+  "hasRecords": true,
+  "recordsCount": 2
+}
+
+[1A[2K[Browser] [QUERYSIMPLE-DATA-ACTION] {
+  "feature": "DATA-ACTION",
+  "timestamp": "2025-12-19T13:36:17.029Z",
+  "action": "addToMap-isSupported",
+  "widgetId": "widget_15",
+  "actionWidgetId": "widget_15",
+  "dataLevel": "DATA_SOURCE",
+  "dataSetsCount": 1,
+  "hasOutputDS": true
+}
+
+[1A[2K[Browser] [QUERYSIMPLE-DATA-ACTION] {
+  "feature": "DATA-ACTION",
+  "timestamp": "2025-12-19T13:36:17.029Z",
+  "action": "addToMap-isSupported",
+  "result": false,
+  "reason": "Not Records level"
+}
+
+[1A[2K[Browser] [QUERYSIMPLE-DATA-ACTION] {
+  "feature": "DATA-ACTION",
+  "timestamp": "2025-12-19T13:36:17.029Z",
+  "action": "addToMap-isSupported",
+  "widgetId": "widget_15",
+  "actionWidgetId": "widget_15",
+  "dataLevel": "DATA_SOURCE",
+  "dataSetsCount": 1,
+  "hasOutputDS": true
+}
+
+[1A[2K[Browser] [QUERYSIMPLE-DATA-ACTION] {
+  "feature": "DATA-ACTION",
+  "timestamp": "2025-12-19T13:36:17.029Z",
+  "action": "addToMap-isSupported",
+  "result": false,
+  "reason": "Not Records level"
+}
+
+[1A[2K[Browser] [QUERYSIMPLE-DATA-ACTION] {
+  "feature": "DATA-ACTION",
+  "timestamp": "2025-12-19T13:36:17.029Z",
+  "action": "addToMap-isSupported",
+  "widgetId": "widget_15",
+  "actionWidgetId": "widget_15",
+  "dataLevel": "DATA_SOURCE",
+  "dataSetsCount": 1,
+  "hasOutputDS": true
+}
+
+[1A[2K[Browser] [QUERYSIMPLE-DATA-ACTION] {
+  "feature": "DATA-ACTION",
+  "timestamp": "2025-12-19T13:36:17.029Z",
+  "action": "addToMap-isSupported",
+  "result": false,
+  "reason": "Not Records level"
+}
+
+[1A[2K[Browser] [QUERYSIMPLE-GRAPHICS-LAYER] {
+  "feature": "GRAPHICS-LAYER",
+  "timestamp": 1766151377104,
+  "event": "selectRecordsInDataSources-using-layer-selection",
+  "recordIdsCount": 2,
+  "useGraphicsLayer": false,
+  "hasGraphicsLayer": false,
+  "hasMapView": false
+}
+
+[1A[2K[Browser] [QUERYSIMPLE-GRAPHICS-LAYER] {
+  "feature": "GRAPHICS-LAYER",
+  "timestamp": 1766151377104,
+  "event": "selectRecordsByIds-layer-state",
+  "originDSId": "dataSource_1-19ae1ed5667-layer-2-2",
+  "layerId": "2",
+  "hasLayerMap": false,
+  "hasLayerView": false,
+  "hasLayerParent": true,
+  "parentType": "map-image",
+  "parentHasMap": false,
+  "parentHasView": false,
+  "parentHasViews": false
+}
+
+[1A[2K[Browser] [QUERYSIMPLE-RESULTS-MODE] {
+  "feature": "RESULTS-MODE",
+  "timestamp": 1766151377107,
+  "event": "handleDataSourceInfoChange-fired",
+  "widgetId": "widget_15",
+  "outputDSId": "widget_15_output_27103205142151154",
+  "dsId": "widget_15_output_27103205142151154",
+  "selectedRecordsFromDS": 2,
+  "selectedIdsFromDS": 2,
+  "currentSelectedRecordsState": 2,
+  "recordsPropCount": 2,
+  "removedRecordIdsCount": 0
+}
+
+[1A[2K[Browser] [QUERYSIMPLE-RESULTS-MODE] {
+  "feature": "RESULTS-MODE",
+  "timestamp": 1766151377107,
+  "event": "handleDataSourceInfoChange-skipping-update",
+  "widgetId": "widget_15",
+  "reason": "no-change-detected"
+}
+
+[1A[2K[Browser] [QUERYSIMPLE-RESULTS-MODE] {
+  "feature": "RESULTS-MODE",
+  "timestamp": "2025-12-19T13:36:17.108Z",
+  "event": "re-selected-accumulated-records-after-query-switch",
+  "widgetId": "widget_15",
+  "outputDSId": "widget_15_output_27103205142151154",
+  "recordsCount": 2
+}
+
+[1A[2K[Browser] [QUERYSIMPLE-RESULTS-MODE] {
+  "feature": "RESULTS-MODE",
+  "timestamp": "2025-12-19T13:36:17.309Z",
+  "event": "verify-records-after-reselection",
+  "widgetId": "widget_15",
+  "outputDSId": "widget_15_output_27103205142151154",
+  "expectedCount": 2,
+  "actualSelectedInDS": 2,
+  "selectedIdsInDS": 2,
+  "recordsMatch": true
+}
+
+[1A[2K✅ Selection attempted: MAJOR. Current: MAJOR
+
+[1A[2K📝 Entering "222305" in widget_15
+
+[1A[2K[Browser] [QUERYSIMPLE-TASK] {
+  "feature": "TASK",
+  "timestamp": 1766151378661,
+  "event": "handleFormSubmit-start",
+  "widgetId": "widget_15",
+  "resultsMode": "ADD_TO_CURRENT_SELECTION"
+}
+
+[1A[2K[Browser] [QUERYSIMPLE-RESULTS-MODE] {
+  "feature": "RESULTS-MODE",
+  "timestamp": 1766151378661,
+  "event": "captured-existing-records-diagnostic",
+  "widgetId": "widget_15",
+  "resultsMode": "ADD_TO_CURRENT_SELECTION",
+  "fromPropCount": 2,
+  "fromDSCount": 2,
+  "finalCapturedCount": 2,
+  "firstRecordId": "451356",
+  "allRecordIds": [
+    "451356",
+    "445596"
+  ],
+  "outputDSId": "widget_15_output_27103205142151154"
+}
+
+[1A[2K[Browser] [QUERYSIMPLE-TASK] {
+  "feature": "TASK",
+  "timestamp": 1766151378662,
+  "event": "handleFormSubmit-executing-query",
+  "widgetId": "widget_15",
+  "where": "LOWER(MAJOR) = '222305'",
+  "resultsMode": "ADD_TO_CURRENT_SELECTION"
+}
+
+[1A[2K[Browser] [QUERYSIMPLE-GROUP] {
+  "feature": "GROUP",
+  "timestamp": "2025-12-19T13:36:18.664Z",
+  "event": "rendering-dropdowns",
+  "totalQueries": 3,
+  "queryOptionsCount": 2,
+  "currentQueryGroupId": "kcp",
+  "isGroupedQuery": true,
+  "currentOptionIndex": 0,
+  "selectedGroupId": "kcp",
+  "selectedGroupQueryIndex": 1,
+  "currentQueryConfigId": "27103205142151154"
+}
+
+[1A[2K[Browser] [QUERYSIMPLE-GROUP] {
+  "feature": "GROUP",
+  "timestamp": "2025-12-19T13:36:18.664Z",
+  "event": "rendering-query-option",
+  "index": 0,
+  "configId": "4504440367870579",
+  "displayName": "Parcels",
+  "groupId": "kcp"
+}
+
+[1A[2K[Browser] [QUERYSIMPLE-GROUP] {
+  "feature": "GROUP",
+  "timestamp": "2025-12-19T13:36:18.664Z",
+  "event": "rendering-query-option",
+  "index": 1,
+  "configId": "4744975195556419",
+  "displayName": "Regional trails",
+  "groupId": null
+}
+
+[1A[2K[Browser] [QUERYSIMPLE-RESULTS-MODE] {
+  "feature": "RESULTS-MODE",
+  "timestamp": "2025-12-19T13:36:18.667Z",
+  "event": "actionDataSets-calculation-start",
+  "widgetId": "widget_15",
+  "selectedRecordsCount": 2,
+  "queryDataRecordsCount": 2,
+  "recordsPropCount": 2,
+  "outputDSId": "widget_15_output_27103205142151154",
+  "hasSelectedRecords": true,
+  "hasQueryDataRecords": true,
+  "hasRecordsProp": true
+}
+
+[1A[2K[Browser] [QUERYSIMPLE-RESULTS-MODE] {
+  "feature": "RESULTS-MODE",
+  "timestamp": "2025-12-19T13:36:18.667Z",
+  "event": "actionDataSets-final",
+  "widgetId": "widget_15",
+  "dataSetsCount": 1,
+  "totalRecordsCount": 2,
+  "dataSetsByOrigin": [
+    {
+      "originDSId": "dataSource_1-19ae1ed5667-layer-2-2",
+      "recordsCount": 2,
+      "type": "selected"
+    }
+  ]
+}
+
+[1A[2K[Browser] [QUERYSIMPLE-RESULTS-MODE] {
+  "feature": "RESULTS-MODE",
+  "timestamp": 1766151378669,
+  "event": "handleDataSourceInfoChange-fired",
+  "widgetId": "widget_15",
+  "outputDSId": "widget_15_output_27103205142151154",
+  "dsId": "widget_15_output_27103205142151154",
+  "selectedRecordsFromDS": 0,
+  "selectedIdsFromDS": 2,
+  "currentSelectedRecordsState": 2,
+  "recordsPropCount": 2,
+  "removedRecordIdsCount": 0
+}
+
+[1A[2K[Browser] [QUERYSIMPLE-RESULTS-MODE] {
+  "feature": "RESULTS-MODE",
+  "timestamp": 1766151378669,
+  "event": "handleDataSourceInfoChange-skipping-update",
+  "widgetId": "widget_15",
+  "reason": "no-change-detected"
+}
+
+[1A[2K[Browser] [QUERYSIMPLE-GROUP] {
+  "feature": "GROUP",
+  "timestamp": "2025-12-19T13:36:18.671Z",
+  "event": "rendering-dropdowns",
+  "totalQueries": 3,
+  "queryOptionsCount": 2,
+  "currentQueryGroupId": "kcp",
+  "isGroupedQuery": true,
+  "currentOptionIndex": 0,
+  "selectedGroupId": "kcp",
+  "selectedGroupQueryIndex": 1,
+  "currentQueryConfigId": "27103205142151154"
+}
+
+[1A[2K[Browser] [QUERYSIMPLE-GROUP] {
+  "feature": "GROUP",
+  "timestamp": "2025-12-19T13:36:18.671Z",
+  "event": "rendering-query-option",
+  "index": 0,
+  "configId": "4504440367870579",
+  "displayName": "Parcels",
+  "groupId": "kcp"
+}
+
+[1A[2K[Browser] [QUERYSIMPLE-GROUP] {
+  "feature": "GROUP",
+  "timestamp": "2025-12-19T13:36:18.671Z",
+  "event": "rendering-query-option",
+  "index": 1,
+  "configId": "4744975195556419",
+  "displayName": "Regional trails",
+  "groupId": null
+}
+
+[1A[2K[Browser] [QUERYSIMPLE-DATA-ACTION] {
+  "feature": "DATA-ACTION",
+  "timestamp": "2025-12-19T13:36:18.672Z",
+  "action": "addToMap-isSupported",
+  "widgetId": "widget_15",
+  "actionWidgetId": "widget_15",
+  "dataLevel": "RECORDS",
+  "dataSetsCount": 1,
+  "hasOutputDS": true
+}
+
+[1A[2K[Browser] [QUERYSIMPLE-DATA-ACTION] {
+  "feature": "DATA-ACTION",
+  "timestamp": "2025-12-19T13:36:18.672Z",
+  "action": "addToMap-isSupported",
+  "result": true,
+  "hasRecords": true,
+  "recordsCount": 2
+}
+
+[1A[2K[Browser] [QUERYSIMPLE-DATA-ACTION] {
+  "feature": "DATA-ACTION",
+  "timestamp": "2025-12-19T13:36:18.672Z",
+  "action": "addToMap-isSupported",
+  "widgetId": "widget_15",
+  "actionWidgetId": "widget_15",
+  "dataLevel": "DATA_SOURCE",
+  "dataSetsCount": 1,
+  "hasOutputDS": true
+}
+
+[1A[2K[Browser] [QUERYSIMPLE-DATA-ACTION] {
+  "feature": "DATA-ACTION",
+  "timestamp": "2025-12-19T13:36:18.672Z",
+  "action": "addToMap-isSupported",
+  "result": false,
+  "reason": "Not Records level"
+}
+
+[1A[2K[Browser] [QUERYSIMPLE-RESULTS-MODE] {
+  "feature": "RESULTS-MODE",
+  "timestamp": 1766151379029,
+  "event": "handleDataSourceInfoChange-fired",
+  "widgetId": "widget_15",
+  "outputDSId": "widget_15_output_27103205142151154",
+  "dsId": "widget_15_output_27103205142151154",
+  "selectedRecordsFromDS": 0,
+  "selectedIdsFromDS": 2,
+  "currentSelectedRecordsState": 2,
+  "recordsPropCount": 2,
+  "removedRecordIdsCount": 0
+}
+
+[1A[2K[Browser] [QUERYSIMPLE-RESULTS-MODE] {
+  "feature": "RESULTS-MODE",
+  "timestamp": 1766151379029,
+  "event": "handleDataSourceInfoChange-skipping-update",
+  "widgetId": "widget_15",
+  "reason": "no-change-detected"
+}
+
+[1A[2K[Browser] [QUERYSIMPLE-RESULTS-MODE] {
+  "feature": "RESULTS-MODE",
+  "timestamp": 1766151379035,
+  "event": "handleDataSourceInfoChange-fired",
+  "widgetId": "widget_15",
+  "outputDSId": "widget_15_output_27103205142151154",
+  "dsId": "widget_15_output_27103205142151154",
+  "selectedRecordsFromDS": 0,
+  "selectedIdsFromDS": 0,
+  "currentSelectedRecordsState": 2,
+  "recordsPropCount": 2,
+  "removedRecordIdsCount": 0
+}
+
+[1A[2K[Browser] [QUERYSIMPLE-RESULTS-MODE] {
+  "feature": "RESULTS-MODE",
+  "timestamp": "2025-12-19T13:36:19.035Z",
+  "event": "handleDataSourceInfoChange-skipping-clear-during-query-switch",
+  "widgetId": "widget_15",
+  "reason": "waiting-for-reselection",
+  "recordsPropCount": 2,
+  "currentSelectedRecordsCount": 2
+}
+
+[1A[2K🖱️ Clicking Apply in widget_15
+
+[1A[2K⏳ Waiting for Step 2 results (bulk add + zoom)...
+
+[1A[2K⏳ Results in widget_15...
+
+[1A[2K✅ Results appeared
+
+[1A[2K📊 Step 2 Count (after Bulk Add): 2
+
+[1A[2K  2) [chromium] › tests/e2e/query-simple/session.spec.ts:195:7 › QuerySimple Methodical Session › should maintain consistent state in Widget 2 (Isolated) › Accumulate results in Add mode 
+
+    Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBeGreaterThan[2m([22m[32mexpected[39m[2m)[22m
+
+    Expected: > [32m100[39m
+    Received:   [31m2[39m
+
+      119 |       // PIN_1 is likely part of MAJOR_1, so it won't be duplicated.
+      120 |       // Expected: MAJOR_1 (~121) + PIN_2 (1) = 122
+    > 121 |       expect(count).toBeGreaterThan(100);
+          |                     ^
+      122 |     });
+      123 |
+      124 |     // --- STEP 3: REMOVE MODE DEPLETION ---
+        at /Users/adamcabrera/Dev/arcgis-experience-builder-1.19/client/tests/e2e/query-simple/session.spec.ts:121:21
+        at runMethodicalSession (/Users/adamcabrera/Dev/arcgis-experience-builder-1.19/client/tests/e2e/query-simple/session.spec.ts:80:5)
+        at /Users/adamcabrera/Dev/arcgis-experience-builder-1.19/client/tests/e2e/query-simple/session.spec.ts:196:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/query-simple-session-Query-7c29b-state-in-Widget-2-Isolated--chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/query-simple-session-Query-7c29b-state-in-Widget-2-Isolated--chromium/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/query-simple-session-Query-7c29b-state-in-Widget-2-Isolated--chromium/error-context.md
+
+
+[1A[2K  2 failed
+    [chromium] › tests/e2e/query-simple/session.spec.ts:191:7 › QuerySimple Methodical Session › should maintain consistent state in Widget 1 (Enhanced Search) 
+    [chromium] › tests/e2e/query-simple/session.spec.ts:195:7 › QuerySimple Methodical Session › should maintain consistent state in Widget 2 (Isolated) 
+  1 passed (1.6m)

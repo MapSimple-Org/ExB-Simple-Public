@@ -1,4 +1,5 @@
 import { test as setup } from '@playwright/test';
+import * as fs from 'fs';
 
 /**
  * Authentication setup for E2E tests
@@ -12,6 +13,40 @@ import { test as setup } from '@playwright/test';
 setup('🔐 authenticate and save session', async ({ page, context }) => {
   const APP_URL = process.env.TEST_APP_URL || '/experience/0';
   const baseURL = process.env.TEST_BASE_URL || 'https://localhost:3001';
+  const authPath = 'tests/.auth/user.json';
+
+  // --- SMART SKIP: Check if existing session is still valid ---
+  if (fs.existsSync(authPath)) {
+    console.log('🔍 Existing authentication file found. Checking validity...');
+    
+    // Create a temporary context with the existing state to probe the app
+    const probeContext = await context.browser().newContext({ 
+      storageState: authPath,
+      ignoreHTTPSErrors: true 
+    });
+    const probePage = await probeContext.newPage();
+    
+    try {
+      await probePage.goto(baseURL + APP_URL, { waitUntil: 'domcontentloaded', timeout: 15000 });
+      await probePage.waitForTimeout(3000); 
+      
+      const currentUrl = probePage.url();
+      const isLoginPage = /sign.*in|login|oauth|saml|microsoft|okta|auth|sso/i.test(currentUrl);
+      const buttons = await probePage.locator('button').count();
+      const isAppLoaded = !isLoginPage && (buttons > 5 || /experience/.test(currentUrl));
+
+      if (isAppLoaded) {
+        console.log('✅ Session is still valid! Skipping manual authentication setup.');
+        await probeContext.close();
+        return; 
+      }
+      console.log('❌ Session expired or invalid. Proceeding with fresh authentication.');
+    } catch (e) {
+      console.log('⚠️ Probe failed or timed out, proceeding with fresh authentication.');
+    } finally {
+      await probeContext.close();
+    }
+  }
   
   console.log('\n========================================');
   console.log('🔐 Authentication Setup');
@@ -190,7 +225,6 @@ setup('🔐 authenticate and save session', async ({ page, context }) => {
   console.log('');
   
   // Save the authenticated state
-  const authPath = 'tests/.auth/user.json';
   await context.storageState({ path: authPath });
   
   console.log('💾 Authentication state saved to:', authPath);

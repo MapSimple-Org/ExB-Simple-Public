@@ -9,8 +9,8 @@
       "clientId": "experienceBuilder"
     },
     "prod": {
-      "portalUrl": "https://kingcounty.maps.arcgis.com",
-      "clientId": "nt8b4CtMJ5Cs89Dv",
+      "portalUrl": "https://mapsimple.maps.arcgis.com",
+      "clientId": "iYQdczh23qInxgMr",
       "isWebTier": false
     }
   }

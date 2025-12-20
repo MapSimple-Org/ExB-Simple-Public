@@ -16,11 +16,41 @@ export class KCSearchHelpers {
   /**
    * Click the widget controller to open a specific widget
    */
-  async openWidget(label: string) {
-    console.log(`🔍 Opening widget: "${label}"`);
-    const btn = this.page.locator(`button[aria-label*="${label}" i], button:has-text("${label}")`).first();
-    await btn.click({ force: true });
-    await this.page.waitForTimeout(2000); 
+  async openWidget(label: string, widgetId?: string) {
+    console.log(`🔍 Opening widget: "${label}" ${widgetId ? `(${widgetId})` : ''}`);
+    
+    // Priority 1: Use data-widgetid if we have it (most reliable in ExB)
+    // Priority 2: Use the aria-label/text fallback
+    const btn = widgetId 
+      ? this.page.locator(`button[data-widgetid="${widgetId}"]`).first()
+      : this.page.locator(`button[aria-label*="${label}" i], button:has-text("${label}")`).first();
+    
+    try {
+      await btn.waitFor({ state: 'visible', timeout: 5000 });
+      console.log(`   🖱️ Clicking widget button for "${label}"`);
+      await btn.click({ force: true });
+      await this.page.waitForTimeout(2000); 
+    } catch (e) {
+      console.log(`   ❌ Could not find widget button with label "${label}". Listing all button labels for debug:`);
+      const buttons = await this.page.locator('button[aria-label], button').all();
+      for (const b of buttons) {
+        const text = await b.textContent();
+        const aria = await b.getAttribute('aria-label');
+        if (text || aria) {
+          console.log(`      - Button: text="${text?.trim()}", aria="${aria}"`);
+        }
+      }
+      
+      console.log(`   🔍 Trying fallback search for "${label}"...`);
+      // Try to find ANY button that might be the controller
+      const anyControllerBtn = this.page.locator('.widget-controller button, .jimu-widget-controller button').filter({ hasText: new RegExp(label, 'i') }).first();
+      if (await anyControllerBtn.isVisible()) {
+        await anyControllerBtn.click({ force: true });
+        await this.page.waitForTimeout(2000);
+      } else {
+        throw new Error(`Could not find widget button for "${label}" ${widgetId ? `with ID ${widgetId}` : ''}`);
+      }
+    }
   }
 
   /**
@@ -28,7 +58,7 @@ export class KCSearchHelpers {
    */
   async closeWidget() {
     console.log('✖️ Closing panel');
-    const closeBtn = this.page.locator('button[aria-label="Close"], .jimu-floating-panel-header button[aria-label="Close"]').filter({ isVisible: true }).first();
+    const closeBtn = this.page.locator('button[aria-label="Close"], .jimu-floating-panel-header button[aria-label="Close"]').filter({ visible: true }).first();
     if (await closeBtn.isVisible()) {
       await closeBtn.click({ force: true });
       await this.page.waitForTimeout(1000);
@@ -107,42 +137,77 @@ export class KCSearchHelpers {
   }
 
   /**
-   * Enter query value
+   * Enter query value into the search input
    */
   async enterQueryValue(value: string, widgetId: string) {
-    console.log(`📝 Entering "${value}" in ${widgetId}`);
+    console.log(`📝 [Step: enterQueryValue] Entering "${value}" in ${widgetId}`);
     const widget = this.getWidget(widgetId);
-    const input = widget.locator('input.jimu-input-base, input:not([type="hidden"])').filter({ isVisible: true }).first();
     
-    await input.waitFor({ state: 'attached', timeout: 10000 });
-    await input.focus();
-    await input.fill(value);
-    await input.dispatchEvent('input', { bubbles: true });
-    await input.dispatchEvent('change', { bubbles: true });
-    await input.press('Enter');
+    // 1. Ensure we are on the Query tab
+    console.log('   🔍 Checking for Query tab...');
+    const queryTab = widget.locator('.jimu-nav-link, button[role="tab"]').filter({ hasText: /Query/i }).first();
+    const isActive = await widget.locator('.jimu-nav-link.active, button[role="tab"][aria-selected="true"]').filter({ hasText: /Query/i }).count() > 0;
+    
+    if (!isActive && await queryTab.isVisible()) {
+      console.log('   📑 Switching to Query tab to expose input');
+      await queryTab.click({ force: true });
+      await this.page.waitForTimeout(1500); // Wait for tab transition
+    }
+
+    // 2. Find and fill the input
+    console.log('   🔍 Searching for input field...');
+    const input = widget.locator('input.jimu-input-base, input:not([type="hidden"])').filter({ visible: true }).first();
+    
+    try {
+      await input.waitFor({ state: 'attached', timeout: 10000 });
+      console.log('   ⌨️  Focusing and filling input');
+      await input.focus();
+      await input.fill(value);
+      await input.dispatchEvent('input', { bubbles: true });
+      await input.dispatchEvent('change', { bubbles: true });
+      await input.press('Enter');
+      console.log('   ✅ Input filled and Enter pressed');
+    } catch (e) {
+      console.log(`   ❌ [enterQueryValue] Failed: ${e.message}`);
+      // Final attempt: wait longer and try simple fill
+      await this.page.waitForTimeout(3000);
+      await input.fill(value);
+      await input.press('Enter');
+    }
   }
 
   /**
-   * Click Apply
+   * Click Apply button in the search form
    */
   async clickApply(widgetId: string) {
-    console.log(`🖱️ Clicking Apply in ${widgetId}`);
+    console.log(`🖱️ [Step: clickApply] Clicking Apply in ${widgetId}`);
     const widget = this.getWidget(widgetId);
     
-    // Ensure we are actually on the Query tab before clicking Apply
-    const queryTab = widget.locator('.jimu-nav-link.active').filter({ hasText: /Query/i });
-    const isActive = await queryTab.count() > 0;
-    if (!isActive) {
-      console.log(`⚠️ Widget ${widgetId} is NOT on the Query tab. Switching now...`);
-      await this.switchToQueryTab(widgetId);
-      await this.page.waitForTimeout(2000); // Give it time to render content
+    // 1. Ensure we are actually on the Query tab before clicking Apply
+    const queryTab = widget.locator('.jimu-nav-link, button[role="tab"]').filter({ hasText: /Query/i }).first();
+    const isActive = await widget.locator('.jimu-nav-link.active, button[role="tab"][aria-selected="true"]').filter({ hasText: /Query/i }).count() > 0;
+    
+    if (!isActive && await queryTab.isVisible()) {
+      console.log('   📑 Switching to Query tab to expose Apply button');
+      await queryTab.click({ force: true });
+      await this.page.waitForTimeout(1500);
     }
 
+    // 2. Find and click Apply
     const applyBtn = widget.locator('button').filter({ hasText: /^Apply$/i }).first();
-    await applyBtn.waitFor({ state: 'attached', timeout: 10000 });
-    await applyBtn.scrollIntoViewIfNeeded();
-    await this.page.waitForTimeout(500); // Tiny settle delay
-    await applyBtn.click({ force: true });
+    
+    try {
+      await applyBtn.waitFor({ state: 'attached', timeout: 10000 });
+      await applyBtn.scrollIntoViewIfNeeded();
+      await this.page.waitForTimeout(500); // Settle
+      console.log('   🖱️ Clicking Apply button');
+      await applyBtn.click({ force: true });
+      console.log('   ✅ Apply clicked');
+    } catch (e) {
+      console.log(`   ❌ [clickApply] Failed: ${e.message}`);
+      // Fallback: try to find ANY button with Apply text even if not visible yet
+      await applyBtn.click({ force: true }).catch(() => console.log('   ⚠️ Fallback click failed too'));
+    }
   }
 
   /**
@@ -241,6 +306,114 @@ export class KCSearchHelpers {
     } else {
       console.log('✅ Records already compact');
     }
+  }
+
+  /**
+   * Click the Expand All button
+   */
+  async clickExpandAll(widgetId: string) {
+    console.log(`↔️ Clicking Expand All in ${widgetId}`);
+    const widget = this.getWidget(widgetId);
+    const expandBtn = widget.locator('button[aria-label*="expand all" i]').first();
+    await expandBtn.waitFor({ state: 'attached', timeout: 5000 });
+    await expandBtn.click({ force: true });
+    await this.page.waitForTimeout(1000);
+  }
+
+  /**
+   * Click the Collapse All button
+   */
+  async clickCollapseAll(widgetId: string) {
+    console.log(`🤏 Clicking Collapse All in ${widgetId}`);
+    const widget = this.getWidget(widgetId);
+    const collapseBtn = widget.locator('button[aria-label*="collapse all" i]').first();
+    await collapseBtn.waitFor({ state: 'attached', timeout: 5000 });
+    await collapseBtn.click({ force: true });
+    await this.page.waitForTimeout(1000);
+  }
+
+  /**
+   * Click the Clear Results button
+   */
+  async clickClearResults(widgetId: string) {
+    console.log(`🧹 [Step: clickClearResults] Clicking Clear Results in ${widgetId}`);
+    const widget = this.getWidget(widgetId);
+    
+    // Ensure we are on the Results tab
+    const resultsTab = widget.locator('.jimu-nav-link, button[role="tab"]').filter({ hasText: /Results/i }).first();
+    const isActive = await widget.locator('.jimu-nav-link.active, button[role="tab"][aria-selected="true"]').filter({ hasText: /Results/i }).count() > 0;
+    
+    if (!isActive && await resultsTab.isVisible()) {
+      console.log('   📑 Switching to Results tab to expose Clear button');
+      await resultsTab.click({ force: true });
+      await this.page.waitForTimeout(1000);
+    }
+
+    const clearBtn = widget.locator('button[aria-label*="clear results" i], button:has-text("Clear Results")').first();
+    
+    try {
+      await clearBtn.waitFor({ state: 'attached', timeout: 10000 });
+      await clearBtn.scrollIntoViewIfNeeded();
+      console.log('   🖱️ Clicking Clear Results button');
+      await clearBtn.click({ force: true });
+      await this.page.waitForTimeout(2000);
+      console.log('   ✅ Results cleared');
+    } catch (e) {
+      console.log(`   ❌ [clickClearResults] Failed: ${e.message}`);
+      // Fallback
+      await clearBtn.click({ force: true }).catch(() => console.log('   ⚠️ Fallback clear failed'));
+    }
+  }
+
+  /**
+   * Click the map's "Clear selection" tool button (usually in the upper left)
+   */
+  async clearMapSelection() {
+    console.log('🗺️ Clicking Map "Clear selection" tool');
+    const clearBtn = this.page.locator('button[aria-label="Clear selection"], button[title="Clear selection"]').first();
+    await clearBtn.waitFor({ state: 'visible', timeout: 10000 });
+    await clearBtn.click({ force: true });
+    await this.page.waitForTimeout(1500);
+    console.log('✅ Map selection cleared');
+  }
+
+  /**
+   * Execute a data action from the dropdown
+   */
+  async executeAction(widgetId: string, actionName: string) {
+    console.log(`🚀 Executing action "${actionName}" in ${widgetId}`);
+    const widget = this.getWidget(widgetId);
+    
+    // 1. Open the actions menu
+    console.log('   🔍 Searching for actions menu button...');
+    const actionMenuBtn = widget.locator('button.data-action-button, button[aria-label*="action" i], [data-testid="dropdownBtn"].data-action-button').first();
+    
+    try {
+      await actionMenuBtn.waitFor({ state: 'attached', timeout: 10000 });
+      await actionMenuBtn.scrollIntoViewIfNeeded();
+      console.log('   🖱️ Clicking actions menu button');
+      await actionMenuBtn.click({ force: true });
+      await this.page.waitForTimeout(1500);
+    } catch (e) {
+      console.log(`   ❌ Failed to find or click actions menu button: ${e.message}`);
+      // Fallback: try to find any button with "Actions" or the specific icon
+      const fallbackBtn = widget.locator('button').filter({ hasText: /Actions/i }).first();
+      if (await fallbackBtn.isVisible()) {
+        console.log('   🖱️ Clicking fallback Actions button');
+        await fallbackBtn.click({ force: true });
+        await this.page.waitForTimeout(1500);
+      } else {
+        throw e;
+      }
+    }
+    
+    // 2. Click the specific action
+    console.log(`   🖱️ Looking for action: "${actionName}"`);
+    const actionItem = this.page.locator('.jimu-dropdown-item, .dropdown-item, [role="menuitem"], [role="option"]').filter({ hasText: new RegExp(actionName, 'i') }).first();
+    await actionItem.waitFor({ state: 'attached', timeout: 10000 });
+    await actionItem.click({ force: true });
+    console.log(`   ✅ Action "${actionName}" clicked`);
+    await this.page.waitForTimeout(2000);
   }
 
   /**
