@@ -39,7 +39,7 @@ Always use the smallest possible tool for the job. Avoid "Hammer" commands that 
 ### 3. The "Save Game" Milestone (Checkpointing)
 Before starting a high-risk structural refactor (e.g., Class-to-Hooks migration):
 1.  **Verify Stability**: Ensure the current build is functional and passing E2E tests.
-2.  **Commit Baseline**: Commit all active changes with a descriptive baseline message (e.g., `Baseline: Stable r017.39 before Hooks refactor`).
+2.  **Commit Baseline**: Commit all active changes with a descriptive baseline message (e.g., `Baseline: Stable r017.41 before Hooks refactor`).
 3.  **Push to GitHub**: Immediately push the commit to the remote repository. This creates an immutable "Save Game" that survives local filesystem errors.
 
 ---
@@ -55,6 +55,8 @@ client/your-extensions/
 │   ├── README.md                    # Widget overview and features
 │   ├── TODO.md                      # Pending tasks and improvements
 │   ├── DEVELOPMENT_GUIDE.md         # This file
+│   ├── PRESENTATION_SUMMARY.md      # Features summary for presentations
+│   ├── CURRENT_WORK.md              # Active status and hard-won lessons
 │   ├── query-simple/               # QuerySimple widget
 │   │   ├── manifest.json           # Widget manifest (name, version, properties)
 │   │   ├── config.json             # Default widget configuration
@@ -67,7 +69,7 @@ client/your-extensions/
 │   │       ├── common/             # Widget-specific common code
 │   │       ├── data-actions/        # Custom data actions
 │   │       ├── runtime/            # Runtime widget code
-│   │       │   ├── widget.tsx      # Main widget component
+│   │       │   ├── widget.tsx      # Main widget component (Class)
 │   │       │   ├── widget-context.tsx # React context for widget state
 │   │       │   ├── widget-config.ts   # Runtime configuration helpers
 │   │       │   ├── translations/   # i18n translation files
@@ -78,12 +80,13 @@ client/your-extensions/
 │   │           └── translations/   # Setting page translations
 │   ├── helper-simple/              # HelperSimple widget
 │   │   └── [similar structure]
-│   └── shared-code/                # Shared code between widgets
+│   └── shared-code/                # Shared code between widgets (CRITICAL)
 │       └── common/
 │           ├── common-components.tsx # Shared React components
 │           ├── data-source-tip.tsx  # Data source status component
 │           ├── use-ds-exists.tsx    # Data source existence hook
 │           └── utils.tsx            # Shared utility functions
+│           └── debug-logger.ts      # Centralized logging logic
 └── themes/                         # Custom themes (if any)
 ```
 
@@ -470,61 +473,52 @@ export default class LogExtentAction extends AbstractMessageAction {
 
 ## Testing Strategy
 
+The MapSimple project follows a **Unified Methodical Testing** strategy. Because ArcGIS Experience Builder is a heavy framework with complex state interdependencies, we prioritize long-running "User Journey" sessions over isolated unit tests for critical functionality.
+
 ### E2E Tests with Playwright
 
-Tests are located in `client/tests/e2e/`.
+All E2E tests are located in `client/tests/e2e/`.
 
-#### Test Structure
+#### The "Mega-Journey" Pattern
 
-```typescript
-import { test, expect } from '@playwright/test'
-import { KCSearchHelpers } from '../fixtures/test-helpers'
+Instead of separate files for every feature, we use a single comprehensive session in `session.spec.ts`. This mimics a real user session and is the only reliable way to catch "state leaks" where one action (like a hash change) impacts a future action (like a manual search).
 
-test.describe('QuerySimple Widget', () => {
-  let helpers: KCSearchHelpers
-
-  test.beforeEach(async ({ page }) => {
-    helpers = new KCSearchHelpers(page)
-    await page.goto(`${baseURL}${APP_URL}#qsopen=true`)
-    await helpers.waitForWidget()
-  })
-
-  test('should execute query', async ({ page }) => {
-    await helpers.selectQueryItem('King County Parcels - PIN')
-    await helpers.enterQueryValue('2223059013')
-    await helpers.clickApply()
-    await helpers.waitForResults()
-    
-    const count = await helpers.getResultCount()
-    expect(count).toBeGreaterThan(0)
-  })
-})
-```
-
-#### Test Helpers
-
-Create reusable helpers in `tests/e2e/fixtures/test-helpers.ts`:
-
-```typescript
-export class KCSearchHelpers {
-  constructor(private page: Page) {}
-  
-  async waitForWidget() { /* ... */ }
-  async selectQueryItem(name: string) { /* ... */ }
-  async enterQueryValue(value: string) { /* ... */ }
-  async clickApply() { /* ... */ }
-  async waitForResults() { /* ... */ }
-  async getResultCount(): Promise<number> { /* ... */ }
-}
-```
+**Core Coverage in `session.spec.ts`:**
+- **URL Parameters**: Both Query (`?shortId=`) and Hash (`#shortId=`).
+- **State Cleanup**: Verifying form values clear when switching between URL parameters (The "Dirty Hash" fix).
+- **UI Reset**: Verifying expansion state resets when switching query types (The "Sticky Expansion" fix).
+- **Graphics**: The "Add to Map" data action and graphics layer management.
+- **Isolation**: Running searches in one widget and ensuring it doesn't impact the other.
+- **Persistence**: Closing and reopening widgets to verify state restoration ("Save Game").
 
 #### Running Tests
 
 ```bash
 cd client
-npx playwright test
-npx playwright test query-simple/add-to-map.spec.ts
+
+# 1. Setup Authentication (SSO/MFA)
+# Run this once per day to save your session to tests/.auth/user.json
+npm run test:e2e:auth-setup
+
+# 2. Execute the Unified Mega-Journey
+# Always run with --headed to verify visual state and --project=chromium
+npx playwright test tests/e2e/query-simple/session.spec.ts --project=chromium --headed
+
+# 3. View Results
+npx playwright show-report
 ```
+
+### Test Helpers
+
+Reusable logic is centralized in `client/tests/e2e/fixtures/test-helpers.ts`. Always add new UI interaction logic here rather than in the spec file to keep tests readable.
+
+**Key Helpers:**
+- `openWidget(label)`: Opens a widget from the controller.
+- `executeAction(widgetId, actionName)`: Triggers a data action (e.g., "Add to Map").
+- `setResultsMode(mode, widgetId)`: Switches between New, Add, and Remove modes.
+- `clickExpandAll(widgetId)` / `clickCollapseAll(widgetId)`: Manages results list state.
+
+---
 
 ### Unit Tests
 
@@ -575,13 +569,13 @@ Widget versions follow the format: `{BASE_VERSION}-r{RELEASE_NUMBER}` or `{BASE_
 
 - **Base Version**: Matches Experience Builder version (e.g., `1.19.0`) for compatibility
 - **Release Number**: Increments on major changes (e.g., `001`, `002`, `003`) for browser cache busting
-- **Minor Version**: Increments on smaller fixes between major releases (e.g., `r015.1`, `r015.2`)
+- **Minor Version**: Increments on smaller fixes between major releases (e.g., `r017.1`, `r017.2`)
 
 Examples:
-- `1.19.0-r015` - Major release 015
-- `1.19.0-r015.1` - Minor fix 1 for release 015
-- `1.19.0-r015.2` - Minor fix 2 for release 015
-- `1.19.0-r016` - Next major release (minor resets)
+- `1.19.0-r017` - Major release 017
+- `1.19.0-r017.1` - Minor fix 1 for release 017
+- `1.19.0-r017.41` - Current stable state
+- `1.19.0-r018` - Next major release (minor resets)
 
 #### Version File Structure
 
@@ -817,17 +811,41 @@ When switching between queries (e.g., via hash params), React may re-use compone
 Esri's default `LOWER(FIELD) = 'value'` generates non-SARGable SQL, which kills database performance on large datasets.
 *   **Solution**: Normalize the search input to uppercase in code and rewrite the SQL to `FIELD = 'UPPER_VALUE'`. This preserves the database's ability to use its attribute indexes.
 
-### Hash Parameter Handling (Advanced)
+### URL Parameters & Deep Linking
 
-Hash parameters are used for deep linking. A key pattern is **Deep Link Consumption**:
+The MapSimple widgets support advanced automation via URL parameters. Both **Hash fragments (`#`)** and **Query strings (`?`)** are supported across all features.
 
-1.  **Detection**: The widget detects a hash (e.g., `#pin=123`) on mount or hash change.
-2.  **Execution**: The widget executes the query immediately.
-3.  **Consumption**: If the user interactively changes the "Results Management Mode" (to Add or Remove), the widget **must clear the hash**. This prevents the hash from re-triggering a "New Selection" reset during subsequent re-renders and ensures the URL doesn't become "dirty" as the user modifies the set.
-4.  **Dirty Hash Guard**: When switching between different hash parameters (e.g., `#pin=123` to `#major=456`), ensure all component state (inputs, result counts, expansion states) is explicitly flushed. React may try to "recycle" component state if the `configId` changes too rapidly.
+#### 1. Automation Parameters
+
+| Parameter | Type | Description |
+| :--- | :--- | :--- |
+| `shortId=value` | Logic | Automatically opens the widget, selects the matching query, populates the input, and executes the search. Examples: `pin`, `major`, `owner`, `trail`. (e.g., `#pin=123` or `?major=456`) |
+| `qsopen=true` | Control | Forces the QuerySimple widget to open even if no search parameters are present. |
+| `debug=all` | Debug | Enables all diagnostic logging features in the browser console. |
+| `debug=FEATURE` | Debug | Enables specific logging (e.g., `debug=HASH,TASK,ZOOM`). |
+
+#### 2. Format Comparison: `#` (Hash) vs. `?` (Query String)
+
+MapSimple widgets support both formats, but choosing the right one depends on your deployment scenario:
+
+| Feature | Hash Fragment (`#`) | Query String (`?`) |
+| :--- | :--- | :--- |
+| **Server Visibility** | Client-side only. Never sent to the server. | Sent to the server with every request. |
+| **Page Reloads** | Changing a hash NEVER triggers a page reload. | Changing a query string MAY trigger a full page refresh. |
+| **ExB Compatibility** | **Recommended.** ExB is a Single Page App; hashes are the native way to manage state. | Supported, but can occasionally conflict with server-side redirects or proxies. |
+| **Browser History** | Standard behavior; creates a new history entry. | Standard behavior; creates a new history entry. |
+| **Deep Link Safety** | Safest for interactive tools. URL stays clean after "Consumption." | Standard for "Static" links (e.g., a link from an email). |
+
+**Recommendation**: Use **Hash (`#`)** for interactive automation where you want the fastest UI response without any server-side overhead. Use **Query String (`?`)** if your application is being linked to from a system that only supports standard URL parameters.
+
+#### 3. Deep Link Consumption Pattern
+To prevent "initialization loops" and ensure a clean UX during multi-step workflows:
+1.  **One-Time Trigger**: When a `shortId` is detected, it is consumed (selected and executed once).
+2.  **State Shift**: If the user interactively changes the "Results Management Mode" (to Add or Remove), the widget **strips** the hash parameter from the URL. This prevents the page from resetting your accumulated results if you refresh or trigger a re-render.
+3.  **Dirty Hash Protection**: When switching from one parameter to another (e.g., `#pin=1` to `#pin=2`), the widget uses a unique React `key` strategy to force-flush all internal state.
 
 ```typescript
-// Example from widget.tsx
+// Example of consumption from widget.tsx
 private handleResultsModeChange = (mode: SelectionType) => {
   // Clear hash when switching to accumulation modes to 'consume' the deep link
   if (mode === SelectionType.AddToSelection || mode === SelectionType.RemoveFromSelection) {
@@ -839,30 +857,31 @@ private handleResultsModeChange = (mode: SelectionType) => {
 
 ### Selection Management
 
+Selection should always be handled via the centralized utilities in `selection-utils.ts` to ensure that both the Map's native highlight (blue boxes) and our custom Graphics Layer highlights stay in sync.
+
 ```typescript
 // selection-utils.ts
-import { DataSourceManager, MessageManager } from 'jimu-core'
+import { selectRecordsAndPublish, clearSelectionInDataSources } from './selection-utils'
 
-export function selectRecordsAndPublish(
-  dataSource: DataSource,
-  records: DataRecord[],
-  zoomToSelected = false
-) {
-  // Select records on origin data source
-  dataSource.selectRecords(records)
-  
-  // Publish selection change message
-  MessageManager.getInstance().publishMessage({
-    type: 'DATA_RECORDS_SELECTION_CHANGE',
-    widgetId: widgetId,
-    data: { records, dataSourceId: dataSource.id }
-  })
-  
-  // Handle zoom if needed
-  if (zoomToSelected) {
-    zoomToRecords(records)
-  }
-}
+// 1. Selecting records (Standard Pattern)
+await selectRecordsAndPublish(
+  widgetId, 
+  outputDS, 
+  recordIds, 
+  records, 
+  alsoPublishToOutputDS, // false
+  useGraphicsLayer,      // true
+  graphicsLayer, 
+  mapView
+)
+
+// 2. Clearing selection
+await clearSelectionInDataSources(
+  widgetId, 
+  outputDS, 
+  useGraphicsLayer,      // true
+  graphicsLayer
+)
 ```
 
 ### Query Execution Pattern
@@ -970,6 +989,6 @@ import { DataSourceTip, useDataSourceExists } from 'widgets/shared-code/common'
 
 ---
 
-*Last Updated: December 2024*
-*Maintained by: MapSimple Organization*
+*Last Updated: December 2025*
+*Maintained by: MapSimple Organization (Adam Cabrera)*
 
