@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="jest tests" tests="13" failures="0" errors="0" time="0.963">
+  <testsuite name="query-utils unit tests" errors="0" failures="0" skipped="0" timestamp="2025-12-20T22:47:32" time="0.326" tests="13">
+    <testcase classname="query-utils unit tests combineFields should combine display fields and title expression fields" name="query-utils unit tests combineFields should combine display fields and title expression fields" time="0.002">
+    </testcase>
+    <testcase classname="query-utils unit tests combineFields should handle missing title expression" name="query-utils unit tests combineFields should handle missing title expression" time="0">
+    </testcase>
+    <testcase classname="query-utils unit tests combineFields should avoid duplicates" name="query-utils unit tests combineFields should avoid duplicates" time="0">
+    </testcase>
+    <testcase classname="query-utils unit tests sanitizeQueryInput should strip leading and trailing spaces" name="query-utils unit tests sanitizeQueryInput should strip leading and trailing spaces" time="0">
+    </testcase>
+    <testcase classname="query-utils unit tests sanitizeQueryInput should return null for empty or whitespace strings" name="query-utils unit tests sanitizeQueryInput should return null for empty or whitespace strings" time="0">
+    </testcase>
+    <testcase classname="query-utils unit tests sanitizeQueryInput should escape single quotes to prevent basic SQL injection" name="query-utils unit tests sanitizeQueryInput should escape single quotes to prevent basic SQL injection" time="0">
+    </testcase>
+    <testcase classname="query-utils unit tests generateQueryParams - Universal SQL Optimizer should unwrap LOWER() and convert value to UPPERCASE (Universal SQL Optimizer)" name="query-utils unit tests generateQueryParams - Universal SQL Optimizer should unwrap LOWER() and convert value to UPPERCASE (Universal SQL Optimizer)" time="0.001">
+    </testcase>
+    <testcase classname="query-utils unit tests generateQueryParams - Universal SQL Optimizer should handle LIKE operator in SQL Optimizer" name="query-utils unit tests generateQueryParams - Universal SQL Optimizer should handle LIKE operator in SQL Optimizer" time="0">
+    </testcase>
+    <testcase classname="query-utils unit tests generateQueryParams - Universal SQL Optimizer should not affect normal SQL queries" name="query-utils unit tests generateQueryParams - Universal SQL Optimizer should not affect normal SQL queries" time="0.001">
+    </testcase>
+    <testcase classname="query-utils unit tests generateQueryParams - Universal SQL Optimizer should handle multiple LOWER() clauses (Stress Test)" name="query-utils unit tests generateQueryParams - Universal SQL Optimizer should handle multiple LOWER() clauses (Stress Test)" time="0">
+    </testcase>
+    <testcase classname="query-utils unit tests generateQueryParams - Universal SQL Optimizer should handle mixed case values in LOWER() clauses" name="query-utils unit tests generateQueryParams - Universal SQL Optimizer should handle mixed case values in LOWER() clauses" time="0">
+    </testcase>
+    <testcase classname="query-utils unit tests generateQueryParams - Field Shredder should only request required fields (Field Shredder Optimization)" name="query-utils unit tests generateQueryParams - Field Shredder should only request required fields (Field Shredder Optimization)" time="0">
+    </testcase>
+    <testcase classname="query-utils unit tests generateQueryParams - Field Shredder should default to 1000 pageSize if not specified" name="query-utils unit tests generateQueryParams - Field Shredder should default to 1000 pageSize if not specified" time="0">
+    </testcase>
+  </testsuite>
+</testsuites>
