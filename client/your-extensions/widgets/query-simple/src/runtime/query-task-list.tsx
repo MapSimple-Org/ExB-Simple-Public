@@ -137,27 +137,66 @@ export function QueryTaskList (props: QueryTaskListProps) {
   
   const { groups, ungrouped, groupOrder } = React.useMemo(() => groupQueries(sortedQueryItems), [sortedQueryItems])
   
-  // Determine if we have an initial query value from the URL hash
-  const initialQueryValueFromHash = React.useMemo(() => {
-    const hash = window.location.hash.substring(1)
-    if (!hash) return null
+  // State to track the current URL hash and query string
+  const [urlParams, setUrlParams] = React.useState(() => ({
+    hash: window.location.hash.substring(1),
+    query: window.location.search.substring(1)
+  }))
+
+  // Listen for hashchange events to update our local state
+  React.useEffect(() => {
+    const handleUrlChange = () => {
+      debugLogger.log('HASH', {
+        event: 'url-change-detected-in-task-list',
+        newHash: window.location.hash,
+        newQuery: window.location.search,
+        timestamp: Date.now()
+      })
+      setUrlParams({
+        hash: window.location.hash.substring(1),
+        query: window.location.search.substring(1)
+      })
+    }
+    window.addEventListener('hashchange', handleUrlChange)
+    // Also listen for popstate in case query parameters change without hash change
+    window.addEventListener('popstate', handleUrlChange)
     
-    const params = new URLSearchParams(hash)
+    return () => {
+      window.removeEventListener('hashchange', handleUrlChange)
+      window.removeEventListener('popstate', handleUrlChange)
+    }
+  }, [])
+
+  // Determine if we have an initial query value from the URL hash or query string
+  const initialQueryValueFromUrl = React.useMemo(() => {
+    const { hash, query } = urlParams
+    
+    const hashParams = new URLSearchParams(hash)
+    const queryParams = new URLSearchParams(query)
+    
     const allQueryItems = [...ungrouped.map(u => u.item), ...Object.values(groups).flatMap(g => g.items)]
     
     for (const item of allQueryItems) {
-      if (item.shortId && params.has(item.shortId)) {
-        return {
-          shortId: item.shortId,
-          value: params.get(item.shortId)
+      if (item.shortId) {
+        if (hashParams.has(item.shortId)) {
+          return {
+            shortId: item.shortId,
+            value: hashParams.get(item.shortId)
+          }
+        }
+        if (queryParams.has(item.shortId)) {
+          return {
+            shortId: item.shortId,
+            value: queryParams.get(item.shortId)
+          }
         }
       }
     }
     return null
-  }, [ungrouped, groups])
+  }, [ungrouped, groups, urlParams])
 
-  // Use the prop initialQueryValue if provided, otherwise fallback to our own hash parsing
-  const effectiveInitialQueryValue = initialQueryValue || initialQueryValueFromHash
+  // Use the prop initialQueryValue if provided, otherwise fallback to our own URL parsing
+  const effectiveInitialQueryValue = initialQueryValue || initialQueryValueFromUrl
 
   // Find the query item matching the shortId from URL hash
   const matchingQueryIndex = React.useMemo(() => {
@@ -381,7 +420,7 @@ export function QueryTaskList (props: QueryTaskListProps) {
             total={sortedQueryItems.length}
             queryItem={selectedQueryItem}
             isInPopper={isInPopper}
-            initialInputValue={selectedQueryItem.shortId === initialQueryValue?.shortId ? initialQueryValue?.value : undefined}
+            initialInputValue={selectedQueryItem.shortId === effectiveInitialQueryValue?.shortId ? effectiveInitialQueryValue?.value : undefined}
             onHashParameterUsed={onHashParameterUsed}
             queryItems={sortedQueryItems}
             selectedQueryIndex={selectedUngroupedIndex}

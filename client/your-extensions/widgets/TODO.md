@@ -1,5 +1,24 @@
 # QuerySimple Widget TODOs
 
+## Bugs to Address (Presentation Discovery)
+
+### 1. Expansion State Sticky on Hash Switch
+**Status:** ✅ RESOLVED (r017.41)  
+**Issue**: When switching between queries via URL hash (e.g., `#pin` to `#major`), the widget remembers the expansion state of the *previous* query instead of honoring the `resultExpandByDefault` config of the new query.
+**Cause**: `QueryTaskResult` state persistence during rapid `configId` transitions.
+
+### 2. "Dirty" Hash Switching
+**Status:** ✅ RESOLVED (r017.41)  
+**Issue**: Switching from one hash parameter to another (e.g., `#pin=123` to `#pin=456` or `#major=789`) sometimes "remembers" the first query's value or fails to fully refresh the form/results for the new parameter.
+**Cause**: State persistence in `QueryTask` or `QueryTaskList` consumption logic.
+
+### 3. HelperSimple URL Parameter Support
+**Status:** ✅ RESOLVED (r017.41)  
+**Feature**: HS should listen for both `#shortid=value` (hash) and `?shortid=value` (query string).
+**Task**: Update HS listener logic and info discovery icon to reflect both supported formats.
+
+---
+
 ## High Priority - Immediate Next Steps
 
 ### 1. Solidify Playwright Testing & Auth
