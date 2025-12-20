@@ -503,7 +503,7 @@ export function QueryTaskForm (props: QueryTaskItemProps) {
               {originDS && (
                 <div css={css`margin: -10px 0px;`}>
                   <SqlExpressionRuntime
-                    key={`${configId}-${initialInputValue || 'default'}`}
+                    key={`${configId}-${initialInputValue || 'none'}`}
                     widgetId={widgetId}
                     dataSource={originDS}
                     expression={attributeFilterSqlExprObj}

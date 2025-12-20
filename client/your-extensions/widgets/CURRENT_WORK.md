@@ -1,45 +1,51 @@
 # Current Work Status
 
-**Last Updated:** 2025-12-16 (Release 016.8 - Debug Logging Fix)  
+**Last Updated:** 2025-12-20 (Release 017.41 - Sticky State & URL Param Fixes)  
 **Branch:** `feature/results-management-modes`  
 **Developer:** Adam Cabrera  
-**Current Version:** v1.19.0-r016.8
+**Current Version:** v1.19.0-r017.41
 
 ## Active Work
 
 ### Current Task
-- **What:** Debug Logging Cleanup - Fixed all console.log statements that were bypassing debug gates
-- **Why:** Console logs were appearing even when no debug switch was set, violating the debug logging system
-- **Status:** ✅ **COMPLETE** - All console.log statements replaced with debugLogger.log(). Development Guide updated to mandate debugLogger usage.
+- **What:** Sticky State & URL Parameter Support - Fixed "persistence traps" during rapid hash switching and added `?query` parameter support.
+- **Why:** Switching between searches via URL hash was leaving the form and expansion icons in a "dirty" state from the previous query.
+- **Status:** ✅ **COMPLETE** - All state-flushing bugs resolved. HS now supports `#` and `?` parameters.
 - **Files Modified:**
-  - `query-simple/src/runtime/components/feature-info.tsx` - 4 console.log statements fixed
-  - `query-simple/src/runtime/query-result-item.tsx` - 1 console.log statement fixed
-  - `query-simple/src/runtime/simple-list.tsx` - 1 console.log statement fixed
-  - `query-simple/src/runtime/query-result.tsx` - 1 console.log statement fixed
-  - `query-simple/src/runtime/lazy-list.tsx` - 2 console.log statements fixed
-  - `query-simple/src/runtime/results-management-utils.ts` - Removed redundant console.error
-  - `query-simple/src/runtime/query-task.tsx` - Removed 2 redundant console.error statements
-  - `query-simple/src/data-actions/add-to-map-action.tsx` - Removed redundant console.error
-  - `DEVELOPMENT_GUIDE.md` - Updated to mandate ALWAYS using debugLogger, NEVER console.log
-  - `query-simple/src/version.ts` - Incremented to r016.8
+  - `query-simple/src/runtime/query-result.tsx` - Fixed expansion state resetting
+  - `query-simple/src/runtime/query-task-form.tsx` - Forced form flushing via unique keys
+  - `query-simple/src/runtime/query-task-list.tsx` - Added `?query` support and listener logic
+  - `helper-simple/src/runtime/widget.tsx` - Updated HS to detect both parameter types
+  - `query-simple/src/version.ts` - Incremented to r017.41
 
 ### Previous Task (Complete)
-- **What:** Implementing Results Management Modes - Adding "Add to current results" and "Remove from current results" functionality to QuerySimple widget
-- **Why:** Users want to build up a collection of parcels from multiple searches (e.g., multiple PIN searches + a Major number search) and then export or perform actions on the combined set
-- **Status:** ✅ **COMPLETE** - Both "Add to" and "Remove from" modes are fully implemented and working. Scroll position preservation fix also complete.
-- **Files Modified:** 
-  - `query-simple/src/runtime/widget.tsx` - Added resultsMode state
-  - `query-simple/src/runtime/query-task.tsx` - Added UI buttons for mode selection
-  - `query-simple/src/runtime/query-task-list.tsx` - Passes resultsMode props
-  - `query-simple/src/runtime/translations/default.ts` - Added translations
-  - `query-simple/src/config.ts` - SelectionType enum already has needed values
-  - **NEW:** `query-simple/src/runtime/results-management-utils.ts` - Utility functions for results accumulation
-- **Notes:** 
-  - UI is complete - mode buttons are visible and functional
-  - State management is in place
-  - Approach documented - ready to implement "Add to" logic
-  - "New" mode already works correctly - no restructuring needed
-  - Will extract shared logic into utility functions to avoid duplication
+- **What:** The Performance Breakthrough - 93% Latency Reduction
+- **Why:** Parcel and Major queries were taking 21+ seconds due to non-SARGable SQL and field bloat.
+- **Status:** ✅ **COMPLETE** - Queries reduced to 1.4s.
+- **Key Solutions:** Universal SQL Optimizer, Attribute Stripping, Geometry Generalization.
+
+## 🔬 Post-Mortem: What Worked, What Didn't, and Why
+
+### 1. The Performance Engine (SQL Optimizer)
+- **What Worked:** Surgically "unwrapping" the database field from `LOWER()` and manually uppercasing the search input.
+- **The "Why":** Standard framework queries use `LOWER(PIN) = '123'`, which prevents the database from using its attribute index (causing a "Full Table Scan"). By using `PIN = '123'`, the database uses its B-Tree index instantly.
+- **The Lesson:** Case-insensitivity should be handled by normalizing input, not by modifying the database column in the query.
+
+### 2. The "Sticky State" Trap
+- **What Didn't Work:** Using standard `useState` initialization for expansion and form values.
+- **The "Why":** React re-uses component instances during rapid hash switching to save memory. Without an explicit `useEffect` watching the `configId` or a unique `key` on the form, state from the *previous* query persists into the *next* query.
+- **The Lesson:** Always use unique React `keys` based on the query's ID to force a clean slate during transitions.
+
+### 3. The "Construction Worker" Mistake
+- **What Didn't Work:** Using `git reset --hard` to revert code experiments.
+- **The "Why":** Experience Builder's local portal configuration (`config.json`) and sign-in info are often untracked. A hard reset destroys the local development environment, not just the code.
+- **The Lesson:** Use the "Scalpel Rule"—`git checkout path/to/file` is safe; `reset --hard` is a hammer.
+
+### 4. Single-Trip vs. Lazy Loading
+- **What Worked:** Fetching all results in one trip and using a simple list.
+- **The "Why":** With Attribute Stripping (fetching only 3 fields vs 50), the payload size is so small that the overhead of pagination (stuttering, state management) becomes a net negative. Single-trip is faster and more reliable.
+
+---
 
 ## Recent Context
 

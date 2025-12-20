@@ -85,7 +85,7 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
     // Listen for hash changes to detect when URL hash parameters are updated
     window.addEventListener('hashchange', this.handleHashChange)
     // Check hash on initial mount
-    this.checkHash()
+    this.checkUrlParameters()
     
     // Listen for QuerySimple selection changes (for logging/debugging)
     window.addEventListener(QUERYSIMPLE_SELECTION_EVENT, this.handleQuerySimpleSelectionChange)
@@ -109,9 +109,9 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
   }
 
   componentDidUpdate(prevProps: AllWidgetProps<IMConfig>) {
-    // Re-check hash if managed widget configuration changed
+    // Re-check parameters if managed widget configuration changed
     if (prevProps.config.managedWidgetId !== this.props.config.managedWidgetId) {
-      this.checkHash()
+      this.checkUrlParameters()
     }
     
     // Re-initialize hash entry tracking and identify popup watching if config changed
@@ -222,39 +222,37 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
   }
 
   /**
-   * Checks URL hash parameters for shortIds that match the managed widget.
+   * Checks URL hash and query string parameters for shortIds that match the managed widget.
    * 
    * If a match is found, opens the widget using the Experience Builder API.
    * Hash format: #shortId=value (e.g., #pin=2223059013)
+   * Query format: ?shortId=value (e.g., ?pin=2223059013)
    * 
-   * Special parameter: #qsopen=true
+   * Special parameter: #qsopen=true or ?qsopen=true
    * Forces widget to open without requiring a query parameter match.
-   * Useful for testing (e.g., Playwright E2E tests) or when you need the widget
-   * open but don't have a query parameter to trigger it.
-   * Can be combined with query parameters: #qsopen=true&pin=2223059013
    */
-  checkHash = () => {
+  checkUrlParameters = () => {
     const { config } = this.props
     
     if (!config.managedWidgetId) {
       return
     }
 
-    // Parse URL hash fragment
+    // Parse URL hash fragment and query string
     const hash = window.location.hash.substring(1)
+    const query = window.location.search.substring(1)
     
-    if (!hash) {
+    if (!hash && !query) {
       return
     }
     
-    const urlParams = new URLSearchParams(hash)
+    const hashParams = new URLSearchParams(hash)
+    const queryParams = new URLSearchParams(query)
     
     // Check for special qsopen parameter (forces widget to open)
-    // This is useful for Playwright tests that need the widget open
-    // but don't necessarily need to execute a query
-    if (urlParams.get('qsopen') === 'true') {
+    if (hashParams.get('qsopen') === 'true' || queryParams.get('qsopen') === 'true') {
       this.openWidget(config.managedWidgetId)
-      return // Open widget and return early (don't need to check shortIds)
+      return 
     }
 
     // Get all shortIds from the managed widget
@@ -264,9 +262,9 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
       return
     }
     
-    // Check if any shortId matches a hash parameter key
+    // Check if any shortId matches in either hash or query string
     shortIds.forEach(shortId => {
-      if (urlParams.has(shortId)) {
+      if (hashParams.has(shortId) || queryParams.has(shortId)) {
         // Open the widget using the proper API
         this.openWidget(config.managedWidgetId)
       }
@@ -275,11 +273,11 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
 
   /**
    * Handles hash change events from the browser.
-   * Re-checks hash parameters when the URL hash changes.
+   * Re-checks parameters when the URL hash changes.
    */
   handleHashChange = () => {
-    // Check hash for widget opening
-    this.checkHash()
+    // Check parameters for widget opening
+    this.checkUrlParameters()
     
     // Update hash entry tracking for logging/debugging
     const { config } = this.props
