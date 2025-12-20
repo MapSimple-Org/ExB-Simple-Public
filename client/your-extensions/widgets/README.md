@@ -391,18 +391,43 @@ import {
 2. Export it from `shared-code/common/index.ts`
 3. Import in widgets using: `import { ... } from 'widgets/shared-code/common'`
 
-### Testing
+## Testing & Quality Assurance
 
-E2E tests are located in `client/tests/e2e/`:
-- `query-simple/session.spec.ts` - Core methodical user session tests
-- `query-simple/repro-bugs.spec.ts` - Regression suite for state-flushing bugs
-- `query-simple/add-to-map.spec.ts` - Add to Map action tests
+The widgets use a **Unified Testing Strategy** powered by Playwright. Instead of many small, isolated tests, we use a "Mega-Journey" session that mimics real user behavior to detect state leaks and persistence bugs.
 
-Run tests with:
-```bash
-cd client
-npx playwright test
-```
+### Test Structure
+
+- **`auth-setup.ts`**: Handles manual SSO/MFA login and saves the session state. Run this once per day (or if your session expires).
+- **`session.spec.ts`**: The "Mega-Journey" test. A single, continuous session covering:
+    - Deep Linking (`?pin=`) and Hash Fragments (`#major=`).
+    - Bug Regression: Sticky Expansion and Dirty Hash fixes.
+    - Graphics Layer actions (Add to Map).
+    - Multi-widget isolation and state persistence (Save Game).
+    - Accumulation logic (Add/Remove modes).
+    - Manual UI interactions (Trash icons, Expand/Collapse tools).
+
+### How to Run Tests
+
+1.  **Auth Setup** (Manual):
+    ```bash
+    cd client
+    npm run test:e2e:auth-setup
+    ```
+    *Complete the login in the browser window that opens.*
+
+2.  **Execute Unified Session**:
+    ```bash
+    cd client
+    npx playwright test tests/e2e/query-simple/session.spec.ts --project=chromium --headed
+    ```
+
+3.  **View Reports**:
+    ```bash
+    cd client
+    npx playwright show-report
+    ```
+
+*Note: Redundant isolated tests are archived in `tests/e2e/query-simple/legacy/` for reference but should not be run in normal development cycles.*
 
 ## Version History
 
