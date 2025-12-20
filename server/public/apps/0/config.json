@@ -437,7 +437,7 @@
             "attributeFilterDesc": "Search by parcel's major number",
             "shortId": "major",
             "zoomToSelected": true,
-            "resultExpandByDefault": true,
+            "resultExpandByDefault": false,
             "groupId": "kcp",
             "searchAlias": "Major number",
             "icon": {
@@ -779,7 +779,9 @@
                 "displaySQL": "(PIN starts with ?)"
               }
             },
-            "groupId": "kcp"
+            "groupId": "kcp",
+            "resultExpandByDefault": true,
+            "shortId": "pin"
           },
           {
             "configId": "27103205142151154",
@@ -821,7 +823,8 @@
               "sql": "",
               "displaySQL": "(MAJOR = ?)"
             },
-            "groupId": "kcp"
+            "groupId": "kcp",
+            "shortId": "major"
           },
           {
             "configId": "4744975195556419",
@@ -1307,7 +1310,7 @@
   "attributes": {
     "portalUrl": "https://mapsimple.maps.arcgis.com"
   },
-  "timestamp": 1766164318997,
+  "timestamp": 1766190816032,
   "sharedThemeVariables": null,
   "mainLocale": "en",
   "dataSources": {
@@ -1530,5 +1533,5 @@
       ]
     }
   },
-  "publishTimestamp": 1766164319817
+  "publishTimestamp": 1766190817079
 }

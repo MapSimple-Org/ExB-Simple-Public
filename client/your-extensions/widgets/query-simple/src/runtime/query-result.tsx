@@ -452,19 +452,19 @@ export function QueryTaskResult (props: QueryTaskResultProps) {
 
   // Update expandAll when queryItem changes (e.g., switching between queries)
   React.useEffect(() => {
-    const newExpandAll = currentItem.resultExpandByDefault ?? false
+    const newExpandAll = queryItem.resultExpandByDefault ?? false
     debugLogger.log('RESULTS-MODE', {
       event: 'expandAll-reset-by-queryItem-change',
       widgetId,
       queryItemConfigId: queryItem.configId,
-      resultExpandByDefault: currentItem.resultExpandByDefault,
+      resultExpandByDefault: queryItem.resultExpandByDefault,
       newExpandAll,
       timestamp: Date.now()
     })
     setExpandAll(newExpandAll)
     // Reset individual expansion states when query changes
     setItemExpandStates(new Map())
-  }, [queryItem.configId, queryItem.resultExpandByDefault, widgetId])
+  }, [queryItem.configId])
 
   /**
    * Monitor origin data source selection changes to detect when other widgets (like map identify)

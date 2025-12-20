@@ -5,6 +5,18 @@ All notable changes to MapSimple Experience Builder widgets will be documented i
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.19.0-r017.41] - 2025-12-20
+
+### Fixed
+- **Sticky Expansion State**: Resolved bug where expansion icons "remembered" the state of the previous query during rapid hash switching.
+- **Dirty Hash Support**: Fixed form values persisting across hash transitions by implementing unique React keys for query forms.
+- **Query Parameter Support**: Added official support for `?shortid=value` alongside the existing `#shortid=value` format in both HelperSimple and QuerySimple.
+
+## [1.19.0-r017.40] - 2025-12-20
+
+### Added
+- **Diagnostic Regression Suite**: Created `repro-bugs.spec.ts` to explicitly test for state-flushing issues during rapid hash transitions.
+
 ## [1.19.0-r017.39] - 2025-12-19
 
 ### Added
