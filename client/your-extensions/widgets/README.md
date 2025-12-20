@@ -9,28 +9,29 @@ Custom widgets for ArcGIS Experience Builder Developer Edition.
 A powerful query widget that allows users to query feature layers with support for attribute filters, spatial filters, result display customization, and query grouping.
 
 **Features:**
+- **Performance Engine**: 93% latency reduction via Universal SQL Optimization and Attribute Stripping.
+- **Dual-Mode Deep Linking**: Full support for both `#shortId=value` and `?shortId=value`.
+- **Results Management**: Build complex selection sets with "Add to" and "Remove from" modes.
 - Attribute filtering (text, number, date)
 - Spatial filtering (buffer, draw, map extent)
 - Query grouping for organized query management
-- Hash parameter support for deep linking
 - Hash parameter info button (discoverable deep linking)
 - Display order for query prioritization
 - Result pagination (multi-page or lazy load)
 - Selection management and map integration
-- Results management modes (New, Add to, Remove from)
 - Custom data actions (Add to Map)
 - Debug logging for troubleshooting
 
-**Version:** 1.19.0
+**Version:** 1.19.0-r017.41
 
 ### HelperSimple (`helper-simple/`)
 
-A helper widget that manages opening other widgets via hash parameters and maintains QuerySimple widget selections when identify tool is used.
+A helper widget that manages opening other widgets via URL parameters and maintains QuerySimple widget selections when identify tool is used.
 
 **Features:**
-- Monitors URL hash changes
-- Automatically opens widgets based on hash parameters
-- Supports `#qsopen=true` for QuerySimple widget
+- Monitors URL hash changes (`#`) and query strings (`?`)
+- Automatically opens widgets based on detected `shortId` parameters
+- Supports `#qsopen=true` or `?qsopen=true` to force QuerySimple open
 - **Selection Restoration**: Automatically restores QuerySimple selections when identify popup closes (configurable)
 
 ## Installation
@@ -122,23 +123,32 @@ Group related queries together for better organization:
    - Queries without `groupId` appear individually in the first dropdown
    - Use `item.name` for display name
 
-#### Hash Parameters
+#### URL Parameters & Deep Linking
 
-Configure hash parameters for deep linking:
+Configure parameters for automated search and navigation. Both **Hash Fragments (`#`)** and **Query Strings (`?`)** are supported.
 
 1. **Set Short ID**
    - In query configuration, set `shortId` (e.g., "pin", "major")
-   - This becomes the hash parameter identifier
+   - This becomes the parameter identifier
 
 2. **Usage**
-   - `#pin=2223059013` - Execute query with shortId "pin" and value "2223059013"
-   - `#major=12345` - Execute query with shortId "major" and value "12345"
+   - `#pin=2223059013` or `?pin=2223059013` - Execute query with shortId "pin" and value "2223059013"
+   - `#major=12345` or `?major=12345` - Execute query with shortId "major" and value "12345"
 
-3. **Hash Parameter Info Button**
+3. **Choosing Your Format: `#` vs `?`**
+
+| Feature | Hash Fragment (`#`) | Query String (`?`) |
+| :--- | :--- | :--- |
+| **Recommendation** | **Best for Interactive UX** | **Best for External Linking** |
+| **Page Reloads** | Never triggers a reload. | May trigger a full page refresh. |
+| **Server Logs** | **Private.** Stays in the browser only. | **Public.** Logged by web servers/proxies. |
+| **"Consumption"** | URL cleans up instantly without flicker. | URL cleanup requires a state change. |
+
+**Pro Tip**: Use **Hash (`#`)** whenever possible. It is the native way Single Page Apps (like Experience Builder) handle state, ensuring the snappiest response for your users.
+
+4. **Automation Info Button**
    - An info button (ℹ️) appears next to layer titles when queries have shortIds configured
-   - Clicking the button shows a tooltip with all available shortIds for that layer
-   - Makes hash parameter search capability discoverable to end users
-   - Example tooltip: "This layer can be searched using the shortIds pin and major using #shortId=value in the URL"
+   - Hovering shows a tooltip with all available shortIds and examples for both `#` and `?` formats.
 
 #### Display Order
 
@@ -287,16 +297,15 @@ This enables debug logging for hash and form events, and executes the "pin" quer
 4. Clear browser cache
 5. Check browser console for errors
 
-### Hash Parameters Not Working
+### URL Parameters Not Working
 
-**Problem:** Hash parameters don't trigger queries.
+**Problem:** Parameters don't trigger queries.
 
 **Solutions:**
 1. Verify `shortId` is configured in query settings
-2. Check URL format: `#shortId=value` (not `?shortId=value`)
+2. Ensure you are using the correct format: `#shortId=value` or `?shortId=value`.
 3. Enable debug logging: `?debug=HASH`
-4. Check browser console for errors
-5. Verify widget is configured correctly
+4. Check browser console for "Deep Link Consumption" logs.
 
 ### Query Results Not Displaying
 
@@ -385,13 +394,13 @@ import {
 ### Testing
 
 E2E tests are located in `client/tests/e2e/`:
-- `query-simple/query-execution.spec.ts` - Query execution tests
-- `query-simple/selection-management.spec.ts` - Selection management tests
+- `query-simple/session.spec.ts` - Core methodical user session tests
+- `query-simple/repro-bugs.spec.ts` - Regression suite for state-flushing bugs
 - `query-simple/add-to-map.spec.ts` - Add to Map action tests
 
 Run tests with:
 ```bash
-cd client/tests
+cd client
 npx playwright test
 ```
 
