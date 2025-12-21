@@ -17,10 +17,13 @@
 ## 2. Debugging & Logging
 - **No Direct Console Logs**: Never use `console.log()`. Always use the custom `debugLogger`.
 - **Feature Flags**: Log specific events using feature switches (e.g., `debugLogger.log('HASH', ...)`).
+- **The Log-First Rule**: Investigating bugs? Add `debugLogger` calls to capture state/timing *before* guessing at a fix.
 
 ## 3. SQL Performance (The Optimizer)
 - **SARGable Queries**: Avoid wrapping database fields in functions like `LOWER()` as it kills index performance.
 - **Normalizing Input**: Perform case-insensitive searches by normalizing user input to uppercase in the application logic rather than the SQL `WHERE` clause.
+- **Attribute Stripping**: Request ONLY the fields required for display to minimize network payloads.
+- **Geometry Generalization**: Use `maxAllowableOffset: 0.1` for all display queries to optimize performance.
 
 ## 4. State Management & Transitions
 - **The Persistence Trap**: Avoid "ghost values" in forms when switching queries.
@@ -36,3 +39,18 @@
 - **Hash Fragments (#)**: Best for snappy, interactive UX (no page reload).
 - **Query Strings (?)**: Best for external linking and CRM integration.
 - **ShortID Logic**: Both formats must resolve to the same underlying search logic using the configured `shortId`.
+- **Consumption**: URL parameters should be "consumed" (cleared) when moving into interactive modes (Add/Remove) to prevent loops.
+
+# --- Architectural Patterns ---
+
+## 1. Shared Code Pattern (CRITICAL)
+- **Zero Duplication**: Never recreate a utility or component if it exists in `shared-code/common/`.
+- **Cross-Widget Sync**: Shared code is the "Single Source of Truth" for loggers, UI tips, and status indicators.
+
+## 2. Widget Communication (The Handshake)
+- **Custom Events**: Widgets communicate via a standard event bus (e.g., `querysimple-selection-changed`, `querysimple-widget-state-changed`).
+- **Persistence**: Selections must be maintained even when external tools (like Map Identify) are used.
+
+## 3. Component Hierarchy
+- **Shell & Hooks**: Keep `widget.tsx` as a clean shell. Move complex logic into modular custom hooks (e.g., `useHashConsumption`, `useWidgetState`).
+- **Synchronized Utilities**: Use `selection-utils.ts` for all map highlighting to ensure graphics and native layers stay in sync.
