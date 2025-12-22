@@ -5,6 +5,11 @@ All notable changes to MapSimple Experience Builder widgets will be documented i
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.19.0-r017.42] - 2025-12-21
+
+### Fixed
+- **Logging Compliance**: Replaced direct `console.log` calls in `query-utils.ts` with the centralized `debugLogger` to adhere to the MapSimple Development Guide.
+
 ## [1.19.0-r017.41] - 2025-12-20
 
 ### Fixed
