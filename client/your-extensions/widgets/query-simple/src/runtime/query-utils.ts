@@ -13,7 +13,9 @@ import {
 } from 'jimu-core'
 import type { IFieldInfo } from '@esri/arcgis-rest-feature-service'
 import { type QueryItemType, SpatialRelation, type SpatialFilterObj, FieldsType, mapJSAPIUnitToDsUnit, mapJSAPISpatialRelToDsSpatialRel } from '../config'
-import { getFieldInfosInPopupContent } from 'widgets/shared-code/common'
+import { getFieldInfosInPopupContent, createQuerySimpleDebugLogger } from 'widgets/shared-code/common'
+
+const debugLogger = createQuerySimpleDebugLogger()
 
 export function combineFields (resultDisplayFields: ImmutableArray<string>, resultTitleExpression: string, idField?: string): string[] {
   const fields = new Set<string>()
@@ -160,7 +162,11 @@ export function generateQueryParams (
     })
     
     if (optimizedWhere !== mergedQueryParams.where) {
-      console.log(`[QUERYSIMPLE-PERF] Universal SQL Optimization: ${mergedQueryParams.where} -> ${optimizedWhere}`)
+      debugLogger.log('TASK', {
+        event: 'sql-optimized',
+        original: mergedQueryParams.where,
+        optimized: optimizedWhere
+      })
       mergedQueryParams.where = optimizedWhere
     }
   }
@@ -185,11 +191,13 @@ export function generateQueryParams (
   }
 
   // Diagnostic log: Show exactly WHICH fields are being sent
-  console.log(`[QUERYSIMPLE-PERF] Requesting data: 
-    - Fields Count: ${queryParams.outFields?.length} 
-    - Fields: ${queryParams.outFields?.join(', ')}
-    - PageSize: ${queryParams.pageSize}
-    - Offset: ${queryParams.maxAllowableOffset}`)
+  debugLogger.log('TASK', {
+    event: 'requesting-data',
+    fieldsCount: queryParams.outFields?.length,
+    fields: queryParams.outFields?.join(', '),
+    pageSize: queryParams.pageSize,
+    offset: queryParams.maxAllowableOffset
+  })
 
   if (useSpatialFilter && spatialFilter?.geometry) {
     const { geometry, relation = SpatialRelation.Intersect, buffer } = spatialFilter
@@ -262,7 +270,13 @@ export async function executeQuery (
   const layerObject = await getLayerObject(originDs)
   const layerTime = performance.now() - layerStartTime
 
-  console.log(`[QUERYSIMPLE-PERF] executeQuery complete. Fetch: ${Math.round(fetchTime)}ms, Layer: ${Math.round(layerTime)}ms, Total: ${Math.round(performance.now() - startTime)}ms, Count: ${records.length}`)
+  debugLogger.log('TASK', {
+    event: 'query-complete',
+    fetchTime: Math.round(fetchTime),
+    layerTime: Math.round(layerTime),
+    totalTime: Math.round(performance.now() - startTime),
+    recordCount: records.length
+  })
   
   records.forEach((record) => {
     const feature = (record as any).feature
