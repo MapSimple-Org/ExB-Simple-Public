@@ -1,4 +1,4 @@
-import { combineFields, generateQueryParams, sanitizeQueryInput } from '../src/runtime/query-utils';
+import { combineFields, generateQueryParams, sanitizeQueryInput, isQueryInputValid, sanitizeSqlExpression } from '../src/runtime/query-utils';
 import { FieldsType } from '../src/config';
 import { Immutable } from 'jimu-core';
 
@@ -56,6 +56,85 @@ describe('query-utils unit tests', () => {
     it('should escape single quotes to prevent basic SQL injection', () => {
       // In SQL, ' is escaped as ''
       expect(sanitizeQueryInput("O'Malley")).toBe("O''Malley");
+    });
+  });
+
+  describe('isQueryInputValid', () => {
+    it('should identify an empty string as invalid', () => {
+      expect(isQueryInputValid('')).toBe(false);
+    });
+
+    it('should identify a whitespace-only string as invalid', () => {
+      expect(isQueryInputValid('   ')).toBe(false);
+    });
+
+    it('should identify a valid string as valid', () => {
+      expect(isQueryInputValid('12345')).toBe(true);
+    });
+
+    it('should identify a number as valid', () => {
+      expect(isQueryInputValid(12345)).toBe(true);
+    });
+
+    it('should identify an array of objects as valid if the first object has a value', () => {
+      expect(isQueryInputValid([{ value: '123', label: '123' }])).toBe(true);
+    });
+
+    it('should identify an array of objects as invalid if the first object has an empty value', () => {
+      expect(isQueryInputValid([{ value: ' ', label: ' ' }])).toBe(false);
+      expect(isQueryInputValid([{ value: '', label: '' }])).toBe(false);
+    });
+
+    it('should identify as valid if we explicitly say it is a list, even if empty', () => {
+      expect(isQueryInputValid('', true)).toBe(true);
+      expect(isQueryInputValid(null, true)).toBe(true);
+    });
+  });
+
+  describe('sanitizeSqlExpression (Complex Structures)', () => {
+    // Mock for setIn
+    const mockSetIn = jest.fn().mockImplementation((path, val) => ({
+      ...mockExpr,
+      setIn: mockSetIn
+    }));
+    
+    const mockExpr: any = {
+      parts: [
+        {
+          type: 'SINGLE',
+          valueOptions: { value: "  O'Reilly  " }
+        }
+      ],
+      setIn: mockSetIn
+    };
+
+    it('should sanitize a simple string part', () => {
+      const result = sanitizeSqlExpression(mockExpr);
+      expect(mockSetIn).toHaveBeenCalledWith(['parts', 0, 'valueOptions', 'value'], "O''Reilly");
+    });
+
+    it('should sanitize a Value List (array of objects) part', () => {
+      const complexExpr: any = {
+        parts: [
+          {
+            type: 'SINGLE',
+            valueOptions: {
+              value: [
+                { value: "  O'Reilly  ", label: "O'Reilly" },
+                { value: "  Smith  ", label: "Smith" }
+              ]
+            }
+          }
+        ],
+        setIn: jest.fn()
+      };
+      
+      const result = sanitizeSqlExpression(complexExpr);
+      const expectedArr = [
+        { value: "O''Reilly", label: "O'Reilly" },
+        { value: "Smith", label: "Smith" }
+      ];
+      expect(complexExpr.setIn).toHaveBeenCalledWith(['parts', 0, 'valueOptions', 'value'], expectedArr);
     });
   });
 

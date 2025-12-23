@@ -39,7 +39,36 @@
 
 ## High Priority - Immediate Next Steps
 
-### 1. Solidify Playwright Testing & Auth
+### 0. Esri Standards & Architectural Hardening
+**Status:** Pending (Targeting Separate Branch)
+**Priority:** Critical
+**Source:** Architectural Review
+**Goal:** Align codebase with official Esri patterns to ensure "human-readable" and "Esri-standard" code for external review.
+- **Thin Shell Pattern**: Refactor `widget.tsx` (1,600+ lines) into a "dumb shell" by moving logic into custom hooks (`useUrlConsumption`, `useSelectionRestoration`, `useVisibility`).
+- **Standardized JSDoc**: Apply consistent JSDoc headers to all exported functions and components to match `@esri` standards.
+- **React Ref Migration**: Replace direct DOM selectors (`document.querySelector`) with React Refs in `QueryTaskForm` for cleaner component isolation.
+- **Modular State Persistence**: Isolate the "Add/Remove Results" state management to prevent side effects in standard data source selection.
+
+### 0. Adopt TDD Workflow
+**Status:** ✅ IMPLEMENTED (r017.43)  
+**Priority:** Critical  
+**Source:** User Request  
+**Goal:** Write tests *before* implementation to ensure stability and define clear win conditions.
+- **Documentation**: Updated `DEVELOPMENT_GUIDE.md` with TDD section.
+- **Execution**: Applied TDD to SQL sanitization hardening in r017.43.
+
+### 1. SQL Injection & Input Validation
+**Status:** ✅ INITIAL HARDENING (r017.47)  
+**Priority:** High  
+**Source:** Security/Stability  
+- **Validation**: Added `isQueryInputValid` to prevent empty string submittals.
+- **Sanitization**: Added `sanitizeQueryInput` to strip whitespace and escape single quotes.
+- **Form Hardening**: Integrated validation into `QueryTaskForm` UI to disable "Apply" when input is invalid.
+- **Smart Validation**: Exempted list-based selectors (Regional Trails) from mandatory text rules.
+- **Stability**: Resolved circular structure crash in `clearResult` (r017.47).
+- **TDD**: Verified logic with unit tests in `query-utils.test.ts`.
+
+### 2. Solidify Playwright Testing & Auth
 **Status:** ✅ Substantially Improved (r017.35+)  
 **Priority:** High  
 **Source:** User Request - Development Velocity

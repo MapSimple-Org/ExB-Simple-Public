@@ -1459,10 +1459,14 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
     }
 
     // Get URL hash fragment parameters (ExB uses # for params)
+    // Also check query string for shortIds to handle both formats
     const hash = window.location.hash.substring(1) // Remove the #
-    const urlParams = new URLSearchParams(hash)
+    const query = window.location.search.substring(1) // Remove the ?
+    const hashParams = new URLSearchParams(hash)
+    const queryParams = new URLSearchParams(query)
     
     // Check if we've already processed this specific hash string
+    // We only track hash because query params are usually static or managed by ExB
     if (this.lastProcessedHash === hash) {
       return
     }
@@ -1470,85 +1474,83 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
     // Update immediately to prevent re-entry race conditions
     this.lastProcessedHash = hash
 
-    // Log all hash params for debugging
+    // Log all params for debugging
     const allHashParams: { [key: string]: string } = {}
-    urlParams.forEach((value, key) => {
-      allHashParams[key] = value
-    })
+    hashParams.forEach((value, key) => { allHashParams[key] = value })
+    const allQueryParams: { [key: string]: string } = {}
+    queryParams.forEach((value, key) => { allQueryParams[key] = value })
 
-    // Log hash check for debugging
+    // Log check for debugging
     debugLogger.log('HASH', {
-      event: 'hash-check',
+      event: 'url-param-check',
       widgetId: this.props.id,
       hash: hash,
-      allHashParams: allHashParams,
-      hashParamsCount: Object.keys(allHashParams).length,
+      query: query,
+      allHashParams,
+      allQueryParams,
       availableShortIds: shortIds,
       currentState: this.state.initialQueryValue,
       timestamp: Date.now()
     })
 
-    // Find the first matching shortId (prioritize first match in query items order)
-    // This ensures we only set state once per check and maintains consistent behavior
-    let foundMatch = false
-    for (const shortId of shortIds) {
-      if (urlParams.has(shortId)) {
-        foundMatch = true
-        const value = urlParams.get(shortId)
-        // Only update if the value has changed to avoid unnecessary re-renders
-        if (this.state.initialQueryValue?.shortId !== shortId || this.state.initialQueryValue?.value !== value) {
-          debugLogger.log('HASH', {
-            event: 'hash-detected',
-            widgetId: this.props.id,
-            shortId: shortId,
-            value: value,
-            previousShortId: this.state.initialQueryValue?.shortId,
-            previousValue: this.state.initialQueryValue?.value,
-            allHashParams: allHashParams,
-            timestamp: Date.now()
-          })
-          
-          // Reset to New mode when hash parameter is detected to avoid bugs with accumulation modes
-          const needsModeReset = this.state.resultsMode !== SelectionType.NewSelection
-          
-          debugLogger.log('HASH', {
-            event: 'hash-detected-setting-state',
-            widgetId: this.props.id,
-            shortId,
-            value,
-            needsModeReset,
-            currentMode: this.state.resultsMode,
-            timestamp: Date.now()
-          })
+    // Find the first matching shortId
+    // PRIORITY:
+    // 1. Any shortId found in the HASH (hash always wins)
+    // 2. Any shortId found in the QUERY string (if no hash match)
+    
+    let foundShortId: string | null = null
+    let foundValue: string | null = null
+    let foundIn: 'hash' | 'query' | null = null
 
-          this.setState({ 
-            initialQueryValue: { shortId, value },
-            // Reset to New mode and clear accumulatedRecords (same as handleResultsModeChange does)
-            ...(needsModeReset ? { 
-              resultsMode: SelectionType.NewSelection,
-              accumulatedRecords: []
-            } : {})
-          })
-          
-          if (needsModeReset) {
-            debugLogger.log('HASH', {
-              event: 'hash-reset-mode-to-new',
-              widgetId: this.props.id,
-              previousMode: this.state.resultsMode,
-              reason: 'hash-parameter-detected'
-            })
-          }
-        } else {
-          debugLogger.log('HASH', {
-            event: 'hash-skipped',
-            widgetId: this.props.id,
-            shortId: shortId,
-            value: value,
-            reason: 'value-unchanged'
-          })
-        }
-        return // Exit after first match
+    // FIRST PASS: Check ALL shortIds in the HASH
+    for (const shortId of shortIds) {
+      if (hashParams.has(shortId)) {
+        foundShortId = shortId
+        foundValue = hashParams.get(shortId)
+        foundIn = 'hash'
+        break
       }
+    }
+
+    // SECOND PASS: If no hash match, check ALL shortIds in the QUERY string
+    if (!foundShortId) {
+      for (const shortId of shortIds) {
+        if (queryParams.has(shortId)) {
+          foundShortId = shortId
+          foundValue = queryParams.get(shortId)
+          foundIn = 'query'
+          break
+        }
+      }
+    }
+
+    if (foundShortId && foundValue !== null) {
+      // Only update if the value or shortId has changed to avoid unnecessary re-renders
+      if (this.state.initialQueryValue?.shortId !== foundShortId || this.state.initialQueryValue?.value !== foundValue) {
+        debugLogger.log('HASH', {
+          event: 'url-param-detected',
+          widgetId: this.props.id,
+          shortId: foundShortId,
+          value: foundValue,
+          foundIn,
+          previousShortId: this.state.initialQueryValue?.shortId,
+          previousValue: this.state.initialQueryValue?.value,
+          timestamp: Date.now()
+        })
+        
+        // Reset to New mode when hash parameter is detected to avoid bugs with accumulation modes
+        const needsModeReset = this.state.resultsMode !== SelectionType.NewSelection
+        
+        this.setState({ 
+          initialQueryValue: { shortId: foundShortId, value: foundValue },
+          // Reset to New mode and clear accumulatedRecords
+          ...(needsModeReset ? { 
+            resultsMode: SelectionType.NewSelection,
+            accumulatedRecords: []
+          } : {})
+        })
+      }
+      return // Exit after finding first match
     }
     
     // If no hash parameters match any shortId, log what's in the hash
