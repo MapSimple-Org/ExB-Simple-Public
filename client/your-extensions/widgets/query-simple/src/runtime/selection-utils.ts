@@ -268,6 +268,8 @@ export async function selectRecordsAndPublish(
  * @returns The clear button element, or null if not found
  */
 export function findClearResultsButton(): HTMLButtonElement | null {
-  return document.querySelector('button[aria-label="Clear results"]') as HTMLButtonElement | null
+  // Hardened: Prioritize the one in the results header, fallback to any
+  return (document.querySelector('.query-result__header button[aria-label="Clear results"]') || 
+          document.querySelector('button[aria-label="Clear results"]')) as HTMLButtonElement | null
 }
 

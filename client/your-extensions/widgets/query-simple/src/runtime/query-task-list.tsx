@@ -176,19 +176,22 @@ export function QueryTaskList (props: QueryTaskListProps) {
     
     const allQueryItems = [...ungrouped.map(u => u.item), ...Object.values(groups).flatMap(g => g.items)]
     
+    // PRIORITY 1: Check ALL shortIds in the HASH (hash always wins)
     for (const item of allQueryItems) {
-      if (item.shortId) {
-        if (hashParams.has(item.shortId)) {
-          return {
-            shortId: item.shortId,
-            value: hashParams.get(item.shortId)
-          }
+      if (item.shortId && hashParams.has(item.shortId)) {
+        return {
+          shortId: item.shortId,
+          value: hashParams.get(item.shortId)
         }
-        if (queryParams.has(item.shortId)) {
-          return {
-            shortId: item.shortId,
-            value: queryParams.get(item.shortId)
-          }
+      }
+    }
+
+    // PRIORITY 2: Check ALL shortIds in the QUERY string
+    for (const item of allQueryItems) {
+      if (item.shortId && queryParams.has(item.shortId)) {
+        return {
+          shortId: item.shortId,
+          value: queryParams.get(item.shortId)
         }
       }
     }
