@@ -1,0 +1,330 @@
+@import url('https://fonts.googleapis.com/css2?family=Alegreya:ital,wght@0,400..900;1,400..900&family=Josefin+Slab:ital,wght@0,100..700;1,100..700&family=Merriweather:ital,opsz,wght@0,18..144,300..900;1,18..144,300..900&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Noto+Sans:ital,wght@0,100..900;1,100..900&family=Noto+Serif:ital,wght@0,100..900;1,100..900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Roboto:ital,wght@0,100..900;1,100..900&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap');
+
+/* ========================================================================== */
+/* LEGACY / BASE UTILITIES                                                    */
+/* ========================================================================== */
+
+.inner-popper {
+    z-index: 2002 !important;
+}
+
+.color-picker-popper {
+    z-index: 2002 !important;
+}
+
+.drawToolbarDiv {
+    width: 95% !important;
+    margin: 0 auto !important;
+}
+
+.buttonRow {
+    width: fit-content;
+    margin: 0 auto;
+}
+
+.decimalInput {
+    width: 100px;
+}
+
+.text-style-editor {
+    padding: 0 !important;
+}
+
+.pc-btn {
+    min-height: 34px;
+    text-align: center;
+    flex: 1 1 0 !important;
+    min-width: 0 !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+}
+
+/* ========================================================================== */
+/* SCROLLABLE WIDGET STRUCTURE                                                */
+/* ========================================================================== */
+
+.widget-draw {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow: hidden;
+}
+
+/* Tab header */
+.tab-header {
+    flex-shrink: 0;
+    display: flex;
+    border-bottom: 2px solid #ccc;
+    background: #fff;
+    z-index: 10;
+    position: relative;
+    margin: 0; /* no extra spacing */
+}
+
+.tab-button {
+    flex: 1;
+    padding: 0.5rem 1rem;
+    text-align: center;
+    cursor: pointer;
+    font-weight: 500;
+    color: #003a55;
+    border-bottom: 2px solid transparent;
+    background: #f8f9fa;
+    transition: all 0.2s ease;
+}
+
+    .tab-button:hover {
+        background-color: #e9ecef;
+    }
+
+    .tab-button.active {
+        background: #fff;
+        border-bottom: 2px solid #003a55;
+        font-weight: 600;
+        color: #003a55;
+    }
+
+/* Scrollable content */
+.tab-content {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    min-height: 0;
+    scrollbar-width: thin;
+    scrollbar-color: #c1c1c1 #f1f1f1;
+}
+
+    .tab-content::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    .tab-content::-webkit-scrollbar-track {
+        background: #f1f1f1;
+        border-radius: 3px;
+    }
+
+    .tab-content::-webkit-scrollbar-thumb {
+        background: #c1c1c1;
+        border-radius: 3px;
+    }
+
+        .tab-content::-webkit-scrollbar-thumb:hover {
+            background: #a8a8a8;
+        }
+
+/* ========================================================================== */
+/* CONTENT CONTAINERS                                                         */
+/* ========================================================================== */
+
+.draw-panel-content,
+.my-drawings-tab-container {
+    padding: 16px;
+    min-height: min-content;
+}
+
+.mode-message {
+    margin: 0;
+}
+
+    .mode-message h5 {
+        margin: 0.5rem 0 0.25rem 0;
+        color: #003a55;
+    }
+
+    .mode-message h6 {
+        margin: 0;
+        color: #666;
+        font-weight: normal;
+    }
+
+.drawing-tools-section {
+    margin: 0;
+}
+
+/* ========================================================================== */
+/* MAIN CHECKBOX STACKS — NO VERTICAL SPACING                                 */
+/* ========================================================================== */
+
+/* Parent stack that holds: Measure, Snapping, Buffer */
+.main-checkbox-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 0; /* absolutely no space between sections */
+}
+
+/* Inner stack that holds: Enable Measurements + Enable Tooltips (inside Measure) */
+.measure-toggle-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 0; /* absolutely no space between these two as well */
+}
+
+    /* Make sure panels themselves don’t create margins */
+    .main-checkbox-stack .jimu-collapsable-panel,
+    .measure-toggle-stack .jimu-collapsable-panel {
+        margin: 0 !important;
+    }
+
+/* ========================================================================== */
+/* COLLAPSIBLE SECTIONS — RESET ALL EXTRA SPACING                             */
+/* ========================================================================== */
+
+/* Each wrapper around a collapsible panel */
+.collapsible-section {
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+    /* Never add spacing between consecutive sections */
+    .collapsible-section + .collapsible-section {
+        margin-top: 0 !important;
+    }
+
+    /* Panel styling (kept minimal); no external margins */
+    .collapsible-section .jimu-collapsable-panel {
+        margin: 0 !important;
+        border-radius: 4px;
+        overflow: hidden;
+        background: #fff;
+    }
+
+        /* Panel header/body internal padding (visual comfort without external gaps) */
+        .collapsible-section .jimu-collapsable-panel > .header {
+            background: #f8f9fa;
+            border-bottom: 1px solid #dee2e6;
+            padding: 12px 16px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            min-height: 44px;
+        }
+
+        .collapsible-section .jimu-collapsable-panel > .body {
+            padding: 16px;
+        }
+
+    /* Nuke any margins that might be introduced by nested utilities/components */
+    .collapsible-section > * {
+        margin: 0 !important;
+    }
+
+    .collapsible-section > div {
+        margin: 0 !important;
+    }
+
+    .collapsible-section .mb-1,
+    .collapsible-section .mb-2,
+    .collapsible-section .mb-3,
+    .collapsible-section .mt-1,
+    .collapsible-section .mt-2,
+    .collapsible-section .mt-3,
+    .collapsible-section [class*="margin"],
+    .collapsible-section [class*="mb-"],
+    .collapsible-section [class*="mt-"],
+    .collapsible-section [class*="my-"] {
+        margin-top: 0 !important;
+        margin-bottom: 0 !important;
+    }
+
+/* Known components that previously added spacing */
+.measurement-section,
+.tooltip-controls,
+.snapping-controls,
+.buffer-controls {
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+    .measurement-section .body,
+    .snapping-controls .body,
+    .buffer-controls .body {
+        padding-bottom: 0 !important; /* ensure bodies don't extend spacing */
+    }
+
+/* Arrow controls — keep tight */
+.arrow-controls {
+    padding: 0;
+    background: transparent;
+    border: none;
+    border-radius: 0;
+}
+
+    .arrow-controls .drawToolbarDiv {
+        margin-bottom: 0;
+    }
+
+/* ========================================================================== */
+/* SYMBOL SELECTOR & MISC                                                     */
+/* ========================================================================== */
+
+.myss {
+    margin: 0;
+}
+
+    .myss .border {
+        border: 1px solid #dee2e6 !important;
+        border-radius: 4px;
+    }
+
+/* Bottom toolbar (leave default spacing inside if desired) */
+.drawToolbarBottomDiv {
+    margin: 0;
+    flex-wrap: wrap;
+    padding-top: 8px; /* minimal separation from content above, internal only */
+}
+
+/* ========================================================================== */
+/* RESPONSIVE TWEAKS                                                          */
+/* ========================================================================== */
+
+@media (max-height: 400px) {
+    .draw-panel-content,
+    .my-drawings-tab-container {
+        padding: 8px;
+    }
+
+    .collapsible-section .jimu-collapsable-panel > .header {
+        padding: 10px 12px;
+        min-height: 40px;
+    }
+
+    .collapsible-section .jimu-collapsable-panel > .body {
+        padding: 12px;
+    }
+
+    .tab-button {
+        padding: 6px 12px;
+        font-size: 0.9rem;
+    }
+
+    .mode-message h5 {
+        font-size: 1rem;
+    }
+
+    .mode-message h6 {
+        font-size: 0.875rem;
+    }
+
+    .drawToolbarBottomDiv {
+        margin: 0;
+        padding-top: 8px;
+    }
+}
+
+@media (max-height: 300px) {
+    .draw-panel-content,
+    .my-drawings-tab-container {
+        padding: 6px;
+    }
+
+    .tab-button {
+        padding: 4px 8px;
+        font-size: 0.8rem;
+    }
+
+    .buttonRow {
+        margin-bottom: 0;
+    }
+}

@@ -5,6 +5,44 @@ All notable changes to MapSimple Experience Builder widgets will be documented i
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.19.0-r017.48] - 2025-12-22
+
+### Fixed
+- **Priority URL Parsing**: Unified URL parameter handling between `widget.tsx` and `QueryTaskList.tsx`. Hash parameters now correctly override query string parameters across all query items, resolving the "Dirty Hash" bug when pivoting between deep links.
+- **State Mismatch**: Fixed a race condition where `QueryTaskList` could fallback to stale query string values after a hash parameter was consumed.
+
+### Added
+- **Documentation**: Created `TESTING_WALKTHROUGH.md` providing a step-by-step guide for manual verification of all QuerySimple features.
+- **Architectural Roadmap**: Added "Esri Standards & Architectural Hardening" to `TODO.md` for future refactoring into a "Thin Shell" pattern.
+
+## [1.19.0-r017.47] - 2025-12-21
+
+### Fixed
+- **Circular Structure Crash**: Resolved "Converting circular structure to JSON" error when clicking the clear results (trash can) button by properly handling the React event object in `clearResult`.
+- **External Widget Fix (draw-advanced)**: Patched the `draw-advanced` widget's `style.ts` to remove an incompatible theme reference (`theme.surfaces[1]`) that was preventing the widget from rendering in Experience Builder 1.19.
+
+## [1.19.0-r017.46] - 2025-12-21
+
+### Changed
+- **Smarter Input Validation**: Refined the "Empty String Prevention" rule to exempt list-based selections (Unique Values, Field Values). This allows users to interact with Regional Trails and other dropdown-style searches without being blocked by the mandatory text requirement.
+
+## [1.19.0-r017.45] - 2025-12-21
+
+### Fixed
+- **Immutable Structure Preservation**: Fixed `TypeError: asMutable is not a function` by properly handling "Value List" structures (arrays of objects). The sanitizer now surgically updates string values within these structures while preserving the overall object architecture required by the framework.
+
+## [1.19.0-r017.44] - 2025-12-21
+
+### Fixed
+- **Instant Validation**: Resolved bug where the "Apply" button remained disabled during typing until the input lost focus. Added real-time validation via DOM event listeners.
+
+## [1.19.0-r017.43] - 2025-12-21
+
+### Added
+- **TDD Workflow**: Adopted Test-Driven Development (TDD) as requested, adding unit tests for SQL sanitization and input validation.
+- **Input Validation**: Added `isQueryInputValid` and `sanitizeQueryInput` to prevent empty string submittals and provide basic SQL injection protection.
+- **Form Debugging**: Added granular focus and typing logs in `QueryTaskForm` to monitor input behavior and validation state.
+
 ## [1.19.0-r017.42] - 2025-12-21
 
 ### Fixed

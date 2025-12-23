@@ -1,13 +1,30 @@
 # Current Work Status
 
-**Last Updated:** 2025-12-20 (Release 017.41 - Sticky State & URL Param Fixes)  
-**Branch:** `feature/results-management-modes`  
+**Last Updated:** 2025-12-22 (Release 017.48 - Priority URL Parsing & Testing Walkthrough)  
+**Branch:** `feature/sql-sanitization-r17`  
 **Developer:** Adam Cabrera  
-**Current Version:** v1.19.0-r017.41
+**Current Version:** v1.19.0-r017.48
 
 ## Active Work
 
 ### Current Task
+- **What:** Priority-based URL Parsing & Documentation.
+- **Why:** Resolve "Dirty Hash" bug where query string parameters (`?pin=`) were overriding hash parameters (`#major=`) due to configuration order.
+- **Status:** ✅ **COMPLETE** - Unified URL parsing in `widget.tsx` and `QueryTaskList.tsx`. Hash now always overrides Query string. `TESTING_WALKTHROUGH.md` created.
+- **Files Modified:**
+  - `query-simple/src/runtime/widget.tsx` - Updated `checkQueryStringForShortIds` to prioritize hash.
+  - `query-simple/src/runtime/query-task-list.tsx` - Updated `initialQueryValueFromUrl` to match `widget.tsx` priority.
+  - `query-simple/src/version.ts` - Incremented to r017.48.
+  - `CHANGELOG.md` - Documented r017.48.
+  - `TESTING_WALKTHROUGH.md` - New manual testing guide.
+  - `TODO.md` - Added Architectural Hardening section.
+
+### Previous Task (Complete)
+- **What:** SQL Sanitization Hardening & Crash Fixes.
+- **Why:** Resolve circular structure crash in `clearResult` and patch external `draw-advanced` widget for compatibility.
+- **Status:** ✅ **COMPLETE** - `clearResult` crash fixed, `draw-advanced` theme error patched.
+
+### Previous Task (Complete)
 - **What:** Sticky State & URL Parameter Support - Fixed "persistence traps" during rapid hash switching and added `?query` parameter support.
 - **Why:** Switching between searches via URL hash was leaving the form and expansion icons in a "dirty" state from the previous query.
 - **Status:** ✅ **COMPLETE** - All state-flushing bugs resolved. HS now supports `#` and `?` parameters.
