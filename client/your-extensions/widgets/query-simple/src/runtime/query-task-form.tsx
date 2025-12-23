@@ -20,6 +20,7 @@ import { loadArcGISJSAPIModules } from 'jimu-arcgis'
 import { SqlExpressionRuntime, getShownClauseNumberByExpression } from 'jimu-ui/basic/sql-expression-runtime'
 import { type QueryItemType, type SpatialFilterObj, SpatialRelation, type UnitType } from '../config'
 import { DEFAULT_QUERY_ITEM } from '../default-query-item'
+import { sanitizeSqlExpression, isQueryInputValid } from './query-utils'
 import defaultMessage from './translations/default'
 import { QueryTaskSpatialForm } from './query-task-spatial-form'
 import { useAutoHeight } from './useAutoHeight'
@@ -117,11 +118,118 @@ export function QueryTaskForm (props: QueryTaskItemProps) {
   const spatialRelationRef = React.useRef<SpatialRelation>(SpatialRelation.Intersect)
   const bufferRef = React.useRef<{ distance: number, unit: UnitType }>(null)
   const applyButtonRef = React.useRef<HTMLButtonElement>(null)
+  const formContentRef = React.useRef<HTMLDivElement>(null)
   const isAutoHeight = useAutoHeight()
   const showClauseNumber = React.useRef(getShownClauseNumberByExpression(sqlExprObj))
   const initialValueSetRef = React.useRef<string | null>(null) // Track which configId we've set the value for
   const lastValueSetRef = React.useRef<string | null>(null) // Track the last value that was set
   const hashTriggeredRef = React.useRef<boolean>(false) // Track if query was triggered via hash parameter
+  const [isTypingValid, setIsTypingValid] = React.useState<boolean>(false)
+
+  // Monitor focus and input events within the query form
+  React.useEffect(() => {
+    const handleFocus = (e: FocusEvent) => {
+      const target = e.target as HTMLElement
+      if (target.tagName === 'INPUT') {
+        const val = (target as HTMLInputElement).value
+        setIsTypingValid(isQueryInputValid(val))
+        debugLogger.log('FORM', {
+          event: 'input-focused',
+          configId,
+          tagName: target.tagName,
+          type: (target as HTMLInputElement).type,
+          value: val
+        })
+      }
+    }
+
+    const handleInput = (e: Event) => {
+      const target = e.target as HTMLElement
+      if (target.tagName === 'INPUT') {
+        const val = (target as HTMLInputElement).value
+        const isValid = isQueryInputValid(val)
+        setIsTypingValid(isValid)
+        debugLogger.log('FORM', {
+          event: 'input-typing',
+          configId,
+          value: val,
+          isTypingValid: isValid
+        })
+      }
+    }
+
+    const handleFocusOut = (e: FocusEvent) => {
+      // Small delay to allow state to catch up
+      setTimeout(() => {
+        setIsTypingValid(false)
+      }, 50)
+    }
+
+    const container = formContentRef.current
+    if (container) {
+      container.addEventListener('focusin', handleFocus)
+      container.addEventListener('input', handleInput)
+      container.addEventListener('focusout', handleFocusOut)
+    }
+
+    return () => {
+      if (container) {
+        container.removeEventListener('focusin', handleFocus)
+        container.removeEventListener('input', handleInput)
+        container.removeEventListener('focusout', handleFocusOut)
+      }
+    }
+  }, [configId])
+
+  // Check if any attribute filter input is valid
+  const isInputValid = React.useMemo(() => {
+    // If the user is currently typing something valid, the form is valid
+    if (isTypingValid) {
+      debugLogger.log('FORM', {
+        event: 'validation-check-instant',
+        configId,
+        isValid: true
+      })
+      return true
+    }
+
+    if (!attributeFilterSqlExprObj?.parts || attributeFilterSqlExprObj.parts.length === 0) {
+      return true // If no parts, we assume it's valid (e.g. spatial-only query)
+    }
+    
+    // Check if at least one SINGLE part has a valid value
+    const hasValidValue = attributeFilterSqlExprObj.parts.some(part => {
+      // Accessing Immutable structures requires care. If dot notation fails, 
+      // the framework components might be using .get() or other methods.
+      // We'll be inclusive here: if it's not a SINGLE part, we treat it as valid.
+      if (part.type === 'SINGLE') {
+        const val = part.valueOptions?.value
+        const source = part.valueOptions?.source
+        
+        // If the source is NOT 'USER_INPUT', it's likely a list/dropdown (UNIQUE_VALUES, FIELD_VALUE)
+        // We treat these as "List" types which are exempted from the empty-string rule.
+        const isList = source && source !== 'USER_INPUT'
+        
+        const isValid = isQueryInputValid(val, !!isList)
+        
+        debugLogger.log('FORM', {
+          event: 'validation-check',
+          configId,
+          partType: part.type,
+          source,
+          isList,
+          value: val,
+          valueType: typeof val,
+          isValid
+        })
+        
+        return isValid
+      }
+      return true 
+    })
+
+    return hasValidValue
+  }, [attributeFilterSqlExprObj, configId, isTypingValid])
 
   const originDS = outputDS?.getOriginDataSources()[0]
 
@@ -140,6 +248,7 @@ export function QueryTaskForm (props: QueryTaskItemProps) {
       initialValueSetRef.current = null
       lastValueSetRef.current = null
       hashTriggeredRef.current = false // Reset hash trigger flag when switching queries
+      setIsTypingValid(false) // Reset typing validation
     }
     
     // Check if value has changed for the same configId
@@ -171,7 +280,9 @@ export function QueryTaskForm (props: QueryTaskItemProps) {
         // This is necessary because SqlExpressionRuntime may not sync from the expression prop alone
         const timeoutId = setTimeout(() => {
           // Find the input element within SqlExpressionRuntime
-          const formElement = document.querySelector(`[data-widget-id="${widgetId}"]`)?.closest('.query-form') || 
+          // Use data-widgetid (standard ExB attribute) to isolate the correct widget instance
+          const formElement = document.querySelector(`[data-widgetid="${widgetId}"]`)?.querySelector('.query-form') || 
+                             document.querySelector(`.widget-runtime[data-widgetid="${widgetId}"]`) ||
                              document.querySelector('.query-form')
           
           if (formElement) {
@@ -219,7 +330,7 @@ export function QueryTaskForm (props: QueryTaskItemProps) {
               if (applyButtonRef.current && !applyButtonRef.current.disabled && datasourceReady) {
                 // VERIFICATION: Ensure input value is actually set before executing query
                 // This is especially important for grouped queries where dropdowns need to be synchronized first
-                const formElement = document.querySelector(`[data-widget-id="${widgetId}"]`)?.closest('.query-form') || 
+                const formElement = document.querySelector(`[data-widgetid="${widgetId}"]`)?.querySelector('.query-form') || 
                                    document.querySelector('.query-form')
                 
                 if (formElement && initialInputValue) {
@@ -322,24 +433,27 @@ export function QueryTaskForm (props: QueryTaskItemProps) {
     // Force zoom for hash-triggered queries, otherwise use runtime preference
     const zoomToUse = hashTriggeredRef.current ? true : runtimeZoomToSelected
 
+    // Sanitize user input before submission
+    const sanitizedSqlExprObj = sanitizeSqlExpression(attributeFilterSqlExprObj)
+
     let rel = spatialRelationRef.current
     if (spatialFilterObjRef.current?.geometry && rel == null) {
       rel = SpatialRelation.Intersect
     }
     if (Array.isArray(spatialFilterObjRef.current?.geometry)) {
       if (spatialFilterObjRef.current.geometry.length === 1) {
-        onFormSubmit(attributeFilterSqlExprObj, { ...spatialFilterObjRef.current, geometry: spatialFilterObjRef.current.geometry[0], relation: rel, buffer: bufferRef.current }, zoomToUse)
+        onFormSubmit(sanitizedSqlExprObj, { ...spatialFilterObjRef.current, geometry: spatialFilterObjRef.current.geometry[0], relation: rel, buffer: bufferRef.current }, zoomToUse)
       } else {
         loadArcGISJSAPIModules([
           'esri/geometry/operators/unionOperator'
         ]).then(modules => {
           const operator: (typeof __esri.unionOperator) = modules[0]
           const geometry = operator.executeMany(spatialFilterObjRef.current.geometry)
-          onFormSubmit(attributeFilterSqlExprObj, { ...spatialFilterObjRef.current, geometry, relation: rel, buffer: bufferRef.current }, zoomToUse)
+          onFormSubmit(sanitizedSqlExprObj, { ...spatialFilterObjRef.current, geometry, relation: rel, buffer: bufferRef.current }, zoomToUse)
         })
       }
     } else {
-      onFormSubmit(attributeFilterSqlExprObj, { ...spatialFilterObjRef.current, relation: rel, buffer: bufferRef.current }, zoomToUse)
+      onFormSubmit(sanitizedSqlExprObj, { ...spatialFilterObjRef.current, relation: rel, buffer: bufferRef.current }, zoomToUse)
     }
     
     // Reset hashTriggeredRef after use
@@ -347,7 +461,7 @@ export function QueryTaskForm (props: QueryTaskItemProps) {
   }, [onFormSubmit, outputDS, attributeFilterSqlExprObj, runtimeZoomToSelected])
 
   const handleKeyDown = React.useCallback((event: React.KeyboardEvent) => {
-    if (event.key === 'Enter' && datasourceReady) {
+    if (event.key === 'Enter' && datasourceReady && isInputValid) {
       event.preventDefault()
       
       // Find the active input field
@@ -374,7 +488,7 @@ export function QueryTaskForm (props: QueryTaskItemProps) {
         }
       }
     }
-  }, [datasourceReady, applyQuery])
+  }, [datasourceReady, applyQuery, isInputValid])
 
   React.useEffect(() => {
     if (!dataActionFilter) return
@@ -392,9 +506,15 @@ export function QueryTaskForm (props: QueryTaskItemProps) {
   }, [sqlExprObj])
 
   const handleSqlExprObjChange = React.useCallback((sqlObj: IMSqlExpression) => {
+    debugLogger.log('FORM', {
+      event: 'sql-expression-changed',
+      configId,
+      partsCount: sqlObj?.parts?.length || 0,
+      firstPartValue: sqlObj?.parts?.[0]?.type === 'SINGLE' ? (sqlObj.parts[0] as any).valueOptions?.value : 'not-single'
+    })
     showClauseNumber.current = getShownClauseNumberByExpression(sqlObj)
     setAttributeFilterSqlExprObj(sqlObj)
-  }, [])
+  }, [configId])
 
   const handleSpatialFilterChange = React.useCallback((filter: SpatialFilterObj) => {
     spatialFilterObjRef.current = filter
@@ -454,7 +574,6 @@ export function QueryTaskForm (props: QueryTaskItemProps) {
   }, [showAttributeFilter, originDS, configId, sqlExprObj, useAttributeFilter, attributeFilterLabel])
 
   // Check DOM visibility after render
-  const formContentRef = React.useRef<HTMLDivElement>(null)
   React.useEffect(() => {
     if (formContentRef.current) {
       const computedStyle = window.getComputedStyle(formContentRef.current)
@@ -548,7 +667,7 @@ export function QueryTaskForm (props: QueryTaskItemProps) {
           <span className='mr-auto' css={css`font-size: 0.875rem; color: var(--sys-color-text-primary);`}>
             {getI18nMessage('zoomToSelected')}
           </span>
-          <Button ref={applyButtonRef} color='primary' className='ml-auto' disabled={!datasourceReady} onClick={applyQuery}>
+          <Button ref={applyButtonRef} color='primary' className='ml-auto' disabled={!datasourceReady || !isInputValid} onClick={applyQuery}>
             {getI18nMessage('apply')}
           </Button>
           {(showClauseNumber.current > 0 || showSpatialFilter) && (

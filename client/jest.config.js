@@ -65,6 +65,7 @@ module.exports = {
     "^jimu-data-source$": "<rootDir>/dist/jimu-data-source/index.js",
     "^jimu-arcgis$": "<rootDir>/dist/jimu-arcgis/index.js",
     "^jimu-for-test$": "<rootDir>/jimu-for-test/index.tsx",
+    "^widgets/shared-code/common$": "<rootDir>/your-extensions/widgets/shared-code/common.ts",
 
     "^jimu-ui/lib/icons/(.*)\\.svg": "<rootDir>/__mocks__/icon-mock.js",
     '^jimu-icons/svg/(.*)\\.svg': '<rootDir>/__mocks__/icon-mock.js',

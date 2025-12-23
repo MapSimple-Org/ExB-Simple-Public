@@ -1416,7 +1416,7 @@ export function QueryTask (props: QueryTaskProps) {
                     aria-label={getI18nMessage('clearResult')}
                     icon
                     className='ml-auto py-0'
-                    onClick={clearResult}
+                    onClick={() => { clearResult('user-trash-click') }}
                   >
                     <TrashOutlined />
                   </Button>
@@ -1876,6 +1876,7 @@ export function QueryTask (props: QueryTaskProps) {
                   overflow: hidden;
                 `}>
                   <QueryTaskForm
+                    key={queryItem.configId}
                     {...otherProps}
                     configId={queryItem.configId}
                     outputDS={outputDS}
