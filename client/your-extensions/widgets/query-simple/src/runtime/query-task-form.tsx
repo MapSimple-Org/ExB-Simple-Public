@@ -207,10 +207,23 @@ export function QueryTaskForm (props: QueryTaskItemProps) {
         const source = part.valueOptions?.source
         
         // If the source is NOT 'USER_INPUT', it's likely a list/dropdown (UNIQUE_VALUES, FIELD_VALUE)
+        // We also check for part.dataSource which is common for list-based selections
         // We treat these as "List" types which are exempted from the empty-string rule.
-        const isList = source && source !== 'USER_INPUT'
+        const isList = (source && source !== 'USER_INPUT') || (part.dataSource?.source)
         
         const isValid = isQueryInputValid(val, !!isList)
+        
+        debugLogger.log('FORM', {
+          event: 'validation-check-detail',
+          configId,
+          partType: part.type,
+          source,
+          hasDataSource: !!part.dataSource,
+          dataSourceSource: part.dataSource?.source,
+          isList: !!isList,
+          value: val,
+          isValid
+        })
         
         debugLogger.log('FORM', {
           event: 'validation-check',

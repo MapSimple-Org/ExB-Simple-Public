@@ -69,7 +69,9 @@ test.describe('QuerySimple: SQL Sanitization & Validation', () => {
     // Note: This relies on "Regional Trails" being in the test app's config
     console.log('🔍 Switching to a List-based query (Regional Trails)');
     try {
-      await helpers.selectFromDropdown(/Regional Trails/i, 'alias', WIDGET_ID);
+      await helpers.selectFromDropdown(/Regional Trails/i, 'layer', WIDGET_ID);
+      // Give the form a moment to settle and validation to update
+      await page.waitForTimeout(2000);
     } catch (e) {
       console.log('⚠️ Could not find Regional Trails query, skipping list exemption check');
       return;

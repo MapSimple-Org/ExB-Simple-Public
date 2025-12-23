@@ -106,8 +106,11 @@ test.describe('MapSimple Unified Mega-Journey', () => {
 
     // --- PHASE 2: WIDGET 1 INTERACTION (MAIN/GRAPHICS) ---
     await test.step('Widget 1 Interaction: Bulk Tools & Manual Removal', async () => {
-      console.log('↔️ Testing Bulk Tools (Expand/Collapse)');
+      console.log('↔️ Testing Bulk Tools (Collapse/Expand)');
       await helpers.switchToResultsTab(WIDGET_1_ID);
+      
+      // Since default is now Expanded for this query, we test Collapse first
+      await helpers.clickCollapseAll(WIDGET_1_ID);
       await helpers.clickExpandAll(WIDGET_1_ID);
       await helpers.clickCollapseAll(WIDGET_1_ID);
       
@@ -198,10 +201,14 @@ test.describe('MapSimple Unified Mega-Journey', () => {
     // --- PHASE 6: FINAL CLEANUP ---
     await test.step('Full Cleanup and Map Reset', async () => {
       console.log('🧹 Clearing Widget 2');
+      // Ensure it's open
+      await helpers.openWidget(WIDGET_2_LABEL, WIDGET_2_ID);
       await helpers.clickClearResults(WIDGET_2_ID);
       await helpers.verifyResultsCleared(WIDGET_2_ID);
       
       console.log('🧹 Clearing Widget 1');
+      // Ensure it's open
+      await helpers.openWidget(WIDGET_1_LABEL, WIDGET_1_ID);
       await helpers.clickClearResults(WIDGET_1_ID);
       await helpers.verifyResultsCleared(WIDGET_1_ID);
       
