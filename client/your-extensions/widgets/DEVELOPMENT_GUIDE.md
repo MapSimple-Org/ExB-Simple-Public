@@ -16,6 +16,7 @@ This guide documents the architecture, best practices, and development patterns 
 8. [Best Practices](#best-practices)
 9. [Common Patterns](#common-patterns)
 10. [References](#references)
+11. [Test-Driven Development (TDD) Workflow](#test-driven-development-tdd-workflow)
 
 ---
 
@@ -36,7 +37,16 @@ Always use the smallest possible tool for the job. Avoid "Hammer" commands that 
 *   **BAD**: Using `git reset --hard` to undo a few lines of code.
 *   **GOOD**: Using `git checkout path/to/file` or `git stash` to revert specific changes.
 
-### 3. The "Save Game" Milestone (Checkpointing)
+### 3. Surgical Progress (Incremental Excellence)
+Never build a "giant piece of crap" that won't stand the test of time. Complexity is the enemy of stability.
+*   **Small Steps**: Break every feature into the smallest possible functional units.
+*   **Test-Driven Development (TDD)**: Whenever possible, write your tests *before* you implement the feature or fix. This defines the "Win Condition" upfront and prevents scope creep.
+*   **Solid & Understood**: Never commit code you don't fully understand. If a logic change feels like a guess, it is.
+*   **Well Documented**: Update the `CHANGELOG.md`, `CURRENT_WORK.md`, and relevant `.md` files after every significant step.
+*   **Well Tested**: Every small step must be verified—either via unit tests, the "Mega-Journey" E2E suite, or manual verification—before moving to the next.
+*   **Parity First**: Focus on replicating WAB functionality reliably before adding "shiny" new features that might introduce instability.
+
+### 4. The "Save Game" Milestone (Checkpointing)
 Before starting a high-risk structural refactor (e.g., Class-to-Hooks migration):
 1.  **Verify Stability**: Ensure the current build is functional and passing E2E tests.
 2.  **Commit Baseline**: Commit all active changes with a descriptive baseline message (e.g., `Baseline: Stable r017.41 before Hooks refactor`).
@@ -913,6 +923,25 @@ const executeQuery = async (
   }
 }
 ```
+
+---
+
+## 11. Test-Driven Development (TDD) Workflow
+
+To ensure the long-term stability of the MapSimple widgets, we adhere to a **Test-First** philosophy.
+
+### The Cycle
+1.  **Red**: Write a failing test (Unit or E2E) that defines the expected behavior of the new feature or the reproduction of a bug.
+2.  **Green**: Implement the minimal amount of code required to make the test pass.
+3.  **Refactor**: Clean up the implementation while ensuring the tests stay green.
+
+### Why TDD?
+-   **Win Conditions**: It forces us to define exactly what "done" looks like before we touch the source code.
+-   **Framework Realism (CRITICAL)**: Unit tests for functions that handle framework data (like `IMSqlExpression`) MUST simulate actual Experience Builder data structures (Immutable objects, arrays of objects, etc.). Testing only simple strings leads to regressions (e.g., the `asMutable` crash).
+-   **Regression Safety**: Tests written first provide an immediate safety net for the next "Surgical Step."
+-   **Documentation**: Tests serve as live documentation of how the system is intended to behave.
+
+*Note: While not everything can be perfectly tested (e.g., complex framework-level UI races), we strive for maximum coverage on all logic and core user journeys.*
 
 ---
 
