@@ -952,11 +952,18 @@ window.addEventListener('my-widget-event', (event: CustomEvent) => {
 - **Instant UI**: Spinner hides immediately after data arrives, decoupling UI responsiveness from map animations.
 - **SQL Index Preservation**: Detects and fixes `LOWER()` index killers on `PIN` and `MAJOR`.
 
-### Structural Refactor (r018.0+)
-- **Hybrid Architecture**: Keep `BaseWidget` as a Class component (for ExB compatibility) but move all complex logic (Hash handling, Visibility, Restoration) into **Functional Custom Hooks**.
-- **Hook-First Logic**: Prefer `useHashConsumption`, `useWidgetState`, etc., over large class methods.
+### Structural Refactor (r018.0+) - Hook & Shell Architecture
+
+**Status:** In Progress (Chunk 1 Complete - r018.10)
+
+- **Hybrid Architecture**: Keep `widget.tsx` as a Class component (for ExB compatibility) but move all complex logic into **Manager Classes** and **Custom Hooks**.
+- **Manager Pattern**: Use manager classes (e.g., `UrlConsumptionManager`) for class component compatibility, hooks for functional components.
+- **Chunk 1 Complete (r018.10)**: URL Parameter Consumption migrated to `UrlConsumptionManager` class in `runtime/hooks/use-url-consumption.ts`
+- **Hook-First Logic**: Prefer manager classes/hooks over large class methods in `widget.tsx`.
 - **Async/Await over Timeouts**: Replace brittle `setTimeout` calls with robust Promise-based workflows.
 - **Modular ESM**: Eliminate `require()` calls by resolving circular dependencies.
+
+**Migration Plan:** See `COMPLETE_MIGRATION_PLAN.md` for detailed chunk-by-chunk migration strategy.
 
 ---
 
