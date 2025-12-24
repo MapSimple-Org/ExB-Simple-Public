@@ -84,11 +84,17 @@ This document outlines a **complete, safe migration** of all widget logic from `
 **Logging:** Parameter detection logs (`HASH` feature), mode reset logs
 
 ### Chunk 2: Widget Visibility Engine  
-**Status:** ✅ Preserved, ready to implement  
+**Status:** ✅ **COMPLETE** (r018.13)  
 **Complexity:** Low  
 **Risk:** Low  
-**Methods:** `setupVisibilityDetection()`, `cleanupVisibilityDetection()`, `checkVisibility()`, `logVisibilityChange()`  
-**Logging Required:** Comparison logs, visibility state change logs, IntersectionObserver logs
+**Methods:** `WidgetVisibilityManager.setup()`, `WidgetVisibilityManager.cleanup()`, `WidgetVisibilityManager.getIsPanelVisible()`  
+**Implementation:** Manager class in `query-simple/src/runtime/hooks/use-widget-visibility.ts`  
+**Completed Steps:**
+- ✅ Step 2.1: Manager class added (r018.11)
+- ✅ Step 2.2: Parallel execution with comparison logging (r018.12)
+- ✅ Step 2.3: Switched to manager, removed old code (r018.13)
+- ⏳ Step 2.4: Cleanup - remove temporary comparison logs (optional)
+**Logging:** Visibility state change logs (`WIDGET-STATE` feature), HelperSimple notification logs
 
 ### Chunk 3: Selection & Restoration ⚠️ **HIGH RISK**
 **Status:** ❌ Previous attempt failed - needs careful re-implementation  
