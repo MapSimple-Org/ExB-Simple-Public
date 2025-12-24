@@ -111,6 +111,74 @@
 
 ---
 
+### 3a. Remove Non-Graphics Layer Implementation (BREAKING CHANGE) - Post r018.0
+**Status:** 📌 **DEFERRED** (After r018.0 complete)  
+**Priority:** High (Code Simplification)  
+**Source:** User Request (r018.13)  
+**Target Release:** r019.0 (Breaking change requires major version bump)
+
+**Problem:** The dual-path implementation (graphics layer vs. layer selection) adds complexity and causes issues:
+- Zoom functionality breaks when graphics layer is disabled (mapView not available)
+- ~44 conditional checks throughout codebase
+- Inconsistent behavior between modes
+- Graphics layer implementation is cleaner and more reliable
+
+**Solution:** Remove `useGraphicsLayerForHighlight` config option entirely. Always use graphics layer when `highlightMapWidgetId` is configured.
+
+**Files to Modify (44 references across 7 files):**
+
+1. **`query-simple/src/config.ts`**:
+   - Remove `useGraphicsLayerForHighlight?: boolean` from `IMConfig` interface
+   - Keep `highlightMapWidgetId?: string` (make it required or always check for it)
+
+2. **`query-simple/src/setting/setting.tsx`**:
+   - Remove the toggle switch for `useGraphicsLayerForHighlight` (lines ~299-307)
+   - Remove conditional wrapper around map selector (line ~318)
+   - Always show map selector if `highlightMapWidgetId` exists
+   - Update translations to remove graphics layer toggle text
+
+3. **`query-simple/src/runtime/widget.tsx`**:
+   - Always render `JimuMapViewComponent` if `highlightMapWidgetId` is configured (remove `useGraphicsLayerForHighlight` check on line ~1486)
+   - Always initialize graphics layer in `handleJimuMapViewChanged` (remove conditional on line ~406)
+   - Remove all `config.useGraphicsLayerForHighlight` checks throughout
+   - Remove `useGraphicsLayerForHighlight` prop passing to child components
+
+4. **`query-simple/src/runtime/query-task.tsx`**:
+   - Remove `useGraphicsLayerForHighlight` prop from `QueryTaskProps` interface
+   - Remove all conditional logic based on `useGraphicsLayerForHighlight`
+   - Always pass `graphicsLayer` and `mapView` when available
+   - Remove conditional initialization checks (line ~610)
+
+5. **`query-simple/src/runtime/query-result.tsx`**:
+   - Remove `useGraphicsLayerForHighlight` prop from `QueryTaskResultProps` interface
+   - Remove all conditional logic based on `useGraphicsLayerForHighlight`
+   - Always pass `graphicsLayer` and `mapView` when available
+
+6. **`query-simple/src/runtime/query-task-list.tsx`**:
+   - Remove `useGraphicsLayerForHighlight` prop passing to `QueryTask`
+
+7. **`query-simple/src/runtime/selection-utils.ts`**:
+   - Remove `useGraphicsLayer: boolean` parameter from `selectRecordsInDataSources()` function signature
+   - Always use graphics layer when `graphicsLayer` and `mapView` are provided
+   - Remove conditional logic (lines ~110-158)
+   - Update all call sites to remove `useGraphicsLayer` argument
+
+**Migration Strategy:**
+- **Version Manager**: Add migration in `version-manager.ts` to set `highlightMapWidgetId` from existing config if `useGraphicsLayerForHighlight` was true
+- **Breaking Change**: Document in CHANGELOG.md that `useGraphicsLayerForHighlight` config option is removed
+- **Testing**: Verify zoom works correctly, selection highlighting works, and graphics layer is always initialized when map widget is configured
+
+**Benefits:**
+- Removes ~44 conditional checks
+- Fixes zoom issue (mapView always available)
+- Consistent behavior across all implementations
+- Simpler codebase to maintain
+- Graphics layer is the cleaner, more reliable implementation
+
+**Note:** This is a breaking change and should be implemented as r019.0 (major version bump). Do not implement until r018.0 migration is complete.
+
+---
+
 ## High Priority - Best Practices
 
 ### 3. Standardize Error Handling Pattern
