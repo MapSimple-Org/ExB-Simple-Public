@@ -2,7 +2,7 @@
 
 Custom widgets for ArcGIS Experience Builder Developer Edition (1.19.0+). Built for performance, deep-linking, and advanced result management.
 
-**Current Version**: `1.19.0-r017.41`
+**Current Version**: `1.19.0-r017.60`
 **Release Type**: Production Stability Build
 
 ## Key Differentiators (Why QuerySimple?)
