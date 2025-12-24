@@ -17,16 +17,11 @@ import { QUERYSIMPLE_SELECTION_EVENT } from './selection-utils'
 import { WIDGET_VERSION } from '../version'
 // Chunk 1: URL Parameter Consumption Manager (r018.8)
 import { UrlConsumptionManager } from './hooks/use-url-consumption'
-// Chunk 2: Widget Visibility Engine Manager (r018.12) - Step 2.2: Parallel execution
+// Chunk 2: Widget Visibility Engine Manager (r018.13) - Step 2.3: Switch to manager
 import { WidgetVisibilityManager } from './hooks/use-widget-visibility'
 
 const debugLogger = createQuerySimpleDebugLogger()
 const { iconMap } = getWidgetRuntimeDataMap()
-
-/**
- * Custom event name for QuerySimple to notify HelperSimple of widget open/close state.
- */
-const QUERYSIMPLE_WIDGET_STATE_EVENT = 'querysimple-widget-state-changed'
 
 /**
  * Custom event name for requesting restoration when identify popup closes.
@@ -48,10 +43,8 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
   static versionManager = versionManager
   // Chunk 1: URL Parameter Consumption Manager (r018.8)
   private urlConsumptionManager = new UrlConsumptionManager()
-  // Chunk 2: Widget Visibility Engine Manager (r018.12) - Step 2.2: Parallel execution
+  // Chunk 2: Widget Visibility Engine Manager (r018.13) - Step 2.3: Switch to manager
   private visibilityManager = new WidgetVisibilityManager()
-  // Track old implementation result for comparison (updated whenever visibility changes)
-  private oldVisibilityResult: boolean | undefined = undefined
 
   state: { 
     initialQueryValue?: { shortId: string, value: string }, 
@@ -73,8 +66,6 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
     this.setState({ activeTab })
   }
   private widgetRef = React.createRef<HTMLDivElement>()
-  private visibilityObserver: IntersectionObserver | null = null
-  private visibilityCheckInterval: number | null = null
   private graphicsLayerRef = React.createRef<__esri.GraphicsLayer | null>()
   private mapViewRef = React.createRef<__esri.MapView | __esri.SceneView | null>()
 
@@ -136,72 +127,27 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
       }
     )
     
-    // OLD: Existing visibility detection implementation
-    this.setupVisibilityDetection()
-    
-    // NEW: Manager implementation (r018.12 - parallel execution mode)
-    // Run both implementations side-by-side and compare results
+    // Chunk 2: Manager implementation (r018.13 - Step 2.3: Switch to manager)
     if (this.widgetRef.current) {
       this.visibilityManager.setup(
         this.widgetRef.current,
         this.props,
         {
           onVisibilityChange: (isVisible) => {
-            // Log what the new implementation found immediately
-            debugLogger.log('CHUNK-2-COMPARE', {
-              event: 'new-implementation-visibility-change',
-              widgetId: this.props.id,
-              newImplementation: {
-                isVisible,
-                method: 'visibility-manager'
-              },
-              timestamp: Date.now()
-            })
+            // Update state
+            this.setState({ isPanelVisible: isVisible })
             
-            // Delay comparison to allow old implementation to finish
-            // We don't care about execution order, just that both produce the same result
-            setTimeout(() => {
-              // Use oldVisibilityResult if available (captured in logVisibilityChange), otherwise fallback to state
-              const oldIsVisible = this.oldVisibilityResult !== undefined ? this.oldVisibilityResult : this.state.isPanelVisible
-              const match = oldIsVisible === isVisible
-              
-              debugLogger.log('CHUNK-2-COMPARE', {
-                event: 'visibility-change-comparison',
-                widgetId: this.props.id,
-                oldImplementation: {
-                  isVisible: oldIsVisible,
-                  method: 'setupVisibilityDetection',
-                  source: this.oldVisibilityResult !== undefined ? 'logVisibilityChange' : 'state'
-                },
-                newImplementation: {
-                  isVisible,
-                  method: 'visibility-manager'
-                },
-                match,
-                timestamp: Date.now()
-              })
-              
-              if (!match) {
-                debugLogger.log('CHUNK-2-MISMATCH', {
-                  event: 'visibility-mismatch',
-                  widgetId: this.props.id,
-                  oldIsVisible,
-                  newIsVisible,
-                  warning: 'VISIBILITY STATE MISMATCH - INVESTIGATE',
-                  timestamp: Date.now()
-                })
-              }
-            }, 10) // Small delay to let old implementation finish
+            // Handle restoration logic
+            this.handleVisibilityChange(isVisible)
           }
         },
         (isVisible) => {
-          // Update state via manager (for comparison)
-          // Note: Old implementation also updates state, so this is just for manager's internal tracking
-          this.oldVisibilityResult = isVisible
+          // Manager's internal state tracking callback
+          // (no-op, restoration handled in onVisibilityChange)
         }
       )
       
-      // Also notify mount via manager
+      // Notify mount via manager
       this.visibilityManager.notifyMount(this.props.id)
     }
     
@@ -211,24 +157,6 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
     // Listen for restore requests when identify popup closes
     window.addEventListener(RESTORE_ON_IDENTIFY_CLOSE_EVENT, this.handleRestoreOnIdentifyClose as EventListener)
     
-    // Notify HelperSimple that this widget is now open
-    const openEvent = new CustomEvent(QUERYSIMPLE_WIDGET_STATE_EVENT, {
-      detail: {
-        widgetId: this.props.id,
-        isOpen: true
-      },
-      bubbles: true,
-      cancelable: true
-    })
-    window.dispatchEvent(openEvent)
-    debugLogger.log('WIDGET-STATE', {
-      event: 'widget-opened',
-      widgetId: this.props.id,
-      isOpen: true,
-      timestamp: new Date().toISOString()
-    })
-    
-    
     // Graphics layer will be initialized when map view becomes available via JimuMapViewComponent
   }
 
@@ -236,7 +164,7 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
     // Chunk 1: Clean up manager (r018.8)
     this.urlConsumptionManager.cleanup()
     
-    // Chunk 2: Clean up manager (r018.12 - parallel execution mode)
+    // Chunk 2: Clean up manager (r018.13 - Step 2.3: Switch to manager)
     this.visibilityManager.cleanup()
     this.visibilityManager.notifyUnmount(this.props.id)
     
@@ -246,22 +174,8 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
     // Clean up restore on identify close listener
     window.removeEventListener(RESTORE_ON_IDENTIFY_CLOSE_EVENT, this.handleRestoreOnIdentifyClose as EventListener)
     
-    // OLD: Existing visibility detection cleanup
-    this.cleanupVisibilityDetection()
-    
     // Clean up graphics layer
     this.cleanupGraphicsLayer()
-    
-    // Notify HelperSimple that this widget is now closed
-    const closeEvent = new CustomEvent(QUERYSIMPLE_WIDGET_STATE_EVENT, {
-      detail: {
-        widgetId: this.props.id,
-        isOpen: false
-      },
-      bubbles: true,
-      cancelable: true
-    })
-    window.dispatchEvent(closeEvent)
     debugLogger.log('WIDGET-STATE', {
       event: 'widget-closed',
       widgetId: this.props.id,
@@ -364,81 +278,108 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
   }
 
   /**
-   * Sets up visibility detection to track when the widget panel is open/closed.
-   * Uses IntersectionObserver if available, falls back to periodic checking.
+   * Handles visibility change from WidgetVisibilityManager.
+   * Contains restoration logic for when panel opens/closes.
+   * Chunk 2: Manager implementation (r018.13 - Step 2.3: Switch to manager)
    */
-  setupVisibilityDetection = () => {
-    // Wait for next tick to ensure ref is set
-    setTimeout(() => {
-      if (!this.widgetRef.current) {
-        debugLogger.log('WIDGET-STATE', {
-          event: 'visibility-detection-setup-failed',
+  handleVisibilityChange = (isVisible: boolean) => {
+    if (isVisible) {
+      // When panel opens, check if we have selection to restore
+      const isAccumulationMode = this.state.resultsMode === SelectionType.AddToSelection || 
+                                 this.state.resultsMode === SelectionType.RemoveFromSelection
+      const hasAccumulatedRecords = this.state.accumulatedRecords && this.state.accumulatedRecords.length > 0
+      const hasSelectionState = this.state.hasSelection || false
+      const hasSelectionToRestore = isAccumulationMode 
+        ? hasAccumulatedRecords 
+        : hasSelectionState
+      
+      debugLogger.log('RESTORE', {
+        event: 'panel-opened-checking-selection',
+        widgetId: this.props.id,
+        resultsMode: this.state.resultsMode,
+        isAccumulationMode,
+        hasSelection: hasSelectionState,
+        hasAccumulatedRecords,
+        accumulatedRecordsCount: this.state.accumulatedRecords?.length || 0,
+        selectionRecordCount: this.state.selectionRecordCount || 0,
+        hasLastSelection: !!this.state.lastSelection,
+        lastSelectionRecordCount: this.state.lastSelection?.recordIds.length || 0,
+        hasSelectionToRestore,
+        decisionLogic: {
+          'isAccumulationMode': isAccumulationMode,
+          'hasAccumulatedRecords': hasAccumulatedRecords,
+          'hasSelectionState': hasSelectionState,
+          'calculated-hasSelectionToRestore': hasSelectionToRestore,
+          'will-call-addSelectionToMap': hasSelectionToRestore
+        }
+      })
+      
+      // Add selection to map if we have one
+      if (hasSelectionToRestore) {
+        debugLogger.log('RESTORE', {
+          event: 'panel-opened-calling-addSelectionToMap',
           widgetId: this.props.id,
-          reason: 'widget-ref-not-available'
+          reason: 'hasSelectionToRestore-is-true'
         })
-        return
-      }
-
-      const element = this.widgetRef.current
-
-      // Method 1: IntersectionObserver (most efficient)
-      if ('IntersectionObserver' in window) {
-        this.visibilityObserver = new IntersectionObserver(
-          (entries) => {
-            const entry = entries[0]
-            const isVisible = entry.isIntersecting && entry.intersectionRatio > 0
-            
-            // Only log if state changed
-            if (this.state.isPanelVisible !== isVisible) {
-              this.setState({ isPanelVisible: isVisible })
-              this.logVisibilityChange(isVisible, 'IntersectionObserver')
-              this.notifyHelperSimpleOfPanelState(isVisible)
-            }
-          },
-          {
-            threshold: [0, 0.1, 1.0], // Trigger at 0%, 10%, and 100% visibility
-            rootMargin: '0px'
-          }
-        )
-        
-        this.visibilityObserver.observe(element)
-        debugLogger.log('WIDGET-STATE', {
-          event: 'visibility-detection-setup',
-          widgetId: this.props.id,
-          method: 'IntersectionObserver'
-        })
+        this.addSelectionToMap()
       } else {
-        // Method 2: Fallback to periodic checking
-        this.visibilityCheckInterval = window.setInterval(() => {
-          const isVisible = this.checkVisibility()
-          if (this.state.isPanelVisible !== isVisible) {
-            this.setState({ isPanelVisible: isVisible })
-            this.logVisibilityChange(isVisible, 'periodic-check')
-            this.notifyHelperSimpleOfPanelState(isVisible)
-          }
-        }, 250) // Check every 250ms
-        
-        debugLogger.log('WIDGET-STATE', {
-          event: 'visibility-detection-setup',
+        debugLogger.log('RESTORE', {
+          event: 'panel-opened-skipping-addSelectionToMap',
           widgetId: this.props.id,
-          method: 'periodic-check'
+          reason: 'hasSelectionToRestore-is-false',
+          why: isAccumulationMode 
+            ? 'no-accumulated-records' 
+            : 'no-hasSelection-state'
         })
       }
-    }, 100)
-  }
-
-  /**
-   * Cleans up visibility detection observers/intervals.
-   */
-  cleanupVisibilityDetection = () => {
-    if (this.visibilityObserver) {
-      this.visibilityObserver.disconnect()
-      this.visibilityObserver = null
-    }
-    
-    if (this.visibilityCheckInterval !== null) {
-      clearInterval(this.visibilityCheckInterval)
-      this.visibilityCheckInterval = null
+    } else {
+      // When panel closes, clear selection from map only (keep widget state)
+      const isAccumulationMode = this.state.resultsMode === SelectionType.AddToSelection || 
+                                 this.state.resultsMode === SelectionType.RemoveFromSelection
+      const hasAccumulatedRecords = this.state.accumulatedRecords && this.state.accumulatedRecords.length > 0
+      const hasSelectionState = this.state.hasSelection || false
+      const hasSelectionToClear = isAccumulationMode 
+        ? hasAccumulatedRecords 
+        : hasSelectionState
+      
+      debugLogger.log('RESTORE', {
+        event: 'panel-closed-checking-selection',
+        widgetId: this.props.id,
+        resultsMode: this.state.resultsMode,
+        isAccumulationMode,
+        hasSelection: hasSelectionState,
+        hasAccumulatedRecords,
+        accumulatedRecordsCount: this.state.accumulatedRecords?.length || 0,
+        selectionRecordCount: this.state.selectionRecordCount || 0,
+        hasLastSelection: !!this.state.lastSelection,
+        lastSelectionRecordCount: this.state.lastSelection?.recordIds.length || 0,
+        hasSelectionToClear,
+        decisionLogic: {
+          'isAccumulationMode': isAccumulationMode,
+          'hasAccumulatedRecords': hasAccumulatedRecords,
+          'hasSelectionState': hasSelectionState,
+          'calculated-hasSelectionToClear': hasSelectionToClear,
+          'will-call-clearSelectionFromMap': hasSelectionToClear
+        }
+      })
+      
+      if (hasSelectionToClear) {
+        debugLogger.log('RESTORE', {
+          event: 'panel-closed-calling-clearSelectionFromMap',
+          widgetId: this.props.id,
+          reason: 'hasSelectionToClear-is-true'
+        })
+        this.clearSelectionFromMap()
+      } else {
+        debugLogger.log('RESTORE', {
+          event: 'panel-closed-no-selection-to-clear',
+          widgetId: this.props.id,
+          reason: 'hasSelectionToClear-is-false',
+          why: isAccumulationMode 
+            ? 'no-accumulated-records' 
+            : 'no-hasSelection-state'
+        })
+      }
     }
   }
 
@@ -604,31 +545,6 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
     }
   }
 
-  /**
-   * Checks if the widget element is currently visible.
-   * Fallback method when IntersectionObserver is not available.
-   */
-  checkVisibility = (): boolean => {
-    if (!this.widgetRef.current) return false
-    
-    const element = this.widgetRef.current
-    const style = window.getComputedStyle(element)
-    const rect = element.getBoundingClientRect()
-    
-    const isVisible = (
-      style.display !== 'none' &&
-      style.visibility !== 'hidden' &&
-      style.opacity !== '0' &&
-      rect.width > 0 &&
-      rect.height > 0 &&
-      rect.top < window.innerHeight &&
-      rect.bottom > 0 &&
-      rect.left < window.innerWidth &&
-      rect.right > 0
-    )
-    
-    return isVisible
-  }
 
   /**
    * Tracks selection changes from query-result.
@@ -746,7 +662,8 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
       return
     }
     
-    const isWidgetOpen = this.state.isPanelVisible === true
+    // Use manager as source of truth for visibility (r018.13)
+    const isWidgetOpen = this.visibilityManager.getIsPanelVisible()
     const isAccumulationMode = this.state.resultsMode === SelectionType.AddToSelection || 
                                this.state.resultsMode === SelectionType.RemoveFromSelection
     
@@ -1464,146 +1381,6 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
     }
   }
 
-  /**
-   * Logs visibility state changes.
-   */
-  logVisibilityChange = (isVisible: boolean, method: string) => {
-    // Capture old implementation result for comparison (r018.12)
-    this.oldVisibilityResult = isVisible
-    
-    // Log what the old implementation found
-    debugLogger.log('CHUNK-2-COMPARE', {
-      event: 'old-implementation-visibility-change',
-      widgetId: this.props.id,
-      oldImplementation: {
-        isVisible,
-        method
-      },
-      timestamp: Date.now()
-    })
-    
-    debugLogger.log('WIDGET-STATE', {
-      event: isVisible ? 'panel-opened' : 'panel-closed',
-      widgetId: this.props.id,
-      isVisible,
-      method,
-      timestamp: new Date().toISOString()
-    })
-    
-    if (isVisible) {
-      // When panel opens, check if we have selection to restore
-      const isAccumulationMode = this.state.resultsMode === SelectionType.AddToSelection || 
-                                 this.state.resultsMode === SelectionType.RemoveFromSelection
-      const hasAccumulatedRecords = this.state.accumulatedRecords && this.state.accumulatedRecords.length > 0
-      const hasSelectionState = this.state.hasSelection || false
-      const hasSelectionToRestore = isAccumulationMode 
-        ? hasAccumulatedRecords 
-        : hasSelectionState
-      
-      debugLogger.log('RESTORE', {
-        event: 'panel-opened-checking-selection',
-        widgetId: this.props.id,
-        resultsMode: this.state.resultsMode,
-        isAccumulationMode,
-        hasSelection: hasSelectionState,
-        hasAccumulatedRecords,
-        accumulatedRecordsCount: this.state.accumulatedRecords?.length || 0,
-        selectionRecordCount: this.state.selectionRecordCount || 0,
-        hasLastSelection: !!this.state.lastSelection,
-        lastSelectionRecordCount: this.state.lastSelection?.recordIds.length || 0,
-        hasSelectionToRestore,
-        decisionLogic: {
-          'isAccumulationMode': isAccumulationMode,
-          'hasAccumulatedRecords': hasAccumulatedRecords,
-          'hasSelectionState': hasSelectionState,
-          'calculated-hasSelectionToRestore': hasSelectionToRestore,
-          'will-call-addSelectionToMap': hasSelectionToRestore
-        }
-      })
-      
-      // Add selection to map if we have one
-      if (hasSelectionToRestore) {
-        debugLogger.log('RESTORE', {
-          event: 'panel-opened-calling-addSelectionToMap',
-          widgetId: this.props.id,
-          reason: 'hasSelectionToRestore-is-true'
-        })
-        this.addSelectionToMap()
-      } else {
-        debugLogger.log('RESTORE', {
-          event: 'panel-opened-skipping-addSelectionToMap',
-          widgetId: this.props.id,
-          reason: 'hasSelectionToRestore-is-false',
-          why: isAccumulationMode 
-            ? 'no-accumulated-records' 
-            : 'no-hasSelection-state'
-        })
-      }
-    } else {
-      // When panel closes, clear selection from map only (keep widget state)
-      const isAccumulationMode = this.state.resultsMode === SelectionType.AddToSelection || 
-                                 this.state.resultsMode === SelectionType.RemoveFromSelection
-      const hasAccumulatedRecords = this.state.accumulatedRecords && this.state.accumulatedRecords.length > 0
-      const hasSelectionState = this.state.hasSelection || false
-      const hasSelectionToClear = isAccumulationMode 
-        ? hasAccumulatedRecords 
-        : hasSelectionState
-      
-      debugLogger.log('RESTORE', {
-        event: 'panel-closed-checking-selection',
-        widgetId: this.props.id,
-        resultsMode: this.state.resultsMode,
-        isAccumulationMode,
-        hasSelection: hasSelectionState,
-        hasAccumulatedRecords,
-        accumulatedRecordsCount: this.state.accumulatedRecords?.length || 0,
-        selectionRecordCount: this.state.selectionRecordCount || 0,
-        hasLastSelection: !!this.state.lastSelection,
-        lastSelectionRecordCount: this.state.lastSelection?.recordIds.length || 0,
-        hasSelectionToClear,
-        decisionLogic: {
-          'isAccumulationMode': isAccumulationMode,
-          'hasAccumulatedRecords': hasAccumulatedRecords,
-          'hasSelectionState': hasSelectionState,
-          'calculated-hasSelectionToClear': hasSelectionToClear,
-          'will-call-clearSelectionFromMap': hasSelectionToClear
-        }
-      })
-      
-      if (hasSelectionToClear) {
-        debugLogger.log('RESTORE', {
-          event: 'panel-closed-calling-clearSelectionFromMap',
-          widgetId: this.props.id,
-          reason: 'hasSelectionToClear-is-true'
-        })
-        this.clearSelectionFromMap()
-      } else {
-        debugLogger.log('RESTORE', {
-          event: 'panel-closed-no-selection-to-clear',
-          widgetId: this.props.id,
-          reason: 'hasSelectionToClear-is-false',
-          why: isAccumulationMode 
-            ? 'no-accumulated-records' 
-            : 'no-hasSelection-state'
-        })
-      }
-    }
-  }
-
-  /**
-   * Notifies HelperSimple of panel visibility state changes.
-   */
-  notifyHelperSimpleOfPanelState = (isVisible: boolean) => {
-    const event = new CustomEvent(QUERYSIMPLE_WIDGET_STATE_EVENT, {
-      detail: {
-        widgetId: this.props.id,
-        isOpen: isVisible
-      },
-      bubbles: true,
-      cancelable: true
-    })
-    window.dispatchEvent(event)
-  }
 
   /**
    * NOTIFY that a hash parameter has been used.
