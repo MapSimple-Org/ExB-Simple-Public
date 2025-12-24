@@ -96,10 +96,11 @@ This document outlines a **complete, safe migration** of all widget logic from `
 - ⏳ Step 2.4: Cleanup - remove temporary comparison logs (optional)
 **Logging:** Visibility state change logs (`WIDGET-STATE` feature), HelperSimple notification logs
 
-### Chunk 3: Selection & Restoration ⚠️ **HIGH RISK**
+### Chunk 3: Selection & Restoration ⚠️ **HIGH RISK** (Deferred to Last)
 **Status:** ❌ Previous attempt failed - needs careful re-implementation  
 **Complexity:** High  
 **Risk:** **CRITICAL** - This is where things broke before  
+**Note:** Deferred to last to build momentum with lower-risk chunks first  
 **Methods:** 
 - `handleSelectionChange()` - Selection state management
 - `addSelectionToMap()` - Restore selection on panel open
