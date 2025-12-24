@@ -15,8 +15,8 @@ import { createQuerySimpleDebugLogger } from 'widgets/shared-code/common'
 import { createOrGetGraphicsLayer, cleanupGraphicsLayer } from './graphics-layer-utils'
 import { QUERYSIMPLE_SELECTION_EVENT } from './selection-utils'
 import { WIDGET_VERSION } from '../version'
-// Chunk 1: URL Parameter Consumption Manager (r018.1)
-// import { UrlConsumptionManager } from './hooks/use-url-consumption'
+// Chunk 1: URL Parameter Consumption Manager (r018.2)
+import { UrlConsumptionManager } from './hooks/use-url-consumption'
 
 const debugLogger = createQuerySimpleDebugLogger()
 const { iconMap } = getWidgetRuntimeDataMap()
@@ -45,8 +45,8 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
 }> {
   static versionManager = versionManager
   private lastProcessedHash: string = ''
-  // Chunk 1: URL Parameter Consumption Manager (r018.1)
-  // private urlConsumptionManager = new UrlConsumptionManager()
+  // Chunk 1: URL Parameter Consumption Manager (r018.2) - Parallel execution mode
+  private urlConsumptionManager = new UrlConsumptionManager()
 
   state: { 
     initialQueryValue?: { shortId: string, value: string }, 
@@ -116,6 +116,9 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
   }
 
   componentWillUnmount() {
+    // Chunk 1: Clean up manager (r018.2)
+    this.urlConsumptionManager.cleanup()
+    
     // Clean up hashchange listener
     window.removeEventListener('hashchange', this.checkQueryStringForShortIds)
     
@@ -150,8 +153,58 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
   }
 
   componentDidUpdate(prevProps: AllWidgetProps<IMConfig>) {
+    // Chunk 1: Re-check URL parameters when query items change (r018.2)
     if (prevProps.config.queryItems !== this.props.config.queryItems) {
+      // OLD: Existing implementation (keep this for comparison)
       this.checkQueryStringForShortIds()
+      
+      // NEW: Manager implementation (parallel execution)
+      this.urlConsumptionManager.checkUrlParameters(
+        this.props,
+        this.state.resultsMode,
+        {
+          onInitialValueFound: (value) => {
+            // Comparison logging
+            const oldValue = this.state.initialQueryValue
+            const match = JSON.stringify(oldValue) === JSON.stringify(value)
+            
+            debugLogger.log('CHUNK-1-COMPARE', {
+              event: 'url-param-detection-comparison-didUpdate',
+              widgetId: this.props.id,
+              oldImplementation: {
+                shortId: oldValue?.shortId,
+                value: oldValue?.value
+              },
+              newImplementation: {
+                shortId: value?.shortId,
+                value: value?.value
+              },
+              match,
+              timestamp: Date.now()
+            })
+            
+            if (!match) {
+              debugLogger.log('CHUNK-1-MISMATCH', {
+                event: 'url-param-mismatch-didUpdate',
+                widgetId: this.props.id,
+                oldValue,
+                newValue: value,
+                warning: 'IMPLEMENTATIONS DO NOT MATCH - INVESTIGATE',
+                timestamp: Date.now()
+              })
+            }
+          },
+          onModeResetNeeded: () => {
+            debugLogger.log('CHUNK-1-COMPARE', {
+              event: 'mode-reset-comparison-didUpdate',
+              widgetId: this.props.id,
+              currentMode: this.state.resultsMode,
+              newImplementationDetectedReset: true,
+              timestamp: Date.now()
+            })
+          }
+        }
+      )
     }
     
     // Clean up graphics layer if config changed to disabled
@@ -1424,6 +1477,10 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
     const { id } = this.props
     const { initialQueryValue } = this.state
     
+    // Chunk 1: Parallel execution - also call manager (r018.2)
+    this.urlConsumptionManager.removeHashParameter(shortId, id)
+    
+    // OLD: Existing implementation (keep this for comparison)
     debugLogger.log('HASH', {
       event: 'handleHashParameterUsed-notified',
       widgetId: id,
