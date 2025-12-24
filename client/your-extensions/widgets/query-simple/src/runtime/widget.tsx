@@ -391,7 +391,7 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
   /**
    * Handles map view change from JimuMapViewComponent.
    * When map view becomes available, initialize graphics layer if enabled.
-   * Chunk 6: Manager implementation (r018.16 - Step 6.3: Switch to manager)
+   * Chunk 6: Manager implementation (r018.18 - Step 6.4: Cleanup complete)
    */
   private handleJimuMapViewChanged = (jimuMapView: JimuMapView | null) => {
     const { id, config } = this.props
@@ -404,17 +404,6 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
         onMapViewChange: (newJimuMapView) => {
           // Get map view from manager
           const newMapView = this.mapViewManager.getMapView()
-          
-          // Verification log (temporary - will be removed in Step 6.4)
-          debugLogger.log('CHUNK-6-COMPARE', {
-            event: 'map-view-change-verification',
-            widgetId: id,
-            hasJimuMapView: !!newJimuMapView,
-            hasView: !!newMapView,
-            viewType: newMapView?.type || 'none',
-            mapViewRefSet: !!this.mapViewRef.current,
-            timestamp: Date.now()
-          })
           
           // If map view is available and graphics layer is enabled, initialize it
           if (newMapView && config.useGraphicsLayerForHighlight && !this.graphicsLayerRef.current) {
