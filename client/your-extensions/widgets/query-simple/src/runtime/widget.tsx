@@ -74,7 +74,67 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
   private mapViewRef = React.createRef<__esri.MapView | __esri.SceneView | null>()
 
   componentDidMount() {
+    // OLD: Existing implementation (keep this for comparison)
     this.checkQueryStringForShortIds()
+    
+    // NEW: Manager implementation (r018.2 - parallel execution mode)
+    // Run both implementations side-by-side and compare results
+    this.urlConsumptionManager.setup(
+      this.props,
+      this.state.resultsMode,
+      {
+        onInitialValueFound: (value) => {
+          // Comparison logging - verify both implementations produce same results
+          const oldValue = this.state.initialQueryValue
+          const match = JSON.stringify(oldValue) === JSON.stringify(value)
+          
+          debugLogger.log('CHUNK-1-COMPARE', {
+            event: 'url-param-detection-comparison',
+            widgetId: this.props.id,
+            oldImplementation: {
+              shortId: oldValue?.shortId,
+              value: oldValue?.value
+            },
+            newImplementation: {
+              shortId: value?.shortId,
+              value: value?.value
+            },
+            match,
+            timestamp: Date.now()
+          })
+          
+          // Log mismatches immediately
+          if (!match) {
+            debugLogger.log('CHUNK-1-COMPARE', {
+              event: 'url-param-mismatch',
+              widgetId: this.props.id,
+              oldValue,
+              newValue: value,
+              match: false,
+              warning: 'IMPLEMENTATIONS DO NOT MATCH - INVESTIGATE',
+              timestamp: Date.now()
+            })
+          }
+          
+          // Note: We don't update state here - old implementation handles it
+          // This is just for comparison logging
+        },
+        onModeResetNeeded: () => {
+          // Comparison logging for mode reset
+          debugLogger.log('CHUNK-1-COMPARE', {
+            event: 'mode-reset-comparison',
+            widgetId: this.props.id,
+            currentMode: this.state.resultsMode,
+            newImplementationDetectedReset: true,
+            timestamp: Date.now()
+          })
+          
+          // Note: We don't update state here - old implementation handles it
+          // This is just for comparison logging
+        }
+      }
+    )
+    
     // Listen for hash changes to detect when hash parameters are updated
     // This is needed when HelperSimple opens the widget with a hash parameter
     // or when hash parameters change while the widget is already mounted
