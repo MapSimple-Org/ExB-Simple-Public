@@ -152,8 +152,9 @@ export class UrlConsumptionManager {
       })
       
       // Update the URL without triggering a reload
+      // Always preserve pathname and query string, only update hash
       window.history.replaceState(null, '', 
-        newHash ? `#${newHash}` : window.location.pathname + window.location.search
+        window.location.pathname + window.location.search + (newHash ? `#${newHash}` : '')
       )
       
       // Reset tracking so it can be processed again if needed

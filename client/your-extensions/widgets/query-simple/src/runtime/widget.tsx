@@ -1110,8 +1110,9 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
       })
       
       // Update the URL without triggering a reload
+      // Always preserve pathname and query string, only update hash
       window.history.replaceState(null, '', 
-        newHash ? `#${newHash}` : window.location.pathname + window.location.search
+        window.location.pathname + window.location.search + (newHash ? `#${newHash}` : '')
       )
       
       // Also clear the state so it won't trigger again
