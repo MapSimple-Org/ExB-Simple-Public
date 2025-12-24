@@ -23,7 +23,9 @@
  * 
  * Temporary Migration Features (will be removed after migration complete):
  * - CHUNK-1-COMPARE: Chunk 1 (URL Parameter) comparison logs
+ * - CHUNK-1-MISMATCH: Chunk 1 mismatch warnings
  * - CHUNK-2-COMPARE: Chunk 2 (Visibility) comparison logs
+ * - CHUNK-2-MISMATCH: Chunk 2 mismatch warnings
  * - CHUNK-3-COMPARE: Chunk 3 (Selection/Restoration) comparison logs
  * - CHUNK-3-DECISION: Chunk 3 decision point logs
  * - CHUNK-3-FALLBACK: Chunk 3 fallback logic logs
@@ -39,7 +41,7 @@
  * - RESTORE: Selection restoration attempts and results
  */
 
-type DebugFeature = 'HASH' | 'FORM' | 'TASK' | 'ZOOM' | 'MAP-EXTENT' | 'DATA-ACTION' | 'GROUP' | 'SELECTION' | 'WIDGET-STATE' | 'RESTORE' | 'RESULTS-MODE' | 'EXPAND-COLLAPSE' | 'GRAPHICS-LAYER' | 'CHUNK-1-COMPARE' | 'CHUNK-2-COMPARE' | 'CHUNK-3-COMPARE' | 'CHUNK-3-DECISION' | 'CHUNK-3-FALLBACK' | 'CHUNK-4-COMPARE' | 'CHUNK-5-COMPARE' | 'CHUNK-6-COMPARE' | 'CHUNK-7-COMPARE' | 'all' | 'false'
+type DebugFeature = 'HASH' | 'FORM' | 'TASK' | 'ZOOM' | 'MAP-EXTENT' | 'DATA-ACTION' | 'GROUP' | 'SELECTION' | 'WIDGET-STATE' | 'RESTORE' | 'RESULTS-MODE' | 'EXPAND-COLLAPSE' | 'GRAPHICS-LAYER' | 'CHUNK-1-COMPARE' | 'CHUNK-1-MISMATCH' | 'CHUNK-2-COMPARE' | 'CHUNK-2-MISMATCH' | 'CHUNK-3-COMPARE' | 'CHUNK-3-DECISION' | 'CHUNK-3-FALLBACK' | 'CHUNK-4-COMPARE' | 'CHUNK-5-COMPARE' | 'CHUNK-6-COMPARE' | 'CHUNK-7-COMPARE' | 'all' | 'false'
 
 interface DebugLoggerOptions {
   widgetName: string
@@ -155,7 +157,7 @@ export function createQuerySimpleDebugLogger() {
       'HASH', 'FORM', 'TASK', 'ZOOM', 'MAP-EXTENT', 'DATA-ACTION', 'GROUP', 
       'SELECTION', 'WIDGET-STATE', 'RESTORE', 'RESULTS-MODE', 'EXPAND-COLLAPSE', 'GRAPHICS-LAYER',
       // Temporary migration features (will be removed after migration complete)
-      'CHUNK-1-COMPARE', 'CHUNK-2-COMPARE', 'CHUNK-3-COMPARE', 'CHUNK-3-DECISION', 'CHUNK-3-FALLBACK',
+      'CHUNK-1-COMPARE', 'CHUNK-1-MISMATCH', 'CHUNK-2-COMPARE', 'CHUNK-2-MISMATCH', 'CHUNK-3-COMPARE', 'CHUNK-3-DECISION', 'CHUNK-3-FALLBACK',
       'CHUNK-4-COMPARE', 'CHUNK-5-COMPARE', 'CHUNK-6-COMPARE', 'CHUNK-7-COMPARE'
     ]
   })
