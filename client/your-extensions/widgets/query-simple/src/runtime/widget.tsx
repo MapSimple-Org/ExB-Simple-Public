@@ -17,8 +17,8 @@ import { QUERYSIMPLE_SELECTION_EVENT } from './selection-utils'
 import { WIDGET_VERSION } from '../version'
 // Chunk 1: URL Parameter Consumption Manager (r018.8)
 import { UrlConsumptionManager } from './hooks/use-url-consumption'
-// Chunk 2: Widget Visibility Engine Manager (r018.11) - Step 2.1: Add manager without integration
-// import { WidgetVisibilityManager } from './hooks/use-widget-visibility'
+// Chunk 2: Widget Visibility Engine Manager (r018.12) - Step 2.2: Parallel execution
+import { WidgetVisibilityManager } from './hooks/use-widget-visibility'
 
 const debugLogger = createQuerySimpleDebugLogger()
 const { iconMap } = getWidgetRuntimeDataMap()
@@ -48,8 +48,10 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
   static versionManager = versionManager
   // Chunk 1: URL Parameter Consumption Manager (r018.8)
   private urlConsumptionManager = new UrlConsumptionManager()
-  // Chunk 2: Widget Visibility Engine Manager (r018.11) - Step 2.1: Add manager without integration
-  // private visibilityManager = new WidgetVisibilityManager()
+  // Chunk 2: Widget Visibility Engine Manager (r018.12) - Step 2.2: Parallel execution
+  private visibilityManager = new WidgetVisibilityManager()
+  // Track old implementation result for comparison (updated whenever visibility changes)
+  private oldVisibilityResult: boolean | undefined = undefined
 
   state: { 
     initialQueryValue?: { shortId: string, value: string }, 
@@ -134,8 +136,74 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
       }
     )
     
-    // Set up visibility detection
+    // OLD: Existing visibility detection implementation
     this.setupVisibilityDetection()
+    
+    // NEW: Manager implementation (r018.12 - parallel execution mode)
+    // Run both implementations side-by-side and compare results
+    if (this.widgetRef.current) {
+      this.visibilityManager.setup(
+        this.widgetRef.current,
+        this.props,
+        {
+          onVisibilityChange: (isVisible) => {
+            // Log what the new implementation found immediately
+            debugLogger.log('CHUNK-2-COMPARE', {
+              event: 'new-implementation-visibility-change',
+              widgetId: this.props.id,
+              newImplementation: {
+                isVisible,
+                method: 'visibility-manager'
+              },
+              timestamp: Date.now()
+            })
+            
+            // Delay comparison to allow old implementation to finish
+            // We don't care about execution order, just that both produce the same result
+            setTimeout(() => {
+              // Use oldVisibilityResult if available (captured in logVisibilityChange), otherwise fallback to state
+              const oldIsVisible = this.oldVisibilityResult !== undefined ? this.oldVisibilityResult : this.state.isPanelVisible
+              const match = oldIsVisible === isVisible
+              
+              debugLogger.log('CHUNK-2-COMPARE', {
+                event: 'visibility-change-comparison',
+                widgetId: this.props.id,
+                oldImplementation: {
+                  isVisible: oldIsVisible,
+                  method: 'setupVisibilityDetection',
+                  source: this.oldVisibilityResult !== undefined ? 'logVisibilityChange' : 'state'
+                },
+                newImplementation: {
+                  isVisible,
+                  method: 'visibility-manager'
+                },
+                match,
+                timestamp: Date.now()
+              })
+              
+              if (!match) {
+                debugLogger.log('CHUNK-2-MISMATCH', {
+                  event: 'visibility-mismatch',
+                  widgetId: this.props.id,
+                  oldIsVisible,
+                  newIsVisible,
+                  warning: 'VISIBILITY STATE MISMATCH - INVESTIGATE',
+                  timestamp: Date.now()
+                })
+              }
+            }, 10) // Small delay to let old implementation finish
+          }
+        },
+        (isVisible) => {
+          // Update state via manager (for comparison)
+          // Note: Old implementation also updates state, so this is just for manager's internal tracking
+          this.oldVisibilityResult = isVisible
+        }
+      )
+      
+      // Also notify mount via manager
+      this.visibilityManager.notifyMount(this.props.id)
+    }
     
     // Listen for selection changes from query-result
     window.addEventListener(QUERYSIMPLE_SELECTION_EVENT, this.handleSelectionChange as EventListener)
@@ -168,13 +236,17 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
     // Chunk 1: Clean up manager (r018.8)
     this.urlConsumptionManager.cleanup()
     
+    // Chunk 2: Clean up manager (r018.12 - parallel execution mode)
+    this.visibilityManager.cleanup()
+    this.visibilityManager.notifyUnmount(this.props.id)
+    
     // Clean up selection change listener
     window.removeEventListener(QUERYSIMPLE_SELECTION_EVENT, this.handleSelectionChange as EventListener)
     
     // Clean up restore on identify close listener
     window.removeEventListener(RESTORE_ON_IDENTIFY_CLOSE_EVENT, this.handleRestoreOnIdentifyClose as EventListener)
     
-    // Clean up visibility detection
+    // OLD: Existing visibility detection cleanup
     this.cleanupVisibilityDetection()
     
     // Clean up graphics layer
@@ -1396,6 +1468,20 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
    * Logs visibility state changes.
    */
   logVisibilityChange = (isVisible: boolean, method: string) => {
+    // Capture old implementation result for comparison (r018.12)
+    this.oldVisibilityResult = isVisible
+    
+    // Log what the old implementation found
+    debugLogger.log('CHUNK-2-COMPARE', {
+      event: 'old-implementation-visibility-change',
+      widgetId: this.props.id,
+      oldImplementation: {
+        isVisible,
+        method
+      },
+      timestamp: Date.now()
+    })
+    
     debugLogger.log('WIDGET-STATE', {
       event: isVisible ? 'panel-opened' : 'panel-closed',
       widgetId: this.props.id,
