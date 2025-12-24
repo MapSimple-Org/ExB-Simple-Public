@@ -47,8 +47,16 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
   private urlConsumptionManager = new UrlConsumptionManager()
   // Chunk 2: Widget Visibility Engine Manager (r018.13) - Step 2.3: Switch to manager
   private visibilityManager = new WidgetVisibilityManager()
-  // Chunk 6: Map View Management Manager (r018.14) - Step 6.1: Add manager without integration
+  
+  // Refs must be declared before managers that use them
+  private widgetRef = React.createRef<HTMLDivElement>()
+  private graphicsLayerRef = React.createRef<__esri.GraphicsLayer | null>()
+  private mapViewRef = React.createRef<__esri.MapView | __esri.SceneView | null>()
+  
+  // Chunk 6: Map View Management Manager (r018.15) - Step 6.2: Parallel execution
   private mapViewManager = new MapViewManager(this.mapViewRef)
+  // Track old implementation result for comparison
+  private oldMapViewResult: { jimuMapView: JimuMapView | null, mapView: __esri.MapView | __esri.SceneView | null } | undefined = undefined
 
   state: { 
     initialQueryValue?: { shortId: string, value: string }, 
@@ -69,9 +77,6 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
   handleTabChange = (activeTab: 'query' | 'results') => {
     this.setState({ activeTab })
   }
-  private widgetRef = React.createRef<HTMLDivElement>()
-  private graphicsLayerRef = React.createRef<__esri.GraphicsLayer | null>()
-  private mapViewRef = React.createRef<__esri.MapView | __esri.SceneView | null>()
 
   componentDidMount() {
     // Chunk 1: Manager implementation (r018.8 - switched to manager)
@@ -390,10 +395,13 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
   /**
    * Handles map view change from JimuMapViewComponent.
    * When map view becomes available, initialize graphics layer if enabled.
+   * 
+   * Chunk 6: Parallel execution mode (r018.15) - runs both old and new implementations side-by-side
    */
   private handleJimuMapViewChanged = (jimuMapView: JimuMapView | null) => {
     const { id, config } = this.props
     
+    // OLD: Existing implementation
     debugLogger.log('GRAPHICS-LAYER', {
       event: 'handleJimuMapViewChanged',
       widgetId: id,
@@ -403,10 +411,99 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
       timestamp: Date.now()
     })
     
-    // Store JimuMapView in state
+    // Store JimuMapView in state (old implementation)
     this.setState({ jimuMapView: jimuMapView || undefined })
     
+    // Capture old implementation result for comparison
+    this.oldMapViewResult = {
+      jimuMapView: jimuMapView || null,
+      mapView: jimuMapView?.view || null
+    }
+    
+    // Log old implementation result
+    debugLogger.log('CHUNK-6-COMPARE', {
+      event: 'old-implementation-map-view-change',
+      widgetId: id,
+      oldImplementation: {
+        hasJimuMapView: !!jimuMapView,
+        hasView: !!(jimuMapView?.view),
+        viewType: jimuMapView?.view?.type || 'none',
+        mapViewRefSet: !!this.mapViewRef.current
+      },
+      timestamp: Date.now()
+    })
+    
+    // NEW: Manager implementation (r018.15 - parallel execution mode)
+    this.mapViewManager.handleJimuMapViewChanged(
+      jimuMapView,
+      this.props,
+      {
+        onMapViewChange: (newJimuMapView) => {
+          // Log what the new implementation found
+          debugLogger.log('CHUNK-6-COMPARE', {
+            event: 'new-implementation-map-view-change',
+            widgetId: id,
+            newImplementation: {
+              hasJimuMapView: !!newJimuMapView,
+              hasView: !!(newJimuMapView?.view),
+              viewType: newJimuMapView?.view?.type || 'none',
+              mapViewRefSet: !!this.mapViewRef.current
+            },
+            timestamp: Date.now()
+          })
+          
+          // Delay comparison to allow both implementations to finish
+          setTimeout(() => {
+            const oldJimuMapView = this.oldMapViewResult?.jimuMapView || null
+            const oldMapView = this.oldMapViewResult?.mapView || null
+            const newMapView = this.mapViewManager.getMapView()
+            
+            const jimuMapViewMatch = (oldJimuMapView === newJimuMapView) || 
+                                    (!!oldJimuMapView === !!newJimuMapView && 
+                                     oldJimuMapView?.view === newJimuMapView?.view)
+            const mapViewMatch = (oldMapView === newMapView) || 
+                                (!!oldMapView === !!newMapView)
+            
+            debugLogger.log('CHUNK-6-COMPARE', {
+              event: 'map-view-change-comparison',
+              widgetId: id,
+              oldImplementation: {
+                hasJimuMapView: !!oldJimuMapView,
+                hasView: !!oldMapView,
+                viewType: oldMapView?.type || 'none',
+                mapViewRefSet: !!this.mapViewRef.current
+              },
+              newImplementation: {
+                hasJimuMapView: !!newJimuMapView,
+                hasView: !!newMapView,
+                viewType: newMapView?.type || 'none',
+                mapViewRefSet: !!this.mapViewRef.current
+              },
+              jimuMapViewMatch,
+              mapViewMatch,
+              match: jimuMapViewMatch && mapViewMatch,
+              timestamp: Date.now()
+            })
+            
+            if (!jimuMapViewMatch || !mapViewMatch) {
+              debugLogger.log('CHUNK-6-MISMATCH', {
+                event: 'map-view-mismatch',
+                widgetId: id,
+                oldJimuMapView: !!oldJimuMapView,
+                newJimuMapView: !!newJimuMapView,
+                oldMapView: !!oldMapView,
+                newMapView: !!newMapView,
+                warning: 'MAP VIEW STATE MISMATCH - INVESTIGATE',
+                timestamp: Date.now()
+              })
+            }
+          }, 10) // Small delay to let both implementations finish
+        }
+      }
+    )
+    
     // If map view is available and graphics layer is enabled, initialize it
+    // (This stays in old implementation for now - will be moved to manager in later step)
     if (jimuMapView?.view && config.useGraphicsLayerForHighlight && !this.graphicsLayerRef.current) {
       this.initializeGraphicsLayer(jimuMapView.view)
     }

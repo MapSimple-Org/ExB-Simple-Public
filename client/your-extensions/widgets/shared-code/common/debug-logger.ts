@@ -32,6 +32,7 @@
  * - CHUNK-4-COMPARE: Chunk 4 (Graphics Layer) comparison logs
  * - CHUNK-5-COMPARE: Chunk 5 (Accumulated Records) comparison logs
  * - CHUNK-6-COMPARE: Chunk 6 (Map View) comparison logs
+ * - CHUNK-6-MISMATCH: Chunk 6 mismatch warnings
  * - CHUNK-7-COMPARE: Chunk 7 (Events) comparison logs
  * 
  * Features (HelperSimple):
@@ -41,7 +42,7 @@
  * - RESTORE: Selection restoration attempts and results
  */
 
-type DebugFeature = 'HASH' | 'FORM' | 'TASK' | 'ZOOM' | 'MAP-EXTENT' | 'DATA-ACTION' | 'GROUP' | 'SELECTION' | 'WIDGET-STATE' | 'RESTORE' | 'RESULTS-MODE' | 'EXPAND-COLLAPSE' | 'GRAPHICS-LAYER' | 'CHUNK-1-COMPARE' | 'CHUNK-1-MISMATCH' | 'CHUNK-2-COMPARE' | 'CHUNK-2-MISMATCH' | 'CHUNK-3-COMPARE' | 'CHUNK-3-DECISION' | 'CHUNK-3-FALLBACK' | 'CHUNK-4-COMPARE' | 'CHUNK-5-COMPARE' | 'CHUNK-6-COMPARE' | 'CHUNK-7-COMPARE' | 'all' | 'false'
+type DebugFeature = 'HASH' | 'FORM' | 'TASK' | 'ZOOM' | 'MAP-EXTENT' | 'DATA-ACTION' | 'GROUP' | 'SELECTION' | 'WIDGET-STATE' | 'RESTORE' | 'RESULTS-MODE' | 'EXPAND-COLLAPSE' | 'GRAPHICS-LAYER' | 'CHUNK-1-COMPARE' | 'CHUNK-1-MISMATCH' | 'CHUNK-2-COMPARE' | 'CHUNK-2-MISMATCH' | 'CHUNK-3-COMPARE' | 'CHUNK-3-DECISION' | 'CHUNK-3-FALLBACK' | 'CHUNK-4-COMPARE' | 'CHUNK-5-COMPARE' | 'CHUNK-6-COMPARE' | 'CHUNK-6-MISMATCH' | 'CHUNK-7-COMPARE' | 'all' | 'false'
 
 interface DebugLoggerOptions {
   widgetName: string
@@ -158,7 +159,7 @@ export function createQuerySimpleDebugLogger() {
       'SELECTION', 'WIDGET-STATE', 'RESTORE', 'RESULTS-MODE', 'EXPAND-COLLAPSE', 'GRAPHICS-LAYER',
       // Temporary migration features (will be removed after migration complete)
       'CHUNK-1-COMPARE', 'CHUNK-1-MISMATCH', 'CHUNK-2-COMPARE', 'CHUNK-2-MISMATCH', 'CHUNK-3-COMPARE', 'CHUNK-3-DECISION', 'CHUNK-3-FALLBACK',
-      'CHUNK-4-COMPARE', 'CHUNK-5-COMPARE', 'CHUNK-6-COMPARE', 'CHUNK-7-COMPARE'
+      'CHUNK-4-COMPARE', 'CHUNK-5-COMPARE', 'CHUNK-6-COMPARE', 'CHUNK-6-MISMATCH', 'CHUNK-7-COMPARE'
     ]
   })
 }
