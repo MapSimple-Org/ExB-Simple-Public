@@ -354,57 +354,331 @@ const isDataSourceReady = dataSource?.isDataSourceSet && dataSource?.isDataViewR
 
 #### Excluding Framework Actions
 
-In `manifest.json`:
+In `manifest.json`, use `excludeDataActions` to prevent framework actions from appearing in your widget's `DataActionList`:
 
 ```json
 {
   "excludeDataActions": [
     "arcgis-map.addToMap",
     "arcgis-map.showOnMap",
-    "edit.edit"
+    "edit.edit",
+    "query-select-loaded",
+    "query-clear-selection"
   ]
 }
 ```
 
 #### Creating Custom Data Actions
 
+Custom data actions are created using a **function-based pattern** that returns a `DataAction` object. This pattern allows you to pass widget-specific context (like `widgetId`, `outputDS`, `intl`) to the action.
+
+**Step 1: Create the Action Function**
+
 ```typescript
 // data-actions/add-to-map-action.tsx
-import { DataActionBuilder, type DataAction } from 'jimu-core'
+import { type DataRecordSet, type DataAction, DataLevel, type IntlShape, type DataSource } from 'jimu-core'
+import { selectRecordsAndPublish } from '../runtime/selection-utils'
+import { createQuerySimpleDebugLogger } from 'widgets/shared-code/common'
+import type { FeatureDataRecord } from 'jimu-core'
 
-export default class AddToMapAction implements DataAction {
-  id = 'add-to-map'
-  label = 'Add to Map'
-  icon = require('./assets/add-to-map.svg')
-  
-  isSupported(dataSource, records) {
-    return true // or custom logic
-  }
-  
-  onExecute(dataSource, records) {
-    // Custom action logic
-    selectRecordsAndPublish(dataSource, records)
+const debugLogger = createQuerySimpleDebugLogger()
+
+/**
+ * Creates a custom "Add to Map" data action.
+ * 
+ * @param widgetId - The widget ID that provides this action
+ * @param outputDS - The output data source (used for selection on the origin layer)
+ * @param intl - The Intl object for internationalization
+ * @returns A DataAction object that can be used by DataActionList
+ */
+export function createAddToMapAction(
+  widgetId: string,
+  outputDS: DataSource,
+  intl: IntlShape
+): DataAction {
+  return {
+    id: `${widgetId}-addToMap`,
+    name: 'addToMap',
+    label: intl.formatMessage({ id: 'addToMap', defaultMessage: 'Add to map' }),
+    icon: require('../runtime/assets/icons/show-on-map.svg').default,
+    index: -100, // Controls display order (lower = earlier)
+    widgetId,
+    intl,
+    supportProviderWidget: true,
+    
+    /**
+     * Determines if this action can process the given data sets.
+     * Must return a Promise<boolean>.
+     */
+    isSupported: async (
+      dataSets: DataRecordSet[], 
+      dataLevel: DataLevel, 
+      actionWidgetId: string
+    ): Promise<boolean> => {
+      // Only support Records level actions
+      if (dataLevel !== DataLevel.Records) {
+        return false
+      }
+      
+      // Need at least one data set with records
+      if (!dataSets || dataSets.length === 0) {
+        return false
+      }
+      
+      // Check if we have records and output data source
+      const hasRecords = dataSets.some(ds => ds.records && ds.records.length > 0)
+      return hasRecords && !!outputDS
+    },
+    
+    /**
+     * Executes the action.
+     * Must return a Promise<boolean> indicating success/failure.
+     */
+    onExecute: async (
+      dataSets: DataRecordSet[], 
+      dataLevel: DataLevel, 
+      actionWidgetId: string
+    ): Promise<boolean> => {
+      if (!outputDS || dataLevel !== DataLevel.Records) {
+        return false
+      }
+      
+      // Collect all records from all data sets
+      const allRecords: FeatureDataRecord[] = []
+      dataSets.forEach(dataSet => {
+        if (dataSet.records && dataSet.records.length > 0) {
+          const featureRecords = dataSet.records.filter(
+            (record): record is FeatureDataRecord => {
+              return record && typeof (record as FeatureDataRecord).getGeometry === 'function'
+            }
+          )
+          allRecords.push(...featureRecords)
+        }
+      })
+      
+      if (allRecords.length === 0) {
+        return false
+      }
+      
+      // Get record IDs
+      const recordIds = allRecords.map(record => record.getId())
+      
+      // Use widget's selection process
+      await selectRecordsAndPublish(
+        widgetId, 
+        outputDS, 
+        recordIds, 
+        allRecords, 
+        true // alsoPublishToOutputDS
+      )
+      
+      return true
+    },
+    
+    /**
+     * Cleanup method (required by DataAction interface)
+     */
+    destroy: (): void => {
+      // No cleanup needed
+    }
   }
 }
 ```
 
-#### Registering Actions
+**Step 2: Export Actions via `getExtraActions()`**
 
 ```typescript
 // data-actions/index.tsx
-import { DataActionBuilder } from 'jimu-core'
-import AddToMapAction from './add-to-map-action'
+import { type DataAction, type DataSource, type IntlShape } from 'jimu-core'
+import { createAddToMapAction } from './add-to-map-action'
+import { createZoomToAction } from './zoom-to-action'
 
-DataActionBuilder.getInstance().registerDataAction(AddToMapAction)
+/**
+ * Returns custom data actions for the widget.
+ * 
+ * @param widgetId - The widget ID
+ * @param outputDS - The output data source (null/undefined if not available)
+ * @param mapView - The map view (null/undefined if not available)
+ * @param intl - The Intl object for internationalization
+ * @param queryItem - Optional query item configuration
+ * @param runtimeZoomToSelected - Optional runtime zoom override from the query form
+ * @returns Array of custom DataAction objects (empty if conditions not met)
+ */
+export function getExtraActions(
+  widgetId: string,
+  outputDS: DataSource | null | undefined,
+  mapView: __esri.MapView | __esri.SceneView | undefined,
+  intl: IntlShape,
+  queryItem?: QueryItemType,
+  runtimeZoomToSelected?: boolean
+): DataAction[] {
+  const actions: DataAction[] = []
+  
+  // Add "Zoom To" action if we have mapView and intl
+  if (mapView && intl) {
+    actions.push(createZoomToAction(widgetId, mapView, intl))
+  }
+  
+  // Add "Add to Map" action if we have outputDS and intl
+  if (outputDS && intl) {
+    actions.push(createAddToMapAction(widgetId, outputDS, intl, queryItem, runtimeZoomToSelected))
+  }
+  
+  return actions
+}
 ```
+
+**Step 3: Use Actions in Your Component**
+
+```typescript
+// runtime/query-result.tsx
+import { getExtraActions } from '../data-actions'
+import { DataActionList, DataActionListStyle } from 'jimu-ui'
+
+export function QueryTaskResult(props: QueryTaskResultProps) {
+  const { widgetId, outputDS, mapView, queryItem, runtimeZoomToSelected } = props
+  const intl = hooks.useIntl()
+  
+  // Memoize extra actions to prevent unnecessary re-creation
+  const extraActions = React.useMemo(() => {
+    return getExtraActions(widgetId, outputDS, mapView, intl, queryItem, runtimeZoomToSelected)
+  }, [widgetId, outputDS, mapView, intl, queryItem, runtimeZoomToSelected])
+  
+  // Group records by origin data source for DataActionList
+  const actionDataSets: DataRecordSet[] = React.useMemo(() => {
+    // ... grouping logic ...
+    return groupedDataSets
+  }, [records, outputDS])
+  
+  return (
+    <DataActionList
+      widgetId={widgetId}
+      dataSets={actionDataSets}
+      listStyle={DataActionListStyle.Dropdown}
+      buttonSize='sm'
+      buttonType='tertiary'
+      extraActions={extraActions} // Pass custom actions here
+    />
+  )
+}
+```
+
+#### Grouping Records by Origin Data Source
+
+When accumulating records from multiple queries (potentially different origin data sources), `DataActionList` requires records to be grouped by their origin data source. This ensures framework actions (like "Zoom to Feature") recognize the records correctly.
+
+```typescript
+// Group records by their origin data source
+const actionDataSets: DataRecordSet[] = React.useMemo(() => {
+  if (!records || records.length === 0) {
+    // Return empty DataRecordSet if no records
+    return [{
+      dataSource: outputDS,
+      type: 'loaded',
+      records: [],
+      name: outputDS?.id,
+      label: outputDS?.getLabel()
+    }]
+  }
+  
+  // Group records by origin data source
+  const recordsByOriginDS = new Map<FeatureLayerDataSource, FeatureDataRecord[]>()
+  
+  records.forEach(record => {
+    const recordDS = (record as FeatureDataRecord).getDataSource?.() as FeatureLayerDataSource
+    let originDS: FeatureLayerDataSource | null = null
+    
+    if (recordDS) {
+      // Get the origin data source (the actual layer, not the output DS)
+      originDS = recordDS.getOriginDataSources()?.[0] as FeatureLayerDataSource || recordDS
+    } else if (outputDS) {
+      // Fallback: use outputDS's origin if record doesn't have dataSource
+      originDS = outputDS.getOriginDataSources()?.[0] as FeatureLayerDataSource || outputDS as FeatureLayerDataSource
+    }
+    
+    if (originDS) {
+      if (!recordsByOriginDS.has(originDS)) {
+        recordsByOriginDS.set(originDS, [])
+      }
+      recordsByOriginDS.get(originDS).push(record as FeatureDataRecord)
+    }
+  })
+  
+  // Create a DataRecordSet for each origin data source
+  const dataSets: DataRecordSet[] = Array.from(recordsByOriginDS.entries()).map(([originDS, originRecords]) => {
+    return {
+      dataSource: originDS, // Use origin DS, not outputDS
+      type: 'selected',
+      records: originRecords,
+      name: originDS.id,
+      label: originDS.getLabel()
+    }
+  })
+  
+  return dataSets
+}, [records, outputDS])
+```
+
+**Why This Matters:**
+- `DataActionList` validates records against the `dataSource` in each `DataRecordSet`
+- Records must match their origin data source for framework actions to work
+- Grouping ensures each `DataRecordSet` contains records from a single origin layer
+
+#### Key Points
+
+- **Function-Based Pattern**: Actions are created via functions (not classes) that return `DataAction` objects
+- **Context Injection**: Pass widget-specific context (`widgetId`, `outputDS`, `intl`) when creating actions
+- **`getExtraActions()`**: Export a function that returns an array of custom actions
+- **`extraActions` Prop**: Pass custom actions to `DataActionList` via the `extraActions` prop
+- **Memoization**: Use `React.useMemo()` to prevent unnecessary re-creation of action objects
+- **Data Level**: Most actions operate at `DataLevel.Records` (individual records), not `DataLevel.DataSource`
+- **Grouping**: When records come from multiple origin data sources, group them into separate `DataRecordSet` objects for proper `DataActionList` recognition
 
 ---
 
 ## Widget Communication
 
-### Message Publishing
+Experience Builder provides multiple ways for widgets to communicate with each other. Communication can be **configurable** (set up in the builder UI) or **programmatic** (implemented in code).
 
-In `manifest.json`:
+### Configurable Communication Methods
+
+These methods can be configured by users in the Experience Builder builder UI:
+
+#### 1.1 Use the Same Data Source/Data View
+
+When multiple widgets use the same data source or data view, they automatically share:
+- **Selection state**: Selecting records in one widget updates selection in all widgets using the same data source
+- **Data records**: All widgets receive the same data records
+- **Data source status**: All widgets see the same data source status (loading, ready, error, etc.)
+
+**Use Case**: One widget handles selection, another displays details of selected records.
+
+**See**: [Use data source in widget](https://developers.arcgis.com/experience-builder/guide/use-data-source-in-widget/)
+
+#### 1.2 Use the Same Map Widget
+
+When multiple widgets use the same map widget, they share the same `JimuMapView` instance. Widgets can:
+- Listen to layer view creation/removal events
+- Access the same `MapView` or `SceneView` instance
+- Coordinate map interactions (zoom, pan, layer visibility)
+
+**Use Case**: One widget controls map layers, another responds to map extent changes.
+
+**See**: [Use map widget in widget](https://developers.arcgis.com/experience-builder/guide/use-map-widget-in-widget/)
+
+#### 1.3 Use a Widget's Output Data Source
+
+Widgets can use another widget's output data source as their input, creating a data flow pipeline.
+
+**Use Case**: Query widget outputs results → List widget displays those results → Chart widget visualizes the data.
+
+**See**: [Widget output data source](https://developers.arcgis.com/experience-builder/guide/widget-output-data-source/)
+
+#### 1.4 Use Message/Actions
+
+Widgets can publish messages that other widgets can listen to and respond to via message actions.
+
+**Declaring Published Messages** (in `manifest.json`):
 
 ```json
 {
@@ -417,7 +691,7 @@ In `manifest.json`:
 }
 ```
 
-### Publishing Messages
+**Publishing Messages**:
 
 ```typescript
 import { MessageManager, type Message } from 'jimu-core'
@@ -434,36 +708,180 @@ const message: Message = {
 MessageManager.getInstance().publishMessage(message)
 ```
 
-### Message Actions
+**See**: [Message action](https://developers.arcgis.com/experience-builder/guide/message-action/) for details.
 
-In `manifest.json`:
+#### 1.5 Use Data Actions
+
+Data actions allow widgets to provide actions that can be executed on data records. These appear in `DataActionList` components.
+
+**See**: [Data action](https://developers.arcgis.com/experience-builder/guide/data-action/) for details. Also see the [Data Actions](#data-actions) section above for custom implementation patterns.
+
+### Programmatic Communication Methods
+
+These methods require code implementation:
+
+#### 2.1 Use Widget State to Share State Between Widgets
+
+Experience Builder uses Redux to manage application state. Widgets can store plain JavaScript objects in a shared `widgetsState` that is accessible by all widgets.
+
+**Storing Widget State**:
+
+```typescript
+import { appActions } from 'jimu-core'
+
+/**
+ * Store state in the shared widgetsState Redux store.
+ * 
+ * @param widgetId - Your widget ID
+ * @param propKey - Property key (supports dot notation like "a.b.c")
+ * @param value - The value to store (must be plain JavaScript object, no functions)
+ */
+this.props.dispatch(appActions.widgetStatePropChange(widgetId, propKey, value))
+```
+
+**Example**:
+
+```typescript
+// Widget 1: Store state
+this.props.dispatch(appActions.widgetStatePropChange("w1", "a.b1", "value1"))
+this.props.dispatch(appActions.widgetStatePropChange("w1", "a.b2", "value2"))
+
+// Results in Redux store:
+// widgetsState: {
+//   w1: {
+//     a: {
+//       b1: 'value1',
+//       b2: 'value2'
+//     }
+//   }
+// }
+```
+
+**Accessing Widget State** (in another widget):
+
+```typescript
+import { hooks } from 'jimu-core'
+
+// Using useSelect hook
+const widgetState = hooks.useSelect((state: IMState) => state.widgetsState?.[widgetId])
+
+// Or using mapExtraStateProps in class components
+mapExtraStateProps = (state: IMState) => {
+  return {
+    widgetState: state.widgetsState?.[widgetId]
+  }
+}
+```
+
+**Storing Complex Objects** (with functions or class instances):
+
+For complex objects that can't be serialized (e.g., functions, class instances), use `widgetMutableStatePropChange`:
+
+```typescript
+import { appActions, MutableStoreManager } from 'jimu-core'
+
+// Store mutable state
+this.props.dispatch(appActions.widgetMutableStatePropChange(widgetId, propKey, value))
+
+// Access mutable state
+const value = MutableStoreManager.getInstance().getStateValue(widgetId, propKey)
+```
+
+**Limitations**:
+- `widgetsState` can only store plain JavaScript objects (no functions, no class instances)
+- Use `widgetMutableStatePropChange` for complex objects
+- State is shared across all widgets, so use unique keys to avoid conflicts
+
+**See**: [Widget communication](https://developers.arcgis.com/experience-builder/guide/widget-communication/) for official documentation.
+
+#### 2.2 Provide Your Own Redux Store/Action/Reducer
+
+For advanced state management needs, widgets can provide custom Redux extensions that integrate with Experience Builder's Redux store.
+
+**Step 1: Create Extension Class**:
+
+```typescript
+// extensions/my-store.ts
+import { extensionSpec } from 'jimu-core'
+
+export default class MyReduxStoreExtension implements extensionSpec.ReduxStoreExtension {
+  getActions() {
+    // Return your Redux actions
+    return {
+      myAction: (payload: any) => ({
+        type: 'MY_ACTION',
+        payload
+      })
+    }
+  }
+
+  getInitLocalState() {
+    // Return initial state
+    return {
+      myData: null
+    }
+  }
+
+  getReducer() {
+    // Return Redux reducer
+    return (state: any, action: any) => {
+      switch (action.type) {
+        case 'MY_ACTION':
+          return { ...state, myData: action.payload }
+        default:
+          return state
+      }
+    }
+  }
+
+  getStoreKey() {
+    // Return unique key for this store
+    return 'myWidgetStore'
+  }
+}
+```
+
+**Step 2: Declare Extension in `manifest.json`**:
 
 ```json
 {
-  "messageActions": [
+  "extensions": [
     {
-      "name": "logExtentAction",
-      "label": "Log Map Extent to Console",
-      "uri": "actions/log-extent-action"
+      "name": "My Store",
+      "point": "REDUX_STORE",
+      "uri": "extensions/my-store"
     }
   ]
 }
 ```
 
-### Implementing Message Actions
+**Use Case**: Complex state management that requires custom Redux actions and reducers beyond simple key-value storage.
+
+**See**: [Widget communication](https://developers.arcgis.com/experience-builder/guide/widget-communication/) for official documentation.
+
+### Custom Events Pattern (Alternative Approach)
+
+In addition to framework-provided communication methods, widgets can use browser `CustomEvent` API for direct widget-to-widget communication:
 
 ```typescript
-// actions/log-extent-action.ts
-import { AbstractMessageAction, type MessageAction } from 'jimu-core'
+// Widget 1: Dispatch custom event
+const event = new CustomEvent('my-widget-event', {
+  detail: { data: 'value' },
+  bubbles: true,
+  cancelable: true
+})
+window.dispatchEvent(event)
 
-export default class LogExtentAction extends AbstractMessageAction {
-  filterMessageType = 'EXTENT_CHANGE'
-  
-  onExecute(message: Message, actionConfig?: any) {
-    console.log('Map extent:', message.data)
-  }
-}
+// Widget 2: Listen for custom event
+window.addEventListener('my-widget-event', (event: CustomEvent) => {
+  const data = event.detail.data
+  // Handle event
+})
 ```
+
+**Use Case**: When widgets need to communicate but don't share data sources or maps, and message/action system is too heavy.
+
+**Note**: Custom events are not managed by Experience Builder's framework, so they won't appear in the builder UI. Use this pattern for programmatic communication only.
 
 ### Query Performance Optimizations (r017.37+)
 - **Universal SQL Optimizer (r017.39+)**: Automatically detects and fixes `LOWER()` index killers on **any** database field. It upper-cases the user's input in the code and unwraps the database field, ensuring speed AND case-insensitivity regardless of field names.
@@ -894,6 +1312,69 @@ await clearSelectionInDataSources(
 )
 ```
 
+### Zoom to Records
+
+Zoom functionality is centralized in `zoom-utils.ts` to ensure consistent zoom behavior with padding across all zoom operations (hooks, data actions, and direct calls).
+
+**Shared Utility Function:**
+
+```typescript
+// zoom-utils.ts
+import { zoomToRecords } from './zoom-utils'
+
+// Pure function - can be used anywhere
+await zoomToRecords(mapView, records, {
+  padding: {
+    left: 50,
+    right: 50,
+    top: 50,
+    bottom: 50
+  }
+})
+```
+
+**React Hook Pattern:**
+
+```typescript
+// hooks/use-zoom-to-records.ts
+import { useZoomToRecords } from './hooks/use-zoom-to-records'
+
+export function MyComponent({ mapView, records }) {
+  const zoomToRecords = useZoomToRecords(mapView)
+  
+  // Use in event handlers
+  const handleClick = () => {
+    zoomToRecords(records).catch(error => {
+      // Handle errors
+    })
+  }
+}
+```
+
+**Data Action Pattern:**
+
+```typescript
+// data-actions/zoom-to-action.tsx
+import { zoomToRecords } from '../runtime/zoom-utils'
+
+export function createZoomToAction(widgetId, mapView, intl): DataAction {
+  return {
+    // ... action config ...
+    onExecute: async (dataSets, dataLevel, actionWidgetId) => {
+      const records = extractRecordsFromDataSets(dataSets)
+      await zoomToRecords(mapView, records)
+      return true
+    }
+  }
+}
+```
+
+**Key Points:**
+- **Single Source of Truth**: All zoom logic lives in `zoom-utils.ts`
+- **Consistent Padding**: Default 50px padding on all sides ensures features are visible
+- **Reusable**: Pure function can be used in hooks, data actions, or direct calls
+- **Error Handling**: Utility logs errors via `debugLogger` and throws for caller handling
+
 ### Query Execution Pattern
 
 ```typescript
@@ -966,6 +1447,10 @@ To ensure the long-term stability of the MapSimple widgets, we adhere to a **Tes
 - [Share Code Between Widgets](https://developers.arcgis.com/experience-builder/guide/share-code-between-widgets/)
 - [Add Help to Your Widget](https://developers.arcgis.com/experience-builder/guide/add-help-to-your-widget/)
 - [Upgrade to New Theme](https://developers.arcgis.com/experience-builder/guide/upgrade-to-new-theme/)
+
+### Deployment & Distribution
+
+- [Add Experience Builder Custom Widgets In ArcGIS Enterprise](https://www.esri.com/arcgis-blog/products/arcgis-enterprise/developers/add-experience-builder-custom-widgets-in-arcgis-enterprise) - Step-by-step guide for hosting and registering custom widgets in ArcGIS Enterprise (11.0+). Covers compilation, hosting, portal registration, and sharing custom widgets.
 
 ### Project-Specific Documentation
 

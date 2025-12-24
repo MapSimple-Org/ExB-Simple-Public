@@ -5,6 +5,37 @@ All notable changes to MapSimple Experience Builder widgets will be documented i
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.19.0-r017.60] - 2025-12-23
+
+### Added
+- **Custom Zoom To Action**: Created custom "Zoom To" data action that replaces the framework's default zoom action, ensuring consistent zoom behavior with 50px padding across all zoom operations.
+- **Shared Zoom Utility**: Extracted zoom logic into `zoom-utils.ts` as a shared utility function, eliminating code duplication between the React hook and data action implementations.
+
+### Changed
+- **Zoom Implementation**: Refactored `useZoomToRecords` hook to use shared `zoomToRecords` utility function, maintaining backward compatibility while centralizing zoom logic.
+- **Data Actions**: Updated `getExtraActions` to include custom "Zoom To" action alongside "Add to Map" action, both using QuerySimple's internal processes.
+
+### Fixed
+- **Framework Action Suppression**: Excluded framework's `zoomToFeature` and `arcgis-map.zoomToFeature` actions from appearing in DataActionList, ensuring only custom actions are shown.
+
+## [1.19.0-r017.59] - 2025-12-23
+
+### Changed
+- **Action Name**: Changed custom zoom action name from `zoomToFeature` to `querySimpleZoomTo` to avoid conflicts with framework action.
+
+## [1.19.0-r017.58] - 2025-12-23
+
+### Added
+- **Custom Zoom To Data Action**: Initial implementation of custom "Zoom To" data action using shared zoom utility.
+
+## [1.19.0-r017.57] - 2025-12-23
+
+### Added
+- **Shared Zoom Utility**: Created `zoom-utils.ts` with pure `zoomToRecords` function for reuse across hooks and data actions.
+
+### Changed
+- **Hook Refactoring**: Refactored `useZoomToRecords` hook to wrap shared utility function instead of duplicating logic.
+
 ## [1.19.0-r017.48] - 2025-12-22
 
 ### Fixed

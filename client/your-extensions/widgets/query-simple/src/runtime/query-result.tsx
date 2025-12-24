@@ -27,6 +27,7 @@ import { Button, Icon, Tooltip, DataActionList, DataActionListStyle } from 'jimu
 import { getWidgetRuntimeDataMap } from './widget-config'
 import { type QueryItemType, FieldsType, PagingType, ListDirection, ResultSelectMode, SelectionType } from '../config'
 import defaultMessage from './translations/default'
+import { useZoomToRecords } from './hooks/use-zoom-to-records'
 // FORCED: Always SimpleList - LazyList and PagingList removed
 import { SimpleList } from './simple-list'
 import { combineFields } from './query-utils'
@@ -138,6 +139,7 @@ export function QueryTaskResult (props: QueryTaskResultProps) {
   const { queryItem, queryParams, resultCount, maxPerPage, records, widgetId, outputDS, runtimeZoomToSelected, onNavBack, resultsMode, accumulatedRecords, onAccumulatedRecordsChange, useGraphicsLayerForHighlight, graphicsLayer, mapView } = props
   const getI18nMessage = hooks.useTranslation(defaultMessage)
   const intl = useIntl()
+  const zoomToRecords = useZoomToRecords(mapView)
   const [queryData, setQueryData] = React.useState(null)
   const [selectedRecords, setSelectedRecords] = React.useState<DataRecord[]>([])
   const [removedRecordIds, setRemovedRecordIds] = React.useState<Set<string>>(new Set())
@@ -177,8 +179,8 @@ export function QueryTaskResult (props: QueryTaskResultProps) {
   const [selectionError, setSelectionError] = React.useState<string>(null)
 
   const extraActions = React.useMemo(() => {
-    return getExtraActions(widgetId, outputDS, intl, queryItem, runtimeZoomToSelected)
-  }, [widgetId, outputDS, intl, queryItem, runtimeZoomToSelected])
+    return getExtraActions(widgetId, outputDS, mapView, intl, queryItem, runtimeZoomToSelected)
+  }, [widgetId, outputDS, mapView, intl, queryItem, runtimeZoomToSelected])
 
   const enableDataAction = ReactRedux.useSelector((state: IMState) => {
     const widgetJson = state.appConfig.widgets[widgetId]
@@ -958,34 +960,11 @@ export function QueryTaskResult (props: QueryTaskResultProps) {
       selectRecordsAndPublish(widgetId, outputDS, recordIds, updatedSelectedDatas as FeatureDataRecord[], true)
     }
     
-    // Zoom to the clicked record using data actions (always enabled - user wants to keep this behavior)
-    const dataSet: DataRecordSet = {
-      dataSource: outputDS,
-      records: [data],
-      type: 'selected',
-      name: outputDS.getLabel()
-    }
-    
-    // Get available data actions and find the zoomToFeature action
-    DataActionManager.getInstance().getSupportedActions(widgetId, [dataSet], DataLevel.Records)
-      .then(actionCategories => {
-        // Look for zoomToFeature action in any category
-        let zoomAction: any = null
-        for (const category in actionCategories) {
-          const actions = actionCategories[category]
-          zoomAction = actions.find((action: any) => action.name === 'zoomToFeature' || action.id === 'zoomToFeature')
-          if (zoomAction) break
-        }
-
-        if (zoomAction) {
-          // Execute the zoom action
-          return DataActionManager.getInstance().executeDataAction(zoomAction, [dataSet], DataLevel.Records, widgetId)
-        }
-      })
-      .catch(error => {
-        // Silently handle errors
-      })
-  }, [outputDS, widgetId])
+    // Zoom to the clicked record with padding (always enabled - user wants to keep this behavior)
+    zoomToRecords([data]).catch(error => {
+      // Silently handle errors - zoom is non-critical
+    })
+  }, [outputDS, widgetId, zoomToRecords])
 
   /**
    * Removes a record from the results and selection.
