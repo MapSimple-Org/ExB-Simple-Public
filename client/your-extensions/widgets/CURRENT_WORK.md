@@ -26,10 +26,26 @@
   - `DEVELOPMENT_GUIDE.md` - Updated project structure and architecture docs
 - **Verification:** Hash (#) and query string (?) parameters working correctly, no empty query race conditions observed.
 
-### Next Task: Chunk 2 - Widget Visibility Engine
+### Previous Task (Complete): Chunk 2 - Widget Visibility Engine ✅ **COMPLETE** (r018.13)
 - **What:** Migrate widget visibility detection to `WidgetVisibilityManager` class.
 - **Why:** Centralize visibility detection logic using IntersectionObserver API.
-- **Status:** 🔄 **READY TO START** - Files preserved in `preserved/r018-chunks/use-widget-visibility.ts`. Ready for implementation.
+- **Status:** ✅ **COMPLETE** - All steps completed and tested:
+  - ✅ Step 2.1: Manager class added (r018.11)
+  - ✅ Step 2.2: Parallel execution with comparison logging (r018.12)
+  - ✅ Step 2.3: Switched to manager, removed old code (r018.13)
+  - ⏳ Step 2.4: Cleanup - remove temporary comparison logs (optional)
+- **Files Modified:**
+  - `query-simple/src/runtime/hooks/use-widget-visibility.ts` - `WidgetVisibilityManager` class implementation
+  - `query-simple/src/runtime/widget.tsx` - Integrated manager, removed old visibility detection methods
+  - `query-simple/src/version.ts` - Incremented to r018.13
+  - `COMPLETE_MIGRATION_PLAN.md` - Updated with Chunk 2 completion status
+  - `CHUNK_TESTING_GUIDE.md` - Updated with Chunk 2 completion status
+- **Verification:** Visibility detection working correctly, HelperSimple notifications working, selection restoration working.
+
+### Next Task: Chunk 3 - Selection & Restoration
+- **What:** Migrate selection and restoration logic to manager/hook pattern.
+- **Why:** Centralize selection management and identify popup restoration logic.
+- **Status:** ⚠️ **HIGH RISK** - Previous attempt failed. Needs careful re-implementation.
 - **Reference:** See `COMPLETE_MIGRATION_PLAN.md` for detailed migration strategy and `CHUNK_TESTING_GUIDE.md` for testing instructions.
 
 ### Deferred Task: Remove Non-Graphics Layer Implementation (BREAKING CHANGE)
