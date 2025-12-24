@@ -32,6 +32,12 @@
 - **Status:** 🔄 **READY TO START** - Files preserved in `preserved/r018-chunks/use-widget-visibility.ts`. Ready for implementation.
 - **Reference:** See `COMPLETE_MIGRATION_PLAN.md` for detailed migration strategy and `CHUNK_TESTING_GUIDE.md` for testing instructions.
 
+### Deferred Task: Remove Non-Graphics Layer Implementation (BREAKING CHANGE)
+- **What:** Remove `useGraphicsLayerForHighlight` config option and always use graphics layer when map widget is configured.
+- **Why:** Graphics layer is cleaner implementation, fixes zoom issues, simplifies codebase (~44 conditionals removed).
+- **Status:** 📌 **DEFERRED** - Will be implemented as r019.0 (breaking change) after r018.0 migration is complete.
+- **Reference:** See `TODO.md` section "3a. Remove Non-Graphics Layer Implementation" for detailed implementation plan.
+
 ### Previous Task (Complete): Custom Zoom To Action & Shared Zoom Utility (r017.60)
 - **What:** Replace framework's default zoom action with custom implementation that uses consistent padding (50px) and centralize zoom logic to eliminate code duplication.
 - **Status:** ✅ **COMPLETE** - Created shared `zoom-utils.ts`, refactored `useZoomToRecords` hook to use shared utility, created custom "Zoom To" data action, and suppressed framework zoom action.
