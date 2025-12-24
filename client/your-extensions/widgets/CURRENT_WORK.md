@@ -1,9 +1,9 @@
 # Current Work Status
 
-**Last Updated:** 2025-12-24 (Release 018.10 - Chunk 1 Complete: URL Parameter Consumption Manager)  
+**Last Updated:** 2025-12-24 (Release 018.16 - Chunk 6 Step 6.3 Complete: Switch to MapViewManager)  
 **Branch:** `feature/chunk-rock`  
 **Developer:** Adam Cabrera  
-**Current Version:** v1.19.0-r018.10
+**Current Version:** v1.19.0-r018.16
 
 ## Active Work
 
@@ -42,10 +42,19 @@
   - `CHUNK_TESTING_GUIDE.md` - Updated with Chunk 2 completion status
 - **Verification:** Visibility detection working correctly, HelperSimple notifications working, selection restoration working.
 
-### Next Task: Chunk 6 - Map View Management
-- **What:** Migrate map view ref management and view change handlers to manager/hook pattern.
-- **Why:** Centralize map view management logic, low risk and independent.
-- **Status:** 🔄 **READY TO START** - Low risk, good momentum builder before tackling Chunk 3.
+### Current Task: Chunk 6 - Map View Management 🔄 **IN PROGRESS**
+- **What:** Migrate map view ref management and `JimuMapViewComponent`'s `onActiveViewChange` handling to `MapViewManager` class.
+- **Why:** Centralize map view logic, improve maintainability, and ensure consistent access to `mapView` for other features (e.g., zoom, graphics layer).
+- **Status:** 🔄 **IN PROGRESS** - Step 6.3 (Switch to Manager) complete (r018.16). Ready for Step 6.4 (Cleanup).
+- **Completed Steps:**
+  - ✅ Step 6.1: Add Manager Class (r018.14)
+  - ✅ Step 6.2: Parallel Execution (r018.15)
+  - ✅ Step 6.3: Switch to Manager (r018.16)
+- **Next Step:** Step 6.4: Cleanup - Remove temporary verification logs
+- **Files Modified:**
+  - `query-simple/src/runtime/hooks/use-map-view.ts` - `MapViewManager` class implementation
+  - `query-simple/src/runtime/widget.tsx` - Integrated manager, removed old `setState` implementation
+  - `query-simple/src/version.ts` - Incremented to r018.16
 - **Reference:** See `COMPLETE_MIGRATION_PLAN.md` for detailed migration strategy and `CHUNK_TESTING_GUIDE.md` for testing instructions.
 
 ### Deferred Task: Chunk 3 - Selection & Restoration
