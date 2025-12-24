@@ -8,16 +8,27 @@
 ## Active Work
 
 ### Current Task
-- **What:** Priority-based URL Parsing & Documentation.
-- **Why:** Resolve "Dirty Hash" bug where query string parameters (`?pin=`) were overriding hash parameters (`#major=`) due to configuration order.
-- **Status:** ✅ **COMPLETE** - Unified URL parsing in `widget.tsx` and `QueryTaskList.tsx`. Hash now always overrides Query string. `TESTING_WALKTHROUGH.md` created.
+- **What:** Custom Zoom To Action & Shared Zoom Utility Implementation.
+- **Why:** Replace framework's default zoom action with custom implementation that uses consistent padding (50px) and centralize zoom logic to eliminate code duplication.
+- **Status:** ✅ **COMPLETE** - Created shared `zoom-utils.ts`, refactored `useZoomToRecords` hook to use shared utility, created custom "Zoom To" data action, and suppressed framework zoom action.
 - **Files Modified:**
-  - `query-simple/src/runtime/widget.tsx` - Updated `checkQueryStringForShortIds` to prioritize hash.
-  - `query-simple/src/runtime/query-task-list.tsx` - Updated `initialQueryValueFromUrl` to match `widget.tsx` priority.
-  - `query-simple/src/version.ts` - Incremented to r017.48.
-  - `CHANGELOG.md` - Documented r017.48.
-  - `TESTING_WALKTHROUGH.md` - New manual testing guide.
-  - `TODO.md` - Added Architectural Hardening section.
+  - `query-simple/src/runtime/zoom-utils.ts` - New shared utility for zoom functionality.
+  - `query-simple/src/runtime/hooks/use-zoom-to-records.ts` - Refactored to use shared utility.
+  - `query-simple/src/data-actions/zoom-to-action.tsx` - New custom zoom action.
+  - `query-simple/src/data-actions/index.tsx` - Updated to include zoom action and accept `mapView` parameter.
+  - `query-simple/src/data-actions/add-to-map-action.tsx` - Removed framework zoom logic.
+  - `query-simple/src/runtime/query-result.tsx` - Updated to pass `mapView` to `getExtraActions`.
+  - `query-simple/manifest.json` - Added `zoomToFeature` and `arcgis-map.zoomToFeature` to `excludeDataActions`.
+  - `query-simple/src/runtime/assets/icons/zoom-to.svg` - New icon matching framework's zoom icon.
+  - `query-simple/src/version.ts` - Incremented to r017.60.
+  - `CHANGELOG.md` - Documented r017.57-60.
+  - `DEVELOPMENT_GUIDE.md` - Updated data actions documentation and added zoom utility pattern.
+
+### Next Task: Chunk 1 Implementation
+- **What:** Re-implement URL Parameter Consumption (`UrlConsumptionManager`) from preserved folder.
+- **Why:** Centralize URL parameter detection and consumption logic for deep linking.
+- **Status:** 🔄 **PENDING** - Files preserved in `preserved/r018-chunks/use-url-consumption.ts`. Ready for re-implementation.
+- **Reference:** See `preserved/r018-chunks/README.md` and `preserved/r018-chunks/INTEGRATION_GUIDE.md` for implementation details.
 
 ### Previous Task (Complete)
 - **What:** SQL Sanitization Hardening & Crash Fixes.
