@@ -130,8 +130,16 @@ client/your-extensions/
 │   │       │   ├── widget.tsx      # Main widget component (Class)
 │   │       │   ├── widget-context.tsx # React context for widget state
 │   │       │   ├── widget-config.ts   # Runtime configuration helpers
+│   │       │   ├── hooks/          # Custom hooks and manager classes
+│   │       │   │   ├── use-url-consumption.ts # UrlConsumptionManager (Chunk 1)
+│   │       │   │   └── use-zoom-to-records.ts # Zoom hook wrapper
+│   │       │   ├── zoom-utils.ts   # Shared zoom utility (pure function)
+│   │       │   ├── selection-utils.ts # Selection management utilities
+│   │       │   ├── graphics-layer-utils.ts # Graphics layer management
+│   │       │   ├── query-utils.ts  # Query generation utilities
 │   │       │   ├── translations/   # i18n translation files
 │   │       │   └── assets/         # Widget assets (icons, etc.)
+│   │       │       └── icons/     # Custom SVG icons (zoom-to.svg, etc.)
 │   │       └── setting/            # Setting page UI
 │   │           ├── setting.tsx    # Main setting component
 │   │           ├── setting-config.ts # Setting configuration types
@@ -155,6 +163,11 @@ client/your-extensions/
 - **`widget.tsx`**: Main runtime widget component (class or function component)
 - **`setting.tsx`**: Widget configuration UI in builder mode
 - **`version-manager.ts`**: Handles configuration migration between ExB versions
+- **`runtime/hooks/use-url-consumption.ts`**: `UrlConsumptionManager` class for URL parameter detection and consumption (Chunk 1 - r018.10)
+- **`runtime/hooks/use-zoom-to-records.ts`**: React hook wrapper for zoom functionality
+- **`runtime/zoom-utils.ts`**: Pure utility function for zooming to records (shared by hooks and data actions)
+- **`runtime/selection-utils.ts`**: Utilities for managing map selection and graphics layer synchronization
+- **`runtime/graphics-layer-utils.ts`**: Graphics layer management utilities
 
 ---
 
