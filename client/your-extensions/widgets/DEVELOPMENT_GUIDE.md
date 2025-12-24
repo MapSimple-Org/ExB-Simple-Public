@@ -52,6 +52,54 @@ Before starting a high-risk structural refactor (e.g., Class-to-Hooks migration)
 2.  **Commit Baseline**: Commit all active changes with a descriptive baseline message (e.g., `Baseline: Stable r017.41 before Hooks refactor`).
 3.  **Push to GitHub**: Immediately push the commit to the remote repository. This creates an immutable "Save Game" that survives local filesystem errors.
 
+### 5. Branching Strategy (CRITICAL - NEVER DEVELOP ON DEVELOP)
+
+**MANDATORY RULE**: **NEVER develop features directly on `develop` branch. `develop` is for stable releases ONLY.**
+
+#### Branch Purposes
+
+- **`develop`**: 
+  - **ONLY** contains stable, tested, production-ready code
+  - **ONLY** receives merges from feature branches after complete testing
+  - **NEVER** receives direct commits for feature development
+  - Current stable version: r017.x (e.g., r017.60)
+
+- **`feature/*` branches** (e.g., `feature/chunk-rock`):
+  - **ALL** feature development happens here
+  - **ALL** experimental work, migrations, and new functionality
+  - Version increments (e.g., r018.x) happen on feature branches
+  - Only merged to `develop` when feature is complete and stable
+
+#### Workflow Rules
+
+1. **Always create/use a feature branch for development:**
+   ```bash
+   git checkout -b feature/my-feature-name
+   # OR switch to existing feature branch
+   git checkout feature/chunk-rock
+   ```
+
+2. **Never commit directly to `develop`:**
+   - If you find yourself on `develop`, immediately switch to a feature branch
+   - If you accidentally commit to `develop`, move commits to feature branch immediately
+
+3. **Before pushing, verify your branch:**
+   ```bash
+   git branch --show-current  # Should show feature/*, NOT develop
+   ```
+
+4. **When feature is complete:**
+   - Test thoroughly on feature branch
+   - Merge feature branch into `develop` (via PR or direct merge)
+   - Tag stable release on `develop`
+
+#### Version Numbering
+
+- **r017.x**: Stable releases on `develop` branch
+- **r018.x+**: Development versions on feature branches (e.g., `feature/chunk-rock`)
+
+**Remember**: If you're writing code, you should be on a feature branch. `develop` is read-only for active development.
+
 ---
 
 ## Project Structure
