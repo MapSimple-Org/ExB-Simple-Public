@@ -547,31 +547,34 @@ if (JSON.stringify(oldSelectedIds.sort()) !== JSON.stringify(newSelectedIds.sort
 
 ## Phase 6: Chunk 6 (Map View Management) - r018.51-018.54
 
-### Step 6.1: Create Map View Manager (r018.51)
-**Goal:** Extract map view logic to manager  
-**Test:** Map view ref managed correctly  
+### Step 6.1: Add Manager Class (r018.14) ✅
+**Goal:** Add manager without integration  
+**Test:** Build succeeds, no runtime changes  
 **Test File:** `tests/unit/chunk-6-map-view.test.ts`  
-**Logging:** View change logs, comparison logs
+**Logging:** None yet (no integration)  
+**Status:** ✅ Complete
 
-### Step 6.2: Extract View Change Handler (r018.52)
-**Goal:** Move view change logic to manager  
-**Test:** View changes handled correctly  
-**Test File:** Unit tests for view changes  
-**Logging:** View change logs
+### Step 6.2: Parallel Execution (r018.15) ✅
+**Goal:** Run both implementations, compare results via logging  
+**Test:** Comparison logs show identical map view state  
+**Status:** ✅ Complete - Comparison logs confirmed match: true  
+**Test File:** Expand unit tests, add comparison test  
+**Logging:** Comparison logs (`CHUNK-6-COMPARE`, `CHUNK-6-MISMATCH`)
 
-### Step 6.3: Extract View Ref Management (r018.53)
-**Goal:** Move view ref management to manager  
-**Test:** View refs updated correctly  
-**Test File:** Unit tests for ref management  
-**Logging:** Ref update logs
+### Step 6.3: Switch to Manager (r018.16) ✅
+**Goal:** Replace old code with manager  
+**Test:** All map view scenarios work correctly  
+**Status:** ✅ Complete  
+**Test File:** Full unit test suite + integration test  
+**Logging:** Keep simplified verification logs temporarily
 
-### Step 6.4: Cleanup (r018.54)
+### Step 6.4: Cleanup (r018.17)
 **Goal:** Remove old code, clean up temporary logs  
 **Test:** Code is clean, all tests pass  
 **Test File:** Final verification test  
 **Logging:** Remove comparison logs, keep essential logs
 
-**Milestone:** r018.60 - Chunk 6 Complete
+**Milestone:** r018.17 - Chunk 6 Complete
 
 ---
 
