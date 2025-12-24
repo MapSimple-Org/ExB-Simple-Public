@@ -9,8 +9,8 @@
  * - Minor fix: Increment MINOR_VERSION (e.g., 1 -> 2) while keeping same RELEASE_NUMBER
  */
 const BASE_VERSION = '1.19.0'
-const RELEASE_NUMBER = '017' // Increment on major changes (001, 002, 003, ...)
-const MINOR_VERSION = '60' // Increment on minor fixes between major releases (1, 2, 3, ...)
+const RELEASE_NUMBER = '018' // Increment on major changes (001, 002, 003, ...)
+const MINOR_VERSION = '1' // Increment on minor fixes between major releases (1, 2, 3, ...)
 
 export const WIDGET_VERSION = MINOR_VERSION && MINOR_VERSION !== '0'
   ? `${BASE_VERSION}-r${RELEASE_NUMBER}.${MINOR_VERSION}`
