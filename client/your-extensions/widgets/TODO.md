@@ -96,8 +96,8 @@
 
 **Progress:**
 - ✅ **Chunk 1 Complete (r018.10)**: URL Parameter Consumption migrated to `UrlConsumptionManager` class
-- 🔄 **Chunk 2 Next**: Widget Visibility Engine (ready to start)
-- ⏳ **Chunk 3**: Selection & Restoration (HIGH RISK - previous attempt failed)
+- ✅ **Chunk 2 Complete (r018.13)**: Widget Visibility Engine migrated to `WidgetVisibilityManager` class
+- ⏳ **Chunk 3 Next**: Selection & Restoration (HIGH RISK - previous attempt failed)
 - ⏳ **Chunks 4-7**: Graphics Layer, Accumulated Records, Map View, Events
 
 **Implementation Plan:**
