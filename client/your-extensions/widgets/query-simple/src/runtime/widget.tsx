@@ -17,6 +17,8 @@ import { QUERYSIMPLE_SELECTION_EVENT } from './selection-utils'
 import { WIDGET_VERSION } from '../version'
 // Chunk 1: URL Parameter Consumption Manager (r018.8)
 import { UrlConsumptionManager } from './hooks/use-url-consumption'
+// Chunk 2: Widget Visibility Engine Manager (r018.11) - Step 2.1: Add manager without integration
+// import { WidgetVisibilityManager } from './hooks/use-widget-visibility'
 
 const debugLogger = createQuerySimpleDebugLogger()
 const { iconMap } = getWidgetRuntimeDataMap()
@@ -46,6 +48,8 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
   static versionManager = versionManager
   // Chunk 1: URL Parameter Consumption Manager (r018.8)
   private urlConsumptionManager = new UrlConsumptionManager()
+  // Chunk 2: Widget Visibility Engine Manager (r018.11) - Step 2.1: Add manager without integration
+  // private visibilityManager = new WidgetVisibilityManager()
 
   state: { 
     initialQueryValue?: { shortId: string, value: string }, 
