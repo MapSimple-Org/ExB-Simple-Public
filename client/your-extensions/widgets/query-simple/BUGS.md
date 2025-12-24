@@ -49,6 +49,30 @@ When a user had results visible in "New" mode and clicked the "Add" button, the 
 2.  **Strict Record Preference**: Updated `query-result.tsx` to strictly prefer the `records` prop (the accumulated set) when in accumulation modes (Add/Remove). This ensures the UI remains consistent even if the underlying data source's selection briefly fluctuates during query execution.
 3.  **Humanized Testing**: Added 1-second "breathing room" delays to Playwright tests to better simulate human interaction speed and allow React state updates to complete.
 
+## Bug #4: Dirty Hash - data_s Parameter Not Cleared When Selections Cleared
+
+**Status:** ✅ RESOLVED (r017.50)  
+**Priority:** Medium  
+**Version:** r017.50  
+**Date Updated:** 2025-12-23
+
+### Description
+When records were selected in the Results widget, Experience Builder automatically added a `data_s` parameter to the URL hash (e.g., `#data_s=id:widget_12_output_...:451204+451205+...`). However, when selections were cleared (via "Clear All", switching queries, etc.), the `data_s` parameter remained in the hash, creating a "dirty hash" with stale selection data. This could cause issues when:
+- Switching between queries
+- Clearing results and performing new searches
+- Any combination of actions where selections weren't properly unselected
+
+### Root Cause
+Experience Builder's framework automatically adds `data_s` to the hash when selections are made, but doesn't remove it when selections are cleared. The widget was clearing selections from data sources and publishing empty selection messages, but wasn't explicitly removing the `data_s` parameter from the hash.
+
+### Solution (r017.50)
+1.  **Hash Cleanup Function**: Added `clearDataSParameterFromHash()` function in `selection-utils.ts` that removes the `data_s` parameter from the URL hash.
+2.  **Integrated into Clear Logic**: Modified `clearSelectionInDataSources()` to call `clearDataSParameterFromHash()` after clearing selections, ensuring the hash is cleaned whenever selections are cleared.
+3.  **Comprehensive Coverage**: Since `clearSelectionInDataSources()` is called from all selection clearing paths (Clear All, query switching, etc.), this fix covers all scenarios.
+
+### Files Modified
+- `query-simple/src/runtime/selection-utils.ts`: Added `clearDataSParameterFromHash()` function and integrated it into `clearSelectionInDataSources()`
+
 ---
 
 ## Performance Issue #1: Query Execution Speed
