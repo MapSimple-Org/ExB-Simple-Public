@@ -69,11 +69,19 @@ This document outlines a **complete, safe migration** of all widget logic from `
 ## Complete Chunk Inventory
 
 ### Chunk 1: URL Parameter Consumption
-**Status:** ✅ Preserved, ready to implement  
+**Status:** ✅ **COMPLETE** (r018.10)  
 **Complexity:** Low  
 **Risk:** Low  
-**Methods:** `checkQueryStringForShortIds()`, `removeHashParameter()`  
-**Logging Required:** Comparison logs, parameter detection logs, mode reset logs
+**Methods:** `UrlConsumptionManager.checkUrlParameters()`, `UrlConsumptionManager.removeHashParameter()`  
+**Implementation:** Manager class in `query-simple/src/runtime/hooks/use-url-consumption.ts`  
+**Completed Steps:**
+- ✅ Step 1.1: Manager class added (r018.1)
+- ✅ Step 1.2: Parallel execution with comparison logging (r018.2-r018.7)
+- ✅ Step 1.3: Switched to manager, removed old code (r018.8)
+- ✅ Step 1.4: Cleanup - removed unused `checkQueryStringForShortIds()` method (r018.10)
+**Additional Fixes:**
+- ✅ Fixed race condition: Verify both DOM input and React state before query execution (r018.9)
+**Logging:** Parameter detection logs (`HASH` feature), mode reset logs
 
 ### Chunk 2: Widget Visibility Engine  
 **Status:** ✅ Preserved, ready to implement  
