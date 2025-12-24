@@ -292,15 +292,99 @@ This guide provides **specific testing instructions** for each chunk during the 
 
 ### Debug Switches
 
+**For Step 6.2 (Parallel Execution):**
 ```
-?debug=CHUNK-6-COMPARE,MAP-EXTENT,ZOOM
+?debug=CHUNK-6-COMPARE,MAP-EXTENT,GRAPHICS-LAYER
 ```
+
+### When Map View Changes Occur
+
+**Map view state changes are relatively infrequent:**
+- **On Widget Mount**: When widget first loads and `JimuMapViewComponent` provides the map view (most common - happens once per widget load)
+- **On Map Widget Change**: If multiple map widgets are configured and user switches between them (rare)
+- **On View Change**: If the map's active view changes (very rare)
+
+**Note:** Unlike visibility (Chunk 2) which changes frequently, map view changes are typically a **one-time event** when the widget loads. You'll see comparison logs **once** when you first open the widget.
 
 ### What to Test
 
-- Map view ref updates correctly
-- View change handlers work correctly
-- Zoom functionality works correctly
+#### Test 1: Initial Map View Detection (Most Common - Primary Test)
+
+**Steps:**
+1. Open Experience Builder app with QuerySimple widget configured
+2. Ensure graphics layer highlighting is enabled and map widget is configured
+3. Open QuerySimple widget panel
+4. Check browser console for logs
+
+**Expected Logs:**
+- `[QUERYSIMPLE-GRAPHICS-LAYER]` - `handleJimuMapViewChanged` (old implementation)
+- `[QUERYSIMPLE-MAP-EXTENT]` - `handleJimuMapViewChanged` (new implementation)
+- `[QUERYSIMPLE-CHUNK-6-COMPARE]` - `old-implementation-map-view-change`
+- `[QUERYSIMPLE-CHUNK-6-COMPARE]` - `new-implementation-map-view-change`
+- `[QUERYSIMPLE-CHUNK-6-COMPARE]` - `map-view-change-comparison` with `match: true`, `jimuMapViewMatch: true`, `mapViewMatch: true`
+- `[QUERYSIMPLE-GRAPHICS-LAYER]` - Graphics layer initialization (if enabled)
+
+**What to Verify:**
+- ✅ Both implementations detect map view
+- ✅ Comparison logs show `jimuMapViewMatch: true` and `mapViewMatch: true`
+- ✅ `mapViewRef.current` is set correctly
+- ✅ Graphics layer initializes (if enabled)
+- ✅ **NO** `CHUNK-6-MISMATCH` logs
+
+#### Test 2: Graphics Layer Disabled (Secondary Test)
+
+**Steps:**
+1. Disable graphics layer highlighting in widget config
+2. Open QuerySimple widget panel
+3. Check browser console for logs
+
+**Expected Logs:**
+- `[QUERYSIMPLE-CHUNK-6-COMPARE]` logs still appear
+- Comparison logs show `match: true`
+- **NO** graphics layer initialization logs
+
+**What to Verify:**
+- ✅ Map view management works even when graphics layer is disabled
+- ✅ Comparison logs show `match: true`
+- ✅ `mapViewRef.current` is still set correctly (needed for zoom)
+
+#### Test 3: Map View Available Before Widget Opens (Edge Case)
+
+**Steps:**
+1. Open Experience Builder app (map view loads)
+2. Wait a few seconds for map to fully load
+3. Open QuerySimple widget panel
+4. Check browser console for logs
+
+**Expected Logs:**
+- Same as Test 1, but map view may already be available when widget opens
+
+**What to Verify:**
+- ✅ Both implementations handle already-available map view
+- ✅ Comparison logs show `match: true`
+- ✅ No timing issues
+
+### Success Criteria for Chunk 6
+
+- ✅ Both implementations detect map view correctly
+- ✅ Comparison logs show `jimuMapViewMatch: true` and `mapViewMatch: true`
+- ✅ `mapViewRef.current` is set correctly in both implementations
+- ✅ Graphics layer initializes correctly (if enabled)
+- ✅ **NO** logs with `match: false`
+- ✅ **NO** `CHUNK-6-MISMATCH` logs
+
+### Testing Tips
+
+**Since map view changes are infrequent:**
+- **Primary Test**: Widget mount/initial load (Test 1) - this is the most common scenario
+- **Secondary Test**: Graphics layer disabled (Test 2) - verifies mapViewRef is set even without graphics layer
+- **Edge Case**: Map view available before widget opens (Test 3) - verifies timing handling
+
+**What to Watch For:**
+- Comparison logs should appear **once** when widget first loads (or when map view changes)
+- If you see multiple comparison logs, that's fine (map view changed multiple times)
+- The key is that **every** comparison log shows `match: true`
+- Unlike Chunk 2 (visibility), you won't see frequent comparison logs - map view is stable
 
 ---
 
