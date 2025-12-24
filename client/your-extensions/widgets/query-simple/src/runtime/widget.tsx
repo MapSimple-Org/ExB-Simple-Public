@@ -184,11 +184,12 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
             })
             
             if (!match) {
-              debugLogger.log('CHUNK-1-MISMATCH', {
+              debugLogger.log('CHUNK-1-COMPARE', {
                 event: 'url-param-mismatch-didUpdate',
                 widgetId: this.props.id,
                 oldValue,
                 newValue: value,
+                match: false,
                 warning: 'IMPLEMENTATIONS DO NOT MATCH - INVESTIGATE',
                 timestamp: Date.now()
               })
