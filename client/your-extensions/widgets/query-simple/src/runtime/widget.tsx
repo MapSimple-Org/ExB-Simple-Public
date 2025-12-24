@@ -19,6 +19,8 @@ import { WIDGET_VERSION } from '../version'
 import { UrlConsumptionManager } from './hooks/use-url-consumption'
 // Chunk 2: Widget Visibility Engine Manager (r018.13) - Step 2.3: Switch to manager
 import { WidgetVisibilityManager } from './hooks/use-widget-visibility'
+// Chunk 6: Map View Management Manager (r018.14) - Step 6.1: Add manager without integration
+import { MapViewManager } from './hooks/use-map-view'
 
 const debugLogger = createQuerySimpleDebugLogger()
 const { iconMap } = getWidgetRuntimeDataMap()
@@ -45,6 +47,8 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
   private urlConsumptionManager = new UrlConsumptionManager()
   // Chunk 2: Widget Visibility Engine Manager (r018.13) - Step 2.3: Switch to manager
   private visibilityManager = new WidgetVisibilityManager()
+  // Chunk 6: Map View Management Manager (r018.14) - Step 6.1: Add manager without integration
+  private mapViewManager = new MapViewManager(this.mapViewRef)
 
   state: { 
     initialQueryValue?: { shortId: string, value: string }, 
