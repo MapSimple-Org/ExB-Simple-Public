@@ -216,17 +216,19 @@ if (JSON.stringify(oldResult) !== JSON.stringify(newResult)) {
 
 ---
 
-## Phase 2: Chunk 2 (Widget Visibility Engine) - r018.11-018.14
+## Phase 2: Chunk 2 (Widget Visibility Engine) - r018.11-018.13
 
-### Step 2.1: Add Manager Class (r018.11)
+### Step 2.1: Add Manager Class (r018.11) ✅
 **Goal:** Add manager without integration  
 **Test:** Build succeeds, no runtime changes  
 **Test File:** `tests/unit/chunk-2-visibility.test.ts` (create new)  
 **Logging:** None yet (no integration)
+**Status:** ✅ Complete
 
-### Step 2.2: Parallel Execution (r018.12)
+### Step 2.2: Parallel Execution (r018.12) ✅
 **Goal:** Run both implementations, compare results via logging  
-**Test:** Comparison logs show identical visibility state  
+**Test:** Comparison logs show identical visibility state
+**Status:** ✅ Complete - Comparison logs confirmed match: true  
 **Test File:** Expand unit tests, add comparison test  
 
 **Logging Pattern:**
