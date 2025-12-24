@@ -134,12 +134,13 @@ This document outlines a **complete, safe migration** of all widget logic from `
 **Methods:** `handleAccumulatedRecordsChange()`, accumulated records state management  
 **Logging Required:** State change logs, accumulation logs, mode reset logs
 
-### Chunk 6: Map View Management
-**Status:** 🔄 Needs extraction  
+### Chunk 6: Map View Management (Next)
+**Status:** 🔄 Ready to implement  
 **Complexity:** Low  
 **Risk:** Low  
 **Methods:** Map view ref management, view change handlers  
-**Logging Required:** View change logs, ref update logs
+**Logging Required:** View change logs, ref update logs  
+**Note:** Good next step - low risk, independent, builds momentum before tackling Chunk 3
 
 ### Chunk 7: Event Handling
 **Status:** 🔄 Needs extraction  
