@@ -7,7 +7,7 @@
  * with the widget's "Clear results" functionality.
  */
 
-import { type DataRecordSet, type DataAction, DataLevel, type IntlShape, DataActionManager, type DataSource } from 'jimu-core'
+import { type DataRecordSet, type DataAction, DataLevel, type IntlShape, type DataSource } from 'jimu-core'
 import { selectRecordsAndPublish } from '../runtime/selection-utils'
 import { createQuerySimpleDebugLogger } from 'widgets/shared-code/common'
 
@@ -155,48 +155,13 @@ export function createAddToMapAction(
       try {
         selectRecordsAndPublish(widgetId, outputDS, recordIds, allRecords, true)
         
-        // Determine zoom behavior: runtime override takes precedence, then queryItem config, defaults to true
-        const shouldZoom = runtimeZoomToSelected !== undefined 
-          ? runtimeZoomToSelected 
-          : (queryItem?.zoomToSelected !== false)
-        
-        if (shouldZoom && allRecords.length > 0) {
-          const zoomDataSet: DataRecordSet = {
-            dataSource: outputDS,
-            records: allRecords,
-            name: outputDS.getLabel()
-          }
-          
-          // Find and execute the zoomToFeature action from available framework actions
-          DataActionManager.getInstance().getSupportedActions(widgetId, [zoomDataSet], DataLevel.Records)
-            .then(actionCategories => {
-              // Search through all action categories to find zoomToFeature action
-              let zoomAction: DataAction | null = null
-              for (const category in actionCategories) {
-                const actions = actionCategories[category]
-                zoomAction = actions.find((action: DataAction) => 
-                  action.name === 'zoomToFeature' || action.id === 'zoomToFeature'
-                ) || null
-                if (zoomAction) break
-              }
-              
-              if (zoomAction) {
-                return DataActionManager.getInstance().executeDataAction(zoomAction, [zoomDataSet], DataLevel.Records, widgetId)
-              }
-            })
-            .catch(error => {
-              debugLogger.log('DATA-ACTION', {
-                action: 'addToMap-onExecute-zoom',
-                error: error instanceof Error ? error.message : String(error)
-              })
-            })
-        }
+        // Note: Zoom is now handled by the separate "Zoom To" action in the DataActionList
+        // Users can click "Zoom To" from the action menu if they want to zoom to selected records
         
         debugLogger.log('DATA-ACTION', {
           action: 'addToMap-onExecute',
           result: true,
-          message: 'Successfully selected records and published selection message',
-          zoomExecuted: shouldZoom
+          message: 'Successfully selected records and published selection message'
         })
         
         return true
