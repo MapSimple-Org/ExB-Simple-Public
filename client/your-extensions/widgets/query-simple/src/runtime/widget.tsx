@@ -15,6 +15,8 @@ import { createQuerySimpleDebugLogger } from 'widgets/shared-code/common'
 import { createOrGetGraphicsLayer, cleanupGraphicsLayer } from './graphics-layer-utils'
 import { QUERYSIMPLE_SELECTION_EVENT } from './selection-utils'
 import { WIDGET_VERSION } from '../version'
+// Chunk 1: URL Parameter Consumption Manager (r018.1)
+// import { UrlConsumptionManager } from './hooks/use-url-consumption'
 
 const debugLogger = createQuerySimpleDebugLogger()
 const { iconMap } = getWidgetRuntimeDataMap()
@@ -43,6 +45,8 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
 }> {
   static versionManager = versionManager
   private lastProcessedHash: string = ''
+  // Chunk 1: URL Parameter Consumption Manager (r018.1)
+  // private urlConsumptionManager = new UrlConsumptionManager()
 
   state: { 
     initialQueryValue?: { shortId: string, value: string }, 
