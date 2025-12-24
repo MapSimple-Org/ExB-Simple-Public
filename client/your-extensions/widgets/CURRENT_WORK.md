@@ -42,10 +42,16 @@
   - `CHUNK_TESTING_GUIDE.md` - Updated with Chunk 2 completion status
 - **Verification:** Visibility detection working correctly, HelperSimple notifications working, selection restoration working.
 
-### Next Task: Chunk 3 - Selection & Restoration
+### Next Task: Chunk 6 - Map View Management
+- **What:** Migrate map view ref management and view change handlers to manager/hook pattern.
+- **Why:** Centralize map view management logic, low risk and independent.
+- **Status:** 🔄 **READY TO START** - Low risk, good momentum builder before tackling Chunk 3.
+- **Reference:** See `COMPLETE_MIGRATION_PLAN.md` for detailed migration strategy and `CHUNK_TESTING_GUIDE.md` for testing instructions.
+
+### Deferred Task: Chunk 3 - Selection & Restoration
 - **What:** Migrate selection and restoration logic to manager/hook pattern.
 - **Why:** Centralize selection management and identify popup restoration logic.
-- **Status:** ⚠️ **HIGH RISK** - Previous attempt failed. Needs careful re-implementation.
+- **Status:** ⚠️ **DEFERRED TO LAST** - Previous attempt failed. Will be tackled after Chunks 4, 5, 6, and 7 are complete.
 - **Reference:** See `COMPLETE_MIGRATION_PLAN.md` for detailed migration strategy and `CHUNK_TESTING_GUIDE.md` for testing instructions.
 
 ### Deferred Task: Remove Non-Graphics Layer Implementation (BREAKING CHANGE)
