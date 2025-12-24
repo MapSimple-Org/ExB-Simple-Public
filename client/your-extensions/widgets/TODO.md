@@ -86,24 +86,28 @@
 
 ---
 
-### 3. Structural Refactor (Class to Hooks)
-**Status:** 🔴 DEFERRED (User requested rollback)  
-**Priority:** Low  
-**Source:** Development Strategy
-
-**Update**: An attempt was made to refactor `widget.tsx` into Custom Hooks, but it was rolled back to maintain the stable, high-performance r017.39 build. This task is currently on hold.
-**Status:** Pending  
+### 3. Structural Refactor (Hook & Shell Architecture) - r018.0+
+**Status:** 🟢 **IN PROGRESS** (Chunk 1 Complete - r018.10)  
 **Priority:** High  
-**Source:** Code Review - "Simple is Key"
+**Source:** Code Review - "Simple is Key"  
+**Branch:** `feature/chunk-rock`
 
-**Issue:** The codebase has become complex with manual syncs, brittle timeouts, and large component files. This likely contributes to perceived slowness and flakiness.
+**Update**: Migrating `widget.tsx` logic into Manager Classes and Custom Hooks using incremental, safe approach with extensive logging and testing.
+
+**Progress:**
+- ✅ **Chunk 1 Complete (r018.10)**: URL Parameter Consumption migrated to `UrlConsumptionManager` class
+- 🔄 **Chunk 2 Next**: Widget Visibility Engine (ready to start)
+- ⏳ **Chunk 3**: Selection & Restoration (HIGH RISK - previous attempt failed)
+- ⏳ **Chunks 4-7**: Graphics Layer, Accumulated Records, Map View, Events
 
 **Implementation Plan:**
-1. **De-bloat `widget.tsx`**: Move orchestrator logic into custom hooks (`useVisibility`, `useRestoration`, `useHashConsumption`).
+1. **De-bloat `widget.tsx`**: Move orchestrator logic into manager classes and custom hooks (using manager pattern for class component compatibility).
 2. **Remove Brittle Timeouts**: Replace `setTimeout(..., 50)` calls with robust Promise chaining or framework hooks (e.g., `useUpdateEffect`).
 3. **Event-Driven UI**: Replace polling for identify popups with native framework events if available.
-4. ** ESM Imports**: Resolve circular dependencies to allow standard `import` syntax instead of `require()`.
+4. **ESM Imports**: Resolve circular dependencies to allow standard `import` syntax instead of `require()`.
 5. **Deduplication Logic**: Standardize composite record keys (`${dsId}_${objectId}`) earlier in the data pipeline.
+
+**Reference:** See `COMPLETE_MIGRATION_PLAN.md` for detailed chunk-by-chunk migration strategy and `CHUNK_TESTING_GUIDE.md` for testing instructions.
 
 ---
 
