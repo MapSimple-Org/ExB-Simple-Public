@@ -42,6 +42,7 @@ import { QueryTaskForm } from './query-task-form'
 import { QueryTaskResult } from './query-result'
 import { DataSourceTip, useDataSourceExists, ErrorMessage } from 'widgets/shared-code/common'
 import { QueryTaskLabel } from './query-task-label'
+import { useZoomToRecords } from './hooks/use-zoom-to-records'
 import { DEFAULT_QUERY_ITEM } from '../default-query-item'
 import { generateQueryParams, executeQuery, executeCountQuery } from './query-utils'
 import { mergeResultsIntoAccumulated, removeResultsFromAccumulated, removeRecordsFromOriginSelections } from './results-management-utils'
@@ -154,6 +155,7 @@ const style = css`
 export function QueryTask (props: QueryTaskProps) {
   const { queryItem, onNavBack, total, isInPopper = false, wrappedInPopper = false, className = '', index, initialInputValue, onHashParameterUsed, queryItems, selectedQueryIndex, onQueryChange, groups, ungrouped, groupOrder, selectedGroupId, selectedGroupQueryIndex, onGroupChange, onGroupQueryChange, onUngroupedChange, resultsMode, onResultsModeChange, accumulatedRecords, onAccumulatedRecordsChange, useGraphicsLayerForHighlight, graphicsLayer, mapView, onInitializeGraphicsLayer, onClearGraphicsLayer, activeTab: propActiveTab, onTabChange: propOnTabChange, ...otherProps } = props
   const getI18nMessage = hooks.useTranslation(defaultMessage)
+  const zoomToRecords = useZoomToRecords(mapView)
   const [stage, setStage] = React.useState(0) // 0 = form, 1 = results, 2 = loading
   const [internalActiveTab, setInternalActiveTab] = React.useState<'query' | 'results'>('query')
   
@@ -1198,7 +1200,7 @@ export function QueryTask (props: QueryTaskProps) {
           timestamp: Date.now()
         })
 
-        // Trigger the existing zoomToFeature data action (same as clicking "Zoom To" in the menu)
+        // Zoom to records using shared zoom utility (consistent padding behavior)
         // Use runtime preference if provided, otherwise fall back to config setting (defaults to true)
         const shouldZoom = runtimeZoomToSelected !== undefined 
           ? runtimeZoomToSelected 
@@ -1209,44 +1211,20 @@ export function QueryTask (props: QueryTaskProps) {
         const dsForZoom = dsToUse || outputDS
         
         if (recordsForZoom && recordsForZoom.length > 0 && dsForZoom && shouldZoom) {
-          // Create a data set from the appropriate data source and records
-          const dataSet: DataRecordSet = {
-            dataSource: dsForZoom,
-            records: recordsForZoom,
-            name: dsForZoom.getLabel()
+          try {
+            await zoomToRecords(recordsForZoom as FeatureDataRecord[])
+          } catch (error) {
+            const errorMessage = error instanceof Error ? error.message : 'Failed to zoom to features'
+            setZoomError(errorMessage)
+            debugLogger.log('ZOOM', {
+              event: 'zoom-goTo-error-query',
+              error: errorMessage,
+              errorStack: error instanceof Error ? error.stack : undefined
+            })
+            if (process.env.NODE_ENV === 'development') {
+              console.error('Error executing zoomToRecords', error)
+            }
           }
-
-          // Get available data actions and find the zoomToFeature action
-          return DataActionManager.getInstance().getSupportedActions(props.widgetId, [dataSet], DataLevel.Records)
-            .then(actionCategories => {
-              // Look for zoomToFeature action in any category
-              let zoomAction: any = null
-              for (const category in actionCategories) {
-                const actions = actionCategories[category]
-                zoomAction = actions.find((action: any) => action.name === 'zoomToFeature' || action.id === 'zoomToFeature')
-                if (zoomAction) break
-              }
-
-              if (zoomAction) {
-                // Execute the same zoom action that works when clicked manually
-                return DataActionManager.getInstance().executeDataAction(zoomAction, [dataSet], DataLevel.Records, props.widgetId)
-              } else {
-                return Promise.resolve(false)
-              }
-            })
-            .catch(error => {
-              const errorMessage = error instanceof Error ? error.message : 'Failed to zoom to features'
-              setZoomError(errorMessage)
-              debugLogger.log('ZOOM', {
-                event: 'zoom-action-failed',
-                error: errorMessage,
-                errorStack: error instanceof Error ? error.stack : undefined
-              })
-              if (process.env.NODE_ENV === 'development') {
-                console.error('Error executing zoomToFeature data action', error)
-              }
-              return Promise.resolve(false)
-            })
         }
         return Promise.resolve(true)
       })
