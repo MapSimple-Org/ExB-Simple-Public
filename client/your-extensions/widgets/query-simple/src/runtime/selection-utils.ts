@@ -164,8 +164,40 @@ export async function selectRecordsInDataSources(
 }
 
 /**
+ * Clears the `data_s` parameter from the URL hash.
+ * Experience Builder automatically adds `data_s` when selections are made,
+ * but doesn't remove it when selections are cleared, causing "dirty hash" issues.
+ * 
+ * This function ensures the hash is clean when selections are cleared.
+ */
+function clearDataSParameterFromHash(): void {
+  const hash = window.location.hash.substring(1)
+  if (!hash) return
+  
+  const urlParams = new URLSearchParams(hash)
+  
+  if (urlParams.has('data_s')) {
+    urlParams.delete('data_s')
+    const newHash = urlParams.toString()
+    
+    debugLogger.log('HASH', {
+      event: 'clearDataSParameterFromHash',
+      hadDataS: true,
+      newHash: newHash ? `#${newHash}` : '(empty)',
+      timestamp: Date.now()
+    })
+    
+    // Update the URL without triggering a reload
+    window.history.replaceState(null, '', 
+      newHash ? `#${newHash}` : window.location.pathname + window.location.search
+    )
+  }
+}
+
+/**
  * Clears selection in both the origin data source and output data source.
  * Optionally clears graphics layer if using graphics layer mode.
+ * Also clears the `data_s` parameter from the URL hash to prevent "dirty hash" issues.
  * 
  * @param widgetId - The widget ID (needed to publish message)
  * @param outputDS - The output data source
@@ -195,6 +227,10 @@ export async function clearSelectionInDataSources (
   if (outputDS) {
     publishSelectionMessage(widgetId, [], outputDS, true)
   }
+  
+  // Clear data_s parameter from hash to prevent dirty hash
+  // Experience Builder adds data_s when selections are made but doesn't remove it when cleared
+  clearDataSParameterFromHash()
 }
 
 /**

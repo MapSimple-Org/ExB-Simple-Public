@@ -375,8 +375,8 @@ export function QueryTaskResult (props: QueryTaskResultProps) {
       })
     }
     
-    // Reset expand all to queryItem's resultExpandByDefault setting
-    setExpandAll(currentItem.resultExpandByDefault ?? false)
+    // NOTE: Don't reset expandAll here - it's handled by the queryItem-change useEffect
+    // Resetting it here causes the Expand/Collapse button to flip back when records are removed
     setQueryData({
       records,
       page: 1
