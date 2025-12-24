@@ -123,6 +123,8 @@
 - Inconsistent behavior between modes
 - Graphics layer implementation is cleaner and more reliable
 
+**Note:** As of r018.13, the non-graphics layer implementation is **not being tested or maintained**. It will be removed entirely in r019.0. Do not spend time debugging or fixing issues with `useGraphicsLayerForHighlight: false` mode.
+
 **Solution:** Remove `useGraphicsLayerForHighlight` config option entirely. Always use graphics layer when `highlightMapWidgetId` is configured.
 
 **Files to Modify (44 references across 7 files):**
