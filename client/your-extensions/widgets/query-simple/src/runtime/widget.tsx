@@ -15,7 +15,7 @@ import { createQuerySimpleDebugLogger } from 'widgets/shared-code/common'
 import { createOrGetGraphicsLayer, cleanupGraphicsLayer } from './graphics-layer-utils'
 import { QUERYSIMPLE_SELECTION_EVENT } from './selection-utils'
 import { WIDGET_VERSION } from '../version'
-// Chunk 1: URL Parameter Consumption Manager (r018.2)
+// Chunk 1: URL Parameter Consumption Manager (r018.8)
 import { UrlConsumptionManager } from './hooks/use-url-consumption'
 
 const debugLogger = createQuerySimpleDebugLogger()
@@ -44,8 +44,7 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
   activeTab?: 'query' | 'results'
 }> {
   static versionManager = versionManager
-  private lastProcessedHash: string = ''
-  // Chunk 1: URL Parameter Consumption Manager (r018.2) - Parallel execution mode
+  // Chunk 1: URL Parameter Consumption Manager (r018.8)
   private urlConsumptionManager = new UrlConsumptionManager()
 
   state: { 
@@ -74,71 +73,62 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
   private mapViewRef = React.createRef<__esri.MapView | __esri.SceneView | null>()
 
   componentDidMount() {
-    // OLD: Existing implementation (keep this for comparison)
-    this.checkQueryStringForShortIds()
-    
-    // NEW: Manager implementation (r018.2 - parallel execution mode)
-    // Run both implementations side-by-side and compare results
+    // Chunk 1: Manager implementation (r018.8 - switched to manager)
     this.urlConsumptionManager.setup(
       this.props,
       this.state.resultsMode,
       {
         onInitialValueFound: (value) => {
-          // Comparison logging - verify both implementations produce same results
-          const oldValue = this.state.initialQueryValue
-          const match = JSON.stringify(oldValue) === JSON.stringify(value)
-          
-          debugLogger.log('CHUNK-1-COMPARE', {
-            event: 'url-param-detection-comparison',
-            widgetId: this.props.id,
-            oldImplementation: {
-              shortId: oldValue?.shortId,
-              value: oldValue?.value
-            },
-            newImplementation: {
-              shortId: value?.shortId,
-              value: value?.value
-            },
-            match,
-            timestamp: Date.now()
-          })
-          
-          // Log mismatches immediately
-          if (!match) {
-            debugLogger.log('CHUNK-1-COMPARE', {
-              event: 'url-param-mismatch',
-              widgetId: this.props.id,
-              oldValue,
-              newValue: value,
-              match: false,
-              warning: 'IMPLEMENTATIONS DO NOT MATCH - INVESTIGATE',
-              timestamp: Date.now()
-            })
+          if (value) {
+            // Only update if the value or shortId has changed to avoid unnecessary re-renders
+            if (this.state.initialQueryValue?.shortId !== value.shortId || this.state.initialQueryValue?.value !== value.value) {
+              debugLogger.log('HASH', {
+                event: 'url-param-detected',
+                widgetId: this.props.id,
+                shortId: value.shortId,
+                value: value.value,
+                foundIn: 'manager',
+                previousShortId: this.state.initialQueryValue?.shortId,
+                previousValue: this.state.initialQueryValue?.value,
+                timestamp: Date.now()
+              })
+              
+              // Reset to New mode when hash parameter is detected to avoid bugs with accumulation modes
+              const needsModeReset = this.state.resultsMode !== SelectionType.NewSelection
+              
+              this.setState({ 
+                initialQueryValue: { shortId: value.shortId, value: value.value },
+                // Reset to New mode and clear accumulatedRecords
+                ...(needsModeReset ? { 
+                  resultsMode: SelectionType.NewSelection,
+                  accumulatedRecords: []
+                } : {})
+              })
+            }
+          } else {
+            // No matching parameters found - clear state
+            if (this.state.initialQueryValue) {
+              this.setState({ initialQueryValue: undefined })
+            }
           }
-          
-          // Note: We don't update state here - old implementation handles it
-          // This is just for comparison logging
         },
         onModeResetNeeded: () => {
-          // Comparison logging for mode reset
-          debugLogger.log('CHUNK-1-COMPARE', {
-            event: 'mode-reset-comparison',
-            widgetId: this.props.id,
-            currentMode: this.state.resultsMode,
-            newImplementationDetectedReset: true,
-            timestamp: Date.now()
-          })
-          
-          // Note: We don't update state here - old implementation handles it
-          // This is just for comparison logging
+          // Reset to New mode when hash parameter is detected
+          if (this.state.resultsMode !== SelectionType.NewSelection) {
+            debugLogger.log('HASH', {
+              event: 'mode-reset-needed-on-hash-detection',
+              widgetId: this.props.id,
+              currentMode: this.state.resultsMode,
+              timestamp: Date.now()
+            })
+            this.setState({ 
+              resultsMode: SelectionType.NewSelection,
+              accumulatedRecords: []
+            })
+          }
         }
       }
     )
-    
-    // Listen for hash changes to detect when hash parameters are updated
-    // This is needed when HelperSimple opens the widget with a hash parameter
-    // or when hash parameters change while the widget is already mounted
-    window.addEventListener('hashchange', this.checkQueryStringForShortIds)
     
     // Set up visibility detection
     this.setupVisibilityDetection()
@@ -166,21 +156,13 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
       timestamp: new Date().toISOString()
     })
     
-    // Also check after a short delay to catch cases where hash was already present
-    // when widget was opened (e.g., by HelperSimple opening the widget)
-    setTimeout(() => {
-      this.checkQueryStringForShortIds()
-    }, 100)
     
     // Graphics layer will be initialized when map view becomes available via JimuMapViewComponent
   }
 
   componentWillUnmount() {
-    // Chunk 1: Clean up manager (r018.2)
+    // Chunk 1: Clean up manager (r018.8)
     this.urlConsumptionManager.cleanup()
-    
-    // Clean up hashchange listener
-    window.removeEventListener('hashchange', this.checkQueryStringForShortIds)
     
     // Clean up selection change listener
     window.removeEventListener(QUERYSIMPLE_SELECTION_EVENT, this.handleSelectionChange as EventListener)
@@ -213,56 +195,62 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
   }
 
   componentDidUpdate(prevProps: AllWidgetProps<IMConfig>) {
-    // Chunk 1: Re-check URL parameters when query items change (r018.2)
+    // Chunk 1: Re-check URL parameters when query items change (r018.8)
     if (prevProps.config.queryItems !== this.props.config.queryItems) {
-      // OLD: Existing implementation (keep this for comparison)
-      this.checkQueryStringForShortIds()
-      
-      // NEW: Manager implementation (parallel execution)
       this.urlConsumptionManager.checkUrlParameters(
         this.props,
         this.state.resultsMode,
         {
           onInitialValueFound: (value) => {
-            // Comparison logging
-            const oldValue = this.state.initialQueryValue
-            const match = JSON.stringify(oldValue) === JSON.stringify(value)
-            
-            debugLogger.log('CHUNK-1-COMPARE', {
-              event: 'url-param-detection-comparison-didUpdate',
-              widgetId: this.props.id,
-              oldImplementation: {
-                shortId: oldValue?.shortId,
-                value: oldValue?.value
-              },
-              newImplementation: {
-                shortId: value?.shortId,
-                value: value?.value
-              },
-              match,
-              timestamp: Date.now()
-            })
-            
-            if (!match) {
-              debugLogger.log('CHUNK-1-COMPARE', {
-                event: 'url-param-mismatch-didUpdate',
-                widgetId: this.props.id,
-                oldValue,
-                newValue: value,
-                match: false,
-                warning: 'IMPLEMENTATIONS DO NOT MATCH - INVESTIGATE',
-                timestamp: Date.now()
-              })
+            if (value) {
+              // Only update if the value or shortId has changed to avoid unnecessary re-renders
+              if (this.state.initialQueryValue?.shortId !== value.shortId || this.state.initialQueryValue?.value !== value.value) {
+                debugLogger.log('HASH', {
+                  event: 'url-param-detected',
+                  widgetId: this.props.id,
+                  shortId: value.shortId,
+                  value: value.value,
+                  foundIn: 'manager',
+                  context: 'componentDidUpdate',
+                  previousShortId: this.state.initialQueryValue?.shortId,
+                  previousValue: this.state.initialQueryValue?.value,
+                  timestamp: Date.now()
+                })
+                
+                // Reset to New mode when hash parameter is detected to avoid bugs with accumulation modes
+                const needsModeReset = this.state.resultsMode !== SelectionType.NewSelection
+                
+                this.setState({ 
+                  initialQueryValue: { shortId: value.shortId, value: value.value },
+                  // Reset to New mode and clear accumulatedRecords
+                  ...(needsModeReset ? { 
+                    resultsMode: SelectionType.NewSelection,
+                    accumulatedRecords: []
+                  } : {})
+                })
+              }
+            } else {
+              // No matching parameters found - clear state
+              if (this.state.initialQueryValue) {
+                this.setState({ initialQueryValue: undefined })
+              }
             }
           },
           onModeResetNeeded: () => {
-            debugLogger.log('CHUNK-1-COMPARE', {
-              event: 'mode-reset-comparison-didUpdate',
-              widgetId: this.props.id,
-              currentMode: this.state.resultsMode,
-              newImplementationDetectedReset: true,
-              timestamp: Date.now()
-            })
+            // Reset to New mode when hash parameter is detected
+            if (this.state.resultsMode !== SelectionType.NewSelection) {
+              debugLogger.log('HASH', {
+                event: 'mode-reset-needed-on-hash-detection',
+                widgetId: this.props.id,
+                currentMode: this.state.resultsMode,
+                context: 'componentDidUpdate',
+                timestamp: Date.now()
+              })
+              this.setState({ 
+                resultsMode: SelectionType.NewSelection,
+                accumulatedRecords: []
+              })
+            }
           }
         }
       )
@@ -1538,10 +1526,9 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
     const { id } = this.props
     const { initialQueryValue } = this.state
     
-    // Chunk 1: Parallel execution - also call manager (r018.2)
+    // Chunk 1: Manager implementation (r018.8)
     this.urlConsumptionManager.removeHashParameter(shortId, id)
     
-    // OLD: Existing implementation (keep this for comparison)
     debugLogger.log('HASH', {
       event: 'handleHashParameterUsed-notified',
       widgetId: id,
@@ -1557,154 +1544,6 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
     }
   }
 
-  /**
-   * Checks the URL hash parameters for any shortIds that match query items.
-   * If found, stores the value to be used to auto-populate and execute the query.
-   * Experience Builder uses hash-based URL parameters (e.g., #pin=2223059013).
-   * 
-   * This method prioritizes the first matching shortId found in the query items order.
-   * If multiple hash parameters exist, only the first match is used.
-   */
-  checkQueryStringForShortIds = () => {
-    const { config } = this.props
-    if (!config.queryItems?.length) {
-      return
-    }
-
-    // Extract all shortIds from query items
-    const shortIds = config.queryItems
-      .map(item => item.shortId)
-      .filter(shortId => shortId != null && shortId.trim() !== '')
-
-    if (shortIds.length === 0) {
-      return
-    }
-
-    // Get URL hash fragment parameters (ExB uses # for params)
-    // Also check query string for shortIds to handle both formats
-    const hash = window.location.hash.substring(1) // Remove the #
-    const query = window.location.search.substring(1) // Remove the ?
-    const hashParams = new URLSearchParams(hash)
-    const queryParams = new URLSearchParams(query)
-    
-    // Check if we've already processed this specific hash string
-    // We only track hash because query params are usually static or managed by ExB
-    if (this.lastProcessedHash === hash) {
-      return
-    }
-    
-    // Update immediately to prevent re-entry race conditions
-    this.lastProcessedHash = hash
-
-    // Log all params for debugging
-    const allHashParams: { [key: string]: string } = {}
-    hashParams.forEach((value, key) => { allHashParams[key] = value })
-    const allQueryParams: { [key: string]: string } = {}
-    queryParams.forEach((value, key) => { allQueryParams[key] = value })
-
-    // Log check for debugging
-    debugLogger.log('HASH', {
-      event: 'url-param-check',
-      widgetId: this.props.id,
-      hash: hash,
-      query: query,
-      allHashParams,
-      allQueryParams,
-      availableShortIds: shortIds,
-      currentState: this.state.initialQueryValue,
-      timestamp: Date.now()
-    })
-
-    // Find the first matching shortId
-    // PRIORITY:
-    // 1. Any shortId found in the HASH (hash always wins)
-    // 2. Any shortId found in the QUERY string (if no hash match)
-    
-    let foundShortId: string | null = null
-    let foundValue: string | null = null
-    let foundIn: 'hash' | 'query' | null = null
-
-    // FIRST PASS: Check ALL shortIds in the HASH
-    for (const shortId of shortIds) {
-      if (hashParams.has(shortId)) {
-        foundShortId = shortId
-        foundValue = hashParams.get(shortId)
-        foundIn = 'hash'
-        break
-      }
-    }
-
-    // SECOND PASS: If no hash match, check ALL shortIds in the QUERY string
-    if (!foundShortId) {
-      for (const shortId of shortIds) {
-        if (queryParams.has(shortId)) {
-          foundShortId = shortId
-          foundValue = queryParams.get(shortId)
-          foundIn = 'query'
-          break
-        }
-      }
-    }
-
-    if (foundShortId && foundValue !== null) {
-      // Only update if the value or shortId has changed to avoid unnecessary re-renders
-      if (this.state.initialQueryValue?.shortId !== foundShortId || this.state.initialQueryValue?.value !== foundValue) {
-        debugLogger.log('HASH', {
-          event: 'url-param-detected',
-          widgetId: this.props.id,
-          shortId: foundShortId,
-          value: foundValue,
-          foundIn,
-          previousShortId: this.state.initialQueryValue?.shortId,
-          previousValue: this.state.initialQueryValue?.value,
-          timestamp: Date.now()
-        })
-        
-        // Reset to New mode when hash parameter is detected to avoid bugs with accumulation modes
-        const needsModeReset = this.state.resultsMode !== SelectionType.NewSelection
-        
-        this.setState({ 
-          initialQueryValue: { shortId: foundShortId, value: foundValue },
-          // Reset to New mode and clear accumulatedRecords
-          ...(needsModeReset ? { 
-            resultsMode: SelectionType.NewSelection,
-            accumulatedRecords: []
-          } : {})
-        })
-      }
-      return // Exit after finding first match
-    }
-    
-    // If no hash parameters match any shortId, log what's in the hash
-    if (!foundMatch && Object.keys(allHashParams).length > 0) {
-      debugLogger.log('HASH', {
-        event: 'hash-check-no-matching-shortId',
-        widgetId: this.props.id,
-        hash: hash,
-        allHashParams: allHashParams,
-        availableShortIds: shortIds,
-        note: 'Hash contains params but none match configured shortIds',
-        timestamp: Date.now()
-      })
-    }
-
-    // If no hash parameters match any shortId, clear the state
-    // This handles cases where hash parameters were removed
-    if (this.state.initialQueryValue) {
-      debugLogger.log('HASH', {
-        event: 'hash-cleared',
-        widgetId: this.props.id,
-        previousShortId: this.state.initialQueryValue.shortId,
-        previousValue: this.state.initialQueryValue.value,
-        reason: 'no-matching-hash-params',
-        allHashParams: allHashParams,
-        timestamp: Date.now()
-      })
-      this.setState({ 
-        initialQueryValue: undefined
-      })
-    }
-  }
 
   render () {
     const { config, id, icon, label, layoutId, layoutItemId, controllerWidgetId } = this.props

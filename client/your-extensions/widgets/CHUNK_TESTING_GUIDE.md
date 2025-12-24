@@ -46,18 +46,24 @@ This guide provides **specific testing instructions** for each chunk during the 
 
 ## Chunk 1: URL Parameter Consumption
 
+**Status:** ✅ **COMPLETE** (r018.10)
+
 ### Debug Switches
 
-**For Step 1.2 (Parallel Execution):**
+**For Production Testing:**
 ```
-?debug=CHUNK-1-COMPARE,HASH
+?debug=HASH
 ```
 
 **Why:** 
-- `CHUNK-1-COMPARE` shows comparison logs between old/new implementations
-- `HASH` shows hash parameter processing logs from both implementations
+- `HASH` shows hash parameter processing logs from the manager implementation
+- Comparison logs (`CHUNK-1-COMPARE`) were removed after verification (r018.8)
+
+**Note:** Chunk 1 migration is complete. The old `checkQueryStringForShortIds()` method has been removed and replaced with `UrlConsumptionManager`.
 
 ### What to Test
+
+**Note:** These tests were used during migration (r018.2-r018.7) to verify correctness. Chunk 1 is now complete and using only the manager implementation.
 
 #### Test 1: Hash Parameter Detection (`#shortId=value`)
 
@@ -66,19 +72,15 @@ This guide provides **specific testing instructions** for each chunk during the 
 2. Check browser console for logs
 
 **Expected Logs:**
-- `[QUERYSIMPLE-HASH]` - `url-param-check` (old implementation)
-- `[QUERYSIMPLE-HASH]` - `url-param-detected` (old implementation)
-- `[QUERYSIMPLE-HASH]` - `url-param-detected` (new implementation)
-- `[QUERYSIMPLE-CHUNK-1-COMPARE]` - `url-param-detection-comparison` with `match: true`
-- **NO** logs with `match: false` or `warning: 'IMPLEMENTATIONS DO NOT MATCH'`
+- `[QUERYSIMPLE-HASH]` - `url-param-detected` with `foundIn: 'hash'`
+- `[QUERYSIMPLE-HASH]` - `url-param-detected` with `foundIn: 'manager'`
 
 **What to Verify:**
 - ✅ Widget opens automatically
 - ✅ Correct query is selected
 - ✅ Input field is populated with value
-- ✅ Query executes automatically
-- ✅ Both implementations detect the same parameter
-- ✅ Comparison logs show `match: true`
+- ✅ Query executes automatically (with proper React state synchronization)
+- ✅ No empty queries (race condition fixed in r018.9)
 
 #### Test 2: Query String Parameter Detection (`?shortId=value`)
 
@@ -87,14 +89,13 @@ This guide provides **specific testing instructions** for each chunk during the 
 2. Check browser console for logs
 
 **Expected Logs:**
-- `[QUERYSIMPLE-HASH]` - `url-param-detected` with `foundIn: 'query'` (both implementations)
-- `[QUERYSIMPLE-CHUNK-1-COMPARE]` - `url-param-detection-comparison` with `match: true`
-- **NO** logs with `match: false`
+- `[QUERYSIMPLE-HASH]` - `url-param-detected` with `foundIn: 'query'`
+- `[QUERYSIMPLE-HASH]` - `url-param-detected` with `foundIn: 'manager'`
 
 **What to Verify:**
 - ✅ Widget opens and executes query
-- ✅ Both implementations agree
-- ✅ Comparison logs show `match: true`
+- ✅ Query string parameters are detected correctly
+- ✅ No empty queries (race condition fixed in r018.9)
 
 #### Test 3: Hash Priority Over Query String
 

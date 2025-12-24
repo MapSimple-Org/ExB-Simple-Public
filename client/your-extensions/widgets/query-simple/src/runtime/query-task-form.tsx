@@ -356,15 +356,25 @@ export function QueryTaskForm (props: QueryTaskItemProps) {
                     }
                   })
                   
-                  if (!inputValueSet) {
+                  // CRITICAL: Also verify React state has the value
+                  // This prevents race condition where DOM has value but React state hasn't updated yet
+                  const firstPart = attributeFilterSqlExprObj?.parts?.[0]
+                  const reactStateHasValue = firstPart?.type === 'SINGLE' && 
+                                            firstPart?.valueOptions?.value === initialInputValue
+                  
+                  if (!inputValueSet || !reactStateHasValue) {
                     debugLogger.log('FORM', {
                       event: 'input-value-not-set-retrying',
                       expectedValue: initialInputValue,
                       queryItemShortId,
+                      domValueSet: inputValueSet,
+                      reactStateHasValue: reactStateHasValue,
+                      currentReactValue: firstPart?.valueOptions?.value,
+                      currentReactPartType: firstPart?.type,
                       action: 'will-retry-after-delay',
-                      note: 'Input value not set, retrying to ensure synchronization'
+                      note: 'Input value or React state not synchronized, retrying to prevent empty query'
                     })
-                    // Retry after a short delay to allow state to sync
+                    // Retry after a delay to allow React state to sync
                     setTimeout(() => {
                       // Recursively call verifyAndApply if needed, but limit retries
                       // For now, just retry once more
@@ -385,12 +395,14 @@ export function QueryTaskForm (props: QueryTaskItemProps) {
                   }
                 }
                 
-                // Input value is set correctly, proceed with execution
+                // Both DOM input AND React state are synchronized, proceed with execution
                 debugLogger.log('FORM', {
                   event: 'input-value-verified',
                   expectedValue: initialInputValue,
                   queryItemShortId,
-                  note: 'Input value verified, proceeding with query execution'
+                  domValueSet: true,
+                  reactStateHasValue: true,
+                  note: 'Both DOM input and React state verified, proceeding with query execution'
                 })
                 
                 // Set hashTriggeredRef to force zoom for hash-triggered queries

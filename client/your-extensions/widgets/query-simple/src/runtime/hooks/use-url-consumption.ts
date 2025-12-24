@@ -56,13 +56,19 @@ export class UrlConsumptionManager {
     const hash = window.location.hash.substring(1)
     const query = window.location.search.substring(1)
     
-    // Skip if we've already processed this exact hash fragment
-    if (this.lastProcessedHash === hash) {
+    // Skip hash-only if we've already processed this exact hash fragment
+    // But always check query strings (they don't trigger hashchange events)
+    // Only skip if we have a hash fragment AND we've already processed it
+    if (hash && this.lastProcessedHash === hash) {
       return
     }
     
     this.isProcessing = true
-    this.lastProcessedHash = hash
+    // Only update lastProcessedHash if we actually have a hash fragment
+    // Query strings are always checked (no skip logic for them)
+    if (hash) {
+      this.lastProcessedHash = hash
+    }
 
     const hashParams = new URLSearchParams(hash)
     const queryParams = new URLSearchParams(query)
