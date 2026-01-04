@@ -2,8 +2,9 @@
 
 Custom widgets for ArcGIS Experience Builder Developer Edition (1.19.0+). Built for performance, deep-linking, and advanced result management.
 
-**Current Version**: `1.19.0-r017.60`
-**Release Type**: Production Stability Build
+**Current Version**: `1.19.0-r018.18` (Feature Branch: `feature/chunk-rock`)  
+**Stable Version**: `1.19.0-r017.60` (on `develop` branch)  
+**Release Type**: Hook & Shell Architecture Migration (r018.x)
 
 ## Key Differentiators (Why QuerySimple?)
 
@@ -76,6 +77,19 @@ Add `?debug=FEATURE` to your URL (e.g., `?debug=HASH,TASK`).
 | `RESTORE` | Logic used to rebuild the map selection after an identify event. |
 | `WIDGET-STATE` | The handshake between HelperSimple and QuerySimple. |
 | `GRAPHICS-LAYER` | Highlighting logic for graphics-enabled widgets. |
+
+### Known Bugs (Always Visible)
+
+**Important:** Known bugs are logged automatically, even when `?debug=false`. These appear as warnings in the console with the format `[QUERYSIMPLE ⚠️ BUG]` to help developers understand when they encounter a known issue rather than something they've done wrong.
+
+Each bug log includes:
+- **Bug ID**: Unique identifier (e.g., `BUG-GRAPHICS-001`)
+- **Category**: Bug type (SELECTION, UI, URL, DATA, GRAPHICS, PERFORMANCE, GENERAL)
+- **Description**: What the bug is and why it's happening
+- **Workaround**: How to avoid or work around the issue
+- **Target Resolution**: When the bug will be fixed (e.g., `r019.0`)
+
+See `query-simple/BUGS.md` for a complete list of known bugs and their status.
 
 ---
 

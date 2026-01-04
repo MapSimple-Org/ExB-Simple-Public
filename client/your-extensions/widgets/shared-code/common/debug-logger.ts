@@ -7,6 +7,7 @@
  * - Add ?debug=false to disable all debug logs
  * 
  * Features (QuerySimple):
+ * - BUG: Known bugs/issues (always logs, even if debug=false) - Use format: bugId, category, description
  * - HASH: Hash parameter processing
  * - FORM: Query form interactions
  * - TASK: Query task management
@@ -42,7 +43,7 @@
  * - RESTORE: Selection restoration attempts and results
  */
 
-type DebugFeature = 'HASH' | 'FORM' | 'TASK' | 'ZOOM' | 'MAP-EXTENT' | 'DATA-ACTION' | 'GROUP' | 'SELECTION' | 'WIDGET-STATE' | 'RESTORE' | 'RESULTS-MODE' | 'EXPAND-COLLAPSE' | 'GRAPHICS-LAYER' | 'CHUNK-1-COMPARE' | 'CHUNK-1-MISMATCH' | 'CHUNK-2-COMPARE' | 'CHUNK-2-MISMATCH' | 'CHUNK-3-COMPARE' | 'CHUNK-3-DECISION' | 'CHUNK-3-FALLBACK' | 'CHUNK-4-COMPARE' | 'CHUNK-5-COMPARE' | 'CHUNK-6-COMPARE' | 'CHUNK-6-MISMATCH' | 'CHUNK-7-COMPARE' | 'all' | 'false'
+type DebugFeature = 'BUG' | 'HASH' | 'FORM' | 'TASK' | 'ZOOM' | 'MAP-EXTENT' | 'DATA-ACTION' | 'GROUP' | 'SELECTION' | 'WIDGET-STATE' | 'RESTORE' | 'RESULTS-MODE' | 'EXPAND-COLLAPSE' | 'GRAPHICS-LAYER' | 'CHUNK-1-COMPARE' | 'CHUNK-1-MISMATCH' | 'CHUNK-2-COMPARE' | 'CHUNK-2-MISMATCH' | 'CHUNK-3-COMPARE' | 'CHUNK-3-DECISION' | 'CHUNK-3-FALLBACK' | 'CHUNK-4-COMPARE' | 'CHUNK-5-COMPARE' | 'CHUNK-6-COMPARE' | 'CHUNK-6-MISMATCH' | 'CHUNK-7-COMPARE' | 'all' | 'false'
 
 interface DebugLoggerOptions {
   widgetName: string
@@ -114,6 +115,11 @@ class DebugLogger {
   private isEnabled(feature: DebugFeature): boolean {
     this.initialize()
     
+    // BUG level always enabled, regardless of debug switches (even if debug=false)
+    if (feature === 'BUG') {
+      return true
+    }
+    
     if (this.enabledFeatures.has('all')) {
       return true
     }
@@ -122,6 +128,22 @@ class DebugLogger {
   }
 
   log(feature: DebugFeature, data: any): void {
+    // BUG level always logs, even if debug=false
+    if (feature === 'BUG') {
+      const logData = {
+        feature: 'BUG',
+        bugId: data.bugId || 'UNKNOWN',
+        category: data.category || 'GENERAL',
+        timestamp: new Date().toISOString(),
+        ...data
+      }
+      
+      // Use console.warn with emoji format to make bugs stand out
+      console.warn(`[${this.widgetName.toUpperCase()} ⚠️ BUG]`, JSON.stringify(logData, null, 2))
+      return
+    }
+    
+    // Regular feature logging (existing behavior)
     if (!this.isEnabled(feature)) {
       return
     }

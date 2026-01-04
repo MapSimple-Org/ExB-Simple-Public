@@ -961,6 +961,21 @@ export function QueryTaskResult (props: QueryTaskResultProps) {
     }
     
     // Zoom to the clicked record with padding (always enabled - user wants to keep this behavior)
+    // BUG-GRAPHICS-001: Zoom operations fail when graphics layer is disabled
+    if (!mapView && !useGraphicsLayerForHighlight) {
+      debugLogger.log('BUG', {
+        bugId: 'BUG-GRAPHICS-001',
+        category: 'GRAPHICS',
+        event: 'zoom-operation-failed-graphics-layer-disabled',
+        widgetId,
+        operation: 'result-item-click-zoom',
+        recordId: data.getId(),
+        description: 'Zoom operation attempted on result item click but mapView is unavailable because useGraphicsLayerForHighlight is disabled',
+        workaround: 'Enable useGraphicsLayerForHighlight in widget settings',
+        targetResolution: 'r019.0'
+      })
+    }
+    
     zoomToRecords([data]).catch(error => {
       // Silently handle errors - zoom is non-critical
     })
