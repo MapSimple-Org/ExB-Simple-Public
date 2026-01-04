@@ -27,9 +27,30 @@ const { iconMap } = getWidgetRuntimeDataMap()
 
 /**
  * Custom event name for requesting restoration when identify popup closes.
+ * Dispatched by query-result component when identify popup closes and selection was cleared.
  */
 const RESTORE_ON_IDENTIFY_CLOSE_EVENT = 'querysimple-restore-on-identify-close'
 
+/**
+ * QuerySimple Widget
+ * 
+ * A high-performance query widget for ArcGIS Experience Builder that provides:
+ * - Universal SQL optimization for database index usage
+ * - Dual-mode deep linking (hash fragments and query strings)
+ * - Results accumulation across multiple queries
+ * - Selection persistence and restoration
+ * - Graphics layer highlighting for map visualization
+ * 
+ * Architecture:
+ * This widget follows a "Hook & Shell" pattern where complex logic is extracted into
+ * manager classes (UrlConsumptionManager, WidgetVisibilityManager, MapViewManager)
+ * to keep the main widget class clean and maintainable.
+ * 
+ * @since 1.19.0-r018.18
+ * @see {@link UrlConsumptionManager} for URL parameter handling
+ * @see {@link WidgetVisibilityManager} for panel visibility detection
+ * @see {@link MapViewManager} for map view reference management
+ */
 export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>, { 
   initialQueryValue?: { shortId: string, value: string }, 
   isPanelVisible?: boolean, 
@@ -70,6 +91,13 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
     activeTab: 'query'
   }
 
+  /**
+   * Handles tab change between "Query" and "Results" tabs.
+   * 
+   * @param activeTab - The tab to switch to ('query' or 'results')
+   * 
+   * @since 1.19.0-r017.0
+   */
   handleTabChange = (activeTab: 'query' | 'results') => {
     this.setState({ activeTab })
   }
@@ -261,11 +289,15 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
   }
 
   /**
-   * Notifies HelperSimple of selection changes.
-   * Called by QueryTaskResult when selection is made.
+   * Notifies HelperSimple widget of selection changes via custom event.
    * 
-   * @param recordIds - Array of selected record IDs
-   * @param dataSourceId - Optional data source ID
+   * This method dispatches a custom event that HelperSimple listens to for tracking
+   * selection state. Called by QueryTaskResult component when user selects records.
+   * 
+   * @param recordIds - Array of selected record IDs (objectIds from the feature layer)
+   * @param dataSourceId - Optional data source ID for the selected records
+   * 
+   * @since 1.19.0-r017.0
    */
   notifyHelperSimpleOfSelection = (recordIds: string[], dataSourceId?: string) => {
     const { id } = this.props
@@ -283,9 +315,20 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
   }
 
   /**
-   * Handles visibility change from WidgetVisibilityManager.
-   * Contains restoration logic for when panel opens/closes.
-   * Chunk 2: Manager implementation (r018.13 - Step 2.3: Switch to manager)
+   * Handles widget panel visibility changes from WidgetVisibilityManager.
+   * 
+   * This method implements the selection restoration pattern:
+   * - When panel opens: Restores selection to map if widget has accumulated records or last selection
+   * - When panel closes: Clears selection from map (but preserves widget state for restoration)
+   * 
+   * The restoration logic respects the current results mode:
+   * - "Add to" / "Remove from" modes: Uses accumulated records for restoration
+   * - "New" mode: Uses lastSelection state for restoration
+   * 
+   * @param isVisible - True if widget panel is visible, false if hidden
+   * 
+   * @since 1.19.0-r018.13 (Chunk 2: Manager implementation)
+   * @see {@link WidgetVisibilityManager} for visibility detection implementation
    */
   handleVisibilityChange = (isVisible: boolean) => {
     if (isVisible) {
@@ -390,8 +433,15 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
 
   /**
    * Handles map view change from JimuMapViewComponent.
-   * When map view becomes available, initialize graphics layer if enabled.
-   * Chunk 6: Manager implementation (r018.18 - Step 6.4: Cleanup complete)
+   * 
+   * This method is called by JimuMapViewComponent when the map view becomes available
+   * or changes. It delegates to MapViewManager for reference management and initializes
+   * the graphics layer if enabled in widget configuration.
+   * 
+   * @param jimuMapView - The JimuMapView instance from JimuMapViewComponent, or null if unavailable
+   * 
+   * @since 1.19.0-r018.18 (Chunk 6: Manager implementation)
+   * @see {@link MapViewManager} for map view reference management
    */
   private handleJimuMapViewChanged = (jimuMapView: JimuMapView | null) => {
     const { id, config } = this.props
@@ -415,7 +465,16 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
   }
 
   /**
-   * Initializes the graphics layer using the provided map view.
+   * Initializes the graphics layer for map highlighting.
+   * 
+   * Creates or retrieves a graphics layer and adds it to the map view. The graphics layer
+   * is used to highlight selected features on the map when `useGraphicsLayerForHighlight`
+   * is enabled in widget configuration.
+   * 
+   * @param mapView - The ArcGIS MapView or SceneView instance to add the graphics layer to
+   * 
+   * @since 1.19.0-r017.0
+   * @see {@link createOrGetGraphicsLayer} for graphics layer creation logic
    */
   private initializeGraphicsLayer = async (mapView: __esri.MapView | __esri.SceneView) => {
     const { id } = this.props
@@ -459,8 +518,16 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
   }
 
   /**
-   * Initializes graphics layer lazily when outputDS becomes available.
-   * Now uses the map view from JimuMapViewComponent instead of trying to get it from data source.
+   * Initializes graphics layer lazily when output data source becomes available.
+   * 
+   * This method is called by QueryTask component when an output data source is created
+   * and graphics layer highlighting is enabled. It retrieves the map view from MapViewManager
+   * and initializes the graphics layer if not already initialized.
+   * 
+   * @param outputDS - The output data source that was created
+   * 
+   * @since 1.19.0-r017.0
+   * @see {@link MapViewManager.getMapView} for map view retrieval
    */
   public initializeGraphicsLayerFromOutputDS = async (outputDS: DataSource) => {
     const { id, config } = this.props
@@ -495,7 +562,14 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
   }
 
   /**
-   * Cleans up the graphics layer when widget unmounts or config changes.
+   * Cleans up the graphics layer when widget unmounts or configuration changes.
+   * 
+   * Removes the graphics layer from the map view and clears internal references.
+   * Called automatically when widget unmounts or when graphics layer highlighting
+   * is disabled in widget configuration.
+   * 
+   * @since 1.19.0-r017.0
+   * @see {@link cleanupGraphicsLayer} utility function for cleanup logic
    */
   private cleanupGraphicsLayer = () => {
     const { id } = this.props
@@ -515,8 +589,13 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
   }
 
   /**
-   * Clears the graphics layer if it exists.
-   * This is called when clearing results or switching queries in New mode to ensure graphics are removed.
+   * Clears all graphics from the graphics layer if it exists.
+   * 
+   * This method is called when clearing results or switching queries in "New" mode
+   * to ensure graphics are removed from the map. It does not remove the graphics layer
+   * itself, only clears its contents.
+   * 
+   * @since 1.19.0-r017.0
    */
   public clearGraphicsLayerIfExists = () => {
     const { config } = this.props
@@ -553,8 +632,19 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
 
 
   /**
-   * Tracks selection changes from query-result.
-   * In "Add to" or "Remove from" modes, uses accumulated records count for restoration.
+   * Handles selection change events from QueryTaskResult component.
+   * 
+   * This method updates widget state when records are selected or deselected in the
+   * results tab. It respects the current results mode:
+   * - "Add to" / "Remove from" modes: Uses accumulated records count for restoration state
+   * - "New" mode: Uses event record IDs for restoration state
+   * 
+   * Also handles automatic mode reset: If selection is cleared in "Remove from" mode,
+   * the mode is automatically reset to "New" since Remove mode requires selection to function.
+   * 
+   * @param event - Custom event containing selection details (widgetId, recordIds, outputDsId, queryItemConfigId)
+   * 
+   * @since 1.19.0-r017.0
    */
   handleSelectionChange = (event: Event) => {
     const customEvent = event as CustomEvent<{ widgetId: string, recordIds: string[], dataSourceId?: string, outputDsId?: string, queryItemConfigId?: string }>
@@ -651,8 +741,19 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
 
   /**
    * Handles restore request when identify popup closes.
-   * Only restores if widget panel is open.
-   * In "Add to" or "Remove from" modes, restores all accumulated records.
+   * 
+   * This method restores selection to the map after the identify popup closes and
+   * selection was cleared. It only restores if the widget panel is currently open
+   * (users can't see restored selection if widget is closed).
+   * 
+   * Restoration logic:
+   * - "Add to" / "Remove from" modes: Restores all accumulated records grouped by origin data source
+   * - "New" mode: Restores lastSelection state
+   * 
+   * @param event - Custom event containing selection details (widgetId, recordIds, outputDsId, queryItemConfigId)
+   * 
+   * @since 1.19.0-r017.0
+   * @see {@link RESTORE_ON_IDENTIFY_CLOSE_EVENT} for event name constant
    */
   private handleRestoreOnIdentifyClose = (event: Event) => {
     const customEvent = event as CustomEvent<{ 
@@ -796,8 +897,24 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
   }
 
   /**
-   * Adds selection to map when widget opens (reuses Add to Map logic).
-   * In "Add to" or "Remove from" modes, restores all accumulated records grouped by origin data source.
+   * Restores selection to the map when widget panel opens.
+   * 
+   * This method is called by handleVisibilityChange when the panel becomes visible.
+   * It restores previously selected records to the map based on the current results mode:
+   * 
+   * - "Add to" / "Remove from" modes: Restores all accumulated records, grouped by origin data source
+   * - "New" mode: Restores lastSelection state from the most recent query
+   * 
+   * The restoration uses selectRecordsAndPublish utility which handles:
+   * - Selecting records in origin data sources
+   * - Adding graphics to graphics layer (if enabled)
+   * - Publishing selection messages to other widgets
+   * - Deduplication of records
+   * 
+   * Note: This method does NOT zoom to the selection (unlike the "Add to Map" action).
+   * 
+   * @since 1.19.0-r017.0
+   * @see {@link selectRecordsAndPublish} utility function for selection logic
    */
   private addSelectionToMap = () => {
     const { lastSelection, accumulatedRecords, resultsMode } = this.state
@@ -1042,8 +1159,18 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
   }
 
   /**
-   * Handles results mode change from dropdown.
-   * Updates widget state and logs the change for debugging.
+   * Handles results mode change from the mode dropdown in QueryTask component.
+   * 
+   * This method is called when the user switches between "Create new", "Add to", or
+   * "Remove from" modes. It performs the following actions:
+   * 
+   * 1. Consumes hash parameters when switching to accumulation modes (prevents re-triggering)
+   * 2. Clears accumulated records when switching to "New" mode
+   * 3. Updates widget state with the new mode
+   * 
+   * @param mode - The new selection type mode (NewSelection, AddToSelection, or RemoveFromSelection)
+   * 
+   * @since 1.19.0-r017.0
    */
   private handleResultsModeChange = (mode: SelectionType) => {
     debugLogger.log('RESULTS-MODE', {
@@ -1081,6 +1208,20 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
     }
   }
 
+  /**
+   * Removes a hash parameter from the URL when switching to accumulation modes.
+   * 
+   * This method is called when switching to "Add to" or "Remove from" modes to consume
+   * the deep link parameter. This prevents the hash parameter from re-triggering the query
+   * when the widget re-renders.
+   * 
+   * The URL is updated using history.replaceState to avoid page reload, and both pathname
+   * and query string are preserved (e.g., debug parameters remain intact).
+   * 
+   * @param shortId - The shortId parameter to remove from the URL hash
+   * 
+   * @since 1.19.0-r017.0
+   */
   private removeHashParameter = (shortId: string) => {
     if (!shortId) return
     
@@ -1132,9 +1273,21 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
   }
 
   /**
-   * Clears selection from map only (keeps selection in widget's internal state).
-   * Called when widget panel closes to remove selection from map while preserving widget state.
-   * Always clears accumulated records if they exist, regardless of current mode.
+   * Clears selection from the map while preserving widget's internal state.
+   * 
+   * This method is called when the widget panel closes to remove selection from the map
+   * (cleaning up the visual selection) while keeping the selection state in the widget
+   * for restoration when the panel reopens.
+   * 
+   * The method handles both "New" mode (lastSelection) and accumulation modes (accumulatedRecords).
+   * It groups records by origin data source and clears selection from each origin data source,
+   * ensuring multi-layer selections are properly cleared.
+   * 
+   * Graphics layer is also cleared if enabled, and empty selection messages are published
+   * to notify other widgets (like HelperSimple) that selection has been cleared.
+   * 
+   * @since 1.19.0-r017.0
+   * @see {@link clearSelectionInDataSources} utility function for clearing logic
    */
   private clearSelectionFromMap = () => {
     const { lastSelection, accumulatedRecords, resultsMode } = this.state

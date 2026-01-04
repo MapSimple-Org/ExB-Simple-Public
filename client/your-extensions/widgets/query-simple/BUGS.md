@@ -2,6 +2,64 @@
 
 ## Status: Open Issues
 
+*No open bugs at this time. All bugs have been resolved.*
+
+---
+
+## Bug Categories
+
+Bugs are categorized for easier tracking:
+- **SELECTION**: Issues related to record selection, map highlighting, or selection restoration
+- **UI**: User interface issues (buttons, tabs, expand/collapse, etc.)
+- **URL**: Deep linking, hash parameters, query string parameters
+- **DATA**: Data source issues, query execution, record handling
+- **GRAPHICS**: Graphics layer highlighting issues
+- **PERFORMANCE**: Performance-related issues
+- **GENERAL**: Other issues that don't fit into above categories
+
+---
+
+## Open Bugs
+
+### Bug #5: Zoom Operations Fail When Graphics Layer Disabled
+
+**Status:** 🔴 **OPEN** (Target Resolution: r019.0)  
+**Priority:** High  
+**Category:** GRAPHICS  
+**Bug ID:** `BUG-GRAPHICS-001`  
+**Version Reported:** r018.20  
+**Date Reported:** 2025-12-24
+
+### Description
+Zoom operations fail when `useGraphicsLayerForHighlight` is disabled (`false`) because `mapView` is not available. This affects:
+- Clicking a result item to zoom to it
+- "Zoom to selected" action in the results panel
+- "Zoom to selected" checkbox when query results are returned
+- Hash parameter-triggered queries with zoom enabled
+- Any zoom operation that requires `mapView` access
+
+### Root Cause
+The dual-path implementation (graphics layer vs. layer selection) means that when `useGraphicsLayerForHighlight` is `false`, the `JimuMapViewComponent` is not rendered, so `mapView` is never available. All zoom operations require `mapView` to function.
+
+### Workaround
+Enable `useGraphicsLayerForHighlight` in widget settings to use graphics layer mode, which provides `mapView` access.
+
+### Affected Operations
+- Result item click zoom
+- "Zoom to selected" data action
+- Query result zoom (when `zoomToSelected` config is enabled)
+- Hash parameter-triggered zoom operations
+
+### Resolution Plan
+This bug will be resolved in r019.0 by removing the non-graphics layer implementation entirely. The `useGraphicsLayerForHighlight` config option will be removed, and graphics layer will always be used when `highlightMapWidgetId` is configured.
+
+### Files Affected
+- `query-simple/src/runtime/zoom-utils.ts`
+- `query-simple/src/runtime/hooks/use-zoom-to-records.ts`
+- `query-simple/src/data-actions/zoom-to-action.tsx`
+- `query-simple/src/runtime/query-task.tsx`
+- `query-simple/src/runtime/query-result.tsx`
+
 ---
 
 ## Bug #1: Graphics Layer Not Clearing When Switching Queries in "New" Mode
