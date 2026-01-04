@@ -1211,6 +1211,21 @@ export function QueryTask (props: QueryTaskProps) {
         const dsForZoom = dsToUse || outputDS
         
         if (recordsForZoom && recordsForZoom.length > 0 && dsForZoom && shouldZoom) {
+          // BUG-GRAPHICS-001: Zoom operations fail when graphics layer is disabled
+          if (!mapView && !useGraphicsLayerForHighlight) {
+            debugLogger.log('BUG', {
+              bugId: 'BUG-GRAPHICS-001',
+              category: 'GRAPHICS',
+              event: 'zoom-operation-failed-graphics-layer-disabled',
+              widgetId: props.widgetId,
+              operation: 'query-result-zoom',
+              recordsCount: recordsForZoom.length,
+              description: 'Zoom operation attempted but mapView is unavailable because useGraphicsLayerForHighlight is disabled',
+              workaround: 'Enable useGraphicsLayerForHighlight in widget settings',
+              targetResolution: 'r019.0'
+            })
+          }
+          
           try {
             await zoomToRecords(recordsForZoom as FeatureDataRecord[])
           } catch (error) {
