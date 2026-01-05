@@ -12,7 +12,6 @@ import { TaskListInline } from './query-task-list-inline'
 import { TaskListPopperWrapper } from './query-task-list-popper-wrapper'
 import { QueryWidgetContext } from './widget-context'
 import { createQuerySimpleDebugLogger } from 'widgets/shared-code/common'
-import { createOrGetGraphicsLayer, cleanupGraphicsLayer } from './graphics-layer-utils'
 import { QUERYSIMPLE_SELECTION_EVENT } from './selection-utils'
 import { WIDGET_VERSION } from '../version'
 // Chunk 1: URL Parameter Consumption Manager (r018.8)
@@ -21,6 +20,8 @@ import { UrlConsumptionManager } from './hooks/use-url-consumption'
 import { WidgetVisibilityManager } from './hooks/use-widget-visibility'
 // Chunk 6: Map View Management Manager (r018.14) - Step 6.1: Add manager without integration
 import { MapViewManager } from './hooks/use-map-view'
+// Chunk 4: Graphics Layer Management Manager (r018.24) - Step 4.2: Parallel execution
+import { GraphicsLayerManager } from './hooks/use-graphics-layer'
 
 const debugLogger = createQuerySimpleDebugLogger()
 const { iconMap } = getWidgetRuntimeDataMap()
@@ -75,6 +76,8 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
   
   // Chunk 6: Map View Management Manager (r018.16) - Step 6.3: Switch to manager
   private mapViewManager = new MapViewManager(this.mapViewRef)
+  // Chunk 4: Graphics Layer Management Manager (r018.24) - Step 4.2: Parallel execution
+  private graphicsLayerManager = new GraphicsLayerManager(this.graphicsLayerRef, this.mapViewRef)
 
   state: { 
     initialQueryValue?: { shortId: string, value: string }, 
@@ -207,8 +210,9 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
     // Clean up restore on identify close listener
     window.removeEventListener(RESTORE_ON_IDENTIFY_CLOSE_EVENT, this.handleRestoreOnIdentifyClose as EventListener)
     
-    // Clean up graphics layer
-    this.cleanupGraphicsLayer()
+    // Chunk 4: Graphics layer cleanup (r018.25 - Step 4.3: Remove old implementation)
+    this.graphicsLayerManager.cleanup(this.props.id)
+    
     debugLogger.log('WIDGET-STATE', {
       event: 'widget-closed',
       widgetId: this.props.id,
@@ -279,13 +283,8 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
       )
     }
     
-    // Clean up graphics layer if config changed to disabled
-    if (prevProps.config.useGraphicsLayerForHighlight !== this.props.config.useGraphicsLayerForHighlight) {
-      if (!this.props.config.useGraphicsLayerForHighlight) {
-        this.cleanupGraphicsLayer()
-      }
-      // If enabled, initialization will happen when map view becomes available via JimuMapViewComponent
-    }
+    // Chunk 4: Graphics layer is now required (r018.25 - Step 4.3: Remove config change handling)
+    // No need to handle config changes for graphics layer since it's always enabled
   }
 
   /**
@@ -455,9 +454,16 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
           // Get map view from manager
           const newMapView = this.mapViewManager.getMapView()
           
-          // If map view is available and graphics layer is enabled, initialize it
-          if (newMapView && config.useGraphicsLayerForHighlight && !this.graphicsLayerRef.current) {
-            this.initializeGraphicsLayer(newMapView)
+          // Chunk 4: Graphics layer initialization (r018.25 - Step 4.3: Remove old implementation)
+          // Initialize graphics layer if map view is available and graphics layer should be initialized
+          if (this.graphicsLayerManager.shouldInitialize(config, newMapView) && newMapView) {
+            // Use void to handle promise without blocking
+            void this.graphicsLayerManager.initialize(id, newMapView, {
+              onGraphicsLayerInitialized: (graphicsLayer) => {
+                // Update state to force re-render and update props
+                this.setState({ graphicsLayerInitialized: true })
+              }
+            })
           }
         }
       }
@@ -465,128 +471,52 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
   }
 
   /**
-   * Initializes the graphics layer for map highlighting.
-   * 
-   * Creates or retrieves a graphics layer and adds it to the map view. The graphics layer
-   * is used to highlight selected features on the map when `useGraphicsLayerForHighlight`
-   * is enabled in widget configuration.
-   * 
-   * @param mapView - The ArcGIS MapView or SceneView instance to add the graphics layer to
-   * 
-   * @since 1.19.0-r017.0
-   * @see {@link createOrGetGraphicsLayer} for graphics layer creation logic
-   */
-  private initializeGraphicsLayer = async (mapView: __esri.MapView | __esri.SceneView) => {
-    const { id } = this.props
-    
-    try {
-      // Create or get graphics layer
-      const graphicsLayer = await createOrGetGraphicsLayer(id, mapView)
-      if (!graphicsLayer) {
-        debugLogger.log('GRAPHICS-LAYER', {
-          event: 'initializeGraphicsLayer-failed',
-          widgetId: id,
-          reason: 'graphics-layer-creation-failed',
-          timestamp: Date.now()
-        })
-        return
-      }
-
-      // Store references
-      this.mapViewRef.current = mapView
-      this.graphicsLayerRef.current = graphicsLayer
-
-      // Update state to force re-render and update props
-      this.setState({ graphicsLayerInitialized: true })
-
-      debugLogger.log('GRAPHICS-LAYER', {
-        event: 'initializeGraphicsLayer-success',
-        widgetId: id,
-        graphicsLayerId: graphicsLayer.id,
-        viewType: mapView.type || 'unknown',
-        timestamp: Date.now()
-      })
-    } catch (error) {
-      debugLogger.log('GRAPHICS-LAYER', {
-        event: 'initializeGraphicsLayer-error',
-        widgetId: id,
-        error: error instanceof Error ? error.message : String(error),
-        errorStack: error instanceof Error ? error.stack : undefined,
-        timestamp: Date.now()
-      })
-    }
-  }
-
-  /**
    * Initializes graphics layer lazily when output data source becomes available.
    * 
-   * This method is called by QueryTask component when an output data source is created
-   * and graphics layer highlighting is enabled. It retrieves the map view from MapViewManager
-   * and initializes the graphics layer if not already initialized.
+   * This method is called by QueryTask component when an output data source is created.
+   * It retrieves the map view from MapViewManager and initializes the graphics layer
+   * using GraphicsLayerManager if not already initialized.
    * 
    * @param outputDS - The output data source that was created
    * 
    * @since 1.19.0-r017.0
+   * @see {@link GraphicsLayerManager.initializeFromOutputDS} for graphics layer initialization
+   * @see {@link MapViewManager.getMapView} for map view retrieval
+   */
+
+  /**
+   * Initializes graphics layer lazily when output data source becomes available.
+   * 
+   * This method is called by QueryTask component when an output data source is created.
+   * It retrieves the map view from MapViewManager and initializes the graphics layer
+   * using GraphicsLayerManager if not already initialized.
+   * 
+   * @param outputDS - The output data source that was created
+   * 
+   * @since 1.19.0-r017.0
+   * @see {@link GraphicsLayerManager.initializeFromOutputDS} for graphics layer initialization
    * @see {@link MapViewManager.getMapView} for map view retrieval
    */
   public initializeGraphicsLayerFromOutputDS = async (outputDS: DataSource) => {
     const { id, config } = this.props
     
-    // Only initialize if enabled and not already initialized
-    if (!config.useGraphicsLayerForHighlight || this.graphicsLayerRef.current) {
-      debugLogger.log('GRAPHICS-LAYER', {
-        event: 'initializeGraphicsLayerFromOutputDS-skipped',
-        widgetId: id,
-        reason: !config.useGraphicsLayerForHighlight ? 'not-enabled' : 'already-initialized',
-        timestamp: Date.now()
-      })
-      return
-    }
-
-    // Use map view from manager if available (Chunk 6: r018.16 - Step 6.3: Switch to manager)
+    // Chunk 4: Graphics layer initialization (r018.25 - Step 4.3: Remove old implementation)
+    // Use map view from manager if available
     const mapView = this.mapViewManager.getMapView() || this.mapViewRef.current
-    if (!mapView) {
-      debugLogger.log('GRAPHICS-LAYER', {
-        event: 'initializeGraphicsLayerFromOutputDS-skipped',
-        widgetId: id,
-        reason: 'map-view-not-available-yet',
-        outputDSId: outputDS.id,
-        hasJimuMapView: !!this.mapViewManager.getJimuMapView(),
-        timestamp: Date.now()
-      })
-      return
-    }
-
-    // Initialize graphics layer with the map view
-    await this.initializeGraphicsLayer(mapView)
+    
+    await this.graphicsLayerManager.initializeFromOutputDS(
+      id,
+      config,
+      outputDS,
+      mapView,
+      {
+        onGraphicsLayerInitialized: (graphicsLayer) => {
+          this.setState({ graphicsLayerInitialized: true })
+        }
+      }
+    )
   }
 
-  /**
-   * Cleans up the graphics layer when widget unmounts or configuration changes.
-   * 
-   * Removes the graphics layer from the map view and clears internal references.
-   * Called automatically when widget unmounts or when graphics layer highlighting
-   * is disabled in widget configuration.
-   * 
-   * @since 1.19.0-r017.0
-   * @see {@link cleanupGraphicsLayer} utility function for cleanup logic
-   */
-  private cleanupGraphicsLayer = () => {
-    const { id } = this.props
-    const mapView = this.mapViewRef.current
-
-    if (mapView) {
-      cleanupGraphicsLayer(id, mapView)
-      this.mapViewRef.current = null
-      this.graphicsLayerRef.current = null
-
-      debugLogger.log('GRAPHICS-LAYER', {
-        event: 'cleanupGraphicsLayer-complete',
-        widgetId: id,
-        timestamp: Date.now()
-      })
-    }
-  }
 
   /**
    * Clears all graphics from the graphics layer if it exists.
@@ -596,38 +526,13 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
    * itself, only clears its contents.
    * 
    * @since 1.19.0-r017.0
+   * @see {@link GraphicsLayerManager.clearGraphics} for graphics clearing logic
    */
   public clearGraphicsLayerIfExists = () => {
     const { config } = this.props
-    const graphicsLayer = this.graphicsLayerRef.current
     
-    if (config.useGraphicsLayerForHighlight && graphicsLayer) {
-      debugLogger.log('GRAPHICS-LAYER', {
-        event: 'clearGraphicsLayerIfExists-called',
-        widgetId: this.props.id,
-        graphicsLayerId: graphicsLayer.id,
-        graphicsCount: graphicsLayer.graphics.length,
-        timestamp: Date.now()
-      })
-      
-      const { clearGraphicsLayer } = require('./graphics-layer-utils')
-      clearGraphicsLayer(graphicsLayer)
-      
-      debugLogger.log('GRAPHICS-LAYER', {
-        event: 'clearGraphicsLayerIfExists-complete',
-        widgetId: this.props.id,
-        graphicsLayerId: graphicsLayer.id,
-        timestamp: Date.now()
-      })
-    } else {
-      debugLogger.log('GRAPHICS-LAYER', {
-        event: 'clearGraphicsLayerIfExists-skipped',
-        widgetId: this.props.id,
-        reason: !config.useGraphicsLayerForHighlight ? 'not-enabled' : 'no-graphics-layer',
-        hasGraphicsLayer: !!graphicsLayer,
-        timestamp: Date.now()
-      })
-    }
+    // Chunk 4: Graphics layer clearing (r018.25 - Step 4.3: Remove old implementation)
+    this.graphicsLayerManager.clearGraphics(this.props.id, config)
   }
 
 

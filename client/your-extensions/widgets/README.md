@@ -2,7 +2,7 @@
 
 Custom widgets for ArcGIS Experience Builder Developer Edition (1.19.0+). Built for performance, deep-linking, and advanced result management.
 
-**Current Version**: `1.19.0-r018.18` (Feature Branch: `feature/chunk-rock`)  
+**Current Version**: `1.19.0-r018.25` (Feature Branch: `feature/chunk-rock`)  
 **Stable Version**: `1.19.0-r017.60` (on `develop` branch)  
 **Release Type**: Hook & Shell Architecture Migration (r018.x)
 
