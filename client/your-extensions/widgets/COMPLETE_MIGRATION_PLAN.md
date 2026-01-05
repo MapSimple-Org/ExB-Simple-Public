@@ -122,11 +122,18 @@ This document outlines a **complete, safe migration** of all widget logic from `
 - Comparison logs between old/new implementations
 
 ### Chunk 4: Graphics Layer Management
-**Status:** 🔄 Needs extraction  
+**Status:** ✅ **COMPLETE** (r018.25)  
 **Complexity:** Medium  
 **Risk:** Medium  
 **Methods:** `handleJimuMapViewChanged()`, graphics layer initialization/cleanup  
-**Logging Required:** Initialization logs, cleanup logs, comparison logs
+**Implementation:** Manager class in `query-simple/src/runtime/hooks/use-graphics-layer.ts`  
+**Completed Steps:**
+- ✅ Step 4.1: Manager class added (r018.19)
+- ✅ Step 4.2: Parallel execution with comparison logging (r018.20-r018.24)
+- ✅ Step 4.3: Switched to manager, removed old code (r018.25)
+- ✅ Step 4.4: Cleanup - removed non-graphics layer implementation (r018.25)
+**Breaking Change:** Removed `useGraphicsLayerForHighlight` config option - graphics layer is now required when map widget is configured
+**Logging:** Graphics layer initialization logs (`GRAPHICS-LAYER` feature), comparison logs removed after verification
 
 ### Chunk 5: Accumulated Records Management
 **Status:** 🔄 Needs extraction  
@@ -485,33 +492,39 @@ if (JSON.stringify(oldSelectedIds.sort()) !== JSON.stringify(newSelectedIds.sort
 
 ---
 
-## Phase 4: Chunk 4 (Graphics Layer Management) - r018.31-018.34
+## Phase 4: Chunk 4 (Graphics Layer Management) - r018.19-018.25
 
-### Step 4.1: Create Graphics Layer Manager (r018.31)
+### Step 4.1: Create Graphics Layer Manager (r018.19) ✅
 **Goal:** Extract graphics layer logic to manager  
 **Test:** Graphics layer initializes correctly  
 **Test File:** `tests/unit/chunk-4-graphics-layer.test.ts`  
-**Logging:** Initialization logs, comparison logs
+**Logging:** Initialization logs, comparison logs  
+**Status:** ✅ Complete
 
-### Step 4.2: Extract Initialization Logic (r018.32)
-**Goal:** Move graphics layer creation to manager  
-**Test:** Graphics layer created when map view available  
-**Test File:** Unit tests for initialization  
-**Logging:** Creation logs, error logs
+### Step 4.2: Parallel Execution (r018.20-r018.24) ✅
+**Goal:** Run both implementations side-by-side, compare results  
+**Test:** Comparison logs show identical graphics layer state  
+**Status:** ✅ Complete - Comparison logs confirmed match: true  
+**Test File:** Expand unit tests, add comparison test  
+**Logging:** Comparison logs (`CHUNK-4-COMPARE`, `GRAPHICS-LAYER`)
 
-### Step 4.3: Extract Cleanup Logic (r018.33)
-**Goal:** Move graphics layer cleanup to manager  
-**Test:** Graphics layer cleaned up correctly  
-**Test File:** Unit tests for cleanup  
-**Logging:** Cleanup logs
+### Step 4.3: Switch to Manager (r018.25) ✅
+**Goal:** Replace old code with manager, remove non-graphics layer implementation  
+**Test:** Graphics layer management works correctly  
+**Status:** ✅ Complete  
+**Test File:** Full unit test suite + integration test  
+**Logging:** Removed comparison logs, kept essential GRAPHICS-LAYER logs
 
-### Step 4.4: Cleanup (r018.34)
-**Goal:** Remove old code, clean up temporary logs  
+### Step 4.4: Cleanup (r018.25) ✅
+**Goal:** Remove old code, remove non-graphics layer implementation  
 **Test:** Code is clean, all tests pass  
+**Status:** ✅ Complete  
 **Test File:** Final verification test  
-**Logging:** Remove comparison logs, keep essential logs
+**Logging:** Removed comparison logs, kept essential GRAPHICS-LAYER logs
 
-**Milestone:** r018.40 - Chunk 4 Complete
+**Breaking Change:** Removed `useGraphicsLayerForHighlight` config option - graphics layer is now required when map widget is configured. This simplifies the codebase by removing ~150+ lines of duplicate/legacy code.
+
+**Milestone:** r018.25 - Chunk 4 Complete ✅
 
 ---
 

@@ -1,9 +1,9 @@
 # Current Work Status
 
-**Last Updated:** 2025-12-24 (Release 018.18 - Chunk 6 Complete: Map View Management)  
+**Last Updated:** 2026-01-05 (Release 018.25 - Chunk 4 Complete: Graphics Layer Management)  
 **Branch:** `feature/chunk-rock`  
 **Developer:** Adam Cabrera  
-**Current Version:** v1.19.0-r018.18
+**Current Version:** v1.19.0-r018.25
 
 ## Active Work
 
@@ -56,8 +56,25 @@
   - `query-simple/src/version.ts` - Incremented to r018.18
 - **Verification:** Map view management working correctly, graphics layer initialization working, essential MAP-EXTENT logs preserved.
 
+### Current Task: Chunk 4 - Graphics Layer Management ✅ **COMPLETE** (r018.25)
+- **What:** Migrated graphics layer initialization and cleanup to `GraphicsLayerManager` class. Removed non-graphics layer implementation entirely (breaking change).
+- **Why:** Centralize graphics layer logic, simplify codebase by removing ~150+ lines of duplicate code, and make graphics layer the only selection method.
+- **Status:** ✅ **COMPLETE** - All steps completed:
+  - ✅ Step 4.1: Manager class added (r018.19)
+  - ✅ Step 4.2: Parallel execution with comparison logging (r018.20-r018.24)
+  - ✅ Step 4.3: Switched to manager, removed old code (r018.25)
+  - ✅ Step 4.4: Cleanup - removed non-graphics layer implementation (r018.25)
+- **Breaking Change:** `useGraphicsLayerForHighlight` is now required (`boolean` instead of `boolean?`) - graphics layer is always enabled when map widget is configured.
+- **Files Modified:**
+  - `query-simple/src/runtime/hooks/use-graphics-layer.ts` - `GraphicsLayerManager` class implementation
+  - `query-simple/src/runtime/widget.tsx` - Integrated manager, removed old `initializeGraphicsLayer()` and `cleanupGraphicsLayer()` methods, removed config change handling
+  - `query-simple/src/config.ts` - Changed `useGraphicsLayerForHighlight` from optional to required
+  - `query-simple/src/setting/setting.tsx` - Removed toggle switch, graphics layer always enabled
+  - `query-simple/src/version.ts` - Incremented to r018.25
+- **Verification:** Graphics layer management working correctly, all comparison logs showed match: true, non-graphics layer code paths removed.
+
 ### Next Task: TBD
-- **What:** Next chunk to be determined.
+- **What:** Next chunk to be determined (Chunk 5 or Chunk 3).
 - **Status:** Ready to proceed with next chunk.
 
 ### Deferred Task: Chunk 3 - Selection & Restoration
@@ -66,11 +83,11 @@
 - **Status:** ⚠️ **DEFERRED TO LAST** - Previous attempt failed. Will be tackled after Chunks 4, 5, 6, and 7 are complete.
 - **Reference:** See `COMPLETE_MIGRATION_PLAN.md` for detailed migration strategy and `CHUNK_TESTING_GUIDE.md` for testing instructions.
 
-### Deferred Task: Remove Non-Graphics Layer Implementation (BREAKING CHANGE)
-- **What:** Remove `useGraphicsLayerForHighlight` config option and always use graphics layer when map widget is configured.
-- **Why:** Graphics layer is cleaner implementation, fixes zoom issues, simplifies codebase (~44 conditionals removed).
-- **Status:** 📌 **DEFERRED** - Will be implemented as r019.0 (breaking change) after r018.0 migration is complete.
-- **Reference:** See `TODO.md` section "3a. Remove Non-Graphics Layer Implementation" for detailed implementation plan.
+### Previous Task (Complete): Remove Non-Graphics Layer Implementation ✅ **COMPLETE** (r018.25)
+- **What:** Removed `useGraphicsLayerForHighlight` config option and always use graphics layer when map widget is configured.
+- **Why:** Graphics layer is cleaner implementation, fixes zoom issues, simplifies codebase (~150+ lines removed).
+- **Status:** ✅ **COMPLETE** - Implemented as part of Chunk 4 migration (r018.25).
+- **Breaking Change:** `useGraphicsLayerForHighlight` is now required (`boolean` instead of `boolean?`) - graphics layer is always enabled when map widget is configured.
 
 ### Previous Task (Complete): Custom Zoom To Action & Shared Zoom Utility (r017.60)
 - **What:** Replace framework's default zoom action with custom implementation that uses consistent padding (50px) and centralize zoom logic to eliminate code duplication.

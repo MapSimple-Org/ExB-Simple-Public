@@ -257,17 +257,88 @@ This guide provides **specific testing instructions** for each chunk during the 
 
 ## Chunk 4: Graphics Layer Management
 
+**Status:** ✅ **COMPLETE** (r018.25)
+
 ### Debug Switches
 
+**For Production Testing:**
 ```
-?debug=CHUNK-4-COMPARE,GRAPHICS-LAYER
+?debug=GRAPHICS-LAYER
 ```
+
+**Why:** 
+- `GRAPHICS-LAYER` shows graphics layer initialization and cleanup logs from the manager implementation
+- Comparison logs (`CHUNK-4-COMPARE`) were removed after verification (r018.25)
+
+**Note:** Chunk 4 migration is complete. The old `initializeGraphicsLayer()` and `cleanupGraphicsLayer()` methods have been removed and replaced with `GraphicsLayerManager`. The non-graphics layer implementation has been removed entirely - graphics layer is now required when map widget is configured.
 
 ### What to Test
 
-- Graphics layer initialization when map view available
-- Graphics layer cleanup on unmount
-- Graphics layer cleanup when disabled in config
+**Note:** These tests were used during migration (r018.20-r018.24) to verify correctness. Chunk 4 is now complete and using only the manager implementation.
+
+#### Test 1: Graphics Layer Initialization
+
+**Steps:**
+1. Open widget with map widget configured
+2. Check browser console for logs
+
+**Expected Logs:**
+- `[QUERYSIMPLE-GRAPHICS-LAYER]` - `createOrGetGraphicsLayer-created`
+- `[QUERYSIMPLE-GRAPHICS-LAYER]` - `initializeGraphicsLayer-success`
+
+**What to Verify:**
+- ✅ Graphics layer is created when map view is available
+- ✅ Graphics layer ID is set correctly
+- ✅ Graphics layer is added to map view
+
+#### Test 2: Graphics Layer Cleanup
+
+**Steps:**
+1. Open widget with graphics layer initialized
+2. Close widget panel or unmount widget
+3. Check browser console for logs
+
+**Expected Logs:**
+- `[QUERYSIMPLE-GRAPHICS-LAYER]` - `cleanupGraphicsLayer-complete`
+
+**What to Verify:**
+- ✅ Graphics layer is removed from map view on cleanup
+- ✅ Graphics layer reference is cleared
+
+#### Test 3: Initialize from Output Data Source
+
+**Steps:**
+1. Execute a query that returns results
+2. Check browser console for logs
+
+**Expected Logs:**
+- `[QUERYSIMPLE-GRAPHICS-LAYER]` - Graphics layer initialization logs
+
+**What to Verify:**
+- ✅ Graphics layer initializes correctly when output data source is created
+- ✅ Graphics layer is ready for highlighting
+
+### Success Criteria for Chunk 4
+
+**Step 4.2 (Parallel Execution) Success:**
+- ✅ All comparison logs showed `match: true`
+- ✅ **NO** logs with `match: false` or mismatch warnings
+- ✅ Both implementations initialized graphics layer identically
+- ✅ Both implementations cleaned up graphics layer identically
+
+**Step 4.3 (Switch to Manager) Success:**
+- ✅ Graphics layer management works correctly
+- ✅ All old code removed
+- ✅ Non-graphics layer implementation removed
+- ✅ Config change handling removed
+
+**If Mismatches Occur:**
+1. **STOP** - Do not proceed to Step 4.3
+2. Review `CHUNK-4-COMPARE` logs with `match: false`
+3. Compare old vs new values in logs
+4. Investigate root cause
+5. Fix manager implementation
+6. Re-test before proceeding
 
 ---
 

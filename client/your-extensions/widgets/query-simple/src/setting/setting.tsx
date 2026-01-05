@@ -296,16 +296,16 @@ export default class Setting extends React.PureComponent<AllWidgetSettingProps<I
         )}
         {this.props.config.queryItems.length > 0 && (
           <SettingSection role='group' aria-label={this.getI18nMessage('highlightOptions')} title={this.getI18nMessage('highlightOptions')}>
-            <SettingRow label={this.getI18nMessage('useGraphicsLayerForHighlight')}>
-              <Switch
-                aria-label={this.getI18nMessage('useGraphicsLayerForHighlight')}
-                checked={config.useGraphicsLayerForHighlight ?? false}
-                onChange={(e) => {
-                  this.updateConfigForOptions(['useGraphicsLayerForHighlight', e.target.checked])
-                }}
-              />
-            </SettingRow>
             <SettingRow flow='wrap'>
+              <div css={css`
+                font-size: 0.875rem;
+                color: var(--dark-800);
+                line-height: 1.4;
+                width: 100%;
+                margin-bottom: 0.5rem;
+              `}>
+                {this.getI18nMessage('useGraphicsLayerForHighlight')}
+              </div>
               <div css={css`
                 font-size: 0.75rem;
                 color: var(--dark-400);
@@ -315,8 +315,7 @@ export default class Setting extends React.PureComponent<AllWidgetSettingProps<I
                 {this.getI18nMessage('useGraphicsLayerForHighlightDescription')}
               </div>
             </SettingRow>
-            {config.useGraphicsLayerForHighlight && (
-              <SettingSection role='group' title={this.getI18nMessage('selectMapForHighlight')} className='text-truncate'>
+            <SettingSection role='group' title={this.getI18nMessage('selectMapForHighlight')} className='text-truncate'>
                 <SettingRow>
                   <MapWidgetSelector
                     onSelect={(mapWidgetIds) => {
