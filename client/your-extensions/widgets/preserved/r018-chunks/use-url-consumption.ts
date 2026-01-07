@@ -17,7 +17,7 @@ interface UrlConsumptionCallbacks {
  * 
  * Part of Chunk 1: URL Parameter Consumption extraction.
  * 
- * Note: This is a utility class (not a hook) to work with class components.
+ * Note: This is a utility function (not a hook) to work with class components.
  */
 export class UrlConsumptionManager {
   private lastProcessedHash: string = ''
@@ -56,19 +56,13 @@ export class UrlConsumptionManager {
     const hash = window.location.hash.substring(1)
     const query = window.location.search.substring(1)
     
-    // Skip hash-only if we've already processed this exact hash fragment
-    // But always check query strings (they don't trigger hashchange events)
-    // Only skip if we have a hash fragment AND we've already processed it
-    if (hash && this.lastProcessedHash === hash) {
+    // Skip if we've already processed this exact hash fragment
+    if (this.lastProcessedHash === hash) {
       return
     }
     
     this.isProcessing = true
-    // Only update lastProcessedHash if we actually have a hash fragment
-    // Query strings are always checked (no skip logic for them)
-    if (hash) {
-      this.lastProcessedHash = hash
-    }
+    this.lastProcessedHash = hash
 
     const hashParams = new URLSearchParams(hash)
     const queryParams = new URLSearchParams(query)
@@ -152,9 +146,8 @@ export class UrlConsumptionManager {
       })
       
       // Update the URL without triggering a reload
-      // Always preserve pathname and query string, only update hash
       window.history.replaceState(null, '', 
-        window.location.pathname + window.location.search + (newHash ? `#${newHash}` : '')
+        newHash ? `#${newHash}` : window.location.pathname + window.location.search
       )
       
       // Reset tracking so it can be processed again if needed
@@ -163,19 +156,28 @@ export class UrlConsumptionManager {
   }
 
   /**
-   * Sets up the manager (no autonomous URL checking).
-   * QuerySimple should only process hash parameters when HelperSimple explicitly triggers it
-   * via OPEN_WIDGET_EVENT. This ensures HelperSimple remains the orchestrator.
+   * Sets up hash change listener.
    */
   setup(
     props: AllWidgetProps<IMConfig>,
     resultsMode: SelectionType,
     callbacks: UrlConsumptionCallbacks
   ): void {
-    // Do NOT automatically check URL parameters
-    // Do NOT set up hashchange listener
-    // QuerySimple will only process hash when HelperSimple explicitly opens the widget
-    // This ensures HelperSimple remains the orchestrator
+    // Create bound handler
+    this.hashChangeHandler = () => {
+      this.checkUrlParameters(props, resultsMode, callbacks)
+    }
+    
+    // Initial check
+    this.checkUrlParameters(props, resultsMode, callbacks)
+    
+    // Listen for hash changes
+    window.addEventListener('hashchange', this.hashChangeHandler)
+    
+    // Also check after a short delay to catch cases where hash was already present
+    setTimeout(() => {
+      this.checkUrlParameters(props, resultsMode, callbacks)
+    }, 100)
   }
 
   /**

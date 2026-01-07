@@ -7,10 +7,7 @@
   "description": "Widget used for drawing on the map",
   "copyright": "2021",
   "license": "http://www.apache.org/licenses/LICENSE-2.0",
-  "properties": {
-    "hasMainClass": false,
-    "hasSettingPage": false
-  },
+  "properties": {},
   "translatedLocales": [
     "en"
   ],

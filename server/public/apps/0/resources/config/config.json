@@ -109,12 +109,6 @@
           "bbox": {},
           "setting": {}
         },
-        "2": {
-          "type": "WIDGET",
-          "widgetId": "widget_15",
-          "bbox": {},
-          "setting": {}
-        },
         "3": {
           "type": "WIDGET",
           "widgetId": "widget_17",
@@ -132,7 +126,6 @@
       "label": "Controller layout",
       "order": [
         "1",
-        "2",
         "4",
         "3"
       ]
@@ -319,7 +312,7 @@
                   },
                   "displayType": "USE_ASK_FOR_VALUE",
                   "askForValueOptions": {
-                    "label": null,
+                    "label": "Parcel number is",
                     "display": "BLOCK",
                     "hint": "Please enter a ten digit number",
                     "cascade": null
@@ -453,15 +446,14 @@
                 "isUploaded": false,
                 "color": "var(--ref-palette-neutral-1100)"
               }
-            },
-            "order": 1
+            }
           },
           {
             "configId": "12739964857494834",
             "name": "Regional Trails",
             "useDataSource": {
-              "dataSourceId": "dataSource_1-19ae20572f0-layer-172-0-1",
-              "mainDataSourceId": "dataSource_1-19ae20572f0-layer-172-0-1",
+              "dataSourceId": "dataSource_1-19ae20572f0-layer-172-0-2",
+              "mainDataSourceId": "dataSource_1-19ae20572f0-layer-172-0-2",
               "rootDataSourceId": "dataSource_1",
               "fields": [
                 "PF_Alias_Name"
@@ -469,20 +461,6 @@
             },
             "outputDataSourceId": "widget_12_output_12739964857494834",
             "spatialRelationUseDataSources": [],
-            "icon": {
-              "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" fill=\"none\" viewBox=\"0 0 16 16\"><path fill=\"#000\" fill-rule=\"evenodd\" d=\"M15.993 1.47C15.91.64 15.05 0 14 0c-1.104 0-2 .71-2 1.603v3.193l2 1.616 2-1.616V1.603zM14.067 7c.239 0 .433.183.433.41 0 .225-.194.408-.433.408l-.764.005c-.966.013-1.741.056-2.597.164-1.424.178-2.491.504-3.053.978-.58.491-.61 1.155.084 2.156l.208.29c1.955 2.774.227 4.328-4.662 4.559l-.26.01-.538.015-.552.005a.42.42 0 0 1-.433-.41c0-.225.194-.408.433-.408l.548-.004c4.895-.072 6.274-1.141 4.736-3.324l-.201-.28c-.915-1.324-.872-2.43.059-3.218.726-.614 1.933-.982 3.516-1.18C11.71 7.035 12.683 7 14.067 7M2 8.076c1.05 0 1.91.64 1.993 1.47L4 9.68v3.193l-2 1.617-2-1.617V9.679c0-.893.896-1.603 2-1.603\" clip-rule=\"evenodd\"></path></svg>",
-              "properties": {
-                "filename": "PathOutlined",
-                "originalName": "outlined/gis/path.svg",
-                "path": [
-                  "gis",
-                  "PathOutlined"
-                ],
-                "inlineSvg": true,
-                "isUploaded": false,
-                "color": "var(--ref-palette-neutral-1100)"
-              }
-            },
             "sqlExprObj": {
               "logicalOperator": "AND",
               "parts": [
@@ -508,36 +486,8 @@
                 }
               ],
               "sql": "",
-              "displaySQL": "",
-              "sqlExpression": {
-                "logicalOperator": "AND",
-                "parts": [
-                  {
-                    "type": "SINGLE",
-                    "jimuFieldName": "PF_Alias_Name",
-                    "operator": "STRING_OPERATOR_IS",
-                    "valueOptions": {
-                      "isValid": true,
-                      "sourceType": "UNIQUE",
-                      "inputEditor": "SIMPLE_SELECT",
-                      "value": null
-                    },
-                    "displayType": "USE_ASK_FOR_VALUE",
-                    "askForValueOptions": {
-                      "label": null,
-                      "display": "BLOCK",
-                      "hint": "",
-                      "cascade": "NONE"
-                    },
-                    "displayLabel": null,
-                    "caseSensitive": false
-                  }
-                ],
-                "sql": "",
-                "displaySQL": ""
-              }
-            },
-            "resultExpandByDefault": true
+              "displaySQL": "(Trail Name = ?)"
+            }
           }
         ],
         "arrangeType": "BLOCK",
@@ -634,8 +584,8 @@
           "useFieldsInPopupInfo": true
         },
         {
-          "dataSourceId": "dataSource_1-19ae20572f0-layer-172-0-1",
-          "mainDataSourceId": "dataSource_1-19ae20572f0-layer-172-0-1",
+          "dataSourceId": "dataSource_1-19ae20572f0-layer-172-0-2",
+          "mainDataSourceId": "dataSource_1-19ae20572f0-layer-172-0-2",
           "rootDataSourceId": "dataSource_1",
           "fields": [
             "PF_Alias_Name"
@@ -679,8 +629,8 @@
               "height": 504.6875
             },
             "widget_15": {
-              "width": 430,
-              "height": 454.4375
+              "width": 457,
+              "height": 504.15625
             }
           },
           "arrangement": "floating"
@@ -703,267 +653,6 @@
       "layouts": {
         "controller": {
           "LARGE": "layout_5"
-        }
-      }
-    },
-    "widget_15": {
-      "uri": "widgets/query-simple/",
-      "version": "1.19.0",
-      "label": "QuerySimple",
-      "config": {
-        "queryItems": [
-          {
-            "configId": "4504440367870579",
-            "name": "KC Parcels",
-            "useDataSource": {
-              "dataSourceId": "dataSource_1-19ae1ed5667-layer-2-2",
-              "mainDataSourceId": "dataSource_1-19ae1ed5667-layer-2-2",
-              "rootDataSourceId": "dataSource_1",
-              "fields": [
-                "PIN"
-              ]
-            },
-            "outputDataSourceId": "widget_15_output_4504440367870579",
-            "spatialRelationUseDataSources": [],
-            "sqlExprObj": {
-              "logicalOperator": "AND",
-              "parts": [
-                {
-                  "type": "SINGLE",
-                  "jimuFieldName": "PIN",
-                  "operator": "STRING_OPERATOR_STARTS_WITH",
-                  "valueOptions": {
-                    "isValid": true,
-                    "sourceType": "USER_INPUT",
-                    "inputEditor": "TEXT_BOX",
-                    "value": null
-                  },
-                  "displayType": "USE_ASK_FOR_VALUE",
-                  "askForValueOptions": {
-                    "label": "Parcel number",
-                    "display": "BLOCK",
-                    "hint": "2223059013",
-                    "cascade": null
-                  },
-                  "displayLabel": null,
-                  "caseSensitive": false
-                }
-              ],
-              "sql": "",
-              "displaySQL": "(PIN starts with ?)",
-              "sqlExpression": {
-                "logicalOperator": "AND",
-                "parts": [
-                  {
-                    "type": "SINGLE",
-                    "jimuFieldName": "PIN",
-                    "operator": "STRING_OPERATOR_STARTS_WITH",
-                    "valueOptions": {
-                      "isValid": true,
-                      "sourceType": "USER_INPUT",
-                      "inputEditor": "TEXT_BOX",
-                      "value": null
-                    },
-                    "displayType": "USE_ASK_FOR_VALUE",
-                    "askForValueOptions": {
-                      "label": null,
-                      "display": "BLOCK",
-                      "hint": "22230590",
-                      "cascade": null
-                    },
-                    "displayLabel": null,
-                    "caseSensitive": false
-                  }
-                ],
-                "sql": "",
-                "displaySQL": "(PIN starts with ?)"
-              }
-            },
-            "groupId": "kcp"
-          },
-          {
-            "configId": "27103205142151154",
-            "name": "KC Parcels",
-            "useDataSource": {
-              "dataSourceId": "dataSource_1-19ae1ed5667-layer-2-2",
-              "mainDataSourceId": "dataSource_1-19ae1ed5667-layer-2-2",
-              "rootDataSourceId": "dataSource_1",
-              "fields": [
-                "MAJOR"
-              ]
-            },
-            "outputDataSourceId": "widget_15_output_27103205142151154",
-            "spatialRelationUseDataSources": [],
-            "sqlExprObj": {
-              "logicalOperator": "AND",
-              "parts": [
-                {
-                  "type": "SINGLE",
-                  "jimuFieldName": "MAJOR",
-                  "operator": "STRING_OPERATOR_IS",
-                  "valueOptions": {
-                    "isValid": true,
-                    "sourceType": "USER_INPUT",
-                    "inputEditor": "TEXT_BOX",
-                    "value": null
-                  },
-                  "displayType": "USE_ASK_FOR_VALUE",
-                  "askForValueOptions": {
-                    "label": null,
-                    "display": "BLOCK",
-                    "hint": "222305",
-                    "cascade": null
-                  },
-                  "displayLabel": null,
-                  "caseSensitive": false
-                }
-              ],
-              "sql": "",
-              "displaySQL": "(MAJOR = ?)"
-            },
-            "groupId": "kcp"
-          },
-          {
-            "configId": "4744975195556419",
-            "name": "Regional trails",
-            "useDataSource": {
-              "dataSourceId": "dataSource_1-19ae20572f0-layer-172-0-1",
-              "mainDataSourceId": "dataSource_1-19ae20572f0-layer-172-0-1",
-              "rootDataSourceId": "dataSource_1",
-              "fields": [
-                "Trail_Name"
-              ]
-            },
-            "outputDataSourceId": "widget_15_output_4744975195556419",
-            "spatialRelationUseDataSources": [],
-            "sqlExprObj": {
-              "logicalOperator": "AND",
-              "parts": [
-                {
-                  "type": "SINGLE",
-                  "jimuFieldName": "Trail_Name",
-                  "operator": "STRING_OPERATOR_IS",
-                  "valueOptions": {
-                    "isValid": true,
-                    "sourceType": "UNIQUE",
-                    "inputEditor": "SIMPLE_SELECT",
-                    "value": null
-                  },
-                  "displayType": "USE_ASK_FOR_VALUE",
-                  "askForValueOptions": {
-                    "label": null,
-                    "display": "BLOCK",
-                    "hint": "",
-                    "cascade": "NONE"
-                  },
-                  "displayLabel": null,
-                  "caseSensitive": false
-                }
-              ],
-              "sql": "",
-              "displaySQL": "(Trail_Name = ?)"
-            }
-          }
-        ],
-        "arrangeType": "BLOCK",
-        "arrangeWrap": false,
-        "resultListDirection": "Vertical",
-        "resultPagingStyle": "LazyLoad",
-        "defaultPageSize": 20,
-        "lazyLoadInitialPageSize": 500
-      },
-      "id": "widget_15",
-      "outputDataSources": [
-        "widget_15_output_4504440367870579",
-        "widget_15_output_27103205142151154",
-        "widget_15_output_4744975195556419"
-      ],
-      "useDataSources": [
-        {
-          "dataSourceId": "dataSource_1-19ae1ed5667-layer-2-2",
-          "mainDataSourceId": "dataSource_1-19ae1ed5667-layer-2-2",
-          "rootDataSourceId": "dataSource_1",
-          "fields": [
-            "PIN",
-            "MAJOR"
-          ],
-          "useFieldsInPopupInfo": true
-        },
-        {
-          "dataSourceId": "dataSource_1-19ae20572f0-layer-172-0-1",
-          "mainDataSourceId": "dataSource_1-19ae20572f0-layer-172-0-1",
-          "rootDataSourceId": "dataSource_1",
-          "fields": [
-            "Trail_Name"
-          ],
-          "useFieldsInPopupInfo": true
-        }
-      ],
-      "dataActions": {
-        "showOnMap": {
-          "config": {
-            "isUseCustomSymbol": true,
-            "isOperationalLayer": true,
-            "symbolOption": {
-              "pointSymbol": {
-                "type": "esriSMS",
-                "color": [
-                  255,
-                  255,
-                  0,
-                  150
-                ],
-                "angle": 0,
-                "xoffset": 0,
-                "yoffset": 0,
-                "size": 12,
-                "style": "esriSMSCircle",
-                "outline": {
-                  "type": "esriSLS",
-                  "color": [
-                    255,
-                    255,
-                    0,
-                    150
-                  ],
-                  "width": 1,
-                  "style": "esriSLSSolid"
-                }
-              },
-              "polylineSymbol": {
-                "type": "esriSLS",
-                "color": [
-                  255,
-                  255,
-                  0,
-                  150
-                ],
-                "width": 0.75,
-                "style": "esriSLSSolid"
-              },
-              "polygonSymbol": {
-                "type": "esriSFS",
-                "color": [
-                  255,
-                  255,
-                  0,
-                  150
-                ],
-                "outline": {
-                  "type": "esriSLS",
-                  "color": [
-                    255,
-                    255,
-                    0,
-                    150
-                  ],
-                  "width": 1,
-                  "style": "esriSLSSolid"
-                },
-                "style": "esriSFSSolid"
-              }
-            }
-          }
         }
       }
     },
@@ -1307,7 +996,7 @@
   "attributes": {
     "portalUrl": "https://mapsimple.maps.arcgis.com"
   },
-  "timestamp": 1766164318997,
+  "timestamp": 1767649676755,
   "sharedThemeVariables": null,
   "mainLocale": "en",
   "dataSources": {
@@ -1362,41 +1051,18 @@
       "layerId": "2",
       "isOutputFromWidget": true
     },
-    "widget_15_output_4504440367870579": {
-      "id": "widget_15_output_4504440367870579",
-      "label": "KC Parcels result",
-      "type": "FEATURE_LAYER",
-      "geometryType": "esriGeometryPolygon",
-      "url": "https://gismaps.kingcounty.gov/arcgis/rest/services/Property/KingCo_PropertyInfo/MapServer/2",
-      "itemId": "666c951c560e448d830b36e7bf212518",
-      "portalUrl": "https://www.arcgis.com",
-      "originDataSources": [
-        {
-          "dataSourceId": "dataSource_1-19ae1ed5667-layer-2-2",
-          "mainDataSourceId": "dataSource_1-19ae1ed5667-layer-2-2",
-          "rootDataSourceId": "dataSource_1",
-          "fields": [
-            "PIN",
-            "MAJOR"
-          ],
-          "useFieldsInPopupInfo": true
-        }
-      ],
-      "layerId": "2",
-      "isOutputFromWidget": true
-    },
     "widget_12_output_12739964857494834": {
       "id": "widget_12_output_12739964857494834",
       "label": "Regional Trails result",
       "type": "FEATURE_LAYER",
       "geometryType": "esriGeometryPolyline",
-      "url": "https://gismaps.kingcounty.gov/arcgis/rest/services/Parks/KingCo_ParksTrails/MapServer/1",
+      "url": "https://gismaps.kingcounty.gov/arcgis/rest/services/Parks/KingCo_ParksTrails/MapServer/2",
       "itemId": "0157d2e14ac043469731a4fc12b50907",
       "portalUrl": "https://www.arcgis.com",
       "originDataSources": [
         {
-          "dataSourceId": "dataSource_1-19ae20572f0-layer-172-0-1",
-          "mainDataSourceId": "dataSource_1-19ae20572f0-layer-172-0-1",
+          "dataSourceId": "dataSource_1-19ae20572f0-layer-172-0-2",
+          "mainDataSourceId": "dataSource_1-19ae20572f0-layer-172-0-2",
           "rootDataSourceId": "dataSource_1",
           "fields": [
             "PF_Alias_Name"
@@ -1404,7 +1070,7 @@
           "useFieldsInPopupInfo": true
         }
       ],
-      "layerId": "1",
+      "layerId": "2",
       "isOutputFromWidget": true
     },
     "widget_18_output_6712658679306877": {
@@ -1452,27 +1118,6 @@
       "layerId": "1",
       "isOutputFromWidget": true
     },
-    "widget_15_output_27103205142151154": {
-      "id": "widget_15_output_27103205142151154",
-      "label": "KC Parcels result",
-      "type": "FEATURE_LAYER",
-      "geometryType": "esriGeometryPolygon",
-      "url": "https://gismaps.kingcounty.gov/arcgis/rest/services/Property/KingCo_PropertyInfo/MapServer/2",
-      "itemId": "666c951c560e448d830b36e7bf212518",
-      "portalUrl": "https://www.arcgis.com",
-      "originDataSources": [
-        {
-          "dataSourceId": "dataSource_1-19ae1ed5667-layer-2-2",
-          "mainDataSourceId": "dataSource_1-19ae1ed5667-layer-2-2",
-          "rootDataSourceId": "dataSource_1",
-          "fields": [
-            "MAJOR"
-          ]
-        }
-      ],
-      "layerId": "2",
-      "isOutputFromWidget": true
-    },
     "widget_18_output_9681964291836676": {
       "id": "widget_18_output_9681964291836676",
       "label": "Major result",
@@ -1492,28 +1137,6 @@
         }
       ],
       "layerId": "2",
-      "isOutputFromWidget": true
-    },
-    "widget_15_output_4744975195556419": {
-      "id": "widget_15_output_4744975195556419",
-      "label": "Regional trails result",
-      "type": "FEATURE_LAYER",
-      "geometryType": "esriGeometryPolyline",
-      "url": "https://gismaps.kingcounty.gov/arcgis/rest/services/Parks/KingCo_ParksTrails/MapServer/1",
-      "itemId": "0157d2e14ac043469731a4fc12b50907",
-      "portalUrl": "https://www.arcgis.com",
-      "originDataSources": [
-        {
-          "dataSourceId": "dataSource_1-19ae20572f0-layer-172-0-1",
-          "mainDataSourceId": "dataSource_1-19ae20572f0-layer-172-0-1",
-          "rootDataSourceId": "dataSource_1",
-          "fields": [
-            "Trail_Name"
-          ],
-          "useFieldsInPopupInfo": true
-        }
-      ],
-      "layerId": "1",
       "isOutputFromWidget": true
     }
   },

@@ -35,6 +35,8 @@
   "excludeDataActions": [
     "arcgis-map.addToMap",
     "arcgis-map.showOnMap",
+    "arcgis-map.zoomToFeature",
+    "zoomToFeature",
     "edit.edit",
     "query-select-loaded",
     "query-clear-selection"
