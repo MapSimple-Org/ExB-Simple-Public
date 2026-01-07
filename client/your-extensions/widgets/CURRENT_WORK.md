@@ -1,13 +1,60 @@
 # Current Work Status
 
-**Last Updated:** 2026-01-05 (Release 018.25 - Chunk 4 Complete: Graphics Layer Management)  
+**Last Updated:** 2026-01-07 (Release 018.56 - Chunk 5 In Progress: Bug Fixes & Documentation)  
 **Branch:** `feature/chunk-rock`  
 **Developer:** Adam Cabrera  
-**Current Version:** v1.19.0-r018.25
+**Current Version:** v1.19.0-r018.56
 
 ## Active Work
 
-### Current Task: Chunk 1 - URL Parameter Consumption ✅ **COMPLETE** (r018.10)
+### Current Task: Chunk 5 - Accumulated Records Management 🔄 **IN PROGRESS** (r018.26-r018.56)
+- **What:** Migrating accumulated records state management to `AccumulatedRecordsManager` class.
+- **Why:** Centralize accumulated records logic, improve maintainability, prepare for Hook & Shell architecture.
+- **Status:** 🔄 **IN PROGRESS** - Parallel execution phase with comparison logging:
+  - ✅ Step 5.1: Manager class added (r018.26)
+  - 🔄 Step 5.2: Parallel execution with comparison logging (r018.27-r018.56) - **IN PROGRESS**
+  - ⏳ Step 5.3: Switch to manager, remove old code
+  - ⏳ Step 5.4: Cleanup - remove temporary comparison logs
+- **Debug Switches:** `CHUNK-5-COMPARE,RESULTS-MODE,FORM`
+- **Recent Fixes:**
+  - ✅ Fixed hash parameter re-execution when switching queries (r018.43-r018.53)
+    - **Problem:** Hash parameters re-executed when switching queries due to multiple issues
+    - **Solution:** Multi-part fix:
+      - r018.43: Converted `shouldUseInitialQueryValueForSelectionRef` from ref to state
+      - r018.46: Added `onHashParameterUsed` callback after query execution
+      - r018.47: Moved callback to after UI updates complete (prevents re-render interruption)
+      - r018.52: Clear hash state atomically in single `setState` call
+      - r018.53: Fixed `queryItemShortId` undefined by using `queryItem.shortId`
+  - ✅ Fixed input value cleared after query execution (r018.54-r018.55)
+    - **Problem:** Input field value was cleared after hash/user query execution
+    - **Solution:** 
+      - r018.54: Removed `|| !initialInputValue` condition that caused form reset
+      - r018.55: Added `previousConfigIdRef` to track configId changes, preserve existing values
+    - **Result:** Input values now persist as visual records after execution
+  - ✅ Fixed Remove mode not resetting when all records cleared (r018.56)
+    - **Problem:** Mode stayed on "Remove" when all accumulated records cleared
+    - **Solution:** Added mode reset logic to `handleAccumulatedRecordsChange` - reset to NewSelection when all records cleared in Remove mode
+    - **Result:** Mode state now reflects current capability
+  - ✅ Fixed hash parameter race condition where queries didn't execute when Query tab wasn't active (r018.39)
+    - **Problem:** Hash values were set while Results tab was active, but `SqlExpressionRuntime` didn't fire `onChange` because input wasn't visible
+    - **Solution:** Ensure Query tab is active before setting hash values - switch to Query tab first, then set value
+- **Files Modified:**
+  - `query-simple/src/runtime/hooks/use-accumulated-records.ts` - `AccumulatedRecordsManager` class implementation
+  - `query-simple/src/runtime/widget.tsx` - Integrated manager with parallel execution, comparison logging, mode reset logic
+  - `query-simple/src/runtime/query-task-form.tsx` - Fixed hash parameter race condition, input value preservation
+  - `query-simple/src/runtime/query-task.tsx` - Pass tab state props to form, call `onHashParameterUsed` after UI updates and zoom complete
+  - `query-simple/src/version.ts` - Incremented to r018.56
+  - `query-simple/BUGS.md` - Documented all fixes
+  - `HELPER_QUERY_INTERACTION.md` - Comprehensive HS/QS interaction documentation
+- **Verification:** 
+  - Comparison logs showing match: true for mode changes and accumulated records changes
+  - Hash queries execute correctly regardless of active tab
+  - Hash re-execution on query switch resolved
+  - Hash queries zoom and display results correctly
+  - Input values persist after execution (visual records)
+  - Remove mode resets when all records cleared
+
+### Previous Task (Complete): Chunk 1 - URL Parameter Consumption ✅ **COMPLETE** (r018.10)
 - **What:** Migrated URL parameter detection and consumption to `UrlConsumptionManager` class.
 - **Why:** Centralize URL parameter logic for deep linking, eliminate code duplication, prepare for Hook & Shell architecture.
 - **Status:** ✅ **COMPLETE** - All steps completed and tested:

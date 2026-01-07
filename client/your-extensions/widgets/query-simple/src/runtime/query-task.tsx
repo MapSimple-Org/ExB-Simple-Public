@@ -55,6 +55,13 @@ import { createQuerySimpleDebugLogger } from 'widgets/shared-code/common'
 
 const debugLogger = createQuerySimpleDebugLogger()
 
+// Event fired when SqlExpressionRuntime converts hash value from string to array format
+const QUERYSIMPLE_HASH_VALUE_CONVERTED_EVENT = 'querysimple-hash-value-converted'
+
+// Event fired when a hash-triggered query execution completes successfully
+// This allows HelperSimple to track which hash parameters have been executed
+const QUERYSIMPLE_HASH_QUERY_EXECUTED_EVENT = 'querysimple-hash-query-executed'
+
 export interface QueryTaskProps {
   widgetId: string
   index: number
@@ -159,6 +166,19 @@ export function QueryTask (props: QueryTaskProps) {
   const [stage, setStage] = React.useState(0) // 0 = form, 1 = results, 2 = loading
   const [internalActiveTab, setInternalActiveTab] = React.useState<'query' | 'results'>('query')
   
+  // Log when initialInputValue prop is received
+  React.useEffect(() => {
+    debugLogger.log('HASH-EXEC', {
+      event: 'querytask-initialinputvalue-prop-received',
+      widgetId: props.widgetId,
+      queryItemConfigId: props.queryItem.configId,
+      queryItemShortId: props.queryItemShortId,
+      hasInitialInputValue: !!props.initialInputValue,
+      initialInputValue: props.initialInputValue,
+      timestamp: Date.now()
+    })
+  }, [props.initialInputValue, props.widgetId, props.queryItem.configId, props.queryItemShortId])
+  
   // Controlled tab state: use prop if provided, otherwise internal state
   const activeTab = propActiveTab || internalActiveTab
   const setActiveTab = React.useCallback((tab: 'query' | 'results') => {
@@ -194,6 +214,12 @@ export function QueryTask (props: QueryTaskProps) {
   // Error states for user-facing errors
   const [selectionError, setSelectionError] = React.useState<string>(null)
   const [zoomError, setZoomError] = React.useState<string>(null)
+  // Store pending query when waiting for hash value conversion
+  const pendingHashQueryRef = React.useRef<{
+    sqlExpr: IMSqlExpression
+    spatialFilter: SpatialFilterObj
+    runtimeZoomToSelected?: boolean
+  } | null>(null)
 
   const currentItem = Object.assign({}, DEFAULT_QUERY_ITEM, queryItem)
   const { icon, name, displayLabel } = currentItem
@@ -813,21 +839,20 @@ export function QueryTask (props: QueryTaskProps) {
   }, [resultCount, activeTab])
 
   /**
-   * Handles form submission when user clicks "Apply" button.
-   * Clears old results (if any) by programmatically clicking the trash can button,
-   * then executes the query with the provided SQL expression and spatial filter.
+   * Internal implementation of handleFormSubmit (without waiting logic)
+   * This is called either directly or after hash value conversion
    * 
    * @param sqlExpr - The SQL expression for attribute filtering
    * @param spatialFilter - The spatial filter object
    * @param runtimeZoomToSelected - Optional runtime override for zoom-to-selected behavior
    */
-  const handleFormSubmit = React.useCallback(async (sqlExpr: IMSqlExpression, spatialFilter: SpatialFilterObj, runtimeZoomToSelected?: boolean) => {
+  const handleFormSubmitInternal = React.useCallback(async (sqlExpr: IMSqlExpression, spatialFilter: SpatialFilterObj, runtimeZoomToSelected?: boolean) => {
     // Clear previous errors when starting a new query
     setSelectionError(null)
     setZoomError(null)
     
     debugLogger.log('TASK', {
-      event: 'handleFormSubmit-start',
+      event: 'handleFormSubmitInternal-executing',
       widgetId: props.widgetId,
       resultsMode,
       timestamp: Date.now()
@@ -1175,7 +1200,7 @@ export function QueryTask (props: QueryTaskProps) {
           timestamp: Date.now()
         })
         
-        // Update result count
+        // Update result count FIRST (before any parent callbacks that might cause re-renders)
         // For "Add to" and "Remove from" modes, use accumulated/remaining count
         // For "New" mode, use query count
         const newResultCount = resultsMode === SelectionType.AddToSelection || resultsMode === SelectionType.RemoveFromSelection
@@ -1241,6 +1266,65 @@ export function QueryTask (props: QueryTaskProps) {
             }
           }
         }
+        
+        // NOW call onHashParameterUsed AFTER all UI updates and zoom operations complete
+        // This prevents the parent re-render from interrupting the promise chain
+        // This prevents hash parameters from re-executing when switching queries
+        if (initialInputValue && queryItem.shortId && onHashParameterUsed) {
+          debugLogger.log('HASH-EXEC', {
+            event: 'querytask-calling-onhashparameterused',
+            widgetId: props.widgetId,
+            queryItemConfigId: props.queryItem.configId,
+            queryItemShortId: queryItem.shortId,
+            initialInputValue,
+            timestamp: Date.now()
+          })
+          
+          debugLogger.log('TASK', {
+            event: 'hash-query-executed-notifying-parent',
+            widgetId: props.widgetId,
+            queryItemConfigId: queryItem.configId,
+            queryItemShortId: queryItem.shortId,
+            initialInputValue,
+            timestamp: Date.now()
+          })
+          onHashParameterUsed(queryItem.shortId)
+          
+          debugLogger.log('HASH-EXEC', {
+            event: 'querytask-onhashparameterused-called',
+            widgetId: props.widgetId,
+            queryItemConfigId: props.queryItem.configId,
+            queryItemShortId: queryItem.shortId,
+            timestamp: Date.now()
+          })
+          
+          // Fire event to notify HelperSimple that hash query execution is complete
+          // This allows HelperSimple to track which hash parameters have been executed
+          // to prevent re-execution when switching queries
+          const hashParam = `${queryItem.shortId}=${initialInputValue}`
+          const executedEvent = new CustomEvent(QUERYSIMPLE_HASH_QUERY_EXECUTED_EVENT, {
+            detail: {
+              widgetId: props.widgetId,
+              shortId: queryItem.shortId,
+              value: initialInputValue,
+              hashParam
+            },
+            bubbles: true,
+            cancelable: true
+          })
+          window.dispatchEvent(executedEvent)
+          
+          debugLogger.log('HASH-EXEC', {
+            event: 'querytask-hash-query-executed-event-dispatched',
+            widgetId: props.widgetId,
+            queryItemConfigId: queryItem.configId,
+            queryItemShortId: queryItem.shortId,
+            initialInputValue,
+            hashParam,
+            timestamp: Date.now()
+          })
+        }
+        
         return Promise.resolve(true)
       })
       .catch(error => {
@@ -1259,7 +1343,157 @@ export function QueryTask (props: QueryTaskProps) {
         }
         // setStage(1) // Removed from here; now called in the main chain before background actions
       })
-  }, [currentItem, queryItem, props.widgetId, outputDS, publishDataClearedMsg, clearResult, resultsMode, accumulatedRecords, onAccumulatedRecordsChange, onClearGraphicsLayer])
+  }, [currentItem, queryItem, props.widgetId, outputDS, publishDataClearedMsg, clearResult, resultsMode, accumulatedRecords, onAccumulatedRecordsChange, onClearGraphicsLayer, mapView, useGraphicsLayerForHighlight, zoomToRecords])
+
+  // Listen for hash value conversion event and execute pending query
+  React.useEffect(() => {
+    const handleHashValueConverted = (event: CustomEvent) => {
+      debugLogger.log('TASK', {
+        event: 'hash-value-converted-event-received',
+        widgetId: props.widgetId,
+        eventWidgetId: event.detail?.widgetId,
+        eventConfigId: event.detail?.configId,
+        matchesWidget: event.detail?.widgetId === props.widgetId,
+        hasPendingQuery: !!pendingHashQueryRef.current,
+        timestamp: Date.now()
+      })
+      
+      // Only process events for this widget
+      if (event.detail?.widgetId !== props.widgetId) {
+        debugLogger.log('TASK', {
+          event: 'hash-value-converted-event-ignored-wrong-widget',
+          widgetId: props.widgetId,
+          eventWidgetId: event.detail?.widgetId,
+          timestamp: Date.now()
+        })
+        return
+      }
+      
+      if (pendingHashQueryRef.current) {
+        debugLogger.log('TASK', {
+          event: 'hash-value-converted-executing-pending-query',
+          widgetId: props.widgetId,
+          configId: event.detail.configId,
+          initialInputValue: event.detail.initialInputValue,
+          timestamp: Date.now()
+        })
+        
+        const { sqlExpr, spatialFilter, runtimeZoomToSelected } = pendingHashQueryRef.current
+        pendingHashQueryRef.current = null
+        
+        // Execute the pending query now that value is converted
+        // Use setTimeout to ensure this happens after the current event loop
+        setTimeout(() => {
+          handleFormSubmitInternal(sqlExpr, spatialFilter, runtimeZoomToSelected)
+        }, 0)
+      } else {
+        // Conversion happened before handleFormSubmit was called
+        // applyQuery() is called directly from handleSqlExprObjChange in query-task-form.tsx
+        debugLogger.log('TASK', {
+          event: 'hash-value-converted-event-received-no-pending-query',
+          widgetId: props.widgetId,
+          configId: event.detail?.configId,
+          initialInputValue: event.detail?.initialInputValue,
+          note: 'Conversion happened before handleFormSubmit - applyQuery() called directly from form component',
+          timestamp: Date.now()
+        })
+      }
+    }
+    
+    document.addEventListener(QUERYSIMPLE_HASH_VALUE_CONVERTED_EVENT, handleHashValueConverted as EventListener)
+    
+    return () => {
+      document.removeEventListener(QUERYSIMPLE_HASH_VALUE_CONVERTED_EVENT, handleHashValueConverted as EventListener)
+    }
+  }, [props.widgetId, handleFormSubmitInternal])
+
+  /**
+   * Handles form submission when user clicks "Apply" button.
+   * Checks if hash value needs conversion and waits for event if needed.
+   * 
+   * @param sqlExpr - The SQL expression for attribute filtering
+   * @param spatialFilter - The spatial filter object
+   * @param runtimeZoomToSelected - Optional runtime override for zoom-to-selected behavior
+   */
+  const handleFormSubmit = React.useCallback(async (sqlExpr: IMSqlExpression, spatialFilter: SpatialFilterObj, runtimeZoomToSelected?: boolean) => {
+    // LOG AT THE VERY START - before any checks
+    debugLogger.log('TASK', {
+      event: 'handleFormSubmit-called',
+      widgetId: props.widgetId,
+      sqlExprExists: !!sqlExpr,
+      firstPartExists: !!sqlExpr?.parts?.[0],
+      timestamp: Date.now()
+    })
+    
+    // Check if this is a hash-triggered query with unconverted value (string format)
+    const firstPart = sqlExpr?.parts?.[0]
+    const value = firstPart?.type === 'SINGLE' ? (firstPart as any).valueOptions?.value : null
+    const isStringValue = typeof value === 'string' && value.length > 0
+    const isArrayValue = Array.isArray(value) && value.length > 0
+    
+    debugLogger.log('TASK', {
+      event: 'handleFormSubmit-checking-conversion',
+      widgetId: props.widgetId,
+      initialInputValue,
+      valueType: typeof value,
+      isStringValue,
+      isArrayValue,
+      value: Array.isArray(value) ? value : value,
+      willCheckWaitCondition: isStringValue && !isArrayValue && initialInputValue && value === initialInputValue,
+      timestamp: Date.now()
+    })
+    
+    // If value is string (not converted to array yet), wait for conversion event
+    // This happens when hash value changes for same configId
+    if (isStringValue && !isArrayValue && initialInputValue && value === initialInputValue) {
+      debugLogger.log('TASK', {
+        event: 'handleFormSubmit-waiting-for-conversion',
+        widgetId: props.widgetId,
+        currentValue: value,
+        initialInputValue,
+        timestamp: Date.now()
+      })
+      
+      // Store pending query
+      pendingHashQueryRef.current = {
+        sqlExpr,
+        spatialFilter,
+        runtimeZoomToSelected
+      }
+      
+      // Set a timeout to prevent infinite waiting (fallback after 2 seconds)
+      setTimeout(() => {
+        if (pendingHashQueryRef.current) {
+          debugLogger.log('TASK', {
+            event: 'handleFormSubmit-conversion-timeout-executing-anyway',
+            widgetId: props.widgetId,
+            timestamp: Date.now()
+          })
+          
+          const { sqlExpr, spatialFilter, runtimeZoomToSelected } = pendingHashQueryRef.current
+          pendingHashQueryRef.current = null
+          
+          // Execute anyway (fallback)
+          handleFormSubmitInternal(sqlExpr, spatialFilter, runtimeZoomToSelected)
+        }
+      }, 2000)
+      
+      return // Exit early, will execute when event fires
+    }
+    
+    debugLogger.log('TASK', {
+      event: 'handleFormSubmit-executing-immediately',
+      widgetId: props.widgetId,
+      reason: isStringValue ? 'not-hash-triggered' : (isArrayValue ? 'already-converted' : 'no-value'),
+      valueType: typeof value,
+      isStringValue,
+      isArrayValue,
+      timestamp: Date.now()
+    })
+    
+    // Value is already converted or not hash-triggered, execute immediately
+    handleFormSubmitInternal(sqlExpr, spatialFilter, runtimeZoomToSelected)
+  }, [props.widgetId, initialInputValue, handleFormSubmitInternal])
 
   const { useAttributeFilter, sqlExprObj, useSpatialFilter, spatialFilterTypes, spatialIncludeRuntimeData, spatialRelationUseDataSources} = currentItem
   const showAttributeFilter = useAttributeFilter && sqlExprObj != null
@@ -1880,6 +2114,8 @@ export function QueryTask (props: QueryTaskProps) {
                     initialInputValue={initialInputValue}
                     onHashParameterUsed={onHashParameterUsed}
                     queryItemShortId={queryItem.shortId}
+                    activeTab={activeTab}
+                    onTabChange={setActiveTab}
                   />
                 </div>
               )}

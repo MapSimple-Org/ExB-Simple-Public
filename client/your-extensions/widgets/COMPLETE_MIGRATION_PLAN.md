@@ -136,11 +136,29 @@ This document outlines a **complete, safe migration** of all widget logic from `
 **Logging:** Graphics layer initialization logs (`GRAPHICS-LAYER` feature), comparison logs removed after verification
 
 ### Chunk 5: Accumulated Records Management
-**Status:** 🔄 Needs extraction  
+**Status:** 🔄 **IN PROGRESS** - Parallel Execution Phase (r018.26-r018.56)  
 **Complexity:** Medium  
 **Risk:** Medium  
 **Methods:** `handleAccumulatedRecordsChange()`, accumulated records state management  
-**Logging Required:** State change logs, accumulation logs, mode reset logs
+**Implementation:** Manager class in `query-simple/src/runtime/hooks/use-accumulated-records.ts`  
+**Completed Steps:**
+- ✅ Step 5.1: Manager class added (r018.26)
+- 🔄 Step 5.2: Parallel execution with comparison logging (r018.27-r018.56) - **IN PROGRESS**
+- ⏳ Step 5.3: Switch to manager, remove old code
+- ⏳ Step 5.4: Cleanup - remove temporary comparison logs
+**Debug Switches:** `CHUNK-5-COMPARE,RESULTS-MODE,FORM`
+**Recent Fixes:**
+- ✅ Fixed hash parameter re-execution when switching queries (r018.43-r018.53)
+  - Multi-part fix: ref→state conversion, callback timing, atomic state clearing, undefined variable fix
+- ✅ Fixed input value cleared after query execution (r018.54-r018.55)
+  - Preserve input values as visual records after execution
+- ✅ Fixed Remove mode not resetting when all records cleared (r018.56)
+  - Mode resets to NewSelection when all accumulated records cleared
+- ✅ Fixed hash parameter race condition: Ensure Query tab is active before setting hash values (r018.39)
+**Logging:** Comparison logs (`CHUNK-5-COMPARE`), state change logs (`RESULTS-MODE` feature), form logs (`FORM` feature)
+**Documentation:** 
+- `HELPER_QUERY_INTERACTION.md` - Comprehensive HS/QS interaction architecture
+- `query-simple/BUGS.md` - All fixes documented with root causes and solutions
 
 ### Chunk 6: Map View Management (Next)
 **Status:** 🔄 Ready to implement  

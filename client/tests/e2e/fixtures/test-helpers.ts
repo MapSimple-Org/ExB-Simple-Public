@@ -396,30 +396,61 @@ export class KCSearchHelpers {
   }
 
   /**
-   * Click the Clear Results button
+   * Click the Clear Results button (trash can icon)
+   * This automatically switches back to Query tab after clearing
    */
   async clickClearResults(widgetId: string) {
     console.log(`🧹 [Step: clickClearResults] Clicking Clear Results in ${widgetId}`);
-    
-    // Explicitly switch to Results tab first
-    await this.switchToResultsTab(widgetId);
 
     const widget = this.getWidget(widgetId);
-    // Target the trash can specifically in the Results header to avoid ambiguity with the Query tab's button
-    const clearBtn = widget.locator('.query-result__header button[aria-label*="clear results" i], .query-result__header button:has-text("Clear Results")').first();
+    
+    // Try multiple selectors to find the Clear Results button:
+    // 1. Button with aria-label containing "clear results"
+    // 2. Button with text "Clear Results"
+    // 3. Button containing the trash icon (by icon class or SVG)
+    let clearBtn = widget.locator('.query-result__header button[aria-label*="clear results" i], .query-result__header button:has-text("Clear Results")').first();
     
     try {
-      // Use shorter timeout and force click
-      await clearBtn.waitFor({ state: 'visible', timeout: 5000 });
-      console.log('   🖱️ Clicking Clear Results button');
+      // Try to find button first (might already be on Results tab)
+      await clearBtn.waitFor({ state: 'visible', timeout: 3000 });
+      console.log('   🖱️ Clicking Clear Results button (trash can)');
       await clearBtn.click({ force: true });
-      // Wait for the clear to process and UI to update
+      // Wait for the clear to process and UI to update (switches to Query tab automatically)
       await this.page.waitForTimeout(2000);
-      console.log('   ✅ Results cleared');
+      console.log('   ✅ Results cleared (should now be on Query tab)');
+      return;
     } catch (e) {
-      console.log(`   ❌ [clickClearResults] Failed: ${e.message}`);
-      // Fallback
-      await clearBtn.click({ force: true }).catch(() => console.log('   ⚠️ Fallback clear failed'));
+      console.log(`   ⚠️ Button not visible, trying to switch to Results tab first...`);
+      // Button not visible - try switching to Results tab first
+      try {
+        await this.switchToResultsTab(widgetId);
+        // Try again after switching
+        await clearBtn.waitFor({ state: 'visible', timeout: 3000 });
+        await clearBtn.click({ force: true });
+        await this.page.waitForTimeout(2000);
+        console.log('   ✅ Results cleared (after switching to Results tab)');
+        return;
+      } catch (e2) {
+        console.log(`   ⚠️ Primary selector failed: ${e2.message}, trying fallback...`);
+      }
+    }
+    
+    // Fallback: Find button containing the trash icon by looking for the icon-btn-sizer class
+    // The trash icon is in a span with class "icon-btn-sizer" inside the button
+    let clearBtnFallback = widget.locator('.query-result__header button:has(.icon-btn-sizer), .query-result__header button:has(.jimu-button-icon)').first();
+    try {
+      await clearBtnFallback.waitFor({ state: 'visible', timeout: 3000 });
+      await clearBtnFallback.click({ force: true });
+      await this.page.waitForTimeout(2000);
+      console.log('   ✅ Results cleared (via icon fallback selector)');
+    } catch (e3) {
+      console.log(`   ❌ Fallback also failed: ${e3.message}`);
+      // Last resort: try any button in results header
+      const anyBtn = widget.locator('.query-result__header button').first();
+      await anyBtn.waitFor({ state: 'visible', timeout: 3000 });
+      await anyBtn.click({ force: true });
+      await this.page.waitForTimeout(2000);
+      console.log('   ✅ Clicked button in results header (last resort)');
     }
   }
 

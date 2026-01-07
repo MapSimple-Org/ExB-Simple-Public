@@ -23,6 +23,12 @@ const QUERYSIMPLE_SELECTION_EVENT = 'querysimple-selection-changed'
 const QUERYSIMPLE_WIDGET_STATE_EVENT = 'querysimple-widget-state-changed'
 
 /**
+ * Custom event name for QuerySimple to notify HelperSimple that a hash-triggered query has completed execution.
+ * This allows HelperSimple to track which hash parameters have been executed to prevent re-execution.
+ */
+const QUERYSIMPLE_HASH_QUERY_EXECUTED_EVENT = 'querysimple-hash-query-executed'
+
+/**
  * Detects if an identify popup is currently visible in the DOM.
  * Uses verified selectors based on Experience Builder's identify popup structure.
  * 
@@ -77,6 +83,10 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
   private querySimpleWidgetIsOpen: boolean = false
   private previousWidgetState: boolean | null = null
   
+  // Track last executed hash parameter to prevent re-execution when switching queries
+  // Format: "shortId=value" (e.g., "pin=2223059013")
+  private lastExecutedHash: string | null = null
+  
   // Identify popup detection for logging (no restoration)
   private identifyPopupObserver: MutationObserver | null = null
   private identifyPopupWasOpen: boolean = false
@@ -93,6 +103,9 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
     // Listen for QuerySimple widget state changes (open/close)
     window.addEventListener(QUERYSIMPLE_WIDGET_STATE_EVENT, this.handleQuerySimpleWidgetStateChange)
     
+    // Listen for QuerySimple hash query execution completion
+    window.addEventListener(QUERYSIMPLE_HASH_QUERY_EXECUTED_EVENT, this.handleHashQueryExecuted)
+    
     // Initialize hash entry tracking for logging/debugging
     if (this.props.config.managedWidgetId) {
       this.previousHashEntry = this.parseHashForWidgetSelection(this.props.config.managedWidgetId)
@@ -105,6 +118,7 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
     window.removeEventListener('hashchange', this.handleHashChange)
     window.removeEventListener(QUERYSIMPLE_SELECTION_EVENT, this.handleQuerySimpleSelectionChange)
     window.removeEventListener(QUERYSIMPLE_WIDGET_STATE_EVENT, this.handleQuerySimpleWidgetStateChange)
+    window.removeEventListener(QUERYSIMPLE_HASH_QUERY_EXECUTED_EVENT, this.handleHashQueryExecuted)
     this.stopIdentifyPopupWatching()
   }
 
@@ -197,22 +211,49 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
   openWidget = (widgetId: string): void => {
     const openAction = appActions.openWidget(widgetId)
     
+    debugLogger.log('HASH-EXEC', {
+      event: 'helpersimple-openwidget-starting',
+      widgetId,
+      timestamp: Date.now()
+    })
+    
     this.loadWidgetClass(widgetId)
       .then(() => {
         getAppStore().dispatch(openAction)
+        debugLogger.log('HASH-EXEC', {
+          event: 'helpersimple-openwidget-action-dispatched',
+          widgetId,
+          timestamp: Date.now()
+        })
       })
       .then(() => {
         // Give the widget a moment to mount, then notify it to process hash parameters
         setTimeout(() => {
+          debugLogger.log('HASH-EXEC', {
+            event: 'helpersimple-openwidget-dispatching-event',
+            widgetId,
+            timestamp: Date.now()
+          })
           const event = new CustomEvent(OPEN_WIDGET_EVENT, {
             detail: { widgetId },
             bubbles: true,
             cancelable: true
           })
           window.dispatchEvent(event)
+          debugLogger.log('HASH-EXEC', {
+            event: 'helpersimple-openwidget-event-dispatched',
+            widgetId,
+            timestamp: Date.now()
+          })
         }, 500)
       })
       .catch((error) => {
+        debugLogger.log('HASH-EXEC', {
+          event: 'helpersimple-openwidget-error',
+          widgetId,
+          error: error instanceof Error ? error.message : String(error),
+          timestamp: Date.now()
+        })
         // Silently handle errors - widget may already be open or not in a controller
         // eslint-disable-next-line no-console
         if (process.env.NODE_ENV === 'development') {
@@ -242,6 +283,16 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
     const hash = window.location.hash.substring(1)
     const query = window.location.search.substring(1)
     
+    debugLogger.log('HASH-EXEC', {
+      event: 'helpersimple-checkurlparameters-called',
+      widgetId: config.managedWidgetId,
+      currentUrlHash: hash,
+      currentUrlQuery: query,
+      hasHash: !!hash,
+      hasQuery: !!query,
+      timestamp: Date.now()
+    })
+    
     if (!hash && !query) {
       return
     }
@@ -251,6 +302,11 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
     
     // Check for special qsopen parameter (forces widget to open)
     if (hashParams.get('qsopen') === 'true' || queryParams.get('qsopen') === 'true') {
+      debugLogger.log('HASH-EXEC', {
+        event: 'helpersimple-checkurl-opening-widget-qsopen',
+        widgetId: config.managedWidgetId,
+        timestamp: Date.now()
+      })
       this.openWidget(config.managedWidgetId)
       return 
     }
@@ -264,9 +320,43 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
     
     // Check if any shortId matches in either hash or query string
     shortIds.forEach(shortId => {
-      if (hashParams.has(shortId) || queryParams.has(shortId)) {
-        // Open the widget using the proper API
-        this.openWidget(config.managedWidgetId)
+      const hashValue = hashParams.get(shortId) || queryParams.get(shortId)
+      
+      if (hashValue) {
+        const currentHash = `${shortId}=${hashValue}`
+        
+        debugLogger.log('HASH-EXEC', {
+          event: 'helpersimple-checkurl-shortid-match-detected',
+          widgetId: config.managedWidgetId,
+          shortId,
+          hashValue,
+          currentHash,
+          lastExecutedHash: this.lastExecutedHash,
+          willOpenWidget: currentHash !== this.lastExecutedHash,
+          timestamp: Date.now()
+        })
+        
+        // Only open widget if hash has changed (not already executed)
+        if (currentHash !== this.lastExecutedHash) {
+          debugLogger.log('HASH-EXEC', {
+            event: 'helpersimple-checkurl-opening-widget-shortid-match',
+            widgetId: config.managedWidgetId,
+            shortId,
+            hashValue,
+            timestamp: Date.now()
+          })
+          // Open the widget using the proper API
+          this.openWidget(config.managedWidgetId)
+        } else {
+          debugLogger.log('HASH-EXEC', {
+            event: 'helpersimple-checkurl-skipping-already-executed-hash',
+            widgetId: config.managedWidgetId,
+            shortId,
+            hashValue,
+            lastExecutedHash: this.lastExecutedHash,
+            timestamp: Date.now()
+          })
+        }
       }
     })
   }
@@ -276,6 +366,18 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
    * Re-checks parameters when the URL hash changes.
    */
   handleHashChange = () => {
+    const hash = window.location.hash.substring(1)
+    const query = window.location.search.substring(1)
+    
+    debugLogger.log('HASH-EXEC', {
+      event: 'helpersimple-handlehashchange-fired',
+      widgetId: this.props.config.managedWidgetId,
+      currentUrlHash: hash,
+      currentUrlQuery: query,
+      lastExecutedHash: this.lastExecutedHash,
+      timestamp: Date.now()
+    })
+    
     // Check parameters for widget opening
     this.checkUrlParameters()
     
@@ -342,6 +444,47 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
       
       this.previousWidgetState = isNowOpen
     }
+  }
+
+  /**
+   * Handles QuerySimple hash query execution completion event.
+   * Tracks the last executed hash parameter to prevent re-execution when switching queries.
+   */
+  handleHashQueryExecuted = (event: CustomEvent<{ widgetId: string, shortId: string, value: string, hashParam: string }>) => {
+    const { widgetId, shortId, value, hashParam } = event.detail || {}
+    const { config } = this.props
+    
+    // Only track if this is for our managed widget
+    if (widgetId !== config.managedWidgetId) {
+      debugLogger.log('HASH-EXEC', {
+        event: 'helpersimple-hash-query-executed-ignored-wrong-widget',
+        eventWidgetId: widgetId,
+        managedWidgetId: config.managedWidgetId,
+        timestamp: Date.now()
+      })
+      return
+    }
+    
+    debugLogger.log('HASH-EXEC', {
+      event: 'helpersimple-hash-query-executed-received',
+      widgetId,
+      shortId,
+      value,
+      hashParam,
+      previousLastExecutedHash: this.lastExecutedHash,
+      timestamp: Date.now()
+    })
+    
+    // Track the last executed hash parameter
+    // Format: "shortId=value" (e.g., "pin=2223059013")
+    this.lastExecutedHash = hashParam
+    
+    debugLogger.log('HASH-EXEC', {
+      event: 'helpersimple-last-executed-hash-updated',
+      widgetId,
+      lastExecutedHash: this.lastExecutedHash,
+      timestamp: Date.now()
+    })
   }
 
 
