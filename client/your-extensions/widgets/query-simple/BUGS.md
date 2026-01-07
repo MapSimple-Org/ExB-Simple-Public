@@ -1,163 +1,246 @@
-# QuerySimple Widget - Bug Tracking and Performance Issues
+# Known Bugs
 
-## Status: Open Issues
-
-*No open bugs at this time. All bugs have been resolved.*
+**Last Updated:** 2026-01-07 (Release 018.56)
 
 ---
 
 ## Bug Categories
 
-Bugs are categorized for easier tracking:
-- **SELECTION**: Issues related to record selection, map highlighting, or selection restoration
-- **UI**: User interface issues (buttons, tabs, expand/collapse, etc.)
-- **URL**: Deep linking, hash parameters, query string parameters
-- **DATA**: Data source issues, query execution, record handling
-- **GRAPHICS**: Graphics layer highlighting issues
-- **PERFORMANCE**: Performance-related issues
-- **GENERAL**: Other issues that don't fit into above categories
+- **HASH-PARAM**: Hash parameter processing issues
+- **GRAPHICS**: Graphics layer and highlighting issues
+- **SELECTION**: Selection and restoration issues
+- **QUERY-EXEC**: Query execution and timing issues
 
 ---
 
 ## Open Bugs
 
-### Bug #5: Zoom Operations Fail When Graphics Layer Disabled
+### HASH-PARAM-001: Hash Queries Not Executing When Query Tab Not Active ✅ **RESOLVED** (r018.39)
 
-**Status:** 🔴 **OPEN** (Target Resolution: r019.0)  
-**Priority:** High  
+**Status:** ✅ **RESOLVED**  
+**Severity:** Medium  
+**Category:** HASH-PARAM  
+**First Reported:** 2026-01-06  
+**Resolved:** 2026-01-06 (r018.39)
+
+**Description:**
+When a hash parameter changes while the Results tab is active, the query does not execute. The hash value is set in React state, but `SqlExpressionRuntime` does not fire `onChange` because the input element is not visible/focused when the Query tab is inactive.
+
+**Root Cause:**
+The DOM manipulation that triggers `SqlExpressionRuntime`'s `onChange` only works when the Query tab is active and the input element is visible. When the Results tab is active, the input is hidden, so the simulated events don't trigger `SqlExpressionRuntime` to process the value conversion.
+
+**Solution:**
+Ensure the Query tab is active before setting hash values. When a hash value needs to be set:
+1. Check if `activeTab !== 'query'`
+2. If not active, switch to Query tab via `onTabChange('query')`
+3. Return early - the `useEffect` will re-run when `activeTab` becomes `'query'`
+4. Set the hash value with `SqlExpressionRuntime` visible and ready to process it
+
+**Files Modified:**
+- `query-simple/src/runtime/query-task-form.tsx` - Added tab check before setting hash value
+- `query-simple/src/runtime/query-task.tsx` - Pass `activeTab` and `onTabChange` props to `QueryTaskForm`
+
+**Workaround:**
+None needed - fix ensures Query tab is active before processing hash values.
+
+**Target Resolution:** r018.39 ✅ **RESOLVED**
+
+---
+
+### BUG-GRAPHICS-001: Zoom Operations Fail When Graphics Layer Disabled
+
+**Status:** ⚠️ **DEFERRED** (r019.0)  
+**Severity:** Medium  
 **Category:** GRAPHICS  
-**Bug ID:** `BUG-GRAPHICS-001`  
-**Version Reported:** r018.20  
-**Date Reported:** 2025-12-24
+**First Reported:** 2026-01-05  
+**Target Resolution:** r019.0
 
-### Description
-Zoom operations fail when `useGraphicsLayerForHighlight` is disabled (`false`) because `mapView` is not available. This affects:
-- Clicking a result item to zoom to it
-- "Zoom to selected" action in the results panel
-- "Zoom to selected" checkbox when query results are returned
-- Hash parameter-triggered queries with zoom enabled
-- Any zoom operation that requires `mapView` access
+**Description:**
+Zoom operations (Zoom to Selection, Zoom to Selected in panel, hash-triggered zoom) fail when `useGraphicsLayerForHighlight` is disabled because `mapView` is not available in those contexts.
 
-### Root Cause
-The dual-path implementation (graphics layer vs. layer selection) means that when `useGraphicsLayerForHighlight` is `false`, the `JimuMapViewComponent` is not rendered, so `mapView` is never available. All zoom operations require `mapView` to function.
+**Root Cause:**
+When `useGraphicsLayerForHighlight` is `false`, the widget does not initialize a graphics layer and does not maintain a `mapView` reference. Zoom operations require `mapView` to function.
 
-### Workaround
-Enable `useGraphicsLayerForHighlight` in widget settings to use graphics layer mode, which provides `mapView` access.
+**Workaround:**
+Enable `useGraphicsLayerForHighlight` in widget configuration. Graphics layer is now required (breaking change in r018.25).
 
-### Affected Operations
-- Result item click zoom
-- "Zoom to selected" data action
-- Query result zoom (when `zoomToSelected` config is enabled)
-- Hash parameter-triggered zoom operations
-
-### Resolution Plan
-This bug will be resolved in r019.0 by removing the non-graphics layer implementation entirely. The `useGraphicsLayerForHighlight` config option will be removed, and graphics layer will always be used when `highlightMapWidgetId` is configured.
-
-### Files Affected
-- `query-simple/src/runtime/zoom-utils.ts`
-- `query-simple/src/runtime/hooks/use-zoom-to-records.ts`
-- `query-simple/src/data-actions/zoom-to-action.tsx`
-- `query-simple/src/runtime/query-task.tsx`
-- `query-simple/src/runtime/query-result.tsx`
+**Target Resolution:** r019.0 (Graphics layer is now required, so this bug will be resolved when non-graphics layer implementation is fully removed)
 
 ---
 
-## Bug #1: Graphics Layer Not Clearing When Switching Queries in "New" Mode
+### HASH-PARAM-002: Hash Parameters Re-Execute When Switching Queries ✅ **RESOLVED** (r018.53)
 
-**Status:** ✅ RESOLVED (r017.29)  
-**Priority:** High  
-**Version:** r017.29  
-**Date Updated:** 2025-12-18
+**Status:** ✅ **RESOLVED**  
+**Severity:** High  
+**Category:** HASH-PARAM  
+**First Reported:** 2026-01-06  
+**Resolved:** 2026-01-07 (r018.53)  
+**Introduced:** Likely r018.8 (Chunk 1: URL Parameter Consumption Manager)
 
-### Description
-When switching queries in "New" mode, the graphics layer retained graphics from the previous query. This was due to a race condition where the native selection sync was fighting with our clearing logic.
+**Description:**
+When switching between queries (e.g., from "major" query to "parcel" query), if there is a hash parameter in the URL from a previously executed query, that hash value re-pops into the form and re-executes the query. This should only happen when a new hash parameter is entered by a human, not when switching queries.
 
-### Solution (r017.29)
-1.  **Centralized Selection Dispatch**: Created `dispatchSelectionEvent` in `selection-utils.ts` to ensure all components notify the main widget of selection changes simultaneously.
-2.  **Virtual Clear**: Implemented "effective" values in `QueryTask.tsx` to immediately hide old results in the UI during a switch, even if the data source takes a moment to clear.
-3.  **Sticky Selection**: Modified `QueryTaskList.tsx` to prevent resetting to the default query when a hash parameter is removed from the URL.
-4.  **Native Sync**: Ensured `publishSelectionMessage` is called with empty arrays during clearing to force the Map's blue highlight boxes to vanish.
+**Root Cause:**
+Multi-part issue requiring iterative fixes:
+1. **Part 1 (r018.43):** `shouldUseInitialQueryValueForSelectionRef` was implemented as a React ref instead of state. When `handleHashParameterUsed` sets the ref's `.current` value to `false`, React doesn't trigger a re-render because refs don't cause re-renders. This means `query-task-list.tsx` never sees the flag change from `true` to `false`.
+2. **Part 2 (r018.46):** `onHashParameterUsed` callback was never being called after hash queries executed successfully, so `handleHashParameterUsed` never ran, and the flag never cleared.
+3. **Part 3 (r018.47):** When `onHashParameterUsed` was added in r018.46, it was called too early (before `setResultCount` and `setStage(1)`), causing the parent re-render to interrupt the promise chain, preventing zoom and results display.
+4. **Part 4 (r018.52):** `shouldUseInitialQueryValueForSelection` and `initialQueryValue` were not being cleared atomically, and `queryItemShortId` was undefined, preventing `onHashParameterUsed` from being called.
+5. **Part 5 (r018.53):** Fixed `queryItemShortId` undefined issue by using `queryItem.shortId` instead.
 
-## Bug #2: Hash Parameters Not Being Cleaned Up Properly / Resetting Selection
+**Technical Details:**
+- `shouldUseInitialQueryValueForSelectionRef` was a `React.createRef<boolean>(false)` (fixed in r018.43)
+- `onHashParameterUsed` was never called after successful hash query execution (fixed in r018.46)
+- `onHashParameterUsed` was called before UI updates completed, causing re-render to interrupt promise chain (fixed in r018.47)
+- Hash state was not cleared atomically, causing race conditions (fixed in r018.52)
+- `queryItemShortId` variable was undefined, preventing callback from firing (fixed in r018.53)
 
-**Status:** ✅ RESOLVED (r017.30)  
-**Priority:** Medium  
-**Version:** r017.30  
-**Date Updated:** 2025-12-19
+**Expected Behavior:**
+- Hash parameters should only trigger queries when explicitly entered by a human (via HelperSimple's `OPEN_WIDGET_EVENT`)
+- Switching queries should not re-trigger hash parameters that were already executed
+- `initialQueryValue` should be cleared after a query executes
+- Hash queries should execute, zoom, and display results correctly
 
-### Description
-URL hash parameters (like `#pin=...`) were causing the widget to reset to the first query in the display order as soon as the parameter was removed from the URL, even if the results were still active. Additionally, hash parameters were sometimes re-triggering "New Mode" resets when the user tried to switch to "Add" or "Remove" modes, because the hash remained in the URL and triggered the initialization logic again.
+**Solution:**
+1. **r018.43:** Convert `shouldUseInitialQueryValueForSelectionRef` from a React ref to a state variable
+2. **r018.46:** Call `onHashParameterUsed` after successful hash query execution
+3. **r018.47:** Move `onHashParameterUsed` call to AFTER `setResultCount`, `setStage(1)`, and zoom operations complete
+4. **r018.52:** Clear both `shouldUseInitialQueryValueForSelection` and `initialQueryValue` atomically in single `setState` call
+5. **r018.53:** Fix `queryItemShortId` undefined by using `queryItem.shortId` directly
 
-### Solution (r017.30)
-1.  **Deep Link Consumption**: Modified `widget.tsx` to automatically clear hash parameters from the URL when the user switches to **"Add"** or **"Remove"** results management modes. This signals that the deep link has been "consumed" and prevents the widget from re-initializing and resetting the mode during re-renders.
-2.  **Sticky Selection**: Improved `QueryTaskList.tsx` to make the selection "sticky" so it doesn't reset when the hash is removed.
+**Files Modified:**
+- `query-simple/src/runtime/widget.tsx` (r018.43, r018.52) - State management fixes
+- `query-simple/src/runtime/query-task.tsx` (r018.46, r018.47, r018.53) - Callback timing and variable fixes
+- `helper-simple/src/runtime/widget.tsx` (r018.51) - Added `lastExecutedHash` tracking
 
-## Bug #3: Record Capture Failure when Switching to "Add" Mode
+**Investigation Notes:**
+- Issue required multiple iterative fixes due to complex state management and timing issues
+- Each fix addressed a different aspect of the problem
+- Final fix (r018.53) resolved the undefined variable issue that prevented state clearing
 
-**Status:** ✅ RESOLVED (r017.31)  
-**Priority:** High  
-**Version:** r017.31  
-**Date Updated:** 2025-12-19
-
-### Description
-When a user had results visible in "New" mode and clicked the "Add" button, the existing results were sometimes lost. This happened because the capture logic was only looking at the React `records` prop, which might be empty during a render transition.
-
-### Solution (r017.31)
-1.  **Dual-Source Capture Strategy**: Modified `QueryTask.tsx` to check both the internal `effectiveRecords` state AND the current `outputDS.getSelectedRecords()`.
-2.  **Strict Record Preference**: Updated `query-result.tsx` to strictly prefer the `records` prop (the accumulated set) when in accumulation modes (Add/Remove). This ensures the UI remains consistent even if the underlying data source's selection briefly fluctuates during query execution.
-3.  **Humanized Testing**: Added 1-second "breathing room" delays to Playwright tests to better simulate human interaction speed and allow React state updates to complete.
-
-## Bug #4: Dirty Hash - data_s Parameter Not Cleared When Selections Cleared
-
-**Status:** ✅ RESOLVED (r017.50)  
-**Priority:** Medium  
-**Version:** r017.50  
-**Date Updated:** 2025-12-23
-
-### Description
-When records were selected in the Results widget, Experience Builder automatically added a `data_s` parameter to the URL hash (e.g., `#data_s=id:widget_12_output_...:451204+451205+...`). However, when selections were cleared (via "Clear All", switching queries, etc.), the `data_s` parameter remained in the hash, creating a "dirty hash" with stale selection data. This could cause issues when:
-- Switching between queries
-- Clearing results and performing new searches
-- Any combination of actions where selections weren't properly unselected
-
-### Root Cause
-Experience Builder's framework automatically adds `data_s` to the hash when selections are made, but doesn't remove it when selections are cleared. The widget was clearing selections from data sources and publishing empty selection messages, but wasn't explicitly removing the `data_s` parameter from the hash.
-
-### Solution (r017.50)
-1.  **Hash Cleanup Function**: Added `clearDataSParameterFromHash()` function in `selection-utils.ts` that removes the `data_s` parameter from the URL hash.
-2.  **Integrated into Clear Logic**: Modified `clearSelectionInDataSources()` to call `clearDataSParameterFromHash()` after clearing selections, ensuring the hash is cleaned whenever selections are cleared.
-3.  **Comprehensive Coverage**: Since `clearSelectionInDataSources()` is called from all selection clearing paths (Clear All, query switching, etc.), this fix covers all scenarios.
-
-### Files Modified
-- `query-simple/src/runtime/selection-utils.ts`: Added `clearDataSParameterFromHash()` function and integrated it into `clearSelectionInDataSources()`
+**Target Resolution:** r018.53 ✅ **RESOLVED**
 
 ---
 
-## Performance Issue #1: Query Execution Speed
+### HASH-PARAM-003: Input Value Cleared After Query Execution ✅ **RESOLVED** (r018.55)
 
-**Status:** ✅ RESOLVED (r017.39)  
-**Priority:** High  
-**Version:** r017.39  
-**Date Updated:** 2025-12-19
+**Status:** ✅ **RESOLVED**  
+**Severity:** Medium  
+**Category:** HASH-PARAM  
+**First Reported:** 2026-01-07  
+**Resolved:** 2026-01-07 (r018.55)
 
-### Description
-Query execution was significantly slower than the same queries in Web AppBuilder (WAB). For some datasets, like Major Number searches, fetch times were exceeding 20 seconds.
+**Description:**
+After a hash query or user-entered query executes, when returning to the Query tab, the input field value is cleared. The value should persist as a visual record of the search. It should only be cleared by: Reset button, query switch, or manual clearing.
 
-### Solution (r017.39)
-We identified and "killed" four major bottlenecks:
-1.  **Universal SQL Optimizer**: Automatically detects and "unwraps" the framework's `LOWER()` function from database fields in the `WHERE` clause. This restores the database's ability to use attribute indexes (SARGable queries). It simultaneously normalizes the user's input to uppercase to maintain case-insensitivity.
-2.  **Attribute Stripping**: Forced the widget to request only the specific fields needed for the Result Title and List. This eliminated "Field Bloat" where the framework was requesting `*` (all fields), causing massive server-side overhead.
-3.  **Geometry Generalization**: Forced `maxAllowableOffset: 0.1` for all display queries. This reduces the network payload by simplifying complex polygon geometries (like parcels) for faster transfer.
-4.  **Instant UI (Spinner Bypass)**: Decoupled the "Retrieving results..." spinner from the map zoom animation. The spinner now hides the microsecond data arrives, allowing user interaction while the map zooms in the background.
-5.  **Round-Trip Reduction**: Eliminated the separate `executeCountQuery` call, deriving the record count directly from the main `executeQuery` result.
+**Root Cause:**
+In `query-task-form.tsx`, when `sqlExprObj` prop changed, the condition `initialValueSetRef.current !== configId || !initialInputValue` would reset `attributeFilterSqlExprObj` to the base `sqlExprObj` when `initialInputValue` became `undefined` (after hash execution). This cleared user-entered values as well as hash values.
 
-**Result**: Fetch times dropped from **21.3s** to **1.4s** for the same 121-record query.
+**Technical Details:**
+- The `useEffect` watching `sqlExprObj` had condition: `if (initialValueSetRef.current !== configId || !initialInputValue)`
+- When `initialInputValue` became `undefined` after execution, `!initialInputValue` became `true`
+- This caused form to reset to base `sqlExprObj`, clearing the input value
+- Affected both hash-triggered and user-entered queries
+
+**Expected Behavior:**
+- Input value should persist after query execution (visual record)
+- Value should only be cleared by: Reset button, query switch (`configId` changes), or manual clearing
+- Value should NOT be cleared when `initialInputValue` prop becomes `undefined`
+
+**Solution:**
+1. **r018.54:** Removed `|| !initialInputValue` condition - only update if `initialValueSetRef.current !== configId`
+2. **r018.55:** Added `previousConfigIdRef` to track configId changes, check if value already set before updating
+3. Only update `attributeFilterSqlExprObj` if:
+   - No value is set yet (initializing), OR
+   - `configId` changed (switching queries - reset to base)
+
+**Files Modified:**
+- `query-simple/src/runtime/query-task-form.tsx` (r018.54, r018.55)
+  - Removed `|| !initialInputValue` condition from update check
+  - Added `previousConfigIdRef` to track configId changes
+  - Added check for existing value before updating
+
+**Investigation Notes:**
+- Initial fix (r018.54) only addressed hash values, but user-entered values were also being cleared
+- Second fix (r018.55) added proper value preservation logic for both hash and user-entered values
+
+**Target Resolution:** r018.55 ✅ **RESOLVED**
 
 ---
 
-## Notes
+### RESULTS-MODE-001: Remove Mode Not Resetting When All Records Cleared ✅ **RESOLVED** (r018.56)
 
-- All bugs/issues should be tested with graphics layer highlighting enabled
-- Logs are available via `createQuerySimpleDebugLogger()` - check browser console
-- Version tracking: See `src/version.ts` for current version
-- When fixing bugs, remember to increment minor version and rebuild (see `DEVELOPMENT_GUIDE.md`)
+**Status:** ✅ **RESOLVED**  
+**Severity:** Medium  
+**Category:** RESULTS-MODE  
+**First Reported:** 2026-01-07  
+**Resolved:** 2026-01-07 (r018.56)
+
+**Description:**
+When in "Remove from" mode, if all accumulated records are cleared (either manually or via Clear Results button), the mode stays on "Remove" even though the Remove button is disabled. The mode should automatically reset to "New Selection" since Remove mode requires accumulated records to function.
+
+**Root Cause:**
+`handleAccumulatedRecordsChange` in `widget.tsx` updated accumulated records state but didn't check if the mode should reset when records are cleared in Remove mode. The mode reset logic existed in `handleSelectionChange` but wasn't triggered when accumulated records were cleared directly.
+
+**Technical Details:**
+- Remove mode requires accumulated records to function (nothing to remove if no records)
+- When all records cleared, Remove button correctly disables (UI working)
+- But mode state remained `RemoveFromSelection`, causing confusion
+- Mode should reflect current capability - Remove mode is useless without records
+
+**Expected Behavior:**
+- When all accumulated records cleared in Remove mode, mode should reset to NewSelection
+- Mode state should always reflect current functionality
+- Remove button should be disabled when no records (already working)
+
+**Solution:**
+Added mode reset logic to `handleAccumulatedRecordsChange`:
+1. Check if `records.length === 0` and `resultsMode === SelectionType.RemoveFromSelection`
+2. If both true, reset mode to `NewSelection` atomically with records update
+3. Added logging to track when mode reset occurs
+
+**Files Modified:**
+- `query-simple/src/runtime/widget.tsx` (r018.56)
+  - Added mode reset check in `handleAccumulatedRecordsChange`
+  - Reset mode to `NewSelection` when all records cleared in Remove mode
+  - Added logging for mode reset events
+
+**Investigation Notes:**
+- Mode reset logic existed in `handleSelectionChange` but wasn't triggered for direct accumulated records clearing
+- Fix ensures mode state always reflects current capability
+
+**Target Resolution:** r018.56 ✅ **RESOLVED**
+
+---
+
+## Resolved Bugs
+
+### HASH-PARAM-003: Input Value Cleared After Query Execution ✅ **RESOLVED** (r018.55)
+- **Resolved:** 2026-01-07
+- **Fix:** 
+  - r018.54: Removed `|| !initialInputValue` condition that caused form reset
+  - r018.55: Added `previousConfigIdRef` to track configId changes, preserve existing values
+- **Version:** r018.55
+- **Root Cause:** Form was resetting to base `sqlExprObj` when `initialInputValue` became `undefined` after execution
+
+### RESULTS-MODE-001: Remove Mode Not Resetting When All Records Cleared ✅ **RESOLVED** (r018.56)
+- **Resolved:** 2026-01-07
+- **Fix:** Added mode reset logic to `handleAccumulatedRecordsChange` - reset to NewSelection when all records cleared in Remove mode
+- **Version:** r018.56
+- **Root Cause:** Mode reset logic only existed in `handleSelectionChange`, not triggered for direct accumulated records clearing
+
+### HASH-PARAM-002: Hash Parameters Re-Execute When Switching Queries ✅ **RESOLVED** (r018.53)
+- **Resolved:** 2026-01-07
+- **Fix:** 
+  - r018.43: Convert `shouldUseInitialQueryValueForSelectionRef` from React ref to state variable
+  - r018.46: Call `onHashParameterUsed` after successful hash query execution
+  - r018.47: Move `onHashParameterUsed` call to after UI updates and zoom complete
+  - r018.52: Clear hash state atomically in single `setState` call
+  - r018.53: Fix `queryItemShortId` undefined by using `queryItem.shortId`
+- **Version:** r018.53
+- **Root Cause:** Multiple issues: React refs don't trigger re-renders, callback never called, callback called too early, state not cleared atomically, undefined variable
+
+### HASH-PARAM-001: Hash Queries Not Executing When Query Tab Not Active ✅ **RESOLVED** (r018.39)
+- **Resolved:** 2026-01-06
+- **Fix:** Ensure Query tab is active before setting hash values
+- **Version:** r018.39

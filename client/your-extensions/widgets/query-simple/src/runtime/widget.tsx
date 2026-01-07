@@ -22,6 +22,8 @@ import { WidgetVisibilityManager } from './hooks/use-widget-visibility'
 import { MapViewManager } from './hooks/use-map-view'
 // Chunk 4: Graphics Layer Management Manager (r018.24) - Step 4.2: Parallel execution
 import { GraphicsLayerManager } from './hooks/use-graphics-layer'
+// Chunk 5: Accumulated Records Management Manager (r018.26) - Step 5.1: Add manager without integration
+import { AccumulatedRecordsManager } from './hooks/use-accumulated-records'
 
 const debugLogger = createQuerySimpleDebugLogger()
 const { iconMap } = getWidgetRuntimeDataMap()
@@ -31,6 +33,12 @@ const { iconMap } = getWidgetRuntimeDataMap()
  * Dispatched by query-result component when identify popup closes and selection was cleared.
  */
 const RESTORE_ON_IDENTIFY_CLOSE_EVENT = 'querysimple-restore-on-identify-close'
+
+/**
+ * Custom event name for HelperSimple to notify QuerySimple to process hash parameters.
+ * Dispatched by HelperSimple after opening a widget in a controller.
+ */
+const OPEN_WIDGET_EVENT = 'helpersimple-open-widget'
 
 /**
  * QuerySimple Widget
@@ -78,6 +86,12 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
   private mapViewManager = new MapViewManager(this.mapViewRef)
   // Chunk 4: Graphics Layer Management Manager (r018.24) - Step 4.2: Parallel execution
   private graphicsLayerManager = new GraphicsLayerManager(this.graphicsLayerRef, this.mapViewRef)
+  // Chunk 5: Accumulated Records Management Manager (r018.26) - Step 5.1: Add manager without integration
+  private accumulatedRecordsManager = new AccumulatedRecordsManager()
+  
+  // Track processed hash parameters to prevent re-execution when switching queries
+  // Key: "shortId:value" (e.g., "pin:2223059013")
+  private processedHashParamsRef = new Set<string>()
 
   state: { 
     initialQueryValue?: { shortId: string, value: string }, 
@@ -88,7 +102,10 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
     resultsMode?: SelectionType, 
     accumulatedRecords?: FeatureDataRecord[], 
     graphicsLayerInitialized?: boolean, 
-    activeTab?: 'query' | 'results'
+    activeTab?: 'query' | 'results',
+    // Track when HelperSimple explicitly opens widget - only then should query-task-list use initialQueryValue for selection
+    // Using state instead of ref ensures React triggers re-renders when flag changes
+    shouldUseInitialQueryValueForSelection?: boolean
   } = {
     resultsMode: SelectionType.NewSelection, // Default mode
     activeTab: 'query'
@@ -105,40 +122,214 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
     this.setState({ activeTab })
   }
 
-  componentDidMount() {
-    // Chunk 1: Manager implementation (r018.8 - switched to manager)
-    this.urlConsumptionManager.setup(
+  /**
+   * Handles HelperSimple's open widget event.
+   * QuerySimple should only process hash parameters when HelperSimple explicitly opens the widget.
+   * This ensures HelperSimple remains the orchestrator and prevents autonomous hash processing.
+   */
+  handleOpenWidgetEvent = (event: CustomEvent) => {
+    const { id } = this.props
+    
+    debugLogger.log('HASH-EXEC', {
+      event: 'querysimple-handleopenwidgetevent-received',
+      widgetId: id,
+      eventWidgetId: event.detail?.widgetId,
+      matches: event.detail?.widgetId === id,
+      currentState: {
+        shouldUseInitialQueryValueForSelection: this.state.shouldUseInitialQueryValueForSelection,
+        hasInitialQueryValue: !!this.state.initialQueryValue,
+        initialQueryValueShortId: this.state.initialQueryValue?.shortId,
+        initialQueryValueValue: this.state.initialQueryValue?.value,
+        processedHashParams: Array.from(this.processedHashParamsRef),
+        currentUrlHash: window.location.hash.substring(1)
+      },
+      timestamp: Date.now()
+    })
+    
+    // Only process if this event is for our widget
+    if (event.detail?.widgetId !== id) {
+      debugLogger.log('HASH-EXEC', {
+        event: 'querysimple-handleopenwidgetevent-ignored-wrong-widget',
+        widgetId: id,
+        eventWidgetId: event.detail?.widgetId,
+        timestamp: Date.now()
+      })
+      return
+    }
+    
+    // NOTE: We don't check processed hashes here anymore
+    // The check happens in onInitialValueFound after we know which shortId:value pair is being processed
+    
+    debugLogger.log('HASH', {
+      event: 'open-widget-event-received-from-helpersimple',
+      widgetId: id,
+      timestamp: Date.now()
+    })
+    
+    // Set flag to allow query-task-list to use initialQueryValue for selection
+    // This ensures we only react to hash parameters when HelperSimple explicitly opens us
+    // Using state instead of ref ensures React triggers re-render so query-task-list sees the change
+    this.setState({ shouldUseInitialQueryValueForSelection: true }, () => {
+      debugLogger.log('HASH-EXEC', {
+        event: 'querysimple-flag-set-true-state-updated',
+        widgetId: id,
+        newState: {
+          shouldUseInitialQueryValueForSelection: this.state.shouldUseInitialQueryValueForSelection,
+          hasInitialQueryValue: !!this.state.initialQueryValue,
+          initialQueryValueShortId: this.state.initialQueryValue?.shortId,
+          initialQueryValueValue: this.state.initialQueryValue?.value
+        },
+        timestamp: Date.now()
+      })
+    })
+    
+    debugLogger.log('HASH', {
+      event: 'shouldUseInitialQueryValueForSelection-flag-set-true',
+      widgetId: id,
+      flagValue: true,
+      timestamp: Date.now()
+    })
+    
+    // Now check URL parameters - HelperSimple has explicitly opened us
+    debugLogger.log('HASH-EXEC', {
+      event: 'querysimple-checkurlparameters-starting',
+      widgetId: this.props.id,
+      currentState: {
+        shouldUseInitialQueryValueForSelection: this.state.shouldUseInitialQueryValueForSelection,
+        hasInitialQueryValue: !!this.state.initialQueryValue,
+        initialQueryValueShortId: this.state.initialQueryValue?.shortId,
+        initialQueryValueValue: this.state.initialQueryValue?.value
+      },
+      timestamp: Date.now()
+    })
+    
+    this.urlConsumptionManager.checkUrlParameters(
       this.props,
       this.state.resultsMode,
       {
         onInitialValueFound: (value) => {
+          debugLogger.log('HASH-EXEC', {
+            event: 'querysimple-oninitialvaluefound-called',
+            widgetId: this.props.id,
+            hasValue: !!value,
+            valueShortId: value?.shortId,
+            valueValue: value?.value,
+            currentState: {
+              shouldUseInitialQueryValueForSelection: this.state.shouldUseInitialQueryValueForSelection,
+              hasInitialQueryValue: !!this.state.initialQueryValue,
+              initialQueryValueShortId: this.state.initialQueryValue?.shortId,
+              initialQueryValueValue: this.state.initialQueryValue?.value
+            },
+            timestamp: Date.now()
+          })
+          
           if (value) {
+            // Check if this specific shortId:value combination was already processed
+            const paramKey = `${value.shortId}:${value.value}`
+            if (this.processedHashParamsRef.has(paramKey)) {
+              debugLogger.log('HASH-EXEC', {
+                event: 'querysimple-oninitialvaluefound-already-processed',
+                widgetId: this.props.id,
+                shortId: value.shortId,
+                value: value.value,
+                paramKey,
+                processedParams: Array.from(this.processedHashParamsRef),
+                timestamp: Date.now()
+              })
+              return
+            }
+            
             // Only update if the value or shortId has changed to avoid unnecessary re-renders
-            if (this.state.initialQueryValue?.shortId !== value.shortId || this.state.initialQueryValue?.value !== value.value) {
+            const willUpdate = this.state.initialQueryValue?.shortId !== value.shortId || this.state.initialQueryValue?.value !== value.value
+            
+            debugLogger.log('HASH-EXEC', {
+              event: 'querysimple-oninitialvaluefound-will-update',
+              widgetId: this.props.id,
+              willUpdate,
+              previousShortId: this.state.initialQueryValue?.shortId,
+              previousValue: this.state.initialQueryValue?.value,
+              newShortId: value.shortId,
+              newValue: value.value,
+              timestamp: Date.now()
+            })
+            
+            if (willUpdate) {
               debugLogger.log('HASH', {
                 event: 'url-param-detected',
                 widgetId: this.props.id,
                 shortId: value.shortId,
                 value: value.value,
                 foundIn: 'manager',
+                triggeredBy: 'helpersimple-open-widget-event',
                 previousShortId: this.state.initialQueryValue?.shortId,
                 previousValue: this.state.initialQueryValue?.value,
                 timestamp: Date.now()
               })
               
               // Reset to New mode when hash parameter is detected to avoid bugs with accumulation modes
-              const needsModeReset = this.state.resultsMode !== SelectionType.NewSelection
+              // OLD IMPLEMENTATION (parallel execution)
+              const oldNeedsModeReset = this.state.resultsMode !== SelectionType.NewSelection
+              const oldCurrentMode = this.state.resultsMode
               
               this.setState({ 
                 initialQueryValue: { shortId: value.shortId, value: value.value },
                 // Reset to New mode and clear accumulatedRecords
-                ...(needsModeReset ? { 
+                ...(oldNeedsModeReset ? { 
                   resultsMode: SelectionType.NewSelection,
                   accumulatedRecords: []
                 } : {})
+              }, () => {
+                debugLogger.log('HASH-EXEC', {
+                  event: 'querysimple-initialqueryvalue-state-updated',
+                  widgetId: this.props.id,
+                  newState: {
+                    shouldUseInitialQueryValueForSelection: this.state.shouldUseInitialQueryValueForSelection,
+                    hasInitialQueryValue: !!this.state.initialQueryValue,
+                    initialQueryValueShortId: this.state.initialQueryValue?.shortId,
+                    initialQueryValueValue: this.state.initialQueryValue?.value,
+                    resultsMode: this.state.resultsMode
+                  },
+                  timestamp: Date.now()
+                })
               })
+
+              // NEW IMPLEMENTATION (parallel execution)
+              if (oldNeedsModeReset) {
+                const newResetResult = this.accumulatedRecordsManager.resetModeOnHashDetection(
+                  this.props.id,
+                  oldCurrentMode
+                )
+
+                // COMPARISON LOGGING
+                debugLogger.log('CHUNK-5-COMPARE', {
+                  event: 'mode-reset-on-hash-detection-comparison',
+                  widgetId: this.props.id,
+                  context: 'helpersimple-open-widget-event',
+                  oldImplementation: {
+                    needsModeReset: oldNeedsModeReset,
+                    currentMode: oldCurrentMode,
+                    newMode: SelectionType.NewSelection,
+                    accumulatedRecordsCleared: oldNeedsModeReset
+                  },
+                  newImplementation: {
+                    needsModeReset: oldNeedsModeReset,
+                    currentMode: oldCurrentMode,
+                    newMode: newResetResult.resultsMode,
+                    accumulatedRecordsCleared: newResetResult.accumulatedRecords.length === 0
+                  },
+                  match: newResetResult.resultsMode === SelectionType.NewSelection && 
+                         newResetResult.accumulatedRecords.length === 0,
+                  timestamp: Date.now()
+                })
+              }
             }
           } else {
+            debugLogger.log('HASH-EXEC', {
+              event: 'querysimple-oninitialvaluefound-no-value-clearing',
+              widgetId: this.props.id,
+              hasCurrentInitialQueryValue: !!this.state.initialQueryValue,
+              timestamp: Date.now()
+            })
             // No matching parameters found - clear state
             if (this.state.initialQueryValue) {
               this.setState({ initialQueryValue: undefined })
@@ -147,21 +338,82 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
         },
         onModeResetNeeded: () => {
           // Reset to New mode when hash parameter is detected
-          if (this.state.resultsMode !== SelectionType.NewSelection) {
+          // OLD IMPLEMENTATION (parallel execution)
+          const oldCurrentMode = this.state.resultsMode
+          const oldNeedsReset = oldCurrentMode !== SelectionType.NewSelection
+          
+          if (oldNeedsReset) {
             debugLogger.log('HASH', {
               event: 'mode-reset-needed-on-hash-detection',
               widgetId: this.props.id,
-              currentMode: this.state.resultsMode,
+              currentMode: oldCurrentMode,
+              triggeredBy: 'helpersimple-open-widget-event',
               timestamp: Date.now()
             })
             this.setState({ 
               resultsMode: SelectionType.NewSelection,
               accumulatedRecords: []
             })
+
+            // NEW IMPLEMENTATION (parallel execution)
+            const newResetResult = this.accumulatedRecordsManager.resetModeOnHashDetection(
+              this.props.id,
+              oldCurrentMode
+            )
+
+            // COMPARISON LOGGING
+            debugLogger.log('CHUNK-5-COMPARE', {
+              event: 'mode-reset-on-hash-detection-comparison',
+              widgetId: this.props.id,
+              context: 'helpersimple-open-widget-event-mode-reset',
+              oldImplementation: {
+                needsModeReset: oldNeedsReset,
+                currentMode: oldCurrentMode,
+                newMode: SelectionType.NewSelection,
+                accumulatedRecordsCleared: oldNeedsReset
+              },
+              newImplementation: {
+                needsModeReset: oldNeedsReset,
+                currentMode: oldCurrentMode,
+                newMode: newResetResult.resultsMode,
+                accumulatedRecordsCleared: newResetResult.accumulatedRecords.length === 0
+              },
+              match: newResetResult.resultsMode === SelectionType.NewSelection && 
+                     newResetResult.accumulatedRecords.length === 0,
+              timestamp: Date.now()
+            })
           }
         }
       }
     )
+  }
+
+  componentDidMount() {
+    // Chunk 1: Manager implementation (r018.8 - switched to manager)
+    // Setup manager (no autonomous URL checking - HelperSimple orchestrates)
+    // NOTE: setup() is a no-op - callbacks are never called
+    this.urlConsumptionManager.setup(
+      this.props,
+      this.state.resultsMode,
+      {} // Empty callbacks - setup() is a no-op
+    )
+    
+    // Listen for HelperSimple's open widget event
+    // QuerySimple should only process hash parameters when HelperSimple explicitly opens the widget
+    // This ensures HelperSimple remains the orchestrator
+    window.addEventListener(OPEN_WIDGET_EVENT, this.handleOpenWidgetEvent)
+    
+    debugLogger.log('HASH-EXEC', {
+      event: 'querysimple-mounted-event-listener-setup',
+      widgetId: this.props.id,
+      currentState: {
+        shouldUseInitialQueryValueForSelection: this.state.shouldUseInitialQueryValueForSelection,
+        hasInitialQueryValue: !!this.state.initialQueryValue,
+        initialQueryValueShortId: this.state.initialQueryValue?.shortId,
+        initialQueryValueValue: this.state.initialQueryValue?.value
+      },
+      timestamp: Date.now()
+    })
     
     // Chunk 2: Manager implementation (r018.13 - Step 2.3: Switch to manager)
     if (this.widgetRef.current) {
@@ -186,6 +438,34 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
       // Notify mount via manager
       this.visibilityManager.notifyMount(this.props.id)
     }
+
+    // Chunk 5: Initialize accumulated records manager state (r018.26 - Step 5.1: Add manager)
+    // Sync manager state with widget state
+    if (this.state.resultsMode) {
+      this.accumulatedRecordsManager.handleResultsModeChange(
+        this.props.id,
+        this.state.resultsMode,
+        false
+      )
+    }
+    if (this.state.accumulatedRecords && this.state.accumulatedRecords.length > 0) {
+      this.accumulatedRecordsManager.handleAccumulatedRecordsChange(
+        this.props.id,
+        this.state.accumulatedRecords
+      )
+    }
+    
+    // Set up callbacks for manager
+    this.accumulatedRecordsManager.setCallbacks({
+      onModeChange: (mode) => {
+        // Manager will handle state updates, but we need to sync widget state
+        // This will be handled in the comparison phase
+      },
+      onAccumulatedRecordsChange: (records) => {
+        // Manager will handle state updates, but we need to sync widget state
+        // This will be handled in the comparison phase
+      }
+    })
     
     // Listen for selection changes from query-result
     window.addEventListener(QUERYSIMPLE_SELECTION_EVENT, this.handleSelectionChange as EventListener)
@@ -200,6 +480,9 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
     // Chunk 1: Clean up manager (r018.8)
     this.urlConsumptionManager.cleanup()
     
+    // Clean up HelperSimple open widget event listener
+    window.removeEventListener(OPEN_WIDGET_EVENT, this.handleOpenWidgetEvent)
+    
     // Chunk 2: Clean up manager (r018.13 - Step 2.3: Switch to manager)
     this.visibilityManager.cleanup()
     this.visibilityManager.notifyUnmount(this.props.id)
@@ -213,6 +496,9 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
     // Chunk 4: Graphics layer cleanup (r018.25 - Step 4.3: Remove old implementation)
     this.graphicsLayerManager.cleanup(this.props.id)
     
+    // Chunk 5: Clean up accumulated records manager (r018.26 - Step 5.1: Add manager)
+    this.accumulatedRecordsManager.cleanup()
+    
     debugLogger.log('WIDGET-STATE', {
       event: 'widget-closed',
       widgetId: this.props.id,
@@ -222,66 +508,9 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
   }
 
   componentDidUpdate(prevProps: AllWidgetProps<IMConfig>) {
-    // Chunk 1: Re-check URL parameters when query items change (r018.8)
-    if (prevProps.config.queryItems !== this.props.config.queryItems) {
-      this.urlConsumptionManager.checkUrlParameters(
-        this.props,
-        this.state.resultsMode,
-        {
-          onInitialValueFound: (value) => {
-            if (value) {
-              // Only update if the value or shortId has changed to avoid unnecessary re-renders
-              if (this.state.initialQueryValue?.shortId !== value.shortId || this.state.initialQueryValue?.value !== value.value) {
-                debugLogger.log('HASH', {
-                  event: 'url-param-detected',
-                  widgetId: this.props.id,
-                  shortId: value.shortId,
-                  value: value.value,
-                  foundIn: 'manager',
-                  context: 'componentDidUpdate',
-                  previousShortId: this.state.initialQueryValue?.shortId,
-                  previousValue: this.state.initialQueryValue?.value,
-                  timestamp: Date.now()
-                })
-                
-                // Reset to New mode when hash parameter is detected to avoid bugs with accumulation modes
-                const needsModeReset = this.state.resultsMode !== SelectionType.NewSelection
-                
-                this.setState({ 
-                  initialQueryValue: { shortId: value.shortId, value: value.value },
-                  // Reset to New mode and clear accumulatedRecords
-                  ...(needsModeReset ? { 
-                    resultsMode: SelectionType.NewSelection,
-                    accumulatedRecords: []
-                  } : {})
-                })
-              }
-            } else {
-              // No matching parameters found - clear state
-              if (this.state.initialQueryValue) {
-                this.setState({ initialQueryValue: undefined })
-              }
-            }
-          },
-          onModeResetNeeded: () => {
-            // Reset to New mode when hash parameter is detected
-            if (this.state.resultsMode !== SelectionType.NewSelection) {
-              debugLogger.log('HASH', {
-                event: 'mode-reset-needed-on-hash-detection',
-                widgetId: this.props.id,
-                currentMode: this.state.resultsMode,
-                context: 'componentDidUpdate',
-                timestamp: Date.now()
-              })
-              this.setState({ 
-                resultsMode: SelectionType.NewSelection,
-                accumulatedRecords: []
-              })
-            }
-          }
-        }
-      )
-    }
+    // QuerySimple no longer autonomously checks URL parameters
+    // Only HelperSimple can trigger hash parameter processing via OPEN_WIDGET_EVENT
+    // This ensures HelperSimple remains the orchestrator
     
     // Chunk 4: Graphics layer is now required (r018.25 - Step 4.3: Remove config change handling)
     // No need to handle config changes for graphics layer since it's always enabled
@@ -1078,12 +1307,18 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
    * @since 1.19.0-r017.0
    */
   private handleResultsModeChange = (mode: SelectionType) => {
+    // OLD IMPLEMENTATION (parallel execution)
+    const oldPreviousMode = this.state.resultsMode
+    const oldCurrentAccumulatedCount = this.state.accumulatedRecords?.length || 0
+    const oldShouldConsumeHash = (mode === SelectionType.AddToSelection || mode === SelectionType.RemoveFromSelection) && !!this.state.initialQueryValue?.shortId
+    const oldWillClearAccumulated = mode === SelectionType.NewSelection
+    
     debugLogger.log('RESULTS-MODE', {
       event: 'handleResultsModeChange-triggered',
       widgetId: this.props.id,
-      previousMode: this.state.resultsMode,
+      previousMode: oldPreviousMode,
       newMode: mode,
-      currentAccumulatedCount: this.state.accumulatedRecords?.length || 0,
+      currentAccumulatedCount: oldCurrentAccumulatedCount,
       timestamp: Date.now()
     })
     
@@ -1111,6 +1346,44 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
     } else {
       this.setState({ resultsMode: mode })
     }
+
+    // Capture manager's previous state BEFORE updating
+    const newPreviousMode = this.accumulatedRecordsManager.getResultsMode()
+    const newPreviousAccumulatedCount = this.accumulatedRecordsManager.getAccumulatedRecordsCount()
+
+    // NEW IMPLEMENTATION (parallel execution)
+    const newResult = this.accumulatedRecordsManager.handleResultsModeChange(
+      this.props.id,
+      mode,
+      oldShouldConsumeHash,
+      this.state.initialQueryValue?.shortId,
+      this.removeHashParameter
+    )
+
+    // COMPARISON LOGGING
+    debugLogger.log('CHUNK-5-COMPARE', {
+      event: 'handleResultsModeChange-comparison',
+      widgetId: this.props.id,
+      oldImplementation: {
+        previousMode: oldPreviousMode,
+        newMode: mode,
+        currentAccumulatedCount: oldCurrentAccumulatedCount,
+        willClearAccumulated: oldWillClearAccumulated,
+        shouldConsumeHash: oldShouldConsumeHash
+      },
+      newImplementation: {
+        previousMode: newPreviousMode,
+        newMode: newResult.resultsMode,
+        currentAccumulatedCount: newPreviousAccumulatedCount,
+        willClearAccumulated: newResult.resultsMode === SelectionType.NewSelection,
+        shouldConsumeHash: oldShouldConsumeHash
+      },
+      match: oldPreviousMode === newPreviousMode &&
+             oldCurrentAccumulatedCount === newPreviousAccumulatedCount &&
+             newResult.resultsMode === mode && 
+             (mode === SelectionType.NewSelection ? newResult.accumulatedRecords.length === 0 : true),
+      timestamp: Date.now()
+    })
   }
 
   /**
@@ -1158,14 +1431,67 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
   }
 
   private handleAccumulatedRecordsChange = (records: FeatureDataRecord[]) => {
+    // OLD IMPLEMENTATION (parallel execution)
+    const oldPreviousCount = this.state.accumulatedRecords?.length || 0
+    const oldNewCount = records.length
+    
+    // If we're in Remove mode and all accumulated records are cleared, reset to NewSelection mode
+    // Remove mode requires accumulated records to function, so it should be disabled when records are empty
+    const shouldResetMode = records.length === 0 && 
+                           this.state.resultsMode === SelectionType.RemoveFromSelection
+    
     debugLogger.log('RESULTS-MODE', {
       event: 'handleAccumulatedRecordsChange-triggered',
       widgetId: this.props.id,
-      previousCount: this.state.accumulatedRecords?.length || 0,
-      newCount: records.length,
+      previousCount: oldPreviousCount,
+      newCount: oldNewCount,
+      currentMode: this.state.resultsMode,
+      shouldResetMode,
       timestamp: Date.now()
     })
-    this.setState({ accumulatedRecords: records })
+    
+    this.setState({ 
+      accumulatedRecords: records,
+      // Reset mode to NewSelection if all accumulated records cleared in Remove mode
+      ...(shouldResetMode ? {
+        resultsMode: SelectionType.NewSelection
+      } : {})
+    })
+    
+    if (shouldResetMode) {
+      debugLogger.log('RESULTS-MODE', {
+        event: 'mode-reset-on-accumulated-records-cleared',
+        widgetId: this.props.id,
+        previousMode: SelectionType.RemoveFromSelection,
+        newMode: SelectionType.NewSelection,
+        reason: 'all-accumulated-records-cleared-in-remove-mode',
+        timestamp: Date.now()
+      })
+    }
+
+    // Capture manager's previous state BEFORE updating
+    const newPreviousCount = this.accumulatedRecordsManager.getAccumulatedRecordsCount()
+
+    // NEW IMPLEMENTATION (parallel execution)
+    this.accumulatedRecordsManager.handleAccumulatedRecordsChange(this.props.id, records)
+
+    // COMPARISON LOGGING
+    debugLogger.log('CHUNK-5-COMPARE', {
+      event: 'handleAccumulatedRecordsChange-comparison',
+      widgetId: this.props.id,
+      oldImplementation: {
+        previousCount: oldPreviousCount,
+        newCount: oldNewCount,
+        recordsLength: records.length
+      },
+      newImplementation: {
+        previousCount: newPreviousCount,
+        newCount: records.length,
+        recordsLength: records.length
+      },
+      match: oldPreviousCount === newPreviousCount && oldNewCount === records.length,
+      timestamp: Date.now()
+    })
   }
 
   /**
@@ -1458,22 +1784,77 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
     const { id } = this.props
     const { initialQueryValue } = this.state
     
-    // Chunk 1: Manager implementation (r018.8)
-    this.urlConsumptionManager.removeHashParameter(shortId, id)
+    debugLogger.log('HASH-EXEC', {
+      event: 'querysimple-handlehashparameterused-called',
+      widgetId: id,
+      shortId,
+      currentState: {
+        shouldUseInitialQueryValueForSelection: this.state.shouldUseInitialQueryValueForSelection,
+        hasInitialQueryValue: !!this.state.initialQueryValue,
+        initialQueryValueShortId: this.state.initialQueryValue?.shortId,
+        initialQueryValueValue: this.state.initialQueryValue?.value
+      },
+      timestamp: Date.now()
+    })
+    
+    // NOTE: Hash parameters are NOT cleared here - they persist in URL
+    // Hash parameters are only consumed when switching to accumulation modes (Add/Remove)
+    // to prevent re-triggering when the user manually switches modes
     
     debugLogger.log('HASH', {
       event: 'handleHashParameterUsed-notified',
       widgetId: id,
       shortId: shortId,
       currentInitialQueryValue: initialQueryValue,
-      note: 'Hash remains in URL per user requirement',
+      note: 'Hash parameter used but NOT cleared - hash remains in URL per user requirement',
       timestamp: Date.now()
     })
 
-    // Clear the state so it won't trigger again within this session/mount
-    if (this.state.initialQueryValue?.shortId === shortId) {
-      this.setState({ initialQueryValue: undefined })
+    // Track this shortId:value pair as processed to prevent re-execution when switching queries
+    // This prevents HelperSimple from re-triggering the same parameter when switching queries
+    if (initialQueryValue) {
+      const paramKey = `${initialQueryValue.shortId}:${initialQueryValue.value}`
+      this.processedHashParamsRef.add(paramKey)
+      debugLogger.log('HASH-EXEC', {
+        event: 'querysimple-hashparam-tracked-as-processed',
+        widgetId: id,
+        shortId: initialQueryValue.shortId,
+        value: initialQueryValue.value,
+        paramKey,
+        processedParams: Array.from(this.processedHashParamsRef),
+        timestamp: Date.now()
+      })
     }
+    
+    // ALWAYS clear both hash state values after execution
+    // QuerySimple should not remember hash state after HelperSimple-driven execution completes
+    // This prevents autonomous re-processing when switching queries
+    // Using a single setState ensures atomic update and prevents race conditions
+    this.setState({ 
+      shouldUseInitialQueryValueForSelection: false,
+      initialQueryValue: undefined
+    }, () => {
+      debugLogger.log('HASH-EXEC', {
+        event: 'querysimple-handlehashparameterused-state-cleared',
+        widgetId: id,
+        shortId,
+        newState: {
+          shouldUseInitialQueryValueForSelection: this.state.shouldUseInitialQueryValueForSelection,
+          hasInitialQueryValue: !!this.state.initialQueryValue,
+          initialQueryValueShortId: this.state.initialQueryValue?.shortId,
+          initialQueryValueValue: this.state.initialQueryValue?.value
+        },
+        timestamp: Date.now()
+      })
+    })
+    
+    debugLogger.log('HASH', {
+      event: 'shouldUseInitialQueryValueForSelection-flag-cleared',
+      widgetId: id,
+      shortId: shortId,
+      flagValue: false,
+      timestamp: Date.now()
+    })
   }
 
 
@@ -1504,6 +1885,7 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
                 defaultPageSize={config.defaultPageSize} 
                 className='pb-4' 
                 initialQueryValue={this.state.initialQueryValue} 
+                shouldUseInitialQueryValueForSelection={this.state.shouldUseInitialQueryValueForSelection}
                 onHashParameterUsed={this.handleHashParameterUsed}
                 resultsMode={this.state.resultsMode}
                 onResultsModeChange={this.handleResultsModeChange}
@@ -1584,6 +1966,7 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
                 queryItems={config.queryItems} 
                 defaultPageSize={config.defaultPageSize} 
                 initialQueryValue={this.state.initialQueryValue} 
+                shouldUseInitialQueryValueForSelection={this.state.shouldUseInitialQueryValueForSelection}
                 onHashParameterUsed={this.handleHashParameterUsed}
                 resultsMode={this.state.resultsMode}
                 onResultsModeChange={this.handleResultsModeChange}

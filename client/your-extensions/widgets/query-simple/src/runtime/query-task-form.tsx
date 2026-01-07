@@ -27,9 +27,37 @@ import { useAutoHeight } from './useAutoHeight'
 import { createQuerySimpleDebugLogger } from 'widgets/shared-code/common'
 
 const debugLogger = createQuerySimpleDebugLogger()
+
 import { QueryTaskContext } from './query-task-context'
 import { InfoOutlined } from 'jimu-icons/outlined/suggested/info'
 import { clearSelectionInDataSources } from './selection-utils'
+
+/**
+ * Event-Driven Hash Parameter Execution Pattern
+ * 
+ * CRITICAL: This is the ONLY execution path for hash-triggered queries.
+ * 
+ * Flow:
+ * 1. Hash value set in state as STRING (e.g., "5568900000")
+ * 2. DOM manipulation triggers SqlExpressionRuntime to process the value
+ * 3. SqlExpressionRuntime converts string → array format [{value: "...", label: "..."}]
+ * 4. handleSqlExprObjChange detects conversion → dispatches QUERYSIMPLE_HASH_VALUE_CONVERTED_EVENT
+ * 5. Event listener in query-task.tsx executes query (OR handleSqlExprObjChange calls applyQuery directly)
+ * 
+ * WHY THIS PATTERN EXISTS:
+ * - SqlExpressionRuntime ONLY fires onChange when value is converted to array format
+ * - Queries REQUIRE array format - executing with string format returns unfiltered results (1000 records)
+ * - We MUST wait for conversion before executing queries
+ * 
+ * ANTI-PATTERN TO AVOID:
+ * - DO NOT add useEffect hooks that execute queries based on string values
+ * - DO NOT execute queries before QUERYSIMPLE_HASH_VALUE_CONVERTED_EVENT is dispatched
+ * - DO NOT circumvent the event-driven flow with early execution checks
+ * 
+ * If you need to execute a query, wait for the conversion event or call applyQuery()
+ * AFTER handleSqlExprObjChange has detected the conversion and dispatched the event.
+ */
+const QUERYSIMPLE_HASH_VALUE_CONVERTED_EVENT = 'querysimple-hash-value-converted'
 
 export interface QueryTaskItemProps {
   widgetId: string
@@ -42,6 +70,8 @@ export interface QueryTaskItemProps {
   initialInputValue?: string
   onHashParameterUsed?: (shortId: string) => void
   queryItemShortId?: string
+  activeTab?: 'query' | 'results'
+  onTabChange?: (tab: 'query' | 'results') => void
 }
 
 const getFormStyle = (isAutoHeight: boolean) => {
@@ -72,7 +102,7 @@ const getFormStyle = (isAutoHeight: boolean) => {
 }
 
 export function QueryTaskForm (props: QueryTaskItemProps) {
-  const { widgetId, configId, outputDS, spatialFilterEnabled, datasourceReady, onFormSubmit, dataActionFilter, initialInputValue, onHashParameterUsed, queryItemShortId } = props
+  const { widgetId, configId, outputDS, spatialFilterEnabled, datasourceReady, onFormSubmit, dataActionFilter, initialInputValue, onHashParameterUsed, queryItemShortId, activeTab, onTabChange } = props
   const preDataActionFilter = hooks.usePrevious(dataActionFilter)
   const queryItem: ImmutableObject<QueryItemType> = ReactRedux.useSelector((state: IMState) => {
     const widgetJson = state.appConfig.widgets[widgetId]
@@ -114,6 +144,9 @@ export function QueryTaskForm (props: QueryTaskItemProps) {
     spatialFilterDesc
   } = currentItem
   const [attributeFilterSqlExprObj, setAttributeFilterSqlExprObj] = React.useState<IMSqlExpression>(sqlExprObj)
+  // Ref to track current SQL expression for synchronous access in applyQuery
+  // This ensures hash values are immediately available when Apply is clicked
+  const attributeFilterSqlExprObjRef = React.useRef<IMSqlExpression>(sqlExprObj)
   const spatialFilterObjRef = React.useRef<SpatialFilterObj>(null)
   const spatialRelationRef = React.useRef<SpatialRelation>(SpatialRelation.Intersect)
   const bufferRef = React.useRef<{ distance: number, unit: UnitType }>(null)
@@ -124,6 +157,7 @@ export function QueryTaskForm (props: QueryTaskItemProps) {
   const initialValueSetRef = React.useRef<string | null>(null) // Track which configId we've set the value for
   const lastValueSetRef = React.useRef<string | null>(null) // Track the last value that was set
   const hashTriggeredRef = React.useRef<boolean>(false) // Track if query was triggered via hash parameter
+  const previousConfigIdRef = React.useRef<string | null>(null) // Track previous configId to detect query switches
   const [isTypingValid, setIsTypingValid] = React.useState<boolean>(false)
 
   // Monitor focus and input events within the query form
@@ -246,6 +280,17 @@ export function QueryTaskForm (props: QueryTaskItemProps) {
 
   const originDS = outputDS?.getOriginDataSources()[0]
 
+  // Track configId changes (query switches)
+  React.useEffect(() => {
+    debugLogger.log('FORM', {
+      event: 'configId-changed',
+      configId,
+      previousConfigId: initialValueSetRef.current,
+      initialInputValue,
+      timestamp: Date.now()
+    })
+  }, [configId, initialInputValue, datasourceReady, outputDS, widgetId, hashTriggeredRef])
+
   /**
    * Sets the input value from URL hash parameters when:
    * 1. Datasource is ready
@@ -256,11 +301,29 @@ export function QueryTaskForm (props: QueryTaskItemProps) {
    * is properly set in SqlExpressionRuntime's internal state.
    */
   React.useEffect(() => {
+    debugLogger.log('FORM', {
+      event: 'initialInputValue-prop-received',
+      configId,
+      initialInputValue,
+      datasourceReady,
+      hasSqlExprObj: !!sqlExprObj,
+      sqlExprObjPartsLength: sqlExprObj?.parts?.length,
+      initialValueSetRef: initialValueSetRef.current,
+      willProcess: datasourceReady && initialInputValue && sqlExprObj?.parts?.length > 0,
+      timestamp: Date.now()
+    })
+    
     // Reset flag if configId changed (switched to different query)
     if (initialValueSetRef.current !== null && initialValueSetRef.current !== configId) {
       initialValueSetRef.current = null
       lastValueSetRef.current = null
       hashTriggeredRef.current = false // Reset hash trigger flag when switching queries
+      debugLogger.log('FORM', {
+        event: 'hashTriggeredRef-reset',
+        configId,
+        reason: 'switching-queries',
+        timestamp: Date.now()
+      })
       setIsTypingValid(false) // Reset typing validation
     }
     
@@ -278,12 +341,70 @@ export function QueryTaskForm (props: QueryTaskItemProps) {
                           (initialValueSetRef.current !== configId || valueChanged)
     
     if (shouldSetValue) {
+      // Ensure Query tab is active before setting hash value
+      // This ensures SqlExpressionRuntime is visible and can process the value
+      if (activeTab !== 'query' && onTabChange) {
+        debugLogger.log('FORM', {
+          event: 'hash-value-setting-switching-to-query-tab',
+          configId,
+          initialInputValue,
+          currentTab: activeTab,
+          note: 'Switching to Query tab before setting hash value to ensure SqlExpressionRuntime can process it'
+        })
+        onTabChange('query')
+        // Return early - useEffect will run again when activeTab becomes 'query'
+        return
+      }
+      
+      debugLogger.log('FORM', {
+        event: 'hash-value-setting-start',
+        configId,
+        initialInputValue,
+        initialValueSetRef: initialValueSetRef.current,
+        valueChanged,
+        hashTriggeredRefBefore: hashTriggeredRef.current,
+        sqlExprObjPartsLength: sqlExprObj?.parts?.length,
+        activeTab,
+        timestamp: Date.now()
+      })
+      
+      // Set hashTriggeredRef IMMEDIATELY when setting hash value
+      // This ensures handleSqlExprObjChange can detect hash-triggered conversions
+      hashTriggeredRef.current = true
+      debugLogger.log('FORM', {
+        event: 'hashTriggeredRef-set-true',
+        configId,
+        initialInputValue,
+        timestamp: Date.now()
+      })
+      
       const firstPart = sqlExprObj.parts[0]
       // Check if the first part is a SINGLE clause (not a SqlClauseSet)
       if (firstPart && 'type' in firstPart && firstPart.type === 'SINGLE' && 'valueOptions' in firstPart) {
         // Update the expression object with the initial value
         const updated = sqlExprObj.setIn(['parts', '0', 'valueOptions', 'value'], initialInputValue)
+        
+        debugLogger.log('FORM', {
+          event: 'hash-value-setting-react-state',
+          configId,
+          initialInputValue,
+          previousStateValue: attributeFilterSqlExprObj?.parts?.[0]?.valueOptions?.value,
+          newStateValue: updated?.parts?.[0]?.valueOptions?.value,
+          willCallSetState: true,
+          note: 'Setting value in React state - SqlExpressionRuntime should receive via expression prop'
+        })
+        
         setAttributeFilterSqlExprObj(updated)
+        // Update ref immediately for synchronous access in applyQuery
+        attributeFilterSqlExprObjRef.current = updated
+        
+        debugLogger.log('FORM', {
+          event: 'hash-value-ref-updated',
+          configId,
+          initialInputValue,
+          refValueAfterUpdate: attributeFilterSqlExprObjRef.current?.parts?.[0]?.valueOptions?.value,
+          timestamp: Date.now()
+        })
         // Update clause number for the updated expression
         showClauseNumber.current = getShownClauseNumberByExpression(updated)
         initialValueSetRef.current = configId
@@ -298,15 +419,51 @@ export function QueryTaskForm (props: QueryTaskItemProps) {
                              document.querySelector(`.widget-runtime[data-widgetid="${widgetId}"]`) ||
                              document.querySelector('.query-form')
           
+          debugLogger.log('FORM', {
+            event: 'hash-value-dom-manipulation-start',
+            configId,
+            initialInputValue,
+            formElementFound: !!formElement,
+            widgetId,
+            selector1: `[data-widgetid="${widgetId}"] .query-form`,
+            selector2: `.widget-runtime[data-widgetid="${widgetId}"]`,
+            selector3: '.query-form',
+            timestamp: Date.now()
+          })
+          
           if (formElement) {
             // Look for text input elements
             const textInputs = formElement.querySelectorAll('input[type="text"]')
             
-            textInputs.forEach((input: HTMLInputElement) => {
+            debugLogger.log('FORM', {
+              event: 'hash-value-dom-manipulation-inputs-found',
+              configId,
+              initialInputValue,
+              inputsFound: textInputs.length,
+              formElementTag: formElement.tagName,
+              formElementClass: formElement.className,
+              timestamp: Date.now()
+            })
+            
+            let inputsUpdated = 0
+            textInputs.forEach((input: HTMLInputElement, index: number) => {
               // Update the value if input is empty OR if the value has changed (hash parameter updated)
               const shouldUpdate = !input.value || 
                                   input.value.trim() === '' || 
                                   input.value !== initialInputValue
+              
+              debugLogger.log('FORM', {
+                event: 'hash-value-dom-manipulation-input-check',
+                configId,
+                initialInputValue,
+                inputIndex: index,
+                currentInputValue: input.value,
+                inputId: input.id,
+                inputName: input.name,
+                inputParentTag: input.parentElement?.tagName,
+                shouldUpdate,
+                timestamp: Date.now()
+              })
               
               if (shouldUpdate) {
                 // Focus the input first
@@ -314,6 +471,16 @@ export function QueryTaskForm (props: QueryTaskItemProps) {
                 
                 // Set the value
                 input.value = initialInputValue
+                
+                debugLogger.log('FORM', {
+                  event: 'hash-value-dom-manipulation-input-value-set',
+                  configId,
+                  initialInputValue,
+                  inputIndex: index,
+                  valueAfterSet: input.value,
+                  isFocused: document.activeElement === input,
+                  timestamp: Date.now()
+                })
                 
                 // Create and dispatch input event with proper properties
                 const inputEvent = new Event('input', { bubbles: true, cancelable: true })
@@ -333,90 +500,45 @@ export function QueryTaskForm (props: QueryTaskItemProps) {
                   input.dispatchEvent(reactEvent)
                 }
                 
+                debugLogger.log('FORM', {
+                  event: 'hash-value-dom-manipulation-events-dispatched',
+                  configId,
+                  initialInputValue,
+                  inputIndex: index,
+                  inputEventDispatched: true,
+                  changeEventDispatched: true,
+                  reactEventDispatched: !!nativeInputValueSetter,
+                  timestamp: Date.now()
+                })
+                
                 // Blur to trigger any validation or state updates
                 input.blur()
+                
+                inputsUpdated++
               }
             })
             
-            // After setting values and blurring, verify input value is set before triggering Apply button
-            setTimeout(() => {
-              if (applyButtonRef.current && !applyButtonRef.current.disabled && datasourceReady) {
-                // VERIFICATION: Ensure input value is actually set before executing query
-                // This is especially important for grouped queries where dropdowns need to be synchronized first
-                const formElement = document.querySelector(`[data-widgetid="${widgetId}"]`)?.querySelector('.query-form') || 
-                                   document.querySelector('.query-form')
-                
-                if (formElement && initialInputValue) {
-                  const textInputs = formElement.querySelectorAll('input[type="text"]')
-                  let inputValueSet = false
-                  
-                  textInputs.forEach((input: HTMLInputElement) => {
-                    if (input.value === initialInputValue) {
-                      inputValueSet = true
-                    }
-                  })
-                  
-                  // CRITICAL: Also verify React state has the value
-                  // This prevents race condition where DOM has value but React state hasn't updated yet
-                  const firstPart = attributeFilterSqlExprObj?.parts?.[0]
-                  const reactStateHasValue = firstPart?.type === 'SINGLE' && 
-                                            firstPart?.valueOptions?.value === initialInputValue
-                  
-                  if (!inputValueSet || !reactStateHasValue) {
-                    debugLogger.log('FORM', {
-                      event: 'input-value-not-set-retrying',
-                      expectedValue: initialInputValue,
-                      queryItemShortId,
-                      domValueSet: inputValueSet,
-                      reactStateHasValue: reactStateHasValue,
-                      currentReactValue: firstPart?.valueOptions?.value,
-                      currentReactPartType: firstPart?.type,
-                      action: 'will-retry-after-delay',
-                      note: 'Input value or React state not synchronized, retrying to prevent empty query'
-                    })
-                    // Retry after a delay to allow React state to sync
-                    setTimeout(() => {
-                      // Recursively call verifyAndApply if needed, but limit retries
-                      // For now, just retry once more
-                      if (applyButtonRef.current && !applyButtonRef.current.disabled && datasourceReady) {
-                        // Set hashTriggeredRef to force zoom for hash-triggered queries
-                        hashTriggeredRef.current = true
-                        
-                        // Remove hash parameter from URL before Apply is triggered
-                        if (onHashParameterUsed && queryItemShortId) {
-                          onHashParameterUsed(queryItemShortId)
-                        }
-
-                        // Auto-trigger Apply button
-                        applyButtonRef.current.click()
-                      }
-                    }, 300)
-                    return // Exit early, will retry
-                  }
-                }
-                
-                // Both DOM input AND React state are synchronized, proceed with execution
-                debugLogger.log('FORM', {
-                  event: 'input-value-verified',
-                  expectedValue: initialInputValue,
-                  queryItemShortId,
-                  domValueSet: true,
-                  reactStateHasValue: true,
-                  note: 'Both DOM input and React state verified, proceeding with query execution'
-                })
-                
-                // Set hashTriggeredRef to force zoom for hash-triggered queries
-                hashTriggeredRef.current = true
-                
-                // Remove hash parameter from URL before Apply is triggered to prevent re-execution
-                if (onHashParameterUsed && queryItemShortId) {
-                  onHashParameterUsed(queryItemShortId)
-                }
-
-                // Auto-trigger Apply button to execute the query with the populated value
-                applyButtonRef.current.click()
-              }
-            }, 200) // Small delay after blur to ensure state is synced
+            // Hash-triggered queries: DOM manipulation triggers SqlExpressionRuntime onChange
+            // handleSqlExprObjChange detects conversion and fires QUERYSIMPLE_HASH_VALUE_CONVERTED_EVENT
+            // Event listener in query-task.tsx executes query directly - no Apply button click needed
+            debugLogger.log('FORM', {
+              event: 'hash-value-dom-manipulation-complete',
+              configId,
+              initialInputValue,
+              inputsFound: textInputs.length,
+              inputsUpdated,
+              note: 'DOM manipulation complete - SqlExpressionRuntime onChange should fire',
+              timestamp: Date.now()
+            })
+          } else {
+            debugLogger.log('FORM', {
+              event: 'hash-value-dom-manipulation-failed',
+              configId,
+              initialInputValue,
+              reason: 'formElement-not-found',
+              widgetId,
+              timestamp: Date.now()
+            })
           }
         }, 500) // Longer delay to ensure component is fully rendered
         
@@ -428,14 +550,79 @@ export function QueryTaskForm (props: QueryTaskItemProps) {
     if (!sqlExprObj) {
       showClauseNumber.current = 0
       setAttributeFilterSqlExprObj(null)
+      attributeFilterSqlExprObjRef.current = null
+      
+      debugLogger.log('FORM', {
+        event: 'sqlExprObj-cleared',
+        configId,
+        timestamp: Date.now()
+      })
     } else {
       showClauseNumber.current = getShownClauseNumberByExpression(sqlExprObj)
-      // Only update if we haven't set the initial value for this configId yet, or if we don't have an initial value
-      if (initialValueSetRef.current !== configId || !initialInputValue) {
+      
+      // Check if we already have a value set (from user input or hash)
+      const currentValue = attributeFilterSqlExprObj?.parts?.[0]?.valueOptions?.value
+      const baseValue = sqlExprObj?.parts?.[0]?.valueOptions?.value
+      const hasValueSet = currentValue !== undefined && currentValue !== null && currentValue !== ''
+      const configIdChanged = previousConfigIdRef.current !== null && previousConfigIdRef.current !== configId
+      
+      // Only update if:
+      // 1. We haven't set a value yet (no value in current state), OR
+      // 2. configId changed (switching queries - reset to base sqlExprObj)
+      // Otherwise, preserve the existing value as a visual record
+      if (!hasValueSet || configIdChanged) {
         setAttributeFilterSqlExprObj(sqlExprObj)
+        attributeFilterSqlExprObjRef.current = sqlExprObj
+        
+        debugLogger.log('FORM', {
+          event: 'sqlExprObj-updated-ref',
+          configId,
+          previousConfigId: previousConfigIdRef.current,
+          initialInputValue,
+          initialValueSetRef: initialValueSetRef.current,
+          hasValueSet,
+          configIdChanged,
+          previousValue: currentValue,
+          newValue: baseValue,
+          reason: configIdChanged ? 'configId-changed-resetting' : 'no-value-set-initializing',
+          timestamp: Date.now()
+        })
+      } else {
+        debugLogger.log('FORM', {
+          event: 'sqlExprObj-skipped-ref-update',
+          configId,
+          previousConfigId: previousConfigIdRef.current,
+          initialInputValue,
+          initialValueSetRef: initialValueSetRef.current,
+          currentValue,
+          baseValue,
+          reason: 'value-already-set-preserving-as-visual-record',
+          note: 'Skipping update to preserve user-entered or hash-set value as visual record',
+          timestamp: Date.now()
+        })
       }
+      
+      // Update previousConfigIdRef for next comparison
+      previousConfigIdRef.current = configId
     }
-  }, [sqlExprObj, initialInputValue, datasourceReady, configId, widgetId, onHashParameterUsed, queryItemShortId])
+  }, [sqlExprObj, initialInputValue, datasourceReady, configId, widgetId, onHashParameterUsed, queryItemShortId, activeTab, onTabChange])
+  
+  // Keep ref in sync with state changes (for SqlExpressionRuntime updates)
+  React.useEffect(() => {
+    attributeFilterSqlExprObjRef.current = attributeFilterSqlExprObj
+    
+    // Log when state changes - this is what SqlExpressionRuntime receives via expression prop
+    debugLogger.log('FORM', {
+      event: 'attributeFilterSqlExprObj-state-changed',
+      configId,
+      stateValue: attributeFilterSqlExprObj?.parts?.[0]?.valueOptions?.value,
+      stateValueType: typeof attributeFilterSqlExprObj?.parts?.[0]?.valueOptions?.value,
+      isArray: Array.isArray(attributeFilterSqlExprObj?.parts?.[0]?.valueOptions?.value),
+      hashTriggeredRef: hashTriggeredRef.current,
+      initialInputValue,
+      note: 'React state changed - SqlExpressionRuntime should receive this via expression prop'
+    })
+  }, [attributeFilterSqlExprObj, configId, initialInputValue])
 
   const applyQuery = React.useCallback(() => {
     // When the 'apply' button is clicked, it should clear the selection from the previous result list
@@ -459,7 +646,36 @@ export function QueryTaskForm (props: QueryTaskItemProps) {
     const zoomToUse = hashTriggeredRef.current ? true : runtimeZoomToSelected
 
     // Sanitize user input before submission
-    const sanitizedSqlExprObj = sanitizeSqlExpression(attributeFilterSqlExprObj)
+    // Read from ref to get the latest value synchronously (including hash values)
+    const currentSqlExprObj = attributeFilterSqlExprObjRef.current
+    const currentRefValue = currentSqlExprObj?.parts?.[0]?.valueOptions?.value
+    
+    debugLogger.log('FORM', {
+      event: 'applyQuery-executing',
+      configId,
+      initialInputValue,
+      currentRefValue,
+      refHasValue: !!currentRefValue,
+      hashTriggered: hashTriggeredRef.current,
+      timestamp: Date.now()
+    })
+    
+    const sanitizedSqlExprObj = sanitizeSqlExpression(currentSqlExprObj)
+    
+    // Log the sanitized expression to see if value was preserved
+    const sanitizedValue = sanitizedSqlExprObj?.parts?.[0]?.valueOptions?.value
+    debugLogger.log('FORM', {
+      event: 'applyQuery-after-sanitize',
+      configId,
+      currentRefValue,
+      sanitizedValue,
+      valuesMatch: currentRefValue === sanitizedValue,
+      sanitizedValueType: typeof sanitizedValue,
+      currentRefValueType: typeof currentRefValue,
+      isArrayCurrent: Array.isArray(currentRefValue),
+      isArraySanitized: Array.isArray(sanitizedValue),
+      timestamp: Date.now()
+    })
 
     let rel = spatialRelationRef.current
     if (spatialFilterObjRef.current?.geometry && rel == null) {
@@ -483,7 +699,12 @@ export function QueryTaskForm (props: QueryTaskItemProps) {
     
     // Reset hashTriggeredRef after use
     hashTriggeredRef.current = false
-  }, [onFormSubmit, outputDS, attributeFilterSqlExprObj, runtimeZoomToSelected])
+    debugLogger.log('FORM', {
+      event: 'hashTriggeredRef-reset-after-apply',
+      configId,
+      timestamp: Date.now()
+    })
+  }, [onFormSubmit, outputDS, runtimeZoomToSelected])
 
   const handleKeyDown = React.useCallback((event: React.KeyboardEvent) => {
     if (event.key === 'Enter' && datasourceReady && isInputValid) {
@@ -518,9 +739,28 @@ export function QueryTaskForm (props: QueryTaskItemProps) {
   React.useEffect(() => {
     if (!dataActionFilter) return
     if (dataActionFilter.where !== preDataActionFilter?.where) {
+      // Log state when dataActionFilter changes (query switch)
+      const currentRefValue = attributeFilterSqlExprObjRef.current?.parts?.[0]?.valueOptions?.value
+      const hasPendingHashValue = initialInputValue && 
+                                  (initialValueSetRef.current !== configId || 
+                                   currentRefValue !== initialInputValue)
+      
+      debugLogger.log('FORM', {
+        event: 'dataActionFilter-changed-auto-trigger',
+        configId,
+        previousWhere: preDataActionFilter?.where,
+        newWhere: dataActionFilter.where,
+        initialInputValue,
+        initialValueSetRef: initialValueSetRef.current,
+        currentRefValue,
+        hasPendingHashValue,
+        willCallApplyQuery: !hasPendingHashValue,
+        timestamp: Date.now()
+      })
+      
       applyQuery()
     }
-  }, [dataActionFilter, preDataActionFilter?.where, applyQuery])
+  }, [dataActionFilter, preDataActionFilter?.where, applyQuery, initialInputValue, configId])
 
   const resetQuery = React.useCallback(() => {
     // 1. reset attribute filter
@@ -531,15 +771,135 @@ export function QueryTaskForm (props: QueryTaskItemProps) {
   }, [sqlExprObj])
 
   const handleSqlExprObjChange = React.useCallback((sqlObj: IMSqlExpression) => {
+    // LOG AT THE VERY START
+    const sqlObjValue = sqlObj?.parts?.[0]?.valueOptions?.value
+    const previousRefValue = attributeFilterSqlExprObjRef.current?.parts?.[0]?.valueOptions?.value
+    const previousStateValue = attributeFilterSqlExprObj?.parts?.[0]?.valueOptions?.value
+    
+    // Check if this is from user typing or prop change
+    const isFromUserTyping = typeof previousRefValue === 'string' && 
+                             typeof sqlObjValue === 'object' && 
+                             Array.isArray(sqlObjValue) &&
+                             sqlObjValue[0]?.value === previousRefValue
+    const isFromPropChange = JSON.stringify(previousStateValue) === JSON.stringify(sqlObjValue)
+    
+    debugLogger.log('FORM', {
+      event: 'handleSqlExprObjChange-called',
+      configId,
+      sqlObjExists: !!sqlObj,
+      initialInputValue,
+      hashTriggeredRef: hashTriggeredRef.current,
+      sqlObjValue,
+      sqlObjValueType: typeof sqlObjValue,
+      sqlObjIsArray: Array.isArray(sqlObjValue),
+      previousRefValue,
+      previousStateValue,
+      isFromUserTyping,
+      isFromPropChange,
+      triggerSource: isFromUserTyping ? 'user-typing' : (isFromPropChange ? 'prop-change' : 'unknown'),
+      timestamp: Date.now()
+    })
+    
+    const firstPart = sqlObj?.parts?.[0]
+    const value = firstPart?.type === 'SINGLE' ? (firstPart as any).valueOptions?.value : 'not-single'
+    
     debugLogger.log('FORM', {
       event: 'sql-expression-changed',
       configId,
       partsCount: sqlObj?.parts?.length || 0,
-      firstPartValue: sqlObj?.parts?.[0]?.type === 'SINGLE' ? (sqlObj.parts[0] as any).valueOptions?.value : 'not-single'
+      firstPartValue: value,
+      hashTriggeredRefValue: hashTriggeredRef.current,
+      initialInputValue: initialInputValue,
+      isArrayFormat: Array.isArray(value),
+      timestamp: Date.now()
     })
+    
     showClauseNumber.current = getShownClauseNumberByExpression(sqlObj)
     setAttributeFilterSqlExprObj(sqlObj)
-  }, [configId])
+    
+    // Check if this is a hash-triggered conversion (string -> array)
+    // When hash value changes for same configId, SqlExpressionRuntime converts string to array format
+    if (firstPart?.type === 'SINGLE' && firstPart?.valueOptions?.value) {
+      const value = firstPart.valueOptions.value
+      const isArrayFormat = Array.isArray(value)
+      const hasInitialValue = initialInputValue && hashTriggeredRef.current
+      
+      debugLogger.log('FORM', {
+        event: 'sql-expression-changed-conversion-check',
+        configId,
+        isArrayFormat,
+        hasInitialValue,
+        hashTriggeredRefValue: hashTriggeredRef.current,
+        initialInputValue,
+        valueType: typeof value,
+        value: Array.isArray(value) ? value : value,
+        timestamp: Date.now()
+      })
+      
+      // If value converted to array format AND this was hash-triggered, fire event
+      if (isArrayFormat && hasInitialValue && initialInputValue) {
+        const matchesHashValue = value.length > 0 && value[0]?.value === initialInputValue
+        
+        debugLogger.log('FORM', {
+          event: 'sql-expression-changed-matches-check',
+          configId,
+          matchesHashValue,
+          initialInputValue,
+          convertedValueFirstItem: value[0]?.value,
+          timestamp: Date.now()
+        })
+        
+        if (matchesHashValue) {
+          debugLogger.log('FORM', {
+            event: 'hash-value-converted-to-array',
+            configId,
+            initialInputValue,
+            convertedValue: value,
+            timestamp: Date.now()
+          })
+          
+          // Fire custom event for query execution to wait on
+          const event = new CustomEvent(QUERYSIMPLE_HASH_VALUE_CONVERTED_EVENT, {
+            detail: {
+              configId,
+              widgetId,
+              initialInputValue,
+              convertedValue: value
+            },
+            bubbles: true
+          })
+          document.dispatchEvent(event)
+          
+          debugLogger.log('FORM', {
+            event: 'hash-value-converted-event-dispatched',
+            configId,
+            widgetId,
+            timestamp: Date.now()
+          })
+          
+          // EXECUTION POINT: Query execution happens HERE after conversion is confirmed
+          // This is the ONLY place where hash-triggered queries should execute
+          // The event QUERYSIMPLE_HASH_VALUE_CONVERTED_EVENT has been dispatched above
+          // This direct call handles the case where conversion happens synchronously
+          // The event listener in query-task.tsx handles the async case
+          if (hashTriggeredRef.current && datasourceReady && outputDS) {
+            debugLogger.log('FORM', {
+              event: 'hash-value-converted-executing-query-directly',
+              configId,
+              initialInputValue,
+              note: 'Conversion complete - executing query directly via applyQuery (event-driven pattern)',
+              timestamp: Date.now()
+            })
+            
+            // Use setTimeout to ensure this happens after the current event loop
+            setTimeout(() => {
+              applyQuery()
+            }, 0)
+          }
+        }
+      }
+    }
+  }, [configId, initialInputValue, widgetId, datasourceReady, outputDS, applyQuery])
 
   const handleSpatialFilterChange = React.useCallback((filter: SpatialFilterObj) => {
     spatialFilterObjRef.current = filter
@@ -621,6 +981,26 @@ export function QueryTaskForm (props: QueryTaskItemProps) {
       })
     }
   }, [configId, showAttributeFilter, originDS])
+
+  // Log when SqlExpressionRuntime key changes (component remounts) OR expression prop changes
+  React.useEffect(() => {
+    const sqlExprRuntimeKey = `${configId}-${initialInputValue || 'none'}`
+    const expressionValue = attributeFilterSqlExprObj?.parts?.[0]?.valueOptions?.value
+    
+    debugLogger.log('FORM', {
+      event: 'SqlExpressionRuntime-props-changed',
+      configId,
+      initialInputValue,
+      sqlExprRuntimeKey,
+      expressionValue,
+      expressionValueType: typeof expressionValue,
+      isArray: Array.isArray(expressionValue),
+      hashTriggeredRef: hashTriggeredRef.current,
+      originDSExists: !!originDS,
+      note: 'SqlExpressionRuntime receiving new expression prop - will it fire onChange?',
+      timestamp: Date.now()
+    })
+  }, [configId, initialInputValue, attributeFilterSqlExprObj, originDS])
 
   return (
     <QueryTaskContext.Provider value={{ resetSymbol }}>

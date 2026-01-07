@@ -344,18 +344,133 @@ This guide provides **specific testing instructions** for each chunk during the 
 
 ## Chunk 5: Accumulated Records Management
 
+**Status:** 🔄 **IN PROGRESS** - Parallel Execution Phase (r018.26-r018.56)
+
 ### Debug Switches
 
+**For Step 5.2 (Parallel Execution):**
 ```
-?debug=CHUNK-5-COMPARE,RESULTS-MODE
+?debug=CHUNK-5-COMPARE,RESULTS-MODE,FORM
 ```
+
+**Individual Switches:**
+- **`CHUNK-5-COMPARE`** - Comparison logs between old and new implementation
+- **`RESULTS-MODE`** - Results mode state change logs
+- **`FORM`** - Form value setting logs (for hash parameter testing)
 
 ### What to Test
 
-- Records accumulate correctly in "Add to Selection" mode
-- Records remove correctly in "Remove from Selection" mode
-- Mode reset clears accumulated records
-- Accumulated records persist when switching queries
+#### Test 1: Accumulated Records Mode Changes
+
+**Steps:**
+1. Execute a query in "New Selection" mode
+2. Switch to "Add to Selection" mode
+3. Execute another query
+4. Check browser console for logs
+
+**Expected Logs:**
+- `[QUERYSIMPLE-RESULTS-MODE]` - `handleResultsModeChange-triggered` (old implementation)
+- `[QUERYSIMPLE-RESULTS-MODE]` - `handleResultsModeChange-triggered` (new implementation)
+- `[QUERYSIMPLE-CHUNK-5-COMPARE]` - `handleResultsModeChange-comparison` with `match: true`
+
+**What to Verify:**
+- ✅ Both implementations detect mode change
+- ✅ Comparison logs show `match: true`
+- ✅ Accumulated records update correctly
+
+#### Test 2: Accumulated Records Changes
+
+**Steps:**
+1. Execute queries in "Add to Selection" mode
+2. Add multiple sets of records
+3. Check browser console for logs
+
+**Expected Logs:**
+- `[QUERYSIMPLE-RESULTS-MODE]` - `handleAccumulatedRecordsChange-triggered` (old implementation)
+- `[QUERYSIMPLE-RESULTS-MODE]` - `handleAccumulatedRecordsChange-triggered` (new implementation)
+- `[QUERYSIMPLE-CHUNK-5-COMPARE]` - `handleAccumulatedRecordsChange-comparison` with `match: true`
+
+**What to Verify:**
+- ✅ Both implementations track accumulated records
+- ✅ Comparison logs show `match: true` for record counts
+- ✅ Records accumulate correctly
+
+#### Test 3: Hash Parameter Processing (Recent Fixes)
+
+**Steps:**
+1. Navigate to URL with hash: `#pin=2223059013`
+2. Verify query executes
+3. Switch to different query (e.g., "major")
+4. Switch back to original query ("pin")
+5. Check browser console for logs
+
+**Expected Logs:**
+- `[QUERYSIMPLE-HASH-EXEC]` - `querysimple-handleopenwidgetevent-called`
+- `[QUERYSIMPLE-HASH-EXEC]` - `querysimple-oninitialvaluefound-called`
+- `[QUERYSIMPLE-FORM]` - `hash-value-setting-start`
+- `[QUERYSIMPLE-HASH-EXEC]` - `querysimple-handlehashparameterused-state-cleared`
+- When switching back: `[QUERYSIMPLE-HASH-EXEC]` - `querysimple-oninitialvaluefound-already-processed` OR no re-execution
+
+**What to Verify:**
+- ✅ Hash query executes on initial load
+- ✅ Hash does NOT re-execute when switching queries
+- ✅ Input value persists as visual record after execution
+- ✅ State is cleared atomically after execution
+
+#### Test 4: Input Value Persistence (Recent Fix)
+
+**Steps:**
+1. Execute a hash query (e.g., `#pin=2223059013`)
+2. Return to Query tab
+3. Verify input field still shows value
+4. Execute a user-entered query
+5. Return to Query tab
+6. Verify input field still shows value
+
+**Expected Behavior:**
+- ✅ Input value persists after hash query execution
+- ✅ Input value persists after user-entered query execution
+- ✅ Value only cleared by: Reset button, query switch, or manual clearing
+
+**Expected Logs:**
+- `[QUERYSIMPLE-FORM]` - `sqlExprObj-skipped-ref-update` with `reason: 'value-already-set-preserving-as-visual-record'`
+
+#### Test 5: Remove Mode Reset (Recent Fix)
+
+**Steps:**
+1. Add some records using "Add to Selection" mode
+2. Switch to "Remove from Selection" mode
+3. Remove a few records manually
+4. Clear all results (trash can button)
+5. Check browser console for logs
+
+**Expected Logs:**
+- `[QUERYSIMPLE-RESULTS-MODE]` - `handleAccumulatedRecordsChange-triggered` with `newCount: 0`
+- `[QUERYSIMPLE-RESULTS-MODE]` - `mode-reset-on-accumulated-records-cleared`
+- Mode should reset to "New Selection"
+
+**What to Verify:**
+- ✅ Remove button is disabled when no records (UI working)
+- ✅ Mode resets to "New Selection" when all records cleared
+- ✅ Mode state reflects current capability
+
+### Success Criteria for Chunk 5
+
+- ✅ All comparison logs show `match: true`
+- ✅ **NO** logs with `match: false`
+- ✅ Accumulated records accumulate correctly
+- ✅ Accumulated records remove correctly
+- ✅ Hash parameters don't re-execute when switching queries
+- ✅ Input values persist as visual records
+- ✅ Remove mode resets when all records cleared
+- ✅ Mode state reflects current capability
+
+### Recent Fixes Verified
+
+- ✅ **Hash Re-execution Prevention (r018.43-r018.53):** Hash parameters don't re-execute when switching queries
+- ✅ **Input Value Persistence (r018.54-r018.55):** Input values persist after execution as visual records
+- ✅ **Remove Mode Reset (r018.56):** Mode resets to NewSelection when all records cleared
+- ✅ **Hash Tab Active Fix (r018.39):** Hash queries execute correctly regardless of active tab
 
 ---
 
