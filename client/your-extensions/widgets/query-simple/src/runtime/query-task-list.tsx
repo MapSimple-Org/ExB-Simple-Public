@@ -16,6 +16,7 @@ export interface QueryTaskListProps {
   defaultPageSize?: number
   className?: string
   initialQueryValue?: { shortId: string, value: string }
+  shouldUseInitialQueryValueForSelection?: boolean
   onHashParameterUsed?: (shortId: string) => void
   resultsMode?: SelectionType
   onResultsModeChange?: (mode: SelectionType) => void
@@ -123,8 +124,33 @@ const getQueryDisplayName = (item: ImmutableObject<QueryItemType>): string => {
 }
 
 export function QueryTaskList (props: QueryTaskListProps) {
-  const { queryItems, widgetId, defaultPageSize, isInPopper = false, className = '', initialQueryValue, onHashParameterUsed, resultsMode, onResultsModeChange, accumulatedRecords, onAccumulatedRecordsChange, useGraphicsLayerForHighlight, graphicsLayer, mapView, onInitializeGraphicsLayer, onClearGraphicsLayer, activeTab, onTabChange } = props
+  const { queryItems, widgetId, defaultPageSize, isInPopper = false, className = '', initialQueryValue, shouldUseInitialQueryValueForSelection = false, onHashParameterUsed, resultsMode, onResultsModeChange, accumulatedRecords, onAccumulatedRecordsChange, useGraphicsLayerForHighlight, graphicsLayer, mapView, onInitializeGraphicsLayer, onClearGraphicsLayer, activeTab, onTabChange } = props
   const getI18nMessage = hooks.useTranslation(defaultMessages)
+  
+  // Log when props are received
+  React.useEffect(() => {
+    debugLogger.log('HASH-EXEC', {
+      event: 'querytasklist-props-received',
+      widgetId,
+      props: {
+        hasInitialQueryValue: !!initialQueryValue,
+        initialQueryValueShortId: initialQueryValue?.shortId,
+        initialQueryValueValue: initialQueryValue?.value,
+        shouldUseInitialQueryValueForSelection
+      },
+      timestamp: Date.now()
+    })
+    
+    debugLogger.log('GROUP', {
+      event: 'query-task-list-props-received',
+      widgetId,
+      hasInitialQueryValue: !!initialQueryValue,
+      initialQueryValueShortId: initialQueryValue?.shortId,
+      initialQueryValueValue: initialQueryValue?.value,
+      shouldUseInitialQueryValueForSelection,
+      timestamp: Date.now()
+    })
+  }, [initialQueryValue, shouldUseInitialQueryValueForSelection, widgetId])
   
   // Sort queries by display order before grouping
   // Handle case where queryItems might be undefined/null or not an ImmutableArray
@@ -137,69 +163,37 @@ export function QueryTaskList (props: QueryTaskListProps) {
   
   const { groups, ungrouped, groupOrder } = React.useMemo(() => groupQueries(sortedQueryItems), [sortedQueryItems])
   
-  // State to track the current URL hash and query string
-  const [urlParams, setUrlParams] = React.useState(() => ({
-    hash: window.location.hash.substring(1),
-    query: window.location.search.substring(1)
-  }))
-
-  // Listen for hashchange events to update our local state
+  // Only use the prop initialQueryValue when HelperSimple explicitly opens the widget
+  // QuerySimple should not autonomously react to initialQueryValue prop changes
+  // HelperSimple is the orchestrator and sets shouldUseInitialQueryValueForSelection flag
+  const effectiveInitialQueryValue = shouldUseInitialQueryValueForSelection ? initialQueryValue : undefined
+  
+  // Log when effectiveInitialQueryValue is calculated
   React.useEffect(() => {
-    const handleUrlChange = () => {
-      debugLogger.log('HASH', {
-        event: 'url-change-detected-in-task-list',
-        newHash: window.location.hash,
-        newQuery: window.location.search,
-        timestamp: Date.now()
-      })
-      setUrlParams({
-        hash: window.location.hash.substring(1),
-        query: window.location.search.substring(1)
-      })
-    }
-    window.addEventListener('hashchange', handleUrlChange)
-    // Also listen for popstate in case query parameters change without hash change
-    window.addEventListener('popstate', handleUrlChange)
+    debugLogger.log('HASH-EXEC', {
+      event: 'querytasklist-effectiveinitialqueryvalue-calculated',
+      widgetId,
+      calculation: {
+        shouldUseInitialQueryValueForSelection,
+        hasInitialQueryValue: !!initialQueryValue,
+        effectiveResult: effectiveInitialQueryValue ? 'USE_INITIAL_QUERY_VALUE' : 'UNDEFINED',
+        effectiveShortId: effectiveInitialQueryValue?.shortId,
+        effectiveValue: effectiveInitialQueryValue?.value
+      },
+      timestamp: Date.now()
+    })
     
-    return () => {
-      window.removeEventListener('hashchange', handleUrlChange)
-      window.removeEventListener('popstate', handleUrlChange)
-    }
-  }, [])
-
-  // Determine if we have an initial query value from the URL hash or query string
-  const initialQueryValueFromUrl = React.useMemo(() => {
-    const { hash, query } = urlParams
-    
-    const hashParams = new URLSearchParams(hash)
-    const queryParams = new URLSearchParams(query)
-    
-    const allQueryItems = [...ungrouped.map(u => u.item), ...Object.values(groups).flatMap(g => g.items)]
-    
-    // PRIORITY 1: Check ALL shortIds in the HASH (hash always wins)
-    for (const item of allQueryItems) {
-      if (item.shortId && hashParams.has(item.shortId)) {
-        return {
-          shortId: item.shortId,
-          value: hashParams.get(item.shortId)
-        }
-      }
-    }
-
-    // PRIORITY 2: Check ALL shortIds in the QUERY string
-    for (const item of allQueryItems) {
-      if (item.shortId && queryParams.has(item.shortId)) {
-        return {
-          shortId: item.shortId,
-          value: queryParams.get(item.shortId)
-        }
-      }
-    }
-    return null
-  }, [ungrouped, groups, urlParams])
-
-  // Use the prop initialQueryValue if provided, otherwise fallback to our own URL parsing
-  const effectiveInitialQueryValue = initialQueryValue || initialQueryValueFromUrl
+    debugLogger.log('GROUP', {
+      event: 'effectiveInitialQueryValue-calculated',
+      widgetId,
+      shouldUseInitialQueryValueForSelection,
+      hasInitialQueryValue: !!initialQueryValue,
+      hasEffectiveInitialQueryValue: !!effectiveInitialQueryValue,
+      effectiveShortId: effectiveInitialQueryValue?.shortId,
+      effectiveValue: effectiveInitialQueryValue?.value,
+      timestamp: Date.now()
+    })
+  }, [effectiveInitialQueryValue, shouldUseInitialQueryValueForSelection, initialQueryValue, widgetId])
 
   // Find the query item matching the shortId from URL hash
   const matchingQueryIndex = React.useMemo(() => {
@@ -298,18 +292,50 @@ export function QueryTaskList (props: QueryTaskListProps) {
     return 0
   })
   
-  // Update selection when initialQueryValue changes (e.g., when URL hash is detected)
-  // We only want to update based on the hash if one is PRESENT.
-  // If the hash is removed (initialQueryValue becomes null), we DON'T want to reset to default.
+  // Update selection when HelperSimple explicitly opens widget with hash parameter
+  // Only react when shouldUseInitialQueryValueForSelection is true (set by HelperSimple)
+  // This prevents autonomous query selection when switching queries
   React.useEffect(() => {
-    if (getQuerySelection) {
-      // Hash parameter matched - use that selection and STAY THERE
+    debugLogger.log('HASH-EXEC', {
+      event: 'querytasklist-selection-useeffect-check',
+      widgetId,
+      check: {
+        shouldUseInitialQueryValueForSelection,
+        hasGetQuerySelection: !!getQuerySelection,
+        getQuerySelectionType: getQuerySelection?.type,
+        willUpdateSelection: shouldUseInitialQueryValueForSelection && !!getQuerySelection
+      },
+      timestamp: Date.now()
+    })
+    
+    debugLogger.log('GROUP', {
+      event: 'query-selection-useeffect-check',
+      widgetId,
+      shouldUseInitialQueryValueForSelection,
+      hasGetQuerySelection: !!getQuerySelection,
+      getQuerySelectionType: getQuerySelection?.type,
+      willUpdateSelection: shouldUseInitialQueryValueForSelection && !!getQuerySelection,
+      timestamp: Date.now()
+    })
+    
+    if (shouldUseInitialQueryValueForSelection && getQuerySelection) {
+      // Hash parameter matched - HelperSimple explicitly opened us with this hash
+      debugLogger.log('HASH-EXEC', {
+        event: 'querytasklist-selection-useeffect-updating',
+        widgetId,
+        selectionType: getQuerySelection.type,
+        selectionDetails: getQuerySelection.type === 'group' 
+          ? { groupId: getQuerySelection.groupId, index: getQuerySelection.index }
+          : { index: getQuerySelection.index },
+        timestamp: Date.now()
+      })
+      
       if (getQuerySelection.type === 'group') {
         debugLogger.log('GROUP', {
           event: 'selection-changed-to-group-from-hash',
           groupId: getQuerySelection.groupId,
           index: getQuerySelection.index,
-          note: 'Sticky selection from hash parameter'
+          note: 'HelperSimple explicitly opened widget with hash parameter'
         })
         setSelectedGroupId(getQuerySelection.groupId)
         setSelectedGroupQueryIndex(getQuerySelection.index)
@@ -317,13 +343,33 @@ export function QueryTaskList (props: QueryTaskListProps) {
         debugLogger.log('GROUP', {
           event: 'selection-changed-to-ungrouped-from-hash',
           index: getQuerySelection.index,
-          note: 'Sticky selection from hash parameter'
+          note: 'HelperSimple explicitly opened widget with hash parameter'
         })
         setSelectedGroupId(null)
         setSelectedUngroupedIndex(getQuerySelection.index)
       }
+    } else {
+      debugLogger.log('HASH-EXEC', {
+        event: 'querytasklist-selection-useeffect-skipped',
+        widgetId,
+        reason: !shouldUseInitialQueryValueForSelection ? 'flag-is-false' : 'no-query-selection',
+        check: {
+          shouldUseInitialQueryValueForSelection,
+          hasGetQuerySelection: !!getQuerySelection
+        },
+        timestamp: Date.now()
+      })
+      
+      debugLogger.log('GROUP', {
+        event: 'query-selection-useeffect-skipped',
+        widgetId,
+        reason: !shouldUseInitialQueryValueForSelection ? 'flag-is-false' : 'no-query-selection',
+        shouldUseInitialQueryValueForSelection,
+        hasGetQuerySelection: !!getQuerySelection,
+        timestamp: Date.now()
+      })
     }
-  }, [getQuerySelection])
+  }, [shouldUseInitialQueryValueForSelection, getQuerySelection, widgetId])
   
   // Get the currently selected query item
   const getSelectedQueryItem = (): ImmutableObject<QueryItemType> => {
@@ -415,16 +461,31 @@ export function QueryTaskList (props: QueryTaskListProps) {
       {/* Search Layer dropdown moved to QueryTask Query tab content */}
       
       {/* Show selected query form directly below */}
-      {selectedQueryItem && (
-        <div className={`query-task-container ${isInPopper ? FOCUSABLE_CONTAINER_CLASS : ''}`}>
-          <QueryTask
-            widgetId={widgetId}
-            index={selectedQueryRealIndex >= 0 ? selectedQueryRealIndex : 0}
-            total={sortedQueryItems.length}
-            queryItem={selectedQueryItem}
-            isInPopper={isInPopper}
-            initialInputValue={selectedQueryItem.shortId === effectiveInitialQueryValue?.shortId ? effectiveInitialQueryValue?.value : undefined}
-            onHashParameterUsed={onHashParameterUsed}
+      {selectedQueryItem && (() => {
+        const willPassInitialInputValue = selectedQueryItem.shortId === effectiveInitialQueryValue?.shortId
+        const initialInputValueToPass = willPassInitialInputValue ? effectiveInitialQueryValue?.value : undefined
+        
+        debugLogger.log('GROUP', {
+          event: 'initialInputValue-being-passed-to-querytask',
+          widgetId,
+          selectedQueryItemShortId: selectedQueryItem.shortId,
+          selectedQueryItemConfigId: selectedQueryItem.configId,
+          effectiveInitialQueryValueShortId: effectiveInitialQueryValue?.shortId,
+          willPassInitialInputValue,
+          initialInputValue: initialInputValueToPass,
+          timestamp: Date.now()
+        })
+        
+        return (
+          <div className={`query-task-container ${isInPopper ? FOCUSABLE_CONTAINER_CLASS : ''}`}>
+            <QueryTask
+              widgetId={widgetId}
+              index={selectedQueryRealIndex >= 0 ? selectedQueryRealIndex : 0}
+              total={sortedQueryItems.length}
+              queryItem={selectedQueryItem}
+              isInPopper={isInPopper}
+              initialInputValue={initialInputValueToPass}
+              onHashParameterUsed={onHashParameterUsed}
             queryItems={sortedQueryItems}
             selectedQueryIndex={selectedUngroupedIndex}
             onQueryChange={(index) => setSelectedUngroupedIndex(index)}
@@ -449,10 +510,11 @@ export function QueryTaskList (props: QueryTaskListProps) {
             onAccumulatedRecordsChange={onAccumulatedRecordsChange}
             activeTab={activeTab}
             onTabChange={onTabChange}
-            // No onNavBack - no navigation needed
-          />
-        </div>
-      )}
+              // No onNavBack - no navigation needed
+            />
+          </div>
+        )
+      })()}
     </div>
   )
 }
