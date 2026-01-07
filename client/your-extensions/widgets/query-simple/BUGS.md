@@ -1,6 +1,6 @@
 # Known Bugs
 
-**Last Updated:** 2026-01-07 (Release 018.56)
+**Last Updated:** 2026-01-07 (Release 018.66)
 
 ---
 
@@ -213,6 +213,57 @@ Added mode reset logic to `handleAccumulatedRecordsChange`:
 
 ---
 
+### GRAPHICS-002: Stale Graphics Persist When Switching Queries ✅ **RESOLVED** (r018.66)
+
+**Status:** ✅ **RESOLVED**  
+**Severity:** Medium  
+**Category:** GRAPHICS  
+**First Reported:** 2026-01-07  
+**Resolved:** 2026-01-07 (r018.66)
+
+**Description:**
+When switching queries (e.g., from "Major" to "Parcel") in "Add to Selection" or "Remove from Selection" mode, previously removed records temporarily reappear in the graphics layer but not in the selection or results list. After closing and reopening the widget, the graphics disappear again.
+
+**Root Cause:**
+The graphics layer is shared across all queries for the same widget. When switching queries in accumulation modes, `handleOutputDataSourceCreated` re-selects accumulated records without first clearing the graphics layer. This causes:
+1. Stale graphics from the previous query to persist in the shared graphics layer
+2. New graphics to be added on top of stale graphics
+3. Graphics for manually removed records to reappear because they're still in `accumulatedRecords` but not in the actual selection
+
+**Technical Details:**
+- Graphics layer is shared across queries (one layer per widget)
+- When switching queries in accumulation modes, accumulated records are preserved
+- `handleOutputDataSourceCreated` re-selects ALL accumulated records without clearing graphics first
+- Stale graphics from previous query remain visible
+- Graphics for removed records reappear because `accumulatedRecords` contains stale data
+
+**Expected Behavior:**
+- Graphics layer should be cleared when switching queries, even in accumulation modes
+- Only valid, currently selected records should have graphics
+- Graphics should match the selection state exactly
+
+**Solution:**
+Clear the graphics layer before re-selecting accumulated records when switching queries:
+1. Check if graphics layer is enabled and callback is available
+2. Call `onClearGraphicsLayer()` before re-selecting accumulated records
+3. This ensures stale graphics from previous query are removed before new graphics are added
+
+**Files Modified:**
+- `query-simple/src/runtime/query-task.tsx` (r018.66)
+  - Added graphics layer clearing before re-selecting accumulated records in `handleOutputDataSourceCreated`
+  - Added logging to track graphics layer clearing on query switch
+  - Updated dependency array to include `graphicsLayer` and `onClearGraphicsLayer`
+
+**Investigation Notes:**
+- Issue was specific to query switching in accumulation modes
+- Graphics layer clearing was already happening in "New Selection" mode via `clearResult`
+- Accumulation modes preserve records, so graphics clearing was skipped
+- Fix ensures graphics layer is cleared even when preserving accumulated records
+
+**Target Resolution:** r018.66 ✅ **RESOLVED**
+
+---
+
 ## Resolved Bugs
 
 ### HASH-PARAM-003: Input Value Cleared After Query Execution ✅ **RESOLVED** (r018.55)
@@ -239,6 +290,12 @@ Added mode reset logic to `handleAccumulatedRecordsChange`:
   - r018.53: Fix `queryItemShortId` undefined by using `queryItem.shortId`
 - **Version:** r018.53
 - **Root Cause:** Multiple issues: React refs don't trigger re-renders, callback never called, callback called too early, state not cleared atomically, undefined variable
+
+### GRAPHICS-002: Stale Graphics Persist When Switching Queries ✅ **RESOLVED** (r018.66)
+- **Resolved:** 2026-01-07
+- **Fix:** Clear graphics layer before re-selecting accumulated records when switching queries
+- **Version:** r018.66
+- **Root Cause:** Graphics layer not cleared when switching queries in accumulation modes, causing stale graphics to persist
 
 ### HASH-PARAM-001: Hash Queries Not Executing When Query Tab Not Active ✅ **RESOLVED** (r018.39)
 - **Resolved:** 2026-01-06

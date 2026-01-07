@@ -1,13 +1,62 @@
 # Current Work Status
 
-**Last Updated:** 2026-01-07 (Release 018.58 - Chunk 5 Complete: Manager Implementation)  
+**Last Updated:** 2026-01-08 (Release 018.69 - Data Source Sync Investigation)  
 **Branch:** `feature/chunk-rock`  
 **Developer:** Adam Cabrera  
-**Current Version:** v1.19.0-r018.58
+**Current Version:** v1.19.0-r018.69
 
 ## Active Work
 
-### Current Task: Chunk 5 - Accumulated Records Management ✅ **COMPLETE** (r018.58)
+### Current Task: Data Source Sync Investigation 🔍 **IN PROGRESS** (r018.69)
+
+**Problem Statement:**
+Manually removed records reappear when switching queries in accumulation mode ("Add to Selection" or "Remove from Selection"). Specifically:
+- User removes records using the X button in the Results tab
+- User switches to a different query (e.g., from "Major number" to "Parcel number")
+- The removed records reappear in the graphics layer (but not in the selection or results list)
+- When the widget is closed and reopened, the records disappear again
+
+**What Has Not Worked:**
+1. **r018.65**: Using `outputDS.getSelectedRecords()` as source of truth for mode switching - This correctly filters removed records when switching modes, but doesn't prevent re-appearance when switching queries.
+2. **r018.66**: Clearing graphics layer before re-selecting accumulated records on query switch - This prevents stale graphics from persisting, but doesn't address the root cause of records reappearing.
+3. **r018.67**: Syncing `accumulatedRecords` with `outputDS.getSelectedRecords()` when re-selecting after query switch - This syncs the state, but records still reappear in graphics layer.
+4. **r018.68**: Immediate sync when X button is clicked AND sync before query switch - Both sync points execute correctly, but records still reappear.
+
+**Why We Think This Is Happening:**
+The issue appears to be a timing/synchronization problem:
+- `accumulatedRecords` state is being synced correctly (removed records are excluded)
+- `outputDS.getSelectedRecords()` correctly reflects removals
+- But when `selectRecordsAndPublish` is called during query switch, it may be using stale `accumulatedRecords` or the graphics layer is being populated from a different source
+- The graphics layer shows records that aren't in `outputDS.getSelectedRecords()` or `accumulatedRecords`, suggesting a race condition or multiple code paths updating the graphics layer
+
+**What We Are Considering:**
+1. **Multiple Graphics Layer Updates**: There may be multiple code paths updating the graphics layer during query switch, and one of them is using stale data
+2. **Race Condition**: The sync operations may be happening, but `selectRecordsAndPublish` is being called with stale `accumulatedRecords` before the sync completes
+3. **Graphics Layer Source**: The graphics layer may be populated from a different source (e.g., `recordsRef.current`, `effectiveRecords`, or query results) that hasn't been synced
+4. **State Propagation Delay**: React state updates may not have propagated when `selectRecordsAndPublish` is called, causing it to use old `accumulatedRecords`
+
+**Current Investigation (r018.69):**
+Added comprehensive diagnostic logging to track:
+- Full state (IDs) of `accumulatedRecords`, `outputDS.getSelectedRecords()`, and graphics layer BEFORE and AFTER:
+  - X button removal
+  - Query switch sync
+  - Re-selection after query switch
+  - Mode switches
+  - Query completion
+- Record IDs being added/removed at each step
+- Whether all sources match at each critical point
+
+**Debug Switches:** `RESULTS-MODE`
+
+**Next Steps:**
+1. Collect logs from reproduction scenario
+2. Analyze logs to identify where records diverge
+3. Identify the code path that's adding removed records back
+4. Fix the root cause
+
+---
+
+### Previous Task: Chunk 5 - Accumulated Records Management ✅ **COMPLETE** (r018.58)
 - **What:** Migrated accumulated records state management to `AccumulatedRecordsManager` class.
 - **Why:** Centralize accumulated records logic, improve maintainability, prepare for Hook & Shell architecture.
 - **Status:** ✅ **COMPLETE** - All steps completed:

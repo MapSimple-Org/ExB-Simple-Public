@@ -6,6 +6,7 @@ import { QueryTask } from './query-task'
 import { FOCUSABLE_CONTAINER_CLASS } from 'jimu-ui'
 import defaultMessages from './translations/default'
 import { createQuerySimpleDebugLogger } from 'widgets/shared-code/common'
+import type { EventManager } from './hooks/use-event-handling'
 
 const debugLogger = createQuerySimpleDebugLogger()
 
@@ -29,6 +30,7 @@ export interface QueryTaskListProps {
   onClearGraphicsLayer?: () => void
   activeTab?: 'query' | 'results'
   onTabChange?: (tab: 'query' | 'results') => void
+  eventManager?: EventManager  // Chunk 7.1: Event Handling Manager
 }
 
 interface GroupedQueries {
@@ -124,7 +126,7 @@ const getQueryDisplayName = (item: ImmutableObject<QueryItemType>): string => {
 }
 
 export function QueryTaskList (props: QueryTaskListProps) {
-  const { queryItems, widgetId, defaultPageSize, isInPopper = false, className = '', initialQueryValue, shouldUseInitialQueryValueForSelection = false, onHashParameterUsed, resultsMode, onResultsModeChange, accumulatedRecords, onAccumulatedRecordsChange, useGraphicsLayerForHighlight, graphicsLayer, mapView, onInitializeGraphicsLayer, onClearGraphicsLayer, activeTab, onTabChange } = props
+  const { queryItems, widgetId, defaultPageSize, isInPopper = false, className = '', initialQueryValue, shouldUseInitialQueryValueForSelection = false, onHashParameterUsed, resultsMode, onResultsModeChange, accumulatedRecords, onAccumulatedRecordsChange, useGraphicsLayerForHighlight, graphicsLayer, mapView, onInitializeGraphicsLayer, onClearGraphicsLayer, activeTab, onTabChange, eventManager } = props
   const getI18nMessage = hooks.useTranslation(defaultMessages)
   
   // Log when props are received
@@ -510,6 +512,7 @@ export function QueryTaskList (props: QueryTaskListProps) {
             onAccumulatedRecordsChange={onAccumulatedRecordsChange}
             activeTab={activeTab}
             onTabChange={onTabChange}
+            eventManager={eventManager}
               // No onNavBack - no navigation needed
             />
           </div>
