@@ -1,12 +1,12 @@
 {
-  "created": 1766093636339,
+  "created": 1766173043821,
   "description": "",
-  "id": "0",
-  "modified": 1767649677489,
+  "id": "1",
+  "modified": 1766536456343,
   "owner": "adamsimple",
   "tags": [],
   "thumbnail": null,
-  "title": "AC MapSimple Sandbox",
+  "title": "MapSimple KC Demo",
   "type": "Web Experience",
   "snippet": "",
   "typeKeywords": [
@@ -15,12 +15,12 @@
     "JavaScript",
     "status: Published",
     "version:1.19.0",
-    "modified: 1767649676808",
+    "modified: 1766536455472",
     "publishVersion:1.19.0"
   ],
   "portalUrl": "https://mapsimple.maps.arcgis.com",
   "username": "adamsimple",
-  "url": null,
-  "name": "AC MapSimple Sandbox",
-  "isLocalApp": true
+  "name": "MapSimple KC Demo",
+  "isLocalApp": true,
+  "url": null
 }
