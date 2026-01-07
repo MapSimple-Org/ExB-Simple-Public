@@ -160,20 +160,32 @@ This document outlines a **complete, safe migration** of all widget logic from `
 - `HELPER_QUERY_INTERACTION.md` - Comprehensive HS/QS interaction architecture
 - `query-simple/BUGS.md` - All fixes documented with root causes and solutions
 
-### Chunk 6: Map View Management (Next)
-**Status:** 🔄 Ready to implement  
+### Chunk 6: Map View Management
+**Status:** ✅ **COMPLETE** (r018.18)  
 **Complexity:** Low  
 **Risk:** Low  
 **Methods:** Map view ref management, view change handlers  
-**Logging Required:** View change logs, ref update logs  
-**Note:** Good next step - low risk, independent, builds momentum before tackling Chunk 3
+**Implementation:** Manager class in `query-simple/src/runtime/hooks/use-map-view.ts`  
+**Completed Steps:**
+- ✅ Step 6.1: Manager class added (r018.14)
+- ✅ Step 6.2: Parallel execution with comparison logging (r018.15)
+- ✅ Step 6.3: Switch to manager, removed old code (r018.16)
+- ✅ Step 6.4: Cleanup - removed temporary verification logs (r018.18)
+**Logging:** Map view change logs (`MAP-EXTENT` feature), essential logs preserved
 
 ### Chunk 7: Event Handling
-**Status:** 🔄 Needs extraction  
+**Status:** 🔄 **IN PROGRESS** - Parallel Execution Phase (r018.59)  
 **Complexity:** Medium  
 **Risk:** Medium  
 **Methods:** Event listener setup/cleanup, custom event dispatching  
-**Logging Required:** Event setup logs, event dispatch logs, listener registration logs
+**Implementation:** Manager class in `query-simple/src/runtime/hooks/use-event-handling.ts`  
+**Completed Steps:**
+- ✅ Step 7.1: Manager class added (r018.59)
+- 🔄 Step 7.2: Parallel execution with comparison logging (r018.59) - **IN PROGRESS**
+- ⏳ Step 7.3: Switch to manager, remove old code
+- ⏳ Step 7.4: Cleanup - remove temporary comparison logs
+**Debug Switches:** `CHUNK-7-COMPARE,EVENTS`
+**Logging:** Comparison logs (`CHUNK-7-COMPARE`), event setup/cleanup logs (`EVENTS` feature)
 
 ---
 

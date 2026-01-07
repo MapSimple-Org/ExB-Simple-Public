@@ -12,7 +12,6 @@ import { TaskListInline } from './query-task-list-inline'
 import { TaskListPopperWrapper } from './query-task-list-popper-wrapper'
 import { QueryWidgetContext } from './widget-context'
 import { createQuerySimpleDebugLogger } from 'widgets/shared-code/common'
-import { QUERYSIMPLE_SELECTION_EVENT } from './selection-utils'
 import { WIDGET_VERSION } from '../version'
 // Chunk 1: URL Parameter Consumption Manager (r018.8)
 import { UrlConsumptionManager } from './hooks/use-url-consumption'
@@ -24,21 +23,13 @@ import { MapViewManager } from './hooks/use-map-view'
 import { GraphicsLayerManager } from './hooks/use-graphics-layer'
 // Chunk 5: Accumulated Records Management Manager (r018.26) - Step 5.1: Add manager without integration
 import { AccumulatedRecordsManager } from './hooks/use-accumulated-records'
+// Chunk 7: Event Handling Manager (r018.59) - Step 7.1: Create Event Manager
+import { EventManager, OPEN_WIDGET_EVENT, QUERYSIMPLE_SELECTION_EVENT, RESTORE_ON_IDENTIFY_CLOSE_EVENT } from './hooks/use-event-handling'
 
 const debugLogger = createQuerySimpleDebugLogger()
 const { iconMap } = getWidgetRuntimeDataMap()
 
-/**
- * Custom event name for requesting restoration when identify popup closes.
- * Dispatched by query-result component when identify popup closes and selection was cleared.
- */
-const RESTORE_ON_IDENTIFY_CLOSE_EVENT = 'querysimple-restore-on-identify-close'
-
-/**
- * Custom event name for HelperSimple to notify QuerySimple to process hash parameters.
- * Dispatched by HelperSimple after opening a widget in a controller.
- */
-const OPEN_WIDGET_EVENT = 'helpersimple-open-widget'
+// Event constants moved to EventManager (r018.59 - Chunk 7.1)
 
 /**
  * QuerySimple Widget
@@ -88,6 +79,8 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
   private graphicsLayerManager = new GraphicsLayerManager(this.graphicsLayerRef, this.mapViewRef)
   // Chunk 5: Accumulated Records Management Manager (r018.26) - Step 5.1: Add manager without integration
   private accumulatedRecordsManager = new AccumulatedRecordsManager()
+  // Chunk 7: Event Handling Manager (r018.59) - Step 7.1: Create Event Manager
+  private eventManager = new EventManager()
   
   // Track processed hash parameters to prevent re-execution when switching queries
   // Key: "shortId:value" (e.g., "pin:2223059013")
@@ -360,7 +353,7 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
     // Listen for HelperSimple's open widget event
     // QuerySimple should only process hash parameters when HelperSimple explicitly opens the widget
     // This ensures HelperSimple remains the orchestrator
-    window.addEventListener(OPEN_WIDGET_EVENT, this.handleOpenWidgetEvent)
+    // Note: Event listener setup moved to parallel execution section below (Chunk 7.1)
     
     debugLogger.log('HASH-EXEC', {
       event: 'querysimple-mounted-event-listener-setup',
@@ -450,11 +443,51 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
       }
     })
     
+    // ============================================================================
+    // OLD IMPLEMENTATION (parallel execution) - Chunk 7.1
+    // ============================================================================
+    // Listen for HelperSimple orchestration events
+    window.addEventListener(OPEN_WIDGET_EVENT, this.handleOpenWidgetEvent)
+    
     // Listen for selection changes from query-result
     window.addEventListener(QUERYSIMPLE_SELECTION_EVENT, this.handleSelectionChange as EventListener)
     
     // Listen for restore requests when identify popup closes
     window.addEventListener(RESTORE_ON_IDENTIFY_CLOSE_EVENT, this.handleRestoreOnIdentifyClose as EventListener)
+    
+    debugLogger.log('EVENTS', {
+      event: 'old-implementation-event-listeners-setup',
+      widgetId: this.props.id,
+      listenersRegistered: 3,
+      timestamp: Date.now()
+    })
+    // ============================================================================
+
+    // NEW IMPLEMENTATION (parallel execution) - Chunk 7.1
+    this.eventManager.setHandlers({
+      onOpenWidgetEvent: this.handleOpenWidgetEvent,
+      onSelectionChange: this.handleSelectionChange,
+      onRestoreOnIdentifyClose: this.handleRestoreOnIdentifyClose
+    })
+    
+    this.eventManager.setup(this.props.id)
+
+    // COMPARISON LOGGING
+    debugLogger.log('CHUNK-7-COMPARE', {
+      event: 'event-listeners-setup-comparison',
+      widgetId: this.props.id,
+      oldImplementation: {
+        listenersRegistered: 3,
+        setupMethod: 'window.addEventListener'
+      },
+      newImplementation: {
+        listenersRegistered: 3,
+        setupMethod: 'EventManager.setup',
+        isSetup: this.eventManager.isSetup()
+      },
+      match: this.eventManager.isSetup() === true,
+      timestamp: Date.now()
+    })
     
     // Graphics layer will be initialized when map view becomes available via JimuMapViewComponent
   }
@@ -463,18 +496,50 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
     // Chunk 1: Clean up manager (r018.8)
     this.urlConsumptionManager.cleanup()
     
+    // ============================================================================
+    // OLD IMPLEMENTATION (parallel execution) - Chunk 7.1
+    // ============================================================================
     // Clean up HelperSimple open widget event listener
     window.removeEventListener(OPEN_WIDGET_EVENT, this.handleOpenWidgetEvent)
-    
-    // Chunk 2: Clean up manager (r018.13 - Step 2.3: Switch to manager)
-    this.visibilityManager.cleanup()
-    this.visibilityManager.notifyUnmount(this.props.id)
     
     // Clean up selection change listener
     window.removeEventListener(QUERYSIMPLE_SELECTION_EVENT, this.handleSelectionChange as EventListener)
     
     // Clean up restore on identify close listener
     window.removeEventListener(RESTORE_ON_IDENTIFY_CLOSE_EVENT, this.handleRestoreOnIdentifyClose as EventListener)
+    
+    debugLogger.log('EVENTS', {
+      event: 'old-implementation-event-listeners-cleaned',
+      widgetId: this.props.id,
+      listenersRemoved: 3,
+      timestamp: Date.now()
+    })
+    // ============================================================================
+
+    // NEW IMPLEMENTATION (parallel execution) - Chunk 7.1
+    const wasSetup = this.eventManager.isSetup()
+    this.eventManager.cleanup(this.props.id)
+
+    // COMPARISON LOGGING
+    debugLogger.log('CHUNK-7-COMPARE', {
+      event: 'event-listeners-cleanup-comparison',
+      widgetId: this.props.id,
+      oldImplementation: {
+        listenersRemoved: 3,
+        cleanupMethod: 'window.removeEventListener'
+      },
+      newImplementation: {
+        wasSetup,
+        cleanupMethod: 'EventManager.cleanup',
+        isSetup: this.eventManager.isSetup()
+      },
+      match: this.eventManager.isSetup() === false,
+      timestamp: Date.now()
+    })
+    
+    // Chunk 2: Clean up manager (r018.13 - Step 2.3: Switch to manager)
+    this.visibilityManager.cleanup()
+    this.visibilityManager.notifyUnmount(this.props.id)
     
     // Chunk 4: Graphics layer cleanup (r018.25 - Step 4.3: Remove old implementation)
     this.graphicsLayerManager.cleanup(this.props.id)
@@ -513,7 +578,10 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
   notifyHelperSimpleOfSelection = (recordIds: string[], dataSourceId?: string) => {
     const { id } = this.props
     
-    const event = new CustomEvent(QUERYSIMPLE_SELECTION_EVENT, {
+    // ============================================================================
+    // OLD IMPLEMENTATION (parallel execution) - Chunk 7.1
+    // ============================================================================
+    const oldEvent = new CustomEvent(QUERYSIMPLE_SELECTION_EVENT, {
       detail: {
         widgetId: id,
         recordIds,
@@ -522,7 +590,41 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
       bubbles: true,
       cancelable: true
     })
-    window.dispatchEvent(event)
+    window.dispatchEvent(oldEvent)
+    
+    debugLogger.log('EVENTS', {
+      event: 'old-implementation-selection-event-dispatched',
+      widgetId: id,
+      recordIdsCount: recordIds.length,
+      dataSourceId,
+      timestamp: Date.now()
+    })
+    // ============================================================================
+
+    // NEW IMPLEMENTATION (parallel execution) - Chunk 7.1
+    // Note: This call is missing outputDsId and queryItemConfigId, but this method
+    // is only used for notifying HelperSimple, not for setting lastSelection state.
+    // The actual selection events come from query-task.tsx and query-result.tsx
+    // which use dispatchSelectionEvent from selection-utils.ts
+    this.eventManager.dispatchSelectionEvent(id, recordIds, dataSourceId)
+
+    // COMPARISON LOGGING
+    debugLogger.log('CHUNK-7-COMPARE', {
+      event: 'selection-event-dispatch-comparison',
+      widgetId: id,
+      oldImplementation: {
+        method: 'window.dispatchEvent',
+        recordIdsCount: recordIds.length,
+        dataSourceId
+      },
+      newImplementation: {
+        method: 'EventManager.dispatchSelectionEvent',
+        recordIdsCount: recordIds.length,
+        dataSourceId
+      },
+      match: true, // Both dispatch the same event
+      timestamp: Date.now()
+    })
   }
 
   /**
@@ -1353,6 +1455,26 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
   }
 
   private handleAccumulatedRecordsChange = (records: FeatureDataRecord[]) => {
+    // DIAGNOSTIC LOGGING: State change tracking
+    const previousRecords = this.state.accumulatedRecords || []
+    const previousIds = previousRecords.map(r => r.getId())
+    const newIds = records.map(r => r.getId())
+    const addedIds = newIds.filter(id => !previousIds.includes(id))
+    const removedIds = previousIds.filter(id => !newIds.includes(id))
+    
+    debugLogger.log('RESULTS-MODE', {
+      event: 'accumulated-records-state-change',
+      widgetId: this.props.id,
+      previousCount: previousRecords.length,
+      previousIds: previousIds,
+      newCount: records.length,
+      newIds: newIds,
+      addedIds: addedIds,
+      removedIds: removedIds,
+      resultsMode: this.state.resultsMode,
+      timestamp: Date.now()
+    })
+    
     // Using AccumulatedRecordsManager (r018.58)
     this.accumulatedRecordsManager.handleAccumulatedRecordsChange(this.props.id, records)
 
@@ -1423,8 +1545,20 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
       lastSelectionRecordCount: lastSelection?.recordIds.length || 0,
       hasAccumulatedRecords: !!(accumulatedRecords && accumulatedRecords.length > 0),
       accumulatedRecordsCount: accumulatedRecords?.length || 0,
-      selectionRecordCount: this.state.selectionRecordCount || 0
+      selectionRecordCount: this.state.selectionRecordCount || 0,
+      hasSelection: this.state.hasSelection || false
     })
+    
+    // Always clear graphics layer first when panel closes (if graphics layer is enabled)
+    // This ensures visual selection is removed even if state is inconsistent
+    if (this.props.config.useGraphicsLayerForHighlight && this.graphicsLayerRef.current) {
+      this.graphicsLayerManager.clearGraphics(id, this.props.config)
+      debugLogger.log('RESTORE', {
+        event: 'panel-closed-graphics-layer-cleared',
+        widgetId: id,
+        graphicsLayerId: this.graphicsLayerRef.current.id
+      })
+    }
     
     // Always clear accumulated records if they exist (regardless of mode)
     // This handles the case where mode might have changed but records still exist
@@ -1570,14 +1704,78 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
       })
     }
     
-    // Fall back to original logic for "New" mode
+    // If we have selection state but no lastSelection, we still need to clear
+    // This handles the case where state is inconsistent (hasSelection=true but lastSelection=null)
+    if (this.state.hasSelection && !lastSelection) {
+      debugLogger.log('RESTORE', {
+        event: 'clearSelectionFromMap-has-selection-but-no-lastSelection',
+        widgetId: id,
+        selectionRecordCount: this.state.selectionRecordCount || 0,
+        note: 'will-attempt-to-clear-from-current-selection-state'
+      })
+      
+      // Try to get the output DS from the most recent query
+      // Find output DS for this widget (pattern: widget_{id}_output_*)
+      const dsManager = DataSourceManager.getInstance()
+      const allDataSources = Object.values(dsManager.getDataSources())
+      const outputDS = allDataSources.find(ds => 
+        ds.id.startsWith(`widget_${id}_output_`)
+      ) as FeatureLayerDataSource
+      
+      if (outputDS) {
+        const originDS = outputDS.getOriginDataSources()?.[0] as FeatureLayerDataSource
+        if (originDS) {
+          const { clearSelectionInDataSources } = require('./selection-utils')
+          const useGraphicsLayer = this.props.config.useGraphicsLayerForHighlight
+          const graphicsLayer = this.graphicsLayerRef.current || undefined
+          
+          ;(async () => {
+            try {
+              await clearSelectionInDataSources(id, originDS, useGraphicsLayer, graphicsLayer)
+              debugLogger.log('RESTORE', {
+                event: 'panel-closed-cleared-selection-from-state',
+                widgetId: id,
+                originDSId: originDS.id,
+                outputDSId: outputDS.id,
+                usedGraphicsLayer: useGraphicsLayer
+              })
+            } catch (error) {
+              debugLogger.log('RESTORE', {
+                event: 'panel-closed-clear-from-state-failed',
+                widgetId: id,
+                originDSId: originDS.id,
+                outputDSId: outputDS.id,
+                error: error instanceof Error ? error.message : String(error)
+              })
+            }
+          })()
+          return
+        } else {
+          debugLogger.log('RESTORE', {
+            event: 'clearSelectionFromMap-no-origin-ds-found',
+            widgetId: id,
+            outputDSId: outputDS.id,
+            note: 'output-ds-found-but-no-origin-ds'
+          })
+        }
+      } else {
+        debugLogger.log('RESTORE', {
+          event: 'clearSelectionFromMap-no-output-ds-found',
+          widgetId: id,
+          note: 'could-not-find-output-ds-for-widget'
+        })
+      }
+    }
+    
+    // Fall back to original logic for "New" mode with lastSelection
     if (!lastSelection) {
       debugLogger.log('RESTORE', {
         event: 'clearSelectionFromMap-no-lastSelection-exiting',
         widgetId: id,
         hasAccumulatedRecords: !!(accumulatedRecords && accumulatedRecords.length > 0),
         accumulatedRecordsCount: accumulatedRecords?.length || 0,
-        'hypothesis': 'no-lastSelection-so-exiting-maybe-should-have-cleared-accumulated-records-first'
+        hasSelection: this.state.hasSelection || false,
+        selectionRecordCount: this.state.selectionRecordCount || 0
       })
       return
     }
@@ -1785,6 +1983,7 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
                 onClearGraphicsLayer={this.clearGraphicsLayerIfExists}
                 activeTab={this.state.activeTab}
                 onTabChange={this.handleTabChange}
+                eventManager={this.eventManager}
               />
           </TaskListPopperWrapper>
         </QueryWidgetContext.Provider>
@@ -1866,6 +2065,7 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
                 onClearGraphicsLayer={this.clearGraphicsLayerIfExists}
                 activeTab={this.state.activeTab}
                 onTabChange={this.handleTabChange}
+                eventManager={this.eventManager}
               />
             </QueryWidgetContext.Provider>
           </div>

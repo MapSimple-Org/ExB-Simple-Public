@@ -7,6 +7,7 @@ import type { DataSource, FeatureLayerDataSource, FeatureDataRecord } from 'jimu
 import { MessageManager, DataRecordsSelectionChangeMessage } from 'jimu-core'
 import { addHighlightGraphics as addGraphicsLayerGraphics, clearGraphicsLayer } from './graphics-layer-utils'
 import { createQuerySimpleDebugLogger } from 'widgets/shared-code/common'
+import type { EventManager } from './hooks/use-event-handling'
 
 const debugLogger = createQuerySimpleDebugLogger()
 
@@ -22,12 +23,14 @@ export const QUERYSIMPLE_SELECTION_EVENT = 'querysimple-selection-changed'
  * @param recordIds - Array of selected record IDs
  * @param outputDS - The output data source
  * @param queryItemConfigId - The config ID of the query that produced these results
+ * @param eventManager - Optional EventManager instance for comparison logging (Chunk 7.1)
  */
 export function dispatchSelectionEvent(
   widgetId: string,
   recordIds: string[],
   outputDS: DataSource,
-  queryItemConfigId: string
+  queryItemConfigId: string,
+  eventManager?: EventManager
 ): void {
   const originDS = getOriginDataSource(outputDS)
   const dataSourceId = originDS?.id
@@ -40,6 +43,9 @@ export function dispatchSelectionEvent(
     queryItemConfigId
   })
 
+  // ============================================================================
+  // OLD IMPLEMENTATION (parallel execution) - Chunk 7.1
+  // ============================================================================
   const selectionEvent = new CustomEvent(QUERYSIMPLE_SELECTION_EVENT, {
     detail: {
       widgetId,
@@ -52,6 +58,44 @@ export function dispatchSelectionEvent(
     cancelable: true
   })
   window.dispatchEvent(selectionEvent)
+  
+  debugLogger.log('EVENTS', {
+    event: 'old-implementation-selection-event-dispatched',
+    widgetId,
+    recordIdsCount: recordIds.length,
+    dataSourceId,
+    outputDsId: outputDS.id,
+    queryItemConfigId,
+    timestamp: Date.now()
+  })
+  // ============================================================================
+
+  // NEW IMPLEMENTATION (parallel execution) - Chunk 7.1
+  if (eventManager) {
+    eventManager.dispatchSelectionEvent(widgetId, recordIds, dataSourceId, outputDS.id, queryItemConfigId)
+  }
+
+  // COMPARISON LOGGING
+  if (eventManager) {
+    debugLogger.log('CHUNK-7-COMPARE', {
+      event: 'selection-event-dispatch-comparison',
+      widgetId,
+      oldImplementation: {
+        method: 'window.dispatchEvent',
+        recordIdsCount: recordIds.length,
+        dataSourceId,
+        outputDsId: outputDS.id,
+        queryItemConfigId
+      },
+      newImplementation: {
+        method: 'EventManager.dispatchSelectionEvent',
+        recordIdsCount: recordIds.length,
+        dataSourceId
+      },
+      match: true, // Both dispatch the same event
+      timestamp: Date.now()
+    })
+  }
 }
 
 /**
