@@ -267,17 +267,13 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
               })
               
               // Reset to New mode when hash parameter is detected to avoid bugs with accumulation modes
-              // OLD IMPLEMENTATION (parallel execution)
-              const oldNeedsModeReset = this.state.resultsMode !== SelectionType.NewSelection
-              const oldCurrentMode = this.state.resultsMode
+              // Using AccumulatedRecordsManager (r018.58)
+              const needsModeReset = this.state.resultsMode !== SelectionType.NewSelection
+              const currentMode = this.state.resultsMode
               
+              // Update initialQueryValue state
               this.setState({ 
-                initialQueryValue: { shortId: value.shortId, value: value.value },
-                // Reset to New mode and clear accumulatedRecords
-                ...(oldNeedsModeReset ? { 
-                  resultsMode: SelectionType.NewSelection,
-                  accumulatedRecords: []
-                } : {})
+                initialQueryValue: { shortId: value.shortId, value: value.value }
               }, () => {
                 debugLogger.log('HASH-EXEC', {
                   event: 'querysimple-initialqueryvalue-state-updated',
@@ -293,33 +289,17 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
                 })
               })
 
-              // NEW IMPLEMENTATION (parallel execution)
-              if (oldNeedsModeReset) {
-                const newResetResult = this.accumulatedRecordsManager.resetModeOnHashDetection(
+              // Reset mode via manager if needed
+              if (needsModeReset) {
+                const resetResult = this.accumulatedRecordsManager.resetModeOnHashDetection(
                   this.props.id,
-                  oldCurrentMode
+                  currentMode
                 )
-
-                // COMPARISON LOGGING
-                debugLogger.log('CHUNK-5-COMPARE', {
-                  event: 'mode-reset-on-hash-detection-comparison',
-                  widgetId: this.props.id,
-                  context: 'helpersimple-open-widget-event',
-                  oldImplementation: {
-                    needsModeReset: oldNeedsModeReset,
-                    currentMode: oldCurrentMode,
-                    newMode: SelectionType.NewSelection,
-                    accumulatedRecordsCleared: oldNeedsModeReset
-                  },
-                  newImplementation: {
-                    needsModeReset: oldNeedsModeReset,
-                    currentMode: oldCurrentMode,
-                    newMode: newResetResult.resultsMode,
-                    accumulatedRecordsCleared: newResetResult.accumulatedRecords.length === 0
-                  },
-                  match: newResetResult.resultsMode === SelectionType.NewSelection && 
-                         newResetResult.accumulatedRecords.length === 0,
-                  timestamp: Date.now()
+                
+                // Update widget state from manager's return value
+                this.setState({
+                  resultsMode: resetResult.resultsMode,
+                  accumulatedRecords: resetResult.accumulatedRecords
                 })
               }
             }
@@ -338,49 +318,28 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
         },
         onModeResetNeeded: () => {
           // Reset to New mode when hash parameter is detected
-          // OLD IMPLEMENTATION (parallel execution)
-          const oldCurrentMode = this.state.resultsMode
-          const oldNeedsReset = oldCurrentMode !== SelectionType.NewSelection
+          // Using AccumulatedRecordsManager (r018.58)
+          const currentMode = this.state.resultsMode
+          const needsReset = currentMode !== SelectionType.NewSelection
           
-          if (oldNeedsReset) {
+          if (needsReset) {
             debugLogger.log('HASH', {
               event: 'mode-reset-needed-on-hash-detection',
               widgetId: this.props.id,
-              currentMode: oldCurrentMode,
+              currentMode,
               triggeredBy: 'helpersimple-open-widget-event',
               timestamp: Date.now()
             })
-            this.setState({ 
-              resultsMode: SelectionType.NewSelection,
-              accumulatedRecords: []
-            })
-
-            // NEW IMPLEMENTATION (parallel execution)
-            const newResetResult = this.accumulatedRecordsManager.resetModeOnHashDetection(
+            
+            const resetResult = this.accumulatedRecordsManager.resetModeOnHashDetection(
               this.props.id,
-              oldCurrentMode
+              currentMode
             )
-
-            // COMPARISON LOGGING
-            debugLogger.log('CHUNK-5-COMPARE', {
-              event: 'mode-reset-on-hash-detection-comparison',
-              widgetId: this.props.id,
-              context: 'helpersimple-open-widget-event-mode-reset',
-              oldImplementation: {
-                needsModeReset: oldNeedsReset,
-                currentMode: oldCurrentMode,
-                newMode: SelectionType.NewSelection,
-                accumulatedRecordsCleared: oldNeedsReset
-              },
-              newImplementation: {
-                needsModeReset: oldNeedsReset,
-                currentMode: oldCurrentMode,
-                newMode: newResetResult.resultsMode,
-                accumulatedRecordsCleared: newResetResult.accumulatedRecords.length === 0
-              },
-              match: newResetResult.resultsMode === SelectionType.NewSelection && 
-                     newResetResult.accumulatedRecords.length === 0,
-              timestamp: Date.now()
+            
+            // Update widget state from manager's return value
+            this.setState({
+              resultsMode: resetResult.resultsMode,
+              accumulatedRecords: resetResult.accumulatedRecords
             })
           }
         }
@@ -456,14 +415,38 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
     }
     
     // Set up callbacks for manager
+    // Set up callbacks for manager (r018.57)
+    // Note: Primary state updates come from manager return values in handleResultsModeChange/handleAccumulatedRecordsChange
+    // These callbacks serve as backup/verification but shouldn't be needed since we update state directly from return values
     this.accumulatedRecordsManager.setCallbacks({
       onModeChange: (mode) => {
-        // Manager will handle state updates, but we need to sync widget state
-        // This will be handled in the comparison phase
+        // State is updated from handleResultsModeChange return value, so this is just a backup
+        if (this.state.resultsMode !== mode) {
+          debugLogger.log('RESULTS-MODE', {
+            event: 'callback-onModeChange-state-sync',
+            widgetId: this.props.id,
+            callbackMode: mode,
+            currentStateMode: this.state.resultsMode,
+            note: 'State should already be synced from return value',
+            timestamp: Date.now()
+          })
+          this.setState({ resultsMode: mode })
+        }
       },
       onAccumulatedRecordsChange: (records) => {
-        // Manager will handle state updates, but we need to sync widget state
-        // This will be handled in the comparison phase
+        // State is updated from handleAccumulatedRecordsChange, so this is just a backup
+        const currentCount = this.state.accumulatedRecords?.length || 0
+        if (currentCount !== records.length) {
+          debugLogger.log('RESULTS-MODE', {
+            event: 'callback-onAccumulatedRecordsChange-state-sync',
+            widgetId: this.props.id,
+            callbackCount: records.length,
+            currentStateCount: currentCount,
+            note: 'State should already be synced from direct update',
+            timestamp: Date.now()
+          })
+          this.setState({ accumulatedRecords: records })
+        }
       }
     })
     
@@ -1307,82 +1290,21 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
    * @since 1.19.0-r017.0
    */
   private handleResultsModeChange = (mode: SelectionType) => {
-    // OLD IMPLEMENTATION (parallel execution)
-    const oldPreviousMode = this.state.resultsMode
-    const oldCurrentAccumulatedCount = this.state.accumulatedRecords?.length || 0
-    const oldShouldConsumeHash = (mode === SelectionType.AddToSelection || mode === SelectionType.RemoveFromSelection) && !!this.state.initialQueryValue?.shortId
-    const oldWillClearAccumulated = mode === SelectionType.NewSelection
+    // Using AccumulatedRecordsManager (r018.58)
+    const shouldConsumeHash = (mode === SelectionType.AddToSelection || mode === SelectionType.RemoveFromSelection) && !!this.state.initialQueryValue?.shortId
     
-    debugLogger.log('RESULTS-MODE', {
-      event: 'handleResultsModeChange-triggered',
-      widgetId: this.props.id,
-      previousMode: oldPreviousMode,
-      newMode: mode,
-      currentAccumulatedCount: oldCurrentAccumulatedCount,
-      timestamp: Date.now()
-    })
-    
-    // Consume deep link when switching to accumulation modes
-    if (mode === SelectionType.AddToSelection || mode === SelectionType.RemoveFromSelection) {
-      if (this.state.initialQueryValue?.shortId) {
-        debugLogger.log('HASH', {
-          event: 'consuming-hash-on-mode-switch',
-          widgetId: this.props.id,
-          mode,
-          shortId: this.state.initialQueryValue.shortId
-        })
-        this.removeHashParameter(this.state.initialQueryValue.shortId)
-      }
-    }
-
-    // If switching to "New" mode, clear accumulated records
-    if (mode === SelectionType.NewSelection) {
-      debugLogger.log('RESULTS-MODE', {
-        event: 'clearing-accumulated-records-on-mode-switch',
-        widgetId: this.props.id,
-        previousMode: this.state.resultsMode
-      })
-      this.setState({ resultsMode: mode, accumulatedRecords: [] })
-    } else {
-      this.setState({ resultsMode: mode })
-    }
-
-    // Capture manager's previous state BEFORE updating
-    const newPreviousMode = this.accumulatedRecordsManager.getResultsMode()
-    const newPreviousAccumulatedCount = this.accumulatedRecordsManager.getAccumulatedRecordsCount()
-
-    // NEW IMPLEMENTATION (parallel execution)
-    const newResult = this.accumulatedRecordsManager.handleResultsModeChange(
+    const result = this.accumulatedRecordsManager.handleResultsModeChange(
       this.props.id,
       mode,
-      oldShouldConsumeHash,
+      shouldConsumeHash,
       this.state.initialQueryValue?.shortId,
       this.removeHashParameter
     )
 
-    // COMPARISON LOGGING
-    debugLogger.log('CHUNK-5-COMPARE', {
-      event: 'handleResultsModeChange-comparison',
-      widgetId: this.props.id,
-      oldImplementation: {
-        previousMode: oldPreviousMode,
-        newMode: mode,
-        currentAccumulatedCount: oldCurrentAccumulatedCount,
-        willClearAccumulated: oldWillClearAccumulated,
-        shouldConsumeHash: oldShouldConsumeHash
-      },
-      newImplementation: {
-        previousMode: newPreviousMode,
-        newMode: newResult.resultsMode,
-        currentAccumulatedCount: newPreviousAccumulatedCount,
-        willClearAccumulated: newResult.resultsMode === SelectionType.NewSelection,
-        shouldConsumeHash: oldShouldConsumeHash
-      },
-      match: oldPreviousMode === newPreviousMode &&
-             oldCurrentAccumulatedCount === newPreviousAccumulatedCount &&
-             newResult.resultsMode === mode && 
-             (mode === SelectionType.NewSelection ? newResult.accumulatedRecords.length === 0 : true),
-      timestamp: Date.now()
+    // Update widget state from manager's return value
+    this.setState({
+      resultsMode: result.resultsMode,
+      accumulatedRecords: result.accumulatedRecords
     })
   }
 
@@ -1431,25 +1353,14 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
   }
 
   private handleAccumulatedRecordsChange = (records: FeatureDataRecord[]) => {
-    // OLD IMPLEMENTATION (parallel execution)
-    const oldPreviousCount = this.state.accumulatedRecords?.length || 0
-    const oldNewCount = records.length
-    
+    // Using AccumulatedRecordsManager (r018.58)
+    this.accumulatedRecordsManager.handleAccumulatedRecordsChange(this.props.id, records)
+
     // If we're in Remove mode and all accumulated records are cleared, reset to NewSelection mode
     // Remove mode requires accumulated records to function, so it should be disabled when records are empty
     const shouldResetMode = records.length === 0 && 
                            this.state.resultsMode === SelectionType.RemoveFromSelection
-    
-    debugLogger.log('RESULTS-MODE', {
-      event: 'handleAccumulatedRecordsChange-triggered',
-      widgetId: this.props.id,
-      previousCount: oldPreviousCount,
-      newCount: oldNewCount,
-      currentMode: this.state.resultsMode,
-      shouldResetMode,
-      timestamp: Date.now()
-    })
-    
+
     this.setState({ 
       accumulatedRecords: records,
       // Reset mode to NewSelection if all accumulated records cleared in Remove mode
@@ -1457,7 +1368,7 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
         resultsMode: SelectionType.NewSelection
       } : {})
     })
-    
+
     if (shouldResetMode) {
       debugLogger.log('RESULTS-MODE', {
         event: 'mode-reset-on-accumulated-records-cleared',
@@ -1468,30 +1379,6 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
         timestamp: Date.now()
       })
     }
-
-    // Capture manager's previous state BEFORE updating
-    const newPreviousCount = this.accumulatedRecordsManager.getAccumulatedRecordsCount()
-
-    // NEW IMPLEMENTATION (parallel execution)
-    this.accumulatedRecordsManager.handleAccumulatedRecordsChange(this.props.id, records)
-
-    // COMPARISON LOGGING
-    debugLogger.log('CHUNK-5-COMPARE', {
-      event: 'handleAccumulatedRecordsChange-comparison',
-      widgetId: this.props.id,
-      oldImplementation: {
-        previousCount: oldPreviousCount,
-        newCount: oldNewCount,
-        recordsLength: records.length
-      },
-      newImplementation: {
-        previousCount: newPreviousCount,
-        newCount: records.length,
-        recordsLength: records.length
-      },
-      match: oldPreviousCount === newPreviousCount && oldNewCount === records.length,
-      timestamp: Date.now()
-    })
   }
 
   /**

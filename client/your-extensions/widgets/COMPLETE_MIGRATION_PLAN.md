@@ -136,16 +136,16 @@ This document outlines a **complete, safe migration** of all widget logic from `
 **Logging:** Graphics layer initialization logs (`GRAPHICS-LAYER` feature), comparison logs removed after verification
 
 ### Chunk 5: Accumulated Records Management
-**Status:** 🔄 **IN PROGRESS** - Parallel Execution Phase (r018.26-r018.56)  
+**Status:** ✅ **COMPLETE** (r018.58)  
 **Complexity:** Medium  
 **Risk:** Medium  
 **Methods:** `handleAccumulatedRecordsChange()`, accumulated records state management  
 **Implementation:** Manager class in `query-simple/src/runtime/hooks/use-accumulated-records.ts`  
 **Completed Steps:**
 - ✅ Step 5.1: Manager class added (r018.26)
-- 🔄 Step 5.2: Parallel execution with comparison logging (r018.27-r018.56) - **IN PROGRESS**
-- ⏳ Step 5.3: Switch to manager, remove old code
-- ⏳ Step 5.4: Cleanup - remove temporary comparison logs
+- ✅ Step 5.2: Parallel execution with comparison logging (r018.27-r018.56)
+- ✅ Step 5.3: Switch to manager, remove old code (r018.57-r018.58)
+- ⏳ Step 5.4: Cleanup - remove temporary comparison logs (optional - already removed in r018.58)
 **Debug Switches:** `CHUNK-5-COMPARE,RESULTS-MODE,FORM`
 **Recent Fixes:**
 - ✅ Fixed hash parameter re-execution when switching queries (r018.43-r018.53)
