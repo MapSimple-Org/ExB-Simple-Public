@@ -100,6 +100,7 @@ export interface QueryTaskProps {
   onClearGraphicsLayer?: () => void
   activeTab?: 'query' | 'results'
   onTabChange?: (tab: 'query' | 'results') => void
+  eventManager?: import('./hooks/use-event-handling').EventManager  // Chunk 7.1: Event Handling Manager
 }
 
 // Helper function to get display name for query in dropdown
@@ -160,7 +161,7 @@ const style = css`
 `
 
 export function QueryTask (props: QueryTaskProps) {
-  const { queryItem, onNavBack, total, isInPopper = false, wrappedInPopper = false, className = '', index, initialInputValue, onHashParameterUsed, queryItems, selectedQueryIndex, onQueryChange, groups, ungrouped, groupOrder, selectedGroupId, selectedGroupQueryIndex, onGroupChange, onGroupQueryChange, onUngroupedChange, resultsMode, onResultsModeChange, accumulatedRecords, onAccumulatedRecordsChange, useGraphicsLayerForHighlight, graphicsLayer, mapView, onInitializeGraphicsLayer, onClearGraphicsLayer, activeTab: propActiveTab, onTabChange: propOnTabChange, ...otherProps } = props
+  const { queryItem, onNavBack, total, isInPopper = false, wrappedInPopper = false, className = '', index, initialInputValue, onHashParameterUsed, queryItems, selectedQueryIndex, onQueryChange, groups, ungrouped, groupOrder, selectedGroupId, selectedGroupQueryIndex, onGroupChange, onGroupQueryChange, onUngroupedChange, resultsMode, onResultsModeChange, accumulatedRecords, onAccumulatedRecordsChange, useGraphicsLayerForHighlight, graphicsLayer, mapView, onInitializeGraphicsLayer, onClearGraphicsLayer, activeTab: propActiveTab, onTabChange: propOnTabChange, eventManager, ...otherProps } = props
   const getI18nMessage = hooks.useTranslation(defaultMessage)
   const zoomToRecords = useZoomToRecords(mapView)
   const [stage, setStage] = React.useState(0) // 0 = form, 1 = results, 2 = loading
@@ -569,6 +570,29 @@ export function QueryTask (props: QueryTaskProps) {
   const handleOutputDataSourceCreated = React.useCallback(async (ds: DataSource) => {
     setOutputDS(ds)
     
+    // Detect query switch for logging
+    const isSwitchingQueries = previousConfigIdRef.current !== queryItem.configId
+    const oldConfigId = previousConfigIdRef.current
+    
+    // VERIFICATION LOGGING: Track graphics layer state when switching queries
+    if (isSwitchingQueries && (resultsMode === SelectionType.AddToSelection || resultsMode === SelectionType.RemoveFromSelection)) {
+      const graphicsCountBefore = graphicsLayer?.graphics?.length || 0
+      debugLogger.log('RESULTS-MODE', {
+        event: 'handleOutputDataSourceCreated-query-switch-detected',
+        widgetId: props.widgetId,
+        oldConfigId,
+        newConfigId: queryItem.configId,
+        resultsMode,
+        hasGraphicsLayer: !!graphicsLayer,
+        graphicsCountBefore,
+        hasAccumulatedRecords: !!(accumulatedRecords && accumulatedRecords.length > 0),
+        accumulatedRecordsCount: accumulatedRecords?.length || 0,
+        useGraphicsLayerForHighlight,
+        hasOnClearGraphicsLayer: !!onClearGraphicsLayer,
+        timestamp: Date.now()
+      })
+    }
+    
     // CHECK rootDataSource.map to see how framework accesses map view
     try {
       const originDataSources = ds.getOriginDataSources()
@@ -645,70 +669,209 @@ export function QueryTask (props: QueryTaskProps) {
     // This ensures records are selected both on the map and in the Results tab
     if ((resultsMode === SelectionType.AddToSelection || resultsMode === SelectionType.RemoveFromSelection) 
         && accumulatedRecords && accumulatedRecords.length > 0) {
+      // VERIFICATION LOGGING: Graphics count before clearing
+      const graphicsCountBeforeClear = graphicsLayer?.graphics?.length || 0
+      
+      // FIX (r018.67): Clear graphics layer when switching queries to prevent stale graphics
+      // from previous queries from persisting in the shared graphics layer
+      if (useGraphicsLayerForHighlight && graphicsLayer && onClearGraphicsLayer) {
+        debugLogger.log('RESULTS-MODE', {
+          event: 'clearing-graphics-layer-before-reselection-on-query-switch',
+          widgetId: props.widgetId,
+          resultsMode,
+          accumulatedRecordsCount: accumulatedRecords.length,
+          graphicsCountBeforeClear,
+          timestamp: Date.now()
+        })
+        onClearGraphicsLayer()
+        
+        // VERIFICATION LOGGING: Graphics count after clearing
+        const graphicsCountAfterClear = graphicsLayer?.graphics?.length || 0
+        debugLogger.log('RESULTS-MODE', {
+          event: 'graphics-layer-cleared-on-query-switch',
+          widgetId: props.widgetId,
+          graphicsCountBeforeClear,
+          graphicsCountAfterClear,
+          cleared: graphicsCountAfterClear === 0,
+          timestamp: Date.now()
+        })
+      } else {
+        debugLogger.log('RESULTS-MODE', {
+          event: 'skipping-graphics-layer-clear-on-query-switch',
+          widgetId: props.widgetId,
+          reason: !useGraphicsLayerForHighlight ? 'useGraphicsLayerForHighlight-false' : 
+                  !graphicsLayer ? 'no-graphicsLayer' : 
+                  !onClearGraphicsLayer ? 'no-onClearGraphicsLayer' : 'unknown',
+          graphicsCountBeforeClear,
+          timestamp: Date.now()
+        })
+      }
+      
       // Use a delay to ensure the DS is fully ready and graphics layer props are updated after widget re-render
       // If graphics layer was just initialized, wait a bit longer for props to update
       const delay = (useGraphicsLayerForHighlight && onInitializeGraphicsLayer) ? 200 : 100
       setTimeout(() => {
         const featureDS = ds as FeatureLayerDataSource
         if (featureDS && accumulatedRecords && accumulatedRecords.length > 0) {
-          const recordIds = accumulatedRecords.map(record => record.getId())
-          // Use the same selectRecordsAndPublish that's used after query completion
-          // This will select records on the map and trigger handleDataSourceInfoChange
-          // in query-result.tsx to update selectedRecords state for the Results tab
-          // Use graphics layer if enabled (props should be updated after widget re-render)
-          ;(async () => {
-            try {
-                await selectRecordsAndPublish(
-                  props.widgetId,
-                  featureDS,
-                  recordIds,
-                  accumulatedRecords,
-                  false,
-                  useGraphicsLayerForHighlight,
-                  graphicsLayer,
-                  mapView
-                )
-              
-                // Update recordsRef so results tab shows accumulated records
-                recordsRef.current = accumulatedRecords
-                setResultCount(accumulatedRecords.length)
+          // FIX (r018.67): Use outputDS.getSelectedRecords() as source of truth to sync accumulatedRecords
+          // This ensures removed records are not re-selected and are removed from accumulatedRecords
+          // We don't store removed records anywhere - they're permanently removed
+          const actuallySelectedRecords = featureDS.getSelectedRecords() as FeatureDataRecord[] || []
+          
+          // VERIFICATION LOGGING: Compare accumulatedRecords vs actually selected records
+          debugLogger.log('RESULTS-MODE', {
+            event: 'sync-check-before-reselection',
+            widgetId: props.widgetId,
+            accumulatedRecordsCount: accumulatedRecords.length,
+            actuallySelectedRecordsCount: actuallySelectedRecords.length,
+            accumulatedRecordIds: accumulatedRecords.map(r => r.getId()).slice(0, 10),
+            actuallySelectedIds: actuallySelectedRecords.map(r => r.getId()).slice(0, 10),
+            recordsOutOfSync: accumulatedRecords.length !== actuallySelectedRecords.length,
+            timestamp: Date.now()
+          })
+          
+          // SYNC: If accumulatedRecords doesn't match what's actually selected, sync it
+          // This happens when records were manually removed but accumulatedRecords wasn't updated
+          let recordsToReselect = accumulatedRecords
+          if (actuallySelectedRecords.length > 0 && 
+              actuallySelectedRecords.length !== accumulatedRecords.length) {
+            // Build a Set of actually selected IDs for fast lookup
+            const actuallySelectedIds = new Set(actuallySelectedRecords.map(r => r.getId()))
+            
+            // Filter accumulatedRecords to only include records that are actually selected
+            recordsToReselect = accumulatedRecords.filter(record => 
+              actuallySelectedIds.has(record.getId())
+            )
+            
+            // Update accumulatedRecords to match reality (sync)
+            if (onAccumulatedRecordsChange) {
+              debugLogger.log('RESULTS-MODE', {
+                event: 'syncing-accumulated-records-to-actually-selected',
+                widgetId: props.widgetId,
+                accumulatedRecordsCountBefore: accumulatedRecords.length,
+                accumulatedRecordsCountAfter: recordsToReselect.length,
+                recordsRemoved: accumulatedRecords.length - recordsToReselect.length,
+                note: 'removed-records-permanently-deleted-from-accumulatedRecords',
+                timestamp: Date.now()
+              })
+              onAccumulatedRecordsChange(recordsToReselect)
+            }
+          } else if (actuallySelectedRecords.length === 0 && accumulatedRecords.length > 0) {
+            // All records were removed - sync accumulatedRecords to empty
+            if (onAccumulatedRecordsChange) {
+              debugLogger.log('RESULTS-MODE', {
+                event: 'syncing-accumulated-records-to-empty',
+                widgetId: props.widgetId,
+                accumulatedRecordsCountBefore: accumulatedRecords.length,
+                note: 'all-records-removed-syncing-to-empty',
+                timestamp: Date.now()
+              })
+              onAccumulatedRecordsChange([])
+              recordsToReselect = []
+            }
+          }
+          
+          // Only re-select if we have records to re-select
+          if (recordsToReselect.length > 0) {
+            const recordIds = recordsToReselect.map(record => record.getId())
+            
+            // DIAGNOSTIC LOGGING: What we're about to re-select
+            debugLogger.log('RESULTS-MODE', {
+              event: 'query-switch-before-reselection',
+              widgetId: props.widgetId,
+              recordsToReselectCount: recordsToReselect.length,
+              recordsToReselectIds: recordIds,
+              outputDSId: featureDS.id,
+              graphicsLayerCountBefore: graphicsLayer?.graphics?.length || 0,
+              timestamp: Date.now()
+            })
+            
+            // Use the same selectRecordsAndPublish that's used after query completion
+            // This will select records on the map and trigger handleDataSourceInfoChange
+            // in query-result.tsx to update selectedRecords state for the Results tab
+            // Use graphics layer if enabled (props should be updated after widget re-render)
+            ;(async () => {
+              try {
+                  await selectRecordsAndPublish(
+                    props.widgetId,
+                    featureDS,
+                    recordIds,
+                    recordsToReselect,
+                    false,
+                    useGraphicsLayerForHighlight,
+                    graphicsLayer,
+                    mapView
+                  )
                 
-                debugLogger.log('RESULTS-MODE', {
-                  event: 're-selected-accumulated-records-after-query-switch',
-                  widgetId: props.widgetId,
-                  outputDSId: featureDS.id,
-                  recordsCount: accumulatedRecords.length
-                })
-                
-                // Verify what's actually selected in the DS after a delay
-                setTimeout(() => {
-                  const ds = DataSourceManager.getInstance().getDataSource(featureDS.id)
-                  const selectedInDS = ds?.getSelectedRecords()
-                  const selectedIdsInDS = ds?.getSelectedRecordIds() ?? []
+                  // Update recordsRef so results tab shows accumulated records
+                  recordsRef.current = recordsToReselect
+                  setResultCount(recordsToReselect.length)
+                  
+                  // VERIFICATION LOGGING: Graphics count after re-selection
+                  const graphicsCountAfterReselection = graphicsLayer?.graphics?.length || 0
                   
                   debugLogger.log('RESULTS-MODE', {
-                    event: 'verify-records-after-reselection',
+                    event: 're-selected-accumulated-records-after-query-switch',
                     widgetId: props.widgetId,
                     outputDSId: featureDS.id,
-                    expectedCount: accumulatedRecords.length,
-                    actualSelectedInDS: selectedInDS?.length || 0,
-                    selectedIdsInDS: selectedIdsInDS.length,
-                    recordsMatch: selectedInDS?.length === accumulatedRecords.length
+                    recordsCount: recordsToReselect.length,
+                    graphicsCountAfterReselection,
+                    expectedGraphicsCount: recordsToReselect.length,
+                    graphicsMatch: graphicsCountAfterReselection === recordsToReselect.length,
+                    timestamp: Date.now()
                   })
-                }, 200)
-              } catch (error) {
-                debugLogger.log('RESULTS-MODE', {
-                  event: 're-selection-failed-after-switch',
-                  widgetId: props.widgetId,
-                  error: error instanceof Error ? error.message : 'Unknown error',
-                  errorStack: error instanceof Error ? error.stack : undefined
-                })
-              }
-            })()
+                  
+                  // Verify what's actually selected in the DS after a delay
+                  setTimeout(() => {
+                    const ds = DataSourceManager.getInstance().getDataSource(featureDS.id)
+                    const selectedInDS = ds?.getSelectedRecords()
+                    const selectedIdsInDS = ds?.getSelectedRecordIds() ?? []
+                    const finalGraphicsCount = graphicsLayer?.graphics?.length || 0
+                    const finalGraphicsIds = graphicsLayer?.graphics?.map(g => g.attributes?.OBJECTID || g.attributes?.id || g.attributes?.FID) || []
+                    
+                    debugLogger.log('RESULTS-MODE', {
+                      event: 'query-switch-after-reselection-full-state',
+                      widgetId: props.widgetId,
+                      outputDSId: featureDS.id,
+                      expectedCount: recordsToReselect.length,
+                      expectedIds: recordIds,
+                      actualSelectedInDS: selectedInDS?.length || 0,
+                      actualSelectedIdsInDS: selectedIdsInDS,
+                      finalGraphicsCount,
+                      finalGraphicsIds,
+                      allSourcesMatch: selectedIdsInDS.length === recordsToReselect.length &&
+                                       finalGraphicsCount === recordsToReselect.length &&
+                                       JSON.stringify(selectedIdsInDS.sort()) === JSON.stringify(recordIds.sort()),
+                      timestamp: Date.now()
+                    })
+                  }, 200)
+                } catch (error) {
+                  debugLogger.log('RESULTS-MODE', {
+                    event: 're-selection-failed-after-switch',
+                    widgetId: props.widgetId,
+                    error: error instanceof Error ? error.message : 'Unknown error',
+                    errorStack: error instanceof Error ? error.stack : undefined
+                  })
+                }
+              })()
+          } else {
+            // No records to re-select - all were removed
+            recordsRef.current = []
+            setResultCount(0)
+            
+            debugLogger.log('RESULTS-MODE', {
+              event: 'no-records-to-reselect-all-removed',
+              widgetId: props.widgetId,
+              outputDSId: featureDS.id,
+              accumulatedRecordsCountBefore: accumulatedRecords.length,
+              note: 'all-records-were-removed-no-reselection-needed',
+              timestamp: Date.now()
+            })
+          }
         }
       }, 100)
     }
-  }, [resultsMode, accumulatedRecords, props.widgetId, useGraphicsLayerForHighlight, onInitializeGraphicsLayer])
+  }, [resultsMode, accumulatedRecords, props.widgetId, useGraphicsLayerForHighlight, onInitializeGraphicsLayer, graphicsLayer, onClearGraphicsLayer, mapView, queryItem.configId, onAccumulatedRecordsChange])
 
   // Clear results when query item changes (e.g., when new hash parameter triggers different query)
   React.useEffect(() => {
@@ -751,21 +914,114 @@ export function QueryTask (props: QueryTaskProps) {
         // Don't set error state - this is expected in some scenarios
       }
     } else if (isSwitchingQueries) {
-      // Just update the ref - don't clear results if in "Add to" or "Remove from" mode or no results
-      previousConfigIdRef.current = queryItem.configId
+      // Store the old configId BEFORE updating the ref
+      const oldConfigId = previousConfigIdRef.current
       
+      // DIAGNOSTIC LOGGING: Full state BEFORE sync
       if (resultsMode === SelectionType.AddToSelection || resultsMode === SelectionType.RemoveFromSelection) {
+        if (outputDS && accumulatedRecords && accumulatedRecords.length > 0) {
+          const actuallySelectedRecordsBeforeSync = outputDS.getSelectedRecords() as FeatureDataRecord[] || []
+          const accumulatedIds = accumulatedRecords.map(r => r.getId())
+          const actuallySelectedIdsBeforeSync = actuallySelectedRecordsBeforeSync.map(r => r.getId())
+          const graphicsLayerIds = graphicsLayer?.graphics?.map(g => g.attributes?.OBJECTID || g.attributes?.id || g.attributes?.FID) || []
+          
+          debugLogger.log('RESULTS-MODE', {
+            event: 'query-switch-before-sync-full-state',
+            widgetId: props.widgetId,
+            oldConfigId,
+            newConfigId: queryItem.configId,
+            accumulatedRecordsCount: accumulatedRecords.length,
+            accumulatedIds: accumulatedIds,
+            outputDSSelectedCount: actuallySelectedRecordsBeforeSync.length,
+            outputDSSelectedIds: actuallySelectedIdsBeforeSync,
+            graphicsLayerCount: graphicsLayer?.graphics?.length || 0,
+            graphicsLayerIds: graphicsLayerIds,
+            recordsOutOfSync: accumulatedIds.length !== actuallySelectedIdsBeforeSync.length,
+            idsMatch: JSON.stringify(accumulatedIds.sort()) === JSON.stringify(actuallySelectedIdsBeforeSync.sort()),
+            timestamp: Date.now()
+          })
+        }
+      }
+      
+      // FIX (r018.70): Only sync accumulatedRecords when there are actually selected records that are a subset
+      // This prevents clearing accumulatedRecords when switching to empty data sources during query switches
+      // Only sync if records were manually removed (actuallySelected < accumulated), not during empty DS switches
+      if (resultsMode === SelectionType.AddToSelection || resultsMode === SelectionType.RemoveFromSelection) {
+        if (outputDS && accumulatedRecords && accumulatedRecords.length > 0 && onAccumulatedRecordsChange) {
+          const actuallySelectedRecords = outputDS.getSelectedRecords() as FeatureDataRecord[] || []
+          
+          if (actuallySelectedRecords.length > 0 && actuallySelectedRecords.length < accumulatedRecords.length) {
+            // Build a Set of actually selected IDs for fast lookup
+            const actuallySelectedIdsSet = new Set(actuallySelectedRecords.map(r => r.getId()))
+            
+            // Filter accumulatedRecords to only include records that are actually selected
+            const syncedRecords = accumulatedRecords.filter(record => 
+              actuallySelectedIdsSet.has(record.getId())
+            )
+            
+            const accumulatedIds = accumulatedRecords.map(r => r.getId())
+            const actuallySelectedIds = actuallySelectedRecords.map(r => r.getId())
+            const syncedIds = syncedRecords.map(r => r.getId())
+            const removedIds = accumulatedIds.filter(id => !syncedIds.includes(id))
+            
+            debugLogger.log('RESULTS-MODE', {
+              event: 'syncing-accumulated-records-before-query-switch',
+              widgetId: props.widgetId,
+              oldConfigId,
+              newConfigId: queryItem.configId,
+              accumulatedRecordsCountBefore: accumulatedRecords.length,
+              accumulatedIdsBefore: accumulatedIds,
+              actuallySelectedCount: actuallySelectedRecords.length,
+              actuallySelectedIds: actuallySelectedIds,
+              syncedRecordsCount: syncedRecords.length,
+              syncedIds: syncedIds,
+              recordsRemoved: accumulatedRecords.length - syncedRecords.length,
+              removedIds: removedIds,
+              note: 'immediate-sync-before-query-switch',
+              timestamp: Date.now()
+            })
+            
+            // Update accumulatedRecords to match reality (immediate sync, not lazy)
+            onAccumulatedRecordsChange(syncedRecords)
+            
+            // DIAGNOSTIC LOGGING: Full state AFTER sync
+            debugLogger.log('RESULTS-MODE', {
+              event: 'query-switch-after-sync-full-state',
+              widgetId: props.widgetId,
+              oldConfigId,
+              newConfigId: queryItem.configId,
+              accumulatedRecordsCountAfter: syncedRecords.length,
+              accumulatedIdsAfter: syncedIds,
+              outputDSSelectedCount: actuallySelectedRecords.length,
+              outputDSSelectedIds: actuallySelectedIds,
+              timestamp: Date.now()
+            })
+          } else {
+            debugLogger.log('RESULTS-MODE', {
+              event: 'accumulated-records-already-in-sync-before-query-switch',
+              widgetId: props.widgetId,
+              oldConfigId,
+              newConfigId: queryItem.configId,
+              accumulatedRecordsCount: accumulatedRecords.length,
+              timestamp: Date.now()
+            })
+          }
+        }
+        
         debugLogger.log('RESULTS-MODE', {
           event: 'preserving-accumulated-records-on-query-switch',
           widgetId: props.widgetId,
           resultsMode,
-          oldConfigId: previousConfigIdRef.current,
+          oldConfigId,
           newConfigId: queryItem.configId,
           accumulatedRecordsCount: accumulatedRecords?.length || 0
         })
       }
+      
+      // Update the ref AFTER syncing
+      previousConfigIdRef.current = queryItem.configId
     }
-  }, [queryItem.configId, clearResult, resultCount, resultsMode, accumulatedRecords, props.widgetId])
+  }, [queryItem.configId, clearResult, resultCount, resultsMode, accumulatedRecords, props.widgetId, outputDS, onAccumulatedRecordsChange])
 
   const navToForm = React.useCallback(async (clearResults = false) => {
     if (clearResults) {
@@ -980,18 +1236,32 @@ export function QueryTask (props: QueryTaskProps) {
             
             recordsToDisplay = mergedRecords
             
-            // Update widget-level accumulated records so they persist across query switches
-            if (onAccumulatedRecordsChange) {
-              onAccumulatedRecordsChange(mergedRecords)
-            }
+            // DIAGNOSTIC LOGGING: Records being added to accumulatedRecords
+            const existingIds = existingRecordsForMerge.map(r => r.getId())
+            const newRecordIds = result.records.map(r => r.getId())
+            const mergedIds = mergedRecords.map(r => r.getId())
+            const addedIds = mergedIds.filter(id => !existingIds.includes(id))
+            const duplicateIds = newRecordIds.filter(id => existingIds.includes(id))
             
             debugLogger.log('RESULTS-MODE', {
               event: 'add-mode-merge-complete-diagnostic',
               widgetId: props.widgetId,
+              existingCount: existingRecordsForMerge.length,
+              existingIds: existingIds,
+              newRecordsCount: result.records.length,
+              newRecordIds: newRecordIds,
               mergedRecordsCount: mergedRecords.length,
-              mergedIds: mergedRecords.map(r => r.getId?.()).slice(0, 10),
+              mergedIds: mergedIds,
+              addedIds: addedIds,
+              duplicateIds: duplicateIds,
+              duplicatesFiltered: duplicateIds.length,
               timestamp: Date.now()
             })
+            
+            // Update widget-level accumulated records so they persist across query switches
+            if (onAccumulatedRecordsChange) {
+              onAccumulatedRecordsChange(mergedRecords)
+            }
           } catch (error) {
             debugLogger.log('RESULTS-MODE', {
               event: 'add-mode-error',
@@ -1150,7 +1420,7 @@ export function QueryTask (props: QueryTaskProps) {
                 
                 // Dispatch custom selection event so Widget state is updated immediately
                 // This is crucial for hash-based execution where QueryTask handles selection
-                dispatchSelectionEvent(props.widgetId, recordIdsToSelect, dsToUse, queryItem.configId)
+                dispatchSelectionEvent(props.widgetId, recordIdsToSelect, dsToUse, queryItem.configId, eventManager)
               } catch (error) {
                 const errorMessage = error instanceof Error ? error.message : 'Failed to select query results'
                 setSelectionError(errorMessage)
@@ -1171,7 +1441,7 @@ export function QueryTask (props: QueryTaskProps) {
               hasSelectedRecordsRef.current = false
               
               // Notify Widget that selection is cleared
-              dispatchSelectionEvent(props.widgetId, [], dsToUse, queryItem.configId)
+              dispatchSelectionEvent(props.widgetId, [], dsToUse, queryItem.configId, eventManager)
               
               debugLogger.log('RESULTS-MODE', {
                 event: 'remove-mode-all-records-removed-selection-cleared',
@@ -1947,9 +2217,54 @@ export function QueryTask (props: QueryTaskProps) {
                           
                           // If switching FROM "New" TO "Add to" mode and we have current results,
                           // merge them with existing accumulated records before changing mode
-                          const recordsToCapture = (effectiveRecords && effectiveRecords.length > 0) 
-                            ? (effectiveRecords as FeatureDataRecord[])
-                            : (outputDS?.getSelectedRecords() as FeatureDataRecord[] || [])
+                          //
+                          // SOURCE OF TRUTH ARCHITECTURE (r018.65):
+                          // - outputDS.getSelectedRecords() is the SINGLE SOURCE OF TRUTH for current selection
+                          //   It correctly filters out removed records and stays in sync with user actions
+                          // - effectiveRecords (from recordsRef.current) contains stale query results that may
+                          //   include removed records, so it should only be used as a fallback when outputDS
+                          //   has no selection (e.g., during query execution before selection is applied)
+                          // - This ensures removed records are never accidentally included in accumulatedRecords
+                          
+                          // DEBUG: Log state before capture to verify assumptions
+                          const effectiveRecordsCount = effectiveRecords?.length || 0
+                          const outputDSSelectedRecords = outputDS?.getSelectedRecords() as FeatureDataRecord[] || []
+                          const outputDSSelectedCount = outputDSSelectedRecords.length
+                          const accumulatedRecordsCount = accumulatedRecords?.length || 0
+                          
+                          debugLogger.log('RESULTS-MODE', {
+                            event: 'mode-switch-debug-before-capture',
+                            widgetId: props.widgetId,
+                            previousMode,
+                            newMode,
+                            effectiveRecordsCount,
+                            outputDSSelectedCount,
+                            accumulatedRecordsCount,
+                            outputDSId: outputDS?.id,
+                            hasEffectiveRecords: effectiveRecords && effectiveRecords.length > 0,
+                            hasOutputDSSelected: outputDSSelectedRecords.length > 0,
+                            timestamp: Date.now()
+                          })
+                          
+                          // FIX (r018.65): Use outputDS.getSelectedRecords() as source of truth for mode switching
+                          // This correctly filters out removed records, unlike effectiveRecords which contains stale data
+                          // outputDS.getSelectedRecords() is the single source of truth that stays in sync with removals
+                          const recordsToCapture = outputDSSelectedRecords.length > 0
+                            ? outputDSSelectedRecords
+                            : (effectiveRecords && effectiveRecords.length > 0 
+                                ? (effectiveRecords as FeatureDataRecord[])
+                                : [])
+                          
+                          // DEBUG: Log which source was used
+                          debugLogger.log('RESULTS-MODE', {
+                            event: 'mode-switch-debug-after-capture',
+                            widgetId: props.widgetId,
+                            recordsToCaptureCount: recordsToCapture.length,
+                            source: outputDSSelectedRecords.length > 0 ? 'outputDS.getSelectedRecords()' : (effectiveRecords && effectiveRecords.length > 0 ? 'effectiveRecords' : 'none'),
+                            effectiveRecordsCount,
+                            outputDSSelectedCount,
+                            timestamp: Date.now()
+                          })
 
                           if (previousMode === SelectionType.NewSelection && 
                               newMode === SelectionType.AddToSelection &&
@@ -1965,14 +2280,30 @@ export function QueryTask (props: QueryTaskProps) {
                               existingAccumulated
                             )
                             
+                            const existingIds = existingAccumulated.map(r => r.getId())
+                            const capturedIds = recordsToCapture.map(r => r.getId())
+                            const mergedIds = mergedRecords.map(r => r.getId())
+                            const addedIds = mergedIds.filter(id => !existingIds.includes(id))
+                            const duplicateIds = capturedIds.filter(id => existingIds.includes(id))
+                            
                             debugLogger.log('RESULTS-MODE', {
                               event: 'capturing-current-results-on-mode-switch',
                               widgetId: props.widgetId,
                               previousMode,
                               newMode,
                               capturedRecordsCount: recordsToCapture.length,
+                              capturedIds: capturedIds,
+                              effectiveRecordsCount,
+                              outputDSSelectedCount,
                               existingAccumulatedCount: existingAccumulated.length,
-                              mergedRecordsCount: mergedRecords.length
+                              existingIds: existingIds,
+                              mergedRecordsCount: mergedRecords.length,
+                              mergedIds: mergedIds,
+                              addedIds: addedIds,
+                              duplicateIds: duplicateIds,
+                              duplicatesFiltered: duplicateIds.length,
+                              sourceUsed: outputDSSelectedRecords.length > 0 ? 'outputDS.getSelectedRecords()' : (effectiveRecords && effectiveRecords.length > 0 ? 'effectiveRecords' : 'none'),
+                              note: 'outputDS.getSelectedRecords()-is-source-of-truth-filters-removed-records'
                             })
                             
                             onAccumulatedRecordsChange(mergedRecords)
@@ -2019,9 +2350,54 @@ export function QueryTask (props: QueryTaskProps) {
                           // If switching FROM "New" TO "Remove from" mode and we have current results,
                           // merge them with existing accumulated records before changing mode
                           // (same pattern as "Add to" mode)
-                          const recordsToCaptureForRemove = (effectiveRecords && effectiveRecords.length > 0) 
-                            ? (effectiveRecords as FeatureDataRecord[])
-                            : (outputDS?.getSelectedRecords() as FeatureDataRecord[] || [])
+                          //
+                          // SOURCE OF TRUTH ARCHITECTURE (r018.65):
+                          // - outputDS.getSelectedRecords() is the SINGLE SOURCE OF TRUTH for current selection
+                          //   It correctly filters out removed records and stays in sync with user actions
+                          // - effectiveRecords (from recordsRef.current) contains stale query results that may
+                          //   include removed records, so it should only be used as a fallback when outputDS
+                          //   has no selection (e.g., during query execution before selection is applied)
+                          // - This ensures removed records are never accidentally included in accumulatedRecords
+                          
+                          // DEBUG: Log state before capture to verify assumptions
+                          const effectiveRecordsCountForRemove = effectiveRecords?.length || 0
+                          const outputDSSelectedRecordsForRemove = outputDS?.getSelectedRecords() as FeatureDataRecord[] || []
+                          const outputDSSelectedCountForRemove = outputDSSelectedRecordsForRemove.length
+                          const accumulatedRecordsCountForRemove = accumulatedRecords?.length || 0
+                          
+                          debugLogger.log('RESULTS-MODE', {
+                            event: 'mode-switch-debug-before-capture-remove',
+                            widgetId: props.widgetId,
+                            previousMode,
+                            newMode,
+                            effectiveRecordsCount: effectiveRecordsCountForRemove,
+                            outputDSSelectedCount: outputDSSelectedCountForRemove,
+                            accumulatedRecordsCount: accumulatedRecordsCountForRemove,
+                            outputDSId: outputDS?.id,
+                            hasEffectiveRecords: effectiveRecords && effectiveRecords.length > 0,
+                            hasOutputDSSelected: outputDSSelectedRecordsForRemove.length > 0,
+                            timestamp: Date.now()
+                          })
+                          
+                          // FIX (r018.65): Use outputDS.getSelectedRecords() as source of truth for mode switching
+                          // This correctly filters out removed records, unlike effectiveRecords which contains stale data
+                          // outputDS.getSelectedRecords() is the single source of truth that stays in sync with removals
+                          const recordsToCaptureForRemove = outputDSSelectedRecordsForRemove.length > 0
+                            ? outputDSSelectedRecordsForRemove
+                            : (effectiveRecords && effectiveRecords.length > 0 
+                                ? (effectiveRecords as FeatureDataRecord[])
+                                : [])
+                          
+                          // DEBUG: Log which source was used
+                          debugLogger.log('RESULTS-MODE', {
+                            event: 'mode-switch-debug-after-capture-remove',
+                            widgetId: props.widgetId,
+                            recordsToCaptureCount: recordsToCaptureForRemove.length,
+                            source: outputDSSelectedRecordsForRemove.length > 0 ? 'outputDS.getSelectedRecords()' : (effectiveRecords && effectiveRecords.length > 0 ? 'effectiveRecords' : 'none'),
+                            effectiveRecordsCount: effectiveRecordsCountForRemove,
+                            outputDSSelectedCount: outputDSSelectedCountForRemove,
+                            timestamp: Date.now()
+                          })
 
                           if (previousMode === SelectionType.NewSelection && 
                               newMode === SelectionType.RemoveFromSelection &&
@@ -2043,8 +2419,12 @@ export function QueryTask (props: QueryTaskProps) {
                               previousMode,
                               newMode,
                               capturedRecordsCount: recordsToCaptureForRemove.length,
+                              effectiveRecordsCount: effectiveRecordsCountForRemove,
+                              outputDSSelectedCount: outputDSSelectedCountForRemove,
                               existingAccumulatedCount: existingAccumulated.length,
-                              mergedRecordsCount: mergedRecords.length
+                              mergedRecordsCount: mergedRecords.length,
+                              sourceUsed: outputDSSelectedRecordsForRemove.length > 0 ? 'outputDS.getSelectedRecords()' : (effectiveRecords && effectiveRecords.length > 0 ? 'effectiveRecords' : 'none'),
+                              note: 'outputDS.getSelectedRecords()-is-source-of-truth-filters-removed-records'
                             })
                             
                             onAccumulatedRecordsChange(mergedRecords)
@@ -2183,6 +2563,7 @@ export function QueryTask (props: QueryTaskProps) {
                 mapView={mapView}
                 accumulatedRecords={accumulatedRecords}
                 onAccumulatedRecordsChange={onAccumulatedRecordsChange}
+                eventManager={eventManager}
                 onNavBack={async (clearResults = false) => {
                   // Handle navigation from QueryTaskResult
                   // If clearResults is true, clear everything and go to query tab

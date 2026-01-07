@@ -106,6 +106,7 @@ export interface QueryTaskResultProps {
   resultsMode?: SelectionType
   accumulatedRecords?: FeatureDataRecord[]
   onAccumulatedRecordsChange?: (records: FeatureDataRecord[]) => void
+  eventManager?: import('./hooks/use-event-handling').EventManager  // Chunk 7.1: Event Handling Manager
 }
 
 const resultStyle = css`
@@ -136,7 +137,7 @@ const resultStyle = css`
 `
 
 export function QueryTaskResult (props: QueryTaskResultProps) {
-  const { queryItem, queryParams, resultCount, maxPerPage, records, widgetId, outputDS, runtimeZoomToSelected, onNavBack, resultsMode, accumulatedRecords, onAccumulatedRecordsChange, useGraphicsLayerForHighlight, graphicsLayer, mapView } = props
+  const { queryItem, queryParams, resultCount, maxPerPage, records, widgetId, outputDS, runtimeZoomToSelected, onNavBack, resultsMode, accumulatedRecords, onAccumulatedRecordsChange, useGraphicsLayerForHighlight, graphicsLayer, mapView, eventManager } = props
   const getI18nMessage = hooks.useTranslation(defaultMessage)
   const intl = useIntl()
   const zoomToRecords = useZoomToRecords(mapView)
@@ -415,7 +416,7 @@ export function QueryTaskResult (props: QueryTaskResultProps) {
           lastSelectedFeatureRecordsRef.current = fdr // Store the full records for potential restoration
           
           // Notify Widget and HelperSimple of selection change
-          dispatchSelectionEvent(widgetId, recordIds, outputDS, queryItem.configId)
+          dispatchSelectionEvent(widgetId, recordIds, outputDS, queryItem.configId, eventManager)
         } catch (error) {
           const errorMessage = error instanceof Error ? error.message : 'Failed to select query results'
           setSelectionError(errorMessage)
@@ -1098,10 +1099,48 @@ export function QueryTaskResult (props: QueryTaskResultProps) {
       graphicsLayer
     )
     
+    // DIAGNOSTIC LOGGING: Full state BEFORE removal
+    const outputDSSelectedBefore = outputDS.getSelectedRecords() as FeatureDataRecord[] || []
+    const outputDSSelectedIdsBefore = outputDSSelectedBefore.map(r => r.getId())
+    const accumulatedRecordsIdsBefore = accumulatedRecords?.map(r => r.getId()) || []
+    const graphicsLayerIdsBefore = graphicsLayer?.graphics?.map(g => g.attributes?.OBJECTID || g.attributes?.id || g.attributes?.FID) || []
+    
+    debugLogger.log('RESULTS-MODE', {
+      event: 'x-button-removal-before-state',
+      widgetId,
+      removedRecordId: dataId,
+      outputDSSelectedCount: outputDSSelectedBefore.length,
+      outputDSSelectedIds: outputDSSelectedIdsBefore,
+      accumulatedRecordsCount: accumulatedRecords?.length || 0,
+      accumulatedRecordsIds: accumulatedRecordsIdsBefore,
+      graphicsLayerCount: graphicsLayer?.graphics?.length || 0,
+      graphicsLayerIds: graphicsLayerIdsBefore,
+      allSourcesMatch: outputDSSelectedIdsBefore.length === accumulatedRecordsIdsBefore.length && 
+                       outputDSSelectedIdsBefore.length === graphicsLayerIdsBefore.length &&
+                       JSON.stringify(outputDSSelectedIdsBefore.sort()) === JSON.stringify(accumulatedRecordsIdsBefore.sort()),
+      timestamp: Date.now()
+    })
+    
     // Update outputDS selection
     const selectedDatas = outputDS.getSelectedRecords() ?? []
     const updatedSelectedDatas = selectedDatas.filter(record => record.getId() !== dataId)
     const recordIds = updatedSelectedDatas.map(record => record.getId())
+    
+    // DEBUG: Log state fragmentation after removal
+    debugLogger.log('RESULTS-MODE', {
+      event: 'removeRecord-state-fragmentation-debug',
+      widgetId,
+      removedRecordId: dataId,
+      removedRecordIdsCount: removedRecordIds.size + 1, // +1 because we just added it
+      outputDSSelectedBeforeRemoval: selectedDatas.length,
+      outputDSSelectedAfterRemoval: updatedSelectedDatas.length,
+      recordsPropCount: records?.length || 0,
+      queryDataRecordsCount: queryData?.records?.length || 0,
+      accumulatedRecordsCount: accumulatedRecords?.length || 0,
+      resultsMode,
+      note: 'verify-if-recordsProp-contains-removed-record',
+      timestamp: Date.now()
+    })
     
     // Update outputDS selection
     if (typeof outputDS.selectRecordsByIds === 'function') {
@@ -1125,26 +1164,104 @@ export function QueryTaskResult (props: QueryTaskResultProps) {
     })
     window.dispatchEvent(selectionEvent)
     
-    // If in accumulation mode, also remove from accumulated records
+    // DIAGNOSTIC LOGGING: Full state AFTER removal (before sync)
+    const outputDSSelectedAfter = outputDS.getSelectedRecords() as FeatureDataRecord[] || []
+    const outputDSSelectedIdsAfter = outputDSSelectedAfter.map(r => r.getId())
+    const graphicsLayerIdsAfter = graphicsLayer?.graphics?.map(g => g.attributes?.OBJECTID || g.attributes?.id || g.attributes?.FID) || []
+    
+    debugLogger.log('RESULTS-MODE', {
+      event: 'x-button-removal-after-state-before-sync',
+      widgetId,
+      removedRecordId: dataId,
+      outputDSSelectedCount: outputDSSelectedAfter.length,
+      outputDSSelectedIds: outputDSSelectedIdsAfter,
+      graphicsLayerCount: graphicsLayer?.graphics?.length || 0,
+      graphicsLayerIds: graphicsLayerIdsAfter,
+      removedFromOutputDS: outputDSSelectedIdsAfter.length < outputDSSelectedIdsBefore.length,
+      removedFromGraphics: graphicsLayerIdsAfter.length < graphicsLayerIdsBefore.length,
+      timestamp: Date.now()
+    })
+    
+    // FIX (r018.68): Sync accumulatedRecords with outputDS.getSelectedRecords() as single source of truth
+    // This ensures immediate sync when X button is clicked - no lazy syncing
+    // outputDS.getSelectedRecords() is the authoritative source that stays in sync with removals
     const isAccumulationMode = resultsMode === SelectionType.AddToSelection || 
                                resultsMode === SelectionType.RemoveFromSelection
-    if (isAccumulationMode && onAccumulatedRecordsChange && accumulatedRecords && accumulatedRecords.length > 0) {
-      const remainingRecords = removeResultsFromAccumulated(
-        outputDS as FeatureLayerDataSource,
-        [data],
-        accumulatedRecords
-      )
+    if (isAccumulationMode && onAccumulatedRecordsChange) {
+      // Get the actual selected records from outputDS (single source of truth)
+      // This is called AFTER outputDS.selectRecordsByIds() above, so it reflects the removal
+      const actuallySelectedRecords = outputDS.getSelectedRecords() as FeatureDataRecord[] || []
       
-      debugLogger.log('RESULTS-MODE', {
-        event: 'x-button-removed-from-accumulated',
-        widgetId,
-        removedRecordId: dataId,
-        accumulatedRecordsCountBefore: accumulatedRecords.length,
-        remainingRecordsCount: remainingRecords.length,
-        wasRemoved: remainingRecords.length < accumulatedRecords.length
-      })
-      
-      onAccumulatedRecordsChange(remainingRecords)
+      // Sync accumulatedRecords with what's actually selected
+      // This ensures removed records are immediately excluded from accumulatedRecords
+      if (accumulatedRecords && accumulatedRecords.length > 0) {
+        // Build a Set of actually selected IDs for fast lookup
+        const actuallySelectedIds = new Set(actuallySelectedRecords.map(r => r.getId()))
+        
+        // Filter accumulatedRecords to only include records that are actually selected
+        const syncedRecords = accumulatedRecords.filter(record => 
+          actuallySelectedIds.has(record.getId())
+        )
+        
+        const syncedRecordsIds = syncedRecords.map(r => r.getId())
+        
+        debugLogger.log('RESULTS-MODE', {
+          event: 'x-button-immediate-sync-with-outputds',
+          widgetId,
+          removedRecordId: dataId,
+          accumulatedRecordsCountBefore: accumulatedRecords.length,
+          accumulatedRecordsIdsBefore: accumulatedRecordsIdsBefore,
+          actuallySelectedCount: actuallySelectedRecords.length,
+          actuallySelectedIds: outputDSSelectedIdsAfter,
+          syncedRecordsCount: syncedRecords.length,
+          syncedRecordsIds: syncedRecordsIds,
+          recordsRemoved: accumulatedRecords.length - syncedRecords.length,
+          removedIds: accumulatedRecordsIdsBefore.filter(id => !syncedRecordsIds.includes(id)),
+          note: 'immediate-sync-with-outputds-getSelectedRecords',
+          timestamp: Date.now()
+        })
+        
+        // Update accumulatedRecords to match reality (immediate sync, not lazy)
+        onAccumulatedRecordsChange(syncedRecords)
+        
+        // DIAGNOSTIC LOGGING: Full state AFTER sync
+        debugLogger.log('RESULTS-MODE', {
+          event: 'x-button-removal-after-sync-state',
+          widgetId,
+          removedRecordId: dataId,
+          accumulatedRecordsCountAfter: syncedRecords.length,
+          accumulatedRecordsIdsAfter: syncedRecordsIds,
+          outputDSSelectedCount: outputDSSelectedAfter.length,
+          outputDSSelectedIds: outputDSSelectedIdsAfter,
+          graphicsLayerCount: graphicsLayer?.graphics?.length || 0,
+          graphicsLayerIds: graphicsLayerIdsAfter,
+          allSourcesMatch: syncedRecordsIds.length === outputDSSelectedIdsAfter.length &&
+                           syncedRecordsIds.length === graphicsLayerIdsAfter.length &&
+                           JSON.stringify(syncedRecordsIds.sort()) === JSON.stringify(outputDSSelectedIdsAfter.sort()),
+          timestamp: Date.now()
+        })
+      } else if (actuallySelectedRecords.length > 0) {
+        // If accumulatedRecords is empty but outputDS has selection, sync it
+        debugLogger.log('RESULTS-MODE', {
+          event: 'x-button-syncing-empty-accumulated-with-outputds',
+          widgetId,
+          removedRecordId: dataId,
+          actuallySelectedCount: actuallySelectedRecords.length,
+          note: 'accumulatedRecords-was-empty-syncing-from-outputds',
+          timestamp: Date.now()
+        })
+        onAccumulatedRecordsChange(actuallySelectedRecords)
+      } else {
+        // Both are empty - ensure accumulatedRecords is empty
+        debugLogger.log('RESULTS-MODE', {
+          event: 'x-button-both-empty-syncing',
+          widgetId,
+          removedRecordId: dataId,
+          note: 'both-accumulatedRecords-and-outputds-are-empty',
+          timestamp: Date.now()
+        })
+        onAccumulatedRecordsChange([])
+      }
     }
     
     // Log after removeRecord completes to check if expandAll changed
