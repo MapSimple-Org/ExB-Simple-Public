@@ -344,19 +344,20 @@ This guide provides **specific testing instructions** for each chunk during the 
 
 ## Chunk 5: Accumulated Records Management
 
-**Status:** 🔄 **IN PROGRESS** - Parallel Execution Phase (r018.26-r018.56)
+**Status:** ✅ **COMPLETE** (r018.58)
 
 ### Debug Switches
 
-**For Step 5.2 (Parallel Execution):**
+**For Production Testing:**
 ```
-?debug=CHUNK-5-COMPARE,RESULTS-MODE,FORM
+?debug=RESULTS-MODE,FORM
 ```
 
 **Individual Switches:**
-- **`CHUNK-5-COMPARE`** - Comparison logs between old and new implementation
-- **`RESULTS-MODE`** - Results mode state change logs
+- **`RESULTS-MODE`** - Results mode state change logs (permanent)
 - **`FORM`** - Form value setting logs (for hash parameter testing)
+
+**Note:** Chunk 5 migration is complete. The old implementation has been removed and replaced with `AccumulatedRecordsManager`. Comparison logs (`CHUNK-5-COMPARE`) were removed after verification (r018.58).
 
 ### What to Test
 
@@ -369,14 +370,12 @@ This guide provides **specific testing instructions** for each chunk during the 
 4. Check browser console for logs
 
 **Expected Logs:**
-- `[QUERYSIMPLE-RESULTS-MODE]` - `handleResultsModeChange-triggered` (old implementation)
-- `[QUERYSIMPLE-RESULTS-MODE]` - `handleResultsModeChange-triggered` (new implementation)
-- `[QUERYSIMPLE-CHUNK-5-COMPARE]` - `handleResultsModeChange-comparison` with `match: true`
+- `[QUERYSIMPLE-RESULTS-MODE]` - `handleResultsModeChange-triggered`
 
 **What to Verify:**
-- ✅ Both implementations detect mode change
-- ✅ Comparison logs show `match: true`
+- ✅ Mode change detected correctly
 - ✅ Accumulated records update correctly
+- ✅ State synchronized with manager
 
 #### Test 2: Accumulated Records Changes
 
@@ -386,14 +385,12 @@ This guide provides **specific testing instructions** for each chunk during the 
 3. Check browser console for logs
 
 **Expected Logs:**
-- `[QUERYSIMPLE-RESULTS-MODE]` - `handleAccumulatedRecordsChange-triggered` (old implementation)
-- `[QUERYSIMPLE-RESULTS-MODE]` - `handleAccumulatedRecordsChange-triggered` (new implementation)
-- `[QUERYSIMPLE-CHUNK-5-COMPARE]` - `handleAccumulatedRecordsChange-comparison` with `match: true`
+- `[QUERYSIMPLE-RESULTS-MODE]` - `handleAccumulatedRecordsChange-triggered`
 
 **What to Verify:**
-- ✅ Both implementations track accumulated records
-- ✅ Comparison logs show `match: true` for record counts
+- ✅ Accumulated records tracked correctly
 - ✅ Records accumulate correctly
+- ✅ State synchronized with manager
 
 #### Test 3: Hash Parameter Processing (Recent Fixes)
 
@@ -456,14 +453,13 @@ This guide provides **specific testing instructions** for each chunk during the 
 
 ### Success Criteria for Chunk 5
 
-- ✅ All comparison logs show `match: true`
-- ✅ **NO** logs with `match: false`
 - ✅ Accumulated records accumulate correctly
 - ✅ Accumulated records remove correctly
 - ✅ Hash parameters don't re-execute when switching queries
 - ✅ Input values persist as visual records
 - ✅ Remove mode resets when all records cleared
 - ✅ Mode state reflects current capability
+- ✅ Manager implementation handles all state changes correctly
 
 ### Recent Fixes Verified
 
