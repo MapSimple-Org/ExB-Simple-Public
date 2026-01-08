@@ -1,58 +1,184 @@
 # Current Work Status
 
-**Last Updated:** 2026-01-08 (Release 018.69 - Data Source Sync Investigation)  
-**Branch:** `feature/chunk-rock`  
-**Developer:** Adam Cabrera  
-**Current Version:** v1.19.0-r018.69
+**Last Updated:** 2026-01-08 (Release 018.97 - Universal Tab Count & Manual Removal Cleanup)
+**Branch:** `feature/chunk-rock`
+**Developer:** Adam Cabrera
+**Current Version:** v1.19.0-r018.97
+
+## Recent Releases
+
+### r018.97 - Universal Tab Count & Clear Results Fix (2026-01-08) ✅
+**Problem:** 
+1. Tab count not updating when records removed via X button in New mode
+2. Clear Results button throwing `setRemovedRecordIds is not defined` error
+
+**Solution:**
+- Made `accumulatedRecords` the universal source of truth across ALL modes (New, Add, Remove)
+- `effectiveRecords` now prefers `accumulatedRecords` universally
+- In New mode, query results populate `accumulatedRecords` instead of clearing it
+- Simplified `clearResults()` to delegate to parent
+- Removed broken `setRemovedRecordIds` reference
+
+**Files Modified:** `query-result.tsx`, `query-task.tsx`, `version.ts`
+
+### r018.96 - Removed Manual Removal Tracking (2026-01-08) ✅
+**Problem:** 
+Unnecessarily complex `manuallyRemovedRecordIds` tracking prevented re-adding records when same query run again in Add mode.
+
+**Solution:**
+Complete removal of `manuallyRemovedRecordIds` state and filtering logic. The r018.94 refactoring made this obsolete.
+
+**Files Modified:** `widget.tsx`, `query-task.tsx`, `query-result.tsx`, `query-task-list.tsx`, `version.ts`
+
+---
 
 ## Active Work
 
-### Current Task: Data Source Sync Investigation 🔍 **IN PROGRESS** (r018.69)
+### Current Task: Chunk Architecture Implementation (In Progress)
+Working on modular "chunk" architecture to break down the monolithic widget into testable, maintainable modules.
+
+---
+
+
+## Historical Context
+
+## Active Work
+
+### Current Task: Prevent Manually Removed Records from Reappearing in ADD Mode 🛡️ **IMPLEMENTATION COMPLETE** (r018.75)
 
 **Problem Statement:**
-Manually removed records reappear when switching queries in accumulation mode ("Add to Selection" or "Remove from Selection"). Specifically:
-- User removes records using the X button in the Results tab
-- User switches to a different query (e.g., from "Major number" to "Parcel number")
-- The removed records reappear in the graphics layer (but not in the selection or results list)
-- When the widget is closed and reopened, the records disappear again
+Manually removed records reappear when switching queries in accumulation mode ("Add to Selection" or "Remove from Selection"). The root cause is that hash-triggered queries execute independently and don't know about manual user actions that removed specific records.
 
-**What Has Not Worked:**
-1. **r018.65**: Using `outputDS.getSelectedRecords()` as source of truth for mode switching - This correctly filters removed records when switching modes, but doesn't prevent re-appearance when switching queries.
-2. **r018.66**: Clearing graphics layer before re-selecting accumulated records on query switch - This prevents stale graphics from persisting, but doesn't address the root cause of records reappearing.
-3. **r018.67**: Syncing `accumulatedRecords` with `outputDS.getSelectedRecords()` when re-selecting after query switch - This syncs the state, but records still reappear in graphics layer.
-4. **r018.68**: Immediate sync when X button is clicked AND sync before query switch - Both sync points execute correctly, but records still reappear.
+**Previous Approaches That Failed:**
+1. **r018.65-68**: Various sync attempts trying to fix the data source state management - These correctly maintained state but didn't prevent hash-triggered queries from resurrecting removed records.
+2. **r018.69**: Comprehensive diagnostic logging - Confirmed that state management is correct, but hash queries were the resurrection source.
 
-**Why We Think This Is Happening:**
-The issue appears to be a timing/synchronization problem:
-- `accumulatedRecords` state is being synced correctly (removed records are excluded)
-- `outputDS.getSelectedRecords()` correctly reflects removals
-- But when `selectRecordsAndPublish` is called during query switch, it may be using stale `accumulatedRecords` or the graphics layer is being populated from a different source
-- The graphics layer shows records that aren't in `outputDS.getSelectedRecords()` or `accumulatedRecords`, suggesting a race condition or multiple code paths updating the graphics layer
+**The Surgical Solution: Direct Hash Parameter Modification (r018.74)**
+Instead of blocking hash queries entirely (which broke legitimate deep linking), surgically modify the hash parameters themselves to remove manually deselected record IDs.
 
-**What We Are Considering:**
-1. **Multiple Graphics Layer Updates**: There may be multiple code paths updating the graphics layer during query switch, and one of them is using stale data
-2. **Race Condition**: The sync operations may be happening, but `selectRecordsAndPublish` is being called with stale `accumulatedRecords` before the sync completes
-3. **Graphics Layer Source**: The graphics layer may be populated from a different source (e.g., `recordsRef.current`, `effectiveRecords`, or query results) that hasn't been synced
-4. **State Propagation Delay**: React state updates may not have propagated when `selectRecordsAndPublish` is called, causing it to use old `accumulatedRecords`
+**How It Works:**
+1. **When a record is manually removed**: Remove its ID from the relevant hash parameter values
+2. **When hash queries execute**: They only process the remaining IDs in the hash
+3. **Result**: Hash parameters become a precise representation of exactly what should be selected
 
-**Current Investigation (r018.69):**
-Added comprehensive diagnostic logging to track:
-- Full state (IDs) of `accumulatedRecords`, `outputDS.getSelectedRecords()`, and graphics layer BEFORE and AFTER:
-  - X button removal
-  - Query switch sync
-  - Re-selection after query switch
-  - Mode switches
-  - Query completion
-- Record IDs being added/removed at each step
-- Whether all sources match at each critical point
+**Example:**
+- Original hash: `?id=1,2,3,4,5` (select specific records 1,2,3,4,5)
+- User removes records 1, 2, 3 using X button
+- Modified hash: `?id=4,5`
+- Next hash query only selects records 4 and 5
+- Hash becomes surgical representation of current selection intent
 
-**Debug Switches:** `RESULTS-MODE`
+**Implementation Details:**
 
-**Next Steps:**
-1. Collect logs from reproduction scenario
-2. Analyze logs to identify where records diverge
-3. Identify the code path that's adding removed records back
-4. Fix the root cause
+**1. Hash Modification Logic (`query-result.tsx` `removeRecord` function):**
+```typescript
+// Parse current hash parameters
+const hash = window.location.hash.substring(1)
+const urlParams = new URLSearchParams(hash)
+
+// Find hash parameters that contain the removed record ID
+// (This assumes we know which parameter contains the IDs, e.g., 'id', 'pin', etc.)
+// For simplicity, we'll check common ID parameters or use a mapping
+const idParamKeys = ['id', 'pin', 'major', 'parcel'] // Add more as needed
+
+let hashModified = false
+idParamKeys.forEach(paramKey => {
+  if (urlParams.has(paramKey)) {
+    const currentValue = urlParams.get(paramKey) || ''
+    const ids = currentValue.split(',').map(id => id.trim()).filter(id => id)
+
+    // Remove the specific ID from this parameter
+    const filteredIds = ids.filter(id => id !== dataId)
+
+    if (filteredIds.length !== ids.length) {
+      // IDs were removed, update the parameter
+      if (filteredIds.length > 0) {
+        urlParams.set(paramKey, filteredIds.join(','))
+      } else {
+        // No IDs left, remove the parameter entirely
+        urlParams.delete(paramKey)
+      }
+      hashModified = true
+    }
+  }
+})
+
+if (hashModified) {
+  // Update hash surgically
+  const newHash = urlParams.toString()
+  window.history.replaceState(null, '', `#${newHash}`)
+
+  debugLogger.log('HASH', {
+    event: 'hash-surgically-modified-id-removed',
+    widgetId,
+    removedRecordId: dataId,
+    originalHash: hash,
+    newHash: newHash,
+    timestamp: Date.now()
+  })
+}
+```
+
+**2. Hash Query Processing (`widget.tsx` `handleOpenWidgetEvent`):**
+```typescript
+// Hash parameters now contain only the IDs that should be selected
+// No additional filtering needed - the hash already represents the precise selection
+const hash = window.location.hash.substring(1)
+const urlParams = new URLSearchParams(hash)
+
+// Process hash normally - it already contains only desired IDs
+// ... existing hash processing logic ...
+
+debugLogger.log('HASH-EXEC', {
+  event: 'hash-query-processed-surgical-ids-only',
+  widgetId: id,
+  hashParams: Object.fromEntries(urlParams.entries()),
+  timestamp: Date.now()
+})
+```
+
+**Benefits of This Approach:**
+- ✅ **Truly Surgical**: Hash parameters become exact representation of desired selection
+- ✅ **No Extra Parameters**: No "exclude" clutter - hash stays clean and meaningful
+- ✅ **Self-Documenting**: Hash shows exactly which records should be selected
+- ✅ **Preserves Hash Functionality**: Deep linking works, URL sharing works
+- ✅ **No State Management**: No need to track removed records separately
+- ✅ **Backwards Compatible**: Existing hashes work normally
+- ✅ **Intuitive**: `?id=4,5` clearly means "select records 4 and 5"
+
+**Debug Logging:** `HASH` (for hash modifications), `RESULTS-MODE` (for record removal tracking)
+
+**Implementation Plan:**
+1. **r018.74**: Implement direct hash parameter modification in `removeRecord` function
+2. **r018.75**: Track manually removed records and filter them from ADD mode queries
+3. **r018.76**: Test complete flow: remove record → hash surgically updated → ADD mode respects removals
+4. **r018.77**: Edge case testing (multiple parameters, empty parameters, etc.)
+5. **r018.78**: Diagnostic logging to verify mode switch conditions (ADD/REMOVE button conditions)
+
+**Risks & Mitigations:**
+- **Parameter Identification**: Need to correctly identify which hash parameter contains the record IDs
+  - **Mitigation**: Use configurable mapping of parameter names to ID types
+  - **Mitigation**: Fallback to no modification if parameter unclear
+- **Multiple Parameters**: Hash might have multiple ID parameters (e.g., `?pin=123&major=456`)
+  - **Mitigation**: Check all known ID parameters and remove from each
+- **URL Length Limits**: Very long ID lists still hit browser limits (~2048 chars)
+  - **Mitigation**: Monitor URL length and consider truncation warnings
+- **Hash Context Loss**: Removing IDs might lose original search context
+  - **Mitigation**: Only modify parameters that explicitly contain specific record IDs
+
+**Testing Scenarios:**
+1. **Basic Removal**: Remove record → verify hash updated → switch queries → verify record stays removed
+2. **Multiple Removals**: Remove multiple records → verify all excluded in hash
+3. **Hash Navigation**: Navigate with pre-existing exclusions → verify filtering works
+4. **Mode Switching**: Switch to "New Selection" → verify exclusions cleared
+5. **Widget Lifecycle**: Close/reopen widget → verify exclusions persist
+6. **Edge Cases**: Duplicate IDs, invalid IDs, empty exclusions
+
+**Files to Modify:**
+- `query-simple/src/runtime/query-result.tsx` - Add hash modification in `removeRecord`
+- `query-simple/src/runtime/widget.tsx` - Add exclusion parsing in `handleOpenWidgetEvent`
+- `query-simple/src/runtime/query-task.tsx` - Add exclusion filtering in query execution (if needed)
+- `query-simple/src/version.ts` - Increment version numbers
 
 ---
 
@@ -722,3 +848,71 @@ Similar to "Add to" mode:
 - `selection-utils.ts` - Selection management utilities
 - **NEW:** `results-management-utils.ts` - Results mode utilities (to be created)
 
+## 🏥 Surgical Hash Modification for Manually Removed Records (r018.74)
+
+**Problem:** When users manually remove records using the "Remove" option or X button, these records would reappear when switching queries in accumulation mode (Add/Remove).
+
+**Root Cause:** The URL hash parameters represented the original query intent and weren't updated when records were manually removed. When switching queries, the hash parameters would execute again, bringing back the removed records.
+
+**Solution:** Directly modify hash parameters to remove record IDs when they are manually removed, ensuring the hash accurately reflects the user's current selection intent.
+
+**Implementation:**
+- Modified `removeRecord` function in `query-result.tsx` to surgically update hash parameters
+- Removes specific record IDs from relevant hash parameters (`id`, `pin`, `major`, `parcel`, `shortId`)
+- If a parameter becomes empty after removal, it's completely removed from the hash
+- Maintains deep linking functionality while preventing resurrection of removed records
+
+**Benefits:**
+- ✅ Hash accurately represents current selection intent
+- ✅ Deep linking still works for sharing/bookmarking
+- ✅ No permanent filtering - removed records can still be queried if needed
+- ✅ Works across all accumulation modes
+
+## 🛡️ Prevent Manually Removed Records from Reappearing in ADD Mode (r018.75)
+
+**Problem:** Even with surgical hash modification, manually removed records would still reappear when switching to ADD mode and changing queries.
+
+**Root Cause:** In ADD mode, new query results were merged with existing accumulated records without checking if any of the new results were previously manually removed.
+
+**Solution:** Track manually removed record IDs at the widget level and filter them out from new query results in ADD mode.
+
+**Implementation:**
+- Added `manuallyRemovedRecordIds` state to widget.tsx to track removed records
+- Modified `removeRecord` callback to notify widget when records are manually removed
+- Updated ADD mode logic in `query-task.tsx` to filter out manually removed records from new query results
+- Clear tracking when switching to NEW mode (fresh start)
+- Enhanced logging to track filtering behavior
+
+**Benefits:**
+- ✅ Manually removed records stay removed even when switching queries in ADD mode
+- ✅ Temporary tracking (resets on NEW mode) - not permanent exclusion
+- ✅ Works alongside surgical hash modification for comprehensive protection
+- ✅ Detailed logging for debugging resurrection issues
+
+## 🔍 Mode Switch Condition Diagnostic Logging (r018.78)
+
+**Problem:** Despite implementing surgical hash modification (r018.74) and manually removed records tracking (r018.75), testing revealed that manually removed records still reappear when switching queries in ADD mode. The logs showed records being captured correctly (118 records), but the merge operation that should update `accumulatedRecords` was never executing.
+
+**Root Cause Investigation:** The `capturing-current-results-on-mode-switch` log event was never appearing, suggesting the condition check guarding the merge operation was failing silently.
+
+**Solution:** Add comprehensive diagnostic logging to check each condition in the mode switch logic individually, allowing us to pinpoint exactly which condition is preventing the merge from executing.
+
+**Implementation:**
+- Added `conditionCheck` object that evaluates each part of the compound if-statement separately
+- Logs each condition's result: `previousModeIsNew`, `newModeIsAdd`, `hasRecordsToCapture`, `hasOutputDS`, `hasOnAccumulatedRecordsChange`
+- Added `allConditionsMet` calculated field to see if all conditions together evaluate to true
+- Added else block to log when merge is skipped with full condition details
+- Applied to both ADD button and REMOVE button mode switch handlers
+
+**Diagnostic Events:**
+- `mode-switch-condition-check`: Logs individual condition results before executing merge logic
+- `mode-switch-merge-skipped`: Logs when merge is not executed due to failed conditions
+- `mode-switch-condition-check-remove`: Same as above but for REMOVE button
+
+**Expected Outcome:** Logs will reveal which specific condition is false, allowing us to:
+1. Identify if `onAccumulatedRecordsChange` callback is missing/undefined
+2. Verify `previousMode` and `newMode` have expected values
+3. Confirm `recordsToCapture` has the correct length
+4. Check if `outputDS` is properly defined
+
+**Next Steps:** Once we identify the failing condition, we can implement the appropriate fix to ensure the merge executes and `accumulatedRecords` state is properly updated when switching to ADD mode.

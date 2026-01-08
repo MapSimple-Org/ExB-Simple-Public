@@ -31,6 +31,7 @@ export interface QueryTaskListProps {
   activeTab?: 'query' | 'results'
   onTabChange?: (tab: 'query' | 'results') => void
   eventManager?: EventManager  // Chunk 7.1: Event Handling Manager
+  // FIX (r018.96): Removed manuallyRemovedRecordIds and onManualRemoval - no longer needed
 }
 
 interface GroupedQueries {

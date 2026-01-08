@@ -5,6 +5,26 @@ All notable changes to MapSimple Experience Builder widgets will be documented i
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.19.0-r018.97] - 2025-01-08
+
+### Fixed
+- **Tab Count in New Mode**: Tab count now updates correctly when records are removed via X button in New mode. Previously, the count remained static (e.g., 121/121) even after removing records.
+- **Clear Results Button**: Fixed `ReferenceError: setRemovedRecordIds is not defined` when clicking Clear Results button on Results tab.
+- **Universal Tab Count Architecture**: `accumulatedRecords` is now the single source of truth for displayed records across ALL modes (New, Add, Remove), ensuring consistent tab count behavior.
+
+### Changed
+- **Simplified Clear Results Logic**: Refactored `clearResults()` in `query-result.tsx` to delegate directly to parent's `clearResult()` method, eliminating redundant local state cleanup.
+- **Universal accumulatedRecords Sync**: Removed mode-specific checks - `accumulatedRecords` now syncs in all modes for universal tab count tracking.
+
+## [1.19.0-r018.96] - 2025-01-08
+
+### Removed
+- **Manual Removal Tracking**: Eliminated `manuallyRemovedRecordIds` state and all related filtering logic across `widget.tsx`, `query-task.tsx`, `query-result.tsx`, and `query-task-list.tsx`.
+
+### Changed
+- **Simplified Architecture**: Removed unnecessary complexity by relying on `mergeResultsIntoAccumulated`'s composite key duplicate detection. Running the same query after removing records now correctly re-adds those records in Add mode.
+- **Cleaner Code**: Removed over 200 lines of tracking logic that was made obsolete by the r018.94 architectural refactoring.
+
 ## [1.19.0-r017.60] - 2025-12-23
 
 ### Added
