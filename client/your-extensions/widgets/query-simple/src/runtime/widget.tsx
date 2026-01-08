@@ -86,15 +86,15 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
   // Key: "shortId:value" (e.g., "pin:2223059013")
   private processedHashParamsRef = new Set<string>()
 
-  state: { 
-    initialQueryValue?: { shortId: string, value: string }, 
-    isPanelVisible?: boolean, 
-    hasSelection?: boolean, 
-    selectionRecordCount?: number, 
-    lastSelection?: { recordIds: string[], outputDsId: string, queryItemConfigId: string }, 
-    resultsMode?: SelectionType, 
-    accumulatedRecords?: FeatureDataRecord[], 
-    graphicsLayerInitialized?: boolean, 
+  state: {
+    initialQueryValue?: { shortId: string, value: string },
+    isPanelVisible?: boolean,
+    hasSelection?: boolean,
+    selectionRecordCount?: number,
+    lastSelection?: { recordIds: string[], outputDsId: string, queryItemConfigId: string },
+    resultsMode?: SelectionType,
+    accumulatedRecords?: FeatureDataRecord[],
+    graphicsLayerInitialized?: boolean,
     activeTab?: 'query' | 'results',
     // Track when HelperSimple explicitly opens widget - only then should query-task-list use initialQueryValue for selection
     // Using state instead of ref ensures React triggers re-renders when flag changes
@@ -116,13 +116,42 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
   }
 
   /**
+   * Resets the manual modifications flag when user starts fresh operations.
+   * This allows hash-triggered queries to work again after explicit user actions.
+   */
+  resetManualModifications = () => {
+    // FIX (r018.96): Removed manuallyRemovedRecordIds tracking - no longer needed
+    // Duplicate detection in mergeResultsIntoAccumulated handles preventing duplicates
+    const hasManualModifications = this.state.hasManualModifications
+
+    debugLogger.log('RESULTS-MODE', {
+      event: 'reset-manual-modifications-check',
+      widgetId: this.props.id,
+      hasManualModifications,
+      note: 'r018.96: No manuallyRemovedRecordIds tracking',
+      timestamp: Date.now()
+    })
+
+    if (hasManualModifications) {
+      debugLogger.log('RESULTS-MODE', {
+        event: 'resetting-manual-modifications',
+        widgetId: this.props.id,
+        reason: 'user-started-fresh-operation',
+        hadManualModificationsFlag: hasManualModifications,
+        note: 'r018.96: No manuallyRemovedRecordIds to clear',
+        timestamp: Date.now()
+      })
+    }
+  }
+
+  /**
    * Handles HelperSimple's open widget event.
    * QuerySimple should only process hash parameters when HelperSimple explicitly opens the widget.
    * This ensures HelperSimple remains the orchestrator and prevents autonomous hash processing.
    */
   handleOpenWidgetEvent = (event: CustomEvent) => {
     const { id } = this.props
-    
+
     debugLogger.log('HASH-EXEC', {
       event: 'querysimple-handleopenwidgetevent-received',
       widgetId: id,
@@ -134,11 +163,14 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
         initialQueryValueShortId: this.state.initialQueryValue?.shortId,
         initialQueryValueValue: this.state.initialQueryValue?.value,
         processedHashParams: Array.from(this.processedHashParamsRef),
-        currentUrlHash: window.location.hash.substring(1)
+        currentUrlHash: window.location.hash.substring(1),
       },
       timestamp: Date.now()
     })
-    
+
+    // With surgical hash modification, the hash already contains only desired record IDs
+    // No need to block processing - the hash is now a precise representation of selection intent
+
     // Only process if this event is for our widget
     if (event.detail?.widgetId !== id) {
       debugLogger.log('HASH-EXEC', {
@@ -1402,6 +1434,11 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
       this.state.initialQueryValue?.shortId,
       this.removeHashParameter
     )
+
+    // Reset manual modifications when switching to New Selection mode
+    if (mode === SelectionType.NewSelection && this.state.resultsMode !== SelectionType.NewSelection) {
+      this.resetManualModifications()
+    }
 
     // Update widget state from manager's return value
     this.setState({
