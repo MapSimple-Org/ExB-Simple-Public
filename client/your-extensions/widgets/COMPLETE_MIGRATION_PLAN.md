@@ -174,7 +174,7 @@ This document outlines a **complete, safe migration** of all widget logic from `
 **Logging:** Map view change logs (`MAP-EXTENT` feature), essential logs preserved
 
 ### Chunk 7: Event Handling
-**Status:** ✅ **COMPLETE** (r018.111)  
+**Status:** ✅ **COMPLETE** (r018.128)  
 **Complexity:** Medium  
 **Risk:** Medium  
 **Methods:** Event listener setup/cleanup, custom event dispatching  
@@ -184,9 +184,16 @@ This document outlines a **complete, safe migration** of all widget logic from `
 - ✅ Step 7.2: Parallel execution with comparison logging (r018.59-098)
 - ✅ Step 7.3: Switch to manager, commented old code (r018.103)
 - ✅ Step 7.4: Cleanup - removed commented code and comparison logs (r018.111)
-**Debug Switches:** `EVENTS`
-**Logging:** Event setup/cleanup logs (`EVENTS` feature)
-**Note:** During integration, discovered and fixed two major hash execution bugs (r018.98-110)
+**Debug Switches:** `EVENTS`, `HASH-EXEC`, `FORM`
+**Logging:** Event setup/cleanup logs (`EVENTS` feature), hash execution logs (`HASH-EXEC`), form population logs (`FORM`)
+**Bugs Fixed During Integration:**
+- r018.98-102: Fixed hash parameters not re-executing (removed processedHashParamsRef blocking)
+- r018.104: Fixed Remove mode graphics not being removed from layer
+- r018.105-110: Fixed intermittent first-load hash execution bug (race condition with outputDS)
+- r018.112-122: Fixed hash execution for mid-session hash changes (SqlExpressionRuntime onChange issues)
+- r018.125-127: Fixed DOM manipulation timing with MutationObserver + requestAnimationFrame
+- r018.128: Fixed tab switching loop that prevented auto-switch to Results tab
+**Note:** SqlExpressionRuntime is a black-box component that required extensive DOM manipulation workarounds. Consider forking or replacing in future.
 
 ---
 
