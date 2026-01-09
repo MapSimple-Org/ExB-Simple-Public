@@ -21,15 +21,15 @@ This guide provides **specific testing instructions** for each chunk during the 
 
 **These switches are temporary and will be removed after migration:**
 
-- **`CHUNK-1-COMPARE`** - Chunk 1 (URL Parameter) comparison logs
-- **`CHUNK-2-COMPARE`** - Chunk 2 (Visibility) comparison logs
-- **`CHUNK-3-COMPARE`** - Chunk 3 (Selection/Restoration) comparison logs
-- **`CHUNK-3-DECISION`** - Chunk 3 decision point logs
-- **`CHUNK-3-FALLBACK`** - Chunk 3 fallback logic logs
-- **`CHUNK-4-COMPARE`** - Chunk 4 (Graphics Layer) comparison logs
-- **`CHUNK-5-COMPARE`** - Chunk 5 (Accumulated Records) comparison logs
-- **`CHUNK-6-COMPARE`** - Chunk 6 (Map View) comparison logs
-- **`CHUNK-7-COMPARE`** - Chunk 7 (Events) comparison logs
+- ~~**`CHUNK-1-COMPARE`**~~ - ✅ Removed (r018.10)
+- ~~**`CHUNK-2-COMPARE`**~~ - ✅ Removed (r018.13)
+- ~~**`CHUNK-3-COMPARE`**~~ - ✅ Removed (r019.8 - Section 3.1 only)
+- **`CHUNK-3-DECISION`** - Chunk 3 decision point logs (for Sections 3.2-3.3)
+- **`CHUNK-3-FALLBACK`** - Chunk 3 fallback logic logs (for Sections 3.2-3.3)
+- ~~**`CHUNK-4-COMPARE`**~~ - ✅ Removed (r018.25)
+- ~~**`CHUNK-5-COMPARE`**~~ - ✅ Removed (r018.58)
+- ~~**`CHUNK-6-COMPARE`**~~ - ✅ Removed (r018.18)
+- ~~**`CHUNK-7-COMPARE`**~~ - ✅ Removed (r018.111)
 
 ### Permanent Debug Features
 
@@ -586,16 +586,27 @@ This guide provides **specific testing instructions** for each chunk during the 
 
 ---
 
-## Chunk 3: Selection & Restoration ⚠️ **CRITICAL** (Deferred to Last)
+## Chunk 3: Selection & Restoration (Sectioned Approach)
 
-**Note:** This chunk is deferred to last due to previous implementation failures. Complete Chunks 4, 5, 6, and 7 first to build momentum and reduce risk.
+**Status:** 🏗️ **IN PROGRESS** - Section 3.1 Complete (r019.8)
 
-### Debug Switches
+**Strategy:** Breaking Chunk 3 into 3 sections, completing each fully (tests, implementation, cleanup) before proceeding:
+- ✅ **Section 3.1:** Selection State Tracking (r019.8) - COMPLETE
+- 🔜 **Section 3.2:** Panel Open/Close Restoration - Pending
+- 🔜 **Section 3.3:** Map Identify Restoration - Pending
 
-**For Step 3.6 (Parallel Execution):**
+### Section 3.1: Selection State Tracking ✅ **COMPLETE** (r019.8)
+
+**Implementation:** `SelectionRestorationManager.handleSelectionChange()`  
+**Test File:** `tests/e2e/query-simple/selection-restoration.spec.ts`  
+**E2E Tests:** 6/6 passing (2.0 minutes)
+
+**Debug Switches:**
 ```
-?debug=CHUNK-3-COMPARE,CHUNK-3-DECISION,CHUNK-3-FALLBACK,SELECTION,RESTORE,GRAPHICS-LAYER
+?debug=RESTORE
 ```
+
+**Note:** `CHUNK-3-COMPARE` debug feature was removed in r019.8 after verification complete.
 
 ### What to Test
 
