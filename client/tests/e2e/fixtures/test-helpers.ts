@@ -291,35 +291,18 @@ export class KCSearchHelpers {
   async switchToResultsTab(widgetId: string) {
     console.log(`📑 Switching to Results tab in ${widgetId}`);
     
-    const clicked = await this.page.evaluate((wId) => {
-      // Try multiple selectors for the widget container
-      const widget = document.querySelector(`[data-widgetid="${wId}"]`) || 
-                     document.querySelector(`.widget-runtime[data-widgetid="${wId}"]`) ||
-                     document.querySelector(`.jimu-widget[data-widgetid="${wId}"]`);
-      
-      const findAndClickTab = (container: Element | Document) => {
-        const tabs = Array.from(container.querySelectorAll('.jimu-nav-link, button[role="tab"], .nav-link, .nav-item'));
-        const resultsTab = tabs.find(t => t.textContent?.trim().toLowerCase() === 'results');
-        if (resultsTab) {
-          (resultsTab as HTMLElement).click();
-          return true;
-        }
-        return false;
-      };
-
-      if (widget && findAndClickTab(widget)) return true;
-      // Global fallback if widget scope failed
-      return findAndClickTab(document);
-    }, widgetId);
-
-    if (clicked) {
-      console.log('   ✅ Switched to Results tab (via JS click)');
-      await this.page.waitForTimeout(2000);
-    } else {
-      console.log('   ⚠️ Could not find Results tab via JS, trying Playwright fallback...');
-      const resultsTab = this.getWidget(widgetId).locator('.jimu-nav-link, button[role="tab"], .nav-link').filter({ hasText: /^Results$/i }).first();
-      await resultsTab.click({ force: true }).catch(() => console.log('   ❌ Global fallback click for Results tab failed too'));
-      await this.page.waitForTimeout(2000);
+    // Use Playwright click (not JS evaluate) to trigger React's synthetic events
+    const widget = this.getWidget(widgetId);
+    const resultsTab = widget.locator('.jimu-nav-link, button[role="tab"], .nav-link, .nav-item').filter({ hasText: /^Results$/i }).first();
+    
+    try {
+      await resultsTab.waitFor({ state: 'visible', timeout: 3000 });
+      await resultsTab.click();
+      console.log('   ✅ Clicked Results tab (Playwright click)');
+      await this.page.waitForTimeout(1000);
+    } catch (e) {
+      console.log('   ❌ Could not find or click Results tab');
+      throw e;
     }
   }
 
