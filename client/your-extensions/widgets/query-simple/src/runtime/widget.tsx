@@ -457,22 +457,18 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
     
     // ============================================================================
     // OLD IMPLEMENTATION (parallel execution) - Chunk 7.1
+    // COMMENTED OUT - To be removed after verification (r018.103)
     // ============================================================================
-    // Listen for HelperSimple orchestration events
-    window.addEventListener(OPEN_WIDGET_EVENT, this.handleOpenWidgetEvent)
+    // window.addEventListener(OPEN_WIDGET_EVENT, this.handleOpenWidgetEvent)
+    // window.addEventListener(QUERYSIMPLE_SELECTION_EVENT, this.handleSelectionChange as EventListener)
+    // window.addEventListener(RESTORE_ON_IDENTIFY_CLOSE_EVENT, this.handleRestoreOnIdentifyClose as EventListener)
     
-    // Listen for selection changes from query-result
-    window.addEventListener(QUERYSIMPLE_SELECTION_EVENT, this.handleSelectionChange as EventListener)
-    
-    // Listen for restore requests when identify popup closes
-    window.addEventListener(RESTORE_ON_IDENTIFY_CLOSE_EVENT, this.handleRestoreOnIdentifyClose as EventListener)
-    
-    debugLogger.log('EVENTS', {
-      event: 'old-implementation-event-listeners-setup',
-      widgetId: this.props.id,
-      listenersRegistered: 3,
-      timestamp: Date.now()
-    })
+    // debugLogger.log('EVENTS', {
+    //   event: 'old-implementation-event-listeners-setup',
+    //   widgetId: this.props.id,
+    //   listenersRegistered: 3,
+    //   timestamp: Date.now()
+    // })
     // ============================================================================
 
     // NEW IMPLEMENTATION (parallel execution) - Chunk 7.1
@@ -510,22 +506,18 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
     
     // ============================================================================
     // OLD IMPLEMENTATION (parallel execution) - Chunk 7.1
+    // COMMENTED OUT - To be removed after verification (r018.103)
     // ============================================================================
-    // Clean up HelperSimple open widget event listener
-    window.removeEventListener(OPEN_WIDGET_EVENT, this.handleOpenWidgetEvent)
+    // window.removeEventListener(OPEN_WIDGET_EVENT, this.handleOpenWidgetEvent)
+    // window.removeEventListener(QUERYSIMPLE_SELECTION_EVENT, this.handleSelectionChange as EventListener)
+    // window.removeEventListener(RESTORE_ON_IDENTIFY_CLOSE_EVENT, this.handleRestoreOnIdentifyClose as EventListener)
     
-    // Clean up selection change listener
-    window.removeEventListener(QUERYSIMPLE_SELECTION_EVENT, this.handleSelectionChange as EventListener)
-    
-    // Clean up restore on identify close listener
-    window.removeEventListener(RESTORE_ON_IDENTIFY_CLOSE_EVENT, this.handleRestoreOnIdentifyClose as EventListener)
-    
-    debugLogger.log('EVENTS', {
-      event: 'old-implementation-event-listeners-cleaned',
-      widgetId: this.props.id,
-      listenersRemoved: 3,
-      timestamp: Date.now()
-    })
+    // debugLogger.log('EVENTS', {
+    //   event: 'old-implementation-event-listeners-cleaned',
+    //   widgetId: this.props.id,
+    //   listenersRemoved: 3,
+    //   timestamp: Date.now()
+    // })
     // ============================================================================
 
     // NEW IMPLEMENTATION (parallel execution) - Chunk 7.1
@@ -592,25 +584,26 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
     
     // ============================================================================
     // OLD IMPLEMENTATION (parallel execution) - Chunk 7.1
+    // COMMENTED OUT - To be removed after verification (r018.103)
     // ============================================================================
-    const oldEvent = new CustomEvent(QUERYSIMPLE_SELECTION_EVENT, {
-      detail: {
-        widgetId: id,
-        recordIds,
-        dataSourceId
-      },
-      bubbles: true,
-      cancelable: true
-    })
-    window.dispatchEvent(oldEvent)
+    // const oldEvent = new CustomEvent(QUERYSIMPLE_SELECTION_EVENT, {
+    //   detail: {
+    //     widgetId: id,
+    //     recordIds,
+    //     dataSourceId
+    //   },
+    //   bubbles: true,
+    //   cancelable: true
+    // })
+    // window.dispatchEvent(oldEvent)
     
-    debugLogger.log('EVENTS', {
-      event: 'old-implementation-selection-event-dispatched',
-      widgetId: id,
-      recordIdsCount: recordIds.length,
-      dataSourceId,
-      timestamp: Date.now()
-    })
+    // debugLogger.log('EVENTS', {
+    //   event: 'old-implementation-selection-event-dispatched',
+    //   widgetId: id,
+    //   recordIdsCount: recordIds.length,
+    //   dataSourceId,
+    //   timestamp: Date.now()
+    // })
     // ============================================================================
 
     // NEW IMPLEMENTATION (parallel execution) - Chunk 7.1
