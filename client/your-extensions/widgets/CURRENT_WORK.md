@@ -1,11 +1,43 @@
 # Current Work Status
 
-**Last Updated:** 2026-01-08 (Release 018.111 - Chunk 7 Complete)
+**Last Updated:** 2026-01-09 (Release 018.128 - Chunk 7 Complete + Hash Execution Fixes)
 **Branch:** `feature/chunk-rock`
 **Developer:** Adam Cabrera
-**Current Version:** v1.19.0-r018.111
+**Current Version:** v1.19.0-r018.128
 
 ## Recent Releases
+
+### r018.128 - Hash Re-Execution Complete (2026-01-09) ✅
+**Summary:** 
+Final fix for hash parameter re-execution and tab switching. All three sequential hash queries now execute correctly and automatically switch to Results tab.
+
+**Problem:** 
+- First query executed but stayed on Query tab (instead of auto-switching to Results)
+- Second and third queries sometimes failed to execute
+- Root cause: Tab-switching useEffect ran continuously, creating a loop that blocked auto-switch to Results
+
+**Solution:**
+- Added `lastTabSwitchHashRef` to track which hash value we last switched tabs for
+- Tab switch only happens ONCE per unique hash value
+- Ref resets when hash is cleared (allows same hash to trigger again later)
+- This prevents the loop: switch to Query → query executes → try to switch to Results → useEffect runs again → switches back to Query
+
+**Files Modified:** `query-task.tsx`, `version.ts`
+
+**Result:** Stable hash execution for all three queries with correct tab auto-switching behavior.
+
+### r018.125-127 - Hash Execution DOM Manipulation Fixes (2026-01-09)
+**Summary:**
+Implemented event-driven DOM manipulation using `MutationObserver` + `requestAnimationFrame` to populate `SqlExpressionRuntime` input field for hash queries.
+
+**Key Insights:**
+- `SqlExpressionRuntime` doesn't populate its text field from `expression` prop on mount
+- `onChange` event doesn't fire for programmatic prop updates
+- Required DOM manipulation with focus/blur cycle to trigger conversion
+- Used double RAF to ensure component fully initialized before manipulation
+- Must track which hash values were already processed to prevent loops
+
+**Files Modified:** `query-task-form.tsx`, `query-task.tsx`, `version.ts`
 
 ### r018.111 - Chunk 7 Complete: Event Handling (2026-01-08) ✅
 **Summary:** 
@@ -26,6 +58,7 @@ Completed Chunk 7 (Event Handling) migration by removing all legacy event handli
 - r018.98-102: Fixed hash parameters not re-executing
 - r018.104: Fixed Remove mode graphics not being removed
 - r018.105-110: Fixed intermittent first-load hash execution bug
+- r018.112-128: Fixed hash execution race conditions and tab switching issues
 
 ### r018.97 - Universal Tab Count & Clear Results Fix (2026-01-08) ✅
 **Problem:** 
