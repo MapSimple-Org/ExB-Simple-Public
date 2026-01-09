@@ -1111,16 +1111,67 @@ export function QueryTaskForm (props: QueryTaskItemProps) {
     })
   }, [configId, initialInputValue, attributeFilterSqlExprObj, originDS])
 
-  // FIX (r018.125): DOM manipulation using MutationObserver + requestAnimationFrame (event-driven, no setTimeout)
-  // This replicates the working pattern from r018.108 but with MutationObserver + RAF instead of setTimeout.
-  // Key insights from old working code:
-  // 1. useEffect depends on initialInputValue, so it re-runs for each hash change
-  // 2. Use initialInputValue (not expressionValue) for comparisons and value setting
-  // 3. Update if input is empty OR different from initialInputValue
-  // 4. Double RAF ensures SqlExpressionRuntime's onChange handler is attached before manipulation
-  // Flow: MutationObserver detects input → double RAF (wait for React commit) → focus → set value → 
-  // dispatch events → blur → SqlExpressionRuntime.onChange fires → handleSqlExprObjChange detects 
-  // string→array conversion → fires QUERYSIMPLE_HASH_VALUE_CONVERTED_EVENT → query executes
+  // ============================================================================
+  // DOM MANIPULATION FOR SqlExpressionRuntime (r018.122-128)
+  // ============================================================================
+  // 
+  // ⚠️ CRITICAL: DO NOT REMOVE THIS WORKAROUND ⚠️
+  // 
+  // WHY THIS IS NECESSARY:
+  // 
+  // SqlExpressionRuntime is a "black-box" ExB component that does NOT support
+  // programmatic value population via its `expression` prop. This was discovered
+  // through extensive testing (r018.108-128):
+  // 
+  // 1. Setting `expression` prop → Component does NOT populate its text field
+  // 2. Changing `expression` prop → Component does NOT fire onChange event
+  // 3. Using `key` prop to remount → Component still doesn't populate field
+  // 
+  // The component ONLY responds to actual DOM user interactions (focus, input, blur).
+  // 
+  // WHAT WE NEED TO ACHIEVE:
+  // 
+  // When a hash parameter arrives (e.g., #pin=2223059013), we need to:
+  // 1. Populate the SqlExpressionRuntime text field with "2223059013"
+  // 2. Trigger SqlExpressionRuntime's onChange handler
+  // 3. Allow it to convert string → array format internally
+  // 4. Execute the query with the correctly formatted value
+  // 
+  // THE SOLUTION:
+  // 
+  // Simulate user interaction by directly manipulating the DOM input field:
+  // 
+  // 1. MutationObserver watches for input[type="text"] to appear in DOM
+  // 2. Double requestAnimationFrame ensures React has attached event handlers
+  // 3. focus() → set value → dispatch events → blur()
+  // 4. SqlExpressionRuntime.onChange fires naturally
+  // 5. Internal string→array conversion happens
+  // 6. Query executes with correct array format
+  // 
+  // ALTERNATIVES ATTEMPTED (ALL FAILED):
+  // 
+  // - ❌ Direct applyQuery() call → Wrong format (string instead of array)
+  // - ❌ Updating expression prop → Component ignores it
+  // - ❌ Key-based remount → Component doesn't populate from prop
+  // - ❌ Calling onChange manually → No access to internal state
+  // 
+  // TIMING REQUIREMENTS:
+  // 
+  // - MutationObserver: Event-driven detection when input appears
+  // - Double RAF: Ensures React commit phase completes (handlers attached)
+  // - focus/blur cycle: Triggers SqlExpressionRuntime's internal logic
+  // 
+  // MAINTENANCE NOTES:
+  // 
+  // - This workaround is REQUIRED for hash parameter execution
+  // - If Esri updates SqlExpressionRuntime to support programmatic population, 
+  //   this can be removed
+  // - Tested extensively in r018.108-128 (see CURRENT_WORK.md)
+  // - Debug switch: FORM (query-task-form events)
+  // 
+  // See: SQLEXPRESSION_RUNTIME_DOM_WORKAROUND.md for full details
+  // 
+  // ============================================================================
   React.useEffect(() => {
     if (!sqlExprRuntimeContainerRef.current || !originDS) return
     
