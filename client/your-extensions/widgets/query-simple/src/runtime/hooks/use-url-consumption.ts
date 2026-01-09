@@ -36,12 +36,32 @@ export class UrlConsumptionManager {
     const { config, id } = props
     const { onInitialValueFound, onModeResetNeeded } = callbacks
 
+    debugLogger.log('HASH-EXEC', {
+      event: 'urlconsumption-checkurlparameters-entry',
+      widgetId: id,
+      hasQueryItems: !!config.queryItems?.length,
+      isProcessing: this.isProcessing,
+      lastProcessedHash: this.lastProcessedHash,
+      currentHash: window.location.hash.substring(1),
+      timestamp: Date.now()
+    })
+
     if (!config.queryItems?.length) {
+      debugLogger.log('HASH-EXEC', {
+        event: 'urlconsumption-exit-no-query-items',
+        widgetId: id,
+        timestamp: Date.now()
+      })
       return
     }
 
     // Prevent concurrent processing
     if (this.isProcessing) {
+      debugLogger.log('HASH-EXEC', {
+        event: 'urlconsumption-exit-already-processing',
+        widgetId: id,
+        timestamp: Date.now()
+      })
       return
     }
 
@@ -50,25 +70,27 @@ export class UrlConsumptionManager {
       .filter(sid => sid != null && sid.trim() !== '')
 
     if (shortIds.length === 0) {
+      debugLogger.log('HASH-EXEC', {
+        event: 'urlconsumption-exit-no-shortids',
+        widgetId: id,
+        timestamp: Date.now()
+      })
       return
     }
 
     const hash = window.location.hash.substring(1)
     const query = window.location.search.substring(1)
     
-    // Skip hash-only if we've already processed this exact hash fragment
-    // But always check query strings (they don't trigger hashchange events)
-    // Only skip if we have a hash fragment AND we've already processed it
-    if (hash && this.lastProcessedHash === hash) {
-      return
-    }
-    
     this.isProcessing = true
-    // Only update lastProcessedHash if we actually have a hash fragment
-    // Query strings are always checked (no skip logic for them)
-    if (hash) {
-      this.lastProcessedHash = hash
-    }
+
+    debugLogger.log('HASH-EXEC', {
+      event: 'urlconsumption-parsing-params',
+      widgetId: id,
+      hash,
+      query,
+      shortIds,
+      timestamp: Date.now()
+    })
 
     const hashParams = new URLSearchParams(hash)
     const queryParams = new URLSearchParams(query)
@@ -99,7 +121,45 @@ export class UrlConsumptionManager {
       }
     }
 
+    debugLogger.log('HASH-EXEC', {
+      event: 'urlconsumption-search-complete',
+      widgetId: id,
+      foundShortId,
+      foundValue,
+      foundIn,
+      hasMatch: !!(foundShortId && foundValue !== null),
+      timestamp: Date.now()
+    })
+
     if (foundShortId && foundValue !== null) {
+      // Track only the specific shortId parameter (e.g., "pin=2223059013")
+      // NOT the entire hash string with data_s and other parameters
+      const currentShortIdParam = `${foundShortId}=${foundValue}`
+      
+      debugLogger.log('HASH-EXEC', {
+        event: 'urlconsumption-checking-lastprocessedhash',
+        widgetId: id,
+        currentShortIdParam,
+        lastProcessedHash: this.lastProcessedHash,
+        willSkip: this.lastProcessedHash === currentShortIdParam,
+        timestamp: Date.now()
+      })
+      
+      // Skip if we've already processed this exact shortId parameter
+      if (this.lastProcessedHash === currentShortIdParam) {
+        debugLogger.log('HASH-EXEC', {
+          event: 'urlconsumption-exit-hash-already-processed',
+          widgetId: id,
+          currentShortIdParam,
+          lastProcessedHash: this.lastProcessedHash,
+          timestamp: Date.now()
+        })
+        this.isProcessing = false
+        return
+      }
+      
+      // Update lastProcessedHash to track this specific shortId parameter
+      this.lastProcessedHash = currentShortIdParam
       debugLogger.log('HASH', {
         event: 'url-param-detected',
         widgetId: id,
@@ -120,13 +180,38 @@ export class UrlConsumptionManager {
         onModeResetNeeded()
       }
       
+      debugLogger.log('HASH-EXEC', {
+        event: 'urlconsumption-calling-oninitialvaluefound',
+        widgetId: id,
+        shortId: foundShortId,
+        value: foundValue,
+        timestamp: Date.now()
+      })
+      
       onInitialValueFound({ shortId: foundShortId, value: foundValue })
+      
+      debugLogger.log('HASH-EXEC', {
+        event: 'urlconsumption-oninitialvaluefound-returned',
+        widgetId: id,
+        timestamp: Date.now()
+      })
     } else {
+      debugLogger.log('HASH-EXEC', {
+        event: 'urlconsumption-no-match-calling-oninitialvaluefound-undefined',
+        widgetId: id,
+        timestamp: Date.now()
+      })
       // No matching parameters found - clear state
       onInitialValueFound(undefined)
     }
     
     this.isProcessing = false
+    
+    debugLogger.log('HASH-EXEC', {
+      event: 'urlconsumption-checkurlparameters-exit',
+      widgetId: id,
+      timestamp: Date.now()
+    })
   }
 
   /**
