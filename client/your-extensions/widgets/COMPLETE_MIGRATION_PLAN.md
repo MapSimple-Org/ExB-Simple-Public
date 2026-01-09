@@ -96,30 +96,74 @@ This document outlines a **complete, safe migration** of all widget logic from `
 - ⏳ Step 2.4: Cleanup - remove temporary comparison logs (optional)
 **Logging:** Visibility state change logs (`WIDGET-STATE` feature), HelperSimple notification logs
 
-### Chunk 3: Selection & Restoration ⚠️ **HIGH RISK** (Deferred to Last)
-**Status:** ❌ Previous attempt failed - needs careful re-implementation  
+### Chunk 3: Selection & Restoration ⚠️ **HIGH RISK** (Sectioned Implementation)
+**Status:** 🚧 **IN PROGRESS** (Started r019.0)  
 **Complexity:** High  
-**Risk:** **CRITICAL** - This is where things broke before  
-**Note:** Deferred to last to build momentum with lower-risk chunks first  
+**Risk:** **CRITICAL** - Previous attempt failed  
+**Strategy:** Break into 3 sections, complete each fully before moving to next  
+**Version:** Fresh start at r019.0  
+**Implementation:** Manager class in `query-simple/src/runtime/hooks/use-selection-restoration.ts`  
+
+#### **Section 3.1: Selection State Tracking** (~91 lines)
+**Status:** ⏳ **PENDING**  
+**Methods:** `handleSelectionChange()` - Tracks selection events and updates state  
+**Complexity:** Low  
+**Steps:**
+- ⏳ Step 3.1.1: Write E2E tests for selection state tracking
+- ⏳ Step 3.1.2: Create `SelectionRestorationManager` class with state tracking methods
+- ⏳ Step 3.1.3: Parallel implementation with `RESTORE-COMPARE` logging
+- ⏳ Step 3.1.4: Test, debug, verify with logs
+- ⏳ Step 3.1.5: Switch to manager, keep comparison logs
+- ⏳ Step 3.1.6: Run full E2E suite, verify no regressions
+- ⏳ Step 3.1.7: Cleanup - remove commented code and comparison logs
+**Debug Switches:** `RESTORE`, `RESTORE-COMPARE`
+
+#### **Section 3.2: Panel Open/Close Restoration** (~566 lines)
+**Status:** ⏳ **PENDING**  
 **Methods:** 
-- `handleSelectionChange()` - Selection state management
-- `addSelectionToMap()` - Restore selection on panel open
-- `clearSelectionFromMap()` - Clear selection on panel close
-- `handleRestoreOnIdentifyClose()` - Restore after identify popup
+- `addSelectionToMap()` - Restores selection when panel opens (~240 lines)
+- `clearSelectionFromMap()` - Clears selection when panel closes (~326 lines)
+**Complexity:** High (complex origin DS grouping logic)  
+**Steps:**
+- ⏳ Step 3.2.1: Write E2E tests for open/close restoration
+- ⏳ Step 3.2.2: Add open/close methods to `SelectionRestorationManager`
+- ⏳ Step 3.2.3: Parallel implementation with `RESTORE-COMPARE` logging
+- ⏳ Step 3.2.4: Test, debug, verify with logs
+- ⏳ Step 3.2.5: Switch to manager, keep comparison logs
+- ⏳ Step 3.2.6: Run full E2E suite, verify no regressions
+- ⏳ Step 3.2.7: Cleanup - remove commented code and comparison logs
+**Debug Switches:** `RESTORE`, `RESTORE-COMPARE`
+
+#### **Section 3.3: Map Identify Restoration** (~139 lines)
+**Status:** ⏳ **PENDING**  
+**Methods:** `handleRestoreOnIdentifyClose()` - Restores after Map Identify popup closes  
+**Complexity:** Low (delegates to Section 3.2's `addSelectionToMap()`)  
+**Steps:**
+- ⏳ Step 3.3.1: Write E2E tests for Map Identify restoration
+- ⏳ Step 3.3.2: Add identify restoration method to `SelectionRestorationManager`
+- ⏳ Step 3.3.3: Parallel implementation with `RESTORE-COMPARE` logging
+- ⏳ Step 3.3.4: Test, debug, verify with logs
+- ⏳ Step 3.3.5: Switch to manager, keep comparison logs
+- ⏳ Step 3.3.6: Run full E2E suite, verify no regressions
+- ⏳ Step 3.3.7: Cleanup - remove commented code and comparison logs
+**Debug Switches:** `RESTORE`, `RESTORE-COMPARE`
 
 **Previous Failure Points:**
 - Records not selecting in data source when graphics layer enabled
 - Filtering logic failed when `r.getDataSource()` returned null
 - Empty arrays passed to `selectRecordsByIds()` cleared selection instead of selecting
+- Timing issues with data source availability
+- State inconsistency between `lastSelection`, `accumulatedRecords`, and `hasSelection`
 
 **Logging Required:** ⚠️ **EXTENSIVE**
 - Every decision point in selection logic
 - Record filtering results (before/after)
-- Data source resolution attempts
+- Data source resolution attempts (both methods)
 - Fallback logic execution
 - Selection state transitions
 - Restoration attempts and results
-- Comparison logs between old/new implementations
+- Origin DS grouping logic
+- Comparison logs between old/new implementations (`RESTORE-COMPARE` feature)
 
 ### Chunk 4: Graphics Layer Management
 **Status:** ✅ **COMPLETE** (r018.25)  
