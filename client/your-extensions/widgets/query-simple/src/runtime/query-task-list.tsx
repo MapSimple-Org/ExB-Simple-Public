@@ -208,7 +208,7 @@ export function QueryTaskList (props: QueryTaskListProps) {
       hasEffectiveInitialQueryValue: !!effectiveInitialQueryValue,
       shortIdToMatch: shortId,
       sortedQueryItemsCount: sortedQueryItems?.length || 0,
-      sortedQueryItemsShortIds: sortedQueryItems?.map(item => item.shortId).toArray() || [],
+      sortedQueryItemsShortIds: sortedQueryItems ? [...sortedQueryItems.map(item => item.shortId)] : [],
       timestamp: Date.now()
     })
     
