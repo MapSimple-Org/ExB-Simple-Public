@@ -40,10 +40,10 @@ test.describe('Selection & Restoration', () => {
   test.beforeEach(async ({ page }) => {
     helpers = new KCSearchHelpers(page);
     
-    // Pipe browser console to terminal (focus on RESTORE logs)
+    // Pipe browser console to terminal (focus on RESTORE and CHUNK-3-COMPARE logs)
     page.on('console', msg => {
       const text = msg.text();
-      if (text.includes('QUERYSIMPLE-RESTORE') || text.includes('RESTORE-COMPARE')) {
+      if (text.includes('QUERYSIMPLE-RESTORE') || text.includes('QUERYSIMPLE-CHUNK-3-COMPARE')) {
         console.log(`[Browser] ${text}`);
       }
     });
@@ -63,7 +63,7 @@ test.describe('Selection & Restoration', () => {
     console.log('🧪 TEST 1: New Mode - Basic Open/Close Restoration');
     
     await test.step('Load page and execute single record query', async () => {
-      const url = `${BASE_URL}${APP_URL}?pin=${PIN_SINGLE}&debug=RESTORE&qsopen=true`;
+      const url = `${BASE_URL}${APP_URL}?pin=${PIN_SINGLE}&debug=RESTORE,CHUNK-3-COMPARE&qsopen=true`;
       console.log(`📍 Navigating to: ${url}`);
       await page.goto(url, { waitUntil: 'networkidle' });
       
@@ -116,7 +116,7 @@ test.describe('Selection & Restoration', () => {
     console.log('🧪 TEST 2: Add Mode - Accumulated Records Restoration');
     
     await test.step('Execute first query (1 record)', async () => {
-      const url = `${BASE_URL}${APP_URL}?pin=${PIN_SINGLE}&debug=RESTORE&qsopen=true`;
+      const url = `${BASE_URL}${APP_URL}?pin=${PIN_SINGLE}&debug=RESTORE,CHUNK-3-COMPARE&qsopen=true`;
       console.log(`📍 Query 1: ${url}`);
       await page.goto(url, { waitUntil: 'networkidle' });
       
@@ -187,7 +187,7 @@ test.describe('Selection & Restoration', () => {
     console.log('🧪 TEST 3A: Manual X Button Removal');
     
     await test.step('Execute bulk query (121 records)', async () => {
-      const url = `${BASE_URL}${APP_URL}?major=${MAJOR_BULK}&debug=RESTORE&qsopen=true`;
+      const url = `${BASE_URL}${APP_URL}?major=${MAJOR_BULK}&debug=RESTORE,CHUNK-3-COMPARE&qsopen=true`;
       console.log(`📍 Query: ${url}`);
       await page.goto(url, { waitUntil: 'networkidle' });
       
@@ -243,7 +243,7 @@ test.describe('Selection & Restoration', () => {
     console.log('🧪 TEST 3B: Remove Mode with Query');
     
     await test.step('Execute initial query (121 records)', async () => {
-      const url = `${BASE_URL}${APP_URL}?major=${MAJOR_BULK}&debug=RESTORE&qsopen=true`;
+      const url = `${BASE_URL}${APP_URL}?major=${MAJOR_BULK}&debug=RESTORE,CHUNK-3-COMPARE&qsopen=true`;
       console.log(`📍 Initial Query: ${url}`);
       await page.goto(url, { waitUntil: 'networkidle' });
       
@@ -302,7 +302,7 @@ test.describe('Selection & Restoration', () => {
     console.log('⚠️ SKIPPED: Requires Map Identify interaction - manual verification needed');
     
     await test.step('Execute query and verify selection', async () => {
-      const url = `${BASE_URL}${APP_URL}?pin=${PIN_SINGLE}&debug=RESTORE&qsopen=true`;
+      const url = `${BASE_URL}${APP_URL}?pin=${PIN_SINGLE}&debug=RESTORE,CHUNK-3-COMPARE&qsopen=true`;
       console.log(`📍 Query: ${url}`);
       await page.goto(url, { waitUntil: 'networkidle' });
       
@@ -353,7 +353,7 @@ test.describe('Selection & Restoration', () => {
     console.log('⚠️ SKIPPED: Requires Map Identify interaction - manual verification needed');
     
     await test.step('Execute query and close widget', async () => {
-      const url = `${BASE_URL}${APP_URL}?pin=${PIN_SINGLE}&debug=RESTORE&qsopen=true`;
+      const url = `${BASE_URL}${APP_URL}?pin=${PIN_SINGLE}&debug=RESTORE,CHUNK-3-COMPARE&qsopen=true`;
       console.log(`📍 Query: ${url}`);
       await page.goto(url, { waitUntil: 'networkidle' });
       
@@ -389,7 +389,7 @@ test.describe('Selection & Restoration', () => {
     console.log('🧪 TEST 6: Mode Switch - State Consistency');
     
     await test.step('Execute query in New mode', async () => {
-      const url = `${BASE_URL}${APP_URL}?major=${MAJOR_BULK}&debug=RESTORE&qsopen=true`;
+      const url = `${BASE_URL}${APP_URL}?major=${MAJOR_BULK}&debug=RESTORE,CHUNK-3-COMPARE&qsopen=true`;
       console.log(`📍 Query (New mode): ${url}`);
       await page.goto(url, { waitUntil: 'networkidle' });
       
