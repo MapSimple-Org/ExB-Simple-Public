@@ -1,9 +1,47 @@
 # Current Work Status
 
-**Last Updated:** 2026-01-09 (Release 018.128 - Chunk 7 Complete + Hash Execution Fixes)
+**Last Updated:** 2026-01-09 (Release 019.0 - Chunk 3 Section 3.1 Start)
 **Branch:** `feature/chunk-rock`
 **Developer:** Adam Cabrera
-**Current Version:** v1.19.0-r018.128
+**Current Version:** v1.19.0-r019.0
+
+## 🚧 Current Work: Chunk 3 - Selection & Restoration (Section 3.1)
+
+### **Strategy Change: Sectioned Implementation**
+After Chunk 7 completion, starting fresh with **r019.0** for Chunk 3. Breaking into 3 sections, completing each fully (including tests, implementation, and cleanup) before moving to next section.
+
+### **Section 3.1: Selection State Tracking** (~91 lines)
+**Status:** 🏗️ Creating E2E tests  
+**Method:** `handleSelectionChange()` - Tracks selection events from queries  
+**Implementation File:** `query-simple/src/runtime/hooks/use-selection-restoration.ts`  
+**Test File:** `tests/e2e/query-simple/selection-restoration.spec.ts`
+
+**What This Section Does:**
+- Listens to `QUERYSIMPLE_SELECTION_EVENT` custom events
+- Updates widget state: `hasSelection`, `selectionRecordCount`, `lastSelection`
+- Handles mode-specific logic:
+  - **Add/Remove modes:** Uses `accumulatedRecords` count for selection state
+  - **New mode:** Uses event's recordIds directly
+- Resets mode when selection is cleared in Remove mode
+- Ignores empty selections when panel is closed (prevents state wipe from own clear logic)
+
+**Test Coverage:**
+1. New Mode - Basic selection state tracking
+2. Add Mode - Selection state based on accumulated records
+3. Remove Mode - Mode reset when selection cleared
+4. Multi-query - Selection state across query switches
+5. Panel closed - Ignoring spurious empty selections
+
+**Steps for Section 3.1:**
+- ⏳ **Step 3.1.1:** Write E2E tests (in progress)
+- ⏳ **Step 3.1.2:** Create `SelectionRestorationManager` class
+- ⏳ **Step 3.1.3:** Parallel implementation with `RESTORE-COMPARE` logging
+- ⏳ **Step 3.1.4:** Test, debug, verify with logs
+- ⏳ **Step 3.1.5:** Switch to manager, keep comparison logs
+- ⏳ **Step 3.1.6:** Run full E2E suite, verify no regressions
+- ⏳ **Step 3.1.7:** Cleanup - remove commented code and comparison logs
+
+---
 
 ## Recent Releases
 
