@@ -45,29 +45,30 @@ export function dispatchSelectionEvent(
 
   // ============================================================================
   // OLD IMPLEMENTATION (parallel execution) - Chunk 7.1
+  // COMMENTED OUT - To be removed after verification (r018.103)
   // ============================================================================
-  const selectionEvent = new CustomEvent(QUERYSIMPLE_SELECTION_EVENT, {
-    detail: {
-      widgetId,
-      recordIds,
-      dataSourceId,
-      outputDsId: outputDS.id,
-      queryItemConfigId
-    },
-    bubbles: true,
-    cancelable: true
-  })
-  window.dispatchEvent(selectionEvent)
+  // const selectionEvent = new CustomEvent(QUERYSIMPLE_SELECTION_EVENT, {
+  //   detail: {
+  //     widgetId,
+  //     recordIds,
+  //     dataSourceId,
+  //     outputDsId: outputDS.id,
+  //     queryItemConfigId
+  //   },
+  //   bubbles: true,
+  //   cancelable: true
+  // })
+  // window.dispatchEvent(selectionEvent)
   
-  debugLogger.log('EVENTS', {
-    event: 'old-implementation-selection-event-dispatched',
-    widgetId,
-    recordIdsCount: recordIds.length,
-    dataSourceId,
-    outputDsId: outputDS.id,
-    queryItemConfigId,
-    timestamp: Date.now()
-  })
+  // debugLogger.log('EVENTS', {
+  //   event: 'old-implementation-selection-event-dispatched',
+  //   widgetId,
+  //   recordIdsCount: recordIds.length,
+  //   dataSourceId,
+  //   outputDsId: outputDS.id,
+  //   queryItemConfigId,
+  //   timestamp: Date.now()
+  // })
   // ============================================================================
 
   // NEW IMPLEMENTATION (parallel execution) - Chunk 7.1
