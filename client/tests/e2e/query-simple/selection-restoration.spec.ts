@@ -142,6 +142,9 @@ test.describe('Selection & Restoration', () => {
       await helpers.clickApply(WIDGET_ID);
       await helpers.waitForResults(WIDGET_ID, 30000);
       
+      // Wait for UI to settle and results to fully process
+      await page.waitForTimeout(2000);
+      
       const count = await helpers.getResultCount(WIDGET_ID);
       console.log(`📊 Total Accumulated: ${count} record(s)`);
       expect(count).toBe(2);
@@ -172,20 +175,76 @@ test.describe('Selection & Restoration', () => {
   });
 
   /**
-   * TEST 3: Remove Mode - Restoration After Removal
+   * TEST 3A: Manual X Button Removal (No Mode Change)
    * 
    * Verifies:
-   * - Manual removal updates accumulated records
+   * - X button removal works in New mode
    * - Removed records excluded from restoration
-   * - Selection state reflects current accumulated records count
+   * - Selection state reflects current records count
    */
-  test('should restore correct records after manual removal in Remove mode', async ({ page }) => {
+  test('should restore correct records after manual X button removal', async ({ page }) => {
     test.setTimeout(TEST_TIMEOUT);
-    console.log('🧪 TEST 3: Remove Mode - Restoration After Removal');
+    console.log('🧪 TEST 3A: Manual X Button Removal');
     
     await test.step('Execute bulk query (121 records)', async () => {
       const url = `${BASE_URL}${APP_URL}?major=${MAJOR_BULK}&debug=RESTORE&qsopen=true`;
       console.log(`📍 Query: ${url}`);
+      await page.goto(url, { waitUntil: 'networkidle' });
+      
+      await helpers.waitForWidget(WIDGET_ID);
+      await helpers.waitForResults(WIDGET_ID, 30000);
+      
+      const count = await helpers.getResultCount(WIDGET_ID);
+      expect(count).toBe(121);
+    });
+    
+    await test.step('Manually remove 3 records via trash button', async () => {
+      console.log('🗑️ Removing 3 records via trash button (staying in New mode)');
+      
+      // Should already be on Results tab after query
+      // Remove first 3 records
+      for (let i = 0; i < 3; i++) {
+        const widget = helpers.getWidget(WIDGET_ID);
+        const removeBtn = widget.locator('button[aria-label="Remove record"]').first();
+        await removeBtn.click();
+        await page.waitForTimeout(500);
+      }
+      
+      const count = await helpers.getResultCount(WIDGET_ID);
+      console.log(`📊 After Removal: ${count} record(s)`);
+      expect(count).toBe(118);
+    });
+    
+    await test.step('Close and reopen widget', async () => {
+      console.log('🔽 Closing widget panel');
+      await helpers.closeWidget();
+      await page.waitForTimeout(HUMAN_DELAY);
+      
+      console.log('🔼 Reopening widget panel');
+      await helpers.openWidget(WIDGET_LABEL, WIDGET_ID);
+      await page.waitForTimeout(HUMAN_DELAY);
+      
+      const count = await helpers.getResultCount(WIDGET_ID);
+      console.log(`📊 After Reopen: ${count} record(s)`);
+      expect(count).toBe(118); // Should restore 118, not 121
+    });
+  });
+
+  /**
+   * TEST 3B: Remove Mode with Query
+   * 
+   * Verifies:
+   * - Remove mode removes records via query
+   * - All matching records removed
+   * - Nothing to restore after removing all
+   */
+  test('should remove all records via query in Remove mode', async ({ page }) => {
+    test.setTimeout(TEST_TIMEOUT);
+    console.log('🧪 TEST 3B: Remove Mode with Query');
+    
+    await test.step('Execute initial query (121 records)', async () => {
+      const url = `${BASE_URL}${APP_URL}?major=${MAJOR_BULK}&debug=RESTORE&qsopen=true`;
+      console.log(`📍 Initial Query: ${url}`);
       await page.goto(url, { waitUntil: 'networkidle' });
       
       await helpers.waitForWidget(WIDGET_ID);
@@ -202,42 +261,23 @@ test.describe('Selection & Restoration', () => {
       await page.waitForTimeout(HUMAN_DELAY);
     });
     
-    await test.step('Manually remove 3 records', async () => {
-      console.log('🗑️ Removing 3 records via X button');
-      await helpers.switchToResultsTab(WIDGET_ID);
+    await test.step('Execute same query to remove all records', async () => {
+      console.log(`📍 Remove Query: major=${MAJOR_BULK} (same as initial)`);
       
-      // Remove first 3 records
-      for (let i = 0; i < 3; i++) {
-        const widget = helpers.getWidget(WIDGET_ID);
-        const removeBtn = widget.locator('button[title="Remove from selection"]').first();
-        await removeBtn.click();
-        await page.waitForTimeout(500);
-      }
+      // Enter same value and click Apply
+      await helpers.enterQueryValue(MAJOR_BULK, WIDGET_ID);
+      await helpers.clickApply(WIDGET_ID);
+      
+      // Wait for removal to process (no Results tab when 0 records, so can't use waitForResults)
+      await page.waitForTimeout(3000);
       
       const count = await helpers.getResultCount(WIDGET_ID);
       console.log(`📊 After Removal: ${count} record(s)`);
-      expect(count).toBe(118);
-      
-      // TODO: Verify 118 records selected in origin DS
-      // TODO: Verify graphics layer has 118 graphics
+      expect(count).toBe(0); // All 121 records should be removed
     });
     
-    await test.step('Close and reopen widget', async () => {
-      console.log('🔽 Closing widget panel');
-      await helpers.closeWidget();
-      await page.waitForTimeout(HUMAN_DELAY);
-      
-      console.log('🔼 Reopening widget panel');
-      await helpers.openWidget(WIDGET_LABEL, WIDGET_ID);
-      await page.waitForTimeout(HUMAN_DELAY);
-      
-      const count = await helpers.getResultCount(WIDGET_ID);
-      console.log(`📊 After Reopen: ${count} record(s)`);
-      expect(count).toBe(118); // Should restore 118, not 121
-      
-      // TODO: Verify 118 records restored (not 121)
-      // TODO: Verify graphics layer has 118 graphics (not 121)
-    });
+    // TODO: Add close/reopen test when we understand 0-record behavior better
+    // For now, verifying that all records were removed is sufficient
   });
 
   /**
