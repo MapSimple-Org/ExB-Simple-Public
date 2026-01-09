@@ -455,23 +455,7 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
       }
     })
     
-    // ============================================================================
-    // OLD IMPLEMENTATION (parallel execution) - Chunk 7.1
-    // COMMENTED OUT - To be removed after verification (r018.103)
-    // ============================================================================
-    // window.addEventListener(OPEN_WIDGET_EVENT, this.handleOpenWidgetEvent)
-    // window.addEventListener(QUERYSIMPLE_SELECTION_EVENT, this.handleSelectionChange as EventListener)
-    // window.addEventListener(RESTORE_ON_IDENTIFY_CLOSE_EVENT, this.handleRestoreOnIdentifyClose as EventListener)
-    
-    // debugLogger.log('EVENTS', {
-    //   event: 'old-implementation-event-listeners-setup',
-    //   widgetId: this.props.id,
-    //   listenersRegistered: 3,
-    //   timestamp: Date.now()
-    // })
-    // ============================================================================
-
-    // NEW IMPLEMENTATION (parallel execution) - Chunk 7.1
+    // Chunk 7: Event handling (r018.59 - Step 7.1: Add manager)
     this.eventManager.setHandlers({
       onOpenWidgetEvent: this.handleOpenWidgetEvent,
       onSelectionChange: this.handleSelectionChange,
@@ -479,23 +463,6 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
     })
     
     this.eventManager.setup(this.props.id)
-
-    // COMPARISON LOGGING
-    debugLogger.log('CHUNK-7-COMPARE', {
-      event: 'event-listeners-setup-comparison',
-      widgetId: this.props.id,
-      oldImplementation: {
-        listenersRegistered: 3,
-        setupMethod: 'window.addEventListener'
-      },
-      newImplementation: {
-        listenersRegistered: 3,
-        setupMethod: 'EventManager.setup',
-        isSetup: this.eventManager.isSetup()
-      },
-      match: this.eventManager.isSetup() === true,
-      timestamp: Date.now()
-    })
     
     // Graphics layer will be initialized when map view becomes available via JimuMapViewComponent
   }
@@ -504,42 +471,8 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
     // Chunk 1: Clean up manager (r018.8)
     this.urlConsumptionManager.cleanup()
     
-    // ============================================================================
-    // OLD IMPLEMENTATION (parallel execution) - Chunk 7.1
-    // COMMENTED OUT - To be removed after verification (r018.103)
-    // ============================================================================
-    // window.removeEventListener(OPEN_WIDGET_EVENT, this.handleOpenWidgetEvent)
-    // window.removeEventListener(QUERYSIMPLE_SELECTION_EVENT, this.handleSelectionChange as EventListener)
-    // window.removeEventListener(RESTORE_ON_IDENTIFY_CLOSE_EVENT, this.handleRestoreOnIdentifyClose as EventListener)
-    
-    // debugLogger.log('EVENTS', {
-    //   event: 'old-implementation-event-listeners-cleaned',
-    //   widgetId: this.props.id,
-    //   listenersRemoved: 3,
-    //   timestamp: Date.now()
-    // })
-    // ============================================================================
-
-    // NEW IMPLEMENTATION (parallel execution) - Chunk 7.1
-    const wasSetup = this.eventManager.isSetup()
+    // Chunk 7: Event handling cleanup (r018.59 - Step 7.1: Add manager)
     this.eventManager.cleanup(this.props.id)
-
-    // COMPARISON LOGGING
-    debugLogger.log('CHUNK-7-COMPARE', {
-      event: 'event-listeners-cleanup-comparison',
-      widgetId: this.props.id,
-      oldImplementation: {
-        listenersRemoved: 3,
-        cleanupMethod: 'window.removeEventListener'
-      },
-      newImplementation: {
-        wasSetup,
-        cleanupMethod: 'EventManager.cleanup',
-        isSetup: this.eventManager.isSetup()
-      },
-      match: this.eventManager.isSetup() === false,
-      timestamp: Date.now()
-    })
     
     // Chunk 2: Clean up manager (r018.13 - Step 2.3: Switch to manager)
     this.visibilityManager.cleanup()
@@ -582,54 +515,12 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
   notifyHelperSimpleOfSelection = (recordIds: string[], dataSourceId?: string) => {
     const { id } = this.props
     
-    // ============================================================================
-    // OLD IMPLEMENTATION (parallel execution) - Chunk 7.1
-    // COMMENTED OUT - To be removed after verification (r018.103)
-    // ============================================================================
-    // const oldEvent = new CustomEvent(QUERYSIMPLE_SELECTION_EVENT, {
-    //   detail: {
-    //     widgetId: id,
-    //     recordIds,
-    //     dataSourceId
-    //   },
-    //   bubbles: true,
-    //   cancelable: true
-    // })
-    // window.dispatchEvent(oldEvent)
-    
-    // debugLogger.log('EVENTS', {
-    //   event: 'old-implementation-selection-event-dispatched',
-    //   widgetId: id,
-    //   recordIdsCount: recordIds.length,
-    //   dataSourceId,
-    //   timestamp: Date.now()
-    // })
-    // ============================================================================
-
-    // NEW IMPLEMENTATION (parallel execution) - Chunk 7.1
+    // Chunk 7: Dispatch selection event via EventManager (r018.59)
     // Note: This call is missing outputDsId and queryItemConfigId, but this method
     // is only used for notifying HelperSimple, not for setting lastSelection state.
     // The actual selection events come from query-task.tsx and query-result.tsx
     // which use dispatchSelectionEvent from selection-utils.ts
     this.eventManager.dispatchSelectionEvent(id, recordIds, dataSourceId)
-
-    // COMPARISON LOGGING
-    debugLogger.log('CHUNK-7-COMPARE', {
-      event: 'selection-event-dispatch-comparison',
-      widgetId: id,
-      oldImplementation: {
-        method: 'window.dispatchEvent',
-        recordIdsCount: recordIds.length,
-        dataSourceId
-      },
-      newImplementation: {
-        method: 'EventManager.dispatchSelectionEvent',
-        recordIdsCount: recordIds.length,
-        dataSourceId
-      },
-      match: true, // Both dispatch the same event
-      timestamp: Date.now()
-    })
   }
 
   /**
