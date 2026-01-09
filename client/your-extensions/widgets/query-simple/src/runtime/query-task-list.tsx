@@ -201,20 +201,87 @@ export function QueryTaskList (props: QueryTaskListProps) {
   // Find the query item matching the shortId from URL hash
   const matchingQueryIndex = React.useMemo(() => {
     const shortId = effectiveInitialQueryValue?.shortId
+    
+    debugLogger.log('HASH-FIRST-LOAD', {
+      event: 'matchingQueryIndex-calculation-start',
+      widgetId,
+      hasEffectiveInitialQueryValue: !!effectiveInitialQueryValue,
+      shortIdToMatch: shortId,
+      sortedQueryItemsCount: sortedQueryItems?.length || 0,
+      sortedQueryItemsShortIds: sortedQueryItems?.map(item => item.shortId).toArray() || [],
+      timestamp: Date.now()
+    })
+    
     if (!shortId) {
+      debugLogger.log('HASH-FIRST-LOAD', {
+        event: 'matchingQueryIndex-no-shortid',
+        widgetId,
+        result: -1,
+        reason: 'No shortId in effectiveInitialQueryValue',
+        timestamp: Date.now()
+      })
       return -1
     }
-    return sortedQueryItems.findIndex(item => item.shortId === shortId)
-  }, [sortedQueryItems, effectiveInitialQueryValue])
+    
+    const foundIndex = sortedQueryItems.findIndex(item => item.shortId === shortId)
+    
+    debugLogger.log('HASH-FIRST-LOAD', {
+      event: 'matchingQueryIndex-calculation-complete',
+      widgetId,
+      shortIdToMatch: shortId,
+      foundIndex,
+      matchFound: foundIndex >= 0,
+      matchedItem: foundIndex >= 0 ? {
+        configId: sortedQueryItems[foundIndex].configId,
+        shortId: sortedQueryItems[foundIndex].shortId,
+        label: sortedQueryItems[foundIndex].label
+      } : null,
+      timestamp: Date.now()
+    })
+    
+    return foundIndex
+  }, [sortedQueryItems, effectiveInitialQueryValue, widgetId])
   
   // Determine which group/ungrouped index the matching query is at
   const getQuerySelection = React.useMemo(() => {
-    if (matchingQueryIndex < 0) return null
+    debugLogger.log('HASH-FIRST-LOAD', {
+      event: 'getQuerySelection-calculation-start',
+      widgetId,
+      matchingQueryIndex,
+      hasMatch: matchingQueryIndex >= 0,
+      timestamp: Date.now()
+    })
+    
+    if (matchingQueryIndex < 0) {
+      debugLogger.log('HASH-FIRST-LOAD', {
+        event: 'getQuerySelection-no-match',
+        widgetId,
+        result: null,
+        reason: 'matchingQueryIndex is negative',
+        timestamp: Date.now()
+      })
+      return null
+    }
     
     const item = sortedQueryItems[matchingQueryIndex]
+    
+    debugLogger.log('HASH-FIRST-LOAD', {
+      event: 'getQuerySelection-matched-item',
+      widgetId,
+      matchedItem: {
+        configId: item.configId,
+        shortId: item.shortId,
+        label: item.label,
+        groupId: item.groupId,
+        hasGroup: !!item.groupId
+      },
+      timestamp: Date.now()
+    })
     if (item.groupId) {
       const groupItems = groups[item.groupId]?.items || Immutable([])
       const indexInGroup = groupItems.findIndex(q => q.configId === item.configId)
+      const result = { type: 'group' as const, groupId: item.groupId, index: indexInGroup >= 0 ? indexInGroup : 0 }
+      
       debugLogger.log('GROUP', {
         event: 'hash-query-found-in-group',
         groupId: item.groupId,
@@ -222,19 +289,37 @@ export function QueryTaskList (props: QueryTaskListProps) {
         queryItemConfigId: item.configId,
         queryItemShortId: item.shortId
       })
-      return { type: 'group' as const, groupId: item.groupId, index: indexInGroup >= 0 ? indexInGroup : 0 }
+      
+      debugLogger.log('HASH-FIRST-LOAD', {
+        event: 'getQuerySelection-returning-group',
+        widgetId,
+        result,
+        timestamp: Date.now()
+      })
+      
+      return result
     } else {
       // Ungrouped query
       const indexInUngrouped = ungrouped.findIndex(({ item: q }) => q.configId === item.configId)
+      const result = { type: 'ungrouped' as const, index: indexInUngrouped >= 0 ? indexInUngrouped : 0 }
+      
       debugLogger.log('GROUP', {
         event: 'hash-query-found-ungrouped',
         indexInUngrouped: indexInUngrouped >= 0 ? indexInUngrouped : 0,
         queryItemConfigId: item.configId,
         queryItemShortId: item.shortId
       })
-      return { type: 'ungrouped' as const, index: indexInUngrouped >= 0 ? indexInUngrouped : 0 }
+      
+      debugLogger.log('HASH-FIRST-LOAD', {
+        event: 'getQuerySelection-returning-ungrouped',
+        widgetId,
+        result,
+        timestamp: Date.now()
+      })
+      
+      return result
     }
-  }, [matchingQueryIndex, sortedQueryItems, groups, ungrouped])
+  }, [matchingQueryIndex, sortedQueryItems, groups, ungrouped, widgetId])
   
   // Helper to determine default selection based on display order
   const getDefaultSelection = React.useMemo(() => {
@@ -299,6 +384,22 @@ export function QueryTaskList (props: QueryTaskListProps) {
   // Only react when shouldUseInitialQueryValueForSelection is true (set by HelperSimple)
   // This prevents autonomous query selection when switching queries
   React.useEffect(() => {
+    debugLogger.log('HASH-FIRST-LOAD', {
+      event: 'EXECUTION-USEEFFECT-TRIGGERED',
+      widgetId,
+      criticalConditions: {
+        shouldUseInitialQueryValueForSelection,
+        hasGetQuerySelection: !!getQuerySelection,
+        getQuerySelectionValue: getQuerySelection,
+        hasEffectiveInitialQueryValue: !!effectiveInitialQueryValue,
+        effectiveInitialQueryValue,
+        matchingQueryIndex,
+        conditionsMet: shouldUseInitialQueryValueForSelection && !!getQuerySelection,
+        WILL_EXECUTE_QUERY: shouldUseInitialQueryValueForSelection && !!getQuerySelection
+      },
+      timestamp: Date.now()
+    })
+    
     debugLogger.log('HASH-EXEC', {
       event: 'querytasklist-selection-useeffect-check',
       widgetId,
@@ -352,6 +453,25 @@ export function QueryTaskList (props: QueryTaskListProps) {
         setSelectedUngroupedIndex(getQuerySelection.index)
       }
     } else {
+      debugLogger.log('HASH-FIRST-LOAD', {
+        event: 'EXECUTION-SKIPPED',
+        widgetId,
+        reason: !shouldUseInitialQueryValueForSelection ? 'FLAG_IS_FALSE' : 'NO_QUERY_SELECTION',
+        detailedDiagnostic: {
+          shouldUseInitialQueryValueForSelection,
+          hasGetQuerySelection: !!getQuerySelection,
+          getQuerySelectionValue: getQuerySelection,
+          hasEffectiveInitialQueryValue: !!effectiveInitialQueryValue,
+          effectiveInitialQueryValue,
+          matchingQueryIndex,
+          sortedQueryItemsCount: sortedQueryItems?.length || 0,
+          possibleCauses: !shouldUseInitialQueryValueForSelection 
+            ? ['HelperSimple did not set the flag', 'Widget opened without hash parameter']
+            : ['matchingQueryIndex returned -1', 'shortId did not match any query', 'queryItems not loaded yet']
+        },
+        timestamp: Date.now()
+      })
+      
       debugLogger.log('HASH-EXEC', {
         event: 'querytasklist-selection-useeffect-skipped',
         widgetId,
@@ -372,7 +492,7 @@ export function QueryTaskList (props: QueryTaskListProps) {
         timestamp: Date.now()
       })
     }
-  }, [shouldUseInitialQueryValueForSelection, getQuerySelection, widgetId])
+  }, [shouldUseInitialQueryValueForSelection, getQuerySelection, widgetId, effectiveInitialQueryValue, matchingQueryIndex, sortedQueryItems])
   
   // Get the currently selected query item
   const getSelectedQueryItem = (): ImmutableObject<QueryItemType> => {
