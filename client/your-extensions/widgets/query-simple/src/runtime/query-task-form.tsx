@@ -313,6 +313,21 @@ export function QueryTaskForm (props: QueryTaskItemProps) {
       timestamp: Date.now()
     })
     
+    debugLogger.log('HASH-FIRST-LOAD', {
+      event: 'form-initialInputValue-received',
+      configId,
+      initialInputValue,
+      datasourceReady,
+      hasSqlExprObj: !!sqlExprObj,
+      sqlExprObjPartsLength: sqlExprObj?.parts?.length,
+      initialValueSetRef: initialValueSetRef.current,
+      lastValueSetRef: lastValueSetRef.current,
+      hashTriggeredRef: hashTriggeredRef.current,
+      currentStateValue: attributeFilterSqlExprObj?.parts?.[0]?.valueOptions?.value,
+      willProcess: datasourceReady && initialInputValue && sqlExprObj?.parts?.length > 0,
+      timestamp: Date.now()
+    })
+    
     // Reset flag if configId changed (switched to different query)
     if (initialValueSetRef.current !== null && initialValueSetRef.current !== configId) {
       initialValueSetRef.current = null
@@ -368,6 +383,21 @@ export function QueryTaskForm (props: QueryTaskItemProps) {
         timestamp: Date.now()
       })
       
+      debugLogger.log('HASH-FIRST-LOAD', {
+        event: 'form-hash-value-setting-start',
+        configId,
+        initialInputValue,
+        initialValueSetRef: initialValueSetRef.current,
+        lastValueSetRef: lastValueSetRef.current,
+        valueChanged,
+        hashTriggeredRefBefore: hashTriggeredRef.current,
+        datasourceReady,
+        hasOutputDS: !!outputDS,
+        sqlExprObjPartsLength: sqlExprObj?.parts?.length,
+        activeTab,
+        timestamp: Date.now()
+      })
+      
       // Set hashTriggeredRef IMMEDIATELY when setting hash value
       // This ensures handleSqlExprObjChange can detect hash-triggered conversions
       hashTriggeredRef.current = true
@@ -375,6 +405,14 @@ export function QueryTaskForm (props: QueryTaskItemProps) {
         event: 'hashTriggeredRef-set-true',
         configId,
         initialInputValue,
+        timestamp: Date.now()
+      })
+      
+      debugLogger.log('HASH-FIRST-LOAD', {
+        event: 'form-hashTriggeredRef-set-true',
+        configId,
+        initialInputValue,
+        hashTriggeredRefAfter: hashTriggeredRef.current,
         timestamp: Date.now()
       })
       
@@ -625,6 +663,17 @@ export function QueryTaskForm (props: QueryTaskItemProps) {
   }, [attributeFilterSqlExprObj, configId, initialInputValue])
 
   const applyQuery = React.useCallback(() => {
+    debugLogger.log('HASH-FIRST-LOAD', {
+      event: 'form-applyQuery-EXECUTING',
+      configId,
+      initialInputValue,
+      hashTriggeredRef: hashTriggeredRef.current,
+      runtimeZoomToSelected,
+      willZoom: hashTriggeredRef.current ? true : runtimeZoomToSelected,
+      currentValue: attributeFilterSqlExprObjRef.current?.parts?.[0]?.valueOptions?.value,
+      timestamp: Date.now()
+    })
+    
     // When the 'apply' button is clicked, it should clear the selection from the previous result list
     clearSelectionInDataSources(outputDS)
 
@@ -681,10 +730,31 @@ export function QueryTaskForm (props: QueryTaskItemProps) {
     if (spatialFilterObjRef.current?.geometry && rel == null) {
       rel = SpatialRelation.Intersect
     }
+    debugLogger.log('HASH-FIRST-LOAD', {
+      event: 'form-about-to-call-onFormSubmit',
+      configId,
+      initialInputValue,
+      sanitizedValue,
+      hasSpatialGeometryArray: Array.isArray(spatialFilterObjRef.current?.geometry),
+      spatialGeometryCount: Array.isArray(spatialFilterObjRef.current?.geometry) ? spatialFilterObjRef.current.geometry.length : 0,
+      zoomToUse,
+      timestamp: Date.now()
+    })
+    
     if (Array.isArray(spatialFilterObjRef.current?.geometry)) {
       if (spatialFilterObjRef.current.geometry.length === 1) {
+        debugLogger.log('HASH-FIRST-LOAD', {
+          event: 'form-calling-onFormSubmit-single-geometry',
+          configId,
+          timestamp: Date.now()
+        })
         onFormSubmit(sanitizedSqlExprObj, { ...spatialFilterObjRef.current, geometry: spatialFilterObjRef.current.geometry[0], relation: rel, buffer: bufferRef.current }, zoomToUse)
       } else {
+        debugLogger.log('HASH-FIRST-LOAD', {
+          event: 'form-calling-onFormSubmit-multiple-geometry-union',
+          configId,
+          timestamp: Date.now()
+        })
         loadArcGISJSAPIModules([
           'esri/geometry/operators/unionOperator'
         ]).then(modules => {
@@ -694,6 +764,11 @@ export function QueryTaskForm (props: QueryTaskItemProps) {
         })
       }
     } else {
+      debugLogger.log('HASH-FIRST-LOAD', {
+        event: 'form-calling-onFormSubmit-no-spatial-geometry',
+        configId,
+        timestamp: Date.now()
+      })
       onFormSubmit(sanitizedSqlExprObj, { ...spatialFilterObjRef.current, relation: rel, buffer: bufferRef.current }, zoomToUse)
     }
     
@@ -800,6 +875,22 @@ export function QueryTaskForm (props: QueryTaskItemProps) {
       timestamp: Date.now()
     })
     
+    debugLogger.log('HASH-FIRST-LOAD', {
+      event: 'form-handleSqlExprObjChange-CALLED',
+      configId,
+      initialInputValue,
+      hashTriggeredRef: hashTriggeredRef.current,
+      datasourceReady,
+      hasOutputDS: !!outputDS,
+      sqlObjValue,
+      sqlObjValueType: typeof sqlObjValue,
+      isArray: Array.isArray(sqlObjValue),
+      previousRefValue,
+      previousRefValueType: typeof previousRefValue,
+      valueChangedFromStringToArray: typeof previousRefValue === 'string' && Array.isArray(sqlObjValue),
+      timestamp: Date.now()
+    })
+    
     const firstPart = sqlObj?.parts?.[0]
     const value = firstPart?.type === 'SINGLE' ? (firstPart as any).valueOptions?.value : 'not-single'
     
@@ -833,6 +924,21 @@ export function QueryTaskForm (props: QueryTaskItemProps) {
         initialInputValue,
         valueType: typeof value,
         value: Array.isArray(value) ? value : value,
+        timestamp: Date.now()
+      })
+      
+      debugLogger.log('HASH-FIRST-LOAD', {
+        event: 'form-conversion-check',
+        configId,
+        isArrayFormat,
+        hasInitialValue,
+        hashTriggeredRef: hashTriggeredRef.current,
+        initialInputValue,
+        valueType: typeof value,
+        isArray: Array.isArray(value),
+        arrayLength: Array.isArray(value) ? value.length : 'n/a',
+        firstItem: Array.isArray(value) && value.length > 0 ? value[0] : 'n/a',
+        willCheckMatch: isArrayFormat && hasInitialValue && initialInputValue,
         timestamp: Date.now()
       })
       
@@ -882,6 +988,21 @@ export function QueryTaskForm (props: QueryTaskItemProps) {
           // The event QUERYSIMPLE_HASH_VALUE_CONVERTED_EVENT has been dispatched above
           // This direct call handles the case where conversion happens synchronously
           // The event listener in query-task.tsx handles the async case
+          
+          debugLogger.log('HASH-FIRST-LOAD', {
+            event: 'form-execution-decision-point',
+            configId,
+            initialInputValue,
+            conditionCheck: {
+              hashTriggeredRef: hashTriggeredRef.current,
+              datasourceReady,
+              hasOutputDS: !!outputDS,
+              allConditionsMet: hashTriggeredRef.current && datasourceReady && outputDS
+            },
+            willExecute: hashTriggeredRef.current && datasourceReady && outputDS,
+            timestamp: Date.now()
+          })
+          
           if (hashTriggeredRef.current && datasourceReady && outputDS) {
             debugLogger.log('FORM', {
               event: 'hash-value-converted-executing-query-directly',
@@ -891,10 +1012,40 @@ export function QueryTaskForm (props: QueryTaskItemProps) {
               timestamp: Date.now()
             })
             
+            debugLogger.log('HASH-FIRST-LOAD', {
+              event: 'form-WILL-EXECUTE-applyQuery',
+              configId,
+              initialInputValue,
+              note: 'All conditions met - calling applyQuery after setTimeout(0)',
+              timestamp: Date.now()
+            })
+            
             // Use setTimeout to ensure this happens after the current event loop
             setTimeout(() => {
+              debugLogger.log('HASH-FIRST-LOAD', {
+                event: 'form-applyQuery-CALLED',
+                configId,
+                initialInputValue,
+                timestamp: Date.now()
+              })
               applyQuery()
             }, 0)
+          } else {
+            debugLogger.log('HASH-FIRST-LOAD', {
+              event: 'form-execution-SKIPPED',
+              configId,
+              initialInputValue,
+              reason: !hashTriggeredRef.current ? 'hashTriggeredRef is false' :
+                      !datasourceReady ? 'datasourceReady is false' :
+                      !outputDS ? 'outputDS is null/undefined' :
+                      'unknown',
+              conditionStates: {
+                hashTriggeredRef: hashTriggeredRef.current,
+                datasourceReady,
+                hasOutputDS: !!outputDS
+              },
+              timestamp: Date.now()
+            })
           }
         }
       }
