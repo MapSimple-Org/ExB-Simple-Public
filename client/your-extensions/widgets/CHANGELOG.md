@@ -5,6 +5,27 @@ All notable changes to MapSimple Experience Builder widgets will be documented i
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.19.0-r018.110] - 2025-01-08
+
+### Fixed
+- **Intermittent First-Load Hash Execution Bug**: Fixed race condition where hash parameters would sometimes populate the form but not execute on first page load. The issue occurred when `datasourceReady` became true before `outputDS` was available, causing the hash value to be set but execution to fail silently.
+
+### Changed
+- **Hash Value Setting Logic**: Added `outputDS` check to `shouldSetValue` condition and `outputDS` to the useEffect dependency array in `query-task-form.tsx`. Hash values are now only set when ALL required conditions are met: `datasourceReady`, `outputDS`, and `sqlExprObj`.
+- **Hash Re-Execution Support**: Modified `UrlConsumptionManager` to track only the `shortId=value` portion of hash parameters (not entire hash), allowing the same query to be re-executed after navigating away and back.
+- **Removed Hash Processing Blocker**: Eliminated `processedHashParamsRef` from `widget.tsx` that was preventing hash parameters from re-executing.
+
+### Added
+- **HASH-FIRST-LOAD Debug Logging**: Added comprehensive diagnostic logging throughout the hash execution path in `query-task-form.tsx` and `query-task-list.tsx` to track condition states, execution decision points, and identify race conditions.
+- **HASH-EXEC Debug Feature**: Added `HASH-EXEC` debug feature to both QuerySimple and HelperSimple loggers for tracking hash execution flow.
+
+### Technical Details
+- **r018.98-102**: Fixed hash re-execution by removing redundant tracking in both HelperSimple and QuerySimple
+- **r018.105-107**: Added extensive diagnostic logging with new `HASH-FIRST-LOAD` debug tag
+- **r018.108**: Fixed circular reference error in logging (outputDS object being stringified)
+- **r018.109**: Added `outputDS` check to `shouldSetValue` condition to prevent setting hash before execution can occur
+- **r018.110**: Added `outputDS` to useEffect dependency array to ensure hash is set when all conditions are met
+
 ## [1.19.0-r018.97] - 2025-01-08
 
 ### Fixed

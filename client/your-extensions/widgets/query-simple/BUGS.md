@@ -1,6 +1,6 @@
 # Known Bugs
 
-**Last Updated:** 2026-01-07 (Release 018.66)
+**Last Updated:** 2026-01-08 (Release 018.110)
 
 ---
 
@@ -14,6 +14,128 @@
 ---
 
 ## Open Bugs
+
+### HASH-PARAM-004: Intermittent First-Load Hash Execution Failure ✅ **RESOLVED** (r018.110)
+
+**Status:** ✅ **RESOLVED**  
+**Severity:** High  
+**Category:** HASH-PARAM, QUERY-EXEC  
+**First Reported:** 2026-01-08  
+**Resolved:** 2026-01-08 (r018.110)
+
+**Description:**
+Hash parameters would intermittently populate the form on first page load but fail to execute. The query would not run, no spinner appeared, and the Apply button remained disabled. This was a race condition where the hash value was set before all required conditions for execution were met.
+
+**Root Cause:**
+The hash value setting logic waited for `datasourceReady` and `sqlExprObj` to be ready, but not for `outputDS`. When the useEffect ran:
+1. `datasourceReady` became `true` first
+2. `outputDS` was still `null/undefined`
+3. Hash value was set in the form
+4. `hashTriggeredRef` was set to `true`
+5. SqlExpressionRuntime converted string → array
+6. Execution check failed because `outputDS` was `null`
+7. No error shown - query silently failed to execute
+
+Additionally, the useEffect did not have `outputDS` in its dependency array, so even when `outputDS` became available later, the effect wouldn't re-run to set the hash value.
+
+**Technical Details:**
+- `shouldSetValue` condition at line ~353 checked: `datasourceReady && initialInputValue && sqlExprObj?.parts?.length > 0`
+- Missing `outputDS` check, but execution required: `hashTriggeredRef && datasourceReady && outputDS` (line ~1006)
+- useEffect dependency array at line ~650 did not include `outputDS`
+- Race condition window: ~300-500ms between `datasourceReady=true` and `outputDS` becoming available
+
+**Expected Behavior:**
+- Hash parameters should only be set when ALL execution conditions are ready
+- If conditions aren't met, useEffect should re-run when missing conditions become available
+- Hash queries should execute reliably on first page load
+
+**Solution:**
+1. **r018.109:** Added `outputDS` check to `shouldSetValue` condition:
+   ```typescript
+   const shouldSetValue = datasourceReady && 
+                         outputDS &&  // ADDED
+                         initialInputValue && 
+                         sqlExprObj?.parts?.length > 0 &&
+                         (initialValueSetRef.current !== configId || valueChanged)
+   ```
+
+2. **r018.110:** Added `outputDS` to useEffect dependency array:
+   ```typescript
+   }, [sqlExprObj, initialInputValue, datasourceReady, outputDS, ...])
+   ```
+
+Now the hash value is only set when all three required conditions exist, and the effect re-runs when `outputDS` becomes available.
+
+**Files Modified:**
+- `query-simple/src/runtime/query-task-form.tsx` (r018.109, r018.110)
+  - Added `outputDS` check to `shouldSetValue` condition
+  - Added `outputDS` to useEffect dependency array
+  - Updated diagnostic logging to include `hasOutputDS`
+
+**Related Bugs:**
+- HASH-PARAM-001: Hash queries not executing when Query tab not active (different root cause)
+- HASH-PARAM-002: Hash parameters re-executing when switching queries (different root cause)
+
+**Investigation Tools:**
+- Added `HASH-FIRST-LOAD` debug tag (r018.105) with comprehensive logging:
+  - Condition state tracking in `query-task-list.tsx`
+  - Execution path tracking in `query-task-form.tsx`
+  - Decision point logging showing which conditions were met/failed
+  
+**Target Resolution:** r018.110 ✅ **RESOLVED**
+
+---
+
+### HASH-PARAM-005: Hash Parameters Not Re-Executing ✅ **RESOLVED** (r018.102)
+
+**Status:** ✅ **RESOLVED**  
+**Severity:** Medium  
+**Category:** HASH-PARAM  
+**First Reported:** 2026-01-08  
+**Resolved:** 2026-01-08 (r018.102)
+
+**Description:**
+When loading a page with a hash parameter (e.g., `pin=2223059013`), the query would execute successfully. However, if the hash was changed (e.g., to `major=222306`) and then changed back to the original (`pin=2223059013`), the query would not re-execute. The widget would open, populate the value, but never submit the query.
+
+**Root Cause:**
+Redundant hash tracking in multiple locations:
+1. **HelperSimple**: `lastExecutedHash` stored the entire hash string and blocked re-execution
+2. **QuerySimple UrlConsumptionManager**: `lastProcessedHash` stored the entire hash string
+3. **QuerySimple widget.tsx**: `processedHashParamsRef` Set stored all `shortId:value` combinations
+
+When the same hash parameter was used again, all three blockers prevented re-execution.
+
+**Technical Details:**
+- HelperSimple's `lastExecutedHash` compared full hash strings (lines 340-359 in helper-simple/widget.tsx)
+- UrlConsumptionManager's `lastProcessedHash` compared full hash strings
+- widget.tsx's `processedHashParamsRef` tracked `shortId:value` in a Set and never cleared
+- All three checks had to pass for a query to execute
+
+**Expected Behavior:**
+- Hash parameters should re-execute when user navigates away and back
+- Previous execution should not block future execution of the same query
+- System should allow re-running the same search with the same parameters
+
+**Solution:**
+1. **r018.98:** Added `HASH-EXEC` debug feature to HelperSimple's logger
+2. **r018.99-100:** Added `HASH-EXEC` logging to UrlConsumptionManager and QuerySimple's logger
+3. **r018.101:** Modified UrlConsumptionManager to track only `shortId=value` portion of hash (not entire hash)
+4. **r018.102:** Removed `processedHashParamsRef` and all associated blocking logic from widget.tsx
+
+**Files Modified:**
+- `helper-simple/src/runtime/widget.tsx` (r018.98)
+- `query-simple/src/runtime/hooks/use-url-consumption.ts` (r018.99, r018.101)
+- `query-simple/src/runtime/widget.tsx` (r018.102)
+- `shared-code/common/debug-logger.ts` (r018.98, r018.100)
+
+**Investigation Notes:**
+- Required enabling `HASH-EXEC` logging in both widgets to identify all blocking checks
+- Issue was caused by over-aggressive caching/memoization
+- Solution removes unnecessary redundant tracking while keeping HelperSimple's tracking for UX purposes
+
+**Target Resolution:** r018.102 ✅ **RESOLVED**
+
+---
 
 ### HASH-PARAM-001: Hash Queries Not Executing When Query Tab Not Active ✅ **RESOLVED** (r018.39)
 
