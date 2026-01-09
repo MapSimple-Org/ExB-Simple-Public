@@ -81,10 +81,6 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
   private accumulatedRecordsManager = new AccumulatedRecordsManager()
   // Chunk 7: Event Handling Manager (r018.59) - Step 7.1: Create Event Manager
   private eventManager = new EventManager()
-  
-  // Track processed hash parameters to prevent re-execution when switching queries
-  // Key: "shortId:value" (e.g., "pin:2223059013")
-  private processedHashParamsRef = new Set<string>()
 
   state: {
     initialQueryValue?: { shortId: string, value: string },
@@ -162,7 +158,6 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
         hasInitialQueryValue: !!this.state.initialQueryValue,
         initialQueryValueShortId: this.state.initialQueryValue?.shortId,
         initialQueryValueValue: this.state.initialQueryValue?.value,
-        processedHashParams: Array.from(this.processedHashParamsRef),
         currentUrlHash: window.location.hash.substring(1),
       },
       timestamp: Date.now()
@@ -249,21 +244,6 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
           })
           
           if (value) {
-            // Check if this specific shortId:value combination was already processed
-            const paramKey = `${value.shortId}:${value.value}`
-            if (this.processedHashParamsRef.has(paramKey)) {
-              debugLogger.log('HASH-EXEC', {
-                event: 'querysimple-oninitialvaluefound-already-processed',
-                widgetId: this.props.id,
-                shortId: value.shortId,
-                value: value.value,
-                paramKey,
-                processedParams: Array.from(this.processedHashParamsRef),
-                timestamp: Date.now()
-              })
-              return
-            }
-            
             // Only update if the value or shortId has changed to avoid unnecessary re-renders
             const willUpdate = this.state.initialQueryValue?.shortId !== value.shortId || this.state.initialQueryValue?.value !== value.value
             
@@ -1931,22 +1911,6 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
       note: 'Hash parameter used but NOT cleared - hash remains in URL per user requirement',
       timestamp: Date.now()
     })
-
-    // Track this shortId:value pair as processed to prevent re-execution when switching queries
-    // This prevents HelperSimple from re-triggering the same parameter when switching queries
-    if (initialQueryValue) {
-      const paramKey = `${initialQueryValue.shortId}:${initialQueryValue.value}`
-      this.processedHashParamsRef.add(paramKey)
-      debugLogger.log('HASH-EXEC', {
-        event: 'querysimple-hashparam-tracked-as-processed',
-        widgetId: id,
-        shortId: initialQueryValue.shortId,
-        value: initialQueryValue.value,
-        paramKey,
-        processedParams: Array.from(this.processedHashParamsRef),
-        timestamp: Date.now()
-      })
-    }
     
     // ALWAYS clear both hash state values after execution
     // QuerySimple should not remember hash state after HelperSimple-driven execution completes
