@@ -178,9 +178,41 @@ export function QueryTask (props: QueryTaskProps) {
       queryItemShortId: props.queryItemShortId,
       hasInitialInputValue: !!props.initialInputValue,
       initialInputValue: props.initialInputValue,
+      lastTabSwitchHash: lastTabSwitchHashRef.current,
       timestamp: Date.now()
     })
-  }, [props.initialInputValue, props.widgetId, props.queryItem.configId, props.queryItemShortId])
+    
+    // FIX (r018.128): Only switch tab ONCE per unique hash value
+    // This prevents continuous re-switching that blocks auto-switch to Results tab
+    if (props.initialInputValue && lastTabSwitchHashRef.current !== props.initialInputValue) {
+      lastTabSwitchHashRef.current = props.initialInputValue
+      
+      debugLogger.log('HASH-EXEC', {
+        event: 'querytask-switching-to-query-tab-for-hash',
+        widgetId: props.widgetId,
+        initialInputValue: props.initialInputValue,
+        currentActiveTab: propActiveTab || internalActiveTab,
+        note: 'First time seeing this hash value - switching to Query tab',
+        timestamp: Date.now()
+      })
+      
+      if (propOnTabChange) {
+        propOnTabChange('query')
+      } else {
+        setInternalActiveTab('query')
+      }
+    } else if (!props.initialInputValue && lastTabSwitchHashRef.current !== null) {
+      // Reset ref when hash is cleared (allows same hash to trigger again later)
+      debugLogger.log('HASH-EXEC', {
+        event: 'querytask-resetting-tab-switch-tracking',
+        widgetId: props.widgetId,
+        previousHash: lastTabSwitchHashRef.current,
+        note: 'Hash cleared - resetting tracking so same hash can trigger again',
+        timestamp: Date.now()
+      })
+      lastTabSwitchHashRef.current = null
+    }
+  }, [props.initialInputValue, props.widgetId, props.queryItem.configId, props.queryItemShortId, propOnTabChange, propActiveTab, internalActiveTab])
   
   // Controlled tab state: use prop if provided, otherwise internal state
   const activeTab = propActiveTab || internalActiveTab
@@ -197,6 +229,8 @@ export function QueryTask (props: QueryTaskProps) {
   const isQuerySwitchInProgressRef = React.useRef(false)
   // Track if we've already selected records for the current query results
   const hasSelectedRecordsRef = React.useRef(false)
+  // FIX (r018.128): Track which hash value we last switched tabs for to prevent continuous re-switching
+  const lastTabSwitchHashRef = React.useRef<string | null>(null)
   // Track query execution count to force QueryTaskResult remount on new queries
   const queryExecutionKeyRef = React.useRef(0)
   const queryParamRef = React.useRef<QueryParams>(null)
