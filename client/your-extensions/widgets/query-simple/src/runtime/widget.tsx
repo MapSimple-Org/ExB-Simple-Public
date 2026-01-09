@@ -915,30 +915,33 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
 
     this.handleSelectionChange(event)
 
-    // Capture state AFTER old implementation
-    const stateAfterOld = {
-      hasSelection: this.state.hasSelection,
-      selectionRecordCount: this.state.selectionRecordCount,
-      lastSelection: this.state.lastSelection,
-      resultsMode: this.state.resultsMode,
-      accumulatedRecordsCount: this.state.accumulatedRecords?.length || 0,
-      isPanelVisible: this.state.isPanelVisible
-    }
+    // FIX (r019.4): Wait for setState to complete before capturing state
+    // React's setState is async, so we need to wait before reading this.state
+    setTimeout(() => {
+      // Capture state AFTER old implementation (after setState completes)
+      const stateAfterOld = {
+        hasSelection: this.state.hasSelection,
+        selectionRecordCount: this.state.selectionRecordCount,
+        lastSelection: this.state.lastSelection,
+        resultsMode: this.state.resultsMode,
+        accumulatedRecordsCount: this.state.accumulatedRecords?.length || 0,
+        isPanelVisible: this.state.isPanelVisible
+      }
 
-    debugLogger.log('CHUNK-3-COMPARE', {
-      event: 'old-implementation-handleSelectionChange-complete',
-      widgetId: id,
-      oldImplementation: {
-        stateBefore,
-        stateAfter: stateAfterOld,
-        stateChanged: JSON.stringify(stateBefore) !== JSON.stringify(stateAfterOld)
-      },
-      timestamp: Date.now()
-    })
+      debugLogger.log('CHUNK-3-COMPARE', {
+        event: 'old-implementation-handleSelectionChange-complete',
+        widgetId: id,
+        oldImplementation: {
+          stateBefore,
+          stateAfter: stateAfterOld,
+          stateChanged: JSON.stringify(stateBefore) !== JSON.stringify(stateAfterOld)
+        },
+        timestamp: Date.now()
+      })
 
-    // Reset state to BEFORE for fair comparison
-    // This ensures new implementation starts with same state as old
-    this.setState(stateBefore as any, () => {
+      // Reset state to BEFORE for fair comparison
+      // This ensures new implementation starts with same state as old
+      this.setState(stateBefore as any, () => {
       debugLogger.log('CHUNK-3-COMPARE', {
         event: 'parallel-execution-state-RESET-for-new-implementation',
         widgetId: id,
@@ -1005,10 +1008,18 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
                 old: stateAfterOld.selectionRecordCount,
                 new: stateAfterNew.selectionRecordCount
               } : 'match',
-              lastSelectionCount: (stateAfterOld.lastSelection?.recordIds.length || 0) !== (stateAfterNew.lastSelection?.recordIds.length || 0) ? {
-                old: stateAfterOld.lastSelection?.recordIds.length || 0,
-                new: stateAfterNew.lastSelection?.recordIds.length || 0
-              } : 'match',
+              lastSelectionRecordIds: (() => {
+                // FIX (r019.4): Compare actual record IDs, not just count
+                const oldIds = stateAfterOld.lastSelection?.recordIds || []
+                const newIds = stateAfterNew.lastSelection?.recordIds || []
+                const idsMatch = JSON.stringify(oldIds.sort()) === JSON.stringify(newIds.sort())
+                return !idsMatch ? {
+                  old: oldIds,
+                  new: newIds,
+                  oldCount: oldIds.length,
+                  newCount: newIds.length
+                } : 'match'
+              })(),
               resultsMode: stateAfterOld.resultsMode !== stateAfterNew.resultsMode ? {
                 old: stateAfterOld.resultsMode,
                 new: stateAfterNew.resultsMode
@@ -1032,6 +1043,7 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
         })
       }, 0)
     })
+    }, 10) // FIX (r019.4): Wait 10ms for old implementation's setState to complete
   }
 
   /**
