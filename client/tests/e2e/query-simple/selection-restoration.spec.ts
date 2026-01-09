@@ -268,11 +268,22 @@ test.describe('Selection & Restoration', () => {
       await helpers.enterQueryValue(MAJOR_BULK, WIDGET_ID);
       await helpers.clickApply(WIDGET_ID);
       
-      // Wait for removal to process
-      await page.waitForTimeout(2000);
+      // Wait for "Retrieving query results..." loading message to disappear
+      const widget = helpers.getWidget(WIDGET_ID);
+      const loadingMessage = widget.getByText(/retrieving query results/i);
+      
+      try {
+        console.log('⏳ Waiting for removal query to complete...');
+        await loadingMessage.waitFor({ state: 'detached', timeout: 10000 });
+        console.log('✅ Removal query completed');
+      } catch (e) {
+        console.log('⚠️ Loading message timeout (might already be gone)');
+      }
+      
+      // Additional settle time for state updates
+      await page.waitForTimeout(1000);
       
       // Verify success: Results tab should be disabled/unselectable when 0 records
-      const widget = helpers.getWidget(WIDGET_ID);
       const resultsTab = widget.locator('.jimu-nav-link, button[role="tab"]').filter({ hasText: /^Results/i }).first();
       
       const isDisabled = await resultsTab.evaluate(tab => {
