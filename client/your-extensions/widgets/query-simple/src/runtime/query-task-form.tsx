@@ -318,13 +318,14 @@ export function QueryTaskForm (props: QueryTaskItemProps) {
       configId,
       initialInputValue,
       datasourceReady,
+      hasOutputDS: !!outputDS,
       hasSqlExprObj: !!sqlExprObj,
       sqlExprObjPartsLength: sqlExprObj?.parts?.length,
       initialValueSetRef: initialValueSetRef.current,
       lastValueSetRef: lastValueSetRef.current,
       hashTriggeredRef: hashTriggeredRef.current,
       currentStateValue: attributeFilterSqlExprObj?.parts?.[0]?.valueOptions?.value,
-      willProcess: datasourceReady && initialInputValue && sqlExprObj?.parts?.length > 0,
+      willProcess: datasourceReady && outputDS && initialInputValue && sqlExprObj?.parts?.length > 0,
       timestamp: Date.now()
     })
     
@@ -350,7 +351,10 @@ export function QueryTaskForm (props: QueryTaskItemProps) {
     // Set the value if:
     // - We haven't set it for this configId yet, OR
     // - The value has changed for the same configId (hash parameter updated)
+    // FIX (r018.109): Wait for ALL required conditions before setting hash value
+    // This prevents race condition where hash is set before outputDS exists
     const shouldSetValue = datasourceReady && 
+                          outputDS &&
                           initialInputValue && 
                           sqlExprObj?.parts?.length > 0 &&
                           (initialValueSetRef.current !== configId || valueChanged)
