@@ -997,9 +997,9 @@ export function QueryTaskForm (props: QueryTaskItemProps) {
               hashTriggeredRef: hashTriggeredRef.current,
               datasourceReady,
               hasOutputDS: !!outputDS,
-              allConditionsMet: hashTriggeredRef.current && datasourceReady && outputDS
+              allConditionsMet: !!(hashTriggeredRef.current && datasourceReady && outputDS)
             },
-            willExecute: hashTriggeredRef.current && datasourceReady && outputDS,
+            willExecute: !!(hashTriggeredRef.current && datasourceReady && outputDS),
             timestamp: Date.now()
           })
           
