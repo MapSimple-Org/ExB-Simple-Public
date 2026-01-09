@@ -1,5 +1,5 @@
 import React from 'react'
-import { SelectionType } from 'jimu-arcgis'
+import { SelectionType } from '../../config'
 import { createQuerySimpleDebugLogger } from 'widgets/shared-code/common'
 
 const debugLogger = createQuerySimpleDebugLogger()
