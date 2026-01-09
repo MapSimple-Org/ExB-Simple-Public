@@ -647,7 +647,7 @@ export function QueryTaskForm (props: QueryTaskItemProps) {
       // Update previousConfigIdRef for next comparison
       previousConfigIdRef.current = configId
     }
-  }, [sqlExprObj, initialInputValue, datasourceReady, configId, widgetId, onHashParameterUsed, queryItemShortId, activeTab, onTabChange])
+  }, [sqlExprObj, initialInputValue, datasourceReady, outputDS, configId, widgetId, onHashParameterUsed, queryItemShortId, activeTab, onTabChange])
   
   // Keep ref in sync with state changes (for SqlExpressionRuntime updates)
   React.useEffect(() => {
