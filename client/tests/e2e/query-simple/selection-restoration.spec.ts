@@ -268,16 +268,24 @@ test.describe('Selection & Restoration', () => {
       await helpers.enterQueryValue(MAJOR_BULK, WIDGET_ID);
       await helpers.clickApply(WIDGET_ID);
       
-      // Wait for removal to process (no Results tab when 0 records, so can't use waitForResults)
-      await page.waitForTimeout(3000);
+      // Wait for removal to process
+      await page.waitForTimeout(2000);
       
-      const count = await helpers.getResultCount(WIDGET_ID);
-      console.log(`📊 After Removal: ${count} record(s)`);
-      expect(count).toBe(0); // All 121 records should be removed
+      // Verify success: Results tab should be disabled/unselectable when 0 records
+      const widget = helpers.getWidget(WIDGET_ID);
+      const resultsTab = widget.locator('.jimu-nav-link, button[role="tab"]').filter({ hasText: /^Results/i }).first();
+      
+      const isDisabled = await resultsTab.evaluate(tab => {
+        return tab.hasAttribute('disabled') || 
+               tab.getAttribute('aria-disabled') === 'true' ||
+               tab.classList.contains('disabled');
+      });
+      
+      console.log(`✅ Removal successful - Results tab disabled: ${isDisabled}`);
+      expect(isDisabled).toBe(true);
+      
+      console.log('📊 After Removal: 0 record(s) (verified by Results tab disabled state)');
     });
-    
-    // TODO: Add close/reopen test when we understand 0-record behavior better
-    // For now, verifying that all records were removed is sufficient
   });
 
   /**
