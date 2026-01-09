@@ -259,35 +259,29 @@ export class KCSearchHelpers {
   async switchToQueryTab(widgetId: string) {
     console.log(`📑 Switching to Query tab in ${widgetId}`);
     
-    const clicked = await this.page.evaluate((wId) => {
-      // Try multiple selectors for the widget container
-      const widget = document.querySelector(`[data-widgetid="${wId}"]`) || 
-                     document.querySelector(`.widget-runtime[data-widgetid="${wId}"]`) ||
-                     document.querySelector(`.jimu-widget[data-widgetid="${wId}"]`);
-      
-      const findAndClickTab = (container: Element | Document) => {
-        const tabs = Array.from(container.querySelectorAll('.jimu-nav-link, button[role="tab"], .nav-link, .nav-item'));
-        const queryTab = tabs.find(t => t.textContent?.trim().toLowerCase() === 'query');
-        if (queryTab) {
-          (queryTab as HTMLElement).click();
-          return true;
-        }
-        return false;
-      };
-
-      if (widget && findAndClickTab(widget)) return true;
-      // Global fallback if widget scope failed
-      return findAndClickTab(document);
-    }, widgetId);
-
-    if (clicked) {
-      console.log('   ✅ Switched to Query tab (via JS click)');
-      await this.page.waitForTimeout(2000);
+    // Use Playwright click (not JS evaluate) to trigger React's synthetic events
+    const widget = this.getWidget(widgetId);
+    const queryTab = widget.locator('.jimu-nav-link, button[role="tab"], .nav-link, .nav-item').filter({ hasText: /^Query$/i }).first();
+    
+    try {
+      await queryTab.waitFor({ state: 'visible', timeout: 3000 });
+      await queryTab.click();
+      console.log('   ✅ Clicked Query tab (Playwright click)');
+    } catch (e) {
+      console.log('   ❌ Could not find or click Query tab');
+      throw e;
+    }
+    
+    // Wait for Query tab content to be visible (verify we're actually on the Query tab)
+    await this.page.waitForTimeout(1000);
+    const isOnQueryTab = await widget.locator('button').filter({ hasText: /^(New|Add|Remove)$/i }).first().isVisible().catch(() => false);
+    
+    if (isOnQueryTab) {
+      console.log('   ✅ Verified: Query tab is active (mode buttons visible)');
     } else {
-      console.log('   ⚠️ Could not find Query tab via JS, trying Playwright fallback...');
-      const queryTab = this.getWidget(widgetId).locator('.jimu-nav-link, button[role="tab"], .nav-link').filter({ hasText: /^Query$/i }).first();
-      await queryTab.click({ force: true }).catch(() => console.log('   ❌ Global fallback click for Query tab failed too'));
-      await this.page.waitForTimeout(2000);
+      console.log('   ⚠️ Warning: Query tab might not be active (mode buttons not visible)');
+      // Take a screenshot for debugging
+      await this.page.screenshot({ path: `test-results/query-tab-switch-failed-${Date.now()}.png` });
     }
   }
 
@@ -336,8 +330,19 @@ export class KCSearchHelpers {
     console.log(`🎯 Setting results mode to: ${mode} in ${widgetId}`);
     const widget = this.getWidget(widgetId);
     const modeButton = widget.locator('button').filter({ hasText: new RegExp(`^${mode}$`, 'i') }).first();
+    
+    // Wait for the mode button to be visible (Query tab needs to be active)
+    try {
+      await modeButton.waitFor({ state: 'visible', timeout: 5000 });
+      console.log(`   ✅ Mode button "${mode}" is visible`);
+    } catch (e) {
+      console.log(`   ❌ Mode button "${mode}" not visible after 5s - might still be on Results tab`);
+      throw e;
+    }
+    
     await modeButton.click({ force: true });
     await this.page.waitForTimeout(500);
+    console.log(`   ✅ Clicked "${mode}" mode button`);
   }
 
   /**
