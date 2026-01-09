@@ -178,7 +178,7 @@ export function createQuerySimpleDebugLogger() {
   return new DebugLogger({
     widgetName: 'QUERYSIMPLE',
     features: [
-      'HASH', 'FORM', 'TASK', 'ZOOM', 'MAP-EXTENT', 'DATA-ACTION', 'GROUP', 
+      'HASH', 'HASH-EXEC', 'FORM', 'TASK', 'ZOOM', 'MAP-EXTENT', 'DATA-ACTION', 'GROUP', 
       'SELECTION', 'WIDGET-STATE', 'RESTORE', 'RESULTS-MODE', 'EXPAND-COLLAPSE', 'GRAPHICS-LAYER', 'EVENTS',
       // Temporary migration features (will be removed after migration complete)
       'CHUNK-1-COMPARE', 'CHUNK-1-MISMATCH', 'CHUNK-2-COMPARE', 'CHUNK-2-MISMATCH', 'CHUNK-3-COMPARE', 'CHUNK-3-DECISION', 'CHUNK-3-FALLBACK',
@@ -193,7 +193,7 @@ export function createQuerySimpleDebugLogger() {
 export function createHelperSimpleDebugLogger() {
   return new DebugLogger({
     widgetName: 'HELPERSIMPLE',
-    features: ['HASH', 'SELECTION', 'WIDGET-STATE', 'RESTORE']
+    features: ['HASH', 'HASH-EXEC', 'SELECTION', 'WIDGET-STATE', 'RESTORE']
   })
 }
 
