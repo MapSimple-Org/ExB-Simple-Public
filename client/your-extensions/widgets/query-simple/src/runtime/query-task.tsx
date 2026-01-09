@@ -46,6 +46,7 @@ import { useZoomToRecords } from './hooks/use-zoom-to-records'
 import { DEFAULT_QUERY_ITEM } from '../default-query-item'
 import { generateQueryParams, executeQuery, executeCountQuery } from './query-utils'
 import { mergeResultsIntoAccumulated, removeResultsFromAccumulated, removeRecordsFromOriginSelections } from './results-management-utils'
+import { removeHighlightGraphics } from './graphics-layer-utils'
 import { MenuOutlined } from 'jimu-icons/outlined/editor/menu'
 import defaultMessage from './translations/default'
 import { ArrowLeftOutlined } from 'jimu-icons/outlined/directional/arrow-left'
@@ -1507,6 +1508,24 @@ export function QueryTask (props: QueryTaskProps) {
                 // Graphics will be synced through normal selection flow
               )
               
+              // FIX (r018.104): Manually remove graphics from graphics layer
+              // Similar to X button removal fix (r018.90), we need to explicitly remove graphics
+              // since removeRecordsFromOriginSelections doesn't receive graphics layer params
+              if (useGraphicsLayerForHighlight && graphicsLayer && result.records && result.records.length > 0) {
+                const removedRecordIds = result.records.map(r => r.getId())
+                removeHighlightGraphics(graphicsLayer, removedRecordIds)
+                
+                debugLogger.log('RESULTS-MODE', {
+                  event: 'remove-mode-manual-graphics-removal',
+                  widgetId: props.widgetId,
+                  graphicsCountBefore: graphicsCountBeforeRemoveMode,
+                  graphicsCountAfter: graphicsLayer?.graphics?.length || 0,
+                  removedRecordIdsCount: removedRecordIds.length,
+                  removedRecordIds: removedRecordIds.slice(0, 10),
+                  timestamp: Date.now()
+                })
+              }
+              
               // FIX (r018.86): DIAGNOSTIC - Graphics count AFTER removeRecordsFromOriginSelections
               const graphicsCountAfterRemoveMode = graphicsLayer?.graphics?.length || 0
               const graphicsIdsAfterRemoveMode = graphicsLayer?.graphics?.map(g => g.attributes?.recordId).slice(0, 10) || []
@@ -1519,7 +1538,7 @@ export function QueryTask (props: QueryTaskProps) {
                 graphicsIdsAfter: graphicsIdsAfterRemoveMode,
                 graphicsChanged: graphicsCountAfterRemoveMode !== graphicsCountBeforeRemoveMode,
                 graphicsChangedBy: graphicsCountAfterRemoveMode - graphicsCountBeforeRemoveMode,
-                expected: 'Graphics should NOT change here (no graphics layer params passed)',
+                expected: 'Graphics SHOULD NOW be removed (r018.104 fix)',
                 timestamp: Date.now()
               })
               
