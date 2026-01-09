@@ -92,44 +92,9 @@ export class SelectionRestorationManager {
     const state = this.stateGetter()
 
     // ========================================================================
-    // CHUNK-3-COMPARE: Log state BEFORE processing
-    // ========================================================================
-    const stateBefore = {
-      hasSelection: state.hasSelection,
-      selectionRecordCount: state.selectionRecordCount,
-      lastSelection: state.lastSelection,
-      resultsMode: state.resultsMode,
-      accumulatedRecordsCount: state.accumulatedRecords?.length || 0,
-      isPanelVisible: state.isPanelVisible
-    }
-
-    debugLogger.log('CHUNK-3-COMPARE', {
-      event: 'new-implementation-handleSelectionChange-before',
-      widgetId: this.widgetId,
-      newImplementation: {
-        stateBefore,
-        eventWidgetId: customEvent.detail.widgetId,
-        eventRecordIdsCount: customEvent.detail.recordIds.length,
-        eventHasOutputDsId: !!customEvent.detail.outputDsId,
-        eventHasQueryItemConfigId: !!customEvent.detail.queryItemConfigId,
-        timestamp: Date.now()
-      }
-    })
-
-    // ========================================================================
     // 1. Only track if this is for our widget
     // ========================================================================
     if (customEvent.detail.widgetId !== this.widgetId) {
-      debugLogger.log('CHUNK-3-COMPARE', {
-        event: 'new-implementation-handleSelectionChange-ignoring-other-widget',
-        widgetId: this.widgetId,
-        newImplementation: {
-          stateBefore,
-          eventWidgetId: customEvent.detail.widgetId,
-          reason: 'event-for-different-widget',
-          timestamp: Date.now()
-        }
-      })
       return
     }
 
@@ -143,19 +108,6 @@ export class SelectionRestorationManager {
         event: 'handleSelectionChange-ignoring-empty-selection-while-panel-closed',
         widgetId: this.widgetId,
         timestamp: Date.now()
-      })
-      
-      debugLogger.log('CHUNK-3-COMPARE', {
-        event: 'new-implementation-handleSelectionChange-ignoring-empty-while-closed',
-        widgetId: this.widgetId,
-        newImplementation: {
-          stateBefore,
-          eventRecordIdsCount: customEvent.detail.recordIds.length,
-          isPanelVisible: state.isPanelVisible,
-          hasSelection,
-          reason: 'panel-closed-and-empty-selection',
-          timestamp: Date.now()
-        }
       })
       return
     }
@@ -246,29 +198,6 @@ export class SelectionRestorationManager {
       'note': shouldResetMode 
         ? 'Mode reset to NewSelection because selection was cleared in Remove mode'
         : 'lastSelection-only-contains-current-query-records-not-all-accumulated-records'
-    })
-
-    debugLogger.log('CHUNK-3-COMPARE', {
-      event: 'new-implementation-handleSelectionChange-after',
-      widgetId: this.widgetId,
-      newImplementation: {
-        stateBefore,
-        stateAfter: {
-          hasSelection: newState.hasSelection,
-          selectionRecordCount: newState.selectionRecordCount,
-          lastSelectionRecordIdsCount: newState.lastSelection?.recordIds.length || 0,
-          resultsMode: newState.resultsMode || state.resultsMode,
-          accumulatedRecordsCount: newState.accumulatedRecords?.length ?? state.accumulatedRecords?.length ?? 0
-        },
-        decisionLogic: {
-          isAccumulationMode,
-          accumulatedRecordsCount,
-          selectionCount,
-          shouldResetMode
-        },
-        result: 'success',
-        timestamp: Date.now()
-      }
     })
   }
 
