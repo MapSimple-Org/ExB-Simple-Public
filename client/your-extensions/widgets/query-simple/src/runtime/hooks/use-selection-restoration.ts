@@ -43,18 +43,24 @@ export interface SelectionRestorationCallbacks {
  * Note: This is a utility class (not a hook) to work with class components.
  */
 export class SelectionRestorationManager {
-  private widgetId: string
+  private widgetId: string = ''
   private stateGetter: () => SelectionRestorationState
   private callbacks: SelectionRestorationCallbacks
 
   constructor(
-    widgetId: string,
     stateGetter: () => SelectionRestorationState,
     callbacks: SelectionRestorationCallbacks
   ) {
-    this.widgetId = widgetId
     this.stateGetter = stateGetter
     this.callbacks = callbacks
+  }
+
+  /**
+   * Sets the widget ID. Should be called once in componentDidMount.
+   * @param widgetId - The widget ID
+   */
+  setWidgetId(widgetId: string): void {
+    this.widgetId = widgetId
   }
 
   // ============================================================================

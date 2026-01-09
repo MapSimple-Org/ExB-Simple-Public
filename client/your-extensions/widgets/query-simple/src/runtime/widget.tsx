@@ -25,6 +25,8 @@ import { GraphicsLayerManager } from './hooks/use-graphics-layer'
 import { AccumulatedRecordsManager } from './hooks/use-accumulated-records'
 // Chunk 7: Event Handling Manager (r018.59) - Step 7.1: Create Event Manager
 import { EventManager, OPEN_WIDGET_EVENT, QUERYSIMPLE_SELECTION_EVENT, RESTORE_ON_IDENTIFY_CLOSE_EVENT } from './hooks/use-event-handling'
+// Chunk 3: Selection & Restoration Manager (r019.1) - Section 3.1: Selection State Tracking
+import { SelectionRestorationManager } from './hooks/use-selection-restoration'
 
 const debugLogger = createQuerySimpleDebugLogger()
 const { iconMap } = getWidgetRuntimeDataMap()
@@ -81,6 +83,13 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
   private accumulatedRecordsManager = new AccumulatedRecordsManager()
   // Chunk 7: Event Handling Manager (r018.59) - Step 7.1: Create Event Manager
   private eventManager = new EventManager()
+  // Chunk 3: Selection & Restoration Manager (r019.1) - Section 3.1: Selection State Tracking
+  private selectionRestorationManager = new SelectionRestorationManager(
+    () => this.state, // stateGetter
+    {
+      onStateUpdate: (newState) => this.setState(newState as any)
+    }
+  )
 
   state: {
     initialQueryValue?: { shortId: string, value: string },
@@ -458,11 +467,14 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
     // Chunk 7: Event handling (r018.59 - Step 7.1: Add manager)
     this.eventManager.setHandlers({
       onOpenWidgetEvent: this.handleOpenWidgetEvent,
-      onSelectionChange: this.handleSelectionChange,
+      onSelectionChange: this.handleSelectionChangeParallel, // FIX (r019.2): Use parallel method for Section 3.1
       onRestoreOnIdentifyClose: this.handleRestoreOnIdentifyClose
     })
     
     this.eventManager.setup(this.props.id)
+    
+    // Chunk 3: Selection & Restoration Manager (r019.2) - Section 3.1: Initialize widgetId
+    this.selectionRestorationManager.setWidgetId(this.props.id)
     
     // Graphics layer will be initialized when map view becomes available via JimuMapViewComponent
   }
@@ -851,6 +863,174 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
       'note': shouldResetMode 
         ? 'Mode reset to NewSelection because selection was cleared in Remove mode'
         : 'lastSelection-only-contains-current-query-records-not-all-accumulated-records'
+    })
+  }
+
+  /**
+   * PARALLEL EXECUTION: Runs BOTH old and new handleSelectionChange implementations.
+   * This is Section 3.1 Step 3.1.3 - Parallel implementation with RESTORE-COMPARE logging.
+   * 
+   * After testing confirms identical behavior, we'll switch to manager-only in Step 3.1.5.
+   * 
+   * @param event - The selection change event
+   * 
+   * @since 1.19.0-r019.2 (Section 3.1 Step 3.1.3)
+   */
+  handleSelectionChangeParallel = (event: Event) => {
+    const { id } = this.props
+
+    debugLogger.log('CHUNK-3-COMPARE', {
+      event: 'parallel-execution-handleSelectionChange-START',
+      widgetId: id,
+      note: 'Running BOTH old and new implementations in parallel',
+      timestamp: Date.now()
+    })
+
+    // Capture state BEFORE both implementations run
+    const stateBefore = {
+      hasSelection: this.state.hasSelection,
+      selectionRecordCount: this.state.selectionRecordCount,
+      lastSelection: this.state.lastSelection,
+      resultsMode: this.state.resultsMode,
+      accumulatedRecordsCount: this.state.accumulatedRecords?.length || 0,
+      isPanelVisible: this.state.isPanelVisible
+    }
+
+    debugLogger.log('CHUNK-3-COMPARE', {
+      event: 'parallel-execution-state-BEFORE-both',
+      widgetId: id,
+      stateBefore,
+      timestamp: Date.now()
+    })
+
+    // ========================================================================
+    // 1. Run OLD implementation (existing handleSelectionChange)
+    // ========================================================================
+    debugLogger.log('CHUNK-3-COMPARE', {
+      event: 'old-implementation-handleSelectionChange-starting',
+      widgetId: id,
+      note: 'About to call existing handleSelectionChange',
+      timestamp: Date.now()
+    })
+
+    this.handleSelectionChange(event)
+
+    // Capture state AFTER old implementation
+    const stateAfterOld = {
+      hasSelection: this.state.hasSelection,
+      selectionRecordCount: this.state.selectionRecordCount,
+      lastSelection: this.state.lastSelection,
+      resultsMode: this.state.resultsMode,
+      accumulatedRecordsCount: this.state.accumulatedRecords?.length || 0,
+      isPanelVisible: this.state.isPanelVisible
+    }
+
+    debugLogger.log('CHUNK-3-COMPARE', {
+      event: 'old-implementation-handleSelectionChange-complete',
+      widgetId: id,
+      oldImplementation: {
+        stateBefore,
+        stateAfter: stateAfterOld,
+        stateChanged: JSON.stringify(stateBefore) !== JSON.stringify(stateAfterOld)
+      },
+      timestamp: Date.now()
+    })
+
+    // Reset state to BEFORE for fair comparison
+    // This ensures new implementation starts with same state as old
+    this.setState(stateBefore as any, () => {
+      debugLogger.log('CHUNK-3-COMPARE', {
+        event: 'parallel-execution-state-RESET-for-new-implementation',
+        widgetId: id,
+        note: 'State reset to original before new implementation runs',
+        timestamp: Date.now()
+      })
+
+      // ========================================================================
+      // 2. Run NEW implementation (SelectionRestorationManager)
+      // ========================================================================
+      debugLogger.log('CHUNK-3-COMPARE', {
+        event: 'new-implementation-handleSelectionChange-starting',
+        widgetId: id,
+        note: 'About to call SelectionRestorationManager.handleSelectionChange',
+        timestamp: Date.now()
+      })
+
+      this.selectionRestorationManager.handleSelectionChange(event)
+
+      // Capture state AFTER new implementation (on next tick to allow setState to complete)
+      setTimeout(() => {
+        const stateAfterNew = {
+          hasSelection: this.state.hasSelection,
+          selectionRecordCount: this.state.selectionRecordCount,
+          lastSelection: this.state.lastSelection,
+          resultsMode: this.state.resultsMode,
+          accumulatedRecordsCount: this.state.accumulatedRecords?.length || 0,
+          isPanelVisible: this.state.isPanelVisible
+        }
+
+        debugLogger.log('CHUNK-3-COMPARE', {
+          event: 'new-implementation-handleSelectionChange-complete',
+          widgetId: id,
+          newImplementation: {
+            stateBefore,
+            stateAfter: stateAfterNew,
+            stateChanged: JSON.stringify(stateBefore) !== JSON.stringify(stateAfterNew)
+          },
+          timestamp: Date.now()
+        })
+
+        // ========================================================================
+        // 3. COMPARISON: Old vs. New
+        // ========================================================================
+        const statesMatch = JSON.stringify(stateAfterOld) === JSON.stringify(stateAfterNew)
+
+        debugLogger.log('CHUNK-3-COMPARE', {
+          event: 'parallel-execution-COMPARISON',
+          widgetId: id,
+          comparison: {
+            statesMatch,
+            oldImplementation: {
+              stateAfter: stateAfterOld
+            },
+            newImplementation: {
+              stateAfter: stateAfterNew
+            },
+            differences: statesMatch ? 'NONE - Perfect match! ✅' : {
+              hasSelection: stateAfterOld.hasSelection !== stateAfterNew.hasSelection ? {
+                old: stateAfterOld.hasSelection,
+                new: stateAfterNew.hasSelection
+              } : 'match',
+              selectionRecordCount: stateAfterOld.selectionRecordCount !== stateAfterNew.selectionRecordCount ? {
+                old: stateAfterOld.selectionRecordCount,
+                new: stateAfterNew.selectionRecordCount
+              } : 'match',
+              lastSelectionCount: (stateAfterOld.lastSelection?.recordIds.length || 0) !== (stateAfterNew.lastSelection?.recordIds.length || 0) ? {
+                old: stateAfterOld.lastSelection?.recordIds.length || 0,
+                new: stateAfterNew.lastSelection?.recordIds.length || 0
+              } : 'match',
+              resultsMode: stateAfterOld.resultsMode !== stateAfterNew.resultsMode ? {
+                old: stateAfterOld.resultsMode,
+                new: stateAfterNew.resultsMode
+              } : 'match',
+              accumulatedRecordsCount: stateAfterOld.accumulatedRecordsCount !== stateAfterNew.accumulatedRecordsCount ? {
+                old: stateAfterOld.accumulatedRecordsCount,
+                new: stateAfterNew.accumulatedRecordsCount
+              } : 'match'
+            }
+          },
+          timestamp: Date.now()
+        })
+
+        debugLogger.log('CHUNK-3-COMPARE', {
+          event: 'parallel-execution-handleSelectionChange-END',
+          widgetId: id,
+          note: statesMatch 
+            ? '✅ IMPLEMENTATIONS MATCH - Ready to switch to manager'
+            : '❌ IMPLEMENTATIONS DIFFER - Debug needed',
+          timestamp: Date.now()
+        })
+      }, 0)
     })
   }
 
