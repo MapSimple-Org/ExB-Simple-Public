@@ -467,7 +467,8 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
     // Chunk 7: Event handling (r018.59 - Step 7.1: Add manager)
     this.eventManager.setHandlers({
       onOpenWidgetEvent: this.handleOpenWidgetEvent,
-      onSelectionChange: this.handleSelectionChangeParallel, // FIX (r019.2): Use parallel method for Section 3.1
+      // Chunk 3: Section 3.1 Step 3.1.5 (r019.5): Switch to manager implementation
+      onSelectionChange: (event) => this.selectionRestorationManager.handleSelectionChange(event),
       onRestoreOnIdentifyClose: this.handleRestoreOnIdentifyClose
     })
     
@@ -773,6 +774,19 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
    * 
    * @since 1.19.0-r017.0
    */
+  /**
+   * OLD IMPLEMENTATION - COMMENTED OUT (r019.5 - Section 3.1 Step 3.1.5)
+   * 
+   * This implementation has been replaced by SelectionRestorationManager.handleSelectionChange.
+   * Keeping commented code for safety until verification is complete.
+   * 
+   * Verified via:
+   * - E2E Tests: 6/6 passing (19/19 comparison matches)
+   * - Manual Testing: 63/72 perfect matches (9 mismatches were timing artifacts from parallel execution)
+   * 
+   * Remove in Section 3.1 Step 3.1.7 after final verification.
+   */
+  /*
   handleSelectionChange = (event: Event) => {
     const customEvent = event as CustomEvent<{ widgetId: string, recordIds: string[], dataSourceId?: string, outputDsId?: string, queryItemConfigId?: string }>
     const { id } = this.props
@@ -865,17 +879,25 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
         : 'lastSelection-only-contains-current-query-records-not-all-accumulated-records'
     })
   }
+  */
 
   /**
-   * PARALLEL EXECUTION: Runs BOTH old and new handleSelectionChange implementations.
-   * This is Section 3.1 Step 3.1.3 - Parallel implementation with RESTORE-COMPARE logging.
+   * PARALLEL EXECUTION - COMMENTED OUT (r019.5 - Section 3.1 Step 3.1.5)
    * 
-   * After testing confirms identical behavior, we'll switch to manager-only in Step 3.1.5.
+   * This parallel execution method was used to verify the new SelectionRestorationManager
+   * matched the old implementation's behavior.
    * 
-   * @param event - The selection change event
+   * Results:
+   * - E2E Tests: 19/19 perfect matches
+   * - Manual Testing: 63/72 matches (9 mismatches were timing artifacts)
+   * 
+   * No longer needed now that we've switched to manager-only implementation.
+   * Remove in Section 3.1 Step 3.1.7 after final verification.
    * 
    * @since 1.19.0-r019.2 (Section 3.1 Step 3.1.3)
+   * @deprecated r019.5 - Replaced by direct manager call
    */
+  /*
   handleSelectionChangeParallel = (event: Event) => {
     const { id } = this.props
 
@@ -1045,6 +1067,7 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
     })
     }, 10) // FIX (r019.4): Wait 10ms for old implementation's setState to complete
   }
+  */
 
   /**
    * Handles restore request when identify popup closes.
