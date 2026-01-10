@@ -870,7 +870,7 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
         accumulatedRecordsCount: this.state.accumulatedRecords.length
       })
       
-      this.addSelectionToMap()
+      this.addSelectionToMapParallel()
       return
     }
     
@@ -929,7 +929,7 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
       outputDsId: customEvent.detail.outputDsId
     })
     
-    this.addSelectionToMap()
+    this.addSelectionToMapParallel()
   }
 
   /**
