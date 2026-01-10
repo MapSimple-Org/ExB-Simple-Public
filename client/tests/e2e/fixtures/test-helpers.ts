@@ -307,6 +307,20 @@ export class KCSearchHelpers {
   }
 
   /**
+   * Check if Results tab is visible
+   */
+  async isResultsTabVisible(widgetId: string): Promise<boolean> {
+    const widget = this.getWidget(widgetId);
+    const resultsTab = widget.locator('.jimu-nav-link, button[role="tab"], .nav-link, .nav-item').filter({ hasText: /^Results$/i }).first();
+    
+    try {
+      return await resultsTab.isVisible();
+    } catch (e) {
+      return false;
+    }
+  }
+
+  /**
    * Set the results mode (New, Add, Remove)
    */
   async setResultsMode(mode: 'New' | 'Add' | 'Remove', widgetId: string) {
@@ -521,5 +535,168 @@ export class KCSearchHelpers {
     console.log(`🧐 Verifying results cleared in ${widgetId}`);
     const count = await this.getResultCount(widgetId);
     expect(count).toBe(0);
+  }
+
+  // ============================================================================
+  // Map Identify Helpers (Chunk 3 Section 3.3)
+  // ============================================================================
+
+  /**
+   * Click on map at specific coordinates to trigger identify popup.
+   * 
+   * @param x - X coordinate in pixels (from left edge of viewport)
+   * @param y - Y coordinate in pixels (from top edge of viewport)
+   * @param options - Optional click options
+   * 
+   * Usage:
+   *   // Click on a known feature location
+   *   await helpers.clickMapAtCoordinates(450, 300)
+   * 
+   * To find coordinates, use captureMapCoordinates() in browser console:
+   *   window.captureMapCoordinates = true
+   *   // Hover over features and watch console for coordinates
+   */
+  async clickMapAtCoordinates(x: number, y: number, options?: { delay?: number }) {
+    console.log(`🗺️  Clicking map at coordinates (${x}, ${y})`);
+    
+    // Click at the specified coordinates
+    await this.page.mouse.click(x, y, { delay: options?.delay || 100 });
+    
+    // Wait a bit for identify popup to potentially appear
+    await this.page.waitForTimeout(1000);
+    
+    console.log(`   ✅ Map clicked at (${x}, ${y})`);
+  }
+
+  /**
+   * Wait for the identify popup to appear after clicking on a map feature.
+   * 
+   * @param timeout - Maximum time to wait in milliseconds (default: 5000)
+   * @returns true if popup appeared, false if timeout
+   * 
+   * The identify popup is part of ExB's built-in Map widget functionality.
+   * It typically has selectors like:
+   * - .esri-popup
+   * - .esri-feature-popup
+   * - [role="dialog"]
+   */
+  async waitForIdentifyPopup(timeout: number = 5000): Promise<boolean> {
+    console.log(`⏳ Waiting for identify popup to appear...`);
+    
+    try {
+      // Try multiple selectors that might match the identify popup
+      const popupSelectors = [
+        '.esri-popup',
+        '.esri-feature-popup',
+        '.jimu-popup',
+        '[role="dialog"][aria-label*="Popup" i]',
+        '.esri-popup__main-container'
+      ];
+
+      for (const selector of popupSelectors) {
+        const popup = this.page.locator(selector).first();
+        if (await popup.isVisible({ timeout: timeout / popupSelectors.length })) {
+          console.log(`   ✅ Identify popup appeared (${selector})`);
+          return true;
+        }
+      }
+
+      console.log(`   ⚠️  No identify popup detected`);
+      return false;
+    } catch (error) {
+      console.log(`   ⚠️  Timeout waiting for identify popup`);
+      return false;
+    }
+  }
+
+  /**
+   * Close the identify popup (if open).
+   * 
+   * Looks for common close button patterns in ExB's identify popup:
+   * - Close button with aria-label
+   * - X button in popup header
+   * - ESC key press
+   */
+  async closeIdentifyPopup(): Promise<void> {
+    console.log(`❌ Attempting to close identify popup...`);
+
+    try {
+      // Try clicking close button (multiple possible selectors)
+      const closeButtonSelectors = [
+        '.esri-popup__button[title*="Close" i]',
+        '.esri-popup__header button.esri-popup__button',
+        '.esri-popup [aria-label*="Close" i]',
+        '.jimu-popup button[aria-label*="Close" i]',
+        'button.esri-icon-close'
+      ];
+
+      for (const selector of closeButtonSelectors) {
+        const closeBtn = this.page.locator(selector).first();
+        if (await closeBtn.isVisible({ timeout: 1000 })) {
+          await closeBtn.click();
+          console.log(`   ✅ Clicked close button (${selector})`);
+          await this.page.waitForTimeout(500);
+          return;
+        }
+      }
+
+      // Fallback: Press ESC key
+      console.log(`   ⌨️  No close button found, pressing ESC key`);
+      await this.page.keyboard.press('Escape');
+      await this.page.waitForTimeout(500);
+      
+      console.log(`   ✅ Identify popup closed`);
+    } catch (error) {
+      console.log(`   ⚠️  Error closing identify popup:`, error);
+    }
+  }
+
+  /**
+   * Helper to inject coordinate logging into the browser.
+   * This allows you to hover over the map and see coordinates in the console.
+   * 
+   * Usage in test:
+   *   await helpers.enableMapCoordinateLogging()
+   *   // Then manually hover over map to see coordinates logged
+   *   // Use those coordinates in clickMapAtCoordinates()
+   */
+  async enableMapCoordinateLogging(): Promise<void> {
+    await this.page.evaluate(() => {
+      let isLogging = false;
+      
+      const mapContainer = document.querySelector('.esri-view-surface') as HTMLElement;
+      if (!mapContainer) {
+        console.error('❌ Map container not found');
+        return;
+      }
+
+      mapContainer.addEventListener('mousemove', (e: MouseEvent) => {
+        if (!isLogging) return;
+        
+        const rect = mapContainer.getBoundingClientRect();
+        const x = Math.round(e.clientX);
+        const y = Math.round(e.clientY);
+        const relX = Math.round(e.clientX - rect.left);
+        const relY = Math.round(e.clientY - rect.top);
+        
+        console.log(`🗺️  Map Coords: viewport(${x}, ${y}) | relative(${relX}, ${relY})`);
+      });
+
+      // Enable logging via console command
+      (window as any).startMapCoordinateCapture = () => {
+        isLogging = true;
+        console.log('✅ Map coordinate capture STARTED. Hover over map to see coordinates.');
+      };
+      
+      (window as any).stopMapCoordinateCapture = () => {
+        isLogging = false;
+        console.log('⏹️  Map coordinate capture STOPPED.');
+      };
+
+      console.log('📍 Map coordinate capture ready!');
+      console.log('   Run: window.startMapCoordinateCapture()');
+      console.log('   Then hover over map features to see coordinates');
+      console.log('   Run: window.stopMapCoordinateCapture() when done');
+    });
   }
 }

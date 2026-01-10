@@ -261,6 +261,41 @@
 
 ## Feature Requests & Pending Tasks
 
+### 0. REST API Network Monitoring
+**Status:** 📌 **TODO** (Post-Chunk 3)  
+**Priority:** Medium  
+**Source:** Strategic Planning (r019.8)  
+**Goal:** Add network interception to monitor ArcGIS REST API calls for debugging and validation.  
+
+**Rationale:**  
+- Provides early warning if SQL expression translation changes in future ExB versions
+- Allows validation that our queries match Esri's query construction
+- Critical fallback if `SqlExpressionRuntime` DOM workaround breaks
+- Can be used to reverse-engineer query patterns for potential SimpleQEngine replacement
+
+**Implementation Plan:**
+1. Add `network-monitor.ts` utility class for programmatic fetch interception
+2. Enable monitoring via debug flag or development mode
+3. Add E2E tests with Playwright network interception
+4. Log query URLs, WHERE clauses, performance metrics
+5. Create comparison reports (our queries vs. Esri's queries)
+
+**Files to Create/Modify:**
+- `query-simple/src/runtime/network-monitor.ts` (new)
+- `query-simple/src/runtime/widget.tsx` (integrate monitoring)
+- `tests/e2e/query-simple/network-monitoring.spec.ts` (new)
+- `shared-code/common/debug-logger.ts` (add NETWORK feature)
+
+**Documentation:**
+- ✅ `REST_ENDPOINT_MONITORING.md` - Implementation guide (complete)
+- ✅ `SQLEXPRESSIONRUNTIME_CONTINGENCY_PLAN.md` - Updated with monitoring strategy
+- ✅ `SQLEXPRESSIONRUNTIME_FEATURE_ANALYSIS.md` - Feature inventory
+
+**Estimated Effort:** 1-2 days
+**Target Release:** r020.0+ (after Chunk 3 complete)
+
+---
+
 ### 1. Multiple QS Widgets Results Interference
 **Status:** Pending
 

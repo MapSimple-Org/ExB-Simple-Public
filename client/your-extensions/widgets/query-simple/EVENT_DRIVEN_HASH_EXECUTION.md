@@ -144,3 +144,4 @@ When debugging hash-triggered queries, look for these log events in order:
 - **r018.42**: Implemented event-driven waiting for hash conversion
 - **r018.41**: Fixed hash queries not executing when Query tab wasn't active
 
+
