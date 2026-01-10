@@ -100,6 +100,41 @@ Before starting a high-risk structural refactor (e.g., Class-to-Hooks migration)
 
 **Remember**: If you're writing code, you should be on a feature branch. `develop` is read-only for active development.
 
+### 6. Git Commit Protocol (CRITICAL - NEVER COMMIT WITHOUT APPROVAL)
+
+**MANDATORY RULE**: **NEVER commit or push code to git without explicit user instruction and approval.**
+
+#### Why This Matters
+- **Code Quality Control**: Only verified, tested, and stable code gets committed
+- **No Junk Commits**: Prevents committing experimental, broken, or untested code
+- **Collaborative Development**: User maintains control over what gets saved to the repository
+- **Version History Integrity**: Git history should only contain meaningful, working states
+
+#### Workflow Rules
+
+1. **Only Modify Files**: You may make code changes, updates, and fixes as requested
+2. **Never Commit**: Do NOT run `git add`, `git commit`, or `git push` commands
+3. **Wait for Approval**: After making changes, inform the user and wait for explicit commit instruction
+4. **User-Initiated Commits**: Only commit when the user says "commit this" or "check this in"
+
+#### Example Interaction
+```
+You: "I've made the requested changes to fix the bug."
+User: "Good, commit it."
+You: "Changes committed with message: 'fix: description'"
+```
+
+#### What Gets Committed
+- ✅ **Stable fixes** that have been tested and verified
+- ✅ **Completed features** after full testing
+- ✅ **Version increments** for completed work
+- ❌ **Experimental code** that might not work
+- ❌ **Unverified changes** without testing
+- ❌ **Partial implementations** that aren't complete
+
+#### Exception
+The only time you may commit without explicit instruction is when creating initial documentation or setup files that are purely informational and don't affect functionality.
+
 ---
 
 ## Project Structure

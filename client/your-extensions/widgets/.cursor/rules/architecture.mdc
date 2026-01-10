@@ -1,0 +1,9 @@
+---
+description: Architecture patterns for QuerySimple and HelperSimple
+globs: widgets/**/*
+alwaysApply: true
+---
+# Architecture
+- **Zero Duplication**: Shared-code first.
+- **The Persistence Trap**: Use React `key` props with `configId` to force-unmount components.
+- **Reference**: Detailed widget handshake and component hierarchy patterns are in `@DEVELOPMENT_GUIDE.md` Section 2-4.
