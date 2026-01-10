@@ -591,7 +591,7 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
           widgetId: this.props.id,
           reason: 'hasSelectionToRestore-is-true'
         })
-        this.addSelectionToMap()
+        this.addSelectionToMapParallel()
       } else {
         debugLogger.log('RESTORE', {
           event: 'panel-opened-skipping-addSelectionToMap',
@@ -639,7 +639,7 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
           widgetId: this.props.id,
           reason: 'hasSelectionToClear-is-true'
         })
-        this.clearSelectionFromMap()
+        this.clearSelectionFromMapParallel()
       } else {
         debugLogger.log('RESTORE', {
           event: 'panel-closed-no-selection-to-clear',
@@ -933,6 +933,68 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
   }
 
   /**
+   * Manager-based addSelectionToMap (r019.11 - Chunk 3 Section 3.2.5)
+   * Switched to manager-only implementation
+   */
+  private addSelectionToMapParallel = async () => {
+    debugLogger.log('RESTORE-COMPARE', {
+      event: 'manager-addSelectionToMap-starting',
+      widgetId: this.props.id,
+      timestamp: Date.now()
+    })
+
+    // Call manager implementation
+    const deps = {
+      graphicsLayerRef: this.graphicsLayerRef,
+      mapViewRef: this.mapViewRef,
+      graphicsLayerManager: this.graphicsLayerManager,
+      config: this.props.config
+    }
+    
+    await this.selectionRestorationManager.addSelectionToMap(deps)
+
+    debugLogger.log('RESTORE-COMPARE', {
+      event: 'manager-addSelectionToMap-completed',
+      widgetId: this.props.id,
+      note: 'Manager implementation complete'
+    })
+  }
+
+  /**
+   * Manager-based clearSelectionFromMap (r019.11 - Chunk 3 Section 3.2.5)
+   * Switched to manager-only implementation
+   */
+  private clearSelectionFromMapParallel = async () => {
+    debugLogger.log('RESTORE-COMPARE', {
+      event: 'manager-clearSelectionFromMap-starting',
+      widgetId: this.props.id,
+      timestamp: Date.now()
+    })
+
+    // Call manager implementation
+    const deps = {
+      graphicsLayerRef: this.graphicsLayerRef,
+      mapViewRef: this.mapViewRef,
+      graphicsLayerManager: this.graphicsLayerManager,
+      config: this.props.config
+    }
+    
+    await this.selectionRestorationManager.clearSelectionFromMap(deps)
+
+    debugLogger.log('RESTORE-COMPARE', {
+      event: 'manager-clearSelectionFromMap-completed',
+      widgetId: this.props.id,
+      note: 'Manager implementation complete'
+    })
+  }
+
+  // ============================================================================
+  // OLD IMPLEMENTATION - COMMENTED OUT (r019.11 - Chunk 3 Section 3.2.5)
+  // This method is now handled by SelectionRestorationManager
+  // Will be removed after verification period (Step 3.2.7)
+  // ============================================================================
+  /*
+  /**
    * Restores selection to the map when widget panel opens.
    * 
    * This method is called by handleVisibilityChange when the panel becomes visible.
@@ -952,6 +1014,7 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
    * @since 1.19.0-r017.0
    * @see {@link selectRecordsAndPublish} utility function for selection logic
    */
+  /*
   private addSelectionToMap = () => {
     const { lastSelection, accumulatedRecords, resultsMode } = this.state
     const { id } = this.props
@@ -1193,6 +1256,10 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
       })
     }
   }
+  */
+  // ============================================================================
+  // END OLD addSelectionToMap - Now handled by SelectionRestorationManager
+  // ============================================================================
 
   /**
    * Handles results mode change from the mode dropdown in QueryTask component.
@@ -1334,6 +1401,12 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
     throw new Error('This method is deprecated - use existing output DS instead')
   }
 
+  // ============================================================================
+  // OLD IMPLEMENTATION - COMMENTED OUT (r019.11 - Chunk 3 Section 3.2.5)
+  // This method is now handled by SelectionRestorationManager
+  // Will be removed after verification period (Step 3.2.7)
+  // ============================================================================
+  /*
   /**
    * Clears selection from the map while preserving widget's internal state.
    * 
@@ -1351,6 +1424,7 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
    * @since 1.19.0-r017.0
    * @see {@link clearSelectionInDataSources} utility function for clearing logic
    */
+  /*
   private clearSelectionFromMap = () => {
     const { lastSelection, accumulatedRecords, resultsMode } = this.state
     const { id } = this.props
@@ -1678,6 +1752,10 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
       })
     }
   }
+  */
+  // ============================================================================
+  // END OLD clearSelectionFromMap - Now handled by SelectionRestorationManager
+  // ============================================================================
 
 
   /**
