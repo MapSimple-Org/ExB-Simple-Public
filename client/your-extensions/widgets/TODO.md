@@ -97,8 +97,11 @@
 **Progress:**
 - ✅ **Chunk 1 Complete (r018.10)**: URL Parameter Consumption migrated to `UrlConsumptionManager` class
 - ✅ **Chunk 2 Complete (r018.13)**: Widget Visibility Engine migrated to `WidgetVisibilityManager` class
-- ⏳ **Chunk 3 Next**: Selection & Restoration (HIGH RISK - previous attempt failed)
-- ⏳ **Chunks 4-7**: Graphics Layer, Accumulated Records, Map View, Events
+- ✅ **Chunk 3 Complete (r019.22)**: Selection & Restoration migrated to `SelectionRestorationManager` class
+- ✅ **Chunk 4 Complete (r018.25)**: Graphics Layer Management migrated to `GraphicsLayerManager` class
+- ✅ **Chunk 5 Complete (r018.58)**: Accumulated Records Management migrated to `AccumulatedRecordsManager` class
+- ✅ **Chunk 6 Complete (r018.18)**: Map View Management migrated to `MapViewManager` class
+- ✅ **Chunk 7 Complete (r018.111)**: Event Handling migrated to `EventManager` class
 
 **Implementation Plan:**
 1. **De-bloat `widget.tsx`**: Move orchestrator logic into manager classes and custom hooks (using manager pattern for class component compatibility).
@@ -108,6 +111,45 @@
 5. **Deduplication Logic**: Standardize composite record keys (`${dsId}_${objectId}`) earlier in the data pipeline.
 
 **Reference:** See `COMPLETE_MIGRATION_PLAN.md` for detailed chunk-by-chunk migration strategy and `CHUNK_TESTING_GUIDE.md` for testing instructions.
+
+**Status:** ✅ **COMPLETE** - All 7 chunks migrated successfully (r019.22)
+
+---
+
+### 2a. Esri Standards Alignment for Submission
+**Status:** 📋 **TODO** (Pre-submission)  
+**Priority:** Medium  
+**Source:** Esri Standards Review (2026-01-10)  
+**Reference:** See `ESRI_STANDARDS_ALIGNMENT.md` for full analysis
+
+**Action Items:**
+
+**HIGH Priority:**
+1. **Version Management Documentation**
+   - [ ] Add comment in `version.ts` explaining it's for **internal development tracking** (not config migration)
+   - [ ] Document that `version-manager.ts` is for config schema upgrades (currently empty - no breaking changes yet)
+   - [ ] Clarify in README that `v1.19.0-r019.22` format is internal, public version is `1.19.0`
+
+**MEDIUM Priority (Optional - if Esri requests):**
+2. **Code Comments Simplification**
+   - [ ] Review JSDoc comments and simplify to Esri style (remove `@since`, `@see`, `@example`)
+   - [ ] Keep "what/why" comments, remove "how" comments
+   - [ ] Focus on public API documentation only
+
+3. **Public Distribution Verification**
+   - [ ] Verify GitHub remote branch has clean widget folders (no .md files)
+   - [ ] Confirm only these files in public distribution:
+     - `README.md` (root)
+     - Widget folders with `src/`, `manifest.json`, `config.json`, `icon.svg`
+     - `shared-code/` (if included)
+     - No development artifacts
+
+**LOW Priority (Nice to Have):**
+4. **Companion Widget Documentation**
+   - [ ] Add "Companion Widgets" section to README explaining the suite concept
+   - [ ] Clarify that QuerySimple + HelperSimple work together (not separate widgets)
+
+**Current Assessment:** 95%+ Esri-compliant. Public distribution structure matches Esri patterns perfectly.
 
 ---
 

@@ -588,12 +588,12 @@ This guide provides **specific testing instructions** for each chunk during the 
 
 ## Chunk 3: Selection & Restoration (Sectioned Approach)
 
-**Status:** 🏗️ **IN PROGRESS** - Section 3.1 Complete (r019.8)
+**Status:** ✅ **COMPLETE** - All 3 Sections Complete (r019.22)
 
 **Strategy:** Breaking Chunk 3 into 3 sections, completing each fully (tests, implementation, cleanup) before proceeding:
 - ✅ **Section 3.1:** Selection State Tracking (r019.8) - COMPLETE
-- 🔜 **Section 3.2:** Panel Open/Close Restoration - Pending
-- 🔜 **Section 3.3:** Map Identify Restoration - Pending
+- ✅ **Section 3.2:** Panel Open/Close Restoration (r019.20) - COMPLETE
+- ✅ **Section 3.3:** Map Identify Restoration (r019.22) - COMPLETE
 
 ### Section 3.1: Selection State Tracking ✅ **COMPLETE** (r019.8)
 
@@ -607,6 +607,32 @@ This guide provides **specific testing instructions** for each chunk during the 
 ```
 
 **Note:** `CHUNK-3-COMPARE` debug feature was removed in r019.8 after verification complete.
+
+### Section 3.2: Panel Open/Close Restoration ✅ **COMPLETE** (r019.20)
+
+**Implementation:** `SelectionRestorationManager.addSelectionToMap()`, `SelectionRestorationManager.clearSelectionFromMap()`  
+**Test File:** `tests/e2e/query-simple/panel-restoration.spec.ts`  
+**E2E Tests:** 7/7 passing (2.1 minutes)
+
+**What Was Migrated:**
+- Panel open restoration logic (adds selection to map)
+- Panel close clearing logic (removes selection from map)
+- Both New mode (lastSelection) and Add/Remove modes (accumulatedRecords)
+
+**Code Cleanup:**
+- Removed 681 lines of old implementation code (Blocks 1, 2, 3)
+- File size reduced 34% (2004 → 1327 lines)
+
+### Section 3.3: Map Identify Restoration ✅ **COMPLETE** (r019.22)
+
+**Implementation:** `handleRestoreOnIdentifyClose()` → calls `SelectionRestorationManager.addSelectionToMap()`  
+**Test File:** `tests/e2e/query-simple/map-identify-restoration.spec.ts`  
+**E2E Tests:** 2/2 passing (24.1 seconds)
+
+**What Was Fixed:**
+- Bug where commented-out methods were being called (r019.14)
+- Changed to call manager methods directly via async IIFE
+- Selection now properly restores after closing Map Identify popup
 
 ### What to Test
 

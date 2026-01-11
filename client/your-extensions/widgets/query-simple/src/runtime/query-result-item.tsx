@@ -9,7 +9,7 @@ import {
   type IMState,
   classNames
 } from 'jimu-core'
-import { Button } from 'jimu-ui'
+import { Button, Tooltip } from 'jimu-ui'
 import { TrashOutlined } from 'jimu-icons/outlined/editor/trash'
 import FeatureInfo from './components/feature-info'
 import { ListDirection } from '../config'
@@ -132,26 +132,28 @@ export const QueryResultItem = (props: ResultItemProps) => {
         expandByDefault={expandByDefault}
         dataSource={dataSource}
       />
-      <Button
-        className="remove-button"
-        icon
-        size="sm"
-        variant="text"
-        color="inherit"
-        onClick={handleRemove}
-        aria-label="Remove record"
-        css={css`
-          padding: 6px;
-          min-width: 32px;
-          width: 32px;
-          height: 32px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-        `}
-      >
-        <TrashOutlined size={18} />
-      </Button>
+      <Tooltip title="Remove result" placement="bottom">
+        <Button
+          className="remove-button"
+          icon
+          size="sm"
+          variant="text"
+          color="inherit"
+          onClick={handleRemove}
+          aria-label="Remove result"
+          css={css`
+            padding: 6px;
+            min-width: 32px;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+          `}
+        >
+          <TrashOutlined size={18} />
+        </Button>
+      </Tooltip>
     </div>
   )
 }
