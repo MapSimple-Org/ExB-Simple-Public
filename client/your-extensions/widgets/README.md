@@ -89,7 +89,26 @@ Each bug log includes:
 - **Workaround**: How to avoid or work around the issue
 - **Target Resolution**: When the bug will be fixed (e.g., `r019.0`)
 
-See `query-simple/BUGS.md` for a complete list of known bugs and their status.
+See [`docs/bugs/BUGS.md`](docs/bugs/BUGS.md) for a complete list of known bugs and their status.
+
+---
+
+## Documentation
+
+All development documentation has been organized into a centralized [`docs/`](docs/) directory for easy navigation:
+
+- **[`docs/development/`](docs/)** - Development guides, testing, standards (start with [`DEVELOPMENT_GUIDE.md`](docs/development/DEVELOPMENT_GUIDE.md))
+- **[`docs/architecture/`](docs/)** - Design patterns, migration plans, refactoring strategies
+- **[`docs/technical/`](docs/)** - Deep dives into specific technical challenges
+- **[`docs/features/`](docs/)** - Feature specifications and integration guides
+- **[`docs/bugs/`](docs/)** - Bug reports and resolution documentation
+- **[`docs/blog/`](docs/)** - Development insights and lessons learned
+
+**Quick Links:**
+- 📖 **New Developers:** Start with [`docs/development/DEVELOPMENT_GUIDE.md`](docs/development/DEVELOPMENT_GUIDE.md)
+- 🧪 **Testing:** See [`docs/development/TESTING_WALKTHROUGH.md`](docs/development/TESTING_WALKTHROUGH.md)
+- 🏗️ **Architecture:** See [`docs/architecture/COMPLETE_MIGRATION_PLAN.md`](docs/architecture/COMPLETE_MIGRATION_PLAN.md)
+- 📋 **Full Index:** See [`docs/README.md`](docs/README.md)
 
 ---
 
