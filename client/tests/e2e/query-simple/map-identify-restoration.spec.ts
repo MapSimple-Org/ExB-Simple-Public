@@ -79,6 +79,10 @@ test.describe('Map Identify Restoration (Chunk 3 Section 3.3)', () => {
       console.log('   This may indicate incorrect coordinates or feature not clickable');
     }
 
+    // Wait a moment so popup is visible before closing
+    console.log('⏳ Waiting 2 seconds for popup to be visible...');
+    await page.waitForTimeout(2000);
+
     // Step 5: Close identify popup
     console.log('❌ Closing identify popup - this should trigger handleRestoreOnIdentifyClose');
     await helpers.closeIdentifyPopup();
@@ -107,7 +111,7 @@ test.describe('Map Identify Restoration (Chunk 3 Section 3.3)', () => {
 
     // Step 2: Switch to Add mode and perform second query
     await helpers.switchToQueryTab(WIDGET_ID);
-    await helpers.setResultsMode(WIDGET_ID, 'Add');
+    await helpers.setResultsMode('Add', WIDGET_ID);
     await helpers.enterQueryValue('5568900000', WIDGET_ID);
     await helpers.clickApply(WIDGET_ID);
     await helpers.waitForResults(WIDGET_ID);
@@ -160,63 +164,6 @@ test.describe('Map Identify Restoration (Chunk 3 Section 3.3)', () => {
     console.log('✅ No restoration attempted when widget closed (correct behavior)');
   });
 
-  test('should log runtime error when calling commented method', async ({ page }) => {
-    // This test specifically checks for the bug we're documenting
-    // Expected: Runtime error when handleRestoreOnIdentifyClose is triggered
-    
-    const consoleErrors: string[] = [];
-    const runtimeErrors: string[] = [];
-
-    // Capture console errors
-    page.on('console', msg => {
-      if (msg.type() === 'error') {
-        consoleErrors.push(msg.text());
-      }
-    });
-
-    // Capture page errors
-    page.on('pageerror', error => {
-      runtimeErrors.push(error.message);
-    });
-
-    // Step 1: Open widget and perform query
-    await helpers.openWidget(WIDGET_LABEL);
-    await helpers.switchToQueryTab(WIDGET_ID);
-    await helpers.enterQueryValue(PIN_SINGLE, WIDGET_ID);
-    await helpers.clickApply(WIDGET_ID);
-    await helpers.waitForResults(WIDGET_ID);
-
-    // Step 2: Trigger identify and close (manual)
-    console.log('⚠️  MANUAL STEP REQUIRED: Click on map feature, then close identify popup');
-    console.log('    Watching for runtime errors...');
-    await page.waitForTimeout(10000); // Give time for manual interaction
-
-    // Step 3: Check for expected error
-    console.log('\n📋 Console Errors Captured:', consoleErrors.length);
-    consoleErrors.forEach((err, i) => {
-      console.log(`  ${i + 1}. ${err}`);
-    });
-
-    console.log('\n📋 Runtime Errors Captured:', runtimeErrors.length);
-    runtimeErrors.forEach((err, i) => {
-      console.log(`  ${i + 1}. ${err}`);
-    });
-
-    // Expected error: "this.addSelectionToMap is not a function"
-    // or similar error indicating the method is undefined
-    const hasExpectedError = runtimeErrors.some(err => 
-      err.includes('addSelectionToMap') && 
-      (err.includes('not a function') || err.includes('undefined'))
-    );
-
-    if (hasExpectedError) {
-      console.log('✅ CONFIRMED BUG: Runtime error when calling commented method');
-    } else {
-      console.log('⚠️  NO ERROR DETECTED: Either identify was not triggered, or method is somehow defined');
-    }
-
-    // This assertion documents the current buggy state
-    // When bug is fixed, this test should be updated or removed
-    expect(hasExpectedError).toBe(true); // Expecting the bug to exist in r019.14
-  });
+  // Note: The "should log runtime error when calling commented method" test was removed in r019.20
+  // That test checked for a bug that has been fixed - all methods now call the manager directly.
 });

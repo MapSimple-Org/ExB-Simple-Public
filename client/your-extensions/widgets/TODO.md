@@ -110,7 +110,7 @@
 4. **ESM Imports**: Resolve circular dependencies to allow standard `import` syntax instead of `require()`.
 5. **Deduplication Logic**: Standardize composite record keys (`${dsId}_${objectId}`) earlier in the data pipeline.
 
-**Reference:** See `COMPLETE_MIGRATION_PLAN.md` for detailed chunk-by-chunk migration strategy and `CHUNK_TESTING_GUIDE.md` for testing instructions.
+**Reference:** See [`docs/architecture/COMPLETE_MIGRATION_PLAN.md`](docs/architecture/COMPLETE_MIGRATION_PLAN.md) for detailed chunk-by-chunk migration strategy and [`docs/architecture/CHUNK_TESTING_GUIDE.md`](docs/architecture/CHUNK_TESTING_GUIDE.md) for testing instructions.
 
 **Status:** ✅ **COMPLETE** - All 7 chunks migrated successfully (r019.22)
 
@@ -120,7 +120,7 @@
 **Status:** 📋 **TODO** (Pre-submission)  
 **Priority:** Medium  
 **Source:** Esri Standards Review (2026-01-10)  
-**Reference:** See `ESRI_STANDARDS_ALIGNMENT.md` for full analysis
+**Reference:** See [`docs/development/ESRI_STANDARDS_ALIGNMENT.md`](docs/development/ESRI_STANDARDS_ALIGNMENT.md) for full analysis
 
 **Action Items:**
 
@@ -150,6 +150,108 @@
    - [ ] Clarify that QuerySimple + HelperSimple work together (not separate widgets)
 
 **Current Assessment:** 95%+ Esri-compliant. Public distribution structure matches Esri patterns perfectly.
+
+---
+
+### 2b. Tab-Level Component Extraction (Pre-Graphics Tab Development)
+**Status:** 📋 **TODO** (Post-Team Deployment)  
+**Priority:** Critical (Architectural Foundation)  
+**Source:** Architecture Planning (2026-01-10)  
+**Goal:** Extract Query and Results tab logic into separate components BEFORE building Graphics tab to prevent `query-task.tsx` from growing beyond 3000 lines.
+
+**Problem:** 
+- Current `query-task.tsx`: 2999 lines (already a "God Component")
+- Future Graphics tab would add ~600-1000 lines → 4000+ lines in one file
+- Unmaintainable, untestable, merge-conflict nightmare
+
+**Architecture Target:**
+```
+query-task.tsx (800 lines - orchestration only)
+├─ tabs/QueryTabContent.tsx (800 lines - extracted)
+├─ tabs/ResultsTabContent.tsx (1664 lines - already separate as query-result.tsx)
+└─ tabs/GraphicsTabContent.tsx (600 lines - FUTURE)
+```
+
+**Phase 1: Extract Query Tab (Week 1-2 post-deployment)**
+1. **Create `QueryTabContent.tsx`**
+   - [ ] Extract all Query tab UI logic from `query-task.tsx`
+   - [ ] Move SqlExpressionRuntime, AttributeFilter, SpatialFilter to new component
+   - [ ] Create `use-sql-expression.ts` hook
+   - [ ] Create `use-attribute-filter.ts` hook
+   - [ ] Create `use-spatial-filter.ts` hook
+   - [ ] Test query tab works identically
+   - Target: `query-task.tsx` → ~1200 lines
+
+2. **Simplify QueryTask to Tab Orchestrator**
+   - [ ] Refactor `query-task.tsx` to ONLY handle tab switching and data flow
+   - [ ] Extract shared data source logic to hooks
+   - [ ] Extract query submission logic to `use-query-submission.ts`
+   - [ ] Test all existing features (E2E regression)
+   - Target: `query-task.tsx` → ~800 lines
+
+**Phase 2: Graphics Tab Development (Week 3-4)**
+3. **Create Graphics Tab Component (AFTER Phase 1)**
+   - [ ] Create `tabs/GraphicsTabContent.tsx`
+   - [ ] Implement `use-draw-tools.ts` (Sketch widget integration)
+   - [ ] Implement `use-shape-selection.ts` (spatial query logic)
+   - [ ] Implement `use-spatial-operators.ts` (intersects, contains, within)
+   - [ ] Add buffer/distance options
+   - [ ] E2E testing for shape-based selection
+   - Target: `GraphicsTabContent.tsx` → ~600 lines
+
+4. **Integration**
+   - [ ] Add Graphics tab to QueryTask orchestrator (~10 lines)
+   - [ ] Update tab bar UI
+   - [ ] E2E testing (all tabs)
+   - [ ] Documentation
+   - Final: `query-task.tsx` remains ~800 lines
+
+**Benefits:**
+- ✅ Each tab independently testable
+- ✅ Parallel development possible (multiple devs)
+- ✅ Graphics tab can be feature-flagged
+- ✅ Draw tools can be reused in other widgets
+- ✅ Clear separation of concerns
+- ✅ Future tabs easy to add (Search, Bookmarks, etc.)
+
+**Files to Create:**
+```
+query-simple/src/runtime/
+├── tabs/
+│   ├── QueryTabContent.tsx (NEW - Phase 1)
+│   ├── ResultsTabContent.tsx (rename query-result.tsx)
+│   └── GraphicsTabContent.tsx (NEW - Phase 2)
+│
+└── hooks/
+    ├── query-tab/
+    │   ├── use-sql-expression.ts (NEW - Phase 1)
+    │   ├── use-attribute-filter.ts (NEW - Phase 1)
+    │   └── use-spatial-filter.ts (NEW - Phase 1)
+    │
+    ├── graphics-tab/
+    │   ├── use-draw-tools.ts (NEW - Phase 2)
+    │   ├── use-shape-selection.ts (NEW - Phase 2)
+    │   └── use-spatial-operators.ts (NEW - Phase 2)
+    │
+    └── shared/
+        ├── use-query-submission.ts (NEW - Phase 1)
+        └── use-data-sources.ts (NEW - Phase 1)
+```
+
+**Critical Rule:** 
+🚨 **DO NOT build Graphics tab inline** in current `query-task.tsx`. Extract Query tab FIRST.
+
+**Estimated Effort:**
+- Phase 1 (Query tab extraction): 1-2 weeks
+- Phase 2 (Graphics tab development): 1-2 weeks
+- **Total:** 2-4 weeks
+
+**Target Release:** r020.0+ (Post team feedback)
+
+**Documentation:**
+- [ ] Create [`docs/architecture/GRAPHICS_TAB_ARCHITECTURE.md`](docs/architecture/GRAPHICS_TAB_ARCHITECTURE.md) with detailed implementation plan
+- [ ] Add extraction guidelines to [`docs/development/DEVELOPMENT_GUIDE.md`](docs/development/DEVELOPMENT_GUIDE.md)
+- [ ] Update architecture docs with tab-level refactoring strategy
 
 ---
 
@@ -259,9 +361,26 @@
 
 ---
 
-### 8. Add Marker.io for User Feedback
+### 8. Add BugHerd for User Feedback (Post-Export)
 **Status:** Pending  
 **Priority:** Medium  
+**Timing:** After site export, before team deployment
+
+**Workflow:**
+1. ✅ Test configured page with all required searches
+2. ✅ Export site via ExB (flattens to HTML/JS)
+3. 🔲 Add BugHerd script to exported `index.html`
+4. 🔲 Deploy to team for testing with visual feedback tool
+
+**Integration:** Add BugHerd widget code to the **exported site's `index.html`**, not the widget source code. This allows team members to pin feedback directly on the page, and provides built-in Kanban board for issue tracking.
+
+**Benefits:**
+- Visual feedback (pin comments directly on page)
+- Built-in Kanban board (no need for separate PM tool)
+- Automatic screenshots and browser info
+- Task assignment and workflow management
+
+**Reference:** https://bugherd.com
 
 ---
 
@@ -297,7 +416,7 @@
 - **Dynamic Toggle**: Automatically switches between "Add to" and "Remove from" based on current results.
 - **Mode Evolution**: Automatically upgrades "New" mode to "Add" mode to prevent data loss.
 - **Event Bus**: Use custom events to pass identified features to the active QS widget.
-- **Documentation**: See [MAP_IDENTIFY_INTEGRATION.md](./MAP_IDENTIFY_INTEGRATION.md) for the full architecture.
+- **Documentation**: See [`docs/features/MAP_IDENTIFY_INTEGRATION.md`](docs/features/MAP_IDENTIFY_INTEGRATION.md) for the full architecture.
 
 ---
 
@@ -329,9 +448,9 @@
 - `shared-code/common/debug-logger.ts` (add NETWORK feature)
 
 **Documentation:**
-- ✅ `REST_ENDPOINT_MONITORING.md` - Implementation guide (complete)
-- ✅ `SQLEXPRESSIONRUNTIME_CONTINGENCY_PLAN.md` - Updated with monitoring strategy
-- ✅ `SQLEXPRESSIONRUNTIME_FEATURE_ANALYSIS.md` - Feature inventory
+- ✅ [`docs/technical/REST_ENDPOINT_MONITORING.md`](docs/technical/REST_ENDPOINT_MONITORING.md) - Implementation guide (complete)
+- ✅ [`docs/technical/SQLEXPRESSIONRUNTIME_CONTINGENCY_PLAN.md`](docs/technical/SQLEXPRESSIONRUNTIME_CONTINGENCY_PLAN.md) - Updated with monitoring strategy
+- ✅ [`docs/technical/SQLEXPRESSIONRUNTIME_FEATURE_ANALYSIS.md`](docs/technical/SQLEXPRESSIONRUNTIME_FEATURE_ANALYSIS.md) - Feature inventory
 
 **Estimated Effort:** 1-2 days
 **Target Release:** r020.0+ (after Chunk 3 complete)

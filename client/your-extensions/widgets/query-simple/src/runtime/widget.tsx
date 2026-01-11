@@ -591,7 +591,15 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
           widgetId: this.props.id,
           reason: 'hasSelectionToRestore-is-true'
         })
-        this.addSelectionToMapParallel()
+        ;(async () => {
+          const deps = {
+            graphicsLayerRef: this.graphicsLayerRef,
+            mapViewRef: this.mapViewRef,
+            graphicsLayerManager: this.graphicsLayerManager,
+            config: this.props.config
+          }
+          await this.selectionRestorationManager.addSelectionToMap(deps)
+        })()
       } else {
         debugLogger.log('RESTORE', {
           event: 'panel-opened-skipping-addSelectionToMap',
@@ -639,7 +647,15 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
           widgetId: this.props.id,
           reason: 'hasSelectionToClear-is-true'
         })
-        this.clearSelectionFromMapParallel()
+        ;(async () => {
+          const deps = {
+            graphicsLayerRef: this.graphicsLayerRef,
+            mapViewRef: this.mapViewRef,
+            graphicsLayerManager: this.graphicsLayerManager,
+            config: this.props.config
+          }
+          await this.selectionRestorationManager.clearSelectionFromMap(deps)
+        })()
       } else {
         debugLogger.log('RESTORE', {
           event: 'panel-closed-no-selection-to-clear',
@@ -870,7 +886,15 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
         accumulatedRecordsCount: this.state.accumulatedRecords.length
       })
       
-      this.addSelectionToMapParallel()
+      ;(async () => {
+        const deps = {
+          graphicsLayerRef: this.graphicsLayerRef,
+          mapViewRef: this.mapViewRef,
+          graphicsLayerManager: this.graphicsLayerManager,
+          config: this.props.config
+        }
+        await this.selectionRestorationManager.addSelectionToMap(deps)
+      })()
       return
     }
     
@@ -929,336 +953,26 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
       outputDsId: customEvent.detail.outputDsId
     })
     
-    this.addSelectionToMapParallel()
-  }
-
-  /**
-   * Manager-based addSelectionToMap (r019.11 - Chunk 3 Section 3.2.5)
-   * Switched to manager-only implementation
-   */
-  private addSelectionToMapParallel = async () => {
-    debugLogger.log('RESTORE-COMPARE', {
-      event: 'manager-addSelectionToMap-starting',
-      widgetId: this.props.id,
-      timestamp: Date.now()
-    })
-
-    // Call manager implementation
-    const deps = {
-      graphicsLayerRef: this.graphicsLayerRef,
-      mapViewRef: this.mapViewRef,
-      graphicsLayerManager: this.graphicsLayerManager,
-      config: this.props.config
-    }
-    
-    await this.selectionRestorationManager.addSelectionToMap(deps)
-
-    debugLogger.log('RESTORE-COMPARE', {
-      event: 'manager-addSelectionToMap-completed',
-      widgetId: this.props.id,
-      note: 'Manager implementation complete'
-    })
-  }
-
-  /**
-   * Manager-based clearSelectionFromMap (r019.11 - Chunk 3 Section 3.2.5)
-   * Switched to manager-only implementation
-   */
-  private clearSelectionFromMapParallel = async () => {
-    debugLogger.log('RESTORE-COMPARE', {
-      event: 'manager-clearSelectionFromMap-starting',
-      widgetId: this.props.id,
-      timestamp: Date.now()
-    })
-
-    // Call manager implementation
-    const deps = {
-      graphicsLayerRef: this.graphicsLayerRef,
-      mapViewRef: this.mapViewRef,
-      graphicsLayerManager: this.graphicsLayerManager,
-      config: this.props.config
-    }
-    
-    await this.selectionRestorationManager.clearSelectionFromMap(deps)
-
-    debugLogger.log('RESTORE-COMPARE', {
-      event: 'manager-clearSelectionFromMap-completed',
-      widgetId: this.props.id,
-      note: 'Manager implementation complete'
-    })
+    ;(async () => {
+      const deps = {
+        graphicsLayerRef: this.graphicsLayerRef,
+        mapViewRef: this.mapViewRef,
+        graphicsLayerManager: this.graphicsLayerManager,
+        config: this.props.config
+      }
+      await this.selectionRestorationManager.addSelectionToMap(deps)
+    })()
   }
 
   // ============================================================================
-  // OLD IMPLEMENTATION - COMMENTED OUT (r019.11 - Chunk 3 Section 3.2.5)
-  // This method is now handled by SelectionRestorationManager
-  // Will be removed after verification period (Step 3.2.7)
+  // r019.18: Removed addSelectionToMapParallel wrapper (27 lines)
+  // r019.20: Removed clearSelectionFromMapParallel wrapper (27 lines)
+  // All call sites now directly invoke SelectionRestorationManager methods
   // ============================================================================
-  /*
-  /**
-   * Restores selection to the map when widget panel opens.
-   * 
-   * This method is called by handleVisibilityChange when the panel becomes visible.
-   * It restores previously selected records to the map based on the current results mode:
-   * 
-   * - "Add to" / "Remove from" modes: Restores all accumulated records, grouped by origin data source
-   * - "New" mode: Restores lastSelection state from the most recent query
-   * 
-   * The restoration uses selectRecordsAndPublish utility which handles:
-   * - Selecting records in origin data sources
-   * - Adding graphics to graphics layer (if enabled)
-   * - Publishing selection messages to other widgets
-   * - Deduplication of records
-   * 
-   * Note: This method does NOT zoom to the selection (unlike the "Add to Map" action).
-   * 
-   * @since 1.19.0-r017.0
-   * @see {@link selectRecordsAndPublish} utility function for selection logic
-   */
-  /*
-  private addSelectionToMap = () => {
-    const { lastSelection, accumulatedRecords, resultsMode } = this.state
-    const { id } = this.props
-    
-    debugLogger.log('RESTORE', {
-      event: 'addSelectionToMap-called',
-      widgetId: id,
-      resultsMode,
-      hasAccumulatedRecords: !!(accumulatedRecords && accumulatedRecords.length > 0),
-      accumulatedRecordsCount: accumulatedRecords?.length || 0,
-      hasLastSelection: !!lastSelection,
-      lastSelectionRecordCount: lastSelection?.recordIds.length || 0,
-      lastSelectionOutputDsId: lastSelection?.outputDsId
-    })
-    
-    // In Add/Remove modes, use accumulated records for restoration
-    const isAccumulationMode = resultsMode === SelectionType.AddToSelection || 
-                              resultsMode === SelectionType.RemoveFromSelection
-    
-    // HYPOTHESIS: Should always check accumulatedRecords first, regardless of mode
-    // Adding log to see if accumulatedRecords exist but we're not using them
-    if (accumulatedRecords && accumulatedRecords.length > 0) {
-      debugLogger.log('RESTORE', {
-        event: 'addSelectionToMap-found-accumulated-records',
-        widgetId: id,
-        resultsMode,
-        isAccumulationMode,
-        accumulatedRecordsCount: accumulatedRecords.length,
-        'should-use-accumulated': true,
-        'current-condition-check': isAccumulationMode && accumulatedRecords && accumulatedRecords.length > 0,
-        'condition-result': isAccumulationMode && accumulatedRecords && accumulatedRecords.length > 0
-      })
-    } else {
-      debugLogger.log('RESTORE', {
-        event: 'addSelectionToMap-no-accumulated-records',
-        widgetId: id,
-        resultsMode,
-        isAccumulationMode,
-        accumulatedRecordsCount: 0,
-        'will-fallback-to-lastSelection': !!lastSelection
-      })
-    }
-    
-    if (isAccumulationMode && accumulatedRecords && accumulatedRecords.length > 0) {
-      // Group accumulated records by origin data source
-      const recordsByOriginDS = new Map<FeatureLayerDataSource, FeatureDataRecord[]>()
-      const dsManager = DataSourceManager.getInstance()
-      
-      accumulatedRecords.forEach((record, index) => {
-        const recordId = record.getId()
-        let originDS: FeatureLayerDataSource | null = null
-        
-        // Method 1: Try to get from record.getDataSource()
-        const recordDS = record.getDataSource?.() as FeatureLayerDataSource
-        if (recordDS) {
-          originDS = recordDS.getOriginDataSources()?.[0] as FeatureLayerDataSource || recordDS
-          
-          debugLogger.log('RESTORE', {
-            event: 'found-origin-ds-from-record-ds',
-            widgetId: id,
-            recordIndex: index,
-            recordId,
-            originDSId: originDS?.id || 'null',
-            method: 'record.getDataSource()'
-          })
-        }
-        
-        // Method 2: If that failed, search all data sources for a record with matching ID
-        if (!originDS) {
-          const dsMap = dsManager.getDataSources()
-          const allDataSources = Object.values(dsMap)
-          
-          for (const ds of allDataSources) {
-            // Check if this is a FeatureLayerDataSource by checking for getAllLoadedRecords method
-            if (ds && typeof (ds as any).getAllLoadedRecords === 'function') {
-              try {
-                // Check if this DS has the record
-                const allRecords = (ds as any).getAllLoadedRecords() || []
-                const matchingRecord = allRecords.find((r: FeatureDataRecord) => r.getId() === recordId)
-                
-                if (matchingRecord) {
-                  // Found the record - get origin DS from this DS
-                  originDS = (ds as any).getOriginDataSources()?.[0] as FeatureLayerDataSource || ds as FeatureLayerDataSource
-                  
-                  debugLogger.log('RESTORE', {
-                    event: 'found-origin-ds-via-search',
-                    widgetId: id,
-                    recordIndex: index,
-                    recordId,
-                    originDSId: originDS.id,
-                    method: 'searched-all-data-sources',
-                    searchedDSId: ds.id
-                  })
-                  break
-                }
-              } catch (error) {
-                // Continue searching
-              }
-            }
-          }
-        }
-        
-        if (originDS) {
-          if (!recordsByOriginDS.has(originDS)) {
-            recordsByOriginDS.set(originDS, [])
-          }
-          recordsByOriginDS.get(originDS)!.push(record)
-        } else {
-          debugLogger.log('RESTORE', {
-            event: 'could-not-find-origin-ds-for-record',
-            widgetId: id,
-            recordIndex: index,
-            recordId,
-            warning: 'record-will-be-skipped'
-          })
-        }
-      })
-      
-      debugLogger.log('RESTORE', {
-        event: 'panel-opened-restoring-accumulated-records',
-        widgetId: id,
-        resultsMode,
-        accumulatedRecordsCount: accumulatedRecords.length,
-        originDSCount: recordsByOriginDS.size
-      })
-      
-      // Restore selection for each origin data source
-      const { selectRecordsAndPublish } = require('./selection-utils')
-      const useGraphicsLayer = this.props.config.useGraphicsLayerForHighlight
-      const graphicsLayer = this.graphicsLayerRef.current || undefined
-      const mapView = this.mapViewRef.current || undefined
-      
-      recordsByOriginDS.forEach((records, originDS) => {
-        const recordIds = records.map(r => r.getId())
-        try {
-          // Use originDS directly (not outputDS) since records are selected in origin layers
-          // Use async IIFE since forEach callback can't be async
-          ;(async () => {
-            await selectRecordsAndPublish(id, originDS, recordIds, records, true, useGraphicsLayer, graphicsLayer, mapView)
-          })()
-          
-          debugLogger.log('RESTORE', {
-            event: 'panel-opened-restored-origin-ds',
-            widgetId: id,
-            originDSId: originDS.id,
-            recordCount: records.length,
-            zoomExecuted: false
-          })
-        } catch (error) {
-          debugLogger.log('RESTORE', {
-            event: 'panel-opened-restore-origin-ds-failed',
-            widgetId: id,
-            originDSId: originDS.id,
-            error: error instanceof Error ? error.message : String(error),
-            errorStack: error instanceof Error ? error.stack : undefined
-          })
-        }
-      })
-      
-      return
-    }
-    
-    // HYPOTHESIS: Maybe accumulatedRecords exist but we're not in accumulation mode?
-    // Or maybe we should always check accumulatedRecords first?
-    if (accumulatedRecords && accumulatedRecords.length > 0 && !isAccumulationMode) {
-      debugLogger.log('RESTORE', {
-        event: 'addSelectionToMap-accumulated-records-exist-but-not-accumulation-mode',
-        widgetId: id,
-        resultsMode,
-        isAccumulationMode,
-        accumulatedRecordsCount: accumulatedRecords.length,
-        'hypothesis': 'accumulated-records-exist-but-mode-is-not-add-or-remove',
-        'should-we-still-use-them': 'NEEDS-INVESTIGATION'
-      })
-    }
-    
-    // Fall back to original logic for "New" mode
-    if (!lastSelection) {
-      debugLogger.log('RESTORE', {
-        event: 'addSelectionToMap-no-lastSelection-exiting',
-        widgetId: id,
-        resultsMode,
-        hasAccumulatedRecords: !!(accumulatedRecords && accumulatedRecords.length > 0),
-        accumulatedRecordsCount: accumulatedRecords?.length || 0,
-        'hypothesis': 'no-lastSelection-so-exiting-early-maybe-should-check-accumulated-records-first'
-      })
-      return
-    }
 
-    const dsManager = DataSourceManager.getInstance()
-    const outputDS = dsManager.getDataSource(lastSelection.outputDsId) as FeatureLayerDataSource
-    
-    if (!outputDS) {
-      debugLogger.log('RESTORE', {
-        event: 'panel-opened-output-ds-not-found',
-        widgetId: id,
-        outputDsId: lastSelection.outputDsId
-      })
-      return
-    }
-
-    // Get records from output DS (same as Add to Map)
-    const allRecords = outputDS.getAllLoadedRecords() || []
-    const recordsToSelect = allRecords.filter(record => 
-      lastSelection.recordIds.includes(record.getId())
-    ) as FeatureDataRecord[]
-    
-    if (recordsToSelect.length === 0) {
-      debugLogger.log('RESTORE', {
-        event: 'panel-opened-no-matching-records',
-        widgetId: id,
-        ourRecordCount: lastSelection.recordIds.length
-      })
-      return
-    }
-
-    // Same logic as Add to Map action - selectRecordsAndPublish handles duplicate checking
-    // Don't zoom when restoring on widget open (Add to Map action handles zoom for manual clicks)
-    try {
-      const { selectRecordsAndPublish } = require('./selection-utils')
-      const useGraphicsLayer = this.props.config.useGraphicsLayerForHighlight
-      const graphicsLayer = this.graphicsLayerRef.current || undefined
-      const mapView = this.mapViewRef.current || undefined
-      ;(async () => {
-        await selectRecordsAndPublish(id, outputDS, lastSelection.recordIds, recordsToSelect, true, useGraphicsLayer, graphicsLayer, mapView)
-      })()
-      
-      debugLogger.log('RESTORE', {
-        event: 'panel-opened-selection-added-to-map',
-        widgetId: id,
-        recordCount: recordsToSelect.length,
-        zoomExecuted: false
-      })
-    } catch (error) {
-      debugLogger.log('RESTORE', {
-        event: 'panel-opened-add-to-map-failed',
-        widgetId: id,
-        error: error instanceof Error ? error.message : String(error)
-      })
-    }
-  }
-  */
   // ============================================================================
-  // END OLD addSelectionToMap - Now handled by SelectionRestorationManager
+  // r019.15: Removed old addSelectionToMap implementation (272 lines)
+  // Now fully handled by SelectionRestorationManager.addSelectionToMap()
   // ============================================================================
 
   /**
@@ -1402,361 +1116,9 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
   }
 
   // ============================================================================
-  // OLD IMPLEMENTATION - COMMENTED OUT (r019.11 - Chunk 3 Section 3.2.5)
-  // This method is now handled by SelectionRestorationManager
-  // Will be removed after verification period (Step 3.2.7)
+  // r019.16: Removed old clearSelectionFromMap implementation (355 lines)
+  // Now fully handled by SelectionRestorationManager.clearSelectionFromMap()
   // ============================================================================
-  /*
-  /**
-   * Clears selection from the map while preserving widget's internal state.
-   * 
-   * This method is called when the widget panel closes to remove selection from the map
-   * (cleaning up the visual selection) while keeping the selection state in the widget
-   * for restoration when the panel reopens.
-   * 
-   * The method handles both "New" mode (lastSelection) and accumulation modes (accumulatedRecords).
-   * It groups records by origin data source and clears selection from each origin data source,
-   * ensuring multi-layer selections are properly cleared.
-   * 
-   * Graphics layer is also cleared if enabled, and empty selection messages are published
-   * to notify other widgets (like HelperSimple) that selection has been cleared.
-   * 
-   * @since 1.19.0-r017.0
-   * @see {@link clearSelectionInDataSources} utility function for clearing logic
-   */
-  /*
-  private clearSelectionFromMap = () => {
-    const { lastSelection, accumulatedRecords, resultsMode } = this.state
-    const { id } = this.props
-    
-    const isAccumulationMode = resultsMode === SelectionType.AddToSelection || 
-                               resultsMode === SelectionType.RemoveFromSelection
-    
-    debugLogger.log('RESTORE', {
-      event: 'clearSelectionFromMap-called',
-      widgetId: id,
-      resultsMode,
-      isAccumulationMode,
-      hasLastSelection: !!lastSelection,
-      lastSelectionRecordCount: lastSelection?.recordIds.length || 0,
-      hasAccumulatedRecords: !!(accumulatedRecords && accumulatedRecords.length > 0),
-      accumulatedRecordsCount: accumulatedRecords?.length || 0,
-      selectionRecordCount: this.state.selectionRecordCount || 0,
-      hasSelection: this.state.hasSelection || false
-    })
-    
-    // Always clear graphics layer first when panel closes (if graphics layer is enabled)
-    // This ensures visual selection is removed even if state is inconsistent
-    if (this.props.config.useGraphicsLayerForHighlight && this.graphicsLayerRef.current) {
-      this.graphicsLayerManager.clearGraphics(id, this.props.config)
-      debugLogger.log('RESTORE', {
-        event: 'panel-closed-graphics-layer-cleared',
-        widgetId: id,
-        graphicsLayerId: this.graphicsLayerRef.current.id
-      })
-    }
-    
-    // Always clear accumulated records if they exist (regardless of mode)
-    // This handles the case where mode might have changed but records still exist
-    debugLogger.log('RESTORE', {
-      event: 'clearSelectionFromMap-checking-accumulated-records',
-      widgetId: id,
-      'condition': 'accumulatedRecords && accumulatedRecords.length > 0',
-      'condition-result': !!(accumulatedRecords && accumulatedRecords.length > 0),
-      accumulatedRecordsCount: accumulatedRecords?.length || 0
-    })
-    
-    if (accumulatedRecords && accumulatedRecords.length > 0) {
-      // Group accumulated records by origin data source
-      const recordsByOriginDS = new Map<FeatureLayerDataSource, FeatureDataRecord[]>()
-      const dsManager = DataSourceManager.getInstance()
-      
-      accumulatedRecords.forEach((record, index) => {
-        const recordId = record.getId()
-        let originDS: FeatureLayerDataSource | null = null
-        
-        // Method 1: Try to get from record.getDataSource()
-        const recordDS = record.getDataSource?.() as FeatureLayerDataSource
-        if (recordDS) {
-          originDS = recordDS.getOriginDataSources()?.[0] as FeatureLayerDataSource || recordDS
-          
-          debugLogger.log('RESTORE', {
-            event: 'clear-found-origin-ds-from-record-ds',
-            widgetId: id,
-            recordIndex: index,
-            recordId,
-            originDSId: originDS?.id || 'null',
-            method: 'record.getDataSource()'
-          })
-        }
-        
-        // Method 2: If that failed, search all data sources for a record with matching ID
-        if (!originDS) {
-          const dsMap = dsManager.getDataSources()
-          const allDataSources = Object.values(dsMap)
-          
-          for (const ds of allDataSources) {
-            // Check if this is a FeatureLayerDataSource by checking for getAllLoadedRecords method
-            if (ds && typeof (ds as any).getAllLoadedRecords === 'function') {
-              try {
-                // Check if this DS has the record
-                const allRecords = (ds as any).getAllLoadedRecords() || []
-                const matchingRecord = allRecords.find((r: FeatureDataRecord) => r.getId() === recordId)
-                
-                if (matchingRecord) {
-                  // Found the record - get origin DS from this DS
-                  originDS = (ds as any).getOriginDataSources()?.[0] as FeatureLayerDataSource || ds as FeatureLayerDataSource
-                  
-                  debugLogger.log('RESTORE', {
-                    event: 'clear-found-origin-ds-via-search',
-                    widgetId: id,
-                    recordIndex: index,
-                    recordId,
-                    originDSId: originDS.id,
-                    method: 'searched-all-data-sources',
-                    searchedDSId: ds.id
-                  })
-                  break
-                }
-              } catch (error) {
-                // Continue searching
-              }
-            }
-          }
-        }
-        
-        if (originDS) {
-          if (!recordsByOriginDS.has(originDS)) {
-            recordsByOriginDS.set(originDS, [])
-          }
-          recordsByOriginDS.get(originDS)!.push(record)
-        } else {
-          debugLogger.log('RESTORE', {
-            event: 'clear-could-not-find-origin-ds-for-record',
-            widgetId: id,
-            recordIndex: index,
-            recordId,
-            warning: 'record-will-be-skipped'
-          })
-        }
-      })
-      
-      debugLogger.log('RESTORE', {
-        event: 'panel-closed-clearing-accumulated-records-from-map',
-        widgetId: id,
-        accumulatedRecordsCount: accumulatedRecords.length,
-        originDSCount: recordsByOriginDS.size
-      })
-      
-      // Clear selection from each origin data source
-      const { clearSelectionInDataSources } = require('./selection-utils')
-      const useGraphicsLayer = this.props.config.useGraphicsLayerForHighlight
-      const graphicsLayer = this.graphicsLayerRef.current || undefined
-      
-      recordsByOriginDS.forEach((records, originDS) => {
-        try {
-          // Use async IIFE since forEach callback can't be async
-          ;(async () => {
-            await clearSelectionInDataSources(id, originDS, useGraphicsLayer, graphicsLayer)
-            
-            debugLogger.log('RESTORE', {
-              event: 'panel-closed-cleared-origin-ds-selection',
-              widgetId: id,
-              originDSId: originDS.id,
-              recordCount: records.length,
-              usedGraphicsLayer: useGraphicsLayer
-            })
-          })()
-        } catch (error) {
-          debugLogger.log('RESTORE', {
-            event: 'panel-closed-clear-origin-ds-failed',
-            widgetId: id,
-            originDSId: originDS.id,
-            error: error instanceof Error ? error.message : String(error)
-          })
-        }
-      })
-      
-      debugLogger.log('RESTORE', {
-        event: 'clearSelectionFromMap-cleared-accumulated-records-returning',
-        widgetId: id,
-        'will-not-fallback-to-lastSelection': true
-      })
-      return
-    }
-    
-    // HYPOTHESIS: Maybe accumulatedRecords exist but we didn't enter the if block?
-    // Or maybe we should always clear accumulated records if they exist?
-    if (accumulatedRecords && accumulatedRecords.length > 0) {
-      debugLogger.log('RESTORE', {
-        event: 'clearSelectionFromMap-accumulated-records-exist-but-not-clearing',
-        widgetId: id,
-        resultsMode,
-        isAccumulationMode,
-        accumulatedRecordsCount: accumulatedRecords.length,
-        'hypothesis': 'accumulated-records-exist-but-condition-failed-why',
-        'condition-was': 'accumulatedRecords && accumulatedRecords.length > 0',
-        'condition-result': !!(accumulatedRecords && accumulatedRecords.length > 0)
-      })
-    }
-    
-    // If we have selection state but no lastSelection, we still need to clear
-    // This handles the case where state is inconsistent (hasSelection=true but lastSelection=null)
-    if (this.state.hasSelection && !lastSelection) {
-      debugLogger.log('RESTORE', {
-        event: 'clearSelectionFromMap-has-selection-but-no-lastSelection',
-        widgetId: id,
-        selectionRecordCount: this.state.selectionRecordCount || 0,
-        note: 'will-attempt-to-clear-from-current-selection-state'
-      })
-      
-      // Try to get the output DS from the most recent query
-      // Find output DS for this widget (pattern: widget_{id}_output_*)
-      const dsManager = DataSourceManager.getInstance()
-      const allDataSources = Object.values(dsManager.getDataSources())
-      const outputDS = allDataSources.find(ds => 
-        ds.id.startsWith(`widget_${id}_output_`)
-      ) as FeatureLayerDataSource
-      
-      if (outputDS) {
-        const originDS = outputDS.getOriginDataSources()?.[0] as FeatureLayerDataSource
-        if (originDS) {
-          const { clearSelectionInDataSources } = require('./selection-utils')
-          const useGraphicsLayer = this.props.config.useGraphicsLayerForHighlight
-          const graphicsLayer = this.graphicsLayerRef.current || undefined
-          
-          ;(async () => {
-            try {
-              await clearSelectionInDataSources(id, originDS, useGraphicsLayer, graphicsLayer)
-              debugLogger.log('RESTORE', {
-                event: 'panel-closed-cleared-selection-from-state',
-                widgetId: id,
-                originDSId: originDS.id,
-                outputDSId: outputDS.id,
-                usedGraphicsLayer: useGraphicsLayer
-              })
-            } catch (error) {
-              debugLogger.log('RESTORE', {
-                event: 'panel-closed-clear-from-state-failed',
-                widgetId: id,
-                originDSId: originDS.id,
-                outputDSId: outputDS.id,
-                error: error instanceof Error ? error.message : String(error)
-              })
-            }
-          })()
-          return
-        } else {
-          debugLogger.log('RESTORE', {
-            event: 'clearSelectionFromMap-no-origin-ds-found',
-            widgetId: id,
-            outputDSId: outputDS.id,
-            note: 'output-ds-found-but-no-origin-ds'
-          })
-        }
-      } else {
-        debugLogger.log('RESTORE', {
-          event: 'clearSelectionFromMap-no-output-ds-found',
-          widgetId: id,
-          note: 'could-not-find-output-ds-for-widget'
-        })
-      }
-    }
-    
-    // Fall back to original logic for "New" mode with lastSelection
-    if (!lastSelection) {
-      debugLogger.log('RESTORE', {
-        event: 'clearSelectionFromMap-no-lastSelection-exiting',
-        widgetId: id,
-        hasAccumulatedRecords: !!(accumulatedRecords && accumulatedRecords.length > 0),
-        accumulatedRecordsCount: accumulatedRecords?.length || 0,
-        hasSelection: this.state.hasSelection || false,
-        selectionRecordCount: this.state.selectionRecordCount || 0
-      })
-      return
-    }
-
-    const dsManager = DataSourceManager.getInstance()
-    const outputDS = dsManager.getDataSource(lastSelection.outputDsId) as FeatureLayerDataSource
-    
-    if (!outputDS) {
-      debugLogger.log('RESTORE', {
-        event: 'panel-closed-output-ds-not-found',
-        widgetId: id,
-        outputDsId: lastSelection.outputDsId
-      })
-      return
-    }
-
-    try {
-      // Get origin DS (the map layer)
-      const originDS = outputDS.getOriginDataSources()?.[0] as FeatureLayerDataSource
-      
-      if (!originDS) {
-        debugLogger.log('RESTORE', {
-          event: 'panel-closed-origin-ds-not-found',
-          widgetId: id,
-          outputDsId: lastSelection.outputDsId
-        })
-        return
-      }
-
-      // Check current selection state before clearing
-      const currentSelectedIds = originDS.getSelectedRecordIds() || []
-      const ourRecordIds = lastSelection.recordIds
-      const matchesOurSelection = ourRecordIds.length === currentSelectedIds.length &&
-        ourRecordIds.every(recordId => currentSelectedIds.includes(recordId))
-      
-      debugLogger.log('RESTORE', {
-        event: 'panel-closed-checking-map-selection',
-        widgetId: id,
-        ourRecordCount: ourRecordIds.length,
-        mapSelectedCount: currentSelectedIds.length,
-        matchesOurSelection,
-        ourRecordIds: ourRecordIds.slice(0, 5),
-        mapSelectedIds: currentSelectedIds.slice(0, 5)
-      })
-
-      // Use clearSelectionInDataSources utility which supports graphics layer
-      const { clearSelectionInDataSources } = require('./selection-utils')
-      const useGraphicsLayer = this.props.config.useGraphicsLayerForHighlight
-      const graphicsLayer = this.graphicsLayerRef.current || undefined
-      
-      ;(async () => {
-        await clearSelectionInDataSources(id, originDS, useGraphicsLayer, graphicsLayer)
-        
-        debugLogger.log('RESTORE', {
-          event: 'panel-closed-cleared-origin-ds-selection',
-          widgetId: id,
-          originDSId: originDS.id,
-          usedGraphicsLayer: useGraphicsLayer
-        })
-        
-        // Verify selection was cleared
-        const afterClearIds = originDS.getSelectedRecordIds() || []
-        debugLogger.log('RESTORE', {
-          event: 'panel-closed-selection-cleared-from-map',
-          widgetId: id,
-          recordCount: lastSelection.recordIds.length,
-          originDSId: originDS.id,
-          selectionAfterClear: afterClearIds.length,
-          verifiedCleared: afterClearIds.length === 0
-        })
-      })()
-    } catch (error) {
-      debugLogger.log('RESTORE', {
-        event: 'panel-closed-clear-from-map-failed',
-        widgetId: id,
-        error: error instanceof Error ? error.message : String(error),
-        errorStack: error instanceof Error ? error.stack : undefined
-      })
-    }
-  }
-  */
-  // ============================================================================
-  // END OLD clearSelectionFromMap - Now handled by SelectionRestorationManager
-  // ============================================================================
-
 
   /**
    * NOTIFY that a hash parameter has been used.
