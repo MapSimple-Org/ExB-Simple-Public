@@ -18,7 +18,7 @@
 **Task**: Update HS listener logic and info discovery icon to reflect both supported formats.
 
 ### 4. Accumulated Results Change Format When Switching Queries
-**Status:** 🐛 **CONFIRMED** - Not Fixed  
+**Status:** 🐛 **CONFIRMED** - Not Fixed (BUG logging added in r019.31)  
 **Priority:** High (Affects ADD mode UX)  
 **Discovered:** 2026-01-12 (Demo Site Testing)  
 **Issue**: In ADD_TO_SELECTION mode, when switching between queries, ALL accumulated results change to match the currently selected query's display configuration (fields, format, etc.) instead of maintaining their original query's configuration.
@@ -27,14 +27,21 @@
 
 **Impact**: Makes ADD mode nearly unusable for queries with different configurations. Users see wrong fields or missing data.
 
-**Documentation**: [`docs/bugs/ACCUMULATED_RESULTS_FORMAT_SWITCH.md`](docs/bugs/ACCUMULATED_RESULTS_FORMAT_SWITCH.md)
+**Visibility**: Automatic BUG warning appears in console when bug manifests (added r019.31)
 
-**Proposed Solution**:
+**Documentation**: 
+- Bug details: [`docs/bugs/ACCUMULATED_RESULTS_FORMAT_SWITCH.md`](docs/bugs/ACCUMULATED_RESULTS_FORMAT_SWITCH.md)
+- **Implementation plan**: [`docs/bugs/BUG-ADD-MODE-001_IMPLEMENTATION_PLAN.md`](docs/bugs/BUG-ADD-MODE-001_IMPLEMENTATION_PLAN.md)
+
+**Solution Overview**:
 - Store original `queryConfig` with each accumulated record set
 - Render each set using its original configuration
 - Group results visually by source query
+- Add collapse/expand for each set
 
-**Estimated Effort**: 1-2 days (Medium complexity)
+**Complexity**: 5-6 out of 10 (Medium)  
+**Estimated Effort**: 1-2 days  
+**Recommended Branch**: `feature/bug-add-mode-001` (new branch from `feature/chunk-rock`)
 
 ---
 
