@@ -650,6 +650,28 @@ export function QueryTask (props: QueryTaskProps) {
         isQuerySwitchFlagSet: isQuerySwitchInProgressRef.current,
         timestamp: Date.now()
       })
+      
+      // BUG LOGGING: Accumulated results format switch bug
+      // Log whenever query switches with accumulated records (known bug - format will change)
+      if (accumulatedRecords && accumulatedRecords.length > 0) {
+        debugLogger.log('BUG', {
+          bugId: 'BUG-ADD-MODE-001',
+          category: 'UI',
+          event: 'accumulated-results-format-switch',
+          widgetId: props.widgetId,
+          oldQueryConfigId: oldConfigId,
+          newQueryConfigId: queryItem.configId,
+          oldQueryName: 'Unknown (not tracked)', // We don't currently track which query created records
+          newQueryName: queryItem.name || queryItem.searchAlias || 'Unknown',
+          accumulatedRecordsCount: accumulatedRecords.length,
+          resultsMode,
+          description: 'Accumulated results will change to match new query\'s display format. Fields, layout, and styling will switch from original query\'s configuration to current query\'s configuration.',
+          impact: 'Results may show wrong fields or missing data. Makes ADD mode confusing for multi-query workflows.',
+          workaround: 'Use NEW_SELECTION mode instead of ADD_TO_SELECTION, or only accumulate results from the same query.',
+          targetResolution: 'TBD - Store original queryConfig with each record set',
+          documentation: 'docs/bugs/ACCUMULATED_RESULTS_FORMAT_SWITCH.md'
+        })
+      }
     }
     
     // CHECK rootDataSource.map to see how framework accesses map view
