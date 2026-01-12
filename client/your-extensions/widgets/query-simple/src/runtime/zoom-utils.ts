@@ -7,6 +7,7 @@
 
 import type { FeatureDataRecord } from 'jimu-core'
 import { createQuerySimpleDebugLogger } from 'widgets/shared-code/common'
+import Extent from 'esri/geometry/Extent'
 
 const debugLogger = createQuerySimpleDebugLogger()
 
@@ -188,13 +189,28 @@ export async function zoomToRecords(
     
     if (geometries.length === 1) {
       // Single geometry - get its extent
-      // Note: Point geometries will have zero-area extents (width=0, height=0)
-      // which will be expanded by the zero-area detection logic below
-      extent = geometries[0].extent || (geometries[0] as any).getExtent?.()
+      const geom = geometries[0]
+      
+      // Point geometries don't always have an .extent property in the ArcGIS JS API
+      // Create a zero-area extent manually so the downstream expansion logic can handle it
+      if (geom.type === 'point') {
+        const pt = geom as __esri.Point
+        extent = new Extent({
+          xmin: pt.x,
+          xmax: pt.x,
+          ymin: pt.y,
+          ymax: pt.y,
+          spatialReference: pt.spatialReference
+        })
+      } else {
+        // For non-point geometries (polygon, polyline), use the geometry's extent
+        extent = geom.extent || (geom as any).getExtent?.()
+      }
       
       debugLogger.log('ZOOM', {
         event: 'extent-calculated-single',
-        geometryType: geometries[0].type,
+        geometryType: geom.type,
+        extentCreatedManually: geom.type === 'point',
         originalExtent: extent ? {
           xmin: extent.xmin,
           xmax: extent.xmax,
