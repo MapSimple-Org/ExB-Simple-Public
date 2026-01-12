@@ -9,7 +9,7 @@ import {
   type IMState,
   classNames
 } from 'jimu-core'
-import { Button } from 'jimu-ui'
+import { Button, Tooltip } from 'jimu-ui'
 import { TrashOutlined } from 'jimu-icons/outlined/editor/trash'
 import FeatureInfo from './components/feature-info'
 import { ListDirection } from '../config'
@@ -35,6 +35,10 @@ const style = css`
   flex-shrink: 0;
   min-height: 2rem;
   position: relative;
+  
+  /* Add right padding to prevent header text from running into trash button */
+  padding-right: 44px;  /* 32px button width + 12px buffer */
+  
   &.selected {
     outline: 2px solid var(--sys-color-primary-main);
   }
@@ -54,6 +58,18 @@ const style = css`
     // Larger touch target for mobile/accessibility
     min-width: 32px;
     min-height: 32px;
+  }
+  
+  /* Ensure the FeatureInfo component respects the padding */
+  .feature-info-component {
+    width: 100%;
+  }
+  
+  /* Make the header wrap if it's still too long */
+  .esri-feature__title {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    padding-right: 8px;
   }
 `
 
@@ -132,26 +148,28 @@ export const QueryResultItem = (props: ResultItemProps) => {
         expandByDefault={expandByDefault}
         dataSource={dataSource}
       />
-      <Button
-        className="remove-button"
-        icon
-        size="sm"
-        variant="text"
-        color="inherit"
-        onClick={handleRemove}
-        aria-label="Remove record"
-        css={css`
-          padding: 6px;
-          min-width: 32px;
-          width: 32px;
-          height: 32px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-        `}
-      >
-        <TrashOutlined size={18} />
-      </Button>
+      <Tooltip title="Remove result" placement="bottom">
+        <Button
+          className="remove-button"
+          icon
+          size="sm"
+          variant="text"
+          color="inherit"
+          onClick={handleRemove}
+          aria-label="Remove result"
+          css={css`
+            padding: 6px;
+            min-width: 32px;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+          `}
+        >
+          <TrashOutlined size={18} />
+        </Button>
+      </Tooltip>
     </div>
   )
 }

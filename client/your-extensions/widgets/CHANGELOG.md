@@ -5,6 +5,393 @@ All notable changes to MapSimple Experience Builder widgets will be documented i
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.19.0-r019.31] - 2026-01-12
+
+### Added
+- **BUG Logging for ADD Mode Format Switch**: Added automatic warning logging (BUG-ADD-MODE-001) when switching queries in ADD_TO_SELECTION mode with accumulated results. This known bug causes all accumulated results to change their display format to match the newly selected query's configuration.
+
+### Bug Detection
+The warning appears automatically in the console (even without `?debug=all`) when:
+- User is in ADD_TO_SELECTION or REMOVE_FROM_SELECTION mode
+- Has accumulated results from a previous query
+- Switches to a different query
+
+**Console Output:**
+```javascript
+[QUERYSIMPLE ⚠️ BUG] {
+  "bugId": "BUG-ADD-MODE-001",
+  "category": "UI",
+  "event": "accumulated-results-format-switch",
+  "oldQueryConfigId": "8390785603784936",
+  "newQueryConfigId": "06367134367377913",
+  "accumulatedRecordsCount": 5,
+  "description": "Accumulated results will change to match new query's display format...",
+  "workaround": "Use NEW_SELECTION mode instead of ADD_TO_SELECTION...",
+  "targetResolution": "TBD - Store original queryConfig with each record set",
+  "documentation": "docs/bugs/ACCUMULATED_RESULTS_FORMAT_SWITCH.md"
+}
+```
+
+**Why This Matters:**
+- Makes the bug visible to testers and users during demo site testing
+- Provides immediate workaround guidance
+- Includes link to full documentation
+- Uses console.warn() for visibility (yellow/orange color)
+
+### Technical Details
+- Added in `query-task.tsx` at query switch detection point (line ~653)
+- Leverages existing BUG logging level (always enabled, even with `?debug=false`)
+- Detects `isSwitchingQueries` flag when in accumulation mode
+- Logs bug details including old/new query IDs and record count
+
+### Files Modified
+- `query-simple/src/runtime/query-task.tsx` (added BUG logging)
+- `query-simple/src/version.ts` (r019.30 → r019.31)
+
+### Related Documentation
+- Bug documentation: `docs/bugs/ACCUMULATED_RESULTS_FORMAT_SWITCH.md`
+- Logging system: `docs/blog/BLOG_KNOWN_BUGS_LOGGING.md`
+
+## [1.19.0-r019.30] - 2026-01-12 ✅ VERIFIED
+
+### Fixed
+- **Missing Import**: Added missing `Extent` import to `zoom-utils.ts`. The r019.29 refactor moved extent creation from `query-task.tsx` to `zoom-utils.ts` but forgot to add the import, causing `ReferenceError: Extent is not defined`.
+
+### Verification Results
+**✅ TESTED & CONFIRMED WORKING:**
+- Single point zoom: Works (1 point)
+- Multiple points zoom: Works (220 points)
+- No console errors
+- Proper extent calculation and map movement
+
+### Files Modified
+- `query-simple/src/runtime/zoom-utils.ts` (added Extent import)
+- `query-simple/src/version.ts` (r019.29 → r019.30)
+
+## [1.19.0-r019.29] - 2026-01-12 ✅ WORKING (with r019.30 import fix)
+
+### Summary
+**Complete fix for point geometry zoom issue.** Single points and multiple points (1, 10, 220+) now zoom correctly. Solution uses on-the-fly extent calculation in `zoom-utils.ts` to work around Esri's read-only `.extent` property on point geometries.
+
+### Fixed
+- **Point Zoom (Read-Only Property Fix)**: Fixed zoom failure for single and multiple points by creating extents on-the-fly in `zoom-utils.ts`. Previous upstream normalization approach failed because Esri's geometry `.extent` property is **read-only** and cannot be mutated.
+- **Eliminated Esri Accessor Error**: Removed code that attempted to assign to read-only `.extent` property, which caused `[esri.core.Accessor] cannot assign to read-only property 'extent'` console errors.
+
+### Changed
+- **On-The-Fly Extent Calculation**: Point geometries now have their extents calculated at the moment of use (in `zoom-utils.ts`), not through mutation or caching. This is a lightweight operation (4 property assignments) and avoids all mutation/immutability issues.
+- **Removed Upstream Normalization**: Removed the failed attempt to mutate geometry objects in `query-task.tsx`. Geometry objects remain unmodified.
+
+### Technical Details
+
+**Root Cause Analysis:**
+```javascript
+// Previous approach (r019.28) - FAILED:
+geom.extent = new Extent({ ... })  // ❌ Throws error - read-only property!
+// Console: [esri.core.Accessor] cannot assign to read-only property 'extent'
+```
+
+**New Approach (r019.29) - On-The-Fly Calculation:**
+```typescript
+// In zoom-utils.ts - Extract and calculate simultaneously
+const geometryData = records.map(record => {
+  const geom = record.getJSAPIGeometry()
+  if (!geom) return null
+  
+  // For points, create extent on-the-fly (doesn't modify geometry)
+  if (geom.type === 'point' && !geom.extent) {
+    const pt = geom as __esri.Point
+    return {
+      geometry: geom,
+      extent: new Extent({  // New local object, not mutating geom
+        xmin: pt.x, xmax: pt.x,
+        ymin: pt.y, ymax: pt.y,
+        spatialReference: pt.spatialReference
+      })
+    }
+  }
+  
+  // For other types, use existing extent
+  return { geometry: geom, extent: geom.extent }
+}).filter(item => item != null)
+```
+
+**Why This Works:**
+- ✅ No mutation of read-only properties
+- ✅ No React state corruption issues
+- ✅ Extents calculated exactly when needed
+- ✅ Performance cost is negligible (trivial math)
+- ✅ Clean, self-contained in `zoom-utils.ts`
+- ✅ No caching complexity
+
+**Zoom Operation Flow:**
+1. User clicks "Zoom to selected" (1 or 229 points)
+2. `zoomToRecords()` called with records
+3. For each record:
+   - Extract geometry via `getJSAPIGeometry()`
+   - If point without extent → create extent object (local, not attached to geom)
+   - If other type → use existing extent
+4. Calculate union extent from all extent objects
+5. Check for zero-area and apply buffer if needed
+6. Call `mapView.goTo(extent)`
+
+**Expected Console Output:**
+```javascript
+[QUERYSIMPLE-ZOOM] {
+  event: 'geometries-extracted',
+  geometriesCount: 229,
+  geometryTypes: ['point', 'point', ...]  // All points
+}
+
+[QUERYSIMPLE-ZOOM] {
+  event: 'extent-calculated-union',
+  extentsCount: 229,  // ✅ All extents calculated!
+  originalExtent: { xmin, xmax, ymin, ymax, width, height }
+}
+
+[QUERYSIMPLE-ZOOM] {
+  event: 'mapView-goTo-complete',
+  success: true
+}
+```
+
+### Files Modified
+- `query-simple/src/runtime/zoom-utils.ts` (on-the-fly extent calculation)
+- `query-simple/src/runtime/query-task.tsx` (removed upstream normalization, removed Extent import)
+- `query-simple/src/version.ts` (r019.28 → r019.29)
+
+### Lessons Learned
+- Esri geometry objects are **Accessor** instances with read-only computed properties
+- The `.extent` property on point geometries is read-only and always returns `null`
+- Attempting to mutate it fails silently or throws console errors
+- The correct approach is to create **new, local** extent objects when needed, not modify geometries
+
+## [1.19.0-r019.28] - 2026-01-12 [REVERTED]
+
+### Status
+**⚠️ This version was reverted in r019.29 due to Esri read-only property constraint.**
+
+The upstream normalization approach attempted to assign to `geom.extent`, which is a read-only property on Esri Accessor objects. This caused the error:
+```
+[esri.core.Accessor] cannot assign to read-only property 'extent'
+```
+
+### Original Intent (Failed)
+- Attempted to normalize point geometries by adding `.extent` property when results are received
+- Goal was to make all geometries uniform for downstream tools
+- Failed because `.extent` is read-only on Esri geometry objects
+
+## [1.19.0-r019.27] - 2026-01-12
+
+### Fixed
+- **Settings UI Artifact**: Fixed errant `)}` text appearing below the Map dropdown in Highlight Options section. Removed stray JSX closing syntax from line 331 in `setting.tsx` that was being rendered as text instead of code.
+
+### Technical Details
+- Removed extra `)}` on line 331 that was outside the correct conditional structure
+- Proper JSX structure now closes the nested SettingSection without extra syntax
+- Settings page now renders cleanly without text artifacts
+
+## [1.19.0-r019.26] - 2026-01-12
+
+### Fixed
+- **Results Header Layout**: Fixed issue where long layer names in result headers would overlap with the trash button. Header text now wraps properly and has adequate right padding (44px) to prevent collision with the remove button. Header grows vertically as needed to accommodate longer layer names.
+
+### Changed
+- **Result Item Styling**: Added right padding to result item container and word-wrap styling to `.esri-feature__title` to ensure long text wraps cleanly. Trash button remains fixed in top-right corner with proper spacing.
+
+### Technical Details
+- Added `padding-right: 44px` to result item (32px button + 12px buffer)
+- Added `word-wrap: break-word` and `overflow-wrap: break-word` to header title
+- Ensures full layer names are readable without being cut off
+- Maintains clean layout for both short and long layer names
+
+## [1.19.0-r019.25] - 2026-01-12
+
+### Fixed
+- **Point Geometry Zoom Bug**: Fixed critical issue where zooming to single point features (addresses, parcel centroids) would silently fail. Single point geometries (`type === 'point'`) don't have an `.extent` property in the ArcGIS JS API, causing zoom operations to skip. Now explicitly creates zero-area extents for single points before expansion logic.
+- **Zero-Area Extent Zoom**: Fixed issue where zooming to single points or overlapping points would fail or zoom to unusable scale. The `zoomToRecords` utility now detects zero-area extents (width=0 or height=0) and automatically expands them by 300 feet in all directions.
+
+### Changed
+- **Smart Unit Conversion**: Zoom buffer distance is now automatically converted based on spatial reference:
+  - Web Mercator (3857/102100): Converts 300 feet → ~91.44 meters
+  - State Plane (feet-based): Uses 300 feet directly
+- **Enhanced ZoomToRecordsOptions**: Added optional `zeroAreaBufferFeet` parameter (defaults to 300) for future configurability.
+- **Explicit Point Handling**: Single point geometries now have extent created manually using `new Extent({ xmin: pt.x, xmax: pt.x, ymin: pt.y, ymax: pt.y })`. Multipoints, polygons, and polylines continue to use their native `.extent` property.
+
+### Technical Details
+- **Three Helper Functions Added**:
+  - `isMetricSpatialReference()`: Detects coordinate system units (meters vs feet)
+  - `expandZeroAreaExtent()`: Buffers extent around center point
+  - Enhanced inline documentation throughout `zoom-utils.ts`
+- **Extent-Based Approach**: Maintains extent strategy (no scale manipulation) to ensure padding from `ZoomToRecordsOptions` is still respected.
+- **Comprehensive Diagnostic Logging**: Added 10+ log points throughout zoom operation:
+  - `zoom-start`: Initial parameters and mapView info
+  - `geometries-extracted`: Geometry count and types
+  - `extent-calculated-single`: Extent details with `extentCreatedManually` flag
+  - `zero-area-check`: Detects zero-width/height extents
+  - `zero-area-extent-expanded`: Before/after expansion coordinates
+  - `calling-mapView-goTo`: Final extent passed to API
+  - `mapView-goTo-complete`: Success confirmation
+- **Geometry Type Handling**:
+  - Single points (`point`): Extent created manually ✓
+  - Multipoints (`multipoint`): Uses native `.extent` ✓
+  - Polygons/Polylines: Uses native `.extent` ✓
+
+### Development Process
+- **r019.23**: Initial zero-area expansion implementation
+- **r019.24**: Added comprehensive diagnostic logging
+- **r019.25**: Fixed root cause - single points lacking extent property
+
+### Future Enhancement
+- **Configurable Buffer Distance**: See TODO.md "Configurable Point Zoom Buffer" for plan to expose this in widget settings.
+
+### Credit
+Point extent creation fix suggested by user during architecture review. User correctly identified that single point geometries lack `.extent` property, advocating for explicit handling over downstream detection.
+
+## [1.19.0-r019.8] - 2026-01-09
+
+### Added
+- **SelectionRestorationManager**: New manager class for handling selection state tracking logic (Chunk 3 Section 3.1).
+- **Selection Restoration E2E Tests**: Comprehensive test suite with 6 passing scenarios covering New/Add/Remove modes, manual removal, query-based removal, and mode switching.
+
+### Changed
+- **Selection State Tracking**: Migrated `handleSelectionChange` logic from `widget.tsx` to `SelectionRestorationManager` class using test-first approach with parallel execution verification.
+- **EventManager Integration**: `EventManager` now calls `SelectionRestorationManager.handleSelectionChange()` directly for cleaner architecture.
+
+### Removed
+- **Scaffolding Code**: Removed 365 lines of temporary code including commented old implementation, parallel execution method, and CHUNK-3-COMPARE debug logs.
+
+### Technical Details
+- **r019.0**: Started Section 3.1 with E2E test suite creation (7 test scenarios)
+- **r019.1**: Created `SelectionRestorationManager` class structure
+- **r019.2**: Implemented parallel execution to compare old vs. new implementations
+- **r019.3**: Fixed `SelectionType` import path in manager
+- **r019.4**: Fixed parallel execution timing for accurate state comparison
+- **r019.5**: Updated E2E tests to capture CHUNK-3-COMPARE logs
+- **r019.6**: Switched to manager-only implementation (commented out old code)
+- **r019.7**: Fixed Test 3B timing issue (wait for removal query to complete)
+- **r019.8**: Cleanup - removed all commented code and CHUNK-3-COMPARE logs
+
+### Verification Results
+- **E2E Tests**: 6/6 passing (2.0 minutes runtime)
+- **Parallel Execution**: 19/19 perfect matches in E2E tests
+- **Manual Testing**: 63/72 matches (9 mismatches were timing artifacts)
+- **No Regressions**: All existing functionality preserved
+
+## [1.19.0-r018.110] - 2025-01-08
+
+### Fixed
+- **Intermittent First-Load Hash Execution Bug**: Fixed race condition where hash parameters would sometimes populate the form but not execute on first page load. The issue occurred when `datasourceReady` became true before `outputDS` was available, causing the hash value to be set but execution to fail silently.
+
+### Changed
+- **Hash Value Setting Logic**: Added `outputDS` check to `shouldSetValue` condition and `outputDS` to the useEffect dependency array in `query-task-form.tsx`. Hash values are now only set when ALL required conditions are met: `datasourceReady`, `outputDS`, and `sqlExprObj`.
+- **Hash Re-Execution Support**: Modified `UrlConsumptionManager` to track only the `shortId=value` portion of hash parameters (not entire hash), allowing the same query to be re-executed after navigating away and back.
+- **Removed Hash Processing Blocker**: Eliminated `processedHashParamsRef` from `widget.tsx` that was preventing hash parameters from re-executing.
+
+### Added
+- **HASH-FIRST-LOAD Debug Logging**: Added comprehensive diagnostic logging throughout the hash execution path in `query-task-form.tsx` and `query-task-list.tsx` to track condition states, execution decision points, and identify race conditions.
+- **HASH-EXEC Debug Feature**: Added `HASH-EXEC` debug feature to both QuerySimple and HelperSimple loggers for tracking hash execution flow.
+
+### Technical Details
+- **r018.98-102**: Fixed hash re-execution by removing redundant tracking in both HelperSimple and QuerySimple
+- **r018.105-107**: Added extensive diagnostic logging with new `HASH-FIRST-LOAD` debug tag
+- **r018.108**: Fixed circular reference error in logging (outputDS object being stringified)
+- **r018.109**: Added `outputDS` check to `shouldSetValue` condition to prevent setting hash before execution can occur
+- **r018.110**: Added `outputDS` to useEffect dependency array to ensure hash is set when all conditions are met
+
+## [1.19.0-r018.97] - 2025-01-08
+
+### Fixed
+- **Tab Count in New Mode**: Tab count now updates correctly when records are removed via X button in New mode. Previously, the count remained static (e.g., 121/121) even after removing records.
+- **Clear Results Button**: Fixed `ReferenceError: setRemovedRecordIds is not defined` when clicking Clear Results button on Results tab.
+- **Universal Tab Count Architecture**: `accumulatedRecords` is now the single source of truth for displayed records across ALL modes (New, Add, Remove), ensuring consistent tab count behavior.
+
+### Changed
+- **Simplified Clear Results Logic**: Refactored `clearResults()` in `query-result.tsx` to delegate directly to parent's `clearResult()` method, eliminating redundant local state cleanup.
+- **Universal accumulatedRecords Sync**: Removed mode-specific checks - `accumulatedRecords` now syncs in all modes for universal tab count tracking.
+
+## [1.19.0-r018.96] - 2025-01-08
+
+### Removed
+- **Manual Removal Tracking**: Eliminated `manuallyRemovedRecordIds` state and all related filtering logic across `widget.tsx`, `query-task.tsx`, `query-result.tsx`, and `query-task-list.tsx`.
+
+### Changed
+- **Simplified Architecture**: Removed unnecessary complexity by relying on `mergeResultsIntoAccumulated`'s composite key duplicate detection. Running the same query after removing records now correctly re-adds those records in Add mode.
+- **Cleaner Code**: Removed over 200 lines of tracking logic that was made obsolete by the r018.94 architectural refactoring.
+
+## [1.19.0-r017.60] - 2025-12-23
+
+### Added
+- **Custom Zoom To Action**: Created custom "Zoom To" data action that replaces the framework's default zoom action, ensuring consistent zoom behavior with 50px padding across all zoom operations.
+- **Shared Zoom Utility**: Extracted zoom logic into `zoom-utils.ts` as a shared utility function, eliminating code duplication between the React hook and data action implementations.
+
+### Changed
+- **Zoom Implementation**: Refactored `useZoomToRecords` hook to use shared `zoomToRecords` utility function, maintaining backward compatibility while centralizing zoom logic.
+- **Data Actions**: Updated `getExtraActions` to include custom "Zoom To" action alongside "Add to Map" action, both using QuerySimple's internal processes.
+
+### Fixed
+- **Framework Action Suppression**: Excluded framework's `zoomToFeature` and `arcgis-map.zoomToFeature` actions from appearing in DataActionList, ensuring only custom actions are shown.
+
+## [1.19.0-r017.59] - 2025-12-23
+
+### Changed
+- **Action Name**: Changed custom zoom action name from `zoomToFeature` to `querySimpleZoomTo` to avoid conflicts with framework action.
+
+## [1.19.0-r017.58] - 2025-12-23
+
+### Added
+- **Custom Zoom To Data Action**: Initial implementation of custom "Zoom To" data action using shared zoom utility.
+
+## [1.19.0-r017.57] - 2025-12-23
+
+### Added
+- **Shared Zoom Utility**: Created `zoom-utils.ts` with pure `zoomToRecords` function for reuse across hooks and data actions.
+
+### Changed
+- **Hook Refactoring**: Refactored `useZoomToRecords` hook to wrap shared utility function instead of duplicating logic.
+
+## [1.19.0-r017.48] - 2025-12-22
+
+### Fixed
+- **Priority URL Parsing**: Unified URL parameter handling between `widget.tsx` and `QueryTaskList.tsx`. Hash parameters now correctly override query string parameters across all query items, resolving the "Dirty Hash" bug when pivoting between deep links.
+- **State Mismatch**: Fixed a race condition where `QueryTaskList` could fallback to stale query string values after a hash parameter was consumed.
+
+### Added
+- **Documentation**: Created `TESTING_WALKTHROUGH.md` providing a step-by-step guide for manual verification of all QuerySimple features.
+- **Architectural Roadmap**: Added "Esri Standards & Architectural Hardening" to `TODO.md` for future refactoring into a "Thin Shell" pattern.
+
+## [1.19.0-r017.47] - 2025-12-21
+
+### Fixed
+- **Circular Structure Crash**: Resolved "Converting circular structure to JSON" error when clicking the clear results (trash can) button by properly handling the React event object in `clearResult`.
+- **External Widget Fix (draw-advanced)**: Patched the `draw-advanced` widget's `style.ts` to remove an incompatible theme reference (`theme.surfaces[1]`) that was preventing the widget from rendering in Experience Builder 1.19.
+
+## [1.19.0-r017.46] - 2025-12-21
+
+### Changed
+- **Smarter Input Validation**: Refined the "Empty String Prevention" rule to exempt list-based selections (Unique Values, Field Values). This allows users to interact with Regional Trails and other dropdown-style searches without being blocked by the mandatory text requirement.
+
+## [1.19.0-r017.45] - 2025-12-21
+
+### Fixed
+- **Immutable Structure Preservation**: Fixed `TypeError: asMutable is not a function` by properly handling "Value List" structures (arrays of objects). The sanitizer now surgically updates string values within these structures while preserving the overall object architecture required by the framework.
+
+## [1.19.0-r017.44] - 2025-12-21
+
+### Fixed
+- **Instant Validation**: Resolved bug where the "Apply" button remained disabled during typing until the input lost focus. Added real-time validation via DOM event listeners.
+
+## [1.19.0-r017.43] - 2025-12-21
+
+### Added
+- **TDD Workflow**: Adopted Test-Driven Development (TDD) as requested, adding unit tests for SQL sanitization and input validation.
+- **Input Validation**: Added `isQueryInputValid` and `sanitizeQueryInput` to prevent empty string submittals and provide basic SQL injection protection.
+- **Form Debugging**: Added granular focus and typing logs in `QueryTaskForm` to monitor input behavior and validation state.
+
+## [1.19.0-r017.42] - 2025-12-21
+
+### Fixed
+- **Logging Compliance**: Replaced direct `console.log` calls in `query-utils.ts` with the centralized `debugLogger` to adhere to the MapSimple Development Guide.
+
 ## [1.19.0-r017.41] - 2025-12-20
 
 ### Fixed

@@ -7,6 +7,7 @@ import type { DataSource, FeatureLayerDataSource, FeatureDataRecord } from 'jimu
 import { MessageManager, DataRecordsSelectionChangeMessage } from 'jimu-core'
 import { addHighlightGraphics as addGraphicsLayerGraphics, clearGraphicsLayer } from './graphics-layer-utils'
 import { createQuerySimpleDebugLogger } from 'widgets/shared-code/common'
+import type { EventManager } from './hooks/use-event-handling'
 
 const debugLogger = createQuerySimpleDebugLogger()
 
@@ -22,12 +23,14 @@ export const QUERYSIMPLE_SELECTION_EVENT = 'querysimple-selection-changed'
  * @param recordIds - Array of selected record IDs
  * @param outputDS - The output data source
  * @param queryItemConfigId - The config ID of the query that produced these results
+ * @param eventManager - Optional EventManager instance for comparison logging (Chunk 7.1)
  */
 export function dispatchSelectionEvent(
   widgetId: string,
   recordIds: string[],
   outputDS: DataSource,
-  queryItemConfigId: string
+  queryItemConfigId: string,
+  eventManager?: EventManager
 ): void {
   const originDS = getOriginDataSource(outputDS)
   const dataSourceId = originDS?.id
@@ -40,18 +43,10 @@ export function dispatchSelectionEvent(
     queryItemConfigId
   })
 
-  const selectionEvent = new CustomEvent(QUERYSIMPLE_SELECTION_EVENT, {
-    detail: {
-      widgetId,
-      recordIds,
-      dataSourceId,
-      outputDsId: outputDS.id,
-      queryItemConfigId
-    },
-    bubbles: true,
-    cancelable: true
-  })
-  window.dispatchEvent(selectionEvent)
+  // Chunk 7: Dispatch selection event via EventManager (r018.59)
+  if (eventManager) {
+    eventManager.dispatchSelectionEvent(widgetId, recordIds, dataSourceId, outputDS.id, queryItemConfigId)
+  }
 }
 
 /**
@@ -164,8 +159,41 @@ export async function selectRecordsInDataSources(
 }
 
 /**
+ * Clears the `data_s` parameter from the URL hash.
+ * Experience Builder automatically adds `data_s` when selections are made,
+ * but doesn't remove it when selections are cleared, causing "dirty hash" issues.
+ * 
+ * This function ensures the hash is clean when selections are cleared.
+ */
+function clearDataSParameterFromHash(): void {
+  const hash = window.location.hash.substring(1)
+  if (!hash) return
+  
+  const urlParams = new URLSearchParams(hash)
+  
+  if (urlParams.has('data_s')) {
+    urlParams.delete('data_s')
+    const newHash = urlParams.toString()
+    
+    debugLogger.log('HASH', {
+      event: 'clearDataSParameterFromHash',
+      hadDataS: true,
+      newHash: newHash ? `#${newHash}` : '(empty)',
+      timestamp: Date.now()
+    })
+    
+    // Update the URL without triggering a reload
+    // Always preserve pathname and query string, only update hash
+    window.history.replaceState(null, '', 
+      window.location.pathname + window.location.search + (newHash ? `#${newHash}` : '')
+    )
+  }
+}
+
+/**
  * Clears selection in both the origin data source and output data source.
  * Optionally clears graphics layer if using graphics layer mode.
+ * Also clears the `data_s` parameter from the URL hash to prevent "dirty hash" issues.
  * 
  * @param widgetId - The widget ID (needed to publish message)
  * @param outputDS - The output data source
@@ -195,6 +223,10 @@ export async function clearSelectionInDataSources (
   if (outputDS) {
     publishSelectionMessage(widgetId, [], outputDS, true)
   }
+  
+  // Clear data_s parameter from hash to prevent dirty hash
+  // Experience Builder adds data_s when selections are made but doesn't remove it when cleared
+  clearDataSParameterFromHash()
 }
 
 /**
@@ -268,6 +300,8 @@ export async function selectRecordsAndPublish(
  * @returns The clear button element, or null if not found
  */
 export function findClearResultsButton(): HTMLButtonElement | null {
-  return document.querySelector('button[aria-label="Clear results"]') as HTMLButtonElement | null
+  // Hardened: Prioritize the one in the results header, fallback to any
+  return (document.querySelector('.query-result__header button[aria-label="Clear results"]') || 
+          document.querySelector('button[aria-label="Clear results"]')) as HTMLButtonElement | null
 }
 

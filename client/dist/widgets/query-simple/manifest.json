@@ -4,7 +4,7 @@
   "type": "widget",
   "version": "1.19.0",
   "exbVersion": "1.19.0",
-  "author": "King County GIS",
+  "author": "MapSimple",
   "description": "QuerySimple widget - simplified query widget",
   "copyright": "",
   "license": "http://www.apache.org/licenses/LICENSE-2.0",
@@ -35,6 +35,8 @@
   "excludeDataActions": [
     "arcgis-map.addToMap",
     "arcgis-map.showOnMap",
+    "arcgis-map.zoomToFeature",
+    "zoomToFeature",
     "edit.edit",
     "query-select-loaded",
     "query-clear-selection"

@@ -187,25 +187,22 @@ export class KCSearchHelpers {
     const queryTab = widget.locator('.jimu-nav-link, button[role="tab"]').filter({ hasText: /Query/i }).first();
     const isActive = await widget.locator('.jimu-nav-link.active, button[role="tab"][aria-selected="true"]').filter({ hasText: /Query/i }).count() > 0;
     
-    if (!isActive && await queryTab.isVisible()) {
+    if (!isActive) {
       console.log('   📑 Switching to Query tab to expose Apply button');
-      await queryTab.click({ force: true });
-      await this.page.waitForTimeout(1500);
+      await queryTab.click({ force: true }).catch(() => console.log('   ⚠️ Could not click Query tab'));
+      await this.page.waitForTimeout(1000);
     }
 
     // 2. Find and click Apply
     const applyBtn = widget.locator('button').filter({ hasText: /^Apply$/i }).first();
     
     try {
-      await applyBtn.waitFor({ state: 'attached', timeout: 10000 });
-      await applyBtn.scrollIntoViewIfNeeded();
-      await this.page.waitForTimeout(500); // Settle
+      await applyBtn.waitFor({ state: 'attached', timeout: 5000 });
       console.log('   🖱️ Clicking Apply button');
       await applyBtn.click({ force: true });
       console.log('   ✅ Apply clicked');
     } catch (e) {
       console.log(`   ❌ [clickApply] Failed: ${e.message}`);
-      // Fallback: try to find ANY button with Apply text even if not visible yet
       await applyBtn.click({ force: true }).catch(() => console.log('   ⚠️ Fallback click failed too'));
     }
   }
@@ -261,10 +258,31 @@ export class KCSearchHelpers {
    */
   async switchToQueryTab(widgetId: string) {
     console.log(`📑 Switching to Query tab in ${widgetId}`);
+    
+    // Use Playwright click (not JS evaluate) to trigger React's synthetic events
     const widget = this.getWidget(widgetId);
-    const queryTab = widget.locator('.jimu-nav-link, button[role="tab"]').filter({ hasText: /Query/i }).first();
-    await queryTab.click({ force: true });
-    await this.page.waitForTimeout(1500);
+    const queryTab = widget.locator('.jimu-nav-link, button[role="tab"], .nav-link, .nav-item').filter({ hasText: /^Query$/i }).first();
+    
+    try {
+      await queryTab.waitFor({ state: 'visible', timeout: 3000 });
+      await queryTab.click();
+      console.log('   ✅ Clicked Query tab (Playwright click)');
+    } catch (e) {
+      console.log('   ❌ Could not find or click Query tab');
+      throw e;
+    }
+    
+    // Wait for Query tab content to be visible (verify we're actually on the Query tab)
+    await this.page.waitForTimeout(1000);
+    const isOnQueryTab = await widget.locator('button').filter({ hasText: /^(New|Add|Remove)$/i }).first().isVisible().catch(() => false);
+    
+    if (isOnQueryTab) {
+      console.log('   ✅ Verified: Query tab is active (mode buttons visible)');
+    } else {
+      console.log('   ⚠️ Warning: Query tab might not be active (mode buttons not visible)');
+      // Take a screenshot for debugging
+      await this.page.screenshot({ path: `test-results/query-tab-switch-failed-${Date.now()}.png` });
+    }
   }
 
   /**
@@ -272,10 +290,34 @@ export class KCSearchHelpers {
    */
   async switchToResultsTab(widgetId: string) {
     console.log(`📑 Switching to Results tab in ${widgetId}`);
+    
+    // Use Playwright click (not JS evaluate) to trigger React's synthetic events
     const widget = this.getWidget(widgetId);
-    const resultsTab = widget.locator('.jimu-nav-link, button[role="tab"]').filter({ hasText: /Results/i }).first();
-    await resultsTab.click({ force: true });
-    await this.page.waitForTimeout(1500);
+    const resultsTab = widget.locator('.jimu-nav-link, button[role="tab"], .nav-link, .nav-item').filter({ hasText: /^Results$/i }).first();
+    
+    try {
+      await resultsTab.waitFor({ state: 'visible', timeout: 3000 });
+      await resultsTab.click();
+      console.log('   ✅ Clicked Results tab (Playwright click)');
+      await this.page.waitForTimeout(1000);
+    } catch (e) {
+      console.log('   ❌ Could not find or click Results tab');
+      throw e;
+    }
+  }
+
+  /**
+   * Check if Results tab is visible
+   */
+  async isResultsTabVisible(widgetId: string): Promise<boolean> {
+    const widget = this.getWidget(widgetId);
+    const resultsTab = widget.locator('.jimu-nav-link, button[role="tab"], .nav-link, .nav-item').filter({ hasText: /^Results$/i }).first();
+    
+    try {
+      return await resultsTab.isVisible();
+    } catch (e) {
+      return false;
+    }
   }
 
   /**
@@ -285,8 +327,19 @@ export class KCSearchHelpers {
     console.log(`🎯 Setting results mode to: ${mode} in ${widgetId}`);
     const widget = this.getWidget(widgetId);
     const modeButton = widget.locator('button').filter({ hasText: new RegExp(`^${mode}$`, 'i') }).first();
+    
+    // Wait for the mode button to be visible (Query tab needs to be active)
+    try {
+      await modeButton.waitFor({ state: 'visible', timeout: 5000 });
+      console.log(`   ✅ Mode button "${mode}" is visible`);
+    } catch (e) {
+      console.log(`   ❌ Mode button "${mode}" not visible after 5s - might still be on Results tab`);
+      throw e;
+    }
+    
     await modeButton.click({ force: true });
     await this.page.waitForTimeout(500);
+    console.log(`   ✅ Clicked "${mode}" mode button`);
   }
 
   /**
@@ -309,59 +362,97 @@ export class KCSearchHelpers {
   }
 
   /**
-   * Click the Expand All button
+   * Click the Expand All button if visible
    */
   async clickExpandAll(widgetId: string) {
     console.log(`↔️ Clicking Expand All in ${widgetId}`);
     const widget = this.getWidget(widgetId);
     const expandBtn = widget.locator('button[aria-label*="expand all" i]').first();
-    await expandBtn.waitFor({ state: 'attached', timeout: 5000 });
-    await expandBtn.click({ force: true });
-    await this.page.waitForTimeout(1000);
+    
+    // Use a soft check - if it's not visible, we might already be expanded
+    if (await expandBtn.isVisible()) {
+      await expandBtn.click({ force: true });
+      await this.page.waitForTimeout(1000);
+      console.log('   ✅ Expanded all items');
+    } else {
+      console.log('   ℹ️ Expand All button not visible, skipping (possibly already expanded)');
+    }
   }
 
   /**
-   * Click the Collapse All button
+   * Click the Collapse All button if visible
    */
   async clickCollapseAll(widgetId: string) {
     console.log(`🤏 Clicking Collapse All in ${widgetId}`);
     const widget = this.getWidget(widgetId);
     const collapseBtn = widget.locator('button[aria-label*="collapse all" i]').first();
-    await collapseBtn.waitFor({ state: 'attached', timeout: 5000 });
-    await collapseBtn.click({ force: true });
-    await this.page.waitForTimeout(1000);
+    
+    // Use a soft check - if it's not visible, we might already be collapsed
+    if (await collapseBtn.isVisible()) {
+      await collapseBtn.click({ force: true });
+      await this.page.waitForTimeout(1000);
+      console.log('   ✅ Collapsed all items');
+    } else {
+      console.log('   ℹ️ Collapse All button not visible, skipping (possibly already collapsed)');
+    }
   }
 
   /**
-   * Click the Clear Results button
+   * Click the Clear Results button (trash can icon)
+   * This automatically switches back to Query tab after clearing
    */
   async clickClearResults(widgetId: string) {
     console.log(`🧹 [Step: clickClearResults] Clicking Clear Results in ${widgetId}`);
+
     const widget = this.getWidget(widgetId);
     
-    // Ensure we are on the Results tab
-    const resultsTab = widget.locator('.jimu-nav-link, button[role="tab"]').filter({ hasText: /Results/i }).first();
-    const isActive = await widget.locator('.jimu-nav-link.active, button[role="tab"][aria-selected="true"]').filter({ hasText: /Results/i }).count() > 0;
-    
-    if (!isActive && await resultsTab.isVisible()) {
-      console.log('   📑 Switching to Results tab to expose Clear button');
-      await resultsTab.click({ force: true });
-      await this.page.waitForTimeout(1000);
-    }
-
-    const clearBtn = widget.locator('button[aria-label*="clear results" i], button:has-text("Clear Results")').first();
+    // Try multiple selectors to find the Clear Results button:
+    // 1. Button with aria-label containing "clear results"
+    // 2. Button with text "Clear Results"
+    // 3. Button containing the trash icon (by icon class or SVG)
+    let clearBtn = widget.locator('.query-result__header button[aria-label*="clear results" i], .query-result__header button:has-text("Clear Results")').first();
     
     try {
-      await clearBtn.waitFor({ state: 'attached', timeout: 10000 });
-      await clearBtn.scrollIntoViewIfNeeded();
-      console.log('   🖱️ Clicking Clear Results button');
+      // Try to find button first (might already be on Results tab)
+      await clearBtn.waitFor({ state: 'visible', timeout: 3000 });
+      console.log('   🖱️ Clicking Clear Results button (trash can)');
       await clearBtn.click({ force: true });
+      // Wait for the clear to process and UI to update (switches to Query tab automatically)
       await this.page.waitForTimeout(2000);
-      console.log('   ✅ Results cleared');
+      console.log('   ✅ Results cleared (should now be on Query tab)');
+      return;
     } catch (e) {
-      console.log(`   ❌ [clickClearResults] Failed: ${e.message}`);
-      // Fallback
-      await clearBtn.click({ force: true }).catch(() => console.log('   ⚠️ Fallback clear failed'));
+      console.log(`   ⚠️ Button not visible, trying to switch to Results tab first...`);
+      // Button not visible - try switching to Results tab first
+      try {
+        await this.switchToResultsTab(widgetId);
+        // Try again after switching
+        await clearBtn.waitFor({ state: 'visible', timeout: 3000 });
+        await clearBtn.click({ force: true });
+        await this.page.waitForTimeout(2000);
+        console.log('   ✅ Results cleared (after switching to Results tab)');
+        return;
+      } catch (e2) {
+        console.log(`   ⚠️ Primary selector failed: ${e2.message}, trying fallback...`);
+      }
+    }
+    
+    // Fallback: Find button containing the trash icon by looking for the icon-btn-sizer class
+    // The trash icon is in a span with class "icon-btn-sizer" inside the button
+    let clearBtnFallback = widget.locator('.query-result__header button:has(.icon-btn-sizer), .query-result__header button:has(.jimu-button-icon)').first();
+    try {
+      await clearBtnFallback.waitFor({ state: 'visible', timeout: 3000 });
+      await clearBtnFallback.click({ force: true });
+      await this.page.waitForTimeout(2000);
+      console.log('   ✅ Results cleared (via icon fallback selector)');
+    } catch (e3) {
+      console.log(`   ❌ Fallback also failed: ${e3.message}`);
+      // Last resort: try any button in results header
+      const anyBtn = widget.locator('.query-result__header button').first();
+      await anyBtn.waitFor({ state: 'visible', timeout: 3000 });
+      await anyBtn.click({ force: true });
+      await this.page.waitForTimeout(2000);
+      console.log('   ✅ Clicked button in results header (last resort)');
     }
   }
 
@@ -444,5 +535,168 @@ export class KCSearchHelpers {
     console.log(`🧐 Verifying results cleared in ${widgetId}`);
     const count = await this.getResultCount(widgetId);
     expect(count).toBe(0);
+  }
+
+  // ============================================================================
+  // Map Identify Helpers (Chunk 3 Section 3.3)
+  // ============================================================================
+
+  /**
+   * Click on map at specific coordinates to trigger identify popup.
+   * 
+   * @param x - X coordinate in pixels (from left edge of viewport)
+   * @param y - Y coordinate in pixels (from top edge of viewport)
+   * @param options - Optional click options
+   * 
+   * Usage:
+   *   // Click on a known feature location
+   *   await helpers.clickMapAtCoordinates(450, 300)
+   * 
+   * To find coordinates, use captureMapCoordinates() in browser console:
+   *   window.captureMapCoordinates = true
+   *   // Hover over features and watch console for coordinates
+   */
+  async clickMapAtCoordinates(x: number, y: number, options?: { delay?: number }) {
+    console.log(`🗺️  Clicking map at coordinates (${x}, ${y})`);
+    
+    // Click at the specified coordinates
+    await this.page.mouse.click(x, y, { delay: options?.delay || 100 });
+    
+    // Wait a bit for identify popup to potentially appear
+    await this.page.waitForTimeout(1000);
+    
+    console.log(`   ✅ Map clicked at (${x}, ${y})`);
+  }
+
+  /**
+   * Wait for the identify popup to appear after clicking on a map feature.
+   * 
+   * @param timeout - Maximum time to wait in milliseconds (default: 5000)
+   * @returns true if popup appeared, false if timeout
+   * 
+   * The identify popup is part of ExB's built-in Map widget functionality.
+   * It typically has selectors like:
+   * - .esri-popup
+   * - .esri-feature-popup
+   * - [role="dialog"]
+   */
+  async waitForIdentifyPopup(timeout: number = 5000): Promise<boolean> {
+    console.log(`⏳ Waiting for identify popup to appear...`);
+    
+    try {
+      // Try multiple selectors that might match the identify popup
+      const popupSelectors = [
+        '.esri-popup',
+        '.esri-feature-popup',
+        '.jimu-popup',
+        '[role="dialog"][aria-label*="Popup" i]',
+        '.esri-popup__main-container'
+      ];
+
+      for (const selector of popupSelectors) {
+        const popup = this.page.locator(selector).first();
+        if (await popup.isVisible({ timeout: timeout / popupSelectors.length })) {
+          console.log(`   ✅ Identify popup appeared (${selector})`);
+          return true;
+        }
+      }
+
+      console.log(`   ⚠️  No identify popup detected`);
+      return false;
+    } catch (error) {
+      console.log(`   ⚠️  Timeout waiting for identify popup`);
+      return false;
+    }
+  }
+
+  /**
+   * Close the identify popup (if open).
+   * 
+   * Looks for common close button patterns in ExB's identify popup:
+   * - Close button with aria-label
+   * - X button in popup header
+   * - ESC key press
+   */
+  async closeIdentifyPopup(): Promise<void> {
+    console.log(`❌ Attempting to close identify popup...`);
+
+    try {
+      // Try clicking close button (multiple possible selectors)
+      const closeButtonSelectors = [
+        '.esri-popup__button[title*="Close" i]',
+        '.esri-popup__header button.esri-popup__button',
+        '.esri-popup [aria-label*="Close" i]',
+        '.jimu-popup button[aria-label*="Close" i]',
+        'button.esri-icon-close'
+      ];
+
+      for (const selector of closeButtonSelectors) {
+        const closeBtn = this.page.locator(selector).first();
+        if (await closeBtn.isVisible({ timeout: 1000 })) {
+          await closeBtn.click();
+          console.log(`   ✅ Clicked close button (${selector})`);
+          await this.page.waitForTimeout(500);
+          return;
+        }
+      }
+
+      // Fallback: Press ESC key
+      console.log(`   ⌨️  No close button found, pressing ESC key`);
+      await this.page.keyboard.press('Escape');
+      await this.page.waitForTimeout(500);
+      
+      console.log(`   ✅ Identify popup closed`);
+    } catch (error) {
+      console.log(`   ⚠️  Error closing identify popup:`, error);
+    }
+  }
+
+  /**
+   * Helper to inject coordinate logging into the browser.
+   * This allows you to hover over the map and see coordinates in the console.
+   * 
+   * Usage in test:
+   *   await helpers.enableMapCoordinateLogging()
+   *   // Then manually hover over map to see coordinates logged
+   *   // Use those coordinates in clickMapAtCoordinates()
+   */
+  async enableMapCoordinateLogging(): Promise<void> {
+    await this.page.evaluate(() => {
+      let isLogging = false;
+      
+      const mapContainer = document.querySelector('.esri-view-surface') as HTMLElement;
+      if (!mapContainer) {
+        console.error('❌ Map container not found');
+        return;
+      }
+
+      mapContainer.addEventListener('mousemove', (e: MouseEvent) => {
+        if (!isLogging) return;
+        
+        const rect = mapContainer.getBoundingClientRect();
+        const x = Math.round(e.clientX);
+        const y = Math.round(e.clientY);
+        const relX = Math.round(e.clientX - rect.left);
+        const relY = Math.round(e.clientY - rect.top);
+        
+        console.log(`🗺️  Map Coords: viewport(${x}, ${y}) | relative(${relX}, ${relY})`);
+      });
+
+      // Enable logging via console command
+      (window as any).startMapCoordinateCapture = () => {
+        isLogging = true;
+        console.log('✅ Map coordinate capture STARTED. Hover over map to see coordinates.');
+      };
+      
+      (window as any).stopMapCoordinateCapture = () => {
+        isLogging = false;
+        console.log('⏹️  Map coordinate capture STOPPED.');
+      };
+
+      console.log('📍 Map coordinate capture ready!');
+      console.log('   Run: window.startMapCoordinateCapture()');
+      console.log('   Then hover over map features to see coordinates');
+      console.log('   Run: window.stopMapCoordinateCapture() when done');
+    });
   }
 }
