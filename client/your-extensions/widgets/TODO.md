@@ -255,6 +255,83 @@ query-simple/src/runtime/
 
 ---
 
+### 2c. Configurable Point Zoom Buffer
+**Status:** 📋 **TODO** (Post-Team Deployment)  
+**Priority:** Low (Enhancement)  
+**Source:** Demo Site Testing (2026-01-12)  
+**Implemented:** r019.23 (hardcoded default)  
+**Goal:** Expose point zoom buffer distance in widget settings to allow authors to customize zoom level for point features.
+
+**Problem:** 
+- Single points or overlapping points have zero-area extents (width=0, height=0)
+- Without expansion, `mapView.goTo()` zooms to unusable scale
+- Fixed with 300ft default buffer in r019.23, but hardcoded
+
+**Current Implementation (r019.23):**
+- `zoomToRecords()` detects zero-area extents and expands by 300 feet
+- Buffer is automatically converted based on spatial reference:
+  - Web Mercator (3857/102100): 300ft → ~91.44m
+  - State Plane (feet-based): 300ft directly
+- Configurable via `ZoomToRecordsOptions.zeroAreaBufferFeet` parameter (not exposed in UI yet)
+
+**Future Enhancement:**
+1. **Add Widget Setting (Results page)**
+   - [ ] Add `pointZoomBufferFeet?: number` to `QueryItemType` config interface (default: 300)
+   - [ ] Add numeric input in `setting/results.tsx`:
+     ```tsx
+     <SettingRow label="Point zoom buffer (feet)">
+       <NumericInput
+         value={currentItem.pointZoomBufferFeet ?? 300}
+         min={50}
+         max={5000}
+         step={50}
+         onChange={(value) => onPropertyChanged('pointZoomBufferFeet', value)}
+       />
+     </SettingRow>
+     ```
+   - [ ] Add help text: "Buffer distance for zooming to single points (e.g., addresses, parcels)"
+
+2. **Pass Through to Zoom Functions**
+   - [ ] Update `getExtraActions()` in `query-result.tsx` to pass `pointZoomBufferFeet` to data actions
+   - [ ] Update `createZoomToAction()` to accept and pass buffer to `zoomToRecords()`
+   - [ ] Update `handleFormSubmitInternal()` in `query-task.tsx` to pass buffer during query result zoom
+   - [ ] Update `toggleSelection()` in `query-result.tsx` to pass buffer during result click zoom
+
+3. **Translation Strings**
+   - [ ] Add to `runtime/translations/default.ts`:
+     ```typescript
+     pointZoomBuffer: 'Point zoom buffer (feet)',
+     pointZoomBufferHelp: 'Buffer distance when zooming to single points or addresses',
+     ```
+   - [ ] Add to `setting/translations/default.ts`
+
+4. **Testing**
+   - [ ] Manual testing: Adjust buffer and verify zoom level changes
+   - [ ] E2E test: Verify different buffer values produce different zoom levels
+   - [ ] Test with both Web Mercator and State Plane coordinate systems
+
+**Estimated Effort:** 2-4 hours
+
+**Target Release:** r020.0+ (Post team feedback)
+
+**Files to Modify:**
+- `query-simple/src/config.ts` (add config property)
+- `query-simple/src/setting/results.tsx` (add UI control)
+- `query-simple/src/runtime/query-task.tsx` (pass buffer to zoom calls)
+- `query-simple/src/runtime/query-result.tsx` (pass buffer to zoom calls)
+- `query-simple/src/data-actions/zoom-to-action.tsx` (pass buffer)
+- `query-simple/src/data-actions/index.tsx` (pass buffer from config)
+- `query-simple/src/runtime/translations/default.ts` (add strings)
+- `query-simple/src/setting/translations/default.ts` (add strings)
+
+**Benefits:**
+- ✅ Authors can optimize zoom level for their specific use case
+- ✅ Addresses with large lots can use larger buffer (500-1000ft)
+- ✅ Dense urban parcels can use smaller buffer (100-200ft)
+- ✅ One setting controls all zoom behaviors (query results, result clicks, data actions)
+
+---
+
 ### 3a. Remove Non-Graphics Layer Implementation (BREAKING CHANGE) - Post r018.0
 **Status:** 📌 **DEFERRED** (After r018.0 complete)  
 **Priority:** High (Code Simplification)  

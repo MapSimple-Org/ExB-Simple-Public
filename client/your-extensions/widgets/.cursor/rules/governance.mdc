@@ -6,4 +6,4 @@ alwaysApply: true
 # Project Governance
 - **Tone**: Professional, managerial, and direct. 
 - **The Scalpel Rule**: Use surgical edits. NEVER run destructive commands (git reset --hard) that destroy local ExB configs.
-- **References**: Consult `@docs/development/DEVELOPMENT_GUIDE.md` Section 1 & 5 for full Git and Environment safety protocols.
+- **References**: Consult `@DEVELOPMENT_GUIDE.md` Section 1 & 5 for full Git and Environment safety protocols.
