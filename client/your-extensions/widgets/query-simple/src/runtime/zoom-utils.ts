@@ -6,6 +6,7 @@
  */
 
 import type { FeatureDataRecord } from 'jimu-core'
+import Extent from 'esri/geometry/Extent'
 import { createQuerySimpleDebugLogger } from 'widgets/shared-code/common'
 
 const debugLogger = createQuerySimpleDebugLogger()
