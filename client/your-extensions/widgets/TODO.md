@@ -259,19 +259,21 @@ query-simple/src/runtime/
 **Status:** 📋 **TODO** (Post-Team Deployment)  
 **Priority:** Low (Enhancement)  
 **Source:** Demo Site Testing (2026-01-12)  
-**Implemented:** r019.23 (hardcoded default)  
+**Core Implementation:** ✅ **COMPLETE** (r019.29-30)  
 **Goal:** Expose point zoom buffer distance in widget settings to allow authors to customize zoom level for point features.
 
-**Problem:** 
+**Problem (RESOLVED):** 
 - Single points or overlapping points have zero-area extents (width=0, height=0)
 - Without expansion, `mapView.goTo()` zooms to unusable scale
-- Fixed with 300ft default buffer in r019.23, but hardcoded
+- **✅ FIXED in r019.29-30:** On-the-fly extent calculation with 300ft default buffer
 
-**Current Implementation (r019.23):**
-- `zoomToRecords()` detects zero-area extents and expands by 300 feet
+**Current Implementation (r019.29-30):**
+- `zoomToRecords()` creates extents on-the-fly for point geometries (read-only `.extent` property workaround)
+- Detects zero-area extents and expands by 300 feet
 - Buffer is automatically converted based on spatial reference:
   - Web Mercator (3857/102100): 300ft → ~91.44m
   - State Plane (feet-based): 300ft directly
+- **✅ VERIFIED WORKING:** Single points (1) and multiple points (220+) zoom correctly
 - Configurable via `ZoomToRecordsOptions.zeroAreaBufferFeet` parameter (not exposed in UI yet)
 
 **Future Enhancement:**
