@@ -35,6 +35,10 @@ const style = css`
   flex-shrink: 0;
   min-height: 2rem;
   position: relative;
+  
+  /* Add right padding to prevent header text from running into trash button */
+  padding-right: 44px;  /* 32px button width + 12px buffer */
+  
   &.selected {
     outline: 2px solid var(--sys-color-primary-main);
   }
@@ -54,6 +58,18 @@ const style = css`
     // Larger touch target for mobile/accessibility
     min-width: 32px;
     min-height: 32px;
+  }
+  
+  /* Ensure the FeatureInfo component respects the padding */
+  .feature-info-component {
+    width: 100%;
+  }
+  
+  /* Make the header wrap if it's still too long */
+  .esri-feature__title {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    padding-right: 8px;
   }
 `
 

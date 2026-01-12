@@ -5,6 +5,20 @@ All notable changes to MapSimple Experience Builder widgets will be documented i
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.19.0-r019.26] - 2026-01-12
+
+### Fixed
+- **Results Header Layout**: Fixed issue where long layer names in result headers would overlap with the trash button. Header text now wraps properly and has adequate right padding (44px) to prevent collision with the remove button. Header grows vertically as needed to accommodate longer layer names.
+
+### Changed
+- **Result Item Styling**: Added right padding to result item container and word-wrap styling to `.esri-feature__title` to ensure long text wraps cleanly. Trash button remains fixed in top-right corner with proper spacing.
+
+### Technical Details
+- Added `padding-right: 44px` to result item (32px button + 12px buffer)
+- Added `word-wrap: break-word` and `overflow-wrap: break-word` to header title
+- Ensures full layer names are readable without being cut off
+- Maintains clean layout for both short and long layer names
+
 ## [1.19.0-r019.25] - 2026-01-12
 
 ### Fixed
