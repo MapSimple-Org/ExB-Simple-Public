@@ -5,6 +5,16 @@ All notable changes to MapSimple Experience Builder widgets will be documented i
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.19.0-r019.27] - 2026-01-12
+
+### Fixed
+- **Settings UI Artifact**: Fixed errant `)}` text appearing below the Map dropdown in Highlight Options section. Removed stray JSX closing syntax from line 331 in `setting.tsx` that was being rendered as text instead of code.
+
+### Technical Details
+- Removed extra `)}` on line 331 that was outside the correct conditional structure
+- Proper JSX structure now closes the nested SettingSection without extra syntax
+- Settings page now renders cleanly without text artifacts
+
 ## [1.19.0-r019.26] - 2026-01-12
 
 ### Fixed

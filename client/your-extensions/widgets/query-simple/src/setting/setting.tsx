@@ -328,7 +328,6 @@ export default class Setting extends React.PureComponent<AllWidgetSettingProps<I
                   />
                 </SettingRow>
               </SettingSection>
-            )}
           </SettingSection>
         )}
         <DataSourceRemoveWarningPopup
