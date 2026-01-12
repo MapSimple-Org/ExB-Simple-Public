@@ -15,24 +15,56 @@
 
 **Solution:** Change accumulated records from a flat array to grouped sets, where each set stores its original query configuration and is rendered independently.
 
+**Architectural Principles:**
+
+1. **BULLETPROOF IDENTITY**: UUID-based `setInstanceId` guarantees unique React keys
+2. **STRICT PROVENANCE**: Immutable `queryConfig` snapshot is the Source of Truth for rendering
+3. **HUMAN-READABLE**: Query names and aliases displayed in collapsible headers
+4. **CENTRALIZED TRUTH**: Duplicate detection operates at state level across all sets
+
+These principles ensure that each accumulated result set maintains complete isolation from the active query panel, preventing the format switch bug by design.
+
 ---
 
 ## Implementation Overview
 
+**ARCHITECTURAL STANDARDS:**
+
+1. **BULLETPROOF IDENTITY**: Each record set has a UUID-based `setInstanceId` for guaranteed uniqueness in React keys
+2. **STRICT PROVENANCE**: Each set stores an immutable `queryConfig` snapshot that is the Source of Truth for rendering
+3. **HUMAN-READABLE**: Record sets include `queryName` and `searchAlias` for user orientation in headers
+4. **CENTRALIZED TRUTH**: Duplicate detection occurs at the state level, checking across ALL existing sets
+
+---
+
 ### Phase 1: Data Structure Changes (4 hours)
 Change how accumulated records are stored to preserve original query metadata.
+- Add UUID generation utility
+- Create `AccumulatedRecordSet` interface with `setInstanceId`
+- Implement state management with immutable provenance
 
 ### Phase 2: Merge & Remove Logic (4 hours)
 Update utilities to work with record sets instead of flat arrays.
+- Implement centralized duplicate detection
+- Generate UUID for each new set
+- Capture immutable queryConfig snapshot
 
 ### Phase 3: Rendering Changes (2 hours)
 Update UI to render each record set with its original configuration.
+- Create `ResultSetGroup` with human-readable headers
+- Ensure strict isolation from active query changes
+- Use UUID for React keys
 
 ### Phase 4: Testing & Verification (4 hours)
 Manual testing, E2E tests, and edge case validation.
+- Verify immutability and isolation
+- Test rapid-fire query scenarios
+- Validate unique React keys
 
 ### Phase 5: Documentation & Cleanup (2 hours)
 Update docs, remove BUG logging, add CHANGELOG entry.
+- Document architectural principles
+- Update version and CHANGELOG
 
 ---
 
@@ -61,16 +93,20 @@ const [accumulatedRecords, setAccumulatedRecords] = useState<FeatureDataRecord[]
 ```typescript
 // Define new interface
 interface AccumulatedRecordSet {
-  // Unique identifier for this record set
+  // BULLETPROOF IDENTITY: Unique instance ID for React keys
+  // Generated via UUID - ensures uniqueness even during rapid-fire queries
+  setInstanceId: string
+  
+  // Query config ID (from the original query that produced these records)
   queryConfigId: string
   
-  // Full query configuration (CRITICAL - stores display settings)
+  // STRICT PROVENANCE: Full query configuration (IMMUTABLE - stores display settings)
+  // This is the Source of Truth for rendering this set
+  // CRITICAL: Must remain isolated from active query panel changes
   queryConfig: ImmutableObject<QueryItemType>
   
-  // Human-readable name for UI display
+  // HUMAN-READABLE HEADERS: Display metadata for user orientation and debugging
   queryName: string
-  
-  // Search alias if different from name
   searchAlias?: string
   
   // The actual records
@@ -78,7 +114,7 @@ interface AccumulatedRecordSet {
   
   // Metadata
   addedTimestamp: number
-  recordIds: string[]  // For quick lookup
+  recordIds: string[]  // For quick lookup during duplicate detection
 }
 
 interface AccumulatedRecordsState {
@@ -103,6 +139,29 @@ const [accumulatedRecordsState, setAccumulatedRecordsState] =
 
 ---
 
+## Dependencies
+
+### Required Package: `uuid`
+
+This implementation requires the `uuid` package for generating unique set instance IDs.
+
+**Check if already installed:**
+```bash
+cd /Users/adamcabrera/Dev/arcgis-experience-builder-1.19/client
+npm list uuid
+```
+
+**If not installed:**
+```bash
+cd /Users/adamcabrera/Dev/arcgis-experience-builder-1.19/client
+npm install uuid
+npm install --save-dev @types/uuid
+```
+
+**Note:** Experience Builder's `client` workspace likely already has `uuid` as it's a common dependency in Esri projects.
+
+---
+
 ## Step-by-Step Implementation
 
 ### Step 1: Create New Type Definitions
@@ -112,31 +171,68 @@ const [accumulatedRecordsState, setAccumulatedRecordsState] =
 ```typescript
 import type { ImmutableObject, FeatureDataRecord } from 'jimu-core'
 import type { QueryItemType } from '../../config'
+import { v4 as uuidv4 } from 'uuid'
 
 /**
  * A set of records accumulated from a single query execution.
  * Preserves the original query configuration for proper display.
+ * 
+ * ARCHITECTURAL PRINCIPLES:
+ * 1. BULLETPROOF IDENTITY: Each set has a unique UUID-based instanceId
+ * 2. STRICT PROVENANCE: queryConfig is immutable and isolated from active query changes
+ * 3. HUMAN-READABLE: Stores queryName and searchAlias for user orientation
+ * 4. CENTRALIZED TRUTH: Duplicate detection occurs at state level, not per-set
  */
 export interface AccumulatedRecordSet {
-  /** Unique identifier for the query that produced these records */
+  /** 
+   * BULLETPROOF IDENTITY: Unique instance ID generated via UUID.
+   * Used for React keys - guarantees uniqueness even during rapid-fire queries.
+   * Never changes after creation.
+   */
+  setInstanceId: string
+  
+  /** 
+   * Query config ID from the original query that produced these records.
+   * Links this set back to its source query configuration.
+   */
   queryConfigId: string
   
-  /** Full query configuration including display settings */
+  /** 
+   * STRICT PROVENANCE: Full query configuration (IMMUTABLE).
+   * This is the Source of Truth for rendering this set.
+   * CRITICAL: Must remain isolated from active query panel changes.
+   * Contains all display settings: fields, symbols, expand state, etc.
+   */
   queryConfig: ImmutableObject<QueryItemType>
   
-  /** Human-readable name for display */
+  /** 
+   * HUMAN-READABLE HEADERS: Display name for user orientation.
+   * Used in ResultSetGroup header to identify source of results.
+   */
   queryName: string
   
-  /** Search alias if different from name */
+  /** 
+   * HUMAN-READABLE HEADERS: Search alias if different from name.
+   * Displayed in ResultSetGroup header when present.
+   */
   searchAlias?: string
   
-  /** Records from this query execution */
+  /** 
+   * Records from this query execution.
+   * Each record is a FeatureDataRecord from jimu-core.
+   */
   records: FeatureDataRecord[]
   
-  /** Record IDs for quick duplicate checking */
+  /** 
+   * Record IDs for quick duplicate checking.
+   * Pre-computed to avoid repeated getId() calls during merges.
+   */
   recordIds: string[]
   
-  /** When this set was added (for sorting/ordering) */
+  /** 
+   * When this set was added (Unix timestamp).
+   * Used for ordering, sorting, and debugging.
+   */
   addedTimestamp: number
 }
 
@@ -168,6 +264,16 @@ export function createEmptyAccumulatedState(): AccumulatedRecordsState {
     allRecordIds: [],
     allRecords: []
   }
+}
+
+/**
+ * BULLETPROOF IDENTITY: Generates a unique set instance ID.
+ * Uses UUID v4 to guarantee uniqueness even during rapid-fire queries.
+ * 
+ * @returns Unique string identifier for AccumulatedRecordSet
+ */
+export function generateSetInstanceId(): string {
+  return uuidv4()
 }
 
 /**
@@ -262,16 +368,22 @@ const effectiveResultCount = isAccumulationMode
 
 ```typescript
 import type { AccumulatedRecordsState, AccumulatedRecordSet } from './types/accumulated-records'
+import { generateSetInstanceId } from './types/accumulated-records'
 import type { ImmutableObject, FeatureDataRecord } from 'jimu-core'
 import type { QueryItemType } from '../config'
 
 /**
  * Adds a new record set to accumulated records.
- * Handles duplicate detection within and across sets.
+ * 
+ * ARCHITECTURAL PRINCIPLES:
+ * 1. CENTRALIZED TRUTH: Duplicate detection checks across ALL existing sets
+ * 2. BULLETPROOF IDENTITY: Generates unique UUID for set instance ID
+ * 3. STRICT PROVENANCE: Captures immutable queryConfig snapshot at creation time
+ * 4. HUMAN-READABLE: Extracts queryName and searchAlias for headers
  * 
  * @param currentState - Current accumulated records state
  * @param newRecords - New records to add
- * @param queryConfig - Query configuration that produced these records
+ * @param queryConfig - Query configuration that produced these records (immutable)
  * @returns Updated accumulated records state
  */
 export function addRecordSetToAccumulated(
@@ -286,7 +398,8 @@ export function addRecordSetToAccumulated(
   // Extract record IDs from new records
   const newRecordIds = newRecords.map(r => r.getId())
   
-  // Check for duplicates across ALL existing sets
+  // CENTRALIZED TRUTH: Check for duplicates across ALL existing sets
+  // This ensures data integrity at the state level
   const existingIds = new Set(currentState.allRecordIds)
   const duplicateIds = new Set<string>()
   const uniqueNewRecords: FeatureDataRecord[] = []
@@ -302,14 +415,16 @@ export function addRecordSetToAccumulated(
     }
   })
   
-  // Log duplicate detection
+  // Log duplicate detection for debugging
   if (duplicateIds.size > 0) {
-    console.log('[RESULTS-MODE] Skipped duplicates when adding record set:', {
+    console.log('[RESULTS-MODE] CENTRALIZED DUPLICATE DETECTION: Skipped duplicates when adding record set:', {
       queryConfigId: queryConfig.configId,
       totalNewRecords: newRecords.length,
       duplicatesSkipped: duplicateIds.size,
       uniqueRecordsAdded: uniqueNewRecords.length,
-      duplicateIds: Array.from(duplicateIds).slice(0, 10)
+      duplicateIds: Array.from(duplicateIds).slice(0, 10),
+      existingTotalRecords: currentState.totalCount,
+      existingSetsCount: currentState.recordSets.length
     })
   }
   
@@ -318,21 +433,27 @@ export function addRecordSetToAccumulated(
     return currentState
   }
   
-  // Create new record set
+  // BULLETPROOF IDENTITY: Generate unique UUID for this set instance
+  const setInstanceId = generateSetInstanceId()
+  
+  // STRICT PROVENANCE: Capture immutable queryConfig snapshot
+  // This ensures the set always renders with the config from when it was created,
+  // completely isolated from future changes to the active query panel
   const newSet: AccumulatedRecordSet = {
-    queryConfigId: queryConfig.configId,
-    queryConfig: queryConfig,
-    queryName: queryConfig.name || 'Unnamed Query',
-    searchAlias: queryConfig.searchAlias,
-    records: uniqueNewRecords,
-    recordIds: uniqueNewRecordIds,
-    addedTimestamp: Date.now()
+    setInstanceId,                                     // UUID for React keys
+    queryConfigId: queryConfig.configId,               // Link to original query
+    queryConfig: queryConfig,                          // IMMUTABLE snapshot (Source of Truth)
+    queryName: queryConfig.name || 'Unnamed Query',    // HUMAN-READABLE header
+    searchAlias: queryConfig.searchAlias,              // HUMAN-READABLE alternate name
+    records: uniqueNewRecords,                         // Feature data
+    recordIds: uniqueNewRecordIds,                     // Pre-computed IDs for quick lookup
+    addedTimestamp: Date.now()                         // Temporal ordering
   }
   
   // Add to record sets array
   const updatedRecordSets = [...currentState.recordSets, newSet]
   
-  // Recalculate flattened lists
+  // Recalculate flattened lists for compatibility
   const allRecords = flattenRecordSets(updatedRecordSets)
   const allRecordIds = flattenRecordIds(updatedRecordSets)
   
@@ -525,7 +646,14 @@ export function QueryTaskResult (props: QueryTaskResultProps) {
 ```typescript
 /**
  * Renders a group of results from a single query execution.
- * Each group maintains its original query configuration.
+ * 
+ * ARCHITECTURAL PRINCIPLES:
+ * 1. STRICT PROVENANCE: recordSet.queryConfig is the immutable Source of Truth
+ * 2. HUMAN-READABLE: Header displays queryName/searchAlias for user orientation
+ * 3. ISOLATION: Never reacts to changes in the active query panel
+ * 
+ * Each group maintains its original query configuration and renders independently.
+ * The queryConfig snapshot is captured at creation time and NEVER changes.
  */
 interface ResultSetGroupProps {
   recordSet: AccumulatedRecordSet
@@ -549,6 +677,9 @@ function ResultSetGroup(props: ResultSetGroupProps) {
   const getI18nMessage = hooks.useTranslation(defaultMessage)
   const [isCollapsed, setIsCollapsed] = React.useState(false)
   
+  // HUMAN-READABLE: Display searchAlias (preferred) or queryName
+  const displayName = recordSet.searchAlias || recordSet.queryName
+  
   return (
     <div 
       className="result-set-group"
@@ -559,7 +690,7 @@ function ResultSetGroup(props: ResultSetGroupProps) {
         overflow: hidden;
       `}
     >
-      {/* Header showing query name and count */}
+      {/* HUMAN-READABLE HEADER: Shows query source and record count */}
       <div 
         className="result-set-header"
         onClick={() => setIsCollapsed(!isCollapsed)}
@@ -602,8 +733,8 @@ function ResultSetGroup(props: ResultSetGroupProps) {
       >
         <div className="header-left">
           <span className="collapse-icon">▼</span>
-          <span className="query-name">
-            {recordSet.searchAlias || recordSet.queryName}
+          <span className="query-name" title={`Source: ${recordSet.queryName}`}>
+            {displayName}
           </span>
           <span className="record-count">
             ({recordSet.records.length} {recordSet.records.length === 1 ? 'item' : 'items'})
@@ -611,25 +742,39 @@ function ResultSetGroup(props: ResultSetGroupProps) {
         </div>
       </div>
       
-      {/* Results list (using original query config!) */}
+      {/* Results list - STRICT PROVENANCE: Uses immutable recordSet.queryConfig */}
       {!isCollapsed && (
         <div className="result-set-content">
           <QueryTaskResult
             widgetId={widgetId}
-            queryItem={recordSet.queryConfig}  // CRITICAL: Use original config!
+            queryItem={recordSet.queryConfig}  // CRITICAL: Immutable Source of Truth!
             records={recordSet.records}
             outputDS={outputDS}
             resultsMode="NEW_SELECTION"  // Treat each set independently
             useGraphicsLayerForHighlight={useGraphicsLayerForHighlight}
             graphicsLayer={graphicsLayer}
             mapView={mapView}
-            // Don't pass accumulated props - each set is independent
+            // ISOLATION: Don't pass accumulated props - each set is independent
+            // This ensures the set never reacts to active query panel changes
           />
         </div>
       )}
     </div>
   )
 }
+
+/**
+ * ARCHITECTURAL GUARANTEE:
+ * 
+ * The recordSet.queryConfig passed to QueryTaskResult is:
+ * 1. An ImmutableObject<QueryItemType> captured at set creation time
+ * 2. Completely isolated from the active query panel's state
+ * 3. Never modified or replaced after the set is created
+ * 4. The definitive Source of Truth for how this set renders
+ * 
+ * This architecture ensures that switching queries in the active panel
+ * CANNOT affect the display of previously accumulated result sets.
+ */
 ```
 
 #### 5d. Update Main Rendering Logic (line ~1200+)
@@ -650,9 +795,10 @@ if (resultsMode !== SelectionType.NewSelection &&
       </div>
       
       {/* Render each record set with its original config */}
-      {accumulatedRecordsState.recordSets.map((recordSet, index) => (
+      {/* BULLETPROOF IDENTITY: Use setInstanceId (UUID) as React key */}
+      {accumulatedRecordsState.recordSets.map((recordSet) => (
         <ResultSetGroup
-          key={`${recordSet.queryConfigId}-${recordSet.addedTimestamp}-${index}`}
+          key={recordSet.setInstanceId}  // UUID guarantees uniqueness!
           recordSet={recordSet}
           widgetId={widgetId}
           outputDS={outputDS}
@@ -976,6 +1122,13 @@ git push origin main
 
 ## Success Criteria
 
+### Architectural Requirements
+- [ ] **BULLETPROOF IDENTITY**: Each set has unique UUID-based `setInstanceId`
+- [ ] **STRICT PROVENANCE**: Each set stores immutable `queryConfig` snapshot
+- [ ] **ISOLATION**: Switching queries does NOT affect previously accumulated sets
+- [ ] **HUMAN-READABLE**: Headers display `queryName` and `searchAlias`
+- [ ] **CENTRALIZED TRUTH**: Duplicate detection checks across ALL sets
+
 ### Functional Requirements
 - [ ] Accumulated results maintain original query's display format
 - [ ] Each record set shows query name and record count
@@ -994,6 +1147,7 @@ git push origin main
 - [ ] New E2E tests pass
 - [ ] No console errors during testing
 - [ ] Performance: No noticeable slowdown with 10+ sets
+- [ ] UUID package properly imported and used
 
 ### User Experience Requirements
 - [ ] Visual grouping is clear and intuitive
@@ -1062,11 +1216,39 @@ git push origin --delete feature/bug-add-mode-001
 
 ## Notes & Considerations
 
+### Architectural Guarantees
+
+**BULLETPROOF IDENTITY:**
+- Each `AccumulatedRecordSet` receives a UUID v4 (`setInstanceId`)
+- Guarantees unique React keys even during rapid-fire queries
+- No collision risk from timestamp-based keys
+- Enables proper component reconciliation
+
+**STRICT PROVENANCE & IMMUTABILITY:**
+- `queryConfig` is captured as an `ImmutableObject<QueryItemType>` at set creation
+- Acts as the definitive Source of Truth for rendering that set
+- Completely isolated from active query panel state changes
+- Never modified or replaced after creation
+- Prevents format switch bug by design
+
+**HUMAN-READABLE HEADERS:**
+- `queryName` and `searchAlias` stored for user orientation
+- Displayed in `ResultSetGroup` header
+- Critical for debugging multi-query workflows
+- Minimal overhead (two strings per set)
+
+**CENTRALIZED TRUTH:**
+- Duplicate detection occurs at state level (`addRecordSetToAccumulated`)
+- Checks record IDs across ALL existing sets
+- Single source of truth for data integrity
+- Pre-computed `recordIds` array enables fast lookups
+
 ### Performance
 - **Concern:** Rendering multiple QueryTaskResult components
 - **Mitigation:** Each set is independent, so React can optimize
 - **Worst case:** 10 query sets with 50 records each = 500 records
 - **Expected:** Most users will have 2-3 sets max
+- **UUID Impact:** Negligible (v4 generation is ~1-2ms per set)
 
 ### Edge Cases
 1. **Same query, different values**: Creates separate sets (by timestamp)
