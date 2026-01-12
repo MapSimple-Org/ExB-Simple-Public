@@ -5,9 +5,10 @@ All notable changes to MapSimple Experience Builder widgets will be documented i
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.19.0-r019.23] - 2026-01-12
+## [1.19.0-r019.25] - 2026-01-12
 
 ### Fixed
+- **Point Geometry Zoom Bug**: Fixed critical issue where zooming to single point features (addresses, parcel centroids) would silently fail. Single point geometries (`type === 'point'`) don't have an `.extent` property in the ArcGIS JS API, causing zoom operations to skip. Now explicitly creates zero-area extents for single points before expansion logic.
 - **Zero-Area Extent Zoom**: Fixed issue where zooming to single points or overlapping points would fail or zoom to unusable scale. The `zoomToRecords` utility now detects zero-area extents (width=0 or height=0) and automatically expands them by 300 feet in all directions.
 
 ### Changed
@@ -15,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Web Mercator (3857/102100): Converts 300 feet → ~91.44 meters
   - State Plane (feet-based): Uses 300 feet directly
 - **Enhanced ZoomToRecordsOptions**: Added optional `zeroAreaBufferFeet` parameter (defaults to 300) for future configurability.
+- **Explicit Point Handling**: Single point geometries now have extent created manually using `new Extent({ xmin: pt.x, xmax: pt.x, ymin: pt.y, ymax: pt.y })`. Multipoints, polygons, and polylines continue to use their native `.extent` property.
 
 ### Technical Details
 - **Three Helper Functions Added**:
@@ -22,10 +24,29 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `expandZeroAreaExtent()`: Buffers extent around center point
   - Enhanced inline documentation throughout `zoom-utils.ts`
 - **Extent-Based Approach**: Maintains extent strategy (no scale manipulation) to ensure padding from `ZoomToRecordsOptions` is still respected.
-- **Comprehensive Logging**: Added `ZOOM` category logging for zero-area extent detection and expansion.
+- **Comprehensive Diagnostic Logging**: Added 10+ log points throughout zoom operation:
+  - `zoom-start`: Initial parameters and mapView info
+  - `geometries-extracted`: Geometry count and types
+  - `extent-calculated-single`: Extent details with `extentCreatedManually` flag
+  - `zero-area-check`: Detects zero-width/height extents
+  - `zero-area-extent-expanded`: Before/after expansion coordinates
+  - `calling-mapView-goTo`: Final extent passed to API
+  - `mapView-goTo-complete`: Success confirmation
+- **Geometry Type Handling**:
+  - Single points (`point`): Extent created manually ✓
+  - Multipoints (`multipoint`): Uses native `.extent` ✓
+  - Polygons/Polylines: Uses native `.extent` ✓
+
+### Development Process
+- **r019.23**: Initial zero-area expansion implementation
+- **r019.24**: Added comprehensive diagnostic logging
+- **r019.25**: Fixed root cause - single points lacking extent property
 
 ### Future Enhancement
 - **Configurable Buffer Distance**: See TODO.md "Configurable Point Zoom Buffer" for plan to expose this in widget settings.
+
+### Credit
+Point extent creation fix suggested by user during architecture review. User correctly identified that single point geometries lack `.extent` property, advocating for explicit handling over downstream detection.
 
 ## [1.19.0-r019.8] - 2026-01-09
 
