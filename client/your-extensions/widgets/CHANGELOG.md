@@ -5,6 +5,28 @@ All notable changes to MapSimple Experience Builder widgets will be documented i
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.19.0-r019.23] - 2026-01-12
+
+### Fixed
+- **Zero-Area Extent Zoom**: Fixed issue where zooming to single points or overlapping points would fail or zoom to unusable scale. The `zoomToRecords` utility now detects zero-area extents (width=0 or height=0) and automatically expands them by 300 feet in all directions.
+
+### Changed
+- **Smart Unit Conversion**: Zoom buffer distance is now automatically converted based on spatial reference:
+  - Web Mercator (3857/102100): Converts 300 feet → ~91.44 meters
+  - State Plane (feet-based): Uses 300 feet directly
+- **Enhanced ZoomToRecordsOptions**: Added optional `zeroAreaBufferFeet` parameter (defaults to 300) for future configurability.
+
+### Technical Details
+- **Three Helper Functions Added**:
+  - `isMetricSpatialReference()`: Detects coordinate system units (meters vs feet)
+  - `expandZeroAreaExtent()`: Buffers extent around center point
+  - Enhanced inline documentation throughout `zoom-utils.ts`
+- **Extent-Based Approach**: Maintains extent strategy (no scale manipulation) to ensure padding from `ZoomToRecordsOptions` is still respected.
+- **Comprehensive Logging**: Added `ZOOM` category logging for zero-area extent detection and expansion.
+
+### Future Enhancement
+- **Configurable Buffer Distance**: See TODO.md "Configurable Point Zoom Buffer" for plan to expose this in widget settings.
+
 ## [1.19.0-r019.8] - 2026-01-09
 
 ### Added
