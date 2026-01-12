@@ -5,6 +5,53 @@ All notable changes to MapSimple Experience Builder widgets will be documented i
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.19.0-r019.31] - 2026-01-12
+
+### Added
+- **BUG Logging for ADD Mode Format Switch**: Added automatic warning logging (BUG-ADD-MODE-001) when switching queries in ADD_TO_SELECTION mode with accumulated results. This known bug causes all accumulated results to change their display format to match the newly selected query's configuration.
+
+### Bug Detection
+The warning appears automatically in the console (even without `?debug=all`) when:
+- User is in ADD_TO_SELECTION or REMOVE_FROM_SELECTION mode
+- Has accumulated results from a previous query
+- Switches to a different query
+
+**Console Output:**
+```javascript
+[QUERYSIMPLE ⚠️ BUG] {
+  "bugId": "BUG-ADD-MODE-001",
+  "category": "UI",
+  "event": "accumulated-results-format-switch",
+  "oldQueryConfigId": "8390785603784936",
+  "newQueryConfigId": "06367134367377913",
+  "accumulatedRecordsCount": 5,
+  "description": "Accumulated results will change to match new query's display format...",
+  "workaround": "Use NEW_SELECTION mode instead of ADD_TO_SELECTION...",
+  "targetResolution": "TBD - Store original queryConfig with each record set",
+  "documentation": "docs/bugs/ACCUMULATED_RESULTS_FORMAT_SWITCH.md"
+}
+```
+
+**Why This Matters:**
+- Makes the bug visible to testers and users during demo site testing
+- Provides immediate workaround guidance
+- Includes link to full documentation
+- Uses console.warn() for visibility (yellow/orange color)
+
+### Technical Details
+- Added in `query-task.tsx` at query switch detection point (line ~653)
+- Leverages existing BUG logging level (always enabled, even with `?debug=false`)
+- Detects `isSwitchingQueries` flag when in accumulation mode
+- Logs bug details including old/new query IDs and record count
+
+### Files Modified
+- `query-simple/src/runtime/query-task.tsx` (added BUG logging)
+- `query-simple/src/version.ts` (r019.30 → r019.31)
+
+### Related Documentation
+- Bug documentation: `docs/bugs/ACCUMULATED_RESULTS_FORMAT_SWITCH.md`
+- Logging system: `docs/blog/BLOG_KNOWN_BUGS_LOGGING.md`
+
 ## [1.19.0-r019.30] - 2026-01-12 ✅ VERIFIED
 
 ### Fixed
