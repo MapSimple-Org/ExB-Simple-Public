@@ -27,6 +27,7 @@ import { Button, Icon, Tooltip, DataActionList, DataActionListStyle } from 'jimu
 import { getWidgetRuntimeDataMap } from './widget-config'
 import { type QueryItemType, FieldsType, PagingType, ListDirection, ResultSelectMode, SelectionType } from '../config'
 import defaultMessage from './translations/default'
+import { useZoomToRecords } from './hooks/use-zoom-to-records'
 // FORCED: Always SimpleList - LazyList and PagingList removed
 import { SimpleList } from './simple-list'
 import { combineFields } from './query-utils'
@@ -43,6 +44,7 @@ import {
   dispatchSelectionEvent 
 } from './selection-utils'
 import { removeResultsFromAccumulated, removeRecordsFromOriginSelections } from './results-management-utils'
+import { removeHighlightGraphics } from './graphics-layer-utils'
 import { createQuerySimpleDebugLogger } from 'widgets/shared-code/common'
 
 const debugLogger = createQuerySimpleDebugLogger()
@@ -105,6 +107,10 @@ export interface QueryTaskResultProps {
   resultsMode?: SelectionType
   accumulatedRecords?: FeatureDataRecord[]
   onAccumulatedRecordsChange?: (records: FeatureDataRecord[]) => void
+  eventManager?: import('./hooks/use-event-handling').EventManager  // Chunk 7.1: Event Handling Manager
+  // FIX (r018.96): Removed onManualRemoval - no longer needed
+  // FIX (r018.92): Flag to track when query switch is in progress
+  isQuerySwitchInProgressRef?: React.MutableRefObject<boolean>
 }
 
 const resultStyle = css`
@@ -135,12 +141,13 @@ const resultStyle = css`
 `
 
 export function QueryTaskResult (props: QueryTaskResultProps) {
-  const { queryItem, queryParams, resultCount, maxPerPage, records, widgetId, outputDS, runtimeZoomToSelected, onNavBack, resultsMode, accumulatedRecords, onAccumulatedRecordsChange, useGraphicsLayerForHighlight, graphicsLayer, mapView } = props
+  const { queryItem, queryParams, resultCount, maxPerPage, records, widgetId, outputDS, runtimeZoomToSelected, onNavBack, resultsMode, accumulatedRecords, onAccumulatedRecordsChange, useGraphicsLayerForHighlight, graphicsLayer, mapView, eventManager, isQuerySwitchInProgressRef } = props
   const getI18nMessage = hooks.useTranslation(defaultMessage)
   const intl = useIntl()
+  const zoomToRecords = useZoomToRecords(mapView)
   const [queryData, setQueryData] = React.useState(null)
   const [selectedRecords, setSelectedRecords] = React.useState<DataRecord[]>([])
-  const [removedRecordIds, setRemovedRecordIds] = React.useState<Set<string>>(new Set())
+  // FIX (r018.94): Removed removedRecordIds state - no longer needed since records stay in sync
   
   const currentItem = Object.assign({}, DEFAULT_QUERY_ITEM, queryItem)
   const [expandAll, setExpandAll] = React.useState(currentItem.resultExpandByDefault ?? false)
@@ -166,19 +173,14 @@ export function QueryTaskResult (props: QueryTaskResultProps) {
   const lastQueryRecordIdsRef = React.useRef<string[]>([])
   // Track the last selected FeatureDataRecords for restoration (if needed)
   const lastSelectedFeatureRecordsRef = React.useRef<FeatureDataRecord[]>([])
-  // Ref to track removedRecordIds for use in callbacks (avoids stale closure issues)
-  const removedRecordIdsRef = React.useRef<Set<string>>(new Set())
+  // FIX (r018.94): Removed removedRecordIds ref - no longer needed
   
-  // Sync ref whenever removedRecordIds state changes
-  React.useEffect(() => {
-    removedRecordIdsRef.current = removedRecordIds
-  }, [removedRecordIds])
   // Error state for user-facing errors
   const [selectionError, setSelectionError] = React.useState<string>(null)
 
   const extraActions = React.useMemo(() => {
-    return getExtraActions(widgetId, outputDS, intl, queryItem, runtimeZoomToSelected)
-  }, [widgetId, outputDS, intl, queryItem, runtimeZoomToSelected])
+    return getExtraActions(widgetId, outputDS, mapView, intl, queryItem, runtimeZoomToSelected)
+  }, [widgetId, outputDS, mapView, intl, queryItem, runtimeZoomToSelected])
 
   const enableDataAction = ReactRedux.useSelector((state: IMState) => {
     const widgetJson = state.appConfig.widgets[widgetId]
@@ -316,12 +318,12 @@ export function QueryTaskResult (props: QueryTaskResultProps) {
     return dataSets
   }, [selectedRecords, outputDS, queryData, currentItem, records, widgetId])
 
-  // Memoize filtered records to prevent unnecessary re-renders that reset scroll position
+  // FIX (r018.94): Simplified - no filtering needed since records are kept in sync
+  // Memoize records to prevent unnecessary re-renders that reset scroll position
   // This ensures the records prop only changes when the actual data changes, not just the array reference
   const filteredRecordsForList = React.useMemo(() => {
-    return queryData?.records?.filter((record: DataRecord) => !removedRecordIds.has(record.getId())) || 
-           (records?.filter(record => !removedRecordIds.has(record.getId())) || [])
-  }, [queryData?.records, records, removedRecordIds])
+    return queryData?.records || records || []
+  }, [queryData?.records, records])
 
   hooks.useEffectOnce(() => {
     // focus the back button when it is rendered
@@ -341,55 +343,45 @@ export function QueryTaskResult (props: QueryTaskResultProps) {
     const recordsChanged = currentRecordIds.length !== lastQueryRecordIdsRef.current.length ||
       currentRecordIds.some((id, index) => id !== lastQueryRecordIdsRef.current[index])
     
-    // Debug: Log when records prop changes
+    // FIX (r018.94): Simplified - no removedRecordIds tracking needed
     debugLogger.log('RESULTS-MODE', {
       event: 'records-prop-changed',
       widgetId: widgetId,
       recordsCount: records?.length || 0,
       willSetQueryData: records && records.length > 0,
-      removedRecordIdsCount: removedRecordIds.size,
       hasSelectedRef: hasSelectedRef.current,
       recordsChanged: recordsChanged,
       lastQueryRecordIdsCount: lastQueryRecordIdsRef.current.length,
-      currentRecordIdsCount: currentRecordIds.length
+      currentRecordIdsCount: currentRecordIds.length,
+      note: 'r018.94: Records stay in sync - no filtering needed',
+      timestamp: Date.now()
     })
     
-    // IMPORTANT: Only reset removed records if this is truly a NEW query with different records
-    // Don't reset if records are the same (just a re-render or lazy load)
+    // Update the original query record IDs ref
     if (recordsChanged) {
-      debugLogger.log('RESULTS-MODE', {
-        event: 'records-truly-changed-resetting-removed',
-        widgetId: widgetId,
-        oldRecordIdsCount: lastQueryRecordIdsRef.current.length,
-        newRecordIdsCount: currentRecordIds.length
-      })
-      setRemovedRecordIds(new Set())
-      // Update the original query record IDs ref
       lastQueryRecordIdsRef.current = currentRecordIds
-    } else {
       debugLogger.log('RESULTS-MODE', {
-        event: 'records-not-changed-preserving-removed',
+        event: 'records-changed-ref-updated',
         widgetId: widgetId,
-        recordIdsCount: currentRecordIds.length,
-        removedRecordIdsCount: removedRecordIds.size
+        newRecordIdsCount: currentRecordIds.length,
+        timestamp: Date.now()
       })
     }
     
-    // Reset expand all to queryItem's resultExpandByDefault setting
-    setExpandAll(currentItem.resultExpandByDefault ?? false)
+    // NOTE: Don't reset expandAll here - it's handled by the queryItem-change useEffect
+    // Resetting it here causes the Expand/Collapse button to flip back when records are removed
     setQueryData({
       records,
       page: 1
     })
     
+    // FIX (r018.94): Simplified - no removedRecordIds check needed
     // Only auto-select records if:
     // 1. We have records and outputDS
     // 2. We haven't already selected these records (hasSelectedRef is false)
     // 3. OR the records have actually changed (new query results)
-    // 4. AND we don't have any removed records (to prevent re-selecting removed ones)
     if (records && records.length > 0 && outputDS && 
-        (!hasSelectedRef.current || recordsChanged) && 
-        removedRecordIds.size === 0) {
+        (!hasSelectedRef.current || recordsChanged)) {
       const recordIds = records.map(record => record.getId())
       const fdr = records as FeatureDataRecord[]
       
@@ -413,7 +405,7 @@ export function QueryTaskResult (props: QueryTaskResultProps) {
           lastSelectedFeatureRecordsRef.current = fdr // Store the full records for potential restoration
           
           // Notify Widget and HelperSimple of selection change
-          dispatchSelectionEvent(widgetId, recordIds, outputDS, queryItem.configId)
+          dispatchSelectionEvent(widgetId, recordIds, outputDS, queryItem.configId, eventManager)
         } catch (error) {
           const errorMessage = error instanceof Error ? error.message : 'Failed to select query results'
           setSelectionError(errorMessage)
@@ -430,17 +422,19 @@ export function QueryTaskResult (props: QueryTaskResultProps) {
       hasSelectedRef.current = false
       lastSelectedRecordsRef.current = []
       setSelectionError(null) // Clear errors when clearing records
-    } else if (removedRecordIds.size > 0) {
+    } else {
       debugLogger.log('RESULTS-MODE', {
-        event: 'skipping-reselection-due-to-removed-records',
+        event: 'auto-selection-skipped',
         widgetId: widgetId,
-        removedRecordIdsCount: removedRecordIds.size,
         recordsCount: records?.length || 0,
+        hasRecords: !!(records && records.length > 0),
+        hasOutputDS: !!outputDS,
         hasSelectedRef: hasSelectedRef.current,
-        recordsChanged: recordsChanged
+        recordsChanged: recordsChanged,
+        timestamp: Date.now()
       })
     }
-  }, [records, outputDS, widgetId, queryItem.configId, queryItem.resultExpandByDefault, removedRecordIds])
+  }, [records, outputDS, widgetId, queryItem.configId, queryItem.resultExpandByDefault])
 
   React.useEffect(() => {
     // clear selection when resultSelectMode changed
@@ -647,16 +641,9 @@ export function QueryTaskResult (props: QueryTaskResultProps) {
       timestamp: Date.now()
     })
     
-    // Reset local selection flags
-    hasSelectedRef.current = false
-    lastSelectedRecordsRef.current = []
-    // Reset local query data state
-    setQueryData(null)
-    setRemovedRecordIds(new Set())
-    // Clear error state when clearing results
-    setSelectionError(null)
-    // Delegate to parent's clearResult method (via onNavBack) which handles
-    // clearing selection from map, publishing messages, etc.
+    // FIX (r018.97): Simplified - just delegate to parent's clearResult
+    // Parent handles all cleanup: records, selection, graphics, hash, messages, etc.
+    // Local state will be reset when component remounts with fresh results
     await onNavBack(true)
     
     // Log hash state after clearing (with delay to catch async updates)
@@ -685,6 +672,21 @@ export function QueryTaskResult (props: QueryTaskResultProps) {
   }
 
   const handleRenderDone = React.useCallback(({ dataItems, pageSize, page }) => {
+    // FIX (r018.92): Skip handleRenderDone if a query switch is in progress
+    // This prevents handleRenderDone from re-selecting full query results before the query switch
+    // logic can clear the graphics layer and re-select only the accumulated records
+    if (isQuerySwitchInProgressRef?.current) {
+      debugLogger.log('RESULTS-MODE', {
+        event: 'handleRenderDone-skipped-query-switch-in-progress',
+        widgetId,
+        queryItemConfigId: queryItem.configId,
+        dataItemsCount: dataItems?.length || 0,
+        resultsMode,
+        timestamp: Date.now()
+      })
+      return
+    }
+    
     debugLogger.log('RESULTS-MODE', {
       event: 'handleRenderDone-called',
       widgetId,
@@ -692,15 +694,34 @@ export function QueryTaskResult (props: QueryTaskResultProps) {
       dataItemsCount: dataItems?.length || 0,
       pageSize,
       page,
+      resultsMode,
+      accumulatedRecordsCount: accumulatedRecords?.length || 0,
       timestamp: Date.now()
     })
     
-    // Use ref to get latest removedRecordIds (avoids stale closure issues with lazy loading)
-    const currentRemovedIds = removedRecordIdsRef.current
+    // FIX (r018.94): Simplified - no removedRecordIds filtering needed
+    // Records prop is already filtered in Add/Remove mode
+    // FIX (r018.89): When in Add/Remove mode, also filter to only include accumulated records
+    // This prevents handleRenderDone from re-selecting the full query results after a query switch
+    let filteredItems = dataItems || []
     
-    // Filter out removed records FIRST - before any selection logic
-    // This ensures removed records stay removed even during lazy loading
-    const filteredItems = dataItems?.filter(item => !currentRemovedIds.has(item.getId())) || []
+    if (resultsMode !== SelectionType.NEW_SELECTION && accumulatedRecords && accumulatedRecords.length > 0) {
+      const accumulatedRecordIds = new Set(accumulatedRecords.map(r => r.getId()))
+      const beforeFilterCount = filteredItems.length
+      filteredItems = filteredItems.filter(item => accumulatedRecordIds.has(item.getId()))
+      
+      debugLogger.log('RESULTS-MODE', {
+        event: 'handleRenderDone-filtered-by-accumulated-records',
+        widgetId,
+        resultsMode,
+        dataItemsCount: dataItems?.length || 0,
+        afterAccumulatedFilter: filteredItems.length,
+        accumulatedRecordsCount: accumulatedRecords.length,
+        filtered: beforeFilterCount - filteredItems.length,
+        note: 'r018.94: No removedRecordIds filter - records stay in sync',
+        timestamp: Date.now()
+      })
+    }
     
     // Check if queryData has actually changed before updating state
     // This prevents unnecessary re-renders that reset scroll position
@@ -734,43 +755,58 @@ export function QueryTaskResult (props: QueryTaskResultProps) {
       
       // Only select if the selection has actually changed
       if (selectionChanged) {
-        try {
-          setSelectionError(null) // Clear previous errors
-          selectRecordsAndPublish(widgetId, outputDS, recordIds, fdr)
-          
-          debugLogger.log('RESULTS-MODE', {
-            event: 'handleRenderDone-selecting-filtered-records',
-            widgetId: widgetId,
-            dataItemsCount: dataItems?.length || 0,
-            filteredItemsCount: filteredItems.length,
-            removedRecordIdsCount: currentRemovedIds.size,
-            selectionChanged: true,
-            currentlySelectedCount: currentlySelectedIds.length,
-            newSelectionCount: recordIds.length
-          })
-        } catch (error) {
-          const errorMessage = error instanceof Error ? error.message : 'Failed to select query results'
-          setSelectionError(errorMessage)
-          debugLogger.log('TASK', {
-            event: 'selection-failed-handleRenderDone',
-            error: errorMessage,
-            errorStack: error instanceof Error ? error.stack : undefined,
-            recordCount: recordIds.length
-          })
-        }
+        // r018.78: Use async IIFE to properly await selection and pass graphics parameters
+        ;(async () => {
+          try {
+            setSelectionError(null) // Clear previous errors
+            await selectRecordsAndPublish(
+              widgetId, 
+              outputDS, 
+              recordIds, 
+              fdr,
+              false, // alsoPublishToOutputDS
+              useGraphicsLayerForHighlight,
+              graphicsLayer,
+              mapView
+            )
+            
+            debugLogger.log('RESULTS-MODE', {
+              event: 'handleRenderDone-selecting-filtered-records',
+              widgetId: widgetId,
+              dataItemsCount: dataItems?.length || 0,
+              filteredItemsCount: filteredItems.length,
+              selectionChanged: true,
+              currentlySelectedCount: currentlySelectedIds.length,
+              newSelectionCount: recordIds.length,
+              usedGraphicsLayer: useGraphicsLayerForHighlight,
+              note: 'r018.94: No removedRecordIds tracking',
+              timestamp: Date.now()
+            })
+          } catch (error) {
+            const errorMessage = error instanceof Error ? error.message : 'Failed to select query results'
+            setSelectionError(errorMessage)
+            debugLogger.log('TASK', {
+              event: 'selection-failed-handleRenderDone',
+              error: errorMessage,
+              errorStack: error instanceof Error ? error.stack : undefined,
+              recordCount: recordIds.length
+            })
+          }
+        })()
       } else {
         debugLogger.log('RESULTS-MODE', {
           event: 'handleRenderDone-skipping-reselection',
           widgetId: widgetId,
           dataItemsCount: dataItems?.length || 0,
           filteredItemsCount: filteredItems.length,
-          removedRecordIdsCount: currentRemovedIds.size,
           reason: 'selection-unchanged',
-          currentlySelectedCount: currentlySelectedIds.length
+          currentlySelectedCount: currentlySelectedIds.length,
+          note: 'r018.94: No removedRecordIds tracking',
+          timestamp: Date.now()
         })
       }
     }
-  }, [outputDS, widgetId, queryData])
+  }, [outputDS, widgetId, queryData, resultsMode, accumulatedRecords])
 
   const handleDataSourceInfoChange = React.useCallback(() => {
     const ds = DataSourceManager.getInstance().getDataSource(outputDS?.id)
@@ -790,7 +826,7 @@ export function QueryTaskResult (props: QueryTaskResultProps) {
       selectedIdsFromDS: selectedIds.length,
       currentSelectedRecordsState: selectedRecords?.length || 0,
       recordsPropCount: recordsProp?.length || 0,
-      removedRecordIdsCount: removedRecordIds.size,
+      note: 'r018.94: No removedRecordIds tracking',
       timestamp: Date.now()
     })
     
@@ -808,30 +844,13 @@ export function QueryTaskResult (props: QueryTaskResultProps) {
       return // Skip updating - re-selection is coming
     }
     
-    // IMPORTANT: Filter out removed records from DS selection before comparing/syncing
-    // This prevents removed records from being re-added when scrolling triggers this callback
-    const filteredDsRecords = dsRecords?.filter((record: DataRecord) => !removedRecordIds.has(record.getId())) ?? []
-    const filteredSelectedIds = selectedIds.filter(id => !removedRecordIds.has(id))
-    
-    // If DS has more selected than our state, but the difference is entirely removed records, don't sync
-    if (filteredSelectedIds.length === (selectedRecords?.length || 0) && selectedIds.length > filteredSelectedIds.length) {
-      debugLogger.log('RESULTS-MODE', {
-        event: 'handleDataSourceInfoChange-skipping-sync-due-to-removed-records',
-        widgetId: widgetId,
-        reason: 'ds-selection-includes-removed-records',
-        dsSelectedCount: selectedIds.length,
-        filteredCount: filteredSelectedIds.length,
-        componentStateCount: selectedRecords?.length || 0,
-        removedRecordIdsCount: removedRecordIds.size
-      })
-      return // Skip syncing - the mismatch is due to removed records
-    }
-    
+    // FIX (r018.94): Simplified - no removedRecordIds filtering needed
+    // Records prop is already filtered in Add/Remove mode
     let shouldUpdate = false
-    if (filteredSelectedIds.length !== selectedRecords?.length) {
+    if (selectedIds.length !== selectedRecords?.length) {
       shouldUpdate = true
     } else { // equal length
-      shouldUpdate = filteredSelectedIds.some(id => {
+      shouldUpdate = selectedIds.some(id => {
         const target = selectedRecords.find((item) => item.getId() === id)
         return target == null
       })
@@ -841,20 +860,13 @@ export function QueryTaskResult (props: QueryTaskResultProps) {
         event: 'handleDataSourceInfoChange-updating-selectedRecords',
         widgetId: widgetId,
         oldCount: selectedRecords?.length || 0,
-        newCount: filteredDsRecords.length,
-        note: 'filtered-out-removed-records'
-      })
-      debugLogger.log('RESULTS-MODE', {
-        event: 'handleDataSourceInfoChange-updating-selectedRecords',
-        widgetId: widgetId,
-        oldCount: selectedRecords?.length || 0,
-        newCount: filteredDsRecords.length,
+        newCount: dsRecords?.length || 0,
         oldSelectedIds: (selectedRecords || []).map(r => r.getId()).slice(0, 5),
-        newSelectedIds: filteredSelectedIds.slice(0, 5),
-        note: 'filtered-out-removed-records',
+        newSelectedIds: selectedIds.slice(0, 5),
+        note: 'r018.94: No removedRecordIds filtering',
         timestamp: Date.now()
       })
-      setSelectedRecords(filteredDsRecords)
+      setSelectedRecords(dsRecords || [])
     } else {
       debugLogger.log('RESULTS-MODE', {
         event: 'handleDataSourceInfoChange-skipping-update',
@@ -863,22 +875,22 @@ export function QueryTaskResult (props: QueryTaskResultProps) {
         timestamp: Date.now()
       })
     }
-  }, [outputDS?.id, selectedRecords, widgetId, records, removedRecordIds])
+  }, [outputDS?.id, selectedRecords, widgetId, records])
 
   /**
    * Generates the tip message showing how many features are displayed.
-   * Filters out removed records to show accurate counts.
+   * FIX (r018.94): Simplified - no filtering needed since records stay in sync
    * 
-   * @returns Formatted string like "Features displayed: 118 / 121"
+   * @returns Formatted string like "Features displayed: 118 / 118"
    */
   const getTipMessage = () => {
     if (queryData && queryData.records) {
-      // Filter out removed records for display count
-      const displayedRecords = queryData.records.filter((record: DataRecord) => !removedRecordIds.has(record.getId()))
-      const displayedCount = displayedRecords.length
+      // FIX (r018.94): No filtering needed - queryData.records is already filtered
+      const displayedCount = queryData.records.length
       
-      // FORCED: Always SimpleList, so always use simple display format
-      return `${getI18nMessage('featuresDisplayed')}: ${displayedCount} / ${resultCount}`
+      // FIX (r018.83): Use displayedCount for both numerator and denominator
+      // This ensures the count shows "118 / 118" after removing records, not "118 / 121"
+      return `${getI18nMessage('featuresDisplayed')}: ${displayedCount} / ${displayedCount}`
       const { page = 1, pageSize = defaultPageSize } = queryData
       const from = (page - 1) * pageSize + 1
       const to = from + pageSize - 1
@@ -958,34 +970,26 @@ export function QueryTaskResult (props: QueryTaskResultProps) {
       selectRecordsAndPublish(widgetId, outputDS, recordIds, updatedSelectedDatas as FeatureDataRecord[], true)
     }
     
-    // Zoom to the clicked record using data actions (always enabled - user wants to keep this behavior)
-    const dataSet: DataRecordSet = {
-      dataSource: outputDS,
-      records: [data],
-      type: 'selected',
-      name: outputDS.getLabel()
+    // Zoom to the clicked record with padding (always enabled - user wants to keep this behavior)
+    // BUG-GRAPHICS-001: Zoom operations fail when graphics layer is disabled
+    if (!mapView && !useGraphicsLayerForHighlight) {
+      debugLogger.log('BUG', {
+        bugId: 'BUG-GRAPHICS-001',
+        category: 'GRAPHICS',
+        event: 'zoom-operation-failed-graphics-layer-disabled',
+        widgetId,
+        operation: 'result-item-click-zoom',
+        recordId: data.getId(),
+        description: 'Zoom operation attempted on result item click but mapView is unavailable because useGraphicsLayerForHighlight is disabled',
+        workaround: 'Enable useGraphicsLayerForHighlight in widget settings',
+        targetResolution: 'r019.0'
+      })
     }
     
-    // Get available data actions and find the zoomToFeature action
-    DataActionManager.getInstance().getSupportedActions(widgetId, [dataSet], DataLevel.Records)
-      .then(actionCategories => {
-        // Look for zoomToFeature action in any category
-        let zoomAction: any = null
-        for (const category in actionCategories) {
-          const actions = actionCategories[category]
-          zoomAction = actions.find((action: any) => action.name === 'zoomToFeature' || action.id === 'zoomToFeature')
-          if (zoomAction) break
-        }
-
-        if (zoomAction) {
-          // Execute the zoom action
-          return DataActionManager.getInstance().executeDataAction(zoomAction, [dataSet], DataLevel.Records, widgetId)
-        }
-      })
-      .catch(error => {
-        // Silently handle errors
-      })
-  }, [outputDS, widgetId])
+    zoomToRecords([data]).catch(error => {
+      // Silently handle errors - zoom is non-critical
+    })
+  }, [outputDS, widgetId, zoomToRecords])
 
   /**
    * Removes a record from the results and selection.
@@ -1024,7 +1028,149 @@ export function QueryTaskResult (props: QueryTaskResultProps) {
       hashParamsCount: Object.keys(hashParams).length,
       timestamp: Date.now()
     })
-    
+
+    // SURGICAL HASH MODIFICATION: Remove the record ID from hash parameters
+    // This makes the hash a precise representation of what should be selected
+    const idParamKeys = ['id', 'pin', 'major', 'parcel', 'shortId'] // Common ID parameter names
+    let hashModified = false
+
+    idParamKeys.forEach(paramKey => {
+      if (urlParams.has(paramKey)) {
+        const currentValue = urlParams.get(paramKey) || ''
+        const ids = currentValue.split(',').map(id => id.trim()).filter(id => id)
+
+        // Remove the specific record ID from this parameter
+        const filteredIds = ids.filter(id => id !== dataId)
+
+        if (filteredIds.length !== ids.length) {
+          // IDs were removed, update the parameter
+          if (filteredIds.length > 0) {
+            urlParams.set(paramKey, filteredIds.join(','))
+          } else {
+            // No IDs left, remove the parameter entirely
+            urlParams.delete(paramKey)
+          }
+          hashModified = true
+        }
+      }
+    })
+
+    // FIX (r018.84): SURGICAL HASH MODIFICATION FOR data_s PARAMETER
+    // Experience Builder creates a new widget output ID instead of updating the existing one
+    // We need to manually update the existing entry to prevent duplication
+    if (urlParams.has('data_s')) {
+      const dataS = urlParams.get('data_s') || ''
+      const decodedDataS = decodeURIComponent(dataS)
+      const selections = decodedDataS.split(',')
+      
+      // Extract widget number from widgetId (e.g., "widget_12" -> "12")
+      const widgetMatch = widgetId.match(/widget_(\d+)/)
+      if (widgetMatch) {
+        const widgetNumber = widgetMatch[1]
+        const widgetPattern = new RegExp(`widget_${widgetNumber}_output_\\d+`)
+        
+        // Find and update the selection entry for this widget
+        let dataSModified = false
+        const updatedSelections = selections.map(selection => {
+          if (!selection.startsWith('id:')) {
+            return selection
+          }
+          
+          const idPart = selection.substring(3) // Remove "id:"
+          const colonIndex = idPart.lastIndexOf(':')
+          if (colonIndex === -1) {
+            return selection
+          }
+          
+          const dsIdPart = idPart.substring(0, colonIndex)
+          const recordIdsPart = idPart.substring(colonIndex + 1)
+          
+          // Check if this matches our widget's output DS pattern
+          let matchesWidget = false
+          if (dsIdPart.includes('~')) {
+            // Compound format: dataSource_*~widget_XX_output_*
+            const parts = dsIdPart.split('~')
+            matchesWidget = parts.some(part => part.match(widgetPattern))
+          } else {
+            // Simple format: widget_XX_output_*
+            matchesWidget = dsIdPart.match(widgetPattern) !== null
+          }
+          
+          if (matchesWidget) {
+            // Remove the specific record ID from this entry
+            const recordIds = recordIdsPart.split(',').map(id => id.trim()).filter(id => id)
+            const filteredRecordIds = recordIds.filter(id => id !== dataId)
+            
+            if (filteredRecordIds.length !== recordIds.length) {
+              dataSModified = true
+              debugLogger.log('HASH', {
+                event: 'data_s-record-removed',
+                widgetId,
+                removedRecordId: dataId,
+                originalRecordCount: recordIds.length,
+                newRecordCount: filteredRecordIds.length,
+                dsIdPart,
+                timestamp: Date.now()
+              })
+              
+              // If no records remain, return empty string (will be filtered out)
+              if (filteredRecordIds.length === 0) {
+                return ''
+              }
+              
+              // Reconstruct the selection with updated record IDs
+              return `id:${dsIdPart}:${filteredRecordIds.join(',')}`
+            }
+          }
+          
+          return selection
+        }).filter(s => s) // Remove empty strings
+        
+        if (dataSModified) {
+          if (updatedSelections.length > 0) {
+            urlParams.set('data_s', encodeURIComponent(updatedSelections.join(',')))
+          } else {
+            // No selections remain, remove data_s entirely
+            urlParams.delete('data_s')
+          }
+          hashModified = true
+          
+          debugLogger.log('HASH', {
+            event: 'data_s-surgically-modified',
+            widgetId,
+            removedRecordId: dataId,
+            originalSelectionCount: selections.length,
+            newSelectionCount: updatedSelections.length,
+            timestamp: Date.now()
+          })
+        }
+      }
+    }
+
+    if (hashModified) {
+      // Update hash surgically
+      const newHash = urlParams.toString()
+      window.history.replaceState(null, '', `#${newHash}`)
+
+      debugLogger.log('HASH', {
+        event: 'hash-surgically-modified-id-removed',
+        widgetId,
+        removedRecordId: dataId,
+        originalHash: hash,
+        newHash: newHash,
+        timestamp: Date.now()
+      })
+    }
+
+    // FIX (r018.96): Removed manual removal tracking - no longer needed
+    debugLogger.log('RESULTS-MODE', {
+      event: 'x-button-removal-updating-accumulated-records',
+      widgetId,
+      removedRecordId: dataId,
+      note: 'r018.96: No manual removal tracking - duplicate detection handles this',
+      timestamp: Date.now()
+    })
+
     // Remove from expansion states map
     setItemExpandStates(prevMap => {
       const newMap = new Map(prevMap)
@@ -1039,75 +1185,198 @@ export function QueryTaskResult (props: QueryTaskResultProps) {
       return newMap
     })
     
-    // Add to removed records set
-    setRemovedRecordIds(prev => {
-      const newSet = new Set(prev).add(dataId)
-      
-      // If all records are now removed, clear everything by calling trash can logic
-      // IMPORTANT: Compare against actual displayed records count, not resultCount
-      // resultCount only reflects the latest query, but in "Add to" mode we display accumulated records
-      // Use queryData.records.length (before filtering) as the source of truth for displayed records
-      // Fall back to accumulatedRecords.length if in accumulation mode, or resultCount as last resort
-      let currentDisplayedCount = queryData?.records?.length || 0
-      if (currentDisplayedCount === 0) {
-        // If queryData doesn't have records yet, check if we're in accumulation mode
-        const isAccumulationMode = resultsMode === SelectionType.AddToSelection || 
-                                   resultsMode === SelectionType.RemoveFromSelection
-        if (isAccumulationMode && accumulatedRecords && accumulatedRecords.length > 0) {
-          currentDisplayedCount = accumulatedRecords.length
-        } else {
-          // Last resort: use resultCount (but this might be incorrect in accumulation mode)
-          currentDisplayedCount = resultCount
-        }
-      }
-      
-      debugLogger.log('RESULTS-MODE', {
-        event: 'removeRecord-checking-all-removed',
-        widgetId,
-        removedRecordIdsSize: newSet.size,
-        currentDisplayedCount,
-        resultCount,
-        queryDataRecordsCount: queryData?.records?.length || 0,
-        accumulatedRecordsCount: accumulatedRecords?.length || 0,
-        resultsMode,
-        willNavigateBack: newSet.size === currentDisplayedCount && currentDisplayedCount > 0,
-        timestamp: Date.now()
-      })
-      
-      if (newSet.size === currentDisplayedCount && currentDisplayedCount > 0) {
-        // All displayed records removed - clear everything (same as clicking trash can button)
-        onNavBack(true)
-        return newSet
-      }
-      
-      return newSet
-    })
-    
+    // FIX (r018.94): Removed removedRecordIds tracking - queryData now updated directly
     // Update queryData to filter out the removed record
     setQueryData(prevData => {
       if (!prevData) return prevData
       const filteredRecords = prevData.records.filter((record: DataRecord) => record.getId() !== dataId)
+      
+      debugLogger.log('RESULTS-MODE', {
+        event: 'queryData-updated-after-removal',
+        widgetId,
+        removedRecordId: dataId,
+        recordsCountBefore: prevData.records.length,
+        recordsCountAfter: filteredRecords.length,
+        timestamp: Date.now()
+      })
+      
+      // FIX (r018.94): Check if this was the last record - if so, navigate back
+      if (filteredRecords.length === 0 && prevData.records.length > 0) {
+        debugLogger.log('RESULTS-MODE', {
+          event: 'last-record-removed-navigating-back',
+          widgetId,
+          removedRecordId: dataId,
+          timestamp: Date.now()
+        })
+        // Use setTimeout to avoid setState during render
+        setTimeout(() => onNavBack(true), 0)
+      }
+      
       return {
         ...prevData,
         records: filteredRecords
       }
     })
     
+    // FIX (r018.85): DIAGNOSTIC - Graphics count BEFORE removeRecordsFromOriginSelections
+    const graphicsCountBeforeOriginRemoval = graphicsLayer?.graphics?.length || 0
+    const graphicsIdsBeforeOriginRemoval = graphicsLayer?.graphics?.map(g => g.attributes?.recordId).slice(0, 10) || []
+    
+    debugLogger.log('RESULTS-MODE', {
+      event: 'x-button-removal-BEFORE-removeRecordsFromOriginSelections',
+      widgetId,
+      removedRecordId: dataId,
+      graphicsCountBefore: graphicsCountBeforeOriginRemoval,
+      graphicsIdsBefore: graphicsIdsBeforeOriginRemoval,
+      willPassGraphicsLayer: false, // FIX: Changed to false to prevent graphics manipulation here
+      timestamp: Date.now()
+    })
+    
     // ALWAYS remove from origin data source selections (same as Remove mode)
     // This properly removes records from the map selection, handling single or multiple origin sources
-    // Also removes graphics from graphics layer if using graphics layer highlighting
+    // FIX (r018.85): DON'T pass graphics layer parameters here - let graphics be managed by selection sync
+    // The previous behavior (passing graphicsLayer) was causing the count to jump from 124 to 136
+    // because graphics were being removed here, then re-added during selection synchronization
     removeRecordsFromOriginSelections(
       widgetId, 
       [data], 
-      outputDS as FeatureLayerDataSource,
-      useGraphicsLayerForHighlight,
-      graphicsLayer
+      outputDS as FeatureLayerDataSource
+      // NOT passing useGraphicsLayerForHighlight or graphicsLayer
+      // Graphics will be synced through normal selection flow
     )
+    
+    // FIX (r018.85): DIAGNOSTIC - Graphics count AFTER removeRecordsFromOriginSelections
+    const graphicsCountAfterOriginRemoval = graphicsLayer?.graphics?.length || 0
+    const graphicsIdsAfterOriginRemoval = graphicsLayer?.graphics?.map(g => g.attributes?.recordId).slice(0, 10) || []
+    
+    debugLogger.log('RESULTS-MODE', {
+      event: 'x-button-removal-AFTER-removeRecordsFromOriginSelections',
+      widgetId,
+      removedRecordId: dataId,
+      graphicsCountBefore: graphicsCountBeforeOriginRemoval,
+      graphicsCountAfter: graphicsCountAfterOriginRemoval,
+      graphicsIdsAfter: graphicsIdsAfterOriginRemoval,
+      graphicsChanged: graphicsCountAfterOriginRemoval !== graphicsCountBeforeOriginRemoval,
+      graphicsChangedBy: graphicsCountAfterOriginRemoval - graphicsCountBeforeOriginRemoval,
+      expected: 'Graphics should NOT change here (no graphics layer params passed)',
+      timestamp: Date.now()
+    })
+    
+    // FIX (r018.91): DIAGNOSTIC - Check why manual graphics removal condition isn't met
+    debugLogger.log('RESULTS-MODE', {
+      event: 'x-button-removal-checking-manual-graphics-removal-condition',
+      widgetId,
+      removedRecordId: dataId,
+      useGraphicsLayerForHighlight: useGraphicsLayerForHighlight,
+      hasGraphicsLayer: !!graphicsLayer,
+      graphicsLayerId: graphicsLayer?.id,
+      graphicsLayerGraphicsCount: graphicsLayer?.graphics?.length || 0,
+      conditionWillPass: !!(useGraphicsLayerForHighlight && graphicsLayer),
+      timestamp: Date.now()
+    })
+    
+    // FIX (r018.90): Manually remove graphics from layer after removeRecordsFromOriginSelections
+    // Since we don't pass graphics layer params to removeRecordsFromOriginSelections (to avoid 
+    // the 136 duplicate issue), we need to manually remove the graphic here
+    // This is safe now because r018.89 fixed the query switch re-selection issue
+    if (useGraphicsLayerForHighlight && graphicsLayer) {
+      const graphicsCountBeforeManualRemoval = graphicsLayer.graphics.length
+      
+      debugLogger.log('RESULTS-MODE', {
+        event: 'x-button-removal-manual-graphics-sync-start',
+        widgetId,
+        removedRecordId: dataId,
+        graphicsCountBefore: graphicsCountBeforeManualRemoval,
+        timestamp: Date.now()
+      })
+      
+      removeHighlightGraphics(graphicsLayer, [dataId])
+      
+      const graphicsCountAfterManualRemoval = graphicsLayer.graphics.length
+      
+      debugLogger.log('RESULTS-MODE', {
+        event: 'x-button-removal-manual-graphics-sync-complete',
+        widgetId,
+        removedRecordId: dataId,
+        graphicsCountBefore: graphicsCountBeforeManualRemoval,
+        graphicsCountAfter: graphicsCountAfterManualRemoval,
+        graphicsRemoved: graphicsCountBeforeManualRemoval - graphicsCountAfterManualRemoval,
+        expectedRemoved: 1,
+        removalMatches: (graphicsCountBeforeManualRemoval - graphicsCountAfterManualRemoval) === 1,
+        timestamp: Date.now()
+      })
+    } else {
+      // FIX (r018.91): Log when condition is NOT met to understand why
+      debugLogger.log('RESULTS-MODE', {
+        event: 'x-button-removal-manual-graphics-removal-SKIPPED',
+        widgetId,
+        removedRecordId: dataId,
+        reason: !useGraphicsLayerForHighlight ? 'useGraphicsLayerForHighlight is false' :
+                !graphicsLayer ? 'graphicsLayer is null/undefined' :
+                'unknown',
+        useGraphicsLayerForHighlight,
+        hasGraphicsLayer: !!graphicsLayer,
+        timestamp: Date.now()
+      })
+    }
+    
+    // DIAGNOSTIC LOGGING: Full state BEFORE removal
+    const outputDSSelectedBefore = outputDS.getSelectedRecords() as FeatureDataRecord[] || []
+    const outputDSSelectedIdsBefore = outputDSSelectedBefore.map(r => r.getId())
+    const accumulatedRecordsIdsBefore = accumulatedRecords?.map(r => r.getId()) || []
+    
+    // FIX (r018.81): Detailed graphics attribute inspection to understand why IDs are null
+    const graphicsLayerIdsBefore: (string | null)[] = []
+    const firstFewGraphicsAttrs: any[] = []
+    graphicsLayer?.graphics?.forEach((g, index) => {
+      if (index < 3) {
+        // Log first 3 graphics' full attributes for diagnosis
+        firstFewGraphicsAttrs.push({
+          index,
+          hasAttributes: !!g.attributes,
+          attributes: g.attributes,
+          attributeKeys: g.attributes ? Object.keys(g.attributes) : []
+        })
+      }
+      graphicsLayerIdsBefore.push(g.attributes?.recordId || null)
+    })
+    
+    debugLogger.log('RESULTS-MODE', {
+      event: 'x-button-removal-before-state',
+      widgetId,
+      removedRecordId: dataId,
+      outputDSSelectedCount: outputDSSelectedBefore.length,
+      outputDSSelectedIds: outputDSSelectedIdsBefore,
+      accumulatedRecordsCount: accumulatedRecords?.length || 0,
+      accumulatedRecordsIds: accumulatedRecordsIdsBefore,
+      graphicsLayerCount: graphicsLayer?.graphics?.length || 0,
+      graphicsLayerIds: graphicsLayerIdsBefore.slice(0, 110),
+      firstFewGraphicsAttrs, // NEW: inspect what attributes are actually there
+      allSourcesMatch: outputDSSelectedIdsBefore.length === accumulatedRecordsIdsBefore.length && 
+                       outputDSSelectedIdsBefore.length === graphicsLayerIdsBefore.length &&
+                       JSON.stringify(outputDSSelectedIdsBefore.sort()) === JSON.stringify(accumulatedRecordsIdsBefore.sort()),
+      timestamp: Date.now()
+    })
     
     // Update outputDS selection
     const selectedDatas = outputDS.getSelectedRecords() ?? []
     const updatedSelectedDatas = selectedDatas.filter(record => record.getId() !== dataId)
     const recordIds = updatedSelectedDatas.map(record => record.getId())
+    
+    // DEBUG: Log state after removal
+    debugLogger.log('RESULTS-MODE', {
+      event: 'removeRecord-state-after-removal',
+      widgetId,
+      removedRecordId: dataId,
+      outputDSSelectedBeforeRemoval: selectedDatas.length,
+      outputDSSelectedAfterRemoval: updatedSelectedDatas.length,
+      recordsPropCount: records?.length || 0,
+      queryDataRecordsCount: queryData?.records?.length || 0,
+      accumulatedRecordsCount: accumulatedRecords?.length || 0,
+      resultsMode,
+      note: 'r018.94: Records stay in sync - no removedRecordIds tracking',
+      timestamp: Date.now()
+    })
     
     // Update outputDS selection
     if (typeof outputDS.selectRecordsByIds === 'function') {
@@ -1131,28 +1400,171 @@ export function QueryTaskResult (props: QueryTaskResultProps) {
     })
     window.dispatchEvent(selectionEvent)
     
-    // If in accumulation mode, also remove from accumulated records
-    const isAccumulationMode = resultsMode === SelectionType.AddToSelection || 
-                               resultsMode === SelectionType.RemoveFromSelection
-    if (isAccumulationMode && onAccumulatedRecordsChange && accumulatedRecords && accumulatedRecords.length > 0) {
-      const remainingRecords = removeResultsFromAccumulated(
-        outputDS as FeatureLayerDataSource,
-        [data],
-        accumulatedRecords
-      )
+    // DIAGNOSTIC LOGGING: Full state AFTER removal (before sync)
+    const outputDSSelectedAfter = outputDS.getSelectedRecords() as FeatureDataRecord[] || []
+    const outputDSSelectedIdsAfter = outputDSSelectedAfter.map(r => r.getId())
+    
+    // FIX (r018.81): Detailed graphics attribute inspection to understand why IDs are null
+    const graphicsLayerIdsAfter: (string | null)[] = []
+    const firstFewGraphicsAttrsAfter: any[] = []
+    graphicsLayer?.graphics?.forEach((g, index) => {
+      if (index < 3) {
+        // Log first 3 graphics' full attributes for diagnosis
+        firstFewGraphicsAttrsAfter.push({
+          index,
+          hasAttributes: !!g.attributes,
+          attributes: g.attributes,
+          attributeKeys: g.attributes ? Object.keys(g.attributes) : []
+        })
+      }
+      graphicsLayerIdsAfter.push(g.attributes?.recordId || null)
+    })
+    
+    debugLogger.log('RESULTS-MODE', {
+      event: 'x-button-removal-after-state-before-sync',
+      widgetId,
+      removedRecordId: dataId,
+      outputDSSelectedCount: outputDSSelectedAfter.length,
+      outputDSSelectedIds: outputDSSelectedIdsAfter,
+      graphicsLayerCount: graphicsLayer?.graphics?.length || 0,
+      graphicsLayerIds: graphicsLayerIdsAfter.slice(0, 110),
+      firstFewGraphicsAttrsAfter, // NEW: inspect what attributes are actually there
+      removedFromOutputDS: outputDSSelectedIdsAfter.length < outputDSSelectedIdsBefore.length,
+      removedFromGraphics: graphicsLayerIdsAfter.length < graphicsLayerIdsBefore.length,
+      timestamp: Date.now()
+    })
+    
+    // FIX (r018.97): Sync accumulatedRecords in ALL modes for universal tab count tracking
+    // accumulatedRecords is now the single source of truth for displayed records across all modes
+    // This ensures tab count updates correctly when records are removed in ANY mode (New, Add, Remove)
+    if (onAccumulatedRecordsChange) {
+      // Get the actual selected records from outputDS (single source of truth)
+      // This is called AFTER outputDS.selectRecordsByIds() above, so it reflects the removal
+      const actuallySelectedRecords = outputDS.getSelectedRecords() as FeatureDataRecord[] || []
       
-      debugLogger.log('RESULTS-MODE', {
-        event: 'x-button-removed-from-accumulated',
-        widgetId,
-        removedRecordId: dataId,
-        accumulatedRecordsCountBefore: accumulatedRecords.length,
-        remainingRecordsCount: remainingRecords.length,
-        wasRemoved: remainingRecords.length < accumulatedRecords.length
-      })
-      
-      onAccumulatedRecordsChange(remainingRecords)
+      // Sync accumulatedRecords with what's actually selected
+      // This ensures removed records are immediately excluded from accumulatedRecords
+      if (accumulatedRecords && accumulatedRecords.length > 0) {
+        // Build a Set of actually selected IDs for fast lookup
+        const actuallySelectedIds = new Set(actuallySelectedRecords.map(r => r.getId()))
+        
+        // Filter accumulatedRecords to only include records that are actually selected
+        const syncedRecords = accumulatedRecords.filter(record => 
+          actuallySelectedIds.has(record.getId())
+        )
+        
+        const syncedRecordsIds = syncedRecords.map(r => r.getId())
+        
+        debugLogger.log('RESULTS-MODE', {
+          event: 'x-button-immediate-sync-with-outputds',
+          widgetId,
+          resultsMode,
+          removedRecordId: dataId,
+          accumulatedRecordsCountBefore: accumulatedRecords.length,
+          accumulatedRecordsIdsBefore: accumulatedRecordsIdsBefore,
+          actuallySelectedCount: actuallySelectedRecords.length,
+          actuallySelectedIds: outputDSSelectedIdsAfter,
+          syncedRecordsCount: syncedRecords.length,
+          syncedRecordsIds: syncedRecordsIds,
+          recordsRemoved: accumulatedRecords.length - syncedRecords.length,
+          removedIds: accumulatedRecordsIdsBefore.filter(id => !syncedRecordsIds.includes(id)),
+          note: 'r018.97: immediate-sync-in-all-modes-for-universal-tab-count',
+          timestamp: Date.now()
+        })
+        
+        // Update accumulatedRecords to match reality (immediate sync, not lazy)
+        onAccumulatedRecordsChange(syncedRecords)
+        
+        // DIAGNOSTIC LOGGING: Full state AFTER sync
+        debugLogger.log('RESULTS-MODE', {
+          event: 'x-button-removal-after-sync-state',
+          widgetId,
+          removedRecordId: dataId,
+          accumulatedRecordsCountAfter: syncedRecords.length,
+          accumulatedRecordsIdsAfter: syncedRecordsIds,
+          outputDSSelectedCount: outputDSSelectedAfter.length,
+          outputDSSelectedIds: outputDSSelectedIdsAfter,
+          graphicsLayerCount: graphicsLayer?.graphics?.length || 0,
+          graphicsLayerIds: graphicsLayerIdsAfter,
+          allSourcesMatch: syncedRecordsIds.length === outputDSSelectedIdsAfter.length &&
+                           syncedRecordsIds.length === graphicsLayerIdsAfter.length &&
+                           JSON.stringify(syncedRecordsIds.sort()) === JSON.stringify(outputDSSelectedIdsAfter.sort()),
+          timestamp: Date.now()
+        })
+      } else if (actuallySelectedRecords.length > 0) {
+        // If accumulatedRecords is empty but outputDS has selection, sync it
+        debugLogger.log('RESULTS-MODE', {
+          event: 'x-button-syncing-empty-accumulated-with-outputds',
+          widgetId,
+          removedRecordId: dataId,
+          actuallySelectedCount: actuallySelectedRecords.length,
+          note: 'accumulatedRecords-was-empty-syncing-from-outputds',
+          timestamp: Date.now()
+        })
+        onAccumulatedRecordsChange(actuallySelectedRecords)
+      } else {
+        // Both are empty - ensure accumulatedRecords is empty
+        debugLogger.log('RESULTS-MODE', {
+          event: 'x-button-both-empty-syncing',
+          widgetId,
+          removedRecordId: dataId,
+          note: 'both-accumulatedRecords-and-outputds-are-empty',
+          timestamp: Date.now()
+        })
+        onAccumulatedRecordsChange([])
+      }
     }
     
+    // FIX (r018.96): Removed manual modification flag - no longer needed
+    debugLogger.log('RESULTS-MODE', {
+      event: 'x-button-removal-complete',
+      widgetId,
+      removedRecordId: dataId,
+      note: 'r018.96: No manual removal tracking needed',
+      timestamp: Date.now()
+    })
+    
+    // FIX (r018.85): FINAL DIAGNOSTIC - Graphics count after entire removal flow
+    // This happens AFTER all sync logic, so we can see the final state
+    setTimeout(() => {
+      const finalGraphicsCount = graphicsLayer?.graphics?.length || 0
+      const finalGraphicsIds = graphicsLayer?.graphics?.map(g => g.attributes?.recordId) || []
+      const finalGraphicsIdsSample = finalGraphicsIds.slice(0, 10)
+      
+      // Count duplicates in final graphics
+      const graphicsIdCounts = new Map<string, number>()
+      finalGraphicsIds.forEach(id => {
+        if (id) {
+          graphicsIdCounts.set(id, (graphicsIdCounts.get(id) || 0) + 1)
+        }
+      })
+      const duplicateIds = Array.from(graphicsIdCounts.entries())
+        .filter(([_, count]) => count > 1)
+        .map(([id, count]) => ({ id, count }))
+      
+      debugLogger.log('RESULTS-MODE', {
+        event: 'x-button-removal-FINAL-graphics-state',
+        widgetId,
+        removedRecordId: dataId,
+        graphicsCountBeforeEntireFlow: graphicsCountBeforeOriginRemoval,
+        graphicsCountAfterEntireFlow: finalGraphicsCount,
+        graphicsIdsSample: finalGraphicsIdsSample,
+        graphicsChanged: finalGraphicsCount !== graphicsCountBeforeOriginRemoval,
+        graphicsChangedBy: finalGraphicsCount - graphicsCountBeforeOriginRemoval,
+        expectedChange: -1, // Should remove 1 graphic
+        actualChange: finalGraphicsCount - graphicsCountBeforeOriginRemoval,
+        changeMatches: (finalGraphicsCount - graphicsCountBeforeOriginRemoval) === -1,
+        duplicateGraphicsDetected: duplicateIds.length > 0,
+        duplicateGraphics: duplicateIds.slice(0, 5),
+        totalDuplicates: duplicateIds.reduce((sum, { count }) => sum + (count - 1), 0),
+        note: 'Final state after all removal and sync logic completes',
+        timestamp: Date.now()
+      })
+    }, 100) // Small delay to ensure all async operations complete
+
+    // Note: Hash parameters are preserved but hash-triggered queries are blocked
+    // when manual modifications exist (handled in widget's handleOpenWidgetEvent)
+
     // Log after removeRecord completes to check if expandAll changed
     setTimeout(() => {
       debugLogger.log('RESULTS-MODE', {
@@ -1243,7 +1655,6 @@ export function QueryTaskResult (props: QueryTaskResultProps) {
             onRemove={removeRecord}
             expandByDefault={expandAll}
             itemExpandStates={itemExpandStates}
-            removedRecordIds={removedRecordIds}
             onRenderDone={handleRenderDone}
           />
         )}

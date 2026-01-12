@@ -4,7 +4,7 @@
   "type": "widget",
   "version": "1.19.0",
   "exbVersion": "1.19.0",
-  "author": "King County GIS",
+  "author": "MapSimple",
   "description": "HelperSimple widget - helper widget for opening QuerySimple widgets via hash parameters",
   "copyright": "",
   "license": "http://www.apache.org/licenses/LICENSE-2.0",
