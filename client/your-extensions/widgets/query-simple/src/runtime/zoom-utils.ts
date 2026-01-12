@@ -120,7 +120,13 @@ function expandZeroAreaExtent(extent: __esri.Extent, bufferDistance: number): __
  * using mapView.goTo() with configurable padding. Handles both single and
  * multiple geometries by calculating union extent when needed.
  * 
- * ZERO-AREA EXTENT HANDLING (r019.23):
+ * SINGLE POINT GEOMETRY HANDLING (r019.25):
+ * Single point geometries (type === 'point') don't have an .extent property
+ * in the ArcGIS JS API. This function explicitly creates a zero-area extent
+ * for single points using the point's x,y coordinates. Multipoints, polygons,
+ * and polylines use their native .extent property.
+ * 
+ * ZERO-AREA EXTENT HANDLING (r019.23-r019.25):
  * When zooming to single points or overlapping points, the calculated extent
  * will have zero width/height. This function detects this condition and
  * expands the extent by 300 feet (default) in all directions to provide
@@ -129,13 +135,39 @@ function expandZeroAreaExtent(extent: __esri.Extent, bufferDistance: number): __
  * - Web Mercator (3857/102100): Converts 300 feet → ~91.44 meters
  * - State Plane (feet-based): Uses 300 feet directly
  * 
+ * GEOMETRY TYPE SUPPORT:
+ * - Single Points (point): Extent created manually → Zero-area expansion applied
+ * - Multipoints (multipoint): Uses native .extent → Zero-area expansion if overlapping
+ * - Polygons/Polylines: Uses native .extent → Expansion only if degenerate
+ * 
  * This approach maintains the extent-based zoom strategy, ensuring the
  * padding from ZoomToRecordsOptions is still respected during mapView.goTo().
  * 
- * @param mapView - The map view to zoom
+ * DIAGNOSTIC LOGGING (r019.24):
+ * Comprehensive logging throughout operation exposes geometry types, extent
+ * calculations, zero-area detection, expansion math, and final goTo parameters.
+ * Filter console by [QUERYSIMPLE-ZOOM] to see complete trace.
+ * 
+ * @param mapView - The map view to zoom (2D or 3D)
  * @param records - Array of feature data records to zoom to
- * @param options - Optional zoom options including padding and zero-area buffer
+ * @param options - Optional zoom options including padding and zero-area buffer distance
  * @returns Promise that resolves when zoom completes
+ * 
+ * @example
+ * // Zoom to single point with default 300ft buffer
+ * await zoomToRecords(mapView, [pointRecord])
+ * 
+ * @example
+ * // Zoom to polygon with custom padding
+ * await zoomToRecords(mapView, [polygonRecord], {
+ *   padding: { left: 100, right: 100, top: 100, bottom: 100 }
+ * })
+ * 
+ * @example
+ * // Zoom to point with custom buffer (500ft instead of 300ft)
+ * await zoomToRecords(mapView, [pointRecord], {
+ *   zeroAreaBufferFeet: 500
+ * })
  */
 export async function zoomToRecords(
   mapView: __esri.MapView | __esri.SceneView,
@@ -191,8 +223,9 @@ export async function zoomToRecords(
       // Single geometry - get its extent
       const geom = geometries[0]
       
-      // Point geometries don't always have an .extent property in the ArcGIS JS API
+      // SINGLE point geometries (type === 'point') don't always have an .extent property in the ArcGIS JS API
       // Create a zero-area extent manually so the downstream expansion logic can handle it
+      // Note: Multipoints (type === 'multipoint') DO have .extent and are handled by the else block
       if (geom.type === 'point') {
         const pt = geom as __esri.Point
         extent = new Extent({
@@ -203,7 +236,8 @@ export async function zoomToRecords(
           spatialReference: pt.spatialReference
         })
       } else {
-        // For non-point geometries (polygon, polyline), use the geometry's extent
+        // For all other geometry types (multipoint, polygon, polyline), use the geometry's extent
+        // Multipoints have extent because they can span an area
         extent = geom.extent || (geom as any).getExtent?.()
       }
       
