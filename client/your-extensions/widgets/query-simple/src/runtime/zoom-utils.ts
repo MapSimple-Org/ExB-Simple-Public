@@ -142,11 +142,25 @@ export async function zoomToRecords(
   options?: ZoomToRecordsOptions
 ): Promise<void> {
   if (!mapView || !records || records.length === 0) {
+    debugLogger.log('ZOOM', {
+      event: 'zoom-early-exit',
+      reason: !mapView ? 'no-mapView' : 'no-records',
+      recordsCount: records?.length || 0
+    })
     return
   }
 
   const padding = options?.padding || DEFAULT_PADDING
   const zeroAreaBufferFeet = options?.zeroAreaBufferFeet || DEFAULT_ZERO_AREA_BUFFER_FEET
+
+  debugLogger.log('ZOOM', {
+    event: 'zoom-start',
+    recordsCount: records.length,
+    padding,
+    zeroAreaBufferFeet,
+    mapViewType: mapView.type,
+    spatialReferenceWkid: mapView.spatialReference?.wkid
+  })
 
   try {
     // Extract geometries from records
@@ -154,7 +168,19 @@ export async function zoomToRecords(
       .map(record => record.getJSAPIGeometry())
       .filter(geom => geom != null)
     
+    debugLogger.log('ZOOM', {
+      event: 'geometries-extracted',
+      recordsCount: records.length,
+      geometriesCount: geometries.length,
+      geometryTypes: geometries.map(g => g?.type)
+    })
+    
     if (geometries.length === 0) {
+      debugLogger.log('ZOOM', {
+        event: 'zoom-early-exit',
+        reason: 'no-geometries',
+        recordsCount: records.length
+      })
       return
     }
 
@@ -165,6 +191,20 @@ export async function zoomToRecords(
       // Note: Point geometries will have zero-area extents (width=0, height=0)
       // which will be expanded by the zero-area detection logic below
       extent = geometries[0].extent || (geometries[0] as any).getExtent?.()
+      
+      debugLogger.log('ZOOM', {
+        event: 'extent-calculated-single',
+        geometryType: geometries[0].type,
+        originalExtent: extent ? {
+          xmin: extent.xmin,
+          xmax: extent.xmax,
+          ymin: extent.ymin,
+          ymax: extent.ymax,
+          width: extent.width,
+          height: extent.height,
+          spatialReference: extent.spatialReference?.wkid
+        } : null
+      })
     } else {
       // Multiple geometries - calculate union extent
       // Note: Overlapping points will produce a zero-area extent
@@ -179,12 +219,34 @@ export async function zoomToRecords(
           extent = extent.union(extents[i])
         }
       }
+      
+      debugLogger.log('ZOOM', {
+        event: 'extent-calculated-union',
+        geometriesCount: geometries.length,
+        extentsCount: extents.length,
+        originalExtent: extent ? {
+          xmin: extent.xmin,
+          xmax: extent.xmax,
+          ymin: extent.ymin,
+          ymax: extent.ymax,
+          width: extent.width,
+          height: extent.height,
+          spatialReference: extent.spatialReference?.wkid
+        } : null
+      })
     }
     
     if (extent) {
       // Check for zero-area extent (single point or overlapping points)
       // This condition triggers when extent.width === 0 OR extent.height === 0
       const isZeroArea = extent.width === 0 || extent.height === 0
+      
+      debugLogger.log('ZOOM', {
+        event: 'zero-area-check',
+        isZeroArea,
+        extentWidth: extent.width,
+        extentHeight: extent.height
+      })
       
       if (isZeroArea) {
         // Determine buffer distance based on spatial reference
@@ -193,6 +255,8 @@ export async function zoomToRecords(
         const bufferDistance = isMetric 
           ? zeroAreaBufferFeet * FEET_TO_METERS  // Convert feet to meters (~91.44m for 300ft)
           : zeroAreaBufferFeet                    // Use feet directly
+        
+        const originalExtent = extent.clone()
         
         // Expand the extent by the buffer distance in all directions
         // This creates a square extent centered on the point(s)
@@ -205,6 +269,14 @@ export async function zoomToRecords(
           bufferDistance: bufferDistance,
           spatialReferenceWkid: mapView.spatialReference.wkid,
           isMetric: isMetric,
+          originalExtent: {
+            xmin: originalExtent.xmin,
+            xmax: originalExtent.xmax,
+            ymin: originalExtent.ymin,
+            ymax: originalExtent.ymax,
+            width: originalExtent.width,
+            height: originalExtent.height
+          },
           expandedExtent: {
             xmin: extent.xmin,
             xmax: extent.xmax,
@@ -218,12 +290,38 @@ export async function zoomToRecords(
       
       // Zoom to the extent with padding
       // The padding from options is applied here, in addition to any zero-area expansion
-      await mapView.goTo(extent, { padding })
+      debugLogger.log('ZOOM', {
+        event: 'calling-mapView-goTo',
+        finalExtent: {
+          xmin: extent.xmin,
+          xmax: extent.xmax,
+          ymin: extent.ymin,
+          ymax: extent.ymax,
+          width: extent.width,
+          height: extent.height,
+          spatialReference: extent.spatialReference?.wkid
+        },
+        padding
+      })
+      
+      const goToResult = await mapView.goTo(extent, { padding })
+      
+      debugLogger.log('ZOOM', {
+        event: 'mapView-goTo-complete',
+        success: true,
+        goToResult: goToResult ? 'returned-value' : 'no-return-value'
+      })
+    } else {
+      debugLogger.log('ZOOM', {
+        event: 'zoom-skipped',
+        reason: 'no-extent-calculated'
+      })
     }
   } catch (error) {
     debugLogger.log('ZOOM', {
       event: 'zoom-goTo-error',
       error: error instanceof Error ? error.message : String(error),
+      errorStack: error instanceof Error ? error.stack : undefined,
       recordsCount: records.length
     })
     throw error
