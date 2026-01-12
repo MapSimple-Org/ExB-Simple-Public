@@ -12,7 +12,7 @@ export default {
   spatialFilterType_InteractiveDrawMode: 'Drawn graphic',
   results: 'Results',
   featuresDisplayed: 'Features displayed',
-  clearResult: 'Clear results',
+  clearResult: 'Clear all results',
   checkResult: 'Check results',
   mapMustBeVisible: 'Map must be visible',
   chooseFilterType: 'Choose the filter type',

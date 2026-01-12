@@ -9,12 +9,13 @@ import {
   DataRecordSetChangeMessage,
   RecordSetChangeType,
   type ImmutableArray,
-  dataSourceUtils,
-  Immutable
+  dataSourceUtils
 } from 'jimu-core'
 import type { IFieldInfo } from '@esri/arcgis-rest-feature-service'
 import { type QueryItemType, SpatialRelation, type SpatialFilterObj, FieldsType, mapJSAPIUnitToDsUnit, mapJSAPISpatialRelToDsSpatialRel } from '../config'
-import { getFieldInfosInPopupContent } from 'widgets/shared-code/common'
+import { getFieldInfosInPopupContent, createQuerySimpleDebugLogger } from '../../../shared-code/common'
+
+const debugLogger = createQuerySimpleDebugLogger()
 
 export function combineFields (resultDisplayFields: ImmutableArray<string>, resultTitleExpression: string, idField?: string): string[] {
   const fields = new Set<string>()
@@ -32,6 +33,55 @@ export function combineFields (resultDisplayFields: ImmutableArray<string>, resu
 }
 
 /**
+ * Validates user input before query execution.
+ * @param input - The raw user input (string, number, etc.)
+ * @param isList - Optional flag indicating if the input is from a list/selector (lenient validation)
+ * @returns boolean - true if input is valid, false otherwise
+ */
+export function isQueryInputValid (input: any, isList: boolean = false): boolean {
+  // If it's a list-based selection (Unique Values, Field Values), 
+  // we allow empty/null as it might represent "no filter" or the user 
+  // intends to interact with the list.
+  if (isList) {
+    return true
+  }
+
+  if (input === null || input === undefined) {
+    return false
+  }
+  
+  // If it's a string, ensure it's not empty or just whitespace
+  if (typeof input === 'string') {
+    return input.trim() !== ''
+  }
+
+  // If it's an array (often used in unique values or multiple selection)
+  if (Array.isArray(input)) {
+    if (input.length === 0) return false
+    // Check if the first item is valid (usually {value: '...', label: '...'})
+    const firstItem = input[0]
+    if (firstItem && typeof firstItem === 'object' && 'value' in firstItem) {
+      return isQueryInputValid(firstItem.value)
+    }
+    return true
+  }
+
+  // If it's a jimu-core Immutable array
+  if (input.asMutable && typeof input.toArray === 'function') {
+    const arr = input.toArray()
+    if (arr.length === 0) return false
+    const firstItem = arr[0]
+    if (firstItem && typeof firstItem === 'object' && 'value' in firstItem) {
+      return isQueryInputValid(firstItem.value)
+    }
+    return true
+  }
+  
+  // For other types (numbers, dates), if it exists, we count it as valid
+  return true
+}
+
+/**
  * Sanitizes user input for query tasks.
  * 1. Strips leading and trailing whitespace.
  * 2. Prevents basic SQL injection by escaping single quotes.
@@ -40,7 +90,7 @@ export function combineFields (resultDisplayFields: ImmutableArray<string>, resu
  * @param input - The raw user input string
  * @returns Sanitized string or null if input is empty
  */
-export function sanitizeQueryInput (input: string): string | null {
+export function sanitizeQueryInput (input: string | null | undefined): string | null {
   if (!input || typeof input !== 'string') {
     return null
   }
@@ -51,7 +101,6 @@ export function sanitizeQueryInput (input: string): string | null {
   }
   
   // Basic SQL escaping: replace single quotes with double single quotes
-  // This is a safety measure in case jimu-core's getArcGISSQL fails to catch something.
   return trimmed.replace(/'/g, "''")
 }
 
@@ -70,10 +119,38 @@ export function sanitizeSqlExpression (sqlExpr: IMSqlExpression): IMSqlExpressio
   sqlExpr.parts.forEach((part, index) => {
     if (part.type === 'SINGLE' && part.valueOptions?.value !== undefined) {
       const rawValue = part.valueOptions.value
-      const sanitizedValue = sanitizeQueryInput(String(rawValue))
       
-      if (sanitizedValue !== rawValue) {
-        sanitizedExpr = sanitizedExpr.setIn(['parts', index, 'valueOptions', 'value'], sanitizedValue)
+      // CASE 1: Simple String
+      if (typeof rawValue === 'string') {
+        const sanitizedValue = sanitizeQueryInput(rawValue)
+        if (sanitizedValue !== rawValue) {
+          sanitizedExpr = sanitizedExpr.setIn(['parts', index, 'valueOptions', 'value'], sanitizedValue)
+        }
+      } 
+      // CASE 2: Array of objects (Unique Values / Dropdowns)
+      // We must preserve the Immutable structure to avoid "asMutable" errors
+      else if (Array.isArray(rawValue) || (rawValue && typeof (rawValue as any).toArray === 'function')) {
+        const isImmutable = typeof (rawValue as any).toArray === 'function'
+        const arr = isImmutable ? (rawValue as any).toArray() : (rawValue as any[])
+        
+        let changed = false
+        const sanitizedArr = arr.map(item => {
+          if (item && typeof item === 'object' && 'value' in item && typeof item.value === 'string') {
+            const sanitizedVal = sanitizeQueryInput(item.value)
+            if (sanitizedVal !== item.value) {
+              changed = true
+              return { ...item, value: sanitizedVal }
+            }
+          }
+          return item
+        })
+        
+        if (changed) {
+          // If it was Immutable, we should ideally use Immutable methods to update,
+          // but setIn on the top-level expression with a plain array/object 
+          // usually triggers the framework's auto-conversion.
+          sanitizedExpr = sanitizedExpr.setIn(['parts', index, 'valueOptions', 'value'], sanitizedArr)
+        }
       }
     }
   })
@@ -211,7 +288,11 @@ export function generateQueryParams (
     })
     
     if (optimizedWhere !== mergedQueryParams.where) {
-      console.log(`[QUERYSIMPLE-PERF] Universal SQL Optimization: ${mergedQueryParams.where} -> ${optimizedWhere}`)
+      debugLogger.log('TASK', {
+        event: 'sql-optimized',
+        original: mergedQueryParams.where,
+        optimized: optimizedWhere
+      })
       mergedQueryParams.where = optimizedWhere
     }
   }
@@ -236,11 +317,13 @@ export function generateQueryParams (
   }
 
   // Diagnostic log: Show exactly WHICH fields are being sent
-  console.log(`[QUERYSIMPLE-PERF] Requesting data: 
-    - Fields Count: ${queryParams.outFields?.length} 
-    - Fields: ${queryParams.outFields?.join(', ')}
-    - PageSize: ${queryParams.pageSize}
-    - Offset: ${queryParams.maxAllowableOffset}`)
+  debugLogger.log('TASK', {
+    event: 'requesting-data',
+    fieldsCount: queryParams.outFields?.length,
+    fields: queryParams.outFields?.join(', '),
+    pageSize: queryParams.pageSize,
+    offset: queryParams.maxAllowableOffset
+  })
 
   if (useSpatialFilter && spatialFilter?.geometry) {
     const { geometry, relation = SpatialRelation.Intersect, buffer } = spatialFilter
@@ -313,7 +396,13 @@ export async function executeQuery (
   const layerObject = await getLayerObject(originDs)
   const layerTime = performance.now() - layerStartTime
 
-  console.log(`[QUERYSIMPLE-PERF] executeQuery complete. Fetch: ${Math.round(fetchTime)}ms, Layer: ${Math.round(layerTime)}ms, Total: ${Math.round(performance.now() - startTime)}ms, Count: ${records.length}`)
+  debugLogger.log('TASK', {
+    event: 'query-complete',
+    fetchTime: Math.round(fetchTime),
+    layerTime: Math.round(layerTime),
+    totalTime: Math.round(performance.now() - startTime),
+    recordCount: records.length
+  })
   
   records.forEach((record) => {
     const feature = (record as any).feature

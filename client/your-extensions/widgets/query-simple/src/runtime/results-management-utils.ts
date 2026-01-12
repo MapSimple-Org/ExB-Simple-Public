@@ -310,13 +310,50 @@ export function removeRecordsFromOriginSelections(
   // Remove from graphics layer if using graphics layer highlighting
   if (useGraphicsLayer && graphicsLayer) {
     const recordIdsToRemove = recordsToRemove.map(record => record.getId())
-    debugLogger.log('RESULTS-MODE', {
-      event: 'removing-graphics-from-layer',
-      widgetId,
-      recordIdsCount: recordIdsToRemove.length,
-      graphicsLayerId: graphicsLayer.id
+    
+    // FIX (r018.82): Capture TRUE "before" state BEFORE removing graphics
+    const graphicsBeforeRemoval: (string | null)[] = []
+    const firstFewGraphicsAttrs: any[] = []
+    graphicsLayer?.graphics?.forEach((g, index) => {
+      if (index < 3) {
+        firstFewGraphicsAttrs.push({
+          index,
+          hasAttributes: !!g.attributes,
+          attributes: g.attributes,
+          attributeKeys: g.attributes ? Object.keys(g.attributes) : []
+        })
+      }
+      graphicsBeforeRemoval.push(g.attributes?.recordId || null)
     })
+    
+    debugLogger.log('RESULTS-MODE', {
+      event: 'removing-graphics-TRUE-BEFORE-state',
+      widgetId,
+      recordIdsToRemove,
+      graphicsLayerCountBefore: graphicsLayer.graphics.length,
+      graphicsLayerIdsBefore: graphicsBeforeRemoval.slice(0, 110),
+      firstFewGraphicsAttrs,
+      timestamp: Date.now()
+    })
+    
     removeHighlightGraphics(graphicsLayer, recordIdsToRemove)
+    
+    // FIX (r018.82): Capture TRUE "after" state AFTER removing graphics
+    const graphicsAfterRemoval: (string | null)[] = []
+    graphicsLayer?.graphics?.forEach((g) => {
+      graphicsAfterRemoval.push(g.attributes?.recordId || null)
+    })
+    
+    debugLogger.log('RESULTS-MODE', {
+      event: 'removing-graphics-TRUE-AFTER-state',
+      widgetId,
+      graphicsLayerCountAfter: graphicsLayer.graphics.length,
+      graphicsLayerIdsAfter: graphicsAfterRemoval.slice(0, 110),
+      actuallyRemoved: graphicsBeforeRemoval.length - graphicsAfterRemoval.length,
+      expectedToRemove: recordIdsToRemove.length,
+      removalMatches: (graphicsBeforeRemoval.length - graphicsAfterRemoval.length) === recordIdsToRemove.length,
+      timestamp: Date.now()
+    })
   }
   
   // Group records by their origin data source

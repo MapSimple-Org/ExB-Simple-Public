@@ -7,6 +7,7 @@
  * - Add ?debug=false to disable all debug logs
  * 
  * Features (QuerySimple):
+ * - BUG: Known bugs/issues (always logs, even if debug=false) - Use format: bugId, category, description
  * - HASH: Hash parameter processing
  * - FORM: Query form interactions
  * - TASK: Query task management
@@ -20,6 +21,20 @@
  * - RESULTS-MODE: Results management mode selection (Create new, Add to, Remove from)
  * - EXPAND-COLLAPSE: Expand/collapse state management for result items
  * - GRAPHICS-LAYER: Graphics layer highlighting (independent of layer visibility)
+ * - EVENTS: Event listener setup/cleanup and custom event dispatching
+ * 
+ * Temporary Migration Features (will be removed after migration complete):
+ * - CHUNK-1-COMPARE: Chunk 1 (URL Parameter) comparison logs
+ * - CHUNK-1-MISMATCH: Chunk 1 mismatch warnings
+ * - CHUNK-2-COMPARE: Chunk 2 (Visibility) comparison logs
+ * - CHUNK-2-MISMATCH: Chunk 2 mismatch warnings
+ * - CHUNK-3-COMPARE: Chunk 3 (Selection/Restoration) comparison logs
+ * - CHUNK-3-DECISION: Chunk 3 decision point logs
+ * - CHUNK-3-FALLBACK: Chunk 3 fallback logic logs
+ * - CHUNK-4-COMPARE: Chunk 4 (Graphics Layer) comparison logs
+ * - CHUNK-5-COMPARE: Chunk 5 (Accumulated Records) comparison logs
+ * - CHUNK-6-COMPARE: Chunk 6 (Map View) comparison logs
+ * - CHUNK-6-MISMATCH: Chunk 6 mismatch warnings
  * 
  * Features (HelperSimple):
  * - HASH: Hash parameter monitoring and widget opening
@@ -28,7 +43,7 @@
  * - RESTORE: Selection restoration attempts and results
  */
 
-type DebugFeature = 'HASH' | 'FORM' | 'TASK' | 'ZOOM' | 'MAP-EXTENT' | 'DATA-ACTION' | 'GROUP' | 'SELECTION' | 'WIDGET-STATE' | 'RESTORE' | 'RESULTS-MODE' | 'EXPAND-COLLAPSE' | 'GRAPHICS-LAYER' | 'all' | 'false'
+type DebugFeature = 'BUG' | 'HASH' | 'HASH-EXEC' | 'FORM' | 'TASK' | 'ZOOM' | 'MAP-EXTENT' | 'DATA-ACTION' | 'GROUP' | 'SELECTION' | 'WIDGET-STATE' | 'RESTORE' | 'RESTORE-COMPARE' | 'RESULTS-MODE' | 'EXPAND-COLLAPSE' | 'GRAPHICS-LAYER' | 'EVENTS' | 'CHUNK-1-COMPARE' | 'CHUNK-1-MISMATCH' | 'CHUNK-2-COMPARE' | 'CHUNK-2-MISMATCH' | 'CHUNK-3-COMPARE' | 'CHUNK-3-DECISION' | 'CHUNK-3-FALLBACK' | 'CHUNK-4-COMPARE' | 'CHUNK-5-COMPARE' | 'CHUNK-6-COMPARE' | 'CHUNK-6-MISMATCH' | 'all' | 'false'
 
 interface DebugLoggerOptions {
   widgetName: string
@@ -100,6 +115,11 @@ class DebugLogger {
   private isEnabled(feature: DebugFeature): boolean {
     this.initialize()
     
+    // BUG level always enabled, regardless of debug switches (even if debug=false)
+    if (feature === 'BUG') {
+      return true
+    }
+    
     if (this.enabledFeatures.has('all')) {
       return true
     }
@@ -108,6 +128,22 @@ class DebugLogger {
   }
 
   log(feature: DebugFeature, data: any): void {
+    // BUG level always logs, even if debug=false
+    if (feature === 'BUG') {
+      const logData = {
+        feature: 'BUG',
+        bugId: data.bugId || 'UNKNOWN',
+        category: data.category || 'GENERAL',
+        timestamp: new Date().toISOString(),
+        ...data
+      }
+      
+      // Use console.warn with emoji format to make bugs stand out
+      console.warn(`[${this.widgetName.toUpperCase()} ⚠️ BUG]`, JSON.stringify(logData, null, 2))
+      return
+    }
+    
+    // Regular feature logging (existing behavior)
     if (!this.isEnabled(feature)) {
       return
     }
@@ -140,7 +176,13 @@ class DebugLogger {
 export function createQuerySimpleDebugLogger() {
   return new DebugLogger({
     widgetName: 'QUERYSIMPLE',
-    features: ['HASH', 'FORM', 'TASK', 'ZOOM', 'MAP-EXTENT', 'DATA-ACTION', 'GROUP', 'SELECTION', 'WIDGET-STATE', 'RESTORE', 'RESULTS-MODE', 'EXPAND-COLLAPSE', 'GRAPHICS-LAYER']
+    features: [
+      'HASH', 'HASH-EXEC', 'HASH-FIRST-LOAD', 'FORM', 'TASK', 'ZOOM', 'MAP-EXTENT', 'DATA-ACTION', 'GROUP', 
+      'SELECTION', 'WIDGET-STATE', 'RESTORE', 'RESULTS-MODE', 'EXPAND-COLLAPSE', 'GRAPHICS-LAYER', 'EVENTS',
+      // Temporary migration features (will be removed after migration complete)
+      'CHUNK-1-COMPARE', 'CHUNK-1-MISMATCH', 'CHUNK-2-COMPARE', 'CHUNK-2-MISMATCH', 'CHUNK-3-COMPARE', 'CHUNK-3-DECISION', 'CHUNK-3-FALLBACK',
+      'CHUNK-4-COMPARE', 'CHUNK-5-COMPARE', 'CHUNK-6-COMPARE', 'CHUNK-6-MISMATCH'
+    ]
   })
 }
 
@@ -150,7 +192,7 @@ export function createQuerySimpleDebugLogger() {
 export function createHelperSimpleDebugLogger() {
   return new DebugLogger({
     widgetName: 'HELPERSIMPLE',
-    features: ['HASH', 'SELECTION', 'WIDGET-STATE', 'RESTORE']
+    features: ['HASH', 'HASH-EXEC', 'SELECTION', 'WIDGET-STATE', 'RESTORE']
   })
 }
 

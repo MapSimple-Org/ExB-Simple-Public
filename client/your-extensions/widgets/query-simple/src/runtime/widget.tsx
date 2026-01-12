@@ -12,23 +12,47 @@ import { TaskListInline } from './query-task-list-inline'
 import { TaskListPopperWrapper } from './query-task-list-popper-wrapper'
 import { QueryWidgetContext } from './widget-context'
 import { createQuerySimpleDebugLogger } from 'widgets/shared-code/common'
-import { createOrGetGraphicsLayer, cleanupGraphicsLayer } from './graphics-layer-utils'
-import { QUERYSIMPLE_SELECTION_EVENT } from './selection-utils'
 import { WIDGET_VERSION } from '../version'
+// Chunk 1: URL Parameter Consumption Manager (r018.8)
+import { UrlConsumptionManager } from './hooks/use-url-consumption'
+// Chunk 2: Widget Visibility Engine Manager (r018.13) - Step 2.3: Switch to manager
+import { WidgetVisibilityManager } from './hooks/use-widget-visibility'
+// Chunk 6: Map View Management Manager (r018.14) - Step 6.1: Add manager without integration
+import { MapViewManager } from './hooks/use-map-view'
+// Chunk 4: Graphics Layer Management Manager (r018.24) - Step 4.2: Parallel execution
+import { GraphicsLayerManager } from './hooks/use-graphics-layer'
+// Chunk 5: Accumulated Records Management Manager (r018.26) - Step 5.1: Add manager without integration
+import { AccumulatedRecordsManager } from './hooks/use-accumulated-records'
+// Chunk 7: Event Handling Manager (r018.59) - Step 7.1: Create Event Manager
+import { EventManager, OPEN_WIDGET_EVENT, QUERYSIMPLE_SELECTION_EVENT, RESTORE_ON_IDENTIFY_CLOSE_EVENT } from './hooks/use-event-handling'
+// Chunk 3: Selection & Restoration Manager (r019.1) - Section 3.1: Selection State Tracking
+import { SelectionRestorationManager } from './hooks/use-selection-restoration'
 
 const debugLogger = createQuerySimpleDebugLogger()
 const { iconMap } = getWidgetRuntimeDataMap()
 
-/**
- * Custom event name for QuerySimple to notify HelperSimple of widget open/close state.
- */
-const QUERYSIMPLE_WIDGET_STATE_EVENT = 'querysimple-widget-state-changed'
+// Event constants moved to EventManager (r018.59 - Chunk 7.1)
 
 /**
- * Custom event name for requesting restoration when identify popup closes.
+ * QuerySimple Widget
+ * 
+ * A high-performance query widget for ArcGIS Experience Builder that provides:
+ * - Universal SQL optimization for database index usage
+ * - Dual-mode deep linking (hash fragments and query strings)
+ * - Results accumulation across multiple queries
+ * - Selection persistence and restoration
+ * - Graphics layer highlighting for map visualization
+ * 
+ * Architecture:
+ * This widget follows a "Hook & Shell" pattern where complex logic is extracted into
+ * manager classes (UrlConsumptionManager, WidgetVisibilityManager, MapViewManager)
+ * to keep the main widget class clean and maintainable.
+ * 
+ * @since 1.19.0-r018.18
+ * @see {@link UrlConsumptionManager} for URL parameter handling
+ * @see {@link WidgetVisibilityManager} for panel visibility detection
+ * @see {@link MapViewManager} for map view reference management
  */
-const RESTORE_ON_IDENTIFY_CLOSE_EVENT = 'querysimple-restore-on-identify-close'
-
 export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>, { 
   initialQueryValue?: { shortId: string, value: string }, 
   isPanelVisible?: boolean, 
@@ -38,105 +62,441 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
   resultsMode?: SelectionType, 
   accumulatedRecords?: FeatureDataRecord[], 
   graphicsLayerInitialized?: boolean, 
-  jimuMapView?: JimuMapView,
   activeTab?: 'query' | 'results'
 }> {
   static versionManager = versionManager
-  private lastProcessedHash: string = ''
+  // Chunk 1: URL Parameter Consumption Manager (r018.8)
+  private urlConsumptionManager = new UrlConsumptionManager()
+  // Chunk 2: Widget Visibility Engine Manager (r018.13) - Step 2.3: Switch to manager
+  private visibilityManager = new WidgetVisibilityManager()
+  
+  // Refs must be declared before managers that use them
+  private widgetRef = React.createRef<HTMLDivElement>()
+  private graphicsLayerRef = React.createRef<__esri.GraphicsLayer | null>()
+  private mapViewRef = React.createRef<__esri.MapView | __esri.SceneView | null>()
+  
+  // Chunk 6: Map View Management Manager (r018.16) - Step 6.3: Switch to manager
+  private mapViewManager = new MapViewManager(this.mapViewRef)
+  // Chunk 4: Graphics Layer Management Manager (r018.24) - Step 4.2: Parallel execution
+  private graphicsLayerManager = new GraphicsLayerManager(this.graphicsLayerRef, this.mapViewRef)
+  // Chunk 5: Accumulated Records Management Manager (r018.26) - Step 5.1: Add manager without integration
+  private accumulatedRecordsManager = new AccumulatedRecordsManager()
+  // Chunk 7: Event Handling Manager (r018.59) - Step 7.1: Create Event Manager
+  private eventManager = new EventManager()
+  // Chunk 3: Selection & Restoration Manager (r019.1) - Section 3.1: Selection State Tracking
+  private selectionRestorationManager = new SelectionRestorationManager(
+    () => this.state, // stateGetter
+    {
+      onStateUpdate: (newState) => this.setState(newState as any)
+    }
+  )
 
-  state: { 
-    initialQueryValue?: { shortId: string, value: string }, 
-    isPanelVisible?: boolean, 
-    hasSelection?: boolean, 
-    selectionRecordCount?: number, 
-    lastSelection?: { recordIds: string[], outputDsId: string, queryItemConfigId: string }, 
-    resultsMode?: SelectionType, 
-    accumulatedRecords?: FeatureDataRecord[], 
-    graphicsLayerInitialized?: boolean, 
-    jimuMapView?: JimuMapView,
-    activeTab?: 'query' | 'results'
+  state: {
+    initialQueryValue?: { shortId: string, value: string },
+    isPanelVisible?: boolean,
+    hasSelection?: boolean,
+    selectionRecordCount?: number,
+    lastSelection?: { recordIds: string[], outputDsId: string, queryItemConfigId: string },
+    resultsMode?: SelectionType,
+    accumulatedRecords?: FeatureDataRecord[],
+    graphicsLayerInitialized?: boolean,
+    activeTab?: 'query' | 'results',
+    // Track when HelperSimple explicitly opens widget - only then should query-task-list use initialQueryValue for selection
+    // Using state instead of ref ensures React triggers re-renders when flag changes
+    shouldUseInitialQueryValueForSelection?: boolean
   } = {
     resultsMode: SelectionType.NewSelection, // Default mode
     activeTab: 'query'
   }
 
+  /**
+   * Handles tab change between "Query" and "Results" tabs.
+   * 
+   * @param activeTab - The tab to switch to ('query' or 'results')
+   * 
+   * @since 1.19.0-r017.0
+   */
   handleTabChange = (activeTab: 'query' | 'results') => {
     this.setState({ activeTab })
   }
-  private widgetRef = React.createRef<HTMLDivElement>()
-  private visibilityObserver: IntersectionObserver | null = null
-  private visibilityCheckInterval: number | null = null
-  private graphicsLayerRef = React.createRef<__esri.GraphicsLayer | null>()
-  private mapViewRef = React.createRef<__esri.MapView | __esri.SceneView | null>()
+
+  /**
+   * Resets the manual modifications flag when user starts fresh operations.
+   * This allows hash-triggered queries to work again after explicit user actions.
+   */
+  resetManualModifications = () => {
+    // FIX (r018.96): Removed manuallyRemovedRecordIds tracking - no longer needed
+    // Duplicate detection in mergeResultsIntoAccumulated handles preventing duplicates
+    const hasManualModifications = this.state.hasManualModifications
+
+    debugLogger.log('RESULTS-MODE', {
+      event: 'reset-manual-modifications-check',
+      widgetId: this.props.id,
+      hasManualModifications,
+      note: 'r018.96: No manuallyRemovedRecordIds tracking',
+      timestamp: Date.now()
+    })
+
+    if (hasManualModifications) {
+      debugLogger.log('RESULTS-MODE', {
+        event: 'resetting-manual-modifications',
+        widgetId: this.props.id,
+        reason: 'user-started-fresh-operation',
+        hadManualModificationsFlag: hasManualModifications,
+        note: 'r018.96: No manuallyRemovedRecordIds to clear',
+        timestamp: Date.now()
+      })
+    }
+  }
+
+  /**
+   * Handles HelperSimple's open widget event.
+   * QuerySimple should only process hash parameters when HelperSimple explicitly opens the widget.
+   * This ensures HelperSimple remains the orchestrator and prevents autonomous hash processing.
+   */
+  handleOpenWidgetEvent = (event: CustomEvent) => {
+    const { id } = this.props
+
+    debugLogger.log('HASH-EXEC', {
+      event: 'querysimple-handleopenwidgetevent-received',
+      widgetId: id,
+      eventWidgetId: event.detail?.widgetId,
+      matches: event.detail?.widgetId === id,
+      currentState: {
+        shouldUseInitialQueryValueForSelection: this.state.shouldUseInitialQueryValueForSelection,
+        hasInitialQueryValue: !!this.state.initialQueryValue,
+        initialQueryValueShortId: this.state.initialQueryValue?.shortId,
+        initialQueryValueValue: this.state.initialQueryValue?.value,
+        currentUrlHash: window.location.hash.substring(1),
+      },
+      timestamp: Date.now()
+    })
+
+    // With surgical hash modification, the hash already contains only desired record IDs
+    // No need to block processing - the hash is now a precise representation of selection intent
+
+    // Only process if this event is for our widget
+    if (event.detail?.widgetId !== id) {
+      debugLogger.log('HASH-EXEC', {
+        event: 'querysimple-handleopenwidgetevent-ignored-wrong-widget',
+        widgetId: id,
+        eventWidgetId: event.detail?.widgetId,
+        timestamp: Date.now()
+      })
+      return
+    }
+    
+    // NOTE: We don't check processed hashes here anymore
+    // The check happens in onInitialValueFound after we know which shortId:value pair is being processed
+    
+    debugLogger.log('HASH', {
+      event: 'open-widget-event-received-from-helpersimple',
+      widgetId: id,
+      timestamp: Date.now()
+    })
+    
+    // Set flag to allow query-task-list to use initialQueryValue for selection
+    // This ensures we only react to hash parameters when HelperSimple explicitly opens us
+    // Using state instead of ref ensures React triggers re-render so query-task-list sees the change
+    this.setState({ shouldUseInitialQueryValueForSelection: true }, () => {
+      debugLogger.log('HASH-EXEC', {
+        event: 'querysimple-flag-set-true-state-updated',
+        widgetId: id,
+        newState: {
+          shouldUseInitialQueryValueForSelection: this.state.shouldUseInitialQueryValueForSelection,
+          hasInitialQueryValue: !!this.state.initialQueryValue,
+          initialQueryValueShortId: this.state.initialQueryValue?.shortId,
+          initialQueryValueValue: this.state.initialQueryValue?.value
+        },
+        timestamp: Date.now()
+      })
+    })
+    
+    debugLogger.log('HASH', {
+      event: 'shouldUseInitialQueryValueForSelection-flag-set-true',
+      widgetId: id,
+      flagValue: true,
+      timestamp: Date.now()
+    })
+    
+    // Now check URL parameters - HelperSimple has explicitly opened us
+    debugLogger.log('HASH-EXEC', {
+      event: 'querysimple-checkurlparameters-starting',
+      widgetId: this.props.id,
+      currentState: {
+        shouldUseInitialQueryValueForSelection: this.state.shouldUseInitialQueryValueForSelection,
+        hasInitialQueryValue: !!this.state.initialQueryValue,
+        initialQueryValueShortId: this.state.initialQueryValue?.shortId,
+        initialQueryValueValue: this.state.initialQueryValue?.value
+      },
+      timestamp: Date.now()
+    })
+    
+    this.urlConsumptionManager.checkUrlParameters(
+      this.props,
+      this.state.resultsMode,
+      {
+        onInitialValueFound: (value) => {
+          debugLogger.log('HASH-EXEC', {
+            event: 'querysimple-oninitialvaluefound-called',
+            widgetId: this.props.id,
+            hasValue: !!value,
+            valueShortId: value?.shortId,
+            valueValue: value?.value,
+            currentState: {
+              shouldUseInitialQueryValueForSelection: this.state.shouldUseInitialQueryValueForSelection,
+              hasInitialQueryValue: !!this.state.initialQueryValue,
+              initialQueryValueShortId: this.state.initialQueryValue?.shortId,
+              initialQueryValueValue: this.state.initialQueryValue?.value
+            },
+            timestamp: Date.now()
+          })
+          
+          if (value) {
+            // Only update if the value or shortId has changed to avoid unnecessary re-renders
+            const willUpdate = this.state.initialQueryValue?.shortId !== value.shortId || this.state.initialQueryValue?.value !== value.value
+            
+            debugLogger.log('HASH-EXEC', {
+              event: 'querysimple-oninitialvaluefound-will-update',
+              widgetId: this.props.id,
+              willUpdate,
+              previousShortId: this.state.initialQueryValue?.shortId,
+              previousValue: this.state.initialQueryValue?.value,
+              newShortId: value.shortId,
+              newValue: value.value,
+              timestamp: Date.now()
+            })
+            
+            if (willUpdate) {
+              debugLogger.log('HASH', {
+                event: 'url-param-detected',
+                widgetId: this.props.id,
+                shortId: value.shortId,
+                value: value.value,
+                foundIn: 'manager',
+                triggeredBy: 'helpersimple-open-widget-event',
+                previousShortId: this.state.initialQueryValue?.shortId,
+                previousValue: this.state.initialQueryValue?.value,
+                timestamp: Date.now()
+              })
+              
+              // Reset to New mode when hash parameter is detected to avoid bugs with accumulation modes
+              // Using AccumulatedRecordsManager (r018.58)
+              const needsModeReset = this.state.resultsMode !== SelectionType.NewSelection
+              const currentMode = this.state.resultsMode
+              
+              // Update initialQueryValue state
+              this.setState({ 
+                initialQueryValue: { shortId: value.shortId, value: value.value }
+              }, () => {
+                debugLogger.log('HASH-EXEC', {
+                  event: 'querysimple-initialqueryvalue-state-updated',
+                  widgetId: this.props.id,
+                  newState: {
+                    shouldUseInitialQueryValueForSelection: this.state.shouldUseInitialQueryValueForSelection,
+                    hasInitialQueryValue: !!this.state.initialQueryValue,
+                    initialQueryValueShortId: this.state.initialQueryValue?.shortId,
+                    initialQueryValueValue: this.state.initialQueryValue?.value,
+                    resultsMode: this.state.resultsMode
+                  },
+                  timestamp: Date.now()
+                })
+              })
+
+              // Reset mode via manager if needed
+              if (needsModeReset) {
+                const resetResult = this.accumulatedRecordsManager.resetModeOnHashDetection(
+                  this.props.id,
+                  currentMode
+                )
+                
+                // Update widget state from manager's return value
+                this.setState({
+                  resultsMode: resetResult.resultsMode,
+                  accumulatedRecords: resetResult.accumulatedRecords
+                })
+              }
+            }
+          } else {
+            debugLogger.log('HASH-EXEC', {
+              event: 'querysimple-oninitialvaluefound-no-value-clearing',
+              widgetId: this.props.id,
+              hasCurrentInitialQueryValue: !!this.state.initialQueryValue,
+              timestamp: Date.now()
+            })
+            // No matching parameters found - clear state
+            if (this.state.initialQueryValue) {
+              this.setState({ initialQueryValue: undefined })
+            }
+          }
+        },
+        onModeResetNeeded: () => {
+          // Reset to New mode when hash parameter is detected
+          // Using AccumulatedRecordsManager (r018.58)
+          const currentMode = this.state.resultsMode
+          const needsReset = currentMode !== SelectionType.NewSelection
+          
+          if (needsReset) {
+            debugLogger.log('HASH', {
+              event: 'mode-reset-needed-on-hash-detection',
+              widgetId: this.props.id,
+              currentMode,
+              triggeredBy: 'helpersimple-open-widget-event',
+              timestamp: Date.now()
+            })
+            
+            const resetResult = this.accumulatedRecordsManager.resetModeOnHashDetection(
+              this.props.id,
+              currentMode
+            )
+            
+            // Update widget state from manager's return value
+            this.setState({
+              resultsMode: resetResult.resultsMode,
+              accumulatedRecords: resetResult.accumulatedRecords
+            })
+          }
+        }
+      }
+    )
+  }
 
   componentDidMount() {
-    this.checkQueryStringForShortIds()
-    // Listen for hash changes to detect when hash parameters are updated
-    // This is needed when HelperSimple opens the widget with a hash parameter
-    // or when hash parameters change while the widget is already mounted
-    window.addEventListener('hashchange', this.checkQueryStringForShortIds)
+    // Chunk 1: Manager implementation (r018.8 - switched to manager)
+    // Setup manager (no autonomous URL checking - HelperSimple orchestrates)
+    // NOTE: setup() is a no-op - callbacks are never called
+    this.urlConsumptionManager.setup(
+      this.props,
+      this.state.resultsMode,
+      {} // Empty callbacks - setup() is a no-op
+    )
     
-    // Set up visibility detection
-    this.setupVisibilityDetection()
+    // Listen for HelperSimple's open widget event
+    // QuerySimple should only process hash parameters when HelperSimple explicitly opens the widget
+    // This ensures HelperSimple remains the orchestrator
+    // Note: Event listener setup moved to parallel execution section below (Chunk 7.1)
     
-    // Listen for selection changes from query-result
-    window.addEventListener(QUERYSIMPLE_SELECTION_EVENT, this.handleSelectionChange as EventListener)
-    
-    // Listen for restore requests when identify popup closes
-    window.addEventListener(RESTORE_ON_IDENTIFY_CLOSE_EVENT, this.handleRestoreOnIdentifyClose as EventListener)
-    
-    // Notify HelperSimple that this widget is now open
-    const openEvent = new CustomEvent(QUERYSIMPLE_WIDGET_STATE_EVENT, {
-      detail: {
-        widgetId: this.props.id,
-        isOpen: true
-      },
-      bubbles: true,
-      cancelable: true
-    })
-    window.dispatchEvent(openEvent)
-    debugLogger.log('WIDGET-STATE', {
-      event: 'widget-opened',
+    debugLogger.log('HASH-EXEC', {
+      event: 'querysimple-mounted-event-listener-setup',
       widgetId: this.props.id,
-      isOpen: true,
-      timestamp: new Date().toISOString()
+      currentState: {
+        shouldUseInitialQueryValueForSelection: this.state.shouldUseInitialQueryValueForSelection,
+        hasInitialQueryValue: !!this.state.initialQueryValue,
+        initialQueryValueShortId: this.state.initialQueryValue?.shortId,
+        initialQueryValueValue: this.state.initialQueryValue?.value
+      },
+      timestamp: Date.now()
     })
     
-    // Also check after a short delay to catch cases where hash was already present
-    // when widget was opened (e.g., by HelperSimple opening the widget)
-    setTimeout(() => {
-      this.checkQueryStringForShortIds()
-    }, 100)
+    // Chunk 2: Manager implementation (r018.13 - Step 2.3: Switch to manager)
+    if (this.widgetRef.current) {
+      this.visibilityManager.setup(
+        this.widgetRef.current,
+        this.props,
+        {
+          onVisibilityChange: (isVisible) => {
+            // Update state
+            this.setState({ isPanelVisible: isVisible })
+            
+            // Handle restoration logic
+            this.handleVisibilityChange(isVisible)
+          }
+        },
+        (isVisible) => {
+          // Manager's internal state tracking callback
+          // (no-op, restoration handled in onVisibilityChange)
+        }
+      )
+      
+      // Notify mount via manager
+      this.visibilityManager.notifyMount(this.props.id)
+    }
+
+    // Chunk 5: Initialize accumulated records manager state (r018.26 - Step 5.1: Add manager)
+    // Sync manager state with widget state
+    if (this.state.resultsMode) {
+      this.accumulatedRecordsManager.handleResultsModeChange(
+        this.props.id,
+        this.state.resultsMode,
+        false
+      )
+    }
+    if (this.state.accumulatedRecords && this.state.accumulatedRecords.length > 0) {
+      this.accumulatedRecordsManager.handleAccumulatedRecordsChange(
+        this.props.id,
+        this.state.accumulatedRecords
+      )
+    }
+    
+    // Set up callbacks for manager
+    // Set up callbacks for manager (r018.57)
+    // Note: Primary state updates come from manager return values in handleResultsModeChange/handleAccumulatedRecordsChange
+    // These callbacks serve as backup/verification but shouldn't be needed since we update state directly from return values
+    this.accumulatedRecordsManager.setCallbacks({
+      onModeChange: (mode) => {
+        // State is updated from handleResultsModeChange return value, so this is just a backup
+        if (this.state.resultsMode !== mode) {
+          debugLogger.log('RESULTS-MODE', {
+            event: 'callback-onModeChange-state-sync',
+            widgetId: this.props.id,
+            callbackMode: mode,
+            currentStateMode: this.state.resultsMode,
+            note: 'State should already be synced from return value',
+            timestamp: Date.now()
+          })
+          this.setState({ resultsMode: mode })
+        }
+      },
+      onAccumulatedRecordsChange: (records) => {
+        // State is updated from handleAccumulatedRecordsChange, so this is just a backup
+        const currentCount = this.state.accumulatedRecords?.length || 0
+        if (currentCount !== records.length) {
+          debugLogger.log('RESULTS-MODE', {
+            event: 'callback-onAccumulatedRecordsChange-state-sync',
+            widgetId: this.props.id,
+            callbackCount: records.length,
+            currentStateCount: currentCount,
+            note: 'State should already be synced from direct update',
+            timestamp: Date.now()
+          })
+          this.setState({ accumulatedRecords: records })
+        }
+      }
+    })
+    
+    // Chunk 7: Event handling (r018.59 - Step 7.1: Add manager)
+    this.eventManager.setHandlers({
+      onOpenWidgetEvent: this.handleOpenWidgetEvent,
+      // Chunk 3: Section 3.1 Step 3.1.5 (r019.5): Switch to manager implementation
+      onSelectionChange: (event) => this.selectionRestorationManager.handleSelectionChange(event),
+      onRestoreOnIdentifyClose: this.handleRestoreOnIdentifyClose
+    })
+    
+    this.eventManager.setup(this.props.id)
+    
+    // Chunk 3: Selection & Restoration Manager (r019.2) - Section 3.1: Initialize widgetId
+    this.selectionRestorationManager.setWidgetId(this.props.id)
     
     // Graphics layer will be initialized when map view becomes available via JimuMapViewComponent
   }
 
   componentWillUnmount() {
-    // Clean up hashchange listener
-    window.removeEventListener('hashchange', this.checkQueryStringForShortIds)
+    // Chunk 1: Clean up manager (r018.8)
+    this.urlConsumptionManager.cleanup()
     
-    // Clean up selection change listener
-    window.removeEventListener(QUERYSIMPLE_SELECTION_EVENT, this.handleSelectionChange as EventListener)
+    // Chunk 7: Event handling cleanup (r018.59 - Step 7.1: Add manager)
+    this.eventManager.cleanup(this.props.id)
     
-    // Clean up restore on identify close listener
-    window.removeEventListener(RESTORE_ON_IDENTIFY_CLOSE_EVENT, this.handleRestoreOnIdentifyClose as EventListener)
+    // Chunk 2: Clean up manager (r018.13 - Step 2.3: Switch to manager)
+    this.visibilityManager.cleanup()
+    this.visibilityManager.notifyUnmount(this.props.id)
     
-    // Clean up visibility detection
-    this.cleanupVisibilityDetection()
+    // Chunk 4: Graphics layer cleanup (r018.25 - Step 4.3: Remove old implementation)
+    this.graphicsLayerManager.cleanup(this.props.id)
     
-    // Clean up graphics layer
-    this.cleanupGraphicsLayer()
+    // Chunk 5: Clean up accumulated records manager (r018.26 - Step 5.1: Add manager)
+    this.accumulatedRecordsManager.cleanup()
     
-    // Notify HelperSimple that this widget is now closed
-    const closeEvent = new CustomEvent(QUERYSIMPLE_WIDGET_STATE_EVENT, {
-      detail: {
-        widgetId: this.props.id,
-        isOpen: false
-      },
-      bubbles: true,
-      cancelable: true
-    })
-    window.dispatchEvent(closeEvent)
     debugLogger.log('WIDGET-STATE', {
       event: 'widget-closed',
       widgetId: this.props.id,
@@ -146,409 +506,306 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
   }
 
   componentDidUpdate(prevProps: AllWidgetProps<IMConfig>) {
-    if (prevProps.config.queryItems !== this.props.config.queryItems) {
-      this.checkQueryStringForShortIds()
-    }
+    // QuerySimple no longer autonomously checks URL parameters
+    // Only HelperSimple can trigger hash parameter processing via OPEN_WIDGET_EVENT
+    // This ensures HelperSimple remains the orchestrator
     
-    // Clean up graphics layer if config changed to disabled
-    if (prevProps.config.useGraphicsLayerForHighlight !== this.props.config.useGraphicsLayerForHighlight) {
-      if (!this.props.config.useGraphicsLayerForHighlight) {
-        this.cleanupGraphicsLayer()
-      }
-      // If enabled, initialization will happen when map view becomes available via JimuMapViewComponent
-    }
+    // Chunk 4: Graphics layer is now required (r018.25 - Step 4.3: Remove config change handling)
+    // No need to handle config changes for graphics layer since it's always enabled
   }
 
   /**
-   * Notifies HelperSimple of selection changes.
-   * Called by QueryTaskResult when selection is made.
+   * Notifies HelperSimple widget of selection changes via custom event.
    * 
-   * @param recordIds - Array of selected record IDs
-   * @param dataSourceId - Optional data source ID
+   * This method dispatches a custom event that HelperSimple listens to for tracking
+   * selection state. Called by QueryTaskResult component when user selects records.
+   * 
+   * @param recordIds - Array of selected record IDs (objectIds from the feature layer)
+   * @param dataSourceId - Optional data source ID for the selected records
+   * 
+   * @since 1.19.0-r017.0
    */
   notifyHelperSimpleOfSelection = (recordIds: string[], dataSourceId?: string) => {
     const { id } = this.props
     
-    const event = new CustomEvent(QUERYSIMPLE_SELECTION_EVENT, {
-      detail: {
-        widgetId: id,
-        recordIds,
-        dataSourceId
-      },
-      bubbles: true,
-      cancelable: true
-    })
-    window.dispatchEvent(event)
+    // Chunk 7: Dispatch selection event via EventManager (r018.59)
+    // Note: This call is missing outputDsId and queryItemConfigId, but this method
+    // is only used for notifying HelperSimple, not for setting lastSelection state.
+    // The actual selection events come from query-task.tsx and query-result.tsx
+    // which use dispatchSelectionEvent from selection-utils.ts
+    this.eventManager.dispatchSelectionEvent(id, recordIds, dataSourceId)
   }
 
   /**
-   * Sets up visibility detection to track when the widget panel is open/closed.
-   * Uses IntersectionObserver if available, falls back to periodic checking.
+   * Handles widget panel visibility changes from WidgetVisibilityManager.
+   * 
+   * This method implements the selection restoration pattern:
+   * - When panel opens: Restores selection to map if widget has accumulated records or last selection
+   * - When panel closes: Clears selection from map (but preserves widget state for restoration)
+   * 
+   * The restoration logic respects the current results mode:
+   * - "Add to" / "Remove from" modes: Uses accumulated records for restoration
+   * - "New" mode: Uses lastSelection state for restoration
+   * 
+   * @param isVisible - True if widget panel is visible, false if hidden
+   * 
+   * @since 1.19.0-r018.13 (Chunk 2: Manager implementation)
+   * @see {@link WidgetVisibilityManager} for visibility detection implementation
    */
-  setupVisibilityDetection = () => {
-    // Wait for next tick to ensure ref is set
-    setTimeout(() => {
-      if (!this.widgetRef.current) {
-        debugLogger.log('WIDGET-STATE', {
-          event: 'visibility-detection-setup-failed',
+  handleVisibilityChange = (isVisible: boolean) => {
+    if (isVisible) {
+      // When panel opens, check if we have selection to restore
+      const isAccumulationMode = this.state.resultsMode === SelectionType.AddToSelection || 
+                                 this.state.resultsMode === SelectionType.RemoveFromSelection
+      const hasAccumulatedRecords = this.state.accumulatedRecords && this.state.accumulatedRecords.length > 0
+      const hasSelectionState = this.state.hasSelection || false
+      const hasSelectionToRestore = isAccumulationMode 
+        ? hasAccumulatedRecords 
+        : hasSelectionState
+      
+      debugLogger.log('RESTORE', {
+        event: 'panel-opened-checking-selection',
+        widgetId: this.props.id,
+        resultsMode: this.state.resultsMode,
+        isAccumulationMode,
+        hasSelection: hasSelectionState,
+        hasAccumulatedRecords,
+        accumulatedRecordsCount: this.state.accumulatedRecords?.length || 0,
+        selectionRecordCount: this.state.selectionRecordCount || 0,
+        hasLastSelection: !!this.state.lastSelection,
+        lastSelectionRecordCount: this.state.lastSelection?.recordIds.length || 0,
+        hasSelectionToRestore,
+        decisionLogic: {
+          'isAccumulationMode': isAccumulationMode,
+          'hasAccumulatedRecords': hasAccumulatedRecords,
+          'hasSelectionState': hasSelectionState,
+          'calculated-hasSelectionToRestore': hasSelectionToRestore,
+          'will-call-addSelectionToMap': hasSelectionToRestore
+        }
+      })
+      
+      // Add selection to map if we have one
+      if (hasSelectionToRestore) {
+        debugLogger.log('RESTORE', {
+          event: 'panel-opened-calling-addSelectionToMap',
           widgetId: this.props.id,
-          reason: 'widget-ref-not-available'
+          reason: 'hasSelectionToRestore-is-true'
         })
-        return
-      }
-
-      const element = this.widgetRef.current
-
-      // Method 1: IntersectionObserver (most efficient)
-      if ('IntersectionObserver' in window) {
-        this.visibilityObserver = new IntersectionObserver(
-          (entries) => {
-            const entry = entries[0]
-            const isVisible = entry.isIntersecting && entry.intersectionRatio > 0
-            
-            // Only log if state changed
-            if (this.state.isPanelVisible !== isVisible) {
-              this.setState({ isPanelVisible: isVisible })
-              this.logVisibilityChange(isVisible, 'IntersectionObserver')
-              this.notifyHelperSimpleOfPanelState(isVisible)
-            }
-          },
-          {
-            threshold: [0, 0.1, 1.0], // Trigger at 0%, 10%, and 100% visibility
-            rootMargin: '0px'
+        ;(async () => {
+          const deps = {
+            graphicsLayerRef: this.graphicsLayerRef,
+            mapViewRef: this.mapViewRef,
+            graphicsLayerManager: this.graphicsLayerManager,
+            config: this.props.config
           }
-        )
-        
-        this.visibilityObserver.observe(element)
-        debugLogger.log('WIDGET-STATE', {
-          event: 'visibility-detection-setup',
-          widgetId: this.props.id,
-          method: 'IntersectionObserver'
-        })
+          await this.selectionRestorationManager.addSelectionToMap(deps)
+        })()
       } else {
-        // Method 2: Fallback to periodic checking
-        this.visibilityCheckInterval = window.setInterval(() => {
-          const isVisible = this.checkVisibility()
-          if (this.state.isPanelVisible !== isVisible) {
-            this.setState({ isPanelVisible: isVisible })
-            this.logVisibilityChange(isVisible, 'periodic-check')
-            this.notifyHelperSimpleOfPanelState(isVisible)
-          }
-        }, 250) // Check every 250ms
-        
-        debugLogger.log('WIDGET-STATE', {
-          event: 'visibility-detection-setup',
+        debugLogger.log('RESTORE', {
+          event: 'panel-opened-skipping-addSelectionToMap',
           widgetId: this.props.id,
-          method: 'periodic-check'
+          reason: 'hasSelectionToRestore-is-false',
+          why: isAccumulationMode 
+            ? 'no-accumulated-records' 
+            : 'no-hasSelection-state'
         })
       }
-    }, 100)
-  }
-
-  /**
-   * Cleans up visibility detection observers/intervals.
-   */
-  cleanupVisibilityDetection = () => {
-    if (this.visibilityObserver) {
-      this.visibilityObserver.disconnect()
-      this.visibilityObserver = null
-    }
-    
-    if (this.visibilityCheckInterval !== null) {
-      clearInterval(this.visibilityCheckInterval)
-      this.visibilityCheckInterval = null
+    } else {
+      // When panel closes, clear selection from map only (keep widget state)
+      const isAccumulationMode = this.state.resultsMode === SelectionType.AddToSelection || 
+                                 this.state.resultsMode === SelectionType.RemoveFromSelection
+      const hasAccumulatedRecords = this.state.accumulatedRecords && this.state.accumulatedRecords.length > 0
+      const hasSelectionState = this.state.hasSelection || false
+      const hasSelectionToClear = isAccumulationMode 
+        ? hasAccumulatedRecords 
+        : hasSelectionState
+      
+      debugLogger.log('RESTORE', {
+        event: 'panel-closed-checking-selection',
+        widgetId: this.props.id,
+        resultsMode: this.state.resultsMode,
+        isAccumulationMode,
+        hasSelection: hasSelectionState,
+        hasAccumulatedRecords,
+        accumulatedRecordsCount: this.state.accumulatedRecords?.length || 0,
+        selectionRecordCount: this.state.selectionRecordCount || 0,
+        hasLastSelection: !!this.state.lastSelection,
+        lastSelectionRecordCount: this.state.lastSelection?.recordIds.length || 0,
+        hasSelectionToClear,
+        decisionLogic: {
+          'isAccumulationMode': isAccumulationMode,
+          'hasAccumulatedRecords': hasAccumulatedRecords,
+          'hasSelectionState': hasSelectionState,
+          'calculated-hasSelectionToClear': hasSelectionToClear,
+          'will-call-clearSelectionFromMap': hasSelectionToClear
+        }
+      })
+      
+      if (hasSelectionToClear) {
+        debugLogger.log('RESTORE', {
+          event: 'panel-closed-calling-clearSelectionFromMap',
+          widgetId: this.props.id,
+          reason: 'hasSelectionToClear-is-true'
+        })
+        ;(async () => {
+          const deps = {
+            graphicsLayerRef: this.graphicsLayerRef,
+            mapViewRef: this.mapViewRef,
+            graphicsLayerManager: this.graphicsLayerManager,
+            config: this.props.config
+          }
+          await this.selectionRestorationManager.clearSelectionFromMap(deps)
+        })()
+      } else {
+        debugLogger.log('RESTORE', {
+          event: 'panel-closed-no-selection-to-clear',
+          widgetId: this.props.id,
+          reason: 'hasSelectionToClear-is-false',
+          why: isAccumulationMode 
+            ? 'no-accumulated-records' 
+            : 'no-hasSelection-state'
+        })
+      }
     }
   }
 
   /**
    * Handles map view change from JimuMapViewComponent.
-   * When map view becomes available, initialize graphics layer if enabled.
+   * 
+   * This method is called by JimuMapViewComponent when the map view becomes available
+   * or changes. It delegates to MapViewManager for reference management and initializes
+   * the graphics layer if enabled in widget configuration.
+   * 
+   * @param jimuMapView - The JimuMapView instance from JimuMapViewComponent, or null if unavailable
+   * 
+   * @since 1.19.0-r018.18 (Chunk 6: Manager implementation)
+   * @see {@link MapViewManager} for map view reference management
    */
   private handleJimuMapViewChanged = (jimuMapView: JimuMapView | null) => {
     const { id, config } = this.props
     
-    debugLogger.log('GRAPHICS-LAYER', {
-      event: 'handleJimuMapViewChanged',
-      widgetId: id,
-      hasJimuMapView: !!jimuMapView,
-      hasView: !!(jimuMapView?.view),
-      viewType: jimuMapView?.view?.type || 'none',
-      timestamp: Date.now()
-    })
-    
-    // Store JimuMapView in state
-    this.setState({ jimuMapView: jimuMapView || undefined })
-    
-    // If map view is available and graphics layer is enabled, initialize it
-    if (jimuMapView?.view && config.useGraphicsLayerForHighlight && !this.graphicsLayerRef.current) {
-      this.initializeGraphicsLayer(jimuMapView.view)
-    }
-  }
-
-  /**
-   * Initializes the graphics layer using the provided map view.
-   */
-  private initializeGraphicsLayer = async (mapView: __esri.MapView | __esri.SceneView) => {
-    const { id } = this.props
-    
-    try {
-      // Create or get graphics layer
-      const graphicsLayer = await createOrGetGraphicsLayer(id, mapView)
-      if (!graphicsLayer) {
-        debugLogger.log('GRAPHICS-LAYER', {
-          event: 'initializeGraphicsLayer-failed',
-          widgetId: id,
-          reason: 'graphics-layer-creation-failed',
-          timestamp: Date.now()
-        })
-        return
+    // Manager implementation (r018.16 - Step 6.3: Switch to manager)
+    this.mapViewManager.handleJimuMapViewChanged(
+      jimuMapView,
+      this.props,
+      {
+        onMapViewChange: (newJimuMapView) => {
+          // Get map view from manager
+          const newMapView = this.mapViewManager.getMapView()
+          
+          // Chunk 4: Graphics layer initialization (r018.25 - Step 4.3: Remove old implementation)
+          // Initialize graphics layer if map view is available and graphics layer should be initialized
+          if (this.graphicsLayerManager.shouldInitialize(config, newMapView) && newMapView) {
+            // Use void to handle promise without blocking
+            void this.graphicsLayerManager.initialize(id, newMapView, {
+              onGraphicsLayerInitialized: (graphicsLayer) => {
+                // Update state to force re-render and update props
+                this.setState({ graphicsLayerInitialized: true })
+              }
+            })
+          }
+        }
       }
-
-      // Store references
-      this.mapViewRef.current = mapView
-      this.graphicsLayerRef.current = graphicsLayer
-
-      // Update state to force re-render and update props
-      this.setState({ graphicsLayerInitialized: true })
-
-      debugLogger.log('GRAPHICS-LAYER', {
-        event: 'initializeGraphicsLayer-success',
-        widgetId: id,
-        graphicsLayerId: graphicsLayer.id,
-        viewType: mapView.type || 'unknown',
-        timestamp: Date.now()
-      })
-    } catch (error) {
-      debugLogger.log('GRAPHICS-LAYER', {
-        event: 'initializeGraphicsLayer-error',
-        widgetId: id,
-        error: error instanceof Error ? error.message : String(error),
-        errorStack: error instanceof Error ? error.stack : undefined,
-        timestamp: Date.now()
-      })
-    }
+    )
   }
 
   /**
-   * Initializes graphics layer lazily when outputDS becomes available.
-   * Now uses the map view from JimuMapViewComponent instead of trying to get it from data source.
+   * Initializes graphics layer lazily when output data source becomes available.
+   * 
+   * This method is called by QueryTask component when an output data source is created.
+   * It retrieves the map view from MapViewManager and initializes the graphics layer
+   * using GraphicsLayerManager if not already initialized.
+   * 
+   * @param outputDS - The output data source that was created
+   * 
+   * @since 1.19.0-r017.0
+   * @see {@link GraphicsLayerManager.initializeFromOutputDS} for graphics layer initialization
+   * @see {@link MapViewManager.getMapView} for map view retrieval
+   */
+
+  /**
+   * Initializes graphics layer lazily when output data source becomes available.
+   * 
+   * This method is called by QueryTask component when an output data source is created.
+   * It retrieves the map view from MapViewManager and initializes the graphics layer
+   * using GraphicsLayerManager if not already initialized.
+   * 
+   * @param outputDS - The output data source that was created
+   * 
+   * @since 1.19.0-r017.0
+   * @see {@link GraphicsLayerManager.initializeFromOutputDS} for graphics layer initialization
+   * @see {@link MapViewManager.getMapView} for map view retrieval
    */
   public initializeGraphicsLayerFromOutputDS = async (outputDS: DataSource) => {
     const { id, config } = this.props
     
-    // Only initialize if enabled and not already initialized
-    if (!config.useGraphicsLayerForHighlight || this.graphicsLayerRef.current) {
-      debugLogger.log('GRAPHICS-LAYER', {
-        event: 'initializeGraphicsLayerFromOutputDS-skipped',
-        widgetId: id,
-        reason: !config.useGraphicsLayerForHighlight ? 'not-enabled' : 'already-initialized',
-        timestamp: Date.now()
-      })
-      return
-    }
-
-    // Use map view from JimuMapViewComponent if available
-    const mapView = this.state.jimuMapView?.view || this.mapViewRef.current
-    if (!mapView) {
-      debugLogger.log('GRAPHICS-LAYER', {
-        event: 'initializeGraphicsLayerFromOutputDS-skipped',
-        widgetId: id,
-        reason: 'map-view-not-available-yet',
-        outputDSId: outputDS.id,
-        hasJimuMapView: !!this.state.jimuMapView,
-        timestamp: Date.now()
-      })
-      return
-    }
-
-    // Initialize graphics layer with the map view
-    await this.initializeGraphicsLayer(mapView)
+    // Chunk 4: Graphics layer initialization (r018.25 - Step 4.3: Remove old implementation)
+    // Use map view from manager if available
+    const mapView = this.mapViewManager.getMapView() || this.mapViewRef.current
+    
+    await this.graphicsLayerManager.initializeFromOutputDS(
+      id,
+      config,
+      outputDS,
+      mapView,
+      {
+        onGraphicsLayerInitialized: (graphicsLayer) => {
+          this.setState({ graphicsLayerInitialized: true })
+        }
+      }
+    )
   }
 
-  /**
-   * Cleans up the graphics layer when widget unmounts or config changes.
-   */
-  private cleanupGraphicsLayer = () => {
-    const { id } = this.props
-    const mapView = this.mapViewRef.current
-
-    if (mapView) {
-      cleanupGraphicsLayer(id, mapView)
-      this.mapViewRef.current = null
-      this.graphicsLayerRef.current = null
-
-      debugLogger.log('GRAPHICS-LAYER', {
-        event: 'cleanupGraphicsLayer-complete',
-        widgetId: id,
-        timestamp: Date.now()
-      })
-    }
-  }
 
   /**
-   * Clears the graphics layer if it exists.
-   * This is called when clearing results or switching queries in New mode to ensure graphics are removed.
+   * Clears all graphics from the graphics layer if it exists.
+   * 
+   * This method is called when clearing results or switching queries in "New" mode
+   * to ensure graphics are removed from the map. It does not remove the graphics layer
+   * itself, only clears its contents.
+   * 
+   * @since 1.19.0-r017.0
+   * @see {@link GraphicsLayerManager.clearGraphics} for graphics clearing logic
    */
   public clearGraphicsLayerIfExists = () => {
     const { config } = this.props
-    const graphicsLayer = this.graphicsLayerRef.current
     
-    if (config.useGraphicsLayerForHighlight && graphicsLayer) {
-      debugLogger.log('GRAPHICS-LAYER', {
-        event: 'clearGraphicsLayerIfExists-called',
-        widgetId: this.props.id,
-        graphicsLayerId: graphicsLayer.id,
-        graphicsCount: graphicsLayer.graphics.length,
-        timestamp: Date.now()
-      })
-      
-      const { clearGraphicsLayer } = require('./graphics-layer-utils')
-      clearGraphicsLayer(graphicsLayer)
-      
-      debugLogger.log('GRAPHICS-LAYER', {
-        event: 'clearGraphicsLayerIfExists-complete',
-        widgetId: this.props.id,
-        graphicsLayerId: graphicsLayer.id,
-        timestamp: Date.now()
-      })
-    } else {
-      debugLogger.log('GRAPHICS-LAYER', {
-        event: 'clearGraphicsLayerIfExists-skipped',
-        widgetId: this.props.id,
-        reason: !config.useGraphicsLayerForHighlight ? 'not-enabled' : 'no-graphics-layer',
-        hasGraphicsLayer: !!graphicsLayer,
-        timestamp: Date.now()
-      })
-    }
+    // Chunk 4: Graphics layer clearing (r018.25 - Step 4.3: Remove old implementation)
+    this.graphicsLayerManager.clearGraphics(this.props.id, config)
   }
 
-  /**
-   * Checks if the widget element is currently visible.
-   * Fallback method when IntersectionObserver is not available.
-   */
-  checkVisibility = (): boolean => {
-    if (!this.widgetRef.current) return false
-    
-    const element = this.widgetRef.current
-    const style = window.getComputedStyle(element)
-    const rect = element.getBoundingClientRect()
-    
-    const isVisible = (
-      style.display !== 'none' &&
-      style.visibility !== 'hidden' &&
-      style.opacity !== '0' &&
-      rect.width > 0 &&
-      rect.height > 0 &&
-      rect.top < window.innerHeight &&
-      rect.bottom > 0 &&
-      rect.left < window.innerWidth &&
-      rect.right > 0
-    )
-    
-    return isVisible
-  }
 
   /**
-   * Tracks selection changes from query-result.
-   * In "Add to" or "Remove from" modes, uses accumulated records count for restoration.
+   * Handles selection change events from QueryTaskResult component.
+   * 
+   * This method updates widget state when records are selected or deselected in the
+   * results tab. It respects the current results mode:
+   * - "Add to" / "Remove from" modes: Uses accumulated records count for restoration state
+   * - "New" mode: Uses event record IDs for restoration state
+   * 
+   * Also handles automatic mode reset: If selection is cleared in "Remove from" mode,
+   * the mode is automatically reset to "New" since Remove mode requires selection to function.
+   * 
+   * @param event - Custom event containing selection details (widgetId, recordIds, outputDsId, queryItemConfigId)
+   * 
+   * @since 1.19.0-r017.0
    */
-  handleSelectionChange = (event: Event) => {
-    const customEvent = event as CustomEvent<{ widgetId: string, recordIds: string[], dataSourceId?: string, outputDsId?: string, queryItemConfigId?: string }>
-    const { id } = this.props
-    
-    // Only track if this is for our widget
-    if (customEvent.detail.widgetId !== id) {
-      return
-    }
-    
-    const hasSelection = customEvent.detail.recordIds && customEvent.detail.recordIds.length > 0
-    
-    // If the panel is NOT visible, and we are receiving an EMPTY selection,
-    // it's almost certainly our own 'clearSelectionFromMap' logic firing.
-    // We should IGNORE this so we don't wipe out the lastSelection state.
-    if (!this.state.isPanelVisible && !hasSelection) {
-      debugLogger.log('RESTORE', {
-        event: 'handleSelectionChange-ignoring-empty-selection-while-panel-closed',
-        widgetId: id,
-        timestamp: Date.now()
-      })
-      return
-    }
-    
-    // In "Add to" or "Remove from" mode, use accumulated records count for restoration
-    // The accumulated records are the source of truth for what should be restored
-    const isAccumulationMode = this.state.resultsMode === SelectionType.AddToSelection || 
-                               this.state.resultsMode === SelectionType.RemoveFromSelection
-    const accumulatedRecordsCount = this.state.accumulatedRecords?.length || 0
-    const selectionCount = isAccumulationMode && accumulatedRecordsCount > 0
-      ? accumulatedRecordsCount
-      : (hasSelection ? customEvent.detail.recordIds.length : 0)
-    
-    // If selection is cleared and we're in Remove mode, reset to NewSelection mode
-    // Remove mode requires selection to function, so it should be disabled when selection is empty
-    const shouldResetMode = !hasSelection && 
-                            selectionCount === 0 && 
-                            this.state.resultsMode === SelectionType.RemoveFromSelection
-    
-    debugLogger.log('RESTORE', {
-      event: 'handleSelectionChange-updating-state',
-      widgetId: id,
-      resultsMode: this.state.resultsMode,
-      isAccumulationMode,
-      eventRecordIdsCount: customEvent.detail.recordIds.length,
-      hasSelectionFromEvent: hasSelection,
-      accumulatedRecordsCountBefore: accumulatedRecordsCount,
-      calculatedSelectionCount: selectionCount,
-      'will-set-hasSelection': selectionCount > 0,
-      'will-set-lastSelection': hasSelection && !!customEvent.detail.outputDsId && !!customEvent.detail.queryItemConfigId,
-      'will-reset-mode': shouldResetMode,
-      decisionLogic: {
-        'isAccumulationMode': isAccumulationMode,
-        'accumulatedRecordsCount > 0': accumulatedRecordsCount > 0,
-        'use-accumulated-count': isAccumulationMode && accumulatedRecordsCount > 0,
-        'use-event-count': !(isAccumulationMode && accumulatedRecordsCount > 0),
-        'should-reset-mode': shouldResetMode
-      }
-    })
-    
-    this.setState({
-      hasSelection: selectionCount > 0,
-      selectionRecordCount: selectionCount,
-      // Store lastSelection for compatibility, but restoration will use accumulatedRecords in Add/Remove modes
-      lastSelection: hasSelection && customEvent.detail.outputDsId && customEvent.detail.queryItemConfigId
-        ? {
-            recordIds: customEvent.detail.recordIds,
-            outputDsId: customEvent.detail.outputDsId,
-            queryItemConfigId: customEvent.detail.queryItemConfigId
-          }
-        : undefined,
-      // Reset mode to NewSelection if selection is cleared in Remove mode
-      ...(shouldResetMode ? {
-        resultsMode: SelectionType.NewSelection,
-        accumulatedRecords: [] // Also clear accumulated records when resetting mode
-      } : {})
-    })
-    
-    debugLogger.log('RESTORE', {
-      event: 'handleSelectionChange-state-updated',
-      widgetId: id,
-      'new-hasSelection': selectionCount > 0,
-      'new-selectionRecordCount': selectionCount,
-      'new-lastSelection-recordIds-count': hasSelection && customEvent.detail.outputDsId && customEvent.detail.queryItemConfigId
-        ? customEvent.detail.recordIds.length
-        : 0,
-      'mode-reset': shouldResetMode,
-      'new-mode': shouldResetMode ? SelectionType.NewSelection : this.state.resultsMode,
-      'note': shouldResetMode 
-        ? 'Mode reset to NewSelection because selection was cleared in Remove mode'
-        : 'lastSelection-only-contains-current-query-records-not-all-accumulated-records'
-    })
-  }
 
   /**
    * Handles restore request when identify popup closes.
-   * Only restores if widget panel is open.
-   * In "Add to" or "Remove from" modes, restores all accumulated records.
+   * 
+   * This method restores selection to the map after the identify popup closes and
+   * selection was cleared. It only restores if the widget panel is currently open
+   * (users can't see restored selection if widget is closed).
+   * 
+   * Restoration logic:
+   * - "Add to" / "Remove from" modes: Restores all accumulated records grouped by origin data source
+   * - "New" mode: Restores lastSelection state
+   * 
+   * @param event - Custom event containing selection details (widgetId, recordIds, outputDsId, queryItemConfigId)
+   * 
+   * @since 1.19.0-r017.0
+   * @see {@link RESTORE_ON_IDENTIFY_CLOSE_EVENT} for event name constant
    */
   private handleRestoreOnIdentifyClose = (event: Event) => {
     const customEvent = event as CustomEvent<{ 
@@ -564,7 +821,8 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
       return
     }
     
-    const isWidgetOpen = this.state.isPanelVisible === true
+    // Use manager as source of truth for visibility (r018.13)
+    const isWidgetOpen = this.visibilityManager.getIsPanelVisible()
     const isAccumulationMode = this.state.resultsMode === SelectionType.AddToSelection || 
                                this.state.resultsMode === SelectionType.RemoveFromSelection
     
@@ -628,7 +886,15 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
         accumulatedRecordsCount: this.state.accumulatedRecords.length
       })
       
-      this.addSelectionToMap()
+      ;(async () => {
+        const deps = {
+          graphicsLayerRef: this.graphicsLayerRef,
+          mapViewRef: this.mapViewRef,
+          graphicsLayerManager: this.graphicsLayerManager,
+          config: this.props.config
+        }
+        await this.selectionRestorationManager.addSelectionToMap(deps)
+      })()
       return
     }
     
@@ -687,295 +953,80 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
       outputDsId: customEvent.detail.outputDsId
     })
     
-    this.addSelectionToMap()
+    ;(async () => {
+      const deps = {
+        graphicsLayerRef: this.graphicsLayerRef,
+        mapViewRef: this.mapViewRef,
+        graphicsLayerManager: this.graphicsLayerManager,
+        config: this.props.config
+      }
+      await this.selectionRestorationManager.addSelectionToMap(deps)
+    })()
   }
 
-  /**
-   * Adds selection to map when widget opens (reuses Add to Map logic).
-   * In "Add to" or "Remove from" modes, restores all accumulated records grouped by origin data source.
-   */
-  private addSelectionToMap = () => {
-    const { lastSelection, accumulatedRecords, resultsMode } = this.state
-    const { id } = this.props
-    
-    debugLogger.log('RESTORE', {
-      event: 'addSelectionToMap-called',
-      widgetId: id,
-      resultsMode,
-      hasAccumulatedRecords: !!(accumulatedRecords && accumulatedRecords.length > 0),
-      accumulatedRecordsCount: accumulatedRecords?.length || 0,
-      hasLastSelection: !!lastSelection,
-      lastSelectionRecordCount: lastSelection?.recordIds.length || 0,
-      lastSelectionOutputDsId: lastSelection?.outputDsId
-    })
-    
-    // In Add/Remove modes, use accumulated records for restoration
-    const isAccumulationMode = resultsMode === SelectionType.AddToSelection || 
-                              resultsMode === SelectionType.RemoveFromSelection
-    
-    // HYPOTHESIS: Should always check accumulatedRecords first, regardless of mode
-    // Adding log to see if accumulatedRecords exist but we're not using them
-    if (accumulatedRecords && accumulatedRecords.length > 0) {
-      debugLogger.log('RESTORE', {
-        event: 'addSelectionToMap-found-accumulated-records',
-        widgetId: id,
-        resultsMode,
-        isAccumulationMode,
-        accumulatedRecordsCount: accumulatedRecords.length,
-        'should-use-accumulated': true,
-        'current-condition-check': isAccumulationMode && accumulatedRecords && accumulatedRecords.length > 0,
-        'condition-result': isAccumulationMode && accumulatedRecords && accumulatedRecords.length > 0
-      })
-    } else {
-      debugLogger.log('RESTORE', {
-        event: 'addSelectionToMap-no-accumulated-records',
-        widgetId: id,
-        resultsMode,
-        isAccumulationMode,
-        accumulatedRecordsCount: 0,
-        'will-fallback-to-lastSelection': !!lastSelection
-      })
-    }
-    
-    if (isAccumulationMode && accumulatedRecords && accumulatedRecords.length > 0) {
-      // Group accumulated records by origin data source
-      const recordsByOriginDS = new Map<FeatureLayerDataSource, FeatureDataRecord[]>()
-      const dsManager = DataSourceManager.getInstance()
-      
-      accumulatedRecords.forEach((record, index) => {
-        const recordId = record.getId()
-        let originDS: FeatureLayerDataSource | null = null
-        
-        // Method 1: Try to get from record.getDataSource()
-        const recordDS = record.getDataSource?.() as FeatureLayerDataSource
-        if (recordDS) {
-          originDS = recordDS.getOriginDataSources()?.[0] as FeatureLayerDataSource || recordDS
-          
-          debugLogger.log('RESTORE', {
-            event: 'found-origin-ds-from-record-ds',
-            widgetId: id,
-            recordIndex: index,
-            recordId,
-            originDSId: originDS?.id || 'null',
-            method: 'record.getDataSource()'
-          })
-        }
-        
-        // Method 2: If that failed, search all data sources for a record with matching ID
-        if (!originDS) {
-          const dsMap = dsManager.getDataSources()
-          const allDataSources = Object.values(dsMap)
-          
-          for (const ds of allDataSources) {
-            // Check if this is a FeatureLayerDataSource by checking for getAllLoadedRecords method
-            if (ds && typeof (ds as any).getAllLoadedRecords === 'function') {
-              try {
-                // Check if this DS has the record
-                const allRecords = (ds as any).getAllLoadedRecords() || []
-                const matchingRecord = allRecords.find((r: FeatureDataRecord) => r.getId() === recordId)
-                
-                if (matchingRecord) {
-                  // Found the record - get origin DS from this DS
-                  originDS = (ds as any).getOriginDataSources()?.[0] as FeatureLayerDataSource || ds as FeatureLayerDataSource
-                  
-                  debugLogger.log('RESTORE', {
-                    event: 'found-origin-ds-via-search',
-                    widgetId: id,
-                    recordIndex: index,
-                    recordId,
-                    originDSId: originDS.id,
-                    method: 'searched-all-data-sources',
-                    searchedDSId: ds.id
-                  })
-                  break
-                }
-              } catch (error) {
-                // Continue searching
-              }
-            }
-          }
-        }
-        
-        if (originDS) {
-          if (!recordsByOriginDS.has(originDS)) {
-            recordsByOriginDS.set(originDS, [])
-          }
-          recordsByOriginDS.get(originDS)!.push(record)
-        } else {
-          debugLogger.log('RESTORE', {
-            event: 'could-not-find-origin-ds-for-record',
-            widgetId: id,
-            recordIndex: index,
-            recordId,
-            warning: 'record-will-be-skipped'
-          })
-        }
-      })
-      
-      debugLogger.log('RESTORE', {
-        event: 'panel-opened-restoring-accumulated-records',
-        widgetId: id,
-        resultsMode,
-        accumulatedRecordsCount: accumulatedRecords.length,
-        originDSCount: recordsByOriginDS.size
-      })
-      
-      // Restore selection for each origin data source
-      const { selectRecordsAndPublish } = require('./selection-utils')
-      const useGraphicsLayer = this.props.config.useGraphicsLayerForHighlight
-      const graphicsLayer = this.graphicsLayerRef.current || undefined
-      const mapView = this.mapViewRef.current || undefined
-      
-      recordsByOriginDS.forEach((records, originDS) => {
-        const recordIds = records.map(r => r.getId())
-        try {
-          // Use originDS directly (not outputDS) since records are selected in origin layers
-          // Use async IIFE since forEach callback can't be async
-          ;(async () => {
-            await selectRecordsAndPublish(id, originDS, recordIds, records, true, useGraphicsLayer, graphicsLayer, mapView)
-          })()
-          
-          debugLogger.log('RESTORE', {
-            event: 'panel-opened-restored-origin-ds',
-            widgetId: id,
-            originDSId: originDS.id,
-            recordCount: records.length,
-            zoomExecuted: false
-          })
-        } catch (error) {
-          debugLogger.log('RESTORE', {
-            event: 'panel-opened-restore-origin-ds-failed',
-            widgetId: id,
-            originDSId: originDS.id,
-            error: error instanceof Error ? error.message : String(error),
-            errorStack: error instanceof Error ? error.stack : undefined
-          })
-        }
-      })
-      
-      return
-    }
-    
-    // HYPOTHESIS: Maybe accumulatedRecords exist but we're not in accumulation mode?
-    // Or maybe we should always check accumulatedRecords first?
-    if (accumulatedRecords && accumulatedRecords.length > 0 && !isAccumulationMode) {
-      debugLogger.log('RESTORE', {
-        event: 'addSelectionToMap-accumulated-records-exist-but-not-accumulation-mode',
-        widgetId: id,
-        resultsMode,
-        isAccumulationMode,
-        accumulatedRecordsCount: accumulatedRecords.length,
-        'hypothesis': 'accumulated-records-exist-but-mode-is-not-add-or-remove',
-        'should-we-still-use-them': 'NEEDS-INVESTIGATION'
-      })
-    }
-    
-    // Fall back to original logic for "New" mode
-    if (!lastSelection) {
-      debugLogger.log('RESTORE', {
-        event: 'addSelectionToMap-no-lastSelection-exiting',
-        widgetId: id,
-        resultsMode,
-        hasAccumulatedRecords: !!(accumulatedRecords && accumulatedRecords.length > 0),
-        accumulatedRecordsCount: accumulatedRecords?.length || 0,
-        'hypothesis': 'no-lastSelection-so-exiting-early-maybe-should-check-accumulated-records-first'
-      })
-      return
-    }
+  // ============================================================================
+  // r019.18: Removed addSelectionToMapParallel wrapper (27 lines)
+  // r019.20: Removed clearSelectionFromMapParallel wrapper (27 lines)
+  // All call sites now directly invoke SelectionRestorationManager methods
+  // ============================================================================
 
-    const dsManager = DataSourceManager.getInstance()
-    const outputDS = dsManager.getDataSource(lastSelection.outputDsId) as FeatureLayerDataSource
-    
-    if (!outputDS) {
-      debugLogger.log('RESTORE', {
-        event: 'panel-opened-output-ds-not-found',
-        widgetId: id,
-        outputDsId: lastSelection.outputDsId
-      })
-      return
-    }
-
-    // Get records from output DS (same as Add to Map)
-    const allRecords = outputDS.getAllLoadedRecords() || []
-    const recordsToSelect = allRecords.filter(record => 
-      lastSelection.recordIds.includes(record.getId())
-    ) as FeatureDataRecord[]
-    
-    if (recordsToSelect.length === 0) {
-      debugLogger.log('RESTORE', {
-        event: 'panel-opened-no-matching-records',
-        widgetId: id,
-        ourRecordCount: lastSelection.recordIds.length
-      })
-      return
-    }
-
-    // Same logic as Add to Map action - selectRecordsAndPublish handles duplicate checking
-    // Don't zoom when restoring on widget open (Add to Map action handles zoom for manual clicks)
-    try {
-      const { selectRecordsAndPublish } = require('./selection-utils')
-      const useGraphicsLayer = this.props.config.useGraphicsLayerForHighlight
-      const graphicsLayer = this.graphicsLayerRef.current || undefined
-      const mapView = this.mapViewRef.current || undefined
-      ;(async () => {
-        await selectRecordsAndPublish(id, outputDS, lastSelection.recordIds, recordsToSelect, true, useGraphicsLayer, graphicsLayer, mapView)
-      })()
-      
-      debugLogger.log('RESTORE', {
-        event: 'panel-opened-selection-added-to-map',
-        widgetId: id,
-        recordCount: recordsToSelect.length,
-        zoomExecuted: false
-      })
-    } catch (error) {
-      debugLogger.log('RESTORE', {
-        event: 'panel-opened-add-to-map-failed',
-        widgetId: id,
-        error: error instanceof Error ? error.message : String(error)
-      })
-    }
-  }
+  // ============================================================================
+  // r019.15: Removed old addSelectionToMap implementation (272 lines)
+  // Now fully handled by SelectionRestorationManager.addSelectionToMap()
+  // ============================================================================
 
   /**
-   * Handles results mode change from dropdown.
-   * Updates widget state and logs the change for debugging.
+   * Handles results mode change from the mode dropdown in QueryTask component.
+   * 
+   * This method is called when the user switches between "Create new", "Add to", or
+   * "Remove from" modes. It performs the following actions:
+   * 
+   * 1. Consumes hash parameters when switching to accumulation modes (prevents re-triggering)
+   * 2. Clears accumulated records when switching to "New" mode
+   * 3. Updates widget state with the new mode
+   * 
+   * @param mode - The new selection type mode (NewSelection, AddToSelection, or RemoveFromSelection)
+   * 
+   * @since 1.19.0-r017.0
    */
   private handleResultsModeChange = (mode: SelectionType) => {
-    debugLogger.log('RESULTS-MODE', {
-      event: 'handleResultsModeChange-triggered',
-      widgetId: this.props.id,
-      previousMode: this.state.resultsMode,
-      newMode: mode,
-      currentAccumulatedCount: this.state.accumulatedRecords?.length || 0,
-      timestamp: Date.now()
-    })
+    // Using AccumulatedRecordsManager (r018.58)
+    const shouldConsumeHash = (mode === SelectionType.AddToSelection || mode === SelectionType.RemoveFromSelection) && !!this.state.initialQueryValue?.shortId
     
-    // Consume deep link when switching to accumulation modes
-    if (mode === SelectionType.AddToSelection || mode === SelectionType.RemoveFromSelection) {
-      if (this.state.initialQueryValue?.shortId) {
-        debugLogger.log('HASH', {
-          event: 'consuming-hash-on-mode-switch',
-          widgetId: this.props.id,
-          mode,
-          shortId: this.state.initialQueryValue.shortId
-        })
-        this.removeHashParameter(this.state.initialQueryValue.shortId)
-      }
+    const result = this.accumulatedRecordsManager.handleResultsModeChange(
+      this.props.id,
+      mode,
+      shouldConsumeHash,
+      this.state.initialQueryValue?.shortId,
+      this.removeHashParameter
+    )
+
+    // Reset manual modifications when switching to New Selection mode
+    if (mode === SelectionType.NewSelection && this.state.resultsMode !== SelectionType.NewSelection) {
+      this.resetManualModifications()
     }
 
-    // If switching to "New" mode, clear accumulated records
-    if (mode === SelectionType.NewSelection) {
-      debugLogger.log('RESULTS-MODE', {
-        event: 'clearing-accumulated-records-on-mode-switch',
-        widgetId: this.props.id,
-        previousMode: this.state.resultsMode
-      })
-      this.setState({ resultsMode: mode, accumulatedRecords: [] })
-    } else {
-      this.setState({ resultsMode: mode })
-    }
+    // Update widget state from manager's return value
+    this.setState({
+      resultsMode: result.resultsMode,
+      accumulatedRecords: result.accumulatedRecords
+    })
   }
 
+  /**
+   * Removes a hash parameter from the URL when switching to accumulation modes.
+   * 
+   * This method is called when switching to "Add to" or "Remove from" modes to consume
+   * the deep link parameter. This prevents the hash parameter from re-triggering the query
+   * when the widget re-renders.
+   * 
+   * The URL is updated using history.replaceState to avoid page reload, and both pathname
+   * and query string are preserved (e.g., debug parameters remain intact).
+   * 
+   * @param shortId - The shortId parameter to remove from the URL hash
+   * 
+   * @since 1.19.0-r017.0
+   */
   private removeHashParameter = (shortId: string) => {
     if (!shortId) return
     
@@ -994,8 +1045,9 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
       })
       
       // Update the URL without triggering a reload
+      // Always preserve pathname and query string, only update hash
       window.history.replaceState(null, '', 
-        newHash ? `#${newHash}` : window.location.pathname + window.location.search
+        window.location.pathname + window.location.search + (newHash ? `#${newHash}` : '')
       )
       
       // Also clear the state so it won't trigger again
@@ -1006,14 +1058,52 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
   }
 
   private handleAccumulatedRecordsChange = (records: FeatureDataRecord[]) => {
+    // DIAGNOSTIC LOGGING: State change tracking
+    const previousRecords = this.state.accumulatedRecords || []
+    const previousIds = previousRecords.map(r => r.getId())
+    const newIds = records.map(r => r.getId())
+    const addedIds = newIds.filter(id => !previousIds.includes(id))
+    const removedIds = previousIds.filter(id => !newIds.includes(id))
+    
     debugLogger.log('RESULTS-MODE', {
-      event: 'handleAccumulatedRecordsChange-triggered',
+      event: 'accumulated-records-state-change',
       widgetId: this.props.id,
-      previousCount: this.state.accumulatedRecords?.length || 0,
+      previousCount: previousRecords.length,
+      previousIds: previousIds,
       newCount: records.length,
+      newIds: newIds,
+      addedIds: addedIds,
+      removedIds: removedIds,
+      resultsMode: this.state.resultsMode,
       timestamp: Date.now()
     })
-    this.setState({ accumulatedRecords: records })
+    
+    // Using AccumulatedRecordsManager (r018.58)
+    this.accumulatedRecordsManager.handleAccumulatedRecordsChange(this.props.id, records)
+
+    // If we're in Remove mode and all accumulated records are cleared, reset to NewSelection mode
+    // Remove mode requires accumulated records to function, so it should be disabled when records are empty
+    const shouldResetMode = records.length === 0 && 
+                           this.state.resultsMode === SelectionType.RemoveFromSelection
+
+    this.setState({ 
+      accumulatedRecords: records,
+      // Reset mode to NewSelection if all accumulated records cleared in Remove mode
+      ...(shouldResetMode ? {
+        resultsMode: SelectionType.NewSelection
+      } : {})
+    })
+
+    if (shouldResetMode) {
+      debugLogger.log('RESULTS-MODE', {
+        event: 'mode-reset-on-accumulated-records-cleared',
+        widgetId: this.props.id,
+        previousMode: SelectionType.RemoveFromSelection,
+        newMode: SelectionType.NewSelection,
+        reason: 'all-accumulated-records-cleared-in-remove-mode',
+        timestamp: Date.now()
+      })
+    }
   }
 
   /**
@@ -1025,389 +1115,10 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
     throw new Error('This method is deprecated - use existing output DS instead')
   }
 
-  /**
-   * Clears selection from map only (keeps selection in widget's internal state).
-   * Called when widget panel closes to remove selection from map while preserving widget state.
-   * Always clears accumulated records if they exist, regardless of current mode.
-   */
-  private clearSelectionFromMap = () => {
-    const { lastSelection, accumulatedRecords, resultsMode } = this.state
-    const { id } = this.props
-    
-    const isAccumulationMode = resultsMode === SelectionType.AddToSelection || 
-                               resultsMode === SelectionType.RemoveFromSelection
-    
-    debugLogger.log('RESTORE', {
-      event: 'clearSelectionFromMap-called',
-      widgetId: id,
-      resultsMode,
-      isAccumulationMode,
-      hasLastSelection: !!lastSelection,
-      lastSelectionRecordCount: lastSelection?.recordIds.length || 0,
-      hasAccumulatedRecords: !!(accumulatedRecords && accumulatedRecords.length > 0),
-      accumulatedRecordsCount: accumulatedRecords?.length || 0,
-      selectionRecordCount: this.state.selectionRecordCount || 0
-    })
-    
-    // Always clear accumulated records if they exist (regardless of mode)
-    // This handles the case where mode might have changed but records still exist
-    debugLogger.log('RESTORE', {
-      event: 'clearSelectionFromMap-checking-accumulated-records',
-      widgetId: id,
-      'condition': 'accumulatedRecords && accumulatedRecords.length > 0',
-      'condition-result': !!(accumulatedRecords && accumulatedRecords.length > 0),
-      accumulatedRecordsCount: accumulatedRecords?.length || 0
-    })
-    
-    if (accumulatedRecords && accumulatedRecords.length > 0) {
-      // Group accumulated records by origin data source
-      const recordsByOriginDS = new Map<FeatureLayerDataSource, FeatureDataRecord[]>()
-      const dsManager = DataSourceManager.getInstance()
-      
-      accumulatedRecords.forEach((record, index) => {
-        const recordId = record.getId()
-        let originDS: FeatureLayerDataSource | null = null
-        
-        // Method 1: Try to get from record.getDataSource()
-        const recordDS = record.getDataSource?.() as FeatureLayerDataSource
-        if (recordDS) {
-          originDS = recordDS.getOriginDataSources()?.[0] as FeatureLayerDataSource || recordDS
-          
-          debugLogger.log('RESTORE', {
-            event: 'clear-found-origin-ds-from-record-ds',
-            widgetId: id,
-            recordIndex: index,
-            recordId,
-            originDSId: originDS?.id || 'null',
-            method: 'record.getDataSource()'
-          })
-        }
-        
-        // Method 2: If that failed, search all data sources for a record with matching ID
-        if (!originDS) {
-          const dsMap = dsManager.getDataSources()
-          const allDataSources = Object.values(dsMap)
-          
-          for (const ds of allDataSources) {
-            // Check if this is a FeatureLayerDataSource by checking for getAllLoadedRecords method
-            if (ds && typeof (ds as any).getAllLoadedRecords === 'function') {
-              try {
-                // Check if this DS has the record
-                const allRecords = (ds as any).getAllLoadedRecords() || []
-                const matchingRecord = allRecords.find((r: FeatureDataRecord) => r.getId() === recordId)
-                
-                if (matchingRecord) {
-                  // Found the record - get origin DS from this DS
-                  originDS = (ds as any).getOriginDataSources()?.[0] as FeatureLayerDataSource || ds as FeatureLayerDataSource
-                  
-                  debugLogger.log('RESTORE', {
-                    event: 'clear-found-origin-ds-via-search',
-                    widgetId: id,
-                    recordIndex: index,
-                    recordId,
-                    originDSId: originDS.id,
-                    method: 'searched-all-data-sources',
-                    searchedDSId: ds.id
-                  })
-                  break
-                }
-              } catch (error) {
-                // Continue searching
-              }
-            }
-          }
-        }
-        
-        if (originDS) {
-          if (!recordsByOriginDS.has(originDS)) {
-            recordsByOriginDS.set(originDS, [])
-          }
-          recordsByOriginDS.get(originDS)!.push(record)
-        } else {
-          debugLogger.log('RESTORE', {
-            event: 'clear-could-not-find-origin-ds-for-record',
-            widgetId: id,
-            recordIndex: index,
-            recordId,
-            warning: 'record-will-be-skipped'
-          })
-        }
-      })
-      
-      debugLogger.log('RESTORE', {
-        event: 'panel-closed-clearing-accumulated-records-from-map',
-        widgetId: id,
-        accumulatedRecordsCount: accumulatedRecords.length,
-        originDSCount: recordsByOriginDS.size
-      })
-      
-      // Clear selection from each origin data source
-      const { clearSelectionInDataSources } = require('./selection-utils')
-      const useGraphicsLayer = this.props.config.useGraphicsLayerForHighlight
-      const graphicsLayer = this.graphicsLayerRef.current || undefined
-      
-      recordsByOriginDS.forEach((records, originDS) => {
-        try {
-          // Use async IIFE since forEach callback can't be async
-          ;(async () => {
-            await clearSelectionInDataSources(id, originDS, useGraphicsLayer, graphicsLayer)
-            
-            debugLogger.log('RESTORE', {
-              event: 'panel-closed-cleared-origin-ds-selection',
-              widgetId: id,
-              originDSId: originDS.id,
-              recordCount: records.length,
-              usedGraphicsLayer: useGraphicsLayer
-            })
-          })()
-        } catch (error) {
-          debugLogger.log('RESTORE', {
-            event: 'panel-closed-clear-origin-ds-failed',
-            widgetId: id,
-            originDSId: originDS.id,
-            error: error instanceof Error ? error.message : String(error)
-          })
-        }
-      })
-      
-      debugLogger.log('RESTORE', {
-        event: 'clearSelectionFromMap-cleared-accumulated-records-returning',
-        widgetId: id,
-        'will-not-fallback-to-lastSelection': true
-      })
-      return
-    }
-    
-    // HYPOTHESIS: Maybe accumulatedRecords exist but we didn't enter the if block?
-    // Or maybe we should always clear accumulated records if they exist?
-    if (accumulatedRecords && accumulatedRecords.length > 0) {
-      debugLogger.log('RESTORE', {
-        event: 'clearSelectionFromMap-accumulated-records-exist-but-not-clearing',
-        widgetId: id,
-        resultsMode,
-        isAccumulationMode,
-        accumulatedRecordsCount: accumulatedRecords.length,
-        'hypothesis': 'accumulated-records-exist-but-condition-failed-why',
-        'condition-was': 'accumulatedRecords && accumulatedRecords.length > 0',
-        'condition-result': !!(accumulatedRecords && accumulatedRecords.length > 0)
-      })
-    }
-    
-    // Fall back to original logic for "New" mode
-    if (!lastSelection) {
-      debugLogger.log('RESTORE', {
-        event: 'clearSelectionFromMap-no-lastSelection-exiting',
-        widgetId: id,
-        hasAccumulatedRecords: !!(accumulatedRecords && accumulatedRecords.length > 0),
-        accumulatedRecordsCount: accumulatedRecords?.length || 0,
-        'hypothesis': 'no-lastSelection-so-exiting-maybe-should-have-cleared-accumulated-records-first'
-      })
-      return
-    }
-
-    const dsManager = DataSourceManager.getInstance()
-    const outputDS = dsManager.getDataSource(lastSelection.outputDsId) as FeatureLayerDataSource
-    
-    if (!outputDS) {
-      debugLogger.log('RESTORE', {
-        event: 'panel-closed-output-ds-not-found',
-        widgetId: id,
-        outputDsId: lastSelection.outputDsId
-      })
-      return
-    }
-
-    try {
-      // Get origin DS (the map layer)
-      const originDS = outputDS.getOriginDataSources()?.[0] as FeatureLayerDataSource
-      
-      if (!originDS) {
-        debugLogger.log('RESTORE', {
-          event: 'panel-closed-origin-ds-not-found',
-          widgetId: id,
-          outputDsId: lastSelection.outputDsId
-        })
-        return
-      }
-
-      // Check current selection state before clearing
-      const currentSelectedIds = originDS.getSelectedRecordIds() || []
-      const ourRecordIds = lastSelection.recordIds
-      const matchesOurSelection = ourRecordIds.length === currentSelectedIds.length &&
-        ourRecordIds.every(recordId => currentSelectedIds.includes(recordId))
-      
-      debugLogger.log('RESTORE', {
-        event: 'panel-closed-checking-map-selection',
-        widgetId: id,
-        ourRecordCount: ourRecordIds.length,
-        mapSelectedCount: currentSelectedIds.length,
-        matchesOurSelection,
-        ourRecordIds: ourRecordIds.slice(0, 5),
-        mapSelectedIds: currentSelectedIds.slice(0, 5)
-      })
-
-      // Use clearSelectionInDataSources utility which supports graphics layer
-      const { clearSelectionInDataSources } = require('./selection-utils')
-      const useGraphicsLayer = this.props.config.useGraphicsLayerForHighlight
-      const graphicsLayer = this.graphicsLayerRef.current || undefined
-      
-      ;(async () => {
-        await clearSelectionInDataSources(id, originDS, useGraphicsLayer, graphicsLayer)
-        
-        debugLogger.log('RESTORE', {
-          event: 'panel-closed-cleared-origin-ds-selection',
-          widgetId: id,
-          originDSId: originDS.id,
-          usedGraphicsLayer: useGraphicsLayer
-        })
-        
-        // Verify selection was cleared
-        const afterClearIds = originDS.getSelectedRecordIds() || []
-        debugLogger.log('RESTORE', {
-          event: 'panel-closed-selection-cleared-from-map',
-          widgetId: id,
-          recordCount: lastSelection.recordIds.length,
-          originDSId: originDS.id,
-          selectionAfterClear: afterClearIds.length,
-          verifiedCleared: afterClearIds.length === 0
-        })
-      })()
-    } catch (error) {
-      debugLogger.log('RESTORE', {
-        event: 'panel-closed-clear-from-map-failed',
-        widgetId: id,
-        error: error instanceof Error ? error.message : String(error),
-        errorStack: error instanceof Error ? error.stack : undefined
-      })
-    }
-  }
-
-  /**
-   * Logs visibility state changes.
-   */
-  logVisibilityChange = (isVisible: boolean, method: string) => {
-    debugLogger.log('WIDGET-STATE', {
-      event: isVisible ? 'panel-opened' : 'panel-closed',
-      widgetId: this.props.id,
-      isVisible,
-      method,
-      timestamp: new Date().toISOString()
-    })
-    
-    if (isVisible) {
-      // When panel opens, check if we have selection to restore
-      const isAccumulationMode = this.state.resultsMode === SelectionType.AddToSelection || 
-                                 this.state.resultsMode === SelectionType.RemoveFromSelection
-      const hasAccumulatedRecords = this.state.accumulatedRecords && this.state.accumulatedRecords.length > 0
-      const hasSelectionState = this.state.hasSelection || false
-      const hasSelectionToRestore = isAccumulationMode 
-        ? hasAccumulatedRecords 
-        : hasSelectionState
-      
-      debugLogger.log('RESTORE', {
-        event: 'panel-opened-checking-selection',
-        widgetId: this.props.id,
-        resultsMode: this.state.resultsMode,
-        isAccumulationMode,
-        hasSelection: hasSelectionState,
-        hasAccumulatedRecords,
-        accumulatedRecordsCount: this.state.accumulatedRecords?.length || 0,
-        selectionRecordCount: this.state.selectionRecordCount || 0,
-        hasLastSelection: !!this.state.lastSelection,
-        lastSelectionRecordCount: this.state.lastSelection?.recordIds.length || 0,
-        hasSelectionToRestore,
-        decisionLogic: {
-          'isAccumulationMode': isAccumulationMode,
-          'hasAccumulatedRecords': hasAccumulatedRecords,
-          'hasSelectionState': hasSelectionState,
-          'calculated-hasSelectionToRestore': hasSelectionToRestore,
-          'will-call-addSelectionToMap': hasSelectionToRestore
-        }
-      })
-      
-      // Add selection to map if we have one
-      if (hasSelectionToRestore) {
-        debugLogger.log('RESTORE', {
-          event: 'panel-opened-calling-addSelectionToMap',
-          widgetId: this.props.id,
-          reason: 'hasSelectionToRestore-is-true'
-        })
-        this.addSelectionToMap()
-      } else {
-        debugLogger.log('RESTORE', {
-          event: 'panel-opened-skipping-addSelectionToMap',
-          widgetId: this.props.id,
-          reason: 'hasSelectionToRestore-is-false',
-          why: isAccumulationMode 
-            ? 'no-accumulated-records' 
-            : 'no-hasSelection-state'
-        })
-      }
-    } else {
-      // When panel closes, clear selection from map only (keep widget state)
-      const isAccumulationMode = this.state.resultsMode === SelectionType.AddToSelection || 
-                                 this.state.resultsMode === SelectionType.RemoveFromSelection
-      const hasAccumulatedRecords = this.state.accumulatedRecords && this.state.accumulatedRecords.length > 0
-      const hasSelectionState = this.state.hasSelection || false
-      const hasSelectionToClear = isAccumulationMode 
-        ? hasAccumulatedRecords 
-        : hasSelectionState
-      
-      debugLogger.log('RESTORE', {
-        event: 'panel-closed-checking-selection',
-        widgetId: this.props.id,
-        resultsMode: this.state.resultsMode,
-        isAccumulationMode,
-        hasSelection: hasSelectionState,
-        hasAccumulatedRecords,
-        accumulatedRecordsCount: this.state.accumulatedRecords?.length || 0,
-        selectionRecordCount: this.state.selectionRecordCount || 0,
-        hasLastSelection: !!this.state.lastSelection,
-        lastSelectionRecordCount: this.state.lastSelection?.recordIds.length || 0,
-        hasSelectionToClear,
-        decisionLogic: {
-          'isAccumulationMode': isAccumulationMode,
-          'hasAccumulatedRecords': hasAccumulatedRecords,
-          'hasSelectionState': hasSelectionState,
-          'calculated-hasSelectionToClear': hasSelectionToClear,
-          'will-call-clearSelectionFromMap': hasSelectionToClear
-        }
-      })
-      
-      if (hasSelectionToClear) {
-        debugLogger.log('RESTORE', {
-          event: 'panel-closed-calling-clearSelectionFromMap',
-          widgetId: this.props.id,
-          reason: 'hasSelectionToClear-is-true'
-        })
-        this.clearSelectionFromMap()
-      } else {
-        debugLogger.log('RESTORE', {
-          event: 'panel-closed-no-selection-to-clear',
-          widgetId: this.props.id,
-          reason: 'hasSelectionToClear-is-false',
-          why: isAccumulationMode 
-            ? 'no-accumulated-records' 
-            : 'no-hasSelection-state'
-        })
-      }
-    }
-  }
-
-  /**
-   * Notifies HelperSimple of panel visibility state changes.
-   */
-  notifyHelperSimpleOfPanelState = (isVisible: boolean) => {
-    const event = new CustomEvent(QUERYSIMPLE_WIDGET_STATE_EVENT, {
-      detail: {
-        widgetId: this.props.id,
-        isOpen: isVisible
-      },
-      bubbles: true,
-      cancelable: true
-    })
-    window.dispatchEvent(event)
-  }
+  // ============================================================================
+  // r019.16: Removed old clearSelectionFromMap implementation (355 lines)
+  // Now fully handled by SelectionRestorationManager.clearSelectionFromMap()
+  // ============================================================================
 
   /**
    * NOTIFY that a hash parameter has been used.
@@ -1420,167 +1131,63 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
     const { id } = this.props
     const { initialQueryValue } = this.state
     
+    debugLogger.log('HASH-EXEC', {
+      event: 'querysimple-handlehashparameterused-called',
+      widgetId: id,
+      shortId,
+      currentState: {
+        shouldUseInitialQueryValueForSelection: this.state.shouldUseInitialQueryValueForSelection,
+        hasInitialQueryValue: !!this.state.initialQueryValue,
+        initialQueryValueShortId: this.state.initialQueryValue?.shortId,
+        initialQueryValueValue: this.state.initialQueryValue?.value
+      },
+      timestamp: Date.now()
+    })
+    
+    // NOTE: Hash parameters are NOT cleared here - they persist in URL
+    // Hash parameters are only consumed when switching to accumulation modes (Add/Remove)
+    // to prevent re-triggering when the user manually switches modes
+    
     debugLogger.log('HASH', {
       event: 'handleHashParameterUsed-notified',
       widgetId: id,
       shortId: shortId,
       currentInitialQueryValue: initialQueryValue,
-      note: 'Hash remains in URL per user requirement',
+      note: 'Hash parameter used but NOT cleared - hash remains in URL per user requirement',
       timestamp: Date.now()
     })
-
-    // Clear the state so it won't trigger again within this session/mount
-    if (this.state.initialQueryValue?.shortId === shortId) {
-      this.setState({ initialQueryValue: undefined })
-    }
-  }
-
-  /**
-   * Checks the URL hash parameters for any shortIds that match query items.
-   * If found, stores the value to be used to auto-populate and execute the query.
-   * Experience Builder uses hash-based URL parameters (e.g., #pin=2223059013).
-   * 
-   * This method prioritizes the first matching shortId found in the query items order.
-   * If multiple hash parameters exist, only the first match is used.
-   */
-  checkQueryStringForShortIds = () => {
-    const { config } = this.props
-    if (!config.queryItems?.length) {
-      return
-    }
-
-    // Extract all shortIds from query items
-    const shortIds = config.queryItems
-      .map(item => item.shortId)
-      .filter(shortId => shortId != null && shortId.trim() !== '')
-
-    if (shortIds.length === 0) {
-      return
-    }
-
-    // Get URL hash fragment parameters (ExB uses # for params)
-    const hash = window.location.hash.substring(1) // Remove the #
-    const urlParams = new URLSearchParams(hash)
     
-    // Check if we've already processed this specific hash string
-    if (this.lastProcessedHash === hash) {
-      return
-    }
-    
-    // Update immediately to prevent re-entry race conditions
-    this.lastProcessedHash = hash
-
-    // Log all hash params for debugging
-    const allHashParams: { [key: string]: string } = {}
-    urlParams.forEach((value, key) => {
-      allHashParams[key] = value
+    // ALWAYS clear both hash state values after execution
+    // QuerySimple should not remember hash state after HelperSimple-driven execution completes
+    // This prevents autonomous re-processing when switching queries
+    // Using a single setState ensures atomic update and prevents race conditions
+    this.setState({ 
+      shouldUseInitialQueryValueForSelection: false,
+      initialQueryValue: undefined
+    }, () => {
+      debugLogger.log('HASH-EXEC', {
+        event: 'querysimple-handlehashparameterused-state-cleared',
+        widgetId: id,
+        shortId,
+        newState: {
+          shouldUseInitialQueryValueForSelection: this.state.shouldUseInitialQueryValueForSelection,
+          hasInitialQueryValue: !!this.state.initialQueryValue,
+          initialQueryValueShortId: this.state.initialQueryValue?.shortId,
+          initialQueryValueValue: this.state.initialQueryValue?.value
+        },
+        timestamp: Date.now()
+      })
     })
-
-    // Log hash check for debugging
+    
     debugLogger.log('HASH', {
-      event: 'hash-check',
-      widgetId: this.props.id,
-      hash: hash,
-      allHashParams: allHashParams,
-      hashParamsCount: Object.keys(allHashParams).length,
-      availableShortIds: shortIds,
-      currentState: this.state.initialQueryValue,
+      event: 'shouldUseInitialQueryValueForSelection-flag-cleared',
+      widgetId: id,
+      shortId: shortId,
+      flagValue: false,
       timestamp: Date.now()
     })
-
-    // Find the first matching shortId (prioritize first match in query items order)
-    // This ensures we only set state once per check and maintains consistent behavior
-    let foundMatch = false
-    for (const shortId of shortIds) {
-      if (urlParams.has(shortId)) {
-        foundMatch = true
-        const value = urlParams.get(shortId)
-        // Only update if the value has changed to avoid unnecessary re-renders
-        if (this.state.initialQueryValue?.shortId !== shortId || this.state.initialQueryValue?.value !== value) {
-          debugLogger.log('HASH', {
-            event: 'hash-detected',
-            widgetId: this.props.id,
-            shortId: shortId,
-            value: value,
-            previousShortId: this.state.initialQueryValue?.shortId,
-            previousValue: this.state.initialQueryValue?.value,
-            allHashParams: allHashParams,
-            timestamp: Date.now()
-          })
-          
-          // Reset to New mode when hash parameter is detected to avoid bugs with accumulation modes
-          const needsModeReset = this.state.resultsMode !== SelectionType.NewSelection
-          
-          debugLogger.log('HASH', {
-            event: 'hash-detected-setting-state',
-            widgetId: this.props.id,
-            shortId,
-            value,
-            needsModeReset,
-            currentMode: this.state.resultsMode,
-            timestamp: Date.now()
-          })
-
-          this.setState({ 
-            initialQueryValue: { shortId, value },
-            // Reset to New mode and clear accumulatedRecords (same as handleResultsModeChange does)
-            ...(needsModeReset ? { 
-              resultsMode: SelectionType.NewSelection,
-              accumulatedRecords: []
-            } : {})
-          })
-          
-          if (needsModeReset) {
-            debugLogger.log('HASH', {
-              event: 'hash-reset-mode-to-new',
-              widgetId: this.props.id,
-              previousMode: this.state.resultsMode,
-              reason: 'hash-parameter-detected'
-            })
-          }
-        } else {
-          debugLogger.log('HASH', {
-            event: 'hash-skipped',
-            widgetId: this.props.id,
-            shortId: shortId,
-            value: value,
-            reason: 'value-unchanged'
-          })
-        }
-        return // Exit after first match
-      }
-    }
-    
-    // If no hash parameters match any shortId, log what's in the hash
-    if (!foundMatch && Object.keys(allHashParams).length > 0) {
-      debugLogger.log('HASH', {
-        event: 'hash-check-no-matching-shortId',
-        widgetId: this.props.id,
-        hash: hash,
-        allHashParams: allHashParams,
-        availableShortIds: shortIds,
-        note: 'Hash contains params but none match configured shortIds',
-        timestamp: Date.now()
-      })
-    }
-
-    // If no hash parameters match any shortId, clear the state
-    // This handles cases where hash parameters were removed
-    if (this.state.initialQueryValue) {
-      debugLogger.log('HASH', {
-        event: 'hash-cleared',
-        widgetId: this.props.id,
-        previousShortId: this.state.initialQueryValue.shortId,
-        previousValue: this.state.initialQueryValue.value,
-        reason: 'no-matching-hash-params',
-        allHashParams: allHashParams,
-        timestamp: Date.now()
-      })
-      this.setState({ 
-        initialQueryValue: undefined
-      })
-    }
   }
+
 
   render () {
     const { config, id, icon, label, layoutId, layoutItemId, controllerWidgetId } = this.props
@@ -1609,6 +1216,7 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
                 defaultPageSize={config.defaultPageSize} 
                 className='pb-4' 
                 initialQueryValue={this.state.initialQueryValue} 
+                shouldUseInitialQueryValueForSelection={this.state.shouldUseInitialQueryValueForSelection}
                 onHashParameterUsed={this.handleHashParameterUsed}
                 resultsMode={this.state.resultsMode}
                 onResultsModeChange={this.handleResultsModeChange}
@@ -1621,6 +1229,7 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
                 onClearGraphicsLayer={this.clearGraphicsLayerIfExists}
                 activeTab={this.state.activeTab}
                 onTabChange={this.handleTabChange}
+                eventManager={this.eventManager}
               />
           </TaskListPopperWrapper>
         </QueryWidgetContext.Provider>
@@ -1689,6 +1298,7 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
                 queryItems={config.queryItems} 
                 defaultPageSize={config.defaultPageSize} 
                 initialQueryValue={this.state.initialQueryValue} 
+                shouldUseInitialQueryValueForSelection={this.state.shouldUseInitialQueryValueForSelection}
                 onHashParameterUsed={this.handleHashParameterUsed}
                 resultsMode={this.state.resultsMode}
                 onResultsModeChange={this.handleResultsModeChange}
@@ -1701,6 +1311,7 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
                 onClearGraphicsLayer={this.clearGraphicsLayerIfExists}
                 activeTab={this.state.activeTab}
                 onTabChange={this.handleTabChange}
+                eventManager={this.eventManager}
               />
             </QueryWidgetContext.Provider>
           </div>

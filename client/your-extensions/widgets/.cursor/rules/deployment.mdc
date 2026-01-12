@@ -1,0 +1,8 @@
+---
+description: Rules for exporting ExB experiences and directory structure
+globs: **/*
+alwaysApply: false
+---
+# Distribution
+- **Structure**: Maintain a flat root for ExB compatibility.
+- **Exporting**: Follow the "Public Distribution Architecture" found in `@docs/development/DEVELOPMENT_GUIDE.md` Section 10.
