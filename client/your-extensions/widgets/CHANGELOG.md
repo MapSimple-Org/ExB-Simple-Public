@@ -5,16 +5,26 @@ All notable changes to MapSimple Experience Builder widgets will be documented i
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.19.0-r019.30] - 2026-01-12
+## [1.19.0-r019.30] - 2026-01-12 ✅ VERIFIED
 
 ### Fixed
 - **Missing Import**: Added missing `Extent` import to `zoom-utils.ts`. The r019.29 refactor moved extent creation from `query-task.tsx` to `zoom-utils.ts` but forgot to add the import, causing `ReferenceError: Extent is not defined`.
+
+### Verification Results
+**✅ TESTED & CONFIRMED WORKING:**
+- Single point zoom: Works (1 point)
+- Multiple points zoom: Works (220 points)
+- No console errors
+- Proper extent calculation and map movement
 
 ### Files Modified
 - `query-simple/src/runtime/zoom-utils.ts` (added Extent import)
 - `query-simple/src/version.ts` (r019.29 → r019.30)
 
-## [1.19.0-r019.29] - 2026-01-12
+## [1.19.0-r019.29] - 2026-01-12 ✅ WORKING (with r019.30 import fix)
+
+### Summary
+**Complete fix for point geometry zoom issue.** Single points and multiple points (1, 10, 220+) now zoom correctly. Solution uses on-the-fly extent calculation in `zoom-utils.ts` to work around Esri's read-only `.extent` property on point geometries.
 
 ### Fixed
 - **Point Zoom (Read-Only Property Fix)**: Fixed zoom failure for single and multiple points by creating extents on-the-fly in `zoom-utils.ts`. Previous upstream normalization approach failed because Esri's geometry `.extent` property is **read-only** and cannot be mutated.
