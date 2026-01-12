@@ -17,6 +17,25 @@
 **Feature**: HS should listen for both `#shortid=value` (hash) and `?shortid=value` (query string).
 **Task**: Update HS listener logic and info discovery icon to reflect both supported formats.
 
+### 4. Accumulated Results Change Format When Switching Queries
+**Status:** 🐛 **CONFIRMED** - Not Fixed  
+**Priority:** High (Affects ADD mode UX)  
+**Discovered:** 2026-01-12 (Demo Site Testing)  
+**Issue**: In ADD_TO_SELECTION mode, when switching between queries, ALL accumulated results change to match the currently selected query's display configuration (fields, format, etc.) instead of maintaining their original query's configuration.
+
+**Expected**: Each set of accumulated results should preserve the display format from the query that produced them.
+
+**Impact**: Makes ADD mode nearly unusable for queries with different configurations. Users see wrong fields or missing data.
+
+**Documentation**: [`docs/bugs/ACCUMULATED_RESULTS_FORMAT_SWITCH.md`](docs/bugs/ACCUMULATED_RESULTS_FORMAT_SWITCH.md)
+
+**Proposed Solution**:
+- Store original `queryConfig` with each accumulated record set
+- Render each set using its original configuration
+- Group results visually by source query
+
+**Estimated Effort**: 1-2 days (Medium complexity)
+
 ---
 
 ## Future Considerations & Best Practices (Thinking Phase)
