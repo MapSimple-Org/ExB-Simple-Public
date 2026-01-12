@@ -5,6 +5,15 @@ All notable changes to MapSimple Experience Builder widgets will be documented i
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.19.0-r019.30] - 2026-01-12
+
+### Fixed
+- **Missing Import**: Added missing `Extent` import to `zoom-utils.ts`. The r019.29 refactor moved extent creation from `query-task.tsx` to `zoom-utils.ts` but forgot to add the import, causing `ReferenceError: Extent is not defined`.
+
+### Files Modified
+- `query-simple/src/runtime/zoom-utils.ts` (added Extent import)
+- `query-simple/src/version.ts` (r019.29 → r019.30)
+
 ## [1.19.0-r019.29] - 2026-01-12
 
 ### Fixed
