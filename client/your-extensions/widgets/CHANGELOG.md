@@ -5,6 +5,55 @@ All notable changes to MapSimple Experience Builder widgets will be documented i
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.19.0-r019.28] - 2026-01-12
+
+### Fixed
+- **Multiple Point Zoom**: Fixed critical issue where zooming to multiple single point features (e.g., 229 address points) would fail completely. Zoom now works correctly for any number of points (1, 10, 229, etc.).
+- **ExB Tool Compatibility**: Fixed compatibility issues with other Experience Builder tools that expect all geometries to have `.extent` property. Single points now work with framework zoom actions, data actions, and other ExB tools.
+
+### Changed
+- **Upstream Geometry Normalization**: Point geometries are now normalized when query results are received (in `query-task.tsx`), not during zoom operations. This ensures all records have proper `.extent` property before any tool uses them.
+- **Simplified Zoom Logic**: Removed special-case point handling from `zoom-utils.ts`. All geometry types (points, multipoints, polygons, polylines) are now processed uniformly.
+
+### Technical Details
+**In `query-task.tsx` (line ~1406):**
+- Added geometry normalization immediately after query execution
+- Iterates through all result records and adds `.extent` to single points
+- Creates zero-area extent: `{ xmin: pt.x, xmax: pt.x, ymin: pt.y, ymax: pt.y }`
+- Logs `geometries-normalized` event showing how many points were fixed
+
+**In `zoom-utils.ts`:**
+- Removed explicit point extent creation (now handled upstream)
+- Simplified single geometry handling - all types use `.extent` uniformly
+- Removed manual `new Extent()` construction for points
+- Updated JSDoc to reflect upstream normalization
+
+**Root Cause (Resolved):**
+```javascript
+// BEFORE (r019.27): Multiple points failed
+extentsCount: 0,          // All geometries.map(g => g.extent) returned [null, null...]
+originalExtent: null,     // No extent calculated
+event: 'zoom-skipped'     // Zoom completely failed
+
+// AFTER (r019.28): Multiple points work
+extentsCount: 229,        // All points have .extent after normalization
+originalExtent: { ... },  // Valid extent encompassing all 229 points
+event: 'mapView-goTo-complete'  // Zoom succeeds
+```
+
+### Benefits
+- ✅ Fixes zoom for multiple single points (1, 10, 229, any count)
+- ✅ Fixes compatibility with framework zoom actions
+- ✅ Fixes compatibility with other ExB tools expecting `.extent`
+- ✅ Cleaner architecture: normalize once, use everywhere
+- ✅ Simpler zoom code: no special cases needed
+- ✅ Better performance: normalization happens once per query, not per zoom
+
+### Files Modified
+- `query-simple/src/runtime/query-task.tsx` (added Extent import, normalization logic)
+- `query-simple/src/runtime/zoom-utils.ts` (removed point special-case handling, updated JSDoc)
+- `query-simple/src/version.ts` (r019.27 → r019.28)
+
 ## [1.19.0-r019.27] - 2026-01-12
 
 ### Fixed

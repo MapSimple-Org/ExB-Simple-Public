@@ -7,7 +7,6 @@
 
 import type { FeatureDataRecord } from 'jimu-core'
 import { createQuerySimpleDebugLogger } from 'widgets/shared-code/common'
-import Extent from 'esri/geometry/Extent'
 
 const debugLogger = createQuerySimpleDebugLogger()
 
@@ -120,13 +119,12 @@ function expandZeroAreaExtent(extent: __esri.Extent, bufferDistance: number): __
  * using mapView.goTo() with configurable padding. Handles both single and
  * multiple geometries by calculating union extent when needed.
  * 
- * SINGLE POINT GEOMETRY HANDLING (r019.25):
- * Single point geometries (type === 'point') don't have an .extent property
- * in the ArcGIS JS API. This function explicitly creates a zero-area extent
- * for single points using the point's x,y coordinates. Multipoints, polygons,
- * and polylines use their native .extent property.
+ * GEOMETRY NORMALIZATION (r019.28):
+ * Point geometries are normalized upstream (in query-task.tsx) to include
+ * .extent property. This ensures all geometry types (points, multipoints,
+ * polygons, polylines) have a consistent interface.
  * 
- * ZERO-AREA EXTENT HANDLING (r019.23-r019.25):
+ * ZERO-AREA EXTENT HANDLING (r019.23-r019.28):
  * When zooming to single points or overlapping points, the calculated extent
  * will have zero width/height. This function detects this condition and
  * expands the extent by 300 feet (default) in all directions to provide
@@ -136,7 +134,7 @@ function expandZeroAreaExtent(extent: __esri.Extent, bufferDistance: number): __
  * - State Plane (feet-based): Uses 300 feet directly
  * 
  * GEOMETRY TYPE SUPPORT:
- * - Single Points (point): Extent created manually → Zero-area expansion applied
+ * - Single Points (point): Uses normalized .extent → Zero-area expansion applied
  * - Multipoints (multipoint): Uses native .extent → Zero-area expansion if overlapping
  * - Polygons/Polylines: Uses native .extent → Expansion only if degenerate
  * 
@@ -221,30 +219,13 @@ export async function zoomToRecords(
     
     if (geometries.length === 1) {
       // Single geometry - get its extent
+      // Note: Points are normalized upstream (in query-task.tsx) to have .extent property
       const geom = geometries[0]
-      
-      // SINGLE point geometries (type === 'point') don't always have an .extent property in the ArcGIS JS API
-      // Create a zero-area extent manually so the downstream expansion logic can handle it
-      // Note: Multipoints (type === 'multipoint') DO have .extent and are handled by the else block
-      if (geom.type === 'point') {
-        const pt = geom as __esri.Point
-        extent = new Extent({
-          xmin: pt.x,
-          xmax: pt.x,
-          ymin: pt.y,
-          ymax: pt.y,
-          spatialReference: pt.spatialReference
-        })
-      } else {
-        // For all other geometry types (multipoint, polygon, polyline), use the geometry's extent
-        // Multipoints have extent because they can span an area
-        extent = geom.extent || (geom as any).getExtent?.()
-      }
+      extent = geom.extent || (geom as any).getExtent?.()
       
       debugLogger.log('ZOOM', {
         event: 'extent-calculated-single',
         geometryType: geom.type,
-        extentCreatedManually: geom.type === 'point',
         originalExtent: extent ? {
           xmin: extent.xmin,
           xmax: extent.xmax,
