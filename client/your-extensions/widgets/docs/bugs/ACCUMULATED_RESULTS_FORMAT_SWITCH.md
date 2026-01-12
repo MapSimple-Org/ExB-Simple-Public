@@ -325,9 +325,22 @@ test('should preserve display format when accumulating results', async ({ page }
 
 ## Estimated Effort
 
-**Complexity:** Medium  
+**Complexity:** Medium (5-6 out of 10)  
 **Estimated Time:** 1-2 days  
 **Risk:** Medium (affects core results display logic)
+
+## Implementation Plan
+
+**Detailed step-by-step implementation guide:** [`BUG-ADD-MODE-001_IMPLEMENTATION_PLAN.md`](BUG-ADD-MODE-001_IMPLEMENTATION_PLAN.md)
+
+The implementation plan includes:
+- Complete data structure changes
+- Step-by-step code modifications with examples
+- Testing strategy (manual + E2E)
+- Rollback plan
+- Success criteria
+- Branch strategy
+- Estimated timeline with breakdown
 
 **Breakdown:**
 - 4 hours: Update AccumulatedRecordsManager structure
