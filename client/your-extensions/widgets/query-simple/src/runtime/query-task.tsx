@@ -34,7 +34,6 @@ import {
   type IMState,
   type FeatureDataRecord
 } from 'jimu-core'
-import Extent from 'esri/geometry/Extent'
 import { Button, Tooltip, FOCUSABLE_CONTAINER_CLASS, Tabs, Tab, Select } from 'jimu-ui'
 import { InfoOutlined } from 'jimu-icons/outlined/suggested/info'
 import { TrashOutlined } from 'jimu-icons/outlined/editor/trash'
@@ -1403,36 +1402,6 @@ export function QueryTask (props: QueryTaskProps) {
         const processingStartTime = performance.now()
         
         queryResultCount = result.records?.length || 0
-        
-        // NORMALIZE GEOMETRIES: Add extent property to single points
-        // This fixes zoom and other ExB tools that expect all geometries to have .extent
-        // Single points in ArcGIS JS API don't have .extent by default, but polygons/lines do
-        if (result.records && result.records.length > 0) {
-          let pointsNormalized = 0
-          result.records.forEach(record => {
-            const geom = record.getJSAPIGeometry?.()
-            if (geom?.type === 'point' && !geom.extent) {
-              const pt = geom as __esri.Point
-              geom.extent = new Extent({
-                xmin: pt.x,
-                xmax: pt.x,
-                ymin: pt.y,
-                ymax: pt.y,
-                spatialReference: pt.spatialReference
-              })
-              pointsNormalized++
-            }
-          })
-          
-          if (pointsNormalized > 0) {
-            debugLogger.log('RESULTS-MODE', {
-              event: 'geometries-normalized',
-              totalRecords: result.records.length,
-              pointsNormalized,
-              note: 'Added .extent property to single point geometries for ExB tool compatibility'
-            })
-          }
-        }
         
         debugLogger.log('RESULTS-MODE', {
           event: 'query-execution-complete',

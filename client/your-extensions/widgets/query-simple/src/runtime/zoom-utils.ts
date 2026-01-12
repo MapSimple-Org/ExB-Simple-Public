@@ -194,19 +194,45 @@ export async function zoomToRecords(
   })
 
   try {
-    // Extract geometries from records
-    const geometries = records
-      .map(record => record.getJSAPIGeometry())
-      .filter(geom => geom != null)
+    // Extract geometries from records and calculate extents on-the-fly
+    // Note: Point geometries in ArcGIS JS API have read-only .extent property (always null)
+    // We create extent objects on-the-fly for points to avoid mutation errors
+    const geometryData = records
+      .map(record => {
+        const geom = record.getJSAPIGeometry()
+        if (!geom) return null
+        
+        // For points without extent, create a zero-area extent on-the-fly
+        if (geom.type === 'point' && !geom.extent) {
+          const pt = geom as __esri.Point
+          return {
+            geometry: geom,
+            extent: new Extent({
+              xmin: pt.x,
+              xmax: pt.x,
+              ymin: pt.y,
+              ymax: pt.y,
+              spatialReference: pt.spatialReference
+            })
+          }
+        }
+        
+        // For other geometry types, use existing extent
+        return {
+          geometry: geom,
+          extent: geom.extent || (geom as any).getExtent?.()
+        }
+      })
+      .filter(item => item != null)
     
     debugLogger.log('ZOOM', {
       event: 'geometries-extracted',
       recordsCount: records.length,
-      geometriesCount: geometries.length,
-      geometryTypes: geometries.map(g => g?.type)
+      geometriesCount: geometryData.length,
+      geometryTypes: geometryData.map(item => item.geometry.type)
     })
     
-    if (geometries.length === 0) {
+    if (geometryData.length === 0) {
       debugLogger.log('ZOOM', {
         event: 'zoom-early-exit',
         reason: 'no-geometries',
@@ -217,15 +243,14 @@ export async function zoomToRecords(
 
     let extent: __esri.Extent | null = null
     
-    if (geometries.length === 1) {
-      // Single geometry - get its extent
-      // Note: Points are normalized upstream (in query-task.tsx) to have .extent property
-      const geom = geometries[0]
-      extent = geom.extent || (geom as any).getExtent?.()
+    if (geometryData.length === 1) {
+      // Single geometry - use the calculated extent
+      const item = geometryData[0]
+      extent = item.extent
       
       debugLogger.log('ZOOM', {
         event: 'extent-calculated-single',
-        geometryType: geom.type,
+        geometryType: item.geometry.type,
         originalExtent: extent ? {
           xmin: extent.xmin,
           xmax: extent.xmax,
@@ -240,8 +265,8 @@ export async function zoomToRecords(
       // Multiple geometries - calculate union extent
       // Note: Overlapping points will produce a zero-area extent
       // which will be expanded by the zero-area detection logic below
-      const extents = geometries
-        .map(geom => geom.extent || (geom as any).getExtent?.())
+      const extents = geometryData
+        .map(item => item.extent)
         .filter(e => e != null)
       
       if (extents.length > 0) {
@@ -253,7 +278,7 @@ export async function zoomToRecords(
       
       debugLogger.log('ZOOM', {
         event: 'extent-calculated-union',
-        geometriesCount: geometries.length,
+        geometriesCount: geometryData.length,
         extentsCount: extents.length,
         originalExtent: extent ? {
           xmin: extent.xmin,
