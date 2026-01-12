@@ -5,54 +5,114 @@ All notable changes to MapSimple Experience Builder widgets will be documented i
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.19.0-r019.28] - 2026-01-12
+## [1.19.0-r019.29] - 2026-01-12
 
 ### Fixed
-- **Multiple Point Zoom**: Fixed critical issue where zooming to multiple single point features (e.g., 229 address points) would fail completely. Zoom now works correctly for any number of points (1, 10, 229, etc.).
-- **ExB Tool Compatibility**: Fixed compatibility issues with other Experience Builder tools that expect all geometries to have `.extent` property. Single points now work with framework zoom actions, data actions, and other ExB tools.
+- **Point Zoom (Read-Only Property Fix)**: Fixed zoom failure for single and multiple points by creating extents on-the-fly in `zoom-utils.ts`. Previous upstream normalization approach failed because Esri's geometry `.extent` property is **read-only** and cannot be mutated.
+- **Eliminated Esri Accessor Error**: Removed code that attempted to assign to read-only `.extent` property, which caused `[esri.core.Accessor] cannot assign to read-only property 'extent'` console errors.
 
 ### Changed
-- **Upstream Geometry Normalization**: Point geometries are now normalized when query results are received (in `query-task.tsx`), not during zoom operations. This ensures all records have proper `.extent` property before any tool uses them.
-- **Simplified Zoom Logic**: Removed special-case point handling from `zoom-utils.ts`. All geometry types (points, multipoints, polygons, polylines) are now processed uniformly.
+- **On-The-Fly Extent Calculation**: Point geometries now have their extents calculated at the moment of use (in `zoom-utils.ts`), not through mutation or caching. This is a lightweight operation (4 property assignments) and avoids all mutation/immutability issues.
+- **Removed Upstream Normalization**: Removed the failed attempt to mutate geometry objects in `query-task.tsx`. Geometry objects remain unmodified.
 
 ### Technical Details
-**In `query-task.tsx` (line ~1406):**
-- Added geometry normalization immediately after query execution
-- Iterates through all result records and adds `.extent` to single points
-- Creates zero-area extent: `{ xmin: pt.x, xmax: pt.x, ymin: pt.y, ymax: pt.y }`
-- Logs `geometries-normalized` event showing how many points were fixed
 
-**In `zoom-utils.ts`:**
-- Removed explicit point extent creation (now handled upstream)
-- Simplified single geometry handling - all types use `.extent` uniformly
-- Removed manual `new Extent()` construction for points
-- Updated JSDoc to reflect upstream normalization
-
-**Root Cause (Resolved):**
+**Root Cause Analysis:**
 ```javascript
-// BEFORE (r019.27): Multiple points failed
-extentsCount: 0,          // All geometries.map(g => g.extent) returned [null, null...]
-originalExtent: null,     // No extent calculated
-event: 'zoom-skipped'     // Zoom completely failed
-
-// AFTER (r019.28): Multiple points work
-extentsCount: 229,        // All points have .extent after normalization
-originalExtent: { ... },  // Valid extent encompassing all 229 points
-event: 'mapView-goTo-complete'  // Zoom succeeds
+// Previous approach (r019.28) - FAILED:
+geom.extent = new Extent({ ... })  // ❌ Throws error - read-only property!
+// Console: [esri.core.Accessor] cannot assign to read-only property 'extent'
 ```
 
-### Benefits
-- ✅ Fixes zoom for multiple single points (1, 10, 229, any count)
-- ✅ Fixes compatibility with framework zoom actions
-- ✅ Fixes compatibility with other ExB tools expecting `.extent`
-- ✅ Cleaner architecture: normalize once, use everywhere
-- ✅ Simpler zoom code: no special cases needed
-- ✅ Better performance: normalization happens once per query, not per zoom
+**New Approach (r019.29) - On-The-Fly Calculation:**
+```typescript
+// In zoom-utils.ts - Extract and calculate simultaneously
+const geometryData = records.map(record => {
+  const geom = record.getJSAPIGeometry()
+  if (!geom) return null
+  
+  // For points, create extent on-the-fly (doesn't modify geometry)
+  if (geom.type === 'point' && !geom.extent) {
+    const pt = geom as __esri.Point
+    return {
+      geometry: geom,
+      extent: new Extent({  // New local object, not mutating geom
+        xmin: pt.x, xmax: pt.x,
+        ymin: pt.y, ymax: pt.y,
+        spatialReference: pt.spatialReference
+      })
+    }
+  }
+  
+  // For other types, use existing extent
+  return { geometry: geom, extent: geom.extent }
+}).filter(item => item != null)
+```
+
+**Why This Works:**
+- ✅ No mutation of read-only properties
+- ✅ No React state corruption issues
+- ✅ Extents calculated exactly when needed
+- ✅ Performance cost is negligible (trivial math)
+- ✅ Clean, self-contained in `zoom-utils.ts`
+- ✅ No caching complexity
+
+**Zoom Operation Flow:**
+1. User clicks "Zoom to selected" (1 or 229 points)
+2. `zoomToRecords()` called with records
+3. For each record:
+   - Extract geometry via `getJSAPIGeometry()`
+   - If point without extent → create extent object (local, not attached to geom)
+   - If other type → use existing extent
+4. Calculate union extent from all extent objects
+5. Check for zero-area and apply buffer if needed
+6. Call `mapView.goTo(extent)`
+
+**Expected Console Output:**
+```javascript
+[QUERYSIMPLE-ZOOM] {
+  event: 'geometries-extracted',
+  geometriesCount: 229,
+  geometryTypes: ['point', 'point', ...]  // All points
+}
+
+[QUERYSIMPLE-ZOOM] {
+  event: 'extent-calculated-union',
+  extentsCount: 229,  // ✅ All extents calculated!
+  originalExtent: { xmin, xmax, ymin, ymax, width, height }
+}
+
+[QUERYSIMPLE-ZOOM] {
+  event: 'mapView-goTo-complete',
+  success: true
+}
+```
 
 ### Files Modified
-- `query-simple/src/runtime/query-task.tsx` (added Extent import, normalization logic)
-- `query-simple/src/runtime/zoom-utils.ts` (removed point special-case handling, updated JSDoc)
-- `query-simple/src/version.ts` (r019.27 → r019.28)
+- `query-simple/src/runtime/zoom-utils.ts` (on-the-fly extent calculation)
+- `query-simple/src/runtime/query-task.tsx` (removed upstream normalization, removed Extent import)
+- `query-simple/src/version.ts` (r019.28 → r019.29)
+
+### Lessons Learned
+- Esri geometry objects are **Accessor** instances with read-only computed properties
+- The `.extent` property on point geometries is read-only and always returns `null`
+- Attempting to mutate it fails silently or throws console errors
+- The correct approach is to create **new, local** extent objects when needed, not modify geometries
+
+## [1.19.0-r019.28] - 2026-01-12 [REVERTED]
+
+### Status
+**⚠️ This version was reverted in r019.29 due to Esri read-only property constraint.**
+
+The upstream normalization approach attempted to assign to `geom.extent`, which is a read-only property on Esri Accessor objects. This caused the error:
+```
+[esri.core.Accessor] cannot assign to read-only property 'extent'
+```
+
+### Original Intent (Failed)
+- Attempted to normalize point geometries by adding `.extent` property when results are received
+- Goal was to make all geometries uniform for downstream tools
+- Failed because `.extent` is read-only on Esri geometry objects
 
 ## [1.19.0-r019.27] - 2026-01-12
 
