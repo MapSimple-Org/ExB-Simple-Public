@@ -455,9 +455,11 @@ MIT License - See LICENSE file for details
 
 ## 🙏 Acknowledgments
 
-Built for the King County Parcel Viewer ecosystem by the MapSimple organization.
+Built by the MapSimple organization as a replacement for Robert Scheitlin's Enhanced Search widget for ArcGIS Web App Builder.
 
-Special thanks to the Esri Experience Builder team for creating an extensible platform.
+Special thanks to:
+- **Robert Scheitlin** for the original Enhanced Search widget that inspired this work
+- **Esri Experience Builder team** for creating an extensible platform
 
 ---
 
@@ -468,6 +470,8 @@ Special thanks to the Esri Experience Builder team for creating an extensible pl
 - **Documentation**: See inline code documentation and comments
 
 ---
+
+© 2026 MapSimple Organization
 
 **Last Updated**: 2026-01-13  
 **Version**: 1.19.0-r019.31
