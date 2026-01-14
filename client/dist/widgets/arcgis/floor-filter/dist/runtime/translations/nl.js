@@ -1,1 +1,0 @@
-System.register([],function(e){return{execute:function(){e({_widgetLabel:"Verdiepingfilter",floorfilter_noMap:"Verdiepingfilter",floorfilter_notFloorAware:"De geselecteerde kaart is niet vloerbewust"})}}});

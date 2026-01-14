@@ -1,1 +1,0 @@
-System.register([],function(e){return{execute:function(){e({createNew:"Crea nuovo",newExperience:"Nuova esperienza",developerEdition:"Versione Developer",linkToHome:"Home",linkToMapViewer:"Mappa",linkToSceneViewer:"Scena",linkToNotebooks:"Appunti",linkToGroups:"Gruppi",linkToContent:"Contenuto",linkToOrganization:"Organizzazione",expressModeLabel:"Modalit\xe0 espresso"})}}});

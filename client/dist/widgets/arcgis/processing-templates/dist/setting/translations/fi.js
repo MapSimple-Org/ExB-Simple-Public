@@ -1,1 +1,0 @@
-System.register([],function(a){return{execute:function(){a({customizeLayer:"Mukauta karttatasoja",selectLayers:"Valitse karttatasot",noDataSourceWarning:"Valittu kartan pienoisohjelma ei sis\xe4ll\xe4 web-karttaa tai web-maisemaa."})}}});

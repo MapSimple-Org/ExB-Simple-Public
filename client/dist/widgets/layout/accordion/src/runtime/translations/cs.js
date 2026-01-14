@@ -1,1 +1,0 @@
-System.register([],function(e){return{execute:function(){e({_widgetLabel:"Rozbalovac\xed panel",tips:"Rozbalovac\xed panel"})}}});

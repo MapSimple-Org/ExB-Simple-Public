@@ -1,1 +1,0 @@
-System.register([],function(e){return{execute:function(){e({settingsLabel:"\u0625\u0639\u062f\u0627\u062f\u0627\u062a \u0639\u0627\u0631\u0636 \u0627\u0644\u0648\u062b\u0627\u0626\u0642"})}}});

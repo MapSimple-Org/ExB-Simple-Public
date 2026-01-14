@@ -1,1 +1,0 @@
-System.register([],function(e){return{execute:function(){e({_widgetLabel:"Login",switchToLogin:"Skift til f\xf8r login",switchToLogout:"Skift til efter login",toggleSignInPreview:"Skift forh\xe5ndsvisning af login",restrictedResources:"Begr\xe6nsede ressourcer"})}}});

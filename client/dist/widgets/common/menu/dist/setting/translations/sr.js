@@ -1,1 +1,0 @@
-System.register([],function(e){return{execute:function(){e({subMenuExpandMode:"Re\u017eim pro\u0161irenja pod-menija",mainMenu:"Glavni meni",subMenu:"Pod-meni",navArrowColor:"Boja strelice za navigaciju"})}}});

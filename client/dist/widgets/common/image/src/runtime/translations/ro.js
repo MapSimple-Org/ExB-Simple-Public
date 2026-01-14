@@ -1,1 +1,0 @@
-System.register([],function(e){return{execute:function(){e({_widgetLabel:"Imagine",imageChooseShape:"Form\u0103",imageCrop:"Decupare",previousImage:"Imaginea precedent\u0103",nextImage:"Imaginea urm\u0103toare",imageViewer:"Vizualizator de imagini"})}}});

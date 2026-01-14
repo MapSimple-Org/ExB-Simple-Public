@@ -1,1 +1,0 @@
-System.register([],function(e){return{execute:function(){e({settingsLabel:"Postavke preglednika dokumenata",selectModelViewer:"Odaberite widget za pregled dokumenata za prikaz dokumenata."})}}});

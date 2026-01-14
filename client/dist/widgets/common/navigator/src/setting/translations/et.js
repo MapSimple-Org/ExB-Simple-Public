@@ -1,1 +1,0 @@
-System.register([],function(a){return{execute:function(){a({_widgetLabel:"Vaadete navigeerimine",tabStyle:"Vahekaardi laad",navBtnStyle:"Navigeerimisnupu laad",stepTips:"T\xf6\xf6tab ainult siis, kui \xfcleminekuanimatsioon m\xe4\xe4ratud vastava jaotisevidina jaoks.",paginationStyle:"Lehek\xfcljestamise laad",navArrowColor:"Navigeerimisnoole v\xe4rv"})}}});

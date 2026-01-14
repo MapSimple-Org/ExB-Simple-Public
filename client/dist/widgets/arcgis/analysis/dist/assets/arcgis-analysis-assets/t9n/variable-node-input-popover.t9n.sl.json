@@ -1,7 +1,0 @@
-{
-  "header": "Izberi spremenljivko",
-  "noFound": "Ni najdenih združljivih spremenljivk",
-  "search": "Išči spremenljivke",
-  "variableLabel": "Napis: <span style='font-weight: var(--calcite-font-weight-normal)'>${val}</span>",
-  "variableVal": "Vrednost: <span style='font-weight: var(--calcite-font-weight-normal)'>${val}</span>"
-}

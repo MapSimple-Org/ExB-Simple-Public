@@ -1,1 +1,0 @@
-System.register([],function(n){return{execute:function(){n({distance:"Kho\u1ea3ng c\xe1ch",area:"Di\u1ec7n t\xedch",atLeastOne:"Ph\u1ea3i ch\u1ecdn \xedt nh\u1ea5t m\u1ed9t c\xf4ng c\u1ee5",toolbar:"Thanh c\xf4ng c\u1ee5",disableSnapping:"T\u1eaft t\xednh n\u0103ng b\u1eaft \u0111i\u1ec3m trong b\u1ea3n \u0111\u1ed3 2D"})}}});

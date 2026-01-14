@@ -1,8 +1,0 @@
-{
-  "select": "Élément sélectionné : ${title}",
-  "lastUpdated": "Mise à jour de l’élément : ${date}",
-  "viewItemDetails": "Afficher les détails",
-  "preview": "Aperçu",
-  "closePreview": "Fermer l’aperçu",
-  "moreOptions": "Autres options"
-}

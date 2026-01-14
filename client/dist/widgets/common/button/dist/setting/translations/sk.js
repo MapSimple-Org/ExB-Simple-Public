@@ -1,1 +1,0 @@
-System.register([],function(e){return{execute:function(){e({_widgetLabel:"Tla\u010didlo",dynamicStyleExpressionsLabel:"Pou\u017ei\u0165 textov\xfd obsah tla\u010didla"})}}});

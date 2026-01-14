@@ -1,9 +1,0 @@
-{
-  "disconnect": "변수에서 연결 해제",
-  "overwriteTo": "레이어 덮어쓰기: <span style='font-weight: var(--calcite-font-weight-normal)'>${val}</span>",
-  "resultType": "결과 유형: <span style='font-weight: var(--calcite-font-weight-normal)'>${val}</span>",
-  "saveTo": "결과 이름: <span style='font-weight: var(--calcite-font-weight-normal)'>${val}</span>",
-  "variableLabel": "레이블: <span style='font-weight: var(--calcite-font-weight-normal)'>${val}</span>",
-  "variableNode": "변수 노드",
-  "variableVal": "값: <span style='font-weight: var(--calcite-font-weight-normal)'>${val}</span>"
-}

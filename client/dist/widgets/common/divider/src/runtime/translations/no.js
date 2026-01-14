@@ -1,1 +1,0 @@
-System.register([],function(e){return{execute:function(){e({_widgetLabel:"Skiller",quickStyleItem:"Hurtigstil {index}"})}}});

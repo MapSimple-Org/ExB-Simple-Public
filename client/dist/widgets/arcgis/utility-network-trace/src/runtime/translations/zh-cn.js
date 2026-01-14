@@ -1,1 +1,0 @@
-System.register([],function(e){return{execute:function(){e({_widgetLabel:"\u516c\u5171\u8bbe\u65bd\u7f51\u7edc\u8ffd\u8e2a",_widgetDescription:"\u7528\u4e8e\u8ffd\u8e2a ArcGIS \u516c\u5171\u8bbe\u65bd\u7f51\u7edc\u7684\u5fae\u4ef6",_action_filter_label:"\u8fc7\u6ee4\u5668"})}}});

@@ -1,1 +1,0 @@
-System.register([],function(e){return{execute:function(){e({_widgetLabel:"Een nieuwe ervaring maken",createNewApp:"Nieuwe app maken",largeDevices:"Apparaten met groot scherm",mediumDevices:"Apparaten met middelgroot scherm",smallDevices:"Apparaten met klein scherm"})}}});

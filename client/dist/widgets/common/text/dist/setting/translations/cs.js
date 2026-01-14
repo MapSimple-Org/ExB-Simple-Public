@@ -1,1 +1,0 @@
-System.register([],function(e){return{execute:function(){e({verticalAlignment:"Svisl\xe9 zarovn\xe1n\xed"})}}});

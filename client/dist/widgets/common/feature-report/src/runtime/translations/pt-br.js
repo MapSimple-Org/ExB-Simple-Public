@@ -1,1 +1,0 @@
-System.register([],function(e){return{execute:function(){e({_widgetLabel:"Relat\xf3rio da Fei\xe7\xe3o"})}}});

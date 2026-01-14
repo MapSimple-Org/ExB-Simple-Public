@@ -1,1 +1,0 @@
-System.register([],function(e){return{execute:function(){e({_widgetLabel:"\u0632\u0631",dynamicStyleExpressionsLabel:"\u0627\u0633\u062a\u062e\u062f\u0645 \u0645\u062d\u062a\u0648\u0649 \u0646\u0635 \u0627\u0644\u0632\u0631"})}}});

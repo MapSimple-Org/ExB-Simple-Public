@@ -1,1 +1,0 @@
-System.register([],function(e){return{execute:function(){e({createNew:"Buat baru",newExperience:"Pengalaman baru",developerEdition:"Edisi Pengembang",linkToHome:"Rumah",linkToMapViewer:"Peta",linkToSceneViewer:"Scene",linkToNotebooks:"Notebook",linkToGroups:"Grup",linkToContent:"Konten",linkToOrganization:"Organisasi",expressModeLabel:"Mode ekspres"})}}});

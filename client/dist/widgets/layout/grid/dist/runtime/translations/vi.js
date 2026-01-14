@@ -1,1 +1,0 @@
-System.register([],function(t){return{execute:function(){t({_widgetLabel:"L\u01b0\u1edbi",widgetProperties:"Thu\u1ed9c t\xednh ti\u1ec7n \xedch",widgetFunctions:"Ch\u1ee9c n\u0103ng ti\u1ec7n \xedch",widgetName:"t\xean ti\u1ec7n \xedch:",widgetProps:"thu\u1ed9c t\xednh ti\u1ec7n \xedch:",tips:"L\u01b0\u1edbi"})}}});

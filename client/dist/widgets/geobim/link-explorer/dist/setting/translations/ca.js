@@ -1,1 +1,0 @@
-System.register([],function(e){return{execute:function(){e({settingsLabel:"Configuraci\xf3 de l'explorador d'enlla\xe7os",selectModelViewer:"Seleccioneu un widget de visor de documents per mostrar els documents enlla\xe7ats."})}}});

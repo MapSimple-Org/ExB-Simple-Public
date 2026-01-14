@@ -1,1 +1,0 @@
-System.register([],function(e){return{execute:function(){e({_widgetLabel:"Slika",imageChooseShape:"Oblik",imageCrop:"Obre\u017ei",previousImage:"Prethodna slika",nextImage:"Sljede\u0107a slika",imageViewer:"Preglednik slika"})}}});

@@ -1,1 +1,0 @@
-System.register([],function(e){return{execute:function(){e({settingsLabel:"\u0e01\u0e32\u0e23\u0e15\u0e31\u0e49\u0e07\u0e04\u0e48\u0e32 Document Viewer"})}}});

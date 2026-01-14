@@ -1,1 +1,0 @@
-System.register([],function(e){return{execute:function(){e({_widgetLabel:"Diagramm",dataEmptyTip:"Andmeid ei leitud."})}}});

@@ -1,1 +1,0 @@
-System.register([],function(e){return{execute:function(){e({customizeLayer:"Tilpas lag",selectLayers:"V\xe6lg lag",noDataSourceWarning:"Den valgte kort-widget indeholder ikke et webkort eller en webscene."})}}});

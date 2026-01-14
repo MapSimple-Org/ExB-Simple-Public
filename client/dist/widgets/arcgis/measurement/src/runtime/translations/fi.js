@@ -1,1 +1,0 @@
-System.register([],function(t){return{execute:function(){t({_widgetLabel:"Mittaus",selectToStart:"Valitse ty\xf6kalu, jotta voit alkaa mitata.",measureDistance:"Mittaa et\xe4isyys",measureArea:"Mittaa alue",clearMeasurement:"Tyhenn\xe4 mittaus",measureUnit:"Mittayksikk\xf6"})}}});

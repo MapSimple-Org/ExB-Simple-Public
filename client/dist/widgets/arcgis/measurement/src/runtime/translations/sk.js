@@ -1,1 +1,0 @@
-System.register([],function(e){return{execute:function(){e({_widgetLabel:"Meranie",selectToStart:"Vyberte n\xe1stroj na za\u010datie merania.",measureDistance:"Mera\u0165 vzdialenosti",measureArea:"Mera\u0165 plochu",clearMeasurement:"Vy\u010disti\u0165 meranie",measureUnit:"Mern\xe1 jednotka"})}}});

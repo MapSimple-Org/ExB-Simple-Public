@@ -1,1 +1,0 @@
-System.register([],function(e){return{execute:function(){e({distance:"Atstumas",area:"Teritorija",atLeastOne:"Reikia pasirinkti bent vien\u0105 \u012frank\u012f",toolbar:"\u012eranki\u0173 juosta",disableSnapping:"I\u0161jungti pritraukim\u0105 2D \u017eem\u0117lapyje"})}}});

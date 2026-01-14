@@ -1,1 +1,0 @@
-System.register([],function(e){return{execute:function(){e({_widgetLabel:"Filtre de planta",floorfilter_noMap:"Filtre de planta",floorfilter_notFloorAware:"El mapa seleccionat no t\xe9 en compte les plantes"})}}});

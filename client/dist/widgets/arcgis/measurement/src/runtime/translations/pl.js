@@ -1,1 +1,0 @@
-System.register([],function(e){return{execute:function(){e({_widgetLabel:"Pomiar",selectToStart:"Wybierz narz\u0119dzie, aby rozpocz\u0105\u0107 pomiar.",measureDistance:"Pomiar odleg\u0142o\u015bci",measureArea:"Pomiar powierzchni",clearMeasurement:"Wyczy\u015b\u0107 pomiar",measureUnit:"Jednostka miary"})}}});

@@ -1,1 +1,0 @@
-System.register([],function(e){return{execute:function(){e({_widgetLabel:"Oszt\xf3",quickStyleItem:"Gyors st\xedlus {index}"})}}});

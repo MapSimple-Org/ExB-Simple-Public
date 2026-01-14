@@ -1,1 +1,0 @@
-System.register([],function(n){return{execute:function(){n({subMenuExpandMode:"L\xe4ge f\xf6r visning av undermeny",mainMenu:"Huvudmeny",subMenu:"Undermeny",navArrowColor:"F\xe4rg p\xe5 navigeringspil"})}}});

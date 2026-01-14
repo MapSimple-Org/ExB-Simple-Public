@@ -1,1 +1,0 @@
-System.register([],function(o){return{execute:function(){o({verticalAlign:"Okomito poravnaj",spaceAround:"Prostor oko",spaceBetween:"Prostor izme\u0111u",spaceEvenly:"Ravnomjerno raspodijeli",horizontalAlign:"Vodoravno poravnaj",scrollable:"Mogu\u0107e je pomicanje"})}}});

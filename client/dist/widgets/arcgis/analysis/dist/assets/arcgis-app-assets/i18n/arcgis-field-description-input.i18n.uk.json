@@ -1,6 +1,0 @@
-{
-  "description": "Опис",
-  "addDescription": "Додати опис",
-  "charactersLeft": "Залишилось символів: ${num}",
-  "invalid": "Опис не може містити символи < і >."
-}

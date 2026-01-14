@@ -1,1 +1,0 @@
-System.register([],function(e){return{execute:function(){e({distance:"T\xe1vols\xe1g",area:"Ter\xfclet",atLeastOne:"Legal\xe1bb egy eszk\xf6zt ki kell v\xe1lasztani.",toolbar:"Eszk\xf6zs\xe1v",disableSnapping:"Hozz\xe1illeszt\xe9s letilt\xe1sa a 2D t\xe9rk\xe9pen"})}}});

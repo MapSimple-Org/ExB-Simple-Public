@@ -1,7 +1,0 @@
-{
-  "header": "تحديد متغير",
-  "noFound": "لم يتم العثور على متغيرات متوافقة",
-  "search": "البحث في المتغيرات",
-  "variableLabel": "التسمية: <span style='font-weight: var(--calcite-font-weight-normal)'>${val}</span>",
-  "variableVal": "القيمة: <span style='font-weight: var(--calcite-font-weight-normal)'>${val}</span>"
-}

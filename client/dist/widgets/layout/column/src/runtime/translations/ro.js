@@ -1,1 +1,0 @@
-System.register([],function(e){return{execute:function(){e({_widgetLabel:"Coloan\u0103",widgetProperties:"Propriet\u0103\u021bi widget",widgetFunctions:"Func\u021bii widget",widgetName:"Nume widget:",widgetProps:"Propriet\u0103\u021bi widget:",tips:"Coloan\u0103"})}}});

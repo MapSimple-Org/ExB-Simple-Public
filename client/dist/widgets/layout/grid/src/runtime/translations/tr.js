@@ -1,1 +1,0 @@
-System.register([],function(e){return{execute:function(){e({_widgetLabel:"Grid",widgetProperties:"Ara\xe7 \xf6zellikleri",widgetFunctions:"Ara\xe7 i\u015flevleri",widgetName:"ara\xe7 ad\u0131:",widgetProps:"ara\xe7 \xf6zellikleri:",tips:"Grid"})}}});

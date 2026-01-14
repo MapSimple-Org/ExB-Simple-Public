@@ -1,1 +1,0 @@
-System.register([],function(e){return{execute:function(){e({subMenuExpandMode:"Alammen\xfc\xfc laiendamise re\u017eiim",mainMenu:"Peamen\xfc\xfc",subMenu:"Alammen\xfc\xfc",navArrowColor:"Navigeerimisnoole v\xe4rv"})}}});

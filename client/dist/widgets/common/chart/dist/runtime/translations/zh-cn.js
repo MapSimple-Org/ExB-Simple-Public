@@ -1,1 +1,0 @@
-System.register([],function(e){return{execute:function(){e({_widgetLabel:"\u56fe\u8868",dataEmptyTip:"\u627e\u4e0d\u5230\u6570\u636e\u3002"})}}});

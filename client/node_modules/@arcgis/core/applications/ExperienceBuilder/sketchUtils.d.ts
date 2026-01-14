@@ -1,7 +1,0 @@
-import "../../interfaces";
-
-export const dismissFloatingElements: __esri.sketchUtils["dismissFloatingElements"];
-export const setContextualToolLocation: __esri.sketchUtils["setContextualToolLocation"];
-export const setCustomTools: __esri.sketchUtils["setCustomTools"];
-export const setGroupAllowCollapse: __esri.sketchUtils["setGroupAllowCollapse"];
-export const setGroupCollapsePriorities: __esri.sketchUtils["setGroupCollapsePriorities"];

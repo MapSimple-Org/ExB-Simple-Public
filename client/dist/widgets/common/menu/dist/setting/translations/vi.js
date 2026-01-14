@@ -1,1 +1,0 @@
-System.register([],function(n){return{execute:function(){n({subMenuExpandMode:"Ch\u1ebf \u0111\u1ed9 m\u1edf r\u1ed9ng menu ph\u1ee5",mainMenu:"Menu ch\xednh",subMenu:"Menu ph\u1ee5",navArrowColor:"M\xe0u m\u0169i t\xean \u0111i\u1ec1u h\u01b0\u1edbng"})}}});

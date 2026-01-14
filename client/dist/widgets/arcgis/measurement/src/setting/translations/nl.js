@@ -1,1 +1,0 @@
-System.register([],function(e){return{execute:function(){e({distance:"Afstand",area:"Gebied",atLeastOne:"Er moet minstens \xe9\xe9n tool worden geselecteerd",toolbar:"Werkbalk",disableSnapping:"Snapping uitschakelen in 2D-kaart"})}}});

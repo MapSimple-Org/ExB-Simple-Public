@@ -1,1 +1,0 @@
-System.register([],function(e){return{execute:function(){e({_widgetLabel:"V\xe5ningsfilter",floorfilter_noMap:"V\xe5ningsfilter",floorfilter_notFloorAware:"Den valda kartan \xe4r inte v\xe5ningsmedveten"})}}});

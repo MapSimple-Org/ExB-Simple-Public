@@ -1,1 +1,0 @@
-System.register([],function(e){return{execute:function(){e({verticalAlign:"Vertikal justering",spaceAround:"Utrymme runt",spaceBetween:"Utrymme mellan",spaceEvenly:"F\xf6rdela j\xe4mnt",horizontalAlign:"Horisontell justering",scrollable:"Rullningsbar"})}}});

@@ -1,9 +1,0 @@
-{
-  "disconnect": "変数から切断",
-  "overwriteTo": "レイヤーの上書き: <span style='font-weight: var(--calcite-font-weight-normal)'>${val}</span>",
-  "resultType": "結果タイプ: <span style='font-weight: var(--calcite-font-weight-normal)'>${val}</span>",
-  "saveTo": "出力名: <span style='font-weight: var(--calcite-font-weight-normal)'>${val}</span>",
-  "variableLabel": "ラベル: <span style='font-weight: var(--calcite-font-weight-normal)'>${val}</span>",
-  "variableNode": "変数ノード",
-  "variableVal": "値: <span style='font-weight: var(--calcite-font-weight-normal)'>${val}</span>"
-}

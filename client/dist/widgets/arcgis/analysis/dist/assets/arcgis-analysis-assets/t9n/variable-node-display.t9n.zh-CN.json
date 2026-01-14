@@ -1,9 +1,0 @@
-{
-  "disconnect": "与变量断开连接",
-  "overwriteTo": "覆盖图层：<span style='font-weight: var(--calcite-font-weight-normal)'>${val}</span>",
-  "resultType": "结果类型：<span style='font-weight: var(--calcite-font-weight-normal)'>${val}</span>",
-  "saveTo": "输出名称：<span style='font-weight: var(--calcite-font-weight-normal)'>${val}</span>",
-  "variableLabel": "标注：<span style='font-weight: var(--calcite-font-weight-normal)'>${val}</span>",
-  "variableNode": "变量节点",
-  "variableVal": "值：<span style='font-weight: var(--calcite-font-weight-normal)'>${val}</span>"
-}

@@ -1,1 +1,0 @@
-System.register([],function(e){return{execute:function(){e({distance:"Distan\u021b\u0103",area:"Suprafa\u0163\u0103",atLeastOne:"Trebuie s\u0103 fie selectat cel pu\u021bin un instrument",toolbar:"Bar\u0103 de instrumente",disableSnapping:"Dezactivarea alipirii \xeen harta 2D"})}}});

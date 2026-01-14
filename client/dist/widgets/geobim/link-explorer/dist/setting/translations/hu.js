@@ -1,1 +1,0 @@
-System.register([],function(e){return{execute:function(){e({settingsLabel:"Link Explorer be\xe1ll\xedt\xe1sai",selectModelViewer:"V\xe1lasszon ki egy Document Viewer-widgetet a csatolt dokumentumok megjelen\xedt\xe9s\xe9hez."})}}});
