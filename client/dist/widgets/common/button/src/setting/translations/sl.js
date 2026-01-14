@@ -1,1 +1,0 @@
-System.register([],function(e){return{execute:function(){e({_widgetLabel:"Gumb",dynamicStyleExpressionsLabel:"Uporabi vsebino Besedilo gumba"})}}});

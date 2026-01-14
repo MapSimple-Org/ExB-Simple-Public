@@ -1,1 +1,0 @@
-System.register([],function(e){return{execute:function(){e({_layout_REGULAR_label:"Almindelig",_layout_HOVER_label:"Hold over",_layout_DEFAULT_label:"Standard",applyTo:"Ans\xf8g til {status}",isolate:"Isoler",linkedToAnd:"Tilknyttet {where1} og {where2}",linkedTo:"Tilknyttet {where}",placeHolderTip:"V\xe6lg en kortskabelon.",showSelected:"Vis valg",_widgetLabel:"Kort"})}}});

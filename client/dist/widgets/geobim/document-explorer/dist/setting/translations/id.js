@@ -1,1 +1,0 @@
-System.register([],function(e){return{execute:function(){e({settingsLabel:"Pengaturan Explorer Dokumen",selectModelViewer:"Pilih widget Penampil Dokumen untuk menampilkan dokumen."})}}});

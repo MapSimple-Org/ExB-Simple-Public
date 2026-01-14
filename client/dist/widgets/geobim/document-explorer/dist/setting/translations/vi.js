@@ -1,1 +1,0 @@
-System.register([],function(e){return{execute:function(){e({settingsLabel:"Thi\u1ebft l\u1eadp Document Explorer",selectModelViewer:"Ch\u1ecdn ti\u1ec7n \xedch Document Viewer \u0111\u1ec3 hi\u1ec3n th\u1ecb c\xe1c t\xe0i li\u1ec7u."})}}});

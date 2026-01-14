@@ -1,1 +1,0 @@
-System.register([],function(e){return{execute:function(){e({createNew:"Skapa ny",newExperience:"Ny upplevelse",developerEdition:"Developer Edition",linkToHome:"Hem",linkToMapViewer:"Karta",linkToSceneViewer:"Scen",linkToNotebooks:"Notebooks",linkToGroups:"Grupper",linkToContent:"Inneh\xe5ll",linkToOrganization:"Organisation",expressModeLabel:"Expressl\xe4ge"})}}});

@@ -1,1 +1,0 @@
-System.register([],function(e){return{execute:function(){e({_widgetLabel:"Acorde\xe3o",tips:"Acorde\xe3o"})}}});

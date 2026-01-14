@@ -1,6 +1,0 @@
-{
-  "description": "Leírás",
-  "addDescription": "Adjon meg egy leírást",
-  "charactersLeft": "${num} karakter maradt",
-  "invalid": "A leírás nem tartalmazhatja a következő karaktereket: < vagy >."
-}

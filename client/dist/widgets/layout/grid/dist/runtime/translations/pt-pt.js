@@ -1,1 +1,0 @@
-System.register([],function(e){return{execute:function(){e({_widgetLabel:"Grelha",widgetProperties:"Propriedades do widget",widgetFunctions:"Fun\xe7\xf5es do widget",widgetName:"nome do widget:",widgetProps:"propriedades do widget:",tips:"Grelha"})}}});

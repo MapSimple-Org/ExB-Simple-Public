@@ -1,7 +1,0 @@
-{
-  "deselectAll": "Poista kaikkien valinta",
-  "ignoreFieldMessage": "Tämä kenttä jätetään huomiotta, koska tilastotyyppejä ei ole valittu.",
-  "remove": "Poista",
-  "requiredError": "Tämä parametri on pakollinen.",
-  "selectAll": "Valitse kaikki"
-}

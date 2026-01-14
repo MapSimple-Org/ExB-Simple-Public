@@ -1,7 +1,0 @@
-{
-  "addEntryButtonLabel": "Ekle",
-  "maxGroupsMessage": "Maksimum giriş sayısı ${maxCount}.",
-  "minGroupsMessage": "Minimum giriş sayısı ${minCount}.",
-  "removeEntryButtonLabel": "Girdiyi kaldır",
-  "requiredMessage": "Bu parametre gerekli."
-}

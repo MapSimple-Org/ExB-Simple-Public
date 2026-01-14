@@ -1,1 +1,0 @@
-System.register([],function(n){return{execute:function(){n({_widgetLabel:"B\u1ed9 l\u1ecdc T\u1ea7ng",floorfilter_noMap:"B\u1ed9 l\u1ecdc T\u1ea7ng",floorfilter_notFloorAware:"B\u1ea3n \u0111\u1ed3 \u0111\xe3 ch\u1ecdn kh\xf4ng nh\u1eadn bi\u1ebft \u0111\u01b0\u1ee3c t\u1ea7ng"})}}});

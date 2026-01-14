@@ -1,1 +1,0 @@
-System.register([],function(e){return{execute:function(){e({customizeLayer:"Dostosuj warstwy",selectLayers:"Wybierz warstwy",noDataSourceWarning:"Wybrany wid\u017cet Mapa nie zawiera mapy internetowej lub sceny internetowej."})}}});

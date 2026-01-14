@@ -1,1 +1,0 @@
-System.register([],function(e){return{execute:function(){e({_widgetLabel:"Zlo\u017eenka",tips:"Zlo\u017eenka"})}}});

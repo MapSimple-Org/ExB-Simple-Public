@@ -1,1 +1,0 @@
-System.register([],function(e){return{execute:function(){e({_widgetLabel:"Sklada\u010dka",tips:"Sklada\u010dka"})}}});

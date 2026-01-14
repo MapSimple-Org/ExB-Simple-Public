@@ -1,1 +1,0 @@
-System.register([],function(e){return{execute:function(){e({customizeLayer:"Prilagodi slojeve",selectLayers:"Selektujte slojeve",noDataSourceWarning:"Izabrani vid\u017eet mape ne sadr\u017ei veb mapu ili veb scenu."})}}});

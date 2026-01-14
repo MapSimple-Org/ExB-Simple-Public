@@ -1,7 +1,0 @@
-{
-  "example": "Exemple",
-  "input": "Entrada",
-  "output": "Sortida",
-  "optional": "Opcional",
-  "WNDWIHintText": "El valor α:α ha de ser entre 0 i 1; el valor per defecte és 0,5"
-}

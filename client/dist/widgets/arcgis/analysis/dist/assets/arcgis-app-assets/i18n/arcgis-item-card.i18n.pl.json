@@ -1,8 +1,0 @@
-{
-  "select": "Wybierz element: ${title}",
-  "lastUpdated": "Zaktualizowany element: ${date}",
-  "viewItemDetails": "Wyświetl szczegóły",
-  "preview": "Podgląd",
-  "closePreview": "Zamknij podgląd",
-  "moreOptions": "Więcej opcji"
-}

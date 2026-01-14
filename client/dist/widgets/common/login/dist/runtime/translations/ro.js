@@ -1,1 +1,0 @@
-System.register([],function(e){return{execute:function(){e({_widgetLabel:"Autentificare",switchToLogin:"Comutare la \xeenainte de autentificare",switchToLogout:"Comutare la dup\u0103 autentificare",toggleSignInPreview:"Comutare previzualizare autentificare",restrictedResources:"Resurse restric\u021bionate"})}}});

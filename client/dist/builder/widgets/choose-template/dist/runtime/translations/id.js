@@ -1,1 +1,0 @@
-System.register([],function(e){return{execute:function(){e({_widgetLabel:"Buat pengalaman baru",createNewApp:"Buat aplikasi baru",largeDevices:"Perangkat berlayar besar",mediumDevices:"Perangkat berlayar sedang",smallDevices:"Perangkat berlayar kecil"})}}});

@@ -1,1 +1,0 @@
-System.register([],function(a){return{execute:function(){a({distance:"Udaljenosti",area:"Poligona",atLeastOne:"Treba odabrati barem jedan alat",toolbar:"Alatna traka",disableSnapping:"Onemogu\u0107i priljepljivanje u 2D mapu"})}}});

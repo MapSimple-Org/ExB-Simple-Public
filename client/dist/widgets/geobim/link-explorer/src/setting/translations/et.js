@@ -1,1 +1,0 @@
-System.register([],function(e){return{execute:function(){e({settingsLabel:"Link Exploreri seaded",selectModelViewer:"Lingitud dokumentide kuvamiseks valige dokumendivaaturi Viewer vidin."})}}});

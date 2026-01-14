@@ -1,1 +1,0 @@
-System.register([],function(e){return{execute:function(){e({_widgetLabel:"B\u1ed9 chia",quickStyleItem:"Thay \u0111\u1ed5i ki\u1ec3u nhanh {index}"})}}});

@@ -1,1 +1,0 @@
-System.register([],function(t){return{execute:function(){t({distance:"Avst\xe5nd",area:"Yta",atLeastOne:"Minst ett verktyg m\xe5ste v\xe4ljas.",toolbar:"Verktygsf\xe4lt",disableSnapping:"Inaktivera snappning i 2D-karta"})}}});

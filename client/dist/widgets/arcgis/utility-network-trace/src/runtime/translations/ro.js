@@ -1,1 +1,0 @@
-System.register([],function(e){return{execute:function(){e({_widgetLabel:"Urm\u0103rire re\u021bea utilit\u0103\u021bi",_widgetDescription:"Un widget pentru urm\u0103rirea unei re\u021bele de utilit\u0103\u021bi ArcGIS",_action_filter_label:"Filtrare"})}}});

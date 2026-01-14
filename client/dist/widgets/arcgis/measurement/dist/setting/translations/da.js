@@ -1,1 +1,0 @@
-System.register([],function(t){return{execute:function(){t({distance:"Afstand",area:"Omr\xe5de",atLeastOne:"Mindst \xe9t v\xe6rkt\xf8j skal v\xe6re valgt",toolbar:"V\xe6rkt\xf8jslinje",disableSnapping:"Deaktiv\xe9r snapping i 2D-kort"})}}});

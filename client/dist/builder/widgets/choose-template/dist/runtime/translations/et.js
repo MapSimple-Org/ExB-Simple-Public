@@ -1,1 +1,0 @@
-System.register([],function(e){return{execute:function(){e({_widgetLabel:"Loo uus keskkond",createNewApp:"Loo uus rakendus",largeDevices:"Suure ekraaniga seaded",mediumDevices:"Keskmise ekraaniga seaded",smallDevices:"V\xe4ikese ekraaniga seaded"})}}});

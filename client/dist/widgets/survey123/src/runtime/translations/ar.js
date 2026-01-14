@@ -1,1 +1,0 @@
-System.register([],function(e){return{execute:function(){e({_widgetLabel:"\u0627\u0633\u062a\u0637\u0644\u0627\u0639"})}}});

@@ -1,8 +1,0 @@
-{
-  "select": "Velg element: ${title}",
-  "lastUpdated": "Element oppdatert: ${date}",
-  "viewItemDetails": "Vis detaljer",
-  "preview": "Forhåndsvisning",
-  "closePreview": "Lukk forhåndsvisningen",
-  "moreOptions": "Flere alternativer"
-}

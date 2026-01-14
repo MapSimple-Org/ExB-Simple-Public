@@ -1,1 +1,0 @@
-System.register([],function(e){return{execute:function(){e({distance:"Distance",area:"Surface",atLeastOne:"Au moins un outil doit \xeatre s\xe9lectionn\xe9",toolbar:"Barre d\u2019outils",disableSnapping:"D\xe9sactiver la capture dans les cartes\xa02D"})}}});

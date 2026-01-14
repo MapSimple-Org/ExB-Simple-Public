@@ -1,1 +1,0 @@
-System.register([],function(t){return{execute:function(){t({_widgetLabel:"Diagram\u0103",dataEmptyTip:"Nu au fost g\u0103site date."})}}});

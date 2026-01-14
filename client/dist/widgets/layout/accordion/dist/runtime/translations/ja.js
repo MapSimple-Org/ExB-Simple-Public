@@ -1,1 +1,0 @@
-System.register([],function(e){return{execute:function(){e({_widgetLabel:"\u30a2\u30b3\u30fc\u30c7\u30a3\u30aa\u30f3",tips:"\u30a2\u30b3\u30fc\u30c7\u30a3\u30aa\u30f3"})}}});

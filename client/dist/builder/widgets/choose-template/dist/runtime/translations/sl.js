@@ -1,1 +1,0 @@
-System.register([],function(e){return{execute:function(){e({_widgetLabel:"Ustvari novo spletno aplikacijo",createNewApp:"Ustvari novo aplikacijo",largeDevices:"Naprave z velikim zaslonom",mediumDevices:"Naprave s srednje velikim zaslonom",smallDevices:"Naprave z majhnim zaslonom"})}}});

@@ -1,9 +1,0 @@
-{
-  "inputFlowDirectionRasterLabel": "Input flow direction raster",
-  "inputLayerGroupText": "Choose the input stream and flow direction rasters.",
-  "inputStreamRasterLabel": "Input stream raster",
-  "itemProperties": {
-    "description": "Output generated from running the StreamLink analysis tool.",
-    "snippet": "Output generated from StreamLink"
-  }
-}

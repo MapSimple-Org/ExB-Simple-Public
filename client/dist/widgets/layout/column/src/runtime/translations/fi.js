@@ -1,1 +1,0 @@
-System.register([],function(e){return{execute:function(){e({_widgetLabel:"Pylv\xe4s",widgetProperties:"Pienoisohjelman ominaisuudet",widgetFunctions:"Pienoisohjelman toiminnot",widgetName:"pienoisohjelman nimi:",widgetProps:"pienoisohjelman ominaisuudet:",tips:"Sarake"})}}});

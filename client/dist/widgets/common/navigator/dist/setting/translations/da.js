@@ -1,1 +1,0 @@
-System.register([],function(e){return{execute:function(){e({_widgetLabel:"Viser Navigation",tabStyle:"Fanetypografi",navBtnStyle:"Typografi p\xe5 navigationsknapper",stepTips:"Fungerer kun, n\xe5r en overgangsanimation er indstillet for den tilh\xf8rende sektions-widget.",paginationStyle:"Sideinddelingstypografi",navArrowColor:"Farve p\xe5 navigationspil"})}}});

@@ -1,1 +1,0 @@
-System.register([],function(e){return{execute:function(){e({createNew:"Opprett ny",newExperience:"Ny opplevelse",developerEdition:"Developer Edition",linkToHome:"Hjem",linkToMapViewer:"Kart",linkToSceneViewer:"Scene",linkToNotebooks:"Notatblokker",linkToGroups:"Grupper",linkToContent:"Innhold",linkToOrganization:"Organisasjon",expressModeLabel:"Ekspressmodus"})}}});

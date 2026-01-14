@@ -1,1 +1,0 @@
-System.register([],function(e){return{execute:function(){e({distance:"Vzdialenos\u0165",area:"Plocha",atLeastOne:"Je potrebn\xe9 vybra\u0165 aspo\u0148 jeden n\xe1stroj",toolbar:"Panel n\xe1strojov",disableSnapping:"Deaktivova\u0165 prichyt\xe1vanie v 2D mape"})}}});

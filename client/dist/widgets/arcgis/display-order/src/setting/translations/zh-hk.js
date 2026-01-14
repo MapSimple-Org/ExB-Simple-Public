@@ -1,1 +1,0 @@
-System.register([],function(e){return{execute:function(){e({customizeLayer:"\u81ea\u8a02\u5716\u5c64",selectLayers:"\u9078\u64c7\u5716\u5c64",noDataSourceWarning:"\u6240\u9078\u5730\u5716 widget \u4e0d\u5305\u542b Web \u5730\u5716\u6216 Web \u5834\u666f\u3002"})}}});

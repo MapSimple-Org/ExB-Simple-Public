@@ -1,9 +1,0 @@
-{
-  "weightedSumTable": "Table de somme pondérée",
-  "id": "ID",
-  "layer": "Couche",
-  "field": "Terrain",
-  "weight": "Pondération",
-  "value": "Valeur",
-  "selectLayer": "Sélectionner une couche"
-}

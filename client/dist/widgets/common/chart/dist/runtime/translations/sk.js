@@ -1,1 +1,0 @@
-System.register([],function(e){return{execute:function(){e({_widgetLabel:"Graf",dataEmptyTip:"Nena\u0161li sa \u017eiadne d\xe1ta."})}}});

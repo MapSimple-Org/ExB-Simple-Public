@@ -1,1 +1,0 @@
-System.register([],function(e){return{execute:function(){e({customizeLayer:"Lagen aanpassen",selectLayers:"Lagen selecteren",noDataSourceWarning:"De geselecteerde Kaart-widget bevat geen web map of web scene."})}}});

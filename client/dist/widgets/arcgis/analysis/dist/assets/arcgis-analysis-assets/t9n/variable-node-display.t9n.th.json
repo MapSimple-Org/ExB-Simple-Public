@@ -1,9 +1,0 @@
-{
-  "disconnect": "ตัดการเชื่อมต่อจากตัวแปร",
-  "overwriteTo": "เขียนทับชั้นข้อมูล: <span style='font-weight: var(--calcite-font-weight-normal)'>${val}</span>",
-  "resultType": "ประเภทผลลัพธ์: <span style='font-weight: var(--calcite-font-weight-normal)'>${val}</span>",
-  "saveTo": "ชื่อเอาต์พุต: <span style='font-weight: var(--calcite-font-weight-normal)'>${val}</span>",
-  "variableLabel": "ป้ายกำกับ: <span style='font-weight: var(--calcite-font-weight-normal)'>${val}</span>",
-  "variableNode": "โหนดตัวแปร",
-  "variableVal": "ค่า: <span style='font-weight: var(--calcite-font-weight-normal)'>${val}</span>"
-}

@@ -1,1 +1,0 @@
-System.register([],function(e){return{execute:function(){e({_widgetLabel:"\u0e15\u0e31\u0e27\u0e01\u0e23\u0e2d\u0e07"})}}});

@@ -1,1 +1,0 @@
-System.register([],function(t){return{execute:function(){t({_widgetLabel:"Th\xf4ng tin \u0110\u1ed1i t\u01b0\u1ee3ng",noDataMessageDefaultText:"Kh\xf4ng t\xecm th\u1ea5y d\u1eef li\u1ec7u.",featureNumbers:"{index} / {count}",featureInfoDataActionLabel:"B\u1ea3n ghi hi\u1ec7n t\u1ea1i v\u1ec1 th\xf4ng tin \u0111\u1ed1i t\u01b0\u1ee3ng {layer}"})}}});

@@ -1,1 +1,0 @@
-System.register([],function(e){return{execute:function(){e({settingsLabel:"Configuraci\xf3n del Explorador de v\xednculos",selectModelViewer:"Seleccione un widget de Visor de documentos para visualizar los documentos vinculados."})}}});

@@ -1,1 +1,0 @@
-System.register([],function(e){return{execute:function(){e({_widgetLabel:"\u91cf\u6e2c",selectToStart:"\u9078\u64c7\u5de5\u5177\u4f86\u958b\u59cb\u6e2c\u91cf\u3002",measureDistance:"\u6e2c\u91cf\u8ddd\u96e2",measureArea:"\u6e2c\u91cf\u9762\u7a4d",clearMeasurement:"\u6e05\u9664\u6e2c\u91cf",measureUnit:"\u6e2c\u91cf\u55ae\u4f4d"})}}});

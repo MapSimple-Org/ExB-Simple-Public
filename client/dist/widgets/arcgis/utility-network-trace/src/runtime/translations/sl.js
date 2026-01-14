@@ -1,1 +1,0 @@
-System.register([],function(e){return{execute:function(){e({_widgetLabel:"Sled komunalnega omre\u017eja",_widgetDescription:"Pripomo\u010dek za sledenje omre\u017eju ArcGIS Utility Network",_action_filter_label:"Filter"})}}});

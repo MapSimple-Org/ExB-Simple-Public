@@ -1,1 +1,0 @@
-System.register([],function(e){return{execute:function(){e({verticalAlign:"Svisl\xe9 zarovn\xe1n\xed",spaceAround:"Odd\u011blit kolem",spaceBetween:"Odd\u011blit mezi",spaceEvenly:"Odd\u011blit rovnom\u011brn\u011b",horizontalAlign:"Vodorovn\xe9 zarovn\xe1n\xed",scrollable:"Rolovateln\xfd"})}}});

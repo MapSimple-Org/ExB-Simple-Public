@@ -1,1 +1,0 @@
-System.register([],function(i){return{execute:function(){i({_widgetLabel:"Pro\u0161irivi prikaz",tips:"Pro\u0161irivi prikaz"})}}});

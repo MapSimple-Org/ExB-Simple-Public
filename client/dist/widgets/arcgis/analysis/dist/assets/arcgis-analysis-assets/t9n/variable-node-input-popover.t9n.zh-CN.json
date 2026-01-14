@@ -1,7 +1,0 @@
-{
-  "header": "选择变量",
-  "noFound": "未找到兼容变量",
-  "search": "搜索变量",
-  "variableLabel": "标注：<span style='font-weight: var(--calcite-font-weight-normal)'>${val}</span>",
-  "variableVal": "值：<span style='font-weight: var(--calcite-font-weight-normal)'>${val}</span>"
-}

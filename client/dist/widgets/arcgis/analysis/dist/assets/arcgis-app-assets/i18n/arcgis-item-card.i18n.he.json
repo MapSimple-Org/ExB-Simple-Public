@@ -1,8 +1,0 @@
-{
-  "select": "בחר פריט: ${title}",
-  "lastUpdated": "פריט עודכן: ${date}",
-  "viewItemDetails": "הצג פרטים",
-  "preview": "תצוגה מקדימה",
-  "closePreview": "סגור תצוגה מקדימה",
-  "moreOptions": "עוד אפשרויות"
-}

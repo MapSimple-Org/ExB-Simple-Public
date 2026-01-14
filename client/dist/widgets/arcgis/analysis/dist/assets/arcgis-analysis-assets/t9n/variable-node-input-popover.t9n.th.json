@@ -1,7 +1,0 @@
-{
-  "header": "เลือกตัวแปร",
-  "noFound": "ไม่พบตัวแปรที่เข้ากันได้",
-  "search": "ค้นหาตัวแปร",
-  "variableLabel": "ป้ายกำกับ: <span style='font-weight: var(--calcite-font-weight-normal)'>${val}</span>",
-  "variableVal": "ค่า: <span style='font-weight: var(--calcite-font-weight-normal)'>${val}</span>"
-}

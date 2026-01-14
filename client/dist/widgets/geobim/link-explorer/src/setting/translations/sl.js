@@ -1,1 +1,0 @@
-System.register([],function(e){return{execute:function(){e({settingsLabel:"Nastavitve povezave Explorer",selectModelViewer:"Izberite pripomo\u010dek Document Viewer za prikaz povezanih dokumentov."})}}});

@@ -1,1 +1,0 @@
-System.register([],function(e){return{execute:function(){e({_widgetLabel:"Feature-Info",noDataMessageDefaultText:"Keine Daten gefunden.",featureNumbers:"{index} von {count}",featureInfoDataActionLabel:'{layer}: aktueller Datensatz in "Feature-Info"'})}}});

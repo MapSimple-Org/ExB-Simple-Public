@@ -1,1 +1,0 @@
-System.register([],function(e){return{execute:function(){e({_widgetLabel:"Metin",defaultPlaceholder:"Metni d\xfczenlemek i\xe7in \xe7ift t\u0131klay\u0131n"})}}});

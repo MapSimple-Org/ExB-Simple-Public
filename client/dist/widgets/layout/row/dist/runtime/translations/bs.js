@@ -1,1 +1,0 @@
-System.register([],function(e){return{execute:function(){e({_widgetLabel:"Redak",widgetProperties:"Vlasni\u0161tva widgeta",widgetFunctions:"Funkcije widgeta",widgetName:"naziv widgeta:",widgetProps:"vlasni\u0161tva widgeta:",tips:"Redak"})}}});

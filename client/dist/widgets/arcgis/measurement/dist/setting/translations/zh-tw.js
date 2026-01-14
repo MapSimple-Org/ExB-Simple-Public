@@ -1,1 +1,0 @@
-System.register([],function(e){return{execute:function(){e({distance:"\u8ddd\u96e2",area:"\u9762\u7a4d",atLeastOne:"\u5fc5\u9808\u81f3\u5c11\u9078\u64c7\u4e00\u500b\u5de5\u5177",toolbar:"\u5de5\u5177\u5217",disableSnapping:"\u5728 2D \u5730\u5716\u4e2d\u505c\u7528\u8cbc\u9f4a"})}}});

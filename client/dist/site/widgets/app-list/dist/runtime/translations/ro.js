@@ -1,1 +1,0 @@
-System.register([],function(e){return{execute:function(){e({_widgetLabel:"List\u0103 de aplica\u021bii"})}}});

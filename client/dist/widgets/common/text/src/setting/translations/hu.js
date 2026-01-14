@@ -1,1 +1,0 @@
-System.register([],function(e){return{execute:function(){e({verticalAlignment:"F\xfcgg\u0151leges igaz\xedt\xe1s"})}}});

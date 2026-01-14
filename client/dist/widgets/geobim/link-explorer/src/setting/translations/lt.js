@@ -1,1 +1,0 @@
-System.register([],function(e){return{execute:function(){e({settingsLabel:"Link Explorer nustatymai",selectModelViewer:"Pasirinkite Dokument\u0173 \u017ei\u016brykl\u0117s valdikl\u012f, kad gal\u0117tum\u0117te atvaizduoti susietus dokumentus."})}}});

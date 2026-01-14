@@ -1,1 +1,0 @@
-System.register([],function(e){return{execute:function(){e({_widgetLabel:"Tombol",dynamicStyleExpressionsLabel:"Gunakan konten Teks Tombol"})}}});

@@ -1,9 +1,0 @@
-{
-  "weightedSumTable": "Gewogen Somtabel",
-  "id": "ID",
-  "layer": "Kaartlaag",
-  "field": "Veld",
-  "weight": "Gewicht",
-  "value": "Waarde",
-  "selectLayer": "Kaartlaag selecteren"
-}

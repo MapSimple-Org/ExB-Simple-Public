@@ -1,1 +1,0 @@
-System.register([],function(e){return{execute:function(){e({_widgetLabel:"Buton",dynamicStyleExpressionsLabel:"Buton Metni i\xe7eri\u011fini kullan"})}}});

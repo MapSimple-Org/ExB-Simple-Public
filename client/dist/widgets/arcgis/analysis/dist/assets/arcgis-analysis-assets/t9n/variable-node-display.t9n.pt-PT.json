@@ -1,9 +1,0 @@
-{
-  "disconnect": "Desligar da variável",
-  "overwriteTo": "Substituir camada: <span style='font-weight: var(--calcite-font-weight-normal)'>${val}</span>",
-  "resultType": "Tipo de resultado: <span style='font-weight: var(--calcite-font-weight-normal)'>${val}</span>",
-  "saveTo": "Nome de saída: <span style='font-weight: var(--calcite-font-weight-normal)'>${val}</span>",
-  "variableLabel": "Etiqueta: <span style='font-weight: var(--calcite-font-weight-normal)'>${val}</span>",
-  "variableNode": "Nó de variável",
-  "variableVal": "Valor: <span style='font-weight: var(--calcite-font-weight-normal)'>${val}</span>"
-}

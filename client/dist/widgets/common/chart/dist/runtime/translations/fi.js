@@ -1,1 +1,0 @@
-System.register([],function(t){return{execute:function(){t({_widgetLabel:"Kaavio",dataEmptyTip:"Aineistoa ei l\xf6ytynyt."})}}});

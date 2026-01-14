@@ -1,1 +1,0 @@
-System.register([],function(e){return{execute:function(){e({_widgetLabel:"Mesure",selectToStart:"S\xe9lectionnez un outil pour commencer \xe0 mesurer.",measureDistance:"Mesurer une distance",measureArea:"Mesurer une surface",clearMeasurement:"Effacer la mesure",measureUnit:"Unit\xe9 de mesure"})}}});

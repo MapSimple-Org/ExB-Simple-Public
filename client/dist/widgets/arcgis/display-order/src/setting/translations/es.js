@@ -1,1 +1,0 @@
-System.register([],function(e){return{execute:function(){e({customizeLayer:"Personalizar capas",selectLayers:"Seleccionar capas",noDataSourceWarning:"El widget Mapa seleccionado no contiene ning\xfan mapa web ni ninguna escena web."})}}});

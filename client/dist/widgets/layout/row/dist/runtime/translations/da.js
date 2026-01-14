@@ -1,1 +1,0 @@
-System.register([],function(e){return{execute:function(){e({_widgetLabel:"R\xe6kke",widgetProperties:"Widget-egenskaber",widgetFunctions:"Widget-funktioner",widgetName:"widget-navn:",widgetProps:"widget-egenskaber:",tips:"R\xe6kke"})}}});

@@ -1,1 +1,0 @@
-System.register([],function(e){return{execute:function(){e({_widgetLabel:"Grille",widgetProperties:"Propri\xe9t\xe9s du widget",widgetFunctions:"Fonctions du widget",widgetName:"nom du widget\xa0:",widgetProps:"propri\xe9t\xe9s du widget\xa0:",tips:"Grille"})}}});

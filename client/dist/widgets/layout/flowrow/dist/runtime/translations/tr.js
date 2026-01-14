@@ -1,1 +1,0 @@
-System.register([],function(e){return{execute:function(){e({_widgetLabel:"Ak\u0131\u015f S\u0131ras\u0131"})}}});

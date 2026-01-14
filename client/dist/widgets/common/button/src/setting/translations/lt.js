@@ -1,1 +1,0 @@
-System.register([],function(t){return{execute:function(){t({_widgetLabel:"Mygtukas",dynamicStyleExpressionsLabel:"Naudoti mygtuko teksto turin\u012f"})}}});

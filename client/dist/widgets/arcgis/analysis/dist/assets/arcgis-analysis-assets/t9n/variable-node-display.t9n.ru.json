@@ -1,9 +1,0 @@
-{
-  "disconnect": "Отключиться от переменной",
-  "overwriteTo": "Перезаписать слой: <span style='font-weight: var(--calcite-font-weight-normal)'>${val}</span>",
-  "resultType": "Тип результата: <span style='font-weight: var(--calcite-font-weight-normal)'>${val}</span>",
-  "saveTo": "Выходное имя: <span style='font-weight: var(--calcite-font-weight-normal)'>${val}</span>",
-  "variableLabel": "Надпись: <span style='font-weight: var(--calcite-font-weight-normal)'>${val}</span>",
-  "variableNode": "Узел переменной",
-  "variableVal": "Значение: <span style='font-weight: var(--calcite-font-weight-normal)'>${val}</span>"
-}

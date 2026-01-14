@@ -1,1 +1,0 @@
-System.register([],function(e){return{execute:function(){e({customizeLayer:"Katmanlar\u0131 \xf6zelle\u015ftir",selectLayers:"Katmanlar\u0131 se\xe7",noDataSourceWarning:"Se\xe7ili Harita arac\u0131 bir Web Haritas\u0131 veya Web Sahnesi i\xe7ermiyor."})}}});

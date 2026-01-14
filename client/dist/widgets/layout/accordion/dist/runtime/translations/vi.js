@@ -1,1 +1,0 @@
-System.register([],function(e){return{execute:function(){e({_widgetLabel:"X\u1ebfp",tips:"X\u1ebfp"})}}});

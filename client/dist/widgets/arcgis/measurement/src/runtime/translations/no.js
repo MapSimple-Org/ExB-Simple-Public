@@ -1,1 +1,0 @@
-System.register([],function(e){return{execute:function(){e({_widgetLabel:"M\xe5l",selectToStart:"Velg et verkt\xf8y for \xe5 starte m\xe5lingen.",measureDistance:"M\xe5le avstand",measureArea:"M\xe5l areal",clearMeasurement:"Fjern m\xe5ling",measureUnit:"M\xe5leenhet"})}}});

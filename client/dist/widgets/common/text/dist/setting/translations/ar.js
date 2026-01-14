@@ -1,1 +1,0 @@
-System.register([],function(e){return{execute:function(){e({verticalAlignment:"\u0645\u062d\u0627\u0630\u0627\u0629 \u0631\u0623\u0633\u064a\u0629"})}}});

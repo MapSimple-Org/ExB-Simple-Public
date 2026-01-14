@@ -1,1 +1,0 @@
-System.register([],function(e){return{execute:function(){e({_widgetLabel:"\u05d0\u05e7\u05d5\u05e8\u05d3\u05d9\u05d5\u05df",tips:"\u05d0\u05e7\u05d5\u05e8\u05d3\u05d9\u05d5\u05df"})}}});

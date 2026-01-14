@@ -1,1 +1,0 @@
-System.register([],function(e){return{execute:function(){e({_widgetLabel:"Accedi",switchToLogin:"Passa a prima dell'accesso",switchToLogout:"Passa a dopo l'accesso",toggleSignInPreview:"Attiva/disattiva anteprima di accesso",restrictedResources:"Risorse limitate"})}}});

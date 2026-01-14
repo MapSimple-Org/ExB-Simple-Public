@@ -1,1 +1,0 @@
-System.register([],function(e){return{execute:function(){e({_widgetLabel:"Imagen",imageChooseShape:"Forma",imageCrop:"Recortar",previousImage:"Imagen anterior",nextImage:"Imagen siguiente",imageViewer:"Visor de im\xe1genes"})}}});

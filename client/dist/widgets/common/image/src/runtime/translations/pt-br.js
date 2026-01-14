@@ -1,1 +1,0 @@
-System.register([],function(e){return{execute:function(){e({_widgetLabel:"Imagem",imageChooseShape:"Formato",imageCrop:"Cortar",previousImage:"Imagem anterior",nextImage:"Pr\xf3xima imagem",imageViewer:"Visualizador de imagens"})}}});

@@ -1,1 +1,0 @@
-System.register([],function(e){return{execute:function(){e({_widgetLabel:"Image",imageChooseShape:"Forme",imageCrop:"Rogner",previousImage:"Image pr\xe9c\xe9dente",nextImage:"Image suivante",imageViewer:"Visionneuse d\u2019images"})}}});

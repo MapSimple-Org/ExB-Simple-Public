@@ -1,1 +1,0 @@
-System.register([],function(e){return{execute:function(){e({subMenuExpandMode:"\u5b50\u83dc\u5355\u5c55\u5f00\u6a21\u5f0f",mainMenu:"\u4e3b\u83dc\u5355",subMenu:"\u5b50\u83dc\u5355",navArrowColor:"\u5bfc\u822a\u7bad\u5934\u989c\u8272"})}}});

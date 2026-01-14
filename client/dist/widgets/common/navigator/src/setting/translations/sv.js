@@ -1,1 +1,0 @@
-System.register([],function(n){return{execute:function(){n({_widgetLabel:"Visar navigering",tabStyle:"Flikstil",navBtnStyle:"Stil p\xe5 navigeringsknapp",stepTips:"Fungerar bara n\xe4r en \xf6verg\xe5ngsanimering \xe4r inst\xe4lld f\xf6r motsvarande sektionswidget.",paginationStyle:"Pagineringsstil",navArrowColor:"F\xe4rg p\xe5 navigeringspil"})}}});

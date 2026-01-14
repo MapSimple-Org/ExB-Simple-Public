@@ -1,1 +1,0 @@
-System.register([],function(e){return{execute:function(){e({_widgetLabel:"Alapt\xe9rk\xe9p-gal\xe9ria"})}}});

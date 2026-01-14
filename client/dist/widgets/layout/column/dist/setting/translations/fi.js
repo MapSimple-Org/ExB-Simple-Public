@@ -1,1 +1,0 @@
-System.register([],function(e){return{execute:function(){e({verticalAlign:"Pystytasaus",spaceAround:"Tila ymp\xe4rill\xe4",spaceBetween:"Tila v\xe4liss\xe4",spaceEvenly:"Sijoita tasav\xe4lein",horizontalAlign:"Vaakatasaus",scrollable:"Vieritett\xe4v\xe4"})}}});

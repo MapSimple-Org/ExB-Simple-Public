@@ -1,1 +1,0 @@
-System.register([],function(e){return{execute:function(){e({subMenuExpandMode:"Modo de expans\xe3o de submenu",mainMenu:"Menu principal",subMenu:"Submenu",navArrowColor:"Cor da seta de navega\xe7\xe3o"})}}});

@@ -1,118 +1,138 @@
 # MapSimple Experience Builder Widgets
 
-Custom widgets for ArcGIS Experience Builder Developer Edition.
+Custom widgets for ArcGIS Experience Builder Developer Edition (1.19.0+). Built for performance, deep-linking, and advanced result management.
 
-## Overview
+**Current Version**: `1.19.0-r018.47` (Feature Branch: `feature/chunk-rock`)  
+**Stable Version**: `1.19.0-r017.60` (on `develop` branch)  
+**Release Type**: Hook & Shell Architecture Migration (r018.x)
 
-This repository contains production-ready widgets for ArcGIS Experience Builder Developer Edition, designed for MapSimple.org and the broader ArcGIS community.
+## Key Differentiators (Why QuerySimple?)
 
-## Widgets
+QuerySimple is designed to solve the common pain points of the standard Experience Builder query widget:
 
-### QuerySimple
+- **93% Latency Reduction**: Powered by a **Universal SQL Optimizer** that automatically rewrites expensive queries to use database indexes, plus **Attribute Stripping** to minimize network payloads.
+- **Dual-Mode Deep Linking**: Support for both Hash Fragments (`#shortId=val`) and Query Strings (`?shortId=val`).
+- **Results Accumulation**: Unlike the standard widget which clears results on every search, QuerySimple allows you to "Add to" or "Remove from" a selection set across multiple different queries.
+- **Discoverable Automation**: An interactive "Info Button" (ℹ️) automatically appears to show users exactly how to deep-link to the current layer.
+- **Persistence & Restoration**: Selections are maintained even when the identify tool is used, ensuring users never lose their search context.
 
-A powerful query widget that allows users to query feature layers with support for:
-- Attribute filtering (text, number, date)
-- Spatial filtering (buffer, draw, map extent)
-- Query grouping for organized query management
-- Hash parameter support for deep linking
-- Result pagination (multi-page or lazy load)
-- Selection management and map integration
-- Custom data actions (Add to Map)
-- Debug logging for troubleshooting
+---
 
-**Version:** 1.19.0
+## Widgets in this Suite
 
-### HelperSimple
+### 🔍 QuerySimple (`query-simple/`)
+A high-performance search engine for Experience Builder.
 
-A helper widget that manages opening other widgets via hash parameters. Useful for deep linking and automated widget opening.
+**Advanced Features:**
+- **SQL Optimizer**: Automatically unwraps `LOWER()` from search fields to ensure database index usage.
+- **Query Grouping**: Organize dozens of searches into a clean two-dropdown hierarchy.
+- **Display Order**: Control search prioritization via the `order` property (no need to manually reorder config).
+- **Spatial Power**: Integrated buffer, draw, and extent filtering.
+- **Unified Testing**: Verified by a "Mega-Journey" E2E suite that simulates real user sessions.
+
+### 🛠️ HelperSimple (`helper-simple/`)
+The "Orchestrator" widget that handles the background logic.
 
 **Features:**
-- Monitors URL hash changes
-- Automatically opens widgets based on hash parameters
-- Supports `#qsopen=true` for QuerySimple widget
+- **URL Monitor**: Listens for hash and query string changes to trigger QuerySimple automation.
+- **Selection Guard**: Restores QuerySimple results after the map identify popup is closed.
+- **Handshake Logic**: Manages the "open/close" state between widgets to ensure a clean UI.
 
-## Quick Start
+---
 
-### Installation
+## Configuration & Enhancements
 
-1. **Copy Widgets to Extensions Directory**
-   ```bash
-   cp -r client/your-extensions/widgets/query-simple /path/to/experience-builder/client/your-extensions/widgets/
-   cp -r client/your-extensions/widgets/helper-simple /path/to/experience-builder/client/your-extensions/widgets/
-   cp -r client/your-extensions/widgets/shared-code /path/to/experience-builder/client/your-extensions/widgets/
-   ```
+### URL Parameters (Deep Linking)
+Configure a `shortId` for any query to enable instant automation.
 
-2. **Rebuild Experience Builder**
-   ```bash
-   cd /path/to/experience-builder/client
-   npm run build
-   ```
+| Format | Example | Best Use Case |
+| :--- | :--- | :--- |
+| **Hash (#)** | `index.html#pin=123` | **Interactive UX.** Snappy, no page reload, private to browser. |
+| **Query (?)** | `index.html?pin=123` | **External Linking.** Standard for CRM/Email integrations. |
 
-3. **Restart Experience Builder Server**
+### Display Order & Grouping
+Manage complex search requirements with ease:
+- **`groupId`**: Clusters related searches (e.g., "Parcels") into a group.
+- **`searchAlias`**: The label shown inside the group (e.g., "Search by PIN").
+- **`order`**: A numeric value (1, 2, 3...) that forces a search to the top of the list, regardless of when it was added to the config.
 
-4. **Add Widgets in Builder**
-   - Open Experience Builder Builder
-   - Navigate to Widgets panel
-   - Find "QuerySimple" and "HelperSimple" in the widget list
-   - Drag widgets onto your experience
+---
+
+## Troubleshooting & Debugging
+
+The suite includes a production-safe **Debug System**. No logs are shown in the console unless explicitly requested via the URL.
+
+### How to use:
+Add `?debug=FEATURE` to your URL (e.g., `?debug=HASH,TASK`).
+
+### Available Switches:
+| Switch | What it tracks |
+| :--- | :--- |
+| `all` | Enable every single log (Warning: High volume). |
+| `HASH` | Deep link consumption and URL parameter parsing. |
+| `TASK` | Query execution, performance metrics, and data source status. |
+| `RESULTS-MODE` | Transitions between New, Add, and Remove selection modes. |
+| `EXPAND-COLLAPSE` | State management for result item details. |
+| `SELECTION` | Identify popup tracking and map selection sync. |
+| `RESTORE` | Logic used to rebuild the map selection after an identify event. |
+| `WIDGET-STATE` | The handshake between HelperSimple and QuerySimple. |
+| `GRAPHICS-LAYER` | Highlighting logic for graphics-enabled widgets. |
+
+### Known Bugs (Always Visible)
+
+**Important:** Known bugs are logged automatically, even when `?debug=false`. These appear as warnings in the console with the format `[QUERYSIMPLE ⚠️ BUG]` to help developers understand when they encounter a known issue rather than something they've done wrong.
+
+Each bug log includes:
+- **Bug ID**: Unique identifier (e.g., `BUG-GRAPHICS-001`)
+- **Category**: Bug type (SELECTION, UI, URL, DATA, GRAPHICS, PERFORMANCE, GENERAL)
+- **Description**: What the bug is and why it's happening
+- **Workaround**: How to avoid or work around the issue
+- **Target Resolution**: When the bug will be fixed (e.g., `r019.0`)
+
+See [`docs/bugs/BUGS.md`](docs/bugs/BUGS.md) for a complete list of known bugs and their status.
+
+---
 
 ## Documentation
 
-For detailed documentation, including:
-- Complete installation instructions
-- Configuration guide (including query grouping)
-- Usage examples
-- Hash parameter reference
-- Debug logging guide
-- Troubleshooting
+All development documentation has been organized into a centralized [`docs/`](docs/) directory for easy navigation:
 
-See: **[Widget Documentation](./client/your-extensions/widgets/README.md)**
+- **[`docs/development/`](docs/)** - Development guides, testing, standards (start with [`DEVELOPMENT_GUIDE.md`](docs/development/DEVELOPMENT_GUIDE.md))
+- **[`docs/architecture/`](docs/)** - Design patterns, migration plans, refactoring strategies
+- **[`docs/technical/`](docs/)** - Deep dives into specific technical challenges
+- **[`docs/features/`](docs/)** - Feature specifications and integration guides
+- **[`docs/bugs/`](docs/)** - Bug reports and resolution documentation
+- **[`docs/blog/`](docs/)** - Development insights and lessons learned
 
-## Hash Parameters
+**Quick Links:**
+- 📖 **New Developers:** Start with [`docs/development/DEVELOPMENT_GUIDE.md`](docs/development/DEVELOPMENT_GUIDE.md)
+- 🧪 **Testing:** See [`docs/development/TESTING_WALKTHROUGH.md`](docs/development/TESTING_WALKTHROUGH.md)
+- 🏗️ **Architecture:** See [`docs/architecture/COMPLETE_MIGRATION_PLAN.md`](docs/architecture/COMPLETE_MIGRATION_PLAN.md)
+- 📋 **Full Index:** See [`docs/README.md`](docs/README.md)
 
-### QuerySimple
+---
 
-Format: `#shortId=value`
+## Quality Assurance
 
-**Examples:**
-- `#pin=2223059013` - Execute "pin" query with value "2223059013"
-- `#major=12345` - Execute "major" query with value "12345"
+We use a **Unified Testing Strategy**. Instead of dozens of small tests that might miss state leaks, we run a single **"Mega-Journey"** that simulates a 5-minute user session across both widgets.
 
-### HelperSimple
+### Running the Suite:
+```bash
+# 1. Manual Auth (Do this once a day)
+npm run test:e2e:auth-setup
 
-- `#qsopen=true` - Forces QuerySimple widget to open
+# 2. Run the Mega-Journey
+npx playwright test tests/e2e/query-simple/session.spec.ts --project=chromium --headed
+```
 
-## Debug Logging
+---
 
-Enable debug logging by adding `?debug=` parameter to your URL:
+## Installation
 
-- `?debug=all` - Enable all debug logs
-- `?debug=HASH,FORM` - Enable specific feature logs (comma-separated)
-- `?debug=false` - Disable all debug logs (default)
+1. Copy `query-simple`, `helper-simple`, and `shared-code` into your `client/your-extensions/widgets` folder.
+2. Run `npm run build` from the `client` directory.
+3. Restart your Experience Builder server.
 
-Available debug features: `HASH`, `FORM`, `TASK`, `ZOOM`, `MAP-EXTENT`, `DATA-ACTION`, `UI`, `ERROR`
+---
 
-## Version History
-
-See [CHANGELOG.md](./client/your-extensions/widgets/CHANGELOG.md) for detailed version history and changes.
-
-## Requirements
-
-- ArcGIS Experience Builder Developer Edition 1.19.0 or later
-- Node.js and npm installed
-- Access to Experience Builder source code
-
-## Support
-
-For issues, questions, or contributions, please refer to the repository's issue tracker or contact the MapSimple organization.
-
-## License
-
-[Add your license information here]
-
-## References
-
-- [ArcGIS Experience Builder Widget Development Guide](https://developers.arcgis.com/experience-builder/guide/)
-- [Share Code Between Widgets](https://developers.arcgis.com/experience-builder/guide/share-code-between-widgets/)
-- [Experience Builder Developer Edition](https://developers.arcgis.com/experience-builder/)
-
+© 2025 MapSimple Organization. Built for the King County Parcel Viewer ecosystem.

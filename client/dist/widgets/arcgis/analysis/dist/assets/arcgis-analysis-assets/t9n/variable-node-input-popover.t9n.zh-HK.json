@@ -1,7 +1,0 @@
-{
-  "header": "選擇變數",
-  "noFound": "找不到相容的變數",
-  "search": "搜尋變數",
-  "variableLabel": "標籤: <span style='font-weight: var(--calcite-font-weight-normal)'>${val}</span>",
-  "variableVal": "值: <span style='font-weight: var(--calcite-font-weight-normal)'>${val}</span>"
-}

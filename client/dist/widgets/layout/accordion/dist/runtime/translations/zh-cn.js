@@ -1,1 +1,0 @@
-System.register([],function(e){return{execute:function(){e({_widgetLabel:"\u624b\u98ce\u7434\u5f0f",tips:"\u624b\u98ce\u7434\u5f0f"})}}});

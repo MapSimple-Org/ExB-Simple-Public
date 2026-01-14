@@ -1,1 +1,0 @@
-System.register([],function(e){return{execute:function(){e({_widgetLabel:"Veikt m\u0113r\u012bjumu",selectToStart:"Atlasiet r\u012bku, lai s\u0101ktu m\u0113r\u012b\u0161anu.",measureDistance:"Att\u0101luma m\u0113r\u012b\u0161ana",measureArea:"M\u0113r\u012bt laukumu",clearMeasurement:"Not\u012br\u012bt m\u0113r\u012bjumu",measureUnit:"M\u0113rvien\u012bba"})}}});

@@ -1,5 +1,0 @@
-import "../calcite-icon/index.js";
-import "../calcite-action/index.js";
-import "../calcite-action-menu/index.js";
-import "../calcite-scrim/index.js";
-export * from "./customElement.js";

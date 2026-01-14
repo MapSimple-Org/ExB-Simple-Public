@@ -1,1 +1,0 @@
-System.register([],function(e){return{execute:function(){e({_widgetLabel:"Login",switchToLogin:"Beralih ke sebelum login",switchToLogout:"Beralih ke setelah login",toggleSignInPreview:"Aktifkan pratinjau sign-in",restrictedResources:"Sumber daya terbatas"})}}});

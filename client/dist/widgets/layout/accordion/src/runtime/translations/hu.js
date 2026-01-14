@@ -1,1 +1,0 @@
-System.register([],function(t){return{execute:function(){t({_widgetLabel:"Kibonthat\xf3 panel",tips:"Kibonthat\xf3 panel"})}}});

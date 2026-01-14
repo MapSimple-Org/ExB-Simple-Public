@@ -1,1 +1,0 @@
-System.register([],function(e){return{execute:function(){e({customizeLayer:"Personnaliser les couches",selectLayers:"S\xe9lectionner des couches",noDataSourceWarning:"Le widget Carte s\xe9lectionn\xe9 ne contient aucune carte\xa0Web ou sc\xe8ne\xa0Web."})}}});

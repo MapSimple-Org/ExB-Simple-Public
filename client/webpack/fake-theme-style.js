@@ -1,1 +1,0 @@
-//This is a theme style placeholder to make webpack work even the theme does not have a style.

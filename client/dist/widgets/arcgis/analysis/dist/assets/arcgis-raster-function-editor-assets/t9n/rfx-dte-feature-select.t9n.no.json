@@ -1,8 +1,0 @@
-{
-  "selectFeature": "Velg et geoobjektlag",
-  "browseLayer": "Bla gjennom lag",
-  "loading": "Laster inn...",
-  "errorCodes": {
-    "required": "Denne parameteren kreves."
-  }
-}

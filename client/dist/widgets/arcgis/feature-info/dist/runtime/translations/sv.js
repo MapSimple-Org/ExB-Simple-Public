@@ -1,1 +1,0 @@
-System.register([],function(e){return{execute:function(){e({_widgetLabel:"Geoobjektinformation",noDataMessageDefaultText:"Inga data hittades.",featureNumbers:"{index} av {count}",featureInfoDataActionLabel:"{layer} geoobjektinfo - aktuell post"})}}});

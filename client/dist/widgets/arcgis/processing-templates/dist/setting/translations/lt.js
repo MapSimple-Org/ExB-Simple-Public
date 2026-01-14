@@ -1,1 +1,0 @@
-System.register([],function(e){return{execute:function(){e({customizeLayer:"Adaptuoti sluoksnius",selectLayers:"Pasirinkite sluoksnius",noDataSourceWarning:"Pasirinktame \u017eem\u0117lapio valdiklyje n\u0117ra internetinio \u017eem\u0117lapio arba internetin\u0117s scenos."})}}});

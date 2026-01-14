@@ -1,1 +1,0 @@
-System.register([],function(e){return{execute:function(){e({settingsLabel:"Defini\xe7\xf5es do visualizador de documentos"})}}});

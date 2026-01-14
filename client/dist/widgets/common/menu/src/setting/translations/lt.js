@@ -1,1 +1,0 @@
-System.register([],function(n){return{execute:function(){n({subMenuExpandMode:"Submeniu i\u0161pl\u0117timo re\u017eimas",mainMenu:"Pagrindinis meniu",subMenu:"Submeniu",navArrowColor:"Navigacijos rodykl\u0117s spalva"})}}});

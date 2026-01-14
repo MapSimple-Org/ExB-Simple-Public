@@ -1,8 +1,0 @@
-{
-  "select": "Izberi element: ${title}",
-  "lastUpdated": "Element je posodobljen: ${date}",
-  "viewItemDetails": "Ogled podrobnosti",
-  "preview": "Predogled",
-  "closePreview": "Zapri predogled",
-  "moreOptions": "Več možnosti"
-}

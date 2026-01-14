@@ -1,8 +1,0 @@
-{
-  "selectFeature": "Izberi geoobjektni sloj",
-  "browseLayer": "Prebrskaj sloje",
-  "loading": "Nalaganje...",
-  "errorCodes": {
-    "required": "Ta parameter je obvezen."
-  }
-}

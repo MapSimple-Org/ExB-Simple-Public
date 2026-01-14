@@ -1,1 +1,0 @@
-System.register([],function(a){return{execute:function(){a({distance:"Rastojanje",area:"Povr\u0161ina",atLeastOne:"Potrebno je izabrati najmanje jednu alatku",toolbar:"Traka sa alatkama",disableSnapping:"Onemogu\u0107i ka\u010denje u 2D mapi"})}}});

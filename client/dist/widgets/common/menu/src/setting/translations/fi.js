@@ -1,1 +1,0 @@
-System.register([],function(n){return{execute:function(){n({subMenuExpandMode:"Alivalikon laajennustila",mainMenu:"P\xe4\xe4valikko",subMenu:"Alivalikko",navArrowColor:"Navigointinuolen v\xe4ri"})}}});

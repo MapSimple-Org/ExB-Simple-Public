@@ -1,1 +1,0 @@
-System.register([],function(e){return{execute:function(){e({_widgetLabel:"Crear una experiencia nueva",createNewApp:"Crear una nueva aplicaci\xf3n",largeDevices:"Dispositivos de pantalla grande",mediumDevices:"Dispositivos de pantalla mediana",smallDevices:"Dispositivos de pantalla peque\xf1a"})}}});

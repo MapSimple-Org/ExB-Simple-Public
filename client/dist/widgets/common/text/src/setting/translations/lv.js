@@ -1,1 +1,0 @@
-System.register([],function(e){return{execute:function(){e({verticalAlignment:"Vertik\u0101l\u0101 sal\u0101go\u0161ana"})}}});

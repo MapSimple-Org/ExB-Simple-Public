@@ -1,1 +1,0 @@
-System.register([],function(e){return{execute:function(){e({_widgetLabel:"Klasi\u010dni smjer slike",toggleButtonOn:"Isklju\u010dite za odabir geoobjekata na karti",toggleButtonOff:"Uklju\u010dite za odabir to\u010dke fokusa na karti za prikaz slike",viewImage:"Kliknite ovdje za prikaz odabranog geoobjekta na slici",updateButton:"A\u017euriraj",deleteButton:"Izbri\u0161i"})}}});

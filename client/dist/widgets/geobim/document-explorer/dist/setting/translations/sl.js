@@ -1,1 +1,0 @@
-System.register([],function(e){return{execute:function(){e({settingsLabel:"Nastavitve za Document Explorer",selectModelViewer:"Izberite pripomo\u010dek Document Viewer za prikaz dokumentov."})}}});

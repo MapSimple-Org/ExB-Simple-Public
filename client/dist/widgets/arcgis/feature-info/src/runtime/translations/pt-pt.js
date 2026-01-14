@@ -1,1 +1,0 @@
-System.register([],function(e){return{execute:function(){e({_widgetLabel:"Informa\xe7\xe3o do elemento",noDataMessageDefaultText:"N\xe3o foram encontrados dados.",featureNumbers:"{index} de {count}",featureInfoDataActionLabel:"Registo atual da informa\xe7\xe3o do elemento {layer}"})}}});

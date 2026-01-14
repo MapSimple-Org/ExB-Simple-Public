@@ -1,1 +1,0 @@
-System.register([],function(e){return{execute:function(){e({_widgetLabel:"Mjerenje",selectToStart:"Odaberite alat za po\u010detak mjerenja.",measureDistance:"Izmjere udaljenost",measureArea:"Izmjeri podru\u010dje",clearMeasurement:"Jasno mjerenje",measureUnit:"Mjerna jedinica"})}}});

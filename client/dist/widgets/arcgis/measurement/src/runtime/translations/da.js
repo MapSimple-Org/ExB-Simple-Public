@@ -1,1 +1,0 @@
-System.register([],function(e){return{execute:function(){e({_widgetLabel:"M\xe5ling",selectToStart:"V\xe6lg et v\xe6rkt\xf8j for at starte m\xe5ling.",measureDistance:"Opm\xe5l afstand",measureArea:"Opm\xe5l omr\xe5de",clearMeasurement:"Ryd m\xe5ling",measureUnit:"M\xe5leenhed"})}}});

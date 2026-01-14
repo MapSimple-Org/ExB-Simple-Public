@@ -1,1 +1,0 @@
-System.register([],function(e){return{execute:function(){e({subMenuExpandMode:"Utvidelsesmodus undermeny",mainMenu:"Hovedmeny",subMenu:"Undermeny",navArrowColor:"Farge p\xe5 navigasjonspil"})}}});

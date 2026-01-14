@@ -1,1 +1,0 @@
-System.register([],function(e){return{execute:function(){e({_widgetLabel:"Eine neue Experience erstellen",createNewApp:"Neue App erstellen",largeDevices:"Ger\xe4te mit gro\xdfem Bildschirm",mediumDevices:"Ger\xe4te mit mittelgro\xdfem Bildschirm",smallDevices:"Ger\xe4te mit kleinem Bildschirm"})}}});

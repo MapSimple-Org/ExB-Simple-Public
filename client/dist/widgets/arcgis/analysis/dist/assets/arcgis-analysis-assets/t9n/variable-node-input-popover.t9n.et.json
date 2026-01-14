@@ -1,7 +1,0 @@
-{
-  "header": "Vali muutuja",
-  "noFound": "Võrreldavaid muutujaid ei leitud",
-  "search": "Otsi muutujaid",
-  "variableLabel": "Märgis: <span style='font-weight: var(--calcite-font-weight-normal)'>${val}</span>",
-  "variableVal": "Väärtus: <span style='font-weight: var(--calcite-font-weight-normal)'>${val}</span>"
-}

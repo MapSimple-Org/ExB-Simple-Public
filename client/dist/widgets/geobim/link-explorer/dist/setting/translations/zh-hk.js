@@ -1,1 +1,0 @@
-System.register([],function(e){return{execute:function(){e({settingsLabel:"\u9023\u7d50\u7e3d\u7ba1\u8a2d\u5b9a",selectModelViewer:"\u9078\u64c7\u6587\u4ef6\u6aa2\u8996\u5668 widget \u4ee5\u986f\u793a\u9023\u7d50\u7684\u6587\u4ef6\u3002"})}}});

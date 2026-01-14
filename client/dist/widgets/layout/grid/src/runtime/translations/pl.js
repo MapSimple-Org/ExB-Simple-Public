@@ -1,1 +1,0 @@
-System.register([],function(e){return{execute:function(){e({_widgetLabel:"Siatka",widgetProperties:"W\u0142a\u015bciwo\u015bci wid\u017cetu",widgetFunctions:"Funkcje wid\u017cetu",widgetName:"Nazwa wid\u017cetu:",widgetProps:"W\u0142a\u015bciwo\u015bci wid\u017cetu:",tips:"Siatka"})}}});

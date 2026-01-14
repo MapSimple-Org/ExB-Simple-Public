@@ -1,1 +1,0 @@
-System.register([],function(e){return{execute:function(){e({_widgetLabel:"Trasovanie utility siete",_widgetDescription:"Widget na sledovanie siete ArcGIS Utility Network",_action_filter_label:"Filter"})}}});

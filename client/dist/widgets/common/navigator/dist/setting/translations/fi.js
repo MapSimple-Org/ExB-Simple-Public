@@ -1,1 +1,0 @@
-System.register([],function(i){return{execute:function(){i({_widgetLabel:"N\xe4kymiss\xe4 siirtyminen",tabStyle:"V\xe4lilehtityyli",navBtnStyle:"Siirtymispainikkeen tyyli",stepTips:"Toimii vain, kun vastaavalle Osa-pienoisohjelmalle on m\xe4\xe4ritetty siirtym\xe4animaatio.",paginationStyle:"Sivutustyyli",navArrowColor:"Navigointinuolen v\xe4ri"})}}});

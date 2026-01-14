@@ -1,7 +1,0 @@
-{
-  "header": "変数の選択",
-  "noFound": "互換性のある変数が見つかりませんでした",
-  "search": "変数の検索",
-  "variableLabel": "ラベル: <span style='font-weight: var(--calcite-font-weight-normal)'>${val}</span>",
-  "variableVal": "値: <span style='font-weight: var(--calcite-font-weight-normal)'>${val}</span>"
-}
