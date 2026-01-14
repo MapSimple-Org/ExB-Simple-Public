@@ -1,1 +1,0 @@
-System.register([],function(e){return{execute:function(){e({customizeLayer:"Tilpass lag",selectLayers:"Velg lag",noDataSourceWarning:"Kartminiprogrammet som er valgt, inneholder ikke et webkart eller en webscene."})}}});

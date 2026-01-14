@@ -1,1 +1,0 @@
-System.register([],function(e){return{execute:function(){e({settingsLabel:"Nastavenia prehliada\u010da dokumentov"})}}});

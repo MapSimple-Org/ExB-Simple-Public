@@ -1,1 +1,0 @@
-System.register([],function(e){return{execute:function(){e({_widgetLabel:"\u5206\u9694\u7ebf",quickStyleItem:"\u5feb\u901f\u6837\u5f0f {index}"})}}});

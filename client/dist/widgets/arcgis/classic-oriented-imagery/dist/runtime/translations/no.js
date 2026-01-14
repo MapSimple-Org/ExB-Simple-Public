@@ -1,1 +1,0 @@
-System.register([],function(e){return{execute:function(){e({_widgetLabel:"Klassisk orienterte bilder",toggleButtonOn:"Sl\xe5 av for \xe5 velge geoobjekter i kart",toggleButtonOff:"Sl\xe5 p\xe5 for \xe5 velge et fokuspunkt i kart for visning av bilde",viewImage:"Klikk her for \xe5 vise det valgte geoobjektet i bilde",updateButton:"Oppdater",deleteButton:"Slett"})}}});

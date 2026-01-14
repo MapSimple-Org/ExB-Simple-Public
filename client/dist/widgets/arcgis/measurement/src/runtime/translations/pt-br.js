@@ -1,1 +1,0 @@
-System.register([],function(e){return{execute:function(){e({_widgetLabel:"Medi\xe7\xe3o",selectToStart:"Selecione uma ferramenta para iniciar a medi\xe7\xe3o.",measureDistance:"Medir dist\xe2ncias",measureArea:"Medir \xe1rea",clearMeasurement:"Limpar medi\xe7\xe3o",measureUnit:"Unidade de medida"})}}});

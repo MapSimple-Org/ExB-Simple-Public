@@ -1,1 +1,0 @@
-System.register([],function(e){return{execute:function(){e({_widgetLabel:"Messen",selectToStart:"W\xe4hlen Sie ein Werkzeug aus, um die Messung zu starten.",measureDistance:"Strecke messen",measureArea:"Fl\xe4che messen",clearMeasurement:"Messung l\xf6schen",measureUnit:"Messeinheit"})}}});

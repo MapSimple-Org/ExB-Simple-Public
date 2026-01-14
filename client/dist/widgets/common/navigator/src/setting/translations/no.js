@@ -1,1 +1,0 @@
-System.register([],function(n){return{execute:function(){n({_widgetLabel:"Visninger-navigasjon",tabStyle:"Fanestil",navBtnStyle:"Navigasjonsknappestil",stepTips:"Fungerer bare n\xe5r en overgangsanimasjon er angitt for den tilsvarende Seksjon-widgeten.",paginationStyle:"Pagineringsstil",navArrowColor:"Farge p\xe5 navigasjonspil"})}}});

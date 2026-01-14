@@ -1,1 +1,0 @@
-System.register([],function(e){return{execute:function(){e({_widgetLabel:"Prijava",switchToLogin:"Preklopi na pred prijavo",switchToLogout:"Preklopi na po prijavi",toggleSignInPreview:"Preklapljaj predogled prijave",restrictedResources:"Omejeni viri"})}}});

@@ -1,1 +1,0 @@
-System.register([],function(i){return{execute:function(){i({_widgetLabel:"Kurti nauj\u0105 patirt\u012f",createNewApp:"Kurti nauj\u0105 program\u0117l\u0119",largeDevices:"\u012erenginiai su dideliais ekranais",mediumDevices:"\u012erenginiai su vidutinio dyd\u017eio ekranais",smallDevices:"\u012erenginiai su ma\u017eais ekranais"})}}});

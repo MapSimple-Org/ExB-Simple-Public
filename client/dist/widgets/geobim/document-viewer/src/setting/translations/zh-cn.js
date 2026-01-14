@@ -1,1 +1,0 @@
-System.register([],function(e){return{execute:function(){e({settingsLabel:"Document Viewer \u8bbe\u7f6e"})}}});

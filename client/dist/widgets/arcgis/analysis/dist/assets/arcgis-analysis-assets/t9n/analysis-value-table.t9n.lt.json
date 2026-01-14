@@ -1,7 +1,0 @@
-{
-  "addEntryButtonLabel": "Pridėti",
-  "maxGroupsMessage": "Didžiausias įrašų skaičius yra ${maxCount}.",
-  "minGroupsMessage": "Mažiausias įrašų skaičius yra ${minCount}.",
-  "removeEntryButtonLabel": "Pašalinti įrašą",
-  "requiredMessage": "Šis parametras yra būtinas."
-}

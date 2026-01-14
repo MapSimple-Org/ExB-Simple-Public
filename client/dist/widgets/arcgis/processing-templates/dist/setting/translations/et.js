@@ -1,1 +1,0 @@
-System.register([],function(e){return{execute:function(){e({customizeLayer:"Kohanda kihte",selectLayers:"Vali kihid",noDataSourceWarning:"Valitud kaardividin ei sisalda veebikaarti ega veebistseeni."})}}});

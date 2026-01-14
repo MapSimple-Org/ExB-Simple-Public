@@ -1,1 +1,0 @@
-System.register([],function(e){return{execute:function(){e({customizeLayer:"Personalizza layer",selectLayers:"Seleziona layer",noDataSourceWarning:"Il widget mappa selezionato non contiene una mappa web o una scena web."})}}});

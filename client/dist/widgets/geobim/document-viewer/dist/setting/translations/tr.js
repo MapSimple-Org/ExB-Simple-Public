@@ -1,1 +1,0 @@
-System.register([],function(e){return{execute:function(){e({settingsLabel:"Belge G\xf6r\xfcnt\xfcleyici Ayarlar\u0131"})}}});

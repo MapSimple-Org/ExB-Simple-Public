@@ -1,1 +1,0 @@
-System.register([],function(e){return{execute:function(){e({settingsLabel:"Link Explorerin asetukset",selectModelViewer:"Valitse Document Viewer -pienoisohjelma, jos haluat n\xe4ytt\xe4\xe4 linkitetyt dokumentit."})}}});

@@ -1,1 +1,0 @@
-System.register([],function(o){return{execute:function(){o({verticalAlign:"Poravnaj vertikalno",spaceAround:"Prostor oko",spaceBetween:"Prostor izme\u0111u",spaceEvenly:"Ravnomerno rasporedi",horizontalAlign:"Poravnaj horizontalno",scrollable:"Klizna traka omogu\u0107ena"})}}});

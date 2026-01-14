@@ -1,1 +1,0 @@
-System.register([],function(e){return{execute:function(){e({distance:"Avstand",area:"Omr\xe5de",atLeastOne:"Du m\xe5 velge minst ett verkt\xf8y",toolbar:"Verkt\xf8ylinje",disableSnapping:"Deaktiver forankring i 2D-kart"})}}});

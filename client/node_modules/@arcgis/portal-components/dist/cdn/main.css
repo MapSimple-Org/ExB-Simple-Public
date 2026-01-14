@@ -1,1 +1,0 @@
-@layer{:not([hydrated]):is(arcgis-portal-classification-banner,arcgis-portal-classification-config,arcgis-portal-classification-favorite,arcgis-portal-classification-form-element,arcgis-portal-field-delete){visibility:hidden}}

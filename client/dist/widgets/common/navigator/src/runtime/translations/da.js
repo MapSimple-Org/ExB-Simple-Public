@@ -1,1 +1,0 @@
-System.register([],function(e){return{execute:function(){e({_widgetLabel:"Viser Navigation",widgetPlaceholder:"Opret link til et afsnit for at bruge denne widget.",widgetPlaceholderWithNoView:"V\xe6lg en visning for at bruge denne widget.",tabDefault:"Fanestandard",tabUnderline:"Faneunderstregnnig",tabPills:"Fanepiller",arrow1:"Pil 1",arrow2:"Pil 2",arrow3:"Pil 3"})}}});

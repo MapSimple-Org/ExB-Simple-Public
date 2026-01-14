@@ -1,9 +1,0 @@
-{
-  "addToMap": "Confirmare și adăugare la hartă",
-  "cancel": "Anulare",
-  "confirm": "Confirmare",
-  "header": "Selectați un element",
-  "select": "Selectare",
-  "unsupportedLayer": "Acest parametru nu acceptă următoarele straturi tematice: ${layerName}.",
-  "viewDetails": "Vizualizare detalii"
-}

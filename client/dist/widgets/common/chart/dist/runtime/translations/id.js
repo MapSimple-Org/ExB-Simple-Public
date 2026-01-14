@@ -1,1 +1,0 @@
-System.register([],function(a){return{execute:function(){a({_widgetLabel:"Diagram",dataEmptyTip:"Tidak ada data yang ditemukan."})}}});

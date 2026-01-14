@@ -1,1 +1,0 @@
-System.register([],function(e){return{execute:function(){e({_widgetLabel:"Medici\xf3n",selectToStart:"Seleccione una herramienta para iniciar la medici\xf3n.",measureDistance:"Medir la distancia",measureArea:"Medir \xe1rea",clearMeasurement:"Borrar medici\xf3n",measureUnit:"Unidad de medida"})}}});

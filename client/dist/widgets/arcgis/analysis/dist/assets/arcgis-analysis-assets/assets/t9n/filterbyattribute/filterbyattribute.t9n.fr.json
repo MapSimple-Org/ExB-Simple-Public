@@ -1,8 +1,0 @@
-{
-  "itemProperties": {
-    "description": "Résultats générés en exécutant l’outil d’analyse Filtrer par attributs.",
-    "snippet": "Résultats générés avec Filtrer par attributs"
-  },
-  "noLayerDisabledTooltip": "Sélectionnez un jeu de données en entrée valide.",
-  "queryCriteriaGroupLabel": "Critères de requête"
-}

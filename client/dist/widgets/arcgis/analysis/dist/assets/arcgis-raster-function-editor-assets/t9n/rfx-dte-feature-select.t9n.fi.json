@@ -1,8 +1,0 @@
-{
-  "selectFeature": "Valitse kohdekarttataso",
-  "browseLayer": "Selaa karttatasoja",
-  "loading": "Ladataan...",
-  "errorCodes": {
-    "required": "Tämä parametri on pakollinen."
-  }
-}

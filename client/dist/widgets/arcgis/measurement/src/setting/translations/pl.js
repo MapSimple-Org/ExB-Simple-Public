@@ -1,1 +1,0 @@
-System.register([],function(e){return{execute:function(){e({distance:"Odleg\u0142o\u015b\u0107",area:"Obszar",atLeastOne:"Nale\u017cy wybra\u0107 co najmniej jedno narz\u0119dzie",toolbar:"Pasek narz\u0119dzi",disableSnapping:"Wy\u0142\u0105cz doci\u0105ganie na mapie 2D"})}}});

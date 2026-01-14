@@ -1,1 +1,0 @@
-System.register([],function(e){return{execute:function(){e({settingsLabel:"Link Explorer-indstillinger",selectModelViewer:"V\xe6lg en Document Viewer-widget for at vise tilknyttede dokumenter."})}}});

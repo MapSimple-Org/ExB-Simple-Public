@@ -1,1 +1,0 @@
-System.register([],function(e){return{execute:function(){e({_widgetLabel:"\u0644\u0648\u062d\u0629 \u062a\u062d\u0643\u0645 \u0645\u062a\u062d\u0631\u0643\u0629",tips:"\u0644\u0648\u062d\u0629 \u062a\u062d\u0643\u0645 \u0645\u062a\u062d\u0631\u0643\u0629"})}}});

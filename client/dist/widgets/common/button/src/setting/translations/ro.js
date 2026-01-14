@@ -1,1 +1,0 @@
-System.register([],function(e){return{execute:function(){e({_widgetLabel:"Buton",dynamicStyleExpressionsLabel:"Utilizare con\u021binut text buton"})}}});

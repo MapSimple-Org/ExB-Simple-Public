@@ -1,1 +1,0 @@
-System.register([],function(e){return{execute:function(){e({_widgetLabel:"\u5716\u5fb5\u8cc7\u8a0a",noDataMessageDefaultText:"\u627e\u4e0d\u5230\u8cc7\u6599\u3002",featureNumbers:"{count} \u7684 {index}",featureInfoDataActionLabel:"{layer} \u5716\u5fb5\u8cc7\u8a0a\u76ee\u524d\u8a18\u9304"})}}});

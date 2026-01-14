@@ -1,1 +1,0 @@
-System.register([],function(e){return{execute:function(){e({_widgetLabel:"Tracering Utility Network",_widgetDescription:"Een widget voor het traceren van een ArcGIS Utility Network",_action_filter_label:"Filter"})}}});

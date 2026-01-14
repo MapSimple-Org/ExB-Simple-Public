@@ -1,1 +1,0 @@
-System.register([],function(e){return{execute:function(){e({settingsLabel:"Param\xe8tres de la visionneuse de documents"})}}});

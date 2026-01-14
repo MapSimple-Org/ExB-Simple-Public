@@ -1,1 +1,0 @@
-System.register([],function(e){return{execute:function(){e({_widgetLabel:"Sor",widgetProperties:"Widget tulajdons\xe1gai",widgetFunctions:"Widget f\xfcggv\xe9nyei",widgetName:"widget neve:",widgetProps:"widget tulajdons\xe1gai:",tips:"Sor"})}}});

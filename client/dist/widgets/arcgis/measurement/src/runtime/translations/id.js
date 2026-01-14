@@ -1,1 +1,0 @@
-System.register([],function(e){return{execute:function(){e({_widgetLabel:"Pengukuran",selectToStart:"Pilih alat untuk memulai pengukuran.",measureDistance:"Ukur jarak",measureArea:"Ukur area",clearMeasurement:"Hapus pengukuran",measureUnit:"Satuan pengukuran"})}}});

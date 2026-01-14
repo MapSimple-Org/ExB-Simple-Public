@@ -1,8 +1,0 @@
-{
-  "selectFeature": "Izvēlēties elemetu slāni",
-  "browseLayer": "Pārlūkot slāņus",
-  "loading": "Ielādē...",
-  "errorCodes": {
-    "required": "Šis parametrs ir obligāts."
-  }
-}

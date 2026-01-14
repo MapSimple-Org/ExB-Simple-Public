@@ -1,1 +1,0 @@
-System.register([],function(e){return{execute:function(){e({settingsLabel:"Instellingen Documentverkenner",selectModelViewer:"Selecteer een Documentweergave-widget als u documenten wilt weergeven."})}}});

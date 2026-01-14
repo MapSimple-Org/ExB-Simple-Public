@@ -1,1 +1,0 @@
-System.register([],function(e){return{execute:function(){e({_widgetLabel:"Rutenett",widgetProperties:"Widgetegenskaper",widgetFunctions:"Widgetfunksjoner",widgetName:"widgetnavn:",widgetProps:"widgetegenskaper:",tips:"Rutenett"})}}});

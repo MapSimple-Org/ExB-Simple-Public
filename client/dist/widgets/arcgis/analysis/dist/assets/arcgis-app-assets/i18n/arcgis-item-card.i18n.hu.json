@@ -1,8 +1,0 @@
-{
-  "select": "Elem kijelölése: ${title}",
-  "lastUpdated": "Elem frissítve: ${date}",
-  "viewItemDetails": "Részletek megtekintése",
-  "preview": "Előnézet",
-  "closePreview": "Előnézet bezárása",
-  "moreOptions": "További lehetőségek"
-}

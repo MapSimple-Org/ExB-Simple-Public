@@ -1,7 +1,0 @@
-{
-  "header": "Изберете променлива",
-  "noFound": "Не са намерени съвместими променливи",
-  "search": "Търсене на променливи",
-  "variableLabel": "Надпис: <span style='font-weight: var(--calcite-font-weight-normal)'>${val}</span>",
-  "variableVal": "Стойност: <span style='font-weight: var(--calcite-font-weight-normal)'>${val}</span>"
-}

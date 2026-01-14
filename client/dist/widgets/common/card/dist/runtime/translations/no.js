@@ -1,1 +1,0 @@
-System.register([],function(e){return{execute:function(){e({_layout_REGULAR_label:"Vanlig",_layout_HOVER_label:"Hover",_layout_DEFAULT_label:"Standard",applyTo:"Bruk p\xe5 {status}",isolate:"Isoler",linkedToAnd:"Koblet til {where1} og {where2}",linkedTo:"Koblet til {where}",placeHolderTip:"Velg en kortmal.",showSelected:"Vis utvalg",_widgetLabel:"Kort"})}}});

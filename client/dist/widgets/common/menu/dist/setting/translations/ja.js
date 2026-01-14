@@ -1,1 +1,0 @@
-System.register([],function(e){return{execute:function(){e({subMenuExpandMode:"\u30b5\u30d6\u30e1\u30cb\u30e5\u30fc\u5c55\u958b\u30e2\u30fc\u30c9",mainMenu:"\u30e1\u30a4\u30f3 \u30e1\u30cb\u30e5\u30fc",subMenu:"\u30b5\u30d6\u30e1\u30cb\u30e5\u30fc",navArrowColor:"\u30ca\u30d3\u30b2\u30fc\u30b7\u30e7\u30f3\u77e2\u5370\u306e\u8272"})}}});

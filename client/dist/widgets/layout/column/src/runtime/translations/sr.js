@@ -1,1 +1,0 @@
-System.register([],function(t){return{execute:function(){t({_widgetLabel:"Stubi\u010dasti",widgetProperties:"Svojstva vid\u017eeta",widgetFunctions:"Funkcije vid\u017eeta",widgetName:"naziv vid\u017eeta:",widgetProps:"svojstva vid\u017eeta:",tips:"Stubi\u010dasti"})}}});

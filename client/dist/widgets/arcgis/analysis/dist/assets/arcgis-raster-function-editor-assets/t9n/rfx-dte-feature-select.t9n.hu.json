@@ -1,8 +1,0 @@
-{
-  "selectFeature": "Válasszon ki vektoros réteget",
-  "browseLayer": "Rétegek tallózása",
-  "loading": "Betöltés...",
-  "errorCodes": {
-    "required": "Ez a paraméter kötelező."
-  }
-}

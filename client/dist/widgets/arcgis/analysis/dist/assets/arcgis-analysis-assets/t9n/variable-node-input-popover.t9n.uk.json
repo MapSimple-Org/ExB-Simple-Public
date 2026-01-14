@@ -1,7 +1,0 @@
-{
-  "header": "Вибрати змінну",
-  "noFound": "Сумісні змінні не знайдено",
-  "search": "Шукати змінні",
-  "variableLabel": "Напис: <span style='font-weight: var(--calcite-font-weight-normal)'>${val}</span>",
-  "variableVal": "Значення: <span style='font-weight: var(--calcite-font-weight-normal)'>${val}</span>"
-}

@@ -1,1 +1,0 @@
-System.register([],function(e){return{execute:function(){e({_widgetLabel:"Accord\xe9on",tips:"Accord\xe9on"})}}});

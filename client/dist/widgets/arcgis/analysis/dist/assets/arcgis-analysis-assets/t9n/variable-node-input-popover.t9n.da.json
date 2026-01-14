@@ -1,7 +1,0 @@
-{
-  "header": "Vælg variabel",
-  "noFound": "Der blev ikke fundet nogen kompatible variabler",
-  "search": "Søgevariabler",
-  "variableLabel": "Etiket: <span style='font-weight: var(--calcite-font-weight-normal)'>${val}</span>",
-  "variableVal": "Værdi: <span style='font-weight: var(--calcite-font-weight-normal)'>${val}</span>"
-}

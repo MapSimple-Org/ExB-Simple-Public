@@ -1,1 +1,0 @@
-System.register([],function(e){return{execute:function(){e({_widgetLabel:"Gomb",dynamicStyleExpressionsLabel:"Gombsz\xf6veg-tartalom haszn\xe1lata"})}}});

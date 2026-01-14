@@ -1,1 +1,0 @@
-System.register([],function(e){return{execute:function(){e({_widgetLabel:"\u697c\u5c42\u8fc7\u6ee4\u5668",floorfilter_noMap:"\u697c\u5c42\u8fc7\u6ee4\u5668",floorfilter_notFloorAware:"\u6240\u9009\u5730\u56fe\u4e0d\u662f\u697c\u5c42\u611f\u77e5\u578b\u5730\u56fe"})}}});

@@ -1,1 +1,0 @@
-System.register([],function(e){return{execute:function(){e({_widgetLabel:"Zoznam aplik\xe1ci\xed"})}}});

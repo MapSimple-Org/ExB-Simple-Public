@@ -1,1 +1,0 @@
-System.register([],function(e){return{execute:function(){e({_widgetLabel:"Bot\xe3o",dynamicStyleExpressionsLabel:"Utilizar o conte\xfado do Texto do bot\xe3o"})}}});

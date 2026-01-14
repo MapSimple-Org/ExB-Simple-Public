@@ -1,1 +1,0 @@
-System.register([],function(e){return{execute:function(){e({_widgetLabel:"N\xfat",dynamicStyleExpressionsLabel:"S\u1eed d\u1ee5ng n\u1ed9i dung N\xfat V\u0103n b\u1ea3n"})}}});

@@ -1,1 +1,0 @@
-System.register([],function(e){return{execute:function(){e({_widgetLabel:"Piltide kuvamise j\xe4rjekord",_widgetDescription:"Vidin kattuvate piltide kuvamisj\xe4rjekorra m\xe4\xe4ramiseks pildikihis.",selectLayers:"Vali kihid",noLayersTip:"Praegu pole kuvatavaid pildikihte.",openSettingPanelTip:"Avage konfiguratsioonide uuendamiseks vidina s\xe4tete paneel."})}}});

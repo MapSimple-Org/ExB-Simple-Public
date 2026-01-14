@@ -1,1 +1,0 @@
-System.register([],function(e){return{execute:function(){e({_widgetLabel:"Sisselogimine",switchToLogin:"Vaheta enne sisselogimist",switchToLogout:"Vaheta p\xe4rast sisselogimist",toggleSignInPreview:"Vaheta sisselogimise eelvaadet",restrictedResources:"Piiratud ressursid"})}}});

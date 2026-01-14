@@ -1,1 +1,0 @@
-System.register([],function(e){return{execute:function(){e({_widgetLabel:"Pilt",imageChooseShape:"Kuju",imageCrop:"K\xe4rbi",previousImage:"Eelmine pilt",nextImage:"J\xe4rgmine pilt",imageViewer:"Pildivaatur"})}}});

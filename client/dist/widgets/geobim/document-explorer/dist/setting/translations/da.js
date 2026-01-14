@@ -1,1 +1,0 @@
-System.register([],function(e){return{execute:function(){e({settingsLabel:"Document Explorer-indstillinger",selectModelViewer:"V\xe6lg en Document Viewer-widget for at vise dokumenter."})}}});

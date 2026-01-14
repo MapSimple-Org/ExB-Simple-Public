@@ -1,9 +1,0 @@
-{
-  "disconnect": "Prekini vezu sa promenljivom",
-  "overwriteTo": "Zameni sloj: <span style='font-weight: var(--calcite-font-weight-normal)'>${val}</span>",
-  "resultType": "Tip rezultata: <span style='font-weight: var(--calcite-font-weight-normal)'>${val}</span>",
-  "saveTo": "Naziv izlaza: <span style='font-weight: var(--calcite-font-weight-normal)'>${val}</span>",
-  "variableLabel": "Oznaka: <span style='font-weight: var(--calcite-font-weight-normal)'>${val}</span>",
-  "variableNode": "Čvor promenljive",
-  "variableVal": "Vrednost: <span style='font-weight: var(--calcite-font-weight-normal)'>${val}</span>"
-}

@@ -1,1 +1,0 @@
-System.register([],function(i){return{execute:function(){i({_widgetLabel:"Ruudustik",widgetProperties:"Vidina atribuudid",widgetFunctions:"Vidina funktsioonid",widgetName:"vidina nimi:",widgetProps:"vidina atribuudid:",tips:"Ruudustik"})}}});

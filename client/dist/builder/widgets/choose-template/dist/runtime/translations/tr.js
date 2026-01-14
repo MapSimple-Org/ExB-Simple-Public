@@ -1,1 +1,0 @@
-System.register([],function(e){return{execute:function(){e({_widgetLabel:"Yeni bir deneyim yarat\u0131n",createNewApp:"Yeni uygulama olu\u015ftur",largeDevices:"B\xfcy\xfck ekranl\u0131 cihazlar",mediumDevices:"Orta boy ekranl\u0131 cihazlar",smallDevices:"K\xfc\xe7\xfck boy ekranl\u0131 cihazlar"})}}});

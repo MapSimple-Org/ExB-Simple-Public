@@ -1,1 +1,0 @@
-System.register([],function(e){return{execute:function(){e({customizeLayer:"Prilagodi slojeve",selectLayers:"Odaberite slojeve",noDataSourceWarning:"Odabrani widget karte ne sadr\u017ei interaktivnu kartu ili interaktivnu scenu."})}}});

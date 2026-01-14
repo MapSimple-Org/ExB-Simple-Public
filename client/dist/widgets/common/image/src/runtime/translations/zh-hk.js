@@ -1,1 +1,0 @@
-System.register([],function(e){return{execute:function(){e({_widgetLabel:"\u5716\u7247",imageChooseShape:"\u5f62\u72c0",imageCrop:"\u88c1\u526a",previousImage:"\u4e0a\u4e00\u5f35\u5716\u7247",nextImage:"\u4e0b\u4e00\u5f35\u5716\u7247",imageViewer:"\u5716\u7247\u6aa2\u8996\u5668"})}}});

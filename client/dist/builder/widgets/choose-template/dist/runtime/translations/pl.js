@@ -1,1 +1,0 @@
-System.register([],function(e){return{execute:function(){e({_widgetLabel:"Utw\xf3rz nowe \u015brodowisko",createNewApp:"Utw\xf3rz now\u0105 aplikacj\u0119",largeDevices:"Urz\u0105dzenia z du\u017cymi ekranami",mediumDevices:"Urz\u0105dzenia ze \u015brednimi ekranami",smallDevices:"Urz\u0105dzenia z ma\u0142ymi ekranami"})}}});

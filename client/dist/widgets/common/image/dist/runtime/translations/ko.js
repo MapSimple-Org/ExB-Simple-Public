@@ -1,1 +1,0 @@
-System.register([],function(e){return{execute:function(){e({_widgetLabel:"\uc774\ubbf8\uc9c0",imageChooseShape:"\ubaa8\uc591",imageCrop:"\uc790\ub974\uae30",previousImage:"\uc774\uc804 \uc774\ubbf8\uc9c0",nextImage:"\ub2e4\uc74c \uc774\ubbf8\uc9c0",imageViewer:"\uc774\ubbf8\uc9c0 \ubdf0\uc5b4"})}}});

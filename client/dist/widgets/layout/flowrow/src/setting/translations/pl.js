@@ -1,1 +1,0 @@
-System.register([],function(e){return{execute:function(){e({verticalAlign:"Wyr\xf3wnanie w pionie",spaceAround:"Przestrze\u0144 wok\xf3\u0142",spaceBetween:"Przestrze\u0144 mi\u0119dzy",spaceEvenly:"Rozmie\u015b\u0107 r\xf3wnomiernie",horizontalAlign:"Wyr\xf3wnanie w poziomie",scrollable:"Przewijalna"})}}});

@@ -1,1 +1,0 @@
-System.register([],function(e){return{execute:function(){e({settingsLabel:"Innstillinger for Dokumentutforsker",selectModelViewer:"Velg et miniprogram for dokumentviseren for \xe5 vise dokumenter."})}}});

@@ -1,1 +1,0 @@
-System.register([],function(e){return{execute:function(){e({settingsLabel:"\ubb38\uc11c \ubdf0\uc5b4 \uc124\uc815"})}}});

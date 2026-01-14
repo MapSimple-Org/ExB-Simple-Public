@@ -1,8 +1,0 @@
-{
-  "devEnv": {
-    "prod": {
-      "portalUrl": "https://www.arcgis.com",
-      "clientId": "experienceBuilder"
-    }
-  }
-}

@@ -1,9 +1,0 @@
-{
-  "inputFlowDirectionRasterLabel": "Vstupný raster smeru prúdenia",
-  "inputLayerGroupText": "Vyberte rastre vstupného toku a smeru prúdenia.",
-  "inputStreamRasterLabel": "Vstupný raster toku",
-  "itemProperties": {
-    "description": "Výstup vygenerovaný zo spustenia nástroja na analýzu StreamLink.",
-    "snippet": "Výstup generovaný zo StreamLink"
-  }
-}

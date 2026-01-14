@@ -1,1 +1,0 @@
-System.register([],function(t){return{execute:function(){t({_widgetLabel:"St\u0101vu filtrs",floorfilter_noMap:"St\u0101vu filtrs",floorfilter_notFloorAware:"Atlas\u012btaj\u0101 kart\u0113 nav nor\u0101des par st\u0101viem"})}}});

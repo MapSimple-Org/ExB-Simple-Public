@@ -1,1 +1,0 @@
-System.register([],function(e){return{execute:function(){e({distance:"\uac70\ub9ac",area:"\uba74\uc801",atLeastOne:"\ub3c4\uad6c\ub97c \ud558\ub098 \uc774\uc0c1 \uc120\ud0dd\ud574\uc57c \ud569\ub2c8\ub2e4.",toolbar:"\ub3c4\uad6c\ubaa8\uc74c",disableSnapping:"2D \ub9f5\uc5d0\uc11c \uc2a4\ub0b4\ud551 \ube44\ud65c\uc131\ud654"})}}});

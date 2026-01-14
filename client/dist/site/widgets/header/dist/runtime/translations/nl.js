@@ -1,1 +1,0 @@
-System.register([],function(e){return{execute:function(){e({createNew:"Maak nieuwe",newExperience:"Nieuwe ervaring",developerEdition:"Developer Edition",linkToHome:"Start",linkToMapViewer:"Kaart",linkToSceneViewer:"Scene",linkToNotebooks:"Notebooks",linkToGroups:"Groepen",linkToContent:"Content",linkToOrganization:"Organisatie",expressModeLabel:"Express-modus"})}}});

@@ -1,6 +1,0 @@
-{
-  "description": "Deskripsi",
-  "addDescription": "Tambahkan deskripsi",
-  "charactersLeft": "Karakter tersisa: ${num}",
-  "invalid": "Deskripsi tidak boleh berisi salah satu dari karakter ini: < atau >."
-}

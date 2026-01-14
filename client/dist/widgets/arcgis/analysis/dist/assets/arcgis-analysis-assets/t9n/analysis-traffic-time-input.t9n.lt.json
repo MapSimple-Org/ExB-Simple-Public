@@ -1,8 +1,0 @@
-{
-  "arriveTime": "Atvykimo laikas",
-  "modes": {
-    "custom": "Pasirinktinė data ir laikas",
-    "now": "Dabar",
-    "unspecified": "Laikas nenurodytas"
-  }
-}

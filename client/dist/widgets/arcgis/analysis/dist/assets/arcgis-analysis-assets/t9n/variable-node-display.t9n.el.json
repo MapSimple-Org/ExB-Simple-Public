@@ -1,9 +1,0 @@
-{
-  "disconnect": "Αποσύνδεση από μεταβλητή",
-  "overwriteTo": "Αντικατάσταση θεματικού επιπέδου: </span>${val}<span style='font-weight: var(--calcite-font-weight-normal)'>",
-  "resultType": "Τύπος αποτελέσματος: </span>${val}<span style='font-weight: var(--calcite-font-weight-normal)'>",
-  "saveTo": "Όνομα εξόδου: </span>${val}<span style='font-weight: var(--calcite-font-weight-normal)'>",
-  "variableLabel": "Ετικέτα: </span>${val}<span style='font-weight: var(--calcite-font-weight-normal)'>",
-  "variableNode": "Κόμβος μεταβλητής",
-  "variableVal": "Τιμή: </span>${val}<span style='font-weight: var(--calcite-font-weight-normal)'>"
-}

@@ -1,1 +1,0 @@
-System.register([],function(e){return{execute:function(){e({customizeLayer:"\u81ea\u5b9a\u4e49\u56fe\u5c42",selectLayers:"\u9009\u62e9\u56fe\u5c42",noDataSourceWarning:"\u6240\u9009\u201c\u5730\u56fe\u201d\u5fae\u4ef6\u4e0d\u5305\u542b Web \u5730\u56fe\u6216 Web \u573a\u666f\u3002"})}}});

@@ -1,1 +1,0 @@
-System.register([],function(e){return{execute:function(){e({_widgetLabel:"Diagramme",dataEmptyTip:"Aucune donn\xe9e trouv\xe9e."})}}});

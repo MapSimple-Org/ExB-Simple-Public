@@ -1,8 +1,0 @@
-{
-  "select": "Selectare element: ${title}",
-  "lastUpdated": "Element actualizat: ${date}",
-  "viewItemDetails": "Vizualizare detalii",
-  "preview": "Previzualizare",
-  "closePreview": "Închidere previzualizare",
-  "moreOptions": "Mai multe opțiuni"
-}
