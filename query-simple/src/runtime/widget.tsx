@@ -481,6 +481,18 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
   }
 
   componentWillUnmount() {
+    // r021.6 Chunk 2c: Close popup when widget unmounts
+    const mapView = this.mapViewManager.getMapView() || this.mapViewRef.current
+    if (mapView?.popup?.visible) {
+      mapView.popup.close()
+      debugLogger.log('POPUP', {
+        event: 'popup-closed-on-widget-unmount',
+        widgetId: this.props.id,
+        reason: 'Widget unmounted',
+        timestamp: Date.now()
+      })
+    }
+    
     // Chunk 1: Clean up manager (r018.8)
     this.urlConsumptionManager.cleanup()
     
@@ -586,6 +598,23 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
       
       // Add selection to map if we have one
       if (hasSelectionToRestore) {
+        // r020.1 (BUG-HASH-DIRTY-001): Safety check - only restore if we have records to display
+        const hasRecordsToDisplay = this.state.accumulatedRecords?.some(ar => ar.record) || 
+                                    this.state.selectionRecordCount > 0
+        
+        if (!hasRecordsToDisplay) {
+          debugLogger.log('RESTORE', {
+            event: 'panel-opened-skipping-restore-no-records',
+            widgetId: this.props.id,
+            reason: 'hasSelectionToRestore-true-but-no-records-to-display',
+            hasAccumulatedRecords,
+            accumulatedRecordsCount: this.state.accumulatedRecords?.length || 0,
+            selectionRecordCount: this.state.selectionRecordCount || 0,
+            hasLastSelection: !!this.state.lastSelection
+          })
+          return // Don't restore if no records
+        }
+        
         debugLogger.log('RESTORE', {
           event: 'panel-opened-calling-addSelectionToMap',
           widgetId: this.props.id,
@@ -611,6 +640,18 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
         })
       }
     } else {
+      // r021.7 Chunk 2c: Close popup when widget panel closes
+      const mapView = this.mapViewManager.getMapView() || this.mapViewRef.current
+      if (mapView?.popup?.visible) {
+        mapView.popup.close()
+        debugLogger.log('POPUP', {
+          event: 'popup-closed-on-panel-close',
+          widgetId: this.props.id,
+          reason: 'Widget panel closed',
+          timestamp: Date.now()
+        })
+      }
+      
       // When panel closes, clear selection from map only (keep widget state)
       const isAccumulationMode = this.state.resultsMode === SelectionType.AddToSelection || 
                                  this.state.resultsMode === SelectionType.RemoveFromSelection

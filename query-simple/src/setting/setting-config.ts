@@ -2,6 +2,7 @@
 import { QueryArrangeType } from '../config'
 import iconClose from 'jimu-icons/svg/outlined/editor/close.svg'
 import iconAdd from 'jimu-icons/svg/outlined/editor/plus.svg'
+import iconDuplicate from 'jimu-icons/svg/outlined/editor/duplicate.svg'
 import iconSetting from 'jimu-icons/svg/outlined/application/setting.svg'
 import arrowDown from 'jimu-icons/svg/outlined/directional/down.svg'
 import arrowUp from 'jimu-icons/svg/outlined/directional/up.svg'
@@ -22,6 +23,7 @@ const iconMap = {
   iconTipBulb: require('./assets/icons/tip-bulb.svg'),
   iconClose,
   iconAdd,
+  iconDuplicate,
   iconSetting,
   arrowDown,
   arrowUp,

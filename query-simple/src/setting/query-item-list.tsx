@@ -1,5 +1,5 @@
 /** @jsx jsx */
-import { React, jsx, css, type ImmutableArray, type ImmutableObject, urlUtils, polished, classNames, hooks } from 'jimu-core'
+import { React, jsx, css, Immutable, type ImmutableArray, type ImmutableObject, urlUtils, polished, classNames, hooks } from 'jimu-core'
 import { Button, Icon } from 'jimu-ui'
 import { List, TreeItemActionType, type TreeItemsType, type TreeItemType, type CommandActionDataType } from 'jimu-ui/basic/list-tree'
 import { SettingRow, SettingSection, SidePopper } from 'jimu-ui/advanced/setting-components'
@@ -61,6 +61,22 @@ export function QueryItemList (props: Props) {
   const clearSelection = React.useCallback(() => {
     setSelectedIndex(-1)
   }, [])
+
+  const handleDuplicateQuery = React.useCallback((index: number) => {
+    const queryToDuplicate = queryItems[index]
+    const newConfigId = `${Math.random()}`.slice(2)
+    
+    const duplicatedQuery = Immutable({
+      ...queryToDuplicate,
+      configId: newConfigId,
+      outputDataSourceId: `${props.widgetId}_output_${newConfigId}`,
+      name: `${queryToDuplicate.name} (Copy)`,
+      searchAlias: queryToDuplicate.searchAlias ? `${queryToDuplicate.searchAlias}_copy` : undefined,
+      shortId: queryToDuplicate.shortId ? `${queryToDuplicate.shortId}_copy` : undefined
+    })
+    
+    onNewQueryItemAdded(duplicatedQuery)
+  }, [queryItems, props.widgetId, onNewQueryItemAdded])
 
   const advancedActionMap = {
     overrideItemBlockInfo: ({ itemBlockInfo }, refComponent) => {
@@ -131,6 +147,14 @@ export function QueryItemList (props: Props) {
               itemStateIcon: { icon: item.icon?.svg },
               itemStateTitle: item.name,
               itemStateCommands: [
+                {
+                  label: getI18nMessage('duplicate'),
+                  iconProps: () => ({ icon: iconMap.iconDuplicate, size: 12 }),
+                  action: ({ data }: CommandActionDataType) => {
+                    const { itemJsons: [currentItemJson] } = data
+                    handleDuplicateQuery(+currentItemJson.itemKey)
+                  }
+                },
                 {
                   label: getI18nMessage('remove'),
                   iconProps: () => ({ icon: iconMap.iconClose, size: 12 }),
