@@ -3,6 +3,7 @@ export default {
   outputDsLabel: '{label} result',
   addNewQueryAndCustomOptions: 'Add new query and custom options.',
   newQuery: 'New query',
+  duplicate: 'Duplicate',
   newFilterLayer: 'Add filter layer',
   arrangementStyle: 'Arrangement style',
   wrapItems: 'Wrap items',
