@@ -532,12 +532,35 @@ export function QueryTask (props: QueryTaskProps) {
       })
     }
     
+    // r021.4 Chunk 2a: Close popup when clearing results
+    if (mapView?.popup?.visible) {
+      mapView.popup.close()
+      debugLogger.log('POPUP', {
+        event: 'popup-closed-on-clear-results',
+        widgetId: props.widgetId,
+        reason: 'User clicked Clear results button',
+        timestamp: Date.now()
+      })
+    }
+    
     // Clear widget-level accumulated records when clearing results
     if (onAccumulatedRecordsChange) {
       onAccumulatedRecordsChange([])
       debugLogger.log('RESULTS-MODE', {
         event: 'accumulated-records-cleared-on-clear-results',
         widgetId: props.widgetId
+      })
+    }
+    
+    // r020.1 (BUG-HASH-DIRTY-001): Dispatch empty selection event to clear widget state
+    // This ensures hasSelection, selectionRecordCount, and lastSelection are cleared
+    if (props.eventManager && outputDS) {
+      dispatchSelectionEvent(props.widgetId, [], outputDS, queryItem.configId, props.eventManager)
+      debugLogger.log('HASH', {
+        event: 'clearResult-dispatched-empty-selection-event',
+        widgetId: props.widgetId,
+        reason: 'clear-widget-selection-state',
+        timestamp: Date.now()
       })
     }
     
@@ -1578,6 +1601,18 @@ export function QueryTask (props: QueryTaskProps) {
                   graphicsCountAfter: graphicsLayer?.graphics?.length || 0,
                   removedRecordIdsCount: removedRecordIds.length,
                   removedRecordIds: removedRecordIds.slice(0, 10),
+                  timestamp: Date.now()
+                })
+              }
+              
+              // r021.5 FIX: Close popup when executing Remove mode query
+              if (mapView?.popup?.visible) {
+                mapView.popup.close()
+                debugLogger.log('POPUP', {
+                  event: 'popup-closed-on-remove-mode-query',
+                  widgetId: props.widgetId,
+                  removedRecordsCount: result.records.length,
+                  reason: 'Remove mode query executed',
                   timestamp: Date.now()
                 })
               }

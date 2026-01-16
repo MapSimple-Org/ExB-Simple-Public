@@ -106,12 +106,16 @@ export const QueryResultItem = (props: ResultItemProps) => {
     return widgetJson.config.resultListDirection !== ListDirection.Horizontal
   })
 
-  // Handle clicking on the result item - zooms to feature on map
+  /**
+   * Handle clicking on the result item.
+   * Triggers zoom and popup opening (handled in toggleSelection callback).
+   */
   const handleClickResultItem = React.useCallback((e: React.MouseEvent) => {
     // Don't trigger zoom if clicking the remove button
     if ((e.target as HTMLElement).closest('.remove-button')) {
       return
     }
+    
     onClick(data)
   }, [onClick, data])
 
