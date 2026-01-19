@@ -3,11 +3,36 @@
 import { React, css, jsx, type DataSource, injectIntl, type IntlShape, classNames } from 'jimu-core'
 import { loadArcGISJSAPIModules } from 'jimu-arcgis'
 import { Button } from 'jimu-ui'
-import { RightFilled } from 'jimu-icons/filled/directional/right'
-import { DownFilled } from 'jimu-icons/filled/directional/down'
 import { createQuerySimpleDebugLogger } from 'widgets/shared-code/common'
 
 const debugLogger = createQuerySimpleDebugLogger()
+
+/**
+ * Arrow icons as CSS background-images (r021.46 memory optimization)
+ * Instead of creating 600 React component instances of RightFilled/DownFilled,
+ * we use CSS styles with SVG data-uris that are reused across all items.
+ * This eliminates 600 component instances + 600 DOM nodes.
+ * SVG sources: jimu-icons/svg/filled/directional/right.svg and down.svg
+ */
+const rightArrowStyle = css`
+  width: 16px;
+  height: 16px;
+  background-image: url('data:image/svg+xml;utf8,<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 2L12 8L4 14V2Z" fill="currentColor"/></svg>');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  display: inline-block;
+`
+
+const downArrowStyle = css`
+  width: 16px;
+  height: 16px;
+  background-image: url('data:image/svg+xml;utf8,<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M14 4L8 12L2 4L14 4Z" fill="currentColor"/></svg>');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  display: inline-block;
+`
 
 export enum LoadStatus {
   Pending = 'Pending',
@@ -260,7 +285,7 @@ class FeatureInfo extends React.PureComponent<Props & ExtraProps, State> {
               justify-content: center;
             `}
           >
-            {showContent ? <DownFilled size='m'/> : <RightFilled size='m' autoFlip/>}
+            <div css={showContent ? downArrowStyle : rightArrowStyle} aria-hidden="true" />
           </Button>
         )}
         <div className='flex-grow-1' ref={this.featureContainer} />

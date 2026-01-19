@@ -176,6 +176,25 @@ export function QueryTaskResult (props: QueryTaskResultProps) {
   const lastSelectedFeatureRecordsRef = React.useRef<FeatureDataRecord[]>([])
   // FIX (r018.94): Removed removedRecordIds ref - no longer needed
   
+  // r021.15: Cleanup refs on unmount to prevent memory leaks
+  React.useEffect(() => {
+    return () => {
+      // Clear all refs holding FeatureDataRecord arrays to allow garbage collection
+      // These arrays can hold hundreds of records with circular references to DOM nodes
+      lastSelectedRecordsRef.current = []
+      lastQueryRecordIdsRef.current = []
+      lastSelectedFeatureRecordsRef.current = []
+      hasSelectedRef.current = false
+      
+      debugLogger.log('TASK', {
+        event: 'memory-cleanup-query-result-refs',
+        widgetId,
+        note: 'Cleared refs on QueryTaskResult unmount to free memory',
+        timestamp: Date.now()
+      })
+    }
+  }, [widgetId])
+  
   // Error state for user-facing errors
   const [selectionError, setSelectionError] = React.useState<string>(null)
 

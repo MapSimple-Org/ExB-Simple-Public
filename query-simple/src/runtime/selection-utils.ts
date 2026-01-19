@@ -5,7 +5,7 @@
 
 import type { DataSource, FeatureLayerDataSource, FeatureDataRecord } from 'jimu-core'
 import { MessageManager, DataRecordsSelectionChangeMessage } from 'jimu-core'
-import { addHighlightGraphics as addGraphicsLayerGraphics, clearGraphicsLayer } from './graphics-layer-utils'
+import { addHighlightGraphics as addGraphicsLayerGraphics, clearGraphicsLayer, createOrGetGraphicsLayer } from './graphics-layer-utils'
 import { createQuerySimpleDebugLogger } from 'widgets/shared-code/common'
 import type { EventManager } from './hooks/use-event-handling'
 
@@ -102,7 +102,7 @@ export async function selectRecordsInDataSources(
   const originDS = getOriginDataSource(outputDS)
   
   // If using graphics layer, add graphics for highlighting
-  if (useGraphicsLayer && graphicsLayer && mapView && records && records.length > 0) {
+  if (useGraphicsLayer && mapView && records && records.length > 0 && graphicsLayer) {
     debugLogger.log('GRAPHICS-LAYER', {
       event: 'selectRecordsInDataSources-using-graphics-layer',
       recordIdsCount: recordIds.length,

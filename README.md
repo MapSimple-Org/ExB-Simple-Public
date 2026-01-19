@@ -1,131 +1,233 @@
 # MapSimple Experience Builder Widgets
 
-Custom widgets for ArcGIS Experience Builder Developer Edition.
+Custom widgets for ArcGIS Experience Builder Developer Edition (1.19.0+). Built for performance, deep-linking, and advanced result management.
 
-## Overview
+**Current Version**: `1.19.0-r021.46`  
+**Latest Update**: Major memory optimization and performance improvements (Jan 16-19, 2026)
 
-This repository contains production-ready widgets for ArcGIS Experience Builder Developer Edition, designed for MapSimple.org and the broader ArcGIS community.
+## Key Differentiators (Why QuerySimple?)
 
-## Widgets
+QuerySimple is designed to solve the common pain points of the standard Experience Builder query widget:
 
-### QuerySimple
+- **93% Latency Reduction**: Powered by a **Universal SQL Optimizer** that automatically rewrites expensive queries to use database indexes, plus **Attribute Stripping** to minimize network payloads.
+- **Dual-Mode Deep Linking**: Support for both Hash Fragments (`#shortId=val`) and Query Strings (`?shortId=val`).
+- **Results Accumulation**: Unlike the standard widget which clears results on every search, QuerySimple allows you to "Add to" or "Remove from" a selection set across multiple different queries.
+- **Discoverable Automation**: An interactive "Info Button" (ℹ️) automatically appears to show users exactly how to deep-link to the current layer.
+- **Persistence & Restoration**: Selections are maintained even when the identify tool is used, ensuring users never lose their search context.
 
-A powerful query widget that allows users to query feature layers with support for:
-- Attribute filtering (text, number, date)
-- Spatial filtering (buffer, draw, map extent)
-- Query grouping for organized query management
-- **Duplicate query button** for fast configuration (NEW in r020.0)
-- **Auto-open popup on result click** with guaranteed interior location (NEW in r021.11)
-- Hash parameter support for deep linking
-- Result pagination (multi-page or lazy load)
-- Selection management and map integration
-- Custom data actions (Add to Map)
-- Debug logging for troubleshooting
+---
 
-**Version:** 1.19.0-r021.11
+## What's New: r021.11 → r021.46 (Jan 16-19, 2026)
 
-### HelperSimple
+### 🎉 Major Achievements
 
-A helper widget that manages opening other widgets via hash parameters. Useful for deep linking and automated widget opening.
+Four-day intensive memory leak investigation resulting in **93% memory reduction** for New Selection mode and comprehensive optimizations across the board.
+
+#### Performance Improvements
+
+**New Selection Mode:**
+- **Before**: 25.89 MB per query
+- **After**: 1.76 MB per query  
+- **Result**: 93% reduction ✅
+
+**Add to Selection Mode:**
+- **Before**: ~27 MB baseline drift per cycle
+- **After**: ~25 MB baseline drift per cycle
+- **Note**: Remaining 25 MB is ESRI JSAPI internal memory (beyond widget control)
+
+#### Key Fixes (r021.15 - r021.46)
+
+1. **Grouped Result Sets** (r021.15-r021.19)
+   - Multi-query result accumulation with group-level management
+   - Display all accumulated queries with their result counts
+   - Remove individual query results from accumulated set
+
+2. **Geometry Reference Leak** (r021.36) 🎯
+   - **Impact**: Reduced memory from 11.21 MB/query → 1.76 MB/query (84% improvement)
+   - **Fix**: Modified zoom-utils to store extent objects only, not full geometry objects
+   - **Breakthrough**: This was the single biggest memory win
+
+3. **ESRI Observer Cleanup Order** (r021.39)
+   - **Impact**: Fixed orphaned ESRI observers (87K `TrackingTarget`, 56K `ObservationHandle` accumulating)
+   - **Fix**: Reordered cleanup to clear selection BEFORE destroying OutputDataSource
+   - **Insight**: Destroying DS before clearing selection left observers orphaned
+
+4. **Multi-Source Clearing** (r021.43)
+   - **Impact**: 80% reduction in TrackingTarget accumulation
+   - **Fix**: Clear selection on ALL origin DataSources (not just current one) in Add mode
+   - **Why**: Multiple queries accumulate from different layers, each with its own observers
+
+5. **Icon Component Duplication** (r021.44, r021.46)
+   - **Impact**: Eliminated 1,200 React component instances (600 trash icons + 600 expand/collapse arrows)
+   - **Fix**: Replaced React components with CSS background-images using SVG data-uris
+   - **Savings**: ~3-4 MB component/DOM overhead per 600 results
+
+6. **ESRI Limitations Documented** (r021.46)
+   - **Finding**: Allocation sampling revealed 95% of remaining memory leak is ESRI JSAPI internals
+   - **Source**: `onTrackingEnd`, `e.reactionDeferred`, `_watchMeshGeometryChanges` in `init.js:5`
+   - **Conclusion**: No public API to control these internal structures
+   - **Action**: Documented limitations for future reference
+
+#### Technical Deep-Dive
+
+For complete technical details and version history, see:
+- **CHANGELOG.md** - Detailed version-by-version changes (r021.11 through r021.46)
+
+---
+
+## Widgets in this Suite
+
+### 🔍 QuerySimple (`query-simple/`)
+A high-performance search engine for Experience Builder.
+
+**Advanced Features:**
+- **Duplicate Query Button**: Clone any query instantly with all settings preserved - a massive time-saver when configuring multiple similar searches.
+- **SQL Optimizer**: Automatically unwraps `LOWER()` from search fields to ensure database index usage.
+- **Query Grouping**: Organize dozens of searches into a clean two-dropdown hierarchy.
+- **Display Order**: Control search prioritization via the `order` property (no need to manually reorder config).
+- **Spatial Power**: Integrated buffer, draw, and extent filtering.
+- **Unified Testing**: Verified by a "Mega-Journey" E2E suite that simulates real user sessions.
+
+### 🛠️ HelperSimple (`helper-simple/`)
+The "Orchestrator" widget that handles the background logic.
 
 **Features:**
-- Monitors URL hash changes
-- Automatically opens widgets based on hash parameters
-- Supports `#qsopen=true` for QuerySimple widget
+- **URL Monitor**: Listens for hash and query string changes to trigger QuerySimple automation.
+- **Selection Guard**: Restores QuerySimple results after the map identify popup is closed.
+- **Handshake Logic**: Manages the "open/close" state between widgets to ensure a clean UI.
 
-## Quick Start
+---
 
-### Installation
+## Configuration & Enhancements
 
-1. **Copy Widgets to Extensions Directory**
-   ```bash
-   cp -r query-simple /path/to/experience-builder/client/your-extensions/widgets/
-   cp -r helper-simple /path/to/experience-builder/client/your-extensions/widgets/
-   cp -r shared-code /path/to/experience-builder/client/your-extensions/widgets/
-   ```
+### Duplicate Query Button (NEW in r020.0)
 
-2. **Rebuild Experience Builder**
-   ```bash
-   cd /path/to/experience-builder/client
-   npm run build
-   ```
+**The #1 time-saver for power users configuring multiple similar queries.**
 
-3. **Restart Experience Builder Server**
+When you have dozens of queries against the same layer (e.g., different parcel search fields), the duplicate button eliminates repetitive configuration work.
 
-4. **Add Widgets in Builder**
-   - Open Experience Builder Builder
-   - Navigate to Widgets panel
-   - Find "QuerySimple" and "HelperSimple" in the widget list
-   - Drag widgets onto your experience
+**How it works:**
+1. Configure your first query with all the settings (layer, filters, display format, spatial tools, grouping, etc.)
+2. Click the **duplicate icon** (📋) next to the query in the settings panel
+3. A perfect clone appears instantly with "(Copy)" appended to the name
+4. Change only what's different (e.g., switch from "Parcel Number" field to "Owner Name" field)
+5. Done! All other settings are preserved.
 
-## Key Features
+**What gets cloned:**
+- ✅ Layer and data source configuration
+- ✅ Attribute filters and SQL expressions
+- ✅ Spatial filters, buffers, and geometry tools
+- ✅ Display format and field configuration
+- ✅ Sorting, pagination, and result styling
+- ✅ Grouping settings and display order
+- ✅ Hash parameters (with "_copy" appended to prevent collisions)
 
-### Duplicate Query Button (r020.0)
-Quickly clone existing queries with all settings preserved. Saves significant time when creating similar queries against the same layer - just duplicate and change the search field or value.
+**Unique IDs auto-generated:**
+- New `configId` and `outputDataSourceId` are created automatically
+- Hash parameters (`shortId`, `searchAlias`) are made unique with "_copy" suffix
+- No risk of ID collisions or configuration conflicts
 
-**Time Savings:** Configure 26 queries in ~8 minutes vs. ~50 minutes manual setup.
+**Real-world example:**
+If you're building a parcel search with 10 different search fields (PIN, Major/Minor, Owner Name, Address, etc.), you can:
+1. Configure the first query completely (~5 minutes)
+2. Duplicate it 9 times (~30 seconds)
+3. Update just the field name in each copy (~2 minutes total)
 
-### Auto-Open Popup on Result Click (r021.11)
-When you click a result in the results panel, the popup automatically opens showing feature attributes - matching the familiar WAB Enhanced Search behavior.
+**Total time: ~8 minutes instead of ~50 minutes!**
 
-**Smart Location:** Uses ArcGIS `labelPointOperator` to guarantee popup appears on the interior of the geometry (perfect for L-shaped parcels or polygons with holes).
+---
 
-**Performance:** < 1ms calculation time using optimized ArcGIS API.
+### URL Parameters (Deep Linking)
+Configure a `shortId` for any query to enable instant automation.
 
-## Hash Parameters
+| Format | Example | Best Use Case |
+| :--- | :--- | :--- |
+| **Hash (#)** | `index.html#pin=123` | **Interactive UX.** Snappy, no page reload, private to browser. |
+| **Query (?)** | `index.html?pin=123` | **External Linking.** Standard for CRM/Email integrations. |
 
-### QuerySimple
+### Display Order & Grouping
+Manage complex search requirements with ease:
+- **`groupId`**: Clusters related searches (e.g., "Parcels") into a group.
+- **`searchAlias`**: The label shown inside the group (e.g., "Search by PIN").
+- **`order`**: A numeric value (1, 2, 3...) that forces a search to the top of the list, regardless of when it was added to the config.
 
-Format: `#shortId=value`
+---
 
-**Examples:**
-- `#pin=2223059013` - Execute "pin" query with value "2223059013"
-- `#major=12345` - Execute "major" query with value "12345"
+## Troubleshooting & Debugging
 
-### HelperSimple
+The suite includes a production-safe **Debug System**. No logs are shown in the console unless explicitly requested via the URL.
 
-- `#qsopen=true` - Forces QuerySimple widget to open
+### How to use:
+Add `?debug=FEATURE` to your URL (e.g., `?debug=HASH,TASK`).
 
-## Debug Logging
+### Available Switches:
+| Switch | What it tracks |
+| :--- | :--- |
+| `all` | Enable every single log (Warning: High volume). |
+| `HASH` | Deep link consumption and URL parameter parsing. |
+| `TASK` | Query execution, performance metrics, and data source status. |
+| `RESULTS-MODE` | Transitions between New, Add, and Remove selection modes. |
+| `EXPAND-COLLAPSE` | State management for result item details. |
+| `SELECTION` | Identify popup tracking and map selection sync. |
+| `RESTORE` | Logic used to rebuild the map selection after an identify event. |
+| `WIDGET-STATE` | The handshake between HelperSimple and QuerySimple. |
+| `GRAPHICS-LAYER` | Highlighting logic for graphics-enabled widgets. |
 
-Enable debug logging by adding `?debug=` parameter to your URL:
+### Known Bugs (Always Visible)
 
-- `?debug=all` - Enable all debug logs
-- `?debug=HASH,FORM` - Enable specific feature logs (comma-separated)
-- `?debug=false` - Disable all debug logs (default)
+**Important:** Known bugs are logged automatically, even when `?debug=false`. These appear as warnings in the console with the format `[QUERYSIMPLE ⚠️ BUG]` to help developers understand when they encounter a known issue rather than something they've done wrong.
 
-Available debug features: `HASH`, `FORM`, `TASK`, `ZOOM`, `MAP-EXTENT`, `DATA-ACTION`, `POPUP`, `UI`, `ERROR`
+Each bug log includes:
+- **Bug ID**: Unique identifier (e.g., `BUG-GRAPHICS-001`)
+- **Category**: Bug type (SELECTION, UI, URL, DATA, GRAPHICS, PERFORMANCE, GENERAL)
+- **Description**: What the bug is and why it's happening
+- **Workaround**: How to avoid or work around the issue
+- **Target Resolution**: When the bug will be fixed (e.g., `r019.0`)
 
-## Recent Updates
+See [`docs/bugs/BUGS.md`](docs/bugs/BUGS.md) for a complete list of known bugs and their status.
 
-### Version 1.19.0-r021.11 (January 2026)
-- **NEW:** Auto-open popup on result click with guaranteed interior location
-- **NEW:** Duplicate query button for fast configuration
-- **FIXED:** Hash parameter persistence issue on widget reopen
-- **IMPROVED:** Popup location calculation using ArcGIS labelPointOperator
+---
 
-### Version 1.19.0-r019.31
-- Initial public release
-- Query grouping support
-- Enhanced selection management
+## Documentation
 
-## Requirements
+All development documentation has been organized into a centralized [`docs/`](docs/) directory for easy navigation:
 
-- ArcGIS Experience Builder Developer Edition 1.19.0 or later
-- Node.js and npm installed
-- Access to Experience Builder source code
+- **[`docs/development/`](docs/)** - Development guides, testing, standards (start with [`DEVELOPMENT_GUIDE.md`](docs/development/DEVELOPMENT_GUIDE.md))
+- **[`docs/architecture/`](docs/)** - Design patterns, migration plans, refactoring strategies
+- **[`docs/technical/`](docs/)** - Deep dives into specific technical challenges
+- **[`docs/features/`](docs/)** - Feature specifications and integration guides
+- **[`docs/bugs/`](docs/)** - Bug reports and resolution documentation
+- **[`docs/blog/`](docs/)** - Development insights and lessons learned
 
-## Support
+**Quick Links:**
+- 📖 **New Developers:** Start with [`docs/development/DEVELOPMENT_GUIDE.md`](docs/development/DEVELOPMENT_GUIDE.md)
+- 🧪 **Testing:** See [`docs/development/TESTING_WALKTHROUGH.md`](docs/development/TESTING_WALKTHROUGH.md)
+- 🏗️ **Architecture:** See [`docs/architecture/COMPLETE_MIGRATION_PLAN.md`](docs/architecture/COMPLETE_MIGRATION_PLAN.md)
+- 📋 **Full Index:** See [`docs/README.md`](docs/README.md)
 
-For issues, questions, or contributions, please refer to the repository's issue tracker or contact the MapSimple organization.
+---
 
-## License
+## Quality Assurance
 
-[Add your license information here]
+We use a **Unified Testing Strategy**. Instead of dozens of small tests that might miss state leaks, we run a single **"Mega-Journey"** that simulates a 5-minute user session across both widgets.
 
-## References
+### Running the Suite:
+```bash
+# 1. Manual Auth (Do this once a day)
+npm run test:e2e:auth-setup
 
-- [ArcGIS Experience Builder Widget Development Guide](https://developers.arcgis.com/experience-builder/guide/)
-- [Share Code Between Widgets](https://developers.arcgis.com/experience-builder/guide/share-code-between-widgets/)
-- [Experience Builder Developer Edition](https://developers.arcgis.com/experience-builder/)
+# 2. Run the Mega-Journey
+npx playwright test tests/e2e/query-simple/session.spec.ts --project=chromium --headed
+```
 
+---
+
+## Installation
+
+1. Copy `query-simple`, `helper-simple`, and `shared-code` into your `client/your-extensions/widgets` folder.
+2. Run `npm run build` from the `client` directory.
+3. Restart your Experience Builder server.
+
+---
+
+© 2025 MapSimple Organization. Built for the King County Parcel Viewer ecosystem.
