@@ -230,4 +230,4 @@ npx playwright test tests/e2e/query-simple/session.spec.ts --project=chromium --
 
 ---
 
-© 2025 MapSimple Organization. Built for the King County Parcel Viewer ecosystem.
+© 2025 MapSimple Organization
