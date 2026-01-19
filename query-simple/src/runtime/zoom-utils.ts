@@ -195,10 +195,11 @@ export async function zoomToRecords(
   })
 
   try {
-    // Extract geometries from records and calculate extents on-the-fly
-    // Note: Point geometries in ArcGIS JS API have read-only .extent property (always null)
-    // We create extent objects on-the-fly for points to avoid mutation errors
-    const geometryData = records
+    // r021.36: Extract ONLY extents from records, not full geometries
+    // MEMORY FIX: Previously we stored both geometry + extent for each record (121-163 objects)
+    // But we only ever use the extent for zoom calculation - the geometry refs were wasted memory
+    // Now we only extract and store extents, letting geometry objects be GC'd immediately
+    const extents = records
       .map(record => {
         const geom = record.getJSAPIGeometry()
         if (!geom) return null
@@ -206,37 +207,31 @@ export async function zoomToRecords(
         // For points without extent, create a zero-area extent on-the-fly
         if (geom.type === 'point' && !geom.extent) {
           const pt = geom as __esri.Point
-          return {
-            geometry: geom,
-            extent: new Extent({
-              xmin: pt.x,
-              xmax: pt.x,
-              ymin: pt.y,
-              ymax: pt.y,
-              spatialReference: pt.spatialReference
-            })
-          }
+          return new Extent({
+            xmin: pt.x,
+            xmax: pt.x,
+            ymin: pt.y,
+            ymax: pt.y,
+            spatialReference: pt.spatialReference
+          })
         }
         
         // For other geometry types, use existing extent
-        return {
-          geometry: geom,
-          extent: geom.extent || (geom as any).getExtent?.()
-        }
+        return geom.extent || (geom as any).getExtent?.()
       })
-      .filter(item => item != null)
+      .filter(ext => ext != null)
     
     debugLogger.log('ZOOM', {
-      event: 'geometries-extracted',
+      event: 'extents-extracted',
       recordsCount: records.length,
-      geometriesCount: geometryData.length,
-      geometryTypes: geometryData.map(item => item.geometry.type)
+      extentsCount: extents.length,
+      note: 'r021.36: Only storing extents, not full geometries (memory optimization)'
     })
     
-    if (geometryData.length === 0) {
+    if (extents.length === 0) {
       debugLogger.log('ZOOM', {
         event: 'zoom-early-exit',
-        reason: 'no-geometries',
+        reason: 'no-extents',
         recordsCount: records.length
       })
       return
@@ -244,14 +239,12 @@ export async function zoomToRecords(
 
     let extent: __esri.Extent | null = null
     
-    if (geometryData.length === 1) {
-      // Single geometry - use the calculated extent
-      const item = geometryData[0]
-      extent = item.extent
+    if (extents.length === 1) {
+      // Single extent - use it directly
+      extent = extents[0]
       
       debugLogger.log('ZOOM', {
         event: 'extent-calculated-single',
-        geometryType: item.geometry.type,
         originalExtent: extent ? {
           xmin: extent.xmin,
           xmax: extent.xmax,
@@ -263,23 +256,16 @@ export async function zoomToRecords(
         } : null
       })
     } else {
-      // Multiple geometries - calculate union extent
+      // Multiple extents - calculate union extent
       // Note: Overlapping points will produce a zero-area extent
       // which will be expanded by the zero-area detection logic below
-      const extents = geometryData
-        .map(item => item.extent)
-        .filter(e => e != null)
-      
-      if (extents.length > 0) {
-        extent = extents[0].clone()
-        for (let i = 1; i < extents.length; i++) {
-          extent = extent.union(extents[i])
-        }
+      extent = extents[0].clone()
+      for (let i = 1; i < extents.length; i++) {
+        extent = extent.union(extents[i])
       }
       
       debugLogger.log('ZOOM', {
         event: 'extent-calculated-union',
-        geometriesCount: geometryData.length,
         extentsCount: extents.length,
         originalExtent: extent ? {
           xmin: extent.xmin,
@@ -366,8 +352,10 @@ export async function zoomToRecords(
       debugLogger.log('ZOOM', {
         event: 'mapView-goTo-complete',
         success: true,
-        goToResult: goToResult ? 'returned-value' : 'no-return-value'
+        goToResult: goToResult ? 'returned-value' : 'no-return-value',
+        note: 'r021.36: Geometry refs were not stored, only extents - memory optimized'
       })
+      
     } else {
       debugLogger.log('ZOOM', {
         event: 'zoom-skipped',

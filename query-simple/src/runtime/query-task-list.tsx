@@ -28,6 +28,7 @@ export interface QueryTaskListProps {
   mapView?: __esri.MapView | __esri.SceneView
   onInitializeGraphicsLayer?: (outputDS: DataSource) => Promise<void>
   onClearGraphicsLayer?: () => void
+  onDestroyGraphicsLayer?: () => void // r021.17: Clear refs after destroying layer
   activeTab?: 'query' | 'results'
   onTabChange?: (tab: 'query' | 'results') => void
   eventManager?: EventManager  // Chunk 7.1: Event Handling Manager
@@ -127,7 +128,7 @@ const getQueryDisplayName = (item: ImmutableObject<QueryItemType>): string => {
 }
 
 export function QueryTaskList (props: QueryTaskListProps) {
-  const { queryItems, widgetId, defaultPageSize, isInPopper = false, className = '', initialQueryValue, shouldUseInitialQueryValueForSelection = false, onHashParameterUsed, resultsMode, onResultsModeChange, accumulatedRecords, onAccumulatedRecordsChange, useGraphicsLayerForHighlight, graphicsLayer, mapView, onInitializeGraphicsLayer, onClearGraphicsLayer, activeTab, onTabChange, eventManager } = props
+  const { queryItems, widgetId, defaultPageSize, isInPopper = false, className = '', initialQueryValue, shouldUseInitialQueryValueForSelection = false, onHashParameterUsed, resultsMode, onResultsModeChange, accumulatedRecords, onAccumulatedRecordsChange, useGraphicsLayerForHighlight, graphicsLayer, mapView, onInitializeGraphicsLayer, onClearGraphicsLayer, onDestroyGraphicsLayer, activeTab, onTabChange, eventManager } = props
   const getI18nMessage = hooks.useTranslation(defaultMessages)
   
   // Log when props are received
@@ -621,6 +622,7 @@ export function QueryTaskList (props: QueryTaskListProps) {
             mapView={mapView}
             onInitializeGraphicsLayer={onInitializeGraphicsLayer}
             onClearGraphicsLayer={onClearGraphicsLayer}
+            onDestroyGraphicsLayer={onDestroyGraphicsLayer}
             groupOrder={groupOrder}
             selectedGroupId={selectedGroupId}
             selectedGroupQueryIndex={selectedGroupQueryIndex}

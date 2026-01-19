@@ -667,6 +667,7 @@ export function clearGraphicsLayer(graphicsLayer: __esri.GraphicsLayer): void {
 
 /**
  * Removes the graphics layer from the map and cleans up references.
+ * r021.16: Now calls destroy() to free internal buffers and prevent memory leaks.
  */
 export function cleanupGraphicsLayer(
   widgetId: string,
@@ -678,17 +679,25 @@ export function cleanupGraphicsLayer(
   try {
     const graphicsLayer = mapView.map.layers.find(layer => layer.id === layerId) as __esri.GraphicsLayer
     if (graphicsLayer) {
+      const graphicsCount = graphicsLayer.graphics.length
+      
       // Clear all graphics first
       graphicsLayer.removeAll()
       
       // Remove layer from map
       mapView.map.remove(graphicsLayer)
       
+      // r021.16: Destroy the layer to free internal buffers (JSArrayBufferData)
+      // This prevents memory leaks from geometry buffers accumulating with each query
+      graphicsLayer.destroy()
+      
       debugLogger.log('GRAPHICS-LAYER', {
         event: 'cleanupGraphicsLayer-complete',
         seq,
         widgetId,
         layerId,
+        graphicsCountBeforeCleanup: graphicsCount,
+        destroyed: true,
         timestamp: Date.now()
       })
     } else {
