@@ -10,12 +10,28 @@ import {
   classNames
 } from 'jimu-core'
 import { Button, Tooltip } from 'jimu-ui'
-import { TrashOutlined } from 'jimu-icons/outlined/editor/trash'
 import FeatureInfo from './components/feature-info'
 import { ListDirection } from '../config'
 import { createQuerySimpleDebugLogger } from 'widgets/shared-code/common'
 
 const debugLogger = createQuerySimpleDebugLogger()
+
+/**
+ * Trash icon as CSS background-image (r021.44 memory optimization)
+ * Instead of creating 600 React component instances of <TrashOutlined>,
+ * we use a single CSS style with SVG data-uri that's reused across all items.
+ * This eliminates 600 component instances + 600 DOM nodes.
+ * SVG source: jimu-icons/svg/outlined/editor/trash.svg
+ */
+const trashIconStyle = css`
+  width: 18px;
+  height: 18px;
+  background-image: url('data:image/svg+xml;utf8,<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 6.5C6 6.22386 6.22386 6 6.5 6C6.77614 6 7 6.22386 7 6.5V12.5C7 12.7761 6.77614 13 6.5 13C6.22386 13 6 12.7761 6 12.5V6.5Z" fill="currentColor"/><path d="M9.5 6C9.22386 6 9 6.22386 9 6.5V12.5C9 12.7761 9.22386 13 9.5 13C9.77614 13 10 12.7761 10 12.5V6.5C10 6.22386 9.77614 6 9.5 6Z" fill="currentColor"/><path fill-rule="evenodd" clip-rule="evenodd" d="M11 0H5C4.44772 0 4 0.447715 4 1V3H0.5C0.223858 3 0 3.22386 0 3.5C0 3.77614 0.223858 4 0.5 4H2.1L2.90995 15.0995C2.96107 15.6107 3.39124 16 3.90499 16H12.095C12.6088 16 13.0389 15.6107 13.09 15.0995L13.9 4H15.5C15.7761 4 16 3.77614 16 3.5C16 3.22386 15.7761 3 15.5 3H12V1C12 0.447715 11.5523 0 11 0ZM11 3V1H5V3H11ZM12.895 4H3.10499L3.90499 15H12.095L12.895 4Z" fill="currentColor"/></svg>');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  display: inline-block;
+`
 
 export interface ResultItemProps {
   widgetId: string
@@ -171,7 +187,7 @@ export const QueryResultItem = (props: ResultItemProps) => {
             justify-content: center;
           `}
         >
-          <TrashOutlined size={18} />
+          <div css={trashIconStyle} aria-hidden="true" />
         </Button>
       </Tooltip>
     </div>

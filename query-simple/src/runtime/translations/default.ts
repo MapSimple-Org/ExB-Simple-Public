@@ -28,6 +28,7 @@ export default {
   runtime: 'Runtime',
   selectLoaded: 'Select loaded',
   retrieving: 'Retrieving query results...',
+  clearing: 'Clearing results...',
   zoomToSelected: 'Zoom to selected',
   queryTab: 'Query',
   resultsTab: 'Results',

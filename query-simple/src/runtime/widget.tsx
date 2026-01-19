@@ -734,12 +734,17 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
           // Get map view from manager
           const newMapView = this.mapViewManager.getMapView()
           
+          // r021.19: Store mapView in ref so it's available to QueryTask
+          this.mapViewRef.current = newMapView
+          
           // Chunk 4: Graphics layer initialization (r018.25 - Step 4.3: Remove old implementation)
           // Initialize graphics layer if map view is available and graphics layer should be initialized
           if (this.graphicsLayerManager.shouldInitialize(config, newMapView) && newMapView) {
             // Use void to handle promise without blocking
             void this.graphicsLayerManager.initialize(id, newMapView, {
               onGraphicsLayerInitialized: (graphicsLayer) => {
+                // r021.19: Store graphics layer in ref
+                this.graphicsLayerRef.current = graphicsLayer
                 // Update state to force re-render and update props
                 this.setState({ graphicsLayerInitialized: true })
               }
@@ -814,6 +819,58 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
     // Chunk 4: Graphics layer clearing (r018.25 - Step 4.3: Remove old implementation)
     this.graphicsLayerManager.clearGraphics(this.props.id, config)
   }
+
+  /**
+   * Clears graphics layer refs after layer has been destroyed, then recreates the layer.
+   * 
+   * This method is called after cleanupGraphicsLayer() destroys the layer.
+   * It immediately recreates the layer so it's available for the next query.
+   * 
+   * @since 1.19.0-r021.19 (Option 2: Immediate recreation)
+   * @see {@link clearGraphicsLayerIfExists} for clearing graphics without destroying layer
+   */
+  public clearGraphicsLayerRefs = async () => {
+    const mapView = this.mapViewRef.current
+    const { id, config } = this.props
+    
+    debugLogger.log('GRAPHICS-LAYER', {
+      event: 'clearGraphicsLayerRefs-called',
+      widgetId: id,
+      hasMapView: !!mapView,
+      willRecreate: !!(mapView && config.useGraphicsLayerForHighlight),
+      timestamp: Date.now()
+    })
+    
+    // Clear old refs
+    this.graphicsLayerRef.current = null
+    
+    // Immediately recreate the layer if we still need it
+    if (mapView && config.useGraphicsLayerForHighlight) {
+      try {
+        const { createOrGetGraphicsLayer } = await import('./graphics-layer-utils')
+        const newGraphicsLayer = await createOrGetGraphicsLayer(id, mapView)
+        this.graphicsLayerRef.current = newGraphicsLayer
+        
+        debugLogger.log('GRAPHICS-LAYER', {
+          event: 'clearGraphicsLayerRefs-recreated',
+          widgetId: id,
+          newLayerId: newGraphicsLayer.id,
+          timestamp: Date.now()
+        })
+        
+        // Force re-render to pass new layer down
+        this.setState({ graphicsLayerInitialized: true })
+      } catch (error) {
+        debugLogger.log('GRAPHICS-LAYER', {
+          event: 'clearGraphicsLayerRefs-recreation-failed',
+          widgetId: id,
+          error: error instanceof Error ? error.message : String(error),
+          timestamp: Date.now()
+        })
+      }
+    }
+  }
+
 
 
   /**
@@ -1268,6 +1325,7 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
                 mapView={this.mapViewRef.current || undefined}
                 onInitializeGraphicsLayer={this.initializeGraphicsLayerFromOutputDS}
                 onClearGraphicsLayer={this.clearGraphicsLayerIfExists}
+                onDestroyGraphicsLayer={this.clearGraphicsLayerRefs}
                 activeTab={this.state.activeTab}
                 onTabChange={this.handleTabChange}
                 eventManager={this.eventManager}
@@ -1350,6 +1408,7 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
                 mapView={this.mapViewRef.current || undefined}
                 onInitializeGraphicsLayer={this.initializeGraphicsLayerFromOutputDS}
                 onClearGraphicsLayer={this.clearGraphicsLayerIfExists}
+                onDestroyGraphicsLayer={this.clearGraphicsLayerRefs}
                 activeTab={this.state.activeTab}
                 onTabChange={this.handleTabChange}
                 eventManager={this.eventManager}
