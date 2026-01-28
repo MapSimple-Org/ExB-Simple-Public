@@ -58,7 +58,6 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
   isPanelVisible?: boolean, 
   hasSelection?: boolean, 
   selectionRecordCount?: number, 
-  lastSelection?: { recordIds: string[], outputDsId: string, queryItemConfigId: string }, 
   resultsMode?: SelectionType, 
   accumulatedRecords?: FeatureDataRecord[], 
   graphicsLayerInitialized?: boolean, 
@@ -96,7 +95,6 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
     isPanelVisible?: boolean,
     hasSelection?: boolean,
     selectionRecordCount?: number,
-    lastSelection?: { recordIds: string[], outputDsId: string, queryItemConfigId: string },
     resultsMode?: SelectionType,
     accumulatedRecords?: FeatureDataRecord[],
     graphicsLayerInitialized?: boolean,
@@ -542,7 +540,7 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
     
     // Chunk 7: Dispatch selection event via EventManager (r018.59)
     // Note: This call is missing outputDsId and queryItemConfigId, but this method
-    // is only used for notifying HelperSimple, not for setting lastSelection state.
+    // is only used for notifying HelperSimple (r021.110: lastSelection removed).
     // The actual selection events come from query-task.tsx and query-result.tsx
     // which use dispatchSelectionEvent from selection-utils.ts
     this.eventManager.dispatchSelectionEvent(id, recordIds, dataSourceId)
@@ -557,7 +555,7 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
    * 
    * The restoration logic respects the current results mode:
    * - "Add to" / "Remove from" modes: Uses accumulated records for restoration
-   * - "New" mode: Uses lastSelection state for restoration
+   * - "New" mode: Uses accumulated records (r021.110: lastSelection removed)
    * 
    * @param isVisible - True if widget panel is visible, false if hidden
    * 
@@ -584,8 +582,6 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
         hasAccumulatedRecords,
         accumulatedRecordsCount: this.state.accumulatedRecords?.length || 0,
         selectionRecordCount: this.state.selectionRecordCount || 0,
-        hasLastSelection: !!this.state.lastSelection,
-        lastSelectionRecordCount: this.state.lastSelection?.recordIds.length || 0,
         hasSelectionToRestore,
         decisionLogic: {
           'isAccumulationMode': isAccumulationMode,
@@ -609,8 +605,7 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
             reason: 'hasSelectionToRestore-true-but-no-records-to-display',
             hasAccumulatedRecords,
             accumulatedRecordsCount: this.state.accumulatedRecords?.length || 0,
-            selectionRecordCount: this.state.selectionRecordCount || 0,
-            hasLastSelection: !!this.state.lastSelection
+            selectionRecordCount: this.state.selectionRecordCount || 0
           })
           return // Don't restore if no records
         }
@@ -670,8 +665,6 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
         hasAccumulatedRecords,
         accumulatedRecordsCount: this.state.accumulatedRecords?.length || 0,
         selectionRecordCount: this.state.selectionRecordCount || 0,
-        hasLastSelection: !!this.state.lastSelection,
-        lastSelectionRecordCount: this.state.lastSelection?.recordIds.length || 0,
         hasSelectionToClear,
         decisionLogic: {
           'isAccumulationMode': isAccumulationMode,
@@ -898,7 +891,7 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
    * 
    * Restoration logic:
    * - "Add to" / "Remove from" modes: Restores all accumulated records grouped by origin data source
-   * - "New" mode: Restores lastSelection state
+   * - "New" mode: Restores accumulated records (r021.110: lastSelection removed)
    * 
    * @param event - Custom event containing selection details (widgetId, recordIds, outputDsId, queryItemConfigId)
    * 
@@ -933,8 +926,6 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
       eventRecordIdsCount: customEvent.detail.recordIds.length,
       hasSelection: this.state.hasSelection || false,
       accumulatedRecordsCount: this.state.accumulatedRecords?.length || 0,
-      hasLastSelection: !!this.state.lastSelection,
-      lastSelectionRecordCount: this.state.lastSelection?.recordIds.length || 0,
       outputDsId: customEvent.detail.outputDsId,
       queryItemConfigId: customEvent.detail.queryItemConfigId
     })
@@ -1009,36 +1000,13 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
       })
     }
     
-    // For "New" mode, use original validation logic
-    // Check if we have matching selection state
-    if (!this.state.hasSelection || !this.state.lastSelection) {
+    // r021.110: Simplified - no longer checking lastSelection (removed)
+    // For "New" mode, check if we have selection
+    if (!this.state.hasSelection) {
       debugLogger.log('RESTORE', {
         event: 'identify-popup-closed-restore-skipped-no-selection',
         widgetId: id,
-        hasSelection: this.state.hasSelection,
-        hasLastSelection: !!this.state.lastSelection
-      })
-      return
-    }
-    
-    // Verify the outputDsId matches
-    if (this.state.lastSelection.outputDsId !== customEvent.detail.outputDsId) {
-      debugLogger.log('RESTORE', {
-        event: 'identify-popup-closed-restore-skipped-ds-mismatch',
-        widgetId: id,
-        ourOutputDsId: this.state.lastSelection.outputDsId,
-        requestedOutputDsId: customEvent.detail.outputDsId
-      })
-      return
-    }
-    
-    // Verify the queryItemConfigId matches (optional but good to check)
-    if (this.state.lastSelection.queryItemConfigId !== customEvent.detail.queryItemConfigId) {
-      debugLogger.log('RESTORE', {
-        event: 'identify-popup-closed-restore-skipped-query-mismatch',
-        widgetId: id,
-        ourQueryItemConfigId: this.state.lastSelection.queryItemConfigId,
-        requestedQueryItemConfigId: customEvent.detail.queryItemConfigId
+        hasSelection: this.state.hasSelection
       })
       return
     }
@@ -1184,12 +1152,39 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
     const shouldResetMode = records.length === 0 && 
                            this.state.resultsMode === SelectionType.RemoveFromSelection
 
+    // r021.111: Capture stack trace to see WHO is updating accumulatedRecords
+    const stackTrace = new Error().stack?.split('\n').slice(2, 8).join(' << ') || 'unknown'
+    
+    // r021.107: Log BEFORE setState
+    debugLogger.log('WIDGET-STATE', {
+      event: 'widget-updating-accumulated-records-BEFORE',
+      widgetId: this.props.id,
+      beforeCount: this.state.accumulatedRecords?.length || 0,
+      beforeIds: this.state.accumulatedRecords?.map(r => r.getId()).slice(0, 10) || [],
+      afterCount: records.length,
+      afterIds: records.map(r => r.getId()).slice(0, 10),
+      willResetMode: shouldResetMode,
+      calledFrom: stackTrace,
+      timestamp: Date.now()
+    })
+
     this.setState({ 
       accumulatedRecords: records,
       // Reset mode to NewSelection if all accumulated records cleared in Remove mode
       ...(shouldResetMode ? {
         resultsMode: SelectionType.NewSelection
       } : {})
+    }, () => {
+      // r021.107: Callback to verify state was actually updated
+      debugLogger.log('WIDGET-STATE', {
+        event: 'widget-updated-accumulated-records-AFTER',
+        widgetId: this.props.id,
+        stateAccumulatedRecordsCount: this.state.accumulatedRecords?.length || 0,
+        stateAccumulatedRecordsIds: this.state.accumulatedRecords?.map(r => r.getId()).slice(0, 10) || [],
+        expectedCount: records.length,
+        match: this.state.accumulatedRecords?.length === records.length,
+        timestamp: Date.now()
+      })
     })
 
     if (shouldResetMode) {

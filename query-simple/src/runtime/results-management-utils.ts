@@ -115,59 +115,133 @@ export async function createAccumulatedResultsDataSource(
  * Merges new query results with existing records.
  * Deduplicates records using composite keys (originDSId_objectId).
  * 
+ * r021.87: Read __queryConfigId from record attributes (stamped when added)
+ * to get each record's original datasource for accurate deduplication.
+ * Without this, records with same ID from different datasources
+ * (e.g., Trail "2" and Arlington "2") are incorrectly treated as duplicates.
+ * 
  * This function merges new records with existing records that were captured
  * before the query executed. The caller is responsible for storing the merged
  * records (typically in recordsRef or state).
  * 
- * @param outputDS - The output data source (used for key generation)
+ * @param outputDS - The output data source for NEW records
  * @param newRecords - New records to merge in
  * @param existingRecords - Existing records captured before query execution (optional, defaults to empty array)
- * @returns Array of all merged records (existing + new unique records)
+ * @param queries - Array of query configs to look up originDS by __queryConfigId (optional)
+ * @returns Object with mergedRecords, addedRecordIds, and duplicateRecordIds
  */
 export function mergeResultsIntoAccumulated(
   outputDS: FeatureLayerDataSource,
   newRecords: FeatureDataRecord[],
-  existingRecords: FeatureDataRecord[] = []
-): FeatureDataRecord[] {
+  existingRecords: FeatureDataRecord[] = [],
+  queries?: Array<any>
+): { mergedRecords: FeatureDataRecord[]; addedRecordIds: string[]; duplicateRecordIds: string[] } {
   debugLogger.log('RESULTS-MODE', {
     event: 'merging-results-start',
     outputDSId: outputDS.id,
     existingRecordsCount: existingRecords.length,
-    newRecordsCount: newRecords.length
+    newRecordsCount: newRecords.length,
+    hasQueries: !!queries,
+    queriesCount: queries?.length || 0
   })
   
-  // Build Set of existing record keys for fast lookup
-  const existingKeys = new Set(
-    existingRecords.map(record => getRecordKey(record, outputDS))
-  )
+  // r021.82: Build Set of existing record keys using EACH RECORD'S ORIGINAL DATASOURCE
+  const existingKeys = new Set<string>()
+  const dsManager = DataSourceManager.getInstance()
+  
+  existingRecords.forEach(record => {
+    const recordId = record.getId()
+    
+    // r021.87: Read queryConfigId from record attributes (stamped when added)
+    const recordQueryConfigId = (record as any).feature?.attributes?.__queryConfigId
+    let useDataSource: any = null
+    
+    if (recordQueryConfigId && queries) {
+      const queryConfig = queries.find(q => q.configId === recordQueryConfigId)
+      useDataSource = queryConfig?.useDataSource
+      
+      // r021.83: Extract dataSourceId STRING from useDataSource object
+      const dataSourceId = typeof useDataSource === 'string' 
+        ? useDataSource 
+        : useDataSource?.dataSourceId
+      
+      debugLogger.log('RESULTS-MODE', {
+        event: 'building-existing-key-with-map',
+        recordId,
+        hasQueryConfig: !!queryConfig,
+        dataSourceId: dataSourceId || 'missing',
+        queryConfigId: queryConfig?.configId || 'missing'
+      })
+      
+      if (dataSourceId) {
+        const recordDS = dsManager.getDataSource(dataSourceId) as FeatureLayerDataSource
+        if (recordDS) {
+          const key = getRecordKey(record, recordDS)
+          existingKeys.add(key)
+          debugLogger.log('RESULTS-MODE', {
+            event: 'existing-key-used-record-ds',
+            recordId,
+            dataSourceId,
+            key
+          })
+          return
+        } else {
+          debugLogger.log('RESULTS-MODE', {
+            event: 'existing-key-ds-lookup-failed',
+            recordId,
+            dataSourceId,
+            note: 'DataSource not found in DataSourceManager - using fallback'
+          })
+        }
+      }
+    }
+    
+    // Fallback: use outputDS (may cause false duplicates)
+    const key = getRecordKey(record, outputDS)
+    existingKeys.add(key)
+    debugLogger.log('RESULTS-MODE', {
+      event: 'existing-key-used-fallback-outputds',
+      recordId,
+      outputDSId: outputDS.id,
+      key,
+      reason: queries ? 'config-lookup-failed' : 'no-queries-provided'
+    })
+  })
   
   debugLogger.log('RESULTS-MODE', {
     event: 'existing-records-check',
     existingRecordsCount: existingRecords.length,
-    existingKeysCount: existingKeys.size
+    existingKeysCount: existingKeys.size,
+    hasQueries: !!queries
   })
   
-  // Filter new records to only include those not already in output DS
-  const uniqueNewRecords = newRecords.filter(record => {
+  // r021.84: Filter new records and track which were added vs duplicates
+  const uniqueNewRecords: FeatureDataRecord[] = []
+  const addedRecordIds: string[] = []
+  const duplicateRecordIds: string[] = []
+  
+  newRecords.forEach(record => {
     const key = getRecordKey(record, outputDS)
     const isDuplicate = existingKeys.has(key)
     
     if (isDuplicate) {
+      duplicateRecordIds.push(record.getId())
       debugLogger.log('RESULTS-MODE', {
         event: 'duplicate-record-skipped',
         key,
         objectId: record.getId()
       })
+    } else {
+      uniqueNewRecords.push(record)
+      addedRecordIds.push(record.getId())
     }
-    
-    return !isDuplicate
   })
   
   debugLogger.log('RESULTS-MODE', {
     event: 'deduplication-complete',
     newRecordsCount: newRecords.length,
     uniqueNewRecordsCount: uniqueNewRecords.length,
-    duplicatesSkipped: newRecords.length - uniqueNewRecords.length
+    duplicatesSkipped: duplicateRecordIds.length
   })
   
   // Merge records
@@ -180,7 +254,11 @@ export function mergeResultsIntoAccumulated(
     newUniqueCount: uniqueNewRecords.length
   })
   
-  return mergedRecords
+  return {
+    mergedRecords,
+    addedRecordIds,
+    duplicateRecordIds
+  }
 }
 
 /**
@@ -336,7 +414,8 @@ export function removeRecordsFromOriginSelections(
       timestamp: Date.now()
     })
     
-    removeHighlightGraphics(graphicsLayer, recordIdsToRemove)
+    // r021.90: Pass records to removeHighlightGraphics for composite key matching
+    removeHighlightGraphics(graphicsLayer, recordIdsToRemove, recordsToRemove as FeatureDataRecord[])
     
     // FIX (r018.82): Capture TRUE "after" state AFTER removing graphics
     const graphicsAfterRemoval: (string | null)[] = []
@@ -403,15 +482,22 @@ export function removeRecordsFromOriginSelections(
         recordsToRemoveCount: recordsToRemoveForOrigin.length
       })
       
-      // Build Set of IDs to remove for fast lookup
-      const idsToRemove = new Set(
-        recordsToRemoveForOrigin.map(record => record.getId())
+      // r021.90: Build composite keys (recordId + queryConfigId) to remove for accurate matching
+      // This prevents removing records with the same ID but from different queries
+      const compositeKeysToRemove = new Set(
+        recordsToRemoveForOrigin.map(record => {
+          const recordId = record.getId()
+          const queryConfigId = record.feature?.attributes?.__queryConfigId || ''
+          return `${recordId}__${queryConfigId}`
+        })
       )
       
-      // Filter out records that match IDs to remove
+      // Filter out records that match composite keys (ID + queryConfigId) to remove
       const remainingRecords = currentSelectedRecords.filter(record => {
         const recordId = record.getId()
-        return !idsToRemove.has(recordId)
+        const queryConfigId = record.feature?.attributes?.__queryConfigId || ''
+        const compositeKey = `${recordId}__${queryConfigId}`
+        return !compositeKeysToRemove.has(compositeKey)
       })
       
       const remainingIds = remainingRecords.map(record => record.getId())

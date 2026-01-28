@@ -384,6 +384,47 @@ export class SelectionRestorationManager {
     const graphicsLayer = deps.graphicsLayerRef.current || undefined
     const mapView = deps.mapViewRef.current || undefined
 
+    // r021.93: Clear graphics layer ONCE before restoring all records
+    // This prevents each origin DS restore from clearing the previous one's graphics
+    if (useGraphicsLayer && graphicsLayer && mapView) {
+      const { clearGraphicsLayer: clearGL, addHighlightGraphics } = await import('../graphics-layer-utils')
+      
+      debugLogger.log('RESTORE', {
+        event: 'panel-opened-clearing-graphics-before-restore',
+        widgetId: this.widgetId,
+        graphicsLayerId: graphicsLayer.id,
+        graphicsCountBefore: graphicsLayer.graphics.length,
+        accumulatedRecordsStructure: accumulatedRecords.map((item, i) => ({
+          index: i,
+          hasConfigId: !!item.configId,
+          hasRecord: !!item.record,
+          configId: item.configId,
+          recordId: item.record?.getId?.() || 'no-getId',
+          itemKeys: Object.keys(item)
+        })).slice(0, 5),
+        timestamp: Date.now()
+      })
+      
+      clearGL(graphicsLayer)
+      
+      // r021.93: accumulatedRecords are the raw FeatureDataRecord objects, not wrapped
+      // Filter out any null/undefined entries
+      const validRecords = accumulatedRecords.filter(record => record != null)
+      
+      await addHighlightGraphics(graphicsLayer, validRecords, mapView)
+      
+      debugLogger.log('RESTORE', {
+        event: 'panel-opened-graphics-restored-in-batch',
+        widgetId: this.widgetId,
+        graphicsLayerId: graphicsLayer.id,
+        accumulatedRecordsCount: accumulatedRecords.length,
+        validRecordsCount: validRecords.length,
+        finalGraphicsCount: graphicsLayer.graphics.length,
+        timestamp: Date.now()
+      })
+    }
+
+    // Now restore selection in each origin DS (without graphics, since we already added them above)
     for (const [originDS, records] of recordsByOriginDS.entries()) {
       const recordIds = records.map(r => r.getId())
       try {
@@ -393,9 +434,9 @@ export class SelectionRestorationManager {
           recordIds,
           records,
           true, // alsoPublishToOutputDS
-          useGraphicsLayer,
-          graphicsLayer,
-          mapView
+          false, // useGraphicsLayer - FALSE to prevent clearing/re-adding
+          undefined, // graphicsLayer - don't pass it
+          undefined // mapView - don't pass it
         )
 
         debugLogger.log('RESTORE', {
