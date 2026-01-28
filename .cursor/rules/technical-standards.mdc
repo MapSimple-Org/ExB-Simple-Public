@@ -4,6 +4,6 @@ globs: **/*.{ts,tsx,js}
 alwaysApply: true
 ---
 # Technical Standards
-- **Versioning**: Increment `MINOR_VERSION` in `version.ts` for every change.
+- **Versioning**: Increment `MINOR_VERSION` in `version.ts` for every logical pass of work. One pass = one version. Multiple related file changes in a single pass = one increment. Build and increment BEFORE saying "ready to test." If you circle back to add more changes after completing something, that's a new pass → increment again.
 - **Logging**: NEVER use `console.log`. Use `debugLogger`.
 - **Performance**: Follow the SQL Optimizer and SARGable query patterns documented in `@docs/development/DEVELOPMENT_GUIDE.md` Section 8.
