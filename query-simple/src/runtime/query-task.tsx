@@ -228,6 +228,8 @@ export function QueryTask (props: QueryTaskProps) {
   const [resultCount, setResultCount] = React.useState(0)
   // FIX (r018.92): Track when a query switch is in progress to prevent handleRenderDone interference
   const isQuerySwitchInProgressRef = React.useRef(false)
+  // r021.75: Track IDs of records from current query (for proper formatting in ADD mode)
+  const currentQueryRecordIdsRef = React.useRef<string[]>([])
   // Track if we've already selected records for the current query results
   const hasSelectedRecordsRef = React.useRef(false)
   // FIX (r018.128): Track which hash value we last switched tabs for to prevent continuous re-switching
@@ -242,13 +244,18 @@ export function QueryTask (props: QueryTaskProps) {
   const attributeFilterSqlExprObj = React.useRef<IMSqlExpression>(queryItem.sqlExprObj)
   const spatialFilterObj = React.useRef(null)
   const backBtnRef = React.useRef<HTMLButtonElement>(undefined)
-  const clearResultBtnRef = React.useRef<HTMLButtonElement>(undefined)
+  
+  // r021.51: Key prop pattern to force DataSourceComponent remount
+  // Incrementing this key forces React to unmount/remount DataSourceComponent, which triggers
+  // natural DS recreation. Replaces programmatic button click anti-pattern with idiomatic React.
+  const [dsRecreationKey, setDsRecreationKey] = React.useState(0)
+  
   const [dataActionFilter, setDataActionFilter] = React.useState(null)
   const previousConfigIdRef = React.useRef<string>(queryItem.configId)
   // Track manual tab switches to prevent auto-switch useEffect from interfering
   const manualTabSwitchRef = React.useRef(false)
   // Track when a query was just executed - only auto-switch after query execution completes
-  const queryJustExecutedRef = React.useRef(false)
+  const [queryJustExecuted, setQueryJustExecuted] = React.useState(false)
   // Store the last runtime zoom override value from the form for use by Add to Map action
   const lastRuntimeZoomToSelectedRef = React.useRef<boolean | undefined>(undefined)
   // Error states for user-facing errors
@@ -336,7 +343,7 @@ export function QueryTask (props: QueryTaskProps) {
         queryItemConfigId: queryItem.configId,
         activeTab,
         resultCount,
-        queryJustExecutedRef: queryJustExecutedRef.current,
+        queryJustExecuted,
         timestamp: Date.now()
       })
       return
@@ -347,7 +354,7 @@ export function QueryTask (props: QueryTaskProps) {
     const isSimpleList = true
     
     // ONLY auto-switch when:
-    // 1. A query was just executed (queryJustExecutedRef.current === true)
+    // 1. A query was just executed (queryJustExecuted === true)
     // 2. We have results (resultCount > 0)
     // 3. Records are actually loaded:
     //    - For SimpleList: resultCount > 0 is sufficient (records available immediately)
@@ -363,17 +370,17 @@ export function QueryTask (props: QueryTaskProps) {
       queryItemConfigId: queryItem.configId,
       activeTab,
       resultCount,
-      queryJustExecutedRef: queryJustExecutedRef.current,
+      queryJustExecuted,
       isSimpleList,
       pagingTypeInConfig,
       hasRecords,
       recordsRefLength: recordsRef.current?.length || 0,
       manualTabSwitchRef: manualTabSwitchRef.current,
-      willAutoSwitch: queryJustExecutedRef.current && resultCount > 0 && hasRecords && activeTab === 'query',
+      willAutoSwitch: queryJustExecuted && resultCount > 0 && hasRecords && activeTab === 'query',
       timestamp: Date.now()
     })
     
-    if (queryJustExecutedRef.current && 
+    if (queryJustExecuted && 
         resultCount > 0 && 
         hasRecords && 
         activeTab === 'query') {
@@ -387,16 +394,16 @@ export function QueryTask (props: QueryTaskProps) {
         timestamp: Date.now()
       })
       setActiveTab('results')
-      queryJustExecutedRef.current = false // Reset after switching
+      setQueryJustExecuted(false) // Reset after switching
       debugLogger.log('TASK', {
         event: 'auto-switch-completed',
         widgetId: props.widgetId,
         queryItemConfigId: queryItem.configId,
-        queryJustExecutedRefReset: queryJustExecutedRef.current,
+        queryJustExecutedReset: false,
         timestamp: Date.now()
       })
     }
-  }, [resultCount, activeTab, pagingTypeInConfig])
+  }, [resultCount, activeTab, pagingTypeInConfig, queryJustExecuted])
 
   // Verify dropdowns are synchronized with hash parameter when present
   // This is especially important for grouped queries where dropdowns need to be synchronized
@@ -558,6 +565,9 @@ export function QueryTask (props: QueryTaskProps) {
     queryExecutionKeyRef.current += 1
     setSelectionError(null)
     setZoomError(null)
+    
+    // r021.87: Clear record tracking (formatting is stamped on records)
+    currentQueryRecordIdsRef.current = []
     
     // Clear parent array IMMEDIATELY
     if (onAccumulatedRecordsChange) {
@@ -770,19 +780,19 @@ export function QueryTask (props: QueryTaskProps) {
     setOutputDS(ds)
     
     // ============================================================================
-    // r021.31: EXECUTE PENDING QUERY AFTER DS RECREATION (Part 2 of 2)
+    // r021.51: EXECUTE PENDING QUERY AFTER DS RECREATION (Part 2 of 2)
     // ============================================================================
     //
-    // This callback is the SECOND HALF of the r021.31 destroy-click-callback pattern.
-    // It executes the pending query that was stored in handleFormSubmit (see line ~2177).
+    // This callback executes the pending query that was stored in handleFormSubmit.
+    // It fires after DataSourceComponent remounts due to key prop change (r021.51).
     //
     // FLOW:
-    //   1. User clicks Apply in handleFormSubmit (line ~2150)
-    //   2. Query stored in pendingQueryAfterClearRef (line ~2245)
-    //   3. DS destroyed manually (line ~2262)
-    //   4. Clear button clicked programmatically (line ~2293)
-    //   5. Clear button's onClick calls clearResult() → clears state
-    //   6. React detects outputDS change → DataSourceComponent recreates DS
+    //   1. User clicks Apply in handleFormSubmit with existing results
+    //   2. Query stored in pendingQueryAfterClearRef
+    //   3. DS destroyed manually
+    //   4. dsRecreationKey incremented → forces DataSourceComponent remount (r021.51)
+    //   5. React unmounts old DataSourceComponent → mounts new one
+    //   6. New DataSourceComponent creates fresh OutputDataSource
     //   7. **THIS CALLBACK FIRES** ← You are here
     //   8. setTimeout waits 300ms for React/ESRI to fully stabilize
     //   9. Pending query executes with fresh DS
@@ -793,7 +803,7 @@ export function QueryTask (props: QueryTaskProps) {
     //   - Executing query IMMEDIATELY can cause timing issues and incomplete cleanup
     //   - 300ms allows both React and ESRI to fully settle before query execution
     //
-    // 300MS DELAY TIMING RATIONALE (from systematic testing):
+    // 300MS DELAY TIMING RATIONALE (from systematic testing r021.31-35):
     //   - 100ms: 22.46 MB/query (62% variance) - Too erratic, React not fully settled
     //   - 200ms: 22.13 MB/query (14% variance) - Better but still some instability
     //   - 300ms: 18.92 MB/query (9% variance) - OPTIMAL ✅ Best performance + consistency
@@ -819,10 +829,10 @@ export function QueryTask (props: QueryTaskProps) {
       pendingQueryAfterClearRef.current = null // Clear pending query immediately to prevent re-execution
       
       debugLogger.log('TASK', {
-        event: 'r021.31-executing-pending-query-after-ds-recreation',
+        event: 'r021.51-executing-pending-query-after-ds-recreation',
         widgetId: props.widgetId,
         newDSId: ds.id,
-        note: 'DS recreated by DataSourceComponent, executing stored query after 300ms settle time',
+        note: 'DS recreated via key prop remount (r021.51), executing stored query after 300ms settle time',
         timestamp: Date.now()
       })
       
@@ -835,11 +845,11 @@ export function QueryTask (props: QueryTaskProps) {
       // DO NOT remove setTimeout - causes orphaned references and memory leaks
       setTimeout(() => {
         debugLogger.log('TASK', {
-          event: 'r021.31-executing-query-after-settle-period',
+          event: 'r021.51-executing-query-after-settle-period',
           widgetId: props.widgetId,
           newDSId: ds.id,
           settleTimeMs: 300,
-          note: 'React and ESRI settled, executing query with fresh DS',
+          note: 'React and ESRI settled (r021.51 key prop remount), executing query with fresh DS',
           timestamp: Date.now()
         })
         handleFormSubmit(sqlExpr, spatialFilter, runtimeZoomToSelected)
@@ -895,27 +905,7 @@ export function QueryTask (props: QueryTaskProps) {
         timestamp: Date.now()
       })
       
-      // BUG LOGGING: Accumulated results format switch bug
-      // Log whenever query switches with accumulated records (known bug - format will change)
-      if (accumulatedRecords && accumulatedRecords.length > 0) {
-        debugLogger.log('BUG', {
-          bugId: 'BUG-ADD-MODE-001',
-          category: 'UI',
-          event: 'accumulated-results-format-switch',
-          widgetId: props.widgetId,
-          oldQueryConfigId: oldConfigId,
-          newQueryConfigId: queryItem.configId,
-          oldQueryName: 'Unknown (not tracked)', // We don't currently track which query created records
-          newQueryName: queryItem.name || queryItem.searchAlias || 'Unknown',
-          accumulatedRecordsCount: accumulatedRecords.length,
-          resultsMode,
-          description: 'Accumulated results will change to match new query\'s display format. Fields, layout, and styling will switch from original query\'s configuration to current query\'s configuration.',
-          impact: 'Results may show wrong fields or missing data. Makes ADD mode confusing for multi-query workflows.',
-          workaround: 'Use NEW_SELECTION mode instead of ADD_TO_SELECTION, or only accumulate results from the same query.',
-          targetResolution: 'TBD - Store original queryConfig with each record set',
-          documentation: 'docs/bugs/ACCUMULATED_RESULTS_FORMAT_SWITCH.md'
-        })
-      }
+      // r021.87: BUG-ADD-MODE-001 FIXED - per-record formatting preserved via __queryConfigId on records
     }
     
     // CHECK rootDataSource.map to see how framework accesses map view
@@ -1515,13 +1505,14 @@ export function QueryTask (props: QueryTaskProps) {
       event.preventDefault()
       event.stopPropagation()
     }
-    // Don't allow switching to results if there are no results
-    if (tab === 'results' && resultCount === 0) {
+    // Don't allow switching to results if there are no results AND no accumulated records
+    if (tab === 'results' && resultCount === 0 && (!accumulatedRecords || accumulatedRecords.length === 0)) {
       debugLogger.log('TASK', {
         event: 'tab-change-blocked',
-        reason: 'no-results',
+        reason: 'no-results-and-no-accumulated',
         tab,
-        resultCount
+        resultCount,
+        accumulatedRecordsCount: accumulatedRecords?.length || 0
       })
       return
     }
@@ -1559,6 +1550,18 @@ export function QueryTask (props: QueryTaskProps) {
       resultsMode,
       timestamp: Date.now()
     })
+
+    // Check outputDS exists before proceeding
+    if (!outputDS) {
+      debugLogger.log('TASK', {
+        event: 'handleFormSubmitInternal-no-outputDS',
+        widgetId: props.widgetId,
+        note: 'OutputDS not available - returning control to user',
+        timestamp: Date.now()
+      })
+      setStage(0) // Return control to user
+      return
+    }
 
     // Store the runtime zoom override for use by Add to Map action
     lastRuntimeZoomToSelectedRef.current = runtimeZoomToSelected
@@ -1686,69 +1689,107 @@ export function QueryTask (props: QueryTaskProps) {
         let dsToUse = outputDS
         
         // Handle "Add to" mode: merge new results with widget-level accumulated records
-        if (resultsMode === SelectionType.AddToSelection && result.records && result.records.length > 0) {
-          try {
-            // FIX (r018.96): No manual removal filtering needed
-            // Duplicate detection in mergeResultsIntoAccumulated handles preventing duplicates
-            debugLogger.log('RESULTS-MODE', {
-              event: 'add-mode-starting-merge',
-              widgetId: props.widgetId,
-              existingCount: existingRecordsForMerge.length,
-              existingIds: existingRecordsForMerge.map(r => r.getId?.()).slice(0, 5),
-              newRecordsCount: result.records.length,
-              newRecordIds: result.records?.slice(0, 5).map((r: any) => r.getId?.()),
-              note: 'r018.96: No manual removal filtering - duplicate detection handles this',
-              timestamp: Date.now()
-            })
+        if (resultsMode === SelectionType.AddToSelection) {
+          if (result.records && result.records.length > 0) {
+            try {
+              // FIX (r018.96): No manual removal filtering needed
+              // Duplicate detection in mergeResultsIntoAccumulated handles preventing duplicates
+              debugLogger.log('RESULTS-MODE', {
+                event: 'add-mode-starting-merge',
+                widgetId: props.widgetId,
+                existingCount: existingRecordsForMerge.length,
+                existingIds: existingRecordsForMerge.map(r => r.getId?.()).slice(0, 5),
+                newRecordsCount: result.records.length,
+                newRecordIds: result.records?.slice(0, 5).map((r: any) => r.getId?.()),
+                note: 'r018.96: No manual removal filtering - duplicate detection handles this',
+                timestamp: Date.now()
+              })
 
-            // Merge new query results with widget-level accumulated records
-            // mergeResultsIntoAccumulated uses composite keys to prevent duplicates
-            const mergedRecords = mergeResultsIntoAccumulated(
-              outputDS as FeatureLayerDataSource, // Use outputDS for key generation
-              result.records as FeatureDataRecord[],
-              existingRecordsForMerge // Use consistently captured records
-            )
-            
-            recordsToDisplay = mergedRecords
+              // r021.87: Merge function reads __queryConfigId from record attributes
+              // This keeps duplicate detection logic in ONE place (results-management-utils.ts)
+              const mergeResult = mergeResultsIntoAccumulated(
+                outputDS as FeatureLayerDataSource, // Use outputDS for NEW records
+                result.records as FeatureDataRecord[],
+                existingRecordsForMerge, // Use consistently captured records
+                queryItems // For looking up originDS by __queryConfigId
+              )
+              
+              const mergedRecords = mergeResult.mergedRecords
+              const addedIds = mergeResult.addedRecordIds
+              const duplicateIds = mergeResult.duplicateRecordIds
+              
+              recordsToDisplay = mergedRecords
 
-            // DIAGNOSTIC LOGGING: Records being added to accumulatedRecords
-            const existingIds = existingRecordsForMerge.map(r => r.getId())
-            const newRecordIds = result.records.map(r => r.getId())
-            const mergedIds = mergedRecords.map(r => r.getId())
-            const addedIds = mergedIds.filter(id => !existingIds.includes(id))
-            const duplicateIds = newRecordIds.filter(id => existingIds.includes(id))
-            
-            debugLogger.log('RESULTS-MODE', {
-              event: 'add-mode-merge-complete',
-              widgetId: props.widgetId,
-              existingCount: existingRecordsForMerge.length,
-              existingIds: existingIds.slice(0, 10),
-              newRecordsCount: result.records.length,
-              newRecordIds: newRecordIds.slice(0, 10),
-              mergedRecordsCount: mergedRecords.length,
-              mergedIds: mergedIds.slice(0, 10),
-              addedIds: addedIds.slice(0, 10),
-              duplicateIds: duplicateIds.slice(0, 10),
-              duplicatesSkipped: duplicateIds.length,
-              recordsAdded: addedIds.length,
-              note: 'r018.96: No manual removal filtering - mergeResultsIntoAccumulated handles duplicates',
-              timestamp: Date.now()
-            })
-            
-            // Update widget-level accumulated records so they persist across query switches
-            if (onAccumulatedRecordsChange) {
-              onAccumulatedRecordsChange(mergedRecords)
+              // For diagnostic logging only
+              const existingIds = existingRecordsForMerge.map(r => r.getId())
+              const newRecordIds = result.records.map(r => r.getId())
+              const mergedIds = mergedRecords.map(r => r.getId())
+              
+              debugLogger.log('RESULTS-MODE', {
+                event: 'add-mode-merge-complete',
+                widgetId: props.widgetId,
+                existingCount: existingRecordsForMerge.length,
+                existingIds: existingIds.slice(0, 10),
+                newRecordsCount: result.records.length,
+                newRecordIds: newRecordIds.slice(0, 10),
+                mergedRecordsCount: mergedRecords.length,
+                mergedIds: mergedIds.slice(0, 10),
+                addedIds: addedIds.slice(0, 10),
+                duplicateIds: duplicateIds.slice(0, 10),
+                duplicatesSkipped: duplicateIds.length,
+                recordsAdded: addedIds.length,
+                note: 'r021.84: Duplicate detection logic is now in ONE place (results-management-utils)',
+                timestamp: Date.now()
+              })
+              
+              // Update widget-level accumulated records so they persist across query switches
+              if (onAccumulatedRecordsChange) {
+                onAccumulatedRecordsChange(mergedRecords)
+              }
+              
+              // r021.87: Store queryConfigId directly on record when added - no map needed
+              currentQueryRecordIdsRef.current = addedIds
+              
+              result.records.forEach(record => {
+                const recordId = record.getId()
+                // Only stamp records that were actually added (not duplicates)
+                if (addedIds.includes(recordId)) {
+                  // Store queryConfigId directly on the record
+                  if (record.feature && record.feature.attributes) {
+                    record.feature.attributes.__queryConfigId = queryItem.configId
+                  }
+                  
+                  debugLogger.log('RESULTS-MODE', {
+                    event: 'queryConfigId-stamped-on-record',
+                    widgetId: props.widgetId,
+                    recordId,
+                    queryConfigId: queryItem.configId,
+                    storedOnRecord: !!record.feature?.attributes,
+                    timestamp: Date.now()
+                  })
+                }
+              })
+            } catch (error) {
+              debugLogger.log('RESULTS-MODE', {
+                event: 'add-mode-error',
+                widgetId: props.widgetId,
+                error: error instanceof Error ? error.message : 'Unknown error',
+                errorStack: error instanceof Error ? error.stack : undefined,
+                note: 'r018.96: Falling back to existing records on error',
+                timestamp: Date.now()
+              })
+              // Fall back to existing records on error
+              recordsToDisplay = existingRecordsForMerge
             }
-          } catch (error) {
+          } else {
+            // Query returned 0 results - preserve existing accumulated records
             debugLogger.log('RESULTS-MODE', {
-              event: 'add-mode-error',
+              event: 'add-mode-zero-results',
               widgetId: props.widgetId,
-              error: error instanceof Error ? error.message : 'Unknown error',
-              errorStack: error instanceof Error ? error.stack : undefined,
-              note: 'r018.96: Falling back to existing records on error',
+              existingCount: existingRecordsForMerge.length,
+              note: 'Query returned 0 results - preserving existing accumulated records',
               timestamp: Date.now()
             })
-            // Fall back to existing records on error
             recordsToDisplay = existingRecordsForMerge
           }
         } else if (resultsMode === SelectionType.RemoveFromSelection) {
@@ -1814,9 +1855,10 @@ export function QueryTask (props: QueryTaskProps) {
               // FIX (r018.104): Manually remove graphics from graphics layer
               // Similar to X button removal fix (r018.90), we need to explicitly remove graphics
               // since removeRecordsFromOriginSelections doesn't receive graphics layer params
+              // r021.91: Pass records for composite key matching
               if (useGraphicsLayerForHighlight && graphicsLayer && result.records && result.records.length > 0) {
                 const removedRecordIds = result.records.map(r => r.getId())
-                removeHighlightGraphics(graphicsLayer, removedRecordIds)
+                removeHighlightGraphics(graphicsLayer, removedRecordIds, result.records as FeatureDataRecord[])
                 
                 debugLogger.log('RESULTS-MODE', {
                   event: 'remove-mode-manual-graphics-removal',
@@ -1914,6 +1956,15 @@ export function QueryTask (props: QueryTaskProps) {
               note: 'r018.97: Populate accumulatedRecords in New mode for universal tab count',
               timestamp: Date.now()
             })
+            
+            // r021.87: In NEW mode, stamp queryConfigId on all records
+            currentQueryRecordIdsRef.current = (recordsToDisplay as FeatureDataRecord[]).map(r => r.getId());
+            
+            (recordsToDisplay as FeatureDataRecord[]).forEach(record => {
+              if (record.feature && record.feature.attributes) {
+                record.feature.attributes.__queryConfigId = queryItem.configId
+              }
+            })
           } else if (onAccumulatedRecordsChange) {
             // No results - clear accumulatedRecords
             onAccumulatedRecordsChange([])
@@ -2010,8 +2061,8 @@ export function QueryTask (props: QueryTaskProps) {
         }
         
         // Mark that query just executed BEFORE updating resultCount
-        // This ensures the auto-switch useEffect sees queryJustExecutedRef.current === true
-        queryJustExecutedRef.current = true
+        // This ensures the auto-switch useEffect sees queryJustExecuted === true
+        setQueryJustExecuted(true)
         debugLogger.log('TASK', {
           event: 'query-executed-flag-set',
           widgetId: props.widgetId,
@@ -2083,9 +2134,13 @@ export function QueryTask (props: QueryTaskProps) {
               error: errorMessage,
               errorStack: error instanceof Error ? error.stack : undefined
             })
-            if (process.env.NODE_ENV === 'development') {
-              console.error('Error executing zoomToRecords', error)
-            }
+            debugLogger.log('ZOOM', {
+              event: 'zoom-to-records-error',
+              widgetId: props.widgetId,
+              error: error instanceof Error ? error.message : String(error),
+              errorStack: error instanceof Error ? error.stack : undefined,
+              timestamp: Date.now()
+            })
           }
         }
         
@@ -2157,7 +2212,7 @@ export function QueryTask (props: QueryTaskProps) {
           errorStack: error instanceof Error ? error.stack : undefined,
           timestamp: Date.now()
         })
-        setStage(1) // Return to results or form stage even on error
+        setStage(0) // Return control to user - exit Stage 2 on error
       })
       .finally(() => {
         if (spatialFilter?.layer && spatialFilter?.clearAfterApply) {
@@ -2347,18 +2402,35 @@ export function QueryTask (props: QueryTaskProps) {
         }
       }
       
-      // Programmatic button click triggers React to recreate DS
-      if (clearResultBtnRef.current) {
-        clearResultBtnRef.current.click()
-      } else {
-        debugLogger.log('ERROR', {
-          event: 'clear-button-ref-missing',
-          widgetId: props.widgetId,
-          timestamp: Date.now()
-        })
-        setStage(0)
-        isRetryAfterClearRef.current = false
-      }
+      // ============================================================================
+      // r021.51: KEY PROP PATTERN - Force DataSourceComponent Remount
+      // ============================================================================
+      // Increment the key prop on DataSourceComponent to force React to unmount/remount it.
+      // When the key changes, React treats it as a new component instance and creates a fresh
+      // DataSource, which triggers handleOutputDataSourceCreated callback naturally.
+      //
+      // This replaces the previous programmatic button click anti-pattern (r021.31-50) with
+      // idiomatic React. Memory testing shows equivalent performance (18.67 vs 18.83 MB/query).
+      //
+      // WHY THIS WORKS:
+      // - React unmounts old DataSourceComponent (releases all hooks/effects)
+      // - React mounts new DataSourceComponent (fresh lifecycle)
+      // - New component creates OutputDataSource via ESRI's normal flow
+      // - handleOutputDataSourceCreated callback fires with new DS instance
+      // - Pending query executes after 300ms settle time
+      //
+      // See: OUTPUTDATASOURCE_MEMORY_LEAK_INVESTIGATION.md (r021.51 section)
+      // ============================================================================
+      
+      setDsRecreationKey(prev => prev + 1)
+      
+      debugLogger.log('TASK', {
+        event: 'ds-recreation-key-incremented',
+        widgetId: props.widgetId,
+        newKey: dsRecreationKey + 1,
+        note: 'Key prop pattern - DataSourceComponent will remount and recreate DS',
+        timestamp: Date.now()
+      })
       
       return
     }
@@ -2492,7 +2564,15 @@ export function QueryTask (props: QueryTaskProps) {
       flex-direction: column;
       overflow: hidden;
     `}>
-      <DataSourceComponent useDataSource={useOutputDs} onDataSourceCreated={handleOutputDataSourceCreated} onDataSourceInfoChange={handleOutputDataSourceInfoChange}/>
+      {/* r021.51: Key prop forces remount when DS is destroyed. Changing this key tells React
+          to treat DataSourceComponent as a new instance, triggering full unmount/remount cycle
+          and natural DS recreation. This is the proper React pattern for forced remounting. */}
+      <DataSourceComponent 
+        key={dsRecreationKey}
+        useDataSource={useOutputDs} 
+        onDataSourceCreated={handleOutputDataSourceCreated} 
+        onDataSourceInfoChange={handleOutputDataSourceInfoChange}
+      />
       
       {/* Tab Navigation - Moved to top */}
       <Tabs
@@ -2607,7 +2687,6 @@ export function QueryTask (props: QueryTaskProps) {
               {effectiveResultCount > 0 && (
                 <Tooltip title={getI18nMessage('clearResult')} placement='bottom'>
                   <Button
-                    ref={clearResultBtnRef}
                     size='sm'
                     type='tertiary'
                     aria-label={getI18nMessage('clearResult')}
@@ -2946,23 +3025,35 @@ export function QueryTask (props: QueryTaskProps) {
                             timestamp: Date.now()
                           })
                           
-                          // FIX (r018.65): Use outputDS.getSelectedRecords() as source of truth for mode switching
-                          // This correctly filters out removed records, unlike effectiveRecords which contains stale data
-                          // outputDS.getSelectedRecords() is the single source of truth that stays in sync with removals
-                          const recordsToCapture = outputDSSelectedRecords.length > 0
-                            ? outputDSSelectedRecords
-                            : (effectiveRecords && effectiveRecords.length > 0 
-                                ? (effectiveRecords as FeatureDataRecord[])
-                                : [])
+                          // FIX (r021.112): Priority order for capturing records on mode switch FROM NEW mode:
+                          // 1. accumulatedRecords - SINGLE SOURCE OF TRUTH when switching from NEW mode
+                          //    It reflects removals and is always up-to-date (r018.97, r021.110)
+                          // 2. outputDS.getSelectedRecords() - can be stale after removals in NEW mode
+                          // 3. effectiveRecords - fallback to original query results (also stale after removals)
+                          // BUG FIX: outputDS.getSelectedRecords() can return stale data (121 records) when
+                          // records have been removed in NEW mode. accumulatedRecords is the source of truth.
+                          const recordsToCapture = (accumulatedRecords && accumulatedRecords.length > 0)
+                            ? accumulatedRecords
+                            : (outputDSSelectedRecords.length > 0
+                                ? outputDSSelectedRecords
+                                : (effectiveRecords && effectiveRecords.length > 0 
+                                    ? (effectiveRecords as FeatureDataRecord[])
+                                    : []))
                           
                           // DEBUG: Log which source was used
                           debugLogger.log('RESULTS-MODE', {
                             event: 'mode-switch-debug-after-capture',
                             widgetId: props.widgetId,
                             recordsToCaptureCount: recordsToCapture.length,
-                            source: outputDSSelectedRecords.length > 0 ? 'outputDS.getSelectedRecords()' : (effectiveRecords && effectiveRecords.length > 0 ? 'effectiveRecords' : 'none'),
+                            source: (accumulatedRecords && accumulatedRecords.length > 0)
+                              ? 'accumulatedRecords' 
+                              : (outputDSSelectedRecords.length > 0 
+                                  ? 'outputDS.getSelectedRecords()' 
+                                  : (effectiveRecords && effectiveRecords.length > 0 ? 'effectiveRecords' : 'none')),
                             effectiveRecordsCount,
                             outputDSSelectedCount,
+                            accumulatedRecordsCount,
+                            note: 'r021.112: accumulatedRecords is single source of truth when switching from NEW mode',
                             timestamp: Date.now()
                           })
 
@@ -2997,18 +3088,21 @@ export function QueryTask (props: QueryTaskProps) {
                               onAccumulatedRecordsChange) {
                             const existingAccumulated = accumulatedRecords || []
                             
-                            // Merge current results with existing accumulated records
-                            const mergedRecords = mergeResultsIntoAccumulated(
+                            // r021.87: Merge function reads __queryConfigId from record attributes
+                            const mergeResult = mergeResultsIntoAccumulated(
                               outputDS as FeatureLayerDataSource,
                               recordsToCapture,
-                              existingAccumulated
+                              existingAccumulated,
+                              queryItems
                             )
+                            
+                            const mergedRecords = mergeResult.mergedRecords
+                            const addedIds = mergeResult.addedRecordIds
+                            const duplicateIds = mergeResult.duplicateRecordIds
                             
                             const existingIds = existingAccumulated.map(r => r.getId())
                             const capturedIds = recordsToCapture.map(r => r.getId())
                             const mergedIds = mergedRecords.map(r => r.getId())
-                            const addedIds = mergedIds.filter(id => !existingIds.includes(id))
-                            const duplicateIds = capturedIds.filter(id => existingIds.includes(id))
                             
                             debugLogger.log('RESULTS-MODE', {
                               event: 'capturing-current-results-on-mode-switch',
@@ -3026,8 +3120,20 @@ export function QueryTask (props: QueryTaskProps) {
                               addedIds: addedIds,
                               duplicateIds: duplicateIds,
                               duplicatesFiltered: duplicateIds.length,
-                              sourceUsed: outputDSSelectedRecords.length > 0 ? 'outputDS.getSelectedRecords()' : (effectiveRecords && effectiveRecords.length > 0 ? 'effectiveRecords' : 'none'),
-                              note: 'outputDS.getSelectedRecords()-is-source-of-truth-filters-removed-records'
+                              sourceUsed: outputDSSelectedRecords.length > 0 
+                                ? 'outputDS.getSelectedRecords()' 
+                                : (accumulatedRecords && accumulatedRecords.length > 0 
+                                    ? 'accumulatedRecords' 
+                                    : (effectiveRecords && effectiveRecords.length > 0 ? 'effectiveRecords' : 'none')),
+                              note: 'r021.111: accumulatedRecords prioritized over effectiveRecords to capture removed-record state'
+                            })
+                            
+                            // r021.87: Stamp queryConfigId on newly added records
+                            recordsToCapture.forEach(record => {
+                              const recordId = record.getId()
+                              if (addedIds.includes(recordId) && record.feature?.attributes) {
+                                record.feature.attributes.__queryConfigId = queryItem.configId
+                              }
                             })
                             
                             onAccumulatedRecordsChange(mergedRecords)
@@ -3111,23 +3217,35 @@ export function QueryTask (props: QueryTaskProps) {
                             timestamp: Date.now()
                           })
                           
-                          // FIX (r018.65): Use outputDS.getSelectedRecords() as source of truth for mode switching
-                          // This correctly filters out removed records, unlike effectiveRecords which contains stale data
-                          // outputDS.getSelectedRecords() is the single source of truth that stays in sync with removals
-                          const recordsToCaptureForRemove = outputDSSelectedRecordsForRemove.length > 0
-                            ? outputDSSelectedRecordsForRemove
-                            : (effectiveRecords && effectiveRecords.length > 0 
-                                ? (effectiveRecords as FeatureDataRecord[])
-                                : [])
+                          // FIX (r021.112): Priority order for capturing records on mode switch FROM NEW mode:
+                          // 1. accumulatedRecords - SINGLE SOURCE OF TRUTH when switching from NEW mode
+                          //    It reflects removals and is always up-to-date (r018.97, r021.110)
+                          // 2. outputDS.getSelectedRecords() - can be stale after removals in NEW mode
+                          // 3. effectiveRecords - fallback to original query results (also stale after removals)
+                          // BUG FIX: outputDS.getSelectedRecords() can return stale data when records have been
+                          // removed in NEW mode. accumulatedRecords is the source of truth.
+                          const recordsToCaptureForRemove = (accumulatedRecords && accumulatedRecords.length > 0)
+                            ? accumulatedRecords
+                            : (outputDSSelectedRecordsForRemove.length > 0
+                                ? outputDSSelectedRecordsForRemove
+                                : (effectiveRecords && effectiveRecords.length > 0 
+                                    ? (effectiveRecords as FeatureDataRecord[])
+                                    : []))
                           
                           // DEBUG: Log which source was used
                           debugLogger.log('RESULTS-MODE', {
                             event: 'mode-switch-debug-after-capture-remove',
                             widgetId: props.widgetId,
                             recordsToCaptureCount: recordsToCaptureForRemove.length,
-                            source: outputDSSelectedRecordsForRemove.length > 0 ? 'outputDS.getSelectedRecords()' : (effectiveRecords && effectiveRecords.length > 0 ? 'effectiveRecords' : 'none'),
+                            source: (accumulatedRecords && accumulatedRecords.length > 0)
+                              ? 'accumulatedRecords' 
+                              : (outputDSSelectedRecordsForRemove.length > 0 
+                                  ? 'outputDS.getSelectedRecords()' 
+                                  : (effectiveRecords && effectiveRecords.length > 0 ? 'effectiveRecords' : 'none')),
                             effectiveRecordsCount: effectiveRecordsCountForRemove,
                             outputDSSelectedCount: outputDSSelectedCountForRemove,
+                            accumulatedRecordsCount: accumulatedRecordsCountForRemove,
+                            note: 'r021.112: accumulatedRecords is single source of truth when switching from NEW mode',
                             timestamp: Date.now()
                           })
 
@@ -3162,12 +3280,15 @@ export function QueryTask (props: QueryTaskProps) {
                               onAccumulatedRecordsChange) {
                             const existingAccumulated = accumulatedRecords || []
                             
-                            // Merge current results with existing accumulated records
-                            const mergedRecords = mergeResultsIntoAccumulated(
+                            // r021.87: Merge function reads __queryConfigId from record attributes
+                            const mergeResult = mergeResultsIntoAccumulated(
                               outputDS as FeatureLayerDataSource,
                               recordsToCaptureForRemove,
-                              existingAccumulated
+                              existingAccumulated,
+                              queryItems
                             )
+                            
+                            const mergedRecords = mergeResult.mergedRecords
                             
                             debugLogger.log('RESULTS-MODE', {
                               event: 'capturing-current-results-on-mode-switch-to-remove',
@@ -3179,8 +3300,21 @@ export function QueryTask (props: QueryTaskProps) {
                               outputDSSelectedCount: outputDSSelectedCountForRemove,
                               existingAccumulatedCount: existingAccumulated.length,
                               mergedRecordsCount: mergedRecords.length,
-                              sourceUsed: outputDSSelectedRecordsForRemove.length > 0 ? 'outputDS.getSelectedRecords()' : (effectiveRecords && effectiveRecords.length > 0 ? 'effectiveRecords' : 'none'),
-                              note: 'outputDS.getSelectedRecords()-is-source-of-truth-filters-removed-records'
+                              sourceUsed: (accumulatedRecords && accumulatedRecords.length > 0)
+                                ? 'accumulatedRecords' 
+                                : (outputDSSelectedRecordsForRemove.length > 0 
+                                    ? 'outputDS.getSelectedRecords()' 
+                                    : (effectiveRecords && effectiveRecords.length > 0 ? 'effectiveRecords' : 'none')),
+                              note: 'r021.112: accumulatedRecords is single source of truth when switching from NEW mode (reflects removals)'
+                            })
+                            
+                            // r021.87: Stamp queryConfigId on newly captured records
+                            const addedIdsFromMerge = mergeResult.addedRecordIds
+                            recordsToCaptureForRemove.forEach(record => {
+                              const recordId = record.getId()
+                              if (addedIdsFromMerge.includes(recordId) && record.feature?.attributes) {
+                                record.feature.attributes.__queryConfigId = queryItem.configId
+                              }
                             })
                             
                             onAccumulatedRecordsChange(mergedRecords)
@@ -3312,7 +3446,9 @@ export function QueryTask (props: QueryTaskProps) {
               }}
             >
               <QueryTaskResult
-                key={`${queryItem.configId}-${queryExecutionKeyRef.current}`}
+                key={resultsMode === SelectionType.NewSelection 
+                  ? `${queryItem.configId}-${queryExecutionKeyRef.current}`
+                  : `stable-${queryExecutionKeyRef.current}`}
                 widgetId={props.widgetId}
                 queryItem={queryItem}
                 queryParams={queryParamRef.current}
@@ -3329,6 +3465,7 @@ export function QueryTask (props: QueryTaskProps) {
                 onAccumulatedRecordsChange={onAccumulatedRecordsChange}
                 eventManager={eventManager}
                 isQuerySwitchInProgressRef={isQuerySwitchInProgressRef}
+                queries={queryItems}
                 onNavBack={async (clearResults = false) => {
                   // Handle navigation from QueryTaskResult
                   // If clearResults is true, clear everything and go to query tab

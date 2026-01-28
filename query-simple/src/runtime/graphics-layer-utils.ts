@@ -501,24 +501,12 @@ export async function addHighlightGraphics(
   const skippedRecordIds: string[] = []
   const duplicateRecordIds: string[] = []
 
+  // r021.90: No duplicate checking - caller clears the layer before calling this function
+  // This ensures we always add the exact set of records provided
   records.forEach(record => {
     try {
       const recordId = record.getId()
       
-      // Check if this record ID already exists in graphics layer
-      if (existingRecordIdSet.has(recordId)) {
-        duplicateCount++
-        duplicateRecordIds.push(recordId)
-        debugLogger.log('GRAPHICS-LAYER', {
-          event: 'addHighlightGraphics-duplicate-detected',
-          seq,
-          recordId,
-          graphicsLayerId: graphicsLayer.id,
-          timestamp: Date.now()
-        })
-        return // Skip adding duplicate
-      }
-
       const graphic = record.feature as __esri.Graphic
       if (!graphic || !graphic.geometry) {
         skippedCount++
@@ -532,12 +520,16 @@ export async function addHighlightGraphics(
       // Create symbol using default highlight color
       const symbol = getDefaultHighlightSymbol(geometryType, mapView)
 
+      // r021.90: Store queryConfigId to distinguish between records with same ID from different queries
+      const queryConfigId = record.feature?.attributes?.__queryConfigId || ''
+
       // Create new graphic with highlight symbol
       const highlightGraphic = new Graphic({
         geometry: graphic.geometry,
         symbol: symbol,
         attributes: {
           recordId: recordId,
+          queryConfigId: queryConfigId,
           source: 'querysimple-highlight',
           widgetId: graphicsLayer.id.replace('querysimple-highlight-', '')
         }
@@ -546,9 +538,6 @@ export async function addHighlightGraphics(
       graphicsLayer.add(highlightGraphic)
       addedCount++
       addedRecordIds.push(recordId)
-      
-      // Add to tracking set to prevent duplicates within this batch
-      existingRecordIdSet.add(recordId)
     } catch (error) {
       skippedCount++
       skippedRecordIds.push(record.getId())
@@ -597,7 +586,8 @@ export async function addHighlightGraphics(
  */
 export function removeHighlightGraphics(
   graphicsLayer: __esri.GraphicsLayer,
-  recordIds: string[]
+  recordIds: string[],
+  records?: FeatureDataRecord[]
 ): void {
   const seq = ++operationSequence
   if (!graphicsLayer || !recordIds || recordIds.length === 0) {
@@ -611,22 +601,64 @@ export function removeHighlightGraphics(
     return
   }
 
-  const recordIdSet = new Set(recordIds)
   let removedCount = 0
 
-  // Find and remove graphics matching record IDs
-  const graphicsToRemove: __esri.Graphic[] = []
-  graphicsLayer.graphics.forEach(graphic => {
-    const recordId = graphic.attributes?.recordId
-    if (recordId && recordIdSet.has(recordId)) {
-      graphicsToRemove.push(graphic)
-    }
-  })
+  // r021.93: Build composite key set if records are provided (for accurate matching)
+  if (records && records.length > 0) {
+    const compositeKeys = records.map(record => {
+      const recordId = record.getId()
+      const queryConfigId = record.feature?.attributes?.__queryConfigId || ''
+      return { recordId, queryConfigId, compositeKey: `${recordId}__${queryConfigId}` }
+    })
+    const compositeKeySet = new Set(compositeKeys.map(k => k.compositeKey))
 
-  graphicsToRemove.forEach(graphic => {
-    graphicsLayer.remove(graphic)
-    removedCount++
-  })
+    debugLogger.log('GRAPHICS-LAYER', {
+      event: 'removeHighlightGraphics-composite-keys',
+      seq,
+      graphicsLayerId: graphicsLayer.id,
+      compositeKeys: compositeKeys,
+      graphicsCount: graphicsLayer.graphics.length,
+      graphicsKeys: graphicsLayer.graphics.map(g => ({
+        recordId: g.attributes?.recordId,
+        queryConfigId: g.attributes?.queryConfigId || '',
+        compositeKey: `${g.attributes?.recordId}__${g.attributes?.queryConfigId || ''}`
+      })).slice(0, 10),
+      timestamp: Date.now()
+    })
+
+    // Find and remove graphics matching composite keys (recordId + queryConfigId)
+    const graphicsToRemove: __esri.Graphic[] = []
+    graphicsLayer.graphics.forEach(graphic => {
+      const recordId = graphic.attributes?.recordId
+      const queryConfigId = graphic.attributes?.queryConfigId || ''
+      if (recordId) {
+        const compositeKey = `${recordId}__${queryConfigId}`
+        if (compositeKeySet.has(compositeKey)) {
+          graphicsToRemove.push(graphic)
+        }
+      }
+    })
+
+    graphicsToRemove.forEach(graphic => {
+      graphicsLayer.remove(graphic)
+      removedCount++
+    })
+  } else {
+    // Fallback: use simple recordId matching (for backwards compatibility)
+    const recordIdSet = new Set(recordIds)
+    const graphicsToRemove: __esri.Graphic[] = []
+    graphicsLayer.graphics.forEach(graphic => {
+      const recordId = graphic.attributes?.recordId
+      if (recordId && recordIdSet.has(recordId)) {
+        graphicsToRemove.push(graphic)
+      }
+    })
+
+    graphicsToRemove.forEach(graphic => {
+      graphicsLayer.remove(graphic)
+      removedCount++
+    })
+  }
 
   debugLogger.log('GRAPHICS-LAYER', {
     event: 'removeHighlightGraphics-complete',

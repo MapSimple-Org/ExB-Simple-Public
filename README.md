@@ -2,8 +2,41 @@
 
 Custom widgets for ArcGIS Experience Builder Developer Edition (1.19.0+). Built for performance, deep-linking, and advanced result management.
 
-**Current Version**: `1.19.0-r021.46`  
-**Latest Update**: Major memory optimization and performance improvements (Jan 16-19, 2026)
+**Current Version**: `1.19.0-r021.112`  
+**Latest Update**: Format preservation across sources, composite keys, and architectural simplification (Jan 19-27, 2026)
+
+---
+
+## What's New: r021.46 → r021.112 (Jan 19-27, 2026)
+
+### 🎯 Primary Achievement: Format Preservation & Multi-Source Duplicates
+
+**Maintaining source formatting when adding from different sources.** In ADD mode, when you run Query A (e.g., addresses), then Query B (e.g., parcels), accumulated results from Query A used to change format to match Query B. Fields would swap, display names would change, and users saw incorrect data. **That’s fixed.** Each record now keeps the display format of the query that added it, so you can meaningfully combine results from different sources.
+
+**Duplicates from different sources now work.** Previously, identity was based only on **ObjectID**. Records with the same ObjectID from different layers (e.g., "2" from Trails vs "2" from Parcels) were treated as the same record—graphics could disappear, removal behaved wrongly, and multi-source accumulation was unreliable. We now use **composite keys** (`recordId__queryConfigId`) so each record is uniquely tied to its **data source**. You can add "duplicate" IDs from different layers and manage them correctly: separate formatting, separate graphics, correct add/remove.
+
+#### Architectural Simplification (r021.110)
+
+During the rearchitecture we also **removed stale state fallbacks** (`lastSelection`) that could restore incorrect data. We now use `accumulatedRecords` as the single source of truth, eliminated 126+ lines of risky fallback code, and simplified restoration logic. This was a deliberate cleanup, not a refactor-introduced bug fix.
+
+#### Bugs Introduced During Refactor — Now Fixed
+
+The format-preservation and composite-key refactor introduced a number of regressions that didn’t exist in r021.46. We’ve addressed them:
+
+- **Mode switching** (r021.111, r021.112): Removed records no longer reappear when switching NEW → ADD/REMOVE; we prioritize `accumulatedRecords` over stale `outputDS` data.
+- **Graphics layer** (r021.93, r021.109): Fixed doubling in ADD mode, X-button removal, and restore-after-close; composite keys used for highlight matching.
+- **Record management** (r021.94, r021.106, r021.108): Fixed "ghost" records, triple-call race after removals, and restoration showing removed records; tab auto-switch works in all modes.
+
+#### Impact
+
+- ✅ **Format preserved** when adding from different sources
+- ✅ **Duplicate ObjectIDs from different sources** supported via composite keys
+- ✅ Regressions from the refactor **resolved**; behavior is stable again
+- ✅ **Simpler architecture** with a single source of truth
+
+For complete technical details, see [CHANGELOG.md](CHANGELOG.md).
+
+---
 
 ## Key Differentiators (Why QuerySimple?)
 
@@ -17,67 +50,10 @@ QuerySimple is designed to solve the common pain points of the standard Experien
 
 ---
 
-## What's New: r021.11 → r021.46 (Jan 16-19, 2026)
-
-### 🎉 Major Achievements
-
-Four-day intensive memory leak investigation resulting in **93% memory reduction** for New Selection mode and comprehensive optimizations across the board.
-
-#### Performance Improvements
-
-**New Selection Mode:**
-- **Before**: 25.89 MB per query
-- **After**: 1.76 MB per query  
-- **Result**: 93% reduction ✅
-
-**Add to Selection Mode:**
-- **Before**: ~27 MB baseline drift per cycle
-- **After**: ~25 MB baseline drift per cycle
-- **Note**: Remaining 25 MB is ESRI JSAPI internal memory (beyond widget control)
-
-#### Key Fixes (r021.15 - r021.46)
-
-1. **Grouped Result Sets** (r021.15-r021.19)
-   - Multi-query result accumulation with group-level management
-   - Display all accumulated queries with their result counts
-   - Remove individual query results from accumulated set
-
-2. **Geometry Reference Leak** (r021.36) 🎯
-   - **Impact**: Reduced memory from 11.21 MB/query → 1.76 MB/query (84% improvement)
-   - **Fix**: Modified zoom-utils to store extent objects only, not full geometry objects
-   - **Breakthrough**: This was the single biggest memory win
-
-3. **ESRI Observer Cleanup Order** (r021.39)
-   - **Impact**: Fixed orphaned ESRI observers (87K `TrackingTarget`, 56K `ObservationHandle` accumulating)
-   - **Fix**: Reordered cleanup to clear selection BEFORE destroying OutputDataSource
-   - **Insight**: Destroying DS before clearing selection left observers orphaned
-
-4. **Multi-Source Clearing** (r021.43)
-   - **Impact**: 80% reduction in TrackingTarget accumulation
-   - **Fix**: Clear selection on ALL origin DataSources (not just current one) in Add mode
-   - **Why**: Multiple queries accumulate from different layers, each with its own observers
-
-5. **Icon Component Duplication** (r021.44, r021.46)
-   - **Impact**: Eliminated 1,200 React component instances (600 trash icons + 600 expand/collapse arrows)
-   - **Fix**: Replaced React components with CSS background-images using SVG data-uris
-   - **Savings**: ~3-4 MB component/DOM overhead per 600 results
-
-6. **ESRI Limitations Documented** (r021.46)
-   - **Finding**: Allocation sampling revealed 95% of remaining memory leak is ESRI JSAPI internals
-   - **Source**: `onTrackingEnd`, `e.reactionDeferred`, `_watchMeshGeometryChanges` in `init.js:5`
-   - **Conclusion**: No public API to control these internal structures
-   - **Action**: Documented limitations for future reference
-
-#### Technical Deep-Dive
-
-For complete technical details and version history, see:
-- **CHANGELOG.md** - Detailed version-by-version changes (r021.11 through r021.46)
-
----
-
 ## Widgets in this Suite
 
 ### 🔍 QuerySimple (`query-simple/`)
+
 A high-performance search engine for Experience Builder.
 
 **Advanced Features:**
@@ -89,6 +65,7 @@ A high-performance search engine for Experience Builder.
 - **Unified Testing**: Verified by a "Mega-Journey" E2E suite that simulates real user sessions.
 
 ### 🛠️ HelperSimple (`helper-simple/`)
+
 The "Orchestrator" widget that handles the background logic.
 
 **Features:**
@@ -138,14 +115,16 @@ If you're building a parcel search with 10 different search fields (PIN, Major/M
 ---
 
 ### URL Parameters (Deep Linking)
+
 Configure a `shortId` for any query to enable instant automation.
 
-| Format | Example | Best Use Case |
-| :--- | :--- | :--- |
-| **Hash (#)** | `index.html#pin=123` | **Interactive UX.** Snappy, no page reload, private to browser. |
-| **Query (?)** | `index.html?pin=123` | **External Linking.** Standard for CRM/Email integrations. |
+| Format        | Example            | Best Use Case                                                   |
+| ------------- | ------------------ | --------------------------------------------------------------- |
+| **Hash (#)**  | index.html#pin=123 | **Interactive UX.** Snappy, no page reload, private to browser. |
+| **Query (?)** | index.html?pin=123 | **External Linking.** Standard for CRM/Email integrations.      |
 
 ### Display Order & Grouping
+
 Manage complex search requirements with ease:
 - **`groupId`**: Clusters related searches (e.g., "Parcels") into a group.
 - **`searchAlias`**: The label shown inside the group (e.g., "Search by PIN").
@@ -161,17 +140,18 @@ The suite includes a production-safe **Debug System**. No logs are shown in the 
 Add `?debug=FEATURE` to your URL (e.g., `?debug=HASH,TASK`).
 
 ### Available Switches:
-| Switch | What it tracks |
-| :--- | :--- |
-| `all` | Enable every single log (Warning: High volume). |
-| `HASH` | Deep link consumption and URL parameter parsing. |
-| `TASK` | Query execution, performance metrics, and data source status. |
-| `RESULTS-MODE` | Transitions between New, Add, and Remove selection modes. |
-| `EXPAND-COLLAPSE` | State management for result item details. |
-| `SELECTION` | Identify popup tracking and map selection sync. |
-| `RESTORE` | Logic used to rebuild the map selection after an identify event. |
-| `WIDGET-STATE` | The handshake between HelperSimple and QuerySimple. |
-| `GRAPHICS-LAYER` | Highlighting logic for graphics-enabled widgets. |
+
+| Switch          | What it tracks                                                   |
+| --------------- | ---------------------------------------------------------------- |
+| all             | Enable every single log (Warning: High volume).                  |
+| HASH            | Deep link consumption and URL parameter parsing.                 |
+| TASK            | Query execution, performance metrics, and data source status.    |
+| RESULTS-MODE    | Transitions between New, Add, and Remove selection modes.        |
+| EXPAND-COLLAPSE | State management for result item details.                        |
+| SELECTION       | Identify popup tracking and map selection sync.                  |
+| RESTORE         | Logic used to rebuild the map selection after an identify event. |
+| WIDGET-STATE    | The handshake between HelperSimple and QuerySimple.              |
+| GRAPHICS-LAYER  | Highlighting logic for graphics-enabled widgets.                 |
 
 ### Known Bugs (Always Visible)
 
@@ -212,6 +192,7 @@ All development documentation has been organized into a centralized [`docs/`](do
 We use a **Unified Testing Strategy**. Instead of dozens of small tests that might miss state leaks, we run a single **"Mega-Journey"** that simulates a 5-minute user session across both widgets.
 
 ### Running the Suite:
+
 ```bash
 # 1. Manual Auth (Do this once a day)
 npm run test:e2e:auth-setup

@@ -5,6 +5,418 @@ All notable changes to MapSimple Experience Builder widgets will be documented i
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.19.0-r021.112] - 2026-01-27 - Fix Mode Switch Priority (Stale outputDS.getSelectedRecords())
+
+### Fixed
+- **Records Resurrection on Mode Switch (Part 2)**: When switching from NEW to ADD mode after removing records, `outputDS.getSelectedRecords()` returned stale data (121 records) instead of the correct count (118)
+
+### Root Cause
+- r021.111 fixed the fallback to use `accumulatedRecords` over `effectiveRecords`, but the priority was still: `outputDS.getSelectedRecords()` → `accumulatedRecords` → `effectiveRecords`
+- `outputDS.getSelectedRecords()` can be stale after removals in NEW mode (returns original 121 instead of current 118)
+- When `outputDS.getSelectedRecords()` had data, it was used even though it was incorrect
+
+### Solution
+- **Prioritized `accumulatedRecords` over `outputDS.getSelectedRecords()`** when switching from NEW mode
+- New priority: `accumulatedRecords` → `outputDS.getSelectedRecords()` → `effectiveRecords` → `[]`
+- `accumulatedRecords` is the single source of truth that reflects removals (r021.110)
+- Applied fix to both NEW→ADD and NEW→REMOVE mode switches
+
+### Impact
+- ✅ Mode switches now correctly use `accumulatedRecords` (reflects removals)
+- ✅ No more stale `outputDS.getSelectedRecords()` data being used
+- ✅ Records stay removed when switching modes
+
+### Cleanup
+- Removed all TWO-CLICK diagnostic logs (bug resolved)
+- Converted `console.warn` and `console.error` to `debugLogger` for consistency
+
+### Files Modified
+- `query-simple/src/runtime/query-task.tsx` - Prioritized `accumulatedRecords` in mode switch logic (2 locations), converted console statements
+- `query-simple/src/runtime/query-result.tsx` - Removed TWO-CLICK diagnostic logs (4 locations)
+- `query-simple/src/version.ts` - Bumped to r021.112
+
+---
+
+## [1.19.0-r021.111] - 2026-01-27 - Fix Mode Switch Fallback (Stale effectiveRecords)
+
+### Fixed
+- **Records Resurrection on Mode Switch**: When switching from NEW to ADD mode after removing records, all original records would reappear
+
+### Root Cause
+- Mode switch logic used this fallback priority: `outputDS.getSelectedRecords()` → `effectiveRecords` → `[]`
+- `effectiveRecords` comes from `recordsRef.current`, which is only updated on new queries
+- After removing records in NEW mode, `accumulatedRecords` was correctly synced (118), but `recordsRef.current` stayed stale (121)
+- When `outputDS.getSelectedRecords()` was empty, it fell back to stale `effectiveRecords` (121 records)
+
+### Solution
+- Changed fallback priority to: `outputDS.getSelectedRecords()` → `accumulatedRecords` → `effectiveRecords` → `[]`
+- `accumulatedRecords` is kept in sync with removals (r018.97), so it's the correct fallback
+- Applied fix to both NEW→ADD and NEW→REMOVE mode switches
+
+### Impact
+- ✅ Mode switches now preserve removed-record state
+- ✅ Switching from NEW to ADD after removals uses correct (reduced) count
+- ✅ No more "zombie records" reappearing on mode change
+
+### Files Modified
+- `query-simple/src/runtime/query-task.tsx` - Updated mode switch fallback logic (2 locations)
+- `query-simple/src/version.ts` - Bumped to r021.111
+
+---
+
+## [1.19.0-r021.110] - 2026-01-27 - Remove lastSelection (Stale Fallback)
+
+### Removed
+- **`lastSelection` State Property**: Removed orphaned/stale fallback state that was causing out-of-sync issues
+
+### Root Cause
+- `lastSelection` was only updated from data source selection events
+- When records were removed via `handleAccumulatedRecordsChange`, `accumulatedRecords` was updated but `lastSelection` was NOT
+- This created a ticking time bomb: if restoration ever fell back to `lastSelection`, it would restore stale/incorrect data
+- r021.108 already prioritized `accumulatedRecords`, making `lastSelection` largely unused
+
+### Solution
+- **Removed `lastSelection` entirely** - Use `accumulatedRecords` as single source of truth
+- Removed `lastSelection` from widget state interface
+- Removed `lastSelection` update logic in `handleSelectionChange`
+- Removed `restoreLastSelection` fallback in restoration logic (68 lines)
+- Removed `clearLastSelection` fallback in clear logic (58 lines)
+- Simplified `handleRestoreOnIdentifyClose` to remove `lastSelection` validation
+
+### Impact
+- ✅ Eliminates risk of stale data restoration
+- ✅ Simpler architecture - one source of truth
+- ✅ Removed 126+ lines of dead/dangerous fallback code
+- ✅ No functional changes - restoration already prioritized `accumulatedRecords` (r021.108)
+
+### Files Modified
+- `query-simple/src/runtime/widget.tsx` - Removed `lastSelection` from state and validation logic
+- `query-simple/src/runtime/hooks/use-selection-restoration.ts` - Removed `lastSelection` update, fallbacks, and helper methods
+- `query-simple/src/version.ts` - Bumped to r021.110
+
+---
+
+## [1.19.0-r021.109] - 2026-01-27 - Fix Duplicate Detection to Use Composite Keys
+
+### Fixed
+- **Graphics Missing When Combining Queries with Same Record IDs**: When adding records from different queries in ADD mode, if two records had the same `recordId` (e.g., "2" from Trails and "2" from Arlington), the duplicate detection would skip adding the second graphic even though they were from different data sources.
+
+### Root Cause
+- Duplicate detection in `addHighlightGraphics` was only checking `recordId`
+- It treated records with the same ID from different queries as duplicates
+- This prevented legitimate graphics from being added to the map
+
+### Solution
+- Changed duplicate detection to use **composite keys** (`recordId__queryConfigId`)
+- Now checks: `existingCompositeKey === compositeKey` instead of `existingRecordId === recordId`
+- Tracks added items using composite keys: `addedDuringThisOperation.add(compositeKey)`
+- Records with same ID from different queries can now coexist on the map
+
+### Impact
+- ✅ Multiple queries can have records with same IDs (graphics appear for both)
+- ✅ True duplicates (same recordId AND same queryConfigId) still prevented
+- ✅ Works correctly in ADD mode when combining queries from different sources
+- ✅ Results panel correctly shows all records (this was already working)
+
+### Files Modified
+- `query-simple/src/runtime/graphics-layer-utils.ts` - Updated duplicate detection to use composite keys
+- `query-simple/src/version.ts` - Bumped to r021.109
+
+### Testing
+Test ADD mode with duplicate IDs:
+1. Run query from Trails (returns record with ID "2")
+2. Switch to ADD mode
+3. Run query from Arlington (returns record with ID "2")
+4. **Expected**: Both graphics appear on map (2 graphics total)
+5. **Expected**: Results panel shows both records (2 records total)
+
+---
+
+## [1.19.0-r021.108] - 2026-01-27 - Fix Restoration to Use Updated accumulatedRecords
+
+### Fixed
+- **Removed Records Reappear After Close/Reopen**: In NEW mode, when records were removed and the widget was closed/reopened, the removed records would reappear on the map. This was because restoration logic was using stale `lastSelection` data instead of the updated `accumulatedRecords`.
+
+### Root Cause
+- Widget-level `accumulatedRecords` state WAS being updated correctly during removal (121 → 120 → 119 → 118)
+- But restoration logic checked `isAccumulationMode` first and only used `accumulatedRecords` in ADD/REMOVE modes
+- In NEW mode, it fell back to `lastSelection` which still contained all 121 original record IDs (never updated during removal)
+- Result: Restoration added back the 3 removed records (451314, 451315, 451316)
+
+### Solution
+- **Changed restoration priority** in `use-selection-restoration.ts`
+- Now checks for `accumulatedRecords` FIRST, regardless of mode
+- Only falls back to `lastSelection` if no `accumulatedRecords` exist
+- This ensures removals in NEW mode are respected during restoration
+
+### Impact
+- ✅ Removed records stay removed after close/reopen
+- ✅ Works correctly in all modes (NEW, ADD, REMOVE)
+- ✅ accumulatedRecords now serves as single source of truth for restoration
+
+### Files Modified
+- `query-simple/src/runtime/hooks/use-selection-restoration.ts` - Changed restoration logic priority
+- `query-simple/src/version.ts` - Bumped to r021.108
+
+### Testing
+Test restoration with removals:
+1. Query 121 records (NEW mode)
+2. Remove 3 records (451314, 451315, 451316)
+3. Close widget
+4. Reopen widget
+5. **Expected**: 118 graphics on map (NOT 121)
+6. **Expected**: Removed records (451314, 451315, 451316) do NOT reappear
+
+### Related Issues
+- Completes fix started in r021.106 (triple-call race)
+- Addresses second root cause identified in `docs/audit/ROOT-CAUSE-ANALYSIS.md`
+
+---
+
+## [1.19.0-r021.106] - 2026-01-27 - Fix Triple-Call Race After Removals
+
+### Fixed
+- **Triple-Call Race After Removal**: After removing a record, `handleRenderDone` was firing 3 times (from List re-renders), causing 3 simultaneous `selectRecordsInDataSources` calls. This created race conditions and duplicate graphics operations.
+
+### Root Cause
+- `handleRenderDone` callback was passed to the `SimpleList` component and fired on every render
+- After removal, React would re-render the List 3 times (removal complete, state propagation, graphics/selection updates)
+- Each render triggered `handleRenderDone`, which called `selectRecordsAndPublish` with the full current list
+- The `pendingGraphicsOperation` promise serialization had a race where multiple waiters would proceed concurrently after the first operation completed
+
+### Solution
+- **Removed `handleRenderDone` entirely** - it was redundant with the records-watching useEffect that already handles selection updates
+- The List component manages its own pagination internally, so queryData state mirroring was unnecessary
+- This eliminates the source of the triple-call race
+
+### Impact
+- ✅ Only ONE selection call fires after removal (instead of 3)
+- ✅ Cleaner, more predictable selection flow
+- ✅ Eliminates race conditions from overlapping async graphics operations
+
+### Files Modified
+- `query-simple/src/runtime/query-result.tsx` - Removed handleRenderDone function and onRenderDone prop
+- `query-simple/src/version.ts` - Bumped to r021.106
+
+### Testing
+Test removal flow:
+1. Query 121 records
+2. Remove 1 record
+3. **Expected**: Only ONE `selectRecordsInDataSources-ENTRY` log (not 3)
+4. **Expected**: Graphics layer updates cleanly with 120 records
+
+### Related Issues
+- Addresses first root cause identified in `docs/audit/ROOT-CAUSE-ANALYSIS.md`
+- Second fix (restoration bug) completed in r021.108
+
+---
+
+## [1.19.0-r021.94] - 2026-01-27 - React Key Collision Fix & Dead Code Removal
+
+### Fixed
+- **Ghost Records in Results Panel**: When two records from different queries shared the same `recordId` (e.g., both have ID "2"), removing one would leave a "ghost" visual artifact. The removed record's UI would remain visible but non-interactive (expand/collapse wouldn't work correctly).
+
+### Removed
+- **Dead Code Cleanup**: Deleted `paging-list.tsx` and `lazy-list.tsx` - unused since r016.4 when SimpleList was forced as the only list component. These files were maintained unnecessarily and added no value.
+
+### Root Cause
+- React component keys were based solely on `recordId`, causing key collisions when multiple records shared the same ID but had different `queryConfigId` values.
+- When a record was removed, React would reuse the existing component instance (same key) instead of unmounting it, preserving stale internal state.
+
+### Solution
+- Changed `SimpleList` component to use composite keys: `${recordId}__${queryConfigId}`
+- React now correctly unmounts removed components and mounts new ones with different queryConfigId values
+- Each record gets a unique key regardless of ID overlap across queries
+
+### Impact
+- ✅ Removal of records with duplicate IDs now works correctly
+- ✅ No more ghost records in UI after removal
+- ✅ Expand/collapse state correctly tied to the actual record being displayed
+- ✅ Tab counts were already correct (this was purely a React rendering issue)
+
+### Files Modified
+- `query-simple/src/runtime/simple-list.tsx` - Use composite key for QueryResultItem
+- `query-simple/src/runtime/query-result.tsx` - Use `capturedQueryConfigId` consistently in outputDS filter
+- `query-simple/src/version.ts` - Bumped to r021.94
+
+### Files Deleted
+- `query-simple/src/runtime/paging-list.tsx` - Dead code (unused since r016.4)
+- `query-simple/src/runtime/lazy-list.tsx` - Dead code (unused since r016.4)
+
+---
+
+## [1.19.0-r021.93] - 2026-01-27 - Graphics Layer Rendering Fixes
+
+### Fixed
+- **Graphics Layer Doubling**: Graphics appeared doubled (super dark) when adding records in ADD mode. Fixed by serializing overlapping async calls to `selectRecordsInDataSources` that were racing and stacking graphics.
+- **Record Removal Failure**: Clicking X to remove a record didn't remove its graphic from the map. Fixed by correcting the timing of `__queryConfigId` cleanup - now happens AFTER graphics removal so composite key matching works.
+- **Restore Showing Only Last Item**: After close/reopen, only the last added record's graphic displayed. Fixed by batching all accumulated records' graphics in ONE operation instead of per-origin-DS clearing.
+
+### Root Causes & Solutions
+
+#### 1. Graphics Doubling
+- **Cause**: Two `useEffect` hooks firing within 1ms of each other (query completion + records prop change), both calling `selectRecordsInDataSources`. Because `addHighlightGraphics` is async, the second call's clear happened before the first call's add completed, leading to both sets being added.
+- **Solution**: Added `pendingGraphicsOperation` tracking in `selection-utils.ts`. New calls wait for pending operations to complete before starting, preventing async overlap.
+
+#### 2. Removal Failure  
+- **Cause**: `__queryConfigId` was deleted from record attributes BEFORE calling `removeHighlightGraphics`. When removal logic tried to build composite keys (`recordId__queryConfigId`), the queryConfigId was already gone, resulting in mismatched keys (`"923__"` vs `"923__948755217701372"`).
+- **Solution**: Captured `__queryConfigId` BEFORE cleanup, then moved the actual cleanup to AFTER graphics removal completes. Composite key matching now works perfectly.
+
+#### 3. Restore Showing Only Last Item
+- **Cause**: Restore logic looped through origin data sources and called `selectRecordsAndPublish` for each. Since each call starts with `clearGraphicsLayer()`, the second origin DS's graphics wiped out the first's graphics.
+- **Solution**: Refactored restore to clear graphics layer ONCE, then add ALL accumulated records in a single batch, then restore selection per origin DS WITHOUT passing graphics layer params.
+
+### Technical Details
+- **Async Serialization**: `pendingGraphicsOperation` promise tracks in-flight graphics operations
+- **Cleanup Timing**: `capturedQueryConfigId` variable holds value before deletion for use in removal logic
+- **Batch Restore**: Graphics added once for all records, selection restored separately per origin DS with `useGraphicsLayer: false`
+- **Structure Fix**: `accumulatedRecords` are raw FeatureDataRecord objects, not `{configId, record}` wrappers
+
+### Files Modified
+- `query-simple/src/runtime/graphics-layer-utils.ts` - Added composite key diagnostic logging
+- `query-simple/src/runtime/query-result.tsx` - Fixed __queryConfigId cleanup timing (capture before, delete after)
+- `query-simple/src/runtime/selection-utils.ts` - Added async serialization with pendingGraphicsOperation
+- `query-simple/src/runtime/hooks/use-selection-restoration.ts` - Batch graphics restore, fixed structure handling
+- `query-simple/src/version.ts` - Bumped to r021.93
+
+### Memory & Performance Notes
+- Memory profile remains healthy: ~68 MB growth after extensive testing (multiple queries, mode switches, close/reopen cycles)
+- No widget-specific memory leaks detected
+- One transient removal failure observed during high-memory session (2.4 GB tab usage) but not reproducible after reload
+- Normal browser/framework caching accounts for memory growth
+
+### Testing
+- ✅ ADD mode: Add record → graphics appear correctly (no doubling)
+- ✅ Close/reopen: All accumulated records' graphics persist
+- ✅ Remove record: X button cleanly removes correct graphic with composite key matching
+- ✅ Multiple origin DS: Records from different queries maintain separate graphics
+
+---
+
+## [1.19.0-r021.88] - 2026-01-25 - Tab Auto-Switch Fix
+
+### Fixed
+- **Auto-Switch to Results Tab in ADD/REMOVE Modes**: Fixed bug where widget would auto-switch to Results tab in NEW mode but not in ADD or REMOVE modes. Changed `queryJustExecutedRef` from `useRef` to `useState` to ensure useEffect dependencies trigger properly.
+
+### Technical Details
+- **Problem**: Auto-switch useEffect only triggered when `resultCount`, `activeTab`, or `pagingTypeInConfig` changed. In ADD mode, `resultCount` might not change enough to trigger the effect, preventing auto-switch.
+- **Solution**: Converted `queryJustExecutedRef` ref to `queryJustExecuted` state variable and added it to useEffect dependencies.
+- **Result**: Auto-switch now works consistently across all modes.
+
+### Files Modified
+- `query-simple/src/runtime/query-task.tsx` - Changed ref to state, updated dependencies
+- `query-simple/src/version.ts` - Bumped to r021.88
+
+---
+
+## [1.19.0-r021.87] - 2026-01-23 - Composite Key Stamping
+
+### Changed
+- **Composite Key Architecture**: Stamp `__queryConfigId` directly on record attributes when added (NEW, ADD, or mode switches). No map needed - simpler architecture that survives React state updates and mode transitions.
+
+### Files Modified
+- `query-simple/src/runtime/query-task.tsx` - Stamp composite key on records
+- `query-simple/src/version.ts` - Bumped to r021.87
+
+---
+
+## [1.19.0-r021.52] - 2026-01-22 - BUG-ADD-MODE-001 Phase 1
+
+### Added
+- **Phase 1: Data Structure Changes for Accumulated Records**: Implemented new grouped record set architecture to fix format switching bug in ADD mode. Each accumulated record set now preserves its original query configuration metadata.
+- Created `AccumulatedRecordSet` interface with UUID-based identity, immutable query config, and human-readable metadata
+- Created `AccumulatedRecordsState` interface to manage grouped sets with flat list compatibility
+- Added `addRecordSet` method to `AccumulatedRecordsManager` with comprehensive debug logging
+- Added `handleAddRecordSet` callback in widget.tsx to capture query metadata during ADD mode execution
+- Wired up callback through widget.tsx → QueryTaskList → QueryTask → query execution flow
+- Debug logging category `BUG-ADD-MODE-001` shows query config metadata being stored with each set
+
+### Changed
+- Updated `AccumulatedRecordsManager` from flat array (`FeatureDataRecord[]`) to grouped structure (`AccumulatedRecordsState`)
+- All manager methods updated to work with new structure while maintaining backward compatibility
+
+### Technical Details
+- **BULLETPROOF IDENTITY**: Each set has UUID-based `setInstanceId` for unique React keys
+- **STRICT PROVENANCE**: Immutable `queryConfig` snapshot isolated from active query panel changes
+- **HUMAN-READABLE**: Query names and aliases stored for user orientation
+- **CENTRALIZED TRUTH**: Duplicate detection will operate at state level (Phase 2)
+
+### Files Added
+- `query-simple/src/runtime/types/accumulated-records.ts` - New type definitions
+- `docs/bugs/BUG-ADD-MODE-001_PHASE1_COMPLETE.md` - Phase 1 documentation
+
+### Files Modified
+- `query-simple/src/runtime/hooks/use-accumulated-records.ts` - Manager updated for grouped structure
+- `query-simple/src/runtime/widget.tsx` - Added `handleAddRecordSet` callback and wired it to QueryTaskList
+- `query-simple/src/runtime/query-task-list.tsx` - Added prop pass-through for `onAddRecordSet`
+- `query-simple/src/runtime/query-task.tsx` - Calls `onAddRecordSet` after merging in ADD mode
+- `query-simple/src/version.ts` - Bumped to r021.52
+
+### Known Limitations
+- Record sets stored but not yet used for rendering (Phase 2)
+- Format switching bug still occurs in UI (will be fixed in Phase 3)
+- Duplicate detection not yet implemented (Phase 2)
+
+### Testing
+- Enable debug logging with `?debug=BUG-ADD-MODE-001` URL parameter
+- Run queries in ADD mode to see `PHASE1-addRecordSet-called` and `PHASE1-state-updated` logs
+- Logs show `setInstanceId`, `queryConfig` metadata, and state breakdown
+- All existing E2E tests still pass
+- See `docs/bugs/PHASE1_TESTING_GUIDE.md` for step-by-step testing instructions
+
+---
+
+## [1.19.0-r021.51] - 2026-01-22
+
+### Changed
+- **Replaced programmatic button click with React key prop pattern**: Removed anti-pattern DOM manipulation (programmatic button click) for DataSource recreation. Now uses idiomatic React `key` prop on `DataSourceComponent` to force remounting when DS is destroyed. Memory testing shows equivalent performance (18.67 vs 18.83 MB/query). This is the proper React pattern and more suitable for Esri review.
+
+### Technical Details
+- Added `dsRecreationKey` state variable that increments when DS is destroyed
+- DataSourceComponent now has `key={dsRecreationKey}` prop
+- When key changes, React unmounts old component and mounts new one, triggering natural DS recreation
+- Removed `clearResultBtnRef` and programmatic `.click()` call
+- Updated all inline documentation to reflect r021.51 pattern
+- Maintains same 300ms settle time for React/ESRI stabilization (tested in r021.31-35)
+
+### Files Modified
+- `query-simple/src/runtime/query-task.tsx` - Key prop pattern implementation
+- `query-simple/src/version.ts` - Bumped to r021.51
+
+---
+
+## [1.19.0-r021.50] - 2026-01-20
+
+### Fixed
+- **Missing OutputDataSource Check**: Added safety check in `handleFormSubmitInternal` to prevent crash when `outputDS` is undefined. Query execution now gracefully exits and returns control to user (Stage 0) if DataSource is not available.
+  - **File**: `query-simple/src/runtime/query-task.tsx` line 1564
+  - **Change**: Added `if (!outputDS)` check with `setStage(0)` and early return
+  - **Impact**: Prevents `Cannot read properties of undefined` error when queries execute before DataSource is ready
+
+## [1.19.0-r021.49] - 2026-01-20
+
+### Fixed
+- **Zero Results in Add Mode**: Fixed display of accumulated records when query returns 0 results in Add mode. Previously, empty query results would clear the Results panel even though accumulated records existed.
+  - **File**: `query-simple/src/runtime/query-task.tsx` line 1690
+  - **Change**: Added else branch to preserve `existingRecordsForMerge` when query returns 0 results
+  - **Impact**: Accumulated records remain visible in Results tab when subsequent queries return nothing
+
+## [1.19.0-r021.48] - 2026-01-20
+
+### Fixed
+- **Results Tab Blocking in Add Mode**: Fixed tab blocking logic to check accumulated records in addition to current query result count. In Add mode, if accumulated records exist but last query returned 0 results, Results tab remains accessible.
+  - **File**: `query-simple/src/runtime/query-task.tsx` line 1519
+  - **Change**: Tab blocking now checks `resultCount === 0 && (!accumulatedRecords || accumulatedRecords.length === 0)`
+  - **Impact**: Users can always access Results tab when accumulated records exist, even if most recent query returned nothing
+
+## [1.19.0-r021.47] - 2026-01-20
+
+### Fixed
+- **Query Error Recovery**: Changed error handler to exit Stage 2 (loading) and return to Stage 0 (form) on any query error. Ensures user always regains control if a query fails, whether initiated from widget or hash parameter.
+  - **File**: `query-simple/src/runtime/query-task.tsx` line 2160
+  - **Change**: `.catch()` block now calls `setStage(0)` instead of `setStage(1)`
+  - **Impact**: Widget cannot get stuck in loading state after query errors
+
 ## [1.19.0-r021.46] - 2026-01-19
 
 ### Fixed

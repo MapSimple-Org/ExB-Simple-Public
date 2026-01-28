@@ -11,6 +11,9 @@ import type { EventManager } from './hooks/use-event-handling'
 
 const debugLogger = createQuerySimpleDebugLogger()
 
+// r021.93: Track pending graphics operations to prevent async overlap
+let pendingGraphicsOperation: Promise<void> | null = null
+
 /**
  * Custom event name for QuerySimple to notify Widget of selection changes.
  */
@@ -103,6 +106,17 @@ export async function selectRecordsInDataSources(
   
   // If using graphics layer, add graphics for highlighting
   if (useGraphicsLayer && mapView && records && records.length > 0 && graphicsLayer) {
+    // r021.93: Wait for any pending graphics operation to complete before starting new one
+    if (pendingGraphicsOperation) {
+      debugLogger.log('GRAPHICS-LAYER', {
+        event: 'selectRecordsInDataSources-waiting-for-pending-operation',
+        recordIdsCount: recordIds.length,
+        graphicsLayerId: graphicsLayer.id,
+        timestamp: Date.now()
+      })
+      await pendingGraphicsOperation
+    }
+
     debugLogger.log('GRAPHICS-LAYER', {
       event: 'selectRecordsInDataSources-using-graphics-layer',
       recordIdsCount: recordIds.length,
@@ -111,7 +125,17 @@ export async function selectRecordsInDataSources(
       timestamp: Date.now()
     })
     
-    await addGraphicsLayerGraphics(graphicsLayer, records, mapView)
+    // r021.93: Track this operation as pending
+    pendingGraphicsOperation = (async () => {
+      // r021.90: Clear graphics layer before re-adding to ensure we have the correct set
+      // This handles multiple render cycles where the full accumulated list is passed each time
+      clearGraphicsLayer(graphicsLayer)
+      
+      await addGraphicsLayerGraphics(graphicsLayer, records, mapView)
+    })()
+
+    await pendingGraphicsOperation
+    pendingGraphicsOperation = null
     
     // Still select in data source for state management (but layer selection won't show if layer is off)
     if (originDS && typeof originDS.selectRecordsByIds === 'function') {
