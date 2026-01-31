@@ -5,6 +5,485 @@ All notable changes to MapSimple Experience Builder widgets will be documented i
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.19.0-r022.14] - 2026-01-30 - No-Results Popover Complete
+
+### Added
+- **UX Enhancement**: Calcite Popover appears when query returns zero results
+- **User Feedback**: Clear messaging for empty query results with dismissible popover
+- **Smart Detection**: Automatically triggers on zero-result queries and reappears on each occurrence
+
+### Implementation Summary (r022.3-r022.14)
+**Iterative refinement for optimal placement and behavior:**
+
+- **r022.3-r022.8**: Initial Alert → Popover switch, width/positioning iterations, timestamp-based re-triggering
+- **r022.9**: Added `key={timestamp}` to force React remount on each zero-result query
+- **r022.10-r022.12**: Anchor height experiments (80px → 1px) with `flipDisabled` for control
+- **r022.13**: Added `overlayPositioning="fixed"` for stable viewport-relative positioning
+- **r022.14**: Removed anchor margin for tighter placement
+
+**Final Configuration:**
+```tsx
+<calcite-popover 
+  key={`no-results-${noResultsAlert.timestamp}`}  // Force remount
+  referenceElement="query-feedback-anchor"         // Minimal 1px anchor
+  placement="bottom"                                // Below content
+  flipDisabled={true}                               // No auto-flip
+  overlayPositioning="fixed"                        // Viewport-relative
+  autoClose                                         // Dismissible
+  closable                                          // X button
+  open={noResultsAlert.show}
+/>
+```
+
+**User Experience:**
+- Query with no results → Popover appears immediately below form
+- Displays record count requested and query value
+- Dismissible via X button or click outside
+- Reappears on each new zero-result query (not sticky)
+- 320px max width, constrains to panel width
+
+### Technical Details
+- State management: `noResultsAlert` with `timestamp` for unique keys
+- Detection: Query execution callback checks `queryResultCount === 0`
+- i18n strings: `noResultsAlertLabel`, `noResultsAlertTitle`, `noResultsAlertMessage`
+- Component: Integrated into `QueryTabContent.tsx`
+
+### Files Modified
+- `query-simple/src/runtime/query-task.tsx` - Detection logic, state management
+- `query-simple/src/runtime/tabs/QueryTabContent.tsx` - Popover component integration
+- `query-simple/src/runtime/translations/default.ts` - i18n strings
+- `query-simple/src/version.ts` - Bumped to r022.14
+
+### Related
+- TODO Section 2c: UX Enhancements - Results Mode Feedback (Complete)
+- 12 iterations (r022.3-r022.14) to refine placement and behavior
+
+---
+
+## [1.19.0-r022.2] - 2026-01-30 - Complete lastSelection Removal
+
+### Removed
+- **Dead Code Cleanup (126+ lines)**: Completed r021.110 intent by removing all unused lastSelection code
+  - Removed `restoreLastSelection()` method (~70 lines)
+  - Removed `clearLastSelection()` method (~60 lines)
+  - Removed `lastSelection` from `SelectionRestorationState` interface
+  - Removed `lastSelection` assignment in `handleSelectionChange`
+  - Removed `lastSelection` from all logs and fallback conditions
+  - Updated JSDoc comments to reflect r022.2 cleanup
+
+### Why Safe to Remove
+- r022.1 made `accumulatedRecords` the universal restoration source for ALL modes
+- `restoreLastSelection()` and `clearLastSelection()` methods never called after r022.1
+- `lastSelection` state was never updated when records removed (source of r021.108 bug)
+- All functionality now uses `accumulatedRecords` (reflects removals correctly)
+
+### Impact
+- ✅ 180 lines of dead/risky fallback code removed
+- ✅ Simpler architecture - one source of truth (`accumulatedRecords`)
+- ✅ Widget bundle size reduced: 2.31 MiB → 2.29 MiB
+- ✅ Zero functional changes (r022.1 already fixed behavior)
+
+### Files Modified
+- `query-simple/src/runtime/hooks/use-selection-restoration.ts` - Removed lastSelection state, methods, logs
+- `query-simple/src/runtime/hooks/use-event-handling.ts` - Updated JSDoc comments
+- `query-simple/src/version.ts` - Bumped to r022.2
+
+### Related
+- r022.1: Functional fix (restoration priority)
+- r021.110: Original cleanup intent (never implemented in source)
+
+---
+
+## [1.19.0-r022.1] - 2026-01-30 - FIX: Zombie Graphics on Widget Reopen
+
+### Fixed
+- **CRITICAL: Removed Records Reappear After Close/Reopen**: In NEW mode, when records were removed and the widget was closed/reopened, the removed records would reappear as graphics on the map (but correctly excluded from Results panel).
+
+### Root Cause
+- Restoration logic used `lastSelection` (stale, 121 records) for NEW mode instead of `accumulatedRecords` (current, 118 records)
+- `lastSelection` was never updated when records removed via X button
+- `accumulatedRecords` correctly reflected removals (121 → 118)
+- Result: Close/reopen restored all 121 graphics, including 3 removed "zombies"
+
+### Log Evidence
+```json
+"panel-closed-cleared-origin-ds" recordCount: 118 ✅
+"panel-opened-restoring-lastSelection" recordIdsCount: 121 ❌
+"addHighlightGraphics-complete" addedCount: 121 ❌ (should be 118)
+```
+
+### Solution
+- Changed restoration condition from `isAccumulationMode && accumulatedRecords` to just `accumulatedRecords`
+- Now uses `accumulatedRecords` for **ALL modes** (New/Add/Remove), not just Add/Remove
+- `lastSelection` only as emergency fallback (should never happen)
+- `accumulatedRecords` is universal source of truth (reflects removals in NEW mode)
+
+### Why This Was Missed
+- r021.110 documented `lastSelection` removal in CHANGELOG
+- Fix was implemented, built (r021.128.js), deployed, and tested by team
+- But source code change (.ts files) never committed to git
+- Bug rediscovered during r022.0 edge case testing
+
+### Impact
+- ✅ Removed records stay removed after close/reopen
+- ✅ Works correctly in all modes (NEW, ADD, REMOVE)
+- ✅ Closes r021.108 functional gap that was documented but not in source
+
+### Files Modified
+- `query-simple/src/runtime/hooks/use-selection-restoration.ts` - Changed restoration condition (line 274), added r022.1 comment and fallback warning log
+- `query-simple/src/version.ts` - Bumped to r022.1
+
+### Testing
+Reproduce bug scenario:
+1. Query 121 records (NEW mode)
+2. Remove 3 records → 118 in panel ✅
+3. Close widget → Graphics clear ✅
+4. Open widget → Should restore 118, NOT 121 ✅
+
+---
+
+## [1.19.0-r022.0] - 2026-01-30 - Tab Extraction: Query Tab → QueryTabContent.tsx
+
+### Changed
+- **Architectural Refactor**: Extracted Query tab content into separate component to prepare for Graphics tab addition
+  - Created `query-simple/src/runtime/tabs/QueryTabContent.tsx` (598 lines)
+  - Reduced `query-simple/src/runtime/query-task.tsx` from 3456 → 2982 lines (474 lines removed, 13.7% reduction)
+  - Positioned for Graphics tab addition without creating 4000+ line "god component"
+
+### What Moved to QueryTabContent.tsx
+- Results Mode button group (New/Add/Remove selection modes)
+- Form wrapper and QueryTaskForm component
+- DataSourceTip component
+- All Query tab-specific UI and logic
+
+### What Stayed in query-task.tsx (Shared by All Tabs)
+- Header (back button, query label, hash info, Clear Results button)
+- Search Layer dropdown (+ Search Alias when grouped)
+- Tab bar and orchestration
+- Query execution logic
+
+### Architecture
+```
+query-task.tsx (2982 lines - orchestration + shared UI)
+├─ tabs/QueryTabContent.tsx (598 lines - Query tab)
+├─ tabs/ResultsTabContent.tsx (query-result.tsx - Results tab)
+└─ tabs/GraphicsTabContent.tsx (FUTURE)
+```
+
+### Approach
+- **Pure code relocation** - No behavior changes, no new hooks
+- **Minimal approach** - Kept Query tab logic consolidated in one component (no over-normalization)
+- **Props-based** - QueryTabContent receives all needed state/callbacks from parent
+
+### Impact
+- ✅ `query-task.tsx` manageable size (under 3000 lines)
+- ✅ Ready for Graphics tab addition
+- ✅ Each tab independently readable
+- ✅ Zero functional changes (pure relocation)
+- ✅ Build successful, no linter errors
+
+### Files Modified
+- `query-simple/src/runtime/tabs/QueryTabContent.tsx` (NEW) - 598 lines
+- `query-simple/src/runtime/query-task.tsx` - Reduced 474 lines, imports QueryTabContent
+- `query-simple/src/version.ts` - Bumped to r022.0
+
+### Documentation
+- Implementation plan: `docs/development/TAB_EXTRACTION_IMPLEMENTATION_PLAN.md`
+- TODO updated: Section 2b marked Phase 1 complete
+
+---
+
+## [1.19.0-r021.130] - 2026-01-29 - Clear Pattern Extended to Results Tab
+
+### Changed
+- **Results-tab clear**: Same memory-workflow pattern as Query-tab clear (destroy DS, null outputDS, increment dsRecreationKey). Apply with no DS stores pending query; runs when new DS created.
+- **clearResult**: `shouldDestroyDSs` now includes `navToForm-clearResults`; null + key increment for `user-trash-click` or `navToForm-clearResults`. TASK log `clearResult-clear-tab-pattern` (was `clearResult-query-tab-pattern`).
+
+### Files Modified
+- `query-simple/src/runtime/query-task.tsx` - extend destroy + pattern to `navToForm-clearResults`
+- `query-simple/src/version.ts` - Bumped to r021.130
+
+---
+
+## [1.19.0-r021.129] - 2026-01-29 - Query-Tab Clear: Memory-Workflow Pattern (Use-After-Destroy Fix)
+
+### Fixed
+- **Clear from Query tab then Apply**: TypeError `Cannot read properties of undefined (reading 'pendingPromiseToQuerySelectedRecordsPresetBeforeDsReady')` when user clears via Query-tab trash, keeps value in box, and clicks Apply
+  - Root cause: We destroyed the output DS on Query-tab clear but kept referring to it; Apply then called `updateQueryParams` on the destroyed DS
+  - Results-tab clear did not destroy the DS (`navToForm-clearResults`), so no crash there
+
+### Implementation (Query-tab clear only; Results extended in r021.130)
+- **clearResult** (`user-trash-click`): After `clearAllSelectionsForWidget` destroys DSs, `setOutputDS(null)` and `setDsRecreationKey(k => k + 1)` so Output DataSourceComponent remounts and creates a new DS (same pattern as memory workflow)
+- **handleFormSubmitInternal**: When `!outputDS`, store `{ sqlExpr, spatialFilter, runtimeZoomToSelected }` in `pendingQueryAfterClearRef`, `setStage(0)`, return; `handleOutputDataSourceCreated` already runs pending query when new DS exists
+- TASK log when we null + increment; `handleFormSubmitInternal-no-outputDS` note updated
+
+### Files Modified
+- `query-simple/src/runtime/query-task.tsx` - clearResult (user-trash-click null + key), handleFormSubmitInternal (store pending when no DS)
+- `query-simple/src/version.ts` - Bumped to r021.129
+
+---
+
+## [1.19.0-r021.128] - 2026-01-28 - Stale Accumulated Count Fix (BUG-STALE-COUNT-001)
+
+### Fixed
+- **Stale accumulated count in handleSelectionChange**: Handler no longer reads stale `state.accumulatedRecords?.length` when selection is cleared
+  - **Option A**: Selection event detail now includes `accumulatedRecordsCount`; dispatcher passes current count (0 when clearing)
+  - Handler uses `event.detail.accumulatedRecordsCount` with fallback to state; event is source of truth at dispatch time
+  - Fixes incorrect `hasSelection: true` / `selectionRecordCount: 2` after clear and related production errors
+
+### Implementation
+- `selection-utils.ts`: `dispatchSelectionEvent(..., accumulatedRecordsCount?)`; pass 0 in `clearAllSelectionsForWidget`
+- `use-event-handling.ts`: EventManager `dispatchSelectionEvent` and event detail include `accumulatedRecordsCount`
+- `use-selection-restoration.ts`: Handler uses `eventAccumulatedCount`; logging shows `eventAccumulatedCount` and `stateAccumulatedCount`
+- Call sites: query-task (select pass `accumulatedRecords?.length`, clear pass 0), query-result (pass `accumulatedRecords?.length`), widget unchanged (optional param)
+
+### Testing and debug
+- See `docs/bugs/BUG-STALE-ACCUMULATED-COUNT-PLAN.md` section "Testing and Debug Flags"
+- Enable RESTORE, TASK, EVENTS; filter console by [QUERYSIMPLE-RESTORE], [QUERYSIMPLE-TASK], [QUERYSIMPLE-EVENTS]
+- Verify: clear in Add/Remove mode shows `eventAccumulatedCount: 0`, `calculatedSelectionCount: 0`, `will-set-hasSelection: false`
+
+### Files Modified
+- `query-simple/src/runtime/selection-utils.ts`, `hooks/use-event-handling.ts`, `hooks/use-selection-restoration.ts`
+- `query-simple/src/runtime/query-task.tsx`, `query-result.tsx`
+- `docs/bugs/BUG-STALE-ACCUMULATED-COUNT-PLAN.md` - Status fixed, testing and debug section added
+- `query-simple/src/version.ts` - Bumped to r021.128
+
+---
+
+## [1.19.0-r021.127] - 2026-01-28 - Zoom Extent Expansion Documentation
+
+### Added
+- **Technical doc**: `docs/technical/ZOOM_EXTENT_EXPANSION.md` - Single source of truth for zoom-by-factor design
+  - Why extent expansion instead of padding
+  - Math (center, half-size, factor, new extent)
+  - Where it lives in code, how to make factor configurable
+  - Calibration tool usage, zero-area handling, references
+- **In-code docs**: zoom-utils.ts file header and expansion block; use-zoom-to-records.ts JSDoc
+- **Development guide**: Zoom to Records section updated for expansion factor; link to technical doc; References entry
+
+### Files Modified
+- `docs/technical/ZOOM_EXTENT_EXPANSION.md` (new)
+- `query-simple/src/runtime/zoom-utils.ts` - File and expansion-block comments
+- `query-simple/src/runtime/hooks/use-zoom-to-records.ts` - JSDoc
+- `docs/development/DEVELOPMENT_GUIDE.md` - Zoom section + References
+- `query-simple/src/version.ts` - Bumped to r021.127
+
+---
+
+## [1.19.0-r021.126] - 2026-01-28 - Fixed Zoom ReferenceError
+
+### Fixed
+- **Zoom Broken**: Fixed ReferenceError in extent expansion calculation that prevented zoom from working
+  - Bug: Referenced undefined `originalExtent` variable (was renamed to `originalExtentBeforeFactorExpansion`)
+  - Impact: Zoom to selected records was completely broken - `mapView.goTo()` never called
+  - Fix: Updated all references to use correct variable name
+
+### Files Modified
+- `query-simple/src/runtime/zoom-utils.ts` - Fixed variable reference in expansion calculation
+- `query-simple/src/version.ts` - Bumped to r021.126
+
+---
+
+## [1.19.0-r021.124] - 2026-01-28 - Extent Expansion by Factor (Replaces Padding)
+
+### Changed
+- **Zoom Strategy**: Replaced viewport-dependent padding with extent expansion by percentage factor
+  - **Expansion Factor**: Default 1.2 (20% expansion = 10% on each side)
+  - **Benefits**: More predictable, independent of viewport size, consistent across zoom levels
+  - **Removed**: All adaptive padding logic based on aspect ratio
+- **Calibration Tool**: Updated to calculate expansion factor instead of padding values
+- Extent is expanded in map coordinates before calling `mapView.goTo()` (no padding parameter)
+
+### Technical Details
+- Expansion factor: `1.2` = expand extent by 20% in all directions
+- Calculated as: `newHalfWidth = originalHalfWidth * expansionFactor`
+- Works consistently at all zoom levels because it's in map units, not pixels
+- Zero-area extents still use the 300ft buffer (unchanged)
+
+### Files Modified
+- `query-simple/src/runtime/zoom-utils.ts` - Replaced padding logic with extent expansion
+- `query-simple/src/version.ts` - Bumped to r021.124
+
+---
+
+## [1.19.0-r021.122] - 2026-01-28 - Minimum Padding Guarantees
+
+### Fixed
+- **Padding Never Zero**: Added minimum padding guarantees to ensure padding is never set to 0px
+  - **Horizontal extents**: Minimum 60px top/bottom (was 30% of 200px = 60px, now explicitly guaranteed)
+  - **Vertical extents**: Minimum 150px left/right (was 30% of 500px = 150px, now explicitly guaranteed)
+- Prevents edge cases where calculated padding could round to 0
+
+### Files Modified
+- `query-simple/src/runtime/zoom-utils.ts` - Added Math.max() to ensure minimum padding values
+- `query-simple/src/version.ts` - Bumped to r021.122
+
+---
+
+## [1.19.0-r021.121] - 2026-01-28 - Improved Adaptive Padding Logic
+
+### Changed
+- **Adaptive Padding Logic**: Now always applies some padding to all sides, not just the emphasized dimension
+  - **Horizontal extents** (wider than tall): Full left/right (500px), reduced top/bottom (60px = 30% of 200px)
+  - **Vertical extents** (taller than wide): Full top/bottom (200px), reduced left/right (150px = 30% of 500px)
+  - **Square extents**: Full padding on all sides (500px sides, 200px top/bottom)
+- Fixes issue where very horizontal extents got zero top/bottom padding, causing tight vertical spacing
+- Fixes issue where very vertical extents got zero left/right padding, causing tight horizontal spacing
+
+### Files Modified
+- `query-simple/src/runtime/zoom-utils.ts` - Updated adaptive padding to always apply some padding to all sides
+- `query-simple/src/version.ts` - Bumped to r021.121
+
+---
+
+## [1.19.0-r021.120] - 2026-01-28 - Updated Zoom Padding Values
+
+### Changed
+- **Zoom Padding**: Updated padding values based on user testing
+  - **Sides (left/right)**: 500px (was 485px)
+  - **Top/bottom**: 200px (was 125px)
+- Adaptive padding logic (from r021.119) still applies these values based on extent aspect ratio
+
+### Files Modified
+- `query-simple/src/runtime/zoom-utils.ts` - Updated DEFAULT_PADDING values
+- `query-simple/src/version.ts` - Bumped to r021.120
+
+---
+
+## [1.19.0-r021.119] - 2026-01-28 - Adaptive Zoom Padding Based on Extent Aspect Ratio
+
+### Changed
+- **Adaptive Padding**: Zoom padding now adapts based on the extent's aspect ratio
+  - **Vertical extent** (taller than wide, ratio < 0.8): Padding applied to **top/bottom only** (125px each)
+  - **Horizontal extent** (wider than tall, ratio > 1.25): Padding applied to **left/right only** (485px each)
+  - **Square/regular extent** (ratio 0.8-1.25): Padding applied to **all sides** (485px sides, 125px top/bottom)
+- Prevents over-elongation by only padding the shorter dimension
+- Makes zoom results more balanced regardless of extent shape
+
+### Technical Details
+- Aspect ratio calculated as `width / height`
+- Threshold: < 0.8 = vertical, > 1.25 = horizontal, 0.8-1.25 = square
+- Base padding values: 485px (sides), 125px (top/bottom)
+
+### Files Modified
+- `query-simple/src/runtime/zoom-utils.ts` - Added adaptive padding logic based on aspect ratio
+- `query-simple/src/version.ts` - Bumped to r021.119
+
+---
+
+## [1.19.0-r021.118] - 2026-01-28 - Asymmetric Zoom Padding (Calibrated)
+
+### Changed
+- **Zoom Padding**: Updated to asymmetric padding based on user calibration testing
+- **Sides (left/right)**: 485px each (average of calibrated 493px/476px)
+- **Top/bottom**: 125px each (middle of 100-150 range for testing)
+- Provides more breathing room on the sides while keeping top/bottom reasonable
+- User can test across different zoom levels to fine-tune
+
+### Files Modified
+- `query-simple/src/runtime/zoom-utils.ts` - Updated DEFAULT_PADDING to asymmetric values
+- `query-simple/src/version.ts` - Bumped to r021.118
+
+---
+
+## [1.19.0-r021.117] - 2026-01-28 - Updated Zoom Padding (Calibrated)
+
+### Changed
+- **Zoom Padding**: Updated default zoom padding from 200px to 250px on all sides
+- Value calibrated using the zoom extent calibration tool based on user testing
+- User calibration showed: left: 493px, right: 476px, top: 25px, bottom: 20px (average: ~253px)
+- Using 250px as rounded average for all sides
+
+### Files Modified
+- `query-simple/src/runtime/zoom-utils.ts` - Updated DEFAULT_PADDING from 200px to 250px
+- `query-simple/src/version.ts` - Bumped to r021.117
+
+---
+
+## [1.19.0-r021.116] - 2026-01-28 - Zoom Extent Calibration Tool
+
+### Added
+- **Zoom Extent Calibration Tool**: Added debug tool to capture adjusted map extents and calculate optimal padding values
+- **Enhanced Extent Logging**: Zoom operations now log detailed extent coordinates (before and after zoom)
+- **Console Function**: `window.__querySimpleCaptureAdjustedExtent()` - Run after manually adjusting zoom to calculate optimal padding
+
+### How to Use
+1. Run a query that triggers auto-zoom (or enable `?debug=ZOOM` to see extent logs)
+2. Manually adjust the map zoom to your preferred extent
+3. In browser console, run: `window.__querySimpleCaptureAdjustedExtent()`
+4. Console will show:
+   - Original extent (before padding)
+   - Adjusted extent (your preferred zoom)
+   - Calculated padding values that would produce your adjusted extent
+   - Recommended average padding value
+
+### Files Modified
+- `query-simple/src/runtime/zoom-utils.ts` - Added extent logging and calibration function
+- `query-simple/src/version.ts` - Bumped to r021.116
+
+---
+
+## [1.19.0-r021.115] - 2026-01-28 - Increased Default Zoom Padding
+
+### Changed
+- **Zoom Padding**: Increased default zoom padding from 100px to 200px on all sides when zooming to query results
+- Provides more breathing room around features when auto-zooming after query execution
+- Value is currently hardcoded but structured to be easily made configurable per query item in the future
+
+### Files Modified
+- `query-simple/src/runtime/zoom-utils.ts` - Updated DEFAULT_PADDING from 100px to 200px
+- `query-simple/src/version.ts` - Bumped to r021.115
+
+---
+
+## [1.19.0-r021.114] - 2026-01-28 - Increased Default Zoom Padding
+
+### Changed
+- **Zoom Padding**: Increased default zoom padding from 50px to 100px on all sides when zooming to query results
+- Provides more breathing room around features when auto-zooming after query execution
+- Value is currently hardcoded but structured to be easily made configurable per query item in the future
+
+### Files Modified
+- `query-simple/src/runtime/zoom-utils.ts` - Updated DEFAULT_PADDING from 50px to 100px
+- `query-simple/src/version.ts` - Bumped to r021.114
+
+---
+
+## [1.19.0-r021.113] - 2026-01-28 - Unified Clearing Function (Hash Clearing Fix)
+
+### Fixed
+- **Hash Not Cleared from Query Tab**: When clearing results from the Query tab, the hash parameter (`#data_s=...`) was not cleared, leaving a "dirty hash" in the URL. Results tab clear worked correctly.
+
+### Root Cause
+- Two separate code paths in `clearResult()` function:
+  - **Query tab clear** (`user-trash-click`): Used multi-source clearing path that manually cleared origin DSs but **didn't call `clearSelectionInDataSources()`**, which is where hash clearing happens
+  - **Results tab clear** (`navToForm-clearResults`): Used simpler path that **did call `clearSelectionInDataSources()`**, which cleared the hash
+
+### Solution
+- **Created unified `clearAllSelectionsForWidget()` function** in `selection-utils.ts` that handles all clearing logic:
+  - Multi-source clearing (all origin DataSources for the widget)
+  - Graphics layer clearing
+  - Popup closing
+  - Hash clearing (via `clearSelectionInDataSources()`)
+  - Event dispatching
+  - Message publishing
+  - Optional DataSource destruction
+- **Refactored `clearResult()`** to use the unified function for both paths
+- Both Query tab and Results tab now execute the same code, ensuring consistent behavior
+
+### Impact
+- ✅ Hash is always cleared regardless of which tab the clear action comes from
+- ✅ Both paths handle multi-source clearing correctly
+- ✅ Single source of truth for clearing logic (DRY principle)
+- ✅ Consistent behavior across all clear operations
+
+### Files Modified
+- `query-simple/src/runtime/selection-utils.ts` - Added `clearAllSelectionsForWidget()` unified function
+- `query-simple/src/runtime/query-task.tsx` - Refactored `clearResult()` to use unified function, removed duplicate clearing logic
+- `query-simple/src/version.ts` - Bumped to r021.113
+
+---
+
 ## [1.19.0-r021.112] - 2026-01-27 - Fix Mode Switch Priority (Stale outputDS.getSelectedRecords())
 
 ### Fixed
