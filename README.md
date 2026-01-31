@@ -2,39 +2,93 @@
 
 Custom widgets for ArcGIS Experience Builder Developer Edition (1.19.0+). Built for performance, deep-linking, and advanced result management.
 
-**Current Version**: `1.19.0-r021.112`  
-**Latest Update**: Format preservation across sources, composite keys, and architectural simplification (Jan 19-27, 2026)
+**Current Version**: `1.19.0-r022.26`  
+**Latest Update**: Tab extraction, UX feedback enhancements, and bug fixes (Jan 30, 2026)
 
 ---
 
-## What's New: r021.46 → r021.112 (Jan 19-27, 2026)
+## What's New: r021.112 → r022.26 (Jan 30, 2026)
 
-### 🎯 Primary Achievement: Format Preservation & Multi-Source Duplicates
+### 🎯 Major Improvements
 
-**Maintaining source formatting when adding from different sources.** In ADD mode, when you run Query A (e.g., addresses), then Query B (e.g., parcels), accumulated results from Query A used to change format to match Query B. Fields would swap, display names would change, and users saw incorrect data. **That’s fixed.** Each record now keeps the display format of the query that added it, so you can meaningfully combine results from different sources.
+Since the r021.112 release (format preservation & composite keys), we've made significant enhancements focused on **architecture**, **user feedback**, and **stability**:
 
-**Duplicates from different sources now work.** Previously, identity was based only on **ObjectID**. Records with the same ObjectID from different layers (e.g., "2" from Trails vs "2" from Parcels) were treated as the same record—graphics could disappear, removal behaved wrongly, and multi-source accumulation was unreliable. We now use **composite keys** (`recordId__queryConfigId`) so each record is uniquely tied to its **data source**. You can add "duplicate" IDs from different layers and manage them correctly: separate formatting, separate graphics, correct add/remove.
+#### 1. Tab-Level Component Extraction (r022.0)
 
-#### Architectural Simplification (r021.110)
+**Architectural foundation for future spatial features.** The Query tab logic has been extracted into a separate component (`QueryTabContent.tsx`), reducing the main orchestrator file from 3456 → 2982 lines (13.7% reduction). This modular architecture prepares the widget for the upcoming **Spatial tab** (drawing tools, buffers, and spatial queries).
 
-During the rearchitecture we also **removed stale state fallbacks** (`lastSelection`) that could restore incorrect data. We now use `accumulatedRecords` as the single source of truth, eliminated 126+ lines of risky fallback code, and simplified restoration logic. This was a deliberate cleanup, not a refactor-introduced bug fix.
+**Benefits:**
+- ✅ Each tab is independently testable
+- ✅ Simpler maintenance and debugging
+- ✅ Room to grow: Spatial tab can be added cleanly
+- ✅ No functional changes - purely architectural
 
-#### Bugs Introduced During Refactor — Now Fixed
+#### 2. UX Feedback Popovers (r022.3-r022.26)
 
-The format-preservation and composite-key refactor introduced a number of regressions that didn’t exist in r021.46. We’ve addressed them:
+**Clear visual feedback for edge cases.** Users now receive immediate, dismissible feedback when their queries don't produce expected results:
 
-- **Mode switching** (r021.111, r021.112): Removed records no longer reappear when switching NEW → ADD/REMOVE; we prioritize `accumulatedRecords` over stale `outputDS` data.
-- **Graphics layer** (r021.93, r021.109): Fixed doubling in ADD mode, X-button removal, and restore-after-close; composite keys used for highlight matching.
-- **Record management** (r021.94, r021.106, r021.108): Fixed "ghost" records, triple-call race after removals, and restoration showing removed records; tab auto-switch works in all modes.
+**Scenario 1: Query Returns No Results**
+- **When:** Query executes but finds 0 records
+- **Feedback:** Popover appears below the query form
+- **Message:** "No records found. Try adjusting your search criteria."
 
-#### Impact
+**Scenario 2: Remove Mode - Nothing to Remove**
+- **When:** Query finds records, but none are in the current Results panel
+- **Feedback:** Popover appears at bottom of Results panel
+- **Message:** "Query found X record(s), but none were in your Results."
 
-- ✅ **Format preserved** when adding from different sources
-- ✅ **Duplicate ObjectIDs from different sources** supported via composite keys
-- ✅ Regressions from the refactor **resolved**; behavior is stable again
-- ✅ **Simpler architecture** with a single source of truth
+**Scenario 3: Add Mode - All Duplicates**
+- **When:** Query finds records, but all are already in Results
+- **Feedback:** Popover appears at bottom of Results panel
+- **Message:** "Query found X record(s), but all were already in your Results."
 
-For complete technical details, see [CHANGELOG.md](CHANGELOG.md).
+**Implementation:**
+- Built with Esri's Calcite Popover component
+- Dismissible via X button or click outside
+- Reappears on each occurrence (not sticky)
+- Light yellow background for visibility
+- Fully internationalized (i18n ready)
+
+#### 3. Critical Bug Fix: Zombie Graphics (r022.1)
+
+**Removed records now stay removed.** Fixed a bug where records removed via the X button would reappear as graphics on the map after closing and reopening the widget. The issue was caused by stale restoration logic that didn't reflect removals.
+
+**Impact:**
+- ✅ Removed records stay removed across widget close/reopen
+- ✅ Graphics layer correctly reflects current Results panel state
+- ✅ Works in all modes (NEW, ADD, REMOVE)
+
+#### 4. Code Cleanup: Dead Code Removal (r022.2)
+
+**Simpler, more maintainable codebase.** Removed 126+ lines of unused `lastSelection` fallback code that was documented as removed in r021.110 but never actually deleted from source. The widget now uses `accumulatedRecords` as the single source of truth for all restoration scenarios.
+
+**Impact:**
+- ✅ Widget bundle size reduced: 2.31 MiB → 2.29 MiB
+- ✅ One source of truth (no risky fallbacks)
+- ✅ Zero functional changes (already fixed in r022.1)
+
+#### 5. Tab Auto-Switch Bug Fix (r022.22)
+
+**Query tab no longer switches incorrectly.** Fixed a bug in Add mode where the widget would switch to the Results tab even when a query returned 0 results (but existing accumulated records were present). The tab now only switches when the **current query** returns results, not when **any results exist**.
+
+**Impact:**
+- ✅ Tab switching behavior is now correct in all modes
+- ✅ No false switches when queries fail
+- ✅ Improved user experience for multi-query workflows
+
+---
+
+### 🔄 Previous Release: r021.112 (Jan 19-27, 2026)
+
+**Format Preservation & Multi-Source Duplicates**
+
+The r021.112 release was a major architectural improvement focused on:
+- **Format preservation** when adding from different sources (fields no longer swap)
+- **Composite keys** for handling duplicate ObjectIDs from different layers
+- **Architectural simplification** with `accumulatedRecords` as single source of truth
+- **Bug fixes** for graphics doubling, ghost records, and mode switching
+
+For complete details on r021.112, see previous release notes and CHANGELOG.md.
 
 ---
 
@@ -47,6 +101,7 @@ QuerySimple is designed to solve the common pain points of the standard Experien
 - **Results Accumulation**: Unlike the standard widget which clears results on every search, QuerySimple allows you to "Add to" or "Remove from" a selection set across multiple different queries.
 - **Discoverable Automation**: An interactive "Info Button" (ℹ️) automatically appears to show users exactly how to deep-link to the current layer.
 - **Persistence & Restoration**: Selections are maintained even when the identify tool is used, ensuring users never lose their search context.
+- **Clear User Feedback**: Visual popovers provide immediate feedback for edge cases (no results, nothing to remove, all duplicates).
 
 ---
 
@@ -63,6 +118,7 @@ A high-performance search engine for Experience Builder.
 - **Display Order**: Control search prioritization via the `order` property (no need to manually reorder config).
 - **Spatial Power**: Integrated buffer, draw, and extent filtering.
 - **Unified Testing**: Verified by a "Mega-Journey" E2E suite that simulates real user sessions.
+- **Tab Architecture**: Modular design with separate components for Query, Results, and future Spatial features.
 
 ### 🛠️ HelperSimple (`helper-simple/`)
 
@@ -118,10 +174,10 @@ If you're building a parcel search with 10 different search fields (PIN, Major/M
 
 Configure a `shortId` for any query to enable instant automation.
 
-| Format        | Example            | Best Use Case                                                   |
-| ------------- | ------------------ | --------------------------------------------------------------- |
-| **Hash (#)**  | index.html#pin=123 | **Interactive UX.** Snappy, no page reload, private to browser. |
-| **Query (?)** | index.html?pin=123 | **External Linking.** Standard for CRM/Email integrations.      |
+| Format       | Example                   | Best Use Case                                                   |
+| ------------ | ------------------------- | --------------------------------------------------------------- |
+| **Hash (#)** | index.html#pin=123        | **Interactive UX.** Snappy, no page reload, private to browser. |
+| **Query (?)** | index.html?pin=123       | **External Linking.** Standard for CRM/Email integrations.      |
 
 ### Display Order & Grouping
 
@@ -162,28 +218,28 @@ Each bug log includes:
 - **Category**: Bug type (SELECTION, UI, URL, DATA, GRAPHICS, PERFORMANCE, GENERAL)
 - **Description**: What the bug is and why it's happening
 - **Workaround**: How to avoid or work around the issue
-- **Target Resolution**: When the bug will be fixed (e.g., `r019.0`)
+- **Target Resolution**: When the bug will be fixed (e.g., `r023.0`)
 
-See [`docs/bugs/BUGS.md`](docs/bugs/BUGS.md) for a complete list of known bugs and their status.
+See CHANGELOG.md for a complete list of changes and bug fixes.
 
 ---
 
 ## Documentation
 
-All development documentation has been organized into a centralized [`docs/`](docs/) directory for easy navigation:
+All development documentation has been organized into a centralized docs/ directory for easy navigation:
 
-- **[`docs/development/`](docs/)** - Development guides, testing, standards (start with [`DEVELOPMENT_GUIDE.md`](docs/development/DEVELOPMENT_GUIDE.md))
-- **[`docs/architecture/`](docs/)** - Design patterns, migration plans, refactoring strategies
-- **[`docs/technical/`](docs/)** - Deep dives into specific technical challenges
-- **[`docs/features/`](docs/)** - Feature specifications and integration guides
-- **[`docs/bugs/`](docs/)** - Bug reports and resolution documentation
-- **[`docs/blog/`](docs/)** - Development insights and lessons learned
+- **docs/development/** - Development guides, testing, standards (start with DEVELOPMENT_GUIDE.md)
+- **docs/architecture/** - Design patterns, migration plans, refactoring strategies
+- **docs/technical/** - Deep dives into specific technical challenges
+- **docs/features/** - Feature specifications and integration guides
+- **docs/bugs/** - Bug reports and resolution documentation
+- **docs/blog/** - Development insights and lessons learned
 
 **Quick Links:**
-- 📖 **New Developers:** Start with [`docs/development/DEVELOPMENT_GUIDE.md`](docs/development/DEVELOPMENT_GUIDE.md)
-- 🧪 **Testing:** See [`docs/development/TESTING_WALKTHROUGH.md`](docs/development/TESTING_WALKTHROUGH.md)
-- 🏗️ **Architecture:** See [`docs/architecture/COMPLETE_MIGRATION_PLAN.md`](docs/architecture/COMPLETE_MIGRATION_PLAN.md)
-- 📋 **Full Index:** See [`docs/README.md`](docs/README.md)
+- 📖 **New Developers:** Start with docs/development/DEVELOPMENT_GUIDE.md
+- 🧪 **Testing:** See docs/development/TESTING_WALKTHROUGH.md
+- 🏗️ **Architecture:** See docs/architecture/COMPLETE_MIGRATION_PLAN.md
+- 📋 **Full Index:** See docs/README.md
 
 ---
 
@@ -211,4 +267,16 @@ npx playwright test tests/e2e/query-simple/session.spec.ts --project=chromium --
 
 ---
 
-© 2025 MapSimple Organization
+## Coming Soon: Spatial Tab
+
+The r022.0 tab extraction work prepares the foundation for the **Spatial tab** - an upcoming feature that will provide:
+- **Drawing tools** for creating shapes on the map (point, line, polygon, circle, rectangle)
+- **Buffer options** with customizable distance and units
+- **Spatial relationships** (intersects, contains, within, touches, crosses, overlaps)
+- **Unified workflow** combining the best of WAB's "By Shape" and "By Spatial" tabs
+
+Target release: r023.0+
+
+---
+
+© 2025-2026 MapSimple Organization

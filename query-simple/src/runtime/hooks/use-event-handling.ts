@@ -124,25 +124,31 @@ export class EventManager {
   }
 
   /**
-   * Dispatches a custom event to notify HelperSimple of selection changes.
-   * 
+   * Dispatches a custom event to notify Widget/HelperSimple of selection changes.
+   * BUG-STALE-COUNT-001: accumulatedRecordsCount in detail so handler does not read stale state.
+   *
    * @param widgetId - Widget ID
    * @param recordIds - Array of selected record IDs
    * @param dataSourceId - Optional data source ID
-   * @param outputDsId - Output data source ID (required for lastSelection state)
-   * @param queryItemConfigId - Query item config ID (required for lastSelection state)
+   * @param outputDsId - Output data source ID
+   * @param queryItemConfigId - Query item config ID
+   * @param accumulatedRecordsCount - Current accumulated count at dispatch time (pass 0 when clearing)
+   * 
+   * r022.2: outputDsId/queryItemConfigId still used for event detail but not for lastSelection (removed)
    */
   dispatchSelectionEvent(
-    widgetId: string, 
-    recordIds: string[], 
+    widgetId: string,
+    recordIds: string[],
     dataSourceId?: string,
     outputDsId?: string,
-    queryItemConfigId?: string
+    queryItemConfigId?: string,
+    accumulatedRecordsCount?: number
   ): void {
     debugLogger.log('EVENTS', {
       event: 'event-manager-dispatch-selection-event',
       widgetId,
       recordIdsCount: recordIds.length,
+      accumulatedRecordsCount,
       dataSourceId,
       outputDsId,
       queryItemConfigId,
@@ -155,18 +161,20 @@ export class EventManager {
         recordIds,
         dataSourceId,
         outputDsId,
-        queryItemConfigId
+        queryItemConfigId,
+        accumulatedRecordsCount
       },
       bubbles: true,
       cancelable: true
     })
-    
+
     window.dispatchEvent(event)
 
     debugLogger.log('EVENTS', {
       event: 'event-manager-selection-event-dispatched',
       widgetId,
       recordIdsCount: recordIds.length,
+      accumulatedRecordsCount,
       timestamp: Date.now()
     })
   }

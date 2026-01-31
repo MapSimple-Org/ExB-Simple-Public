@@ -6,15 +6,11 @@ const debugLogger = createQuerySimpleDebugLogger()
 
 /**
  * Interface for widget state that relates to selection and restoration.
+ * r022.2: lastSelection removed - accumulatedRecords is universal source of truth
  */
 export interface SelectionRestorationState {
   hasSelection: boolean
   selectionRecordCount: number
-  lastSelection?: {
-    recordIds: string[]
-    outputDsId: string
-    queryItemConfigId: string
-  }
   resultsMode: SelectionType
   accumulatedRecords?: Array<{
     configId: string
@@ -89,18 +85,21 @@ export class SelectionRestorationManager {
    * 1. Ignores events not for this widget
    * 2. Ignores empty selections when panel is closed (to prevent state wipe)
    * 3. Calculates selection count (uses accumulated records in Add/Remove modes)
-   * 4. Updates widget state: hasSelection, selectionRecordCount, lastSelection
+   * 4. Updates widget state: hasSelection, selectionRecordCount
    * 5. Resets mode to NewSelection if selection is cleared in Remove mode
+   * 
+   * r022.2: lastSelection removed from state updates
    * 
    * @param event - The selection change event
    */
   handleSelectionChange(event: Event): void {
-    const customEvent = event as CustomEvent<{ 
+    const customEvent = event as CustomEvent<{
       widgetId: string
       recordIds: string[]
       dataSourceId?: string
       outputDsId?: string
-      queryItemConfigId?: string 
+      queryItemConfigId?: string
+      accumulatedRecordsCount?: number
     }>
 
     // Get current state
@@ -128,14 +127,13 @@ export class SelectionRestorationManager {
     }
 
     // ========================================================================
-    // 3. Calculate selection count
+    // 3. Calculate selection count (BUG-STALE-COUNT-001: use event count, not state)
     // ========================================================================
-    // In "Add to" or "Remove from" mode, use accumulated records count
-    const isAccumulationMode = state.resultsMode === SelectionType.AddToSelection || 
+    const isAccumulationMode = state.resultsMode === SelectionType.AddToSelection ||
                                state.resultsMode === SelectionType.RemoveFromSelection
-    const accumulatedRecordsCount = state.accumulatedRecords?.length || 0
-    const selectionCount = isAccumulationMode && accumulatedRecordsCount > 0
-      ? accumulatedRecordsCount
+    const eventAccumulatedCount = customEvent.detail.accumulatedRecordsCount ?? state.accumulatedRecords?.length ?? 0
+    const selectionCount = isAccumulationMode && eventAccumulatedCount > 0
+      ? eventAccumulatedCount
       : (hasSelection ? customEvent.detail.recordIds.length : 0)
 
     // ========================================================================
@@ -149,17 +147,10 @@ export class SelectionRestorationManager {
     // ========================================================================
     // 5. Build new state
     // ========================================================================
+    // r022.2: lastSelection removed - accumulatedRecords is universal source of truth
     const newState: Partial<SelectionRestorationState> = {
       hasSelection: selectionCount > 0,
-      selectionRecordCount: selectionCount,
-      // Store lastSelection for compatibility
-      lastSelection: hasSelection && customEvent.detail.outputDsId && customEvent.detail.queryItemConfigId
-        ? {
-            recordIds: customEvent.detail.recordIds,
-            outputDsId: customEvent.detail.outputDsId,
-            queryItemConfigId: customEvent.detail.queryItemConfigId
-          }
-        : undefined
+      selectionRecordCount: selectionCount
     }
 
     // Reset mode if needed
@@ -178,16 +169,15 @@ export class SelectionRestorationManager {
       isAccumulationMode,
       eventRecordIdsCount: customEvent.detail.recordIds.length,
       hasSelectionFromEvent: hasSelection,
-      accumulatedRecordsCountBefore: accumulatedRecordsCount,
+      eventAccumulatedCount,
+      stateAccumulatedCount: state.accumulatedRecords?.length ?? 0,
       calculatedSelectionCount: selectionCount,
       'will-set-hasSelection': selectionCount > 0,
-      'will-set-lastSelection': hasSelection && !!customEvent.detail.outputDsId && !!customEvent.detail.queryItemConfigId,
       'will-reset-mode': shouldResetMode,
       decisionLogic: {
-        'isAccumulationMode': isAccumulationMode,
-        'accumulatedRecordsCount > 0': accumulatedRecordsCount > 0,
-        'use-accumulated-count': isAccumulationMode && accumulatedRecordsCount > 0,
-        'use-event-count': !(isAccumulationMode && accumulatedRecordsCount > 0),
+        isAccumulationMode,
+        'eventAccumulatedCount > 0': eventAccumulatedCount > 0,
+        'use-event-accumulated-count': isAccumulationMode && eventAccumulatedCount > 0,
         'should-reset-mode': shouldResetMode
       }
     })
@@ -205,14 +195,11 @@ export class SelectionRestorationManager {
       widgetId: this.widgetId,
       'new-hasSelection': selectionCount > 0,
       'new-selectionRecordCount': selectionCount,
-      'new-lastSelection-recordIds-count': hasSelection && customEvent.detail.outputDsId && customEvent.detail.queryItemConfigId
-        ? customEvent.detail.recordIds.length
-        : 0,
       'mode-reset': shouldResetMode,
       'new-mode': shouldResetMode ? SelectionType.NewSelection : state.resultsMode,
-      'note': shouldResetMode 
+      note: shouldResetMode 
         ? 'Mode reset to NewSelection because selection was cleared in Remove mode'
-        : 'lastSelection-only-contains-current-query-records-not-all-accumulated-records'
+        : 'r022.2: lastSelection removed - accumulatedRecords is universal source'
     })
   }
 
@@ -224,16 +211,17 @@ export class SelectionRestorationManager {
    * Restores selection to the map when the widget panel opens.
    * 
    * This method:
-   * 1. Checks if accumulated records exist (Add/Remove modes)
+   * 1. Checks if accumulated records exist (ALL modes)
    * 2. Groups accumulated records by origin data source
    * 3. Calls selectRecordsAndPublish for each origin DS
-   * 4. Falls back to lastSelection if no accumulated records
+   * 
+   * r022.2: lastSelection fallback removed - accumulatedRecords is universal source
    * 
    * @param deps - Runtime dependencies (graphics layer, map view, config)
    */
   async addSelectionToMap(deps: RestorationDependencies): Promise<void> {
     const state = this.stateGetter()
-    const { lastSelection, accumulatedRecords, resultsMode } = state
+    const { accumulatedRecords, resultsMode } = state
 
     debugLogger.log('RESTORE', {
       event: 'addSelectionToMap-called',
@@ -241,49 +229,26 @@ export class SelectionRestorationManager {
       resultsMode,
       hasAccumulatedRecords: !!(accumulatedRecords && accumulatedRecords.length > 0),
       accumulatedRecordsCount: accumulatedRecords?.length || 0,
-      hasLastSelection: !!lastSelection,
-      lastSelectionRecordCount: lastSelection?.recordIds.length || 0,
-      lastSelectionOutputDsId: lastSelection?.outputDsId
+      note: 'r022.2: lastSelection removed - accumulatedRecords is universal source of truth'
     })
 
-    // In Add/Remove modes, use accumulated records for restoration
-    const isAccumulationMode = resultsMode === SelectionType.AddToSelection || 
-                              resultsMode === SelectionType.RemoveFromSelection
-
-    // Check if we should use accumulated records
+    // r022.1/r022.2: Use accumulatedRecords for ALL modes (reflects removals)
+    // accumulatedRecords is universal source of truth across New/Add/Remove modes
     if (accumulatedRecords && accumulatedRecords.length > 0) {
       debugLogger.log('RESTORE', {
         event: 'addSelectionToMap-found-accumulated-records',
         widgetId: this.widgetId,
         resultsMode,
-        isAccumulationMode,
-        accumulatedRecordsCount: accumulatedRecords.length,
-        'should-use-accumulated': true
+        accumulatedRecordsCount: accumulatedRecords.length
       })
-    } else {
-      debugLogger.log('RESTORE', {
-        event: 'addSelectionToMap-no-accumulated-records',
-        widgetId: this.widgetId,
-        resultsMode,
-        isAccumulationMode,
-        accumulatedRecordsCount: 0,
-        'will-fallback-to-lastSelection': !!lastSelection
-      })
-    }
-
-    if (isAccumulationMode && accumulatedRecords && accumulatedRecords.length > 0) {
-      // Group accumulated records by origin data source
+      
       await this.restoreAccumulatedRecords(accumulatedRecords, deps)
-    } else if (!isAccumulationMode && lastSelection && lastSelection.recordIds.length > 0) {
-      // Fall back to lastSelection in New mode
-      await this.restoreLastSelection(lastSelection, deps)
     } else {
       debugLogger.log('RESTORE', {
         event: 'addSelectionToMap-no-selection-to-restore',
         widgetId: this.widgetId,
         resultsMode,
-        hasAccumulatedRecords: accumulatedRecords && accumulatedRecords.length > 0,
-        hasLastSelection: !!lastSelection
+        note: 'r022.2: No accumulated records - nothing to restore'
       })
     }
   }
@@ -457,76 +422,8 @@ export class SelectionRestorationManager {
     }
   }
 
-  /**
-   * Helper: Restore lastSelection (New mode)
-   */
-  private async restoreLastSelection(
-    lastSelection: { recordIds: string[], outputDsId: string, queryItemConfigId: string },
-    deps: RestorationDependencies
-  ): Promise<void> {
-    // Lazy-load dependencies
-    const { DataSourceManager } = await import('jimu-core')
-    const { selectRecordsAndPublish } = await import('../selection-utils')
-
-    const dsManager = DataSourceManager.getInstance()
-    const outputDS = dsManager.getDataSource(lastSelection.outputDsId)
-
-    if (!outputDS) {
-      debugLogger.log('RESTORE', {
-        event: 'panel-opened-outputDS-not-found',
-        widgetId: this.widgetId,
-        outputDsId: lastSelection.outputDsId
-      })
-      return
-    }
-
-    // Get origin DS
-    const originDS = (outputDS as any).getOriginDataSources?.()?.[0] || outputDS
-
-    // Get records
-    const allRecords = (outputDS as any).getAllLoadedRecords() || []
-    const recordsToRestore = allRecords.filter((r: any) => 
-      lastSelection.recordIds.includes(r.getId())
-    )
-
-    debugLogger.log('RESTORE', {
-      event: 'panel-opened-restoring-lastSelection',
-      widgetId: this.widgetId,
-      outputDsId: lastSelection.outputDsId,
-      recordIdsCount: lastSelection.recordIds.length,
-      recordsFound: recordsToRestore.length
-    })
-
-    const useGraphicsLayer = deps.config.useGraphicsLayerForHighlight
-    const graphicsLayer = deps.graphicsLayerRef.current || undefined
-    const mapView = deps.mapViewRef.current || undefined
-
-    try {
-      await selectRecordsAndPublish(
-        this.widgetId,
-        originDS,
-        lastSelection.recordIds,
-        recordsToRestore,
-        true,
-        useGraphicsLayer,
-        graphicsLayer,
-        mapView
-      )
-
-      debugLogger.log('RESTORE', {
-        event: 'panel-opened-restored-lastSelection',
-        widgetId: this.widgetId,
-        originDSId: originDS.id,
-        recordCount: recordsToRestore.length
-      })
-    } catch (error) {
-      debugLogger.log('RESTORE', {
-        event: 'panel-opened-restore-lastSelection-failed',
-        widgetId: this.widgetId,
-        error: error.message
-      })
-    }
-  }
+  // r022.2: restoreLastSelection() method removed - dead code after r022.1 fix
+  // r022.1 made accumulatedRecords the universal restoration source for ALL modes
 
   /**
    * Clears selection from the map when the widget panel closes.
@@ -535,28 +432,22 @@ export class SelectionRestorationManager {
    * 1. Clears graphics layer (if enabled)
    * 2. Groups accumulated records by origin DS (if they exist)
    * 3. Clears selection from each origin DS
-   * 4. Falls back to lastSelection if no accumulated records
+   * 
+   * r022.2: lastSelection fallback removed - accumulatedRecords is universal source
    * 
    * @param deps - Runtime dependencies (graphics layer, map view, config)
    */
   async clearSelectionFromMap(deps: RestorationDependencies): Promise<void> {
     const state = this.stateGetter()
-    const { lastSelection, accumulatedRecords, resultsMode } = state
-
-    const isAccumulationMode = resultsMode === SelectionType.AddToSelection || 
-                               resultsMode === SelectionType.RemoveFromSelection
+    const { accumulatedRecords, resultsMode } = state
 
     debugLogger.log('RESTORE', {
       event: 'clearSelectionFromMap-called',
       widgetId: this.widgetId,
       resultsMode,
-      isAccumulationMode,
-      hasLastSelection: !!lastSelection,
-      lastSelectionRecordCount: lastSelection?.recordIds.length || 0,
       hasAccumulatedRecords: !!(accumulatedRecords && accumulatedRecords.length > 0),
       accumulatedRecordsCount: accumulatedRecords?.length || 0,
-      selectionRecordCount: state.selectionRecordCount || 0,
-      hasSelection: state.hasSelection || false
+      note: 'r022.2: lastSelection removed - using accumulatedRecords only'
     })
 
     // Always clear graphics layer first when panel closes
@@ -569,23 +460,14 @@ export class SelectionRestorationManager {
       })
     }
 
-    // Always clear accumulated records if they exist
-    debugLogger.log('RESTORE', {
-      event: 'clearSelectionFromMap-checking-accumulated-records',
-      widgetId: this.widgetId,
-      'condition': 'accumulatedRecords && accumulatedRecords.length > 0',
-      'condition-result': !!(accumulatedRecords && accumulatedRecords.length > 0),
-      accumulatedRecordsCount: accumulatedRecords?.length || 0
-    })
-
+    // r022.2: Always use accumulated records - single source of truth
     if (accumulatedRecords && accumulatedRecords.length > 0) {
       await this.clearAccumulatedRecords(accumulatedRecords, deps)
-    } else if (lastSelection && lastSelection.recordIds.length > 0) {
-      await this.clearLastSelection(lastSelection, deps)
     } else {
       debugLogger.log('RESTORE', {
         event: 'clearSelectionFromMap-no-selection-to-clear',
-        widgetId: this.widgetId
+        widgetId: this.widgetId,
+        note: 'r022.2: No accumulated records to clear'
       })
     }
   }
@@ -700,64 +582,8 @@ export class SelectionRestorationManager {
     }
   }
 
-  /**
-   * Helper: Clear lastSelection (New mode)
-   */
-  private async clearLastSelection(
-    lastSelection: { recordIds: string[], outputDsId: string, queryItemConfigId: string },
-    deps: RestorationDependencies
-  ): Promise<void> {
-    // Lazy-load dependencies
-    const { DataSourceManager } = await import('jimu-core')
-    const { clearSelectionInDataSources } = await import('../selection-utils')
-
-    const dsManager = DataSourceManager.getInstance()
-    const outputDS = dsManager.getDataSource(lastSelection.outputDsId)
-
-    if (!outputDS) {
-      debugLogger.log('RESTORE', {
-        event: 'panel-closed-outputDS-not-found',
-        widgetId: this.widgetId,
-        outputDsId: lastSelection.outputDsId
-      })
-      return
-    }
-
-    const originDS = (outputDS as any).getOriginDataSources?.()?.[0] || outputDS
-
-    debugLogger.log('RESTORE', {
-      event: 'panel-closed-clearing-lastSelection',
-      widgetId: this.widgetId,
-      outputDsId: lastSelection.outputDsId,
-      originDSId: originDS.id
-    })
-
-    try {
-      const useGraphicsLayer = deps.config.useGraphicsLayerForHighlight
-      const graphicsLayer = deps.graphicsLayerRef.current || undefined
-
-      // Use clearSelectionInDataSources to properly publish empty selection message
-      // This clears the #data_s=... hash parameter
-      await clearSelectionInDataSources(
-        this.widgetId,
-        originDS,
-        useGraphicsLayer,
-        graphicsLayer
-      )
-
-      debugLogger.log('RESTORE', {
-        event: 'panel-closed-cleared-lastSelection',
-        widgetId: this.widgetId,
-        originDSId: originDS.id
-      })
-    } catch (error) {
-      debugLogger.log('RESTORE', {
-        event: 'panel-closed-clear-lastSelection-failed',
-        widgetId: this.widgetId,
-        error: error.message
-      })
-    }
-  }
+  // r022.2: clearLastSelection() method removed - dead code after r022.1 fix
+  // r022.1 made accumulatedRecords the universal clearing source for ALL modes
 
   // ============================================================================
   // Section 3.3: Map Identify Restoration

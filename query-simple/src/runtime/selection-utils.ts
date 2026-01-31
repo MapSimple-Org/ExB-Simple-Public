@@ -4,8 +4,8 @@
  */
 
 import type { DataSource, FeatureLayerDataSource, FeatureDataRecord } from 'jimu-core'
-import { MessageManager, DataRecordsSelectionChangeMessage } from 'jimu-core'
-import { addHighlightGraphics as addGraphicsLayerGraphics, clearGraphicsLayer, createOrGetGraphicsLayer } from './graphics-layer-utils'
+import { MessageManager, DataRecordsSelectionChangeMessage, DataSourceManager, DataRecordSetChangeMessage, RecordSetChangeType } from 'jimu-core'
+import { addHighlightGraphics as addGraphicsLayerGraphics, clearGraphicsLayer, createOrGetGraphicsLayer, cleanupGraphicsLayer } from './graphics-layer-utils'
 import { createQuerySimpleDebugLogger } from 'widgets/shared-code/common'
 import type { EventManager } from './hooks/use-event-handling'
 
@@ -21,34 +21,37 @@ export const QUERYSIMPLE_SELECTION_EVENT = 'querysimple-selection-changed'
 
 /**
  * Dispatches a custom selection event to the window so the main Widget can track state.
- * 
+ * BUG-STALE-COUNT-001 fix: Pass accumulatedRecordsCount so handler does not read stale state.
+ *
  * @param widgetId - The widget ID
  * @param recordIds - Array of selected record IDs
  * @param outputDS - The output data source
  * @param queryItemConfigId - The config ID of the query that produced these results
- * @param eventManager - Optional EventManager instance for comparison logging (Chunk 7.1)
+ * @param eventManager - Optional EventManager instance
+ * @param accumulatedRecordsCount - Current accumulated records count at dispatch time (pass 0 when clearing)
  */
 export function dispatchSelectionEvent(
   widgetId: string,
   recordIds: string[],
   outputDS: DataSource,
   queryItemConfigId: string,
-  eventManager?: EventManager
+  eventManager?: EventManager,
+  accumulatedRecordsCount?: number
 ): void {
   const originDS = getOriginDataSource(outputDS)
   const dataSourceId = originDS?.id
-  
+
   debugLogger.log('TASK', {
     event: 'dispatchSelectionEvent',
     widgetId,
     recordCount: recordIds.length,
+    accumulatedRecordsCount,
     outputDsId: outputDS.id,
     queryItemConfigId
   })
 
-  // Chunk 7: Dispatch selection event via EventManager (r018.59)
   if (eventManager) {
-    eventManager.dispatchSelectionEvent(widgetId, recordIds, dataSourceId, outputDS.id, queryItemConfigId)
+    eventManager.dispatchSelectionEvent(widgetId, recordIds, dataSourceId, outputDS.id, queryItemConfigId, accumulatedRecordsCount)
   }
 }
 
@@ -251,6 +254,172 @@ export async function clearSelectionInDataSources (
   // Clear data_s parameter from hash to prevent dirty hash
   // Experience Builder adds data_s when selections are made but doesn't remove it when cleared
   clearDataSParameterFromHash()
+}
+
+/**
+ * Unified function to clear all selections for a widget.
+ * Handles multi-source clearing, graphics layer, popup, hash clearing, events, and messages.
+ * This is the single source of truth for clearing operations - both Query tab and Results tab use this.
+ * 
+ * @param options - Configuration options for clearing
+ */
+export async function clearAllSelectionsForWidget(options: {
+  widgetId: string
+  outputDS: DataSource | null | undefined
+  useGraphicsLayer: boolean
+  graphicsLayer?: __esri.GraphicsLayer
+  mapView?: __esri.MapView | __esri.SceneView
+  eventManager?: EventManager
+  queryItemConfigId?: string
+  onDestroyGraphicsLayer?: () => void
+  destroyOutputDataSources?: boolean
+}): Promise<void> {
+  const {
+    widgetId,
+    outputDS,
+    useGraphicsLayer,
+    graphicsLayer,
+    mapView,
+    eventManager,
+    queryItemConfigId,
+    onDestroyGraphicsLayer,
+    destroyOutputDataSources = false
+  } = options
+
+  if (!outputDS) {
+    debugLogger.log('TASK', {
+      event: 'clearAllSelectionsForWidget-skipped-no-outputDS',
+      widgetId,
+      timestamp: Date.now()
+    })
+    return
+  }
+
+  try {
+    const dsManager = DataSourceManager.getInstance()
+    const allDataSources = dsManager.getDataSources()
+    const originDataSourcesToClear = new Map<string, DataSource>()
+
+    // Find ALL OutputDataSources for this widget and collect their origin DataSources
+    Object.keys(allDataSources).forEach(dsId => {
+      if (dsId.startsWith(`${widgetId}_output_`)) {
+        const ds = allDataSources[dsId]
+        const originDS = getOriginDataSource(ds)
+        if (originDS && !originDataSourcesToClear.has(originDS.id)) {
+          originDataSourcesToClear.set(originDS.id, originDS)
+        }
+      }
+    })
+
+    debugLogger.log('TASK', {
+      event: 'clearAllSelectionsForWidget-multi-source-clearing',
+      widgetId,
+      originDataSourceCount: originDataSourcesToClear.size,
+      originDSIds: Array.from(originDataSourcesToClear.keys()),
+      destroyOutputDataSources,
+      timestamp: Date.now()
+    })
+
+    // Clear selection on EACH unique origin DataSource
+    for (const [originDSId, originDS] of originDataSourcesToClear) {
+      try {
+        if (typeof (originDS as any).selectRecordsByIds === 'function') {
+          (originDS as any).selectRecordsByIds([])
+          debugLogger.log('TASK', {
+            event: 'clearAllSelectionsForWidget-origin-ds-cleared',
+            widgetId,
+            originDSId,
+            timestamp: Date.now()
+          })
+        }
+      } catch (error) {
+        debugLogger.log('TASK', {
+          event: 'clearAllSelectionsForWidget-origin-ds-clear-failed',
+          widgetId,
+          originDSId,
+          error: error instanceof Error ? error.message : String(error),
+          timestamp: Date.now()
+        })
+      }
+    }
+
+    // Clear graphics layer
+    if (useGraphicsLayer && graphicsLayer && mapView) {
+      try {
+        cleanupGraphicsLayer(widgetId, mapView)
+        onDestroyGraphicsLayer?.()
+      } catch (error) {
+        debugLogger.log('ERROR', {
+          event: 'clearAllSelectionsForWidget-graphics-layer-destroy-failed',
+          widgetId,
+          error: error instanceof Error ? error.message : String(error)
+        })
+      }
+    }
+
+    // Close popup
+    if (mapView?.popup?.visible) {
+      mapView.popup.close()
+    }
+
+    // Clear selection in outputDS (this also clears the hash via clearSelectionInDataSources)
+    await clearSelectionInDataSources(widgetId, outputDS, useGraphicsLayer, graphicsLayer)
+
+    // Dispatch empty selection event (pass 0 so handler does not read stale accumulated count)
+    if (eventManager && queryItemConfigId) {
+      dispatchSelectionEvent(widgetId, [], outputDS, queryItemConfigId, eventManager, 0)
+    }
+
+    // Publish data cleared message
+    const dataRecordSetChangeMessage = new DataRecordSetChangeMessage(widgetId, RecordSetChangeType.Remove, [outputDS.id])
+    MessageManager.getInstance().publishMessage(dataRecordSetChangeMessage)
+    await MessageManager.getInstance().publishMessage(new DataRecordsSelectionChangeMessage(widgetId, [], [outputDS.id]))
+
+    // Optionally destroy ALL OutputDataSources (observers already cleared from origin DSs)
+    if (destroyOutputDataSources) {
+      const outputDataSourceIds: string[] = []
+      Object.keys(allDataSources).forEach(dsId => {
+        if (dsId.startsWith(`${widgetId}_output_`)) {
+          outputDataSourceIds.push(dsId)
+        }
+      })
+
+      let destroyedCount = 0
+      for (const dsId of outputDataSourceIds) {
+        try {
+          dsManager.destroyDataSource(dsId)
+          destroyedCount++
+        } catch (err) {
+          // Ignore - already destroyed
+        }
+      }
+
+      debugLogger.log('TASK', {
+        event: 'clearAllSelectionsForWidget-all-datasources-destroyed',
+        widgetId,
+        destroyedCount,
+        timestamp: Date.now()
+      })
+    } else {
+      // If not destroying, clear source records on outputDS
+      outputDS.clearSourceRecords()
+    }
+
+    debugLogger.log('TASK', {
+      event: 'clearAllSelectionsForWidget-complete',
+      widgetId,
+      destroyOutputDataSources,
+      timestamp: Date.now()
+    })
+
+  } catch (error) {
+    debugLogger.log('ERROR', {
+      event: 'clearAllSelectionsForWidget-failed',
+      widgetId,
+      error: error instanceof Error ? error.message : String(error)
+    })
+    throw error
+  }
 }
 
 /**

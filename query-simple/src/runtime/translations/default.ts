@@ -43,7 +43,19 @@ export default {
   resultsModeDesc: 'Controls how query results are combined:\n• New: Each query replaces previous results\n• Add: New results are added to existing results\n• Remove: Matching results are removed from existing results',
   resultsModeNew: 'New',
   resultsModeAdd: 'Add',
-  resultsModeRemove: 'Remove'
+  resultsModeRemove: 'Remove',
+  // r022.3: Calcite Alert messages for query feedback
+  noResultsAlertLabel: 'No results found',
+  noResultsAlertTitle: 'No results found',
+  noResultsAlertMessage: 'The query completed successfully but found no matching records. Try adjusting your search criteria.',
+  // r022.15: Calcite Popover messages for Remove mode with no matches
+  noRemovalAlertLabel: 'No records removed',
+  noRemovalAlertTitle: 'No records were removed',
+  noRemovalAlertMessage: 'Query found {recordsFound} record(s), but none were in your Results to remove.',
+  // r022.21: Calcite Popover messages for Add mode with all duplicates
+  allDuplicatesAlertLabel: 'All duplicates',
+  allDuplicatesAlertTitle: 'All records already in Results',
+  allDuplicatesAlertMessage: 'Query found {recordsFound} record(s), but all were already in your Results.'
 }
 
 
