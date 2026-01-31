@@ -9,8 +9,8 @@
  * - Minor fix: Increment MINOR_VERSION (e.g., 1 -> 2) while keeping same RELEASE_NUMBER
  */
 const BASE_VERSION = '1.19.0'
-const RELEASE_NUMBER = '021' // Increment on major changes (001, 002, 003, ...)
-const MINOR_VERSION = '112' // r021.112: Prioritize accumulatedRecords over outputDS.getSelectedRecords() on mode switch
+const RELEASE_NUMBER = '022' // Increment on major changes (001, 002, 003, ...)
+const MINOR_VERSION = '26' // r022.26: Apply light yellow background to Query tab popover for consistency
 
 export const WIDGET_VERSION = MINOR_VERSION && Number(MINOR_VERSION) > 0
   ? `${BASE_VERSION}-r${RELEASE_NUMBER}.${MINOR_VERSION}`

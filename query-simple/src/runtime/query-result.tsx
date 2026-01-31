@@ -116,6 +116,22 @@ export interface QueryTaskResultProps {
   currentQueryRecordIds?: string[]
   // r021.87: Queries array for looking up config by __queryConfigId
   queries?: ImmutableArray<ImmutableObject<QueryItemType>>
+  // r022.15: No-removal alert for Remove mode when query finds records but none match
+  noRemovalAlert?: {
+    show: boolean
+    recordsFound: number
+    queryValue: string
+    timestamp?: number
+  } | null
+  onDismissNoRemovalAlert?: () => void
+  // r022.21: All-duplicates alert for Add mode when all found records are already in Results
+  allDuplicatesAlert?: {
+    show: boolean
+    recordsFound: number
+    queryValue: string
+    timestamp?: number
+  } | null
+  onDismissAllDuplicatesAlert?: () => void
 }
 
 const resultStyle = css`
@@ -146,7 +162,7 @@ const resultStyle = css`
 `
 
 export function QueryTaskResult (props: QueryTaskResultProps) {
-  const { queryItem, queryParams, resultCount, maxPerPage, records, widgetId, outputDS, runtimeZoomToSelected, onNavBack, resultsMode, accumulatedRecords, onAccumulatedRecordsChange, useGraphicsLayerForHighlight, graphicsLayer, mapView, eventManager, isQuerySwitchInProgressRef, currentQueryRecordIds, queries } = props
+  const { queryItem, queryParams, resultCount, maxPerPage, records, widgetId, outputDS, runtimeZoomToSelected, onNavBack, resultsMode, accumulatedRecords, onAccumulatedRecordsChange, useGraphicsLayerForHighlight, graphicsLayer, mapView, eventManager, isQuerySwitchInProgressRef, currentQueryRecordIds, queries, noRemovalAlert, onDismissNoRemovalAlert, allDuplicatesAlert, onDismissAllDuplicatesAlert } = props
   const getI18nMessage = hooks.useTranslation(defaultMessage)
   const intl = useIntl()
   const zoomToRecords = useZoomToRecords(mapView)
@@ -463,8 +479,8 @@ export function QueryTaskResult (props: QueryTaskResultProps) {
           lastSelectedRecordsRef.current = recordIds // Store the IDs we selected
           lastSelectedFeatureRecordsRef.current = fdr // Store the full records for potential restoration
           
-          // Notify Widget and HelperSimple of selection change
-          dispatchSelectionEvent(widgetId, recordIds, outputDS, queryItem.configId, eventManager)
+          // Notify Widget and HelperSimple of selection change (BUG-STALE-COUNT-001: pass count)
+          dispatchSelectionEvent(widgetId, recordIds, outputDS, queryItem.configId, eventManager, accumulatedRecords?.length)
         } catch (error) {
           const errorMessage = error instanceof Error ? error.message : 'Failed to select query results'
           setSelectionError(errorMessage)
@@ -1744,6 +1760,90 @@ export function QueryTaskResult (props: QueryTaskResultProps) {
           />
         )}
       </div>
+      
+      {/* r022.15: Anchor for Remove-mode no-removal popover */}
+      <div 
+        id="remove-feedback-anchor"
+        css={css`
+          height: 1px;
+          width: 100%;
+          position: relative;
+          padding: 0;
+          pointer-events: none;
+        `}
+      />
+      
+      {/* r022.15: Calcite Popover for Remove mode feedback (query found records but none matched) */}
+      {noRemovalAlert?.show && (
+        <calcite-popover 
+          key={`no-removal-${noRemovalAlert.timestamp}`}
+          referenceElement="remove-feedback-anchor"
+          placement="top"
+          flipDisabled={true}
+          overlayPositioning="fixed"
+          triggerDisabled={true}
+          autoClose
+          closable
+          label={getI18nMessage('noRemovalAlertLabel')}
+          open={noRemovalAlert.show}
+          onCalcitePopoverClose={() => {
+            if (onDismissNoRemovalAlert) {
+              onDismissNoRemovalAlert()
+            }
+          }}
+          style={{
+            '--calcite-popover-max-size-x': '320px',
+            maxWidth: '320px',
+            width: '100%',
+            '--calcite-color-foreground-1': 'lightyellow'
+          } as React.CSSProperties}
+        >
+          <div style={{ padding: '12px', maxWidth: '320px' }}>
+            <div style={{ fontWeight: 600, marginBottom: '8px', fontSize: '14px', color: '#151515' }}>
+              {getI18nMessage('noRemovalAlertTitle')}
+            </div>
+            <div style={{ fontSize: '13px', lineHeight: '1.5', color: '#2b2b2b' }}>
+              {getI18nMessage('noRemovalAlertMessage', { recordsFound: noRemovalAlert.recordsFound })}
+            </div>
+          </div>
+        </calcite-popover>
+      )}
+      
+      {/* r022.21: Calcite Popover for Add mode feedback (all records are duplicates) */}
+      {allDuplicatesAlert?.show && (
+        <calcite-popover 
+          key={`all-duplicates-${allDuplicatesAlert.timestamp}`}
+          referenceElement="remove-feedback-anchor"
+          placement="top"
+          flipDisabled={true}
+          overlayPositioning="fixed"
+          triggerDisabled={true}
+          autoClose
+          closable
+          label={getI18nMessage('allDuplicatesAlertLabel')}
+          open={allDuplicatesAlert.show}
+          onCalcitePopoverClose={() => {
+            if (onDismissAllDuplicatesAlert) {
+              onDismissAllDuplicatesAlert()
+            }
+          }}
+          style={{
+            '--calcite-popover-max-size-x': '320px',
+            maxWidth: '320px',
+            width: '100%',
+            '--calcite-color-foreground-1': 'lightyellow'
+          } as React.CSSProperties}
+        >
+          <div style={{ padding: '12px', maxWidth: '320px' }}>
+            <div style={{ fontWeight: 600, marginBottom: '8px', fontSize: '14px', color: '#151515' }}>
+              {getI18nMessage('allDuplicatesAlertTitle')}
+            </div>
+            <div style={{ fontSize: '13px', lineHeight: '1.5', color: '#2b2b2b' }}>
+              {getI18nMessage('allDuplicatesAlertMessage', { recordsFound: allDuplicatesAlert.recordsFound })}
+            </div>
+          </div>
+        </calcite-popover>
+      )}
     </div>
   )
 }
