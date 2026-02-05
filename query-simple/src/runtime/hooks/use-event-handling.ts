@@ -49,7 +49,9 @@ export class EventManager {
    * Registers listeners for:
    * - OPEN_WIDGET_EVENT: HelperSimple orchestration
    * - QUERYSIMPLE_SELECTION_EVENT: Selection changes from QueryTaskResult
-   * - RESTORE_ON_IDENTIFY_CLOSE_EVENT: Restore selection after identify popup closes
+   * - RESTORE_ON_IDENTIFY_CLOSE_EVENT: Restore selection after identify popup closes (dispatched by HelperSimple)
+   * 
+   * r022.42: Popup restore now uses shared addSelectionToMap() path (same as widget close/open)
    * 
    * @param widgetId - Widget ID for logging
    */
@@ -75,7 +77,7 @@ export class EventManager {
     // Listen for selection changes from query-result
     window.addEventListener(QUERYSIMPLE_SELECTION_EVENT, this.handleSelectionChangeBound)
     
-    // Listen for restore requests when identify popup closes
+    // r022.42: Listen for restore requests when identify popup closes (dispatched by HelperSimple)
     window.addEventListener(RESTORE_ON_IDENTIFY_CLOSE_EVENT, this.handleRestoreOnIdentifyCloseBound)
 
     this.listenersSetup = true
