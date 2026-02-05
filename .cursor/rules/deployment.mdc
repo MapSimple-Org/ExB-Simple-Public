@@ -1,9 +1,0 @@
----
-description: Rules for exporting ExB experiences and directory structure
-globs: **/*
-alwaysApply: false
----
-# Distribution
-- **Structure**: Maintain a flat root for ExB compatibility.
-- **Esri Standards**: ALL code must adhere to Esri's Hook & Shell architecture pattern and JSDoc style. See `@docs/development/ESRI_STANDARDS_ALIGNMENT.md` Section 0.
-- **Exporting**: Follow the "Public Distribution Architecture" found in `@docs/development/DEVELOPMENT_GUIDE.md` Section 10.

@@ -94,6 +94,7 @@ export function getOriginDataSource(
  * @param useGraphicsLayer - Whether to use graphics layer for highlighting (default: false)
  * @param graphicsLayer - Graphics layer instance (required if useGraphicsLayer is true)
  * @param mapView - Map view instance (required if useGraphicsLayer is true)
+ * @param skipOriginDSSelection - Skip origin DS selection but still do graphics (default: false)
  */
 export async function selectRecordsInDataSources(
   outputDS: DataSource | null | undefined,
@@ -101,7 +102,8 @@ export async function selectRecordsInDataSources(
   records?: FeatureDataRecord[],
   useGraphicsLayer: boolean = false,
   graphicsLayer?: __esri.GraphicsLayer,
-  mapView?: __esri.MapView | __esri.SceneView
+  mapView?: __esri.MapView | __esri.SceneView,
+  skipOriginDSSelection: boolean = false
 ): Promise<void> {
   if (!outputDS) return
   
@@ -140,9 +142,25 @@ export async function selectRecordsInDataSources(
     await pendingGraphicsOperation
     pendingGraphicsOperation = null
     
+    // r022.72: Skip origin DS selection if already handled elsewhere (e.g., by query-task.tsx grouping logic)
     // Still select in data source for state management (but layer selection won't show if layer is off)
-    if (originDS && typeof originDS.selectRecordsByIds === 'function') {
+    if (!skipOriginDSSelection && originDS && typeof originDS.selectRecordsByIds === 'function') {
       originDS.selectRecordsByIds(recordIds, records)
+      debugLogger.log('SELECTION-STATE-AUDIT', {
+        event: 'r022-72-origin-ds-selected-from-selectRecordsInDataSources',
+        originDSId: originDS.id,
+        recordCount: recordIds.length,
+        timestamp: Date.now()
+      })
+    } else if (skipOriginDSSelection) {
+      debugLogger.log('SELECTION-STATE-AUDIT', {
+        event: 'r022-72-origin-ds-selection-skipped',
+        reason: 'skipOriginDSSelection-flag-true',
+        originDSId: originDS?.id,
+        recordCount: recordIds.length,
+        note: 'Graphics handled, but origin DS selection skipped (already correct)',
+        timestamp: Date.now()
+      })
     }
   } else {
     // Original behavior: use layer selection
@@ -471,6 +489,7 @@ export function publishSelectionMessage(
  * @param useGraphicsLayer - Whether to use graphics layer for highlighting (default: false)
  * @param graphicsLayer - Graphics layer instance (required if useGraphicsLayer is true)
  * @param mapView - Map view instance (required if useGraphicsLayer is true)
+ * @param skipOriginDSSelection - Skip origin DS selection but still do graphics (default: false)
  */
 export async function selectRecordsAndPublish(
   widgetId: string,
@@ -480,9 +499,10 @@ export async function selectRecordsAndPublish(
   alsoPublishToOutputDS: boolean = false,
   useGraphicsLayer: boolean = false,
   graphicsLayer?: __esri.GraphicsLayer,
-  mapView?: __esri.MapView | __esri.SceneView
+  mapView?: __esri.MapView | __esri.SceneView,
+  skipOriginDSSelection: boolean = false
 ): Promise<void> {
-  await selectRecordsInDataSources(outputDS, recordIds, records, useGraphicsLayer, graphicsLayer, mapView)
+  await selectRecordsInDataSources(outputDS, recordIds, records, useGraphicsLayer, graphicsLayer, mapView, skipOriginDSSelection)
   publishSelectionMessage(widgetId, records, outputDS, alsoPublishToOutputDS)
 }
 

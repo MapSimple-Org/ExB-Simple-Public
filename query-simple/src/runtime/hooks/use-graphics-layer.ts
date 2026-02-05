@@ -147,7 +147,6 @@ export class GraphicsLayerManager {
   ): Promise<void> {
     // Chunk 4: Comparison logging - new implementation
     const newStateBefore = {
-      useGraphicsLayerForHighlight: config.useGraphicsLayerForHighlight,
       hasGraphicsLayer: !!this.graphicsLayerRef.current,
       graphicsLayerId: this.graphicsLayerRef.current?.id || null,
       hasMapView: !!this.mapViewRef.current,
@@ -163,15 +162,15 @@ export class GraphicsLayerManager {
       }
     })
     
-    // Only initialize if enabled and not already initialized
-    if (!config.useGraphicsLayerForHighlight || this.graphicsLayerRef.current) {
+    // Only initialize if not already initialized
+    if (this.graphicsLayerRef.current) {
       debugLogger.log('CHUNK-4-COMPARE', {
         event: 'new-implementation-initializeGraphicsLayerFromOutputDS-skipped',
         widgetId,
         newImplementation: {
           stateBefore: newStateBefore,
           result: 'skipped',
-          reason: !config.useGraphicsLayerForHighlight ? 'not-enabled' : 'already-initialized',
+          reason: 'already-initialized',
           timestamp: Date.now()
         }
       })
@@ -279,7 +278,6 @@ export class GraphicsLayerManager {
     // Chunk 4: Comparison logging - new implementation
     const graphicsLayer = this.graphicsLayerRef.current
     const newStateBefore = {
-      useGraphicsLayerForHighlight: config.useGraphicsLayerForHighlight,
       hasGraphicsLayer: !!graphicsLayer,
       graphicsLayerId: graphicsLayer?.id || null,
       graphicsCount: graphicsLayer?.graphics.length || 0
@@ -294,12 +292,11 @@ export class GraphicsLayerManager {
       }
     })
     
-    if (config.useGraphicsLayerForHighlight && graphicsLayer) {
+    if (graphicsLayer) {
       const { clearGraphicsLayer } = require('../graphics-layer-utils')
       clearGraphicsLayer(graphicsLayer)
       
       const newStateAfter = {
-        useGraphicsLayerForHighlight: config.useGraphicsLayerForHighlight,
         hasGraphicsLayer: !!this.graphicsLayerRef.current,
         graphicsLayerId: this.graphicsLayerRef.current?.id || null,
         graphicsCount: this.graphicsLayerRef.current?.graphics.length || 0
@@ -323,7 +320,7 @@ export class GraphicsLayerManager {
         newImplementation: {
           stateBefore: newStateBefore,
           result: 'skipped',
-          reason: !config.useGraphicsLayerForHighlight ? 'not-enabled' : 'no-graphics-layer',
+          reason: 'no-graphics-layer',
           timestamp: Date.now()
         }
       })
@@ -348,7 +345,7 @@ export class GraphicsLayerManager {
     config: IMConfig,
     mapView: __esri.MapView | __esri.SceneView | null
   ): boolean {
-    return !!(mapView && config.useGraphicsLayerForHighlight && !this.graphicsLayerRef.current)
+    return !!(mapView && !this.graphicsLayerRef.current)
   }
 }
 

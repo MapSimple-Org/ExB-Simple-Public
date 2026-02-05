@@ -5,6 +5,185 @@ All notable changes to MapSimple Experience Builder widgets will be documented i
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.19.0-r022.35] - 2026-02-03 - FIX: Graphics Fill Missing (Outline Only)
+
+### Fixed
+- **Graphics Rendering Independence**: Hardcoded widget-specific symbology to prevent external widgets from affecting graphics rendering
+  - **Bug**: Advanced Draw widget sets `mapView.highlightOptions.fillOpacity = 0`, causing QuerySimple graphics to render without fill (outline only)
+  - **Reproduction**: Select item → Close widget → Open Draw widget → Reopen QuerySimple → Graphics have no fill
+  - **Solution**: Replaced runtime `highlightOptions` lookup with hardcoded constants
+
+### Technical Details
+**Root Cause:**
+- `getDefaultHighlightSymbol()` was reading `mapView.highlightOptions.fillOpacity` at runtime
+- Advanced Draw widget modifies `fillOpacity` to `0` for its sketch graphics
+- QuerySimple graphics created after Draw opens inherit `fillOpacity = 0`
+- Result: Fill color becomes `[0, 255, 255, 0]` (fully transparent)
+
+**Fix (r022.35):**
+Added `QUERYSIMPLE_HIGHLIGHT_SYMBOLOGY` constants:
+```typescript
+const QUERYSIMPLE_HIGHLIGHT_SYMBOLOGY = {
+  color: [0, 255, 255],      // Cyan
+  fillOpacity: 0.25,         // 25% transparent fill
+  outlineOpacity: 1.0,       // 100% opaque outline
+  lineOpacity: 1.0,          // 100% opaque lines
+  outlineWidth: 2,
+  lineWidth: 4,
+  markerSize: 12
+}
+```
+
+Modified `getDefaultHighlightSymbol()` to use constants instead of `mapView.highlightOptions`.
+
+**Impact:**
+- ✅ Graphics always render with fill regardless of external widget state
+- ✅ Widget independence - no external dependencies
+- ✅ Consistent symbology across all operations
+- ✅ Future-ready - constants can be exposed as widget settings
+
+**Files Modified:**
+- `query-simple/src/runtime/graphics-layer-utils.ts` - Hardcoded symbology constants
+- `query-simple/src/version.ts` - r022.34 → r022.35
+
+**Investigation:**
+- r022.34: Added diagnostic logging to capture `highlightOptions` values
+- User confirmed reproduction: Advanced Draw widget was the culprit
+
+**Documentation:**
+- Complete bug report: `docs/bugs/BUG-GRAPHICS-FILL-MISSING.md`
+
+---
+
+## [1.19.0-r022.33] - 2026-02-03 - FIX: Cross-Layer X Button Removal
+
+### Fixed
+- **CRITICAL: Cross-Layer Record Removal**: Fixed bug where removing a record via X button failed to clear the selection from its origin data source when the record was added from a different query layer
+  - **Bug Scenario**: Hash query (Parcels) → Add mode → Switch to Parks query → Add Park record → Remove original Parcel record
+  - **Symptom**: Record removed from UI and graphics, but selection remained in Parcels layer (invisible desync)
+  - **Root Cause**: Removal utility used `record.getDataSource()` method which returns `null` for accumulated records, falling back to current query's origin DS (Parks instead of Parcels)
+  - **Fix**: Changed to use `record.dataSource` property which persists correctly through accumulation
+
+### Technical Details
+**Investigation:**
+- r022.31: Enhanced diagnostic logging added (6 new log events)
+- r022.32: Fixed undefined variable in diagnostic logging
+- r022.33: Implemented 1-line fix using `.dataSource` property
+
+**File Changed:**
+- `results-management-utils.ts` (line 442): `record.getDataSource?.()` → `(record as any).dataSource`
+
+**Why It Works:**
+- `.getDataSource()` method returns `null` for records in accumulated state
+- `.dataSource` property persists on record object through merging/state updates
+- Pattern already proven in X button handler (`query-result.tsx`)
+
+**Impact:**
+- ✅ Cross-layer removals now clear selection from correct origin layer
+- ✅ No more "ghost selections" on widget close/reopen
+- ✅ Simple fix (1 line) vs. complex stamping approach (multi-file changes)
+- ✅ Uses existing proven pattern
+- ✅ Diagnostic logging preserved for future debugging
+
+**Documentation:**
+- Complete bug report: `docs/bugs/BUG-CROSS-LAYER-X-BUTTON-REMOVAL.md`
+- Root cause analysis, fix implementation, testing protocol documented
+
+---
+
+## [1.19.0-r022.30] - 2026-02-01 - FIX: Graphics Flash on Query Switch
+
+### Fixed
+- **CRITICAL: Graphics Layer Flash in Add/Remove Mode**: When switching queries in Add or Remove mode with accumulated results visible, graphics would briefly disappear and reappear, causing visual flash
+
+---
+
+## [1.19.0-r022.27] - 2026-02-01 - Orphaned Code Cleanup
+
+### Removed
+- **Dead Code Cleanup (87 lines)**: Removed all `useGraphicsLayerForHighlight` references
+  - Config property was disabled in earlier version but code paths remained
+  - 63 references across 10 files checking a config option users couldn't set
+  - Surgical removal on dedicated feature branch
+
+### Implementation Details
+**Branch:** `feature/remove-graphics-layer-orphaned-code`
+
+**Files Modified (10):**
+1. `config.ts` - Removed property from interface
+2. `setting/setting.tsx` - Removed UI labels
+3. `setting/translations/default.ts` - Removed i18n strings
+4. `runtime/widget.tsx` - Removed conditionals, prop passing, logging
+5. `runtime/query-task.tsx` - Removed from props and conditionals
+6. `runtime/query-result.tsx` - Removed from props and selection calls
+7. `runtime/query-task-list.tsx` - Removed from props
+8. `data-actions/zoom-to-action.tsx` - Removed bug logging
+9. `runtime/hooks/use-selection-restoration.ts` - Removed from dependencies
+10. `runtime/hooks/use-graphics-layer.ts` - Removed from initialization
+
+**Impact:**
+- ✅ 63 orphaned references removed
+- ✅ 87 net lines deleted
+- ✅ Cleaner architecture
+- ✅ No dead code paths to maintain
+- ✅ Build successful, all functionality working
+
+### Related
+- TODO Section 3a: Remove Non-Graphics Layer Implementation (Complete)
+
+### Root Cause
+During query switches in Add/Remove mode, three unnecessary operations were occurring:
+1. Graphics layer was being cleared via `onClearGraphicsLayer()`
+2. Graphics were being cleared and re-added via `selectRecordsAndPublish(useGraphicsLayer: true)`
+3. Accumulated records sync logic was incorrectly purging records
+
+These operations were unnecessary because:
+- Graphics already correctly reflected `accumulatedRecords` 
+- Only output DS selection needed updating for Results panel
+- Sync logic is only for manual deletions (X buttons), not query switches
+
+### Solution (r022.30)
+Three surgical fixes in `query-task.tsx`:
+
+1. **Skip clearing graphics layer** (line 957)
+   - Removed `onClearGraphicsLayer()` call in Add/Remove mode during query switch
+   - Graphics already match `accumulatedRecords` - no need to clear
+
+2. **Update output DS without touching graphics** (line 1044)
+   - Changed `selectRecordsAndPublish(useGraphicsLayer: true)` → `useGraphicsLayer: false`
+   - Updates output DS selection (fixes Results panel)
+   - Skips all graphics operations (eliminates flash)
+
+3. **Skip sync logic during query switches** (line 1374)
+   - Commented out `onAccumulatedRecordsChange(syncedRecords)` during query switches
+   - Sync only needed for manual deletions (X button clicks)
+   - Prevents incorrect purging of accumulated records
+
+### Impact
+- ✅ Zero graphics flash when switching queries in Add/Remove mode
+- ✅ Results panel stays perfectly in sync with accumulated records
+- ✅ Manual deletions (X buttons) continue working correctly
+- ✅ Performance improvement (eliminated unnecessary clear/re-add cycles)
+
+### Testing
+Verified across multiple scenarios:
+- Query switches between 3 different queries with 2-122 accumulated records
+- Add mode: Smooth transitions, no flash, correct counts
+- Remove mode: Smooth transitions, no flash, correct counts
+- Manual deletions: Graphics removed correctly, counts update properly
+- Results panel: Always shows correct accumulated records
+
+### Files Modified
+- `query-simple/src/runtime/query-task.tsx` (3 surgical fixes)
+- `query-simple/src/version.ts` (r022.28 → r022.30)
+
+### Investigation Path
+- r022.28: Surgically commented out `onClearGraphicsLayer()` and `selectRecordsAndPublish()` → graphics fixed, Results broken
+- r022.29: Changed approach to call `selectRecordsAndPublish(useGraphicsLayer: false)` → both fixed
+- r022.30: Cleaned up test comments, production-ready code
+
+---
+
 ## [1.19.0-r022.14] - 2026-01-30 - No-Results Popover Complete
 
 ### Added

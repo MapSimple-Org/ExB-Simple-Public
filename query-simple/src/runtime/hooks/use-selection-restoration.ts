@@ -36,9 +36,7 @@ export interface RestorationDependencies {
   graphicsLayerManager: {
     clearGraphics: (widgetId: string, config: any) => void
   }
-  config: {
-    useGraphicsLayerForHighlight: boolean
-  }
+  config: Record<string, any>
 }
 
 /**
@@ -127,13 +125,16 @@ export class SelectionRestorationManager {
     }
 
     // ========================================================================
-    // 3. Calculate selection count (BUG-STALE-COUNT-001: use event count, not state)
+    // 3. Calculate selection count
     // ========================================================================
     const isAccumulationMode = state.resultsMode === SelectionType.AddToSelection ||
                                state.resultsMode === SelectionType.RemoveFromSelection
-    const eventAccumulatedCount = customEvent.detail.accumulatedRecordsCount ?? state.accumulatedRecords?.length ?? 0
-    const selectionCount = isAccumulationMode && eventAccumulatedCount > 0
-      ? eventAccumulatedCount
+    const stateAccumulatedCount = state.accumulatedRecords?.length ?? 0
+    const eventAccumulatedCount = customEvent.detail.accumulatedRecordsCount ?? 0
+    // r022.43: FIX - Use stateAccumulatedCount (widget source of truth) not eventAccumulatedCount (stale hashEntry)
+    // When switching layers in Add mode, HelperSimple hashEntry is stale (old layer count), but state is correct
+    const selectionCount = isAccumulationMode && stateAccumulatedCount > 0
+      ? stateAccumulatedCount
       : (hasSelection ? customEvent.detail.recordIds.length : 0)
 
     // ========================================================================
@@ -170,15 +171,16 @@ export class SelectionRestorationManager {
       eventRecordIdsCount: customEvent.detail.recordIds.length,
       hasSelectionFromEvent: hasSelection,
       eventAccumulatedCount,
-      stateAccumulatedCount: state.accumulatedRecords?.length ?? 0,
+      stateAccumulatedCount,
       calculatedSelectionCount: selectionCount,
       'will-set-hasSelection': selectionCount > 0,
       'will-reset-mode': shouldResetMode,
       decisionLogic: {
         isAccumulationMode,
-        'eventAccumulatedCount > 0': eventAccumulatedCount > 0,
-        'use-event-accumulated-count': isAccumulationMode && eventAccumulatedCount > 0,
-        'should-reset-mode': shouldResetMode
+        'stateAccumulatedCount > 0': stateAccumulatedCount > 0,
+        'use-state-accumulated-count': isAccumulationMode && stateAccumulatedCount > 0,
+        'should-reset-mode': shouldResetMode,
+        note: 'r022.43: Using stateAccumulatedCount (widget state) not eventAccumulatedCount (stale hashEntry)'
       }
     })
 
@@ -216,10 +218,13 @@ export class SelectionRestorationManager {
    * 3. Calls selectRecordsAndPublish for each origin DS
    * 
    * r022.2: lastSelection fallback removed - accumulatedRecords is universal source
+   * r022.41: Added manageGraphicsLayer parameter for shared restoration path
    * 
    * @param deps - Runtime dependencies (graphics layer, map view, config)
+   * @param manageGraphicsLayer - If true (default), clears and re-adds graphics layer.
+   *                              If false, skips graphics operations (e.g., for Identify popup restore)
    */
-  async addSelectionToMap(deps: RestorationDependencies): Promise<void> {
+  async addSelectionToMap(deps: RestorationDependencies, manageGraphicsLayer: boolean = true): Promise<void> {
     const state = this.stateGetter()
     const { accumulatedRecords, resultsMode } = state
 
@@ -239,10 +244,11 @@ export class SelectionRestorationManager {
         event: 'addSelectionToMap-found-accumulated-records',
         widgetId: this.widgetId,
         resultsMode,
-        accumulatedRecordsCount: accumulatedRecords.length
+        accumulatedRecordsCount: accumulatedRecords.length,
+        manageGraphicsLayer
       })
       
-      await this.restoreAccumulatedRecords(accumulatedRecords, deps)
+      await this.restoreAccumulatedRecords(accumulatedRecords, deps, manageGraphicsLayer)
     } else {
       debugLogger.log('RESTORE', {
         event: 'addSelectionToMap-no-selection-to-restore',
@@ -255,10 +261,12 @@ export class SelectionRestorationManager {
 
   /**
    * Helper: Restore accumulated records (grouped by origin DS)
+   * r022.41: Added manageGraphicsLayer parameter
    */
   private async restoreAccumulatedRecords(
     accumulatedRecords: Array<{ configId: string, record: any }>,
-    deps: RestorationDependencies
+    deps: RestorationDependencies,
+    manageGraphicsLayer: boolean
   ): Promise<void> {
     // Lazy-load dependencies
     const { DataSourceManager } = await import('jimu-core')
@@ -345,20 +353,21 @@ export class SelectionRestorationManager {
     })
 
     // Restore selection for each origin data source
-    const useGraphicsLayer = deps.config.useGraphicsLayerForHighlight
     const graphicsLayer = deps.graphicsLayerRef.current || undefined
     const mapView = deps.mapViewRef.current || undefined
 
-    // r021.93: Clear graphics layer ONCE before restoring all records
-    // This prevents each origin DS restore from clearing the previous one's graphics
-    if (useGraphicsLayer && graphicsLayer && mapView) {
+    // r022.41: Conditionally manage graphics layer based on caller context
+    // Widget close/open: manageGraphicsLayer=true (clears and re-adds graphics)
+    // Identify popup restore: manageGraphicsLayer=false (graphics already visible, just restore DS selection)
+    if (manageGraphicsLayer && graphicsLayer && mapView) {
       const { clearGraphicsLayer: clearGL, addHighlightGraphics } = await import('../graphics-layer-utils')
       
       debugLogger.log('RESTORE', {
-        event: 'panel-opened-clearing-graphics-before-restore',
+        event: 'clearing-graphics-before-restore',
         widgetId: this.widgetId,
         graphicsLayerId: graphicsLayer.id,
         graphicsCountBefore: graphicsLayer.graphics.length,
+        manageGraphicsLayer,
         accumulatedRecordsStructure: accumulatedRecords.map((item, i) => ({
           index: i,
           hasConfigId: !!item.configId,
@@ -379,12 +388,22 @@ export class SelectionRestorationManager {
       await addHighlightGraphics(graphicsLayer, validRecords, mapView)
       
       debugLogger.log('RESTORE', {
-        event: 'panel-opened-graphics-restored-in-batch',
+        event: 'graphics-restored-in-batch',
         widgetId: this.widgetId,
         graphicsLayerId: graphicsLayer.id,
         accumulatedRecordsCount: accumulatedRecords.length,
         validRecordsCount: validRecords.length,
         finalGraphicsCount: graphicsLayer.graphics.length,
+        manageGraphicsLayer,
+        timestamp: Date.now()
+      })
+    } else if (!manageGraphicsLayer) {
+      debugLogger.log('RESTORE', {
+        event: 'graphics-management-skipped',
+        widgetId: this.widgetId,
+        manageGraphicsLayer,
+        reason: 'caller-requested-skip-graphics-layer',
+        note: 'r022.41: Used for Identify popup restore where graphics already visible',
         timestamp: Date.now()
       })
     }
@@ -451,7 +470,7 @@ export class SelectionRestorationManager {
     })
 
     // Always clear graphics layer first when panel closes
-    if (deps.config.useGraphicsLayerForHighlight && deps.graphicsLayerRef.current) {
+    if (deps.graphicsLayerRef.current) {
       deps.graphicsLayerManager.clearGraphics(this.widgetId, deps.config)
       debugLogger.log('RESTORE', {
         event: 'panel-closed-graphics-layer-cleared',
@@ -551,7 +570,6 @@ export class SelectionRestorationManager {
     })
 
     // Clear selection from each origin DS
-    const useGraphicsLayer = deps.config.useGraphicsLayerForHighlight
     const graphicsLayer = deps.graphicsLayerRef.current || undefined
 
     for (const [originDS, records] of recordsByOriginDS.entries()) {
@@ -561,7 +579,7 @@ export class SelectionRestorationManager {
         await clearSelectionInDataSources(
           this.widgetId,
           originDS,
-          useGraphicsLayer,
+          true, // Always use graphics layer
           graphicsLayer
         )
 

@@ -100,21 +100,6 @@ export function createZoomToAction(
       })
       
       if (!mapView || dataLevel !== DataLevel.Records) {
-        // BUG-GRAPHICS-001: Zoom operations fail when graphics layer is disabled
-        if (!mapView) {
-          debugLogger.log('BUG', {
-            bugId: 'BUG-GRAPHICS-001',
-            category: 'GRAPHICS',
-            event: 'zoom-operation-failed-graphics-layer-disabled',
-            widgetId,
-            operation: 'zoom-to-selected-action',
-            dataSetsCount: dataSets?.length || 0,
-            description: 'Zoom to selected action attempted but mapView is unavailable (likely because useGraphicsLayerForHighlight is disabled)',
-            workaround: 'Enable useGraphicsLayerForHighlight in widget settings',
-            targetResolution: 'r019.0'
-          })
-        }
-        
         debugLogger.log('DATA-ACTION', {
           action: 'zoomTo-onExecute',
           result: false,

@@ -830,7 +830,7 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
       event: 'clearGraphicsLayerRefs-called',
       widgetId: id,
       hasMapView: !!mapView,
-      willRecreate: !!(mapView && config.useGraphicsLayerForHighlight),
+      willRecreate: !!mapView,
       timestamp: Date.now()
     })
     
@@ -838,7 +838,7 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
     this.graphicsLayerRef.current = null
     
     // Immediately recreate the layer if we still need it
-    if (mapView && config.useGraphicsLayerForHighlight) {
+    if (mapView) {
       try {
         const { createOrGetGraphicsLayer } = await import('./graphics-layer-utils')
         const newGraphicsLayer = await createOrGetGraphicsLayer(id, mapView)
@@ -885,25 +885,21 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
   /**
    * Handles restore request when identify popup closes.
    * 
-   * This method restores selection to the map after the identify popup closes and
-   * selection was cleared. It only restores if the widget panel is currently open
-   * (users can't see restored selection if widget is closed).
+   * This method restores selection to the map after the identify popup closes.
+   * It only restores if the widget panel is currently open and accumulated records exist.
    * 
-   * Restoration logic:
-   * - "Add to" / "Remove from" modes: Restores all accumulated records grouped by origin data source
-   * - "New" mode: Restores accumulated records (r021.110: lastSelection removed)
+   * r022.42: Simplified to use shared addSelectionToMap() path (same as componentDidShow)
+   * with manageGraphicsLayer=false to skip graphics clear/re-add (graphics already visible).
    * 
-   * @param event - Custom event containing selection details (widgetId, recordIds, outputDsId, queryItemConfigId)
+   * @param event - Custom event dispatched by HelperSimple (widgetId, timestamp)
    * 
    * @since 1.19.0-r017.0
    * @see {@link RESTORE_ON_IDENTIFY_CLOSE_EVENT} for event name constant
    */
   private handleRestoreOnIdentifyClose = (event: Event) => {
     const customEvent = event as CustomEvent<{ 
-      widgetId: string, 
-      recordIds: string[], 
-      outputDsId: string,
-      queryItemConfigId: string
+      widgetId: string,
+      timestamp: string
     }>
     const { id } = this.props
     
@@ -914,20 +910,16 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
     
     // Use manager as source of truth for visibility (r018.13)
     const isWidgetOpen = this.visibilityManager.getIsPanelVisible()
-    const isAccumulationMode = this.state.resultsMode === SelectionType.AddToSelection || 
-                               this.state.resultsMode === SelectionType.RemoveFromSelection
     
+    // r022.42: Simplified logging - no more per-layer event details
     debugLogger.log('RESTORE', {
       event: 'identify-popup-closed-restore-requested',
       widgetId: id,
       isWidgetOpen,
       resultsMode: this.state.resultsMode,
-      isAccumulationMode,
-      eventRecordIdsCount: customEvent.detail.recordIds.length,
-      hasSelection: this.state.hasSelection || false,
+      hasAccumulatedRecords: !!(this.state.accumulatedRecords && this.state.accumulatedRecords.length > 0),
       accumulatedRecordsCount: this.state.accumulatedRecords?.length || 0,
-      outputDsId: customEvent.detail.outputDsId,
-      queryItemConfigId: customEvent.detail.queryItemConfigId
+      timestamp: customEvent.detail.timestamp
     })
     
     // Only restore if widget is open
@@ -935,88 +927,32 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
       debugLogger.log('RESTORE', {
         event: 'identify-popup-closed-restore-skipped-widget-closed',
         widgetId: id,
-        recordCount: customEvent.detail.recordIds.length
+        decision: 'SKIP_RESTORATION',
+        reason: 'Widget is closed'
       })
       return
     }
     
-    // HYPOTHESIS: Should always check accumulatedRecords first, regardless of mode
-    if (this.state.accumulatedRecords && this.state.accumulatedRecords.length > 0) {
+    // r022.42: Check if accumulated records exist (universal for ALL modes)
+    if (!this.state.accumulatedRecords || this.state.accumulatedRecords.length === 0) {
       debugLogger.log('RESTORE', {
-        event: 'identify-popup-closed-found-accumulated-records',
+        event: 'identify-popup-closed-restore-skipped-no-accumulated-records',
         widgetId: id,
         resultsMode: this.state.resultsMode,
-        isAccumulationMode,
-        accumulatedRecordsCount: this.state.accumulatedRecords.length,
-        'should-use-accumulated': true,
-        'current-condition-check': isAccumulationMode,
-        'condition-result': isAccumulationMode
-      })
-    }
-    
-    // In Add/Remove modes, check accumulated records instead of lastSelection
-    if (isAccumulationMode) {
-      if (!this.state.hasSelection || !this.state.accumulatedRecords || this.state.accumulatedRecords.length === 0) {
-        debugLogger.log('RESTORE', {
-          event: 'identify-popup-closed-restore-skipped-no-accumulated-records',
-          widgetId: id,
-          hasSelection: this.state.hasSelection,
-          accumulatedRecordsCount: this.state.accumulatedRecords?.length || 0,
-          'hypothesis': 'hasSelection-is-false-or-no-accumulated-records',
-          'maybe-hasSelection-should-be-based-on-accumulated-records': true
-        })
-        return
-      }
-      
-      // Restore all accumulated records (grouped by origin DS)
-      debugLogger.log('RESTORE', {
-        event: 'identify-popup-closed-restoring-accumulated-records',
-        widgetId: id,
-        accumulatedRecordsCount: this.state.accumulatedRecords.length
-      })
-      
-      ;(async () => {
-        const deps = {
-          graphicsLayerRef: this.graphicsLayerRef,
-          mapViewRef: this.mapViewRef,
-          graphicsLayerManager: this.graphicsLayerManager,
-          config: this.props.config
-        }
-        await this.selectionRestorationManager.addSelectionToMap(deps)
-      })()
-      return
-    }
-    
-    // HYPOTHESIS: Maybe accumulatedRecords exist but we're not in accumulation mode?
-    if (this.state.accumulatedRecords && this.state.accumulatedRecords.length > 0 && !isAccumulationMode) {
-      debugLogger.log('RESTORE', {
-        event: 'identify-popup-closed-accumulated-records-exist-but-not-accumulation-mode',
-        widgetId: id,
-        resultsMode: this.state.resultsMode,
-        isAccumulationMode,
-        accumulatedRecordsCount: this.state.accumulatedRecords.length,
-        'hypothesis': 'accumulated-records-exist-but-mode-is-not-add-or-remove',
-        'should-we-still-use-them': 'NEEDS-INVESTIGATION'
-      })
-    }
-    
-    // r021.110: Simplified - no longer checking lastSelection (removed)
-    // For "New" mode, check if we have selection
-    if (!this.state.hasSelection) {
-      debugLogger.log('RESTORE', {
-        event: 'identify-popup-closed-restore-skipped-no-selection',
-        widgetId: id,
-        hasSelection: this.state.hasSelection
+        decision: 'SKIP_RESTORATION',
+        reason: 'No accumulated records to restore'
       })
       return
     }
     
-    // Restore selection to map (reuse existing method)
+    // r022.42: Use shared restoration path (same as componentDidShow) with manageGraphicsLayer=false
     debugLogger.log('RESTORE', {
-      event: 'identify-popup-closed-restoring-selection',
+      event: 'identify-popup-closed-restoring-via-shared-path',
       widgetId: id,
-      recordCount: customEvent.detail.recordIds.length,
-      outputDsId: customEvent.detail.outputDsId
+      resultsMode: this.state.resultsMode,
+      accumulatedRecordsCount: this.state.accumulatedRecords.length,
+      manageGraphicsLayer: false,
+      note: 'r022.42: Using shared addSelectionToMap() with graphics management disabled'
     })
     
     ;(async () => {
@@ -1026,7 +962,7 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
         graphicsLayerManager: this.graphicsLayerManager,
         config: this.props.config
       }
-      await this.selectionRestorationManager.addSelectionToMap(deps)
+      await this.selectionRestorationManager.addSelectionToMap(deps, false) // r022.42: false = skip graphics management
     })()
   }
 
@@ -1315,7 +1251,6 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
                 onResultsModeChange={this.handleResultsModeChange}
                 accumulatedRecords={this.state.accumulatedRecords}
                 onAccumulatedRecordsChange={this.handleAccumulatedRecordsChange}
-                useGraphicsLayerForHighlight={config.useGraphicsLayerForHighlight}
                 graphicsLayer={this.graphicsLayerRef.current || undefined}
                 mapView={this.mapViewRef.current || undefined}
                 onInitializeGraphicsLayer={this.initializeGraphicsLayerFromOutputDS}
@@ -1356,7 +1291,7 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
       `}>
         {/* Hidden JimuMapViewComponent to get map view for graphics layer */}
         {/* Uses explicit map widget ID from config (widget-level binding) */}
-        {config.useGraphicsLayerForHighlight && config.highlightMapWidgetId && (
+        {config.highlightMapWidgetId && (
           <JimuMapViewComponent
             useMapWidgetId={config.highlightMapWidgetId}
             onActiveViewChange={this.handleJimuMapViewChanged}
@@ -1398,7 +1333,6 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
                 onResultsModeChange={this.handleResultsModeChange}
                 accumulatedRecords={this.state.accumulatedRecords}
                 onAccumulatedRecordsChange={this.handleAccumulatedRecordsChange}
-                useGraphicsLayerForHighlight={config.useGraphicsLayerForHighlight}
                 graphicsLayer={this.graphicsLayerRef.current || undefined}
                 mapView={this.mapViewRef.current || undefined}
                 onInitializeGraphicsLayer={this.initializeGraphicsLayerFromOutputDS}

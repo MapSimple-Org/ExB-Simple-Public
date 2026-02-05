@@ -14,6 +14,36 @@ const debugLogger = createQuerySimpleDebugLogger()
 let operationSequence = 0
 
 /**
+ * QuerySimple Widget Highlight Symbology Constants
+ * 
+ * These values are hardcoded to ensure consistent highlighting that is not affected
+ * by external widgets (e.g., Draw widget) modifying mapView.highlightOptions.
+ * 
+ * r022.35: Hardcoded to prevent Advanced Draw widget from setting fillOpacity to 0,
+ * which causes graphics to render with outline only (no fill).
+ */
+const QUERYSIMPLE_HIGHLIGHT_SYMBOLOGY = {
+  // Base color: Cyan (matches ArcGIS default selection color)
+  color: [0, 255, 255] as [number, number, number],
+  
+  // Fill opacity for polygons (25% transparent)
+  fillOpacity: 0.25,
+  
+  // Outline/halo opacity (100% opaque)
+  outlineOpacity: 1.0,
+  
+  // Line opacity (100% opaque for visibility)
+  lineOpacity: 1.0,
+  
+  // Widths
+  outlineWidth: 2,
+  lineWidth: 4,
+  
+  // Point marker size
+  markerSize: 12
+} as const
+
+/**
  * Gets the map view from a data source's origin layer.
  * Accesses the view through the FeatureLayer's view property.
  * @param outputDS - The output data source (or any data source)
@@ -284,55 +314,58 @@ export async function getMapViewFromDataSource(
 
 /**
  * Gets the default highlight symbol based on geometry type.
- * Uses the map's actual highlight color from highlightOptions to match standard selection appearance.
+ * 
+ * r022.35: Uses hardcoded QuerySimple symbology constants instead of reading from
+ * mapView.highlightOptions. This ensures consistent rendering that is not affected
+ * by external widgets (e.g., Advanced Draw widget setting fillOpacity to 0).
+ * 
+ * @param geometryType - The geometry type ('point', 'polyline', 'polygon', etc.)
+ * @returns Symbol configured with widget-specific highlighting
  */
 function getDefaultHighlightSymbol(
-  geometryType: string,
-  mapView: __esri.MapView | __esri.SceneView
+  geometryType: string
 ): __esri.Symbol {
-  // Get default highlight color from view's highlightOptions
-  const highlightOptions = (mapView.highlightOptions || {}) as __esri.HighlightOptions
+  // Use hardcoded QuerySimple symbology instead of reading from mapView.highlightOptions
+  // This prevents external widgets from affecting our graphics rendering
   
-  // Extract color - could be array [R,G,B,A] or Color object
-  let highlightColor: number[] | null = null
+  const { color, fillOpacity, outlineOpacity, lineOpacity, outlineWidth, lineWidth, markerSize } = QUERYSIMPLE_HIGHLIGHT_SYMBOLOGY
   
-  if (highlightOptions.color) {
-    // If it's a Color object, convert to array
-    if (typeof highlightOptions.color === 'object' && 'toRgba' in highlightOptions.color) {
-      highlightColor = (highlightOptions.color as any).toRgba()
-    } 
-    // If it's already an array
-    else if (Array.isArray(highlightOptions.color)) {
-      highlightColor = highlightOptions.color
-    }
-  }
+  // Build color arrays with appropriate opacity
+  const fillColor = [...color, fillOpacity] as [number, number, number, number]
+  const outlineColor = [...color, outlineOpacity] as [number, number, number, number]
+  const lineColor = [...color, lineOpacity] as [number, number, number, number]
   
-  // If no color in highlightOptions, use the ArcGIS documented default: cyan [0, 255, 255]
-  if (!highlightColor) {
-    highlightColor = [0, 255, 255, 1.0] // Full opacity default
-  }
-  
-  // Ensure we have 4 elements [R, G, B, A]
-  const baseColor = highlightColor.slice(0, 3)
-  const baseAlpha = highlightColor.length >= 4 ? highlightColor[3] : 1.0
-  
-  // Get fill opacity from highlightOptions or use default
-  const fillOpacity = highlightOptions.fillOpacity !== undefined 
-    ? highlightOptions.fillOpacity 
-    : 0.25 // Default 25% opacity for fill
-  const fillColor = [...baseColor, fillOpacity]
-  
-  // Get halo opacity or use default - for outlines and lines
-  const haloOpacity = highlightOptions.haloOpacity !== undefined
-    ? highlightOptions.haloOpacity
-    : baseAlpha // Use the color's alpha if available, otherwise 1.0
-  const outlineColor = [...baseColor, haloOpacity]
-  
-  // For lines, use full opacity to ensure visibility
-  const lineOpacity = highlightOptions.haloOpacity !== undefined
-    ? Math.max(highlightOptions.haloOpacity, 0.8) // At least 80% opacity
-    : baseAlpha // Use the color's alpha, or default to 1.0
-  const lineColor = [...baseColor, lineOpacity]
+  // DIAGNOSTIC (r022.34): Log symbology being used
+  debugLogger.log('GRAPHICS-LAYER', {
+    event: 'symbology-calculation',
+    geometryType,
+    source: 'QUERYSIMPLE_HIGHLIGHT_SYMBOLOGY-constants',
+    hardcodedValues: {
+      baseColor: color,
+      fillOpacity,
+      fillColor,
+      outlineOpacity,
+      outlineColor,
+      lineOpacity,
+      lineColor
+    },
+    symbolToCreate: geometryType === 'polygon' ? {
+      type: 'simple-fill',
+      fillColor,
+      outlineColor,
+      outlineWidth
+    } : geometryType === 'polyline' ? {
+      type: 'simple-line',
+      lineColor,
+      width: lineWidth
+    } : {
+      type: 'simple-marker',
+      color: outlineColor,
+      size: markerSize
+    },
+    note: 'r022.35: Using hardcoded symbology - independent of mapView.highlightOptions',
+    timestamp: Date.now()
+  })
   
   switch (geometryType) {
     case 'point':
@@ -342,16 +375,16 @@ function getDefaultHighlightSymbol(
         color: outlineColor,
         outline: {
           color: outlineColor,
-          width: 2
+          width: outlineWidth
         },
-        size: 12
+        size: markerSize
       } as unknown as __esri.SimpleMarkerSymbol
       
     case 'polyline':
       return {
         type: 'simple-line',
-        color: lineColor, // Use lineColor with proper opacity
-        width: 4 // Increased width for visibility
+        color: lineColor,
+        width: lineWidth
       } as unknown as __esri.SimpleLineSymbol
       
     case 'polygon':
@@ -361,7 +394,7 @@ function getDefaultHighlightSymbol(
         color: fillColor,
         outline: {
           color: outlineColor,
-          width: 2
+          width: outlineWidth
         }
       } as unknown as __esri.SimpleFillSymbol
       
@@ -372,7 +405,7 @@ function getDefaultHighlightSymbol(
         color: fillColor,
         outline: {
           color: outlineColor,
-          width: 2
+          width: outlineWidth
         }
       } as unknown as __esri.SimpleFillSymbol
   }
@@ -517,8 +550,8 @@ export async function addHighlightGraphics(
       // Get geometry type from graphic
       const geometryType = graphic.geometry.type
 
-      // Create symbol using default highlight color
-      const symbol = getDefaultHighlightSymbol(geometryType, mapView)
+      // Create symbol using widget-specific hardcoded symbology (r022.35)
+      const symbol = getDefaultHighlightSymbol(geometryType)
 
       // r021.90: Store queryConfigId to distinguish between records with same ID from different queries
       const queryConfigId = record.feature?.attributes?.__queryConfigId || ''

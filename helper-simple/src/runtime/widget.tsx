@@ -666,30 +666,27 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
       }
 
       if (identifyPopupJustClosed) {
-        // Get current selection state at moment popup closes
-        const originDSId = this.querySimpleSelection?.dataSourceId
-        let currentSelectionAtClose: { count: number, ids: string[] } | null = null
-        if (originDSId) {
-          const dsManager = DataSourceManager.getInstance()
-          const originDS = dsManager.getDataSource(originDSId) as FeatureLayerDataSource
-          if (originDS) {
-            const selectedIds = originDS.getSelectedRecordIds() || []
-            currentSelectionAtClose = {
-              count: selectedIds.length,
-              ids: selectedIds.slice(0, 5)
-            }
-          }
-        }
-
         debugLogger.log('SELECTION', {
           event: 'identify-popup-closed',
           widgetId: config.managedWidgetId,
-          hasQuerySimpleSelection: !!this.querySimpleSelection,
-          ourTrackedRecordCount: this.querySimpleSelection?.recordIds.length || 0,
-          ourTrackedRecordIds: this.querySimpleSelection?.recordIds.slice(0, 5) || [],
-          hasPreviousHashEntry: !!this.previousHashEntry,
-          previousHashEntryOutputDsId: this.previousHashEntry?.outputDsId || null,
-          currentSelectionAtClose
+          timestamp: new Date().toISOString()
+        })
+        
+        // r022.42: Dispatch global restore event (QuerySimple will handle cross-layer restoration)
+        const restoreEvent = new CustomEvent('querysimple-restore-on-identify-close', {
+          detail: {
+            widgetId: config.managedWidgetId,
+            timestamp: new Date().toISOString()
+          },
+          bubbles: true,
+          cancelable: true
+        })
+        window.dispatchEvent(restoreEvent)
+        
+        debugLogger.log('SELECTION', {
+          event: 'identify-popup-closed-restore-event-dispatched',
+          widgetId: config.managedWidgetId,
+          timestamp: new Date().toISOString()
         })
       }
 
