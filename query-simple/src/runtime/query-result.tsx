@@ -52,45 +52,10 @@ const debugLogger = createQuerySimpleDebugLogger()
 import { ErrorMessage } from 'widgets/shared-code/common'
 const { iconMap } = getWidgetRuntimeDataMap()
 
-/**
- * Custom event name for requesting restoration when identify popup closes.
- */
-const RESTORE_ON_IDENTIFY_CLOSE_EVENT = 'querysimple-restore-on-identify-close'
-
-/**
- * Detects if an identify popup is currently visible in the DOM.
- * Uses verified selectors based on Experience Builder's identify popup structure.
- * 
- * @returns true if identify popup is detected and visible, false otherwise
- */
-function isIdentifyPopupOpen(): boolean {
-  // Primary selector: .esri-popup with role="dialog"
-  const popup = document.querySelector('.esri-popup[role="dialog"]')
-  
-  if (!popup) {
-    return false
-  }
-  
-  // Verify it's visible (not hidden)
-  const ariaHidden = popup.getAttribute('aria-hidden')
-  if (ariaHidden === 'true') {
-    return false
-  }
-  
-  // Additional check: verify computed style shows it's visible
-  const style = window.getComputedStyle(popup)
-  if (style.display === 'none' || style.visibility === 'hidden' || style.opacity === '0') {
-    return false
-  }
-  
-  // Verify it contains esri-features (identify popup structure)
-  const hasFeatures = popup.querySelector('.esri-features')
-  if (!hasFeatures) {
-    return false
-  }
-  
-  return true
-}
+// r022.42: REMOVED - HelperSimple now handles global identify popup detection and event dispatch
+// Old per-layer event dispatch logic was flawed (only detected when THIS layer's selection was cleared)
+// const RESTORE_ON_IDENTIFY_CLOSE_EVENT = 'querysimple-restore-on-identify-close'
+// function isIdentifyPopupOpen(): boolean { ... }
 
 export interface QueryTaskResultProps {
   widgetId: string
@@ -102,7 +67,6 @@ export interface QueryTaskResultProps {
   records: DataRecord[]
   runtimeZoomToSelected?: boolean
   onNavBack: (clearResults?: boolean) => Promise<void> | void
-  useGraphicsLayerForHighlight?: boolean
   graphicsLayer?: __esri.GraphicsLayer
   mapView?: __esri.MapView | __esri.SceneView
   resultsMode?: SelectionType
@@ -162,7 +126,7 @@ const resultStyle = css`
 `
 
 export function QueryTaskResult (props: QueryTaskResultProps) {
-  const { queryItem, queryParams, resultCount, maxPerPage, records, widgetId, outputDS, runtimeZoomToSelected, onNavBack, resultsMode, accumulatedRecords, onAccumulatedRecordsChange, useGraphicsLayerForHighlight, graphicsLayer, mapView, eventManager, isQuerySwitchInProgressRef, currentQueryRecordIds, queries, noRemovalAlert, onDismissNoRemovalAlert, allDuplicatesAlert, onDismissAllDuplicatesAlert } = props
+  const { queryItem, queryParams, resultCount, maxPerPage, records, widgetId, outputDS, runtimeZoomToSelected, onNavBack, resultsMode, accumulatedRecords, onAccumulatedRecordsChange, graphicsLayer, mapView, eventManager, isQuerySwitchInProgressRef, currentQueryRecordIds, queries, noRemovalAlert, onDismissNoRemovalAlert, allDuplicatesAlert, onDismissAllDuplicatesAlert } = props
   const getI18nMessage = hooks.useTranslation(defaultMessage)
   const intl = useIntl()
   const zoomToRecords = useZoomToRecords(mapView)
@@ -450,6 +414,29 @@ export function QueryTaskResult (props: QueryTaskResultProps) {
       const recordIds = records.map(record => record.getId())
       const fdr = records as FeatureDataRecord[]
       
+      // r022.71: Intelligent check - are these records already selected in outputDS?
+      const currentSelectedIds = outputDS.getSelectedRecordIds() || []
+      const recordIdsSet = new Set(recordIds)
+      const currentSelectedIdsSet = new Set(currentSelectedIds)
+      
+      const alreadySelected = 
+        recordIds.length === currentSelectedIds.length &&
+        recordIds.every(id => currentSelectedIdsSet.has(id))
+      
+      debugLogger.log('SELECTION-STATE-AUDIT', {
+        event: 'r022-71-useEffect-selection-check',
+        widgetId,
+        recordsToSelectCount: recordIds.length,
+        currentSelectedCount: currentSelectedIds.length,
+        recordsToSelect: recordIds.slice(0, 5), // First 5 IDs
+        currentSelected: currentSelectedIds.slice(0, 5), // First 5 IDs
+        alreadySelected,
+        hasSelectedRef: hasSelectedRef.current,
+        recordsChanged,
+        willSkipSelection: alreadySelected,
+        timestamp: Date.now()
+      })
+      
       // Select records and publish selection message using utility function
       // Use async IIFE since useEffect can't be async
       ;(async () => {
@@ -462,7 +449,8 @@ export function QueryTaskResult (props: QueryTaskResultProps) {
             recordIdsCount: recordIds.length,
             hasSelectedRef: hasSelectedRef.current,
             recordsChanged,
-            note: 'r021.105: Calling from records-watching useEffect',
+            alreadySelected,
+            note: 'r022.72: Calling selectRecordsAndPublish, may skip origin DS selection if alreadySelected',
             timestamp: Date.now()
           })
           await selectRecordsAndPublish(
@@ -471,9 +459,10 @@ export function QueryTaskResult (props: QueryTaskResultProps) {
             recordIds, 
             fdr, 
             false, 
-            useGraphicsLayerForHighlight, 
+            true, // Always use graphics layer
             graphicsLayer, 
-            mapView
+            mapView,
+            alreadySelected // r022.72: Skip origin DS selection if already selected, but still do graphics
           )
           hasSelectedRef.current = true // Mark as selected
           lastSelectedRecordsRef.current = recordIds // Store the IDs we selected
@@ -514,10 +503,10 @@ export function QueryTaskResult (props: QueryTaskResultProps) {
   React.useEffect(() => {
     // clear selection when resultSelectMode changed
     if (outputDS) {
-      clearSelectionInDataSources(outputDS, useGraphicsLayerForHighlight, graphicsLayer)
+      clearSelectionInDataSources(outputDS, true, graphicsLayer) // Always use graphics layer
       publishSelectionMessage(widgetId, [], outputDS, true)
     }
-  }, [queryItem.resultSelectMode, outputDS, widgetId, useGraphicsLayerForHighlight, graphicsLayer])
+  }, [queryItem.resultSelectMode, outputDS, widgetId, graphicsLayer])
 
   // Update expandAll when queryItem changes (e.g., switching between queries)
   React.useEffect(() => {
@@ -536,8 +525,9 @@ export function QueryTaskResult (props: QueryTaskResultProps) {
 
   /**
    * Monitor origin data source selection changes to detect when other widgets (like map identify)
-   * clear our selections. Enhanced with identify popup detection for testing scenarios.
-   * Watches the origin data source's selection state directly via polling.
+   * clear our selections. Watches the origin data source's selection state directly via polling.
+   * 
+   * r022.42: Identify popup tracking removed (now handled globally by HelperSimple)
    */
   React.useEffect(() => {
     if (!outputDS) return
@@ -547,20 +537,18 @@ export function QueryTaskResult (props: QueryTaskResultProps) {
 
     const originDSId = originDS.id
     let previousSelectedIds: string[] = []
-    let identifyPopupWasOpen = false
     let lastLogTime = 0
     const LOG_THROTTLE_MS = 1000 // Throttle logs to once per second
     
     // Initial check
     previousSelectedIds = originDS.getSelectedRecordIds() || []
-    identifyPopupWasOpen = isIdentifyPopupOpen()
 
+    // r022.42: Removed identify popup tracking (now handled globally by HelperSimple)
     // Watch for selection changes on the origin data source
     const checkSelection = () => {
       const currentSelectedIds = originDS.getSelectedRecordIds() || []
       const ourExpectedIds = lastSelectedRecordsRef.current
       const hasOurSelection = ourExpectedIds.length > 0
-      const identifyPopupIsOpen = isIdentifyPopupOpen()
       
       // Detect if selection was cleared or changed externally
       const wasCleared = previousSelectedIds.length > 0 && currentSelectedIds.length === 0
@@ -571,46 +559,9 @@ export function QueryTaskResult (props: QueryTaskResultProps) {
       // NEW: Detect if selection was added (went from empty to having records)
       const wasAdded = previousSelectedIds.length === 0 && currentSelectedIds.length > 0
       
-      // Track identify popup state changes
-      const identifyPopupJustOpened = !identifyPopupWasOpen && identifyPopupIsOpen
-      const identifyPopupJustClosed = identifyPopupWasOpen && !identifyPopupIsOpen
-      const identifyPopupStillOpen = identifyPopupWasOpen && identifyPopupIsOpen
-      
-      // Log identify popup state changes
       const now = Date.now()
-      if (identifyPopupJustOpened || identifyPopupJustClosed) {
-        debugLogger.log('SELECTION', {
-          event: identifyPopupJustOpened ? 'identify-popup-opened' : 'identify-popup-closed',
-          originDSId,
-          ourSelectionCount: ourExpectedIds.length,
-          currentSelectionCount: currentSelectedIds.length,
-          timestamp: new Date().toISOString()
-        })
-        
-        // If identify popup just closed and selection was cleared, dispatch restore event
-        if (identifyPopupJustClosed && wasCleared && hasOurSelection && ourExpectedIds.length > 0) {
-          const restoreEvent = new CustomEvent(RESTORE_ON_IDENTIFY_CLOSE_EVENT, {
-            detail: {
-              widgetId,
-              recordIds: ourExpectedIds,
-              outputDsId: outputDS.id,
-              queryItemConfigId: queryItem.configId
-            },
-            bubbles: true,
-            cancelable: true
-          })
-          window.dispatchEvent(restoreEvent)
-          
-          debugLogger.log('SELECTION', {
-            event: 'identify-popup-closed-restore-requested',
-            widgetId,
-            recordCount: ourExpectedIds.length,
-            outputDsId: outputDS.id,
-            queryItemConfigId: queryItem.configId
-          })
-        }
-      }
       
+      // r022.42: Simplified logging - removed identify popup state tracking (HelperSimple handles globally)
       // Log ALL selection changes (not just when we have our own selection)
       if (wasCleared || wasChanged || wasAdded) {
         // Check if this matches our expected selection
@@ -618,30 +569,7 @@ export function QueryTaskResult (props: QueryTaskResultProps) {
           ourExpectedIds.length === currentSelectedIds.length &&
           ourExpectedIds.every(id => currentSelectedIds.includes(id))
         
-        // Determine what would happen (for testing/logging)
-        const wouldRestore = wasCleared && identifyPopupIsOpen && hasOurSelection && ourExpectedIds.length > 0
-        
-        // Determine scenario
-        let scenario = 'Unknown'
-        if (wasAdded && !hasOurSelection) {
-          scenario = 'TEST SCENARIO 4: Another widget selected records (we have no selection)'
-        } else if (wasChanged && !matchesOurSelection && !hasOurSelection) {
-          scenario = 'TEST SCENARIO 5: Another widget changed selection (we have no selection)'
-        } else if (wasChanged && !matchesOurSelection && hasOurSelection) {
-          scenario = identifyPopupIsOpen
-            ? 'TEST SCENARIO 2: Query → Identify (selection changed, not cleared) → Would NOT restore'
-            : 'TEST SCENARIO 3: Query → Another QuerySimple widget → Would NOT restore'
-        } else if (wasCleared && hasOurSelection) {
-          scenario = identifyPopupIsOpen
-            ? 'TEST SCENARIO 1: Query → Identify → Would restore'
-            : 'TEST SCENARIO 3: Query → Another QuerySimple widget (cleared) → Would NOT restore'
-        } else if (wasAdded && hasOurSelection) {
-          scenario = matchesOurSelection
-            ? 'Our widget selected records'
-            : 'Another widget selected different records'
-        }
-        
-        // Log detection with identify popup state (throttled)
+        // Log detection (throttled)
         if (now - lastLogTime > LOG_THROTTLE_MS) {
           debugLogger.log('SELECTION', {
             event: wasCleared ? 'selection-cleared' : wasChanged ? 'selection-changed' : 'selection-added',
@@ -654,28 +582,11 @@ export function QueryTaskResult (props: QueryTaskResultProps) {
             wasAdded,
             hasOurSelection,
             matchesOurSelection,
-            identifyPopupIsOpen,
-            identifyPopupJustOpened,
-            identifyPopupStillOpen,
-            identifyPopupJustClosed,
-            wouldRestore,
             ourExpectedIds: ourExpectedIds.slice(0, 5),
             previousSelectedIds: previousSelectedIds.slice(0, 5),
             currentSelectedIds: currentSelectedIds.slice(0, 5),
             timestamp: new Date().toISOString(),
-            note: wouldRestore 
-              ? 'Would restore selection (cleared + identify popup open)'
-              : identifyPopupIsOpen && wasChanged
-                ? 'Identify popup open but selection changed (not cleared) - would not restore'
-                : wasCleared && !identifyPopupIsOpen
-                  ? 'Selection cleared, checking if identify popup opens...'
-                  : wasAdded
-                    ? hasOurSelection && matchesOurSelection
-                      ? 'Our widget selected records'
-                      : hasOurSelection && !matchesOurSelection
-                        ? 'Another widget selected different records'
-                        : 'Selection added (by another widget or external source)'
-                    : 'No identify popup detected - would not restore'
+            note: 'r022.42: Restoration now handled globally by HelperSimple'
           })
           
           lastLogTime = now
@@ -683,7 +594,6 @@ export function QueryTaskResult (props: QueryTaskResultProps) {
       }
       
       previousSelectedIds = [...currentSelectedIds]
-      identifyPopupWasOpen = identifyPopupIsOpen
     }
 
     // Check periodically (every 500ms)
@@ -920,20 +830,6 @@ export function QueryTaskResult (props: QueryTaskResultProps) {
     }
     
     // Zoom to the clicked record with padding (always enabled - user wants to keep this behavior)
-    // BUG-GRAPHICS-001: Zoom operations fail when graphics layer is disabled
-    if (!mapView && !useGraphicsLayerForHighlight) {
-      debugLogger.log('BUG', {
-        bugId: 'BUG-GRAPHICS-001',
-        category: 'GRAPHICS',
-        event: 'zoom-operation-failed-graphics-layer-disabled',
-        widgetId,
-        operation: 'result-item-click-zoom',
-        recordId: data.getId(),
-        description: 'Zoom operation attempted on result item click but mapView is unavailable because useGraphicsLayerForHighlight is disabled',
-        workaround: 'Enable useGraphicsLayerForHighlight in widget settings',
-        targetResolution: 'r019.0'
-      })
-    }
     
     // r021.0 Chunk 1: Get feature from data (FeatureDataRecord)
     const clickedFeature = (data as any).feature || data.getData?.() || null
@@ -1305,6 +1201,27 @@ export function QueryTaskResult (props: QueryTaskResultProps) {
     // r021.93: Capture queryConfigId BEFORE cleanup (needed for composite key matching)
     const capturedQueryConfigId = data.feature?.attributes?.__queryConfigId || ''
     
+    // DIAGNOSTIC (r022.31): Cross-layer removal detection
+    const currentQueryOriginDS = (outputDS as FeatureLayerDataSource)?.getOriginDataSources?.()?.[0] as FeatureLayerDataSource || outputDS as FeatureLayerDataSource
+    const recordOriginDS = data.dataSource?.getRootDataSource() || data.dataSource
+    
+    debugLogger.log('RESULTS-MODE', {
+      event: 'x-button-removal-origin-ds-detection',
+      widgetId,
+      removedRecordId: dataId,
+      recordQueryConfigId: capturedQueryConfigId || 'MISSING',
+      currentQueryConfigId: queryItem.configId,
+      isCrossLayerRemoval: !!capturedQueryConfigId && capturedQueryConfigId !== queryItem.configId,
+      recordOriginDSId: recordOriginDS?.id || 'unknown',
+      recordOriginDSLabel: recordOriginDS?.getLabel?.() || 'unknown',
+      currentQueryOriginDSId: currentQueryOriginDS?.id || 'unknown',
+      currentQueryOriginDSLabel: currentQueryOriginDS?.getLabel?.() || 'unknown',
+      isCrossOriginDSRemoval: recordOriginDS?.id !== currentQueryOriginDS?.id,
+      accumulatedRecordsLayerCount: new Set(props.records?.map(r => (r as FeatureDataRecord).dataSource?.getRootDataSource()?.id)).size,
+      allAccumulatedLayers: [...new Set(props.records?.map(r => (r as FeatureDataRecord).dataSource?.getRootDataSource()?.id))],
+      timestamp: Date.now()
+    })
+    
     // r021.93: DELAY cleanup until AFTER graphics removal (so removeHighlightGraphics can use it)
     
     // FIX (r018.94): Removed removedRecordIds tracking - queryData now updated directly
@@ -1369,12 +1286,14 @@ export function QueryTaskResult (props: QueryTaskResultProps) {
     // FIX (r018.85): DON'T pass graphics layer parameters here - let graphics be managed by selection sync
     // The previous behavior (passing graphicsLayer) was causing the count to jump from 124 to 136
     // because graphics were being removed here, then re-added during selection synchronization
+    // r022.73: Pass accumulated records so removal can look up __queryConfigId for composite keys
     removeRecordsFromOriginSelections(
       widgetId, 
       [data], 
-      outputDS as FeatureLayerDataSource
-      // NOT passing useGraphicsLayerForHighlight or graphicsLayer
-      // Graphics will be synced through normal selection flow
+      outputDS as FeatureLayerDataSource,
+      undefined, // useGraphicsLayer
+      undefined, // graphicsLayer
+      accumulatedRecords // r022.73: Pass for queryConfigId lookup
     )
     
     // FIX (r018.85): DIAGNOSTIC - Graphics count AFTER removeRecordsFromOriginSelections
@@ -1394,16 +1313,59 @@ export function QueryTaskResult (props: QueryTaskResultProps) {
       timestamp: Date.now()
     })
     
+    // DIAGNOSTIC (r022.31): Aggregate selection state across all layers after removal
+    // Use setTimeout to allow all DS updates to complete
+    setTimeout(() => {
+      const layerSelectionStates: Record<string, any> = {}
+      
+      // Get unique origin DSs from all accumulated records
+      const uniqueOriginDSIds = new Set(
+        props.records?.map(r => (r as FeatureDataRecord).dataSource?.getRootDataSource()?.id).filter(Boolean)
+      )
+      
+      uniqueOriginDSIds.forEach(dsId => {
+        try {
+          const ds = (window as any).jimuConfig?.appConfig?.dataSources?.[dsId]
+          if (ds && typeof ds.getSelectedRecords === 'function') {
+            const selected = ds.getSelectedRecords() || []
+            const selectedIds = ds.getSelectedRecordIds() || []
+            layerSelectionStates[dsId] = {
+              label: ds.getLabel?.() || 'unknown',
+              count: selected.length,
+              ids: selectedIds.slice(0, 10)
+            }
+          }
+        } catch (err) {
+          layerSelectionStates[dsId] = { error: err.message }
+        }
+      })
+      
+      debugLogger.log('RESULTS-MODE', {
+        event: 'x-button-removal-aggregate-selection-state',
+        widgetId,
+        removedRecordId: dataId,
+        timing: 'after-removal-100ms',
+        accumulatedRecordsCount: props.records?.length || 0,
+        uniqueLayersInAccumulated: uniqueOriginDSIds.size,
+        layerSelectionStates,
+        outputDSId: outputDS?.id,
+        outputDSSelectedCount: outputDS?.getSelectedRecords()?.length || 0,
+        graphicsLayerCount: graphicsCountAfterOriginRemoval,
+        expectedLayerWithRemoval: data.dataSource?.getRootDataSource()?.id || 'unknown',
+        note: 'Checking if selection was cleared in correct origin layer',
+        timestamp: Date.now()
+      })
+    }, 100)
+    
     // FIX (r018.91): DIAGNOSTIC - Check why manual graphics removal condition isn't met
     debugLogger.log('RESULTS-MODE', {
       event: 'x-button-removal-checking-manual-graphics-removal-condition',
       widgetId,
       removedRecordId: dataId,
-      useGraphicsLayerForHighlight: useGraphicsLayerForHighlight,
       hasGraphicsLayer: !!graphicsLayer,
       graphicsLayerId: graphicsLayer?.id,
       graphicsLayerGraphicsCount: graphicsLayer?.graphics?.length || 0,
-      conditionWillPass: !!(useGraphicsLayerForHighlight && graphicsLayer),
+      conditionWillPass: !!graphicsLayer,
       timestamp: Date.now()
     })
     
@@ -1412,7 +1374,7 @@ export function QueryTaskResult (props: QueryTaskResultProps) {
     // the 136 duplicate issue), we need to manually remove the graphic here
     // This is safe now because r018.89 fixed the query switch re-selection issue
     // r021.91: Pass data record for composite key matching
-    if (useGraphicsLayerForHighlight && graphicsLayer) {
+    if (graphicsLayer) {
       const graphicsCountBeforeManualRemoval = graphicsLayer.graphics.length
       
       debugLogger.log('RESULTS-MODE', {
@@ -1439,16 +1401,12 @@ export function QueryTaskResult (props: QueryTaskResultProps) {
         timestamp: Date.now()
       })
     } else {
-      // FIX (r018.91): Log when condition is NOT met to understand why
       debugLogger.log('RESULTS-MODE', {
         event: 'x-button-removal-manual-graphics-removal-SKIPPED',
         widgetId,
         removedRecordId: dataId,
-        reason: !useGraphicsLayerForHighlight ? 'useGraphicsLayerForHighlight is false' :
-                !graphicsLayer ? 'graphicsLayer is null/undefined' :
-                'unknown',
-        useGraphicsLayerForHighlight,
-        hasGraphicsLayer: !!graphicsLayer,
+        reason: 'graphicsLayer is null/undefined',
+        hasGraphicsLayer: false,
         timestamp: Date.now()
       })
     }

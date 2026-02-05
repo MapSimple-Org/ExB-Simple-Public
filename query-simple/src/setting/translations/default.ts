@@ -62,8 +62,6 @@ export default {
   displayOrder: 'Display Order',
   displayOrderDescription: 'Lower numbers appear first. Leave empty to maintain default order.',
   highlightOptions: 'Highlight Options',
-  useGraphicsLayerForHighlight: 'Use graphics layer for highlighting',
-  useGraphicsLayerForHighlightDescription: 'When enabled, highlights will display even when the layer is turned off. Uses the map\'s default highlight color.',
   selectMapForHighlight: 'Select map widget'
 }
 

@@ -95,7 +95,6 @@ export interface QueryTaskProps {
   accumulatedRecords?: FeatureDataRecord[]
   onAccumulatedRecordsChange?: (records: FeatureDataRecord[]) => void
   // Graphics layer props
-  useGraphicsLayerForHighlight?: boolean
   graphicsLayer?: __esri.GraphicsLayer
   mapView?: __esri.MapView | __esri.SceneView
   onInitializeGraphicsLayer?: (outputDS: DataSource) => Promise<void>
@@ -165,7 +164,7 @@ const style = css`
 `
 
 export function QueryTask (props: QueryTaskProps) {
-  const { queryItem, onNavBack, total, isInPopper = false, wrappedInPopper = false, className = '', index, initialInputValue, onHashParameterUsed, queryItems, selectedQueryIndex, onQueryChange, groups, ungrouped, groupOrder, selectedGroupId, selectedGroupQueryIndex, onGroupChange, onGroupQueryChange, onUngroupedChange, resultsMode, onResultsModeChange, accumulatedRecords, onAccumulatedRecordsChange, useGraphicsLayerForHighlight, graphicsLayer, mapView, onInitializeGraphicsLayer, onClearGraphicsLayer, onDestroyGraphicsLayer, activeTab: propActiveTab, onTabChange: propOnTabChange, eventManager, ...otherProps } = props
+  const { queryItem, onNavBack, total, isInPopper = false, wrappedInPopper = false, className = '', index, initialInputValue, onHashParameterUsed, queryItems, selectedQueryIndex, onQueryChange, groups, ungrouped, groupOrder, selectedGroupId, selectedGroupQueryIndex, onGroupChange, onGroupQueryChange, onUngroupedChange, resultsMode, onResultsModeChange, accumulatedRecords, onAccumulatedRecordsChange, graphicsLayer, mapView, onInitializeGraphicsLayer, onClearGraphicsLayer, onDestroyGraphicsLayer, activeTab: propActiveTab, onTabChange: propOnTabChange, eventManager, ...otherProps } = props
   const getI18nMessage = hooks.useTranslation(defaultMessage)
   const zoomToRecords = useZoomToRecords(mapView)
   const [stage, setStage] = React.useState(0) // 0 = form, 1 = results, 2 = loading, 3 = clearing
@@ -631,7 +630,7 @@ export function QueryTask (props: QueryTaskProps) {
         await clearAllSelectionsForWidget({
           widgetId: props.widgetId,
           outputDS,
-          useGraphicsLayer: useGraphicsLayerForHighlight,
+          useGraphicsLayer: true,
           graphicsLayer,
           mapView,
           eventManager: props.eventManager,
@@ -672,7 +671,7 @@ export function QueryTask (props: QueryTaskProps) {
       note: 'Stage 0 reset - React will recreate DS on next query',
       timestamp: Date.now()
     })
-  }, [outputDS, publishDataClearedMsg, props.widgetId, queryItem.configId, onAccumulatedRecordsChange, useGraphicsLayerForHighlight, graphicsLayer, mapView, props.eventManager])
+  }, [outputDS, publishDataClearedMsg, props.widgetId, queryItem.configId, onAccumulatedRecordsChange, graphicsLayer, mapView, props.eventManager])
 
   /**
    * Handles data source creation when switching between query items.
@@ -843,7 +842,6 @@ export function QueryTask (props: QueryTaskProps) {
         graphicsCountBefore,
         hasAccumulatedRecords: !!(accumulatedRecords && accumulatedRecords.length > 0),
         accumulatedRecordsCount: accumulatedRecords?.length || 0,
-        useGraphicsLayerForHighlight,
         hasOnClearGraphicsLayer: !!onClearGraphicsLayer,
         isQuerySwitchFlagSet: isQuerySwitchInProgressRef.current,
         timestamp: Date.now()
@@ -915,8 +913,8 @@ export function QueryTask (props: QueryTaskProps) {
       })
     }
     
-    // Initialize graphics layer lazily if enabled and not already initialized
-    if (useGraphicsLayerForHighlight && onInitializeGraphicsLayer) {
+    // Initialize graphics layer lazily if not already initialized
+    if (onInitializeGraphicsLayer) {
       await onInitializeGraphicsLayer(ds)
       // After initialization, graphicsLayer and mapView props should be updated
       // But since props come from refs, we need to wait for widget re-render
@@ -946,7 +944,7 @@ export function QueryTask (props: QueryTaskProps) {
       
       // FIX (r018.67): Clear graphics layer when switching queries to prevent stale graphics
       // from previous queries from persisting in the shared graphics layer
-      if (useGraphicsLayerForHighlight && graphicsLayer && onClearGraphicsLayer) {
+      if (graphicsLayer && onClearGraphicsLayer) {
         debugLogger.log('RESULTS-MODE', {
           event: 'clearing-graphics-layer-before-reselection-on-query-switch',
           widgetId: props.widgetId,
@@ -955,7 +953,10 @@ export function QueryTask (props: QueryTaskProps) {
           graphicsCountBeforeClear,
           timestamp: Date.now()
         })
-        onClearGraphicsLayer()
+        
+        // FIX (r022.29): Skip clearing graphics layer in Add/Remove mode
+        // Graphics are already correct and match accumulatedRecords
+        // Clearing here causes unnecessary flash
         
         // VERIFICATION LOGGING: Graphics count after clearing
         const graphicsCountAfterClear = graphicsLayer?.graphics?.length || 0
@@ -971,8 +972,7 @@ export function QueryTask (props: QueryTaskProps) {
         debugLogger.log('RESULTS-MODE', {
           event: 'skipping-graphics-layer-clear-on-query-switch',
           widgetId: props.widgetId,
-          reason: !useGraphicsLayerForHighlight ? 'useGraphicsLayerForHighlight-false' : 
-                  !graphicsLayer ? 'no-graphicsLayer' : 
+          reason: !graphicsLayer ? 'no-graphicsLayer' : 
                   !onClearGraphicsLayer ? 'no-onClearGraphicsLayer' : 'unknown',
           graphicsCountBeforeClear,
           timestamp: Date.now()
@@ -981,13 +981,41 @@ export function QueryTask (props: QueryTaskProps) {
       
       // Use a delay to ensure the DS is fully ready and graphics layer props are updated after widget re-render
       // If graphics layer was just initialized, wait a bit longer for props to update
-      const delay = (useGraphicsLayerForHighlight && onInitializeGraphicsLayer) ? 200 : 100
+      const delay = onInitializeGraphicsLayer ? 200 : 100
       setTimeout(() => {
         const featureDS = ds as FeatureLayerDataSource
         if (featureDS && accumulatedRecords && accumulatedRecords.length > 0) {
-          // FIX (r018.96): No filtering needed - accumulatedRecords is already the source of truth
-          // Duplicate detection in mergeResultsIntoAccumulated prevents duplicates
-          const recordsToReselect = accumulatedRecords
+          // r022.38: Filter accumulated records to only include records from the new query's origin layer
+          // This prevents ghost selections when switching between queries with different origin layers
+          const newQueryOriginDS = featureDS.getOriginDataSources?.()?.[0] || featureDS
+          const newQueryOriginDSId = newQueryOriginDS.id
+          
+          const recordsFromNewLayer = accumulatedRecords.filter(record => {
+            // Get the record's origin DS
+            const recordDS = (record as any).dataSource || record.getDataSource?.()
+            if (!recordDS) return false
+            
+            const recordOriginDS = recordDS.getOriginDataSources?.()?.[0] || recordDS
+            const recordOriginDSId = recordOriginDS.id
+            
+            return recordOriginDSId === newQueryOriginDSId
+          })
+          
+          debugLogger.log('RESULTS-MODE', {
+            event: 'query-switch-filtering-records-by-origin-layer',
+            widgetId: props.widgetId,
+            totalAccumulatedCount: accumulatedRecords.length,
+            newQueryOriginDSId,
+            recordsFromNewLayerCount: recordsFromNewLayer.length,
+            recordsFromOtherLayersCount: accumulatedRecords.length - recordsFromNewLayer.length,
+            allRecordIds: accumulatedRecords.map(r => r.getId()),
+            recordsFromNewLayerIds: recordsFromNewLayer.map(r => r.getId()),
+            note: 'r022.38: Only reselect records that belong to the new query origin layer',
+            timestamp: Date.now()
+          })
+          
+          // Use filtered records for reselection on the new output DS
+          const recordsToReselect = recordsFromNewLayer
           
           // VERIFICATION LOGGING: Show records being reselected
           debugLogger.log('RESULTS-MODE', {
@@ -996,23 +1024,9 @@ export function QueryTask (props: QueryTaskProps) {
             accumulatedRecordsCount: accumulatedRecords.length,
             recordsToReselectCount: recordsToReselect.length,
             recordsToReselectIds: recordsToReselect.map(r => r.getId()).slice(0, 10),
-            note: 'r018.96: Using accumulatedRecords directly - no manual removal tracking',
+            note: 'r022.38: Only reselecting records from new query origin layer',
             timestamp: Date.now()
           })
-          
-          // Update accumulatedRecords if filtering removed any records
-          if (recordsToReselect.length !== accumulatedRecords.length && onAccumulatedRecordsChange) {
-            debugLogger.log('RESULTS-MODE', {
-              event: 'syncing-accumulated-records-after-filtering-manually-removed',
-              widgetId: props.widgetId,
-              accumulatedRecordsCountBefore: accumulatedRecords.length,
-              accumulatedRecordsCountAfter: recordsToReselect.length,
-              recordsRemoved: accumulatedRecords.length - recordsToReselect.length,
-              note: 'Updating accumulatedRecords to exclude manually removed records',
-              timestamp: Date.now()
-            })
-            onAccumulatedRecordsChange(recordsToReselect)
-          }
           
           // Only re-select if we have records to re-select
           if (recordsToReselect.length > 0) {
@@ -1029,10 +1043,9 @@ export function QueryTask (props: QueryTaskProps) {
               timestamp: Date.now()
             })
             
-            // Use the same selectRecordsAndPublish that's used after query completion
-            // This will select records on the map and trigger handleDataSourceInfoChange
-            // in query-result.tsx to update selectedRecords state for the Results tab
-            // Use graphics layer if enabled (props should be updated after widget re-render)
+            // Update output DS selection to keep Results tab in sync with accumulated records
+            // FIX (r022.29): Pass false for useGraphicsLayer to skip graphics operations
+            // Graphics are already correct and match accumulatedRecords - no need to clear/re-add
             ;(async () => {
               try {
                   await selectRecordsAndPublish(
@@ -1041,10 +1054,19 @@ export function QueryTask (props: QueryTaskProps) {
                     recordIds,
                     recordsToReselect,
                     false,
-                    useGraphicsLayerForHighlight,
+                    false, // Skip graphics layer operations (no clear/re-add, eliminates flash)
                     graphicsLayer,
                     mapView
                   )
+                  
+                  debugLogger.log('RESULTS-MODE', {
+                    event: 'query-switch-updated-output-DS-only',
+                    widgetId: props.widgetId,
+                    recordsReselectedCount: recordsToReselect.length,
+                    graphicsCount: graphicsLayer?.graphics?.length || 0,
+                    note: 'Updated output DS selection without touching graphics',
+                    timestamp: Date.now()
+                  })
                 
                   // FIX (r018.92): Clear the query switch flag after re-selection completes
                   isQuerySwitchInProgressRef.current = false
@@ -1178,9 +1200,10 @@ export function QueryTask (props: QueryTaskProps) {
                     }
                   }
                 
-                  // Update recordsRef so results tab shows accumulated records
-                  recordsRef.current = recordsToReselect
-                  setResultCount(recordsToReselect.length)
+                  // r022.39: Update recordsRef to show ALL accumulated records (not just filtered subset)
+                  // The Results tab should display records from all layers, not just the current query's layer
+                  recordsRef.current = accumulatedRecords
+                  setResultCount(accumulatedRecords.length)
                   
                   // VERIFICATION LOGGING: Graphics count after re-selection
                   const graphicsCountAfterReselection = graphicsLayer?.graphics?.length || 0
@@ -1231,24 +1254,46 @@ export function QueryTask (props: QueryTaskProps) {
                 }
               })()
           } else {
-            // No records to re-select - all were removed
-            recordsRef.current = []
-            setResultCount(0)
+            // r022.52: No records from new layer, but still need to update output DS selection
+            // for Results tab highlighting. Update ONLY output DS (not origin DS to avoid cross-layer collision)
+            recordsRef.current = accumulatedRecords
+            setResultCount(accumulatedRecords.length)
             
             debugLogger.log('RESULTS-MODE', {
-              event: 'no-records-to-reselect-all-removed',
+              event: 'no-records-from-new-layer-updating-output-ds-only',
               widgetId: props.widgetId,
               outputDSId: featureDS.id,
-              accumulatedRecordsCountBefore: accumulatedRecords.length,
-              note: 'all-records-were-removed-no-reselection-needed',
+              newLayerOriginDSId: newQueryOriginDSId,
+              accumulatedRecordsCount: accumulatedRecords.length,
+              recordsFromNewLayerCount: 0,
+              note: 'r022.52: Updating output DS selection for Results tab highlighting',
               timestamp: Date.now()
             })
+            
+            // Update output DS selection (for Results tab highlighting) without touching origin DS
+            if (featureDS && typeof featureDS.selectRecordsByIds === 'function') {
+              const allRecordIds = accumulatedRecords.map(r => r.getId())
+              featureDS.selectRecordsByIds(allRecordIds, accumulatedRecords)
+              
+              debugLogger.log('RESULTS-MODE', {
+                event: 'output-ds-selection-updated-for-cross-layer-display',
+                widgetId: props.widgetId,
+                outputDSId: featureDS.id,
+                recordIdsCount: allRecordIds.length,
+                recordIds: allRecordIds,
+                note: 'r022.52: Output DS now has all accumulated records selected for Results tab',
+                timestamp: Date.now()
+              })
+            }
+            
+            // Clear the query switch flag
+            isQuerySwitchInProgressRef.current = false
           }
         }
       }, 100)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [resultsMode, accumulatedRecords, props.widgetId, useGraphicsLayerForHighlight, onInitializeGraphicsLayer, graphicsLayer, onClearGraphicsLayer, mapView, queryItem.configId, onAccumulatedRecordsChange])
+  }, [resultsMode, accumulatedRecords, props.widgetId, onInitializeGraphicsLayer, graphicsLayer, onClearGraphicsLayer, mapView, queryItem.configId, onAccumulatedRecordsChange])
   // Note: handleFormSubmit is called via setTimeout from pending query execution but not included in deps
   // to avoid circular dependency (handleFormSubmit is defined after this callback)
 
@@ -1357,12 +1402,13 @@ export function QueryTask (props: QueryTaskProps) {
               syncedIds: syncedIds,
               recordsRemoved: accumulatedRecords.length - syncedRecords.length,
               removedIds: removedIds,
-              note: 'immediate-sync-before-query-switch',
+              note: 'FIX r022.29: Sync skipped during query switch - only needed for manual deletions',
               timestamp: Date.now()
             })
             
-            // Update accumulatedRecords to match reality (immediate sync, not lazy)
-            onAccumulatedRecordsChange(syncedRecords)
+            // FIX (r022.29): Skip sync during query switch to prevent incorrect purging
+            // This sync is only for manual deletions (X button clicks), not query switching
+            // During query switch, output DS is temporarily out of sync until selectRecordsAndPublish completes
             
             // DIAGNOSTIC LOGGING: Full state AFTER sync
             debugLogger.log('RESULTS-MODE', {
@@ -1784,6 +1830,20 @@ export function QueryTask (props: QueryTaskProps) {
         } else if (resultsMode === SelectionType.RemoveFromSelection) {
           // Handle "Remove from" mode: remove matching records from widget-level accumulated records
           try {
+            // r022.73: DIAGNOSTIC - Check if accumulated records have __queryConfigId
+            debugLogger.log('RESULTS-MODE', {
+              event: 'remove-mode-accumulated-records-audit',
+              widgetId: props.widgetId,
+              existingCount: existingRecordsForMerge.length,
+              recordsWithConfigId: existingRecordsForMerge.filter(r => r.feature?.attributes?.__queryConfigId).length,
+              sampleRecords: existingRecordsForMerge.slice(0, 3).map(r => ({
+                recordId: r.getId(),
+                hasConfigId: !!r.feature?.attributes?.__queryConfigId,
+                queryConfigId: r.feature?.attributes?.__queryConfigId || 'MISSING'
+              })),
+              timestamp: Date.now()
+            })
+            
             debugLogger.log('RESULTS-MODE', {
               event: 'remove-mode-starting-merge',
               widgetId: props.widgetId,
@@ -1833,19 +1893,21 @@ export function QueryTask (props: QueryTaskProps) {
               // FIX (r018.86): DON'T pass graphics layer parameters here - let graphics be managed by selection sync
               // This matches the fix for X button removal (r018.85)
               // Graphics will be synced through the normal selection flow after this operation
+              // r022.73: Pass accumulated records so removal can look up __queryConfigId for composite keys
               removeRecordsFromOriginSelections(
                 props.widgetId,
                 result.records as FeatureDataRecord[],
-                outputDS as FeatureLayerDataSource
-                // NOT passing useGraphicsLayerForHighlight or graphicsLayer
-                // Graphics will be synced through normal selection flow
+                outputDS as FeatureLayerDataSource,
+                undefined, // useGraphicsLayer
+                undefined, // graphicsLayer
+                existingRecordsForMerge // r022.73: Pass accumulated records for queryConfigId lookup
               )
               
               // FIX (r018.104): Manually remove graphics from graphics layer
               // Similar to X button removal fix (r018.90), we need to explicitly remove graphics
               // since removeRecordsFromOriginSelections doesn't receive graphics layer params
               // r021.91: Pass records for composite key matching
-              if (useGraphicsLayerForHighlight && graphicsLayer && result.records && result.records.length > 0) {
+              if (graphicsLayer && result.records && result.records.length > 0) {
                 const removedRecordIds = result.records.map(r => r.getId())
                 removeHighlightGraphics(graphicsLayer, removedRecordIds, result.records as FeatureDataRecord[])
                 
@@ -1988,6 +2050,18 @@ export function QueryTask (props: QueryTaskProps) {
         // Reset selection flag for new query results
         hasSelectedRecordsRef.current = false
         
+        // r022.44: DIAGNOSTIC - Log state BEFORE selection condition check
+        debugLogger.log('SELECTION-STATE-AUDIT', {
+          event: 'before-selection-condition-check',
+          widgetId: props.widgetId,
+          resultsMode,
+          hasRecordsToDisplay: !!recordsToDisplay,
+          recordsToDisplayLength: recordsToDisplay?.length || 0,
+          hasDsToUse: !!dsToUse,
+          conditionWillPass: !!(recordsToDisplay && recordsToDisplay.length > 0 && dsToUse),
+          timestamp: Date.now()
+        })
+        
         // Select records in the output DS
         // For "Add to" mode, select merged records
         // For "Remove from" mode, select remaining records (already updated via removeRecordsFromOriginSelections)
@@ -2018,23 +2092,90 @@ export function QueryTask (props: QueryTaskProps) {
               })
             }
           } else {
-            // For "Add to" and "New" modes, select records normally
-            setSelectionError(null) // Clear previous errors
+            // For "Add to" and "New" modes, select records with cross-layer grouping
+            setSelectionError(null)
             ;(async () => {
               try {
-                await selectRecordsAndPublish(
-                  props.widgetId,
-                  dsToUse,
-                  recordIdsToSelect,
-                  recordsToDisplay as FeatureDataRecord[],
-                  false,
-                  useGraphicsLayerForHighlight,
-                  graphicsLayer,
-                  mapView
-                )
-                hasSelectedRecordsRef.current = true // Mark as selected
+                // r022.73: Group records by __queryConfigId to prevent cross-layer selection pollution
+                // This ensures each layer only gets its own record IDs selected
+                debugLogger.log('SELECTION-STATE-AUDIT', {
+                  event: 'r022-73-grouping-starting',
+                  widgetId: props.widgetId,
+                  recordsToDisplayCount: recordsToDisplay.length,
+                  timestamp: Date.now()
+                })
                 
-                // Dispatch custom selection event so Widget state is updated immediately (BUG-STALE-COUNT-001: pass count)
+                const { DataSourceManager } = await import('jimu-core')
+                const dsManager = DataSourceManager.getInstance()
+                const recordsByOriginDS = new Map<DataSource, FeatureDataRecord[]>()
+                
+                for (const record of recordsToDisplay as FeatureDataRecord[]) {
+                  const queryConfigId = record.feature?.attributes?.__queryConfigId
+                  
+                  debugLogger.log('SELECTION-STATE-AUDIT', {
+                    event: 'r022-73-checking-record',
+                    recordId: record.getId(),
+                    hasQueryConfigId: !!queryConfigId,
+                    queryConfigId,
+                    timestamp: Date.now()
+                  })
+                  
+                  if (!queryConfigId) continue
+                  
+                  const matchingQueryItem = props.queryItems?.find(qi => qi.configId === queryConfigId)
+                  if (!matchingQueryItem?.useDataSource) continue
+                  
+                  const outputDS = dsManager.getDataSource(matchingQueryItem.useDataSource.dataSourceId)
+                  const originDS = outputDS?.getOriginDataSources?.()?.[0] || outputDS
+                  if (!originDS) continue
+                  
+                  if (!recordsByOriginDS.has(originDS)) {
+                    recordsByOriginDS.set(originDS, [])
+                  }
+                  recordsByOriginDS.get(originDS).push(record)
+                }
+                
+                debugLogger.log('SELECTION-STATE-AUDIT', {
+                  event: 'r022-73-grouping-complete',
+                  widgetId: props.widgetId,
+                  originDSCount: recordsByOriginDS.size,
+                  groups: Array.from(recordsByOriginDS.entries()).map(([ds, records]) => ({
+                    originDSId: ds.id,
+                    recordCount: records.length,
+                    recordIds: records.map(r => r.getId())
+                  })),
+                  timestamp: Date.now()
+                })
+                
+                // r022.73: Clear all origin DS selections first
+                for (const [originDS, records] of recordsByOriginDS.entries()) {
+                  if (typeof originDS.selectRecordsByIds === 'function') {
+                    originDS.selectRecordsByIds([], [])
+                  }
+                }
+                
+                // r022.73: Select each origin DS group with its correct records (NO GRAPHICS)
+                for (const [originDS, records] of recordsByOriginDS.entries()) {
+                  const recordIds = records.map(r => r.getId())
+                  
+                  if (typeof originDS.selectRecordsByIds === 'function') {
+                    originDS.selectRecordsByIds(recordIds, records)
+                    debugLogger.log('SELECTION-STATE-AUDIT', {
+                      event: 'r022-73-origin-ds-selected',
+                      originDSId: originDS.id,
+                      recordCount: recordIds.length,
+                      recordIds: recordIds,
+                      timestamp: Date.now()
+                    })
+                  }
+                }
+                
+                // r022.73: Update outputDS for Results tab with ALL records (cross-layer display)
+                if (typeof dsToUse.selectRecordsByIds === 'function') {
+                  dsToUse.selectRecordsByIds(recordIdsToSelect, recordsToDisplay as FeatureDataRecord[])
+                }
+                
+                // Dispatch custom selection event so Widget state is updated immediately
                 dispatchSelectionEvent(props.widgetId, recordIdsToSelect, dsToUse, queryItem.configId, eventManager, accumulatedRecords?.length)
               } catch (error) {
                 const errorMessage = error instanceof Error ? error.message : 'Failed to select query results'
@@ -2051,8 +2192,8 @@ export function QueryTask (props: QueryTaskProps) {
         } else if (resultsMode === SelectionType.RemoveFromSelection && recordsToDisplay.length === 0) {
           // All records removed - clear selection
           ;(async () => {
-            try {
-              await clearSelectionInDataSources(props.widgetId, dsToUse, useGraphicsLayerForHighlight, graphicsLayer)
+              try {
+              await clearSelectionInDataSources(props.widgetId, dsToUse, true, graphicsLayer)
               hasSelectedRecordsRef.current = false
               
               // Notify Widget that selection is cleared (pass 0 so handler does not read stale count)
@@ -2126,21 +2267,6 @@ export function QueryTask (props: QueryTaskProps) {
         const dsForZoom = dsToUse || outputDS
         
         if (recordsForZoom && recordsForZoom.length > 0 && dsForZoom && shouldZoom) {
-          // BUG-GRAPHICS-001: Zoom operations fail when graphics layer is disabled
-          if (!mapView && !useGraphicsLayerForHighlight) {
-            debugLogger.log('BUG', {
-              bugId: 'BUG-GRAPHICS-001',
-              category: 'GRAPHICS',
-              event: 'zoom-operation-failed-graphics-layer-disabled',
-              widgetId: props.widgetId,
-              operation: 'query-result-zoom',
-              recordsCount: recordsForZoom.length,
-              description: 'Zoom operation attempted but mapView is unavailable because useGraphicsLayerForHighlight is disabled',
-              workaround: 'Enable useGraphicsLayerForHighlight in widget settings',
-              targetResolution: 'r019.0'
-            })
-          }
-          
           try {
             await zoomToRecords(recordsForZoom as FeatureDataRecord[])
           } catch (error) {
@@ -2237,7 +2363,7 @@ export function QueryTask (props: QueryTaskProps) {
         }
         // setStage(1) // Removed from here; now called in the main chain before background actions
       })
-  }, [currentItem, queryItem, props.widgetId, outputDS, publishDataClearedMsg, clearResult, resultsMode, accumulatedRecords, onAccumulatedRecordsChange, onClearGraphicsLayer, mapView, useGraphicsLayerForHighlight, zoomToRecords])
+  }, [currentItem, queryItem, props.widgetId, outputDS, publishDataClearedMsg, clearResult, resultsMode, accumulatedRecords, onAccumulatedRecordsChange, onClearGraphicsLayer, mapView, zoomToRecords])
 
   // Listen for hash value conversion event and execute pending query
   React.useEffect(() => {
@@ -2365,13 +2491,13 @@ export function QueryTask (props: QueryTaskProps) {
       setResultCount(0)
       
       try {
-        await clearSelectionInDataSources(props.widgetId, outputDS, useGraphicsLayerForHighlight, graphicsLayer)
+        await clearSelectionInDataSources(props.widgetId, outputDS, true, graphicsLayer)
       } catch (error) {
         debugLogger.log('ERROR', { event: 'selection-clear-failed', error: error.message })
       }
       
-      if (useGraphicsLayerForHighlight && graphicsLayer && mapView) {
-        try {
+      if (graphicsLayer && mapView) {
+        try{
           cleanupGraphicsLayer(props.widgetId, mapView)
           onDestroyGraphicsLayer?.()
         } catch (error) {
@@ -3003,7 +3129,6 @@ export function QueryTask (props: QueryTaskProps) {
                 outputDS={outputDS}
                 runtimeZoomToSelected={lastRuntimeZoomToSelectedRef.current}
                 resultsMode={resultsMode}
-                useGraphicsLayerForHighlight={useGraphicsLayerForHighlight}
                 graphicsLayer={graphicsLayer}
                 mapView={mapView}
                 accumulatedRecords={accumulatedRecords}

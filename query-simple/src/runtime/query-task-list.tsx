@@ -23,7 +23,6 @@ export interface QueryTaskListProps {
   onResultsModeChange?: (mode: SelectionType) => void
   accumulatedRecords?: FeatureDataRecord[]
   onAccumulatedRecordsChange?: (records: FeatureDataRecord[]) => void
-  useGraphicsLayerForHighlight?: boolean
   graphicsLayer?: __esri.GraphicsLayer
   mapView?: __esri.MapView | __esri.SceneView
   onInitializeGraphicsLayer?: (outputDS: DataSource) => Promise<void>
@@ -128,7 +127,7 @@ const getQueryDisplayName = (item: ImmutableObject<QueryItemType>): string => {
 }
 
 export function QueryTaskList (props: QueryTaskListProps) {
-  const { queryItems, widgetId, defaultPageSize, isInPopper = false, className = '', initialQueryValue, shouldUseInitialQueryValueForSelection = false, onHashParameterUsed, resultsMode, onResultsModeChange, accumulatedRecords, onAccumulatedRecordsChange, useGraphicsLayerForHighlight, graphicsLayer, mapView, onInitializeGraphicsLayer, onClearGraphicsLayer, onDestroyGraphicsLayer, activeTab, onTabChange, eventManager } = props
+  const { queryItems, widgetId, defaultPageSize, isInPopper = false, className = '', initialQueryValue, shouldUseInitialQueryValueForSelection = false, onHashParameterUsed, resultsMode, onResultsModeChange, accumulatedRecords, onAccumulatedRecordsChange, graphicsLayer, mapView, onInitializeGraphicsLayer, onClearGraphicsLayer, onDestroyGraphicsLayer, activeTab, onTabChange, eventManager } = props
   const getI18nMessage = hooks.useTranslation(defaultMessages)
   
   // Log when props are received
@@ -617,7 +616,6 @@ export function QueryTaskList (props: QueryTaskListProps) {
             groups={groups}
             ungrouped={ungrouped}
             // Graphics layer props
-            useGraphicsLayerForHighlight={useGraphicsLayerForHighlight}
             graphicsLayer={graphicsLayer}
             mapView={mapView}
             onInitializeGraphicsLayer={onInitializeGraphicsLayer}

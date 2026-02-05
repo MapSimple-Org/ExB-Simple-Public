@@ -360,13 +360,15 @@ export function removeResultsFromAccumulated(
  * @param outputDS - The output data source (used for key generation)
  * @param useGraphicsLayer - Whether to remove graphics from graphics layer (default: false)
  * @param graphicsLayer - Graphics layer instance (required if useGraphicsLayer is true)
+ * @param accumulatedRecords - Accumulated records with __queryConfigId (for composite key lookup)
  */
 export function removeRecordsFromOriginSelections(
   widgetId: string,
   recordsToRemove: FeatureDataRecord[],
   outputDS: FeatureLayerDataSource,
   useGraphicsLayer?: boolean,
-  graphicsLayer?: __esri.GraphicsLayer
+  graphicsLayer?: __esri.GraphicsLayer,
+  accumulatedRecords?: FeatureDataRecord[]
 ): void {
   debugLogger.log('RESULTS-MODE', {
     event: 'removing-records-from-origin-selections-start',
@@ -438,15 +440,70 @@ export function removeRecordsFromOriginSelections(
   // Group records by their origin data source
   const recordsByOriginDS = new Map<FeatureLayerDataSource, FeatureDataRecord[]>()
   
-  recordsToRemove.forEach(record => {
-    const recordDS = record.getDataSource?.() as FeatureLayerDataSource
+  recordsToRemove.forEach((record, recordIndex) => {
+    // FIX (r022.33): Use .dataSource property instead of .getDataSource() method
+    // The getDataSource() method returns null for records in accumulated state,
+    // but the .dataSource property persists and contains the correct reference
+    const recordDS = (record as any).dataSource as FeatureLayerDataSource
+    const recordQueryConfigId = record.feature?.attributes?.__queryConfigId || ''
+    
+    // DIAGNOSTIC (r022.31): Log the origin DS lookup process
+    debugLogger.log('RESULTS-MODE', {
+      event: 'x-button-removal-record-origin-ds-lookup-start',
+      widgetId,
+      recordIndex,
+      recordId: record.getId(),
+      recordQueryConfigId: recordQueryConfigId || 'MISSING',
+      hasRecordDS: !!recordDS,
+      recordDSId: recordDS?.id || 'null',
+      recordDSType: recordDS?.type || 'null',
+      outputDSId: outputDS.id,
+      lookupMethod: 'dataSource-property',
+      note: 'r022.33: Using .dataSource property (not .getDataSource() method)',
+      timestamp: Date.now()
+    })
+    
     let originDS: FeatureLayerDataSource | null = null
+    let lookupMethod = 'unknown'
     
     if (recordDS) {
       originDS = recordDS.getOriginDataSources()?.[0] as FeatureLayerDataSource || recordDS
+      lookupMethod = recordDS.getOriginDataSources()?.[0] ? 'recordDS.getOriginDataSources' : 'recordDS-direct'
+      
+      // DIAGNOSTIC (r022.31): Log recordDS lookup result
+      debugLogger.log('RESULTS-MODE', {
+        event: 'x-button-removal-origin-ds-from-recordDS',
+        widgetId,
+        recordIndex,
+        recordId: record.getId(),
+        recordDSId: recordDS.id,
+        originDSId: originDS.id,
+        originDSType: originDS.type,
+        originDSLabel: originDS.getLabel?.() || 'unknown',
+        lookupMethod,
+        timestamp: Date.now()
+      })
     } else {
       // Fallback: try to get origin from outputDS
       originDS = outputDS.getOriginDataSources()?.[0] as FeatureLayerDataSource || null
+      lookupMethod = 'outputDS-fallback'
+      
+      // DIAGNOSTIC (r022.31): Log outputDS fallback
+      debugLogger.log('RESULTS-MODE', {
+        event: 'x-button-removal-origin-ds-from-outputDS-fallback',
+        widgetId,
+        recordIndex,
+        recordId: record.getId(),
+        recordQueryConfigId: recordQueryConfigId || 'MISSING',
+        reason: 'record-getDataSource-returned-null',
+        outputDSId: outputDS.id,
+        originDSId: originDS?.id || 'null',
+        originDSType: originDS?.type || 'null',
+        originDSLabel: originDS?.getLabel?.() || 'null',
+        lookupMethod,
+        warning: 'Using current query origin DS - may be incorrect for cross-layer records',
+        timestamp: Date.now()
+      })
     }
     
     if (originDS) {
@@ -454,6 +511,32 @@ export function removeRecordsFromOriginSelections(
         recordsByOriginDS.set(originDS, [])
       }
       recordsByOriginDS.get(originDS)!.push(record)
+      
+      // DIAGNOSTIC (r022.31): Log final resolution
+      debugLogger.log('RESULTS-MODE', {
+        event: 'x-button-removal-origin-ds-resolved',
+        widgetId,
+        recordIndex,
+        recordId: record.getId(),
+        recordQueryConfigId: recordQueryConfigId || 'MISSING',
+        resolvedOriginDSId: originDS.id,
+        resolvedOriginDSType: originDS.type,
+        resolvedOriginDSLabel: originDS.getLabel?.() || 'unknown',
+        lookupMethod,
+        timestamp: Date.now()
+      })
+    } else {
+      // DIAGNOSTIC (r022.31): Log lookup failure
+      debugLogger.log('RESULTS-MODE', {
+        event: 'x-button-removal-origin-ds-lookup-failed',
+        widgetId,
+        recordIndex,
+        recordId: record.getId(),
+        recordQueryConfigId: recordQueryConfigId || 'MISSING',
+        reason: 'no-origin-ds-found',
+        lookupMethod,
+        timestamp: Date.now()
+      })
     }
   })
   
@@ -474,20 +557,49 @@ export function removeRecordsFromOriginSelections(
       const currentSelectedRecords = originDS.getSelectedRecords() || []
       const currentSelectedIds = originDS.getSelectedRecordIds() || []
       
+      // DIAGNOSTIC (r022.31): Per-layer selection state BEFORE removal
       debugLogger.log('RESULTS-MODE', {
         event: 'processing-origin-ds-removal',
         widgetId,
         originDSId: originDS.id,
+        originDSType: originDS.type,
+        originDSLabel: originDS.getLabel?.() || 'unknown',
         currentSelectedCount: currentSelectedRecords.length,
-        recordsToRemoveCount: recordsToRemoveForOrigin.length
+        currentSelectedIds: currentSelectedIds.slice(0, 20),
+        recordsToRemoveCount: recordsToRemoveForOrigin.length,
+        recordsToRemoveIds: recordsToRemoveForOrigin.map(r => r.getId()),
+        recordsToRemoveQueryConfigs: recordsToRemoveForOrigin.map(r => r.feature?.attributes?.__queryConfigId || 'MISSING'),
+        timestamp: Date.now()
       })
       
-      // r021.90: Build composite keys (recordId + queryConfigId) to remove for accurate matching
-      // This prevents removing records with the same ID but from different queries
+      // r022.73: Build composite keys (recordId + queryConfigId) to remove for accurate matching
+      // FIX: Query results don't have __queryConfigId, but accumulated records do
+      // Build lookup map from accumulated records first
+      const accumulatedLookup = new Map<string, string>()
+      if (accumulatedRecords) {
+        accumulatedRecords.forEach(accRec => {
+          const accRecId = accRec.getId()
+          const accQueryConfigId = accRec.feature?.attributes?.__queryConfigId || ''
+          accumulatedLookup.set(accRecId, accQueryConfigId)
+        })
+      }
+      
       const compositeKeysToRemove = new Set(
         recordsToRemoveForOrigin.map(record => {
           const recordId = record.getId()
-          const queryConfigId = record.feature?.attributes?.__queryConfigId || ''
+          // r022.73: Use queryConfigId from accumulated records, not from query results
+          const queryConfigId = accumulatedLookup.get(recordId) || record.feature?.attributes?.__queryConfigId || ''
+          
+          debugLogger.log('RESULTS-MODE', {
+            event: 'r022-73-removal-composite-key-built',
+            recordId,
+            queryConfigIdFromAccumulated: accumulatedLookup.get(recordId) || 'NOT_FOUND',
+            queryConfigIdFromRecord: record.feature?.attributes?.__queryConfigId || 'MISSING',
+            finalQueryConfigId: queryConfigId,
+            compositeKey: `${recordId}__${queryConfigId}`,
+            timestamp: Date.now()
+          })
+          
           return `${recordId}__${queryConfigId}`
         })
       )
@@ -502,17 +614,69 @@ export function removeRecordsFromOriginSelections(
       
       const remainingIds = remainingRecords.map(record => record.getId())
       
+      // DIAGNOSTIC (r022.31): Log composite key removal details
       debugLogger.log('RESULTS-MODE', {
         event: 'origin-ds-removal-filtered',
         widgetId,
         originDSId: originDS.id,
-        removedCount: currentSelectedRecords.length - remainingRecords.length,
-        remainingCount: remainingRecords.length
+        originDSLabel: originDS.getLabel?.() || 'unknown',
+        selectionBeforeRemoval: {
+          count: currentSelectedRecords.length,
+          ids: currentSelectedIds.slice(0, 20),
+          compositeKeys: currentSelectedRecords.slice(0, 5).map(r => ({
+            recordId: r.getId(),
+            queryConfigId: r.feature?.attributes?.__queryConfigId || 'MISSING'
+          }))
+        },
+        removalDetails: {
+          compositeKeysToRemove: Array.from(compositeKeysToRemove),
+          expectedRemovedCount: recordsToRemoveForOrigin.length,
+          actualRemovedCount: currentSelectedRecords.length - remainingRecords.length,
+          removalSuccessful: (currentSelectedRecords.length - remainingRecords.length) === recordsToRemoveForOrigin.length
+        },
+        remainingAfterFilter: {
+          count: remainingRecords.length,
+          ids: remainingIds.slice(0, 20)
+        },
+        timestamp: Date.now()
       })
       
       // Update selection in origin DS
       if (typeof originDS.selectRecordsByIds === 'function') {
         originDS.selectRecordsByIds(remainingIds, remainingRecords as FeatureDataRecord[])
+        
+        // DIAGNOSTIC (r022.31): Verify selection state AFTER update
+        // Use setTimeout to allow DS to process the selection change
+        setTimeout(() => {
+          const actualSelectedAfter = originDS.getSelectedRecords() || []
+          const actualSelectedIdsAfter = originDS.getSelectedRecordIds() || []
+          
+          debugLogger.log('RESULTS-MODE', {
+            event: 'origin-ds-removal-complete-verified',
+            widgetId,
+            originDSId: originDS.id,
+            originDSLabel: originDS.getLabel?.() || 'unknown',
+            selectionAfterUpdate: {
+              count: actualSelectedAfter.length,
+              ids: actualSelectedIdsAfter.slice(0, 20)
+            },
+            expectedCount: remainingRecords.length,
+            actualCount: actualSelectedAfter.length,
+            countsMatch: actualSelectedAfter.length === remainingRecords.length,
+            expectedRemovedCount: recordsToRemoveForOrigin.length,
+            actualRemovedCount: currentSelectedRecords.length - actualSelectedAfter.length,
+            removalSuccessful: (currentSelectedRecords.length - actualSelectedAfter.length) === recordsToRemoveForOrigin.length,
+            timestamp: Date.now()
+          })
+        }, 100)
+      } else {
+        debugLogger.log('RESULTS-MODE', {
+          event: 'origin-ds-removal-skipped',
+          widgetId,
+          originDSId: originDS.id,
+          reason: 'selectRecordsByIds-not-available',
+          timestamp: Date.now()
+        })
       }
       
       // Publish selection change message for this origin DS
