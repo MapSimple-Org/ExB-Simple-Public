@@ -10,7 +10,7 @@
  */
 const BASE_VERSION = '1.19.0'
 const RELEASE_NUMBER = '022' // Increment on major changes (001, 002, 003, ...)
-const MINOR_VERSION = '74' // r022.74: FIX - Remove mode: lookup __queryConfigId from accumulated records for composite key matching
+const MINOR_VERSION = '77' // r022.77: FIX - Use props.state for close detection, ignore IntersectionObserver close (fixes minimize bug)
 
 export const WIDGET_VERSION = MINOR_VERSION && Number(MINOR_VERSION) > 0
   ? `${BASE_VERSION}-r${RELEASE_NUMBER}.${MINOR_VERSION}`
