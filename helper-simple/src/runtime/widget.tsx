@@ -139,6 +139,35 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
         this.querySimpleSelection = null
       }
     }
+    
+    // r022.76: Watch props.state for ACTUAL close (not DOM visibility/minimize)
+    if (prevProps.state !== this.props.state) {
+      if (this.props.state === 'OPENED' && prevProps.state === 'CLOSED') {
+        // HelperSimple opened
+        debugLogger.log('WIDGET-STATE', {
+          event: 'helpersimple-opened-via-props-state',
+          widgetId: this.props.id,
+          prevState: prevProps.state,
+          currentState: this.props.state,
+          method: 'props.state-monitoring',
+          note: 'r022.76: Official ExB state detection',
+          timestamp: Date.now()
+        })
+        
+      } else if (this.props.state === 'CLOSED' && prevProps.state === 'OPENED') {
+        // HelperSimple closed
+        debugLogger.log('WIDGET-STATE', {
+          event: 'helpersimple-closed-via-props-state',
+          widgetId: this.props.id,
+          prevState: prevProps.state,
+          currentState: this.props.state,
+          method: 'props.state-monitoring',
+          note: 'r022.76: Official ExB state detection',
+          timestamp: Date.now()
+        })
+      }
+    }
+    // Note: Minimize keeps state as 'OPENED', so no state change = no action ✓
   }
 
   /**

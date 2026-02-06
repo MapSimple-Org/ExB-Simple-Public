@@ -136,11 +136,29 @@ export class WidgetVisibilityManager {
             const entry = entries[0]
             const isVisible = entry.isIntersecting && entry.intersectionRatio > 0
             
-            // Only update if state changed
+            // r022.76: Only handle OPEN events (isVisible=true)
+            // Close detection now handled by props.state in componentDidUpdate
+            // This prevents minimize from triggering close (minimize makes DOM hidden but props.state stays 'OPENED')
             if (this.isPanelVisible !== isVisible) {
               this.isPanelVisible = isVisible
-              this.logVisibilityChange(isVisible, 'IntersectionObserver', id, callbacks)
-              onVisibilityStateChange(isVisible)
+              
+              if (isVisible) {
+                // Widget opened - handle normally
+                this.logVisibilityChange(isVisible, 'IntersectionObserver', id, callbacks)
+                onVisibilityStateChange(isVisible)
+              } else {
+                // Widget hidden (close OR minimize) - log but DON'T trigger close logic
+                debugLogger.log('WIDGET-STATE', {
+                  event: 'panel-hidden-ignored',
+                  widgetId: id,
+                  isVisible: false,
+                  method: 'IntersectionObserver',
+                  note: 'r022.76: Ignoring close/minimize - handled by props.state in componentDidUpdate',
+                  timestamp: Date.now()
+                })
+                // DON'T call logVisibilityChange or onVisibilityStateChange for close
+                // This prevents minimize from triggering clear-selection logic
+              }
             }
           },
           {
@@ -161,8 +179,21 @@ export class WidgetVisibilityManager {
           const isVisible = this.checkVisibility()
           if (this.isPanelVisible !== isVisible) {
             this.isPanelVisible = isVisible
-            this.logVisibilityChange(isVisible, 'periodic-check', id, callbacks)
-            onVisibilityStateChange(isVisible)
+            
+            // r022.76: Only handle OPEN events (same as IntersectionObserver)
+            if (isVisible) {
+              this.logVisibilityChange(isVisible, 'periodic-check', id, callbacks)
+              onVisibilityStateChange(isVisible)
+            } else {
+              debugLogger.log('WIDGET-STATE', {
+                event: 'panel-hidden-ignored',
+                widgetId: id,
+                isVisible: false,
+                method: 'periodic-check',
+                note: 'r022.76: Ignoring close/minimize - handled by props.state',
+                timestamp: Date.now()
+              })
+            }
           }
         }, 250) // Check every 250ms
         
