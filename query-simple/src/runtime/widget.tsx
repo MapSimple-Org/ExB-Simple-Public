@@ -520,6 +520,66 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
     // Only HelperSimple can trigger hash parameter processing via OPEN_WIDGET_EVENT
     // This ensures HelperSimple remains the orchestrator
     
+    // r022.76: Watch props.state for ACTUAL close (not DOM visibility/minimize)
+    // Uses official ExB state property instead of fragile DOM visibility detection
+    if (prevProps.state !== this.props.state) {
+      if (this.props.state === 'OPENED' && prevProps.state === 'CLOSED') {
+        // Widget opened - restore selections
+        debugLogger.log('WIDGET-STATE', {
+          event: 'widget-opened-via-props-state',
+          widgetId: this.props.id,
+          prevState: prevProps.state,
+          currentState: this.props.state,
+          action: 'restore-selections',
+          method: 'props.state-monitoring',
+          note: 'r022.76: Official ExB state detection (not DOM visibility)',
+          timestamp: Date.now()
+        })
+        
+        // r022.76: Notify HelperSimple via event (replaces IntersectionObserver notification)
+        const event = new CustomEvent('querysimple-widget-state-changed', {
+          detail: {
+            widgetId: this.props.id,
+            isOpen: true
+          },
+          bubbles: true,
+          cancelable: true
+        })
+        window.dispatchEvent(event)
+        
+        // r022.76: Restore selections on open
+        this.handleVisibilityChange(true)
+        
+      } else if (this.props.state === 'CLOSED' && prevProps.state === 'OPENED') {
+        // Widget closed - clear selections
+        debugLogger.log('WIDGET-STATE', {
+          event: 'widget-closed-via-props-state',
+          widgetId: this.props.id,
+          prevState: prevProps.state,
+          currentState: this.props.state,
+          action: 'clear-selections',
+          method: 'props.state-monitoring',
+          note: 'r022.76: Official ExB state detection (not DOM visibility)',
+          timestamp: Date.now()
+        })
+        
+        // r022.76: Notify HelperSimple via event (replaces IntersectionObserver notification)
+        const event = new CustomEvent('querysimple-widget-state-changed', {
+          detail: {
+            widgetId: this.props.id,
+            isOpen: false
+          },
+          bubbles: true,
+          cancelable: true
+        })
+        window.dispatchEvent(event)
+        
+        // r022.76: Clear selections on close
+        this.handleVisibilityChange(false)
+      }
+    }
+    // Note: Minimize keeps state as 'OPENED', so no state change = no action = selections preserved ✓
+    
     // Chunk 4: Graphics layer is now required (r018.25 - Step 4.3: Remove config change handling)
     // No need to handle config changes for graphics layer since it's always enabled
   }
