@@ -2,8 +2,8 @@
 
 Custom widgets for ArcGIS Experience Builder Developer Edition (1.19.0+). Built for performance, deep-linking, and advanced result management.
 
-**Current Version**: `1.19.0-r022.103`  
-**Latest Update**: Graphics Symbology v2 + UX Improvements (Feb 8, 2026)
+**Current Version**: `1.19.0-r022.104`  
+**Latest Update**: Un-Minimize Restoration Fix (Feb 8, 2026)
 
 ---
 
@@ -27,47 +27,57 @@ Custom widgets for ArcGIS Experience Builder Developer Edition (1.19.0+). Built 
 
 ---
 
-## What's New: r022.97 → r022.103 (Feb 8, 2026)
+## What's New: r022.104 (Feb 8, 2026)
+
+### 🐛 Critical Fix
+
+**Un-Minimize Restoration Fix** - Fixed widget un-minimize triggering duplicate restoration logic
+
+**The Problem:**
+- Un-minimizing the widget was triggering open/restoration logic via DOM visibility detection
+- This happened even though `props.state` stayed `'OPENED'` the entire time (widget was never actually closed)
+- Result: Unnecessary restoration events and duplicate logic execution
+
+**The Solution:**
+- Track first open with `hasOpenedOnce` flag
+- Use DOM detection (IntersectionObserver) **only** for first widget open
+- After first open, rely solely on `props.state` transitions for subsequent opens
+- Un-minimize now correctly ignored (widget was already open)
+
+**Impact:**
+- ✅ First open: DOM detection works correctly (ExB state not immediately available)
+- ✅ Minimize: No action (props.state stays `'OPENED'`)
+- ✅ Un-minimize: No action (DOM visibility change ignored)
+- ✅ Close then re-open: `props.state` transition handles correctly
+- ✅ No duplicate restoration on un-minimize
+- ✅ Cleaner debug logs (no spurious open events)
+
+**Why This Matters:**
+The r022.77 fix correctly distinguished minimize from close, but DOM visibility was still firing on un-minimize. This created unnecessary work and confusing logs. Now the widget uses the right detection method at the right time: DOM for initial open (when ExB hasn't populated state yet), then `props.state` for everything else.
+
+---
+
+## Previous Updates: r022.97 → r022.103 (Feb 8, 2026)
 
 ### 🎨 Graphics Symbology v2
 
 **Fully configurable graphics layer styling** - customize colors, opacity, and sizing for both fill and outline.
 
-**New Features:**
-- **Settings UI Controls**: Color pickers, opacity sliders, and size controls for fill and outline
-- **Centralized Configuration**: `HighlightConfigManager` singleton manages all graphics symbology
-- **Per-Widget Customization**: Each QuerySimple widget can have its own color scheme
-- **New Default Color**: Magenta (#DF00FF) - brighter and more visible than the old purple
-
-**Configuration Options:**
-- Fill Color (hex color picker)
-- Fill Opacity (0-1 slider)
-- Outline Color (hex color picker)
-- Outline Width (1-5px)
-- Point Marker Size (8-24px)
+- Settings UI Controls: Color pickers, opacity sliders, and size controls
+- Centralized Configuration: `HighlightConfigManager` singleton
+- Per-Widget Customization: Each QuerySimple widget can have its own color scheme
+- New Default Color: Magenta (#DF00FF)
 
 ### 🎯 UX Improvements
 
-**Zoom to Results Button** - Moved from hidden Actions menu to prominent Results tab header
-- **Why**: Users requested more discoverable placement
-- **Location**: Right of the Clear (trash) button
-- **Size**: 36x36px touch-friendly target (WCAG/Apple HIG compliant)
+- **Zoom to Results Button**: Moved from hidden Actions menu to prominent Results tab header
+- **Touch Target Optimization**: 36x36px buttons (WCAG/Apple HIG compliant)
 
 ### 🐛 Critical Fixes
 
-**Selection Count Bug Resolved** - Fixed "3 selections with 2 results" issue
-- **Root Cause**: Faulty optimization was forcing duplicate selection calls
-- **Solution**: Removed the problematic r022.96 "fix" that was causing the bug
-- **Result**: Selection counts now accurate in all modes (New/Add/Remove)
-
-**Popup Multi-Click Issue Fixed** - Popups now open on first click
-- **Bug**: `[esri.widgets.Features]` warning caused popup issues
-- **Solution**: Set `shouldFocus: false` in `mapView.openPopup()`
-- **Impact**: Consistent popup behavior across all interactions
-
-**Graphics Z-Order Optimization** - Purple graphics now consistently render on top of native blue selection
-- **Implementation**: Graphics layer repositioned to end of layer stack on each render
-- **Result**: Both colors visible (purple fill + blue outline)
+- **Selection Count Bug**: Fixed "3 selections with 2 results" issue
+- **Popup Multi-Click Issue**: Popups now open on first click
+- **Graphics Z-Order**: Purple graphics consistently render on top of native selection
 
 ---
 

@@ -28,6 +28,7 @@ export class WidgetVisibilityManager {
   private visibilityCheckInterval: number | null = null
   private isPanelVisible: boolean = false
   private widgetElement: HTMLElement | null = null
+  private hasOpenedOnce: boolean = false // r022.104: Track first open to avoid re-triggering on un-minimize
 
   /**
    * Checks if the widget element is currently visible.
@@ -143,9 +144,33 @@ export class WidgetVisibilityManager {
               this.isPanelVisible = isVisible
               
               if (isVisible) {
-                // Widget opened - handle normally
-                this.logVisibilityChange(isVisible, 'IntersectionObserver', id, callbacks)
-                onVisibilityStateChange(isVisible)
+                // r022.104: Only trigger open logic on FIRST open (DOM detection)
+                // After that, rely on props.state in componentDidUpdate for subsequent opens
+                if (!this.hasOpenedOnce) {
+                  // First open - use DOM visibility
+                  this.hasOpenedOnce = true
+                  this.logVisibilityChange(isVisible, 'IntersectionObserver', id, callbacks)
+                  onVisibilityStateChange(isVisible)
+                  debugLogger.log('WIDGET-STATE', {
+                    event: 'first-open-detected',
+                    widgetId: id,
+                    method: 'IntersectionObserver',
+                    note: 'r022.104: First open via DOM - subsequent opens will use props.state',
+                    timestamp: Date.now()
+                  })
+                } else {
+                  // Already opened once - ignore DOM visibility (un-minimize)
+                  // Let componentDidUpdate handle subsequent opens via props.state
+                  debugLogger.log('WIDGET-STATE', {
+                    event: 'panel-visible-ignored',
+                    widgetId: id,
+                    isVisible: true,
+                    method: 'IntersectionObserver',
+                    note: 'r022.104: Ignoring un-minimize - already opened once, using props.state',
+                    hasOpenedOnce: this.hasOpenedOnce,
+                    timestamp: Date.now()
+                  })
+                }
               } else {
                 // Widget hidden (close OR minimize) - log but DON'T trigger close logic
                 debugLogger.log('WIDGET-STATE', {
@@ -182,8 +207,32 @@ export class WidgetVisibilityManager {
             
             // r022.76: Only handle OPEN events (same as IntersectionObserver)
             if (isVisible) {
-              this.logVisibilityChange(isVisible, 'periodic-check', id, callbacks)
-              onVisibilityStateChange(isVisible)
+              // r022.104: Only trigger open logic on FIRST open (DOM detection)
+              // After that, rely on props.state in componentDidUpdate for subsequent opens
+              if (!this.hasOpenedOnce) {
+                // First open - use DOM visibility
+                this.hasOpenedOnce = true
+                this.logVisibilityChange(isVisible, 'periodic-check', id, callbacks)
+                onVisibilityStateChange(isVisible)
+                debugLogger.log('WIDGET-STATE', {
+                  event: 'first-open-detected',
+                  widgetId: id,
+                  method: 'periodic-check',
+                  note: 'r022.104: First open via DOM - subsequent opens will use props.state',
+                  timestamp: Date.now()
+                })
+              } else {
+                // Already opened once - ignore DOM visibility (un-minimize)
+                debugLogger.log('WIDGET-STATE', {
+                  event: 'panel-visible-ignored',
+                  widgetId: id,
+                  isVisible: true,
+                  method: 'periodic-check',
+                  note: 'r022.104: Ignoring un-minimize - already opened once, using props.state',
+                  hasOpenedOnce: this.hasOpenedOnce,
+                  timestamp: Date.now()
+                })
+              }
             } else {
               debugLogger.log('WIDGET-STATE', {
                 event: 'panel-hidden-ignored',

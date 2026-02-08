@@ -5,88 +5,93 @@ All notable changes to MapSimple Experience Builder widgets will be documented i
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.19.0-r022.103] - 2026-02-08 - Graphics Symbology v2 + UX Improvements
-
-### Added
-- **Zoom to Results Button**: Standalone button on Results tab header (right of Clear button) for quick access to zoom functionality
-  - **Why**: "Zoom to selected" was buried in Actions menu - users requested more prominent placement
-  - **UX**: Touch-friendly 36x36px button with tooltip
-  - **Icon**: Same zoom-to icon as used in Actions menu
-
-### Changed
-- **Default Color Update**: Changed default graphics color from Purple (#7B1FA2) to Magenta (#DF00FF)
-  - **Why**: Brighter, more visible on most basemaps
-  - **Impact**: New installations default to magenta; existing configs unchanged
-  - **Locations**: `HighlightConfigManager` defaults, settings UI, config comments
-
-- **Touch Target Optimization**: Increased button sizes for Clear and Zoom to 36x36px
-  - **Why**: Better accessibility and usability on touch devices
-  - **Standard**: Aligns with WCAG/Apple HIG recommendations (36px minimum)
-
-- **Graphics Z-Order**: Purple graphics now consistently render on top of native blue selection
-  - **Why**: Provides visual confirmation that both graphics and native selection are active
-  - **Implementation**: Graphics layer repositioned to absolute end of layer stack in `addHighlightGraphics()`
-  - **Result**: Users see purple fill + blue outline (both visible)
+## [1.19.0-r022.104] - 2026-02-08 - FIX: Un-Minimize Triggering Open Logic
 
 ### Fixed
-- **Selection Count Bug (Critical)**: Removed r022.96 "fix" that was causing "3 selections with 2 results" bug
-  - **Root Cause**: r022.96 disabled `alreadySelected` optimization in Add/Remove modes, forcing duplicate `selectRecordsByIds()` calls
-  - **Diagnosis**: Z-order issue was purely cosmetic (purple obscuring blue) - NOT a selection bug
-  - **Resolution**: Reverted r022.96 logic - selection counts now accurate, z-order handled separately
-  - **Key Learning**: The "blue outline disappearing" was always a visual z-order issue, not a selection state issue
-
-- **Popup Multi-Click Issue**: Fixed popup requiring multiple clicks to open
-  - **Bug**: `[esri.widgets.Features] Features can only be focused when currently active.` warning caused popup issues
-  - **Solution**: Set `shouldFocus: false` in `mapView.openPopup()` to prevent premature focus on Features widget
-  - **Impact**: Popups now open on first click consistently
+- **Un-Minimize Triggering Restoration**: Fixed widget un-minimize triggering open/restoration logic unnecessarily
+  - **Bug**: Un-minimizing widget ran restoration logic via DOM visibility detection, even though widget was already open (`props.state` stayed `'OPENED'`)
+  - **Manifestation**: Visible as duplicate restoration events and unnecessary re-execution of open logic
+  - **Root Cause**: IntersectionObserver detected DOM visibility change (minimize → un-minimize) and fired `onVisibilityStateChange(true)`
+  - **Solution**: Track first open with `hasOpenedOnce` flag - use DOM detection only for first open, rely on `props.state` thereafter
 
 ### Technical Details
-**Z-Order Management (r022.100-102):**
-- **Approach**: Initially tried adding graphics layer at high index (999) in `createOrGetGraphicsLayer`
-- **Issue**: Native highlight layers created dynamically *after* graphics layer, appearing on top
-- **Solution**: Moved repositioning logic to `addHighlightGraphics()` - runs every time graphics added (after native selection)
-- **Result**: Graphics layer consistently at end of layer stack, purple renders on top
+**Widget Open Detection Strategy (r022.104):**
 
-**Selection Logic (r022.95-96):**
-- **r022.95**: Surgical rollback to r022.94, manual reapplication of r022.96 and r022.98
-- **r022.96 (Final)**: Removed r022.96 "fix" after confirming it caused selection count bug
-- **Verified**: Native selection logic works correctly without r022.96 changes
+**Problem:**
+- r022.77 fixed minimize/close distinction using `props.state`
+- But DOM visibility detection (IntersectionObserver) was still firing on un-minimize
+- Un-minimize makes widget DOM visible again → triggers open logic → unnecessary restoration
 
-**Zoom Button (r022.97-99):**
-- **r022.97**: Added button to Results tab header using existing `zoomToRecords` hook
-- **r022.98**: Implemented 44x44px touch targets
-- **r022.99**: Refined to 36x36px for better visual balance
+**Solution - Hybrid Approach:**
+1. **First Open**: Use DOM visibility detection (IntersectionObserver/periodic check)
+   - Reason: ExB doesn't immediately populate `props.state` on initial mount
+   - Reliable detection of initial widget open
+2. **After First Open**: Use only `props.state` transitions in `componentDidUpdate`
+   - Minimize: `props.state` stays `'OPENED'` → no action
+   - Un-minimize: `props.state` stays `'OPENED'` → no action (DOM visibility change ignored)
+   - Close then re-open: `props.state` changes `'CLOSED'` → `'OPENED'` → restoration
 
-**Color Update (r022.103):**
-- Updated `HighlightConfigManager.getFillColor()` default: `#7B1FA2` → `#DF00FF`
-- Updated `HighlightConfigManager.getOutlineColor()` default: `#7B1FA2` → `#DF00FF`
-- Updated settings UI `ThemeColorPicker` defaults
-- Updated config comments and RGB fallback values
+**Implementation:**
+```typescript
+// In WidgetVisibilityManager
+private hasOpenedOnce: boolean = false
+
+// In IntersectionObserver callback
+if (isVisible) {
+  if (!this.hasOpenedOnce) {
+    // First open - use DOM detection
+    this.hasOpenedOnce = true
+    this.logVisibilityChange(isVisible, 'IntersectionObserver', id, callbacks)
+    onVisibilityStateChange(isVisible)
+  } else {
+    // Already opened once - ignore DOM visibility (un-minimize)
+    // Log but don't trigger open logic
+  }
+}
+```
+
+**Logic Flow:**
+```
+First widget open (CLOSED → DOM visible):
+  ↓
+  hasOpenedOnce = false → Use DOM detection ✅
+  ↓ Trigger restoration
+  ↓ Set hasOpenedOnce = true
+
+User minimizes:
+  ↓ props.state stays 'OPENED' → No action ✅
+
+User un-minimizes:
+  ↓ DOM becomes visible → hasOpenedOnce = true → Ignore DOM ✅
+  ↓ props.state still 'OPENED' → No action ✅
+
+User closes then re-opens:
+  ↓ props.state: 'CLOSED' → 'OPENED'
+  ↓ componentDidUpdate detects transition ✅
+  ↓ Trigger restoration
+```
+
+**Enhanced Logging:**
+- `first-open-detected` - Initial widget open via DOM detection
+- `panel-visible-ignored` - Un-minimize ignored (already opened once)
 
 **Impact:**
-- ✅ Zoom action more discoverable (no longer buried in menu)
-- ✅ Touch-friendly interface (36x36px buttons)
-- ✅ Accurate selection counts (r022.96 bug removed)
-- ✅ Purple graphics consistently visible on top
-- ✅ Popups work on first click
-- ✅ Brighter default color for better visibility
+- ✅ First open: DOM detection works correctly (ExB state not yet available)
+- ✅ Minimize: No action (props.state stays `'OPENED'`)
+- ✅ Un-minimize: No action (DOM visibility ignored after first open)
+- ✅ Close then re-open: `props.state` transition handles correctly
+- ✅ No duplicate restoration on un-minimize
+- ✅ Cleaner logs (no spurious open events)
 
 **Files Modified:**
-- `query-simple/src/runtime/query-result.tsx` - Zoom button, r022.96 revert, popup fix
-- `query-simple/src/runtime/graphics-layer-utils.ts` - Z-order repositioning
-- `query-simple/src/config.ts` - Color defaults in comments
-- `query-simple/src/setting/setting.tsx` - Color defaults in UI
-- `shared-code/mapsimple-common/highlight-config-manager.ts` - Color defaults
-- `query-simple/src/version.ts` - r022.87 → r022.103
-- `TODO.md` - Removed completed tasks, added auto-selection separation and LayerList integration TODOs
+- `query-simple/src/runtime/hooks/use-widget-visibility.ts` - Add `hasOpenedOnce` flag, conditional DOM detection
+- `query-simple/src/version.ts` - r022.103 → r022.104
 
 **Testing:**
-- User tested each increment (r022.97-103)
-- Selection counts verified accurate after r022.96 removal
-- Z-order verified with multiple query switches
-- Zoom button verified on Results tab
-- Touch target sizing verified
-- Color change verified in settings UI
+- ✅ First widget open triggers restoration (DOM detection)
+- ✅ Minimize → Un-minimize: No duplicate restoration
+- ✅ Close → Re-open: Restoration triggered correctly (props.state)
+- ✅ Multiple minimize/un-minimize cycles: No spurious events
 
 ---
 

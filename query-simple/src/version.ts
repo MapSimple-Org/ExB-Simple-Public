@@ -10,7 +10,7 @@
  */
 const BASE_VERSION = '1.19.0'
 const RELEASE_NUMBER = '022' // Increment on major changes (001, 002, 003, ...)
-const MINOR_VERSION = '103' // r022.103: Change default color from purple (#7B1FA2) to magenta (#DF00FF)
+const MINOR_VERSION = '104' // r022.104: Fix un-minimize triggering open logic - use DOM for first open only, props.state thereafter
 
 export const WIDGET_VERSION = MINOR_VERSION && Number(MINOR_VERSION) > 0
   ? `${BASE_VERSION}-r${RELEASE_NUMBER}.${MINOR_VERSION}`
