@@ -5,6 +5,91 @@ All notable changes to MapSimple Experience Builder widgets will be documented i
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.19.0-r022.103] - 2026-02-08 - Graphics Symbology v2 + UX Improvements
+
+### Added
+- **Zoom to Results Button**: Standalone button on Results tab header (right of Clear button) for quick access to zoom functionality
+  - **Why**: "Zoom to selected" was buried in Actions menu - users requested more prominent placement
+  - **UX**: Touch-friendly 36x36px button with tooltip
+  - **Icon**: Same zoom-to icon as used in Actions menu
+
+### Changed
+- **Default Color Update**: Changed default graphics color from Purple (#7B1FA2) to Magenta (#DF00FF)
+  - **Why**: Brighter, more visible on most basemaps
+  - **Impact**: New installations default to magenta; existing configs unchanged
+  - **Locations**: `HighlightConfigManager` defaults, settings UI, config comments
+
+- **Touch Target Optimization**: Increased button sizes for Clear and Zoom to 36x36px
+  - **Why**: Better accessibility and usability on touch devices
+  - **Standard**: Aligns with WCAG/Apple HIG recommendations (36px minimum)
+
+- **Graphics Z-Order**: Purple graphics now consistently render on top of native blue selection
+  - **Why**: Provides visual confirmation that both graphics and native selection are active
+  - **Implementation**: Graphics layer repositioned to absolute end of layer stack in `addHighlightGraphics()`
+  - **Result**: Users see purple fill + blue outline (both visible)
+
+### Fixed
+- **Selection Count Bug (Critical)**: Removed r022.96 "fix" that was causing "3 selections with 2 results" bug
+  - **Root Cause**: r022.96 disabled `alreadySelected` optimization in Add/Remove modes, forcing duplicate `selectRecordsByIds()` calls
+  - **Diagnosis**: Z-order issue was purely cosmetic (purple obscuring blue) - NOT a selection bug
+  - **Resolution**: Reverted r022.96 logic - selection counts now accurate, z-order handled separately
+  - **Key Learning**: The "blue outline disappearing" was always a visual z-order issue, not a selection state issue
+
+- **Popup Multi-Click Issue**: Fixed popup requiring multiple clicks to open
+  - **Bug**: `[esri.widgets.Features] Features can only be focused when currently active.` warning caused popup issues
+  - **Solution**: Set `shouldFocus: false` in `mapView.openPopup()` to prevent premature focus on Features widget
+  - **Impact**: Popups now open on first click consistently
+
+### Technical Details
+**Z-Order Management (r022.100-102):**
+- **Approach**: Initially tried adding graphics layer at high index (999) in `createOrGetGraphicsLayer`
+- **Issue**: Native highlight layers created dynamically *after* graphics layer, appearing on top
+- **Solution**: Moved repositioning logic to `addHighlightGraphics()` - runs every time graphics added (after native selection)
+- **Result**: Graphics layer consistently at end of layer stack, purple renders on top
+
+**Selection Logic (r022.95-96):**
+- **r022.95**: Surgical rollback to r022.94, manual reapplication of r022.96 and r022.98
+- **r022.96 (Final)**: Removed r022.96 "fix" after confirming it caused selection count bug
+- **Verified**: Native selection logic works correctly without r022.96 changes
+
+**Zoom Button (r022.97-99):**
+- **r022.97**: Added button to Results tab header using existing `zoomToRecords` hook
+- **r022.98**: Implemented 44x44px touch targets
+- **r022.99**: Refined to 36x36px for better visual balance
+
+**Color Update (r022.103):**
+- Updated `HighlightConfigManager.getFillColor()` default: `#7B1FA2` → `#DF00FF`
+- Updated `HighlightConfigManager.getOutlineColor()` default: `#7B1FA2` → `#DF00FF`
+- Updated settings UI `ThemeColorPicker` defaults
+- Updated config comments and RGB fallback values
+
+**Impact:**
+- ✅ Zoom action more discoverable (no longer buried in menu)
+- ✅ Touch-friendly interface (36x36px buttons)
+- ✅ Accurate selection counts (r022.96 bug removed)
+- ✅ Purple graphics consistently visible on top
+- ✅ Popups work on first click
+- ✅ Brighter default color for better visibility
+
+**Files Modified:**
+- `query-simple/src/runtime/query-result.tsx` - Zoom button, r022.96 revert, popup fix
+- `query-simple/src/runtime/graphics-layer-utils.ts` - Z-order repositioning
+- `query-simple/src/config.ts` - Color defaults in comments
+- `query-simple/src/setting/setting.tsx` - Color defaults in UI
+- `shared-code/mapsimple-common/highlight-config-manager.ts` - Color defaults
+- `query-simple/src/version.ts` - r022.87 → r022.103
+- `TODO.md` - Removed completed tasks, added auto-selection separation and LayerList integration TODOs
+
+**Testing:**
+- User tested each increment (r022.97-103)
+- Selection counts verified accurate after r022.96 removal
+- Z-order verified with multiple query switches
+- Zoom button verified on Results tab
+- Touch target sizing verified
+- Color change verified in settings UI
+
+---
+
 ## [1.19.0-r022.87] - 2026-02-07 - Infrastructure: Namespace Migration Complete
 
 ### Changed
