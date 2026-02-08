@@ -36,6 +36,8 @@ import { ArrowLeftOutlined } from 'jimu-icons/outlined/directional/arrow-left'
 import { ExpandAllOutlined } from 'jimu-icons/outlined/directional/expand-all'
 import { CollapseAllOutlined } from 'jimu-icons/outlined/directional/collapse-all'
 import { getExtraActions } from '../data-actions'
+// Import zoom icon for direct action button
+const zoomToIcon = require('./assets/icons/zoom-to.svg')
 import { 
   selectRecordsInDataSources, 
   clearSelectionInDataSources, 
@@ -604,6 +606,32 @@ export function QueryTaskResult (props: QueryTaskResultProps) {
   }, [outputDS])
 
   /**
+   * Zooms to all records in the results.
+   */
+  const zoomToAllResults = React.useCallback(async () => {
+    if (!accumulatedRecords || accumulatedRecords.length === 0 || !zoomToRecords) {
+      return
+    }
+    
+    try {
+      await zoomToRecords(accumulatedRecords)
+      debugLogger.log('TASK', {
+        event: 'zoom-to-all-results',
+        widgetId,
+        recordCount: accumulatedRecords.length,
+        timestamp: Date.now()
+      })
+    } catch (error) {
+      debugLogger.log('TASK', {
+        event: 'zoom-to-all-results-error',
+        widgetId,
+        error: error instanceof Error ? error.message : String(error),
+        timestamp: Date.now()
+      })
+    }
+  }, [accumulatedRecords, zoomToRecords, widgetId])
+
+  /**
    * Clears all results. Resets local state and delegates to parent's clearResult method.
    */
   const clearResults = async () => {
@@ -944,11 +972,12 @@ export function QueryTaskResult (props: QueryTaskResultProps) {
                 timestamp: Date.now()
               })
               
-              // Open popup using mapView.openPopup() for proper initialization
+              // r022.98: Set shouldFocus: false to prevent premature focus on Features widget
+              // This prevents "[esri.widgets.Features] Features can only be focused when currently active" warning
               mapView.openPopup({
                 features: [clickedFeature],
                 location: popupLocation,
-                shouldFocus: true
+                shouldFocus: false
               })
               
               // Restore original popupEnabled state
@@ -1661,10 +1690,35 @@ export function QueryTaskResult (props: QueryTaskResultProps) {
         {(
           <React.Fragment>
             <Tooltip title={getI18nMessage('clearResult')} placement='bottom'>
-              <Button className='ml-auto' icon size='sm' variant='text' color='inherit' onClick={clearResults} aria-label={getI18nMessage('clearResult')}>
+              <Button 
+                className='ml-auto' 
+                icon 
+                size='sm' 
+                variant='text' 
+                color='inherit' 
+                onClick={clearResults} 
+                aria-label={getI18nMessage('clearResult')}
+                css={css`min-width: 36px; min-height: 36px;`}
+              >
                 <Icon icon={iconMap.toolDelete} />
               </Button>
             </Tooltip>
+            {/* Zoom to results button - 36x36px touch target */}
+            {accumulatedRecords && accumulatedRecords.length > 0 && zoomToRecords && (
+              <Tooltip title={getI18nMessage('zoomToSelected')} placement='bottom'>
+                <Button 
+                  icon 
+                  size='sm' 
+                  variant='text' 
+                  color='inherit' 
+                  onClick={zoomToAllResults} 
+                  aria-label={getI18nMessage('zoomToSelected')}
+                  css={css`min-width: 36px; min-height: 36px;`}
+                >
+                  <Icon icon={zoomToIcon} />
+                </Button>
+              </Tooltip>
+            )}
             {/* Data actions filtered via manifest.json excludeDataActions - Show on Map, Select Loaded, and Clear Selection are excluded.
                 Custom "Add to Map" action is provided via extraActions and uses QuerySimple's selection process. */}
             {enableDataAction && outputDS && (

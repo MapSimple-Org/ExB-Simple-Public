@@ -62,7 +62,21 @@ export default {
   displayOrder: 'Display Order',
   displayOrderDescription: 'Lower numbers appear first. Leave empty to maintain default order.',
   highlightOptions: 'Highlight Options',
-  selectMapForHighlight: 'Select map widget'
+  selectMapForHighlight: 'Select map widget',
+  graphicsSymbology: 'Graphics Layer Symbology',
+  fillColor: 'Fill color',
+  fillOpacity: 'Fill opacity',
+  outlineColor: 'Outline color',
+  outlineOpacity: 'Outline opacity',
+  outlineWidth: 'Outline width',
+  pointMarkerSize: 'Point marker size',
+  pointOutlineWidth: 'Point outline width',
+  pointMarkerStyle: 'Point marker style',
+  styleCircle: 'Circle',
+  styleSquare: 'Square',
+  styleCross: 'Cross',
+  styleX: 'X',
+  styleDiamond: 'Diamond'
 }
 
 

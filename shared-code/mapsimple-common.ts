@@ -12,6 +12,7 @@ export * from './mapsimple-common/utils'
 export * from './mapsimple-common/use-ds-exists'
 export * from './mapsimple-common/data-source-tip'
 export * from './mapsimple-common/debug-logger'
+export * from './mapsimple-common/highlight-config-manager'
 
 
 

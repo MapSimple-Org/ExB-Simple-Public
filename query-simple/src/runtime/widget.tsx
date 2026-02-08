@@ -11,7 +11,7 @@ import { QueryTaskList } from './query-task-list'
 import { TaskListInline } from './query-task-list-inline'
 import { TaskListPopperWrapper } from './query-task-list-popper-wrapper'
 import { QueryWidgetContext } from './widget-context'
-import { createQuerySimpleDebugLogger } from 'widgets/shared-code/mapsimple-common'
+import { createQuerySimpleDebugLogger, highlightConfigManager } from 'widgets/shared-code/mapsimple-common'
 import { WIDGET_VERSION } from '../version'
 // Chunk 1: URL Parameter Consumption Manager (r018.8)
 import { UrlConsumptionManager } from './hooks/use-url-consumption'
@@ -476,6 +476,9 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
     this.selectionRestorationManager.setWidgetId(this.props.id)
     
     // Graphics layer will be initialized when map view becomes available via JimuMapViewComponent
+    
+    // Register widget config with HighlightConfigManager (r022.91)
+    highlightConfigManager.registerConfig(this.props.id, this.props.config)
   }
 
   componentWillUnmount() {
@@ -506,6 +509,9 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
     
     // Chunk 5: Clean up accumulated records manager (r018.26 - Step 5.1: Add manager)
     this.accumulatedRecordsManager.cleanup()
+    
+    // Unregister widget config from HighlightConfigManager (r022.91)
+    highlightConfigManager.unregisterConfig(this.props.id)
     
     debugLogger.log('WIDGET-STATE', {
       event: 'widget-closed',
@@ -579,6 +585,11 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
       }
     }
     // Note: Minimize keeps state as 'OPENED', so no state change = no action = selections preserved ✓
+    
+    // Re-register config with HighlightConfigManager on config changes (r022.91)
+    if (prevProps.config !== this.props.config) {
+      highlightConfigManager.registerConfig(this.props.id, this.props.config)
+    }
     
     // Chunk 4: Graphics layer is now required (r018.25 - Step 4.3: Remove config change handling)
     // No need to handle config changes for graphics layer since it's always enabled
@@ -968,17 +979,22 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
       return
     }
     
-    // Use manager as source of truth for visibility (r018.13)
-    const isWidgetOpen = this.visibilityManager.getIsPanelVisible()
+    // r022.93: Trust props.state if available (minimized widgets still 'OPENED')
+    // Fallback to DOM visibility only if props.state is undefined (initial load)
+    const isWidgetOpen = this.props.state === 'OPENED' || 
+                         (this.props.state === undefined && this.visibilityManager.getIsPanelVisible())
     
     // r022.42: Simplified logging - no more per-layer event details
     debugLogger.log('RESTORE', {
       event: 'identify-popup-closed-restore-requested',
       widgetId: id,
       isWidgetOpen,
+      propsState: this.props.state,
+      domVisible: this.visibilityManager.getIsPanelVisible(),
       resultsMode: this.state.resultsMode,
       hasAccumulatedRecords: !!(this.state.accumulatedRecords && this.state.accumulatedRecords.length > 0),
       accumulatedRecordsCount: this.state.accumulatedRecords?.length || 0,
+      note: 'r022.93: Trust props.state OPENED (even if minimized), fallback to DOM if undefined',
       timestamp: customEvent.detail.timestamp
     })
     
@@ -987,6 +1003,8 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
       debugLogger.log('RESTORE', {
         event: 'identify-popup-closed-restore-skipped-widget-closed',
         widgetId: id,
+        propsState: this.props.state,
+        domVisible: this.visibilityManager.getIsPanelVisible(),
         decision: 'SKIP_RESTORATION',
         reason: 'Widget is closed'
       })

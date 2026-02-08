@@ -6,42 +6,12 @@
 import type { DataSource, FeatureLayerDataSource, FeatureDataRecord } from 'jimu-core'
 import { DataSourceManager } from 'jimu-core'
 import { loadArcGISJSAPIModules } from 'jimu-arcgis'
-import { createQuerySimpleDebugLogger } from 'widgets/shared-code/mapsimple-common'
+import { createQuerySimpleDebugLogger, highlightConfigManager } from 'widgets/shared-code/mapsimple-common'
 
 const debugLogger = createQuerySimpleDebugLogger()
 
 // Global sequence counter for graphics operations to track timing across calls
 let operationSequence = 0
-
-/**
- * QuerySimple Widget Highlight Symbology Constants
- * 
- * These values are hardcoded to ensure consistent highlighting that is not affected
- * by external widgets (e.g., Draw widget) modifying mapView.highlightOptions.
- * 
- * r022.35: Hardcoded to prevent Advanced Draw widget from setting fillOpacity to 0,
- * which causes graphics to render with outline only (no fill).
- */
-const QUERYSIMPLE_HIGHLIGHT_SYMBOLOGY = {
-  // Base color: Cyan (matches ArcGIS default selection color)
-  color: [0, 255, 255] as [number, number, number],
-  
-  // Fill opacity for polygons (25% transparent)
-  fillOpacity: 0.25,
-  
-  // Outline/halo opacity (100% opaque)
-  outlineOpacity: 1.0,
-  
-  // Line opacity (100% opaque for visibility)
-  lineOpacity: 1.0,
-  
-  // Widths
-  outlineWidth: 2,
-  lineWidth: 4,
-  
-  // Point marker size
-  markerSize: 12
-} as const
 
 /**
  * Gets the map view from a data source's origin layer.
@@ -315,55 +285,67 @@ export async function getMapViewFromDataSource(
 /**
  * Gets the default highlight symbol based on geometry type.
  * 
- * r022.35: Uses hardcoded QuerySimple symbology constants instead of reading from
- * mapView.highlightOptions. This ensures consistent rendering that is not affected
- * by external widgets (e.g., Advanced Draw widget setting fillOpacity to 0).
+ * r022.92: Uses HighlightConfigManager to get widget-specific symbology configuration.
+ * Falls back to hardcoded defaults if config not available.
  * 
  * @param geometryType - The geometry type ('point', 'polyline', 'polygon', etc.)
+ * @param widgetId - The widget ID to retrieve config for
  * @returns Symbol configured with widget-specific highlighting
  */
 function getDefaultHighlightSymbol(
-  geometryType: string
+  geometryType: string,
+  widgetId: string
 ): __esri.Symbol {
-  // Use hardcoded QuerySimple symbology instead of reading from mapView.highlightOptions
-  // This prevents external widgets from affecting our graphics rendering
-  
-  const { color, fillOpacity, outlineOpacity, lineOpacity, outlineWidth, lineWidth, markerSize } = QUERYSIMPLE_HIGHLIGHT_SYMBOLOGY
+  // r022.92: Get symbology from HighlightConfigManager (per-widget config)
+  const fillColorRGB = highlightConfigManager.getFillColor(widgetId)
+  const fillOpacity = highlightConfigManager.getFillOpacity(widgetId)
+  const outlineColorRGB = highlightConfigManager.getOutlineColor(widgetId)
+  const outlineOpacity = highlightConfigManager.getOutlineOpacity(widgetId)
+  const outlineWidth = highlightConfigManager.getOutlineWidth(widgetId)
+  const pointSize = highlightConfigManager.getPointSize(widgetId)
+  const pointOutlineWidth = highlightConfigManager.getPointOutlineWidth(widgetId)
+  const pointStyle = highlightConfigManager.getPointStyle(widgetId)
   
   // Build color arrays with appropriate opacity
-  const fillColor = [...color, fillOpacity] as [number, number, number, number]
-  const outlineColor = [...color, outlineOpacity] as [number, number, number, number]
-  const lineColor = [...color, lineOpacity] as [number, number, number, number]
+  const fillColorWithAlpha = [...fillColorRGB, fillOpacity] as [number, number, number, number]
+  const outlineColorWithAlpha = [...outlineColorRGB, outlineOpacity] as [number, number, number, number]
+  const lineColorWithAlpha = [...outlineColorRGB, outlineOpacity] as [number, number, number, number]
   
-  // DIAGNOSTIC (r022.34): Log symbology being used
+  // DIAGNOSTIC: Log symbology being used (r022.92: now from HighlightConfigManager)
   debugLogger.log('GRAPHICS-LAYER', {
     event: 'symbology-calculation',
     geometryType,
-    source: 'QUERYSIMPLE_HIGHLIGHT_SYMBOLOGY-constants',
-    hardcodedValues: {
-      baseColor: color,
+    widgetId,
+    source: 'HighlightConfigManager',
+    configValues: {
+      fillColorRGB,
       fillOpacity,
-      fillColor,
+      fillColorWithAlpha,
+      outlineColorRGB,
       outlineOpacity,
-      outlineColor,
-      lineOpacity,
-      lineColor
+      outlineColorWithAlpha,
+      outlineWidth,
+      pointSize,
+      pointOutlineWidth,
+      pointStyle
     },
     symbolToCreate: geometryType === 'polygon' ? {
       type: 'simple-fill',
-      fillColor,
-      outlineColor,
+      fillColor: fillColorWithAlpha,
+      outlineColor: outlineColorWithAlpha,
       outlineWidth
     } : geometryType === 'polyline' ? {
       type: 'simple-line',
-      lineColor,
-      width: lineWidth
+      lineColor: lineColorWithAlpha,
+      width: outlineWidth
     } : {
       type: 'simple-marker',
-      color: outlineColor,
-      size: markerSize
+      color: outlineColorWithAlpha,
+      size: pointSize,
+      style: pointStyle,
+      outlineWidth: pointOutlineWidth
     },
-    note: 'r022.35: Using hardcoded symbology - independent of mapView.highlightOptions',
+    note: 'r022.92: Using HighlightConfigManager for per-widget configuration',
     timestamp: Date.now()
   })
   
@@ -372,28 +354,29 @@ function getDefaultHighlightSymbol(
     case 'multipoint':
       return {
         type: 'simple-marker',
-        color: outlineColor,
+        style: pointStyle,
+        color: fillColorWithAlpha, // Fill color for marker interior
         outline: {
-          color: outlineColor,
-          width: outlineWidth
+          color: outlineColorWithAlpha,
+          width: pointOutlineWidth
         },
-        size: markerSize
+        size: pointSize
       } as unknown as __esri.SimpleMarkerSymbol
       
     case 'polyline':
       return {
         type: 'simple-line',
-        color: lineColor,
-        width: lineWidth
+        color: lineColorWithAlpha,
+        width: outlineWidth
       } as unknown as __esri.SimpleLineSymbol
       
     case 'polygon':
     case 'multipolygon':
       return {
         type: 'simple-fill',
-        color: fillColor,
+        color: fillColorWithAlpha,
         outline: {
-          color: outlineColor,
+          color: outlineColorWithAlpha,
           width: outlineWidth
         }
       } as unknown as __esri.SimpleFillSymbol
@@ -402,9 +385,9 @@ function getDefaultHighlightSymbol(
       // Fallback to polygon symbol
       return {
         type: 'simple-fill',
-        color: fillColor,
+        color: fillColorWithAlpha,
         outline: {
-          color: outlineColor,
+          color: outlineColorWithAlpha,
           width: outlineWidth
         }
       } as unknown as __esri.SimpleFillSymbol
@@ -447,8 +430,10 @@ export async function createOrGetGraphicsLayer(
       visible: true
     })
     
-    // Add to map
-    mapView.map.add(graphicsLayer)
+    // r022.100: Add to the very end so purple graphics draw on top
+    // Get current layer count and add 1 to ensure we're after everything including highlight layers
+    const currentLayerCount = mapView.map.layers.length
+    mapView.map.add(graphicsLayer, currentLayerCount)
     
     debugLogger.log('GRAPHICS-LAYER', {
       event: 'createOrGetGraphicsLayer-created',
@@ -494,6 +479,25 @@ export async function addHighlightGraphics(
     return
   }
 
+  // r022.102: Move graphics layer to absolute end AFTER native selection creates highlight layers
+  // This ensures purple graphics always render on top
+  const allLayers = mapView.map.layers.toArray()
+  const currentIndex = allLayers.findIndex(l => l.id === graphicsLayer.id)
+  const targetIndex = allLayers.length - 1 // Last position
+  
+  if (currentIndex !== -1 && currentIndex < targetIndex) {
+    mapView.map.reorder(graphicsLayer, targetIndex)
+    debugLogger.log('GRAPHICS-LAYER', {
+      event: 'r022-102-moved-to-top',
+      seq,
+      graphicsLayerId: graphicsLayer.id,
+      oldIndex: currentIndex,
+      newIndex: targetIndex,
+      note: 'Moved graphics layer to absolute end so purple renders on top of native selection',
+      timestamp: Date.now()
+    })
+  }
+
   // Log existing state BEFORE adding - verify assumption about duplicates
   const existingGraphicsCount = graphicsLayer.graphics.length
   const existingRecordIds: string[] = []
@@ -534,6 +538,9 @@ export async function addHighlightGraphics(
   const skippedRecordIds: string[] = []
   const duplicateRecordIds: string[] = []
 
+  // Extract widgetId from graphics layer ID (format: querysimple-highlight-{widgetId})
+  const widgetId = graphicsLayer.id.replace('querysimple-highlight-', '')
+  
   // r021.90: No duplicate checking - caller clears the layer before calling this function
   // This ensures we always add the exact set of records provided
   records.forEach(record => {
@@ -550,8 +557,8 @@ export async function addHighlightGraphics(
       // Get geometry type from graphic
       const geometryType = graphic.geometry.type
 
-      // Create symbol using widget-specific hardcoded symbology (r022.35)
-      const symbol = getDefaultHighlightSymbol(geometryType)
+      // Create symbol using HighlightConfigManager (r022.92)
+      const symbol = getDefaultHighlightSymbol(geometryType, widgetId)
 
       // r021.90: Store queryConfigId to distinguish between records with same ID from different queries
       const queryConfigId = record.feature?.attributes?.__queryConfigId || ''

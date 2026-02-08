@@ -2,327 +2,209 @@
 
 Custom widgets for ArcGIS Experience Builder Developer Edition (1.19.0+). Built for performance, deep-linking, and advanced result management.
 
-**Current Version**: `1.19.0-r022.87`  
-**Latest Update**: Shared-code namespace migration for collision-proof deployment (Feb 7, 2026)
+**Current Version**: `1.19.0-r022.103`  
+**Latest Update**: Graphics Symbology v2 + UX Improvements (Feb 8, 2026)
 
 ---
 
-## What's New: r022.77 → r022.87 (Feb 7, 2026)
+## Quick Start
 
-### 🚀 Infrastructure Enhancements
+### Installation
 
-#### Shared-Code Namespace Migration (r022.78-r022.87)
+1. **Copy widgets to your ExB installation:**
+   ```bash
+   # Copy all three folders to your-extensions/widgets/
+   cp -r query-simple helper-simple shared-code /path/to/ExB/client/your-extensions/widgets/
+   ```
 
-**Renamed shared utilities from `common` to `mapsimple-common` to prevent module conflicts in multi-vendor deployments.**
+2. **Build the widgets:**
+   ```bash
+   cd /path/to/ExB/client
+   npm run build
+   ```
 
-Experience Builder loads all custom widgets into a shared runtime environment. If another developer created a widget with a `shared-code/common/` folder, it would collide with MapSimple's modules, causing loading errors and unpredictable behavior.
-
-**Root Cause:**  
-The generic `common` namespace was too broad and collision-prone. In environments with multiple custom widgets (consultancies, enterprise deployments), the risk of namespace conflicts was significant.
-
-**Solution:**
-- **Side-by-Side Migration Strategy**: Both old (`common`) and new (`mapsimple-common`) import paths coexisted during the transition
-- **Incremental Testing**: 47 files migrated across 8 groups with full testing after each commit
-- **Zero Downtime**: Both paths remained functional until migration was complete
-- **Clean Rollback Path**: Started from stable r022.77 baseline with documented recovery strategy
-
-**Impact:**
-- ✅ Collision-proof namespace ensures safe deployment in any environment
-- ✅ No breaking changes for existing implementations (handled internally)
-- ✅ Foundation established for public distribution and multi-vendor compatibility
-- ✅ Zero regressions detected throughout 10-commit migration process
-
-**Technical Details:**
-1. Created `shared-code/mapsimple-common/` alongside existing `shared-code/common/`
-2. Updated imports in batches: core runtime → forms → hooks → settings → data actions
-3. Verified compilation and functionality after each batch
-4. Removed old `common` folder only after all references migrated
-
-This change is invisible to end users but critical for deployment reliability in shared environments.
+3. **Restart Experience Builder** and add QuerySimple + HelperSimple to your app
 
 ---
 
-## Previous Updates: r022.26 → r022.77 (Feb 5, 2026)
+## What's New: r022.97 → r022.103 (Feb 8, 2026)
+
+### 🎨 Graphics Symbology v2
+
+**Fully configurable graphics layer styling** - customize colors, opacity, and sizing for both fill and outline.
+
+**New Features:**
+- **Settings UI Controls**: Color pickers, opacity sliders, and size controls for fill and outline
+- **Centralized Configuration**: `HighlightConfigManager` singleton manages all graphics symbology
+- **Per-Widget Customization**: Each QuerySimple widget can have its own color scheme
+- **New Default Color**: Magenta (#DF00FF) - brighter and more visible than the old purple
+
+**Configuration Options:**
+- Fill Color (hex color picker)
+- Fill Opacity (0-1 slider)
+- Outline Color (hex color picker)
+- Outline Width (1-5px)
+- Point Marker Size (8-24px)
+
+### 🎯 UX Improvements
+
+**Zoom to Results Button** - Moved from hidden Actions menu to prominent Results tab header
+- **Why**: Users requested more discoverable placement
+- **Location**: Right of the Clear (trash) button
+- **Size**: 36x36px touch-friendly target (WCAG/Apple HIG compliant)
+
+### 🐛 Critical Fixes
+
+**Selection Count Bug Resolved** - Fixed "3 selections with 2 results" issue
+- **Root Cause**: Faulty optimization was forcing duplicate selection calls
+- **Solution**: Removed the problematic r022.96 "fix" that was causing the bug
+- **Result**: Selection counts now accurate in all modes (New/Add/Remove)
+
+**Popup Multi-Click Issue Fixed** - Popups now open on first click
+- **Bug**: `[esri.widgets.Features]` warning caused popup issues
+- **Solution**: Set `shouldFocus: false` in `mapView.openPopup()`
+- **Impact**: Consistent popup behavior across all interactions
+
+**Graphics Z-Order Optimization** - Purple graphics now consistently render on top of native blue selection
+- **Implementation**: Graphics layer repositioned to end of layer stack on each render
+- **Result**: Both colors visible (purple fill + blue outline)
+
+---
+
+## Previous Updates: r022.87 (Feb 7, 2026)
+
+### 🚀 Infrastructure: Namespace Migration
+
+**Renamed shared utilities from `common` to `mapsimple-common`** to prevent module conflicts in multi-vendor deployments.
+
+**Why**: Experience Builder loads all custom widgets into a shared runtime. Generic `common` namespace risked collision with other developers' widgets.
+
+**Impact**:
+- ✅ Collision-proof namespace for safe deployment
+- ✅ No breaking changes (handled internally)
+- ✅ 47 files migrated across 8 groups with zero regressions
+
+---
+
+## Previous Updates: r022.77 (Feb 5, 2026)
 
 ### 🎯 Critical Fixes
 
-#### Widget Minimize vs Close Detection (r022.77)
+**Widget Minimize vs Close Detection** - Fixed widget minimize incorrectly clearing selections
+- **Bug**: Minimizing triggered close logic, clearing map selections
+- **Solution**: Uses `props.state` from Experience Builder to distinguish minimize from close
+- **Result**: Minimize preserves selections; close clears them (as expected)
 
-**Fixed widget minimize incorrectly clearing selections.** Minimizing the widget was triggering the close logic, which cleared selections from the map. Users expected minimize to preserve selections (like a visual collapse).
-
-**Root Cause:**  
-Widget used DOM visibility detection (IntersectionObserver) which couldn't distinguish between minimize (widget hidden) and close (widget closed). Both made the DOM element hidden → both triggered clear-selections logic.
-
-**Solution:**
-- **Close detection:** Now uses `props.state` property from Experience Builder (`'OPENED'` → `'CLOSED'`)
-- **Minimize handling:** When widget is minimized, `props.state` stays `'OPENED'` → no state change → no action → selections preserved
-- **Open detection:** IntersectionObserver still handles open (works correctly)
-
-**Impact:**
-- ✅ Minimize preserves selections (bug fixed)
-- ✅ Maximize shows selections still there
-- ✅ Close still clears selections correctly
-- ✅ Open still restores selections correctly
-- ✅ HelperSimple receives accurate widget state events
-
-#### Cross-Layer Selection Count (r022.71-74)
-
-**Resolved a high-priority bug** where adding records from multiple layers showed incorrect selection counts on the map (e.g., 6 selected instead of 4, or 5 instead of 3).
-
-**Root Cause:**  
-When accumulating records from different layers (Parcels + Address Points), all record IDs were being selected on the current query's single origin data source. This caused cross-layer selection pollution where Parcel IDs were attempted on Address Points layers.
-
-**Solution:**
-- **Intelligent Selection Check**: useEffect now detects when records are already correctly selected, preventing redundant operations
-- **Cross-Layer Grouping**: Records are grouped by their `__queryConfigId` and selected on their correct origin data sources
-- **Remove Mode Fix**: Composite key matching now looks up `__queryConfigId` from accumulated records (not query results)
-
-**Impact:**
-- ✅ Selection counts now accurate across all layer combinations
-- ✅ Graphics display correctly
-- ✅ Remove mode works properly (via query execution or X button)
-- ✅ All 8 edge cases tested and passing
-- ✅ Widget close/reopen restoration unaffected
-- ✅ Hash URL queries work correctly
+**Cross-Layer Selection Count** - Fixed incorrect selection counts when accumulating from multiple layers
+- **Bug**: 6 selected instead of 4 when mixing Parcels + Address Points
+- **Solution**: Records grouped by `__queryConfigId` and selected on correct origin data sources
+- **Result**: Accurate selection counts across all layer combinations
 
 ---
 
-## Previous Updates: r021.112 → r022.26 (Jan 30, 2026)
+## Key Features
 
-### 🎯 Major Improvements
+### Why QuerySimple?
 
-Since the r021.112 release (format preservation & composite keys), we've made significant enhancements focused on **architecture**, **user feedback**, and **stability**:
+QuerySimple solves the common pain points of the standard Experience Builder query widget:
 
-#### 1. Tab-Level Component Extraction (r022.0)
+- **93% Latency Reduction**: Universal SQL Optimizer + Attribute Stripping minimize network payloads
+- **Dual-Mode Deep Linking**: Hash Fragments (`#shortId=val`) and Query Strings (`?shortId=val`)
+- **Results Accumulation**: "Add to" or "Remove from" selections across multiple queries
+- **Discoverable Automation**: Interactive Info Button (ℹ️) shows users how to deep-link
+- **Persistence**: Selections maintained even when identify tool is used
 
-**Architectural foundation for future spatial features.** The Query tab logic has been extracted into a separate component (`QueryTabContent.tsx`), reducing the main orchestrator file from 3456 → 2982 lines (13.7% reduction). This modular architecture prepares the widget for the upcoming **Spatial tab** (drawing tools, buffers, and spatial queries).
+### Advanced Features
 
-**Benefits:**
-- ✅ Each tab is independently testable
-- ✅ Simpler maintenance and debugging
-- ✅ Room to grow: Spatial tab can be added cleanly
-- ✅ No functional changes - purely architectural
-
-#### 2. UX Feedback Popovers (r022.3-r022.26)
-
-**Clear visual feedback for edge cases.** Users now receive immediate, dismissible feedback when their queries don't produce expected results:
-
-**Scenario 1: Query Returns No Results**
-- **When:** Query executes but finds 0 records
-- **Feedback:** Popover appears below the query form
-- **Message:** "No records found. Try adjusting your search criteria."
-
-**Scenario 2: Remove Mode - Nothing to Remove**
-- **When:** Query finds records, but none are in the current Results panel
-- **Feedback:** Popover appears at bottom of Results panel
-- **Message:** "Query found X record(s), but none were in your Results."
-
-**Scenario 3: Add Mode - All Duplicates**
-- **When:** Query finds records, but all are already in Results
-- **Feedback:** Popover appears at bottom of Results panel
-- **Message:** "Query found X record(s), but all were already in your Results."
-
-**Implementation:**
-- Built with Esri's Calcite Popover component
-- Dismissible via X button or click outside
-- Reappears on each occurrence (not sticky)
-- Light yellow background for visibility
-- Fully internationalized (i18n ready)
-
-#### 3. Critical Bug Fix: Zombie Graphics (r022.1)
-
-**Removed records now stay removed.** Fixed a bug where records removed via the X button would reappear as graphics on the map after closing and reopening the widget. The issue was caused by stale restoration logic that didn't reflect removals.
-
-**Impact:**
-- ✅ Removed records stay removed across widget close/reopen
-- ✅ Graphics layer correctly reflects current Results panel state
-- ✅ Works in all modes (NEW, ADD, REMOVE)
-
-#### 4. Code Cleanup: Dead Code Removal (r022.2)
-
-**Simpler, more maintainable codebase.** Removed 126+ lines of unused `lastSelection` fallback code that was documented as removed in r021.110 but never actually deleted from source. The widget now uses `accumulatedRecords` as the single source of truth for all restoration scenarios.
-
-**Impact:**
-- ✅ Widget bundle size reduced: 2.31 MiB → 2.29 MiB
-- ✅ One source of truth (no risky fallbacks)
-- ✅ Zero functional changes (already fixed in r022.1)
-
-#### 5. Tab Auto-Switch Bug Fix (r022.22)
-
-**Query tab no longer switches incorrectly.** Fixed a bug in Add mode where the widget would switch to the Results tab even when a query returned 0 results (but existing accumulated records were present). The tab now only switches when the **current query** returns results, not when **any results exist**.
-
-**Impact:**
-- ✅ Tab switching behavior is now correct in all modes
-- ✅ No false switches when queries fail
-- ✅ Improved user experience for multi-query workflows
-
----
-
-### 🔄 Previous Release: r021.112 (Jan 19-27, 2026)
-
-**Format Preservation & Multi-Source Duplicates**
-
-The r021.112 release was a major architectural improvement focused on:
-- **Format preservation** when adding from different sources (fields no longer swap)
-- **Composite keys** for handling duplicate ObjectIDs from different layers
-- **Architectural simplification** with `accumulatedRecords` as single source of truth
-- **Bug fixes** for graphics doubling, ghost records, and mode switching
-
-For complete details on r021.112, see previous release notes and CHANGELOG.md
-
----
-
-## Key Differentiators (Why QuerySimple?)
-
-QuerySimple is designed to solve the common pain points of the standard Experience Builder query widget:
-
-- **93% Latency Reduction**: Powered by a **Universal SQL Optimizer** that automatically rewrites expensive queries to use database indexes, plus **Attribute Stripping** to minimize network payloads.
-- **Dual-Mode Deep Linking**: Support for both Hash Fragments (`#shortId=val`) and Query Strings (`?shortId=val`).
-- **Results Accumulation**: Unlike the standard widget which clears results on every search, QuerySimple allows you to "Add to" or "Remove from" a selection set across multiple different queries.
-- **Discoverable Automation**: An interactive "Info Button" (ℹ️) automatically appears to show users exactly how to deep-link to the current layer.
-- **Persistence & Restoration**: Selections are maintained even when the identify tool is used, ensuring users never lose their search context.
+- **Duplicate Query Button**: Clone any query instantly with all settings preserved
+- **Query Grouping**: Organize dozens of searches into clean two-dropdown hierarchy
+- **SQL Optimizer**: Automatically unwraps `LOWER()` to ensure database index usage
+- **Display Order Control**: Prioritize searches via `order` property
+- **Configurable Graphics**: Custom colors, opacity, and sizing for highlights
 
 ---
 
 ## Widgets in this Suite
 
 ### 🔍 QuerySimple (`query-simple/`)
-A high-performance search engine for Experience Builder.
-
-**Advanced Features:**
-- **Duplicate Query Button**: Clone any query instantly with all settings preserved - a massive time-saver when configuring multiple similar searches.
-- **SQL Optimizer**: Automatically unwraps `LOWER()` from search fields to ensure database index usage.
-- **Query Grouping**: Organize dozens of searches into a clean two-dropdown hierarchy.
-- **Display Order**: Control search prioritization via the `order` property (no need to manually reorder config).
-- **Spatial Power**: Integrated buffer, draw, and extent filtering.
-- **Unified Testing**: Verified by a "Mega-Journey" E2E suite that simulates real user sessions.
+High-performance search engine for Experience Builder.
 
 ### 🛠️ HelperSimple (`helper-simple/`)
-The "Orchestrator" widget that handles the background logic.
+Background orchestrator that handles:
+- **URL Monitor**: Triggers QuerySimple automation from hash/query strings
+- **Selection Guard**: Restores results after map identify popup closes
+- **Handshake Logic**: Manages open/close state between widgets
 
-**Features:**
-- **URL Monitor**: Listens for hash and query string changes to trigger QuerySimple automation.
-- **Selection Guard**: Restores QuerySimple results after the map identify popup is closed.
-- **Handshake Logic**: Manages the "open/close" state between widgets to ensure a clean UI.
-
----
-
-## Configuration & Enhancements
-
-### Duplicate Query Button (NEW in r020.0)
-
-**The #1 time-saver for power users configuring multiple similar queries.**
-
-When you have dozens of queries against the same layer (e.g., different parcel search fields), the duplicate button eliminates repetitive configuration work.
-
-**How it works:**
-1. Configure your first query with all the settings (layer, filters, display format, spatial tools, grouping, etc.)
-2. Click the **duplicate icon** (📋) next to the query in the settings panel
-3. A perfect clone appears instantly with "(Copy)" appended to the name
-4. Change only what's different (e.g., switch from "Parcel Number" field to "Owner Name" field)
-5. Done! All other settings are preserved.
-
-**What gets cloned:**
-- ✅ Layer and data source configuration
-- ✅ Attribute filters and SQL expressions
-- ✅ Spatial filters, buffers, and geometry tools
-- ✅ Display format and field configuration
-- ✅ Sorting, pagination, and result styling
-- ✅ Grouping settings and display order
-- ✅ Hash parameters (with "_copy" appended to prevent collisions)
-
-**Unique IDs auto-generated:**
-- New `configId` and `outputDataSourceId` are created automatically
-- Hash parameters (`shortId`, `searchAlias`) are made unique with "_copy" suffix
-- No risk of ID collisions or configuration conflicts
-
-**Real-world example:**
-If you're building a parcel search with 10 different search fields (PIN, Major/Minor, Owner Name, Address, etc.), you can:
-1. Configure the first query completely (~5 minutes)
-2. Duplicate it 9 times (~30 seconds)
-3. Update just the field name in each copy (~2 minutes total)
-
-**Total time: ~8 minutes instead of ~50 minutes!**
+### 📦 Shared Code (`shared-code/`)
+Common utilities shared between widgets:
+- Debug logger (`mapsimple-common/debug-logger.ts`)
+- Data source utilities (`mapsimple-common/use-ds-exists.tsx`)
+- UI components (`mapsimple-common/common-components.tsx`)
+- Graphics configuration (`mapsimple-common/highlight-config-manager.ts`)
 
 ---
+
+## Configuration
 
 ### URL Parameters (Deep Linking)
-Configure a `shortId` for any query to enable instant automation.
+
+Configure a `shortId` for any query to enable instant automation:
 
 | Format | Example | Best Use Case |
 | :--- | :--- | :--- |
-| **Hash (#)** | `index.html#pin=123` | **Interactive UX.** Snappy, no page reload, private to browser. |
-| **Query (?)** | `index.html?pin=123` | **External Linking.** Standard for CRM/Email integrations. |
+| **Hash (#)** | `index.html#pin=123` | **Interactive UX.** Snappy, no page reload |
+| **Query (?)** | `index.html?pin=123` | **External Linking.** CRM/Email integrations |
 
 ### Display Order & Grouping
-Manage complex search requirements with ease:
-- **`groupId`**: Clusters related searches (e.g., "Parcels") into a group.
-- **`searchAlias`**: The label shown inside the group (e.g., "Search by PIN").
-- **`order`**: A numeric value (1, 2, 3...) that forces a search to the top of the list, regardless of when it was added to the config.
+
+- **`groupId`**: Clusters related searches (e.g., "Parcels")
+- **`searchAlias`**: Label shown inside the group (e.g., "Search by PIN")
+- **`order`**: Numeric value (1, 2, 3...) forces search to top of list
+
+### Graphics Symbology
+
+Configure in widget settings:
+- **Fill Color**: Hex color picker (default: #DF00FF magenta)
+- **Fill Opacity**: 0-1 (default: 0.25)
+- **Outline Color**: Hex color picker (default: #DF00FF magenta)
+- **Outline Width**: 1-5px (default: 2px)
+- **Point Size**: 8-24px (default: 12px)
 
 ---
 
-## Troubleshooting & Debugging
+## Troubleshooting
 
-The suite includes a production-safe **Debug System**. No logs are shown in the console unless explicitly requested via the URL.
+### Debug System
 
-### How to use:
-Add `?debug=FEATURE` to your URL (e.g., `?debug=HASH,TASK`).
+Production-safe debugging via URL parameter: `?debug=FEATURE`
 
-### Available Switches:
-| Switch | What it tracks |
-| :--- | :--- |
-| `all` | Enable every single log (Warning: High volume). |
-| `HASH` | Deep link consumption and URL parameter parsing. |
-| `TASK` | Query execution, performance metrics, and data source status. |
-| `RESULTS-MODE` | Transitions between New, Add, and Remove selection modes. |
-| `EXPAND-COLLAPSE` | State management for result item details. |
-| `SELECTION` | Identify popup tracking and map selection sync. |
-| `RESTORE` | Logic used to rebuild the map selection after an identify event. |
-| `WIDGET-STATE` | The handshake between HelperSimple and QuerySimple. |
-| `GRAPHICS-LAYER` | Highlighting logic for graphics-enabled widgets. |
+**Available switches:**
+- `all` - Enable all logs (high volume)
+- `HASH` - URL parameter parsing and consumption
+- `TASK` - Query execution and performance
+- `RESULTS-MODE` - New/Add/Remove mode transitions
+- `SELECTION` - Map selection sync
+- `RESTORE` - Selection restoration logic
+- `GRAPHICS-LAYER` - Highlighting logic
+- `WIDGET-STATE` - Widget handshake events
 
-### Known Bugs (Always Visible)
+**Example:** `index.html?debug=HASH,TASK`
 
-**Important:** Known bugs are logged automatically, even when `?debug=false`. These appear as warnings in the console with the format `[QUERYSIMPLE ⚠️ BUG]` to help developers understand when they encounter a known issue rather than something they've done wrong.
+### Known Bugs
 
-Each bug log includes:
-- **Bug ID**: Unique identifier (e.g., `BUG-GRAPHICS-001`)
-- **Category**: Bug type (SELECTION, UI, URL, DATA, GRAPHICS, PERFORMANCE, GENERAL)
-- **Description**: What the bug is and why it's happening
-- **Workaround**: How to avoid or work around the issue
-- **Target Resolution**: When the bug will be fixed (e.g., `r019.0`)
-
-See [`docs/bugs/BUGS.md`](docs/bugs/BUGS.md) for a complete list of known bugs and their status.
+Known bugs are logged automatically with format `[QUERYSIMPLE ⚠️ BUG]` including:
+- Bug ID and category
+- Description and workaround
+- Target resolution version
 
 ---
 
-## Documentation
+## Testing
 
-All development documentation has been organized into a centralized [`docs/`](docs/) directory for easy navigation:
+Verified by a **"Mega-Journey" E2E suite** that simulates 5-minute user sessions.
 
-- **[`docs/development/`](docs/)** - Development guides, testing, standards (start with [`DEVELOPMENT_GUIDE.md`](docs/development/DEVELOPMENT_GUIDE.md))
-- **[`docs/architecture/`](docs/)** - Design patterns, migration plans, refactoring strategies
-- **[`docs/technical/`](docs/)** - Deep dives into specific technical challenges
-- **[`docs/features/`](docs/)** - Feature specifications and integration guides
-- **[`docs/bugs/`](docs/)** - Bug reports and resolution documentation
-- **[`docs/blog/`](docs/)** - Development insights and lessons learned
-
-**Quick Links:**
-- 📖 **New Developers:** Start with [`docs/development/DEVELOPMENT_GUIDE.md`](docs/development/DEVELOPMENT_GUIDE.md)
-- 🧪 **Testing:** See [`docs/development/TESTING_WALKTHROUGH.md`](docs/development/TESTING_WALKTHROUGH.md)
-- 🏗️ **Architecture:** See [`docs/architecture/COMPLETE_MIGRATION_PLAN.md`](docs/architecture/COMPLETE_MIGRATION_PLAN.md)
-- 📋 **Full Index:** See [`docs/README.md`](docs/README.md)
-
----
-
-## Quality Assurance
-
-We use a **Unified Testing Strategy**. Instead of dozens of small tests that might miss state leaks, we run a single **"Mega-Journey"** that simulates a 5-minute user session across both widgets.
-
-### Running the Suite:
 ```bash
-# 1. Manual Auth (Do this once a day)
+# 1. Manual Auth (once per day)
 npm run test:e2e:auth-setup
 
 # 2. Run the Mega-Journey
@@ -331,11 +213,18 @@ npx playwright test tests/e2e/query-simple/session.spec.ts --project=chromium --
 
 ---
 
-## Installation
+## Requirements
 
-1. Copy `query-simple`, `helper-simple`, and `shared-code` into your `client/your-extensions/widgets` folder.
-2. Run `npm run build` from the `client` directory.
-3. Restart your Experience Builder server.
+- ArcGIS Experience Builder Developer Edition **1.19.0+**
+- Node.js (version matching your ExB installation)
+
+---
+
+## Support & Documentation
+
+- **Issues**: [Report bugs on GitHub](https://github.com/MapSimple-Org/ExB-Simple-Public/issues)
+- **Changelog**: See [CHANGELOG.md](CHANGELOG.md) for complete version history
+- **License**: MIT - see [LICENSE](LICENSE)
 
 ---
 

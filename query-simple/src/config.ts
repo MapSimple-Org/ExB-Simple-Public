@@ -186,6 +186,15 @@ export interface SettingConfig {
   resultPagingStyle?: PagingType
   lazyLoadInitialPageSize?: number
   highlightMapWidgetId?: string // Map widget ID to use for graphics layer highlighting
+  // Graphics Layer Symbology Configuration
+  highlightFillColor?: string         // Hex color (e.g., '#DF00FF' - magenta)
+  highlightFillOpacity?: number       // 0-1 (default: 0.25)
+  highlightOutlineColor?: string      // Hex color (e.g., '#DF00FF' - magenta)
+  highlightOutlineOpacity?: number    // 0-1 (default: 1.0)
+  highlightOutlineWidth?: number      // pixels (default: 2)
+  highlightPointSize?: number         // pixels (default: 12)
+  highlightPointOutlineWidth?: number // pixels (default: 2) - separate from polygon outline
+  highlightPointStyle?: 'circle' | 'square' | 'cross' | 'x' | 'diamond'  // default: 'circle'
   sizeMap?: {
     arrangementIconPopper?: SizeMap
   }

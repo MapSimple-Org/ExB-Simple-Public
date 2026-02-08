@@ -20,6 +20,7 @@ import {
   dataComponentsUtils
 } from 'jimu-ui/advanced/data-source-selector'
 import { NumericInput, Select, Switch, defaultMessages as jimuUIDefaultMessages } from 'jimu-ui'
+import { ThemeColorPicker } from 'jimu-ui/basic/color-picker'
 import { SettingRow, SettingSection, DirectionSelector, MapWidgetSelector } from 'jimu-ui/advanced/setting-components'
 import { type IMConfig, type QueryArrangeType, type QueryItemType, PagingType, ListDirection, FieldsType } from '../config'
 import defaultMessages from './translations/default'
@@ -309,6 +310,104 @@ export default class Setting extends React.PureComponent<AllWidgetSettingProps<I
                   />
                 </SettingRow>
               </SettingSection>
+          </SettingSection>
+        )}
+        {this.props.config.queryItems.length > 0 && (
+          <SettingSection role='group' aria-label={this.getI18nMessage('graphicsSymbology')} title={this.getI18nMessage('graphicsSymbology')}>
+                <SettingRow label={this.getI18nMessage('fillColor')} flow='wrap'>
+                  <ThemeColorPicker
+                    specificTheme={this.props.theme2}
+                    value={config.highlightFillColor || '#DF00FF'}
+                    onChange={(color: string) => {
+                      this.updateConfigForOptions(['highlightFillColor', color])
+                    }}
+                  />
+                </SettingRow>
+            
+            <SettingRow label={this.getI18nMessage('fillOpacity')} flow='wrap'>
+              <NumericInput
+                value={config.highlightFillOpacity ?? 0.25}
+                min={0}
+                max={1}
+                step={0.05}
+                onChange={(value: number) => {
+                  this.updateConfigForOptions(['highlightFillOpacity', value])
+                }}
+              />
+            </SettingRow>
+            
+                <SettingRow label={this.getI18nMessage('outlineColor')} flow='wrap'>
+                  <ThemeColorPicker
+                    specificTheme={this.props.theme2}
+                    value={config.highlightOutlineColor || '#DF00FF'}
+                    onChange={(color: string) => {
+                      this.updateConfigForOptions(['highlightOutlineColor', color])
+                    }}
+                  />
+                </SettingRow>
+            
+            <SettingRow label={this.getI18nMessage('outlineOpacity')} flow='wrap'>
+              <NumericInput
+                value={config.highlightOutlineOpacity ?? 1.0}
+                min={0}
+                max={1}
+                step={0.05}
+                onChange={(value: number) => {
+                  this.updateConfigForOptions(['highlightOutlineOpacity', value])
+                }}
+              />
+            </SettingRow>
+            
+            <SettingRow label={this.getI18nMessage('outlineWidth')} flow='wrap'>
+              <NumericInput
+                value={config.highlightOutlineWidth ?? 2}
+                min={1}
+                max={10}
+                step={1}
+                onChange={(value: number) => {
+                  this.updateConfigForOptions(['highlightOutlineWidth', value])
+                }}
+              />
+            </SettingRow>
+            
+            <SettingRow label={this.getI18nMessage('pointMarkerSize')} flow='wrap'>
+              <NumericInput
+                value={config.highlightPointSize ?? 12}
+                min={8}
+                max={32}
+                step={2}
+                onChange={(value: number) => {
+                  this.updateConfigForOptions(['highlightPointSize', value])
+                }}
+              />
+            </SettingRow>
+            
+            <SettingRow label={this.getI18nMessage('pointOutlineWidth')} flow='wrap'>
+              <NumericInput
+                value={config.highlightPointOutlineWidth ?? 2}
+                min={1}
+                max={6}
+                step={1}
+                onChange={(value: number) => {
+                  this.updateConfigForOptions(['highlightPointOutlineWidth', value])
+                }}
+              />
+            </SettingRow>
+            
+            <SettingRow label={this.getI18nMessage('pointMarkerStyle')} flow='wrap'>
+              <Select
+                value={config.highlightPointStyle || 'circle'}
+                onChange={(e) => {
+                  this.updateConfigForOptions(['highlightPointStyle', e.target.value])
+                }}
+              >
+                <option value='circle'>{this.getI18nMessage('styleCircle')}</option>
+                <option value='square'>{this.getI18nMessage('styleSquare')}</option>
+                <option value='cross'>{this.getI18nMessage('styleCross')}</option>
+                <option value='x'>{this.getI18nMessage('styleX')}</option>
+                <option value='diamond'>{this.getI18nMessage('styleDiamond')}</option>
+              </Select>
+            </SettingRow>
           </SettingSection>
         )}
         <DataSourceRemoveWarningPopup
