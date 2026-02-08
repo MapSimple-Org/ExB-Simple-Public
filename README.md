@@ -2,12 +2,47 @@
 
 Custom widgets for ArcGIS Experience Builder Developer Edition (1.19.0+). Built for performance, deep-linking, and advanced result management.
 
-**Current Version**: `1.19.0-r022.77`  
-**Latest Update**: Minimize bug fix, cross-layer selection fix, Remove mode enhancements (Feb 5, 2026)
+**Current Version**: `1.19.0-r022.87`  
+**Latest Update**: Shared-code namespace migration for collision-proof deployment (Feb 7, 2026)
 
 ---
 
-## What's New: r022.26 → r022.77 (Feb 5, 2026)
+## What's New: r022.77 → r022.87 (Feb 7, 2026)
+
+### 🚀 Infrastructure Enhancements
+
+#### Shared-Code Namespace Migration (r022.78-r022.87)
+
+**Renamed shared utilities from `common` to `mapsimple-common` to prevent module conflicts in multi-vendor deployments.**
+
+Experience Builder loads all custom widgets into a shared runtime environment. If another developer created a widget with a `shared-code/common/` folder, it would collide with MapSimple's modules, causing loading errors and unpredictable behavior.
+
+**Root Cause:**  
+The generic `common` namespace was too broad and collision-prone. In environments with multiple custom widgets (consultancies, enterprise deployments), the risk of namespace conflicts was significant.
+
+**Solution:**
+- **Side-by-Side Migration Strategy**: Both old (`common`) and new (`mapsimple-common`) import paths coexisted during the transition
+- **Incremental Testing**: 47 files migrated across 8 groups with full testing after each commit
+- **Zero Downtime**: Both paths remained functional until migration was complete
+- **Clean Rollback Path**: Started from stable r022.77 baseline with documented recovery strategy
+
+**Impact:**
+- ✅ Collision-proof namespace ensures safe deployment in any environment
+- ✅ No breaking changes for existing implementations (handled internally)
+- ✅ Foundation established for public distribution and multi-vendor compatibility
+- ✅ Zero regressions detected throughout 10-commit migration process
+
+**Technical Details:**
+1. Created `shared-code/mapsimple-common/` alongside existing `shared-code/common/`
+2. Updated imports in batches: core runtime → forms → hooks → settings → data actions
+3. Verified compilation and functionality after each batch
+4. Removed old `common` folder only after all references migrated
+
+This change is invisible to end users but critical for deployment reliability in shared environments.
+
+---
+
+## Previous Updates: r022.26 → r022.77 (Feb 5, 2026)
 
 ### 🎯 Critical Fixes
 
@@ -49,23 +84,6 @@ When accumulating records from different layers (Parcels + Address Points), all 
 - ✅ All 8 edge cases tested and passing
 - ✅ Widget close/reopen restoration unaffected
 - ✅ Hash URL queries work correctly
-
-**Fixed widget minimize incorrectly clearing selections.** Minimizing the widget was triggering the close logic, which cleared selections from the map. Users expected minimize to preserve selections (like a visual collapse).
-
-**Root Cause:**  
-Widget used DOM visibility detection (IntersectionObserver) which couldn't distinguish between minimize (widget hidden) and close (widget closed). Both made the DOM element hidden → both triggered clear-selections logic.
-
-**Solution:**
-- **Close detection:** Now uses `props.state` property from Experience Builder (`'OPENED'` → `'CLOSED'`)
-- **Minimize handling:** When widget is minimized, `props.state` stays `'OPENED'` → no state change → no action → selections preserved
-- **Open detection:** IntersectionObserver still handles open (works correctly)
-
-**Impact:**
-- ✅ Minimize preserves selections (bug fixed)
-- ✅ Maximize shows selections still there
-- ✅ Close still clears selections correctly
-- ✅ Open still restores selections correctly
-- ✅ HelperSimple receives accurate widget state events
 
 ---
 
@@ -150,7 +168,7 @@ The r021.112 release was a major architectural improvement focused on:
 - **Architectural simplification** with `accumulatedRecords` as single source of truth
 - **Bug fixes** for graphics doubling, ghost records, and mode switching
 
-For complete details on r021.112, see previous release notes and CHANGELOG.md.
+For complete details on r021.112, see previous release notes and CHANGELOG.md
 
 ---
 
@@ -163,14 +181,12 @@ QuerySimple is designed to solve the common pain points of the standard Experien
 - **Results Accumulation**: Unlike the standard widget which clears results on every search, QuerySimple allows you to "Add to" or "Remove from" a selection set across multiple different queries.
 - **Discoverable Automation**: An interactive "Info Button" (ℹ️) automatically appears to show users exactly how to deep-link to the current layer.
 - **Persistence & Restoration**: Selections are maintained even when the identify tool is used, ensuring users never lose their search context.
-- **Clear User Feedback**: Visual popovers provide immediate feedback for edge cases (no results, nothing to remove, all duplicates).
 
 ---
 
 ## Widgets in this Suite
 
 ### 🔍 QuerySimple (`query-simple/`)
-
 A high-performance search engine for Experience Builder.
 
 **Advanced Features:**
@@ -180,10 +196,8 @@ A high-performance search engine for Experience Builder.
 - **Display Order**: Control search prioritization via the `order` property (no need to manually reorder config).
 - **Spatial Power**: Integrated buffer, draw, and extent filtering.
 - **Unified Testing**: Verified by a "Mega-Journey" E2E suite that simulates real user sessions.
-- **Tab Architecture**: Modular design with separate components for Query, Results, and future Spatial features.
 
 ### 🛠️ HelperSimple (`helper-simple/`)
-
 The "Orchestrator" widget that handles the background logic.
 
 **Features:**
@@ -233,16 +247,14 @@ If you're building a parcel search with 10 different search fields (PIN, Major/M
 ---
 
 ### URL Parameters (Deep Linking)
-
 Configure a `shortId` for any query to enable instant automation.
 
-| Format       | Example                   | Best Use Case                                                   |
-| ------------ | ------------------------- | --------------------------------------------------------------- |
-| **Hash (#)** | index.html#pin=123        | **Interactive UX.** Snappy, no page reload, private to browser. |
-| **Query (?)** | index.html?pin=123       | **External Linking.** Standard for CRM/Email integrations.      |
+| Format | Example | Best Use Case |
+| :--- | :--- | :--- |
+| **Hash (#)** | `index.html#pin=123` | **Interactive UX.** Snappy, no page reload, private to browser. |
+| **Query (?)** | `index.html?pin=123` | **External Linking.** Standard for CRM/Email integrations. |
 
 ### Display Order & Grouping
-
 Manage complex search requirements with ease:
 - **`groupId`**: Clusters related searches (e.g., "Parcels") into a group.
 - **`searchAlias`**: The label shown inside the group (e.g., "Search by PIN").
@@ -258,19 +270,17 @@ The suite includes a production-safe **Debug System**. No logs are shown in the 
 Add `?debug=FEATURE` to your URL (e.g., `?debug=HASH,TASK`).
 
 ### Available Switches:
-
-| Switch                 | What it tracks                                                   |
-| ---------------------- | ---------------------------------------------------------------- |
-| all                    | Enable every single log (Warning: High volume).                  |
-| HASH                   | Deep link consumption and URL parameter parsing.                 |
-| TASK                   | Query execution, performance metrics, and data source status.    |
-| RESULTS-MODE           | Transitions between New, Add, and Remove selection modes.        |
-| EXPAND-COLLAPSE        | State management for result item details.                        |
-| SELECTION              | Identify popup tracking and map selection sync.                  |
-| SELECTION-STATE-AUDIT  | Detailed selection state auditing (cross-layer grouping, intelligent checks). |
-| RESTORE                | Logic used to rebuild the map selection after an identify event. |
-| WIDGET-STATE           | The handshake between HelperSimple and QuerySimple.              |
-| GRAPHICS-LAYER         | Highlighting logic for graphics-enabled widgets.                 |
+| Switch | What it tracks |
+| :--- | :--- |
+| `all` | Enable every single log (Warning: High volume). |
+| `HASH` | Deep link consumption and URL parameter parsing. |
+| `TASK` | Query execution, performance metrics, and data source status. |
+| `RESULTS-MODE` | Transitions between New, Add, and Remove selection modes. |
+| `EXPAND-COLLAPSE` | State management for result item details. |
+| `SELECTION` | Identify popup tracking and map selection sync. |
+| `RESTORE` | Logic used to rebuild the map selection after an identify event. |
+| `WIDGET-STATE` | The handshake between HelperSimple and QuerySimple. |
+| `GRAPHICS-LAYER` | Highlighting logic for graphics-enabled widgets. |
 
 ### Known Bugs (Always Visible)
 
@@ -281,28 +291,28 @@ Each bug log includes:
 - **Category**: Bug type (SELECTION, UI, URL, DATA, GRAPHICS, PERFORMANCE, GENERAL)
 - **Description**: What the bug is and why it's happening
 - **Workaround**: How to avoid or work around the issue
-- **Target Resolution**: When the bug will be fixed (e.g., `r023.0`)
+- **Target Resolution**: When the bug will be fixed (e.g., `r019.0`)
 
-See CHANGELOG.md for a complete list of changes and bug fixes.
+See [`docs/bugs/BUGS.md`](docs/bugs/BUGS.md) for a complete list of known bugs and their status.
 
 ---
 
 ## Documentation
 
-All development documentation has been organized into a centralized docs/ directory for easy navigation:
+All development documentation has been organized into a centralized [`docs/`](docs/) directory for easy navigation:
 
-- **docs/development/** - Development guides, testing, standards (start with DEVELOPMENT_GUIDE.md)
-- **docs/architecture/** - Design patterns, migration plans, refactoring strategies
-- **docs/technical/** - Deep dives into specific technical challenges
-- **docs/features/** - Feature specifications and integration guides
-- **docs/bugs/** - Bug reports and resolution documentation
-- **docs/blog/** - Development insights and lessons learned
+- **[`docs/development/`](docs/)** - Development guides, testing, standards (start with [`DEVELOPMENT_GUIDE.md`](docs/development/DEVELOPMENT_GUIDE.md))
+- **[`docs/architecture/`](docs/)** - Design patterns, migration plans, refactoring strategies
+- **[`docs/technical/`](docs/)** - Deep dives into specific technical challenges
+- **[`docs/features/`](docs/)** - Feature specifications and integration guides
+- **[`docs/bugs/`](docs/)** - Bug reports and resolution documentation
+- **[`docs/blog/`](docs/)** - Development insights and lessons learned
 
 **Quick Links:**
-- 📖 **New Developers:** Start with docs/development/DEVELOPMENT_GUIDE.md
-- 🧪 **Testing:** See docs/development/TESTING_WALKTHROUGH.md
-- 🏗️ **Architecture:** See docs/architecture/COMPLETE_MIGRATION_PLAN.md
-- 📋 **Full Index:** See docs/README.md
+- 📖 **New Developers:** Start with [`docs/development/DEVELOPMENT_GUIDE.md`](docs/development/DEVELOPMENT_GUIDE.md)
+- 🧪 **Testing:** See [`docs/development/TESTING_WALKTHROUGH.md`](docs/development/TESTING_WALKTHROUGH.md)
+- 🏗️ **Architecture:** See [`docs/architecture/COMPLETE_MIGRATION_PLAN.md`](docs/architecture/COMPLETE_MIGRATION_PLAN.md)
+- 📋 **Full Index:** See [`docs/README.md`](docs/README.md)
 
 ---
 
@@ -311,7 +321,6 @@ All development documentation has been organized into a centralized docs/ direct
 We use a **Unified Testing Strategy**. Instead of dozens of small tests that might miss state leaks, we run a single **"Mega-Journey"** that simulates a 5-minute user session across both widgets.
 
 ### Running the Suite:
-
 ```bash
 # 1. Manual Auth (Do this once a day)
 npm run test:e2e:auth-setup
@@ -330,16 +339,4 @@ npx playwright test tests/e2e/query-simple/session.spec.ts --project=chromium --
 
 ---
 
-## Coming Soon: Spatial Tab
-
-The r022.0 tab extraction work prepares the foundation for the **Spatial tab** - an upcoming feature that will provide:
-- **Drawing tools** for creating shapes on the map (point, line, polygon, circle, rectangle)
-- **Buffer options** with customizable distance and units
-- **Spatial relationships** (intersects, contains, within, touches, crosses, overlaps)
-- **Unified workflow** combining the best of WAB's "By Shape" and "By Spatial" tabs
-
-Target release: r023.0+
-
----
-
-© 2025-2026 MapSimple Organization
+© 2025 MapSimple Organization.

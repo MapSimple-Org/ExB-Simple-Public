@@ -1,6 +1,6 @@
 import { type FeatureDataRecord } from 'jimu-core'
 import { SelectionType } from '../../config'
-import { createQuerySimpleDebugLogger } from 'widgets/shared-code/common'
+import { createQuerySimpleDebugLogger } from 'widgets/shared-code/mapsimple-common'
 
 const debugLogger = createQuerySimpleDebugLogger()
 

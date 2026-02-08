@@ -46,9 +46,8 @@ import { Button, Tooltip } from 'jimu-ui'
 import { InfoOutlined } from 'jimu-icons/outlined/suggested/info'
 import { type QueryItemType, SelectionType } from '../../config'
 import { QueryTaskForm } from '../query-task-form'
-import { DataSourceTip } from 'widgets/shared-code/common'
+import { DataSourceTip, createQuerySimpleDebugLogger } from 'widgets/shared-code/mapsimple-common'
 import { mergeResultsIntoAccumulated } from '../results-management-utils'
-import { createQuerySimpleDebugLogger } from 'widgets/shared-code/common'
 import defaultMessage from '../translations/default'
 
 const debugLogger = createQuerySimpleDebugLogger()

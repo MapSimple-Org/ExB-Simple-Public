@@ -5,7 +5,7 @@ import type { QueryItemType, SelectionType } from '../config'
 import { QueryTask } from './query-task'
 import { FOCUSABLE_CONTAINER_CLASS } from 'jimu-ui'
 import defaultMessages from './translations/default'
-import { createQuerySimpleDebugLogger } from 'widgets/shared-code/common'
+import { createQuerySimpleDebugLogger } from 'widgets/shared-code/mapsimple-common'
 import type { EventManager } from './hooks/use-event-handling'
 
 const debugLogger = createQuerySimpleDebugLogger()

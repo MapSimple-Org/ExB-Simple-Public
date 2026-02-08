@@ -11,7 +11,7 @@ import { QueryTaskList } from './query-task-list'
 import { TaskListInline } from './query-task-list-inline'
 import { TaskListPopperWrapper } from './query-task-list-popper-wrapper'
 import { QueryWidgetContext } from './widget-context'
-import { createQuerySimpleDebugLogger } from 'widgets/shared-code/common'
+import { createQuerySimpleDebugLogger } from 'widgets/shared-code/mapsimple-common'
 import { WIDGET_VERSION } from '../version'
 // Chunk 1: URL Parameter Consumption Manager (r018.8)
 import { UrlConsumptionManager } from './hooks/use-url-consumption'

@@ -24,7 +24,7 @@ import { sanitizeSqlExpression, isQueryInputValid } from './query-utils'
 import defaultMessage from './translations/default'
 import { QueryTaskSpatialForm } from './query-task-spatial-form'
 import { useAutoHeight } from './useAutoHeight'
-import { createQuerySimpleDebugLogger } from 'widgets/shared-code/common'
+import { createQuerySimpleDebugLogger } from 'widgets/shared-code/mapsimple-common'
 
 const debugLogger = createQuerySimpleDebugLogger()
 

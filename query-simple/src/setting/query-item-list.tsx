@@ -5,7 +5,7 @@ import { List, TreeItemActionType, type TreeItemsType, type TreeItemType, type C
 import { SettingRow, SettingSection, SidePopper } from 'jimu-ui/advanced/setting-components'
 import defaultMessages from './translations/default'
 import type { QueryItemType, QueryArrangeType } from '../config'
-import { DataSourceTip } from 'widgets/shared-code/common'
+import { DataSourceTip } from 'widgets/shared-code/mapsimple-common'
 import { widgetSettingDataMap } from './setting-config'
 import { QueryItemSetting } from './query-item-setting'
 

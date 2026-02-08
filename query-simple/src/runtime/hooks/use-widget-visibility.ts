@@ -1,6 +1,6 @@
 import { type AllWidgetProps } from 'jimu-core'
 import { type IMConfig } from '../../config'
-import { createQuerySimpleDebugLogger } from 'widgets/shared-code/common'
+import { createQuerySimpleDebugLogger } from 'widgets/shared-code/mapsimple-common'
 
 const debugLogger = createQuerySimpleDebugLogger()
 

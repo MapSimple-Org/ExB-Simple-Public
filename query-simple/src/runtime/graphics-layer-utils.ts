@@ -6,7 +6,7 @@
 import type { DataSource, FeatureLayerDataSource, FeatureDataRecord } from 'jimu-core'
 import { DataSourceManager } from 'jimu-core'
 import { loadArcGISJSAPIModules } from 'jimu-arcgis'
-import { createQuerySimpleDebugLogger } from 'widgets/shared-code/common'
+import { createQuerySimpleDebugLogger } from 'widgets/shared-code/mapsimple-common'
 
 const debugLogger = createQuerySimpleDebugLogger()
 

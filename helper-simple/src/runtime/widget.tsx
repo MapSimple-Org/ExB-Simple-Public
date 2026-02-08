@@ -2,7 +2,7 @@
 import { React, jsx, css, type AllWidgetProps, getAppStore, type IMState, WidgetManager, appActions, DataSourceManager, type DataSource, type FeatureLayerDataSource } from 'jimu-core'
 import { type IMConfig } from '../config'
 import { versionManager } from '../version-manager'
-import { createHelperSimpleDebugLogger } from 'widgets/shared-code/common'
+import { createHelperSimpleDebugLogger } from 'widgets/shared-code/mapsimple-common'
 
 const debugLogger = createHelperSimpleDebugLogger()
 

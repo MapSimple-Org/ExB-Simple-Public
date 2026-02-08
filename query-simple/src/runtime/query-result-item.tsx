@@ -12,7 +12,7 @@ import {
 import { Button, Tooltip } from 'jimu-ui'
 import FeatureInfo from './components/feature-info'
 import { ListDirection } from '../config'
-import { createQuerySimpleDebugLogger } from 'widgets/shared-code/common'
+import { createQuerySimpleDebugLogger } from 'widgets/shared-code/mapsimple-common'
 
 const debugLogger = createQuerySimpleDebugLogger()
 

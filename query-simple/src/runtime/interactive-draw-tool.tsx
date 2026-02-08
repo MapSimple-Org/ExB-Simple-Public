@@ -4,7 +4,7 @@ import { Checkbox } from 'jimu-ui'
 import type { JimuMapView } from 'jimu-arcgis'
 import type * as jimuMap from 'jimu-ui/advanced/map'
 import { CreateToolType } from '../config'
-import { EntityStatusType, StatusIndicator } from 'widgets/shared-code/common'
+import { EntityStatusType, StatusIndicator } from 'widgets/shared-code/mapsimple-common'
 import defaultMessage from './translations/default'
 export interface InteractiveDrawProps {
   jimuMapView: JimuMapView

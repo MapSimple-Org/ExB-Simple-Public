@@ -9,7 +9,7 @@
 
 import { type DataRecordSet, type DataAction, DataLevel, type IntlShape, type DataSource } from 'jimu-core'
 import { selectRecordsAndPublish } from '../runtime/selection-utils'
-import { createQuerySimpleDebugLogger } from 'widgets/shared-code/common'
+import { createQuerySimpleDebugLogger } from 'widgets/shared-code/mapsimple-common'
 
 const debugLogger = createQuerySimpleDebugLogger()
 import type { FeatureDataRecord } from 'jimu-core'

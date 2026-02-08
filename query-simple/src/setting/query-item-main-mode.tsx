@@ -27,7 +27,7 @@ import { AttributeFilterSetting } from './attribute-filter'
 import { SpatialFilterSetting } from './spatial-filter'
 import { ResultsSetting } from './results'
 import { DEFAULT_QUERY_ITEM } from '../default-query-item'
-import { useDataSourceExists } from 'widgets/shared-code/common'
+import { useDataSourceExists } from 'widgets/shared-code/mapsimple-common'
 
 const dsTypes = Immutable([
   AllDataSourceTypes.FeatureLayer,

@@ -13,7 +13,7 @@ import { type QueryItemType, ListDirection } from '../config'
 import { QueryResultItem } from './query-result-item'
 import { getPopupTemplate } from './query-utils'
 import { useAutoHeight } from './useAutoHeight'
-import { createQuerySimpleDebugLogger } from 'widgets/shared-code/common'
+import { createQuerySimpleDebugLogger } from 'widgets/shared-code/mapsimple-common'
 
 const debugLogger = createQuerySimpleDebugLogger()
 

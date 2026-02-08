@@ -2,7 +2,7 @@ import React from 'react'
 import { type AllWidgetProps } from 'jimu-core'
 import { type IMConfig } from '../../config'
 import { type JimuMapView } from 'jimu-arcgis'
-import { createQuerySimpleDebugLogger } from 'widgets/shared-code/common'
+import { createQuerySimpleDebugLogger } from 'widgets/shared-code/mapsimple-common'
 
 const debugLogger = createQuerySimpleDebugLogger()
 

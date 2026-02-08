@@ -45,11 +45,10 @@ import {
 } from './selection-utils'
 import { removeResultsFromAccumulated, removeRecordsFromOriginSelections } from './results-management-utils'
 import { removeHighlightGraphics } from './graphics-layer-utils'
-import { createQuerySimpleDebugLogger } from 'widgets/shared-code/common'
+import { createQuerySimpleDebugLogger, ErrorMessage } from 'widgets/shared-code/mapsimple-common'
 import * as labelPointOperator from '@arcgis/core/geometry/operators/labelPointOperator.js'
 
 const debugLogger = createQuerySimpleDebugLogger()
-import { ErrorMessage } from 'widgets/shared-code/common'
 const { iconMap } = getWidgetRuntimeDataMap()
 
 // r022.42: REMOVED - HelperSimple now handles global identify popup detection and event dispatch

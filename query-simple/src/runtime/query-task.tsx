@@ -41,7 +41,7 @@ import { PagingType, type QueryItemType, type SpatialFilterObj, SelectionType } 
 import { QueryTabContent } from './tabs/QueryTabContent'
 import { QueryTaskForm } from './query-task-form'
 import { QueryTaskResult } from './query-result'
-import { DataSourceTip, useDataSourceExists, ErrorMessage } from 'widgets/shared-code/common'
+import { DataSourceTip, useDataSourceExists, ErrorMessage } from 'widgets/shared-code/mapsimple-common'
 import { QueryTaskLabel } from './query-task-label'
 import { useZoomToRecords } from './hooks/use-zoom-to-records'
 import { DEFAULT_QUERY_ITEM } from '../default-query-item'
@@ -53,7 +53,7 @@ import defaultMessage from './translations/default'
 import { ArrowLeftOutlined } from 'jimu-icons/outlined/directional/arrow-left'
 import { LoadingResult } from './loading-result'
 import { clearSelectionInDataSources, selectRecordsAndPublish, findClearResultsButton, dispatchSelectionEvent, getOriginDataSource, clearAllSelectionsForWidget } from './selection-utils'
-import { createQuerySimpleDebugLogger } from 'widgets/shared-code/common'
+import { createQuerySimpleDebugLogger } from 'widgets/shared-code/mapsimple-common'
 
 const debugLogger = createQuerySimpleDebugLogger()
 

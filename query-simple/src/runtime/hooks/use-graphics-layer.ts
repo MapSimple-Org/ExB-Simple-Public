@@ -2,7 +2,7 @@ import React from 'react'
 import { type AllWidgetProps, type DataSource } from 'jimu-core'
 import { type IMConfig } from '../../config'
 import { createOrGetGraphicsLayer, cleanupGraphicsLayer } from '../graphics-layer-utils'
-import { createQuerySimpleDebugLogger } from 'widgets/shared-code/common'
+import { createQuerySimpleDebugLogger } from 'widgets/shared-code/mapsimple-common'
 
 const debugLogger = createQuerySimpleDebugLogger()
 

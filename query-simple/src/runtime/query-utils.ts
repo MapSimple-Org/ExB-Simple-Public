@@ -13,7 +13,7 @@ import {
 } from 'jimu-core'
 import type { IFieldInfo } from '@esri/arcgis-rest-feature-service'
 import { type QueryItemType, SpatialRelation, type SpatialFilterObj, FieldsType, mapJSAPIUnitToDsUnit, mapJSAPISpatialRelToDsSpatialRel } from '../config'
-import { getFieldInfosInPopupContent, createQuerySimpleDebugLogger } from '../../../shared-code/common'
+import { getFieldInfosInPopupContent, createQuerySimpleDebugLogger } from '../../../shared-code/mapsimple-common'
 
 const debugLogger = createQuerySimpleDebugLogger()
 

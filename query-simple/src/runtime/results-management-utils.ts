@@ -5,7 +5,7 @@
 
 import type { FeatureLayerDataSource, FeatureDataRecord, DataRecord } from 'jimu-core'
 import { DataSourceManager, DataSourceStatus, MessageManager, DataRecordSetChangeMessage, RecordSetChangeType, DataRecordsSelectionChangeMessage } from 'jimu-core'
-import { createQuerySimpleDebugLogger } from 'widgets/shared-code/common'
+import { createQuerySimpleDebugLogger } from 'widgets/shared-code/mapsimple-common'
 import { removeHighlightGraphics } from './graphics-layer-utils'
 
 const debugLogger = createQuerySimpleDebugLogger()

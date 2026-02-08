@@ -7,7 +7,7 @@ import {
 import { withTheme } from 'jimu-theme'
 import { List, TreeItemActionType, type TreeItemsType, type TreeItemType } from 'jimu-ui/basic/list-tree'
 import { SettingRow } from 'jimu-ui/advanced/setting-components'
-import { getFieldInfosInPopupContent } from 'widgets/shared-code/common'
+import { getFieldInfosInPopupContent } from 'widgets/shared-code/mapsimple-common'
 
 interface Props {
   useDataSource: UseDataSource

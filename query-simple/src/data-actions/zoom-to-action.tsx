@@ -7,7 +7,7 @@
  */
 
 import { type DataRecordSet, type DataAction, DataLevel, type IntlShape } from 'jimu-core'
-import { createQuerySimpleDebugLogger } from 'widgets/shared-code/common'
+import { createQuerySimpleDebugLogger } from 'widgets/shared-code/mapsimple-common'
 import { zoomToRecords } from '../runtime/zoom-utils'
 import type { FeatureDataRecord } from 'jimu-core'
 

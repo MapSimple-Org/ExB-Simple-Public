@@ -23,7 +23,7 @@ import { NumericInput, Select, Switch, defaultMessages as jimuUIDefaultMessages 
 import { SettingRow, SettingSection, DirectionSelector, MapWidgetSelector } from 'jimu-ui/advanced/setting-components'
 import { type IMConfig, type QueryArrangeType, type QueryItemType, PagingType, ListDirection, FieldsType } from '../config'
 import defaultMessages from './translations/default'
-import { createGetI18nMessage } from 'widgets/shared-code/common'
+import { createGetI18nMessage } from 'widgets/shared-code/mapsimple-common'
 import type { ValueManSetByKeyType } from './setting-config'
 import { getOutputJsonOriginDs } from './setting-utils'
 import { QueryItemList } from './query-item-list'

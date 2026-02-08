@@ -3,7 +3,7 @@ import { React, jsx, css, type ImmutableObject } from 'jimu-core'
 import { Button, Icon } from 'jimu-ui'
 import type { QueryItemType } from '../config'
 import { getWidgetRuntimeDataMap } from './widget-config'
-import { DataSourceTip } from 'widgets/shared-code/common'
+import { DataSourceTip } from 'widgets/shared-code/mapsimple-common'
 import { QueryTaskLabel } from './query-task-label'
 import { DEFAULT_QUERY_ITEM } from '../default-query-item'
 

@@ -3,7 +3,7 @@
 import { React, css, jsx, type DataSource, injectIntl, type IntlShape, classNames } from 'jimu-core'
 import { loadArcGISJSAPIModules } from 'jimu-arcgis'
 import { Button } from 'jimu-ui'
-import { createQuerySimpleDebugLogger } from 'widgets/shared-code/common'
+import { createQuerySimpleDebugLogger } from 'widgets/shared-code/mapsimple-common'
 
 const debugLogger = createQuerySimpleDebugLogger()
 
