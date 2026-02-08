@@ -5,6 +5,90 @@ All notable changes to MapSimple Experience Builder widgets will be documented i
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.19.0-r022.87] - 2026-02-07 - Infrastructure: Namespace Migration Complete
+
+### Changed
+- **Shared Code Namespace Migration**: Renamed `shared-code/common` to `shared-code/mapsimple-common` to prevent module conflicts in multi-vendor deployments
+  - **Why**: Generic `common` namespace risked collision with other custom widgets in shared ExB runtime
+  - **Strategy**: Incremental side-by-side migration - both old and new paths coexisted during transition
+  - **Result**: 47 files migrated across 8 groups with zero regressions detected
+
+### Technical Details
+**Migration Approach:**
+- Phase 1 (r022.78): Created `shared-code/mapsimple-common/` alongside existing `common/`, dual barrel exports
+- Phase 2 (r022.79-86): Migrated imports incrementally - core runtime → forms → hooks → settings → data actions
+- Phase 3 (r022.87): Removed old `shared-code/common/` folder after all references migrated
+
+**Files Updated:**
+- All query-simple imports (35 files)
+- All helper-simple imports (1 file)
+- Preserved chunks (2 files)
+- Unit tests included in distribution
+
+**Impact:**
+- ✅ Collision-proof namespace ensures safe deployment in any environment
+- ✅ No breaking changes for existing implementations (handled internally)
+- ✅ Foundation established for public distribution and multi-vendor compatibility
+- ✅ Full test coverage maintained throughout 10-commit migration process
+
+**Files Modified:**
+- `shared-code/mapsimple-common/` - New namespace directory (all modules)
+- `shared-code/mapsimple-common.ts` - New barrel export file
+- `query-simple/src/**/*.tsx` - Updated imports (35 files)
+- `helper-simple/src/runtime/widget.tsx` - Updated imports
+- `preserved/r018-chunks/**/*.ts` - Updated imports
+
+**Testing:**
+- User tested after each group (8 test cycles)
+- Zero regressions detected
+- Clean compilation verified after each commit
+
+---
+
+## [1.19.0-r022.77] - 2026-02-05 - CRITICAL FIX: Widget Minimize vs Close Detection
+
+### Fixed
+- **Widget Minimize Incorrectly Clearing Selections**: Fixed widget minimize triggering close logic which cleared selections from map
+  - **Bug**: Minimizing widget cleared selections; users expected minimize to preserve selections (visual collapse)
+  - **Root Cause**: DOM visibility detection (IntersectionObserver) couldn't distinguish minimize from close
+  - **Solution**: Now uses Experience Builder's `props.state` property (`'OPENED'` vs `'CLOSED'`)
+
+- **Cross-Layer Selection Count**: Fixed high-priority bug where adding records from multiple layers showed incorrect selection counts
+  - **Bug**: Selection counts wrong when accumulating from different layers (e.g., 6 selected instead of 4)
+  - **Root Cause**: All record IDs selected on current query's single origin data source, causing cross-layer pollution
+  - **Solution**: Records grouped by `__queryConfigId` and selected on correct origin data sources
+
+### Technical Details
+**Minimize/Close Detection (r022.77):**
+- **Old Behavior**: IntersectionObserver detected both minimize and close as "hidden" → triggered clear
+- **New Behavior**: 
+  - Close detection: `props.state` transitions from `'OPENED'` to `'CLOSED'`
+  - Minimize: `props.state` stays `'OPENED'` → no state change → selections preserved
+  - Open detection: IntersectionObserver still handles correctly
+
+**Cross-Layer Selection (r022.71-74):**
+- Intelligent Selection Check: useEffect detects when records already correctly selected
+- Cross-Layer Grouping: Records grouped by `__queryConfigId`, selected on correct origin DS
+- Remove Mode Fix: Composite key matching looks up `__queryConfigId` from accumulated records
+
+**Impact:**
+- ✅ Minimize preserves selections (bug fixed)
+- ✅ Maximize shows selections still there
+- ✅ Close still clears selections correctly
+- ✅ Open still restores selections correctly
+- ✅ HelperSimple receives accurate widget state events
+- ✅ Selection counts accurate across all layer combinations
+- ✅ Graphics display correctly in all modes
+- ✅ Remove mode works properly (via query execution or X button)
+
+**Files Modified:**
+- `query-simple/src/runtime/hooks/use-widget-visibility.ts` - Added `props.state` detection
+- `query-simple/src/runtime/query-result.tsx` - Cross-layer selection logic
+- `query-simple/src/runtime/selection-utils.ts` - Grouped selection by configId
+- `query-simple/src/version.ts` - r022.76 → r022.77
+
+---
+
 ## [1.19.0-r022.35] - 2026-02-03 - FIX: Graphics Fill Missing (Outline Only)
 
 ### Fixed
