@@ -10,7 +10,7 @@
  */
 const BASE_VERSION = '1.19.0'
 const RELEASE_NUMBER = '022' // Increment on major changes (001, 002, 003, ...)
-const MINOR_VERSION = '107' // r022.107: Add configurable hover pin color setting
+const MINOR_VERSION = '109' // r022.109: Adjust spring drop starting position (-2.0 to -1.2)
 
 export const WIDGET_VERSION = MINOR_VERSION && Number(MINOR_VERSION) > 0
   ? `${BASE_VERSION}-r${RELEASE_NUMBER}.${MINOR_VERSION}`

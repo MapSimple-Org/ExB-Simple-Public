@@ -2,8 +2,8 @@
 
 Custom widgets for ArcGIS Experience Builder Developer Edition (1.19.0+). Built for performance, deep-linking, and advanced result management.
 
-**Current Version**: `1.19.0-r022.107`  
-**Latest Update**: Configurable Hover Preview Pin Color (Feb 9, 2026)
+**Current Version**: `1.19.0-r022.109`  
+**Latest Update**: Animated Spring Drop for Hover Preview Pin (Feb 9, 2026)
 
 ---
 
@@ -27,7 +27,36 @@ Custom widgets for ArcGIS Experience Builder Developer Edition (1.19.0+). Built 
 
 ---
 
-## What's New: r022.107 (Feb 9, 2026)
+## What's New: r022.108-109 (Feb 9, 2026)
+
+### 🎬 New Feature
+
+**Animated Spring Drop for Hover Preview Pin** - Google Maps-style drop-and-bounce animation when pins appear
+
+**The Feature:**
+- Spring physics animation with stiffness `0.15` and damping `0.8`
+- Pin starts suspended at `y: -1.2` and settles at `y: -0.5` with natural bounce
+- Smooth `requestAnimationFrame` loop for 60fps performance
+- Proper cleanup on mouse leave, click, and component unmount
+
+**Animation Behavior:**
+- Plays when hovering over any result item in the list
+- Restarts automatically when hovering different results (graphic reused)
+- Cancels immediately on mouse leave or click
+- No performance impact (single graphic, efficient physics loop)
+
+**Impact:**
+- ✅ Familiar, polished interaction matching Google Maps UX
+- ✅ Visual feedback confirms which result is being previewed
+- ✅ Snappier feel with optimized starting position
+- ✅ Production-ready performance with proper lifecycle management
+
+**Why This Matters:**
+The spring animation adds a professional, delightful touch to the hover preview feature. Users get instant visual feedback when exploring results, and the familiar bounce effect feels natural and responsive.
+
+---
+
+## Previous Updates: r022.107 (Feb 9, 2026)
 
 ### 🎨 New Feature
 

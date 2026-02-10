@@ -5,6 +5,87 @@ All notable changes to MapSimple Experience Builder widgets will be documented i
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.19.0-r022.109] - 2026-02-09 - ENHANCEMENT: Adjust Spring Drop Animation Timing
+
+### Changed
+- **Spring Drop Starting Position**: Adjusted initial Y position from `-2.0` to `-1.2` for snappier animation
+  - Shorter drop distance creates quicker, more responsive feel
+  - Maintains same physics (stiffness: 0.15, damping: 0.8)
+  - Final resting position unchanged at `-0.5`
+
+### Technical Details
+**Implementation:**
+- Updated `initialY` constant in both animation paths (create and reuse)
+- Updated initial `anchorPoint.y` on CIM symbol creation
+- Animation duration naturally shorter due to reduced travel distance
+
+**Files Modified:**
+- `query-simple/src/runtime/query-result-item.tsx`: Updated `initialY` from `-2.0` to `-1.2` in both animation loops
+- `query-simple/src/version.ts`: Incremented to `r022.109`
+
+---
+
+## [1.19.0-r022.108] - 2026-02-09 - FEATURE: Animated Spring Drop for Hover Preview Pin
+
+### Added
+- **Google Maps-Style Drop Animation**: Hover preview pin now animates with spring physics when appearing
+  - **Starting Position**: Pin suspended at `y: -2.0` (relative anchor point)
+  - **Final Position**: Settles at `y: -0.5` (current resting tip position)
+  - **Physics**: Spring simulation with stiffness `0.15` and damping `0.8`
+  - **Animation**: Smooth bounce effect using `requestAnimationFrame`
+
+### Technical Details
+**Implementation:**
+- Added `animationRef` useRef to track `requestAnimationFrame` ID for proper cleanup
+- Created spring physics loop with force and velocity calculations
+- Animation updates CIM symbol's `anchorPoint.y` property each frame
+- Proper lifecycle management:
+  - Animation cancelled on mouse leave
+  - Animation cancelled on result item click
+  - Animation cancelled on component unmount
+  - Animation restarts when hovering different results (graphic reused)
+
+**Code Structure:**
+```typescript
+// Spring physics loop
+let currentY = initialY
+let velocity = 0
+
+const animate = (timestamp: number) => {
+  // Spring physics calculation
+  const force = (targetY - currentY) * 0.15  // Stiffness
+  velocity = (velocity + force) * 0.8         // Damping
+  currentY += velocity
+  
+  // Update graphic symbol anchor
+  const newSymbol = currentSymbol.clone()
+  newSymbol.data.symbol.symbolLayers[0].anchorPoint = { x: 0, y: currentY }
+  hoverGraphicRef.current.symbol = newSymbol
+  
+  // Continue until settled
+  if (Math.abs(velocity) > 0.001 || Math.abs(targetY - currentY) > 0.001) {
+    animationRef.current = requestAnimationFrame(animate)
+  }
+}
+```
+
+**Safety:**
+- `cancelAnimationFrame()` called in:
+  - `handleMouseLeave` (hide pin)
+  - `handleClickResultItem` (hide pin on click)
+  - `useEffect` cleanup (component unmount)
+- Animation ID stored in `animationRef.current` for all cancellation points
+
+**Files Modified:**
+- `query-simple/src/runtime/query-result-item.tsx`: Added animation logic, refs, and cleanup
+- `query-simple/src/version.ts`: Incremented to `r022.108`
+
+**Debug Logging:**
+- `HOVER-PREVIEW` events: `animation-complete`, `animation-update-error`
+- Logs final Y position when animation settles
+
+---
+
 ## [1.19.0-r022.107] - 2026-02-09 - FEATURE: Configurable Hover Preview Pin Color
 
 ### Added

@@ -132,6 +132,7 @@ export const QueryResultItem = (props: ResultItemProps) => {
   // r022.106: Hover preview - refs for hover graphic management
   const hoverGraphicRef = React.useRef<__esri.Graphic | null>(null)
   const hoverTimeoutRef = React.useRef<number | null>(null)
+  const animationRef = React.useRef<number | null>(null) // r022.108: Spring animation ID
   
   // Log when QueryResultItem renders
   React.useEffect(() => {
@@ -158,11 +159,18 @@ export const QueryResultItem = (props: ResultItemProps) => {
    * Handle clicking on the result item.
    * Triggers zoom and popup opening (handled in toggleSelection callback).
    * r022.106: Also hides hover graphic on click
+   * r022.108: Cancel spring animation on click
    */
   const handleClickResultItem = React.useCallback((e: React.MouseEvent) => {
     // Don't trigger zoom if clicking the remove button
     if ((e.target as HTMLElement).closest('.remove-button')) {
       return
+    }
+    
+    // r022.108: Cancel any running animation
+    if (animationRef.current) {
+      cancelAnimationFrame(animationRef.current)
+      animationRef.current = null
     }
     
     // r022.106: Hide hover graphic on click (Option 1 behavior)
@@ -196,6 +204,12 @@ export const QueryResultItem = (props: ResultItemProps) => {
   // r022.106: Hover preview - cleanup on unmount
   React.useEffect(() => {
     return () => {
+      // r022.108: Cancel any running animation
+      if (animationRef.current) {
+        cancelAnimationFrame(animationRef.current)
+        animationRef.current = null
+      }
+      
       // Clear any pending timeout
       if (hoverTimeoutRef.current) {
         window.clearTimeout(hoverTimeoutRef.current)
@@ -374,6 +388,9 @@ export const QueryResultItem = (props: ResultItemProps) => {
             }
           }
           
+          // r022.108: Start with pin suspended high (will animate down with spring physics)
+          cimSymbol.data.symbol.symbolLayers[0].anchorPoint = { x: 0, y: -1.2 }
+          
           hoverGraphicRef.current = new Graphic({
             geometry: labelPoint,
             symbol: cimSymbol as any
@@ -384,24 +401,126 @@ export const QueryResultItem = (props: ResultItemProps) => {
             event: 'hover-graphic-created',
             recordId,
             geometryType: geometry.type,
-            symbolType: 'CIMSymbol-GooglePin',
+            symbolType: 'CIMSymbol-GooglePin-Animated',
             color: hoverPinColor || '#FFC107',
             colorRgb: baseColor,
             location: { x: labelPoint.x, y: labelPoint.y },
             timestamp: Date.now()
           })
+          
+          // r022.108: Start spring drop animation
+          let start = null
+          const targetY = -0.5  // Final resting position
+          const initialY = -1.2 // Starting suspended height
+          let currentY = initialY
+          let velocity = 0
+          
+          const animate = (timestamp: number) => {
+            if (!start) start = timestamp
+            
+            // Spring physics calculation
+            const force = (targetY - currentY) * 0.15  // Stiffness
+            velocity = (velocity + force) * 0.8         // Damping
+            currentY += velocity
+            
+            // Update the graphic symbol anchor
+            if (hoverGraphicRef.current && mapView?.graphics) {
+              try {
+                const currentSymbol = hoverGraphicRef.current.symbol as any
+                const newSymbol = currentSymbol.clone()
+                newSymbol.data.symbol.symbolLayers[0].anchorPoint = { x: 0, y: currentY }
+                newSymbol.data.symbol.symbolLayers[0].anchorPointUnits = 'Relative'
+                hoverGraphicRef.current.symbol = newSymbol
+              } catch (error) {
+                debugLogger.log('HOVER-PREVIEW', {
+                  event: 'animation-update-error',
+                  recordId,
+                  error: error?.toString(),
+                  timestamp: Date.now()
+                })
+              }
+            }
+            
+            // Continue until settled
+            if (Math.abs(velocity) > 0.001 || Math.abs(targetY - currentY) > 0.001) {
+              animationRef.current = requestAnimationFrame(animate)
+            } else {
+              debugLogger.log('HOVER-PREVIEW', {
+                event: 'animation-complete',
+                recordId,
+                finalY: currentY,
+                timestamp: Date.now()
+              })
+              animationRef.current = null
+            }
+          }
+          
+          animationRef.current = requestAnimationFrame(animate)
+          
         } else {
-          // Reuse existing graphic - just update geometry
+          // Reuse existing graphic - update geometry and restart animation
           hoverGraphicRef.current.geometry = labelPoint
           hoverGraphicRef.current.visible = true
           
+          // r022.108: Cancel any existing animation before starting new one
+          if (animationRef.current) {
+            cancelAnimationFrame(animationRef.current)
+            animationRef.current = null
+          }
+          
           debugLogger.log('HOVER-PREVIEW', {
-            event: 'hover-graphic-updated',
+            event: 'hover-graphic-reused',
             recordId,
             geometryType: geometry.type,
             location: { x: labelPoint.x, y: labelPoint.y },
             timestamp: Date.now()
           })
+          
+          // r022.108: Restart spring drop animation
+          let start = null
+          const targetY = -0.5
+          const initialY = -1.2
+          let currentY = initialY
+          let velocity = 0
+          
+          const animate = (timestamp: number) => {
+            if (!start) start = timestamp
+            
+            const force = (targetY - currentY) * 0.15
+            velocity = (velocity + force) * 0.8
+            currentY += velocity
+            
+            if (hoverGraphicRef.current && mapView?.graphics) {
+              try {
+                const currentSymbol = hoverGraphicRef.current.symbol as any
+                const newSymbol = currentSymbol.clone()
+                newSymbol.data.symbol.symbolLayers[0].anchorPoint = { x: 0, y: currentY }
+                newSymbol.data.symbol.symbolLayers[0].anchorPointUnits = 'Relative'
+                hoverGraphicRef.current.symbol = newSymbol
+              } catch (error) {
+                debugLogger.log('HOVER-PREVIEW', {
+                  event: 'animation-update-error-reuse',
+                  recordId,
+                  error: error?.toString(),
+                  timestamp: Date.now()
+                })
+              }
+            }
+            
+            if (Math.abs(velocity) > 0.001 || Math.abs(targetY - currentY) > 0.001) {
+              animationRef.current = requestAnimationFrame(animate)
+            } else {
+              debugLogger.log('HOVER-PREVIEW', {
+                event: 'animation-complete-reuse',
+                recordId,
+                finalY: currentY,
+                timestamp: Date.now()
+              })
+              animationRef.current = null
+            }
+          }
+          
+          animationRef.current = requestAnimationFrame(animate)
         }
       } catch (error) {
         debugLogger.log('HOVER-PREVIEW', {
@@ -416,8 +535,15 @@ export const QueryResultItem = (props: ResultItemProps) => {
 
   /**
    * r022.106: Handle mouse leave - hide hover preview pin
+   * r022.108: Cancel spring animation
    */
   const handleMouseLeave = React.useCallback(() => {
+    // r022.108: Cancel any running animation
+    if (animationRef.current) {
+      cancelAnimationFrame(animationRef.current)
+      animationRef.current = null
+    }
+    
     // Clear any pending timeout
     if (hoverTimeoutRef.current) {
       window.clearTimeout(hoverTimeoutRef.current)
