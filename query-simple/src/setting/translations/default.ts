@@ -76,7 +76,13 @@ export default {
   styleSquare: 'Square',
   styleCross: 'Cross',
   styleX: 'X',
-  styleDiamond: 'Diamond'
+  styleDiamond: 'Diamond',
+  hoverPinColor: 'Hover Preview Pin',
+  pinColor: 'Pin color',
+  hoverPinColorDescription: 'Color of the pin that appears when hovering over a result in the list.',
+  resultClickBehavior: 'Result Click Behavior',
+  zoomOnResultClick: 'Zoom to record when clicked',
+  zoomOnResultClickDescription: 'Automatically zoom to a record when clicking it in the results panel. The popup will always open regardless of this setting.'
 }
 
 

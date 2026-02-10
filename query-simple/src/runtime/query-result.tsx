@@ -64,6 +64,7 @@ export interface QueryTaskResultProps {
   maxPerPage: number
   queryParams: QueryParams
   outputDS: DataSource
+  hoverPinColor?: string // r022.106: Configurable hover pin color
   queryItem: ImmutableObject<QueryItemType>
   records: DataRecord[]
   runtimeZoomToSelected?: boolean
@@ -97,6 +98,8 @@ export interface QueryTaskResultProps {
     timestamp?: number
   } | null
   onDismissAllDuplicatesAlert?: () => void
+  // r022.105: Configurable zoom on result click
+  zoomOnResultClick?: boolean
 }
 
 const resultStyle = css`
@@ -127,7 +130,7 @@ const resultStyle = css`
 `
 
 export function QueryTaskResult (props: QueryTaskResultProps) {
-  const { queryItem, queryParams, resultCount, maxPerPage, records, widgetId, outputDS, runtimeZoomToSelected, onNavBack, resultsMode, accumulatedRecords, onAccumulatedRecordsChange, graphicsLayer, mapView, eventManager, isQuerySwitchInProgressRef, currentQueryRecordIds, queries, noRemovalAlert, onDismissNoRemovalAlert, allDuplicatesAlert, onDismissAllDuplicatesAlert } = props
+  const { queryItem, queryParams, resultCount, maxPerPage, records, widgetId, outputDS, runtimeZoomToSelected, onNavBack, resultsMode, accumulatedRecords, onAccumulatedRecordsChange, graphicsLayer, mapView, eventManager, isQuerySwitchInProgressRef, currentQueryRecordIds, queries, noRemovalAlert, onDismissNoRemovalAlert, allDuplicatesAlert, onDismissAllDuplicatesAlert, zoomOnResultClick, hoverPinColor } = props
   const getI18nMessage = hooks.useTranslation(defaultMessage)
   const intl = useIntl()
   const zoomToRecords = useZoomToRecords(mapView)
@@ -832,6 +835,98 @@ export function QueryTaskResult (props: QueryTaskResultProps) {
    * - Popup closes when widget panel closes
    * - Popup closes in Remove mode query execution
    */
+  // r022.105: Helper function to open popup for a record
+  const openPopupForRecord = React.useCallback((data: FeatureDataRecord) => {
+    const dataId = data.getId()
+    const clickedFeature = (data as any).feature || data.getData?.() || null
+    
+    if (!mapView || !clickedFeature) {
+      debugLogger.log('POPUP', {
+        event: 'popup-open-skipped',
+        recordId: dataId,
+        reason: !mapView ? 'no-mapview' : 'no-feature',
+        timestamp: Date.now()
+      })
+      return
+    }
+    
+    const geometry = data.getJSAPIGeometry()
+    
+    if (!geometry) {
+      debugLogger.log('POPUP', {
+        event: 'popup-open-skipped',
+        recordId: dataId,
+        reason: 'no-geometry',
+        timestamp: Date.now()
+      })
+      return
+    }
+    
+    // r021.11: Calculate popup location using labelPointOperator
+    const calcStartTime = Date.now()
+    let popupLocation: any
+    let calculationMethod = 'labelPointOperator'
+    let calculationDetails: any = {}
+    
+    try {
+      popupLocation = labelPointOperator.execute(geometry)
+      calculationDetails = {
+        geometryType: geometry.type,
+        method: 'labelPointOperator.execute',
+        note: geometry.type === 'polygon' 
+          ? 'Guaranteed interior point' 
+          : geometry.type === 'polyline'
+          ? 'Vertex near middle of longest segment'
+          : 'Point itself'
+      }
+    } catch (error) {
+      debugLogger.log('POPUP', {
+        event: 'labelPointOperator-error',
+        error: error?.toString(),
+        geometryType: geometry.type,
+        fallback: 'centroid-or-extent',
+        timestamp: Date.now()
+      })
+      popupLocation = (geometry as any).centroid || geometry.extent?.center
+      calculationMethod = 'fallback-centroid'
+      calculationDetails = { error: error?.toString() }
+    }
+    
+    const calcEndTime = Date.now()
+    const calcDuration = calcEndTime - calcStartTime
+    
+    debugLogger.log('POPUP', {
+      event: 'popup-location-calculated',
+      recordId: dataId,
+      geometryType: geometry.type,
+      calculationMethod,
+      calculationDurationMs: calcDuration,
+      calculationDetails,
+      hasPopupLocation: !!popupLocation,
+      popupLocationCoords: popupLocation ? { x: popupLocation.x, y: popupLocation.y } : null,
+      timestamp: Date.now()
+    })
+    
+    if (popupLocation) {
+      // r022.98: Set shouldFocus: false to prevent premature focus on Features widget
+      mapView.openPopup({
+        features: [clickedFeature],
+        location: popupLocation,
+        shouldFocus: false
+      })
+      
+      debugLogger.log('POPUP', {
+        event: 'popup-opened',
+        recordId: dataId,
+        location: { x: popupLocation.x, y: popupLocation.y },
+        calculationMethod,
+        calculationDurationMs: calcDuration,
+        note: 'r022.98: shouldFocus=false to prevent Features widget warning',
+        timestamp: Date.now()
+      })
+    }
+  }, [mapView])
+  
   const toggleSelection = React.useCallback((data: FeatureDataRecord) => {
     // Ensure the clicked record is selected (it should already be, but ensure it)
     const selectedDatas = outputDS.getSelectedRecords() ?? []
@@ -856,180 +951,66 @@ export function QueryTaskResult (props: QueryTaskResultProps) {
       selectRecordsAndPublish(widgetId, outputDS, recordIds, updatedSelectedDatas as FeatureDataRecord[], true)
     }
     
-    // Zoom to the clicked record with padding (always enabled - user wants to keep this behavior)
+    // r022.105: Make zoom configurable - defaults to true for backward compatibility
+    const shouldZoom = zoomOnResultClick !== false
     
-    // r021.0 Chunk 1: Get feature from data (FeatureDataRecord)
-    const clickedFeature = (data as any).feature || data.getData?.() || null
-    
-    // r021.0 Chunk 1: Log BEFORE zoom to verify function is called
     debugLogger.log('POPUP', {
-      event: 'result-clicked-BEFORE-zoom',
+      event: 'result-clicked',
       recordId: dataId,
-      hasMapView: !!mapView,
-      hasFeature: !!clickedFeature,
-      hasZoomFunction: !!zoomToRecords,
-      note: 'If you see this, toggleSelection is being called',
+      shouldZoom,
+      configValue: zoomOnResultClick,
+      note: 'r022.105: Zoom is now configurable',
       timestamp: Date.now()
     })
     
-    // Zoom to record, then log popup data (Chunk 1: r021.0)
-    const zoomPromise = zoomToRecords([data])
-    
-    debugLogger.log('POPUP', {
-      event: 'zoom-promise-created',
-      recordId: dataId,
-      isPromise: zoomPromise && typeof zoomPromise.then === 'function',
-      promiseType: typeof zoomPromise,
-      note: 'Checking if zoomToRecords returns a promise',
-      timestamp: Date.now()
-    })
-    
-    zoomPromise
-      .then(() => {
-        // r021.0 Chunk 1: Log AFTER zoom to verify promise resolved
+    if (shouldZoom) {
+      // Current behavior: Zoom first, then open popup after zoom completes
+      debugLogger.log('POPUP', {
+        event: 'result-clicked-BEFORE-zoom',
+        recordId: dataId,
+        hasMapView: !!mapView,
+        hasZoomFunction: !!zoomToRecords,
+        note: 'r022.105: Zoom enabled, zooming before popup',
+        timestamp: Date.now()
+      })
+      
+      const zoomPromise = zoomToRecords([data])
+      
+      zoomPromise.then(() => {
         debugLogger.log('POPUP', {
           event: 'result-clicked-AFTER-zoom',
           recordId: dataId,
-          hasMapView: !!mapView,
-          hasFeature: !!clickedFeature,
-          note: 'If you see this, zoom promise resolved',
+          note: 'r022.105: Zoom complete, opening popup',
           timestamp: Date.now()
         })
         
-        // r021.9: Calculate popup location AFTER zoom completes (for polylines, find closest point to map center)
-        if (mapView && clickedFeature) {
-          const geometry = data.getJSAPIGeometry()
-          
-          if (geometry) {
-            // r021.11: Calculate popup location using labelPointOperator
-            // This ensures the popup is always on the interior of the geometry
-            const calcStartTime = Date.now()
-            let popupLocation: any
-            let calculationMethod = 'labelPointOperator'
-            let calculationDetails: any = {}
-            
-            try {
-              // Use labelPointOperator for all geometry types
-              // - Point: Returns the point itself
-              // - Polyline: Returns vertex near middle of longest segment
-              // - Polygon: Returns point near centroid (GUARANTEED interior!)
-              popupLocation = labelPointOperator.execute(geometry)
-              
-              calculationDetails = {
-                geometryType: geometry.type,
-                method: 'labelPointOperator.execute',
-                note: geometry.type === 'polygon' 
-                  ? 'Guaranteed interior point' 
-                  : geometry.type === 'polyline'
-                  ? 'Vertex near middle of longest segment'
-                  : 'Point itself'
-              }
-            } catch (error) {
-              // Fallback to centroid/extent center if labelPointOperator fails
-              debugLogger.log('POPUP', {
-                event: 'labelPointOperator-error',
-                error: error?.toString(),
-                geometryType: geometry.type,
-                fallback: 'centroid-or-extent',
-                timestamp: Date.now()
-              })
-              
-              popupLocation = (geometry as any).centroid || geometry.extent?.center
-              calculationMethod = 'fallback-centroid'
-              calculationDetails = { error: error?.toString() }
-            }
-            
-            const calcEndTime = Date.now()
-            const calcDuration = calcEndTime - calcStartTime
-            
-            debugLogger.log('POPUP', {
-              event: 'popup-location-calculated',
-              recordId: dataId,
-              geometryType: geometry.type,
-              calculationMethod,
-              calculationDurationMs: calcDuration,
-              calculationDetails,
-              hasPopupLocation: !!popupLocation,
-              popupLocationCoords: popupLocation ? {
-                x: popupLocation.x,
-                y: popupLocation.y,
-                spatialReference: popupLocation.spatialReference?.wkid
-              } : null,
-              timestamp: Date.now()
-            })
-            
-            // r021.3 Chunk 2: Open the popup (NO CLEANUP YET)
-            try {
-              // Temporarily toggle popupEnabled to allow programmatic control
-              const originalPopupEnabled = mapView.popupEnabled
-              mapView.popupEnabled = false
-              
-              debugLogger.log('POPUP', {
-                event: 'popup-opening',
-                recordId: dataId,
-                originalPopupEnabled,
-                note: 'About to call mapView.openPopup()',
-                timestamp: Date.now()
-              })
-              
-              // r022.98: Set shouldFocus: false to prevent premature focus on Features widget
-              // This prevents "[esri.widgets.Features] Features can only be focused when currently active" warning
-              mapView.openPopup({
-                features: [clickedFeature],
-                location: popupLocation,
-                shouldFocus: false
-              })
-              
-              // Restore original popupEnabled state
-              mapView.popupEnabled = originalPopupEnabled
-              
-              debugLogger.log('POPUP', {
-                event: 'popup-opened',
-                recordId: dataId,
-                popupVisible: mapView.popup?.visible,
-                note: 'Popup opened successfully',
-                timestamp: Date.now()
-              })
-            } catch (error) {
-              debugLogger.log('POPUP', {
-                event: 'popup-open-failed',
-                recordId: dataId,
-                error: error instanceof Error ? error.message : String(error),
-                note: 'Failed to open popup',
-                timestamp: Date.now()
-              })
-            }
-          } else {
-            debugLogger.log('POPUP', {
-              event: 'result-clicked-no-geometry',
-              recordId: dataId,
-              hasFeature: !!clickedFeature,
-              warning: 'No geometry available for popup',
-              timestamp: Date.now()
-            })
-          }
-        } else {
-          debugLogger.log('POPUP', {
-            event: 'result-clicked-missing-dependencies',
-            recordId: dataId,
-            hasMapView: !!mapView,
-            hasFeature: !!clickedFeature,
-            warning: 'Cannot prepare popup data - missing mapView or feature',
-            timestamp: Date.now()
-          })
-        }
+        // Open popup after zoom completes
+        openPopupForRecord(data)
       })
       .catch(error => {
-        // Log zoom errors so we know if .then() didn't fire
         debugLogger.log('POPUP', {
           event: 'zoom-promise-rejected',
           recordId: dataId,
           error: error instanceof Error ? error.message : String(error),
-          note: 'Zoom failed, so .then() callback did not fire',
+          note: 'r022.105: Zoom failed, opening popup anyway',
           timestamp: Date.now()
         })
+        // Still open popup even if zoom fails
+        openPopupForRecord(data)
       })
-  }, [outputDS, widgetId, zoomToRecords])
+    } else {
+      // r022.105: New behavior - popup only (no zoom)
+      debugLogger.log('POPUP', {
+        event: 'result-clicked-NO-zoom',
+        recordId: dataId,
+        note: 'r022.105: Zoom disabled, opening popup without zoom',
+        timestamp: Date.now()
+      })
+      
+      // Open popup immediately without zooming
+      openPopupForRecord(data)
+    }
+  }, [outputDS, widgetId, zoomToRecords, zoomOnResultClick, openPopupForRecord])
 
   /**
    * Removes a record from the results and selection.
@@ -1768,6 +1749,8 @@ export function QueryTaskResult (props: QueryTaskResultProps) {
             onRemove={removeRecord}
             expandByDefault={expandAll}
             queries={queries}
+            mapView={mapView}
+            hoverPinColor={hoverPinColor}
           />
         )}
       </div>

@@ -195,6 +195,10 @@ export interface SettingConfig {
   highlightPointSize?: number         // pixels (default: 12)
   highlightPointOutlineWidth?: number // pixels (default: 2) - separate from polygon outline
   highlightPointStyle?: 'circle' | 'square' | 'cross' | 'x' | 'diamond'  // default: 'circle'
+  // Hover Preview Pin Configuration
+  hoverPinColor?: string              // Hex color (e.g., '#FFC107' - yellow) - default: '#FFC107'
+  // Result Click Behavior
+  zoomOnResultClick?: boolean         // Default: true - zoom to record when clicked in results panel (popup always opens)
   sizeMap?: {
     arrangementIconPopper?: SizeMap
   }

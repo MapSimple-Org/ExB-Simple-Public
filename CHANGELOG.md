@@ -5,6 +5,135 @@ All notable changes to MapSimple Experience Builder widgets will be documented i
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.19.0-r022.107] - 2026-02-09 - FEATURE: Configurable Hover Preview Pin Color
+
+### Added
+- **Configurable Hover Pin Color**: Widget setting to customize the color of the hover preview pin
+  - **New Setting**: "Hover Preview Pin" section with color picker in widget settings
+  - **Default**: Yellow (#FFC107) - matches Google Maps style
+  - **Feature**: Pin appears on map when hovering over result items in the list
+  - **Auto-Generated Lighter Center**: Inner circle automatically rendered 20% lighter than selected color
+  - **Config Property**: `hoverPinColor?: string`
+
+### Changed
+- **Settings UI Improvements**: Enhanced readability of description text
+  - Removed low-contrast `text-secondary` class
+  - Applied `opacity: 0.8` for better visibility while maintaining visual hierarchy
+  - Fixed negative margin (`-8px` → `4px`) that caused text to clash with controls above
+
+### Technical Details
+**Implementation:**
+- Added `hoverPinColor` config property with hex color string
+- Created `hexToRgb()` helper function to convert hex to RGBA array for CIM symbols
+- Threaded color prop through component hierarchy: `widget.tsx` → `QueryTaskList` → `QueryTask` → `QueryTaskResult` → `SimpleList` → `QueryResultItem`
+- CIM symbol dynamically applies configured color:
+  - **Base color**: Used for outer teardrop pin shape
+  - **Lighter variant**: Calculated by multiplying RGB values by 1.2 (capped at 255)
+- Updated debug logging to include actual color values used
+
+**Code Structure:**
+```typescript
+// Convert hex to RGB for CIM symbol
+function hexToRgb(hex: string, alpha: number = 230): [number, number, number, number] {
+  const cleanHex = hex.replace('#', '')
+  const r = parseInt(cleanHex.substring(0, 2), 16)
+  const g = parseInt(cleanHex.substring(2, 4), 16)
+  const b = parseInt(cleanHex.substring(4, 6), 16)
+  return [r, g, b, alpha]
+}
+
+// In handleMouseEnter callback
+const baseColor = hexToRgb(hoverPinColor || '#FFC107', 230)
+const lighterColor = [
+  Math.min(255, Math.round(baseColor[0] * 1.2)),
+  Math.min(255, Math.round(baseColor[1] * 1.2)),
+  Math.min(255, Math.round(baseColor[2] * 1.2)),
+  255
+]
+```
+
+**Files Changed:**
+- `config.ts`: Added `hoverPinColor?: string` property
+- `setting/setting.tsx`: Added "Hover Preview Pin" section with ThemeColorPicker, improved text contrast
+- `setting/translations/default.ts`: Added i18n strings for hover pin color
+- `query-result-item.tsx`: Added `hexToRgb()` helper, dynamic color application in CIM symbol
+- `simple-list.tsx`: Added `hoverPinColor` prop
+- `query-result.tsx`: Added `hoverPinColor` prop
+- `query-task.tsx`: Added `hoverPinColor` prop
+- `query-task-list.tsx`: Added `hoverPinColor` prop
+- `widget.tsx`: Passed `config.hoverPinColor` to QueryTaskList components
+- `version.ts`: Incremented to r022.107
+
+**Testing:**
+1. Open widget settings → "Hover Preview Pin" section
+2. Select different colors (red, blue, green, etc.)
+3. Hover over result items to see pin in new color
+4. Verify center circle is lighter shade of selected color
+5. Verify description text is readable with proper spacing
+
+**Memory Safety:**
+- Single Graphic object per result item (reused across hovers) ✅
+- Point geometry objects properly replaced and garbage collected ✅
+- No object accumulation ✅
+
+## [1.19.0-r022.105] - 2026-02-09 - FEATURE: Configurable Zoom on Result Click
+
+### Added
+- **Configurable Zoom Behavior**: Widget setting to control zoom behavior when clicking results in the panel
+  - **New Setting**: "Zoom to record when clicked" toggle in "Result Click Behavior" section
+  - **Default**: Enabled (maintains current behavior)
+  - **When Enabled**: Click result → Zoom to record → Open popup
+  - **When Disabled**: Click result → Open popup only (no zoom)
+  - **Use Case**: Allows users to disable zoom for workflows where automatic zooming is disruptive
+  - **Config Property**: `zoomOnResultClick?: boolean`
+
+### Technical Details
+**Implementation:**
+- Added `zoomOnResultClick` config property (defaults to `true` for backward compatibility)
+- New settings UI section: "Result Click Behavior" with Switch control
+- Extracted `openPopupForRecord()` helper function to eliminate code duplication
+- Conditional zoom logic in `toggleSelection()` callback
+- Props threading: `widget.tsx` → `QueryTaskList` → `QueryTask` → `QueryTaskResult`
+
+**Code Structure:**
+```typescript
+// In query-result.tsx
+const openPopupForRecord = React.useCallback((data: FeatureDataRecord) => {
+  // Calculate popup location using labelPointOperator
+  // Open popup at calculated location
+}, [mapView])
+
+const toggleSelection = React.useCallback((data: FeatureDataRecord) => {
+  const shouldZoom = zoomOnResultClick !== false
+  
+  if (shouldZoom) {
+    zoomToRecords([data]).then(() => openPopupForRecord(data))
+  } else {
+    openPopupForRecord(data) // Popup only, no zoom
+  }
+}, [zoomOnResultClick, openPopupForRecord])
+```
+
+**Files Changed:**
+- `config.ts`: Added `zoomOnResultClick?: boolean` property
+- `setting/setting.tsx`: Added "Result Click Behavior" section with Switch
+- `setting/translations/default.ts`: Added i18n strings
+- `query-result.tsx`: Extracted helper, conditional zoom logic
+- `query-task.tsx`: Pass prop through
+- `query-task-list.tsx`: Pass prop through
+- `widget.tsx`: Pass `config.zoomOnResultClick` to components
+- `version.ts`: Incremented to r022.105
+
+**Benefits:**
+- ✅ Backward compatible (defaults to current behavior)
+- ✅ User choice for different workflow needs
+- ✅ Popup always opens regardless of zoom setting
+- ✅ Clean separation of zoom and popup logic
+- ✅ Reuses labelPoint calculation for popup location
+
+### Changed
+- Refactored popup opening logic into dedicated `openPopupForRecord()` helper function
+
 ## [1.19.0-r022.104] - 2026-02-08 - FIX: Un-Minimize Triggering Open Logic
 
 ### Fixed

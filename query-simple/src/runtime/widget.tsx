@@ -1337,6 +1337,8 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
                 activeTab={this.state.activeTab}
                 onTabChange={this.handleTabChange}
                 eventManager={this.eventManager}
+                zoomOnResultClick={config.zoomOnResultClick}
+                hoverPinColor={config.hoverPinColor}
               />
           </TaskListPopperWrapper>
         </QueryWidgetContext.Provider>
@@ -1419,6 +1421,8 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
                 activeTab={this.state.activeTab}
                 onTabChange={this.handleTabChange}
                 eventManager={this.eventManager}
+                zoomOnResultClick={config.zoomOnResultClick}
+                hoverPinColor={config.hoverPinColor}
               />
             </QueryWidgetContext.Provider>
           </div>

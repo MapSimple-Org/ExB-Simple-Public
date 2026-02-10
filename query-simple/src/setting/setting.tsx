@@ -410,6 +410,38 @@ export default class Setting extends React.PureComponent<AllWidgetSettingProps<I
             </SettingRow>
           </SettingSection>
         )}
+        {this.props.config.queryItems.length > 0 && (
+          <SettingSection role='group' aria-label={this.getI18nMessage('hoverPinColor')} title={this.getI18nMessage('hoverPinColor')}>
+            <SettingRow label={this.getI18nMessage('pinColor')} flow='wrap'>
+              <ThemeColorPicker
+                specificTheme={this.props.theme2}
+                value={config.hoverPinColor || '#FFC107'}
+                onChange={(color: string) => {
+                  this.updateConfigForOptions(['hoverPinColor', color])
+                }}
+              />
+            </SettingRow>
+            <div css={css`font-size: 0.875rem; margin-top: 4px; padding: 0 16px 8px; opacity: 0.8;`}>
+              {this.getI18nMessage('hoverPinColorDescription')}
+            </div>
+          </SettingSection>
+        )}
+        {this.props.config.queryItems.length > 0 && (
+          <SettingSection role='group' aria-label={this.getI18nMessage('resultClickBehavior')} title={this.getI18nMessage('resultClickBehavior')}>
+            <SettingRow label={this.getI18nMessage('zoomOnResultClick')}>
+              <Switch
+                checked={config.zoomOnResultClick !== false}
+                onChange={(e) => {
+                  this.updateConfigForOptions(['zoomOnResultClick', e.target.checked])
+                }}
+                aria-label={this.getI18nMessage('zoomOnResultClick')}
+              />
+            </SettingRow>
+            <div css={css`font-size: 0.875rem; margin-top: 4px; padding: 0 16px 8px; opacity: 0.8;`}>
+              {this.getI18nMessage('zoomOnResultClickDescription')}
+            </div>
+          </SettingSection>
+        )}
         <DataSourceRemoveWarningPopup
           dataSourceId={this.state.dsToRemove}
           isOpen={this.state.showRemoveQueryItemWarning}

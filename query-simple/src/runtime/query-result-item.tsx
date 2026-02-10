@@ -13,6 +13,8 @@ import { Button, Tooltip } from 'jimu-ui'
 import FeatureInfo from './components/feature-info'
 import { ListDirection } from '../config'
 import { createQuerySimpleDebugLogger } from 'widgets/shared-code/mapsimple-common'
+import Graphic from '@arcgis/core/Graphic'
+import * as labelPointOperator from '@arcgis/core/geometry/operators/labelPointOperator.js'
 
 const debugLogger = createQuerySimpleDebugLogger()
 
@@ -39,9 +41,12 @@ export interface ResultItemProps {
   defaultPopupTemplate: any
   data: FeatureDataRecord
   dataSource: DataSource
+  hoverPinColor?: string // r022.106: Configurable hover pin color
   expandByDefault: boolean
   onClick: (record: FeatureDataRecord) => void
   onRemove: (record: FeatureDataRecord) => void
+  // r022.106: Hover preview props
+  mapView?: __esri.MapView | __esri.SceneView
 }
 
 const style = css`
@@ -51,12 +56,18 @@ const style = css`
   flex-shrink: 0;
   min-height: 2rem;
   position: relative;
+  transition: background-color 0.15s ease-in-out;
   
   /* Add right padding to prevent header text from running into trash button */
   padding-right: 44px;  /* 32px button width + 12px buffer */
   
   &.selected {
     outline: 2px solid var(--sys-color-primary-main);
+  }
+  
+  /* r022.106: Hover preview - visual feedback in result row */
+  &:hover {
+    background-color: rgba(204, 0, 255, 0.08);  /* Neon purple tint */
   }
   
   .remove-button {
@@ -96,10 +107,31 @@ const style = css`
  * - Remove button (trash icon) in upper-right corner to remove record from results
  * - Records are expanded by default to show full feature information
  */
+/**
+ * Helper: Convert hex color to RGB array for CIM symbols
+ * @param hex - Hex color string (e.g., '#FFC107' or 'FFC107')
+ * @returns RGB array [r, g, b, alpha] for CIM symbol (e.g., [255, 193, 7, 230])
+ */
+function hexToRgb(hex: string, alpha: number = 230): [number, number, number, number] {
+  // Remove # if present
+  const cleanHex = hex.replace('#', '')
+  
+  // Parse RGB
+  const r = parseInt(cleanHex.substring(0, 2), 16)
+  const g = parseInt(cleanHex.substring(2, 4), 16)
+  const b = parseInt(cleanHex.substring(4, 6), 16)
+  
+  return [r, g, b, alpha]
+}
+
 export const QueryResultItem = (props: ResultItemProps) => {
-  const { widgetId, data, dataSource, popupTemplate, defaultPopupTemplate, onClick, onRemove, expandByDefault = false } = props
+  const { widgetId, data, dataSource, popupTemplate, defaultPopupTemplate, onClick, onRemove, expandByDefault = false, mapView, hoverPinColor } = props
   
   const recordId = data.getId()
+  
+  // r022.106: Hover preview - refs for hover graphic management
+  const hoverGraphicRef = React.useRef<__esri.Graphic | null>(null)
+  const hoverTimeoutRef = React.useRef<number | null>(null)
   
   // Log when QueryResultItem renders
   React.useEffect(() => {
@@ -125,6 +157,7 @@ export const QueryResultItem = (props: ResultItemProps) => {
   /**
    * Handle clicking on the result item.
    * Triggers zoom and popup opening (handled in toggleSelection callback).
+   * r022.106: Also hides hover graphic on click
    */
   const handleClickResultItem = React.useCallback((e: React.MouseEvent) => {
     // Don't trigger zoom if clicking the remove button
@@ -132,8 +165,18 @@ export const QueryResultItem = (props: ResultItemProps) => {
       return
     }
     
+    // r022.106: Hide hover graphic on click (Option 1 behavior)
+    if (hoverGraphicRef.current) {
+      hoverGraphicRef.current.visible = false
+      debugLogger.log('HOVER-PREVIEW', {
+        event: 'hover-graphic-hidden-on-click',
+        recordId,
+        timestamp: Date.now()
+      })
+    }
+    
     onClick(data)
-  }, [onClick, data])
+  }, [onClick, data, recordId])
 
   // Handle clicking the remove button - removes record from results and selection
   const handleRemove = React.useCallback((e: React.MouseEvent) => {
@@ -150,11 +193,256 @@ export const QueryResultItem = (props: ResultItemProps) => {
     }
   }, [handleClickResultItem])
 
+  // r022.106: Hover preview - cleanup on unmount
+  React.useEffect(() => {
+    return () => {
+      // Clear any pending timeout
+      if (hoverTimeoutRef.current) {
+        window.clearTimeout(hoverTimeoutRef.current)
+        hoverTimeoutRef.current = null
+      }
+      
+      // Remove hover graphic from map
+      if (hoverGraphicRef.current && mapView?.graphics) {
+        try {
+          mapView.graphics.remove(hoverGraphicRef.current)
+          debugLogger.log('HOVER-PREVIEW', {
+            event: 'hover-graphic-removed-on-unmount',
+            recordId,
+            timestamp: Date.now()
+          })
+        } catch (error) {
+          debugLogger.log('HOVER-PREVIEW', {
+            event: 'hover-graphic-remove-error-on-unmount',
+            recordId,
+            error: error?.toString(),
+            timestamp: Date.now()
+          })
+        }
+        hoverGraphicRef.current = null
+      }
+    }
+  }, [mapView, recordId])
+
+  /**
+   * r022.106: Handle mouse enter - show hover preview pin on map
+   * Debounced to 100ms to prevent flicker when moving across list items
+   */
+  const handleMouseEnter = React.useCallback(() => {
+    // Skip if no mapView
+    if (!mapView?.graphics) {
+      return
+    }
+    
+    // Clear any existing timeout
+    if (hoverTimeoutRef.current) {
+      window.clearTimeout(hoverTimeoutRef.current)
+    }
+    
+    // Debounce: Wait 100ms before showing graphic
+    hoverTimeoutRef.current = window.setTimeout(() => {
+      try {
+        const geometry = data.getJSAPIGeometry()
+        
+        if (!geometry) {
+          debugLogger.log('HOVER-PREVIEW', {
+            event: 'hover-skipped-no-geometry',
+            recordId,
+            timestamp: Date.now()
+          })
+          return
+        }
+        
+        // r022.106: Convert configured color to RGB for CIM symbol
+        const baseColor = hexToRgb(hoverPinColor || '#FFC107', 230) // Main pin color
+        // Create lighter variant for center circle (increase each RGB component by 20%)
+        const lighterColor: [number, number, number, number] = [
+          Math.min(255, Math.round(baseColor[0] * 1.2)),
+          Math.min(255, Math.round(baseColor[1] * 1.2)),
+          Math.min(255, Math.round(baseColor[2] * 1.2)),
+          255 // Full opacity for center
+        ]
+        
+        // Calculate label point (same as popup logic)
+        const labelPoint = labelPointOperator.execute(geometry)
+        
+        if (!labelPoint) {
+          debugLogger.log('HOVER-PREVIEW', {
+            event: 'hover-skipped-no-labelpoint',
+            recordId,
+            geometryType: geometry.type,
+            timestamp: Date.now()
+          })
+          return
+        }
+        
+        // Create or update hover graphic
+        if (!hoverGraphicRef.current) {
+          // First hover - create new graphic using user's simplified teardrop pin SVG
+          // User's SVG path (viewBox 0 0 24 24):
+          // M12,2C8.1,2,5,5.1,5,9c0,5.2,7,13,7,13s7-7.8,7-13C19,5.1,15.9,2,12,2z 
+          // M12,11.5c-1.4,0-2.5-1.1-2.5-2.5s1.1-2.5,2.5-2.5s2.5,1.1,2.5,2.5S13.4,11.5,12,11.5z
+          // Y-FLIPPED for CIM (new_y = 24 - old_y): Point should be at top, circle at bottom
+          
+          const cimSymbol = {
+            type: 'cim',
+            data: {
+              type: 'CIMSymbolReference',
+              symbol: {
+                type: 'CIMPointSymbol',
+                symbolLayers: [
+                  {
+                    type: 'CIMVectorMarker',
+                    enable: true,
+                    size: 28,
+                    anchorPointUnits: 'Relative',
+                    anchorPoint: { x: 0, y: -0.5 }, // Anchor halfway up to position tip correctly
+                    frame: { xmin: 0, ymin: 0, xmax: 24, ymax: 24 },
+                    markerGraphics: [
+                      {
+                        // Outer teardrop shape (Y-flipped: 24-y for each coordinate)
+                        type: 'CIMMarkerGraphic',
+                        geometry: {
+                          rings: [[
+                            // Starting from top (was bottom Y=22, now Y=2)
+                            [12, 22], [10.5, 22], [9, 21.5], [7.5, 20.5],
+                            [6, 19], [5.5, 17.5], [5, 15],
+                            // Going up in visual (was down, Y=9 now Y=15)
+                            [5, 13.5], [5.5, 11], [6.5, 8.5],
+                            [8, 6], [10, 3.5], [12, 2],
+                            // Right side (was bottom Y=22, now Y=2)
+                            [14, 3.5], [16, 6], [17.5, 8.5],
+                            [18.5, 11], [19, 13.5],
+                            // Top curve (was Y=9, now Y=15)
+                            [19, 15], [18.5, 17.5], [18, 19],
+                            [16.5, 20.5], [15, 21.5], [13.5, 22], [12, 22]
+                          ]]
+                        },
+                        symbol: {
+                          type: 'CIMPolygonSymbol',
+                          symbolLayers: [
+                            {
+                              type: 'CIMSolidStroke',
+                              enable: true,
+                              width: 1.5,
+                              color: [255, 255, 255, 255] // White outline
+                            },
+                            {
+                              type: 'CIMSolidFill',
+                              enable: true,
+                              color: baseColor // Configured hover pin color
+                            }
+                          ]
+                        }
+                      },
+                      {
+                        // Inner circle "eye" (Y-flipped: was Y=9 center, now Y=15 center)
+                        type: 'CIMMarkerGraphic',
+                        geometry: {
+                          rings: [[
+                            [12, 17.5], [13, 17.3], [13.8, 16.8],
+                            [14.3, 16], [14.5, 15], [14.3, 14],
+                            [13.8, 13.2], [13, 12.7], [12, 12.5],
+                            [11, 12.7], [10.2, 13.2], [9.7, 14],
+                            [9.5, 15], [9.7, 16], [10.2, 16.8],
+                            [11, 17.3], [12, 17.5]
+                          ]]
+                        },
+                        symbol: {
+                          type: 'CIMPolygonSymbol',
+                          symbolLayers: [
+                            {
+                              type: 'CIMSolidStroke',
+                              enable: true,
+                              width: 1,
+                              color: [255, 255, 255, 255] // White outline
+                            },
+                            {
+                              type: 'CIMSolidFill',
+                              enable: true,
+                              color: lighterColor // Lighter variant for center circle
+                            }
+                          ]
+                        }
+                      }
+                    ],
+                    scaleSymbolsProportionally: true,
+                    respectFrame: true
+                  }
+                ]
+              }
+            }
+          }
+          
+          hoverGraphicRef.current = new Graphic({
+            geometry: labelPoint,
+            symbol: cimSymbol as any
+          })
+          mapView.graphics.add(hoverGraphicRef.current)
+          
+          debugLogger.log('HOVER-PREVIEW', {
+            event: 'hover-graphic-created',
+            recordId,
+            geometryType: geometry.type,
+            symbolType: 'CIMSymbol-GooglePin',
+            color: hoverPinColor || '#FFC107',
+            colorRgb: baseColor,
+            location: { x: labelPoint.x, y: labelPoint.y },
+            timestamp: Date.now()
+          })
+        } else {
+          // Reuse existing graphic - just update geometry
+          hoverGraphicRef.current.geometry = labelPoint
+          hoverGraphicRef.current.visible = true
+          
+          debugLogger.log('HOVER-PREVIEW', {
+            event: 'hover-graphic-updated',
+            recordId,
+            geometryType: geometry.type,
+            location: { x: labelPoint.x, y: labelPoint.y },
+            timestamp: Date.now()
+          })
+        }
+      } catch (error) {
+        debugLogger.log('HOVER-PREVIEW', {
+          event: 'hover-graphic-error',
+          recordId,
+          error: error?.toString(),
+          timestamp: Date.now()
+        })
+      }
+    }, 100) // 100ms debounce
+  }, [mapView, data, recordId, hoverPinColor])
+
+  /**
+   * r022.106: Handle mouse leave - hide hover preview pin
+   */
+  const handleMouseLeave = React.useCallback(() => {
+    // Clear any pending timeout
+    if (hoverTimeoutRef.current) {
+      window.clearTimeout(hoverTimeoutRef.current)
+      hoverTimeoutRef.current = null
+    }
+    
+    // Hide hover graphic (don't destroy - reuse it)
+    if (hoverGraphicRef.current) {
+      hoverGraphicRef.current.visible = false
+      
+      debugLogger.log('HOVER-PREVIEW', {
+        event: 'hover-graphic-hidden',
+        recordId,
+        timestamp: Date.now()
+      })
+    }
+  }, [recordId])
+
   return (
     <div
       className={classNames('query-result-item', { selected })}
       onClick={handleClickResultItem}
       onKeyUp={onKeyUp}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
       css={style}
       role='option'
       aria-selected={selected}

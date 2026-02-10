@@ -2,8 +2,8 @@
 
 Custom widgets for ArcGIS Experience Builder Developer Edition (1.19.0+). Built for performance, deep-linking, and advanced result management.
 
-**Current Version**: `1.19.0-r022.104`  
-**Latest Update**: Un-Minimize Restoration Fix (Feb 8, 2026)
+**Current Version**: `1.19.0-r022.107`  
+**Latest Update**: Configurable Hover Preview Pin Color (Feb 9, 2026)
 
 ---
 
@@ -27,7 +27,35 @@ Custom widgets for ArcGIS Experience Builder Developer Edition (1.19.0+). Built 
 
 ---
 
-## What's New: r022.104 (Feb 8, 2026)
+## What's New: r022.107 (Feb 9, 2026)
+
+### 🎨 New Feature
+
+**Configurable Hover Preview Pin Color** - Customize the color of the hover preview pin to match your branding
+
+**The Feature:**
+- New "Hover Preview Pin" section in widget settings with color picker
+- Default yellow (#FFC107) matches Google Maps style
+- Auto-generated lighter center circle (20% brighter than selected color)
+- Dynamic CIM symbol color application using hex-to-RGB conversion
+
+**Settings UI Improvements:**
+- Removed low-contrast `text-secondary` class for better readability
+- Applied `opacity: 0.8` for improved visibility while maintaining hierarchy
+- Fixed negative margin (-8px → 4px) preventing text collision with controls
+
+**Impact:**
+- ✅ Match your organization's color scheme
+- ✅ Better brand consistency across applications
+- ✅ Improved settings text readability
+- ✅ Professional spacing between controls and descriptions
+
+**Why This Matters:**
+The hover preview pin helps users quickly locate features on the map when browsing results. Making the color configurable allows you to match your organization's branding and avoid confusion with other map symbols.
+
+---
+
+## Previous Updates: r022.104 (Feb 8, 2026)
 
 ### 🐛 Critical Fix
 

@@ -16,11 +16,14 @@ export interface QueryTaskListProps {
   isInPopper?: boolean
   defaultPageSize?: number
   className?: string
+  hoverPinColor?: string // r022.106: Configurable hover pin color
   initialQueryValue?: { shortId: string, value: string }
   shouldUseInitialQueryValueForSelection?: boolean
   onHashParameterUsed?: (shortId: string) => void
   resultsMode?: SelectionType
   onResultsModeChange?: (mode: SelectionType) => void
+  // r022.105: Configurable zoom on result click
+  zoomOnResultClick?: boolean
   accumulatedRecords?: FeatureDataRecord[]
   onAccumulatedRecordsChange?: (records: FeatureDataRecord[]) => void
   graphicsLayer?: __esri.GraphicsLayer
@@ -127,7 +130,7 @@ const getQueryDisplayName = (item: ImmutableObject<QueryItemType>): string => {
 }
 
 export function QueryTaskList (props: QueryTaskListProps) {
-  const { queryItems, widgetId, defaultPageSize, isInPopper = false, className = '', initialQueryValue, shouldUseInitialQueryValueForSelection = false, onHashParameterUsed, resultsMode, onResultsModeChange, accumulatedRecords, onAccumulatedRecordsChange, graphicsLayer, mapView, onInitializeGraphicsLayer, onClearGraphicsLayer, onDestroyGraphicsLayer, activeTab, onTabChange, eventManager } = props
+  const { queryItems, widgetId, defaultPageSize, isInPopper = false, className = '', initialQueryValue, shouldUseInitialQueryValueForSelection = false, onHashParameterUsed, resultsMode, onResultsModeChange, accumulatedRecords, onAccumulatedRecordsChange, graphicsLayer, mapView, onInitializeGraphicsLayer, onClearGraphicsLayer, onDestroyGraphicsLayer, activeTab, onTabChange, eventManager, zoomOnResultClick, hoverPinColor } = props
   const getI18nMessage = hooks.useTranslation(defaultMessages)
   
   // Log when props are received
@@ -634,6 +637,8 @@ export function QueryTaskList (props: QueryTaskListProps) {
             activeTab={activeTab}
             onTabChange={onTabChange}
             eventManager={eventManager}
+            zoomOnResultClick={zoomOnResultClick}
+            hoverPinColor={hoverPinColor}
               // No onNavBack - no navigation needed
             />
           </div>

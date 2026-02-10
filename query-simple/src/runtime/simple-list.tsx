@@ -23,6 +23,7 @@ export interface SimpleListProps {
   outputDS: FeatureLayerDataSource
   records: DataRecord[]
   direction: ListDirection
+  hoverPinColor?: string // r022.106: Configurable hover pin color
   onEscape: () => void
   onSelectChange: (data: FeatureDataRecord) => void
   onRemove: (data: FeatureDataRecord) => void
@@ -32,6 +33,8 @@ export interface SimpleListProps {
   onRenderDone?: (options: { dataItems: any[] }) => void
   // r021.87: Queries array for looking up config by __queryConfigId
   queries?: ImmutableArray<ImmutableObject<QueryItemType>>
+  // r022.106: Hover preview
+  mapView?: __esri.MapView | __esri.SceneView
 }
 
 const getStyle = (isAutoHeight: boolean) => {
@@ -82,7 +85,9 @@ export function SimpleList (props: SimpleListProps) {
     // r021.77: itemExpandStates removed
     removedRecordIds,
     onRenderDone,
-    queries
+    queries,
+    mapView,
+    hoverPinColor // r022.106: Configurable hover pin color
   } = props
   
   const isAutoHeight = useAutoHeight()
@@ -271,6 +276,8 @@ export function SimpleList (props: SimpleListProps) {
               expandByDefault={expandByDefaultValue}
               onClick={onSelectChange}
               onRemove={onRemove}
+              mapView={mapView}
+              hoverPinColor={hoverPinColor}
             />
           )
         })}

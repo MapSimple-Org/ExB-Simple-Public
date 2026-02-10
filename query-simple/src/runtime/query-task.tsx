@@ -70,6 +70,8 @@ export interface QueryTaskProps {
   total: number
   queryItem: ImmutableObject<QueryItemType>
   wrappedInPopper?: boolean
+  hoverPinColor?: string // r022.106: Configurable hover pin color
+  hoverPinColor?: string // r022.106: Configurable hover pin color
   className?: string
   isInPopper?: boolean
   onNavBack?: () => void
@@ -104,6 +106,8 @@ export interface QueryTaskProps {
   onTabChange?: (tab: 'query' | 'results') => void
   eventManager?: import('./hooks/use-event-handling').EventManager  // Chunk 7.1: Event Handling Manager
   // FIX (r018.96): Removed manuallyRemovedRecordIds and onManualRemoval - no longer needed
+  // r022.105: Configurable zoom on result click
+  zoomOnResultClick?: boolean
 }
 
 // Helper function to get display name for query in dropdown
@@ -164,7 +168,7 @@ const style = css`
 `
 
 export function QueryTask (props: QueryTaskProps) {
-  const { queryItem, onNavBack, total, isInPopper = false, wrappedInPopper = false, className = '', index, initialInputValue, onHashParameterUsed, queryItems, selectedQueryIndex, onQueryChange, groups, ungrouped, groupOrder, selectedGroupId, selectedGroupQueryIndex, onGroupChange, onGroupQueryChange, onUngroupedChange, resultsMode, onResultsModeChange, accumulatedRecords, onAccumulatedRecordsChange, graphicsLayer, mapView, onInitializeGraphicsLayer, onClearGraphicsLayer, onDestroyGraphicsLayer, activeTab: propActiveTab, onTabChange: propOnTabChange, eventManager, ...otherProps } = props
+  const { queryItem, onNavBack, total, isInPopper = false, wrappedInPopper = false, className = '', index, initialInputValue, onHashParameterUsed, queryItems, selectedQueryIndex, onQueryChange, groups, ungrouped, groupOrder, selectedGroupId, selectedGroupQueryIndex, onGroupChange, onGroupQueryChange, onUngroupedChange, resultsMode, onResultsModeChange, accumulatedRecords, onAccumulatedRecordsChange, graphicsLayer, mapView, onInitializeGraphicsLayer, onClearGraphicsLayer, onDestroyGraphicsLayer, activeTab: propActiveTab, onTabChange: propOnTabChange, eventManager, zoomOnResultClick, hoverPinColor, ...otherProps } = props
   const getI18nMessage = hooks.useTranslation(defaultMessage)
   const zoomToRecords = useZoomToRecords(mapView)
   const [stage, setStage] = React.useState(0) // 0 = form, 1 = results, 2 = loading, 3 = clearing
@@ -3136,6 +3140,8 @@ export function QueryTask (props: QueryTaskProps) {
                 eventManager={eventManager}
                 isQuerySwitchInProgressRef={isQuerySwitchInProgressRef}
                 queries={queryItems}
+                zoomOnResultClick={zoomOnResultClick}
+                hoverPinColor={hoverPinColor}
                 noRemovalAlert={noRemovalAlert}
                 onDismissNoRemovalAlert={() => setNoRemovalAlert(null)}
                 allDuplicatesAlert={allDuplicatesAlert}
