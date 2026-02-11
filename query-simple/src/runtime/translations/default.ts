@@ -34,7 +34,7 @@ export default {
   resultsTab: 'Results',
   expandAll: 'Expand all',
   collapseAll: 'Collapse all',
-  addToMap: 'Add to map',
+  addToMap: 'Select on map',
   resultsMode: 'Results mode',
   createNewResults: 'Create new results',
   addToCurrentResults: 'Add to current results',

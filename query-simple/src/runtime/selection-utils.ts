@@ -170,11 +170,12 @@ export async function selectRecordsInDataSources(
       useGraphicsLayer,
       hasGraphicsLayer: !!graphicsLayer,
       hasMapView: !!mapView,
+      skipOriginDSSelection,
       timestamp: Date.now()
     })
     
-    // Select in origin data source (the actual layer)
-    if (originDS && typeof originDS.selectRecordsByIds === 'function') {
+    // r023.5: Respect skipOriginDSSelection in BOTH branches (not just graphics layer branch)
+    if (!skipOriginDSSelection && originDS && typeof originDS.selectRecordsByIds === 'function') {
       // Log layer state right before selection to see what's available when selection works
       const layer = (originDS as any).layer || (originDS as any).getLayer?.()
       if (layer) {
@@ -194,6 +195,14 @@ export async function selectRecordsInDataSources(
       }
       
       originDS.selectRecordsByIds(recordIds, records)
+    } else if (skipOriginDSSelection) {
+      debugLogger.log('GRAPHICS-LAYER', {
+        event: 'r023-5-origin-ds-selection-skipped-layer-branch',
+        reason: 'skipOriginDSSelection-flag-true',
+        originDSId: originDS?.id,
+        recordCount: recordIds.length,
+        timestamp: Date.now()
+      })
     }
   }
   
@@ -210,7 +219,7 @@ export async function selectRecordsInDataSources(
  * 
  * This function ensures the hash is clean when selections are cleared.
  */
-function clearDataSParameterFromHash(): void {
+export function clearDataSParameterFromHash(): void {
   const hash = window.location.hash.substring(1)
   if (!hash) return
   

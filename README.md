@@ -2,8 +2,8 @@
 
 Custom widgets for ArcGIS Experience Builder Developer Edition (1.19.0+). Built for performance, deep-linking, and advanced result management.
 
-**Current Version**: `1.19.0-r022.109`  
-**Latest Update**: Animated Spring Drop for Hover Preview Pin (Feb 9, 2026)
+**Current Version**: `1.19.0-r023.13`  
+**Latest Update**: Selection Architecture Overhaul + Settings Validation (Jan 25, 2026)
 
 ---
 
@@ -27,60 +27,44 @@ Custom widgets for ArcGIS Experience Builder Developer Edition (1.19.0+). Built 
 
 ---
 
-## What's New: r022.108-109 (Feb 9, 2026)
+## What's New: r023.5-13 (Jan 25, 2026)
 
-### 🎬 New Feature
+### Selection Architecture Overhaul
 
-**Animated Spring Drop for Hover Preview Pin** - Google Maps-style drop-and-bounce animation when pins appear
+**Automatic blue map outlines removed from query execution.** Query results now only show purple/magenta highlight graphics. Blue selection outlines appear only when the user explicitly clicks "Select on Map."
 
-**The Feature:**
-- Spring physics animation with stiffness `0.15` and damping `0.8`
-- Pin starts suspended at `y: -1.2` and settles at `y: -0.5` with natural bounce
-- Smooth `requestAnimationFrame` loop for 60fps performance
-- Proper cleanup on mouse leave, click, and component unmount
+**What Changed:**
+- Query execution, query switching, panel reopen, and popup close no longer trigger automatic blue outlines
+- "Add to map" renamed to "Select on Map" to reflect the new explicit behavior
+- Explicit user actions (Select on Map, record click, Remove, Clear All) work exactly as before
+- "Select on Map" blue outlines now persist through panel close/reopen
 
-**Animation Behavior:**
-- Plays when hovering over any result item in the list
-- Restarts automatically when hovering different results (graphic reused)
-- Cancels immediately on mouse leave or click
-- No performance impact (single graphic, efficient physics loop)
+**Bug Fixes:**
+- Fixed blue outlines appearing on widget panel reopen and identify popup close
+- Fixed URL hash (`data_s`) not being cleaned after widget panel close
+- Simplified query switch reselection block from 372 lines to ~30 lines
 
-**Impact:**
-- ✅ Familiar, polished interaction matching Google Maps UX
-- ✅ Visual feedback confirms which result is being previewed
-- ✅ Snappier feel with optimized starting position
-- ✅ Production-ready performance with proper lifecycle management
+**Settings Validation:**
+- Red warning appears in widget settings when no map widget is selected (required for highlights to display)
 
 **Why This Matters:**
-The spring animation adds a professional, delightful touch to the hover preview feature. Users get instant visual feedback when exploring results, and the familiar bounce effect feels natural and responsive.
+Automatic blue outlines created visual clutter, duplicated the purple graphics, and caused confusing phantom selections. This overhaul makes selection behavior predictable: purple graphics for query results, blue outlines only when the user asks for them.
+
+---
+
+## Previous Updates: r022.108-109 (Feb 9, 2026)
+
+### Animated Spring Drop for Hover Preview Pin
+
+Google Maps-style drop-and-bounce animation when pins appear. Spring physics with stiffness `0.15` and damping `0.8`, smooth `requestAnimationFrame` loop, and proper cleanup on mouse leave/click/unmount.
 
 ---
 
 ## Previous Updates: r022.107 (Feb 9, 2026)
 
-### 🎨 New Feature
+### Configurable Hover Preview Pin Color
 
-**Configurable Hover Preview Pin Color** - Customize the color of the hover preview pin to match your branding
-
-**The Feature:**
-- New "Hover Preview Pin" section in widget settings with color picker
-- Default yellow (#FFC107) matches Google Maps style
-- Auto-generated lighter center circle (20% brighter than selected color)
-- Dynamic CIM symbol color application using hex-to-RGB conversion
-
-**Settings UI Improvements:**
-- Removed low-contrast `text-secondary` class for better readability
-- Applied `opacity: 0.8` for improved visibility while maintaining hierarchy
-- Fixed negative margin (-8px → 4px) preventing text collision with controls
-
-**Impact:**
-- ✅ Match your organization's color scheme
-- ✅ Better brand consistency across applications
-- ✅ Improved settings text readability
-- ✅ Professional spacing between controls and descriptions
-
-**Why This Matters:**
-The hover preview pin helps users quickly locate features on the map when browsing results. Making the color configurable allows you to match your organization's branding and avoid confusion with other map symbols.
+New "Hover Preview Pin" section in widget settings with color picker. Default yellow (#FFC107), auto-generated lighter center circle, and dynamic CIM symbol color application.
 
 ---
 

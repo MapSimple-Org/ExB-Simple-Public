@@ -833,89 +833,8 @@ export function QueryTask (props: QueryTaskProps) {
       }
     }
     
-    // VERIFICATION LOGGING: Track graphics layer state when switching queries
-    if (isSwitchingQueries && (resultsMode === SelectionType.AddToSelection || resultsMode === SelectionType.RemoveFromSelection)) {
-      const graphicsCountBefore = graphicsLayer?.graphics?.length || 0
-      debugLogger.log('RESULTS-MODE', {
-        event: 'handleOutputDataSourceCreated-query-switch-detected',
-        widgetId: props.widgetId,
-        oldConfigId,
-        newConfigId: queryItem.configId,
-        resultsMode,
-        hasGraphicsLayer: !!graphicsLayer,
-        graphicsCountBefore,
-        hasAccumulatedRecords: !!(accumulatedRecords && accumulatedRecords.length > 0),
-        accumulatedRecordsCount: accumulatedRecords?.length || 0,
-        hasOnClearGraphicsLayer: !!onClearGraphicsLayer,
-        isQuerySwitchFlagSet: isQuerySwitchInProgressRef.current,
-        timestamp: Date.now()
-      })
-      
-      // r021.87: BUG-ADD-MODE-001 FIXED - per-record formatting preserved via __queryConfigId on records
-    }
-    
-    // CHECK rootDataSource.map to see how framework accesses map view
-    try {
-      const originDataSources = ds.getOriginDataSources()
-      const originDS = originDataSources?.[0]
-      if (originDS) {
-        const rootDS = originDS.getRootDataSource()
-        if (rootDS) {
-          // Expose rootDS to window for console inspection
-          ;(window as any).__querySimpleRootDS = rootDS
-          ;(window as any).__querySimpleRootDSMap = (rootDS as any).map
-          ;(window as any).__querySimpleOriginDS = originDS
-          
-          debugLogger.log('GRAPHICS-LAYER', {
-            event: 'check-root-datasource-map',
-            widgetId: props.widgetId,
-            outputDSId: ds.id,
-            originDSId: originDS.id,
-            rootDSId: rootDS.id,
-            rootDSType: rootDS.type,
-            hasRootDSMap: !!(rootDS as any).map,
-            rootDSMapType: (rootDS as any).map ? typeof (rootDS as any).map : 'none',
-            rootDSMapId: (rootDS as any).map?.id || 'none',
-            hasRootDSMapView: !!(rootDS as any).map?.view,
-            hasRootDSMapViews: !!(rootDS as any).map?.views,
-            rootDSMapViewsLength: (rootDS as any).map?.views?.length || 0,
-            // Log some map properties if it exists
-            rootDSMapKeys: (rootDS as any).map ? Object.keys((rootDS as any).map).filter(key => 
-              !key.startsWith('_') && 
-              typeof (rootDS as any).map[key] !== 'function'
-            ).slice(0, 20) : [],
-            // Log that objects are available on window for console inspection
-            consoleInspection: 'Check window.__querySimpleRootDS, window.__querySimpleRootDSMap, window.__querySimpleOriginDS',
-            timestamp: Date.now()
-          })
-          
-          // If map exists, check its view
-          const rootMap = (rootDS as any).map
-          if (rootMap) {
-            const view = rootMap.view || 
-                         (rootMap.views?.getItemAt?.(0)) ||
-                         (rootMap.views?.length > 0 ? rootMap.views[0] : null)
-            
-            debugLogger.log('GRAPHICS-LAYER', {
-              event: 'check-root-datasource-map-view',
-              widgetId: props.widgetId,
-              hasView: !!view,
-              viewType: view?.type || 'none',
-              viewId: view?.id || 'none',
-              timestamp: Date.now()
-            })
-          }
-        }
-      }
-    } catch (error) {
-      debugLogger.log('GRAPHICS-LAYER', {
-        event: 'check-root-datasource-map-error',
-        widgetId: props.widgetId,
-        error: error instanceof Error ? error.message : String(error),
-        errorStack: error instanceof Error ? error.stack : undefined,
-        timestamp: Date.now()
-      })
-    }
+    // r023.9: Removed verbose query-switch verification logging and rootDataSource map inspection
+    // These were diagnostic tools from earlier debugging sessions, no longer needed
     
     // Initialize graphics layer lazily if not already initialized
     if (onInitializeGraphicsLayer) {
@@ -925,376 +844,42 @@ export function QueryTask (props: QueryTaskProps) {
       // For now, use the props that will be updated on next render
     }
     
-    // If in "Add to" or "Remove from" mode and we have accumulated records, re-select them
-    // This uses the same logic as after query completion - selectRecordsAndPublish
-    // This ensures records are selected both on the map and in the Results tab
+    // r023.9: SIMPLIFIED query switch reselection block
+    // Previously 372 lines. Reduced to essentials: update output DS, records ref, and clear flag.
+    // Removed: graphics clearing (neutered), origin layer filtering (not needed for output DS),
+    // selectRecordsAndPublish (overkill with both skip flags), URL hash cleanup, verification logging.
     if ((resultsMode === SelectionType.AddToSelection || resultsMode === SelectionType.RemoveFromSelection) 
         && accumulatedRecords && accumulatedRecords.length > 0) {
       
-      // FIX (r018.93): Flag is now set earlier (at query switch detection) to prevent timing issues
-      // Verify that the flag is already set
-      debugLogger.log('RESULTS-MODE', {
-        event: 'query-switch-reselection-starting',
-        widgetId: props.widgetId,
-        resultsMode,
-        accumulatedRecordsCount: accumulatedRecords.length,
-        isQuerySwitchFlagSet: isQuerySwitchInProgressRef.current,
-        note: 'Flag should already be set from query switch detection',
-        timestamp: Date.now()
-      })
-      
-      // VERIFICATION LOGGING: Graphics count before clearing
-      const graphicsCountBeforeClear = graphicsLayer?.graphics?.length || 0
-      
-      // FIX (r018.67): Clear graphics layer when switching queries to prevent stale graphics
-      // from previous queries from persisting in the shared graphics layer
-      if (graphicsLayer && onClearGraphicsLayer) {
-        debugLogger.log('RESULTS-MODE', {
-          event: 'clearing-graphics-layer-before-reselection-on-query-switch',
-          widgetId: props.widgetId,
-          resultsMode,
-          accumulatedRecordsCount: accumulatedRecords.length,
-          graphicsCountBeforeClear,
-          timestamp: Date.now()
-        })
-        
-        // FIX (r022.29): Skip clearing graphics layer in Add/Remove mode
-        // Graphics are already correct and match accumulatedRecords
-        // Clearing here causes unnecessary flash
-        
-        // VERIFICATION LOGGING: Graphics count after clearing
-        const graphicsCountAfterClear = graphicsLayer?.graphics?.length || 0
-        debugLogger.log('RESULTS-MODE', {
-          event: 'graphics-layer-cleared-on-query-switch',
-          widgetId: props.widgetId,
-          graphicsCountBeforeClear,
-          graphicsCountAfterClear,
-          cleared: graphicsCountAfterClear === 0,
-          timestamp: Date.now()
-        })
-      } else {
-        debugLogger.log('RESULTS-MODE', {
-          event: 'skipping-graphics-layer-clear-on-query-switch',
-          widgetId: props.widgetId,
-          reason: !graphicsLayer ? 'no-graphicsLayer' : 
-                  !onClearGraphicsLayer ? 'no-onClearGraphicsLayer' : 'unknown',
-          graphicsCountBeforeClear,
-          timestamp: Date.now()
-        })
-      }
-      
-      // Use a delay to ensure the DS is fully ready and graphics layer props are updated after widget re-render
-      // If graphics layer was just initialized, wait a bit longer for props to update
+      // Delay to ensure the new output DS is fully ready after widget re-render
       const delay = onInitializeGraphicsLayer ? 200 : 100
       setTimeout(() => {
         const featureDS = ds as FeatureLayerDataSource
         if (featureDS && accumulatedRecords && accumulatedRecords.length > 0) {
-          // r022.38: Filter accumulated records to only include records from the new query's origin layer
-          // This prevents ghost selections when switching between queries with different origin layers
-          const newQueryOriginDS = featureDS.getOriginDataSources?.()?.[0] || featureDS
-          const newQueryOriginDSId = newQueryOriginDS.id
+          const allRecordIds = accumulatedRecords.map(r => r.getId())
           
-          const recordsFromNewLayer = accumulatedRecords.filter(record => {
-            // Get the record's origin DS
-            const recordDS = (record as any).dataSource || record.getDataSource?.()
-            if (!recordDS) return false
-            
-            const recordOriginDS = recordDS.getOriginDataSources?.()?.[0] || recordDS
-            const recordOriginDSId = recordOriginDS.id
-            
-            return recordOriginDSId === newQueryOriginDSId
-          })
-          
-          debugLogger.log('RESULTS-MODE', {
-            event: 'query-switch-filtering-records-by-origin-layer',
-            widgetId: props.widgetId,
-            totalAccumulatedCount: accumulatedRecords.length,
-            newQueryOriginDSId,
-            recordsFromNewLayerCount: recordsFromNewLayer.length,
-            recordsFromOtherLayersCount: accumulatedRecords.length - recordsFromNewLayer.length,
-            allRecordIds: accumulatedRecords.map(r => r.getId()),
-            recordsFromNewLayerIds: recordsFromNewLayer.map(r => r.getId()),
-            note: 'r022.38: Only reselect records that belong to the new query origin layer',
-            timestamp: Date.now()
-          })
-          
-          // Use filtered records for reselection on the new output DS
-          const recordsToReselect = recordsFromNewLayer
-          
-          // VERIFICATION LOGGING: Show records being reselected
-          debugLogger.log('RESULTS-MODE', {
-            event: 'query-switch-reselecting-accumulated-records',
-            widgetId: props.widgetId,
-            accumulatedRecordsCount: accumulatedRecords.length,
-            recordsToReselectCount: recordsToReselect.length,
-            recordsToReselectIds: recordsToReselect.map(r => r.getId()).slice(0, 10),
-            note: 'r022.38: Only reselecting records from new query origin layer',
-            timestamp: Date.now()
-          })
-          
-          // Only re-select if we have records to re-select
-          if (recordsToReselect.length > 0) {
-            const recordIds = recordsToReselect.map(record => record.getId())
-            
-            // DIAGNOSTIC LOGGING: What we're about to re-select
-            debugLogger.log('RESULTS-MODE', {
-              event: 'query-switch-before-reselection',
-              widgetId: props.widgetId,
-              recordsToReselectCount: recordsToReselect.length,
-              recordsToReselectIds: recordIds,
-              outputDSId: featureDS.id,
-              graphicsLayerCountBefore: graphicsLayer?.graphics?.length || 0,
-              timestamp: Date.now()
-            })
-            
-            // Update output DS selection to keep Results tab in sync with accumulated records
-            // FIX (r022.29): Pass false for useGraphicsLayer to skip graphics operations
-            // Graphics are already correct and match accumulatedRecords - no need to clear/re-add
-            ;(async () => {
-              try {
-                  await selectRecordsAndPublish(
-                    props.widgetId,
-                    featureDS,
-                    recordIds,
-                    recordsToReselect,
-                    false,
-                    false, // Skip graphics layer operations (no clear/re-add, eliminates flash)
-                    graphicsLayer,
-                    mapView
-                  )
-                  
-                  debugLogger.log('RESULTS-MODE', {
-                    event: 'query-switch-updated-output-DS-only',
-                    widgetId: props.widgetId,
-                    recordsReselectedCount: recordsToReselect.length,
-                    graphicsCount: graphicsLayer?.graphics?.length || 0,
-                    note: 'Updated output DS selection without touching graphics',
-                    timestamp: Date.now()
-                  })
-                
-                  // FIX (r018.92): Clear the query switch flag after re-selection completes
-                  isQuerySwitchInProgressRef.current = false
-                  
-                  debugLogger.log('RESULTS-MODE', {
-                    event: 'query-switch-completed-clearing-in-progress-flag',
-                    widgetId: props.widgetId,
-                    recordsReselected: recordIds.length,
-                    timestamp: Date.now()
-                  })
-                  
-                  // FIX (r018.86): Clean up duplicate widget output entries in data_s hash
-                  // When switching queries, Experience Builder creates a new output DS with a new ID
-                  // We need to remove all old widget output entries to prevent duplicates
-                  const currentOutputDSId = featureDS.id
-                  const hash = window.location.hash.substring(1)
-                  const urlParams = new URLSearchParams(hash)
-                  
-                  if (urlParams.has('data_s')) {
-                    const dataS = urlParams.get('data_s') || ''
-                    const decodedDataS = decodeURIComponent(dataS)
-                    const selections = decodedDataS.split(',')
-                    
-                    // Extract widget number from widgetId (e.g., "widget_12" -> "12")
-                    const widgetMatch = props.widgetId.match(/widget_(\d+)/)
-                    if (widgetMatch) {
-                      const widgetNumber = widgetMatch[1]
-                      const widgetPattern = new RegExp(`widget_${widgetNumber}_output_(\\d+)`)
-                      
-                      // Find all widget output entries for this widget
-                      const widgetOutputEntries: Array<{selection: string, outputId: string, recordCount: number}> = []
-                      selections.forEach(selection => {
-                        if (selection.startsWith('id:')) {
-                          const idPart = selection.substring(3)
-                          const colonIndex = idPart.lastIndexOf(':')
-                          if (colonIndex !== -1) {
-                            const dsIdPart = idPart.substring(0, colonIndex)
-                            const recordIdsPart = idPart.substring(colonIndex + 1)
-                            const recordCount = recordIdsPart ? recordIdsPart.split(/[,+]/).filter(id => id).length : 0
-                            
-                            // Check if this matches our widget's output DS pattern
-                            let outputIdMatch: RegExpMatchArray | null = null
-                            if (dsIdPart.includes('~')) {
-                              // Compound format: dataSource_*~widget_XX_output_*
-                              const parts = dsIdPart.split('~')
-                              for (const part of parts) {
-                                const match = part.match(widgetPattern)
-                                if (match) {
-                                  outputIdMatch = match
-                                  break
-                                }
-                              }
-                            } else {
-                              // Simple format: widget_XX_output_*
-                              outputIdMatch = dsIdPart.match(widgetPattern)
-                            }
-                            
-                            if (outputIdMatch) {
-                              const fullOutputId = outputIdMatch[0] // e.g., "widget_12_output_28628683957324497"
-                              widgetOutputEntries.push({ selection, outputId: fullOutputId, recordCount })
-                            }
-                          }
-                        }
-                      })
-                      
-                      // If we have multiple entries for this widget, keep only the current one
-                      if (widgetOutputEntries.length > 1) {
-                        const currentOutputIdShort = currentOutputDSId.split('-').pop() // Extract the numeric part
-                        
-                        debugLogger.log('HASH', {
-                          event: 'query-switch-multiple-widget-outputs-detected',
-                          widgetId: props.widgetId,
-                          totalWidgetOutputs: widgetOutputEntries.length,
-                          widgetOutputs: widgetOutputEntries.map(e => ({ outputId: e.outputId, recordCount: e.recordCount })),
-                          currentOutputDSId,
-                          currentOutputIdShort,
-                          timestamp: Date.now()
-                        })
-                        
-                        // Filter out all old widget output entries
-                        const updatedSelections = selections.filter(selection => {
-                          const matchingEntry = widgetOutputEntries.find(e => e.selection === selection)
-                          if (matchingEntry) {
-                            // Keep only the entry matching the current output DS
-                            const keepEntry = matchingEntry.outputId.includes(currentOutputIdShort || '')
-                            if (!keepEntry) {
-                              debugLogger.log('HASH', {
-                                event: 'query-switch-removing-old-widget-output',
-                                widgetId: props.widgetId,
-                                removedOutputId: matchingEntry.outputId,
-                                removedRecordCount: matchingEntry.recordCount,
-                                currentOutputDSId,
-                                timestamp: Date.now()
-                              })
-                            }
-                            return keepEntry
-                          }
-                          return true
-                        })
-                        
-                        if (updatedSelections.length !== selections.length) {
-                          if (updatedSelections.length > 0) {
-                            urlParams.set('data_s', encodeURIComponent(updatedSelections.join(',')))
-                          } else {
-                            urlParams.delete('data_s')
-                          }
-                          window.location.hash = urlParams.toString()
-                          
-                          debugLogger.log('HASH', {
-                            event: 'query-switch-cleaned-duplicate-widget-outputs',
-                            widgetId: props.widgetId,
-                            originalSelectionCount: selections.length,
-                            newSelectionCount: updatedSelections.length,
-                            entriesRemoved: selections.length - updatedSelections.length,
-                            keptOutputDSId: currentOutputDSId,
-                            keptRecordCount: recordsToReselect.length,
-                            timestamp: Date.now()
-                          })
-                        }
-                      } else if (widgetOutputEntries.length === 1) {
-                        debugLogger.log('HASH', {
-                          event: 'query-switch-single-widget-output-found',
-                          widgetId: props.widgetId,
-                          outputId: widgetOutputEntries[0].outputId,
-                          recordCount: widgetOutputEntries[0].recordCount,
-                          expectedRecordCount: recordsToReselect.length,
-                          recordCountsMatch: widgetOutputEntries[0].recordCount === recordsToReselect.length,
-                          timestamp: Date.now()
-                        })
-                      }
-                    }
-                  }
-                
-                  // r022.39: Update recordsRef to show ALL accumulated records (not just filtered subset)
-                  // The Results tab should display records from all layers, not just the current query's layer
-                  recordsRef.current = accumulatedRecords
-                  setResultCount(accumulatedRecords.length)
-                  
-                  // VERIFICATION LOGGING: Graphics count after re-selection
-                  const graphicsCountAfterReselection = graphicsLayer?.graphics?.length || 0
-                  
-                  debugLogger.log('RESULTS-MODE', {
-                    event: 're-selected-accumulated-records-after-query-switch',
-                    widgetId: props.widgetId,
-                    outputDSId: featureDS.id,
-                    recordsCount: recordsToReselect.length,
-                    graphicsCountAfterReselection,
-                    expectedGraphicsCount: recordsToReselect.length,
-                    graphicsMatch: graphicsCountAfterReselection === recordsToReselect.length,
-                    timestamp: Date.now()
-                  })
-                  
-                  // Verify what's actually selected in the DS after a delay
-                  setTimeout(() => {
-                    const ds = DataSourceManager.getInstance().getDataSource(featureDS.id)
-                    const selectedInDS = ds?.getSelectedRecords()
-                    const selectedIdsInDS = ds?.getSelectedRecordIds() ?? []
-                    const finalGraphicsCount = graphicsLayer?.graphics?.length || 0
-                    // r018.78: Use 'recordId' attribute (not OBJECTID/id/FID) - that's how graphics-layer-utils stores them
-                    const finalGraphicsIds = graphicsLayer?.graphics?.map(g => g.attributes?.recordId) || []
-                    
-                    debugLogger.log('RESULTS-MODE', {
-                      event: 'query-switch-after-reselection-full-state',
-                      widgetId: props.widgetId,
-                      outputDSId: featureDS.id,
-                      expectedCount: recordsToReselect.length,
-                      expectedIds: recordIds,
-                      actualSelectedInDS: selectedInDS?.length || 0,
-                      actualSelectedIdsInDS: selectedIdsInDS,
-                      finalGraphicsCount,
-                      finalGraphicsIds,
-                      allSourcesMatch: selectedIdsInDS.length === recordsToReselect.length &&
-                                       finalGraphicsCount === recordsToReselect.length &&
-                                       JSON.stringify(selectedIdsInDS.sort()) === JSON.stringify(recordIds.sort()),
-                      timestamp: Date.now()
-                    })
-                  }, 200)
-                } catch (error) {
-                  debugLogger.log('RESULTS-MODE', {
-                    event: 're-selection-failed-after-switch',
-                    widgetId: props.widgetId,
-                    error: error instanceof Error ? error.message : 'Unknown error',
-                    errorStack: error instanceof Error ? error.stack : undefined
-                  })
-                }
-              })()
-          } else {
-            // r022.52: No records from new layer, but still need to update output DS selection
-            // for Results tab highlighting. Update ONLY output DS (not origin DS to avoid cross-layer collision)
-            recordsRef.current = accumulatedRecords
-            setResultCount(accumulatedRecords.length)
-            
-            debugLogger.log('RESULTS-MODE', {
-              event: 'no-records-from-new-layer-updating-output-ds-only',
-              widgetId: props.widgetId,
-              outputDSId: featureDS.id,
-              newLayerOriginDSId: newQueryOriginDSId,
-              accumulatedRecordsCount: accumulatedRecords.length,
-              recordsFromNewLayerCount: 0,
-              note: 'r022.52: Updating output DS selection for Results tab highlighting',
-              timestamp: Date.now()
-            })
-            
-            // Update output DS selection (for Results tab highlighting) without touching origin DS
-            if (featureDS && typeof featureDS.selectRecordsByIds === 'function') {
-              const allRecordIds = accumulatedRecords.map(r => r.getId())
-              featureDS.selectRecordsByIds(allRecordIds, accumulatedRecords)
-              
-              debugLogger.log('RESULTS-MODE', {
-                event: 'output-ds-selection-updated-for-cross-layer-display',
-                widgetId: props.widgetId,
-                outputDSId: featureDS.id,
-                recordIdsCount: allRecordIds.length,
-                recordIds: allRecordIds,
-                note: 'r022.52: Output DS now has all accumulated records selected for Results tab',
-                timestamp: Date.now()
-              })
-            }
-            
-            // Clear the query switch flag
-            isQuerySwitchInProgressRef.current = false
+          // Update output DS with ALL accumulated records (cross-layer) for Results tab borders
+          if (typeof featureDS.selectRecordsByIds === 'function') {
+            featureDS.selectRecordsByIds(allRecordIds, accumulatedRecords)
           }
+          
+          // Update Results tab display
+          recordsRef.current = accumulatedRecords
+          setResultCount(accumulatedRecords.length)
+          
+          // Clear the query switch flag so handleDataSourceInfoChange resumes normal operation
+          isQuerySwitchInProgressRef.current = false
+          
+          debugLogger.log('RESULTS-MODE', {
+            event: 'query-switch-output-ds-updated',
+            widgetId: props.widgetId,
+            outputDSId: featureDS.id,
+            recordCount: allRecordIds.length,
+            graphicsCount: graphicsLayer?.graphics?.length || 0,
+            timestamp: Date.now()
+          })
         }
-      }, 100)
+      }, delay)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [resultsMode, accumulatedRecords, props.widgetId, onInitializeGraphicsLayer, graphicsLayer, onClearGraphicsLayer, mapView, queryItem.configId, onAccumulatedRecordsChange])
@@ -1372,72 +957,12 @@ export function QueryTask (props: QueryTaskProps) {
         }
       }
       
-      // FIX (r018.70): Only sync accumulatedRecords when there are actually selected records that are a subset
-      // This prevents clearing accumulatedRecords when switching to empty data sources during query switches
-      // Only sync if records were manually removed (actuallySelected < accumulated), not during empty DS switches
+      // r023.8: REMOVED destructive sync block (lines 1379-1442)
+      // This block computed syncedRecords but never called onAccumulatedRecordsChange(syncedRecords)
+      // It was neutered in r022.29 to fix query switch purging, leaving only diagnostic logs
+      // With automatic selection removed, this entire block is dead code
+      
       if (resultsMode === SelectionType.AddToSelection || resultsMode === SelectionType.RemoveFromSelection) {
-        if (outputDS && accumulatedRecords && accumulatedRecords.length > 0 && onAccumulatedRecordsChange) {
-          const actuallySelectedRecords = outputDS.getSelectedRecords() as FeatureDataRecord[] || []
-          
-          if (actuallySelectedRecords.length > 0 && actuallySelectedRecords.length < accumulatedRecords.length) {
-            // Build a Set of actually selected IDs for fast lookup
-            const actuallySelectedIdsSet = new Set(actuallySelectedRecords.map(r => r.getId()))
-            
-            // Filter accumulatedRecords to only include records that are actually selected
-            const syncedRecords = accumulatedRecords.filter(record => 
-              actuallySelectedIdsSet.has(record.getId())
-            )
-            
-            const accumulatedIds = accumulatedRecords.map(r => r.getId())
-            const actuallySelectedIds = actuallySelectedRecords.map(r => r.getId())
-            const syncedIds = syncedRecords.map(r => r.getId())
-            const removedIds = accumulatedIds.filter(id => !syncedIds.includes(id))
-            
-            debugLogger.log('RESULTS-MODE', {
-              event: 'syncing-accumulated-records-before-query-switch',
-              widgetId: props.widgetId,
-              oldConfigId,
-              newConfigId: queryItem.configId,
-              accumulatedRecordsCountBefore: accumulatedRecords.length,
-              accumulatedIdsBefore: accumulatedIds,
-              actuallySelectedCount: actuallySelectedRecords.length,
-              actuallySelectedIds: actuallySelectedIds,
-              syncedRecordsCount: syncedRecords.length,
-              syncedIds: syncedIds,
-              recordsRemoved: accumulatedRecords.length - syncedRecords.length,
-              removedIds: removedIds,
-              note: 'FIX r022.29: Sync skipped during query switch - only needed for manual deletions',
-              timestamp: Date.now()
-            })
-            
-            // FIX (r022.29): Skip sync during query switch to prevent incorrect purging
-            // This sync is only for manual deletions (X button clicks), not query switching
-            // During query switch, output DS is temporarily out of sync until selectRecordsAndPublish completes
-            
-            // DIAGNOSTIC LOGGING: Full state AFTER sync
-            debugLogger.log('RESULTS-MODE', {
-              event: 'query-switch-after-sync-full-state',
-              widgetId: props.widgetId,
-              oldConfigId,
-              newConfigId: queryItem.configId,
-              accumulatedRecordsCountAfter: syncedRecords.length,
-              accumulatedIdsAfter: syncedIds,
-              outputDSSelectedCount: actuallySelectedRecords.length,
-              outputDSSelectedIds: actuallySelectedIds,
-              timestamp: Date.now()
-            })
-          } else {
-            debugLogger.log('RESULTS-MODE', {
-              event: 'accumulated-records-already-in-sync-before-query-switch',
-              widgetId: props.widgetId,
-              oldConfigId,
-              newConfigId: queryItem.configId,
-              accumulatedRecordsCount: accumulatedRecords.length,
-              timestamp: Date.now()
-            })
-          }
-        }
-        
         debugLogger.log('RESULTS-MODE', {
           event: 'preserving-accumulated-records-on-query-switch',
           widgetId: props.widgetId,
@@ -2151,28 +1676,9 @@ export function QueryTask (props: QueryTaskProps) {
                   timestamp: Date.now()
                 })
                 
-                // r022.73: Clear all origin DS selections first
-                for (const [originDS, records] of recordsByOriginDS.entries()) {
-                  if (typeof originDS.selectRecordsByIds === 'function') {
-                    originDS.selectRecordsByIds([], [])
-                  }
-                }
-                
-                // r022.73: Select each origin DS group with its correct records (NO GRAPHICS)
-                for (const [originDS, records] of recordsByOriginDS.entries()) {
-                  const recordIds = records.map(r => r.getId())
-                  
-                  if (typeof originDS.selectRecordsByIds === 'function') {
-                    originDS.selectRecordsByIds(recordIds, records)
-                    debugLogger.log('SELECTION-STATE-AUDIT', {
-                      event: 'r022-73-origin-ds-selected',
-                      originDSId: originDS.id,
-                      recordCount: recordIds.length,
-                      recordIds: recordIds,
-                      timestamp: Date.now()
-                    })
-                  }
-                }
+                // r023.5: REMOVED origin DS selection (blue outlines) - only "Add to Map" creates blue outlines
+                // Previously: Clear then re-select each origin DS
+                // Now: Skip origin DS entirely, only update output DS for Results tab
                 
                 // r022.73: Update outputDS for Results tab with ALL records (cross-layer display)
                 if (typeof dsToUse.selectRecordsByIds === 'function') {

@@ -215,7 +215,7 @@ export class SelectionRestorationManager {
    * This method:
    * 1. Checks if accumulated records exist (ALL modes)
    * 2. Groups accumulated records by origin data source
-   * 3. Calls selectRecordsAndPublish for each origin DS
+   * 3. r023.10: Origin DS selection removed (was causing blue outlines)
    * 
    * r022.2: lastSelection fallback removed - accumulatedRecords is universal source
    * r022.41: Added manageGraphicsLayer parameter for shared restoration path
@@ -270,8 +270,6 @@ export class SelectionRestorationManager {
   ): Promise<void> {
     // Lazy-load dependencies
     const { DataSourceManager } = await import('jimu-core')
-    const { selectRecordsAndPublish } = await import('../selection-utils')
-
     const recordsByOriginDS = new Map<any, any[]>() // Map<FeatureLayerDataSource, FeatureDataRecord[]>
     const dsManager = DataSourceManager.getInstance()
 
@@ -408,51 +406,38 @@ export class SelectionRestorationManager {
       })
     }
 
-    // Now restore selection in each origin DS (without graphics, since we already added them above)
-    for (const [originDS, records] of recordsByOriginDS.entries()) {
-      const recordIds = records.map(r => r.getId())
-      try {
-        await selectRecordsAndPublish(
-          this.widgetId,
-          originDS,
-          recordIds,
-          records,
-          true, // alsoPublishToOutputDS
-          false, // useGraphicsLayer - FALSE to prevent clearing/re-adding
-          undefined, // graphicsLayer - don't pass it
-          undefined // mapView - don't pass it
-        )
-
-        debugLogger.log('RESTORE', {
-          event: 'panel-opened-restored-origin-ds',
-          widgetId: this.widgetId,
-          originDSId: originDS.id,
-          recordCount: records.length,
-          zoomExecuted: false
-        })
-      } catch (error) {
-        debugLogger.log('RESTORE', {
-          event: 'panel-opened-restore-origin-ds-failed',
-          widgetId: this.widgetId,
-          originDSId: originDS.id,
-          error: error.message
-        })
-      }
-    }
+    // r023.10: Origin DS loop REMOVED. Previously iterated over origin DSes and called
+    // selectRecordsAndPublish per DS, which passed originDS as outputDS parameter.
+    // This caused blue outlines via:
+    //   1. outputDS.selectRecordsByIds() (line 210 in selectRecordsInDataSources) was actually
+    //      calling originDS.selectRecordsByIds() since originDS was passed as outputDS
+    //   2. publishSelectionMessage() published DataRecordsSelectionChangeMessage for origin DS
+    //
+    // Graphics are already restored above (lines 362-409).
+    // Output DS selection (Results tab borders) is handled by handleOutputDataSourceCreated
+    // in query-task.tsx when the widget re-renders after panel reopen.
+    debugLogger.log('RESTORE', {
+      event: 'panel-opened-graphics-restored-skipping-origin-ds',
+      widgetId: this.widgetId,
+      accumulatedRecordsCount: accumulatedRecords.length,
+      originDSCount: recordsByOriginDS.size,
+      note: 'r023.10: Origin DS selection removed to prevent blue outlines'
+    })
   }
 
   // r022.2: restoreLastSelection() method removed - dead code after r022.1 fix
   // r022.1 made accumulatedRecords the universal restoration source for ALL modes
 
   /**
-   * Clears selection from the map when the widget panel closes.
+   * Clears widget graphics from the map when the widget panel closes.
    * 
    * This method:
-   * 1. Clears graphics layer (if enabled)
-   * 2. Groups accumulated records by origin DS (if they exist)
-   * 3. Clears selection from each origin DS
+   * 1. Clears graphics layer (purple highlights)
+   * 2. Does NOT clear origin DS selection (blue outlines from "Select on Map")
    * 
    * r022.2: lastSelection fallback removed - accumulatedRecords is universal source
+   * r023.10: Origin DS clearing removed. Explicit "Select on Map" blue outlines
+   * persist through panel close/reopen. Only (X) and Clear All remove them.
    * 
    * @param deps - Runtime dependencies (graphics layer, map view, config)
    */
@@ -479,16 +464,24 @@ export class SelectionRestorationManager {
       })
     }
 
-    // r022.2: Always use accumulated records - single source of truth
-    if (accumulatedRecords && accumulatedRecords.length > 0) {
-      await this.clearAccumulatedRecords(accumulatedRecords, deps)
-    } else {
-      debugLogger.log('RESTORE', {
-        event: 'clearSelectionFromMap-no-selection-to-clear',
-        widgetId: this.widgetId,
-        note: 'r022.2: No accumulated records to clear'
-      })
-    }
+    // r023.10: Origin DS clearing REMOVED from panel close.
+    // Previously called clearAccumulatedRecords() which cleared origin DS selection per DS.
+    // This destroyed explicit "Select on Map" blue outlines when closing the panel,
+    // and since r023.10 removed origin DS restoration on reopen, they'd never come back.
+    // Now only (X) remove and Clear All clear origin DS selection (explicit user actions).
+    // Graphics layer is already cleared above (lines 457-464) and restored on reopen.
+    // r023.12: Still clean the data_s hash parameter on panel close.
+    // ExB adds data_s when selections are made but doesn't remove it when the widget closes.
+    // This prevents "dirty hash" issues without clearing the actual origin DS selection.
+    const { clearDataSParameterFromHash } = await import('../selection-utils')
+    clearDataSParameterFromHash()
+
+    debugLogger.log('RESTORE', {
+      event: 'panel-closed-hash-cleaned-origin-ds-preserved',
+      widgetId: this.widgetId,
+      accumulatedRecordsCount: accumulatedRecords?.length || 0,
+      note: 'r023.12: data_s hash cleared, origin DS selection preserved'
+    })
   }
 
   /**

@@ -309,6 +309,18 @@ export default class Setting extends React.PureComponent<AllWidgetSettingProps<I
                       : undefined}
                   />
                 </SettingRow>
+                {!config.highlightMapWidgetId && (
+                  <SettingRow>
+                    <div css={css`
+                      color: var(--ref-palette-red-600, #dc3545);
+                      font-size: 12px;
+                      line-height: 1.4;
+                      padding: 4px 0;
+                    `}>
+                      {this.getI18nMessage('mapWidgetRequired')}
+                    </div>
+                  </SettingRow>
+                )}
               </SettingSection>
           </SettingSection>
         )}

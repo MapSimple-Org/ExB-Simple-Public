@@ -63,6 +63,7 @@ export default {
   displayOrderDescription: 'Lower numbers appear first. Leave empty to maintain default order.',
   highlightOptions: 'Highlight Options',
   selectMapForHighlight: 'Select map widget',
+  mapWidgetRequired: 'A map widget is required. Query results will not display on the map without one.',
   graphicsSymbology: 'Graphics Layer Symbology',
   fillColor: 'Fill color',
   fillOpacity: 'Fill opacity',

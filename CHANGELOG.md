@@ -5,6 +5,59 @@ All notable changes to MapSimple Experience Builder widgets will be documented i
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.19.0-r023.13] - 2026-01-25 - Selection Architecture Overhaul + Settings Validation
+
+### Architecture: Automatic Blue Outline Removal (r023.5-9)
+**Query results no longer create automatic blue selection outlines on the map.** Purple/magenta graphics (highlights) still render as expected. Blue outlines now only appear when the user explicitly clicks "Select on Map."
+
+All automatic origin data source selection paths have been systematically removed:
+- Query execution auto-select
+- Cross-layer grouping loops
+- Query switch reselection (simplified from 372 lines to ~30 lines)
+- Panel reopen restoration
+- Popup close restoration
+
+**Why:** Automatic blue outlines created confusing visual noise, duplicated the purple graphics, and caused phantom selections that persisted unexpectedly. Explicit user actions ("Select on Map", record click, Remove X, Clear All) remain fully functional.
+
+### Bug Fixes (r023.10-12)
+- **Blue outlines on panel reopen and popup close**: Restoration logic was incorrectly passing origin data sources where output data sources were expected, causing framework-level blue outline creation even with the skip flag enabled. Removed the origin DS loop from restoration entirely.
+- **"Select on Map" blue outlines lost on panel close**: Explicit user selections via "Select on Map" now persist when the widget panel is closed, matching the expected behavior that user actions are preserved.
+- **Dirty URL hash after panel close**: The `data_s` hash parameter (added by Experience Builder during selections) is now cleaned independently of origin DS clearing, preventing stale selection state in the URL.
+
+### Settings Validation (r023.13)
+- **Map widget required warning**: A red validation message now appears in the widget settings when no map widget is selected under Highlight Options. Query results will not display on the map without a configured map widget.
+
+### UI Change (r023.7)
+- **Renamed "Add to map" to "Select on map"**: The action label now accurately reflects its purpose since automatic map selection has been removed.
+
+### Selection Behavior Summary
+
+| Action | Purple Graphics | Blue Outlines | Status |
+|---|---|---|---|
+| Query execution | Yes | No | Changed |
+| Query switch (Add/Remove) | Yes | No | Changed |
+| Panel close then reopen | Restored | Preserved if set | Changed |
+| Popup close | Restored | No | Changed |
+| "Select on Map" (user click) | Yes | Yes | Unchanged |
+| Record click | Yes | Yes | Unchanged |
+| Remove X / Clear All | Cleared | Cleared | Unchanged |
+
+### Known Issues
+- **Intermittent hash query non-execution**: URL hash value populates in the textbox but `SqlExpressionRuntime.onChange` occasionally does not fire. Appears to be a timing race unrelated to the selection changes. Under investigation.
+
+### Files Modified
+- `query-simple/src/runtime/query-task.tsx`: Reselection block simplified, cross-layer loops removed
+- `query-simple/src/runtime/query-result.tsx`: Auto-select disabled
+- `query-simple/src/runtime/selection-utils.ts`: Skip flag in both branches, export fix
+- `query-simple/src/runtime/hooks/use-selection-restoration.ts`: Origin DS restoration removed, hash cleanup added
+- `query-simple/src/runtime/translations/default.ts`: "Select on map" label
+- `query-simple/src/data-actions/add-to-map-action.tsx`: Updated default label
+- `query-simple/src/setting/setting.tsx`: Map widget validation warning
+- `query-simple/src/setting/translations/default.ts`: Warning translation string
+- `query-simple/src/version.ts`: Incremented through r023.5 to r023.13
+
+---
+
 ## [1.19.0-r022.109] - 2026-02-09 - ENHANCEMENT: Adjust Spring Drop Animation Timing
 
 ### Changed

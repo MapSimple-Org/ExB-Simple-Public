@@ -204,8 +204,9 @@ export function QueryTaskResult (props: QueryTaskResultProps) {
   const [selectionError, setSelectionError] = React.useState<string>(null)
 
   const extraActions = React.useMemo(() => {
-    return getExtraActions(widgetId, outputDS, mapView, intl, queryItem, runtimeZoomToSelected)
-  }, [widgetId, outputDS, mapView, intl, queryItem, runtimeZoomToSelected])
+    // r023.3: Pass graphics layer and queries so Add to Map can interrogate graphics for multi-layer selection
+    return getExtraActions(widgetId, outputDS, mapView, intl, queryItem, runtimeZoomToSelected, graphicsLayer, queries)
+  }, [widgetId, outputDS, mapView, intl, queryItem, runtimeZoomToSelected, graphicsLayer, queries])
 
   const enableDataAction = ReactRedux.useSelector((state: IMState) => {
     const widgetJson = state.appConfig.widgets[widgetId]
@@ -466,7 +467,7 @@ export function QueryTaskResult (props: QueryTaskResultProps) {
             true, // Always use graphics layer
             graphicsLayer, 
             mapView,
-            alreadySelected // r022.72: Skip origin DS selection if already selected, but still do graphics
+            true // r023.5: ALWAYS skip origin DS selection (no automatic blue outlines)
           )
           hasSelectedRef.current = true // Mark as selected
           lastSelectedRecordsRef.current = recordIds // Store the IDs we selected

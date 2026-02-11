@@ -553,6 +553,8 @@ export function captureAdjustedExtent(): {
   const wasExpanded = averageExpansionFactor > 1
   const wasContracted = averageExpansionFactor < 1
 
+  const calculatedExpansionFactor = wasExpanded ? averageExpansionFactor : null
+  
   const result = {
     adjustedExtent: {
       xmin: adjustedExtent.xmin,
@@ -577,7 +579,7 @@ export function captureAdjustedExtent(): {
       spatialReference: originalExtent.spatialReference?.wkid
     },
     originalExpansionFactor: originalExpansionFactor || null,
-    calculatedExpansionFactor: wasExpanded ? averageExpansionFactor : null,
+    calculatedExpansionFactor: calculatedExpansionFactor,
         expansion: {
           widthFactor: widthExpansionFactor,
           heightFactor: heightExpansionFactor,
