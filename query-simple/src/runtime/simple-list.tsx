@@ -7,7 +7,8 @@ import {
   type FeatureLayerDataSource,
   type ImmutableObject,
   type DataRecord,
-  type FeatureDataRecord
+  type FeatureDataRecord,
+  DataSourceManager
 } from 'jimu-core'
 import { type QueryItemType, ListDirection } from '../config'
 import { QueryResultItem } from './query-result-item'
@@ -157,19 +158,37 @@ export function SimpleList (props: SimpleListProps) {
     })
     
     // Fetch templates for any config we haven't cached yet
+    const dsManager = DataSourceManager.getInstance()
+    
     uniqueConfigIds.forEach(configId => {
       if (!popupTemplateCacheRef.current.has(configId)) {
         const queryConfig = queries.find(q => q.configId === configId)
         if (queryConfig) {
+          // r023.17: Resolve the CORRECT origin DS for this queryConfig.
+          // After a query switch in Add mode, outputDS points to the NEW query's layer.
+          // Cross-query records need their OWN origin DS for correct popup templates.
+          let originDSForConfig: FeatureLayerDataSource | undefined
+          const useDS = queryConfig.useDataSource
+          const originDSId = typeof useDS === 'string' ? useDS : useDS?.dataSourceId
+          
+          if (originDSId) {
+            const resolvedDS = dsManager.getDataSource(originDSId)
+            if (resolvedDS) {
+              originDSForConfig = resolvedDS as FeatureLayerDataSource
+            }
+          }
+          
           debugLogger.log('RESULTS-MODE', {
             event: 'fetching-popup-template-for-config',
             widgetId,
             queryConfigId: configId,
             cachedConfigIds: Array.from(popupTemplateCacheRef.current.keys()),
+            originDSId: originDSId || 'none',
+            usingOriginOverride: !!originDSForConfig,
             timestamp: Date.now()
           })
           
-          getPopupTemplate(outputDS, queryConfig).then(rs => {
+          getPopupTemplate(outputDS, queryConfig, originDSForConfig).then(rs => {
             popupTemplateCacheRef.current.set(configId, {
               popup: rs.popupTemplate,
               default: rs.defaultPopupTemplate

@@ -28,6 +28,7 @@ export default {
   pagingStyle_LazyLoad: 'Single-page',
   field_PopupSetting: 'Use webmap settings',
   field_SelectAttributes: 'Customize',
+  field_CustomTemplate: 'Custom template',
   selectDisplayFields: 'Select fields to display ',
   symbolType_DefaultSymbol: 'Default',
   symbolType_CustomSymbol: 'Custom',
@@ -83,7 +84,10 @@ export default {
   hoverPinColorDescription: 'Color of the pin that appears when hovering over a result in the list.',
   resultClickBehavior: 'Result Click Behavior',
   zoomOnResultClick: 'Zoom to record when clicked',
-  zoomOnResultClickDescription: 'Automatically zoom to a record when clicking it in the results panel. The popup will always open regardless of this setting.'
+  zoomOnResultClickDescription: 'Automatically zoom to a record when clicking it in the results panel. The popup will always open regardless of this setting.',
+  contentTemplate: 'Content template',
+  contentTemplateTip: 'Formatting syntax:\n**bold** or __bold__\n*italic* or _italic_\n# Heading\n## Subheading\n### Small heading\n- List item\n--- Horizontal rule\n[text](url) Link\n(blank line) Paragraph break\n(leading spaces) Indent\n\nInsert fields with the data button below.',
+  templatePreview: 'Preview'
 }
 
 

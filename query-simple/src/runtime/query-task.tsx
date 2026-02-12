@@ -2181,6 +2181,22 @@ export function QueryTask (props: QueryTaskProps) {
   // FIX (r018.95): Use effectiveRecords.length to reflect real-time count updates when records are removed
   const effectiveResultCount = isVirtualClearActive ? 0 : effectiveRecords.length
   
+  // r023.15: Keep recordsRef in sync with accumulatedRecords when records are removed.
+  // The reselection block (line ~867) sets recordsRef.current = accumulatedRecords during query
+  // switches in Add mode. If the user then removes records via X-button, accumulatedRecords is
+  // updated but recordsRef stays stale. When switching to New mode, accumulatedRecords clears
+  // to [] and effectiveRecords falls through to the stale recordsRef, resurrecting zombies.
+  // This effect keeps recordsRef in sync so the fallback always has the correct (reduced) set.
+  React.useEffect(() => {
+    if (accumulatedRecords && accumulatedRecords.length > 0 && recordsRef.current && recordsRef.current.length > 0) {
+      // Only sync if accumulated has fewer records (removal happened)
+      // Don't sync on additions - recordsRef tracks the current query's raw results
+      if (accumulatedRecords.length < recordsRef.current.length) {
+        recordsRef.current = accumulatedRecords
+      }
+    }
+  }, [accumulatedRecords])
+
   // DIAGNOSTIC: Log when we're using accumulatedRecords vs raw records
   React.useEffect(() => {
     if (effectiveRecords.length > 0 || effectiveResultCount > 0) {

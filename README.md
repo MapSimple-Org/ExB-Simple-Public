@@ -2,8 +2,8 @@
 
 Custom widgets for ArcGIS Experience Builder Developer Edition (1.19.0+). Built for performance, deep-linking, and advanced result management.
 
-**Current Version**: `1.19.0-r023.13`  
-**Latest Update**: Selection Architecture Overhaul + Settings Validation (Jan 25, 2026)
+**Current Version**: `1.19.0-r023.21`  
+**Latest Update**: FeatureInfo DOM Leak Fix + Custom Template Mode (Feb 12, 2026)
 
 ---
 
@@ -27,7 +27,44 @@ Custom widgets for ArcGIS Experience Builder Developer Edition (1.19.0+). Built 
 
 ---
 
-## What's New: r023.5-13 (Jan 25, 2026)
+## What's New: r023.14-21 (Feb 12, 2026)
+
+### FeatureInfo Detached DOM Leak Fix (r023.19-21)
+
+**Fixed a memory leak where every result clear, query switch, or record removal leaked Esri Feature widget DOM nodes.** Heap snapshots showed +6,641 detached `<div>` elements per heavy cycle before the fix.
+
+**Root cause:** The `FeatureInfo` component (originally from Esri's stock query widget) was missing two cleanup paths:
+1. No `componentWillUnmount` lifecycle method. Esri Feature widget and its container were never cleaned up on unmount.
+2. Incomplete `destroyFeature()` that left orphaned container elements on prop updates.
+
+**Results (heap snapshot comparison):**
+- Detached `<div>`: 6,641/cycle reduced to 1,183/cycle (82% reduction)
+- Detached `<button>`: 1,142/cycle eliminated from top entries
+- Remaining detached DOM is Esri SDK internal and not addressable from application code
+
+### Custom Template Mode (r023.18)
+
+**New "Custom Template" result display option.** A third choice alongside "Popup setting" and "Select attributes" in the Results configuration. Users author a Markdown template with `{fieldName}` tokens that gets converted to styled HTML at runtime.
+
+**Supported Markdown syntax:**
+- `**bold**`, `*italic*`, headings (`#`, `##`, `###`)
+- Lists (`- item`), horizontal rules (`---`), links (`[text](url)`)
+- Leading spaces for indentation, line breaks, and paragraph spacing
+
+**Settings UI includes:**
+- Monospace content editor with field picker button
+- `(?)` hover tooltip with full syntax cheat sheet
+- Live preview panel with badge-styled field tokens
+
+### Bug Fixes (r023.14-17)
+
+**Zombie records reappearing after X-button removal.** Records removed via the X-button would reappear when switching from Add mode to New mode. Fixed by syncing `recordsRef` with `accumulatedRecords` when removals are detected.
+
+**Cross-query popup template using wrong origin data source.** Parcel records lost their formatting when accumulated with park records in Add mode. Fixed by adding conditional `__queryConfigId` stamping and per-record origin data source resolution.
+
+---
+
+## Previous Updates: r023.5-13 (Jan 25, 2026)
 
 ### Selection Architecture Overhaul
 
@@ -47,9 +84,6 @@ Custom widgets for ArcGIS Experience Builder Developer Edition (1.19.0+). Built 
 **Settings Validation:**
 - Red warning appears in widget settings when no map widget is selected (required for highlights to display)
 
-**Why This Matters:**
-Automatic blue outlines created visual clutter, duplicated the purple graphics, and caused confusing phantom selections. This overhaul makes selection behavior predictable: purple graphics for query results, blue outlines only when the user asks for them.
-
 ---
 
 ## Previous Updates: r022.108-109 (Feb 9, 2026)
@@ -68,88 +102,26 @@ New "Hover Preview Pin" section in widget settings with color picker. Default ye
 
 ---
 
-## Previous Updates: r022.104 (Feb 8, 2026)
+## Previous Updates: r022.97-103 (Feb 8, 2026)
 
-### 🐛 Critical Fix
+### Graphics Symbology v2
 
-**Un-Minimize Restoration Fix** - Fixed widget un-minimize triggering duplicate restoration logic
+**Fully configurable graphics layer styling** with color pickers, opacity sliders, and size controls.
 
-**The Problem:**
-- Un-minimizing the widget was triggering open/restoration logic via DOM visibility detection
-- This happened even though `props.state` stayed `'OPENED'` the entire time (widget was never actually closed)
-- Result: Unnecessary restoration events and duplicate logic execution
-
-**The Solution:**
-- Track first open with `hasOpenedOnce` flag
-- Use DOM detection (IntersectionObserver) **only** for first widget open
-- After first open, rely solely on `props.state` transitions for subsequent opens
-- Un-minimize now correctly ignored (widget was already open)
-
-**Impact:**
-- ✅ First open: DOM detection works correctly (ExB state not immediately available)
-- ✅ Minimize: No action (props.state stays `'OPENED'`)
-- ✅ Un-minimize: No action (DOM visibility change ignored)
-- ✅ Close then re-open: `props.state` transition handles correctly
-- ✅ No duplicate restoration on un-minimize
-- ✅ Cleaner debug logs (no spurious open events)
-
-**Why This Matters:**
-The r022.77 fix correctly distinguished minimize from close, but DOM visibility was still firing on un-minimize. This created unnecessary work and confusing logs. Now the widget uses the right detection method at the right time: DOM for initial open (when ExB hasn't populated state yet), then `props.state` for everything else.
-
----
-
-## Previous Updates: r022.97 → r022.103 (Feb 8, 2026)
-
-### 🎨 Graphics Symbology v2
-
-**Fully configurable graphics layer styling** - customize colors, opacity, and sizing for both fill and outline.
-
-- Settings UI Controls: Color pickers, opacity sliders, and size controls
 - Centralized Configuration: `HighlightConfigManager` singleton
 - Per-Widget Customization: Each QuerySimple widget can have its own color scheme
-- New Default Color: Magenta (#DF00FF)
+- Default Color: Magenta (#DF00FF)
 
-### 🎯 UX Improvements
+### UX Improvements
 
 - **Zoom to Results Button**: Moved from hidden Actions menu to prominent Results tab header
 - **Touch Target Optimization**: 36x36px buttons (WCAG/Apple HIG compliant)
 
-### 🐛 Critical Fixes
+### Critical Fixes
 
 - **Selection Count Bug**: Fixed "3 selections with 2 results" issue
 - **Popup Multi-Click Issue**: Popups now open on first click
 - **Graphics Z-Order**: Purple graphics consistently render on top of native selection
-
----
-
-## Previous Updates: r022.87 (Feb 7, 2026)
-
-### 🚀 Infrastructure: Namespace Migration
-
-**Renamed shared utilities from `common` to `mapsimple-common`** to prevent module conflicts in multi-vendor deployments.
-
-**Why**: Experience Builder loads all custom widgets into a shared runtime. Generic `common` namespace risked collision with other developers' widgets.
-
-**Impact**:
-- ✅ Collision-proof namespace for safe deployment
-- ✅ No breaking changes (handled internally)
-- ✅ 47 files migrated across 8 groups with zero regressions
-
----
-
-## Previous Updates: r022.77 (Feb 5, 2026)
-
-### 🎯 Critical Fixes
-
-**Widget Minimize vs Close Detection** - Fixed widget minimize incorrectly clearing selections
-- **Bug**: Minimizing triggered close logic, clearing map selections
-- **Solution**: Uses `props.state` from Experience Builder to distinguish minimize from close
-- **Result**: Minimize preserves selections; close clears them (as expected)
-
-**Cross-Layer Selection Count** - Fixed incorrect selection counts when accumulating from multiple layers
-- **Bug**: 6 selected instead of 4 when mixing Parcels + Address Points
-- **Solution**: Records grouped by `__queryConfigId` and selected on correct origin data sources
-- **Result**: Accurate selection counts across all layer combinations
 
 ---
 
@@ -162,11 +134,12 @@ QuerySimple solves the common pain points of the standard Experience Builder que
 - **93% Latency Reduction**: Universal SQL Optimizer + Attribute Stripping minimize network payloads
 - **Dual-Mode Deep Linking**: Hash Fragments (`#shortId=val`) and Query Strings (`?shortId=val`)
 - **Results Accumulation**: "Add to" or "Remove from" selections across multiple queries
-- **Discoverable Automation**: Interactive Info Button (ℹ️) shows users how to deep-link
+- **Discoverable Automation**: Interactive Info Button shows users how to deep-link
 - **Persistence**: Selections maintained even when identify tool is used
 
 ### Advanced Features
 
+- **Custom Template Mode**: Markdown-based result display with field tokens and live preview
 - **Duplicate Query Button**: Clone any query instantly with all settings preserved
 - **Query Grouping**: Organize dozens of searches into clean two-dropdown hierarchy
 - **SQL Optimizer**: Automatically unwraps `LOWER()` to ensure database index usage
@@ -177,16 +150,16 @@ QuerySimple solves the common pain points of the standard Experience Builder que
 
 ## Widgets in this Suite
 
-### 🔍 QuerySimple (`query-simple/`)
+### QuerySimple (`query-simple/`)
 High-performance search engine for Experience Builder.
 
-### 🛠️ HelperSimple (`helper-simple/`)
+### HelperSimple (`helper-simple/`)
 Background orchestrator that handles:
 - **URL Monitor**: Triggers QuerySimple automation from hash/query strings
 - **Selection Guard**: Restores results after map identify popup closes
 - **Handshake Logic**: Manages open/close state between widgets
 
-### 📦 Shared Code (`shared-code/`)
+### Shared Code (`shared-code/`)
 Common utilities shared between widgets:
 - Debug logger (`mapsimple-common/debug-logger.ts`)
 - Data source utilities (`mapsimple-common/use-ds-exists.tsx`)
@@ -243,7 +216,7 @@ Production-safe debugging via URL parameter: `?debug=FEATURE`
 
 ### Known Bugs
 
-Known bugs are logged automatically with format `[QUERYSIMPLE ⚠️ BUG]` including:
+Known bugs are logged automatically with format `[QUERYSIMPLE BUG]` including:
 - Bug ID and category
 - Description and workaround
 - Target resolution version
@@ -279,4 +252,4 @@ npx playwright test tests/e2e/query-simple/session.spec.ts --project=chromium --
 
 ---
 
-© 2025 MapSimple Organization.
+© 2026 MapSimple Organization.

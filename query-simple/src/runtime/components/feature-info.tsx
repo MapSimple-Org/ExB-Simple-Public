@@ -181,8 +181,24 @@ class FeatureInfo extends React.PureComponent<Props & ExtraProps, State> {
     }
   }
 
+  // r023.21: Ensure Esri Feature widget and container div are cleaned up on unmount.
+  // Without this, every unmount (clearResult, query switch, record removal) orphans
+  // the manually-created DOM as detached nodes that can't be GC'd.
+  componentWillUnmount () {
+    this.destroyFeature()
+  }
+
   destroyFeature () {
     this.feature && !this.feature.destroyed && this.feature.destroy()
+    this.feature = null
+    // r023.19: Remove container div(s) that createFeature() appended.
+    // Without this, each componentDidUpdate prop-change cycle orphans the old container
+    // while createFeature() appends a new one, accumulating detached DOM.
+    if (this.featureContainer.current) {
+      while (this.featureContainer.current.firstChild) {
+        this.featureContainer.current.removeChild(this.featureContainer.current.firstChild)
+      }
+    }
   }
 
   getVisibleElements () {
@@ -222,14 +238,19 @@ class FeatureInfo extends React.PureComponent<Props & ExtraProps, State> {
         return
       }
       
+      // r023.19: Destroy previous feature and clear old container BEFORE creating new one.
+      // Previously destroyFeature() was called AFTER appending the new container,
+      // which meant the upgraded cleanup (clearing all children) also removed
+      // the freshly appended container, leaving the Feature widget rendering
+      // into a detached div invisible to the user.
+      this.destroyFeature()
+
       const container = document && document.createElement('div')
       container.className = 'jimu-widget'
       this.featureContainer.current.appendChild(container)
 
       const originDS = this.props.dataSource.getOriginDataSources()
       const rootDataSource = originDS?.[0]?.getRootDataSource()
-
-      this.destroyFeature()
       const layer = this.props.graphic.layer as __esri.FeatureLayer
       if (this.props.popupTemplate) {
         this.props.graphic.popupTemplate = this.props.popupTemplate

@@ -97,6 +97,7 @@ export enum PagingType {
 export enum FieldsType {
   PopupSetting = 'PopupSetting',
   SelectAttributes = 'SelectAttributes',
+  CustomTemplate = 'CustomTemplate', // r023.18: Markdown template with {fieldName} substitution
 }
 
 export enum SortDirection {
@@ -152,6 +153,7 @@ export interface QueryItemType {
   resultFieldsType?: FieldsType
   resultTitleFields?: string[]
   resultTitleExpression?: string
+  resultContentExpression?: string // r023.18: Markdown template for CustomTemplate mode
   resultDisplayFields?: string[]
   resultSymbolType?: SymbolType
   resultCustomSymbol?: any

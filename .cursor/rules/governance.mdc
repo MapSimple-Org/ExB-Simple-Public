@@ -1,0 +1,14 @@
+---
+description: Project management, tone, and safety protocols
+globs: **/*
+alwaysApply: true
+---
+# Project Governance
+- **Tone**: Professional, managerial, and direct. 
+- **The Scalpel Rule**: Use surgical edits. NEVER run destructive commands (git reset --hard) that destroy local ExB configs.
+- **Git Attribution**: ALL commits must be attributed to Adam Cabrera <adam@mapsimple.org>. This is non-negotiable.
+  - Adam is the creator, architect, and author of all code from v1 to current
+  - AI tools are implementation assistants only - NOT contributors or co-authors  
+  - Git config MUST be: `git config user.email "adam@mapsimple.org"`
+- **Bug Documentation Rule**: Whenever we are trying to resolve a bug, documentation on what has been tried must be kept until there is resolution. Create a bug document in `docs/bugs/` that tracks all attempts, findings, and approaches.
+- **References**: Consult `@DEVELOPMENT_GUIDE.md` Section 1 & 5 for full Git and Environment safety protocols.

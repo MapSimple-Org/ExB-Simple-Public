@@ -80,11 +80,6 @@ jest.mock('../src/runtime/graphics-layer-utils', () => ({
   removeHighlightGraphics: jest.fn()
 }));
 
-// Mock zoom hook
-jest.mock('../src/runtime/hooks/use-zoom-to-records', () => ({
-  useZoomToRecords: () => jest.fn().mockResolvedValue(undefined)
-}));
-
 // Mock data actions
 jest.mock('../src/data-actions', () => ({
   getExtraActions: jest.fn().mockReturnValue([])
@@ -101,7 +96,7 @@ jest.mock('../src/default-query-item', () => ({
 }));
 
 // Mock shared code
-jest.mock('widgets/shared-code/mapsimple-common', () => ({
+jest.mock('widgets/shared-code/common', () => ({
   createQuerySimpleDebugLogger: () => ({ log: jest.fn() }),
   getWidgetRuntimeDataMap: () => ({ iconMap: {} }),
   ErrorMessage: () => <div />

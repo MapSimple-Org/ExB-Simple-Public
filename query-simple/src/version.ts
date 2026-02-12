@@ -10,7 +10,7 @@
  */
 const BASE_VERSION = '1.19.0'
 const RELEASE_NUMBER = '023' // Increment on major changes (001, 002, 003, ...)
-const MINOR_VERSION = '13' // r023.13: Make map widget selection required in settings UI
+const MINOR_VERSION = '21' // r023.21: Add componentWillUnmount to FeatureInfo - fixes detached DOM leak on unmount (Leak Path A)
 
 export const WIDGET_VERSION = MINOR_VERSION && Number(MINOR_VERSION) > 0
   ? `${BASE_VERSION}-r${RELEASE_NUMBER}.${MINOR_VERSION}`

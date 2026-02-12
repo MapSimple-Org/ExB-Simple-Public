@@ -14,10 +14,11 @@ import {
 import type { IFieldInfo } from '@esri/arcgis-rest-feature-service'
 import { type QueryItemType, SpatialRelation, type SpatialFilterObj, FieldsType, mapJSAPIUnitToDsUnit, mapJSAPISpatialRelToDsSpatialRel } from '../config'
 import { getFieldInfosInPopupContent, createQuerySimpleDebugLogger } from '../../../shared-code/mapsimple-common'
+import { convertTemplateToHtml, extractFieldTokens } from './markdown-template-utils'
 
 const debugLogger = createQuerySimpleDebugLogger()
 
-export function combineFields (resultDisplayFields: ImmutableArray<string>, resultTitleExpression: string, idField?: string): string[] {
+export function combineFields (resultDisplayFields: ImmutableArray<string>, resultTitleExpression: string, idField?: string, resultContentExpression?: string): string[] {
   const fields = new Set<string>()
   resultDisplayFields?.forEach(item => fields.add(item))
   if (resultTitleExpression) {
@@ -25,6 +26,10 @@ export function combineFields (resultDisplayFields: ImmutableArray<string>, resu
     if (templates?.length > 0) {
       templates.forEach(item => fields.add(item.substring(1, item.length - 1)))
     }
+  }
+  // r023.18: Extract fields from Custom Template content expression
+  if (resultContentExpression) {
+    extractFieldTokens(resultContentExpression).forEach(f => fields.add(f))
   }
   if (idField) {
     fields.add(idField)
@@ -160,10 +165,14 @@ export function sanitizeSqlExpression (sqlExpr: IMSqlExpression): IMSqlExpressio
 
 export async function getPopupTemplate (
   outputDS: FeatureLayerDataSource,
-  queryItem: ImmutableObject<QueryItemType>
+  queryItem: ImmutableObject<QueryItemType>,
+  originDSOverride?: FeatureLayerDataSource // r023.17: Allow caller to specify correct origin DS for cross-query records
 ): Promise<{ popupTemplate?: __esri.PopupTemplate, defaultPopupTemplate?: __esri.PopupTemplate }> {
   const { resultFieldsType, resultDisplayFields, resultTitleExpression = '' } = queryItem
-  const currentOriginDs: FeatureLayerDataSource = outputDS.getOriginDataSources()[0] as FeatureLayerDataSource
+  // r023.17: Use override origin DS when provided (cross-query accumulation mode)
+  // Without this, switching queries in Add mode causes the CURRENT query's origin DS
+  // to be used for ALL records, producing wrong popup templates for prior-query records.
+  const currentOriginDs: FeatureLayerDataSource = originDSOverride || (outputDS.getOriginDataSources()[0] as FeatureLayerDataSource)
   const popupInfo = currentOriginDs.getPopupInfo()
 
   if (resultFieldsType === FieldsType.SelectAttributes) {
@@ -218,6 +227,21 @@ export async function getPopupTemplate (
       } as any
     }
   }
+  // r023.18: Custom Template mode - convert Markdown to HTML for PopupTemplate text content
+  if (resultFieldsType === FieldsType.CustomTemplate) {
+    const resultContentExpression = (queryItem as any).resultContentExpression || ''
+    const htmlContent = convertTemplateToHtml(resultContentExpression)
+    return {
+      popupTemplate: {
+        title: resultTitleExpression,
+        content: [{
+          type: 'text',
+          text: htmlContent
+        }]
+      }
+    } as any
+  }
+
   // the source layer will provide popup info
   let layerObject
   if (currentOriginDs.layer) {
@@ -253,7 +277,11 @@ export function generateQueryParams (
   // column in the database (* or all). We surgically request only the fields 
   // needed for the Title, the Attribute List, and the ID field.
   let outputFields: string[] = []
-  if (resultFieldsType === FieldsType.SelectAttributes && resultDisplayFields) {
+  if (resultFieldsType === FieldsType.CustomTemplate) {
+    // r023.18: Custom Template mode - extract fields from both title and content expressions
+    const contentExpr = (queryItem as any).resultContentExpression || ''
+    outputFields = combineFields(null, resultTitleExpression || '', outputDS.getIdField(), contentExpr)
+  } else if (resultFieldsType === FieldsType.SelectAttributes && resultDisplayFields) {
     outputFields = combineFields(resultDisplayFields as any, resultTitleExpression || '', outputDS.getIdField())
   } else {
     // Popup mode: Get only visible fields from popup info

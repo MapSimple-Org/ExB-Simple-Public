@@ -377,11 +377,17 @@ export function QueryTabContent(props: QueryTabContentProps) {
                     note: 'r021.111: accumulatedRecords prioritized over effectiveRecords to capture removed-record state'
                   })
                   
-                  // r021.87: Stamp queryConfigId on newly added records
+                  // r023.17: Only stamp queryConfigId on records that don't already have one.
+                  // Previously this stamped ALL added records with queryItem.configId (the CURRENT
+                  // query dropdown). When switching from New to Add after changing the query dropdown,
+                  // records from a prior query (e.g. parcel) got stamped with the new query's configId
+                  // (e.g. park), corrupting their popup template lookup.
                   recordsToCapture.forEach(record => {
                     const recordId = record.getId()
                     if (addedIds.includes(recordId) && record.feature?.attributes) {
-                      record.feature.attributes.__queryConfigId = queryItem.configId
+                      if (!record.feature.attributes.__queryConfigId) {
+                        record.feature.attributes.__queryConfigId = queryItem.configId
+                      }
                     }
                   })
                   
@@ -557,12 +563,15 @@ export function QueryTabContent(props: QueryTabContentProps) {
                     note: 'r021.112: accumulatedRecords is single source of truth when switching from NEW mode (reflects removals)'
                   })
                   
-                  // r021.87: Stamp queryConfigId on newly captured records
+                  // r023.17: Only stamp queryConfigId on records that don't already have one.
+                  // Same fix as Add mode - preserves existing queryConfigId from prior queries.
                   const addedIdsFromMerge = mergeResult.addedRecordIds
                   recordsToCaptureForRemove.forEach(record => {
                     const recordId = record.getId()
                     if (addedIdsFromMerge.includes(recordId) && record.feature?.attributes) {
-                      record.feature.attributes.__queryConfigId = queryItem.configId
+                      if (!record.feature.attributes.__queryConfigId) {
+                        record.feature.attributes.__queryConfigId = queryItem.configId
+                      }
                     }
                   })
                   

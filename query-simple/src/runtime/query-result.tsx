@@ -299,7 +299,10 @@ export function QueryTaskResult (props: QueryTaskResultProps) {
       }
       
       // Add fields if needed (use currentItem's field settings)
-      if (currentItem.resultFieldsType === FieldsType.SelectAttributes && currentItem.resultDisplayFields != null) {
+      if (currentItem.resultFieldsType === FieldsType.CustomTemplate) {
+        // r023.18: Custom Template mode - extract fields from content expression
+        dataSet.fields = combineFields(null, currentItem.resultTitleExpression, undefined, (currentItem as any).resultContentExpression)
+      } else if (currentItem.resultFieldsType === FieldsType.SelectAttributes && currentItem.resultDisplayFields != null) {
         dataSet.fields = combineFields(currentItem.resultDisplayFields, currentItem.resultTitleExpression)
       } else if (originDS && 'getPopupInfo' in originDS) {
         // use fields in popup template from origin DS
@@ -1473,14 +1476,24 @@ export function QueryTaskResult (props: QueryTaskResultProps) {
     })
     
     // Update outputDS selection
-    // r021.92: Check both recordId AND queryConfigId for accurate matching
-    // r021.94: Use capturedQueryConfigId (already captured above) for consistency
+    // r023.14: Use flexible matching (same pattern as accumulatedRecords filter at line ~1569)
+    // Previous logic (r021.92) required BOTH recordId AND __queryConfigId to match, but
+    // cross-query records placed in the output DS via the reselection block may not have
+    // __queryConfigId accessible via getSelectedRecords(). This caused zombie records:
+    // X-button removal updated accumulatedRecords but not the output DS, and on mode switch
+    // to New, handleDataSourceInfoChange repopulated from the stale output DS.
     const selectedDatas = outputDS.getSelectedRecords() ?? []
     const updatedSelectedDatas = selectedDatas.filter(record => {
       const recordId = record.getId()
+      if (recordId !== dataId) {
+        return true // Keep - different record ID
+      }
+      // Record IDs match - check if we need composite key matching
       const recordQueryConfigId = (record as FeatureDataRecord).feature?.attributes?.__queryConfigId || ''
-      // Only remove if BOTH ID and queryConfigId match
-      return !(recordId === dataId && recordQueryConfigId === capturedQueryConfigId)
+      if (capturedQueryConfigId && recordQueryConfigId) {
+        return recordQueryConfigId !== capturedQueryConfigId // Keep if queryConfigIds differ
+      }
+      return false // Remove - recordIds match and no queryConfigId disambiguation needed
     })
     const recordIds = updatedSelectedDatas.map(record => record.getId())
     

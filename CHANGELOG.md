@@ -5,60 +5,396 @@ All notable changes to MapSimple Experience Builder widgets will be documented i
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.19.0-r023.13] - 2026-01-25 - Selection Architecture Overhaul + Settings Validation
+## [1.19.0-r023.19-21] - 2026-02-12 - FeatureInfo detached DOM leak fix
 
-### Architecture: Automatic Blue Outline Removal (r023.5-9)
-**Query results no longer create automatic blue selection outlines on the map.** Purple/magenta graphics (highlights) still render as expected. Blue outlines now only appear when the user explicitly clicks "Select on Map."
+### Fixed
+**Detached DOM accumulation from FeatureInfo component.** Each `FeatureInfo` unmount (clear results, query switch, record removal) orphaned the manually-created Esri Feature widget, its container div, and all internal calcite-loader/SVG elements as detached DOM nodes. Heap snapshots showed +6,641 detached divs per heavy cycle before the fix.
 
-All automatic origin data source selection paths have been systematically removed:
-- Query execution auto-select
-- Cross-layer grouping loops
-- Query switch reselection (simplified from 372 lines to ~30 lines)
-- Panel reopen restoration
-- Popup close restoration
+**Root cause:** `feature-info.tsx` (originally copied from Esri's stock query widget) had two missing cleanup paths:
+1. No `componentWillUnmount` lifecycle method (Leak Path A: unmount). Esri Feature widget and container div were never cleaned up when React unmounted the component.
+2. Incomplete `destroyFeature()` (Leak Path B: prop updates). Only called `this.feature.destroy()` without removing the container div or nulling the reference. On each `componentDidUpdate` prop change, a new container was appended while the old one was orphaned.
 
-**Why:** Automatic blue outlines created confusing visual noise, duplicated the purple graphics, and caused phantom selections that persisted unexpectedly. Explicit user actions ("Select on Map", record click, Remove X, Clear All) remain fully functional.
+**Fix progression:**
+- r023.19: Upgraded `destroyFeature()` to null the feature ref and clear all child DOM from container
+- r023.20: Fixed call order in `createFeature()` (must destroy before appending new container, not after)
+- r023.21: Added `componentWillUnmount` lifecycle method that calls `destroyFeature()`
 
-### Bug Fixes (r023.10-12)
-- **Blue outlines on panel reopen and popup close**: Restoration logic was incorrectly passing origin data sources where output data sources were expected, causing framework-level blue outline creation even with the skip flag enabled. Removed the origin DS loop from restoration entirely.
-- **"Select on Map" blue outlines lost on panel close**: Explicit user selections via "Select on Map" now persist when the widget panel is closed, matching the expected behavior that user actions are preserved.
-- **Dirty URL hash after panel close**: The `data_s` hash parameter (added by Experience Builder during selections) is now cleaned independently of origin DS clearing, preventing stale selection state in the URL.
+**Results (heap snapshot comparison):**
+- Detached `<div>`: +6,641/cycle reduced to +1,183/cycle (82% reduction)
+- Detached `<button>`: +1,142/cycle eliminated from top entries
+- Remaining detached DOM (calcite-loader, ShadowRoot, SVG elements) is Esri SDK internal and not addressable from application code
 
-### Settings Validation (r023.13)
-- **Map widget required warning**: A red validation message now appears in the widget settings when no map widget is selected under Highlight Options. Query results will not display on the map without a configured map widget.
-
-### UI Change (r023.7)
-- **Renamed "Add to map" to "Select on map"**: The action label now accurately reflects its purpose since automatic map selection has been removed.
-
-### Selection Behavior Summary
-
-| Action | Purple Graphics | Blue Outlines | Status |
-|---|---|---|---|
-| Query execution | Yes | No | Changed |
-| Query switch (Add/Remove) | Yes | No | Changed |
-| Panel close then reopen | Restored | Preserved if set | Changed |
-| Popup close | Restored | No | Changed |
-| "Select on Map" (user click) | Yes | Yes | Unchanged |
-| Record click | Yes | Yes | Unchanged |
-| Remove X / Clear All | Cleared | Cleared | Unchanged |
-
-### Known Issues
-- **Intermittent hash query non-execution**: URL hash value populates in the textbox but `SqlExpressionRuntime.onChange` occasionally does not fire. Appears to be a timing race unrelated to the selection changes. Under investigation.
+**Note:** Esri's stock `dist/widgets/arcgis/query/` feature-info.tsx has the same bug. This fix is our improvement on top of their code.
 
 ### Files Modified
-- `query-simple/src/runtime/query-task.tsx`: Reselection block simplified, cross-layer loops removed
-- `query-simple/src/runtime/query-result.tsx`: Auto-select disabled
-- `query-simple/src/runtime/selection-utils.ts`: Skip flag in both branches, export fix
-- `query-simple/src/runtime/hooks/use-selection-restoration.ts`: Origin DS restoration removed, hash cleanup added
-- `query-simple/src/runtime/translations/default.ts`: "Select on map" label
-- `query-simple/src/data-actions/add-to-map-action.tsx`: Updated default label
-- `query-simple/src/setting/setting.tsx`: Map widget validation warning
-- `query-simple/src/setting/translations/default.ts`: Warning translation string
-- `query-simple/src/version.ts`: Incremented through r023.5 to r023.13
+- `query-simple/src/runtime/components/feature-info.tsx`: Added `componentWillUnmount`, upgraded `destroyFeature()`, reordered cleanup in `createFeature()`
+- `query-simple/src/version.ts`: Incremented through r023.21
 
 ---
 
-## [1.19.0-r022.109] - 2026-02-09 - ENHANCEMENT: Adjust Spring Drop Animation Timing
+## [1.19.0-r023.18] - 2026-02-12 - Custom Template mode with Markdown editor
+
+### Added
+**Custom Template result display mode.** A third option alongside "Popup setting" and "Select attributes" in the Results configuration. Users author a Markdown template with `{fieldName}` tokens that gets converted to styled HTML at runtime via Esri PopupTemplate text content.
+
+**Settings UI:**
+- "Custom template" option in the result fields dropdown
+- Monospace content editor with field picker button (same ExpressionBuilder pattern as title)
+- `(?)` InfoOutlined hover tooltip with full syntax cheat sheet
+- Live preview panel with badge-styled field tokens
+- Title expression editor shared between SelectAttributes and CustomTemplate modes
+
+**Supported Markdown syntax:**
+- `**bold**` / `__bold__` and `*italic*` / `_italic_`
+- `#` Heading (h3), `##` Subheading (h4), `###` Small heading (h5)
+- `- item` unordered list items
+- `---` horizontal rule
+- `[text](url)` clickable links (opens in new tab)
+- Leading spaces for visual indentation (2 spaces = 1em)
+- Single Enter = `<br/>` (line break within paragraph)
+- Blank line (double Enter) = new `<p>` (paragraph break)
+
+**Architecture:**
+- Zero-dependency lightweight Markdown parser (`markdown-template-utils.ts`)
+- Runs through the existing PopupTemplate pipeline (text content type)
+- `extractFieldTokens()` ensures query fetches all referenced fields
+- `combineFields()` extended to parse `resultContentExpression`
+- Paragraph buffer pattern groups consecutive plain lines into single `<p>` with `<br/>` separators
+
+### Files Added
+- `query-simple/src/runtime/markdown-template-utils.ts`: `convertTemplateToHtml`, `renderPreview`, `extractFieldTokens`
+
+### Files Modified
+- `query-simple/src/config.ts`: Added `CustomTemplate` to `FieldsType` enum, `resultContentExpression` to `QueryItemType`
+- `query-simple/src/default-query-item.ts`: Default empty string for `resultContentExpression`
+- `query-simple/src/runtime/query-utils.ts`: CustomTemplate branch in `getPopupTemplate`, extended `combineFields`
+- `query-simple/src/runtime/query-result.tsx`: CustomTemplate branch in field extraction for action data sets
+- `query-simple/src/setting/results.tsx`: Full Custom Template settings UI with editor, field picker, tooltip, and preview
+- `query-simple/src/setting/translations/default.ts`: `field_CustomTemplate`, `contentTemplate`, `contentTemplateTip`, `templatePreview`
+- `query-simple/src/version.ts`: Incremented to r023.18
+
+---
+
+## [1.19.0-r023.14-17] - 2026-02-12 - Zombie records, cross-query popup template fixes
+
+### Bug Fixed (r023.14-16): Zombie records reappearing after X-button removal
+**Records removed via the X-button would reappear when switching from Add mode to New mode.**
+
+**Root cause:** `recordsRef.current` in `query-task.tsx` was set from `accumulatedRecords` during query switches but was never updated when individual records were removed via the X-button. The `effectiveRecords` fallback would read stale data from `recordsRef.current`.
+
+**Fix progression:**
+- r023.14: Improved `outputDS` selection filtering in `query-result.tsx` `removeRecord` callback to correctly deselect records even when `__queryConfigId` was inconsistent
+- r023.15: Attempted `effectiveRecords` change (overcorrection, caused regression: premature clearing of results panel on mode switch)
+- r023.16: Reverted r023.15. Added `useEffect` to `query-task.tsx` that syncs `recordsRef.current` with `accumulatedRecords` when removals are detected (length decreases)
+
+### Bug Fixed (r023.17): Cross-query popup template using wrong origin DS
+**Parcel record lost its formatting when accumulated with a park record in Add mode.**
+
+**Root cause:** The `__queryConfigId` stamping logic in `QueryTabContent.tsx` was blindly applying the current query's `configId` to all "added" records, even if they already had a `__queryConfigId` from a prior query. This caused `getPopupTemplate` to resolve the wrong origin data source.
+
+**Fix (3 files):**
+- `QueryTabContent.tsx`: Conditional stamping, only if `__queryConfigId` not already set
+- `query-utils.ts`: `getPopupTemplate` accepts optional `originDSOverride` parameter
+- `simple-list.tsx`: Resolves correct `originDSForConfig` per record via `DataSourceManager`
+
+### Files Modified
+- `query-simple/src/runtime/query-task.tsx`: r023.16 `useEffect` for `recordsRef` sync
+- `query-simple/src/runtime/query-result.tsx`: r023.14 improved `outputDS` selection filter
+- `query-simple/src/runtime/tabs/QueryTabContent.tsx`: r023.17 conditional `__queryConfigId` stamping
+- `query-simple/src/runtime/query-utils.ts`: r023.17 `originDSOverride` parameter
+- `query-simple/src/runtime/simple-list.tsx`: r023.17 resolve correct origin DS per config
+- `query-simple/src/version.ts`: Incremented through r023.17
+- `docs/testing/EDGE-CASE-TEST-PLAN.md`: Added Sections J (Zombie Records) and K (Cross-Query Popup Template)
+
+---
+
+## [1.19.0-r023.13] - 2026-01-25 - Settings: Map widget required warning
+
+### Changed
+**Map widget selection now shows a validation warning.** When no map widget is selected under Highlight Options, a red warning message appears below the selector: "A map widget is required. Query results will not display on the map without one." The warning disappears once a map widget is selected.
+
+### Files Modified
+- `query-simple/src/setting/setting.tsx`: Added conditional warning below `MapWidgetSelector`
+- `query-simple/src/setting/translations/default.ts`: Added `mapWidgetRequired` translation string
+- `query-simple/src/version.ts`: Incremented to r023.13
+
+---
+
+## [1.19.0-r023.12] - 2026-02-11 - FIX: Clean data_s hash on panel close
+
+### Bug Fixed
+**Dirty hash persisting after widget panel close.** When `clearAccumulatedRecords` was removed from panel close (r023.11) to preserve explicit "Select on Map" blue outlines, the `clearDataSParameterFromHash()` call was also lost as a side effect. Experience Builder adds `data_s` to the URL hash when selections are made but never removes it, leaving stale selection state in the URL after closing the widget.
+
+### Fix
+Added a direct `clearDataSParameterFromHash()` call to `clearSelectionFromMap`, independent of origin DS clearing. The hash is cleaned without touching the origin DS selection.
+
+### Selection Audit (r023.5-12 Complete)
+
+All automatic origin DS selection paths are now blocked. Only explicit user actions trigger blue outlines:
+
+| Path | Status |
+|---|---|
+| Query execution (auto-select) | Blocked (r023.5) |
+| Query switch reselection | Output DS only (r023.9) |
+| Cross-layer grouping loops | Removed (r023.5) |
+| Panel reopen restoration | Origin DS loop removed (r023.10) |
+| Popup close restoration | Same fix (r023.10) |
+| Panel close clearing | Origin DS clear removed (r023.11) |
+| Record click (user action) | Intentional, kept |
+| Remove X (user action) | Intentional, kept |
+| Clear All (user action) | Intentional, kept |
+| "Select on Map" (user action) | Intentional, kept |
+
+**Files Modified:**
+- `query-simple/src/runtime/hooks/use-selection-restoration.ts`: Added `clearDataSParameterFromHash()` import and call
+- `query-simple/src/version.ts`: Incremented to r023.12
+
+---
+
+## [1.19.0-r023.11] - 2026-02-11 - BUGFIX: Blue outlines on panel close/reopen and popup close
+
+### Bug Fixed
+**Blue outlines appearing on widget panel reopen and identify popup close.** The `restoreAccumulatedRecords` method in `use-selection-restoration.ts` passed `originDS` as the `outputDS` parameter to `selectRecordsAndPublish`. Even with `skipOriginDSSelection: true` (added in r023.5), two leak paths remained:
+
+1. `outputDS.selectRecordsByIds()` (line 210 in `selectRecordsInDataSources`) was actually calling `originDS.selectRecordsByIds()` since the origin DS was passed as the output DS parameter
+2. `publishSelectionMessage()` published a `DataRecordsSelectionChangeMessage` for the origin DS, which the framework reacted to by creating blue outlines
+
+### Changes
+
+**r023.10: Remove origin DS selection from restoration path**
+- Removed the origin DS loop from `restoreAccumulatedRecords` (lines 411-442)
+- Graphics are already restored separately (lines 362-409)
+- Output DS selection is handled by `handleOutputDataSourceCreated` on widget re-render
+- Removed unused `selectRecordsAndPublish` dynamic import
+
+**r023.11: Preserve explicit "Select on Map" blue outlines through panel close**
+- Removed `clearAccumulatedRecords()` call from `clearSelectionFromMap`
+- Previously, closing the widget panel cleared origin DS selection (blue outlines from "Select on Map")
+- Since r023.10 removed origin DS restoration on reopen, this meant explicit user selections were permanently destroyed on panel close
+- Now only (X) remove and Clear All clear origin DS selection (explicit user actions only)
+
+**Files Modified:**
+- `query-simple/src/runtime/hooks/use-selection-restoration.ts`: Restoration and clearing paths
+- `query-simple/src/version.ts`: Incremented to r023.11
+
+### Known Issues
+- **Intermittent hash query non-execution:** Value populates in textbox but `SqlExpressionRuntime.onChange` never fires. Appears to be a timing race unrelated to r023.5-11 selection changes. Under investigation.
+
+---
+
+## [1.19.0-r023.9] - 2026-02-11 - ARCHITECTURE: Simplify Reselection Block (Step 3/3)
+
+### Architectural Changes
+**Simplified 372-line reselection block to ~30 lines (query-task.tsx):** The reselection block that ran during query switches in Add/Remove mode was massively over-engineered. With automatic blue outlines removed (r023.5-7) and the destructive sync block removed (r023.8), most of this code was dead weight.
+
+**What was removed (~340 lines):**
+- Graphics layer clearing (already neutered in r022.29, just logged)
+- Origin layer filtering of accumulated records (not needed for output DS, which is widget-owned)
+- `selectRecordsAndPublish` call (with both `skipOriginDSSelection` and `useGraphicsLayer` false, it was just a wrapper around `selectRecordsByIds`)
+- URL hash `data_s` duplicate cleanup (~120 lines of hash parsing)
+- Verbose diagnostic/verification logging (6+ log calls)
+- Verification setTimeout that polled DS state after 200ms
+- rootDataSource map inspection diagnostic block (~60 lines)
+
+**What remains (the essential core):**
+1. `isQuerySwitchInProgressRef.current = true` (set early, before block)
+2. `featureDS.selectRecordsByIds(allRecordIds, accumulatedRecords)` - updates new output DS
+3. `recordsRef.current = accumulatedRecords` - updates Results tab records
+4. `setResultCount(accumulatedRecords.length)` - updates count display
+5. `isQuerySwitchInProgressRef.current = false` - clears flag
+6. One diagnostic log summarizing the update
+
+**Why this is safe:**
+- Output DS update is now a direct `selectRecordsByIds` call (same end result as the `selectRecordsAndPublish` wrapper)
+- Origin layer filtering was only needed for origin DS selection (now disabled)
+- URL hash cleanup addressed a side effect of `publishSelectionMessage` which is no longer called here
+- All removed logging was diagnostic, not behavioral
+
+**Files Modified:**
+- `query-simple/src/runtime/query-task.tsx`: Lines 836-882 replace lines 836-1302
+- `query-simple/src/version.ts`: Incremented to `r023.9`
+
+---
+
+## [1.19.0-r023.8] - 2026-02-11 - CLEANUP: Remove Destructive Sync Block (Step 2/3)
+
+### Code Cleanup
+**Removed dead code block (query-task.tsx lines 1379-1442):** This block was neutered in r022.29 to fix query switch purging. It computed `syncedRecords` by filtering `accumulatedRecords` against `outputDS.getSelectedRecords()`, logged diagnostic info, but never called `onAccumulatedRecordsChange(syncedRecords)` to actually sync. With automatic selection removed, this entire block is dead code.
+
+**What was removed:**
+- Condition check: `if (actuallySelectedRecords.length > 0 && actuallySelectedRecords.length < accumulatedRecords.length)`
+- Set construction for fast lookup
+- Filter operation to compute `syncedRecords`
+- Two diagnostic log calls with computed values
+- Else branch that logged "already-in-sync"
+
+**What was kept:**
+- `preserving-accumulated-records-on-query-switch` log (line 1445)
+- `previousConfigIdRef.current` update (line 1456)
+- Surrounding accumulation mode guards
+
+**Why this is safe:** The sync call was already removed in r022.29. This block only computed values and logged them. No functionality depends on these logs. Removal has zero behavioral impact.
+
+**Test Result (2026-02-11):** Query switching in Add mode verified. All accumulated records remain in Results tab with blue borders. Graphics persist through switches. No behavioral change from r023.7.
+
+**Files Modified:**
+- `query-simple/src/runtime/query-task.tsx`: Lines 1379-1442 removed
+- `query-simple/src/version.ts`: Incremented to `r023.8`
+
+---
+
+## [1.19.0-r023.7] - 2026-02-11 - BUGFIX + UI: Layer-selection branch skip flag + "Select on map" rename
+
+### Bug Fixed
+**Blue outlines still appearing on query switch (r023.6):** The `selectRecordsInDataSources` function in `selection-utils.ts` has two branches: a graphics-layer branch and a layer-selection (else) branch. The `skipOriginDSSelection` flag was only checked in the graphics-layer branch. Query switch calls used `useGraphicsLayer: false`, falling into the else branch which called `originDS.selectRecordsByIds()` unconditionally.
+
+**Fix:** Added `!skipOriginDSSelection &&` guard to the layer-selection branch (line 177), matching the graphics-layer branch pattern. Also added `skipOriginDSSelection` to the diagnostic log and a skip-event log for traceability.
+
+### UI Change
+**Renamed "Add to map" action to "Select on map":** The action label now better reflects its purpose since automatic selection has been removed. Users explicitly choose to select features on the map.
+
+**Files Modified:**
+- `query-simple/src/runtime/selection-utils.ts`: Line 177 (skip guard in else branch)
+- `query-simple/src/runtime/translations/default.ts`: `addToMap` label
+- `query-simple/src/data-actions/add-to-map-action.tsx`: Default label
+- `query-simple/src/version.ts`: Incremented to `r023.7`
+
+### Known Issues / Future Work
+- **Map Identify popup path:** Closing an Identify popup still triggers native selection (blue outlines). This is a separate code path not yet addressed.
+- **Dead code: layer-selection else branch:** With selection disabled, `useGraphicsLayer` is effectively always `true`. The else branch in `selectRecordsInDataSources` is dead code and should be considered for removal as a cleanup task.
+- **Config remnant:** The `useGraphicsLayer` toggle may have been removed from the settings UI, but the code branch persists. Should be cleaned up to avoid confusion.
+
+---
+
+## [1.19.0-r023.5] - 2026-02-11 - ARCHITECTURE: Remove Automatic Blue Map Outlines (Step 1/3 COMPLETE)
+
+### 🏗️ Architectural Changes
+**Remove automatic blue map outlines from query execution**: Query results no longer create blue selection outlines on the map automatically. Purple graphics (highlights) still render. Blue outlines only appear when user explicitly uses "Add to Map" action.
+
+**Initial implementation (query-result.tsx line 470) only covered one of four paths. Full implementation addresses all automatic selection paths:**
+
+**Path 1 - Automatic selection useEffect (query-result.tsx line 470):**
+- Changed `alreadySelected` to `true`
+- Skips origin DS selection in `selectRecordsAndPublish`
+
+**Path 2 - Cross-layer grouping (query-task.tsx lines 2157-2178):**
+- REMOVED two loops that called `originDS.selectRecordsByIds()` directly
+- These loops cleared then re-selected each origin DS during query result processing
+- Output DS selection retained (line 2182) for Results tab borders
+
+**Path 3 - Query switch reselection (query-task.tsx line 1067):**
+- Added `skipOriginDSSelection: true` (9th parameter) to `selectRecordsAndPublish`
+- Prevents blue outlines when switching between queries in Add/Remove modes
+
+**Path 4 - Panel reopen restoration (use-selection-restoration.ts line 424):**
+- Added `skipOriginDSSelection: true` to `selectRecordsAndPublish`
+- Prevents blue outlines when reopening widget panel
+
+**What this achieves:**
+- Query execution → Purple graphics YES, blue map outlines NO
+- Query switching → Purple graphics YES, blue map outlines NO
+- Panel reopen → Purple graphics YES, blue map outlines NO
+- Results tab blue borders → YES (via output DS)
+- "Add to Map" action → YES (explicitly calls origin DS selection)
+
+**Why this is safe:**
+- Purple graphics provide visual feedback during query
+- Results tab provides selection state
+- User retains full control via "Add to Map" for blue outlines
+- No loss of functionality, just shift from automatic to explicit
+
+**Testing priorities:**
+1. Query execution shows purple graphics, no blue outlines
+2. Results tab blue borders render correctly
+3. "Add to Map" creates blue outlines as expected
+4. Query switching preserves graphics and Results tab state
+5. Panel close/reopen preserves graphics, no blue outlines
+
+**Files Modified:**
+- `query-simple/src/runtime/query-result.tsx`: Line 470
+- `query-simple/src/runtime/query-task.tsx`: Lines 1067, 2157-2178
+- `query-simple/src/runtime/hooks/use-selection-restoration.ts`: Line 424
+- `query-simple/src/version.ts`: Incremented to `r023.5`
+
+**Next Steps:** Step 2 (remove destructive sync block), Step 3 (remove reselection block)
+
+---
+
+## [1.19.0-r023.4] - 2026-02-11 - BUGFIX: Query Switch Results Tab Deselection
+
+### 🐛 Bug Fixed
+**Results Tab Losing Blue Borders on Query Switch**: When switching queries in Add mode, results from other layers would lose their blue border highlighting in the Results tab.
+
+**Root Cause:**
+- Query switch reselection block (query-task.tsx lines 997-1022) filtered accumulated records to only the current query's layer
+- Passed filtered subset to `selectRecordsAndPublish` (line 1055-1064)
+- Output DS selection updated with partial set (e.g., 1 of 2 records)
+- `handleDataSourceInfoChange` reads partial selection, updates `selectedRecords` state
+- Cross-layer results lose blue border in Results tab
+
+**The Fix:**
+- Line 1037: Changed `recordsToReselect.map(...)` to `accumulatedRecords.map(...)`
+- Line 1059: Changed `recordsToReselect` to `accumulatedRecords`
+- Output DS now gets ALL accumulated records selected (not filtered subset)
+- Results tab blue borders persist across query switches
+
+**Why this is safe:** The output DS is widget-owned and can hold records from any layer. Only origin DS selection (blue map outlines) needs layer filtering, which is handled separately.
+
+**Test Result:** Query parcel + park in Add mode. Switch between queries. Both keep blue border in Results tab.
+
+**Files Modified:**
+- `query-simple/src/runtime/query-task.tsx`: Lines 1037, 1059
+- `query-simple/src/version.ts`: Incremented to `r023.4`
+
+---
+
+## [1.19.0-r023.3] - 2026-02-11 - ARCHITECTURE: Isolate Add to Map Selection (Phase 1)
+
+### 🏗️ Architectural Changes
+- **Isolated Add to Map selection logic** from shared selection utilities
+- Created dedicated `selectRecordsForAddToMap` function with multi-layer support
+- Add to Map now interrogates graphics layer to determine record-to-layer mapping
+- Preparation for removing all automatic selection logic in Phase 2
+
+### ✨ Enhanced
+- **Multi-layer selection via graphics interrogation**:
+  - Graphics layer stores `queryConfigId` in attributes
+  - Function maps `queryConfigId` → query config → data source → origin layer
+  - Groups records by origin layer
+  - Selects records in each layer independently
+  - Supports unlimited layers in accumulation mode
+
+### 🔧 Technical Details
+**Implementation:**
+- `add-to-map-action.tsx`: Added dedicated `selectRecordsForAddToMap` function (isolated, self-contained)
+- `index.tsx`: Pass `graphicsLayer` and `queries` through action creation chain
+- `query-result.tsx`: Pass `graphicsLayer` and `queries` to `getExtraActions`
+- Graphics interrogation:
+  1. Read `recordId` and `queryConfigId` from graphic attributes
+  2. Map `queryConfigId` to data source via query configs
+  3. Get origin data source from data source manager
+  4. Group records by origin layer
+  5. Call `selectRecordsByIds` on each layer
+
+**Files Modified:**
+- `query-simple/src/data-actions/add-to-map-action.tsx`: Created dedicated selection function
+- `query-simple/src/data-actions/index.tsx`: Updated action creation signature
+- `query-simple/src/runtime/query-result.tsx`: Pass graphics and queries to actions
+- `query-simple/src/version.ts`: Incremented to `r023.3`
+
+**Why This Matters:**
+- Add to Map is now independent of automatic selection logic
+- When we remove automatic selection in Phase 2, Add to Map will continue working
+- Multi-layer selection properly supported via graphics layer interrogation
+
+**Phase 1 Complete** ✅
+- Add to Map isolated and tested
+- Multi-layer selection working
+- Ready for Phase 2: Remove all automatic selection logic
+
+---
+
+## [1.19.0-r022.109] - 2026-01-25 - ENHANCEMENT: Adjust Spring Drop Animation Timing
 
 ### Changed
 - **Spring Drop Starting Position**: Adjusted initial Y position from `-2.0` to `-1.2` for snappier animation
@@ -78,7 +414,7 @@ All automatic origin data source selection paths have been systematically remove
 
 ---
 
-## [1.19.0-r022.108] - 2026-02-09 - FEATURE: Animated Spring Drop for Hover Preview Pin
+## [1.19.0-r022.108] - 2026-01-25 - FEATURE: Animated Spring Drop for Hover Preview Pin
 
 ### Added
 - **Google Maps-Style Drop Animation**: Hover preview pin now animates with spring physics when appearing
@@ -139,7 +475,7 @@ const animate = (timestamp: number) => {
 
 ---
 
-## [1.19.0-r022.107] - 2026-02-09 - FEATURE: Configurable Hover Preview Pin Color
+## [1.19.0-r022.107] - 2026-02-10 - FEATURE: Configurable Hover Preview Pin Color
 
 ### Added
 - **Configurable Hover Pin Color**: Widget setting to customize the color of the hover preview pin

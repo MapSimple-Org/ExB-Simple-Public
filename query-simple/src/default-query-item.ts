@@ -36,6 +36,7 @@ export const DEFAULT_QUERY_ITEM: Partial<QueryItemType> = {
   resultListDirection: ListDirection.Vertical,
   resultPagingStyle: PagingType.MultiPage,
   resultFieldsType: FieldsType.PopupSetting,
+  resultContentExpression: '',
   resultSymbolType: SymbolType.DefaultSymbol,
   resultCustomSymbol: {
     angle: 0,

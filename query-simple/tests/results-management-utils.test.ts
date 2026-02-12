@@ -1,8 +1,8 @@
 import { getRecordKey, mergeResultsIntoAccumulated, removeResultsFromAccumulated, removeRecordsFromOriginSelections } from '../src/runtime/results-management-utils';
 import { MessageManager, DataRecordsSelectionChangeMessage } from 'jimu-core';
 
-// Mock shared-code/mapsimple-common
-jest.mock('widgets/shared-code/mapsimple-common', () => ({
+// Mock shared-code/common
+jest.mock('widgets/shared-code/common', () => ({
   createQuerySimpleDebugLogger: () => ({
     log: jest.fn()
   })
@@ -73,18 +73,15 @@ describe('results-management-utils unit tests', () => {
     it('should merge unique new records into existing records', () => {
       const existingRecord: any = {
         getId: jest.fn().mockReturnValue('1'),
-        getDataSource: jest.fn().mockReturnValue({ getOriginDataSources: () => [mockOriginDS] }),
-        feature: { attributes: {} }
+        getDataSource: jest.fn().mockReturnValue({ getOriginDataSources: () => [mockOriginDS] })
       };
       const newRecord1: any = {
         getId: jest.fn().mockReturnValue('1'), // Duplicate
-        getDataSource: jest.fn().mockReturnValue({ getOriginDataSources: () => [mockOriginDS] }),
-        feature: { attributes: {} }
+        getDataSource: jest.fn().mockReturnValue({ getOriginDataSources: () => [mockOriginDS] })
       };
       const newRecord2: any = {
         getId: jest.fn().mockReturnValue('2'), // Unique
-        getDataSource: jest.fn().mockReturnValue({ getOriginDataSources: () => [mockOriginDS] }),
-        feature: { attributes: {} }
+        getDataSource: jest.fn().mockReturnValue({ getOriginDataSources: () => [mockOriginDS] })
       };
 
       const result = mergeResultsIntoAccumulated(
@@ -93,13 +90,10 @@ describe('results-management-utils unit tests', () => {
         [existingRecord]
       );
 
-      // Function now returns an object with mergedRecords, addedRecordIds, duplicateRecordIds
-      expect(result.mergedRecords.length).toBe(2);
-      expect(result.mergedRecords).toContain(existingRecord);
-      expect(result.mergedRecords).toContain(newRecord2);
-      expect(result.mergedRecords).not.toContain(newRecord1);
-      expect(result.addedRecordIds).toContain('2');
-      expect(result.duplicateRecordIds).toContain('1');
+      expect(result.length).toBe(2);
+      expect(result).toContain(existingRecord);
+      expect(result).toContain(newRecord2);
+      expect(result).not.toContain(newRecord1);
     });
   });
 

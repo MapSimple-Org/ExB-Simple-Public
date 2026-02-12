@@ -13,8 +13,8 @@ jest.mock('../src/runtime/query-task-list', () => ({
   QueryTaskList: () => <div data-testid="mock-query-task-list" />
 }));
 
-// Mock shared-code/mapsimple-common
-jest.mock('widgets/shared-code/mapsimple-common', () => ({
+// Mock shared-code/common
+jest.mock('widgets/shared-code/common', () => ({
   createQuerySimpleDebugLogger: () => ({
     log: jest.fn()
   }),
