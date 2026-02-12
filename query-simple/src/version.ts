@@ -10,7 +10,7 @@
  */
 const BASE_VERSION = '1.19.0'
 const RELEASE_NUMBER = '023' // Increment on major changes (001, 002, 003, ...)
-const MINOR_VERSION = '21' // r023.21: Add componentWillUnmount to FeatureInfo - fixes detached DOM leak on unmount (Leak Path A)
+const MINOR_VERSION = '23' // r023.23: Results Mode polish - hardcode mode colors (theme-proof), remove LOGIC label, font size tuning
 
 export const WIDGET_VERSION = MINOR_VERSION && Number(MINOR_VERSION) > 0
   ? `${BASE_VERSION}-r${RELEASE_NUMBER}.${MINOR_VERSION}`

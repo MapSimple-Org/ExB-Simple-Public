@@ -2,8 +2,8 @@
 
 Custom widgets for ArcGIS Experience Builder Developer Edition (1.19.0+). Built for performance, deep-linking, and advanced result management.
 
-**Current Version**: `1.19.0-r023.21`  
-**Latest Update**: FeatureInfo DOM Leak Fix + Custom Template Mode (Feb 12, 2026)
+**Current Version**: `1.19.0-r023.23`  
+**Latest Update**: Results Mode UX Overhaul + FeatureInfo DOM Leak Fix (Feb 12, 2026)
 
 ---
 
@@ -27,7 +27,19 @@ Custom widgets for ArcGIS Experience Builder Developer Edition (1.19.0+). Built 
 
 ---
 
-## What's New: r023.14-21 (Feb 12, 2026)
+## What's New: r023.14-23 (Feb 12, 2026)
+
+### Results Mode UX Overhaul (r023.22-23)
+
+**The New/Add/Remove mode selector has been redesigned** to make it clear these are modes, not action buttons. Users previously confused "Remove" for an action that should do something immediately.
+
+**What Changed:**
+- **Segmented control**: Buttons sit inside a unified tray instead of floating separately
+- **Per-mode colors**: New (blue), Add (green), Remove (muted red) for instant visual identity
+- **Per-mode icons**: Star, plus, and minus reinforce each mode at a glance
+- **Logic summary bar**: A colored banner below the buttons confirms the active mode in plain language (e.g., "Each query replaces previous results.")
+- **"Results Mode" label**: Replaces the ambiguous "Results:" label
+- **Theme-proof colors**: Mode colors are hardcoded so they maintain semantic meaning regardless of ExB theme configuration
 
 ### FeatureInfo Detached DOM Leak Fix (r023.19-21)
 

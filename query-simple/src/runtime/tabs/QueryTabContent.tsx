@@ -173,7 +173,7 @@ export function QueryTabContent(props: QueryTabContentProps) {
             white-space: nowrap;
             flex-shrink: 0;
           `}>
-            {getI18nMessage('results')}:
+            {getI18nMessage('resultsModeLabel')}
           </div>
           <Tooltip placement='bottom' css={css`white-space: pre-line;`} title={getI18nMessage('resultsModeDesc')}>
             <Button size='sm' icon type='tertiary' aria-label={getI18nMessage('resultsModeDesc')} css={css`flex-shrink: 0;`}>
@@ -181,22 +181,24 @@ export function QueryTabContent(props: QueryTabContentProps) {
             </Button>
           </Tooltip>
           
-          {/* Mode buttons */}
+          {/* Mode buttons - segmented control */}
           <div 
             role="radiogroup"
             aria-label={getI18nMessage('resultsMode')}
             css={css`
               display: flex;
-              gap: 4px;
               align-items: stretch;
               flex: 1;
               min-width: 0;
+              background: #f1f5f9;
+              border: 1px solid #e2e8f0;
+              border-radius: 4px;
+              padding: 2px;
+              gap: 2px;
             `}
           >
             <Button
               size="sm"
-              variant={resultsMode === SelectionType.NewSelection ? 'contained' : 'outlined'}
-              color={resultsMode === SelectionType.NewSelection ? 'primary' : 'default'}
               onClick={() => {
                 const newMode = SelectionType.NewSelection
                 debugLogger.log('RESULTS-MODE', {
@@ -217,19 +219,40 @@ export function QueryTabContent(props: QueryTabContentProps) {
               css={css`
                 flex: 1;
                 font-size: 0.75rem;
-                padding: 4px 8px;
-                min-height: 28px;
+                font-weight: 600;
+                padding: 2px 8px;
+                min-height: 26px;
                 white-space: nowrap;
-                text-overflow: ellipsis;
                 overflow: hidden;
+                display: inline-flex !important;
+                align-items: center;
+                justify-content: center;
+                gap: 3px;
+                border: none !important;
+                border-radius: 3px !important;
+                background: ${resultsMode === SelectionType.NewSelection
+                  ? '#3b82f6' 
+                  : 'transparent'} !important;
+                color: ${resultsMode === SelectionType.NewSelection 
+                  ? '#fff' 
+                  : '#64748b'} !important;
+                box-shadow: ${resultsMode === SelectionType.NewSelection
+                  ? '0 1px 2px rgba(0,0,0,0.1)'
+                  : 'none'} !important;
+                transition: all 0.15s ease;
+                cursor: pointer;
+                &:hover {
+                  background: ${resultsMode === SelectionType.NewSelection 
+                    ? '#2563eb' 
+                    : '#e2e8f0'} !important;
+                }
               `}
             >
+              <span css={css`font-size: 0.6rem;`}>★</span>
               {getI18nMessage('resultsModeNew')}
             </Button>
             <Button
               size="sm"
-              variant={resultsMode === SelectionType.AddToSelection ? 'contained' : 'outlined'}
-              color={resultsMode === SelectionType.AddToSelection ? 'primary' : 'default'}
               onClick={() => {
                 const newMode = SelectionType.AddToSelection
                 const previousMode = resultsMode || SelectionType.NewSelection
@@ -412,19 +435,40 @@ export function QueryTabContent(props: QueryTabContentProps) {
               css={css`
                 flex: 1;
                 font-size: 0.75rem;
-                padding: 4px 8px;
-                min-height: 28px;
+                font-weight: 600;
+                padding: 2px 8px;
+                min-height: 26px;
                 white-space: nowrap;
-                text-overflow: ellipsis;
                 overflow: hidden;
+                display: inline-flex !important;
+                align-items: center;
+                justify-content: center;
+                gap: 3px;
+                border: none !important;
+                border-radius: 3px !important;
+                background: ${resultsMode === SelectionType.AddToSelection
+                  ? '#059669' 
+                  : 'transparent'} !important;
+                color: ${resultsMode === SelectionType.AddToSelection 
+                  ? '#fff' 
+                  : '#64748b'} !important;
+                box-shadow: ${resultsMode === SelectionType.AddToSelection
+                  ? '0 1px 2px rgba(0,0,0,0.1)'
+                  : 'none'} !important;
+                transition: all 0.15s ease;
+                cursor: pointer;
+                &:hover {
+                  background: ${resultsMode === SelectionType.AddToSelection 
+                    ? '#047857' 
+                    : '#e2e8f0'} !important;
+                }
               `}
             >
+              <span css={css`font-size: 0.7rem;`}>+</span>
               {getI18nMessage('resultsModeAdd')}
             </Button>
             <Button
               size="sm"
-              variant={resultsMode === SelectionType.RemoveFromSelection ? 'contained' : 'outlined'}
-              color={resultsMode === SelectionType.RemoveFromSelection ? 'primary' : 'default'}
               disabled={!accumulatedRecords || accumulatedRecords.length === 0}
               onClick={() => {
                 const newMode = SelectionType.RemoveFromSelection
@@ -598,16 +642,82 @@ export function QueryTabContent(props: QueryTabContentProps) {
               css={css`
                 flex: 1;
                 font-size: 0.75rem;
-                padding: 4px 8px;
-                min-height: 28px;
+                font-weight: 600;
+                padding: 2px 8px;
+                min-height: 26px;
                 white-space: nowrap;
-                text-overflow: ellipsis;
                 overflow: hidden;
+                display: inline-flex !important;
+                align-items: center;
+                justify-content: center;
+                gap: 3px;
+                border: none !important;
+                border-radius: 3px !important;
+                background: ${resultsMode === SelectionType.RemoveFromSelection
+                  ? '#be123c' 
+                  : 'transparent'} !important;
+                color: ${resultsMode === SelectionType.RemoveFromSelection 
+                  ? '#fff' 
+                  : '#64748b'} !important;
+                box-shadow: ${resultsMode === SelectionType.RemoveFromSelection
+                  ? '0 1px 2px rgba(0,0,0,0.1)'
+                  : 'none'} !important;
+                transition: all 0.15s ease;
+                cursor: pointer;
+                &:hover:not(:disabled) {
+                  background: ${resultsMode === SelectionType.RemoveFromSelection 
+                    ? '#9f1239' 
+                    : '#e2e8f0'} !important;
+                }
+                &:disabled {
+                  opacity: 0.4;
+                  cursor: not-allowed;
+                }
               `}
             >
+              <span css={css`font-size: 0.7rem;`}>&minus;</span>
               {getI18nMessage('resultsModeRemove')}
             </Button>
           </div>
+        </div>
+        {/* Logic summary bar - confirms active mode intent */}
+        <div css={css`
+          margin-top: 4px;
+          padding: 3px 8px;
+          border-radius: 3px;
+          border-left: 2px solid ${
+            resultsMode === SelectionType.NewSelection 
+              ? '#3b82f6'
+              : resultsMode === SelectionType.AddToSelection
+              ? '#059669'
+              : '#be123c'
+          };
+          background: ${
+            resultsMode === SelectionType.NewSelection 
+              ? 'rgba(59, 130, 246, 0.15)'
+              : resultsMode === SelectionType.AddToSelection
+              ? 'rgba(5, 150, 105, 0.15)'
+              : 'rgba(225, 29, 72, 0.15)'
+          };
+          color: ${
+            resultsMode === SelectionType.NewSelection 
+              ? '#1e40af'
+              : resultsMode === SelectionType.AddToSelection
+              ? '#065f46'
+              : '#9f1239'
+          };
+          display: flex;
+          align-items: center;
+          gap: 4px;
+          font-size: 0.8rem;
+          line-height: 1.3;
+          transition: all 0.15s ease;
+        `}>
+          <span css={css`font-weight: 500; letter-spacing: -0.01em; opacity: 0.8;`}>
+            {resultsMode === SelectionType.NewSelection && getI18nMessage('resultsModeLogicNew')}
+            {resultsMode === SelectionType.AddToSelection && getI18nMessage('resultsModeLogicAdd')}
+            {resultsMode === SelectionType.RemoveFromSelection && getI18nMessage('resultsModeLogicRemove')}
+          </span>
         </div>
         <div 
           id={`results-mode-description-${widgetId}`}

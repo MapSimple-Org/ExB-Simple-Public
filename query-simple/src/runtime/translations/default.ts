@@ -35,6 +35,7 @@ export default {
   expandAll: 'Expand all',
   collapseAll: 'Collapse all',
   addToMap: 'Select on map',
+  resultsModeLabel: 'Results Mode',
   resultsMode: 'Results mode',
   createNewResults: 'Create new results',
   addToCurrentResults: 'Add to current results',
@@ -44,6 +45,10 @@ export default {
   resultsModeNew: 'New',
   resultsModeAdd: 'Add',
   resultsModeRemove: 'Remove',
+  // r023.22: Logic summary bar text for each results mode
+  resultsModeLogicNew: 'Each query replaces previous results.',
+  resultsModeLogicAdd: 'New results are added to existing results.',
+  resultsModeLogicRemove: 'Matching results are removed from existing results.',
   // r022.3: Calcite Alert messages for query feedback
   noResultsAlertLabel: 'No results found',
   noResultsAlertTitle: 'No results found',
