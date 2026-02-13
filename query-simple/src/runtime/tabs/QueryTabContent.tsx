@@ -399,11 +399,16 @@ export function QueryTabContent(props: QueryTabContentProps) {
                   // query dropdown). When switching from New to Add after changing the query dropdown,
                   // records from a prior query (e.g. parcel) got stamped with the new query's configId
                   // (e.g. park), corrupting their popup template lookup.
+                  // r023.30: Also stamp originDSId for cross-layer removal support
+                  const originDSIdForCapture = outputDS?.getOriginDataSources()?.[0]?.id || outputDS?.id
                   recordsToCapture.forEach(record => {
                     const recordId = record.getId()
                     if (addedIds.includes(recordId) && record.feature?.attributes) {
                       if (!record.feature.attributes.__queryConfigId) {
                         record.feature.attributes.__queryConfigId = queryItem.configId
+                      }
+                      if (!record.feature.attributes.__originDSId && originDSIdForCapture) {
+                        record.feature.attributes.__originDSId = originDSIdForCapture
                       }
                     }
                   })
@@ -603,12 +608,17 @@ export function QueryTabContent(props: QueryTabContentProps) {
                   
                   // r023.17: Only stamp queryConfigId on records that don't already have one.
                   // Same fix as Add mode - preserves existing queryConfigId from prior queries.
+                  // r023.30: Also stamp originDSId for cross-layer removal support
                   const addedIdsFromMerge = mergeResult.addedRecordIds
+                  const originDSIdForRemoveCapture = outputDS?.getOriginDataSources()?.[0]?.id || outputDS?.id
                   recordsToCaptureForRemove.forEach(record => {
                     const recordId = record.getId()
                     if (addedIdsFromMerge.includes(recordId) && record.feature?.attributes) {
                       if (!record.feature.attributes.__queryConfigId) {
                         record.feature.attributes.__queryConfigId = queryItem.configId
+                      }
+                      if (!record.feature.attributes.__originDSId && originDSIdForRemoveCapture) {
+                        record.feature.attributes.__originDSId = originDSIdForRemoveCapture
                       }
                     }
                   })
