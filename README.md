@@ -2,8 +2,8 @@
 
 Custom widgets for ArcGIS Experience Builder Developer Edition (1.19.0+). Built for performance, deep-linking, and advanced result management.
 
-**Current Version**: `1.19.0-r023.23`  
-**Latest Update**: Results Mode UX Overhaul + FeatureInfo DOM Leak Fix (Feb 12, 2026)
+**Current Version**: `1.19.0-r023.26`  
+**Latest Update**: Results Mode UX Polish + FeatureInfo DOM Leak Fix (Feb 12, 2026)
 
 ---
 
@@ -27,9 +27,9 @@ Custom widgets for ArcGIS Experience Builder Developer Edition (1.19.0+). Built 
 
 ---
 
-## What's New: r023.14-23 (Feb 12, 2026)
+## What's New: r023.14-26 (Feb 12, 2026)
 
-### Results Mode UX Overhaul (r023.22-23)
+### Results Mode UX Overhaul (r023.22-26)
 
 **The New/Add/Remove mode selector has been redesigned** to make it clear these are modes, not action buttons. Users previously confused "Remove" for an action that should do something immediately.
 
@@ -40,6 +40,11 @@ Custom widgets for ArcGIS Experience Builder Developer Edition (1.19.0+). Built 
 - **Logic summary bar**: A colored banner below the buttons confirms the active mode in plain language (e.g., "Each query replaces previous results.")
 - **"Results Mode" label**: Replaces the ambiguous "Results:" label
 - **Theme-proof colors**: Mode colors are hardcoded so they maintain semantic meaning regardless of ExB theme configuration
+
+**Polish (r023.24-26):**
+- Refined button font size (0.8125rem) and padding for readability
+- Removed redundant info hover button (logic bar provides the same guidance)
+- Tuned button height to match original compact sizing while keeping wider hit targets
 
 ### FeatureInfo Detached DOM Leak Fix (r023.19-21)
 
@@ -264,4 +269,4 @@ npx playwright test tests/e2e/query-simple/session.spec.ts --project=chromium --
 
 ---
 
-© 2026 MapSimple Organization.
+(c) 2026 MapSimple Organization.

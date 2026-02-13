@@ -5,6 +5,35 @@ All notable changes to MapSimple Experience Builder widgets will be documented i
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.19.0-r023.22-26] - 2026-02-12 - Results Mode UX overhaul and polish
+
+### Changed (r023.22-23)
+**Results Mode selector redesigned.** The New/Add/Remove mode buttons were restyled to make it clear these are modes, not action buttons. Users were confusing "Remove" for an action that should do something immediately.
+
+- **Segmented control**: Buttons sit inside a unified tray with subtle background
+- **Per-mode colors**: New (blue), Add (green), Remove (muted red), hardcoded so ExB theme cannot override
+- **Per-mode icons**: Star, plus, minus for visual differentiation
+- **Logic summary bar**: Colored banner below buttons confirms active mode in plain language
+- **"Results Mode" label**: Replaces ambiguous "Results:" label
+- **r023.23 polish**: Removed "LOGIC:" prefix, font size 0.8rem, opacity tuning
+
+### Changed (r023.24)
+- Results Mode button font size: 0.75rem → 0.8125rem
+
+### Changed (r023.25)
+- Removed Results Mode info (i) hover button; logic bar below provides the same guidance
+- Button horizontal padding: 8px → 10px for more width
+
+### Changed (r023.26)
+- Reverted button height to original (padding 2px vertical, min-height 26px); kept width increase
+
+### Files Modified
+- `query-simple/src/runtime/tabs/QueryTabContent.tsx`: Results Mode UI overhaul, removed Tooltip/InfoOutlined
+- `query-simple/src/runtime/translations/default.ts`: Added resultsModeLogicNew, resultsModeLogicAdd, resultsModeLogicRemove
+- `query-simple/src/version.ts`: Incremented through r023.26
+
+---
+
 ## [1.19.0-r023.19-21] - 2026-02-12 - FeatureInfo detached DOM leak fix
 
 ### Fixed
