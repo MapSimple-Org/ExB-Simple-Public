@@ -1,4 +1,4 @@
-# Release Notes: v1.19.0-r023.23
+# Release Notes: v1.19.0-r023.26
 
 **Release Date**: February 12, 2026  
 **Type**: UX Overhaul + Memory Leak Fix + New Feature + Bug Fixes
@@ -13,14 +13,14 @@ This release redesigns the Results Mode selector so users understand it controls
 
 ## Changes
 
-### Results Mode UX Overhaul (r023.22-23)
+### Results Mode UX Overhaul (r023.22-26)
 
 **The New/Add/Remove mode selector has been completely restyled.** Users were confusing "Remove" for an action button rather than a mode selector.
 
 **Visual changes:**
 - **Segmented control**: Buttons sit inside a unified tray with a subtle background, replacing three separate floating buttons
 - **Per-mode color identity**: New (blue #3b82f6), Add (green #059669), Remove (muted red #be123c)
-- **Per-mode icons**: Star (★), plus (+), and minus (−) for visual differentiation
+- **Per-mode icons**: Star, plus, and minus for visual differentiation
 - **Logic summary bar**: A colored banner below the buttons with a left-border accent confirms the active mode in plain language
 - **"Results Mode" label**: Replaces the ambiguous "Results:" label
 - **Theme-proof colors**: All mode colors are hardcoded so they maintain semantic meaning regardless of ExB theme configuration. The color identity IS the feature.
@@ -33,11 +33,11 @@ This release redesigns the Results Mode selector so users understand it controls
 | Add | Green | New results are added to existing results. |
 | Remove | Red | Matching results are removed from existing results. |
 
-**r023.23 polish:**
-- Hardcoded all colors to prevent ExB theme overrides
-- Removed "LOGIC:" prefix label to prevent line wrapping
-- Font size tuned to 0.8rem for readability
-- Muted red default (#be123c) with deeper hover (#9f1239)
+**Polish (r023.24-26):**
+- Button font size refined to 0.8125rem for readability at compact size
+- Removed redundant info (i) hover button; the logic summary bar provides the same guidance inline
+- Increased horizontal padding (10px) for wider touch targets
+- Reverted button height to original compact sizing (min-height 26px, 2px vertical padding) while keeping wider hit targets
 
 ---
 
@@ -56,6 +56,8 @@ This release redesigns the Results Mode selector so users understand it controls
 | Detached `<div>` per cycle | 6,641 | 1,183 | 82% |
 | Detached `<button>` per cycle | 1,142 | Eliminated | 100% |
 
+Remaining detached DOM (calcite-loader, ShadowRoot, SVG) is Esri SDK internal and not addressable from application code.
+
 ---
 
 ### Custom Template Mode (r023.18)
@@ -65,6 +67,8 @@ This release redesigns the Results Mode selector so users understand it controls
 **Supported syntax:** Bold, italic, headings, lists, horizontal rules, links, indentation, line breaks, and paragraph spacing.
 
 **Settings UI:** Monospace editor with field picker, hover tooltip cheat sheet, and live preview panel.
+
+**Architecture:** Zero-dependency lightweight Markdown parser (`markdown-template-utils.ts`). Runs through the existing PopupTemplate pipeline (text content type).
 
 ---
 
@@ -77,6 +81,18 @@ Records removed via the X-button would reappear when switching from Add mode to 
 ### Bug Fix: Cross-Query Popup Template (r023.17)
 
 Parcel records lost their formatting when accumulated with park records in Add mode. Fixed by adding conditional `__queryConfigId` stamping and per-record origin data source resolution.
+
+---
+
+### Selection Architecture Overhaul (r023.5-13)
+
+**Automatic blue map outlines removed from query execution.** Query results now only show purple/magenta highlight graphics. Blue selection outlines appear only when the user explicitly clicks "Select on Map."
+
+- Query execution, query switching, panel reopen, and popup close no longer trigger automatic blue outlines
+- "Add to map" renamed to "Select on Map" to reflect the new explicit behavior
+- Explicit user actions (Select on Map, record click, Remove, Clear All) work exactly as before
+- "Select on Map" blue outlines persist through panel close/reopen
+- Red warning in widget settings when no map widget is selected
 
 ---
 
@@ -103,7 +119,8 @@ Parcel records lost their formatting when accumulated with park records in Add m
 
 ## Upgrade Notes
 
-- No configuration changes required. Existing widget configurations will work without modification.
+- No configuration changes required. Existing widget configurations work without modification.
 - The Results Mode buttons now have fixed colors that do not follow the ExB theme. This is intentional to preserve the semantic meaning of each mode.
 - The new "Custom template" option appears automatically in the Results configuration dropdown. Existing queries are unaffected.
 - The FeatureInfo memory leak fix is automatic. No user action needed.
+- "Add to map" has been renamed to "Select on Map." Functionality is identical but the action is now explicit rather than automatic on query execution.

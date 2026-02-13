@@ -42,8 +42,7 @@ import {
   type FeatureDataRecord,
   hooks
 } from 'jimu-core'
-import { Button, Tooltip } from 'jimu-ui'
-import { InfoOutlined } from 'jimu-icons/outlined/suggested/info'
+import { Button } from 'jimu-ui'
 import { type QueryItemType, SelectionType } from '../../config'
 import { QueryTaskForm } from '../query-task-form'
 import { DataSourceTip, createQuerySimpleDebugLogger } from 'widgets/shared-code/mapsimple-common'
@@ -165,7 +164,7 @@ export function QueryTabContent(props: QueryTabContentProps) {
           gap: 0.5rem;
           flex-wrap: nowrap;
         `}>
-          {/* Results label and info button */}
+          {/* Results label */}
           <div className="title2" css={css`
             font-size: 0.875rem;
             font-weight: 500;
@@ -175,11 +174,6 @@ export function QueryTabContent(props: QueryTabContentProps) {
           `}>
             {getI18nMessage('resultsModeLabel')}
           </div>
-          <Tooltip placement='bottom' css={css`white-space: pre-line;`} title={getI18nMessage('resultsModeDesc')}>
-            <Button size='sm' icon type='tertiary' aria-label={getI18nMessage('resultsModeDesc')} css={css`flex-shrink: 0;`}>
-              <InfoOutlined color='var(--sys-color-primary-main)' size='s'/>
-            </Button>
-          </Tooltip>
           
           {/* Mode buttons - segmented control */}
           <div 
@@ -218,9 +212,9 @@ export function QueryTabContent(props: QueryTabContentProps) {
               title={getI18nMessage('createNewResults')}
               css={css`
                 flex: 1;
-                font-size: 0.75rem;
+                font-size: 0.8125rem;
                 font-weight: 600;
-                padding: 2px 8px;
+                padding: 2px 10px;
                 min-height: 26px;
                 white-space: nowrap;
                 overflow: hidden;
@@ -434,9 +428,9 @@ export function QueryTabContent(props: QueryTabContentProps) {
               title={getI18nMessage('addToCurrentResults')}
               css={css`
                 flex: 1;
-                font-size: 0.75rem;
+                font-size: 0.8125rem;
                 font-weight: 600;
-                padding: 2px 8px;
+                padding: 2px 10px;
                 min-height: 26px;
                 white-space: nowrap;
                 overflow: hidden;
@@ -641,9 +635,9 @@ export function QueryTabContent(props: QueryTabContentProps) {
                 : getI18nMessage('removeFromCurrentResults')}
               css={css`
                 flex: 1;
-                font-size: 0.75rem;
+                font-size: 0.8125rem;
                 font-weight: 600;
-                padding: 2px 8px;
+                padding: 2px 10px;
                 min-height: 26px;
                 white-space: nowrap;
                 overflow: hidden;
