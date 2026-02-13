@@ -10,7 +10,7 @@
  */
 const BASE_VERSION = '1.19.0'
 const RELEASE_NUMBER = '023' // Increment on major changes (001, 002, 003, ...)
-const MINOR_VERSION = '26' // r023.26: Revert button height to 26px, keep width (2px 10px padding)
+const MINOR_VERSION = '30' // r023.30: Fix cross-layer removal - stamp __originDSId on records
 
 export const WIDGET_VERSION = MINOR_VERSION && Number(MINOR_VERSION) > 0
   ? `${BASE_VERSION}-r${RELEASE_NUMBER}.${MINOR_VERSION}`

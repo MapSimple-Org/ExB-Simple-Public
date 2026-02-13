@@ -2,8 +2,8 @@
 
 Custom widgets for ArcGIS Experience Builder Developer Edition (1.19.0+). Built for performance, deep-linking, and advanced result management.
 
-**Current Version**: `1.19.0-r023.26`  
-**Latest Update**: Results Mode UX Polish + FeatureInfo DOM Leak Fix (Feb 12, 2026)
+**Current Version**: `1.19.0-r023.30`  
+**Latest Update**: Cross-Layer Selection Removal Fixes (Feb 13, 2026)
 
 ---
 
@@ -27,7 +27,30 @@ Custom widgets for ArcGIS Experience Builder Developer Edition (1.19.0+). Built 
 
 ---
 
-## What's New: r023.14-26 (Feb 12, 2026)
+## What's New: r023.28-30 (Feb 13, 2026)
+
+### Cross-Layer Selection Removal Fixes
+
+**Fixed several issues with removing records from accumulated results when working with multiple layers.**
+
+**r023.28 - Native selection clearing on single-item removal:**
+- When removing a record via the X button after using "Select on Map", the blue outline now clears correctly
+- Root cause: Composite key matching failed for records without `__queryConfigId`
+- Solution: Falls back to simple recordId matching when composite key matching removes nothing
+
+**r023.29 - Expand/collapse state preservation:**
+- Expand/collapse state no longer resets when switching between New/Add/Remove modes
+- Root cause: Component key changed based on resultsMode, forcing React remount
+- Solution: Stable key that only changes on new query execution
+
+**r023.30 - Cross-layer removal for accumulated results:**
+- Native selection now clears correctly when removing records from non-current layers
+- Root cause: Origin DS lookup fell back to single layer regardless of record source
+- Solution: Records stamped with `__originDSId` attribute; lookup via DataSourceManager
+
+---
+
+## Previous Updates: r023.14-26 (Feb 12, 2026)
 
 ### Results Mode UX Overhaul (r023.22-26)
 

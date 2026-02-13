@@ -355,9 +355,16 @@ export function removeResultsFromAccumulated(
  * This ensures map selection is updated correctly when records come from multiple origin layers.
  * Also removes graphics from graphics layer if using graphics layer highlighting.
  * 
+ * r023.30: Uses __originDSId attribute on records to look up origin DS via DataSourceManager.
+ * This enables correct removal for cross-layer accumulated results where records come from
+ * different origin data sources. Falls back to .dataSource property then outputDS origin.
+ * 
+ * r023.28: Falls back to simple recordId matching if composite key matching fails.
+ * This handles cases where origin DS records don't have __queryConfigId (e.g., "Select on Map").
+ * 
  * @param widgetId - The widget ID for publishing messages
- * @param recordsToRemove - Records to remove from selection
- * @param outputDS - The output data source (used for key generation)
+ * @param recordsToRemove - Records to remove from selection (should have __originDSId attribute)
+ * @param outputDS - The output data source (fallback for origin DS lookup)
  * @param useGraphicsLayer - Whether to remove graphics from graphics layer (default: false)
  * @param graphicsLayer - Graphics layer instance (required if useGraphicsLayer is true)
  * @param accumulatedRecords - Accumulated records with __queryConfigId (for composite key lookup)
@@ -441,64 +448,82 @@ export function removeRecordsFromOriginSelections(
   const recordsByOriginDS = new Map<FeatureLayerDataSource, FeatureDataRecord[]>()
   
   recordsToRemove.forEach((record, recordIndex) => {
-    // FIX (r022.33): Use .dataSource property instead of .getDataSource() method
-    // The getDataSource() method returns null for records in accumulated state,
-    // but the .dataSource property persists and contains the correct reference
-    const recordDS = (record as any).dataSource as FeatureLayerDataSource
     const recordQueryConfigId = record.feature?.attributes?.__queryConfigId || ''
+    // r023.30: Use __originDSId attribute for cross-layer support
+    const recordOriginDSId = record.feature?.attributes?.__originDSId || ''
     
-    // DIAGNOSTIC (r022.31): Log the origin DS lookup process
+    // DIAGNOSTIC: Log the origin DS lookup process
     debugLogger.log('RESULTS-MODE', {
       event: 'x-button-removal-record-origin-ds-lookup-start',
       widgetId,
       recordIndex,
       recordId: record.getId(),
       recordQueryConfigId: recordQueryConfigId || 'MISSING',
-      hasRecordDS: !!recordDS,
-      recordDSId: recordDS?.id || 'null',
-      recordDSType: recordDS?.type || 'null',
+      recordOriginDSId: recordOriginDSId || 'MISSING',
       outputDSId: outputDS.id,
-      lookupMethod: 'dataSource-property',
-      note: 'r022.33: Using .dataSource property (not .getDataSource() method)',
+      lookupMethod: 'originDSId-attribute',
+      note: 'r023.30: Using __originDSId attribute for cross-layer removal',
       timestamp: Date.now()
     })
     
     let originDS: FeatureLayerDataSource | null = null
     let lookupMethod = 'unknown'
     
-    if (recordDS) {
-      originDS = recordDS.getOriginDataSources()?.[0] as FeatureLayerDataSource || recordDS
-      lookupMethod = recordDS.getOriginDataSources()?.[0] ? 'recordDS.getOriginDataSources' : 'recordDS-direct'
+    // r023.30: Primary lookup via __originDSId attribute (supports cross-layer)
+    if (recordOriginDSId) {
+      const dsManager = DataSourceManager.getInstance()
+      originDS = dsManager.getDataSource(recordOriginDSId) as FeatureLayerDataSource || null
+      lookupMethod = originDS ? 'originDSId-attribute-lookup' : 'originDSId-attribute-lookup-failed'
       
-      // DIAGNOSTIC (r022.31): Log recordDS lookup result
       debugLogger.log('RESULTS-MODE', {
-        event: 'x-button-removal-origin-ds-from-recordDS',
+        event: 'x-button-removal-origin-ds-from-attribute',
         widgetId,
         recordIndex,
         recordId: record.getId(),
-        recordDSId: recordDS.id,
-        originDSId: originDS.id,
-        originDSType: originDS.type,
-        originDSLabel: originDS.getLabel?.() || 'unknown',
+        recordOriginDSId,
+        originDSFound: !!originDS,
+        originDSId: originDS?.id || 'null',
+        originDSLabel: originDS?.getLabel?.() || 'null',
         lookupMethod,
         timestamp: Date.now()
       })
-    } else {
-      // Fallback: try to get origin from outputDS
+    }
+    
+    // Fallback: try .dataSource property (legacy support)
+    if (!originDS) {
+      const recordDS = (record as any).dataSource as FeatureLayerDataSource
+      if (recordDS) {
+        originDS = recordDS.getOriginDataSources()?.[0] as FeatureLayerDataSource || recordDS
+        lookupMethod = 'dataSource-property-fallback'
+        
+        debugLogger.log('RESULTS-MODE', {
+          event: 'x-button-removal-origin-ds-from-recordDS-fallback',
+          widgetId,
+          recordIndex,
+          recordId: record.getId(),
+          recordDSId: recordDS.id,
+          originDSId: originDS?.id || 'null',
+          lookupMethod,
+          timestamp: Date.now()
+        })
+      }
+    }
+    
+    // Final fallback: use outputDS origin (may be incorrect for cross-layer)
+    if (!originDS) {
       originDS = outputDS.getOriginDataSources()?.[0] as FeatureLayerDataSource || null
       lookupMethod = 'outputDS-fallback'
       
-      // DIAGNOSTIC (r022.31): Log outputDS fallback
       debugLogger.log('RESULTS-MODE', {
         event: 'x-button-removal-origin-ds-from-outputDS-fallback',
         widgetId,
         recordIndex,
         recordId: record.getId(),
         recordQueryConfigId: recordQueryConfigId || 'MISSING',
-        reason: 'record-getDataSource-returned-null',
+        recordOriginDSId: recordOriginDSId || 'MISSING',
+        reason: 'no-originDSId-attribute-and-no-dataSource-property',
         outputDSId: outputDS.id,
         originDSId: originDS?.id || 'null',
-        originDSType: originDS?.type || 'null',
         originDSLabel: originDS?.getLabel?.() || 'null',
         lookupMethod,
         warning: 'Using current query origin DS - may be incorrect for cross-layer records',
@@ -604,22 +629,50 @@ export function removeRecordsFromOriginSelections(
         })
       )
       
+      // r023.28: Also build simple recordId set for fallback matching
+      const recordIdsToRemove = new Set(recordsToRemoveForOrigin.map(r => r.getId()))
+      
       // Filter out records that match composite keys (ID + queryConfigId) to remove
-      const remainingRecords = currentSelectedRecords.filter(record => {
+      let remainingRecords = currentSelectedRecords.filter(record => {
         const recordId = record.getId()
         const queryConfigId = record.feature?.attributes?.__queryConfigId || ''
         const compositeKey = `${recordId}__${queryConfigId}`
         return !compositeKeysToRemove.has(compositeKey)
       })
       
+      // r023.28: If composite key matching didn't remove anything, fall back to simple recordId matching
+      // This handles cases where origin DS records don't have __queryConfigId (e.g., "Select on Map" selections)
+      const compositeRemovalCount = currentSelectedRecords.length - remainingRecords.length
+      if (compositeRemovalCount === 0 && recordsToRemoveForOrigin.length > 0) {
+        debugLogger.log('RESULTS-MODE', {
+          event: 'r023-28-composite-key-fallback-to-recordId',
+          widgetId,
+          originDSId: originDS.id,
+          reason: 'composite-key-matching-removed-nothing',
+          recordIdsToRemove: Array.from(recordIdsToRemove),
+          note: 'Falling back to simple recordId matching (origin DS records may lack __queryConfigId)',
+          timestamp: Date.now()
+        })
+        
+        remainingRecords = currentSelectedRecords.filter(record => {
+          const recordId = record.getId()
+          return !recordIdsToRemove.has(recordId)
+        })
+      }
+      
       const remainingIds = remainingRecords.map(record => record.getId())
       
-      // DIAGNOSTIC (r022.31): Log composite key removal details
+      // r023.28: Determine which matching method was used
+      const usedFallbackMatching = compositeRemovalCount === 0 && recordsToRemoveForOrigin.length > 0
+      const finalRemovalCount = currentSelectedRecords.length - remainingRecords.length
+      
+      // DIAGNOSTIC (r022.31, r023.28): Log removal details including which method was used
       debugLogger.log('RESULTS-MODE', {
         event: 'origin-ds-removal-filtered',
         widgetId,
         originDSId: originDS.id,
         originDSLabel: originDS.getLabel?.() || 'unknown',
+        matchingMethod: usedFallbackMatching ? 'recordId-fallback' : 'composite-key',
         selectionBeforeRemoval: {
           count: currentSelectedRecords.length,
           ids: currentSelectedIds.slice(0, 20),
@@ -630,9 +683,11 @@ export function removeRecordsFromOriginSelections(
         },
         removalDetails: {
           compositeKeysToRemove: Array.from(compositeKeysToRemove),
+          recordIdsToRemove: Array.from(recordIdsToRemove),
           expectedRemovedCount: recordsToRemoveForOrigin.length,
-          actualRemovedCount: currentSelectedRecords.length - remainingRecords.length,
-          removalSuccessful: (currentSelectedRecords.length - remainingRecords.length) === recordsToRemoveForOrigin.length
+          compositeMatchRemoved: compositeRemovalCount,
+          finalRemovedCount: finalRemovalCount,
+          removalSuccessful: finalRemovalCount === recordsToRemoveForOrigin.length
         },
         remainingAfterFilter: {
           count: remainingRecords.length,

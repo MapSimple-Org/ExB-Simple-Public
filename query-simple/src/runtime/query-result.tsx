@@ -508,13 +508,10 @@ export function QueryTaskResult (props: QueryTaskResultProps) {
     }
   }, [records, outputDS, widgetId, queryItem.configId, queryItem.resultExpandByDefault])
 
-  React.useEffect(() => {
-    // clear selection when resultSelectMode changed
-    if (outputDS) {
-      clearSelectionInDataSources(outputDS, true, graphicsLayer) // Always use graphics layer
-      publishSelectionMessage(widgetId, [], outputDS, true)
-    }
-  }, [queryItem.resultSelectMode, outputDS, widgetId, graphicsLayer])
+  // r023.28: REMOVED - This useEffect was dead code that caused URL flash
+  // It was intended to clear selection when resultSelectMode (Single/Multiple) changed,
+  // but since r023.5-12 we don't use native selection, only graphics layer.
+  // Also had incorrect function arguments (outputDS where widgetId was expected).
 
   // Update expandAll when queryItem changes (e.g., switching between queries)
   React.useEffect(() => {

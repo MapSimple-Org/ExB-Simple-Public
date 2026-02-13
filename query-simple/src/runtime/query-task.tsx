@@ -1314,20 +1314,25 @@ export function QueryTask (props: QueryTaskProps) {
               // r021.87: Store queryConfigId directly on record when added - no map needed
               currentQueryRecordIdsRef.current = addedIds
               
+              // r023.30: Get origin DS ID for cross-layer removal support
+              const originDSId = featureDS.getOriginDataSources()?.[0]?.id || featureDS.id
+              
               result.records.forEach(record => {
                 const recordId = record.getId()
                 // Only stamp records that were actually added (not duplicates)
                 if (addedIds.includes(recordId)) {
-                  // Store queryConfigId directly on the record
+                  // Store queryConfigId and originDSId directly on the record
                   if (record.feature && record.feature.attributes) {
                     record.feature.attributes.__queryConfigId = queryItem.configId
+                    record.feature.attributes.__originDSId = originDSId
                   }
                   
                   debugLogger.log('RESULTS-MODE', {
-                    event: 'queryConfigId-stamped-on-record',
+                    event: 'record-stamped-with-ids',
                     widgetId: props.widgetId,
                     recordId,
                     queryConfigId: queryItem.configId,
+                    originDSId,
                     storedOnRecord: !!record.feature?.attributes,
                     timestamp: Date.now()
                   })
@@ -1562,11 +1567,14 @@ export function QueryTask (props: QueryTaskProps) {
             })
             
             // r021.87: In NEW mode, stamp queryConfigId on all records
+            // r023.30: Also stamp originDSId for cross-layer removal support
             currentQueryRecordIdsRef.current = (recordsToDisplay as FeatureDataRecord[]).map(r => r.getId());
+            const originDSIdForNew = featureDS.getOriginDataSources()?.[0]?.id || featureDS.id
             
-            (recordsToDisplay as FeatureDataRecord[]).forEach(record => {
+            ;(recordsToDisplay as FeatureDataRecord[]).forEach(record => {
               if (record.feature && record.feature.attributes) {
                 record.feature.attributes.__queryConfigId = queryItem.configId
+                record.feature.attributes.__originDSId = originDSIdForNew
               }
             })
           } else if (onAccumulatedRecordsChange) {
@@ -2642,10 +2650,9 @@ export function QueryTask (props: QueryTaskProps) {
                 }
               }}
             >
+              {/* r023.29: Stable key - only remount on new query execution, not mode switches */}
               <QueryTaskResult
-                key={resultsMode === SelectionType.NewSelection 
-                  ? `${queryItem.configId}-${queryExecutionKeyRef.current}`
-                  : `stable-${queryExecutionKeyRef.current}`}
+                key={`${queryItem.configId}-${queryExecutionKeyRef.current}`}
                 widgetId={props.widgetId}
                 queryItem={queryItem}
                 queryParams={queryParamRef.current}
