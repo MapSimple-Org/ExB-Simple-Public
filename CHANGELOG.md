@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 > **Archive**: For releases r001-r021, see [CHANGELOG_ARCHIVE_r001-r021.md](docs/archive/CHANGELOG_ARCHIVE_r001-r021.md)
 
-## [1.19.0-r024.18] - 2026-02-15 - LayerList Persistent Results (Complete)
+## [1.19.0-r024.18] - 2026-02-14 - LayerList Persistent Results (Complete)
 
 ### Added
 **LayerList integration with persistent result layers.** Query results can now be displayed as a `GroupLayer` visible in the LayerList and Legend widgets, persisting when the widget closes.
