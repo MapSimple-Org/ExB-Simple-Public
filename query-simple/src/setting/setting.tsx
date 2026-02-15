@@ -19,7 +19,7 @@ import {
   DataSourceRemoveWaringReason,
   dataComponentsUtils
 } from 'jimu-ui/advanced/data-source-selector'
-import { NumericInput, Select, Switch, defaultMessages as jimuUIDefaultMessages } from 'jimu-ui'
+import { NumericInput, Select, Switch, TextInput, defaultMessages as jimuUIDefaultMessages } from 'jimu-ui'
 import { ThemeColorPicker } from 'jimu-ui/basic/color-picker'
 import { SettingRow, SettingSection, DirectionSelector, MapWidgetSelector } from 'jimu-ui/advanced/setting-components'
 import { type IMConfig, type QueryArrangeType, type QueryItemType, PagingType, ListDirection, FieldsType } from '../config'
@@ -326,6 +326,30 @@ export default class Setting extends React.PureComponent<AllWidgetSettingProps<I
         )}
         {this.props.config.queryItems.length > 0 && (
           <SettingSection role='group' aria-label={this.getI18nMessage('graphicsSymbology')} title={this.getI18nMessage('graphicsSymbology')}>
+                <SettingRow label={this.getI18nMessage('addResultsAsMapLayer')}>
+                  <Switch
+                    checked={config.addResultsAsMapLayer === true}
+                    onChange={(e) => {
+                      this.updateConfigForOptions(['addResultsAsMapLayer', e.target.checked])
+                    }}
+                    aria-label={this.getI18nMessage('addResultsAsMapLayer')}
+                  />
+                </SettingRow>
+                <div css={css`font-size: 0.875rem; margin-top: 4px; padding: 0 16px 8px; opacity: 0.8;`}>
+                  {this.getI18nMessage('addResultsAsMapLayerDescription')}
+                </div>
+                {config.addResultsAsMapLayer && (
+                  <SettingRow label={this.getI18nMessage('resultsLayerTitle')} flow='wrap'>
+                    <TextInput
+                      value={config.resultsLayerTitle || ''}
+                      placeholder={this.getI18nMessage('resultsLayerTitlePlaceholder')}
+                      onChange={(e) => {
+                        this.updateConfigForOptions(['resultsLayerTitle', e.target.value])
+                      }}
+                      aria-label={this.getI18nMessage('resultsLayerTitle')}
+                    />
+                  </SettingRow>
+                )}
                 <SettingRow label={this.getI18nMessage('fillColor')} flow='wrap'>
                   <ThemeColorPicker
                     specificTheme={this.props.theme2}
@@ -442,7 +466,7 @@ export default class Setting extends React.PureComponent<AllWidgetSettingProps<I
           <SettingSection role='group' aria-label={this.getI18nMessage('resultClickBehavior')} title={this.getI18nMessage('resultClickBehavior')}>
             <SettingRow label={this.getI18nMessage('zoomOnResultClick')}>
               <Switch
-                checked={config.zoomOnResultClick !== false}
+                checked={config.zoomOnResultClick === true}
                 onChange={(e) => {
                   this.updateConfigForOptions(['zoomOnResultClick', e.target.checked])
                 }}

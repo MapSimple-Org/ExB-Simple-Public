@@ -28,6 +28,8 @@ export interface SimpleListProps {
   onEscape: () => void
   onSelectChange: (data: FeatureDataRecord) => void
   onRemove: (data: FeatureDataRecord) => void
+  /** r023.32: Zoom to single record. Passed to QueryResultItem for menu/inline icon. */
+  onZoomTo?: (data: FeatureDataRecord) => void
   expandByDefault?: boolean
   // r021.77: itemExpandStates removed - doesn't persist with no-rerender approach
   removedRecordIds?: Set<string>
@@ -82,6 +84,7 @@ export function SimpleList (props: SimpleListProps) {
     onEscape,
     onSelectChange,
     onRemove,
+    onZoomTo,
     expandByDefault,
     // r021.77: itemExpandStates removed
     removedRecordIds,
@@ -295,6 +298,7 @@ export function SimpleList (props: SimpleListProps) {
               expandByDefault={expandByDefaultValue}
               onClick={onSelectChange}
               onRemove={onRemove}
+              onZoomTo={onZoomTo}
               mapView={mapView}
               hoverPinColor={hoverPinColor}
             />

@@ -200,7 +200,13 @@ export interface SettingConfig {
   // Hover Preview Pin Configuration
   hoverPinColor?: string              // Hex color (e.g., '#FFC107' - yellow) - default: '#FFC107'
   // Result Click Behavior
-  zoomOnResultClick?: boolean         // Default: true - zoom to record when clicked in results panel (popup always opens)
+  /** r023.31: Default false. When true, clicking a result zooms to it. When false, use "Zoom to" from result menu. */
+  zoomOnResultClick?: boolean
+  // r024.0: LayerList Integration - Persistent Result Layers
+  /** Default false. When true, results render as GroupLayer in LayerList; layer persists when widget closes. */
+  addResultsAsMapLayer?: boolean
+  /** Custom title for the results layer in LayerList. Default: 'QuerySimple Results'. */
+  resultsLayerTitle?: string
   sizeMap?: {
     arrangementIconPopper?: SizeMap
   }

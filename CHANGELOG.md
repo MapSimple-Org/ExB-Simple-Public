@@ -7,6 +7,105 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 > **Archive**: For releases r001-r021, see [CHANGELOG_ARCHIVE_r001-r021.md](docs/archive/CHANGELOG_ARCHIVE_r001-r021.md)
 
+## [1.19.0-r024.18] - 2026-02-15 - LayerList Persistent Results (Complete)
+
+### Added
+**LayerList integration with persistent result layers.** Query results can now be displayed as a `GroupLayer` visible in the LayerList and Legend widgets, persisting when the widget closes.
+
+**Settings:**
+- "Show results in LayerList" toggle in widget settings (Graphics section)
+- Optional custom layer title (defaults to "Enhanced Search")
+
+**Core Functionality (r024.0-r024.11):**
+- Results render into a `GroupLayer` with 3 geometry-based sublayers (Points, Lines, Polygons)
+- LayerList shows collapsible group with geometry-type sublayers
+- Toggle layer or sublayers in LayerList to control visibility
+- Graphics persist on map when widget closes (no clear/restore cycle)
+- Multiple widgets each get their own GroupLayer (no conflicts)
+
+**Legend Support (r024.12-r024.15):**
+- Dynamic companion FeatureLayers show symbology in Legend widget
+- Legend entries automatically appear when graphics of that geometry type are added
+- Legend entries automatically removed when last graphic of that type is cleared
+- Toggling in Legend controls visibility of actual graphics
+- Legend FeatureLayers hidden from LayerList to avoid clutter
+
+### Fixed
+
+**r024.4** - Toggle change detection: Switching toggle after initialization now recreates layer with correct type
+
+**r024.5** - Config registration timing: Moved to constructor to prevent race conditions
+
+**r024.9** - Architecture: Restored 3-sublayer architecture with `visibilityMode: 'inherited'` for reliable LayerList integration
+
+**r024.10** - Clear/Recreate: Fixed `clearGraphicsLayerRefs` to recreate correct layer type (GroupLayer vs GraphicsLayer)
+
+**r024.11** - Clear All: Fixed to work with both layer types using `clearGraphicsLayerOrGroupLayer`
+
+**r024.16** - Removal Protection: GroupLayer automatically re-adds itself if user tries to remove via LayerList "Remove" action
+
+**r024.17** - Race Condition: Hash query loads no longer create duplicate GroupLayers (promise-based creation lock)
+
+**r024.18** - Auto-Enable Visibility: Layer automatically turns on when graphics are added if it was toggled off
+
+### Files Modified
+- `query-simple/src/config.ts`: addResultsAsMapLayer, resultsLayerTitle
+- `query-simple/src/setting/setting.tsx`: toggle and title input UI
+- `query-simple/src/setting/translations/default.ts`: i18n strings
+- `query-simple/src/runtime/graphics-layer-utils.ts`: GroupLayer creation, Legend FeatureLayers, lifecycle
+- `query-simple/src/runtime/widget.tsx`: conditional close/open behavior, toggle change detection
+- `query-simple/src/runtime/hooks/use-selection-restoration.ts`: conditional restoration skip
+- `query-simple/src/runtime/query-task.tsx`: clearResult GroupLayer handling
+- `query-simple/src/version.ts`: r024.0 -> r024.18
+
+---
+
+## [1.19.0-r024.0] - 2026-02-12 - LayerList Integration Phase 1
+
+### Added
+**Config and Settings UI for LayerList persistent results (Phase 1).** No behavior change yet.
+- `addResultsAsMapLayer` config toggle (default: false) - "Show results in LayerList"
+- `resultsLayerTitle` optional config - custom layer title when enabled (default: "QuerySimple Results")
+- Settings UI: toggle switch and optional title input in Graphics Layer Symbology section
+- i18n strings for new settings
+
+Phase 2 will implement GroupLayer creation and graphics routing.
+
+---
+
+## [1.19.0-r023.34] - 2026-02-14 - Expanded result item height fix
+
+### Fixed
+**Expanded result items clipped at bottom.** When expanded, stacked Zoom/Remove icons (64px) plus attribute content exceeded the 2rem min-height. Added `result-item-expanded` class with `min-height: 4.5rem` so the container accommodates all content.
+
+---
+
+## [1.19.0-r023.31-33] - 2026-02-14 - Result actions and zoom defaults
+
+### Changed (r023.31)
+**Default zoomOnResultClick to false.** Clicking a result no longer zooms by default. Users zoom explicitly via "Zoom to" in the result actions menu or inline icon. Enables explicit zoom workflow.
+
+### Added (r023.32)
+**Three-dot menu per result row.** Replaced inline trash button with a menu containing:
+- **Zoom to** – zooms map to that record (when map available)
+- **Remove** – removes record from results
+
+Saves space when collapsed; uses same icons as before (zoom-to.svg, trash).
+
+### Changed (r023.33)
+**Adaptive result actions.** When expanded, shows inline Zoom to and Remove icons stacked vertically. When collapsed, shows three-dot menu. Horizontal layout always shows inline icons. FeatureInfo exposes `onExpandChange` callback so QueryResultItem can track expand state.
+
+### Files Modified
+- `query-simple/src/config.ts`: zoomOnResultClick default and JSDoc
+- `query-simple/src/runtime/query-result.tsx`: handleZoomToRecord, zoomOnResultClick logic
+- `query-simple/src/runtime/query-result-item.tsx`: Menu, inline icons, expand-state logic
+- `query-simple/src/runtime/components/feature-info.tsx`: onExpandChange callback
+- `query-simple/src/runtime/simple-list.tsx`: onZoomTo prop
+- `query-simple/src/setting/setting.tsx`: zoomOnResultClick checkbox logic
+- `query-simple/src/version.ts`: Incremented through r023.33
+
+---
+
 ## [1.19.0-r023.28-30] - 2026-02-13 - Cross-layer selection removal fixes
 
 ### Fixed (r023.28)

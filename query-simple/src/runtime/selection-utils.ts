@@ -5,7 +5,7 @@
 
 import type { DataSource, FeatureLayerDataSource, FeatureDataRecord } from 'jimu-core'
 import { MessageManager, DataRecordsSelectionChangeMessage, DataSourceManager, DataRecordSetChangeMessage, RecordSetChangeType } from 'jimu-core'
-import { addHighlightGraphics as addGraphicsLayerGraphics, clearGraphicsLayer, createOrGetGraphicsLayer, cleanupGraphicsLayer } from './graphics-layer-utils'
+import { addHighlightGraphics as addGraphicsLayerGraphics, clearGraphicsLayerOrGroupLayer, createOrGetGraphicsLayer, cleanupGraphicsLayer } from './graphics-layer-utils'
 import { createQuerySimpleDebugLogger } from 'widgets/shared-code/mapsimple-common'
 import type { EventManager } from './hooks/use-event-handling'
 
@@ -101,7 +101,7 @@ export async function selectRecordsInDataSources(
   recordIds: string[],
   records?: FeatureDataRecord[],
   useGraphicsLayer: boolean = false,
-  graphicsLayer?: __esri.GraphicsLayer,
+  graphicsLayer?: __esri.GraphicsLayer | __esri.GroupLayer,
   mapView?: __esri.MapView | __esri.SceneView,
   skipOriginDSSelection: boolean = false
 ): Promise<void> {
@@ -133,8 +133,8 @@ export async function selectRecordsInDataSources(
     // r021.93: Track this operation as pending
     pendingGraphicsOperation = (async () => {
       // r021.90: Clear graphics layer before re-adding to ensure we have the correct set
-      // This handles multiple render cycles where the full accumulated list is passed each time
-      clearGraphicsLayer(graphicsLayer)
+      // r024.10: Use clearGraphicsLayerOrGroupLayer - handles both GraphicsLayer and GroupLayer
+      clearGraphicsLayerOrGroupLayer(graphicsLayer)
       
       await addGraphicsLayerGraphics(graphicsLayer, records, mapView)
     })()
@@ -258,7 +258,7 @@ export async function clearSelectionInDataSources (
   widgetId: string,
   outputDS: DataSource | null | undefined,
   useGraphicsLayer: boolean = false,
-  graphicsLayer?: __esri.GraphicsLayer
+  graphicsLayer?: __esri.GraphicsLayer | __esri.GroupLayer
 ): Promise<void> {
   // Clear graphics layer if using graphics layer mode
   if (useGraphicsLayer && graphicsLayer) {
@@ -267,7 +267,7 @@ export async function clearSelectionInDataSources (
       graphicsLayerId: graphicsLayer.id,
       timestamp: Date.now()
     })
-    clearGraphicsLayer(graphicsLayer)
+    clearGraphicsLayerOrGroupLayer(graphicsLayer)
   }
 
   // Clear data source selection for state management
@@ -294,7 +294,7 @@ export async function clearAllSelectionsForWidget(options: {
   widgetId: string
   outputDS: DataSource | null | undefined
   useGraphicsLayer: boolean
-  graphicsLayer?: __esri.GraphicsLayer
+  graphicsLayer?: __esri.GraphicsLayer | __esri.GroupLayer
   mapView?: __esri.MapView | __esri.SceneView
   eventManager?: EventManager
   queryItemConfigId?: string

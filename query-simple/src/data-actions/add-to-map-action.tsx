@@ -13,6 +13,7 @@
 
 import { type DataRecordSet, type DataAction, DataLevel, type IntlShape, type DataSource, MessageManager, DataRecordsSelectionChangeMessage, DataSourceManager, type ImmutableArray, type ImmutableObject } from 'jimu-core'
 import { createQuerySimpleDebugLogger } from 'widgets/shared-code/mapsimple-common'
+import { getGraphicsCountFromLayer, forEachGraphicInLayer } from '../runtime/graphics-layer-utils'
 
 const debugLogger = createQuerySimpleDebugLogger()
 import type { FeatureDataRecord } from 'jimu-core'
@@ -42,7 +43,7 @@ async function selectRecordsForAddToMap(
   widgetId: string,
   records: FeatureDataRecord[],
   outputDS: DataSource,
-  graphicsLayer?: __esri.GraphicsLayer,
+  graphicsLayer?: __esri.GraphicsLayer | __esri.GroupLayer,
   queries?: ImmutableArray<ImmutableObject<QueryItemType>>
 ): Promise<void> {
   debugLogger.log('DATA-ACTION', {
@@ -53,7 +54,7 @@ async function selectRecordsForAddToMap(
     hasOutputDS: !!outputDS,
     outputDSId: outputDS?.id,
     hasGraphicsLayer: !!graphicsLayer,
-    graphicsCount: graphicsLayer?.graphics?.length || 0,
+    graphicsCount: getGraphicsCountFromLayer(graphicsLayer),
     hasQueries: !!(queries && queries.length > 0),
     queriesCount: queries?.length || 0,
     note: 'r023.3: Entering dedicated selection function - will interrogate graphics layer',
@@ -87,18 +88,19 @@ async function selectRecordsForAddToMap(
   const recordsByOriginDS = new Map<DataSource, { records: FeatureDataRecord[], ids: string[] }>()
   const dsManager = DataSourceManager.getInstance()
   
-  if (graphicsLayer && graphicsLayer.graphics && graphicsLayer.graphics.length > 0 && queries && queries.length > 0) {
+  const graphicsCount = getGraphicsCountFromLayer(graphicsLayer)
+  if (graphicsLayer && graphicsCount > 0 && queries && queries.length > 0) {
     debugLogger.log('DATA-ACTION', {
       event: 'selectRecordsForAddToMap-interrogating-graphics',
       widgetId,
-      graphicsCount: graphicsLayer.graphics.length,
+      graphicsCount,
       queriesCount: queries.length,
       recordIdsToSelect: recordIds.slice(0, 10),
       timestamp: Date.now()
     })
     
     // Step 1: Build map of record ID -> queryConfigId from graphics
-    graphicsLayer.graphics.forEach(graphic => {
+    forEachGraphicInLayer(graphicsLayer, graphic => {
       const graphicRecordId = graphic.attributes?.recordId
       const graphicQueryConfigId = graphic.attributes?.queryConfigId
       
@@ -332,7 +334,7 @@ export function createAddToMapAction(
   intl: IntlShape,
   queryItem?: QueryItemType,
   runtimeZoomToSelected?: boolean,
-  graphicsLayer?: __esri.GraphicsLayer,
+  graphicsLayer?: __esri.GraphicsLayer | __esri.GroupLayer,
   queries?: ImmutableArray<ImmutableObject<QueryItemType>>
 ): DataAction {
   return {
@@ -491,7 +493,7 @@ export function createAddToMapAction(
           message: 'r023.3: Successfully selected records via dedicated Add to Map function (multi-layer via graphics)',
           recordsCount: allRecords.length,
           hasGraphicsLayer: !!graphicsLayer,
-          graphicsCount: graphicsLayer?.graphics?.length || 0,
+          graphicsCount: getGraphicsCountFromLayer(graphicsLayer),
           hasQueries: !!(queries && queries.length > 0),
           queriesCount: queries?.length || 0,
           timestamp: Date.now()

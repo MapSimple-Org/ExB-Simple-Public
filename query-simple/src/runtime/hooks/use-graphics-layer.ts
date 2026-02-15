@@ -1,13 +1,13 @@
 import React from 'react'
 import { type AllWidgetProps, type DataSource } from 'jimu-core'
 import { type IMConfig } from '../../config'
-import { createOrGetGraphicsLayer, cleanupGraphicsLayer } from '../graphics-layer-utils'
-import { createQuerySimpleDebugLogger } from 'widgets/shared-code/mapsimple-common'
+import { createOrGetGraphicsLayer, createOrGetResultGroupLayer, cleanupGraphicsLayer, cleanupGroupLayer, clearGraphicsLayerOrGroupLayer } from '../graphics-layer-utils'
+import { createQuerySimpleDebugLogger, highlightConfigManager } from 'widgets/shared-code/mapsimple-common'
 
 const debugLogger = createQuerySimpleDebugLogger()
 
 interface GraphicsLayerCallbacks {
-  onGraphicsLayerInitialized?: (graphicsLayer: __esri.GraphicsLayer) => void
+  onGraphicsLayerInitialized?: (graphicsLayer: __esri.GraphicsLayer | __esri.GroupLayer) => void
   onGraphicsLayerCleaned?: () => void
 }
 
@@ -22,11 +22,11 @@ interface GraphicsLayerCallbacks {
  * Note: This is a utility class (not a hook) to work with class components.
  */
 export class GraphicsLayerManager {
-  private graphicsLayerRef: React.RefObject<__esri.GraphicsLayer | null>
+  private graphicsLayerRef: React.RefObject<__esri.GraphicsLayer | __esri.GroupLayer | null>
   private mapViewRef: React.RefObject<__esri.MapView | __esri.SceneView | null>
 
   constructor(
-    graphicsLayerRef: React.RefObject<__esri.GraphicsLayer | null>,
+    graphicsLayerRef: React.RefObject<__esri.GraphicsLayer | __esri.GroupLayer | null>,
     mapViewRef: React.RefObject<__esri.MapView | __esri.SceneView | null>
   ) {
     this.graphicsLayerRef = graphicsLayerRef
@@ -35,6 +35,7 @@ export class GraphicsLayerManager {
 
   /**
    * Initializes the graphics layer for map highlighting.
+   * r024.2: Conditionally creates GroupLayer or GraphicsLayer based on config.
    * 
    * Creates or retrieves a graphics layer and adds it to the map view.
    * 
@@ -42,13 +43,16 @@ export class GraphicsLayerManager {
    * @param mapView - The ArcGIS MapView or SceneView instance
    * @param callbacks - Optional callbacks for initialization events
    * 
-   * @returns Promise resolving to the graphics layer, or null if initialization failed
+   * @returns Promise resolving to the graphics layer or group layer, or null if initialization failed
    */
   async initialize(
     widgetId: string,
     mapView: __esri.MapView | __esri.SceneView,
     callbacks?: GraphicsLayerCallbacks
-  ): Promise<__esri.GraphicsLayer | null> {
+  ): Promise<__esri.GraphicsLayer | __esri.GroupLayer | null> {
+    // r024.2: Check if LayerList mode is enabled
+    const useGroupLayer = highlightConfigManager.getAddResultsAsMapLayer(widgetId)
+    
     // Chunk 4: Comparison logging - new implementation
     const newStateBefore = {
       hasGraphicsLayer: !!this.graphicsLayerRef.current,
@@ -60,6 +64,7 @@ export class GraphicsLayerManager {
     debugLogger.log('CHUNK-4-COMPARE', {
       event: 'new-implementation-initializeGraphicsLayer-before',
       widgetId,
+      useGroupLayer,
       newImplementation: {
         stateBefore: newStateBefore,
         mapViewType: mapView.type || 'unknown',
@@ -68,16 +73,19 @@ export class GraphicsLayerManager {
     })
     
     try {
-      // Create or get graphics layer
-      const graphicsLayer = await createOrGetGraphicsLayer(widgetId, mapView)
-      if (!graphicsLayer) {
+      // r024.2: Create GroupLayer or GraphicsLayer based on config
+      const layer = useGroupLayer
+        ? await createOrGetResultGroupLayer(widgetId, mapView)
+        : await createOrGetGraphicsLayer(widgetId, mapView)
+      if (!layer) {
         debugLogger.log('CHUNK-4-COMPARE', {
           event: 'new-implementation-initializeGraphicsLayer-failed',
           widgetId,
+          useGroupLayer,
           newImplementation: {
             stateBefore: newStateBefore,
             result: 'failed',
-            reason: 'graphics-layer-creation-failed',
+            reason: useGroupLayer ? 'group-layer-creation-failed' : 'graphics-layer-creation-failed',
             timestamp: Date.now()
           }
         })
@@ -86,7 +94,7 @@ export class GraphicsLayerManager {
 
       // Store references
       this.mapViewRef.current = mapView
-      this.graphicsLayerRef.current = graphicsLayer
+      this.graphicsLayerRef.current = layer
 
       const newStateAfter = {
         hasGraphicsLayer: !!this.graphicsLayerRef.current,
@@ -98,11 +106,13 @@ export class GraphicsLayerManager {
       debugLogger.log('CHUNK-4-COMPARE', {
         event: 'new-implementation-initializeGraphicsLayer-success',
         widgetId,
+        useGroupLayer,
         newImplementation: {
           stateBefore: newStateBefore,
           stateAfter: newStateAfter,
           result: 'success',
-          graphicsLayerId: graphicsLayer.id,
+          layerId: layer.id,
+          layerType: useGroupLayer ? 'group' : 'graphics',
           viewType: mapView.type || 'unknown',
           timestamp: Date.now()
         }
@@ -110,10 +120,10 @@ export class GraphicsLayerManager {
 
       // Call callback if provided
       if (callbacks?.onGraphicsLayerInitialized) {
-        callbacks.onGraphicsLayerInitialized(graphicsLayer)
+        callbacks.onGraphicsLayerInitialized(layer)
       }
 
-      return graphicsLayer
+      return layer
     } catch (error) {
       debugLogger.log('CHUNK-4-COMPARE', {
         event: 'new-implementation-initializeGraphicsLayer-error',
@@ -198,9 +208,10 @@ export class GraphicsLayerManager {
   }
 
   /**
-   * Cleans up the graphics layer.
+   * Cleans up the graphics layer or group layer.
+   * r024.2: Conditionally calls cleanupGroupLayer or cleanupGraphicsLayer.
    * 
-   * Removes the graphics layer from the map view and clears internal references.
+   * Removes the layer from the map view and clears internal references.
    * 
    * @param widgetId - Widget ID
    * @param callbacks - Optional callbacks
@@ -209,17 +220,23 @@ export class GraphicsLayerManager {
     widgetId: string,
     callbacks?: GraphicsLayerCallbacks
   ): void {
+    // r024.2: Check layer type to determine cleanup method
+    const layer = this.graphicsLayerRef.current
+    const isGroupLayer = layer && (layer as __esri.Layer).type === 'group'
+    
     // Chunk 4: Comparison logging - new implementation
     const newStateBefore = {
       hasGraphicsLayer: !!this.graphicsLayerRef.current,
       graphicsLayerId: this.graphicsLayerRef.current?.id || null,
       hasMapView: !!this.mapViewRef.current,
-      viewType: this.mapViewRef.current?.type || null
+      viewType: this.mapViewRef.current?.type || null,
+      isGroupLayer
     }
     
     debugLogger.log('CHUNK-4-COMPARE', {
       event: 'new-implementation-cleanupGraphicsLayer-before',
       widgetId,
+      isGroupLayer,
       newImplementation: {
         stateBefore: newStateBefore,
         timestamp: Date.now()
@@ -228,7 +245,12 @@ export class GraphicsLayerManager {
 
     const mapView = this.mapViewRef.current
     if (mapView) {
-      cleanupGraphicsLayer(widgetId, mapView)
+      // r024.2: Use appropriate cleanup based on layer type
+      if (isGroupLayer) {
+        cleanupGroupLayer(widgetId, mapView)
+      } else {
+        cleanupGraphicsLayer(widgetId, mapView)
+      }
       this.mapViewRef.current = null
       this.graphicsLayerRef.current = null
 
@@ -242,6 +264,7 @@ export class GraphicsLayerManager {
       debugLogger.log('CHUNK-4-COMPARE', {
         event: 'new-implementation-cleanupGraphicsLayer-complete',
         widgetId,
+        isGroupLayer,
         newImplementation: {
           stateBefore: newStateBefore,
           stateAfter: newStateAfter,
@@ -269,47 +292,67 @@ export class GraphicsLayerManager {
   }
 
   /**
-   * Clears all graphics from the graphics layer if it exists.
+   * Clears all graphics from the graphics layer or group layer if it exists.
+   * r024.2: Uses clearGraphicsLayerOrGroupLayer to handle both types.
    * 
    * @param widgetId - Widget ID for logging
    * @param config - Widget configuration
    */
   clearGraphics(widgetId: string, config: IMConfig): void {
     // Chunk 4: Comparison logging - new implementation
-    const graphicsLayer = this.graphicsLayerRef.current
+    const layer = this.graphicsLayerRef.current
+    const isGroupLayer = layer && (layer as __esri.Layer).type === 'group'
+    
+    // r024.2: Get graphics count based on layer type
+    let graphicsCount = 0
+    if (layer) {
+      if (isGroupLayer) {
+        const gl = layer as __esri.GroupLayer
+        gl.layers.forEach((sublayer: __esri.Layer) => {
+          const glSub = sublayer as __esri.GraphicsLayer
+          if (glSub.graphics) graphicsCount += glSub.graphics.length
+        })
+      } else {
+        graphicsCount = (layer as __esri.GraphicsLayer).graphics?.length || 0
+      }
+    }
+    
     const newStateBefore = {
-      hasGraphicsLayer: !!graphicsLayer,
-      graphicsLayerId: graphicsLayer?.id || null,
-      graphicsCount: graphicsLayer?.graphics.length || 0
+      hasGraphicsLayer: !!layer,
+      graphicsLayerId: layer?.id || null,
+      graphicsCount,
+      isGroupLayer
     }
     
     debugLogger.log('CHUNK-4-COMPARE', {
       event: 'new-implementation-clearGraphicsLayerIfExists-before',
       widgetId,
+      isGroupLayer,
       newImplementation: {
         stateBefore: newStateBefore,
         timestamp: Date.now()
       }
     })
     
-    if (graphicsLayer) {
-      const { clearGraphicsLayer } = require('../graphics-layer-utils')
-      clearGraphicsLayer(graphicsLayer)
+    if (layer) {
+      // r024.2: Use unified clear function
+      clearGraphicsLayerOrGroupLayer(layer)
       
       const newStateAfter = {
         hasGraphicsLayer: !!this.graphicsLayerRef.current,
         graphicsLayerId: this.graphicsLayerRef.current?.id || null,
-        graphicsCount: this.graphicsLayerRef.current?.graphics.length || 0
+        graphicsCount: 0
       }
       
       debugLogger.log('CHUNK-4-COMPARE', {
         event: 'new-implementation-clearGraphicsLayerIfExists-complete',
         widgetId,
+        isGroupLayer,
         newImplementation: {
           stateBefore: newStateBefore,
           stateAfter: newStateAfter,
           result: 'complete',
-          graphicsLayerId: graphicsLayer.id,
+          layerId: layer.id,
           timestamp: Date.now()
         }
       })
@@ -328,9 +371,10 @@ export class GraphicsLayerManager {
   }
 
   /**
-   * Gets the current graphics layer.
+   * Gets the current graphics layer or group layer.
+   * r024.2: Return type updated to include GroupLayer.
    */
-  getGraphicsLayer(): __esri.GraphicsLayer | null {
+  getGraphicsLayer(): __esri.GraphicsLayer | __esri.GroupLayer | null {
     return this.graphicsLayerRef.current
   }
 

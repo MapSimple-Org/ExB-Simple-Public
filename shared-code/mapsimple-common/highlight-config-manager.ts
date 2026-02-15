@@ -129,6 +129,23 @@ class HighlightConfigManager {
   }
 
   /**
+   * r024.0: Whether to show results as GroupLayer in LayerList (default: false)
+   */
+  public getAddResultsAsMapLayer(widgetId: string): boolean {
+    const config = this.configCache.get(widgetId)
+    return config?.addResultsAsMapLayer === true
+  }
+
+  /**
+   * r024.0: Custom title for results layer in LayerList (default: 'QuerySimple Results')
+   */
+  public getResultsLayerTitle(widgetId: string): string {
+    const config = this.configCache.get(widgetId)
+    const title = config?.resultsLayerTitle
+    return (typeof title === 'string' && title.trim() !== '') ? title.trim() : 'QuerySimple Results'
+  }
+
+  /**
    * Convert hex color to RGB array
    * @private
    */

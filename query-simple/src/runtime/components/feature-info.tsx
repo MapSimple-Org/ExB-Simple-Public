@@ -47,6 +47,8 @@ interface Props {
   defaultPopupTemplate: __esri.PopupTemplate
   togglable?: boolean
   expandByDefault?: boolean
+  /** r023.33: Notifies parent when expand state changes. Used by QueryResultItem to show inline icons vs menu. */
+  onExpandChange?: (expanded: boolean) => void
 }
 
 interface State {
@@ -153,6 +155,7 @@ class FeatureInfo extends React.PureComponent<Props & ExtraProps, State> {
       
       if (togglable) {
         this.setState({ showContent: expandByDefault }, () => {
+          this.props.onExpandChange?.(expandByDefault)
           debugLogger.log('EXPAND-COLLAPSE', {
             event: 'FeatureInfo-state-updated',
             recordId,
@@ -280,7 +283,10 @@ class FeatureInfo extends React.PureComponent<Props & ExtraProps, State> {
 
   toggleExpanded = (e) => {
     e.stopPropagation()
-    this.setState({ showContent: !this.state.showContent })
+    const next = !this.state.showContent
+    this.setState({ showContent: next }, () => {
+      this.props.onExpandChange?.(next)
+    })
   }
 
   render () {

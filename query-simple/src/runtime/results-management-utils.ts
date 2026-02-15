@@ -6,7 +6,7 @@
 import type { FeatureLayerDataSource, FeatureDataRecord, DataRecord } from 'jimu-core'
 import { DataSourceManager, DataSourceStatus, MessageManager, DataRecordSetChangeMessage, RecordSetChangeType, DataRecordsSelectionChangeMessage } from 'jimu-core'
 import { createQuerySimpleDebugLogger } from 'widgets/shared-code/mapsimple-common'
-import { removeHighlightGraphics } from './graphics-layer-utils'
+import { removeHighlightGraphics, getGraphicsCountFromLayer, forEachGraphicInLayer } from './graphics-layer-utils'
 
 const debugLogger = createQuerySimpleDebugLogger()
 
@@ -374,7 +374,7 @@ export function removeRecordsFromOriginSelections(
   recordsToRemove: FeatureDataRecord[],
   outputDS: FeatureLayerDataSource,
   useGraphicsLayer?: boolean,
-  graphicsLayer?: __esri.GraphicsLayer,
+  graphicsLayer?: __esri.GraphicsLayer | __esri.GroupLayer,
   accumulatedRecords?: FeatureDataRecord[]
 ): void {
   debugLogger.log('RESULTS-MODE', {
@@ -401,7 +401,8 @@ export function removeRecordsFromOriginSelections(
     // FIX (r018.82): Capture TRUE "before" state BEFORE removing graphics
     const graphicsBeforeRemoval: (string | null)[] = []
     const firstFewGraphicsAttrs: any[] = []
-    graphicsLayer?.graphics?.forEach((g, index) => {
+    let index = 0
+    forEachGraphicInLayer(graphicsLayer, (g) => {
       if (index < 3) {
         firstFewGraphicsAttrs.push({
           index,
@@ -411,13 +412,14 @@ export function removeRecordsFromOriginSelections(
         })
       }
       graphicsBeforeRemoval.push(g.attributes?.recordId || null)
+      index++
     })
     
     debugLogger.log('RESULTS-MODE', {
       event: 'removing-graphics-TRUE-BEFORE-state',
       widgetId,
       recordIdsToRemove,
-      graphicsLayerCountBefore: graphicsLayer.graphics.length,
+      graphicsLayerCountBefore: getGraphicsCountFromLayer(graphicsLayer),
       graphicsLayerIdsBefore: graphicsBeforeRemoval.slice(0, 110),
       firstFewGraphicsAttrs,
       timestamp: Date.now()
@@ -428,14 +430,14 @@ export function removeRecordsFromOriginSelections(
     
     // FIX (r018.82): Capture TRUE "after" state AFTER removing graphics
     const graphicsAfterRemoval: (string | null)[] = []
-    graphicsLayer?.graphics?.forEach((g) => {
+    forEachGraphicInLayer(graphicsLayer, (g) => {
       graphicsAfterRemoval.push(g.attributes?.recordId || null)
     })
     
     debugLogger.log('RESULTS-MODE', {
       event: 'removing-graphics-TRUE-AFTER-state',
       widgetId,
-      graphicsLayerCountAfter: graphicsLayer.graphics.length,
+      graphicsLayerCountAfter: getGraphicsCountFromLayer(graphicsLayer),
       graphicsLayerIdsAfter: graphicsAfterRemoval.slice(0, 110),
       actuallyRemoved: graphicsBeforeRemoval.length - graphicsAfterRemoval.length,
       expectedToRemove: recordIdsToRemove.length,
