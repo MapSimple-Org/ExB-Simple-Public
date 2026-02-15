@@ -35,7 +35,7 @@ Custom widgets for ArcGIS Experience Builder Developer Edition (1.19.0+). Built 
 
 **Settings Toggle:**
 - New "Show results in LayerList" toggle in widget settings (Graphics section)
-- Optional custom layer title (defaults to "Enhanced Search")
+- Optional custom layer title (defaults to "QuerySimple Results")
 - Results persist on map when widget closes; no more clear/restore cycle
 
 **Architecture:**
