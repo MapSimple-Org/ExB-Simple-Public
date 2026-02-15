@@ -3,7 +3,7 @@
 Custom widgets for ArcGIS Experience Builder Developer Edition (1.19.0+). Built for performance, deep-linking, and advanced result management.
 
 **Current Version**: `1.19.0-r024.18`  
-**Latest Update**: LayerList Persistent Results with Legend Support (Feb 15, 2026)
+**Latest Update**: LayerList Persistent Results with Legend Support (Feb 14, 2026)
 
 ---
 
@@ -27,7 +27,7 @@ Custom widgets for ArcGIS Experience Builder Developer Edition (1.19.0+). Built 
 
 ---
 
-## What's New: r024.0-18 (Feb 15, 2026)
+## What's New: r024.0-18 (Feb 14, 2026)
 
 ### LayerList Persistent Results
 
