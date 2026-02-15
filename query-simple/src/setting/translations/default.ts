@@ -85,6 +85,10 @@ export default {
   resultClickBehavior: 'Result Click Behavior',
   zoomOnResultClick: 'Zoom to record when clicked',
   zoomOnResultClickDescription: 'Automatically zoom to a record when clicking it in the results panel. The popup will always open regardless of this setting.',
+  addResultsAsMapLayer: 'Show results in LayerList',
+  addResultsAsMapLayerDescription: 'When enabled, query results appear as a layer in the map LayerList. The layer persists when the widget is closed.',
+  resultsLayerTitle: 'Layer title',
+  resultsLayerTitlePlaceholder: 'QuerySimple Results',
   contentTemplate: 'Content template',
   contentTemplateTip: 'Formatting syntax:\n**bold** or __bold__\n*italic* or _italic_\n# Heading\n## Subheading\n### Small heading\n- List item\n--- Horizontal rule\n[text](url) Link\n(blank line) Paragraph break\n(leading spaces) Indent\n\nInsert fields with the data button below.',
   templatePreview: 'Preview'

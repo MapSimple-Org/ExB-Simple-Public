@@ -90,6 +90,13 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
     }
   )
 
+  // r024.5: Register config in constructor so it's available before any callbacks fire
+  // (handleMapViewChange can fire before componentDidMount)
+  constructor(props: AllWidgetProps<IMConfig>) {
+    super(props)
+    highlightConfigManager.registerConfig(props.id, props.config)
+  }
+
   state: {
     initialQueryValue?: { shortId: string, value: string },
     isPanelVisible?: boolean,
@@ -589,6 +596,39 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
     // Re-register config with HighlightConfigManager on config changes (r022.91)
     if (prevProps.config !== this.props.config) {
       highlightConfigManager.registerConfig(this.props.id, this.props.config)
+      
+      // r024.4: Detect addResultsAsMapLayer toggle change and reinitialize layer
+      const prevAddResultsAsMapLayer = prevProps.config?.addResultsAsMapLayer === true
+      const currAddResultsAsMapLayer = this.props.config?.addResultsAsMapLayer === true
+      
+      if (prevAddResultsAsMapLayer !== currAddResultsAsMapLayer) {
+        // r024.4: Store mapView BEFORE cleanup (cleanup clears the ref)
+        const mapView = this.mapViewManager.getMapView() || this.mapViewRef.current
+        
+        debugLogger.log('GRAPHICS-LAYER', {
+          event: 'addResultsAsMapLayer-toggle-changed',
+          widgetId: this.props.id,
+          from: prevAddResultsAsMapLayer,
+          to: currAddResultsAsMapLayer,
+          action: 'reinitializing-layer',
+          hasMapView: !!mapView,
+          timestamp: Date.now()
+        })
+        
+        // Cleanup existing layer
+        this.graphicsLayerManager.cleanup(this.props.id)
+        this.graphicsLayerRef.current = null
+        
+        // Reinitialize with new layer type
+        if (mapView) {
+          void this.graphicsLayerManager.initialize(this.props.id, mapView, {
+            onGraphicsLayerInitialized: (graphicsLayer) => {
+              this.graphicsLayerRef.current = graphicsLayer
+              this.setState({ graphicsLayerInitialized: true })
+            }
+          })
+        }
+      }
     }
     
     // Chunk 4: Graphics layer is now required (r018.25 - Step 4.3: Remove config change handling)
@@ -911,14 +951,18 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
     // Immediately recreate the layer if we still need it
     if (mapView) {
       try {
-        const { createOrGetGraphicsLayer } = await import('./graphics-layer-utils')
-        const newGraphicsLayer = await createOrGetGraphicsLayer(id, mapView)
-        this.graphicsLayerRef.current = newGraphicsLayer
+        const { createOrGetGraphicsLayer, createOrGetResultGroupLayer } = await import('./graphics-layer-utils')
+        const useGroupLayer = highlightConfigManager.getAddResultsAsMapLayer(id)
+        const newLayer = useGroupLayer
+          ? await createOrGetResultGroupLayer(id, mapView)
+          : await createOrGetGraphicsLayer(id, mapView)
+        this.graphicsLayerRef.current = newLayer
         
         debugLogger.log('GRAPHICS-LAYER', {
           event: 'clearGraphicsLayerRefs-recreated',
           widgetId: id,
-          newLayerId: newGraphicsLayer.id,
+          newLayerId: newLayer?.id,
+          useGroupLayer,
           timestamp: Date.now()
         })
         

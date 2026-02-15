@@ -9,10 +9,12 @@ import {
   type IMState,
   classNames
 } from 'jimu-core'
-import { Button, Tooltip } from 'jimu-ui'
+import { Button, Tooltip, Popper, Icon } from 'jimu-ui'
 import FeatureInfo from './components/feature-info'
 import { ListDirection } from '../config'
 import { createQuerySimpleDebugLogger } from 'widgets/shared-code/mapsimple-common'
+import defaultMessages from './translations/default'
+import { hooks } from 'jimu-core'
 import Graphic from '@arcgis/core/Graphic'
 import * as labelPointOperator from '@arcgis/core/geometry/operators/labelPointOperator.js'
 
@@ -25,6 +27,9 @@ const debugLogger = createQuerySimpleDebugLogger()
  * This eliminates 600 component instances + 600 DOM nodes.
  * SVG source: jimu-icons/svg/outlined/editor/trash.svg
  */
+const moreIcon = require('jimu-icons/svg/outlined/application/more-horizontal.svg')
+const zoomToIcon = require('./assets/icons/zoom-to.svg')
+
 const trashIconStyle = css`
   width: 18px;
   height: 18px;
@@ -45,6 +50,8 @@ export interface ResultItemProps {
   expandByDefault: boolean
   onClick: (record: FeatureDataRecord) => void
   onRemove: (record: FeatureDataRecord) => void
+  /** r023.32: Zoom to single record. When provided, Zoom to appears in menu and (when expanded) as inline icon. */
+  onZoomTo?: (record: FeatureDataRecord) => void
   // r022.106: Hover preview props
   mapView?: __esri.MapView | __esri.SceneView
 }
@@ -58,8 +65,13 @@ const style = css`
   position: relative;
   transition: background-color 0.15s ease-in-out;
   
-  /* Add right padding to prevent header text from running into trash button */
-  padding-right: 44px;  /* 32px button width + 12px buffer */
+  /* r023.34: When expanded, stacked action icons (64px) + content need more height */
+  &.result-item-expanded {
+    min-height: 4.5rem;
+  }
+  
+  /* Add right padding to prevent header text from running into action buttons */
+  padding-right: 44px;  /* 32px button + buffer (vertical stack uses same width) */
   
   &.selected {
     outline: 2px solid var(--sys-color-primary-main);
@@ -70,19 +82,36 @@ const style = css`
     background-color: rgba(204, 0, 255, 0.08);  /* Neon purple tint */
   }
   
-  .remove-button {
+  .result-actions-menu {
     position: absolute;
     top: 4px;
     right: 4px;
     z-index: 10;
-    opacity: 0.7;
-    transition: opacity 0.2s;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+  }
+  
+  .result-actions-menu.result-actions-expanded {
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: flex-start;
+  }
+  
+  .result-actions-toggle {
+    opacity: 1;
+    color: var(--sys-color-on-surface);
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     
     &:hover {
-      opacity: 1;
+      color: var(--sys-color-primary-main);
     }
     
-    // Larger touch target for mobile/accessibility
     min-width: 32px;
     min-height: 32px;
   }
@@ -101,11 +130,15 @@ const style = css`
 `
 
 /**
- * QueryResultItem component - displays a single query result record
- * Features:
- * - Clicking the item zooms to the feature on the map
- * - Remove button (trash icon) in upper-right corner to remove record from results
- * - Records are expanded by default to show full feature information
+ * QueryResultItem - displays a single query result record.
+ *
+ * r023.32-33: Result actions (Zoom to, Remove) adapt to expand state:
+ * - When expanded: Inline icons stacked vertically (Zoom to, Remove) for quick access.
+ * - When collapsed: Three-dot menu to save space; same actions in dropdown.
+ * - Horizontal layout (no collapse): Always shows inline icons.
+ *
+ * zoomOnResultClick (r023.31) defaults to false; Zoom to is explicit via menu or inline icon.
+ * No manual cleanup needed: state, Popper, and callbacks are React-managed.
  */
 /**
  * Helper: Convert hex color to RGB array for CIM symbols
@@ -125,7 +158,16 @@ function hexToRgb(hex: string, alpha: number = 230): [number, number, number, nu
 }
 
 export const QueryResultItem = (props: ResultItemProps) => {
-  const { widgetId, data, dataSource, popupTemplate, defaultPopupTemplate, onClick, onRemove, expandByDefault = false, mapView, hoverPinColor } = props
+  const { widgetId, data, dataSource, popupTemplate, defaultPopupTemplate, onClick, onRemove, onZoomTo, expandByDefault = false, mapView, hoverPinColor } = props
+  const getI18nMessage = hooks.useTranslation(defaultMessages)
+  const [menuOpen, setMenuOpen] = React.useState(false)
+  const menuButtonRef = React.useRef<HTMLButtonElement>(null)
+  const [isExpanded, setIsExpanded] = React.useState(expandByDefault)
+
+  // r023.33: Sync with expandByDefault when parent toggles Expand All / Collapse All
+  React.useEffect(() => {
+    setIsExpanded(expandByDefault)
+  }, [expandByDefault])
   
   const recordId = data.getId()
   
@@ -162,8 +204,8 @@ export const QueryResultItem = (props: ResultItemProps) => {
    * r022.108: Cancel spring animation on click
    */
   const handleClickResultItem = React.useCallback((e: React.MouseEvent) => {
-    // Don't trigger zoom if clicking the remove button
-    if ((e.target as HTMLElement).closest('.remove-button')) {
+    // Don't trigger zoom/popup if clicking the actions menu or menu button
+    if ((e.target as HTMLElement).closest('.result-actions-menu') || (e.target as HTMLElement).closest('.result-actions-toggle')) {
       return
     }
     
@@ -186,12 +228,21 @@ export const QueryResultItem = (props: ResultItemProps) => {
     onClick(data)
   }, [onClick, data, recordId])
 
-  // Handle clicking the remove button - removes record from results and selection
+  // Handle clicking the remove menu item
   const handleRemove = React.useCallback((e: React.MouseEvent) => {
-    e.stopPropagation() // Prevent triggering the item click handler
+    e.stopPropagation()
     e.preventDefault()
+    setMenuOpen(false)
     onRemove(data)
   }, [onRemove, data])
+
+  // Handle clicking the zoom to menu item
+  const handleZoomTo = React.useCallback((e: React.MouseEvent) => {
+    e.stopPropagation()
+    e.preventDefault()
+    setMenuOpen(false)
+    onZoomTo?.(data)
+  }, [onZoomTo, data])
 
   const onKeyUp = React.useCallback((evt) => {
     if (evt.key === 'Enter' || evt.key === ' ') {
@@ -564,7 +615,7 @@ export const QueryResultItem = (props: ResultItemProps) => {
 
   return (
     <div
-      className={classNames('query-result-item', { selected })}
+      className={classNames('query-result-item', { selected, 'result-item-expanded': isExpanded || !isVerticalAlign })}
       onClick={handleClickResultItem}
       onKeyUp={onKeyUp}
       onMouseEnter={handleMouseEnter}
@@ -580,30 +631,115 @@ export const QueryResultItem = (props: ResultItemProps) => {
         defaultPopupTemplate={defaultPopupTemplate}
         togglable={isVerticalAlign}
         expandByDefault={expandByDefault}
+        onExpandChange={isVerticalAlign ? setIsExpanded : undefined}
         dataSource={dataSource}
       />
-      <Tooltip title="Remove result" placement="bottom">
-        <Button
-          className="remove-button"
-          icon
-          size="sm"
-          variant="text"
-          color="inherit"
-          onClick={handleRemove}
-          aria-label="Remove result"
-          css={css`
-            padding: 6px;
-            min-width: 32px;
-            width: 32px;
-            height: 32px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-          `}
-        >
-          <div css={trashIconStyle} aria-hidden="true" />
-        </Button>
-      </Tooltip>
+      {/* r023.32-33: Expanded = inline icons (vertical stack); collapsed = three-dot menu */}
+      <div className={classNames('result-actions-menu', { 'result-actions-expanded': (isExpanded || !isVerticalAlign) })}>
+        {(isExpanded || !isVerticalAlign) ? (
+          <>
+            {onZoomTo && (
+              <Tooltip title={getI18nMessage('zoomToRecord')} placement="bottom">
+                <Button
+                  className="result-actions-toggle"
+                  icon
+                  size="sm"
+                  variant="text"
+                  color="inherit"
+                  onClick={(e) => { e.stopPropagation(); e.preventDefault(); onZoomTo(data) }}
+                  aria-label={getI18nMessage('zoomToRecord')}
+                  css={css`padding: 6px; min-width: 32px; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center;`}
+                >
+                  <Icon icon={zoomToIcon} size={18} />
+                </Button>
+              </Tooltip>
+            )}
+            <Tooltip title={getI18nMessage('removeResult')} placement="bottom">
+              <Button
+                className="result-actions-toggle"
+                icon
+                size="sm"
+                variant="text"
+                color="inherit"
+                onClick={handleRemove}
+                aria-label={getI18nMessage('removeResult')}
+                css={css`padding: 6px; min-width: 32px; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center;`}
+              >
+                <div css={trashIconStyle} aria-hidden="true" />
+              </Button>
+            </Tooltip>
+          </>
+        ) : (
+          <>
+            <Tooltip title={getI18nMessage('resultActions')} placement="bottom">
+              <Button
+                ref={menuButtonRef}
+                className="result-actions-toggle"
+                icon
+                size="sm"
+                variant="text"
+                color="inherit"
+                onClick={(e) => { e.stopPropagation(); e.preventDefault(); setMenuOpen(!menuOpen) }}
+                aria-label="Result actions"
+                aria-haspopup="menu"
+                aria-expanded={menuOpen}
+                css={css`padding: 6px; min-width: 32px; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center;`}
+              >
+                <Icon icon={moreIcon} size={22} />
+              </Button>
+            </Tooltip>
+            <Popper
+              open={menuOpen}
+              reference={menuButtonRef.current}
+              placement="bottom-end"
+              toggle={() => setMenuOpen(false)}
+              trapFocus={false}
+            >
+              <div
+                css={css`
+                  min-width: 140px;
+                  padding: 4px 0;
+                  background: var(--ref-palette-neutral-0);
+                  border: 1px solid var(--ref-palette-neutral-400);
+                  border-radius: 4px;
+                  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+                `}
+              >
+                {onZoomTo && (
+                  <button
+                    type="button"
+                    role="menuitem"
+                    onClick={handleZoomTo}
+                    css={css`
+                      display: flex; align-items: center; gap: 8px; width: 100%;
+                      padding: 8px 12px; border: none; background: none; font-size: 0.875rem;
+                      cursor: pointer; text-align: left;
+                      &:hover { background: var(--ref-palette-neutral-200); }
+                    `}
+                  >
+                    <Icon icon={zoomToIcon} size={16} />
+                    {getI18nMessage('zoomToRecord')}
+                  </button>
+                )}
+                <button
+                  type="button"
+                  role="menuitem"
+                  onClick={handleRemove}
+                  css={css`
+                    display: flex; align-items: center; gap: 8px; width: 100%;
+                    padding: 8px 12px; border: none; background: none; font-size: 0.875rem;
+                    cursor: pointer; text-align: left;
+                    &:hover { background: var(--ref-palette-neutral-200); }
+                  `}
+                >
+                  <div css={trashIconStyle} aria-hidden="true" style={{ width: 16, height: 16 }} />
+                  {getI18nMessage('removeResult')}
+                </button>
+              </div>
+            </Popper>
+          </>
+        )}
+      </div>
     </div>
   )
 }

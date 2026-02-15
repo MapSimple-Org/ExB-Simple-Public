@@ -46,7 +46,7 @@ import {
   dispatchSelectionEvent 
 } from './selection-utils'
 import { removeResultsFromAccumulated, removeRecordsFromOriginSelections } from './results-management-utils'
-import { removeHighlightGraphics } from './graphics-layer-utils'
+import { removeHighlightGraphics, getGraphicsCountFromLayer } from './graphics-layer-utils'
 import { createQuerySimpleDebugLogger, ErrorMessage } from 'widgets/shared-code/mapsimple-common'
 import * as labelPointOperator from '@arcgis/core/geometry/operators/labelPointOperator.js'
 
@@ -69,7 +69,7 @@ export interface QueryTaskResultProps {
   records: DataRecord[]
   runtimeZoomToSelected?: boolean
   onNavBack: (clearResults?: boolean) => Promise<void> | void
-  graphicsLayer?: __esri.GraphicsLayer
+  graphicsLayer?: __esri.GraphicsLayer | __esri.GroupLayer
   mapView?: __esri.MapView | __esri.SceneView
   resultsMode?: SelectionType
   accumulatedRecords?: FeatureDataRecord[]
@@ -952,15 +952,15 @@ export function QueryTaskResult (props: QueryTaskResultProps) {
       selectRecordsAndPublish(widgetId, outputDS, recordIds, updatedSelectedDatas as FeatureDataRecord[], true)
     }
     
-    // r022.105: Make zoom configurable - defaults to true for backward compatibility
-    const shouldZoom = zoomOnResultClick !== false
+    // r022.105: Make zoom configurable - defaults to false
+    const shouldZoom = zoomOnResultClick === true
     
     debugLogger.log('POPUP', {
       event: 'result-clicked',
       recordId: dataId,
       shouldZoom,
       configValue: zoomOnResultClick,
-      note: 'r022.105: Zoom is now configurable',
+      note: 'r023.31: Default is false, zoom only when explicitly enabled',
       timestamp: Date.now()
     })
     
@@ -1012,6 +1012,15 @@ export function QueryTaskResult (props: QueryTaskResultProps) {
       openPopupForRecord(data)
     }
   }, [outputDS, widgetId, zoomToRecords, zoomOnResultClick, openPopupForRecord])
+
+  /**
+   * Zooms the map to a single record. Used by result row "Zoom to" (menu when collapsed, inline icon when expanded).
+   */
+  const handleZoomToRecord = React.useCallback(async (data: FeatureDataRecord) => {
+    if (zoomToRecords) {
+      await zoomToRecords([data])
+    }
+  }, [zoomToRecords])
 
   /**
    * Removes a record from the results and selection.
@@ -1385,7 +1394,7 @@ export function QueryTaskResult (props: QueryTaskResultProps) {
     // This is safe now because r018.89 fixed the query switch re-selection issue
     // r021.91: Pass data record for composite key matching
     if (graphicsLayer) {
-      const graphicsCountBeforeManualRemoval = graphicsLayer.graphics.length
+      const graphicsCountBeforeManualRemoval = getGraphicsCountFromLayer(graphicsLayer)
       
       debugLogger.log('RESULTS-MODE', {
         event: 'x-button-removal-manual-graphics-sync-start',
@@ -1397,7 +1406,7 @@ export function QueryTaskResult (props: QueryTaskResultProps) {
       
       removeHighlightGraphics(graphicsLayer, [dataId], [data])
       
-      const graphicsCountAfterManualRemoval = graphicsLayer.graphics.length
+      const graphicsCountAfterManualRemoval = getGraphicsCountFromLayer(graphicsLayer)
       
       debugLogger.log('RESULTS-MODE', {
         event: 'x-button-removal-manual-graphics-sync-complete',
@@ -1758,6 +1767,7 @@ export function QueryTaskResult (props: QueryTaskResultProps) {
             onEscape={handleEscape}
             onSelectChange={toggleSelection}
             onRemove={removeRecord}
+            onZoomTo={handleZoomToRecord}
             expandByDefault={expandAll}
             queries={queries}
             mapView={mapView}

@@ -219,6 +219,7 @@ export class SelectionRestorationManager {
    * 
    * r022.2: lastSelection fallback removed - accumulatedRecords is universal source
    * r022.41: Added manageGraphicsLayer parameter for shared restoration path
+   * r024.3: When LayerList mode enabled and GroupLayer exists, skip restoration
    * 
    * @param deps - Runtime dependencies (graphics layer, map view, config)
    * @param manageGraphicsLayer - If true (default), clears and re-adds graphics layer.
@@ -228,14 +229,34 @@ export class SelectionRestorationManager {
     const state = this.stateGetter()
     const { accumulatedRecords, resultsMode } = state
 
+    // r024.3: Check if LayerList mode is enabled
+    const addResultsAsMapLayer = (deps.config as any)?.addResultsAsMapLayer === true
+    const mapView = deps.mapViewRef.current
+
     debugLogger.log('RESTORE', {
       event: 'addSelectionToMap-called',
       widgetId: this.widgetId,
       resultsMode,
       hasAccumulatedRecords: !!(accumulatedRecords && accumulatedRecords.length > 0),
       accumulatedRecordsCount: accumulatedRecords?.length || 0,
+      addResultsAsMapLayer,
       note: 'r022.2: lastSelection removed - accumulatedRecords is universal source of truth'
     })
+
+    // r024.3: When LayerList mode enabled and GroupLayer exists, skip restoration (graphics already there)
+    if (addResultsAsMapLayer && mapView) {
+      const groupLayerId = `querysimple-results-${this.widgetId}`
+      const existingGroupLayer = mapView.map.layers.find((layer: __esri.Layer) => layer.id === groupLayerId)
+      if (existingGroupLayer) {
+        debugLogger.log('RESTORE', {
+          event: 'addSelectionToMap-skipped-layerlist-mode',
+          widgetId: this.widgetId,
+          groupLayerId,
+          note: 'r024.3: GroupLayer exists on map - graphics already present, skipping restoration'
+        })
+        return
+      }
+    }
 
     // r022.1/r022.2: Use accumulatedRecords for ALL modes (reflects removals)
     // accumulatedRecords is universal source of truth across New/Add/Remove modes
@@ -432,12 +453,13 @@ export class SelectionRestorationManager {
    * Clears widget graphics from the map when the widget panel closes.
    * 
    * This method:
-   * 1. Clears graphics layer (purple highlights)
+   * 1. Clears graphics layer (purple highlights) - UNLESS LayerList mode enabled
    * 2. Does NOT clear origin DS selection (blue outlines from "Select on Map")
    * 
    * r022.2: lastSelection fallback removed - accumulatedRecords is universal source
    * r023.10: Origin DS clearing removed. Explicit "Select on Map" blue outlines
    * persist through panel close/reopen. Only (X) and Clear All remove them.
+   * r024.3: When LayerList mode enabled, skip graphics clear (GroupLayer persists)
    * 
    * @param deps - Runtime dependencies (graphics layer, map view, config)
    */
@@ -445,17 +467,30 @@ export class SelectionRestorationManager {
     const state = this.stateGetter()
     const { accumulatedRecords, resultsMode } = state
 
+    // r024.3: Check if LayerList mode is enabled - if so, skip clearing graphics
+    const addResultsAsMapLayer = (deps.config as any)?.addResultsAsMapLayer === true
+
     debugLogger.log('RESTORE', {
       event: 'clearSelectionFromMap-called',
       widgetId: this.widgetId,
       resultsMode,
       hasAccumulatedRecords: !!(accumulatedRecords && accumulatedRecords.length > 0),
       accumulatedRecordsCount: accumulatedRecords?.length || 0,
-      note: 'r022.2: lastSelection removed - using accumulatedRecords only'
+      addResultsAsMapLayer,
+      note: addResultsAsMapLayer 
+        ? 'r024.3: LayerList mode - graphics will persist' 
+        : 'r022.2: lastSelection removed - using accumulatedRecords only'
     })
 
-    // Always clear graphics layer first when panel closes
-    if (deps.graphicsLayerRef.current) {
+    // r024.3: Skip graphics clear when LayerList mode is enabled (GroupLayer persists)
+    if (addResultsAsMapLayer) {
+      debugLogger.log('RESTORE', {
+        event: 'panel-closed-graphics-persist-layerlist-mode',
+        widgetId: this.widgetId,
+        note: 'r024.3: GroupLayer persists when widget closes - skipping graphics clear'
+      })
+    } else if (deps.graphicsLayerRef.current) {
+      // Original behavior: clear graphics when panel closes
       deps.graphicsLayerManager.clearGraphics(this.widgetId, deps.config)
       debugLogger.log('RESTORE', {
         event: 'panel-closed-graphics-layer-cleared',
