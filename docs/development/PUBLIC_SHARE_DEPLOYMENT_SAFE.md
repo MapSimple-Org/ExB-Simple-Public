@@ -65,11 +65,13 @@ git remote -v
 
 #### 0a. Create/Update Release Document
 
-Create or overwrite the release document. Only the current release is kept (no history).
+Create or overwrite the release document. **Only one release doc exists at a time** (no version history).
 
 - **Location:** `docs/releases/RELEASE_v1.19.0-r{version}.md`
 - **Name format:** `RELEASE_v1.19.0-r024.18.md` (use actual version from `version.ts`)
-- **Overwrite:** Replace the file each release; do not keep multiple release docs
+- **Action:** Overwrite the existing `RELEASE_v1.19.0-r*.md` file with the NEW version
+- **Content:** Compare last public release (check staging's `docs/releases/`) vs current version, document changes
+- **Follow existing format:** Overview, key features, technical details (see existing RELEASE docs)
 
 #### 0b. Update README.md
 
@@ -110,11 +112,11 @@ git branch --show-current
 
 ### Step 2: Clean Staging Directory (Remove Old Files)
 
-**ONLY in staging directory** - remove old widget files:
+**ONLY in staging directory** - remove old widget files and docs:
 
 ```bash
 # Still in /Users/adamcabrera/Dev/ExB-Simple-Public-Share/
-rm -rf query-simple helper-simple shared-code .cursor CHANGELOG.md README.md .gitignore LICENSE
+rm -rf query-simple helper-simple shared-code .cursor CHANGELOG.md README.md .gitignore LICENSE docs/
 ```
 
 **Verify clean:**
@@ -139,9 +141,13 @@ cp -r /Users/adamcabrera/Dev/arcgis-experience-builder-1.19/client/your-extensio
 cp -r /Users/adamcabrera/Dev/arcgis-experience-builder-1.19/client/your-extensions/widgets/shared-code .
 cp -r /Users/adamcabrera/Dev/arcgis-experience-builder-1.19/client/your-extensions/widgets/.cursor .
 
-# Copy documentation (README and CHANGELOG prepared in Step 0)
+# Copy documentation (README, CHANGELOG, and release doc prepared in Step 0)
 cp /Users/adamcabrera/Dev/arcgis-experience-builder-1.19/client/your-extensions/widgets/CHANGELOG.md .
 cp /Users/adamcabrera/Dev/arcgis-experience-builder-1.19/client/your-extensions/widgets/README.md .
+
+# Copy release doc (created in Step 0a)
+mkdir -p docs/releases
+cp /Users/adamcabrera/Dev/arcgis-experience-builder-1.19/client/your-extensions/widgets/docs/releases/RELEASE_v1.19.0-r*.md docs/releases/
 
 # Get .gitignore from public-share branch (source: whatever was last committed there)
 git fetch origin public-share
@@ -154,7 +160,10 @@ git show origin/public-share:LICENSE > LICENSE
 **Verify structure:**
 ```bash
 ls -la
-# Should show: .cursor, .git, .gitignore, CHANGELOG.md, LICENSE, README.md, helper-simple, query-simple, shared-code
+# Should show: .cursor, .git, .gitignore, CHANGELOG.md, LICENSE, README.md, docs/, helper-simple, query-simple, shared-code
+
+ls -la docs/releases/
+# Should show: RELEASE_v1.19.0-r{version}.md (one file)
 ```
 
 ---
@@ -201,9 +210,10 @@ git push origin public-share
 
 **Check the following:**
 - [ ] Widgets are at root (NOT nested in `client/your-extensions/widgets/`)
-- [ ] README shows correct version (e.g., r022.26)
+- [ ] README shows correct version (e.g., r024.18)
 - [ ] CHANGELOG is up to date
-- [ ] No internal documentation leaked (no `docs/` folder)
+- [ ] `docs/releases/` contains ONLY the current RELEASE doc (one file)
+- [ ] No internal docs leaked (no `docs/development/`, `docs/features/`, or other internal folders)
 - [ ] Structure is clean and ready for public consumption
 - [ ] `.cursor/rules/` folder is present (public development rules)
 - [ ] `shared-code/` folder is present
