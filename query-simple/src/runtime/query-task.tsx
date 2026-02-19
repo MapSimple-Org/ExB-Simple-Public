@@ -1346,7 +1346,10 @@ export function QueryTask (props: QueryTaskProps) {
       where: queryParams.where,
       timestamp: Date.now()
     })
-    const queryPromise = USE_DIRECT_QUERY
+    
+    // r024.63: Wrap query execution in its own error handler for service/network errors
+    // This is separate from the chain's .catch() which handles processing errors
+    const queryPromise = (USE_DIRECT_QUERY
       ? executeDirectQuery(
           featureDS,
           queryItem,
@@ -1364,6 +1367,46 @@ export function QueryTask (props: QueryTaskProps) {
           _directDefaultPopupTemplate: directResult.defaultPopupTemplate
         }))
       : executeQuery(props.widgetId, queryItem, featureDS, queryParamRef.current)
+    ).catch(error => {
+      // r024.63: Only show user-facing error for actual service/network failures
+      // These are errors from featureLayer.load(), featureLayer.queryFeatures(), or outputDS.load()
+      const rawMessage = error instanceof Error ? error.message : String(error)
+      
+      // Check if this looks like a service/network error vs a processing error
+      const isServiceError = 
+        rawMessage.includes('Unable to complete operation') ||
+        rawMessage.includes('Failed to fetch') ||
+        rawMessage.includes('NetworkError') ||
+        rawMessage.includes('featureResult') ||
+        rawMessage.includes('PBF') ||
+        rawMessage.includes('timeout') ||
+        rawMessage.includes('ETIMEDOUT') ||
+        rawMessage.includes('ECONNREFUSED') ||
+        rawMessage.includes('503') ||
+        rawMessage.includes('502') ||
+        rawMessage.includes('500') ||
+        rawMessage.includes('404')
+      
+      debugLogger.log('TASK', {
+        event: 'query-execution-error',
+        widgetId: props.widgetId,
+        error: rawMessage,
+        isServiceError,
+        errorStack: error instanceof Error ? error.stack : undefined,
+        timestamp: Date.now()
+      })
+      
+      if (isServiceError) {
+        setQueryErrorAlert({
+          show: true,
+          errorMessage: rawMessage,
+          timestamp: Date.now()
+        })
+      }
+      
+      // Re-throw so the chain knows the query failed
+      throw error
+    })
 
     queryPromise
       .then(async (result) => {
@@ -2043,19 +2086,15 @@ export function QueryTask (props: QueryTaskProps) {
         return Promise.resolve(true)
       })
       .catch(error => {
+        // r024.63: This catch handles errors in the processing chain AFTER query execution
+        // Service/network errors are already handled in the query promise wrapper above
+        // We only log here, don't show popover (user already saw it if it was a service error)
         const rawMessage = error instanceof Error ? error.message : String(error)
         debugLogger.log('TASK', {
           event: 'query-chain-failed-diagnostic',
           widgetId: props.widgetId,
           error: rawMessage,
           errorStack: error instanceof Error ? error.stack : undefined,
-          timestamp: Date.now()
-        })
-        
-        // r024.62: Surface service/network errors to the user via popover
-        setQueryErrorAlert({
-          show: true,
-          errorMessage: rawMessage,
           timestamp: Date.now()
         })
         
