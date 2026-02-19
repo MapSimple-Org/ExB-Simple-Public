@@ -2,8 +2,8 @@
 
 Custom widgets for ArcGIS Experience Builder Developer Edition (1.19.0+). Built for performance, deep-linking, and advanced result management.
 
-**Current Version**: `1.19.0-r024.62`  
-**Latest Update**: Service Error Feedback, Popup Fixes, Graphics Race Condition Fix (Feb 19, 2026)
+**Current Version**: `1.19.0-r024.63`  
+**Latest Update**: Refined Error Feedback, Popup Fixes, Graphics Race Condition Fix (Feb 19, 2026)
 
 ---
 

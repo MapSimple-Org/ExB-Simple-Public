@@ -1,4 +1,4 @@
-# Release v1.19.0-r024.62
+# Release v1.19.0-r024.63
 
 **Release Date:** 2026-02-19  
 **Experience Builder Version:** 1.19.0+
@@ -6,6 +6,28 @@
 ## Highlights
 
 This release includes a major performance overhaul (memory leak investigation and direct query bypass), architectural cleanup, and improved user feedback for service outages.
+
+---
+
+## Error Feedback Refinement (r024.63)
+
+**The service error popover now only appears for actual service/network failures.**
+
+### The Problem (r024.62)
+
+The error popover introduced in r024.62 was too aggressive. It caught ANY error in the query chain and displayed the "service unavailable" message, even for transient JavaScript errors or processing issues unrelated to service availability.
+
+### Solution (r024.63)
+
+The error handler now filters by error message patterns before showing the popover:
+
+- `Unable to complete operation` - ArcGIS Server errors
+- `Failed to fetch` / `NetworkError` - Browser network failures
+- `featureResult` / `PBF` - Parser errors from invalid service responses
+- `timeout` / `ETIMEDOUT` / `ECONNREFUSED` - Network timeouts
+- HTTP status codes `500`, `502`, `503`, `404`
+
+Processing errors in the chain are still logged via `debugLogger` but no longer trigger the user-facing popover.
 
 ---
 
