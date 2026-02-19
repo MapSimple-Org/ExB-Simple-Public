@@ -747,13 +747,15 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
       }
     } else {
       // r021.7 Chunk 2c: Close popup when widget panel closes
+      // r024.58: Skip on LL path - graphics persist, so popup content is still valid
+      const isLayerListMode = this.props.config?.addResultsAsMapLayer === true
       const mapView = this.mapViewManager.getMapView() || this.mapViewRef.current
-      if (mapView?.popup?.visible) {
+      if (!isLayerListMode && mapView?.popup?.visible) {
         mapView.popup.close()
         debugLogger.log('POPUP', {
           event: 'popup-closed-on-panel-close',
           widgetId: this.props.id,
-          reason: 'Widget panel closed',
+          reason: 'Widget panel closed (non-LL mode)',
           timestamp: Date.now()
         })
       }
@@ -1182,45 +1184,48 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
   }
 
   private handleAccumulatedRecordsChange = (records: FeatureDataRecord[]) => {
-    // DIAGNOSTIC LOGGING: State change tracking
     const previousRecords = this.state.accumulatedRecords || []
-    const previousIds = previousRecords.map(r => r.getId())
-    const newIds = records.map(r => r.getId())
-    const addedIds = newIds.filter(id => !previousIds.includes(id))
-    const removedIds = previousIds.filter(id => !newIds.includes(id))
+    const previousCount = previousRecords.length
+    const newCount = records.length
     
-    debugLogger.log('RESULTS-MODE', {
-      event: 'accumulated-records-state-change',
-      widgetId: this.props.id,
-      previousCount: previousRecords.length,
-      previousIds: previousIds,
-      newCount: records.length,
-      newIds: newIds,
-      addedIds: addedIds,
-      removedIds: removedIds,
-      resultsMode: this.state.resultsMode,
-      timestamp: Date.now()
-    })
+    // r024.23: Optimize logging to avoid creating arrays on clear path
+    // Each .map() and .filter() creates a new array, contributing to 400K+ array accumulation
+    if (newCount > 0 || previousCount > 0) {
+      // Only compute IDs when there's something to log (non-empty case)
+      const previousIds = previousCount > 0 ? previousRecords.map(r => r.getId()) : []
+      const newIds = newCount > 0 ? records.map(r => r.getId()) : []
+      
+      debugLogger.log('RESULTS-MODE', {
+        event: 'accumulated-records-state-change',
+        widgetId: this.props.id,
+        previousCount,
+        previousIds: previousIds.slice(0, 20), // Limit to 20 for log readability
+        newCount,
+        newIds: newIds.slice(0, 20),
+        resultsMode: this.state.resultsMode,
+        timestamp: Date.now()
+      })
+    }
     
     // Using AccumulatedRecordsManager (r018.58)
     this.accumulatedRecordsManager.handleAccumulatedRecordsChange(this.props.id, records)
 
     // If we're in Remove mode and all accumulated records are cleared, reset to NewSelection mode
     // Remove mode requires accumulated records to function, so it should be disabled when records are empty
-    const shouldResetMode = records.length === 0 && 
+    const shouldResetMode = newCount === 0 && 
                            this.state.resultsMode === SelectionType.RemoveFromSelection
 
-    // r021.111: Capture stack trace to see WHO is updating accumulatedRecords
-    const stackTrace = new Error().stack?.split('\n').slice(2, 8).join(' << ') || 'unknown'
+    // r024.23: Only capture stack trace for debugging when needed
+    const stackTrace = (previousCount > 0 || newCount > 0) 
+      ? (new Error().stack?.split('\n').slice(2, 6).join(' << ') || 'unknown')
+      : 'clear-path'
     
-    // r021.107: Log BEFORE setState
+    // r021.107: Log BEFORE setState (simplified for clear case)
     debugLogger.log('WIDGET-STATE', {
       event: 'widget-updating-accumulated-records-BEFORE',
       widgetId: this.props.id,
-      beforeCount: this.state.accumulatedRecords?.length || 0,
-      beforeIds: this.state.accumulatedRecords?.map(r => r.getId()).slice(0, 10) || [],
-      afterCount: records.length,
-      afterIds: records.map(r => r.getId()).slice(0, 10),
+      beforeCount: previousCount,
+      afterCount: newCount,
       willResetMode: shouldResetMode,
       calledFrom: stackTrace,
       timestamp: Date.now()

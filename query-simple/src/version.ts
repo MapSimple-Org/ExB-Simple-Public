@@ -10,7 +10,7 @@
  */
 const BASE_VERSION = '1.19.0'
 const RELEASE_NUMBER = '024' // Increment on major changes (001, 002, 003, ...)
-const MINOR_VERSION = '18' // r024.18: Auto-enable GroupLayer visibility when adding graphics
+const MINOR_VERSION = '62' // r024.62: Show error popover when query fails due to service outage or network error
 
 export const WIDGET_VERSION = MINOR_VERSION && Number(MINOR_VERSION) > 0
   ? `${BASE_VERSION}-r${RELEASE_NUMBER}.${MINOR_VERSION}`

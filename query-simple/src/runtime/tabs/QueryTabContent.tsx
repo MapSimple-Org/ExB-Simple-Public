@@ -103,6 +103,14 @@ export interface QueryTabContentProps {
   } | null
   onDismissNoResultsAlert?: () => void
   
+  // r024.62: Query error alert (service down, network failure)
+  queryErrorAlert?: {
+    show: boolean
+    errorMessage: string
+    timestamp?: number
+  } | null
+  onDismissQueryErrorAlert?: () => void
+  
   // Other props passed to QueryTaskForm
   otherProps?: any
 }
@@ -142,6 +150,8 @@ export function QueryTabContent(props: QueryTabContentProps) {
     setActiveTab,
     noResultsAlert,
     onDismissNoResultsAlert,
+    queryErrorAlert,
+    onDismissQueryErrorAlert,
     otherProps
   } = props
   
@@ -827,6 +837,43 @@ export function QueryTabContent(props: QueryTabContentProps) {
             </div>
             <div style={{ fontSize: '13px', lineHeight: '1.5', color: '#2b2b2b' }}>
               {getI18nMessage('noResultsAlertMessage')}
+            </div>
+          </div>
+        </calcite-popover>
+      )}
+      
+      {/* r024.62: Calcite Popover for query execution failure (service down, network error) */}
+      {queryErrorAlert?.show && (
+        <calcite-popover 
+          key={`query-error-${queryErrorAlert.timestamp}`}
+          referenceElement="query-feedback-anchor"
+          placement="bottom"
+          flipDisabled={true}
+          overlayPositioning="fixed"
+          triggerDisabled={true}
+          autoClose
+          closable
+          label={getI18nMessage('queryErrorAlertLabel')}
+          open={queryErrorAlert.show}
+          onCalcitePopoverClose={() => {
+            if (onDismissQueryErrorAlert) {
+              onDismissQueryErrorAlert()
+            }
+          }}
+          style={{
+            '--calcite-popover-max-size-x': '320px',
+            maxWidth: '320px',
+            width: '100%',
+            '--calcite-color-foreground-1': '#fef2f2'
+          } as React.CSSProperties}
+        >
+          <div style={{ padding: '12px', maxWidth: '320px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontWeight: 600, marginBottom: '8px', fontSize: '14px', color: '#991b1b' }}>
+              <calcite-icon icon="exclamation-mark-triangle" scale="s" style={{ color: '#dc2626' }} />
+              {getI18nMessage('queryErrorAlertTitle')}
+            </div>
+            <div style={{ fontSize: '13px', lineHeight: '1.5', color: '#2b2b2b' }}>
+              {getI18nMessage('queryErrorAlertMessage')}
             </div>
           </div>
         </calcite-popover>

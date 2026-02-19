@@ -46,14 +46,36 @@ import { QueryTaskLabel } from './query-task-label'
 import { useZoomToRecords } from './hooks/use-zoom-to-records'
 import { DEFAULT_QUERY_ITEM } from '../default-query-item'
 import { generateQueryParams, executeQuery, executeCountQuery } from './query-utils'
+import { executeDirectQuery } from './direct-query'
+
+/**
+ * Direct JS API Query Bypass Toggle (r024.50, re-enabled r024.57)
+ *
+ * When true, bypasses ExB's outputDS.load() and uses FeatureLayer.queryFeatures()
+ * directly. r024.57: Now uses outputDS.buildRecord() to wrap raw Graphics into
+ * real FeatureDataRecord objects with full coded domain formatting and complete
+ * interface compatibility. No adapter gaps.
+ *
+ * STATUS: ENABLED (r024.57) - See docs/development/DIRECT_QUERY_BYPASS.md
+ *
+ * WHAT IT DOES:
+ * - Calls FeatureLayer.queryFeatures() instead of outputDS.load()
+ * - Wraps results via outputDS.buildRecord() (real FeatureDataRecord, not adapter)
+ * - Skips: DataSource reactive lifecycle, schema resolution, watcher setup
+ * - Keeps: coded domain formatting, field aliasing, inter-widget compatibility
+ *
+ * MEMORY IMPACT: 89-99% reduction in per-query memory growth.
+ * Set to false to revert to the ExB DataSource path if issues arise.
+ */
+const USE_DIRECT_QUERY = true
 import { mergeResultsIntoAccumulated, removeResultsFromAccumulated, removeRecordsFromOriginSelections } from './results-management-utils'
-import { removeHighlightGraphics, cleanupGraphicsLayer } from './graphics-layer-utils'
+import { removeHighlightGraphics, cleanupGraphicsLayer, cleanupAnyResultLayer, clearAnyResultLayerContents } from './graphics-layer-utils'
 import { MenuOutlined } from 'jimu-icons/outlined/editor/menu'
 import defaultMessage from './translations/default'
 import { ArrowLeftOutlined } from 'jimu-icons/outlined/directional/arrow-left'
 import { LoadingResult } from './loading-result'
 import { clearSelectionInDataSources, selectRecordsAndPublish, findClearResultsButton, dispatchSelectionEvent, getOriginDataSource, clearAllSelectionsForWidget } from './selection-utils'
-import { createQuerySimpleDebugLogger } from 'widgets/shared-code/mapsimple-common'
+import { createQuerySimpleDebugLogger, globalHandleManager } from 'widgets/shared-code/mapsimple-common'
 
 const debugLogger = createQuerySimpleDebugLogger()
 
@@ -173,6 +195,9 @@ export function QueryTask (props: QueryTaskProps) {
   const zoomToRecords = useZoomToRecords(mapView)
   const [stage, setStage] = React.useState(0) // 0 = form, 1 = results, 2 = loading, 3 = clearing
   const [internalActiveTab, setInternalActiveTab] = React.useState<'query' | 'results'>('query')
+  // r024.19: Flag to force effectiveRecords to be empty during clearing
+  // This triggers React to unmount children BEFORE we clear the parent array
+  const [isClearing, setIsClearing] = React.useState(false)
   
   // Log when initialInputValue prop is received
   React.useEffect(() => {
@@ -260,6 +285,13 @@ export function QueryTask (props: QueryTaskProps) {
     recordsFound: number // How many records the query found
     queryValue: string // The search value used
     timestamp?: number // Unique timestamp for React remount
+  } | null>(null)
+  
+  // r024.62: Alert state for query execution failures (service down, network error, etc.)
+  const [queryErrorAlert, setQueryErrorAlert] = React.useState<{
+    show: boolean
+    errorMessage: string
+    timestamp?: number
   } | null>(null)
   
   // r022.21: Alert state for Add mode when all found records are duplicates
@@ -566,38 +598,78 @@ export function QueryTask (props: QueryTaskProps) {
     })
 
     // ============================================================================
-    // r021.45: Delay Parent Array Clearing Until After React Unmounts
-    //
-    // KEY INSIGHT FROM r021.44 TESTING:
-    // After implementing CSS background-image for trash icons, we still see massive
-    // detached DOM accumulation (+722 detached buttons, +2,878 divs) between Clear 1
-    // and Clear 2. This means closures in child components are holding references
-    // even after React unmounts them.
+    // r021.45 / r024.19: Delay Parent Array Clearing Until After React Unmounts
     //
     // THE CLOSURE PROBLEM:
     // 1. Results panel renders 600 QueryResultItem components
     // 2. Each component's onClick handler captures its `record` object in closure
-    // 3. We call onAccumulatedRecordsChange([]) BEFORE React unmounts children
-    // 4. Parent array is cleared, but children are still mounted with closures intact
-    // 5. When React finally unmounts them, those closures still reference records
-    // 6. Result: Detached DOM can't be GC'd
+    // 3. If we clear parent array BEFORE React unmounts children, closures still hold refs
+    // 4. Result: Detached DOM can't be GC'd (84K+ Comment nodes, 31K+ divs accumulating)
     //
-    // SOLUTION:
-    // Wait for React to physically unmount children BEFORE clearing parent array:
-    // - recordsRef.current = null (break child's direct reference)
-    // - setStage(2) (trigger React unmount)
-    // - await setTimeout(0) (yield - let React complete unmount & release closures)
-    // - onAccumulatedRecordsChange([]) (NOW safe to clear parent array)
-    // - destroy OutputDataSource (DS's reference)
+    // SOLUTION (IMPLEMENTED r024.19):
+    // Use isClearing state flag to force effectiveRecords=[] IMMEDIATELY:
+    // 1. setIsClearing(true) - makes effectiveRecords=[] in next render
+    // 2. React sees empty list and unmounts all QueryResultItem children
+    // 3. await requestAnimationFrame + setTimeout(0) - ensures:
+    //    - rAF fires after React commits DOM update (paint complete)
+    //    - setTimeout(0) gives extra tick for cleanup effects to run
+    // 4. Children unmounted, closures released, refs can be GC'd
+    // 5. NOW safe to call onAccumulatedRecordsChange([]) - no orphaned refs
+    // 6. setIsClearing(false) - ready for new results
     // ============================================================================
     
-    // STEP 1: Enter Clearing State & Clear Local References
+    // STEP 1: Set clearing flag FIRST to force effectiveRecords = []
+    // This triggers React to immediately re-render with empty list, unmounting children
+    debugLogger.log('TASK', {
+      event: 'clearResult-setting-isClearing-true',
+      widgetId: props.widgetId,
+      reason,
+      currentAccumulatedCount: accumulatedRecords?.length || 0,
+      note: 'r024.19: Force effectiveRecords=[] to trigger child unmount',
+      timestamp: Date.now()
+    })
+    setIsClearing(true)
+    
+    // ============================================================================
+    // SOVEREIGN RESET - Atomic Transaction (r024.40)
+    // Order is CRITICAL - this is a single transaction to prevent memory leaks
+    // ============================================================================
+    
+    // 1. ABLUTION: Kill the ghosts (55k+ ObservationHandles)
+    // Must happen BEFORE React unmounts components that created them
+    const purgeStats = globalHandleManager.purgeAll(props.widgetId)
+    debugLogger.log('TASK', {
+      event: 'clearResult-ablution-purge',
+      widgetId: props.widgetId,
+      reason,
+      purgeStats,
+      note: 'r024.40: Sovereign Reset - killed ESRI handles before UI unmount',
+      timestamp: Date.now()
+    })
+    
+    // 2. CLEAR THE MAP: Remove all graphics synchronously
+    if (mapView?.graphics) {
+      const graphicsCount = mapView.graphics.length
+      mapView.graphics.removeAll()
+      debugLogger.log('TASK', {
+        event: 'clearResult-ablution-graphics',
+        widgetId: props.widgetId,
+        reason,
+        graphicsRemoved: graphicsCount,
+        note: 'r024.40: Sovereign Reset - cleared map graphics',
+        timestamp: Date.now()
+      })
+    }
+    
+    // 3. FORCE UI UNMOUNT: Increment key to trigger React full tree destruction
+    queryExecutionKeyRef.current += 1
+    
+    // 4. CLEAR THE DATA: Release references
     recordsRef.current = null              // Release child's reference to records
     outputDS?.setStatus(DataSourceStatus.NotReady)
-    setResultCount(0)                      // Clear count, trigger React updates
+    setResultCount(0)                      // Clear count
     setActiveTab('query')                  // Hide Results tab
     hasSelectedRecordsRef.current = false
-    queryExecutionKeyRef.current += 1
     setSelectionError(null)
     setZoomError(null)
     
@@ -611,11 +683,50 @@ export function QueryTask (props: QueryTaskProps) {
     setNoResultsAlert(null)
     setNoRemovalAlert(null)
     setAllDuplicatesAlert(null)
+    setQueryErrorAlert(null)
     
-    // Clear parent array IMMEDIATELY
+    // r024.19: YIELD to let React unmount children
+    // The isClearing=true above makes effectiveRecords=[] which triggers React to
+    // unmount QueryResultItem components. We yield to let this complete so closures
+    // holding FeatureDataRecord references are released before we clear parent data.
+    // 
+    // Use requestAnimationFrame + setTimeout pattern to ensure:
+    // 1. React has committed the DOM update (rAF fires after paint)
+    // 2. Cleanup effects have run (another tick)
+    await new Promise<void>(resolve => {
+      requestAnimationFrame(() => {
+        // After paint - DOM is updated, children should be unmounted
+        setTimeout(() => {
+          // Extra tick for cleanup effects
+          resolve()
+        }, 0)
+      })
+    })
+    
+    // NOW safe to clear parent array - children are unmounted, closures released
+    debugLogger.log('TASK', {
+      event: 'clearResult-yield-complete',
+      widgetId: props.widgetId,
+      reason,
+      note: 'r024.19: rAF+setTimeout complete - children should be unmounted now',
+      timestamp: Date.now()
+    })
+    
+    // r024.28: REMOVED aggressive record nulling (was r024.23)
+    // The nulling corrupted records still held by widget.tsx state, causing getId() to fail
+    // Memory cleanup will happen naturally when array references are released
+    
     if (onAccumulatedRecordsChange) {
       onAccumulatedRecordsChange([])
     }
+    
+    debugLogger.log('TASK', {
+      event: 'clearResult-parent-array-cleared-after-unmount',
+      widgetId: props.widgetId,
+      reason,
+      note: 'r024.19: Children unmounted via isClearing flag before clearing parent array',
+      timestamp: Date.now()
+    })
     
     // STEP 2: The Purge - Do all cleanup using unified clearing function
     // Unified clearing ensures both Query tab and Results tab clear paths do the same thing:
@@ -627,6 +738,37 @@ export function QueryTask (props: QueryTaskProps) {
     // - Message publishing
     // - Optional DataSource destruction
     
+    // r024.26: ALWAYS clean up graphics layers regardless of outputDS state
+    // The layers exist on the map with a specific ID - they must be cleaned even if outputDS is null
+    if (mapView) {
+      try {
+        // r024.53: Lightweight clear - preserves GroupLayer on map to avoid +58 MB destroy/recreate
+        const cleanupResult = clearAnyResultLayerContents(props.widgetId, mapView)
+        debugLogger.log('TASK', {
+          event: 'clearResult-direct-layer-cleanup',
+          widgetId: props.widgetId,
+          reason,
+          clearedGraphicsLayer: cleanupResult.clearedGraphicsLayer,
+          clearedGroupLayer: cleanupResult.clearedGroupLayer,
+          hasOutputDS: !!outputDS,
+          timestamp: Date.now()
+        })
+        onDestroyGraphicsLayer?.()
+      } catch (error) {
+        debugLogger.log('ERROR', {
+          event: 'clearResult-direct-layer-cleanup-failed',
+          widgetId: props.widgetId,
+          reason,
+          error: error instanceof Error ? error.message : String(error)
+        })
+      }
+      
+      // Close popup
+      if (mapView.popup?.visible) {
+        mapView.popup.close()
+      }
+    }
+    
     if (outputDS) {
       const shouldDestroyDSs = reason === 'query-item-switch-new-mode' || reason === 'user-trash-click' || reason === 'navToForm-clearResults'
       
@@ -634,12 +776,12 @@ export function QueryTask (props: QueryTaskProps) {
         await clearAllSelectionsForWidget({
           widgetId: props.widgetId,
           outputDS,
-          useGraphicsLayer: true,
+          useGraphicsLayer: false, // r024.26: Layer already cleaned above, skip duplicate cleanup
           graphicsLayer,
           mapView,
           eventManager: props.eventManager,
           queryItemConfigId: queryItem.configId,
-          onDestroyGraphicsLayer,
+          onDestroyGraphicsLayer: undefined, // Already called above
           destroyOutputDataSources: shouldDestroyDSs
         })
         if (shouldDestroyDSs && (reason === 'user-trash-click' || reason === 'navToForm-clearResults')) {
@@ -667,6 +809,9 @@ export function QueryTask (props: QueryTaskProps) {
     // STEP 3: The Reset - Back to Stage 0
     // This final state change "kicks" React one last time after all cleanup is done
     setStage(0)
+    
+    // r024.19: Reset clearing flag - unmount complete, safe to render new results
+    setIsClearing(false)
     
     debugLogger.log('TASK', {
       event: 'clearResult-complete',
@@ -1067,6 +1212,7 @@ export function QueryTask (props: QueryTaskProps) {
       event: 'handleFormSubmitInternal-executing',
       widgetId: props.widgetId,
       resultsMode,
+      queryExecutionKey: queryExecutionKeyRef.current,
       timestamp: Date.now()
     })
 
@@ -1188,7 +1334,38 @@ export function QueryTask (props: QueryTaskProps) {
     featureDS.updateQueryParams(queryParamRef.current, props.widgetId)
     
     const fetchStartTime = performance.now()
-    executeQuery(props.widgetId, queryItem, featureDS, queryParamRef.current)
+
+    // Direct Query Bypass (r024.50, re-enabled r024.57 with buildRecord)
+    // Bypasses ExB's outputDS.load() and its ~115 MB/query memory leak.
+    // Uses outputDS.buildRecord() for real FeatureDataRecord objects.
+    debugLogger.log('QUERY-PATH', {
+      event: 'query-fork',
+      path: USE_DIRECT_QUERY ? 'DIRECT (buildRecord)' : 'EXB (outputDS.load)',
+      toggle: USE_DIRECT_QUERY,
+      widgetId: props.widgetId,
+      where: queryParams.where,
+      timestamp: Date.now()
+    })
+    const queryPromise = USE_DIRECT_QUERY
+      ? executeDirectQuery(
+          featureDS,
+          queryItem,
+          queryParams.where || '1=1',
+          {
+            returnGeometry: true,
+            maxAllowableOffset: 0.1,
+            pageSize: queryParams.pageSize as number,
+            orderByFields: queryParams.orderByFields as string[]
+          }
+        ).then(directResult => ({
+          records: directResult.records as DataRecord[],
+          fields: directResult.fields,
+          _directPopupTemplate: directResult.popupTemplate,
+          _directDefaultPopupTemplate: directResult.defaultPopupTemplate
+        }))
+      : executeQuery(props.widgetId, queryItem, featureDS, queryParamRef.current)
+
+    queryPromise
       .then(async (result) => {
         const fetchDurationMs = Math.round(performance.now() - fetchStartTime)
         const processingStartTime = performance.now()
@@ -1866,13 +2043,22 @@ export function QueryTask (props: QueryTaskProps) {
         return Promise.resolve(true)
       })
       .catch(error => {
+        const rawMessage = error instanceof Error ? error.message : String(error)
         debugLogger.log('TASK', {
           event: 'query-chain-failed-diagnostic',
           widgetId: props.widgetId,
-          error: error instanceof Error ? error.message : String(error),
+          error: rawMessage,
           errorStack: error instanceof Error ? error.stack : undefined,
           timestamp: Date.now()
         })
+        
+        // r024.62: Surface service/network errors to the user via popover
+        setQueryErrorAlert({
+          show: true,
+          errorMessage: rawMessage,
+          timestamp: Date.now()
+        })
+        
         setStage(0) // Return control to user - exit Stage 2 on error
       })
       .finally(() => {
@@ -1997,6 +2183,21 @@ export function QueryTask (props: QueryTaskProps) {
         runtimeZoomToSelected
       }
       
+      // ============================================================================
+      // SOVEREIGN RESET - Atomic Transaction (r024.40)
+      // Must purge ESRI handles BEFORE destroying components that created them
+      // ============================================================================
+      
+      // 1. ABLUTION: Kill the ghosts (ObservationHandles)
+      const purgeStats = globalHandleManager.purgeAll(props.widgetId)
+      debugLogger.log('TASK', {
+        event: 'memory-workflow-ablution-purge',
+        widgetId: props.widgetId,
+        purgeStats,
+        note: 'r024.40: Sovereign Reset - killed ESRI handles before DS destruction',
+        timestamp: Date.now()
+      })
+      
       // Manual cleanup: refs, graphics, selection
       debugLogger.log('TASK', {
         event: 'memory-cleanup-start',
@@ -2014,9 +2215,10 @@ export function QueryTask (props: QueryTaskProps) {
         debugLogger.log('ERROR', { event: 'selection-clear-failed', error: error.message })
       }
       
-      if (graphicsLayer && mapView) {
+      // r024.53: Lightweight clear - preserves layers on map
+      if (mapView) {
         try{
-          cleanupGraphicsLayer(props.widgetId, mapView)
+          clearAnyResultLayerContents(props.widgetId, mapView)
           onDestroyGraphicsLayer?.()
         } catch (error) {
           debugLogger.log('ERROR', { event: 'graphics-cleanup-failed', error: error.message })
@@ -2182,12 +2384,13 @@ export function QueryTask (props: QueryTaskProps) {
   
   // Use these "effective" values for the UI
   // Prefer accumulatedRecords when available (synced in all modes), fallback to recordsRef for initial query results
-  const effectiveRecords = isVirtualClearActive ? [] : 
+  // r024.19: When isClearing is true, force empty array to trigger React unmount BEFORE clearing parent data
+  const effectiveRecords = (isClearing || isVirtualClearActive) ? [] : 
                           (accumulatedRecords && accumulatedRecords.length > 0) ? accumulatedRecords :
                           (recordsRef.current || [])
   
   // FIX (r018.95): Use effectiveRecords.length to reflect real-time count updates when records are removed
-  const effectiveResultCount = isVirtualClearActive ? 0 : effectiveRecords.length
+  const effectiveResultCount = (isClearing || isVirtualClearActive) ? 0 : effectiveRecords.length
   
   // r023.15: Keep recordsRef in sync with accumulatedRecords when records are removed.
   // The reselection block (line ~867) sets recordsRef.current = accumulatedRecords during query
@@ -2608,6 +2811,8 @@ export function QueryTask (props: QueryTaskProps) {
               setActiveTab={setActiveTab}
               noResultsAlert={noResultsAlert}
               onDismissNoResultsAlert={() => setNoResultsAlert(null)}
+              queryErrorAlert={queryErrorAlert}
+              onDismissQueryErrorAlert={() => setQueryErrorAlert(null)}
               otherProps={otherProps}
             />
           </div>
@@ -2671,6 +2876,7 @@ export function QueryTask (props: QueryTaskProps) {
                 queries={queryItems}
                 zoomOnResultClick={zoomOnResultClick}
                 hoverPinColor={hoverPinColor}
+                listResetKey={queryExecutionKeyRef.current}
                 noRemovalAlert={noRemovalAlert}
                 onDismissNoRemovalAlert={() => setNoRemovalAlert(null)}
                 allDuplicatesAlert={allDuplicatesAlert}

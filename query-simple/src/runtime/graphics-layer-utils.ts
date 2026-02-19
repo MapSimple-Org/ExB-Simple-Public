@@ -6,7 +6,7 @@
 import type { DataSource, FeatureLayerDataSource, FeatureDataRecord } from 'jimu-core'
 import { DataSourceManager } from 'jimu-core'
 import { loadArcGISJSAPIModules } from 'jimu-arcgis'
-import { createQuerySimpleDebugLogger, highlightConfigManager } from 'widgets/shared-code/mapsimple-common'
+import { createQuerySimpleDebugLogger, highlightConfigManager, globalHandleManager } from 'widgets/shared-code/mapsimple-common'
 
 const debugLogger = createQuerySimpleDebugLogger()
 
@@ -394,26 +394,41 @@ function getDefaultHighlightSymbol(
   }
 }
 
-// r024.16: Track removal listeners to prevent duplicates
-const removalListenerHandles = new Map<string, __esri.Handle>()
-
 // r024.17: Track in-progress GroupLayer creation to prevent race condition duplicates
 const creationInProgress = new Map<string, Promise<__esri.GroupLayer | null>>()
+
+// r024.61: Track in-progress GraphicsLayer creation to prevent race condition duplicates
+// Without this, concurrent calls both pass the "does it exist?" check before either adds
+// to the map, creating two layers with the same ID. The widget ref ends up pointing at
+// the wrong one, so clear-all finds an empty layer while the graphic renders from the other.
+const graphicsLayerCreationInProgress = new Map<string, Promise<__esri.GraphicsLayer | null>>()
+
+// r024.19: Track Legend FeatureLayer visibility watch handles for cleanup
+// r024.31: Now also tracked in globalHandleManager for centralized cleanup
+const legendVisibilityHandles = new Map<string, __esri.WatchHandle>()
+const legendVisibilityHandleIds = new Map<string, string>() // Maps legendLayerId -> globalHandleManager handleId
+
+// r024.59: Cache mapView per widgetId so the legend-layer visibility watcher
+// can close the popup when the user toggles the layer off in the Layer List.
+// Set in addHighlightGraphics(), cleared in cleanupGraphicsLayer().
+const mapViewCache = new Map<string, __esri.MapView | __esri.SceneView>()
 
 /**
  * r024.9: Creates or gets existing result GroupLayer for LayerList integration.
  *
- * Points/Lines/Polygons architecture - each sublayer visible in LayerList.
- * visibilityMode: 'inherited' so toggling GroupLayer toggles all sublayers.
- * LayerList natively handles visibility for layers with listMode: 'show'.
+ * r024.52: Simplified to single hidden GraphicsLayer. All graphics go into one layer
+ * regardless of geometry type. Sublayers are hidden from LayerList (listMode: 'hide')
+ * so users cannot remove them individually. GroupLayer is the single toggle.
+ * Legend FeatureLayers (hidden, per-geometry-type) are created dynamically for Legend display.
  *
- * r024.15: Legend FeatureLayers are now created dynamically when graphics are added,
- * not statically at GroupLayer creation time.
+ * r024.56: Remove action disabled by clearing ExB's __exb_layer_from_runtime flag
+ * on the GroupLayer after map.add(). ExB's map-layers widget only shows the Remove
+ * button for layers with this flag set to true (see map-layers/actions/remove.tsx).
+ * This replaces the r024.16 after-remove watcher pattern, eliminating one persistent
+ * listener per widget and preventing the +58 MB destroy/recreate cost if a user
+ * managed to trigger removal.
  *
- * r024.16: Listens for layer removal and re-adds if user tries to remove from LayerList.
- *
- * r024.17: Uses creation lock to prevent duplicate layers from race conditions
- * (e.g., hash query load triggering multiple concurrent calls).
+ * r024.17: Uses creation lock to prevent duplicate layers from race conditions.
  */
 export async function createOrGetResultGroupLayer(
   widgetId: string,
@@ -490,26 +505,15 @@ async function createGroupLayerInternal(
     ])
     const title = highlightConfigManager.getResultsLayerTitle(widgetId)
 
-    const pointsLayer = new GraphicsLayer({
-      id: `${layerId}-points`,
-      title: 'Points',
-      listMode: 'show',
-      visible: true
-    })
-    const linesLayer = new GraphicsLayer({
-      id: `${layerId}-lines`,
-      title: 'Lines',
-      listMode: 'show',
-      visible: true
-    })
-    const polygonsLayer = new GraphicsLayer({
-      id: `${layerId}-polygons`,
-      title: 'Polygons',
-      listMode: 'show',
+    // r024.52: Single hidden GraphicsLayer for all geometry types
+    const graphicsLayer = new GraphicsLayer({
+      id: `${layerId}-graphics`,
+      title: 'Graphics',
+      listMode: 'hide',
       visible: true
     })
 
-    // r024.15: Legend FeatureLayers are created dynamically in addHighlightGraphics
+    // Legend FeatureLayers are created dynamically in addHighlightGraphics
     // when graphics of each geometry type are first added
 
     const groupLayer = new GroupLayer({
@@ -518,7 +522,7 @@ async function createGroupLayerInternal(
       listMode: 'show',
       visible: true,
       visibilityMode: 'inherited',
-      layers: [pointsLayer, linesLayer, polygonsLayer]
+      layers: [graphicsLayer]
     })
 
     // Final check before adding - another call might have snuck in
@@ -539,8 +543,11 @@ async function createGroupLayerInternal(
     const currentLayerCount = mapView.map.layers.length
     mapView.map.add(groupLayer, currentLayerCount)
 
-    // r024.16: Listen for removal and re-add if user tries to remove from LayerList
-    setupRemovalProtection(mapView, groupLayer, widgetId)
+    // r024.56: Disable the Remove action in ExB's map-layers (LayerList) widget.
+    // ExB stamps __exb_layer_from_runtime on runtime-added layers; the map-layers
+    // Remove action checks this flag via isValid(). Clearing it hides the button,
+    // which is cheaper and safer than the old after-remove watcher pattern.
+    ;(groupLayer as any).__exb_layer_from_runtime = false
 
     debugLogger.log('GRAPHICS-LAYER', {
       event: 'createOrGetResultGroupLayer-created',
@@ -548,8 +555,8 @@ async function createGroupLayerInternal(
       widgetId,
       layerId,
       title,
-      sublayerCount: 3,
-      hasRemovalProtection: true,
+      sublayerCount: 1,
+      removeActionDisabled: true,
       timestamp: Date.now()
     })
 
@@ -565,60 +572,6 @@ async function createGroupLayerInternal(
       timestamp: Date.now()
     })
     return null
-  }
-}
-
-/**
- * r024.16: Sets up a listener to prevent user from removing the GroupLayer.
- * If they remove it from LayerList, we immediately re-add it.
- */
-function setupRemovalProtection(
-  mapView: __esri.MapView | __esri.SceneView,
-  groupLayer: __esri.GroupLayer,
-  widgetId: string
-): void {
-  const layerId = groupLayer.id
-
-  // Remove existing listener if any (prevents duplicates)
-  if (removalListenerHandles.has(layerId)) {
-    removalListenerHandles.get(layerId)?.remove()
-    removalListenerHandles.delete(layerId)
-  }
-
-  // Listen for layer removal
-  const handle = mapView.map.layers.on('after-remove', (event: any) => {
-    const removedLayer = event.item as __esri.Layer
-    if (removedLayer?.id === layerId) {
-      debugLogger.log('GRAPHICS-LAYER', {
-        event: 'removal-protection-triggered',
-        widgetId,
-        layerId,
-        action: 're-adding-layer',
-        timestamp: Date.now()
-      })
-
-      // Re-add the layer at the top
-      const currentLayerCount = mapView.map.layers.length
-      mapView.map.add(groupLayer, currentLayerCount)
-    }
-  })
-
-  removalListenerHandles.set(layerId, handle)
-}
-
-/**
- * r024.16: Removes the removal protection listener.
- * Called when we intentionally want to remove the layer (cleanup).
- */
-function removeRemovalProtection(layerId: string): void {
-  if (removalListenerHandles.has(layerId)) {
-    removalListenerHandles.get(layerId)?.remove()
-    removalListenerHandles.delete(layerId)
-    debugLogger.log('GRAPHICS-LAYER', {
-      event: 'removal-protection-removed',
-      layerId,
-      timestamp: Date.now()
-    })
   }
 }
 
@@ -640,17 +593,6 @@ function normalizeGeometryType(geometryType: string): string {
   if (geometryType === 'point' || geometryType === 'multipoint') return 'point'
   if (geometryType === 'polyline') return 'polyline'
   return 'polygon' // polygon, multipolygon, or default
-}
-
-/**
- * r024.15: Gets the GraphicsLayer sublayer index for a geometry type.
- * Order: [0]=Points, [1]=Lines, [2]=Polygons
- */
-function getSublayerIndexForGeometryType(geometryType: string): number {
-  const normalized = normalizeGeometryType(geometryType)
-  if (normalized === 'point') return 0
-  if (normalized === 'polyline') return 1
-  return 2
 }
 
 /**
@@ -743,8 +685,10 @@ function createLegendFeatureLayer(
     visible: true
   })
 
-  // Watch visibility changes and sync with corresponding GraphicsLayer
-  legendLayer.watch('visible', (visible: boolean) => {
+  // r024.22: Watch visibility changes and sync with corresponding GraphicsLayer
+  // IMPORTANT: Store the handle for cleanup to prevent memory leaks
+  // r024.31: Now also tracked in globalHandleManager
+  const watchHandle = legendLayer.watch('visible', (visible: boolean) => {
     debugLogger.log('GRAPHICS-LAYER', {
       event: 'legend-layer-visibility-changed',
       widgetId,
@@ -755,7 +699,30 @@ function createLegendFeatureLayer(
       timestamp: Date.now()
     })
     graphicsLayer.visible = visible
+
+    // r024.59: When user toggles layer OFF in Layer List, close the popup.
+    // Graphics disappear but the popup would otherwise stay orphaned.
+    if (!visible) {
+      const cachedView = mapViewCache.get(widgetId)
+      if (cachedView?.popup?.visible) {
+        cachedView.popup.close()
+        debugLogger.log('POPUP', {
+          event: 'popup-closed-on-layer-toggle-off',
+          widgetId,
+          layerId: legendLayer.id,
+          reason: 'Layer toggled off in Layer List',
+          timestamp: Date.now()
+        })
+      }
+    }
   })
+  
+  // Store handle for cleanup when legend layer is destroyed
+  legendVisibilityHandles.set(legendLayerId, watchHandle)
+  
+  // r024.31: Register with globalHandleManager for centralized cleanup
+  const handleId = globalHandleManager.track(widgetId, watchHandle, 'legend-visibility', `legend-${legendLayerId}`)
+  legendVisibilityHandleIds.set(legendLayerId, handleId)
 
   debugLogger.log('GRAPHICS-LAYER', {
     event: 'createLegendFeatureLayer-created',
@@ -763,6 +730,7 @@ function createLegendFeatureLayer(
     layerId: legendLayerId,
     geometryType: normalized,
     title,
+    watchHandleStored: true,
     timestamp: Date.now()
   })
 
@@ -781,18 +749,37 @@ async function ensureLegendFeatureLayer(
   const layerId = groupLayer.id
   const legendLayerId = getLegendLayerId(layerId, geometryType)
   
-  // Check if Legend layer already exists
-  const existingLegend = groupLayer.layers.find(l => l.id === legendLayerId)
+  // r024.54: If Legend layer already exists, re-enable it and return.
+  // It may have been hidden by clearGroupLayerContents() or removeEmptyLegendFeatureLayers().
+  const existingLegend = groupLayer.layers.find(l => l.id === legendLayerId) as __esri.FeatureLayer
   if (existingLegend) {
-    return // Already exists
+    if (!existingLegend.legendEnabled) {
+      existingLegend.legendEnabled = true
+      debugLogger.log('GRAPHICS-LAYER', {
+        event: 'ensureLegendFeatureLayer-re-enabled',
+        widgetId,
+        layerId: legendLayerId,
+        geometryType: normalizeGeometryType(geometryType),
+        timestamp: Date.now()
+      })
+    }
+    return
   }
 
-  // Get the corresponding GraphicsLayer
-  const sublayerIndex = getSublayerIndexForGeometryType(geometryType)
-  const graphicsLayer = groupLayer.layers.getItemAt(sublayerIndex) as __esri.GraphicsLayer
+  // r024.52: Get the single GraphicsLayer
+  const graphicsLayer = getGraphicsSublayer(groupLayer)
   
-  // Only create if there are graphics
+  // Only create if there are graphics of this geometry type
   if (!graphicsLayer || !graphicsLayer.graphics || graphicsLayer.graphics.length === 0) {
+    return
+  }
+  
+  // Check that at least one graphic has the target geometry type
+  const normalizedGeoType = normalizeGeometryType(geometryType)
+  const hasGeometryType = graphicsLayer.graphics.some(g => {
+    return g.geometry && normalizeGeometryType(g.geometry.type) === normalizedGeoType
+  })
+  if (!hasGeometryType) {
     return
   }
 
@@ -824,31 +811,33 @@ async function ensureLegendFeatureLayer(
 }
 
 /**
- * r024.15: Removes Legend FeatureLayers for empty GraphicsLayer sublayers.
- * Called after removing graphics to clean up Legend entries for empty geometry types.
+ * r024.15: Hides Legend FeatureLayers for geometry types with no remaining graphics.
+ * r024.54: No longer destroys Legend FeatureLayers. Hides them via legendEnabled = false
+ * so ESRI can maintain its internal reactive infrastructure for reuse.
  */
 function removeEmptyLegendFeatureLayers(groupLayer: __esri.GroupLayer, widgetId: string): void {
   const layerId = groupLayer.id
   const geometryTypes = ['point', 'polyline', 'polygon']
+  const graphicsLayer = getGraphicsSublayer(groupLayer)
   
-  geometryTypes.forEach((geoType, index) => {
+  geometryTypes.forEach((geoType) => {
     const legendLayerId = getLegendLayerId(layerId, geoType)
-    const legendLayer = groupLayer.layers.find(l => l.id === legendLayerId)
+    const legendLayer = groupLayer.layers.find(l => l.id === legendLayerId) as __esri.FeatureLayer
     
-    if (!legendLayer) return // No legend layer for this type
+    if (!legendLayer) return
     
-    // Check if the corresponding GraphicsLayer is empty
-    const graphicsLayer = groupLayer.layers.getItemAt(index) as __esri.GraphicsLayer
-    if (graphicsLayer && graphicsLayer.graphics && graphicsLayer.graphics.length === 0) {
-      groupLayer.layers.remove(legendLayer)
-      legendLayer.destroy()
-      
+    const hasGraphicsOfType = graphicsLayer?.graphics?.some(g =>
+      g.geometry && normalizeGeometryType(g.geometry.type) === geoType
+    ) ?? false
+
+    if (!hasGraphicsOfType && legendLayer.legendEnabled) {
+      legendLayer.legendEnabled = false
       debugLogger.log('GRAPHICS-LAYER', {
-        event: 'removeEmptyLegendFeatureLayers-removed',
+        event: 'removeEmptyLegendFeatureLayers-hidden',
         widgetId,
         layerId: legendLayerId,
         geometryType: geoType,
-        reason: 'graphics-layer-empty',
+        reason: 'no-graphics-of-type',
         timestamp: Date.now()
       })
     }
@@ -887,21 +876,23 @@ export function forEachGraphicInLayer(
 }
 
 /**
- * Gets the target sublayer for a geometry type from a GroupLayer.
- * Order: [0]=Points, [1]=Lines, [2]=Polygons
+ * r024.52: Gets the single GraphicsLayer sublayer from a GroupLayer.
+ * All geometry types go into the same layer.
  */
-function getSublayerForGeometryType(groupLayer: __esri.GroupLayer, geometryType: string): __esri.GraphicsLayer | null {
-  const layers = groupLayer.layers
-  if (!layers || layers.length < 3) return null
-  if (geometryType === 'point' || geometryType === 'multipoint') return layers.getItemAt(0) as __esri.GraphicsLayer
-  if (geometryType === 'polyline') return layers.getItemAt(1) as __esri.GraphicsLayer
-  if (geometryType === 'polygon' || geometryType === 'multipolygon') return layers.getItemAt(2) as __esri.GraphicsLayer
-  return layers.getItemAt(2) as __esri.GraphicsLayer
+function getGraphicsSublayer(groupLayer: __esri.GroupLayer): __esri.GraphicsLayer | null {
+  const graphicsLayerId = `${groupLayer.id}-graphics`
+  const layer = groupLayer.layers.find(l => l.id === graphicsLayerId) as __esri.GraphicsLayer
+  return layer || null
 }
 
 /**
  * Creates or gets an existing graphics layer for the widget.
  * Uses a unique ID based on widget ID to ensure one layer per widget.
+ *
+ * r024.61: Uses creation lock to prevent duplicate layers from race conditions.
+ * Without this, concurrent calls (e.g. from handleDataSourceCreated + initializeGraphicsLayer)
+ * both pass the "does it exist?" check before either adds to the map, creating two layers
+ * with the same ID. The widget ref ends up pointing at the wrong one.
  */
 export async function createOrGetGraphicsLayer(
   widgetId: string,
@@ -909,45 +900,92 @@ export async function createOrGetGraphicsLayer(
 ): Promise<__esri.GraphicsLayer | null> {
   const seq = ++operationSequence
   const layerId = `querysimple-highlight-${widgetId}`
-  
-  try {
-    // Check if layer already exists
-    const existingLayer = mapView.map.layers.find(layer => layer.id === layerId) as __esri.GraphicsLayer
-    if (existingLayer) {
-      debugLogger.log('GRAPHICS-LAYER', {
-        event: 'createOrGetGraphicsLayer-found-existing',
-        seq,
-        widgetId,
-        layerId,
-        timestamp: Date.now()
-      })
-      return existingLayer
-    }
 
-    // Load GraphicsLayer module
-    const [GraphicsLayer] = await loadArcGISJSAPIModules(['esri/layers/GraphicsLayer'])
-    
-    // Create new graphics layer
-    const graphicsLayer = new GraphicsLayer({
-      id: layerId,
-      title: `QuerySimple Highlights (${widgetId})`,
-      listMode: 'hide', // Hide from layer list
-      visible: true
-    })
-    
-    // r022.100: Add to the very end so purple graphics draw on top
-    // Get current layer count and add 1 to ensure we're after everything including highlight layers
-    const currentLayerCount = mapView.map.layers.length
-    mapView.map.add(graphicsLayer, currentLayerCount)
-    
+  // r024.61: If creation is already in progress, wait for it instead of creating a duplicate
+  if (graphicsLayerCreationInProgress.has(layerId)) {
     debugLogger.log('GRAPHICS-LAYER', {
-      event: 'createOrGetGraphicsLayer-created',
+      event: 'createOrGetGraphicsLayer-waiting-for-in-progress',
       seq,
       widgetId,
       layerId,
       timestamp: Date.now()
     })
-    
+    return graphicsLayerCreationInProgress.get(layerId)!
+  }
+
+  // Check for existing layer first (fast path)
+  const existingLayer = mapView.map.layers.find(layer => layer.id === layerId) as __esri.GraphicsLayer
+  if (existingLayer) {
+    debugLogger.log('GRAPHICS-LAYER', {
+      event: 'createOrGetGraphicsLayer-found-existing',
+      seq,
+      widgetId,
+      layerId,
+      layerUid: (existingLayer as any).uid,
+      graphicsCount: existingLayer.graphics?.length ?? 'N/A',
+      timestamp: Date.now()
+    })
+    return existingLayer
+  }
+
+  // r024.61: Lock creation and delegate to internal function
+  const creationPromise = createGraphicsLayerInternal(widgetId, mapView, layerId, seq)
+  graphicsLayerCreationInProgress.set(layerId, creationPromise)
+
+  try {
+    return await creationPromise
+  } finally {
+    graphicsLayerCreationInProgress.delete(layerId)
+  }
+}
+
+/**
+ * r024.61: Internal function that actually creates the GraphicsLayer.
+ * Separated to allow the creation lock to work properly.
+ */
+async function createGraphicsLayerInternal(
+  widgetId: string,
+  mapView: __esri.MapView | __esri.SceneView,
+  layerId: string,
+  seq: number
+): Promise<__esri.GraphicsLayer | null> {
+  try {
+    // Load GraphicsLayer module
+    const [GraphicsLayer] = await loadArcGISJSAPIModules(['esri/layers/GraphicsLayer'])
+
+    // Double-check after async load (another call may have completed while we awaited)
+    const existingLayer = mapView.map.layers.find(layer => layer.id === layerId) as __esri.GraphicsLayer
+    if (existingLayer) {
+      debugLogger.log('GRAPHICS-LAYER', {
+        event: 'createOrGetGraphicsLayer-found-existing-after-lock',
+        seq,
+        widgetId,
+        layerId,
+        layerUid: (existingLayer as any).uid,
+        timestamp: Date.now()
+      })
+      return existingLayer
+    }
+
+    const graphicsLayer = new GraphicsLayer({
+      id: layerId,
+      title: `QuerySimple Highlights (${widgetId})`,
+      listMode: 'hide',
+      visible: true
+    })
+
+    const currentLayerCount = mapView.map.layers.length
+    mapView.map.add(graphicsLayer, currentLayerCount)
+
+    debugLogger.log('GRAPHICS-LAYER', {
+      event: 'createOrGetGraphicsLayer-created',
+      seq,
+      widgetId,
+      layerId,
+      layerUid: (graphicsLayer as any).uid,
+      timestamp: Date.now()
+    })
+
     return graphicsLayer
   } catch (error) {
     debugLogger.log('GRAPHICS-LAYER', {
@@ -1065,6 +1103,10 @@ export async function addHighlightGraphics(
 
   // Extract widgetId from graphics layer ID (querysimple-highlight-{id} or querysimple-results-{id})
   const widgetId = graphicsLayer.id.replace(/^querysimple-(?:highlight|results)-/, '')
+
+  // r024.59: Cache mapView so the legend-layer visibility watcher can close
+  // the popup when the user toggles the layer off in the Layer List
+  mapViewCache.set(widgetId, mapView)
   
   // r021.90: No duplicate checking - caller clears the layer before calling this function
   // This ensures we always add the exact set of records provided
@@ -1101,7 +1143,7 @@ export async function addHighlightGraphics(
       })
 
       const targetLayer = isGroupLayer
-        ? getSublayerForGeometryType(graphicsLayer as __esri.GroupLayer, geometryType)
+        ? getGraphicsSublayer(graphicsLayer as __esri.GroupLayer)
         : (graphicsLayer as __esri.GraphicsLayer)
       if (targetLayer) {
         targetLayer.add(highlightGraphic)
@@ -1152,6 +1194,7 @@ export async function addHighlightGraphics(
     event: 'addHighlightGraphics-complete',
     seq,
     graphicsLayerId: graphicsLayer.id,
+    graphicsLayerUid: (graphicsLayer as any).uid,
     recordsCount: records.length,
     addedCount,
     skippedCount,
@@ -1368,7 +1411,16 @@ export function cleanupGraphicsLayer(
     if (graphicsLayer) {
       const graphicsCount = graphicsLayer.graphics.length
       
-      // Clear all graphics first
+      // r024.35: Null graphic properties before removal to break circular references
+      graphicsLayer.graphics.forEach((graphic: __esri.Graphic) => {
+        try {
+          graphic.popupTemplate = null
+          graphic.symbol = null
+          graphic.geometry = null
+        } catch (e) { /* Ignore - some properties may be read-only */ }
+      })
+      
+      // Clear all graphics
       graphicsLayer.removeAll()
       
       // Remove layer from map
@@ -1384,6 +1436,7 @@ export function cleanupGraphicsLayer(
         widgetId,
         layerId,
         graphicsCountBeforeCleanup: graphicsCount,
+        graphicPropertiesNulled: true,
         destroyed: true,
         timestamp: Date.now()
       })
@@ -1396,6 +1449,12 @@ export function cleanupGraphicsLayer(
         timestamp: Date.now()
       })
     }
+
+    // r024.59: Clear cached mapView reference for this widget
+    mapViewCache.delete(widgetId)
+
+    // r024.61: Clear creation lock so next createOrGetGraphicsLayer starts fresh
+    graphicsLayerCreationInProgress.delete(layerId)
   } catch (error) {
     debugLogger.log('GRAPHICS-LAYER', {
       event: 'cleanupGraphicsLayer-error',
@@ -1410,8 +1469,80 @@ export function cleanupGraphicsLayer(
 }
 
 /**
+ * r024.53: Lightweight clear that preserves the GroupLayer on the map.
+ * r024.54: Also preserves Legend FeatureLayers (hides them via legendEnabled = false
+ * instead of destroying). Destroying Legend FLs orphans ESRI reactive DOM trees.
+ * 
+ * Clears graphics from the GraphicsLayer sublayer and hides Legend FLs from
+ * the legend display. Does NOT remove or destroy any layers.
+ * 
+ * Use this for all "clear results" actions. Reserve cleanupGroupLayer()
+ * for widget unmount only.
+ */
+export function clearGroupLayerContents(
+  widgetId: string,
+  mapView: __esri.MapView | __esri.SceneView
+): boolean {
+  const seq = ++operationSequence
+  const layerId = `querysimple-results-${widgetId}`
+
+  const groupLayer = mapView.map.layers.find(layer => layer.id === layerId) as __esri.GroupLayer
+  if (!groupLayer) {
+    debugLogger.log('GRAPHICS-LAYER', {
+      event: 'clearGroupLayerContents-not-found',
+      seq,
+      widgetId,
+      layerId,
+      timestamp: Date.now()
+    })
+    return false
+  }
+
+  // r024.54: Hide Legend FeatureLayers instead of destroying them.
+  // Destroying triggers ESRI reactive teardown that creates orphaned DOM trees.
+  // Keep them alive so ESRI can reuse its internal infrastructure on the next query.
+  const geometryTypes = ['point', 'polyline', 'polygon']
+  let legendLayersHidden = 0
+  geometryTypes.forEach(geoType => {
+    const legendLayerId = getLegendLayerId(layerId, geoType)
+    const legendLayer = groupLayer.layers.find(l => l.id === legendLayerId) as __esri.FeatureLayer
+    if (legendLayer) {
+      legendLayer.legendEnabled = false
+      legendLayersHidden++
+    }
+  })
+
+  // Clear graphics from the single GraphicsLayer sublayer
+  let graphicsCleared = 0
+  const gfxLayer = getGraphicsSublayer(groupLayer)
+  if (gfxLayer && gfxLayer.graphics) {
+    graphicsCleared = gfxLayer.graphics.length
+    gfxLayer.removeAll()
+  }
+
+  debugLogger.log('GRAPHICS-LAYER', {
+    event: 'clearGroupLayerContents-complete',
+    seq,
+    widgetId,
+    layerId,
+    graphicsCleared,
+    legendLayersHidden,
+    groupLayerPreserved: true,
+    legendLayersPreserved: true,
+    timestamp: Date.now()
+  })
+
+  return true
+}
+
+/**
  * r024.2: Removes the GroupLayer (LayerList results) from the map.
- * r024.16: Removes removal protection listener before removing.
+ * r024.22: Cleans up Legend FeatureLayer visibility watch handles.
+ * r024.56: Removal protection listener deleted; Remove action is now disabled
+ * at the source via __exb_layer_from_runtime = false.
+ * 
+ * r024.53: Now reserved for WIDGET UNMOUNT only. For clearing results,
+ * use clearGroupLayerContents() instead to avoid the +58 MB destroy/recreate cost.
  */
 export function cleanupGroupLayer(
   widgetId: string,
@@ -1421,16 +1552,45 @@ export function cleanupGroupLayer(
   const layerId = `querysimple-results-${widgetId}`
 
   try {
-    // r024.16: Remove protection listener first so we can actually remove the layer
-    removeRemovalProtection(layerId)
+    // r024.22: Clean up all legend visibility watch handles for this GroupLayer
+    // r024.31: Also remove from globalHandleManager
+    const geometryTypes = ['point', 'polyline', 'polygon']
+    let watchHandlesCleaned = 0
+    let globalHandlesRemoved = 0
+    geometryTypes.forEach(geoType => {
+      const legendLayerId = getLegendLayerId(layerId, geoType)
+      const watchHandle = legendVisibilityHandles.get(legendLayerId)
+      if (watchHandle) {
+        watchHandle.remove()
+        legendVisibilityHandles.delete(legendLayerId)
+        watchHandlesCleaned++
+      }
+      
+      // r024.31: Also remove from globalHandleManager
+      const handleId = legendVisibilityHandleIds.get(legendLayerId)
+      if (handleId) {
+        globalHandleManager.remove(widgetId, handleId)
+        legendVisibilityHandleIds.delete(legendLayerId)
+        globalHandlesRemoved++
+      }
+    })
 
     const groupLayer = mapView.map.layers.find(layer => layer.id === layerId) as __esri.GroupLayer
     if (groupLayer) {
       let graphicsCount = 0
+      // r024.35: Null graphic properties before removal to break circular references
       groupLayer.layers.forEach((sublayer: __esri.Layer) => {
         const glSub = sublayer as __esri.GraphicsLayer
         if (glSub.graphics) {
-          graphicsCount += glSub.graphics.length
+          glSub.graphics.forEach((graphic: __esri.Graphic) => {
+            graphicsCount++
+            // Break potential circular references that prevent GC
+            try {
+              graphic.popupTemplate = null
+              graphic.symbol = null
+              graphic.geometry = null
+            } catch (e) { /* Ignore - some properties may be read-only */ }
+          })
           glSub.removeAll()
         }
       })
@@ -1443,6 +1603,8 @@ export function cleanupGroupLayer(
         widgetId,
         layerId,
         graphicsCountBeforeCleanup: graphicsCount,
+        watchHandlesCleaned,
+        globalHandlesRemoved,
         destroyed: true,
         timestamp: Date.now()
       })
@@ -1452,6 +1614,8 @@ export function cleanupGroupLayer(
         seq,
         widgetId,
         layerId,
+        watchHandlesCleaned,
+        globalHandlesRemoved,
         timestamp: Date.now()
       })
     }
@@ -1468,3 +1632,142 @@ export function cleanupGroupLayer(
   }
 }
 
+/**
+ * r024.53: Lightweight unified clear that preserves layers on the map.
+ * For GroupLayer: clears graphics and Legend layers but keeps GroupLayer alive.
+ * For GraphicsLayer (non-LayerList): clears graphics only.
+ * 
+ * Use this for all "clear results" actions. Reserve cleanupAnyResultLayer()
+ * for widget unmount only.
+ */
+export function clearAnyResultLayerContents(
+  widgetId: string,
+  mapView: __esri.MapView | __esri.SceneView
+): { clearedGraphicsLayer: boolean; clearedGroupLayer: boolean } {
+  const seq = ++operationSequence
+  const result = { clearedGraphicsLayer: false, clearedGroupLayer: false }
+
+  // Check for GroupLayer (LayerList mode)
+  const groupLayerId = `querysimple-results-${widgetId}`
+  const groupLayer = mapView.map.layers.find(layer => layer.id === groupLayerId) as __esri.GroupLayer
+  if (groupLayer) {
+    result.clearedGroupLayer = clearGroupLayerContents(widgetId, mapView)
+  }
+
+  // Check for GraphicsLayer (regular mode)
+  const graphicsLayerId = `querysimple-highlight-${widgetId}`
+  const graphicsLayer = mapView.map.layers.find(layer => layer.id === graphicsLayerId) as __esri.GraphicsLayer
+  if (graphicsLayer) {
+    clearGraphicsLayerOrGroupLayer(graphicsLayer)
+    result.clearedGraphicsLayer = true
+  }
+
+  debugLogger.log('GRAPHICS-LAYER', {
+    event: 'clearAnyResultLayerContents-complete',
+    seq,
+    widgetId,
+    clearedGraphicsLayer: result.clearedGraphicsLayer,
+    clearedGroupLayer: result.clearedGroupLayer,
+    timestamp: Date.now()
+  })
+
+  return result
+}
+
+/**
+ * r024.20: Unified cleanup that handles both GraphicsLayer and GroupLayer.
+ * Checks for existence of each layer type and destroys whichever exists.
+ * 
+ * r024.53: Now reserved for WIDGET UNMOUNT only. For clearing results,
+ * use clearAnyResultLayerContents() instead.
+ * 
+ * @param widgetId - Widget ID
+ * @param mapView - Map view instance
+ * @returns Object indicating which layer type was cleaned up
+ */
+export function cleanupAnyResultLayer(
+  widgetId: string,
+  mapView: __esri.MapView | __esri.SceneView
+): { cleanedGraphicsLayer: boolean; cleanedGroupLayer: boolean } {
+  const seq = ++operationSequence
+  const result = { cleanedGraphicsLayer: false, cleanedGroupLayer: false }
+  
+  debugLogger.log('GRAPHICS-LAYER', {
+    event: 'cleanupAnyResultLayer-start',
+    seq,
+    widgetId,
+    timestamp: Date.now()
+  })
+  
+  // Check for GroupLayer (LayerList mode)
+  const groupLayerId = `querysimple-results-${widgetId}`
+  const groupLayer = mapView.map.layers.find(layer => layer.id === groupLayerId) as __esri.GroupLayer
+  if (groupLayer) {
+    cleanupGroupLayer(widgetId, mapView)
+    result.cleanedGroupLayer = true
+  }
+  
+  // Check for GraphicsLayer (regular mode)
+  // r024.43: FIX - ID was wrong (querysimple-graphics- vs querysimple-highlight-)
+  const graphicsLayerId = `querysimple-highlight-${widgetId}`
+  const graphicsLayer = mapView.map.layers.find(layer => layer.id === graphicsLayerId) as __esri.GraphicsLayer
+  if (graphicsLayer) {
+    cleanupGraphicsLayer(widgetId, mapView)
+    result.cleanedGraphicsLayer = true
+  }
+  
+  debugLogger.log('GRAPHICS-LAYER', {
+    event: 'cleanupAnyResultLayer-complete',
+    seq,
+    widgetId,
+    cleanedGraphicsLayer: result.cleanedGraphicsLayer,
+    cleanedGroupLayer: result.cleanedGroupLayer,
+    timestamp: Date.now()
+  })
+  
+  return result
+}
+
+/**
+ * r024.20: Destroy and recreate the GroupLayer for memory cleanup.
+ * This is the recommended pattern for clearing results with LayerList mode.
+ * Destroys the layer to free ArcGIS internal buffers, then recreates fresh.
+ * 
+ * @param widgetId - Widget ID
+ * @param mapView - Map view instance
+ * @returns Promise resolving to the new GroupLayer
+ */
+export async function destroyAndRecreateGroupLayer(
+  widgetId: string,
+  mapView: __esri.MapView | __esri.SceneView
+): Promise<__esri.GroupLayer | null> {
+  const seq = ++operationSequence
+  
+  debugLogger.log('GRAPHICS-LAYER', {
+    event: 'destroyAndRecreateGroupLayer-start',
+    seq,
+    widgetId,
+    timestamp: Date.now()
+  })
+  
+  // Step 1: Destroy existing
+  cleanupGroupLayer(widgetId, mapView)
+  
+  // Step 2: Clear creation lock (the layer was destroyed, so lock should be cleared)
+  const layerId = `querysimple-results-${widgetId}`
+  creationInProgress.delete(layerId)
+  
+  // Step 3: Recreate fresh
+  const newGroupLayer = await createOrGetResultGroupLayer(widgetId, mapView)
+  
+  debugLogger.log('GRAPHICS-LAYER', {
+    event: 'destroyAndRecreateGroupLayer-complete',
+    seq,
+    widgetId,
+    newLayerCreated: !!newGroupLayer,
+    newLayerId: newGroupLayer?.id || null,
+    timestamp: Date.now()
+  })
+  
+  return newGroupLayer
+}

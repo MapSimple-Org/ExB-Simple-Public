@@ -1,7 +1,15 @@
 /** @jsx jsx */
 // This file is duplicated from '../../../../feature-info/src/runtime/components/feature-info'
 import { React, css, jsx, type DataSource, injectIntl, type IntlShape, classNames } from 'jimu-core'
-import { loadArcGISJSAPIModules } from 'jimu-arcgis'
+// r024.51: Direct import from @arcgis/core instead of jimu-arcgis wrapper.
+// This is INDEPENDENT of the USE_DIRECT_QUERY toggle and remains enabled.
+//
+// Why: The jimu-arcgis Feature wrapper prevents ESRI's internal ObservationHandle
+// cleanup between queries. Importing directly from @arcgis/core lets ESRI's core
+// delete its own handles (50K+ deleted per cycle vs ~0 on the jimu-arcgis path).
+// This is a low-risk module swap - same Feature widget, same popup rendering,
+// just imported from the source instead of through ExB's wrapper layer.
+import Feature from '@arcgis/core/widgets/Feature'
 import { Button } from 'jimu-ui'
 import { createQuerySimpleDebugLogger } from 'widgets/shared-code/mapsimple-common'
 
@@ -94,7 +102,7 @@ interface ExtraProps {
 }
 
 class FeatureInfo extends React.PureComponent<Props & ExtraProps, State> {
-  private Feature: typeof __esri.Feature
+  // r024.48: Removed private Feature class reference - using direct import now
   private feature: __esri.Feature
   private readonly featureContainer: React.RefObject<HTMLInputElement | null>
 
@@ -154,12 +162,15 @@ class FeatureInfo extends React.PureComponent<Props & ExtraProps, State> {
       })
       
       if (togglable) {
+        // r024.19: Don't call onExpandChange when syncing from prop - parent already knows
+        // Calling it would cause a cascade: prop change → setState → onExpandChange → parent setState
+        // With 600 items, this was causing 2400+ state updates and a visible flash
         this.setState({ showContent: expandByDefault }, () => {
-          this.props.onExpandChange?.(expandByDefault)
           debugLogger.log('EXPAND-COLLAPSE', {
-            event: 'FeatureInfo-state-updated',
+            event: 'FeatureInfo-state-updated-from-prop',
             recordId,
             newShowContent: this.state.showContent,
+            note: 'r024.19: Skipping onExpandChange callback - parent initiated this change',
             timestamp: Date.now()
           })
         })
@@ -192,93 +203,73 @@ class FeatureInfo extends React.PureComponent<Props & ExtraProps, State> {
   }
 
   destroyFeature () {
-    this.feature && !this.feature.destroyed && this.feature.destroy()
+    // r024.45: Simplified cleanup - let ESRI handle its own cleanup.
+    // Removed r024.32-34 globalHandleManager tracking (160 objects/closures per query)
+    // and r024.32 aggressive Calcite disconnectedCallback calls (10,000+ DOM queries).
+    
+    if (this.feature && !this.feature.destroyed) {
+      this.feature.destroy()
+    }
     this.feature = null
-    // r023.19: Remove container div(s) that createFeature() appended.
-    // Without this, each componentDidUpdate prop-change cycle orphans the old container
-    // while createFeature() appends a new one, accumulating detached DOM.
+    
+    // Clear the outer container
     if (this.featureContainer.current) {
-      while (this.featureContainer.current.firstChild) {
-        this.featureContainer.current.removeChild(this.featureContainer.current.firstChild)
-      }
+      this.featureContainer.current.innerHTML = ''
     }
   }
 
   getVisibleElements () {
-    const { togglable = false } = this.props
     const { showContent } = this.state
-    const expanded = togglable ? showContent : true
     return {
       title: true,
-      content: {
-        fields: expanded,
-        text: expanded,
-        media: expanded,
-        attachments: expanded
-      },
+      content: showContent
+        ? {
+            fields: true,
+            text: true,
+            media: true,
+            attachments: true
+          }
+        : false,
       lastEditedInfo: false
     }
   }
 
   createFeature () {
-    let featureModulePromise
-    if (this.Feature) {
-      featureModulePromise = Promise.resolve()
-    } else {
-      featureModulePromise = loadArcGISJSAPIModules([
-        'esri/widgets/Feature'
-      ]).then(modules => {
-        [
-          this.Feature
-        ] = modules
-      })
+    if (!this.featureContainer.current) {
+      return
     }
-    return featureModulePromise.then(() => {
-      // Check if component is still mounted before trying to append
-      // This prevents errors when component unmounts during async module loading
-      if (!this.featureContainer.current) {
-        // Component was unmounted, abort
-        return
-      }
-      
-      // r023.19: Destroy previous feature and clear old container BEFORE creating new one.
-      // Previously destroyFeature() was called AFTER appending the new container,
-      // which meant the upgraded cleanup (clearing all children) also removed
-      // the freshly appended container, leaving the Feature widget rendering
-      // into a detached div invisible to the user.
-      this.destroyFeature()
 
-      const container = document && document.createElement('div')
-      container.className = 'jimu-widget'
-      this.featureContainer.current.appendChild(container)
+    this.destroyFeature()
 
-      const originDS = this.props.dataSource.getOriginDataSources()
-      const rootDataSource = originDS?.[0]?.getRootDataSource()
-      const layer = this.props.graphic.layer as __esri.FeatureLayer
-      if (this.props.popupTemplate) {
-        this.props.graphic.popupTemplate = this.props.popupTemplate
-      } else if (layer) {
-        // set popupTemplate with layer's popupTemplate or defaultPopupTemplate
-        this.props.graphic.popupTemplate = layer.popupTemplate ?? this.props.defaultPopupTemplate
-      } else {
-        this.props.graphic.popupTemplate = this.props.defaultPopupTemplate
-      }
-      if (layer && !layer.popupTemplate) {
-        layer.popupTemplate = this.props.popupTemplate || this.props.defaultPopupTemplate
-      }
-      this.feature = new this.Feature({
-        container: container,
-        defaultPopupTemplateEnabled: true,
-        // @ts-expect-error
-        spatialReference: this.props.dataSource?.layer?.spatialReference || null,
-        // @ts-expect-error
-        map: rootDataSource?.map || null,
-        graphic: this.props.graphic,
-        visibleElements: this.getVisibleElements()
-      })
-    }).then(() => {
-      this.setState({ loadStatus: LoadStatus.Fulfilled })
+    const container = document && document.createElement('div')
+    container.className = 'jimu-widget'
+    this.featureContainer.current.appendChild(container)
+
+    const originDS = this.props.dataSource.getOriginDataSources()
+    const rootDataSource = originDS?.[0]?.getRootDataSource()
+    const layer = this.props.graphic.layer as __esri.FeatureLayer
+    if (this.props.popupTemplate) {
+      this.props.graphic.popupTemplate = this.props.popupTemplate
+    } else if (layer) {
+      this.props.graphic.popupTemplate = layer.popupTemplate ?? this.props.defaultPopupTemplate
+    } else {
+      this.props.graphic.popupTemplate = this.props.defaultPopupTemplate
+    }
+    if (layer && !layer.popupTemplate) {
+      layer.popupTemplate = this.props.popupTemplate || this.props.defaultPopupTemplate
+    }
+    // r024.51: Direct instantiation from @arcgis/core - no jimu-arcgis wrapper
+    this.feature = new Feature({
+      container: container,
+      defaultPopupTemplateEnabled: true,
+      // @ts-expect-error
+      spatialReference: this.props.dataSource?.layer?.spatialReference || null,
+      // @ts-expect-error
+      map: rootDataSource?.map || null,
+      graphic: this.props.graphic,
+      visibleElements: this.getVisibleElements()
     })
+    this.setState({ loadStatus: LoadStatus.Fulfilled })
   }
 
   toggleExpanded = (e) => {

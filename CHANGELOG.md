@@ -7,6 +7,196 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 > **Archive**: For releases r001-r021, see [CHANGELOG_ARCHIVE_r001-r021.md](docs/archive/CHANGELOG_ARCHIVE_r001-r021.md)
 
+## [1.19.0-r024.62] - 2026-02-19 - Show Error Feedback on Service Outage
+
+### Fixed
+
+**Query failures from service outages now surface a user-facing message (r024.62):**
+- When the backing ArcGIS map service is down or returns an unexpected response, the query chain fails silently: the spinner disappears and the form returns with zero feedback
+- The ArcGIS JS API's PBF parser throws when the service returns an error page or empty body instead of valid PBF data
+- Added `queryErrorAlert` state in `query-task.tsx` (same pattern as `noResultsAlert` from r022.3)
+- On query chain failure, a red-themed `calcite-popover` now appears anchored below the form with: "Search could not be completed. The map service may be temporarily unavailable."
+- Popover is closable, auto-closes, and clears on the next query execution
+- i18n strings added: `queryErrorAlertLabel`, `queryErrorAlertTitle`, `queryErrorAlertMessage`
+
+**Files modified:**
+- `query-simple/src/runtime/query-task.tsx` - `queryErrorAlert` state, set in `.catch`, cleared in `clearResult`, passed to `QueryTabContent`
+- `query-simple/src/runtime/tabs/QueryTabContent.tsx` - New props, red popover with warning icon
+- `query-simple/src/runtime/translations/default.ts` - Three new i18n strings
+- `query-simple/src/version.ts` - Increment to r024.62
+
+---
+
+## [1.19.0-r024.61] - 2026-02-19 - Fix Clear-All Graphics Race Condition
+
+### Fixed
+
+**Clear-all now properly removes graphics on first query in non-LL mode (r024.61):**
+- "Remove all" (trash button) left graphics on the map when widget_66 was the first widget to run a query
+- If the LL widget (widget_63) ran a query first, clear-all worked correctly on widget_66
+- Root cause: `createOrGetGraphicsLayer` had no concurrency guard. During widget init, two concurrent calls (from `handleDataSourceCreated` and `initializeGraphicsLayerFromOutputDS`) both passed the "does it exist?" check before either added to the map, creating two `GraphicsLayer` objects with the same ID but different UIDs
+- The map kept one layer, the widget ref held the other. Graphics were added to the ref's layer, but `clearAnyResultLayerContents` found the map's layer (empty) by ID lookup
+- Fix: Added `graphicsLayerCreationInProgress` lock (same pattern as `createOrGetResultGroupLayer` from r024.17). The second concurrent caller now awaits the first caller's promise. Also added a double-check after the async module load
+- When widget_63 ran first, it consumed enough time that widget_66's two calls no longer raced, masking the bug
+
+**Files modified:**
+- `query-simple/src/runtime/graphics-layer-utils.ts` - Creation lock, internal factory function, lock cleanup in `cleanupGraphicsLayer`, UID tracking on layer create/find/add
+- `query-simple/src/version.ts` - Increment to r024.61
+
+---
+
+## [1.19.0-r024.59] - 2026-02-19 - Close Popup on Layer Toggle-Off in Layer List
+
+### Fixed
+
+**Popup closes when layer toggled off in Layer List (r024.59):**
+- In LL mode, when the user toggles the result layer OFF via the Layer List, the graphics disappear but the popup was staying open pointing at nothing
+- Added a module-level `mapViewCache` in `graphics-layer-utils.ts` to cache the mapView per widgetId
+- Cache is set in `addHighlightGraphics()` (which already receives mapView) and cleared in `cleanupGraphicsLayer()`
+- The existing legend-layer visibility watcher now closes the popup when `visible` flips to `false`
+- Complements r024.58 which correctly skips `popup.close()` on panel close (graphics persist in LL mode)
+
+**Files modified:**
+- `query-simple/src/runtime/graphics-layer-utils.ts` - mapView cache, popup close in watcher, cache cleanup
+- `query-simple/src/version.ts` - Increment to r024.59
+
+---
+
+## [1.19.0-r024.58] - 2026-02-12 - Skip Popup Close on LL Path
+
+### Fixed
+
+**Popup no longer force-closed on panel close in Layer List mode (r024.58):**
+- In LL mode, graphics persist on the map after the widget panel closes, so popup content remains valid
+- Added `isLayerListMode` check: only close popup on panel close in non-LL (graphics layer) mode
+- Previously, closing the panel would always close the popup, even when the underlying graphics were still visible
+
+**Files modified:**
+- `query-simple/src/runtime/widget.tsx` - Conditional popup close in `handleVisibilityChange`
+- `query-simple/src/version.ts` - Increment to r024.58
+
+---
+
+## [1.19.0-r024.57] - 2026-02-12 - Re-enable Direct Query Bypass with buildRecord()
+
+### Changed
+
+**Direct query bypass re-enabled (r024.57):**
+- `USE_DIRECT_QUERY` toggle set to `true` in `query-task.tsx`
+- Replaced the `DirectQueryRecord` minimal adapter with `outputDS.buildRecord()`
+- `buildRecord()` is ExB's own method: "Builds a data record only -- does not add the record into data source"
+- Returns real `FeatureDataRecord` objects with full coded domain formatting, `getFormattedFieldValue()`, `clone()`, attachment support, and complete inter-widget compatibility
+- Bypasses `outputDS.load()` (the primary memory leak source) while keeping all record formatting
+- Confirmed impact: +12 MB steady-state for 160 records (matches r024.54 baseline of +14 MB)
+
+**Debug logging for query path verification:**
+- Added `QUERY-PATH` debug feature: logs which fork is taken (DIRECT vs EXB legacy) on every query
+- Added `DIRECT-QUERY` debug feature: logs execution details (timing, record count, geometry, exceededTransferLimit)
+- Both features registered in `shared-code/mapsimple-common/debug-logger.ts`
+- Enable via `?debug=QUERY-PATH,DIRECT-QUERY` or `?debug=all`
+
+### Removed
+- `DirectQueryRecord` class deleted from `direct-query.ts` (replaced by `buildRecord()`)
+- All 5 known adapter gaps resolved (coded domains, inter-widget messaging, setData, etc.)
+
+### Known Gaps
+- **Coded domain formatting**: Not yet tested. Current test data has flattened domains (code + label fields). Need a layer with active coded value domains to verify `getFormattedFieldValue()` works correctly through `buildRecord()`. Theoretically resolved since `buildRecord()` returns real `FeatureDataRecord` objects.
+
+### Files Modified
+- `query-simple/src/runtime/direct-query.ts`: Deleted DirectQueryRecord, rewrote executeDirectQuery to use buildRecord()
+- `query-simple/src/runtime/query-task.tsx`: Flipped toggle to true, simplified branch, removed DirectQueryRecord import, added QUERY-PATH debug logging at fork point
+- `query-simple/src/runtime/query-utils.ts`: Added QUERY-PATH debug logging for legacy path identification
+- `query-simple/src/version.ts`: 56 -> 57
+- `shared-code/mapsimple-common/debug-logger.ts`: Registered QUERY-PATH and DIRECT-QUERY debug features
+- `docs/development/DIRECT_QUERY_BYPASS.md`: Updated status to ENABLED, documented buildRecord() approach, added Debugging section, added Testing Status table
+- `docs/development/DEVELOPMENT_GUIDE.md`: Added QUERY-PATH and DIRECT-QUERY to Available Debug Features list
+- `docs/bugs/MEMORY_LEAK_INVESTIGATION.md`: Added r024.57 test results, domain caveat, test protocol step 10
+
+---
+
+## [1.19.0-r024.56] - 2026-02-12 - Disable LayerList Remove Action
+
+### Changed
+
+**Remove action disabled at the source (r024.56):**
+- After `mapView.map.add(groupLayer)`, the ExB-stamped `__exb_layer_from_runtime` flag is set to `false`
+- ExB's map-layers widget only shows the Remove (trash) button for layers where this flag is truthy (see `dist/widgets/arcgis/map-layers/src/runtime/actions/remove.tsx`)
+- Eliminates the entire `setupRemovalProtection` / `removeRemovalProtection` watcher system (~75 lines deleted)
+- Removes one persistent `after-remove` listener per widget instance
+- Removes two module-level tracking Maps (`removalListenerHandles`, `removalListenerHandleIds`)
+- Makes the +58 MB destroy/recreate cycle from user-triggered removal impossible
+- Legend FeatureLayers unaffected (ExB only stamps the flag on top-level layers added to `map.layers`, not GroupLayer sublayers)
+
+### Verified
+- Remove button does NOT appear for the GroupLayer in the map-layers widget
+- Legend still displays point, line, and polygon symbology for query results
+- Visibility toggle still works in the LayerList
+
+### Files Modified
+- `query-simple/src/runtime/graphics-layer-utils.ts`: Deleted removal protection system, added `__exb_layer_from_runtime = false` after `map.add()`
+- `query-simple/src/version.ts`: 55 -> 56
+- `docs/bugs/MEMORY_LEAK_INVESTIGATION.md`: Next Steps item 3 marked DONE, test protocol updated
+
+---
+
+## [1.19.0-r024.55] - 2026-02-17 - Memory Leak Investigation & Persistent Layer Architecture
+
+### Changed
+
+**Memory leak investigation (r024.48-r024.55).** Identified and addressed the per-query memory leak through a series of targeted experiments. Full findings in `docs/bugs/MEMORY_LEAK_INVESTIGATION.md`.
+
+**Direct Feature import (r024.48/51, permanent):**
+- `feature-info.tsx` now imports `Feature` directly from `@arcgis/core/widgets/Feature` instead of the `jimu-arcgis` wrapper
+- Allows ESRI's core to delete its own ObservationHandles between queries (50K+ deleted per cycle vs ~0 through the wrapper)
+- Low-risk module swap with no behavior change
+
+**Persistent GroupLayer (r024.52-53):**
+- Consolidated 3 visible GraphicsLayer sublayers into 1 hidden GraphicsLayer (reduces reactive watcher overhead)
+- `clearGroupLayerContents()` now preserves the GroupLayer on the map instead of destroying and recreating it
+- `cleanupGroupLayer()` reserved exclusively for widget unmount
+- Saved ~32 MB on first-query initialization cost
+
+**Persistent Legend FeatureLayers (r024.54):**
+- `ensureLegendFeatureLayer()` reuses existing Legend FLs instead of creating new ones (re-enables via `legendEnabled = true`)
+- `clearGroupLayerContents()` hides Legend FLs via `legendEnabled = false` instead of removing and destroying them
+- `removeEmptyLegendFeatureLayers()` hides instead of destroys
+- Result: LayerList path stabilizes at +1 MB/query after a 2-query warm-up (down from ~62 MB/query steady state)
+
+**Direct query bypass (r024.50, disabled r024.55):**
+- Proved that ExB's `outputDS.load()` is the primary source of the memory leak
+- `USE_DIRECT_QUERY` toggle in `query-task.tsx` set to `false` for production safety
+- `direct-query.ts` and `DirectQueryRecord` adapter remain in codebase, fully documented, for future hardening
+- See `docs/development/DIRECT_QUERY_BYPASS.md` for full story, test results, and hardening roadmap
+
+### Performance Results (r024.54, LayerList path)
+
+| Query | Memory | Growth | Records |
+|---|---|---|---|
+| Base | 175 MB | -- | -- |
+| Q1 + clear | 257 MB | +82 MB | 1 |
+| Q2 + clear | 319 MB | +62 MB | 1 |
+| Q3 + clear | 320 MB | **+1 MB** | 1 |
+| Q4 + clear | 321 MB | **+1 MB** | 1 |
+| Q5 + clear | 335 MB | **+14 MB** | 160 |
+
+99% reduction (single record) and 89% reduction (160 records) vs r024.39 baseline of 127 MB/query.
+
+### Added
+
+- `docs/development/DIRECT_QUERY_BYPASS.md` - Architecture, test results, known gaps, and hardening roadmap for the direct query bypass
+
+### Files Modified
+- `query-simple/src/runtime/query-task.tsx`: USE_DIRECT_QUERY toggle (false), documentation
+- `query-simple/src/runtime/direct-query.ts`: Thorough inline documentation of gaps and hardening roadmap
+- `query-simple/src/runtime/components/feature-info.tsx`: Direct @arcgis/core Feature import with explanation
+- `query-simple/src/runtime/graphics-layer-utils.ts`: Persistent GroupLayer, persistent Legend FeatureLayers
+- `query-simple/src/runtime/selection-utils.ts`: Lightweight clear integration
+- `query-simple/src/version.ts`: r024.43 -> r024.55
+- `docs/bugs/MEMORY_LEAK_INVESTIGATION.md`: Full investigation results through r024.55
+- `docs/development/DIRECT_QUERY_BYPASS.md`: New document
+
+---
+
 ## [1.19.0-r024.18] - 2026-02-14 - LayerList Persistent Results (Complete)
 
 ### Added

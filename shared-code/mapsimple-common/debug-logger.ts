@@ -23,6 +23,8 @@
  * - EXPAND-COLLAPSE: Expand/collapse state management for result items
  * - GRAPHICS-LAYER: Graphics layer highlighting (independent of layer visibility)
  * - EVENTS: Event listener setup/cleanup and custom event dispatching
+ * - QUERY-PATH: Which query path is taken (DIRECT vs EXB legacy)
+ * - DIRECT-QUERY: Direct FeatureLayer.queryFeatures() bypass execution details
  * 
  * Temporary Migration Features (will be removed after migration complete):
  * - CHUNK-1-COMPARE: Chunk 1 (URL Parameter) comparison logs
@@ -44,7 +46,7 @@
  * - RESTORE: Selection restoration attempts and results
  */
 
-type DebugFeature = 'BUG' | 'HASH' | 'HASH-EXEC' | 'FORM' | 'TASK' | 'ZOOM' | 'MAP-EXTENT' | 'DATA-ACTION' | 'GROUP' | 'SELECTION' | 'SELECTION-STATE-AUDIT' | 'WIDGET-STATE' | 'RESTORE' | 'RESTORE-COMPARE' | 'RESULTS-MODE' | 'EXPAND-COLLAPSE' | 'GRAPHICS-LAYER' | 'EVENTS' | 'POPUP' | 'CHUNK-1-COMPARE' | 'CHUNK-1-MISMATCH' | 'CHUNK-2-COMPARE' | 'CHUNK-2-MISMATCH' | 'CHUNK-3-COMPARE' | 'CHUNK-3-DECISION' | 'CHUNK-3-FALLBACK' | 'CHUNK-4-COMPARE' | 'CHUNK-5-COMPARE' | 'CHUNK-6-COMPARE' | 'CHUNK-6-MISMATCH' | 'all' | 'false'
+type DebugFeature = 'BUG' | 'HASH' | 'HASH-EXEC' | 'FORM' | 'TASK' | 'ZOOM' | 'MAP-EXTENT' | 'DATA-ACTION' | 'GROUP' | 'SELECTION' | 'SELECTION-STATE-AUDIT' | 'WIDGET-STATE' | 'RESTORE' | 'RESTORE-COMPARE' | 'RESULTS-MODE' | 'EXPAND-COLLAPSE' | 'GRAPHICS-LAYER' | 'EVENTS' | 'POPUP' | 'QUERY-PATH' | 'DIRECT-QUERY' | 'CHUNK-1-COMPARE' | 'CHUNK-1-MISMATCH' | 'CHUNK-2-COMPARE' | 'CHUNK-2-MISMATCH' | 'CHUNK-3-COMPARE' | 'CHUNK-3-DECISION' | 'CHUNK-3-FALLBACK' | 'CHUNK-4-COMPARE' | 'CHUNK-5-COMPARE' | 'CHUNK-6-COMPARE' | 'CHUNK-6-MISMATCH' | 'all' | 'false'
 
 interface DebugLoggerOptions {
   widgetName: string
@@ -180,6 +182,7 @@ export function createQuerySimpleDebugLogger() {
     features: [
       'HASH', 'HASH-EXEC', 'HASH-FIRST-LOAD', 'FORM', 'TASK', 'ZOOM', 'MAP-EXTENT', 'DATA-ACTION', 'GROUP', 
       'SELECTION', 'SELECTION-STATE-AUDIT', 'WIDGET-STATE', 'RESTORE', 'RESULTS-MODE', 'EXPAND-COLLAPSE', 'GRAPHICS-LAYER', 'EVENTS', 'POPUP',
+      'QUERY-PATH', 'DIRECT-QUERY',
       // Temporary migration features (will be removed after migration complete)
       'CHUNK-1-COMPARE', 'CHUNK-1-MISMATCH', 'CHUNK-2-COMPARE', 'CHUNK-2-MISMATCH', 'CHUNK-3-COMPARE', 'CHUNK-3-DECISION', 'CHUNK-3-FALLBACK',
       'CHUNK-4-COMPARE', 'CHUNK-5-COMPARE', 'CHUNK-6-COMPARE', 'CHUNK-6-MISMATCH'
