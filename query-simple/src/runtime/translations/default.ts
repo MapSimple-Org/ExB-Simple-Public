@@ -63,7 +63,11 @@ export default {
   // r022.21: Calcite Popover messages for Add mode with all duplicates
   allDuplicatesAlertLabel: 'All duplicates',
   allDuplicatesAlertTitle: 'All records already in Results',
-  allDuplicatesAlertMessage: 'Query found {recordsFound} record(s), but all were already in your Results.'
+  allDuplicatesAlertMessage: 'Query found {recordsFound} record(s), but all were already in your Results.',
+  // r024.62: Calcite Popover messages for query execution failure (service down, network error)
+  queryErrorAlertLabel: 'Search failed',
+  queryErrorAlertTitle: 'Search could not be completed',
+  queryErrorAlertMessage: 'The map service may be temporarily unavailable. Please try again in a few minutes. If the problem persists, contact your administrator.'
 }
 
 

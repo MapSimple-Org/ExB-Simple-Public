@@ -411,6 +411,13 @@ export async function executeQuery (
   //   ? Object.keys(fields).filter((jimuName) => selectedFieldNames.includes(fields[jimuName].name))
   //   : []
   // outputDS.setSelectedFields(selectedFieldJimuNames)
+  debugLogger.log('QUERY-PATH', {
+    event: 'EXB-LEGACY-PATH',
+    path: 'outputDS.load()',
+    widgetId,
+    note: 'If you see this, the old ExB query path is running. USE_DIRECT_QUERY may be false.',
+    timestamp: Date.now()
+  })
   const startTime = performance.now()
   let records = await outputDS.load(queryParams, { widgetId })
   const fetchTime = performance.now() - startTime

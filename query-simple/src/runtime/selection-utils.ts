@@ -5,7 +5,7 @@
 
 import type { DataSource, FeatureLayerDataSource, FeatureDataRecord } from 'jimu-core'
 import { MessageManager, DataRecordsSelectionChangeMessage, DataSourceManager, DataRecordSetChangeMessage, RecordSetChangeType } from 'jimu-core'
-import { addHighlightGraphics as addGraphicsLayerGraphics, clearGraphicsLayerOrGroupLayer, createOrGetGraphicsLayer, cleanupGraphicsLayer } from './graphics-layer-utils'
+import { addHighlightGraphics as addGraphicsLayerGraphics, clearGraphicsLayerOrGroupLayer, createOrGetGraphicsLayer, cleanupGraphicsLayer, cleanupAnyResultLayer, clearAnyResultLayerContents } from './graphics-layer-utils'
 import { createQuerySimpleDebugLogger } from 'widgets/shared-code/mapsimple-common'
 import type { EventManager } from './hooks/use-event-handling'
 
@@ -370,14 +370,22 @@ export async function clearAllSelectionsForWidget(options: {
       }
     }
 
-    // Clear graphics layer
-    if (useGraphicsLayer && graphicsLayer && mapView) {
+    // r024.53: Lightweight clear - preserves layers on map
+    if (useGraphicsLayer && mapView) {
       try {
-        cleanupGraphicsLayer(widgetId, mapView)
+        const cleanupResult = clearAnyResultLayerContents(widgetId, mapView)
+        debugLogger.log('TASK', {
+          event: 'clearAllSelectionsForWidget-layer-cleanup',
+          widgetId,
+          clearedGraphicsLayer: cleanupResult.clearedGraphicsLayer,
+          clearedGroupLayer: cleanupResult.clearedGroupLayer,
+          graphicsLayerRefWasTruthy: !!graphicsLayer,
+          timestamp: Date.now()
+        })
         onDestroyGraphicsLayer?.()
       } catch (error) {
         debugLogger.log('ERROR', {
-          event: 'clearAllSelectionsForWidget-graphics-layer-destroy-failed',
+          event: 'clearAllSelectionsForWidget-layer-destroy-failed',
           widgetId,
           error: error instanceof Error ? error.message : String(error)
         })

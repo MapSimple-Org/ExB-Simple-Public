@@ -30,6 +30,8 @@ export interface SimpleListProps {
   onRemove: (data: FeatureDataRecord) => void
   /** r023.32: Zoom to single record. Passed to QueryResultItem for menu/inline icon. */
   onZoomTo?: (data: FeatureDataRecord) => void
+  /** r024.46: When true, clicking a result already zooms, so zoom button is redundant */
+  zoomOnResultClick?: boolean
   expandByDefault?: boolean
   // r021.77: itemExpandStates removed - doesn't persist with no-rerender approach
   removedRecordIds?: Set<string>
@@ -85,6 +87,7 @@ export function SimpleList (props: SimpleListProps) {
     onSelectChange,
     onRemove,
     onZoomTo,
+    zoomOnResultClick,
     expandByDefault,
     // r021.77: itemExpandStates removed
     removedRecordIds,
@@ -101,15 +104,20 @@ export function SimpleList (props: SimpleListProps) {
   // Key: queryConfig.configId, Value: { popupTemplate, defaultPopupTemplate }
   const popupTemplateCacheRef = React.useRef<Map<string, { popup: any, default: any }>>(new Map())
   
-  // r021.77: Cleanup cache on unmount
+  // r021.77 / r024.24: Cleanup cache on unmount
+  // Popup templates may hold DOM references that prevent GC
   React.useEffect(() => {
     return () => {
       debugLogger.log('RESULTS-MODE', {
         event: 'SimpleList-cleanup-popup-template-cache',
         widgetId,
         cacheSize: popupTemplateCacheRef.current.size,
-        cachedConfigIds: Array.from(popupTemplateCacheRef.current.keys()),
         timestamp: Date.now()
+      })
+      // r024.24: Null out template contents before clearing to help GC
+      popupTemplateCacheRef.current.forEach((templates, configId) => {
+        templates.popup = null
+        templates.default = null
       })
       popupTemplateCacheRef.current.clear()
     }
@@ -299,6 +307,7 @@ export function SimpleList (props: SimpleListProps) {
               onClick={onSelectChange}
               onRemove={onRemove}
               onZoomTo={onZoomTo}
+              zoomOnResultClick={zoomOnResultClick}
               mapView={mapView}
               hoverPinColor={hoverPinColor}
             />

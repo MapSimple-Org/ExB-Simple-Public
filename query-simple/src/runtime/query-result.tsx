@@ -78,6 +78,8 @@ export interface QueryTaskResultProps {
   // FIX (r018.96): Removed onManualRemoval - no longer needed
   // FIX (r018.92): Flag to track when query switch is in progress
   isQuerySwitchInProgressRef?: React.MutableRefObject<boolean>
+  /** r024.33: Session key to force DOM reset on Clear/New Query */
+  listResetKey?: number
   // r021.75: IDs of records from current query (for proper formatting in ADD mode)
   currentQueryRecordIds?: string[]
   // r021.87: Queries array for looking up config by __queryConfigId
@@ -130,7 +132,7 @@ const resultStyle = css`
 `
 
 export function QueryTaskResult (props: QueryTaskResultProps) {
-  const { queryItem, queryParams, resultCount, maxPerPage, records, widgetId, outputDS, runtimeZoomToSelected, onNavBack, resultsMode, accumulatedRecords, onAccumulatedRecordsChange, graphicsLayer, mapView, eventManager, isQuerySwitchInProgressRef, currentQueryRecordIds, queries, noRemovalAlert, onDismissNoRemovalAlert, allDuplicatesAlert, onDismissAllDuplicatesAlert, zoomOnResultClick, hoverPinColor } = props
+  const { queryItem, queryParams, resultCount, maxPerPage, records, widgetId, outputDS, runtimeZoomToSelected, onNavBack, resultsMode, accumulatedRecords, onAccumulatedRecordsChange, graphicsLayer, mapView, eventManager, isQuerySwitchInProgressRef, currentQueryRecordIds, queries, noRemovalAlert, onDismissNoRemovalAlert, allDuplicatesAlert, onDismissAllDuplicatesAlert, zoomOnResultClick, hoverPinColor, listResetKey } = props
   const getI18nMessage = hooks.useTranslation(defaultMessage)
   const intl = useIntl()
   const zoomToRecords = useZoomToRecords(mapView)
@@ -180,6 +182,12 @@ export function QueryTaskResult (props: QueryTaskResultProps) {
   // r021.98: Track when removal is in progress to prevent useEffect from re-adding graphics
   const isRemovalInProgressRef = React.useRef(false)
   // FIX (r018.94): Removed removedRecordIds ref - no longer needed
+  
+  // r024.38: Stable callback refs to prevent closure capture of record arrays
+  // These refs always hold the latest callback implementation
+  const removeRecordRef = React.useRef<((data: FeatureDataRecord) => void) | null>(null)
+  const toggleSelectionRef = React.useRef<((data: FeatureDataRecord) => void) | null>(null)
+  const handleZoomToRecordRef = React.useRef<((data: FeatureDataRecord) => Promise<void>) | null>(null)
   
   // r021.15: Cleanup refs on unmount to prevent memory leaks
   React.useEffect(() => {
@@ -1669,6 +1677,28 @@ export function QueryTaskResult (props: QueryTaskResultProps) {
     }, 0)
   }, [outputDS, widgetId, resultCount, onNavBack, resultsMode, accumulatedRecords, onAccumulatedRecordsChange, queryItem.configId, expandAll])
 
+  // r024.39: Direct ref assignment (no useEffect overhead)
+  // Update refs synchronously during render - they're current before DOM commit
+  // Safe because: stable wrappers capture the ref OBJECT, read .current at CALL time
+  removeRecordRef.current = removeRecord
+  toggleSelectionRef.current = toggleSelection
+  handleZoomToRecordRef.current = handleZoomToRecord
+  
+  // r024.38: Stable callback wrappers - these NEVER change identity
+  // They call through refs, so items always invoke the latest logic
+  // without capturing the record arrays in their own closures
+  const stableRemoveRecord = React.useCallback((data: FeatureDataRecord) => {
+    removeRecordRef.current?.(data)
+  }, []) // Empty deps = stable identity forever
+  
+  const stableToggleSelection = React.useCallback((data: FeatureDataRecord) => {
+    toggleSelectionRef.current?.(data)
+  }, [])
+  
+  const stableHandleZoomToRecord = React.useCallback(async (data: FeatureDataRecord) => {
+    await handleZoomToRecordRef.current?.(data)
+  }, [])
+
   return (
     <div className='query-result h-100' css={resultStyle} role='listbox' aria-label={getI18nMessage('results')}>
       <DataSourceComponent useDataSource={resultUseOutputDataSource} onDataSourceInfoChange={handleDataSourceInfoChange} />
@@ -1756,18 +1786,20 @@ export function QueryTaskResult (props: QueryTaskResultProps) {
           </div>
         </div>
         {/* r021.87: SimpleList reads queryConfigId from record attributes */}
+        {/* r024.33: Dynamic key forces complete DOM reset on Clear/New Query */}
         {resultCount > 0 && (
           <SimpleList
-            key='simple'
+            key={`simple-${listResetKey || 0}`}
             widgetId={widgetId}
             queryItem={queryItem}
             outputDS={outputDS as any}
             records={filteredRecordsForList}
             direction={direction}
             onEscape={handleEscape}
-            onSelectChange={toggleSelection}
-            onRemove={removeRecord}
-            onZoomTo={handleZoomToRecord}
+            onSelectChange={stableToggleSelection}
+            onRemove={stableRemoveRecord}
+            onZoomTo={stableHandleZoomToRecord}
+            zoomOnResultClick={zoomOnResultClick}
             expandByDefault={expandAll}
             queries={queries}
             mapView={mapView}

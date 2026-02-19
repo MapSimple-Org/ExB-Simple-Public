@@ -9,7 +9,7 @@ import {
   type IMState,
   classNames
 } from 'jimu-core'
-import { Button, Tooltip, Popper, Icon } from 'jimu-ui'
+// r024.41: Removed Button, Tooltip, Popper, Icon - replaced with plain HTML to avoid Calcite overhead
 import FeatureInfo from './components/feature-info'
 import { ListDirection } from '../config'
 import { createQuerySimpleDebugLogger } from 'widgets/shared-code/mapsimple-common'
@@ -21,23 +21,200 @@ import * as labelPointOperator from '@arcgis/core/geometry/operators/labelPointO
 const debugLogger = createQuerySimpleDebugLogger()
 
 /**
+ * r024.25: Factory function to create CIM teardrop pin symbol structure
+ * Creates the symbol ONCE and returns the data structure for reuse.
+ * This avoids creating new symbol objects on every hover and every animation frame.
+ * 
+ * @param baseColor - RGBA array for the main pin color
+ * @param lighterColor - RGBA array for the center circle (lighter variant)
+ * @returns CIM symbol JSON structure
+ */
+function createCIMPinSymbolData(
+  baseColor: [number, number, number, number],
+  lighterColor: [number, number, number, number]
+) {
+  return {
+    type: 'CIMSymbolReference',
+    symbol: {
+      type: 'CIMPointSymbol',
+      symbolLayers: [
+        {
+          type: 'CIMVectorMarker',
+          enable: true,
+          size: 28,
+          anchorPointUnits: 'Relative',
+          anchorPoint: { x: 0, y: -0.5 }, // Default resting position
+          frame: { xmin: 0, ymin: 0, xmax: 24, ymax: 24 },
+          markerGraphics: [
+            {
+              // Outer teardrop shape (Y-flipped for CIM)
+              type: 'CIMMarkerGraphic',
+              geometry: {
+                rings: [[
+                  [12, 22], [10.5, 22], [9, 21.5], [7.5, 20.5],
+                  [6, 19], [5.5, 17.5], [5, 15],
+                  [5, 13.5], [5.5, 11], [6.5, 8.5],
+                  [8, 6], [10, 3.5], [12, 2],
+                  [14, 3.5], [16, 6], [17.5, 8.5],
+                  [18.5, 11], [19, 13.5],
+                  [19, 15], [18.5, 17.5], [18, 19],
+                  [16.5, 20.5], [15, 21.5], [13.5, 22], [12, 22]
+                ]]
+              },
+              symbol: {
+                type: 'CIMPolygonSymbol',
+                symbolLayers: [
+                  {
+                    type: 'CIMSolidStroke',
+                    enable: true,
+                    width: 1.5,
+                    color: [255, 255, 255, 255] // White outline
+                  },
+                  {
+                    type: 'CIMSolidFill',
+                    enable: true,
+                    color: baseColor
+                  }
+                ]
+              }
+            },
+            {
+              // Inner circle "eye" (Y-flipped for CIM)
+              type: 'CIMMarkerGraphic',
+              geometry: {
+                rings: [[
+                  [12, 17.5], [13, 17.3], [13.8, 16.8],
+                  [14.3, 16], [14.5, 15], [14.3, 14],
+                  [13.8, 13.2], [13, 12.7], [12, 12.5],
+                  [11, 12.7], [10.2, 13.2], [9.7, 14],
+                  [9.5, 15], [9.7, 16], [10.2, 16.8],
+                  [11, 17.3], [12, 17.5]
+                ]]
+              },
+              symbol: {
+                type: 'CIMPolygonSymbol',
+                symbolLayers: [
+                  {
+                    type: 'CIMSolidStroke',
+                    enable: true,
+                    width: 1,
+                    color: [255, 255, 255, 255] // White outline
+                  },
+                  {
+                    type: 'CIMSolidFill',
+                    enable: true,
+                    color: lighterColor
+                  }
+                ]
+              }
+            }
+          ],
+          scaleSymbolsProportionally: true,
+          respectFrame: true
+        }
+      ]
+    }
+  }
+}
+
+/**
  * Trash icon as CSS background-image (r021.44 memory optimization)
  * Instead of creating 600 React component instances of <TrashOutlined>,
  * we use a single CSS style with SVG data-uri that's reused across all items.
  * This eliminates 600 component instances + 600 DOM nodes.
  * SVG source: jimu-icons/svg/outlined/editor/trash.svg
  */
-const moreIcon = require('jimu-icons/svg/outlined/application/more-horizontal.svg')
-const zoomToIcon = require('./assets/icons/zoom-to.svg')
+// r024.41: Plain HTML icons - SVG data URIs instead of jimu-ui Icon components
+// This eliminates Calcite shadow DOM overhead for 600+ result items
 
 const trashIconStyle = css`
   width: 18px;
   height: 18px;
-  background-image: url('data:image/svg+xml;utf8,<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 6.5C6 6.22386 6.22386 6 6.5 6C6.77614 6 7 6.22386 7 6.5V12.5C7 12.7761 6.77614 13 6.5 13C6.22386 13 6 12.7761 6 12.5V6.5Z" fill="currentColor"/><path d="M9.5 6C9.22386 6 9 6.22386 9 6.5V12.5C9 12.7761 9.22386 13 9.5 13C9.77614 13 10 12.7761 10 12.5V6.5C10 6.22386 9.77614 6 9.5 6Z" fill="currentColor"/><path fill-rule="evenodd" clip-rule="evenodd" d="M11 0H5C4.44772 0 4 0.447715 4 1V3H0.5C0.223858 3 0 3.22386 0 3.5C0 3.77614 0.223858 4 0.5 4H2.1L2.90995 15.0995C2.96107 15.6107 3.39124 16 3.90499 16H12.095C12.6088 16 13.0389 15.6107 13.09 15.0995L13.9 4H15.5C15.7761 4 16 3.77614 16 3.5C16 3.22386 15.7761 3 15.5 3H12V1C12 0.447715 11.5523 0 11 0ZM11 3V1H5V3H11ZM12.895 4H3.10499L3.90499 15H12.095L12.895 4Z" fill="currentColor"/></svg>');
+  background-image: url('data:image/svg+xml;utf8,<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 6.5C6 6.22386 6.22386 6 6.5 6C6.77614 6 7 6.22386 7 6.5V12.5C7 12.7761 6.77614 13 6.5 13C6.22386 13 6 12.7761 6 12.5V6.5Z" fill="%236a6a6a"/><path d="M9.5 6C9.22386 6 9 6.22386 9 6.5V12.5C9 12.7761 9.22386 13 9.5 13C9.77614 13 10 12.7761 10 12.5V6.5C10 6.22386 9.77614 6 9.5 6Z" fill="%236a6a6a"/><path fill-rule="evenodd" clip-rule="evenodd" d="M11 0H5C4.44772 0 4 0.447715 4 1V3H0.5C0.223858 3 0 3.22386 0 3.5C0 3.77614 0.223858 4 0.5 4H2.1L2.90995 15.0995C2.96107 15.6107 3.39124 16 3.90499 16H12.095C12.6088 16 13.0389 15.6107 13.09 15.0995L13.9 4H15.5C15.7761 4 16 3.77614 16 3.5C16 3.22386 15.7761 3 15.5 3H12V1C12 0.447715 11.5523 0 11 0ZM11 3V1H5V3H11ZM12.895 4H3.10499L3.90499 15H12.095L12.895 4Z" fill="%236a6a6a"/></svg>');
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
   display: inline-block;
+`
+
+const zoomToIconStyle = css`
+  width: 18px;
+  height: 18px;
+  background-image: url('data:image/svg+xml;utf8,<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M0 10.5V12C0 12.5523 0.447716 13 1 13H2.5V12H1L1 10.5H0ZM2.5 1H1C0.447715 1 0 1.44772 0 2V3.5H1V2L2.5 2V1ZM0 8.5H1V5.5H0V8.5ZM4.5 1V2H7.5V1H4.5ZM9.5 1V2H11V3.5H12V2C12 1.44772 11.5523 1 11 1H9.5ZM6.31802 13.682C7.95595 15.3199 10.5424 15.4312 12.3092 14.0159L14.1569 15.864L14.864 15.1569L13.0166 13.3085C14.4312 11.5416 14.3197 8.9557 12.682 7.31802C10.9246 5.56066 8.07538 5.56066 6.31802 7.31802C4.56066 9.07538 4.56066 11.9246 6.31802 13.682ZM7.02513 12.9749C5.65829 11.608 5.65829 9.39196 7.02513 8.02513C8.39196 6.65829 10.608 6.65829 11.9749 8.02513C13.3417 9.39196 13.3417 11.608 11.9749 12.9749C10.608 14.3417 8.39196 14.3417 7.02513 12.9749ZM9 13V11H7V10H9V8H10V10H12V11H10V13H9Z" fill="%236a6a6a"/></svg>');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  display: inline-block;
+`
+
+const moreIconStyle = css`
+  width: 22px;
+  height: 22px;
+  background-image: url('data:image/svg+xml;utf8,<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="3" cy="8" r="1.5" fill="%236a6a6a"/><circle cx="8" cy="8" r="1.5" fill="%236a6a6a"/><circle cx="13" cy="8" r="1.5" fill="%236a6a6a"/></svg>');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  display: inline-block;
+`
+
+// r024.41: Action button style - plain HTML button replacing jimu-ui Button
+const actionButtonStyle = css`
+  padding: 6px;
+  min-width: 32px;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+  
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.08);
+  }
+  
+  &:focus {
+    outline: 2px solid var(--sys-color-primary-main);
+    outline-offset: 1px;
+  }
+  
+  &:active {
+    background-color: rgba(0, 0, 0, 0.12);
+  }
+`
+
+// r024.46: Dropdown menu base style - direction set dynamically via inline style
+const dropdownMenuBaseStyle = css`
+  position: absolute;
+  right: 0;
+  min-width: 140px;
+  padding: 4px 0;
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  z-index: 1000;
+`
+
+const menuItemStyle = css`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 8px 12px;
+  border: none;
+  background: none;
+  font-size: 0.875rem;
+  cursor: pointer;
+  text-align: left;
+  color: inherit;
+  
+  &:hover {
+    background: var(--ref-palette-neutral-200);
+  }
 `
 
 export interface ResultItemProps {
@@ -52,12 +229,14 @@ export interface ResultItemProps {
   onRemove: (record: FeatureDataRecord) => void
   /** r023.32: Zoom to single record. When provided, Zoom to appears in menu and (when expanded) as inline icon. */
   onZoomTo?: (record: FeatureDataRecord) => void
+  /** r024.46: When true, clicking a result already zooms, so zoom button is redundant */
+  zoomOnResultClick?: boolean
   // r022.106: Hover preview props
   mapView?: __esri.MapView | __esri.SceneView
 }
 
 const style = css`
-  overflow: auto;
+  overflow: visible;  /* r024.41: Changed from auto to allow dropdown menu to extend outside */
   flex-flow: row;
   cursor: pointer;
   flex-shrink: 0;
@@ -158,15 +337,22 @@ function hexToRgb(hex: string, alpha: number = 230): [number, number, number, nu
 }
 
 export const QueryResultItem = (props: ResultItemProps) => {
-  const { widgetId, data, dataSource, popupTemplate, defaultPopupTemplate, onClick, onRemove, onZoomTo, expandByDefault = false, mapView, hoverPinColor } = props
+  const { widgetId, data, dataSource, popupTemplate, defaultPopupTemplate, onClick, onRemove, onZoomTo, zoomOnResultClick, expandByDefault = false, mapView, hoverPinColor } = props
   const getI18nMessage = hooks.useTranslation(defaultMessages)
   const [menuOpen, setMenuOpen] = React.useState(false)
+  const [menuDropUp, setMenuDropUp] = React.useState(false)
   const menuButtonRef = React.useRef<HTMLButtonElement>(null)
   const [isExpanded, setIsExpanded] = React.useState(expandByDefault)
 
-  // r023.33: Sync with expandByDefault when parent toggles Expand All / Collapse All
+  // r023.33 / r024.19: Sync with expandByDefault when parent toggles Expand All / Collapse All
+  // Only update if value actually changed to avoid unnecessary re-renders
   React.useEffect(() => {
-    setIsExpanded(expandByDefault)
+    setIsExpanded(prev => {
+      if (prev !== expandByDefault) {
+        return expandByDefault
+      }
+      return prev  // No change, no re-render
+    })
   }, [expandByDefault])
   
   const recordId = data.getId()
@@ -175,6 +361,23 @@ export const QueryResultItem = (props: ResultItemProps) => {
   const hoverGraphicRef = React.useRef<__esri.Graphic | null>(null)
   const hoverTimeoutRef = React.useRef<number | null>(null)
   const animationRef = React.useRef<number | null>(null) // r022.108: Spring animation ID
+  
+  // r024.25: Memoized CIM symbol data to avoid creating new objects on every hover/animation frame
+  // The symbol data is created ONCE when color changes, not on every hover
+  const memoizedSymbolData = React.useMemo(() => {
+    const baseColor = hexToRgb(hoverPinColor || '#FFC107', 230)
+    const lighterColor: [number, number, number, number] = [
+      Math.min(255, Math.round(baseColor[0] * 1.2)),
+      Math.min(255, Math.round(baseColor[1] * 1.2)),
+      Math.min(255, Math.round(baseColor[2] * 1.2)),
+      255
+    ]
+    return createCIMPinSymbolData(baseColor, lighterColor)
+  }, [hoverPinColor])
+  
+  // r024.25: Ref to hold the live symbol data during animation (mutable)
+  // This allows us to update anchorPoint without cloning the entire structure
+  const symbolDataRef = React.useRef<ReturnType<typeof createCIMPinSymbolData> | null>(null)
   
   // Log when QueryResultItem renders
   React.useEffect(() => {
@@ -291,6 +494,7 @@ export const QueryResultItem = (props: ResultItemProps) => {
 
   /**
    * r022.106: Handle mouse enter - show hover preview pin on map
+   * r024.25: Optimized to use memoized CIMSymbol - no cloning on every animation frame
    * Debounced to 100ms to prevent flicker when moving across list items
    */
   const handleMouseEnter = React.useCallback(() => {
@@ -318,16 +522,6 @@ export const QueryResultItem = (props: ResultItemProps) => {
           return
         }
         
-        // r022.106: Convert configured color to RGB for CIM symbol
-        const baseColor = hexToRgb(hoverPinColor || '#FFC107', 230) // Main pin color
-        // Create lighter variant for center circle (increase each RGB component by 20%)
-        const lighterColor: [number, number, number, number] = [
-          Math.min(255, Math.round(baseColor[0] * 1.2)),
-          Math.min(255, Math.round(baseColor[1] * 1.2)),
-          Math.min(255, Math.round(baseColor[2] * 1.2)),
-          255 // Full opacity for center
-        ]
-        
         // Calculate label point (same as popup logic)
         const labelPoint = labelPointOperator.execute(geometry)
         
@@ -341,106 +535,20 @@ export const QueryResultItem = (props: ResultItemProps) => {
           return
         }
         
+        // r024.25: Create a deep copy of the memoized symbol data for this graphic's animation.
+        // This copy is made ONCE per hover start, not on every animation frame.
+        // We use JSON parse/stringify for a clean deep copy since this is plain JSON data.
+        symbolDataRef.current = JSON.parse(JSON.stringify(memoizedSymbolData))
+        
         // Create or update hover graphic
         if (!hoverGraphicRef.current) {
-          // First hover - create new graphic using user's simplified teardrop pin SVG
-          // User's SVG path (viewBox 0 0 24 24):
-          // M12,2C8.1,2,5,5.1,5,9c0,5.2,7,13,7,13s7-7.8,7-13C19,5.1,15.9,2,12,2z 
-          // M12,11.5c-1.4,0-2.5-1.1-2.5-2.5s1.1-2.5,2.5-2.5s2.5,1.1,2.5,2.5S13.4,11.5,12,11.5z
-          // Y-FLIPPED for CIM (new_y = 24 - old_y): Point should be at top, circle at bottom
+          // r024.25: Set initial suspended position
+          symbolDataRef.current.symbol.symbolLayers[0].anchorPoint = { x: 0, y: -1.2 }
           
           const cimSymbol = {
             type: 'cim',
-            data: {
-              type: 'CIMSymbolReference',
-              symbol: {
-                type: 'CIMPointSymbol',
-                symbolLayers: [
-                  {
-                    type: 'CIMVectorMarker',
-                    enable: true,
-                    size: 28,
-                    anchorPointUnits: 'Relative',
-                    anchorPoint: { x: 0, y: -0.5 }, // Anchor halfway up to position tip correctly
-                    frame: { xmin: 0, ymin: 0, xmax: 24, ymax: 24 },
-                    markerGraphics: [
-                      {
-                        // Outer teardrop shape (Y-flipped: 24-y for each coordinate)
-                        type: 'CIMMarkerGraphic',
-                        geometry: {
-                          rings: [[
-                            // Starting from top (was bottom Y=22, now Y=2)
-                            [12, 22], [10.5, 22], [9, 21.5], [7.5, 20.5],
-                            [6, 19], [5.5, 17.5], [5, 15],
-                            // Going up in visual (was down, Y=9 now Y=15)
-                            [5, 13.5], [5.5, 11], [6.5, 8.5],
-                            [8, 6], [10, 3.5], [12, 2],
-                            // Right side (was bottom Y=22, now Y=2)
-                            [14, 3.5], [16, 6], [17.5, 8.5],
-                            [18.5, 11], [19, 13.5],
-                            // Top curve (was Y=9, now Y=15)
-                            [19, 15], [18.5, 17.5], [18, 19],
-                            [16.5, 20.5], [15, 21.5], [13.5, 22], [12, 22]
-                          ]]
-                        },
-                        symbol: {
-                          type: 'CIMPolygonSymbol',
-                          symbolLayers: [
-                            {
-                              type: 'CIMSolidStroke',
-                              enable: true,
-                              width: 1.5,
-                              color: [255, 255, 255, 255] // White outline
-                            },
-                            {
-                              type: 'CIMSolidFill',
-                              enable: true,
-                              color: baseColor // Configured hover pin color
-                            }
-                          ]
-                        }
-                      },
-                      {
-                        // Inner circle "eye" (Y-flipped: was Y=9 center, now Y=15 center)
-                        type: 'CIMMarkerGraphic',
-                        geometry: {
-                          rings: [[
-                            [12, 17.5], [13, 17.3], [13.8, 16.8],
-                            [14.3, 16], [14.5, 15], [14.3, 14],
-                            [13.8, 13.2], [13, 12.7], [12, 12.5],
-                            [11, 12.7], [10.2, 13.2], [9.7, 14],
-                            [9.5, 15], [9.7, 16], [10.2, 16.8],
-                            [11, 17.3], [12, 17.5]
-                          ]]
-                        },
-                        symbol: {
-                          type: 'CIMPolygonSymbol',
-                          symbolLayers: [
-                            {
-                              type: 'CIMSolidStroke',
-                              enable: true,
-                              width: 1,
-                              color: [255, 255, 255, 255] // White outline
-                            },
-                            {
-                              type: 'CIMSolidFill',
-                              enable: true,
-                              color: lighterColor // Lighter variant for center circle
-                            }
-                          ]
-                        }
-                      }
-                    ],
-                    scaleSymbolsProportionally: true,
-                    respectFrame: true
-                  }
-                ]
-              }
-            }
+            data: symbolDataRef.current
           }
-          
-          // r022.108: Start with pin suspended high (will animate down with spring physics)
-          cimSymbol.data.symbol.symbolLayers[0].anchorPoint = { x: 0, y: -1.2 }
           
           hoverGraphicRef.current = new Graphic({
             geometry: labelPoint,
@@ -452,14 +560,13 @@ export const QueryResultItem = (props: ResultItemProps) => {
             event: 'hover-graphic-created',
             recordId,
             geometryType: geometry.type,
-            symbolType: 'CIMSymbol-GooglePin-Animated',
+            symbolType: 'CIMSymbol-GooglePin-Animated-Optimized',
             color: hoverPinColor || '#FFC107',
-            colorRgb: baseColor,
             location: { x: labelPoint.x, y: labelPoint.y },
             timestamp: Date.now()
           })
           
-          // r022.108: Start spring drop animation
+          // r022.108 / r024.25: Start spring drop animation (optimized - no cloning)
           let start = null
           const targetY = -0.5  // Final resting position
           const initialY = -1.2 // Starting suspended height
@@ -474,14 +581,18 @@ export const QueryResultItem = (props: ResultItemProps) => {
             velocity = (velocity + force) * 0.8         // Damping
             currentY += velocity
             
-            // Update the graphic symbol anchor
-            if (hoverGraphicRef.current && mapView?.graphics) {
+            // r024.25: Update anchor directly in the stored data ref (no cloning)
+            if (hoverGraphicRef.current && mapView?.graphics && symbolDataRef.current) {
               try {
-                const currentSymbol = hoverGraphicRef.current.symbol as any
-                const newSymbol = currentSymbol.clone()
-                newSymbol.data.symbol.symbolLayers[0].anchorPoint = { x: 0, y: currentY }
-                newSymbol.data.symbol.symbolLayers[0].anchorPointUnits = 'Relative'
-                hoverGraphicRef.current.symbol = newSymbol
+                // Mutate the stored data directly
+                symbolDataRef.current.symbol.symbolLayers[0].anchorPoint = { x: 0, y: currentY }
+                
+                // Create a new symbol wrapper to trigger ESRI's change detection
+                // The data object is reused, only the wrapper is new (minimal allocation)
+                hoverGraphicRef.current.symbol = {
+                  type: 'cim',
+                  data: symbolDataRef.current
+                } as any
               } catch (error) {
                 debugLogger.log('HOVER-PREVIEW', {
                   event: 'animation-update-error',
@@ -519,6 +630,11 @@ export const QueryResultItem = (props: ResultItemProps) => {
             animationRef.current = null
           }
           
+          // r024.25: Reset anchor to suspended position for new animation
+          if (symbolDataRef.current) {
+            symbolDataRef.current.symbol.symbolLayers[0].anchorPoint = { x: 0, y: -1.2 }
+          }
+          
           debugLogger.log('HOVER-PREVIEW', {
             event: 'hover-graphic-reused',
             recordId,
@@ -527,7 +643,7 @@ export const QueryResultItem = (props: ResultItemProps) => {
             timestamp: Date.now()
           })
           
-          // r022.108: Restart spring drop animation
+          // r022.108 / r024.25: Restart spring drop animation (optimized - no cloning)
           let start = null
           const targetY = -0.5
           const initialY = -1.2
@@ -541,13 +657,14 @@ export const QueryResultItem = (props: ResultItemProps) => {
             velocity = (velocity + force) * 0.8
             currentY += velocity
             
-            if (hoverGraphicRef.current && mapView?.graphics) {
+            // r024.25: Update anchor directly (no cloning)
+            if (hoverGraphicRef.current && mapView?.graphics && symbolDataRef.current) {
               try {
-                const currentSymbol = hoverGraphicRef.current.symbol as any
-                const newSymbol = currentSymbol.clone()
-                newSymbol.data.symbol.symbolLayers[0].anchorPoint = { x: 0, y: currentY }
-                newSymbol.data.symbol.symbolLayers[0].anchorPointUnits = 'Relative'
-                hoverGraphicRef.current.symbol = newSymbol
+                symbolDataRef.current.symbol.symbolLayers[0].anchorPoint = { x: 0, y: currentY }
+                hoverGraphicRef.current.symbol = {
+                  type: 'cim',
+                  data: symbolDataRef.current
+                } as any
               } catch (error) {
                 debugLogger.log('HOVER-PREVIEW', {
                   event: 'animation-update-error-reuse',
@@ -582,7 +699,7 @@ export const QueryResultItem = (props: ResultItemProps) => {
         })
       }
     }, 100) // 100ms debounce
-  }, [mapView, data, recordId, hoverPinColor])
+  }, [mapView, data, recordId, hoverPinColor, memoizedSymbolData])
 
   /**
    * r022.106: Handle mouse leave - hide hover preview pin
@@ -634,110 +751,107 @@ export const QueryResultItem = (props: ResultItemProps) => {
         onExpandChange={isVerticalAlign ? setIsExpanded : undefined}
         dataSource={dataSource}
       />
-      {/* r023.32-33: Expanded = inline icons (vertical stack); collapsed = three-dot menu */}
+      {/* r024.41: Plain HTML action buttons - NO jimu-ui, NO Calcite, NO click-outside listener */}
+      {/* r024.46: When zoomOnResultClick is on, skip zoom button entirely.
+          If collapsed and no zoom button, show trash directly (no three-dot menu needed). */}
       <div className={classNames('result-actions-menu', { 'result-actions-expanded': (isExpanded || !isVerticalAlign) })}>
         {(isExpanded || !isVerticalAlign) ? (
           <>
-            {onZoomTo && (
-              <Tooltip title={getI18nMessage('zoomToRecord')} placement="bottom">
-                <Button
-                  className="result-actions-toggle"
-                  icon
-                  size="sm"
-                  variant="text"
-                  color="inherit"
-                  onClick={(e) => { e.stopPropagation(); e.preventDefault(); onZoomTo(data) }}
-                  aria-label={getI18nMessage('zoomToRecord')}
-                  css={css`padding: 6px; min-width: 32px; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center;`}
-                >
-                  <Icon icon={zoomToIcon} size={18} />
-                </Button>
-              </Tooltip>
+            {onZoomTo && !zoomOnResultClick && (
+              <button
+                type="button"
+                className="result-actions-toggle"
+                css={actionButtonStyle}
+                onClick={handleZoomTo}
+                aria-label={getI18nMessage('zoomToRecord')}
+                title={getI18nMessage('zoomToRecord')}
+              >
+                <span css={zoomToIconStyle} aria-hidden="true" />
+              </button>
             )}
-            <Tooltip title={getI18nMessage('removeResult')} placement="bottom">
-              <Button
-                className="result-actions-toggle"
-                icon
-                size="sm"
-                variant="text"
-                color="inherit"
-                onClick={handleRemove}
-                aria-label={getI18nMessage('removeResult')}
-                css={css`padding: 6px; min-width: 32px; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center;`}
-              >
-                <div css={trashIconStyle} aria-hidden="true" />
-              </Button>
-            </Tooltip>
-          </>
-        ) : (
-          <>
-            <Tooltip title={getI18nMessage('resultActions')} placement="bottom">
-              <Button
-                ref={menuButtonRef}
-                className="result-actions-toggle"
-                icon
-                size="sm"
-                variant="text"
-                color="inherit"
-                onClick={(e) => { e.stopPropagation(); e.preventDefault(); setMenuOpen(!menuOpen) }}
-                aria-label="Result actions"
-                aria-haspopup="menu"
-                aria-expanded={menuOpen}
-                css={css`padding: 6px; min-width: 32px; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center;`}
-              >
-                <Icon icon={moreIcon} size={22} />
-              </Button>
-            </Tooltip>
-            <Popper
-              open={menuOpen}
-              reference={menuButtonRef.current}
-              placement="bottom-end"
-              toggle={() => setMenuOpen(false)}
-              trapFocus={false}
+            <button
+              type="button"
+              className="result-actions-toggle"
+              css={actionButtonStyle}
+              onClick={handleRemove}
+              aria-label={getI18nMessage('removeResult')}
+              title={getI18nMessage('removeResult')}
             >
-              <div
-                css={css`
-                  min-width: 140px;
-                  padding: 4px 0;
-                  background: var(--ref-palette-neutral-0);
-                  border: 1px solid var(--ref-palette-neutral-400);
-                  border-radius: 4px;
-                  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-                `}
-              >
-                {onZoomTo && (
-                  <button
-                    type="button"
-                    role="menuitem"
-                    onClick={handleZoomTo}
-                    css={css`
-                      display: flex; align-items: center; gap: 8px; width: 100%;
-                      padding: 8px 12px; border: none; background: none; font-size: 0.875rem;
-                      cursor: pointer; text-align: left;
-                      &:hover { background: var(--ref-palette-neutral-200); }
-                    `}
-                  >
-                    <Icon icon={zoomToIcon} size={16} />
-                    {getI18nMessage('zoomToRecord')}
-                  </button>
-                )}
+              <span css={trashIconStyle} aria-hidden="true" />
+            </button>
+          </>
+        ) : (zoomOnResultClick || !onZoomTo) ? (
+          /* r024.46: Click-to-zoom is on (or no zoom handler) - just show trash directly, no menu */
+          <button
+            type="button"
+            className="result-actions-toggle"
+            css={actionButtonStyle}
+            onClick={handleRemove}
+            aria-label={getI18nMessage('removeResult')}
+            title={getI18nMessage('removeResult')}
+          >
+            <span css={trashIconStyle} aria-hidden="true" />
+          </button>
+        ) : (
+          <div 
+            css={css`position: relative;`}
+            onBlur={(e) => {
+              // Close menu when focus leaves the container (click elsewhere)
+              if (!e.currentTarget.contains(e.relatedTarget as Node)) {
+                setMenuOpen(false)
+              }
+            }}
+          >
+            <button
+              ref={menuButtonRef}
+              type="button"
+              className="result-actions-toggle"
+              css={actionButtonStyle}
+              onClick={(e) => {
+                e.stopPropagation()
+                e.preventDefault()
+                if (!menuOpen && menuButtonRef.current) {
+                  // r024.46: Check if there's room below. Menu is ~80px tall.
+                  const scrollParent = menuButtonRef.current.closest('.query-result-container')
+                  if (scrollParent) {
+                    const scrollRect = scrollParent.getBoundingClientRect()
+                    const btnRect = menuButtonRef.current.getBoundingClientRect()
+                    const spaceBelow = scrollRect.bottom - btnRect.bottom
+                    setMenuDropUp(spaceBelow < 90)
+                  }
+                }
+                setMenuOpen(!menuOpen)
+              }}
+              aria-label={getI18nMessage('resultActions')}
+              title={getI18nMessage('resultActions')}
+              aria-haspopup="menu"
+              aria-expanded={menuOpen}
+            >
+              <span css={moreIconStyle} aria-hidden="true" />
+            </button>
+            {menuOpen && (
+              <div css={dropdownMenuBaseStyle} style={menuDropUp ? { bottom: '36px' } : { top: '36px' }} role="menu" tabIndex={-1}>
+                <button
+                  type="button"
+                  role="menuitem"
+                  onClick={handleZoomTo}
+                  css={menuItemStyle}
+                >
+                  <span css={css`${zoomToIconStyle}; width: 16px; height: 16px;`} aria-hidden="true" />
+                  {getI18nMessage('zoomToRecord')}
+                </button>
                 <button
                   type="button"
                   role="menuitem"
                   onClick={handleRemove}
-                  css={css`
-                    display: flex; align-items: center; gap: 8px; width: 100%;
-                    padding: 8px 12px; border: none; background: none; font-size: 0.875rem;
-                    cursor: pointer; text-align: left;
-                    &:hover { background: var(--ref-palette-neutral-200); }
-                  `}
+                  css={menuItemStyle}
                 >
-                  <div css={trashIconStyle} aria-hidden="true" style={{ width: 16, height: 16 }} />
+                  <span css={css`${trashIconStyle}; width: 16px; height: 16px;`} aria-hidden="true" />
                   {getI18nMessage('removeResult')}
                 </button>
               </div>
-            </Popper>
-          </>
+            )}
+          </div>
         )}
       </div>
     </div>
