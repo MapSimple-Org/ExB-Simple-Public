@@ -2,8 +2,8 @@
 
 Custom widgets for ArcGIS Experience Builder Developer Edition (1.19.0+). Built for performance, deep-linking, and advanced result management.
 
-**Current Version**: `1.19.0-r024.63`  
-**Latest Update**: Refined Error Feedback, Popup Fixes, Graphics Race Condition Fix (Feb 19, 2026)
+**Current Version**: `1.19.0-r024.79`  
+**Latest Update**: Export CSV, Cached Extent Performance, Multi-Source Fixes (Feb 27, 2026)
 
 ---
 
@@ -27,54 +27,55 @@ Custom widgets for ArcGIS Experience Builder Developer Edition (1.19.0+). Built 
 
 ---
 
-## What's New: r024.58-62 (Feb 19, 2026)
+## What's New: r024.74-79 (Feb 27, 2026)
 
-### Service Error Feedback (r024.62)
+### Export CSV (r024.78-79)
 
-**Query failures from service outages now surface user-facing messages.** When the backing ArcGIS map service is down or returns an unexpected response, users previously saw silent failures: the spinner disappeared and the form returned with no feedback.
+**Export your query results to CSV with complete attribute data.**
 
-**What Changed:**
-- On query chain failure, a red-themed `calcite-popover` appears anchored below the form
-- Message: "Search could not be completed. The map service may be temporarily unavailable."
-- Popover is closable, auto-closes, and clears on the next query execution
-- i18n strings added for internationalization support
+The ResultsMenu now includes an "Export CSV" option:
+- **Single source:** Downloads a `.csv` file named after the data source
+- **Multiple sources:** Downloads a `QueryResults.zip` containing one CSV per source
+- **Full attributes:** Re-queries the data source to fetch ALL fields, not just displayed fields
 
-**Technical Details:**
-- The ArcGIS JS API's PBF parser throws when the service returns an error page or empty body instead of valid PBF data
-- Error is caught in the query chain's `.catch` handler and surfaced via the popover
+### Cached Extent for Zoom/Pan (r024.74-75)
 
-### Clear-All Graphics Race Condition Fix (r024.61)
+**Zoom and Pan operations are now faster.**
 
-**Fixed: "Remove all" (trash button) now properly clears graphics on first query in multi-widget apps.**
+Previously, clicking "Zoom to Selected" or "Pan to" recalculated the combined extent on every click. Now the extent is calculated once when results change and cached, eliminating redundant geometry operations.
 
-**Symptoms:**
-- Graphics remained on the map after clicking "Remove all" when the non-LayerList widget was the first to run a query
-- Subsequent clear-all operations worked correctly
-- If the LayerList widget ran a query first, the bug did not manifest
+### Multi-Source View in Table Fix (r024.76)
 
-**Root Cause:**
-- `createOrGetGraphicsLayer` had no concurrency guard
-- During widget init, two concurrent calls both passed the "does it exist?" check before either added to the map
-- This created two `GraphicsLayer` objects with the same ID but different internal UIDs
-- The map kept one layer, the widget ref held the other
-- Graphics were added to the ref's layer, but `clearAnyResultLayerContents` found the map's layer (empty) by ID lookup
+**View in Table now correctly shows all data sources as separate tabs.**
 
-**Fix:**
-- Added `graphicsLayerCreationInProgress` lock (same pattern as `createOrGetResultGroupLayer` from r024.17)
-- Second concurrent caller now awaits the first caller's promise
-- Added double-check after async module load
+When accumulating records from different feature layers (Add mode), "View in Table" was only showing the last layer. Fixed by properly tracking each record's origin data source.
 
-### Popup Behavior Fixes (r024.58-59)
+### ResultsMenu Cleanup (r024.77)
 
-**r024.59 - Popup Closes on Layer Toggle-Off:**
-- In LayerList mode, when the user toggles the result layer OFF via the LayerList, the graphics disappear but the popup was staying open pointing at nothing
-- Added a module-level `mapViewCache` to cache the mapView per widgetId
-- The existing legend-layer visibility watcher now closes the popup when `visible` flips to `false`
+**Removed duplicate actions from the results menu.**
 
-**r024.58 - Popup Persists in LayerList Mode:**
-- In LayerList mode, graphics persist on the map after the widget panel closes, so popup content remains valid
-- Added `isLayerListMode` check: only close popup on panel close in non-LayerList (graphics layer) mode
-- Previously, closing the panel would always close the popup, even when the underlying graphics were still visible
+The custom ResultsMenu now contains only:
+- Pan to (centers on all results)
+- View in table (opens Table widget)
+- Export CSV (downloads full attributes)
+- Select on map (adds to native selection)
+
+---
+
+## Previous Updates: r024.58-63 (Feb 19, 2026)
+
+### Service Error Feedback
+
+Query failures from service outages now surface user-facing messages with a red-themed popover.
+
+### Graphics Race Condition Fix
+
+Fixed "Remove all" button not clearing graphics on first query in multi-widget apps.
+
+### Popup Behavior Fixes
+
+- Popup closes when layer toggled off in LayerList
+- Popup persists when widget panel closes in LayerList mode
 
 ---
 

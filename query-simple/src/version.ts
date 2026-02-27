@@ -10,7 +10,7 @@
  */
 const BASE_VERSION = '1.19.0'
 const RELEASE_NUMBER = '024' // Increment on major changes (001, 002, 003, ...)
-const MINOR_VERSION = '63' // r024.63: Narrow error popover to only service/network errors, not all chain errors
+const MINOR_VERSION = '79' // r024.79: Export CSV now fetches full attributes via re-query (matches View in Table)
 
 export const WIDGET_VERSION = MINOR_VERSION && Number(MINOR_VERSION) > 0
   ? `${BASE_VERSION}-r${RELEASE_NUMBER}.${MINOR_VERSION}`

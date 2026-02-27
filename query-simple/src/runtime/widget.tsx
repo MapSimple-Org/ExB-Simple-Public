@@ -12,6 +12,7 @@ import { TaskListInline } from './query-task-list-inline'
 import { TaskListPopperWrapper } from './query-task-list-popper-wrapper'
 import { QueryWidgetContext } from './widget-context'
 import { createQuerySimpleDebugLogger, highlightConfigManager } from 'widgets/shared-code/mapsimple-common'
+import { calculateRecordsExtent } from './zoom-utils'
 import { WIDGET_VERSION } from '../version'
 // Chunk 1: URL Parameter Consumption Manager (r018.8)
 import { UrlConsumptionManager } from './hooks/use-url-consumption'
@@ -60,6 +61,7 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
   selectionRecordCount?: number, 
   resultsMode?: SelectionType, 
   accumulatedRecords?: FeatureDataRecord[], 
+  resultsExtent?: __esri.Extent | null,
   graphicsLayerInitialized?: boolean, 
   activeTab?: 'query' | 'results'
 }> {
@@ -104,6 +106,7 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
     selectionRecordCount?: number,
     resultsMode?: SelectionType,
     accumulatedRecords?: FeatureDataRecord[],
+    resultsExtent?: __esri.Extent | null,
     graphicsLayerInitialized?: boolean,
     activeTab?: 'query' | 'results',
     // Track when HelperSimple explicitly opens widget - only then should query-task-list use initialQueryValue for selection
@@ -111,7 +114,8 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
     shouldUseInitialQueryValueForSelection?: boolean
   } = {
     resultsMode: SelectionType.NewSelection, // Default mode
-    activeTab: 'query'
+    activeTab: 'query',
+    resultsExtent: null
   }
 
   /**
@@ -1231,8 +1235,28 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
       timestamp: Date.now()
     })
 
+    // r024.74: Calculate extent once when records change (for zoom/pan actions)
+    const resultsExtent = records.length > 0 ? calculateRecordsExtent(records) : null
+    
+    debugLogger.log('ZOOM', {
+      event: 'resultsExtent-calculated-on-accumulation-change',
+      widgetId: this.props.id,
+      recordsCount: records.length,
+      hasExtent: !!resultsExtent,
+      extent: resultsExtent ? {
+        xmin: resultsExtent.xmin,
+        xmax: resultsExtent.xmax,
+        ymin: resultsExtent.ymin,
+        ymax: resultsExtent.ymax,
+        width: resultsExtent.width,
+        height: resultsExtent.height
+      } : null,
+      timestamp: Date.now()
+    })
+    
     this.setState({ 
       accumulatedRecords: records,
+      resultsExtent,
       // Reset mode to NewSelection if all accumulated records cleared in Remove mode
       ...(shouldResetMode ? {
         resultsMode: SelectionType.NewSelection
@@ -1377,6 +1401,7 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
                 resultsMode={this.state.resultsMode}
                 onResultsModeChange={this.handleResultsModeChange}
                 accumulatedRecords={this.state.accumulatedRecords}
+                resultsExtent={this.state.resultsExtent}
                 onAccumulatedRecordsChange={this.handleAccumulatedRecordsChange}
                 graphicsLayer={this.graphicsLayerRef.current || undefined}
                 mapView={this.mapViewRef.current || undefined}
@@ -1461,6 +1486,7 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
                 resultsMode={this.state.resultsMode}
                 onResultsModeChange={this.handleResultsModeChange}
                 accumulatedRecords={this.state.accumulatedRecords}
+                resultsExtent={this.state.resultsExtent}
                 onAccumulatedRecordsChange={this.handleAccumulatedRecordsChange}
                 graphicsLayer={this.graphicsLayerRef.current || undefined}
                 mapView={this.mapViewRef.current || undefined}

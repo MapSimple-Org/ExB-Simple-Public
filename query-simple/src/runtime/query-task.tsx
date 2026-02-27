@@ -117,6 +117,7 @@ export interface QueryTaskProps {
   resultsMode?: SelectionType
   onResultsModeChange?: (mode: SelectionType) => void
   accumulatedRecords?: FeatureDataRecord[]
+  resultsExtent?: __esri.Extent | null  // r024.74: Cached extent for zoom/pan actions
   onAccumulatedRecordsChange?: (records: FeatureDataRecord[]) => void
   // Graphics layer props
   graphicsLayer?: __esri.GraphicsLayer
@@ -190,7 +191,7 @@ const style = css`
 `
 
 export function QueryTask (props: QueryTaskProps) {
-  const { queryItem, onNavBack, total, isInPopper = false, wrappedInPopper = false, className = '', index, initialInputValue, onHashParameterUsed, queryItems, selectedQueryIndex, onQueryChange, groups, ungrouped, groupOrder, selectedGroupId, selectedGroupQueryIndex, onGroupChange, onGroupQueryChange, onUngroupedChange, resultsMode, onResultsModeChange, accumulatedRecords, onAccumulatedRecordsChange, graphicsLayer, mapView, onInitializeGraphicsLayer, onClearGraphicsLayer, onDestroyGraphicsLayer, activeTab: propActiveTab, onTabChange: propOnTabChange, eventManager, zoomOnResultClick, hoverPinColor, ...otherProps } = props
+  const { queryItem, onNavBack, total, isInPopper = false, wrappedInPopper = false, className = '', index, initialInputValue, onHashParameterUsed, queryItems, selectedQueryIndex, onQueryChange, groups, ungrouped, groupOrder, selectedGroupId, selectedGroupQueryIndex, onGroupChange, onGroupQueryChange, onUngroupedChange, resultsMode, onResultsModeChange, accumulatedRecords, resultsExtent, onAccumulatedRecordsChange, graphicsLayer, mapView, onInitializeGraphicsLayer, onClearGraphicsLayer, onDestroyGraphicsLayer, activeTab: propActiveTab, onTabChange: propOnTabChange, eventManager, zoomOnResultClick, hoverPinColor, ...otherProps } = props
   const getI18nMessage = hooks.useTranslation(defaultMessage)
   const zoomToRecords = useZoomToRecords(mapView)
   const [stage, setStage] = React.useState(0) // 0 = form, 1 = results, 2 = loading, 3 = clearing
@@ -2909,6 +2910,7 @@ export function QueryTask (props: QueryTaskProps) {
                 graphicsLayer={graphicsLayer}
                 mapView={mapView}
                 accumulatedRecords={accumulatedRecords}
+                resultsExtent={resultsExtent}
                 onAccumulatedRecordsChange={onAccumulatedRecordsChange}
                 eventManager={eventManager}
                 isQuerySwitchInProgressRef={isQuerySwitchInProgressRef}

@@ -67,7 +67,13 @@ export default {
   // r024.62: Calcite Popover messages for query execution failure (service down, network error)
   queryErrorAlertLabel: 'Search failed',
   queryErrorAlertTitle: 'Search could not be completed',
-  queryErrorAlertMessage: 'The map service may be temporarily unavailable. Please try again in a few minutes. If the problem persists, contact your administrator.'
+  queryErrorAlertMessage: 'The map service may be temporarily unavailable. Please try again in a few minutes. If the problem persists, contact your administrator.',
+  // r024: Results menu action labels
+  panTo: 'Pan to',
+  viewInTable: 'View in table',
+  exportCSV: 'Export CSV',
+  export: 'Export',
+  actionsMenu: 'More actions'
 }
 
 

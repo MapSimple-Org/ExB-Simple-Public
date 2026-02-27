@@ -23,11 +23,13 @@ import {
   DataLevel,
   useIntl
 } from 'jimu-core'
-import { Button, Icon, Tooltip, DataActionList, DataActionListStyle } from 'jimu-ui'
+import { Button, Icon, Tooltip } from 'jimu-ui'
+import { ResultsMenu } from './results-menu'
 import { getWidgetRuntimeDataMap } from './widget-config'
 import { type QueryItemType, FieldsType, PagingType, ListDirection, ResultSelectMode, SelectionType } from '../config'
 import defaultMessage from './translations/default'
 import { useZoomToRecords } from './hooks/use-zoom-to-records'
+import { expandExtentByFactor, DEFAULT_EXTENT_EXPANSION_FACTOR } from './zoom-utils'
 // FORCED: Always SimpleList - LazyList and PagingList removed
 import { SimpleList } from './simple-list'
 import { combineFields } from './query-utils'
@@ -35,14 +37,13 @@ import { DEFAULT_QUERY_ITEM } from '../default-query-item'
 import { ArrowLeftOutlined } from 'jimu-icons/outlined/directional/arrow-left'
 import { ExpandAllOutlined } from 'jimu-icons/outlined/directional/expand-all'
 import { CollapseAllOutlined } from 'jimu-icons/outlined/directional/collapse-all'
-import { getExtraActions } from '../data-actions'
+// r024: Removed getExtraActions - now using ResultsMenu with direct action handlers
 // Import zoom icon for direct action button
 const zoomToIcon = require('./assets/icons/zoom-to.svg')
 import { 
   selectRecordsInDataSources, 
   clearSelectionInDataSources, 
   selectRecordsAndPublish,
-  publishSelectionMessage,
   dispatchSelectionEvent 
 } from './selection-utils'
 import { removeResultsFromAccumulated, removeRecordsFromOriginSelections } from './results-management-utils'
@@ -73,6 +74,7 @@ export interface QueryTaskResultProps {
   mapView?: __esri.MapView | __esri.SceneView
   resultsMode?: SelectionType
   accumulatedRecords?: FeatureDataRecord[]
+  resultsExtent?: __esri.Extent | null  // r024.74: Cached extent for zoom/pan actions
   onAccumulatedRecordsChange?: (records: FeatureDataRecord[]) => void
   eventManager?: import('./hooks/use-event-handling').EventManager  // Chunk 7.1: Event Handling Manager
   // FIX (r018.96): Removed onManualRemoval - no longer needed
@@ -132,7 +134,7 @@ const resultStyle = css`
 `
 
 export function QueryTaskResult (props: QueryTaskResultProps) {
-  const { queryItem, queryParams, resultCount, maxPerPage, records, widgetId, outputDS, runtimeZoomToSelected, onNavBack, resultsMode, accumulatedRecords, onAccumulatedRecordsChange, graphicsLayer, mapView, eventManager, isQuerySwitchInProgressRef, currentQueryRecordIds, queries, noRemovalAlert, onDismissNoRemovalAlert, allDuplicatesAlert, onDismissAllDuplicatesAlert, zoomOnResultClick, hoverPinColor, listResetKey } = props
+  const { queryItem, queryParams, resultCount, maxPerPage, records, widgetId, outputDS, runtimeZoomToSelected, onNavBack, resultsMode, accumulatedRecords, resultsExtent, onAccumulatedRecordsChange, graphicsLayer, mapView, eventManager, isQuerySwitchInProgressRef, currentQueryRecordIds, queries, noRemovalAlert, onDismissNoRemovalAlert, allDuplicatesAlert, onDismissAllDuplicatesAlert, zoomOnResultClick, hoverPinColor, listResetKey } = props
   const getI18nMessage = hooks.useTranslation(defaultMessage)
   const intl = useIntl()
   const zoomToRecords = useZoomToRecords(mapView)
@@ -211,10 +213,7 @@ export function QueryTaskResult (props: QueryTaskResultProps) {
   // Error state for user-facing errors
   const [selectionError, setSelectionError] = React.useState<string>(null)
 
-  const extraActions = React.useMemo(() => {
-    // r023.3: Pass graphics layer and queries so Add to Map can interrogate graphics for multi-layer selection
-    return getExtraActions(widgetId, outputDS, mapView, intl, queryItem, runtimeZoomToSelected, graphicsLayer, queries)
-  }, [widgetId, outputDS, mapView, intl, queryItem, runtimeZoomToSelected, graphicsLayer, queries])
+  // r024: Removed extraActions - now using ResultsMenu with direct action handlers
 
   const enableDataAction = ReactRedux.useSelector((state: IMState) => {
     const widgetJson = state.appConfig.widgets[widgetId]
@@ -275,24 +274,50 @@ export function QueryTaskResult (props: QueryTaskResultProps) {
     }
     
     // Group records by their origin data source
+    // r024.76: Use stamped __originDSId attribute for multi-source accumulation support
     const recordsByOriginDS = new Map<FeatureLayerDataSource, FeatureDataRecord[]>()
     
     recordsToUse.forEach(record => {
-      const recordDS = (record as FeatureDataRecord).getDataSource?.() as FeatureLayerDataSource
+      const featureRecord = record as FeatureDataRecord
       let originDS: FeatureLayerDataSource | null = null
+      let lookupMethod = 'none'
       
-      if (recordDS) {
-        originDS = recordDS.getOriginDataSources()?.[0] as FeatureLayerDataSource || recordDS
-      } else if (outputDS) {
-        // Fallback: use outputDS's origin if record doesn't have dataSource
+      // Priority 1: Use stamped __originDSId attribute (set when records are accumulated)
+      const stampedOriginId = featureRecord.feature?.attributes?.__originDSId
+      if (stampedOriginId) {
+        const dsManager = DataSourceManager.getInstance()
+        originDS = dsManager.getDataSource(stampedOriginId) as FeatureLayerDataSource
+        lookupMethod = 'stamped-originDSId'
+      }
+      
+      // Priority 2: Try record.getDataSource() and get its origin
+      if (!originDS) {
+        const recordDS = featureRecord.getDataSource?.() as FeatureLayerDataSource
+        if (recordDS) {
+          originDS = recordDS.getOriginDataSources()?.[0] as FeatureLayerDataSource || recordDS
+          lookupMethod = 'record-getDataSource'
+        }
+      }
+      
+      // Priority 3: Fallback to outputDS's origin
+      if (!originDS && outputDS) {
         originDS = outputDS.getOriginDataSources()?.[0] as FeatureLayerDataSource || outputDS as FeatureLayerDataSource
+        lookupMethod = 'outputDS-fallback'
       }
       
       if (originDS) {
         if (!recordsByOriginDS.has(originDS)) {
           recordsByOriginDS.set(originDS, [])
+          debugLogger.log('RESULTS-MODE', {
+            event: 'actionDataSets-new-origin-group',
+            widgetId: widgetId,
+            originDSId: originDS.id,
+            originDSLabel: originDS.getLabel?.() || 'unknown',
+            lookupMethod,
+            stampedOriginId: stampedOriginId || 'none'
+          })
         }
-        recordsByOriginDS.get(originDS).push(record as FeatureDataRecord)
+        recordsByOriginDS.get(originDS).push(featureRecord)
       }
     })
     
@@ -618,19 +643,54 @@ export function QueryTaskResult (props: QueryTaskResultProps) {
   }, [outputDS])
 
   /**
-   * Zooms to all records in the results.
+   * Zooms to all records in the results using the cached resultsExtent.
+   * r024.74: Uses pre-calculated extent instead of computing on every click.
    */
   const zoomToAllResults = React.useCallback(async () => {
-    if (!accumulatedRecords || accumulatedRecords.length === 0 || !zoomToRecords) {
+    if (!resultsExtent || !mapView) {
+      debugLogger.log('TASK', {
+        event: 'zoom-to-all-results-skipped',
+        widgetId,
+        hasExtent: !!resultsExtent,
+        hasMapView: !!mapView,
+        timestamp: Date.now()
+      })
       return
     }
     
     try {
-      await zoomToRecords(accumulatedRecords)
+      // Apply expansion factor to the cached extent
+      const expandedExtent = expandExtentByFactor(
+        resultsExtent, 
+        DEFAULT_EXTENT_EXPANSION_FACTOR,
+        mapView.spatialReference
+      )
+      
       debugLogger.log('TASK', {
-        event: 'zoom-to-all-results',
+        event: 'zoom-to-all-results-using-cached-extent',
         widgetId,
-        recordCount: accumulatedRecords.length,
+        recordCount: accumulatedRecords?.length || 0,
+        originalExtent: {
+          xmin: resultsExtent.xmin,
+          xmax: resultsExtent.xmax,
+          width: resultsExtent.width,
+          height: resultsExtent.height
+        },
+        expandedExtent: {
+          xmin: expandedExtent.xmin,
+          xmax: expandedExtent.xmax,
+          width: expandedExtent.width,
+          height: expandedExtent.height
+        },
+        expansionFactor: DEFAULT_EXTENT_EXPANSION_FACTOR,
+        timestamp: Date.now()
+      })
+      
+      await mapView.goTo(expandedExtent)
+      
+      debugLogger.log('TASK', {
+        event: 'zoom-to-all-results-complete',
+        widgetId,
         timestamp: Date.now()
       })
     } catch (error) {
@@ -641,7 +701,7 @@ export function QueryTaskResult (props: QueryTaskResultProps) {
         timestamp: Date.now()
       })
     }
-  }, [accumulatedRecords, zoomToRecords, widgetId])
+  }, [resultsExtent, mapView, widgetId, accumulatedRecords?.length])
 
   /**
    * Clears all results. Resets local state and delegates to parent's clearResult method.
@@ -1735,7 +1795,8 @@ export function QueryTaskResult (props: QueryTaskResultProps) {
               </Button>
             </Tooltip>
             {/* Zoom to results button - 36x36px touch target */}
-            {accumulatedRecords && accumulatedRecords.length > 0 && zoomToRecords && (
+            {/* r024.74: Uses cached resultsExtent instead of computing on click */}
+            {resultsExtent && mapView && (
               <Tooltip title={getI18nMessage('zoomToSelected')} placement='bottom'>
                 <Button 
                   icon 
@@ -1750,18 +1811,21 @@ export function QueryTaskResult (props: QueryTaskResultProps) {
                 </Button>
               </Tooltip>
             )}
-            {/* Data actions filtered via manifest.json excludeDataActions - Show on Map, Select Loaded, and Clear Selection are excluded.
-                Custom "Add to Map" action is provided via extraActions and uses QuerySimple's selection process. */}
+            {/* r024: Custom hamburger menu with curated actions:
+                Pan to, View in table, Export (submenu), Zoom to selected, Select on map */}
             {enableDataAction && outputDS && (
               <React.Fragment>
                 <div css={css`width: 1px; height: 16px; background-color: var(--sys-color-divider-input);`}></div>
-                <DataActionList
+                <ResultsMenu
                   widgetId={widgetId}
                   dataSets={actionDataSets}
-                  listStyle={DataActionListStyle.Dropdown}
-                  buttonSize='sm'
-                  buttonType='tertiary'
-                  extraActions={extraActions}
+                  outputDS={outputDS}
+                  mapView={mapView}
+                  resultsExtent={resultsExtent}
+                  intl={intl}
+                  queryItem={queryItem}
+                  graphicsLayer={graphicsLayer}
+                  queries={queries}
                 />
               </React.Fragment>
             )}
