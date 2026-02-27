@@ -65,6 +65,157 @@ const DEFAULT_ZERO_AREA_BUFFER_FEET = 300
 /** Conversion factor: feet to meters */
 const FEET_TO_METERS = 0.3048
 
+// Export default expansion factor for use by consumers who have pre-calculated extent
+export { DEFAULT_EXTENT_EXPANSION_FACTOR }
+
+/**
+ * Calculates the combined extent of all feature records.
+ * 
+ * This function extracts extents from all records and unions them together to
+ * produce a single extent that encompasses all features. The result is the RAW
+ * extent (not expanded) - apply expansion separately if needed.
+ * 
+ * Use this to pre-calculate extent when records change, rather than recalculating
+ * on every zoom/pan action. The cached extent can then be used by both zoomToExtent()
+ * and pan operations.
+ * 
+ * @param records - Array of feature data records to calculate extent for
+ * @returns The combined extent of all records, or null if no valid geometries
+ * 
+ * @example
+ * // Calculate extent once when records change
+ * const extent = calculateRecordsExtent(accumulatedRecords)
+ * 
+ * // Use for zoom (with expansion)
+ * if (extent) {
+ *   const expanded = expandExtentByFactor(extent, 1.2)
+ *   mapView.goTo(expanded)
+ * }
+ * 
+ * // Use for pan (center only)
+ * if (extent) {
+ *   mapView.goTo({ center: extent.center })
+ * }
+ */
+export function calculateRecordsExtent(records: FeatureDataRecord[]): __esri.Extent | null {
+  if (!records || records.length === 0) {
+    debugLogger.log('ZOOM', {
+      event: 'calculateRecordsExtent-early-exit',
+      reason: 'no-records',
+      recordsCount: records?.length || 0
+    })
+    return null
+  }
+
+  debugLogger.log('ZOOM', {
+    event: 'calculateRecordsExtent-start',
+    recordsCount: records.length
+  })
+
+  // Extract extents from records (memory-optimized: only store extents, not geometries)
+  const extents = records
+    .map(record => {
+      const geom = record.getJSAPIGeometry()
+      if (!geom) return null
+      
+      // For points without extent, create a zero-area extent
+      if (geom.type === 'point' && !geom.extent) {
+        const pt = geom as __esri.Point
+        return new Extent({
+          xmin: pt.x,
+          xmax: pt.x,
+          ymin: pt.y,
+          ymax: pt.y,
+          spatialReference: pt.spatialReference
+        })
+      }
+      
+      // For other geometry types, use existing extent
+      return geom.extent || (geom as any).getExtent?.()
+    })
+    .filter((ext): ext is __esri.Extent => ext != null)
+  
+  if (extents.length === 0) {
+    debugLogger.log('ZOOM', {
+      event: 'calculateRecordsExtent-no-extents',
+      recordsCount: records.length
+    })
+    return null
+  }
+
+  // Calculate union of all extents
+  let extent: __esri.Extent = extents[0].clone()
+  
+  for (let i = 1; i < extents.length; i++) {
+    extent = extent.union(extents[i])
+  }
+  
+  debugLogger.log('ZOOM', {
+    event: 'calculateRecordsExtent-complete',
+    recordsCount: records.length,
+    extentsCount: extents.length,
+    extent: {
+      xmin: extent.xmin,
+      xmax: extent.xmax,
+      ymin: extent.ymin,
+      ymax: extent.ymax,
+      width: extent.width,
+      height: extent.height,
+      spatialReference: extent.spatialReference?.wkid
+    }
+  })
+  
+  return extent
+}
+
+/**
+ * Expands an extent by a factor around its center.
+ * 
+ * Use this to add padding around a pre-calculated extent before zooming.
+ * Also handles zero-area extents (single points) by applying a buffer.
+ * 
+ * @param extent - The extent to expand
+ * @param expansionFactor - Factor to expand by (default 1.2 = 20% expansion)
+ * @param spatialReference - Spatial reference for zero-area buffer calculation
+ * @param zeroAreaBufferFeet - Buffer in feet for zero-area extents (default 300)
+ * @returns The expanded extent
+ */
+export function expandExtentByFactor(
+  extent: __esri.Extent,
+  expansionFactor: number = DEFAULT_EXTENT_EXPANSION_FACTOR,
+  spatialReference?: __esri.SpatialReference,
+  zeroAreaBufferFeet: number = DEFAULT_ZERO_AREA_BUFFER_FEET
+): __esri.Extent {
+  let expandedExtent = extent.clone()
+  
+  // Handle zero-area extent (single point or overlapping points)
+  const isZeroArea = expandedExtent.width === 0 || expandedExtent.height === 0
+  
+  if (isZeroArea && spatialReference) {
+    const isMetric = isMetricSpatialReference(spatialReference)
+    const bufferDistance = isMetric 
+      ? zeroAreaBufferFeet * FEET_TO_METERS
+      : zeroAreaBufferFeet
+    
+    expandedExtent = expandZeroAreaExtent(expandedExtent, bufferDistance)
+  }
+  
+  // Apply expansion factor
+  const centerX = (expandedExtent.xmin + expandedExtent.xmax) / 2
+  const centerY = (expandedExtent.ymin + expandedExtent.ymax) / 2
+  const halfWidth = expandedExtent.width / 2
+  const halfHeight = expandedExtent.height / 2
+  const expandedHalfWidth = halfWidth * expansionFactor
+  const expandedHalfHeight = halfHeight * expansionFactor
+  
+  return expandedExtent.clone().set({
+    xmin: centerX - expandedHalfWidth,
+    xmax: centerX + expandedHalfWidth,
+    ymin: centerY - expandedHalfHeight,
+    ymax: centerY + expandedHalfHeight
+  })
+}
+
 /**
  * Determines if the spatial reference uses meters (Web Mercator or other metric systems).
  * 

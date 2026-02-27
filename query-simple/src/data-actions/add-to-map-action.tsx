@@ -312,6 +312,66 @@ async function selectRecordsForAddToMap(
 }
 
 /**
+ * Handler function for "Select on map" action - can be called directly from ResultsMenu.
+ * This is the same logic as the Add to Map data action's onExecute.
+ * 
+ * @param widgetId - The widget ID
+ * @param outputDS - The output data source
+ * @param records - Array of FeatureDataRecord to select
+ * @param graphicsLayer - Graphics layer for multi-layer support
+ * @param queries - All query configs for multi-layer mapping
+ */
+export async function handleSelectOnMap(
+  widgetId: string,
+  outputDS: DataSource,
+  records: FeatureDataRecord[],
+  graphicsLayer?: __esri.GraphicsLayer | __esri.GroupLayer,
+  queries?: ImmutableArray<ImmutableObject<QueryItemType>>
+): Promise<boolean> {
+  if (!outputDS || !records || records.length === 0) {
+    debugLogger.log('DATA-ACTION', {
+      action: 'handleSelectOnMap-EARLY-EXIT',
+      result: false,
+      reason: !outputDS ? 'No outputDS' : 'No records',
+      hasOutputDS: !!outputDS,
+      recordsCount: records?.length || 0,
+      timestamp: Date.now()
+    })
+    return false
+  }
+  
+  debugLogger.log('DATA-ACTION', {
+    action: 'handleSelectOnMap-ENTRY',
+    widgetId,
+    recordsCount: records.length,
+    hasGraphicsLayer: !!graphicsLayer,
+    hasQueries: !!(queries && queries.length > 0),
+    timestamp: Date.now()
+  })
+  
+  try {
+    await selectRecordsForAddToMap(widgetId, records, outputDS, graphicsLayer, queries)
+    
+    debugLogger.log('DATA-ACTION', {
+      action: 'handleSelectOnMap-SUCCESS',
+      result: true,
+      recordsCount: records.length,
+      timestamp: Date.now()
+    })
+    
+    return true
+  } catch (error) {
+    debugLogger.log('DATA-ACTION', {
+      action: 'handleSelectOnMap-ERROR',
+      result: false,
+      error: error instanceof Error ? error.message : String(error),
+      timestamp: Date.now()
+    })
+    return false
+  }
+}
+
+/**
  * Creates a custom "Add to Map" data action that uses QuerySimple's selection process.
  * 
  * This action replaces the framework's "Show on Map" action and ensures consistent

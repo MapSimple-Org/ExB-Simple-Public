@@ -7,6 +7,102 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 > **Archive**: For releases r001-r021, see [CHANGELOG_ARCHIVE_r001-r021.md](docs/archive/CHANGELOG_ARCHIVE_r001-r021.md)
 
+## [1.19.0-r024.79] - 2026-02-27 - Export CSV with Full Attributes
+
+### Added
+
+**Export CSV now fetches complete attribute data (r024.78-79):**
+- Added "Export CSV" menu item to ResultsMenu
+- Single source: Downloads `.csv` file directly
+- Multiple sources: Downloads `QueryResults.zip` with one CSV per source
+- Re-queries data source with `outFields: ['*']` to get all attributes (not just display fields)
+- Matches the pattern used by View in Table action
+- Falls back to client-side attributes if re-query fails
+
+**Technical details:**
+- Custom `recordsToCSV` function generates CSV (jimu-core's toCSV is internal)
+- Uses actual OBJECTID from feature attributes (not `getId()` internal IDs) for multi-source support
+- Properly escapes CSV values (commas, quotes, newlines)
+- Excludes internal fields (`__queryConfigId`, `__originDSId`)
+
+**Files modified:**
+- `query-simple/src/runtime/results-menu.tsx` - Added Export CSV handler and menu item
+- `query-simple/src/runtime/translations/default.ts` - Added `exportCSV` i18n string
+- `query-simple/src/version.ts` - Increment to r024.79
+
+---
+
+## [1.19.0-r024.77] - 2026-02-22 - Clean Up ResultsMenu
+
+### Changed
+
+**Removed DataActionList from ResultsMenu (r024.77):**
+- DataActionList was duplicating the "Pan to" action already provided by our custom menu
+- ResultsMenu now contains only three custom actions: Pan to, View in table, Select on map
+- Cleaner, more focused menu without Esri's default actions cluttering the UI
+
+**Files modified:**
+- `query-simple/src/runtime/results-menu.tsx` - Removed DataActionList, updated imports and styles
+- `query-simple/src/version.ts` - Increment to r024.77
+
+---
+
+## [1.19.0-r024.76] - 2026-02-22 - Fix Multi-Source View in Table
+
+### Fixed
+
+**View in Table now correctly handles multiple data sources (r024.76):**
+- When records from different feature layers are accumulated (Add mode), "View in table" was only showing the last source
+- Root cause: `actionDataSets` grouping used `record.getDataSource()` which returns the shared outputDS after accumulation
+- Fix: Now reads the stamped `__originDSId` attribute from record attributes first, uses DataSourceManager to look up the actual origin data source
+- Records from different layers now correctly appear as separate tabs in the Table widget
+
+**Files modified:**
+- `query-simple/src/runtime/query-result.tsx` - Updated `actionDataSets` useMemo to prioritize `__originDSId`
+- `query-simple/src/version.ts` - Increment to r024.76
+
+---
+
+## [1.19.0-r024.75] - 2026-02-22 - Cache Results Extent for Pan Action
+
+### Changed
+
+**Pan to action now uses cached resultsExtent (r024.75):**
+- Phase 2 of extent caching optimization
+- ResultsMenu's "Pan to" action now uses pre-calculated `resultsExtent` from props
+- Centers on ALL results, not just the last record
+- Deprecated `panToRecords` and `handlePanTo` in `pan-to-action.tsx`
+
+**Files modified:**
+- `query-simple/src/runtime/results-menu.tsx` - Uses cached resultsExtent for Pan to
+- `query-simple/src/runtime/query-result.tsx` - Passes resultsExtent to ResultsMenu
+- `query-simple/src/data-actions/pan-to-action.tsx` - Marked as deprecated
+- `query-simple/src/version.ts` - Increment to r024.75
+
+---
+
+## [1.19.0-r024.74] - 2026-02-22 - Cache Results Extent for Zoom
+
+### Changed
+
+**Zoom to All Results now uses cached extent (r024.74):**
+- Phase 1 of extent caching optimization
+- Combined extent of all results is now calculated once when `accumulatedRecords` changes
+- Stored as `resultsExtent` in widget state and passed through component chain
+- "Zoom to Selected" button uses pre-calculated extent instead of recalculating on each click
+- Improves performance and ensures consistent behavior
+
+**Files modified:**
+- `query-simple/src/runtime/zoom-utils.ts` - New `calculateRecordsExtent()` function, exported `expandExtentByFactor()`
+- `query-simple/src/runtime/widget.tsx` - Added `resultsExtent` state, calculated in `handleAccumulatedRecordsChange`
+- `query-simple/src/runtime/query-task-list.tsx` - Pass through `resultsExtent` prop
+- `query-simple/src/runtime/query-task.tsx` - Pass through `resultsExtent` prop
+- `query-simple/src/runtime/query-result.tsx` - Use cached extent for zoom button
+- `query-simple/src/version.ts` - Increment to r024.74
+- `CONTEXT.md` - Added architecture notes for cached extent pattern
+
+---
+
 ## [1.19.0-r024.62] - 2026-02-19 - Show Error Feedback on Service Outage
 
 ### Fixed

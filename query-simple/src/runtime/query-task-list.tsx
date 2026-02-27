@@ -25,6 +25,7 @@ export interface QueryTaskListProps {
   // r022.105: Configurable zoom on result click
   zoomOnResultClick?: boolean
   accumulatedRecords?: FeatureDataRecord[]
+  resultsExtent?: __esri.Extent | null  // r024.74: Cached extent for zoom/pan actions
   onAccumulatedRecordsChange?: (records: FeatureDataRecord[]) => void
   graphicsLayer?: __esri.GraphicsLayer
   mapView?: __esri.MapView | __esri.SceneView
@@ -130,7 +131,7 @@ const getQueryDisplayName = (item: ImmutableObject<QueryItemType>): string => {
 }
 
 export function QueryTaskList (props: QueryTaskListProps) {
-  const { queryItems, widgetId, defaultPageSize, isInPopper = false, className = '', initialQueryValue, shouldUseInitialQueryValueForSelection = false, onHashParameterUsed, resultsMode, onResultsModeChange, accumulatedRecords, onAccumulatedRecordsChange, graphicsLayer, mapView, onInitializeGraphicsLayer, onClearGraphicsLayer, onDestroyGraphicsLayer, activeTab, onTabChange, eventManager, zoomOnResultClick, hoverPinColor } = props
+  const { queryItems, widgetId, defaultPageSize, isInPopper = false, className = '', initialQueryValue, shouldUseInitialQueryValueForSelection = false, onHashParameterUsed, resultsMode, onResultsModeChange, accumulatedRecords, resultsExtent, onAccumulatedRecordsChange, graphicsLayer, mapView, onInitializeGraphicsLayer, onClearGraphicsLayer, onDestroyGraphicsLayer, activeTab, onTabChange, eventManager, zoomOnResultClick, hoverPinColor } = props
   const getI18nMessage = hooks.useTranslation(defaultMessages)
   
   // Log when props are received
@@ -633,6 +634,7 @@ export function QueryTaskList (props: QueryTaskListProps) {
             resultsMode={resultsMode}
             onResultsModeChange={onResultsModeChange}
             accumulatedRecords={accumulatedRecords}
+            resultsExtent={resultsExtent}
             onAccumulatedRecordsChange={onAccumulatedRecordsChange}
             activeTab={activeTab}
             onTabChange={onTabChange}
