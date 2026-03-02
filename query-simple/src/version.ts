@@ -10,7 +10,7 @@
  */
 const BASE_VERSION = '1.19.0'
 const RELEASE_NUMBER = '024' // Increment on major changes (001, 002, 003, ...)
-const MINOR_VERSION = '109' // r024.109: Smart Helper-Simple note - only shows when not managed
+const MINOR_VERSION = '110' // r024.110: Custom Template image support ![alt](url)
 
 export const WIDGET_VERSION = MINOR_VERSION && Number(MINOR_VERSION) > 0
   ? `${BASE_VERSION}-r${RELEASE_NUMBER}.${MINOR_VERSION}`

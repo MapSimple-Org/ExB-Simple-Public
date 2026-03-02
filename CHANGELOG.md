@@ -7,6 +7,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 > **Archive**: For releases r001-r021, see [CHANGELOG_ARCHIVE_r001-r021.md](docs/archive/CHANGELOG_ARCHIVE_r001-r021.md)
 
+## [1.19.0-r024.110] - 2026-03-01 - Custom Template Image Support
+
+### Added
+
+**Image syntax support in Custom Template mode (r024.110):**
+- Added `![alt](url)` Markdown image syntax to the template parser
+- Images render with responsive styling (max-width: 100%, height: auto)
+- Supports field tokens: `![Photo]({PHOTO_URL})` renders images from attribute fields
+- Processed before links to avoid syntax conflicts (`![]()` vs `[]()`)
+
+**Files modified:**
+- `query-simple/src/runtime/markdown-template-utils.ts` - Add image regex and HTML conversion
+- `query-simple/src/version.ts` - Increment to r024.110
+
+---
+
 ## [1.19.0-r024.109] - 2026-02-22 - Smart ShortId Helper Note
 
 ### Added

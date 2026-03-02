@@ -10,6 +10,7 @@
  *   - item            Unordered list item
  *   ---               Horizontal rule
  *   [text](url)       Clickable link (opens in new tab)
+ *   ![alt](url)       Image (responsive, max-width 100%)
  *   (blank line)      Paragraph break
  *   (leading spaces)  Visual indentation (2 spaces = 1 level)
  *
@@ -125,11 +126,18 @@ export function convertTemplateToHtml (markdown: string): string {
 }
 
 /**
- * Apply inline formatting: **bold**, *italic*, and [text](url) links.
+ * Apply inline formatting: **bold**, *italic*, ![alt](url) images, and [text](url) links.
  * Processes bold first so **text** isn't partially consumed by the italic pass.
+ * Images must be processed before links (![...] vs [...] syntax).
  * {fieldName} tokens are left untouched.
  */
 function applyInlineFormatting (text: string): string {
+  // Images: ![alt](url) -> <img> (must be before links due to similar syntax)
+  text = text.replace(
+    /!\[([^\]]*)\]\(([^)]+)\)/g,
+    '<img src="$2" alt="$1" style="max-width:100%; height:auto; display:block; margin:4px 0;">'
+  )
+
   // Links: [text](url) -> <a> with new-tab behavior
   text = text.replace(
     /\[([^\]]+)\]\(([^)]+)\)/g,

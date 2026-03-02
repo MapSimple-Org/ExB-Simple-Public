@@ -1,11 +1,40 @@
-# Release v1.19.0-r024.109
+# Release v1.19.0-r024.110
 
 **Release Date:** 2026-03-01  
 **Experience Builder Version:** 1.19.0+
 
 ## Highlights
 
-This release adds multi-format export capabilities (CSV, GeoJSON, JSON), major View in Table improvements including proper tab naming and field visibility, and a smarter settings UX that detects Helper-Simple configuration.
+This release adds multi-format export capabilities (CSV, GeoJSON, JSON), major View in Table improvements including proper tab naming and field visibility, a smarter settings UX that detects Helper-Simple configuration, and image support in Custom Template mode.
+
+---
+
+## Custom Template Image Support (r024.110)
+
+**Display images from your data directly in query results.**
+
+### What's New
+
+Custom Template mode now supports standard Markdown image syntax:
+
+```markdown
+![Alt text]({PHOTO_URL})
+```
+
+If your feature layer has a field containing an image URL (e.g. `PHOTO_URL`), it renders inline in the result card — responsive, max-width 100%.
+
+### Example Template
+
+```markdown
+**{SITENAME}**
+**Site type:** {SITETYPE}
+
+![Photo]({PHOTO_URL})
+```
+
+### Inline Help Updated
+
+The `(?)` tooltip in the Custom Template settings panel now includes image syntax in its cheat sheet.
 
 ---
 
@@ -37,11 +66,6 @@ The ResultsMenu now has an "Export" submenu with three format options:
 ### Technical Details
 
 Export re-queries the original data source with full attributes (same pattern as View in Table). The code is consolidated into `export-utils.ts` making it easy to add new formats.
-
-**Implementation notes:**
-- GeoJSON converter handles Point, Polyline, Polygon, MultiPoint geometries
-- Esri JSON geometry is converted to GeoJSON format
-- `EXPORT_FORMATS` config object makes adding new formats trivial (~20 lines)
 
 ---
 
@@ -79,15 +103,11 @@ Aligned View in Table implementation with Esri's patterns:
 
 **Context-aware Helper-Simple requirement note.**
 
-### What's New
-
 The shortId configuration field now displays a warning note only when needed:
 
 - Note appears if no Helper-Simple widget is configured to manage this QuerySimple widget
 - Note is hidden if a Helper-Simple widget is properly configured
 - Scans app config in real-time to check `managedWidgetId`
-
-This helps users understand why their URL parameters might not work without cluttering the UI for properly configured apps.
 
 ---
 
