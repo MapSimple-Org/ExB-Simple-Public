@@ -91,7 +91,7 @@ export default {
   resultsLayerTitle: 'Layer title',
   resultsLayerTitlePlaceholder: 'QuerySimple Results',
   contentTemplate: 'Content template',
-  contentTemplateTip: 'Formatting syntax:\n**bold** or __bold__\n*italic* or _italic_\n# Heading\n## Subheading\n### Small heading\n- List item\n--- Horizontal rule\n[text](url) Link\n(blank line) Paragraph break\n(leading spaces) Indent\n\nInsert fields with the data button below.',
+  contentTemplateTip: 'Formatting syntax:\n**bold** or __bold__\n*italic* or _italic_\n# Heading\n## Subheading\n### Small heading\n- List item\n--- Horizontal rule\n[text](url) Link\n![alt](url) Image\n(blank line) Paragraph break\n(leading spaces) Indent\n\nInsert fields with the data button below.\nFor images: ![Photo]({PHOTO_URL})',
   templatePreview: 'Preview'
 }
 

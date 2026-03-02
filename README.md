@@ -2,8 +2,8 @@
 
 Custom widgets for ArcGIS Experience Builder Developer Edition (1.19.0+). Built for performance, deep-linking, and advanced result management.
 
-**Current Version**: `1.19.0-r024.109`  
-**Latest Update**: Multi-Format Export (CSV/GeoJSON/JSON), View in Table Improvements, Smart Settings UX (Mar 1, 2026)
+**Current Version**: `1.19.0-r024.110`  
+**Latest Update**: Custom Template image support, Multi-Format Export (CSV/GeoJSON/JSON), View in Table Improvements, Smart Settings UX (Mar 1, 2026)
 
 ---
 
@@ -27,7 +27,19 @@ Custom widgets for ArcGIS Experience Builder Developer Edition (1.19.0+). Built 
 
 ---
 
-## What's New: r024.82-109 (Mar 1, 2026)
+## What's New: r024.82-110 (Mar 1, 2026)
+
+### Custom Template Image Support (r024.110)
+
+**Display images from your data directly in query results.**
+
+If your feature layer has a field containing an image URL, use standard Markdown image syntax in your template:
+
+```markdown
+![Photo]({PHOTO_URL})
+```
+
+Images render inline in result cards, responsive and max-width 100%. The `(?)` tooltip in settings includes the syntax in its cheat sheet.
 
 ### Multi-Format Export (r024.105-108)
 
