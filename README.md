@@ -2,8 +2,8 @@
 
 Custom widgets for ArcGIS Experience Builder Developer Edition (1.19.0+). Built for performance, deep-linking, and advanced result management.
 
-**Current Version**: `1.19.0-r024.79`  
-**Latest Update**: Export CSV, Cached Extent Performance, Multi-Source Fixes (Feb 27, 2026)
+**Current Version**: `1.19.0-r024.109`  
+**Latest Update**: Multi-Format Export (CSV/GeoJSON/JSON), View in Table Improvements, Smart Settings UX (Mar 1, 2026)
 
 ---
 
@@ -27,38 +27,64 @@ Custom widgets for ArcGIS Experience Builder Developer Edition (1.19.0+). Built 
 
 ---
 
-## What's New: r024.74-79 (Feb 27, 2026)
+## What's New: r024.82-109 (Mar 1, 2026)
+
+### Multi-Format Export (r024.105-108)
+
+**Export your query results to CSV, GeoJSON, or JSON with complete attribute data.**
+
+The ResultsMenu now has an "Export" submenu with three format options:
+
+| Format | Includes Geometry | Use Case |
+| :--- | :---: | :--- |
+| **CSV** | No | Spreadsheets, data analysis |
+| **GeoJSON** | Yes | GIS tools, web mapping |
+| **JSON** | No | APIs, programmatic access |
+
+**Features:**
+- **Field aliases**: Column headers use configured aliases, not raw field names
+- **Priority ordering**: Visible fields appear first
+- **Whitespace trimming**: String values are automatically trimmed
+- **Multi-source packaging**: Single source downloads a file; multiple sources download a zip
+
+### View in Table Improvements (r024.82-104)
+
+**Smarter tab naming, field visibility, and memory management.**
+
+- **Tab Naming**: Table tabs now show meaningful names like "Query-Parcels" instead of generic "Output_xxxxx"
+- **Field Visibility**: Table columns respect your configured field visibility from popup templates
+- **Memory Optimization**: Aligned implementation with Esri patterns for better cleanup
+
+### Smart Settings UX (r024.109)
+
+**Context-aware Helper-Simple requirement note.**
+
+The shortId configuration field now displays a warning note only when no Helper-Simple widget is configured to manage the QuerySimple widget. If properly configured, the note is hidden.
+
+---
+
+## Previous Updates: r024.74-79 (Feb 27, 2026)
 
 ### Export CSV (r024.78-79)
 
 **Export your query results to CSV with complete attribute data.**
 
-The ResultsMenu now includes an "Export CSV" option:
+The ResultsMenu includes an "Export CSV" option:
 - **Single source:** Downloads a `.csv` file named after the data source
 - **Multiple sources:** Downloads a `QueryResults.zip` containing one CSV per source
-- **Full attributes:** Re-queries the data source to fetch ALL fields, not just displayed fields
+- **Full attributes:** Re-queries the data source to fetch ALL fields
 
 ### Cached Extent for Zoom/Pan (r024.74-75)
 
-**Zoom and Pan operations are now faster.**
-
-Previously, clicking "Zoom to Selected" or "Pan to" recalculated the combined extent on every click. Now the extent is calculated once when results change and cached, eliminating redundant geometry operations.
+**Zoom and Pan operations are now faster.** Extent is calculated once when results change and cached.
 
 ### Multi-Source View in Table Fix (r024.76)
 
 **View in Table now correctly shows all data sources as separate tabs.**
 
-When accumulating records from different feature layers (Add mode), "View in Table" was only showing the last layer. Fixed by properly tracking each record's origin data source.
-
 ### ResultsMenu Cleanup (r024.77)
 
 **Removed duplicate actions from the results menu.**
-
-The custom ResultsMenu now contains only:
-- Pan to (centers on all results)
-- View in table (opens Table widget)
-- Export CSV (downloads full attributes)
-- Select on map (adds to native selection)
 
 ---
 

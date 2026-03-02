@@ -59,6 +59,7 @@ export default {
   zoomToSelected: 'Zoom to selected',
   groupId: 'Group ID',
   shortIdDescription: 'The hash parameter used to execute a query using #shortid=value in the URL.',
+  shortIdHelperNote: 'Requires a Helper-Simple widget on the page to monitor URL parameters.',
   groupIdDescription: 'Used to group queries together. Example: if you have multiple queries on the parcel layer, one for Parcel number and one for Major number, you can use the Group ID to group these together.',
   displayOrder: 'Display Order',
   displayOrderDescription: 'Lower numbers appear first. Leave empty to maintain default order.',
