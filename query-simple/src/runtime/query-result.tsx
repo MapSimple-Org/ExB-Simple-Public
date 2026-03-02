@@ -331,19 +331,84 @@ export function QueryTaskResult (props: QueryTaskResultProps) {
         label: originDS.getLabel()
       }
       
-      // Add fields if needed (use currentItem's field settings)
-      if (currentItem.resultFieldsType === FieldsType.CustomTemplate) {
-        // r023.18: Custom Template mode - extract fields from content expression
-        dataSet.fields = combineFields(null, currentItem.resultTitleExpression, undefined, (currentItem as any).resultContentExpression)
-      } else if (currentItem.resultFieldsType === FieldsType.SelectAttributes && currentItem.resultDisplayFields != null) {
-        dataSet.fields = combineFields(currentItem.resultDisplayFields, currentItem.resultTitleExpression)
+      // r024.83: Look up original query config by __queryConfigId from first record
+      // This ensures each dataSet gets the correct searchAlias/name from the query that produced it,
+      // not from currentItem which changes when user switches queries
+      const firstRecord = originRecords[0] as FeatureDataRecord
+      const queryConfigId = firstRecord?.feature?.attributes?.__queryConfigId
+      const originalQueryItem = queryConfigId ? queries?.find(q => q.configId === queryConfigId) : null
+      
+      // Attach query metadata to dataSet for downstream use (table naming, etc.)
+      ;(dataSet as any).searchAlias = originalQueryItem?.searchAlias
+      ;(dataSet as any).queryName = originalQueryItem?.name
+      
+      // r024.84: Use originalQueryItem for field settings (falls back to currentItem if not found)
+      // This ensures each dataSet gets the correct display fields from the query that produced it
+      const queryItemForFields = originalQueryItem || currentItem
+      
+      debugLogger.log('VIEW-TABLE', {
+        event: 'actionDataSets-queryLookup',
+        originDSId: originDS.id,
+        queryConfigId: queryConfigId || 'none',
+        foundOriginalQueryItem: !!originalQueryItem,
+        searchAlias: originalQueryItem?.searchAlias || 'none',
+        queryName: originalQueryItem?.name || 'none',
+        resultFieldsType: queryItemForFields.resultFieldsType,
+        resultDisplayFields: queryItemForFields.resultDisplayFields || 'none',
+        usingFallback: !originalQueryItem
+      })
+      
+      // Add fields based on the original query's field settings
+      if (queryItemForFields.resultFieldsType === FieldsType.CustomTemplate) {
+        // Custom Template mode - extract fields from content expression
+        dataSet.fields = combineFields(null, queryItemForFields.resultTitleExpression, undefined, (queryItemForFields as any).resultContentExpression)
+      } else if (queryItemForFields.resultFieldsType === FieldsType.SelectAttributes && queryItemForFields.resultDisplayFields != null) {
+        dataSet.fields = combineFields(queryItemForFields.resultDisplayFields, queryItemForFields.resultTitleExpression)
       } else if (originDS && 'getPopupInfo' in originDS) {
-        // use fields in popup template from origin DS
+        // Fallback: use fields in popup template from origin DS
         const popupInfo = originDS.getPopupInfo()
-        if (popupInfo?.fieldInfos) {
+        
+        // r024.87: Extract fields from popupDescription/popupTitle if they use custom HTML
+        // The fieldInfos.visible flags may not match what's actually displayed
+        const extractFieldsFromTemplate = (template: string): string[] => {
+          if (!template) return []
+          const matches = template.match(/\{(\w+)\}/g) || []
+          return matches.map(m => m.substring(1, m.length - 1))
+        }
+        
+        const titleFields = extractFieldsFromTemplate(popupInfo?.title)
+        const descFields = extractFieldsFromTemplate(popupInfo?.description)
+        const templateFields = [...new Set([...titleFields, ...descFields])]
+        
+        debugLogger.log('VIEW-TABLE', {
+          event: 'actionDataSets-popupInfo',
+          originDSId: originDS.id,
+          hasPopupInfo: !!popupInfo,
+          hasFieldInfos: !!popupInfo?.fieldInfos,
+          fieldInfosCount: popupInfo?.fieldInfos?.length || 0,
+          popupTitle: popupInfo?.title,
+          popupDescription: popupInfo?.description?.substring(0, 200) + '...',
+          titleFields,
+          descFields,
+          templateFieldsExtracted: templateFields,
+          usingTemplateFields: templateFields.length > 0
+        })
+        
+        if (templateFields.length > 0) {
+          // Use fields extracted from the actual popup template
+          dataSet.fields = templateFields
+        } else if (popupInfo?.fieldInfos) {
+          // Fallback to fieldInfos if no template fields found
           dataSet.fields = popupInfo.fieldInfos.filter((fieldInfo) => fieldInfo.visible).map((fieldInfo) => fieldInfo.fieldName)
         }
       }
+      
+      debugLogger.log('VIEW-TABLE', {
+        event: 'actionDataSets-fieldsComputed',
+        originDSId: originDS.id,
+        fieldsSet: dataSet.fields || 'none',
+        fieldsCount: dataSet.fields?.length || 0
+      })
       
       return dataSet
     })
@@ -378,7 +443,7 @@ export function QueryTaskResult (props: QueryTaskResultProps) {
     }
     
     return dataSets
-  }, [selectedRecords, outputDS, queryData, currentItem, records, widgetId])
+  }, [selectedRecords, outputDS, queryData, currentItem, records, widgetId, queries])
 
   // FIX (r018.94): Simplified - no filtering needed since records are kept in sync
   // Memoize records to prevent unnecessary re-renders that reset scroll position

@@ -7,6 +7,384 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 > **Archive**: For releases r001-r021, see [CHANGELOG_ARCHIVE_r001-r021.md](docs/archive/CHANGELOG_ARCHIVE_r001-r021.md)
 
+## [1.19.0-r024.109] - 2026-02-22 - Smart ShortId Helper Note
+
+### Added
+
+**Context-aware Helper-Simple requirement note (r024.109):**
+- Added note below shortId description informing users that URL parameter monitoring requires a Helper-Simple widget
+- Note only appears when no Helper-Simple widget is configured to manage THIS specific QuerySimple widget
+- Scans app config for Helper-Simple widgets and checks their `managedWidgetId` against current widget
+- If properly configured → note hidden; if not configured → note shown
+
+**Files modified:**
+- `query-simple/src/setting/translations/default.ts` - Add shortIdHelperNote translation
+- `query-simple/src/setting/query-item-main-mode.tsx` - Add isManagedByHelper check, conditionally display note
+- `query-simple/src/version.ts` - Increment to r024.109
+
+---
+
+## [1.19.0-r024.108] - 2026-02-22 - Trim Whitespace in Exports
+
+### Fixed
+
+**Trim trailing/leading whitespace from string values (r024.108):**
+- Added `trimValue()` helper that trims whitespace from string fields only
+- Dates, numbers, and other types pass through unchanged
+- Applied to all three export formats (CSV, GeoJSON, JSON)
+
+**Files modified:**
+- `query-simple/src/utils/export-utils.ts` - Add trimValue() and apply in converters
+- `query-simple/src/version.ts` - Increment to r024.108
+
+---
+
+## [1.19.0-r024.107] - 2026-02-22 - Export Code Refactor
+
+### Changed
+
+**Refactored export functionality into shared utilities (r024.107):**
+- Created `query-simple/src/utils/export-utils.ts` with all export logic
+- Shared utilities: `fetchFullRecords()`, `getOrderedFieldsWithAliases()`, `handleExportFormat()`
+- Format converters: `convertToCSV()`, `convertToGeoJSON()`, `convertToJSON()`
+- `EXPORT_FORMATS` config object makes adding new formats trivial
+- `results-menu.tsx` reduced from 940 to 230 lines
+
+**Benefits:**
+- Adding new export format = ~20 lines (just the converter)
+- Single place to fix fetch/field logic bugs
+- Cleaner separation of concerns
+
+**Files modified:**
+- `query-simple/src/utils/export-utils.ts` - NEW - All export utilities
+- `query-simple/src/runtime/results-menu.tsx` - Slimmed down to use shared utilities
+- `query-simple/src/version.ts` - Increment to r024.107
+
+---
+
+## [1.19.0-r024.106] - 2026-02-22 - Add JSON Export
+
+### Added
+
+**JSON export format (r024.106):**
+- Added JSON to Export submenu (attributes only, no geometry)
+- Uses field aliases and priority ordering (same as CSV/GeoJSON)
+- Single source: downloads `Query-{name}.json`
+- Multiple sources: downloads `Query-Results-JSON.zip`
+
+**Files modified:**
+- `query-simple/src/runtime/results-menu.tsx` - Add JSON converter and handler
+- `query-simple/src/version.ts` - Increment to r024.106
+
+---
+
+## [1.19.0-r024.105] - 2026-02-22 - Export Submenu with GeoJSON
+
+### Added
+
+**Export submenu with GeoJSON support (r024.105):**
+- Results menu now has "Export" submenu with flyout (using Esri's `isSubMenuItem` pattern)
+- Added GeoJSON export format alongside existing CSV
+- GeoJSON converter handles Point, Polyline, Polygon, MultiPoint geometries
+- Fetches full attributes before export (same pattern as CSV)
+- Uses field aliases for property names (matches CSV behavior)
+- Priority field ordering (visible fields first)
+- Single source: downloads `Query-{name}.geojson`
+- Multiple sources: downloads `Query-Results-GeoJSON.zip`
+- CSV multi-source now downloads `Query-Results-CSV.zip` (prevents overwrite)
+
+**Files modified:**
+- `query-simple/src/runtime/results-menu.tsx` - Export submenu, GeoJSON converter and handler
+- `query-simple/src/version.ts` - Increment to r024.105
+
+---
+
+## [1.19.0-r024.100] - 2026-03-01 - Align with Esri Patterns
+
+### Changed
+
+**Simplified View in Table to match Esri's implementation (r024.100):**
+- Removed `tabDataSources` tracking map
+- Removed `openTabsByDataSource` tracking map
+- Removed all `destroyDataSource()` calls
+- Removed garbage collection code
+- Tab removal now uses simple `delete` like Esri's `onCloseTab` function
+- Tab replacement matches Esri's `viewInSameSheet` pattern
+
+**Rationale:** After analyzing Esri's `view-in-table.ts` and Table widget's `widget.tsx`, found that Esri does NOT call `destroyDataSource` anywhere. They simply `delete` tab entries from `viewInTableObj` and let the ExB framework handle cleanup. Our explicit destruction may have been circumventing ExB's internal cleanup mechanisms.
+
+**Files modified:**
+- `query-simple/src/data-actions/view-in-table-action.tsx` - Simplified to match Esri patterns
+- `query-simple/src/version.ts` - Increment to r024.100
+
+---
+
+## [1.19.0-r024.99] - 2026-02-22 - Garbage Collection for Manually Closed Tabs
+
+### Fixed
+
+**Clean up orphaned data sources when user manually closes table tabs (r024.99):**
+- r024.98 only cleaned up data sources when duplicate tabs were *replaced* via View in Table
+- But when user closes a tab via the X button, Table widget removes it from state and our `tabDataSources` map retained the orphaned reference - causing memory leak to persist
+- Fix: Added garbage collection pass at start of `handleViewInTable` that:
+  1. Compares `tabDataSources` entries against current Table widget state
+  2. Destroys any data sources whose tabs no longer exist
+  3. Cleans up tracking maps (`tabDataSources`, `openTabsByDataSource`)
+- New debug logs: `viewInTable-garbageCollect`, `viewInTable-garbageCollectSummary`
+- Memory should now be reclaimed when View in Table is clicked after tabs were closed manually
+
+**Files modified:**
+- `query-simple/src/data-actions/view-in-table-action.tsx` - Add garbage collection pass
+- `query-simple/src/version.ts` - Increment to r024.99
+
+---
+
+## [1.19.0-r024.98] - 2026-02-22 - Memory Cleanup for View in Table
+
+### Fixed
+
+**Prevent memory leak from accumulating data sources (r024.98):**
+- Added `tabDataSources` Map to track created data sources by tab ID
+- When duplicate tabs are removed by name, their data sources are destroyed via `DataSourceManager.destroyDataSource()`
+- When tabs are removed by dataSourceId (belt-and-suspenders), their data sources are also destroyed
+- For the "delete and recreate" trick, the data source is preserved but tracking is transferred to the new tab ID
+- Added `createdDataSourceId` to log output for traceability
+- New debug logs: `viewInTable-destroyingDataSource`, `viewInTable-transferDataSourceTracking`
+
+**Files modified:**
+- `query-simple/src/data-actions/view-in-table-action.tsx` - Add data source tracking and cleanup
+- `query-simple/src/version.ts` - Increment to r024.98
+
+---
+
+## [1.19.0-r024.97] - 2026-02-22 - Scale Wait Time with Tab Count
+
+### Fixed
+
+**Priming wait time now scales with number of existing tabs (r024.97):**
+- Fixed 4+ table rendering issue where the active tab was blank
+- Root cause: Fixed 100ms wait wasn't enough when Table widget had 3+ tabs already loaded
+- Fix: Wait time is now `100ms + (50ms × existing tab count)`
+  - 1 table: 100ms (no existing tabs)
+  - 2 tables: 150ms (1 existing tab)
+  - 3 tables: 200ms (2 existing tabs)
+  - 4 tables: 250ms (3 existing tabs)
+- Logs now show `primingWaitMs` to track the calculated wait time
+
+**Files modified:**
+- `query-simple/src/data-actions/view-in-table-action.tsx` - Dynamic wait time calculation
+- `query-simple/src/version.ts` - Increment to r024.97
+
+---
+
+## [1.19.0-r024.96] - 2026-02-22 - Fix 3+ Table Rendering
+
+### Fixed
+
+**Fixed blank table when opening 3+ tables via View in Table (r024.96):**
+- When opening 3+ tables, the active tab would render blank until user switched away and back
+- Root cause: Adding multiple tabs simultaneously (e.g., Tab 1 + Tab 2) didn't give the Table widget enough time to initialize before running the "delete and recreate" trick on the last tab
+- Fix: Now adds tabs one at a time with 50ms pause between each, ensuring each is fully initialized before adding the next
+
+**Files modified:**
+- `query-simple/src/data-actions/view-in-table-action.tsx` - Sequential tab addition with pauses
+- `query-simple/src/version.ts` - Increment to r024.96
+
+---
+
+## [1.19.0-r024.95] - 2026-02-22 - Fix Duplicate Tabs Root Cause
+
+### Fixed
+
+**Fixed duplicate tabs by using cleaned state as foundation (r024.95):**
+- Root cause: In single-tab case, Phase B was re-reading Table state AFTER duplicate removal happened on a local copy, bypassing the cleanup
+- Fix: Phase B now uses `baseTableObj` (which has duplicates already removed) instead of re-reading from Table widget state
+- The duplicate removal from `workingTableObj` is now actually applied to the Table
+- Added debug log `viewInTable-baseTableObj` to verify duplicates are removed before two-phase hack begins
+
+**Files modified:**
+- `query-simple/src/data-actions/view-in-table-action.tsx` - Use baseTableObj as foundation for two-phase hack
+- `query-simple/src/version.ts` - Increment to r024.95
+
+---
+
+## [1.19.0-r024.94] - 2026-02-22 - Clean Up Stale Map Entries
+
+### Fixed
+
+**Clean up stale openTabsByDataSource entries when removing tabs by name (r024.94):**
+- When removing a tab by name, also remove its entry from the `openTabsByDataSource` map
+- Prevents stale map entries from causing duplicate tabs or incorrect tracking
+- Fixes issue where removed tabs left orphaned entries in the tracking map
+
+**Files modified:**
+- `query-simple/src/data-actions/view-in-table-action.tsx` - Clean up map entries on tab removal
+- `query-simple/src/version.ts` - Increment to r024.94
+
+---
+
+## [1.19.0-r024.93] - 2026-02-22 - Fix Duplicate Tabs by Name
+
+### Fixed
+
+**Duplicate tab prevention now checks by tab name, not just dataSourceId (r024.93):**
+- When opening View in Table, existing tabs with the same name (e.g., "Query-Parcels") are removed
+- This prevents duplicate tabs when re-running the same query
+- Fixes issue where dataSourceId changed between queries, bypassing the duplicate check
+- Belt-and-suspenders approach: checks both by name AND by dataSourceId
+
+**Files modified:**
+- `query-simple/src/data-actions/view-in-table-action.tsx` - Check for duplicates by tab name
+- `query-simple/src/version.ts` - Increment to r024.93
+
+---
+
+## [1.19.0-r024.92] - 2026-02-22 - Sequential Multi-Table State Updates
+
+### Fixed
+
+**Multi-table render hack now uses sequential state updates (r024.92):**
+- Separated non-last tabs addition from the two-phase hack into distinct phases
+- Phase A: Add non-last tabs with separate state update, wait 50ms for Table widget to stabilize
+- Phase B1: Add priming version of last tab (re-reads current state)
+- Phase B2: Delete priming tab and add fresh-ID version (re-reads state again)
+- Explicit cleanup: Priming tab entry is now explicitly deleted before adding fresh-ID version
+- Prevents initialization conflicts when multiple tabs are opened simultaneously
+
+**Files modified:**
+- `query-simple/src/data-actions/view-in-table-action.tsx` - Sequential state updates
+- `query-simple/src/version.ts` - Increment to r024.92
+
+---
+
+## [1.19.0-r024.91] - 2026-03-01 - Two-Phase Hack Only For Last Tab
+
+### Fixed
+
+**Two-phase render hack now only applies to the last tab (r024.91):**
+- Non-last tabs are added directly without any hack (they refresh when user switches to them)
+- Only the last/active tab goes through the prime → delay → recreate dance
+- This prevents rendering issues when opening multiple tables at once
+- Cleaner separation: Step 1 adds non-last tabs, Step 2 does two-phase for last tab only
+
+**Files modified:**
+- `query-simple/src/data-actions/view-in-table-action.tsx` - Refactored two-phase hack
+- `query-simple/src/version.ts` - Increment to r024.91
+
+---
+
+## [1.19.0-r024.90] - 2026-02-28 - Multi-Table Render Fix
+
+### Fixed
+
+**Multi-table two-phase hack now activates last tab (r024.90):**
+- Fixed issue where last table tab showed zero records when opening multiple tables
+- The two-phase render hack now activates the LAST tab instead of first
+- Other tabs refresh naturally when user switches to them
+- Only the active tab needs the hack; switching tabs triggers re-initialization
+
+**Files modified:**
+- `query-simple/src/data-actions/view-in-table-action.tsx` - Activate last tab in two-phase hack
+- `query-simple/src/version.ts` - Increment to r024.90
+
+---
+
+## [1.19.0-r024.89] - 2026-02-28 - CSV Export Field Ordering
+
+### Changed
+
+**CSV export now orders fields with visible/configured fields first (r024.89):**
+- Configured display fields appear first in the CSV, in their configured order
+- All remaining fields are appended after the priority fields
+- Matches user expectation: important fields are immediately visible when opening the CSV
+
+**Files modified:**
+- `query-simple/src/runtime/results-menu.tsx` - Updated `recordsToCSV` to support priority field ordering
+- `query-simple/src/version.ts` - Increment to r024.89
+
+---
+
+## [1.19.0-r024.88] - 2026-02-28 - CSV Export Naming Consistency
+
+### Changed
+
+**CSV export filenames now match Table tab naming (r024.88):**
+- Single source exports: `Query-{searchAlias}.csv` or `Query-{queryName}.csv`
+- Multi-source zip entries: Same naming pattern for each CSV inside the zip
+- Zip file renamed from `QueryResults.zip` to `Query-Results.zip`
+- Uses same naming priority as Table tabs: searchAlias > queryName > layerLabel
+
+**Files modified:**
+- `query-simple/src/runtime/results-menu.tsx` - Add `getQueryExportName()` helper
+- `query-simple/src/version.ts` - Increment to r024.88
+
+---
+
+## [1.19.0-r024.87] - 2026-02-28 - Popup Template Field Extraction
+
+### Fixed
+
+**PopupSetting mode field visibility for "View in Table" (r024.87):**
+- Discovered that `popupInfo.fieldInfos.visible` flags don't accurately reflect what's actually displayed in the popup
+- When a layer uses custom HTML in `popupDescription`, only a subset of fields are shown even though all `fieldInfos` report `visible: true`
+- Fixed by extracting `{FIELDNAME}` tokens directly from `popupTitle` and `popupDescription`
+- Uses regex pattern `/\{(\w+)\}/g` (same pattern as `combineFields()`)
+- Falls back to `fieldInfos.filter(visible)` only if no template fields are found
+
+**Files modified:**
+- `query-simple/src/runtime/query-result.tsx` - Extract fields from popup template
+- `query-simple/src/version.ts` - Increment to r024.87
+- `docs/bugs/VIEW_IN_TABLE_NAMING_VISIBILITY.md` - Document the fix
+
+---
+
+## [1.19.0-r024.83] - 2026-02-28 - Table Tab Naming
+
+### Changed
+
+**Table tabs now named using original query config (r024.83):**
+- Tab names follow format `Query-{searchAlias}` or `Query-{queryName}`
+- Uses `__queryConfigId` stamped on records to look up original query config
+- Each data source group gets correct naming from the query that produced it
+- Prevents incorrect naming when user switches queries before opening table
+
+**Naming priority:**
+1. `Query-{searchAlias}` - if query has searchAlias configured
+2. `Query-{queryName}` - if no searchAlias but query has a name
+3. `Query-{layerLabel}` - fallback to data source label
+
+**Files modified:**
+- `query-simple/src/runtime/query-result.tsx` - Look up query config in actionDataSets useMemo
+- `query-simple/src/data-actions/view-in-table-action.tsx` - Apply naming logic
+- `query-simple/src/version.ts` - Increment to r024.83
+
+---
+
+## [1.19.0-r024.82] - 2026-02-28 - View in Table Improvements
+
+### Changed
+
+**Two-phase table render hack (r024.81):**
+- The Table widget has a bug where it doesn't properly render on first load
+- Implemented two-phase update: add priming tabs, wait 100ms, recreate with fresh IDs
+- This forces `destroyTable()` to be called, triggering proper initialization
+- Inline documentation explains the workaround for future reference
+
+**Duplicate tab prevention with data refresh (r024.82):**
+- Opening "View in Table" for the same data source now removes the existing tab first
+- Fresh tab is created to ensure data is always up to date
+- Tracks open tabs by data source ID using module-level Map
+- Prevents accumulation of duplicate tabs in the Table widget
+
+**Debug logging:**
+- `VIEW-TABLE` tag tracks phase 1/2 of render hack and tab management
+
+**Files modified:**
+- `query-simple/src/data-actions/view-in-table-action.tsx` - Two-phase hack, duplicate tab prevention
+- `query-simple/src/version.ts` - Increment to r024.82
+
+---
+
 ## [1.19.0-r024.79] - 2026-02-27 - Export CSV with Full Attributes
 
 ### Added
@@ -91,6 +469,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Stored as `resultsExtent` in widget state and passed through component chain
 - "Zoom to Selected" button uses pre-calculated extent instead of recalculating on each click
 - Improves performance and ensures consistent behavior
+- **Memory optimization:** Eliminates repeated `geometryEngine.union()` and `Extent` object allocations on each button click, reducing GC pressure with large result sets
 
 **Files modified:**
 - `query-simple/src/runtime/zoom-utils.ts` - New `calculateRecordsExtent()` function, exported `expandExtentByFactor()`

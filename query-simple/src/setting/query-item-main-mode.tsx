@@ -20,6 +20,7 @@ import { TextInput, Switch } from 'jimu-ui'
 import { IconPicker } from 'jimu-ui/advanced/resource-selector'
 import { DataSourceSelector } from 'jimu-ui/advanced/data-source-selector'
 import { SettingRow, SettingSection } from 'jimu-ui/advanced/setting-components'
+import { getAppConfigAction } from 'jimu-for-builder'
 import defaultMessages from './translations/default'
 import { type QueryItemType, QueryArrangeType } from '../config'
 import { getOutputJsonOriginDs } from './setting-utils'
@@ -80,6 +81,17 @@ export function QueryItemSettingMain (props: Props) {
   const useDataSources = currentItem.useDataSource != null ? Immutable([currentItem.useDataSource]) : undefined
 
   const dsExists: boolean = useDataSourceExists({ widgetId, useDataSourceId: currentItem.useDataSource?.dataSourceId })
+
+  // Check if any Helper-Simple widget is configured to manage THIS widget
+  const isManagedByHelper = React.useMemo(() => {
+    const appConfig = getAppConfigAction().appConfig
+    if (!appConfig?.widgets) return false
+
+    return Object.values(appConfig.widgets).some((widget: any) =>
+      widget.uri?.includes('helper-simple') &&
+      widget.config?.managedWidgetId === widgetId
+    )
+  }, [widgetId])
 
   React.useEffect(() => {
     if (queryItem?.name && itemLabel !== queryItem.name) {
@@ -270,6 +282,17 @@ export function QueryItemSettingMain (props: Props) {
                 `}>
                   {getI18nMessage('shortIdDescription')}
                 </div>
+                {!isManagedByHelper && (
+                  <div css={css`
+                    font-size: 0.75rem;
+                    color: var(--warning-700);
+                    margin-top: 0.25rem;
+                    line-height: 1.4;
+                    font-style: italic;
+                  `}>
+                    {getI18nMessage('shortIdHelperNote')}
+                  </div>
+                )}
               </SettingRow>
             </SettingSection>
             <SettingSection role='group' aria-label={getI18nMessage('groupId')} title={getI18nMessage('groupId')}>
