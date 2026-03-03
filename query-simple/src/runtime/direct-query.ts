@@ -101,6 +101,7 @@ export async function executeDirectQuery (
     maxAllowableOffset?: number
     pageSize?: number
     orderByFields?: string[]
+    outSpatialReference?: __esri.SpatialReference
   } = {}
 ): Promise<{
     records: FeatureDataRecord[]
@@ -142,6 +143,10 @@ export async function executeDirectQuery (
   }
   if (options.orderByFields?.length > 0) {
     query.orderByFields = options.orderByFields
+  }
+  // r024.111: Project results to map's SR to prevent mixed-SR extent unions (BUG-EXTENT-CACHE-001)
+  if (options.outSpatialReference) {
+    query.outSpatialReference = options.outSpatialReference
   }
 
   const featureSet = await featureLayer.queryFeatures(query)

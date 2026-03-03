@@ -7,6 +7,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 > **Archive**: For releases r001-r021, see [CHANGELOG_ARCHIVE_r001-r021.md](docs/archive/CHANGELOG_ARCHIVE_r001-r021.md)
 
+## [1.19.0-r024.111] - 2026-03-02 - Fix Multi-Source Extent Cache SR Mismatch
+
+### Fixed
+
+**BUG-EXTENT-CACHE-001: Zoom/pan broken when accumulating results from different data sources (r024.111):**
+- Direct query bypass now sets `query.outSpatialReference = mapView.spatialReference` so the server projects all geometries to the map's SR before returning
+- Previously, each layer returned geometries in its native SR (e.g., Parcels in Web Mercator 102100, Parks in WA State Plane feet)
+- `calculateRecordsExtent()` unions extents using raw min/max math, producing nonsensical extents when SRs differ (~14.9M meter width instead of ~400m)
+- Root cause confirmed via live debug logs: `?debug=ZOOM,RESULTS-MODE,WIDGET-STATE,DIRECT-QUERY`
+
+**Files modified:**
+- `query-simple/src/runtime/direct-query.ts` - Add `outSpatialReference` to options, set on query
+- `query-simple/src/runtime/query-task.tsx` - Pass `mapView.spatialReference` when calling `executeDirectQuery()`
+- `query-simple/src/version.ts` - Increment to r024.111
+
+---
+
 ## [1.19.0-r024.110] - 2026-03-01 - Custom Template Image Support
 
 ### Added

@@ -1359,7 +1359,8 @@ export function QueryTask (props: QueryTaskProps) {
             returnGeometry: true,
             maxAllowableOffset: 0.1,
             pageSize: queryParams.pageSize as number,
-            orderByFields: queryParams.orderByFields as string[]
+            orderByFields: queryParams.orderByFields as string[],
+            outSpatialReference: mapView?.spatialReference
           }
         ).then(directResult => ({
           records: directResult.records as DataRecord[],
