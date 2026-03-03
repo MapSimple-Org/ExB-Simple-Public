@@ -2,8 +2,8 @@
 
 Custom widgets for ArcGIS Experience Builder Developer Edition (1.19.0+). Built for performance, deep-linking, and advanced result management.
 
-**Current Version**: `1.19.0-r024.110`  
-**Latest Update**: Custom Template image support, Multi-Format Export (CSV/GeoJSON/JSON), View in Table Improvements, Smart Settings UX (Mar 1, 2026)
+**Current Version**: `1.19.0-r024.111`
+**Latest Update**: Multi-source extent cache SR fix, Custom Template image support, Multi-Format Export (CSV/GeoJSON/JSON), View in Table Improvements, Smart Settings UX (Mar 2, 2026)
 
 ---
 
@@ -27,7 +27,11 @@ Custom widgets for ArcGIS Experience Builder Developer Edition (1.19.0+). Built 
 
 ---
 
-## What's New: r024.82-110 (Mar 1, 2026)
+## What's New: r024.82-111 (Mar 2, 2026)
+
+### Multi-Source Extent Cache Fix (r024.111)
+
+**Fixed zoom/pan producing incorrect extents when accumulating results from different data sources in Add mode.** Different feature layers return geometries in their native spatial reference (e.g., Web Mercator vs State Plane). The extent union mixed coordinate systems, causing "Zoom to All Results" to zoom out to half the earth. Fix: direct queries now set `outSpatialReference` so the server projects all geometries to the map's SR before returning.
 
 ### Custom Template Image Support (r024.110)
 
