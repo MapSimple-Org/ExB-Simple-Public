@@ -43,48 +43,25 @@ import { QueryTaskForm } from './query-task-form'
 import { QueryTaskResult } from './query-result'
 import { DataSourceTip, useDataSourceExists, ErrorMessage } from 'widgets/shared-code/mapsimple-common'
 import { QueryTaskLabel } from './query-task-label'
-import { useZoomToRecords } from './hooks/use-zoom-to-records'
+import { useZoomToRecords } from './managers/use-zoom-to-records'
 import { DEFAULT_QUERY_ITEM } from '../default-query-item'
-import { generateQueryParams, executeQuery, executeCountQuery } from './query-utils'
-import { executeDirectQuery } from './direct-query'
+import { executeQueryInternal } from './query-execution-handler'
+import { executeClearResult } from './query-clear-handler'
+import { executeFormSubmit } from './query-submit-handler'
 
-/**
- * Direct JS API Query Bypass Toggle (r024.50, re-enabled r024.57)
- *
- * When true, bypasses ExB's outputDS.load() and uses FeatureLayer.queryFeatures()
- * directly. r024.57: Now uses outputDS.buildRecord() to wrap raw Graphics into
- * real FeatureDataRecord objects with full coded domain formatting and complete
- * interface compatibility. No adapter gaps.
- *
- * STATUS: ENABLED (r024.57) - See docs/development/DIRECT_QUERY_BYPASS.md
- *
- * WHAT IT DOES:
- * - Calls FeatureLayer.queryFeatures() instead of outputDS.load()
- * - Wraps results via outputDS.buildRecord() (real FeatureDataRecord, not adapter)
- * - Skips: DataSource reactive lifecycle, schema resolution, watcher setup
- * - Keeps: coded domain formatting, field aliasing, inter-widget compatibility
- *
- * MEMORY IMPACT: 89-99% reduction in per-query memory growth.
- * Set to false to revert to the ExB DataSource path if issues arise.
- */
-const USE_DIRECT_QUERY = true
-import { mergeResultsIntoAccumulated, removeResultsFromAccumulated, removeRecordsFromOriginSelections } from './results-management-utils'
-import { removeHighlightGraphics, cleanupGraphicsLayer, cleanupAnyResultLayer, clearAnyResultLayerContents } from './graphics-layer-utils'
+import { cleanupGraphicsLayer, cleanupAnyResultLayer, clearAnyResultLayerContents } from './graphics-layer-utils'
 import { MenuOutlined } from 'jimu-icons/outlined/editor/menu'
 import defaultMessage from './translations/default'
 import { ArrowLeftOutlined } from 'jimu-icons/outlined/directional/arrow-left'
 import { LoadingResult } from './loading-result'
 import { clearSelectionInDataSources, selectRecordsAndPublish, findClearResultsButton, dispatchSelectionEvent, getOriginDataSource, clearAllSelectionsForWidget } from './selection-utils'
 import { createQuerySimpleDebugLogger, globalHandleManager } from 'widgets/shared-code/mapsimple-common'
+import { queryTaskReducer, INITIAL_STATE } from './query-task-reducer'
 
 const debugLogger = createQuerySimpleDebugLogger()
 
 // Event fired when SqlExpressionRuntime converts hash value from string to array format
 const QUERYSIMPLE_HASH_VALUE_CONVERTED_EVENT = 'querysimple-hash-value-converted'
-
-// Event fired when a hash-triggered query execution completes successfully
-// This allows HelperSimple to track which hash parameters have been executed
-const QUERYSIMPLE_HASH_QUERY_EXECUTED_EVENT = 'querysimple-hash-query-executed'
 
 export interface QueryTaskProps {
   widgetId: string
@@ -127,7 +104,7 @@ export interface QueryTaskProps {
   onDestroyGraphicsLayer?: () => void // r021.17: Clear refs after destroying layer
   activeTab?: 'query' | 'results'
   onTabChange?: (tab: 'query' | 'results') => void
-  eventManager?: import('./hooks/use-event-handling').EventManager  // Chunk 7.1: Event Handling Manager
+  eventManager?: import('./managers/event-manager').EventManager  // Chunk 7.1: Event Handling Manager
   // FIX (r018.96): Removed manuallyRemovedRecordIds and onManualRemoval - no longer needed
   // r022.105: Configurable zoom on result click
   zoomOnResultClick?: boolean
@@ -194,11 +171,9 @@ export function QueryTask (props: QueryTaskProps) {
   const { queryItem, onNavBack, total, isInPopper = false, wrappedInPopper = false, className = '', index, initialInputValue, onHashParameterUsed, queryItems, selectedQueryIndex, onQueryChange, groups, ungrouped, groupOrder, selectedGroupId, selectedGroupQueryIndex, onGroupChange, onGroupQueryChange, onUngroupedChange, resultsMode, onResultsModeChange, accumulatedRecords, resultsExtent, onAccumulatedRecordsChange, graphicsLayer, mapView, onInitializeGraphicsLayer, onClearGraphicsLayer, onDestroyGraphicsLayer, activeTab: propActiveTab, onTabChange: propOnTabChange, eventManager, zoomOnResultClick, hoverPinColor, ...otherProps } = props
   const getI18nMessage = hooks.useTranslation(defaultMessage)
   const zoomToRecords = useZoomToRecords(mapView)
-  const [stage, setStage] = React.useState(0) // 0 = form, 1 = results, 2 = loading, 3 = clearing
+  // stage now in useReducer (r024.126 — A2b)
   const [internalActiveTab, setInternalActiveTab] = React.useState<'query' | 'results'>('query')
-  // r024.19: Flag to force effectiveRecords to be empty during clearing
-  // This triggers React to unmount children BEFORE we clear the parent array
-  const [isClearing, setIsClearing] = React.useState(false)
+  // isClearing now in useReducer (r024.127 — A2c)
   
   // Log when initialInputValue prop is received
   React.useEffect(() => {
@@ -255,7 +230,7 @@ export function QueryTask (props: QueryTaskProps) {
     }
   }, [propOnTabChange])
   const [enabled, setEnabled] = React.useState(true)
-  const [resultCount, setResultCount] = React.useState(0)
+  // resultCount now in useReducer (r024.126 — A2b)
   // FIX (r018.92): Track when a query switch is in progress to prevent handleRenderDone interference
   const isQuerySwitchInProgressRef = React.useRef(false)
   // r021.75: Track IDs of records from current query (for proper formatting in ADD mode)
@@ -268,40 +243,16 @@ export function QueryTask (props: QueryTaskProps) {
   const queryExecutionKeyRef = React.useRef(0)
   const queryParamRef = React.useRef<QueryParams>(null)
   const recordsRef = React.useRef<DataRecord[]>(null)
-  const [outputDS, setOutputDS] = React.useState<DataSource>(null)
+  // outputDS now in useReducer (r024.127 — A2c)
   const [dataSource, setDataSource] = React.useState<DataSource>(null)
   const [spatialFilterEnabled, setSpatialFilterEnabled] = React.useState(true)
   
-  // r022.3: Alert state for query feedback (zero results, remove mode no matches, etc.)
-  const [noResultsAlert, setNoResultsAlert] = React.useState<{
-    show: boolean
-    recordsRequested: number // How many records were expected/requested
-    queryValue: string // The search value used
-    timestamp?: number // r022.8: Unique timestamp forces React to re-render on each new query
-  } | null>(null)
-  
-  // r022.15: Alert state for Remove mode when query finds records but none match accumulated results
-  const [noRemovalAlert, setNoRemovalAlert] = React.useState<{
-    show: boolean
-    recordsFound: number // How many records the query found
-    queryValue: string // The search value used
-    timestamp?: number // Unique timestamp for React remount
-  } | null>(null)
-  
-  // r024.62: Alert state for query execution failures (service down, network error, etc.)
-  const [queryErrorAlert, setQueryErrorAlert] = React.useState<{
-    show: boolean
-    errorMessage: string
-    timestamp?: number
-  } | null>(null)
-  
-  // r022.21: Alert state for Add mode when all found records are duplicates
-  const [allDuplicatesAlert, setAllDuplicatesAlert] = React.useState<{
-    show: boolean
-    recordsFound: number // How many records the query found (all duplicates)
-    queryValue: string // The search value used
-    timestamp?: number // Unique timestamp for React remount
-  } | null>(null)
+  // r024.125-127: Consolidated state via useReducer (query-task-reducer.ts)
+  // A2a: selectionError, zoomError, queryErrorAlert, noResultsAlert, allDuplicatesAlert, noRemovalAlert
+  // A2b: stage, resultCount, queryJustExecuted
+  // A2c: isClearing, outputDS, dsRecreationKey
+  const [state, dispatch] = React.useReducer(queryTaskReducer, INITIAL_STATE)
+  const { selectionError, zoomError, queryErrorAlert, noResultsAlert, allDuplicatesAlert, noRemovalAlert, stage, resultCount, queryJustExecuted, isClearing, outputDS, dsRecreationKey } = state
   const attributeFilterSqlExprObj = React.useRef<IMSqlExpression>(queryItem.sqlExprObj)
   const spatialFilterObj = React.useRef(null)
   const backBtnRef = React.useRef<HTMLButtonElement>(undefined)
@@ -310,22 +261,16 @@ export function QueryTask (props: QueryTaskProps) {
   // This allows auto-tab-switch to distinguish between "query returned 0" vs "accumulated records exist"
   const lastQueryResultCountRef = React.useRef<number>(0)
   
-  // r021.51: Key prop pattern to force DataSourceComponent remount
-  // Incrementing this key forces React to unmount/remount DataSourceComponent, which triggers
-  // natural DS recreation. Replaces programmatic button click anti-pattern with idiomatic React.
-  const [dsRecreationKey, setDsRecreationKey] = React.useState(0)
+  // dsRecreationKey now in useReducer (r024.127 — A2c)
   
   const [dataActionFilter, setDataActionFilter] = React.useState(null)
   const previousConfigIdRef = React.useRef<string>(queryItem.configId)
   // Track manual tab switches to prevent auto-switch useEffect from interfering
   const manualTabSwitchRef = React.useRef(false)
-  // Track when a query was just executed - only auto-switch after query execution completes
-  const [queryJustExecuted, setQueryJustExecuted] = React.useState(false)
+  // queryJustExecuted now in useReducer (r024.126 — A2b)
   // Store the last runtime zoom override value from the form for use by Add to Map action
   const lastRuntimeZoomToSelectedRef = React.useRef<boolean | undefined>(undefined)
-  // Error states for user-facing errors
-  const [selectionError, setSelectionError] = React.useState<string>(null)
-  const [zoomError, setZoomError] = React.useState<string>(null)
+  // selectionError and zoomError now in useReducer (r024.125)
   // Store pending query when waiting for hash value conversion
   const pendingHashQueryRef = React.useRef<{
     sqlExpr: IMSqlExpression
@@ -462,7 +407,7 @@ export function QueryTask (props: QueryTaskProps) {
         timestamp: Date.now()
       })
       setActiveTab('results')
-      setQueryJustExecuted(false) // Reset after switching
+      dispatch({ type: 'SET_QUERY_EXECUTED', payload: false }) // Reset after switching
       debugLogger.log('TASK', {
         event: 'auto-switch-completed',
         widgetId: props.widgetId,
@@ -584,243 +529,19 @@ export function QueryTask (props: QueryTaskProps) {
 
   /**
    * Clears all query results from the UI and map.
-   * This is the single source of truth for clearing results.
-   * It clears the records, resets the result count, clears selection from the map,
-   * publishes a cleared message to the map, switches back to the Query tab,
-   * and increments the query execution key to force QueryTaskResult to remount with fresh state.
+   * Delegates to executeClearResult (query-clear-handler.ts).
    */
   const clearResult = React.useCallback(async (reason: string = 'unknown') => {
-    debugLogger.log('TASK', {
-      event: 'clearResult-called',
+    await executeClearResult({
+      dispatch, outputDS, queryExecutionKeyRef, recordsRef,
+      hasSelectedRecordsRef, currentQueryRecordIdsRef, lastQueryResultCountRef,
       widgetId: props.widgetId,
-      hasOutputDS: !!outputDS,
-      reason,
-      timestamp: Date.now()
-    })
-
-    // ============================================================================
-    // r021.45 / r024.19: Delay Parent Array Clearing Until After React Unmounts
-    //
-    // THE CLOSURE PROBLEM:
-    // 1. Results panel renders 600 QueryResultItem components
-    // 2. Each component's onClick handler captures its `record` object in closure
-    // 3. If we clear parent array BEFORE React unmounts children, closures still hold refs
-    // 4. Result: Detached DOM can't be GC'd (84K+ Comment nodes, 31K+ divs accumulating)
-    //
-    // SOLUTION (IMPLEMENTED r024.19):
-    // Use isClearing state flag to force effectiveRecords=[] IMMEDIATELY:
-    // 1. setIsClearing(true) - makes effectiveRecords=[] in next render
-    // 2. React sees empty list and unmounts all QueryResultItem children
-    // 3. await requestAnimationFrame + setTimeout(0) - ensures:
-    //    - rAF fires after React commits DOM update (paint complete)
-    //    - setTimeout(0) gives extra tick for cleanup effects to run
-    // 4. Children unmounted, closures released, refs can be GC'd
-    // 5. NOW safe to call onAccumulatedRecordsChange([]) - no orphaned refs
-    // 6. setIsClearing(false) - ready for new results
-    // ============================================================================
-    
-    // STEP 1: Set clearing flag FIRST to force effectiveRecords = []
-    // This triggers React to immediately re-render with empty list, unmounting children
-    debugLogger.log('TASK', {
-      event: 'clearResult-setting-isClearing-true',
-      widgetId: props.widgetId,
-      reason,
-      currentAccumulatedCount: accumulatedRecords?.length || 0,
-      note: 'r024.19: Force effectiveRecords=[] to trigger child unmount',
-      timestamp: Date.now()
-    })
-    setIsClearing(true)
-    
-    // ============================================================================
-    // SOVEREIGN RESET - Atomic Transaction (r024.40)
-    // Order is CRITICAL - this is a single transaction to prevent memory leaks
-    // ============================================================================
-    
-    // 1. ABLUTION: Kill the ghosts (55k+ ObservationHandles)
-    // Must happen BEFORE React unmounts components that created them
-    const purgeStats = globalHandleManager.purgeAll(props.widgetId)
-    debugLogger.log('TASK', {
-      event: 'clearResult-ablution-purge',
-      widgetId: props.widgetId,
-      reason,
-      purgeStats,
-      note: 'r024.40: Sovereign Reset - killed ESRI handles before UI unmount',
-      timestamp: Date.now()
-    })
-    
-    // 2. CLEAR THE MAP: Remove all graphics synchronously
-    if (mapView?.graphics) {
-      const graphicsCount = mapView.graphics.length
-      mapView.graphics.removeAll()
-      debugLogger.log('TASK', {
-        event: 'clearResult-ablution-graphics',
-        widgetId: props.widgetId,
-        reason,
-        graphicsRemoved: graphicsCount,
-        note: 'r024.40: Sovereign Reset - cleared map graphics',
-        timestamp: Date.now()
-      })
-    }
-    
-    // 3. FORCE UI UNMOUNT: Increment key to trigger React full tree destruction
-    queryExecutionKeyRef.current += 1
-    
-    // 4. CLEAR THE DATA: Release references
-    recordsRef.current = null              // Release child's reference to records
-    outputDS?.setStatus(DataSourceStatus.NotReady)
-    setResultCount(0)                      // Clear count
-    setActiveTab('query')                  // Hide Results tab
-    hasSelectedRecordsRef.current = false
-    setSelectionError(null)
-    setZoomError(null)
-    
-    // r021.87: Clear record tracking (formatting is stamped on records)
-    currentQueryRecordIdsRef.current = []
-    
-    // r022.22: Clear last query result count
-    lastQueryResultCountRef.current = 0
-    
-    // r022.25: Clear all alert/popover states
-    setNoResultsAlert(null)
-    setNoRemovalAlert(null)
-    setAllDuplicatesAlert(null)
-    setQueryErrorAlert(null)
-    
-    // r024.19: YIELD to let React unmount children
-    // The isClearing=true above makes effectiveRecords=[] which triggers React to
-    // unmount QueryResultItem components. We yield to let this complete so closures
-    // holding FeatureDataRecord references are released before we clear parent data.
-    // 
-    // Use requestAnimationFrame + setTimeout pattern to ensure:
-    // 1. React has committed the DOM update (rAF fires after paint)
-    // 2. Cleanup effects have run (another tick)
-    await new Promise<void>(resolve => {
-      requestAnimationFrame(() => {
-        // After paint - DOM is updated, children should be unmounted
-        setTimeout(() => {
-          // Extra tick for cleanup effects
-          resolve()
-        }, 0)
-      })
-    })
-    
-    // NOW safe to clear parent array - children are unmounted, closures released
-    debugLogger.log('TASK', {
-      event: 'clearResult-yield-complete',
-      widgetId: props.widgetId,
-      reason,
-      note: 'r024.19: rAF+setTimeout complete - children should be unmounted now',
-      timestamp: Date.now()
-    })
-    
-    // r024.28: REMOVED aggressive record nulling (was r024.23)
-    // The nulling corrupted records still held by widget.tsx state, causing getId() to fail
-    // Memory cleanup will happen naturally when array references are released
-    
-    if (onAccumulatedRecordsChange) {
-      onAccumulatedRecordsChange([])
-    }
-    
-    debugLogger.log('TASK', {
-      event: 'clearResult-parent-array-cleared-after-unmount',
-      widgetId: props.widgetId,
-      reason,
-      note: 'r024.19: Children unmounted via isClearing flag before clearing parent array',
-      timestamp: Date.now()
-    })
-    
-    // STEP 2: The Purge - Do all cleanup using unified clearing function
-    // Unified clearing ensures both Query tab and Results tab clear paths do the same thing:
-    // - Multi-source clearing (all origin DataSources)
-    // - Graphics layer clearing
-    // - Popup closing
-    // - Hash clearing (via clearSelectionInDataSources)
-    // - Event dispatching
-    // - Message publishing
-    // - Optional DataSource destruction
-    
-    // r024.26: ALWAYS clean up graphics layers regardless of outputDS state
-    // The layers exist on the map with a specific ID - they must be cleaned even if outputDS is null
-    if (mapView) {
-      try {
-        // r024.53: Lightweight clear - preserves GroupLayer on map to avoid +58 MB destroy/recreate
-        const cleanupResult = clearAnyResultLayerContents(props.widgetId, mapView)
-        debugLogger.log('TASK', {
-          event: 'clearResult-direct-layer-cleanup',
-          widgetId: props.widgetId,
-          reason,
-          clearedGraphicsLayer: cleanupResult.clearedGraphicsLayer,
-          clearedGroupLayer: cleanupResult.clearedGroupLayer,
-          hasOutputDS: !!outputDS,
-          timestamp: Date.now()
-        })
-        onDestroyGraphicsLayer?.()
-      } catch (error) {
-        debugLogger.log('ERROR', {
-          event: 'clearResult-direct-layer-cleanup-failed',
-          widgetId: props.widgetId,
-          reason,
-          error: error instanceof Error ? error.message : String(error)
-        })
-      }
-      
-      // Close popup
-      if (mapView.popup?.visible) {
-        mapView.popup.close()
-      }
-    }
-    
-    if (outputDS) {
-      const shouldDestroyDSs = reason === 'query-item-switch-new-mode' || reason === 'user-trash-click' || reason === 'navToForm-clearResults'
-      
-      try {
-        await clearAllSelectionsForWidget({
-          widgetId: props.widgetId,
-          outputDS,
-          useGraphicsLayer: false, // r024.26: Layer already cleaned above, skip duplicate cleanup
-          graphicsLayer,
-          mapView,
-          eventManager: props.eventManager,
-          queryItemConfigId: queryItem.configId,
-          onDestroyGraphicsLayer: undefined, // Already called above
-          destroyOutputDataSources: shouldDestroyDSs
-        })
-        if (shouldDestroyDSs && (reason === 'user-trash-click' || reason === 'navToForm-clearResults')) {
-          setOutputDS(null)
-          setDsRecreationKey(k => k + 1)
-          debugLogger.log('TASK', {
-            event: 'clearResult-clear-tab-pattern',
-            widgetId: props.widgetId,
-            reason,
-            note: 'DS destroyed; nulled outputDS and incremented dsRecreationKey (same pattern as memory workflow)',
-            timestamp: Date.now()
-          })
-        }
-      } catch (error) {
-        debugLogger.log('ERROR', {
-          event: 'clearResult-unified-clear-failed',
-          widgetId: props.widgetId,
-          reason,
-          shouldDestroyDSs,
-          error: error instanceof Error ? error.message : String(error)
-        })
-      }
-    }
-    
-    // STEP 3: The Reset - Back to Stage 0
-    // This final state change "kicks" React one last time after all cleanup is done
-    setStage(0)
-    
-    // r024.19: Reset clearing flag - unmount complete, safe to render new results
-    setIsClearing(false)
-    
-    debugLogger.log('TASK', {
-      event: 'clearResult-complete',
-      widgetId: props.widgetId,
-      reason,
-      note: 'Stage 0 reset - React will recreate DS on next query',
-      timestamp: Date.now()
-    })
+      queryItemConfigId: queryItem.configId,
+      accumulatedRecords, graphicsLayer, mapView,
+      eventManager: props.eventManager,
+      onAccumulatedRecordsChange, onDestroyGraphicsLayer,
+      setActiveTab
+    }, reason)
   }, [outputDS, publishDataClearedMsg, props.widgetId, queryItem.configId, onAccumulatedRecordsChange, graphicsLayer, mapView, props.eventManager])
 
   /**
@@ -850,7 +571,7 @@ export function QueryTask (props: QueryTaskProps) {
       
       setDataSource(ds)
       updateDataSource(ds)
-      setStage(0)
+      dispatch({ type: 'SET_STAGE', payload: 0 })
       setActiveTab('query')
       return // Skip clearing - preserve selection
     }
@@ -865,13 +586,13 @@ export function QueryTask (props: QueryTaskProps) {
 
     setDataSource(ds)
     updateDataSource(ds)
-    setStage(0)
+    dispatch({ type: 'SET_STAGE', payload: 0 })
     setActiveTab('query') // Return to Query tab when switching queries
   }, [updateDataSource, clearResult, resultCount, resultsMode, accumulatedRecords, props.widgetId])
 
   const handleOutputDataSourceCreated = React.useCallback(async (ds: DataSource) => {
-    setOutputDS(ds)
-    
+    dispatch({ type: 'SET_OUTPUT_DS', payload: ds })
+
     // ============================================================================
     // r021.51: EXECUTE PENDING QUERY AFTER DS RECREATION (Part 2 of 2)
     // ============================================================================
@@ -1011,7 +732,7 @@ export function QueryTask (props: QueryTaskProps) {
           
           // Update Results tab display
           recordsRef.current = accumulatedRecords
-          setResultCount(accumulatedRecords.length)
+          dispatch({ type: 'SET_RESULT_COUNT', payload: accumulatedRecords.length })
           
           // Clear the query switch flag so handleDataSourceInfoChange resumes normal operation
           isQuerySwitchInProgressRef.current = false
@@ -1141,7 +862,7 @@ export function QueryTask (props: QueryTaskProps) {
     // Only change stage if we're clearing results
     // Otherwise, keep stage at 1 (results available) so results persist
     if (!clearResults && resultCount > 0) {
-      setStage(1) // Keep results available
+      dispatch({ type: 'SET_STAGE', payload: 1 }) // Keep results available
     }
     lodash.defer(() => {
       focusElementInKeyboardMode(backBtnRef.current)
@@ -1197,917 +918,25 @@ export function QueryTask (props: QueryTaskProps) {
   }, [resultCount, activeTab])
 
   /**
-   * Internal implementation of handleFormSubmit (without waiting logic)
-   * This is called either directly or after hash value conversion
-   * 
+   * Internal implementation of handleFormSubmit.
+   * Delegates to executeQueryInternal (query-execution-handler.ts).
+   *
    * @param sqlExpr - The SQL expression for attribute filtering
    * @param spatialFilter - The spatial filter object
    * @param runtimeZoomToSelected - Optional runtime override for zoom-to-selected behavior
    */
   const handleFormSubmitInternal = React.useCallback(async (sqlExpr: IMSqlExpression, spatialFilter: SpatialFilterObj, runtimeZoomToSelected?: boolean) => {
-    // Clear previous errors when starting a new query
-    setSelectionError(null)
-    setZoomError(null)
-    
-    debugLogger.log('TASK', {
-      event: 'handleFormSubmitInternal-executing',
+    await executeQueryInternal({
+      dispatch, outputDS, queryExecutionKeyRef, pendingQueryAfterClearRef,
+      lastRuntimeZoomToSelectedRef, attributeFilterSqlExprObj, spatialFilterObj,
+      currentQueryRecordIdsRef, hasSelectedRecordsRef, recordsRef,
+      lastQueryResultCountRef, queryParamRef,
       widgetId: props.widgetId,
-      resultsMode,
-      queryExecutionKey: queryExecutionKeyRef.current,
-      timestamp: Date.now()
-    })
-
-    // Check outputDS exists before proceeding
-    if (!outputDS) {
-      pendingQueryAfterClearRef.current = { sqlExpr, spatialFilter, runtimeZoomToSelected }
-      debugLogger.log('TASK', {
-        event: 'handleFormSubmitInternal-no-outputDS',
-        widgetId: props.widgetId,
-        note: 'OutputDS null (e.g. Query-tab clear); stored pending query, will run when handleOutputDataSourceCreated fires',
-        timestamp: Date.now()
-      })
-      setStage(0)
-      return
-    }
-
-    // Store the runtime zoom override for use by Add to Map action
-    lastRuntimeZoomToSelectedRef.current = runtimeZoomToSelected
-    
-    attributeFilterSqlExprObj.current = sqlExpr
-    spatialFilterObj.current = spatialFilter
-    // Load the first page
-    const featureDS = outputDS as FeatureLayerDataSource
-    
-    // For "Add to" and "Remove from" modes, use widget-level accumulated records
-    // These persist across query switches, unlike query-item-level records
-    let existingRecordsForMerge: FeatureDataRecord[] = []
-    if (resultsMode === SelectionType.AddToSelection || resultsMode === SelectionType.RemoveFromSelection) {
-      // Robust capture strategy:
-      // 1. Try records from props (already merged by parent)
-      // 2. Fallback to currently selected records in DS (captured during mode switch)
-      const fromProp = accumulatedRecords || []
-      const fromDS = outputDS?.getSelectedRecords() as FeatureDataRecord[] || []
-      
-      // Diagnostic: Capture existing records from both sources
-      debugLogger.log('RESULTS-MODE', {
-        event: 'capture-existing-records-detailed',
-        widgetId: props.widgetId,
-        queryItemId: props.queryItem?.id,
-        fromPropCount: fromProp.length,
-        fromPropIds: fromProp.map(r => r.getId?.()).slice(0, 5),
-        fromDSCount: fromDS.length,
-        fromDSIds: fromDS.map(r => r.getId?.()).slice(0, 5),
-        outputDSId: outputDS?.id,
-        resultsMode,
-        timestamp: Date.now()
-      })
-      
-      existingRecordsForMerge = fromProp.length > 0 ? fromProp : fromDS
-      
-      // Diagnostic: Final existing records selected
-      debugLogger.log('RESULTS-MODE', {
-        event: 'final-existing-records-selected',
-        widgetId: props.widgetId,
-        finalCount: existingRecordsForMerge.length,
-        finalIds: existingRecordsForMerge.map(r => r.getId?.()).slice(0, 5),
-        source: fromProp.length > 0 ? 'accumulatedRecords-prop' : 'outputDS-getSelectedRecords',
-        timestamp: Date.now()
-      })
-      
-      debugLogger.log('RESULTS-MODE', {
-        event: 'captured-existing-records-diagnostic',
-        widgetId: props.widgetId,
-        resultsMode,
-        fromPropCount: fromProp.length,
-        fromDSCount: fromDS.length,
-        finalCapturedCount: existingRecordsForMerge.length,
-        firstRecordId: existingRecordsForMerge[0]?.getId?.() || 'none',
-        allRecordIds: existingRecordsForMerge.map(r => r.getId?.()).slice(0, 10),
-        outputDSId: outputDS.id,
-        timestamp: Date.now()
-      })
-    }
-    
-    // For "New" mode, clear old results and graphics layer
-    // We call clearResult() directly and AWAIT it to ensure it's finished before query execution starts
-    if (resultsMode === SelectionType.NewSelection) {
-      debugLogger.log('TASK', {
-        event: 'handleFormSubmit-clearing-results-for-new-mode',
-        widgetId: props.widgetId,
-        timestamp: Date.now()
-      })
-      await clearResult('handleFormSubmit-new-mode')
-    }
-    
-    // Set loading stage
-    setStage(2)
-    
-    // FORCED: Always use SimpleList - fetch ALL records, not just a page
-    // Use data source's max record count, or fall back to a large number (10000)
-    const maxRecordCount = (featureDS as any).getMaxRecordCount?.() ?? 10000
-    let pageSize = maxRecordCount
-    const queryParams = generateQueryParams(featureDS, sqlExpr, spatialFilter, currentItem, 1, pageSize)
-    queryParamRef.current = queryParams
-    
-    debugLogger.log('TASK', {
-      event: 'handleFormSubmit-executing-query',
-      widgetId: props.widgetId,
-      where: queryParams.where,
-      resultsMode,
-      timestamp: Date.now()
-    })
-    // Change output ds status to unloaded before use it to load count/records.
-    featureDS.setStatus(DataSourceStatus.Unloaded)
-    featureDS.setCountStatus(DataSourceStatus.Unloaded)
-    let queryResultCount = 0 // Capture count from records to use in finally block
-    const startTime = performance.now()
-    
-    debugLogger.log('TASK', {
-      event: 'perf-query-chain-start',
-      widgetId: props.widgetId,
-      resultsMode,
-      where: queryParams.where,
-      timestamp: Date.now()
-    })
-
-    // PERFORMANCE OPTIMIZATION: Removed redundant executeCountQuery() round-trip.
-    // Since we fetch ALL records (pageSize = maxRecordCount), we can just use records.length.
-    featureDS.updateQueryParams(queryParamRef.current, props.widgetId)
-    
-    const fetchStartTime = performance.now()
-
-    // Direct Query Bypass (r024.50, re-enabled r024.57 with buildRecord)
-    // Bypasses ExB's outputDS.load() and its ~115 MB/query memory leak.
-    // Uses outputDS.buildRecord() for real FeatureDataRecord objects.
-    debugLogger.log('QUERY-PATH', {
-      event: 'query-fork',
-      path: USE_DIRECT_QUERY ? 'DIRECT (buildRecord)' : 'EXB (outputDS.load)',
-      toggle: USE_DIRECT_QUERY,
-      widgetId: props.widgetId,
-      where: queryParams.where,
-      timestamp: Date.now()
-    })
-    
-    // r024.63: Wrap query execution in its own error handler for service/network errors
-    // This is separate from the chain's .catch() which handles processing errors
-    const queryPromise = (USE_DIRECT_QUERY
-      ? executeDirectQuery(
-          featureDS,
-          queryItem,
-          queryParams.where || '1=1',
-          {
-            returnGeometry: true,
-            maxAllowableOffset: 0.1,
-            pageSize: queryParams.pageSize as number,
-            orderByFields: queryParams.orderByFields as string[],
-            outSpatialReference: mapView?.spatialReference
-          }
-        ).then(directResult => ({
-          records: directResult.records as DataRecord[],
-          fields: directResult.fields,
-          _directPopupTemplate: directResult.popupTemplate,
-          _directDefaultPopupTemplate: directResult.defaultPopupTemplate
-        }))
-      : executeQuery(props.widgetId, queryItem, featureDS, queryParamRef.current)
-    ).catch(error => {
-      // r024.63: Only show user-facing error for actual service/network failures
-      // These are errors from featureLayer.load(), featureLayer.queryFeatures(), or outputDS.load()
-      const rawMessage = error instanceof Error ? error.message : String(error)
-      
-      // Check if this looks like a service/network error vs a processing error
-      const isServiceError = 
-        rawMessage.includes('Unable to complete operation') ||
-        rawMessage.includes('Failed to fetch') ||
-        rawMessage.includes('NetworkError') ||
-        rawMessage.includes('featureResult') ||
-        rawMessage.includes('PBF') ||
-        rawMessage.includes('timeout') ||
-        rawMessage.includes('ETIMEDOUT') ||
-        rawMessage.includes('ECONNREFUSED') ||
-        rawMessage.includes('503') ||
-        rawMessage.includes('502') ||
-        rawMessage.includes('500') ||
-        rawMessage.includes('404')
-      
-      debugLogger.log('TASK', {
-        event: 'query-execution-error',
-        widgetId: props.widgetId,
-        error: rawMessage,
-        isServiceError,
-        errorStack: error instanceof Error ? error.stack : undefined,
-        timestamp: Date.now()
-      })
-      
-      if (isServiceError) {
-        setQueryErrorAlert({
-          show: true,
-          errorMessage: rawMessage,
-          timestamp: Date.now()
-        })
-      }
-      
-      // Re-throw so the chain knows the query failed
-      throw error
-    })
-
-    queryPromise
-      .then(async (result) => {
-        const fetchDurationMs = Math.round(performance.now() - fetchStartTime)
-        const processingStartTime = performance.now()
-        
-        queryResultCount = result.records?.length || 0
-        
-        debugLogger.log('RESULTS-MODE', {
-          event: 'query-execution-complete',
-          widgetId: props.widgetId,
-          resultsMode,
-          recordsReturned: queryResultCount,
-          fetchDurationMs,
-          existingCapturedCount: existingRecordsForMerge.length,
-          timestamp: Date.now()
-        })
-        
-        // r022.8: Detect zero results and show alert (force new state each time)
-        if (queryResultCount === 0) {
-          setNoResultsAlert({
-            show: true,
-            recordsRequested: queryResultCount,
-            queryValue: queryParamRef.current?.where || '',
-            timestamp: Date.now() // r022.8: Unique timestamp forces React to recognize as new state
-          })
-          
-          debugLogger.log('RESULTS-MODE', {
-            event: 'no-results-alert-triggered',
-            widgetId: props.widgetId,
-            resultsMode,
-            queryValue: queryParamRef.current?.where || '',
-            timestamp: Date.now()
-          })
-        } else {
-          // Clear any existing alert when query succeeds
-          setNoResultsAlert(null)
-        }
-
-        let recordsToDisplay = result.records || []
-        let dsToUse = outputDS
-        
-        // Handle "Add to" mode: merge new results with widget-level accumulated records
-        if (resultsMode === SelectionType.AddToSelection) {
-          if (result.records && result.records.length > 0) {
-            try {
-              // FIX (r018.96): No manual removal filtering needed
-              // Duplicate detection in mergeResultsIntoAccumulated handles preventing duplicates
-              debugLogger.log('RESULTS-MODE', {
-                event: 'add-mode-starting-merge',
-                widgetId: props.widgetId,
-                existingCount: existingRecordsForMerge.length,
-                existingIds: existingRecordsForMerge.map(r => r.getId?.()).slice(0, 5),
-                newRecordsCount: result.records.length,
-                newRecordIds: result.records?.slice(0, 5).map((r: any) => r.getId?.()),
-                note: 'r018.96: No manual removal filtering - duplicate detection handles this',
-                timestamp: Date.now()
-              })
-
-              // r021.87: Merge function reads __queryConfigId from record attributes
-              // This keeps duplicate detection logic in ONE place (results-management-utils.ts)
-              const mergeResult = mergeResultsIntoAccumulated(
-                outputDS as FeatureLayerDataSource, // Use outputDS for NEW records
-                result.records as FeatureDataRecord[],
-                existingRecordsForMerge, // Use consistently captured records
-                queryItems // For looking up originDS by __queryConfigId
-              )
-              
-              const mergedRecords = mergeResult.mergedRecords
-              const addedIds = mergeResult.addedRecordIds
-              const duplicateIds = mergeResult.duplicateRecordIds
-              
-              recordsToDisplay = mergedRecords
-
-              // For diagnostic logging only
-              const existingIds = existingRecordsForMerge.map(r => r.getId())
-              const newRecordIds = result.records.map(r => r.getId())
-              const mergedIds = mergedRecords.map(r => r.getId())
-              
-              debugLogger.log('RESULTS-MODE', {
-                event: 'add-mode-merge-complete',
-                widgetId: props.widgetId,
-                existingCount: existingRecordsForMerge.length,
-                existingIds: existingIds.slice(0, 10),
-                newRecordsCount: result.records.length,
-                newRecordIds: newRecordIds.slice(0, 10),
-                mergedRecordsCount: mergedRecords.length,
-                mergedIds: mergedIds.slice(0, 10),
-                addedIds: addedIds.slice(0, 10),
-                duplicateIds: duplicateIds.slice(0, 10),
-                duplicatesSkipped: duplicateIds.length,
-                recordsAdded: addedIds.length,
-                note: 'r021.84: Duplicate detection logic is now in ONE place (results-management-utils)',
-                timestamp: Date.now()
-              })
-              
-              // r022.21: Detect Add mode when all records are duplicates (none added)
-              if (result.records.length > 0 && addedIds.length === 0 && duplicateIds.length === result.records.length) {
-                setAllDuplicatesAlert({
-                  show: true,
-                  recordsFound: result.records.length,
-                  queryValue: queryParamRef.current?.where || '',
-                  timestamp: Date.now()
-                })
-                
-                debugLogger.log('RESULTS-MODE', {
-                  event: 'all-duplicates-alert-triggered',
-                  widgetId: props.widgetId,
-                  recordsFound: result.records.length,
-                  duplicatesSkipped: duplicateIds.length,
-                  queryValue: queryParamRef.current?.where || '',
-                  note: 'Query found records but all were already in Results',
-                  timestamp: Date.now()
-                })
-              } else {
-                // Clear any existing alert when records are successfully added
-                setAllDuplicatesAlert(null)
-              }
-              
-              // Update widget-level accumulated records so they persist across query switches
-              if (onAccumulatedRecordsChange) {
-                onAccumulatedRecordsChange(mergedRecords)
-              }
-              
-              // r021.87: Store queryConfigId directly on record when added - no map needed
-              currentQueryRecordIdsRef.current = addedIds
-              
-              // r023.30: Get origin DS ID for cross-layer removal support
-              const originDSId = featureDS.getOriginDataSources()?.[0]?.id || featureDS.id
-              
-              result.records.forEach(record => {
-                const recordId = record.getId()
-                // Only stamp records that were actually added (not duplicates)
-                if (addedIds.includes(recordId)) {
-                  // Store queryConfigId and originDSId directly on the record
-                  if (record.feature && record.feature.attributes) {
-                    record.feature.attributes.__queryConfigId = queryItem.configId
-                    record.feature.attributes.__originDSId = originDSId
-                  }
-                  
-                  debugLogger.log('RESULTS-MODE', {
-                    event: 'record-stamped-with-ids',
-                    widgetId: props.widgetId,
-                    recordId,
-                    queryConfigId: queryItem.configId,
-                    originDSId,
-                    storedOnRecord: !!record.feature?.attributes,
-                    timestamp: Date.now()
-                  })
-                }
-              })
-            } catch (error) {
-              debugLogger.log('RESULTS-MODE', {
-                event: 'add-mode-error',
-                widgetId: props.widgetId,
-                error: error instanceof Error ? error.message : 'Unknown error',
-                errorStack: error instanceof Error ? error.stack : undefined,
-                note: 'r018.96: Falling back to existing records on error',
-                timestamp: Date.now()
-              })
-              // Fall back to existing records on error
-              recordsToDisplay = existingRecordsForMerge
-            }
-          } else {
-            // Query returned 0 results - preserve existing accumulated records
-            debugLogger.log('RESULTS-MODE', {
-              event: 'add-mode-zero-results',
-              widgetId: props.widgetId,
-              existingCount: existingRecordsForMerge.length,
-              note: 'Query returned 0 results - preserving existing accumulated records',
-              timestamp: Date.now()
-            })
-            recordsToDisplay = existingRecordsForMerge
-          }
-        } else if (resultsMode === SelectionType.RemoveFromSelection) {
-          // Handle "Remove from" mode: remove matching records from widget-level accumulated records
-          try {
-            // r022.73: DIAGNOSTIC - Check if accumulated records have __queryConfigId
-            debugLogger.log('RESULTS-MODE', {
-              event: 'remove-mode-accumulated-records-audit',
-              widgetId: props.widgetId,
-              existingCount: existingRecordsForMerge.length,
-              recordsWithConfigId: existingRecordsForMerge.filter(r => r.feature?.attributes?.__queryConfigId).length,
-              sampleRecords: existingRecordsForMerge.slice(0, 3).map(r => ({
-                recordId: r.getId(),
-                hasConfigId: !!r.feature?.attributes?.__queryConfigId,
-                queryConfigId: r.feature?.attributes?.__queryConfigId || 'MISSING'
-              })),
-              timestamp: Date.now()
-            })
-            
-            debugLogger.log('RESULTS-MODE', {
-              event: 'remove-mode-starting-merge',
-              widgetId: props.widgetId,
-              existingCount: existingRecordsForMerge.length,
-              removeCount: result.records?.length || 0
-            })
-            // Check if we have accumulated records to remove from
-            if (existingRecordsForMerge.length === 0) {
-              debugLogger.log('RESULTS-MODE', {
-                event: 'remove-mode-no-accumulated-records',
-                widgetId: props.widgetId,
-                queryRecordsCount: result.records?.length || 0,
-                note: 'No accumulated records to remove from - no-op'
-              })
-              // No accumulated records, so nothing to remove - show empty results
-              recordsToDisplay = []
-            } else if (result.records && result.records.length > 0) {
-              // Remove matching records from accumulated records
-              const remainingRecords = removeResultsFromAccumulated(
-                outputDS as FeatureLayerDataSource, // Use outputDS for key generation
-                result.records as FeatureDataRecord[],
-                existingRecordsForMerge // Use consistently captured records
-              )
-              
-              recordsToDisplay = remainingRecords
-              
-              // Update widget-level accumulated records
-              if (onAccumulatedRecordsChange) {
-                onAccumulatedRecordsChange(remainingRecords)
-              }
-              
-              // FIX (r018.86): DIAGNOSTIC - Graphics count BEFORE removeRecordsFromOriginSelections
-              const graphicsCountBeforeRemoveMode = graphicsLayer?.graphics?.length || 0
-              const graphicsIdsBeforeRemoveMode = graphicsLayer?.graphics?.map(g => g.attributes?.recordId).slice(0, 10) || []
-              
-              debugLogger.log('RESULTS-MODE', {
-                event: 'remove-mode-BEFORE-removeRecordsFromOriginSelections',
-                widgetId: props.widgetId,
-                recordsToRemoveCount: result.records.length,
-                recordsToRemoveIds: result.records.map(r => r.getId()).slice(0, 10),
-                graphicsCountBefore: graphicsCountBeforeRemoveMode,
-                graphicsIdsBefore: graphicsIdsBeforeRemoveMode,
-                timestamp: Date.now()
-              })
-              
-              // Remove records from origin data source selections (map highlighting)
-              // FIX (r018.86): DON'T pass graphics layer parameters here - let graphics be managed by selection sync
-              // This matches the fix for X button removal (r018.85)
-              // Graphics will be synced through the normal selection flow after this operation
-              // r022.73: Pass accumulated records so removal can look up __queryConfigId for composite keys
-              removeRecordsFromOriginSelections(
-                props.widgetId,
-                result.records as FeatureDataRecord[],
-                outputDS as FeatureLayerDataSource,
-                undefined, // useGraphicsLayer
-                undefined, // graphicsLayer
-                existingRecordsForMerge // r022.73: Pass accumulated records for queryConfigId lookup
-              )
-              
-              // FIX (r018.104): Manually remove graphics from graphics layer
-              // Similar to X button removal fix (r018.90), we need to explicitly remove graphics
-              // since removeRecordsFromOriginSelections doesn't receive graphics layer params
-              // r021.91: Pass records for composite key matching
-              if (graphicsLayer && result.records && result.records.length > 0) {
-                const removedRecordIds = result.records.map(r => r.getId())
-                removeHighlightGraphics(graphicsLayer, removedRecordIds, result.records as FeatureDataRecord[])
-                
-                debugLogger.log('RESULTS-MODE', {
-                  event: 'remove-mode-manual-graphics-removal',
-                  widgetId: props.widgetId,
-                  graphicsCountBefore: graphicsCountBeforeRemoveMode,
-                  graphicsCountAfter: graphicsLayer?.graphics?.length || 0,
-                  removedRecordIdsCount: removedRecordIds.length,
-                  removedRecordIds: removedRecordIds.slice(0, 10),
-                  timestamp: Date.now()
-                })
-              }
-              
-              // r021.5 FIX: Close popup when executing Remove mode query
-              if (mapView?.popup?.visible) {
-                mapView.popup.close()
-                debugLogger.log('POPUP', {
-                  event: 'popup-closed-on-remove-mode-query',
-                  widgetId: props.widgetId,
-                  removedRecordsCount: result.records.length,
-                  reason: 'Remove mode query executed',
-                  timestamp: Date.now()
-                })
-              }
-              
-              // FIX (r018.86): DIAGNOSTIC - Graphics count AFTER removeRecordsFromOriginSelections
-              const graphicsCountAfterRemoveMode = graphicsLayer?.graphics?.length || 0
-              const graphicsIdsAfterRemoveMode = graphicsLayer?.graphics?.map(g => g.attributes?.recordId).slice(0, 10) || []
-              
-              debugLogger.log('RESULTS-MODE', {
-                event: 'remove-mode-AFTER-removeRecordsFromOriginSelections',
-                widgetId: props.widgetId,
-                graphicsCountBefore: graphicsCountBeforeRemoveMode,
-                graphicsCountAfter: graphicsCountAfterRemoveMode,
-                graphicsIdsAfter: graphicsIdsAfterRemoveMode,
-                graphicsChanged: graphicsCountAfterRemoveMode !== graphicsCountBeforeRemoveMode,
-                graphicsChangedBy: graphicsCountAfterRemoveMode - graphicsCountBeforeRemoveMode,
-                expected: 'Graphics SHOULD NOW be removed (r018.104 fix)',
-                timestamp: Date.now()
-              })
-              
-              const actualRemovalCount = existingRecordsForMerge.length - remainingRecords.length
-              
-              debugLogger.log('RESULTS-MODE', {
-                event: 'remove-mode-complete',
-                widgetId: props.widgetId,
-                existingAccumulatedRecordsCount: existingRecordsForMerge.length,
-                queryRecordsCount: result.records.length,
-                remainingRecordsCount: remainingRecords.length,
-                recordsRemoved: actualRemovalCount,
-                outputDSId: outputDS.id,
-                widgetLevelRecordsUpdated: true,
-                originSelectionsUpdated: true
-              })
-              
-              // r022.15: Detect Remove mode with no actual removals (query found records but none matched)
-              if (result.records.length > 0 && actualRemovalCount === 0) {
-                setNoRemovalAlert({
-                  show: true,
-                  recordsFound: result.records.length,
-                  queryValue: queryParamRef.current?.where || '',
-                  timestamp: Date.now()
-                })
-                
-                debugLogger.log('RESULTS-MODE', {
-                  event: 'no-removal-alert-triggered',
-                  widgetId: props.widgetId,
-                  recordsFound: result.records.length,
-                  queryValue: queryParamRef.current?.where || '',
-                  note: 'Query found records but none were in accumulated results to remove',
-                  timestamp: Date.now()
-                })
-              } else {
-                // Clear any existing alert when removal succeeds
-                setNoRemovalAlert(null)
-              }
-              
-              // If all records removed, auto-clear (consistent with user expectation)
-              if (remainingRecords.length === 0) {
-                debugLogger.log('RESULTS-MODE', {
-                  event: 'remove-mode-all-records-removed',
-                  widgetId: props.widgetId,
-                  note: 'All accumulated records removed - auto-clearing'
-                })
-                // Clear widget-level accumulated records
-                if (onAccumulatedRecordsChange) {
-                  onAccumulatedRecordsChange([])
-                }
-              }
-            } else {
-              // Query returned no results - nothing to remove
-              debugLogger.log('RESULTS-MODE', {
-                event: 'remove-mode-no-query-results',
-                widgetId: props.widgetId,
-                existingAccumulatedRecordsCount: existingRecordsForMerge.length,
-                note: 'Query returned no results - no records to remove'
-              })
-              // Keep existing accumulated records displayed
-              recordsToDisplay = existingRecordsForMerge
-            }
-          } catch (error) {
-            debugLogger.log('RESULTS-MODE', {
-              event: 'remove-mode-error',
-              widgetId: props.widgetId,
-              error: error instanceof Error ? error.message : 'Unknown error',
-              errorStack: error instanceof Error ? error.stack : undefined
-            })
-            // Fall back to showing query results on error
-            recordsToDisplay = result.records || []
-          }
-        } else if (resultsMode === SelectionType.NewSelection) {
-          // FIX (r018.97): For "New" mode, populate accumulatedRecords with query results
-          // This ensures tab count updates correctly when records are removed in New mode
-          if (onAccumulatedRecordsChange && recordsToDisplay && recordsToDisplay.length > 0) {
-            onAccumulatedRecordsChange(recordsToDisplay as FeatureDataRecord[])
-            debugLogger.log('RESULTS-MODE', {
-              event: 'new-mode-populating-accumulated-records',
-              widgetId: props.widgetId,
-              recordsCount: recordsToDisplay.length,
-              note: 'r018.97: Populate accumulatedRecords in New mode for universal tab count',
-              timestamp: Date.now()
-            })
-            
-            // r021.87: In NEW mode, stamp queryConfigId on all records
-            // r023.30: Also stamp originDSId for cross-layer removal support
-            currentQueryRecordIdsRef.current = (recordsToDisplay as FeatureDataRecord[]).map(r => r.getId());
-            const originDSIdForNew = featureDS.getOriginDataSources()?.[0]?.id || featureDS.id
-            
-            ;(recordsToDisplay as FeatureDataRecord[]).forEach(record => {
-              if (record.feature && record.feature.attributes) {
-                record.feature.attributes.__queryConfigId = queryItem.configId
-                record.feature.attributes.__originDSId = originDSIdForNew
-              }
-            })
-          } else if (onAccumulatedRecordsChange) {
-            // No results - clear accumulatedRecords
-            onAccumulatedRecordsChange([])
-          }
-        }
-        
-        recordsRef.current = recordsToDisplay
-        // Reset selection flag for new query results
-        hasSelectedRecordsRef.current = false
-        
-        // r022.44: DIAGNOSTIC - Log state BEFORE selection condition check
-        debugLogger.log('SELECTION-STATE-AUDIT', {
-          event: 'before-selection-condition-check',
-          widgetId: props.widgetId,
-          resultsMode,
-          hasRecordsToDisplay: !!recordsToDisplay,
-          recordsToDisplayLength: recordsToDisplay?.length || 0,
-          hasDsToUse: !!dsToUse,
-          conditionWillPass: !!(recordsToDisplay && recordsToDisplay.length > 0 && dsToUse),
-          timestamp: Date.now()
-        })
-        
-        // Select records in the output DS
-        // For "Add to" mode, select merged records
-        // For "Remove from" mode, select remaining records (already updated via removeRecordsFromOriginSelections)
-        // For "New" mode, select query results
-        if (recordsToDisplay && recordsToDisplay.length > 0 && dsToUse) {
-          const recordIdsToSelect = recordsToDisplay.map(record => record.getId())
-          
-          // For "Remove from" mode, selection was already updated via removeRecordsFromOriginSelections
-          // But we still need to select in the outputDS for widget state consistency
-          if (resultsMode === SelectionType.RemoveFromSelection) {
-            // Selection was already updated in origin DSs via removeRecordsFromOriginSelections
-            // Just update outputDS selection for widget state consistency
-            try {
-              if (typeof dsToUse.selectRecordsByIds === 'function') {
-                dsToUse.selectRecordsByIds(recordIdsToSelect, recordsToDisplay as FeatureDataRecord[])
-              }
-              hasSelectedRecordsRef.current = true
-              debugLogger.log('RESULTS-MODE', {
-                event: 'remove-mode-output-ds-selection-updated',
-                widgetId: props.widgetId,
-                recordCount: recordsToDisplay.length
-              })
-            } catch (error) {
-              debugLogger.log('RESULTS-MODE', {
-                event: 'remove-mode-output-ds-selection-error',
-                widgetId: props.widgetId,
-                error: error instanceof Error ? error.message : 'Unknown error'
-              })
-            }
-          } else {
-            // For "Add to" and "New" modes, select records with cross-layer grouping
-            setSelectionError(null)
-            ;(async () => {
-              try {
-                // r022.73: Group records by __queryConfigId to prevent cross-layer selection pollution
-                // This ensures each layer only gets its own record IDs selected
-                debugLogger.log('SELECTION-STATE-AUDIT', {
-                  event: 'r022-73-grouping-starting',
-                  widgetId: props.widgetId,
-                  recordsToDisplayCount: recordsToDisplay.length,
-                  timestamp: Date.now()
-                })
-                
-                const { DataSourceManager } = await import('jimu-core')
-                const dsManager = DataSourceManager.getInstance()
-                const recordsByOriginDS = new Map<DataSource, FeatureDataRecord[]>()
-                
-                for (const record of recordsToDisplay as FeatureDataRecord[]) {
-                  const queryConfigId = record.feature?.attributes?.__queryConfigId
-                  
-                  debugLogger.log('SELECTION-STATE-AUDIT', {
-                    event: 'r022-73-checking-record',
-                    recordId: record.getId(),
-                    hasQueryConfigId: !!queryConfigId,
-                    queryConfigId,
-                    timestamp: Date.now()
-                  })
-                  
-                  if (!queryConfigId) continue
-                  
-                  const matchingQueryItem = props.queryItems?.find(qi => qi.configId === queryConfigId)
-                  if (!matchingQueryItem?.useDataSource) continue
-                  
-                  const outputDS = dsManager.getDataSource(matchingQueryItem.useDataSource.dataSourceId)
-                  const originDS = outputDS?.getOriginDataSources?.()?.[0] || outputDS
-                  if (!originDS) continue
-                  
-                  if (!recordsByOriginDS.has(originDS)) {
-                    recordsByOriginDS.set(originDS, [])
-                  }
-                  recordsByOriginDS.get(originDS).push(record)
-                }
-                
-                debugLogger.log('SELECTION-STATE-AUDIT', {
-                  event: 'r022-73-grouping-complete',
-                  widgetId: props.widgetId,
-                  originDSCount: recordsByOriginDS.size,
-                  groups: Array.from(recordsByOriginDS.entries()).map(([ds, records]) => ({
-                    originDSId: ds.id,
-                    recordCount: records.length,
-                    recordIds: records.map(r => r.getId())
-                  })),
-                  timestamp: Date.now()
-                })
-                
-                // r023.5: REMOVED origin DS selection (blue outlines) - only "Add to Map" creates blue outlines
-                // Previously: Clear then re-select each origin DS
-                // Now: Skip origin DS entirely, only update output DS for Results tab
-                
-                // r022.73: Update outputDS for Results tab with ALL records (cross-layer display)
-                if (typeof dsToUse.selectRecordsByIds === 'function') {
-                  dsToUse.selectRecordsByIds(recordIdsToSelect, recordsToDisplay as FeatureDataRecord[])
-                }
-                
-                // Dispatch custom selection event so Widget state is updated immediately
-                dispatchSelectionEvent(props.widgetId, recordIdsToSelect, dsToUse, queryItem.configId, eventManager, accumulatedRecords?.length)
-              } catch (error) {
-                const errorMessage = error instanceof Error ? error.message : 'Failed to select query results'
-                setSelectionError(errorMessage)
-                debugLogger.log('TASK', {
-                  event: 'selection-failed',
-                  error: errorMessage,
-                  errorStack: error instanceof Error ? error.stack : undefined,
-                  recordCount: recordIdsToSelect.length
-                })
-              }
-            })()
-          }
-        } else if (resultsMode === SelectionType.RemoveFromSelection && recordsToDisplay.length === 0) {
-          // All records removed - clear selection
-          ;(async () => {
-              try {
-              await clearSelectionInDataSources(props.widgetId, dsToUse, true, graphicsLayer)
-              hasSelectedRecordsRef.current = false
-              
-              // Notify Widget that selection is cleared (pass 0 so handler does not read stale count)
-              dispatchSelectionEvent(props.widgetId, [], dsToUse, queryItem.configId, eventManager, 0)
-              
-              debugLogger.log('RESULTS-MODE', {
-                event: 'remove-mode-all-records-removed-selection-cleared',
-                widgetId: props.widgetId
-              })
-            } catch (error) {
-              debugLogger.log('RESULTS-MODE', {
-                event: 'remove-mode-clear-selection-error',
-                widgetId: props.widgetId,
-                error: error instanceof Error ? error.message : 'Unknown error'
-              })
-            }
-          })()
-        }
-        
-        // r022.22: Store the CURRENT query's result count (not accumulated count)
-        // This allows auto-tab-switch to check if THIS query returned results
-        lastQueryResultCountRef.current = queryResultCount
-        
-        // Mark that query just executed BEFORE updating resultCount
-        // This ensures the auto-switch useEffect sees queryJustExecuted === true
-        setQueryJustExecuted(true)
-        debugLogger.log('TASK', {
-          event: 'query-executed-flag-set',
-          widgetId: props.widgetId,
-          queryItemConfigId: queryItem.configId,
-          resultsMode,
-          recordsToDisplayCount: recordsToDisplay.length,
-          queryResultCount,
-          lastQueryResultCountRef: lastQueryResultCountRef.current,
-          timestamp: Date.now()
-        })
-        
-        // Update result count FIRST (before any parent callbacks that might cause re-renders)
-        // For "Add to" and "Remove from" modes, use accumulated/remaining count
-        // For "New" mode, use query count
-        const newResultCount = resultsMode === SelectionType.AddToSelection || resultsMode === SelectionType.RemoveFromSelection
-          ? recordsToDisplay.length
-          : queryResultCount
-        
-        setResultCount(newResultCount)
-        
-        // INSTANT UI FIX (The "Spinner Bypass"): 
-        // Decouple the "Retrieving results..." spinner from asynchronous actions like zooming. 
-        // By calling setStage(1) now, the user sees the result list immediately while 
-        // the map animation continues in the background.
-        setStage(1) 
-        
-        debugLogger.log('TASK', {
-          event: 'perf-processing-complete',
-          widgetId: props.widgetId,
-          processingDurationMs: Math.round(performance.now() - processingStartTime),
-          totalChainDurationMs: Math.round(performance.now() - startTime),
-          newResultCount,
-          resultsMode,
-          timestamp: Date.now()
-        })
-
-        // Zoom to records using shared zoom utility (consistent padding behavior)
-        // Use runtime preference if provided, otherwise fall back to config setting (defaults to true)
-        const shouldZoom = runtimeZoomToSelected !== undefined 
-          ? runtimeZoomToSelected 
-          : (queryItem.zoomToSelected !== false)
-        
-        // Use the output DS and merged records
-        const recordsForZoom = recordsToDisplay || result.records
-        const dsForZoom = dsToUse || outputDS
-        
-        if (recordsForZoom && recordsForZoom.length > 0 && dsForZoom && shouldZoom) {
-          try {
-            await zoomToRecords(recordsForZoom as FeatureDataRecord[])
-          } catch (error) {
-            const errorMessage = error instanceof Error ? error.message : 'Failed to zoom to features'
-            setZoomError(errorMessage)
-            debugLogger.log('ZOOM', {
-              event: 'zoom-goTo-error-query',
-              error: errorMessage,
-              errorStack: error instanceof Error ? error.stack : undefined
-            })
-            debugLogger.log('ZOOM', {
-              event: 'zoom-to-records-error',
-              widgetId: props.widgetId,
-              error: error instanceof Error ? error.message : String(error),
-              errorStack: error instanceof Error ? error.stack : undefined,
-              timestamp: Date.now()
-            })
-          }
-        }
-        
-        // NOW call onHashParameterUsed AFTER all UI updates and zoom operations complete
-        // This prevents the parent re-render from interrupting the promise chain
-        // This prevents hash parameters from re-executing when switching queries
-        if (initialInputValue && queryItem.shortId && onHashParameterUsed) {
-          debugLogger.log('HASH-EXEC', {
-            event: 'querytask-calling-onhashparameterused',
-            widgetId: props.widgetId,
-            queryItemConfigId: props.queryItem.configId,
-            queryItemShortId: queryItem.shortId,
-            initialInputValue,
-            timestamp: Date.now()
-          })
-          
-          debugLogger.log('TASK', {
-            event: 'hash-query-executed-notifying-parent',
-            widgetId: props.widgetId,
-            queryItemConfigId: queryItem.configId,
-            queryItemShortId: queryItem.shortId,
-            initialInputValue,
-            timestamp: Date.now()
-          })
-          onHashParameterUsed(queryItem.shortId)
-          
-          debugLogger.log('HASH-EXEC', {
-            event: 'querytask-onhashparameterused-called',
-            widgetId: props.widgetId,
-            queryItemConfigId: props.queryItem.configId,
-            queryItemShortId: queryItem.shortId,
-            timestamp: Date.now()
-          })
-          
-          // Fire event to notify HelperSimple that hash query execution is complete
-          // This allows HelperSimple to track which hash parameters have been executed
-          // to prevent re-execution when switching queries
-          const hashParam = `${queryItem.shortId}=${initialInputValue}`
-          const executedEvent = new CustomEvent(QUERYSIMPLE_HASH_QUERY_EXECUTED_EVENT, {
-            detail: {
-              widgetId: props.widgetId,
-              shortId: queryItem.shortId,
-              value: initialInputValue,
-              hashParam
-            },
-            bubbles: true,
-            cancelable: true
-          })
-          window.dispatchEvent(executedEvent)
-          
-          debugLogger.log('HASH-EXEC', {
-            event: 'querytask-hash-query-executed-event-dispatched',
-            widgetId: props.widgetId,
-            queryItemConfigId: queryItem.configId,
-            queryItemShortId: queryItem.shortId,
-            initialInputValue,
-            hashParam,
-            timestamp: Date.now()
-          })
-        }
-        
-        return Promise.resolve(true)
-      })
-      .catch(error => {
-        // r024.63: This catch handles errors in the processing chain AFTER query execution
-        // Service/network errors are already handled in the query promise wrapper above
-        // We only log here, don't show popover (user already saw it if it was a service error)
-        const rawMessage = error instanceof Error ? error.message : String(error)
-        debugLogger.log('TASK', {
-          event: 'query-chain-failed-diagnostic',
-          widgetId: props.widgetId,
-          error: rawMessage,
-          errorStack: error instanceof Error ? error.stack : undefined,
-          timestamp: Date.now()
-        })
-        
-        setStage(0) // Return control to user - exit Stage 2 on error
-      })
-      .finally(() => {
-        if (spatialFilter?.layer && spatialFilter?.clearAfterApply) {
-          spatialFilter.layer.removeAll()
-        }
-        // setStage(1) // Removed from here; now called in the main chain before background actions
-      })
+      queryItem, queryItems, currentItem, resultsMode, accumulatedRecords,
+      graphicsLayer, mapView, eventManager, initialInputValue,
+      onAccumulatedRecordsChange, onHashParameterUsed,
+      clearResult, zoomToRecords
+    }, sqlExpr, spatialFilter, runtimeZoomToSelected)
   }, [currentItem, queryItem, props.widgetId, outputDS, publishDataClearedMsg, clearResult, resultsMode, accumulatedRecords, onAccumulatedRecordsChange, onClearGraphicsLayer, mapView, zoomToRecords])
 
   // Listen for hash value conversion event and execute pending query
@@ -2174,239 +1003,21 @@ export function QueryTask (props: QueryTaskProps) {
 
   /**
    * Handles form submission when user clicks "Apply" button.
-   * Checks if hash value needs conversion and waits for event if needed.
-   * 
-   * @param sqlExpr - The SQL expression for attribute filtering
-   * @param spatialFilter - The spatial filter object
-   * @param runtimeZoomToSelected - Optional runtime override for zoom-to-selected behavior
+   * Delegates to executeFormSubmit (query-submit-handler.ts).
    */
   const handleFormSubmit = React.useCallback(async (sqlExpr: IMSqlExpression, spatialFilter: SpatialFilterObj, runtimeZoomToSelected?: boolean) => {
-    // LOG AT THE VERY START - before any checks
-    debugLogger.log('TASK', {
-      event: 'handleFormSubmit-called',
+    await executeFormSubmit({
+      dispatch, outputDS, dsRecreationKey,
+      isRetryAfterClearRef, pendingQueryAfterClearRef, pendingHashQueryRef,
+      recordsRef, hasSelectedRecordsRef, queryExecutionKeyRef,
       widgetId: props.widgetId,
-      sqlExprExists: !!sqlExpr,
-      firstPartExists: !!sqlExpr?.parts?.[0],
-      isRetry: isRetryAfterClearRef.current,
-      timestamp: Date.now()
-    })
-    
-    // ============================================================================
-    // r021.35/36: Memory Fix - Manual Cleanup + DS Destroy + Programmatic Clear
-    // ============================================================================
-    // In NEW mode with existing results: Clean refs/graphics → Destroy OutputDataSource → 
-    // Click Clear button (triggers React to recreate DS) → Execute query via callback.
-    //
-    // ⚠️ DO NOT REMOVE: The programmatic button click is required. React doesn't detect 
-    // DataSource destruction through state updates alone. Direct cleanup attempts cause 
-    // double-click bugs. See OUTPUTDATASOURCE_MEMORY_LEAK_INVESTIGATION.md for details.
-    // ============================================================================
-    
-    const hasExistingRecords = outputDS?.getSourceRecords()?.length > 0 || recordsRef.current?.length > 0
-    const needsClear = resultsMode === SelectionType.NewSelection && hasExistingRecords && !isRetryAfterClearRef.current
-    
-    if (needsClear) {
-      debugLogger.log('TASK', {
-        event: 'memory-workflow-start',
-        widgetId: props.widgetId,
-        outputDSRecords: outputDS?.getSourceRecords()?.length || 0,
-        recordsRefCount: recordsRef.current?.length || 0,
-        timestamp: Date.now()
-      })
-      
-      isRetryAfterClearRef.current = true
-      setStage(2)
-      
-      // Store pending query for execution after DS recreation
-      pendingQueryAfterClearRef.current = {
-        sqlExpr,
-        spatialFilter,
-        runtimeZoomToSelected
-      }
-      
-      // ============================================================================
-      // SOVEREIGN RESET - Atomic Transaction (r024.40)
-      // Must purge ESRI handles BEFORE destroying components that created them
-      // ============================================================================
-      
-      // 1. ABLUTION: Kill the ghosts (ObservationHandles)
-      const purgeStats = globalHandleManager.purgeAll(props.widgetId)
-      debugLogger.log('TASK', {
-        event: 'memory-workflow-ablution-purge',
-        widgetId: props.widgetId,
-        purgeStats,
-        note: 'r024.40: Sovereign Reset - killed ESRI handles before DS destruction',
-        timestamp: Date.now()
-      })
-      
-      // Manual cleanup: refs, graphics, selection
-      debugLogger.log('TASK', {
-        event: 'memory-cleanup-start',
-        widgetId: props.widgetId,
-        timestamp: Date.now()
-      })
-      
-      recordsRef.current = null
-      outputDS?.setStatus(DataSourceStatus.NotReady)
-      setResultCount(0)
-      
-      try {
-        await clearSelectionInDataSources(props.widgetId, outputDS, true, graphicsLayer)
-      } catch (error) {
-        debugLogger.log('ERROR', { event: 'selection-clear-failed', error: error.message })
-      }
-      
-      // r024.53: Lightweight clear - preserves layers on map
-      if (mapView) {
-        try{
-          clearAnyResultLayerContents(props.widgetId, mapView)
-          onDestroyGraphicsLayer?.()
-        } catch (error) {
-          debugLogger.log('ERROR', { event: 'graphics-cleanup-failed', error: error.message })
-        }
-      }
-      
-      if (mapView?.popup?.visible) {
-        mapView.popup.close()
-      }
-      
-      if (onAccumulatedRecordsChange) {
-        onAccumulatedRecordsChange([])
-      }
-      
-      if (props.eventManager && outputDS) {
-        dispatchSelectionEvent(props.widgetId, [], outputDS, queryItem.configId, props.eventManager, 0)
-      }
-      
-      await publishDataClearedMsg()
-      
-      hasSelectedRecordsRef.current = false
-      queryExecutionKeyRef.current += 1
-      setSelectionError(null)
-      setZoomError(null)
-      
-      // Destroy DataSource (frees ESRI observers and memory)
-      if (outputDS) {
-        try {
-          const dsId = outputDS.id
-          DataSourceManager.getInstance().destroyDataSource(dsId)
-          debugLogger.log('TASK', {
-            event: 'datasource-destroyed',
-            widgetId: props.widgetId,
-            outputDSId: dsId,
-            timestamp: Date.now()
-          })
-        } catch (error) {
-          debugLogger.log('ERROR', {
-            event: 'datasource-destroy-failed',
-            widgetId: props.widgetId,
-            error: error.message,
-            timestamp: Date.now()
-          })
-        }
-      }
-      
-      // ============================================================================
-      // r021.51: KEY PROP PATTERN - Force DataSourceComponent Remount
-      // ============================================================================
-      // Increment the key prop on DataSourceComponent to force React to unmount/remount it.
-      // When the key changes, React treats it as a new component instance and creates a fresh
-      // DataSource, which triggers handleOutputDataSourceCreated callback naturally.
-      //
-      // This replaces the previous programmatic button click anti-pattern (r021.31-50) with
-      // idiomatic React. Memory testing shows equivalent performance (18.67 vs 18.83 MB/query).
-      //
-      // WHY THIS WORKS:
-      // - React unmounts old DataSourceComponent (releases all hooks/effects)
-      // - React mounts new DataSourceComponent (fresh lifecycle)
-      // - New component creates OutputDataSource via ESRI's normal flow
-      // - handleOutputDataSourceCreated callback fires with new DS instance
-      // - Pending query executes after 300ms settle time
-      //
-      // See: OUTPUTDATASOURCE_MEMORY_LEAK_INVESTIGATION.md (r021.51 section)
-      // ============================================================================
-      
-      setDsRecreationKey(prev => prev + 1)
-      
-      debugLogger.log('TASK', {
-        event: 'ds-recreation-key-incremented',
-        widgetId: props.widgetId,
-        newKey: dsRecreationKey + 1,
-        note: 'Key prop pattern - DataSourceComponent will remount and recreate DS',
-        timestamp: Date.now()
-      })
-      
-      return
-    }
-    
-    // Check if this is a hash-triggered query with unconverted value (string format)
-    const firstPart = sqlExpr?.parts?.[0]
-    const value = firstPart?.type === 'SINGLE' ? (firstPart as any).valueOptions?.value : null
-    const isStringValue = typeof value === 'string' && value.length > 0
-    const isArrayValue = Array.isArray(value) && value.length > 0
-    
-    debugLogger.log('TASK', {
-      event: 'handleFormSubmit-checking-conversion',
-      widgetId: props.widgetId,
-      initialInputValue,
-      valueType: typeof value,
-      isStringValue,
-      isArrayValue,
-      value: Array.isArray(value) ? value : value,
-      willCheckWaitCondition: isStringValue && !isArrayValue && initialInputValue && value === initialInputValue,
-      timestamp: Date.now()
-    })
-    
-    // If value is string (not converted to array yet), wait for conversion event
-    // This happens when hash value changes for same configId
-    if (isStringValue && !isArrayValue && initialInputValue && value === initialInputValue) {
-      debugLogger.log('TASK', {
-        event: 'handleFormSubmit-waiting-for-conversion',
-        widgetId: props.widgetId,
-        currentValue: value,
-        initialInputValue,
-        timestamp: Date.now()
-      })
-      
-      // Store pending query
-      pendingHashQueryRef.current = {
-        sqlExpr,
-        spatialFilter,
-        runtimeZoomToSelected
-      }
-      
-      // Set a timeout to prevent infinite waiting (fallback after 2 seconds)
-      setTimeout(() => {
-        if (pendingHashQueryRef.current) {
-          debugLogger.log('TASK', {
-            event: 'handleFormSubmit-conversion-timeout-executing-anyway',
-            widgetId: props.widgetId,
-            timestamp: Date.now()
-          })
-          
-          const { sqlExpr, spatialFilter, runtimeZoomToSelected } = pendingHashQueryRef.current
-          pendingHashQueryRef.current = null
-          
-          // Execute anyway (fallback)
-          handleFormSubmitInternal(sqlExpr, spatialFilter, runtimeZoomToSelected)
-        }
-      }, 2000)
-      
-      return // Exit early, will execute when event fires
-    }
-    
-    debugLogger.log('TASK', {
-      event: 'handleFormSubmit-executing-immediately',
-      widgetId: props.widgetId,
-      reason: isStringValue ? 'not-hash-triggered' : (isArrayValue ? 'already-converted' : 'no-value'),
-      valueType: typeof value,
-      isStringValue,
-      isArrayValue,
-      timestamp: Date.now()
-    })
-    
-    // Value is already converted or not hash-triggered, execute immediately
-    handleFormSubmitInternal(sqlExpr, spatialFilter, runtimeZoomToSelected)
+      queryItemConfigId: queryItem.configId,
+      resultsMode, initialInputValue,
+      graphicsLayer, mapView,
+      eventManager: props.eventManager,
+      onAccumulatedRecordsChange, onDestroyGraphicsLayer,
+      publishDataClearedMsg, handleFormSubmitInternal
+    }, sqlExpr, spatialFilter, runtimeZoomToSelected)
   }, [props.widgetId, initialInputValue, handleFormSubmitInternal, resultsMode, outputDS, clearResult])
 
   const { useAttributeFilter, sqlExprObj, useSpatialFilter, spatialFilterTypes, spatialIncludeRuntimeData, spatialRelationUseDataSources} = currentItem
@@ -2851,9 +1462,9 @@ export function QueryTask (props: QueryTaskProps) {
               activeTab={activeTab}
               setActiveTab={setActiveTab}
               noResultsAlert={noResultsAlert}
-              onDismissNoResultsAlert={() => setNoResultsAlert(null)}
+              onDismissNoResultsAlert={() => dispatch({ type: 'SET_NO_RESULTS_ALERT', payload: null })}
               queryErrorAlert={queryErrorAlert}
-              onDismissQueryErrorAlert={() => setQueryErrorAlert(null)}
+              onDismissQueryErrorAlert={() => dispatch({ type: 'SET_QUERY_ERROR_ALERT', payload: null })}
               otherProps={otherProps}
             />
           </div>
@@ -2920,9 +1531,9 @@ export function QueryTask (props: QueryTaskProps) {
                 hoverPinColor={hoverPinColor}
                 listResetKey={queryExecutionKeyRef.current}
                 noRemovalAlert={noRemovalAlert}
-                onDismissNoRemovalAlert={() => setNoRemovalAlert(null)}
+                onDismissNoRemovalAlert={() => dispatch({ type: 'SET_NO_REMOVAL_ALERT', payload: null })}
                 allDuplicatesAlert={allDuplicatesAlert}
-                onDismissAllDuplicatesAlert={() => setAllDuplicatesAlert(null)}
+                onDismissAllDuplicatesAlert={() => dispatch({ type: 'SET_ALL_DUPLICATES_ALERT', payload: null })}
                 onNavBack={async (clearResults = false) => {
                   // Handle navigation from QueryTaskResult
                   // If clearResults is true, clear everything and go to query tab
@@ -2954,15 +1565,15 @@ export function QueryTask (props: QueryTaskProps) {
           margin-top: 8px;
         `}>
           {selectionError && (
-            <ErrorMessage 
-              error={selectionError} 
-              onDismiss={() => setSelectionError(null)}
+            <ErrorMessage
+              error={selectionError}
+              onDismiss={() => dispatch({ type: 'SET_SELECTION_ERROR', payload: null })}
             />
           )}
           {zoomError && (
-            <ErrorMessage 
-              error={zoomError} 
-              onDismiss={() => setZoomError(null)}
+            <ErrorMessage
+              error={zoomError}
+              onDismiss={() => dispatch({ type: 'SET_ZOOM_ERROR', payload: null })}
             />
           )}
         </div>

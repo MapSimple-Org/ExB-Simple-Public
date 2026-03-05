@@ -321,8 +321,8 @@ const style = css`
  */
 /**
  * Helper: Convert hex color to RGB array for CIM symbols
- * @param hex - Hex color string (e.g., '#FFC107' or 'FFC107')
- * @returns RGB array [r, g, b, alpha] for CIM symbol (e.g., [255, 193, 7, 230])
+ * @param hex - Hex color string (e.g., '#EA4335' or 'EA4335')
+ * @returns RGB array [r, g, b, alpha] for CIM symbol (e.g., [234, 67, 53, 230])
  */
 function hexToRgb(hex: string, alpha: number = 230): [number, number, number, number] {
   // Remove # if present
@@ -365,7 +365,7 @@ export const QueryResultItem = (props: ResultItemProps) => {
   // r024.25: Memoized CIM symbol data to avoid creating new objects on every hover/animation frame
   // The symbol data is created ONCE when color changes, not on every hover
   const memoizedSymbolData = React.useMemo(() => {
-    const baseColor = hexToRgb(hoverPinColor || '#FFC107', 230)
+    const baseColor = hexToRgb(hoverPinColor || '#EA4335', 230)
     const lighterColor: [number, number, number, number] = [
       Math.min(255, Math.round(baseColor[0] * 1.2)),
       Math.min(255, Math.round(baseColor[1] * 1.2)),
@@ -561,7 +561,7 @@ export const QueryResultItem = (props: ResultItemProps) => {
             recordId,
             geometryType: geometry.type,
             symbolType: 'CIMSymbol-GooglePin-Animated-Optimized',
-            color: hoverPinColor || '#FFC107',
+            color: hoverPinColor || '#EA4335',
             location: { x: labelPoint.x, y: labelPoint.y },
             timestamp: Date.now()
           })

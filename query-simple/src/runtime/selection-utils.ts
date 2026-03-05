@@ -7,7 +7,8 @@ import type { DataSource, FeatureLayerDataSource, FeatureDataRecord } from 'jimu
 import { MessageManager, DataRecordsSelectionChangeMessage, DataSourceManager, DataRecordSetChangeMessage, RecordSetChangeType } from 'jimu-core'
 import { addHighlightGraphics as addGraphicsLayerGraphics, clearGraphicsLayerOrGroupLayer, createOrGetGraphicsLayer, cleanupGraphicsLayer, cleanupAnyResultLayer, clearAnyResultLayerContents } from './graphics-layer-utils'
 import { createQuerySimpleDebugLogger } from 'widgets/shared-code/mapsimple-common'
-import type { EventManager } from './hooks/use-event-handling'
+import { clearDataSFromHash } from './hash-utils'
+import type { EventManager } from './managers/event-manager'
 
 const debugLogger = createQuerySimpleDebugLogger()
 
@@ -214,34 +215,11 @@ export async function selectRecordsInDataSources(
 
 /**
  * Clears the `data_s` parameter from the URL hash.
- * Experience Builder automatically adds `data_s` when selections are made,
- * but doesn't remove it when selections are cleared, causing "dirty hash" issues.
- * 
- * This function ensures the hash is clean when selections are cleared.
+ * Delegates to hash-utils.ts. Kept as a named export for backward compatibility
+ * with dynamic imports in selection-restoration-manager.ts.
  */
 export function clearDataSParameterFromHash(): void {
-  const hash = window.location.hash.substring(1)
-  if (!hash) return
-  
-  const urlParams = new URLSearchParams(hash)
-  
-  if (urlParams.has('data_s')) {
-    urlParams.delete('data_s')
-    const newHash = urlParams.toString()
-    
-    debugLogger.log('HASH', {
-      event: 'clearDataSParameterFromHash',
-      hadDataS: true,
-      newHash: newHash ? `#${newHash}` : '(empty)',
-      timestamp: Date.now()
-    })
-    
-    // Update the URL without triggering a reload
-    // Always preserve pathname and query string, only update hash
-    window.history.replaceState(null, '', 
-      window.location.pathname + window.location.search + (newHash ? `#${newHash}` : '')
-    )
-  }
+  clearDataSFromHash()
 }
 
 /**

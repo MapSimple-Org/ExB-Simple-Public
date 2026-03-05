@@ -1,5 +1,6 @@
 import { type AllWidgetProps } from 'jimu-core'
 import { type IMConfig, SelectionType } from '../../config'
+import { removeHashParam } from '../hash-utils'
 import { createQuerySimpleDebugLogger } from 'widgets/shared-code/mapsimple-common'
 
 const debugLogger = createQuerySimpleDebugLogger()
@@ -11,18 +12,17 @@ interface UrlConsumptionCallbacks {
 
 /**
  * Utility to manage URL parameter consumption and deep linking.
- * 
+ *
  * Handles both Hash fragments (#) and Query Strings (?), with Hash taking priority.
  * Implements atomic consumption to prevent infinite loops.
- * 
+ *
  * Part of Chunk 1: URL Parameter Consumption extraction.
- * 
+ *
  * Note: This is a utility class (not a hook) to work with class components.
  */
 export class UrlConsumptionManager {
   private lastProcessedHash: string = ''
   private isProcessing: boolean = false
-  private hashChangeHandler: (() => void) | null = null
 
   /**
    * Checks URL for hash and query string parameters matching configured shortIds.
@@ -35,16 +35,6 @@ export class UrlConsumptionManager {
   ): void {
     const { config, id } = props
     const { onInitialValueFound, onModeResetNeeded } = callbacks
-
-    debugLogger.log('HASH-EXEC', {
-      event: 'urlconsumption-checkurlparameters-entry',
-      widgetId: id,
-      hasQueryItems: !!config.queryItems?.length,
-      isProcessing: this.isProcessing,
-      lastProcessedHash: this.lastProcessedHash,
-      currentHash: window.location.hash.substring(1),
-      timestamp: Date.now()
-    })
 
     if (!config.queryItems?.length) {
       debugLogger.log('HASH-EXEC', {
@@ -80,17 +70,8 @@ export class UrlConsumptionManager {
 
     const hash = window.location.hash.substring(1)
     const query = window.location.search.substring(1)
-    
-    this.isProcessing = true
 
-    debugLogger.log('HASH-EXEC', {
-      event: 'urlconsumption-parsing-params',
-      widgetId: id,
-      hash,
-      query,
-      shortIds,
-      timestamp: Date.now()
-    })
+    this.isProcessing = true
 
     const hashParams = new URLSearchParams(hash)
     const queryParams = new URLSearchParams(query)
@@ -121,30 +102,11 @@ export class UrlConsumptionManager {
       }
     }
 
-    debugLogger.log('HASH-EXEC', {
-      event: 'urlconsumption-search-complete',
-      widgetId: id,
-      foundShortId,
-      foundValue,
-      foundIn,
-      hasMatch: !!(foundShortId && foundValue !== null),
-      timestamp: Date.now()
-    })
-
     if (foundShortId && foundValue !== null) {
       // Track only the specific shortId parameter (e.g., "pin=2223059013")
       // NOT the entire hash string with data_s and other parameters
       const currentShortIdParam = `${foundShortId}=${foundValue}`
-      
-      debugLogger.log('HASH-EXEC', {
-        event: 'urlconsumption-checking-lastprocessedhash',
-        widgetId: id,
-        currentShortIdParam,
-        lastProcessedHash: this.lastProcessedHash,
-        willSkip: this.lastProcessedHash === currentShortIdParam,
-        timestamp: Date.now()
-      })
-      
+
       // Skip if we've already processed this exact shortId parameter
       if (this.lastProcessedHash === currentShortIdParam) {
         debugLogger.log('HASH-EXEC', {
@@ -157,7 +119,7 @@ export class UrlConsumptionManager {
         this.isProcessing = false
         return
       }
-      
+
       // Update lastProcessedHash to track this specific shortId parameter
       this.lastProcessedHash = currentShortIdParam
       debugLogger.log('HASH', {
@@ -168,7 +130,7 @@ export class UrlConsumptionManager {
         foundIn,
         timestamp: Date.now()
       })
-      
+
       // Reset to New mode when hash parameter is detected to avoid bugs with accumulation modes
       if (resultsMode !== SelectionType.NewSelection && onModeResetNeeded) {
         debugLogger.log('HASH', {
@@ -179,22 +141,8 @@ export class UrlConsumptionManager {
         })
         onModeResetNeeded()
       }
-      
-      debugLogger.log('HASH-EXEC', {
-        event: 'urlconsumption-calling-oninitialvaluefound',
-        widgetId: id,
-        shortId: foundShortId,
-        value: foundValue,
-        timestamp: Date.now()
-      })
-      
+
       onInitialValueFound({ shortId: foundShortId, value: foundValue })
-      
-      debugLogger.log('HASH-EXEC', {
-        event: 'urlconsumption-oninitialvaluefound-returned',
-        widgetId: id,
-        timestamp: Date.now()
-      })
     } else {
       debugLogger.log('HASH-EXEC', {
         event: 'urlconsumption-no-match-calling-oninitialvaluefound-undefined',
@@ -204,14 +152,8 @@ export class UrlConsumptionManager {
       // No matching parameters found - clear state
       onInitialValueFound(undefined)
     }
-    
+
     this.isProcessing = false
-    
-    debugLogger.log('HASH-EXEC', {
-      event: 'urlconsumption-checkurlparameters-exit',
-      widgetId: id,
-      timestamp: Date.now()
-    })
   }
 
   /**
@@ -220,56 +162,13 @@ export class UrlConsumptionManager {
    */
   removeHashParameter(shortId: string, widgetId: string): void {
     if (!shortId) return
-    
-    const hash = window.location.hash.substring(1)
-    const urlParams = new URLSearchParams(hash)
-    
-    if (urlParams.has(shortId)) {
-      urlParams.delete(shortId)
-      const newHash = urlParams.toString()
-      
-      debugLogger.log('HASH', {
-        event: 'removeHashParameter',
-        widgetId,
-        shortId,
-        newHash: newHash ? `#${newHash}` : '(empty)',
-        timestamp: Date.now()
-      })
-      
-      // Update the URL without triggering a reload
-      // Always preserve pathname and query string, only update hash
-      window.history.replaceState(null, '', 
-        window.location.pathname + window.location.search + (newHash ? `#${newHash}` : '')
-      )
-      
+
+    if (removeHashParam(shortId)) {
       // Reset tracking so it can be processed again if needed
       this.lastProcessedHash = ''
     }
   }
 
-  /**
-   * Sets up the manager (no autonomous URL checking).
-   * QuerySimple should only process hash parameters when HelperSimple explicitly triggers it
-   * via OPEN_WIDGET_EVENT. This ensures HelperSimple remains the orchestrator.
-   */
-  setup(
-    props: AllWidgetProps<IMConfig>,
-    resultsMode: SelectionType,
-    callbacks: UrlConsumptionCallbacks
-  ): void {
-    // Do NOT automatically check URL parameters
-    // Do NOT set up hashchange listener
-    // QuerySimple will only process hash when HelperSimple explicitly opens the widget
-    // This ensures HelperSimple remains the orchestrator
-  }
-
-  /**
-   * Cleans up hash change listener.
-   */
-  cleanup(): void {
-    if (this.hashChangeHandler) {
-      window.removeEventListener('hashchange', this.hashChangeHandler)
-      this.hashChangeHandler = null
-    }
-  }
+  // r024.112: setup() and cleanup() removed — both were no-ops (dead since r018.8).
+  // QuerySimple only processes hash when HelperSimple explicitly opens the widget.
 }

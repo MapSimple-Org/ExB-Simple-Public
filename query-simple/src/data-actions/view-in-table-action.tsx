@@ -1,42 +1,67 @@
 /**
  * Custom "View in Table" data action for QuerySimple widget.
- * 
+ *
  * Opens the Table widget with query results. Supports multiple data sources
  * by creating separate tabs for each source in the actionDataSets.
- * 
+ *
  * Adapted from Esri's common/table view-in-table data action.
- * 
+ *
  * ## Architecture Overview
- * 
+ *
  * This module handles opening query results in the ExB Table widget. The Table
  * widget has a bug where field visibility settings are not applied on first
- * load when the table is empty. To work around this, we use a "two-phase 
- * render hack" that primes the Table widget before adding the real data.
- * 
- * ## Two-Phase Render Hack (r024.93+)
- * 
- * When opening multiple tables, only the LAST tab needs the two-phase hack.
- * Earlier tabs initialize properly because the Table widget is already active.
- * 
- * **Phase A**: Add non-last tabs directly with full data (no hack needed)
- * **Phase B1**: Add priming version of last tab (full schema, EMPTY records)
- * **Phase B2**: Delete priming tab, recreate with fresh ID and full records
- * 
- * The priming tab uses empty records to minimize memory footprint. The Table
- * widget needs the full field schema to initialize column definitions, but
- * the actual record data is not needed until Phase B2.
- * 
+ * load when the table starts empty. We use a tab-switch approach to force
+ * re-initialization, falling back to a priming hack only when there's nothing
+ * to switch to.
+ *
+ * ## Tab-Switch Approach (r024.113+)
+ *
+ * Three scenarios for opening tables, depending on existing Table widget state:
+ *
+ * **Scenario 1**: Tables already exist in the Table widget
+ * - Add all new tabs in bulk with full data
+ * - Tab-switch trick: activate last → pivot to existing tab → switch back
+ * - The focus change forces destroyTable + re-initialization via use-table.ts
+ * - Result: No temporary tabs, no memory leak
+ *
+ * **Scenario 2**: No existing tables, single new tab
+ * - Use priming hack (empty records + fresh ID) — nothing to switch to
+ * - One temporary tab created (unavoidable, minimal leak)
+ *
+ * **Scenario 3**: No existing tables, multiple new tabs
+ * - Add all new tabs in bulk with full data
+ * - Tab-switch trick: activate last → pivot to first new tab → switch back
+ * - Result: No temporary tabs, no memory leak
+ *
+ * Scenarios 1 and 3 share the same code path. The only difference is the
+ * pivot tab selection (existing tab for 1, first new tab for 3).
+ *
+ * Tab switching uses `settingChangeTab` + `activeTabId` via
+ * widgetStatePropChange, which triggers the Table widget's onTabClick
+ * (widget.tsx:550-558). This calls destroyTable() in use-table.ts:87-92
+ * when the active data source changes, forcing a fresh FeatureTable
+ * initialization that properly applies field visibility settings.
+ *
+ * ## Duplicate Tab Reuse (r024.114+)
+ *
+ * When the user clicks "View in Table" again on the same results, we compare
+ * incoming record ObjectIDs and display fields against existing tabs. If both
+ * match, the existing tab is reused (just activated) — no new data source or
+ * FeatureLayer is created, eliminating the memory leak from unnecessary
+ * recreation. If data has changed, the old tab is deleted and a new one created
+ * (current behavior, unavoidable with Table widget architecture).
+ *
  * ## Memory Management (r024.100+)
- * 
+ *
  * After analyzing Esri's Table widget source code, we found that Esri does NOT
  * call destroyDataSource() when closing tabs. They simply delete the tab entry
  * from viewInTableObj and let the ExB framework handle cleanup.
- * 
+ *
  * We align with this pattern. Explicit destroyDataSource() calls were tested
  * (r024.98-99) but had no effect on memory growth. Memory behavior is identical
  * whether we destroy data sources or not. This appears to be ExB framework
  * behavior, not something fixable at the widget level.
- * 
+ *
  * ## Version History
  * - r024.83: Tab naming (Query-{searchAlias})
  * - r024.87: Field visibility from popup template
@@ -44,7 +69,9 @@
  * - r024.96: Sequential tab addition for 3+ tables
  * - r024.100: Aligned with Esri patterns (no destroyDataSource)
  * - r024.104: Empty records for priming tab (memory optimization)
- * 
+ * - r024.113: Tab-switch approach replacing two-phase render hack
+ * - r024.114: Duplicate tab reuse (skip recreation when data unchanged)
+ *
  * @see docs/bugs/VIEW_IN_TABLE_NAMING_VISIBILITY.md for full documentation
  */
 
@@ -74,6 +101,30 @@ const { SELECTION_DATA_VIEW_ID } = CONSTANTS
 // Counter for unique IDs (matches Esri's pattern)
 let viewTableId = 0
 
+// ---------------------------------------------------------------------------
+// Timing constants for Table widget state updates
+// ---------------------------------------------------------------------------
+const BULK_ADD_WAIT_MS = 150    // Wait for React to render bulk viewInTableObj update
+const TAB_SWITCH_WAIT_MS = 100  // Wait for destroyTable + re-init per tab switch
+const PRIMING_WAIT_MS = 100     // Wait for priming tab initialization (scenario 2 only)
+
+/**
+ * Programmatically switch the active tab in the Table widget.
+ *
+ * Uses the settingChangeTab mechanism (Table widget.tsx:550-558) which
+ * calls onTabClick internally, triggering destroyTable + re-initialization
+ * in use-table.ts:87-92 when the data source changes between tabs.
+ */
+async function switchActiveTab(tableWidgetId: string, tabId: string): Promise<void> {
+  getAppStore().dispatch(
+    appActions.widgetStatePropChange(tableWidgetId, 'settingChangeTab', true)
+  )
+  getAppStore().dispatch(
+    appActions.widgetStatePropChange(tableWidgetId, 'activeTabId', tabId)
+  )
+  await new Promise(resolve => setTimeout(resolve, TAB_SWITCH_WAIT_MS))
+}
+
 // LayersConfig type from Table widget (simplified)
 interface LayersConfig {
   id: string
@@ -97,6 +148,45 @@ interface LayersConfig {
   useDataSource?: UseDataSource
   dataActionDataSource?: any
   dataActionWidgetId: string
+}
+
+/**
+ * Check if an existing tab can be reused for an incoming dataSet.
+ * Compares record ObjectIDs (order-independent) and display fields.
+ * Returns true if both match — meaning the tab already shows the same data
+ * and recreation would just leak memory for no benefit.
+ */
+function canReuseTab(
+  existingTabData: { daLayerItem: LayersConfig; records: any[] },
+  incomingDataSet: DataRecordSet
+): boolean {
+  const existingRecords = existingTabData.records || []
+  const incomingRecords = incomingDataSet.records || []
+
+  // Quick check: record count must match
+  if (existingRecords.length !== incomingRecords.length) return false
+
+  // Compare ObjectIDs as sets (order-independent)
+  const existingIds = new Set(existingRecords.map(r => r.getId?.() ?? r.id))
+  const incomingIds = new Set(incomingRecords.map(r => r.getId?.() ?? r.id))
+  if (existingIds.size !== incomingIds.size) return false
+  for (const id of existingIds) {
+    if (!incomingIds.has(id)) return false
+  }
+
+  // Compare display fields
+  const existingVisibleFields = (existingTabData.daLayerItem.tableFields || [])
+    .filter((f: any) => f.visible)
+    .map((f: any) => f.jimuName || f.name)
+    .sort()
+  const incomingFields = ((incomingDataSet.fields as string[]) || []).slice().sort()
+
+  // If incoming has no field restrictions, any visibility is fine (won't change)
+  if (incomingFields.length === 0) return true
+
+  // Otherwise fields must match
+  if (existingVisibleFields.length !== incomingFields.length) return false
+  return existingVisibleFields.every((f, i) => f === incomingFields[i])
 }
 
 /**
@@ -192,14 +282,6 @@ async function createLayerConfigFromDataSet(
     
     // Use dataSet.fields for visibility if configured
     const displayFields = dataSet.fields as string[] | undefined
-    
-    debugLogger.log('VIEW-TABLE', {
-      action: 'createLayerConfig-fieldVisibility',
-      dataSourceId: dataSourceUsed.id,
-      displayFieldsFromDataSet: displayFields || 'none',
-      displayFieldsCount: displayFields?.length || 0,
-      allFieldsCount: allFieldsDetails.length
-    })
     
     const initTableFields = allFieldsDetails.filter(
       (item: any) => !defaultInvisible.includes(item.jimuName)
@@ -353,43 +435,93 @@ export async function handleViewInTable(
     const originalTableObj = MutableStoreManager.getInstance().getStateValue([tableWidgetId])?.viewInTableObj || {}
     const viewInTableObj = { ...originalTableObj }
     
-    // Build expected tab names for duplicate detection
-    const expectedTabNames = validDataSets.map(dataSet => {
+    // =========================================================================
+    // DUPLICATE TAB REUSE (r024.114)
+    // =========================================================================
+    //
+    // Before creating new layer configs (which allocate data sources and
+    // FeatureLayers), check if existing tabs already show the same data.
+    // If so, skip recreation entirely — no new data source, no leak.
+    //
+    // Phase 1: Categorize each dataSet as "reusable" or "needs creation"
+    // Phase 2: Only create layer configs for non-reusable dataSets
+    // Phase 3: If ALL reusable, just activate and return early
+    // =========================================================================
+
+    const reusableTabIds: string[] = []
+    const dataSetsToCreate: DataRecordSet[] = []
+
+    for (const dataSet of validDataSets) {
       const searchAlias = (dataSet as any).searchAlias
       const queryName = (dataSet as any).queryName
       const layerLabel = dataSet.dataSource?.getLabel?.() || 'Results'
       const nameLabel = searchAlias || queryName || layerLabel
-      return `Query-${nameLabel}`
-    })
-    
-    debugLogger.log('VIEW-TABLE', {
-      action: 'viewInTable-checkingDuplicates',
-      expectedTabNames,
-      existingTabCount: Object.keys(viewInTableObj).length
-    })
-    
-    // Remove existing tabs with matching names (Esri's pattern: simple delete)
-    // This matches how Esri's Table widget handles viewInSameSheet
-    for (const tabId of Object.keys(viewInTableObj)) {
-      const tabData = viewInTableObj[tabId]
-      const tabName = tabData?.daLayerItem?.name
-      if (tabName && expectedTabNames.includes(tabName)) {
-        delete viewInTableObj[tabId]
+      const expectedName = `Query-${nameLabel}`
+
+      // Search for existing tab with this name
+      let matchingTabId: string | null = null
+      for (const tabId of Object.keys(viewInTableObj)) {
+        const tabData = viewInTableObj[tabId]
+        if (tabData?.daLayerItem?.name === expectedName) {
+          matchingTabId = tabId
+          break
+        }
+      }
+
+      if (matchingTabId && canReuseTab(viewInTableObj[matchingTabId], dataSet)) {
+        // Tab already shows the same data — keep it, skip recreation
+        reusableTabIds.push(matchingTabId)
         debugLogger.log('VIEW-TABLE', {
-          action: 'viewInTable-removingDuplicateByName',
-          tabId,
-          tabName,
-          message: 'Removing existing tab with same name (Esri pattern)'
+          action: 'viewInTable-reusingTab',
+          tabId: matchingTabId,
+          tabName: expectedName,
+          recordCount: dataSet.records?.length || 0
         })
+      } else {
+        if (matchingTabId) {
+          // Tab exists but data changed — delete old tab (current behavior)
+          delete viewInTableObj[matchingTabId]
+          debugLogger.log('VIEW-TABLE', {
+            action: 'viewInTable-removingDuplicateByName',
+            tabId: matchingTabId,
+            tabName: expectedName,
+            message: 'Data changed, removing existing tab for recreation'
+          })
+        }
+        dataSetsToCreate.push(dataSet)
       }
     }
-    
-    // Process each data set and create layer configs
+
+    // If ALL dataSets were reusable, just activate the last one and return.
+    // No new data sources, no tab-switch trick, no leak.
+    if (dataSetsToCreate.length === 0 && reusableTabIds.length > 0) {
+      const lastReusableTabId = reusableTabIds[reusableTabIds.length - 1]
+
+      getAppStore().dispatch(
+        appActions.widgetStatePropChange(tableWidgetId, 'dataActionActiveObj', {
+          activeTabId: lastReusableTabId,
+          dataActionTable: true
+        })
+      )
+
+      debugLogger.log('DATA-ACTION', {
+        action: 'viewInTable-handleViewInTable',
+        result: true,
+        tableWidgetId,
+        tabsReused: reusableTabIds.length,
+        tabsCreated: 0,
+        activeTabId: lastReusableTabId
+      })
+
+      return true
+    }
+
+    // Process only non-reusable data sets and create layer configs
     const createdTabs: Array<{ layerConfig: LayersConfig; records: any[] }> = []
-    
-    for (const dataSet of validDataSets) {
+
+    for (const dataSet of dataSetsToCreate) {
       const result = await createLayerConfigFromDataSet(dataSet, widgetId)
-      
+
       if (result) {
         createdTabs.push(result)
         debugLogger.log('DATA-ACTION', {
@@ -400,7 +532,7 @@ export async function handleViewInTable(
         })
       }
     }
-    
+
     if (createdTabs.length === 0) {
       debugLogger.log('DATA-ACTION', {
         action: 'viewInTable-handleViewInTable',
@@ -411,147 +543,162 @@ export async function handleViewInTable(
     }
     
     // =========================================================================
-    // TWO-PHASE RENDER HACK
+    // TAB-SWITCH APPROACH (r024.113)
     // =========================================================================
-    // 
+    //
     // PROBLEM: The Table widget has a bug where it doesn't properly apply field
     // visibility settings on first load when the table starts empty.
-    // 
-    // SOLUTION: Prime the Table widget with a temporary tab, wait for it to
-    // initialize, then delete and recreate with a fresh ID. This forces the
-    // Table widget's destroyTable() method to run, which properly resets state.
-    // 
-    // OPTIMIZATION: Only the LAST tab needs this hack. Earlier tabs initialize
-    // properly because the Table widget is already rendering by the time they
-    // are added. This means for N tables, we only create 1 extra temporary tab,
-    // not N extra tabs.
-    // 
-    // MEMORY: The priming tab uses empty records (full schema only) to minimize
-    // memory footprint. The schema is needed so the Table widget can initialize
-    // its column definitions, but we don't need to duplicate the actual data.
+    //
+    // SOLUTION: Use tab switching to force the Table widget to destroy and
+    // re-create its internal FeatureTable, which properly applies field
+    // visibility on re-initialization. This avoids creating temporary priming
+    // tabs (and their associated memory leaks) in most scenarios.
+    //
+    // Three scenarios:
+    //   1. Existing tabs present → pivot to existing tab, switch back (no leak)
+    //   2. No existing tabs, single new tab → priming hack (unavoidable leak)
+    //   3. No existing tabs, multiple new tabs → pivot to first tab, switch back
+    //
+    // Scenarios 1 and 3 share the same code path, differing only in pivot
+    // tab selection.
     // =========================================================================
-    
-    const lastTabIndex = createdTabs.length - 1
-    const lastTab = createdTabs[lastTabIndex]
-    const nonLastTabs = createdTabs.slice(0, lastTabIndex)
-    
-    let baseTableObj = { ...viewInTableObj }
-    
-    debugLogger.log('VIEW-TABLE', {
-      action: 'viewInTable-baseTableObj',
-      existingTabNames: Object.values(baseTableObj).map((t: any) => t?.daLayerItem?.name),
-      tabCount: Object.keys(baseTableObj).length
-    })
-    
-    // -------------------------------------------------------------------------
-    // PHASE A: Add non-last tabs directly (no hack needed)
-    // -------------------------------------------------------------------------
-    // These tabs initialize properly because the Table widget is already active.
-    // Add them one at a time with 50ms pauses to let each fully initialize
-    // before adding the next. This prevents initialization conflicts.
-    // -------------------------------------------------------------------------
-    if (nonLastTabs.length > 0) {
-      for (const { layerConfig, records } of nonLastTabs) {
-        baseTableObj[layerConfig.id] = { daLayerItem: layerConfig, records }
-        
-        MutableStoreManager.getInstance().updateStateValue(tableWidgetId, 'viewInTableObj', { ...baseTableObj })
-        
-        debugLogger.log('VIEW-TABLE', {
-          action: 'viewInTable-addingTab',
-          tabName: layerConfig.name,
-          totalTabsSoFar: Object.keys(baseTableObj).length
-        })
-        
-        await new Promise(resolve => setTimeout(resolve, 50))
+
+    const existingTabIds = Object.keys(viewInTableObj)
+    const hasExistingTabs = existingTabIds.length > 0
+    const lastTab = createdTabs[createdTabs.length - 1]
+    let activeTabId: string
+
+    if (hasExistingTabs || createdTabs.length > 1) {
+      // -------------------------------------------------------------------
+      // SCENARIOS 1 + 3: Tab-switch approach
+      // -------------------------------------------------------------------
+      // Add ALL new tabs with full data in one bulk state update, then use
+      // tab switching to force field visibility re-initialization on the
+      // last tab. No temporary priming tabs needed.
+      // -------------------------------------------------------------------
+
+      const bulkTableObj = { ...viewInTableObj }
+      for (const { layerConfig, records } of createdTabs) {
+        bulkTableObj[layerConfig.id] = { daLayerItem: layerConfig, records }
       }
-      
-      // Re-read state after all tabs added (Table widget may have modified it)
-      baseTableObj = MutableStoreManager.getInstance().getStateValue([tableWidgetId])?.viewInTableObj || baseTableObj
+
+      MutableStoreManager.getInstance().updateStateValue(
+        tableWidgetId, 'viewInTableObj', bulkTableObj
+      )
+
+      // Pivot tab: first existing tab (scenario 1) or first new tab (scenario 3)
+      const pivotTabId = hasExistingTabs
+        ? existingTabIds[0]
+        : createdTabs[0].layerConfig.id
+
+      const scenario = hasExistingTabs ? 1 : 3
+
+      // Wait for Table widget to process bulk state update and auto-select
+      // the first new tab (via its viewInTableKeyStrings effect, widget.tsx:457-470)
+      await new Promise(resolve => setTimeout(resolve, BULK_ADD_WAIT_MS))
+
+      // WHY THREE SWITCHES:
+      // The Table widget's FeatureTable bug only affects the ACTIVE tab at the
+      // moment of first render. Switching away and back forces use-table.ts:87-92
+      // to call destroyTable() (because dataSource.id changes), then re-create
+      // a fresh FeatureTable that properly reads the tableFields[].visible flags.
+      //
+      // 1. Activate last tab    → it renders (possibly with wrong field visibility)
+      // 2. Switch to pivot tab  → last tab's FeatureTable is destroyed
+      // 3. Switch back to last  → fresh FeatureTable, correct field visibility
+      //
+      // This replaces the old "priming hack" that created a temporary empty tab,
+      // deleted it, and recreated with a fresh UUID — which leaked the temporary
+      // tab's data source on every invocation.
+      await switchActiveTab(tableWidgetId, lastTab.layerConfig.id)
+      await switchActiveTab(tableWidgetId, pivotTabId)
+      await switchActiveTab(tableWidgetId, lastTab.layerConfig.id)
+
+      activeTabId = lastTab.layerConfig.id
+
+      debugLogger.log('VIEW-TABLE', {
+        action: 'viewInTable-tabSwitch-complete',
+        scenario,
+        activeTabName: lastTab.layerConfig.name,
+        tabsCreated: createdTabs.length,
+        totalTabs: Object.keys(bulkTableObj).length,
+        pivotTabId
+      })
+
+    } else {
+      // -------------------------------------------------------------------
+      // SCENARIO 2: Single new tab, no existing tabs — priming hack
+      // -------------------------------------------------------------------
+      // Only case where tab-switch cannot help (nothing to switch to).
+      // Create a temporary priming tab with empty records, wait for init,
+      // then replace with fresh ID and full records. One unavoidable leak.
+      // -------------------------------------------------------------------
+
+      const singleTab = createdTabs[0]
+
+      // Priming: add tab with full schema but empty records
+      const primingTableObj = { ...viewInTableObj }
+      primingTableObj[singleTab.layerConfig.id] = {
+        daLayerItem: singleTab.layerConfig,
+        records: []  // Empty — schema only, no data duplication
+      }
+
+      MutableStoreManager.getInstance().updateStateValue(
+        tableWidgetId, 'viewInTableObj', primingTableObj
+      )
+
+      getAppStore().dispatch(
+        appActions.widgetStatePropChange(tableWidgetId, 'dataActionActiveObj', {
+          activeTabId: singleTab.layerConfig.id,
+          dataActionTable: true
+        })
+      )
+
+      await new Promise(resolve => setTimeout(resolve, PRIMING_WAIT_MS))
+
+      // Replace: delete priming tab, recreate with fresh UUID and full records
+      const stateAfterPriming = MutableStoreManager.getInstance()
+        .getStateValue([tableWidgetId])?.viewInTableObj || {}
+      const finalTableObj = { ...stateAfterPriming }
+
+      delete finalTableObj[singleTab.layerConfig.id]
+
+      const freshId = `DaTable-${utils.getUUID()}`
+      const freshConfig = { ...singleTab.layerConfig, id: freshId }
+      finalTableObj[freshId] = { daLayerItem: freshConfig, records: singleTab.records }
+
+      MutableStoreManager.getInstance().updateStateValue(
+        tableWidgetId, 'viewInTableObj', finalTableObj
+      )
+
+      activeTabId = freshId
+
+      debugLogger.log('VIEW-TABLE', {
+        action: 'viewInTable-scenario2-complete',
+        tabName: singleTab.layerConfig.name,
+        freshId,
+        primedTabId: singleTab.layerConfig.id
+      })
     }
-    
-    // -------------------------------------------------------------------------
-    // PHASE B1: Add priming version of last tab
-    // -------------------------------------------------------------------------
-    // Create a temporary tab with:
-    //   - Full schema (field definitions) - needed for column initialization
-    //   - Empty records array - minimizes memory footprint
-    // 
-    // This priming tab is never visible to the user. It exists only to force
-    // the Table widget to initialize its internal state.
-    // -------------------------------------------------------------------------
-    const primingTableObj = { ...baseTableObj }
-    primingTableObj[lastTab.layerConfig.id] = { 
-      daLayerItem: lastTab.layerConfig, 
-      records: []  // Empty - schema only, no data duplication
-    }
-    
-    MutableStoreManager.getInstance().updateStateValue(tableWidgetId, 'viewInTableObj', primingTableObj)
-    
+
+    // Final state dispatch for ExB consistency
     getAppStore().dispatch(
       appActions.widgetStatePropChange(tableWidgetId, 'dataActionActiveObj', {
-        activeTabId: lastTab.layerConfig.id,
+        activeTabId,
         dataActionTable: true
       })
     )
-    
-    const existingTabCount = Object.keys(baseTableObj).length
-    const primingWaitMs = 100 + (existingTabCount * 50)
-    
-    debugLogger.log('VIEW-TABLE', {
-      action: 'viewInTable-phaseB1-priming',
-      activeTabName: lastTab.layerConfig.name,
-      tabCount: createdTabs.length,
-      existingTabCount,
-      primingWaitMs
-    })
-    
-    await new Promise(resolve => setTimeout(resolve, primingWaitMs))
-    
-    // -------------------------------------------------------------------------
-    // PHASE B2: Delete priming tab and recreate with fresh ID
-    // -------------------------------------------------------------------------
-    // 1. Delete the priming tab (triggers Table widget's destroyTable cleanup)
-    // 2. Create a new tab with a fresh UUID (forces full re-initialization)
-    // 3. This new tab gets the FULL records - this is the tab the user sees
-    // 
-    // The fresh ID is critical. Reusing the same ID would cause the Table
-    // widget to treat it as an update rather than a new tab, bypassing the
-    // initialization we need.
-    // 
-    // Delete pattern matches Esri's onCloseTab - simple object delete.
-    // -------------------------------------------------------------------------
-    const stateAfterPriming = MutableStoreManager.getInstance().getStateValue([tableWidgetId])?.viewInTableObj || {}
-    const finalTableObj = { ...stateAfterPriming }
-    
-    delete finalTableObj[lastTab.layerConfig.id]
-    
-    const freshId = `DaTable-${utils.getUUID()}`
-    const freshConfig = { ...lastTab.layerConfig, id: freshId }
-    finalTableObj[freshId] = { daLayerItem: freshConfig, records: lastTab.records }
-    
-    MutableStoreManager.getInstance().updateStateValue(tableWidgetId, 'viewInTableObj', finalTableObj)
-    
-    getAppStore().dispatch(
-      appActions.widgetStatePropChange(tableWidgetId, 'dataActionActiveObj', {
-        activeTabId: freshId,
-        dataActionTable: true
-      })
-    )
-    
-    debugLogger.log('VIEW-TABLE', {
-      action: 'viewInTable-phaseB2-final',
-      activeTabName: lastTab.layerConfig.name,
-      tabCount: createdTabs.length
-    })
-    
+
     debugLogger.log('DATA-ACTION', {
       action: 'viewInTable-handleViewInTable',
       result: true,
       tableWidgetId,
       tabsCreated: createdTabs.length,
-      activeTabId: freshId
+      tabsReused: reusableTabIds.length,
+      scenario: (!hasExistingTabs && createdTabs.length === 1) ? 2 : (hasExistingTabs ? 1 : 3),
+      activeTabId
     })
-    
+
     return true
   } catch (error) {
     debugLogger.log('DATA-ACTION', {

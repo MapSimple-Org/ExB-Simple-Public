@@ -198,7 +198,7 @@ export interface SettingConfig {
   highlightPointOutlineWidth?: number // pixels (default: 2) - separate from polygon outline
   highlightPointStyle?: 'circle' | 'square' | 'cross' | 'x' | 'diamond'  // default: 'circle'
   // Hover Preview Pin Configuration
-  hoverPinColor?: string              // Hex color (e.g., '#FFC107' - yellow) - default: '#FFC107'
+  hoverPinColor?: string              // Hex color (e.g., '#EA4335' - red) - default: '#EA4335'
   // Result Click Behavior
   /** r023.31: Default false. When true, clicking a result zooms to it. When false, use "Zoom to" from result menu. */
   zoomOnResultClick?: boolean

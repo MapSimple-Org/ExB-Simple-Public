@@ -35,15 +35,18 @@ import {
   React,
   jsx,
   css,
+  type DataSource,
   type ImmutableObject,
   type ImmutableArray,
+  type IMSqlExpression,
   type FeatureLayerDataSource,
+  type SqlQueryParams,
   type UseDataSource,
   type FeatureDataRecord,
   hooks
 } from 'jimu-core'
 import { Button } from 'jimu-ui'
-import { type QueryItemType, SelectionType } from '../../config'
+import { type QueryItemType, type SpatialFilterObj, SelectionType } from '../../config'
 import { QueryTaskForm } from '../query-task-form'
 import { DataSourceTip, createQuerySimpleDebugLogger } from 'widgets/shared-code/mapsimple-common'
 import { mergeResultsIntoAccumulated } from '../results-management-utils'
@@ -75,21 +78,21 @@ export interface QueryTabContentProps {
   
   // Data sources
   outputDS: FeatureLayerDataSource | null
-  dataSource: any
-  effectiveRecords: any
+  dataSource: DataSource | null
+  effectiveRecords: FeatureDataRecord[]
   
   // Form state
   enabled: boolean
   dsExists: boolean
   spatialFilterEnabled?: boolean
-  dataActionFilter?: any
+  dataActionFilter?: SqlQueryParams
   initialInputValue?: string
   
   // Callbacks
-  handleFormSubmit: (params: any) => void
+  handleFormSubmit: (sqlExpr: IMSqlExpression, spatialFilter: SpatialFilterObj, runtimeZoomToSelected?: boolean) => void
   onHashParameterUsed?: (shortId: string) => void
-  handleStatusChange?: (status: any) => void
-  handleDataSourceCreated?: (ds: any) => void
+  handleStatusChange?: (enabled: boolean) => void
+  handleDataSourceCreated?: (ds: DataSource) => void
   
   // Tab state
   activeTab: 'query' | 'results'
@@ -112,7 +115,7 @@ export interface QueryTabContentProps {
   onDismissQueryErrorAlert?: () => void
   
   // Other props passed to QueryTaskForm
-  otherProps?: any
+  otherProps?: Record<string, unknown>
 }
 
 /**

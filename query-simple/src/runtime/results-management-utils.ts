@@ -6,7 +6,7 @@
 import type { FeatureLayerDataSource, FeatureDataRecord, DataRecord } from 'jimu-core'
 import { DataSourceManager, DataSourceStatus, MessageManager, DataRecordSetChangeMessage, RecordSetChangeType, DataRecordsSelectionChangeMessage } from 'jimu-core'
 import { createQuerySimpleDebugLogger } from 'widgets/shared-code/mapsimple-common'
-import { removeHighlightGraphics, getGraphicsCountFromLayer, forEachGraphicInLayer } from './graphics-layer-utils'
+import { removeHighlightGraphics, getGraphicsCountFromLayer } from './graphics-layer-utils'
 
 const debugLogger = createQuerySimpleDebugLogger()
 
@@ -26,15 +26,6 @@ export function getRecordKey(
   const originDSId = originDS?.id || outputDS.id // Fallback to outputDS if no origin
   const objectId = record.getId()
   const key = `${originDSId}_${objectId}`
-  
-  debugLogger.log('RESULTS-MODE', {
-    event: 'record-key-generated',
-    originDSId,
-    objectId,
-    key,
-    hasOriginDS: !!originDS
-  })
-  
   return key
 }
 
@@ -51,13 +42,6 @@ export async function createAccumulatedResultsDataSource(
   originDS: FeatureLayerDataSource
 ): Promise<FeatureLayerDataSource> {
   const accumulatedDSId = `${widgetId}_accumulated_results`
-  
-  debugLogger.log('RESULTS-MODE', {
-    event: 'creating-accumulated-ds',
-    widgetId,
-    accumulatedDSId,
-    originDSId: originDS.id
-  })
   
   // Check if data source already exists
   const dsManager = DataSourceManager.getInstance()
@@ -159,31 +143,17 @@ export function mergeResultsIntoAccumulated(
     if (recordQueryConfigId && queries) {
       const queryConfig = queries.find(q => q.configId === recordQueryConfigId)
       useDataSource = queryConfig?.useDataSource
-      
+
       // r021.83: Extract dataSourceId STRING from useDataSource object
-      const dataSourceId = typeof useDataSource === 'string' 
-        ? useDataSource 
+      const dataSourceId = typeof useDataSource === 'string'
+        ? useDataSource
         : useDataSource?.dataSourceId
-      
-      debugLogger.log('RESULTS-MODE', {
-        event: 'building-existing-key-with-map',
-        recordId,
-        hasQueryConfig: !!queryConfig,
-        dataSourceId: dataSourceId || 'missing',
-        queryConfigId: queryConfig?.configId || 'missing'
-      })
-      
+
       if (dataSourceId) {
         const recordDS = dsManager.getDataSource(dataSourceId) as FeatureLayerDataSource
         if (recordDS) {
           const key = getRecordKey(record, recordDS)
           existingKeys.add(key)
-          debugLogger.log('RESULTS-MODE', {
-            event: 'existing-key-used-record-ds',
-            recordId,
-            dataSourceId,
-            key
-          })
           return
         } else {
           debugLogger.log('RESULTS-MODE', {
@@ -199,20 +169,6 @@ export function mergeResultsIntoAccumulated(
     // Fallback: use outputDS (may cause false duplicates)
     const key = getRecordKey(record, outputDS)
     existingKeys.add(key)
-    debugLogger.log('RESULTS-MODE', {
-      event: 'existing-key-used-fallback-outputds',
-      recordId,
-      outputDSId: outputDS.id,
-      key,
-      reason: queries ? 'config-lookup-failed' : 'no-queries-provided'
-    })
-  })
-  
-  debugLogger.log('RESULTS-MODE', {
-    event: 'existing-records-check',
-    existingRecordsCount: existingRecords.length,
-    existingKeysCount: existingKeys.size,
-    hasQueries: !!queries
   })
   
   // r021.84: Filter new records and track which were added vs duplicates
@@ -226,32 +182,22 @@ export function mergeResultsIntoAccumulated(
     
     if (isDuplicate) {
       duplicateRecordIds.push(record.getId())
-      debugLogger.log('RESULTS-MODE', {
-        event: 'duplicate-record-skipped',
-        key,
-        objectId: record.getId()
-      })
     } else {
       uniqueNewRecords.push(record)
       addedRecordIds.push(record.getId())
     }
   })
   
-  debugLogger.log('RESULTS-MODE', {
-    event: 'deduplication-complete',
-    newRecordsCount: newRecords.length,
-    uniqueNewRecordsCount: uniqueNewRecords.length,
-    duplicatesSkipped: duplicateRecordIds.length
-  })
-  
   // Merge records
   const mergedRecords = [...existingRecords, ...uniqueNewRecords]
-  
+
   debugLogger.log('RESULTS-MODE', {
     event: 'merge-complete',
-    totalRecordsAfterMerge: mergedRecords.length,
     existingCount: existingRecords.length,
-    newUniqueCount: uniqueNewRecords.length
+    newRecords: newRecords.length,
+    duplicatesSkipped: duplicateRecordIds.length,
+    uniqueAdded: uniqueNewRecords.length,
+    totalAfterMerge: mergedRecords.length
   })
   
   return {
@@ -279,13 +225,6 @@ export function removeResultsFromAccumulated(
   recordsToRemove: FeatureDataRecord[],
   existingAccumulatedRecords: FeatureDataRecord[] = []
 ): FeatureDataRecord[] {
-  debugLogger.log('RESULTS-MODE', {
-    event: 'removing-results-start',
-    outputDSId: outputDS.id,
-    recordsToRemoveCount: recordsToRemove.length,
-    existingAccumulatedRecordsCount: existingAccumulatedRecords.length
-  })
-  
   // If no accumulated records, nothing to remove
   if (existingAccumulatedRecords.length === 0) {
     debugLogger.log('RESULTS-MODE', {
@@ -310,12 +249,6 @@ export function removeResultsFromAccumulated(
     recordsToRemove.map(record => getRecordKey(record, outputDS))
   )
   
-  debugLogger.log('RESULTS-MODE', {
-    event: 'remove-keys-built',
-    existingAccumulatedRecordsCount: existingAccumulatedRecords.length,
-    removeKeysCount: removeKeys.size
-  })
-  
   // Filter out records that match keys to remove
   const remainingRecords: FeatureDataRecord[] = []
   const removedRecords: FeatureDataRecord[] = []
@@ -326,12 +259,6 @@ export function removeResultsFromAccumulated(
     
     if (shouldRemove) {
       removedRecords.push(record)
-      debugLogger.log('RESULTS-MODE', {
-        event: 'record-marked-for-removal',
-        key,
-        objectId: record.getId(),
-        originDSId: (record.getDataSource?.() as FeatureLayerDataSource)?.getOriginDataSources()?.[0]?.id || 'unknown'
-      })
     } else {
       remainingRecords.push(record)
     }
@@ -398,50 +325,21 @@ export function removeRecordsFromOriginSelections(
   if (useGraphicsLayer && graphicsLayer) {
     const recordIdsToRemove = recordsToRemove.map(record => record.getId())
     
-    // FIX (r018.82): Capture TRUE "before" state BEFORE removing graphics
-    const graphicsBeforeRemoval: (string | null)[] = []
-    const firstFewGraphicsAttrs: any[] = []
-    let index = 0
-    forEachGraphicInLayer(graphicsLayer, (g) => {
-      if (index < 3) {
-        firstFewGraphicsAttrs.push({
-          index,
-          hasAttributes: !!g.attributes,
-          attributes: g.attributes,
-          attributeKeys: g.attributes ? Object.keys(g.attributes) : []
-        })
-      }
-      graphicsBeforeRemoval.push(g.attributes?.recordId || null)
-      index++
-    })
-    
-    debugLogger.log('RESULTS-MODE', {
-      event: 'removing-graphics-TRUE-BEFORE-state',
-      widgetId,
-      recordIdsToRemove,
-      graphicsLayerCountBefore: getGraphicsCountFromLayer(graphicsLayer),
-      graphicsLayerIdsBefore: graphicsBeforeRemoval.slice(0, 110),
-      firstFewGraphicsAttrs,
-      timestamp: Date.now()
-    })
-    
+    const graphicsCountBefore = getGraphicsCountFromLayer(graphicsLayer)
+
     // r021.90: Pass records to removeHighlightGraphics for composite key matching
     removeHighlightGraphics(graphicsLayer, recordIdsToRemove, recordsToRemove as FeatureDataRecord[])
-    
-    // FIX (r018.82): Capture TRUE "after" state AFTER removing graphics
-    const graphicsAfterRemoval: (string | null)[] = []
-    forEachGraphicInLayer(graphicsLayer, (g) => {
-      graphicsAfterRemoval.push(g.attributes?.recordId || null)
-    })
-    
+
+    const graphicsCountAfter = getGraphicsCountFromLayer(graphicsLayer)
+
     debugLogger.log('RESULTS-MODE', {
-      event: 'removing-graphics-TRUE-AFTER-state',
+      event: 'removing-graphics-complete',
       widgetId,
-      graphicsLayerCountAfter: getGraphicsCountFromLayer(graphicsLayer),
-      graphicsLayerIdsAfter: graphicsAfterRemoval.slice(0, 110),
-      actuallyRemoved: graphicsBeforeRemoval.length - graphicsAfterRemoval.length,
+      graphicsBefore: graphicsCountBefore,
+      graphicsAfter: graphicsCountAfter,
+      actuallyRemoved: graphicsCountBefore - graphicsCountAfter,
       expectedToRemove: recordIdsToRemove.length,
-      removalMatches: (graphicsBeforeRemoval.length - graphicsAfterRemoval.length) === recordIdsToRemove.length,
+      removalMatches: (graphicsCountBefore - graphicsCountAfter) === recordIdsToRemove.length,
       timestamp: Date.now()
     })
   }
@@ -454,20 +352,6 @@ export function removeRecordsFromOriginSelections(
     // r023.30: Use __originDSId attribute for cross-layer support
     const recordOriginDSId = record.feature?.attributes?.__originDSId || ''
     
-    // DIAGNOSTIC: Log the origin DS lookup process
-    debugLogger.log('RESULTS-MODE', {
-      event: 'x-button-removal-record-origin-ds-lookup-start',
-      widgetId,
-      recordIndex,
-      recordId: record.getId(),
-      recordQueryConfigId: recordQueryConfigId || 'MISSING',
-      recordOriginDSId: recordOriginDSId || 'MISSING',
-      outputDSId: outputDS.id,
-      lookupMethod: 'originDSId-attribute',
-      note: 'r023.30: Using __originDSId attribute for cross-layer removal',
-      timestamp: Date.now()
-    })
-    
     let originDS: FeatureLayerDataSource | null = null
     let lookupMethod = 'unknown'
     
@@ -476,19 +360,6 @@ export function removeRecordsFromOriginSelections(
       const dsManager = DataSourceManager.getInstance()
       originDS = dsManager.getDataSource(recordOriginDSId) as FeatureLayerDataSource || null
       lookupMethod = originDS ? 'originDSId-attribute-lookup' : 'originDSId-attribute-lookup-failed'
-      
-      debugLogger.log('RESULTS-MODE', {
-        event: 'x-button-removal-origin-ds-from-attribute',
-        widgetId,
-        recordIndex,
-        recordId: record.getId(),
-        recordOriginDSId,
-        originDSFound: !!originDS,
-        originDSId: originDS?.id || 'null',
-        originDSLabel: originDS?.getLabel?.() || 'null',
-        lookupMethod,
-        timestamp: Date.now()
-      })
     }
     
     // Fallback: try .dataSource property (legacy support)
@@ -497,17 +368,6 @@ export function removeRecordsFromOriginSelections(
       if (recordDS) {
         originDS = recordDS.getOriginDataSources()?.[0] as FeatureLayerDataSource || recordDS
         lookupMethod = 'dataSource-property-fallback'
-        
-        debugLogger.log('RESULTS-MODE', {
-          event: 'x-button-removal-origin-ds-from-recordDS-fallback',
-          widgetId,
-          recordIndex,
-          recordId: record.getId(),
-          recordDSId: recordDS.id,
-          originDSId: originDS?.id || 'null',
-          lookupMethod,
-          timestamp: Date.now()
-        })
       }
     }
     
@@ -538,20 +398,6 @@ export function removeRecordsFromOriginSelections(
         recordsByOriginDS.set(originDS, [])
       }
       recordsByOriginDS.get(originDS)!.push(record)
-      
-      // DIAGNOSTIC (r022.31): Log final resolution
-      debugLogger.log('RESULTS-MODE', {
-        event: 'x-button-removal-origin-ds-resolved',
-        widgetId,
-        recordIndex,
-        recordId: record.getId(),
-        recordQueryConfigId: recordQueryConfigId || 'MISSING',
-        resolvedOriginDSId: originDS.id,
-        resolvedOriginDSType: originDS.type,
-        resolvedOriginDSLabel: originDS.getLabel?.() || 'unknown',
-        lookupMethod,
-        timestamp: Date.now()
-      })
     } else {
       // DIAGNOSTIC (r022.31): Log lookup failure
       debugLogger.log('RESULTS-MODE', {
@@ -616,16 +462,6 @@ export function removeRecordsFromOriginSelections(
           const recordId = record.getId()
           // r022.73: Use queryConfigId from accumulated records, not from query results
           const queryConfigId = accumulatedLookup.get(recordId) || record.feature?.attributes?.__queryConfigId || ''
-          
-          debugLogger.log('RESULTS-MODE', {
-            event: 'r022-73-removal-composite-key-built',
-            recordId,
-            queryConfigIdFromAccumulated: accumulatedLookup.get(recordId) || 'NOT_FOUND',
-            queryConfigIdFromRecord: record.feature?.attributes?.__queryConfigId || 'MISSING',
-            finalQueryConfigId: queryConfigId,
-            compositeKey: `${recordId}__${queryConfigId}`,
-            timestamp: Date.now()
-          })
           
           return `${recordId}__${queryConfigId}`
         })
@@ -775,18 +611,10 @@ export function removeRecordsFromOriginSelections(
 export function clearAccumulatedResults(
   accumulatedDS: FeatureLayerDataSource
 ): void {
-  debugLogger.log('RESULTS-MODE', {
-    event: 'clearing-accumulated-results',
-    accumulatedDSId: accumulatedDS.id
-  })
-  
   // Set status to NotReady to clear records
   accumulatedDS.setStatus(DataSourceStatus.NotReady)
   accumulatedDS.setCountStatus(DataSourceStatus.NotReady)
-  
-  // Clear any loaded records if possible
-  // Note: May need to use DataSourceManager methods depending on ExB API
-  
+
   debugLogger.log('RESULTS-MODE', {
     event: 'accumulated-results-cleared',
     accumulatedDSId: accumulatedDS.id

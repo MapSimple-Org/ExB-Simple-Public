@@ -2,8 +2,8 @@
 
 Custom widgets for ArcGIS Experience Builder Developer Edition (1.19.0+). Built for performance, deep-linking, and advanced result management.
 
-**Current Version**: `1.19.0-r024.111`
-**Latest Update**: Multi-source extent cache SR fix, Custom Template image support, Multi-Format Export (CSV/GeoJSON/JSON), View in Table Improvements, Smart Settings UX (Mar 2, 2026)
+**Current Version**: `1.19.0-r024.131`
+**Latest Update**: Codebase simplification — major handler extractions, View in Table memory fixes, default hover pin color change, 8 end-to-end process flow docs (Mar 5, 2026)
 
 ---
 
@@ -27,7 +27,34 @@ Custom widgets for ArcGIS Experience Builder Developer Edition (1.19.0+). Built 
 
 ---
 
-## What's New: r024.82-111 (Mar 2, 2026)
+## What's New: r024.112-131 (Mar 5, 2026)
+
+### Codebase Simplification
+
+**Major internal refactoring for maintainability.** The two largest widget files were significantly reduced through systematic extraction of complex functions into focused handler modules, while preserving all existing behavior and passing all 164 tests.
+
+| File | Before | After | Reduction |
+| :--- | :--- | :--- | :--- |
+| `query-task.tsx` | 2,950 lines | 1,620 lines | −45% |
+| `query-result.tsx` | 1,741 lines | 1,253 lines | −28% |
+
+Extracted handlers cover query execution, form submission, results clearing, and record removal — each in its own focused module.
+
+### View in Table Memory Fix (r024.113-114)
+
+**Eliminated priming-tab memory leak** in most scenarios via a tab-switch approach. Duplicate tabs are now reused when data hasn't changed.
+
+### Default Hover Pin Color (r024.116)
+
+**Default hover preview pin color changed from yellow to Google Maps red** for better visibility. Existing custom color configurations are unaffected.
+
+### Process Flow Documentation (r024.112-131)
+
+**8 end-to-end flow documents** created and maintained with ASCII diagrams and file:line references, covering initialization, query execution, results accumulation, zoom, selection, URL hash, settings, and data sources. See `docs/process-flows/`.
+
+---
+
+## Previous Updates: r024.82-111 (Mar 2, 2026)
 
 ### Multi-Source Extent Cache Fix (r024.111)
 

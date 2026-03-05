@@ -6,7 +6,7 @@ import { QueryTask } from './query-task'
 import { FOCUSABLE_CONTAINER_CLASS } from 'jimu-ui'
 import defaultMessages from './translations/default'
 import { createQuerySimpleDebugLogger } from 'widgets/shared-code/mapsimple-common'
-import type { EventManager } from './hooks/use-event-handling'
+import type { EventManager } from './managers/event-manager'
 
 const debugLogger = createQuerySimpleDebugLogger()
 
@@ -134,31 +134,6 @@ export function QueryTaskList (props: QueryTaskListProps) {
   const { queryItems, widgetId, defaultPageSize, isInPopper = false, className = '', initialQueryValue, shouldUseInitialQueryValueForSelection = false, onHashParameterUsed, resultsMode, onResultsModeChange, accumulatedRecords, resultsExtent, onAccumulatedRecordsChange, graphicsLayer, mapView, onInitializeGraphicsLayer, onClearGraphicsLayer, onDestroyGraphicsLayer, activeTab, onTabChange, eventManager, zoomOnResultClick, hoverPinColor } = props
   const getI18nMessage = hooks.useTranslation(defaultMessages)
   
-  // Log when props are received
-  React.useEffect(() => {
-    debugLogger.log('HASH-EXEC', {
-      event: 'querytasklist-props-received',
-      widgetId,
-      props: {
-        hasInitialQueryValue: !!initialQueryValue,
-        initialQueryValueShortId: initialQueryValue?.shortId,
-        initialQueryValueValue: initialQueryValue?.value,
-        shouldUseInitialQueryValueForSelection
-      },
-      timestamp: Date.now()
-    })
-    
-    debugLogger.log('GROUP', {
-      event: 'query-task-list-props-received',
-      widgetId,
-      hasInitialQueryValue: !!initialQueryValue,
-      initialQueryValueShortId: initialQueryValue?.shortId,
-      initialQueryValueValue: initialQueryValue?.value,
-      shouldUseInitialQueryValueForSelection,
-      timestamp: Date.now()
-    })
-  }, [initialQueryValue, shouldUseInitialQueryValueForSelection, widgetId])
-  
   // Sort queries by display order before grouping
   // Handle case where queryItems might be undefined/null or not an ImmutableArray
   const sortedQueryItems = React.useMemo(() => {
@@ -178,26 +153,11 @@ export function QueryTaskList (props: QueryTaskListProps) {
   // Log when effectiveInitialQueryValue is calculated
   React.useEffect(() => {
     debugLogger.log('HASH-EXEC', {
-      event: 'querytasklist-effectiveinitialqueryvalue-calculated',
-      widgetId,
-      calculation: {
-        shouldUseInitialQueryValueForSelection,
-        hasInitialQueryValue: !!initialQueryValue,
-        effectiveResult: effectiveInitialQueryValue ? 'USE_INITIAL_QUERY_VALUE' : 'UNDEFINED',
-        effectiveShortId: effectiveInitialQueryValue?.shortId,
-        effectiveValue: effectiveInitialQueryValue?.value
-      },
-      timestamp: Date.now()
-    })
-    
-    debugLogger.log('GROUP', {
       event: 'effectiveInitialQueryValue-calculated',
       widgetId,
-      shouldUseInitialQueryValueForSelection,
-      hasInitialQueryValue: !!initialQueryValue,
-      hasEffectiveInitialQueryValue: !!effectiveInitialQueryValue,
-      effectiveShortId: effectiveInitialQueryValue?.shortId,
-      effectiveValue: effectiveInitialQueryValue?.value,
+      shouldUse: shouldUseInitialQueryValueForSelection,
+      shortId: effectiveInitialQueryValue?.shortId,
+      value: effectiveInitialQueryValue?.value,
       timestamp: Date.now()
     })
   }, [effectiveInitialQueryValue, shouldUseInitialQueryValueForSelection, initialQueryValue, widgetId])
@@ -205,16 +165,6 @@ export function QueryTaskList (props: QueryTaskListProps) {
   // Find the query item matching the shortId from URL hash
   const matchingQueryIndex = React.useMemo(() => {
     const shortId = effectiveInitialQueryValue?.shortId
-    
-    debugLogger.log('HASH-FIRST-LOAD', {
-      event: 'matchingQueryIndex-calculation-start',
-      widgetId,
-      hasEffectiveInitialQueryValue: !!effectiveInitialQueryValue,
-      shortIdToMatch: shortId,
-      sortedQueryItemsCount: sortedQueryItems?.length || 0,
-      sortedQueryItemsShortIds: sortedQueryItems ? [...sortedQueryItems.map(item => item.shortId)] : [],
-      timestamp: Date.now()
-    })
     
     if (!shortId) {
       debugLogger.log('HASH-FIRST-LOAD', {

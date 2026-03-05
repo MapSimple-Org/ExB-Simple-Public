@@ -14,20 +14,15 @@ import { QueryWidgetContext } from './widget-context'
 import { createQuerySimpleDebugLogger, highlightConfigManager } from 'widgets/shared-code/mapsimple-common'
 import { calculateRecordsExtent } from './zoom-utils'
 import { WIDGET_VERSION } from '../version'
-// Chunk 1: URL Parameter Consumption Manager (r018.8)
-import { UrlConsumptionManager } from './hooks/use-url-consumption'
-// Chunk 2: Widget Visibility Engine Manager (r018.13) - Step 2.3: Switch to manager
-import { WidgetVisibilityManager } from './hooks/use-widget-visibility'
-// Chunk 6: Map View Management Manager (r018.14) - Step 6.1: Add manager without integration
-import { MapViewManager } from './hooks/use-map-view'
-// Chunk 4: Graphics Layer Management Manager (r018.24) - Step 4.2: Parallel execution
-import { GraphicsLayerManager } from './hooks/use-graphics-layer'
-// Chunk 5: Accumulated Records Management Manager (r018.26) - Step 5.1: Add manager without integration
-import { AccumulatedRecordsManager } from './hooks/use-accumulated-records'
-// Chunk 7: Event Handling Manager (r018.59) - Step 7.1: Create Event Manager
-import { EventManager, OPEN_WIDGET_EVENT, QUERYSIMPLE_SELECTION_EVENT, RESTORE_ON_IDENTIFY_CLOSE_EVENT } from './hooks/use-event-handling'
-// Chunk 3: Selection & Restoration Manager (r019.1) - Section 3.1: Selection State Tracking
-import { SelectionRestorationManager } from './hooks/use-selection-restoration'
+import { removeHashParam } from './hash-utils'
+// Managers (extracted from class component, r018–r019)
+import { UrlConsumptionManager } from './managers/url-consumption-manager'
+import { WidgetVisibilityManager } from './managers/widget-visibility-manager'
+import { MapViewManager } from './managers/map-view-manager'
+import { GraphicsLayerManager } from './managers/graphics-layer-manager'
+import { AccumulatedRecordsManager } from './managers/accumulated-records-manager'
+import { EventManager, OPEN_WIDGET_EVENT, QUERYSIMPLE_SELECTION_EVENT, RESTORE_ON_IDENTIFY_CLOSE_EVENT } from './managers/event-manager'
+import { SelectionRestorationManager } from './managers/selection-restoration-manager'
 
 const debugLogger = createQuerySimpleDebugLogger()
 const { iconMap } = getWidgetRuntimeDataMap()
@@ -136,26 +131,6 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
   resetManualModifications = () => {
     // FIX (r018.96): Removed manuallyRemovedRecordIds tracking - no longer needed
     // Duplicate detection in mergeResultsIntoAccumulated handles preventing duplicates
-    const hasManualModifications = this.state.hasManualModifications
-
-    debugLogger.log('RESULTS-MODE', {
-      event: 'reset-manual-modifications-check',
-      widgetId: this.props.id,
-      hasManualModifications,
-      note: 'r018.96: No manuallyRemovedRecordIds tracking',
-      timestamp: Date.now()
-    })
-
-    if (hasManualModifications) {
-      debugLogger.log('RESULTS-MODE', {
-        event: 'resetting-manual-modifications',
-        widgetId: this.props.id,
-        reason: 'user-started-fresh-operation',
-        hadManualModificationsFlag: hasManualModifications,
-        note: 'r018.96: No manuallyRemovedRecordIds to clear',
-        timestamp: Date.now()
-      })
-    }
   }
 
   /**
@@ -229,38 +204,11 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
     })
     
     // Now check URL parameters - HelperSimple has explicitly opened us
-    debugLogger.log('HASH-EXEC', {
-      event: 'querysimple-checkurlparameters-starting',
-      widgetId: this.props.id,
-      currentState: {
-        shouldUseInitialQueryValueForSelection: this.state.shouldUseInitialQueryValueForSelection,
-        hasInitialQueryValue: !!this.state.initialQueryValue,
-        initialQueryValueShortId: this.state.initialQueryValue?.shortId,
-        initialQueryValueValue: this.state.initialQueryValue?.value
-      },
-      timestamp: Date.now()
-    })
-    
     this.urlConsumptionManager.checkUrlParameters(
       this.props,
       this.state.resultsMode,
       {
         onInitialValueFound: (value) => {
-          debugLogger.log('HASH-EXEC', {
-            event: 'querysimple-oninitialvaluefound-called',
-            widgetId: this.props.id,
-            hasValue: !!value,
-            valueShortId: value?.shortId,
-            valueValue: value?.value,
-            currentState: {
-              shouldUseInitialQueryValueForSelection: this.state.shouldUseInitialQueryValueForSelection,
-              hasInitialQueryValue: !!this.state.initialQueryValue,
-              initialQueryValueShortId: this.state.initialQueryValue?.shortId,
-              initialQueryValueValue: this.state.initialQueryValue?.value
-            },
-            timestamp: Date.now()
-          })
-          
           if (value) {
             // Only update if the value or shortId has changed to avoid unnecessary re-renders
             const willUpdate = this.state.initialQueryValue?.shortId !== value.shortId || this.state.initialQueryValue?.value !== value.value
@@ -371,31 +319,10 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
   }
 
   componentDidMount() {
-    // Chunk 1: Manager implementation (r018.8 - switched to manager)
-    // Setup manager (no autonomous URL checking - HelperSimple orchestrates)
-    // NOTE: setup() is a no-op - callbacks are never called
-    this.urlConsumptionManager.setup(
-      this.props,
-      this.state.resultsMode,
-      {} // Empty callbacks - setup() is a no-op
-    )
-    
     // Listen for HelperSimple's open widget event
     // QuerySimple should only process hash parameters when HelperSimple explicitly opens the widget
     // This ensures HelperSimple remains the orchestrator
     // Note: Event listener setup moved to parallel execution section below (Chunk 7.1)
-    
-    debugLogger.log('HASH-EXEC', {
-      event: 'querysimple-mounted-event-listener-setup',
-      widgetId: this.props.id,
-      currentState: {
-        shouldUseInitialQueryValueForSelection: this.state.shouldUseInitialQueryValueForSelection,
-        hasInitialQueryValue: !!this.state.initialQueryValue,
-        initialQueryValueShortId: this.state.initialQueryValue?.shortId,
-        initialQueryValueValue: this.state.initialQueryValue?.value
-      },
-      timestamp: Date.now()
-    })
     
     // Chunk 2: Manager implementation (r018.13 - Step 2.3: Switch to manager)
     if (this.widgetRef.current) {
@@ -445,14 +372,6 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
       onModeChange: (mode) => {
         // State is updated from handleResultsModeChange return value, so this is just a backup
         if (this.state.resultsMode !== mode) {
-          debugLogger.log('RESULTS-MODE', {
-            event: 'callback-onModeChange-state-sync',
-            widgetId: this.props.id,
-            callbackMode: mode,
-            currentStateMode: this.state.resultsMode,
-            note: 'State should already be synced from return value',
-            timestamp: Date.now()
-          })
           this.setState({ resultsMode: mode })
         }
       },
@@ -460,14 +379,6 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
         // State is updated from handleAccumulatedRecordsChange, so this is just a backup
         const currentCount = this.state.accumulatedRecords?.length || 0
         if (currentCount !== records.length) {
-          debugLogger.log('RESULTS-MODE', {
-            event: 'callback-onAccumulatedRecordsChange-state-sync',
-            widgetId: this.props.id,
-            callbackCount: records.length,
-            currentStateCount: currentCount,
-            note: 'State should already be synced from direct update',
-            timestamp: Date.now()
-          })
           this.setState({ accumulatedRecords: records })
         }
       }
@@ -505,9 +416,8 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
       })
     }
     
-    // Chunk 1: Clean up manager (r018.8)
-    this.urlConsumptionManager.cleanup()
-    
+    // r024.112: urlConsumptionManager.cleanup() removed — was a no-op.
+
     // Chunk 7: Event handling cleanup (r018.59 - Step 7.1: Add manager)
     this.eventManager.cleanup(this.props.id)
     
@@ -1159,28 +1069,9 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
    */
   private removeHashParameter = (shortId: string) => {
     if (!shortId) return
-    
-    const hash = window.location.hash.substring(1)
-    const urlParams = new URLSearchParams(hash)
-    
-    if (urlParams.has(shortId)) {
-      urlParams.delete(shortId)
-      const newHash = urlParams.toString()
-      
-      debugLogger.log('HASH', {
-        event: 'removeHashParameter',
-        shortId,
-        newHash: newHash ? `#${newHash}` : '(empty)',
-        timestamp: Date.now()
-      })
-      
-      // Update the URL without triggering a reload
-      // Always preserve pathname and query string, only update hash
-      window.history.replaceState(null, '', 
-        window.location.pathname + window.location.search + (newHash ? `#${newHash}` : '')
-      )
-      
-      // Also clear the state so it won't trigger again
+
+    if (removeHashParam(shortId)) {
+      // Clear the state so it won't trigger again
       if (this.state.initialQueryValue?.shortId === shortId) {
         this.setState({ initialQueryValue: undefined })
       }
@@ -1224,17 +1115,6 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
       ? (new Error().stack?.split('\n').slice(2, 6).join(' << ') || 'unknown')
       : 'clear-path'
     
-    // r021.107: Log BEFORE setState (simplified for clear case)
-    debugLogger.log('WIDGET-STATE', {
-      event: 'widget-updating-accumulated-records-BEFORE',
-      widgetId: this.props.id,
-      beforeCount: previousCount,
-      afterCount: newCount,
-      willResetMode: shouldResetMode,
-      calledFrom: stackTrace,
-      timestamp: Date.now()
-    })
-
     // r024.74: Calculate extent once when records change (for zoom/pan actions)
     const resultsExtent = records.length > 0 ? calculateRecordsExtent(records) : null
     
@@ -1262,14 +1142,15 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
         resultsMode: SelectionType.NewSelection
       } : {})
     }, () => {
-      // r021.107: Callback to verify state was actually updated
       debugLogger.log('WIDGET-STATE', {
-        event: 'widget-updated-accumulated-records-AFTER',
+        event: 'widget-updated-accumulated-records',
         widgetId: this.props.id,
-        stateAccumulatedRecordsCount: this.state.accumulatedRecords?.length || 0,
-        stateAccumulatedRecordsIds: this.state.accumulatedRecords?.map(r => r.getId()).slice(0, 10) || [],
+        beforeCount: previousCount,
+        afterCount: this.state.accumulatedRecords?.length || 0,
         expectedCount: records.length,
         match: this.state.accumulatedRecords?.length === records.length,
+        willResetMode: shouldResetMode,
+        calledFrom: stackTrace,
         timestamp: Date.now()
       })
     })

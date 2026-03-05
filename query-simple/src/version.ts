@@ -10,7 +10,7 @@
  */
 const BASE_VERSION = '1.19.0'
 const RELEASE_NUMBER = '024' // Increment on major changes (001, 002, 003, ...)
-const MINOR_VERSION = '111' // r024.111: Fix multi-source extent cache SR mismatch (BUG-EXTENT-CACHE-001)
+const MINOR_VERSION = '131' // r024.131: Extract removeRecord to record-removal-handler.ts (~490 lines)
 
 export const WIDGET_VERSION = MINOR_VERSION && Number(MINOR_VERSION) > 0
   ? `${BASE_VERSION}-r${RELEASE_NUMBER}.${MINOR_VERSION}`

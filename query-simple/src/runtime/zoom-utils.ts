@@ -10,6 +10,13 @@
  * - Zero-area extents (points): expanded by a fixed buffer (e.g. 300 ft) first,
  *   then the same factor is applied.
  *
+ * SPATIAL REFERENCE ASSUMPTION:
+ * All records passed to calculateRecordsExtent() and zoomToRecords() must have
+ * geometries in the SAME spatial reference (the map's SR). This is enforced
+ * upstream by direct-query.ts setting query.outSpatialReference = mapView.spatialReference
+ * (added in r024.111 to fix BUG-EXTENT-CACHE-001). A runtime guard logs a
+ * warning if mixed SRs are detected, but does not block the operation.
+ *
  * Full design and math: docs/technical/ZOOM_EXTENT_EXPANSION.md
  */
 
@@ -141,6 +148,24 @@ export function calculateRecordsExtent(records: FeatureDataRecord[]): __esri.Ext
       recordsCount: records.length
     })
     return null
+  }
+
+  // SR Validation Guard: Detect mixed spatial references before union.
+  // Should never fire if direct-query.ts properly sets outSpatialReference (r024.111),
+  // but guards against regressions or fallback code paths. See BUG-EXTENT-CACHE-001.
+  if (extents.length > 1) {
+    const baseWkid = extents[0].spatialReference?.wkid
+    const mismatch = extents.find(ext => ext.spatialReference?.wkid !== baseWkid)
+    if (mismatch) {
+      debugLogger.log('ZOOM', {
+        event: 'calculateRecordsExtent-SR-MISMATCH-WARNING',
+        baseWkid,
+        mismatchedWkid: mismatch.spatialReference?.wkid,
+        recordsCount: records.length,
+        extentsCount: extents.length,
+        note: 'Mixed spatial references detected in extent union. Results may be incorrect. See BUG-EXTENT-CACHE-001.'
+      })
+    }
   }
 
   // Calculate union of all extents

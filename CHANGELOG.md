@@ -7,6 +7,315 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 > **Archive**: For releases r001-r021, see [CHANGELOG_ARCHIVE_r001-r021.md](docs/archive/CHANGELOG_ARCHIVE_r001-r021.md)
 
+## [1.19.0-r024.131] - 2026-03-05 - Extract removeRecord (Priority 5 complete)
+
+### Added
+
+- Created `record-removal-handler.ts` (567 lines) with `RemoveRecordContext` interface
+  (14 fields) and `executeRemoveRecord` function — X-button removal flow, composite-key
+  matching, origin DS deselection, graphics sync, outputDS selection update,
+  accumulatedRecords sync
+
+### Changed
+
+- `query-result.tsx` reduced from ~1,741 → ~1,253 lines (−28%)
+- `removeRecord` is now a 10-line thin wrapper that builds context and delegates
+- Removed 3 import lines (results-management-utils partial, graphics-layer-utils partial,
+  hash-utils) — now imported in record-removal-handler.ts
+
+---
+
+## [1.19.0-r024.130] - 2026-03-04 - Extract handleFormSubmit (Priority 4 complete)
+
+### Added
+
+- Created `query-submit-handler.ts` (348 lines) with `SubmitContext` interface
+  (20 fields) and `executeFormSubmit` function — DS destroy/recreate memory workflow,
+  hash value conversion wait pattern, retry-after-clear guard
+
+### Changed
+
+- `query-task.tsx` reduced from ~1,836 → ~1,620 lines (−12%)
+- `handleFormSubmit` is now a 12-line thin wrapper that builds context and delegates
+- `handleFormSubmitInternal` passed as callback in `SubmitContext` (not imported directly)
+
+---
+
+## [1.19.0-r024.129] - 2026-03-04 - Extract clearResult (Priority 3 complete)
+
+### Added
+
+- Created `query-clear-handler.ts` (328 lines) with `ClearResultContext` interface
+  (16 fields) and `executeClearResult` function — Sovereign Reset, graphics cleanup,
+  DS destruction, rAF yield pattern
+
+### Changed
+
+- `query-task.tsx` reduced from ~2,060 → ~1,836 lines (−11%)
+- `clearResult` is now a 12-line thin wrapper that builds context and delegates
+
+---
+
+## [1.19.0-r024.128] - 2026-03-04 - Extract handleFormSubmitInternal (Priority 2 complete)
+
+### Added
+
+- Created `query-execution-handler.ts` (1,044 lines) with `QueryExecutionContext` interface
+  (26 fields) and `executeQueryInternal` function — the full query execution pipeline
+- Moved `USE_DIRECT_QUERY` constant and `QUERYSIMPLE_HASH_QUERY_EXECUTED_EVENT` to new file
+
+### Changed
+
+- `query-task.tsx` reduced from ~2,950 → ~2,060 lines (−30%)
+- `handleFormSubmitInternal` is now a 12-line thin wrapper that builds context and delegates
+- Removed 5 import lines from query-task.tsx (executeDirectQuery, generateQueryParams,
+  executeQuery, executeCountQuery, mergeResultsIntoAccumulated, removeResultsFromAccumulated,
+  removeRecordsFromOriginSelections, removeHighlightGraphics)
+
+---
+
+## [1.19.0-r024.127] - 2026-03-04 - Consolidate useState → useReducer (Priority 1 complete)
+
+### Added
+
+**useReducer consolidation — query-task-reducer.ts (r024.124–r024.127):**
+- Created `query-task-reducer.ts` (197 lines) with `QueryTaskState` interface (12 fields),
+  4 alert type interfaces, 14 action types, and reducer function
+- Includes atomic composite actions: `RESET_FOR_CLEAR` (resets 10 fields in one dispatch),
+  `QUERY_COMPLETE` (sets stage + resultCount + queryJustExecuted atomically)
+
+### Changed
+
+**Step A2a — Migrate error/alert state (r024.125):**
+- Migrated 6 useState variables to useReducer dispatch: `selectionError`, `zoomError`,
+  `queryErrorAlert`, `noResultsAlert`, `allDuplicatesAlert`, `noRemovalAlert`
+
+**Step A2b — Migrate execution state (r024.126):**
+- Migrated 3 useState variables to useReducer dispatch: `stage`, `resultCount`,
+  `queryJustExecuted`
+- 9 `setStage`, 4 `setResultCount`, 2 `setQueryJustExecuted` calls replaced
+
+**Step A2c — Migrate clearing/DS state (r024.127):**
+- Migrated 3 useState variables to useReducer dispatch: `isClearing`, `dsRecreationKey`,
+  `outputDS`
+- 2 `setIsClearing`, 2 `setOutputDS`, 2 `setDsRecreationKey` calls replaced
+
+**Combined impact:** 12 closure variables → 2 (`state` + `dispatch`). All 12 useState
+declarations consolidated into single `useReducer`. Completes Priority 1 of the
+useReducer extraction plan (SINGLETON_EXTRACTION_RESEARCH.md).
+
+**Files modified/created:**
+- `query-simple/src/runtime/query-task-reducer.ts` — NEW (197 lines)
+- `query-simple/src/runtime/query-task.tsx` — 12 useState removed, dispatch calls added
+- `query-simple/src/version.ts` — Increment to r024.127
+
+---
+
+## [1.19.0-r024.123] - 2026-03-04 - Type QueryTabContent props
+
+### Changed
+
+**Type safety — QueryTabContent props (r024.123):**
+- Replaced 7 `any`-typed props in `QueryTabContentProps` interface with proper types:
+  `DataSource | null`, `FeatureDataRecord[]`, `SqlQueryParams`, full `handleFormSubmit`
+  signature (`IMSqlExpression`, `SpatialFilterObj`, `runtimeZoomToSelected?`),
+  `(enabled: boolean) => void`, `(ds: DataSource) => void`, `Record<string, unknown>`
+- Total `any` count reduced from 168 → 161 (avoidable: 36 → 29)
+
+**Files modified:**
+- `query-simple/src/runtime/tabs/QueryTabContent.tsx` — Add type imports, replace 7 `any` types
+- `query-simple/src/version.ts` — Increment to r024.123
+
+---
+
+## [1.19.0-r024.121] - 2026-03-03 - Phase 7: Extract graphics-cleanup-utils.ts with GraphicsStateManager
+
+### Added
+
+**Simplification Phase 7 — Extract cleanup functions with singleton state manager (r024.120–r024.121):**
+- Created `GraphicsStateManager` singleton (`graphics-state-manager.ts`, 149 lines) following the
+  established `HighlightConfigManager` pattern — centralizes 6 module-level Maps/variables that
+  were shared between create/add and cleanup functions
+- Created `graphics-cleanup-utils.ts` (429 lines) with 7 extracted cleanup functions:
+  `clearGraphicsLayer`, `clearGraphicsLayerOrGroupLayer`, `cleanupGraphicsLayer`,
+  `clearGroupLayerContents`, `cleanupGroupLayer`, `clearAnyResultLayerContents`,
+  `cleanupAnyResultLayer`
+- Re-exports in `graphics-layer-utils.ts` maintain backward compatibility — zero consumer
+  import changes required
+
+### Removed
+- Deleted dead `destroyAndRecreateGroupLayer()` (~36 lines) — exported but never imported
+- Removed 6 module-level mutable state variables from `graphics-layer-utils.ts` (replaced by
+  singleton accessor methods)
+
+### Changed
+- `graphics-layer-utils.ts` reduced from ~1,458 → 1,032 lines (-426 lines)
+- All shared state access now goes through `graphicsStateManager.*()` accessor methods
+- Exported `getLegendLayerId()` and `getGraphicsSublayer()` as public helpers for cross-file use
+
+**Files modified/created:**
+- `query-simple/src/runtime/graphics-state-manager.ts` — NEW (149 lines)
+- `query-simple/src/runtime/graphics-cleanup-utils.ts` — NEW (429 lines)
+- `query-simple/src/runtime/graphics-layer-utils.ts` — State migrated, 7 functions extracted, 1 dead function deleted, re-exports added
+- `query-simple/src/version.ts` — Increment to r024.121
+
+---
+
+## [1.19.0-r024.119] - 2026-03-03 - Phase 6: Delete dead getMapViewFromDataSource
+
+### Removed
+
+**Simplification Phase 6 — Delete dead `getMapViewFromDataSource()` (r024.119):**
+- Deleted `getMapViewFromDataSource()` (283 lines) from `graphics-layer-utils.ts` — exported
+  but never imported or called anywhere in the codebase
+- Removed unused imports: `DataSourceManager` (from jimu-core), `FeatureLayerDataSource` (type)
+- `graphics-layer-utils.ts` reduced from 1,741 → 1,458 lines
+
+**Files modified:**
+- `query-simple/src/runtime/graphics-layer-utils.ts` — Removed dead function + unused imports
+- `query-simple/src/version.ts` — Increment to r024.119
+
+---
+
+## [1.19.0-r024.118] - 2026-03-03 - Phase 5: Extract hash-utils.ts
+
+### Changed
+
+**Simplification Phase 5 — Extract `hash-utils.ts` (r024.118):**
+- Created `query-simple/src/runtime/hash-utils.ts` consolidating all hash URL manipulation
+  into 4 functions: `removeHashParam`, `removeRecordIdFromHashParams`,
+  `removeRecordIdFromDataS`, `clearDataSFromHash`
+- Extracted 157 lines of surgical hash modification from `removeRecord()` in
+  `query-result.tsx` → reduced to 2 function calls
+- Eliminated duplicate `removeHashParameter` implementations in `widget.tsx` and
+  `url-consumption-manager.ts` — both now call `removeHashParam()`
+- Replaced `clearDataSParameterFromHash()` body in `selection-utils.ts` with delegation
+  to `clearDataSFromHash()`
+
+**Files modified:**
+- `query-simple/src/runtime/hash-utils.ts` — NEW (~200 lines)
+- `query-simple/src/runtime/query-result.tsx` — removeRecord() shrunk by ~130 lines
+- `query-simple/src/runtime/widget.tsx` — removeHashParameter() shrunk
+- `query-simple/src/runtime/managers/url-consumption-manager.ts` — removeHashParameter() shrunk
+- `query-simple/src/runtime/selection-utils.ts` — clearDataSParameterFromHash() delegated
+- `query-simple/src/version.ts` — Increment to r024.118
+
+---
+
+## [1.19.0-r024.117] - 2026-03-03 - Phase 3: Rename hooks/ → managers/
+
+### Changed
+
+**Simplification Phase 3 — Rename `hooks/` directory to `managers/` (r024.117):**
+- Renamed `query-simple/src/runtime/hooks/` → `query-simple/src/runtime/managers/`
+- 7 of 8 files were utility classes (not React hooks) — filenames now reflect their nature
+- File renames: `use-graphics-layer.ts` → `graphics-layer-manager.ts`,
+  `use-url-consumption.ts` → `url-consumption-manager.ts`,
+  `use-selection-restoration.ts` → `selection-restoration-manager.ts`,
+  `use-widget-visibility.ts` → `widget-visibility-manager.ts`,
+  `use-accumulated-records.ts` → `accumulated-records-manager.ts`,
+  `use-event-handling.ts` → `event-manager.ts`,
+  `use-map-view.ts` → `map-view-manager.ts`
+- `use-zoom-to-records.ts` kept its `use-` prefix (actual React hook)
+- Updated 12 import paths across 8 consumer files (widget.tsx, query-result.tsx,
+  query-task.tsx, query-task-list.tsx, selection-utils.ts, and test files)
+- Cleaned up verbose chunk comments in widget.tsx imports
+
+---
+
+## [1.19.0-r024.116] - 2026-03-03 - Default Hover Pin Color → Google Red
+
+### Changed
+
+- Changed default hover preview pin color from yellow/amber (`#FFC107`) to Google Maps
+  red (`#EA4335`) for better visibility and contrast on the map
+- Updated default in config type definition, settings panel color picker fallback,
+  CIM symbol base color, and JSDoc examples
+- Existing widget instances with a custom pin color configured are unaffected — only
+  changes the default for new or unconfigured widgets
+
+**Files modified:**
+- `query-simple/src/config.ts` — Default comment updated
+- `query-simple/src/setting/setting.tsx` — Color picker fallback
+- `query-simple/src/runtime/query-result-item.tsx` — CIM symbol base color + JSDoc
+- `query-simple/src/version.ts` — Increment to r024.116
+
+---
+
+## [1.19.0-r024.115] - 2026-03-03 - Phase 2: Prune Excessive Logging
+
+### Changed
+
+**Simplification Phase 2 — Prune excessive debugLogger.log() calls (r024.115):**
+- Removed ~61 routine/verbose log calls across 8 files, keeping all error paths,
+  state transitions, decision points, and user action logs
+- Categories removed: per-keystroke form input tracking, per-record iteration logs,
+  routine entry/exit pairs, verbose field-level dumps, intermediate progress checkpoints
+- Categories kept: guard conditions (early returns), state transitions (mode changes,
+  layer creation), decision points (fallback paths, hash detection), error paths
+- Merged redundant log pairs (BEFORE/AFTER → single post-operation log) in widget.tsx,
+  view-in-table-action.tsx, results-management-utils.ts, graphics-layer-utils.ts
+- Consolidated actionDataSets chain in query-result.tsx from 7 intermediate logs to
+  1 summary log with per-dataSet origin and field counts
+
+**Files modified:**
+- `query-simple/src/runtime/hooks/use-url-consumption.ts` — 7 removals (15→8)
+- `query-simple/src/runtime/widget.tsx` — 7 removals + 1 merge (48→39)
+- `query-simple/src/data-actions/view-in-table-action.tsx` — 4 removals + 2 merges (23→17)
+- `query-simple/src/runtime/query-result.tsx` — 6 removals + consolidation (64→58)
+- `query-simple/src/runtime/query-task-form.tsx` — 8 removals (63→55)
+- `query-simple/src/runtime/results-management-utils.ts` — 14 removals + 3 merges (41→23)
+- `query-simple/src/runtime/query-task-list.tsx` — 3 removals + 2 merges (31→27)
+- `query-simple/src/runtime/graphics-layer-utils.ts` — 3 removals (58→55)
+- `query-simple/src/version.ts` — Increment to r024.115
+
+---
+
+## [1.19.0-r024.114] - 2026-03-03 - Duplicate Tab Reuse for View in Table
+
+### Changed
+
+**View in Table: Skip recreation when data unchanged (r024.114):**
+- When clicking "View in Table" on the same results, existing tabs are now reused instead
+  of being destroyed and recreated — eliminates the memory leak from unnecessary data
+  source and FeatureLayer allocation
+- New `canReuseTab()` compares incoming record ObjectIDs and display fields against
+  existing tab data; if both match, the tab is simply activated
+- If data has changed (different records or different field config), falls back to the
+  existing delete+recreate behavior
+- Integrates with the r024.113 tab-switch approach: reusable tabs count as "existing tabs"
+  for scenario determination
+
+**Files modified:**
+- `query-simple/src/data-actions/view-in-table-action.tsx` - Duplicate reuse logic
+- `query-simple/src/version.ts` - Increment to r024.114
+
+---
+
+## [1.19.0-r024.113] - 2026-03-03 - Tab-Switch Approach for View in Table
+
+### Changed
+
+**View in Table: Tab-switch approach replaces two-phase render hack (r024.113):**
+- Replaced the priming-tab workaround with a tab-switch approach that avoids creating
+  temporary tabs (and their associated memory leaks) in most scenarios
+- Three scenarios based on Table widget state:
+  - **Scenario 1** (existing tabs): Add new tabs in bulk, pivot to existing tab and back —
+    no priming tab, no leak
+  - **Scenario 2** (no existing tabs, single new tab): Use priming hack — unavoidable,
+    one minimal leak
+  - **Scenario 3** (no existing tabs, multiple new tabs): Add all tabs in bulk, pivot to
+    first new tab and back — no priming tab, no leak
+- Tab switching uses `settingChangeTab` dispatch to trigger the Table widget's
+  `onTabClick` → `destroyTable()` → fresh FeatureTable initialization
+- Scenarios 1 and 3 share the same code path, differing only in pivot tab selection
+
+**Files modified:**
+- `query-simple/src/data-actions/view-in-table-action.tsx` - 3-scenario refactor
+- `query-simple/src/version.ts` - Increment to r024.113
+
+---
+
 ## [1.19.0-r024.111] - 2026-03-02 - Fix Multi-Source Extent Cache SR Mismatch
 
 ### Fixed

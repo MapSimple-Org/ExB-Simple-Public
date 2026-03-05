@@ -25,36 +25,9 @@ interface VisibilityCallbacks {
  */
 export class WidgetVisibilityManager {
   private visibilityObserver: IntersectionObserver | null = null
-  private visibilityCheckInterval: number | null = null
   private isPanelVisible: boolean = false
   private widgetElement: HTMLElement | null = null
   private hasOpenedOnce: boolean = false // r022.104: Track first open to avoid re-triggering on un-minimize
-
-  /**
-   * Checks if the widget element is currently visible.
-   * Fallback method when IntersectionObserver is not available.
-   */
-  private checkVisibility(): boolean {
-    if (!this.widgetElement) return false
-    
-    const element = this.widgetElement
-    const style = window.getComputedStyle(element)
-    const rect = element.getBoundingClientRect()
-    
-    const isVisible = (
-      style.display !== 'none' &&
-      style.visibility !== 'hidden' &&
-      style.opacity !== '0' &&
-      rect.width > 0 &&
-      rect.height > 0 &&
-      rect.top < window.innerHeight &&
-      rect.bottom > 0 &&
-      rect.left < window.innerWidth &&
-      rect.right > 0
-    )
-    
-    return isVisible
-  }
 
   /**
    * Notifies HelperSimple of panel visibility state changes.
@@ -151,25 +124,11 @@ export class WidgetVisibilityManager {
                   this.hasOpenedOnce = true
                   this.logVisibilityChange(isVisible, 'IntersectionObserver', id, callbacks)
                   onVisibilityStateChange(isVisible)
-                  debugLogger.log('WIDGET-STATE', {
-                    event: 'first-open-detected',
-                    widgetId: id,
-                    method: 'IntersectionObserver',
-                    note: 'r022.104: First open via DOM - subsequent opens will use props.state',
-                    timestamp: Date.now()
-                  })
-                } else {
-                  // Already opened once - ignore DOM visibility (un-minimize)
-                  // Let componentDidUpdate handle subsequent opens via props.state
-                  debugLogger.log('WIDGET-STATE', {
-                    event: 'panel-visible-ignored',
-                    widgetId: id,
-                    isVisible: true,
-                    method: 'IntersectionObserver',
-                    note: 'r022.104: Ignoring un-minimize - already opened once, using props.state',
-                    hasOpenedOnce: this.hasOpenedOnce,
-                    timestamp: Date.now()
-                  })
+
+                  // r024.112: Self-disconnect after first open — observer's only job is done.
+                  // Subsequent opens handled by props.state in componentDidUpdate.
+                  this.visibilityObserver?.disconnect()
+                  this.visibilityObserver = null
                 }
               } else {
                 // Widget hidden (close OR minimize) - log but DON'T trigger close logic
@@ -198,60 +157,8 @@ export class WidgetVisibilityManager {
           widgetId: id,
           method: 'IntersectionObserver'
         })
-      } else {
-        // Method 2: Fallback to periodic checking
-        this.visibilityCheckInterval = window.setInterval(() => {
-          const isVisible = this.checkVisibility()
-          if (this.isPanelVisible !== isVisible) {
-            this.isPanelVisible = isVisible
-            
-            // r022.76: Only handle OPEN events (same as IntersectionObserver)
-            if (isVisible) {
-              // r022.104: Only trigger open logic on FIRST open (DOM detection)
-              // After that, rely on props.state in componentDidUpdate for subsequent opens
-              if (!this.hasOpenedOnce) {
-                // First open - use DOM visibility
-                this.hasOpenedOnce = true
-                this.logVisibilityChange(isVisible, 'periodic-check', id, callbacks)
-                onVisibilityStateChange(isVisible)
-                debugLogger.log('WIDGET-STATE', {
-                  event: 'first-open-detected',
-                  widgetId: id,
-                  method: 'periodic-check',
-                  note: 'r022.104: First open via DOM - subsequent opens will use props.state',
-                  timestamp: Date.now()
-                })
-              } else {
-                // Already opened once - ignore DOM visibility (un-minimize)
-                debugLogger.log('WIDGET-STATE', {
-                  event: 'panel-visible-ignored',
-                  widgetId: id,
-                  isVisible: true,
-                  method: 'periodic-check',
-                  note: 'r022.104: Ignoring un-minimize - already opened once, using props.state',
-                  hasOpenedOnce: this.hasOpenedOnce,
-                  timestamp: Date.now()
-                })
-              }
-            } else {
-              debugLogger.log('WIDGET-STATE', {
-                event: 'panel-hidden-ignored',
-                widgetId: id,
-                isVisible: false,
-                method: 'periodic-check',
-                note: 'r022.76: Ignoring close/minimize - handled by props.state',
-                timestamp: Date.now()
-              })
-            }
-          }
-        }, 250) // Check every 250ms
-        
-        debugLogger.log('WIDGET-STATE', {
-          event: 'visibility-detection-setup',
-          widgetId: id,
-          method: 'periodic-check'
-        })
       }
+      // r024.112: 250ms fallback polling removed — IntersectionObserver supported since 2016.
     }, 100)
   }
 
@@ -259,18 +166,10 @@ export class WidgetVisibilityManager {
    * Cleans up visibility detection observers/intervals.
    */
   cleanup(): void {
-    // Clean up IntersectionObserver
     if (this.visibilityObserver) {
       this.visibilityObserver.disconnect()
       this.visibilityObserver = null
     }
-    
-    // Clean up interval
-    if (this.visibilityCheckInterval !== null) {
-      clearInterval(this.visibilityCheckInterval)
-      this.visibilityCheckInterval = null
-    }
-    
     this.widgetElement = null
   }
 

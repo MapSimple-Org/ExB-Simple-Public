@@ -168,13 +168,6 @@ export function QueryTaskForm (props: QueryTaskItemProps) {
       if (target.tagName === 'INPUT') {
         const val = (target as HTMLInputElement).value
         setIsTypingValid(isQueryInputValid(val))
-        debugLogger.log('FORM', {
-          event: 'input-focused',
-          configId,
-          tagName: target.tagName,
-          type: (target as HTMLInputElement).type,
-          value: val
-        })
       }
     }
 
@@ -184,12 +177,6 @@ export function QueryTaskForm (props: QueryTaskItemProps) {
         const val = (target as HTMLInputElement).value
         const isValid = isQueryInputValid(val)
         setIsTypingValid(isValid)
-        debugLogger.log('FORM', {
-          event: 'input-typing',
-          configId,
-          value: val,
-          isTypingValid: isValid
-        })
       }
     }
 
@@ -281,17 +268,6 @@ export function QueryTaskForm (props: QueryTaskItemProps) {
 
   const originDS = outputDS?.getOriginDataSources()[0]
 
-  // Track configId changes (query switches)
-  React.useEffect(() => {
-    debugLogger.log('FORM', {
-      event: 'configId-changed',
-      configId,
-      previousConfigId: initialValueSetRef.current,
-      initialInputValue,
-      timestamp: Date.now()
-    })
-  }, [configId, initialInputValue, datasourceReady, outputDS, widgetId, hashTriggeredRef])
-
   /**
    * Sets the input value from URL hash parameters when:
    * 1. Datasource is ready
@@ -348,40 +324,6 @@ export function QueryTaskForm (props: QueryTaskItemProps) {
     const valueChanged = lastValueSetRef.current !== null && 
                          lastValueSetRef.current !== initialInputValue &&
                          initialValueSetRef.current === configId
-    
-    // DIAGNOSTIC (r018.112): Prove hypothesis about shouldSetValue logic
-    debugLogger.log('HASH-EXEC', {
-      event: 'form-shouldSetValue-calculation',
-      configId,
-      initialInputValue,
-      CONDITIONS: {
-        datasourceReady,
-        hasOutputDS: !!outputDS,
-        hasInitialInputValue: !!initialInputValue,
-        hasSqlExprObjParts: !!(sqlExprObj?.parts?.length > 0)
-      },
-      REFS: {
-        initialValueSetRef: initialValueSetRef.current,
-        lastValueSetRef: lastValueSetRef.current,
-        previousConfigIdRef: previousConfigIdRef.current
-      },
-      LOGIC_BREAKDOWN: {
-        'initialValueSetRef !== configId': initialValueSetRef.current !== configId,
-        'lastValueSetRef !== null': lastValueSetRef.current !== null,
-        'lastValueSetRef !== initialInputValue': lastValueSetRef.current !== initialInputValue,
-        'initialValueSetRef === configId': initialValueSetRef.current === configId,
-        'valueChanged (all 3 above AND)': valueChanged,
-        'FINAL: configId-mismatch OR valueChanged': (initialValueSetRef.current !== configId || valueChanged)
-      },
-      BREAKDOWN_BASE_CONDITIONS: {
-        datasourceReady,
-        'has-initialInputValue': !!initialInputValue,
-        'has-sqlExprObj-parts': !!(sqlExprObj?.parts?.length > 0),
-        'ref-check': (initialValueSetRef.current !== configId || valueChanged),
-        'baseConditions (all 4 AND)': (datasourceReady && initialInputValue && (sqlExprObj?.parts?.length > 0) && (initialValueSetRef.current !== configId || valueChanged))
-      },
-      timestamp: Date.now()
-    })
     
     // Set the value if:
     // - We haven't set it for this configId yet, OR
@@ -656,21 +598,6 @@ export function QueryTaskForm (props: QueryTaskItemProps) {
     })
     
     const sanitizedSqlExprObj = sanitizeSqlExpression(currentSqlExprObj)
-    
-    // Log the sanitized expression to see if value was preserved
-    const sanitizedValue = sanitizedSqlExprObj?.parts?.[0]?.valueOptions?.value
-    debugLogger.log('FORM', {
-      event: 'applyQuery-after-sanitize',
-      configId,
-      currentRefValue,
-      sanitizedValue,
-      valuesMatch: currentRefValue === sanitizedValue,
-      sanitizedValueType: typeof sanitizedValue,
-      currentRefValueType: typeof currentRefValue,
-      isArrayCurrent: Array.isArray(currentRefValue),
-      isArraySanitized: Array.isArray(sanitizedValue),
-      timestamp: Date.now()
-    })
 
     let rel = spatialRelationRef.current
     if (spatialFilterObjRef.current?.geometry && rel == null) {
@@ -680,7 +607,6 @@ export function QueryTaskForm (props: QueryTaskItemProps) {
       event: 'form-about-to-call-onFormSubmit',
       configId,
       initialInputValue,
-      sanitizedValue,
       hasSpatialGeometryArray: Array.isArray(spatialFilterObjRef.current?.geometry),
       spatialGeometryCount: Array.isArray(spatialFilterObjRef.current?.geometry) ? spatialFilterObjRef.current.geometry.length : 0,
       zoomToUse,
@@ -1226,26 +1152,10 @@ export function QueryTaskForm (props: QueryTaskItemProps) {
               
               // Focus the input first (critical for React synthetic events)
               inputField.focus()
-              
-              debugLogger.log('FORM', {
-                event: 'hash-dom-input-focused',
-                configId,
-                value: initialInputValue,
-                isFocused: document.activeElement === inputField,
-                timestamp: Date.now()
-              })
-              
+
               // Set the value
               inputField.value = String(initialInputValue)
-              
-              debugLogger.log('FORM', {
-                event: 'hash-dom-value-set',
-                configId,
-                value: initialInputValue,
-                inputFieldValueAfter: inputField.value,
-                timestamp: Date.now()
-              })
-              
+
               // Dispatch input event with proper properties
               const inputEvent = new Event('input', { bubbles: true, cancelable: true })
               Object.defineProperty(inputEvent, 'target', { value: inputField, enumerable: true })
@@ -1263,16 +1173,6 @@ export function QueryTaskForm (props: QueryTaskItemProps) {
                 const reactEvent = new Event('input', { bubbles: true })
                 inputField.dispatchEvent(reactEvent)
               }
-              
-              debugLogger.log('FORM', {
-                event: 'hash-dom-events-dispatched',
-                configId,
-                value: initialInputValue,
-                inputEventDispatched: true,
-                changeEventDispatched: true,
-                reactEventDispatched: !!nativeInputValueSetter,
-                timestamp: Date.now()
-              })
               
               // Blur to trigger any validation or state updates (critical for SqlExpressionRuntime.onChange)
               inputField.blur()

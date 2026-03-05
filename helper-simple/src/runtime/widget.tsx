@@ -18,11 +18,6 @@ const OPEN_WIDGET_EVENT = 'helpersimple-open-widget'
 const QUERYSIMPLE_SELECTION_EVENT = 'querysimple-selection-changed'
 
 /**
- * Custom event name for QuerySimple to notify HelperSimple of widget open/close state.
- */
-const QUERYSIMPLE_WIDGET_STATE_EVENT = 'querysimple-widget-state-changed'
-
-/**
  * Custom event name for QuerySimple to notify HelperSimple that a hash-triggered query has completed execution.
  * This allows HelperSimple to track which hash parameters have been executed to prevent re-execution.
  */
@@ -80,8 +75,6 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
   // Selection tracking for logging/debugging purposes (not used for restoration)
   private querySimpleSelection: { recordIds: string[], dataSourceId?: string } | null = null
   private previousHashEntry: { outputDsId: string, recordIds: string[] } | null = null
-  private querySimpleWidgetIsOpen: boolean = false
-  private previousWidgetState: boolean | null = null
   
   // Track last executed hash parameter to prevent re-execution when switching queries
   // Format: "shortId=value" (e.g., "pin=2223059013")
@@ -100,9 +93,6 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
     // Listen for QuerySimple selection changes (for logging/debugging)
     window.addEventListener(QUERYSIMPLE_SELECTION_EVENT, this.handleQuerySimpleSelectionChange)
     
-    // Listen for QuerySimple widget state changes (open/close)
-    window.addEventListener(QUERYSIMPLE_WIDGET_STATE_EVENT, this.handleQuerySimpleWidgetStateChange)
-    
     // Listen for QuerySimple hash query execution completion
     window.addEventListener(QUERYSIMPLE_HASH_QUERY_EXECUTED_EVENT, this.handleHashQueryExecuted)
     
@@ -117,7 +107,6 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
   componentWillUnmount() {
     window.removeEventListener('hashchange', this.handleHashChange)
     window.removeEventListener(QUERYSIMPLE_SELECTION_EVENT, this.handleQuerySimpleSelectionChange)
-    window.removeEventListener(QUERYSIMPLE_WIDGET_STATE_EVENT, this.handleQuerySimpleWidgetStateChange)
     window.removeEventListener(QUERYSIMPLE_HASH_QUERY_EXECUTED_EVENT, this.handleHashQueryExecuted)
     this.stopIdentifyPopupWatching()
   }
@@ -450,30 +439,8 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
     }
   }
 
-  /**
-   * Handles QuerySimple widget state changes (open/close).
-   */
-  handleQuerySimpleWidgetStateChange = (event: CustomEvent<{ widgetId: string, isOpen: boolean }>) => {
-    const { config } = this.props
-    
-    // Only track if this is our managed widget
-    if (event.detail.widgetId === config.managedWidgetId) {
-      const wasOpen = this.querySimpleWidgetIsOpen
-      const isNowOpen = event.detail.isOpen
-      
-      this.querySimpleWidgetIsOpen = isNowOpen
-      
-      debugLogger.log('WIDGET-STATE', {
-        event: 'querysimple-widget-state-changed',
-        widgetId: event.detail.widgetId,
-        isOpen: event.detail.isOpen,
-        wasOpen,
-        transition: wasOpen !== isNowOpen ? (isNowOpen ? 'closed-to-open' : 'open-to-closed') : 'no-change'
-      })
-      
-      this.previousWidgetState = isNowOpen
-    }
-  }
+  // r024.112: handleQuerySimpleWidgetStateChange removed — pure logging, no behavioral impact.
+  // QUERYSIMPLE_WIDGET_STATE_EVENT constant, querySimpleWidgetIsOpen, and previousWidgetState also removed.
 
   /**
    * Handles QuerySimple hash query execution completion event.

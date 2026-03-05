@@ -451,7 +451,7 @@ export default class Setting extends React.PureComponent<AllWidgetSettingProps<I
             <SettingRow label={this.getI18nMessage('pinColor')} flow='wrap'>
               <ThemeColorPicker
                 specificTheme={this.props.theme2}
-                value={config.hoverPinColor || '#FFC107'}
+                value={config.hoverPinColor || '#EA4335'}
                 onChange={(color: string) => {
                   this.updateConfigForOptions(['hoverPinColor', color])
                 }}
