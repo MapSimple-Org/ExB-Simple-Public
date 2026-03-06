@@ -1402,7 +1402,7 @@ export function QueryTask (props: QueryTaskProps) {
                         margin-bottom: 4px;
                         display: block;
                       `}>
-                        Search Alias
+                        Search alias
                       </label>
                       <Select 
                         size="sm"

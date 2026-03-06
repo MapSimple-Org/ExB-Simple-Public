@@ -306,6 +306,10 @@ export function QueryItemSettingMain (props: Props) {
                   onAcceptValue={(value) => {
                     const trimmedValue = value.trim()
                     updateProperty('groupId', trimmedValue || null)
+                    if (!trimmedValue) {
+                      updateProperty('order', null)
+                      setDisplayOrderValue('')
+                    }
                   }}
                   placeholder='e.g., PARCELS, ADDRESSES'
                 />
@@ -319,10 +323,10 @@ export function QueryItemSettingMain (props: Props) {
                 </div>
               </SettingRow>
             </SettingSection>
-            <SettingSection role='group' aria-label='Search Alias' title='Search Alias'>
-              <SettingRow flow='wrap' label='Search Alias'>
+            <SettingSection role='group' aria-label='Search alias' title='Search alias'>
+              <SettingRow flow='wrap' label='Search alias'>
                 <TextInput
-                  aria-label='Search Alias'
+                  aria-label='Search alias'
                   className='w-100'
                   size='sm'
                   value={searchAliasValue}
@@ -335,6 +339,7 @@ export function QueryItemSettingMain (props: Props) {
                 />
               </SettingRow>
             </SettingSection>
+            {groupIdValue && (
             <SettingSection role='group' aria-label={getI18nMessage('displayOrder')} title={getI18nMessage('displayOrder')}>
               <SettingRow flow='wrap' label={getI18nMessage('displayOrder')}>
                 <TextInput
@@ -366,6 +371,7 @@ export function QueryItemSettingMain (props: Props) {
                 </div>
               </SettingRow>
             </SettingSection>
+            )}
             <AttributeFilterSetting
               key={`${queryItem.configId}_attr`}
               queryItem={queryItem}

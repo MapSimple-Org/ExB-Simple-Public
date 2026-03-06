@@ -7,6 +7,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 > **Archive**: For releases r001-r021, see [CHANGELOG_ARCHIVE_r001-r021.md](docs/archive/CHANGELOG_ARCHIVE_r001-r021.md)
 
+## [1.19.0-r024.132] - 2026-03-05 - Sentence case labels, Display Order guard
+
+### Changed
+
+- **Sentence case labels**: "Search Layer" → "Search layer", "Search Alias" → "Search alias",
+  "Display Order" → "Display order" — applied to both runtime widget and settings panel
+- **Display Order hidden when no Group ID**: The Display Order setting section is no longer
+  visible when Group ID is empty, preventing users from entering a value that breaks the widget
+- **Auto-clear Display Order on Group ID removal**: If a user clears Group ID after setting
+  a Display Order value, the order property is automatically nulled out
+
+### Fixed
+
+- Hardcoded "Search Alias" label in runtime query-task.tsx now uses sentence case
+- Hardcoded "Search Alias" labels in settings query-item-main-mode.tsx now use sentence case
+
+---
+
 ## [1.19.0-r024.131] - 2026-03-05 - Extract removeRecord (Priority 5 complete)
 
 ### Added

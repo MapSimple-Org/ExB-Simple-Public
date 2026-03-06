@@ -2,8 +2,8 @@
 
 Custom widgets for ArcGIS Experience Builder Developer Edition (1.19.0+). Built for performance, deep-linking, and advanced result management.
 
-**Current Version**: `1.19.0-r024.131`
-**Latest Update**: Codebase simplification — major handler extractions, View in Table memory fixes, default hover pin color change, 8 end-to-end process flow docs (Mar 5, 2026)
+**Current Version**: `1.19.0-r024.132`
+**Latest Update**: Sentence case labels, Display Order guard, codebase simplification, 8 end-to-end process flow docs (Mar 5, 2026)
 
 ---
 
@@ -27,7 +27,12 @@ Custom widgets for ArcGIS Experience Builder Developer Edition (1.19.0+). Built 
 
 ---
 
-## What's New: r024.112-131 (Mar 5, 2026)
+## What's New: r024.112-132 (Mar 5, 2026)
+
+### UI Polish (r024.132)
+
+- **Sentence case labels**: "Search Layer" → "Search layer", "Search Alias" → "Search alias" — consistent across runtime and settings
+- **Display Order guard**: Display Order field is now hidden when no Group ID is set, preventing misconfiguration that could break the widget. Clearing a Group ID auto-clears any existing Display Order value.
 
 ### Codebase Simplification
 

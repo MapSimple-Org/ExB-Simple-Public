@@ -1,7 +1,7 @@
 export default {
   _widgetLabel: 'QuerySimple',
   reset: 'Reset',
-  searchLayer: 'Search Layer',
+  searchLayer: 'Search layer',
   apply: 'Search',
   noDataAvailable: 'Error in loading data',
   noQueryItem: 'No query',
