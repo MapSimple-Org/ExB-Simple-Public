@@ -319,6 +319,8 @@ export function useBufferPreview (options: UseBufferPreviewOptions): __esri.Geom
         layer.destroy()
         bufferLayerRef.current = null
         graphicRef.current = null
+        // r025.057: Clear stored graphic on unmount too
+        graphicsStateManager.deleteLastBufferGraphic(widgetId)
 
         debugLogger.log('TASK', {
           event: 'buffer-preview-layer-unmount-cleanup',
@@ -336,6 +338,9 @@ export function useBufferPreview (options: UseBufferPreviewOptions): __esri.Geom
     if (!enabled || !inputGeometries || inputGeometries.length === 0 || bufferDistance === 0) {
       // Clear buffer if disabled or no valid input
       setBufferedGeometry(null)
+      // r025.057: Clear stored buffer graphic so selection-restoration-manager
+      // doesn't restore a stale buffer on widget close/reopen
+      graphicsStateManager.deleteLastBufferGraphic(widgetId)
       if (bufferLayerRef.current) {
         const hadGraphics = bufferLayerRef.current.graphics?.length > 0
         bufferLayerRef.current.removeAll()

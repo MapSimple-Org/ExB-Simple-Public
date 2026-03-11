@@ -1369,9 +1369,7 @@ export function QueryTaskForm (props: QueryTaskItemProps) {
           <Button ref={applyButtonRef} color='primary' className='ml-auto' disabled={!datasourceReady || !isInputValid} onClick={applyQuery}>
             {getI18nMessage('apply')}
           </Button>
-          {(showClauseNumber.current > 0 || showSpatialFilter) && (
-            <Button className='ml-2' onClick={resetQuery}>{getI18nMessage('reset')}</Button>
-          )}
+          <Button className='ml-2' disabled={attributeFilterSqlExprObj === sqlExprObj && !showSpatialFilter} onClick={resetQuery}>{getI18nMessage('reset')}</Button>
         </div>
       </div>
     </QueryTaskContext.Provider>

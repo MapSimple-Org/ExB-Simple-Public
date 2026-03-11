@@ -141,6 +141,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- **Buffer preview ghost on widget close/reopen** (r025.057): After a successful spatial
+  query, closing and reopening the widget would show the old buffer preview graphic until
+  switching tabs. Root cause: `useBufferPreview` stored the graphic in `GraphicsStateManager`
+  for panel close/reopen restoration but never cleared it when the buffer was legitimately
+  removed (distance reset to 0 after query success). `selection-restoration-manager` then
+  restored the stale graphic on widget reopen. Fixed by calling
+  `graphicsStateManager.deleteLastBufferGraphic()` when buffer is cleared and on unmount
 - **Multi-point draw only uses first point** (r025.051): Drawing multiple points without
   buffer only used the first point for the spatial query. Root cause: Draw mode bypassed
   the group-by-type union step, so `inputGeometry` memo picked only the first geometry.
@@ -200,6 +207,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   QueryTabContent's Add/Remove merge logic consolidated from ~360 duplicated inline lines
   into single `handleResultsModeChange` callback (~100 lines). Removed `Button` import
   from QueryTabContent (no longer needed). ⚠️ Lightly tested — needs full regression testing
+- **Button consistency across tabs** (r025.056): Renamed execute button from "Search" to
+  "Apply" on both tabs (i18n key `apply`). Added Reset button to Spatial tab (clears buffer,
+  drawn geometries, relationship, and target layers). Both tabs now show Reset always visible
+  but disabled when nothing is dirty — Query tab uses `attributeFilterSqlExprObj === sqlExprObj`
+  pristine check, Spatial tab checks buffer/drawn/relationship/layers state
 
 ### Removed
 

@@ -851,55 +851,73 @@ export function SpatialTabContent (props: SpatialTabContentProps) {
           </div>
         )}
 
-        {/* 7. Execute Button (r025.029) */}
-        <Button
-          id='spatial-execute-btn'
-          type='primary'
-          css={css`flex-shrink: 0;`}
-          disabled={!canExecute || isExecuting}
-          onClick={async () => {
-            if (!canExecute || !inputGeometry || !selectedRelationship || !onExecuteSpatialQuery) return
+        {/* 7. Execute + Reset Buttons (r025.029, r025.056) */}
+        <div className='d-flex align-items-center' css={css`gap: 8px; flex-shrink: 0;`}>
+          <Button
+            id='spatial-execute-btn'
+            type='primary'
+            disabled={!canExecute || isExecuting}
+            onClick={async () => {
+              if (!canExecute || !inputGeometry || !selectedRelationship || !onExecuteSpatialQuery) return
 
-            setIsExecuting(true)
-            // Dismiss any previous alerts
-            if (onDismissQueryErrorAlert) onDismissQueryErrorAlert()
-            if (onDismissNoResultsAlert) onDismissNoResultsAlert()
+              setIsExecuting(true)
+              // Dismiss any previous alerts
+              if (onDismissQueryErrorAlert) onDismissQueryErrorAlert()
+              if (onDismissNoResultsAlert) onDismissNoResultsAlert()
 
-            try {
-              // When buffer is active, use the client-side buffered geometry directly
-              // so spatial relationships (within, crosses, etc.) evaluate against the
-              // actual buffered shape instead of relying on server-side query.distance
-              const parsedBuffer = parseFloat(bufferDistance) || 0
-              const useBufferedGeometry = parsedBuffer > 0 && bufferedGeometry
-              const queryFoundResults = await onExecuteSpatialQuery({
-                inputGeometry: useBufferedGeometry ? bufferedGeometry : inputGeometry,
-                selectedRelationship,
-                selectedLayers,
-                bufferDistance: useBufferedGeometry ? 0 : parsedBuffer,
-                bufferUnit,
-                resultsMode
-              })
-              // Only reset buffer/draw when results were found — preserve on zero results so user can adjust
-              if (queryFoundResults) {
-                setBufferDistance('')
-                // Clear drawn features from map (same cleanup pattern as buffer)
-                if (spatialMode === 'draw') {
-                  setDrawnGeometries([])
-                  if (getDrawLayerRef.current) {
-                    const drawLayer = getDrawLayerRef.current() as __esri.GraphicsLayer
-                    drawLayer?.removeAll()
+              try {
+                // When buffer is active, use the client-side buffered geometry directly
+                // so spatial relationships (within, crosses, etc.) evaluate against the
+                // actual buffered shape instead of relying on server-side query.distance
+                const parsedBuffer = parseFloat(bufferDistance) || 0
+                const useBufferedGeometry = parsedBuffer > 0 && bufferedGeometry
+                const queryFoundResults = await onExecuteSpatialQuery({
+                  inputGeometry: useBufferedGeometry ? bufferedGeometry : inputGeometry,
+                  selectedRelationship,
+                  selectedLayers,
+                  bufferDistance: useBufferedGeometry ? 0 : parsedBuffer,
+                  bufferUnit,
+                  resultsMode
+                })
+                // Only reset buffer/draw when results were found — preserve on zero results so user can adjust
+                if (queryFoundResults) {
+                  setBufferDistance('')
+                  // Clear drawn features from map (same cleanup pattern as buffer)
+                  if (spatialMode === 'draw') {
+                    setDrawnGeometries([])
+                    if (getDrawLayerRef.current) {
+                      const drawLayer = getDrawLayerRef.current() as __esri.GraphicsLayer
+                      drawLayer?.removeAll()
+                    }
                   }
                 }
+              } catch {
+                // Error already handled via SET_QUERY_ERROR_ALERT dispatch — buffer preserved
+              } finally {
+                setIsExecuting(false)
               }
-            } catch {
-              // Error already handled via SET_QUERY_ERROR_ALERT dispatch — buffer preserved
-            } finally {
-              setIsExecuting(false)
-            }
-          }}
-        >
-          {isExecuting ? 'Running...' : 'Run spatial query'}
-        </Button>
+            }}
+          >
+            {isExecuting ? 'Running...' : getI18nMessage('apply')}
+          </Button>
+          <Button
+            disabled={bufferDistance === '' && drawnGeometries.length === 0 && selectedRelationship === null && selectedLayers.length === 0}
+            onClick={() => {
+              setBufferDistance('')
+              setSelectedRelationship(null)
+              setSelectedLayers([])
+              setDrawnGeometries([])
+              if (getDrawLayerRef.current) {
+                const drawLayer = getDrawLayerRef.current() as __esri.GraphicsLayer
+                drawLayer?.removeAll()
+              }
+              if (onDismissQueryErrorAlert) onDismissQueryErrorAlert()
+              if (onDismissNoResultsAlert) onDismissNoResultsAlert()
+            }}
+          >
+            {getI18nMessage('reset')}
+          </Button>
+        </div>
 
         {/* r025.031: Calcite popover for spatial query errors — same pattern as Query tab */}
         {queryErrorAlert?.show && (

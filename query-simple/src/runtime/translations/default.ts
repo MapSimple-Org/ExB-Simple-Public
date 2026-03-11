@@ -2,7 +2,7 @@ export default {
   _widgetLabel: 'QuerySimple',
   reset: 'Reset',
   searchLayer: 'Search layer',
-  apply: 'Search',
+  apply: 'Apply',
   noDataAvailable: 'Error in loading data',
   noQueryItem: 'No query',
   newQueryHint: 'Add content by clicking the "{label}" button on the configuration panel',
