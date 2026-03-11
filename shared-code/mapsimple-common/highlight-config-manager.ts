@@ -146,6 +146,24 @@ class HighlightConfigManager {
   }
 
   /**
+   * r025.051: Get draw symbol color for Spatial tab (with fallback)
+   */
+  public getDrawColor(widgetId: string): [number, number, number] {
+    const config = this.configCache.get(widgetId)
+    const hex = config?.drawColor || '#32FF00' // Lime green default
+    return this.hexToRgb(hex)
+  }
+
+  /**
+   * r025.051: Get buffer preview color for Spatial tab (with fallback)
+   */
+  public getBufferColor(widgetId: string): [number, number, number] {
+    const config = this.configCache.get(widgetId)
+    const hex = config?.bufferColor || '#FFA500' // Orange default
+    return this.hexToRgb(hex)
+  }
+
+  /**
    * Convert hex color to RGB array
    * @private
    */

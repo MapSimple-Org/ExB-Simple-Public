@@ -29,6 +29,7 @@
  * - TODO.md: Section 2b - Tab extraction
  * 
  * @version r022.0 - Initial extraction
+ * @version r025.008 - Swap to shared ResultsModeControl component
  */
 /** @jsx jsx */
 import {
@@ -45,11 +46,11 @@ import {
   type FeatureDataRecord,
   hooks
 } from 'jimu-core'
-import { Button } from 'jimu-ui'
 import { type QueryItemType, type SpatialFilterObj, SelectionType } from '../../config'
 import { QueryTaskForm } from '../query-task-form'
 import { DataSourceTip, createQuerySimpleDebugLogger } from 'widgets/shared-code/mapsimple-common'
 import { mergeResultsIntoAccumulated } from '../results-management-utils'
+import { ResultsModeControl, type ResultsModeValue } from '../components/ResultsModeControl'
 import defaultMessage from '../translations/default'
 
 const debugLogger = createQuerySimpleDebugLogger()
@@ -159,7 +160,149 @@ export function QueryTabContent(props: QueryTabContentProps) {
   } = props
   
   const getI18nMessage = hooks.useTranslation(defaultMessage)
-  
+
+  // ─── Results Mode mapping (r025.008) ──────────────────────────────
+  // Map between shared component's ResultsModeValue and config's SelectionType
+  const SELECTION_MAP: Record<ResultsModeValue, SelectionType> = React.useMemo(() => ({
+    new: SelectionType.NewSelection,
+    add: SelectionType.AddToSelection,
+    remove: SelectionType.RemoveFromSelection
+  }), [])
+
+  const VALUE_MAP: Record<string, ResultsModeValue> = React.useMemo(() => ({
+    [SelectionType.NewSelection]: 'new',
+    [SelectionType.AddToSelection]: 'add',
+    [SelectionType.RemoveFromSelection]: 'remove'
+  }), [])
+
+  // ─── Results Mode change handler ─────────────────────────────────
+  // Consolidates Add/Remove merge logic (previously duplicated inline in each button).
+  // When switching FROM New TO Add/Remove, captures current results into accumulated records
+  // before changing mode.
+  //
+  // SOURCE OF TRUTH ARCHITECTURE (r018.65):
+  // - accumulatedRecords is the SINGLE SOURCE OF TRUTH when switching from NEW mode
+  //   It reflects removals and is always up-to-date (r018.97, r021.110)
+  // - outputDS.getSelectedRecords() can be stale after removals in NEW mode
+  // - effectiveRecords is a fallback to original query results (also stale after removals)
+  const handleResultsModeChange = React.useCallback((mode: ResultsModeValue) => {
+    const newMode = SELECTION_MAP[mode]
+    const previousMode = resultsMode || SelectionType.NewSelection
+
+    debugLogger.log('RESULTS-MODE', {
+      event: 'button-mode-changed',
+      widgetId,
+      queryItemConfigId: queryItem.configId,
+      previousMode,
+      newMode,
+      accumulatedRecordsCount: accumulatedRecords?.length || 0,
+      timestamp: new Date().toISOString()
+    })
+
+    // When switching FROM New TO Add/Remove, merge current results into accumulated
+    if (mode !== 'new' && previousMode === SelectionType.NewSelection) {
+      const outputDSSelectedRecords = outputDS?.getSelectedRecords() as FeatureDataRecord[] || []
+
+      debugLogger.log('RESULTS-MODE', {
+        event: 'mode-switch-debug-before-capture',
+        widgetId,
+        previousMode,
+        newMode,
+        effectiveRecordsCount: effectiveRecords?.length || 0,
+        outputDSSelectedCount: outputDSSelectedRecords.length,
+        accumulatedRecordsCount: accumulatedRecords?.length || 0,
+        outputDSId: outputDS?.id,
+        timestamp: Date.now()
+      })
+
+      // FIX (r021.112): Priority order for capturing records on mode switch FROM NEW mode:
+      // 1. accumulatedRecords - reflects removals, always up-to-date
+      // 2. outputDS.getSelectedRecords() - can be stale after removals
+      // 3. effectiveRecords - fallback to original query results
+      const recordsToCapture = (accumulatedRecords && accumulatedRecords.length > 0)
+        ? accumulatedRecords
+        : (outputDSSelectedRecords.length > 0
+            ? outputDSSelectedRecords
+            : (effectiveRecords && effectiveRecords.length > 0
+                ? (effectiveRecords as FeatureDataRecord[])
+                : []))
+
+      const captureSource = (accumulatedRecords && accumulatedRecords.length > 0)
+        ? 'accumulatedRecords'
+        : (outputDSSelectedRecords.length > 0
+            ? 'outputDS.getSelectedRecords()'
+            : (effectiveRecords && effectiveRecords.length > 0 ? 'effectiveRecords' : 'none'))
+
+      debugLogger.log('RESULTS-MODE', {
+        event: 'mode-switch-debug-after-capture',
+        widgetId,
+        recordsToCaptureCount: recordsToCapture.length,
+        source: captureSource,
+        note: 'r021.112: accumulatedRecords is single source of truth when switching from NEW mode',
+        timestamp: Date.now()
+      })
+
+      if (recordsToCapture.length > 0 && outputDS && onAccumulatedRecordsChange) {
+        const existingAccumulated = accumulatedRecords || []
+
+        // r021.87: Merge function reads __queryConfigId from record attributes
+        const mergeResult = mergeResultsIntoAccumulated(
+          outputDS as FeatureLayerDataSource,
+          recordsToCapture,
+          existingAccumulated,
+          queryItems
+        )
+
+        debugLogger.log('RESULTS-MODE', {
+          event: 'capturing-current-results-on-mode-switch',
+          widgetId,
+          previousMode,
+          newMode,
+          capturedRecordsCount: recordsToCapture.length,
+          existingAccumulatedCount: existingAccumulated.length,
+          mergedRecordsCount: mergeResult.mergedRecords.length,
+          addedIds: mergeResult.addedRecordIds,
+          duplicatesFiltered: mergeResult.duplicateRecordIds.length,
+          sourceUsed: captureSource,
+          note: 'r021.111: accumulatedRecords prioritized over effectiveRecords to capture removed-record state'
+        })
+
+        // r023.17: Only stamp queryConfigId on records that don't already have one.
+        // Preserves existing queryConfigId from prior queries to avoid corrupting popup template lookup.
+        // r023.30: Also stamp originDSId for cross-layer removal support
+        const originDSId = outputDS?.getOriginDataSources()?.[0]?.id || outputDS?.id
+        recordsToCapture.forEach(record => {
+          const recordId = record.getId()
+          if (mergeResult.addedRecordIds.includes(recordId) && record.feature?.attributes) {
+            if (!record.feature.attributes.__queryConfigId) {
+              record.feature.attributes.__queryConfigId = queryItem.configId
+            }
+            if (!record.feature.attributes.__originDSId && originDSId) {
+              record.feature.attributes.__originDSId = originDSId
+            }
+          }
+        })
+
+        onAccumulatedRecordsChange(mergeResult.mergedRecords)
+      } else {
+        debugLogger.log('RESULTS-MODE', {
+          event: 'mode-switch-merge-skipped',
+          widgetId,
+          reason: 'conditions-not-met',
+          hasRecords: recordsToCapture.length > 0,
+          hasOutputDS: !!outputDS,
+          hasCallback: !!onAccumulatedRecordsChange,
+          timestamp: Date.now()
+        })
+      }
+    }
+
+    if (onResultsModeChange) {
+      onResultsModeChange(newMode)
+    }
+  }, [resultsMode, accumulatedRecords, effectiveRecords, outputDS, onAccumulatedRecordsChange,
+      onResultsModeChange, widgetId, queryItem.configId, queryItems, SELECTION_MAP])
+
   return (
     <div css={css`
       position: relative;
@@ -168,581 +311,32 @@ export function QueryTabContent(props: QueryTabContentProps) {
       flex: 1;
       min-height: 0;
     `}>
-      {/* Results Mode Button Group - Always show, regardless of query count */}
+      {/* Results Mode — shared component (r025.008) */}
       <div css={css`
         padding: 8px 16px;
         flex-shrink: 0;
       `}>
-        <div className="d-flex align-items-center" css={css`
-          gap: 0.5rem;
-          flex-wrap: nowrap;
-        `}>
-          {/* Results label */}
-          <div className="title2" css={css`
-            font-size: 0.875rem;
-            font-weight: 500;
-            color: var(--sys-color-text-primary);
-            white-space: nowrap;
-            flex-shrink: 0;
-          `}>
-            {getI18nMessage('resultsModeLabel')}
-          </div>
-          
-          {/* Mode buttons - segmented control */}
-          <div 
-            role="radiogroup"
-            aria-label={getI18nMessage('resultsMode')}
-            css={css`
-              display: flex;
-              align-items: stretch;
-              flex: 1;
-              min-width: 0;
-              background: #f1f5f9;
-              border: 1px solid #e2e8f0;
-              border-radius: 4px;
-              padding: 2px;
-              gap: 2px;
-            `}
-          >
-            <Button
-              size="sm"
-              onClick={() => {
-                const newMode = SelectionType.NewSelection
-                debugLogger.log('RESULTS-MODE', {
-                  event: 'button-mode-changed',
-                  widgetId,
-                  queryItemConfigId: queryItem.configId,
-                  previousMode: resultsMode || SelectionType.NewSelection,
-                  newMode,
-                  timestamp: new Date().toISOString()
-                })
-                if (onResultsModeChange) {
-                  onResultsModeChange(newMode)
-                }
-              }}
-              aria-pressed={resultsMode === SelectionType.NewSelection}
-              aria-label={`${getI18nMessage('createNewResults')}: ${getI18nMessage('resultsModeDesc').split('\n')[1]?.trim() || ''}`}
-              title={getI18nMessage('createNewResults')}
-              css={css`
-                flex: 1;
-                font-size: 0.8125rem;
-                font-weight: 600;
-                padding: 2px 10px;
-                min-height: 26px;
-                white-space: nowrap;
-                overflow: hidden;
-                display: inline-flex !important;
-                align-items: center;
-                justify-content: center;
-                gap: 3px;
-                border: none !important;
-                border-radius: 3px !important;
-                background: ${resultsMode === SelectionType.NewSelection
-                  ? '#3b82f6' 
-                  : 'transparent'} !important;
-                color: ${resultsMode === SelectionType.NewSelection 
-                  ? '#fff' 
-                  : '#64748b'} !important;
-                box-shadow: ${resultsMode === SelectionType.NewSelection
-                  ? '0 1px 2px rgba(0,0,0,0.1)'
-                  : 'none'} !important;
-                transition: all 0.15s ease;
-                cursor: pointer;
-                &:hover {
-                  background: ${resultsMode === SelectionType.NewSelection 
-                    ? '#2563eb' 
-                    : '#e2e8f0'} !important;
-                }
-              `}
-            >
-              <span css={css`font-size: 0.6rem;`}>★</span>
-              {getI18nMessage('resultsModeNew')}
-            </Button>
-            <Button
-              size="sm"
-              onClick={() => {
-                const newMode = SelectionType.AddToSelection
-                const previousMode = resultsMode || SelectionType.NewSelection
-                
-                debugLogger.log('RESULTS-MODE', {
-                  event: 'button-mode-changed',
-                  widgetId,
-                  queryItemConfigId: queryItem.configId,
-                  previousMode,
-                  newMode,
-                  timestamp: new Date().toISOString()
-                })
-                
-                // If switching FROM "New" TO "Add to" mode and we have current results,
-                // merge them with existing accumulated records before changing mode
-                //
-                // SOURCE OF TRUTH ARCHITECTURE (r018.65):
-                // - outputDS.getSelectedRecords() is the SINGLE SOURCE OF TRUTH for current selection
-                //   It correctly filters out removed records and stays in sync with user actions
-                // - effectiveRecords (from recordsRef.current) contains stale query results that may
-                //   include removed records, so it should only be used as a fallback when outputDS
-                //   has no selection (e.g., during query execution before selection is applied)
-                // - This ensures removed records are never accidentally included in accumulatedRecords
-                
-                // DEBUG: Log state before capture to verify assumptions
-                const effectiveRecordsCount = effectiveRecords?.length || 0
-                const outputDSSelectedRecords = outputDS?.getSelectedRecords() as FeatureDataRecord[] || []
-                const outputDSSelectedCount = outputDSSelectedRecords.length
-                const accumulatedRecordsCount = accumulatedRecords?.length || 0
-                
-                debugLogger.log('RESULTS-MODE', {
-                  event: 'mode-switch-debug-before-capture',
-                  widgetId,
-                  previousMode,
-                  newMode,
-                  effectiveRecordsCount,
-                  outputDSSelectedCount,
-                  accumulatedRecordsCount,
-                  outputDSId: outputDS?.id,
-                  hasEffectiveRecords: effectiveRecords && effectiveRecords.length > 0,
-                  hasOutputDSSelected: outputDSSelectedRecords.length > 0,
-                  timestamp: Date.now()
-                })
-                
-                // FIX (r021.112): Priority order for capturing records on mode switch FROM NEW mode:
-                // 1. accumulatedRecords - SINGLE SOURCE OF TRUTH when switching from NEW mode
-                //    It reflects removals and is always up-to-date (r018.97, r021.110)
-                // 2. outputDS.getSelectedRecords() - can be stale after removals in NEW mode
-                // 3. effectiveRecords - fallback to original query results (also stale after removals)
-                // BUG FIX: outputDS.getSelectedRecords() can return stale data (121 records) when
-                // records have been removed in NEW mode. accumulatedRecords is the source of truth.
-                const recordsToCapture = (accumulatedRecords && accumulatedRecords.length > 0)
-                  ? accumulatedRecords
-                  : (outputDSSelectedRecords.length > 0
-                      ? outputDSSelectedRecords
-                      : (effectiveRecords && effectiveRecords.length > 0 
-                          ? (effectiveRecords as FeatureDataRecord[])
-                          : []))
-                
-                // DEBUG: Log which source was used
-                debugLogger.log('RESULTS-MODE', {
-                  event: 'mode-switch-debug-after-capture',
-                  widgetId,
-                  recordsToCaptureCount: recordsToCapture.length,
-                  source: (accumulatedRecords && accumulatedRecords.length > 0)
-                    ? 'accumulatedRecords' 
-                    : (outputDSSelectedRecords.length > 0 
-                        ? 'outputDS.getSelectedRecords()' 
-                        : (effectiveRecords && effectiveRecords.length > 0 ? 'effectiveRecords' : 'none')),
-                  effectiveRecordsCount,
-                  outputDSSelectedCount,
-                  accumulatedRecordsCount,
-                  note: 'r021.112: accumulatedRecords is single source of truth when switching from NEW mode',
-                  timestamp: Date.now()
-                })
-
-                // DIAGNOSTIC: Check each condition individually (r018.78)
-                const conditionCheck = {
-                  previousModeIsNew: previousMode === SelectionType.NewSelection,
-                  newModeIsAdd: newMode === SelectionType.AddToSelection,
-                  hasRecordsToCapture: recordsToCapture.length > 0,
-                  hasOutputDS: !!outputDS,
-                  hasOnAccumulatedRecordsChange: !!onAccumulatedRecordsChange,
-                  previousMode: previousMode,
-                  newMode: newMode,
-                  recordsToCaptureLength: recordsToCapture.length
-                }
-                
-                debugLogger.log('RESULTS-MODE', {
-                  event: 'mode-switch-condition-check',
-                  widgetId,
-                  conditions: conditionCheck,
-                  allConditionsMet: conditionCheck.previousModeIsNew && 
-                                  conditionCheck.newModeIsAdd && 
-                                  conditionCheck.hasRecordsToCapture && 
-                                  conditionCheck.hasOutputDS && 
-                                  conditionCheck.hasOnAccumulatedRecordsChange,
-                  timestamp: Date.now()
-                })
-
-                if (previousMode === SelectionType.NewSelection && 
-                    newMode === SelectionType.AddToSelection &&
-                    recordsToCapture.length > 0 &&
-                    outputDS &&
-                    onAccumulatedRecordsChange) {
-                  const existingAccumulated = accumulatedRecords || []
-                  
-                  // r021.87: Merge function reads __queryConfigId from record attributes
-                  const mergeResult = mergeResultsIntoAccumulated(
-                    outputDS as FeatureLayerDataSource,
-                    recordsToCapture,
-                    existingAccumulated,
-                    queryItems
-                  )
-                  
-                  const mergedRecords = mergeResult.mergedRecords
-                  const addedIds = mergeResult.addedRecordIds
-                  const duplicateIds = mergeResult.duplicateRecordIds
-                  
-                  const existingIds = existingAccumulated.map(r => r.getId())
-                  const capturedIds = recordsToCapture.map(r => r.getId())
-                  const mergedIds = mergedRecords.map(r => r.getId())
-                  
-                  debugLogger.log('RESULTS-MODE', {
-                    event: 'capturing-current-results-on-mode-switch',
-                    widgetId,
-                    previousMode,
-                    newMode,
-                    capturedRecordsCount: recordsToCapture.length,
-                    capturedIds: capturedIds,
-                    effectiveRecordsCount,
-                    outputDSSelectedCount,
-                    existingAccumulatedCount: existingAccumulated.length,
-                    existingIds: existingIds,
-                    mergedRecordsCount: mergedRecords.length,
-                    mergedIds: mergedIds,
-                    addedIds: addedIds,
-                    duplicateIds: duplicateIds,
-                    duplicatesFiltered: duplicateIds.length,
-                    sourceUsed: outputDSSelectedRecords.length > 0 
-                      ? 'outputDS.getSelectedRecords()' 
-                      : (accumulatedRecords && accumulatedRecords.length > 0 
-                          ? 'accumulatedRecords' 
-                          : (effectiveRecords && effectiveRecords.length > 0 ? 'effectiveRecords' : 'none')),
-                    note: 'r021.111: accumulatedRecords prioritized over effectiveRecords to capture removed-record state'
-                  })
-                  
-                  // r023.17: Only stamp queryConfigId on records that don't already have one.
-                  // Previously this stamped ALL added records with queryItem.configId (the CURRENT
-                  // query dropdown). When switching from New to Add after changing the query dropdown,
-                  // records from a prior query (e.g. parcel) got stamped with the new query's configId
-                  // (e.g. park), corrupting their popup template lookup.
-                  // r023.30: Also stamp originDSId for cross-layer removal support
-                  const originDSIdForCapture = outputDS?.getOriginDataSources()?.[0]?.id || outputDS?.id
-                  recordsToCapture.forEach(record => {
-                    const recordId = record.getId()
-                    if (addedIds.includes(recordId) && record.feature?.attributes) {
-                      if (!record.feature.attributes.__queryConfigId) {
-                        record.feature.attributes.__queryConfigId = queryItem.configId
-                      }
-                      if (!record.feature.attributes.__originDSId && originDSIdForCapture) {
-                        record.feature.attributes.__originDSId = originDSIdForCapture
-                      }
-                    }
-                  })
-                  
-                  onAccumulatedRecordsChange(mergedRecords)
-                } else {
-                  debugLogger.log('RESULTS-MODE', {
-                    event: 'mode-switch-merge-skipped',
-                    widgetId,
-                    reason: 'condition-check-failed',
-                    conditions: conditionCheck,
-                    timestamp: Date.now()
-                  })
-                }
-                
-                if (onResultsModeChange) {
-                  onResultsModeChange(newMode)
-                }
-              }}
-              aria-pressed={resultsMode === SelectionType.AddToSelection}
-              aria-label={`${getI18nMessage('addToCurrentResults')}: ${getI18nMessage('resultsModeDesc').split('\n')[2]?.trim() || ''}`}
-              title={getI18nMessage('addToCurrentResults')}
-              css={css`
-                flex: 1;
-                font-size: 0.8125rem;
-                font-weight: 600;
-                padding: 2px 10px;
-                min-height: 26px;
-                white-space: nowrap;
-                overflow: hidden;
-                display: inline-flex !important;
-                align-items: center;
-                justify-content: center;
-                gap: 3px;
-                border: none !important;
-                border-radius: 3px !important;
-                background: ${resultsMode === SelectionType.AddToSelection
-                  ? '#059669' 
-                  : 'transparent'} !important;
-                color: ${resultsMode === SelectionType.AddToSelection 
-                  ? '#fff' 
-                  : '#64748b'} !important;
-                box-shadow: ${resultsMode === SelectionType.AddToSelection
-                  ? '0 1px 2px rgba(0,0,0,0.1)'
-                  : 'none'} !important;
-                transition: all 0.15s ease;
-                cursor: pointer;
-                &:hover {
-                  background: ${resultsMode === SelectionType.AddToSelection 
-                    ? '#047857' 
-                    : '#e2e8f0'} !important;
-                }
-              `}
-            >
-              <span css={css`font-size: 0.7rem;`}>+</span>
-              {getI18nMessage('resultsModeAdd')}
-            </Button>
-            <Button
-              size="sm"
-              disabled={!accumulatedRecords || accumulatedRecords.length === 0}
-              onClick={() => {
-                const newMode = SelectionType.RemoveFromSelection
-                const previousMode = resultsMode || SelectionType.NewSelection
-                
-                debugLogger.log('RESULTS-MODE', {
-                  event: 'button-mode-changed',
-                  widgetId,
-                  queryItemConfigId: queryItem.configId,
-                  previousMode,
-                  newMode,
-                  accumulatedRecordsCount: accumulatedRecords?.length || 0,
-                  timestamp: new Date().toISOString()
-                })
-                
-                // If switching FROM "New" TO "Remove from" mode and we have current results,
-                // merge them with existing accumulated records before changing mode
-                // (same pattern as "Add to" mode)
-                //
-                // SOURCE OF TRUTH ARCHITECTURE (r018.65):
-                // - outputDS.getSelectedRecords() is the SINGLE SOURCE OF TRUTH for current selection
-                //   It correctly filters out removed records and stays in sync with user actions
-                // - effectiveRecords (from recordsRef.current) contains stale query results that may
-                //   include removed records, so it should only be used as a fallback when outputDS
-                //   has no selection (e.g., during query execution before selection is applied)
-                // - This ensures removed records are never accidentally included in accumulatedRecords
-                
-                // DEBUG: Log state before capture to verify assumptions
-                const effectiveRecordsCountForRemove = effectiveRecords?.length || 0
-                const outputDSSelectedRecordsForRemove = outputDS?.getSelectedRecords() as FeatureDataRecord[] || []
-                const outputDSSelectedCountForRemove = outputDSSelectedRecordsForRemove.length
-                const accumulatedRecordsCountForRemove = accumulatedRecords?.length || 0
-                
-                debugLogger.log('RESULTS-MODE', {
-                  event: 'mode-switch-debug-before-capture-remove',
-                  widgetId,
-                  previousMode,
-                  newMode,
-                  effectiveRecordsCount: effectiveRecordsCountForRemove,
-                  outputDSSelectedCount: outputDSSelectedCountForRemove,
-                  accumulatedRecordsCount: accumulatedRecordsCountForRemove,
-                  outputDSId: outputDS?.id,
-                  hasEffectiveRecords: effectiveRecords && effectiveRecords.length > 0,
-                  hasOutputDSSelected: outputDSSelectedRecordsForRemove.length > 0,
-                  timestamp: Date.now()
-                })
-                
-                // FIX (r021.112): Priority order for capturing records on mode switch FROM NEW mode:
-                // 1. accumulatedRecords - SINGLE SOURCE OF TRUTH when switching from NEW mode
-                //    It reflects removals and is always up-to-date (r018.97, r021.110)
-                // 2. outputDS.getSelectedRecords() - can be stale after removals in NEW mode
-                // 3. effectiveRecords - fallback to original query results (also stale after removals)
-                // BUG FIX: outputDS.getSelectedRecords() can return stale data when records have been
-                // removed in NEW mode. accumulatedRecords is the source of truth.
-                const recordsToCaptureForRemove = (accumulatedRecords && accumulatedRecords.length > 0)
-                  ? accumulatedRecords
-                  : (outputDSSelectedRecordsForRemove.length > 0
-                      ? outputDSSelectedRecordsForRemove
-                      : (effectiveRecords && effectiveRecords.length > 0 
-                          ? (effectiveRecords as FeatureDataRecord[])
-                          : []))
-                
-                // DEBUG: Log which source was used
-                debugLogger.log('RESULTS-MODE', {
-                  event: 'mode-switch-debug-after-capture-remove',
-                  widgetId,
-                  recordsToCaptureCount: recordsToCaptureForRemove.length,
-                  source: (accumulatedRecords && accumulatedRecords.length > 0)
-                    ? 'accumulatedRecords' 
-                    : (outputDSSelectedRecordsForRemove.length > 0 
-                        ? 'outputDS.getSelectedRecords()' 
-                        : (effectiveRecords && effectiveRecords.length > 0 ? 'effectiveRecords' : 'none')),
-                  effectiveRecordsCount: effectiveRecordsCountForRemove,
-                  outputDSSelectedCount: outputDSSelectedCountForRemove,
-                  accumulatedRecordsCount: accumulatedRecordsCountForRemove,
-                  note: 'r021.112: accumulatedRecords is single source of truth when switching from NEW mode',
-                  timestamp: Date.now()
-                })
-
-                // DIAGNOSTIC: Check each condition individually (r018.78)
-                const conditionCheckRemove = {
-                  previousModeIsNew: previousMode === SelectionType.NewSelection,
-                  newModeIsRemove: newMode === SelectionType.RemoveFromSelection,
-                  hasRecordsToCapture: recordsToCaptureForRemove.length > 0,
-                  hasOutputDS: !!outputDS,
-                  hasOnAccumulatedRecordsChange: !!onAccumulatedRecordsChange,
-                  previousMode: previousMode,
-                  newMode: newMode,
-                  recordsToCaptureLength: recordsToCaptureForRemove.length
-                }
-                
-                debugLogger.log('RESULTS-MODE', {
-                  event: 'mode-switch-condition-check-remove',
-                  widgetId,
-                  conditions: conditionCheckRemove,
-                  allConditionsMet: conditionCheckRemove.previousModeIsNew && 
-                                  conditionCheckRemove.newModeIsRemove && 
-                                  conditionCheckRemove.hasRecordsToCapture && 
-                                  conditionCheckRemove.hasOutputDS && 
-                                  conditionCheckRemove.hasOnAccumulatedRecordsChange,
-                  timestamp: Date.now()
-                })
-
-                if (previousMode === SelectionType.NewSelection && 
-                    newMode === SelectionType.RemoveFromSelection &&
-                    recordsToCaptureForRemove.length > 0 &&
-                    outputDS &&
-                    onAccumulatedRecordsChange) {
-                  const existingAccumulated = accumulatedRecords || []
-                  
-                  // r021.87: Merge function reads __queryConfigId from record attributes
-                  const mergeResult = mergeResultsIntoAccumulated(
-                    outputDS as FeatureLayerDataSource,
-                    recordsToCaptureForRemove,
-                    existingAccumulated,
-                    queryItems
-                  )
-                  
-                  const mergedRecords = mergeResult.mergedRecords
-                  
-                  debugLogger.log('RESULTS-MODE', {
-                    event: 'capturing-current-results-on-mode-switch-to-remove',
-                    widgetId,
-                    previousMode,
-                    newMode,
-                    capturedRecordsCount: recordsToCaptureForRemove.length,
-                    effectiveRecordsCount: effectiveRecordsCountForRemove,
-                    outputDSSelectedCount: outputDSSelectedCountForRemove,
-                    existingAccumulatedCount: existingAccumulated.length,
-                    mergedRecordsCount: mergedRecords.length,
-                    sourceUsed: (accumulatedRecords && accumulatedRecords.length > 0)
-                      ? 'accumulatedRecords' 
-                      : (outputDSSelectedRecordsForRemove.length > 0 
-                          ? 'outputDS.getSelectedRecords()' 
-                          : (effectiveRecords && effectiveRecords.length > 0 ? 'effectiveRecords' : 'none')),
-                    note: 'r021.112: accumulatedRecords is single source of truth when switching from NEW mode (reflects removals)'
-                  })
-                  
-                  // r023.17: Only stamp queryConfigId on records that don't already have one.
-                  // Same fix as Add mode - preserves existing queryConfigId from prior queries.
-                  // r023.30: Also stamp originDSId for cross-layer removal support
-                  const addedIdsFromMerge = mergeResult.addedRecordIds
-                  const originDSIdForRemoveCapture = outputDS?.getOriginDataSources()?.[0]?.id || outputDS?.id
-                  recordsToCaptureForRemove.forEach(record => {
-                    const recordId = record.getId()
-                    if (addedIdsFromMerge.includes(recordId) && record.feature?.attributes) {
-                      if (!record.feature.attributes.__queryConfigId) {
-                        record.feature.attributes.__queryConfigId = queryItem.configId
-                      }
-                      if (!record.feature.attributes.__originDSId && originDSIdForRemoveCapture) {
-                        record.feature.attributes.__originDSId = originDSIdForRemoveCapture
-                      }
-                    }
-                  })
-                  
-                  onAccumulatedRecordsChange(mergedRecords)
-                } else {
-                  debugLogger.log('RESULTS-MODE', {
-                    event: 'mode-switch-merge-skipped-remove',
-                    widgetId,
-                    reason: 'condition-check-failed',
-                    conditions: conditionCheckRemove,
-                    timestamp: Date.now()
-                  })
-                }
-                
-                if (onResultsModeChange) {
-                  onResultsModeChange(newMode)
-                }
-              }}
-              aria-pressed={resultsMode === SelectionType.RemoveFromSelection}
-              aria-label={`${getI18nMessage('removeFromCurrentResults')}: ${getI18nMessage('resultsModeDesc').split('\n')[3]?.trim() || ''}`}
-              title={(!accumulatedRecords || accumulatedRecords.length === 0) 
-                ? getI18nMessage('resultsModeDisabledRemove')
-                : getI18nMessage('removeFromCurrentResults')}
-              css={css`
-                flex: 1;
-                font-size: 0.8125rem;
-                font-weight: 600;
-                padding: 2px 10px;
-                min-height: 26px;
-                white-space: nowrap;
-                overflow: hidden;
-                display: inline-flex !important;
-                align-items: center;
-                justify-content: center;
-                gap: 3px;
-                border: none !important;
-                border-radius: 3px !important;
-                background: ${resultsMode === SelectionType.RemoveFromSelection
-                  ? '#be123c' 
-                  : 'transparent'} !important;
-                color: ${resultsMode === SelectionType.RemoveFromSelection 
-                  ? '#fff' 
-                  : '#64748b'} !important;
-                box-shadow: ${resultsMode === SelectionType.RemoveFromSelection
-                  ? '0 1px 2px rgba(0,0,0,0.1)'
-                  : 'none'} !important;
-                transition: all 0.15s ease;
-                cursor: pointer;
-                &:hover:not(:disabled) {
-                  background: ${resultsMode === SelectionType.RemoveFromSelection 
-                    ? '#9f1239' 
-                    : '#e2e8f0'} !important;
-                }
-                &:disabled {
-                  opacity: 0.4;
-                  cursor: not-allowed;
-                }
-              `}
-            >
-              <span css={css`font-size: 0.7rem;`}>&minus;</span>
-              {getI18nMessage('resultsModeRemove')}
-            </Button>
-          </div>
-        </div>
-        {/* Logic summary bar - confirms active mode intent */}
         <div css={css`
-          margin-top: 4px;
-          padding: 3px 8px;
-          border-radius: 3px;
-          border-left: 2px solid ${
-            resultsMode === SelectionType.NewSelection 
-              ? '#3b82f6'
-              : resultsMode === SelectionType.AddToSelection
-              ? '#059669'
-              : '#be123c'
-          };
-          background: ${
-            resultsMode === SelectionType.NewSelection 
-              ? 'rgba(59, 130, 246, 0.15)'
-              : resultsMode === SelectionType.AddToSelection
-              ? 'rgba(5, 150, 105, 0.15)'
-              : 'rgba(225, 29, 72, 0.15)'
-          };
-          color: ${
-            resultsMode === SelectionType.NewSelection 
-              ? '#1e40af'
-              : resultsMode === SelectionType.AddToSelection
-              ? '#065f46'
-              : '#9f1239'
-          };
-          display: flex;
-          align-items: center;
-          gap: 4px;
-          font-size: 0.8rem;
-          line-height: 1.3;
-          transition: all 0.15s ease;
+          font-size: 0.875rem;
+          font-weight: 500;
+          color: var(--sys-color-text-primary);
+          margin-bottom: 4px;
         `}>
-          <span css={css`font-weight: 500; letter-spacing: -0.01em; opacity: 0.8;`}>
-            {resultsMode === SelectionType.NewSelection && getI18nMessage('resultsModeLogicNew')}
-            {resultsMode === SelectionType.AddToSelection && getI18nMessage('resultsModeLogicAdd')}
-            {resultsMode === SelectionType.RemoveFromSelection && getI18nMessage('resultsModeLogicRemove')}
-          </span>
+          {getI18nMessage('resultsModeLabel')}
         </div>
-        <div 
+        <ResultsModeControl
+          value={VALUE_MAP[resultsMode || SelectionType.NewSelection] || 'new'}
+          onChange={handleResultsModeChange}
+          removeDisabled={!accumulatedRecords || accumulatedRecords.length === 0}
+          getI18nMessage={getI18nMessage}
+        />
+        <div
           id={`results-mode-description-${widgetId}`}
           className="sr-only"
           aria-live="polite"
           role="status"
         >
-          {resultsMode === SelectionType.NewSelection 
+          {resultsMode === SelectionType.NewSelection
             ? getI18nMessage('createNewResults')
             : resultsMode === SelectionType.AddToSelection
             ? getI18nMessage('addToCurrentResults')

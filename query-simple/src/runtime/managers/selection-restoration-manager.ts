@@ -1,6 +1,7 @@
 import React from 'react'
 import { SelectionType } from '../../config'
 import { createQuerySimpleDebugLogger } from 'widgets/shared-code/mapsimple-common'
+import { graphicsStateManager } from '../graphics-state-manager'
 
 const debugLogger = createQuerySimpleDebugLogger()
 
@@ -278,6 +279,24 @@ export class SelectionRestorationManager {
         note: 'r022.2: No accumulated records - nothing to restore'
       })
     }
+
+    // r025.020: Restore buffer graphic on panel reopen (non-LayerList mode).
+    // Symmetric with clearSelectionFromMap which clears the buffer (r025.017).
+    if (!addResultsAsMapLayer && mapView) {
+      const bufferLayerId = `querysimple-buffer-${this.widgetId}`
+      const bufferLayer = mapView.map.findLayerById(bufferLayerId) as __esri.GraphicsLayer
+      const lastGraphic = graphicsStateManager.getLastBufferGraphic(this.widgetId)
+
+      if (bufferLayer && lastGraphic && bufferLayer.graphics?.length === 0) {
+        bufferLayer.add(lastGraphic)
+        debugLogger.log('RESTORE', {
+          event: 'buffer-preview-restored-on-panel-open',
+          widgetId: this.widgetId,
+          bufferLayerId,
+          timestamp: Date.now()
+        })
+      }
+    }
   }
 
   /**
@@ -497,6 +516,27 @@ export class SelectionRestorationManager {
         widgetId: this.widgetId,
         graphicsLayerId: deps.graphicsLayerRef.current.id
       })
+
+      // r025.017: Also clear buffer preview graphics on panel close.
+      // In non-LayerList mode the buffer layer is standalone on the map
+      // (not inside a GroupLayer), so clearGraphicsLayerOrGroupLayer()
+      // only clears highlight graphics — it doesn't touch the buffer.
+      const mapView = deps.mapViewRef?.current
+      if (mapView) {
+        const bufferLayerId = `querysimple-buffer-${this.widgetId}`
+        const bufferLayer = mapView.map.findLayerById(bufferLayerId) as __esri.GraphicsLayer
+        if (bufferLayer && bufferLayer.graphics?.length > 0) {
+          const bufferCount = bufferLayer.graphics.length
+          bufferLayer.removeAll()
+          debugLogger.log('RESTORE', {
+            event: 'buffer-preview-cleared-on-panel-close',
+            widgetId: this.widgetId,
+            bufferLayerId,
+            graphicsCleared: bufferCount,
+            timestamp: Date.now()
+          })
+        }
+      }
     }
 
     // r023.10: Origin DS clearing REMOVED from panel close.

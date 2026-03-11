@@ -265,6 +265,10 @@ async function createGroupLayerInternal(
     // which is cheaper and safer than the old after-remove watcher pattern.
     ;(groupLayer as any).__exb_layer_from_runtime = false
 
+    // r025.015: Buffer visibility sync removed — buffer layer is now added
+    // INSIDE the GroupLayer by useBufferPreview, so visibilityMode:'inherited'
+    // handles LayerList toggle automatically. No external watcher needed.
+
     debugLogger.log('GRAPHICS-LAYER', {
       event: 'createOrGetResultGroupLayer-created',
       seq,

@@ -38,6 +38,45 @@ export function combineFields (resultDisplayFields: ImmutableArray<string>, resu
 }
 
 /**
+ * Resolve outFields from a DataSource's popup info.
+ * Returns visible popup fields when available, otherwise all layer field names.
+ * Always includes the objectIdField. Never returns ['*'].
+ *
+ * Used by both direct-query.ts (PopupSetting fallback) and execute-spatial-query.ts
+ * (target layers without a queryItem config).
+ */
+export function resolvePopupOutFields (
+  ds: FeatureLayerDataSource,
+  featureLayer: __esri.FeatureLayer
+): string[] {
+  const objectIdField = featureLayer.objectIdField
+
+  const popupInfo = ds.getPopupInfo?.() ||
+    (ds.getOriginDataSources?.()?.[0] as FeatureLayerDataSource)?.getPopupInfo?.()
+
+  if (popupInfo?.fieldInfos) {
+    const layerFieldNames = featureLayer.fields.map(f => f.name)
+    const visibleFields = popupInfo.fieldInfos
+      .filter(fi => fi.visible !== false && layerFieldNames.includes(fi.fieldName))
+      .map(fi => fi.fieldName)
+
+    if (visibleFields.length > 0) {
+      if (objectIdField && !visibleFields.includes(objectIdField)) {
+        visibleFields.push(objectIdField)
+      }
+      return visibleFields
+    }
+  }
+
+  // Fallback: all layer fields (explicit names, not '*')
+  const allFields = featureLayer.fields.map(f => f.name)
+  if (objectIdField && !allFields.includes(objectIdField)) {
+    allFields.push(objectIdField)
+  }
+  return allFields
+}
+
+/**
  * Validates user input before query execution.
  * @param input - The raw user input (string, number, etc.)
  * @param isList - Optional flag indicating if the input is from a list/selector (lenient validation)

@@ -63,7 +63,9 @@ export interface ClearResultContext {
   onDestroyGraphicsLayer?: () => void
 
   // Internal callbacks
-  setActiveTab: (tab: 'query' | 'results') => void
+  setActiveTab: (tab: 'query' | 'spatial' | 'results') => void
+  /** Tab to navigate to after clearing. Defaults to 'query'. */
+  returnTab?: 'query' | 'spatial' | 'results'
 }
 
 // ---------------------------------------------------------------------------
@@ -91,7 +93,7 @@ export async function executeClearResult (
     hasSelectedRecordsRef, currentQueryRecordIdsRef, lastQueryResultCountRef,
     widgetId, queryItemConfigId, accumulatedRecords, graphicsLayer, mapView,
     eventManager, onAccumulatedRecordsChange, onDestroyGraphicsLayer,
-    setActiveTab
+    setActiveTab, returnTab
   } = ctx
 
   debugLogger.log('TASK', {
@@ -173,7 +175,7 @@ export async function executeClearResult (
   recordsRef.current = null              // Release child's reference to records
   outputDS?.setStatus(DataSourceStatus.NotReady)
   dispatch({ type: 'SET_RESULT_COUNT', payload: 0 })  // Clear count
-  setActiveTab('query')                  // Hide Results tab
+  setActiveTab(returnTab ?? 'query')      // Navigate to originating tab
   hasSelectedRecordsRef.current = false
   dispatch({ type: 'SET_SELECTION_ERROR', payload: null })
   dispatch({ type: 'SET_ZOOM_ERROR', payload: null })

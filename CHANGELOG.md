@@ -7,6 +7,207 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 > **Archive**: For releases r001-r021, see [CHANGELOG_ARCHIVE_r001-r021.md](docs/archive/CHANGELOG_ARCHIVE_r001-r021.md)
 
+## [1.19.0-r025] - 2026-03-09 → 2026-03-10 - Spatial Tab Development (in progress)
+
+### Added
+
+- **Spatial tab component** (`SpatialTabContent.tsx`): Two-mode toggle (Operations / Draw)
+  with smart default based on accumulated results
+- **Source indicator**: Shows "{count} feature(s) from Results" or "No features loaded"
+  with blue/neutral styling based on state
+- **Buffer preview**: Real-time geodesic buffer rendering on map via `useBufferPreview` hook
+  with SR-aware operator selection (geodesicBufferOperator vs bufferOperator)
+- **Calcite combobox for spatial relationships**: Searchable dropdown (filters by label +
+  description) replaces 7-item radio list — uses `<calcite-combobox>` web component with
+  `overlayPositioning='fixed'` to escape scroll containers
+- **Real target layers from widget config**: Derives unique layers from `queryItems` via
+  `DataSourceManager`, deduplicates by `mainDataSourceId`, resolves actual layer titles
+  from JSAPI `FeatureLayer.title`
+- **Operations panel layout**: Source → Buffer → Mode → Relationship → Target → Execute
+- **Results mode segmented control**: New (blue) / Add (green) / Remove (red) with
+  logic summary bar matching Query tab pattern
+- **ResultsModeControl shared component** (`components/ResultsModeControl.tsx`): Extracted
+  from duplicated code in QueryTabContent and SpatialTabContent. Data-driven color config
+  map eliminates repeated ternaries. Accepts `value`, `onChange`, `removeDisabled`, `getI18nMessage`
+- **Buffer preview lifecycle**: Imperative clear/restore on panel close/open via
+  `selection-restoration-manager`; singleton stores last graphic per widget
+- **Spatial query execution engine** (`execute-spatial-query.ts`, 222 lines): Multi-layer
+  spatial query with per-layer error handling, lazy DataSource creation for group layer
+  children (uses `rootDataSourceId` from full `useDataSource` config), shared
+  `resolvePopupOutFields()` for consistent field resolution
+- **Full spatial query → Results pipeline** in `query-task.tsx`: `handleExecuteSpatialQuery`
+  orchestrates mode logic (New/Add/Remove), graphics rendering, state dispatch, zoom,
+  auto-tab-switch. Returns `Promise<boolean>` for buffer reset control
+- **`lastQueryOriginTabRef`** for Results tab back-button navigation: tracks `'query'` |
+  `'spatial'` so "Back" returns to whichever tab initiated the query
+- **Client-side buffer geometry for spatial queries**: `useBufferPreview` now returns
+  `bufferedGeometry` state. When buffer is active, the computed polygon is sent as
+  `query.geometry` (with `bufferDistance: 0`) instead of server-side `query.distance`/`query.units`.
+  Ensures spatial relationships evaluate against the actual visible buffer shape
+- **No-results popover** on Spatial tab: calcite-popover with amber styling, anchored to
+  Execute button (`placement="top"`), matching Query tab pattern
+- **Error popover** on Spatial tab: calcite-popover with red styling for query errors,
+  same pattern as Query tab (`placement="top"`)
+- **Shared `resolvePopupOutFields()`** utility in `query-utils.ts`: Extracts popup field
+  names from `FeatureLayer.popupTemplate`, used by both `direct-query.ts` and
+  `execute-spatial-query.ts` for consistent field resolution
+- **Enhanced `getRecordKey()`** in `results-management-utils.ts`: Prefers `__originDSId`
+  stamps for cross-layer deduplication in multi-layer spatial queries
+- **SPATIAL debug tag** registered in `debug-logger.ts` for spatial query logging
+- **Context-aware spatial relationship warnings** (r025.037–r025.040):
+  - Within + point/line without buffer → "no area" warning with suggestion
+  - Touches + buffer → "overlap not touch" warning
+  - Touches + point → "must land exactly on boundary" warning
+  - Crosses + point → "cannot cross" warning
+  - Crosses + point/line with buffer → "same type can't cross" warning
+  - Buffer-aware dimension checks: suppresses false Overlaps/Crosses warnings when buffer
+    converts source to polygon
+- **Spatial relationships reference doc** (`docs/features/SPATIAL_RELATIONSHIPS_REFERENCE.md`):
+  Full reference for all 7 relationships with geometry/buffer compatibility matrices,
+  warning conditions, JSAPI label mapping, and Esri predicate cross-reference
+- **i18n strings**: `spatialSourceFeatures`, `spatialSourceNoFeatures`
+- **FLOW-09 process flow doc**: Buffer preview end-to-end flow documentation
+- **Watch List in TODO.md**: Legacy JSAPI widget deprecation tracking
+  (`esri/widgets/Feature` in popup-render-pool.ts)
+- **TODO #22**: Typeahead / suggest for free-form queries
+- **TODO #23**: Create custom spatial relationship diagrams for help guide
+- **TODO #24**: Complete spatial relationships reference documentation
+- **JimuDraw integration for Spatial Draw mode** (r025.041): Lazy-loaded `jimu-ui/advanced/map`
+  module, JimuDraw component mounted in Draw mode with point/polyline/polygon/rectangle/circle
+  tools. Geometry captured via `onDrawingFinished` callback. Draw layer visibility toggled on
+  mode switch (Operations ↔ Draw)
+- **Multi-shape draw mode** (r025.044): Changed from `JimuDrawCreationMode.Single` to
+  `Continuous`. Drawn geometries accumulate in `drawnGeometries[]` array. Source indicator
+  shows count + types (e.g., "3 drawn shapes (polygon, point)")
+- **Mixed geometry type buffer support** (r025.041): `useBufferPreview` changed from single
+  `inputGeometry` to `inputGeometries: __esri.Geometry[]`. Buffers each geometry individually
+  via `bufferSingle()`, unions resulting polygons. Input geometry preparation groups by type
+  and unions within each group (prevents `unionOperator.executeMany` crash on mixed types)
+- **FLOW-10 process flow doc**: Spatial query execution end-to-end flow
+- **FLOW-11 process flow doc**: Spatial draw mode lifecycle flow
+- **Spatial result default template** (r025.048): Per-layer config flag (`isSpatialResultDefault`)
+  designates one query as the rendering template for spatial query results on that layer.
+  Settings toggle in Results section with per-layer uniqueness enforcement, auto-default on
+  first query creation, and reassignment on deletion. Spatial query engine now stamps real
+  `configId` (instead of fixed `'spatial'`) so SimpleList's template resolution pipeline
+  works automatically. Smart outFields via shared `combineFields()` — same 3-branch pattern
+  as Query tab's `direct-query.ts` (PopupSetting / SelectAttributes / CustomTemplate).
+  Config: `isSpatialResultDefault?: boolean` on `QueryItemType`. Seven files modified, zero
+  downstream changes needed (simple-list.tsx, query-result.tsx, query-utils.ts unchanged)
+- **Freehand draw tools** (r025.049): Added `freehandPolyline` and `freehandPolygon` to
+  JimuDraw `createTools` config. Draw toolbar now offers 7 tools: point, polyline, polygon,
+  rectangle, circle, freehand line, freehand polygon
+- **Rectangle-selection tool** (r025.050): Enabled `rectangle-selection` in JimuDraw
+  selectionTools. Users can select drawn shapes to move, resize, or edit vertices.
+  Added `onDrawingUpdated` callback to rebuild `drawnGeometries` from draw layer on
+  any move/edit/delete — keeps buffer preview in sync with shape changes
+- **Configurable draw & buffer colors** (r025.051): Two color pickers in settings
+  ("Spatial draw colors" section) for draw symbol color and buffer preview color.
+  Uses `HighlightConfigManager` singleton (same pattern as highlight colors). Defaults:
+  lime green (`#32FF00`) for draw, orange (`#FFA500`) for buffer
+- **Spatial tab Remove mode parity** (r025.052): Brought Spatial tab Remove mode to
+  full parity with Query tab. Remove button disabled when no accumulated records.
+  Popup auto-close on Remove execute. Early return for empty existing records. All-records-
+  removed cleanup: `clearSelectionInDataSources` clears graphics/selection, resets
+  `hasSelectedRecordsRef`. Distinguishes "0 matched" from "no records to remove from".
+  Auto-reset to "New" mode when accumulated records are cleared while on "Remove" —
+  matches Query tab behavior (useEffect watches accumulatedRecords + resultsMode)
+- **Typeahead/suggest for free-form text queries** (r025.053): Real-time value suggestions
+  for free-form text inputs (PIN, address, name). Companion `useSuggest` hook attaches
+  to SqlExpressionRuntime's container via capture-phase event listeners, intercepts typing,
+  debounces 300ms, fires lightweight `FeatureLayer.queryFeatures()` with starts-with LIKE
+  pattern. `SuggestPopover` renders absolutely positioned dropdown with prefix highlighting,
+  ARIA listbox pattern, and keyboard navigation (ArrowUp/Down, Enter, Escape). Selected
+  value injected into SqlExpressionRuntime via proven DOM manipulation pattern (same as
+  hash parameters). Config: `enableSuggest`, `suggestMinChars` (default 2), `suggestLimit`
+  (default 10) on `QueryItemType`. New files: `suggest-utils.ts`, `useSuggest.ts`,
+  `SuggestPopover.tsx`. Integration: ~28 lines in `query-task-form.tsx`
+- **Suggest settings UI** (r025.054): Builder settings panel for typeahead suggestions.
+  Switch toggle for enable/disable, `NumericInput` for minimum characters (1–10, default 2)
+  and max suggestions (1–50, default 10). Settings appear in Attribute Filter section under
+  a collapsible panel. Translation strings: `enableSuggest`, `suggestMinChars`, `suggestLimit`
+- **Multi-clause suggest support** (r025.054): `detectFreeFormInput()` now scans ALL SQL
+  expression parts (not just single-clause). Returns the first free-form USER_INPUT clause
+  as the suggest target and extracts fixed clauses as `additionalWhere` filter (e.g.,
+  `PROPTYPE = 'K'`). New `partToWhereClause()` converts fixed parts to SQL fragments,
+  handling Esri's `[{value, label}]` array value format
+- **Operator-aware suggest LIKE patterns** (r025.054): `fetchSuggestions()` matches the
+  SQL operator from the free-form part: `STRING_OPERATOR_CONTAINS` → `%VALUE%`,
+  `STRING_OPERATOR_STARTS_WITH` → `VALUE%`, `STRING_OPERATOR_ENDS_WITH` → `%VALUE%`.
+  Threaded through `detectFreeFormInput` → `useSuggest` → `fetchSuggestions`
+- **SUGGEST debug logging** (r025.054): Registered `SUGGEST` as a debug feature in
+  `debug-logger.ts`. Enable via `?debug=SUGGEST` to see detection, fetch queries, and
+  inject events in the browser console
+
+### Fixed
+
+- **Multi-point draw only uses first point** (r025.051): Drawing multiple points without
+  buffer only used the first point for the spatial query. Root cause: Draw mode bypassed
+  the group-by-type union step, so `inputGeometry` memo picked only the first geometry.
+  Fixed by sharing the same union path for both Draw and Operations modes — multiple
+  points are now unioned into a multipoint geometry
+
+- **Widget stuck in loading state on spatial error**: `SET_STAGE: 2` dispatched but never
+  reset when all target layers failed. Now dispatches `SET_STAGE: 1` before throwing
+- **Buffer cleared on spatial query failure**: Error path changed from `throw` to `return`,
+  allowing `setBufferDistance('')` to execute. Fixed by keeping `throw` + empty `catch`
+- **Buffer cleared on zero results**: `handleExecuteSpatialQuery` now returns `boolean`;
+  buffer only resets when `hasResults === true`
+- **Parks DataSource not found**: Group layer children need `rootDataSourceId` for lazy
+  creation. Fixed by passing full `useDataSource` config objects via `targetUseDataSources`
+  map to `executeSpatialQuery`
+- **ResultsMode value mismatch**: Spatial tab sends `'add'`/`'remove'`/`'new'` but handler
+  compared against `SelectionType` enum values (`'ADD_TO_CURRENT_SELECTION'` etc). Fixed
+  with dual-format boolean checks (`isNewMode`, `isAddMode`, `isRemoveMode`)
+- **"Within" returning 0 results**: JSAPI `within` means query geometry inside target — the
+  inverse of user expectation. Remapped: user-facing "Within" label now sends JSAPI `contains`
+- **Null crash on layer deselect**: `AdvancedSelect` passes `null` when all items cleared;
+  added defensive `|| []` in onChange + `?.length ?? 0` on canExecute check
+- **Parks/Trails config**: Updated data sources for new group layer IDs in app 1 and app 2
+  (both `config.json` and `resources/config/config.json`)
+- **Mixed geometry buffer silently fails** (r025.041): `unionOperator.executeMany()` requires
+  same-type geometries; mixed types (e.g., points + polygons) crashed silently with no `.catch()`.
+  Fixed by grouping geometries by type, unioning within each group
+- **JimuMapView not reaching SpatialTabContent** (r025.042): Non-popper render path in
+  `widget.tsx` was missing `jimuMapView` prop on second `<QueryTaskList>` instance. Draw mode
+  showed infinite loading spinner
+- **Debounce type signature mismatch** (r025.042): `debouncedComputeBuffer` wrapper had stale
+  single-geometry type `(geometry: Geometry, ...)` instead of `(geometries: Geometry[], ...)`
+- **Drawn features not cleared on success** (r025.043): After successful spatial query in Draw
+  mode, drawn shapes now clear from map (same pattern as buffer distance reset). Preserved on
+  zero results so user can adjust and retry
+- **Code cleanup** (r025.045): Removed dead `drawPlaceholderStyle`. Fixed `hasResults` variable
+  shadowing in Execute onClick. Proper `JimuMapView | null` typing (was `any`). Fixed React
+  import rule violation in `map-view-manager.ts`. Removed stale r018.96 comments. Updated
+  header comments
+
+### Changed
+
+- **Spatial relationship labels**: User-friendly remapping — "Within" → JSAPI `contains`,
+  "Encloses search area" → JSAPI `within`. Cleaned up passive voice labels ("Intersected by"
+  → "Intersects", "Overlapped by" → "Overlaps", etc.)
+- **`useBufferPreview` return value**: Changed from `void` to `__esri.Geometry | null`,
+  exposing `bufferedGeometry` state for spatial query use
+- **Spatial relationship UI**: Radio list (47 lines, 7 items) → Calcite combobox (~17 lines)
+  with `selectionMode='single'`, `scale='m'`, and native description support
+- **Target layers**: Hardcoded mock data → dynamic from widget-configured query items;
+  uses `dataSourceId` (not `mainDataSourceId`) for `targetLayerOptions`
+- **Auto-tab-switch**: Condition updated to include `activeTab === 'spatial'`
+- **Import cleanup**: Removed `Label` from jimu-ui imports (only used in old radio list)
+- **Removed 4 unused styles**: `relationshipListStyle`, `relationshipItemStyle`,
+  `relationshipActiveStyle`, `relationshipDisabledStyle`
+- **Results Mode refactor**: Both tabs now use shared `ResultsModeControl` component.
+  QueryTabContent's Add/Remove merge logic consolidated from ~360 duplicated inline lines
+  into single `handleResultsModeChange` callback (~100 lines). Removed `Button` import
+  from QueryTabContent (no longer needed). ⚠️ Lightly tested — needs full regression testing
+
+### Removed
+
+- `draw-advanced/` widget source (sample widget, not ours)
+- `client/dist-download/` and `client/dist-report/` from git tracking (build artifacts)
+
+---
+
 ## [1.19.0-r024.132] - 2026-03-05 - Sentence case labels, Display Order guard
 
 ### Changed

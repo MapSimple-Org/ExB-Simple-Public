@@ -152,7 +152,17 @@ export default class Setting extends React.PureComponent<AllWidgetSettingProps<I
   doRemoveQueryItem = (index: number, dsUpdateRequired = false) => {
     const configOptions = { dsUpdateRequired }
     const queryItems = this.props.config.queryItems.asMutable({ deep: true })
+    const removedItem = queryItems[index]
     queryItems.splice(index, 1)
+
+    // If removed item was spatial result default, reassign to first remaining query for same layer
+    if (removedItem?.isSpatialResultDefault && removedItem.useDataSource?.dataSourceId) {
+      const dsId = removedItem.useDataSource.dataSourceId
+      const replacement = queryItems.find(item => item.useDataSource?.dataSourceId === dsId)
+      if (replacement) {
+        replacement.isSpatialResultDefault = true
+      }
+    }
 
     this.updateConfigForOptions(['queryItems', queryItems, configOptions])
   }
@@ -166,12 +176,41 @@ export default class Setting extends React.PureComponent<AllWidgetSettingProps<I
   }
 
   addQueryItem = (queryItem) => {
-    this.updateQueryItem(this.props.config.queryItems?.length ?? 0, queryItem, true)
+    const existingItems = this.props.config.queryItems ?? Immutable([])
+    const dsId = queryItem.useDataSource?.dataSourceId
+
+    // Auto-set as spatial result default if no other query for this layer has it
+    if (dsId) {
+      const hasExistingDefault = existingItems.some(item =>
+        item.useDataSource?.dataSourceId === dsId && item.isSpatialResultDefault
+      )
+      if (!hasExistingDefault) {
+        queryItem = queryItem.set
+          ? queryItem.set('isSpatialResultDefault', true)
+          : { ...queryItem, isSpatialResultDefault: true }
+      }
+    }
+
+    this.updateQueryItem(existingItems.length, queryItem, true)
   }
 
   updateQueryItem = (index: number, queryItem, dsUpdateRequired = false) => {
     let queryItems: ImmutableArray<QueryItemType> = this.props.config.queryItems ?? Immutable([])
     queryItems = Immutable.set(queryItems, index, queryItem)
+
+    // Enforce: only one isSpatialResultDefault per layer (dataSourceId)
+    if (queryItem.isSpatialResultDefault) {
+      const dsId = queryItem.useDataSource?.dataSourceId
+      if (dsId) {
+        const mutableItems = queryItems.asMutable({ deep: true })
+        mutableItems.forEach((item, i) => {
+          if (i !== index && item.useDataSource?.dataSourceId === dsId && item.isSpatialResultDefault) {
+            item.isSpatialResultDefault = false
+          }
+        })
+        queryItems = Immutable(mutableItems)
+      }
+    }
 
     this.updateConfigForOptions(['queryItems', queryItems, { dsUpdateRequired }])
   }
@@ -460,6 +499,28 @@ export default class Setting extends React.PureComponent<AllWidgetSettingProps<I
             <div css={css`font-size: 0.875rem; margin-top: 4px; padding: 0 16px 8px; opacity: 0.8;`}>
               {this.getI18nMessage('hoverPinColorDescription')}
             </div>
+          </SettingSection>
+        )}
+        {this.props.config.queryItems.length > 0 && (
+          <SettingSection role='group' aria-label={this.getI18nMessage('spatialDrawColors')} title={this.getI18nMessage('spatialDrawColors')}>
+            <SettingRow label={this.getI18nMessage('drawColor')} flow='wrap'>
+              <ThemeColorPicker
+                specificTheme={this.props.theme2}
+                value={config.drawColor || '#32FF00'}
+                onChange={(color: string) => {
+                  this.updateConfigForOptions(['drawColor', color])
+                }}
+              />
+            </SettingRow>
+            <SettingRow label={this.getI18nMessage('bufferColor')} flow='wrap'>
+              <ThemeColorPicker
+                specificTheme={this.props.theme2}
+                value={config.bufferColor || '#FFA500'}
+                onChange={(color: string) => {
+                  this.updateConfigForOptions(['bufferColor', color])
+                }}
+              />
+            </SettingRow>
           </SettingSection>
         )}
         {this.props.config.queryItems.length > 0 && (

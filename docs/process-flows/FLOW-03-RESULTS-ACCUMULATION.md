@@ -23,6 +23,18 @@ determine whether new results replace, add to, or subtract from existing results
 
 ---
 
+## Consumers
+
+| Consumer | Location | Notes |
+|----------|----------|-------|
+| Query execution | `query-execution-handler.ts` | Standard attribute/spatial queries via configured outputDS |
+| Spatial query execution | `handleExecuteSpatialQuery` in `query-task.tsx` | Spatial queries against target layers; records stamped with `__queryConfigId = 'spatial'` and `__spatialLayerTitle` |
+
+Both consumers use `mergeResultsIntoAccumulated` and `removeResultsFromAccumulated`
+identically. Results mode (New/Add/Remove) works the same for spatial results.
+
+---
+
 ## Flow Diagram
 
 ```
@@ -207,4 +219,4 @@ When a user clicks the X button on a result row:
 
 ---
 
-*Last updated: r024.131 (2026-03-05) — corrected stale file:line references after r024.128-131 extractions*
+*Last updated: r025.044 (2026-03-10) — added spatial query as second consumer of merge/remove utilities*

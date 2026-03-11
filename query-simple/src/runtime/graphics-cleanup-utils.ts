@@ -195,6 +195,31 @@ export function clearAnyResultLayerContents(
     result.clearedGraphicsLayer = true
   }
 
+  // r025.016: Also clear buffer preview graphics on explicit clear (not destroy — just removeAll).
+  // In GroupLayer mode the buffer is a child of the GroupLayer, so
+  // clearGroupLayerContents already handled it. In GraphicsLayer mode
+  // the buffer is standalone on the map and needs explicit clearing.
+  // Note: Panel close/reopen is handled separately by selection-restoration-manager (r025.020).
+  if (!result.clearedGroupLayer) {
+    const bufferLayerId = `querysimple-buffer-${widgetId}`
+    const bufferLayer = mapView.map.findLayerById(bufferLayerId) as __esri.GraphicsLayer
+    if (bufferLayer) {
+      const bufferGraphicsCount = bufferLayer.graphics?.length || 0
+      bufferLayer.removeAll()
+
+      if (bufferGraphicsCount > 0) {
+        debugLogger.log('GRAPHICS-LAYER', {
+          event: 'buffer-preview-cleared-on-explicit-clear',
+          seq,
+          widgetId,
+          bufferLayerId,
+          graphicsCleared: bufferGraphicsCount,
+          timestamp: Date.now()
+        })
+      }
+    }
+  }
+
   debugLogger.log('GRAPHICS-LAYER', {
     event: 'clearAnyResultLayerContents-complete',
     seq,
@@ -266,6 +291,23 @@ export function cleanupGraphicsLayer(
       })
     }
 
+    // r025.013: Clean up buffer preview layer (no watch handle in highlight-only mode)
+    const bufferLayerId = `querysimple-buffer-${widgetId}`
+    const bufferLayer = mapView.map.findLayerById(bufferLayerId) as __esri.GraphicsLayer
+    if (bufferLayer) {
+      bufferLayer.removeAll()
+      mapView.map.remove(bufferLayer)
+      bufferLayer.destroy()
+
+      debugLogger.log('GRAPHICS-LAYER', {
+        event: 'buffer-preview-layer-cleaned',
+        seq,
+        widgetId,
+        bufferLayerId,
+        timestamp: Date.now()
+      })
+    }
+
     // r024.59: Clear cached mapView reference for this widget
     graphicsStateManager.deleteMapView(widgetId)
 
@@ -323,6 +365,10 @@ export function cleanupGroupLayer(
         globalHandlesRemoved++
       }
     })
+
+    // r025.015: Buffer visibility watcher removed — buffer layer is now INSIDE
+    // the GroupLayer, so groupLayer.destroy() below destroys it automatically.
+    // No explicit buffer cleanup needed in this path.
 
     const groupLayer = mapView.map.layers.find(layer => layer.id === layerId) as __esri.GroupLayer
     if (groupLayer) {

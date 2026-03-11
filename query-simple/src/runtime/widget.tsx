@@ -107,10 +107,13 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
     // Track when HelperSimple explicitly opens widget - only then should query-task-list use initialQueryValue for selection
     // Using state instead of ref ensures React triggers re-renders when flag changes
     shouldUseInitialQueryValueForSelection?: boolean
+    // r025.041: JimuMapView for spatial draw tools (JimuDraw requires JimuMapView, not raw MapView)
+    jimuMapView?: JimuMapView | null
   } = {
     resultsMode: SelectionType.NewSelection, // Default mode
     activeTab: 'query',
-    resultsExtent: null
+    resultsExtent: null,
+    jimuMapView: null
   }
 
   /**
@@ -427,7 +430,7 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
     
     // Chunk 4: Graphics layer cleanup (r018.25 - Step 4.3: Remove old implementation)
     this.graphicsLayerManager.cleanup(this.props.id)
-    
+
     // Chunk 5: Clean up accumulated records manager (r018.26 - Step 5.1: Add manager)
     this.accumulatedRecordsManager.cleanup()
     
@@ -753,9 +756,12 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
         onMapViewChange: (newJimuMapView) => {
           // Get map view from manager
           const newMapView = this.mapViewManager.getMapView()
-          
+
           // r021.19: Store mapView in ref so it's available to QueryTask
           this.mapViewRef.current = newMapView
+
+          // r025.041: Store JimuMapView in state for spatial Draw mode (JimuDraw component)
+          this.setState({ jimuMapView: newJimuMapView })
           
           // Chunk 4: Graphics layer initialization (r018.25 - Step 4.3: Remove old implementation)
           // Initialize graphics layer if map view is available and graphics layer should be initialized
@@ -1270,13 +1276,13 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
             minSize={config.sizeMap?.arrangementIconPopper?.minSize}
             defaultSize={config.sizeMap?.arrangementIconPopper?.defaultSize}
           >
-              <QueryTaskList 
-                widgetId={id} 
-                isInPopper 
-                queryItems={config.queryItems} 
-                defaultPageSize={config.defaultPageSize} 
-                className='pb-4' 
-                initialQueryValue={this.state.initialQueryValue} 
+              <QueryTaskList
+                widgetId={id}
+                isInPopper
+                queryItems={config.queryItems}
+                defaultPageSize={config.defaultPageSize}
+                className='pb-4'
+                initialQueryValue={this.state.initialQueryValue}
                 shouldUseInitialQueryValueForSelection={this.state.shouldUseInitialQueryValueForSelection}
                 onHashParameterUsed={this.handleHashParameterUsed}
                 resultsMode={this.state.resultsMode}
@@ -1286,6 +1292,7 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
                 onAccumulatedRecordsChange={this.handleAccumulatedRecordsChange}
                 graphicsLayer={this.graphicsLayerRef.current || undefined}
                 mapView={this.mapViewRef.current || undefined}
+                jimuMapView={this.state.jimuMapView}
                 onInitializeGraphicsLayer={this.initializeGraphicsLayerFromOutputDS}
                 onClearGraphicsLayer={this.clearGraphicsLayerIfExists}
                 onDestroyGraphicsLayer={this.clearGraphicsLayerRefs}
@@ -1294,6 +1301,7 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
                 eventManager={this.eventManager}
                 zoomOnResultClick={config.zoomOnResultClick}
                 hoverPinColor={config.hoverPinColor}
+                isPanelVisible={this.state.isPanelVisible}
               />
           </TaskListPopperWrapper>
         </QueryWidgetContext.Provider>
@@ -1379,6 +1387,8 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
                 eventManager={this.eventManager}
                 zoomOnResultClick={config.zoomOnResultClick}
                 hoverPinColor={config.hoverPinColor}
+                isPanelVisible={this.state.isPanelVisible}
+                jimuMapView={this.state.jimuMapView}
               />
             </QueryWidgetContext.Provider>
           </div>

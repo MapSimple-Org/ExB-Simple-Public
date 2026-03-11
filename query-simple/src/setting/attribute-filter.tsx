@@ -11,7 +11,7 @@ import {
   Immutable,
   hooks
 } from 'jimu-core'
-import { TextInput, TextArea, Collapse, Button } from 'jimu-ui'
+import { TextInput, TextArea, Collapse, Button, Switch, NumericInput } from 'jimu-ui'
 import { SqlExpressionBuilderPopup } from 'jimu-ui/advanced/sql-expression-builder'
 import { getJimuFieldNamesBySqlExpression } from 'jimu-ui/basic/sql-expression-runtime'
 import { SettingRow, SettingSection } from 'jimu-ui/advanced/setting-components'
@@ -128,6 +128,38 @@ export function AttributeFilterSetting (props: Props) {
             onAcceptValue={(value) => { onPropertyChanged('attributeFilterDesc', value) }}
           />
         </SettingRow>
+        <SettingRow tag='label' label={getI18nMessage('enableSuggest')} truncateLabel>
+          <Switch
+            checked={currentItem.enableSuggest ?? false}
+            onChange={(e) => { onPropertyChanged('enableSuggest', e.target.checked) }}
+          />
+        </SettingRow>
+        <Collapse isOpen={currentItem.enableSuggest ?? false}>
+          <SettingRow label={getI18nMessage('suggestMinChars')}>
+            <NumericInput
+              aria-label={getI18nMessage('suggestMinChars')}
+              size='sm'
+              min={1}
+              max={10}
+              step={1}
+              value={currentItem.suggestMinChars ?? 2}
+              onAcceptValue={(value) => { onPropertyChanged('suggestMinChars', value) }}
+              css={css`width: 70px;`}
+            />
+          </SettingRow>
+          <SettingRow label={getI18nMessage('suggestLimit')}>
+            <NumericInput
+              aria-label={getI18nMessage('suggestLimit')}
+              size='sm'
+              min={1}
+              max={50}
+              step={1}
+              value={currentItem.suggestLimit ?? 10}
+              onAcceptValue={(value) => { onPropertyChanged('suggestLimit', value) }}
+              css={css`width: 70px;`}
+            />
+          </SettingRow>
+        </Collapse>
       </Collapse>
       <DataSourceComponent useDataSource={currentItem.useDataSource}>
         {(ds) => {

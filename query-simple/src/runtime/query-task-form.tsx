@@ -25,6 +25,9 @@ import defaultMessage from './translations/default'
 import { QueryTaskSpatialForm } from './query-task-spatial-form'
 import { useAutoHeight } from './useAutoHeight'
 import { createQuerySimpleDebugLogger } from 'widgets/shared-code/mapsimple-common'
+import { useSuggest } from './useSuggest'
+import { SuggestPopover } from './SuggestPopover'
+import { detectFreeFormInput } from './suggest-utils'
 
 const debugLogger = createQuerySimpleDebugLogger()
 
@@ -90,7 +93,6 @@ const getFormStyle = (isAutoHeight: boolean) => {
     .query-form__content {
       flex: 1 1 ${isAutoHeight ? 'auto' : 'auto'};
       max-height: ${isAutoHeight ? '61.8vh' : 'none'};
-      overflow: auto;
       padding-bottom: 0;
     }
     .query-form__actions {
@@ -160,6 +162,36 @@ export function QueryTaskForm (props: QueryTaskItemProps) {
   const hashTriggeredRef = React.useRef<boolean>(false) // Track if query was triggered via hash parameter
   const previousConfigIdRef = React.useRef<string | null>(null) // Track previous configId to detect query switches
   const [isTypingValid, setIsTypingValid] = React.useState<boolean>(false)
+
+  // Derived data source — moved above suggest hook (needs originDS)
+  const originDS = outputDS?.getOriginDataSources()[0]
+
+  // ------------------------------------------------------------------
+  // Suggest / Typeahead (r025.053)
+  // ------------------------------------------------------------------
+  const { isFreeForm: isFreeFormInput, fieldName: suggestFieldName, operator: suggestOperator, additionalWhere: suggestAdditionalWhere } = React.useMemo(
+    () => detectFreeFormInput(sqlExprObj),
+    [sqlExprObj]
+  )
+
+  const suggestConfig = React.useMemo(() => ({
+    enabled: currentItem.enableSuggest ?? false,
+    minChars: currentItem.suggestMinChars ?? 2,
+    limit: currentItem.suggestLimit ?? 10,
+    debounceMs: 300
+  }), [currentItem.enableSuggest, currentItem.suggestMinChars, currentItem.suggestLimit])
+
+  const { suggestProps, resetSuggest } = useSuggest({
+    containerRef: sqlExprRuntimeContainerRef,
+    originDS: originDS as FeatureLayerDataSource | null,
+    fieldName: suggestFieldName,
+    operator: suggestOperator,
+    additionalWhere: suggestAdditionalWhere,
+    config: suggestConfig,
+    isFreeFormInput,
+    isHashInjecting: hashTriggeredRef.current,
+    configId
+  })
 
   // Monitor focus and input events within the query form
   React.useEffect(() => {
@@ -265,8 +297,6 @@ export function QueryTaskForm (props: QueryTaskItemProps) {
 
     return hasValidValue
   }, [attributeFilterSqlExprObj, configId, isTypingValid])
-
-  const originDS = outputDS?.getOriginDataSources()[0]
 
   /**
    * Sets the input value from URL hash parameters when:
@@ -654,6 +684,9 @@ export function QueryTaskForm (props: QueryTaskItemProps) {
   }, [onFormSubmit, outputDS, runtimeZoomToSelected])
 
   const handleKeyDown = React.useCallback((event: React.KeyboardEvent) => {
+    // r025.053: If suggest popover is open with an active selection, let useSuggest handle Enter
+    if (event.key === 'Enter' && suggestProps.isOpen && suggestProps.activeIndex >= 0) return
+
     if (event.key === 'Enter' && datasourceReady && isInputValid) {
       event.preventDefault()
       
@@ -681,7 +714,7 @@ export function QueryTaskForm (props: QueryTaskItemProps) {
         }
       }
     }
-  }, [datasourceReady, applyQuery, isInputValid])
+  }, [datasourceReady, applyQuery, isInputValid, suggestProps.isOpen, suggestProps.activeIndex])
 
   React.useEffect(() => {
     if (!dataActionFilter) return
@@ -715,7 +748,9 @@ export function QueryTaskForm (props: QueryTaskItemProps) {
     setAttributeFilterSqlExprObj(sqlExprObj)
     // 2. reset spatial filter
     setResetSymbol(Symbol())
-  }, [sqlExprObj])
+    // 3. reset suggest state (r025.053)
+    resetSuggest()
+  }, [sqlExprObj, resetSuggest])
 
   const handleSqlExprObjChange = React.useCallback((sqlObj: IMSqlExpression) => {
     // LOG AT THE VERY START
@@ -1283,7 +1318,7 @@ export function QueryTaskForm (props: QueryTaskItemProps) {
                 )}
               </div>
               {originDS && (
-                <div ref={sqlExprRuntimeContainerRef} css={css`margin: -10px 0px;`}>
+                <div ref={sqlExprRuntimeContainerRef} css={css`margin: -10px 0px; position: relative;`}>
                   <SqlExpressionRuntime
                     key={`${configId}-${attributeFilterSqlExprObj?.parts?.[0]?.valueOptions?.value || 'empty'}`}
                     widgetId={widgetId}
@@ -1291,6 +1326,7 @@ export function QueryTaskForm (props: QueryTaskItemProps) {
                     expression={attributeFilterSqlExprObj}
                     onChange={handleSqlExprObjChange}
                   />
+                  <SuggestPopover {...suggestProps} />
                 </div>
               )}
             </div>

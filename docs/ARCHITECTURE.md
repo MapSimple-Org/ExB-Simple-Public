@@ -89,15 +89,19 @@ query-simple/
 2. [Enterprise Version Mapping](#enterprise-version-mapping)
 3. [Esri Standards](#esri-standards)
 4. [Widget Architecture](#widget-architecture)
-5. [Shared Code Pattern](#shared-code-pattern)
-6. [Component Libraries](#component-libraries)
-7. [Data Sources & Actions](#data-sources--actions)
-8. [Widget Communication](#widget-communication)
-9. [Best Practices](#best-practices)
-10. [Common Patterns](#common-patterns)
-11. [Common Errors Quick Reference](#common-errors-quick-reference)
-12. [JSAPI Deprecation Notes](#jsapi-deprecation-notes-434)
-13. [References](#references)
+5. [Tab Architecture](#tab-architecture)
+6. [Handler Extraction Pattern](#handler-extraction-pattern)
+7. [Spatial Query Architecture](#spatial-query-architecture)
+8. [Typeahead/Suggest Architecture](#typeaheadsuggest-architecture)
+9. [Shared Code Pattern](#shared-code-pattern)
+10. [Component Libraries](#component-libraries)
+11. [Data Sources & Actions](#data-sources--actions)
+12. [Widget Communication](#widget-communication)
+13. [Best Practices](#best-practices)
+14. [Common Patterns](#common-patterns)
+15. [Common Errors Quick Reference](#common-errors-quick-reference)
+16. [JSAPI Deprecation Notes](#jsapi-deprecation-notes-434)
+17. [References](#references)
 
 ---
 
@@ -110,31 +114,58 @@ query-simple/
 │   ├── icon.svg
 │   └── src/
 │       ├── config.ts
+│       ├── version.ts
 │       ├── version-manager.ts
 │       ├── runtime/
-│       │   ├── widget.tsx
-│       │   ├── query-task.tsx
-│       │   ├── query-result.tsx
-│       │   ├── query-utils.ts
-│       │   ├── selection-utils.ts
-│       │   ├── zoom-utils.ts
-│       │   ├── graphics-layer-utils.ts
+│       │   ├── widget.tsx                      # Main widget shell (class component)
+│       │   ├── query-task.tsx                  # Query orchestrator + spatial query handler
+│       │   ├── query-task-form.tsx             # Query form UI + suggest integration
+│       │   ├── query-task-list.tsx             # Query list management
+│       │   ├── query-task-reducer.ts           # useReducer state machine (12 actions)
+│       │   ├── query-result.tsx                # Results display + record management
+│       │   ├── query-utils.ts                  # SQL Optimizer, field resolution
+│       │   ├── selection-utils.ts              # Selection propagation
+│       │   ├── zoom-utils.ts                   # Zoom-to-results
+│       │   ├── graphics-layer-utils.ts         # Map highlight graphics
+│       │   ├── graphics-cleanup-utils.ts       # Graphics cleanup utilities
+│       │   ├── graphics-state-manager.ts       # Singleton graphics state
+│       │   ├── direct-query.ts                 # JSAPI bypass query + buildRecord()
+│       │   ├── results-management-utils.ts     # Merge/remove/dedup utilities
+│       │   ├── execute-spatial-query.ts        # Multi-layer spatial query engine
+│       │   ├── query-execution-handler.ts      # Extracted query pipeline handler
+│       │   ├── query-clear-handler.ts          # Extracted clear/reset handler
+│       │   ├── query-submit-handler.ts         # Extracted form submit handler
+│       │   ├── record-removal-handler.ts       # Extracted record removal handler
+│       │   ├── suggest-utils.ts                # Typeahead detection, fetch, inject
+│       │   ├── useSuggest.ts                   # Suggest hook with state machine
+│       │   ├── SuggestPopover.tsx              # Suggest dropdown component
+│       │   ├── tabs/
+│       │   │   ├── QueryTabContent.tsx         # Query tab component
+│       │   │   └── SpatialTabContent.tsx       # Spatial tab component
+│       │   ├── components/
+│       │   │   └── ResultsModeControl.tsx      # Shared New/Add/Remove control
 │       │   ├── managers/
+│       │   │   ├── map-view-manager.ts         # MapView lifecycle
+│       │   │   ├── selection-restoration-manager.ts  # Selection restore after identify
+│       │   │   └── use-buffer-preview.ts       # Geodesic buffer preview hook
 │       │   └── translations/
 │       └── setting/
 │           ├── setting.tsx
+│           ├── attribute-filter.tsx
+│           ├── results.tsx
 │           └── translations/
 ├── helper-simple/              # HelperSimple widget
 │   └── [similar structure]
 ├── shared-code/                # Shared utilities
 │   └── mapsimple-common/
-│       ├── debug-logger.ts
+│       ├── debug-logger.ts             # Debug logging framework
+│       ├── highlight-config-manager.ts # Highlight/draw/buffer color config
 │       ├── common-components.tsx
 │       ├── data-source-tip.tsx
 │       └── utils.tsx
 ├── docs/
 │   ├── ARCHITECTURE.md         # This file
-│   ├── process-flows/          # End-to-end flow documentation
+│   ├── process-flows/          # 11 end-to-end flow documents
 │   └── releases/               # Release notes
 ├── CLAUDE.md
 ├── CHANGELOG.md
@@ -147,6 +178,7 @@ query-simple/
 - **`config.ts`**: TypeScript interfaces for widget configuration
 - **`widget.tsx`**: Main runtime widget component (class or function component)
 - **`setting.tsx`**: Widget configuration UI in builder mode
+- **`version.ts`**: Widget version number (BASE_VERSION-rRELEASE_NUMBER.MINOR_VERSION)
 - **`version-manager.ts`**: Handles configuration migration between ExB versions
 
 ---
@@ -235,6 +267,184 @@ export const QueryWidgetContext = React.createContext<WidgetContextValue>(null)
 // In child components
 const context = React.useContext(QueryWidgetContext)
 ```
+
+---
+
+## Tab Architecture
+
+The widget uses a tab-based architecture with the main orchestrator (`query-task.tsx`) delegating UI rendering to extracted tab components:
+
+```
+widget.tsx (Shell)
+  └── query-task.tsx (Orchestrator)
+        ├── QueryTabContent.tsx    # Query form, SQL expression, apply/clear
+        ├── SpatialTabContent.tsx  # Spatial query: Operations + Draw modes
+        └── query-result.tsx       # Results display (shared by both tabs)
+```
+
+### Tab Component Pattern
+
+Each tab is a function component receiving orchestrator state via props:
+
+```typescript
+interface QueryTabContentProps {
+  // State from orchestrator
+  currentItem: QueryItemType
+  accumulatedRecords: FeatureDataRecord[]
+  resultsMode: string
+  // Callbacks to orchestrator
+  onFormSubmit: () => void
+  onClearResult: () => void
+  onResultsModeChange: (mode: string) => void
+  // Shared refs
+  sqlExprRuntimeContainerRef: React.RefObject<HTMLDivElement>
+}
+```
+
+### Shared Components
+
+Components used by both tabs are extracted to `components/`:
+
+- **`ResultsModeControl`**: New (blue) / Add (green) / Remove (red) segmented control with data-driven color config map. Used by both `QueryTabContent` and `SpatialTabContent`
+
+### Back-Button Navigation
+
+A `lastQueryOriginTabRef` tracks which tab (`'query'` | `'spatial'`) initiated the current results, so the Results tab back-button returns to the correct originating tab.
+
+---
+
+## Handler Extraction Pattern
+
+Complex functions from the main orchestrator (`query-task.tsx`) have been extracted into focused handler modules. Each handler follows a consistent pattern:
+
+```typescript
+// 1. Define a typed context interface
+interface QueryExecutionContext {
+  widgetId: string
+  originDS: FeatureLayerDataSource
+  outputDS: DataSource
+  mapView: __esri.MapView
+  // ... all dependencies explicitly listed
+}
+
+// 2. Export a single execute function
+export async function executeQueryInternal(ctx: QueryExecutionContext): Promise<void> {
+  // Full implementation with access to all context
+}
+
+// 3. Original function becomes a thin wrapper
+const handleFormSubmitInternal = React.useCallback(async () => {
+  const ctx: QueryExecutionContext = {
+    widgetId, originDS, outputDS, mapView, // ... build context from component scope
+  }
+  return executeQueryInternal(ctx)
+}, [deps])
+```
+
+### Extracted Handlers
+
+| Handler | Lines | Responsibility |
+|---------|-------|----------------|
+| `query-execution-handler.ts` | 1,044 | Full query pipeline: params, fork, results processing, zoom |
+| `query-clear-handler.ts` | 328 | Sovereign Reset: graphics cleanup, DS destruction |
+| `query-submit-handler.ts` | 348 | Form submit: DS destroy/recreate, hash wait, retry guard |
+| `record-removal-handler.ts` | 567 | X-button removal: composite-key matching, origin DS deselection |
+| `query-task-reducer.ts` | 197 | State management: 12 useState → single useReducer |
+
+This pattern keeps the orchestrator thin (~1,620 lines for the original functions → 10-16 line wrappers) while making each handler independently readable and testable.
+
+---
+
+## Spatial Query Architecture
+
+The Spatial tab provides geometry-based querying through two modes:
+
+### Operations Mode
+
+Uses accumulated results from the Query tab as spatial input:
+
+```
+Source (from Results) → Buffer → Relationship → Target Layers → Execute
+```
+
+### Draw Mode
+
+Direct geometry creation via JimuDraw integration:
+
+```
+Draw Tools (7 types) → Geometry Accumulation → Buffer → Relationship → Target → Execute
+```
+
+### Execution Pipeline
+
+```
+SpatialTabContent.tsx
+  │
+  ├── useBufferPreview()          # Real-time geodesic buffer on map
+  │     ├── Group geometries by type
+  │     ├── Union within each group
+  │     ├── Buffer each geometry individually
+  │     └── Union resulting polygons
+  │
+  └── onExecute → query-task.tsx handleExecuteSpatialQuery()
+        │
+        ├── execute-spatial-query.ts  # Multi-layer query
+        │     ├── For each target layer:
+        │     │   ├── Lazy DataSource creation (group layer children)
+        │     │   ├── FeatureLayer.queryFeatures() with spatial filter
+        │     │   └── Per-layer error handling
+        │     └── Aggregate results across layers
+        │
+        └── Mode logic (New/Add/Remove)
+              ├── Graphics rendering
+              ├── State dispatch
+              ├── Zoom to results
+              └── Auto-tab-switch to Results
+```
+
+### Key Design Decisions
+
+- **Client-side buffer geometry**: Buffer polygon sent as `query.geometry` (with `bufferDistance: 0`) instead of server-side `query.distance/units` — ensures spatial relationships evaluate against the actual visible buffer shape
+- **Mixed geometry support**: Groups geometries by type before union to prevent `executeMany` crash on mixed point/polyline/polygon inputs
+- **Spatial result default template**: Per-layer config flag (`isSpatialResultDefault`) designates one query's rendering settings for spatial results, using shared `combineFields()` for smart outFields
+- **Context-aware warnings**: Warns when relationship + geometry combinations will produce misleading results
+
+---
+
+## Typeahead/Suggest Architecture
+
+Real-time value suggestions for free-form text inputs, implemented as a companion to SqlExpressionRuntime:
+
+```
+sqlExprRuntimeContainerRef (position: relative)
+  ├── SqlExpressionRuntime (UNCHANGED — Esri component)
+  │     └── input[type=text]  ← useSuggest discovers via MutationObserver
+  └── SuggestPopover (position: absolute, below input)
+```
+
+### Component Responsibilities
+
+| File | Lines | Responsibility |
+|------|-------|----------------|
+| `suggest-utils.ts` | 341 | `detectFreeFormInput()`, `fetchSuggestions()`, `injectValueIntoInput()` |
+| `useSuggest.ts` | 508 | Hook with useReducer state machine, debounce, keyboard nav |
+| `SuggestPopover.tsx` | 210 | Dropdown UI with prefix highlighting, ARIA listbox pattern |
+
+### Data Flow
+
+```
+User types → capture-phase input listener → SET_QUERY action
+  → 300ms debounce → fetchSuggestions() → FeatureLayer.queryFeatures()
+    → FETCH_SUCCESS → SuggestPopover renders suggestions
+      → User selects → injectValueIntoInput() → SqlExpressionRuntime.onChange fires
+```
+
+### Key Design Decisions
+
+- **Capture-phase listeners**: Attach to container ref, intercept events before SqlExpressionRuntime processes them — no modifications to Esri component
+- **Multi-clause SQL support**: `detectFreeFormInput()` scans all expression parts, targets the first free-form USER_INPUT clause, extracts fixed clauses as `additionalWhere`
+- **Operator-aware LIKE patterns**: Matches the SQL operator from the clause — `contains` → `%VALUE%`, `starts_with` → `VALUE%`, `ends_with` → `%VALUE%`
+- **Guard suppression**: `isHashInjecting` suppresses during hash parameter injection; `isSelectingRef` suppresses during self-injection
 
 ---
 
@@ -1052,6 +1262,10 @@ debugLogger.log('RESULTS-MODE', {
 
 #### Available Debug Features
 
+**Always-On (no `?debug=` needed):**
+- `BUG` - Known bug warnings (`[QUERYSIMPLE ⚠️ BUG]`) — always visible in console
+
+**URL-Activated (`?debug=FEATURE`):**
 - `HASH` - Hash parameter processing
 - `HASH-EXEC` - Hash query execution
 - `HASH-FIRST-LOAD` - First load hash handling
@@ -1062,6 +1276,7 @@ debugLogger.log('RESULTS-MODE', {
 - `DATA-ACTION` - Data action execution
 - `GROUP` - Query grouping and dropdown
 - `SELECTION` - Record selection management
+- `SELECTION-STATE-AUDIT` - Detailed selection state auditing
 - `WIDGET-STATE` - Widget lifecycle and state changes
 - `RESTORE` - Selection restoration
 - `RESULTS-MODE` - Results mode (NEW/ADD/REMOVE) switching
@@ -1071,6 +1286,10 @@ debugLogger.log('RESULTS-MODE', {
 - `POPUP` - Map popup interactions
 - `QUERY-PATH` - Which query path is taken (DIRECT via buildRecord vs EXB legacy via outputDS.load)
 - `DIRECT-QUERY` - Direct FeatureLayer.queryFeatures() bypass execution details (timing, record counts, field selection)
+- `SPATIAL` - Spatial tab query execution (target layers, buffer, results)
+- `CSV` - CSV export field schema and alias inspection
+- `VIEW-TABLE` - View in Table display fields inspection
+- `SUGGEST` - Typeahead/suggest feature (detection, fetch queries, inject)
 
 #### Control via URL
 

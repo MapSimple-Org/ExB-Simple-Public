@@ -9,6 +9,8 @@
  * Features (QuerySimple):
  * - BUG: Known bugs/issues (always logs, even if debug=false) - Use format: bugId, category, description
  * - HASH: Hash parameter processing
+ * - HASH-EXEC: Hash query execution details
+ * - HASH-FIRST-LOAD: First load hash handling
  * - FORM: Query form interactions
  * - TASK: Query task management
  * - ZOOM: Zoom behavior
@@ -23,10 +25,13 @@
  * - EXPAND-COLLAPSE: Expand/collapse state management for result items
  * - GRAPHICS-LAYER: Graphics layer highlighting (independent of layer visibility)
  * - EVENTS: Event listener setup/cleanup and custom event dispatching
+ * - POPUP: Map popup interactions
  * - QUERY-PATH: Which query path is taken (DIRECT vs EXB legacy)
  * - DIRECT-QUERY: Direct FeatureLayer.queryFeatures() bypass execution details
+ * - SPATIAL: Spatial tab query execution (target layers, buffer, results)
  * - CSV: CSV export field schema and alias inspection
  * - VIEW-TABLE: View in Table display fields inspection
+ * - SUGGEST: Typeahead/suggest feature (detection, fetch queries, inject)
  * 
  * Temporary Migration Features (will be removed after migration complete):
  * - CHUNK-1-COMPARE: Chunk 1 (URL Parameter) comparison logs
@@ -48,7 +53,7 @@
  * - RESTORE: Selection restoration attempts and results
  */
 
-type DebugFeature = 'BUG' | 'HASH' | 'HASH-EXEC' | 'FORM' | 'TASK' | 'ZOOM' | 'MAP-EXTENT' | 'DATA-ACTION' | 'GROUP' | 'SELECTION' | 'SELECTION-STATE-AUDIT' | 'WIDGET-STATE' | 'RESTORE' | 'RESTORE-COMPARE' | 'RESULTS-MODE' | 'EXPAND-COLLAPSE' | 'GRAPHICS-LAYER' | 'EVENTS' | 'POPUP' | 'QUERY-PATH' | 'DIRECT-QUERY' | 'CSV' | 'VIEW-TABLE' | 'CHUNK-1-COMPARE' | 'CHUNK-1-MISMATCH' | 'CHUNK-2-COMPARE' | 'CHUNK-2-MISMATCH' | 'CHUNK-3-COMPARE' | 'CHUNK-3-DECISION' | 'CHUNK-3-FALLBACK' | 'CHUNK-4-COMPARE' | 'CHUNK-5-COMPARE' | 'CHUNK-6-COMPARE' | 'CHUNK-6-MISMATCH' | 'all' | 'false'
+type DebugFeature = 'BUG' | 'HASH' | 'HASH-EXEC' | 'FORM' | 'TASK' | 'ZOOM' | 'MAP-EXTENT' | 'DATA-ACTION' | 'GROUP' | 'SELECTION' | 'SELECTION-STATE-AUDIT' | 'WIDGET-STATE' | 'RESTORE' | 'RESTORE-COMPARE' | 'RESULTS-MODE' | 'EXPAND-COLLAPSE' | 'GRAPHICS-LAYER' | 'EVENTS' | 'POPUP' | 'QUERY-PATH' | 'DIRECT-QUERY' | 'SPATIAL' | 'CSV' | 'VIEW-TABLE' | 'SUGGEST' | 'CHUNK-1-COMPARE' | 'CHUNK-1-MISMATCH' | 'CHUNK-2-COMPARE' | 'CHUNK-2-MISMATCH' | 'CHUNK-3-COMPARE' | 'CHUNK-3-DECISION' | 'CHUNK-3-FALLBACK' | 'CHUNK-4-COMPARE' | 'CHUNK-5-COMPARE' | 'CHUNK-6-COMPARE' | 'CHUNK-6-MISMATCH' | 'all' | 'false'
 
 interface DebugLoggerOptions {
   widgetName: string
@@ -184,7 +189,7 @@ export function createQuerySimpleDebugLogger() {
     features: [
       'HASH', 'HASH-EXEC', 'HASH-FIRST-LOAD', 'FORM', 'TASK', 'ZOOM', 'MAP-EXTENT', 'DATA-ACTION', 'GROUP', 
       'SELECTION', 'SELECTION-STATE-AUDIT', 'WIDGET-STATE', 'RESTORE', 'RESULTS-MODE', 'EXPAND-COLLAPSE', 'GRAPHICS-LAYER', 'EVENTS', 'POPUP',
-      'QUERY-PATH', 'DIRECT-QUERY', 'CSV', 'VIEW-TABLE',
+      'QUERY-PATH', 'DIRECT-QUERY', 'SPATIAL', 'CSV', 'VIEW-TABLE', 'SUGGEST',
       // Temporary migration features (will be removed after migration complete)
       'CHUNK-1-COMPARE', 'CHUNK-1-MISMATCH', 'CHUNK-2-COMPARE', 'CHUNK-2-MISMATCH', 'CHUNK-3-COMPARE', 'CHUNK-3-DECISION', 'CHUNK-3-FALLBACK',
       'CHUNK-4-COMPARE', 'CHUNK-5-COMPARE', 'CHUNK-6-COMPARE', 'CHUNK-6-MISMATCH'

@@ -109,7 +109,8 @@ Widget (widget.tsx)
       +-- QueryWidgetContext.Provider
           +-- QueryTaskList
               +-- QueryTask (one active at a time)
-                  +-- QueryTaskForm (search inputs)
+                  +-- QueryTabContent (search inputs)
+                  +-- SpatialTabContent (spatial query UI)
                   +-- QueryTaskResult (results list)
 ```
 
@@ -153,7 +154,17 @@ QueryTask Props
     +-- index, total (position in list)
     +-- initialInputValue (from hash if shortId match)
     +-- All handler callbacks for state updates
+    |
+    v
+SpatialTabContent Props
+    +-- jimuMapView (ExB wrapper for MapView, from widget state)
+    +-- (other spatial query props)
 ```
+
+> **Note:** `jimuMapView` is stored in widget.tsx state (not just a ref like `mapView`)
+> because `JimuDraw` requires the ExB `JimuMapView` wrapper object, not a raw
+> `__esri.MapView`. The prop flows: widget.tsx state → QueryTaskList → QueryTask →
+> SpatialTabContent.
 
 ---
 
@@ -164,4 +175,4 @@ QueryTask Props
 
 ---
 
-*Last updated: r024.111 (2026-03-03)*
+*Last updated: r025.044 (2026-03-10)*

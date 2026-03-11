@@ -38,7 +38,9 @@ import { Button, Tooltip, FOCUSABLE_CONTAINER_CLASS, Tabs, Tab, Select, Loading,
 import { InfoOutlined } from 'jimu-icons/outlined/suggested/info'
 import { TrashOutlined } from 'jimu-icons/outlined/editor/trash'
 import { PagingType, type QueryItemType, type SpatialFilterObj, SelectionType } from '../config'
+import { type JimuMapView } from 'jimu-arcgis'
 import { QueryTabContent } from './tabs/QueryTabContent'
+import { SpatialTabContent } from './tabs/SpatialTabContent'
 import { QueryTaskForm } from './query-task-form'
 import { QueryTaskResult } from './query-result'
 import { DataSourceTip, useDataSourceExists, ErrorMessage } from 'widgets/shared-code/mapsimple-common'
@@ -48,6 +50,8 @@ import { DEFAULT_QUERY_ITEM } from '../default-query-item'
 import { executeQueryInternal } from './query-execution-handler'
 import { executeClearResult } from './query-clear-handler'
 import { executeFormSubmit } from './query-submit-handler'
+import { executeSpatialQuery, type SpatialQueryResult, convertSpatialResultsToRecords } from './execute-spatial-query'
+import { mergeResultsIntoAccumulated, removeResultsFromAccumulated } from './results-management-utils'
 
 import { cleanupGraphicsLayer, cleanupAnyResultLayer, clearAnyResultLayerContents } from './graphics-layer-utils'
 import { MenuOutlined } from 'jimu-icons/outlined/editor/menu'
@@ -69,7 +73,6 @@ export interface QueryTaskProps {
   total: number
   queryItem: ImmutableObject<QueryItemType>
   wrappedInPopper?: boolean
-  hoverPinColor?: string // r022.106: Configurable hover pin color
   hoverPinColor?: string // r022.106: Configurable hover pin color
   className?: string
   isInPopper?: boolean
@@ -102,12 +105,13 @@ export interface QueryTaskProps {
   onInitializeGraphicsLayer?: (outputDS: DataSource) => Promise<void>
   onClearGraphicsLayer?: () => void
   onDestroyGraphicsLayer?: () => void // r021.17: Clear refs after destroying layer
-  activeTab?: 'query' | 'results'
-  onTabChange?: (tab: 'query' | 'results') => void
+  activeTab?: 'query' | 'spatial' | 'results'
+  onTabChange?: (tab: 'query' | 'spatial' | 'results') => void
   eventManager?: import('./managers/event-manager').EventManager  // Chunk 7.1: Event Handling Manager
-  // FIX (r018.96): Removed manuallyRemovedRecordIds and onManualRemoval - no longer needed
   // r022.105: Configurable zoom on result click
   zoomOnResultClick?: boolean
+  isPanelVisible?: boolean  // r025.013: Buffer preview clear/restore on panel close/open
+  jimuMapView?: JimuMapView | null  // r025.041: JimuMapView for JimuDraw in Spatial tab Draw mode
 }
 
 // Helper function to get display name for query in dropdown
@@ -168,13 +172,36 @@ const style = css`
 `
 
 export function QueryTask (props: QueryTaskProps) {
-  const { queryItem, onNavBack, total, isInPopper = false, wrappedInPopper = false, className = '', index, initialInputValue, onHashParameterUsed, queryItems, selectedQueryIndex, onQueryChange, groups, ungrouped, groupOrder, selectedGroupId, selectedGroupQueryIndex, onGroupChange, onGroupQueryChange, onUngroupedChange, resultsMode, onResultsModeChange, accumulatedRecords, resultsExtent, onAccumulatedRecordsChange, graphicsLayer, mapView, onInitializeGraphicsLayer, onClearGraphicsLayer, onDestroyGraphicsLayer, activeTab: propActiveTab, onTabChange: propOnTabChange, eventManager, zoomOnResultClick, hoverPinColor, ...otherProps } = props
+  const { queryItem, onNavBack, total, isInPopper = false, wrappedInPopper = false, className = '', index, initialInputValue, onHashParameterUsed, queryItems, selectedQueryIndex, onQueryChange, groups, ungrouped, groupOrder, selectedGroupId, selectedGroupQueryIndex, onGroupChange, onGroupQueryChange, onUngroupedChange, resultsMode, onResultsModeChange, accumulatedRecords, resultsExtent, onAccumulatedRecordsChange, graphicsLayer, mapView, onInitializeGraphicsLayer, onClearGraphicsLayer, onDestroyGraphicsLayer, activeTab: propActiveTab, onTabChange: propOnTabChange, eventManager, zoomOnResultClick, hoverPinColor, jimuMapView, ...otherProps } = props
   const getI18nMessage = hooks.useTranslation(defaultMessage)
   const zoomToRecords = useZoomToRecords(mapView)
   // stage now in useReducer (r024.126 — A2b)
-  const [internalActiveTab, setInternalActiveTab] = React.useState<'query' | 'results'>('query')
+  const [internalActiveTab, setInternalActiveTab] = React.useState<'query' | 'spatial' | 'results'>('query')
   // isClearing now in useReducer (r024.127 — A2c)
-  
+
+  // r025.007: Derive unique target layers from configured queryItems for the Spatial tab.
+  // Deduplicates by mainDataSourceId (multiple queries can target the same layer).
+  const targetLayerOptions = React.useMemo(() => {
+    if (!queryItems || queryItems.length === 0) return []
+
+    const seen = new Set<string>()
+    const options: Array<{ value: string; label: string }> = []
+
+    queryItems.forEach(item => {
+      // Use dataSourceId (registered in DataSourceManager), not mainDataSourceId
+      // (group layer children only register under dataSourceId)
+      const dsId = item.useDataSource?.dataSourceId
+      if (!dsId || seen.has(dsId)) return
+      seen.add(dsId)
+
+      const ds = DataSourceManager.getInstance().getDataSource(dsId) as FeatureLayerDataSource
+      const label = ds?.layer?.title || ds?.getLabel() || item.name || dsId
+      options.push({ value: dsId, label })
+    })
+
+    return options
+  }, [queryItems])
+
   // Log when initialInputValue prop is received
   React.useEffect(() => {
     debugLogger.log('HASH-EXEC', {
@@ -222,7 +249,7 @@ export function QueryTask (props: QueryTaskProps) {
   
   // Controlled tab state: use prop if provided, otherwise internal state
   const activeTab = propActiveTab || internalActiveTab
-  const setActiveTab = React.useCallback((tab: 'query' | 'results') => {
+  const setActiveTab = React.useCallback((tab: 'query' | 'spatial' | 'results') => {
     if (propOnTabChange) {
       propOnTabChange(tab)
     } else {
@@ -267,6 +294,8 @@ export function QueryTask (props: QueryTaskProps) {
   const previousConfigIdRef = React.useRef<string>(queryItem.configId)
   // Track manual tab switches to prevent auto-switch useEffect from interfering
   const manualTabSwitchRef = React.useRef(false)
+  // r025.031: Track which tab ('query' | 'spatial') initiated the last query for Results back button
+  const lastQueryOriginTabRef = React.useRef<'query' | 'spatial'>('query')
   // queryJustExecuted now in useReducer (r024.126 — A2b)
   // Store the last runtime zoom override value from the form for use by Add to Map action
   const lastRuntimeZoomToSelectedRef = React.useRef<boolean | undefined>(undefined)
@@ -387,16 +416,17 @@ export function QueryTask (props: QueryTaskProps) {
       hasRecords,
       recordsRefLength: recordsRef.current?.length || 0,
       manualTabSwitchRef: manualTabSwitchRef.current,
-      willAutoSwitch: queryJustExecuted && lastQueryResultCountRef.current > 0 && hasRecords && activeTab === 'query',
+      willAutoSwitch: queryJustExecuted && lastQueryResultCountRef.current > 0 && hasRecords && (activeTab === 'query' || activeTab === 'spatial'),
       timestamp: Date.now()
     })
-    
+
     // r022.22: Check lastQueryResultCountRef (current query's results) not resultCount (accumulated)
     // This prevents auto-switch when query returns 0 but accumulated records exist (Add mode bug)
-    if (queryJustExecuted && 
-        lastQueryResultCountRef.current > 0 && 
-        hasRecords && 
-        activeTab === 'query') {
+    // r025.031: Also auto-switch from spatial tab after spatial query execution
+    if (queryJustExecuted &&
+        lastQueryResultCountRef.current > 0 &&
+        hasRecords &&
+        (activeTab === 'query' || activeTab === 'spatial')) {
       debugLogger.log('TASK', {
         event: 'auto-switch-triggered',
         widgetId: props.widgetId,
@@ -531,7 +561,7 @@ export function QueryTask (props: QueryTaskProps) {
    * Clears all query results from the UI and map.
    * Delegates to executeClearResult (query-clear-handler.ts).
    */
-  const clearResult = React.useCallback(async (reason: string = 'unknown') => {
+  const clearResult = React.useCallback(async (reason: string = 'unknown', returnTab?: 'query' | 'spatial' | 'results') => {
     await executeClearResult({
       dispatch, outputDS, queryExecutionKeyRef, recordsRef,
       hasSelectedRecordsRef, currentQueryRecordIdsRef, lastQueryResultCountRef,
@@ -540,7 +570,7 @@ export function QueryTask (props: QueryTaskProps) {
       accumulatedRecords, graphicsLayer, mapView,
       eventManager: props.eventManager,
       onAccumulatedRecordsChange, onDestroyGraphicsLayer,
-      setActiveTab
+      setActiveTab, returnTab
     }, reason)
   }, [outputDS, publishDataClearedMsg, props.widgetId, queryItem.configId, onAccumulatedRecordsChange, graphicsLayer, mapView, props.eventManager])
 
@@ -851,10 +881,10 @@ export function QueryTask (props: QueryTaskProps) {
       await clearResult('navToForm-clearResults')
       return
     }
-    // Switch to query tab but don't clear results unless explicitly requested
+    // Switch to origin tab (query or spatial) but don't clear results unless explicitly requested
     // Mark as manual switch to prevent auto-switch useEffect from interfering
     manualTabSwitchRef.current = true
-    setActiveTab('query')
+    setActiveTab(lastQueryOriginTabRef.current)
     // Reset the flag after a short delay
     setTimeout(() => {
       manualTabSwitchRef.current = false
@@ -875,10 +905,10 @@ export function QueryTask (props: QueryTaskProps) {
    * when switching between tabs. Results are only cleared when explicitly
    * clicking the trash can button or when starting a new query.
    * 
-   * @param tab - The tab to switch to ('query' | 'results')
+   * @param tab - The tab to switch to ('query' | 'spatial' | 'results')
    * @param event - Optional mouse event to prevent default behavior
    */
-  const handleTabChange = React.useCallback((tab: 'query' | 'results', event?: React.MouseEvent) => {
+  const handleTabChange = React.useCallback((tab: 'query' | 'spatial' | 'results', event?: React.MouseEvent) => {
     debugLogger.log('TASK', {
       event: 'tab-change',
       tab,
@@ -926,6 +956,8 @@ export function QueryTask (props: QueryTaskProps) {
    * @param runtimeZoomToSelected - Optional runtime override for zoom-to-selected behavior
    */
   const handleFormSubmitInternal = React.useCallback(async (sqlExpr: IMSqlExpression, spatialFilter: SpatialFilterObj, runtimeZoomToSelected?: boolean) => {
+    // r025.031: Track origin tab for Results back button
+    lastQueryOriginTabRef.current = 'query'
     await executeQueryInternal({
       dispatch, outputDS, queryExecutionKeyRef, pendingQueryAfterClearRef,
       lastRuntimeZoomToSelectedRef, attributeFilterSqlExprObj, spatialFilterObj,
@@ -1020,6 +1052,205 @@ export function QueryTask (props: QueryTaskProps) {
     }, sqlExpr, spatialFilter, runtimeZoomToSelected)
   }, [props.widgetId, initialInputValue, handleFormSubmitInternal, resultsMode, outputDS, clearResult])
 
+  // ─── Spatial Query Execution ────────────────────────────────────────
+  // r025.031: Full pipeline — execute spatial query, convert to records, apply mode, graphics, zoom
+  const handleExecuteSpatialQuery = React.useCallback(async (params: {
+    inputGeometry: __esri.Geometry
+    selectedRelationship: string
+    selectedLayers: Array<{ value: string | number; label: string }>
+    bufferDistance: number
+    bufferUnit: string
+    resultsMode: string
+  }): Promise<boolean> => {
+    // Track origin tab for Results back button
+    lastQueryOriginTabRef.current = 'spatial'
+
+    // Show loading state
+    dispatch({ type: 'SET_STAGE', payload: 2 })
+
+    const targetLayerIds = params.selectedLayers.map(l => String(l.value))
+
+    // Build useDataSource map for lazy DS creation (group layer children need rootDataSourceId)
+    const targetUseDataSources: Record<string, any> = {}
+    queryItems?.forEach(item => {
+      const dsId = item.useDataSource?.dataSourceId
+      if (dsId && targetLayerIds.includes(dsId)) {
+        targetUseDataSources[dsId] = item.useDataSource
+      }
+    })
+
+    // Build per-layer spatial default maps for field resolution and configId stamping
+    const layerDefaultConfigs: Record<string, any> = {}
+    const layerDefaultConfigIds: Record<string, string> = {}
+    queryItems?.forEach(item => {
+      if (item.isSpatialResultDefault && item.useDataSource?.dataSourceId) {
+        const dsId = item.useDataSource.dataSourceId
+        if (targetLayerIds.includes(dsId)) {
+          layerDefaultConfigs[dsId] = item
+          layerDefaultConfigIds[dsId] = item.configId
+        }
+      }
+    })
+
+    // 1. Execute the spatial query
+    const result: SpatialQueryResult = await executeSpatialQuery({
+      inputGeometry: params.inputGeometry,
+      spatialRelationship: params.selectedRelationship,
+      targetLayerIds,
+      targetUseDataSources,
+      bufferDistance: params.bufferDistance,
+      bufferUnit: params.bufferUnit,
+      widgetId: props.widgetId,
+      layerDefaultConfigs
+    })
+
+    debugLogger.log('SPATIAL', {
+      event: 'spatial-query-results-summary',
+      widgetId: props.widgetId,
+      totalFeatureCount: result.totalFeatureCount,
+      totalTimeMs: result.totalTimeMs,
+      layerResults: result.layerResults.map(r => ({
+        layer: r.layerTitle,
+        count: r.featureCount,
+        queryTimeMs: r.queryTimeMs,
+        exceededTransferLimit: r.exceededTransferLimit
+      })),
+      errors: result.errors.length > 0 ? result.errors : undefined,
+      resultsMode: params.resultsMode,
+      bufferDistance: params.bufferDistance,
+      bufferUnit: params.bufferUnit,
+      spatialRelationship: params.selectedRelationship
+    })
+
+    // If ALL layers failed, show error alert (same pattern as Query tab) and throw
+    // Throwing ensures SpatialTabContent's catch runs → buffer distance is preserved
+    if (result.layerResults.length === 0 && result.errors.length > 0) {
+      dispatch({ type: 'SET_STAGE', payload: 1 })
+      dispatch({ type: 'SET_QUERY_ERROR_ALERT', payload: {
+        show: true,
+        errorMessage: result.errors.map(e => e.error).join('; '),
+        timestamp: Date.now()
+      }})
+      throw new Error('spatial-query-failed')
+    }
+
+    // 2. Convert FeatureSets → FeatureDataRecords via each target layer's DataSource
+    // Pass layerDefaultConfigIds so records are stamped with real configId for popup template resolution
+    const newRecords = convertSpatialResultsToRecords(result, props.widgetId, layerDefaultConfigIds)
+
+    // 3. Handle zero results — return false so buffer is preserved
+    if (newRecords.length === 0) {
+      dispatch({ type: 'SET_NO_RESULTS_ALERT', payload: { show: true, recordsRequested: 0, queryValue: 'spatial query', timestamp: Date.now() } })
+      dispatch({ type: 'SET_STAGE', payload: 1 })
+      return false
+    }
+
+    // 4. Apply ResultsMode (New / Add / Remove)
+    let recordsToDisplay: FeatureDataRecord[]
+    const existingRecords = accumulatedRecords || []
+    const outputDSAsFL = outputDS as FeatureLayerDataSource
+
+    // Map ResultsModeValue ('new'/'add'/'remove') to match check
+    const isNewMode = params.resultsMode === 'new' || params.resultsMode === SelectionType.NewSelection
+    const isAddMode = params.resultsMode === 'add' || params.resultsMode === SelectionType.AddToSelection
+    const isRemoveMode = params.resultsMode === 'remove' || params.resultsMode === SelectionType.RemoveFromSelection
+
+    if (isNewMode) {
+      // New mode: clear old results, use only new records
+      if (existingRecords.length > 0) {
+        await clearResult('spatial-new-mode', 'spatial')
+      }
+      recordsToDisplay = newRecords
+    } else if (isAddMode) {
+      // Add mode: merge new records into existing accumulated records
+      const { mergedRecords, duplicateRecordIds } = mergeResultsIntoAccumulated(
+        outputDSAsFL, newRecords, existingRecords
+      )
+      recordsToDisplay = mergedRecords
+
+      if (duplicateRecordIds.length > 0 && duplicateRecordIds.length === newRecords.length) {
+        dispatch({ type: 'SET_ALL_DUPLICATES_ALERT', payload: { show: true, recordsFound: newRecords.length, queryValue: 'spatial query' } })
+      }
+    } else if (isRemoveMode) {
+      // Remove mode: remove matching records from accumulated (same smarts as Query tab)
+      if (existingRecords.length === 0) {
+        recordsToDisplay = []
+      } else {
+        recordsToDisplay = removeResultsFromAccumulated(outputDSAsFL, newRecords, existingRecords)
+
+        if (recordsToDisplay.length === existingRecords.length) {
+          dispatch({ type: 'SET_NO_REMOVAL_ALERT', payload: { show: true, recordsFound: newRecords.length, queryValue: 'spatial query' } })
+        }
+      }
+
+      // r025.052: Close popup on Remove (matches Query tab behavior)
+      if (mapView?.popup?.visible) {
+        mapView.popup.close()
+      }
+    } else {
+      recordsToDisplay = newRecords
+    }
+
+    // 5. Update parent state
+    onAccumulatedRecordsChange(recordsToDisplay)
+    recordsRef.current = recordsToDisplay
+
+    // 6. Graphics on map via selectRecordsAndPublish
+    if (recordsToDisplay.length > 0 && graphicsLayer && mapView) {
+      const recordIds = recordsToDisplay.map(r => r.getId())
+      await selectRecordsAndPublish(
+        props.widgetId,
+        outputDS,
+        recordIds,
+        recordsToDisplay,
+        false,           // alsoPublishToOutputDS
+        true,            // useGraphicsLayer
+        graphicsLayer,
+        mapView,
+        true             // skipOriginDSSelection — records are from target layers, not outputDS origin
+      )
+      hasSelectedRecordsRef.current = true
+    } else if (isRemoveMode && recordsToDisplay.length === 0) {
+      // r025.052: All records removed — clear selection (same pattern as Query tab)
+      await clearSelectionInDataSources(props.widgetId, outputDS, true, graphicsLayer)
+      hasSelectedRecordsRef.current = false
+
+      debugLogger.log('RESULTS-MODE', {
+        event: 'spatial-remove-mode-all-records-removed-selection-cleared',
+        widgetId: props.widgetId
+      })
+    }
+
+    // 7. Update outputDS selection for Results tab display
+    if (outputDS && typeof (outputDS as any).selectRecordsByIds === 'function') {
+      const recordIds = recordsToDisplay.map(r => r.getId())
+      ;(outputDS as any).selectRecordsByIds(recordIds, recordsToDisplay)
+    }
+
+    // 8. Dispatch state updates
+    queryExecutionKeyRef.current += 1
+    lastQueryResultCountRef.current = newRecords.length
+    dispatch({ type: 'SET_RESULT_COUNT', payload: recordsToDisplay.length })
+    dispatch({ type: 'SET_STAGE', payload: 1 })
+    dispatch({ type: 'SET_QUERY_EXECUTED', payload: true })
+
+    // 9. Zoom to results
+    if (recordsToDisplay.length > 0) {
+      zoomToRecords(recordsToDisplay)
+    }
+
+    debugLogger.log('SPATIAL', {
+      event: 'spatial-pipeline-complete',
+      widgetId: props.widgetId,
+      mode: params.resultsMode,
+      newRecordCount: newRecords.length,
+      displayRecordCount: recordsToDisplay.length,
+      totalTimeMs: result.totalTimeMs
+    })
+
+    return true
+  }, [props.widgetId, queryItems, outputDS, accumulatedRecords, graphicsLayer, mapView, onAccumulatedRecordsChange, clearResult, zoomToRecords])
+
   const { useAttributeFilter, sqlExprObj, useSpatialFilter, spatialFilterTypes, spatialIncludeRuntimeData, spatialRelationUseDataSources} = currentItem
   const showAttributeFilter = useAttributeFilter && sqlExprObj != null
   const showSpatialFilter = spatialFilterEnabled && useSpatialFilter && (spatialFilterTypes.length > 0 || spatialIncludeRuntimeData || spatialRelationUseDataSources?.length > 0)
@@ -1109,7 +1340,7 @@ export function QueryTask (props: QueryTaskProps) {
       {/* Tab Navigation - Moved to top */}
       <Tabs
         value={activeTab}
-        onChange={(id) => handleTabChange(id as 'query' | 'results')}
+        onChange={(id) => handleTabChange(id as 'query' | 'spatial' | 'results')}
         fill={true}
         type='underline'
         keepMount={true}
@@ -1470,6 +1701,40 @@ export function QueryTask (props: QueryTaskProps) {
           </div>
         </Tab>
         <Tab
+          id='spatial'
+          title={getI18nMessage('spatialTab')}
+        >
+          <div
+            className={classNames('query-task__content', {
+              [FOCUSABLE_CONTAINER_CLASS]: isInPopper && activeTab === 'spatial'
+            })}
+            css={css`
+              flex: 1;
+              display: flex;
+              flex-direction: column;
+              min-height: 0;
+              height: 100%;
+              padding-top: 0 !important;
+            `}
+          >
+            <SpatialTabContent
+              activeTab={activeTab}
+              accumulatedRecords={accumulatedRecords}
+              onClearResults={() => { clearResult('spatial-trash-click', 'spatial') }}
+              mapView={mapView}
+              jimuMapView={jimuMapView}
+              widgetId={props.widgetId}
+              isPanelVisible={props.isPanelVisible}
+              targetLayerOptions={targetLayerOptions}
+              onExecuteSpatialQuery={handleExecuteSpatialQuery}
+              queryErrorAlert={queryErrorAlert}
+              onDismissQueryErrorAlert={() => dispatch({ type: 'SET_QUERY_ERROR_ALERT', payload: null })}
+              noResultsAlert={noResultsAlert}
+              onDismissNoResultsAlert={() => dispatch({ type: 'SET_NO_RESULTS_ALERT', payload: null })}
+            />
+          </div>
+        </Tab>
+        <Tab
           id='results'
           title={
             <span>
@@ -1536,8 +1801,7 @@ export function QueryTask (props: QueryTaskProps) {
                 onDismissAllDuplicatesAlert={() => dispatch({ type: 'SET_ALL_DUPLICATES_ALERT', payload: null })}
                 onNavBack={async (clearResults = false) => {
                   // Handle navigation from QueryTaskResult
-                  // If clearResults is true, clear everything and go to query tab
-                  // If false, just switch to query tab without clearing
+                  // r025.031: Navigate back to whichever tab initiated the query (query or spatial)
                   if (clearResults) {
                     hasSelectedRecordsRef.current = false // Reset flag when clearing
                     await navToForm(true)
@@ -1545,7 +1809,7 @@ export function QueryTask (props: QueryTaskProps) {
                     // Just switch tabs, don't clear results
                     // Mark as manual switch to prevent auto-switch useEffect from interfering
                     manualTabSwitchRef.current = true
-                    setActiveTab('query')
+                    setActiveTab(lastQueryOriginTabRef.current)
                     // Reset the flag after a short delay
                     setTimeout(() => {
                       manualTabSwitchRef.current = false

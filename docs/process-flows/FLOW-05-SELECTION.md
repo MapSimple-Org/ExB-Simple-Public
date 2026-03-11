@@ -21,9 +21,15 @@ other widgets react to selections.
 |---------|----------|----------|
 | Query results loaded | `selectRecordsAndPublish()` | selection-utils.ts:511 |
 | Result row clicked | `selectRecordsAndPublish()` | Called from query-result.tsx |
+| Spatial query results | `selectRecordsAndPublish()` | Called from query-task.tsx `handleExecuteSpatialQuery` with `skipOriginDSSelection = true` |
 | Clear results | `clearAllSelectionsForWidget()` | selection-utils.ts:293 |
 | Clear selection | `clearSelectionInDataSources()` | selection-utils.ts:257 |
 | X button on result | `removeRecordsFromOriginSelections()` | results-management-utils.ts:299 |
+
+> **Spatial query note:** Spatial query records come from target layers (e.g.,
+> Parcels, Trails), not the widget's configured outputDS origin. Because there is
+> no single origin DS that owns these records, `skipOriginDSSelection = true` is
+> passed to avoid selecting into an unrelated origin DS.
 
 ---
 
@@ -152,4 +158,4 @@ URL-based query triggering.
 
 ---
 
-*Last updated: r024.131 (2026-03-05) — corrected removeRecordsFromOriginSelections line reference*
+*Last updated: r025.044 (2026-03-10) — added spatial query as entry point with skipOriginDSSelection*

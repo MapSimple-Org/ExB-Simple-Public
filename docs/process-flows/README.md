@@ -1,6 +1,6 @@
 # Process Flow Documentation
 
-End-to-end reference for the 8 major functions of the QuerySimple and
+End-to-end reference for the 11 major functions of the QuerySimple and
 HelperSimple widgets. Each document includes ASCII flow diagrams, file:line
 references, decision points, and test coverage notes.
 
@@ -16,6 +16,9 @@ references, decision points, and test coverage notes.
 | 06 | [FLOW-06-URL-HASH](FLOW-06-URL-HASH.md) | Deep linking: HelperSimple hash monitoring, widget opening, re-execution prevention |
 | 07 | [FLOW-07-SETTINGS](FLOW-07-SETTINGS.md) | Settings panel: multi-stage wizard, config options, data source configuration |
 | 08 | [FLOW-08-DATA-SOURCES](FLOW-08-DATA-SOURCES.md) | DS lifecycle: input/output/origin chain, LayerList vs highlight-only paths |
+| 09 | [FLOW-09-BUFFER-PREVIEW](FLOW-09-BUFFER-PREVIEW.md) | Spatial tab real-time buffer preview: layer lifecycle, SR-aware operator selection, client-side geometry for spatial queries |
+| 10 | [FLOW-10-SPATIAL-QUERY-EXECUTION](FLOW-10-SPATIAL-QUERY-EXECUTION.md) | Spatial query pipeline: two input modes (Operations/Draw), buffer decision, per-layer JSAPI execution, results mode merge |
+| 11 | [FLOW-11-SPATIAL-DRAW-MODE](FLOW-11-SPATIAL-DRAW-MODE.md) | Spatial tab Draw mode: JimuDraw integration, module lazy loading, multi-shape geometry accumulation, mode switching, smart defaults |
 
 ## Key Architectural Patterns
 
@@ -93,4 +96,4 @@ Add the new flow to the Flow Index table above.
 
 ---
 
-*Last updated: r024.131 (2026-03-05)*
+*Last updated: r025.052 (2026-03-11)*

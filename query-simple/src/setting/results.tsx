@@ -226,6 +226,16 @@ export function ResultsSetting (props: Props) {
           <span>{getI18nMessage('zoomToSelected')}</span>
         </label>
       </SettingRow>
+      <SettingRow>
+        <label>
+          <Checkbox
+            className='mr-2'
+            checked={currentItem.isSpatialResultDefault ?? false}
+            onChange={(_, checked) => { onPropertyChanged('isSpatialResultDefault', checked) }}
+          />
+          <span>{getI18nMessage('spatialResultDefault')}</span>
+        </label>
+      </SettingRow>
 
       {/* Title expression editor - shared between SelectAttributes and CustomTemplate */}
       {showTitleEditor && (

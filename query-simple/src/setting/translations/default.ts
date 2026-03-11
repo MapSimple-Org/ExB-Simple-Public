@@ -92,7 +92,15 @@ export default {
   resultsLayerTitlePlaceholder: 'QuerySimple Results',
   contentTemplate: 'Content template',
   contentTemplateTip: 'Formatting syntax:\n**bold** or __bold__\n*italic* or _italic_\n# Heading\n## Subheading\n### Small heading\n- List item\n--- Horizontal rule\n[text](url) Link\n![alt](url) Image\n(blank line) Paragraph break\n(leading spaces) Indent\n\nInsert fields with the data button below.\nFor images: ![Photo]({PHOTO_URL})',
-  templatePreview: 'Preview'
+  templatePreview: 'Preview',
+  spatialResultDefault: 'Use as spatial result template',
+  spatialDrawColors: 'Spatial draw colors',
+  drawColor: 'Draw color',
+  bufferColor: 'Buffer color',
+  enableSuggest: 'Typeahead suggestions',
+  enableSuggestDescription: 'Show matching values as you type in the free-form text input.',
+  suggestMinChars: 'Minimum characters',
+  suggestLimit: 'Max suggestions'
 }
 
 

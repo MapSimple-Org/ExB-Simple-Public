@@ -173,6 +173,15 @@ export interface QueryItemType {
   zoomToSelected?: boolean
   // Display order (lower numbers appear first, optional)
   order?: number
+  /** When true, spatial query results from this layer use this query's rendering/field settings */
+  isSpatialResultDefault?: boolean
+  // Suggest / Typeahead configuration (r025.053)
+  /** When true, enables typeahead suggestions for free-form text inputs */
+  enableSuggest?: boolean
+  /** Minimum characters before firing suggest query (default: 2) */
+  suggestMinChars?: number
+  /** Maximum number of suggestions to return (default: 10) */
+  suggestLimit?: number
 }
 
 export interface SizeMap {
@@ -199,6 +208,9 @@ export interface SettingConfig {
   highlightPointStyle?: 'circle' | 'square' | 'cross' | 'x' | 'diamond'  // default: 'circle'
   // Hover Preview Pin Configuration
   hoverPinColor?: string              // Hex color (e.g., '#EA4335' - red) - default: '#EA4335'
+  // Spatial Tab Draw & Buffer Color Configuration
+  drawColor?: string                  // Hex color for draw symbols (default: '#32FF00' - lime green)
+  bufferColor?: string                // Hex color for buffer preview (default: '#FFA500' - orange)
   // Result Click Behavior
   /** r023.31: Default false. When true, clicking a result zooms to it. When false, use "Zoom to" from result menu. */
   zoomOnResultClick?: boolean

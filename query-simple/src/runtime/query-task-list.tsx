@@ -1,6 +1,7 @@
 /** @jsx jsx */
 import { jsx, css, React, type ImmutableArray, Immutable, type ImmutableObject, hooks, type FeatureLayerDataSource, type FeatureDataRecord, type DataSource } from 'jimu-core'
 import { Select } from 'jimu-ui'
+import { type JimuMapView } from 'jimu-arcgis'
 import type { QueryItemType, SelectionType } from '../config'
 import { QueryTask } from './query-task'
 import { FOCUSABLE_CONTAINER_CLASS } from 'jimu-ui'
@@ -35,7 +36,8 @@ export interface QueryTaskListProps {
   activeTab?: 'query' | 'results'
   onTabChange?: (tab: 'query' | 'results') => void
   eventManager?: EventManager  // Chunk 7.1: Event Handling Manager
-  // FIX (r018.96): Removed manuallyRemovedRecordIds and onManualRemoval - no longer needed
+  isPanelVisible?: boolean  // r025.013: Buffer preview clear/restore on panel close/open
+  jimuMapView?: JimuMapView | null  // r025.041: JimuMapView for JimuDraw in Spatial tab Draw mode
 }
 
 interface GroupedQueries {
@@ -131,7 +133,7 @@ const getQueryDisplayName = (item: ImmutableObject<QueryItemType>): string => {
 }
 
 export function QueryTaskList (props: QueryTaskListProps) {
-  const { queryItems, widgetId, defaultPageSize, isInPopper = false, className = '', initialQueryValue, shouldUseInitialQueryValueForSelection = false, onHashParameterUsed, resultsMode, onResultsModeChange, accumulatedRecords, resultsExtent, onAccumulatedRecordsChange, graphicsLayer, mapView, onInitializeGraphicsLayer, onClearGraphicsLayer, onDestroyGraphicsLayer, activeTab, onTabChange, eventManager, zoomOnResultClick, hoverPinColor } = props
+  const { queryItems, widgetId, defaultPageSize, isInPopper = false, className = '', initialQueryValue, shouldUseInitialQueryValueForSelection = false, onHashParameterUsed, resultsMode, onResultsModeChange, accumulatedRecords, resultsExtent, onAccumulatedRecordsChange, graphicsLayer, mapView, onInitializeGraphicsLayer, onClearGraphicsLayer, onDestroyGraphicsLayer, activeTab, onTabChange, eventManager, zoomOnResultClick, hoverPinColor, isPanelVisible, jimuMapView } = props
   const getI18nMessage = hooks.useTranslation(defaultMessages)
   
   // Sort queries by display order before grouping
@@ -591,6 +593,8 @@ export function QueryTaskList (props: QueryTaskListProps) {
             eventManager={eventManager}
             zoomOnResultClick={zoomOnResultClick}
             hoverPinColor={hoverPinColor}
+            isPanelVisible={isPanelVisible}
+            jimuMapView={jimuMapView}
               // No onNavBack - no navigation needed
             />
           </div>

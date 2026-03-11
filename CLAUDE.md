@@ -17,14 +17,18 @@ Read these files for context before making changes:
 1. **Architecture Guide**: `docs/ARCHITECTURE.md`
    - Compatibility matrix (ExB 1.19, JSAPI 4.34, React 19)
    - Widget architecture patterns (Hook & Shell, lifecycle, component hierarchy)
+   - Tab architecture (Query tab, Spatial tab, shared components)
+   - Handler extraction pattern (typed context interfaces)
+   - Spatial query architecture (Operations + Draw modes, buffer preview, multi-layer execution)
+   - Typeahead/suggest architecture (companion hook pattern, capture-phase listeners)
    - Shared code patterns and import conventions
    - Component libraries (jimu-ui, Emotion CSS-in-JS styling)
    - Data sources, custom data actions, and record grouping
    - Common errors and JSAPI deprecation notes
 
 2. **Process Flows**: `docs/process-flows/README.md`
-   - 8 end-to-end flow documents describing how the widgets work
-   - Initialization, query execution, results accumulation, zoom, selection, URL hash, settings, data sources
+   - 11 end-to-end flow documents describing how the widgets work
+   - Initialization, query execution, results accumulation, zoom, selection, URL hash, settings, data sources, buffer preview, spatial query execution, spatial draw mode
    - When changing code that affects a documented flow, update the corresponding FLOW-XX document
 
 3. **Project Rules**: `.cursor/rules/`
@@ -50,14 +54,21 @@ query-simple/
     config.ts              # TypeScript config interfaces
     version.ts             # Widget version number
     runtime/
-      widget.tsx           # Main widget component (class, delegates to managers)
-      query-task.tsx        # Query execution pipeline (largest file)
+      widget.tsx           # Main widget shell (class component)
+      query-task.tsx        # Query orchestrator + spatial query handler
+      query-task-form.tsx   # Query form UI + suggest integration
       query-result.tsx      # Results display and record management
-      query-utils.ts        # Query generation, Field Shredder, SQL Optimizer
+      query-utils.ts        # SQL Optimizer, field resolution
       selection-utils.ts    # Selection propagation across data sources
       zoom-utils.ts         # Zoom-to-results with SR validation
       graphics-layer-utils.ts  # Map highlight graphics management
-      managers/             # Manager classes for cross-cutting concerns
+      execute-spatial-query.ts # Multi-layer spatial query engine
+      suggest-utils.ts      # Typeahead detection, fetch, inject
+      useSuggest.ts         # Suggest hook with state machine
+      SuggestPopover.tsx    # Suggest dropdown component
+      tabs/                 # Tab components (Query, Spatial)
+      components/           # Shared UI components (ResultsModeControl)
+      managers/             # Manager classes, hooks (buffer preview, etc.)
     setting/
       setting.tsx           # Widget configuration UI
 helper-simple/

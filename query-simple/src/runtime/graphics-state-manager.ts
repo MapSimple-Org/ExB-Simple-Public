@@ -30,9 +30,18 @@ class GraphicsStateManager {
   private _legendVisibilityHandles = new Map<string, __esri.WatchHandle>()
   private _legendVisibilityHandleIds = new Map<string, string>() // legendLayerId -> globalHandleManager handleId
 
+  // r025.015: Buffer visibility watcher removed — buffer layer is now added
+  // INSIDE the GroupLayer, so visibilityMode:'inherited' handles visibility
+  // automatically. No watcher handle storage needed.
+
   // r024.59: Cache mapView per widgetId so the legend-layer visibility watcher
   // can close the popup when the user toggles the layer off in the Layer List.
   private _mapViewCache = new Map<string, __esri.MapView | __esri.SceneView>()
+
+  // r025.020: Store last buffer graphic per widget for imperative restore on panel reopen.
+  // Effects are unreliable for panel close/reopen — imperative clear/restore is symmetric
+  // with how highlight graphics are handled (clearSelectionFromMap / addSelectionToMap).
+  private _lastBufferGraphic = new Map<string, __esri.Graphic>()
 
   private constructor() {
     // Private constructor enforces singleton pattern
@@ -140,6 +149,22 @@ class GraphicsStateManager {
 
   public deleteMapView(widgetId: string): boolean {
     return this._mapViewCache.delete(widgetId)
+  }
+
+  // ---------------------------------------------------------------------------
+  // Last buffer graphic (for imperative restore on panel reopen)
+  // ---------------------------------------------------------------------------
+
+  public getLastBufferGraphic(widgetId: string): __esri.Graphic | undefined {
+    return this._lastBufferGraphic.get(widgetId)
+  }
+
+  public setLastBufferGraphic(widgetId: string, graphic: __esri.Graphic): void {
+    this._lastBufferGraphic.set(widgetId, graphic)
+  }
+
+  public deleteLastBufferGraphic(widgetId: string): boolean {
+    return this._lastBufferGraphic.delete(widgetId)
   }
 }
 

@@ -37,7 +37,7 @@ import { type FeatureLayerDataSource, type FeatureDataRecord } from 'jimu-core'
 import { type ImmutableObject } from 'jimu-core'
 import { type QueryItemType, FieldsType } from '../config'
 import { createQuerySimpleDebugLogger } from 'widgets/shared-code/mapsimple-common'
-import { combineFields } from './query-utils'
+import { combineFields, resolvePopupOutFields } from './query-utils'
 
 const debugLogger = createQuerySimpleDebugLogger()
 
@@ -62,25 +62,12 @@ function resolveOutFields (
     return combineFields(resultDisplayFields as any, resultTitleExpression || '', featureLayer.objectIdField)
   }
 
-  // PopupSetting mode: use visible popup fields
+  // PopupSetting mode / fallback: delegate to shared utility
   if (outputDS) {
-    const popupInfo = outputDS.getPopupInfo?.() ||
-      (outputDS.getOriginDataSources?.()?.[0] as FeatureLayerDataSource)?.getPopupInfo?.()
-    if (popupInfo?.fieldInfos) {
-      const fieldNames = featureLayer.fields.map(f => f.name)
-      const visibleFields = popupInfo.fieldInfos
-        .filter(fi => fi.visible !== false && fieldNames.includes(fi.fieldName))
-        .map(fi => fi.fieldName)
-      if (visibleFields.length > 0) {
-        if (!visibleFields.includes(featureLayer.objectIdField)) {
-          visibleFields.push(featureLayer.objectIdField)
-        }
-        return visibleFields
-      }
-    }
+    return resolvePopupOutFields(outputDS, featureLayer)
   }
 
-  // Fallback: all fields from the layer
+  // No DataSource fallback: all fields from the layer
   return featureLayer.fields.map(f => f.name)
 }
 

@@ -2,8 +2,8 @@
 
 Custom widgets for ArcGIS Experience Builder Developer Edition (1.19.0+). Built for performance, deep-linking, and advanced result management.
 
-**Current Version**: `1.19.0-r024.132`
-**Latest Update**: Sentence case labels, Display Order guard, codebase simplification, 8 end-to-end process flow docs (Mar 5, 2026)
+**Current Version**: `1.19.0-r025.055`
+**Latest Update**: Spatial tab, typeahead suggestions, configurable draw/buffer colors (Mar 11, 2026)
 
 ---
 
@@ -27,35 +27,52 @@ Custom widgets for ArcGIS Experience Builder Developer Edition (1.19.0+). Built 
 
 ---
 
-## What's New: r024.112-132 (Mar 5, 2026)
+## What's New: r025 (Mar 9-11, 2026)
 
-### UI Polish (r024.132)
+### Spatial Tab
 
-- **Sentence case labels**: "Search Layer" → "Search layer", "Search Alias" → "Search alias" — consistent across runtime and settings
-- **Display Order guard**: Display Order field is now hidden when no Group ID is set, preventing misconfiguration that could break the widget. Clearing a Group ID auto-clears any existing Display Order value.
+**Full spatial query support with two modes: Operations and Draw.**
 
-### Codebase Simplification
+**Operations mode** uses existing query results as input geometry for spatial queries against any configured target layer. Features include real-time geodesic buffer preview on the map, searchable Calcite combobox for 7 spatial relationships, context-aware warnings (e.g., "Within requires area geometry"), and multi-layer target selection.
 
-**Major internal refactoring for maintainability.** The two largest widget files were significantly reduced through systematic extraction of complex functions into focused handler modules, while preserving all existing behavior and passing all 164 tests.
+**Draw mode** uses JimuDraw for interactive shape creation with 7 tools (point, polyline, polygon, rectangle, circle, freehand line, freehand polygon). Drawn geometries accumulate for multi-shape queries, with a rectangle-selection tool for editing drawn shapes.
 
-| File | Before | After | Reduction |
-| :--- | :--- | :--- | :--- |
-| `query-task.tsx` | 2,950 lines | 1,620 lines | −45% |
-| `query-result.tsx` | 1,741 lines | 1,253 lines | −28% |
+**Key capabilities:**
+- Buffer support with mixed geometry types (points + polygons in the same query)
+- Client-side buffer geometry for accurate spatial relationship evaluation
+- Configurable draw and buffer colors in settings (color pickers)
+- New/Add/Remove modes shared with Query tab
+- Results back-button returns to originating tab (Query or Spatial)
+- Per-layer "spatial result default" template for rendering spatial results
 
-Extracted handlers cover query execution, form submission, results clearing, and record removal — each in its own focused module.
+### Typeahead Suggestions
 
-### View in Table Memory Fix (r024.113-114)
+**Real-time value suggestions for free-form text queries.** As users type in a PIN, address, or name field, a dropdown appears with matching values from the layer. Select a suggestion to populate the field, then execute normally.
 
-**Eliminated priming-tab memory leak** in most scenarios via a tab-switch approach. Duplicate tabs are now reused when data hasn't changed.
+**Features:**
+- Configurable per query in settings: enable toggle, minimum characters (1-10, default 2), max suggestions (1-50, default 10)
+- Multi-clause SQL support: suggestions honor fixed clauses (e.g., only show names where PROPTYPE = 'K')
+- Operator-aware matching: contains, starts-with, ends-with patterns match the configured SQL operator
+- Keyboard navigation: Arrow keys, Enter to select, Escape to dismiss
+- ARIA combobox pattern for accessibility
+- Debug via `?debug=SUGGEST`
 
-### Default Hover Pin Color (r024.116)
+### Remove Mode Parity (Spatial Tab)
 
-**Default hover preview pin color changed from yellow to Google Maps red** for better visibility. Existing custom color configurations are unaffected.
+Remove button disabled when no accumulated records. Popup auto-close on Remove execute. All-records-removed cleanup with auto-reset to "New" mode.
 
-### Process Flow Documentation (r024.112-131)
+---
 
-**8 end-to-end flow documents** created and maintained with ASCII diagrams and file:line references, covering initialization, query execution, results accumulation, zoom, selection, URL hash, settings, and data sources. See `docs/process-flows/`.
+## Previous Updates: r024.112-132 (Mar 5, 2026)
+
+### UI Polish, Codebase Simplification, Process Flow Docs
+
+- **Sentence case labels** across runtime and settings
+- **Display Order guard**: hidden when no Group ID set
+- **Codebase simplification**: query-task.tsx −45%, query-result.tsx −28% via handler extraction
+- **View in Table memory fix**: eliminated priming-tab leak
+- **Default hover pin color**: changed to Google Maps red
+- **8 end-to-end process flow documents** with ASCII diagrams
 
 ---
 
@@ -341,6 +358,8 @@ QuerySimple solves the common pain points of the standard Experience Builder que
 
 ### Advanced Features
 
+- **Spatial Tab**: Full spatial query support with Operations and Draw modes, buffer preview, 7 drawing tools, and multi-layer targets
+- **Typeahead Suggestions**: Real-time value suggestions for free-form text queries with multi-clause support
 - **Custom Template Mode**: Markdown-based result display with field tokens and live preview
 - **Duplicate Query Button**: Clone any query instantly with all settings preserved
 - **Query Grouping**: Organize dozens of searches into clean two-dropdown hierarchy
@@ -413,6 +432,10 @@ Production-safe debugging via URL parameter: `?debug=FEATURE`
 - `RESTORE` - Selection restoration logic
 - `GRAPHICS-LAYER` - Highlighting logic
 - `WIDGET-STATE` - Widget handshake events
+- `SPATIAL` - Spatial tab query execution
+- `SUGGEST` - Typeahead suggestion queries
+- `DIRECT-QUERY` - Direct FeatureLayer query bypass details
+- `CSV` - CSV export field inspection
 
 **Example:** `index.html?debug=HASH,TASK`
 

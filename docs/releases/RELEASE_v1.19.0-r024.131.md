@@ -1,11 +1,11 @@
-# Release v1.19.0-r024.131
+# Release v1.19.0-r024.132
 
 **Release Date:** 2026-03-05
 **Experience Builder Version:** 1.19.0+
 
 ## Highlights
 
-This release focuses on codebase simplification and maintainability. The two largest widget files have been significantly reduced through systematic extraction of complex functions into focused handler modules, while preserving all existing behavior and passing all 164 tests.
+This release focuses on codebase simplification, maintainability, and UI polish. The two largest widget files have been significantly reduced through systematic extraction of complex functions into focused handler modules, while preserving all existing behavior and passing all 164 tests.
 
 ---
 

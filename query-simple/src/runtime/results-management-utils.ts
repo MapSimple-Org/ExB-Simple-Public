@@ -22,8 +22,10 @@ export function getRecordKey(
   record: FeatureDataRecord,
   outputDS: FeatureLayerDataSource
 ): string {
+  // Prefer stamped __originDSId (set on spatial results and cross-layer accumulation)
+  const stampedOriginDSId = (record as any).feature?.attributes?.__originDSId
   const originDS = outputDS.getOriginDataSources()?.[0] as FeatureLayerDataSource
-  const originDSId = originDS?.id || outputDS.id // Fallback to outputDS if no origin
+  const originDSId = stampedOriginDSId || originDS?.id || outputDS.id
   const objectId = record.getId()
   const key = `${originDSId}_${objectId}`
   return key
