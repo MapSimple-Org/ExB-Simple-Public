@@ -260,130 +260,158 @@ export function QueryItemSettingMain (props: Props) {
                 />
               </SettingRow>
             </SettingSection>
-            <SettingSection role='group' aria-label='Short ID' title='Short ID'>
-              <SettingRow flow='wrap' label='Short ID'>
-                <TextInput
-                  aria-label='Short ID'
-                  className='w-100'
-                  size='sm'
-                  value={shortIdValue}
-                  onChange={(e) => { setShortIdValue(e.target.value) }}
-                  onAcceptValue={(value) => {
-                    const trimmedValue = value.trim()
-                    updateProperty('shortId', trimmedValue || null)
-                  }}
-                  placeholder='e.g., PIN_SEARCH, MAJOR_SEARCH'
+            <SettingSection role='group' aria-label={getI18nMessage('spatialOnly')}>
+              <SettingRow tag='label' label={getI18nMessage('spatialOnly')}>
+                <Switch
+                  checked={currentItem.spatialOnly ?? false}
+                  onChange={(e) => { updateProperty('spatialOnly', e.target.checked) }}
                 />
-                <div css={css`
-                  font-size: 0.75rem;
-                  color: var(--dark-400);
-                  margin-top: 0.25rem;
-                  line-height: 1.4;
-                `}>
-                  {getI18nMessage('shortIdDescription')}
-                </div>
-                {!isManagedByHelper && (
+              </SettingRow>
+              {currentItem.spatialOnly && (
+                <SettingRow>
                   <div css={css`
                     font-size: 0.75rem;
-                    color: var(--warning-700);
-                    margin-top: 0.25rem;
-                    line-height: 1.4;
-                    font-style: italic;
+                    color: var(--dark-400);
                   `}>
-                    {getI18nMessage('shortIdHelperNote')}
+                    {getI18nMessage('spatialOnlyDescription')}
                   </div>
+                </SettingRow>
+              )}
+            </SettingSection>
+            {/* r025.060: Hide query-routing fields for spatial-only layers */}
+            {!currentItem.spatialOnly && (
+              <React.Fragment>
+                <SettingSection role='group' aria-label='Short ID' title='Short ID'>
+                  <SettingRow flow='wrap' label='Short ID'>
+                    <TextInput
+                      aria-label='Short ID'
+                      className='w-100'
+                      size='sm'
+                      value={shortIdValue}
+                      onChange={(e) => { setShortIdValue(e.target.value) }}
+                      onAcceptValue={(value) => {
+                        const trimmedValue = value.trim()
+                        updateProperty('shortId', trimmedValue || null)
+                      }}
+                      placeholder='e.g., PIN_SEARCH, MAJOR_SEARCH'
+                    />
+                    <div css={css`
+                      font-size: 0.75rem;
+                      color: var(--dark-400);
+                      margin-top: 0.25rem;
+                      line-height: 1.4;
+                    `}>
+                      {getI18nMessage('shortIdDescription')}
+                    </div>
+                    {!isManagedByHelper && (
+                      <div css={css`
+                        font-size: 0.75rem;
+                        color: var(--warning-700);
+                        margin-top: 0.25rem;
+                        line-height: 1.4;
+                        font-style: italic;
+                      `}>
+                        {getI18nMessage('shortIdHelperNote')}
+                      </div>
+                    )}
+                  </SettingRow>
+                </SettingSection>
+                <SettingSection role='group' aria-label={getI18nMessage('groupId')} title={getI18nMessage('groupId')}>
+                  <SettingRow flow='wrap' label={getI18nMessage('groupId')}>
+                    <TextInput
+                      aria-label={getI18nMessage('groupId')}
+                      className='w-100'
+                      size='sm'
+                      value={groupIdValue}
+                      onChange={(e) => { setGroupIdValue(e.target.value) }}
+                      onAcceptValue={(value) => {
+                        const trimmedValue = value.trim()
+                        updateProperty('groupId', trimmedValue || null)
+                        if (!trimmedValue) {
+                          updateProperty('order', null)
+                          setDisplayOrderValue('')
+                        }
+                      }}
+                      placeholder='e.g., PARCELS, ADDRESSES'
+                    />
+                    <div css={css`
+                      font-size: 0.75rem;
+                      color: var(--dark-400);
+                      margin-top: 0.25rem;
+                      line-height: 1.4;
+                    `}>
+                      {getI18nMessage('groupIdDescription')}
+                    </div>
+                  </SettingRow>
+                </SettingSection>
+                <SettingSection role='group' aria-label='Search alias' title='Search alias'>
+                  <SettingRow flow='wrap' label='Search alias'>
+                    <TextInput
+                      aria-label='Search alias'
+                      className='w-100'
+                      size='sm'
+                      value={searchAliasValue}
+                      onChange={(e) => { setSearchAliasValue(e.target.value) }}
+                      onAcceptValue={(value) => {
+                        const trimmedValue = value.trim()
+                        updateProperty('searchAlias', trimmedValue || null)
+                      }}
+                      placeholder='e.g., Parcel Number, Major'
+                    />
+                  </SettingRow>
+                </SettingSection>
+                {groupIdValue && (
+                <SettingSection role='group' aria-label={getI18nMessage('displayOrder')} title={getI18nMessage('displayOrder')}>
+                  <SettingRow flow='wrap' label={getI18nMessage('displayOrder')}>
+                    <TextInput
+                      aria-label={getI18nMessage('displayOrder')}
+                      className='w-100'
+                      size='sm'
+                      type='number'
+                      value={displayOrderValue}
+                      onChange={(e) => { setDisplayOrderValue(e.target.value) }}
+                      onAcceptValue={(value) => {
+                        const trimmedValue = value.trim()
+                        const numValue = trimmedValue ? parseInt(trimmedValue, 10) : null
+                        if (numValue !== null && !isNaN(numValue)) {
+                          updateProperty('order', numValue)
+                        } else {
+                          updateProperty('order', null)
+                          setDisplayOrderValue('')
+                        }
+                      }}
+                      placeholder='e.g., 1, 2, 3'
+                    />
+                    <div css={css`
+                      font-size: 0.75rem;
+                      color: var(--dark-400);
+                      margin-top: 0.25rem;
+                      line-height: 1.4;
+                    `}>
+                      {getI18nMessage('displayOrderDescription')}
+                    </div>
+                  </SettingRow>
+                </SettingSection>
                 )}
-              </SettingRow>
-            </SettingSection>
-            <SettingSection role='group' aria-label={getI18nMessage('groupId')} title={getI18nMessage('groupId')}>
-              <SettingRow flow='wrap' label={getI18nMessage('groupId')}>
-                <TextInput
-                  aria-label={getI18nMessage('groupId')}
-                  className='w-100'
-                  size='sm'
-                  value={groupIdValue}
-                  onChange={(e) => { setGroupIdValue(e.target.value) }}
-                  onAcceptValue={(value) => {
-                    const trimmedValue = value.trim()
-                    updateProperty('groupId', trimmedValue || null)
-                    if (!trimmedValue) {
-                      updateProperty('order', null)
-                      setDisplayOrderValue('')
-                    }
-                  }}
-                  placeholder='e.g., PARCELS, ADDRESSES'
-                />
-                <div css={css`
-                  font-size: 0.75rem;
-                  color: var(--dark-400);
-                  margin-top: 0.25rem;
-                  line-height: 1.4;
-                `}>
-                  {getI18nMessage('groupIdDescription')}
-                </div>
-              </SettingRow>
-            </SettingSection>
-            <SettingSection role='group' aria-label='Search alias' title='Search alias'>
-              <SettingRow flow='wrap' label='Search alias'>
-                <TextInput
-                  aria-label='Search alias'
-                  className='w-100'
-                  size='sm'
-                  value={searchAliasValue}
-                  onChange={(e) => { setSearchAliasValue(e.target.value) }}
-                  onAcceptValue={(value) => {
-                    const trimmedValue = value.trim()
-                    updateProperty('searchAlias', trimmedValue || null)
-                  }}
-                  placeholder='e.g., Parcel Number, Major'
-                />
-              </SettingRow>
-            </SettingSection>
-            {groupIdValue && (
-            <SettingSection role='group' aria-label={getI18nMessage('displayOrder')} title={getI18nMessage('displayOrder')}>
-              <SettingRow flow='wrap' label={getI18nMessage('displayOrder')}>
-                <TextInput
-                  aria-label={getI18nMessage('displayOrder')}
-                  className='w-100'
-                  size='sm'
-                  type='number'
-                  value={displayOrderValue}
-                  onChange={(e) => { setDisplayOrderValue(e.target.value) }}
-                  onAcceptValue={(value) => {
-                    const trimmedValue = value.trim()
-                    const numValue = trimmedValue ? parseInt(trimmedValue, 10) : null
-                    if (numValue !== null && !isNaN(numValue)) {
-                      updateProperty('order', numValue)
-                    } else {
-                      updateProperty('order', null)
-                      setDisplayOrderValue('')
-                    }
-                  }}
-                  placeholder='e.g., 1, 2, 3'
-                />
-                <div css={css`
-                  font-size: 0.75rem;
-                  color: var(--dark-400);
-                  margin-top: 0.25rem;
-                  line-height: 1.4;
-                `}>
-                  {getI18nMessage('displayOrderDescription')}
-                </div>
-              </SettingRow>
-            </SettingSection>
+              </React.Fragment>
             )}
-            <AttributeFilterSetting
-              key={`${queryItem.configId}_attr`}
-              queryItem={queryItem}
-              onPropertyChanged={updateProperty}
-              onQueryItemChanged={updateItem}
-            />
-            <SpatialFilterSetting
-              key={`${queryItem.configId}_spatial`}
-              queryItem={queryItem}
-              onPropertyChanged={updateProperty}
-              handleStageChange={handleStageChangeInSpatialFilter}
-            />
+            {/* r025.060: Hide query config sections for spatial-only layers */}
+            {!currentItem.spatialOnly && (
+              <React.Fragment>
+                <AttributeFilterSetting
+                  key={`${queryItem.configId}_attr`}
+                  queryItem={queryItem}
+                  onPropertyChanged={updateProperty}
+                  onQueryItemChanged={updateItem}
+                />
+                <SpatialFilterSetting
+                  key={`${queryItem.configId}_spatial`}
+                  queryItem={queryItem}
+                  onPropertyChanged={updateProperty}
+                  handleStageChange={handleStageChangeInSpatialFilter}
+                />
+              </React.Fragment>
+            )}
             <ResultsSetting key={`${queryItem.configId}_result`} widgetId={widgetId} queryItem={queryItem} onPropertyChanged={updateProperty} onQueryItemChanged={updateItem} />
           </React.Fragment>
         )}

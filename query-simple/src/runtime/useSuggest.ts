@@ -14,7 +14,7 @@
 import { React } from 'jimu-core'
 import type { FeatureLayerDataSource } from 'jimu-core'
 import { createQuerySimpleDebugLogger } from 'widgets/shared-code/mapsimple-common'
-import { fetchSuggestions, injectValueIntoInput, type SuggestItem } from './suggest-utils'
+import { fetchSuggestions, filterCachedSuggestions, injectValueIntoInput, type SuggestCache, type SuggestItem } from './suggest-utils'
 
 const debugLogger = createQuerySimpleDebugLogger()
 
@@ -27,8 +27,10 @@ export interface UseSuggestConfig {
   enabled: boolean
   /** Minimum characters before firing suggest query */
   minChars: number
-  /** Maximum number of suggestions to return */
+  /** Maximum number of suggestions to display */
   limit: number
+  /** Server-side fetch limit for cache (default 50) */
+  fetchLimit: number
   /** Debounce delay in milliseconds */
   debounceMs: number
 }
@@ -186,6 +188,8 @@ export function useSuggest (options: UseSuggestOptions): UseSuggestReturn {
   // Ref to track hash injection state for event handlers (avoids stale closures)
   const isHashInjectingRef = React.useRef<boolean>(isHashInjecting)
   isHashInjectingRef.current = isHashInjecting
+  // Client-side narrowing cache — stores last server fetch for prefix filtering (r025.058)
+  const suggestCacheRef = React.useRef<SuggestCache | null>(null)
 
   // Determine if suggest is fully active
   const isActive = config.enabled && isFreeFormInput && !!originDS && !!fieldName
@@ -287,6 +291,23 @@ export function useSuggest (options: UseSuggestOptions): UseSuggestReturn {
     }
 
     debounceTimerRef.current = setTimeout(async () => {
+      // --- Client-side narrowing: try cache before server query (r025.058) ---
+      const cached = filterCachedSuggestions(
+        suggestCacheRef.current, state.query, operator, additionalWhere, config.limit
+      )
+      if (cached !== null) {
+        debugLogger.log('SUGGEST', {
+          event: 'cache-hit',
+          configId,
+          query: state.query,
+          cachedPrefix: suggestCacheRef.current?.query,
+          filteredCount: cached.length
+        })
+        dispatch({ type: 'FETCH_SUCCESS', suggestions: cached })
+        return
+      }
+
+      // --- Cache miss: fetch from server with larger limit for caching ---
       dispatch({ type: 'FETCH_START' })
 
       const controller = new AbortController()
@@ -298,7 +319,7 @@ export function useSuggest (options: UseSuggestOptions): UseSuggestReturn {
           fieldName,
           operator,
           query: state.query,
-          limit: config.limit,
+          limit: config.fetchLimit,
           signal: controller.signal,
           additionalWhere
         })
@@ -306,7 +327,25 @@ export function useSuggest (options: UseSuggestOptions): UseSuggestReturn {
         // Check if aborted
         if (controller.signal.aborted) return
 
-        dispatch({ type: 'FETCH_SUCCESS', suggestions: results })
+        // Populate cache for future narrowing
+        suggestCacheRef.current = {
+          query: state.query,
+          results,
+          isComplete: results.length < config.fetchLimit,
+          operator: operator ?? null,
+          additionalWhere: additionalWhere ?? null
+        }
+
+        debugLogger.log('SUGGEST', {
+          event: 'cache-store',
+          configId,
+          query: state.query,
+          serverCount: results.length,
+          isComplete: results.length < config.fetchLimit,
+          displayCount: Math.min(results.length, config.limit)
+        })
+
+        dispatch({ type: 'FETCH_SUCCESS', suggestions: results.slice(0, config.limit) })
       } catch (err) {
         if (controller.signal.aborted) return
 
@@ -325,7 +364,7 @@ export function useSuggest (options: UseSuggestOptions): UseSuggestReturn {
         clearTimeout(debounceTimerRef.current)
       }
     }
-  }, [state.status, state.query, originDS, fieldName, operator, additionalWhere, config.limit, config.debounceMs, configId])
+  }, [state.status, state.query, originDS, fieldName, operator, additionalWhere, config.limit, config.fetchLimit, config.debounceMs, configId])
 
   // ------------------------------------------------------------------
   // 4. Cleanup on unmount
@@ -334,6 +373,7 @@ export function useSuggest (options: UseSuggestOptions): UseSuggestReturn {
     return () => {
       if (debounceTimerRef.current) clearTimeout(debounceTimerRef.current)
       if (abortControllerRef.current) abortControllerRef.current.abort()
+      suggestCacheRef.current = null
     }
   }, [])
 
@@ -487,6 +527,7 @@ export function useSuggest (options: UseSuggestOptions): UseSuggestReturn {
   const resetSuggest = React.useCallback(() => {
     if (debounceTimerRef.current) clearTimeout(debounceTimerRef.current)
     if (abortControllerRef.current) abortControllerRef.current.abort()
+    suggestCacheRef.current = null
     dispatch({ type: 'RESET' })
   }, [])
 

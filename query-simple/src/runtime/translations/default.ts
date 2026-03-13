@@ -39,6 +39,11 @@ export default {
   // r025: Spatial tab toggle and placeholder text
   spatialModeOperations: 'Operations',
   spatialModeDraw: 'Draw',
+  spatialModeOperationsTitle: 'Spatial operations',
+  spatialModeDrawTitle: 'Draw graphics',
+  spatialModeOperationsDesc: 'Select features using spatial geometry operations, e.g., intersects, overlaps.',
+  spatialModeDrawDesc: 'Select features using graphics drawn on the map.',
+  spatialRelationshipInfoTooltip: 'About this spatial relationship',
   spatialDrawPlaceholder: 'Use the drawing tools to create a search geometry.',
   spatialDrawHint: 'Draw a shape above to enable spatial operations',
   spatialNoResults: 'Run a query first, or switch to Draw mode to create a search geometry.',

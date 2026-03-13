@@ -1,0 +1,32 @@
+{
+  "name": "feed-simple",
+  "label": "FeedSimple",
+  "type": "widget",
+  "version": "1.19.0",
+  "exbVersion": "1.19.0",
+  "author": "MapSimple",
+  "description": "FeedSimple widget - XML feed consumer with configurable card display and optional map integration",
+  "copyright": "",
+  "license": "http://www.apache.org/licenses/LICENSE-2.0",
+  "dependency": "jimu-arcgis",
+  "properties": {
+    "hasConfig": true,
+    "hasSettingPage": true
+  },
+  "publishMessages": [
+    {
+      "message": "DATA_RECORDS_SELECTION_CHANGE",
+      "description": "Published when a feed card is clicked with Map Integration configured.",
+      "dataDescription": {
+        "type": "OUTPUT_DATA_SOURCE"
+      }
+    }
+  ],
+  "translatedLocales": [
+    "en"
+  ],
+  "defaultSize": {
+    "width": 400,
+    "height": 500
+  }
+}

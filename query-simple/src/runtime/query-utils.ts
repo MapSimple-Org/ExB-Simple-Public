@@ -38,6 +38,29 @@ export function combineFields (resultDisplayFields: ImmutableArray<string>, resu
 }
 
 /**
+ * r025.065: Walk up the parentDataSource chain to find popupInfo.
+ * Group Layers in AGO often store popup config at the GL level, not on
+ * child layers.  ExB mirrors this: the child DataSource's getPopupInfo()
+ * returns null while the parent (group) DataSource holds the configured popup.
+ * This utility checks the DataSource itself first, then walks upward.
+ */
+export function resolvePopupInfoWithInheritance (ds: FeatureLayerDataSource): any | null {
+  // 1. Check the DataSource itself
+  const popupInfo = (ds as any).getPopupInfo?.()
+  if (popupInfo?.fieldInfos?.length > 0) return popupInfo
+
+  // 2. Walk up parentDataSource chain
+  let parent = (ds as any).parentDataSource
+  while (parent) {
+    const parentPopup = parent.getPopupInfo?.()
+    if (parentPopup?.fieldInfos?.length > 0) return parentPopup
+    parent = parent.parentDataSource
+  }
+
+  return null
+}
+
+/**
  * Resolve outFields from a DataSource's popup info.
  * Returns visible popup fields when available, otherwise all layer field names.
  * Always includes the objectIdField. Never returns ['*'].
@@ -51,6 +74,9 @@ export function resolvePopupOutFields (
 ): string[] {
   const objectIdField = featureLayer.objectIdField
 
+  // r025.065: Use DIRECT popupInfo only for outFields resolution — not inherited.
+  // Inherited GL popup may restrict fields for popup display; outFields needs
+  // all available fields so table view and exports have full data.
   const popupInfo = ds.getPopupInfo?.() ||
     (ds.getOriginDataSources?.()?.[0] as FeatureLayerDataSource)?.getPopupInfo?.()
 
@@ -212,7 +238,8 @@ export async function getPopupTemplate (
   // Without this, switching queries in Add mode causes the CURRENT query's origin DS
   // to be used for ALL records, producing wrong popup templates for prior-query records.
   const currentOriginDs: FeatureLayerDataSource = originDSOverride || (outputDS.getOriginDataSources()[0] as FeatureLayerDataSource)
-  const popupInfo = currentOriginDs.getPopupInfo()
+  // r025.065: Use inheritance-aware resolution for group layer popup support
+  const popupInfo = resolvePopupInfoWithInheritance(currentOriginDs)
 
   if (resultFieldsType === FieldsType.SelectAttributes) {
     let fields: string[]
@@ -291,7 +318,39 @@ export async function getPopupTemplate (
   if (layerObject) {
     await layerObject.load()
   }
-  return { defaultPopupTemplate: layerObject?.associatedLayer?.defaultPopupTemplate || layerObject?.defaultPopupTemplate }
+
+  // r025.065: Return the CONFIGURED popupTemplate first (web map popup), not just
+  // the auto-generated defaultPopupTemplate.  Previous code only returned
+  // defaultPopupTemplate, which is a generic all-fields list.  The configured
+  // popup was only found by accident downstream in feature-info.tsx when
+  // layer.popupTemplate happened to be populated — which fails for group layer
+  // children whose popup is defined at the GL level.
+  const configuredPopup = layerObject?.associatedLayer?.popupTemplate || layerObject?.popupTemplate
+  const defaultPopup = layerObject?.associatedLayer?.defaultPopupTemplate || layerObject?.defaultPopupTemplate
+
+  if (configuredPopup) {
+    return { popupTemplate: configuredPopup, defaultPopupTemplate: defaultPopup }
+  }
+
+  // r025.065: If no configured popup on the layer, try the parent DataSource
+  // (group layer may hold the popupInfo that ExB didn't push to the child)
+  const inheritedPopupInfo = resolvePopupInfoWithInheritance(currentOriginDs)
+  if (inheritedPopupInfo) {
+    debugLogger.log('QUERY', 'getPopupTemplate: inherited popupInfo from parent DataSource', { fields: inheritedPopupInfo.fieldInfos?.length })
+    // Build a PopupTemplate from the inherited popupInfo
+    return {
+      popupTemplate: {
+        title: inheritedPopupInfo.title || '',
+        content: inheritedPopupInfo.popupElements?.length > 0
+          ? inheritedPopupInfo.popupElements
+          : [{ type: 'fields' }],
+        fieldInfos: inheritedPopupInfo.fieldInfos
+      } as any,
+      defaultPopupTemplate: defaultPopup
+    }
+  }
+
+  return { defaultPopupTemplate: defaultPopup }
 }
 
 export function generateQueryParams (
@@ -324,7 +383,11 @@ export function generateQueryParams (
     outputFields = combineFields(resultDisplayFields as any, resultTitleExpression || '', outputDS.getIdField())
   } else {
     // Popup mode: Get only visible fields from popup info
-    const popupInfo = currentOriginDs.getPopupInfo()
+    // r025.065: Only use the DIRECT popupInfo for field shredding, not inherited.
+    // Inherited GL popup may mark few fields visible (for popup display), but the
+    // query needs all fields so the table view has full data.  Inherited popupInfo
+    // is used for popup RENDERING (getPopupTemplate), not field FETCHING.
+    const popupInfo = currentOriginDs.getPopupInfo?.()
     const fieldNames = Object.values(currentOriginDs.getSchema().fields ?? {}).map(f => f.name)
     const validFieldInfos = popupInfo?.fieldInfos?.filter(fieldInfo => fieldInfo.visible !== false && fieldNames.includes(fieldInfo.fieldName))
     outputFields = validFieldInfos?.map(fieldInfo => fieldInfo.fieldName) || []

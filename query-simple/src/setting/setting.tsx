@@ -537,6 +537,33 @@ export default class Setting extends React.PureComponent<AllWidgetSettingProps<I
             <div css={css`font-size: 0.875rem; margin-top: 4px; padding: 0 16px 8px; opacity: 0.8;`}>
               {this.getI18nMessage('zoomOnResultClickDescription')}
             </div>
+            <SettingRow label={this.getI18nMessage('pointZoomBuffer')} flow='wrap'>
+              <NumericInput
+                value={config.pointZoomBufferFeet ?? 300}
+                min={50}
+                max={5000}
+                step={50}
+                onChange={(value: number) => {
+                  this.updateConfigForOptions(['pointZoomBufferFeet', value])
+                }}
+              />
+            </SettingRow>
+            <div css={css`font-size: 0.875rem; margin-top: 4px; padding: 0 16px 8px; opacity: 0.8;`}>
+              {this.getI18nMessage('pointZoomBufferDescription')}
+            </div>
+            <SettingRow label={this.getI18nMessage('zoomExpansionFactor')} flow='wrap'>
+              <NumericInput
+                value={config.zoomExpansionFactor ?? 1.2}
+                min={1.0}
+                step={0.1}
+                onChange={(value: number) => {
+                  this.updateConfigForOptions(['zoomExpansionFactor', value])
+                }}
+              />
+            </SettingRow>
+            <div css={css`font-size: 0.875rem; margin-top: 4px; padding: 0 16px 8px; opacity: 0.8;`}>
+              {this.getI18nMessage('zoomExpansionFactorDescription')}
+            </div>
           </SettingSection>
         )}
         <DataSourceRemoveWarningPopup

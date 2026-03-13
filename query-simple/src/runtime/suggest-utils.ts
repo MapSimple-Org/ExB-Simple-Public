@@ -43,6 +43,64 @@ export interface FetchSuggestionsOptions {
   additionalWhere?: string | null
 }
 
+/** Cache entry for client-side narrowing optimization (r025.058) */
+export interface SuggestCache {
+  /** The query string that produced this cached result set */
+  query: string
+  /** Full server result set (up to fetchLimit) */
+  results: SuggestItem[]
+  /** true if results.length < fetchLimit — we have ALL matches for this prefix */
+  isComplete: boolean
+  /** The operator used — cache invalid if operator changes */
+  operator: string | null
+  /** The additionalWhere used — cache invalid if fixed clauses change */
+  additionalWhere: string | null
+}
+
+// Operators where typing more characters can only narrow results (monotonic)
+const NARROWABLE_OPERATORS = new Set([
+  'STRING_OPERATOR_IS',
+  'STRING_OPERATOR_STARTS_WITH',
+  null, // default operator uses starts-with pattern
+  undefined
+])
+
+/**
+ * Attempt to filter cached suggestions client-side instead of hitting the server.
+ *
+ * Returns SuggestItem[] on cache hit, or null if a server re-query is needed.
+ * The null return is the safety guarantee — any doubt = server query = zero regression.
+ */
+export function filterCachedSuggestions (
+  cache: SuggestCache | null,
+  query: string,
+  operator: string | null,
+  additionalWhere: string | null,
+  displayLimit: number
+): SuggestItem[] | null {
+  // No cache → server query
+  if (!cache) return null
+
+  // Context changed → server query
+  if (cache.operator !== operator || cache.additionalWhere !== additionalWhere) return null
+
+  // Operator doesn't narrow monotonically (CONTAINS, ENDS_WITH) → server query
+  if (!NARROWABLE_OPERATORS.has(operator)) return null
+
+  // Server may have had more results than fetched → server query
+  if (!cache.isComplete) return null
+
+  // New query doesn't extend cached prefix (backspace, different string) → server query
+  const upperQuery = query.toUpperCase()
+  const upperCacheQuery = cache.query.toUpperCase()
+  if (!upperQuery.startsWith(upperCacheQuery)) return null
+
+  // Cache hit — filter locally using same starts-with logic as the server LIKE pattern
+  return cache.results
+    .filter(item => item.value.toUpperCase().startsWith(upperQuery))
+    .slice(0, displayLimit)
+}
+
 // ============================================================================
 // 1. Detection: Is this a free-form text input?
 // ============================================================================

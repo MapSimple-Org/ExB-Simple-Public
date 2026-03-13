@@ -1,464 +1,136 @@
 # MapSimple Experience Builder Widgets
 
-Custom widgets for ArcGIS Experience Builder Developer Edition (1.19.0+). Built for performance, deep-linking, and advanced result management.
+Custom widgets for ArcGIS Experience Builder Developer Edition (1.19.0+).
 
-**Current Version**: `1.19.0-r025.055`
-**Latest Update**: Spatial tab, typeahead suggestions, configurable draw/buffer colors (Mar 11, 2026)
+| Widget Family | Version | Status |
+|--------------|---------|--------|
+| **QuerySimple** (+ HelperSimple) | `1.19.0-r025.069` | Updated — Mar 13, 2026 |
+| **FeedSimple** | `1.19.0-r001.031` | New — First public release |
+
+---
+
+## What's in This Repo
+
+This repository contains **two independent widget families**. Install only what you need.
+
+### QuerySimple Family
+
+High-performance search and spatial query engine for Experience Builder. Deep-linking, results accumulation, spatial analysis, typeahead, and configurable graphics.
+
+**Requires 3 folders:**
+- `query-simple/` — Main search widget
+- `helper-simple/` — Background orchestrator (URL monitoring, selection guard)
+- `shared-code/` — Common utilities shared between the two
+
+### FeedSimple (Standalone)
+
+XML feed consumer widget that displays live data feeds with configurable card templates, polling, and optional map integration via spatial join.
+
+**Requires 1 folder:**
+- `feed-simple/` — Fully standalone, no dependency on QuerySimple or shared-code
 
 ---
 
 ## Quick Start
 
-### Installation
+### Install QuerySimple + HelperSimple
 
-1. **Copy widgets to your ExB installation:**
-   ```bash
-   # Copy all three folders to your-extensions/widgets/
-   cp -r query-simple helper-simple shared-code /path/to/ExB/client/your-extensions/widgets/
-   ```
-
-2. **Build the widgets:**
-   ```bash
-   cd /path/to/ExB/client
-   npm run build
-   ```
-
-3. **Restart Experience Builder** and add QuerySimple + HelperSimple to your app
-
----
-
-## What's New: r025 (Mar 9-11, 2026)
-
-### Spatial Tab
-
-**Full spatial query support with two modes: Operations and Draw.**
-
-**Operations mode** uses existing query results as input geometry for spatial queries against any configured target layer. Features include real-time geodesic buffer preview on the map, searchable Calcite combobox for 7 spatial relationships, context-aware warnings (e.g., "Within requires area geometry"), and multi-layer target selection.
-
-**Draw mode** uses JimuDraw for interactive shape creation with 7 tools (point, polyline, polygon, rectangle, circle, freehand line, freehand polygon). Drawn geometries accumulate for multi-shape queries, with a rectangle-selection tool for editing drawn shapes.
-
-**Key capabilities:**
-- Buffer support with mixed geometry types (points + polygons in the same query)
-- Client-side buffer geometry for accurate spatial relationship evaluation
-- Configurable draw and buffer colors in settings (color pickers)
-- New/Add/Remove modes shared with Query tab
-- Results back-button returns to originating tab (Query or Spatial)
-- Per-layer "spatial result default" template for rendering spatial results
-
-### Typeahead Suggestions
-
-**Real-time value suggestions for free-form text queries.** As users type in a PIN, address, or name field, a dropdown appears with matching values from the layer. Select a suggestion to populate the field, then execute normally.
-
-**Features:**
-- Configurable per query in settings: enable toggle, minimum characters (1-10, default 2), max suggestions (1-50, default 10)
-- Multi-clause SQL support: suggestions honor fixed clauses (e.g., only show names where PROPTYPE = 'K')
-- Operator-aware matching: contains, starts-with, ends-with patterns match the configured SQL operator
-- Keyboard navigation: Arrow keys, Enter to select, Escape to dismiss
-- ARIA combobox pattern for accessibility
-- Debug via `?debug=SUGGEST`
-
-### Remove Mode Parity (Spatial Tab)
-
-Remove button disabled when no accumulated records. Popup auto-close on Remove execute. All-records-removed cleanup with auto-reset to "New" mode.
-
----
-
-## Previous Updates: r024.112-132 (Mar 5, 2026)
-
-### UI Polish, Codebase Simplification, Process Flow Docs
-
-- **Sentence case labels** across runtime and settings
-- **Display Order guard**: hidden when no Group ID set
-- **Codebase simplification**: query-task.tsx −45%, query-result.tsx −28% via handler extraction
-- **View in Table memory fix**: eliminated priming-tab leak
-- **Default hover pin color**: changed to Google Maps red
-- **8 end-to-end process flow documents** with ASCII diagrams
-
----
-
-## Previous Updates: r024.82-111 (Mar 2, 2026)
-
-### Multi-Source Extent Cache Fix (r024.111)
-
-**Fixed zoom/pan producing incorrect extents when accumulating results from different data sources in Add mode.** Different feature layers return geometries in their native spatial reference (e.g., Web Mercator vs State Plane). The extent union mixed coordinate systems, causing "Zoom to All Results" to zoom out to half the earth. Fix: direct queries now set `outSpatialReference` so the server projects all geometries to the map's SR before returning.
-
-### Custom Template Image Support (r024.110)
-
-**Display images from your data directly in query results.**
-
-If your feature layer has a field containing an image URL, use standard Markdown image syntax in your template:
-
-```markdown
-![Photo]({PHOTO_URL})
+```bash
+# Copy all three folders to your ExB widgets directory
+cp -r query-simple helper-simple shared-code /path/to/ExB/client/your-extensions/widgets/
 ```
 
-Images render inline in result cards, responsive and max-width 100%. The `(?)` tooltip in settings includes the syntax in its cheat sheet.
+### Install FeedSimple
 
-### Multi-Format Export (r024.105-108)
+```bash
+# Copy just one folder
+cp -r feed-simple /path/to/ExB/client/your-extensions/widgets/
+```
 
-**Export your query results to CSV, GeoJSON, or JSON with complete attribute data.**
+### Build and Run
 
-The ResultsMenu now has an "Export" submenu with three format options:
+```bash
+cd /path/to/ExB/client
+npm run build
+```
 
-| Format | Includes Geometry | Use Case |
-| :--- | :---: | :--- |
-| **CSV** | No | Spreadsheets, data analysis |
-| **GeoJSON** | Yes | GIS tools, web mapping |
-| **JSON** | No | APIs, programmatic access |
-
-**Features:**
-- **Field aliases**: Column headers use configured aliases, not raw field names
-- **Priority ordering**: Visible fields appear first
-- **Whitespace trimming**: String values are automatically trimmed
-- **Multi-source packaging**: Single source downloads a file; multiple sources download a zip
-
-### View in Table Improvements (r024.82-104)
-
-**Smarter tab naming, field visibility, and memory management.**
-
-- **Tab Naming**: Table tabs now show meaningful names like "Query-Parcels" instead of generic "Output_xxxxx"
-- **Field Visibility**: Table columns respect your configured field visibility from popup templates
-- **Memory Optimization**: Aligned implementation with Esri patterns for better cleanup
-
-### Smart Settings UX (r024.109)
-
-**Context-aware Helper-Simple requirement note.**
-
-The shortId configuration field now displays a warning note only when no Helper-Simple widget is configured to manage the QuerySimple widget. If properly configured, the note is hidden.
+Restart Experience Builder and add the widgets to your app.
 
 ---
 
-## Previous Updates: r024.74-79 (Feb 27, 2026)
+## What's New
 
-### Export CSV (r024.78-79)
+### QuerySimple r025.069 (Mar 13, 2026)
 
-**Export your query results to CSV with complete attribute data.**
+**Spatial relationship info popover** — ⓘ icon next to the spatial relationship combobox shows Esri SVG diagrams with descriptions on hover.
 
-The ResultsMenu includes an "Export CSV" option:
-- **Single source:** Downloads a `.csv` file named after the data source
-- **Multiple sources:** Downloads a `QueryResults.zip` containing one CSV per source
-- **Full attributes:** Re-queries the data source to fetch ALL fields
+**Typeahead suggestions** — Real-time value suggestions for free-form text queries with per-query configuration, multi-clause SQL support, and keyboard navigation.
 
-### Cached Extent for Zoom/Pan (r024.74-75)
+**Spatial tab** — Full spatial query support with Operations and Draw modes, buffer preview, 7 drawing tools, context-aware relationship warnings, and multi-layer targets.
 
-**Zoom and Pan operations are now faster.** Extent is calculated once when results change and cached.
+**Additional improvements** — Configurable zoom expansion factor, point zoom buffer, disable spatial filter per query, clear attribute filter labels, and multiple bug fixes.
 
-### Multi-Source View in Table Fix (r024.76)
+### FeedSimple r001.031 (Mar 13, 2026)
 
-**View in Table now correctly shows all data sources as separate tabs.**
-
-### ResultsMenu Cleanup (r024.77)
-
-**Removed duplicate actions from the results menu.**
+First public release featuring XML feed parsing, markdown card templates with token substitution, configurable polling, map integration via spatial join, and status field coloring.
 
 ---
 
-## Previous Updates: r024.58-63 (Feb 19, 2026)
-
-### Service Error Feedback
-
-Query failures from service outages now surface user-facing messages with a red-themed popover.
-
-### Graphics Race Condition Fix
-
-Fixed "Remove all" button not clearing graphics on first query in multi-widget apps.
-
-### Popup Behavior Fixes
-
-- Popup closes when layer toggled off in LayerList
-- Popup persists when widget panel closes in LayerList mode
-
----
-
-## Previous Updates: r024.0-18 (Feb 14, 2026)
-
-### LayerList Persistent Results
-
-**Major new feature: LayerList integration.** Query results can now be displayed as a `GroupLayer` visible in the LayerList (map table of contents) and Legend widgets, persisting even when the widget is closed.
-
-**Settings Toggle:**
-- New "Show results in LayerList" toggle in widget settings (Graphics section)
-- Optional custom layer title (defaults to "QuerySimple Results")
-- Results persist on map when widget closes; no more clear/restore cycle
-
-**Architecture:**
-- Results render into a `GroupLayer` with 3 sublayers (Points, Lines, Polygons)
-- Each geometry type automatically routes to the correct sublayer
-- LayerList shows collapsible group with geometry-type sublayers
-- Toggle layer or sublayers in LayerList to control visibility
-- Multiple widgets each get their own GroupLayer (no conflicts)
-
-**Legend Support (r024.12-15):**
-- GraphicsLayers don't show in Legend (Esri limitation)
-- Solution: Companion "controller" FeatureLayers with renderers show symbology in Legend
-- Legend entries dynamically appear when graphics of that geometry type are added
-- Legend entries automatically removed when last graphic of that type is cleared
-- Toggling in Legend controls visibility of actual graphics
-
-**Edge Case Fixes:**
-- **r024.16**: Removal protection - layer re-adds if user removes from LayerList
-- **r024.17**: Race condition fix - no duplicate GroupLayers on hash query load
-- **r024.18**: Auto-enable visibility - layer turns on when graphics added if toggled off
-
-**Backward Compatibility:**
-- Toggle defaults OFF - existing deployments unchanged
-- No migration required
-
----
-
-## Previous Updates: r023.28-30 (Feb 13, 2026)
-
-### Cross-Layer Selection Removal Fixes
-
-**Fixed several issues with removing records from accumulated results when working with multiple layers.**
-
-**r023.28 - Native selection clearing on single-item removal:**
-- When removing a record via the X button after using "Select on Map", the blue outline now clears correctly
-- Root cause: Composite key matching failed for records without `__queryConfigId`
-- Solution: Falls back to simple recordId matching when composite key matching removes nothing
-
-**r023.29 - Expand/collapse state preservation:**
-- Expand/collapse state no longer resets when switching between New/Add/Remove modes
-- Root cause: Component key changed based on resultsMode, forcing React remount
-- Solution: Stable key that only changes on new query execution
-
-**r023.30 - Cross-layer removal for accumulated results:**
-- Native selection now clears correctly when removing records from non-current layers
-- Root cause: Origin DS lookup fell back to single layer regardless of record source
-- Solution: Records stamped with `__originDSId` attribute; lookup via DataSourceManager
-
----
-
-## Previous Updates: r023.14-26 (Feb 12, 2026)
-
-### Results Mode UX Overhaul (r023.22-26)
-
-**The New/Add/Remove mode selector has been redesigned** to make it clear these are modes, not action buttons. Users previously confused "Remove" for an action that should do something immediately.
-
-**What Changed:**
-- **Segmented control**: Buttons sit inside a unified tray instead of floating separately
-- **Per-mode colors**: New (blue), Add (green), Remove (muted red) for instant visual identity
-- **Per-mode icons**: Star, plus, and minus reinforce each mode at a glance
-- **Logic summary bar**: A colored banner below the buttons confirms the active mode in plain language (e.g., "Each query replaces previous results.")
-- **"Results Mode" label**: Replaces the ambiguous "Results:" label
-- **Theme-proof colors**: Mode colors are hardcoded so they maintain semantic meaning regardless of ExB theme configuration
-
-**Polish (r023.24-26):**
-- Refined button font size (0.8125rem) and padding for readability
-- Removed redundant info hover button (logic bar provides the same guidance)
-- Tuned button height to match original compact sizing while keeping wider hit targets
-
-### FeatureInfo Detached DOM Leak Fix (r023.19-21)
-
-**Fixed a memory leak where every result clear, query switch, or record removal leaked Esri Feature widget DOM nodes.** Heap snapshots showed +6,641 detached `<div>` elements per heavy cycle before the fix.
-
-**Root cause:** The `FeatureInfo` component (originally from Esri's stock query widget) was missing two cleanup paths:
-1. No `componentWillUnmount` lifecycle method. Esri Feature widget and its container were never cleaned up on unmount.
-2. Incomplete `destroyFeature()` that left orphaned container elements on prop updates.
-
-**Results (heap snapshot comparison):**
-- Detached `<div>`: 6,641/cycle reduced to 1,183/cycle (82% reduction)
-- Detached `<button>`: 1,142/cycle eliminated from top entries
-- Remaining detached DOM is Esri SDK internal and not addressable from application code
-
-### Custom Template Mode (r023.18)
-
-**New "Custom Template" result display option.** A third choice alongside "Popup setting" and "Select attributes" in the Results configuration. Users author a Markdown template with `{fieldName}` tokens that gets converted to styled HTML at runtime.
-
-**Supported Markdown syntax:**
-- `**bold**`, `*italic*`, headings (`#`, `##`, `###`)
-- Lists (`- item`), horizontal rules (`---`), links (`[text](url)`)
-- Leading spaces for indentation, line breaks, and paragraph spacing
-
-**Settings UI includes:**
-- Monospace content editor with field picker button
-- `(?)` hover tooltip with full syntax cheat sheet
-- Live preview panel with badge-styled field tokens
-
-### Bug Fixes (r023.14-17)
-
-**Zombie records reappearing after X-button removal.** Records removed via the X-button would reappear when switching from Add mode to New mode. Fixed by syncing `recordsRef` with `accumulatedRecords` when removals are detected.
-
-**Cross-query popup template using wrong origin data source.** Parcel records lost their formatting when accumulated with park records in Add mode. Fixed by adding conditional `__queryConfigId` stamping and per-record origin data source resolution.
-
----
-
-## Previous Updates: r023.5-13 (Jan 25, 2026)
-
-### Selection Architecture Overhaul
-
-**Automatic blue map outlines removed from query execution.** Query results now only show purple/magenta highlight graphics. Blue selection outlines appear only when the user explicitly clicks "Select on Map."
-
-**What Changed:**
-- Query execution, query switching, panel reopen, and popup close no longer trigger automatic blue outlines
-- "Add to map" renamed to "Select on Map" to reflect the new explicit behavior
-- Explicit user actions (Select on Map, record click, Remove, Clear All) work exactly as before
-- "Select on Map" blue outlines now persist through panel close/reopen
-
-**Bug Fixes:**
-- Fixed blue outlines appearing on widget panel reopen and identify popup close
-- Fixed URL hash (`data_s`) not being cleaned after widget panel close
-- Simplified query switch reselection block from 372 lines to ~30 lines
-
-**Settings Validation:**
-- Red warning appears in widget settings when no map widget is selected (required for highlights to display)
-
----
-
-## Previous Updates: r022.108-109 (Feb 9, 2026)
-
-### Animated Spring Drop for Hover Preview Pin
-
-Google Maps-style drop-and-bounce animation when pins appear. Spring physics with stiffness `0.15` and damping `0.8`, smooth `requestAnimationFrame` loop, and proper cleanup on mouse leave/click/unmount.
-
----
-
-## Previous Updates: r022.107 (Feb 9, 2026)
-
-### Configurable Hover Preview Pin Color
-
-New "Hover Preview Pin" section in widget settings with color picker. Default yellow (#FFC107), auto-generated lighter center circle, and dynamic CIM symbol color application.
-
----
-
-## Previous Updates: r022.97-103 (Feb 8, 2026)
-
-### Graphics Symbology v2
-
-**Fully configurable graphics layer styling** with color pickers, opacity sliders, and size controls.
-
-- Centralized Configuration: `HighlightConfigManager` singleton
-- Per-Widget Customization: Each QuerySimple widget can have its own color scheme
-- Default Color: Magenta (#DF00FF)
-
-### UX Improvements
-
-- **Zoom to Results Button**: Moved from hidden Actions menu to prominent Results tab header
-- **Touch Target Optimization**: 36x36px buttons (WCAG/Apple HIG compliant)
-
-### Critical Fixes
-
-- **Selection Count Bug**: Fixed "3 selections with 2 results" issue
-- **Popup Multi-Click Issue**: Popups now open on first click
-- **Graphics Z-Order**: Purple graphics consistently render on top of native selection
-
----
-
-## Key Features
-
-### Why QuerySimple?
-
-QuerySimple solves the common pain points of the standard Experience Builder query widget:
-
-- **93% Latency Reduction**: Universal SQL Optimizer + Attribute Stripping minimize network payloads
-- **Dual-Mode Deep Linking**: Hash Fragments (`#shortId=val`) and Query Strings (`?shortId=val`)
-- **Results Accumulation**: "Add to" or "Remove from" selections across multiple queries
-- **Discoverable Automation**: Interactive Info Button shows users how to deep-link
-- **Persistence**: Selections maintained even when identify tool is used
-
-### Advanced Features
-
-- **Spatial Tab**: Full spatial query support with Operations and Draw modes, buffer preview, 7 drawing tools, and multi-layer targets
-- **Typeahead Suggestions**: Real-time value suggestions for free-form text queries with multi-clause support
-- **Custom Template Mode**: Markdown-based result display with field tokens and live preview
-- **Duplicate Query Button**: Clone any query instantly with all settings preserved
-- **Query Grouping**: Organize dozens of searches into clean two-dropdown hierarchy
-- **SQL Optimizer**: Automatically unwraps `LOWER()` to ensure database index usage
-- **Display Order Control**: Prioritize searches via `order` property
-- **Configurable Graphics**: Custom colors, opacity, and sizing for highlights
-
----
-
-## Widgets in this Suite
-
-### QuerySimple (`query-simple/`)
-High-performance search engine for Experience Builder.
-
-### HelperSimple (`helper-simple/`)
-Background orchestrator that handles:
-- **URL Monitor**: Triggers QuerySimple automation from hash/query strings
-- **Selection Guard**: Restores results after map identify popup closes
-- **Handshake Logic**: Manages open/close state between widgets
-
-### Shared Code (`shared-code/`)
-Common utilities shared between widgets:
-- Debug logger (`mapsimple-common/debug-logger.ts`)
-- Data source utilities (`mapsimple-common/use-ds-exists.tsx`)
-- UI components (`mapsimple-common/common-components.tsx`)
-- Graphics configuration (`mapsimple-common/highlight-config-manager.ts`)
-
----
-
-## Configuration
+## QuerySimple Features
+
+- **93% Latency Reduction**: SQL Optimizer + attribute stripping minimize network payloads
+- **Dual-Mode Deep Linking**: Hash fragments (`#shortId=val`) and query strings (`?shortId=val`)
+- **Results Accumulation**: New/Add/Remove modes across multiple queries
+- **Spatial Tab**: Operations and Draw modes with buffer preview, 7 relationships, multi-layer targets
+- **Typeahead Suggestions**: Real-time value suggestions with multi-clause support
+- **Custom Templates**: Markdown-based result display with `{fieldName}` tokens
+- **LayerList Integration**: Results persist as GroupLayer visible in LayerList and Legend
+- **Configurable Graphics**: Custom colors, opacity, sizing, and hover preview pin
+- **Multi-Format Export**: CSV, GeoJSON, JSON with field aliases and priority ordering
 
 ### URL Parameters (Deep Linking)
 
-Configure a `shortId` for any query to enable instant automation:
-
 | Format | Example | Best Use Case |
 | :--- | :--- | :--- |
-| **Hash (#)** | `index.html#pin=123` | **Interactive UX.** Snappy, no page reload |
-| **Query (?)** | `index.html?pin=123` | **External Linking.** CRM/Email integrations |
-
-### Display Order & Grouping
-
-- **`groupId`**: Clusters related searches (e.g., "Parcels")
-- **`searchAlias`**: Label shown inside the group (e.g., "Search by PIN")
-- **`order`**: Numeric value (1, 2, 3...) forces search to top of list
-
-### Graphics Symbology
-
-Configure in widget settings:
-- **Fill Color**: Hex color picker (default: #DF00FF magenta)
-- **Fill Opacity**: 0-1 (default: 0.25)
-- **Outline Color**: Hex color picker (default: #DF00FF magenta)
-- **Outline Width**: 1-5px (default: 2px)
-- **Point Size**: 8-24px (default: 12px)
-
----
-
-## Troubleshooting
+| **Hash (#)** | `index.html#pin=123` | Interactive UX — no page reload |
+| **Query (?)** | `index.html?pin=123` | External linking — CRM/email integrations |
 
 ### Debug System
 
 Production-safe debugging via URL parameter: `?debug=FEATURE`
 
-**Available switches:**
-- `all` - Enable all logs (high volume)
-- `HASH` - URL parameter parsing and consumption
-- `TASK` - Query execution and performance
-- `RESULTS-MODE` - New/Add/Remove mode transitions
-- `SELECTION` - Map selection sync
-- `RESTORE` - Selection restoration logic
-- `GRAPHICS-LAYER` - Highlighting logic
-- `WIDGET-STATE` - Widget handshake events
-- `SPATIAL` - Spatial tab query execution
-- `SUGGEST` - Typeahead suggestion queries
-- `DIRECT-QUERY` - Direct FeatureLayer query bypass details
-- `CSV` - CSV export field inspection
+**Available tags:** `all`, `HASH`, `TASK`, `RESULTS-MODE`, `SELECTION`, `RESTORE`, `GRAPHICS-LAYER`, `WIDGET-STATE`, `SPATIAL`, `SUGGEST`, `DIRECT-QUERY`, `CSV`, `BUFFER`
 
 **Example:** `index.html?debug=HASH,TASK`
 
-### Known Bugs
+---
 
-Known bugs are logged automatically with format `[QUERYSIMPLE BUG]` including:
-- Bug ID and category
-- Description and workaround
-- Target resolution version
+## FeedSimple Features
+
+- **XML Feed Parsing**: Configurable field mapping with custom parser support
+- **Markdown Card Templates**: Token substitution (`{fieldName}`) with filter chain
+- **Configurable Polling**: Automatic refresh intervals with backoff
+- **Map Integration**: Spatial join to FeatureLayer with click-to-zoom and popup
+- **Status Field Coloring**: Configurable color mapping for status indicators
+
+### Debug System
+
+**Available tags:** `FEED`, `JOIN`
+
+**Example:** `index.html?debug=FEED,JOIN`
 
 ---
 
-## Testing
+## Documentation
 
-Verified by a **"Mega-Journey" E2E suite** that simulates 5-minute user sessions.
+Each widget family has its own documentation under `docs/`:
 
-```bash
-# 1. Manual Auth (once per day)
-npm run test:e2e:auth-setup
-
-# 2. Run the Mega-Journey
-npx playwright test tests/e2e/query-simple/session.spec.ts --project=chromium --headed
-```
+| Doc | QuerySimple | FeedSimple |
+|-----|-------------|------------|
+| Architecture | `docs/query-simple/ARCHITECTURE.md` | `docs/feed-simple/ARCHITECTURE.md` |
+| Changelog | `docs/query-simple/CHANGELOG.md` | `docs/feed-simple/CHANGELOG.md` |
+| Process Flows | `docs/query-simple/process-flows/` | `docs/feed-simple/process-flows/` |
+| Release Notes | `docs/releases/` (shared) | `docs/releases/` (shared) |
 
 ---
 
@@ -469,11 +141,10 @@ npx playwright test tests/e2e/query-simple/session.spec.ts --project=chromium --
 
 ---
 
-## Support & Documentation
+## Support
 
 - **Issues**: [Report bugs on GitHub](https://github.com/MapSimple-Org/ExB-Simple-Public/issues)
-- **Changelog**: See [CHANGELOG.md](CHANGELOG.md) for complete version history
-- **License**: MIT - see [LICENSE](LICENSE)
+- **License**: MIT — see [LICENSE](LICENSE)
 
 ---
 

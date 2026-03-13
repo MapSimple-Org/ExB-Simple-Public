@@ -390,7 +390,7 @@ evaluate correctly against the expanded shape.
 | Spatial relationship | Calcite combobox | contains, intersects, envelope-intersects, overlaps, within, touches, crosses | None (must select) |
 | Buffer distance | TextInput + unit Select | 0 (disabled) or positive number with unit (feet/miles/meters/km) | 0 (no buffer) |
 | Results mode | ResultsModeControl | New / Add / Remove | New |
-| Target layers | AdvancedSelect multi-select | Layers from widget config (queryItems) | None (must select) |
+| Target layers | AdvancedSelect multi-select | Layers from widget config (queryItems), including `spatialOnly` layers that are hidden from Query tab | None (must select) |
 | Client vs server buffer | SpatialTabContent onClick | Client-side bufferedGeometry (when available) / server-side query.distance (fallback) | Client-side |
 | Sequential layer execution | execute-spatial-query.ts:80 | Sequential (current) | Sequential (avoid overwhelming shared ArcGIS Server) |
 

@@ -37,6 +37,14 @@ import { Button, Select, Option, TextInput, Tooltip, AdvancedSelect } from 'jimu
 import { loadArcGISJSAPIModules, type JimuMapView } from 'jimu-arcgis'
 import type * as jimuMap from 'jimu-ui/advanced/map'
 import { TrashOutlined } from 'jimu-icons/outlined/editor/trash'
+import { InfoOutlined } from 'jimu-icons/outlined/suggested/info'
+
+// r025.069: Esri spatial relationship SVG diagrams
+import containsSvg from '../assets/spatial/contains.svg'
+import intersectsSvg from '../assets/spatial/intersects.svg'
+import overlapsSvg from '../assets/spatial/overlaps.svg'
+import withinSvg from '../assets/spatial/within.svg'
+import touchesSvg from '../assets/spatial/touches.svg'
 import defaultMessage from '../translations/default'
 import { createQuerySimpleDebugLogger, EntityStatusType, StatusIndicator, highlightConfigManager } from 'widgets/shared-code/mapsimple-common'
 import { useBufferPreview } from '../managers/use-buffer-preview'
@@ -94,6 +102,17 @@ const spatialRelationships: readonly SpatialRelationshipDef[] = [
   { id: 'touches', label: 'Touches', description: 'Find features that share a boundary but do not overlap', dimensionConstraint: null, constraintNote: null },
   { id: 'crosses', label: 'Crosses', description: 'Find features that pass through your search area (different geometry types only)', dimensionConstraint: 'different', constraintNote: 'Crosses only works between different geometry types (e.g., line-polygon)' }
 ] as const
+
+// r025.069: Diagram SVGs and captions for info popover
+const spatialRelationshipDiagrams: Record<string, { svg: string | null, caption: string }> = {
+  contains: { svg: containsSvg, caption: 'Target must be completely inside the search area.' },
+  intersects: { svg: intersectsSvg, caption: 'Any geometry that touches, overlaps, or falls inside.' },
+  'envelope-intersects': { svg: null, caption: 'Uses the bounding rectangle of the search area. Faster but less precise than Intersects.' },
+  overlaps: { svg: overlapsSvg, caption: 'Same geometry type only. Partial overlap — not fully inside or outside.' },
+  within: { svg: withinSvg, caption: 'Target must completely surround the search area.' },
+  touches: { svg: touchesSvg, caption: 'Boundary contact only — no interior overlap.' },
+  crosses: { svg: null, caption: 'Different geometry types only. Line through polygon is the most common case.' }
+}
 
 const bufferUnits = [
   { value: 'feet', label: 'Feet' },
@@ -184,9 +203,13 @@ const bufferRowStyle = css`
 `
 
 const disabledHintStyle = css`
-  font-size: 0.75rem;
-  color: var(--ref-palette-neutral-700);
-  font-style: italic;
+  font-size: 0.8rem;
+  line-height: 1.3;
+  color: #b22222;
+  background: var(--sys-color-surface);
+  border-left: 3px solid #b22222;
+  border-radius: 3px;
+  padding: 4px 8px;
   margin: 0;
 `
 
@@ -206,6 +229,7 @@ export function SpatialTabContent (props: SpatialTabContentProps) {
   const [bufferDistance, setBufferDistance] = React.useState('')
   const [bufferUnit, setBufferUnit] = React.useState('feet')
   const [selectedLayers, setSelectedLayers] = React.useState<Array<{ value: string | number; label: string }>>([])
+  const [showRelInfo, setShowRelInfo] = React.useState(false) // r025.069: Hover-driven spatial relationship info popover
 
   // r025.041: JimuDraw module (lazy-loaded) and drawn geometry state
   const [mapModule, setMapModule] = React.useState<typeof jimuMap>(null)
@@ -604,6 +628,7 @@ export function SpatialTabContent (props: SpatialTabContentProps) {
           css={spatialMode === 'operations' ? toggleActiveStyle : undefined}
           onClick={() => handleModeChange('operations')}
           aria-pressed={spatialMode === 'operations'}
+          title={getI18nMessage('spatialModeOperationsTitle')}
         >
           {getI18nMessage('spatialModeOperations')}
         </button>
@@ -611,9 +636,27 @@ export function SpatialTabContent (props: SpatialTabContentProps) {
           css={spatialMode === 'draw' ? toggleActiveStyle : undefined}
           onClick={() => handleModeChange('draw')}
           aria-pressed={spatialMode === 'draw'}
+          title={getI18nMessage('spatialModeDrawTitle')}
         >
           {getI18nMessage('spatialModeDraw')}
         </button>
+      </div>
+
+      {/* r025.061: Mode description text */}
+      <div css={css`
+        margin-bottom: 6px;
+        padding: 4px 8px;
+        border-radius: 3px;
+        font-size: 0.8rem;
+        line-height: 1.3;
+        background: var(--sys-color-surface);
+        color: var(--sys-color-text-secondary);
+        border-left: 3px solid var(--sys-color-primary-main);
+      `}>
+        {spatialMode === 'operations'
+          ? getI18nMessage('spatialModeOperationsDesc')
+          : getI18nMessage('spatialModeDrawDesc')
+        }
       </div>
 
       {/* Header row — Clear All button */}
@@ -778,25 +821,74 @@ export function SpatialTabContent (props: SpatialTabContentProps) {
           {spatialMode === 'operations' && !hasResults && (
             <p css={disabledHintStyle}>{getI18nMessage('spatialNoResults')}</p>
           )}
-          <calcite-combobox
-            ref={spatialRelComboboxRef}
-            selectionMode='single'
-            placeholder='Search or select a relationship...'
-            disabled={!operationsEnabled || undefined}
-            scale='m'
-            overlayPositioning='fixed'
-            label={getI18nMessage('spatialRelationship')}
-          >
-            {spatialRelationships.map((rel) => (
-              <calcite-combobox-item
-                key={rel.id}
-                value={rel.id}
-                textLabel={rel.label}
-                description={rel.description}
-                selected={selectedRelationship === rel.id || undefined}
-              />
-            ))}
-          </calcite-combobox>
+          <div css={css`display: flex; align-items: center; gap: 4px;`}>
+            <calcite-combobox
+              ref={spatialRelComboboxRef}
+              selectionMode='single'
+              placeholder='Search or select a relationship...'
+              disabled={!operationsEnabled || undefined}
+              scale='m'
+              overlayPositioning='fixed'
+              label={getI18nMessage('spatialRelationship')}
+              css={css`flex: 1;`}
+            >
+              {spatialRelationships.map((rel) => (
+                <calcite-combobox-item
+                  key={rel.id}
+                  value={rel.id}
+                  textLabel={rel.label}
+                  description={rel.description}
+                  selected={selectedRelationship === rel.id || undefined}
+                />
+              ))}
+            </calcite-combobox>
+            {/* r025.069: Info icon — hover shows spatial relationship diagram popover */}
+            {selectedRelationship && (
+              <div
+                onMouseEnter={() => setShowRelInfo(true)}
+                onMouseLeave={() => setShowRelInfo(false)}
+              >
+                <Button size='sm' icon type='tertiary' id='spatial-rel-info-btn'>
+                  <InfoOutlined color='var(--sys-color-primary-main)' size='s' />
+                </Button>
+              </div>
+            )}
+          {/* r025.069: Spatial relationship info popover — hover-driven, pops above */}
+          {selectedRelationship && (
+            <calcite-popover
+              referenceElement='spatial-rel-info-btn'
+              placement='top'
+              open={showRelInfo || undefined}
+              overlayPositioning='fixed'
+              triggerDisabled
+              pointerDisabled
+              css={css`
+                --calcite-popover-border-color: var(--ref-palette-neutral-400);
+                --calcite-color-foreground-1: var(--ref-palette-white);
+                filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.15));
+              `}
+            >
+              <div
+                css={css`padding: 10px 12px; max-width: 320px;`}
+                onMouseEnter={() => setShowRelInfo(true)}
+                onMouseLeave={() => setShowRelInfo(false)}
+              >
+                <h5 css={css`margin: 0 0 6px; font-size: 0.8125rem; font-weight: 600;`}>
+                  {spatialRelationships.find(r => r.id === selectedRelationship)?.label ?? 'Spatial Relationship'}
+                </h5>
+                {spatialRelationshipDiagrams[selectedRelationship]?.svg && (
+                  <img
+                    src={spatialRelationshipDiagrams[selectedRelationship].svg}
+                    alt={spatialRelationships.find(r => r.id === selectedRelationship)?.label ?? ''}
+                    css={css`width: 100%; max-width: 288px; margin-bottom: 6px;`}
+                  />
+                )}
+                <p css={css`margin: 0; font-size: 0.8rem; color: var(--ref-palette-neutral-1000); line-height: 1.4;`}>
+                  {spatialRelationshipDiagrams[selectedRelationship]?.caption ?? ''}
+                </p>
+              </div>
+            </calcite-popover>
+          )}
         </div>
 
         {/* 5. Target Layers */}
@@ -919,11 +1011,14 @@ export function SpatialTabContent (props: SpatialTabContentProps) {
           </Button>
         </div>
 
+        {/* r025.063: Centered invisible anchor for popover alignment */}
+        <div id='spatial-feedback-anchor' css={css`height: 0; width: 100%;`} />
+
         {/* r025.031: Calcite popover for spatial query errors — same pattern as Query tab */}
         {queryErrorAlert?.show && (
           <calcite-popover
             key={`spatial-error-${queryErrorAlert.timestamp}`}
-            referenceElement="spatial-execute-btn"
+            referenceElement="spatial-feedback-anchor"
             placement="top"
             flipDisabled={true}
             overlayPositioning="fixed"
@@ -958,7 +1053,7 @@ export function SpatialTabContent (props: SpatialTabContentProps) {
         {noResultsAlert?.show && (
           <calcite-popover
             key={`spatial-no-results-${noResultsAlert.timestamp}`}
-            referenceElement="spatial-execute-btn"
+            referenceElement="spatial-feedback-anchor"
             placement="top"
             flipDisabled={true}
             overlayPositioning="fixed"

@@ -6,6 +6,7 @@
   "exbVersion": "1.19.0",
   "author": "MapSimple",
   "description": "QuerySimple widget - simplified query widget",
+  "dependency": "jimu-arcgis",
   "copyright": "",
   "license": "http://www.apache.org/licenses/LICENSE-2.0",
   "messageActions": [

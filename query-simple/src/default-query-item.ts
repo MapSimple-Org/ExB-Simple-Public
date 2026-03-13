@@ -56,11 +56,13 @@ export const DEFAULT_QUERY_ITEM: Partial<QueryItemType> = {
   resultAllowChangeSymbol: false,
   allowExport: false,
   sortOptions: [],
+  spatialOnly: false,
   zoomToSelected: true,
   // Suggest / Typeahead defaults (r025.053)
   enableSuggest: false,
   suggestMinChars: 2,
   suggestLimit: 10,
+  suggestFetchLimit: 50,
   itemSizeMap: {
     arrangementHorizontalPopper: {
       minSize: { width: 300, height: 300 },

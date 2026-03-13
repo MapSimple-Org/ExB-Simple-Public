@@ -174,7 +174,7 @@ const style = css`
 export function QueryTask (props: QueryTaskProps) {
   const { queryItem, onNavBack, total, isInPopper = false, wrappedInPopper = false, className = '', index, initialInputValue, onHashParameterUsed, queryItems, selectedQueryIndex, onQueryChange, groups, ungrouped, groupOrder, selectedGroupId, selectedGroupQueryIndex, onGroupChange, onGroupQueryChange, onUngroupedChange, resultsMode, onResultsModeChange, accumulatedRecords, resultsExtent, onAccumulatedRecordsChange, graphicsLayer, mapView, onInitializeGraphicsLayer, onClearGraphicsLayer, onDestroyGraphicsLayer, activeTab: propActiveTab, onTabChange: propOnTabChange, eventManager, zoomOnResultClick, hoverPinColor, jimuMapView, ...otherProps } = props
   const getI18nMessage = hooks.useTranslation(defaultMessage)
-  const zoomToRecords = useZoomToRecords(mapView)
+  const zoomToRecords = useZoomToRecords(mapView, props.widgetId)
   // stage now in useReducer (r024.126 — A2b)
   const [internalActiveTab, setInternalActiveTab] = React.useState<'query' | 'spatial' | 'results'>('query')
   // isClearing now in useReducer (r024.127 — A2c)
@@ -1482,6 +1482,8 @@ export function QueryTask (props: QueryTaskProps) {
               const addedGroups = new Set<string>()
               
               queryItems.forEach((item, idx) => {
+                // r025.060: Skip spatial-only layers — they participate in Spatial tab only
+                if (item.spatialOnly) return
                 if (item.groupId) {
                   // For grouped queries, use group display name (only add once per group)
                   if (!addedGroups.has(item.groupId)) {

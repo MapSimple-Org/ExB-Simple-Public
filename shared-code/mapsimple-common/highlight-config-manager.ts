@@ -164,6 +164,24 @@ class HighlightConfigManager {
   }
 
   /**
+   * r025.059: Get point zoom buffer distance in feet (with fallback)
+   * Applied when zooming to single points or overlapping points (zero-area extents).
+   */
+  public getPointZoomBufferFeet(widgetId: string): number {
+    const config = this.configCache.get(widgetId)
+    return config?.pointZoomBufferFeet ?? 300
+  }
+
+  /**
+   * r025.068: Get zoom expansion factor (with fallback)
+   * Applied when zooming to lines, polygons, and multi-record extents.
+   */
+  public getZoomExpansionFactor(widgetId: string): number {
+    const config = this.configCache.get(widgetId)
+    return config?.zoomExpansionFactor ?? 1.2
+  }
+
+  /**
    * Convert hex color to RGB array
    * @private
    */

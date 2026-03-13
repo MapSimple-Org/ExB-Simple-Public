@@ -138,6 +138,75 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **SUGGEST debug logging** (r025.054): Registered `SUGGEST` as a debug feature in
   `debug-logger.ts`. Enable via `?debug=SUGGEST` to see detection, fetch queries, and
   inject events in the browser console
+- **Suggest client-side narrowing** (r025.058): Fetch 50 results from server (configurable
+  via `suggestFetchLimit`), display 10. When user types more characters, filter cached
+  results locally instead of re-querying server. Only applies to starts-with/is operators
+  (CONTAINS/ENDS_WITH always query server). Safety guarantee: any cache miss falls through
+  to existing server query path. New `SuggestCache` interface and `filterCachedSuggestions()`
+  pure function in `suggest-utils.ts`. Debug events: `cache-store`, `cache-hit`
+- **Spatial-only layers** (r025.060): New `spatialOnly` flag on `QueryItemType` with builder
+  toggle. When enabled, the layer participates in Spatial tab queries (intersect/buffer) but
+  is hidden from the Query tab search layer dropdown. Settings panel conditionally hides
+  irrelevant sections: Attribute Filter, Spatial Filter, Short ID, Group ID, Search alias,
+  and Display order. Retains: data source, label, icon, toggle with description text,
+  and Results config (template, fields, spatial result default). Enables adding reference
+  layers (e.g., School Districts, Zoning) that enrich spatial query results without
+  cluttering the query interface. Five files modified, zero runtime regressions
+- **Spatial tab mode help text** (r025.061–062): Contextual description below the
+  Operations/Draw toggle. Operations: "Select features using spatial geometry operations,
+  e.g., intersects, overlaps." Draw: "Select features using graphics drawn on the map."
+  Styled with surface background, text-secondary color, primary-main left border accent,
+  0.8rem font. Short tooltips on toggle buttons — "Spatial operations" / "Draw graphics"
+- **Spatial popover centered anchor** (r025.063): Replaced `spatial-execute-btn` reference
+  with a zero-height full-width `spatial-feedback-anchor` div for centered popover alignment,
+  matching Query tab's existing `query-feedback-anchor` pattern
+- **Result card expanded min-height** (r025.063): Added `min-height: 4.5rem` to
+  `feature-info-component` when expanded, so short-content items (e.g., School Districts)
+  don't expose the bottom border below the stacked action buttons. Only applies when
+  expanded — collapsed items retain natural height
+- **Disabled hint callout styling** (r025.064): Spatial tab hint text ("Run a query first…")
+  restyled from subtle italic gray to a firebrick red (#b22222) callout box with left border
+  accent, surface background, and 0.8rem font — consistent with mode help text pattern but
+  visually prominent to explain why controls are disabled
+- **Group layer popup inheritance** (r025.065–066): New `resolvePopupInfoWithInheritance()`
+  utility walks the `parentDataSource` chain so child layers inside Group Layers pick up
+  popup templates configured at the GL level. Fixes result cards falling back to a generic
+  all-fields template when the web map stores popupInfo on the group, not the child.
+  `getPopupTemplate()` now returns `layerObject.popupTemplate` (configured popup) first,
+  with `defaultPopupTemplate` as absolute last resort. Table/export field resolution
+  combines template fields AND visible fieldInfos (previously either/or, which missed
+  fields when a title template existed). Four call sites in `query-utils.ts` updated,
+  plus `query-result.tsx` action dataSets field resolution. Field fetching (outFields)
+  intentionally uses direct `getPopupInfo()` — inheritance only applies to popup rendering
+  and table/export field display
+- **Buffer preview auto-enable GroupLayer** (r025.067): When a buffer graphic is drawn
+  and the parent GroupLayer is hidden (e.g., user toggled it off in LayerList), the
+  GroupLayer is automatically re-enabled so the buffer is visible. Matches the existing
+  `addHighlightGraphics` auto-enable pattern in `graphics-layer-utils.ts`
+- **Configurable zoom expansion factor** (r025.068): New `zoomExpansionFactor` widget-level
+  setting controls how much extra space surrounds features when zooming. 1.0 = tight fit,
+  1.2 = 20% padding (default), no upper limit. Follows the same singleton injection pattern
+  as `pointZoomBufferFeet` — config → HighlightConfigManager → useZoomToRecords hook →
+  zoomToRecords(). Six files: config.ts, setting.tsx, translations, highlight-config-manager,
+  use-zoom-to-records, version
+- **Spatial relationship info popover** (r025.069): ⓘ icon next to the spatial relationship
+  combobox shows a hover popover with the Esri SVG diagram and plain-language caption for the
+  currently selected relationship. Covers 5 of 7 relationships (Contains/Within, Intersects,
+  Overlaps, Within/Encloses, Touches) using official Esri SVGs from the ArcGIS Spatial
+  Relationship documentation. Envelope Intersects and Crosses use text-only descriptions
+  pending custom diagrams. Popover appears on mouseEnter/mouseLeave (no click toggle),
+  styled to match Query tab info tooltips (10px 12px padding, drop shadow, fixed overlay
+  positioning). SVG assets stored in `query-simple/src/runtime/assets/spatial/`
+- **Spatial relationships reference doc updated** (r025.069): Accuracy fixes across all 7
+  relationship tables — softened warnings, corrected geometry pair compatibility. Added Esri
+  SVG image references for 5 relationships. TODO placeholders for Envelope Intersects and
+  Crosses custom diagrams
+- **Button consistency across tabs** (r025.056): Renamed Spatial tab "Run Spatial Query"
+  to "Apply" matching Query tab. Added "Reset" button to Spatial tab. Changed Query tab
+  Reset to always-visible/disabled-when-clean pattern matching Spatial tab
+- **`jimu-arcgis` manifest dependency**: Added `"dependency": "jimu-arcgis"` to
+  `query-simple/manifest.json` per Esri best practice — ensures ArcGIS Maps SDK loads
+  before widget initialization
 
 ### Fixed
 

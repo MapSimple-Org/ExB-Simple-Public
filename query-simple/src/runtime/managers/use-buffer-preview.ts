@@ -258,6 +258,19 @@ export function useBufferPreview (options: UseBufferPreviewOptions): __esri.Geom
       graphicsStateManager.setLastBufferGraphic(widgetId, graphic)
       setBufferedGeometry(combinedBuffer)
 
+      // r025.066: Auto-enable parent GroupLayer visibility when buffer is drawn
+      // Matches addHighlightGraphics pattern (graphics-layer-utils.ts r024.18)
+      const parentLayer = layer.parent as __esri.GroupLayer
+      if (parentLayer && parentLayer.type === 'group' && !parentLayer.visible) {
+        parentLayer.visible = true
+        debugLogger.log('TASK', {
+          event: 'buffer-preview-auto-enabled-parent',
+          widgetId,
+          groupLayerId: parentLayer.id,
+          reason: 'parent-was-hidden-but-buffer-drawn'
+        })
+      }
+
       const geomTypes = [...new Set(geometries.map(g => g.type))]
       debugLogger.log('TASK', {
         event: 'buffer-preview-updated',

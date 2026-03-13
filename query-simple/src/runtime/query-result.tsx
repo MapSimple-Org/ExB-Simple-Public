@@ -32,7 +32,7 @@ import { useZoomToRecords } from './managers/use-zoom-to-records'
 import { expandExtentByFactor, DEFAULT_EXTENT_EXPANSION_FACTOR } from './zoom-utils'
 // FORCED: Always SimpleList - LazyList and PagingList removed
 import { SimpleList } from './simple-list'
-import { combineFields } from './query-utils'
+import { combineFields, resolvePopupInfoWithInheritance } from './query-utils'
 import { DEFAULT_QUERY_ITEM } from '../default-query-item'
 import { ArrowLeftOutlined } from 'jimu-icons/outlined/directional/arrow-left'
 import { ExpandAllOutlined } from 'jimu-icons/outlined/directional/expand-all'
@@ -136,7 +136,7 @@ export function QueryTaskResult (props: QueryTaskResultProps) {
   const { queryItem, queryParams, resultCount, maxPerPage, records, widgetId, outputDS, runtimeZoomToSelected, onNavBack, resultsMode, accumulatedRecords, resultsExtent, onAccumulatedRecordsChange, graphicsLayer, mapView, eventManager, isQuerySwitchInProgressRef, currentQueryRecordIds, queries, noRemovalAlert, onDismissNoRemovalAlert, allDuplicatesAlert, onDismissAllDuplicatesAlert, zoomOnResultClick, hoverPinColor, listResetKey } = props
   const getI18nMessage = hooks.useTranslation(defaultMessage)
   const intl = useIntl()
-  const zoomToRecords = useZoomToRecords(mapView)
+  const zoomToRecords = useZoomToRecords(mapView, widgetId)
   const [queryData, setQueryData] = React.useState(null)
   const [selectedRecords, setSelectedRecords] = React.useState<DataRecord[]>([])
   // FIX (r018.94): Removed removedRecordIds state - no longer needed since records stay in sync
@@ -327,7 +327,9 @@ export function QueryTaskResult (props: QueryTaskResultProps) {
         dataSet.fields = combineFields(queryItemForFields.resultDisplayFields, queryItemForFields.resultTitleExpression)
       } else if (originDS && 'getPopupInfo' in originDS) {
         // Fallback: use fields in popup template from origin DS
-        const popupInfo = originDS.getPopupInfo()
+        // r025.066: Use inheritance-aware resolution so GL children pick up
+        // the parent group layer's popup field config for table display
+        const popupInfo = resolvePopupInfoWithInheritance(originDS as FeatureLayerDataSource)
         
         // r024.87: Extract fields from popupDescription/popupTitle if they use custom HTML
         // The fieldInfos.visible flags may not match what's actually displayed
@@ -340,13 +342,18 @@ export function QueryTaskResult (props: QueryTaskResultProps) {
         const titleFields = extractFieldsFromTemplate(popupInfo?.title)
         const descFields = extractFieldsFromTemplate(popupInfo?.description)
         const templateFields = [...new Set([...titleFields, ...descFields])]
-        
-        if (templateFields.length > 0) {
-          // Use fields extracted from the actual popup template
-          dataSet.fields = templateFields
-        } else if (popupInfo?.fieldInfos) {
-          // Fallback to fieldInfos if no template fields found
-          dataSet.fields = popupInfo.fieldInfos.filter((fieldInfo) => fieldInfo.visible).map((fieldInfo) => fieldInfo.fieldName)
+
+        // r025.066: Combine template fields AND visible fieldInfos — the table should
+        // show everything the popup displays, not just what's in the title/description.
+        // Previously used either/or logic which missed fieldInfos when a title template existed.
+        const visibleFieldInfoFields = popupInfo?.fieldInfos
+          ?.filter((fieldInfo) => fieldInfo.visible !== false)
+          ?.map((fieldInfo) => fieldInfo.fieldName) || []
+
+        const allPopupFields = [...new Set([...templateFields, ...visibleFieldInfoFields])]
+
+        if (allPopupFields.length > 0) {
+          dataSet.fields = allPopupFields
         }
       }
       

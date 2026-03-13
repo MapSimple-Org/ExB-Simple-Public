@@ -408,6 +408,7 @@ SpatialTabContent.tsx
 - **Mixed geometry support**: Groups geometries by type before union to prevent `executeMany` crash on mixed point/polyline/polygon inputs
 - **Spatial result default template**: Per-layer config flag (`isSpatialResultDefault`) designates one query's rendering settings for spatial results, using shared `combineFields()` for smart outFields
 - **Context-aware warnings**: Warns when relationship + geometry combinations will produce misleading results
+- **Spatial-only layers**: `spatialOnly` flag on `QueryItemType` allows reference layers (e.g., School Districts, Zoning) to participate in spatial queries without appearing in the Query tab dropdown. Builder settings panel conditionally hides query-specific sections (attribute filter, spatial filter, short ID, group ID, search alias, display order) for spatial-only items
 
 ---
 
@@ -426,24 +427,34 @@ sqlExprRuntimeContainerRef (position: relative)
 
 | File | Lines | Responsibility |
 |------|-------|----------------|
-| `suggest-utils.ts` | 341 | `detectFreeFormInput()`, `fetchSuggestions()`, `injectValueIntoInput()` |
-| `useSuggest.ts` | 508 | Hook with useReducer state machine, debounce, keyboard nav |
+| `suggest-utils.ts` | ~390 | `detectFreeFormInput()`, `fetchSuggestions()`, `injectValueIntoInput()`, `filterCachedSuggestions()` |
+| `useSuggest.ts` | ~540 | Hook with useReducer state machine, debounce, cache, keyboard nav |
 | `SuggestPopover.tsx` | 210 | Dropdown UI with prefix highlighting, ARIA listbox pattern |
 
 ### Data Flow
 
 ```
 User types → capture-phase input listener → SET_QUERY action
-  → 300ms debounce → fetchSuggestions() → FeatureLayer.queryFeatures()
-    → FETCH_SUCCESS → SuggestPopover renders suggestions
-      → User selects → injectValueIntoInput() → SqlExpressionRuntime.onChange fires
+  → 300ms debounce → filterCachedSuggestions() check:
+    → Cache hit? → FETCH_SUCCESS with filtered results (no server call)
+    → Cache miss? → fetchSuggestions(limit=50) → FeatureLayer.queryFeatures()
+      → Store in suggestCacheRef → FETCH_SUCCESS with results.slice(0, 10)
+        → SuggestPopover renders suggestions
+          → User selects → injectValueIntoInput() → SqlExpressionRuntime.onChange fires
 ```
+
+### Client-Side Narrowing Cache (r025.058)
+
+Fetch 50 results from server, display 10. Cache the full server response in a `useRef<SuggestCache>`. On subsequent keystrokes, if the cache is complete (server returned < 50) and the new query extends the cached prefix, filter locally instead of re-querying.
+
+**Safety guarantee**: `filterCachedSuggestions()` returns `null` on any doubt (operator mismatch, backspace, truncated cache, CONTAINS/ENDS_WITH operators). `null` = fall through to existing server query path = zero regression risk.
 
 ### Key Design Decisions
 
 - **Capture-phase listeners**: Attach to container ref, intercept events before SqlExpressionRuntime processes them — no modifications to Esri component
 - **Multi-clause SQL support**: `detectFreeFormInput()` scans all expression parts, targets the first free-form USER_INPUT clause, extracts fixed clauses as `additionalWhere`
 - **Operator-aware LIKE patterns**: Matches the SQL operator from the clause — `contains` → `%VALUE%`, `starts_with` → `VALUE%`, `ends_with` → `%VALUE%`
+- **Operator-aware caching**: Only starts-with/is operators narrow monotonically, so CONTAINS/ENDS_WITH always bypass cache
 - **Guard suppression**: `isHashInjecting` suppresses during hash parameter injection; `isSelectingRef` suppresses during self-injection
 
 ---

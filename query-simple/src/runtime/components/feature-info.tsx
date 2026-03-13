@@ -66,6 +66,10 @@ interface State {
 
 const style = css`
   border: 1px solid var(--sys-color-divider-secondary);
+  /* r025.063: Ensure short-content expanded items are tall enough to cover stacked action buttons */
+  &.feature-info-expanded {
+    min-height: 4.5rem;
+  }
   .esri-widget__heading {
     font-size: 0.875rem !important;
     font-weight: 500 !important;
@@ -284,7 +288,7 @@ class FeatureInfo extends React.PureComponent<Props & ExtraProps, State> {
     const { togglable = false, intl } = this.props
     const { showContent } = this.state
     return (
-      <div className='feature-info-component d-flex align-items-center p-1' css={style}>
+      <div className={classNames('feature-info-component d-flex align-items-center p-1', { 'feature-info-expanded': showContent })} css={style}>
         {togglable && (
           <Button
             aria-label={intl.formatMessage({ id: showContent ? 'collapse' : 'expand' })}

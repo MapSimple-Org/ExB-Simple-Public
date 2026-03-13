@@ -175,13 +175,17 @@ export interface QueryItemType {
   order?: number
   /** When true, spatial query results from this layer use this query's rendering/field settings */
   isSpatialResultDefault?: boolean
+  /** r025.060: When true, this layer only participates in Spatial tab queries — hidden from Query tab dropdown */
+  spatialOnly?: boolean
   // Suggest / Typeahead configuration (r025.053)
   /** When true, enables typeahead suggestions for free-form text inputs */
   enableSuggest?: boolean
   /** Minimum characters before firing suggest query (default: 2) */
   suggestMinChars?: number
-  /** Maximum number of suggestions to return (default: 10) */
+  /** Maximum number of suggestions to display (default: 10) */
   suggestLimit?: number
+  /** Server-side fetch limit for suggest cache (default: 50) */
+  suggestFetchLimit?: number
 }
 
 export interface SizeMap {
@@ -214,6 +218,10 @@ export interface SettingConfig {
   // Result Click Behavior
   /** r023.31: Default false. When true, clicking a result zooms to it. When false, use "Zoom to" from result menu. */
   zoomOnResultClick?: boolean
+  /** r025.059: Distance in feet to buffer point features when zooming. Default: 300. */
+  pointZoomBufferFeet?: number
+  /** r025.068: Expansion factor for zoom extent. 1.0 = tight fit, 2.0 = double size. Default: 1.2. */
+  zoomExpansionFactor?: number
   // r024.0: LayerList Integration - Persistent Result Layers
   /** Default false. When true, results render as GroupLayer in LayerList; layer persists when widget closes. */
   addResultsAsMapLayer?: boolean

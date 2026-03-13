@@ -178,8 +178,9 @@ export function QueryTaskForm (props: QueryTaskItemProps) {
     enabled: currentItem.enableSuggest ?? false,
     minChars: currentItem.suggestMinChars ?? 2,
     limit: currentItem.suggestLimit ?? 10,
+    fetchLimit: currentItem.suggestFetchLimit ?? 50,
     debounceMs: 300
-  }), [currentItem.enableSuggest, currentItem.suggestMinChars, currentItem.suggestLimit])
+  }), [currentItem.enableSuggest, currentItem.suggestMinChars, currentItem.suggestLimit, currentItem.suggestFetchLimit])
 
   const { suggestProps, resetSuggest } = useSuggest({
     containerRef: sqlExprRuntimeContainerRef,

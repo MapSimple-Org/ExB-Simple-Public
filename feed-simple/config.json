@@ -1,0 +1,17 @@
+{
+  "feedUrl": "",
+  "rootItemElement": "item",
+  "refreshInterval": 30,
+  "showLastUpdated": true,
+  "highlightNewItems": true,
+  "cardTemplate": "",
+  "statusField": "",
+  "statusColorMap": {},
+  "dateFormatString": "MMM D, YYYY",
+  "maxItems": 0,
+  "filterByStatus": [],
+  "featureServiceUrl": "",
+  "joinFieldService": "",
+  "joinFieldFeed": "",
+  "externalLinkTemplate": ""
+}
