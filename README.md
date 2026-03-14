@@ -194,6 +194,35 @@ npx playwright test tests/e2e/query-simple/session.spec.ts --project=chromium --
 
 ---
 
+## Verified Compatibility
+
+### Development Environment
+
+| Component | Version |
+|-----------|---------|
+| Experience Builder | 1.19 |
+| ArcGIS Maps SDK for JavaScript | 4.34 |
+| React | 19 |
+| Node.js | 22 |
+| Calcite Design System | 3.3.3 |
+| TypeScript | Bundled with ExB |
+
+Official reference: https://developers.arcgis.com/experience-builder/guide/release-versions/
+
+### Enterprise Deployment
+
+When deploying to ArcGIS Enterprise, the Enterprise version determines the ExB version:
+
+| Enterprise Version | ExB Version | JSAPI Version | React Version |
+|-------------------|-------------|---------------|---------------|
+| 11.4 | 1.14 | 4.28 | 17 |
+| 11.5 | 1.17 | 4.32 | 18 |
+| 12.0 | 1.18 | 4.33 | 18 |
+
+Set `exbVersion` in `manifest.json` to match or be LESS than Enterprise's ExB version. Example: if building with ExB Dev 1.19 but deploying to Enterprise 11.5 (ExB 1.17), set `"exbVersion": "1.17.0"`.
+
+---
+
 ## Installation
 
 ### QuerySimple + HelperSimple
