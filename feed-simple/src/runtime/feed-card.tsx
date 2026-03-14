@@ -28,14 +28,102 @@ export interface FeedCardProps {
   highlightDurationMs: number
   /** Callback when the card is clicked; receives the item and the mouse event */
   onClick?: (item: FeedItem, evt: React.MouseEvent) => void
+  /** Temporary info message shown below card when map interaction fails */
+  noGeometryMessage?: string
+  // ── Toolbar props ──
+  /** Whether to show the Zoom button */
+  showZoomButton?: boolean
+  /** Whether to show the Pan button */
+  showPanButton?: boolean
+  /** Whether to show the Expand button (admin toggle) */
+  showExpandButton?: boolean
+  /** Whether this item has valid geometry/coordinates for zoom/pan */
+  hasGeometry?: boolean
+  /** Callback for Zoom button click */
+  onZoom?: (item: FeedItem) => void
+  /** Callback for Pan button click */
+  onPan?: (item: FeedItem) => void
+  /** i18n labels for toolbar buttons */
+  toolbarLabels?: {
+    zoom: string
+    pan: string
+    expand: string
+    collapse: string
+    noGeometry: string
+  }
 }
+
+// ── Inline SVG icons (self-contained, no external dependencies) ──
+
+const ZoomIcon = () => (
+  <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+    <path d="M6.5 1a5.5 5.5 0 0 1 4.383 8.823l3.896 3.9a.75.75 0 0 1-1.06 1.06l-3.9-3.896A5.5 5.5 0 1 1 6.5 1zm0 1.5a4 4 0 1 0 0 8 4 4 0 0 0 0-8zM6.5 4a.5.5 0 0 1 .5.5V6h1.5a.5.5 0 0 1 0 1H7v1.5a.5.5 0 0 1-1 0V7H4.5a.5.5 0 0 1 0-1H6V4.5a.5.5 0 0 1 .5-.5z"/>
+  </svg>
+)
+
+const PanIcon = () => (
+  <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+    <path fillRule="evenodd" clipRule="evenodd" d="M3.16895 5.30918V3.04763C3.16895 2.55598 3.36425 2.08446 3.71191 1.73681C4.05956 1.38916 4.53107 1.19385 5.02273 1.19385C5.51132 1.19385 5.97869 1.36508 6.32193 1.67293C6.36032 1.62515 6.40094 1.57952 6.44366 1.53611C6.79682 1.1773 7.26611 1 7.73074 1C8.19536 1 8.66465 1.1773 9.01781 1.53611C9.12056 1.6405 9.21108 1.75775 9.28791 1.8868C9.62092 1.61172 10.0316 1.47559 10.4387 1.47559C10.9034 1.47559 11.3727 1.65289 11.7258 2.01169C11.8902 2.17872 12.0233 2.37867 12.1191 2.60724C12.4273 2.39497 12.7879 2.28979 13.1458 2.28979C13.6104 2.28979 14.0797 2.4671 14.4328 2.8259C14.7857 3.18442 14.9944 3.69459 14.9995 4.31399C14.9998 4.32175 15 4.32956 15 4.3374V10.8899C15 12.1273 14.6015 13.1671 13.8576 13.8978C13.1151 14.627 12.0777 15 10.8899 15H6.71936C6.07313 15 5.45739 14.7293 5.02137 14.253L1.60633 10.5275C1.24288 10.1312 1.02932 9.6202 1.00281 9.08312C0.976287 8.54601 1.1384 8.01652 1.46109 7.58632L3.16895 5.30918ZM7.15636 2.23758C7.00596 2.39039 6.87695 2.64565 6.87695 3.04737V4.85242C6.87695 5.03696 6.77697 5.19816 6.62822 5.28479C6.55429 5.32795 6.46829 5.35267 6.37651 5.35267C6.10037 5.35267 5.87651 5.12881 5.87651 4.85267V2.94294C5.87651 2.52273 5.54873 2.19385 5.02273 2.19385C4.79629 2.19385 4.57913 2.2838 4.41901 2.44391C4.2589 2.60403 4.16895 2.82119 4.16895 3.04763V5.44636C4.17005 5.46551 4.17005 5.48475 4.16895 5.50396V8.18228C4.16895 8.45842 3.94509 8.68228 3.66895 8.68228C3.3928 8.68228 3.16895 8.45842 3.16895 8.18228V6.97585L2.26109 8.18632C2.07839 8.42989 1.98657 8.7297 2.00159 9.03381C2.0166 9.33792 2.13748 9.6272 2.34329 9.85159L5.75853 13.5773C6.0048 13.8464 6.35309 14 6.71936 14H10.8899C11.8682 14 12.6358 13.6961 13.1569 13.1843C13.6765 12.674 14 11.9089 14 10.8899V4.35842C13.9997 4.35137 13.9996 4.34429 13.9996 4.33717C13.9996 3.93545 13.8706 3.68018 13.7202 3.52737C13.5656 3.37039 13.358 3.28979 13.1458 3.28979C12.9335 3.28979 12.7259 3.37039 12.5714 3.52737C12.4266 3.67448 12.3016 3.91654 12.2925 4.29281V4.8522C12.2925 5.08586 12.1323 5.28225 11.9156 5.3371C11.8761 5.34716 11.8347 5.35251 11.792 5.35251C11.5159 5.35251 11.292 5.12865 11.292 4.85251V4.33717C11.292 4.31879 11.2922 4.30052 11.2925 4.28233V3.52369C11.2925 3.12197 11.1635 2.8667 11.0131 2.7139C10.9194 2.61872 10.8063 2.55163 10.6843 2.51354C10.6052 2.48881 10.5223 2.47632 10.4387 2.47632C10.2265 2.47632 10.0189 2.55691 9.86437 2.7139C9.79462 2.78476 9.72948 2.87765 9.67967 2.99696C9.62206 3.13494 9.58496 3.30825 9.58496 3.52369V4.8522C9.58496 5.11224 9.38645 5.32609 9.13271 5.35012C9.11685 5.35164 9.10077 5.35242 9.08452 5.35242C8.80838 5.35242 8.58452 5.12856 8.58452 4.85242V3.04737C8.58452 2.64565 8.45551 2.39039 8.30511 2.23758C8.1506 2.08059 7.943 2 7.73074 2C7.51847 2 7.31087 2.08059 7.15636 2.23758Z"/>
+  </svg>
+)
+
+const ChevronDownIcon = () => (
+  <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+    <path d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
+  </svg>
+)
+
+const ChevronUpIcon = () => (
+  <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+    <path d="M7.646 4.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1-.708.708L8 5.707l-5.646 5.647a.5.5 0 0 1-.708-.708l6-6z"/>
+  </svg>
+)
+
+// ── Toolbar button styles ────────────────────────────────────────
+
+const toolbarBtnCss = css`
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  padding: 0;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  background: transparent;
+  color: #555;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+  &:hover {
+    background: rgba(0, 0, 0, 0.06);
+    border-color: #ccc;
+    color: #333;
+  }
+  &:focus-visible {
+    outline: 2px solid #0079c1;
+    outline-offset: 1px;
+  }
+`
+
+const toolbarBtnDisabledCss = css`
+  ${toolbarBtnCss};
+  opacity: 0.35;
+  pointer-events: none;
+  cursor: default;
+`
 
 export default function FeedCard (props: FeedCardProps): React.ReactElement {
   const {
     item, isHighlighted, isSelected,
     cardTemplate, statusField, statusColorMap, hoverTextField,
-    filterContext, clickable, highlightDurationMs, onClick
+    filterContext, clickable, highlightDurationMs, onClick,
+    noGeometryMessage,
+    showZoomButton, showPanButton, showExpandButton,
+    hasGeometry, onZoom, onPan, toolbarLabels
   } = props
+
+  // Expand state (local to this card)
+  const [isExpanded, setIsExpanded] = React.useState(false)
 
   // Determine background color from status field
   let bgColor = 'transparent'
@@ -72,10 +160,10 @@ export default function FeedCard (props: FeedCardProps): React.ReactElement {
   } else {
     // No template — show raw fields
     content = (
-      <div>
+      <div css={css`overflow-wrap: break-word; word-break: break-word;`}>
         {Object.entries(item).map(([key, value]) => (
           <div key={key} css={css`margin-bottom: 2px;`}>
-            <strong css={css`color: #555; font-size: 0.75rem; text-transform: uppercase;`}>{key}:</strong>{' '}
+            <strong css={css`color: #555; font-size: 0.7rem; text-transform: uppercase; overflow-wrap: break-word;`}>{key}:</strong>{' '}
             <span css={css`font-size: 0.85rem;`}>{value}</span>
           </div>
         ))}
@@ -134,6 +222,109 @@ export default function FeedCard (props: FeedCardProps): React.ReactElement {
         `} />
       )}
       {content}
+      {/* ── Action Toolbar ── */}
+      {(showZoomButton || showPanButton || (showExpandButton && cardTemplate)) && (
+        <div css={css`
+          display: flex;
+          align-items: center;
+          gap: 4px;
+          margin-top: 6px;
+          padding-top: 6px;
+          border-top: 1px solid rgba(0, 0, 0, 0.08);
+        `}>
+          {showZoomButton && (
+            <button
+              css={hasGeometry !== false ? toolbarBtnCss : toolbarBtnDisabledCss}
+              title={hasGeometry !== false
+                ? (toolbarLabels?.zoom || 'Zoom to feature')
+                : (toolbarLabels?.noGeometry || 'No geometry available')}
+              onClick={(evt) => {
+                evt.stopPropagation()
+                if (hasGeometry !== false && onZoom) onZoom(item)
+              }}
+            >
+              <ZoomIcon />
+            </button>
+          )}
+          {showPanButton && (
+            <button
+              css={hasGeometry !== false ? toolbarBtnCss : toolbarBtnDisabledCss}
+              title={hasGeometry !== false
+                ? (toolbarLabels?.pan || 'Pan to feature')
+                : (toolbarLabels?.noGeometry || 'No geometry available')}
+              onClick={(evt) => {
+                evt.stopPropagation()
+                if (hasGeometry !== false && onPan) onPan(item)
+              }}
+            >
+              <PanIcon />
+            </button>
+          )}
+          {showExpandButton && cardTemplate && (
+            <button
+              css={toolbarBtnCss}
+              title={isExpanded
+                ? (toolbarLabels?.collapse || 'Hide fields')
+                : (toolbarLabels?.expand || 'Show all fields')}
+              onClick={(evt) => {
+                evt.stopPropagation()
+                setIsExpanded(prev => !prev)
+              }}
+            >
+              {isExpanded ? <ChevronUpIcon /> : <ChevronDownIcon />}
+            </button>
+          )}
+        </div>
+      )}
+      {/* ── Expanded Raw Fields ── */}
+      {isExpanded && (
+        <div css={css`
+          margin-top: 6px;
+          padding: 8px 10px;
+          background: rgba(0, 0, 0, 0.025);
+          border-radius: 4px;
+          max-height: 300px;
+          overflow-y: auto;
+          font-size: 0.75rem;
+          line-height: 1.5;
+          overflow-wrap: break-word;
+          word-break: break-word;
+          @keyframes feedSimpleExpandIn {
+            from { opacity: 0; max-height: 0; }
+            to { opacity: 1; max-height: 300px; }
+          }
+          animation: feedSimpleExpandIn 0.2s ease-out;
+        `}>
+          {Object.entries(item).map(([key, value]) => (
+            <div key={key} css={css`margin-bottom: 2px;`}>
+              <strong css={css`color: #555; font-size: 0.65rem; text-transform: uppercase;`}>{key}:</strong>{' '}
+              <span>{value}</span>
+            </div>
+          ))}
+        </div>
+      )}
+      {noGeometryMessage && (
+        <div css={css`
+          margin-top: 6px;
+          padding: 5px 10px;
+          background: #e8f0fe;
+          color: #1a73e8;
+          font-size: 0.75rem;
+          border-top: 1px solid #d2e3fc;
+          border-radius: 0 0 4px 4px;
+          display: flex;
+          align-items: center;
+          gap: 6px;
+          @keyframes feedSimpleInfoFadeIn {
+            from { opacity: 0; transform: translateY(-4px); }
+            to { opacity: 1; transform: translateY(0); }
+          }
+          animation: feedSimpleInfoFadeIn 0.2s ease-out;
+        `}>
+          <span css={css`font-size: 13px; flex-shrink: 0;`}>ℹ</span>
+          {noGeometryMessage}
+        </div>
+      )}
     </div>
   )
 }

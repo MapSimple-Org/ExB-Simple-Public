@@ -10,7 +10,7 @@
  */
 const BASE_VERSION = '1.19.0'
 const RELEASE_NUMBER = '025' // Increment on major changes (001, 002, 003, ...)
-const MINOR_VERSION = '069' // r025.069: Spatial relationship info popover — ⓘ icon shows Esri diagram for selected relationship
+const MINOR_VERSION = '071' // r025.071: Fix scroll-to-top button squished in flex layout
 
 export const WIDGET_VERSION = MINOR_VERSION && Number(MINOR_VERSION) > 0
   ? `${BASE_VERSION}-r${RELEASE_NUMBER}.${MINOR_VERSION}`

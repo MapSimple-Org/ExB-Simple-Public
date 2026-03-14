@@ -52,6 +52,7 @@ export default {
   spatialSourceNoFeatures: 'No features loaded',
   expandAll: 'Expand all',
   collapseAll: 'Collapse all',
+  scrollToTop: 'Scroll to top',
   addToMap: 'Select on map',
   resultsModeLabel: 'Results Mode',
   resultsMode: 'Results mode',

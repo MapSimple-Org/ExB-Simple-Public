@@ -175,7 +175,7 @@ export function renderPreview (markdown: string): string {
 
   // Replace {{fieldName}} and {{fieldName | filter}} tokens with styled badges
   return html.replace(
-    /\{\{(\s*[\w.]+\s*)(?:\|\s*(?:"([^"]+)"|(\w+))\s*)?\}\}/g,
+    /\{\{(\s*[\w.@\[\]]+\s*)(?:\|\s*(?:"([^"]+)"|(\w+))\s*)?\}\}/g,
     (_match, fieldName: string, quotedArg?: string, filterName?: string) => {
       const name = fieldName.trim()
       const filter = quotedArg ? `| "${quotedArg}"` : filterName ? `| ${filterName}` : ''
@@ -190,7 +190,7 @@ export function renderPreview (markdown: string): string {
  */
 export function extractFieldTokens (template: string): string[] {
   if (!template) return []
-  const regex = /\{\{(\s*[\w.]+\s*)(?:\|[^}]*)?\}\}/g
+  const regex = /\{\{(\s*[\w.@\[\]]+\s*)(?:\|[^}]*)?\}\}/g
   const fields: string[] = []
   let match: RegExpExecArray | null
   while ((match = regex.exec(template)) !== null) {

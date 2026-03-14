@@ -5,6 +5,144 @@ All notable changes to the FeedSimple widget will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.19.0-r001.039] - 2026-03-13 - Layer Visibility Auto-Restore
+
+### Added
+
+- **Auto-restore feed layer visibility** (r001.039): When a user interacts with a feed card (click, toolbar zoom, toolbar pan), the feed layer is automatically made visible if it was turned off in the LayerList widget. New `ensureFeedLayerVisible()` helper called from all three interaction paths. Logs `layer-visibility-restored` to `FEED-LAYER` debug channel.
+
+## [1.19.0-r001.038] - 2026-03-13 - Scroll-to-Top Chevron Icon
+
+### Changed
+
+- **Scroll-to-top icon** (r001.038): Replaced the arrow-with-bar SVG with a clean chevron (`^`) icon — simpler and more consistent with standard scroll-to-top affordances.
+
+## [1.19.0-r001.037] - 2026-03-13 - GeoRSS Support, Scroll-to-Top, Pan Icon
+
+### Added
+
+- **GeoRSS `<georss:point>` splitting** (r001.037): Parser detects `point` (or `*.point`) fields containing space-separated `"lat lon"` values and emits two synthetic fields: `point_lat` and `point_lon`. Original `point` value preserved. Enables Feed Map Layer for ATOM/GeoRSS feeds (e.g., USGS earthquake ATOM feed) without any manual coordinate extraction.
+- **Scroll-to-top button** (r001.037): Theme-aware FAB (`position: sticky`) appears in the bottom-right of the card list after scrolling past 200px. Uses `--sys-color-primary-main` background (honors ExB app theme). Smooth-scrolls back to top on click. Arrow-up-to-bar icon, 36px rounded-rect, accessible (`aria-label`).
+- **i18n key**: `scrollToTop`
+
+### Changed
+
+- **Pan icon** (r001.037): Replaced generic four-arrow move icon with the Esri hand icon (same SVG as `jimu-icons/outlined/editor/hand` used in QuerySimple's results menu). More intuitive "grab and drag" affordance.
+
+## [1.19.0-r001.036] - 2026-03-13 - Card Action Toolbar
+
+### Added
+
+- **Card action toolbar** (r001.036): Per-card toolbar row with icon buttons for Zoom, Pan, and Expand actions
+  - **Zoom button**: Shown when `enableZoomOnClick` is `false` — zooms to the feature on the map. Hidden when zoom already happens on card click.
+  - **Pan button**: Shown when any map integration is configured — centers the map on the feature without changing zoom level.
+  - **Expand button**: Shown when `enableCardExpand` is `true` — toggles display of all raw feed fields below the card template content.
+  - Buttons disabled with tooltip when the item has no geometry on the map
+  - Toolbar labels are i18n-aware with tooltip text
+- **`enableCardExpand` config** (r001.036): New boolean config field enabling the expand/collapse feature on cards
+- **`panToFeedPoint` utility** (r001.036): New function in `feed-layer-manager.ts` that centers the map on a feed item's coordinates without changing zoom — mirrors `zoomToFeedPoint` but uses current map scale
+- **`buildPanTarget` utility** (r001.036): New function in `map-interaction.ts` that builds a `goTo` target for panning (center only, no zoom change)
+- **i18n keys**: `zoomToFeature`, `panToFeature`, `expandCard`, `collapseCard`, `zoomDisabledNoGeometry`
+- **Settings i18n keys**: `enableCardExpand`, `enableCardExpandDescription`
+
+### Changed
+
+- **`FeedCard` component** (r001.036): Expanded from ~139 lines to ~300+ lines — now supports toolbar rendering, expand/collapse state, and per-card geometry awareness via new props (`showZoomButton`, `showPanButton`, `showExpandButton`, `hasGeometry`, `onZoom`, `onPan`, `toolbarLabels`)
+- **`widget.tsx`** (r001.036): Computes toolbar visibility flags (`showZoomButton`, `showPanButton`, `showExpandButton`) once per render and passes to all cards. Per-card `hasGeometry` check inspects either feed coordinates or spatial join `geometryMap`.
+
+## [1.19.0-r001.035] - 2026-03-13 - No-Geometry Card Click Feedback
+
+### Added
+
+- **Card click feedback** (r001.035): When a card click fails to interact with the map, a temporary info banner appears below the card and auto-dismisses after 3 seconds
+  - Spatial join path: "Feature not found on map" — shown when `geometryMap` has no entry for the clicked item's join value
+  - Feed Map Layer path: "No valid coordinates for this item" — shown when lat/lon fields are missing or unparseable
+  - Light blue info styling (`#e8f0fe`) with fade-in animation, consistent with informational messaging patterns
+  - Card still shows blue selection border so user knows which card was clicked
+- **`noGeometryMessage` prop on FeedCard** (r001.035): Optional string prop renders an info bar below card content when truthy
+- **i18n keys**: `noGeometryOnMap`, `noValidCoordinates`
+
+### Changed
+
+- **`zoomToFeedPoint` return type** (r001.035): Changed from `Promise<void>` to `Promise<boolean>` — returns `false` for missing/invalid coordinates, `true` on success. Enables caller to detect failures and show user feedback.
+- **Spatial join no-geometry path** (r001.035): Now selects the card (blue border) and shows info message instead of silently returning with no visual feedback
+
+### Fixed
+
+- **Geometry query respects web map filters** (r001.035): Replaced direct `esriRequest` REST calls in `feature-join.ts` with JSAPI `FeatureLayer.queryFeatures()` via the actual map layer. Queries now automatically include the layer's `definitionExpression` and any web map filters. Previously, features filtered out in the web map were still returned by the geometry query, causing card clicks to zoom to invisible features.
+  - `feature-join.ts`: Rewritten — `queryFeatureLayerByIds()` accepts a JSAPI `FeatureLayer` instead of a URL string. Uses `featureLayer.createQuery()` to get the definitionExpression, then ANDs it with the IN clause (not overwrites).
+  - `map-interaction.ts`: `queryGeometries()` now finds the actual layer on the map via `mapView.map.allLayers` URL matching (same pattern as `identifyFeatureOnMap`), instead of using the DataSource's separate layer instance which lacks the definitionExpression.
+  - Removed `esriRequest` dependency — all feature queries now go through the JSAPI layer
+
+## [1.19.0-r001.034] - 2026-03-13 - Zoom & Click Behavior + Unit Tests
+
+### Added
+
+- **Unit test suite — Phase 1** (r001.034): 100 tests across 3 files covering pure-function utilities
+  - `tests/token-renderer.test.ts` (30 tests): Basic substitution, dot-path keys, array keys, date filter (format patterns, edge cases), autolink filter, externalLink filter, unknown filters, whitespace/empty/null handling
+  - `tests/custom-xml-parser.test.ts` (20 tests): Flat XML, nested dot-path flattening, XML attributes with `@` prefix, repeated element array indexing, HTML entity sanitization, CDATA sections, namespace stripping, xmlns filtering, self-closing elements, invalid XML error, field name ordering
+  - `tests/markdown-template-utils.test.ts` (50 tests): Headings (h3-h6), bold/italic/underscore, links, images, unordered lists, horizontal rules, paragraph breaks, line breaks, leading-space indentation, token passthrough, complex multi-element templates, renderPreview badge rendering, extractFieldTokens
+- **Zoom on Card Click toggle** (r001.034): New `enableZoomOnClick` config boolean (defaults to `true`). When disabled, card clicks still open popups and identify features — only the map zoom is suppressed.
+- **Zoom & Click Behavior settings section** (r001.034): New settings section appears when either Feed Map Layer or Spatial Join is fully configured with a map widget. Contains:
+  - Enable/disable zoom on card click toggle
+  - Zoom Level (Points) — no hard max cap, JSAPI clamps to basemap tile scheme
+  - Zoom Buffer (Lines/Polygons) — only shown when spatial join is configured (feed map layer only produces points)
+- **`zoomToFeedPoint` options parameter** (r001.034): Added `{ skipZoom?: boolean }` option so the function can identify/popup without zooming when zoom is disabled
+
+### Changed
+
+- **Zoom settings relocated** (r001.034): Moved from inside the Map Integration section to the shared "Zoom & Click Behavior" section that appears for either Feed Map Layer or Spatial Join
+- **Zoom level uncapped** (r001.034): Removed the `max={23}` constraint on the zoom level input — JSAPI naturally handles basemap-specific limits
+- **Spatial join card click** (r001.034): Refactored to always run `identifyFeatureOnMap` regardless of zoom setting — `goTo` is conditional, identify is not
+
+## [1.19.0-r001.033] - 2026-03-13 - Feed Map Layer
+
+### Added
+
+- **Feed Map Layer** (r001.033): Auto-generate a client-side FeatureLayer from feed item coordinates
+  - Items with lat/lon fields are plotted as points on the map automatically
+  - Layer appears in the standard ExB LayerList widget (`listMode: 'show'`)
+  - Full renderer support: configurable marker color, size, and style (circle, square, diamond, cross, x)
+  - Popup integration: reuses the card template by default, or a separate popup template if configured
+  - Efficient poll-cycle sync via `applyEdits()` (full replace, ~1ms for 200 items, batched in 500s for large feeds)
+  - Invalid/missing coordinates silently skipped with debug logging
+  - Layer auto-created when mapView + config + items are all ready
+  - Layer destroyed on widget unmount or config disable
+- **Bidirectional card-map sync** (r001.033): Card click zooms to point + opens popup; map click highlights matching card and scrolls into view
+- **Smart coordinate field detection** (r001.033): Settings panel sorts lat/lon dropdown candidates by field name heuristics and sample value range analysis
+- **New file**: `src/utils/feed-layer-manager.ts` (~280 lines) — layer creation, sync, destroy, popup building, field name sanitization
+- **Config additions**: `enableFeedMapLayer`, `latitudeField`, `longitudeField`, `feedMapLayerTitle`, `feedMapLayerColor`, `feedMapLayerSize`, `feedMapLayerMarkerStyle`, `feedMapLayerPopupTemplate`
+
+### Fixed
+
+- **Card word-wrap** (r001.032→033): Long dot-path field names in raw card view now wrap properly instead of causing horizontal overflow
+
+## [1.19.0-r001.032] - 2026-03-13 - Universal XML Parser
+
+### Changed
+
+- **Recursive XML flattener** (r001.032): Replaced flat single-level child extraction with a recursive tree walk that handles any XML nesting depth
+  - Flat feeds (King County): identical output — fully backward compatible
+  - Nested feeds (USGS QuakeML, 4-5 levels deep): produces dot-path keys like `origin.latitude.value`, `magnitude.mag.value`
+  - Attribute extraction: `@` prefix convention (`link.@href`, `event.@publicID`) — follows XPath standard
+  - Array handling: bracket indexing for repeated sibling elements (`category[0]`, `category[1]`)
+  - Namespace prefixes stripped (uses `localName`) — prefix changes between feeds don't break templates
+  - xmlns declarations filtered out (metadata, not data)
+  - Attribute-only/self-closing elements skip empty text key, only emit `@attr` keys
+  - CDATA unwrapped transparently by DOMParser — zero special handling needed
+  - Field names sorted: flat first, then dot-paths alphabetically
+- **Token regex updates** (r001.032): All 5 token-matching regexes updated from `[\w.]+` to `[\w.@\[\]]+` to support attribute (`@`) and array (`[]`) keys in templates
+  - `token-renderer.ts`: TOKEN_REGEX and external link filter
+  - `markdown-template-utils.ts`: renderPreview and extractFieldTokens
+  - `widget.tsx`: external link click handler
+- **Settings panel hint** (r001.032): "Nested fields use dot notation" message shown when discovered fields contain dot-paths
+
+### Performance
+
+- 500 items × 46 fields (QuakeML worst case) = ~23K function calls, under 5ms
+- DOMParser itself is the bottleneck, not the flattening
+- No caching needed — each poll cycle fetches fresh XML
+
 ## [1.19.0-r001.031] - 2026-03-13 - Code Extraction
 
 ### Changed

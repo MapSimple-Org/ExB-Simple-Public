@@ -1,151 +1,211 @@
 # MapSimple Experience Builder Widgets
 
-Custom widgets for ArcGIS Experience Builder Developer Edition (1.19.0+).
+Custom widgets for ArcGIS Experience Builder Developer Edition (1.19.0+). Built for performance, deep-linking, and advanced result management.
 
-| Widget Family | Version | Status |
-|--------------|---------|--------|
-| **QuerySimple** (+ HelperSimple) | `1.19.0-r025.069` | Updated — Mar 13, 2026 |
-| **FeedSimple** | `1.19.0-r001.031` | New — First public release |
+**Current Version**: QS `1.19.0-r025.071` | FS `1.19.0-r001.039`
+**Latest Update**: Scroll-to-top, card toolbar, GeoRSS support, layer visibility auto-restore (Mar 13, 2026)
 
----
+## Key Differentiators (Why QuerySimple?)
 
-## What's in This Repo
+QuerySimple is designed to solve the common pain points of the standard Experience Builder query widget:
 
-This repository contains **two independent widget families**. Install only what you need.
-
-### QuerySimple Family
-
-High-performance search and spatial query engine for Experience Builder. Deep-linking, results accumulation, spatial analysis, typeahead, and configurable graphics.
-
-**Requires 3 folders:**
-- `query-simple/` — Main search widget
-- `helper-simple/` — Background orchestrator (URL monitoring, selection guard)
-- `shared-code/` — Common utilities shared between the two
-
-### FeedSimple (Standalone)
-
-XML feed consumer widget that displays live data feeds with configurable card templates, polling, and optional map integration via spatial join.
-
-**Requires 1 folder:**
-- `feed-simple/` — Fully standalone, no dependency on QuerySimple or shared-code
+- **93% Latency Reduction**: Powered by a **Universal SQL Optimizer** that automatically rewrites expensive queries to use database indexes, plus **Attribute Stripping** to minimize network payloads.
+- **Dual-Mode Deep Linking**: Support for both Hash Fragments (`#shortId=val`) and Query Strings (`?shortId=val`).
+- **Results Accumulation**: Unlike the standard widget which clears results on every search, QuerySimple allows you to "Add to" or "Remove from" a selection set across multiple different queries.
+- **Discoverable Automation**: An interactive "Info Button" (ℹ️) automatically appears to show users exactly how to deep-link to the current layer.
+- **Persistence & Restoration**: Selections are maintained even when the identify tool is used, ensuring users never lose their search context.
 
 ---
 
-## Quick Start
+## What's New (Mar 13, 2026)
 
-### Install QuerySimple + HelperSimple
+### QuerySimple r025.070–071
 
-```bash
-# Copy all three folders to your ExB widgets directory
-cp -r query-simple helper-simple shared-code /path/to/ExB/client/your-extensions/widgets/
-```
+- **Scroll-to-top button**: Theme-aware chevron button appears after scrolling in the results list. Honors ExB app theme colors via CSS variables.
 
-### Install FeedSimple
+### FeedSimple r001.032–039
 
-```bash
-# Copy just one folder
-cp -r feed-simple /path/to/ExB/client/your-extensions/widgets/
-```
+- **Card action toolbar** (r001.036): Per-card Zoom, Pan, and Expand buttons with disabled state for no-geometry items
+- **GeoRSS support** (r001.037): Auto-splits `<georss:point>` into lat/lon fields at parse time — works with USGS earthquake ATOM feeds out of the box
+- **Scroll-to-top button** (r001.037–038): Theme-aware chevron matching QuerySimple
+- **Auto-restore layer visibility** (r001.039): Feed layer turns on automatically when user clicks a card
+- **Universal XML parser**: Now tested with flat XML, nested (QuakeML), RSS 2.0, ATOM, and ATOM+GeoRSS
 
-### Build and Run
-
-```bash
-cd /path/to/ExB/client
-npm run build
-```
-
-Restart Experience Builder and add the widgets to your app.
+See [RELEASE_QS-r025.071_FS-r001.039](docs/releases/RELEASE_QS-r025.071_FS-r001.039.md) for full details.
 
 ---
 
-## What's New
+## Widgets in this Suite
 
-### QuerySimple r025.069 (Mar 13, 2026)
+### 🔍 QuerySimple (`query-simple/`)
+A high-performance search engine for Experience Builder.
 
-**Spatial relationship info popover** — ⓘ icon next to the spatial relationship combobox shows Esri SVG diagrams with descriptions on hover.
+**Advanced Features:**
+- **Duplicate Query Button**: Clone any query instantly with all settings preserved - a massive time-saver when configuring multiple similar searches.
+- **SQL Optimizer**: Automatically unwraps `LOWER()` from search fields to ensure database index usage.
+- **Query Grouping**: Organize dozens of searches into a clean two-dropdown hierarchy.
+- **Display Order**: Control search prioritization via the `order` property (no need to manually reorder config).
+- **Spatial Power**: Integrated buffer, draw, and extent filtering.
+- **Unified Testing**: Verified by a "Mega-Journey" E2E suite that simulates real user sessions.
 
-**Typeahead suggestions** — Real-time value suggestions for free-form text queries with per-query configuration, multi-clause SQL support, and keyboard navigation.
+### 🛠️ HelperSimple (`helper-simple/`)
+The "Orchestrator" widget that handles the background logic.
 
-**Spatial tab** — Full spatial query support with Operations and Draw modes, buffer preview, 7 drawing tools, context-aware relationship warnings, and multi-layer targets.
+**Features:**
+- **URL Monitor**: Listens for hash and query string changes to trigger QuerySimple automation.
+- **Selection Guard**: Restores QuerySimple results after the map identify popup is closed.
+- **Handshake Logic**: Manages the "open/close" state between widgets to ensure a clean UI.
 
-**Additional improvements** — Configurable zoom expansion factor, point zoom buffer, disable spatial filter per query, clear attribute filter labels, and multiple bug fixes.
+### 📡 FeedSimple (`feed-simple/`)
+A standalone XML feed consumer widget. Does **not** depend on QuerySimple, HelperSimple, or shared-code.
 
-### FeedSimple r001.031 (Mar 13, 2026)
-
-First public release featuring XML feed parsing, markdown card templates with token substitution, configurable polling, map integration via spatial join, and status field coloring.
+**Features:**
+- **Universal XML parsing**: Flat XML, nested (QuakeML), RSS 2.0, ATOM, GeoRSS — one parser handles all
+- **Markdown card templates**: Token substitution (`{{field}}`) with filter chain (date, autolink, externalLink)
+- **Configurable polling**: Automatic refresh with exponential backoff on failures
+- **Feed Map Layer**: Client-side FeatureLayer from feed coordinates with bidirectional card-map click sync
+- **Spatial join**: Runtime join to existing FeatureLayer with click-to-zoom and popup
+- **Status field coloring**: Configurable color mapping for status indicators
+- **Debug logging**: `?debug=FETCH,POLL,JOIN,FEED-LAYER` URL parameters
 
 ---
 
-## QuerySimple Features
+## Configuration & Enhancements
 
-- **93% Latency Reduction**: SQL Optimizer + attribute stripping minimize network payloads
-- **Dual-Mode Deep Linking**: Hash fragments (`#shortId=val`) and query strings (`?shortId=val`)
-- **Results Accumulation**: New/Add/Remove modes across multiple queries
-- **Spatial Tab**: Operations and Draw modes with buffer preview, 7 relationships, multi-layer targets
-- **Typeahead Suggestions**: Real-time value suggestions with multi-clause support
-- **Custom Templates**: Markdown-based result display with `{fieldName}` tokens
-- **LayerList Integration**: Results persist as GroupLayer visible in LayerList and Legend
-- **Configurable Graphics**: Custom colors, opacity, sizing, and hover preview pin
-- **Multi-Format Export**: CSV, GeoJSON, JSON with field aliases and priority ordering
+### Duplicate Query Button (NEW in r020.0)
+
+**The #1 time-saver for power users configuring multiple similar queries.**
+
+When you have dozens of queries against the same layer (e.g., different parcel search fields), the duplicate button eliminates repetitive configuration work.
+
+**How it works:**
+1. Configure your first query with all the settings (layer, filters, display format, spatial tools, grouping, etc.)
+2. Click the **duplicate icon** (📋) next to the query in the settings panel
+3. A perfect clone appears instantly with "(Copy)" appended to the name
+4. Change only what's different (e.g., switch from "Parcel Number" field to "Owner Name" field)
+5. Done! All other settings are preserved.
+
+**What gets cloned:**
+- ✅ Layer and data source configuration
+- ✅ Attribute filters and SQL expressions
+- ✅ Spatial filters, buffers, and geometry tools
+- ✅ Display format and field configuration
+- ✅ Sorting, pagination, and result styling
+- ✅ Grouping settings and display order
+- ✅ Hash parameters (with "_copy" appended to prevent collisions)
+
+**Unique IDs auto-generated:**
+- New `configId` and `outputDataSourceId` are created automatically
+- Hash parameters (`shortId`, `searchAlias`) are made unique with "_copy" suffix
+- No risk of ID collisions or configuration conflicts
+
+**Real-world example:**
+If you're building a parcel search with 10 different search fields (PIN, Major/Minor, Owner Name, Address, etc.), you can:
+1. Configure the first query completely (~5 minutes)
+2. Duplicate it 9 times (~30 seconds)
+3. Update just the field name in each copy (~2 minutes total)
+
+**Total time: ~8 minutes instead of ~50 minutes!**
+
+---
 
 ### URL Parameters (Deep Linking)
+Configure a `shortId` for any query to enable instant automation.
 
 | Format | Example | Best Use Case |
 | :--- | :--- | :--- |
-| **Hash (#)** | `index.html#pin=123` | Interactive UX — no page reload |
-| **Query (?)** | `index.html?pin=123` | External linking — CRM/email integrations |
+| **Hash (#)** | `index.html#pin=123` | **Interactive UX.** Snappy, no page reload, private to browser. |
+| **Query (?)** | `index.html?pin=123` | **External Linking.** Standard for CRM/Email integrations. |
 
-### Debug System
-
-Production-safe debugging via URL parameter: `?debug=FEATURE`
-
-**Available tags:** `all`, `HASH`, `TASK`, `RESULTS-MODE`, `SELECTION`, `RESTORE`, `GRAPHICS-LAYER`, `WIDGET-STATE`, `SPATIAL`, `SUGGEST`, `DIRECT-QUERY`, `CSV`, `BUFFER`
-
-**Example:** `index.html?debug=HASH,TASK`
+### Display Order & Grouping
+Manage complex search requirements with ease:
+- **`groupId`**: Clusters related searches (e.g., "Parcels") into a group.
+- **`searchAlias`**: The label shown inside the group (e.g., "Search by PIN").
+- **`order`**: A numeric value (1, 2, 3...) that forces a search to the top of the list, regardless of when it was added to the config.
 
 ---
 
-## FeedSimple Features
+## Troubleshooting & Debugging
 
-- **XML Feed Parsing**: Configurable field mapping with custom parser support
-- **Markdown Card Templates**: Token substitution (`{fieldName}`) with filter chain
-- **Configurable Polling**: Automatic refresh intervals with backoff
-- **Map Integration**: Spatial join to FeatureLayer with click-to-zoom and popup
-- **Status Field Coloring**: Configurable color mapping for status indicators
+The suite includes a production-safe **Debug System**. No logs are shown in the console unless explicitly requested via the URL.
 
-### Debug System
+### How to use:
+Add `?debug=FEATURE` to your URL (e.g., `?debug=HASH,TASK`).
 
-**Available tags:** `FEED`, `JOIN`
+### Available Switches:
+| Switch | What it tracks |
+| :--- | :--- |
+| `all` | Enable every single log (Warning: High volume). |
+| `HASH` | Deep link consumption and URL parameter parsing. |
+| `TASK` | Query execution, performance metrics, and data source status. |
+| `RESULTS-MODE` | Transitions between New, Add, and Remove selection modes. |
+| `EXPAND-COLLAPSE` | State management for result item details. |
+| `SELECTION` | Identify popup tracking and map selection sync. |
+| `RESTORE` | Logic used to rebuild the map selection after an identify event. |
+| `WIDGET-STATE` | The handshake between HelperSimple and QuerySimple. |
+| `GRAPHICS-LAYER` | Highlighting logic for graphics-enabled widgets. |
 
-**Example:** `index.html?debug=FEED,JOIN`
+### Known Bugs (Always Visible)
+
+**Important:** Known bugs are logged automatically, even when `?debug=false`. These appear as warnings in the console with the format `[QUERYSIMPLE ⚠️ BUG]` to help developers understand when they encounter a known issue rather than something they've done wrong.
+
+Each bug log includes:
+- **Bug ID**: Unique identifier (e.g., `BUG-GRAPHICS-001`)
+- **Category**: Bug type (SELECTION, UI, URL, DATA, GRAPHICS, PERFORMANCE, GENERAL)
+- **Description**: What the bug is and why it's happening
+- **Workaround**: How to avoid or work around the issue
+- **Target Resolution**: When the bug will be fixed (e.g., `r019.0`)
+
+See [`docs/bugs/BUGS.md`](docs/bugs/BUGS.md) for a complete list of known bugs and their status.
 
 ---
 
 ## Documentation
 
-Each widget family has its own documentation under `docs/`:
+All development documentation has been organized into a centralized [`docs/`](docs/) directory for easy navigation:
 
-| Doc | QuerySimple | FeedSimple |
-|-----|-------------|------------|
-| Architecture | `docs/query-simple/ARCHITECTURE.md` | `docs/feed-simple/ARCHITECTURE.md` |
-| Changelog | `docs/query-simple/CHANGELOG.md` | `docs/feed-simple/CHANGELOG.md` |
-| Process Flows | `docs/query-simple/process-flows/` | `docs/feed-simple/process-flows/` |
-| Release Notes | `docs/releases/` (shared) | `docs/releases/` (shared) |
+- **[`docs/development/`](docs/)** - Development guides, testing, standards (start with [`DEVELOPMENT_GUIDE.md`](docs/development/DEVELOPMENT_GUIDE.md))
+- **[`docs/architecture/`](docs/)** - Design patterns, migration plans, refactoring strategies
+- **[`docs/technical/`](docs/)** - Deep dives into specific technical challenges
+- **[`docs/features/`](docs/)** - Feature specifications and integration guides
+- **[`docs/bugs/`](docs/)** - Bug reports and resolution documentation
+- **[`docs/blog/`](docs/)** - Development insights and lessons learned
 
----
-
-## Requirements
-
-- ArcGIS Experience Builder Developer Edition **1.19.0+**
-- Node.js (version matching your ExB installation)
-
----
-
-## Support
-
-- **Issues**: [Report bugs on GitHub](https://github.com/MapSimple-Org/ExB-Simple-Public/issues)
-- **License**: MIT — see [LICENSE](LICENSE)
+**Quick Links:**
+- 📖 **New Developers:** Start with [`docs/development/DEVELOPMENT_GUIDE.md`](docs/development/DEVELOPMENT_GUIDE.md)
+- 🧪 **Testing:** See [`docs/development/TESTING_WALKTHROUGH.md`](docs/development/TESTING_WALKTHROUGH.md)
+- 🏗️ **Architecture:** See [`docs/architecture/COMPLETE_MIGRATION_PLAN.md`](docs/architecture/COMPLETE_MIGRATION_PLAN.md)
+- 📋 **Full Index:** See [`docs/README.md`](docs/README.md)
 
 ---
 
-(c) 2026 MapSimple Organization.
+## Quality Assurance
+
+We use a **Unified Testing Strategy**. Instead of dozens of small tests that might miss state leaks, we run a single **"Mega-Journey"** that simulates a 5-minute user session across both widgets.
+
+### Running the Suite:
+```bash
+# 1. Manual Auth (Do this once a day)
+npm run test:e2e:auth-setup
+
+# 2. Run the Mega-Journey
+npx playwright test tests/e2e/query-simple/session.spec.ts --project=chromium --headed
+```
+
+---
+
+## Installation
+
+### QuerySimple + HelperSimple
+1. Copy `query-simple`, `helper-simple`, and `shared-code` into your `client/your-extensions/widgets` folder.
+2. Run `npm run build` from the `client` directory.
+3. Restart your Experience Builder server.
+
+### FeedSimple (standalone)
+1. Copy just `feed-simple` into your `client/your-extensions/widgets` folder.
+2. Run `npm run build` from the `client` directory.
+3. Restart your Experience Builder server.
+
+---
+
+© 2025 MapSimple Organization.

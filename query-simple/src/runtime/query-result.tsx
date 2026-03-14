@@ -140,7 +140,7 @@ export function QueryTaskResult (props: QueryTaskResultProps) {
   const [queryData, setQueryData] = React.useState(null)
   const [selectedRecords, setSelectedRecords] = React.useState<DataRecord[]>([])
   // FIX (r018.94): Removed removedRecordIds state - no longer needed since records stay in sync
-  
+
   // r021.75: In ADD mode, only records from current query need current queryItem for rendering
   // Existing records already in DOM keep their original formatting
   React.useEffect(() => {
@@ -1171,7 +1171,7 @@ export function QueryTaskResult (props: QueryTaskResultProps) {
           />
         )}
       </div>
-      
+
       {/* r022.15: Anchor for Remove-mode no-removal popover */}
       <div 
         id="remove-feedback-anchor"

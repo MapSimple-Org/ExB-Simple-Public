@@ -25,5 +25,7 @@ export default {
   sortDesc: 'Descending (Z→A, newest first)',
   sortNone: 'Leave empty to keep feed order',
   externalLink: 'External Link',
-  externalLinkTemplate: 'Link URL Template'
+  externalLinkTemplate: 'Link URL Template',
+  enableCardExpand: 'Show Expand Button',
+  enableCardExpandDesc: 'Adds a button to each card that reveals all raw field values'
 }

@@ -1,19 +1,20 @@
 /**
  * Feature service join utility for FeedSimple Map Integration.
  *
- * Queries a feature service REST endpoint to retrieve geometries for feed items
- * by matching a join field. Results are returned as a Map<joinValue, geometry>.
+ * Queries a FeatureLayer via the JSAPI queryFeatures() API to retrieve
+ * geometries for feed items by matching a join field. This approach
+ * respects the layer's definitionExpression and any web map filters,
+ * unlike direct REST queries which bypass them.
  *
- * Uses esriRequest (JSAPI) which auto-attaches portal/AGOL auth tokens.
- * Batches large ID sets into groups of 500 to stay within URL/query limits.
+ * Results are returned as a Map<joinValue, geometry>.
+ * Batches large ID sets into groups of 500 to stay within WHERE clause limits.
  */
 
-import esriRequest from 'esri/request'
 import { createFeedSimpleDebugLogger } from './debug-logger'
 
 const debugLogger = createFeedSimpleDebugLogger()
 
-/** Max IDs per WHERE IN (...) clause to avoid URL length limits */
+/** Max IDs per WHERE IN (...) clause to avoid query limits */
 const BATCH_SIZE = 500
 
 /** Geometry object from ArcGIS REST API (simplified — we pass it through, not parse it) */
@@ -26,35 +27,37 @@ export interface RestGeometry {
   [key: string]: any
 }
 
-/** Single feature from ArcGIS REST API query response */
-interface RestFeature {
-  attributes: Record<string, any>
-  geometry?: RestGeometry
-}
-
-/** ArcGIS REST API query response */
-interface RestQueryResponse {
-  features?: RestFeature[]
-  spatialReference?: { wkid: number; latestWkid?: number }
-  error?: { code: number; message: string }
+/**
+ * Build a WHERE IN clause for a batch of IDs.
+ * Detects numeric vs string values to avoid quoting issues.
+ */
+export function buildWhereClause (joinField: string, ids: string[]): string {
+  const allNumeric = ids.every(id => /^-?\d+(\.\d+)?$/.test(id))
+  if (allNumeric) {
+    return `${joinField} IN (${ids.join(',')})`
+  }
+  const escaped = ids.map(id => id.replace(/'/g, "''"))
+  return `${joinField} IN (${escaped.map(id => `'${id}'`).join(',')})`
 }
 
 /**
- * Query a feature service by join field values, returning a geometry map.
+ * Query a FeatureLayer by join field values, returning a geometry map.
+ * Uses the JSAPI FeatureLayer.queryFeatures() which automatically respects
+ * the layer's definitionExpression and web map filters.
  *
- * @param featureServiceUrl - REST endpoint URL (e.g., .../FeatureServer/0)
- * @param joinField - Field name on the feature service to match against
+ * @param featureLayer - JSAPI FeatureLayer instance (from DataSource or map)
+ * @param joinField - Field name on the feature layer to match against
  * @param ids - Array of join values from the feed items
  * @returns Map of joinValue → geometry. Missing/failed items are omitted.
  */
-export async function queryFeatureServiceByIds (
-  featureServiceUrl: string,
+export async function queryFeatureLayerByIds (
+  featureLayer: __esri.FeatureLayer,
   joinField: string,
   ids: string[]
 ): Promise<Map<string, RestGeometry>> {
   const geometryMap = new Map<string, RestGeometry>()
 
-  if (!featureServiceUrl || !joinField || ids.length === 0) {
+  if (!featureLayer || !joinField || ids.length === 0) {
     return geometryMap
   }
 
@@ -63,17 +66,18 @@ export async function queryFeatureServiceByIds (
 
   debugLogger.log('JOIN', {
     action: 'query-start',
-    url: featureServiceUrl,
+    layer: featureLayer.title || featureLayer.url,
     joinField,
     idCount: uniqueIds.length,
-    batches: Math.ceil(uniqueIds.length / BATCH_SIZE)
+    batches: Math.ceil(uniqueIds.length / BATCH_SIZE),
+    hasDefinitionExpression: !!featureLayer.definitionExpression
   })
 
   // Batch into groups of BATCH_SIZE
   for (let i = 0; i < uniqueIds.length; i += BATCH_SIZE) {
     const batch = uniqueIds.slice(i, i + BATCH_SIZE)
     try {
-      const batchResult = await queryBatch(featureServiceUrl, joinField, batch)
+      const batchResult = await queryBatch(featureLayer, joinField, batch)
       for (const [key, geom] of batchResult) {
         geometryMap.set(key, geom)
       }
@@ -99,56 +103,39 @@ export async function queryFeatureServiceByIds (
 }
 
 /**
- * Query a single batch of IDs against the feature service.
- * Uses esriRequest which auto-attaches the user's portal/AGOL token.
+ * Query a single batch of IDs against the FeatureLayer.
+ * JSAPI queryFeatures() automatically includes the layer's definitionExpression
+ * in the request, so features filtered out in the web map are excluded.
  */
 async function queryBatch (
-  featureServiceUrl: string,
+  featureLayer: __esri.FeatureLayer,
   joinField: string,
   ids: string[]
 ): Promise<Map<string, RestGeometry>> {
   const result = new Map<string, RestGeometry>()
 
-  // Build WHERE clause: joinField IN (val1,val2,...)
-  // If all values look numeric, don't quote (numeric fields fail with quoted values).
-  // Otherwise quote as strings with escaped single quotes.
-  const allNumeric = ids.every(id => /^-?\d+(\.\d+)?$/.test(id))
-  let whereClause: string
-  if (allNumeric) {
-    whereClause = `${joinField} IN (${ids.join(',')})`
+  const inClause = buildWhereClause(joinField, ids)
+
+  // createQuery() pre-populates query.where with the layer's definitionExpression.
+  // We must AND our IN clause with it, not overwrite it.
+  const query = featureLayer.createQuery()
+  if (query.where && query.where !== '1=1') {
+    query.where = `(${query.where}) AND (${inClause})`
   } else {
-    const escaped = ids.map(id => id.replace(/'/g, "''"))
-    whereClause = `${joinField} IN (${escaped.map(id => `'${id}'`).join(',')})`
+    query.where = inClause
   }
+  query.outFields = [joinField]
+  query.returnGeometry = true
 
-  const queryUrl = `${featureServiceUrl}/query`
+  const featureSet = await featureLayer.queryFeatures(query)
 
-  const response = await esriRequest(queryUrl, {
-    query: {
-      where: whereClause,
-      outFields: joinField,
-      returnGeometry: true,
-      f: 'json'
-    },
-    responseType: 'json'
-  })
-
-  const data: RestQueryResponse = response.data
-
-  if (data.error) {
-    throw new Error(`Feature service error: ${data.error.message} (code ${data.error.code})`)
-  }
-
-  if (data.features) {
-    // Attach response-level spatialReference to each geometry (REST returns it separately)
-    const sr = data.spatialReference
-    for (const feature of data.features) {
+  if (featureSet.features) {
+    for (const feature of featureSet.features) {
       const joinValue = String(feature.attributes[joinField] ?? '')
       if (joinValue && feature.geometry) {
-        if (sr && !feature.geometry.spatialReference) {
-          feature.geometry.spatialReference = sr
-        }
-        result.set(joinValue, feature.geometry)
+        // Convert JSAPI geometry to REST-style geometry for our RestGeometry interface
+        const geom = feature.geometry.toJSON() as RestGeometry
+        result.set(joinValue, geom)
       }
     }
   }

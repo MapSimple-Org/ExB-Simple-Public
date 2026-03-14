@@ -4,6 +4,7 @@ import {
   jsx,
   css,
   classNames,
+  hooks,
   type FeatureLayerDataSource,
   type ImmutableObject,
   type DataRecord,
@@ -14,6 +15,7 @@ import { type QueryItemType, ListDirection } from '../config'
 import { QueryResultItem } from './query-result-item'
 import { getPopupTemplate } from './query-utils'
 import { useAutoHeight } from './useAutoHeight'
+import defaultMessage from './translations/default'
 import { createQuerySimpleDebugLogger } from 'widgets/shared-code/mapsimple-common'
 
 const debugLogger = createQuerySimpleDebugLogger()
@@ -99,6 +101,17 @@ export function SimpleList (props: SimpleListProps) {
   
   const isAutoHeight = useAutoHeight()
   const resultContainerRef = React.useRef<HTMLDivElement>(null)
+  const getI18nMessage = hooks.useTranslation(defaultMessage)
+  const [showScrollTop, setShowScrollTop] = React.useState(false)
+
+  const onScrollContainer = React.useCallback((e: React.UIEvent<HTMLDivElement>): void => {
+    const shouldShow = e.currentTarget.scrollTop > 200
+    setShowScrollTop(prev => prev !== shouldShow ? shouldShow : prev)
+  }, [])
+
+  const scrollToTop = React.useCallback((): void => {
+    resultContainerRef.current?.scrollTo({ top: 0, behavior: 'smooth' })
+  }, [])
   
   // r021.76: Cache popup templates per queryConfig
   // Key: queryConfig.configId, Value: { popupTemplate, defaultPopupTemplate }
@@ -230,10 +243,11 @@ export function SimpleList (props: SimpleListProps) {
   }, [])
 
   return (
-    <div 
-      onKeyUp={handleKeyUp} 
-      onKeyDown={handleKeyDown} 
-      className={classNames({ vertical: direction === ListDirection.Vertical })} 
+    <div
+      onKeyUp={handleKeyUp}
+      onKeyDown={handleKeyDown}
+      onScroll={onScrollContainer}
+      className={classNames({ vertical: direction === ListDirection.Vertical })}
       css={getStyle(isAutoHeight)}
       ref={resultContainerRef}
     >
@@ -314,6 +328,47 @@ export function SimpleList (props: SimpleListProps) {
           )
         })}
       </div>
+      {/* Scroll-to-top FAB */}
+      {showScrollTop && (
+        <button
+          onClick={scrollToTop}
+          aria-label={getI18nMessage('scrollToTop')}
+          title={getI18nMessage('scrollToTop')}
+          css={css`
+            position: sticky;
+            bottom: 10px;
+            left: 100%;
+            transform: translateX(-15px);
+            flex-shrink: 0;
+            width: 36px;
+            height: 36px;
+            min-height: 36px;
+            border-radius: 6px;
+            border: none;
+            background: var(--sys-color-primary-main, #0079c1);
+            color: #fff;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+            transition: background 0.2s, box-shadow 0.2s, transform 0.15s;
+            z-index: 10;
+            &:hover {
+              background: var(--sys-color-primary-dark, #005e95);
+              box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
+              transform: translateX(-15px) translateY(-1px);
+            }
+            &:active {
+              transform: translateX(-15px) translateY(0);
+            }
+          `}
+        >
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M3 10l5-5 5 5"/>
+          </svg>
+        </button>
+      )}
     </div>
   )
 }

@@ -70,6 +70,30 @@ export interface FeedSimpleConfig {
   // --- External Link ---
   /** URL template with {{token}} substitution for "open in external app" links */
   externalLinkTemplate: string
+
+  // --- Feed Map Layer (auto-generated from coordinates) ---
+  /** Whether to create a client-side FeatureLayer from feed coordinates */
+  enableFeedMapLayer: boolean
+  /** Dot-path field name containing latitude values */
+  latitudeField: string
+  /** Dot-path field name containing longitude values */
+  longitudeField: string
+  /** Title shown in LayerList for the generated layer */
+  feedMapLayerTitle: string
+  /** Marker color as hex string (e.g., "#FF4500") */
+  feedMapLayerColor: string
+  /** Marker size in points (default 8) */
+  feedMapLayerSize: number
+  /** Marker style: 'circle' | 'square' | 'diamond' | 'cross' (default 'circle') */
+  feedMapLayerMarkerStyle: string
+  /** Popup template for map points — reuses cardTemplate if empty */
+  feedMapLayerPopupTemplate: string
+
+  // --- Zoom & Click Behavior ---
+  /** Whether clicking a card zooms the map to the feature/point (default true) */
+  enableZoomOnClick: boolean
+  /** Whether to show an expand button on cards to reveal all raw field:value pairs (default false) */
+  enableCardExpand: boolean
 }
 
 export type IMConfig = ImmutableObject<FeedSimpleConfig>

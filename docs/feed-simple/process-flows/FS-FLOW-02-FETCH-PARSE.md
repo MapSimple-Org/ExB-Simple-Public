@@ -72,12 +72,21 @@ sorting, change detection, and state update.
       |
       +-- getElementsByTagName(rootItemElement)  <- custom-xml.ts:42
       |
-      +-- For each item element:             <- custom-xml.ts:46-59
-      |   For each direct child element:
-      |     item[child.localName] = child.textContent
-      |     fieldNameSet.add(child.localName)
+      +-- For each item element:             <- custom-xml.ts:130-156
+      |   +-- flattenElement(itemEl, '')     <- custom-xml.ts:52-112
+      |   |   Recursive tree walk: dot-path keys, @attrs,
+      |   |   bracket arrays, namespace stripping
+      |   |
+      |   +-- GeoRSS point split            <- custom-xml.ts:140-148
+      |   |   For keys matching 'point' or '*.point':
+      |   |     Split "lat lon" on whitespace
+      |   |     If 2 valid numbers → emit point_lat, point_lon
+      |   |     Original 'point' value preserved
+      |   |   (r001.037)
+      |   |
+      |   +-- Collect field names into fieldNameSet
       |
-      +-- Return { items, fieldNames }       <- custom-xml.ts:62-65
+      +-- Return { items, fieldNames }       <- custom-xml.ts:160-161
       |
       v
  Back in loadFeed()                          <- widget.tsx:401
@@ -225,4 +234,4 @@ const parser = new CustomXmlParser()
 
 ---
 
-*Last updated: r001.031 (2026-03-13)*
+*Last updated: r001.037 (2026-03-13)*

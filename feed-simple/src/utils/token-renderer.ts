@@ -3,6 +3,9 @@
  *
  * Supports:
  *   {{fieldName}}                — basic substitution
+ *   {{field.nested.path}}        — dot-path substitution for nested XML
+ *   {{field.@attr}}              — XML attribute substitution
+ *   {{field[0]}}                 — array element substitution
  *   {{fieldName | "MMM D, YYYY"}} — date formatting filter
  *   {{fieldName | autolink}}     — convert plain-text URLs to <a> tags
  *   {{fieldName | externalLink}} — render link using externalLinkTemplate
@@ -26,10 +29,13 @@ export interface FilterContext {
 /**
  * Matches tokens with optional filter:
  *   {{field}}               — group 1 = field
+ *   {{field.nested.path}}   — group 1 = field (dot paths supported)
+ *   {{field.@attr}}         — group 1 = field (@ for XML attributes)
+ *   {{field[0]}}            — group 1 = field ([] for array indices)
  *   {{field | "format"}}    — group 1 = field, group 2 = quoted arg
  *   {{field | filterName}}  — group 1 = field, group 3 = filter name
  */
-const TOKEN_REGEX = /\{\{(\s*[\w.]+\s*)(?:\|\s*(?:"([^"]+)"|(\w+))\s*)?\}\}/g
+const TOKEN_REGEX = /\{\{(\s*[\w.@\[\]]+\s*)(?:\|\s*(?:"([^"]+)"|(\w+))\s*)?\}\}/g
 
 // ── Public API ───────────────────────────────────────────────────
 
@@ -151,7 +157,7 @@ function applyExternalLinkFilter (
 
   // Substitute tokens in the URL template (plain substitution, no filters)
   const url = externalLinkTemplate.replace(
-    /\{\{(\s*[\w.]+\s*)\}\}/g,
+    /\{\{(\s*[\w.@\[\]]+\s*)\}\}/g,
     (_m, name: string) => item[name.trim()] ?? ''
   )
 

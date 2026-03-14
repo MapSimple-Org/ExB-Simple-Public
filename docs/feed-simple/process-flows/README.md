@@ -1,6 +1,6 @@
 # FeedSimple Process Flow Documentation
 
-End-to-end reference for the 6 major functions of the FeedSimple widget. Each
+End-to-end reference for the 7 major functions of the FeedSimple widget. Each
 document includes ASCII flow diagrams, file:line references, decision points,
 and configuration options.
 
@@ -12,8 +12,9 @@ and configuration options.
 | 02 | [FS-FLOW-02-FETCH-PARSE](FS-FLOW-02-FETCH-PARSE.md) | HTTP fetch, XML sanitization, DOMParser extraction, sorting, error handling |
 | 03 | [FS-FLOW-03-TOKEN-FILTERS](FS-FLOW-03-TOKEN-FILTERS.md) | Template token substitution, filter chain (date, autolink, externalLink), Markdown-to-HTML |
 | 04 | [FS-FLOW-04-POLLING-LIFECYCLE](FS-FLOW-04-POLLING-LIFECYCLE.md) | Timer management, Page Visibility API, change detection, exponential backoff |
-| 05 | [FS-FLOW-05-MAP-INTEGRATION](FS-FLOW-05-MAP-INTEGRATION.md) | Spatial join, feature service queries, zoom to feature, popup display |
+| 05 | [FS-FLOW-05-MAP-INTEGRATION](FS-FLOW-05-MAP-INTEGRATION.md) | Spatial join via JSAPI layer (respects definitionExpression), zoom/popup, no-geometry feedback |
 | 06 | [FS-FLOW-06-SETTINGS](FS-FLOW-06-SETTINGS.md) | Settings panel sections, Discover Fields, Map Integration config, output DS |
+| 07 | [FS-FLOW-07-FEED-MAP-LAYER](FS-FLOW-07-FEED-MAP-LAYER.md) | Client-side FeatureLayer from feed coordinates, sync, bidirectional click, popups |
 
 ## Key Architectural Patterns
 
@@ -22,42 +23,46 @@ and configuration options.
 - **Non-Blocking Errors**: Failed refreshes preserve last good data with a warning banner
 - **Exponential Backoff**: 3 failures double the interval; 6 failures pause polling entirely
 - **ID-Based Skip**: Geometry queries are skipped when feed join IDs are unchanged
-- **Extracted Utilities**: Pure functions in `map-interaction.ts` keep widget.tsx focused on state
+- **Extracted Utilities**: Pure functions in `map-interaction.ts` and `feed-layer-manager.ts` keep widget.tsx focused on state
+- **Zoom/Identify Separation**: `enableZoomOnClick` controls zoom only — popups always open
 
-## Two Operating Modes
+## Three Operating Modes
 
 | Mode | Description | Requirements |
 |------|-------------|--------------|
 | **A -- Visual Display** | Fetch, parse, render feed items as Markdown-templated cards | Feed URL only |
-| **B -- Spatial Data Source** | Runtime join between feed items and feature service | Feed URL + feature service + join fields |
+| **B -- Spatial Join** | Runtime join between feed items and feature service | Feed URL + feature service + join fields |
+| **C -- Feed Map Layer** | Client-side FeatureLayer from feed coordinates | Feed URL + lat/lon fields in feed data |
 
-Modes can be enabled independently or together. Mode B adds to Mode A.
+Modes can be enabled independently or in combination. B and C both add map
+interaction on top of A.
 
 ## File Structure
 
 ```
 feed-simple/src/
-  config.ts                     Config interface (FeedSimpleConfig)
+  config.ts                     Config interface (FeedSimpleConfig, 33 fields)
   version.ts                    Version constants
   version-manager.ts            Config migration
   runtime/
-    widget.tsx                  Main widget (783 lines)
-    feed-card.tsx               FeedCard presentational component (139 lines)
+    widget.tsx                  Main widget (1217 lines)
+    feed-card.tsx               FeedCard component + card toolbar (330 lines)
     translations/default.ts     i18n strings
   setting/
-    setting.tsx                 Builder settings panel (862 lines)
+    setting.tsx                 Builder settings panel (1187 lines)
     translations/default.ts     Settings i18n strings
   utils/
-    debug-logger.ts             Debug logging (?debug=FETCH,POLL,JOIN,...)
-    feed-fetcher.ts             HTTP fetch wrapper (33 lines)
-    token-renderer.ts           Token substitution + filter pipeline (159 lines)
+    debug-logger.ts             Debug logging (?debug=FETCH,POLL,JOIN,FEED-LAYER,...)
+    feed-fetcher.ts             HTTP fetch wrapper (32 lines)
+    token-renderer.ts           Token substitution + filter pipeline (165 lines)
     markdown-template-utils.ts  Markdown-to-HTML converter (200 lines)
-    map-interaction.ts          Map integration utilities (209 lines)
-    feature-join.ts             Feature service REST queries (157 lines)
+    map-interaction.ts          Spatial join + pan utilities (253 lines)
+    feed-layer-manager.ts       Feed Map Layer — FeatureLayer, sync, popups, zoom, pan (482 lines)
+    feature-join.ts             JSAPI FeatureLayer queries (145 lines)
     data-source-builder.ts      Output DS JSON generation (54 lines)
     parsers/
       interface.ts              IFeedParser contract, FeedItem type
-      custom-xml.ts             XML parser with entity sanitization (67 lines)
+      custom-xml.ts             Recursive XML parser + GeoRSS point split (168 lines)
 ```
 
 ## Maintenance Rules
@@ -93,4 +98,4 @@ Add the new flow to the Flow Index table above.
 
 ---
 
-*Last updated: r001.031 (2026-03-13)*
+*Last updated: r001.039 (2026-03-13)*

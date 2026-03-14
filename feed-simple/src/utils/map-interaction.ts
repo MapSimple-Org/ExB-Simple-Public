@@ -10,7 +10,7 @@
 import { DataSourceManager } from 'jimu-core'
 import Popup from 'esri/widgets/Popup'
 import type { FeedItem } from './parsers/interface'
-import { queryFeatureServiceByIds, type RestGeometry } from './feature-join'
+import { queryFeatureLayerByIds, type RestGeometry } from './feature-join'
 import { createFeedSimpleDebugLogger } from './debug-logger'
 
 const debugLogger = createFeedSimpleDebugLogger()
@@ -67,6 +67,23 @@ export function buildGoToTarget (
     return { target: graphic, zoom: zoomFactorPoint }
   }
   return (graphic.geometry as __esri.Polygon | __esri.Polyline).extent.expand(zoomFactorPoly)
+}
+
+// ── Pan Target ────────────────────────────────────────────────────
+
+/**
+ * Build a goTo target that pans (centers) without changing zoom.
+ * Points use the point directly; lines/polygons use the extent center.
+ */
+export function buildPanTarget (
+  graphic: __esri.Graphic,
+  geometryType: string
+): { center: __esri.Point } {
+  if (geometryType === 'point') {
+    return { center: graphic.geometry as __esri.Point }
+  }
+  const extent = (graphic.geometry as __esri.Polygon | __esri.Polyline).extent
+  return { center: extent.center }
 }
 
 // ── Feature Identification (Popup) ────────────────────────────────
@@ -144,6 +161,8 @@ export interface QueryGeometriesParams {
   joinFieldFeed: string
   joinFieldService: string
   dataSourceId: string
+  /** JSAPI MapView — used to find the actual map layer (which has definitionExpression) */
+  mapView: __esri.MapView | __esri.SceneView | null
   /** Current set of join IDs from previous query — used for skip optimization */
   previousJoinIds: Set<string>
 }
@@ -157,23 +176,41 @@ export interface QueryGeometriesResult {
 }
 
 /**
- * Query the feature service for geometries matching feed items.
+ * Query the feature layer for geometries matching feed items.
+ * Finds the actual FeatureLayer on the map (which carries the web map's
+ * definitionExpression and filters), then queries via JSAPI queryFeatures().
  * Skips re-query if join IDs haven't changed since last call.
  * Returns results for the caller to apply to state.
  */
 export async function queryGeometries (params: QueryGeometriesParams): Promise<QueryGeometriesResult> {
-  const { items, joinFieldFeed, joinFieldService, dataSourceId, previousJoinIds } = params
+  const { items, joinFieldFeed, joinFieldService, dataSourceId, mapView, previousJoinIds } = params
 
-  // Get the feature service URL from the selected data source
+  // Get the DataSource URL to find the matching layer on the map
   const ds = DataSourceManager.getInstance().getDataSource(dataSourceId)
   if (!ds) {
     debugLogger.log('JOIN', { action: 'query-bail', reason: 'DataSourceManager returned null', dsId: dataSourceId })
     return { geometryMap: new Map(), newJoinIds: previousJoinIds, skipped: true }
   }
-  const dsJson = ds.getDataSourceJson()
-  const url = dsJson?.url as string
-  if (!url) {
-    debugLogger.log('JOIN', { action: 'query-bail', reason: 'DS has no url', dsJsonKeys: dsJson ? Object.keys(dsJson) : null })
+  const dsUrl = ds.getDataSourceJson()?.url as string
+  if (!dsUrl) {
+    debugLogger.log('JOIN', { action: 'query-bail', reason: 'DS has no url', dsId: dataSourceId })
+    return { geometryMap: new Map(), newJoinIds: previousJoinIds, skipped: true }
+  }
+
+  if (!mapView) {
+    debugLogger.log('JOIN', { action: 'query-bail', reason: 'no mapView available' })
+    return { geometryMap: new Map(), newJoinIds: previousJoinIds, skipped: true }
+  }
+
+  // Find the ACTUAL FeatureLayer on the map — this is the one that carries
+  // the web map's definitionExpression and configured filters.
+  // The DataSource's ds.layer is a separate instance that may NOT have these.
+  const featureLayer = mapView.map.allLayers.find((layer: any) => {
+    return layer.type === 'feature' && layer.url && dsUrl.toLowerCase().includes(layer.url.toLowerCase())
+  }) as __esri.FeatureLayer | undefined
+
+  if (!featureLayer) {
+    debugLogger.log('JOIN', { action: 'query-bail', reason: 'layer not found on map', dsUrl })
     return { geometryMap: new Map(), newJoinIds: previousJoinIds, skipped: true }
   }
 
@@ -196,8 +233,15 @@ export async function queryGeometries (params: QueryGeometriesParams): Promise<Q
     return { geometryMap: new Map(), newJoinIds, skipped: true }
   }
 
-  debugLogger.log('JOIN', { action: 'query-start', url, joinFieldService, idCount: ids.length, sampleIds: ids.slice(0, 3) })
-  const geometryMap = await queryFeatureServiceByIds(url, joinFieldService, ids)
+  debugLogger.log('JOIN', {
+    action: 'query-start',
+    layer: featureLayer.title || featureLayer.url,
+    joinFieldService,
+    idCount: ids.length,
+    sampleIds: ids.slice(0, 3),
+    definitionExpression: featureLayer.definitionExpression || '(none)'
+  })
+  const geometryMap = await queryFeatureLayerByIds(featureLayer, joinFieldService, ids)
 
   debugLogger.log('JOIN', {
     action: 'geometries-cached',

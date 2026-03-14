@@ -99,6 +99,54 @@ export default class Setting extends React.PureComponent<AllWidgetSettingProps<I
     return Array.from(values).sort()
   }
 
+  // ── Coordinate field detection ──────────────────────────────
+
+  /**
+   * Get coordinate field candidates, sorted with likely matches first.
+   * Samples discovered items to check if values look like valid lat or lon.
+   */
+  getCoordinateCandidates = (type: 'lat' | 'lon'): string[] => {
+    const { discoveredFields, discoveredItems } = this.state
+    if (discoveredFields.length === 0) return []
+
+    // Heuristic: score fields by name and sample values
+    const scored = discoveredFields.map(field => {
+      let score = 0
+      const lower = field.toLowerCase()
+
+      // Name-based scoring
+      if (type === 'lat') {
+        if (lower.includes('latitude') || lower.includes('lat')) score += 10
+        if (lower === 'y' || lower.endsWith('.y')) score += 5
+      } else {
+        if (lower.includes('longitude') || lower.includes('lon') || lower.includes('lng')) score += 10
+        if (lower === 'x' || lower.endsWith('.x')) score += 5
+      }
+
+      // Value-based scoring: check if sample values are valid coordinates
+      const sampleItems = discoveredItems.slice(0, 5)
+      let numericCount = 0
+      let rangeCount = 0
+      for (const item of sampleItems) {
+        const val = parseFloat(item[field])
+        if (!isNaN(val)) {
+          numericCount++
+          if (type === 'lat' && val >= -90 && val <= 90) rangeCount++
+          if (type === 'lon' && val >= -180 && val <= 180) rangeCount++
+        }
+      }
+      if (numericCount >= 3) score += 3
+      if (rangeCount >= 3) score += 5
+
+      return { field, score }
+    })
+
+    // Sort: high-scoring candidates first, then alphabetically
+    return scored
+      .sort((a, b) => b.score - a.score || a.field.localeCompare(b.field))
+      .map(s => s.field)
+  }
+
   // ── Config change handlers ──────────────────────────────────
 
   onFeedUrlChange = (value: string): void => {
@@ -359,6 +407,24 @@ export default class Setting extends React.PureComponent<AllWidgetSettingProps<I
             />
           </SettingRow>
 
+          <SettingRow flow='wrap' label='Root item element'>
+            <TextInput
+              className='w-100'
+              size='sm'
+              placeholder='item'
+              value={config.rootItemElement || ''}
+              onChange={(e) => {
+                this.props.onSettingChange({
+                  id: this.props.id,
+                  config: this.props.config.set('rootItemElement', e.target.value)
+                })
+              }}
+            />
+            <div css={css`font-size: 11px; color: var(--sys-color-text-tertiary); margin-top: 2px;`}>
+              The repeating XML element that wraps each item (e.g. item, entry, event)
+            </div>
+          </SettingRow>
+
           <SettingRow flow='wrap' label='Fields'>
             <Button
               className='w-100'
@@ -379,6 +445,11 @@ export default class Setting extends React.PureComponent<AllWidgetSettingProps<I
             {hasFields && (
               <div css={css`margin-top: 6px; font-size: 11px; color: var(--sys-color-text-tertiary);`}>
                 {discoveredFields.length} fields found
+                {discoveredFields.some(f => f.includes('.')) && (
+                  <span css={css`display: block; margin-top: 2px; font-style: italic;`}>
+                    Nested fields use dot notation (e.g. origin.time.value)
+                  </span>
+                )}
               </div>
             )}
           </SettingRow>
@@ -710,6 +781,215 @@ export default class Setting extends React.PureComponent<AllWidgetSettingProps<I
           </SettingRow>
         </SettingSection>
 
+        {/* ── Feed Map Layer ── */}
+        <SettingSection title='Feed Map Layer'>
+          <SettingRow label='Enable Map Layer'>
+            <Switch
+              checked={config.enableFeedMapLayer === true}
+              onChange={(evt) => {
+                this.props.onSettingChange({
+                  id: this.props.id,
+                  config: this.props.config.set('enableFeedMapLayer', evt.target.checked)
+                })
+              }}
+            />
+          </SettingRow>
+          <div css={css`font-size: 10px; color: var(--sys-color-text-tertiary); padding: 0 16px 8px; line-height: 1.4;`}>
+            When enabled, feed items with lat/lon coordinates are plotted as points on the map and appear in the LayerList.
+          </div>
+
+          {config.enableFeedMapLayer && (
+            <React.Fragment>
+              <SettingRow flow='wrap' label='Latitude Field'>
+                {hasFields
+                  ? (
+                    <Select
+                      className='w-100'
+                      size='sm'
+                      value={config.latitudeField || ''}
+                      onChange={(evt) => {
+                        this.props.onSettingChange({
+                          id: this.props.id,
+                          config: this.props.config.set('latitudeField', evt.target.value)
+                        })
+                      }}
+                    >
+                      <Option value=''>(Select a field)</Option>
+                      {this.getCoordinateCandidates('lat').map((field) => (
+                        <Option key={field} value={field}>{field}</Option>
+                      ))}
+                    </Select>
+                    )
+                  : (
+                    <div css={css`font-size: 11px; color: var(--sys-color-text-tertiary); font-style: italic;`}>
+                      Click "Discover Fields" above to load feed fields.
+                    </div>
+                    )}
+              </SettingRow>
+
+              <SettingRow flow='wrap' label='Longitude Field'>
+                {hasFields
+                  ? (
+                    <Select
+                      className='w-100'
+                      size='sm'
+                      value={config.longitudeField || ''}
+                      onChange={(evt) => {
+                        this.props.onSettingChange({
+                          id: this.props.id,
+                          config: this.props.config.set('longitudeField', evt.target.value)
+                        })
+                      }}
+                    >
+                      <Option value=''>(Select a field)</Option>
+                      {this.getCoordinateCandidates('lon').map((field) => (
+                        <Option key={field} value={field}>{field}</Option>
+                      ))}
+                    </Select>
+                    )
+                  : (
+                    <div css={css`font-size: 11px; color: var(--sys-color-text-tertiary); font-style: italic;`}>
+                      Click "Discover Fields" above to load feed fields.
+                    </div>
+                    )}
+              </SettingRow>
+
+              <SettingRow flow='wrap' label='Layer Title'>
+                <TextInput
+                  className='w-100'
+                  size='sm'
+                  placeholder='Feed Items'
+                  value={config.feedMapLayerTitle || ''}
+                  onChange={(e) => {
+                    this.props.onSettingChange({
+                      id: this.props.id,
+                      config: this.props.config.set('feedMapLayerTitle', e.target.value)
+                    })
+                  }}
+                />
+              </SettingRow>
+
+              <SettingRow label='Marker Color'>
+                <input
+                  type='color'
+                  value={config.feedMapLayerColor || '#FF4500'}
+                  onChange={(e) => {
+                    this.props.onSettingChange({
+                      id: this.props.id,
+                      config: this.props.config.set('feedMapLayerColor', e.target.value)
+                    })
+                  }}
+                  css={css`
+                    width: 36px;
+                    height: 28px;
+                    border: 1px solid var(--sys-color-divider-secondary);
+                    border-radius: 4px;
+                    padding: 2px;
+                    cursor: pointer;
+                    background: transparent;
+                  `}
+                />
+              </SettingRow>
+
+              <SettingRow label='Marker Size'>
+                <NumericInput
+                  size='sm'
+                  style={{ width: 80 }}
+                  min={4}
+                  max={24}
+                  step={1}
+                  value={config.feedMapLayerSize || 8}
+                  onChange={(value) => {
+                    this.props.onSettingChange({
+                      id: this.props.id,
+                      config: this.props.config.set('feedMapLayerSize', value)
+                    })
+                  }}
+                />
+              </SettingRow>
+
+              <SettingRow flow='wrap' label='Marker Style'>
+                <Select
+                  className='w-100'
+                  size='sm'
+                  value={config.feedMapLayerMarkerStyle || 'circle'}
+                  onChange={(evt) => {
+                    this.props.onSettingChange({
+                      id: this.props.id,
+                      config: this.props.config.set('feedMapLayerMarkerStyle', evt.target.value)
+                    })
+                  }}
+                >
+                  <Option value='circle'>Circle</Option>
+                  <Option value='square'>Square</Option>
+                  <Option value='diamond'>Diamond</Option>
+                  <Option value='cross'>Cross</Option>
+                  <Option value='x'>X</Option>
+                </Select>
+              </SettingRow>
+
+              <SettingRow flow='wrap' label='Popup Template'>
+                <TextInput
+                  className='w-100'
+                  size='sm'
+                  placeholder='(Uses card template if empty)'
+                  value={config.feedMapLayerPopupTemplate || ''}
+                  onChange={(e) => {
+                    this.props.onSettingChange({
+                      id: this.props.id,
+                      config: this.props.config.set('feedMapLayerPopupTemplate', e.target.value)
+                    })
+                  }}
+                />
+                <div css={css`font-size: 10px; color: var(--sys-color-text-tertiary); margin-top: 4px; line-height: 1.4;`}>
+                  Leave empty to reuse the card template for map popups. Supports the same {'{{token}}'} syntax.
+                </div>
+              </SettingRow>
+
+              {/* Map Widget selector — only show if not already set by Map Integration */}
+              {!config.mapWidgetId && (
+                <SettingRow flow='wrap' label='Map Widget'>
+                  <MapWidgetSelector
+                    onSelect={(mapWidgetIds) => {
+                      const selectedId = mapWidgetIds && mapWidgetIds.length > 0 ? mapWidgetIds[0] : ''
+                      this.props.onSettingChange({
+                        id: this.props.id,
+                        config: this.props.config.set('mapWidgetId', selectedId)
+                      })
+                    }}
+                    useMapWidgetIds={config.mapWidgetId
+                      ? Immutable([config.mapWidgetId] as string[])
+                      : undefined}
+                  />
+                  <div css={css`font-size: 10px; color: var(--sys-color-text-tertiary); margin-top: 4px;`}>
+                    Select the map widget to display feed points on.
+                  </div>
+                </SettingRow>
+              )}
+
+              {config.mapWidgetId && (
+                <div css={css`font-size: 10px; color: var(--sys-color-text-tertiary); padding: 0 16px 8px; font-style: italic;`}>
+                  Using map widget from Map Integration section.
+                </div>
+              )}
+
+              {config.enableFeedMapLayer && config.latitudeField && config.longitudeField && config.mapWidgetId && (
+                <div css={css`
+                  font-size: 11px;
+                  color: #155724;
+                  background: #d4edda;
+                  border: 1px solid #c3e6cb;
+                  border-radius: 4px;
+                  padding: 6px 10px;
+                  margin: 0 16px 8px;
+                `}>
+                  Feed Map Layer active — items with coordinates will appear as points on the map.
+                </div>
+              )}
+            </React.Fragment>
+          )}
+        </SettingSection>
+
         {/* ── Map Integration ── */}
         <SettingSection title='Map Integration'>
           <SettingRow flow='wrap' label='Feature Layer'>
@@ -802,46 +1082,6 @@ export default class Setting extends React.PureComponent<AllWidgetSettingProps<I
           )}
 
           {hasSpatialJoinDs && config.joinFieldService && config.joinFieldFeed && config.mapWidgetId && (
-            <React.Fragment>
-              <SettingRow label='Zoom Level (Points)'>
-                <NumericInput
-                  size='sm'
-                  style={{ width: 80 }}
-                  min={1}
-                  max={23}
-                  step={1}
-                  value={config.zoomFactorPoint || 15}
-                  onChange={(value) => {
-                    this.props.onSettingChange({
-                      id: this.props.id,
-                      config: this.props.config.set('zoomFactorPoint', value)
-                    })
-                  }}
-                />
-              </SettingRow>
-              <div css={css`font-size: 11px; color: #6c757d; margin: -4px 16px 8px;`}>
-                Map zoom level for point features (1–23). Default: 15.
-              </div>
-
-              <SettingRow label='Zoom Buffer (Lines/Polygons)'>
-                <NumericInput
-                  size='sm'
-                  style={{ width: 80 }}
-                  min={1.0}
-                  step={0.1}
-                  value={config.zoomFactorPoly || 1.5}
-                  onChange={(value) => {
-                    this.props.onSettingChange({
-                      id: this.props.id,
-                      config: this.props.config.set('zoomFactorPoly', value)
-                    })
-                  }}
-                />
-              </SettingRow>
-              <div css={css`font-size: 11px; color: #6c757d; margin: -4px 16px 8px;`}>
-                Extent buffer for line/polygon features (1.0 = tight, 2.0 = double). Default: 1.5.
-              </div>
-
               <div css={css`
                 font-size: 11px;
                 color: #155724;
@@ -853,9 +1093,94 @@ export default class Setting extends React.PureComponent<AllWidgetSettingProps<I
               `}>
                 Map integration active — feed items will be linked to map features.
               </div>
-            </React.Fragment>
           )}
         </SettingSection>
+
+        {/* ── Zoom & Click Behavior ── */}
+        {/* Show when either Feed Map Layer or Spatial Join is fully configured with a map widget */}
+        {config.mapWidgetId && (
+          (config.enableFeedMapLayer && config.latitudeField && config.longitudeField) ||
+          (hasSpatialJoinDs && config.joinFieldService && config.joinFieldFeed)
+        ) && (
+          <SettingSection title='Zoom &amp; Click Behavior'>
+            <SettingRow label='Zoom on Card Click'>
+              <Switch
+                checked={config.enableZoomOnClick !== false}
+                onChange={(evt) => {
+                  this.props.onSettingChange({
+                    id: this.props.id,
+                    config: this.props.config.set('enableZoomOnClick', evt.target.checked)
+                  })
+                }}
+              />
+            </SettingRow>
+            <div css={css`font-size: 10px; color: var(--sys-color-text-tertiary); padding: 0 16px 8px; line-height: 1.4;`}>
+              When enabled, clicking a card zooms the map to the corresponding feature or point. Popups still open regardless of this setting.
+            </div>
+
+            {config.enableZoomOnClick !== false && (
+              <React.Fragment>
+                <SettingRow label='Zoom Level (Points)'>
+                  <NumericInput
+                    size='sm'
+                    style={{ width: 80 }}
+                    min={0}
+                    step={1}
+                    value={config.zoomFactorPoint || 15}
+                    onChange={(value) => {
+                      this.props.onSettingChange({
+                        id: this.props.id,
+                        config: this.props.config.set('zoomFactorPoint', value)
+                      })
+                    }}
+                  />
+                </SettingRow>
+                <div css={css`font-size: 11px; color: #6c757d; margin: -4px 16px 8px;`}>
+                  Map zoom level for point features (0 = world, 15 = street). Default: 15.
+                </div>
+
+                {/* Only show polygon buffer when spatial join is configured (feed map layer only has points) */}
+                {hasSpatialJoinDs && config.joinFieldService && config.joinFieldFeed && (
+                  <React.Fragment>
+                    <SettingRow label='Zoom Buffer (Lines/Polygons)'>
+                      <NumericInput
+                        size='sm'
+                        style={{ width: 80 }}
+                        min={1.0}
+                        step={0.1}
+                        value={config.zoomFactorPoly || 1.5}
+                        onChange={(value) => {
+                          this.props.onSettingChange({
+                            id: this.props.id,
+                            config: this.props.config.set('zoomFactorPoly', value)
+                          })
+                        }}
+                      />
+                    </SettingRow>
+                    <div css={css`font-size: 11px; color: #6c757d; margin: -4px 16px 8px;`}>
+                      Extent buffer for line/polygon features (1.0 = tight, 2.0 = double). Default: 1.5.
+                    </div>
+                  </React.Fragment>
+                )}
+              </React.Fragment>
+            )}
+
+            <SettingRow label={this.props.intl.formatMessage({ id: 'enableCardExpand', defaultMessage: defaultMessages.enableCardExpand })}>
+              <Switch
+                checked={config.enableCardExpand === true}
+                onChange={(evt) => {
+                  this.props.onSettingChange({
+                    id: this.props.id,
+                    config: this.props.config.set('enableCardExpand', evt.target.checked)
+                  })
+                }}
+              />
+            </SettingRow>
+            <div css={css`font-size: 10px; color: var(--sys-color-text-tertiary); padding: 0 16px 8px; line-height: 1.4;`}>
+              {this.props.intl.formatMessage({ id: 'enableCardExpandDesc', defaultMessage: defaultMessages.enableCardExpandDesc })}
+            </div>
+          </SettingSection>
+        )}
       </div>
     )
   }

@@ -1,12 +1,20 @@
 ---
-description: Project management and documentation protocols
+description: Project management, tone, and safety protocols
 globs: **/*
 alwaysApply: true
 ---
 # Project Governance
-- **Tone**: Professional, managerial, and direct.
+- **Tone**: Professional, managerial, and direct. 
+- **The Scalpel Rule**: Use surgical edits. NEVER run destructive commands (git reset --hard) that destroy local ExB configs.
+- **Git Attribution**: ALL commits must be attributed to Adam Cabrera <adam@mapsimple.org>. This is non-negotiable.
+  - Adam is the creator, architect, and author of all code from v1 to current
+  - AI tools are implementation assistants only - NOT contributors or co-authors  
+  - Git config MUST be: `git config user.email "adam@mapsimple.org"`
+- **Bug Documentation Rule**: Whenever we are trying to resolve a bug, documentation on what has been tried must be kept until there is resolution. Create a bug document in `docs/bugs/` that tracks all attempts, findings, and approaches.
 - **Process Flow Maintenance Rule**: The `docs/process-flows/` directory contains 8 flow documents that describe how the widgets work end-to-end. These flows are living documents and MUST be maintained:
   - **When modifying code**: If a change affects any documented flow (initialization, query execution, results accumulation, zoom, selection, URL hash, settings, or data sources), update the corresponding FLOW-XX document with the new line numbers, logic changes, or architectural shifts.
   - **When adding new features**: If a new feature introduces a distinct flow that doesn't fit into an existing document, create a new FLOW-XX document following the established format (overview, flow diagram, key files, test coverage) and add it to the README index.
   - **Line number references**: Flow docs reference specific file:line numbers. After refactors that shift line numbers, update the references to stay accurate.
+  - **Test coverage notes**: Each flow doc has a test coverage section. When adding or removing tests, update the corresponding flow doc's test coverage section and the README's test summary table.
   - **See**: `docs/process-flows/README.md` for the full index and format guidelines.
+- **References**: Consult `@DEVELOPMENT_GUIDE.md` Section 1 & 5 for full Git and Environment safety protocols.
