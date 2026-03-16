@@ -60,6 +60,9 @@ Widget mounts when ExB renders the widget component. Both widgets extend
       +-- GraphicsLayerManager.initialize()
           +-- Determine: GroupLayer or GraphicsLayer (r024.2)
           +-- Add layer to mapView.map.layers
+      +-- applyMobilePopupBehavior() (r025.072)
+      +-- setupMobilePopupWatch() (r025.072)
+      +-- mapView.watch('width') → applyMobilePopupBehavior()
 ```
 
 ---
@@ -175,4 +178,4 @@ SpatialTabContent Props
 
 ---
 
-*Last updated: r025.044 (2026-03-10)*
+*Last updated: r025.072 (2026-03-15)*

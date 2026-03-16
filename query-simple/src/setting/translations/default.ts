@@ -106,7 +106,20 @@ export default {
   enableSuggest: 'Typeahead suggestions',
   enableSuggestDescription: 'Show matching values as you type in the free-form text input.',
   suggestMinChars: 'Minimum characters',
-  suggestLimit: 'Max suggestions'
+  suggestLimit: 'Max suggestions',
+  // Mobile Popup Behavior
+  mobilePopupBehavior: 'Mobile Popup Behavior',
+  mobilePopupCollapsed: 'Open collapsed',
+  mobilePopupCollapsedDescription: 'Show only title bar on mobile. User taps to expand.',
+  mobilePopupDockPosition: 'Dock position',
+  mobilePopupDockPositionDescription: 'Pin popup to a fixed position on mobile.',
+  mobilePopupDockPositionAuto: 'Auto',
+  mobilePopupDockPositionTop: 'Top',
+  mobilePopupDockPositionBottom: 'Bottom',
+  mobilePopupHideDockButton: 'Hide dock button',
+  mobilePopupHideDockButtonDescription: 'Prevent users from undocking the popup.',
+  mobilePopupHideActionBar: 'Hide action bar',
+  mobilePopupHideActionBarDescription: 'Remove zoom-to and other action buttons on mobile.'
 }
 
 

@@ -4,13 +4,15 @@
 
 Describes the end-to-end data flow from HTTP fetch to parsed `FeedItem[]` array.
 The pipeline is: URL validation, HTTP fetch, XML sanitization, DOMParser extraction,
-sorting, change detection, and state update.
+change detection, and state update. Items are stored **unsorted** -- sorting now
+happens at render time via the processing pipeline in `feed-pipeline.ts` (r002).
 
 **Key files:**
 - `feed-simple/src/runtime/widget.tsx` -- `loadFeed()` orchestration (widget.tsx:384-477)
 - `feed-simple/src/utils/feed-fetcher.ts` -- HTTP fetch wrapper (33 lines)
 - `feed-simple/src/utils/parsers/interface.ts` -- `IFeedParser` contract, `FeedItem` type
 - `feed-simple/src/utils/parsers/custom-xml.ts` -- XML parser with entity sanitization (67 lines)
+- `feed-simple/src/runtime/feed-pipeline.ts` -- render-time processing pipeline: filter, search, sort, limit (r002)
 
 ---
 
@@ -91,8 +93,10 @@ sorting, change detection, and state update.
       v
  Back in loadFeed()                          <- widget.tsx:401
       |
-      +-- sortItems(parsed.items)            <- widget.tsx:408
-      |   (see Sorting section below)
+      +-- (sorting removed from fetch path)   (r002)
+      |   Items are stored UNSORTED in state.
+      |   Sorting now happens at render time via
+      |   runPipeline() in feed-pipeline.ts.
       |
       +-- Change detection                   <- widget.tsx:418-423
       |   if (config.highlightNewItems)
@@ -107,7 +111,7 @@ sorting, change detection, and state update.
       |   wasBackedOff = (consecutiveFailures >= BACKOFF_THRESHOLD)
       |
       +-- setState (success)                 <- widget.tsx:431-441
-      |   items: sortedItems
+      |   items: parsed.items (unsorted)
       |   fieldNames: parsed.fieldNames
       |   isLoading: false
       |   error: null, fetchError: null
@@ -116,12 +120,18 @@ sorting, change detection, and state update.
       |   consecutiveFailures: 0
       |   pollPaused: false
       |
+      +-- setState CALLBACK (r002)           <- widget.tsx
+      |   Runs after state is committed:
+      |   +-- syncFeedLayer / syncFeedLayerWithProcessedItems
+      |   |   (ensures layer sync uses committed state, fixing race condition)
+      |   +-- (see FS-FLOW-07 for layer sync details)
+      |
       +-- Restore normal polling?            <- widget.tsx:443-446
       |   if (wasBackedOff) → startPolling()
       |
       +-- Map integration query              <- widget.tsx:449-453
           if (isMapIntegrationConfigured())
-          → runQueryGeometries(sortedItems)
+          → runQueryGeometries(items)
           (see FS-FLOW-05)
 ```
 
@@ -151,28 +161,29 @@ sorting, change detection, and state update.
 
 ---
 
-## Sorting Strategy
+## Sorting Strategy (r002 -- moved to pipeline)
 
-The `sortItems()` method (widget.tsx:355-382) applies sorting with smart type detection:
+Sorting was removed from `loadFeed()` in r002. Items are now stored in their
+original feed order. Sorting happens at render time inside `runPipeline()`
+(`feed-pipeline.ts`), which applies the full processing pipeline:
 
 ```
- sortItems(items)                            <- widget.tsx:355
+ runPipeline(items, config, state)           <- feed-pipeline.ts
       |
-      +-- No sortField configured?           :357
-      |   +-- reverseFeedOrder? → [...items].reverse()
-      |   +-- Otherwise → items (original order)
+      +-- [1] Filter by status               (if statusField + filterByStatus configured)
+      +-- [2] Search filter                  (if state.searchQuery is non-empty)
+      +-- [3] Sort                           (config sortField or state.runtimeSortField)
+      |       Smart type detection: date → numeric → string
+      |       Direction from config or state.runtimeSortDirection
+      |       reverseFeedOrder applied when no sort field
+      +-- [4] Limit                          (if maxItems > 0 → slice)
       |
-      +-- Sort with type detection:          :361-381
-          For each pair (a, b):
-            1. Try date parsing first         :366-369
-               Date.parse(valA) vs Date.parse(valB)
-            2. Try numeric comparison         :372-376
-               Number(valA) vs Number(valB)
-            3. Fall back to string comparison :379-380
-               localeCompare (case-insensitive)
-
-          Direction: sortDirection === 'desc' ? -1 : 1
+      +-- Return { allProcessed, displayed, totalBeforeLimit }
 ```
+
+The widget calls `getProcessedItems()` which invokes the pipeline with
+current state and config, returning the processed results for rendering
+and for map layer sync.
 
 ---
 
@@ -187,22 +198,12 @@ The `getItemId()` method (widget.tsx:227-234) generates stable IDs for change de
 
 ---
 
-## Display Filtering
+## Display Filtering (r002 -- moved to pipeline)
 
-`getDisplayItems()` (widget.tsx:328-346) applies config-driven filters at render time
-(not during fetch, so config changes take effect without re-fetching):
-
-```
- getDisplayItems()                           <- widget.tsx:328
-      |
-      +-- Filter by status                   :333-338
-      |   if statusField + filterByStatus.length > 0
-      |   → exclude items whose status is in the hide list
-      |
-      +-- Limit count                        :341-343
-          if maxItems > 0
-          → slice(0, maxItems)
-```
+Display filtering was previously handled by `getDisplayItems()`. In r002, filtering
+is now part of the `runPipeline()` processing pipeline in `feed-pipeline.ts`.
+The pipeline applies status filtering, text search, sorting, and maxItems limiting
+in a single pass. See the Sorting Strategy section above for the pipeline flow.
 
 ---
 
@@ -234,4 +235,4 @@ const parser = new CustomXmlParser()
 
 ---
 
-*Last updated: r001.037 (2026-03-13)*
+*Last updated: r002.022 (2026-03-14)*

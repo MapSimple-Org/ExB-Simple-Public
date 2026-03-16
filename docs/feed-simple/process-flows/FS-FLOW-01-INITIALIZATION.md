@@ -39,6 +39,10 @@ Widget mounts when ExB renders the widget component. The widget class extends
       |   pollPaused: false
       |   geometryMap: Map()
       |   selectedItemId: null
+      |   searchQuery: ''
+      |   runtimeSortField: null
+      |   runtimeSortDirection: null
+      |   visibleCount: 0
       |
       +-- Initialize private members          :68-74
       |   pollTimerId: null
@@ -99,6 +103,10 @@ Widget mounts when ExB renders the widget component. The widget class extends
 | `pollPaused` | `boolean` | Polling paused after PAUSE_THRESHOLD |
 | `geometryMap` | `Map<string, RestGeometry>` | Cached geometries from feature service |
 | `selectedItemId` | `string | null` | Currently selected card (toggle behavior) |
+| `searchQuery` | `string` | Current text search filter (r002) |
+| `runtimeSortField` | `string | null` | User-selected sort field override (r002) |
+| `runtimeSortDirection` | `string | null` | User-selected sort direction override (r002) |
+| `visibleCount` | `number` | Count of items visible after pipeline processing (r002) |
 
 ---
 
@@ -131,6 +139,14 @@ Widget mounts when ExB renders the widget component. The widget class extends
           if (prevDsId !== currDsId)
           → reset previousJoinIds, geometryMap, selectedItemId
           → if items exist + map configured → runQueryGeometries()
+      |
+      +-- maxItems changed?                  (r002)
+      |   if (prevMaxItems !== currMaxItems)
+      |   → triggers re-render (pipeline recalculates)
+      |
+      +-- filterByStatus changed?            (r002)
+          if (prevFilterByStatus !== currFilterByStatus)
+          → triggers re-render (pipeline recalculates)
 ```
 
 ---
@@ -206,4 +222,4 @@ Widget (widget.tsx)
 
 ---
 
-*Last updated: r001.031 (2026-03-13)*
+*Last updated: r002.022 (2026-03-14)*

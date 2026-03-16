@@ -115,7 +115,15 @@ export function QueryTaskSpatialForm (props: QueryTaskItemProps) {
           <div className='title3'>{getI18nMessage('chooseFilterType')}</div>
           <Select
             aria-label={getI18nMessage('chooseFilterType')}
-            css={css`height: 32px;`}
+            css={css`
+              height: 32px;
+              /* Prevent iOS Safari auto-zoom on input focus */
+              @media (max-width: 1024px) {
+                select, & select {
+                  font-size: 16px !important;
+                }
+              }
+            `}
             value={currentFilterType}
             onChange={handleFilterTypeChanged}
           >

@@ -3,13 +3,14 @@
 ## Overview
 
 Describes the token substitution pipeline that transforms Markdown templates with
-`{{fieldName}}` tokens into rendered HTML card content. Includes the filter chain
-(date formatting, autolink, externalLink) and the Markdown-to-HTML converter.
+`{{fieldName}}` tokens into rendered HTML card content. Includes the chainable
+pipe filter system (math, formatting, date, autolink, externalLink) and the
+Markdown-to-HTML converter.
 
 **Key files:**
-- `feed-simple/src/utils/token-renderer.ts` -- Token substitution + filter pipeline (159 lines)
+- `feed-simple/src/utils/token-renderer.ts` -- Token substitution + chainable pipe filter pipeline (~320 lines)
 - `feed-simple/src/utils/markdown-template-utils.ts` -- Markdown-to-HTML converter (200 lines)
-- `feed-simple/src/runtime/feed-card.tsx` -- FeedCard component that invokes the pipeline (139 lines)
+- `feed-simple/src/runtime/feed-card.tsx` -- FeedCard component that invokes the pipeline (~330 lines)
 
 ---
 
@@ -47,48 +48,94 @@ Describes the token substitution pipeline that transforms Markdown templates wit
 
 ---
 
-## Token Substitution
+## Token Substitution (r002.023 — Chainable Pipes)
 
-`substituteTokens()` (token-renderer.ts:41-71) replaces `{{token}}` placeholders
-with values from the FeedItem. Tokens support optional filters via pipe syntax.
+`substituteTokens()` (token-renderer.ts:54-81) replaces `{{token}}` placeholders
+with values from the FeedItem. Supports chainable pipe filters processed left-to-right.
 
 ### Token Regex
 
 ```
-TOKEN_REGEX = /\{\{(\s*[\w.]+\s*)(?:\|\s*(?:"([^"]+)"|(\w+))\s*)?\}\}/g
+TOKEN_REGEX = /\{\{((?:(?!\}\}).)+)\}\}/g
 ```
 
-| Capture Group | Content | Example |
-|---------------|---------|---------|
-| Group 1 | Field name | `location` |
-| Group 2 | Quoted filter argument | `MMM D, YYYY` |
-| Group 3 | Named filter | `autolink` |
+Captures everything between `{{` and `}}`. The inner content is then split by
+`|` (pipe) respecting quoted strings via `splitPipes()`.
 
 ### Token Resolution Flow
 
 ```
- substituteTokens(template, item, ctx)       <- token-renderer.ts:41
+ substituteTokens(template, item, ctx)       <- token-renderer.ts:54
       |
-      +-- Guard: empty template → ''         :46
+      +-- Guard: empty template → ''         :59
       |
-      +-- template.replace(TOKEN_REGEX, ...)  :48
+      +-- template.replace(TOKEN_REGEX, ...)  :61
           |
-          +-- Extract key = rawField.trim()   :49
-          +-- value = item[key] ?? ''         :50
+          +-- splitPipes(inner)               :63
+          |   Splits by | respecting quoted strings
+          |   e.g., 'field | "MMM D" | round:1'
+          |   → ['field', '"MMM D"', 'round:1']
           |
-          +-- Decision: which filter?
-              |
-              +-- No filter (plain token)    :53
-              |   → return value
-              |
-              +-- Quoted arg (date format)   :57
-              |   → applyDateFilter(value, quotedArg)
-              |
-              +-- Named filter               :61-69
-                  switch (filterName):
-                    'autolink'     → applyAutolinkFilter(value)
-                    'externalLink' → applyExternalLinkFilter(value, item, template)
-                    default        → return value (unknown filter)
+          +-- key = segments[0].trim()        :67
+          +-- value = item[key] ?? ''         :68
+          |
+          +-- No filters? (segments.length===1) :71
+          |   → return value (plain substitution)
+          |
+          +-- For each filter (segments 1..N): :74-78
+              value = applyFilter(value, filter, item, ctx)
+              (left-to-right chaining)
+```
+
+### Filter Router
+
+```
+ applyFilter(value, filter, item, ctx)       <- token-renderer.ts:116
+      |
+      +-- Quoted arg? (e.g., "MMM D, YYYY")  :123
+      |   → applyDateFilter(value, format)
+      |
+      +-- Math operator? (/N, *N, +N, -N)    :129
+      |   → applyMathOp(value, op, operand)
+      |
+      +-- Parameterized? (name:arg)           :135
+      |   → applyNamedFilter(value, name, arg)
+      |
+      +-- Simple named filter                 :143
+          → applyNamedFilter(value, name, undefined)
+```
+
+### Named Filters (r002.023)
+
+| Filter | Syntax | Example | Description |
+|--------|--------|---------|-------------|
+| `autolink` | `{{field \| autolink}}` | URLs → `<a>` tags | Convert plain-text URLs to links |
+| `externalLink` | `{{field \| externalLink}}` | "View ↗" link | Uses `externalLinkTemplate` config |
+| `round` | `{{field \| round:N}}` | `round:1` → 1 decimal | Round to N decimal places (default 0) |
+| `prefix` | `{{field \| prefix:$}}` | `$42` | Prepend text |
+| `suffix` | `{{field \| suffix: km}}` | `2.4 km` | Append text (leading space preserved) |
+| `abs` | `{{field \| abs}}` | `-5` → `5` | Absolute value |
+| `toFixed` | `{{field \| toFixed:N}}` | Alias for `round` | Same as round |
+| `upper` | `{{field \| upper}}` | `hello` → `HELLO` | Uppercase |
+| `lower` | `{{field \| lower}}` | `HELLO` → `hello` | Lowercase |
+
+### Math Operations
+
+| Operator | Syntax | Example |
+|----------|--------|---------|
+| Divide | `{{field \| /1000}}` | 2400 → 2.4 |
+| Multiply | `{{field \| *0.001}}` | 2400 → 2.4 |
+| Add | `{{field \| +10}}` | 5 → 15 |
+| Subtract | `{{field \| -5}}` | 15 → 10 |
+
+### Chaining Example
+
+```
+{{distanceMeters | /1000 | round:1 | suffix: km}}
+     2400.0000953674
+  → /1000 → 2.4000000953674
+  → round:1 → 2.4
+  → suffix: km → "2.4 km"
 ```
 
 ---
@@ -97,37 +144,49 @@ TOKEN_REGEX = /\{\{(\s*[\w.]+\s*)(?:\|\s*(?:"([^"]+)"|(\w+))\s*)?\}\}/g
 
 ### Date Filter
 
-Syntax: `{{fieldName | "MMM D, YYYY"}}` or `{{fieldName | "MMM D, YYYY h:mm A"}}`
+Syntax: `{{fieldName | "MMM D, YYYY"}}` or `{{fieldName | "YYYY-MM-DD HH:mm:ss (UTCZ)"}}`
 
 ```
- applyDateFilter(value, formatString)        <- token-renderer.ts:81
+ applyDateFilter(value, formatString)        <- token-renderer.ts:233
       |
-      +-- Guard: empty value → ''            :82
+      +-- Guard: empty value → ''            :234
       |
-      +-- Date.parse(value)                  :83
+      +-- Date.parse(value)                  :235
       |   if NaN → return raw value (not a date)
       |
-      +-- Slot-based replacement             :96-119
+      +-- Build timezone offset string       :247-252
+      |   d.getTimezoneOffset() → minutes
+      |   Positive = west of UTC (sign inverted for display)
+      |   → e.g., "-07:00", "+05:30", "+00:00"
+      |
+      +-- Slot-based replacement             :264-279
           (prevents cascading regex matches)
           |
-          +-- YYYY → full year               :104
-          +-- YY   → 2-digit year            :105
-          +-- MMM  → abbreviated month name  :106
-          +-- MM   → zero-padded month       :107
-          +-- M    → month (no padding)      :108
-          +-- DD   → zero-padded day         :109
-          +-- D    → day (no padding)        :110
-          +-- hh   → zero-padded 12-hour     :111
-          +-- h    → 12-hour (no padding)    :112
-          +-- mm   → zero-padded minutes     :113
-          +-- ss   → zero-padded seconds     :114
-          +-- A    → AM/PM uppercase         :115
-          +-- a    → am/pm lowercase         :116
+          +-- YYYY → full year               :264
+          +-- YY   → 2-digit year            :265
+          +-- MMM  → abbreviated month name  :266
+          +-- MM   → zero-padded month       :267
+          +-- M    → month (no padding)      :268
+          +-- DD   → zero-padded day         :269
+          +-- D    → day (no padding)        :270
+          +-- HH   → zero-padded 24-hour     :271  (r002.025)
+          +-- H    → 24-hour (no padding)    :272  (r002.025)
+          +-- hh   → zero-padded 12-hour     :273
+          +-- h    → 12-hour (no padding)    :274
+          +-- mm   → zero-padded minutes     :275
+          +-- ss   → zero-padded seconds     :276
+          +-- A    → AM/PM uppercase         :277
+          +-- a    → am/pm lowercase         :278
+          +-- Z    → timezone offset         :279  (r002.025)
 ```
 
 **Slot mechanism:** Each replaced token is temporarily stored as `\x00{index}\x00`
 to prevent subsequent regex passes from consuming characters in already-replaced text
 (e.g., "Mar" from MMM contains "M" which would be matched by the single-M pattern).
+
+**Timezone offset (r002.025):** `Date.getTimezoneOffset()` returns minutes offset
+from UTC. Positive values mean west of UTC. The sign is inverted for display:
+`getTimezoneOffset() = 420` → `-07:00` (Pacific time).
 
 ### Autolink Filter
 
@@ -272,4 +331,4 @@ const filterCtx: FilterContext = {
 
 ---
 
-*Last updated: r001.031 (2026-03-13)*
+*Last updated: r002.030 (2026-03-14)*

@@ -26,8 +26,8 @@ pattern where feed fields are fetched before template and filter options are ava
       +-- [2] Card Template                  :388-472
       |   Template editor, field token buttons, live preview
       |
-      +-- [3] Status Colors                  :475-539
-      |   Status field dropdown, color pickers
+      +-- [3] Card Colors                     :475-539+
+      |   Status field, color mode, exact pickers / range break editor
       |
       +-- [4] Hover Text                     :542-567
       |   Tooltip field dropdown
@@ -121,27 +121,84 @@ The template section provides a Markdown editor with:
 
 ---
 
-## Status Colors Configuration
+## Card Colors Configuration (r002.027)
+
+Renamed from "Status Colors" to "Card Colors" to reflect broader color coding.
 
 ```
- Status Field dropdown                       <- setting.tsx:477-496
+ Status Field dropdown                       <- setting.tsx
       |
       +-- Populated from discoveredFields
       +-- Includes "(None)" option
       +-- onChange → onStatusFieldChange
-      |   Resets statusColorMap to {}        :153-157
+      |   Resets statusColorMap to {}
       |
       v
- Color pickers per status value              <- setting.tsx:499-532
+ Color Mode dropdown                         <- setting.tsx
       |
-      +-- getUniqueValuesForField(statusField) :91-99
+      +-- "Exact match" (default)
+      +-- "Numeric range"
+      +-- onChange → onColorModeChange
+      |
+      v
+ [If colorMode === 'exact']
+      |
+      +-- Color pickers per status value
+      |   getUniqueValuesForField(statusField)
       |   Scans discoveredItems for unique values
       |   Returns sorted array
+      |   For each value: <input type="color">
+      |   onChange → onStatusColorChange(val, color)
       |
-      +-- For each unique value:
-          <input type="color">
-          onChange → onStatusColorChange(val, color)
+ [If colorMode === 'range']
+      |
+      +-- Range break editor
+      |   For each break in rangeColorBreaks:
+      |     - Color picker
+      |     - Min NumericInput (null = unbounded)
+      |     - Max NumericInput (null = unbounded)
+      |     - Label TextInput
+      |     - Remove button
+      |   onUpdateRangeBreak(index, field, value)
+      |   onRemoveRangeBreak(index)
+      |
+      +-- "+ Add Range" button
+          onAddRangeBreak() → appends { min: null, max: null, color: '#cccccc', label: '' }
 ```
+
+### RangeColorBreak Type
+
+```typescript
+interface RangeColorBreak {
+  min: number | null    // Lower bound (inclusive). null = no lower bound.
+  max: number | null    // Upper bound (exclusive). null = no upper bound.
+  color: string         // Background hex color
+  label: string         // Display label (e.g., "Low", "Moderate", "Severe")
+}
+```
+
+### Template Syntax Help Panel (r002.026)
+
+An expandable help panel replaces the outdated hint text below the card template
+editor. Toggled by `templateHelpOpen` state.
+
+```
+ Help panel toggle button                    <- setting.tsx
+      |
+      +-- "Template Syntax Help" ▸ / ▾
+      |   onClick → toggles templateHelpOpen state
+      |
+      +-- [If open] Renders sections:
+          - Tokens: {{fieldName}}, {{field.nested.path}}
+          - Markdown: headings, bold, italic, links, lists
+          - Filters: autolink, externalLink
+          - Math: /N, *N, +N, -N, round:N, prefix:, suffix:
+          - Date: YYYY, MM, DD, HH, hh, mm, ss, A, Z
+          - Example: chained pipe filters
+```
+
+Dark theme compatible: uses `color: inherit` and `rgba(255,255,255,0.08)` code
+backgrounds instead of hardcoded dark colors.
 
 ---
 
@@ -266,6 +323,10 @@ with ExB's framework:
 | `onSpatialJoinDsChange` | `useDataSources`, join fields | DS selector + output DS registration |
 | `onJoinFieldServiceChange` | `joinFieldService` | Triggers output DS re-registration |
 | `onJoinFieldFeedChange` | `joinFieldFeed` | Triggers output DS re-registration |
+| `onColorModeChange` | `colorMode` | 'exact' or 'range' (r002.027) |
+| `onAddRangeBreak` | `rangeColorBreaks` | Appends default break (r002.027) |
+| `onUpdateRangeBreak` | `rangeColorBreaks` | Updates single break field by index (r002.027) |
+| `onRemoveRangeBreak` | `rangeColorBreaks` | Removes break by index (r002.027) |
 
 ---
 
@@ -282,4 +343,4 @@ with ExB's framework:
 
 ---
 
-*Last updated: r001.031 (2026-03-13)*
+*Last updated: r002.030 (2026-03-14)*

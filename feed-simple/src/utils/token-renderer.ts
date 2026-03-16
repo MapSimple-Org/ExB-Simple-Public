@@ -2,13 +2,25 @@
  * Token substitution engine for feed item templates.
  *
  * Supports:
- *   {{fieldName}}                — basic substitution
- *   {{field.nested.path}}        — dot-path substitution for nested XML
- *   {{field.@attr}}              — XML attribute substitution
- *   {{field[0]}}                 — array element substitution
- *   {{fieldName | "MMM D, YYYY"}} — date formatting filter
- *   {{fieldName | autolink}}     — convert plain-text URLs to <a> tags
- *   {{fieldName | externalLink}} — render link using externalLinkTemplate
+ *   {{fieldName}}                    — basic substitution
+ *   {{field.nested.path}}            — dot-path substitution for nested XML
+ *   {{field.@attr}}                  — XML attribute substitution
+ *   {{field[0]}}                     — array element substitution
+ *   {{fieldName | "MMM D, YYYY"}}    — date formatting filter (converts UTC → local timezone)
+ *   {{fieldName | "YYYY-MM-DD HH:mm:ss (UTCZ)"}} — 24-hour local time with offset
+ *   {{fieldName | autolink}}         — convert plain-text URLs to <a> tags
+ *   {{fieldName | externalLink}}     — render link using externalLinkTemplate
+ *
+ * Math & formatting filters (chainable):
+ *   {{field | /1000}}                — divide by 1000
+ *   {{field | *0.001}}               — multiply by 0.001
+ *   {{field | +10}}                  — add 10
+ *   {{field | -5}}                   — subtract 5
+ *   {{field | round:1}}             — round to 1 decimal place
+ *   {{field | round}}               — round to integer (0 decimals)
+ *   {{field | prefix:$}}            — prepend text
+ *   {{field | suffix: km}}          — append text (leading space preserved)
+ *   {{field | /1000 | round:1 | suffix: km}}  — chained: 2400m → "2.4 km"
  */
 
 import type { FeedItem } from './parsers/interface'
@@ -27,21 +39,16 @@ export interface FilterContext {
 // ── Regex ────────────────────────────────────────────────────────
 
 /**
- * Matches tokens with optional filter:
- *   {{field}}               — group 1 = field
- *   {{field.nested.path}}   — group 1 = field (dot paths supported)
- *   {{field.@attr}}         — group 1 = field (@ for XML attributes)
- *   {{field[0]}}            — group 1 = field ([] for array indices)
- *   {{field | "format"}}    — group 1 = field, group 2 = quoted arg
- *   {{field | filterName}}  — group 1 = field, group 3 = filter name
+ * Matches {{...}} tokens. Captures everything between the braces for
+ * pipe-based parsing. Allows any character except }} inside.
  */
-const TOKEN_REGEX = /\{\{(\s*[\w.@\[\]]+\s*)(?:\|\s*(?:"([^"]+)"|(\w+))\s*)?\}\}/g
+const TOKEN_REGEX = /\{\{((?:(?!\}\}).)+)\}\}/g
 
 // ── Public API ───────────────────────────────────────────────────
 
 /**
  * Substitute {{token}} placeholders in a template string with values from a
- * feed item. Optionally applies filters when the pipe syntax is used.
+ * feed item. Supports chained pipe filters for math, formatting, and text.
  * Unresolved tokens are replaced with an empty string.
  */
 export function substituteTokens (
@@ -51,36 +58,175 @@ export function substituteTokens (
 ): string {
   if (!template) return ''
 
-  return template.replace(TOKEN_REGEX, (_match, rawField: string, quotedArg: string | undefined, filterName: string | undefined) => {
-    const key = rawField.trim()
-    const value = item[key] ?? ''
+  return template.replace(TOKEN_REGEX, (_match, inner: string) => {
+    // Split by pipe, respecting quoted strings
+    const segments = splitPipes(inner)
+    if (segments.length === 0) return ''
 
-    // No filter — plain substitution
-    if (!quotedArg && !filterName) return value
+    // First segment is the field name
+    const key = segments[0].trim()
+    let value: string = item[key] ?? ''
 
-    // Quoted argument → date format filter
-    if (quotedArg) {
-      return applyDateFilter(value, quotedArg)
+    // No filters — plain substitution
+    if (segments.length === 1) return value
+
+    // Apply each filter in order
+    for (let i = 1; i < segments.length; i++) {
+      const filter = segments[i].trim()
+      value = applyFilter(value, filter, item, ctx)
     }
 
-    // Named filter
-    switch (filterName) {
-      case 'autolink':
-        return applyAutolinkFilter(value)
-      case 'externalLink':
-        return applyExternalLinkFilter(value, item, ctx.externalLinkTemplate)
-      default:
-        // Unknown filter — return raw value
-        return value
-    }
+    return value
   })
+}
+
+// ── Pipe Splitting ──────────────────────────────────────────────
+
+/**
+ * Split a token's inner content by `|` delimiters, but respect quoted strings.
+ * `field | "MMM D, YYYY" | round:1` → ['field', '"MMM D, YYYY"', 'round:1']
+ */
+function splitPipes (inner: string): string[] {
+  const segments: string[] = []
+  let current = ''
+  let inQuotes = false
+
+  for (let i = 0; i < inner.length; i++) {
+    const ch = inner[i]
+    if (ch === '"') {
+      inQuotes = !inQuotes
+      current += ch
+    } else if (ch === '|' && !inQuotes) {
+      segments.push(current)
+      current = ''
+    } else {
+      current += ch
+    }
+  }
+  segments.push(current)
+  return segments
+}
+
+// ── Filter Router ───────────────────────────────────────────────
+
+/**
+ * Route a single filter segment to the correct handler.
+ * Supports: math operators, round, prefix, suffix, date, autolink, externalLink.
+ */
+function applyFilter (
+  value: string,
+  filter: string,
+  item: FeedItem,
+  ctx: FilterContext
+): string {
+  // Quoted argument → date format filter (legacy syntax)
+  const quotedMatch = filter.match(/^"([^"]+)"$/)
+  if (quotedMatch) {
+    return applyDateFilter(value, quotedMatch[1])
+  }
+
+  // Math operators: /N, *N, +N, -N
+  const mathMatch = filter.match(/^([/*+-])\s*(-?\d+(?:\.\d+)?)$/)
+  if (mathMatch) {
+    return applyMathOp(value, mathMatch[1], parseFloat(mathMatch[2]))
+  }
+
+  // Parameterized filters: name:arg
+  const colonIdx = filter.indexOf(':')
+  if (colonIdx > 0) {
+    const name = filter.substring(0, colonIdx).trim()
+    const arg = filter.substring(colonIdx + 1) // preserve leading space for suffix
+    return applyNamedFilter(value, name, arg, item, ctx)
+  }
+
+  // Simple named filters (no arg)
+  return applyNamedFilter(value, filter, undefined, item, ctx)
+}
+
+/**
+ * Apply a named filter with an optional argument.
+ */
+function applyNamedFilter (
+  value: string,
+  name: string,
+  arg: string | undefined,
+  item: FeedItem,
+  ctx: FilterContext
+): string {
+  switch (name) {
+    case 'autolink':
+      return applyAutolinkFilter(value)
+    case 'externalLink':
+      return applyExternalLinkFilter(value, item, ctx.externalLinkTemplate)
+    case 'round':
+      return applyRound(value, arg)
+    case 'prefix':
+      return (arg ?? '') + value
+    case 'suffix':
+      return value + (arg ?? '')
+    case 'abs':
+      return applyAbs(value)
+    case 'toFixed':
+      return applyRound(value, arg) // alias for round
+    case 'upper':
+      return value.toUpperCase()
+    case 'lower':
+      return value.toLowerCase()
+    default:
+      // Unknown filter — return value unchanged
+      return value
+  }
+}
+
+// ── Math Operations ─────────────────────────────────────────────
+
+/**
+ * Apply an arithmetic operator to a numeric value.
+ * Returns the raw value if it's not a valid number.
+ */
+function applyMathOp (value: string, op: string, operand: number): string {
+  const num = parseFloat(value)
+  if (isNaN(num)) return value
+
+  switch (op) {
+    case '/': return operand !== 0 ? String(num / operand) : value
+    case '*': return String(num * operand)
+    case '+': return String(num + operand)
+    case '-': return String(num - operand)
+    default: return value
+  }
+}
+
+/**
+ * Round a numeric value to N decimal places.
+ * Default: 0 decimals (integer).
+ */
+function applyRound (value: string, arg: string | undefined): string {
+  const num = parseFloat(value)
+  if (isNaN(num)) return value
+  const decimals = arg !== undefined ? parseInt(arg.trim(), 10) : 0
+  if (isNaN(decimals) || decimals < 0) return value
+  return num.toFixed(decimals)
+}
+
+/**
+ * Return the absolute value.
+ */
+function applyAbs (value: string): string {
+  const num = parseFloat(value)
+  if (isNaN(num)) return value
+  return String(Math.abs(num))
 }
 
 // ── Filter implementations ───────────────────────────────────────
 
 /**
  * Format a date string using a simple format pattern.
- * Supports: YYYY, YY, MMM, MM, M, D, DD, h, hh, mm, ss, A/a
+ * Supports: YYYY, YY, MMM, MM, M, D, DD, HH, H, hh, h, mm, ss, A/a, Z
+ *
+ * HH/H = 24-hour time (00–23 / 0–23)
+ * hh/h = 12-hour time (01–12 / 1–12)
+ * Z    = timezone offset (e.g. -07:00, +05:30)
  *
  * Falls back to the raw value if the date cannot be parsed.
  */
@@ -96,6 +242,14 @@ function applyDateFilter (value: string, formatString: string): string {
   const hours24 = d.getHours()
   const hours12 = hours24 % 12 || 12
   const ampm = hours24 < 12 ? 'AM' : 'PM'
+
+  // Build timezone offset string: -07:00, +05:30, +00:00
+  const tzOffset = d.getTimezoneOffset() // minutes, positive = west of UTC
+  const tzSign = tzOffset <= 0 ? '+' : '-'
+  const tzAbsMinutes = Math.abs(tzOffset)
+  const tzHours = String(Math.floor(tzAbsMinutes / 60)).padStart(2, '0')
+  const tzMins = String(tzAbsMinutes % 60).padStart(2, '0')
+  const tzString = `${tzSign}${tzHours}:${tzMins}`
 
   // Use placeholder tokens (\x00N\x00) so that replaced text doesn't get
   // consumed by subsequent regex passes (e.g. MMM → "Mar" then M eats the "M").
@@ -114,12 +268,15 @@ function applyDateFilter (value: string, formatString: string): string {
   result = result.replace(/(?<!M)M(?!M)/g, () => slot(String(d.getMonth() + 1)))
   result = result.replace(/DD/g, () => slot(String(d.getDate()).padStart(2, '0')))
   result = result.replace(/(?<!D)D(?!D)/g, () => slot(String(d.getDate())))
+  result = result.replace(/HH/g, () => slot(String(hours24).padStart(2, '0')))
+  result = result.replace(/(?<!H)H(?!H)/g, () => slot(String(hours24)))
   result = result.replace(/hh/g, () => slot(String(hours12).padStart(2, '0')))
   result = result.replace(/(?<!h)h(?!h)/g, () => slot(String(hours12)))
   result = result.replace(/mm/g, () => slot(String(d.getMinutes()).padStart(2, '0')))
   result = result.replace(/ss/g, () => slot(String(d.getSeconds()).padStart(2, '0')))
   result = result.replace(/A/g, () => slot(ampm))
   result = result.replace(/a/g, () => slot(ampm.toLowerCase()))
+  result = result.replace(/Z/g, () => slot(tzString))
 
   // Swap placeholders back to actual values
   result = result.replace(/\x00(\d+)\x00/g, (_m, idx) => slots[Number(idx)])

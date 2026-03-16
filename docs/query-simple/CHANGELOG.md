@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 > **Archive**: For releases r001-r021, see [CHANGELOG_ARCHIVE_r001-r021.md](docs/archive/CHANGELOG_ARCHIVE_r001-r021.md)
 
-## [1.19.0-r025] - 2026-03-09 → 2026-03-10 - Spatial Tab Development (in progress)
+## [1.19.0-r025] - 2026-03-09 → 2026-03-15 - Spatial Tab Development
 
 ### Added
 
@@ -208,6 +208,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   `query-simple/manifest.json` per Esri best practice — ensures ArcGIS Maps SDK loads
   before widget initialization
 
+#### r025.070
+
+- **Scroll-to-top chevron button** (r025.070): Added a chevron button in the results list
+  that scrolls back to the top of the results panel
+
+#### r025.071
+
+- **Scroll-to-top button flex layout fix** (r025.071): Fixed scroll-to-top button being
+  squished in flex layout — added `flex-shrink` and `min-height` constraints
+
 ### Fixed
 
 - **Buffer preview ghost on widget close/reopen** (r025.057): After a successful spatial
@@ -281,6 +291,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   drawn geometries, relationship, and target layers). Both tabs now show Reset always visible
   but disabled when nothing is dirty — Query tab uses `attributeFilterSqlExprObj === sqlExprObj`
   pristine check, Spatial tab checks buffer/drawn/relationship/layers state
+
+#### r025.072
+
+- **iOS auto-zoom fix** (r025.072): Prevent iOS Safari from zooming when tapping
+  inputs/selects with computed font-size < 16px. Added `@media (max-width: 1024px)`
+  media query with `font-size: 16px !important` to all form inputs in SpatialTabContent
+  (buffer distance, buffer unit, spatial relationship combobox, target layers),
+  buffer-input.tsx (draw mode distance/unit), and query-task-spatial-form.tsx (filter type).
+  1024px breakpoint covers both phones and iPadOS tablets
+- **Mobile popup behavior** (r025.072): 4 config fields for controlling JSAPI popup
+  behavior on mobile viewports (≤ 600px via `mapView.width`):
+  - `mobilePopupCollapsed` — opens popup showing only title bar, user taps to expand
+  - `mobilePopupDockPosition` — pin popup to top-center or bottom-center
+  - `mobilePopupHideDockButton` — remove dock/undock toggle
+  - `mobilePopupHideActionBar` — hide zoom-to and other action buttons
+  Uses `popup.watch('visible')` to apply collapsed state reactively (QS never calls
+  `popup.open()` directly — ExB's Map widget opens popups via data source selection).
+  Separate from HelperSimple's MutationObserver popup detection (which handles selection
+  restoration on popup close). Settings UI in "Mobile Popup Behavior" section with
+  progressive disclosure for hide dock button
 
 ### Removed
 

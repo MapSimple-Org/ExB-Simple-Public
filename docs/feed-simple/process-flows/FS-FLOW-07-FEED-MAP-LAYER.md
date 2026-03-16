@@ -37,10 +37,14 @@ A map widget (`mapWidgetId`) is also needed for the layer to appear on a map.
 
 ## Layer Creation
 
-Triggered when `mapView`, config, and parsed items are all available.
+Triggered when `mapView`, config, and parsed items are all available. In r002,
+layer creation also happens in the `setState` callback after items arrive from
+`loadFeed()`, fixing a race condition where the layer could be created before
+state was committed.
 
 ```
- componentDidUpdate / onActiveViewChange      <- widget.tsx:388
+ componentDidUpdate / onActiveViewChange /    <- widget.tsx
+ setState callback (r002)                     (race condition fix)
       |
       +-- isFeedMapLayerConfigured(config)?
       |   +-- NO --> skip
@@ -92,16 +96,23 @@ Triggered when `mapView`, config, and parsed items are all available.
 ## Poll-Cycle Sync
 
 After each successful feed fetch, items are synced to the existing layer.
+In r002, sync happens inside the `setState` callback to ensure committed state
+is used. A new `syncFeedLayerWithProcessedItems` method syncs the layer with
+pipeline output (post filter/search/sort) rather than raw items.
 
 ```
- loadFeed() success                           <- widget.tsx:403
+ loadFeed() setState callback (r002)          <- widget.tsx
       |
       +-- feedLayer exists?
       |   +-- NO --> skip
       |   +-- YES --> continue
       |
+      +-- syncFeedLayerWithProcessedItems()   (r002)
+      |   reads from getProcessedItems().allProcessed
+      |   (syncs post-pipeline items, not raw items)
+      |
       +-- syncFeedItemsToLayer(               <- feed-layer-manager.ts:223
-      |     layer, items, config, fieldMapping)
+      |     layer, processedItems, config, fieldMapping)
       |
       +-- Parse lat/lon from each item         :240-252
       |   parseFloat(item[latField])
@@ -290,4 +301,4 @@ the original FeedItem from sanitized feature attributes.
 
 ---
 
-*Last updated: r001.039 (2026-03-13)*
+*Last updated: r002.022 (2026-03-14)*

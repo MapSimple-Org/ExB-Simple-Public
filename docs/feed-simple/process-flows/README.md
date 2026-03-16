@@ -1,6 +1,6 @@
 # FeedSimple Process Flow Documentation
 
-End-to-end reference for the 7 major functions of the FeedSimple widget. Each
+End-to-end reference for the 9 major functions of the FeedSimple widget. Each
 document includes ASCII flow diagrams, file:line references, decision points,
 and configuration options.
 
@@ -15,6 +15,8 @@ and configuration options.
 | 05 | [FS-FLOW-05-MAP-INTEGRATION](FS-FLOW-05-MAP-INTEGRATION.md) | Spatial join via JSAPI layer (respects definitionExpression), zoom/popup, no-geometry feedback |
 | 06 | [FS-FLOW-06-SETTINGS](FS-FLOW-06-SETTINGS.md) | Settings panel sections, Discover Fields, Map Integration config, output DS |
 | 07 | [FS-FLOW-07-FEED-MAP-LAYER](FS-FLOW-07-FEED-MAP-LAYER.md) | Client-side FeatureLayer from feed coordinates, sync, bidirectional click, popups |
+| 08 | [FS-FLOW-08-COLOR-RESOLUTION](FS-FLOW-08-COLOR-RESOLUTION.md) | Exact/range card color coding, range label enrichment, search/sort by range labels |
+| 09 | [FS-FLOW-09-RESPONSIVE-RENDERING](FS-FLOW-09-RESPONSIVE-RENDERING.md) | Mobile card template, mobile toolbar position, mobile popup template, CSS media query pattern |
 
 ## Key Architectural Patterns
 
@@ -41,12 +43,12 @@ interaction on top of A.
 
 ```
 feed-simple/src/
-  config.ts                     Config interface (FeedSimpleConfig, 33 fields)
+  config.ts                     Config interface (FeedSimpleConfig, 35+ fields)
   version.ts                    Version constants
   version-manager.ts            Config migration
   runtime/
     widget.tsx                  Main widget (1217 lines)
-    feed-card.tsx               FeedCard component + card toolbar (330 lines)
+    feed-card.tsx               FeedCard component + responsive toolbar (462 lines)
     translations/default.ts     i18n strings
   setting/
     setting.tsx                 Builder settings panel (1187 lines)
@@ -54,9 +56,13 @@ feed-simple/src/
   utils/
     debug-logger.ts             Debug logging (?debug=FETCH,POLL,JOIN,FEED-LAYER,...)
     feed-fetcher.ts             HTTP fetch wrapper (32 lines)
-    token-renderer.ts           Token substitution + filter pipeline (165 lines)
+    token-renderer.ts           Token substitution + chainable pipe filter pipeline (~320 lines)
     markdown-template-utils.ts  Markdown-to-HTML converter (200 lines)
-    map-interaction.ts          Spatial join + pan utilities (253 lines)
+    color-resolver.ts           Exact/range card color resolution + range label enrichment (~139 lines)
+    map-interaction.ts          Spatial join + pan + FeatureEffect utilities (~300 lines)
+    feed-controls.tsx           Search bar, sort controls, range label sort option (r002)
+    feed-pipeline.ts            Processing pipeline: filter, search, sort, limit (r002)
+    feed-csv-export.ts          CSV export utility (r002)
     feed-layer-manager.ts       Feed Map Layer — FeatureLayer, sync, popups, zoom, pan (482 lines)
     feature-join.ts             JSAPI FeatureLayer queries (145 lines)
     data-source-builder.ts      Output DS JSON generation (54 lines)
@@ -98,4 +104,4 @@ Add the new flow to the Flow Index table above.
 
 ---
 
-*Last updated: r001.039 (2026-03-13)*
+*Last updated: r002.047 (2026-03-16)*

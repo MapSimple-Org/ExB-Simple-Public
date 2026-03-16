@@ -10,7 +10,7 @@
  */
 const BASE_VERSION = '1.19.0'
 const RELEASE_NUMBER = '025' // Increment on major changes (001, 002, 003, ...)
-const MINOR_VERSION = '071' // r025.071: Fix scroll-to-top button squished in flex layout
+const MINOR_VERSION = '072' // r025.072: iOS auto-zoom fix + mobile popup behavior (collapsed, dock, hide action bar)
 
 export const WIDGET_VERSION = MINOR_VERSION && Number(MINOR_VERSION) > 0
   ? `${BASE_VERSION}-r${RELEASE_NUMBER}.${MINOR_VERSION}`

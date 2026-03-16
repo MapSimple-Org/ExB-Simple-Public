@@ -9,6 +9,8 @@
 
 import { DataSourceManager } from 'jimu-core'
 import Popup from 'esri/widgets/Popup'
+import FeatureEffect from 'esri/layers/support/FeatureEffect'
+import FeatureFilter from 'esri/layers/support/FeatureFilter'
 import type { FeedItem } from './parsers/interface'
 import { queryFeatureLayerByIds, type RestGeometry } from './feature-join'
 import { createFeedSimpleDebugLogger } from './debug-logger'
@@ -93,6 +95,11 @@ export interface IdentifyParams {
   dataSourceId: string
   joinField: string
   joinValue: string
+  /** Mobile popup options (≤ 600px viewport) */
+  mobilePopupCollapsed?: boolean
+  mobilePopupDockPosition?: string
+  mobilePopupHideDockButton?: boolean
+  mobilePopupHideActionBar?: boolean
 }
 
 /**
@@ -140,12 +147,35 @@ export async function identifyFeatureOnMap (params: IdentifyParams): Promise<voi
         mapView.popup = new Popup({ view: mapView })
       }
 
-      mapView.popup.open({
-        features: [feature],
-        location: feature.geometry.type === 'point'
-          ? feature.geometry as __esri.Point
-          : (feature.geometry as __esri.Polygon | __esri.Polyline).extent?.center
-      })
+      // Apply mobile popup behavior (dock, hide button) at ≤ 600px
+      const isMobile = mapView.width <= 600
+      if (isMobile && params.mobilePopupDockPosition) {
+        mapView.popup.dockEnabled = true
+        mapView.popup.dockOptions = {
+          position: params.mobilePopupDockPosition,
+          buttonEnabled: !params.mobilePopupHideDockButton
+        } as any
+      } else if (!isMobile) {
+        mapView.popup.dockEnabled = false
+        mapView.popup.dockOptions = { buttonEnabled: true, position: 'auto' } as any
+      }
+
+      // Hide action bar on mobile if configured
+      if (isMobile && params.mobilePopupHideActionBar) {
+        mapView.popup.visibleElements = { ...mapView.popup.visibleElements as any, actionBar: false } as any
+      } else if (!isMobile) {
+        mapView.popup.visibleElements = { ...mapView.popup.visibleElements as any, actionBar: true } as any
+      }
+
+      const location = feature.geometry.type === 'point'
+        ? feature.geometry as __esri.Point
+        : (feature.geometry as __esri.Polygon | __esri.Polyline).extent?.center
+
+      const openOptions: any = { features: [feature], location }
+      if (params.mobilePopupCollapsed && isMobile) {
+        openOptions.collapsed = true
+      }
+      mapView.popup.open(openOptions)
       debugLogger.log('JOIN', { action: 'identify-opened', joinValue, oid: feature.attributes[featureLayer.objectIdField] })
     }
   } catch (err) {
@@ -250,4 +280,118 @@ export async function queryGeometries (params: QueryGeometriesParams): Promise<Q
   })
 
   return { geometryMap, newJoinIds, skipped: false }
+}
+
+// ── Feature Effect (Filter Highlight) ─────────────────────────────
+
+/**
+ * Find the joined FeatureLayer on the map by matching the DataSource URL.
+ * Reusable helper extracted from queryGeometries / identifyFeatureOnMap.
+ */
+export function findJoinedFeatureLayer (
+  mapView: __esri.MapView | __esri.SceneView,
+  dataSourceId: string
+): __esri.FeatureLayer | null {
+  const originDs = DataSourceManager.getInstance().getDataSource(dataSourceId)
+  const dsUrl = originDs?.getDataSourceJson()?.url as string
+  if (!dsUrl) return null
+
+  const layer = mapView.map.allLayers.find((l: any) => {
+    return l.type === 'feature' && l.url && dsUrl.toLowerCase().includes(l.url.toLowerCase())
+  }) as __esri.FeatureLayer | undefined
+
+  return layer || null
+}
+
+export interface ApplyFilterEffectParams {
+  mapView: __esri.MapView | __esri.SceneView
+  dataSourceId: string
+  joinField: string
+  /** Join values from the currently filtered/searched feed items */
+  filteredJoinValues: string[]
+  /** All join values from the full (unfiltered) feed item set */
+  allJoinValues: string[]
+}
+
+/**
+ * Apply a FeatureEffect to the joined layer so that features matching the
+ * current filter/search stay fully visible while non-matching features are
+ * dimmed (grayscale + reduced opacity). Clears the effect when no filter
+ * is active (i.e., filteredJoinValues equals allJoinValues).
+ */
+export async function applyFilterEffect (params: ApplyFilterEffectParams): Promise<void> {
+  const { mapView, dataSourceId, joinField, filteredJoinValues, allJoinValues } = params
+
+  const featureLayer = findJoinedFeatureLayer(mapView, dataSourceId)
+  if (!featureLayer) {
+    debugLogger.log('FEATURE-EFFECT', { action: 'no-layer-found', dataSourceId })
+    return
+  }
+
+  let layerView: __esri.FeatureLayerView
+  try {
+    layerView = await mapView.whenLayerView(featureLayer) as __esri.FeatureLayerView
+  } catch (err) {
+    debugLogger.log('FEATURE-EFFECT', {
+      action: 'layerview-error',
+      error: err instanceof Error ? err.message : 'Unknown'
+    })
+    return
+  }
+
+  // No filter active — clear any existing effect
+  if (filteredJoinValues.length === allJoinValues.length) {
+    if (layerView.featureEffect) {
+      layerView.featureEffect = null
+      debugLogger.log('FEATURE-EFFECT', { action: 'cleared', reason: 'no-active-filter' })
+    }
+    return
+  }
+
+  // Build WHERE clause for matching features
+  // Determine if values are numeric or string
+  const allNumeric = filteredJoinValues.length > 0 &&
+    filteredJoinValues.every(v => /^-?\d+(\.\d+)?$/.test(v))
+
+  const inList = allNumeric
+    ? filteredJoinValues.join(',')
+    : filteredJoinValues.map(v => `'${v.replace(/'/g, "''")}'`).join(',')
+
+  const where = filteredJoinValues.length > 0
+    ? `${joinField} IN (${inList})`
+    : '1=0' // No matches — dim everything
+
+  layerView.featureEffect = new FeatureEffect({
+    filter: new FeatureFilter({ where }),
+    excludedEffect: 'grayscale(100%) opacity(30%)'
+  })
+
+  debugLogger.log('FEATURE-EFFECT', {
+    action: 'applied',
+    matchCount: filteredJoinValues.length,
+    totalCount: allJoinValues.length,
+    where: where.length > 200 ? where.substring(0, 200) + '...' : where
+  })
+}
+
+/**
+ * Clear any active FeatureEffect on the joined layer.
+ * Safe to call even if no effect is set.
+ */
+export async function clearFilterEffect (
+  mapView: __esri.MapView | __esri.SceneView,
+  dataSourceId: string
+): Promise<void> {
+  const featureLayer = findJoinedFeatureLayer(mapView, dataSourceId)
+  if (!featureLayer) return
+
+  try {
+    const layerView = await mapView.whenLayerView(featureLayer) as __esri.FeatureLayerView
+    if (layerView.featureEffect) {
+      layerView.featureEffect = null
+      debugLogger.log('FEATURE-EFFECT', { action: 'cleared' })
+    }
+  } catch {
+    // LayerView not available — nothing to clear
+  }
 }

@@ -9,8 +9,8 @@
  * - Minor fix: Increment MINOR_VERSION (e.g., 1 -> 2) while keeping same RELEASE_NUMBER
  */
 const BASE_VERSION = '1.19.0'
-const RELEASE_NUMBER = '001' // Increment on major changes (001, 002, 003, ...)
-const MINOR_VERSION = '039' // r001.039: Auto-restore feed layer visibility on card interaction
+const RELEASE_NUMBER = '002' // Increment on major changes (001, 002, 003, ...)
+const MINOR_VERSION = '047' // r002.047: collapsible color legend bar above card list
 
 export const WIDGET_VERSION = MINOR_VERSION && Number(MINOR_VERSION) > 0
   ? `${BASE_VERSION}-r${RELEASE_NUMBER}.${MINOR_VERSION}`

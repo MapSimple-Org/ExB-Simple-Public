@@ -14,5 +14,6 @@ export default {
   expandCard: 'Show all fields',
   collapseCard: 'Hide fields',
   zoomDisabledNoGeometry: 'No geometry available',
-  scrollToTop: 'Scroll to top'
+  scrollToTop: 'Scroll to top',
+  colorLegend: 'Color Key'
 }

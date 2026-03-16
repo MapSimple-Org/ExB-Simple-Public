@@ -2,6 +2,7 @@
 import {
   React,
   jsx,
+  css,
   hooks
 } from 'jimu-core'
 import { Select, NumericInput, defaultMessages as jimuUIMessages } from 'jimu-ui'
@@ -62,17 +63,32 @@ export function BufferInput (props: Props) {
     onBufferChange(d, e.target.value)
   }, [onBufferChange, d])
 
+  /**
+   * Prevent iOS Safari auto-zoom on input focus.
+   * iOS zooms when focusing any input/select with computed font-size < 16px.
+   */
+  const mobileInputZoomFix = css`
+    @media (max-width: 1024px) {
+      input, select,
+      .jimu-numeric-input input {
+        font-size: 16px !important;
+      }
+    }
+  `
+
   return (
     <React.Fragment>
       <NumericInput
         aria-label={getI18nMessage('theBufferDistance')}
         className='mr-1'
+        css={mobileInputZoomFix}
         value={d}
         onChange={handleDistanceChange}
         onAcceptValue={handleDistanceAccepted}
       />
       <Select
         aria-label={getI18nMessage('unit')}
+        css={mobileInputZoomFix}
         value={u}
         onChange={handleBufferUnitChange}
       >

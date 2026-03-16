@@ -395,4 +395,82 @@ Both are rendered conditionally in the widget's render tree:
 
 ---
 
-*Last updated: r001.035 (2026-03-13)*
+## FeatureEffect on Joined Layer (r002.027)
+
+When search or filter is active, non-matching features on the joined map layer
+are dimmed using JSAPI's `FeatureEffect`. This provides visual feedback on the
+map showing which features correspond to the currently visible cards.
+
+### Effect Application Flow
+
+```
+ syncJoinedLayerFilterEffect()               <- widget.tsx
+      |
+      +-- Guard: no mapView or no DS?
+      |   → return
+      |
+      +-- Collect filteredJoinValues from
+      |   getProcessedItems().allProcessed
+      |   (items after search/filter, before pagination)
+      |
+      +-- Collect allJoinValues from
+      |   this.state.items (all items)
+      |
+      +-- applyFilterEffect({                 <- map-interaction.ts
+      |     mapView, dataSourceId,
+      |     joinField, filteredJoinValues,
+      |     allJoinValues
+      |   })
+      |
+      v
+ applyFilterEffect(params)                   <- map-interaction.ts
+      |
+      +-- findJoinedFeatureLayer()
+      |   mapView.map.allLayers.find(
+      |     layer.type === 'feature' &&
+      |     dsUrl.includes(layer.url))
+      |   → bail if not found
+      |
+      +-- mapView.whenLayerView(layer)
+      |   → get LayerView (async)
+      |
+      +-- No filter active?
+      |   (filteredValues.length === allValues.length)
+      |   → layerView.featureEffect = null
+      |   → return (clear effect)
+      |
+      +-- Build WHERE clause:
+      |   joinField IN ('val1','val2',...)
+      |
+      +-- layerView.featureEffect = new FeatureEffect({
+          filter: new FeatureFilter({ where }),
+          excludedEffect: 'grayscale(100%) opacity(30%)'
+        })
+```
+
+### Effect Triggers
+
+| Trigger | Location | Notes |
+|---------|----------|-------|
+| Search change | `onSearchChange` callback | After search query updates |
+| Filter/maxItems change | `componentDidUpdate` | When config filtering changes |
+
+### Effect Cleanup
+
+| Trigger | Action |
+|---------|--------|
+| `componentWillUnmount` | `clearFilterEffect()` |
+| `onActiveViewChange` | `clearFilterEffect()` (view switched) |
+| DataSource change | `clearFilterEffect()` (DS reconfigured) |
+
+```
+ clearFilterEffect(mapView, dataSourceId)    <- map-interaction.ts
+      |
+      +-- findJoinedFeatureLayer()
+      +-- mapView.whenLayerView(layer)
+      +-- layerView.featureEffect = null
+```
+
+---
+
+*Last updated: r002.030 (2026-03-14)*

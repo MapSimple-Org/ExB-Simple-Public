@@ -202,6 +202,25 @@ const bufferRowStyle = css`
   gap: 8px;
 `
 
+/**
+ * Prevent iOS Safari auto-zoom on input focus.
+ * iOS zooms when focusing any input/select with computed font-size < 16px.
+ * 1024px covers both phones and tablets (iPadOS Safari has the same behavior).
+ */
+const mobileInputZoomFix = css`
+  @media (max-width: 1024px) {
+    input, select,
+    .jimu-input, .jimu-input input,
+    .jimu-numeric-input input,
+    .jimu-select select {
+      font-size: 16px !important;
+    }
+    calcite-combobox {
+      font-size: 16px !important;
+    }
+  }
+`
+
 const disabledHintStyle = css`
   font-size: 0.8rem;
   line-height: 1.3;
@@ -764,7 +783,7 @@ export function SpatialTabContent (props: SpatialTabContentProps) {
         })()}
 
         {/* 2. Buffer Distance */}
-        <div css={sectionStyle}>
+        <div css={[sectionStyle, mobileInputZoomFix]}>
           <h4 css={sectionTitleStyle}>Buffer distance</h4>
           <div css={bufferRowStyle}>
             <TextInput
@@ -813,7 +832,7 @@ export function SpatialTabContent (props: SpatialTabContentProps) {
         </div>
 
         {/* 4. Spatial Relationship — Calcite combobox (searchable by label + description) */}
-        <div css={sectionStyle}>
+        <div css={[sectionStyle, mobileInputZoomFix]}>
           <h4 css={sectionTitleStyle}>{getI18nMessage('spatialRelationship')}</h4>
           {spatialMode === 'draw' && !hasDrawnGeometry && (
             <p css={disabledHintStyle}>{getI18nMessage('spatialDrawHint')}</p>
@@ -892,7 +911,7 @@ export function SpatialTabContent (props: SpatialTabContentProps) {
         </div>
 
         {/* 5. Target Layers */}
-        <div css={sectionStyle}>
+        <div css={[sectionStyle, mobileInputZoomFix]}>
           <h4 css={sectionTitleStyle}>Target layers</h4>
           <AdvancedSelect
             staticValues={targetLayerOptions || []}

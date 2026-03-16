@@ -2,8 +2,8 @@
 
 Custom widgets for ArcGIS Experience Builder Developer Edition (1.19.0+). Built for performance, deep-linking, and advanced result management.
 
-**Current Version**: QS `1.19.0-r025.071` | FS `1.19.0-r001.039`
-**Latest Update**: Scroll-to-top, card toolbar, GeoRSS support, layer visibility auto-restore (Mar 13, 2026)
+**Current Version**: QS `1.19.0-r025.072` | FS `1.19.0-r002.047`
+**Latest Update**: iOS auto-zoom fix, mobile popup behavior, color legend, field chip UX (Mar 16, 2026)
 
 ## Key Differentiators (Why QuerySimple?)
 
@@ -17,21 +17,22 @@ QuerySimple is designed to solve the common pain points of the standard Experien
 
 ---
 
-## What's New (Mar 13, 2026)
+## What's New (Mar 16, 2026)
 
-### QuerySimple r025.070–071
+### QuerySimple r025.072
 
-- **Scroll-to-top button**: Theme-aware chevron button appears after scrolling in the results list. Honors ExB app theme colors via CSS variables.
+- **iOS auto-zoom prevention**: Inputs in the spatial tab enforce 16px font on mobile/tablet to stop Safari from zooming
+- **Mobile popup behavior**: 4 new config fields to control popup collapse, dock position, and action bar visibility on small screens. Uses reactive `mapView.watch('popup.visible')` to apply settings when popups open.
 
-### FeedSimple r001.032–039
+### FeedSimple r002.040–047
 
-- **Card action toolbar** (r001.036): Per-card Zoom, Pan, and Expand buttons with disabled state for no-geometry items
-- **GeoRSS support** (r001.037): Auto-splits `<georss:point>` into lat/lon fields at parse time — works with USGS earthquake ATOM feeds out of the box
-- **Scroll-to-top button** (r001.037–038): Theme-aware chevron matching QuerySimple
-- **Auto-restore layer visibility** (r001.039): Feed layer turns on automatically when user clicks a card
-- **Universal XML parser**: Now tested with flat XML, nested (QuakeML), RSS 2.0, ATOM, and ATOM+GeoRSS
+- **Color legend** (r002.047): Collapsible color key bar above the card list — supports exact and range modes
+- **Field chip UX** (r002.047): High-contrast text and scrollable panels for Insert Field, Sortable Fields, and Search Fields
+- **ClassBreaksRenderer** (r002.031): Per-range map symbol overrides (color, size, style)
+- **Pagination, search, sort** (r002.022): Show-more pagination, debounced search, runtime sort controls
+- **iOS auto-zoom fix** (r002.046): Breakpoint widened to 1024px for iPadOS tablets
 
-See [RELEASE_QS-r025.071_FS-r001.039](docs/releases/RELEASE_QS-r025.071_FS-r001.039.md) for full details.
+See [RELEASE_QS-r025.072_FS-r002.047](docs/releases/RELEASE_QS-r025.072_FS-r002.047.md) for full details.
 
 ---
 
@@ -61,11 +62,16 @@ A standalone XML feed consumer widget. Does **not** depend on QuerySimple, Helpe
 
 **Features:**
 - **Universal XML parsing**: Flat XML, nested (QuakeML), RSS 2.0, ATOM, GeoRSS — one parser handles all
-- **Markdown card templates**: Token substitution (`{{field}}`) with filter chain (date, autolink, externalLink)
-- **Configurable polling**: Automatic refresh with exponential backoff on failures
+- **Markdown card templates**: Token substitution (`{{field}}`) with chainable filters (date, math, text, autolink)
+- **Color coding**: Exact match or numeric range modes with per-range map symbol overrides (ClassBreaksRenderer)
+- **Color legend**: Collapsible color key bar so users understand what each color means
+- **Search, sort, pagination**: Debounced search bar, runtime sort dropdown, show-more pagination
+- **Configurable polling**: Automatic refresh with new-item highlighting
 - **Feed Map Layer**: Client-side FeatureLayer from feed coordinates with bidirectional card-map click sync
+- **Mobile popup behavior**: Configurable dock position, collapsed mode, and action bar visibility
 - **Spatial join**: Runtime join to existing FeatureLayer with click-to-zoom and popup
-- **Status field coloring**: Configurable color mapping for status indicators
+- **Card action toolbar**: Per-card Zoom, Pan, and Expand buttons with configurable position (bottom, right, menu)
+- **Responsive design**: Separate mobile card/popup templates, iOS auto-zoom prevention
 - **Debug logging**: `?debug=FETCH,POLL,JOIN,FEED-LAYER` URL parameters
 
 ---

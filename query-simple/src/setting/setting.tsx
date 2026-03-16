@@ -24,7 +24,16 @@ import { ThemeColorPicker } from 'jimu-ui/basic/color-picker'
 import { SettingRow, SettingSection, DirectionSelector, MapWidgetSelector } from 'jimu-ui/advanced/setting-components'
 import { type IMConfig, type QueryArrangeType, type QueryItemType, PagingType, ListDirection, FieldsType } from '../config'
 import defaultMessages from './translations/default'
-import { createGetI18nMessage } from 'widgets/shared-code/mapsimple-common'
+// Inlined from shared-code/mapsimple-common to avoid SystemJS load failure in builder settings context
+type GetI18nMessageType = (id: string, options?: { messages?: any, values?: any }) => string
+function createGetI18nMessage (options: { intl: any, defaultMessages?: any }) {
+  const { intl, defaultMessages = {} } = options || {}
+  const getI18nMessage: GetI18nMessageType = (id, options) => {
+    const { messages, values } = options || {}
+    return intl.formatMessage({ id, defaultMessage: (messages || defaultMessages)[id] }, values)
+  }
+  return getI18nMessage
+}
 import type { ValueManSetByKeyType } from './setting-config'
 import { getOutputJsonOriginDs } from './setting-utils'
 import { QueryItemList } from './query-item-list'
@@ -563,6 +572,69 @@ export default class Setting extends React.PureComponent<AllWidgetSettingProps<I
             </SettingRow>
             <div css={css`font-size: 0.875rem; margin-top: 4px; padding: 0 16px 8px; opacity: 0.8;`}>
               {this.getI18nMessage('zoomExpansionFactorDescription')}
+            </div>
+          </SettingSection>
+        )}
+        {/* r025.072: Mobile Popup Behavior */}
+        {this.props.config.queryItems.length > 0 && (
+          <SettingSection role='group' aria-label={this.getI18nMessage('mobilePopupBehavior')} title={this.getI18nMessage('mobilePopupBehavior')}>
+            <SettingRow label={this.getI18nMessage('mobilePopupCollapsed')}>
+              <Switch
+                checked={config.mobilePopupCollapsed === true}
+                onChange={(e) => {
+                  this.updateConfigForOptions(['mobilePopupCollapsed', e.target.checked])
+                }}
+                aria-label={this.getI18nMessage('mobilePopupCollapsed')}
+              />
+            </SettingRow>
+            <div css={css`font-size: 0.875rem; margin-top: 4px; padding: 0 16px 8px; opacity: 0.8;`}>
+              {this.getI18nMessage('mobilePopupCollapsedDescription')}
+            </div>
+            <SettingRow label={this.getI18nMessage('mobilePopupDockPosition')}>
+              <Select
+                value={config.mobilePopupDockPosition || ''}
+                onChange={(e) => {
+                  this.updateConfigForOptions(['mobilePopupDockPosition', e.target.value])
+                }}
+                css={css`width: 120px;`}
+                aria-label={this.getI18nMessage('mobilePopupDockPosition')}
+              >
+                <option value=''>{this.getI18nMessage('mobilePopupDockPositionAuto')}</option>
+                <option value='top-center'>{this.getI18nMessage('mobilePopupDockPositionTop')}</option>
+                <option value='bottom-center'>{this.getI18nMessage('mobilePopupDockPositionBottom')}</option>
+              </Select>
+            </SettingRow>
+            <div css={css`font-size: 0.875rem; margin-top: 4px; padding: 0 16px 8px; opacity: 0.8;`}>
+              {this.getI18nMessage('mobilePopupDockPositionDescription')}
+            </div>
+            {/* Progressive disclosure: only show hide dock button when a dock position is set */}
+            {config.mobilePopupDockPosition && (
+              <React.Fragment>
+                <SettingRow label={this.getI18nMessage('mobilePopupHideDockButton')}>
+                  <Switch
+                    checked={config.mobilePopupHideDockButton === true}
+                    onChange={(e) => {
+                      this.updateConfigForOptions(['mobilePopupHideDockButton', e.target.checked])
+                    }}
+                    aria-label={this.getI18nMessage('mobilePopupHideDockButton')}
+                  />
+                </SettingRow>
+                <div css={css`font-size: 0.875rem; margin-top: 4px; padding: 0 16px 8px; opacity: 0.8;`}>
+                  {this.getI18nMessage('mobilePopupHideDockButtonDescription')}
+                </div>
+              </React.Fragment>
+            )}
+            <SettingRow label={this.getI18nMessage('mobilePopupHideActionBar')}>
+              <Switch
+                checked={config.mobilePopupHideActionBar === true}
+                onChange={(e) => {
+                  this.updateConfigForOptions(['mobilePopupHideActionBar', e.target.checked])
+                }}
+                aria-label={this.getI18nMessage('mobilePopupHideActionBar')}
+              />
+            </SettingRow>
+            <div css={css`font-size: 0.875rem; margin-top: 4px; padding: 0 16px 8px; opacity: 0.8;`}>
+              {this.getI18nMessage('mobilePopupHideActionBarDescription')}
             </div>
           </SettingSection>
         )}

@@ -227,6 +227,15 @@ export interface SettingConfig {
   addResultsAsMapLayer?: boolean
   /** Custom title for the results layer in LayerList. Default: 'QuerySimple Results'. */
   resultsLayerTitle?: string
+  // Mobile Popup Behavior (≤ 600px viewport)
+  /** Open popup collapsed (title only) on mobile viewports ≤ 600px (default false) */
+  mobilePopupCollapsed?: boolean
+  /** Dock position on mobile: '' (auto/JSAPI default), 'top-center', 'bottom-center' */
+  mobilePopupDockPosition?: '' | 'top-center' | 'bottom-center'
+  /** Hide the dock toggle button on mobile so users can't undock (default false) */
+  mobilePopupHideDockButton?: boolean
+  /** Hide the popup action bar (zoom-to, etc.) on mobile viewports ≤ 600px (default false) */
+  mobilePopupHideActionBar?: boolean
   sizeMap?: {
     arrangementIconPopper?: SizeMap
   }

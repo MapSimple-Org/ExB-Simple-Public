@@ -79,6 +79,9 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
   private accumulatedRecordsManager = new AccumulatedRecordsManager()
   // Chunk 7: Event Handling Manager (r018.59) - Step 7.1: Create Event Manager
   private eventManager = new EventManager()
+  // r025.072: Mobile popup behavior — JSAPI watch handle
+  private popupVisibleHandle: __esri.WatchHandle | null = null
+
   // Chunk 3: Selection & Restoration Manager (r019.1) - Section 3.1: Selection State Tracking
   private selectionRestorationManager = new SelectionRestorationManager(
     () => this.state, // stateGetter
@@ -436,6 +439,9 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
     
     // Unregister widget config from HighlightConfigManager (r022.91)
     highlightConfigManager.unregisterConfig(this.props.id)
+
+    // r025.072: Clean up mobile popup watch handle
+    this.popupVisibleHandle?.remove()
     
     debugLogger.log('WIDGET-STATE', {
       event: 'widget-closed',
@@ -550,6 +556,9 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
     
     // Chunk 4: Graphics layer is now required (r018.25 - Step 4.3: Remove config change handling)
     // No need to handle config changes for graphics layer since it's always enabled
+
+    // r025.072: No proactive re-apply needed — popup behavior is applied reactively
+    // each time a popup opens via the popup.visible watch in setupMobilePopupWatch().
   }
 
   /**
@@ -734,14 +743,71 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
   }
 
   /**
+   * r025.072: Set up a reactive watch on popup.visible via the view.
+   * The popup object is NOT initialized until the first popup opens, so we cannot
+   * touch mapView.popup proactively. Instead we watch 'popup.visible' on the view
+   * (JSAPI supports nested property watches) and apply all mobile behavior — dock,
+   * action bar, collapsed — each time a popup becomes visible.
+   * Separate from HelperSimple's MutationObserver (which tracks popup close for
+   * selection restoration).
+   */
+  private setupMobilePopupWatch (): void {
+    const mapView = this.mapViewManager.getMapView() || this.mapViewRef.current
+    if (!mapView) return
+
+    // Clean up previous handle
+    this.popupVisibleHandle?.remove()
+
+    // Watch popup.visible on the view — fires when popup opens or closes.
+    // At this point mapView.popup is guaranteed to exist.
+    this.popupVisibleHandle = mapView.watch('popup.visible', (visible: boolean) => {
+      if (!visible || !mapView.popup) return
+      const config = this.props.config
+      const isMobile = mapView.width <= 600
+
+      // Collapsed
+      if (isMobile && config.mobilePopupCollapsed) {
+        mapView.popup.collapsed = true
+      }
+
+      // Dock position
+      if (isMobile && config.mobilePopupDockPosition) {
+        mapView.popup.dockEnabled = true
+        mapView.popup.dockOptions = {
+          position: config.mobilePopupDockPosition,
+          buttonEnabled: !config.mobilePopupHideDockButton
+        } as any
+      }
+
+      // Hide action bar
+      if (isMobile && config.mobilePopupHideActionBar) {
+        mapView.popup.visibleElements = {
+          ...mapView.popup.visibleElements as any,
+          actionBar: false
+        } as any
+      }
+
+      debugLogger.log('POPUP', {
+        event: 'mobile-popup-behavior-applied',
+        isMobile,
+        collapsed: isMobile && !!config.mobilePopupCollapsed,
+        dockPosition: config.mobilePopupDockPosition || 'auto',
+        hideActionBar: !!config.mobilePopupHideActionBar,
+        viewportWidth: mapView.width,
+        timestamp: Date.now()
+      })
+    })
+  }
+
+  /**
    * Handles map view change from JimuMapViewComponent.
-   * 
+   *
    * This method is called by JimuMapViewComponent when the map view becomes available
    * or changes. It delegates to MapViewManager for reference management and initializes
    * the graphics layer if enabled in widget configuration.
-   * 
+   *
    * @param jimuMapView - The JimuMapView instance from JimuMapViewComponent, or null if unavailable
-   * 
+   *
    * @since 1.19.0-r018.18 (Chunk 6: Manager implementation)
    * @see {@link MapViewManager} for map view reference management
    */
@@ -776,6 +842,9 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
               }
             })
           }
+
+          // r025.072: Set up reactive popup watch (applies behavior when popup opens)
+          this.setupMobilePopupWatch()
         }
       }
     )

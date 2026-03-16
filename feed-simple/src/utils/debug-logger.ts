@@ -13,10 +13,12 @@
  * - RENDER: Card rendering and template substitution
  * - POLL: Polling lifecycle (interval, pause, resume, backoff)
  * - JOIN: Feature service spatial join (Mode B)
+ * - FEED-LAYER: Feed map layer creation, sync, renderer, popups (Mode C)
  * - TEMPLATE: Token substitution and filter pipeline
+ * - SETTINGS: Settings panel field discovery and configuration
  */
 
-type DebugFeature = 'BUG' | 'FETCH' | 'PARSE' | 'RENDER' | 'POLL' | 'JOIN' | 'TEMPLATE' | 'all' | 'false'
+type DebugFeature = 'BUG' | 'FETCH' | 'PARSE' | 'RENDER' | 'POLL' | 'JOIN' | 'FEED-LAYER' | 'TEMPLATE' | 'SETTINGS' | 'all' | 'false'
 
 interface DebugLoggerOptions {
   widgetName: string
@@ -140,6 +142,6 @@ class DebugLogger {
 export function createFeedSimpleDebugLogger() {
   return new DebugLogger({
     widgetName: 'FEEDSIMPLE',
-    features: ['FETCH', 'PARSE', 'RENDER', 'POLL', 'JOIN', 'TEMPLATE']
+    features: ['FETCH', 'PARSE', 'RENDER', 'POLL', 'JOIN', 'FEED-LAYER', 'TEMPLATE', 'SETTINGS']
   })
 }

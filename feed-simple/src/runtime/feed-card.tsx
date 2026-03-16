@@ -1,9 +1,11 @@
 /** @jsx jsx */
 import { React, jsx, css } from 'jimu-core'
+import { Dropdown, DropdownButton, DropdownMenu, DropdownItem } from 'jimu-ui'
 import type { FeedItem } from '../utils/parsers/interface'
-import type { StatusColorMap } from '../config'
+import type { StatusColorMap, RangeColorBreak } from '../config'
 import { substituteTokens, type FilterContext } from '../utils/token-renderer'
 import { convertTemplateToHtml } from '../utils/markdown-template-utils'
+import { resolveCardColor } from '../utils/color-resolver'
 
 export interface FeedCardProps {
   /** The feed item data (key-value pairs) */
@@ -18,6 +20,10 @@ export interface FeedCardProps {
   statusField: string
   /** Map of status values to background hex colors */
   statusColorMap: StatusColorMap
+  /** Color mode: 'exact' (string match) or 'range' (numeric ranges). Default 'exact'. */
+  colorMode?: 'exact' | 'range'
+  /** Numeric range breaks for range-based color coding */
+  rangeColorBreaks?: RangeColorBreak[]
   /** Field whose value appears as hover tooltip */
   hoverTextField: string
   /** Filter context for token substitution (externalLinkTemplate + dateFormatString) */
@@ -43,6 +49,14 @@ export interface FeedCardProps {
   onZoom?: (item: FeedItem) => void
   /** Callback for Pan button click */
   onPan?: (item: FeedItem) => void
+  /** URL to open when the link button is clicked (resolved from linkField) */
+  linkUrl?: string
+  /** Toolbar position: 'bottom' (horizontal), 'right' (vertical strip), or 'menu' (kebab dropdown) */
+  toolbarPosition?: 'bottom' | 'right' | 'menu'
+  /** Mobile card template — shown at viewport widths ≤ 600px. Falls back to desktop cardTemplate if empty. */
+  cardTemplateMobile?: string
+  /** Mobile toolbar position override — applied at viewport widths ≤ 600px. Empty = use desktop setting. */
+  toolbarPositionMobile?: '' | 'bottom' | 'right' | 'menu'
   /** i18n labels for toolbar buttons */
   toolbarLabels?: {
     zoom: string
@@ -50,6 +64,7 @@ export interface FeedCardProps {
     expand: string
     collapse: string
     noGeometry: string
+    link: string
   }
 }
 
@@ -76,6 +91,21 @@ const ChevronDownIcon = () => (
 const ChevronUpIcon = () => (
   <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
     <path d="M7.646 4.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1-.708.708L8 5.707l-5.646 5.647a.5.5 0 0 1-.708-.708l6-6z"/>
+  </svg>
+)
+
+const KebabIcon = () => (
+  <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="8" cy="3" r="1.5"/>
+    <circle cx="8" cy="8" r="1.5"/>
+    <circle cx="8" cy="13" r="1.5"/>
+  </svg>
+)
+
+const LinkExternalIcon = () => (
+  <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+    <path d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"/>
+    <path d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"/>
   </svg>
 )
 
@@ -112,62 +142,305 @@ const toolbarBtnDisabledCss = css`
   cursor: default;
 `
 
+const dropdownItemIconCss = css`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+`
+
 export default function FeedCard (props: FeedCardProps): React.ReactElement {
   const {
     item, isHighlighted, isSelected,
-    cardTemplate, statusField, statusColorMap, hoverTextField,
+    cardTemplate, cardTemplateMobile, statusField, statusColorMap, colorMode, rangeColorBreaks, hoverTextField,
     filterContext, clickable, highlightDurationMs, onClick,
     noGeometryMessage,
     showZoomButton, showPanButton, showExpandButton,
-    hasGeometry, onZoom, onPan, toolbarLabels
+    hasGeometry, onZoom, onPan, linkUrl, toolbarPosition, toolbarPositionMobile, toolbarLabels
   } = props
+
+  // Desktop toolbar mode
+  const desktopPos = toolbarPosition || 'bottom'
+  const isRightToolbar = desktopPos === 'right' || desktopPos === 'menu'
+  const isMenuMode = desktopPos === 'menu'
+  const hasToolbar = !!(showZoomButton || showPanButton || linkUrl || (showExpandButton && cardTemplate))
+
+  // Mobile toolbar mode (falls back to desktop when not set)
+  const mobilePos = toolbarPositionMobile || desktopPos
+  const hasMobileToolbarOverride = hasToolbar && mobilePos !== desktopPos
+  const isMobileRight = mobilePos === 'right' || mobilePos === 'menu'
+  const isMobileMenu = mobilePos === 'menu'
+
+  // Responsive content: separate mobile card template
+  const hasMobileContent = !!(cardTemplateMobile && cardTemplateMobile !== cardTemplate)
 
   // Expand state (local to this card)
   const [isExpanded, setIsExpanded] = React.useState(false)
+  // Menu open state (for kebab menu mode — managed by jimu-ui Dropdown)
+  const [isMenuOpen, setIsMenuOpen] = React.useState(false)
 
-  // Determine background color from status field
-  let bgColor = 'transparent'
-  if (statusField && item[statusField] && statusColorMap) {
-    const statusValue = item[statusField]
-    const mappedColor = (statusColorMap as any)[statusValue]
-    if (mappedColor) {
-      bgColor = mappedColor.startsWith('#') ? mappedColor : `#${mappedColor}`
-    }
-  }
+  // Determine background color from status field (supports exact match and range modes)
+  const bgColor = resolveCardColor(item, {
+    statusField,
+    colorMode: colorMode || 'exact',
+    statusColorMap,
+    rangeColorBreaks: rangeColorBreaks as RangeColorBreak[] | undefined
+  })
 
   // Hover tooltip text
   const hoverText = hoverTextField && item[hoverTextField] ? item[hoverTextField] : undefined
 
-  // Render card content
-  let content: React.ReactElement
-  if (cardTemplate) {
-    // Substitute {{tokens}} first (before markdown conversion mangles | and " chars)
-    const substituted = substituteTokens(cardTemplate, item, filterContext)
+  // ── Responsive CSS ──
+  const responsiveDesktopCss = css`
+    @media (max-width: 600px) { display: none !important; }
+  `
+  const responsiveMobileCss = css`
+    display: none !important;
+    @media (max-width: 600px) { display: block !important; }
+  `
+  const responsiveMobileFlexCss = css`
+    display: none !important;
+    @media (max-width: 600px) { display: flex !important; }
+  `
+
+  // ── Content rendering helper ──
+  const templateCss = css`
+    p { margin: 0 0 4px 0; }
+    h3, h4, h5, h6 { margin: 0 0 4px 0; }
+    hr { margin: 6px 0; border: none; border-top: 1px solid #ddd; }
+    ul { margin: 0; padding-left: 20px; }
+    li { margin-bottom: 2px; }
+    a { color: #0079c1; text-decoration: none; &:hover { text-decoration: underline; } }
+  `
+
+  const renderTemplateContent = (tmpl: string): React.ReactElement => {
+    const substituted = substituteTokens(tmpl, item, filterContext)
     const rendered = convertTemplateToHtml(substituted)
-    content = (
-      <div
-        css={css`
-          p { margin: 0 0 4px 0; }
-          h3, h4, h5, h6 { margin: 0 0 4px 0; }
-          hr { margin: 6px 0; border: none; border-top: 1px solid #ddd; }
-          ul { margin: 0; padding-left: 20px; }
-          li { margin-bottom: 2px; }
-          a { color: #0079c1; text-decoration: none; &:hover { text-decoration: underline; } }
+    return <div css={templateCss} dangerouslySetInnerHTML={{ __html: rendered }} />
+  }
+
+  const renderRawFields = (): React.ReactElement => (
+    <div css={css`overflow-wrap: break-word; word-break: break-word;`}>
+      {Object.entries(item).map(([key, value]) => (
+        <div key={key} css={css`margin-bottom: 2px;`}>
+          <strong css={css`color: #555; font-size: 0.7rem; text-transform: uppercase; overflow-wrap: break-word;`}>{key}:</strong>{' '}
+          <span css={css`font-size: 0.85rem;`}>{value}</span>
+        </div>
+      ))}
+    </div>
+  )
+
+  // Render card content (desktop)
+  const content = cardTemplate ? renderTemplateContent(cardTemplate) : renderRawFields()
+  // Render mobile content (only when a different mobile template is set)
+  const mobileContent = hasMobileContent ? renderTemplateContent(cardTemplateMobile) : null
+
+  // ── Toolbar rendering helpers ──
+
+  /** Render button-style toolbar (used for 'bottom' and 'right' positions) */
+  const renderButtonToolbar = (isVertical: boolean): React.ReactElement => (
+    <div css={css`
+      display: flex;
+      flex-direction: ${isVertical ? 'column' : 'row'};
+      align-items: center;
+      gap: 4px;
+      ${isVertical
+        ? `
+          padding-left: 6px;
+          border-left: 1px solid rgba(0, 0, 0, 0.08);
+          flex-shrink: 0;
+        `
+        : `
+          margin-top: 6px;
+          padding-top: 6px;
+          border-top: 1px solid rgba(0, 0, 0, 0.08);
         `}
-        dangerouslySetInnerHTML={{ __html: rendered }}
-      />
-    )
-  } else {
-    // No template — show raw fields
-    content = (
-      <div css={css`overflow-wrap: break-word; word-break: break-word;`}>
-        {Object.entries(item).map(([key, value]) => (
-          <div key={key} css={css`margin-bottom: 2px;`}>
-            <strong css={css`color: #555; font-size: 0.7rem; text-transform: uppercase; overflow-wrap: break-word;`}>{key}:</strong>{' '}
-            <span css={css`font-size: 0.85rem;`}>{value}</span>
-          </div>
-        ))}
-      </div>
+    `}>
+      {showZoomButton && (
+        <button
+          css={hasGeometry !== false ? toolbarBtnCss : toolbarBtnDisabledCss}
+          title={hasGeometry !== false
+            ? (toolbarLabels?.zoom || 'Zoom to feature')
+            : (toolbarLabels?.noGeometry || 'No geometry available')}
+          onClick={(evt) => {
+            evt.stopPropagation()
+            if (hasGeometry !== false && onZoom) onZoom(item)
+          }}
+        >
+          <ZoomIcon />
+        </button>
+      )}
+      {showPanButton && (
+        <button
+          css={hasGeometry !== false ? toolbarBtnCss : toolbarBtnDisabledCss}
+          title={hasGeometry !== false
+            ? (toolbarLabels?.pan || 'Pan to feature')
+            : (toolbarLabels?.noGeometry || 'No geometry available')}
+          onClick={(evt) => {
+            evt.stopPropagation()
+            if (hasGeometry !== false && onPan) onPan(item)
+          }}
+        >
+          <PanIcon />
+        </button>
+      )}
+      {linkUrl && (
+        <button
+          css={toolbarBtnCss}
+          title={toolbarLabels?.link || 'Open link'}
+          onClick={(evt) => {
+            evt.stopPropagation()
+            window.open(linkUrl, '_blank', 'noopener,noreferrer')
+          }}
+        >
+          <LinkExternalIcon />
+        </button>
+      )}
+      {showExpandButton && cardTemplate && (
+        <button
+          css={toolbarBtnCss}
+          title={isExpanded
+            ? (toolbarLabels?.collapse || 'Hide fields')
+            : (toolbarLabels?.expand || 'Show all fields')}
+          onClick={(evt) => {
+            evt.stopPropagation()
+            setIsExpanded(prev => !prev)
+          }}
+        >
+          {isExpanded ? <ChevronUpIcon /> : <ChevronDownIcon />}
+        </button>
+      )}
+    </div>
+  )
+
+  /** Render kebab dropdown toolbar (used for 'menu' position) */
+  const renderKebabMenu = (): React.ReactElement => (
+    <div css={css`
+      padding-left: 6px;
+      border-left: 1px solid rgba(0, 0, 0, 0.08);
+      flex-shrink: 0;
+    `}>
+      <Dropdown
+        isOpen={isMenuOpen}
+        toggle={(evt) => {
+          if (evt) evt.stopPropagation()
+          setIsMenuOpen(prev => !prev)
+        }}
+        direction='down'
+      >
+        <DropdownButton
+          size='sm'
+          type='tertiary'
+          icon
+          arrow={false}
+          aria-label='Actions menu'
+          title='Actions'
+          css={toolbarBtnCss}
+        >
+          <KebabIcon />
+        </DropdownButton>
+        <DropdownMenu css={css`min-width: 160px;`}>
+          {showZoomButton && (
+            <DropdownItem
+              disabled={hasGeometry === false}
+              onClick={() => { if (hasGeometry !== false && onZoom) onZoom(item) }}
+            >
+              <span css={dropdownItemIconCss}><ZoomIcon /> {toolbarLabels?.zoom || 'Zoom to feature'}</span>
+            </DropdownItem>
+          )}
+          {showPanButton && (
+            <DropdownItem
+              disabled={hasGeometry === false}
+              onClick={() => { if (hasGeometry !== false && onPan) onPan(item) }}
+            >
+              <span css={dropdownItemIconCss}><PanIcon /> {toolbarLabels?.pan || 'Pan to feature'}</span>
+            </DropdownItem>
+          )}
+          {linkUrl && (
+            <DropdownItem
+              onClick={() => { window.open(linkUrl, '_blank', 'noopener,noreferrer') }}
+            >
+              <span css={dropdownItemIconCss}><LinkExternalIcon /> {toolbarLabels?.link || 'Open link'}</span>
+            </DropdownItem>
+          )}
+          {showExpandButton && cardTemplate && (
+            <DropdownItem
+              onClick={() => { setIsExpanded(prev => !prev) }}
+            >
+              <span css={dropdownItemIconCss}>
+                {isExpanded ? <ChevronUpIcon /> : <ChevronDownIcon />}
+                {isExpanded
+                  ? (toolbarLabels?.collapse || 'Hide fields')
+                  : (toolbarLabels?.expand || 'Show all fields')}
+              </span>
+            </DropdownItem>
+          )}
+        </DropdownMenu>
+      </Dropdown>
+    </div>
+  )
+
+  /** Render the toolbar for a given position */
+  const renderToolbarForPosition = (pos: string): React.ReactElement | null => {
+    if (!hasToolbar) return null
+    if (pos === 'menu') return renderKebabMenu()
+    if (pos === 'right') return renderButtonToolbar(true)
+    return renderButtonToolbar(false) // 'bottom'
+  }
+
+  /** Whether a position uses a side (right) layout */
+  const isSideLayout = (pos: string): boolean => pos === 'right' || pos === 'menu'
+
+  /**
+   * Render the full card layout: content + toolbar.
+   * When mobile overrides are active, renders both desktop and mobile variants
+   * with CSS media queries toggling visibility at 600px.
+   */
+  const renderCardLayout = (): React.ReactElement => {
+    const needsResponsive = hasMobileContent || hasMobileToolbarOverride
+
+    if (!needsResponsive) {
+      // Simple path: no responsive variants needed
+      return (
+        <div css={css`
+          display: flex;
+          flex-direction: ${isRightToolbar && hasToolbar ? 'row' : 'column'};
+          gap: ${isRightToolbar && hasToolbar ? '8px' : '0'};
+        `}>
+          <div css={css`flex: 1; min-width: 0;`}>{content}</div>
+          {renderToolbarForPosition(desktopPos)}
+        </div>
+      )
+    }
+
+    // Responsive path: render desktop and mobile layouts, toggle with media queries
+    const desktopSide = isSideLayout(desktopPos)
+    const mobileSide = isSideLayout(mobilePos)
+    const desktopContent = content
+    const mobileContentEl = mobileContent || content
+
+    return (
+      <React.Fragment>
+        {/* Desktop layout — hidden at ≤ 600px */}
+        <div css={css`
+          display: flex;
+          flex-direction: ${desktopSide && hasToolbar ? 'row' : 'column'};
+          gap: ${desktopSide && hasToolbar ? '8px' : '0'};
+          @media (max-width: 600px) { display: none !important; }
+        `}>
+          <div css={css`flex: 1; min-width: 0;`}>{desktopContent}</div>
+          {renderToolbarForPosition(desktopPos)}
+        </div>
+        {/* Mobile layout — hidden at > 600px */}
+        <div css={css`
+          display: none;
+          flex-direction: ${mobileSide && hasToolbar ? 'row' : 'column'};
+          gap: ${mobileSide && hasToolbar ? '8px' : '0'};
+          @media (max-width: 600px) { display: flex !important; }
+        `}>
+          <div css={css`flex: 1; min-width: 0;`}>{mobileContentEl}</div>
+          {renderToolbarForPosition(mobilePos)}
+        </div>
+      </React.Fragment>
     )
   }
 
@@ -221,61 +494,8 @@ export default function FeedCard (props: FeedCardProps): React.ReactElement {
           animation: feedSimpleHighlight ${highlightDurationMs}ms ease-out forwards;
         `} />
       )}
-      {content}
-      {/* ── Action Toolbar ── */}
-      {(showZoomButton || showPanButton || (showExpandButton && cardTemplate)) && (
-        <div css={css`
-          display: flex;
-          align-items: center;
-          gap: 4px;
-          margin-top: 6px;
-          padding-top: 6px;
-          border-top: 1px solid rgba(0, 0, 0, 0.08);
-        `}>
-          {showZoomButton && (
-            <button
-              css={hasGeometry !== false ? toolbarBtnCss : toolbarBtnDisabledCss}
-              title={hasGeometry !== false
-                ? (toolbarLabels?.zoom || 'Zoom to feature')
-                : (toolbarLabels?.noGeometry || 'No geometry available')}
-              onClick={(evt) => {
-                evt.stopPropagation()
-                if (hasGeometry !== false && onZoom) onZoom(item)
-              }}
-            >
-              <ZoomIcon />
-            </button>
-          )}
-          {showPanButton && (
-            <button
-              css={hasGeometry !== false ? toolbarBtnCss : toolbarBtnDisabledCss}
-              title={hasGeometry !== false
-                ? (toolbarLabels?.pan || 'Pan to feature')
-                : (toolbarLabels?.noGeometry || 'No geometry available')}
-              onClick={(evt) => {
-                evt.stopPropagation()
-                if (hasGeometry !== false && onPan) onPan(item)
-              }}
-            >
-              <PanIcon />
-            </button>
-          )}
-          {showExpandButton && cardTemplate && (
-            <button
-              css={toolbarBtnCss}
-              title={isExpanded
-                ? (toolbarLabels?.collapse || 'Hide fields')
-                : (toolbarLabels?.expand || 'Show all fields')}
-              onClick={(evt) => {
-                evt.stopPropagation()
-                setIsExpanded(prev => !prev)
-              }}
-            >
-              {isExpanded ? <ChevronUpIcon /> : <ChevronDownIcon />}
-            </button>
-          )}
-        </div>
-      )}
+      {/* ── Card layout: content + toolbar ── */}
+      {renderCardLayout()}
       {/* ── Expanded Raw Fields ── */}
       {isExpanded && (
         <div css={css`

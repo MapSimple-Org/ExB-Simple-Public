@@ -5,6 +5,169 @@ All notable changes to the FeedSimple widget will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.19.0-r002.047] - 2026-03-15 - Color Legend
+
+### Added
+
+- **Collapsible color legend** (r002.047): New `ColorLegend` component (`feed-legend.tsx`) renders a thin color key bar between FeedControls and the card list. Shows color swatches with labels for both exact-match and range color modes. Collapsed by default (inline swatches); click chevron to expand for detail view with range bounds. Admin-togglable via `showColorLegend` config field (defaults to on when `statusField` is set).
+
+## [1.19.0-r002.046] - 2026-03-15 - iOS Auto-Zoom Breakpoint Update
+
+### Changed
+
+- **iOS auto-zoom breakpoint** (r002.046): Widened `@media (max-width: 600px)` to `@media (max-width: 1024px)` in `feed-controls.tsx` for both search input and sort select. Covers iPadOS tablets which have the same Safari auto-zoom behavior as phones.
+
+## [1.19.0-r002.042] - 2026-03-14 - Mobile Popup Behavior
+
+### Added
+
+- **Mobile popup collapsed** (r002.042): New `mobilePopupCollapsed` config toggle. When enabled, popups open showing only the title bar on mobile viewports (≤ 600px). Users tap to expand. Uses JSAPI `popup.open({ collapsed: true })`.
+- **Mobile popup dock position** (r002.042): New `mobilePopupDockPosition` config field. Pins the popup to `top-center` or `bottom-center` on mobile. When set, `dockEnabled` is forced to `true` and `dockOptions.position` is applied. Desktop behavior unchanged (JSAPI defaults restored at > 600px).
+- **Hide dock button on mobile** (r002.042): New `mobilePopupHideDockButton` config toggle. When enabled alongside a dock position, removes the dock/undock toggle from the popup header on mobile so end users can't reposition it. Only shown in settings when dock position is explicitly set.
+- **`applyMobilePopupBehavior` helper** (r002.042): Reusable function in `feed-layer-manager.ts` that sets dock state before `popup.open()` and restores JSAPI defaults on desktop-width viewports. Applied in `zoomToFeedPoint()`, `panToFeedPoint()`, and `identifyFeatureOnMap()`.
+
+## [1.19.0-r002.041] - 2026-03-14 - Responsive Mobile Support, Kebab Menu
+
+### Added
+
+- **Mobile popup template** (r002.039): New `feedMapLayerPopupTemplateMobile` config field. When set, both desktop and mobile popup content are rendered and toggled via CSS `@media (max-width: 600px)` query. No JS viewport detection needed — browser handles switching dynamically on resize. Falls back to desktop popup template when empty.
+- **Popup change detection** (r002.039): `feedMapLayerPopupTemplate`, `feedMapLayerPopupTemplateMobile`, and `feedMapLayerPopupTitle` now trigger feed layer recreation in `componentDidUpdate`. Previously, changing popup config required another config change (e.g., marker color) to take effect.
+- **Mobile card template** (r002.041): New `cardTemplateMobile` config field. Renders both desktop and mobile card content within each `FeedCard`, toggled via CSS media query at 600px. Same `{{token}}` syntax. Falls back to desktop card template when empty.
+- **Mobile toolbar position** (r002.041): New `toolbarPositionMobile` config field. Overrides card toolbar layout at ≤ 600px (Bottom / Right / Menu). When set, both desktop and mobile toolbar variants are rendered with CSS media query toggle. Empty = use desktop setting.
+- **Popup mobile template cascade** (r002.041): When no explicit mobile popup template is set, popup falls back to `cardTemplateMobile` before the desktop popup template. Cascade: `feedMapLayerPopupTemplateMobile → cardTemplateMobile → desktop popup`.
+
+### Changed
+
+- **Hamburger → Kebab menu** (r002.040): Card toolbar "Menu" mode now uses a kebab icon (⋮ three vertical dots) instead of hamburger (☰). Industry standard per Material Design and Apple HIG — hamburger is for app-level navigation, kebab is for item-level actions.
+- **jimu-ui Dropdown for menu toolbar** (r002.040): Replaced custom absolute-positioned dropdown with jimu-ui `Dropdown`/`DropdownButton`/`DropdownMenu`/`DropdownItem` components. Portal-based rendering (`appendToBody` default) eliminates clipping in scrollable card containers. Removed manual click-outside `useEffect` handler and `menuRef`.
+- **Feed-card refactored for responsive rendering** (r002.041): Extracted `renderButtonToolbar()`, `renderKebabMenu()`, `renderToolbarForPosition()`, and `renderCardLayout()` helper functions. `renderCardLayout()` handles both simple (no mobile overrides) and responsive (dual-render with CSS media queries) paths.
+- **Settings label update** (r002.040): Toolbar position "Menu" option renamed to "Menu (⋮)" with description updated to "kebab dropdown."
+
+## [1.19.0-r002.036] - 2026-03-15 - ClassBreaksRenderer, UX Polish, Settings Overhaul
+
+### Added
+
+- **ClassBreaksRenderer for feed map layer** (r002.031): Range-based map symbology using JSAPI `ClassBreaksRenderer`. Each range break can have independent color, size, and marker style on the map. Status field declared as `type: 'double'` with `parseFloat` conversion in sync. Plain autocast objects for symbols (JSAPI `ClassBreakInfo` rejects pre-constructed instances).
+- **Map symbol color override** (r002.031): `mapColor` field on `RangeColorBreak` — independent of card color for when card backgrounds need subtlety but map symbols need punch. Card color and map color stay synced until the user explicitly sets a different map color, then they become independent.
+- **Global marker outline config** (r002.031): `feedMapLayerOutlineColor` and `feedMapLayerOutlineWidth` settings. Width 0 = no outline (`outline: null`). Applies to all markers (default, simple, and every class break).
+- **Range break drag-and-drop reorder** (r002.032): Drag handle on each range break row for reordering via native HTML5 drag-and-drop. Replaces up/down arrow buttons.
+- **Center on Card Click** (r002.033): New `enableCenterOnClick` toggle — pans map to feature without changing zoom level. Mutually exclusive with Zoom on Card Click (validation enforced in settings). Zoom toolbar button hidden only when Zoom on Click is enabled.
+- **Numeric min/max filter** (r002.034): New `filterNumericMin` / `filterNumericMax` config for range color mode. Replaces checkbox-per-value with a numeric range filter. Items outside the configured bounds are excluded from cards and map. `applyNumericFilter()` added to pipeline between status filter and search.
+- **Source attribution footer** (r002.034): Optional `sourceLabel` and `sourceUrl` config — renders a small footer below the card list with credit and link to the original data source.
+- **Auto-discover fields on panel mount** (r002.035): Settings panel automatically runs field discovery when `feedUrl` is set and no fields are cached. Eliminates the broken-looking panel on reopen. Manual "Discover Fields" button remains as fallback.
+- **Template syntax help on Popup Template** (r002.035): Same expandable help reference panel added below the popup template textarea.
+- **Dynamic popup title** (r002.036): New `feedMapLayerPopupTitle` config with `{{token}}` substitution. Uses JSAPI function-based `PopupTemplate.title` to resolve per feature. Falls back to static layer title if empty.
+
+### Changed
+
+- **External Link → Card Options** (r002.033): Merged "External Link" section into "Card Options". External link template now appears as an option in the Link Field dropdown when configured, eliminating the separate section.
+- **Card Options section** (r002.033): "Enable Card Expand" and "Link Field" moved out of "Zoom & Click Behavior" into new "Card Options" section — visible without map integration.
+- **Popup template → textarea** (r002.035): Replaced single-line `TextInput` with multi-line `textarea` for popup templates.
+- **Search controls progressive disclosure** (r002.035): Search placeholder and field list hidden when "Enable Search Bar" is off.
+- **Pagination labels progressive disclosure** (r002.035): "Show More" label and "Show All" toggle hidden when `maxItems` is 0.
+- **"Display Limits" → "Display Limits" with numeric filter** (r002.034): Range mode shows min/max numeric inputs instead of status value checkboxes.
+
+### Fixed
+
+- **Dark mode colors** (r002.032): Replaced 8+ hardcoded light-mode colors (`#c00`, `#fff`, `#333`, `#d4edda`, `#155724`, `#6c757d`) with ExB theme CSS variables (`--sys-color-danger-main`, `--sys-color-surface-overlay`, `--sys-color-text-primary`, `--sys-color-success-main`, `--sys-color-success-container`, `--sys-color-text-tertiary`).
+- **Template help panel overflow** (r002.035): Added `overflow-x: auto` and `max-width: 100%` to prevent help content from overflowing the settings panel width.
+- **HTML entity in section title** (r002.032): Fixed `'Zoom &amp; Click Behavior'` rendering literally as `&amp;`.
+- **Accessibility** (r002.032): Added `aria-label` to all 5 color inputs, 3 reorder/remove buttons, card template textarea, and field token buttons. Added `aria-expanded` to template help toggle.
+- **console.log → debugLogger** (r002.032): Replaced 5 `console.log`/`console.error` calls in settings with `debugLogger.log('SETTINGS', ...)`. Registered `SETTINGS` debug tag.
+- **NumericInput consistency** (r002.032): Changed Marker Size, Zoom Level, and Zoom Buffer from `onChange` (fires per keystroke) to `onAcceptValue` (fires on commit). Added `max={23}` to Zoom Level.
+- **Helper text consistency** (r002.032): Standardized all helper text to `font-size: 11px`. Replaced `opacity: 0.5/0.6` with `color: var(--sys-color-text-tertiary)`.
+
+## [1.19.0-r002.030] - 2026-03-14 - Chainable Filters, Range Colors, Map FeatureEffect
+
+### Added
+
+- **Chainable pipe filters in card templates** (r002.023–024): Full rewrite of token substitution engine to support left-to-right chained pipes. New filters: math operators (`/N`, `*N`, `+N`, `-N`), `round:N`, `prefix:text`, `suffix:text`, `abs`, `toFixed:N`, `upper`, `lower`. Pipes split by `|` respecting quoted strings. Example: `{{field | /1000 | round:1 | suffix: km}}` converts 2400m → "2.4 km". All existing filters (date, autolink, externalLink) remain backward compatible.
+- **24-hour time and timezone offset in date filter** (r002.025): New date tokens `HH` (24-hour padded), `H` (24-hour unpadded), `Z` (timezone offset like `-07:00`). Enables `{{field | "YYYY-MM-DD HH:mm:ss (UTCZ)"}}` for ISO-style local timestamps.
+- **Template syntax help panel** (r002.026): Expandable help panel in settings replaces outdated hint text. Covers tokens, markdown, filters, math operations, date tokens, and usage examples. Dark theme compatible with `color: inherit` and translucent code backgrounds.
+- **Range-based card color coding** (r002.027–029): New `colorMode` config (`'exact'` | `'range'`). Range mode uses `RangeColorBreak[]` with `min` (inclusive), `max` (exclusive), `color`, and `label`. Settings panel includes color mode dropdown, range break editor with color pickers, min/max numeric inputs, label fields, and add/remove buttons. New `color-resolver.ts` utility with `resolveCardColor()` routing to exact or range resolution.
+- **Range label search and sort** (r002.029–030): Virtual fields `__colorRangeLabel` (label text) and `__colorRangeOrder` (break index) injected into items via `enrichItemsWithRangeLabels()`. Search automatically picks up range labels. "Range label" option in sort dropdown (shown when range mode has labeled breaks) sorts by break index for natural ordering (e.g., Low → Moderate → Severe).
+- **FeatureEffect on joined map layers** (r002.027): When search/filter is active, non-matching features on the joined map layer are dimmed via `FeatureEffect` with `grayscale(100%) opacity(30%)`. New `applyFilterEffect()` and `clearFilterEffect()` in `map-interaction.ts`. Effect syncs with search changes, filter changes, and clears on unmount/view change.
+
+### Changed
+
+- **Sort icon** (r002.023): Replaced custom SVG triangle with `SortAscendingArrowOutlined` / `SortDescendingArrowOutlined` from `jimu-icons/outlined/directional/`.
+- **"Status Colors" → "Card Colors"** (r002.027): Settings section renamed to reflect broader color coding capabilities.
+- **FeedCard color resolution** (r002.028): Replaced inline color lookup with `resolveCardColor()` from `color-resolver.ts`, supporting both exact and range modes.
+
+### New Files
+
+- `src/utils/color-resolver.ts` — Color resolution utility (exact match + numeric range), virtual field enrichment for range labels
+
+## [1.19.0-r002.022] - 2026-03-14 - CSV Export Hidden, Pipeline Tests
+
+### Changed
+
+- **CSV Export hidden from settings** (r002.022): CSV Export section wrapped in `{false && ...}` — feature not ready for production. Default `enableCsvExport` remains `false`. Code intact for future re-enablement.
+- **Controls padding** (r002.021): Changed `feed-controls.tsx` container padding from `8px 10px` to `8px 0px` — stretches to edge.
+
+### Added
+
+- **Pipeline unit tests** (r002.022): 37 new tests in `feed-pipeline.test.ts` — covers `applyStatusFilter`, `searchItems`, `sortItems`, `paginateItems`, and full `runPipeline` integration. Total test count: 137 across 4 files.
+
+## [1.19.0-r002.021] - 2026-03-14 - Search/Filter Block Padding
+
+### Changed
+
+- **Controls container padding** (r002.021): Changed `feed-controls.tsx` container padding from `8px 10px` to `8px 0px` — stretches search and sort controls flush to the container edge for a cleaner full-width appearance.
+
+## [1.19.0-r002.020] - 2026-03-14 - Feed Map Layer Race Condition Fix
+
+### Fixed
+
+- **Map layer timing bug** (r002.020): Fixed race condition where mapView arrived before items, causing `initFeedLayer` to be skipped entirely. When items arrive after mapView, now calls `syncFeedLayer` (which creates the layer if needed) instead of `syncFeedLayerWithProcessedItems` (which assumed the layer already existed). This was the root cause of "hit and miss" point rendering on the map.
+
+## [1.19.0-r002.019] - 2026-03-14 - Layer Sync Diagnostic Logging
+
+### Added
+
+- **Layer sync diagnostics** (r002.019): Added coordinate sample logging, `applyEdits` result checking, and post-sync verification to the feed map layer sync pipeline for easier debugging of point rendering issues.
+
+## [1.19.0-r002.018] - 2026-03-14 - Link Field Toolbar Icon
+
+### Added
+
+- **Link field on card toolbar** (r002.018): New `linkField` config property specifying a feed field that contains a URL. Cards with a link value display a `LinkExternalIcon` SVG button on the toolbar that opens the URL in a new tab (`noopener,noreferrer`). Toolbar visibility check updated to include `linkUrl`.
+
+## [1.19.0-r002.016] - 2026-03-14 - CORS Proxy Support via esriRequest
+
+### Changed
+
+- **Feed fetcher rewrite** (r002.016): Rewrote `feed-fetcher.ts` to use dynamically imported `esriRequest` with a native `fetch` fallback. New `loadEsriRequest()` helper checks `window.require` and `window.parent.require` for the AMD loader. Feeds that require a CORS proxy (e.g., GDACS via `feed-proxy.php`) now work at runtime through the `esriRequest` → portal proxy chain. Comprehensive `debugLogger` logging added throughout the fetch chain.
+
+## [1.19.0-r002.011] - 2026-03-14 - Sort & Search Styling Refinements
+
+### Changed
+
+- **Sort arrow styling** (r002.011–015): Wider solid triangle icon, 32px uniform height for all controls, alignment fixes across sort and search bar.
+- **Search input styling** (r002.011–015): Borderless styling for a cleaner appearance.
+- **Sort placeholder text** (r002.011–015): "Sort" shown as placeholder when no field is selected.
+- **Sort + search packaging** (r002.011–015): Sort controls hidden when `enableSearchBar=false`. Direction arrow hidden when no field-based sort is active (`isFieldSort` check).
+- **"Reverse feed order" dropdown option** (r002.011–015): Added as a dedicated dropdown entry using `__reverse__` sentinel value — replaces the previous complex arrow-click-to-reverse behavior.
+
+## [1.19.0-r002.010] - 2026-03-14 - Zoom Settings Gating Fix
+
+### Fixed
+
+- **Zoom settings visibility** (r002.010): Zoom options (zoom level, zoom buffer) are now available even without "zoom on click" enabled, since those settings are also used by toolbar zoom-to functionality.
+
+## [1.19.0-r002.001] - 2026-03-14 - 2.0 Features: Pagination, Search, Sort, CSV Export
+
+### Added
+
+- **Expand-style pagination** (r002.001–009): "Show More" button appends the next batch of cards (not page-flip). Configurable `showMoreLabel` with `{n}` remaining-count token, optional "Show All" button, and `itemLabelSingular`/`itemLabelPlural` config for count display.
+- **Client-side text search** (r002.001–009): Case-insensitive substring search with 200ms debounce. Configurable `searchFields` array (empty = search all fields). New `FeedControls` component (`feed-controls.tsx`) containing the search input and sort controls. Results label and no-results message. Map layer automatically syncs with the active search filter.
+- **Runtime sort controls** (r002.001–009): Sort field dropdown and direction toggle button packaged alongside the search bar in `FeedControls`. Config-driven defaults via `sortField`/`sortDirection`. `sortableFields` restricts which fields appear in the dropdown. "Feed order" and "Reverse feed order" (`__reverse__` sentinel) options in dropdown. Direction arrow hidden when no field sort is active. Sort controls hidden when `enableSearchBar=false`.
+- **CSV Export** (r002.001–009): Client-side CSV generation from `allProcessed` pipeline results. Configurable `exportFields`, `columnHeaderLabels`, and `exportFilenameTemplate` (supports `{date}` token). BOM prefix for Excel compatibility. New `feed-csv-export.ts` utility.
+
+### Changed
+
+- **Processing pipeline refactor** (r002.001–009): Replaced inline `getDisplayItems()` + `sortItems()` with a centralized `runPipeline()` function in new `feed-pipeline.ts`. Pipeline stages: filter → search → sort → paginate. Items stored unsorted — the pipeline handles sort at render time.
+
 ## [1.19.0-r001.039] - 2026-03-13 - Layer Visibility Auto-Restore
 
 ### Added

@@ -27,5 +27,6 @@ export default {
   externalLink: 'External Link',
   externalLinkTemplate: 'Link URL Template',
   enableCardExpand: 'Show Expand Button',
-  enableCardExpandDesc: 'Adds a button to each card that reveals all raw field values'
+  enableCardExpandDesc: 'Adds a button to each card that reveals all raw field values',
+  showColorLegend: 'Show color legend'
 }
