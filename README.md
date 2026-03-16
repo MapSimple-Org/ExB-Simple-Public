@@ -243,4 +243,4 @@ Set `exbVersion` in `manifest.json` to match or be LESS than Enterprise's ExB ve
 
 ---
 
-© 2025 MapSimple Organization.
+© 2026 MapSimple Organization.
