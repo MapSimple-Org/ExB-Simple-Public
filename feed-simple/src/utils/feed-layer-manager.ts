@@ -15,13 +15,12 @@ import Popup from 'esri/widgets/Popup'
 import PopupTemplate from 'esri/PopupTemplate'
 import CustomContent from 'esri/popup/content/CustomContent'
 import ClassBreaksRenderer from 'esri/renderers/ClassBreaksRenderer'
-import type { FeedSimpleConfig } from '../config'
+import type { FeedSimpleConfig, IMConfig, RangeColorBreak } from '../config'
 import type { FeedItem } from './parsers/interface'
 import { substituteTokens, type FilterContext } from './token-renderer'
 import { convertTemplateToHtml } from './markdown-template-utils'
-import { createFeedSimpleDebugLogger } from './debug-logger'
-
-const debugLogger = createFeedSimpleDebugLogger()
+import { debugLogger } from './debug-logger'
+import { MOBILE_BREAKPOINT_PX } from '../constants'
 
 /** Prefix for the generated layer ID */
 const LAYER_ID_PREFIX = 'feedsimple-points-'
@@ -44,13 +43,22 @@ export function sanitizeFieldName (fieldName: string): string {
     .replace(/\]/g, '')
 }
 
+/** Cached field mapping — avoids rebuilding Maps when fieldNames haven't changed */
+let cachedFieldNames: string[] | null = null
+let cachedFieldMapping: { toSanitized: Map<string, string>; toOriginal: Map<string, string> } | null = null
+
 /**
  * Build bidirectional mapping between original field names and sanitized names.
+ * Caches the result — returns the same Maps if fieldNames reference is unchanged.
  */
 export function buildFieldMapping (fieldNames: string[]): {
   toSanitized: Map<string, string>
   toOriginal: Map<string, string>
 } {
+  if (cachedFieldMapping && cachedFieldNames === fieldNames) {
+    return cachedFieldMapping
+  }
+
   const toSanitized = new Map<string, string>()
   const toOriginal = new Map<string, string>()
   for (const name of fieldNames) {
@@ -58,7 +66,9 @@ export function buildFieldMapping (fieldNames: string[]): {
     toSanitized.set(name, sanitized)
     toOriginal.set(sanitized, name)
   }
-  return { toSanitized, toOriginal }
+  cachedFieldNames = fieldNames
+  cachedFieldMapping = { toSanitized, toOriginal }
+  return cachedFieldMapping
 }
 
 // ── Config Check ─────────────────────────────────────────────────
@@ -66,7 +76,7 @@ export function buildFieldMapping (fieldNames: string[]): {
 /**
  * Whether feed map layer is fully configured.
  */
-export function isFeedMapLayerConfigured (config: FeedSimpleConfig): boolean {
+export function isFeedMapLayerConfigured (config: IMConfig): boolean {
   return !!(
     config.enableFeedMapLayer &&
     config.latitudeField &&
@@ -83,7 +93,7 @@ export function isFeedMapLayerConfigured (config: FeedSimpleConfig): boolean {
  */
 export function createFeedFeatureLayer (
   widgetId: string,
-  config: FeedSimpleConfig,
+  config: IMConfig,
   fieldNames: string[]
 ): __esri.FeatureLayer {
   const layerId = LAYER_ID_PREFIX + widgetId
@@ -92,7 +102,7 @@ export function createFeedFeatureLayer (
 
   // When using ClassBreaksRenderer, the status field must be numeric (double)
   const useClassBreaks = config.colorMode === 'range' &&
-    config.rangeColorBreaks && (config.rangeColorBreaks as any).length > 0 &&
+    config.rangeColorBreaks && config.rangeColorBreaks.length > 0 &&
     config.statusField
   const numericStatusField = useClassBreaks ? sanitizeFieldName(config.statusField) : ''
 
@@ -143,23 +153,33 @@ export function createFeedFeatureLayer (
  * correctly renders popups for both native map clicks and programmatic opens.
  */
 export function buildPopupTemplate (
-  config: FeedSimpleConfig,
+  config: IMConfig,
   fieldNames: string[],
   filterContext: FilterContext,
   fieldMapping: { toOriginal: Map<string, string> }
 ): __esri.PopupTemplate {
   const template = config.feedMapLayerPopupTemplate || config.cardTemplate
   const staticTitle = config.feedMapLayerTitle || 'Feed Item'
-  const popupTitleTemplate = (config as any).feedMapLayerPopupTitle as string | undefined
+  const popupTitleTemplate = config.feedMapLayerPopupTitle || ''
+  const popupTitleTemplateMobile = config.feedMapLayerPopupTitleMobile || ''
 
   // Build title: dynamic function when popupTitle template is set, static string otherwise
-  const title: string | ((feature: any) => string) = popupTitleTemplate
+  // When a mobile title is configured, use mapView width to pick the right template
+  const title: string | ((feature: any) => string) = popupTitleTemplate || popupTitleTemplateMobile
     ? (feature: any) => {
         try {
           const attrs = feature?.graphic?.attributes
           if (!attrs) return staticTitle
           const item = reconstructFeedItem(attrs, fieldMapping.toOriginal)
-          return substituteTokens(popupTitleTemplate, item, filterContext)
+          // Pick the right title template based on viewport width
+          const mapView = feature?.graphic?.layer?.parent // mapView is the layer's parent
+          const isMobile = mapView?.width ? mapView.width <= MOBILE_BREAKPOINT_PX : false
+          const activeTemplate = (isMobile && popupTitleTemplateMobile)
+            ? popupTitleTemplateMobile
+            : (popupTitleTemplate || staticTitle)
+          return typeof activeTemplate === 'string' && activeTemplate.includes('{{')
+            ? substituteTokens(activeTemplate, item, filterContext)
+            : activeTemplate
         } catch {
           return staticTitle
         }
@@ -183,7 +203,7 @@ export function buildPopupTemplate (
   // Use CustomContent to render card template HTML from feature attributes
   // Mobile popup cascade: explicit mobile popup → mobile card template → desktop popup
   const mobileTemplate = config.feedMapLayerPopupTemplateMobile
-    || (config as any).cardTemplateMobile
+    || config.cardTemplateMobile
     || ''
   const customContent = new CustomContent({
     outFields: ['*'],
@@ -213,7 +233,7 @@ export function buildPopupTemplate (
           const mobileHtml = convertTemplateToHtml(mobileSubstituted)
 
           const style = document.createElement('style')
-          style.textContent = `${baseStyles}.feed-popup-mobile{display:none}@media(max-width:600px){.feed-popup-desktop{display:none}.feed-popup-mobile{display:block}}`
+          style.textContent = `${baseStyles}.feed-popup-mobile{display:none}@media(max-width:${MOBILE_BREAKPOINT_PX}px){.feed-popup-desktop{display:none}.feed-popup-mobile{display:block}}`
           div.appendChild(style)
           div.innerHTML += `<div class="feed-popup-desktop">${html}</div><div class="feed-popup-mobile">${mobileHtml}</div>`
         } else {
@@ -261,84 +281,137 @@ function reconstructFeedItem (
 // ── Layer Sync (Poll Cycle) ──────────────────────────────────────
 
 /**
- * Sync feed items to the FeatureLayer via applyEdits (full replace).
- * Skips items with missing or invalid coordinates.
+ * Build a Graphic from a feed item with sanitized attributes and Point geometry.
+ * Returns null if the item has missing or invalid coordinates.
+ */
+function buildGraphicFromItem (
+  item: FeedItem,
+  index: number,
+  config: IMConfig,
+  fieldNames: string[],
+  fieldMapping: { toSanitized: Map<string, string> },
+  numericStatusField: string,
+  itemId: string
+): __esri.Graphic | null {
+  const latStr = item[config.latitudeField]
+  const lonStr = item[config.longitudeField]
+  if (!latStr || !lonStr) return null
+
+  const lat = parseFloat(latStr)
+  const lon = parseFloat(lonStr)
+  if (isNaN(lat) || isNaN(lon) || lat < -90 || lat > 90 || lon < -180 || lon > 180) return null
+
+  const attributes: Record<string, any> = {
+    OBJECTID: index + 1,
+    FEED_ITEM_ID: itemId
+  }
+  for (const fieldName of fieldNames) {
+    const sanitized = fieldMapping.toSanitized.get(fieldName) || sanitizeFieldName(fieldName)
+    const rawValue = item[fieldName] ?? ''
+    if (sanitized === numericStatusField && rawValue !== '') {
+      const num = parseFloat(rawValue)
+      attributes[sanitized] = isNaN(num) ? null : num
+    } else {
+      attributes[sanitized] = rawValue
+    }
+  }
+
+  return new Graphic({
+    geometry: new Point({
+      longitude: lon,
+      latitude: lat,
+      spatialReference: { wkid: 4326 }
+    }),
+    attributes
+  })
+}
+
+/**
+ * Apply batched applyEdits to the layer. Returns counts of succeeded and failed.
+ */
+async function batchApplyEdits (
+  layer: __esri.FeatureLayer,
+  edits: { addFeatures?: __esri.Graphic[]; deleteFeatures?: __esri.Graphic[]; updateFeatures?: __esri.Graphic[] },
+  logAction: string
+): Promise<{ succeeded: number; failed: number }> {
+  // Determine which array to batch
+  const features = edits.addFeatures || edits.deleteFeatures || edits.updateFeatures || []
+  const editKey = edits.addFeatures ? 'addFeatures' : edits.deleteFeatures ? 'deleteFeatures' : 'updateFeatures'
+  const resultKey = edits.addFeatures ? 'addFeatureResults' : edits.deleteFeatures ? 'deleteFeatureResults' : 'updateFeatureResults'
+
+  let totalSucceeded = 0
+  let totalFailed = 0
+  const BATCH_SIZE = 500
+
+  for (let start = 0; start < features.length; start += BATCH_SIZE) {
+    const batch = features.slice(start, start + BATCH_SIZE)
+    try {
+      const result = await layer.applyEdits({ [editKey]: batch })
+      const results = (result as any)[resultKey] || []
+      const succeeded = results.filter((r: any) => !r.error).length
+      const failed = results.filter((r: any) => r.error).length
+      totalSucceeded += succeeded
+      totalFailed += failed
+      if (failed > 0) {
+        debugLogger.log('FEED-LAYER', {
+          action: `${logAction}-partial-failure`,
+          batchStart: start,
+          batchSize: batch.length,
+          succeeded,
+          failed,
+          firstError: results.find((r: any) => r.error)?.error?.message || 'Unknown'
+        })
+      }
+    } catch (err) {
+      totalFailed += batch.length
+      debugLogger.log('FEED-LAYER', {
+        action: `${logAction}-error`,
+        batchStart: start,
+        batchSize: batch.length,
+        error: err instanceof Error ? err.message : 'Unknown'
+      })
+    }
+  }
+
+  return { succeeded: totalSucceeded, failed: totalFailed }
+}
+
+/**
+ * Sync feed items to the FeatureLayer via diff-based applyEdits.
+ * Compares item IDs to determine adds, deletes, and updates instead of
+ * replacing all features on every cycle. Skips items with invalid coordinates.
  */
 export async function syncFeedItemsToLayer (
   layer: __esri.FeatureLayer,
   items: FeedItem[],
-  config: FeedSimpleConfig,
+  config: IMConfig,
   fieldNames: string[],
   getItemId: (item: FeedItem) => string
 ): Promise<number> {
   const fieldMapping = buildFieldMapping(fieldNames)
 
-  // 1. Delete all existing features
-  try {
-    const existing = await layer.queryFeatures({ where: '1=1', outFields: ['OBJECTID'] })
-    if (existing.features.length > 0) {
-      await layer.applyEdits({ deleteFeatures: existing.features })
-    }
-  } catch (err) {
-    debugLogger.log('FEED-LAYER', {
-      action: 'sync-delete-error',
-      error: err instanceof Error ? err.message : 'Unknown'
-    })
-  }
-
   // Determine if the status field should be stored as a number (for ClassBreaksRenderer)
   const useClassBreaks = config.colorMode === 'range' &&
-    config.rangeColorBreaks && (config.rangeColorBreaks as any).length > 0 &&
+    config.rangeColorBreaks && config.rangeColorBreaks.length > 0 &&
     config.statusField
   const numericStatusField = useClassBreaks ? sanitizeFieldName(config.statusField) : ''
 
-  // 2. Build new graphics from items
+  // Build new graphics from incoming items
   let skippedCount = 0
-  const graphics: __esri.Graphic[] = []
+  const newGraphics: __esri.Graphic[] = []
+  const newIdSet = new Set<string>()
 
   for (let i = 0; i < items.length; i++) {
-    const item = items[i]
-    const latStr = item[config.latitudeField]
-    const lonStr = item[config.longitudeField]
-
-    if (!latStr || !lonStr) {
+    const itemId = getItemId(items[i])
+    const graphic = buildGraphicFromItem(
+      items[i], i, config, fieldNames, fieldMapping, numericStatusField, itemId
+    )
+    if (graphic) {
+      newGraphics.push(graphic)
+      newIdSet.add(itemId)
+    } else {
       skippedCount++
-      continue
     }
-
-    const lat = parseFloat(latStr)
-    const lon = parseFloat(lonStr)
-
-    if (isNaN(lat) || isNaN(lon) || lat < -90 || lat > 90 || lon < -180 || lon > 180) {
-      skippedCount++
-      continue
-    }
-
-    // Build sanitized attributes
-    const attributes: Record<string, any> = {
-      OBJECTID: i + 1,
-      FEED_ITEM_ID: getItemId(item)
-    }
-    for (const fieldName of fieldNames) {
-      const sanitized = fieldMapping.toSanitized.get(fieldName) || sanitizeFieldName(fieldName)
-      const rawValue = item[fieldName] ?? ''
-      // Store numeric status field as a number so ClassBreaksRenderer can match
-      if (sanitized === numericStatusField && rawValue !== '') {
-        const num = parseFloat(rawValue)
-        attributes[sanitized] = isNaN(num) ? null : num
-      } else {
-        attributes[sanitized] = rawValue
-      }
-    }
-
-    graphics.push(new Graphic({
-      geometry: new Point({
-        longitude: lon,
-        latitude: lat,
-        spatialReference: { wkid: 4326 }
-      }),
-      attributes
-    }))
   }
 
   // Log coordinate extraction for first 3 items to help debug missing points
@@ -355,9 +428,8 @@ export async function syncFeedItemsToLayer (
         lonValue: sItem[config.longitudeField] ?? '(missing)'
       })
     }
-    // Log numeric status field values for ClassBreaksRenderer debugging
-    if (numericStatusField && graphics.length > 0) {
-      const samples = graphics.slice(0, 3)
+    if (numericStatusField && newGraphics.length > 0) {
+      const samples = newGraphics.slice(0, 3)
       debugLogger.log('FEED-LAYER', {
         action: 'class-breaks-values',
         numericField: numericStatusField,
@@ -369,68 +441,89 @@ export async function syncFeedItemsToLayer (
     }
   }
 
-  // 3. Add new features
-  let addedTotal = 0
-  let addErrors = 0
-  if (graphics.length > 0) {
-    // Batch in groups of 500 for large feeds
-    const BATCH_SIZE = 500
-    for (let start = 0; start < graphics.length; start += BATCH_SIZE) {
-      const batch = graphics.slice(start, start + BATCH_SIZE)
-      try {
-        const result = await layer.applyEdits({ addFeatures: batch })
-        const addResults = (result as any).addFeatureResults || []
-        const succeeded = addResults.filter((r: any) => !r.error).length
-        const failed = addResults.filter((r: any) => r.error).length
-        addedTotal += succeeded
-        addErrors += failed
-        if (failed > 0) {
-          debugLogger.log('FEED-LAYER', {
-            action: 'applyEdits-partial-failure',
-            batchStart: start,
-            batchSize: batch.length,
-            succeeded,
-            failed,
-            firstError: addResults.find((r: any) => r.error)?.error?.message || 'Unknown'
-          })
-        }
-      } catch (err) {
-        addErrors += batch.length
-        debugLogger.log('FEED-LAYER', {
-          action: 'applyEdits-error',
-          batchStart: start,
-          batchSize: batch.length,
-          error: err instanceof Error ? err.message : 'Unknown'
-        })
-      }
+  // Query existing features for diff
+  let existingFeatures: __esri.Graphic[] = []
+  try {
+    const existing = await layer.queryFeatures({ where: '1=1', outFields: ['OBJECTID', 'FEED_ITEM_ID'] })
+    existingFeatures = existing.features
+  } catch (err) {
+    debugLogger.log('FEED-LAYER', {
+      action: 'sync-query-error',
+      error: err instanceof Error ? err.message : 'Unknown'
+    })
+    // Fall through — treat as empty layer, will add all
+  }
+
+  // Build map of existing FEED_ITEM_ID → OBJECTID for diff
+  const existingIdMap = new Map<string, number>()
+  for (const f of existingFeatures) {
+    const fid = f.attributes.FEED_ITEM_ID as string
+    const oid = f.attributes.OBJECTID as number
+    if (fid) existingIdMap.set(fid, oid)
+  }
+
+  // Diff: determine adds, updates, deletes
+  const toAdd: __esri.Graphic[] = []
+  const toUpdate: __esri.Graphic[] = []
+  for (const g of newGraphics) {
+    const feedId = g.attributes.FEED_ITEM_ID as string
+    const existingOid = existingIdMap.get(feedId)
+    if (existingOid !== undefined) {
+      // Existing feature — update with current attributes and the existing OBJECTID
+      g.attributes.OBJECTID = existingOid
+      toUpdate.push(g)
+    } else {
+      // New feature — add
+      toAdd.push(g)
     }
   }
 
-  // Verify features actually exist on layer after sync
-  try {
-    const verify = await layer.queryFeatureCount({ where: '1=1' })
-    debugLogger.log('FEED-LAYER', {
-      action: 'sync-verify',
-      expectedCount: graphics.length,
-      actualCount: verify,
-      match: verify === graphics.length
-    })
-  } catch (err) {
-    debugLogger.log('FEED-LAYER', {
-      action: 'sync-verify-error',
-      error: err instanceof Error ? err.message : 'Unknown'
-    })
+  // Features to delete: existing IDs not in the new set
+  const toDelete: __esri.Graphic[] = []
+  for (const f of existingFeatures) {
+    const fid = f.attributes.FEED_ITEM_ID as string
+    if (fid && !newIdSet.has(fid)) {
+      toDelete.push(f)
+    }
   }
 
   debugLogger.log('FEED-LAYER', {
-    action: 'sync-complete',
-    totalItems: items.length,
-    pointsAdded: addedTotal,
-    addErrors,
-    skipped: skippedCount
+    action: 'sync-diff',
+    existing: existingFeatures.length,
+    incoming: newGraphics.length,
+    toAdd: toAdd.length,
+    toUpdate: toUpdate.length,
+    toDelete: toDelete.length
   })
 
-  return graphics.length
+  // Apply edits — only the operations that have features
+  let addResult = { succeeded: 0, failed: 0 }
+  let updateResult = { succeeded: 0, failed: 0 }
+  let deleteResult = { succeeded: 0, failed: 0 }
+
+  if (toDelete.length > 0) {
+    deleteResult = await batchApplyEdits(layer, { deleteFeatures: toDelete }, 'sync-delete')
+  }
+  if (toUpdate.length > 0) {
+    updateResult = await batchApplyEdits(layer, { updateFeatures: toUpdate }, 'sync-update')
+  }
+  if (toAdd.length > 0) {
+    addResult = await batchApplyEdits(layer, { addFeatures: toAdd }, 'sync-add')
+  }
+
+  // Verify features actually exist on layer after sync (debug only)
+  debugLogger.log('FEED-LAYER', {
+    action: 'sync-complete',
+    totalItems: items.length,
+    pointsOnLayer: newGraphics.length,
+    added: addResult.succeeded,
+    updated: updateResult.succeeded,
+    deleted: deleteResult.succeeded,
+    errors: addResult.failed + updateResult.failed + deleteResult.failed,
+    skippedCoords: skippedCount
+  })
+
+  return newGraphics.length
 }
 
 // ── Layer Destruction ────────────────────────────────────────────
@@ -491,7 +584,7 @@ function buildMarkerSymbol (
  * classBreakInfos correctly. Symbols are plain objects (autocast) because
  * ClassBreakInfo's internal setter rejects pre-constructed symbol instances.
  */
-function buildRenderer (config: FeedSimpleConfig): __esri.Renderer {
+function buildRenderer (config: IMConfig): __esri.Renderer {
   const globalColor = config.feedMapLayerColor || '#FF4500'
   const globalSize = config.feedMapLayerSize || 8
   const globalStyle = config.feedMapLayerMarkerStyle || 'circle'
@@ -499,7 +592,7 @@ function buildRenderer (config: FeedSimpleConfig): __esri.Renderer {
   const outlineWidth = config.feedMapLayerOutlineWidth ?? 1
 
   // ClassBreaksRenderer: when range mode is active with breaks and a status field
-  const breaks = config.rangeColorBreaks as any as Array<{ min: number | null, max: number | null, color: string, label: string, mapColor?: string, size?: number, markerStyle?: string }> | undefined
+  const breaks = config.rangeColorBreaks as RangeColorBreak[] | undefined
   if (
     config.colorMode === 'range' &&
     breaks && breaks.length > 0 &&
@@ -553,23 +646,34 @@ function buildRenderer (config: FeedSimpleConfig): __esri.Renderer {
 
 // ── Mobile Popup Behavior ────────────────────────────────────────
 
+/** Popup behavior params — extracted from config so callers don't need IMConfig */
+export interface MobilePopupParams {
+  mobilePopupDockPosition?: string
+  mobilePopupHideDockButton?: boolean
+  mobilePopupHideActionBar?: boolean
+  mobilePopupCollapsed?: boolean
+}
+
 /**
  * Apply mobile-specific popup behavior when viewport ≤ 600px.
  * Sets dockEnabled / dockOptions on the Popup instance.
  * Restores JSAPI defaults on desktop-width viewports.
+ *
+ * Accepts either an IMConfig or a plain MobilePopupParams object,
+ * so both feed-layer-manager and map-interaction can share this logic.
  */
 export function applyMobilePopupBehavior (
   mapView: __esri.MapView | __esri.SceneView,
-  config: FeedSimpleConfig
+  params: MobilePopupParams
 ): void {
   if (!mapView?.popup) return
-  const isMobile = mapView.width <= 600
+  const isMobile = mapView.width <= MOBILE_BREAKPOINT_PX
 
-  if (isMobile && config.mobilePopupDockPosition) {
+  if (isMobile && params.mobilePopupDockPosition) {
     mapView.popup.dockEnabled = true
     mapView.popup.dockOptions = {
-      position: config.mobilePopupDockPosition,
-      buttonEnabled: !config.mobilePopupHideDockButton
+      position: params.mobilePopupDockPosition,
+      buttonEnabled: !params.mobilePopupHideDockButton
     } as any
   } else if (!isMobile) {
     // Restore JSAPI defaults for desktop
@@ -581,7 +685,7 @@ export function applyMobilePopupBehavior (
   }
 
   // Hide action bar (zoom-to, etc.) on mobile if configured
-  if (isMobile && (config as any).mobilePopupHideActionBar) {
+  if (isMobile && params.mobilePopupHideActionBar) {
     mapView.popup.visibleElements = {
       ...mapView.popup.visibleElements as any,
       actionBar: false
@@ -600,11 +704,11 @@ export function applyMobilePopupBehavior (
 function buildPopupOpenOptions (
   features: __esri.Graphic[],
   location: __esri.Point,
-  config: FeedSimpleConfig,
+  config: IMConfig,
   mapView: __esri.MapView | __esri.SceneView
 ): __esri.PopupOpenOptions {
   const options: any = { features, location }
-  if (config.mobilePopupCollapsed && mapView.width <= 600) {
+  if (config.mobilePopupCollapsed && mapView.width <= MOBILE_BREAKPOINT_PX) {
     options.collapsed = true
   }
   return options
@@ -616,11 +720,19 @@ function buildPopupOpenOptions (
  * Navigate to a feed item's point on the map and open its popup.
  * When skipZoom is true, only the popup/identify is performed (no goTo).
  */
-export async function zoomToFeedPoint (
+/**
+ * Navigate to a feed item's point on the map (zoom or pan) and open its popup.
+ * Consolidates the shared logic from the former zoomToFeedPoint / panToFeedPoint.
+ *
+ * @param mode  'zoom' zooms to point at configured zoom level,
+ *              'pan' centers without changing zoom,
+ *              'select' skips navigation entirely (just opens popup at location)
+ */
+export async function navigateToFeedPoint (
   mapView: __esri.MapView | __esri.SceneView,
   item: FeedItem,
-  config: FeedSimpleConfig,
-  options?: { skipZoom?: boolean }
+  config: IMConfig,
+  mode: 'zoom' | 'pan' | 'select' = 'zoom'
 ): Promise<boolean> {
   const latStr = item[config.latitudeField]
   const lonStr = item[config.longitudeField]
@@ -637,11 +749,14 @@ export async function zoomToFeedPoint (
   })
 
   try {
-    // Zoom to point (unless zoom is disabled)
-    if (!options?.skipZoom) {
+    // Navigate based on mode
+    if (mode === 'zoom') {
       const zoom = config.zoomFactorPoint || 15
       await mapView.goTo({ target: point, zoom }, { animate: true, duration: 800 })
+    } else if (mode === 'pan') {
+      await mapView.goTo({ center: point }, { animate: true, duration: 800 })
     }
+    // mode === 'select' — skip navigation, just open popup
 
     // Open popup at the point location
     if (!mapView.popup || typeof mapView.popup.open !== 'function') {
@@ -670,67 +785,7 @@ export async function zoomToFeedPoint (
     return true
   } catch (err) {
     debugLogger.log('FEED-LAYER', {
-      action: 'zoom-error',
-      error: err instanceof Error ? err.message : 'Unknown'
-    })
-    return false
-  }
-}
-
-/**
- * Pan (center) to a feed item's point on the map without changing zoom.
- * Opens popup at the point location.
- */
-export async function panToFeedPoint (
-  mapView: __esri.MapView | __esri.SceneView,
-  item: FeedItem,
-  config: FeedSimpleConfig
-): Promise<boolean> {
-  const latStr = item[config.latitudeField]
-  const lonStr = item[config.longitudeField]
-  if (!latStr || !lonStr) return false
-
-  const lat = parseFloat(latStr)
-  const lon = parseFloat(lonStr)
-  if (isNaN(lat) || isNaN(lon)) return false
-
-  const point = new Point({
-    longitude: lon,
-    latitude: lat,
-    spatialReference: { wkid: 4326 }
-  })
-
-  try {
-    // Pan without changing zoom — only center changes
-    await mapView.goTo({ center: point }, { animate: true, duration: 800 })
-
-    // Open popup at the point location
-    if (!mapView.popup || typeof mapView.popup.open !== 'function') {
-      mapView.popup = new Popup({ view: mapView })
-    }
-
-    const feedLayer = mapView.map.allLayers.find(
-      l => l.id.startsWith(LAYER_ID_PREFIX)
-    ) as __esri.FeatureLayer | undefined
-
-    if (feedLayer) {
-      const result = await feedLayer.queryFeatures({
-        geometry: point,
-        distance: 100,
-        units: 'meters',
-        outFields: ['*'],
-        returnGeometry: true
-      })
-
-      if (result.features.length > 0) {
-        applyMobilePopupBehavior(mapView, config)
-        mapView.popup.open(buildPopupOpenOptions(result.features, point, config, mapView))
-      }
-    }
-    return true
-  } catch (err) {
-    debugLogger.log('FEED-LAYER', {
-      action: 'pan-error',
+      action: `${mode}-error`,
       error: err instanceof Error ? err.message : 'Unknown'
     })
     return false

@@ -43,32 +43,35 @@ interaction on top of A.
 
 ```
 feed-simple/src/
-  config.ts                     Config interface (FeedSimpleConfig, 35+ fields)
+  config.ts                     Config interface (FeedSimpleConfig, 67 fields)
+  constants.ts                  Shared constants (magic strings, thresholds)
   version.ts                    Version constants
   version-manager.ts            Config migration
   runtime/
-    widget.tsx                  Main widget (1217 lines)
-    feed-card.tsx               FeedCard component + responsive toolbar (462 lines)
+    widget.tsx                  Main widget (~1623 lines)
+    feed-card.tsx               FeedCard component + responsive toolbar (~550 lines)
+    feed-controls.tsx           Search bar, sort controls, range label sort option (~224 lines)
+    feed-legend.tsx             Collapsible color legend bar (~185 lines)
     translations/default.ts     i18n strings
   setting/
-    setting.tsx                 Builder settings panel (1187 lines)
+    setting.tsx                 Builder settings panel (~2115 lines)
     translations/default.ts     Settings i18n strings
   utils/
     debug-logger.ts             Debug logging (?debug=FETCH,POLL,JOIN,FEED-LAYER,...)
-    feed-fetcher.ts             HTTP fetch wrapper (32 lines)
-    token-renderer.ts           Token substitution + chainable pipe filter pipeline (~320 lines)
-    markdown-template-utils.ts  Markdown-to-HTML converter (200 lines)
-    color-resolver.ts           Exact/range card color resolution + range label enrichment (~139 lines)
-    map-interaction.ts          Spatial join + pan + FeatureEffect utilities (~300 lines)
-    feed-controls.tsx           Search bar, sort controls, range label sort option (r002)
-    feed-pipeline.ts            Processing pipeline: filter, search, sort, limit (r002)
-    feed-csv-export.ts          CSV export utility (r002)
-    feed-layer-manager.ts       Feed Map Layer — FeatureLayer, sync, popups, zoom, pan (482 lines)
-    feature-join.ts             JSAPI FeatureLayer queries (145 lines)
-    data-source-builder.ts      Output DS JSON generation (54 lines)
+    feed-fetcher.ts             HTTP fetch wrapper — esriRequest + native fallback (~115 lines)
+    token-renderer.ts           Token substitution + chainable pipe filter pipeline (~358 lines)
+    markdown-template-utils.ts  Markdown-to-HTML converter (~214 lines)
+    color-resolver.ts           Exact/range card color resolution + range label enrichment (~133 lines)
+    map-interaction.ts          Spatial join + pan + FeatureEffect utilities (~347 lines)
+    feed-pipeline.ts            Processing pipeline: filter, search, sort, limit (~249 lines)
+    feed-csv-export.ts          CSV export utility (~151 lines)
+    feed-layer-manager.ts       Feed Map Layer — FeatureLayer, sync, popups, zoom, pan (~817 lines)
+    feature-join.ts             JSAPI FeatureLayer queries (~142 lines)
+    data-source-builder.ts      Output DS JSON generation (~66 lines)
+    immutable-helpers.ts        Immutable.js convenience wrappers (~49 lines)
     parsers/
       interface.ts              IFeedParser contract, FeedItem type
-      custom-xml.ts             Recursive XML parser + GeoRSS point split (168 lines)
+      custom-xml.ts             Recursive XML parser + GeoRSS point split (~176 lines)
 ```
 
 ## Maintenance Rules
@@ -104,4 +107,4 @@ Add the new flow to the Flow Index table above.
 
 ---
 
-*Last updated: r002.047 (2026-03-16)*
+*Last updated: r003.010 (2026-03-16)*

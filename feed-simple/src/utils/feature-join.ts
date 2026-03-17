@@ -10,9 +10,7 @@
  * Batches large ID sets into groups of 500 to stay within WHERE clause limits.
  */
 
-import { createFeedSimpleDebugLogger } from './debug-logger'
-
-const debugLogger = createFeedSimpleDebugLogger()
+import { debugLogger } from './debug-logger'
 
 /** Max IDs per WHERE IN (...) clause to avoid query limits */
 const BATCH_SIZE = 500

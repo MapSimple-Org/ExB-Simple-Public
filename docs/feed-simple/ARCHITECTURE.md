@@ -2,7 +2,7 @@
 
 This guide documents the architecture, data flow, and conventions for the FeedSimple Experience Builder widget.
 
-**Version:** 1.19.0-r002.047
+**Version:** 1.19.0-r003.010
 **Last Updated:** 2026-03-16
 
 ---
@@ -73,7 +73,7 @@ widget.tsx (Shell — class component)
 
 ### Widget (Shell) — `widget.tsx`
 
-The main runtime component is a `React.PureComponent` class (~1,591 lines). It manages:
+The main runtime component is a `React.PureComponent` class (~1,623 lines). It manages:
 
 - Feed fetching and parsing orchestration
 - Polling lifecycle (start, stop, backoff, visibility awareness)
@@ -230,6 +230,10 @@ interface PipelineResult {
 
 Each pipeline function is pure, takes an array, and returns a new array. The full `runPipeline()` orchestrator chains them in order.
 
+### Pipeline Memoization (r003.005)
+
+The widget caches the last `PipelineResult` keyed on a composite string of all pipeline inputs (items reference, search query, sort field/direction, visible count, filter state). ImmutableObject arrays (`filterByStatus`, `searchFields`) use separate reference equality checks rather than string coercion, since `ImmutableObject.toString()` can produce unreliable `[object Object]` values. When `getProcessedItems()` is called with unchanged inputs — which happens frequently during re-renders, map sync, and CSV export — the cached result is returned immediately without re-running the pipeline.
+
 ---
 
 ## Parser Layer
@@ -262,7 +266,7 @@ All values are strings. Type coercion (date parsing, numeric comparison) happens
 
 The parser (`parsers/custom-xml.ts`) handles arbitrary XML schemas using a recursive tree walk with the browser's native `DOMParser`. It:
 
-1. **Sanitizes HTML entities**: Replaces common entities (`&nbsp;`, `&mdash;`, `&rsquo;`, etc.) with numeric equivalents. Government and legacy feeds frequently use these without declaring them in a DTD.
+1. **Sanitizes HTML entities**: Replaces 12 common entities (`&nbsp;`, `&mdash;`, `&rsquo;`, etc.) with numeric equivalents via a single pre-compiled regex + replacement map (r003.006). Government and legacy feeds frequently use these without declaring them in a DTD.
 2. **Parses XML**: Uses `DOMParser.parseFromString()` with `text/xml` content type.
 3. **Extracts items**: Finds all elements matching `rootItemElement` (configurable, defaults to `"item"`).
 4. **Recursive flattening**: Walks the full element tree to arbitrary depth, producing:
@@ -310,7 +314,7 @@ These are the only formats requiring new `IFeedParser` implementations. Everythi
 
 ## Token Renderer
 
-The token renderer (`token-renderer.ts`, ~322 lines) handles `{{token}}` substitution with a chainable left-to-right pipe filter pipeline.
+The token renderer (`token-renderer.ts`, ~358 lines) handles `{{token}}` substitution with a chainable left-to-right pipe filter pipeline. All 21 regex patterns used in token matching and date formatting are pre-compiled at module scope (r003.006), eliminating per-call regex construction.
 
 ### Token Syntax
 
@@ -354,7 +358,7 @@ interface FilterContext {
 
 ## Markdown Template System
 
-The markdown template system (`markdown-template-utils.ts`, ~200 lines) converts a subset of Markdown to HTML for card rendering. Adapted from QuerySimple's template utilities but uses double-brace `{{token}}` syntax.
+The markdown template system (`markdown-template-utils.ts`, ~214 lines) converts a subset of Markdown to HTML for card rendering. All 11 regex patterns are pre-compiled at module scope (r003.006). Adapted from QuerySimple's template utilities but uses double-brace `{{token}}` syntax.
 
 ### Supported Markdown Subset
 
@@ -570,7 +574,7 @@ The Feed Map Layer (Mode C) auto-generates a client-side FeatureLayer from feed 
 ### Layer Lifecycle
 
 1. **Creation**: When `mapView`, config, and parsed items are all available, the widget calls `createFeedFeatureLayer()` which builds a `FeatureLayer` with `source: []`, adds it to the map, and registers a click handler for bidirectional sync.
-2. **Sync**: On each poll cycle, `syncFeedItemsToLayer()` performs a full-replace via `applyEdits()` — delete all existing features, add new ones. Batched in groups of 500 for large feeds.
+2. **Sync**: On each poll cycle, `syncFeedItemsToLayer()` performs a diff-based sync (r003.005) — compares `FEED_ITEM_ID` values between existing layer features and incoming items to compute targeted adds, updates, and deletes. Each operation is batched in groups of 500 for large feeds. This replaces the earlier delete-all/add-all approach which caused visible flicker and unnecessary OBJECTID churn.
 3. **Destruction**: `destroyFeedFeatureLayer()` removes the layer from the map on widget unmount, config disable, or map view change.
 4. **Recreation triggers**: Changes to `feedMapLayerPopupTemplate`, `feedMapLayerPopupTemplateMobile`, or `feedMapLayerPopupTitle` in `componentDidUpdate` destroy and recreate the layer.
 
@@ -579,6 +583,8 @@ The Feed Map Layer (Mode C) auto-generates a client-side FeatureLayer from feed 
 JSAPI FeatureLayer field names cannot contain dots, `@`, or brackets. The flattener produces keys like `origin.latitude.value` and `link.@href`. The `buildFieldMapping()` function creates a bidirectional map:
 - **Forward** (original → sanitized): `origin.latitude.value` → `origin_latitude_value`
 - **Reverse** (sanitized → original): Used when reconstructing FeedItem from feature attributes for popup rendering
+
+The mapping is cached at module scope (r003.005) — rebuilds only when the `fieldNames` array reference changes, avoiding 2 Map allocations + n iterations on every poll cycle.
 
 ### Renderer Modes
 
@@ -625,7 +631,7 @@ When a user turns off the feed layer in the LayerList and then interacts with a 
 | `feedMapLayerTitle` | `'Feed Items'` | Layer name in LayerList |
 | `feedMapLayerColor` | `'#FF4500'` | Marker color |
 | `feedMapLayerSize` | `8` | Marker size in points |
-| `feedMapLayerMarkerStyle` | `'circle'` | circle, square, diamond, cross, x |
+| `feedMapLayerMarkerStyle` | `'circle'` | `'circle' \| 'square' \| 'diamond' \| 'cross' \| 'x'` |
 | `feedMapLayerOutlineColor` | (empty) | Outline color (empty = no outline) |
 | `feedMapLayerOutlineWidth` | `1` | Outline width (0 = no outline) |
 | `feedMapLayerPopupTitle` | (empty) | Dynamic title with `{{token}}` substitution |
@@ -730,7 +736,7 @@ Applied in `zoomToFeedPoint()`, `panToFeedPoint()`, and `identifyFeatureOnMap()`
 - Direction toggle (ascending/descending arrow icons)
 - Config-driven defaults via `sortField`/`sortDirection`
 - `sortableFields` restricts which fields appear in the runtime dropdown
-- Smart type detection: tries date parsing first, then numeric, then case-insensitive string
+- Smart type pre-detection (r003.005): samples first 5 non-empty values to classify the sort column as `date`, `numeric`, or `string`, then uses a specialized comparator. Date sorts pre-compute `Date.parse()` values into a `Map` to avoid O(n log n) repeated parsing.
 
 ### Show-More Pagination
 
@@ -766,7 +772,7 @@ When search or filter is active on the card list, non-matching features on the s
 
 ## Data Source Builder
 
-The data source builder (`data-source-builder.ts`, ~54 lines) handles output DataSource registration for the ExB framework.
+The data source builder (`data-source-builder.ts`, ~66 lines) handles output DataSource registration for the ExB framework. Returns a typed `OutputDataSourceJson` interface (r003.006) instead of an untyped object.
 
 ### Purpose
 
@@ -786,7 +792,13 @@ When map integration is fully configured (FeatureLayer selected + both join fiel
 
 ## Settings Panel
 
-The settings panel (~2,271 lines) is organized into sections with progressive disclosure — sections and sub-options show/hide based on prerequisite configuration.
+The settings panel (~2,115 lines) is organized into sections with progressive disclosure — sections and sub-options show/hide based on prerequisite configuration.
+
+### Architecture Patterns
+
+- **`setConfigValue<K>(key, value)`**: Type-safe generic method that replaces 15+ individual `onSettingChange` handler methods. Uses `K extends keyof FeedSimpleConfig` for compile-time key/value type checking.
+- **`renderFieldCheckboxList(configKey, fields, helpText)`**: Shared helper method for rendering checkbox lists (sortable fields, search fields, export fields). Replaced 3 duplicate ~30-line blocks.
+- **Hoisted CSS constants**: Module-level `monoTextareaCss`, `monoTextareaLgCss`, and field checkbox CSS avoid re-creation per render.
 
 ### 1. Feed Source
 
@@ -908,7 +920,7 @@ Conditionally shown when map integration is configured.
 
 ## Debug Logging
 
-FeedSimple uses a self-contained `DebugLogger` class (~147 lines, not shared with QuerySimple).
+FeedSimple uses a self-contained `DebugLogger` singleton (~158 lines, not shared with QuerySimple). All modules import the same singleton instance (r003.001), eliminating duplicate URL parsing and ensuring consistent debug tag state.
 
 ### Activation
 
@@ -934,6 +946,10 @@ The logger checks both the current window and parent window (for ExB iframe cont
 | `FEED-LAYER` | Feed Map Layer creation, sync, destroy, card click, map click, layer visibility |
 | `TEMPLATE` | Token substitution and filter pipeline |
 | `SETTINGS` | Settings panel operations, field discovery, config changes |
+| `EXPORT` | CSV export triggering, field selection, file generation |
+| `SEARCH` | Search query matching, field restriction, result counts |
+| `SORT` | Sort field selection, column type detection, comparator behavior |
+| `FEATURE-EFFECT` | FeatureEffect apply/clear on joined layers during search/filter |
 | `BUG` | Known bugs/issues (always enabled, logged as `console.warn`) |
 
 ### Output Format
@@ -965,42 +981,44 @@ FeedSimple has 137 unit tests across 4 test files (~1,158 total test lines), cov
 
 | File | Purpose | Lines |
 |------|---------|-------|
-| `src/runtime/widget.tsx` | Main widget — lifecycle, polling, fetch, pipeline, card click routing, map integration, feed layer, scroll-to-top, FeatureEffect, pagination, search/sort state | 1,591 |
+| `src/runtime/widget.tsx` | Main widget — lifecycle, polling, fetch, pipeline, card click routing, map integration, feed layer, scroll-to-top, FeatureEffect, pagination, search/sort state | 1,623 |
 | `src/runtime/feed-card.tsx` | FeedCard component — color resolution, token substitution, markdown rendering, highlight animation, toolbar (3 positions), responsive card/toolbar rendering, kebab menu | 550 |
 | `src/runtime/feed-controls.tsx` | FeedControls component — search input (debounced), sort dropdown, direction toggle, results count label, iOS auto-zoom prevention | 224 |
-| `src/runtime/feed-legend.tsx` | ColorLegend component — collapsible color key bar, exact and range mode entries, inline swatches, expanded detail view | 187 |
+| `src/runtime/feed-legend.tsx` | ColorLegend component — collapsible color key bar, exact and range mode entries, inline swatches, expanded detail view | 185 |
 | `src/runtime/translations/default.ts` | Runtime i18n strings | 19 |
 
 ### Settings Files
 
 | File | Purpose | Lines |
 |------|---------|-------|
-| `src/setting/setting.tsx` | Builder settings — field discovery (auto + manual), template editor, syntax help, card colors (exact + range), map integration, feed map layer, mobile settings, zoom config, source attribution | 2,271 |
+| `src/setting/setting.tsx` | Builder settings — field discovery (auto + manual), template editor, syntax help, card colors (exact + range), map integration, feed map layer, mobile settings, zoom config, source attribution | 2,115 |
 | `src/setting/translations/default.ts` | Settings i18n strings | 32 |
 
 ### Utility Files
 
 | File | Purpose | Lines |
 |------|---------|-------|
-| `src/utils/feed-layer-manager.ts` | Feed Map Layer — FeatureLayer creation, sync via applyEdits, ClassBreaksRenderer, CustomContent popups, dynamic popup title, field sanitization, zoom/pan/identify, mobile popup behavior, layer visibility auto-restore | 745 |
-| `src/utils/map-interaction.ts` | Spatial join + pan utilities — config check, geometry type, zoom/pan target, popup, geometry query, FeatureEffect apply/clear | 397 |
-| `src/utils/token-renderer.ts` | Chainable token substitution engine with date, autolink, externalLink, math, text formatting filters | 322 |
-| `src/utils/feed-pipeline.ts` | Processing pipeline — status filter, numeric filter, search, sort, paginate, runPipeline orchestrator | 200 |
-| `src/utils/markdown-template-utils.ts` | Markdown-to-HTML converter, preview renderer, field extractor | 200 |
-| `src/utils/feed-csv-export.ts` | CSV export — blob builder, filename resolver, field resolver, download trigger | 153 |
-| `src/utils/debug-logger.ts` | Self-contained DebugLogger class with URL-driven activation | 147 |
-| `src/utils/feature-join.ts` | JSAPI FeatureLayer query with batched WHERE IN via queryFeatures | 144 |
-| `src/utils/color-resolver.ts` | Color resolution — exact match, numeric range, virtual field enrichment for search/sort | 138 |
-| `src/utils/feed-fetcher.ts` | Async feed fetcher — esriRequest (dynamic import) with native fetch fallback, CORS proxy support | 117 |
-| `src/utils/data-source-builder.ts` | Output DataSource JSON generation for settings registration | 54 |
+| `src/utils/feed-layer-manager.ts` | Feed Map Layer — FeatureLayer creation, sync via applyEdits, ClassBreaksRenderer, CustomContent popups, dynamic popup title, field sanitization, zoom/pan/identify, mobile popup behavior, layer visibility auto-restore | 817 |
+| `src/utils/map-interaction.ts` | Spatial join + pan utilities — config check, geometry type, zoom/pan target, popup, geometry query, FeatureEffect apply/clear | 347 |
+| `src/utils/token-renderer.ts` | Chainable token substitution engine with date, autolink, externalLink, math, text formatting filters | 358 |
+| `src/utils/feed-pipeline.ts` | Processing pipeline — status filter, numeric filter, search, sort, paginate, runPipeline orchestrator | 249 |
+| `src/utils/markdown-template-utils.ts` | Markdown-to-HTML converter, preview renderer, field extractor | 214 |
+| `src/utils/feed-csv-export.ts` | CSV export — blob builder, filename resolver, field resolver, download trigger | 151 |
+| `src/utils/debug-logger.ts` | Self-contained DebugLogger class with URL-driven activation | 151 |
+| `src/utils/feature-join.ts` | JSAPI FeatureLayer query with batched WHERE IN via queryFeatures | 142 |
+| `src/utils/color-resolver.ts` | Color resolution — exact match, numeric range, virtual field enrichment for search/sort | 133 |
+| `src/utils/feed-fetcher.ts` | Async feed fetcher — esriRequest (dynamic import) with native fetch fallback, CORS proxy support | 115 |
+| `src/utils/data-source-builder.ts` | Output DataSource JSON generation for settings registration | 66 |
+| `src/utils/immutable-helpers.ts` | Immutable.js convenience wrappers for settings config updates | 49 |
 | `src/utils/parsers/interface.ts` | `IFeedParser` interface, `FeedItem` type, `ParseResult` type | 30 |
-| `src/utils/parsers/custom-xml.ts` | Universal XML parser — recursive flattener, GeoRSS point splitting, namespace stripping | 168 |
+| `src/utils/parsers/custom-xml.ts` | Universal XML parser — recursive flattener, GeoRSS point splitting, namespace stripping | 176 |
 
 ### Config & Version Files
 
 | File | Purpose | Lines |
 |------|---------|-------|
-| `src/config.ts` | `FeedSimpleConfig` interface (63 fields), `StatusColorMap`, `RangeColorBreak`, `IMConfig` | 201 |
+| `src/config.ts` | `FeedSimpleConfig` interface (67 fields), `StatusColorMap`, `RangeColorBreak`, `IMConfig` | 203 |
+| `src/constants.ts` | Shared constants — magic strings, numeric thresholds, sentinel values | 9 |
 | `src/version.ts` | Version constants (`BASE_VERSION`, `RELEASE_NUMBER`, `MINOR_VERSION`) | 17 |
 | `src/version-manager.ts` | ExB config migration manager (BaseVersionManager subclass) | 13 |
 
@@ -1026,12 +1044,12 @@ FeedSimple has 137 unit tests across 4 test files (~1,158 total test lines), cov
 
 | Category | Files | Lines |
 |----------|-------|-------|
-| Runtime components | 5 | 2,571 |
-| Settings | 2 | 2,303 |
-| Utilities | 13 | 2,815 |
-| Config & version | 3 | 231 |
+| Runtime components | 5 | 2,597 |
+| Settings | 2 | 2,147 |
+| Utilities | 14 | 2,982 |
+| Config & version | 4 | 242 |
 | Tests | 4 | 1,158 |
-| **Total** | **27** | **~9,078** |
+| **Total** | **29** | **~9,126** |
 
 ---
 
@@ -1039,7 +1057,7 @@ FeedSimple has 137 unit tests across 4 test files (~1,158 total test lines), cov
 
 ### FeedSimpleConfig
 
-The central configuration interface with 63 fields organized into groups:
+The central configuration interface with 67 fields organized into groups:
 
 | Group | Fields |
 |-------|--------|
@@ -1050,7 +1068,7 @@ The central configuration interface with 63 fields organized into groups:
 | Map Integration | `joinFieldService`, `joinFieldFeed`, `mapWidgetId`, `zoomFactorPoint`, `zoomFactorPoly` |
 | External Link & Card Options | `externalLinkTemplate`, `linkField`, `enableCardExpand`, `toolbarPosition`, `toolbarPositionMobile` |
 | Source Attribution | `sourceLabel`, `sourceUrl` |
-| Feed Map Layer | `enableFeedMapLayer`, `latitudeField`, `longitudeField`, `feedMapLayerTitle`, `feedMapLayerColor`, `feedMapLayerSize`, `feedMapLayerMarkerStyle`, `feedMapLayerOutlineColor`, `feedMapLayerOutlineWidth`, `feedMapLayerPopupTitle`, `feedMapLayerPopupTemplate`, `feedMapLayerPopupTemplateMobile` |
+| Feed Map Layer | `enableFeedMapLayer`, `latitudeField`, `longitudeField`, `feedMapLayerTitle`, `feedMapLayerColor`, `feedMapLayerSize`, `feedMapLayerMarkerStyle`, `feedMapLayerOutlineColor`, `feedMapLayerOutlineWidth`, `feedMapLayerPopupTitle`, `feedMapLayerPopupTemplate`, `feedMapLayerPopupTitleMobile`, `feedMapLayerPopupTemplateMobile` |
 | Mobile Popup | `mobilePopupCollapsed`, `mobilePopupDockPosition`, `mobilePopupHideDockButton`, `mobilePopupHideActionBar` |
 | Zoom & Click | `enableZoomOnClick`, `enableCenterOnClick` |
 | Search & Sort | `enableSearchBar`, `searchPlaceholder`, `searchFields`, `enableSortControls`, `sortableFields` |
@@ -1067,7 +1085,7 @@ interface RangeColorBreak {
   label: string            // Display label (e.g., "Moderate")
   mapColor?: string        // Map symbol color override
   size?: number            // Map marker size override
-  markerStyle?: string     // Map marker style override
+  markerStyle?: 'circle' | 'square' | 'diamond' | 'cross' | 'x'  // Map marker style override
 }
 ```
 

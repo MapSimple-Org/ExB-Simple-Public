@@ -17,21 +17,29 @@ import type { IFeedParser, FeedItem, ParseResult } from './interface'
  * Replace common HTML entities that are invalid in XML.
  * Government/legacy feeds frequently use &nbsp;, &mdash;, etc.
  * without declaring them in a DTD.
+ * Uses a single regex + replacement map instead of 12 chained .replace() calls.
  */
+const HTML_ENTITY_MAP: Record<string, string> = {
+  '&nbsp;': '&#160;',
+  '&mdash;': '&#8212;',
+  '&ndash;': '&#8211;',
+  '&lsquo;': '&#8216;',
+  '&rsquo;': '&#8217;',
+  '&ldquo;': '&#8220;',
+  '&rdquo;': '&#8221;',
+  '&bull;': '&#8226;',
+  '&hellip;': '&#8230;',
+  '&copy;': '&#169;',
+  '&reg;': '&#174;',
+  '&trade;': '&#8482;'
+}
+const HTML_ENTITY_REGEX = new RegExp(
+  Object.keys(HTML_ENTITY_MAP).map(k => k.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|'),
+  'g'
+)
+
 function sanitizeXml (raw: string): string {
-  return raw
-    .replace(/&nbsp;/g, '&#160;')
-    .replace(/&mdash;/g, '&#8212;')
-    .replace(/&ndash;/g, '&#8211;')
-    .replace(/&lsquo;/g, '&#8216;')
-    .replace(/&rsquo;/g, '&#8217;')
-    .replace(/&ldquo;/g, '&#8220;')
-    .replace(/&rdquo;/g, '&#8221;')
-    .replace(/&bull;/g, '&#8226;')
-    .replace(/&hellip;/g, '&#8230;')
-    .replace(/&copy;/g, '&#169;')
-    .replace(/&reg;/g, '&#174;')
-    .replace(/&trade;/g, '&#8482;')
+  return raw.replace(HTML_ENTITY_REGEX, match => HTML_ENTITY_MAP[match] || match)
 }
 
 /** XML namespace URI for xmlns declarations — filter these out of attributes */

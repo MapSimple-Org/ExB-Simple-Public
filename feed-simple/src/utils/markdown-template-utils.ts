@@ -21,6 +21,20 @@
  * {{fieldName}} tokens pass through untouched for substituteTokens() to replace at render time.
  */
 
+// ── Regex (hoisted to module scope for performance) ──────────────
+
+const RE_HR = /^-{3,}\s*$/
+const RE_LIST_ITEM = /^\s*[-*]\s+/
+const RE_LEADING_SPACES = /^( +)/
+const RE_IMAGE = /!\[([^\]]*)\]\(([^)]+)\)/g
+const RE_LINK = /\[([^\]]+)\]\(([^)]+)\)/g
+const RE_BOLD_STAR = /\*\*(.+?)\*\*/g
+const RE_BOLD_UNDER = /__(.+?)__/g
+const RE_ITALIC_STAR = /\*(.+?)\*/g
+const RE_ITALIC_UNDER = /(?<!\{\{[\w]*)_(.+?)_(?![\w]*\}\})/g
+const RE_PREVIEW_TOKEN = /\{\{(\s*[\w.@[\]]+\s*)(?:\|\s*(?:"([^"]+)"|(\w+))\s*)?\}\}/g
+const RE_EXTRACT_TOKEN = /\{\{(\s*[\w.@[\]]+\s*)(?:\|[^}]*)?\}\}/g
+
 /**
  * Convert a Markdown template string to HTML.
  * Field tokens like {{location}} are preserved for runtime substitution.
@@ -60,7 +74,7 @@ export function convertTemplateToHtml (markdown: string): string {
     }
 
     // Horizontal rule (--- or more)
-    if (/^-{3,}\s*$/.test(line.trim())) {
+    if (RE_HR.test(line.trim())) {
       flushParagraph()
       if (inList) { htmlLines.push('</ul>'); inList = false }
       htmlLines.push('<hr/>')
@@ -94,13 +108,13 @@ export function convertTemplateToHtml (markdown: string): string {
     }
 
     // Unordered list items (- item or * item, with optional leading spaces)
-    if (/^\s*[-*]\s+/.test(line)) {
+    if (RE_LIST_ITEM.test(line)) {
       flushParagraph()
       if (!inList) {
         htmlLines.push('<ul>')
         inList = true
       }
-      const content = line.replace(/^\s*[-*]\s+/, '')
+      const content = line.replace(RE_LIST_ITEM, '')
       htmlLines.push(`<li>${applyInlineFormatting(content)}</li>`)
       continue
     }
@@ -112,7 +126,7 @@ export function convertTemplateToHtml (markdown: string): string {
     }
 
     // Detect leading spaces for indentation (2 spaces = 1em)
-    const leadingSpaces = line.match(/^( +)/)?.[1]?.length || 0
+    const leadingSpaces = line.match(RE_LEADING_SPACES)?.[1]?.length || 0
     const trimmedContent = applyInlineFormatting(line.trimStart())
 
     if (leadingSpaces >= 2) {
@@ -141,23 +155,23 @@ export function convertTemplateToHtml (markdown: string): string {
 function applyInlineFormatting (text: string): string {
   // Images: ![alt](url) -> <img> (must be before links due to similar syntax)
   text = text.replace(
-    /!\[([^\]]*)\]\(([^)]+)\)/g,
+    RE_IMAGE,
     '<img src="$2" alt="$1" style="max-width:100%; height:auto; display:block; margin:4px 0;">'
   )
 
   // Links: [text](url) -> <a> with new-tab behavior
   text = text.replace(
-    /\[([^\]]+)\]\(([^)]+)\)/g,
+    RE_LINK,
     '<a href="$2" target="_blank" rel="noopener">$1</a>'
   )
 
   // Bold: **text** or __text__
-  text = text.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
-  text = text.replace(/__(.+?)__/g, '<strong>$1</strong>')
+  text = text.replace(RE_BOLD_STAR, '<strong>$1</strong>')
+  text = text.replace(RE_BOLD_UNDER, '<strong>$1</strong>')
 
   // Italic: *text* or _text_ (but not inside field tokens like {{field_name}})
-  text = text.replace(/\*(.+?)\*/g, '<em>$1</em>')
-  text = text.replace(/(?<!\{\{[\w]*)_(.+?)_(?![\w]*\}\})/g, '<em>$1</em>')
+  text = text.replace(RE_ITALIC_STAR, '<em>$1</em>')
+  text = text.replace(RE_ITALIC_UNDER, '<em>$1</em>')
 
   return text
 }
@@ -175,7 +189,7 @@ export function renderPreview (markdown: string): string {
 
   // Replace {{fieldName}} and {{fieldName | filter}} tokens with styled badges
   return html.replace(
-    /\{\{(\s*[\w.@\[\]]+\s*)(?:\|\s*(?:"([^"]+)"|(\w+))\s*)?\}\}/g,
+    RE_PREVIEW_TOKEN,
     (_match, fieldName: string, quotedArg?: string, filterName?: string) => {
       const name = fieldName.trim()
       const filter = quotedArg ? `| "${quotedArg}"` : filterName ? `| ${filterName}` : ''
@@ -190,7 +204,7 @@ export function renderPreview (markdown: string): string {
  */
 export function extractFieldTokens (template: string): string[] {
   if (!template) return []
-  const regex = /\{\{(\s*[\w.@\[\]]+\s*)(?:\|[^}]*)?\}\}/g
+  const regex = new RegExp(RE_EXTRACT_TOKEN.source, RE_EXTRACT_TOKEN.flags)
   const fields: string[] = []
   let match: RegExpExecArray | null
   while ((match = regex.exec(template)) !== null) {

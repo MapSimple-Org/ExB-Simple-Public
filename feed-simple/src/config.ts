@@ -27,7 +27,7 @@ export interface RangeColorBreak {
   /** Optional marker size override for map layer (falls back to global feedMapLayerSize) */
   size?: number
   /** Optional marker style override for map layer (falls back to global feedMapLayerMarkerStyle) */
-  markerStyle?: string
+  markerStyle?: 'circle' | 'square' | 'diamond' | 'cross' | 'x'
 }
 
 /**
@@ -126,8 +126,8 @@ export interface FeedSimpleConfig {
   feedMapLayerColor: string
   /** Marker size in points (default 8) */
   feedMapLayerSize: number
-  /** Marker style: 'circle' | 'square' | 'diamond' | 'cross' (default 'circle') */
-  feedMapLayerMarkerStyle: string
+  /** Marker style (default 'circle') */
+  feedMapLayerMarkerStyle: 'circle' | 'square' | 'diamond' | 'cross' | 'x'
   /** Marker outline color as hex string (e.g., "#FFFFFF"). Empty string = no outline. */
   feedMapLayerOutlineColor: string
   /** Marker outline width in points (default 1, 0 = no outline) */
@@ -136,6 +136,8 @@ export interface FeedSimpleConfig {
   feedMapLayerPopupTitle: string
   /** Popup template for map points — reuses cardTemplate if empty */
   feedMapLayerPopupTemplate: string
+  /** Mobile popup title template — more descriptive title for mobile when popup content is collapsed. Falls back to desktop title if empty. */
+  feedMapLayerPopupTitleMobile: string
   /** Mobile popup template — shown at viewport widths ≤ 600px. Falls back to desktop template if empty. */
   feedMapLayerPopupTemplateMobile: string
 

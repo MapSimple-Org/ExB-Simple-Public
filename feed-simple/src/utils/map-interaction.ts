@@ -12,10 +12,11 @@ import Popup from 'esri/widgets/Popup'
 import FeatureEffect from 'esri/layers/support/FeatureEffect'
 import FeatureFilter from 'esri/layers/support/FeatureFilter'
 import type { FeedItem } from './parsers/interface'
-import { queryFeatureLayerByIds, type RestGeometry } from './feature-join'
-import { createFeedSimpleDebugLogger } from './debug-logger'
+import { queryFeatureLayerByIds, type RestGeometry, buildWhereClause } from './feature-join'
+import { applyMobilePopupBehavior } from './feed-layer-manager'
+import { debugLogger } from './debug-logger'
+import { MOBILE_BREAKPOINT_PX } from '../constants'
 
-const debugLogger = createFeedSimpleDebugLogger()
 
 // ── Config Check ──────────────────────────────────────────────────
 
@@ -111,27 +112,16 @@ export async function identifyFeatureOnMap (params: IdentifyParams): Promise<voi
   const { mapView, dataSourceId, joinField, joinValue } = params
   if (!mapView) return
 
-  // Find the FeatureLayer on the map by matching the origin DS URL
-  const originDs = DataSourceManager.getInstance().getDataSource(dataSourceId)
-  const dsUrl = originDs?.getDataSourceJson()?.url as string
-  if (!dsUrl) return
-
-  // Search all layers (including sublayers of group layers)
-  const featureLayer = mapView.map.allLayers.find((layer: any) => {
-    return layer.type === 'feature' && layer.url && dsUrl.toLowerCase().includes(layer.url.toLowerCase())
-  }) as __esri.FeatureLayer | undefined
-
+  // Find the FeatureLayer on the map using the shared helper
+  const featureLayer = findJoinedFeatureLayer(mapView, dataSourceId)
   if (!featureLayer) {
-    debugLogger.log('JOIN', { action: 'identify-no-layer', dsUrl })
+    debugLogger.log('JOIN', { action: 'identify-no-layer', dataSourceId })
     return
   }
 
   try {
     // Query the actual layer for the feature with all attributes
-    const allNumeric = /^-?\d+(\.\d+)?$/.test(joinValue)
-    const where = allNumeric
-      ? `${joinField} = ${joinValue}`
-      : `${joinField} = '${joinValue.replace(/'/g, "''")}'`
+    const where = buildWhereClause(joinField, [joinValue])
 
     const result = await featureLayer.queryFeatures({
       where,
@@ -147,26 +137,10 @@ export async function identifyFeatureOnMap (params: IdentifyParams): Promise<voi
         mapView.popup = new Popup({ view: mapView })
       }
 
-      // Apply mobile popup behavior (dock, hide button) at ≤ 600px
-      const isMobile = mapView.width <= 600
-      if (isMobile && params.mobilePopupDockPosition) {
-        mapView.popup.dockEnabled = true
-        mapView.popup.dockOptions = {
-          position: params.mobilePopupDockPosition,
-          buttonEnabled: !params.mobilePopupHideDockButton
-        } as any
-      } else if (!isMobile) {
-        mapView.popup.dockEnabled = false
-        mapView.popup.dockOptions = { buttonEnabled: true, position: 'auto' } as any
-      }
+      // Apply mobile popup behavior (dock, collapse, action bar) — shared with feed-layer-manager
+      applyMobilePopupBehavior(mapView, params)
 
-      // Hide action bar on mobile if configured
-      if (isMobile && params.mobilePopupHideActionBar) {
-        mapView.popup.visibleElements = { ...mapView.popup.visibleElements as any, actionBar: false } as any
-      } else if (!isMobile) {
-        mapView.popup.visibleElements = { ...mapView.popup.visibleElements as any, actionBar: true } as any
-      }
-
+      const isMobile = mapView.width <= MOBILE_BREAKPOINT_PX
       const location = feature.geometry.type === 'point'
         ? feature.geometry as __esri.Point
         : (feature.geometry as __esri.Polygon | __esri.Polyline).extent?.center
@@ -215,32 +189,16 @@ export interface QueryGeometriesResult {
 export async function queryGeometries (params: QueryGeometriesParams): Promise<QueryGeometriesResult> {
   const { items, joinFieldFeed, joinFieldService, dataSourceId, mapView, previousJoinIds } = params
 
-  // Get the DataSource URL to find the matching layer on the map
-  const ds = DataSourceManager.getInstance().getDataSource(dataSourceId)
-  if (!ds) {
-    debugLogger.log('JOIN', { action: 'query-bail', reason: 'DataSourceManager returned null', dsId: dataSourceId })
-    return { geometryMap: new Map(), newJoinIds: previousJoinIds, skipped: true }
-  }
-  const dsUrl = ds.getDataSourceJson()?.url as string
-  if (!dsUrl) {
-    debugLogger.log('JOIN', { action: 'query-bail', reason: 'DS has no url', dsId: dataSourceId })
-    return { geometryMap: new Map(), newJoinIds: previousJoinIds, skipped: true }
-  }
-
   if (!mapView) {
     debugLogger.log('JOIN', { action: 'query-bail', reason: 'no mapView available' })
     return { geometryMap: new Map(), newJoinIds: previousJoinIds, skipped: true }
   }
 
-  // Find the ACTUAL FeatureLayer on the map — this is the one that carries
-  // the web map's definitionExpression and configured filters.
-  // The DataSource's ds.layer is a separate instance that may NOT have these.
-  const featureLayer = mapView.map.allLayers.find((layer: any) => {
-    return layer.type === 'feature' && layer.url && dsUrl.toLowerCase().includes(layer.url.toLowerCase())
-  }) as __esri.FeatureLayer | undefined
-
+  // Find the ACTUAL FeatureLayer on the map using the shared helper.
+  // This is the one that carries the web map's definitionExpression and configured filters.
+  const featureLayer = findJoinedFeatureLayer(mapView, dataSourceId)
   if (!featureLayer) {
-    debugLogger.log('JOIN', { action: 'query-bail', reason: 'layer not found on map', dsUrl })
+    debugLogger.log('JOIN', { action: 'query-bail', reason: 'layer not found on map', dataSourceId })
     return { geometryMap: new Map(), newJoinIds: previousJoinIds, skipped: true }
   }
 
@@ -348,17 +306,9 @@ export async function applyFilterEffect (params: ApplyFilterEffectParams): Promi
     return
   }
 
-  // Build WHERE clause for matching features
-  // Determine if values are numeric or string
-  const allNumeric = filteredJoinValues.length > 0 &&
-    filteredJoinValues.every(v => /^-?\d+(\.\d+)?$/.test(v))
-
-  const inList = allNumeric
-    ? filteredJoinValues.join(',')
-    : filteredJoinValues.map(v => `'${v.replace(/'/g, "''")}'`).join(',')
-
+  // Build WHERE clause for matching features using shared utility
   const where = filteredJoinValues.length > 0
-    ? `${joinField} IN (${inList})`
+    ? buildWhereClause(joinField, filteredJoinValues)
     : '1=0' // No matches — dim everything
 
   layerView.featureEffect = new FeatureEffect({

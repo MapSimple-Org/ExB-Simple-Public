@@ -1,10 +1,9 @@
 /** @jsx jsx */
-import { React, jsx, css, hooks } from 'jimu-core'
+import { React, jsx, css } from 'jimu-core'
 import { Button } from 'jimu-ui'
 import { DownOutlined } from 'jimu-icons/outlined/directional/down'
 import { UpOutlined } from 'jimu-icons/outlined/directional/up'
 import type { StatusColorMap, RangeColorBreak } from '../config'
-import defaultMessages from './translations/default'
 
 interface ColorLegendProps {
   colorMode: 'exact' | 'range'
@@ -21,7 +20,6 @@ interface ColorLegendProps {
 export default function ColorLegend (props: ColorLegendProps): React.ReactElement | null {
   const { colorMode, statusColorMap, rangeColorBreaks } = props
   const [expanded, setExpanded] = React.useState(false)
-  const getI18nMessage = hooks.useTranslation(defaultMessages)
 
   // Build legend entries from config
   const entries = React.useMemo(() => {

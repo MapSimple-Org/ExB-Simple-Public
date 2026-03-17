@@ -34,11 +34,23 @@ export function getOutputDataSourceId (widgetId: string): string {
  * @param originDs - The DataSource instance selected as the spatial join layer
  * @param originUseDataSource - The UseDataSource reference for the origin layer
  */
+export interface OutputDataSourceJson {
+  id: string
+  label: string
+  type: string
+  geometryType?: string
+  url?: string
+  itemId?: string
+  portalUrl?: string
+  originDataSources: UseDataSource[]
+  isDataInDataSourceInstance: boolean
+}
+
 export function buildOutputDataSourceJson (
   widgetId: string,
   originDs: DataSource,
   originUseDataSource: UseDataSource
-): any {
+): OutputDataSourceJson {
   const dsJson = originDs.getDataSourceJson()
   return {
     id: getOutputDataSourceId(widgetId),

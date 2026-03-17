@@ -7,9 +7,7 @@
  * Falls back to native fetch if esriRequest is unavailable (e.g. in the
  * settings panel / builder iframe where AMD modules aren't loaded).
  */
-import { createFeedSimpleDebugLogger } from './debug-logger'
-
-const debugLogger = createFeedSimpleDebugLogger()
+import { debugLogger } from './debug-logger'
 
 export interface FetchResult {
   text: string

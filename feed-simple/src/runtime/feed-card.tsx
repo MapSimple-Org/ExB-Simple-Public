@@ -6,6 +6,24 @@ import type { StatusColorMap, RangeColorBreak } from '../config'
 import { substituteTokens, type FilterContext } from '../utils/token-renderer'
 import { convertTemplateToHtml } from '../utils/markdown-template-utils'
 import { resolveCardColor } from '../utils/color-resolver'
+import { MOBILE_BREAKPOINT_PX } from '../constants'
+
+// ── Static CSS (hoisted to module scope — no per-render allocation) ──
+
+const templateCss = css`
+  p { margin: 0 0 4px 0; }
+  h3, h4, h5, h6 { margin: 0 0 4px 0; }
+  hr { margin: 6px 0; border: none; border-top: 1px solid #ddd; }
+  ul { margin: 0; padding-left: 20px; }
+  li { margin-bottom: 2px; }
+  a { color: #0079c1; text-decoration: none; &:hover { text-decoration: underline; } }
+`
+const rawFieldsContainerCss = css`overflow-wrap: break-word; word-break: break-word;`
+const rawFieldItemCss = css`margin-bottom: 2px;`
+const rawFieldKeyCss = css`color: #555; font-size: 0.7rem; text-transform: uppercase; overflow-wrap: break-word;`
+const rawFieldValueCss = css`font-size: 0.85rem;`
+const rawFieldKeySmallCss = css`color: #555; font-size: 0.65rem; text-transform: uppercase;`
+const expandedFieldItemCss = css`margin-bottom: 2px;`
 
 export interface FeedCardProps {
   /** The feed item data (key-value pairs) */
@@ -32,8 +50,8 @@ export interface FeedCardProps {
   clickable: boolean
   /** Duration of the highlight flash animation in milliseconds */
   highlightDurationMs: number
-  /** Callback when the card is clicked; receives the item and the mouse event */
-  onClick?: (item: FeedItem, evt: React.MouseEvent) => void
+  /** Callback when the card is clicked or activated via keyboard */
+  onClick?: (item: FeedItem, evt: React.MouseEvent | React.KeyboardEvent) => void
   /** Temporary info message shown below card when map interaction fails */
   noGeometryMessage?: string
   // ── Toolbar props ──
@@ -53,9 +71,9 @@ export interface FeedCardProps {
   linkUrl?: string
   /** Toolbar position: 'bottom' (horizontal), 'right' (vertical strip), or 'menu' (kebab dropdown) */
   toolbarPosition?: 'bottom' | 'right' | 'menu'
-  /** Mobile card template — shown at viewport widths ≤ 600px. Falls back to desktop cardTemplate if empty. */
+  /** Mobile card template — shown at viewport widths ≤ MOBILE_BREAKPOINT_PX. Falls back to desktop cardTemplate if empty. */
   cardTemplateMobile?: string
-  /** Mobile toolbar position override — applied at viewport widths ≤ 600px. Empty = use desktop setting. */
+  /** Mobile toolbar position override — applied at viewport widths ≤ MOBILE_BREAKPOINT_PX. Empty = use desktop setting. */
   toolbarPositionMobile?: '' | 'bottom' | 'right' | 'menu'
   /** i18n labels for toolbar buttons */
   toolbarLabels?: {
@@ -189,29 +207,7 @@ export default function FeedCard (props: FeedCardProps): React.ReactElement {
   // Hover tooltip text
   const hoverText = hoverTextField && item[hoverTextField] ? item[hoverTextField] : undefined
 
-  // ── Responsive CSS ──
-  const responsiveDesktopCss = css`
-    @media (max-width: 600px) { display: none !important; }
-  `
-  const responsiveMobileCss = css`
-    display: none !important;
-    @media (max-width: 600px) { display: block !important; }
-  `
-  const responsiveMobileFlexCss = css`
-    display: none !important;
-    @media (max-width: 600px) { display: flex !important; }
-  `
-
   // ── Content rendering helper ──
-  const templateCss = css`
-    p { margin: 0 0 4px 0; }
-    h3, h4, h5, h6 { margin: 0 0 4px 0; }
-    hr { margin: 6px 0; border: none; border-top: 1px solid #ddd; }
-    ul { margin: 0; padding-left: 20px; }
-    li { margin-bottom: 2px; }
-    a { color: #0079c1; text-decoration: none; &:hover { text-decoration: underline; } }
-  `
-
   const renderTemplateContent = (tmpl: string): React.ReactElement => {
     const substituted = substituteTokens(tmpl, item, filterContext)
     const rendered = convertTemplateToHtml(substituted)
@@ -219,11 +215,11 @@ export default function FeedCard (props: FeedCardProps): React.ReactElement {
   }
 
   const renderRawFields = (): React.ReactElement => (
-    <div css={css`overflow-wrap: break-word; word-break: break-word;`}>
+    <div css={rawFieldsContainerCss}>
       {Object.entries(item).map(([key, value]) => (
-        <div key={key} css={css`margin-bottom: 2px;`}>
-          <strong css={css`color: #555; font-size: 0.7rem; text-transform: uppercase; overflow-wrap: break-word;`}>{key}:</strong>{' '}
-          <span css={css`font-size: 0.85rem;`}>{value}</span>
+        <div key={key} css={rawFieldItemCss}>
+          <strong css={rawFieldKeyCss}>{key}:</strong>{' '}
+          <span css={rawFieldValueCss}>{value}</span>
         </div>
       ))}
     </div>
@@ -393,7 +389,7 @@ export default function FeedCard (props: FeedCardProps): React.ReactElement {
   /**
    * Render the full card layout: content + toolbar.
    * When mobile overrides are active, renders both desktop and mobile variants
-   * with CSS media queries toggling visibility at 600px.
+   * with CSS media queries toggling visibility at MOBILE_BREAKPOINT_PX.
    */
   const renderCardLayout = (): React.ReactElement => {
     const needsResponsive = hasMobileContent || hasMobileToolbarOverride
@@ -420,22 +416,22 @@ export default function FeedCard (props: FeedCardProps): React.ReactElement {
 
     return (
       <React.Fragment>
-        {/* Desktop layout — hidden at ≤ 600px */}
+        {/* Desktop layout — hidden at ≤ MOBILE_BREAKPOINT_PX */}
         <div css={css`
           display: flex;
           flex-direction: ${desktopSide && hasToolbar ? 'row' : 'column'};
           gap: ${desktopSide && hasToolbar ? '8px' : '0'};
-          @media (max-width: 600px) { display: none !important; }
+          @media (max-width: ${MOBILE_BREAKPOINT_PX}px) { display: none !important; }
         `}>
           <div css={css`flex: 1; min-width: 0;`}>{desktopContent}</div>
           {renderToolbarForPosition(desktopPos)}
         </div>
-        {/* Mobile layout — hidden at > 600px */}
+        {/* Mobile layout — hidden at > MOBILE_BREAKPOINT_PX */}
         <div css={css`
           display: none;
           flex-direction: ${mobileSide && hasToolbar ? 'row' : 'column'};
           gap: ${mobileSide && hasToolbar ? '8px' : '0'};
-          @media (max-width: 600px) { display: flex !important; }
+          @media (max-width: ${MOBILE_BREAKPOINT_PX}px) { display: flex !important; }
         `}>
           <div css={css`flex: 1; min-width: 0;`}>{mobileContentEl}</div>
           {renderToolbarForPosition(mobilePos)}
@@ -453,7 +449,7 @@ export default function FeedCard (props: FeedCardProps): React.ReactElement {
       onKeyDown={clickable && onClick
         ? (evt) => {
             if (evt.key === 'Enter' || evt.key === ' ') {
-              onClick(item, evt as any)
+              onClick(item, evt)
             }
           }
         : undefined}
@@ -516,8 +512,8 @@ export default function FeedCard (props: FeedCardProps): React.ReactElement {
           animation: feedSimpleExpandIn 0.2s ease-out;
         `}>
           {Object.entries(item).map(([key, value]) => (
-            <div key={key} css={css`margin-bottom: 2px;`}>
-              <strong css={css`color: #555; font-size: 0.65rem; text-transform: uppercase;`}>{key}:</strong>{' '}
+            <div key={key} css={expandedFieldItemCss}>
+              <strong css={rawFieldKeySmallCss}>{key}:</strong>{' '}
               <span>{value}</span>
             </div>
           ))}

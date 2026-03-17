@@ -68,9 +68,10 @@ export function searchItems (
   if (!query || query.trim() === '') return items
 
   const lowerQuery = query.toLowerCase().trim()
+  // Pre-compute field list once — all items share the same XML schema keys
+  const fields = searchFields.length > 0 ? searchFields : Object.keys(items[0] || {})
 
   return items.filter(item => {
-    const fields = searchFields.length > 0 ? searchFields : Object.keys(item)
     return fields.some(field => {
       const val = item[field]
       return val != null && val.toLowerCase().includes(lowerQuery)
@@ -80,9 +81,40 @@ export function searchItems (
 
 // ── Step 3: Sort ──────────────────────────────────────────────────
 
+type ColumnType = 'date' | 'numeric' | 'string'
+
 /**
- * Sort items by a field with automatic type detection.
- * Tries date parsing first, then numeric, then falls back to string.
+ * Detect the dominant type of a sort column by sampling the first non-empty values.
+ * Avoids per-comparison Date.parse/Number calls in the sort comparator.
+ */
+function detectColumnType (items: FeedItem[], field: string): ColumnType {
+  const SAMPLE_SIZE = 5
+  let sampled = 0
+  let dateCount = 0
+  let numericCount = 0
+
+  for (const item of items) {
+    if (sampled >= SAMPLE_SIZE) break
+    const val = item[field]
+    if (val == null || val === '') continue
+    sampled++
+
+    if (!isNaN(Date.parse(val))) dateCount++
+    const num = Number(val)
+    if (!isNaN(num)) numericCount++
+  }
+
+  if (sampled === 0) return 'string'
+  // Numeric check first — pure numbers also parse as dates, but numeric sort is preferred
+  if (numericCount === sampled) return 'numeric'
+  if (dateCount === sampled) return 'date'
+  return 'string'
+}
+
+/**
+ * Sort items by a field with pre-detected type optimization.
+ * Samples column values to determine type (date, numeric, string) once,
+ * then uses a specialized comparator — avoiding per-comparison Date.parse.
  *
  * @param reverseFeedOrder - When true and no sortField, reverses the feed's natural order
  */
@@ -97,26 +129,44 @@ export function sortItems (
   }
 
   const dir = sortDirection === 'desc' ? -1 : 1
+  const colType = detectColumnType(items, sortField)
 
+  if (colType === 'numeric') {
+    return [...items].sort((a, b) => {
+      const numA = Number(a[sortField] ?? '')
+      const numB = Number(b[sortField] ?? '')
+      const aValid = !isNaN(numA) && a[sortField] !== ''
+      const bValid = !isNaN(numB) && b[sortField] !== ''
+      if (!aValid && !bValid) return 0
+      if (!aValid) return 1 // blanks sort last
+      if (!bValid) return -1
+      return (numA - numB) * dir
+    })
+  }
+
+  if (colType === 'date') {
+    // Pre-compute parsed dates into a Map to avoid repeated Date.parse
+    const dateCache = new Map<FeedItem, number>()
+    for (const item of items) {
+      const val = item[sortField] ?? ''
+      dateCache.set(item, val ? Date.parse(val) : NaN)
+    }
+    return [...items].sort((a, b) => {
+      const dateA = dateCache.get(a) ?? NaN
+      const dateB = dateCache.get(b) ?? NaN
+      const aValid = !isNaN(dateA)
+      const bValid = !isNaN(dateB)
+      if (!aValid && !bValid) return 0
+      if (!aValid) return 1
+      if (!bValid) return -1
+      return (dateA - dateB) * dir
+    })
+  }
+
+  // String sort — case-insensitive
   return [...items].sort((a, b) => {
     const valA = a[sortField] ?? ''
     const valB = b[sortField] ?? ''
-
-    // Try date parsing first
-    const dateA = Date.parse(valA)
-    const dateB = Date.parse(valB)
-    if (!isNaN(dateA) && !isNaN(dateB)) {
-      return (dateA - dateB) * dir
-    }
-
-    // Try numeric comparison
-    const numA = Number(valA)
-    const numB = Number(valB)
-    if (!isNaN(numA) && !isNaN(numB) && valA !== '' && valB !== '') {
-      return (numA - numB) * dir
-    }
-
-    // Fall back to case-insensitive string comparison
     return valA.localeCompare(valB, undefined, { sensitivity: 'base' }) * dir
   })
 }

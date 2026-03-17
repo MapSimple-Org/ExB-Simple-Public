@@ -45,7 +45,7 @@ export function resolveCardColor (item: FeedItem, config: ColorResolverConfig): 
  */
 function resolveExactColor (value: string, colorMap?: StatusColorMap): string | null {
   if (!colorMap) return null
-  const mapped = (colorMap as any)[value]
+  const mapped = colorMap[value]
   if (!mapped) return null
   return mapped.startsWith('#') ? mapped : `#${mapped}`
 }
@@ -117,16 +117,11 @@ export function enrichItemsWithRangeLabels (
       continue
     }
 
-    const matchIdx = breaks.findIndex(brk => {
-      const num = parseFloat(rawValue)
-      if (isNaN(num)) return false
-      const aboveMin = brk.min === null || brk.min === undefined || num >= brk.min
-      const belowMax = brk.max === null || brk.max === undefined || num < brk.max
-      return aboveMin && belowMax
-    })
-
-    if (matchIdx >= 0) {
-      item[RANGE_LABEL_FIELD] = breaks[matchIdx].label || ''
+    // Reuse findMatchingBreak for consistent range logic
+    const match = findMatchingBreak(rawValue, breaks)
+    if (match) {
+      const matchIdx = breaks.indexOf(match)
+      item[RANGE_LABEL_FIELD] = match.label || ''
       item[RANGE_ORDER_FIELD] = String(matchIdx)
     } else {
       item[RANGE_LABEL_FIELD] = ''

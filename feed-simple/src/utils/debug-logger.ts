@@ -16,9 +16,13 @@
  * - FEED-LAYER: Feed map layer creation, sync, renderer, popups (Mode C)
  * - TEMPLATE: Token substitution and filter pipeline
  * - SETTINGS: Settings panel field discovery and configuration
+ * - EXPORT: CSV export operations
+ * - SEARCH: Search bar filtering
+ * - SORT: Runtime sort operations
+ * - FEATURE-EFFECT: Joined layer dimming during search/filter
  */
 
-type DebugFeature = 'BUG' | 'FETCH' | 'PARSE' | 'RENDER' | 'POLL' | 'JOIN' | 'FEED-LAYER' | 'TEMPLATE' | 'SETTINGS' | 'all' | 'false'
+type DebugFeature = 'BUG' | 'FETCH' | 'PARSE' | 'RENDER' | 'POLL' | 'JOIN' | 'FEED-LAYER' | 'TEMPLATE' | 'SETTINGS' | 'EXPORT' | 'SEARCH' | 'SORT' | 'FEATURE-EFFECT' | 'all' | 'false'
 
 interface DebugLoggerOptions {
   widgetName: string
@@ -137,11 +141,11 @@ class DebugLogger {
 }
 
 /**
- * Creates a debug logger instance for FeedSimple widget
+ * Shared singleton debug logger for the FeedSimple widget.
+ * Import this directly instead of creating per-module instances.
  */
-export function createFeedSimpleDebugLogger() {
-  return new DebugLogger({
-    widgetName: 'FEEDSIMPLE',
-    features: ['FETCH', 'PARSE', 'RENDER', 'POLL', 'JOIN', 'FEED-LAYER', 'TEMPLATE', 'SETTINGS']
-  })
-}
+export const debugLogger = new DebugLogger({
+  widgetName: 'FEEDSIMPLE',
+  features: ['FETCH', 'PARSE', 'RENDER', 'POLL', 'JOIN', 'FEED-LAYER', 'TEMPLATE', 'SETTINGS', 'EXPORT', 'SEARCH', 'SORT', 'FEATURE-EFFECT']
+})
+

@@ -7,14 +7,14 @@ import {
 } from 'jimu-core'
 import Graphic from 'esri/Graphic'
 import { JimuMapViewComponent, type JimuMapView } from 'jimu-arcgis'
-import type { IMConfig } from '../config'
+import type { IMConfig, RangeColorBreak } from '../config'
 import type { FeedItem } from '../utils/parsers/interface'
 import { versionManager } from '../version-manager'
 import { WIDGET_VERSION } from '../version'
-import { createFeedSimpleDebugLogger } from '../utils/debug-logger'
+import { debugLogger } from '../utils/debug-logger'
 import { fetchFeed } from '../utils/feed-fetcher'
 import { CustomXmlParser } from '../utils/parsers/custom-xml'
-import { type FilterContext } from '../utils/token-renderer'
+import { type FilterContext, resolveExternalLinkUrl } from '../utils/token-renderer'
 import FeedCard from './feed-card'
 import FeedControls from './feed-controls'
 import ColorLegend from './feed-legend'
@@ -36,16 +36,15 @@ import {
   destroyFeedFeatureLayer,
   buildPopupTemplate,
   buildFieldMapping,
-  zoomToFeedPoint,
-  panToFeedPoint,
+  navigateToFeedPoint,
   getFeedLayerId
 } from '../utils/feed-layer-manager'
 import { runPipeline, type PipelineResult } from '../utils/feed-pipeline'
 import { enrichItemsWithRangeLabels, RANGE_LABEL_FIELD, RANGE_ORDER_FIELD } from '../utils/color-resolver'
 import { exportFeedItemsToCsv } from '../utils/feed-csv-export'
+import { toArray, toPlain, getDataSourceId } from '../utils/immutable-helpers'
 import defaultMessages from './translations/default'
 
-const debugLogger = createFeedSimpleDebugLogger()
 const parser = new CustomXmlParser()
 
 /** Minimum allowed polling interval in seconds */
@@ -108,6 +107,13 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
   private feedFeatureLayer: __esri.FeatureLayer | null = null
   /** Click handler for map-to-card sync on the feed layer */
   private feedLayerClickHandler: __esri.Handle | null = null
+  /** Cached pipeline result for getProcessedItems() memoization */
+  private cachedPipeline: PipelineResult | null = null
+  /** Key for pipeline memoization — invalidates cache when inputs change */
+  private cachedPipelineKey: string = ''
+  /** Reference equality checks for ImmutableObject arrays in pipeline cache */
+  private cachedFilterByStatusRef: any = null
+  private cachedSearchFieldsRef: any = null
 
   constructor (props: AllWidgetProps<IMConfig>) {
     super(props)
@@ -172,10 +178,10 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
     const currMaxItems = this.props.config.maxItems
     const prevFilter = prevProps.config.filterByStatus
     const currFilter = this.props.config.filterByStatus
-    const prevNumMin = (prevProps.config as any).filterNumericMin
-    const currNumMin = (this.props.config as any).filterNumericMin
-    const prevNumMax = (prevProps.config as any).filterNumericMax
-    const currNumMax = (this.props.config as any).filterNumericMax
+    const prevNumMin = prevProps.config.filterNumericMin
+    const currNumMin = this.props.config.filterNumericMin
+    const prevNumMax = prevProps.config.filterNumericMax
+    const currNumMax = this.props.config.filterNumericMax
     if (prevMaxItems !== currMaxItems || prevFilter !== currFilter ||
         prevNumMin !== currNumMin || prevNumMax !== currNumMax) {
       this.setState({ visibleCount: 0 }, () => {
@@ -203,10 +209,10 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
       const rangeRendererChanged =
         prevProps.config.colorMode !== this.props.config.colorMode ||
         prevProps.config.statusField !== this.props.config.statusField ||
-        JSON.stringify(prevProps.config.rangeColorBreaks) !== JSON.stringify(this.props.config.rangeColorBreaks)
+        prevProps.config.rangeColorBreaks !== this.props.config.rangeColorBreaks
       // Popup template/title changed — triggers layer recreation to rebuild PopupTemplate
-      const popupFields = ['feedMapLayerPopupTemplate', 'feedMapLayerPopupTemplateMobile', 'feedMapLayerPopupTitle', 'mobilePopupCollapsed', 'mobilePopupDockPosition', 'mobilePopupHideDockButton', 'mobilePopupHideActionBar'] as const
-      const popupChanged = popupFields.some(f => (prevProps.config as any)[f] !== (this.props.config as any)[f])
+      const popupFields = ['feedMapLayerPopupTemplate', 'feedMapLayerPopupTemplateMobile', 'feedMapLayerPopupTitle', 'feedMapLayerPopupTitleMobile', 'mobilePopupCollapsed', 'mobilePopupDockPosition', 'mobilePopupHideDockButton', 'mobilePopupHideActionBar'] as const
+      const popupChanged = popupFields.some(f => prevProps.config[f] !== this.props.config[f])
       if (styleChanged || rangeRendererChanged || popupChanged) {
         this.cleanupFeedLayer()
         if (this.mapView && this.state.items.length > 0) {
@@ -216,8 +222,8 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
     }
 
     // Spatial join DS changed — clear map integration state, effect, and re-query
-    const prevDsId = (prevProps.useDataSources?.[0] as any)?.dataSourceId
-    const currDsId = (this.props.useDataSources?.[0] as any)?.dataSourceId
+    const prevDsId = getDataSourceId(prevProps.useDataSources)
+    const currDsId = getDataSourceId(this.props.useDataSources)
     if (prevDsId !== currDsId) {
       // Clear featureEffect on the old layer before switching
       if (prevDsId && this.mapView) {
@@ -229,6 +235,18 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
         this.runQueryGeometries(this.state.items)
       }
     }
+
+    // Range label enrichment config changed — re-enrich existing items
+    const rangeConfigChanged =
+      prevProps.config.colorMode !== this.props.config.colorMode ||
+      prevProps.config.statusField !== this.props.config.statusField ||
+      prevProps.config.rangeColorBreaks !== this.props.config.rangeColorBreaks
+    if (rangeConfigChanged && this.state.items.length > 0) {
+      // Clone items before enrichment to avoid mutating React state in-place
+      const cloned = this.state.items.map(item => ({ ...item }))
+      this.enrichItems(cloned)
+      this.setState({ items: cloned })
+    }
   }
 
   componentWillUnmount (): void {
@@ -239,7 +257,7 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
     this.cleanupFeedLayer()
     // Clear any featureEffect on the joined layer
     if (this.mapView && this.props.useDataSources?.[0]) {
-      const dsId = (this.props.useDataSources[0] as any).dataSourceId
+      const dsId = getDataSourceId(this.props.useDataSources)
       if (dsId) clearFilterEffect(this.mapView, dsId)
     }
     debugLogger.log('POLL', { action: 'widget-unmounted' })
@@ -325,10 +343,37 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
   // ── Change Detection ─────────────────────────────────────────────
 
   /**
-   * Generate a stable ID for a feed item.
-   * Uses joinFieldFeed if configured, otherwise hashes all field values.
+   * Enrich items with range label virtual fields.
+   * Called once at fetch time and when range config changes — not in the render path.
+   */
+  private enrichItems (items: FeedItem[]): void {
+    const { config } = this.props
+    enrichItemsWithRangeLabels(items, {
+      statusField: config.statusField || '',
+      colorMode: config.colorMode || 'exact',
+      rangeColorBreaks: toArray(config.rangeColorBreaks)
+    })
+    // Invalidate pipeline cache — enrichment changes item fields
+    this.cachedPipelineKey = ''
+    this.cachedFilterByStatusRef = null
+    this.cachedSearchFieldsRef = null
+    this.cachedPipeline = null
+  }
+
+  /**
+   * Get the cached item ID. Items are stamped with _feedItemId in loadFeed().
+   * Falls back to computing on-the-fly if the stamp is missing (shouldn't happen).
    */
   private getItemId (item: FeedItem): string {
+    return item._feedItemId || this.computeItemId(item)
+  }
+
+  /**
+   * Compute a stable ID for a feed item.
+   * Uses joinFieldFeed if configured, otherwise hashes all field values.
+   * Called once per item at fetch time — result is cached on the item as _feedItemId.
+   */
+  private computeItemId (item: FeedItem): string {
     const { joinFieldFeed } = this.props.config
     if (joinFieldFeed && item[joinFieldFeed]) {
       return item[joinFieldFeed]
@@ -392,7 +437,7 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
     if (this.mapView) {
       if (this.feedFeatureLayer) this.cleanupFeedLayer()
       if (this.props.useDataSources?.[0]) {
-        const dsId = (this.props.useDataSources[0] as any).dataSourceId
+        const dsId = getDataSourceId(this.props.useDataSources)
         if (dsId) clearFilterEffect(this.mapView, dsId)
       }
     }
@@ -401,7 +446,7 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
     debugLogger.log('JOIN', { action: 'map-view-changed', hasView: !!this.mapView })
 
     // Initialize feed map layer if configured and items are available
-    if (this.mapView && isFeedMapLayerConfigured(this.props.config as any) && this.state.items.length > 0) {
+    if (this.mapView && isFeedMapLayerConfigured(this.props.config) && this.state.items.length > 0) {
       this.initFeedLayer(this.state.items, this.state.fieldNames)
     }
   }
@@ -420,7 +465,7 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
    */
   private async runQueryGeometries (items: FeedItem[]): Promise<void> {
     const { joinFieldFeed, joinFieldService } = this.props.config
-    const dataSourceId = (this.props.useDataSources?.[0] as any)?.dataSourceId
+    const dataSourceId = getDataSourceId(this.props.useDataSources)
     if (!joinFieldFeed || !joinFieldService || !dataSourceId) return
 
     const result = await queryGeometries({
@@ -447,7 +492,7 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
   private async initFeedLayer (items: FeedItem[], fieldNames: string[]): Promise<void> {
     if (!this.mapView || this.feedFeatureLayer) return
 
-    const config = this.props.config as any
+    const config = this.props.config
 
     // Check if layer already exists on map (widget remount)
     const existingLayerId = getFeedLayerId(this.props.id)
@@ -489,7 +534,7 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
   private async syncFeedLayer (items: FeedItem[], fieldNames: string[]): Promise<void> {
     if (!this.feedFeatureLayer || !this.mapView) {
       // Layer not created yet — try to create it
-      if (this.mapView && isFeedMapLayerConfigured(this.props.config as any)) {
+      if (this.mapView && isFeedMapLayerConfigured(this.props.config)) {
         await this.initFeedLayer(items, fieldNames)
       }
       return
@@ -498,7 +543,7 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
     await syncFeedItemsToLayer(
       this.feedFeatureLayer,
       items,
-      this.props.config as any,
+      this.props.config,
       fieldNames,
       (item) => this.getItemId(item)
     )
@@ -512,13 +557,13 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
    * Called when search/filter/sort changes so the map reflects the visible card set.
    */
   private syncFeedLayerWithProcessedItems (): void {
-    if (!this.feedFeatureLayer || !isFeedMapLayerConfigured(this.props.config as any)) return
+    if (!this.feedFeatureLayer || !isFeedMapLayerConfigured(this.props.config)) return
     // Use allProcessed (post filter/search/sort, pre-pagination) so all matching items show on map
     const pipeline = this.getProcessedItems()
     syncFeedItemsToLayer(
       this.feedFeatureLayer,
       pipeline.allProcessed,
-      this.props.config as any,
+      this.props.config,
       this.state.fieldNames,
       (item) => this.getItemId(item)
     ).catch(err => {
@@ -534,7 +579,7 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
   private syncJoinedLayerFilterEffect (): void {
     if (!this.mapView || !isMapIntegrationConfigured(this.props.useDataSources, this.props.config)) return
     const { joinFieldFeed, joinFieldService } = this.props.config
-    const dataSourceId = (this.props.useDataSources?.[0] as any)?.dataSourceId
+    const dataSourceId = getDataSourceId(this.props.useDataSources)
     if (!joinFieldFeed || !joinFieldService || !dataSourceId) return
 
     const pipeline = this.getProcessedItems()
@@ -630,12 +675,8 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
     const { config } = this.props
     const { items, searchQuery, runtimeSortField, runtimeSortDirection, visibleCount } = this.state
 
-    // Enrich items with range labels (adds virtual __colorRangeLabel / __colorRangeOrder fields)
-    enrichItemsWithRangeLabels(items, {
-      statusField: config.statusField || '',
-      colorMode: config.colorMode || 'exact',
-      rangeColorBreaks: config.rangeColorBreaks as any
-    })
+    // Range labels are enriched at fetch time (loadFeed) and on config change (componentDidUpdate)
+    // — not here in the render path.
 
     // Determine effective sort: runtime override > config default
     // '__reverse__' is a sentinel for "reverse feed order" — not a real field
@@ -654,19 +695,51 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
       ? (visibleCount > 0 ? visibleCount : maxItems)
       : 0
 
-    return runPipeline(items, {
+    // Memoization: skip pipeline if inputs haven't changed.
+    // Primitive values go into a string key; ImmutableObject refs use reference equality
+    // (ImmutableObject.toString() is unreliable for cache keys).
+    const cacheKey = [
+      items.length, // item count as proxy — items ref changes on fetch
+      items === this.state.items ? 'same' : 'new', // referential check
+      searchQuery,
+      effectiveSortField,
+      effectiveSortDirection,
+      isReverse,
+      config.reverseFeedOrder,
+      config.statusField,
+      config.filterNumericMin,
+      config.filterNumericMax,
+      maxItems,
+      effectiveVisibleCount
+    ].join('|')
+
+    const refsMatch =
+      this.cachedFilterByStatusRef === config.filterByStatus &&
+      this.cachedSearchFieldsRef === config.searchFields
+
+    if (cacheKey === this.cachedPipelineKey && refsMatch && this.cachedPipeline) {
+      return this.cachedPipeline
+    }
+
+    const result = runPipeline(items, {
       statusField: config.statusField || '',
-      filterByStatus: config.filterByStatus ? [...config.filterByStatus] : [],
-      filterNumericMin: (config as any).filterNumericMin ?? null,
-      filterNumericMax: (config as any).filterNumericMax ?? null,
+      filterByStatus: toArray<string>(config.filterByStatus),
+      filterNumericMin: config.filterNumericMin ?? null,
+      filterNumericMax: config.filterNumericMax ?? null,
       searchQuery: searchQuery || '',
-      searchFields: config.searchFields ? [...config.searchFields] : [],
+      searchFields: toArray<string>(config.searchFields),
       sortField: effectiveSortField,
       sortDirection: effectiveSortDirection,
       reverseFeedOrder: isReverse !== (config.reverseFeedOrder || false),
       maxItems,
       visibleCount: effectiveVisibleCount
     })
+
+    this.cachedPipelineKey = cacheKey
+    this.cachedFilterByStatusRef = config.filterByStatus
+    this.cachedSearchFieldsRef = config.searchFields
+    this.cachedPipeline = result
+    return result
   }
 
   /** Expand the visible set by one page of maxItems */
@@ -705,8 +778,8 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
     const { config } = this.props
     const pipeline = this.getProcessedItems()
     exportFeedItemsToCsv(pipeline.allProcessed, {
-      exportFields: config.exportFields ? [...config.exportFields as any] : [],
-      columnHeaderLabels: config.columnHeaderLabels ? { ...(config.columnHeaderLabels as any) } : {},
+      exportFields: toArray<string>(config.exportFields),
+      columnHeaderLabels: toPlain<{ [field: string]: string }>(config.columnHeaderLabels),
       filenameTemplate: config.exportFilenameTemplate || 'feedsimple-export-{date}'
     })
   }
@@ -736,7 +809,13 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
       })
 
       // Store items unsorted — the pipeline handles sort at render time
+      // Stamp each item with a cached _feedItemId to avoid recomputing in render
       const fetchedItems = parsed.items
+      for (const item of fetchedItems) {
+        item._feedItemId = this.computeItemId(item)
+      }
+      // Enrich with range labels once at fetch time (not per render)
+      this.enrichItems(fetchedItems)
 
       // Change detection: highlight new/changed items
       if (this.props.config.highlightNewItems) {
@@ -764,7 +843,7 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
         pollPaused: false
       }, () => {
         // Feed map layer: create layer if needed, then sync with processed items
-        if (isFeedMapLayerConfigured(this.props.config as any)) {
+        if (isFeedMapLayerConfigured(this.props.config)) {
           if (!this.feedFeatureLayer) {
             // Layer not created yet (mapView arrived before items) — init first
             this.syncFeedLayer(this.state.items, this.state.fieldNames)
@@ -818,7 +897,7 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
    * 2. externalLinkTemplate configured → open substituted URL in new tab
    * 3. Neither → no-op
    */
-  private onCardClick = (item: FeedItem, evt: React.MouseEvent): void => {
+  private onCardClick = (item: FeedItem, evt: React.MouseEvent | React.KeyboardEvent): void => {
     // Don't intercept clicks on links inside the card
     if ((evt.target as HTMLElement).closest('a')) return
 
@@ -826,7 +905,7 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
     const itemId = this.getItemId(item)
 
     // Feed map layer: zoom to feed point directly from coordinates
-    if (isFeedMapLayerConfigured(this.props.config as any) && this.mapView) {
+    if (isFeedMapLayerConfigured(this.props.config) && this.mapView) {
       // Toggle: clicking the same card again clears selection
       if (this.state.selectedItemId === itemId) {
         if (this.mapView?.popup) {
@@ -844,19 +923,11 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
       const zoomEnabled = this.props.config.enableZoomOnClick !== false
       const centerEnabled = this.props.config.enableCenterOnClick === true
 
-      if (centerEnabled) {
-        // Center/pan without zoom
-        panToFeedPoint(this.mapView, item, this.props.config as any)
-          .then((success) => {
-            if (!success) this.showNoGeometryMessage(itemId)
-          })
-      } else {
-        // Zoom (or just select if zoom is disabled)
-        zoomToFeedPoint(this.mapView, item, this.props.config as any, { skipZoom: !zoomEnabled })
-          .then((success) => {
-            if (!success) this.showNoGeometryMessage(itemId)
-          })
-      }
+      const mode = centerEnabled ? 'pan' : (zoomEnabled ? 'zoom' : 'select')
+      navigateToFeedPoint(this.mapView, item, this.props.config, mode)
+        .then((success) => {
+          if (!success) this.showNoGeometryMessage(itemId)
+        })
       this.setState({ selectedItemId: itemId })
       debugLogger.log('FEED-LAYER', { action: 'card-click-select', itemId, zoomEnabled, centerEnabled })
       return
@@ -886,20 +957,14 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
 
         // Zoom (if enabled) and identify the feature on the map
         if (this.mapView) {
-          const dataSourceId = (this.props.useDataSources[0] as any).dataSourceId
-          const mobilePopupParams = {
-            mobilePopupCollapsed: (this.props.config as any).mobilePopupCollapsed,
-            mobilePopupDockPosition: (this.props.config as any).mobilePopupDockPosition || '',
-            mobilePopupHideDockButton: (this.props.config as any).mobilePopupHideDockButton,
-            mobilePopupHideActionBar: (this.props.config as any).mobilePopupHideActionBar
-          }
+          const dataSourceId = getDataSourceId(this.props.useDataSources)
           const doIdentify = (): void => {
             identifyFeatureOnMap({
               mapView: this.mapView,
               dataSourceId,
               joinField: joinFieldService,
               joinValue,
-              ...mobilePopupParams
+              ...this.getMobilePopupParams()
             })
           }
 
@@ -937,12 +1002,8 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
     }
 
     // Fallback: external link
-    if (!externalLinkTemplate) return
-
-    const url = externalLinkTemplate.replace(
-      /\{\{(\s*[\w.@\[\]]+\s*)\}\}/g,
-      (_m, name: string) => item[name.trim()] ?? ''
-    )
+    const url = resolveExternalLinkUrl(externalLinkTemplate, item)
+    if (!url) return
 
     debugLogger.log('RENDER', { action: 'card-click-external', url })
     window.open(url, '_blank', 'noopener')
@@ -986,31 +1047,41 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
     const { linkField, externalLinkTemplate } = this.props.config
     if (!linkField) return undefined
     if (linkField === '__externalLink__') {
-      if (!externalLinkTemplate) return undefined
-      return externalLinkTemplate.replace(
-        /\{\{([^}]+)\}\}/g,
-        (_, token: string) => item[token.trim()] ?? ''
-      )
+      return resolveExternalLinkUrl(externalLinkTemplate, item)
     }
     return item[linkField] || undefined
   }
 
   // ── Toolbar Handlers ──────────────────────────────────────────────
 
-  /** Zoom to a feed item's feature/point on the map (toolbar button) */
-  private onCardZoom = (item: FeedItem): void => {
+  /** Build the mobile popup params object from config (shared by all map navigation paths) */
+  private getMobilePopupParams () {
+    return {
+      mobilePopupCollapsed: this.props.config.mobilePopupCollapsed,
+      mobilePopupDockPosition: this.props.config.mobilePopupDockPosition || '',
+      mobilePopupHideDockButton: this.props.config.mobilePopupHideDockButton,
+      mobilePopupHideActionBar: this.props.config.mobilePopupHideActionBar
+    }
+  }
+
+  /**
+   * Navigate to a feed item on the map (zoom or pan).
+   * Handles both feed-layer and spatial-join paths.
+   * Used by toolbar zoom/pan buttons and replaces the former onCardZoom / onCardPan methods.
+   */
+  private handleMapNavigation = (item: FeedItem, mode: 'zoom' | 'pan'): void => {
     if (!this.mapView) return
     const itemId = this.getItemId(item)
 
     // Feed Map Layer takes priority
-    if (isFeedMapLayerConfigured(this.props.config as any)) {
+    if (isFeedMapLayerConfigured(this.props.config)) {
       this.ensureFeedLayerVisible()
-      zoomToFeedPoint(this.mapView, item, this.props.config as any)
+      navigateToFeedPoint(this.mapView, item, this.props.config, mode)
         .then((success) => {
           if (!success) this.showNoGeometryMessage(itemId)
         })
       this.setState({ selectedItemId: itemId })
-      debugLogger.log('FEED-LAYER', { action: 'toolbar-zoom', itemId })
+      debugLogger.log('FEED-LAYER', { action: `toolbar-${mode}`, itemId })
       return
     }
 
@@ -1023,81 +1094,37 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
       const restGeom = this.state.geometryMap.get(joinValue)
       const geometry = inferGeometryType(restGeom)
       const graphic = new Graphic({ attributes: { [joinFieldService]: joinValue }, geometry })
-      const pointZoom = this.props.config.zoomFactorPoint || 15
-      const polyBuffer = this.props.config.zoomFactorPoly || 1.5
-      const goToTarget = buildGoToTarget(graphic, geometry.type, pointZoom, polyBuffer)
-      const dataSourceId = (this.props.useDataSources[0] as any).dataSourceId
+      const dataSourceId = getDataSourceId(this.props.useDataSources)
 
-      const mobilePopup = {
-        mobilePopupCollapsed: (this.props.config as any).mobilePopupCollapsed,
-        mobilePopupDockPosition: (this.props.config as any).mobilePopupDockPosition || '',
-        mobilePopupHideDockButton: (this.props.config as any).mobilePopupHideDockButton
-      }
+      // Build goTo target based on mode
+      const goToTarget = mode === 'zoom'
+        ? buildGoToTarget(graphic, geometry.type, this.props.config.zoomFactorPoint || 15, this.props.config.zoomFactorPoly || 1.5)
+        : buildPanTarget(graphic, geometry.type)
+
       this.mapView.goTo(goToTarget, { animate: true, duration: 800 })
         .then(() => {
-          identifyFeatureOnMap({ mapView: this.mapView, dataSourceId, joinField: joinFieldService, joinValue, ...mobilePopup })
+          identifyFeatureOnMap({ mapView: this.mapView, dataSourceId, joinField: joinFieldService, joinValue, ...this.getMobilePopupParams() })
         })
         .catch(() => { /* goTo can fail if view destroyed */ })
       this.setState({ selectedItemId: itemId })
-      debugLogger.log('JOIN', { action: 'toolbar-zoom', joinValue })
+      debugLogger.log('JOIN', { action: `toolbar-${mode}`, joinValue })
     } else {
       this.setState({ selectedItemId: itemId })
       this.showNoGeometryMessage(itemId)
     }
   }
+
+  /** Zoom to a feed item's feature/point on the map (toolbar button) */
+  private onCardZoom = (item: FeedItem): void => { this.handleMapNavigation(item, 'zoom') }
 
   /** Pan (center without zoom change) to a feed item on the map (toolbar button) */
-  private onCardPan = (item: FeedItem): void => {
-    if (!this.mapView) return
-    const itemId = this.getItemId(item)
-
-    // Feed Map Layer takes priority
-    if (isFeedMapLayerConfigured(this.props.config as any)) {
-      this.ensureFeedLayerVisible()
-      panToFeedPoint(this.mapView, item, this.props.config as any)
-        .then((success) => {
-          if (!success) this.showNoGeometryMessage(itemId)
-        })
-      this.setState({ selectedItemId: itemId })
-      debugLogger.log('FEED-LAYER', { action: 'toolbar-pan', itemId })
-      return
-    }
-
-    // Spatial join
-    const { joinFieldFeed, joinFieldService } = this.props.config
-    if (!joinFieldFeed || !joinFieldService) return
-    const joinValue = item[joinFieldFeed]
-
-    if (joinValue && this.state.geometryMap.has(joinValue)) {
-      const restGeom = this.state.geometryMap.get(joinValue)
-      const geometry = inferGeometryType(restGeom)
-      const graphic = new Graphic({ attributes: { [joinFieldService]: joinValue }, geometry })
-      const panTarget = buildPanTarget(graphic, geometry.type)
-      const dataSourceId = (this.props.useDataSources[0] as any).dataSourceId
-
-      const mobilePopup = {
-        mobilePopupCollapsed: (this.props.config as any).mobilePopupCollapsed,
-        mobilePopupDockPosition: (this.props.config as any).mobilePopupDockPosition || '',
-        mobilePopupHideDockButton: (this.props.config as any).mobilePopupHideDockButton
-      }
-      this.mapView.goTo(panTarget, { animate: true, duration: 800 })
-        .then(() => {
-          identifyFeatureOnMap({ mapView: this.mapView, dataSourceId, joinField: joinFieldService, joinValue, ...mobilePopup })
-        })
-        .catch(() => { /* goTo can fail if view destroyed */ })
-      this.setState({ selectedItemId: itemId })
-      debugLogger.log('JOIN', { action: 'toolbar-pan', joinValue })
-    } else {
-      this.setState({ selectedItemId: itemId })
-      this.showNoGeometryMessage(itemId)
-    }
-  }
+  private onCardPan = (item: FeedItem): void => { this.handleMapNavigation(item, 'pan') }
 
   /** Whether cards should be clickable (have pointer cursor + hover effect) */
   private isCardClickable (): boolean {
     return !!this.props.config.externalLinkTemplate ||
       isMapIntegrationConfigured(this.props.useDataSources, this.props.config) ||
-      isFeedMapLayerConfigured(this.props.config as any)
+      isFeedMapLayerConfigured(this.props.config)
   }
 
   /** Format lastFetchTime as a human-readable string */
@@ -1230,7 +1257,12 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
           )}
 
           {/* Search + sort controls — shown when data is loaded */}
-          {!isLoading && !error && this.state.items.length > 0 && (
+          {!isLoading && !error && this.state.items.length > 0 && (() => {
+            // Pre-compute arrays once — avoids per-card/per-component toArray() allocations
+            const rangeColorBreaksArray = toArray<RangeColorBreak>(config.rangeColorBreaks)
+            const sortableFieldsArray = toArray<string>(config.sortableFields)
+
+            return (<>
             <FeedControls
               enableSearch={config.enableSearchBar !== false}
               searchPlaceholder={config.searchPlaceholder || 'Search...'}
@@ -1240,42 +1272,40 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
               totalCount={this.state.items.length}
               itemLabel={itemLabel}
               enableSort={config.enableSortControls !== false}
-              sortableFields={config.sortableFields ? [...config.sortableFields as any] : []}
+              sortableFields={sortableFieldsArray}
               allFieldNames={this.state.fieldNames}
               sortField={this.state.runtimeSortField}
               sortDirection={this.state.runtimeSortDirection}
               onSortChange={this.onSortChange}
               hasRangeLabels={
                 config.colorMode === 'range' &&
-                Array.isArray(config.rangeColorBreaks) &&
-                (config.rangeColorBreaks as any[]).some((b: any) => b.label && b.label.trim())
+                rangeColorBreaksArray.some(b => b.label && b.label.trim())
               }
             />
-          )}
 
-          {/* Color legend — shown when color coding is configured and legend is enabled */}
-          {!isLoading && !error && config.showColorLegend !== false && config.statusField && this.state.items.length > 0 && (
-            <ColorLegend
-              colorMode={config.colorMode || 'exact'}
-              statusColorMap={config.statusColorMap as any}
-              rangeColorBreaks={config.rangeColorBreaks as any}
-            />
-          )}
+            {/* Color legend — shown when color coding is configured and legend is enabled */}
+            {config.showColorLegend !== false && config.statusField && (
+              <ColorLegend
+                colorMode={config.colorMode || 'exact'}
+                statusColorMap={toPlain(config.statusColorMap)}
+                rangeColorBreaks={rangeColorBreaksArray}
+              />
+            )}
 
-          {/* No results message — when search/filter produces 0 items but data exists */}
-          {!isLoading && !error && this.state.items.length > 0 && items.length === 0 && (
-            <div css={css`
-              text-align: center;
-              color: var(--sys-color-text-tertiary, #999);
-              font-size: 12px;
-              padding: 20px 12px;
-              font-style: italic;
-            `}>
-              No matching {config.itemLabelPlural || 'items'} found.
-            </div>
-          )}
+            {/* No results message — when search/filter produces 0 items but data exists */}
+            {items.length === 0 && (
+              <div css={css`
+                text-align: center;
+                color: var(--sys-color-text-tertiary, #999);
+                font-size: 12px;
+                padding: 20px 12px;
+                font-style: italic;
+              `}>
+                No matching {config.itemLabelPlural || 'items'} found.
+              </div>
+            )}
 
-          {!isLoading && !error && items.length > 0 && (() => {
+            {items.length > 0 && (() => {
             const clickable = this.isCardClickable()
             const filterCtx: FilterContext = {
               externalLinkTemplate: config.externalLinkTemplate,
@@ -1283,7 +1313,7 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
             }
 
             // Toolbar visibility (computed once for all cards)
-            const hasMapConfig = isFeedMapLayerConfigured(config as any) ||
+            const hasMapConfig = isFeedMapLayerConfigured(config) ||
               isMapIntegrationConfigured(this.props.useDataSources, config)
             const showZoomButton = hasMapConfig && config.enableZoomOnClick === false
             const showPanButton = hasMapConfig && config.enableCenterOnClick !== true
@@ -1308,7 +1338,7 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
                   // Per-item geometry check for toolbar button state
                   let hasGeometry = true
                   if (hasMapConfig) {
-                    if (isFeedMapLayerConfigured(config as any)) {
+                    if (isFeedMapLayerConfigured(config)) {
                       const lat = parseFloat(item[config.latitudeField] ?? '')
                       const lon = parseFloat(item[config.longitudeField] ?? '')
                       hasGeometry = !isNaN(lat) && !isNaN(lon)
@@ -1318,24 +1348,24 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
                   }
 
                   return (
-                    <div key={i} data-feed-item-id={id}>
+                    <div key={id} data-feed-item-id={id}>
                       <FeedCard
                         item={item}
                         isHighlighted={this.state.highlightedIds.has(id)}
                         isSelected={this.state.selectedItemId === id}
                         cardTemplate={config.cardTemplate}
-                        cardTemplateMobile={(config as any).cardTemplateMobile || ''}
+                        cardTemplateMobile={config.cardTemplateMobile || ''}
                         statusField={config.statusField}
                         statusColorMap={config.statusColorMap}
                         colorMode={config.colorMode || 'exact'}
-                        rangeColorBreaks={config.rangeColorBreaks as any}
+                        rangeColorBreaks={rangeColorBreaksArray}
                         hoverTextField={config.hoverTextField}
                         filterContext={filterCtx}
                         clickable={clickable}
                         highlightDurationMs={HIGHLIGHT_DURATION_MS}
                         onClick={clickable ? this.onCardClick : undefined}
                         noGeometryMessage={this.state.noGeometryItemId === id
-                          ? this.getI18nMessage(isFeedMapLayerConfigured(config as any) ? 'noValidCoordinates' : 'noGeometryOnMap')
+                          ? this.getI18nMessage(isFeedMapLayerConfigured(config) ? 'noValidCoordinates' : 'noGeometryOnMap')
                           : undefined}
                         showZoomButton={showZoomButton}
                         showPanButton={showPanButton}
@@ -1344,8 +1374,8 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
                         onZoom={showZoomButton ? this.onCardZoom : undefined}
                         onPan={showPanButton ? this.onCardPan : undefined}
                         linkUrl={this.resolveLinkUrl(item)}
-                        toolbarPosition={(config as any).toolbarPosition || 'bottom'}
-                        toolbarPositionMobile={(config as any).toolbarPositionMobile || ''}
+                        toolbarPosition={config.toolbarPosition || 'bottom'}
+                        toolbarPositionMobile={config.toolbarPositionMobile || ''}
                         toolbarLabels={toolbarLabels}
                       />
                     </div>
@@ -1441,7 +1471,7 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
                 )}
 
                 {/* Source attribution footer */}
-                {((config as any).sourceLabel || (config as any).sourceUrl) && (
+                {(config.sourceLabel || config.sourceUrl) && (
                   <div css={css`
                     text-align: center;
                     font-size: 11px;
@@ -1450,9 +1480,9 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
                     border-top: 1px solid var(--sys-color-divider-secondary, #e0e0e0);
                     line-height: 1.4;
                   `}>
-                    {(config as any).sourceUrl
+                    {config.sourceUrl
                       ? <a
-                          href={(config as any).sourceUrl}
+                          href={config.sourceUrl}
                           target='_blank'
                           rel='noopener noreferrer'
                           css={css`
@@ -1461,14 +1491,16 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
                             &:hover { text-decoration: underline; }
                           `}
                         >
-                          {(config as any).sourceLabel || (config as any).sourceUrl}
+                          {config.sourceLabel || config.sourceUrl}
                         </a>
-                      : (config as any).sourceLabel
+                      : config.sourceLabel
                     }
                   </div>
                 )}
               </div>
             )
+          })()}
+          </>)
           })()}
 
           {/* DataSourceComponent ensures the spatial join layer DS is instantiated by ExB */}

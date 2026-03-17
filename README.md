@@ -2,8 +2,8 @@
 
 Custom widgets for ArcGIS Experience Builder Developer Edition (1.19.0+). Built for performance, deep-linking, and advanced result management.
 
-**Current Version**: QS `1.19.0-r025.072` | FS `1.19.0-r002.047`
-**Latest Update**: iOS auto-zoom fix, mobile popup behavior, color legend, field chip UX (Mar 16, 2026)
+**Current Version**: QS `1.19.0-r025.072` | FS `1.19.0-r003.010`
+**Latest Update**: FeedSimple code quality remediation — type safety, deduplication, performance, polish (Mar 16, 2026)
 
 ## Key Differentiators (Why QuerySimple?)
 
@@ -19,20 +19,20 @@ QuerySimple is designed to solve the common pain points of the standard Experien
 
 ## What's New (Mar 16, 2026)
 
-### QuerySimple r025.072
+### FeedSimple r003.010 (Code Quality Remediation)
 
-- **iOS auto-zoom prevention**: Inputs in the spatial tab enforce 16px font on mobile/tablet to stop Safari from zooming
-- **Mobile popup behavior**: 4 new config fields to control popup collapse, dock position, and action bar visibility on small screens. Uses reactive `mapView.watch('popup.visible')` to apply settings when popups open.
+No new user-facing features — this release is entirely focused on internal code quality, performance, and maintainability. A 4-agent code review identified 36 findings (8 HIGH, 13 MEDIUM, 15 LOW), all resolved:
 
-### FeedSimple r002.040–047
+- **Type safety**: Removed `as any` casts, extracted constants, singleton debug logger
+- **Deduplication**: Consolidated 5 duplicated utility functions, merged zoom/pan methods, generic config setter
+- **Performance**: Pipeline memoization, diff-based feed layer sync, sort type pre-detection, field mapping caching
+- **Polish**: CSS hoisting, dead code cleanup, type narrowing, regex pre-compilation
 
-- **Color legend** (r002.047): Collapsible color key bar above the card list — supports exact and range modes
-- **Field chip UX** (r002.047): High-contrast text and scrollable panels for Insert Field, Sortable Fields, and Search Fields
-- **ClassBreaksRenderer** (r002.031): Per-range map symbol overrides (color, size, style)
-- **Pagination, search, sort** (r002.022): Show-more pagination, debounced search, runtime sort controls
-- **iOS auto-zoom fix** (r002.046): Breakpoint widened to 1024px for iPadOS tablets
+See [RELEASE_FS-r003.010](docs/releases/RELEASE_FS-r003.010.md) for full details.
 
-See [RELEASE_QS-r025.072_FS-r002.047](docs/releases/RELEASE_QS-r025.072_FS-r002.047.md) for full details.
+### Previous: QuerySimple r025.072 + FeedSimple r002.047
+
+See [RELEASE_QS-r025.072_FS-r002.047](docs/releases/RELEASE_QS-r025.072_FS-r002.047.md) for details.
 
 ---
 

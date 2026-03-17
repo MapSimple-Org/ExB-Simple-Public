@@ -9,21 +9,74 @@ import { type AllWidgetSettingProps } from 'jimu-for-builder'
 import { SettingSection, SettingRow, MapWidgetSelector } from 'jimu-ui/advanced/setting-components'
 import { DataSourceSelector } from 'jimu-ui/advanced/data-source-selector'
 import { TextInput, NumericInput, Switch, Select, Option, Button } from 'jimu-ui'
-import type { IMConfig, StatusColorMap, RangeColorBreak } from '../config'
+import type { FeedSimpleConfig, IMConfig, StatusColorMap, RangeColorBreak } from '../config'
 import type { FeedItem } from '../utils/parsers/interface'
 import { fetchFeed } from '../utils/feed-fetcher'
 import { CustomXmlParser } from '../utils/parsers/custom-xml'
 import { renderPreview } from '../utils/markdown-template-utils'
 import { buildOutputDataSourceJson } from '../utils/data-source-builder'
-import { createFeedSimpleDebugLogger } from '../utils/debug-logger'
+import { debugLogger } from '../utils/debug-logger'
+import { toArray, toPlain, getDataSourceId } from '../utils/immutable-helpers'
 import defaultMessages from './translations/default'
-
-const debugLogger = createFeedSimpleDebugLogger()
 
 /** Data source types allowed for Map Integration layer selection */
 const SPATIAL_JOIN_DS_TYPES = Immutable([AllDataSourceTypes.FeatureLayer])
 
 const parser = new CustomXmlParser()
+
+// ── Static CSS (hoisted to module scope — no per-render allocation) ──
+
+const monoTextareaCss = css`
+  font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+  font-size: 11px;
+  padding: 6px 8px;
+  border: 1px solid var(--sys-color-divider-secondary);
+  border-radius: 4px;
+  background: var(--sys-color-surface-paper);
+  color: var(--sys-color-text-primary);
+  resize: vertical;
+  line-height: 1.5;
+`
+
+const monoTextareaLgCss = css`
+  font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+  font-size: 12px;
+  line-height: 1.5;
+  padding: 8px;
+  border: 1px solid var(--sys-color-divider-secondary);
+  border-radius: 4px;
+  background: var(--sys-color-surface-paper);
+  color: var(--sys-color-text-primary);
+  resize: vertical;
+  &:focus {
+    outline: 2px solid var(--sys-color-primary-main);
+    outline-offset: -1px;
+  }
+`
+
+const fieldCheckboxLabelCss = css`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  cursor: pointer;
+  color: var(--sys-color-text-primary);
+`
+
+const fieldCheckboxContainerCss = css`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  max-height: 200px;
+  overflow-y: auto;
+`
+
+const fieldCheckboxHintCss = css`
+  font-size: 11px;
+  color: var(--sys-color-text-tertiary);
+  margin-bottom: 4px;
+`
 
 interface State {
   discoveredFields: string[]
@@ -68,7 +121,7 @@ export default class Setting extends React.PureComponent<AllWidgetSettingProps<I
     // Load Map Integration layer fields if already configured (settings panel reopened)
     const useDs = this.props.useDataSources?.[0]
     if (useDs) {
-      this.loadSpatialJoinFields((useDs as any).dataSourceId)
+      this.loadSpatialJoinFields(getDataSourceId(this.props.useDataSources))
     }
 
     // Auto-discover feed fields when panel opens with a configured URL
@@ -249,7 +302,7 @@ export default class Setting extends React.PureComponent<AllWidgetSettingProps<I
   }
 
   onStatusColorChange = (statusValue: string, color: string): void => {
-    const currentMap = (this.props.config.statusColorMap as any) || {}
+    const currentMap = toPlain<StatusColorMap>(this.props.config.statusColorMap)
     const newMap: StatusColorMap = { ...currentMap, [statusValue]: color }
     this.props.onSettingChange({
       id: this.props.id,
@@ -265,7 +318,7 @@ export default class Setting extends React.PureComponent<AllWidgetSettingProps<I
   }
 
   onAddRangeBreak = (): void => {
-    const current = (this.props.config.rangeColorBreaks as any as RangeColorBreak[]) || []
+    const current = toArray<RangeColorBreak>(this.props.config.rangeColorBreaks)
     const newBreaks: RangeColorBreak[] = [...current, { min: null, max: null, color: '#FFD700', label: '' }]
     this.props.onSettingChange({
       id: this.props.id,
@@ -273,8 +326,8 @@ export default class Setting extends React.PureComponent<AllWidgetSettingProps<I
     })
   }
 
-  onUpdateRangeBreak = (index: number, field: keyof RangeColorBreak, value: any): void => {
-    const current = (this.props.config.rangeColorBreaks as any as RangeColorBreak[]) || []
+  onUpdateRangeBreak = (index: number, field: keyof RangeColorBreak, value: string | number | null | undefined): void => {
+    const current = toArray<RangeColorBreak>(this.props.config.rangeColorBreaks)
     const updated = [...current]
     const brk = { ...updated[index] }
 
@@ -288,6 +341,7 @@ export default class Setting extends React.PureComponent<AllWidgetSettingProps<I
         brk.mapColor = value
       }
     } else {
+      // Dynamic property assignment on a spread copy — TS can't narrow this
       ;(brk as any)[field] = value
     }
 
@@ -299,7 +353,7 @@ export default class Setting extends React.PureComponent<AllWidgetSettingProps<I
   }
 
   onRemoveRangeBreak = (index: number): void => {
-    const current = (this.props.config.rangeColorBreaks as any as RangeColorBreak[]) || []
+    const current = toArray<RangeColorBreak>(this.props.config.rangeColorBreaks)
     const updated = current.filter((_, i) => i !== index)
     this.props.onSettingChange({
       id: this.props.id,
@@ -308,7 +362,7 @@ export default class Setting extends React.PureComponent<AllWidgetSettingProps<I
   }
 
   onMoveRangeBreak = (index: number, direction: 'up' | 'down'): void => {
-    const current = (this.props.config.rangeColorBreaks as any as RangeColorBreak[]) || []
+    const current = toArray<RangeColorBreak>(this.props.config.rangeColorBreaks)
     const targetIndex = direction === 'up' ? index - 1 : index + 1
     if (targetIndex < 0 || targetIndex >= current.length) return
     const updated = [...current]
@@ -341,7 +395,7 @@ export default class Setting extends React.PureComponent<AllWidgetSettingProps<I
       this.setState({ dragIndex: null, dragOverIndex: null })
       return
     }
-    const current = (this.props.config.rangeColorBreaks as any as RangeColorBreak[]) || []
+    const current = toArray<RangeColorBreak>(this.props.config.rangeColorBreaks)
     const updated = [...current]
     const [moved] = updated.splice(dragIndex, 1)
     updated.splice(dragOverIndex, 0, moved)
@@ -398,7 +452,7 @@ export default class Setting extends React.PureComponent<AllWidgetSettingProps<I
             overflow: hidden;
             word-break: break-word;
             code {
-              font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+              font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
               font-size: 10px;
               background: rgba(255,255,255,0.08);
               padding: 1px 4px;
@@ -424,8 +478,16 @@ export default class Setting extends React.PureComponent<AllWidgetSettingProps<I
 
             <div className='help-section'>
               <h4>Markdown</h4>
-              <code>**bold**</code> &nbsp; <code>*italic*</code> &nbsp; <code># heading</code> &nbsp;
-              <code>- list</code> &nbsp; <code>[text](url)</code> &nbsp; <code>---</code> rule
+              <code>**bold**</code> &nbsp; <code>*italic*</code> &nbsp; <code>- list</code> &nbsp;
+              <code>[text](url)</code> &nbsp; <code>---</code> rule
+              <table>
+                <tbody>
+                  <tr><td><code># Title</code></td><td>Large heading</td></tr>
+                  <tr><td><code>## Subtitle</code></td><td>Medium heading</td></tr>
+                  <tr><td><code>### Small</code></td><td>Small heading</td></tr>
+                  <tr><td><code>#### Tiny</code></td><td>Tiny heading</td></tr>
+                </tbody>
+              </table>
             </div>
 
             <div className='help-section'>
@@ -478,94 +540,63 @@ export default class Setting extends React.PureComponent<AllWidgetSettingProps<I
     )
   }
 
-  onHoverTextFieldChange = (evt: React.ChangeEvent<HTMLSelectElement>): void => {
+  /** Generic config setter for simple single-property changes */
+  private setConfigValue = <K extends keyof FeedSimpleConfig>(key: K, value: FeedSimpleConfig[K]): void => {
     this.props.onSettingChange({
       id: this.props.id,
-      config: this.props.config.set('hoverTextField', evt.target.value)
+      config: this.props.config.set(key, value as any)
     })
+  }
+
+  /** Render a checkbox list for selecting fields (sortable, search, export) */
+  private renderFieldCheckboxList = (
+    configKey: 'sortableFields' | 'searchFields' | 'exportFields',
+    fields: string[],
+    helpText: string
+  ): React.ReactElement => {
+    const config = this.props.config
+    const selected = toArray<string>(config[configKey])
+    return (
+      <div css={fieldCheckboxContainerCss}>
+        <div css={fieldCheckboxHintCss}>{helpText}</div>
+        {fields.map((field) => {
+          const isChecked = selected.includes(field)
+          return (
+            <label key={field} css={fieldCheckboxLabelCss}>
+              <input
+                type='checkbox'
+                checked={isChecked}
+                onChange={(e) => {
+                  const current = toArray<string>(config[configKey])
+                  const updated = e.target.checked
+                    ? [...current, field]
+                    : current.filter((f: string) => f !== field)
+                  this.setConfigValue(configKey, updated)
+                }}
+              />
+              {field}
+            </label>
+          )
+        })}
+      </div>
+    )
   }
 
   onRefreshIntervalChange = (value: number): void => {
     const clamped = value > 0 && value < 15 ? 15 : Math.max(0, Math.floor(value))
-    this.props.onSettingChange({
-      id: this.props.id,
-      config: this.props.config.set('refreshInterval', clamped)
-    })
-  }
-
-  onShowLastUpdatedChange = (evt: React.ChangeEvent<HTMLInputElement>): void => {
-    this.props.onSettingChange({
-      id: this.props.id,
-      config: this.props.config.set('showLastUpdated', evt.target.checked)
-    })
-  }
-
-  onShowColorLegendChange = (evt: React.ChangeEvent<HTMLInputElement>): void => {
-    this.props.onSettingChange({
-      id: this.props.id,
-      config: this.props.config.set('showColorLegend', evt.target.checked)
-    })
-  }
-
-  onSortFieldChange = (evt: React.ChangeEvent<HTMLSelectElement>): void => {
-    this.props.onSettingChange({
-      id: this.props.id,
-      config: this.props.config.set('sortField', evt.target.value)
-    })
-  }
-
-  onSortDirectionChange = (evt: React.ChangeEvent<HTMLSelectElement>): void => {
-    this.props.onSettingChange({
-      id: this.props.id,
-      config: this.props.config.set('sortDirection', evt.target.value as 'asc' | 'desc')
-    })
-  }
-
-  onReverseFeedOrderChange = (evt: React.ChangeEvent<HTMLInputElement>): void => {
-    this.props.onSettingChange({
-      id: this.props.id,
-      config: this.props.config.set('reverseFeedOrder', evt.target.checked)
-    })
+    this.setConfigValue('refreshInterval', clamped)
   }
 
   onMaxItemsChange = (value: number): void => {
-    this.props.onSettingChange({
-      id: this.props.id,
-      config: this.props.config.set('maxItems', Math.max(0, Math.floor(value)))
-    })
-  }
-
-  /** Generic config setter for simple string/boolean/number properties */
-  private setConfigValue = (key: string, value: any): void => {
-    this.props.onSettingChange({
-      id: this.props.id,
-      config: this.props.config.set(key, value)
-    })
+    this.setConfigValue('maxItems', Math.max(0, Math.floor(value)))
   }
 
   onFilterByStatusToggle = (statusValue: string, checked: boolean): void => {
-    const current = (this.props.config.filterByStatus as any as string[]) || []
+    const current = toArray<string>(this.props.config.filterByStatus)
     const updated = checked
       ? [...current, statusValue]
       : current.filter((v: string) => v !== statusValue)
-    this.props.onSettingChange({
-      id: this.props.id,
-      config: this.props.config.set('filterByStatus', updated as any)
-    })
-  }
-
-  onHighlightNewItemsChange = (evt: React.ChangeEvent<HTMLInputElement>): void => {
-    this.props.onSettingChange({
-      id: this.props.id,
-      config: this.props.config.set('highlightNewItems', evt.target.checked)
-    })
-  }
-
-  onExternalLinkTemplateChange = (value: string): void => {
-    this.props.onSettingChange({
-      id: this.props.id,
-      config: this.props.config.set('externalLinkTemplate', value)
-    })
+    this.setConfigValue('filterByStatus', updated)
   }
 
   // ── Map Integration handlers ─────────────────────────────────
@@ -668,7 +699,7 @@ export default class Setting extends React.PureComponent<AllWidgetSettingProps<I
     const { discoveredFields, isDiscovering, discoverError } = this.state
     const hasFields = discoveredFields.length > 0
     const statusValues = config.statusField ? this.getUniqueValuesForField(config.statusField) : []
-    const colorMap = (config.statusColorMap as any) || {}
+    const colorMap = toPlain<StatusColorMap>(config.statusColorMap)
     const hasSpatialJoinDs = this.props.useDataSources && this.props.useDataSources.length > 0
 
     return (
@@ -692,12 +723,7 @@ export default class Setting extends React.PureComponent<AllWidgetSettingProps<I
               size='sm'
               placeholder='item'
               value={config.rootItemElement || ''}
-              onChange={(e) => {
-                this.props.onSettingChange({
-                  id: this.props.id,
-                  config: this.props.config.set('rootItemElement', e.target.value)
-                })
-              }}
+              onChange={(e) => { this.setConfigValue('rootItemElement', e.target.value) }}
             />
             <div css={css`font-size: 11px; color: var(--sys-color-text-tertiary); margin-top: 2px;`}>
               The repeating XML element that wraps each item (e.g. item, entry, event)
@@ -778,21 +804,7 @@ export default class Setting extends React.PureComponent<AllWidgetSettingProps<I
               placeholder={'**{{status}}** - {{location}}\n{{description}}\nUpdated: {{changeDate}}'}
               value={config.cardTemplate || ''}
               onChange={this.onCardTemplateChange}
-              css={css`
-                font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
-                font-size: 12px;
-                line-height: 1.5;
-                padding: 8px;
-                border: 1px solid var(--sys-color-divider-secondary);
-                border-radius: 4px;
-                background: var(--sys-color-surface-paper);
-                color: var(--sys-color-text-primary);
-                resize: vertical;
-                &:focus {
-                  outline: 2px solid var(--sys-color-primary-main);
-                  outline-offset: -1px;
-                }
-              `}
+              css={monoTextareaLgCss}
             />
             {this.renderTemplateHelp(this.state.templateHelpOpen, 'templateHelpOpen')}
           </SettingRow>
@@ -813,7 +825,7 @@ export default class Setting extends React.PureComponent<AllWidgetSettingProps<I
                       border: 1px solid var(--sys-color-divider-secondary);
                       background: var(--ref-palette-neutral-200);
                       color: var(--ref-palette-neutral-1000);
-                      font-family: monospace;
+                      font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
                       font-size: 11px;
                       cursor: pointer;
                       &:hover {
@@ -833,26 +845,11 @@ export default class Setting extends React.PureComponent<AllWidgetSettingProps<I
             <textarea
               className='w-100'
               placeholder='(Desktop template used on all screens if empty)'
-              value={(config as any).cardTemplateMobile || ''}
+              value={config.cardTemplateMobile || ''}
               aria-label='Mobile card template'
-              onChange={(e) => {
-                this.props.onSettingChange({
-                  id: this.props.id,
-                  config: this.props.config.set('cardTemplateMobile', e.target.value)
-                })
-              }}
+              onChange={(e) => { this.setConfigValue('cardTemplateMobile', e.target.value) }}
               rows={3}
-              css={css`
-                font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
-                font-size: 11px;
-                padding: 6px 8px;
-                border: 1px solid var(--sys-color-divider-secondary);
-                border-radius: 4px;
-                background: var(--sys-color-surface-paper);
-                color: var(--sys-color-text-primary);
-                resize: vertical;
-                line-height: 1.5;
-              `}
+              css={monoTextareaCss}
             />
             <div css={css`font-size: 11px; color: var(--sys-color-text-tertiary); margin-top: 4px; line-height: 1.4;`}>
               Optional simplified template for viewports ≤ 600px. Uses the same {'{{token}}'} syntax.
@@ -973,7 +970,7 @@ export default class Setting extends React.PureComponent<AllWidgetSettingProps<I
                   Each range matches: min ≤ value {'<'} max. Leave min or max empty for unbounded.
                   Ranges are checked top-to-bottom — first match wins.
                 </div>
-                {((config.rangeColorBreaks as any as RangeColorBreak[]) || []).map((brk, idx) => (
+                {toArray<RangeColorBreak>(config.rangeColorBreaks).map((brk, idx) => (
                   <div
                     key={idx}
                     draggable
@@ -1062,7 +1059,7 @@ export default class Setting extends React.PureComponent<AllWidgetSettingProps<I
                           type='color'
                           aria-label='Map symbol color override'
                           value={brk.mapColor || brk.color || '#FFD700'}
-                          onChange={(e) => { this.onUpdateRangeBreak(idx, 'mapColor' as any, e.target.value) }}
+                          onChange={(e) => { this.onUpdateRangeBreak(idx, 'mapColor', e.target.value) }}
                           title='Map symbol color (overrides card color)'
                           css={css`
                             width: 22px; height: 22px;
@@ -1078,13 +1075,13 @@ export default class Setting extends React.PureComponent<AllWidgetSettingProps<I
                           max={24}
                           step={1}
                           value={brk.size ?? undefined}
-                          onAcceptValue={(v) => { this.onUpdateRangeBreak(idx, 'size' as any, v === null || v === undefined || isNaN(v) ? undefined : v) }}
+                          onAcceptValue={(v) => { this.onUpdateRangeBreak(idx, 'size', v === null || v === undefined || isNaN(v) ? undefined : v) }}
                           css={css`width: 56px; font-size: 11px;`}
                         />
                         <Select
                           size='sm'
                           value={brk.markerStyle || ''}
-                          onChange={(evt) => { this.onUpdateRangeBreak(idx, 'markerStyle' as any, evt.target.value || undefined) }}
+                          onChange={(evt) => { this.onUpdateRangeBreak(idx, 'markerStyle', evt.target.value || undefined) }}
                           css={css`flex: 1; min-width: 0; font-size: 11px;`}
                         >
                           <Option value=''>(Default)</Option>
@@ -1132,7 +1129,7 @@ export default class Setting extends React.PureComponent<AllWidgetSettingProps<I
             <SettingRow label='Show color legend'>
               <Switch
                 checked={config.showColorLegend !== false}
-                onChange={this.onShowColorLegendChange}
+                onChange={(e) => { this.setConfigValue('showColorLegend', e.target.checked) }}
               />
             </SettingRow>
           )}
@@ -1146,7 +1143,7 @@ export default class Setting extends React.PureComponent<AllWidgetSettingProps<I
               className='w-100'
               size='sm'
               value={config.hoverTextField || ''}
-              onChange={this.onHoverTextFieldChange}
+              onChange={(e) => { this.setConfigValue('hoverTextField', e.target.value) }}
             >
               <Option value=''>(None)</Option>
               {discoveredFields.map((field) => (
@@ -1179,13 +1176,13 @@ export default class Setting extends React.PureComponent<AllWidgetSettingProps<I
           <SettingRow label={this.getI18nMessage('showLastUpdated')}>
             <Switch
               checked={config.showLastUpdated !== false}
-              onChange={this.onShowLastUpdatedChange}
+              onChange={(e) => { this.setConfigValue('showLastUpdated', e.target.checked) }}
             />
           </SettingRow>
           <SettingRow label='Highlight New Items'>
             <Switch
               checked={config.highlightNewItems === true}
-              onChange={this.onHighlightNewItemsChange}
+              onChange={(e) => { this.setConfigValue('highlightNewItems', e.target.checked) }}
             />
           </SettingRow>
         </SettingSection>
@@ -1205,7 +1202,7 @@ export default class Setting extends React.PureComponent<AllWidgetSettingProps<I
                   className='w-100'
                   size='sm'
                   value={config.sortField || ''}
-                  onChange={this.onSortFieldChange}
+                  onChange={(e) => { this.setConfigValue('sortField', e.target.value) }}
                 >
                   <Option value=''>(None — keep feed order)</Option>
                   {discoveredFields.map((field) => (
@@ -1224,7 +1221,7 @@ export default class Setting extends React.PureComponent<AllWidgetSettingProps<I
               <Select
                 size='sm'
                 value={config.sortDirection || 'asc'}
-                onChange={this.onSortDirectionChange}
+                onChange={(e) => { this.setConfigValue('sortDirection', e.target.value) }}
               >
                 <Option value='asc'>{this.getI18nMessage('sortAsc')}</Option>
                 <Option value='desc'>{this.getI18nMessage('sortDesc')}</Option>
@@ -1235,47 +1232,13 @@ export default class Setting extends React.PureComponent<AllWidgetSettingProps<I
             <SettingRow label='Reverse Feed Order'>
               <Switch
                 checked={config.reverseFeedOrder === true}
-                onChange={this.onReverseFeedOrderChange}
+                onChange={(e) => { this.setConfigValue('reverseFeedOrder', e.target.checked) }}
               />
             </SettingRow>
           )}
           {hasFields && (
             <SettingRow flow='wrap' label='Sortable Fields'>
-              <div css={css`width: 100%; display: flex; flex-direction: column; gap: 4px; max-height: 200px; overflow-y: auto;`}>
-                <div css={css`font-size: 11px; color: var(--sys-color-text-tertiary); margin-bottom: 4px;`}>
-                  Leave all unchecked to allow sorting by any field.
-                </div>
-                {discoveredFields.map((field) => {
-                  const sortableFields = (config.sortableFields as any as string[]) || []
-                  const isChecked = sortableFields.includes(field)
-                  return (
-                    <label
-                      key={field}
-                      css={css`
-                        display: flex;
-                        align-items: center;
-                        gap: 8px;
-                        font-size: 12px;
-                        cursor: pointer;
-                        color: var(--sys-color-text-primary);
-                      `}
-                    >
-                      <input
-                        type='checkbox'
-                        checked={isChecked}
-                        onChange={(e) => {
-                          const current = (config.sortableFields as any as string[]) || []
-                          const updated = e.target.checked
-                            ? [...current, field]
-                            : current.filter((f: string) => f !== field)
-                          this.setConfigValue('sortableFields', updated)
-                        }}
-                      />
-                      {field}
-                    </label>
-                  )
-                })}
-              </div>
+              {this.renderFieldCheckboxList('sortableFields', discoveredFields, 'Leave all unchecked to allow sorting by any field.')}
             </SettingRow>
           )}
         </SettingSection>
@@ -1326,7 +1289,7 @@ export default class Setting extends React.PureComponent<AllWidgetSettingProps<I
             <SettingRow flow='wrap' label='Show Status Values'>
               <div css={css`width: 100%; display: flex; flex-direction: column; gap: 4px;`}>
                 {statusValues.map((val) => {
-                  const filterList = (config.filterByStatus as any as string[]) || []
+                  const filterList = toArray<string>(config.filterByStatus)
                   const isHidden = filterList.includes(val)
                   return (
                     <label
@@ -1366,6 +1329,7 @@ export default class Setting extends React.PureComponent<AllWidgetSettingProps<I
             />
           </SettingRow>
           {config.enableSearchBar !== false && (
+          <React.Fragment>
           <SettingRow flow='wrap' label='Search Placeholder'>
             <TextInput
               className='w-100'
@@ -1377,42 +1341,10 @@ export default class Setting extends React.PureComponent<AllWidgetSettingProps<I
           </SettingRow>
           {hasFields && (
             <SettingRow flow='wrap' label='Search Fields'>
-              <div css={css`width: 100%; display: flex; flex-direction: column; gap: 4px; max-height: 200px; overflow-y: auto;`}>
-                <div css={css`font-size: 11px; color: var(--sys-color-text-tertiary); margin-bottom: 4px;`}>
-                  Leave all unchecked to search all fields.
-                </div>
-                {this.state.discoveredFields.map((field) => {
-                  const searchFields = (config.searchFields as any as string[]) || []
-                  const isChecked = searchFields.includes(field)
-                  return (
-                    <label
-                      key={field}
-                      css={css`
-                        display: flex;
-                        align-items: center;
-                        gap: 8px;
-                        font-size: 12px;
-                        cursor: pointer;
-                        color: var(--sys-color-text-primary);
-                      `}
-                    >
-                      <input
-                        type='checkbox'
-                        checked={isChecked}
-                        onChange={(e) => {
-                          const current = (config.searchFields as any as string[]) || []
-                          const updated = e.target.checked
-                            ? [...current, field]
-                            : current.filter((f: string) => f !== field)
-                          this.setConfigValue('searchFields', updated)
-                        }}
-                      />
-                      {field}
-                    </label>
-                  )
-                })}
-              </div>
+              {this.renderFieldCheckboxList('searchFields', discoveredFields, 'Leave all unchecked to search all fields.')}
             </SettingRow>
+          )}
+          </React.Fragment>
           )}
         </SettingSection>
 
@@ -1494,43 +1426,17 @@ export default class Setting extends React.PureComponent<AllWidgetSettingProps<I
               {/* Export fields checkboxes — shown only when field names are available */}
               {this.state.fieldNames?.length > 0 && (
                 <SettingRow flow='wrap' label='Export Fields'>
-                  <div css={css`font-size: 11px; color: var(--sys-color-text-tertiary); margin-bottom: 4px;`}>
-                    Select fields to include. None selected = all fields.
-                  </div>
-                  {this.state.fieldNames.map(field => {
-                    const exportFields: string[] = config.exportFields ? [...config.exportFields as any] : []
-                    const isChecked = exportFields.includes(field)
-                    return (
-                      <label key={field} css={css`
-                        display: flex; align-items: center; gap: 6px;
-                        font-size: 12px; padding: 2px 0; cursor: pointer;
-                      `}>
-                        <input
-                          type='checkbox'
-                          checked={isChecked}
-                          onChange={() => {
-                            const updated = isChecked
-                              ? exportFields.filter(f => f !== field)
-                              : [...exportFields, field]
-                            this.setConfigValue('exportFields', updated)
-                          }}
-                        />
-                        {field}
-                      </label>
-                    )
-                  })}
+                  {this.renderFieldCheckboxList('exportFields', this.state.fieldNames, 'Select fields to include. None selected = all fields.')}
                 </SettingRow>
               )}
               {/* Column header labels — shown only when export fields are selected */}
-              {config.exportFields && (config.exportFields as any).length > 0 && (
+              {toArray(config.exportFields).length > 0 && (
                 <SettingRow flow='wrap' label='Column Header Labels'>
                   <div css={css`font-size: 11px; color: var(--sys-color-text-tertiary); margin-bottom: 4px;`}>
                     Custom labels for CSV column headers. Leave blank to use field name.
                   </div>
-                  {[...(config.exportFields as any)].map((field: string) => {
-                    const labels: { [key: string]: string } = config.columnHeaderLabels
-                      ? { ...(config.columnHeaderLabels as any) }
-                      : {}
+                  {toArray<string>(config.exportFields).map((field) => {
+                    const labels = toPlain<{ [key: string]: string }>(config.columnHeaderLabels)
                     return (
                       <div key={field} css={css`
                         display: flex; align-items: center; gap: 6px;
@@ -1565,12 +1471,7 @@ export default class Setting extends React.PureComponent<AllWidgetSettingProps<I
           <SettingRow label='Enable Map Layer'>
             <Switch
               checked={config.enableFeedMapLayer === true}
-              onChange={(evt) => {
-                this.props.onSettingChange({
-                  id: this.props.id,
-                  config: this.props.config.set('enableFeedMapLayer', evt.target.checked)
-                })
-              }}
+              onChange={(evt) => { this.setConfigValue('enableFeedMapLayer', evt.target.checked) }}
             />
           </SettingRow>
           <div css={css`font-size: 11px; color: var(--sys-color-text-tertiary); padding: 0 16px 8px; line-height: 1.4;`}>
@@ -1586,12 +1487,7 @@ export default class Setting extends React.PureComponent<AllWidgetSettingProps<I
                       className='w-100'
                       size='sm'
                       value={config.latitudeField || ''}
-                      onChange={(evt) => {
-                        this.props.onSettingChange({
-                          id: this.props.id,
-                          config: this.props.config.set('latitudeField', evt.target.value)
-                        })
-                      }}
+                      onChange={(evt) => { this.setConfigValue('latitudeField', evt.target.value) }}
                     >
                       <Option value=''>(Select a field)</Option>
                       {this.getCoordinateCandidates('lat').map((field) => (
@@ -1613,12 +1509,7 @@ export default class Setting extends React.PureComponent<AllWidgetSettingProps<I
                       className='w-100'
                       size='sm'
                       value={config.longitudeField || ''}
-                      onChange={(evt) => {
-                        this.props.onSettingChange({
-                          id: this.props.id,
-                          config: this.props.config.set('longitudeField', evt.target.value)
-                        })
-                      }}
+                      onChange={(evt) => { this.setConfigValue('longitudeField', evt.target.value) }}
                     >
                       <Option value=''>(Select a field)</Option>
                       {this.getCoordinateCandidates('lon').map((field) => (
@@ -1639,12 +1530,7 @@ export default class Setting extends React.PureComponent<AllWidgetSettingProps<I
                   size='sm'
                   placeholder='Feed Items'
                   value={config.feedMapLayerTitle || ''}
-                  onChange={(e) => {
-                    this.props.onSettingChange({
-                      id: this.props.id,
-                      config: this.props.config.set('feedMapLayerTitle', e.target.value)
-                    })
-                  }}
+                  onChange={(e) => { this.setConfigValue('feedMapLayerTitle', e.target.value) }}
                 />
               </SettingRow>
 
@@ -1653,12 +1539,7 @@ export default class Setting extends React.PureComponent<AllWidgetSettingProps<I
                   type='color'
                   aria-label='Marker color'
                   value={config.feedMapLayerColor || '#FF4500'}
-                  onChange={(e) => {
-                    this.props.onSettingChange({
-                      id: this.props.id,
-                      config: this.props.config.set('feedMapLayerColor', e.target.value)
-                    })
-                  }}
+                  onChange={(e) => { this.setConfigValue('feedMapLayerColor', e.target.value) }}
                   css={css`
                     width: 36px;
                     height: 28px;
@@ -1679,12 +1560,7 @@ export default class Setting extends React.PureComponent<AllWidgetSettingProps<I
                   max={24}
                   step={1}
                   value={config.feedMapLayerSize || 8}
-                  onAcceptValue={(value) => {
-                    this.props.onSettingChange({
-                      id: this.props.id,
-                      config: this.props.config.set('feedMapLayerSize', value)
-                    })
-                  }}
+                  onAcceptValue={(value) => { this.setConfigValue('feedMapLayerSize', value) }}
                 />
               </SettingRow>
 
@@ -1693,12 +1569,7 @@ export default class Setting extends React.PureComponent<AllWidgetSettingProps<I
                   className='w-100'
                   size='sm'
                   value={config.feedMapLayerMarkerStyle || 'circle'}
-                  onChange={(evt) => {
-                    this.props.onSettingChange({
-                      id: this.props.id,
-                      config: this.props.config.set('feedMapLayerMarkerStyle', evt.target.value)
-                    })
-                  }}
+                  onChange={(evt) => { this.setConfigValue('feedMapLayerMarkerStyle', evt.target.value as FeedSimpleConfig['feedMapLayerMarkerStyle']) }}
                 >
                   <Option value='circle'>Circle</Option>
                   <Option value='square'>Square</Option>
@@ -1714,12 +1585,7 @@ export default class Setting extends React.PureComponent<AllWidgetSettingProps<I
                     type='color'
                     aria-label='Outline color'
                     value={config.feedMapLayerOutlineColor || '#FFFFFF'}
-                    onChange={(e) => {
-                      this.props.onSettingChange({
-                        id: this.props.id,
-                        config: this.props.config.set('feedMapLayerOutlineColor', e.target.value)
-                      })
-                    }}
+                    onChange={(e) => { this.setConfigValue('feedMapLayerOutlineColor', e.target.value) }}
                     css={css`width: 32px; height: 28px; padding: 1px; border: 1px solid var(--sys-color-border-default); border-radius: 4px; cursor: pointer; background: transparent;`}
                   />
                   <NumericInput
@@ -1729,12 +1595,7 @@ export default class Setting extends React.PureComponent<AllWidgetSettingProps<I
                     max={5}
                     step={0.5}
                     value={config.feedMapLayerOutlineWidth ?? 1}
-                    onAcceptValue={(value) => {
-                      this.props.onSettingChange({
-                        id: this.props.id,
-                        config: this.props.config.set('feedMapLayerOutlineWidth', value ?? 0)
-                      })
-                    }}
+                    onAcceptValue={(value) => { this.setConfigValue('feedMapLayerOutlineWidth', value ?? 0) }}
                     css={css`width: 64px;`}
                   />
                   <span css={css`font-size: 11px; color: var(--sys-color-text-tertiary);`}>0 = none</span>
@@ -1746,14 +1607,9 @@ export default class Setting extends React.PureComponent<AllWidgetSettingProps<I
                   className='w-100'
                   size='sm'
                   placeholder='e.g., M{{magnitude.mag.value}} - {{description.text}}'
-                  value={(config as any).feedMapLayerPopupTitle || ''}
+                  value={config.feedMapLayerPopupTitle || ''}
                   aria-label='Popup title template'
-                  onChange={(e) => {
-                    this.props.onSettingChange({
-                      id: this.props.id,
-                      config: this.props.config.set('feedMapLayerPopupTitle', (e.target as HTMLInputElement).value)
-                    })
-                  }}
+                  onChange={(e) => { this.setConfigValue('feedMapLayerPopupTitle', (e.target as HTMLInputElement).value) }}
                 />
                 <div css={css`font-size: 11px; color: var(--sys-color-text-tertiary); margin-top: 2px; line-height: 1.4;`}>
                   Dynamic title with {'{{token}}'} substitution. Falls back to layer title if empty.
@@ -1766,24 +1622,9 @@ export default class Setting extends React.PureComponent<AllWidgetSettingProps<I
                   placeholder='(Uses card template if empty)'
                   value={config.feedMapLayerPopupTemplate || ''}
                   aria-label='Popup template'
-                  onChange={(e) => {
-                    this.props.onSettingChange({
-                      id: this.props.id,
-                      config: this.props.config.set('feedMapLayerPopupTemplate', e.target.value)
-                    })
-                  }}
+                  onChange={(e) => { this.setConfigValue('feedMapLayerPopupTemplate', e.target.value) }}
                   rows={4}
-                  css={css`
-                    font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
-                    font-size: 11px;
-                    padding: 6px 8px;
-                    border: 1px solid var(--sys-color-divider-secondary);
-                    border-radius: 4px;
-                    background: var(--sys-color-surface-paper);
-                    color: var(--sys-color-text-primary);
-                    resize: vertical;
-                    line-height: 1.5;
-                  `}
+                  css={monoTextareaCss}
                 />
                 <div css={css`font-size: 11px; color: var(--sys-color-text-tertiary); margin-top: 4px; line-height: 1.4;`}>
                   Leave empty to reuse the card template for map popups. Supports the same {'{{token}}'} syntax.
@@ -1791,115 +1632,32 @@ export default class Setting extends React.PureComponent<AllWidgetSettingProps<I
                 {this.renderTemplateHelp(this.state.popupHelpOpen, 'popupHelpOpen')}
               </SettingRow>
 
+              <SettingRow flow='wrap' label='Popup Title (Mobile)'>
+                <TextInput
+                  className='w-100'
+                  size='sm'
+                  placeholder='(Desktop title used on all screens if empty)'
+                  value={config.feedMapLayerPopupTitleMobile || ''}
+                  aria-label='Mobile popup title template'
+                  onChange={(e) => { this.setConfigValue('feedMapLayerPopupTitleMobile', (e.target as HTMLInputElement).value) }}
+                />
+                <div css={css`font-size: 11px; color: var(--sys-color-text-tertiary); margin-top: 2px; line-height: 1.4;`}>
+                  More descriptive title for mobile when popup content is collapsed. Uses {'{{token}}'} syntax.
+                </div>
+              </SettingRow>
+
               <SettingRow flow='wrap' label='Popup Template (Mobile)'>
                 <textarea
                   className='w-100'
                   placeholder='(Desktop template used on all screens if empty)'
-                  value={(config as any).feedMapLayerPopupTemplateMobile || ''}
+                  value={config.feedMapLayerPopupTemplateMobile || ''}
                   aria-label='Mobile popup template'
-                  onChange={(e) => {
-                    this.props.onSettingChange({
-                      id: this.props.id,
-                      config: this.props.config.set('feedMapLayerPopupTemplateMobile', e.target.value)
-                    })
-                  }}
+                  onChange={(e) => { this.setConfigValue('feedMapLayerPopupTemplateMobile', e.target.value) }}
                   rows={3}
-                  css={css`
-                    font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
-                    font-size: 11px;
-                    padding: 6px 8px;
-                    border: 1px solid var(--sys-color-divider-secondary);
-                    border-radius: 4px;
-                    background: var(--sys-color-surface-paper);
-                    color: var(--sys-color-text-primary);
-                    resize: vertical;
-                    line-height: 1.5;
-                  `}
+                  css={monoTextareaCss}
                 />
                 <div css={css`font-size: 11px; color: var(--sys-color-text-tertiary); margin-top: 4px; line-height: 1.4;`}>
                   Optional simplified template for viewports ≤ 600px. Uses the same {'{{token}}'} syntax.
-                </div>
-              </SettingRow>
-
-              {/* ── Mobile Popup Behavior ── */}
-              <SettingRow flow='wrap' label='Mobile Popup Behavior'>
-                <div css={css`font-size: 11px; color: var(--sys-color-text-tertiary); margin-bottom: 8px; line-height: 1.4;`}>
-                  Controls how popups behave on viewports ≤ 600px.
-                </div>
-
-                {/* Open Collapsed */}
-                <div css={css`display: flex; align-items: center; justify-content: space-between; width: 100%; margin-bottom: 8px;`}>
-                  <div>
-                    <div css={css`font-size: 12px; color: var(--sys-color-text-primary);`}>Open Collapsed</div>
-                    <div css={css`font-size: 11px; color: var(--sys-color-text-tertiary);`}>Show only the title bar. User taps to expand.</div>
-                  </div>
-                  <Switch
-                    checked={(config as any).mobilePopupCollapsed === true}
-                    onChange={(evt) => {
-                      this.props.onSettingChange({
-                        id: this.props.id,
-                        config: this.props.config.set('mobilePopupCollapsed', evt.target.checked)
-                      })
-                    }}
-                  />
-                </div>
-
-                {/* Dock Position */}
-                <div css={css`width: 100%; margin-bottom: 8px;`}>
-                  <div css={css`font-size: 12px; color: var(--sys-color-text-primary); margin-bottom: 4px;`}>Dock Position</div>
-                  <Select
-                    size='sm'
-                    value={(config as any).mobilePopupDockPosition || ''}
-                    onChange={(evt) => {
-                      this.props.onSettingChange({
-                        id: this.props.id,
-                        config: this.props.config.set('mobilePopupDockPosition', evt.target.value)
-                      })
-                    }}
-                  >
-                    <Option value=''>Auto (JSAPI default)</Option>
-                    <Option value='top-center'>Top</Option>
-                    <Option value='bottom-center'>Bottom</Option>
-                  </Select>
-                  <div css={css`font-size: 11px; color: var(--sys-color-text-tertiary); margin-top: 4px;`}>
-                    Pin popup to a fixed position on mobile.
-                  </div>
-                </div>
-
-                {/* Hide Dock Button — only show when dock position is explicitly set */}
-                {(config as any).mobilePopupDockPosition && (
-                  <div css={css`display: flex; align-items: center; justify-content: space-between; width: 100%; margin-bottom: 8px;`}>
-                    <div>
-                      <div css={css`font-size: 12px; color: var(--sys-color-text-primary);`}>Hide Dock Button</div>
-                      <div css={css`font-size: 11px; color: var(--sys-color-text-tertiary);`}>Prevent users from undocking the popup.</div>
-                    </div>
-                    <Switch
-                      checked={(config as any).mobilePopupHideDockButton === true}
-                      onChange={(evt) => {
-                        this.props.onSettingChange({
-                          id: this.props.id,
-                          config: this.props.config.set('mobilePopupHideDockButton', evt.target.checked)
-                        })
-                      }}
-                    />
-                  </div>
-                )}
-
-                {/* Hide Action Bar */}
-                <div css={css`display: flex; align-items: center; justify-content: space-between; width: 100%;`}>
-                  <div>
-                    <div css={css`font-size: 12px; color: var(--sys-color-text-primary);`}>Hide Action Bar</div>
-                    <div css={css`font-size: 11px; color: var(--sys-color-text-tertiary);`}>Remove zoom-to and other action buttons.</div>
-                  </div>
-                  <Switch
-                    checked={(config as any).mobilePopupHideActionBar === true}
-                    onChange={(evt) => {
-                      this.props.onSettingChange({
-                        id: this.props.id,
-                        config: this.props.config.set('mobilePopupHideActionBar', evt.target.checked)
-                      })
-                    }}
-                  />
                 </div>
               </SettingRow>
 
@@ -1909,10 +1667,7 @@ export default class Setting extends React.PureComponent<AllWidgetSettingProps<I
                   <MapWidgetSelector
                     onSelect={(mapWidgetIds) => {
                       const selectedId = mapWidgetIds && mapWidgetIds.length > 0 ? mapWidgetIds[0] : ''
-                      this.props.onSettingChange({
-                        id: this.props.id,
-                        config: this.props.config.set('mapWidgetId', selectedId)
-                      })
+                      this.setConfigValue('mapWidgetId', selectedId)
                     }}
                     useMapWidgetIds={config.mapWidgetId
                       ? Immutable([config.mapWidgetId] as string[])
@@ -2054,6 +1809,95 @@ export default class Setting extends React.PureComponent<AllWidgetSettingProps<I
         </SettingSection>
 
         {/* ── Zoom & Click Behavior ── */}
+        {/* ── Popup & Mobile Behavior ── */}
+        {/* Show when either Feed Map Layer or Spatial Join is fully configured with a map widget */}
+        {config.mapWidgetId && (
+          (config.enableFeedMapLayer && config.latitudeField && config.longitudeField) ||
+          (hasSpatialJoinDs && config.joinFieldService && config.joinFieldFeed)
+        ) && (
+          <SettingSection title='Mobile Popup Behavior'>
+              <div css={css`font-size: 11px; color: var(--sys-color-text-tertiary); margin-bottom: 8px; padding: 0 16px; line-height: 1.4;`}>
+                Controls how popups behave on viewports ≤ 600px.
+              </div>
+
+                {/* Open Collapsed */}
+                <div css={css`display: flex; align-items: center; justify-content: space-between; width: 100%; margin-bottom: 8px;`}>
+                  <div>
+                    <div css={css`font-size: 12px; color: var(--sys-color-text-primary);`}>Open Collapsed</div>
+                    <div css={css`font-size: 11px; color: var(--sys-color-text-tertiary);`}>Show only the title bar. User taps to expand.</div>
+                  </div>
+                  <Switch
+                    checked={config.mobilePopupCollapsed === true}
+                    onChange={(evt) => {
+                      this.props.onSettingChange({
+                        id: this.props.id,
+                        config: this.props.config.set('mobilePopupCollapsed', evt.target.checked)
+                      })
+                    }}
+                  />
+                </div>
+
+                {/* Dock Position */}
+                <div css={css`width: 100%; margin-bottom: 8px;`}>
+                  <div css={css`font-size: 12px; color: var(--sys-color-text-primary); margin-bottom: 4px;`}>Dock Position</div>
+                  <Select
+                    size='sm'
+                    value={config.mobilePopupDockPosition || ''}
+                    onChange={(evt) => {
+                      this.props.onSettingChange({
+                        id: this.props.id,
+                        config: this.props.config.set('mobilePopupDockPosition', evt.target.value)
+                      })
+                    }}
+                  >
+                    <Option value=''>Auto (JSAPI default)</Option>
+                    <Option value='top-center'>Top</Option>
+                    <Option value='bottom-center'>Bottom</Option>
+                  </Select>
+                  <div css={css`font-size: 11px; color: var(--sys-color-text-tertiary); margin-top: 4px;`}>
+                    Pin popup to a fixed position on mobile.
+                  </div>
+                </div>
+
+                {/* Hide Dock Button — only show when dock position is explicitly set */}
+                {config.mobilePopupDockPosition && (
+                  <div css={css`display: flex; align-items: center; justify-content: space-between; width: 100%; margin-bottom: 8px;`}>
+                    <div>
+                      <div css={css`font-size: 12px; color: var(--sys-color-text-primary);`}>Hide Dock Button</div>
+                      <div css={css`font-size: 11px; color: var(--sys-color-text-tertiary);`}>Prevent users from undocking the popup.</div>
+                    </div>
+                    <Switch
+                      checked={config.mobilePopupHideDockButton === true}
+                      onChange={(evt) => {
+                        this.props.onSettingChange({
+                          id: this.props.id,
+                          config: this.props.config.set('mobilePopupHideDockButton', evt.target.checked)
+                        })
+                      }}
+                    />
+                  </div>
+                )}
+
+                {/* Hide Action Bar */}
+                <div css={css`display: flex; align-items: center; justify-content: space-between; width: 100%;`}>
+                  <div>
+                    <div css={css`font-size: 12px; color: var(--sys-color-text-primary);`}>Hide Action Bar</div>
+                    <div css={css`font-size: 11px; color: var(--sys-color-text-tertiary);`}>Remove zoom-to and other action buttons.</div>
+                  </div>
+                  <Switch
+                    checked={config.mobilePopupHideActionBar === true}
+                    onChange={(evt) => {
+                      this.props.onSettingChange({
+                        id: this.props.id,
+                        config: this.props.config.set('mobilePopupHideActionBar', evt.target.checked)
+                      })
+                    }}
+                  />
+                </div>
+          </SettingSection>
+        )}
+
+        {/* ── Zoom & Click Behavior ── */}
         {/* Show when either Feed Map Layer or Spatial Join is fully configured with a map widget */}
         {config.mapWidgetId && (
           (config.enableFeedMapLayer && config.latitudeField && config.longitudeField) ||
@@ -2162,6 +2006,19 @@ export default class Setting extends React.PureComponent<AllWidgetSettingProps<I
               {this.props.intl.formatMessage({ id: 'enableCardExpandDesc', defaultMessage: defaultMessages.enableCardExpandDesc })}
             </div>
 
+            <SettingRow flow='wrap' label='Link URL Template'>
+              <TextInput
+                className='w-100'
+                size='sm'
+                placeholder='https://example.com?id={{fieldName}}'
+                value={config.externalLinkTemplate || ''}
+                onChange={(e) => { this.setConfigValue('externalLinkTemplate', e.target.value) }}
+              />
+              <div css={css`font-size: 11px; color: var(--sys-color-text-tertiary); margin-top: 4px; line-height: 1.4;`}>
+                Build a URL using {'{{token}}'} substitution. Select "Built URL" below to use it as the link field.
+              </div>
+            </SettingRow>
+
             <SettingRow label='Link Field'>
               <Select
                 size='sm'
@@ -2184,26 +2041,13 @@ export default class Setting extends React.PureComponent<AllWidgetSettingProps<I
               </Select>
             </SettingRow>
             <div css={css`font-size: 11px; color: var(--sys-color-text-tertiary); padding: 0 16px 8px; line-height: 1.4;`}>
-              Feed field containing a URL, or use a built URL from the template below. A link icon appears on the card toolbar.
+              Feed field containing a URL, or use a built URL from the template above. A link icon appears on the card toolbar.
             </div>
-
-            <SettingRow flow='wrap' label='Link URL Template'>
-              <TextInput
-                className='w-100'
-                size='sm'
-                placeholder='https://example.com?id={{fieldName}}'
-                value={config.externalLinkTemplate || ''}
-                onChange={(e) => { this.onExternalLinkTemplateChange(e.target.value) }}
-              />
-              <div css={css`font-size: 11px; color: var(--sys-color-text-tertiary); margin-top: 4px; line-height: 1.4;`}>
-                Build a URL using {'{{token}}'} substitution. Select "Built URL" above to use it as the link field.
-              </div>
-            </SettingRow>
 
             <SettingRow label='Toolbar Position'>
               <Select
                 size='sm'
-                value={(config as any).toolbarPosition || 'bottom'}
+                value={config.toolbarPosition || 'bottom'}
                 onChange={(evt) => {
                   this.props.onSettingChange({
                     id: this.props.id,
@@ -2224,7 +2068,7 @@ export default class Setting extends React.PureComponent<AllWidgetSettingProps<I
             <SettingRow label='Toolbar Position (Mobile)'>
               <Select
                 size='sm'
-                value={(config as any).toolbarPositionMobile || ''}
+                value={config.toolbarPositionMobile || ''}
                 onChange={(evt) => {
                   this.props.onSettingChange({
                     id: this.props.id,
@@ -2248,14 +2092,14 @@ export default class Setting extends React.PureComponent<AllWidgetSettingProps<I
                 className='w-100'
                 size='sm'
                 placeholder='e.g., USGS Earthquake Hazards Program'
-                value={(config as any).sourceLabel || ''}
+                value={config.sourceLabel || ''}
                 onChange={(e) => { this.setConfigValue('sourceLabel', e.target.value) }}
               />
               <TextInput
                 className='w-100'
                 size='sm'
                 placeholder='https://source-website.com (optional)'
-                value={(config as any).sourceUrl || ''}
+                value={config.sourceUrl || ''}
                 onChange={(e) => { this.setConfigValue('sourceUrl', e.target.value) }}
                 css={css`margin-top: 4px;`}
               />

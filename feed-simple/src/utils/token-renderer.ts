@@ -36,13 +36,39 @@ export interface FilterContext {
   dateFormatString?: string
 }
 
-// ── Regex ────────────────────────────────────────────────────────
+// ── Regex (hoisted to module scope for performance) ──────────────
 
-/**
- * Matches {{...}} tokens. Captures everything between the braces for
- * pipe-based parsing. Allows any character except }} inside.
- */
+/** Matches {{...}} tokens with pipe-based parsing */
 const TOKEN_REGEX = /\{\{((?:(?!\}\}).)+)\}\}/g
+
+/** Quoted filter argument: "MMM D, YYYY" */
+const RE_QUOTED_FILTER = /^"([^"]+)"$/
+/** Math operator filter: /N, *N, +N, -N */
+const RE_MATH_FILTER = /^([/*+-])\s*(-?\d+(?:\.\d+)?)$/
+/** Autolink: URLs starting with http(s):// or www. */
+const RE_AUTOLINK = /(?:https?:\/\/|www\.)[^\s<>"']+/gi
+/** External link token substitution */
+const RE_EXTERNAL_LINK_TOKEN = /\{\{(\s*[\w.@[\]]+\s*)\}\}/g
+/** Date format placeholder swap-back */
+const RE_SLOT_PLACEHOLDER = /\x00(\d+)\x00/g
+
+// Date format token patterns (order matters: longest prefix first)
+const RE_DATE_YYYY = /YYYY/g
+const RE_DATE_YY = /YY/g
+const RE_DATE_MMM = /MMM/g
+const RE_DATE_MM = /MM/g
+const RE_DATE_M = /(?<!M)M(?!M)/g
+const RE_DATE_DD = /DD/g
+const RE_DATE_D = /(?<!D)D(?!D)/g
+const RE_DATE_HH = /HH/g
+const RE_DATE_H = /(?<!H)H(?!H)/g
+const RE_DATE_hh = /hh/g
+const RE_DATE_h = /(?<!h)h(?!h)/g
+const RE_DATE_mm = /mm/g
+const RE_DATE_ss = /ss/g
+const RE_DATE_A = /A/g
+const RE_DATE_a = /a/g
+const RE_DATE_Z = /Z/g
 
 // ── Public API ───────────────────────────────────────────────────
 
@@ -120,13 +146,13 @@ function applyFilter (
   ctx: FilterContext
 ): string {
   // Quoted argument → date format filter (legacy syntax)
-  const quotedMatch = filter.match(/^"([^"]+)"$/)
+  const quotedMatch = filter.match(RE_QUOTED_FILTER)
   if (quotedMatch) {
     return applyDateFilter(value, quotedMatch[1])
   }
 
   // Math operators: /N, *N, +N, -N
-  const mathMatch = filter.match(/^([/*+-])\s*(-?\d+(?:\.\d+)?)$/)
+  const mathMatch = filter.match(RE_MATH_FILTER)
   if (mathMatch) {
     return applyMathOp(value, mathMatch[1], parseFloat(mathMatch[2]))
   }
@@ -261,25 +287,25 @@ function applyDateFilter (value: string, formatString: string): string {
   }
 
   let result = formatString
-  result = result.replace(/YYYY/g, () => slot(String(d.getFullYear())))
-  result = result.replace(/YY/g, () => slot(String(d.getFullYear()).slice(-2)))
-  result = result.replace(/MMM/g, () => slot(monthNames[d.getMonth()]))
-  result = result.replace(/MM/g, () => slot(String(d.getMonth() + 1).padStart(2, '0')))
-  result = result.replace(/(?<!M)M(?!M)/g, () => slot(String(d.getMonth() + 1)))
-  result = result.replace(/DD/g, () => slot(String(d.getDate()).padStart(2, '0')))
-  result = result.replace(/(?<!D)D(?!D)/g, () => slot(String(d.getDate())))
-  result = result.replace(/HH/g, () => slot(String(hours24).padStart(2, '0')))
-  result = result.replace(/(?<!H)H(?!H)/g, () => slot(String(hours24)))
-  result = result.replace(/hh/g, () => slot(String(hours12).padStart(2, '0')))
-  result = result.replace(/(?<!h)h(?!h)/g, () => slot(String(hours12)))
-  result = result.replace(/mm/g, () => slot(String(d.getMinutes()).padStart(2, '0')))
-  result = result.replace(/ss/g, () => slot(String(d.getSeconds()).padStart(2, '0')))
-  result = result.replace(/A/g, () => slot(ampm))
-  result = result.replace(/a/g, () => slot(ampm.toLowerCase()))
-  result = result.replace(/Z/g, () => slot(tzString))
+  result = result.replace(RE_DATE_YYYY, () => slot(String(d.getFullYear())))
+  result = result.replace(RE_DATE_YY, () => slot(String(d.getFullYear()).slice(-2)))
+  result = result.replace(RE_DATE_MMM, () => slot(monthNames[d.getMonth()]))
+  result = result.replace(RE_DATE_MM, () => slot(String(d.getMonth() + 1).padStart(2, '0')))
+  result = result.replace(RE_DATE_M, () => slot(String(d.getMonth() + 1)))
+  result = result.replace(RE_DATE_DD, () => slot(String(d.getDate()).padStart(2, '0')))
+  result = result.replace(RE_DATE_D, () => slot(String(d.getDate())))
+  result = result.replace(RE_DATE_HH, () => slot(String(hours24).padStart(2, '0')))
+  result = result.replace(RE_DATE_H, () => slot(String(hours24)))
+  result = result.replace(RE_DATE_hh, () => slot(String(hours12).padStart(2, '0')))
+  result = result.replace(RE_DATE_h, () => slot(String(hours12)))
+  result = result.replace(RE_DATE_mm, () => slot(String(d.getMinutes()).padStart(2, '0')))
+  result = result.replace(RE_DATE_ss, () => slot(String(d.getSeconds()).padStart(2, '0')))
+  result = result.replace(RE_DATE_A, () => slot(ampm))
+  result = result.replace(RE_DATE_a, () => slot(ampm.toLowerCase()))
+  result = result.replace(RE_DATE_Z, () => slot(tzString))
 
   // Swap placeholders back to actual values
-  result = result.replace(/\x00(\d+)\x00/g, (_m, idx) => slots[Number(idx)])
+  result = result.replace(RE_SLOT_PLACEHOLDER, (_m, idx) => slots[Number(idx)])
 
   return result
 }
@@ -292,11 +318,27 @@ function applyAutolinkFilter (value: string): string {
   if (!value) return ''
   // Match URLs starting with http(s):// or www.
   return value.replace(
-    /(?:https?:\/\/|www\.)[^\s<>"']+/gi,
+    RE_AUTOLINK,
     (url) => {
       const href = url.startsWith('www.') ? `https://${url}` : url
       return `<a href="${href}" target="_blank" rel="noopener">${url}</a>`
     }
+  )
+}
+
+/**
+ * Substitute {{token}} references in a URL template with item field values.
+ * Used for external link URLs, both inline (card toolbar) and in templates.
+ * Returns the resolved URL string, or undefined if template is empty.
+ */
+export function resolveExternalLinkUrl (
+  template: string | undefined,
+  item: FeedItem
+): string | undefined {
+  if (!template) return undefined
+  return template.replace(
+    RE_EXTERNAL_LINK_TOKEN,
+    (_m, name: string) => item[name.trim()] ?? ''
   )
 }
 
@@ -310,13 +352,7 @@ function applyExternalLinkFilter (
   item: FeedItem,
   externalLinkTemplate: string | undefined
 ): string {
-  if (!externalLinkTemplate) return _value
-
-  // Substitute tokens in the URL template (plain substitution, no filters)
-  const url = externalLinkTemplate.replace(
-    /\{\{(\s*[\w.@\[\]]+\s*)\}\}/g,
-    (_m, name: string) => item[name.trim()] ?? ''
-  )
-
+  const url = resolveExternalLinkUrl(externalLinkTemplate, item)
+  if (!url) return _value
   return `<a href="${url}" target="_blank" rel="noopener">View ↗</a>`
 }

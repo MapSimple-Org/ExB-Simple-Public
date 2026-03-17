@@ -7,9 +7,7 @@
  */
 
 import type { FeedItem } from '../utils/parsers/interface'
-import { createFeedSimpleDebugLogger } from './debug-logger'
-
-const debugLogger = createFeedSimpleDebugLogger()
+import { debugLogger } from './debug-logger'
 
 // ============================================================================
 // Types

@@ -5,7 +5,98 @@ All notable changes to the FeedSimple widget will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.19.0-r002.047] - 2026-03-15 - Color Legend
+## [1.19.0-r003.010] - 2026-03-16 - Setting Dedup, State Mutation Fix, Cache Key Fix
+
+### Changed
+
+- **Typed generic `setConfigValue`** (r003.010): Replaced 15+ inline `onSettingChange` handlers in setting.tsx with a single type-safe generic method `setConfigValue<K extends keyof FeedSimpleConfig>(key, value)`.
+- **`renderFieldCheckboxList` helper** (r003.010): Extracted duplicate checkbox-list rendering for `sortableFields`, `searchFields`, and `exportFields` into a shared helper method — removed ~90 lines of duplication.
+- **Hoisted setting CSS** (r003.010): Moved `monoTextareaCss`, `monoTextareaLgCss`, and field checkbox styling to module-level constants — eliminates re-creation per render.
+- **Removed `as any` on range break fields** (r003.010): Replaced 3 `as any` casts on `onUpdateRangeBreak` calls for `mapColor`, `size`, and `markerStyle` with properly typed string values.
+
+### Fixed
+
+- **React state mutation** (r003.010): Fixed `componentDidUpdate` enrichment path that mutated `this.state.items` in place via `enrichItemsWithRangeLabels()`. Now clones items before enrichment and uses `setState` to update — correct React immutable state pattern.
+- **Pipeline cache key** (r003.010): Fixed `getProcessedItems()` cache invalidation for ImmutableObject arrays (`filterByStatus`, `searchFields`). Previously used `.join('|')` which could produce unreliable `[object Object]` strings. Now uses separate reference equality checks alongside the string cache key.
+
+## [1.19.0-r003.009] - 2026-03-16 - Quick Wins: MOBILE_BREAKPOINT_PX in CSS, onClick Signature, Search Pre-compute
+
+### Changed
+
+- **`MOBILE_BREAKPOINT_PX` in CSS** (r003.009): Replaced 2 hardcoded `@media (max-width: 600px)` strings in feed-card.tsx with `${MOBILE_BREAKPOINT_PX}px` template literals.
+- **Widened `onClick` signature** (r003.009): Changed FeedCard's `onClick` prop from `React.MouseEvent` to `React.MouseEvent | React.KeyboardEvent`, eliminating the `as any` cast on keyboard event forwarding.
+- **Pre-computed `Object.keys` in search** (r003.009): Moved `Object.keys(items[0])` outside the per-item filter loop in `searchItems()` — avoids redundant key enumeration on every item.
+
+## [1.19.0-r003.008] - 2026-03-16 - Render-Path Allocation Optimization
+
+### Changed
+
+- **Pre-computed `toArray()` calls** (r003.008): Restructured widget.tsx render IIFE to call `toArray()` for `rangeColorBreaks` and `sortableFields` once before the card `.map()` loop — eliminates N array allocations per render.
+- **Hoisted raw-field CSS** (r003.008): Moved 6 inline CSS objects for raw field rendering in feed-card.tsx (`rawFieldsContainerCss`, `rawFieldItemCss`, `rawFieldKeyCss`, `rawFieldValueCss`, `rawFieldKeySmallCss`, `expandedFieldItemCss`) to module-level constants.
+
+## [1.19.0-r003.007] - 2026-03-16 - Dead Code Removal
+
+### Removed
+
+- **Deprecated shims** (r003.007): Removed `zoomToFeedPoint()` and `panToFeedPoint()` deprecated wrapper functions from feed-layer-manager.ts (17 lines) — superseded by `navigateToFeedPoint(mode)` in r003.004.
+- **Deprecated factory** (r003.007): Removed `createFeedSimpleDebugLogger()` factory function from debug-logger.ts — superseded by singleton `debugLogger` export in r003.001.
+- **Unused CSS variables** (r003.007): Removed 3 unused module-level CSS variables (`responsiveDesktopCss`, `responsiveMobileCss`, `responsiveMobileFlexCss`) from feed-card.tsx — orphaned after responsive rendering refactor.
+
+## [1.19.0-r003.006] - 2026-03-16 - Polish: CSS Hoisting, Dead Code Cleanup
+
+### Changed
+
+- **CSS hoisting** (r003.006): Moved inline style objects to module-level constants across widget, feed-card, and feed-legend components — eliminates re-creation on every render.
+- **Type narrowing** (r003.006): Replaced broad type annotations with precise narrowed types throughout utility functions.
+- **Regex pre-compilation** (r003.006): Moved regex literals used in hot paths to module-level compiled constants.
+
+### Removed
+
+- **Dead code cleanup** (r003.006): Removed unreachable branches, unused variables, and obsolete commented-out code across multiple files.
+
+## [1.19.0-r003.005] - 2026-03-16 - Performance: Pipeline Memoization, Diff-Based Sync
+
+### Changed
+
+- **Pipeline memoization** (r003.005): Memoized `runPipeline` results to avoid redundant processing when inputs haven't changed.
+- **Diff-based feed layer sync** (r003.005): Feed layer sync now computes a diff of added/removed/updated features instead of full replace — reduces `applyEdits` overhead on large feeds.
+- **Sort optimization** (r003.005): Optimized sort comparator to reduce redundant type coercions during array sorting.
+
+## [1.19.0-r003.004] - 2026-03-16 - Widget Method Dedup, Setting Handler Cleanup
+
+### Changed
+
+- **Widget method deduplication** (r003.004): Consolidated duplicated logic in widget.tsx lifecycle and event handler methods.
+- **Setting handler cleanup** (r003.004): Extracted repeated setting update patterns into reusable handler functions in setting.tsx.
+
+## [1.19.0-r003.003] - 2026-03-16 - Utility Deduplication
+
+### Changed
+
+- **Utility deduplication** (r003.003): Identified and consolidated duplicated helper functions across utility files (token-renderer, feed-pipeline, map-interaction).
+
+## [1.19.0-r003.002] - 2026-03-16 - Type Safety, Immutable Helpers
+
+### Added
+
+- **`immutable-helpers.ts`** (r003.002): New utility module with convenience wrappers for Immutable.js config updates in settings — reduces boilerplate and improves type safety.
+
+### Changed
+
+- **Type safety improvements** (r003.002): Added explicit type annotations and narrowed generic types across utility and settings files.
+
+## [1.19.0-r003.001] - 2026-03-16 - Type Safety, Constants, Singleton Debug Logger
+
+### Added
+
+- **`constants.ts`** (r003.001): New shared constants file extracting magic strings, numeric thresholds, and sentinel values from widget and utility code.
+- **Singleton debug logger** (r003.001): Converted DebugLogger to a singleton pattern — all modules share one instance, eliminating duplicate URL parsing and ensuring consistent debug tag state.
+
+### Changed
+
+- **Type safety sweep** (r003.001): Added strict type annotations to function parameters and return types across widget, settings, and utility files.
+
+## [1.19.0-r002.047] - 2026-03-16 - Color Legend
 
 ### Added
 
