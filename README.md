@@ -2,8 +2,8 @@
 
 Custom widgets for ArcGIS Experience Builder Developer Edition (1.19.0+). Built for performance, deep-linking, and advanced result management.
 
-**Current Version**: QS `1.19.0-r025.072` | FS `1.19.0-r003.010`
-**Latest Update**: FeedSimple code quality remediation — type safety, deduplication, performance, polish (Mar 16, 2026)
+**Current Version**: QS `1.19.0-r025.073` | FS `1.19.0-r003.010`
+**Latest Update**: QuerySimple Spatial tab rendering fix (Mar 17, 2026)
 
 ## Key Differentiators (Why QuerySimple?)
 
@@ -17,18 +17,17 @@ QuerySimple is designed to solve the common pain points of the standard Experien
 
 ---
 
-## What's New (Mar 16, 2026)
+## What's New (Mar 17, 2026)
 
-### FeedSimple r003.010 (Code Quality Remediation)
+### QuerySimple r025.073 (Bug Fix)
 
-No new user-facing features — this release is entirely focused on internal code quality, performance, and maintainability. A 4-agent code review identified 36 findings (8 HIGH, 13 MEDIUM, 15 LOW), all resolved:
+- **Spatial tab rendering fix**: An unclosed `<div>` in the spatial relationship combobox container caused stray `) }` text to appear at the bottom of the Spatial tab. Fixed by adding the missing closing tag.
 
-- **Type safety**: Removed `as any` casts, extracted constants, singleton debug logger
-- **Deduplication**: Consolidated 5 duplicated utility functions, merged zoom/pan methods, generic config setter
-- **Performance**: Pipeline memoization, diff-based feed layer sync, sort type pre-detection, field mapping caching
-- **Polish**: CSS hoisting, dead code cleanup, type narrowing, regex pre-compilation
+See [RELEASE_QS-r025.073_FS-r003.010](docs/releases/RELEASE_QS-r025.073_FS-r003.010.md) for details.
 
-See [RELEASE_FS-r003.010](docs/releases/RELEASE_FS-r003.010.md) for full details.
+### Previous: FeedSimple r003.010 (Code Quality Remediation)
+
+No new user-facing features — internal code quality, performance, and maintainability improvements from a 4-agent code review. See [RELEASE_FS-r003.010](docs/releases/RELEASE_FS-r003.010.md) for full details.
 
 ### Previous: QuerySimple r025.072 + FeedSimple r002.047
 
