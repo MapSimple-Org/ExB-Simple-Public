@@ -872,6 +872,7 @@ export function SpatialTabContent (props: SpatialTabContentProps) {
                 </Button>
               </div>
             )}
+          </div>
           {/* r025.069: Spatial relationship info popover — hover-driven, pops above */}
           {selectedRelationship && (
             <calcite-popover

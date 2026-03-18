@@ -65,13 +65,18 @@ A standalone XML feed consumer widget. Does **not** depend on QuerySimple, Helpe
 - **Markdown card templates**: Token substitution (`{{field}}`) with chainable filters (date, math, text, autolink)
 - **Color coding**: Exact match or numeric range modes with per-range map symbol overrides (ClassBreaksRenderer)
 - **Color legend**: Collapsible color key bar so users understand what each color means
-- **Search, sort, pagination**: Debounced search bar, runtime sort dropdown, show-more pagination
-- **Configurable polling**: Automatic refresh with new-item highlighting
-- **Feed Map Layer**: Client-side FeatureLayer from feed coordinates with bidirectional card-map click sync
-- **Mobile popup behavior**: Configurable dock position, collapsed mode, and action bar visibility
+- **Search & sort**: Debounced search bar with configurable search fields, runtime sort dropdown with configurable sort fields
+- **Show-more pagination**: Configurable "Show more" / "Show all" with custom item count labels
+- **Configurable polling**: Automatic refresh with new-item highlighting and "Last updated" timestamp
+- **Feed Map Layer**: Client-side FeatureLayer from feed coordinates with configurable marker style, size, color, and outline
+- **Bidirectional card-map sync**: Click a card to zoom/pan on map, click a map point to highlight its card
+- **Map popup templates**: Separate desktop/mobile popup templates with configurable dock position and collapsed mode
 - **Spatial join**: Runtime join to existing FeatureLayer with click-to-zoom and popup
-- **Card action toolbar**: Per-card Zoom, Pan, and Expand buttons with configurable position (bottom, right, menu)
-- **Responsive design**: Separate mobile card/popup templates, iOS auto-zoom prevention
+- **Card action toolbar**: Per-card Zoom, Pan, Link, and Expand buttons with configurable position (bottom, right, menu)
+- **External links**: URL template with token substitution, or per-item link field for "open in external app"
+- **Source attribution**: Optional source label and URL displayed as a footer below the card list
+- **Status filtering**: Hide items by exact status value or numeric min/max range
+- **Responsive design**: Separate mobile card/popup templates, mobile toolbar position override, iOS auto-zoom prevention
 - **Debug logging**: `?debug=FETCH,POLL,JOIN,FEED-LAYER` URL parameters
 
 ---

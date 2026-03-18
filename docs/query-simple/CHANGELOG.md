@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 > **Archive**: For releases r001-r021, see [CHANGELOG_ARCHIVE_r001-r021.md](docs/archive/CHANGELOG_ARCHIVE_r001-r021.md)
 
+## [1.19.0-r025.073] - 2026-03-17 - Spatial Tab Fix, TODO Updates
+
+### Fixed
+- **Spatial tab rendering bug**: Unclosed flex `<div>` in `SpatialTabContent.tsx` caused stray `) }` text to render at the bottom of the Spatial tab. Added missing `</div>` to close the combobox + info icon flex container (line 875).
+
+### Changed
+- **TODO #12** (Public-Share README): Marked as ✅ DONE — completed during FS-r003.010 public release.
+- **TODO #13** (Per-Result Pan To): Added new TODO for porting FeedSimple's per-result Pan To feature to QuerySimple, with implementation approach and shared-code design notes.
+
+---
+
 ## [1.19.0-r025] - 2026-03-09 → 2026-03-15 - Spatial Tab Development
 
 ### Added

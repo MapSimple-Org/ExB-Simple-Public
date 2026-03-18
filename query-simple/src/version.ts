@@ -10,7 +10,7 @@
  */
 const BASE_VERSION = '1.19.0'
 const RELEASE_NUMBER = '025' // Increment on major changes (001, 002, 003, ...)
-const MINOR_VERSION = '072' // r025.072: iOS auto-zoom fix + mobile popup behavior (collapsed, dock, hide action bar)
+const MINOR_VERSION = '073' // r025.073: Fix unclosed flex div rendering stray `) }` text on Spatial tab
 
 export const WIDGET_VERSION = MINOR_VERSION && Number(MINOR_VERSION) > 0
   ? `${BASE_VERSION}-r${RELEASE_NUMBER}.${MINOR_VERSION}`
