@@ -28,7 +28,7 @@ import { ResultsMenu } from './results-menu'
 import { getWidgetRuntimeDataMap } from './widget-config'
 import { type QueryItemType, FieldsType, PagingType, ListDirection, ResultSelectMode, SelectionType } from '../config'
 import defaultMessage from './translations/default'
-import { useZoomToRecords } from './managers/use-zoom-to-records'
+import { useZoomToRecords, usePanToRecords } from './managers/use-zoom-to-records'
 import { expandExtentByFactor, DEFAULT_EXTENT_EXPANSION_FACTOR } from './zoom-utils'
 // FORCED: Always SimpleList - LazyList and PagingList removed
 import { SimpleList } from './simple-list'
@@ -47,7 +47,7 @@ import {
   dispatchSelectionEvent 
 } from './selection-utils'
 import { executeRemoveRecord } from './record-removal-handler'
-import { createQuerySimpleDebugLogger, ErrorMessage } from 'widgets/shared-code/mapsimple-common'
+import { createQuerySimpleDebugLogger, ErrorMessage, substituteTokens, convertTemplateToHtml } from 'widgets/shared-code/mapsimple-common'
 import * as labelPointOperator from '@arcgis/core/geometry/operators/labelPointOperator.js'
 
 const debugLogger = createQuerySimpleDebugLogger()
@@ -103,6 +103,7 @@ export interface QueryTaskResultProps {
   onDismissAllDuplicatesAlert?: () => void
   // r022.105: Configurable zoom on result click
   zoomOnResultClick?: boolean
+  panOnResultClick?: boolean
 }
 
 const resultStyle = css`
@@ -133,10 +134,11 @@ const resultStyle = css`
 `
 
 export function QueryTaskResult (props: QueryTaskResultProps) {
-  const { queryItem, queryParams, resultCount, maxPerPage, records, widgetId, outputDS, runtimeZoomToSelected, onNavBack, resultsMode, accumulatedRecords, resultsExtent, onAccumulatedRecordsChange, graphicsLayer, mapView, eventManager, isQuerySwitchInProgressRef, currentQueryRecordIds, queries, noRemovalAlert, onDismissNoRemovalAlert, allDuplicatesAlert, onDismissAllDuplicatesAlert, zoomOnResultClick, hoverPinColor, listResetKey } = props
+  const { queryItem, queryParams, resultCount, maxPerPage, records, widgetId, outputDS, runtimeZoomToSelected, onNavBack, resultsMode, accumulatedRecords, resultsExtent, onAccumulatedRecordsChange, graphicsLayer, mapView, eventManager, isQuerySwitchInProgressRef, currentQueryRecordIds, queries, noRemovalAlert, onDismissNoRemovalAlert, allDuplicatesAlert, onDismissAllDuplicatesAlert, zoomOnResultClick, panOnResultClick, hoverPinColor, listResetKey } = props
   const getI18nMessage = hooks.useTranslation(defaultMessage)
   const intl = useIntl()
   const zoomToRecords = useZoomToRecords(mapView, widgetId)
+  const panToRecordsHook = usePanToRecords(mapView)
   const [queryData, setQueryData] = React.useState(null)
   const [selectedRecords, setSelectedRecords] = React.useState<DataRecord[]>([])
   // FIX (r018.94): Removed removedRecordIds state - no longer needed since records stay in sync
@@ -189,6 +191,7 @@ export function QueryTaskResult (props: QueryTaskResultProps) {
   const removeRecordRef = React.useRef<((data: FeatureDataRecord) => void) | null>(null)
   const toggleSelectionRef = React.useRef<((data: FeatureDataRecord) => void) | null>(null)
   const handleZoomToRecordRef = React.useRef<((data: FeatureDataRecord) => Promise<void>) | null>(null)
+  const handlePanToRecordRef = React.useRef<((data: FeatureDataRecord) => Promise<void>) | null>(null)
   
   // r021.15: Cleanup refs on unmount to prevent memory leaks
   React.useEffect(() => {
@@ -910,11 +913,57 @@ export function QueryTaskResult (props: QueryTaskResultProps) {
     })
     
     if (popupLocation) {
-      // r022.98: Set shouldFocus: false to prevent premature focus on Features widget
+      // r026.007: For CustomTemplate queries, build a CustomContent popup on the fly
+      // so it renders with markdown formatting instead of the layer's default field table.
+      const recordConfigId = clickedFeature?.attributes?.__queryConfigId
+      const recordConfig = recordConfigId && queries?.find(q => q.configId === recordConfigId)
+      if (recordConfig && (recordConfig as any).resultFieldsType === 'CustomTemplate') {
+        const contentTemplate = (recordConfig as any).resultContentExpression || ''
+        const titleTemplate = (recordConfig as any).resultTitleExpression || ''
+        if (contentTemplate) {
+          const attributes = clickedFeature.attributes || {}
+          // Build resolved HTML using our shared pipeline
+          let substituted = substituteTokens(contentTemplate, attributes)
+          substituted = substituted.replace(/(?<!\{)\{(\w+)\}(?!\})/g, (_m, field) => {
+            const val = attributes[field]
+            return val != null ? String(val) : ''
+          })
+          const html = convertTemplateToHtml(substituted)
+          // Resolve title
+          let title = substituteTokens(titleTemplate, attributes)
+          title = title.replace(/(?<!\{)\{(\w+)\}(?!\})/g, (_m, field) => {
+            const val = attributes[field]
+            return val != null ? String(val) : ''
+          })
+          // Create a simple popup with resolved HTML content
+          const contentDiv = document.createElement('div')
+          contentDiv.style.fontSize = '0.875rem'
+          contentDiv.style.lineHeight = '1.4'
+          contentDiv.style.color = 'var(--sys-color-surface-paper-text, #333)'
+          const style = document.createElement('style')
+          style.textContent = 'p{margin:0 0 4px}a{color:var(--sys-color-primary-main, #0079c1);text-decoration:none}a:hover{text-decoration:underline}strong{font-weight:700}em{font-style:italic}h3,h4,h5,h6{font-style:normal;font-weight:600;margin:0 0 4px}'
+          contentDiv.appendChild(style)
+          contentDiv.innerHTML += html
+          mapView.openPopup({
+            title,
+            content: contentDiv,
+            location: popupLocation,
+            shouldFocus: false
+          })
+          debugLogger.log('POPUP', {
+            event: 'popup-opened-custom-template',
+            recordId: dataId,
+            location: { x: popupLocation.x, y: popupLocation.y },
+            timestamp: Date.now()
+          })
+          return
+        }
+      }
+      // Default: let Esri use the layer's popup
       mapView.openPopup({
         features: [clickedFeature],
         location: popupLocation,
-        shouldFocus: false
+        shouldFocus: false // r022.98
       })
       
       debugLogger.log('POPUP', {
@@ -927,8 +976,8 @@ export function QueryTaskResult (props: QueryTaskResultProps) {
         timestamp: Date.now()
       })
     }
-  }, [mapView])
-  
+  }, [mapView, queries])
+
   const toggleSelection = React.useCallback((data: FeatureDataRecord) => {
     // Ensure the clicked record is selected (it should already be, but ensure it)
     const selectedDatas = outputDS.getSelectedRecords() ?? []
@@ -953,66 +1002,47 @@ export function QueryTaskResult (props: QueryTaskResultProps) {
       selectRecordsAndPublish(widgetId, outputDS, recordIds, updatedSelectedDatas as FeatureDataRecord[], true)
     }
     
-    // r022.105: Make zoom configurable - defaults to false
+    // r026.009: Determine click behavior — zoom, pan, or popup-only
     const shouldZoom = zoomOnResultClick === true
-    
+    const shouldPan = panOnResultClick === true
+    const clickMode = shouldPan ? 'pan' : (shouldZoom ? 'zoom' : 'popup-only')
+
     debugLogger.log('POPUP', {
       event: 'result-clicked',
       recordId: dataId,
-      shouldZoom,
-      configValue: zoomOnResultClick,
-      note: 'r023.31: Default is false, zoom only when explicitly enabled',
+      clickMode,
       timestamp: Date.now()
     })
-    
+
     if (shouldZoom) {
-      // Current behavior: Zoom first, then open popup after zoom completes
-      debugLogger.log('POPUP', {
-        event: 'result-clicked-BEFORE-zoom',
-        recordId: dataId,
-        hasMapView: !!mapView,
-        hasZoomFunction: !!zoomToRecords,
-        note: 'r022.105: Zoom enabled, zooming before popup',
-        timestamp: Date.now()
-      })
-      
       const zoomPromise = zoomToRecords([data])
-      
       zoomPromise.then(() => {
-        debugLogger.log('POPUP', {
-          event: 'result-clicked-AFTER-zoom',
-          recordId: dataId,
-          note: 'r022.105: Zoom complete, opening popup',
-          timestamp: Date.now()
-        })
-        
-        // Open popup after zoom completes
         openPopupForRecord(data)
       })
-      .catch(error => {
-        debugLogger.log('POPUP', {
-          event: 'zoom-promise-rejected',
-          recordId: dataId,
-          error: error instanceof Error ? error.message : String(error),
-          note: 'r022.105: Zoom failed, opening popup anyway',
-          timestamp: Date.now()
-        })
-        // Still open popup even if zoom fails
+      .catch(() => {
+        openPopupForRecord(data)
+      })
+    } else if (shouldPan) {
+      // r026.009: Pan first, then open popup
+      const panPromise = panToRecordsHook([data])
+      panPromise.then(() => {
+        openPopupForRecord(data)
+      })
+      .catch(() => {
         openPopupForRecord(data)
       })
     } else {
-      // r022.105: New behavior - popup only (no zoom)
+      // Popup only (no zoom or pan)
       debugLogger.log('POPUP', {
-        event: 'result-clicked-NO-zoom',
+        event: 'result-clicked-NO-navigation',
         recordId: dataId,
-        note: 'r022.105: Zoom disabled, opening popup without zoom',
         timestamp: Date.now()
       })
       
       // Open popup immediately without zooming
       openPopupForRecord(data)
     }
-  }, [outputDS, widgetId, zoomToRecords, zoomOnResultClick, openPopupForRecord])
+  }, [outputDS, widgetId, zoomToRecords, panToRecordsHook, zoomOnResultClick, panOnResultClick, openPopupForRecord])
 
   /**
    * Zooms the map to a single record. Used by result row "Zoom to" (menu when collapsed, inline icon when expanded).
@@ -1022,6 +1052,13 @@ export function QueryTaskResult (props: QueryTaskResultProps) {
       await zoomToRecords([data])
     }
   }, [zoomToRecords])
+
+  // r026.009: Pan to single record (center without zoom change)
+  const handlePanToRecord = React.useCallback(async (data: FeatureDataRecord) => {
+    if (panToRecordsHook) {
+      await panToRecordsHook([data])
+    }
+  }, [panToRecordsHook])
 
   /**
    * Removes a record from the results and selection.
@@ -1043,6 +1080,7 @@ export function QueryTaskResult (props: QueryTaskResultProps) {
   removeRecordRef.current = removeRecord
   toggleSelectionRef.current = toggleSelection
   handleZoomToRecordRef.current = handleZoomToRecord
+  handlePanToRecordRef.current = handlePanToRecord
   
   // r024.38: Stable callback wrappers - these NEVER change identity
   // They call through refs, so items always invoke the latest logic
@@ -1057,6 +1095,10 @@ export function QueryTaskResult (props: QueryTaskResultProps) {
   
   const stableHandleZoomToRecord = React.useCallback(async (data: FeatureDataRecord) => {
     await handleZoomToRecordRef.current?.(data)
+  }, [])
+
+  const stableHandlePanToRecord = React.useCallback(async (data: FeatureDataRecord) => {
+    await handlePanToRecordRef.current?.(data)
   }, [])
 
   return (
@@ -1163,7 +1205,9 @@ export function QueryTaskResult (props: QueryTaskResultProps) {
             onSelectChange={stableToggleSelection}
             onRemove={stableRemoveRecord}
             onZoomTo={stableHandleZoomToRecord}
+            onPanTo={stableHandlePanToRecord}
             zoomOnResultClick={zoomOnResultClick}
+            panOnResultClick={panOnResultClick}
             expandByDefault={expandAll}
             queries={queries}
             mapView={mapView}

@@ -137,4 +137,10 @@ service requests to only the required fields.
 
 ---
 
+## Related Flows
+
+**Data Source Rebinding:** When a layer is replaced in the web map and query items show "Data is inaccessible", see [FLOW-12: Data Source Rebinding](FLOW-12-DATA-SOURCE-REBINDING.md) for the rebind tool workflow that remaps query items to a new data source.
+
+---
+
 *Last updated: r025.072 (2026-03-15)*

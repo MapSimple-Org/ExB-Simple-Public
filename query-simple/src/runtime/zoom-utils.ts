@@ -663,6 +663,45 @@ export async function zoomToRecords(
 }
 
 /**
+ * r026.009: Pan (center) the map to one or more records without changing zoom level.
+ * Reuses calculateRecordsExtent() for geometry resolution, then calls goTo({ center }).
+ * Mirrors FeedSimple's buildPanTarget() pattern.
+ */
+export async function panToRecords(
+  mapView: __esri.MapView | __esri.SceneView,
+  records: FeatureDataRecord[]
+): Promise<void> {
+  if (!mapView || !records || records.length === 0) {
+    debugLogger.log('ZOOM', { event: 'pan-early-exit', reason: !mapView ? 'no-mapView' : 'no-records' })
+    return
+  }
+
+  const extent = calculateRecordsExtent(records)
+  if (!extent) {
+    debugLogger.log('ZOOM', { event: 'pan-no-extent', recordsCount: records.length })
+    return
+  }
+
+  try {
+    await mapView.goTo(
+      { center: extent.center },
+      { animate: true, duration: 500 }
+    )
+    debugLogger.log('ZOOM', {
+      event: 'pan-complete',
+      center: { x: extent.center.x, y: extent.center.y },
+      recordsCount: records.length
+    })
+  } catch (error) {
+    debugLogger.log('ZOOM', {
+      event: 'pan-goTo-error',
+      error: error instanceof Error ? error.message : String(error),
+      recordsCount: records.length
+    })
+  }
+}
+
+/**
  * Debug/Calibration Tool: Captures current map extent and calculates optimal expansion factor.
  * 
  * Use this after manually adjusting the zoom to find the perfect extent, then calculate

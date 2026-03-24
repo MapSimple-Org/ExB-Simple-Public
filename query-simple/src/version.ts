@@ -9,8 +9,8 @@
  * - Minor fix: Increment MINOR_VERSION (e.g., 1 -> 2) while keeping same RELEASE_NUMBER
  */
 const BASE_VERSION = '1.19.0'
-const RELEASE_NUMBER = '025' // Increment on major changes (001, 002, 003, ...)
-const MINOR_VERSION = '073' // r025.073: Fix unclosed flex div rendering stray `) }` text on Spatial tab
+const RELEASE_NUMBER = '026' // Increment on major changes (001, 002, 003, ...)
+const MINOR_VERSION = '025' // r026.025: Clean up rebind tool code + inline docs, update CHANGELOG/TODO/DEVELOPMENT_GUIDE
 
 export const WIDGET_VERSION = MINOR_VERSION && Number(MINOR_VERSION) > 0
   ? `${BASE_VERSION}-r${RELEASE_NUMBER}.${MINOR_VERSION}`

@@ -31,6 +31,7 @@ export default {
   clearing: 'Clearing results...',
   zoomToSelected: 'Zoom to selected',
   zoomToRecord: 'Zoom to',
+  panToRecord: 'Pan to',
   removeResult: 'Remove',
   resultActions: 'Result actions',
   queryTab: 'Query',

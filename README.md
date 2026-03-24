@@ -2,8 +2,8 @@
 
 Custom widgets for ArcGIS Experience Builder Developer Edition (1.19.0+). Built for performance, deep-linking, and advanced result management.
 
-**Current Version**: QS `1.19.0-r025.073` | FS `1.19.0-r003.010`
-**Latest Update**: QuerySimple Spatial tab rendering fix (Mar 17, 2026)
+**Current Version**: QS `1.19.0-r026.025` | FS `1.19.0-r004.005`
+**Latest Update**: Unified Template Engine, Markdown Tables, Data Source Rebind Tool (Mar 24, 2026)
 
 ## Key Differentiators (Why QuerySimple?)
 
@@ -17,27 +17,33 @@ QuerySimple is designed to solve the common pain points of the standard Experien
 
 ---
 
-## What's New (Mar 17, 2026)
+## What's New (Mar 24, 2026)
 
-### QuerySimple r025.073 (Bug Fix)
+### QuerySimple r026.025 (Major Release)
 
-- **Spatial tab rendering fix**: An unclosed `<div>` in the spatial relationship combobox container caused stray `) }` text to appear at the bottom of the Spatial tab. Fixed by adding the missing closing tag.
+- **Unified Template Engine**: QS now uses the same `{{field | filter}}` syntax as FeedSimple with 16 pipe filters (date, math, string, link). Old `{field}` syntax still works via legacy fallback. One-click migration button in settings.
+- **Markdown Tables**: Pipe-delimited table syntax renders as styled HTML. Inline Table Builder tool in settings generates tables visually.
+- **Per-Result Pan To**: New pan button on each result card. Optional pan-on-click behavior (mutually exclusive with zoom).
+- **Data Source Rebind Tool**: When a layer is replaced in the web map, rebind all affected queries to the new data source from the settings panel. Auto-heal mode for matching fields, interactive mapping for mismatched fields. Automatic orphan cleanup.
+
+### FeedSimple r004.005 (Major Release)
+
+- **Markdown Tables**: Table rendering in card and popup templates. Table Builder tool in settings panel.
+- **Shared Markdown Engine**: Core markdown converter extracted to `shared-code/`. No behavioral changes for existing users.
+
+> **Installation Change:** FeedSimple now requires `shared-code/`. See Installation section below. Previous standalone releases remain available on the [Releases](https://github.com/MapSimple-Org/ExB-Simple-Public/releases) page.
+
+See [RELEASE_QS-r026.025_FS-r004.005](docs/releases/RELEASE_QS-r026.025_FS-r004.005.md) for full details.
+
+### Previous: QuerySimple r025.073 + FeedSimple r003.010
 
 See [RELEASE_QS-r025.073_FS-r003.010](docs/releases/RELEASE_QS-r025.073_FS-r003.010.md) for details.
-
-### Previous: FeedSimple r003.010 (Code Quality Remediation)
-
-No new user-facing features — internal code quality, performance, and maintainability improvements from a 4-agent code review. See [RELEASE_FS-r003.010](docs/releases/RELEASE_FS-r003.010.md) for full details.
-
-### Previous: QuerySimple r025.072 + FeedSimple r002.047
-
-See [RELEASE_QS-r025.072_FS-r002.047](docs/releases/RELEASE_QS-r025.072_FS-r002.047.md) for details.
 
 ---
 
 ## Widgets in this Suite
 
-### 🔍 QuerySimple (`query-simple/`)
+### 🔍 QuerySimple (`query-simple/` + `helper-simple/` + `shared-code/`)
 A high-performance search engine for Experience Builder.
 
 **Advanced Features:**
@@ -49,15 +55,15 @@ A high-performance search engine for Experience Builder.
 - **Unified Testing**: Verified by a "Mega-Journey" E2E suite that simulates real user sessions.
 
 ### 🛠️ HelperSimple (`helper-simple/`)
-The "Orchestrator" widget that handles the background logic.
+The "Orchestrator" widget that handles the background logic. Installed alongside QuerySimple.
 
 **Features:**
 - **URL Monitor**: Listens for hash and query string changes to trigger QuerySimple automation.
 - **Selection Guard**: Restores QuerySimple results after the map identify popup is closed.
 - **Handshake Logic**: Manages the "open/close" state between widgets to ensure a clean UI.
 
-### 📡 FeedSimple (`feed-simple/`)
-A standalone XML feed consumer widget. Does **not** depend on QuerySimple, HelperSimple, or shared-code.
+### 📡 FeedSimple (`feed-simple/` + `shared-code/`)
+An XML feed consumer widget. Does **not** depend on QuerySimple or HelperSimple. Requires `shared-code/` (shared markdown engine, starting with r004).
 
 **Features:**
 - **Universal XML parsing**: Flat XML, nested (QuakeML), RSS 2.0, ATOM, GeoRSS — one parser handles all
@@ -240,10 +246,12 @@ Set `exbVersion` in `manifest.json` to match or be LESS than Enterprise's ExB ve
 2. Run `npm run build` from the `client` directory.
 3. Restart your Experience Builder server.
 
-### FeedSimple (standalone)
-1. Copy just `feed-simple` into your `client/your-extensions/widgets` folder.
+### FeedSimple
+1. Copy `feed-simple` and `shared-code` into your `client/your-extensions/widgets` folder.
 2. Run `npm run build` from the `client` directory.
 3. Restart your Experience Builder server.
+
+> **Note:** If you are installing both QS and FS, you only need one copy of `shared-code/`.
 
 ---
 

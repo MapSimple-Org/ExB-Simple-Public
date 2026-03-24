@@ -1,6 +1,6 @@
 # Process Flow Documentation
 
-End-to-end reference for the 11 major functions of the QuerySimple and
+End-to-end reference for the 12 major functions of the QuerySimple and
 HelperSimple widgets. Each document includes ASCII flow diagrams, file:line
 references, decision points, and test coverage notes.
 
@@ -19,6 +19,7 @@ references, decision points, and test coverage notes.
 | 09 | [FLOW-09-BUFFER-PREVIEW](FLOW-09-BUFFER-PREVIEW.md) | Spatial tab real-time buffer preview: layer lifecycle, SR-aware operator selection, client-side geometry for spatial queries |
 | 10 | [FLOW-10-SPATIAL-QUERY-EXECUTION](FLOW-10-SPATIAL-QUERY-EXECUTION.md) | Spatial query pipeline: two input modes (Operations/Draw), buffer decision, per-layer JSAPI execution, results mode merge |
 | 11 | [FLOW-11-SPATIAL-DRAW-MODE](FLOW-11-SPATIAL-DRAW-MODE.md) | Spatial tab Draw mode: JimuDraw integration, module lazy loading, multi-shape geometry accumulation, mode switching, smart defaults |
+| 12 | [FLOW-12-DATA-SOURCE-REBINDING](FLOW-12-DATA-SOURCE-REBINDING.md) | Rebind tool workflow for remapping query items when a layer is replaced in the web map. Covers broken DS detection, auto-heal vs field mapping, and orphan cleanup |
 
 ## Key Architectural Patterns
 

@@ -14,5 +14,10 @@ export * from './mapsimple-common/data-source-tip'
 export * from './mapsimple-common/debug-logger'
 export * from './mapsimple-common/highlight-config-manager'
 export * from './mapsimple-common/global-handle-manager'
+export { convertTemplateToHtml, applyInlineFormatting } from './mapsimple-common/markdown-template-utils'
+export { substituteTokens, resolveExternalLinkUrl } from './mapsimple-common/token-renderer'
+export type { FilterContext } from './mapsimple-common/token-renderer'
+export { TableBuilder } from './mapsimple-common/table-builder'
+export type { TableBuilderProps } from './mapsimple-common/table-builder'
 
 

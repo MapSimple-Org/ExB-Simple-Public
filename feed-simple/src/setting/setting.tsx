@@ -14,6 +14,7 @@ import type { FeedItem } from '../utils/parsers/interface'
 import { fetchFeed } from '../utils/feed-fetcher'
 import { CustomXmlParser } from '../utils/parsers/custom-xml'
 import { renderPreview } from '../utils/markdown-template-utils'
+import { TableBuilder } from 'widgets/shared-code/mapsimple-common'
 import { buildOutputDataSourceJson } from '../utils/data-source-builder'
 import { debugLogger } from '../utils/debug-logger'
 import { toArray, toPlain, getDataSourceId } from '../utils/immutable-helpers'
@@ -92,6 +93,8 @@ interface State {
   templateHelpOpen: boolean
   /** Whether the popup template help panel is expanded */
   popupHelpOpen: boolean
+  /** r026.014: Whether the table builder panel is shown */
+  showTableBuilder: boolean
   /** Index of the range break currently being dragged */
   dragIndex: number | null
   /** Index of the range break currently being dragged over */
@@ -112,6 +115,7 @@ export default class Setting extends React.PureComponent<AllWidgetSettingProps<I
       manualFieldInput: '',
       templateHelpOpen: false,
       popupHelpOpen: false,
+      showTableBuilder: false,
       dragIndex: null,
       dragOverIndex: null
     }
@@ -527,6 +531,21 @@ export default class Setting extends React.PureComponent<AllWidgetSettingProps<I
             </div>
 
             <div className='help-section'>
+              <h4>Tables</h4>
+              <table>
+                <tbody>
+                  <tr><td><code>{'| Header | Header |'}</code></td><td>Header row</td></tr>
+                  <tr><td><code>{'| --- | --- |'}</code></td><td>Separator (required)</td></tr>
+                  <tr><td><code>{'| Cell | Cell |'}</code></td><td>Data row(s)</td></tr>
+                  <tr><td><code>{'| :--- | :---: | ---: |'}</code></td><td>Left, center, right align</td></tr>
+                </tbody>
+              </table>
+              <span css={css`color: var(--sys-color-text-tertiary); font-size: 10px;`}>
+                Use the "Insert table" tool above for easy table creation.
+              </span>
+            </div>
+
+            <div className='help-section'>
               <h4>Example — meters to km</h4>
               <code>{'{{distMeters | /1000 | round:1 | suffix: km}}'}</code>
               <br/>
@@ -806,7 +825,81 @@ export default class Setting extends React.PureComponent<AllWidgetSettingProps<I
               onChange={this.onCardTemplateChange}
               css={monoTextareaLgCss}
             />
-            {this.renderTemplateHelp(this.state.templateHelpOpen, 'templateHelpOpen')}
+            {/* r004.002: Template help + Insert table toggle buttons */}
+            <div css={css`display: flex; gap: 12px; margin-top: 4px;`}>
+              {this.renderTemplateHelp(this.state.templateHelpOpen, 'templateHelpOpen')}
+              <div css={css`margin-top: 0;`}>
+                <button
+                  type='button'
+                  onClick={() => this.setState(prev => ({ showTableBuilder: !prev.showTableBuilder }))}
+                  css={css`
+                    display: flex;
+                    align-items: center;
+                    gap: 4px;
+                    background: none;
+                    border: none;
+                    padding: 2px 0;
+                    cursor: pointer;
+                    font-size: 11px;
+                    color: var(--sys-color-primary-main, #0079c1);
+                    &:hover { text-decoration: underline; }
+                  `}
+                >
+                  <span css={css`
+                    display: inline-block;
+                    transition: transform 0.15s;
+                    transform: ${this.state.showTableBuilder ? 'rotate(90deg)' : 'rotate(0deg)'};
+                    font-size: 10px;
+                  `}>▶</span>
+                  Insert table
+                </button>
+              </div>
+            </div>
+            {/* r004.002: Table builder inline panel */}
+            {this.state.showTableBuilder && (
+              <TableBuilder
+                onInsert={(markdown) => {
+                  // Insert table markdown at cursor position using same pattern as field tokens
+                  const textarea = this.templateTextareaRef.current
+                  const currentTemplate = this.props.config.cardTemplate || ''
+
+                  if (textarea) {
+                    const start = textarea.selectionStart ?? currentTemplate.length
+                    const end = textarea.selectionEnd ?? start
+                    // Ensure table is on its own line
+                    const before = currentTemplate.substring(0, start)
+                    const after = currentTemplate.substring(end)
+                    const prefix = before.length > 0 && !before.endsWith('\n') ? '\n' : ''
+                    const suffix = after.length > 0 && !after.startsWith('\n') ? '\n' : ''
+                    const newValue = before + prefix + markdown + suffix + after
+
+                    this.props.onSettingChange({
+                      id: this.props.id,
+                      config: this.props.config.set('cardTemplate', newValue)
+                    })
+
+                    requestAnimationFrame(() => {
+                      if (textarea) {
+                        textarea.focus()
+                        const newPos = (before + prefix + markdown).length
+                        textarea.setSelectionRange(newPos, newPos)
+                      }
+                    })
+                  } else {
+                    const newValue = currentTemplate
+                      ? `${currentTemplate}\n${markdown}`
+                      : markdown
+                    this.props.onSettingChange({
+                      id: this.props.id,
+                      config: this.props.config.set('cardTemplate', newValue)
+                    })
+                  }
+
+                  this.setState({ showTableBuilder: false })
+                }}
+                onCancel={() => this.setState({ showTableBuilder: false })}
+              />
+            )}
           </SettingRow>
 
           {hasFields && (

@@ -9,8 +9,8 @@
  * - Minor fix: Increment MINOR_VERSION (e.g., 1 -> 2) while keeping same RELEASE_NUMBER
  */
 const BASE_VERSION = '1.19.0'
-const RELEASE_NUMBER = '003' // Increment on major changes (001, 002, 003, ...)
-const MINOR_VERSION = '010' // r003.010: setting dedup (checkbox helper, textarea CSS), fix state mutation, MOBILE_BREAKPOINT_PX in CSS, pipeline cache key fix
+const RELEASE_NUMBER = '004' // Increment on major changes (001, 002, 003, ...)
+const MINOR_VERSION = '005' // r004.005: TableBuilder layout fix — wrap controls, theme-aware inputs
 
 export const WIDGET_VERSION = MINOR_VERSION && Number(MINOR_VERSION) > 0
   ? `${BASE_VERSION}-r${RELEASE_NUMBER}.${MINOR_VERSION}`

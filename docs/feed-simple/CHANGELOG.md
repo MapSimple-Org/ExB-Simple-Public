@@ -5,6 +5,24 @@ All notable changes to the FeedSimple widget will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.19.0-r004.002] - 2026-03-19 - Markdown Table Support (Phase 2)
+
+### Added
+- **Markdown table rendering**: Card and popup templates now render pipe-delimited markdown tables as styled HTML `<table>` elements with borders, header styling, and text alignment support.
+- **Table Builder in settings**: New "Insert table" toggle button in the Card Template section. Opens an inline grid editor (`TableBuilder` from shared-code) to visually build tables — generates pipe-delimited markdown and inserts at cursor position.
+- **Tables help section**: Added "Tables" section to the expandable template syntax reference panel showing header row, separator, data rows, and alignment syntax.
+
+---
+
+## [1.19.0-r004.001] - 2026-03-18 - Shared Markdown Engine
+
+### Changed
+- **Shared markdown engine**: Extracted `convertTemplateToHtml()` and `applyInlineFormatting()` from `feed-simple/src/utils/markdown-template-utils.ts` to `shared-code/mapsimple-common/markdown-template-utils.ts`. Local file is now a thin wrapper that re-exports the shared converter and keeps FS-specific `renderPreview()` and `extractFieldTokens()` (double-brace `{{field}}` token regex with filter support).
+- **First shared-code dependency**: FeedSimple now imports from `shared-code/mapsimple-common` — installation requires copying both `feed-simple/` and `shared-code/` folders.
+- **Tests reorganized**: `convertTemplateToHtml` tests moved to `shared-code/mapsimple-common/tests/`. FS test file now covers only `renderPreview` and `extractFieldTokens`.
+
+---
+
 ## [1.19.0-r003.010] - 2026-03-16 - Setting Dedup, State Mutation Fix, Cache Key Fix
 
 ### Changed

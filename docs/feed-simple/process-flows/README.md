@@ -59,8 +59,8 @@ feed-simple/src/
   utils/
     debug-logger.ts             Debug logging (?debug=FETCH,POLL,JOIN,FEED-LAYER,...)
     feed-fetcher.ts             HTTP fetch wrapper — esriRequest + native fallback (~115 lines)
-    token-renderer.ts           Token substitution + chainable pipe filter pipeline (~358 lines)
-    markdown-template-utils.ts  Markdown-to-HTML converter (~214 lines)
+    token-renderer.ts           Thin wrapper — re-exports substituteTokens from shared-code
+    markdown-template-utils.ts  Thin wrapper — re-exports convertTemplateToHtml from shared-code
     color-resolver.ts           Exact/range card color resolution + range label enrichment (~133 lines)
     map-interaction.ts          Spatial join + pan + FeatureEffect utilities (~347 lines)
     feed-pipeline.ts            Processing pipeline: filter, search, sort, limit (~249 lines)
@@ -72,6 +72,12 @@ feed-simple/src/
     parsers/
       interface.ts              IFeedParser contract, FeedItem type
       custom-xml.ts             Recursive XML parser + GeoRSS point split (~176 lines)
+
+shared-code/mapsimple-common/        (required dependency — copy alongside feed-simple/)
+  markdown-template-utils.ts         Shared Markdown-to-HTML converter
+  token-renderer.ts                  Shared {{field | filter}} token engine + 16 pipe filters
+  template-preview-utils.ts          renderPreview() and extractFieldTokens() with parameterized regex
+  debug-logger.ts                    Tagged debug logger factory
 ```
 
 ## Maintenance Rules

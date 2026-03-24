@@ -12,7 +12,7 @@ import {
 // r024.41: Removed Button, Tooltip, Popper, Icon - replaced with plain HTML to avoid Calcite overhead
 import FeatureInfo from './components/feature-info'
 import { ListDirection } from '../config'
-import { createQuerySimpleDebugLogger } from 'widgets/shared-code/mapsimple-common'
+import { createQuerySimpleDebugLogger, substituteTokens, convertTemplateToHtml } from 'widgets/shared-code/mapsimple-common'
 import defaultMessages from './translations/default'
 import { hooks } from 'jimu-core'
 import Graphic from '@arcgis/core/Graphic'
@@ -147,6 +147,17 @@ const zoomToIconStyle = css`
   display: inline-block;
 `
 
+// r026.009: Pan/center icon — jimu HandOutlined (same SVG as Results Menu "Pan to")
+const panToIconStyle = css`
+  width: 18px;
+  height: 18px;
+  background-image: url('data:image/svg+xml;utf8,<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M3.169 5.309V3.048c0-.492.195-.963.543-1.311a1.853 1.853 0 011.311-.543c.489 0 .956.171 1.299.479.038-.048.079-.093.122-.137A1.853 1.853 0 017.731 1c.465 0 .934.177 1.287.536.103.104.194.222.27.351.333-.275.744-.411 1.151-.411.465 0 .934.177 1.287.536.164.167.297.367.393.596.308-.212.669-.317 1.027-.317.465 0 .934.177 1.287.536.353.358.562.868.567 1.488 0 .008.001.016.001.024V10.89c0 1.237-.399 2.277-1.143 3.008C13.115 14.627 12.078 15 10.89 15H6.719c-.646 0-1.262-.271-1.698-.747L1.606 10.528a2.237 2.237 0 01-.603-1.445 2.237 2.237 0 01.458-1.497l1.708-2.277zM7.156 2.238c-.15.153-.279.408-.279.809v1.805a.5.5 0 01-.748.434.497.497 0 01-.252-.434V2.943c0-.42-.328-.749-.854-.749a.854.854 0 00-.604.25.854.854 0 00-.25.604v2.399c.001.019.001.038 0 .058v2.677a.5.5 0 01-1 0V6.976l-.908 1.21a1.237 1.237 0 00-.26.848c.015.304.136.593.342.818l3.415 3.725c.246.269.595.423.961.423h4.17c.979 0 1.746-.304 2.267-.816.52-.51.843-1.275.843-2.294V4.358a.5.5 0 000-.021c0-.402-.129-.657-.28-.81a.648.648 0 00-.574-.238.648.648 0 00-.574.238c-.145.147-.274.394-.28.766v.56a.5.5 0 01-1 0v-.515a.5.5 0 01.001-.055V3.524c0-.402-.129-.657-.28-.81a.648.648 0 00-.574-.238c-.12 0-.236.025-.342.063a.648.648 0 00-.223.175 1.16 1.16 0 00-.184.283 1.39 1.39 0 00-.095.527v1.328a.5.5 0 01-1 0V3.047c0-.402-.129-.657-.28-.81A.648.648 0 007.731 2a.648.648 0 00-.575.238z" fill="%236a6a6a"/></svg>');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  display: inline-block;
+`
+
 const moreIconStyle = css`
   width: 22px;
   height: 22px;
@@ -229,8 +240,16 @@ export interface ResultItemProps {
   onRemove: (record: FeatureDataRecord) => void
   /** r023.32: Zoom to single record. When provided, Zoom to appears in menu and (when expanded) as inline icon. */
   onZoomTo?: (record: FeatureDataRecord) => void
+  /** r026.009: Pan to single record (center without zoom). */
+  onPanTo?: (record: FeatureDataRecord) => void
   /** r024.46: When true, clicking a result already zooms, so zoom button is redundant */
   zoomOnResultClick?: boolean
+  /** r026.009: When true, clicking a result pans without zoom, so pan button is redundant */
+  panOnResultClick?: boolean
+  /** r026.002: When true, render using our own {{field}} substitution + markdown instead of Esri Feature widget */
+  isCustomTemplate?: boolean
+  /** r026.005: Raw template string for card rendering (stored in cache, not on popupTemplate) */
+  rawTemplate?: string
   // r022.106: Hover preview props
   mapView?: __esri.MapView | __esri.SceneView
 }
@@ -337,7 +356,7 @@ function hexToRgb(hex: string, alpha: number = 230): [number, number, number, nu
 }
 
 export const QueryResultItem = (props: ResultItemProps) => {
-  const { widgetId, data, dataSource, popupTemplate, defaultPopupTemplate, onClick, onRemove, onZoomTo, zoomOnResultClick, expandByDefault = false, mapView, hoverPinColor } = props
+  const { widgetId, data, dataSource, popupTemplate, defaultPopupTemplate, onClick, onRemove, onZoomTo, onPanTo, zoomOnResultClick, panOnResultClick, isCustomTemplate, rawTemplate, expandByDefault = false, mapView, hoverPinColor } = props
   const getI18nMessage = hooks.useTranslation(defaultMessages)
   const [menuOpen, setMenuOpen] = React.useState(false)
   const [menuDropUp, setMenuDropUp] = React.useState(false)
@@ -446,6 +465,14 @@ export const QueryResultItem = (props: ResultItemProps) => {
     setMenuOpen(false)
     onZoomTo?.(data)
   }, [onZoomTo, data])
+
+  // r026.009: Handle clicking the pan to menu item
+  const handlePanTo = React.useCallback((e: React.MouseEvent) => {
+    e.stopPropagation()
+    e.preventDefault()
+    setMenuOpen(false)
+    onPanTo?.(data)
+  }, [onPanTo, data])
 
   const onKeyUp = React.useCallback((evt) => {
     if (evt.key === 'Enter' || evt.key === ' ') {
@@ -742,15 +769,101 @@ export const QueryResultItem = (props: ResultItemProps) => {
       aria-selected={selected}
       tabIndex={0}
     >
-      <FeatureInfo
-        graphic={data.feature as __esri.Graphic}
-        popupTemplate={popupTemplate}
-        defaultPopupTemplate={defaultPopupTemplate}
-        togglable={isVerticalAlign}
-        expandByDefault={expandByDefault}
-        onExpandChange={isVerticalAlign ? setIsExpanded : undefined}
-        dataSource={dataSource}
-      />
+      {/* r026.002: CustomTemplate mode — our own {{field}} substitution + markdown rendering.
+          Bypasses Esri Feature widget but matches FeatureInfo's DOM structure exactly. */}
+      {isCustomTemplate && rawTemplate ? (
+        <div
+          className={classNames('feature-info-component d-flex align-items-center', { 'feature-info-expanded': isExpanded })}
+          style={{ padding: '3px 4px' }}
+          css={css`
+            border: 1px solid var(--sys-color-divider-secondary);
+            &.feature-info-expanded { min-height: 4.5rem; }
+            .esri-widget__heading {
+              font-size: 0.875rem !important;
+              font-weight: 500 !important;
+              margin: 0;
+              color: var(--sys-color-surface-paper-text);
+            }
+            .esri-feature__text {
+              font-size: 0.875rem;
+              color: var(--sys-color-surface-paper-text);
+              p { margin: 0; }
+              p:last-child { margin-bottom: 0; }
+              h3 { font-size: 1rem; font-weight: 600; font-style: normal; margin: 0 0 4px 0; }
+              h4 { font-size: 0.9rem; font-weight: 600; font-style: normal; margin: 0 0 4px 0; }
+              h5 { font-size: 0.85rem; font-weight: 600; font-style: normal; margin: 0 0 3px 0; }
+              h6 { font-size: 0.8rem; font-weight: 600; font-style: normal; margin: 0 0 3px 0; }
+              ul { margin: 2px 0 6px 0; padding-left: 20px; }
+              li { margin: 1px 0; }
+              hr { border: none; border-top: 1px solid var(--ref-palette-neutral-500); margin: 6px 0; }
+              strong { font-weight: 700; }
+              em { font-style: italic; }
+              a { color: var(--sys-color-primary-main); text-decoration: none; }
+              a:hover { text-decoration: underline; }
+              img { max-width: 100%; height: auto; }
+            }
+          `}
+        >
+          {isVerticalAlign && (
+            <button
+              className='jimu-outline-inside flex-shrink-0'
+              onClick={(e) => { e.stopPropagation(); setIsExpanded(!isExpanded) }}
+              aria-label={isExpanded ? 'collapse' : 'expand'}
+              css={css`
+                background: none;
+                border: none;
+                cursor: pointer;
+                min-width: 32px;
+                min-height: 32px;
+                padding: 6px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                align-self: flex-start;
+                border-radius: 2px;
+                color: inherit;
+                &:hover {
+                  background-color: var(--sys-color-action-hover, rgba(0, 0, 0, 0.04));
+                }
+              `}
+            >
+              <div css={isExpanded
+                ? css`width: 16px; height: 16px; background-image: url('data:image/svg+xml;utf8,<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M14 4L8 12L2 4L14 4Z" fill="currentColor"/></svg>'); background-size: contain; background-repeat: no-repeat; background-position: center; display: inline-block;`
+                : css`width: 16px; height: 16px; background-image: url('data:image/svg+xml;utf8,<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 2L12 8L4 14V2Z" fill="currentColor"/></svg>'); background-size: contain; background-repeat: no-repeat; background-position: center; display: inline-block;`
+              } aria-hidden='true' />
+            </button>
+          )}
+          <div className='flex-grow-1' dangerouslySetInnerHTML={{ __html: (() => {
+            const attributes = data.feature?.attributes || {}
+            let substituted = substituteTokens(rawTemplate, attributes)
+            substituted = substituted.replace(/(?<!\{)\{(\w+)\}(?!\})/g, (_m, field) => {
+              const val = attributes[field]
+              return val != null ? String(val) : ''
+            })
+            const html = convertTemplateToHtml(substituted)
+            // Match Esri Feature widget DOM: title heading + text content
+            const titleTemplate = popupTemplate.title || ''
+            let title = substituteTokens(titleTemplate, attributes)
+            title = title.replace(/(?<!\{)\{(\w+)\}(?!\})/g, (_m, field) => {
+              const val = attributes[field]
+              return val != null ? String(val) : ''
+            })
+            const titleHtml = title ? `<div class="esri-widget__heading">${title}</div>` : ''
+            const contentHtml = isExpanded || !isVerticalAlign ? `<div class="esri-feature__text">${html}</div>` : ''
+            return `${titleHtml}${contentHtml}`
+          })() }} />
+        </div>
+      ) : (
+        <FeatureInfo
+          graphic={data.feature as __esri.Graphic}
+          popupTemplate={popupTemplate}
+          defaultPopupTemplate={defaultPopupTemplate}
+          togglable={isVerticalAlign}
+          expandByDefault={expandByDefault}
+          onExpandChange={isVerticalAlign ? setIsExpanded : undefined}
+          dataSource={dataSource}
+        />
+      )}
       {/* r024.41: Plain HTML action buttons - NO jimu-ui, NO Calcite, NO click-outside listener */}
       {/* r024.46: When zoomOnResultClick is on, skip zoom button entirely.
           If collapsed and no zoom button, show trash directly (no three-dot menu needed). */}
@@ -769,6 +882,18 @@ export const QueryResultItem = (props: ResultItemProps) => {
                 <span css={zoomToIconStyle} aria-hidden="true" />
               </button>
             )}
+            {onPanTo && !panOnResultClick && (
+              <button
+                type="button"
+                className="result-actions-toggle"
+                css={actionButtonStyle}
+                onClick={handlePanTo}
+                aria-label={getI18nMessage('panToRecord')}
+                title={getI18nMessage('panToRecord')}
+              >
+                <span css={panToIconStyle} aria-hidden="true" />
+              </button>
+            )}
             <button
               type="button"
               className="result-actions-toggle"
@@ -780,8 +905,8 @@ export const QueryResultItem = (props: ResultItemProps) => {
               <span css={trashIconStyle} aria-hidden="true" />
             </button>
           </>
-        ) : (zoomOnResultClick || !onZoomTo) ? (
-          /* r024.46: Click-to-zoom is on (or no zoom handler) - just show trash directly, no menu */
+        ) : ((zoomOnResultClick || !onZoomTo) && (panOnResultClick || !onPanTo)) ? (
+          /* r024.46/r026.009: Both zoom and pan are either default-click or absent — just show trash directly */
           <button
             type="button"
             className="result-actions-toggle"
@@ -831,15 +956,28 @@ export const QueryResultItem = (props: ResultItemProps) => {
             </button>
             {menuOpen && (
               <div css={dropdownMenuBaseStyle} style={menuDropUp ? { bottom: '36px' } : { top: '36px' }} role="menu" tabIndex={-1}>
-                <button
-                  type="button"
-                  role="menuitem"
-                  onClick={handleZoomTo}
-                  css={menuItemStyle}
-                >
-                  <span css={css`${zoomToIconStyle}; width: 16px; height: 16px;`} aria-hidden="true" />
-                  {getI18nMessage('zoomToRecord')}
-                </button>
+                {onZoomTo && !zoomOnResultClick && (
+                  <button
+                    type="button"
+                    role="menuitem"
+                    onClick={handleZoomTo}
+                    css={menuItemStyle}
+                  >
+                    <span css={css`${zoomToIconStyle}; width: 16px; height: 16px;`} aria-hidden="true" />
+                    {getI18nMessage('zoomToRecord')}
+                  </button>
+                )}
+                {onPanTo && !panOnResultClick && (
+                  <button
+                    type="button"
+                    role="menuitem"
+                    onClick={handlePanTo}
+                    css={menuItemStyle}
+                  >
+                    <span css={css`${panToIconStyle}; width: 16px; height: 16px;`} aria-hidden="true" />
+                    {getI18nMessage('panToRecord')}
+                  </button>
+                )}
                 <button
                   type="button"
                   role="menuitem"

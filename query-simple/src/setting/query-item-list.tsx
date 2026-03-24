@@ -46,6 +46,25 @@ export function QueryItemList (props: Props) {
   const getI18nMessage = hooks.useTranslation(defaultMessages)
   const selectedIndexRef = hooks.useLatest(selectedIndex)
 
+  // r026.023: Track which query items have broken data sources via DataSourceTip callbacks.
+  // Use a ref to avoid re-render loops — DataSourceTip fires onStatusChange on mount,
+  // which would trigger setState → re-render → re-mount DataSourceTip → infinite loop.
+  const brokenDsRef = React.useRef<Set<number>>(new Set())
+  const [brokenDsCount, setBrokenDsCount] = React.useState(0)
+  const handleDsStatusChange = React.useCallback((index: number, enabled: boolean) => {
+    const prev = brokenDsRef.current
+    const hadIt = prev.has(index)
+    if (enabled && hadIt) {
+      prev.delete(index)
+      setBrokenDsCount(prev.size)
+    } else if (!enabled && !hadIt) {
+      prev.add(index)
+      setBrokenDsCount(prev.size)
+    }
+    // No state change if nothing actually changed — prevents re-render loops
+  }, [])
+  const hasBrokenDs = brokenDsCount > 0
+
   const handleNewQueryClicked = React.useCallback(() => {
     setSelectedIndex(queryItems.length)
   }, [queryItems.length])
@@ -137,6 +156,19 @@ export function QueryItemList (props: Props) {
             </div>
           </Button>
         </SettingRow>
+        {/* r026.022–024: Banner when DataSourceTip reports broken data sources.
+            Directs user to the Data Source Management (rebind) tool below. */}
+        {hasBrokenDs && (
+          <div css={css`
+            margin-top: 8px; padding: 6px 10px;
+            background: var(--ref-palette-yellow-100, #fff3cd);
+            color: var(--ref-palette-yellow-900, #856404);
+            border-radius: 4px; font-size: 11px; line-height: 1.5;
+          `}>
+            {brokenDsCount} {brokenDsCount === 1 ? 'query has' : 'queries have'} an inaccessible data source.
+            Use <strong>Data Source Management</strong> below to rebind.
+          </div>
+        )}
         <div className='setting-ui-unit-list mt-4'>
           <List
             className='setting-ui-unit-list-existing'
@@ -170,7 +202,14 @@ export function QueryItemList (props: Props) {
               const { itemJsons } = refComponent.props
               const [currentItemJson] = itemJsons
               const ds = currentItemJson?.itemStateDetailContent?.useDataSource
-              return <DataSourceTip widgetId={props.widgetId} useDataSource={ds} />
+              const itemIndex = +currentItemJson.itemKey
+              return (
+                <DataSourceTip
+                  widgetId={props.widgetId}
+                  useDataSource={ds}
+                  onStatusChange={(enabled) => handleDsStatusChange(itemIndex, enabled)}
+                />
+              )
             }}
             onUpdateItem={(actionData, refComponent) => {
               const { itemJsons } = refComponent.props

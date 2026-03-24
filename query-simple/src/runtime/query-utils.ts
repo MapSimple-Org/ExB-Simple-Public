@@ -13,18 +13,29 @@ import {
 } from 'jimu-core'
 import type { IFieldInfo } from '@esri/arcgis-rest-feature-service'
 import { type QueryItemType, SpatialRelation, type SpatialFilterObj, FieldsType, mapJSAPIUnitToDsUnit, mapJSAPISpatialRelToDsSpatialRel } from '../config'
-import { getFieldInfosInPopupContent, createQuerySimpleDebugLogger } from '../../../shared-code/mapsimple-common'
-import { convertTemplateToHtml, extractFieldTokens } from './markdown-template-utils'
+import { getFieldInfosInPopupContent, createQuerySimpleDebugLogger, substituteTokens, convertTemplateToHtml } from '../../../shared-code/mapsimple-common'
+import { loadArcGISJSAPIModules } from 'jimu-arcgis'
+import { extractFieldTokens } from './markdown-template-utils'
 
 const debugLogger = createQuerySimpleDebugLogger()
 
 export function combineFields (resultDisplayFields: ImmutableArray<string>, resultTitleExpression: string, idField?: string, resultContentExpression?: string): string[] {
   const fields = new Set<string>()
   resultDisplayFields?.forEach(item => fields.add(item))
+  // r026.002: Support both {{field}} (new) and {field} (legacy) title syntax
   if (resultTitleExpression) {
-    const templates = resultTitleExpression.match(/\{\w*\}/g)
-    if (templates?.length > 0) {
-      templates.forEach(item => fields.add(item.substring(1, item.length - 1)))
+    // Match {{FIELD}} or {{FIELD | filter}} (new syntax)
+    const newTokens = resultTitleExpression.match(/\{\{([\w.@[\]]+)(?:\|[^}]*)?\}\}/g)
+    if (newTokens?.length > 0) {
+      newTokens.forEach(item => {
+        const fieldName = item.replace(/^\{\{|\}\}$/g, '').replace(/\|.*$/, '').trim()
+        fields.add(fieldName)
+      })
+    }
+    // Match {FIELD} (legacy syntax, for un-migrated configs)
+    const legacyTokens = resultTitleExpression.match(/(?<!\{)\{(\w+)\}(?!\})/g)
+    if (legacyTokens?.length > 0) {
+      legacyTokens.forEach(item => fields.add(item.substring(1, item.length - 1)))
     }
   }
   // r023.18: Extract fields from Custom Template content expression
@@ -293,18 +304,55 @@ export async function getPopupTemplate (
       } as any
     }
   }
-  // r023.18: Custom Template mode - convert Markdown to HTML for PopupTemplate text content
+  // r026.005: Custom Template mode — use CustomContent (same pattern as FeedSimple).
+  // Esri calls our creator() per feature; we run substituteTokens → convertTemplateToHtml
+  // and return a DOM element with fully resolved HTML. Esri renders it as-is.
+  // This gives us full control: markdown formatting, pipe filters, links — everything works.
   if (resultFieldsType === FieldsType.CustomTemplate) {
     const resultContentExpression = (queryItem as any).resultContentExpression || ''
-    const htmlContent = convertTemplateToHtml(resultContentExpression)
+    const [CustomContent] = await loadArcGISJSAPIModules(['esri/popup/content/CustomContent'])
+    const customContent = new CustomContent({
+      outFields: ['*'],
+      creator: (event: any) => {
+        try {
+          const graphic = event?.graphic
+          if (!graphic?.attributes) {
+            return document.createElement('div')
+          }
+          const attributes = graphic.attributes
+          // Substitute {{field | filter}} tokens, with legacy {field} fallback
+          let substituted = substituteTokens(resultContentExpression, attributes)
+          substituted = substituted.replace(/(?<!\{)\{(\w+)\}(?!\})/g, (_m, field) => {
+            const val = attributes[field]
+            return val != null ? String(val) : ''
+          })
+          const html = convertTemplateToHtml(substituted)
+
+          const div = document.createElement('div')
+          div.style.fontSize = '0.875rem'
+          div.style.lineHeight = '1.4'
+          div.style.fontStyle = 'italic'
+          div.style.color = 'var(--sys-color-surface-paper-text, #333)'
+
+          const style = document.createElement('style')
+          style.textContent = 'p{margin:0 0 4px}a{color:var(--sys-color-primary-main, #0079c1);text-decoration:none}a:hover{text-decoration:underline}hr{margin:6px 0;border:none;border-top:1px solid #ddd}strong{font-weight:700}em{font-style:italic}h3,h4,h5,h6{font-style:normal;font-weight:600;margin:0 0 4px}'
+          div.appendChild(style)
+          div.innerHTML += html
+          return div
+        } catch (err) {
+          debugLogger.log('QUERY', { action: 'custom-template-popup-error', error: err instanceof Error ? err.message : 'Unknown' })
+          return document.createElement('div')
+        }
+      }
+    })
+
     return {
       popupTemplate: {
-        title: resultTitleExpression,
-        content: [{
-          type: 'text',
-          text: htmlContent
-        }]
-      }
+        title: resultTitleExpression, // {field} title — Esri handles this natively
+        content: [customContent]
+      },
+      isCustomTemplate: true,
+      rawTemplate: resultContentExpression // r026.005: Top-level for cache (Esri strips non-standard props)
     } as any
   }
 

@@ -86,6 +86,8 @@ export default {
   resultClickBehavior: 'Result Click Behavior',
   zoomOnResultClick: 'Zoom to record when clicked',
   zoomOnResultClickDescription: 'Automatically zoom to a record when clicking it in the results panel. The popup will always open regardless of this setting.',
+  panOnResultClick: 'Pan to record when clicked',
+  panOnResultClickDescription: 'Center the map on a record when clicking it, without changing the zoom level. Mutually exclusive with zoom on click.',
   pointZoomBuffer: 'Point zoom distance (ft)',
   pointZoomBufferDescription: 'Distance in feet to expand around point features when zooming. Larger values zoom out more for context, smaller values zoom in tighter. Default: 300.',
   zoomExpansionFactor: 'Zoom expansion factor',
@@ -119,7 +121,19 @@ export default {
   mobilePopupHideDockButton: 'Hide dock button',
   mobilePopupHideDockButtonDescription: 'Prevent users from undocking the popup.',
   mobilePopupHideActionBar: 'Hide action bar',
-  mobilePopupHideActionBarDescription: 'Remove zoom-to and other action buttons on mobile.'
+  mobilePopupHideActionBarDescription: 'Remove zoom-to and other action buttons on mobile.',
+  // r026.018: Data Source Rebinding Tool
+  rebindDataSourceMgmt: 'Data Source Management',
+  rebindButton: 'Rebind',
+  rebindCancel: 'Cancel',
+  rebindNewSource: 'Select new data source:',
+  rebindOldField: 'Current Field',
+  rebindNewField: 'New Field',
+  rebindAllFieldsMatch: 'All {count} fields match — ready to rebind.',
+  rebindFieldsMismatch: '{unmatched} of {total} fields need remapping.',
+  rebindApply: 'Apply',
+  rebindLeaveUnmapped: 'Leave unmapped fields as-is',
+  rebindAffectedQueries: '{count} query item(s) will be updated.'
 }
 
 

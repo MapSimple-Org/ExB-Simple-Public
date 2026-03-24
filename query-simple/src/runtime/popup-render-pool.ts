@@ -13,7 +13,7 @@
 
 import { loadArcGISJSAPIModules } from 'jimu-arcgis'
 import { type DataSource, type FeatureDataRecord } from 'jimu-core'
-import { createQuerySimpleDebugLogger } from 'widgets/shared-code/mapsimple-common'
+import { createQuerySimpleDebugLogger, substituteTokens, convertTemplateToHtml } from 'widgets/shared-code/mapsimple-common'
 
 const debugLogger = createQuerySimpleDebugLogger()
 
@@ -45,6 +45,7 @@ interface QueueItem {
   record: FeatureDataRecord
   popupTemplate: __esri.PopupTemplate
   defaultPopupTemplate: __esri.PopupTemplate
+  isCustomTemplate?: boolean // r026.002: Flag for our own {{field}} substitution
 }
 
 interface FeatureWorker {
@@ -298,7 +299,8 @@ export class PopupRenderPool {
   async processRecords(
     records: FeatureDataRecord[],
     popupTemplate: __esri.PopupTemplate,
-    defaultPopupTemplate: __esri.PopupTemplate
+    defaultPopupTemplate: __esri.PopupTemplate,
+    isCustomTemplate?: boolean // r026.002: Flag for our own {{field}} substitution
   ): Promise<void> {
     if (!this.isInitialized) {
       throw new Error('PopupRenderPool not initialized. Call initialize() first.')
@@ -312,6 +314,7 @@ export class PopupRenderPool {
       event: 'popup-render-pool-processing-start',
       recordCount: records.length,
       poolSize: this.workers.length,
+      isCustomTemplate: !!isCustomTemplate,
       timestamp: Date.now()
     })
 
@@ -319,7 +322,8 @@ export class PopupRenderPool {
     this.queue = records.map(record => ({
       record,
       popupTemplate,
-      defaultPopupTemplate
+      defaultPopupTemplate,
+      isCustomTemplate
     }))
 
     // Start all workers
@@ -380,6 +384,45 @@ export class PopupRenderPool {
           timestamp: Date.now()
         })
         
+        // r026.002: CustomTemplate mode — our own substitution, skip Esri Feature widget
+        if (item.isCustomTemplate && item.popupTemplate?.content?.[0]?.type === 'text') {
+          const rawTemplate = item.popupTemplate.content[0].text
+          const attributes = graphic.attributes || {}
+
+          // Our engine: substitute {{tokens}}, then convert markdown to HTML
+          // Also handles legacy {field} tokens for un-migrated configs (graceful fallback)
+          let substituted = substituteTokens(rawTemplate, attributes)
+          substituted = substituted.replace(/(?<!\{)\{(\w+)\}(?!\})/g, (_m, field) => {
+            const val = attributes[field]
+            return val != null ? String(val) : ''
+          })
+          const html = convertTemplateToHtml(substituted)
+
+          // Also substitute the title expression (with same legacy fallback)
+          const titleTemplate = item.popupTemplate.title || ''
+          let title = substituteTokens(titleTemplate, attributes)
+          title = title.replace(/(?<!\{)\{(\w+)\}(?!\})/g, (_m, field) => {
+            const val = attributes[field]
+            return val != null ? String(val) : ''
+          })
+
+          debugLogger.log('TASK', {
+            event: 'popup-render-custom-template',
+            workerId: worker.id,
+            recordId,
+            templateLength: rawTemplate.length,
+            htmlLength: html.length,
+            timestamp: Date.now()
+          })
+
+          // Inject directly — no Esri Feature widget needed
+          const titleHtml = title ? `<div class="esri-widget__heading">${title}</div>` : ''
+          worker.container.innerHTML = `<div class="esri-feature">${titleHtml}<div class="esri-feature__text">${html}</div></div>`
+          this.config.onRecordRendered(recordId, `${titleHtml}${html}`)
+          worker.busy = false
+          continue // Skip Feature widget creation
+        }
+
         // r024.65: Destroy old Feature widget and create fresh one for each record
         if (worker.feature && !worker.feature.destroyed) {
           worker.feature.destroy()

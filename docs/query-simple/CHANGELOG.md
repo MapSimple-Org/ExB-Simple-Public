@@ -7,6 +7,84 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 > **Archive**: For releases r001-r021, see [CHANGELOG_ARCHIVE_r001-r021.md](docs/archive/CHANGELOG_ARCHIVE_r001-r021.md)
 
+## [1.19.0-r026.018–024] - 2026-03-24 - Data Source Rebinding Tool
+
+### Added
+- **Data Source Rebinding Tool** (`rebind-tool.tsx`, `rebind-utils.ts`): New "Data Source Management" section in the settings panel. Lets users rebind query items to a replacement data source when a layer is swapped in the web map.
+- **Auto-heal mode**: When the replacement DS has identical field names, one-click "Apply" swaps all references — no field mapping needed.
+- **Field mapping mode**: When field names differ, an interactive mapping table lets users remap each field. Auto-matches identical names, highlights unmatched fields with dropdowns. "Leave unmapped fields as-is" option for partial rebinding.
+- **Comprehensive field remapping**: Updates `useDataSource`, `sqlExprObj` (recursive for nested AND/OR), `resultTitleExpression` ({{field}} and legacy {field} tokens), `resultContentExpression` (preserves filter chains), `resultDisplayFields`, `sortOptions`, and `resultTitleFields`.
+- **Automatic orphan cleanup**: After rebinding, the old DS is automatically removed from the widget's `useDataSources` via the existing `getAllDataSources()` rebuild pipeline (triggered by `dsUpdateRequired: true`).
+- **Broken DS banner** (`query-item-list.tsx`): When ExB's `DataSourceTip` reports inaccessible data sources on query items, a yellow banner appears directing the user to the Data Source Management tool.
+- **Debug logging**: Rebind apply and cleanup actions logged via `debugLogger` for troubleshooting.
+- **48 unit tests**: Full coverage of `extractFieldReferences()`, `analyzeRebinding()`, `applyRebinding()`, `replaceFieldTokensInTemplate()`, and `remapSqlExpression()`.
+
+### Fixed
+- **r026.024**: Fixed tab lock-up when expanding Data Source Management on a widget with broken data sources. Root cause: `DataSourceTip.onStatusChange` fired on mount → `setBrokenDsIndices()` created new Set → re-render → re-mount → infinite loop. Fixed by using a ref for the set and only updating state when the count changes.
+- **r026.024**: Wrapped `DataSourceManager.getDataSource()` in try/catch in the rebind tool — broken DS IDs can throw instead of returning null.
+- **r026.023**: Removed unreliable green/red status dots from the rebind tool. DS resolution checks were inconsistent between widgets (child DS instances load lazily). Status indicators now deferred entirely to ExB's built-in `DataSourceTip` on query items.
+
+---
+
+## [1.19.0-r026.014] - 2026-03-19 - Markdown Table Support (Phase 2)
+
+### Added
+- **Markdown table parsing**: `convertTemplateToHtml()` in shared-code now parses pipe-delimited markdown tables into styled HTML `<table>` elements with borders, header styling, and text alignment (`:---` left, `:---:` center, `---:` right).
+- **Table Builder component**: New `TableBuilder` component in shared-code — inline grid editor that generates pipe-delimited markdown. Configurable columns (2–6) and data rows (1–10).
+- **Table Builder in settings**: "Insert table" toggle button added alongside "Template syntax reference" in the content template section. Inserts generated table markdown at cursor position.
+- **Tables help section**: Added "Tables" section to the expandable template syntax reference showing header row, separator, data rows, and alignment syntax.
+
+---
+
+## [1.19.0-r026.009–010] - 2026-03-18 - Per-Result Pan To (TODO #13)
+
+### Added
+- **Per-result Pan To**: New "Pan to" button on each result card (hand icon, matching Results Menu). Centers the map on the feature without changing zoom level.
+- **`panOnResultClick` config setting**: When enabled, clicking a result pans instead of zooming. Mutually exclusive with `zoomOnResultClick` — enabling one disables the other (same pattern as FeedSimple).
+- **`panToRecords()` utility**: New function in `zoom-utils.ts` that reuses `calculateRecordsExtent()` and calls `goTo({ center })`. No code duplication with zoom.
+- **`usePanToRecords()` hook**: Mirrors `useZoomToRecords()` pattern in `managers/use-zoom-to-records.ts`.
+- **Pan button visibility**: Follows FeedSimple's inverted-visibility pattern — pan button shows on the toolbar when `panOnResultClick` is OFF (user needs the explicit button). Hidden when pan is the default click behavior.
+- **Pan in collapsed menu**: When result is collapsed, pan appears as a dropdown menu item alongside zoom and remove.
+- **Settings toggle**: "Pan to record when clicked" toggle in Result Click Behavior section with mutual exclusion logic.
+
+### Changed
+- **Click handler**: `toggleSelection` in `query-result.tsx` now supports three modes: `zoom`, `pan`, or `popup-only`. Pan mode calls `panToRecordsHook()` then opens popup.
+- **Collapsed menu logic**: Menu now shows when either zoom OR pan buttons need to be visible (previously only checked zoom).
+
+---
+
+## [1.19.0-r026.002–008] - 2026-03-18 - Unified {{field}} Template Engine (Phase 1.5)
+
+### Added
+- **`{{field | filter}}` token syntax in QS**: QuerySimple now uses the same double-brace token syntax as FeedSimple, with full pipe filter support (date, math, string, link — 16 filters total).
+- **CustomContent popup rendering**: CustomTemplate queries now render popups via Esri `CustomContent` (same pattern as FeedSimple) instead of delegating to the Esri Feature widget. Card click popup uses inline resolved HTML.
+- **Card-level markdown rendering**: CustomTemplate result cards bypass the Esri Feature widget entirely, rendering via `substituteTokens() → convertTemplateToHtml() → dangerouslySetInnerHTML`. Matches FeatureInfo's DOM structure (expand/collapse arrow, border, padding).
+- **Template migration button**: Settings panel detects old `{field}` syntax and offers one-click conversion to `{{field}}` with before/after preview.
+- **Markdown syntax help panel**: Expandable reference panel in QS settings (ported from FeedSimple pattern) replacing the old tooltip-based help.
+- **`substituteTokens()` in shared-code**: Extracted from FeedSimple's `token-renderer.ts` to `shared-code/src/token-renderer.ts`. Both QS and FS now import from the shared module.
+
+### Changed
+- **Settings panel**: Field insertion now emits `{{FIELD}}` instead of `{FIELD}}`. Placeholder text and help content updated throughout.
+- **`query-utils.ts`**: CustomTemplate mode uses `CustomContent` with `substituteTokens()` for map popups. `rawTemplate` stored in cache for card renderer.
+- **`query-result.tsx`**: Card click opens popup with resolved HTML for CustomTemplate queries instead of passing raw feature to Esri's default popup.
+- **`query-result-item.tsx`**: CustomTemplate cards render via shared pipeline with CSS parity to FeatureInfo (border, padding, expand/collapse, italic labels, heading styles).
+- **`simple-list.tsx`**: Popup template cache extended with `rawTemplate` and `isCustomTemplate` fields.
+
+### Fixed
+- **Card styling parity**: Matched FeatureInfo's exact DOM structure, font sizes, padding, and expand/collapse arrow for CustomTemplate cards. Body text `0.875rem`, padding `3px 4px`, p margin 0.
+
+---
+
+## [1.19.0-r026.001] - 2026-03-18 - Shared Markdown Engine (Major)
+
+### Changed
+- **Shared markdown engine**: Extracted `convertTemplateToHtml()` and `applyInlineFormatting()` from `query-simple/src/runtime/markdown-template-utils.ts` to `shared-code/mapsimple-common/markdown-template-utils.ts`. Local file is now a thin wrapper that re-exports the shared converter and keeps QS-specific `renderPreview()` and `extractFieldTokens()` (single-brace `{field}` token regex).
+- **`#### h6` heading support**: Shared engine includes h6 heading level (`#### Tiny`) that QS previously lacked.
+- **Smarter italic regex**: Shared engine uses token-agnostic italic regex that protects both `{SOME_FIELD}` and `{{some_field}}` from false italic matching — fixes a latent bug in QS where `{FIELD_NAME}` could be partially italicized.
+- **Major version bump**: `r025` → `r026` reflecting the architectural change (shared dependency).
+
+---
+
 ## [1.19.0-r025.073] - 2026-03-17 - Spatial Tab Fix, TODO Updates
 
 ### Fixed

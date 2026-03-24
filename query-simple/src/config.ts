@@ -218,6 +218,8 @@ export interface SettingConfig {
   // Result Click Behavior
   /** r023.31: Default false. When true, clicking a result zooms to it. When false, use "Zoom to" from result menu. */
   zoomOnResultClick?: boolean
+  /** r026.009: Default false. When true, clicking a result pans (centers) without changing zoom. Mutually exclusive with zoomOnResultClick. */
+  panOnResultClick?: boolean
   /** r025.059: Distance in feet to buffer point features when zooming. Default: 300. */
   pointZoomBufferFeet?: number
   /** r025.068: Expansion factor for zoom extent. 1.0 = tight fit, 2.0 = double size. Default: 1.2. */

@@ -25,6 +25,8 @@ export interface QueryTaskListProps {
   onResultsModeChange?: (mode: SelectionType) => void
   // r022.105: Configurable zoom on result click
   zoomOnResultClick?: boolean
+  // r026.009: Configurable pan on result click
+  panOnResultClick?: boolean
   accumulatedRecords?: FeatureDataRecord[]
   resultsExtent?: __esri.Extent | null  // r024.74: Cached extent for zoom/pan actions
   onAccumulatedRecordsChange?: (records: FeatureDataRecord[]) => void
@@ -133,7 +135,7 @@ const getQueryDisplayName = (item: ImmutableObject<QueryItemType>): string => {
 }
 
 export function QueryTaskList (props: QueryTaskListProps) {
-  const { queryItems, widgetId, defaultPageSize, isInPopper = false, className = '', initialQueryValue, shouldUseInitialQueryValueForSelection = false, onHashParameterUsed, resultsMode, onResultsModeChange, accumulatedRecords, resultsExtent, onAccumulatedRecordsChange, graphicsLayer, mapView, onInitializeGraphicsLayer, onClearGraphicsLayer, onDestroyGraphicsLayer, activeTab, onTabChange, eventManager, zoomOnResultClick, hoverPinColor, isPanelVisible, jimuMapView } = props
+  const { queryItems, widgetId, defaultPageSize, isInPopper = false, className = '', initialQueryValue, shouldUseInitialQueryValueForSelection = false, onHashParameterUsed, resultsMode, onResultsModeChange, accumulatedRecords, resultsExtent, onAccumulatedRecordsChange, graphicsLayer, mapView, onInitializeGraphicsLayer, onClearGraphicsLayer, onDestroyGraphicsLayer, activeTab, onTabChange, eventManager, zoomOnResultClick, panOnResultClick, hoverPinColor, isPanelVisible, jimuMapView } = props
   const getI18nMessage = hooks.useTranslation(defaultMessages)
   
   // Sort queries by display order before grouping
@@ -592,6 +594,7 @@ export function QueryTaskList (props: QueryTaskListProps) {
             onTabChange={onTabChange}
             eventManager={eventManager}
             zoomOnResultClick={zoomOnResultClick}
+            panOnResultClick={panOnResultClick}
             hoverPinColor={hoverPinColor}
             isPanelVisible={isPanelVisible}
             jimuMapView={jimuMapView}

@@ -110,6 +110,8 @@ export interface QueryTaskProps {
   eventManager?: import('./managers/event-manager').EventManager  // Chunk 7.1: Event Handling Manager
   // r022.105: Configurable zoom on result click
   zoomOnResultClick?: boolean
+  // r026.009: Configurable pan on result click
+  panOnResultClick?: boolean
   isPanelVisible?: boolean  // r025.013: Buffer preview clear/restore on panel close/open
   jimuMapView?: JimuMapView | null  // r025.041: JimuMapView for JimuDraw in Spatial tab Draw mode
 }
@@ -172,7 +174,7 @@ const style = css`
 `
 
 export function QueryTask (props: QueryTaskProps) {
-  const { queryItem, onNavBack, total, isInPopper = false, wrappedInPopper = false, className = '', index, initialInputValue, onHashParameterUsed, queryItems, selectedQueryIndex, onQueryChange, groups, ungrouped, groupOrder, selectedGroupId, selectedGroupQueryIndex, onGroupChange, onGroupQueryChange, onUngroupedChange, resultsMode, onResultsModeChange, accumulatedRecords, resultsExtent, onAccumulatedRecordsChange, graphicsLayer, mapView, onInitializeGraphicsLayer, onClearGraphicsLayer, onDestroyGraphicsLayer, activeTab: propActiveTab, onTabChange: propOnTabChange, eventManager, zoomOnResultClick, hoverPinColor, jimuMapView, ...otherProps } = props
+  const { queryItem, onNavBack, total, isInPopper = false, wrappedInPopper = false, className = '', index, initialInputValue, onHashParameterUsed, queryItems, selectedQueryIndex, onQueryChange, groups, ungrouped, groupOrder, selectedGroupId, selectedGroupQueryIndex, onGroupChange, onGroupQueryChange, onUngroupedChange, resultsMode, onResultsModeChange, accumulatedRecords, resultsExtent, onAccumulatedRecordsChange, graphicsLayer, mapView, onInitializeGraphicsLayer, onClearGraphicsLayer, onDestroyGraphicsLayer, activeTab: propActiveTab, onTabChange: propOnTabChange, eventManager, zoomOnResultClick, panOnResultClick, hoverPinColor, jimuMapView, ...otherProps } = props
   const getI18nMessage = hooks.useTranslation(defaultMessage)
   const zoomToRecords = useZoomToRecords(mapView, props.widgetId)
   // stage now in useReducer (r024.126 — A2b)
@@ -1795,6 +1797,7 @@ export function QueryTask (props: QueryTaskProps) {
                 isQuerySwitchInProgressRef={isQuerySwitchInProgressRef}
                 queries={queryItems}
                 zoomOnResultClick={zoomOnResultClick}
+                panOnResultClick={panOnResultClick}
                 hoverPinColor={hoverPinColor}
                 listResetKey={queryExecutionKeyRef.current}
                 noRemovalAlert={noRemovalAlert}

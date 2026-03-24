@@ -32,8 +32,12 @@ export interface SimpleListProps {
   onRemove: (data: FeatureDataRecord) => void
   /** r023.32: Zoom to single record. Passed to QueryResultItem for menu/inline icon. */
   onZoomTo?: (data: FeatureDataRecord) => void
+  /** r026.009: Pan to single record (center without zoom). Passed to QueryResultItem. */
+  onPanTo?: (data: FeatureDataRecord) => void
   /** r024.46: When true, clicking a result already zooms, so zoom button is redundant */
   zoomOnResultClick?: boolean
+  /** r026.009: When true, clicking a result pans (centers) without zoom */
+  panOnResultClick?: boolean
   expandByDefault?: boolean
   // r021.77: itemExpandStates removed - doesn't persist with no-rerender approach
   removedRecordIds?: Set<string>
@@ -89,7 +93,9 @@ export function SimpleList (props: SimpleListProps) {
     onSelectChange,
     onRemove,
     onZoomTo,
+    onPanTo,
     zoomOnResultClick,
+    panOnResultClick,
     expandByDefault,
     // r021.77: itemExpandStates removed
     removedRecordIds,
@@ -115,7 +121,7 @@ export function SimpleList (props: SimpleListProps) {
   
   // r021.76: Cache popup templates per queryConfig
   // Key: queryConfig.configId, Value: { popupTemplate, defaultPopupTemplate }
-  const popupTemplateCacheRef = React.useRef<Map<string, { popup: any, default: any }>>(new Map())
+  const popupTemplateCacheRef = React.useRef<Map<string, { popup: any, default: any, isCustomTemplate?: boolean, rawTemplate?: string }>>(new Map())
   
   // r021.77 / r024.24: Cleanup cache on unmount
   // Popup templates may hold DOM references that prevent GC
@@ -215,7 +221,9 @@ export function SimpleList (props: SimpleListProps) {
           getPopupTemplate(outputDS, queryConfig, originDSForConfig).then(rs => {
             popupTemplateCacheRef.current.set(configId, {
               popup: rs.popupTemplate,
-              default: rs.defaultPopupTemplate
+              default: rs.defaultPopupTemplate,
+              isCustomTemplate: (rs as any).isCustomTemplate, // r026.002: Pass through for render pool
+              rawTemplate: (rs as any).rawTemplate // r026.005: Raw template for card renderer
             })
             
             // Force re-render to show new templates
@@ -262,6 +270,8 @@ export function SimpleList (props: SimpleListProps) {
           // Look up the query config to get popup template
           let recordPopupTemplate: any
           let recordDefaultPopupTemplate: any
+          let recordIsCustomTemplate = false
+          let recordRawTemplate: string | undefined
           
           if (recordQueryConfigId) {
             const recordConfig = queries.find(q => q.configId === recordQueryConfigId)
@@ -270,6 +280,8 @@ export function SimpleList (props: SimpleListProps) {
               if (cachedTemplates) {
                 recordPopupTemplate = cachedTemplates.popup
                 recordDefaultPopupTemplate = cachedTemplates.default
+                recordIsCustomTemplate = !!cachedTemplates.isCustomTemplate
+                recordRawTemplate = cachedTemplates.rawTemplate
                 
                 debugLogger.log('RESULTS-MODE', {
                   event: 'record-template-lookup',
@@ -317,11 +329,15 @@ export function SimpleList (props: SimpleListProps) {
               widgetId={widgetId}
               popupTemplate={recordPopupTemplate}
               defaultPopupTemplate={recordDefaultPopupTemplate}
+              isCustomTemplate={recordIsCustomTemplate}
+              rawTemplate={recordRawTemplate}
               expandByDefault={expandByDefaultValue}
               onClick={onSelectChange}
               onRemove={onRemove}
               onZoomTo={onZoomTo}
+              onPanTo={onPanTo}
               zoomOnResultClick={zoomOnResultClick}
+              panOnResultClick={panOnResultClick}
               mapView={mapView}
               hoverPinColor={hoverPinColor}
             />

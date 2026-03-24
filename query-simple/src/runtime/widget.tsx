@@ -1369,6 +1369,7 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
                 onTabChange={this.handleTabChange}
                 eventManager={this.eventManager}
                 zoomOnResultClick={config.zoomOnResultClick}
+                panOnResultClick={config.panOnResultClick}
                 hoverPinColor={config.hoverPinColor}
                 isPanelVisible={this.state.isPanelVisible}
               />
@@ -1455,6 +1456,7 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
                 onTabChange={this.handleTabChange}
                 eventManager={this.eventManager}
                 zoomOnResultClick={config.zoomOnResultClick}
+                panOnResultClick={config.panOnResultClick}
                 hoverPinColor={config.hoverPinColor}
                 isPanelVisible={this.state.isPanelVisible}
                 jimuMapView={this.state.jimuMapView}

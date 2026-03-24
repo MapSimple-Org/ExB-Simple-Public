@@ -38,6 +38,7 @@ import type { ValueManSetByKeyType } from './setting-config'
 import { getOutputJsonOriginDs } from './setting-utils'
 import { QueryItemList } from './query-item-list'
 import { Arrangement } from './arrangement'
+import { RebindTool } from './rebind-tool'
 
 export interface State {
   showRemoveQueryItemWarning: boolean
@@ -244,15 +245,16 @@ export default class Setting extends React.PureComponent<AllWidgetSettingProps<I
             const sortOptions = (queryItem.sortOptions || []).filter((i) => i.jimuFieldName)
             const sortFields = sortOptions.map((i) => i.jimuFieldName)
             // fields used in resultTitleExpression
-            // extract fields from the value
-            const reg = /\{(\w*)\}/g
+            // r026.002: Support both {{field}} (new) and {field} (legacy) syntax
+            const reg = /\{\{(\w+)(?:\|[^}]*)?\}\}|\{(\w+)\}/g
             const fields = queryItem.resultTitleExpression?.match(reg)
             const titleFields = []
             if (fields?.length > 0) {
               const dataSource = DataSourceManager.getInstance().getDataSource(dsId)
               const schemaFields = dataSource?.getSchema()?.fields ?? {}
-              fields.forEach(field => { // like "{NAME}"
-                const fieldName = field.substring(1, field.length - 1)
+              fields.forEach(field => { // like "{{NAME}}" or "{NAME}"
+                // Strip braces: {{NAME}} → NAME, {{NAME | filter}} → NAME, {NAME} → NAME
+                const fieldName = field.replace(/^\{\{|\}\}$|\{|\}|\|.*$/g, '').trim()
                 if (schemaFields[fieldName]) {
                   titleFields.push(fieldName)
                 }
@@ -324,6 +326,13 @@ export default class Setting extends React.PureComponent<AllWidgetSettingProps<I
           onQueryItemChanged={this.updateQueryItem}
           onOrderChanged={this.reOrderQueryItems}
         />
+        {this.props.config.queryItems.length > 0 && (
+          <RebindTool
+            widgetId={this.props.id}
+            queryItems={this.props.config.queryItems}
+            updateConfigForOptions={this.updateConfigForOptions}
+          />
+        )}
         {this.props.config.queryItems.length > 0 && !this.props.controllerWidgetId && (
           <Arrangement
             arrangeType={config.arrangeType}
@@ -538,13 +547,37 @@ export default class Setting extends React.PureComponent<AllWidgetSettingProps<I
               <Switch
                 checked={config.zoomOnResultClick === true}
                 onChange={(e) => {
-                  this.updateConfigForOptions(['zoomOnResultClick', e.target.checked])
+                  const checked = e.target.checked
+                  // r026.011: Mutually exclusive — single call to avoid stale config
+                  if (checked && config.panOnResultClick === true) {
+                    this.updateConfigForOptions(['zoomOnResultClick', checked], ['panOnResultClick', false])
+                  } else {
+                    this.updateConfigForOptions(['zoomOnResultClick', checked])
+                  }
                 }}
                 aria-label={this.getI18nMessage('zoomOnResultClick')}
               />
             </SettingRow>
             <div css={css`font-size: 0.875rem; margin-top: 4px; padding: 0 16px 8px; opacity: 0.8;`}>
               {this.getI18nMessage('zoomOnResultClickDescription')}
+            </div>
+            <SettingRow label={this.getI18nMessage('panOnResultClick')}>
+              <Switch
+                checked={config.panOnResultClick === true}
+                onChange={(e) => {
+                  const checked = e.target.checked
+                  // r026.011: Mutually exclusive — single call to avoid stale config
+                  if (checked && config.zoomOnResultClick === true) {
+                    this.updateConfigForOptions(['panOnResultClick', checked], ['zoomOnResultClick', false])
+                  } else {
+                    this.updateConfigForOptions(['panOnResultClick', checked])
+                  }
+                }}
+                aria-label={this.getI18nMessage('panOnResultClick')}
+              />
+            </SettingRow>
+            <div css={css`font-size: 0.875rem; margin-top: 4px; padding: 0 16px 8px; opacity: 0.8;`}>
+              {this.getI18nMessage('panOnResultClickDescription')}
             </div>
             <SettingRow label={this.getI18nMessage('pointZoomBuffer')} flow='wrap'>
               <NumericInput

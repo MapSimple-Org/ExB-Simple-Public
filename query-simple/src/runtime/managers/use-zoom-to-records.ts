@@ -10,7 +10,7 @@
 
 import React from 'react'
 import type { FeatureDataRecord } from 'jimu-core'
-import { zoomToRecords, type ZoomToRecordsOptions } from '../zoom-utils'
+import { zoomToRecords, panToRecords, type ZoomToRecordsOptions } from '../zoom-utils'
 import { highlightConfigManager } from 'widgets/shared-code/mapsimple-common'
 
 /**
@@ -43,6 +43,22 @@ export function useZoomToRecords(
     }
     await zoomToRecords(mapView, records, mergedOptions)
   }, [mapView, widgetId])
+}
+
+/**
+ * r026.009: Hook for panning (centering) to feature records without changing zoom.
+ * Mirrors useZoomToRecords pattern but calls panToRecords instead.
+ */
+export function usePanToRecords(
+  mapView?: __esri.MapView | __esri.SceneView
+): (records: FeatureDataRecord[]) => Promise<void> {
+
+  return React.useCallback(async (
+    records: FeatureDataRecord[]
+  ): Promise<void> => {
+    if (!mapView) return
+    await panToRecords(mapView, records)
+  }, [mapView])
 }
 
 // Re-export types for convenience

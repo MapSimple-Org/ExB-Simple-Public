@@ -2,8 +2,8 @@
 
 This guide documents the architecture, data flow, and conventions for the FeedSimple Experience Builder widget.
 
-**Version:** 1.19.0-r003.010
-**Last Updated:** 2026-03-16
+**Version:** 1.19.0-r004.002
+**Last Updated:** 2026-03-18
 
 ---
 
@@ -52,9 +52,16 @@ FeedSimple is an ArcGIS Experience Builder Developer Edition widget that consume
 
 Modes can be enabled independently or in combination. B and C both add map interaction on top of A, and both can be active simultaneously on the same map widget.
 
-### Independence from Other Widgets
+### Dependencies
 
-FeedSimple is a standalone widget. It does not import from `shared-code/` or depend on QuerySimple or HelperSimple. It has its own debug logger, version management, and utility modules.
+FeedSimple does not depend on QuerySimple or HelperSimple. As of r004.001, it imports shared utilities from `shared-code/mapsimple-common`:
+
+- **`convertTemplateToHtml()`** — Markdown-to-HTML conversion (shared with QS)
+- **`applyInlineFormatting()`** — Inline formatting (bold, italic, links)
+- **`substituteTokens()`** — `{{field | filter}}` token engine (shared with QS)
+- **`createFeedSimpleDebugLogger()`** — Tagged debug logger
+
+**Installation:** Copy both `feed-simple/` and `shared-code/` to `client/your-extensions/widgets/`. Previous standalone releases (r003.010 and earlier) do not require `shared-code/`.
 
 ---
 
