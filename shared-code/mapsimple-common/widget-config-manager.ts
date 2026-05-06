@@ -1,35 +1,40 @@
 /**
- * HighlightConfigManager
- * 
- * Centralized manager for widget highlight/graphics configuration.
- * Provides a single source of truth for graphics symbology settings across all QuerySimple widgets.
- * 
+ * WidgetConfigManager
+ *
+ * Centralized singleton for widget configuration.
+ * Provides a single source of truth for all config settings across QuerySimple widgets,
+ * eliminating prop-drilling for config values that are static for the widget lifetime.
+ *
  * Features:
  * - Singleton pattern (one instance for entire app)
  * - Per-widget configuration storage (keyed by widgetId)
- * - Fallback defaults for all symbology properties
+ * - Fallback defaults for all properties
  * - Type-safe configuration access
- * 
+ *
  * Usage:
  * ```typescript
- * import { highlightConfigManager } from 'widgets/shared-code/mapsimple-common'
- * 
+ * import { widgetConfigManager } from 'widgets/shared-code/mapsimple-common'
+ *
  * // Register widget config on mount
- * highlightConfigManager.registerConfig(widgetId, config)
- * 
- * // Get symbology values
- * const fillColor = highlightConfigManager.getFillColor(widgetId)
- * const pointSize = highlightConfigManager.getPointSize(widgetId)
- * 
+ * widgetConfigManager.registerConfig(widgetId, config)
+ *
+ * // Get config values from any component
+ * const showHeader = widgetConfigManager.getShowHeader(widgetId)
+ * const fillColor = widgetConfigManager.getFillColor(widgetId)
+ *
  * // Unregister on unmount
- * highlightConfigManager.unregisterConfig(widgetId)
+ * widgetConfigManager.unregisterConfig(widgetId)
  * ```
+ *
+ * History:
+ * - Originally named HighlightConfigManager (graphics symbology only)
+ * - r027.014: Renamed to WidgetConfigManager to reflect broader config scope
  */
 
 import { type IMConfig as QuerySimpleConfig } from '../../query-simple/src/config'
 
-class HighlightConfigManager {
-  private static instance: HighlightConfigManager
+class WidgetConfigManager {
+  private static instance: WidgetConfigManager
   private configCache: Map<string, QuerySimpleConfig> = new Map()
 
   private constructor() {
@@ -39,11 +44,11 @@ class HighlightConfigManager {
   /**
    * Get singleton instance
    */
-  public static getInstance(): HighlightConfigManager {
-    if (!HighlightConfigManager.instance) {
-      HighlightConfigManager.instance = new HighlightConfigManager()
+  public static getInstance(): WidgetConfigManager {
+    if (!WidgetConfigManager.instance) {
+      WidgetConfigManager.instance = new WidgetConfigManager()
     }
-    return HighlightConfigManager.instance
+    return WidgetConfigManager.instance
   }
 
   /**
@@ -61,6 +66,35 @@ class HighlightConfigManager {
   public unregisterConfig(widgetId: string): void {
     this.configCache.delete(widgetId)
   }
+
+  // ─── Display ───────────────────────────────────────────────────────
+
+  /**
+   * r027.013: Whether to show the widget header label (default: true)
+   */
+  public getShowHeader(widgetId: string): boolean {
+    const config = this.configCache.get(widgetId)
+    return config?.showHeader !== false
+  }
+
+  // ─── Spatial Tab ───────────────────────────────────────────────────
+
+  /**
+   * r027.014: Allowed spatial relationship IDs for the Spatial tab combobox.
+   * When undefined/empty, all relationships are shown (default behavior).
+   */
+  public getSpatialTabRelationships(widgetId: string): string[] | undefined {
+    const config = this.configCache.get(widgetId)
+    const relationships = config?.spatialTabRelationships
+    // Return undefined if empty array (show all)
+    if (!relationships || (Array.isArray(relationships) && relationships.length === 0)) {
+      return undefined
+    }
+    // ImmutableArray → plain array
+    return Array.isArray(relationships) ? relationships : Array.from(relationships as any)
+  }
+
+  // ─── Graphics Layer Symbology ──────────────────────────────────────
 
   /**
    * Get fill color for widget (with fallback)
@@ -128,6 +162,8 @@ class HighlightConfigManager {
     return config?.highlightPointStyle || 'circle'
   }
 
+  // ─── Map Layer Integration ─────────────────────────────────────────
+
   /**
    * r024.0: Whether to show results as GroupLayer in LayerList (default: false)
    */
@@ -144,6 +180,8 @@ class HighlightConfigManager {
     const title = config?.resultsLayerTitle
     return (typeof title === 'string' && title.trim() !== '') ? title.trim() : 'QuerySimple Results'
   }
+
+  // ─── Spatial Draw Colors ───────────────────────────────────────────
 
   /**
    * r025.051: Get draw symbol color for Spatial tab (with fallback)
@@ -163,6 +201,8 @@ class HighlightConfigManager {
     return this.hexToRgb(hex)
   }
 
+  // ─── Zoom Behavior ─────────────────────────────────────────────────
+
   /**
    * r025.059: Get point zoom buffer distance in feet (with fallback)
    * Applied when zooming to single points or overlapping points (zero-area extents).
@@ -180,6 +220,8 @@ class HighlightConfigManager {
     const config = this.configCache.get(widgetId)
     return config?.zoomExpansionFactor ?? 1.2
   }
+
+  // ─── Private Helpers ───────────────────────────────────────────────
 
   /**
    * Convert hex color to RGB array
@@ -200,5 +242,9 @@ class HighlightConfigManager {
 
 /**
  * Export singleton instance
+ *
+ * Legacy alias: highlightConfigManager is kept for backward compatibility
+ * during the transition period. New code should use widgetConfigManager.
  */
-export const highlightConfigManager = HighlightConfigManager.getInstance()
+export const widgetConfigManager = WidgetConfigManager.getInstance()
+export const highlightConfigManager = widgetConfigManager

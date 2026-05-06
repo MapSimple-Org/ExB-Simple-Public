@@ -46,9 +46,18 @@ import overlapsSvg from '../assets/spatial/overlaps.svg'
 import withinSvg from '../assets/spatial/within.svg'
 import touchesSvg from '../assets/spatial/touches.svg'
 import defaultMessage from '../translations/default'
-import { createQuerySimpleDebugLogger, EntityStatusType, StatusIndicator, highlightConfigManager } from 'widgets/shared-code/mapsimple-common'
+import { createQuerySimpleDebugLogger, EntityStatusType, StatusIndicator, widgetConfigManager } from 'widgets/shared-code/mapsimple-common'
 import { useBufferPreview } from '../managers/use-buffer-preview'
 import { ResultsModeControl, type ResultsModeValue } from '../components/ResultsModeControl'
+import type MapView from '@arcgis/core/views/MapView'
+import type SceneView from '@arcgis/core/views/SceneView'
+import type Geometry from '@arcgis/core/geometry/Geometry'
+/** JSAPI 5.0 exports GeometryUnion from geometry/types; 4.x does not. Cast-only usage. */
+type GeometryUnion = any
+import type GraphicsLayer from '@arcgis/core/layers/GraphicsLayer'
+import type MapNotesLayer from '@arcgis/core/layers/MapNotesLayer'
+import type Graphic from '@arcgis/core/Graphic'
+import type FeatureLayer from '@arcgis/core/layers/FeatureLayer'
 
 const debugLogger = createQuerySimpleDebugLogger()
 
@@ -58,13 +67,13 @@ export interface SpatialTabContentProps {
   activeTab: 'query' | 'spatial' | 'results'
   accumulatedRecords?: FeatureDataRecord[]
   onClearResults?: () => void
-  mapView?: __esri.MapView | __esri.SceneView
+  mapView?: MapView | SceneView
   jimuMapView?: JimuMapView  // r025.041: Required by JimuDraw for Draw mode
   widgetId: string
   isPanelVisible?: boolean  // r025.013: Buffer preview clear/restore on panel close/open
   targetLayerOptions?: Array<{ value: string | number; label: string }>  // r025.007: Real layers from widget config
   onExecuteSpatialQuery?: (params: {
-    inputGeometry: __esri.Geometry
+    inputGeometry: Geometry
     selectedRelationship: string
     selectedLayers: Array<{ value: string | number; label: string }>
     bufferDistance: number
@@ -239,6 +248,12 @@ export function SpatialTabContent (props: SpatialTabContentProps) {
   const getI18nMessage = hooks.useTranslation(defaultMessage)
   const hasResults = accumulatedRecords && accumulatedRecords.length > 0
 
+  // r027.014: Filter spatial relationships via singleton config
+  const allowedRelationshipIds = widgetConfigManager.getSpatialTabRelationships(widgetId)
+  const visibleRelationships = allowedRelationshipIds
+    ? spatialRelationships.filter(r => allowedRelationshipIds.includes(r.id))
+    : spatialRelationships
+
   // Smart default: Operations if results exist, Draw if not
   const [spatialMode, setSpatialMode] = React.useState<SpatialMode>(
     hasResults ? 'operations' : 'draw'
@@ -252,9 +267,9 @@ export function SpatialTabContent (props: SpatialTabContentProps) {
 
   // r025.041: JimuDraw module (lazy-loaded) and drawn geometry state
   const [mapModule, setMapModule] = React.useState<typeof jimuMap>(null)
-  const [drawnGeometries, setDrawnGeometries] = React.useState<__esri.Geometry[]>([])
+  const [drawnGeometries, setDrawnGeometries] = React.useState<Geometry[]>([])
   const hasDrawnGeometry = drawnGeometries.length > 0
-  const getDrawLayerRef = React.useRef<(() => __esri.GraphicsLayer | __esri.MapNotesLayer) | null>(null)
+  const getDrawLayerRef = React.useRef<(() => GraphicsLayer | MapNotesLayer) | null>(null)
 
   // r025.052: Reset resultsMode to 'new' when accumulated records are cleared while on 'remove'
   // Matches Query tab behavior — Remove stays disabled AND deselected when nothing to remove from
@@ -294,7 +309,7 @@ export function SpatialTabContent (props: SpatialTabContentProps) {
       'esri/symbols/SimpleLineSymbol',
       'esri/symbols/SimpleFillSymbol'
     ]).then(([SimpleMarkerSymbol, SimpleLineSymbol, SimpleFillSymbol]) => {
-      const color = highlightConfigManager.getDrawColor(widgetId)
+      const color = widgetConfigManager.getDrawColor(widgetId)
       setDrawSymbols({
         pointSymbol: new SimpleMarkerSymbol({
           color: [...color, 0.85],
@@ -326,10 +341,10 @@ export function SpatialTabContent (props: SpatialTabContentProps) {
   // r025.041: Store array of input geometries (grouped by type, unioned within each group).
   // Supports mixed geometry types (e.g., points + polygons from different layers).
   // Each element is one unioned geometry per type group.
-  const [allInputGeometries, setAllInputGeometries] = React.useState<__esri.Geometry[]>([])
+  const [allInputGeometries, setAllInputGeometries] = React.useState<Geometry[]>([])
 
   // Derived single inputGeometry for warnings and query execution (highest dimension type)
-  const inputGeometry = React.useMemo<__esri.Geometry | null>(() => {
+  const inputGeometry = React.useMemo<Geometry | null>(() => {
     if (allInputGeometries.length === 0) return null
     if (allInputGeometries.length === 1) return allInputGeometries[0]
     // Mixed types: use highest-dimension geometry for warning evaluation
@@ -341,7 +356,7 @@ export function SpatialTabContent (props: SpatialTabContentProps) {
 
   React.useEffect(() => {
     // Resolve raw geometries from current mode
-    let geometries: __esri.Geometry[]
+    let geometries: Geometry[]
     if (spatialMode === 'draw') {
       geometries = drawnGeometries
     } else {
@@ -351,7 +366,7 @@ export function SpatialTabContent (props: SpatialTabContentProps) {
       }
       geometries = (accumulatedRecords
         ?.map(r => r.feature?.geometry)
-        .filter(Boolean) || []) as __esri.Geometry[]
+        .filter(Boolean) || []) as Geometry[]
     }
 
     if (geometries.length === 0) {
@@ -372,21 +387,24 @@ export function SpatialTabContent (props: SpatialTabContentProps) {
       'esri/geometry/operators/unionOperator'
     ]).then(modules => {
       if (cancelled) return
-      const operator: (typeof __esri.unionOperator) = modules[0]
+      const operator: typeof import('@arcgis/core/geometry/operators/unionOperator') = modules[0]
 
-      const byType = new Map<string, __esri.Geometry[]>()
+      const byType = new Map<string, Geometry[]>()
       for (const g of geometries) {
         const arr = byType.get(g.type) || []
         arr.push(g)
         byType.set(g.type, arr)
       }
 
-      const unionedParts: __esri.Geometry[] = []
+      const unionedParts: Geometry[] = []
       for (const [, geoms] of byType) {
         if (geoms.length === 1) {
           unionedParts.push(geoms[0])
         } else {
-          unionedParts.push(operator.executeMany(geoms))
+          // r027.077: unionOperator.executeMany() typed as GeometryUnion[]
+          // in JSAPI 5.0; the byType bucket is Geometry[]. Runtime values
+          // are always GeometryUnion members so the cast is safe.
+          unionedParts.push(operator.executeMany(geoms as GeometryUnion[]))
         }
       }
 
@@ -446,7 +464,7 @@ export function SpatialTabContent (props: SpatialTabContentProps) {
       try {
         const ds = dsManager.getDataSource(layerId) as FeatureLayerDataSource
         if (ds?.layer) {
-          types[layerId] = (ds.layer as __esri.FeatureLayer).geometryType || 'unknown'
+          types[layerId] = (ds.layer as FeatureLayer).geometryType || 'unknown'
         }
       } catch {
         // DataSource not yet loaded — skip
@@ -555,7 +573,7 @@ export function SpatialTabContent (props: SpatialTabContentProps) {
 
     // r025.041: Show/hide draw layer graphics when switching modes
     if (getDrawLayerRef.current) {
-      const drawLayer = getDrawLayerRef.current() as __esri.GraphicsLayer
+      const drawLayer = getDrawLayerRef.current() as GraphicsLayer
       if (drawLayer) {
         drawLayer.visible = mode === 'draw'
       }
@@ -571,7 +589,7 @@ export function SpatialTabContent (props: SpatialTabContentProps) {
     // r025.044: Multi-shape mode — don't clear previous graphics
   }, [])
 
-  const handleDrawEnd = React.useCallback((graphic: __esri.Graphic) => {
+  const handleDrawEnd = React.useCallback((graphic: Graphic) => {
     if (graphic?.geometry) {
       // r025.044: Accumulate drawn geometries (multi-shape mode)
       setDrawnGeometries(prev => [...prev, graphic.geometry])
@@ -584,12 +602,16 @@ export function SpatialTabContent (props: SpatialTabContentProps) {
   }, [widgetId])
 
   // r025.050: Track geometry edits (move, vertex changes, deletions via select tool)
-  const handleDrawUpdate = React.useCallback((res: { type: string, graphics: __esri.Graphic[] }) => {
+  const handleDrawUpdate = React.useCallback((res: { type: string, graphics: Graphic[] }) => {
     // Rebuild drawnGeometries from all graphics currently on the draw layer.
     // This covers moves, vertex edits, and individual shape deletions.
-    const drawLayer = getDrawLayerRef.current?.()
+    // r027.077: Cast to GraphicsLayer (matches the established pattern in
+    // this file at lines 571/1031/1053). The factory ref type is the broader
+    // union GraphicsLayer | MapNotesLayer; only GraphicsLayer is ever set in
+    // practice, and only GraphicsLayer exposes .graphics.
+    const drawLayer = getDrawLayerRef.current?.() as GraphicsLayer | undefined
     if (drawLayer) {
-      const geometries: __esri.Geometry[] = []
+      const geometries: Geometry[] = []
       drawLayer.graphics.forEach(g => {
         if (g.geometry) geometries.push(g.geometry)
       })
@@ -629,6 +651,22 @@ export function SpatialTabContent (props: SpatialTabContentProps) {
       setSpatialMode(smartDefault)
     }
   }, [activeTab, hasResults, accumulatedRecords?.length])
+
+  // r027.024: Scroll the popover anchor into view whenever a no-results or
+  // error alert fires. The popover is anchored to the (invisible) feedback
+  // anchor inside the scrollable spatial form. On smaller screens with the
+  // form scrolled to the top, the popover renders below the fold — the user
+  // sees nothing fire when they click Apply. Scrolling the anchor into view
+  // guarantees the popover is visible regardless of viewport height.
+  React.useEffect(() => {
+    if (!noResultsAlert?.show && !queryErrorAlert?.show) return
+    const anchor = document.getElementById(`spatial-feedback-anchor-${widgetId}`)
+    if (!anchor) return
+    // Defer one frame so the popover has time to mount before we scroll
+    requestAnimationFrame(() => {
+      anchor.scrollIntoView({ behavior: 'smooth', block: 'center' })
+    })
+  }, [noResultsAlert?.show, noResultsAlert?.timestamp, queryErrorAlert?.show, queryErrorAlert?.timestamp, widgetId])
 
   // In Operations mode, operations are enabled when results exist
   // In Draw mode, operations are disabled until a geometry is drawn
@@ -788,11 +826,11 @@ export function SpatialTabContent (props: SpatialTabContentProps) {
           <div css={bufferRowStyle}>
             <TextInput
               css={css`width: 70px;`}
-              type='number'
               placeholder='0'
               value={bufferDistance}
               onChange={(e) => setBufferDistance(e.target.value)}
               aria-label='Buffer distance'
+              inputMode='numeric'
             />
             <Select
               css={css`flex: 1; min-width: 0;`}
@@ -851,11 +889,11 @@ export function SpatialTabContent (props: SpatialTabContentProps) {
               label={getI18nMessage('spatialRelationship')}
               css={css`flex: 1;`}
             >
-              {spatialRelationships.map((rel) => (
+              {visibleRelationships.map((rel) => (
                 <calcite-combobox-item
                   key={rel.id}
                   value={rel.id}
-                  textLabel={rel.label}
+                  heading={rel.label}
                   description={rel.description}
                   selected={selectedRelationship === rel.id || undefined}
                 />
@@ -867,7 +905,7 @@ export function SpatialTabContent (props: SpatialTabContentProps) {
                 onMouseEnter={() => setShowRelInfo(true)}
                 onMouseLeave={() => setShowRelInfo(false)}
               >
-                <Button size='sm' icon type='tertiary' id='spatial-rel-info-btn'>
+                <Button size='sm' icon type='tertiary' id={`spatial-rel-info-btn-${widgetId}`}>
                   <InfoOutlined color='var(--sys-color-primary-main)' size='s' />
                 </Button>
               </div>
@@ -876,12 +914,13 @@ export function SpatialTabContent (props: SpatialTabContentProps) {
           {/* r025.069: Spatial relationship info popover — hover-driven, pops above */}
           {selectedRelationship && (
             <calcite-popover
-              referenceElement='spatial-rel-info-btn'
+              referenceElement={`spatial-rel-info-btn-${widgetId}`}
               placement='top'
               open={showRelInfo || undefined}
               overlayPositioning='fixed'
               triggerDisabled
               pointerDisabled
+              label='Spatial relationship information'
               css={css`
                 --calcite-popover-border-color: var(--ref-palette-neutral-400);
                 --calcite-color-foreground-1: var(--ref-palette-white);
@@ -998,7 +1037,7 @@ export function SpatialTabContent (props: SpatialTabContentProps) {
                   if (spatialMode === 'draw') {
                     setDrawnGeometries([])
                     if (getDrawLayerRef.current) {
-                      const drawLayer = getDrawLayerRef.current() as __esri.GraphicsLayer
+                      const drawLayer = getDrawLayerRef.current() as GraphicsLayer
                       drawLayer?.removeAll()
                     }
                   }
@@ -1020,7 +1059,7 @@ export function SpatialTabContent (props: SpatialTabContentProps) {
               setSelectedLayers([])
               setDrawnGeometries([])
               if (getDrawLayerRef.current) {
-                const drawLayer = getDrawLayerRef.current() as __esri.GraphicsLayer
+                const drawLayer = getDrawLayerRef.current() as GraphicsLayer
                 drawLayer?.removeAll()
               }
               if (onDismissQueryErrorAlert) onDismissQueryErrorAlert()
@@ -1032,13 +1071,13 @@ export function SpatialTabContent (props: SpatialTabContentProps) {
         </div>
 
         {/* r025.063: Centered invisible anchor for popover alignment */}
-        <div id='spatial-feedback-anchor' css={css`height: 0; width: 100%;`} />
+        <div id={`spatial-feedback-anchor-${widgetId}`} css={css`height: 0; width: 100%;`} />
 
         {/* r025.031: Calcite popover for spatial query errors — same pattern as Query tab */}
         {queryErrorAlert?.show && (
           <calcite-popover
             key={`spatial-error-${queryErrorAlert.timestamp}`}
-            referenceElement="spatial-feedback-anchor"
+            referenceElement={`spatial-feedback-anchor-${widgetId}`}
             placement="top"
             flipDisabled={true}
             overlayPositioning="fixed"
@@ -1047,7 +1086,7 @@ export function SpatialTabContent (props: SpatialTabContentProps) {
             closable
             label={getI18nMessage('queryErrorAlertLabel')}
             open={queryErrorAlert.show}
-            onCalcitePopoverClose={() => {
+            oncalcitePopoverClose={() => {
               if (onDismissQueryErrorAlert) onDismissQueryErrorAlert()
             }}
             style={{
@@ -1073,7 +1112,7 @@ export function SpatialTabContent (props: SpatialTabContentProps) {
         {noResultsAlert?.show && (
           <calcite-popover
             key={`spatial-no-results-${noResultsAlert.timestamp}`}
-            referenceElement="spatial-feedback-anchor"
+            referenceElement={`spatial-feedback-anchor-${widgetId}`}
             placement="top"
             flipDisabled={true}
             overlayPositioning="fixed"
@@ -1082,7 +1121,7 @@ export function SpatialTabContent (props: SpatialTabContentProps) {
             closable
             label={getI18nMessage('noResultsAlertLabel')}
             open={noResultsAlert.show}
-            onCalcitePopoverClose={() => {
+            oncalcitePopoverClose={() => {
               if (onDismissNoResultsAlert) onDismissNoResultsAlert()
             }}
             style={{

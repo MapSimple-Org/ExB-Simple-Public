@@ -11,6 +11,14 @@
  * @since 1.19.0-r024.120
  */
 
+import type GroupLayer from '@arcgis/core/layers/GroupLayer'
+import type GraphicsLayer from '@arcgis/core/layers/GraphicsLayer'
+import type MapView from '@arcgis/core/views/MapView'
+import type SceneView from '@arcgis/core/views/SceneView'
+import type Graphic from '@arcgis/core/Graphic'
+/** Minimal handle type — JSAPI 5.0 exports ResourceHandle, 4.x does not. */
+type WatchHandle = { remove(): void }
+
 class GraphicsStateManager {
   private static instance: GraphicsStateManager
 
@@ -18,16 +26,16 @@ class GraphicsStateManager {
   private _operationSequence: number = 0
 
   // r024.17: Track in-progress GroupLayer creation to prevent race condition duplicates
-  private _groupLayerCreation = new Map<string, Promise<__esri.GroupLayer | null>>()
+  private _groupLayerCreation = new Map<string, Promise<GroupLayer | null>>()
 
   // r024.61: Track in-progress GraphicsLayer creation to prevent race condition duplicates.
   // Without this, concurrent calls both pass the "does it exist?" check before either adds
   // to the map, creating two layers with the same ID.
-  private _graphicsLayerCreation = new Map<string, Promise<__esri.GraphicsLayer | null>>()
+  private _graphicsLayerCreation = new Map<string, Promise<GraphicsLayer | null>>()
 
   // r024.19: Track Legend FeatureLayer visibility watch handles for cleanup
   // r024.31: Now also tracked in globalHandleManager for centralized cleanup
-  private _legendVisibilityHandles = new Map<string, __esri.WatchHandle>()
+  private _legendVisibilityHandles = new Map<string, WatchHandle>()
   private _legendVisibilityHandleIds = new Map<string, string>() // legendLayerId -> globalHandleManager handleId
 
   // r025.015: Buffer visibility watcher removed — buffer layer is now added
@@ -36,12 +44,12 @@ class GraphicsStateManager {
 
   // r024.59: Cache mapView per widgetId so the legend-layer visibility watcher
   // can close the popup when the user toggles the layer off in the Layer List.
-  private _mapViewCache = new Map<string, __esri.MapView | __esri.SceneView>()
+  private _mapViewCache = new Map<string, MapView | SceneView>()
 
   // r025.020: Store last buffer graphic per widget for imperative restore on panel reopen.
   // Effects are unreliable for panel close/reopen — imperative clear/restore is symmetric
   // with how highlight graphics are handled (clearSelectionFromMap / addSelectionToMap).
-  private _lastBufferGraphic = new Map<string, __esri.Graphic>()
+  private _lastBufferGraphic = new Map<string, Graphic>()
 
   private constructor() {
     // Private constructor enforces singleton pattern
@@ -67,11 +75,11 @@ class GraphicsStateManager {
   // GroupLayer creation lock
   // ---------------------------------------------------------------------------
 
-  public getGroupLayerCreation(layerId: string): Promise<__esri.GroupLayer | null> | undefined {
+  public getGroupLayerCreation(layerId: string): Promise<GroupLayer | null> | undefined {
     return this._groupLayerCreation.get(layerId)
   }
 
-  public setGroupLayerCreation(layerId: string, promise: Promise<__esri.GroupLayer | null>): void {
+  public setGroupLayerCreation(layerId: string, promise: Promise<GroupLayer | null>): void {
     this._groupLayerCreation.set(layerId, promise)
   }
 
@@ -87,11 +95,11 @@ class GraphicsStateManager {
   // GraphicsLayer creation lock
   // ---------------------------------------------------------------------------
 
-  public getGraphicsLayerCreation(layerId: string): Promise<__esri.GraphicsLayer | null> | undefined {
+  public getGraphicsLayerCreation(layerId: string): Promise<GraphicsLayer | null> | undefined {
     return this._graphicsLayerCreation.get(layerId)
   }
 
-  public setGraphicsLayerCreation(layerId: string, promise: Promise<__esri.GraphicsLayer | null>): void {
+  public setGraphicsLayerCreation(layerId: string, promise: Promise<GraphicsLayer | null>): void {
     this._graphicsLayerCreation.set(layerId, promise)
   }
 
@@ -107,11 +115,11 @@ class GraphicsStateManager {
   // Legend visibility watch handles
   // ---------------------------------------------------------------------------
 
-  public getLegendVisibilityHandle(legendLayerId: string): __esri.WatchHandle | undefined {
+  public getLegendVisibilityHandle(legendLayerId: string): WatchHandle | undefined {
     return this._legendVisibilityHandles.get(legendLayerId)
   }
 
-  public setLegendVisibilityHandle(legendLayerId: string, handle: __esri.WatchHandle): void {
+  public setLegendVisibilityHandle(legendLayerId: string, handle: WatchHandle): void {
     this._legendVisibilityHandles.set(legendLayerId, handle)
   }
 
@@ -139,11 +147,11 @@ class GraphicsStateManager {
   // MapView cache
   // ---------------------------------------------------------------------------
 
-  public getMapView(widgetId: string): __esri.MapView | __esri.SceneView | undefined {
+  public getMapView(widgetId: string): MapView | SceneView | undefined {
     return this._mapViewCache.get(widgetId)
   }
 
-  public setMapView(widgetId: string, mapView: __esri.MapView | __esri.SceneView): void {
+  public setMapView(widgetId: string, mapView: MapView | SceneView): void {
     this._mapViewCache.set(widgetId, mapView)
   }
 
@@ -155,11 +163,11 @@ class GraphicsStateManager {
   // Last buffer graphic (for imperative restore on panel reopen)
   // ---------------------------------------------------------------------------
 
-  public getLastBufferGraphic(widgetId: string): __esri.Graphic | undefined {
+  public getLastBufferGraphic(widgetId: string): Graphic | undefined {
     return this._lastBufferGraphic.get(widgetId)
   }
 
-  public setLastBufferGraphic(widgetId: string, graphic: __esri.Graphic): void {
+  public setLastBufferGraphic(widgetId: string, graphic: Graphic): void {
     this._lastBufferGraphic.set(widgetId, graphic)
   }
 

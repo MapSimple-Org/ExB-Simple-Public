@@ -7,6 +7,12 @@ import { InteractiveDraw } from './interactive-draw-tool'
 import { BufferInput } from './buffer-input'
 import defaultMessage from './translations/default'
 import { QueryTaskContext } from './query-task-context'
+import type Geometry from '@arcgis/core/geometry/Geometry'
+import type GraphicsLayer from '@arcgis/core/layers/GraphicsLayer'
+import type Graphic from '@arcgis/core/Graphic'
+import type BufferParameters from '@arcgis/core/rest/support/BufferParameters'
+/** JSAPI 5.0 exports GeometryUnion from geometry/types; 4.x does not. Cast-only usage. */
+type GeometryUnion = any
 
 export interface Props {
   mapWidgetIds: ImmutableArray<string>
@@ -16,7 +22,7 @@ export interface Props {
   bufferDistance: number
   bufferUnit: UnitType
   onBufferChange: (distance: number, unit: UnitType) => void
-  onGeometryChange: (geom: __esri.Geometry, layer?: __esri.GraphicsLayer, graphic?: __esri.Graphic, clearAfterApply?: boolean) => void
+  onGeometryChange: (geom: Geometry, layer?: GraphicsLayer, graphic?: Graphic, clearAfterApply?: boolean) => void
 }
 
 export function GeometryFromDraw (props: Props) {
@@ -25,14 +31,14 @@ export function GeometryFromDraw (props: Props) {
   const getI18nMessage = hooks.useTranslation(jimuUIMessages, defaultMessage)
   const queryTaskContext = React.useContext(QueryTaskContext)
   const resetSymbolRef = React.useRef(queryTaskContext.resetSymbol)
-  const getLayerFunRef = React.useRef<() => __esri.GraphicsLayer>(null)
-  const bufferOperatorRef = React.useRef<__esri.bufferOperator>(null)
-  const geodesicBufferOperatorRef = React.useRef<__esri.geodesicBufferOperator>(null)
-  const geometryServiceRef = React.useRef<{ geometryService: __esri.geometryService, bufferParameters: typeof __esri.BufferParameters }>(null)
-  const geometryRef = React.useRef<__esri.Geometry>(null)
+  const getLayerFunRef = React.useRef<() => GraphicsLayer>(null)
+  const bufferOperatorRef = React.useRef<typeof import('@arcgis/core/geometry/operators/bufferOperator')>(null)
+  const geodesicBufferOperatorRef = React.useRef<typeof import('@arcgis/core/geometry/operators/geodesicBufferOperator')>(null)
+  const geometryServiceRef = React.useRef<{ geometryService: typeof import('@arcgis/core/rest/geometryService'), bufferParameters: typeof BufferParameters }>(null)
+  const geometryRef = React.useRef<Geometry>(null)
   const bufferDistanceRef = React.useRef(bufferDistance)
   const bufferUnitRef = React.useRef(bufferUnit)
-  const bufferedGraphicRef = React.useRef<__esri.Graphic>(null)
+  const bufferedGraphicRef = React.useRef<Graphic>(null)
 
   hooks.useEffectOnce(() => {
     if (enableBuffer) {
@@ -107,7 +113,7 @@ export function GeometryFromDraw (props: Props) {
           await geodesicBufferOperatorRef.current.load()
         }
         bufferedGraphicRef.current.geometry = geodesicBufferOperatorRef.current.execute(
-          geometry as __esri.GeometryUnion,
+          geometry as GeometryUnion,
           bufferDistanceRef.current,
           {
             unit: lodash.kebabCase(bufferUnitRef.current) as any
@@ -118,7 +124,7 @@ export function GeometryFromDraw (props: Props) {
           bufferOperatorRef.current = await loadArcGISJSAPIModule('esri/geometry/operators/bufferOperator')
         }
         bufferedGraphicRef.current.geometry = bufferOperatorRef.current.execute(
-          geometry as __esri.GeometryUnion,
+          geometry as GeometryUnion,
           bufferDistanceRef.current,
           {
             unit: lodash.kebabCase(bufferUnitRef.current) as any

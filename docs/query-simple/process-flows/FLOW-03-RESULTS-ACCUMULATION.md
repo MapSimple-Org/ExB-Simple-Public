@@ -50,19 +50,19 @@ identically. Results mode (New/Add/Remove) works the same for spatial results.
       │   ▼                                          │
       │   mergeResultsIntoAccumulated(               │
       │     outputDS, newRecords, existingRecords)    │ ← query-execution-handler.ts:406
-      │                ← results-management-utils.ts:117
+      │                ← results-management-utils.ts:120
       │   │                                          │
-      │   ├── Build existing keys Set                │ :132-172
-      │   │   ├── Check __queryConfigId attribute    │ :140
-      │   │   ├── Look up origin DS via DSManager    │ :152-154
-      │   │   └── Fallback: use outputDS             │ :170
+      │   ├── Build existing keys Set                │ :136-176
+      │   │   ├── Check __queryConfigId attribute    │ :144
+      │   │   ├── Look up origin DS via DSManager    │ :156-158
+      │   │   └── Fallback: use outputDS             │ :174
       │   │                                          │
-      │   ├── For each new record:                   │ :179-189
-      │   │   ├── Generate key via getRecordKey()    │ :180
-      │   │   ├── Key exists? → duplicateRecordIds   │ :183-184
-      │   │   └── Key new? → uniqueNewRecords        │ :186-187
+      │   ├── For each new record:                   │ :183-195
+      │   │   ├── Generate key via getRecordKey()    │ :184
+      │   │   ├── Key exists? → duplicateRecordIds   │ :187-189
+      │   │   └── Key new? → uniqueNewRecords        │ :191-193
       │   │                                          │
-      │   └── Return {                               │ :203-207
+      │   └── Return {                               │ :209-213
       │         mergedRecords: [...existing, ...new], │
       │         addedRecordIds,                      │
       │         duplicateRecordIds                   │
@@ -76,12 +76,12 @@ identically. Results mode (New/Add/Remove) works the same for spatial results.
       │   ▼                                          │
       │   removeResultsFromAccumulated(              │
       │     outputDS, recordsToRemove, existing)     │
-      │                ← results-management-utils.ts:223
+      │                ← results-management-utils.ts:229
       │   │                                          │
-      │   ├── Empty existing? → return []            │ :229
-      │   ├── Empty toRemove? → return existing      │ :238
-      │   ├── Build removeKeys Set                   │ :248-250
-      │   └── Filter: keep records not in removeKeys │ :256-265
+      │   ├── Empty existing? → return []            │ :235
+      │   ├── Empty toRemove? → return existing      │ :244
+      │   ├── Build removeKeys Set                   │ :254-256
+      │   └── Filter: keep records not in removeKeys │ :262-271
       │                                              │
       └─────────────────────────────────────────────-┘
       │
@@ -177,32 +177,34 @@ When a user clicks the X button on a result row:
  X button click
       │
       ▼
- removeRecord(data)                          ← query-result.tsx:1023
+ removeRecord(data)                          ← query-result.tsx:1038
       │   (thin wrapper → delegates to executeRemoveRecord)
       │                          ← record-removal-handler.ts (r024.131)
       │
       ▼
- removeRecordsFromOriginSelections(          ← results-management-utils.ts:299
+ removeRecordsFromOriginSelections(          ← results-management-utils.ts:305
    widgetId, recordsToRemove, outputDS,
    useGraphicsLayer?, graphicsLayer?, accumulatedRecords?)
       │
-      ├── Remove from graphics layer (if using)  :324-345
+      ├── Remove from graphics layer (if using)  :331-352
       │   └── removeHighlightGraphics(layer, ids, records)
       │
-      ├── Group records by origin DS             :347-414
-      │   ├── Primary: __originDSId attribute → DSManager lookup  :358-362
-      │   ├── Fallback: .dataSource property → getOriginDataSources  :367-371
-      │   └── Final: outputDS.getOriginDataSources()  :374-377
+      ├── Group records by origin DS             :354-421
+      │   ├── Primary: __originDSId attribute → DSManager lookup  :366-370
+      │   ├── Fallback: .dataSource property → getOriginDataSources  :373-378
+      │   └── Final: outputDS.getOriginDataSources()  :382-384
       │
-      ├── For each origin DS:                    :427-596
-      │   ├── Get current selection              :430-431
-      │   ├── Build composite keys to remove     :460-468
-      │   │   key = "${recordId}__${queryConfigId}"
-      │   ├── Filter: keep non-matching          :474-479
-      │   ├── Fallback: simple recordId match    :484-499
-      │   │   (for records without __queryConfigId)
-      │   ├── originDS.selectRecordsByIds(remaining)  :538-539
-      │   └── Publish DataRecordsSelectionChangeMessage  :576-578
+      ├── For each origin DS:                    :434-end
+      │   ├── Get current IDs                    :440
+      │   │   └── originDS.getSelectedRecordIds()
+      │   │       (r027.010: ID-based — records not available in 1.20)
+      │   ├── Build recordIdsToRemove Set        :443
+      │   │   └── String(r.getId()) for type-safe comparison
+      │   ├── Filter: keep IDs not in remove set :446
+      │   │   └── currentSelectedIds.filter(id => !recordIdsToRemove.has(String(id)))
+      │   ├── originDS.selectRecordsByIds(remainingIds, [])  :482
+      │   │   (r027.010: empty records array — 1.20 only stores IDs)
+      │   └── Publish DataRecordsSelectionChangeMessage
       │
       └── Done
 ```
@@ -219,4 +221,4 @@ When a user clicks the X button on a result row:
 
 ---
 
-*Last updated: r025.044 (2026-03-10) — added spatial query as second consumer of merge/remove utilities*
+*Last updated: r027.017 (2026-04-06) — corrected line numbers for results-management-utils.ts and query-result.tsx*

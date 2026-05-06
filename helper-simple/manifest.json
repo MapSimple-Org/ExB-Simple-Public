@@ -3,7 +3,7 @@
   "label": "HelperSimple",
   "type": "widget",
   "version": "1.19.0",
-  "exbVersion": "1.19.0",
+  "exbVersion": "1.20.0",
   "author": "MapSimple",
   "description": "HelperSimple widget - helper widget for opening QuerySimple widgets via hash parameters",
   "copyright": "",

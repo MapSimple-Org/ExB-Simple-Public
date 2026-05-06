@@ -130,17 +130,19 @@ export function TaskListInline (props: QueryTaskListProps) {
           forceClose={openedPopper >= 0 && openedPopper !== index}
         >
           <QueryTask
-            widgetId={widgetId}
-            index={index}
-            total={1}
-            isInPopper
-            queryItem={currentItem}
-            wrappedInPopper={true}
-            className='pb-4'
-            defaultPageSize={defaultPageSize}
-            initialInputValue={currentItem.shortId === props.initialQueryValue?.shortId ? props.initialQueryValue.value : undefined}
-            onHashParameterUsed={props.onHashParameterUsed}
-            queryItemShortId={currentItem.shortId}
+            {...{
+              widgetId,
+              index,
+              total: 1,
+              isInPopper: true,
+              queryItem: currentItem,
+              wrappedInPopper: true,
+              className: 'pb-4',
+              defaultPageSize,
+              initialInputValue: currentItem.shortId === props.initialQueryValue?.shortId ? props.initialQueryValue.value : undefined,
+              onHashParameterUsed: props.onHashParameterUsed,
+              queryItemShortId: currentItem.shortId
+            } as any}
           />
         </TaskListPopperWrapper>
       })}

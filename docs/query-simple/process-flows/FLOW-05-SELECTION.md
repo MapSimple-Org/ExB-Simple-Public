@@ -19,12 +19,13 @@ other widgets react to selections.
 
 | Trigger | Function | Location |
 |---------|----------|----------|
-| Query results loaded | `selectRecordsAndPublish()` | selection-utils.ts:511 |
+| Query results loaded | `selectRecordsAndPublish()` | selection-utils.ts:493 |
 | Result row clicked | `selectRecordsAndPublish()` | Called from query-result.tsx |
 | Spatial query results | `selectRecordsAndPublish()` | Called from query-task.tsx `handleExecuteSpatialQuery` with `skipOriginDSSelection = true` |
-| Clear results | `clearAllSelectionsForWidget()` | selection-utils.ts:293 |
-| Clear selection | `clearSelectionInDataSources()` | selection-utils.ts:257 |
-| X button on result | `removeRecordsFromOriginSelections()` | results-management-utils.ts:299 |
+| Clear results | `clearAllSelectionsForWidget()` | selection-utils.ts:275 |
+| Clear selection | `clearSelectionInDataSources()` | selection-utils.ts:239 |
+| X button on result | `removeRecordsFromOriginSelections()` | results-management-utils.ts:305 |
+| Output DS selection cleared externally | `handleDataSourceInfoChange()` | query-result.tsx:699 |
 
 > **Spatial query note:** Spatial query records come from target layers (e.g.,
 > Parcels, Trails), not the widget's configured outputDS origin. Because there is
@@ -37,37 +38,37 @@ other widgets react to selections.
 
 ```
  selectRecordsAndPublish(widgetId, outputDS, recordIds, records, ...)
-      │                                      ← selection-utils.ts:511
+      │                                      ← selection-utils.ts:493
       │
-      ├── selectRecordsInDataSources(...)     ← :99
+      ├── selectRecordsInDataSources(...)     ← :104
       │   │
-      │   ├── Guard: !outputDS → exit         :102
+      │   ├── Guard: !outputDS → exit         :113
       │   │
-      │   ├── Get origin DS                   :108
-      │   │   └── getOriginDataSource(outputDS)  :63
+      │   ├── Get origin DS                   :115
+      │   │   └── getOriginDataSource(outputDS)  :68
       │   │       ├── outputDS.getOriginDataSources()[0]
       │   │       └── Fallback: outputDS if has .layer/.type
       │   │
-      │   ├── Graphics Layer path             :130-170
+      │   ├── Graphics Layer path             :118-148
       │   │   └── useGraphicsLayer && graphicsLayer?
-      │   │       ├── Wait for pendingGraphicsOperation  :135
+      │   │       ├── Wait for pendingGraphicsOperation  :120
       │   │       ├── clearGraphicsLayerOrGroupLayer()
       │   │       └── addHighlightGraphics(layer, records, mapView)
       │   │
-      │   ├── Origin DS selection             :175-195
+      │   ├── Origin DS selection             :152-211
       │   │   └── !skipOriginDSSelection?
       │   │       ├── originDS.selectRecordsByIds(ids, records)
       │   │       └── originDS.selectRecordById(id)  (single record)
       │   │
-      │   └── Output DS selection             :198-208
+      │   └── Output DS selection             :215-217
       │       └── outputDS.selectRecordsByIds(ids, records)
       │
-      └── publishSelectionMessage(...)        ← :468
+      └── publishSelectionMessage(...)        ← :450
           │
-          ├── Get origin DS                   :476
-          ├── Publish to origin DS            :479-481
+          ├── Get origin DS                   :458
+          ├── Publish to origin DS            :461-463
           │   └── DataRecordsSelectionChangeMessage(widgetId, records, [originDS.id])
-          └── alsoPublishToOutputDS?          :489-492
+          └── alsoPublishToOutputDS?          :471-475
               └── Publish to output DS too
 ```
 
@@ -76,34 +77,31 @@ other widgets react to selections.
 ## Flow Diagram: Clear All Selections
 
 ```
- clearAllSelectionsForWidget(options)         ← selection-utils.ts:293
+ clearAllSelectionsForWidget(options)         ← selection-utils.ts:275
       │
-      ├── Multi-source clearing               :310-380
+      ├── Multi-source clearing               :309-353
       │   ├── Get all output DS for widget via DataSourceManager
       │   ├── For each output DS:
       │   │   ├── Get origin DS
       │   │   ├── originDS.selectRecordsByIds([], [])
       │   │   └── Publish empty selection message
-      │   └── Clear popup if open             :385
-      │       └── mapView.popup.close()
       │
-      ├── Clear graphics layer                :390-410
+      ├── Clear graphics layer                :356-375
       │   └── useGraphicsLayer?
-      │       ├── cleanupGraphicsLayer(layer)
+      │       ├── clearAnyResultLayerContents(widgetId, mapView)
       │       └── onDestroyGraphicsLayer?.()
       │
-      ├── Clear data_s from URL hash          :415
-      │   └── clearDataSParameterFromHash()   ← selection-utils.ts:222
-      │       └── clearDataSFromHash()        ← hash-utils.ts
-      │           ├── Parse hash as URLSearchParams
-      │           ├── Delete 'data_s' param
-      │           └── history.replaceState(newHash)
+      ├── Clear popup if open                 :378
+      │   └── mapView.popup.close()
       │
-      ├── Dispatch selection event            :420
+      ├── Clear selection in output DS        :383
+      │   └── clearSelectionInDataSources()   ← selection-utils.ts:239
+      │
+      ├── Dispatch selection event            :386
       │   └── dispatchSelectionEvent(widgetId, [], ..., 0)
       │       └── eventManager.dispatchSelectionEvent()
       │
-      └── Destroy output data sources?        :430-450
+      └── Destroy output data sources?        :396-423
           └── destroyOutputDataSources option
 ```
 
@@ -123,6 +121,68 @@ other widgets react to selections.
 | `clearDataSParameterFromHash()` | Wrapper → delegates to hash-utils | selection-utils.ts |
 | `clearDataSFromHash()` | Remove ExB dirty hash param | hash-utils.ts |
 | `findClearResultsButton()` | DOM query for programmatic clear | selection-utils.ts |
+
+---
+
+## ExB 1.20: Record ID Type Safety (r027.010)
+
+In ExB 1.20, `DataRecord.getId()` returns `string | number` based on the
+original attribute type. Redux `selectedIds` are stored as strings (set by
+the initial selection). The card's selection check at
+`query-result-item.tsx:413` uses `.includes(String(data.getId()))`.
+
+**Consequence:** If `selectRecordsByIds()` receives number IDs, Redux stores
+numbers, and the card's string comparison silently returns `false` — all
+selection highlights disappear.
+
+**Rule:** All record IDs passed to `selectRecordsByIds()` MUST be coerced
+with `String(record.getId())`. This applies to both the output DS path
+(`record-removal-handler.ts:405`) and the origin DS path
+(`results-management-utils.ts:446`).
+
+**Related:** `getSelectedRecords()` returns `[]` in ExB 1.20 even when
+`getSelectedRecordIds()` returns IDs. Selection removal must use ID-based
+filtering, not record-object filtering.
+
+---
+
+## Output DS Selection Recovery (r027.016)
+
+When another widget (e.g., a second QuerySimple instance) clears the shared
+origin data source, the output DS `selectedIds` in Redux get wiped. This
+causes the pink card borders to disappear even though the records are still
+accumulated in the result list.
+
+`handleDataSourceInfoChange` in `query-result.tsx:699` detects this situation
+and re-selects from accumulated records:
+
+```
+ DataSourceComponent onDataSourceInfoChange
+      │                                  ← query-result.tsx:1077
+      ▼
+ handleDataSourceInfoChange()            ← query-result.tsx:699
+      │
+      ├── ds = DataSourceManager.getDataSource(outputDS.id)
+      ├── selectedIds = ds.getSelectedRecordIds()    :701
+      │   (r027.016: uses getSelectedRecordIds — getSelectedRecords
+      │    returns [] in ExB 1.20)
+      │
+      ├── records.length > 0 && selectedIds.length === 0?
+      │   │
+      │   ├── YES: External clear detected           :721
+      │   │   └── ds.selectRecordsByIds(recordIds, records)  :731
+      │   │       (re-selects from accumulated records
+      │   │        to restore pink card borders)
+      │   │
+      │   └── NO: Selection still intact → no action
+      │
+      └── Done
+```
+
+**History:** Prior to r027.016, `widget.tsx` had a `restoreOutputDsSelection()`
+function that attempted a similar recovery but relied on `getSelectedRecords()`,
+which always returns `[]` in ExB 1.20. That function was removed and the logic
+was rewritten in `query-result.tsx` using `getSelectedRecordIds()`.
 
 ---
 
@@ -158,4 +218,4 @@ URL-based query triggering.
 
 ---
 
-*Last updated: r025.044 (2026-03-10) — added spatial query as entry point with skipOriginDSSelection*
+*Last updated: r027.017 (2026-04-06) — corrected line numbers, added output DS selection recovery section (r027.016)*

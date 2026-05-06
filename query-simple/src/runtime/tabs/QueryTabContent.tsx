@@ -104,6 +104,7 @@ export interface QueryTabContentProps {
     show: boolean
     recordsRequested: number
     queryValue: string
+    timestamp?: number
   } | null
   onDismissNoResultsAlert?: () => void
   
@@ -174,6 +175,20 @@ export function QueryTabContent(props: QueryTabContentProps) {
     [SelectionType.AddToSelection]: 'add',
     [SelectionType.RemoveFromSelection]: 'remove'
   }), [])
+
+  // r027.024: Scroll the feedback anchor into view whenever a no-results or
+  // error alert fires. The popover anchors above the form (placement="top")
+  // and on smaller screens with the form scrolled, the popover renders out
+  // of the visible area — the user sees nothing fire when they click Apply.
+  // Scrolling the anchor into view guarantees the popover is visible.
+  React.useEffect(() => {
+    if (!noResultsAlert?.show && !queryErrorAlert?.show) return
+    const anchor = document.getElementById('query-feedback-anchor')
+    if (!anchor) return
+    requestAnimationFrame(() => {
+      anchor.scrollIntoView({ behavior: 'smooth', block: 'center' })
+    })
+  }, [noResultsAlert?.show, noResultsAlert?.timestamp, queryErrorAlert?.show, queryErrorAlert?.timestamp])
 
   // ─── Results Mode change handler ─────────────────────────────────
   // Consolidates Add/Remove merge logic (previously duplicated inline in each button).
@@ -250,7 +265,7 @@ export function QueryTabContent(props: QueryTabContentProps) {
           outputDS as FeatureLayerDataSource,
           recordsToCapture,
           existingAccumulated,
-          queryItems
+          queryItems as any
         )
 
         debugLogger.log('RESULTS-MODE', {
@@ -272,7 +287,10 @@ export function QueryTabContent(props: QueryTabContentProps) {
         // r023.30: Also stamp originDSId for cross-layer removal support
         const originDSId = outputDS?.getOriginDataSources()?.[0]?.id || outputDS?.id
         recordsToCapture.forEach(record => {
-          const recordId = record.getId()
+          // r027.067: getId() returns string|number in ExB 1.20;
+          // mergeResult.addedRecordIds is string[]. String() coercion matches
+          // the project's existing pattern for ID coercion.
+          const recordId = String(record.getId())
           if (mergeResult.addedRecordIds.includes(recordId) && record.feature?.attributes) {
             if (!record.feature.attributes.__queryConfigId) {
               record.feature.attributes.__queryConfigId = queryItem.configId
@@ -366,7 +384,8 @@ export function QueryTabContent(props: QueryTabContentProps) {
           `}>
             <QueryTaskForm
               key={queryItem.configId}
-              {...otherProps}
+              {...otherProps as any}
+              widgetId={widgetId}
               configId={queryItem.configId}
               outputDS={outputDS}
               datasourceReady={dataSource != null}
@@ -408,7 +427,7 @@ export function QueryTabContent(props: QueryTabContentProps) {
         <calcite-popover 
           key={`no-results-${noResultsAlert.timestamp}`}
           referenceElement="query-feedback-anchor"
-          placement="bottom"
+          placement="top"
           flipDisabled={true}
           overlayPositioning="fixed"
           triggerDisabled={true}
@@ -416,7 +435,7 @@ export function QueryTabContent(props: QueryTabContentProps) {
           closable
           label={getI18nMessage('noResultsAlertLabel')}
           open={noResultsAlert.show}
-          onCalcitePopoverClose={() => {
+          oncalcitePopoverClose={() => {
             if (onDismissNoResultsAlert) {
               onDismissNoResultsAlert()
             }
@@ -444,7 +463,7 @@ export function QueryTabContent(props: QueryTabContentProps) {
         <calcite-popover 
           key={`query-error-${queryErrorAlert.timestamp}`}
           referenceElement="query-feedback-anchor"
-          placement="bottom"
+          placement="top"
           flipDisabled={true}
           overlayPositioning="fixed"
           triggerDisabled={true}
@@ -452,7 +471,7 @@ export function QueryTabContent(props: QueryTabContentProps) {
           closable
           label={getI18nMessage('queryErrorAlertLabel')}
           open={queryErrorAlert.show}
-          onCalcitePopoverClose={() => {
+          oncalcitePopoverClose={() => {
             if (onDismissQueryErrorAlert) {
               onDismissQueryErrorAlert()
             }

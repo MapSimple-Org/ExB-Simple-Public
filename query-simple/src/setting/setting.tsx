@@ -39,6 +39,7 @@ import { getOutputJsonOriginDs } from './setting-utils'
 import { QueryItemList } from './query-item-list'
 import { Arrangement } from './arrangement'
 import { RebindTool } from './rebind-tool'
+import { DsConflictGuard } from './ds-conflict-guard'
 
 export interface State {
   showRemoveQueryItemWarning: boolean
@@ -317,6 +318,13 @@ export default class Setting extends React.PureComponent<AllWidgetSettingProps<I
     }
     return (
       <div className='jimu-widget-setting setting-query__setting-content h-100'>
+        {this.props.config.queryItems?.length > 0 && (
+          <DsConflictGuard
+            widgetId={this.props.id}
+            queryItems={this.props.config.queryItems}
+            updateConfigForOptions={this.updateConfigForOptions}
+          />
+        )}
         <QueryItemList
           widgetId={this.props.id}
           arrangeType={this.props.config.arrangeType}
@@ -340,6 +348,19 @@ export default class Setting extends React.PureComponent<AllWidgetSettingProps<I
             onArrangeTypeChanged={this.handleArrangeTypeChange}
             onArrangeWrapChanged={this.handleArrangeWrapChange}
           />
+        )}
+        {this.props.config.queryItems.length > 0 && (
+          <SettingSection role='group' aria-label={this.getI18nMessage('displayOptions')} title={this.getI18nMessage('displayOptions')}>
+            <SettingRow label={this.getI18nMessage('showHeader')}>
+              <Switch
+                checked={config.showHeader !== false}
+                onChange={(e) => {
+                  this.updateConfigForOptions(['showHeader', (e.target as HTMLInputElement).checked])
+                }}
+                aria-label={this.getI18nMessage('showHeader')}
+              />
+            </SettingRow>
+          </SettingSection>
         )}
         {this.props.config.queryItems.length > 0 && (
           <SettingSection role='group' aria-label={this.getI18nMessage('resultStyle')} title={this.getI18nMessage('resultStyle')}>
@@ -539,6 +560,53 @@ export default class Setting extends React.PureComponent<AllWidgetSettingProps<I
                 }}
               />
             </SettingRow>
+            <SettingRow label={this.getI18nMessage('spatialTabRelationships')} flow='wrap'>
+              <div css={css`width: 100%; display: flex; flex-direction: column; gap: 4px; margin-top: 4px;`}>
+                {[
+                  { id: 'contains', label: 'Within' },
+                  { id: 'intersects', label: 'Intersects' },
+                  { id: 'envelope-intersects', label: 'Envelope intersects' },
+                  { id: 'overlaps', label: 'Overlaps' },
+                  { id: 'within', label: 'Encloses search area' },
+                  { id: 'touches', label: 'Touches' },
+                  { id: 'crosses', label: 'Crosses' }
+                ].map(rel => {
+                  const currentList: string[] = config.spatialTabRelationships
+                    ? Array.from(config.spatialTabRelationships as any)
+                    : []
+                  const showAll = currentList.length === 0
+                  const isChecked = showAll || currentList.includes(rel.id)
+                  return (
+                    <label key={rel.id} css={css`display: flex; align-items: center; gap: 6px; font-size: 0.8125rem; cursor: pointer;`}>
+                      <input
+                        type='checkbox'
+                        checked={isChecked}
+                        onChange={(e) => {
+                          let newList: string[]
+                          if (showAll) {
+                            // First uncheck: keep all others, remove this one
+                            newList = ['contains', 'intersects', 'envelope-intersects', 'overlaps', 'within', 'touches', 'crosses'].filter(id => id !== rel.id)
+                          } else if (e.target.checked) {
+                            newList = [...currentList, rel.id]
+                          } else {
+                            newList = currentList.filter(id => id !== rel.id)
+                          }
+                          // If all 7 are checked, reset to empty (show all)
+                          if (newList.length >= 7) newList = []
+                          // Don't allow unchecking all
+                          if (newList.length === 0 && !e.target.checked) return
+                          this.updateConfigForOptions(['spatialTabRelationships', newList])
+                        }}
+                      />
+                      {rel.label}
+                    </label>
+                  )
+                })}
+              </div>
+            </SettingRow>
+            <div css={css`font-size: 0.75rem; margin-top: 2px; padding: 0 16px 8px; opacity: 0.7;`}>
+              {this.getI18nMessage('spatialTabRelationshipsDescription')}
+            </div>
           </SettingSection>
         )}
         {this.props.config.queryItems.length > 0 && (

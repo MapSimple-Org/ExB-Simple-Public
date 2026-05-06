@@ -16,6 +16,7 @@ import {
   DataSourceStatus
 } from 'jimu-core'
 import { Select, Option, defaultMessages as jimuUIMessages } from 'jimu-ui'
+import type Geometry from '@arcgis/core/geometry/Geometry'
 import { SpatialRelation, type UnitType } from '../config'
 import { BufferInput } from './buffer-input'
 import defaultMessage from './translations/default'
@@ -29,7 +30,7 @@ export interface Props {
   enableBuffer: boolean
   bufferDistance: number
   bufferUnit: UnitType
-  onSelectionChange: (geoms: __esri.Geometry[]) => void
+  onSelectionChange: (geoms: Geometry[]) => void
   onRelationChange: (rel: SpatialRelation) => void
   onBufferChange: (distance: number, unit: UnitType) => void
 }

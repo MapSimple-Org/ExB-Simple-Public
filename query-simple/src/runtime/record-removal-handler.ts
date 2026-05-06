@@ -17,11 +17,18 @@ import {
 } from 'jimu-core'
 import { type SelectionType } from '../config'
 import { removeRecordsFromOriginSelections } from './results-management-utils'
-import { removeHighlightGraphics, getGraphicsCountFromLayer } from './graphics-layer-utils'
+import { removeHighlightGraphics, getGraphicsCountFromLayer, forEachGraphicInLayer } from './graphics-layer-utils'
 import { removeRecordIdFromHashParams, removeRecordIdFromDataS } from './hash-utils'
 import { createQuerySimpleDebugLogger } from 'widgets/shared-code/mapsimple-common'
+import type GraphicsLayer from '@arcgis/core/layers/GraphicsLayer'
+import type GroupLayer from '@arcgis/core/layers/GroupLayer'
+import type MapView from '@arcgis/core/views/MapView'
+import type SceneView from '@arcgis/core/views/SceneView'
 
 const debugLogger = createQuerySimpleDebugLogger()
+
+// r027.000: ExB 1.20 — DataRecord.getId() now returns string | number.
+// All record IDs are coerced to string via String() at point of use.
 
 // ─────────────────────────────────────────────────────────────
 // Context interface — typed parameter object for all closure variables
@@ -38,8 +45,8 @@ export interface RemoveRecordContext {
   records: DataRecord[]  // props.records — used in diagnostic logging
 
   // Map references
-  mapView: __esri.MapView | __esri.SceneView
-  graphicsLayer: __esri.GraphicsLayer | __esri.GroupLayer
+  mapView: MapView | SceneView
+  graphicsLayer: GraphicsLayer | GroupLayer
 
   // Accumulated records
   accumulatedRecords: FeatureDataRecord[]
@@ -75,7 +82,7 @@ export function executeRemoveRecord (ctx: RemoveRecordContext, data: FeatureData
     onNavBack, expandAll, queryData, isRemovalInProgressRef, setQueryData
   } = ctx
 
-  const dataId = data.getId()
+  const dataId = String(data.getId())
   const currentExpandAll = expandAll
 
   // r021.98: Mark removal in progress to prevent useEffect from re-adding graphics
@@ -146,7 +153,7 @@ export function executeRemoveRecord (ctx: RemoveRecordContext, data: FeatureData
   setQueryData(prevData => {
     if (!prevData) return prevData
     const filteredRecords = prevData.records.filter((record: DataRecord) => {
-      const recordId = record.getId()
+      const recordId = String(record.getId())
       const recordQueryConfigId = (record as FeatureDataRecord).feature?.attributes?.__queryConfigId || ''
       // Only remove if BOTH ID and queryConfigId match
       return !(recordId === dataId && recordQueryConfigId === capturedQueryConfigId)
@@ -184,8 +191,9 @@ export function executeRemoveRecord (ctx: RemoveRecordContext, data: FeatureData
   })
 
   // FIX (r018.85): DIAGNOSTIC - Graphics count BEFORE removeRecordsFromOriginSelections
-  const graphicsCountBeforeOriginRemoval = graphicsLayer?.graphics?.length || 0
-  const graphicsIdsBeforeOriginRemoval = graphicsLayer?.graphics?.map(g => g.attributes?.recordId).slice(0, 10) || []
+  const graphicsCountBeforeOriginRemoval = getGraphicsCountFromLayer(graphicsLayer)
+  const graphicsIdsBeforeOriginRemoval: string[] = []
+  forEachGraphicInLayer(graphicsLayer, g => { if (graphicsIdsBeforeOriginRemoval.length < 10) graphicsIdsBeforeOriginRemoval.push(g.attributes?.recordId) })
 
   debugLogger.log('RESULTS-MODE', {
     event: 'x-button-removal-BEFORE-removeRecordsFromOriginSelections',
@@ -213,8 +221,9 @@ export function executeRemoveRecord (ctx: RemoveRecordContext, data: FeatureData
   )
 
   // FIX (r018.85): DIAGNOSTIC - Graphics count AFTER removeRecordsFromOriginSelections
-  const graphicsCountAfterOriginRemoval = graphicsLayer?.graphics?.length || 0
-  const graphicsIdsAfterOriginRemoval = graphicsLayer?.graphics?.map(g => g.attributes?.recordId).slice(0, 10) || []
+  const graphicsCountAfterOriginRemoval = getGraphicsCountFromLayer(graphicsLayer)
+  const graphicsIdsAfterOriginRemoval: string[] = []
+  forEachGraphicInLayer(graphicsLayer, g => { if (graphicsIdsAfterOriginRemoval.length < 10) graphicsIdsAfterOriginRemoval.push(g.attributes?.recordId) })
 
   debugLogger.log('RESULTS-MODE', {
     event: 'x-button-removal-AFTER-removeRecordsFromOriginSelections',
@@ -280,7 +289,7 @@ export function executeRemoveRecord (ctx: RemoveRecordContext, data: FeatureData
     removedRecordId: dataId,
     hasGraphicsLayer: !!graphicsLayer,
     graphicsLayerId: graphicsLayer?.id,
-    graphicsLayerGraphicsCount: graphicsLayer?.graphics?.length || 0,
+    graphicsLayerGraphicsCount: getGraphicsCountFromLayer(graphicsLayer),
     conditionWillPass: !!graphicsLayer,
     timestamp: Date.now()
   })
@@ -342,23 +351,24 @@ export function executeRemoveRecord (ctx: RemoveRecordContext, data: FeatureData
 
   // DIAGNOSTIC LOGGING: Full state BEFORE removal
   const outputDSSelectedBefore = outputDS.getSelectedRecords() as FeatureDataRecord[] || []
-  const outputDSSelectedIdsBefore = outputDSSelectedBefore.map(r => r.getId())
-  const accumulatedRecordsIdsBefore = accumulatedRecords?.map(r => r.getId()) || []
+  const outputDSSelectedIdsBefore = outputDSSelectedBefore.map(r => String(r.getId()))
+  const accumulatedRecordsIdsBefore = accumulatedRecords?.map(r => String(r.getId())) || []
 
   // FIX (r018.81): Detailed graphics attribute inspection to understand why IDs are null
   const graphicsLayerIdsBefore: (string | null)[] = []
   const firstFewGraphicsAttrs: any[] = []
-  graphicsLayer?.graphics?.forEach((g, index) => {
-    if (index < 3) {
-      // Log first 3 graphics' full attributes for diagnosis
+  let graphicsIndexBefore = 0
+  forEachGraphicInLayer(graphicsLayer, g => {
+    if (graphicsIndexBefore < 3) {
       firstFewGraphicsAttrs.push({
-        index,
+        index: graphicsIndexBefore,
         hasAttributes: !!g.attributes,
         attributes: g.attributes,
         attributeKeys: g.attributes ? Object.keys(g.attributes) : []
       })
     }
     graphicsLayerIdsBefore.push(g.attributes?.recordId || null)
+    graphicsIndexBefore++
   })
 
   debugLogger.log('RESULTS-MODE', {
@@ -369,7 +379,7 @@ export function executeRemoveRecord (ctx: RemoveRecordContext, data: FeatureData
     outputDSSelectedIds: outputDSSelectedIdsBefore,
     accumulatedRecordsCount: accumulatedRecords?.length || 0,
     accumulatedRecordsIds: accumulatedRecordsIdsBefore,
-    graphicsLayerCount: graphicsLayer?.graphics?.length || 0,
+    graphicsLayerCount: getGraphicsCountFromLayer(graphicsLayer),
     graphicsLayerIds: graphicsLayerIdsBefore.slice(0, 110),
     firstFewGraphicsAttrs, // NEW: inspect what attributes are actually there
     allSourcesMatch: outputDSSelectedIdsBefore.length === accumulatedRecordsIdsBefore.length &&
@@ -379,15 +389,13 @@ export function executeRemoveRecord (ctx: RemoveRecordContext, data: FeatureData
   })
 
   // Update outputDS selection
-  // r023.14: Use flexible matching (same pattern as accumulatedRecords filter at line ~1569)
-  // Previous logic (r021.92) required BOTH recordId AND __queryConfigId to match, but
-  // cross-query records placed in the output DS via the reselection block may not have
-  // __queryConfigId accessible via getSelectedRecords(). This caused zombie records:
-  // X-button removal updated accumulatedRecords but not the output DS, and on mode switch
-  // to New, handleDataSourceInfoChange repopulated from the stale output DS.
-  const selectedDatas = outputDS.getSelectedRecords() ?? []
+  // r027.007: ExB 1.20 — outputDS.getSelectedRecords() returns [] even when selectedIds has 121 IDs.
+  // This is a behavior change in ExB 1.20: selectRecordsByIds() stores IDs but not record references.
+  // Use accumulatedRecords as the source of truth (same approach as the accumulatedRecords sync at line ~486).
+  // Previous: outputDS.getSelectedRecords() worked in 1.19 but returns empty in 1.20.
+  const selectedDatas = (accumulatedRecords ?? []) as DataRecord[]
   const updatedSelectedDatas = selectedDatas.filter(record => {
-    const recordId = record.getId()
+    const recordId = String(record.getId())
     if (recordId !== dataId) {
       return true // Keep - different record ID
     }
@@ -398,7 +406,10 @@ export function executeRemoveRecord (ctx: RemoveRecordContext, data: FeatureData
     }
     return false // Remove - recordIds match and no queryConfigId disambiguation needed
   })
-  const recordIds = updatedSelectedDatas.map(record => record.getId())
+  // r027.010: ExB 1.20 — getId() returns number, but Redux selectedIds from initial selection are strings.
+  // Card checks includes(String(getId())), so selectedIds MUST be strings to match.
+  // Evidence: post-selectRecordsByIds-TYPE-CHECK showed numbers in Redux → card comparison fails.
+  const recordIds = updatedSelectedDatas.map(record => String(record.getId()))
 
   // DEBUG: Log state after removal
   debugLogger.log('RESULTS-MODE', {
@@ -418,6 +429,24 @@ export function executeRemoveRecord (ctx: RemoveRecordContext, data: FeatureData
   // Update outputDS selection
   if (typeof outputDS.selectRecordsByIds === 'function') {
     outputDS.selectRecordsByIds(recordIds, updatedSelectedDatas as FeatureDataRecord[])
+
+    // DEBUG r027.008: Capture exact types flowing through selectRecordsByIds → Redux
+    const postSelectIds = outputDS.getSelectedRecordIds() || []
+    const postSelectRecords = outputDS.getSelectedRecords() || []
+    debugLogger.log('SELECTION-STATE-AUDIT', {
+      event: 'post-selectRecordsByIds-TYPE-CHECK',
+      widgetId,
+      inputRecordIdsCount: recordIds.length,
+      inputRecordIdsFirst5: recordIds.slice(0, 5),
+      inputRecordIdsTypes: recordIds.slice(0, 5).map(id => typeof id),
+      postSelectIdsCount: postSelectIds.length,
+      postSelectIdsFirst5: postSelectIds.slice(0, 5),
+      postSelectIdsTypes: postSelectIds.slice(0, 5).map(id => typeof id),
+      postSelectRecordsCount: postSelectRecords.length,
+      dataSourceId: outputDS.id,
+      note: 'Compare inputRecordIdsTypes vs postSelectIdsTypes — if mismatch, Redux stores different type than card reads',
+      timestamp: Date.now()
+    })
   }
 
   // IMPORTANT: Publish custom event so widget can update state
@@ -440,22 +469,23 @@ export function executeRemoveRecord (ctx: RemoveRecordContext, data: FeatureData
 
   // DIAGNOSTIC LOGGING: Full state AFTER removal (before sync)
   const outputDSSelectedAfter = outputDS.getSelectedRecords() as FeatureDataRecord[] || []
-  const outputDSSelectedIdsAfter = outputDSSelectedAfter.map(r => r.getId())
+  const outputDSSelectedIdsAfter = outputDSSelectedAfter.map(r => String(r.getId()))
 
   // FIX (r018.81): Detailed graphics attribute inspection to understand why IDs are null
   const graphicsLayerIdsAfter: (string | null)[] = []
   const firstFewGraphicsAttrsAfter: any[] = []
-  graphicsLayer?.graphics?.forEach((g, index) => {
-    if (index < 3) {
-      // Log first 3 graphics' full attributes for diagnosis
+  let graphicsIndexAfter = 0
+  forEachGraphicInLayer(graphicsLayer, g => {
+    if (graphicsIndexAfter < 3) {
       firstFewGraphicsAttrsAfter.push({
-        index,
+        index: graphicsIndexAfter,
         hasAttributes: !!g.attributes,
         attributes: g.attributes,
         attributeKeys: g.attributes ? Object.keys(g.attributes) : []
       })
     }
     graphicsLayerIdsAfter.push(g.attributes?.recordId || null)
+    graphicsIndexAfter++
   })
 
   debugLogger.log('RESULTS-MODE', {
@@ -464,7 +494,7 @@ export function executeRemoveRecord (ctx: RemoveRecordContext, data: FeatureData
     removedRecordId: dataId,
     outputDSSelectedCount: outputDSSelectedAfter.length,
     outputDSSelectedIds: outputDSSelectedIdsAfter,
-    graphicsLayerCount: graphicsLayer?.graphics?.length || 0,
+    graphicsLayerCount: getGraphicsCountFromLayer(graphicsLayer),
     graphicsLayerIds: graphicsLayerIdsAfter.slice(0, 110),
     firstFewGraphicsAttrsAfter, // NEW: inspect what attributes are actually there
     removedFromOutputDS: outputDSSelectedIdsAfter.length < outputDSSelectedIdsBefore.length,
@@ -483,7 +513,7 @@ export function executeRemoveRecord (ctx: RemoveRecordContext, data: FeatureData
     // r021.97: Use flexible matching - composite key when both have queryConfigId, otherwise just recordId
     // In New mode, __queryConfigId may not be consistently set on accumulatedRecords vs the clicked record
     const syncedRecords = accumulatedRecords.filter(record => {
-      const recordId = record.getId()
+      const recordId = String(record.getId())
       if (recordId !== dataId) {
         return true // Keep - different record ID
       }
@@ -513,8 +543,9 @@ export function executeRemoveRecord (ctx: RemoveRecordContext, data: FeatureData
   // FIX (r018.85): FINAL DIAGNOSTIC - Graphics count after entire removal flow
   // This happens AFTER all sync logic, so we can see the final state
   setTimeout(() => {
-    const finalGraphicsCount = graphicsLayer?.graphics?.length || 0
-    const finalGraphicsIds = graphicsLayer?.graphics?.map(g => g.attributes?.recordId) || []
+    const finalGraphicsCount = getGraphicsCountFromLayer(graphicsLayer)
+    const finalGraphicsIds: string[] = []
+    forEachGraphicInLayer(graphicsLayer, g => finalGraphicsIds.push(g.attributes?.recordId))
     const finalGraphicsIdsSample = finalGraphicsIds.slice(0, 10)
 
     // Count duplicates in final graphics

@@ -2,6 +2,9 @@ import { type DataRecordSet, type DataAction, DataLevel, type DataSource, type I
 import { createAddToMapAction } from './add-to-map-action'
 import { createZoomToAction } from './zoom-to-action'
 import type { QueryItemType } from '../config'
+import type MapView from '@arcgis/core/views/MapView'
+import type SceneView from '@arcgis/core/views/SceneView'
+import type GraphicsLayer from '@arcgis/core/layers/GraphicsLayer'
 
 /**
  * QuerySimple Custom Data Actions
@@ -22,11 +25,11 @@ import type { QueryItemType } from '../config'
 export function getExtraActions(
   widgetId: string,
   outputDS: DataSource | null | undefined,
-  mapView: __esri.MapView | __esri.SceneView | undefined,
+  mapView: MapView | SceneView | undefined,
   intl: IntlShape,
   queryItem?: QueryItemType,
   runtimeZoomToSelected?: boolean,
-  graphicsLayer?: __esri.GraphicsLayer,
+  graphicsLayer?: GraphicsLayer,
   queries?: ImmutableArray<ImmutableObject<QueryItemType>>
 ): DataAction[] {
   const actions: DataAction[] = []

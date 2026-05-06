@@ -21,6 +21,15 @@ import { substituteTokens, type FilterContext } from './token-renderer'
 import { convertTemplateToHtml } from './markdown-template-utils'
 import { debugLogger } from './debug-logger'
 import { MOBILE_BREAKPOINT_PX } from '../constants'
+import type MapView from '@arcgis/core/views/MapView'
+import type SceneView from '@arcgis/core/views/SceneView'
+import type Renderer from '@arcgis/core/renderers/Renderer'
+
+/** Field definition shape — JSAPI 5.0 exports FieldProperties, 4.x puts it in __esri. */
+type FieldProperties = __esri.FieldProperties
+
+/** Minimal popup.open() options — JSAPI 5.0 exports PopupOpenOptions, 4.x does not. */
+type PopupOpenOptions = { features?: any[]; location?: any; collapsed?: boolean }
 
 /** Prefix for the generated layer ID */
 const LAYER_ID_PREFIX = 'feedsimple-points-'
@@ -95,7 +104,7 @@ export function createFeedFeatureLayer (
   widgetId: string,
   config: IMConfig,
   fieldNames: string[]
-): __esri.FeatureLayer {
+): FeatureLayer {
   const layerId = LAYER_ID_PREFIX + widgetId
 
   const fieldMapping = buildFieldMapping(fieldNames)
@@ -107,7 +116,7 @@ export function createFeedFeatureLayer (
   const numericStatusField = useClassBreaks ? sanitizeFieldName(config.statusField) : ''
 
   // Define fields from discovered feed field names
-  const fields: __esri.FieldProperties[] = [
+  const fields: FieldProperties[] = [
     { name: 'OBJECTID', type: 'oid' },
     { name: 'FEED_ITEM_ID', type: 'string', alias: 'Feed Item ID' },
     ...fieldNames.map(name => {
@@ -157,7 +166,7 @@ export function buildPopupTemplate (
   fieldNames: string[],
   filterContext: FilterContext,
   fieldMapping: { toOriginal: Map<string, string> }
-): __esri.PopupTemplate {
+): PopupTemplate {
   const template = config.feedMapLayerPopupTemplate || config.cardTemplate
   const staticTitle = config.feedMapLayerTitle || 'Feed Item'
   const popupTitleTemplate = config.feedMapLayerPopupTitle || ''
@@ -292,7 +301,7 @@ function buildGraphicFromItem (
   fieldMapping: { toSanitized: Map<string, string> },
   numericStatusField: string,
   itemId: string
-): __esri.Graphic | null {
+): Graphic | null {
   const latStr = item[config.latitudeField]
   const lonStr = item[config.longitudeField]
   if (!latStr || !lonStr) return null
@@ -330,8 +339,8 @@ function buildGraphicFromItem (
  * Apply batched applyEdits to the layer. Returns counts of succeeded and failed.
  */
 async function batchApplyEdits (
-  layer: __esri.FeatureLayer,
-  edits: { addFeatures?: __esri.Graphic[]; deleteFeatures?: __esri.Graphic[]; updateFeatures?: __esri.Graphic[] },
+  layer: FeatureLayer,
+  edits: { addFeatures?: Graphic[]; deleteFeatures?: Graphic[]; updateFeatures?: Graphic[] },
   logAction: string
 ): Promise<{ succeeded: number; failed: number }> {
   // Determine which array to batch
@@ -382,7 +391,7 @@ async function batchApplyEdits (
  * replacing all features on every cycle. Skips items with invalid coordinates.
  */
 export async function syncFeedItemsToLayer (
-  layer: __esri.FeatureLayer,
+  layer: FeatureLayer,
   items: FeedItem[],
   config: IMConfig,
   fieldNames: string[],
@@ -398,7 +407,7 @@ export async function syncFeedItemsToLayer (
 
   // Build new graphics from incoming items
   let skippedCount = 0
-  const newGraphics: __esri.Graphic[] = []
+  const newGraphics: Graphic[] = []
   const newIdSet = new Set<string>()
 
   for (let i = 0; i < items.length; i++) {
@@ -442,7 +451,7 @@ export async function syncFeedItemsToLayer (
   }
 
   // Query existing features for diff
-  let existingFeatures: __esri.Graphic[] = []
+  let existingFeatures: Graphic[] = []
   try {
     const existing = await layer.queryFeatures({ where: '1=1', outFields: ['OBJECTID', 'FEED_ITEM_ID'] })
     existingFeatures = existing.features
@@ -463,8 +472,8 @@ export async function syncFeedItemsToLayer (
   }
 
   // Diff: determine adds, updates, deletes
-  const toAdd: __esri.Graphic[] = []
-  const toUpdate: __esri.Graphic[] = []
+  const toAdd: Graphic[] = []
+  const toUpdate: Graphic[] = []
   for (const g of newGraphics) {
     const feedId = g.attributes.FEED_ITEM_ID as string
     const existingOid = existingIdMap.get(feedId)
@@ -479,7 +488,7 @@ export async function syncFeedItemsToLayer (
   }
 
   // Features to delete: existing IDs not in the new set
-  const toDelete: __esri.Graphic[] = []
+  const toDelete: Graphic[] = []
   for (const f of existingFeatures) {
     const fid = f.attributes.FEED_ITEM_ID as string
     if (fid && !newIdSet.has(fid)) {
@@ -532,7 +541,7 @@ export async function syncFeedItemsToLayer (
  * Remove the feed layer from the map and destroy it.
  */
 export function destroyFeedFeatureLayer (
-  mapView: __esri.MapView | __esri.SceneView,
+  mapView: MapView | SceneView,
   widgetId: string
 ): void {
   const layerId = LAYER_ID_PREFIX + widgetId
@@ -584,7 +593,7 @@ function buildMarkerSymbol (
  * classBreakInfos correctly. Symbols are plain objects (autocast) because
  * ClassBreakInfo's internal setter rejects pre-constructed symbol instances.
  */
-function buildRenderer (config: IMConfig): __esri.Renderer {
+function buildRenderer (config: IMConfig): Renderer {
   const globalColor = config.feedMapLayerColor || '#FF4500'
   const globalSize = config.feedMapLayerSize || 8
   const globalStyle = config.feedMapLayerMarkerStyle || 'circle'
@@ -592,7 +601,7 @@ function buildRenderer (config: IMConfig): __esri.Renderer {
   const outlineWidth = config.feedMapLayerOutlineWidth ?? 1
 
   // ClassBreaksRenderer: when range mode is active with breaks and a status field
-  const breaks = config.rangeColorBreaks as RangeColorBreak[] | undefined
+  const breaks = config.rangeColorBreaks as unknown as RangeColorBreak[] | undefined
   if (
     config.colorMode === 'range' &&
     breaks && breaks.length > 0 &&
@@ -663,7 +672,7 @@ export interface MobilePopupParams {
  * so both feed-layer-manager and map-interaction can share this logic.
  */
 export function applyMobilePopupBehavior (
-  mapView: __esri.MapView | __esri.SceneView,
+  mapView: MapView | SceneView,
   params: MobilePopupParams
 ): void {
   if (!mapView?.popup) return
@@ -702,11 +711,11 @@ export function applyMobilePopupBehavior (
  * Build popup.open() options, adding collapsed flag on mobile if configured.
  */
 function buildPopupOpenOptions (
-  features: __esri.Graphic[],
-  location: __esri.Point,
+  features: Graphic[],
+  location: Point,
   config: IMConfig,
-  mapView: __esri.MapView | __esri.SceneView
-): __esri.PopupOpenOptions {
+  mapView: MapView | SceneView
+): PopupOpenOptions {
   const options: any = { features, location }
   if (config.mobilePopupCollapsed && mapView.width <= MOBILE_BREAKPOINT_PX) {
     options.collapsed = true
@@ -729,7 +738,7 @@ function buildPopupOpenOptions (
  *              'select' skips navigation entirely (just opens popup at location)
  */
 export async function navigateToFeedPoint (
-  mapView: __esri.MapView | __esri.SceneView,
+  mapView: MapView | SceneView,
   item: FeedItem,
   config: IMConfig,
   mode: 'zoom' | 'pan' | 'select' = 'zoom'
@@ -766,7 +775,7 @@ export async function navigateToFeedPoint (
     // Find the feature on the feed layer and open its popup
     const feedLayer = mapView.map.allLayers.find(
       l => l.id.startsWith(LAYER_ID_PREFIX)
-    ) as __esri.FeatureLayer | undefined
+    ) as FeatureLayer | undefined
 
     if (feedLayer) {
       const result = await feedLayer.queryFeatures({

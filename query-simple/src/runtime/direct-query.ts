@@ -38,6 +38,9 @@ import { type ImmutableObject } from 'jimu-core'
 import { type QueryItemType, FieldsType } from '../config'
 import { createQuerySimpleDebugLogger } from 'widgets/shared-code/mapsimple-common'
 import { combineFields, resolvePopupOutFields } from './query-utils'
+import type FeatureLayer from '@arcgis/core/layers/FeatureLayer'
+import type SpatialReference from '@arcgis/core/geometry/SpatialReference'
+import type PopupTemplate from '@arcgis/core/PopupTemplate'
 
 const debugLogger = createQuerySimpleDebugLogger()
 
@@ -48,7 +51,7 @@ const debugLogger = createQuerySimpleDebugLogger()
  */
 function resolveOutFields (
   queryItem: ImmutableObject<QueryItemType>,
-  featureLayer: __esri.FeatureLayer,
+  featureLayer: FeatureLayer,
   outputDS?: FeatureLayerDataSource
 ): string[] {
   const { resultFieldsType, resultDisplayFields, resultTitleExpression } = queryItem
@@ -88,20 +91,20 @@ export async function executeDirectQuery (
     maxAllowableOffset?: number
     pageSize?: number
     orderByFields?: string[]
-    outSpatialReference?: __esri.SpatialReference
+    outSpatialReference?: SpatialReference
   } = {}
 ): Promise<{
     records: FeatureDataRecord[]
     fields: string[]
-    popupTemplate: __esri.PopupTemplate | null
-    defaultPopupTemplate: __esri.PopupTemplate | null
+    popupTemplate: PopupTemplate | null
+    defaultPopupTemplate: PopupTemplate | null
     exceededTransferLimit: boolean
   }> {
   const startTime = performance.now()
 
   // Get the actual FeatureLayer from the DataSource
   const originDS = outputDS.getOriginDataSources()[0] as FeatureLayerDataSource
-  const featureLayer = await originDS.createJSAPILayerByDataSource() as __esri.FeatureLayer
+  const featureLayer = await originDS.createJSAPILayerByDataSource() as FeatureLayer
   await featureLayer.load()
 
   const idField = featureLayer.objectIdField || 'OBJECTID'
@@ -139,10 +142,13 @@ export async function executeDirectQuery (
   const featureSet = await featureLayer.queryFeatures(query)
   const fetchTime = Math.round(performance.now() - startTime)
 
-  // Set layer references on each graphic (matches what executeQuery does in query-utils.ts)
+  // Set layer reference on each graphic so popup-render-pool and feature-info
+  // can resolve the source FeatureLayer downstream. JSAPI 5.0 removed both
+  // Graphic.sourceLayer and FeatureLayer.associatedLayer; Graphic.layer is
+  // still present (typed as Layer | Sublayer | ...). Stamp the calling
+  // featureLayer directly — it's the layer we just queried.
   featureSet.features.forEach(graphic => {
-    graphic.sourceLayer = (featureLayer as any).associatedLayer || featureLayer
-    graphic.layer = graphic.sourceLayer
+    graphic.layer = featureLayer
   })
 
   // r024.57: Use ExB's buildRecord() to create real FeatureDataRecord objects.

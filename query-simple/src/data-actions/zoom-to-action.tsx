@@ -10,6 +10,8 @@ import { type DataRecordSet, type DataAction, DataLevel, type IntlShape } from '
 import { createQuerySimpleDebugLogger } from 'widgets/shared-code/mapsimple-common'
 import { zoomToRecords } from '../runtime/zoom-utils'
 import type { FeatureDataRecord } from 'jimu-core'
+import type MapView from '@arcgis/core/views/MapView'
+import type SceneView from '@arcgis/core/views/SceneView'
 
 const debugLogger = createQuerySimpleDebugLogger()
 
@@ -26,7 +28,7 @@ const debugLogger = createQuerySimpleDebugLogger()
  */
 export function createZoomToAction(
   widgetId: string,
-  mapView: __esri.MapView | __esri.SceneView | undefined,
+  mapView: MapView | SceneView | undefined,
   intl: IntlShape
 ): DataAction {
   return {

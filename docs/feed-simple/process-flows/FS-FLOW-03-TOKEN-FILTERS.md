@@ -8,8 +8,10 @@ pipe filter system (math, formatting, date, autolink, externalLink) and the
 Markdown-to-HTML converter.
 
 **Key files:**
-- `feed-simple/src/utils/token-renderer.ts` -- Token substitution + chainable pipe filter pipeline (~320 lines)
-- `feed-simple/src/utils/markdown-template-utils.ts` -- Markdown-to-HTML converter (200 lines)
+- `feed-simple/src/utils/token-renderer.ts` -- Thin re-export wrapper (r004.001: engine extracted to shared-code)
+- `feed-simple/src/utils/markdown-template-utils.ts` -- Thin wrapper: re-exports `convertTemplateToHtml` from shared-code; keeps FS-specific `renderPreview()` and `extractFieldTokens()` locally (r004.001)
+- `shared-code/mapsimple-common/token-renderer.ts` -- Shared `substituteTokens` engine + 16 pipe filters (~364 lines)
+- `shared-code/mapsimple-common/markdown-template-utils.ts` -- Shared Markdown-to-HTML converter with table support (~424 lines)
 - `feed-simple/src/runtime/feed-card.tsx` -- FeedCard component that invokes the pipeline (~330 lines)
 
 ---
@@ -23,10 +25,11 @@ Markdown-to-HTML converter.
       |   |
       |   +-- YES ────────────────────────────────────┐
       |   |                                           |
-      |   |   substituteTokens(template, item, ctx)   |  <- token-renderer.ts:41
-      |   |        |                                  |
+      |   |   substituteTokens(template, item, ctx)   |  <- token-renderer.ts (wrapper)
+      |   |        |                                  |     → shared-code token-renderer.ts:81
       |   |        v                                  |
-      |   |   convertTemplateToHtml(substituted)      |  <- markdown-template-utils.ts:33
+      |   |   convertTemplateToHtml(substituted)      |  <- markdown-template-utils.ts (wrapper)
+      |   |        |                                  |     → shared-code markdown-template-utils.ts:98
       |   |        |                                  |
       |   |        v                                  |
       |   |   dangerouslySetInnerHTML={{ __html }}    |  <- feed-card.tsx:69
@@ -50,8 +53,10 @@ Markdown-to-HTML converter.
 
 ## Token Substitution (r002.023 — Chainable Pipes)
 
-`substituteTokens()` (token-renderer.ts:54-81) replaces `{{token}}` placeholders
-with values from the FeedItem. Supports chainable pipe filters processed left-to-right.
+`substituteTokens()` (shared-code token-renderer.ts:81) replaces `{{token}}`
+placeholders with values from the FeedItem. Supports chainable pipe filters
+processed left-to-right. The FS local `token-renderer.ts` is a thin re-export
+wrapper added in r004.001.
 
 ### Token Regex
 
@@ -65,24 +70,24 @@ Captures everything between `{{` and `}}`. The inner content is then split by
 ### Token Resolution Flow
 
 ```
- substituteTokens(template, item, ctx)       <- token-renderer.ts:54
+ substituteTokens(template, item, ctx)       <- shared-code token-renderer.ts:81
       |
-      +-- Guard: empty template → ''         :59
+      +-- Guard: empty template → ''         :86
       |
-      +-- template.replace(TOKEN_REGEX, ...)  :61
+      +-- template.replace(TOKEN_REGEX, ...)  :88
           |
-          +-- splitPipes(inner)               :63
+          +-- splitPipes(inner)               :90
           |   Splits by | respecting quoted strings
           |   e.g., 'field | "MMM D" | round:1'
           |   → ['field', '"MMM D"', 'round:1']
           |
-          +-- key = segments[0].trim()        :67
-          +-- value = item[key] ?? ''         :68
+          +-- key = segments[0].trim()        :94
+          +-- value = item[key] ?? ''         :96
           |
-          +-- No filters? (segments.length===1) :71
+          +-- No filters? (segments.length===1) :99
           |   → return value (plain substitution)
           |
-          +-- For each filter (segments 1..N): :74-78
+          +-- For each filter (segments 1..N): :102-105
               value = applyFilter(value, filter, item, ctx)
               (left-to-right chaining)
 ```
@@ -90,18 +95,18 @@ Captures everything between `{{` and `}}`. The inner content is then split by
 ### Filter Router
 
 ```
- applyFilter(value, filter, item, ctx)       <- token-renderer.ts:116
+ applyFilter(value, filter, item, ctx)       <- shared-code token-renderer.ts:144
       |
-      +-- Quoted arg? (e.g., "MMM D, YYYY")  :123
+      +-- Quoted arg? (e.g., "MMM D, YYYY")  :151
       |   → applyDateFilter(value, format)
       |
-      +-- Math operator? (/N, *N, +N, -N)    :129
+      +-- Math operator? (/N, *N, +N, -N)    :157
       |   → applyMathOp(value, op, operand)
       |
-      +-- Parameterized? (name:arg)           :135
+      +-- Parameterized? (name:arg)           :163
       |   → applyNamedFilter(value, name, arg)
       |
-      +-- Simple named filter                 :143
+      +-- Simple named filter                 :171
           → applyNamedFilter(value, name, undefined)
 ```
 
@@ -147,37 +152,37 @@ Captures everything between `{{` and `}}`. The inner content is then split by
 Syntax: `{{fieldName | "MMM D, YYYY"}}` or `{{fieldName | "YYYY-MM-DD HH:mm:ss (UTCZ)"}}`
 
 ```
- applyDateFilter(value, formatString)        <- token-renderer.ts:233
+ applyDateFilter(value, formatString)        <- shared-code token-renderer.ts:261
       |
-      +-- Guard: empty value → ''            :234
+      +-- Guard: empty value → ''            :262
       |
-      +-- Date.parse(value)                  :235
+      +-- Date.parse(value)                  :263
       |   if NaN → return raw value (not a date)
       |
-      +-- Build timezone offset string       :247-252
+      +-- Build timezone offset string       :275-280
       |   d.getTimezoneOffset() → minutes
       |   Positive = west of UTC (sign inverted for display)
       |   → e.g., "-07:00", "+05:30", "+00:00"
       |
-      +-- Slot-based replacement             :264-279
+      +-- Slot-based replacement             :292-307
           (prevents cascading regex matches)
           |
-          +-- YYYY → full year               :264
-          +-- YY   → 2-digit year            :265
-          +-- MMM  → abbreviated month name  :266
-          +-- MM   → zero-padded month       :267
-          +-- M    → month (no padding)      :268
-          +-- DD   → zero-padded day         :269
-          +-- D    → day (no padding)        :270
-          +-- HH   → zero-padded 24-hour     :271  (r002.025)
-          +-- H    → 24-hour (no padding)    :272  (r002.025)
-          +-- hh   → zero-padded 12-hour     :273
-          +-- h    → 12-hour (no padding)    :274
-          +-- mm   → zero-padded minutes     :275
-          +-- ss   → zero-padded seconds     :276
-          +-- A    → AM/PM uppercase         :277
-          +-- a    → am/pm lowercase         :278
-          +-- Z    → timezone offset         :279  (r002.025)
+          +-- YYYY → full year               :292
+          +-- YY   → 2-digit year            :293
+          +-- MMM  → abbreviated month name  :294
+          +-- MM   → zero-padded month       :295
+          +-- M    → month (no padding)      :296
+          +-- DD   → zero-padded day         :297
+          +-- D    → day (no padding)        :298
+          +-- HH   → zero-padded 24-hour     :299  (r002.025)
+          +-- H    → 24-hour (no padding)    :300  (r002.025)
+          +-- hh   → zero-padded 12-hour     :301
+          +-- h    → 12-hour (no padding)    :302
+          +-- mm   → zero-padded minutes     :303
+          +-- ss   → zero-padded seconds     :304
+          +-- A    → AM/PM uppercase         :305
+          +-- a    → am/pm lowercase         :306
+          +-- Z    → timezone offset         :307  (r002.025)
 ```
 
 **Slot mechanism:** Each replaced token is temporarily stored as `\x00{index}\x00`
@@ -193,14 +198,14 @@ from UTC. Positive values mean west of UTC. The sign is inverted for display:
 Syntax: `{{fieldName | autolink}}`
 
 ```
- applyAutolinkFilter(value)                  <- token-renderer.ts:128
+ applyAutolinkFilter(value)                  <- shared-code token-renderer.ts:319
       |
-      +-- Guard: empty → ''                 :129
+      +-- Guard: empty → ''                 :320
       |
-      +-- Regex: match URLs                 :131-132
+      +-- Regex: match URLs                 :322-323
       |   Pattern: (?:https?://|www.)[^\s<>"']+
       |
-      +-- For each URL match:               :133-136
+      +-- For each URL match:               :324-327
           www. prefix? → prepend https://
           Wrap in <a href="..." target="_blank" rel="noopener">
 ```
@@ -210,16 +215,16 @@ Syntax: `{{fieldName | autolink}}`
 Syntax: `{{fieldName | externalLink}}`
 
 ```
- applyExternalLinkFilter(value, item, template) <- token-renderer.ts:145
+ applyExternalLinkFilter(value, item, template) <- shared-code token-renderer.ts:355
       |
-      +-- Guard: no externalLinkTemplate     :150
-      |   → return raw value
+      +-- Guard: no externalLinkTemplate     :360-361
+      |   → resolveExternalLinkUrl() returns undefined
       |
-      +-- Substitute tokens in URL template  :153-156
-      |   externalLinkTemplate.replace(/\{\{...\}\}/g, ...)
+      +-- Substitute tokens in URL template  (resolveExternalLinkUrl :336-348)
+      |   template.replace(/\{\{...\}\}/g, ...)
       |   (plain substitution only, no nested filters)
       |
-      +-- Return <a> tag                     :158
+      +-- Return <a> tag                     :362
           <a href="{url}" target="_blank" rel="noopener">View ↗</a>
 ```
 
@@ -227,80 +232,124 @@ Syntax: `{{fieldName | externalLink}}`
 
 ## Markdown-to-HTML Conversion
 
-`convertTemplateToHtml()` (markdown-template-utils.ts:33-133) converts the
+`convertTemplateToHtml()` (shared-code markdown-template-utils.ts:98) converts the
 token-substituted Markdown into HTML. The conversion happens AFTER token substitution
 so that pipe (`|`) and quote (`"`) characters in token syntax are not consumed by
-Markdown parsing.
+Markdown parsing. The FS local `markdown-template-utils.ts` is a thin re-export
+wrapper added in r004.001.
 
 ### Supported Markdown Syntax
 
+All line references below are in `shared-code/mapsimple-common/markdown-template-utils.ts`.
+
 | Syntax | HTML Output | Line Reference |
 |--------|-------------|----------------|
-| `# Heading` | `<h3>` | :89-93 |
-| `## Subheading` | `<h4>` | :83-87 |
-| `### Small` | `<h5>` | :77-81 |
-| `#### Tiny` | `<h6>` | :71-75 |
-| `**bold**` or `__bold__` | `<strong>` | :155-156 |
-| `*italic*` or `_italic_` | `<em>` | :159-160 |
-| `- item` or `* item` | `<ul><li>` | :97-106 |
-| `---` | `<hr/>` | :63-67 |
-| `[text](url)` | `<a>` (new tab) | :149-152 |
-| `![alt](url)` | `<img>` (responsive) | :143-146 |
-| Blank line | New `<p>` | :53-59 |
-| Single newline | `<br/>` | :44-46 |
-| Leading spaces | `padding-left` indent | :115-121 |
+| `# Heading` | `<h3>` | :195-199 |
+| `## Subheading` | `<h4>` | :189-193 |
+| `### Small` | `<h5>` | :183-187 |
+| `#### Tiny` | `<h6>` | :177-181 |
+| `**bold**` or `__bold__` | `<strong>` | :273-274 |
+| `*italic*` or `_italic_` | `<em>` | :277-278 |
+| `- item` or `* item` | `<ul><li>` | :203-211 |
+| `---` | `<hr/>` | :169-173 |
+| `[text](url)` | `<a>` (new tab) | :256-259 |
+| `![alt](url)` | `<img>` (responsive) | :250-253 |
+| `\| H \| H \|` | `<table>` with alignment | :158-163 (r026.014/r004.002) |
+| Blank line | New `<p>` | :136-143 |
+| Single newline | `<br/>` | :113-116 |
+| Leading spaces | `padding-left` indent | :220-229 |
+
+### Table Support (r026.014 / r004.002)
+
+Pipe-delimited Markdown tables are parsed into styled `<table>` HTML.
+
+```
+ parseTableBlock(rows, styleName, customStripeColor)  <- shared-code markdown-template-utils.ts:309
+      |
+      +-- Style presets: 'striped', 'plain', 'bordered'
+      |   Configured via <!-- table:STYLE --> comment   :147-155
+      |   Optional custom stripe color: <!-- table:striped:#aabbcc -->
+      |
+      +-- Custom stripe color logic (r005.004):         :322-328
+      |   customStripeColor sets evenRowBg (dark row)
+      |   lightenHex(customStripeColor, 20) sets oddRowBg (light row)
+      |
+      +-- lightenHex(hex, amount)                       :287-292
+      |   Increases each RGB channel by `amount` (0–255)
+      |   Renamed from darkenHex in r005.004
+      |
+      +-- Alignment from separator row:
+      |   :--- or ---  → left (default)
+      |   :---:        → center
+      |   ---:         → right
+      |
+      +-- Headerless tables supported
+          (separator as first row → no <thead>)
+```
 
 ### Inline Formatting Order
 
 Processing order matters to avoid consuming partial matches:
 
 ```
- applyInlineFormatting(text)                 <- markdown-template-utils.ts:141
+ applyInlineFormatting(text)                 <- shared-code markdown-template-utils.ts:248
       |
-      1. Images: ![alt](url)                :143-146
+      1. Images: ![alt](url)                :250-253
       |  (must be before links due to ! prefix)
       |
-      2. Links: [text](url)                 :149-152
+      2. Links: [text](url)                 :256-259
       |
-      3. Bold: **text** and __text__         :155-156
+      3. URL stash (r027.004)               :267-270
+      |  Protects src/href attributes from bold/italic
+      |
+      4. Bold: **text** and __text__         :273-274
       |  (must be before italic)
       |
-      4. Italic: *text* and _text_           :159-160
-         (_text_ skips {{field_name}} tokens)
+      5. Italic: *text* and _text_           :277-278
+      |  (_text_ skips {{field_name}} tokens)
+      |
+      6. URL restore                         :281
 ```
 
 ### Paragraph Buffering
 
 ```
- convertTemplateToHtml()                     <- markdown-template-utils.ts:33
+ convertTemplateToHtml()                     <- shared-code markdown-template-utils.ts:98
       |
-      +-- Split into lines                  :36
+      +-- Split into lines                  :101
       |
-      +-- For each line:
-      |   +-- Blank line?    → flushParagraph()
+      +-- For each line:                     :132-230
+      |   +-- Blank line?    → flushParagraph(), flushTable()
+      |   +-- Table style?   → capture pending style hint
+      |   +-- Table row?     → accumulate in tableBuffer
       |   +-- Heading?       → flushParagraph(), emit <hN>
       |   +-- HR?            → flushParagraph(), emit <hr/>
       |   +-- List item?     → flushParagraph(), open <ul> if needed
       |   +-- Regular text?  → accumulate in paraBuffer
       |
-      +-- flushParagraph()                   :43-47
-          Join buffered lines with <br/>
-          Wrap in single <p> tag
+      +-- flushParagraph()                   :113-117
+      |   Join buffered lines with <br/>
+      |   Wrap in single <p> tag
+      |
+      +-- flushTable()                       :120-130
+          Parse tableBuffer via parseTableBlock()
+          Apply pending style/stripe color
 ```
 
 ---
 
 ## Settings Preview Renderer
 
-`renderPreview()` (markdown-template-utils.ts:170-186) renders the template in the
-settings panel with styled token badges instead of substituted values:
+`renderPreview()` (feed-simple markdown-template-utils.ts:26-42) is an FS-specific
+function that stays in the local file. It renders the template in the settings panel
+with styled token badges instead of substituted values:
 
 ```
- renderPreview(markdown)                     <- markdown-template-utils.ts:170
+ renderPreview(markdown)                     <- feed-simple markdown-template-utils.ts:26
       |
-      +-- convertTemplateToHtml(markdown)    :174
+      +-- convertTemplateToHtml(markdown)    :30  (from shared-code)
       |
-      +-- Replace {{tokens}} with badges    :177-184
+      +-- Replace {{tokens}} with badges    :33-41
           Each token becomes a styled <span>:
           - Monospace font
           - Primary color background
@@ -311,8 +360,9 @@ settings panel with styled token badges instead of substituted values:
 
 ## FilterContext
 
-The `FilterContext` interface (token-renderer.ts:17-22) passes widget config values
-to the renderer so it remains pure (no config imports):
+The `FilterContext` interface (shared-code token-renderer.ts:30-35) passes widget
+config values to the renderer so it remains pure (no config imports). The FS
+wrapper re-exports the type:
 
 ```typescript
 interface FilterContext {
@@ -331,4 +381,4 @@ const filterCtx: FilterContext = {
 
 ---
 
-*Last updated: r002.030 (2026-03-14)*
+*Last updated: r005.004 (2026-04-06)*

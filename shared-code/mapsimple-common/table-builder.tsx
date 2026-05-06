@@ -12,11 +12,170 @@
  */
 import { React, jsx, css } from 'jimu-core'
 
+/**
+ * State that can be passed to pre-populate the builder for edit mode.
+ */
+export interface TableBuilderState {
+  headers: string[]
+  cells: string[][]
+  cols: number
+  rows: number
+  includeHeader: boolean
+  tableStyle: 'striped' | 'plain' | 'bordered'
+  stripeColor?: string
+}
+
 export interface TableBuilderProps {
-  /** Called with the generated markdown table string when user clicks Insert */
+  /** Called with the generated markdown table string when user clicks Insert/Update */
   onInsert: (markdown: string) => void
   /** Called when user cancels the builder */
   onCancel: () => void
+  /** r027.015: Pre-populate builder with existing table data (edit mode) */
+  initialState?: TableBuilderState
+}
+
+// ── Table reverse-parser ────────────────────────────────────────
+
+/** Separator row regex: | --- | :---: | ---: | etc. */
+const SEPARATOR_RE = /^\|[\s:|-]+\|$/
+
+/** Style hint comment: <!-- table:plain --> or <!-- table:striped:#aabbcc --> */
+const STYLE_HINT_RE = /^<!--\s*table:(\w+)(?::(#[0-9a-fA-F]{6}))?\s*-->$/
+
+/**
+ * r027.015: Reverse-parse a pipe-delimited markdown table back into TableBuilder state.
+ * Returns null if the text doesn't contain a valid table.
+ */
+export function parseMarkdownToTableState (tableMarkdown: string): TableBuilderState | null {
+  const lines = tableMarkdown.trim().split('\n').map(l => l.trim()).filter(l => l.length > 0)
+  if (lines.length < 2) return null // Need at least separator + 1 data row
+
+  let styleIdx = 0
+  let tableStyle: 'striped' | 'plain' | 'bordered' = 'striped'
+  let stripeColor: string | undefined
+
+  // Check for style hint comment
+  const styleMatch = STYLE_HINT_RE.exec(lines[0])
+  if (styleMatch) {
+    const s = styleMatch[1]
+    if (s === 'plain' || s === 'bordered' || s === 'striped') tableStyle = s
+    if (styleMatch[2]) stripeColor = styleMatch[2]
+    styleIdx = 1
+  }
+
+  // Find the separator row
+  let separatorIdx = -1
+  for (let i = styleIdx; i < lines.length; i++) {
+    if (SEPARATOR_RE.test(lines[i])) {
+      separatorIdx = i
+      break
+    }
+  }
+  if (separatorIdx === -1) return null
+
+  // Parse cells from a pipe-delimited line
+  const parseCells = (line: string): string[] => {
+    // Remove leading/trailing pipes, split by |, trim each cell
+    return line.replace(/^\|/, '').replace(/\|$/, '').split('|').map(c => c.trim())
+  }
+
+  // Determine if there's a header row (line between style hint and separator)
+  const hasHeader = separatorIdx > styleIdx
+  let headers: string[] = []
+  if (hasHeader) {
+    headers = parseCells(lines[styleIdx])
+  }
+
+  // Data rows come after the separator
+  const dataLines = lines.slice(separatorIdx + 1)
+  const cells = dataLines.map(line => parseCells(line))
+
+  // Determine column count from separator
+  const cols = parseCells(lines[separatorIdx]).length
+
+  // Normalize: pad headers/cells to match col count
+  if (hasHeader) {
+    while (headers.length < cols) headers.push('')
+    headers = headers.slice(0, cols)
+  } else {
+    headers = Array.from({ length: cols }, (_, i) => `Header ${i + 1}`)
+  }
+
+  const normalizedCells = cells.map(row => {
+    const padded = [...row]
+    while (padded.length < cols) padded.push('')
+    return padded.slice(0, cols)
+  })
+
+  if (normalizedCells.length === 0) return null
+
+  return {
+    headers,
+    cells: normalizedCells,
+    cols,
+    rows: normalizedCells.length,
+    includeHeader: hasHeader,
+    tableStyle,
+    stripeColor
+  }
+}
+
+/**
+ * r027.015: Find the table block surrounding the cursor position in a template string.
+ * Returns the start/end character indices and the table text, or null if cursor isn't in a table.
+ */
+export function findTableBlockAtCursor (text: string, cursorPos: number): { start: number, end: number, tableText: string } | null {
+  const lines = text.split('\n')
+  let charOffset = 0
+  let cursorLineIdx = -1
+
+  // Find which line the cursor is on
+  for (let i = 0; i < lines.length; i++) {
+    const lineEnd = charOffset + lines[i].length
+    if (cursorPos >= charOffset && cursorPos <= lineEnd) {
+      cursorLineIdx = i
+      break
+    }
+    charOffset += lines[i].length + 1 // +1 for \n
+  }
+  if (cursorLineIdx === -1) return null
+
+  // Check if cursor line looks like part of a table (starts with |, or is a style hint/separator)
+  const isTableLine = (line: string): boolean => {
+    const trimmed = line.trim()
+    return trimmed.startsWith('|') || STYLE_HINT_RE.test(trimmed)
+  }
+
+  if (!isTableLine(lines[cursorLineIdx])) return null
+
+  // Walk backward to find table start
+  let startLine = cursorLineIdx
+  while (startLine > 0 && isTableLine(lines[startLine - 1])) {
+    startLine--
+  }
+
+  // Walk forward to find table end
+  let endLine = cursorLineIdx
+  while (endLine < lines.length - 1 && isTableLine(lines[endLine + 1])) {
+    endLine++
+  }
+
+  // Validate: the block must contain a separator row
+  const blockLines = lines.slice(startLine, endLine + 1)
+  const hasSeparator = blockLines.some(l => SEPARATOR_RE.test(l.trim()))
+  if (!hasSeparator) return null
+
+  // Calculate character offsets
+  let startChar = 0
+  for (let i = 0; i < startLine; i++) startChar += lines[i].length + 1
+  let endChar = startChar
+  for (let i = startLine; i <= endLine; i++) endChar += lines[i].length + (i < endLine ? 1 : 0)
+
+  return {
+    start: startChar,
+    end: endChar,
+    tableText: blockLines.join('\n')
+  }
 }
 
 // ── Constraints ──────────────────────────────────────────────────
@@ -26,6 +185,7 @@ const MIN_ROWS = 1   // Data rows (header row is optional via toggle)
 const MAX_ROWS = 10
 const DEFAULT_COLS = 2
 const DEFAULT_ROWS = 2
+const DEFAULT_STRIPE_COLOR = '#e2e2e2'
 
 // ── Styles ───────────────────────────────────────────────────────
 const containerStyle = css`
@@ -135,20 +295,22 @@ const headerLabelStyle = css`
 
 // ── Component ────────────────────────────────────────────────────
 export function TableBuilder (props: TableBuilderProps): React.ReactElement {
-  const { onInsert, onCancel } = props
+  const { onInsert, onCancel, initialState } = props
+  const isEditMode = !!initialState
 
-  const [cols, setCols] = React.useState(DEFAULT_COLS)
-  const [rows, setRows] = React.useState(DEFAULT_ROWS)
-  const [includeHeader, setIncludeHeader] = React.useState(true)
-  const [tableStyle, setTableStyle] = React.useState<'striped' | 'plain' | 'bordered'>('striped')
+  const [cols, setCols] = React.useState(initialState?.cols ?? DEFAULT_COLS)
+  const [rows, setRows] = React.useState(initialState?.rows ?? DEFAULT_ROWS)
+  const [includeHeader, setIncludeHeader] = React.useState(initialState?.includeHeader ?? true)
+  const [tableStyle, setTableStyle] = React.useState<'striped' | 'plain' | 'bordered'>(initialState?.tableStyle ?? 'striped')
+  const [stripeColor, setStripeColor] = React.useState(initialState?.stripeColor ?? DEFAULT_STRIPE_COLOR)
 
   // Grid data: headers[col] and cells[row][col]
   const [headers, setHeaders] = React.useState<string[]>(() =>
-    Array.from({ length: DEFAULT_COLS }, (_, i) => `Header ${i + 1}`)
+    initialState?.headers ?? Array.from({ length: initialState?.cols ?? DEFAULT_COLS }, (_, i) => `Header ${i + 1}`)
   )
   const [cells, setCells] = React.useState<string[][]>(() =>
-    Array.from({ length: DEFAULT_ROWS }, () =>
-      Array.from({ length: DEFAULT_COLS }, () => '')
+    initialState?.cells ?? Array.from({ length: initialState?.rows ?? DEFAULT_ROWS }, () =>
+      Array.from({ length: initialState?.cols ?? DEFAULT_COLS }, () => '')
     )
   )
 
@@ -202,9 +364,11 @@ export function TableBuilder (props: TableBuilderProps): React.ReactElement {
 
     // Style hint comment — parser reads this to apply the visual style
     const parts: string[] = []
-    if (tableStyle !== 'striped') {
-      // Only emit hint for non-default styles (striped is the default)
-      parts.push(`<!-- table:${tableStyle} -->`)
+    const hasCustomColor = tableStyle === 'striped' && stripeColor && stripeColor !== DEFAULT_STRIPE_COLOR
+    if (tableStyle !== 'striped' || hasCustomColor) {
+      // Emit hint for non-default style OR custom stripe color
+      const colorSuffix = hasCustomColor ? `:${stripeColor}` : ''
+      parts.push(`<!-- table:${tableStyle}${colorSuffix} -->`)
     }
 
     if (includeHeader) {
@@ -214,7 +378,7 @@ export function TableBuilder (props: TableBuilderProps): React.ReactElement {
     parts.push(...dataLines)
 
     onInsert(parts.join('\n'))
-  }, [headers, cells, cols, includeHeader, tableStyle, onInsert])
+  }, [headers, cells, cols, includeHeader, tableStyle, stripeColor, onInsert])
 
   return (
     <div css={containerStyle}>
@@ -278,6 +442,49 @@ export function TableBuilder (props: TableBuilderProps): React.ReactElement {
             <option value='bordered'>Bordered</option>
           </select>
         </div>
+        {tableStyle === 'striped' && (
+          <div css={spinnerStyle}>
+            <label htmlFor='stripe-color'>Dark row:</label>
+            <input
+              id='stripe-color'
+              type='color'
+              value={stripeColor}
+              onChange={(e) => setStripeColor(e.target.value)}
+              css={css`
+                width: 28px;
+                height: 24px;
+                padding: 1px;
+                border: 1px solid var(--sys-color-divider-secondary, #ccc);
+                border-radius: 3px;
+                background: var(--sys-color-surface-paper, #fff);
+                cursor: pointer;
+              `}
+              title={`Dark row color: ${stripeColor}`}
+            />
+            {stripeColor !== DEFAULT_STRIPE_COLOR && (
+              <button
+                type='button'
+                onClick={() => setStripeColor(DEFAULT_STRIPE_COLOR)}
+                css={css`
+                  padding: 1px 5px;
+                  border: 1px solid var(--sys-color-divider-secondary, #ccc);
+                  border-radius: 3px;
+                  background: var(--sys-color-surface-paper, #fff);
+                  color: var(--sys-color-text-secondary, #666);
+                  font-size: 10px;
+                  cursor: pointer;
+                  line-height: 1.4;
+                  &:hover {
+                    background: var(--sys-color-surface-background, #f5f5f5);
+                  }
+                `}
+                title='Reset to default stripe color'
+              >
+                Reset
+              </button>
+            )}
+          </div>
+        )}
       </div>
 
       {/* Header row (shown only when includeHeader is true) */}
@@ -324,7 +531,7 @@ export function TableBuilder (props: TableBuilderProps): React.ReactElement {
           Cancel
         </button>
         <button type='button' css={insertBtnStyle} onClick={handleInsert}>
-          Insert Table
+          {isEditMode ? 'Update Table' : 'Insert Table'}
         </button>
       </div>
     </div>

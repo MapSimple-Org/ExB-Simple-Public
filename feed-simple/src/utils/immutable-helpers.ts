@@ -8,7 +8,7 @@
  * @module immutable-helpers
  */
 
-import type { UseDataSource } from 'jimu-core'
+import type { UseDataSource, ImmutableArray } from 'jimu-core'
 
 /**
  * Unwrap an ImmutableArray to a plain TypeScript array.
@@ -42,7 +42,15 @@ export function toPlain<T extends object> (immutable: unknown): T {
  *        `(this.props.useDataSources[0] as any).dataSourceId`
  */
 export function getDataSourceId (
-  useDataSources: Array<UseDataSource | { dataSourceId?: string }> | undefined | null
+  // r027.067: ExB props arrive seamless-immutable-wrapped
+  // (ImmutableArray<UseDataSource>), which lacks array mutation methods, so
+  // it isn't assignable to a plain mutable array type. Widened the param to
+  // also accept the immutable shape. Read-only access only — runtime unchanged.
+  useDataSources:
+    | ImmutableArray<UseDataSource>
+    | Array<UseDataSource | { dataSourceId?: string }>
+    | undefined
+    | null
 ): string | undefined {
   if (!useDataSources || useDataSources.length === 0) return undefined
   return (useDataSources[0] as UseDataSource)?.dataSourceId

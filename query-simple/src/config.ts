@@ -1,6 +1,8 @@
 import type { SpatialRelationship, Units } from '@esri/arcgis-rest-feature-service'
 import type { ImmutableObject, ImmutableArray, SqlExpression, UseDataSource, IconResult, OrderByOption } from 'jimu-core'
 import type { Size } from 'jimu-ui'
+import type Graphic from '@arcgis/core/Graphic'
+import type GraphicsLayer from '@arcgis/core/layers/GraphicsLayer'
 
 export enum CreateToolType {
   Point = 'Point',
@@ -49,8 +51,8 @@ export enum SpatialRelation {
 
 export interface SpatialFilterObj {
   geometry: any
-  graphic?: __esri.Graphic
-  layer?: __esri.GraphicsLayer
+  graphic?: Graphic
+  layer?: GraphicsLayer
   clearAfterApply?: boolean
   relation?: SpatialRelation
   buffer?: { distance: number, unit: UnitType }
@@ -195,10 +197,16 @@ export interface SizeMap {
 
 export interface SettingConfig {
   queryItems?: ImmutableArray<QueryItemType>
+  /** r027.013: When false, hides the widget header label (e.g., "Enhanced Search"). Default true. */
+  showHeader?: boolean
   arrangeType: QueryArrangeType
   arrangeWrap?: boolean
   resultListDirection?: ListDirection
   resultPagingStyle?: PagingType
+  /** r027.079: Default page size used by QueryTaskList / QueryTaskListInline.
+   *  Already consumed at widget.tsx:1388/1427/1479; field declaration was
+   *  missing from SettingConfig and surfaced as TS2339 under stricter checking. */
+  defaultPageSize?: number
   lazyLoadInitialPageSize?: number
   highlightMapWidgetId?: string // Map widget ID to use for graphics layer highlighting
   // Graphics Layer Symbology Configuration
@@ -238,6 +246,10 @@ export interface SettingConfig {
   mobilePopupHideDockButton?: boolean
   /** Hide the popup action bar (zoom-to, etc.) on mobile viewports ≤ 600px (default false) */
   mobilePopupHideActionBar?: boolean
+  /** r027.014: IDs of allowed spatial relationships in the Spatial tab combobox.
+   *  Values are SpatialTabContent relationship ids: 'contains', 'intersects', 'envelope-intersects', 'overlaps', 'within', 'touches', 'crosses'.
+   *  When undefined or empty, all relationships are shown (default). */
+  spatialTabRelationships?: string[]
   sizeMap?: {
     arrangementIconPopper?: SizeMap
   }

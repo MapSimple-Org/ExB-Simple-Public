@@ -10,7 +10,7 @@ import { DEFAULT_QUERY_ITEM } from '../default-query-item'
 import { ResultsFieldSetting } from './results-field'
 import { DataOutlined } from 'jimu-icons/outlined/data/data'
 import { renderPreview } from '../runtime/markdown-template-utils'
-import { TableBuilder } from 'widgets/shared-code/mapsimple-common'
+import { TableBuilder, parseMarkdownToTableState, findTableBlockAtCursor, type TableBuilderState } from 'widgets/shared-code/mapsimple-common'
 import { WarningOutlined } from 'jimu-icons/outlined/suggested/warning'
 
 interface Props {
@@ -63,13 +63,36 @@ export function ResultsSetting (props: Props) {
   const contentEditorRef = React.useRef<HTMLTextAreaElement>(undefined)
   // r026.002: Expandable template syntax help (replaces tooltip)
   const [templateHelpOpen, setTemplateHelpOpen] = React.useState(false)
-  // r026.014: Table builder inline panel
+  // r026.014 + r027.015: Table builder inline panel with edit mode
   const [showTableBuilder, setShowTableBuilder] = React.useState(false)
+  const [tableEditState, setTableEditState] = React.useState<{ state: TableBuilderState, start: number, end: number } | null>(null)
 
   const getI18nMessage = hooks.useTranslation(defaultMessages)
   const [expression, setExpression] = React.useState(queryItem.resultTitleExpression)
   // r023.18: Local state for content template
   const [contentExpression, setContentExpression] = React.useState((queryItem as any).resultContentExpression || '')
+
+  // r027.015: Detect table at cursor position for Insert/Edit toggle
+  // (must be after contentExpression declaration)
+  const detectTableAtCursor = React.useCallback(() => {
+    const textarea = contentEditorRef.current
+    if (!textarea || !contentExpression) {
+      setTableEditState(null)
+      return
+    }
+    const cursorPos = textarea.selectionStart ?? 0
+    const block = findTableBlockAtCursor(contentExpression, cursorPos)
+    if (block) {
+      const parsed = parseMarkdownToTableState(block.tableText)
+      if (parsed) {
+        setTableEditState({ state: parsed, start: block.start, end: block.end })
+        return
+      }
+    }
+    setTableEditState(null)
+  }, [contentExpression])
+
+  const isTableEditMode = !!tableEditState
   const currentItem = Object.assign({}, DEFAULT_QUERY_ITEM, queryItem)
 
   // r026.002: Detect legacy {field} syntax in title and content expressions
@@ -391,9 +414,11 @@ export function ResultsSetting (props: Props) {
               height={140}
               onChange={handleContentTextChange}
               onAcceptValue={handleContentTextAccepted}
+              onClick={detectTableAtCursor}
+              onKeyUp={detectTableAtCursor}
               spellCheck={false}
               value={contentExpression}
-              ref={contentEditorRef}
+              ref={contentEditorRef as any}
               placeholder={'**{{OWNER}}**\n\nManaged by: {{MANAGER}}\nType: *{{SITETYPE}}*'}
             />
             <div className='w-100' css={css`height: 32px; background-color: var(--ref-palette-neutral-300);`}>
@@ -466,7 +491,7 @@ export function ResultsSetting (props: Props) {
               `}>▶</span>
               Template syntax reference
             </button>
-            {/* r026.014: Insert Table toggle */}
+            {/* r026.014 + r027.015: Insert/Edit Table toggle */}
             <button
               type='button'
               onClick={() => setShowTableBuilder(!showTableBuilder)}
@@ -489,22 +514,32 @@ export function ResultsSetting (props: Props) {
                 transform: ${showTableBuilder ? 'rotate(90deg)' : 'rotate(0deg)'};
                 font-size: 10px;
               `}>▶</span>
-              Insert table
+              {isTableEditMode ? 'Edit table' : 'Insert table'}
             </button>
           </div>
-          {/* r026.014: Table builder inline panel */}
+          {/* r026.014 + r027.015: Table builder inline panel (insert or edit mode) */}
           {showTableBuilder && (
             <TableBuilder
+              initialState={isTableEditMode ? tableEditState.state : undefined}
               onInsert={(markdown) => {
-                // Append table markdown to content template
-                const newContent = contentExpression
-                  ? `${contentExpression}\n${markdown}`
-                  : markdown
+                let newContent: string
+                if (isTableEditMode && tableEditState) {
+                  // r027.015: Replace existing table in-place
+                  const before = contentExpression.substring(0, tableEditState.start)
+                  const after = contentExpression.substring(tableEditState.end)
+                  newContent = before + markdown + after
+                } else {
+                  // Append table markdown to content template
+                  newContent = contentExpression
+                    ? `${contentExpression}\n${markdown}`
+                    : markdown
+                }
                 setContentExpression(newContent)
                 handleContentTextAccepted(newContent)
                 setShowTableBuilder(false)
+                setTableEditState(null)
               }}
-              onCancel={() => setShowTableBuilder(false)}
+              onCancel={() => { setShowTableBuilder(false); setTableEditState(null) }}
             />
           )}
           <div>

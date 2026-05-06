@@ -94,7 +94,7 @@ mapModule.JimuDraw
   |     +-- isHideBorder = true            <-- Clean integration with tab UI
   |
   +-- defaultSymbols = {drawSymbols}    <-- r025.051: configurable color
-  |     (via highlightConfigManager.getDrawColor)
+  |     (via widgetConfigManager.getDrawColor)
   |
   +-- Callbacks:
         onJimuDrawCreated  --> handleDrawToolCreated

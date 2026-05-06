@@ -12,11 +12,15 @@ import {
 // r024.41: Removed Button, Tooltip, Popper, Icon - replaced with plain HTML to avoid Calcite overhead
 import FeatureInfo from './components/feature-info'
 import { ListDirection } from '../config'
-import { createQuerySimpleDebugLogger, substituteTokens, convertTemplateToHtml } from 'widgets/shared-code/mapsimple-common'
+import { createQuerySimpleDebugLogger, substituteTokens, substituteLegacyTokens, convertTemplateToHtml } from 'widgets/shared-code/mapsimple-common'
 import defaultMessages from './translations/default'
 import { hooks } from 'jimu-core'
 import Graphic from '@arcgis/core/Graphic'
+import type MapView from '@arcgis/core/views/MapView'
+import type SceneView from '@arcgis/core/views/SceneView'
 import * as labelPointOperator from '@arcgis/core/geometry/operators/labelPointOperator.js'
+/** JSAPI 5.0 exports GeometryUnion from geometry/types; 4.x does not. Cast-only usage. */
+type GeometryUnion = any
 
 const debugLogger = createQuerySimpleDebugLogger()
 
@@ -251,7 +255,12 @@ export interface ResultItemProps {
   /** r026.005: Raw template string for card rendering (stored in cache, not on popupTemplate) */
   rawTemplate?: string
   // r022.106: Hover preview props
-  mapView?: __esri.MapView | __esri.SceneView
+  mapView?: MapView | SceneView
+  // r022.106: Hover pins live on mapView.graphics (always renders on top of
+  // all layers). r027.082 moved them to a per-widget GraphicsLayer, but that
+  // caused z-order issues (results layers recreated on each query landed above
+  // the hover layer). r027.091 moved them back. Cross-widget safety is handled
+  // by scoped cleanup (remove individual graphic refs, never removeAll).
 }
 
 const style = css`
@@ -374,10 +383,11 @@ export const QueryResultItem = (props: ResultItemProps) => {
     })
   }, [expandByDefault])
   
-  const recordId = data.getId()
+  // r027.000: ExB 1.20 — coerce getId() to string (now returns string | number)
+  const recordId = String(data.getId())
   
   // r022.106: Hover preview - refs for hover graphic management
-  const hoverGraphicRef = React.useRef<__esri.Graphic | null>(null)
+  const hoverGraphicRef = React.useRef<Graphic | null>(null)
   const hoverTimeoutRef = React.useRef<number | null>(null)
   const animationRef = React.useRef<number | null>(null) // r022.108: Spring animation ID
   
@@ -410,9 +420,10 @@ export const QueryResultItem = (props: ResultItemProps) => {
   
   // Check if this record is currently selected
   const selected = ReactRedux.useSelector((state: IMState) =>
-    state.dataSourcesInfo?.[dataSource.id]?.selectedIds?.includes(data.getId())
+    // r027.000: ExB 1.20 — coerce getId() to string (now returns string | number)
+    state.dataSourcesInfo?.[dataSource.id]?.selectedIds?.includes(String(data.getId()))
   )
-  
+
   // Determine if list is displayed vertically (affects FeatureInfo expandability)
   const isVerticalAlign = ReactRedux.useSelector((state: IMState) => {
     const widgetJson = state.appConfig.widgets[widgetId]
@@ -497,7 +508,8 @@ export const QueryResultItem = (props: ResultItemProps) => {
         hoverTimeoutRef.current = null
       }
       
-      // Remove hover graphic from map
+      // r027.091: Remove hover graphic from mapView.graphics on unmount.
+      // Scoped to this specific graphic ref (never removeAll).
       if (hoverGraphicRef.current && mapView?.graphics) {
         try {
           mapView.graphics.remove(hoverGraphicRef.current)
@@ -517,6 +529,7 @@ export const QueryResultItem = (props: ResultItemProps) => {
         hoverGraphicRef.current = null
       }
     }
+    // r027.091: mapView in deps so cleanup re-binds if view changes.
   }, [mapView, recordId])
 
   /**
@@ -525,8 +538,21 @@ export const QueryResultItem = (props: ResultItemProps) => {
    * Debounced to 100ms to prevent flicker when moving across list items
    */
   const handleMouseEnter = React.useCallback(() => {
-    // Skip if no mapView
-    if (!mapView?.graphics) {
+    // r027.091: Diagnostic for hover preview. mapView.graphics is the
+    // map-level overlay (always renders on top of all layers).
+    debugLogger.log('HOVER-PREVIEW', {
+      event: 'handler-entered',
+      recordId,
+      hasMapView: !!mapView,
+      mapViewGraphicsCount: mapView?.graphics?.length,
+      timestamp: Date.now()
+    })
+    if (!mapView) {
+      debugLogger.log('HOVER-PREVIEW', {
+        event: 'handler-exit-no-mapview',
+        recordId,
+        timestamp: Date.now()
+      })
       return
     }
     
@@ -550,7 +576,11 @@ export const QueryResultItem = (props: ResultItemProps) => {
         }
         
         // Calculate label point (same as popup logic)
-        const labelPoint = labelPointOperator.execute(geometry)
+        // r027.076: labelPointOperator.execute() typed `geometry: GeometryUnion`
+        // in JSAPI 5.0; data.getJSAPIGeometry() returns the broader Geometry
+        // base. The runtime value is always a GeometryUnion member (Point,
+        // Polygon, Polyline, Multipoint, Extent, Mesh) so the cast is safe.
+        const labelPoint = labelPointOperator.execute(geometry as GeometryUnion)
         
         if (!labelPoint) {
           debugLogger.log('HOVER-PREVIEW', {
@@ -581,6 +611,9 @@ export const QueryResultItem = (props: ResultItemProps) => {
             geometry: labelPoint,
             symbol: cimSymbol as any
           })
+          // r027.091: Add to mapView.graphics (map-level overlay, always
+          // renders on top of all layers). Scoped cleanup on unmount removes
+          // only this specific graphic ref — never removeAll().
           mapView.graphics.add(hoverGraphicRef.current)
           
           debugLogger.log('HOVER-PREVIEW', {
@@ -726,6 +759,7 @@ export const QueryResultItem = (props: ResultItemProps) => {
         })
       }
     }, 100) // 100ms debounce
+    // r027.091: mapView.graphics is always available when mapView is.
   }, [mapView, data, recordId, hoverPinColor, memoizedSymbolData])
 
   /**
@@ -836,18 +870,12 @@ export const QueryResultItem = (props: ResultItemProps) => {
           <div className='flex-grow-1' dangerouslySetInnerHTML={{ __html: (() => {
             const attributes = data.feature?.attributes || {}
             let substituted = substituteTokens(rawTemplate, attributes)
-            substituted = substituted.replace(/(?<!\{)\{(\w+)\}(?!\})/g, (_m, field) => {
-              const val = attributes[field]
-              return val != null ? String(val) : ''
-            })
+            substituted = substituteLegacyTokens(substituted, attributes)
             const html = convertTemplateToHtml(substituted)
             // Match Esri Feature widget DOM: title heading + text content
             const titleTemplate = popupTemplate.title || ''
             let title = substituteTokens(titleTemplate, attributes)
-            title = title.replace(/(?<!\{)\{(\w+)\}(?!\})/g, (_m, field) => {
-              const val = attributes[field]
-              return val != null ? String(val) : ''
-            })
+            title = substituteLegacyTokens(title, attributes)
             const titleHtml = title ? `<div class="esri-widget__heading">${title}</div>` : ''
             const contentHtml = isExpanded || !isVerticalAlign ? `<div class="esri-feature__text">${html}</div>` : ''
             return `${titleHtml}${contentHtml}`
@@ -855,7 +883,7 @@ export const QueryResultItem = (props: ResultItemProps) => {
         </div>
       ) : (
         <FeatureInfo
-          graphic={data.feature as __esri.Graphic}
+          graphic={data.feature as Graphic}
           popupTemplate={popupTemplate}
           defaultPopupTemplate={defaultPopupTemplate}
           togglable={isVerticalAlign}
@@ -869,7 +897,11 @@ export const QueryResultItem = (props: ResultItemProps) => {
           If collapsed and no zoom button, show trash directly (no three-dot menu needed). */}
       <div className={classNames('result-actions-menu', { 'result-actions-expanded': (isExpanded || !isVerticalAlign) })}>
         {(isExpanded || !isVerticalAlign) ? (
-          <>
+          // r027.076: Explicit React.Fragment instead of <>…</> — the file uses
+          // /** @jsx jsx */ (emotion) without a paired @jsxFrag pragma, so the
+          // shorthand triggers TS17017. Spelling it out avoids touching the
+          // file pragma.
+          <React.Fragment>
             {onZoomTo && !zoomOnResultClick && (
               <button
                 type="button"
@@ -904,7 +936,7 @@ export const QueryResultItem = (props: ResultItemProps) => {
             >
               <span css={trashIconStyle} aria-hidden="true" />
             </button>
-          </>
+          </React.Fragment>
         ) : ((zoomOnResultClick || !onZoomTo) && (panOnResultClick || !onPanTo)) ? (
           /* r024.46/r026.009: Both zoom and pan are either default-click or absent — just show trash directly */
           <button

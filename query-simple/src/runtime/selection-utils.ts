@@ -3,12 +3,21 @@
  * Consolidates repeated selection logic to follow DRY principles.
  */
 
+// r027.000: ExB 1.20 — DataRecord.getId() now returns string | number.
+// All record IDs are coerced to string via String() at point of use to maintain
+// consistent string-based ID handling throughout the widget.
+
 import type { DataSource, FeatureLayerDataSource, FeatureDataRecord } from 'jimu-core'
 import { MessageManager, DataRecordsSelectionChangeMessage, DataSourceManager, DataRecordSetChangeMessage, RecordSetChangeType } from 'jimu-core'
 import { addHighlightGraphics as addGraphicsLayerGraphics, clearGraphicsLayerOrGroupLayer, createOrGetGraphicsLayer, cleanupGraphicsLayer, cleanupAnyResultLayer, clearAnyResultLayerContents } from './graphics-layer-utils'
 import { createQuerySimpleDebugLogger } from 'widgets/shared-code/mapsimple-common'
 import { clearDataSFromHash } from './hash-utils'
+import { clearSelectOnMapHighlight } from '../data-actions/add-to-map-action'
 import type { EventManager } from './managers/event-manager'
+import type GraphicsLayer from '@arcgis/core/layers/GraphicsLayer'
+import type GroupLayer from '@arcgis/core/layers/GroupLayer'
+import type MapView from '@arcgis/core/views/MapView'
+import type SceneView from '@arcgis/core/views/SceneView'
 
 const debugLogger = createQuerySimpleDebugLogger()
 
@@ -102,8 +111,8 @@ export async function selectRecordsInDataSources(
   recordIds: string[],
   records?: FeatureDataRecord[],
   useGraphicsLayer: boolean = false,
-  graphicsLayer?: __esri.GraphicsLayer | __esri.GroupLayer,
-  mapView?: __esri.MapView | __esri.SceneView,
+  graphicsLayer?: GraphicsLayer | GroupLayer,
+  mapView?: MapView | SceneView,
   skipOriginDSSelection: boolean = false
 ): Promise<void> {
   if (!outputDS) return
@@ -236,7 +245,7 @@ export async function clearSelectionInDataSources (
   widgetId: string,
   outputDS: DataSource | null | undefined,
   useGraphicsLayer: boolean = false,
-  graphicsLayer?: __esri.GraphicsLayer | __esri.GroupLayer
+  graphicsLayer?: GraphicsLayer | GroupLayer
 ): Promise<void> {
   // Clear graphics layer if using graphics layer mode
   if (useGraphicsLayer && graphicsLayer) {
@@ -272,8 +281,8 @@ export async function clearAllSelectionsForWidget(options: {
   widgetId: string
   outputDS: DataSource | null | undefined
   useGraphicsLayer: boolean
-  graphicsLayer?: __esri.GraphicsLayer | __esri.GroupLayer
-  mapView?: __esri.MapView | __esri.SceneView
+  graphicsLayer?: GraphicsLayer | GroupLayer
+  mapView?: MapView | SceneView
   eventManager?: EventManager
   queryItemConfigId?: string
   onDestroyGraphicsLayer?: () => void
@@ -369,6 +378,9 @@ export async function clearAllSelectionsForWidget(options: {
         })
       }
     }
+
+    // r027.096: Clear any direct highlight from Select on Map
+    clearSelectOnMapHighlight()
 
     // Close popup
     if (mapView?.popup?.visible) {
@@ -493,8 +505,8 @@ export async function selectRecordsAndPublish(
   records: FeatureDataRecord[],
   alsoPublishToOutputDS: boolean = false,
   useGraphicsLayer: boolean = false,
-  graphicsLayer?: __esri.GraphicsLayer,
-  mapView?: __esri.MapView | __esri.SceneView,
+  graphicsLayer?: GraphicsLayer | GroupLayer,
+  mapView?: MapView | SceneView,
   skipOriginDSSelection: boolean = false
 ): Promise<void> {
   await selectRecordsInDataSources(outputDS, recordIds, records, useGraphicsLayer, graphicsLayer, mapView, skipOriginDSSelection)

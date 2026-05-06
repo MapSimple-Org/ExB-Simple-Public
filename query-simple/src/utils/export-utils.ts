@@ -280,7 +280,13 @@ export function convertToGeoJSON(records: DataRecord[], fieldMapping: FieldMappi
     try {
       const esriGeom = featureRecord.getGeometry?.()
       if (esriGeom) {
-        const geomJson = typeof esriGeom.toJSON === 'function' ? esriGeom.toJSON() : esriGeom
+        // r027.073: getGeometry() is typed IGeometry (REST shape, no toJSON).
+        // At runtime the value is sometimes a JSAPI Geometry instance with
+        // .toJSON(), sometimes already the REST JSON shape. The typeof guard
+        // distinguishes; the `as any` lets TS accept the defensive check
+        // without adding an IGeometry import just for the cast.
+        const geomAny = esriGeom as any
+        const geomJson = typeof geomAny.toJSON === 'function' ? geomAny.toJSON() : esriGeom
         geometry = esriGeometryToGeoJSON(geomJson)
       }
     } catch (e) {

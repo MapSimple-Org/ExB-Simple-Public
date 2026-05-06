@@ -2,12 +2,17 @@ import React from 'react'
 import { type AllWidgetProps, type DataSource } from 'jimu-core'
 import { type IMConfig } from '../../config'
 import { createOrGetGraphicsLayer, createOrGetResultGroupLayer, cleanupGraphicsLayer, cleanupGroupLayer, clearGraphicsLayerOrGroupLayer } from '../graphics-layer-utils'
-import { createQuerySimpleDebugLogger, highlightConfigManager } from 'widgets/shared-code/mapsimple-common'
+import { createQuerySimpleDebugLogger, widgetConfigManager } from 'widgets/shared-code/mapsimple-common'
+import type GraphicsLayer from '@arcgis/core/layers/GraphicsLayer'
+import type GroupLayer from '@arcgis/core/layers/GroupLayer'
+import type MapView from '@arcgis/core/views/MapView'
+import type SceneView from '@arcgis/core/views/SceneView'
+import type Layer from '@arcgis/core/layers/Layer'
 
 const debugLogger = createQuerySimpleDebugLogger()
 
 interface GraphicsLayerCallbacks {
-  onGraphicsLayerInitialized?: (graphicsLayer: __esri.GraphicsLayer | __esri.GroupLayer) => void
+  onGraphicsLayerInitialized?: (graphicsLayer: GraphicsLayer) => void
   onGraphicsLayerCleaned?: () => void
 }
 
@@ -22,15 +27,40 @@ interface GraphicsLayerCallbacks {
  * Note: This is a utility class (not a hook) to work with class components.
  */
 export class GraphicsLayerManager {
-  private graphicsLayerRef: React.RefObject<__esri.GraphicsLayer | __esri.GroupLayer | null>
-  private mapViewRef: React.RefObject<__esri.MapView | __esri.SceneView | null>
+  private graphicsLayerRef: React.RefObject<GraphicsLayer | null>
+  private mapViewRef: React.RefObject<MapView | SceneView | null>
+  // r027.033: When useGroupLayer is true the GraphicsLayer is wrapped in a
+  // GroupLayer. Track the parent here so cleanup/clear can target it without
+  // exposing it to consumers (who only need the inner GraphicsLayer).
+  private groupLayer: GroupLayer | null = null
 
   constructor(
-    graphicsLayerRef: React.RefObject<__esri.GraphicsLayer | __esri.GroupLayer | null>,
-    mapViewRef: React.RefObject<__esri.MapView | __esri.SceneView | null>
+    graphicsLayerRef: React.RefObject<GraphicsLayer | null>,
+    mapViewRef: React.RefObject<MapView | SceneView | null>
   ) {
     this.graphicsLayerRef = graphicsLayerRef
     this.mapViewRef = mapViewRef
+  }
+
+  /**
+   * r027.086: Returns the "results layer" — the layer that consumers should
+   * pass to `addHighlightGraphics`, `removeHighlightGraphics`, and
+   * `ensureLegendFeatureLayer`.
+   *
+   * In GroupLayer mode (`addResultsAsMapLayer: true`), that's the parent
+   * GroupLayer — those utility functions discriminate at runtime via
+   * `type === 'group'` and walk the GroupLayer's sublayers to find or
+   * maintain the legend FeatureLayer. In flat mode, it's the inner
+   * GraphicsLayer (same as `graphicsLayerRef.current`).
+   *
+   * `graphicsLayerRef.current` always holds the inner GraphicsLayer (the
+   * manager's invariant since r027.033). This accessor returns the parent
+   * GroupLayer when one exists, falling back to the inner GraphicsLayer
+   * otherwise. Use this instead of reading `graphicsLayerRef.current`
+   * directly anywhere the legend semantics matter.
+   */
+  public getResultsLayer (): GraphicsLayer | GroupLayer | null {
+    return this.groupLayer ?? this.graphicsLayerRef.current
   }
 
   /**
@@ -47,11 +77,11 @@ export class GraphicsLayerManager {
    */
   async initialize(
     widgetId: string,
-    mapView: __esri.MapView | __esri.SceneView,
+    mapView: MapView | SceneView,
     callbacks?: GraphicsLayerCallbacks
-  ): Promise<__esri.GraphicsLayer | __esri.GroupLayer | null> {
+  ): Promise<GraphicsLayer | null> {
     // r024.2: Check if LayerList mode is enabled
-    const useGroupLayer = highlightConfigManager.getAddResultsAsMapLayer(widgetId)
+    const useGroupLayer = widgetConfigManager.getAddResultsAsMapLayer(widgetId)
     
     // Chunk 4: Comparison logging - new implementation
     const newStateBefore = {
@@ -74,6 +104,9 @@ export class GraphicsLayerManager {
     
     try {
       // r024.2: Create GroupLayer or GraphicsLayer based on config
+      // r027.033: When useGroupLayer, the actual GraphicsLayer lives inside the
+      // GroupLayer. Resolve it by predictable child id and store the parent
+      // separately so consumers always see a real GraphicsLayer.
       const layer = useGroupLayer
         ? await createOrGetResultGroupLayer(widgetId, mapView)
         : await createOrGetGraphicsLayer(widgetId, mapView)
@@ -92,9 +125,38 @@ export class GraphicsLayerManager {
         return null
       }
 
+      let graphicsLayer: GraphicsLayer
+      if (useGroupLayer) {
+        const groupLayer = layer as GroupLayer
+        // Inner id pattern set by createGroupLayerInternal: `${groupLayer.id}-graphics`
+        const innerId = `${groupLayer.id}-graphics`
+        const inner = groupLayer.layers.find(l => l.id === innerId) as GraphicsLayer | undefined
+        if (!inner) {
+          debugLogger.log('CHUNK-4-COMPARE', {
+            event: 'new-implementation-initializeGraphicsLayer-failed',
+            widgetId,
+            useGroupLayer,
+            newImplementation: {
+              stateBefore: newStateBefore,
+              result: 'failed',
+              reason: 'inner-graphics-layer-not-found',
+              groupLayerId: groupLayer.id,
+              expectedInnerId: innerId,
+              timestamp: Date.now()
+            }
+          })
+          return null
+        }
+        this.groupLayer = groupLayer
+        graphicsLayer = inner
+      } else {
+        this.groupLayer = null
+        graphicsLayer = layer as GraphicsLayer
+      }
+
       // Store references
       this.mapViewRef.current = mapView
-      this.graphicsLayerRef.current = layer
+      this.graphicsLayerRef.current = graphicsLayer
 
       const newStateAfter = {
         hasGraphicsLayer: !!this.graphicsLayerRef.current,
@@ -111,7 +173,7 @@ export class GraphicsLayerManager {
           stateBefore: newStateBefore,
           stateAfter: newStateAfter,
           result: 'success',
-          layerId: layer.id,
+          layerId: graphicsLayer.id,
           layerType: useGroupLayer ? 'group' : 'graphics',
           viewType: mapView.type || 'unknown',
           timestamp: Date.now()
@@ -120,10 +182,10 @@ export class GraphicsLayerManager {
 
       // Call callback if provided
       if (callbacks?.onGraphicsLayerInitialized) {
-        callbacks.onGraphicsLayerInitialized(layer)
+        callbacks.onGraphicsLayerInitialized(graphicsLayer)
       }
 
-      return layer
+      return graphicsLayer
     } catch (error) {
       debugLogger.log('CHUNK-4-COMPARE', {
         event: 'new-implementation-initializeGraphicsLayer-error',
@@ -152,7 +214,7 @@ export class GraphicsLayerManager {
     widgetId: string,
     config: IMConfig,
     outputDS: DataSource,
-    mapView: __esri.MapView | __esri.SceneView | null,
+    mapView: MapView | SceneView | null,
     callbacks?: GraphicsLayerCallbacks
   ): Promise<void> {
     // Chunk 4: Comparison logging - new implementation
@@ -220,9 +282,9 @@ export class GraphicsLayerManager {
     widgetId: string,
     callbacks?: GraphicsLayerCallbacks
   ): void {
-    // r024.2: Check layer type to determine cleanup method
-    const layer = this.graphicsLayerRef.current
-    const isGroupLayer = layer && (layer as __esri.Layer).type === 'group'
+    // r027.033: groupLayer ref tells us which cleanup path to use without
+    // having to introspect a runtime type on a now-narrowed graphicsLayerRef.
+    const isGroupLayer = !!this.groupLayer
     
     // Chunk 4: Comparison logging - new implementation
     const newStateBefore = {
@@ -253,6 +315,7 @@ export class GraphicsLayerManager {
       }
       this.mapViewRef.current = null
       this.graphicsLayerRef.current = null
+      this.groupLayer = null
 
       const newStateAfter = {
         hasGraphicsLayer: !!this.graphicsLayerRef.current,
@@ -299,27 +362,24 @@ export class GraphicsLayerManager {
    * @param config - Widget configuration
    */
   clearGraphics(widgetId: string, config: IMConfig): void {
-    // Chunk 4: Comparison logging - new implementation
-    const layer = this.graphicsLayerRef.current
-    const isGroupLayer = layer && (layer as __esri.Layer).type === 'group'
-    
+    // r027.033: Read group via dedicated ref, not by introspecting graphicsLayerRef.
+    const graphicsLayer = this.graphicsLayerRef.current
+    const isGroupLayer = !!this.groupLayer
+
     // r024.2: Get graphics count based on layer type
     let graphicsCount = 0
-    if (layer) {
-      if (isGroupLayer) {
-        const gl = layer as __esri.GroupLayer
-        gl.layers.forEach((sublayer: __esri.Layer) => {
-          const glSub = sublayer as __esri.GraphicsLayer
-          if (glSub.graphics) graphicsCount += glSub.graphics.length
-        })
-      } else {
-        graphicsCount = (layer as __esri.GraphicsLayer).graphics?.length || 0
-      }
+    if (this.groupLayer) {
+      this.groupLayer.layers.forEach((sublayer: Layer) => {
+        const glSub = sublayer as GraphicsLayer
+        if (glSub.graphics) graphicsCount += glSub.graphics.length
+      })
+    } else if (graphicsLayer) {
+      graphicsCount = graphicsLayer.graphics?.length || 0
     }
-    
+
     const newStateBefore = {
-      hasGraphicsLayer: !!layer,
-      graphicsLayerId: layer?.id || null,
+      hasGraphicsLayer: !!graphicsLayer,
+      graphicsLayerId: graphicsLayer?.id || null,
       graphicsCount,
       isGroupLayer
     }
@@ -334,16 +394,19 @@ export class GraphicsLayerManager {
       }
     })
     
-    if (layer) {
+    // r027.033: Clear the parent group when present so legend sub-layers are
+    // also cleared; otherwise just the standalone GraphicsLayer.
+    const targetForClear = this.groupLayer || graphicsLayer
+    if (targetForClear) {
       // r024.2: Use unified clear function
-      clearGraphicsLayerOrGroupLayer(layer)
-      
+      clearGraphicsLayerOrGroupLayer(targetForClear)
+
       const newStateAfter = {
         hasGraphicsLayer: !!this.graphicsLayerRef.current,
         graphicsLayerId: this.graphicsLayerRef.current?.id || null,
         graphicsCount: 0
       }
-      
+
       debugLogger.log('CHUNK-4-COMPARE', {
         event: 'new-implementation-clearGraphicsLayerIfExists-complete',
         widgetId,
@@ -352,7 +415,7 @@ export class GraphicsLayerManager {
           stateBefore: newStateBefore,
           stateAfter: newStateAfter,
           result: 'complete',
-          layerId: layer.id,
+          layerId: targetForClear.id,
           timestamp: Date.now()
         }
       })
@@ -371,11 +434,20 @@ export class GraphicsLayerManager {
   }
 
   /**
-   * Gets the current graphics layer or group layer.
-   * r024.2: Return type updated to include GroupLayer.
+   * Gets the inner GraphicsLayer (the one graphics are drawn into).
+   * Always a GraphicsLayer or null — never the outer GroupLayer.
    */
-  getGraphicsLayer(): __esri.GraphicsLayer | __esri.GroupLayer | null {
+  getGraphicsLayer(): GraphicsLayer | null {
     return this.graphicsLayerRef.current
+  }
+
+  /**
+   * r027.033: Returns the parent GroupLayer when useGroupLayer mode is active,
+   * else null. For parent-only ops (LayerList visibility, sibling legend
+   * layers). For graphics manipulation use getGraphicsLayer().
+   */
+  getGroupLayer(): GroupLayer | null {
+    return this.groupLayer
   }
 
   /**
@@ -387,7 +459,7 @@ export class GraphicsLayerManager {
    */
   shouldInitialize(
     config: IMConfig,
-    mapView: __esri.MapView | __esri.SceneView | null
+    mapView: MapView | SceneView | null
   ): boolean {
     return !!(mapView && !this.graphicsLayerRef.current)
   }

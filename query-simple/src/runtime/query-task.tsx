@@ -38,6 +38,7 @@ import { Button, Tooltip, FOCUSABLE_CONTAINER_CLASS, Tabs, Tab, Select, Loading,
 import { InfoOutlined } from 'jimu-icons/outlined/suggested/info'
 import { TrashOutlined } from 'jimu-icons/outlined/editor/trash'
 import { PagingType, type QueryItemType, type SpatialFilterObj, SelectionType } from '../config'
+import { getClauseFieldName } from './sql-clause-utils'
 import { type JimuMapView } from 'jimu-arcgis'
 import { QueryTabContent } from './tabs/QueryTabContent'
 import { SpatialTabContent } from './tabs/SpatialTabContent'
@@ -53,7 +54,7 @@ import { executeFormSubmit } from './query-submit-handler'
 import { executeSpatialQuery, type SpatialQueryResult, convertSpatialResultsToRecords } from './execute-spatial-query'
 import { mergeResultsIntoAccumulated, removeResultsFromAccumulated } from './results-management-utils'
 
-import { cleanupGraphicsLayer, cleanupAnyResultLayer, clearAnyResultLayerContents } from './graphics-layer-utils'
+import { cleanupGraphicsLayer, cleanupAnyResultLayer, clearAnyResultLayerContents, getGraphicsCountFromLayer, forEachGraphicInLayer } from './graphics-layer-utils'
 import { MenuOutlined } from 'jimu-icons/outlined/editor/menu'
 import defaultMessage from './translations/default'
 import { ArrowLeftOutlined } from 'jimu-icons/outlined/directional/arrow-left'
@@ -61,6 +62,12 @@ import { LoadingResult } from './loading-result'
 import { clearSelectionInDataSources, selectRecordsAndPublish, findClearResultsButton, dispatchSelectionEvent, getOriginDataSource, clearAllSelectionsForWidget } from './selection-utils'
 import { createQuerySimpleDebugLogger, globalHandleManager } from 'widgets/shared-code/mapsimple-common'
 import { queryTaskReducer, INITIAL_STATE } from './query-task-reducer'
+import type Extent from '@arcgis/core/geometry/Extent'
+import type GraphicsLayer from '@arcgis/core/layers/GraphicsLayer'
+import type GroupLayer from '@arcgis/core/layers/GroupLayer'
+import type MapView from '@arcgis/core/views/MapView'
+import type SceneView from '@arcgis/core/views/SceneView'
+import type Geometry from '@arcgis/core/geometry/Geometry'
 
 const debugLogger = createQuerySimpleDebugLogger()
 
@@ -97,11 +104,12 @@ export interface QueryTaskProps {
   resultsMode?: SelectionType
   onResultsModeChange?: (mode: SelectionType) => void
   accumulatedRecords?: FeatureDataRecord[]
-  resultsExtent?: __esri.Extent | null  // r024.74: Cached extent for zoom/pan actions
+  resultsExtent?: Extent | null  // r024.74: Cached extent for zoom/pan actions
   onAccumulatedRecordsChange?: (records: FeatureDataRecord[]) => void
   // Graphics layer props
-  graphicsLayer?: __esri.GraphicsLayer
-  mapView?: __esri.MapView | __esri.SceneView
+  graphicsLayer?: GraphicsLayer | GroupLayer
+  mapView?: MapView | SceneView
+  // r027.091: hoverLayer prop removed — hover pins use mapView.graphics
   onInitializeGraphicsLayer?: (outputDS: DataSource) => Promise<void>
   onClearGraphicsLayer?: () => void
   onDestroyGraphicsLayer?: () => void // r021.17: Clear refs after destroying layer
@@ -125,7 +133,7 @@ const getQueryDisplayName = (item: ImmutableObject<QueryItemType>): string => {
   }
   
   // Second priority: field name from SQL expression
-  const jimuFieldName = item.sqlExprObj?.parts?.[0]?.jimuFieldName
+  const jimuFieldName = getClauseFieldName(item.sqlExprObj?.parts?.[0])
   if (jimuFieldName) {
     return jimuFieldName
   }
@@ -774,7 +782,7 @@ export function QueryTask (props: QueryTaskProps) {
             widgetId: props.widgetId,
             outputDSId: featureDS.id,
             recordCount: allRecordIds.length,
-            graphicsCount: graphicsLayer?.graphics?.length || 0,
+            graphicsCount: getGraphicsCountFromLayer(graphicsLayer),
             timestamp: Date.now()
           })
         }
@@ -836,7 +844,8 @@ export function QueryTask (props: QueryTaskProps) {
           const accumulatedIds = accumulatedRecords.map(r => r.getId())
           const actuallySelectedIdsBeforeSync = actuallySelectedRecordsBeforeSync.map(r => r.getId())
           // r018.78: Use 'recordId' attribute - that's how graphics-layer-utils stores them
-          const graphicsLayerIds = graphicsLayer?.graphics?.map(g => g.attributes?.recordId) || []
+          const graphicsLayerIds: string[] = []
+          forEachGraphicInLayer(graphicsLayer, g => graphicsLayerIds.push(g.attributes?.recordId))
           
           debugLogger.log('RESULTS-MODE', {
             event: 'query-switch-before-sync-full-state',
@@ -847,7 +856,7 @@ export function QueryTask (props: QueryTaskProps) {
             accumulatedIds: accumulatedIds,
             outputDSSelectedCount: actuallySelectedRecordsBeforeSync.length,
             outputDSSelectedIds: actuallySelectedIdsBeforeSync,
-            graphicsLayerCount: graphicsLayer?.graphics?.length || 0,
+            graphicsLayerCount: getGraphicsCountFromLayer(graphicsLayer),
             graphicsLayerIds: graphicsLayerIds,
             recordsOutOfSync: accumulatedIds.length !== actuallySelectedIdsBeforeSync.length,
             idsMatch: JSON.stringify(accumulatedIds.sort()) === JSON.stringify(actuallySelectedIdsBeforeSync.sort()),
@@ -1057,7 +1066,7 @@ export function QueryTask (props: QueryTaskProps) {
   // ─── Spatial Query Execution ────────────────────────────────────────
   // r025.031: Full pipeline — execute spatial query, convert to records, apply mode, graphics, zoom
   const handleExecuteSpatialQuery = React.useCallback(async (params: {
-    inputGeometry: __esri.Geometry
+    inputGeometry: Geometry
     selectedRelationship: string
     selectedLayers: Array<{ value: string | number; label: string }>
     bufferDistance: number
@@ -1199,7 +1208,10 @@ export function QueryTask (props: QueryTaskProps) {
 
     // 6. Graphics on map via selectRecordsAndPublish
     if (recordsToDisplay.length > 0 && graphicsLayer && mapView) {
-      const recordIds = recordsToDisplay.map(r => r.getId())
+      // r027.067: getId() returns string|number in ExB 1.20; selectRecordsAndPublish
+      // expects string[]. String() coercion matches the project's existing pattern
+      // for ID coercion (see r027 getId() narrowing batch).
+      const recordIds = recordsToDisplay.map(r => String(r.getId()))
       await selectRecordsAndPublish(
         props.widgetId,
         outputDS,
@@ -1682,9 +1694,9 @@ export function QueryTask (props: QueryTaskProps) {
               onResultsModeChange={onResultsModeChange}
               accumulatedRecords={accumulatedRecords}
               onAccumulatedRecordsChange={onAccumulatedRecordsChange}
-              outputDS={outputDS}
+              outputDS={outputDS as any}
               dataSource={dataSource}
-              effectiveRecords={effectiveRecords}
+              effectiveRecords={effectiveRecords as any}
               enabled={enabled}
               dsExists={dsExists}
               spatialFilterEnabled={spatialFilterEnabled}
@@ -1694,7 +1706,7 @@ export function QueryTask (props: QueryTaskProps) {
               onHashParameterUsed={onHashParameterUsed}
               handleStatusChange={handleStatusChange}
               handleDataSourceCreated={handleDataSourceCreated}
-              activeTab={activeTab}
+              activeTab={activeTab as any}
               setActiveTab={setActiveTab}
               noResultsAlert={noResultsAlert}
               onDismissNoResultsAlert={() => dispatch({ type: 'SET_NO_RESULTS_ALERT', payload: null })}
@@ -1795,7 +1807,7 @@ export function QueryTask (props: QueryTaskProps) {
                 onAccumulatedRecordsChange={onAccumulatedRecordsChange}
                 eventManager={eventManager}
                 isQuerySwitchInProgressRef={isQuerySwitchInProgressRef}
-                queries={queryItems}
+                queries={queryItems as any}
                 zoomOnResultClick={zoomOnResultClick}
                 panOnResultClick={panOnResultClick}
                 hoverPinColor={hoverPinColor}

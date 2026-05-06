@@ -17,7 +17,7 @@ import {
   type IMSqlExpression,
   type DataSource,
   type DataRecord,
-  type QueryParams,
+  type FeatureLayerQueryParams,
   DataSourceStatus,
   type FeatureLayerDataSource,
   type FeatureDataRecord
@@ -27,10 +27,14 @@ import { type QueryTaskAction } from './query-task-reducer'
 import { generateQueryParams, executeQuery } from './query-utils'
 import { executeDirectQuery } from './direct-query'
 import { mergeResultsIntoAccumulated, removeResultsFromAccumulated, removeRecordsFromOriginSelections } from './results-management-utils'
-import { removeHighlightGraphics } from './graphics-layer-utils'
+import { removeHighlightGraphics, getGraphicsCountFromLayer, forEachGraphicInLayer } from './graphics-layer-utils'
 import { clearSelectionInDataSources, dispatchSelectionEvent } from './selection-utils'
 import { createQuerySimpleDebugLogger } from 'widgets/shared-code/mapsimple-common'
 import type { EventManager } from './managers/event-manager'
+import type GraphicsLayer from '@arcgis/core/layers/GraphicsLayer'
+import type GroupLayer from '@arcgis/core/layers/GroupLayer'
+import type MapView from '@arcgis/core/views/MapView'
+import type SceneView from '@arcgis/core/views/SceneView'
 
 const debugLogger = createQuerySimpleDebugLogger()
 
@@ -85,7 +89,10 @@ export interface QueryExecutionContext {
   hasSelectedRecordsRef: React.MutableRefObject<boolean>
   recordsRef: React.MutableRefObject<DataRecord[]>
   lastQueryResultCountRef: React.MutableRefObject<number>
-  queryParamRef: React.MutableRefObject<QueryParams>
+  // r027.065: QueryParams base type lost where/outFields/orderByFields in ExB 1.20.
+  // Bumped to FeatureLayerQueryParams to match what generateQueryParams() returns
+  // and what is read on .current (.where, .orderByFields).
+  queryParamRef: React.MutableRefObject<FeatureLayerQueryParams>
 
   // Props
   widgetId: string
@@ -94,8 +101,8 @@ export interface QueryExecutionContext {
   currentItem: QueryItemType
   resultsMode?: SelectionType
   accumulatedRecords?: FeatureDataRecord[]
-  graphicsLayer?: __esri.GraphicsLayer
-  mapView?: __esri.MapView | __esri.SceneView
+  graphicsLayer?: GraphicsLayer | GroupLayer
+  mapView?: MapView | SceneView
   eventManager?: EventManager
   initialInputValue?: string
   onAccumulatedRecordsChange?: (records: FeatureDataRecord[]) => void
@@ -185,7 +192,7 @@ export async function executeQueryInternal (
     debugLogger.log('RESULTS-MODE', {
       event: 'capture-existing-records-detailed',
       widgetId,
-      queryItemId: queryItem?.id,
+      queryItemId: (queryItem as any)?.id,
       fromPropCount: fromProp.length,
       fromPropIds: fromProp.map(r => r.getId?.()).slice(0, 5),
       fromDSCount: fromDS.length,
@@ -239,7 +246,7 @@ export async function executeQueryInternal (
   // Use data source's max record count, or fall back to a large number (10000)
   const maxRecordCount = (featureDS as any).getMaxRecordCount?.() ?? 10000
   const pageSize = maxRecordCount
-  const queryParams = generateQueryParams(featureDS, sqlExpr, spatialFilter, currentItem, 1, pageSize)
+  const queryParams = generateQueryParams(featureDS, sqlExpr, spatialFilter, currentItem as any, 1, pageSize)
   queryParamRef.current = queryParams
 
   debugLogger.log('TASK', {
@@ -407,7 +414,7 @@ export async function executeQueryInternal (
               outputDS as FeatureLayerDataSource, // Use outputDS for NEW records
               result.records as FeatureDataRecord[],
               existingRecordsForMerge, // Use consistently captured records
-              queryItems // For looking up originDS by __queryConfigId
+              queryItems as any // For looking up originDS by __queryConfigId
             )
 
             const mergedRecords = mergeResult.mergedRecords
@@ -417,9 +424,10 @@ export async function executeQueryInternal (
             recordsToDisplay = mergedRecords
 
             // For diagnostic logging only
-            const existingIds = existingRecordsForMerge.map(r => r.getId())
-            const newRecordIds = result.records.map(r => r.getId())
-            const mergedIds = mergedRecords.map(r => r.getId())
+            // r027.000: ExB 1.20 — coerce getId() to string (now returns string | number)
+            const existingIds = existingRecordsForMerge.map(r => String(r.getId()))
+            const newRecordIds = result.records.map(r => String(r.getId()))
+            const mergedIds = mergedRecords.map(r => String(r.getId()))
 
             debugLogger.log('RESULTS-MODE', {
               event: 'add-mode-merge-complete',
@@ -472,8 +480,13 @@ export async function executeQueryInternal (
             // r023.30: Get origin DS ID for cross-layer removal support
             const originDSId = featureDS.getOriginDataSources()?.[0]?.id || featureDS.id
 
-            result.records.forEach(record => {
-              const recordId = record.getId()
+            // r027.068: Cast to FeatureDataRecord[] for .feature access. result.records
+            // is typed DataRecord[] (the direct-query path at line 305 widens the cast),
+            // but at runtime both paths return FeatureDataRecord[]. Same cast pattern
+            // already used at line 414.
+            ;(result.records as FeatureDataRecord[]).forEach(record => {
+              // r027.000: ExB 1.20 — coerce getId() to string (now returns string | number)
+              const recordId = String(record.getId())
               // Only stamp records that were actually added (not duplicates)
               if (addedIds.includes(recordId)) {
                 // Store queryConfigId and originDSId directly on the record
@@ -526,7 +539,7 @@ export async function executeQueryInternal (
             existingCount: existingRecordsForMerge.length,
             recordsWithConfigId: existingRecordsForMerge.filter(r => r.feature?.attributes?.__queryConfigId).length,
             sampleRecords: existingRecordsForMerge.slice(0, 3).map(r => ({
-              recordId: r.getId(),
+              recordId: String(r.getId()),
               hasConfigId: !!r.feature?.attributes?.__queryConfigId,
               queryConfigId: r.feature?.attributes?.__queryConfigId || 'MISSING'
             })),
@@ -565,14 +578,15 @@ export async function executeQueryInternal (
             }
 
             // FIX (r018.86): DIAGNOSTIC - Graphics count BEFORE removeRecordsFromOriginSelections
-            const graphicsCountBeforeRemoveMode = graphicsLayer?.graphics?.length || 0
-            const graphicsIdsBeforeRemoveMode = graphicsLayer?.graphics?.map(g => g.attributes?.recordId).slice(0, 10) || []
+            const graphicsCountBeforeRemoveMode = getGraphicsCountFromLayer(graphicsLayer)
+            const graphicsIdsBeforeRemoveMode: string[] = []
+            forEachGraphicInLayer(graphicsLayer, g => { if (graphicsIdsBeforeRemoveMode.length < 10) graphicsIdsBeforeRemoveMode.push(g.attributes?.recordId) })
 
             debugLogger.log('RESULTS-MODE', {
               event: 'remove-mode-BEFORE-removeRecordsFromOriginSelections',
               widgetId,
               recordsToRemoveCount: result.records.length,
-              recordsToRemoveIds: result.records.map(r => r.getId()).slice(0, 10),
+              recordsToRemoveIds: result.records.map(r => String(r.getId())).slice(0, 10),
               graphicsCountBefore: graphicsCountBeforeRemoveMode,
               graphicsIdsBefore: graphicsIdsBeforeRemoveMode,
               timestamp: Date.now()
@@ -597,14 +611,14 @@ export async function executeQueryInternal (
             // since removeRecordsFromOriginSelections doesn't receive graphics layer params
             // r021.91: Pass records for composite key matching
             if (graphicsLayer && result.records && result.records.length > 0) {
-              const removedRecordIds = result.records.map(r => r.getId())
+              const removedRecordIds = result.records.map(r => String(r.getId()))
               removeHighlightGraphics(graphicsLayer, removedRecordIds, result.records as FeatureDataRecord[])
 
               debugLogger.log('RESULTS-MODE', {
                 event: 'remove-mode-manual-graphics-removal',
                 widgetId,
                 graphicsCountBefore: graphicsCountBeforeRemoveMode,
-                graphicsCountAfter: graphicsLayer?.graphics?.length || 0,
+                graphicsCountAfter: getGraphicsCountFromLayer(graphicsLayer),
                 removedRecordIdsCount: removedRecordIds.length,
                 removedRecordIds: removedRecordIds.slice(0, 10),
                 timestamp: Date.now()
@@ -624,8 +638,9 @@ export async function executeQueryInternal (
             }
 
             // FIX (r018.86): DIAGNOSTIC - Graphics count AFTER removeRecordsFromOriginSelections
-            const graphicsCountAfterRemoveMode = graphicsLayer?.graphics?.length || 0
-            const graphicsIdsAfterRemoveMode = graphicsLayer?.graphics?.map(g => g.attributes?.recordId).slice(0, 10) || []
+            const graphicsCountAfterRemoveMode = getGraphicsCountFromLayer(graphicsLayer)
+            const graphicsIdsAfterRemoveMode: string[] = []
+            forEachGraphicInLayer(graphicsLayer, g => { if (graphicsIdsAfterRemoveMode.length < 10) graphicsIdsAfterRemoveMode.push(g.attributes?.recordId) })
 
             debugLogger.log('RESULTS-MODE', {
               event: 'remove-mode-AFTER-removeRecordsFromOriginSelections',
@@ -723,7 +738,8 @@ export async function executeQueryInternal (
 
           // r021.87: In NEW mode, stamp queryConfigId on all records
           // r023.30: Also stamp originDSId for cross-layer removal support
-          currentQueryRecordIdsRef.current = (recordsToDisplay as FeatureDataRecord[]).map(r => r.getId());
+          // r027.000: ExB 1.20 — coerce getId() to string (now returns string | number)
+          currentQueryRecordIdsRef.current = (recordsToDisplay as FeatureDataRecord[]).map(r => String(r.getId()));
           const originDSIdForNew = featureDS.getOriginDataSources()?.[0]?.id || featureDS.id
 
           ;(recordsToDisplay as FeatureDataRecord[]).forEach(record => {
@@ -759,7 +775,8 @@ export async function executeQueryInternal (
       // For "Remove from" mode, select remaining records (already updated via removeRecordsFromOriginSelections)
       // For "New" mode, select query results
       if (recordsToDisplay && recordsToDisplay.length > 0 && dsToUse) {
-        const recordIdsToSelect = recordsToDisplay.map(record => record.getId())
+        // r027.000: ExB 1.20 — coerce getId() to string (now returns string | number)
+        const recordIdsToSelect = recordsToDisplay.map(record => String(record.getId()))
 
         // For "Remove from" mode, selection was already updated via removeRecordsFromOriginSelections
         // But we still need to select in the outputDS for widget state consistency
@@ -806,7 +823,7 @@ export async function executeQueryInternal (
 
                 debugLogger.log('SELECTION-STATE-AUDIT', {
                   event: 'r022-73-checking-record',
-                  recordId: record.getId(),
+                  recordId: String(record.getId()),
                   hasQueryConfigId: !!queryConfigId,
                   queryConfigId,
                   timestamp: Date.now()
@@ -834,7 +851,7 @@ export async function executeQueryInternal (
                 groups: Array.from(recordsByOriginDS.entries()).map(([ds, records]) => ({
                   originDSId: ds.id,
                   recordCount: records.length,
-                  recordIds: records.map(r => r.getId())
+                  recordIds: records.map(r => String(r.getId()))
                 })),
                 timestamp: Date.now()
               })

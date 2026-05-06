@@ -5,13 +5,15 @@
  * how much the extent is expanded (default 1.2 = 20%). See docs/technical/ZOOM_EXTENT_EXPANSION.md.
  *
  * r025.059: Added widgetId param to auto-inject pointZoomBufferFeet from
- * HighlightConfigManager when no explicit zeroAreaBufferFeet override is passed.
+ * WidgetConfigManager when no explicit zeroAreaBufferFeet override is passed.
  */
 
 import React from 'react'
 import type { FeatureDataRecord } from 'jimu-core'
+import type MapView from '@arcgis/core/views/MapView'
+import type SceneView from '@arcgis/core/views/SceneView'
 import { zoomToRecords, panToRecords, type ZoomToRecordsOptions } from '../zoom-utils'
-import { highlightConfigManager } from 'widgets/shared-code/mapsimple-common'
+import { widgetConfigManager } from 'widgets/shared-code/mapsimple-common'
 
 /**
  * Returns a function that zooms the map to the given records.
@@ -21,7 +23,7 @@ import { highlightConfigManager } from 'widgets/shared-code/mapsimple-common'
  * injected as zeroAreaBufferFeet (unless explicitly overridden in options).
  */
 export function useZoomToRecords(
-  mapView?: __esri.MapView | __esri.SceneView,
+  mapView?: MapView | SceneView,
   widgetId?: string
 ): (records: FeatureDataRecord[], options?: ZoomToRecordsOptions) => Promise<void> {
 
@@ -36,10 +38,10 @@ export function useZoomToRecords(
     // r025.068: Auto-inject zoom expansion factor from widget config
     const mergedOptions = { ...options }
     if (widgetId && mergedOptions.zeroAreaBufferFeet === undefined) {
-      mergedOptions.zeroAreaBufferFeet = highlightConfigManager.getPointZoomBufferFeet(widgetId)
+      mergedOptions.zeroAreaBufferFeet = widgetConfigManager.getPointZoomBufferFeet(widgetId)
     }
     if (widgetId && mergedOptions.expansionFactor === undefined) {
-      mergedOptions.expansionFactor = highlightConfigManager.getZoomExpansionFactor(widgetId)
+      mergedOptions.expansionFactor = widgetConfigManager.getZoomExpansionFactor(widgetId)
     }
     await zoomToRecords(mapView, records, mergedOptions)
   }, [mapView, widgetId])
@@ -50,7 +52,7 @@ export function useZoomToRecords(
  * Mirrors useZoomToRecords pattern but calls panToRecords instead.
  */
 export function usePanToRecords(
-  mapView?: __esri.MapView | __esri.SceneView
+  mapView?: MapView | SceneView
 ): (records: FeatureDataRecord[]) => Promise<void> {
 
   return React.useCallback(async (

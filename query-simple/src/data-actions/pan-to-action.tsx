@@ -19,6 +19,12 @@ import { type DataRecordSet, DataLevel, type IntlShape } from 'jimu-core'
 import { createQuerySimpleDebugLogger } from 'widgets/shared-code/mapsimple-common'
 import type { FeatureDataRecord } from 'jimu-core'
 import { loadArcGISJSAPIModules } from 'jimu-arcgis'
+import type Point from '@arcgis/core/geometry/Point'
+import type Geometry from '@arcgis/core/geometry/Geometry'
+/** JSAPI 5.0 exports GeometryUnion from geometry/types; 4.x does not. Cast-only usage. */
+type GeometryUnion = any
+import type MapView from '@arcgis/core/views/MapView'
+import type SceneView from '@arcgis/core/views/SceneView'
 
 const debugLogger = createQuerySimpleDebugLogger()
 
@@ -27,34 +33,39 @@ const debugLogger = createQuerySimpleDebugLogger()
  */
 async function getRecordsCenter(
   records: FeatureDataRecord[]
-): Promise<__esri.Point | null> {
+): Promise<Point | null> {
   if (!records || records.length === 0) return null
   
-  const [geometryEngine, Point] = await loadArcGISJSAPIModules([
-    'esri/geometry/geometryEngine',
+  const [unionOperator, Point] = await loadArcGISJSAPIModules([
+    'esri/geometry/operators/unionOperator',
     'esri/geometry/Point'
-  ]) as [typeof __esri.geometryEngine, typeof __esri.Point]
-  
-  const geometries: __esri.Geometry[] = []
-  
+  ]) as [typeof import('@arcgis/core/geometry/operators/unionOperator'), typeof Point]
+
+  const geometries: Geometry[] = []
+
   for (const record of records) {
     const geometry = record.getGeometry()
     if (geometry) {
-      geometries.push(geometry)
+      // r027.078: record.getGeometry() returns IGeometry (REST shape).
+      // At runtime the value is a JSAPI Geometry instance. Module is
+      // deprecated (see file header) — these casts go away when the
+      // module is removed.
+      geometries.push(geometry as unknown as Geometry)
     }
   }
-  
+
   if (geometries.length === 0) return null
-  
+
   // Union all geometries and get center of the combined extent
-  const unionedGeometry = geometryEngine.union(geometries)
+  // r027.078: unionOperator.executeMany() typed as GeometryUnion[] in JSAPI 5.0
+  const unionedGeometry = unionOperator.executeMany(geometries as unknown as GeometryUnion[])
   if (!unionedGeometry) return null
   
   const extent = unionedGeometry.extent
   if (!extent) {
     // Single point geometry
     if (unionedGeometry.type === 'point') {
-      return unionedGeometry as __esri.Point
+      return unionedGeometry as Point
     }
     return null
   }
@@ -67,7 +78,7 @@ async function getRecordsCenter(
  * @deprecated Use cached resultsExtent.center instead - see module comment.
  */
 export async function panToRecords(
-  mapView: __esri.MapView | __esri.SceneView,
+  mapView: MapView | SceneView,
   records: FeatureDataRecord[]
 ): Promise<void> {
   const center = await getRecordsCenter(records)
@@ -100,7 +111,7 @@ export async function panToRecords(
  * @deprecated Use cached resultsExtent.center instead - see module comment.
  */
 export async function handlePanTo(
-  mapView: __esri.MapView | __esri.SceneView | undefined,
+  mapView: MapView | SceneView | undefined,
   dataSets: DataRecordSet[]
 ): Promise<boolean> {
   if (!mapView) {

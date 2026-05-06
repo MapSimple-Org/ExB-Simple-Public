@@ -1,5 +1,5 @@
 /**
- * Configurable debug logging utility for FeedSimple widget
+ * FeedSimple debug logger — thin wrapper around the shared DebugLogger.
  *
  * Usage:
  * - Add ?debug=all to URL to see all debug logs
@@ -20,132 +20,16 @@
  * - SEARCH: Search bar filtering
  * - SORT: Runtime sort operations
  * - FEATURE-EFFECT: Joined layer dimming during search/filter
+ * - DARK-MODE: Theme mode detection and switching (light/dark)
+ *
+ * The DebugLogger class lives in shared-code/mapsimple-common/debug-logger.ts.
+ * This file creates the FeedSimple singleton instance so all FS modules
+ * import from the same local path: `import { debugLogger } from '../utils/debug-logger'`
  */
-
-type DebugFeature = 'BUG' | 'FETCH' | 'PARSE' | 'RENDER' | 'POLL' | 'JOIN' | 'FEED-LAYER' | 'TEMPLATE' | 'SETTINGS' | 'EXPORT' | 'SEARCH' | 'SORT' | 'FEATURE-EFFECT' | 'all' | 'false'
-
-interface DebugLoggerOptions {
-  widgetName: string
-  features: DebugFeature[]
-}
-
-class DebugLogger {
-  private enabledFeatures: Set<DebugFeature> = new Set()
-  private initialized = false
-  private widgetName: string
-  private features: DebugFeature[]
-
-  constructor(options: DebugLoggerOptions) {
-    this.widgetName = options.widgetName
-    this.features = options.features
-  }
-
-  private initialize(): void {
-    if (this.initialized) return
-
-    let urlParams = new URLSearchParams(window.location.search)
-    let debugValue = urlParams.get('debug')
-
-    // Check parent window for ExB iframe context
-    if (debugValue === null && window.parent !== window) {
-      try {
-        urlParams = new URLSearchParams(window.parent.location.search)
-        debugValue = urlParams.get('debug')
-      } catch (e) {
-        // Cross-origin restriction
-      }
-    }
-
-    if (debugValue === 'false') {
-      this.initialized = true
-      return
-    }
-
-    if (debugValue === 'all') {
-      this.features.forEach(feature => {
-        if (feature !== 'all' && feature !== 'false') {
-          this.enabledFeatures.add(feature)
-        }
-      })
-      console.log(`[${this.widgetName}-DEBUG] Enabled ALL features:`, Array.from(this.enabledFeatures))
-    } else if (debugValue !== null) {
-      const requestedFeatures = debugValue.split(',').map(f => f.trim().toUpperCase() as DebugFeature)
-      requestedFeatures.forEach(feature => {
-        if (feature.toUpperCase() === 'ALL') {
-          this.features.forEach(f => {
-            if (f !== 'all' && f !== 'false') {
-              this.enabledFeatures.add(f)
-            }
-          })
-        } else if (this.features.includes(feature)) {
-          this.enabledFeatures.add(feature)
-        }
-      })
-    }
-
-    this.initialized = true
-  }
-
-  private isEnabled(feature: DebugFeature): boolean {
-    this.initialize()
-
-    // BUG level always enabled
-    if (feature === 'BUG') {
-      return true
-    }
-
-    if (this.enabledFeatures.has('all')) {
-      return true
-    }
-
-    return this.enabledFeatures.has(feature)
-  }
-
-  log(feature: DebugFeature, data: any): void {
-    if (feature === 'BUG') {
-      const logData = {
-        feature: 'BUG',
-        bugId: data.bugId || 'UNKNOWN',
-        category: data.category || 'GENERAL',
-        timestamp: new Date().toISOString(),
-        ...data
-      }
-      console.warn(`[${this.widgetName.toUpperCase()} BUG]`, JSON.stringify(logData, null, 2))
-      return
-    }
-
-    if (!this.isEnabled(feature)) {
-      return
-    }
-
-    const logData = {
-      feature,
-      timestamp: new Date().toISOString(),
-      ...data
-    }
-
-    console.log(`[${this.widgetName.toUpperCase()}-${feature}]`, JSON.stringify(logData, null, 2))
-  }
-
-  getConfig(): { enabledFeatures: string[], debugValue: string | null } {
-    this.initialize()
-
-    const urlParams = new URLSearchParams(window.location.search)
-    const debugValue = urlParams.get('debug')
-
-    return {
-      enabledFeatures: Array.from(this.enabledFeatures),
-      debugValue
-    }
-  }
-}
+import { createFeedSimpleDebugLogger } from 'widgets/shared-code/mapsimple-common'
 
 /**
  * Shared singleton debug logger for the FeedSimple widget.
  * Import this directly instead of creating per-module instances.
  */
-export const debugLogger = new DebugLogger({
-  widgetName: 'FEEDSIMPLE',
-  features: ['FETCH', 'PARSE', 'RENDER', 'POLL', 'JOIN', 'FEED-LAYER', 'TEMPLATE', 'SETTINGS', 'EXPORT', 'SEARCH', 'SORT', 'FEATURE-EFFECT']
-})
-
+export const debugLogger = createFeedSimpleDebugLogger()

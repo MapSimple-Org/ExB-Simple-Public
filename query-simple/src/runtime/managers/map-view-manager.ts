@@ -2,6 +2,8 @@ import { React, type AllWidgetProps } from 'jimu-core'
 import { type IMConfig } from '../../config'
 import { type JimuMapView } from 'jimu-arcgis'
 import { createQuerySimpleDebugLogger } from 'widgets/shared-code/mapsimple-common'
+import type MapView from '@arcgis/core/views/MapView'
+import type SceneView from '@arcgis/core/views/SceneView'
 
 const debugLogger = createQuerySimpleDebugLogger()
 
@@ -20,10 +22,10 @@ interface MapViewCallbacks {
  * Note: This is a utility class (not a hook) to work with class components.
  */
 export class MapViewManager {
-  private mapViewRef: React.RefObject<__esri.MapView | __esri.SceneView | null>
+  private mapViewRef: React.RefObject<MapView | SceneView | null>
   private jimuMapView: JimuMapView | null = null
 
-  constructor(mapViewRef: React.RefObject<__esri.MapView | __esri.SceneView | null>) {
+  constructor(mapViewRef: React.RefObject<MapView | SceneView | null>) {
     this.mapViewRef = mapViewRef
   }
 
@@ -73,7 +75,7 @@ export class MapViewManager {
   /**
    * Gets the current map view from ref.
    */
-  getMapView(): __esri.MapView | __esri.SceneView | null {
+  getMapView(): MapView | SceneView | null {
     return this.mapViewRef.current
   }
 

@@ -3,7 +3,7 @@
   "label": "FeedSimple",
   "type": "widget",
   "version": "1.19.0",
-  "exbVersion": "1.19.0",
+  "exbVersion": "1.20.0",
   "author": "MapSimple",
   "description": "FeedSimple widget - XML feed consumer with configurable card display and optional map integration",
   "copyright": "",

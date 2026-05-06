@@ -41,6 +41,11 @@ import { HandOutlined } from 'jimu-icons/outlined/editor/hand'
 import { DownloadOutlined } from 'jimu-icons/outlined/editor/download'
 import { createQuerySimpleDebugLogger } from 'widgets/shared-code/mapsimple-common'
 import type { QueryItemType } from '../config'
+import type MapView from '@arcgis/core/views/MapView'
+import type SceneView from '@arcgis/core/views/SceneView'
+import type Extent from '@arcgis/core/geometry/Extent'
+import type GraphicsLayer from '@arcgis/core/layers/GraphicsLayer'
+import type GroupLayer from '@arcgis/core/layers/GroupLayer'
 
 // Import action handlers
 import { handleViewInTable, isTableWidgetAvailable } from '../data-actions/view-in-table-action'
@@ -56,11 +61,11 @@ export interface ResultsMenuProps {
   widgetId: string
   dataSets: DataRecordSet[]
   outputDS: DataSource
-  mapView?: __esri.MapView | __esri.SceneView
-  resultsExtent?: __esri.Extent | null
+  mapView?: MapView | SceneView
+  resultsExtent?: Extent | null
   intl: IntlShape
   queryItem?: ImmutableObject<QueryItemType>
-  graphicsLayer?: __esri.GraphicsLayer | __esri.GroupLayer
+  graphicsLayer?: GraphicsLayer | GroupLayer
   queries?: ImmutableArray<ImmutableObject<QueryItemType>>
 }
 
@@ -170,9 +175,22 @@ export function ResultsMenu(props: ResultsMenuProps): React.ReactElement {
     const allRecords = getAllFeatureRecords()
     debugLogger.log('DATA-ACTION', { action: 'resultsMenu-selectOnMap-clicked' })
     setIsOpen(false)
-    
+
     if (allRecords.length > 0 && outputDS) {
-      await executeSelectOnMap(widgetId, outputDS, allRecords, graphicsLayer, queries)
+      const result = await executeSelectOnMap(widgetId, outputDS, allRecords, graphicsLayer, queries)
+
+      // r027.097: Trap for non-HFL layers (BUG-SELECT-MAP-IMAGE-001).
+      // Selection data is applied to Redux, but visual highlight (blue outline)
+      // requires a FeatureLayerView which only exists for hosted feature layers.
+      if (result?.success && !result.highlightApplied) {
+        debugLogger.log('BUG', {
+          bugId: 'BUG-SELECT-MAP-IMAGE-001',
+          category: 'DATA-ACTION',
+          description: 'Select on Map: Visual highlight (blue outline) not available for this layer type. ' +
+            'Selection data was applied but map highlighting requires a hosted feature layer.',
+          action: 'resultsMenu-selectOnMap-no-highlight'
+        })
+      }
     }
   }, [getAllFeatureRecords])
   

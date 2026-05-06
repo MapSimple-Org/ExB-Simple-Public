@@ -17,6 +17,13 @@
 import { createQuerySimpleDebugLogger, globalHandleManager } from 'widgets/shared-code/mapsimple-common'
 import { graphicsStateManager } from './graphics-state-manager'
 import { getLegendLayerId, getGraphicsSublayer } from './graphics-layer-utils'
+import type GraphicsLayer from '@arcgis/core/layers/GraphicsLayer'
+import type GroupLayer from '@arcgis/core/layers/GroupLayer'
+import type Layer from '@arcgis/core/layers/Layer'
+import type MapView from '@arcgis/core/views/MapView'
+import type SceneView from '@arcgis/core/views/SceneView'
+import type FeatureLayer from '@arcgis/core/layers/FeatureLayer'
+import type Graphic from '@arcgis/core/Graphic'
 
 const debugLogger = createQuerySimpleDebugLogger()
 
@@ -27,7 +34,7 @@ const debugLogger = createQuerySimpleDebugLogger()
 /**
  * Clears all highlight graphics from the graphics layer.
  */
-export function clearGraphicsLayer(graphicsLayer: __esri.GraphicsLayer): void {
+export function clearGraphicsLayer(graphicsLayer: GraphicsLayer): void {
   const seq = graphicsStateManager.nextSequence()
   if (!graphicsLayer) {
     debugLogger.log('GRAPHICS-LAYER', {
@@ -57,16 +64,16 @@ export function clearGraphicsLayer(graphicsLayer: __esri.GraphicsLayer): void {
  * r024.15: Also removes all Legend FeatureLayers when clearing a GroupLayer.
  */
 export function clearGraphicsLayerOrGroupLayer(
-  layer: __esri.GraphicsLayer | __esri.GroupLayer | null | undefined
+  layer: GraphicsLayer | GroupLayer | null | undefined
 ): void {
   if (!layer) return
-  if ((layer as __esri.Layer).type === 'group') {
-    const gl = layer as __esri.GroupLayer
+  if ((layer as Layer).type === 'group') {
+    const gl = layer as GroupLayer
     let totalRemoved = 0
 
     // r024.15: Find and remove Legend FeatureLayers first
-    const legendLayersToRemove: __esri.Layer[] = []
-    gl.layers.forEach((sublayer: __esri.Layer) => {
+    const legendLayersToRemove: Layer[] = []
+    gl.layers.forEach((sublayer: Layer) => {
       if (sublayer.id.endsWith('-legend')) {
         legendLayersToRemove.push(sublayer)
       }
@@ -77,8 +84,8 @@ export function clearGraphicsLayerOrGroupLayer(
     })
 
     // Clear graphics from GraphicsLayer sublayers
-    gl.layers.forEach((sublayer: __esri.Layer) => {
-      const glSub = sublayer as __esri.GraphicsLayer
+    gl.layers.forEach((sublayer: Layer) => {
+      const glSub = sublayer as GraphicsLayer
       if (glSub.graphics) {
         totalRemoved += glSub.graphics.length
         glSub.removeAll()
@@ -94,7 +101,7 @@ export function clearGraphicsLayerOrGroupLayer(
       timestamp: Date.now()
     })
   } else {
-    clearGraphicsLayer(layer as __esri.GraphicsLayer)
+    clearGraphicsLayer(layer as GraphicsLayer)
   }
 }
 
@@ -111,12 +118,12 @@ export function clearGraphicsLayerOrGroupLayer(
  */
 export function clearGroupLayerContents(
   widgetId: string,
-  mapView: __esri.MapView | __esri.SceneView
+  mapView: MapView | SceneView
 ): boolean {
   const seq = graphicsStateManager.nextSequence()
   const layerId = `querysimple-results-${widgetId}`
 
-  const groupLayer = mapView.map.layers.find(layer => layer.id === layerId) as __esri.GroupLayer
+  const groupLayer = mapView.map.layers.find(layer => layer.id === layerId) as GroupLayer
   if (!groupLayer) {
     debugLogger.log('GRAPHICS-LAYER', {
       event: 'clearGroupLayerContents-not-found',
@@ -135,7 +142,7 @@ export function clearGroupLayerContents(
   let legendLayersHidden = 0
   geometryTypes.forEach(geoType => {
     const legendLayerId = getLegendLayerId(layerId, geoType)
-    const legendLayer = groupLayer.layers.find(l => l.id === legendLayerId) as __esri.FeatureLayer
+    const legendLayer = groupLayer.layers.find(l => l.id === legendLayerId) as FeatureLayer
     if (legendLayer) {
       legendLayer.legendEnabled = false
       legendLayersHidden++
@@ -175,21 +182,21 @@ export function clearGroupLayerContents(
  */
 export function clearAnyResultLayerContents(
   widgetId: string,
-  mapView: __esri.MapView | __esri.SceneView
+  mapView: MapView | SceneView
 ): { clearedGraphicsLayer: boolean; clearedGroupLayer: boolean } {
   const seq = graphicsStateManager.nextSequence()
   const result = { clearedGraphicsLayer: false, clearedGroupLayer: false }
 
   // Check for GroupLayer (LayerList mode)
   const groupLayerId = `querysimple-results-${widgetId}`
-  const groupLayer = mapView.map.layers.find(layer => layer.id === groupLayerId) as __esri.GroupLayer
+  const groupLayer = mapView.map.layers.find(layer => layer.id === groupLayerId) as GroupLayer
   if (groupLayer) {
     result.clearedGroupLayer = clearGroupLayerContents(widgetId, mapView)
   }
 
   // Check for GraphicsLayer (regular mode)
   const graphicsLayerId = `querysimple-highlight-${widgetId}`
-  const graphicsLayer = mapView.map.layers.find(layer => layer.id === graphicsLayerId) as __esri.GraphicsLayer
+  const graphicsLayer = mapView.map.layers.find(layer => layer.id === graphicsLayerId) as GraphicsLayer
   if (graphicsLayer) {
     clearGraphicsLayerOrGroupLayer(graphicsLayer)
     result.clearedGraphicsLayer = true
@@ -202,7 +209,7 @@ export function clearAnyResultLayerContents(
   // Note: Panel close/reopen is handled separately by selection-restoration-manager (r025.020).
   if (!result.clearedGroupLayer) {
     const bufferLayerId = `querysimple-buffer-${widgetId}`
-    const bufferLayer = mapView.map.findLayerById(bufferLayerId) as __esri.GraphicsLayer
+    const bufferLayer = mapView.map.findLayerById(bufferLayerId) as GraphicsLayer
     if (bufferLayer) {
       const bufferGraphicsCount = bufferLayer.graphics?.length || 0
       bufferLayer.removeAll()
@@ -242,18 +249,18 @@ export function clearAnyResultLayerContents(
  */
 export function cleanupGraphicsLayer(
   widgetId: string,
-  mapView: __esri.MapView | __esri.SceneView
+  mapView: MapView | SceneView
 ): void {
   const seq = graphicsStateManager.nextSequence()
   const layerId = `querysimple-highlight-${widgetId}`
 
   try {
-    const graphicsLayer = mapView.map.layers.find(layer => layer.id === layerId) as __esri.GraphicsLayer
+    const graphicsLayer = mapView.map.layers.find(layer => layer.id === layerId) as GraphicsLayer
     if (graphicsLayer) {
       const graphicsCount = graphicsLayer.graphics.length
 
       // r024.35: Null graphic properties before removal to break circular references
-      graphicsLayer.graphics.forEach((graphic: __esri.Graphic) => {
+      graphicsLayer.graphics.forEach((graphic: Graphic) => {
         try {
           graphic.popupTemplate = null
           graphic.symbol = null
@@ -293,7 +300,7 @@ export function cleanupGraphicsLayer(
 
     // r025.013: Clean up buffer preview layer (no watch handle in highlight-only mode)
     const bufferLayerId = `querysimple-buffer-${widgetId}`
-    const bufferLayer = mapView.map.findLayerById(bufferLayerId) as __esri.GraphicsLayer
+    const bufferLayer = mapView.map.findLayerById(bufferLayerId) as GraphicsLayer
     if (bufferLayer) {
       bufferLayer.removeAll()
       mapView.map.remove(bufferLayer)
@@ -337,7 +344,7 @@ export function cleanupGraphicsLayer(
  */
 export function cleanupGroupLayer(
   widgetId: string,
-  mapView: __esri.MapView | __esri.SceneView
+  mapView: MapView | SceneView
 ): void {
   const seq = graphicsStateManager.nextSequence()
   const layerId = `querysimple-results-${widgetId}`
@@ -370,14 +377,14 @@ export function cleanupGroupLayer(
     // the GroupLayer, so groupLayer.destroy() below destroys it automatically.
     // No explicit buffer cleanup needed in this path.
 
-    const groupLayer = mapView.map.layers.find(layer => layer.id === layerId) as __esri.GroupLayer
+    const groupLayer = mapView.map.layers.find(layer => layer.id === layerId) as GroupLayer
     if (groupLayer) {
       let graphicsCount = 0
       // r024.35: Null graphic properties before removal to break circular references
-      groupLayer.layers.forEach((sublayer: __esri.Layer) => {
-        const glSub = sublayer as __esri.GraphicsLayer
+      groupLayer.layers.forEach((sublayer: Layer) => {
+        const glSub = sublayer as GraphicsLayer
         if (glSub.graphics) {
-          glSub.graphics.forEach((graphic: __esri.Graphic) => {
+          glSub.graphics.forEach((graphic: Graphic) => {
             graphicsCount++
             // Break potential circular references that prevent GC
             try {
@@ -440,14 +447,14 @@ export function cleanupGroupLayer(
  */
 export function cleanupAnyResultLayer(
   widgetId: string,
-  mapView: __esri.MapView | __esri.SceneView
+  mapView: MapView | SceneView
 ): { cleanedGraphicsLayer: boolean; cleanedGroupLayer: boolean } {
   const seq = graphicsStateManager.nextSequence()
   const result = { cleanedGraphicsLayer: false, cleanedGroupLayer: false }
 
   // Check for GroupLayer (LayerList mode)
   const groupLayerId = `querysimple-results-${widgetId}`
-  const groupLayer = mapView.map.layers.find(layer => layer.id === groupLayerId) as __esri.GroupLayer
+  const groupLayer = mapView.map.layers.find(layer => layer.id === groupLayerId) as GroupLayer
   if (groupLayer) {
     cleanupGroupLayer(widgetId, mapView)
     result.cleanedGroupLayer = true
@@ -456,7 +463,7 @@ export function cleanupAnyResultLayer(
   // Check for GraphicsLayer (regular mode)
   // r024.43: FIX - ID was wrong (querysimple-graphics- vs querysimple-highlight-)
   const graphicsLayerId = `querysimple-highlight-${widgetId}`
-  const graphicsLayer = mapView.map.layers.find(layer => layer.id === graphicsLayerId) as __esri.GraphicsLayer
+  const graphicsLayer = mapView.map.layers.find(layer => layer.id === graphicsLayerId) as GraphicsLayer
   if (graphicsLayer) {
     cleanupGraphicsLayer(widgetId, mapView)
     result.cleanedGraphicsLayer = true

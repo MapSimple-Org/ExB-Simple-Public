@@ -19,11 +19,11 @@ receive a fixed-distance buffer before the expansion factor is applied.
 
 | Trigger | Location | Description |
 |---------|----------|-------------|
-| Auto-zoom after query | `query-execution-handler.ts:944` | Calls `zoomToRecords(recordsForZoom)` after results load |
-| Click result row | `query-result.tsx:972` | Zooms to single record on click |
-| Zoom-to button | `query-result.tsx:1015` | Manual zoom button on result item |
+| Auto-zoom after query | `query-execution-handler.ts:948` | Calls `zoomToRecords(recordsForZoom)` after results load |
+| Click result row | `query-result.tsx:989` | Zooms to single record on click |
+| Zoom-to button | `query-result.tsx:1022` | Manual zoom button on result item |
 | Zoom data action | `zoom-to-action.tsx:136` | ExB data action for external consumers |
-| Cached extent zoom | `query-result.tsx:589` | Uses pre-cached extent via `expandExtentByFactor()` |
+| Cached extent zoom | `query-result.tsx:602` | Uses pre-cached extent via `expandExtentByFactor()` |
 
 ---
 
@@ -118,7 +118,7 @@ reused on subsequent zoom/pan actions:
            └── Return expanded extent
                 │
                 ▼
-           mapView.goTo(expandedExtent)      ← query-result.tsx:589
+           mapView.goTo(expandedExtent)      ← query-result.tsx:628
 ```
 
 ---
@@ -185,4 +185,4 @@ Defined at zoom-utils.ts:682.
 
 ---
 
-*Last updated: r024.131 (2026-03-05) — corrected stale file:line references after r024.128-131 extractions*
+*Last updated: r027.017 (2026-04-06) — corrected query-result.tsx and query-execution-handler.ts line numbers*

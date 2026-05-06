@@ -21,6 +21,10 @@ import { clearAnyResultLayerContents } from './graphics-layer-utils'
 import { clearAllSelectionsForWidget } from './selection-utils'
 import { createQuerySimpleDebugLogger, globalHandleManager } from 'widgets/shared-code/mapsimple-common'
 import type { EventManager } from './managers/event-manager'
+import type GraphicsLayer from '@arcgis/core/layers/GraphicsLayer'
+import type GroupLayer from '@arcgis/core/layers/GroupLayer'
+import type MapView from '@arcgis/core/views/MapView'
+import type SceneView from '@arcgis/core/views/SceneView'
 
 const debugLogger = createQuerySimpleDebugLogger()
 
@@ -56,8 +60,8 @@ export interface ClearResultContext {
   widgetId: string
   queryItemConfigId: string
   accumulatedRecords?: FeatureDataRecord[]
-  graphicsLayer?: __esri.GraphicsLayer
-  mapView?: __esri.MapView | __esri.SceneView
+  graphicsLayer?: GraphicsLayer | GroupLayer
+  mapView?: MapView | SceneView
   eventManager?: EventManager
   onAccumulatedRecordsChange?: (records: FeatureDataRecord[]) => void
   onDestroyGraphicsLayer?: () => void
@@ -154,19 +158,13 @@ export async function executeClearResult (
     timestamp: Date.now()
   })
 
-  // 2. CLEAR THE MAP: Remove all graphics synchronously
-  if (mapView?.graphics) {
-    const graphicsCount = mapView.graphics.length
-    mapView.graphics.removeAll()
-    debugLogger.log('TASK', {
-      event: 'clearResult-ablution-graphics',
-      widgetId,
-      reason,
-      graphicsRemoved: graphicsCount,
-      note: 'r024.40: Sovereign Reset - cleared map graphics',
-      timestamp: Date.now()
-    })
-  }
+  // 2. r027.084: REMOVED — `mapView.graphics.removeAll()` block.
+  //
+  // r027.091: Hover pins are back on mapView.graphics (always-on-top overlay).
+  // Cross-widget safety is maintained because removeAll() is never called.
+  // Per-card unmount handlers in query-result-item.tsx clean up each widget's
+  // hover pins via mapView.graphics.remove(specificGraphicRef) on unmount.
+  // See docs/bugs/HOVER-PIN-CROSS-WIDGET-BUG.md for full history.
 
   // 3. FORCE UI UNMOUNT: Increment key to trigger React full tree destruction
   queryExecutionKeyRef.current += 1

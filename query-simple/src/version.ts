@@ -8,9 +8,9 @@
  * - Major change: Update RELEASE_NUMBER (e.g., 015 -> 016) and reset MINOR_VERSION to 0
  * - Minor fix: Increment MINOR_VERSION (e.g., 1 -> 2) while keeping same RELEASE_NUMBER
  */
-const BASE_VERSION = '1.19.0'
-const RELEASE_NUMBER = '026' // Increment on major changes (001, 002, 003, ...)
-const MINOR_VERSION = '025' // r026.025: Clean up rebind tool code + inline docs, update CHANGELOG/TODO/DEVELOPMENT_GUIDE
+const BASE_VERSION = '1.20.0'
+const RELEASE_NUMBER = '027' // Increment on major changes (001, 002, 003, ...)
+const MINOR_VERSION = '097' // r027.097 Trap: warn user when Select on Map cannot highlight non-HFL layers (BUG-SELECT-MAP-IMAGE-001).
 
 export const WIDGET_VERSION = MINOR_VERSION && Number(MINOR_VERSION) > 0
   ? `${BASE_VERSION}-r${RELEASE_NUMBER}.${MINOR_VERSION}`

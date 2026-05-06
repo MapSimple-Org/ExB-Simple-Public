@@ -6,6 +6,9 @@ import { createHelperSimpleDebugLogger } from 'widgets/shared-code/mapsimple-com
 
 const debugLogger = createHelperSimpleDebugLogger()
 
+// r027.000: ExB 1.20 — DataRecord.getId() now returns string | number.
+// All record IDs are coerced to string via String() at point of use.
+
 /**
  * Custom event name for notifying managed widgets to process hash parameters.
  * This event is dispatched after a widget is opened in a controller.
@@ -641,7 +644,7 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
           const dsManager = DataSourceManager.getInstance()
           const originDS = dsManager.getDataSource(originDSId) as FeatureLayerDataSource
           if (originDS) {
-            const selectedIds = originDS.getSelectedRecordIds() || []
+            const selectedIds = (originDS.getSelectedRecordIds() || []).map(id => String(id))
             currentSelectionAtOpen = {
               count: selectedIds.length,
               ids: selectedIds.slice(0, 5)

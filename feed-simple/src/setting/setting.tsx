@@ -14,7 +14,7 @@ import type { FeedItem } from '../utils/parsers/interface'
 import { fetchFeed } from '../utils/feed-fetcher'
 import { CustomXmlParser } from '../utils/parsers/custom-xml'
 import { renderPreview } from '../utils/markdown-template-utils'
-import { TableBuilder } from 'widgets/shared-code/mapsimple-common'
+import { TableBuilder, parseMarkdownToTableState, findTableBlockAtCursor, type TableBuilderState } from 'widgets/shared-code/mapsimple-common'
 import { buildOutputDataSourceJson } from '../utils/data-source-builder'
 import { debugLogger } from '../utils/debug-logger'
 import { toArray, toPlain, getDataSourceId } from '../utils/immutable-helpers'
@@ -95,10 +95,14 @@ interface State {
   popupHelpOpen: boolean
   /** r026.014: Whether the table builder panel is shown */
   showTableBuilder: boolean
+  /** r027.015: Table edit state when cursor is inside an existing table */
+  tableEditState: { state: TableBuilderState, start: number, end: number } | null
   /** Index of the range break currently being dragged */
   dragIndex: number | null
   /** Index of the range break currently being dragged over */
   dragOverIndex: number | null
+  /** Field names from discovered feed for export field selection */
+  fieldNames?: string[]
 }
 
 export default class Setting extends React.PureComponent<AllWidgetSettingProps<IMConfig>, State> {
@@ -116,6 +120,7 @@ export default class Setting extends React.PureComponent<AllWidgetSettingProps<I
       templateHelpOpen: false,
       popupHelpOpen: false,
       showTableBuilder: false,
+      tableEditState: null,
       dragIndex: null,
       dragOverIndex: null
     }
@@ -256,6 +261,26 @@ export default class Setting extends React.PureComponent<AllWidgetSettingProps<I
     })
   }
 
+  /** r027.015: Detect if cursor is inside a table block for edit mode */
+  detectTableAtCursor = (): void => {
+    const textarea = this.templateTextareaRef.current
+    const template = this.props.config.cardTemplate || ''
+    if (!textarea || !template) {
+      this.setState({ tableEditState: null })
+      return
+    }
+    const cursorPos = textarea.selectionStart ?? 0
+    const block = findTableBlockAtCursor(template, cursorPos)
+    if (block) {
+      const parsed = parseMarkdownToTableState(block.tableText)
+      if (parsed) {
+        this.setState({ tableEditState: { state: parsed, start: block.start, end: block.end } })
+        return
+      }
+    }
+    this.setState({ tableEditState: null })
+  }
+
   onCardTemplateChange = (evt: React.ChangeEvent<HTMLTextAreaElement>): void => {
     this.props.onSettingChange({
       id: this.props.id,
@@ -339,10 +364,13 @@ export default class Setting extends React.PureComponent<AllWidgetSettingProps<I
     // were previously matching (unset or same value). Once the user sets a
     // different mapColor, the two become independent.
     if (field === 'color') {
+      // r005.009: value is string|number|null|undefined to satisfy all field
+      // call sites; the color branch only fires when the call site passed a
+      // string (from <input type='color'>), so the cast is safe.
       const wasInSync = !brk.mapColor || brk.mapColor === brk.color
-      brk.color = value
+      brk.color = value as string
       if (wasInSync) {
-        brk.mapColor = value
+        brk.mapColor = value as string
       }
     } else {
       // Dynamic property assignment on a spread copy — TS can't narrow this
@@ -667,10 +695,13 @@ export default class Setting extends React.PureComponent<AllWidgetSettingProps<I
     const newConfig = this.props.config.set('joinFieldService', '')
 
     // Save useDataSources on the widget; don't register output DS yet (need join fields)
+    // r027.067 / r005.008: dropped Immutable() wrap — onSettingChange expects
+    // UseDataSource[] (mutable). The framework wraps it on its way through to
+    // IMConfig. The wrap was producing an ImmutableArray which lacks pop/push.
     this.props.onSettingChange({
       id: this.props.id,
       config: newConfig,
-      useDataSources: Immutable([useDs])
+      useDataSources: [useDs]
     }, [])
   }
 
@@ -689,7 +720,12 @@ export default class Setting extends React.PureComponent<AllWidgetSettingProps<I
    * based on whether all Map Integration fields are filled in.
    */
   private saveConfigWithOutputDs (newConfig: IMConfig): void {
-    const useDs = this.props.useDataSources?.[0] as UseDataSource | undefined
+    // r027.067 / r005.008: props.useDataSources is ImmutableArray<UseDataSource>,
+    // so [0] is ImmutableObject<UseDataSource>. The function only reads
+    // .dataSourceId from useDs (line 721) — runtime is identical — but TS in
+    // 1.20 won't allow a direct cast between the two structurally-different
+    // types. Use the documented `as unknown as T` escape.
+    const useDs = this.props.useDataSources?.[0] as unknown as UseDataSource | undefined
     const joinFieldService = newConfig.joinFieldService as string
     const joinFieldFeed = newConfig.joinFieldFeed as string
     const allFilled = !!useDs && !!joinFieldService && !!joinFieldFeed
@@ -701,7 +737,7 @@ export default class Setting extends React.PureComponent<AllWidgetSettingProps<I
         this.props.onSettingChange({
           id: this.props.id,
           config: newConfig
-        }, [outputDsJson])
+        }, [outputDsJson as any])
         return
       }
     }
@@ -823,9 +859,11 @@ export default class Setting extends React.PureComponent<AllWidgetSettingProps<I
               placeholder={'**{{status}}** - {{location}}\n{{description}}\nUpdated: {{changeDate}}'}
               value={config.cardTemplate || ''}
               onChange={this.onCardTemplateChange}
+              onClick={this.detectTableAtCursor}
+              onKeyUp={this.detectTableAtCursor}
               css={monoTextareaLgCss}
             />
-            {/* r004.002: Template help + Insert table toggle buttons */}
+            {/* r004.002 + r027.015: Template help + Insert/Edit table toggle buttons */}
             <div css={css`display: flex; gap: 12px; margin-top: 4px;`}>
               {this.renderTemplateHelp(this.state.templateHelpOpen, 'templateHelpOpen')}
               <div css={css`margin-top: 0;`}>
@@ -851,53 +889,50 @@ export default class Setting extends React.PureComponent<AllWidgetSettingProps<I
                     transform: ${this.state.showTableBuilder ? 'rotate(90deg)' : 'rotate(0deg)'};
                     font-size: 10px;
                   `}>▶</span>
-                  Insert table
+                  {this.state.tableEditState ? 'Edit table' : 'Insert table'}
                 </button>
               </div>
             </div>
-            {/* r004.002: Table builder inline panel */}
+            {/* r004.002 + r027.015: Table builder inline panel (insert or edit mode) */}
             {this.state.showTableBuilder && (
               <TableBuilder
+                initialState={this.state.tableEditState?.state}
                 onInsert={(markdown) => {
-                  // Insert table markdown at cursor position using same pattern as field tokens
-                  const textarea = this.templateTextareaRef.current
                   const currentTemplate = this.props.config.cardTemplate || ''
+                  let newValue: string
 
-                  if (textarea) {
-                    const start = textarea.selectionStart ?? currentTemplate.length
-                    const end = textarea.selectionEnd ?? start
-                    // Ensure table is on its own line
+                  if (this.state.tableEditState) {
+                    // r027.015: Replace existing table in-place
+                    const { start, end } = this.state.tableEditState
                     const before = currentTemplate.substring(0, start)
                     const after = currentTemplate.substring(end)
-                    const prefix = before.length > 0 && !before.endsWith('\n') ? '\n' : ''
-                    const suffix = after.length > 0 && !after.startsWith('\n') ? '\n' : ''
-                    const newValue = before + prefix + markdown + suffix + after
-
-                    this.props.onSettingChange({
-                      id: this.props.id,
-                      config: this.props.config.set('cardTemplate', newValue)
-                    })
-
-                    requestAnimationFrame(() => {
-                      if (textarea) {
-                        textarea.focus()
-                        const newPos = (before + prefix + markdown).length
-                        textarea.setSelectionRange(newPos, newPos)
-                      }
-                    })
+                    newValue = before + markdown + after
                   } else {
-                    const newValue = currentTemplate
-                      ? `${currentTemplate}\n${markdown}`
-                      : markdown
-                    this.props.onSettingChange({
-                      id: this.props.id,
-                      config: this.props.config.set('cardTemplate', newValue)
-                    })
+                    // Insert at cursor position
+                    const textarea = this.templateTextareaRef.current
+                    if (textarea) {
+                      const start = textarea.selectionStart ?? currentTemplate.length
+                      const end = textarea.selectionEnd ?? start
+                      const before = currentTemplate.substring(0, start)
+                      const after = currentTemplate.substring(end)
+                      const prefix = before.length > 0 && !before.endsWith('\n') ? '\n' : ''
+                      const suffix = after.length > 0 && !after.startsWith('\n') ? '\n' : ''
+                      newValue = before + prefix + markdown + suffix + after
+                    } else {
+                      newValue = currentTemplate
+                        ? `${currentTemplate}\n${markdown}`
+                        : markdown
+                    }
                   }
 
-                  this.setState({ showTableBuilder: false })
+                  this.props.onSettingChange({
+                    id: this.props.id,
+                    config: this.props.config.set('cardTemplate', newValue)
+                  })
+
+                  this.setState({ showTableBuilder: false, tableEditState: null })
                 }}
-                onCancel={() => this.setState({ showTableBuilder: false })}
+                onCancel={() => this.setState({ showTableBuilder: false, tableEditState: null })}
               />
             )}
           </SettingRow>
@@ -1127,7 +1162,7 @@ export default class Setting extends React.PureComponent<AllWidgetSettingProps<I
                           size='sm'
                           placeholder='min'
                           value={brk.min ?? undefined}
-                          onAcceptValue={(v) => { this.onUpdateRangeBreak(idx, 'min', v === null || v === undefined || isNaN(v) ? null : v) }}
+                          onAcceptValue={(v) => { this.onUpdateRangeBreak(idx, 'min', v === null || v === undefined || isNaN(Number(v)) ? null : Number(v)) }}
                           css={css`width: 60px; font-size: 11px;`}
                         />
                         <span css={css`font-size: 11px; color: var(--sys-color-text-tertiary);`}>to</span>
@@ -1135,7 +1170,7 @@ export default class Setting extends React.PureComponent<AllWidgetSettingProps<I
                           size='sm'
                           placeholder='max'
                           value={brk.max ?? undefined}
-                          onAcceptValue={(v) => { this.onUpdateRangeBreak(idx, 'max', v === null || v === undefined || isNaN(v) ? null : v) }}
+                          onAcceptValue={(v) => { this.onUpdateRangeBreak(idx, 'max', v === null || v === undefined || isNaN(Number(v)) ? null : Number(v)) }}
                           css={css`width: 60px; font-size: 11px;`}
                         />
                       </div>
@@ -1168,7 +1203,7 @@ export default class Setting extends React.PureComponent<AllWidgetSettingProps<I
                           max={24}
                           step={1}
                           value={brk.size ?? undefined}
-                          onAcceptValue={(v) => { this.onUpdateRangeBreak(idx, 'size', v === null || v === undefined || isNaN(v) ? undefined : v) }}
+                          onAcceptValue={(v) => { this.onUpdateRangeBreak(idx, 'size', v === null || v === undefined || isNaN(Number(v)) ? undefined : Number(v)) }}
                           css={css`width: 56px; font-size: 11px;`}
                         />
                         <Select
@@ -1361,7 +1396,7 @@ export default class Setting extends React.PureComponent<AllWidgetSettingProps<I
                   size='sm'
                   placeholder='min'
                   value={config.filterNumericMin ?? undefined}
-                  onAcceptValue={(v) => { this.setConfigValue('filterNumericMin', v === null || v === undefined || isNaN(v) ? null : v) }}
+                  onAcceptValue={(v) => { this.setConfigValue('filterNumericMin', v === null || v === undefined || isNaN(Number(v)) ? null : Number(v)) }}
                   css={css`flex: 1; font-size: 11px;`}
                 />
                 <span css={css`font-size: 11px; color: var(--sys-color-text-tertiary);`}>to</span>
@@ -1369,7 +1404,7 @@ export default class Setting extends React.PureComponent<AllWidgetSettingProps<I
                   size='sm'
                   placeholder='max'
                   value={config.filterNumericMax ?? undefined}
-                  onAcceptValue={(v) => { this.setConfigValue('filterNumericMax', v === null || v === undefined || isNaN(v) ? null : v) }}
+                  onAcceptValue={(v) => { this.setConfigValue('filterNumericMax', v === null || v === undefined || isNaN(Number(v)) ? null : Number(v)) }}
                   css={css`flex: 1; font-size: 11px;`}
                 />
               </div>
@@ -1653,7 +1688,7 @@ export default class Setting extends React.PureComponent<AllWidgetSettingProps<I
                   max={24}
                   step={1}
                   value={config.feedMapLayerSize || 8}
-                  onAcceptValue={(value) => { this.setConfigValue('feedMapLayerSize', value) }}
+                  onAcceptValue={(value) => { this.setConfigValue('feedMapLayerSize', Number(value) || 8) }}
                 />
               </SettingRow>
 
@@ -1688,7 +1723,7 @@ export default class Setting extends React.PureComponent<AllWidgetSettingProps<I
                     max={5}
                     step={0.5}
                     value={config.feedMapLayerOutlineWidth ?? 1}
-                    onAcceptValue={(value) => { this.setConfigValue('feedMapLayerOutlineWidth', value ?? 0) }}
+                    onAcceptValue={(value) => { this.setConfigValue('feedMapLayerOutlineWidth', value === null || value === undefined ? 0 : Number(value)) }}
                     css={css`width: 64px;`}
                   />
                   <span css={css`font-size: 11px; color: var(--sys-color-text-tertiary);`}>0 = none</span>

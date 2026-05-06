@@ -26,7 +26,7 @@ Widget mounts when ExB renders the widget component. Both widgets extend
 ```
  Widget Constructor                           <- widget.tsx:97
       |
-      +-- highlightConfigManager.registerConfig()  :99
+      +-- widgetConfigManager.registerConfig()  :99
       |   (early registration, before callbacks fire)
       |
       v
@@ -51,7 +51,7 @@ Widget mounts when ExB renders the widget component. Both widgets extend
       |
       +-- [5] SelectionRestorationManager.setWidgetId()  :487
       |
-      +-- [6] highlightConfigManager.registerConfig()  :491-492
+      +-- [6] widgetConfigManager.registerConfig()  :491-492
       |
       v
  [DEFERRED] JimuMapViewComponent.onActiveViewChange

@@ -5,6 +5,8 @@
 
 import type { FeatureLayerDataSource, FeatureDataRecord, DataRecord } from 'jimu-core'
 import { DataSourceManager, DataSourceStatus, MessageManager, DataRecordSetChangeMessage, RecordSetChangeType, DataRecordsSelectionChangeMessage } from 'jimu-core'
+import type GraphicsLayer from '@arcgis/core/layers/GraphicsLayer'
+import type GroupLayer from '@arcgis/core/layers/GroupLayer'
 import { createQuerySimpleDebugLogger } from 'widgets/shared-code/mapsimple-common'
 import { removeHighlightGraphics, getGraphicsCountFromLayer } from './graphics-layer-utils'
 
@@ -26,7 +28,8 @@ export function getRecordKey(
   const stampedOriginDSId = (record as any).feature?.attributes?.__originDSId
   const originDS = outputDS.getOriginDataSources()?.[0] as FeatureLayerDataSource
   const originDSId = stampedOriginDSId || originDS?.id || outputDS.id
-  const objectId = record.getId()
+  // r027.000: ExB 1.20 — coerce getId() to string (now returns string | number)
+  const objectId = String(record.getId())
   const key = `${originDSId}_${objectId}`
   return key
 }
@@ -81,7 +84,7 @@ export async function createAccumulatedResultsDataSource(
   
   // Create the data source using DataSourceManager
   // Note: This follows the pattern from setting.tsx for creating output data sources
-  accumulatedDS = dsManager.createDataSourceByDataSourceJson(outputDataSourceJson) as FeatureLayerDataSource
+  accumulatedDS = (dsManager as any).createDataSourceByDataSourceJson(outputDataSourceJson) as FeatureLayerDataSource
   
   // Set initial status
   accumulatedDS.setStatus(DataSourceStatus.NotReady)
@@ -136,8 +139,9 @@ export function mergeResultsIntoAccumulated(
   const dsManager = DataSourceManager.getInstance()
   
   existingRecords.forEach(record => {
-    const recordId = record.getId()
-    
+    // r027.000: ExB 1.20 — coerce getId() to string (now returns string | number)
+    const recordId = String(record.getId())
+
     // r021.87: Read queryConfigId from record attributes (stamped when added)
     const recordQueryConfigId = (record as any).feature?.attributes?.__queryConfigId
     let useDataSource: any = null
@@ -183,10 +187,12 @@ export function mergeResultsIntoAccumulated(
     const isDuplicate = existingKeys.has(key)
     
     if (isDuplicate) {
-      duplicateRecordIds.push(record.getId())
+      // r027.000: ExB 1.20 — coerce getId() to string (now returns string | number)
+      duplicateRecordIds.push(String(record.getId()))
     } else {
       uniqueNewRecords.push(record)
-      addedRecordIds.push(record.getId())
+      // r027.000: ExB 1.20 — coerce getId() to string (now returns string | number)
+      addedRecordIds.push(String(record.getId()))
     }
   })
   
@@ -303,7 +309,7 @@ export function removeRecordsFromOriginSelections(
   recordsToRemove: FeatureDataRecord[],
   outputDS: FeatureLayerDataSource,
   useGraphicsLayer?: boolean,
-  graphicsLayer?: __esri.GraphicsLayer | __esri.GroupLayer,
+  graphicsLayer?: GraphicsLayer | GroupLayer,
   accumulatedRecords?: FeatureDataRecord[]
 ): void {
   debugLogger.log('RESULTS-MODE', {
@@ -325,7 +331,8 @@ export function removeRecordsFromOriginSelections(
   
   // Remove from graphics layer if using graphics layer highlighting
   if (useGraphicsLayer && graphicsLayer) {
-    const recordIdsToRemove = recordsToRemove.map(record => record.getId())
+    // r027.000: ExB 1.20 — coerce getId() to string (now returns string | number)
+    const recordIdsToRemove = recordsToRemove.map(record => String(record.getId()))
     
     const graphicsCountBefore = getGraphicsCountFromLayer(graphicsLayer)
 
@@ -382,7 +389,7 @@ export function removeRecordsFromOriginSelections(
         event: 'x-button-removal-origin-ds-from-outputDS-fallback',
         widgetId,
         recordIndex,
-        recordId: record.getId(),
+        recordId: String(record.getId()),
         recordQueryConfigId: recordQueryConfigId || 'MISSING',
         recordOriginDSId: recordOriginDSId || 'MISSING',
         reason: 'no-originDSId-attribute-and-no-dataSource-property',
@@ -406,7 +413,7 @@ export function removeRecordsFromOriginSelections(
         event: 'x-button-removal-origin-ds-lookup-failed',
         widgetId,
         recordIndex,
-        recordId: record.getId(),
+        recordId: String(record.getId()),
         recordQueryConfigId: recordQueryConfigId || 'MISSING',
         reason: 'no-origin-ds-found',
         lookupMethod,
@@ -428,10 +435,18 @@ export function removeRecordsFromOriginSelections(
   // For each origin DS, get current selection and remove matching records
   recordsByOriginDS.forEach((recordsToRemoveForOrigin, originDS) => {
     try {
-      // Get current selected records from this origin DS
-      const currentSelectedRecords = originDS.getSelectedRecords() || []
+      // r027.010: ExB 1.20 — getSelectedRecords() returns [] even when selectedIds has values.
+      // accumulatedRecords don't carry origin DS metadata, so filtering them by origin DS fails.
+      // Solution: work with IDs directly via getSelectedRecordIds() (which works in 1.20).
+      // At the origin DS level, record IDs are unique — composite key matching is only needed at output DS level.
       const currentSelectedIds = originDS.getSelectedRecordIds() || []
-      
+
+      // Build set of IDs to remove, normalized to strings for comparison
+      const recordIdsToRemove = new Set(recordsToRemoveForOrigin.map(r => String(r.getId())))
+
+      // Filter current IDs, normalizing both sides to string for comparison
+      const remainingIds = currentSelectedIds.filter(id => !recordIdsToRemove.has(String(id)))
+
       // DIAGNOSTIC (r022.31): Per-layer selection state BEFORE removal
       debugLogger.log('RESULTS-MODE', {
         event: 'processing-origin-ds-removal',
@@ -439,113 +454,41 @@ export function removeRecordsFromOriginSelections(
         originDSId: originDS.id,
         originDSType: originDS.type,
         originDSLabel: originDS.getLabel?.() || 'unknown',
-        currentSelectedCount: currentSelectedRecords.length,
+        currentSelectedCount: currentSelectedIds.length,
         currentSelectedIds: currentSelectedIds.slice(0, 20),
         recordsToRemoveCount: recordsToRemoveForOrigin.length,
-        recordsToRemoveIds: recordsToRemoveForOrigin.map(r => r.getId()),
-        recordsToRemoveQueryConfigs: recordsToRemoveForOrigin.map(r => r.feature?.attributes?.__queryConfigId || 'MISSING'),
+        recordsToRemoveIds: Array.from(recordIdsToRemove),
         timestamp: Date.now()
       })
-      
-      // r022.73: Build composite keys (recordId + queryConfigId) to remove for accurate matching
-      // FIX: Query results don't have __queryConfigId, but accumulated records do
-      // Build lookup map from accumulated records first
-      const accumulatedLookup = new Map<string, string>()
-      if (accumulatedRecords) {
-        accumulatedRecords.forEach(accRec => {
-          const accRecId = accRec.getId()
-          const accQueryConfigId = accRec.feature?.attributes?.__queryConfigId || ''
-          accumulatedLookup.set(accRecId, accQueryConfigId)
-        })
-      }
-      
-      const compositeKeysToRemove = new Set(
-        recordsToRemoveForOrigin.map(record => {
-          const recordId = record.getId()
-          // r022.73: Use queryConfigId from accumulated records, not from query results
-          const queryConfigId = accumulatedLookup.get(recordId) || record.feature?.attributes?.__queryConfigId || ''
-          
-          return `${recordId}__${queryConfigId}`
-        })
-      )
-      
-      // r023.28: Also build simple recordId set for fallback matching
-      const recordIdsToRemove = new Set(recordsToRemoveForOrigin.map(r => r.getId()))
-      
-      // Filter out records that match composite keys (ID + queryConfigId) to remove
-      let remainingRecords = currentSelectedRecords.filter(record => {
-        const recordId = record.getId()
-        const queryConfigId = record.feature?.attributes?.__queryConfigId || ''
-        const compositeKey = `${recordId}__${queryConfigId}`
-        return !compositeKeysToRemove.has(compositeKey)
-      })
-      
-      // r023.28: If composite key matching didn't remove anything, fall back to simple recordId matching
-      // This handles cases where origin DS records don't have __queryConfigId (e.g., "Select on Map" selections)
-      const compositeRemovalCount = currentSelectedRecords.length - remainingRecords.length
-      if (compositeRemovalCount === 0 && recordsToRemoveForOrigin.length > 0) {
-        debugLogger.log('RESULTS-MODE', {
-          event: 'r023-28-composite-key-fallback-to-recordId',
-          widgetId,
-          originDSId: originDS.id,
-          reason: 'composite-key-matching-removed-nothing',
-          recordIdsToRemove: Array.from(recordIdsToRemove),
-          note: 'Falling back to simple recordId matching (origin DS records may lack __queryConfigId)',
-          timestamp: Date.now()
-        })
-        
-        remainingRecords = currentSelectedRecords.filter(record => {
-          const recordId = record.getId()
-          return !recordIdsToRemove.has(recordId)
-        })
-      }
-      
-      const remainingIds = remainingRecords.map(record => record.getId())
-      
-      // r023.28: Determine which matching method was used
-      const usedFallbackMatching = compositeRemovalCount === 0 && recordsToRemoveForOrigin.length > 0
-      const finalRemovalCount = currentSelectedRecords.length - remainingRecords.length
-      
-      // DIAGNOSTIC (r022.31, r023.28): Log removal details including which method was used
+
+      // DIAGNOSTIC (r022.31): Log removal details
       debugLogger.log('RESULTS-MODE', {
         event: 'origin-ds-removal-filtered',
         widgetId,
         originDSId: originDS.id,
         originDSLabel: originDS.getLabel?.() || 'unknown',
-        matchingMethod: usedFallbackMatching ? 'recordId-fallback' : 'composite-key',
-        selectionBeforeRemoval: {
-          count: currentSelectedRecords.length,
-          ids: currentSelectedIds.slice(0, 20),
-          compositeKeys: currentSelectedRecords.slice(0, 5).map(r => ({
-            recordId: r.getId(),
-            queryConfigId: r.feature?.attributes?.__queryConfigId || 'MISSING'
-          }))
-        },
-        removalDetails: {
-          compositeKeysToRemove: Array.from(compositeKeysToRemove),
-          recordIdsToRemove: Array.from(recordIdsToRemove),
-          expectedRemovedCount: recordsToRemoveForOrigin.length,
-          compositeMatchRemoved: compositeRemovalCount,
-          finalRemovedCount: finalRemovalCount,
-          removalSuccessful: finalRemovalCount === recordsToRemoveForOrigin.length
-        },
-        remainingAfterFilter: {
-          count: remainingRecords.length,
-          ids: remainingIds.slice(0, 20)
-        },
+        selectionBeforeCount: currentSelectedIds.length,
+        recordIdsToRemove: Array.from(recordIdsToRemove),
+        remainingCount: remainingIds.length,
+        remainingIds: remainingIds.slice(0, 20),
+        expectedRemovedCount: recordsToRemoveForOrigin.length,
+        actualRemovedCount: currentSelectedIds.length - remainingIds.length,
+        removalSuccessful: (currentSelectedIds.length - remainingIds.length) === recordsToRemoveForOrigin.length,
         timestamp: Date.now()
       })
-      
+
       // Update selection in origin DS
+      // r027.010: ExB 1.20 — pass empty array for records since getSelectedRecords() returns []
+      // and selectRecordsByIds() only stores IDs in 1.20 anyway.
       if (typeof originDS.selectRecordsByIds === 'function') {
-        originDS.selectRecordsByIds(remainingIds, remainingRecords as FeatureDataRecord[])
+        originDS.selectRecordsByIds(remainingIds, [] as FeatureDataRecord[])
         
         // DIAGNOSTIC (r022.31): Verify selection state AFTER update
         // Use setTimeout to allow DS to process the selection change
         setTimeout(() => {
           const actualSelectedAfter = originDS.getSelectedRecords() || []
           const actualSelectedIdsAfter = originDS.getSelectedRecordIds() || []
-          
+
           debugLogger.log('RESULTS-MODE', {
             event: 'origin-ds-removal-complete-verified',
             widgetId,
@@ -555,12 +498,12 @@ export function removeRecordsFromOriginSelections(
               count: actualSelectedAfter.length,
               ids: actualSelectedIdsAfter.slice(0, 20)
             },
-            expectedCount: remainingRecords.length,
+            expectedRemainingCount: remainingIds.length,
             actualCount: actualSelectedAfter.length,
-            countsMatch: actualSelectedAfter.length === remainingRecords.length,
+            countsMatch: actualSelectedAfter.length === remainingIds.length,
             expectedRemovedCount: recordsToRemoveForOrigin.length,
-            actualRemovedCount: currentSelectedRecords.length - actualSelectedAfter.length,
-            removalSuccessful: (currentSelectedRecords.length - actualSelectedAfter.length) === recordsToRemoveForOrigin.length,
+            actualRemovedCount: currentSelectedIds.length - actualSelectedIdsAfter.length,
+            removalSuccessful: (currentSelectedIds.length - actualSelectedIdsAfter.length) === recordsToRemoveForOrigin.length,
             timestamp: Date.now()
           })
         }, 100)
@@ -575,15 +518,18 @@ export function removeRecordsFromOriginSelections(
       }
       
       // Publish selection change message for this origin DS
+      // r027.014: Pass empty records array — r027.010 switched to ID-based selection,
+      // so records are no longer available here. The dataSourceIds param is what
+      // downstream listeners use to refresh their state.
       MessageManager.getInstance().publishMessage(
-        new DataRecordsSelectionChangeMessage(widgetId, remainingRecords as FeatureDataRecord[], [originDS.id])
+        new DataRecordsSelectionChangeMessage(widgetId, [] as FeatureDataRecord[], [originDS.id])
       )
-      
+
       debugLogger.log('RESULTS-MODE', {
         event: 'origin-ds-selection-updated',
         widgetId,
         originDSId: originDS.id,
-        remainingRecordsCount: remainingRecords.length,
+        remainingIdsCount: remainingIds.length,
         messagePublished: true
       })
     } catch (error) {

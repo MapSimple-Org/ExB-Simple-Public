@@ -7,7 +7,7 @@
  * and passes values in as parameters.
  */
 
-import { DataSourceManager } from 'jimu-core'
+import { DataSourceManager, type UseDataSource, type ImmutableArray } from 'jimu-core'
 import Popup from 'esri/widgets/Popup'
 import FeatureEffect from 'esri/layers/support/FeatureEffect'
 import FeatureFilter from 'esri/layers/support/FeatureFilter'
@@ -16,6 +16,14 @@ import { queryFeatureLayerByIds, type RestGeometry, buildWhereClause } from './f
 import { applyMobilePopupBehavior } from './feed-layer-manager'
 import { debugLogger } from './debug-logger'
 import { MOBILE_BREAKPOINT_PX } from '../constants'
+import type Graphic from '@arcgis/core/Graphic'
+import type Point from '@arcgis/core/geometry/Point'
+import type Polygon from '@arcgis/core/geometry/Polygon'
+import type Polyline from '@arcgis/core/geometry/Polyline'
+import type MapView from '@arcgis/core/views/MapView'
+import type SceneView from '@arcgis/core/views/SceneView'
+import type FeatureLayer from '@arcgis/core/layers/FeatureLayer'
+import type FeatureLayerView from '@arcgis/core/views/layers/FeatureLayerView'
 
 
 // ── Config Check ──────────────────────────────────────────────────
@@ -24,7 +32,15 @@ import { MOBILE_BREAKPOINT_PX } from '../constants'
  * Whether all map integration settings are configured (layer DS + both join fields).
  */
 export function isMapIntegrationConfigured (
-  useDataSources: any[] | undefined,
+  // r027.067 / r005.007: ExB props arrive seamless-immutable-wrapped
+  // (ImmutableArray<UseDataSource>), which lacks array mutation methods, so
+  // it isn't assignable to a plain mutable array type. Widened the param to
+  // also accept the immutable shape. Read-only access only — runtime unchanged.
+  useDataSources:
+    | ImmutableArray<UseDataSource>
+    | UseDataSource[]
+    | any[]
+    | undefined,
   config: { joinFieldService: string; joinFieldFeed: string }
 ): boolean {
   return !!(
@@ -61,7 +77,7 @@ export function inferGeometryType (restGeom: RestGeometry): RestGeometry & { typ
  * Points zoom to a specific level; lines/polygons expand the extent by a buffer factor.
  */
 export function buildGoToTarget (
-  graphic: __esri.Graphic,
+  graphic: Graphic,
   geometryType: string,
   zoomFactorPoint: number,
   zoomFactorPoly: number
@@ -69,7 +85,7 @@ export function buildGoToTarget (
   if (geometryType === 'point') {
     return { target: graphic, zoom: zoomFactorPoint }
   }
-  return (graphic.geometry as __esri.Polygon | __esri.Polyline).extent.expand(zoomFactorPoly)
+  return (graphic.geometry as Polygon | Polyline).extent.expand(zoomFactorPoly)
 }
 
 // ── Pan Target ────────────────────────────────────────────────────
@@ -79,20 +95,20 @@ export function buildGoToTarget (
  * Points use the point directly; lines/polygons use the extent center.
  */
 export function buildPanTarget (
-  graphic: __esri.Graphic,
+  graphic: Graphic,
   geometryType: string
-): { center: __esri.Point } {
+): { center: Point } {
   if (geometryType === 'point') {
-    return { center: graphic.geometry as __esri.Point }
+    return { center: graphic.geometry as Point }
   }
-  const extent = (graphic.geometry as __esri.Polygon | __esri.Polyline).extent
+  const extent = (graphic.geometry as Polygon | Polyline).extent
   return { center: extent.center }
 }
 
 // ── Feature Identification (Popup) ────────────────────────────────
 
 export interface IdentifyParams {
-  mapView: __esri.MapView | __esri.SceneView
+  mapView: MapView | SceneView
   dataSourceId: string
   joinField: string
   joinValue: string
@@ -142,8 +158,8 @@ export async function identifyFeatureOnMap (params: IdentifyParams): Promise<voi
 
       const isMobile = mapView.width <= MOBILE_BREAKPOINT_PX
       const location = feature.geometry.type === 'point'
-        ? feature.geometry as __esri.Point
-        : (feature.geometry as __esri.Polygon | __esri.Polyline).extent?.center
+        ? feature.geometry as Point
+        : (feature.geometry as Polygon | Polyline).extent?.center
 
       const openOptions: any = { features: [feature], location }
       if (params.mobilePopupCollapsed && isMobile) {
@@ -166,7 +182,7 @@ export interface QueryGeometriesParams {
   joinFieldService: string
   dataSourceId: string
   /** JSAPI MapView — used to find the actual map layer (which has definitionExpression) */
-  mapView: __esri.MapView | __esri.SceneView | null
+  mapView: MapView | SceneView | null
   /** Current set of join IDs from previous query — used for skip optimization */
   previousJoinIds: Set<string>
 }
@@ -247,22 +263,22 @@ export async function queryGeometries (params: QueryGeometriesParams): Promise<Q
  * Reusable helper extracted from queryGeometries / identifyFeatureOnMap.
  */
 export function findJoinedFeatureLayer (
-  mapView: __esri.MapView | __esri.SceneView,
+  mapView: MapView | SceneView,
   dataSourceId: string
-): __esri.FeatureLayer | null {
+): FeatureLayer | null {
   const originDs = DataSourceManager.getInstance().getDataSource(dataSourceId)
   const dsUrl = originDs?.getDataSourceJson()?.url as string
   if (!dsUrl) return null
 
   const layer = mapView.map.allLayers.find((l: any) => {
     return l.type === 'feature' && l.url && dsUrl.toLowerCase().includes(l.url.toLowerCase())
-  }) as __esri.FeatureLayer | undefined
+  }) as FeatureLayer | undefined
 
   return layer || null
 }
 
 export interface ApplyFilterEffectParams {
-  mapView: __esri.MapView | __esri.SceneView
+  mapView: MapView | SceneView
   dataSourceId: string
   joinField: string
   /** Join values from the currently filtered/searched feed items */
@@ -286,9 +302,9 @@ export async function applyFilterEffect (params: ApplyFilterEffectParams): Promi
     return
   }
 
-  let layerView: __esri.FeatureLayerView
+  let layerView: FeatureLayerView
   try {
-    layerView = await mapView.whenLayerView(featureLayer) as __esri.FeatureLayerView
+    layerView = await mapView.whenLayerView(featureLayer) as FeatureLayerView
   } catch (err) {
     debugLogger.log('FEATURE-EFFECT', {
       action: 'layerview-error',
@@ -329,14 +345,14 @@ export async function applyFilterEffect (params: ApplyFilterEffectParams): Promi
  * Safe to call even if no effect is set.
  */
 export async function clearFilterEffect (
-  mapView: __esri.MapView | __esri.SceneView,
+  mapView: MapView | SceneView,
   dataSourceId: string
 ): Promise<void> {
   const featureLayer = findJoinedFeatureLayer(mapView, dataSourceId)
   if (!featureLayer) return
 
   try {
-    const layerView = await mapView.whenLayerView(featureLayer) as __esri.FeatureLayerView
+    const layerView = await mapView.whenLayerView(featureLayer) as FeatureLayerView
     if (layerView.featureEffect) {
       layerView.featureEffect = null
       debugLogger.log('FEATURE-EFFECT', { action: 'cleared' })

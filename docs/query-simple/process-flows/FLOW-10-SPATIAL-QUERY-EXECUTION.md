@@ -185,7 +185,7 @@ logic (New/Add/Remove).
       |   |
       |   +-- For each layerResult with featureCount > 0:
       |       +-- Get DataSource for layerId
-      |       +-- Set sourceLayer on each graphic (matches direct-query.ts pattern)
+      |       +-- Stamp graphic.layer = featureLayer (r027.030 — JSAPI 5.0 removed sourceLayer/associatedLayer)
       |       +-- ds.buildRecord(graphic) -> FeatureDataRecord
       |       +-- Stamp __queryConfigId = layerDefaultConfigIds[layerId] || 'spatial'
       |       |   (r025.048: real configId enables SimpleList template resolution)

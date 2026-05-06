@@ -13,7 +13,8 @@ import {
   hooks,
   DataSourceManager,
   type SqlQueryParams,
-  Immutable
+  Immutable,
+  ClauseType
 } from 'jimu-core'
 import { Button, Tooltip, Checkbox } from 'jimu-ui'
 import { loadArcGISJSAPIModules } from 'jimu-arcgis'
@@ -21,6 +22,7 @@ import { SqlExpressionRuntime, getShownClauseNumberByExpression } from 'jimu-ui/
 import { type QueryItemType, type SpatialFilterObj, SpatialRelation, type UnitType } from '../config'
 import { DEFAULT_QUERY_ITEM } from '../default-query-item'
 import { sanitizeSqlExpression, isQueryInputValid } from './query-utils'
+import { isSqlClause, getClauseValue } from './sql-clause-utils'
 import defaultMessage from './translations/default'
 import { QueryTaskSpatialForm } from './query-task-spatial-form'
 import { useAutoHeight } from './useAutoHeight'
@@ -257,14 +259,22 @@ export function QueryTaskForm (props: QueryTaskItemProps) {
       // Accessing Immutable structures requires care. If dot notation fails, 
       // the framework components might be using .get() or other methods.
       // We'll be inclusive here: if it's not a SINGLE part, we treat it as valid.
-      if (part.type === 'SINGLE') {
+      if (isSqlClause(part)) {
         const val = part.valueOptions?.value
-        const source = part.valueOptions?.source
+        const source = part.valueOptions?.sourceType
         
-        // If the source is NOT 'USER_INPUT', it's likely a list/dropdown (UNIQUE_VALUES, FIELD_VALUE)
-        // We also check for part.dataSource which is common for list-based selections
-        // We treat these as "List" types which are exempted from the empty-string rule.
-        const isList = (source && source !== 'USER_INPUT') || (part.dataSource?.source)
+        // If sourceType is NOT USER_INPUT, it's a list/dropdown source per the
+        // ClauseSourceType enum (FIELD, UNIQUE, MULTIPLE, predefined variants).
+        // List clauses are exempt from the empty-string rule.
+        //
+        // r027.060: `(part as any).dataSource?.source` is a defensive backstop
+        // that matches the same pattern at suggest-utils.ts:146. `dataSource`
+        // is NOT in jimu-core's public `SqlClause` type def in either 1.19 or
+        // 1.20 — runtime presence is unverified. Preserving the check (rather
+        // than relying on `sourceType !== UserInput` alone) until runtime
+        // verification confirms `sourceType` is sufficient. If a future audit
+        // confirms the field is dead, drop the cast and the OR clause.
+        const isList = (source && source !== 'USER_INPUT') || ((part as any).dataSource?.source)
         
         const isValid = isQueryInputValid(val, !!isList)
         
@@ -273,8 +283,11 @@ export function QueryTaskForm (props: QueryTaskItemProps) {
           configId,
           partType: part.type,
           source,
-          hasDataSource: !!part.dataSource,
-          dataSourceSource: part.dataSource?.source,
+          // r027.060: dropped `hasDataSource` / `dataSourceSource` — they
+          // accessed the undocumented `part.dataSource` field. `source` (now
+          // `sourceType`) already captures the discriminating signal. If the
+          // defensive cast at the `isList` check above ever fires, expand
+          // logging then.
           isList: !!isList,
           value: val,
           isValid
@@ -332,7 +345,7 @@ export function QueryTaskForm (props: QueryTaskItemProps) {
       initialValueSetRef: initialValueSetRef.current,
       lastValueSetRef: lastValueSetRef.current,
       hashTriggeredRef: hashTriggeredRef.current,
-      currentStateValue: attributeFilterSqlExprObj?.parts?.[0]?.valueOptions?.value,
+      currentStateValue: getClauseValue(attributeFilterSqlExprObj?.parts?.[0]),
       willProcess: datasourceReady && outputDS && initialInputValue && sqlExprObj?.parts?.length > 0,
       timestamp: Date.now()
     })
@@ -447,8 +460,8 @@ export function QueryTaskForm (props: QueryTaskItemProps) {
           event: 'hash-value-setting-react-state',
           configId,
           initialInputValue,
-          previousStateValue: attributeFilterSqlExprObj?.parts?.[0]?.valueOptions?.value,
-          newStateValue: updated?.parts?.[0]?.valueOptions?.value,
+          previousStateValue: getClauseValue(attributeFilterSqlExprObj?.parts?.[0]),
+          newStateValue: getClauseValue(updated?.parts?.[0]),
           willCallSetState: true,
           note: 'Setting value in React state - SqlExpressionRuntime should receive via expression prop'
         })
@@ -461,7 +474,7 @@ export function QueryTaskForm (props: QueryTaskItemProps) {
           event: 'hash-value-ref-updated',
           configId,
           initialInputValue,
-          refValueAfterUpdate: attributeFilterSqlExprObjRef.current?.parts?.[0]?.valueOptions?.value,
+          refValueAfterUpdate: getClauseValue(attributeFilterSqlExprObjRef.current?.parts?.[0]),
           timestamp: Date.now()
         })
         // Update clause number for the updated expression
@@ -503,9 +516,9 @@ export function QueryTaskForm (props: QueryTaskItemProps) {
       showClauseNumber.current = getShownClauseNumberByExpression(sqlExprObj)
       
       // Check if we already have a value set (from user input or hash)
-      const currentValue = attributeFilterSqlExprObj?.parts?.[0]?.valueOptions?.value
-      const refValue = attributeFilterSqlExprObjRef.current?.parts?.[0]?.valueOptions?.value
-      const baseValue = sqlExprObj?.parts?.[0]?.valueOptions?.value
+      const currentValue = getClauseValue(attributeFilterSqlExprObj?.parts?.[0])
+      const refValue = getClauseValue(attributeFilterSqlExprObjRef.current?.parts?.[0])
+      const baseValue = getClauseValue(sqlExprObj?.parts?.[0])
       const hasValueSet = currentValue !== undefined && currentValue !== null && currentValue !== ''
       const hasRefValue = refValue !== undefined && refValue !== null && refValue !== ''
       const configIdChanged = previousConfigIdRef.current !== null && previousConfigIdRef.current !== configId
@@ -572,9 +585,9 @@ export function QueryTaskForm (props: QueryTaskItemProps) {
     debugLogger.log('FORM', {
       event: 'attributeFilterSqlExprObj-state-changed',
       configId,
-      stateValue: attributeFilterSqlExprObj?.parts?.[0]?.valueOptions?.value,
-      stateValueType: typeof attributeFilterSqlExprObj?.parts?.[0]?.valueOptions?.value,
-      isArray: Array.isArray(attributeFilterSqlExprObj?.parts?.[0]?.valueOptions?.value),
+      stateValue: getClauseValue(attributeFilterSqlExprObj?.parts?.[0]),
+      stateValueType: typeof getClauseValue(attributeFilterSqlExprObj?.parts?.[0]),
+      isArray: Array.isArray(getClauseValue(attributeFilterSqlExprObj?.parts?.[0])),
       hashTriggeredRef: hashTriggeredRef.current,
       initialInputValue,
       note: 'React state changed - SqlExpressionRuntime should receive this via expression prop'
@@ -589,12 +602,13 @@ export function QueryTaskForm (props: QueryTaskItemProps) {
       hashTriggeredRef: hashTriggeredRef.current,
       runtimeZoomToSelected,
       willZoom: hashTriggeredRef.current ? true : runtimeZoomToSelected,
-      currentValue: attributeFilterSqlExprObjRef.current?.parts?.[0]?.valueOptions?.value,
+      currentValue: getClauseValue(attributeFilterSqlExprObjRef.current?.parts?.[0]),
       timestamp: Date.now()
     })
-    
+
     // When the 'apply' button is clicked, it should clear the selection from the previous result list
-    clearSelectionInDataSources(outputDS)
+    // NOTE: pre-existing arg mismatch — outputDS passed as widgetId. Not fixing in type-only pass.
+    ;(clearSelectionInDataSources as any)(outputDS)
 
     if (outputDS) {
       const originDs: FeatureLayerDataSource = outputDS.getOriginDataSources()[0] as FeatureLayerDataSource
@@ -616,7 +630,7 @@ export function QueryTaskForm (props: QueryTaskItemProps) {
     // Sanitize user input before submission
     // Read from ref to get the latest value synchronously (including hash values)
     const currentSqlExprObj = attributeFilterSqlExprObjRef.current
-    const currentRefValue = currentSqlExprObj?.parts?.[0]?.valueOptions?.value
+    const currentRefValue = getClauseValue(currentSqlExprObj?.parts?.[0])
     
     debugLogger.log('FORM', {
       event: 'applyQuery-executing',
@@ -661,7 +675,7 @@ export function QueryTaskForm (props: QueryTaskItemProps) {
         loadArcGISJSAPIModules([
           'esri/geometry/operators/unionOperator'
         ]).then(modules => {
-          const operator: (typeof __esri.unionOperator) = modules[0]
+          const operator: typeof import('@arcgis/core/geometry/operators/unionOperator') = modules[0]
           const geometry = operator.executeMany(spatialFilterObjRef.current.geometry)
           onFormSubmit(sanitizedSqlExprObj, { ...spatialFilterObjRef.current, geometry, relation: rel, buffer: bufferRef.current }, zoomToUse)
         })
@@ -721,7 +735,7 @@ export function QueryTaskForm (props: QueryTaskItemProps) {
     if (!dataActionFilter) return
     if (dataActionFilter.where !== preDataActionFilter?.where) {
       // Log state when dataActionFilter changes (query switch)
-      const currentRefValue = attributeFilterSqlExprObjRef.current?.parts?.[0]?.valueOptions?.value
+      const currentRefValue = getClauseValue(attributeFilterSqlExprObjRef.current?.parts?.[0])
       const hasPendingHashValue = initialInputValue && 
                                   (initialValueSetRef.current !== configId || 
                                    currentRefValue !== initialInputValue)
@@ -755,9 +769,9 @@ export function QueryTaskForm (props: QueryTaskItemProps) {
 
   const handleSqlExprObjChange = React.useCallback((sqlObj: IMSqlExpression) => {
     // LOG AT THE VERY START
-    const sqlObjValue = sqlObj?.parts?.[0]?.valueOptions?.value
-    const previousRefValue = attributeFilterSqlExprObjRef.current?.parts?.[0]?.valueOptions?.value
-    const previousStateValue = attributeFilterSqlExprObj?.parts?.[0]?.valueOptions?.value
+    const sqlObjValue = getClauseValue(sqlObj?.parts?.[0])
+    const previousRefValue = getClauseValue(attributeFilterSqlExprObjRef.current?.parts?.[0])
+    const previousStateValue = getClauseValue(attributeFilterSqlExprObj?.parts?.[0])
     
     // Check if this is from user typing or prop change
     const isFromUserTyping = typeof previousRefValue === 'string' && 
@@ -818,7 +832,7 @@ export function QueryTaskForm (props: QueryTaskItemProps) {
     
     // Check if this is a hash-triggered conversion (string -> array)
     // When hash value changes for same configId, SqlExpressionRuntime converts string to array format
-    if (firstPart?.type === 'SINGLE' && firstPart?.valueOptions?.value) {
+    if (isSqlClause(firstPart) && firstPart.valueOptions?.value) {
       const value = firstPart.valueOptions.value
       const isArrayFormat = Array.isArray(value)
       const hasInitialValue = initialInputValue && hashTriggeredRef.current
@@ -1055,7 +1069,7 @@ export function QueryTaskForm (props: QueryTaskItemProps) {
 
   // Log when SqlExpressionRuntime key changes (component remounts) OR expression prop changes
   React.useEffect(() => {
-    const expressionValue = attributeFilterSqlExprObj?.parts?.[0]?.valueOptions?.value
+    const expressionValue = getClauseValue(attributeFilterSqlExprObj?.parts?.[0])
     const sqlExprRuntimeKey = `${configId}-${expressionValue || 'empty'}`
     
     debugLogger.log('FORM', {
@@ -1321,7 +1335,7 @@ export function QueryTaskForm (props: QueryTaskItemProps) {
               {originDS && (
                 <div ref={sqlExprRuntimeContainerRef} css={css`margin: -10px 0px; position: relative;`}>
                   <SqlExpressionRuntime
-                    key={`${configId}-${attributeFilterSqlExprObj?.parts?.[0]?.valueOptions?.value || 'empty'}`}
+                    key={`${configId}-${getClauseValue(attributeFilterSqlExprObj?.parts?.[0]) || 'empty'}`}
                     widgetId={widgetId}
                     dataSource={originDS}
                     expression={attributeFilterSqlExprObj}

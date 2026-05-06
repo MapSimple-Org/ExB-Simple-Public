@@ -1,23 +1,36 @@
 import React from 'react'
+import { type FeatureDataRecord } from 'jimu-core'
 import { SelectionType } from '../../config'
 import { createQuerySimpleDebugLogger } from 'widgets/shared-code/mapsimple-common'
 import { graphicsStateManager } from '../graphics-state-manager'
+import type GraphicsLayer from '@arcgis/core/layers/GraphicsLayer'
+import type MapView from '@arcgis/core/views/MapView'
+import type SceneView from '@arcgis/core/views/SceneView'
+import type Layer from '@arcgis/core/layers/Layer'
 
 const debugLogger = createQuerySimpleDebugLogger()
 
 /**
  * Interface for widget state that relates to selection and restoration.
  * r022.2: lastSelection removed - accumulatedRecords is universal source of truth
+ *
+ * r027.079: All fields marked optional. The widget's State (in widget.tsx)
+ * declares these fields with `?:` (all optional), and the stateGetter
+ * returns the full widget State, so structural assignability requires
+ * matching optionality. The manager's runtime code already handles
+ * `undefined` for each (e.g., guards on hasSelection, defaults on
+ * selectionRecordCount).
  */
 export interface SelectionRestorationState {
-  hasSelection: boolean
-  selectionRecordCount: number
-  resultsMode: SelectionType
-  accumulatedRecords?: Array<{
-    configId: string
-    record: any // FeatureDataRecord
-  }>
-  isPanelVisible: boolean
+  hasSelection?: boolean
+  selectionRecordCount?: number
+  resultsMode?: SelectionType
+  // r027.072: Type was Array<{configId, record}> (a stale wrapper shape), but
+  // every other place in the codebase uses FeatureDataRecord[] directly, and
+  // the consumer code at line 322/326 calls record.getId()/getDataSource()
+  // straight on the entries — confirming the runtime shape is bare records.
+  accumulatedRecords?: FeatureDataRecord[]
+  isPanelVisible?: boolean
 }
 
 /**
@@ -30,10 +43,16 @@ export interface SelectionRestorationCallbacks {
 /**
  * Dependencies needed for panel restoration methods.
  * These are typically passed at runtime when calling addSelectionToMap/clearSelectionFromMap.
+ *
+ * r027.079: Widened to match what widget.tsx actually passes:
+ *   - mapViewRef can hold MapView OR SceneView (3D mode).
+ *   - graphicsLayerManager param is typed loosely (it's a class instance);
+ *     only clearGraphics is exercised here, and we keep the structural
+ *     surface narrow to that one method.
  */
 export interface RestorationDependencies {
-  graphicsLayerRef: { current: __esri.GraphicsLayer | null }
-  mapViewRef: { current: __esri.MapView | null }
+  graphicsLayerRef: { current: GraphicsLayer | null }
+  mapViewRef: { current: MapView | SceneView | null }
   graphicsLayerManager: {
     clearGraphics: (widgetId: string, config: any) => void
   }
@@ -247,7 +266,7 @@ export class SelectionRestorationManager {
     // r024.3: When LayerList mode enabled and GroupLayer exists, skip restoration (graphics already there)
     if (addResultsAsMapLayer && mapView) {
       const groupLayerId = `querysimple-results-${this.widgetId}`
-      const existingGroupLayer = mapView.map.layers.find((layer: __esri.Layer) => layer.id === groupLayerId)
+      const existingGroupLayer = mapView.map.layers.find((layer: Layer) => layer.id === groupLayerId)
       if (existingGroupLayer) {
         debugLogger.log('RESTORE', {
           event: 'addSelectionToMap-skipped-layerlist-mode',
@@ -284,7 +303,7 @@ export class SelectionRestorationManager {
     // Symmetric with clearSelectionFromMap which clears the buffer (r025.017).
     if (!addResultsAsMapLayer && mapView) {
       const bufferLayerId = `querysimple-buffer-${this.widgetId}`
-      const bufferLayer = mapView.map.findLayerById(bufferLayerId) as __esri.GraphicsLayer
+      const bufferLayer = mapView.map.findLayerById(bufferLayerId) as GraphicsLayer
       const lastGraphic = graphicsStateManager.getLastBufferGraphic(this.widgetId)
 
       if (bufferLayer && lastGraphic && bufferLayer.graphics?.length === 0) {
@@ -304,7 +323,10 @@ export class SelectionRestorationManager {
    * r022.41: Added manageGraphicsLayer parameter
    */
   private async restoreAccumulatedRecords(
-    accumulatedRecords: Array<{ configId: string, record: any }>,
+    // r027.072: Param type was the same stale wrapper shape as the state field;
+    // narrowed to FeatureDataRecord[] to match the runtime value passed at
+    // line 276 and the rest of the codebase.
+    accumulatedRecords: FeatureDataRecord[],
     deps: RestorationDependencies,
     manageGraphicsLayer: boolean
   ): Promise<void> {
@@ -315,11 +337,15 @@ export class SelectionRestorationManager {
 
     // Group records by origin DS
     accumulatedRecords.forEach((record, index) => {
-      const recordId = record.getId()
+      // r027.000: ExB 1.20 — coerce getId() to string (now returns string | number)
+      const recordId = String(record.getId())
       let originDS: any | null = null
 
-      // Method 1: Try to get from record.getDataSource()
-      const recordDS = record.getDataSource?.()
+      // Method 1: Try to get from record.dataSource
+      // r027.072: ExB 1.20 — DataRecord exposes .dataSource as a property
+      // (line 372 of common-data-source-interface.d.ts). Old getDataSource()
+      // method does not exist in 1.20.
+      const recordDS = record.dataSource
       if (recordDS) {
         originDS = recordDS.getOriginDataSources?.()?.[0] || recordDS
 
@@ -343,7 +369,8 @@ export class SelectionRestorationManager {
           if (ds && typeof (ds as any).getAllLoadedRecords === 'function') {
             try {
               const allRecords = (ds as any).getAllLoadedRecords() || []
-              const matchingRecord = allRecords.find((r: any) => r.getId() === recordId)
+              // r027.000: ExB 1.20 — coerce getId() to string (now returns string | number)
+              const matchingRecord = allRecords.find((r: any) => String(r.getId()) === recordId)
 
               if (matchingRecord) {
                 originDS = (ds as any).getOriginDataSources?.()?.[0] || ds
@@ -400,20 +427,19 @@ export class SelectionRestorationManager {
     if (manageGraphicsLayer && graphicsLayer && mapView) {
       const { clearGraphicsLayer: clearGL, addHighlightGraphics } = await import('../graphics-layer-utils')
       
+      // r027.072: Removed legacy debug-log probe of {configId, record} wrapper
+      // shape. The comment one block down (and the rest of the codebase)
+      // confirms accumulatedRecords are bare FeatureDataRecord objects, so
+      // probing for the old wrapper fields was diagnostic noise from the
+      // wrapper -> bare-record transition that's already complete.
       debugLogger.log('RESTORE', {
         event: 'clearing-graphics-before-restore',
         widgetId: this.widgetId,
         graphicsLayerId: graphicsLayer.id,
         graphicsCountBefore: graphicsLayer.graphics.length,
         manageGraphicsLayer,
-        accumulatedRecordsStructure: accumulatedRecords.map((item, i) => ({
-          index: i,
-          hasConfigId: !!item.configId,
-          hasRecord: !!item.record,
-          configId: item.configId,
-          recordId: item.record?.getId?.() || 'no-getId',
-          itemKeys: Object.keys(item)
-        })).slice(0, 5),
+        accumulatedRecordsCount: accumulatedRecords.length,
+        sampleRecordIds: accumulatedRecords.slice(0, 5).map(r => String(r.getId())),
         timestamp: Date.now()
       })
       
@@ -524,7 +550,7 @@ export class SelectionRestorationManager {
       const mapView = deps.mapViewRef?.current
       if (mapView) {
         const bufferLayerId = `querysimple-buffer-${this.widgetId}`
-        const bufferLayer = mapView.map.findLayerById(bufferLayerId) as __esri.GraphicsLayer
+        const bufferLayer = mapView.map.findLayerById(bufferLayerId) as GraphicsLayer
         if (bufferLayer && bufferLayer.graphics?.length > 0) {
           const bufferCount = bufferLayer.graphics.length
           bufferLayer.removeAll()

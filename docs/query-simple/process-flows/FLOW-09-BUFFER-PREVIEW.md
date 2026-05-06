@@ -26,6 +26,9 @@ users visually confirm spatial extent before executing a query.
 ```
 Map Layers (top to bottom):
   ┌─────────────────────────────────────┐
+  │ querysimple-hover-{widgetId}        │  ← Hover preview pin (r027.082+)
+  │   Red CIM teardrop on card hover    │
+  ├─────────────────────────────────────┤
   │ querysimple-buffer-{widgetId}       │  ← Buffer preview (this flow)
   │   Semi-transparent yellow polygon   │
   ├─────────────────────────────────────┤
@@ -36,6 +39,12 @@ Map Layers (top to bottom):
   │   or querysimple-results-{widgetId} │
   └─────────────────────────────────────┘
 ```
+
+> **r027.082+:** Hover preview pins moved off `mapView.graphics` (the
+> map-level shared collection) onto a per-widget `querysimple-hover-{widgetId}`
+> GraphicsLayer. The earlier home was vulnerable to cross-widget collisions
+> when any QS widget called `mapView.graphics.removeAll()` during clear-results.
+> See `docs/bugs/HOVER-PIN-CROSS-WIDGET-BUG.md` for the investigation.
 
 ---
 

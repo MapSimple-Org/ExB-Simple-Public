@@ -6,11 +6,14 @@ import type * as jimuMap from 'jimu-ui/advanced/map'
 import { CreateToolType } from '../config'
 import { EntityStatusType, StatusIndicator } from 'widgets/shared-code/mapsimple-common'
 import defaultMessage from './translations/default'
+import type Graphic from '@arcgis/core/Graphic'
+import type GraphicsLayer from '@arcgis/core/layers/GraphicsLayer'
+import type MapNotesLayer from '@arcgis/core/layers/MapNotesLayer'
 export interface InteractiveDrawProps {
   jimuMapView: JimuMapView
   widgetId: string
   toolTypes: ImmutableArray<CreateToolType>
-  onDrawEnd: (graphic: __esri.Graphic, getLayerFun?, clearAfterApply?: boolean) => void
+  onDrawEnd: (graphic: Graphic, getLayerFun?, clearAfterApply?: boolean) => void
 }
 
 const sketchToolInfoMap = {
@@ -29,7 +32,7 @@ export function InteractiveDraw (props: InteractiveDrawProps) {
   const { toolTypes = [], jimuMapView, onDrawEnd, widgetId } = props
   const getI18nMessage = hooks.useTranslation(defaultMessage)
   const [mapModule, setMapModule] = React.useState<typeof jimuMap>(null)
-  const getLayerFunRef = React.useRef<() => __esri.GraphicsLayer | __esri.MapNotesLayer>(null)
+  const getLayerFunRef = React.useRef<() => GraphicsLayer | MapNotesLayer>(null)
   const graphicRef = React.useRef(null)
   const [clearAfterApply, setClearAfterApply] = React.useState(false)
 
@@ -60,7 +63,7 @@ export function InteractiveDraw (props: InteractiveDrawProps) {
   }, [])
 
   const handleDrawStart = React.useCallback(() => {
-    getLayerFunRef.current && ((getLayerFunRef.current)() as __esri.GraphicsLayer).removeAll()
+    getLayerFunRef.current && ((getLayerFunRef.current)() as GraphicsLayer).removeAll()
   }, [])
 
   const handleDrawEnd = React.useCallback(

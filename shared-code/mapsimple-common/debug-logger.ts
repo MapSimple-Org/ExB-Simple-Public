@@ -1,66 +1,61 @@
 /**
- * Configurable debug logging utility for Experience Builder widgets
- * 
- * Usage:
- * - Add ?debug=all to URL to see all debug logs
- * - Add ?debug=HASH,FORM to see specific feature logs
- * - Add ?debug=false to disable all debug logs
- * 
- * Features (QuerySimple):
- * - BUG: Known bugs/issues (always logs, even if debug=false) - Use format: bugId, category, description
- * - HASH: Hash parameter processing
- * - HASH-EXEC: Hash query execution details
- * - HASH-FIRST-LOAD: First load hash handling
- * - FORM: Query form interactions
- * - TASK: Query task management
- * - ZOOM: Zoom behavior
- * - MAP-EXTENT: Map extent changes
- * - DATA-ACTION: Data action execution (Add to Map, etc.)
- * - GROUP: Query grouping and dropdown selection
- * - SELECTION: Selection detection and identify popup tracking
- * - SELECTION-STATE-AUDIT: Detailed selection state auditing for troubleshooting
- * - WIDGET-STATE: Widget lifecycle events (open/close handshake)
- * - RESTORE: Selection restoration when widget opens
- * - RESULTS-MODE: Results management mode selection (Create new, Add to, Remove from)
- * - EXPAND-COLLAPSE: Expand/collapse state management for result items
- * - GRAPHICS-LAYER: Graphics layer highlighting (independent of layer visibility)
- * - EVENTS: Event listener setup/cleanup and custom event dispatching
- * - POPUP: Map popup interactions
- * - QUERY-PATH: Which query path is taken (DIRECT vs EXB legacy)
- * - DIRECT-QUERY: Direct FeatureLayer.queryFeatures() bypass execution details
- * - SPATIAL: Spatial tab query execution (target layers, buffer, results)
- * - CSV: CSV export field schema and alias inspection
- * - VIEW-TABLE: View in Table display fields inspection
- * - SUGGEST: Typeahead/suggest feature (detection, fetch queries, inject)
- * 
- * Temporary Migration Features (will be removed after migration complete):
- * - CHUNK-1-COMPARE: Chunk 1 (URL Parameter) comparison logs
- * - CHUNK-1-MISMATCH: Chunk 1 mismatch warnings
- * - CHUNK-2-COMPARE: Chunk 2 (Visibility) comparison logs
- * - CHUNK-2-MISMATCH: Chunk 2 mismatch warnings
- * - CHUNK-3-COMPARE: Chunk 3 (Selection/Restoration) comparison logs
- * - CHUNK-3-DECISION: Chunk 3 decision point logs
- * - CHUNK-3-FALLBACK: Chunk 3 fallback logic logs
- * - CHUNK-4-COMPARE: Chunk 4 (Graphics Layer) comparison logs
- * - CHUNK-5-COMPARE: Chunk 5 (Accumulated Records) comparison logs
- * - CHUNK-6-COMPARE: Chunk 6 (Map View) comparison logs
- * - CHUNK-6-MISMATCH: Chunk 6 mismatch warnings
- * 
- * Features (HelperSimple):
- * - HASH: Hash parameter monitoring and widget opening
- * - SELECTION: Selection tracking from QuerySimple
- * - WIDGET-STATE: Widget state handshake (open/close events)
- * - RESTORE: Selection restoration attempts and results
+ * DebugLogger — URL-activated, feature-scoped debug logging for ExB custom widgets.
+ *
+ * A portable, zero-overhead logging utility that activates via URL parameters.
+ * No code changes needed to toggle logging in dev, test, or production.
+ *
+ * ## Quick Start (any custom widget)
+ *
+ * ```ts
+ * import { createDebugLogger } from 'widgets/shared-code/mapsimple-common'
+ *
+ * const debugLogger = createDebugLogger('MYWIDGET', ['FETCH', 'RENDER', 'AUTH'])
+ * debugLogger.log('FETCH', { url: '...', status: 200 })
+ * debugLogger.log('BUG', { bugId: 'BUG-001', category: 'RENDER', description: 'Card height wrong' })
+ * ```
+ *
+ * ## URL Activation
+ *
+ * - `?debug=all`           — Enable all registered tags
+ * - `?debug=FETCH,RENDER`  — Enable specific tags (comma-separated, case-insensitive)
+ * - `?debug=false`         — Explicitly disable all logging
+ * - (no param)             — Logging disabled (zero overhead)
+ *
+ * ## Features
+ *
+ * - **URL-driven**: No code changes to toggle. Works in dev, test, prod.
+ * - **Feature-scoped**: Each tag isolates a subsystem. No firehose.
+ * - **BUG level**: Always logs via console.warn, even when debug=false.
+ * - **ExB iframe-aware**: Checks parent window for ?debug param.
+ * - **Zero overhead**: isEnabled() returns false immediately when no ?debug param.
+ * - **Lazy init**: URL params not parsed until first log() call.
+ * - **Portable**: DebugLogger class + createDebugLogger() factory work with any widget.
+ *
+ * ## MapSimple Widget Tags
+ *
+ * See createQuerySimpleDebugLogger(), createHelperSimpleDebugLogger(),
+ * and createFeedSimpleDebugLogger() below for widget-specific tag registrations.
+ *
+ * ## Documentation
+ *
+ * See docs/development/DEBUG_LOGGER_GUIDE.md for full implementation guide.
  */
 
-type DebugFeature = 'BUG' | 'HASH' | 'HASH-EXEC' | 'FORM' | 'TASK' | 'ZOOM' | 'MAP-EXTENT' | 'DATA-ACTION' | 'GROUP' | 'SELECTION' | 'SELECTION-STATE-AUDIT' | 'WIDGET-STATE' | 'RESTORE' | 'RESTORE-COMPARE' | 'RESULTS-MODE' | 'EXPAND-COLLAPSE' | 'GRAPHICS-LAYER' | 'EVENTS' | 'POPUP' | 'QUERY-PATH' | 'DIRECT-QUERY' | 'SPATIAL' | 'CSV' | 'VIEW-TABLE' | 'SUGGEST' | 'CHUNK-1-COMPARE' | 'CHUNK-1-MISMATCH' | 'CHUNK-2-COMPARE' | 'CHUNK-2-MISMATCH' | 'CHUNK-3-COMPARE' | 'CHUNK-3-DECISION' | 'CHUNK-3-FALLBACK' | 'CHUNK-4-COMPARE' | 'CHUNK-5-COMPARE' | 'CHUNK-6-COMPARE' | 'CHUNK-6-MISMATCH' | 'all' | 'false'
+/**
+ * Feature tag type — any uppercase string is valid.
+ * Widget-specific factories define the known tags; the class accepts any string
+ * so third-party widgets can define their own without modifying this file.
+ */
+export type DebugFeature = string
 
-interface DebugLoggerOptions {
+export interface DebugLoggerOptions {
+  /** Display name for log prefixes, e.g., 'QUERYSIMPLE', 'FEEDSIMPLE', 'MYWIDGET' */
   widgetName: string
-  features: DebugFeature[]
+  /** Registered feature tags for this widget (used for ?debug=all enumeration) */
+  features: string[]
 }
 
-class DebugLogger {
+export class DebugLogger {
   private enabledFeatures: Set<DebugFeature> = new Set()
   private initialized = false
   private widgetName: string
@@ -106,7 +101,7 @@ class DebugLogger {
       // Parse comma-separated feature list
       const requestedFeatures = debugValue.split(',').map(f => f.trim().toUpperCase() as DebugFeature)
       requestedFeatures.forEach(feature => {
-        if (feature.toUpperCase() === 'ALL') {
+        if (feature === 'ALL') {
           // Enable all features for this widget
           this.features.forEach(f => {
             if (f !== 'all' && f !== 'false') {
@@ -127,10 +122,6 @@ class DebugLogger {
     
     // BUG level always enabled, regardless of debug switches (even if debug=false)
     if (feature === 'BUG') {
-      return true
-    }
-    
-    if (this.enabledFeatures.has('all')) {
       return true
     }
     
@@ -169,10 +160,17 @@ class DebugLogger {
 
   getConfig(): { enabledFeatures: string[], debugValue: string | null } {
     this.initialize()
-    
-    const urlParams = new URLSearchParams(window.location.search)
-    const debugValue = urlParams.get('debug')
-    
+
+    // Check current window first, then parent (same iframe logic as initialize())
+    let debugValue = new URLSearchParams(window.location.search).get('debug')
+    if (debugValue === null && window.parent !== window) {
+      try {
+        debugValue = new URLSearchParams(window.parent.location.search).get('debug')
+      } catch (e) {
+        // Cross-origin — parent not accessible
+      }
+    }
+
     return {
       enabledFeatures: Array.from(this.enabledFeatures),
       debugValue
@@ -187,9 +185,15 @@ export function createQuerySimpleDebugLogger() {
   return new DebugLogger({
     widgetName: 'QUERYSIMPLE',
     features: [
-      'HASH', 'HASH-EXEC', 'HASH-FIRST-LOAD', 'FORM', 'TASK', 'ZOOM', 'MAP-EXTENT', 'DATA-ACTION', 'GROUP', 
+      'HASH', 'HASH-EXEC', 'HASH-FIRST-LOAD', 'FORM', 'TASK', 'ZOOM', 'MAP-EXTENT', 'DATA-ACTION', 'GROUP',
       'SELECTION', 'SELECTION-STATE-AUDIT', 'WIDGET-STATE', 'RESTORE', 'RESULTS-MODE', 'EXPAND-COLLAPSE', 'GRAPHICS-LAYER', 'EVENTS', 'POPUP',
-      'QUERY-PATH', 'DIRECT-QUERY', 'SPATIAL', 'CSV', 'VIEW-TABLE', 'SUGGEST',
+      'QUERY', 'QUERY-PATH', 'DIRECT-QUERY', 'SPATIAL', 'CSV', 'VIEW-TABLE', 'SUGGEST', 'DARK-MODE', 'REBIND',
+      // r027.080: HOVER-PREVIEW, ERROR, QUERY were used in code (query-result-item.tsx,
+      // query-clear-handler.ts, selection-utils.ts, query-submit-handler.ts, query-utils.ts)
+      // but never registered here. The factory's `features.includes(feature)` gate at
+      // debug-logger.ts:111 silently dropped them from any URL filter — making them
+      // invisible to ?debug= unless ?debug=all was used. Registering closes that gap.
+      'HOVER-PREVIEW', 'ERROR',
       // Temporary migration features (will be removed after migration complete)
       'CHUNK-1-COMPARE', 'CHUNK-1-MISMATCH', 'CHUNK-2-COMPARE', 'CHUNK-2-MISMATCH', 'CHUNK-3-COMPARE', 'CHUNK-3-DECISION', 'CHUNK-3-FALLBACK',
       'CHUNK-4-COMPARE', 'CHUNK-5-COMPARE', 'CHUNK-6-COMPARE', 'CHUNK-6-MISMATCH'
@@ -205,5 +209,37 @@ export function createHelperSimpleDebugLogger() {
     widgetName: 'HELPERSIMPLE',
     features: ['HASH', 'HASH-EXEC', 'SELECTION', 'WIDGET-STATE', 'RESTORE']
   })
+}
+
+/**
+ * Creates a debug logger instance for FeedSimple widget
+ */
+export function createFeedSimpleDebugLogger() {
+  return new DebugLogger({
+    widgetName: 'FEEDSIMPLE',
+    features: [
+      'FETCH', 'PARSE', 'RENDER', 'POLL', 'JOIN', 'FEED-LAYER',
+      'TEMPLATE', 'SETTINGS', 'EXPORT', 'SEARCH', 'SORT',
+      'FEATURE-EFFECT', 'DARK-MODE'
+    ]
+  })
+}
+
+/**
+ * Creates a debug logger instance for any custom widget.
+ * Use this if your widget is not part of the MapSimple family.
+ *
+ * @example
+ * ```ts
+ * import { createDebugLogger } from 'widgets/shared-code/mapsimple-common'
+ *
+ * const debugLogger = createDebugLogger('MYWIDGET', ['FETCH', 'RENDER', 'AUTH'])
+ * debugLogger.log('FETCH', { url: '...', status: 200 })
+ * ```
+ *
+ * Activate in browser: `?debug=FETCH,RENDER` or `?debug=all`
+ */
+export function createDebugLogger(widgetName: string, features: string[]) {
+  return new DebugLogger({ widgetName, features })
 }
 

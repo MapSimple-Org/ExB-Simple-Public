@@ -167,8 +167,8 @@ function canReuseTab(
   if (existingRecords.length !== incomingRecords.length) return false
 
   // Compare ObjectIDs as sets (order-independent)
-  const existingIds = new Set(existingRecords.map(r => r.getId?.() ?? r.id))
-  const incomingIds = new Set(incomingRecords.map(r => r.getId?.() ?? r.id))
+  const existingIds = new Set(existingRecords.map(r => r.getId?.() ?? (r as any).id))
+  const incomingIds = new Set(incomingRecords.map(r => r.getId?.() ?? (r as any).id))
   if (existingIds.size !== incomingIds.size) return false
   for (const id of existingIds) {
     if (!incomingIds.has(id)) return false

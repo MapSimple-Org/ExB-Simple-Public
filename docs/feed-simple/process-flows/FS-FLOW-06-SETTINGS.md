@@ -11,7 +11,7 @@ pattern where feed fields are fetched before template and filter options are ava
 - `feed-simple/src/utils/data-source-builder.ts` -- output DS registration (54 lines)
 - `feed-simple/src/utils/feed-fetcher.ts` -- feed fetch for Discover (33 lines)
 - `feed-simple/src/utils/parsers/custom-xml.ts` -- parser used by Discover (67 lines)
-- `feed-simple/src/utils/markdown-template-utils.ts` -- template preview renderer
+- `feed-simple/src/utils/markdown-template-utils.ts` -- Thin wrapper: re-exports `convertTemplateToHtml` from shared-code; keeps FS-specific `renderPreview()` locally (r004.001)
 
 ---
 
@@ -343,4 +343,4 @@ with ExB's framework:
 
 ---
 
-*Last updated: r002.030 (2026-03-14)*
+*Last updated: r005.004 (2026-04-06)*

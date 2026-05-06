@@ -25,17 +25,27 @@
  */
 import { React, lodash, loadArcGISJSAPIModule, utils } from 'jimu-core'
 import { loadArcGISJSAPIModules } from 'jimu-arcgis'
-import { createQuerySimpleDebugLogger, highlightConfigManager } from 'widgets/shared-code/mapsimple-common'
+import { createQuerySimpleDebugLogger, widgetConfigManager } from 'widgets/shared-code/mapsimple-common'
 import { graphicsStateManager } from '../graphics-state-manager'
+import type MapView from '@arcgis/core/views/MapView'
+import type SceneView from '@arcgis/core/views/SceneView'
+import type Geometry from '@arcgis/core/geometry/Geometry'
+import type GraphicsLayer from '@arcgis/core/layers/GraphicsLayer'
+import type Graphic from '@arcgis/core/Graphic'
+import type GroupLayer from '@arcgis/core/layers/GroupLayer'
+import type Polygon from '@arcgis/core/geometry/Polygon'
+import type BufferParameters from '@arcgis/core/rest/support/BufferParameters'
+/** JSAPI 5.0 exports GeometryUnion from geometry/types; 4.x does not. Cast-only usage. */
+type GeometryUnion = any
 
 const debugLogger = createQuerySimpleDebugLogger()
 
 export interface UseBufferPreviewOptions {
-  mapView?: __esri.MapView | __esri.SceneView
+  mapView?: MapView | SceneView
   widgetId: string
   /** r025.041: Changed from single geometry to array to support mixed geometry types.
    *  Each geometry is buffered individually; results are unioned into a single polygon. */
-  inputGeometries: __esri.Geometry[]
+  inputGeometries: Geometry[]
   bufferDistance: number
   bufferUnit: string
   enabled: boolean
@@ -43,7 +53,7 @@ export interface UseBufferPreviewOptions {
 
 // r025.051: Buffer symbol built dynamically from configurable color (via singleton)
 function buildBufferSymbol (widgetId: string) {
-  const rgb = highlightConfigManager.getBufferColor(widgetId)
+  const rgb = widgetConfigManager.getBufferColor(widgetId)
   return {
     type: 'simple-fill' as const,
     color: [...rgb, 0.25],
@@ -57,22 +67,22 @@ function buildBufferSymbol (widgetId: string) {
 
 const LAYER_ID_PREFIX = 'querysimple-buffer-'
 
-export function useBufferPreview (options: UseBufferPreviewOptions): __esri.Geometry | null {
+export function useBufferPreview (options: UseBufferPreviewOptions): Geometry | null {
   const { mapView, widgetId, inputGeometries, bufferDistance, bufferUnit, enabled } = options
 
   // Refs for lazy-loaded modules (same pattern as geometry-from-draw.tsx:29-31)
-  const bufferLayerRef = React.useRef<__esri.GraphicsLayer | null>(null)
-  const graphicRef = React.useRef<__esri.Graphic | null>(null)
-  const bufferOperatorRef = React.useRef<__esri.bufferOperator | null>(null)
-  const geodesicBufferOperatorRef = React.useRef<__esri.geodesicBufferOperator | null>(null)
+  const bufferLayerRef = React.useRef<GraphicsLayer | null>(null)
+  const graphicRef = React.useRef<Graphic | null>(null)
+  const bufferOperatorRef = React.useRef<typeof import('@arcgis/core/geometry/operators/bufferOperator') | null>(null)
+  const geodesicBufferOperatorRef = React.useRef<typeof import('@arcgis/core/geometry/operators/geodesicBufferOperator') | null>(null)
   const geometryServiceRef = React.useRef<{
-    geometryService: __esri.geometryService
-    bufferParameters: typeof __esri.BufferParameters
+    geometryService: typeof import('@arcgis/core/rest/geometryService')
+    bufferParameters: typeof BufferParameters
   } | null>(null)
-  const GraphicClassRef = React.useRef<typeof __esri.Graphic | null>(null)
+  const GraphicClassRef = React.useRef<typeof Graphic | null>(null)
 
   // r025.035: Expose buffered geometry for spatial queries to use as query.geometry
-  const [bufferedGeometry, setBufferedGeometry] = React.useState<__esri.Geometry | null>(null)
+  const [bufferedGeometry, setBufferedGeometry] = React.useState<Geometry | null>(null)
 
   // ── Layer lifecycle: create on first enable, destroy on unmount ──
 
@@ -95,7 +105,7 @@ export function useBufferPreview (options: UseBufferPreviewOptions): __esri.Geom
       const layerId = `${LAYER_ID_PREFIX}${widgetId}`
 
       // Check if layer already exists (e.g., fast remount)
-      const existing = mapView.map.findLayerById(layerId) as __esri.GraphicsLayer
+      const existing = mapView.map.findLayerById(layerId) as GraphicsLayer
       if (existing) {
         bufferLayerRef.current = existing
         return
@@ -113,7 +123,7 @@ export function useBufferPreview (options: UseBufferPreviewOptions): __esri.Geom
       // automatically hides/shows the buffer — no external watcher needed.
       // Falls back to map-level for GraphicsLayer (highlight) mode.
       const groupLayerId = `querysimple-results-${widgetId}`
-      const groupLayer = mapView.map.findLayerById(groupLayerId) as __esri.GroupLayer
+      const groupLayer = mapView.map.findLayerById(groupLayerId) as GroupLayer
       let addedToGroupLayer = false
 
       if (groupLayer && groupLayer.type === 'group') {
@@ -145,10 +155,10 @@ export function useBufferPreview (options: UseBufferPreviewOptions): __esri.Geom
 
   // r025.041: Buffer a single geometry using the appropriate operator for its SR
   const bufferSingle = React.useCallback(async (
-    geometry: __esri.Geometry,
+    geometry: Geometry,
     distance: number,
     unit: string
-  ): Promise<__esri.Polygon | null> => {
+  ): Promise<Polygon | null> => {
     const kebabUnit = lodash.kebabCase(unit) as any
     const sr = geometry.spatialReference
 
@@ -174,7 +184,7 @@ export function useBufferPreview (options: UseBufferPreviewOptions): __esri.Geom
         outSpatialReference: sr,
         geometries: [geometry]
       }))
-      return polygons[0] as __esri.Polygon
+      return polygons[0] as Polygon
     } else if (sr?.isWGS84 || sr?.isWebMercator) {
       // Case 2: WGS84/WebMercator → geodesicBufferOperator
       if (!geodesicBufferOperatorRef.current) {
@@ -186,10 +196,10 @@ export function useBufferPreview (options: UseBufferPreviewOptions): __esri.Geom
         await geodesicBufferOperatorRef.current.load()
       }
       return geodesicBufferOperatorRef.current.execute(
-        geometry as __esri.GeometryUnion,
+        geometry as GeometryUnion,
         distance,
         { unit: kebabUnit }
-      ) as __esri.Polygon
+      ) as Polygon
     } else {
       // Case 3: Other projections → bufferOperator
       if (!bufferOperatorRef.current) {
@@ -198,18 +208,18 @@ export function useBufferPreview (options: UseBufferPreviewOptions): __esri.Geom
         )
       }
       return bufferOperatorRef.current.execute(
-        geometry as __esri.GeometryUnion,
+        geometry as GeometryUnion,
         distance,
         { unit: kebabUnit }
-      ) as __esri.Polygon
+      ) as Polygon
     }
   }, [])
 
   // r025.041: Lazy-load union operator ref (for combining buffer polygons from mixed types)
-  const unionOperatorRef = React.useRef<__esri.unionOperator | null>(null)
+  const unionOperatorRef = React.useRef<typeof import('@arcgis/core/geometry/operators/unionOperator') | null>(null)
 
   const computeBuffer = React.useCallback(async (
-    geometries: __esri.Geometry[],
+    geometries: Geometry[],
     distance: number,
     unit: string
   ) => {
@@ -226,7 +236,7 @@ export function useBufferPreview (options: UseBufferPreviewOptions): __esri.Geom
 
     try {
       // r025.041: Buffer each geometry individually to support mixed types
-      const bufferPolygons: __esri.Polygon[] = []
+      const bufferPolygons: Polygon[] = []
       for (const geometry of geometries) {
         const buffered = await bufferSingle(geometry, distance, unit)
         if (buffered) bufferPolygons.push(buffered)
@@ -235,7 +245,7 @@ export function useBufferPreview (options: UseBufferPreviewOptions): __esri.Geom
       if (bufferPolygons.length === 0 || !bufferLayerRef.current) return
 
       // Combine buffer polygons: single → use directly, multiple → union (all polygons, safe)
-      let combinedBuffer: __esri.Polygon
+      let combinedBuffer: Polygon
       if (bufferPolygons.length === 1) {
         combinedBuffer = bufferPolygons[0]
       } else {
@@ -244,7 +254,7 @@ export function useBufferPreview (options: UseBufferPreviewOptions): __esri.Geom
             'esri/geometry/operators/unionOperator'
           )
         }
-        combinedBuffer = unionOperatorRef.current.executeMany(bufferPolygons) as __esri.Polygon
+        combinedBuffer = unionOperatorRef.current.executeMany(bufferPolygons) as Polygon
       }
 
       const graphic = new Graphic({
@@ -260,7 +270,7 @@ export function useBufferPreview (options: UseBufferPreviewOptions): __esri.Geom
 
       // r025.066: Auto-enable parent GroupLayer visibility when buffer is drawn
       // Matches addHighlightGraphics pattern (graphics-layer-utils.ts r024.18)
-      const parentLayer = layer.parent as __esri.GroupLayer
+      const parentLayer = layer.parent as GroupLayer
       if (parentLayer && parentLayer.type === 'group' && !parentLayer.visible) {
         parentLayer.visible = true
         debugLogger.log('TASK', {
@@ -298,7 +308,7 @@ export function useBufferPreview (options: UseBufferPreviewOptions): __esri.Geom
   // Debounced version (300ms)
   const debouncedComputeBuffer = React.useMemo(
     () => lodash.debounce(
-      (geometries: __esri.Geometry[], distance: number, unit: string) => {
+      (geometries: Geometry[], distance: number, unit: string) => {
         computeBuffer(geometries, distance, unit)
       },
       300

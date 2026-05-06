@@ -12,8 +12,14 @@
  */
 
 import { loadArcGISJSAPIModules } from 'jimu-arcgis'
-import { type DataSource, type FeatureDataRecord } from 'jimu-core'
-import { createQuerySimpleDebugLogger, substituteTokens, convertTemplateToHtml } from 'widgets/shared-code/mapsimple-common'
+import { type DataSource, type FeatureDataRecord, type FeatureLayerDataSource } from 'jimu-core'
+import { createQuerySimpleDebugLogger, substituteTokens, substituteLegacyTokens, convertTemplateToHtml } from 'widgets/shared-code/mapsimple-common'
+import type Feature from '@arcgis/core/widgets/Feature'
+import type PopupTemplate from '@arcgis/core/PopupTemplate'
+import type MapView from '@arcgis/core/views/MapView'
+import type SceneView from '@arcgis/core/views/SceneView'
+import type Graphic from '@arcgis/core/Graphic'
+import type FeatureLayer from '@arcgis/core/layers/FeatureLayer'
 
 const debugLogger = createQuerySimpleDebugLogger()
 
@@ -43,14 +49,14 @@ const CALCITE_TAG_MAP: Record<string, string> = {
 
 interface QueueItem {
   record: FeatureDataRecord
-  popupTemplate: __esri.PopupTemplate
-  defaultPopupTemplate: __esri.PopupTemplate
+  popupTemplate: PopupTemplate
+  defaultPopupTemplate: PopupTemplate
   isCustomTemplate?: boolean // r026.002: Flag for our own {{field}} substitution
 }
 
 interface FeatureWorker {
   id: number
-  feature: __esri.Feature
+  feature: Feature
   container: HTMLDivElement
   busy: boolean
 }
@@ -157,7 +163,7 @@ function extractStaticHTML(container: HTMLElement): string {
  * Waits for a Feature widget to finish rendering.
  * r024.57: Check for actual content in DOM, not just viewModel state.
  */
-async function waitForFeatureReady(feature: __esri.Feature, container: HTMLElement, timeoutMs: number = 5000): Promise<boolean> {
+async function waitForFeatureReady(feature: Feature, container: HTMLElement, timeoutMs: number = 5000): Promise<boolean> {
   const startTime = Date.now()
   
   return new Promise((resolve) => {
@@ -199,10 +205,10 @@ export class PopupRenderPool {
   private isProcessing: boolean = false
   private isInitialized: boolean = false
   private poolContainer: HTMLDivElement | null = null
-  private FeatureClass: typeof __esri.Feature | null = null
+  private FeatureClass: typeof Feature | null = null
   private config: PoolConfig
   private dataSource: DataSource | null = null
-  private mapView: __esri.MapView | __esri.SceneView | null = null
+  private mapView: MapView | SceneView | null = null
   private processedCount: number = 0
   private totalCount: number = 0
 
@@ -218,7 +224,7 @@ export class PopupRenderPool {
    * Creates a hidden container and the specified number of Feature widget workers.
    */
   async initialize(
-    mapView: __esri.MapView | __esri.SceneView,
+    mapView: MapView | SceneView,
     dataSource: DataSource
   ): Promise<void> {
     if (this.isInitialized) {
@@ -298,8 +304,8 @@ export class PopupRenderPool {
    */
   async processRecords(
     records: FeatureDataRecord[],
-    popupTemplate: __esri.PopupTemplate,
-    defaultPopupTemplate: __esri.PopupTemplate,
+    popupTemplate: PopupTemplate,
+    defaultPopupTemplate: PopupTemplate,
     isCustomTemplate?: boolean // r026.002: Flag for our own {{field}} substitution
   ): Promise<void> {
     if (!this.isInitialized) {
@@ -357,9 +363,10 @@ export class PopupRenderPool {
       worker.busy = true
 
       try {
-        const recordId = item.record.getId()
-        const graphic = item.record.feature as __esri.Graphic
-        const layer = graphic.layer as __esri.FeatureLayer
+        // r027.000: ExB 1.20 — coerce getId() to string (now returns string | number)
+        const recordId = String(item.record.getId())
+        const graphic = item.record.feature as Graphic
+        const layer = graphic.layer as FeatureLayer
 
         // r024.66: DIAGNOSTIC - Log what the graphic actually contains
         const graphicAttributes = graphic.attributes || {}
@@ -375,12 +382,17 @@ export class PopupRenderPool {
           hasPopupTemplate: !!item.popupTemplate,
           hasDefaultPopupTemplate: !!item.defaultPopupTemplate,
           layerPopupTemplate: !!layer?.popupTemplate,
-          layerDefaultPopupTemplate: !!layer?.defaultPopupTemplate,
+          // r027.070: layer.defaultPopupTemplate removed in JSAPI 5.0 — replaced
+          // by createPopupTemplate(). Dropped from this diagnostic log because
+          // the value would always be undefined in 1.20.
           attributeCount: attributeKeys.length,
           attributeKeys: attributeKeys.slice(0, 10),
           sampleValues,
           hasMap: !!this.mapView?.map,
-          hasSpatialRef: !!this.dataSource?.layer?.spatialReference,
+          // r027.070: DataSource base type doesn't expose .layer; cast to
+          // FeatureLayerDataSource (which has layer?: __esri.FeatureLayer).
+          // Pool is only used for feature layers so the cast is safe.
+          hasSpatialRef: !!(this.dataSource as FeatureLayerDataSource | null)?.layer?.spatialReference,
           timestamp: Date.now()
         })
         
@@ -392,19 +404,17 @@ export class PopupRenderPool {
           // Our engine: substitute {{tokens}}, then convert markdown to HTML
           // Also handles legacy {field} tokens for un-migrated configs (graceful fallback)
           let substituted = substituteTokens(rawTemplate, attributes)
-          substituted = substituted.replace(/(?<!\{)\{(\w+)\}(?!\})/g, (_m, field) => {
-            const val = attributes[field]
-            return val != null ? String(val) : ''
-          })
+          substituted = substituteLegacyTokens(substituted, attributes)
           const html = convertTemplateToHtml(substituted)
 
           // Also substitute the title expression (with same legacy fallback)
-          const titleTemplate = item.popupTemplate.title || ''
+          // r027.070: PopupTemplate.title in JSAPI 5.0 is typed PopupTemplateTitle
+          // (string | function). substituteTokens needs a string, so guard the type.
+          // Function-typed titles fall through to '' (preserves prior fallback).
+          const rawTitle = item.popupTemplate.title
+          const titleTemplate = (typeof rawTitle === 'string' ? rawTitle : '') || ''
           let title = substituteTokens(titleTemplate, attributes)
-          title = title.replace(/(?<!\{)\{(\w+)\}(?!\})/g, (_m, field) => {
-            const val = attributes[field]
-            return val != null ? String(val) : ''
-          })
+          title = substituteLegacyTokens(title, attributes)
 
           debugLogger.log('TASK', {
             event: 'popup-render-custom-template',
@@ -441,7 +451,10 @@ export class PopupRenderPool {
             layer.popupTemplate = item.defaultPopupTemplate
           }
         } else if (layer) {
-          graphic.popupTemplate = layer.popupTemplate ?? layer.defaultPopupTemplate
+          // r027.070: layer.defaultPopupTemplate removed in JSAPI 5.0 —
+          // createPopupTemplate() is the replacement. Generates a default
+          // PopupTemplate from the layer's schema if none is set.
+          graphic.popupTemplate = layer.popupTemplate ?? layer.createPopupTemplate()
         }
         
         // Create fresh Feature widget with the graphic
@@ -452,7 +465,8 @@ export class PopupRenderPool {
         worker.feature = new this.FeatureClass({
           container: widgetContainer,
           defaultPopupTemplateEnabled: true,
-          spatialReference: this.dataSource?.layer?.spatialReference || null,
+          // r027.070: cast to FeatureLayerDataSource for .layer access (see line 390 note).
+          spatialReference: (this.dataSource as FeatureLayerDataSource | null)?.layer?.spatialReference || null,
           map: this.mapView?.map || null,
           graphic: graphic,
           visibleElements: {
@@ -513,7 +527,8 @@ export class PopupRenderPool {
         })
 
       } catch (error) {
-        const recordId = item.record.getId()
+        // r027.000: ExB 1.20 — coerce getId() to string (now returns string | number)
+        const recordId = String(item.record.getId())
         debugLogger.log('TASK', {
           event: 'popup-render-worker-error',
           workerId: worker.id,

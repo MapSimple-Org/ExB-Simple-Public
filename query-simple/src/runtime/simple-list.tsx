@@ -7,10 +7,13 @@ import {
   hooks,
   type FeatureLayerDataSource,
   type ImmutableObject,
+  type ImmutableArray,
   type DataRecord,
   type FeatureDataRecord,
   DataSourceManager
 } from 'jimu-core'
+import type MapView from '@arcgis/core/views/MapView'
+import type SceneView from '@arcgis/core/views/SceneView'
 import { type QueryItemType, ListDirection } from '../config'
 import { QueryResultItem } from './query-result-item'
 import { getPopupTemplate } from './query-utils'
@@ -45,7 +48,9 @@ export interface SimpleListProps {
   // r021.87: Queries array for looking up config by __queryConfigId
   queries?: ImmutableArray<ImmutableObject<QueryItemType>>
   // r022.106: Hover preview
-  mapView?: __esri.MapView | __esri.SceneView
+  mapView?: MapView | SceneView
+  // r027.091: hoverLayer prop removed — hover pins now use mapView.graphics
+  // (always-on-top overlay) with scoped per-graphic cleanup.
 }
 
 const getStyle = (isAutoHeight: boolean) => {
@@ -155,7 +160,7 @@ export function SimpleList (props: SimpleListProps) {
 
   // Filter out removed records
   const filteredRecords = React.useMemo(() => {
-    return records?.filter(record => !removedRecordIds?.has(record.getId())) || []
+    return records?.filter(record => !removedRecordIds?.has(String(record.getId()))) || []
   }, [records, removedRecordIds])
 
   // Notify parent when records are rendered (for auto-switch logic)
@@ -293,12 +298,17 @@ export function SimpleList (props: SimpleListProps) {
                   timestamp: Date.now()
                 })
               } else {
+                // r027.074: Removed duplicate queryConfigId key — the second
+                // entry (recordConfig.configId) is guaranteed equal to the
+                // first (recordQueryConfigId) because line 279's
+                // queries.find(q => q.configId === recordQueryConfigId)
+                // requires that match. The duplicate just clobbered itself
+                // at runtime; logging it is redundant.
                 debugLogger.log('RESULTS-MODE', {
                   event: 'record-template-not-in-cache',
                   widgetId,
                   recordId,
                   queryConfigId: recordQueryConfigId,
-                  queryConfigId: recordConfig.configId,
                   cachedConfigIds: Array.from(popupTemplateCacheRef.current.keys()),
                   timestamp: Date.now()
                 })

@@ -29,7 +29,7 @@ export default class Setting extends React.PureComponent<AllWidgetSettingProps<I
   onSettingChange: SettingChangeFunction = (key, value) => {
     this.props.onSettingChange({
       id: this.props.id,
-      config: this.props.config.set(key, value)
+      config: this.props.config.set(key as any, value)
     })
   }
 
@@ -95,7 +95,7 @@ export default class Setting extends React.PureComponent<AllWidgetSettingProps<I
               value={config.managedWidgetId || ''}
               onChange={(e) => {
                 const value = e.target.value || undefined
-                this.onSettingChange('managedWidgetId', value)
+                this.onSettingChange('managedWidgetId' as any, value)
               }}
             >
               <option value="">{this.getI18nMessage('selectWidget')}</option>

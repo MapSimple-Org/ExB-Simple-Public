@@ -15,6 +15,9 @@ import { DataSourceManager, Immutable, type FeatureLayerDataSource, type Feature
 import { createQuerySimpleDebugLogger } from 'widgets/shared-code/mapsimple-common'
 import { combineFields, resolvePopupOutFields } from './query-utils'
 import { FieldsType, type QueryItemType } from '../config'
+import type Geometry from '@arcgis/core/geometry/Geometry'
+import type FeatureLayer from '@arcgis/core/layers/FeatureLayer'
+import type FeatureSet from '@arcgis/core/rest/support/FeatureSet'
 
 const debugLogger = createQuerySimpleDebugLogger()
 
@@ -22,7 +25,7 @@ const debugLogger = createQuerySimpleDebugLogger()
 
 export interface SpatialQueryParams {
   /** Source geometry to query against (unioned accumulated record geometries) */
-  inputGeometry: __esri.Geometry
+  inputGeometry: Geometry
   /** JSAPI spatial relationship string (e.g., 'intersects', 'contains', 'within') */
   spatialRelationship: string
   /** Target layer dataSourceId strings */
@@ -43,7 +46,7 @@ export interface SpatialQueryLayerResult {
   layerId: string
   layerTitle: string
   featureCount: number
-  featureSet: __esri.FeatureSet
+  featureSet: FeatureSet
   queryTimeMs: number
   exceededTransferLimit: boolean
 }
@@ -104,7 +107,7 @@ export async function executeSpatialQuery (
         continue
       }
 
-      const featureLayer = (ds.layer || await (ds as any).createJSAPILayerByDataSource()) as __esri.FeatureLayer
+      const featureLayer = (ds.layer || await (ds as any).createJSAPILayerByDataSource()) as FeatureLayer
       await featureLayer.load()
 
       // Build JSAPI Query with spatial parameters
@@ -204,12 +207,13 @@ export function convertSpatialResultsToRecords (
       continue
     }
 
-    const featureLayer = ds.layer as __esri.FeatureLayer
+    const featureLayer = ds.layer as FeatureLayer
 
-    // Set sourceLayer on each graphic (matches direct-query.ts pattern)
+    // Stamp the source layer on each graphic. JSAPI 5.0 removed both
+    // Graphic.sourceLayer and FeatureLayer.associatedLayer; Graphic.layer
+    // is still present and is what popup-render-pool / feature-info read.
     layerResult.featureSet.features.forEach(graphic => {
-      graphic.sourceLayer = featureLayer?.associatedLayer || featureLayer
-      graphic.layer = graphic.sourceLayer
+      graphic.layer = featureLayer
     })
 
     // Build FeatureDataRecords using the target layer's DataSource

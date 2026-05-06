@@ -10,6 +10,7 @@
  * Batches large ID sets into groups of 500 to stay within WHERE clause limits.
  */
 
+import type FeatureLayer from '@arcgis/core/layers/FeatureLayer'
 import { debugLogger } from './debug-logger'
 
 /** Max IDs per WHERE IN (...) clause to avoid query limits */
@@ -49,7 +50,7 @@ export function buildWhereClause (joinField: string, ids: string[]): string {
  * @returns Map of joinValue → geometry. Missing/failed items are omitted.
  */
 export async function queryFeatureLayerByIds (
-  featureLayer: __esri.FeatureLayer,
+  featureLayer: FeatureLayer,
   joinField: string,
   ids: string[]
 ): Promise<Map<string, RestGeometry>> {
@@ -106,7 +107,7 @@ export async function queryFeatureLayerByIds (
  * in the request, so features filtered out in the web map are excluded.
  */
 async function queryBatch (
-  featureLayer: __esri.FeatureLayer,
+  featureLayer: FeatureLayer,
   joinField: string,
   ids: string[]
 ): Promise<Map<string, RestGeometry>> {

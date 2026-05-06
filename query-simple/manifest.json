@@ -3,7 +3,7 @@
   "label": "QuerySimple",
   "type": "widget",
   "version": "1.19.0",
-  "exbVersion": "1.19.0",
+  "exbVersion": "1.20.0",
   "author": "MapSimple",
   "description": "QuerySimple widget - simplified query widget",
   "dependency": "jimu-arcgis",

@@ -29,6 +29,29 @@
  * r026.014 / r004.002: Added markdown table support with alignment
  */
 
+// ── Security: Dangerous URL Scheme Blocking (r027.094 / r005.016) ─
+//
+// THREAT: Markdown [text](url) and ![alt](url) syntax renders URLs into
+// <a href> and <img src> attributes. If a field value substituted into the
+// template contains a javascript:, data:, or vbscript: URL, it would
+// become executable markup after convertTemplateToHtml() runs.
+//
+// PROTECTION: isDangerousUrl() strips whitespace and lowercases the URL
+// before checking against blocked schemes. This defeats obfuscation
+// tricks like 'java\nscript:' or 'JAVASCRIPT:'. When a dangerous URL is
+// detected, the link renders as plain text (label only, no <a> tag) and
+// the image renders as alt text only (no <img> tag).
+//
+// This is independent of the same-named function in token-renderer.ts —
+// both files define their own copy to avoid a circular dependency. The
+// logic is identical.
+
+const RE_DANGEROUS_SCHEME = /^(javascript|data|vbscript):/
+
+function isDangerousUrl (url: string): boolean {
+  return RE_DANGEROUS_SCHEME.test(url.replace(/\s+/g, '').toLowerCase())
+}
+
 // ── Regex (hoisted to module scope for performance) ──────────────
 
 const RE_HR = /^-{3,}\s*$/
@@ -46,8 +69,8 @@ const RE_ITALIC_UNDER = /(?<!\{[\w]*)_(.+?)_(?![\w]*\})/g
 const RE_TABLE_ROW = /^\|(.+)\|$/
 // Table separator: | --- | :---: | ---: | (dashes with optional colons for alignment)
 const RE_TABLE_SEPARATOR = /^\|[\s:|-]+\|$/
-// Table style hint: <!-- table:STYLE --> (e.g. plain, striped, bordered)
-const RE_TABLE_STYLE = /^<!--\s*table:(\w+)\s*-->$/
+// Table style hint: <!-- table:STYLE --> or <!-- table:STYLE:#rrggbb --> (optional custom stripe color)
+const RE_TABLE_STYLE = /^<!--\s*table:(\w+)(?::(#[0-9a-fA-F]{6}))?\s*-->$/
 
 /** Table style presets — colors for alternating rows and header */
 type TableStyleName = 'plain' | 'striped' | 'bordered'
@@ -105,8 +128,9 @@ export function convertTemplateToHtml (markdown: string): string {
   const paraBuffer: string[] = []
   // r026.014: Buffer for consecutive table rows (| ... |)
   const tableBuffer: string[] = []
-  // r026.016: Optional style hint preceding a table (<!-- table:style -->)
+  // r026.016: Optional style hint preceding a table (<!-- table:style --> or <!-- table:style:#color -->)
   let pendingTableStyle: TableStyleName | null = null
+  let pendingStripeColor: string | null = null
 
   /** Flush the paragraph buffer as a single <p> with <br/> separators */
   function flushParagraph (): void {
@@ -119,11 +143,13 @@ export function convertTemplateToHtml (markdown: string): string {
   function flushTable (): void {
     if (tableBuffer.length === 0) {
       pendingTableStyle = null
+      pendingStripeColor = null
       return
     }
-    htmlLines.push(parseTableBlock(tableBuffer.slice(), pendingTableStyle ?? DEFAULT_TABLE_STYLE))
+    htmlLines.push(parseTableBlock(tableBuffer.slice(), pendingTableStyle ?? DEFAULT_TABLE_STYLE, pendingStripeColor))
     tableBuffer.length = 0
     pendingTableStyle = null
+    pendingStripeColor = null
   }
 
   for (let i = 0; i < lines.length; i++) {
@@ -140,13 +166,14 @@ export function convertTemplateToHtml (markdown: string): string {
       continue
     }
 
-    // r026.016: Table style hint — <!-- table:STYLE --> preceding a table
+    // r026.016: Table style hint — <!-- table:STYLE --> or <!-- table:STYLE:#color --> preceding a table
     const styleMatch = line.trim().match(RE_TABLE_STYLE)
     if (styleMatch) {
       const styleName = styleMatch[1].toLowerCase() as TableStyleName
       if (TABLE_STYLES[styleName]) {
         pendingTableStyle = styleName
       }
+      pendingStripeColor = styleMatch[2] || null
       continue
     }
 
@@ -243,16 +270,29 @@ export function convertTemplateToHtml (markdown: string): string {
  */
 export function applyInlineFormatting (text: string): string {
   // Images: ![alt](url) -> <img> (must be before links due to similar syntax)
-  text = text.replace(
-    RE_IMAGE,
-    '<img src="$2" alt="$1" style="max-width:100%; height:auto; display:block; margin:4px 0;">'
-  )
+  // Function-based to block dangerous URL schemes (javascript:, data:, vbscript:)
+  text = text.replace(RE_IMAGE, (_m, alt: string, url: string) => {
+    if (isDangerousUrl(url)) return alt
+    return `<img src="${url}" alt="${alt}" style="max-width:100%; height:auto; display:block; margin:4px 0;">`
+  })
 
   // Links: [text](url) -> <a> with new-tab behavior
-  text = text.replace(
-    RE_LINK,
-    '<a href="$2" target="_blank" rel="noopener">$1</a>'
-  )
+  // Function-based to block dangerous URL schemes
+  text = text.replace(RE_LINK, (_m, label: string, url: string) => {
+    if (isDangerousUrl(url)) return label
+    return `<a href="${url}" target="_blank" rel="noopener">${label}</a>`
+  })
+
+  // r027.004: Protect URLs inside already-converted HTML attributes from bold/italic.
+  // Filenames with underscores (e.g., TH_SM_AT.jpg) were being converted to
+  // TH<em>SM</em>AT.jpg by the italic regex. We stash all src="..." and href="..."
+  // values, run bold/italic, then restore them.
+  // Placeholder uses \x00 (null byte) to avoid triggering bold/italic regexes.
+  const urlStash: string[] = []
+  text = text.replace(/(?:src|href)="([^"]+)"/g, (match) => {
+    urlStash.push(match)
+    return `\x00URLSTASH${urlStash.length - 1}\x00`
+  })
 
   // Bold: **text** or __text__
   text = text.replace(RE_BOLD_STAR, '<strong>$1</strong>')
@@ -262,7 +302,18 @@ export function applyInlineFormatting (text: string): string {
   text = text.replace(RE_ITALIC_STAR, '<em>$1</em>')
   text = text.replace(RE_ITALIC_UNDER, '<em>$1</em>')
 
+  // Restore stashed URLs
+  text = text.replace(/\x00URLSTASH(\d+)\x00/g, (_match, idx) => urlStash[Number(idx)])
+
   return text
+}
+
+/** Lighten a hex color by increasing each channel by `amount` (0–255). */
+function lightenHex (hex: string, amount: number): string {
+  const r = Math.min(255, parseInt(hex.slice(1, 3), 16) + amount)
+  const g = Math.min(255, parseInt(hex.slice(3, 5), 16) + amount)
+  const b = Math.min(255, parseInt(hex.slice(5, 7), 16) + amount)
+  return `#${r.toString(16).padStart(2, '0')}${g.toString(16).padStart(2, '0')}${b.toString(16).padStart(2, '0')}`
 }
 
 /**
@@ -280,7 +331,7 @@ export function applyInlineFormatting (text: string): string {
  *   :---:        → center
  *   ---:         → right
  */
-function parseTableBlock (rows: string[], styleName: TableStyleName = DEFAULT_TABLE_STYLE): string {
+function parseTableBlock (rows: string[], styleName: TableStyleName = DEFAULT_TABLE_STYLE, customStripeColor?: string | null): string {
   if (rows.length < 1) {
     return ''
   }
@@ -291,8 +342,15 @@ function parseTableBlock (rows: string[], styleName: TableStyleName = DEFAULT_TA
     return inner.split('|').map(c => c.trim())
   }
 
-  // Resolve style preset
-  const style = TABLE_STYLES[styleName] || TABLE_STYLES[DEFAULT_TABLE_STYLE]
+  // Resolve style preset, with optional custom stripe color override
+  let style = TABLE_STYLES[styleName] || TABLE_STYLES[DEFAULT_TABLE_STYLE]
+  if (customStripeColor && styleName === 'striped') {
+    style = {
+      ...style,
+      oddRowBg: `background:${lightenHex(customStripeColor, 20)}`,
+      evenRowBg: `background:${customStripeColor}`
+    }
+  }
   const cellPadding = 'padding:4px 8px'
   // Compact font — slightly smaller than parent to match Esri's default table rendering
   const tableFontStyle = 'border-collapse:collapse;width:100%;font-size:0.85em;line-height:1.4;'

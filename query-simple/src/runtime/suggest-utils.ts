@@ -11,9 +11,23 @@
  * be updated to match.
  */
 import type { FeatureLayerDataSource, IMSqlExpression } from 'jimu-core'
+import type FeatureLayer from '@arcgis/core/layers/FeatureLayer'
 import { createQuerySimpleDebugLogger } from 'widgets/shared-code/mapsimple-common'
 
 const debugLogger = createQuerySimpleDebugLogger()
+
+// ── Security: SQL field name validation (r027.095) ──────────────
+//
+// Validates that a field name matches the standard SQL identifier pattern
+// before interpolating it into WHERE clauses. This is a defense-in-depth
+// guard on top of the three existing layers documented in the security
+// comments below (Esri dropdown, config.json, ArcGIS Server validation).
+const RE_VALID_FIELD_NAME = /^[A-Za-z_][\w.]*$/
+
+/** Returns true if the name is a valid SQL identifier (safe for interpolation). */
+export function isValidFieldName (name: string | null | undefined): boolean {
+  return !!name && RE_VALID_FIELD_NAME.test(name)
+}
 
 // ============================================================================
 // Types
@@ -189,11 +203,18 @@ export function detectFreeFormInput (sqlExprObj: IMSqlExpression | null): {
 /**
  * Converts a fixed SQL expression part to a WHERE clause fragment.
  * Handles common string and number operators.
+ *
+ * SECURITY: fieldName is interpolated into the WHERE clause unescaped.
+ * This is safe because it comes from SqlExpression.jimuFieldName (admin
+ * config, not user input). String values are escaped via single-quote
+ * doubling. Number values are coerced through Number() which rejects
+ * non-numeric strings. See fetchSuggestions() for the full security note.
  */
 function partToWhereClause (part: any): string | null {
   const fieldName = part.jimuFieldName || part.fieldName
   const rawValue = part.valueOptions?.value
   if (!fieldName || rawValue == null) return null
+  if (!isValidFieldName(fieldName)) return null
 
   const operator = part.operator as string
   if (!operator) return null
@@ -263,8 +284,18 @@ function partToWhereClause (part: any): string | null {
 export async function fetchSuggestions (options: FetchSuggestionsOptions): Promise<SuggestItem[]> {
   const { originDS, fieldName, operator, query, limit, signal, additionalWhere } = options
 
+  // Validate field name before interpolating into WHERE clause
+  if (!isValidFieldName(fieldName)) {
+    debugLogger.log('SUGGEST', {
+      event: 'fetch-rejected',
+      reason: 'invalid field name',
+      fieldName
+    })
+    return []
+  }
+
   // Get the actual FeatureLayer from the DataSource
-  const featureLayer = await originDS.createJSAPILayerByDataSource() as __esri.FeatureLayer
+  const featureLayer = await originDS.createJSAPILayerByDataSource() as FeatureLayer
   await featureLayer.load()
 
   // Check for abort after async operations
@@ -272,7 +303,22 @@ export async function fetchSuggestions (options: FetchSuggestionsOptions): Promi
     throw new DOMException('Aborted', 'AbortError')
   }
 
-  // Build the WHERE clause — escape single quotes to prevent SQL injection
+  // ── Security: SQL interpolation in suggest queries ──
+  //
+  // USER INPUT (query string): Escaped via single-quote doubling below.
+  // This is the only user-controlled value that reaches the WHERE clause.
+  //
+  // FIELD NAME (fieldName): Interpolated unescaped into UPPER(fieldName)
+  // and ORDER BY. This is safe because fieldName flows from admin config
+  // (SqlExpression.jimuFieldName), not user input. Three layers protect it:
+  //   1. jimuFieldName is set by Esri's SqlExpressionBuilder from the
+  //      feature service field schema — admins pick from a dropdown, they
+  //      don't type field names freehand.
+  //   2. The value is stored in config.json, which requires server write
+  //      access to modify.
+  //   3. ArcGIS Server validates WHERE clauses against the service schema
+  //      before execution — an invalid field name is rejected server-side.
+  //
   // Match the LIKE pattern to the SQL operator:
   //   contains      → %VALUE%
   //   starts_with   → VALUE%

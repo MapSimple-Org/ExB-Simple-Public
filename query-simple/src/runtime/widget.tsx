@@ -11,7 +11,7 @@ import { QueryTaskList } from './query-task-list'
 import { TaskListInline } from './query-task-list-inline'
 import { TaskListPopperWrapper } from './query-task-list-popper-wrapper'
 import { QueryWidgetContext } from './widget-context'
-import { createQuerySimpleDebugLogger, highlightConfigManager } from 'widgets/shared-code/mapsimple-common'
+import { createQuerySimpleDebugLogger, widgetConfigManager } from 'widgets/shared-code/mapsimple-common'
 import { calculateRecordsExtent } from './zoom-utils'
 import { WIDGET_VERSION } from '../version'
 import { removeHashParam } from './hash-utils'
@@ -23,6 +23,11 @@ import { GraphicsLayerManager } from './managers/graphics-layer-manager'
 import { AccumulatedRecordsManager } from './managers/accumulated-records-manager'
 import { EventManager, OPEN_WIDGET_EVENT, QUERYSIMPLE_SELECTION_EVENT, RESTORE_ON_IDENTIFY_CLOSE_EVENT } from './managers/event-manager'
 import { SelectionRestorationManager } from './managers/selection-restoration-manager'
+import type Extent from '@arcgis/core/geometry/Extent'
+import type GraphicsLayer from '@arcgis/core/layers/GraphicsLayer'
+import type MapView from '@arcgis/core/views/MapView'
+import type SceneView from '@arcgis/core/views/SceneView'
+import type { ResourceHandle as WatchHandle } from '@arcgis/core/core/Handles'
 
 const debugLogger = createQuerySimpleDebugLogger()
 const { iconMap } = getWidgetRuntimeDataMap()
@@ -49,16 +54,23 @@ const { iconMap } = getWidgetRuntimeDataMap()
  * @see {@link WidgetVisibilityManager} for panel visibility detection
  * @see {@link MapViewManager} for map view reference management
  */
-export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>, { 
-  initialQueryValue?: { shortId: string, value: string }, 
-  isPanelVisible?: boolean, 
-  hasSelection?: boolean, 
-  selectionRecordCount?: number, 
-  resultsMode?: SelectionType, 
-  accumulatedRecords?: FeatureDataRecord[], 
-  resultsExtent?: __esri.Extent | null,
-  graphicsLayerInitialized?: boolean, 
-  activeTab?: 'query' | 'results'
+export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>, {
+  initialQueryValue?: { shortId: string, value: string },
+  isPanelVisible?: boolean,
+  hasSelection?: boolean,
+  selectionRecordCount?: number,
+  resultsMode?: SelectionType,
+  accumulatedRecords?: FeatureDataRecord[],
+  resultsExtent?: Extent | null,
+  graphicsLayerInitialized?: boolean,
+  // r027.091: hoverLayerInitialized removed — hover pins use mapView.graphics
+  activeTab?: 'query' | 'results',
+  // r027.079: mirrors the field initializer at line 117/119. The class State
+  // generic at this PureComponent declaration is what setState type-checks
+  // against; without these two, setState({shouldUseInitialQueryValueForSelection})
+  // and setState({jimuMapView}) tripped TS2353. Keep both shapes in sync.
+  shouldUseInitialQueryValueForSelection?: boolean,
+  jimuMapView?: JimuMapView | null
 }> {
   static versionManager = versionManager
   // Chunk 1: URL Parameter Consumption Manager (r018.8)
@@ -68,8 +80,11 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
   
   // Refs must be declared before managers that use them
   private widgetRef = React.createRef<HTMLDivElement>()
-  private graphicsLayerRef = React.createRef<__esri.GraphicsLayer | null>()
-  private mapViewRef = React.createRef<__esri.MapView | __esri.SceneView | null>()
+  private graphicsLayerRef = React.createRef<GraphicsLayer | null>()
+  // r027.091: hoverLayerRef removed — hover pins now use mapView.graphics
+  // (always-on-top overlay). Per-graphic scoped cleanup prevents cross-widget
+  // collateral damage. See docs/bugs/HOVER-PIN-CROSS-WIDGET-BUG.md.
+  private mapViewRef = React.createRef<MapView | SceneView | null>()
   
   // Chunk 6: Map View Management Manager (r018.16) - Step 6.3: Switch to manager
   private mapViewManager = new MapViewManager(this.mapViewRef)
@@ -80,7 +95,7 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
   // Chunk 7: Event Handling Manager (r018.59) - Step 7.1: Create Event Manager
   private eventManager = new EventManager()
   // r025.072: Mobile popup behavior — JSAPI watch handle
-  private popupVisibleHandle: __esri.WatchHandle | null = null
+  private popupVisibleHandle: WatchHandle | null = null
 
   // Chunk 3: Selection & Restoration Manager (r019.1) - Section 3.1: Selection State Tracking
   private selectionRestorationManager = new SelectionRestorationManager(
@@ -94,7 +109,7 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
   // (handleMapViewChange can fire before componentDidMount)
   constructor(props: AllWidgetProps<IMConfig>) {
     super(props)
-    highlightConfigManager.registerConfig(props.id, props.config)
+    widgetConfigManager.registerConfig(props.id, props.config)
   }
 
   state: {
@@ -104,7 +119,7 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
     selectionRecordCount?: number,
     resultsMode?: SelectionType,
     accumulatedRecords?: FeatureDataRecord[],
-    resultsExtent?: __esri.Extent | null,
+    resultsExtent?: Extent | null,
     graphicsLayerInitialized?: boolean,
     activeTab?: 'query' | 'results',
     // Track when HelperSimple explicitly opens widget - only then should query-task-list use initialQueryValue for selection
@@ -325,6 +340,17 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
   }
 
   componentDidMount() {
+    // r027.000: Log initial theme mode on mount
+    const initialThemeMode = (this.props as any).theme?.sys?.color?.mode
+    if (initialThemeMode) {
+      debugLogger.log('DARK-MODE', {
+        action: 'initial-mode',
+        widgetId: this.props.id,
+        mode: initialThemeMode,
+        isDark: initialThemeMode === 'dark'
+      })
+    }
+
     // Listen for HelperSimple's open widget event
     // QuerySimple should only process hash parameters when HelperSimple explicitly opens the widget
     // This ensures HelperSimple remains the orchestrator
@@ -406,7 +432,7 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
     // Graphics layer will be initialized when map view becomes available via JimuMapViewComponent
     
     // Register widget config with HighlightConfigManager (r022.91)
-    highlightConfigManager.registerConfig(this.props.id, this.props.config)
+    widgetConfigManager.registerConfig(this.props.id, this.props.config)
   }
 
   componentWillUnmount() {
@@ -434,11 +460,14 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
     // Chunk 4: Graphics layer cleanup (r018.25 - Step 4.3: Remove old implementation)
     this.graphicsLayerManager.cleanup(this.props.id)
 
+    // r027.091: Hover-pin layer cleanup removed — hover pins now live on
+    // mapView.graphics and are cleaned up per-graphic on card unmount.
+
     // Chunk 5: Clean up accumulated records manager (r018.26 - Step 5.1: Add manager)
     this.accumulatedRecordsManager.cleanup()
     
     // Unregister widget config from HighlightConfigManager (r022.91)
-    highlightConfigManager.unregisterConfig(this.props.id)
+    widgetConfigManager.unregisterConfig(this.props.id)
 
     // r025.072: Clean up mobile popup watch handle
     this.popupVisibleHandle?.remove()
@@ -515,10 +544,23 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
       }
     }
     // Note: Minimize keeps state as 'OPENED', so no state change = no action = selections preserved ✓
-    
+
+    // r027.000: Detect theme mode changes (light ↔ dark) for ExB 1.20 dark mode support
+    const prevThemeMode = (prevProps as any).theme?.sys?.color?.mode
+    const currThemeMode = (this.props as any).theme?.sys?.color?.mode
+    if (prevThemeMode !== currThemeMode && currThemeMode) {
+      debugLogger.log('DARK-MODE', {
+        action: 'theme-mode-changed',
+        widgetId: this.props.id,
+        previousMode: prevThemeMode || 'unknown',
+        currentMode: currThemeMode,
+        isDark: currThemeMode === 'dark'
+      })
+    }
+
     // Re-register config with HighlightConfigManager on config changes (r022.91)
     if (prevProps.config !== this.props.config) {
-      highlightConfigManager.registerConfig(this.props.id, this.props.config)
+      widgetConfigManager.registerConfig(this.props.id, this.props.config)
       
       // r024.4: Detect addResultsAsMapLayer toggle change and reinitialize layer
       const prevAddResultsAsMapLayer = prevProps.config?.addResultsAsMapLayer === true
@@ -632,7 +674,12 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
       // Add selection to map if we have one
       if (hasSelectionToRestore) {
         // r020.1 (BUG-HASH-DIRTY-001): Safety check - only restore if we have records to display
-        const hasRecordsToDisplay = this.state.accumulatedRecords?.some(ar => ar.record) || 
+        // r027.079: accumulatedRecords stores FeatureDataRecord[] directly post-r027.072.
+        // The previous `.some(ar => ar.record)` was a vestige of the {configId, record}
+        // wrapper shape — `ar.record` has been undefined since the wrapper was dropped,
+        // making that branch silently always-false (the selectionRecordCount fallback
+        // was masking it). Length check matches the pre-r027.072 truthy semantics.
+        const hasRecordsToDisplay = !!this.state.accumulatedRecords?.length ||
                                     this.state.selectionRecordCount > 0
         
         if (!hasRecordsToDisplay) {
@@ -843,6 +890,9 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
             })
           }
 
+          // r027.091: Hover-pin layer creation removed — hover pins now use
+          // mapView.graphics (always-on-top overlay) with per-graphic cleanup.
+
           // r025.072: Set up reactive popup watch (applies behavior when popup opens)
           this.setupMobilePopupWatch()
         }
@@ -926,8 +976,8 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
    */
   public clearGraphicsLayerRefs = async () => {
     const mapView = this.mapViewRef.current
-    const { id, config } = this.props
-    
+    const { id } = this.props
+
     debugLogger.log('GRAPHICS-LAYER', {
       event: 'clearGraphicsLayerRefs-called',
       widgetId: id,
@@ -935,28 +985,31 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
       willRecreate: !!mapView,
       timestamp: Date.now()
     })
-    
+
     // Clear old refs
     this.graphicsLayerRef.current = null
-    
-    // Immediately recreate the layer if we still need it
+
+    // r027.089 Site C+D (atomic): Delegate to graphicsLayerManager.initialize()
+    // instead of duplicating layer-creation logic inline. The manager owns
+    // useGroupLayer mode: it sets graphicsLayerRef.current to the inner
+    // GraphicsLayer and tracks the parent GroupLayer on its private field.
+    // Render-prop sites now read manager.getResultsLayer() (Site D), which
+    // returns the GroupLayer parent in useGroupLayer mode, so legend-aware
+    // consumers continue to receive the correct layer. This eliminates the
+    // dual inline/manager layer-creation paths that produced the r027.085
+    // and r027.087 legend regressions.
     if (mapView) {
       try {
-        const { createOrGetGraphicsLayer, createOrGetResultGroupLayer } = await import('./graphics-layer-utils')
-        const useGroupLayer = highlightConfigManager.getAddResultsAsMapLayer(id)
-        const newLayer = useGroupLayer
-          ? await createOrGetResultGroupLayer(id, mapView)
-          : await createOrGetGraphicsLayer(id, mapView)
-        this.graphicsLayerRef.current = newLayer
-        
+        const newLayer = await this.graphicsLayerManager.initialize(id, mapView)
+
         debugLogger.log('GRAPHICS-LAYER', {
           event: 'clearGraphicsLayerRefs-recreated',
           widgetId: id,
           newLayerId: newLayer?.id,
-          useGroupLayer,
+          useGroupLayer: widgetConfigManager.getAddResultsAsMapLayer(id),
           timestamp: Date.now()
         })
-        
+
         // Force re-render to pass new layer down
         this.setState({ graphicsLayerInitialized: true })
       } catch (error) {
@@ -1162,8 +1215,9 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
     // Each .map() and .filter() creates a new array, contributing to 400K+ array accumulation
     if (newCount > 0 || previousCount > 0) {
       // Only compute IDs when there's something to log (non-empty case)
-      const previousIds = previousCount > 0 ? previousRecords.map(r => r.getId()) : []
-      const newIds = newCount > 0 ? records.map(r => r.getId()) : []
+      // r027.000: ExB 1.20 — coerce getId() to string (now returns string | number)
+      const previousIds = previousCount > 0 ? previousRecords.map(r => String(r.getId())) : []
+      const newIds = newCount > 0 ? records.map(r => String(r.getId())) : []
       
       debugLogger.log('RESULTS-MODE', {
         event: 'accumulated-records-state-change',
@@ -1359,7 +1413,7 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
                 accumulatedRecords={this.state.accumulatedRecords}
                 resultsExtent={this.state.resultsExtent}
                 onAccumulatedRecordsChange={this.handleAccumulatedRecordsChange}
-                graphicsLayer={this.graphicsLayerRef.current || undefined}
+                graphicsLayer={this.graphicsLayerManager.getResultsLayer() ?? undefined}
                 mapView={this.mapViewRef.current || undefined}
                 jimuMapView={this.state.jimuMapView}
                 onInitializeGraphicsLayer={this.initializeGraphicsLayerFromOutputDS}
@@ -1410,20 +1464,22 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
             onActiveViewChange={this.handleJimuMapViewChanged}
           />
         )}
-        <div className="widget-header" css={css`
-          padding: 6px 16px;
-          border-bottom: 1px solid var(--sys-color-divider-secondary);
-          background-color: var(--sys-color-surface);
-        `}>
-          <h3 className="widget-title" css={css`
-            margin: 0;
-            font-size: 1rem;
-            font-weight: 600;
-            color: var(--sys-color-text-primary);
+        {widgetConfigManager.getShowHeader(id) && (
+          <div className="widget-header" css={css`
+            padding: 6px 16px;
+            border-bottom: 1px solid var(--sys-color-divider-secondary);
+            background-color: var(--sys-color-surface);
           `}>
-            {label || widgetLabel}
-          </h3>
-        </div>
+            <h3 className="widget-title" css={css`
+              margin: 0;
+              font-size: 1rem;
+              font-weight: 600;
+              color: var(--sys-color-text-primary);
+            `}>
+              {label || widgetLabel}
+            </h3>
+          </div>
+        )}
         <div css={css`
           flex: 1;
           display: flex;
@@ -1447,7 +1503,7 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
                 accumulatedRecords={this.state.accumulatedRecords}
                 resultsExtent={this.state.resultsExtent}
                 onAccumulatedRecordsChange={this.handleAccumulatedRecordsChange}
-                graphicsLayer={this.graphicsLayerRef.current || undefined}
+                graphicsLayer={this.graphicsLayerManager.getResultsLayer() ?? undefined}
                 mapView={this.mapViewRef.current || undefined}
                 onInitializeGraphicsLayer={this.initializeGraphicsLayerFromOutputDS}
                 onClearGraphicsLayer={this.clearGraphicsLayerIfExists}

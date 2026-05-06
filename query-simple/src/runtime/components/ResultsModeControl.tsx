@@ -78,7 +78,7 @@ const summaryBarBase = css`
 
 // ─── Component ──────────────────────────────────────────────────────
 
-export function ResultsModeControl ({ value, onChange, removeDisabled, getI18nMessage }: ResultsModeControlProps): JSX.Element {
+export function ResultsModeControl ({ value, onChange, removeDisabled, getI18nMessage }: ResultsModeControlProps): React.JSX.Element {
   const modes: ResultsModeValue[] = ['new', 'add', 'remove']
   const colors = MODE_COLORS[value]
 

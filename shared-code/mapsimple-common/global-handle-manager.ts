@@ -19,7 +19,7 @@ type HandleType = 'watch' | 'on' | 'event' | 'removal-listener' | 'legend-visibi
 
 interface TrackedHandle {
   id: string
-  handle: __esri.Handle | __esri.WatchHandle | { remove: () => void }
+  handle: { remove: () => void }
   type: HandleType
   description?: string
   createdAt: number
@@ -87,7 +87,7 @@ class GlobalHandleManager {
    */
   track(
     widgetId: string,
-    handle: __esri.Handle | __esri.WatchHandle | { remove: () => void },
+    handle: { remove: () => void },
     type: HandleType = 'other',
     description?: string
   ): string {

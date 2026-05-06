@@ -23,6 +23,10 @@
 import type { FeatureDataRecord } from 'jimu-core'
 import Extent from 'esri/geometry/Extent'
 import { createQuerySimpleDebugLogger } from 'widgets/shared-code/mapsimple-common'
+import type Point from '@arcgis/core/geometry/Point'
+import type SpatialReference from '@arcgis/core/geometry/SpatialReference'
+import type MapView from '@arcgis/core/views/MapView'
+import type SceneView from '@arcgis/core/views/SceneView'
 
 const debugLogger = createQuerySimpleDebugLogger()
 
@@ -104,7 +108,7 @@ export { DEFAULT_EXTENT_EXPANSION_FACTOR }
  *   mapView.goTo({ center: extent.center })
  * }
  */
-export function calculateRecordsExtent(records: FeatureDataRecord[]): __esri.Extent | null {
+export function calculateRecordsExtent(records: FeatureDataRecord[]): Extent | null {
   if (!records || records.length === 0) {
     debugLogger.log('ZOOM', {
       event: 'calculateRecordsExtent-early-exit',
@@ -127,7 +131,7 @@ export function calculateRecordsExtent(records: FeatureDataRecord[]): __esri.Ext
       
       // For points without extent, create a zero-area extent
       if (geom.type === 'point' && !geom.extent) {
-        const pt = geom as __esri.Point
+        const pt = geom as Point
         return new Extent({
           xmin: pt.x,
           xmax: pt.x,
@@ -140,7 +144,7 @@ export function calculateRecordsExtent(records: FeatureDataRecord[]): __esri.Ext
       // For other geometry types, use existing extent
       return geom.extent || (geom as any).getExtent?.()
     })
-    .filter((ext): ext is __esri.Extent => ext != null)
+    .filter((ext): ext is Extent => ext != null)
   
   if (extents.length === 0) {
     debugLogger.log('ZOOM', {
@@ -169,7 +173,7 @@ export function calculateRecordsExtent(records: FeatureDataRecord[]): __esri.Ext
   }
 
   // Calculate union of all extents
-  let extent: __esri.Extent = extents[0].clone()
+  let extent: Extent = extents[0].clone()
   
   for (let i = 1; i < extents.length; i++) {
     extent = extent.union(extents[i])
@@ -206,11 +210,11 @@ export function calculateRecordsExtent(records: FeatureDataRecord[]): __esri.Ext
  * @returns The expanded extent
  */
 export function expandExtentByFactor(
-  extent: __esri.Extent,
+  extent: Extent,
   expansionFactor: number = DEFAULT_EXTENT_EXPANSION_FACTOR,
-  spatialReference?: __esri.SpatialReference,
+  spatialReference?: SpatialReference,
   zeroAreaBufferFeet: number = DEFAULT_ZERO_AREA_BUFFER_FEET
-): __esri.Extent {
+): Extent {
   let expandedExtent = extent.clone()
   
   // Handle zero-area extent (single point or overlapping points)
@@ -253,7 +257,7 @@ export function expandExtentByFactor(
  * @param spatialReference - The spatial reference to check
  * @returns true if the spatial reference uses meters, false if feet-based
  */
-function isMetricSpatialReference(spatialReference: __esri.SpatialReference): boolean {
+function isMetricSpatialReference(spatialReference: SpatialReference): boolean {
   // Web Mercator (most common): 3857 or 102100
   if (spatialReference.wkid === 3857 || spatialReference.wkid === 102100) {
     return true
@@ -294,7 +298,7 @@ function isMetricSpatialReference(spatialReference: __esri.SpatialReference): bo
  * @param bufferDistance - The distance to buffer in the spatial reference's units
  * @returns A new extent expanded by the buffer distance in all directions
  */
-function expandZeroAreaExtent(extent: __esri.Extent, bufferDistance: number): __esri.Extent {
+function expandZeroAreaExtent(extent: Extent, bufferDistance: number): Extent {
   const centerX = (extent.xmin + extent.xmax) / 2
   const centerY = (extent.ymin + extent.ymax) / 2
   
@@ -364,7 +368,7 @@ function expandZeroAreaExtent(extent: __esri.Extent, bufferDistance: number): __
  * })
  */
 export async function zoomToRecords(
-  mapView: __esri.MapView | __esri.SceneView,
+  mapView: MapView | SceneView,
   records: FeatureDataRecord[],
   options?: ZoomToRecordsOptions
 ): Promise<void> {
@@ -404,7 +408,7 @@ export async function zoomToRecords(
         
         // For points without extent, create a zero-area extent on-the-fly
         if (geom.type === 'point' && !geom.extent) {
-          const pt = geom as __esri.Point
+          const pt = geom as Point
           return new Extent({
             xmin: pt.x,
             xmax: pt.x,
@@ -435,7 +439,7 @@ export async function zoomToRecords(
       return
     }
 
-    let extent: __esri.Extent | null = null
+    let extent: Extent | null = null
     
     if (extents.length === 1) {
       // Single extent - use it directly
@@ -608,7 +612,7 @@ export async function zoomToRecords(
         note: 'Extent expanded by factor, no padding applied'
       })
       
-      const goToResult = await mapView.goTo(extent)
+      await mapView.goTo(extent)
       
       // Log extent coordinates after zoom completes
       const finalExtent = mapView.extent
@@ -634,7 +638,10 @@ export async function zoomToRecords(
           height: originalExtentBeforeExpansion.height
         },
         expansionFactor,
-        goToResult: goToResult ? 'returned-value' : 'no-return-value',
+        // r027.075: mapView.goTo() returns Promise<void> in JSAPI 5.0; the
+        // truthy check on void was always meaningless. Replaced with a fixed
+        // 'completed' marker so log greps for the field name still work.
+        goToResult: 'completed',
         note: 'r021.36: Geometry refs were not stored, only extents - memory optimized'
       })
       
@@ -668,7 +675,7 @@ export async function zoomToRecords(
  * Mirrors FeedSimple's buildPanTarget() pattern.
  */
 export async function panToRecords(
-  mapView: __esri.MapView | __esri.SceneView,
+  mapView: MapView | SceneView,
   records: FeatureDataRecord[]
 ): Promise<void> {
   if (!mapView || !records || records.length === 0) {
@@ -718,12 +725,14 @@ export async function panToRecords(
  * 
  * @returns Object with adjusted extent, original extent, and calculated expansion factor
  */
-export function captureAdjustedExtent(): {
-  adjustedExtent: __esri.Extent | null
-  originalExtent: __esri.Extent | null
-  calculatedExpansionFactor: number | null
-  error?: string
-} {
+// r027.075: Removed explicit return type. The annotation declared
+// `adjustedExtent: Extent | null` and `originalExtent: Extent | null`, but
+// the success path returns plain {xmin, xmax, ymin, ymax, width, height,
+// centerX, centerY, spatialReference} literals — not Extent instances —
+// plus extra fields (originalExpansionFactor, expansion, warning). The
+// function is window-attached for console-driven calibration only and has no
+// typed callers; letting TS infer keeps the declaration honest.
+export function captureAdjustedExtent() {
   if (typeof window === 'undefined') {
     return {
       adjustedExtent: null,
@@ -734,8 +743,8 @@ export function captureAdjustedExtent(): {
   }
 
   const win = window as any
-  const mapView = win.__querySimpleLastZoomMapView as __esri.MapView | __esri.SceneView | undefined
-  const originalExtent = win.__querySimpleLastZoomExtent as __esri.Extent | undefined
+  const mapView = win.__querySimpleLastZoomMapView as MapView | SceneView | undefined
+  const originalExtent = win.__querySimpleLastZoomExtent as Extent | undefined
   const originalExpansionFactor = win.__querySimpleLastZoomExpansionFactor as number | undefined
 
   if (!mapView) {

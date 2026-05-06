@@ -34,10 +34,70 @@ export interface FilterContext {
   dateFormatString?: string
 }
 
+// ── HTML Escaping ───────────────────────────────────────────────
+
+// ── Security: HTML Entity Escaping (r027.092 / r005.014) ────────
+//
+// THREAT: Field values from feature services or XML feeds are data, not markup.
+// A compromised or misconfigured data source could inject HTML/script tags
+// (e.g., a field value of '<script>alert(1)</script>') that would execute
+// when rendered via dangerouslySetInnerHTML.
+//
+// PROTECTION: escapeHtml() encodes the 5 HTML-significant characters
+// (& < > " ') in every substituted field value. Applied inside
+// substituteTokens() BEFORE pipe filters run, so admin-authored markdown
+// template syntax (bold, links, etc.) is unaffected — only data values
+// are escaped. Also applied in substituteLegacyTokens() for legacy
+// single-brace {field} tokens.
+//
+// PIPELINE ORDER:
+//   substituteTokens(template, item)   ← escapeHtml runs here on each value
+//     → pipe filters (date, math, autolink, externalLink)
+//   convertTemplateToHtml(result)       ← markdown → HTML (admin-authored)
+//     → dangerouslySetInnerHTML         ← safe because values are escaped
+
+/** Characters that must be escaped when field values are interpolated into HTML */
+const HTML_ESCAPE_MAP: Record<string, string> = {
+  '&': '&amp;',
+  '<': '&lt;',
+  '>': '&gt;',
+  '"': '&quot;',
+  "'": '&#39;'
+}
+const RE_HTML_ESCAPE = /[&<>"']/g
+
+function escapeHtml (str: string): string {
+  return str.replace(RE_HTML_ESCAPE, (ch) => HTML_ESCAPE_MAP[ch])
+}
+
+// ── Security: Dangerous URL Scheme Blocking (r027.094 / r005.016) ─
+//
+// THREAT: A field value like 'javascript:alert(document.cookie)' could
+// become a clickable href if used in an externalLink template (e.g.,
+// externalLinkTemplate = '{{link}}'). Same risk applies to data: and
+// vbscript: schemes.
+//
+// PROTECTION: isDangerousUrl() blocks javascript:, data:, and vbscript:
+// schemes. Strips whitespace and lowercases before checking to defeat
+// obfuscation tricks like 'java\nscript:' or 'JAVASCRIPT:'.
+// Applied in resolveExternalLinkUrl() — dangerous URLs return undefined
+// (same as no template configured). Also applied independently in
+// markdown-template-utils.ts for markdown [link](url) and ![image](url).
+
+const RE_DANGEROUS_SCHEME = /^(javascript|data|vbscript):/
+
+function isDangerousUrl (url: string): boolean {
+  return RE_DANGEROUS_SCHEME.test(url.replace(/\s+/g, '').toLowerCase())
+}
+
 // ── Regex (hoisted to module scope for performance) ──────────────
 
 /** Matches {{...}} tokens with pipe-based parsing */
 const TOKEN_REGEX = /\{\{((?:(?!\}\}).)+)\}\}/g
+
+/** Legacy {field} tokens (single-brace, no pipes). Negative lookahead/behind
+ *  avoids matching {{field}} double-brace tokens. */
+const RE_LEGACY_TOKEN = /(?<!\{)\{(\w+)\}(?!\})/g
 
 /** Quoted filter argument: "MMM D, YYYY" */
 const RE_QUOTED_FILTER = /^"([^"]+)"$/
@@ -93,7 +153,7 @@ export function substituteTokens (
     // First segment is the field name
     const key = segments[0].trim()
     const rawValue = item[key]
-    let value: string = rawValue != null ? String(rawValue) : ''
+    let value: string = rawValue != null ? escapeHtml(String(rawValue)) : ''
 
     // No filters — plain substitution
     if (segments.length === 1) return value
@@ -332,19 +392,28 @@ function applyAutolinkFilter (value: string): string {
  * Substitute {{token}} references in a URL template with item field values.
  * Used for external link URLs, both inline (card toolbar) and in templates.
  * Returns the resolved URL string, or undefined if template is empty.
+ *
+ * SECURITY: The resolved URL is checked for dangerous schemes (javascript:,
+ * data:, vbscript:) after token substitution. A field value that resolves to
+ * a dangerous URL returns undefined (same behavior as no template configured).
+ * Note: encodeURIComponent is intentionally NOT applied to field values here
+ * because it would break legitimate URL path segments in field values
+ * (e.g., 'reports/2024/summary' would become 'reports%2F2024%2Fsummary').
  */
 export function resolveExternalLinkUrl (
   template: string | undefined,
   item: Record<string, any>
 ): string | undefined {
   if (!template) return undefined
-  return template.replace(
+  const resolved = template.replace(
     RE_EXTERNAL_LINK_TOKEN,
     (_m, name: string) => {
       const val = item[name.trim()]
       return val != null ? String(val) : ''
     }
   )
+  if (isDangerousUrl(resolved)) return undefined
+  return resolved
 }
 
 /**
@@ -360,4 +429,23 @@ function applyExternalLinkFilter (
   const url = resolveExternalLinkUrl(externalLinkTemplate, item)
   if (!url) return _value
   return `<a href="${url}" target="_blank" rel="noopener">View ↗</a>`
+}
+
+// ── Legacy Token Substitution ───────────────────────────────────
+
+/**
+ * Substitute legacy single-brace {field} tokens in a template string.
+ * Used for un-migrated QS configs that haven't been converted to {{field}}
+ * syntax. Applies the same HTML escaping as substituteTokens().
+ *
+ * Runs AFTER substituteTokens() to catch any remaining single-brace tokens.
+ */
+export function substituteLegacyTokens (
+  template: string,
+  attributes: Record<string, any>
+): string {
+  return template.replace(RE_LEGACY_TOKEN, (_m, field) => {
+    const val = attributes[field]
+    return val != null ? escapeHtml(String(val)) : ''
+  })
 }

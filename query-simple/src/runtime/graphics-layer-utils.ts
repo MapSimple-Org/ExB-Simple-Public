@@ -5,8 +5,19 @@
 
 import type { DataSource, FeatureDataRecord } from 'jimu-core'
 import { loadArcGISJSAPIModules } from 'jimu-arcgis'
-import { createQuerySimpleDebugLogger, highlightConfigManager, globalHandleManager } from 'widgets/shared-code/mapsimple-common'
+import { createQuerySimpleDebugLogger, widgetConfigManager, globalHandleManager } from 'widgets/shared-code/mapsimple-common'
 import { graphicsStateManager } from './graphics-state-manager'
+import type FeatureLayer from '@arcgis/core/layers/FeatureLayer'
+import type Graphic from '@arcgis/core/Graphic'
+import type GraphicsLayer from '@arcgis/core/layers/GraphicsLayer'
+import type GroupLayer from '@arcgis/core/layers/GroupLayer'
+import type Layer from '@arcgis/core/layers/Layer'
+import type MapView from '@arcgis/core/views/MapView'
+import type SceneView from '@arcgis/core/views/SceneView'
+import type SimpleFillSymbol from '@arcgis/core/symbols/SimpleFillSymbol'
+import type SimpleLineSymbol from '@arcgis/core/symbols/SimpleLineSymbol'
+import type SimpleMarkerSymbol from '@arcgis/core/symbols/SimpleMarkerSymbol'
+import type Symbol from '@arcgis/core/symbols/Symbol'
 
 const debugLogger = createQuerySimpleDebugLogger()
 
@@ -26,16 +37,16 @@ let FeatureLayerModule: any = null
 function getDefaultHighlightSymbol(
   geometryType: string,
   widgetId: string
-): __esri.Symbol {
+): Symbol {
   // r022.92: Get symbology from HighlightConfigManager (per-widget config)
-  const fillColorRGB = highlightConfigManager.getFillColor(widgetId)
-  const fillOpacity = highlightConfigManager.getFillOpacity(widgetId)
-  const outlineColorRGB = highlightConfigManager.getOutlineColor(widgetId)
-  const outlineOpacity = highlightConfigManager.getOutlineOpacity(widgetId)
-  const outlineWidth = highlightConfigManager.getOutlineWidth(widgetId)
-  const pointSize = highlightConfigManager.getPointSize(widgetId)
-  const pointOutlineWidth = highlightConfigManager.getPointOutlineWidth(widgetId)
-  const pointStyle = highlightConfigManager.getPointStyle(widgetId)
+  const fillColorRGB = widgetConfigManager.getFillColor(widgetId)
+  const fillOpacity = widgetConfigManager.getFillOpacity(widgetId)
+  const outlineColorRGB = widgetConfigManager.getOutlineColor(widgetId)
+  const outlineOpacity = widgetConfigManager.getOutlineOpacity(widgetId)
+  const outlineWidth = widgetConfigManager.getOutlineWidth(widgetId)
+  const pointSize = widgetConfigManager.getPointSize(widgetId)
+  const pointOutlineWidth = widgetConfigManager.getPointOutlineWidth(widgetId)
+  const pointStyle = widgetConfigManager.getPointStyle(widgetId)
   
   // Build color arrays with appropriate opacity
   const fillColorWithAlpha = [...fillColorRGB, fillOpacity] as [number, number, number, number]
@@ -92,14 +103,14 @@ function getDefaultHighlightSymbol(
           width: pointOutlineWidth
         },
         size: pointSize
-      } as unknown as __esri.SimpleMarkerSymbol
+      } as unknown as SimpleMarkerSymbol
       
     case 'polyline':
       return {
         type: 'simple-line',
         color: lineColorWithAlpha,
         width: outlineWidth
-      } as unknown as __esri.SimpleLineSymbol
+      } as unknown as SimpleLineSymbol
       
     case 'polygon':
     case 'multipolygon':
@@ -110,7 +121,7 @@ function getDefaultHighlightSymbol(
           color: outlineColorWithAlpha,
           width: outlineWidth
         }
-      } as unknown as __esri.SimpleFillSymbol
+      } as unknown as SimpleFillSymbol
       
     default:
       // Fallback to polygon symbol
@@ -121,7 +132,7 @@ function getDefaultHighlightSymbol(
           color: outlineColorWithAlpha,
           width: outlineWidth
         }
-      } as unknown as __esri.SimpleFillSymbol
+      } as unknown as SimpleFillSymbol
   }
 }
 
@@ -148,8 +159,8 @@ function getDefaultHighlightSymbol(
  */
 export async function createOrGetResultGroupLayer(
   widgetId: string,
-  mapView: __esri.MapView | __esri.SceneView
-): Promise<__esri.GroupLayer | null> {
+  mapView: MapView | SceneView
+): Promise<GroupLayer | null> {
   const seq = graphicsStateManager.nextSequence()
   const layerId = `querysimple-results-${widgetId}`
 
@@ -166,7 +177,7 @@ export async function createOrGetResultGroupLayer(
   }
 
   // Check for existing layer first (fast path)
-  const existingLayer = mapView.map.layers.find(layer => layer.id === layerId) as __esri.GroupLayer
+  const existingLayer = mapView.map.layers.find(layer => layer.id === layerId) as GroupLayer
   if (existingLayer) {
     debugLogger.log('GRAPHICS-LAYER', {
       event: 'createOrGetResultGroupLayer-found-existing',
@@ -197,13 +208,13 @@ export async function createOrGetResultGroupLayer(
  */
 async function createGroupLayerInternal(
   widgetId: string,
-  mapView: __esri.MapView | __esri.SceneView,
+  mapView: MapView | SceneView,
   layerId: string,
   seq: number
-): Promise<__esri.GroupLayer | null> {
+): Promise<GroupLayer | null> {
   try {
     // Double-check for existing layer (in case it was added while we waited)
-    const existingLayer = mapView.map.layers.find(layer => layer.id === layerId) as __esri.GroupLayer
+    const existingLayer = mapView.map.layers.find(layer => layer.id === layerId) as GroupLayer
     if (existingLayer) {
       debugLogger.log('GRAPHICS-LAYER', {
         event: 'createOrGetResultGroupLayer-found-existing-after-lock',
@@ -219,7 +230,7 @@ async function createGroupLayerInternal(
       'esri/layers/GroupLayer',
       'esri/layers/GraphicsLayer'
     ])
-    const title = highlightConfigManager.getResultsLayerTitle(widgetId)
+    const title = widgetConfigManager.getResultsLayerTitle(widgetId)
 
     // r024.52: Single hidden GraphicsLayer for all geometry types
     const graphicsLayer = new GraphicsLayer({
@@ -242,7 +253,7 @@ async function createGroupLayerInternal(
     })
 
     // Final check before adding - another call might have snuck in
-    const finalCheck = mapView.map.layers.find(layer => layer.id === layerId) as __esri.GroupLayer
+    const finalCheck = mapView.map.layers.find(layer => layer.id === layerId) as GroupLayer
     if (finalCheck) {
       debugLogger.log('GRAPHICS-LAYER', {
         event: 'createOrGetResultGroupLayer-found-existing-before-add',
@@ -321,20 +332,20 @@ function createLegendFeatureLayer(
   widgetId: string,
   layerId: string,
   geometryType: string,
-  graphicsLayer: __esri.GraphicsLayer
-): __esri.FeatureLayer {
+  graphicsLayer: GraphicsLayer
+): FeatureLayer {
   const normalized = normalizeGeometryType(geometryType)
   const legendLayerId = getLegendLayerId(layerId, geometryType)
   
   // Get symbology from config
-  const fillColorRGB = highlightConfigManager.getFillColor(widgetId)
-  const fillOpacity = highlightConfigManager.getFillOpacity(widgetId)
-  const outlineColorRGB = highlightConfigManager.getOutlineColor(widgetId)
-  const outlineOpacity = highlightConfigManager.getOutlineOpacity(widgetId)
-  const outlineWidth = highlightConfigManager.getOutlineWidth(widgetId)
-  const pointSize = highlightConfigManager.getPointSize(widgetId)
-  const pointOutlineWidth = highlightConfigManager.getPointOutlineWidth(widgetId)
-  const pointStyle = highlightConfigManager.getPointStyle(widgetId)
+  const fillColorRGB = widgetConfigManager.getFillColor(widgetId)
+  const fillOpacity = widgetConfigManager.getFillOpacity(widgetId)
+  const outlineColorRGB = widgetConfigManager.getOutlineColor(widgetId)
+  const outlineOpacity = widgetConfigManager.getOutlineOpacity(widgetId)
+  const outlineWidth = widgetConfigManager.getOutlineWidth(widgetId)
+  const pointSize = widgetConfigManager.getPointSize(widgetId)
+  const pointOutlineWidth = widgetConfigManager.getPointOutlineWidth(widgetId)
+  const pointStyle = widgetConfigManager.getPointStyle(widgetId)
 
   const fillColorWithAlpha = [...fillColorRGB, fillOpacity] as [number, number, number, number]
   const outlineColorWithAlpha = [...outlineColorRGB, outlineOpacity] as [number, number, number, number]
@@ -459,7 +470,7 @@ function createLegendFeatureLayer(
  * Creates one if it doesn't exist and the corresponding GraphicsLayer has graphics.
  */
 async function ensureLegendFeatureLayer(
-  groupLayer: __esri.GroupLayer,
+  groupLayer: GroupLayer,
   geometryType: string,
   widgetId: string
 ): Promise<void> {
@@ -468,7 +479,7 @@ async function ensureLegendFeatureLayer(
   
   // r024.54: If Legend layer already exists, re-enable it and return.
   // It may have been hidden by clearGroupLayerContents() or removeEmptyLegendFeatureLayers().
-  const existingLegend = groupLayer.layers.find(l => l.id === legendLayerId) as __esri.FeatureLayer
+  const existingLegend = groupLayer.layers.find(l => l.id === legendLayerId) as FeatureLayer
   if (existingLegend) {
     if (!existingLegend.legendEnabled) {
       existingLegend.legendEnabled = true
@@ -532,14 +543,14 @@ async function ensureLegendFeatureLayer(
  * r024.54: No longer destroys Legend FeatureLayers. Hides them via legendEnabled = false
  * so ESRI can maintain its internal reactive infrastructure for reuse.
  */
-function removeEmptyLegendFeatureLayers(groupLayer: __esri.GroupLayer, widgetId: string): void {
+function removeEmptyLegendFeatureLayers(groupLayer: GroupLayer, widgetId: string): void {
   const layerId = groupLayer.id
   const geometryTypes = ['point', 'polyline', 'polygon']
   const graphicsLayer = getGraphicsSublayer(groupLayer)
   
   geometryTypes.forEach((geoType) => {
     const legendLayerId = getLegendLayerId(layerId, geoType)
-    const legendLayer = groupLayer.layers.find(l => l.id === legendLayerId) as __esri.FeatureLayer
+    const legendLayer = groupLayer.layers.find(l => l.id === legendLayerId) as FeatureLayer
     
     if (!legendLayer) return
     
@@ -564,31 +575,31 @@ function removeEmptyLegendFeatureLayers(groupLayer: __esri.GroupLayer, widgetId:
 /**
  * r024.9: Gets total graphics count from GraphicsLayer or GroupLayer (sum of sublayers).
  */
-export function getGraphicsCountFromLayer(layer: __esri.GraphicsLayer | __esri.GroupLayer | null | undefined): number {
+export function getGraphicsCountFromLayer(layer: GraphicsLayer | GroupLayer | null | undefined): number {
   if (!layer) return 0
-  if ((layer as __esri.Layer).type === 'group') {
-    const gl = layer as __esri.GroupLayer
-    return gl.layers.toArray().reduce((sum, sub) => sum + ((sub as __esri.GraphicsLayer).graphics?.length || 0), 0)
+  if ((layer as Layer).type === 'group') {
+    const gl = layer as GroupLayer
+    return gl.layers.toArray().reduce((sum, sub) => sum + ((sub as GraphicsLayer).graphics?.length || 0), 0)
   }
-  return (layer as __esri.GraphicsLayer).graphics?.length || 0
+  return (layer as GraphicsLayer).graphics?.length || 0
 }
 
 /**
  * r024.9: Iterates graphics from GraphicsLayer or GroupLayer sublayers.
  */
 export function forEachGraphicInLayer(
-  layer: __esri.GraphicsLayer | __esri.GroupLayer | null | undefined,
-  callback: (graphic: __esri.Graphic) => void
+  layer: GraphicsLayer | GroupLayer | null | undefined,
+  callback: (graphic: Graphic) => void
 ): void {
   if (!layer) return
-  if ((layer as __esri.Layer).type === 'group') {
-    const gl = layer as __esri.GroupLayer
-    gl.layers.forEach((sub: __esri.Layer) => {
-      const glSub = sub as __esri.GraphicsLayer
+  if ((layer as Layer).type === 'group') {
+    const gl = layer as GroupLayer
+    gl.layers.forEach((sub: Layer) => {
+      const glSub = sub as GraphicsLayer
       glSub.graphics?.forEach(callback)
     })
   } else {
-    (layer as __esri.GraphicsLayer).graphics?.forEach(callback)
+    (layer as GraphicsLayer).graphics?.forEach(callback)
   }
 }
 
@@ -596,9 +607,9 @@ export function forEachGraphicInLayer(
  * r024.52: Gets the single GraphicsLayer sublayer from a GroupLayer.
  * All geometry types go into the same layer.
  */
-export function getGraphicsSublayer(groupLayer: __esri.GroupLayer): __esri.GraphicsLayer | null {
+export function getGraphicsSublayer(groupLayer: GroupLayer): GraphicsLayer | null {
   const graphicsLayerId = `${groupLayer.id}-graphics`
-  const layer = groupLayer.layers.find(l => l.id === graphicsLayerId) as __esri.GraphicsLayer
+  const layer = groupLayer.layers.find(l => l.id === graphicsLayerId) as GraphicsLayer
   return layer || null
 }
 
@@ -613,8 +624,8 @@ export function getGraphicsSublayer(groupLayer: __esri.GroupLayer): __esri.Graph
  */
 export async function createOrGetGraphicsLayer(
   widgetId: string,
-  mapView: __esri.MapView | __esri.SceneView
-): Promise<__esri.GraphicsLayer | null> {
+  mapView: MapView | SceneView
+): Promise<GraphicsLayer | null> {
   const seq = graphicsStateManager.nextSequence()
   const layerId = `querysimple-highlight-${widgetId}`
 
@@ -631,7 +642,7 @@ export async function createOrGetGraphicsLayer(
   }
 
   // Check for existing layer first (fast path)
-  const existingLayer = mapView.map.layers.find(layer => layer.id === layerId) as __esri.GraphicsLayer
+  const existingLayer = mapView.map.layers.find(layer => layer.id === layerId) as GraphicsLayer
   if (existingLayer) {
     debugLogger.log('GRAPHICS-LAYER', {
       event: 'createOrGetGraphicsLayer-found-existing',
@@ -662,16 +673,16 @@ export async function createOrGetGraphicsLayer(
  */
 async function createGraphicsLayerInternal(
   widgetId: string,
-  mapView: __esri.MapView | __esri.SceneView,
+  mapView: MapView | SceneView,
   layerId: string,
   seq: number
-): Promise<__esri.GraphicsLayer | null> {
+): Promise<GraphicsLayer | null> {
   try {
     // Load GraphicsLayer module
     const [GraphicsLayer] = await loadArcGISJSAPIModules(['esri/layers/GraphicsLayer'])
 
     // Double-check after async load (another call may have completed while we awaited)
-    const existingLayer = mapView.map.layers.find(layer => layer.id === layerId) as __esri.GraphicsLayer
+    const existingLayer = mapView.map.layers.find(layer => layer.id === layerId) as GraphicsLayer
     if (existingLayer) {
       debugLogger.log('GRAPHICS-LAYER', {
         event: 'createOrGetGraphicsLayer-found-existing-after-lock',
@@ -718,14 +729,20 @@ async function createGraphicsLayerInternal(
   }
 }
 
+// r027.091: createOrGetHoverLayer and createHoverLayerInternal removed.
+// Hover pins moved back to mapView.graphics (always-on-top overlay) to fix
+// z-order issues where results layers landed above the per-widget hover layer.
+// Cross-widget safety is maintained by scoped per-graphic cleanup (never
+// removeAll). See docs/bugs/HOVER-PIN-CROSS-WIDGET-BUG.md.
+
 /**
  * Adds highlight graphics to the graphics layer or GroupLayer sublayers.
  * r024.0: When layer is GroupLayer, routes each graphic to Points/Lines/Polygons sublayer by geometry type.
  */
 export async function addHighlightGraphics(
-  graphicsLayer: __esri.GraphicsLayer | __esri.GroupLayer,
+  graphicsLayer: GraphicsLayer | GroupLayer,
   records: FeatureDataRecord[],
-  mapView: __esri.MapView | __esri.SceneView
+  mapView: MapView | SceneView
 ): Promise<void> {
   const seq = graphicsStateManager.nextSequence()
   if (!graphicsLayer || !records || records.length === 0) {
@@ -739,7 +756,7 @@ export async function addHighlightGraphics(
     return
   }
 
-  const isGroupLayer = (graphicsLayer as __esri.Layer).type === 'group'
+  const isGroupLayer = (graphicsLayer as Layer).type === 'group'
   const layerToReorder = graphicsLayer
 
   // r022.102: Move graphics layer (or GroupLayer) to absolute end AFTER native selection creates highlight layers
@@ -765,11 +782,11 @@ export async function addHighlightGraphics(
   const existingRecordIdSet = new Set<string>()
 
   if (isGroupLayer) {
-    const gl = graphicsLayer as __esri.GroupLayer
-    gl.layers.forEach((sublayer: __esri.Layer) => {
-      const glSub = sublayer as __esri.GraphicsLayer
+    const gl = graphicsLayer as GroupLayer
+    gl.layers.forEach((sublayer: Layer) => {
+      const glSub = sublayer as GraphicsLayer
       if (glSub.graphics) {
-        glSub.graphics.forEach((graphic: __esri.Graphic) => {
+        glSub.graphics.forEach((graphic: Graphic) => {
           existingGraphicsCount++
           const recordId = graphic.attributes?.recordId
           if (recordId) {
@@ -780,9 +797,9 @@ export async function addHighlightGraphics(
       }
     })
   } else {
-    const gl = graphicsLayer as __esri.GraphicsLayer
+    const gl = graphicsLayer as GraphicsLayer
     existingGraphicsCount = gl.graphics.length
-    gl.graphics.forEach((graphic: __esri.Graphic) => {
+    gl.graphics.forEach((graphic: Graphic) => {
       const recordId = graphic.attributes?.recordId
       if (recordId) {
         existingRecordIds.push(recordId)
@@ -812,9 +829,10 @@ export async function addHighlightGraphics(
   // This ensures we always add the exact set of records provided
   records.forEach(record => {
     try {
-      const recordId = record.getId()
-      
-      const graphic = record.feature as __esri.Graphic
+      // r027.000: ExB 1.20 — coerce getId() to string (now returns string | number)
+      const recordId = String(record.getId())
+
+      const graphic = record.feature as Graphic
       if (!graphic || !graphic.geometry) {
         skippedCount++
         skippedRecordIds.push(recordId)
@@ -843,8 +861,8 @@ export async function addHighlightGraphics(
       })
 
       const targetLayer = isGroupLayer
-        ? getGraphicsSublayer(graphicsLayer as __esri.GroupLayer)
-        : (graphicsLayer as __esri.GraphicsLayer)
+        ? getGraphicsSublayer(graphicsLayer as GroupLayer)
+        : (graphicsLayer as GraphicsLayer)
       if (targetLayer) {
         targetLayer.add(highlightGraphic)
         addedCount++
@@ -855,11 +873,12 @@ export async function addHighlightGraphics(
       }
     } catch (error) {
       skippedCount++
-      skippedRecordIds.push(record.getId())
+      skippedRecordIds.push(String(record.getId()))
       debugLogger.log('GRAPHICS-LAYER', {
         event: 'addHighlightGraphics-record-error',
         seq,
-        recordId: record.getId(),
+        // r027.000: ExB 1.20 — coerce getId() to string (now returns string | number)
+        recordId: String(record.getId()),
         error: error instanceof Error ? error.message : String(error),
         timestamp: Date.now()
       })
@@ -870,11 +889,11 @@ export async function addHighlightGraphics(
   let finalGraphicsCount = 0
   const finalRecordIds: string[] = []
   if (isGroupLayer) {
-    const gl = graphicsLayer as __esri.GroupLayer
-    gl.layers.forEach((sublayer: __esri.Layer) => {
-      const glSub = sublayer as __esri.GraphicsLayer
+    const gl = graphicsLayer as GroupLayer
+    gl.layers.forEach((sublayer: Layer) => {
+      const glSub = sublayer as GraphicsLayer
       if (glSub.graphics) {
-        glSub.graphics.forEach((g: __esri.Graphic) => {
+        glSub.graphics.forEach((g: Graphic) => {
           finalGraphicsCount++
           const recordId = g.attributes?.recordId
           if (recordId) finalRecordIds.push(recordId)
@@ -882,9 +901,9 @@ export async function addHighlightGraphics(
       }
     })
   } else {
-    const gl = graphicsLayer as __esri.GraphicsLayer
+    const gl = graphicsLayer as GraphicsLayer
     finalGraphicsCount = gl.graphics.length
-    gl.graphics.forEach((g: __esri.Graphic) => {
+    gl.graphics.forEach((g: Graphic) => {
       const recordId = g.attributes?.recordId
       if (recordId) finalRecordIds.push(recordId)
     })
@@ -927,7 +946,7 @@ export async function addHighlightGraphics(
   if (isGroupLayer && addedCount > 0) {
     const geometryTypesAdded = new Set<string>()
     records.forEach(record => {
-      const graphic = record.feature as __esri.Graphic
+      const graphic = record.feature as Graphic
       if (graphic?.geometry?.type) {
         geometryTypesAdded.add(graphic.geometry.type)
       }
@@ -935,7 +954,7 @@ export async function addHighlightGraphics(
     
     // Create Legend layers for each geometry type that was added
     for (const geoType of geometryTypesAdded) {
-      await ensureLegendFeatureLayer(graphicsLayer as __esri.GroupLayer, geoType, widgetId)
+      await ensureLegendFeatureLayer(graphicsLayer as GroupLayer, geoType, widgetId)
     }
   }
 }
@@ -945,7 +964,7 @@ export async function addHighlightGraphics(
  * r024.9: When GroupLayer, searches all Points/Lines/Polygons sublayers.
  */
 export function removeHighlightGraphics(
-  graphicsLayer: __esri.GraphicsLayer | __esri.GroupLayer,
+  graphicsLayer: GraphicsLayer | GroupLayer,
   recordIds: string[],
   records?: FeatureDataRecord[]
 ): void {
@@ -961,14 +980,14 @@ export function removeHighlightGraphics(
     return
   }
 
-  const isGroupLayer = (graphicsLayer as __esri.Layer).type === 'group'
-  const layersToSearch: __esri.GraphicsLayer[] = isGroupLayer
-    ? (graphicsLayer as __esri.GroupLayer).layers.toArray().filter((l): l is __esri.GraphicsLayer => (l as __esri.GraphicsLayer).graphics != null)
-    : [graphicsLayer as __esri.GraphicsLayer]
+  const isGroupLayer = (graphicsLayer as Layer).type === 'group'
+  const layersToSearch: GraphicsLayer[] = isGroupLayer
+    ? (graphicsLayer as GroupLayer).layers.toArray().filter((l): l is GraphicsLayer => (l as GraphicsLayer).graphics != null)
+    : [graphicsLayer as GraphicsLayer]
 
   let removedCount = 0
 
-  const removeFromLayer = (layer: __esri.GraphicsLayer, graphicsToRemove: __esri.Graphic[]) => {
+  const removeFromLayer = (layer: GraphicsLayer, graphicsToRemove: Graphic[]) => {
     graphicsToRemove.forEach(graphic => {
       layer.remove(graphic)
       removedCount++
@@ -977,10 +996,11 @@ export function removeHighlightGraphics(
 
   if (records && records.length > 0) {
     const compositeKeySet = new Set(
-      records.map(r => `${r.getId()}__${r.feature?.attributes?.__queryConfigId || ''}`)
+      // r027.000: ExB 1.20 — coerce getId() to string (now returns string | number)
+      records.map(r => `${String(r.getId())}__${r.feature?.attributes?.__queryConfigId || ''}`)
     )
     layersToSearch.forEach(layer => {
-      const graphicsToRemove: __esri.Graphic[] = []
+      const graphicsToRemove: Graphic[] = []
       layer.graphics.forEach(graphic => {
         const recordId = graphic.attributes?.recordId
         const queryConfigId = graphic.attributes?.queryConfigId || ''
@@ -993,7 +1013,7 @@ export function removeHighlightGraphics(
   } else {
     const recordIdSet = new Set(recordIds)
     layersToSearch.forEach(layer => {
-      const graphicsToRemove: __esri.Graphic[] = []
+      const graphicsToRemove: Graphic[] = []
       layer.graphics.forEach(graphic => {
         const recordId = graphic.attributes?.recordId
         if (recordId && recordIdSet.has(recordId)) {
@@ -1017,7 +1037,7 @@ export function removeHighlightGraphics(
   // r024.15: Remove Legend FeatureLayers for any now-empty sublayers
   if (isGroupLayer && removedCount > 0) {
     const widgetId = graphicsLayer.id.replace(/^querysimple-results-/, '')
-    removeEmptyLegendFeatureLayers(graphicsLayer as __esri.GroupLayer, widgetId)
+    removeEmptyLegendFeatureLayers(graphicsLayer as GroupLayer, widgetId)
   }
 }
 

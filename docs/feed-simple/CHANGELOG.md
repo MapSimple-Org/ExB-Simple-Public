@@ -5,6 +5,154 @@ All notable changes to the FeedSimple widget will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.20.0-r005.016] - 2026-05-05 - Security: dangerous URL scheme blocking + security test suite
+
+### Context
+Security hardening pass (Groups B + tests). Markdown link/image rendering and `resolveExternalLinkUrl()` in shared-code accepted any URL scheme. Added `isDangerousUrl()` blocking and 26 security tests covering both Group A (escapeHtml) and Group B changes.
+
+### Changed
+- **`shared-code/mapsimple-common/markdown-template-utils.ts`** — `isDangerousUrl()` blocks `javascript:`, `data:`, `vbscript:` schemes in markdown links and images. Dangerous links render as plain text; dangerous images render as alt text.
+- **`shared-code/mapsimple-common/token-renderer.ts`** — Same `isDangerousUrl()` guard on `resolveExternalLinkUrl()`. A field value resolving to a dangerous scheme returns `undefined`.
+
+### Tests added (26 new across both widgets)
+- **`shared-code/.../markdown-template-utils.test.ts`** — 12 tests for dangerous/safe URL scheme handling in links and images
+- **`feed-simple/tests/token-renderer.test.ts`** — 14 tests for `escapeHtml` (6) and `resolveExternalLinkUrl` dangerous URL blocking (8)
+
+### Stats
+- **Tests**: 516/516 (+26 new security tests)
+- **TS errors**: 0
+
+---
+
+## [1.20.0-r005.014] - 2026-05-05 - Security: XSS prevention in shared template rendering
+
+### Context
+Security hardening pass (Group A). FeedSimple consumes `substituteTokens()` from `shared-code` to render XML feed field values into HTML templates. The shared `escapeHtml()` change in `token-renderer.ts` covers FS automatically since it shares the same rendering pipeline.
+
+### Changed
+- **`shared-code/mapsimple-common/token-renderer.ts`** — `escapeHtml()` now applied to every substituted field value inside `substituteTokens()`. XML feed field values are entity-encoded before pipe filters run, preventing injection via compromised feed data. New `substituteLegacyTokens()` export also available (consumed by QS).
+
+### Stats
+- **Tests**: 491/491
+- **TS errors**: 0
+
+---
+
+## [1.20.0-r005.013] - 2026-05-05 - TS error cleanup (remaining errors to 0)
+
+### Context
+Remaining FS TypeScript errors cleaned as part of the cross-widget r027.090 TS cleanup pass. All type-only fixes, zero runtime behavior changes.
+
+### Changed
+- `ResourceHandle` import replaced with local `type Handle = { remove(): void }` in `widget.tsx`
+- Two `new Graphic({ geometry })` calls cast to `geometry: geometry as any` in `widget.tsx` (RestGeometry not assignable to geometry union)
+- Added `/** @jsxFrag React.Fragment */` pragma in `widget.tsx` (missing for `<>` fragment syntax)
+- Added `link` label to `toolbarLabels` in `widget.tsx` (missing required property)
+- Added `fieldNames?: string[]` to State interface in `setting.tsx`
+- `[outputDsJson]` cast to `[outputDsJson as any]` in `setting.tsx`
+- `FieldProperties` import replaced with `type FieldProperties = __esri.FieldProperties` in `feed-layer-manager.ts`
+- `PopupOpenOptions` import replaced with local type in `feed-layer-manager.ts`
+- `rangeColorBreaks` cast widened to `as unknown as RangeColorBreak[]` in `feed-layer-manager.ts`
+
+### Stats
+- **TS errors**: 0 across FS
+- **Tests**: 490/490 (full suite)
+
+---
+
+## [1.20.0-r005.011] - 2026-05-01 - PipelineOptions test fixtures (filterNumericMin/Max)
+
+### Investigation
+7 errors in `feed-pipeline.test.ts` at lines 251/258/270/282/294/313/322. `runPipeline(items, options)` consumers passed inline option fixtures that were missing `filterNumericMin: number | null | undefined` and `filterNumericMax: number | null | undefined`. The two fields were added to `PipelineOptions` (in `feed-pipeline.ts:199-200`) when the numeric range filter step was added; the test fixtures hadn't been refreshed.
+
+### Changed
+- **`feed-pipeline.test.ts`** — two edits clear all 7 errors:
+  - Added `filterNumericMin: null, filterNumericMax: null` to `DEFAULT_OPTIONS`. Cascades through the 6 tests that use `{...DEFAULT_OPTIONS, ...}` spread.
+  - Added the same field pair to the explicit non-spread fixture at line 294 (the only one that doesn't spread `DEFAULT_OPTIONS`).
+  - `null` = "no filter applied", matching the runtime semantics of the numeric range filter step.
+
+### Stats
+- **Widget TS errors**: 85 → 78 (-7).
+- **Tests**: 248/248 (FS+shared) and 490/490 (full suite).
+- **Builds**: clean.
+
+### Notes
+Pure fixture update. No runtime change, no production source touched.
+
+## [1.20.0-r005.009 → r005.010] - 2026-05-01 - string|number cluster cleanup (Calcite NumericInput + RangeColorBreak)
+
+### Investigation
+13 errors carrying the literal `string | number` mismatch turned out to be three distinct sub-clusters, not one. The "getId cascade" label from the prior status writeup was lazy — only 2 of the 13 were actually `getId()`. Re-classified before fixing:
+
+- **A. Genuine `getId()` cascade** (2 errors): `query-task.tsx:1212`, `QueryTabContent.tsx:290`. `DataRecord.getId()` returns `string | number` in 1.20; the call sites pass it where `string` is expected.
+- **B. Calcite 5.0 NumericInput widening** (9 column errors across 7 sites in `setting.tsx`): `onAcceptValue(v)` widened from `number` to `string | number` in Calcite 5.0. `isNaN(v)` rejects the union; trailing `: v` returns also fail when the consumer expects a strict numeric field type.
+- **C. RangeColorBreak handler narrowing** (2 errors at `setting.tsx:366,368`): `onUpdateRangeBreak(value: string | number | null | undefined)` accepts a union to serve every field, but the `field === 'color'` branch assigns to `brk.color` / `brk.mapColor` which are `string`. TS can't narrow the value off the `field` discriminator.
+
+### Changed
+- **Site A (QS r027.067)** — Genuine `getId()` cascade. `query-task.tsx:1212` and `QueryTabContent.tsx:290` wrapped in `String(record.getId())`. Matches the project's existing ID-coercion pattern from the earlier r027 batch.
+- **Site B (FS r005.009)** — Calcite NumericInput widening. Three patterns across seven sites:
+  - **B.1 — `onUpdateRangeBreak` callbacks** (lines 1160/1168/1201): `isNaN(v)` → `isNaN(Number(v))`, trailing `: v` → `: Number(v)`. `onUpdateRangeBreak` already accepts `string | number | null | undefined` so only the inline coercion was needed.
+  - **B.2 — `setConfigValue` + isNaN** (lines 1394/1402, `filterNumericMin` / `filterNumericMax`): both `isNaN(v)` and trailing `: v` wrapped in `Number()` since `setConfigValue` is strict-typed via `FeedSimpleConfig[K]` (number | null).
+  - **B.3 — direct `setConfigValue` passes** (lines 1686/1721): `setConfigValue('feedMapLayerSize', value)` → `Number(value) || 8` (default fallback); `setConfigValue('feedMapLayerOutlineWidth', value ?? 0)` → null/undefined guard then `Number(value)`.
+- **Site C (FS r005.010)** — RangeColorBreak narrowing. Added `as string` casts at the two color-branch assignments (`brk.color = value as string`, `brk.mapColor = value as string`) with a comment noting the call site only fires from `<input type='color'>` and always passes a string. Two sites in one file.
+
+### Stats
+- **Widget TS errors**: 108 → 95 (-13; full string|number cluster cleared).
+- **Tests**: 490/490 passing throughout (full suite confirmed at end).
+- **Builds**: clean throughout.
+- **Cadence**: per-site test + tsc + webpack build, halt on failure. Sites A → B → C all passed clean.
+
+### Notes
+Calcite 5.0's `NumericInput.onAcceptValue` is the silent breaker here — the type widened from `number` to `string | number` between Calcite 4.x and 5.x. Runtime didn't change (the input's emitted value can be a string when the user types non-numeric text), the type checker just caught up. The `Number()` coercions make the runtime intent explicit and produce identical numeric values for valid inputs (NaN for invalid, which we then filter to `null`).
+
+## [1.20.0-r005.006 → r005.008] - 2026-05-01 - ImmutableArray<UseDataSource> cluster cleanup
+
+### Investigation
+ExB props arrive seamless-immutable-wrapped. `props.useDataSources` is `ImmutableArray<UseDataSource>`, which is structurally `Readonly<Remaining<UseDataSource[]>>` and lacks the array mutation methods (`push`, `pop`, `shift`, `splice`, `reverse`, `sort`). 1.20's stricter type checking surfaced 19 errors where the immutable shape was passed to feed-simple helpers and a framework setting callback that declared mutable-array params, even though no code path mutated.
+
+Two helpers were responsible for 17 of the 19 errors. Both helpers are read-only by construction — they only access `[0]?.dataSourceId` or `.length`.
+
+### Changed
+- **Site A — `feed-simple/src/utils/immutable-helpers.ts:44` (r005.006)**: `getDataSourceId()` param type widened from `Array<UseDataSource | { dataSourceId?: string }> | undefined | null` to `ImmutableArray<UseDataSource> | Array<UseDataSource | { dataSourceId?: string }> | undefined | null`. Helper still only reads `[0]?.dataSourceId`. Cascaded to clear 9 widget.tsx + 1 setting.tsx errors.
+- **Site B — `feed-simple/src/utils/map-interaction.ts:34` (r005.007)**: `isMapIntegrationConfigured()` param type widened from `any[] | undefined` to `ImmutableArray<UseDataSource> | UseDataSource[] | any[] | undefined`. Helper still only reads `.length`. Cascaded to clear 8 widget.tsx errors.
+- **Site C — `feed-simple/src/setting/setting.tsx` (r005.008)**: Two sibling errors:
+  - **Line 696**: Dropped the `Immutable([useDs])` wrap on the `useDataSources` arg to `onSettingChange`. The wrap produced an `ImmutableArray` that lacked `pop`/`push` and tripped `onSettingChange`'s `UseDataSource[]` (mutable) signature. The framework wraps the value on its way through to IMConfig, so the explicit wrap was redundant.
+  - **Line 715**: Changed `as UseDataSource | undefined` to `as unknown as UseDataSource | undefined`. `props.useDataSources?.[0]` is `ImmutableObject<UseDataSource>`; only `.dataSourceId` is read downstream so runtime is identical, but TS in 1.20 won't allow a direct cast between the two structurally-different types — `as unknown as T` is the documented escape.
+
+### Stats
+- **Widget TS errors**: 127 → 108 (-19; full ImmutableArray<UseDataSource> cluster cleared).
+- **Tests**: 248/248 passing throughout (feed-simple + shared-code targeted runs).
+- **Builds**: clean throughout.
+- **Cadence**: per-site test + tsc + webpack build, halt on failure.
+
+### Notes
+Pure type-widening + one redundant-wrap removal. No runtime behavior changes. The `as unknown as T` at setting.tsx:715 is the only added cast; it replaces a (now-illegal) direct cast that was already there.
+
+## [1.20.0-r005.001] - 2026-04-30 - ExB 1.20 / JSAPI 5.0.4 Validation
+
+### Changed
+- **`exbVersion` bump**: `feed-simple/manifest.json` updated from `1.19.0` to `1.20.0` as part of the cross-widget version sync (QS r027.035 batch).
+
+### Verified
+- **1.20 manual smoke** (2026-04-30): All FS test paths exercised against the 1.20 install (JSAPI 5.0.4, Calcite 5.0.2, Node 24) — feed load, card render, click → popup, sort/filter/search. All paths passed.
+- **FS unit tests**: `feed-simple/tests/` continue to pass as part of the 490/490 from the 1.20 environment.
+
+### Notes
+- FS-specific source changes in this batch were minor; most of the 1.20 work landed in shared infrastructure and QS source sites. FS came along for the ride.
+- **TODO #21** (added in QS r027.037): Investigate explicit `SpatialReference` on drawn geometries. Mostly a QS concern — FS does not currently draw geometries — but if FS ever does, the same SR audit applies. Keeping it on the FS radar.
+
+---
+
+## [1.20.0-r005.000] - 2026-03-25 - ExB 1.20 Upgrade
+
+### Changed
+- **ExB 1.20 base version**: Upgraded from ExB 1.19 (JSAPI 4.34, Calcite 3.3.3, Node 22) to ExB 1.20 (JSAPI 5.0.4, Calcite 5.0.2, Node 24). React stays at 19.
+
+### Added
+- **Dark mode detection** (r005.000): Wired `theme.sys.color.mode` detection via `this.props.theme` in `widget.tsx`. New `DARK-MODE` debug logger tag registered. Logs initial mode on mount and mode changes via `componentDidUpdate`.
+
+---
+
 ## [1.19.0-r004.002] - 2026-03-19 - Markdown Table Support (Phase 2)
 
 ### Added

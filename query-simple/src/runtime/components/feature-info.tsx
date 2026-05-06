@@ -12,6 +12,9 @@ import { React, css, jsx, type DataSource, injectIntl, type IntlShape, className
 import Feature from '@arcgis/core/widgets/Feature'
 import { Button } from 'jimu-ui'
 import { createQuerySimpleDebugLogger } from 'widgets/shared-code/mapsimple-common'
+import type Graphic from '@arcgis/core/Graphic'
+import type PopupTemplate from '@arcgis/core/PopupTemplate'
+import type FeatureLayer from '@arcgis/core/layers/FeatureLayer'
 
 const debugLogger = createQuerySimpleDebugLogger()
 
@@ -50,9 +53,9 @@ export enum LoadStatus {
 
 interface Props {
   dataSource: DataSource
-  graphic: __esri.Graphic
-  popupTemplate: __esri.PopupTemplate
-  defaultPopupTemplate: __esri.PopupTemplate
+  graphic: Graphic
+  popupTemplate: PopupTemplate
+  defaultPopupTemplate: PopupTemplate
   togglable?: boolean
   expandByDefault?: boolean
   /** r023.33: Notifies parent when expand state changes. Used by QueryResultItem to show inline icons vs menu. */
@@ -107,7 +110,7 @@ interface ExtraProps {
 
 class FeatureInfo extends React.PureComponent<Props & ExtraProps, State> {
   // r024.48: Removed private Feature class reference - using direct import now
-  private feature: __esri.Feature
+  private feature: Feature
   private readonly featureContainer: React.RefObject<HTMLInputElement | null>
 
   constructor (props) {
@@ -251,7 +254,7 @@ class FeatureInfo extends React.PureComponent<Props & ExtraProps, State> {
 
     const originDS = this.props.dataSource.getOriginDataSources()
     const rootDataSource = originDS?.[0]?.getRootDataSource()
-    const layer = this.props.graphic.layer as __esri.FeatureLayer
+    const layer = this.props.graphic.layer as FeatureLayer
     if (this.props.popupTemplate) {
       this.props.graphic.popupTemplate = this.props.popupTemplate
     } else if (layer) {

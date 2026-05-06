@@ -27,6 +27,10 @@ import { clearAnyResultLayerContents } from './graphics-layer-utils'
 import { clearSelectionInDataSources, dispatchSelectionEvent } from './selection-utils'
 import { createQuerySimpleDebugLogger, globalHandleManager } from 'widgets/shared-code/mapsimple-common'
 import type { EventManager } from './managers/event-manager'
+import type GraphicsLayer from '@arcgis/core/layers/GraphicsLayer'
+import type GroupLayer from '@arcgis/core/layers/GroupLayer'
+import type MapView from '@arcgis/core/views/MapView'
+import type SceneView from '@arcgis/core/views/SceneView'
 
 const debugLogger = createQuerySimpleDebugLogger()
 
@@ -73,8 +77,8 @@ export interface SubmitContext {
   queryItemConfigId: string
   resultsMode?: SelectionType
   initialInputValue?: string
-  graphicsLayer?: __esri.GraphicsLayer
-  mapView?: __esri.MapView | __esri.SceneView
+  graphicsLayer?: GraphicsLayer | GroupLayer
+  mapView?: MapView | SceneView
   eventManager?: EventManager
   onAccumulatedRecordsChange?: (records: FeatureDataRecord[]) => void
   onDestroyGraphicsLayer?: () => void

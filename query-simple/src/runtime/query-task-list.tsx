@@ -8,6 +8,12 @@ import { FOCUSABLE_CONTAINER_CLASS } from 'jimu-ui'
 import defaultMessages from './translations/default'
 import { createQuerySimpleDebugLogger } from 'widgets/shared-code/mapsimple-common'
 import type { EventManager } from './managers/event-manager'
+import { getClauseFieldName } from './sql-clause-utils'
+import type Extent from '@arcgis/core/geometry/Extent'
+import type GraphicsLayer from '@arcgis/core/layers/GraphicsLayer'
+import type GroupLayer from '@arcgis/core/layers/GroupLayer'
+import type MapView from '@arcgis/core/views/MapView'
+import type SceneView from '@arcgis/core/views/SceneView'
 
 const debugLogger = createQuerySimpleDebugLogger()
 
@@ -28,10 +34,11 @@ export interface QueryTaskListProps {
   // r026.009: Configurable pan on result click
   panOnResultClick?: boolean
   accumulatedRecords?: FeatureDataRecord[]
-  resultsExtent?: __esri.Extent | null  // r024.74: Cached extent for zoom/pan actions
+  resultsExtent?: Extent | null  // r024.74: Cached extent for zoom/pan actions
   onAccumulatedRecordsChange?: (records: FeatureDataRecord[]) => void
-  graphicsLayer?: __esri.GraphicsLayer
-  mapView?: __esri.MapView | __esri.SceneView
+  graphicsLayer?: GraphicsLayer | GroupLayer
+  mapView?: MapView | SceneView
+  // r027.091: hoverLayer prop removed — hover pins use mapView.graphics
   onInitializeGraphicsLayer?: (outputDS: DataSource) => Promise<void>
   onClearGraphicsLayer?: () => void
   onDestroyGraphicsLayer?: () => void // r021.17: Clear refs after destroying layer
@@ -58,8 +65,8 @@ function sortQueryItemsByOrder(queryItems: ImmutableArray<QueryItemType>): Immut
   
   // Safely convert to regular array for sorting
   // Handle both ImmutableArray (has toArray method) and regular arrays
-  const itemsArray = (queryItems && typeof queryItems.toArray === 'function') 
-    ? queryItems.toArray() 
+  const itemsArray = (queryItems && typeof (queryItems as any).toArray === 'function')
+    ? (queryItems as any).toArray()
     : (Array.isArray(queryItems) ? queryItems : [])
   
   const itemsWithIndex = itemsArray.map((item, index) => ({ item, originalIndex: index }))
@@ -97,7 +104,7 @@ const groupQueries = (queryItems: ImmutableArray<QueryItemType>): GroupedQueries
         groupIndexMap[item.groupId] = index
         groupOrder.push(item.groupId)
       }
-      groupItemsMap[item.groupId].push(item)
+      groupItemsMap[item.groupId].push(item as any)
     } else {
       ungrouped.push({ item, index })
     }
@@ -120,7 +127,7 @@ const getQueryDisplayName = (item: ImmutableObject<QueryItemType>): string => {
   }
   
   // Second priority: field name from SQL expression
-  const jimuFieldName = item.sqlExprObj?.parts?.[0]?.jimuFieldName
+  const jimuFieldName = getClauseFieldName(item.sqlExprObj?.parts?.[0])
   if (jimuFieldName) {
     return jimuFieldName
   }

@@ -1,4 +1,5 @@
 /** @jsx jsx */
+/** @jsxFrag React.Fragment */
 import {
   React, jsx, css,
   type AllWidgetProps,
@@ -44,6 +45,11 @@ import { enrichItemsWithRangeLabels, RANGE_LABEL_FIELD, RANGE_ORDER_FIELD } from
 import { exportFeedItemsToCsv } from '../utils/feed-csv-export'
 import { toArray, toPlain, getDataSourceId } from '../utils/immutable-helpers'
 import defaultMessages from './translations/default'
+import type MapView from '@arcgis/core/views/MapView'
+import type SceneView from '@arcgis/core/views/SceneView'
+import type FeatureLayer from '@arcgis/core/layers/FeatureLayer'
+/** Minimal handle type — JSAPI 5.0 exports ResourceHandle, 4.x does not. */
+type Handle = { remove(): void }
 
 const parser = new CustomXmlParser()
 
@@ -102,11 +108,11 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
   /** Cached join IDs from last geometry query — skip re-query when unchanged */
   private previousJoinIds: Set<string> = new Set()
   /** JSAPI MapView reference from JimuMapViewComponent — used for goTo and popup */
-  private mapView: __esri.MapView | __esri.SceneView | null = null
+  private mapView: MapView | SceneView | null = null
   /** Auto-generated FeatureLayer from feed coordinates (if enabled) */
-  private feedFeatureLayer: __esri.FeatureLayer | null = null
+  private feedFeatureLayer: FeatureLayer | null = null
   /** Click handler for map-to-card sync on the feed layer */
-  private feedLayerClickHandler: __esri.Handle | null = null
+  private feedLayerClickHandler: Handle | null = null
   /** Cached pipeline result for getProcessedItems() memoization */
   private cachedPipeline: PipelineResult | null = null
   /** Key for pipeline memoization — invalidates cache when inputs change */
@@ -148,6 +154,17 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
 
   componentDidMount (): void {
     debugLogger.log('FETCH', { action: 'widget-mounted', version: WIDGET_VERSION })
+
+    // r005.000: Log initial theme mode on mount
+    const initialThemeMode = (this.props as any).theme?.sys?.color?.mode
+    if (initialThemeMode) {
+      debugLogger.log('DARK-MODE', {
+        action: 'initial-mode',
+        widgetId: this.props.id,
+        mode: initialThemeMode,
+        isDark: initialThemeMode === 'dark'
+      })
+    }
     const { feedUrl } = this.props.config
     if (feedUrl) {
       this.loadFeed()
@@ -157,6 +174,19 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
   }
 
   componentDidUpdate (prevProps: AllWidgetProps<IMConfig>): void {
+    // r005.000: Detect theme mode changes (light ↔ dark)
+    const prevThemeMode = (prevProps as any).theme?.sys?.color?.mode
+    const currThemeMode = (this.props as any).theme?.sys?.color?.mode
+    if (prevThemeMode !== currThemeMode && currThemeMode) {
+      debugLogger.log('DARK-MODE', {
+        action: 'theme-mode-changed',
+        widgetId: this.props.id,
+        previousMode: prevThemeMode || 'unknown',
+        currentMode: currThemeMode,
+        isDark: currThemeMode === 'dark'
+      })
+    }
+
     const prevUrl = prevProps.config.feedUrl
     const currUrl = this.props.config.feedUrl
     const prevInterval = prevProps.config.refreshInterval
@@ -498,7 +528,7 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
     const existingLayerId = getFeedLayerId(this.props.id)
     const existing = this.mapView.map.allLayers.find(l => l.id === existingLayerId)
     if (existing) {
-      this.feedFeatureLayer = existing as __esri.FeatureLayer
+      this.feedFeatureLayer = existing as FeatureLayer
       debugLogger.log('FEED-LAYER', { action: 'layer-reattached', layerId: existingLayerId })
     } else {
       this.feedFeatureLayer = createFeedFeatureLayer(this.props.id, config, fieldNames)
@@ -952,7 +982,7 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
         const geometry = inferGeometryType(restGeom)
         const graphic = new Graphic({
           attributes: { [joinFieldService]: joinValue },
-          geometry
+          geometry: geometry as any
         })
 
         // Zoom (if enabled) and identify the feature on the map
@@ -1093,7 +1123,7 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
     if (joinValue && this.state.geometryMap.has(joinValue)) {
       const restGeom = this.state.geometryMap.get(joinValue)
       const geometry = inferGeometryType(restGeom)
-      const graphic = new Graphic({ attributes: { [joinFieldService]: joinValue }, geometry })
+      const graphic = new Graphic({ attributes: { [joinFieldService]: joinValue }, geometry: geometry as any })
       const dataSourceId = getDataSourceId(this.props.useDataSources)
 
       // Build goTo target based on mode
@@ -1326,7 +1356,8 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
                   pan: this.getI18nMessage('panToFeature'),
                   expand: this.getI18nMessage('expandCard'),
                   collapse: this.getI18nMessage('collapseCard'),
-                  noGeometry: this.getI18nMessage('zoomDisabledNoGeometry')
+                  noGeometry: this.getI18nMessage('zoomDisabledNoGeometry'),
+                  link: this.getI18nMessage('openLink') || 'Open link'
                 }
               : undefined
 

@@ -4,7 +4,6 @@ import {
   type IMSqlExpression,
   type FeatureLayerQueryParams,
   MessageManager,
-  type QueryParams,
   type DataRecord,
   DataRecordSetChangeMessage,
   RecordSetChangeType,
@@ -13,9 +12,13 @@ import {
 } from 'jimu-core'
 import type { IFieldInfo } from '@esri/arcgis-rest-feature-service'
 import { type QueryItemType, SpatialRelation, type SpatialFilterObj, FieldsType, mapJSAPIUnitToDsUnit, mapJSAPISpatialRelToDsSpatialRel } from '../config'
-import { getFieldInfosInPopupContent, createQuerySimpleDebugLogger, substituteTokens, convertTemplateToHtml } from '../../../shared-code/mapsimple-common'
+import { getFieldInfosInPopupContent, createQuerySimpleDebugLogger, substituteTokens, substituteLegacyTokens, convertTemplateToHtml } from '../../../shared-code/mapsimple-common'
 import { loadArcGISJSAPIModules } from 'jimu-arcgis'
 import { extractFieldTokens } from './markdown-template-utils'
+import { isSqlClause } from './sql-clause-utils'
+import type FeatureLayer from '@arcgis/core/layers/FeatureLayer'
+import type PopupTemplate from '@arcgis/core/PopupTemplate'
+import type Layer from '@arcgis/core/layers/Layer'
 
 const debugLogger = createQuerySimpleDebugLogger()
 
@@ -81,7 +84,7 @@ export function resolvePopupInfoWithInheritance (ds: FeatureLayerDataSource): an
  */
 export function resolvePopupOutFields (
   ds: FeatureLayerDataSource,
-  featureLayer: __esri.FeatureLayer
+  featureLayer: FeatureLayer
 ): string[] {
   const objectIdField = featureLayer.objectIdField
 
@@ -198,16 +201,16 @@ export function sanitizeSqlExpression (sqlExpr: IMSqlExpression): IMSqlExpressio
 
   let sanitizedExpr = sqlExpr
   sqlExpr.parts.forEach((part, index) => {
-    if (part.type === 'SINGLE' && part.valueOptions?.value !== undefined) {
+    if (isSqlClause(part) && part.valueOptions?.value !== undefined) {
       const rawValue = part.valueOptions.value
       
       // CASE 1: Simple String
       if (typeof rawValue === 'string') {
         const sanitizedValue = sanitizeQueryInput(rawValue)
         if (sanitizedValue !== rawValue) {
-          sanitizedExpr = sanitizedExpr.setIn(['parts', index, 'valueOptions', 'value'], sanitizedValue)
+          sanitizedExpr = (sanitizedExpr as any).setIn(['parts', index, 'valueOptions', 'value'], sanitizedValue)
         }
-      } 
+      }
       // CASE 2: Array of objects (Unique Values / Dropdowns)
       // We must preserve the Immutable structure to avoid "asMutable" errors
       else if (Array.isArray(rawValue) || (rawValue && typeof (rawValue as any).toArray === 'function')) {
@@ -230,7 +233,7 @@ export function sanitizeSqlExpression (sqlExpr: IMSqlExpression): IMSqlExpressio
           // If it was Immutable, we should ideally use Immutable methods to update,
           // but setIn on the top-level expression with a plain array/object 
           // usually triggers the framework's auto-conversion.
-          sanitizedExpr = sanitizedExpr.setIn(['parts', index, 'valueOptions', 'value'], sanitizedArr)
+          sanitizedExpr = (sanitizedExpr as any).setIn(['parts', index, 'valueOptions', 'value'], sanitizedArr)
         }
       }
     }
@@ -243,7 +246,7 @@ export async function getPopupTemplate (
   outputDS: FeatureLayerDataSource,
   queryItem: ImmutableObject<QueryItemType>,
   originDSOverride?: FeatureLayerDataSource // r023.17: Allow caller to specify correct origin DS for cross-query records
-): Promise<{ popupTemplate?: __esri.PopupTemplate, defaultPopupTemplate?: __esri.PopupTemplate }> {
+): Promise<{ popupTemplate?: PopupTemplate, defaultPopupTemplate?: PopupTemplate }> {
   const { resultFieldsType, resultDisplayFields, resultTitleExpression = '' } = queryItem
   // r023.17: Use override origin DS when provided (cross-query accumulation mode)
   // Without this, switching queries in Add mode causes the CURRENT query's origin DS
@@ -322,10 +325,7 @@ export async function getPopupTemplate (
           const attributes = graphic.attributes
           // Substitute {{field | filter}} tokens, with legacy {field} fallback
           let substituted = substituteTokens(resultContentExpression, attributes)
-          substituted = substituted.replace(/(?<!\{)\{(\w+)\}(?!\})/g, (_m, field) => {
-            const val = attributes[field]
-            return val != null ? String(val) : ''
-          })
+          substituted = substituteLegacyTokens(substituted, attributes)
           const html = convertTemplateToHtml(substituted)
 
           const div = document.createElement('div')
@@ -384,7 +384,7 @@ export async function getPopupTemplate (
   // (group layer may hold the popupInfo that ExB didn't push to the child)
   const inheritedPopupInfo = resolvePopupInfoWithInheritance(currentOriginDs)
   if (inheritedPopupInfo) {
-    debugLogger.log('QUERY', 'getPopupTemplate: inherited popupInfo from parent DataSource', { fields: inheritedPopupInfo.fieldInfos?.length })
+    debugLogger.log('QUERY', { event: 'getPopupTemplate-inherited', source: 'parent DataSource', fields: inheritedPopupInfo.fieldInfos?.length })
     // Build a PopupTemplate from the inherited popupInfo
     return {
       popupTemplate: {
@@ -408,7 +408,12 @@ export function generateQueryParams (
   queryItem: ImmutableObject<QueryItemType>,
   page: number,
   pageSize: number
-): QueryParams {
+): FeatureLayerQueryParams {
+  // r027.063: Return type was QueryParams, but ExB 1.20 narrowed that base
+  // interface to only page/pageSize. The SQL fields (where, outFields,
+  // orderByFields) moved to SqlQueryParams. This function actually builds
+  // and returns a FeatureLayerQueryParams (see local var on line below),
+  // so the declared return type now matches what's actually returned.
   const currentQueryDsJson = outputDS.getDataSourceJson()
   const currentOriginDs: FeatureLayerDataSource = outputDS.getOriginDataSources()[0] as FeatureLayerDataSource
   const isLocalDs = currentQueryDsJson?.isDataInDataSourceInstance
@@ -476,13 +481,18 @@ export function generateQueryParams (
   }
 
   // compose query params for query
-  const queryParams: FeatureLayerQueryParams = {
+  // r027.066: maxAllowableOffset is a JSAPI esri/rest/support/Query property,
+  // not modeled on jimu-core's FeatureLayerQueryParams. It is intentionally
+  // threaded through to the underlying esri Query for geometry generalization
+  // (CLAUDE.md "Geometry Generalization" rule). The intersection type
+  // documents this passthrough in place rather than reaching for `as any`.
+  const queryParams: FeatureLayerQueryParams & { maxAllowableOffset?: number } = {
     // url: ds.url,
     returnGeometry: true,
-    /** 
+    /**
      * PERFORMANCE OPTIMIZATION: Force lower precision for all display queries.
      */
-    maxAllowableOffset: 0.1, 
+    maxAllowableOffset: 0.1,
     page,
     // Limit pageSize to a sane default if not provided or too large
     pageSize: (pageSize && pageSize < 1000) ? pageSize : 1000,
@@ -528,7 +538,7 @@ export function generateQueryParams (
 export async function executeCountQuery (
   widgetId: string,
   outputDS: FeatureLayerDataSource,
-  queryParams: QueryParams
+  queryParams: FeatureLayerQueryParams
 ): Promise<number> {
   const result = await outputDS.loadCount(queryParams, { widgetId, refresh: true })
   return result != null ? result : 0
@@ -538,7 +548,7 @@ export async function executeQuery (
   widgetId: string,
   queryItem: ImmutableObject<QueryItemType>,
   outputDS: FeatureLayerDataSource,
-  queryParams: QueryParams
+  queryParams: FeatureLayerQueryParams
 ): Promise<{ records?: DataRecord[], fields?: string[] }> {
   const popupInfo = outputDS.getPopupInfo()
 
@@ -615,7 +625,7 @@ export async function executeQuery (
 }
 
 async function getLayerObject (dataSource: FeatureLayerDataSource) {
-  const layerObject = await dataSource.createJSAPILayerByDataSource() as __esri.Layer
+  const layerObject = await dataSource.createJSAPILayerByDataSource() as Layer
   // layerObject may be undefined if the data source is added by URL
   if (layerObject) {
     await layerObject.load()

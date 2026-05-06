@@ -7,6 +7,870 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 > **Archive**: For releases r001-r021, see [CHANGELOG_ARCHIVE_r001-r021.md](docs/archive/CHANGELOG_ARCHIVE_r001-r021.md)
 
+## [1.20.0-r027.097] - 2026-05-06 - Select on Map: direct highlight + non-HFL guard
+
+### Context
+Select on Map stopped producing visible blue outlines after the parcels layer migrated from a map-image service to a hosted feature layer (HFL) in ArcGIS Online. The framework's indirect highlight chain (`selectRecordsByIds` -> Redux -> observer -> `layerView.highlight()`) is unreliable across layer types and ExB versions. Root cause investigation documented in TODO #22.
+
+### Changed
+- **`query-simple/src/data-actions/add-to-map-action.tsx`** — Direct `layerView.highlight()` via `MapViewManager` -> `getJimuLayerViewByDataSourceId` -> `jimuLayerView.view.highlight(numericIds)`. Bypasses the framework chain entirely. Module-level highlight handle with `clearSelectOnMapHighlight()` export for cleanup. Added `SelectOnMapResult` interface (`{ success, highlightApplied }`) so callers can detect when highlight was not applied.
+- **`query-simple/src/runtime/selection-utils.ts`** — Calls `clearSelectOnMapHighlight()` inside `clearAllSelectionsForWidget` to remove blue outlines on Clear All / Remove.
+- **`query-simple/src/runtime/results-menu.tsx`** — Checks `result.highlightApplied` after Select on Map. When false, emits `debugLogger.log('BUG', { bugId: 'BUG-SELECT-MAP-IMAGE-001' })` via `console.warn` (always visible, no `?debug=` needed).
+- **`query-simple/tests/selection-utils.test.ts`** — Added `jest.mock` for `add-to-map-action` to prevent `jimu-arcgis` SystemJS module from loading in test environment.
+
+### Known limitation
+- **BUG-SELECT-MAP-IMAGE-001**: Map-image sublayers have no client-side `FeatureLayerView` and cannot be highlighted via direct `highlight()`. Selection data is still applied to Redux. The BUG logger surfaces this in the console. See TODO #22 for investigation notes.
+
+### Stats
+- **Tests**: 535/535
+- **TS errors**: 0
+
+---
+
+## [1.20.0-r027.095] - 2026-05-05 - Security: SQL field name validation (Group C)
+
+### Context
+Security hardening pass (Group C). Field names from admin config (`jimuFieldName`) are interpolated into WHERE clauses in `suggest-utils.ts`. Although protected by three existing layers (Esri dropdown, config.json access, ArcGIS Server validation), added `isValidFieldName()` as a fourth defense-in-depth guard.
+
+### Changed
+- **`query-simple/src/runtime/suggest-utils.ts`** — Added `isValidFieldName()` regex guard (`/^[A-Za-z_][\w.]*$/`). Applied before WHERE clause interpolation in `fetchSuggestions()` (returns empty results if invalid) and `partToWhereClause()` (returns null if invalid).
+
+### Tests added (19 new)
+- **`query-simple/tests/suggest-utils.test.ts`** — 8 valid identifier tests (uppercase, mixed case, underscore start, digits, dot-qualified, single char), 11 injection rejection tests (SQL injection, OR tautology, quotes, spaces, semicolons, parens, digit start, empty, null, undefined)
+
+### Stats
+- **Tests**: 535/535 (+19 new)
+- **TS errors**: 0
+
+---
+
+## [1.20.0-r027.094] - 2026-05-05 - Security: dangerous URL scheme blocking + security test suite
+
+### Context
+Security hardening pass (Groups B + tests). Markdown link/image rendering and `resolveExternalLinkUrl()` accepted any URL scheme. A compromised data source could inject `javascript:`, `data:`, or `vbscript:` URLs into rendered templates. Also added comprehensive security tests covering both Group A (escapeHtml) and Group B changes.
+
+### Changed
+- **`shared-code/mapsimple-common/markdown-template-utils.ts`** — Added `isDangerousUrl()` check (blocks `javascript:`, `data:`, `vbscript:` with case-insensitive + whitespace-stripped matching). Converted `RE_LINK` and `RE_IMAGE` replacements from string-based to function-based. Dangerous links render as plain text; dangerous images render as alt text.
+- **`shared-code/mapsimple-common/token-renderer.ts`** — Added same `isDangerousUrl()` guard on the resolved URL in `resolveExternalLinkUrl()`. A field value resolving to a dangerous scheme now returns `undefined` (same as no template configured).
+
+### Tests added (26 new)
+- **`shared-code/.../markdown-template-utils.test.ts`** — 12 tests: dangerous schemes blocked in links (5 cases) and images (2 cases), safe schemes allowed for https/http/relative/mailto (5 cases)
+- **`feed-simple/tests/token-renderer.test.ts`** — 14 tests: `escapeHtml` via `substituteTokens` (6 cases: script tags, ampersands, double quotes, single quotes, safe passthrough, template preservation), `resolveExternalLinkUrl` dangerous URL blocking (8 cases: javascript/data/vbscript/case-insensitive/whitespace-obfuscated blocked, https/http allowed, empty template)
+
+### Stats
+- **Tests**: 516/516 (+26 new security tests)
+- **TS errors**: 0
+
+---
+
+## [1.20.0-r027.092] - 2026-05-05 - Security: XSS prevention in template rendering + legacy token dedup
+
+### Context
+Security hardening pass (Group A). Feature service field values flow through `substituteTokens()` and inline legacy `{field}` regex replacements before reaching `dangerouslySetInnerHTML`. A compromised or misconfigured feature service could inject HTML/script via field values.
+
+### Changed
+- **`shared-code/mapsimple-common/token-renderer.ts`** — Added `escapeHtml()` (HTML entity encoding for `& < > " '`) applied to every substituted field value inside `substituteTokens()`. Escaping runs before pipe filters so admin-authored markdown template syntax is unaffected. Added `RE_LEGACY_TOKEN` regex and exported `substituteLegacyTokens()` helper that applies the same escaping.
+- **`shared-code/mapsimple-common.ts`** — Barrel export updated to include `substituteLegacyTokens`.
+- **`query-result-item.tsx`** — 2 inline legacy regex blocks replaced with `substituteLegacyTokens()` calls.
+- **`query-result.tsx`** — 2 inline legacy regex blocks replaced with `substituteLegacyTokens()` calls.
+- **`popup-render-pool.ts`** — 2 inline legacy regex blocks replaced with `substituteLegacyTokens()` calls.
+- **`query-utils.ts`** — 1 inline legacy regex block replaced with `substituteLegacyTokens()` call. The `.match()` at line 39 is field name extraction for outFields (not value rendering) and was intentionally left unchanged.
+
+### Stats
+- **Net**: 7 inline regex blocks collapsed to 1 shared export; +1 security function
+- **Tests**: 491/491
+- **TS errors**: 0
+
+---
+
+## [1.20.0-r027.091] - 2026-05-05 - Hover pin z-order fix
+
+### Context
+The per-widget hover GraphicsLayer (r027.082) caused hover pins to render behind results graphics. Results layers are destroyed and recreated on each query via `clearGraphicsLayerRefs`, and the recreated layer lands at the top of `mapView.map.layers`, pushing the hover layer underneath.
+
+### Attempted fixes (rejected)
+- `mapView.map.reorder(hoverLayer, topIndex)` after results layer creation: broke selection state (JSAPI rebuilds layer views during reorder).
+- `mapView.map.remove(hoverLayer)` + `mapView.map.add(hoverLayer, topIndex)`: hover layer still appeared buried.
+
+### Fix
+Moved hover pins back to `mapView.graphics` (map-level overlay). This always renders above all layers in `mapView.map.layers` per documented JSAPI behavior (confirmed 4.x and 5.0). Cross-widget safety (the reason r027.082 moved away) is preserved because `removeAll()` was already removed in r027.084, and each card cleans up its own graphic via `mapView.graphics.remove(hoverGraphicRef.current)` on unmount.
+
+### Removed
+- `hoverLayer` prop from 6 components: `query-result-item.tsx`, `simple-list.tsx`, `query-task-list.tsx`, `query-task.tsx`, `query-result.tsx`, `widget.tsx`
+- `createOrGetHoverLayer` + `createHoverLayerInternal` from `graphics-layer-utils.ts` (~125 lines)
+- `hoverLayerRef`, `hoverLayerInitialized` state, and hover layer lifecycle in `widget.tsx`
+- `GraphicsLayer` import from `query-result-item.tsx` and `simple-list.tsx` (only used for hover layer typing)
+
+### Stats
+- **Net**: -190 lines
+- **Tests**: 490/490
+- **TS errors**: 0
+
+---
+
+## [1.20.0-r027.090] - 2026-05-05 - TS error cleanup (41 to 0)
+
+### Context
+41 TypeScript errors remained across all widgets after r027.089. All were type-only issues (no runtime behavior changes). Webpack uses `transpileOnly: true` so these never blocked builds, but they needed cleanup for code review.
+
+### Changed (type-only, zero runtime behavior changes)
+- `ResourceHandle` import replaced with local `WatchHandle` type in `widget.tsx`, `graphics-state-manager.ts`
+- `GeometryUnion` import (from non-existent `@arcgis/core/geometry/types` module) replaced with `type GeometryUnion = any` in 5 files
+- `FieldProperties` import replaced with `type FieldProperties = __esri.FieldProperties` in `feed-layer-manager.ts`
+- `PopupOpenOptions` import replaced with local type in `feed-layer-manager.ts`
+- Various `as any` casts for framework type mismatches (ImmutableObject, DataRecord, OutputDataSourceJson, etc.)
+- `@jsxFrag React.Fragment` pragma added to `feed-simple/widget.tsx`
+- Missing `link` label added to `feed-simple/widget.tsx` toolbar labels
+- `fieldNames?: string[]` added to `feed-simple/setting.tsx` State interface
+- Import path corrections for 3 E2E test files
+- `JSX.Element` → `React.JSX.Element` in `ResultsModeControl.tsx`
+- `debugLogger.log` call signatures corrected in `query-utils.ts` (3 args → 2)
+
+### Restored
+- Deleted test `'should stamp graphic.layer to ds.layer regardless of associatedLayer'` in `execute-spatial-query.test.ts` (removed without approval in prior commit)
+
+### Stats
+- **TS errors**: 41 → 0 across all widgets
+- **Tests**: 490/490 (restored from 489)
+- **Files**: 26 modified across QS, FS, HS
+
+---
+
+## [1.20.0-r027.089] - 2026-05-04 - GraphicsLayer/GroupLayer prop-chain widening + clearGraphicsLayerRefs delegation
+
+### Context
+r027.079 Site E introduced a legend regression in GroupLayer mode by extracting the inner GraphicsLayer from the GroupLayer in `clearGraphicsLayerRefs`. Reverted in r027.085. The underlying problem: two independent code paths (inline in `clearGraphicsLayerRefs` and `graphicsLayerManager.initialize()`) created the layer hierarchy, storing different shapes in `graphicsLayerRef.current`. The render-prop chain depended on whichever path ran last. Sites C+D shipped atomically to eliminate this.
+
+### Changed
+- **Site A (r027.086)**: Added `GraphicsLayerManager.getResultsLayer()` accessor. Returns the parent GroupLayer in useGroupLayer mode, inner GraphicsLayer otherwise. Pure additive, zero consumers at this step.
+- **Site D (r027.089)**: Widened `graphicsLayer` prop from `GraphicsLayer` to `GraphicsLayer | GroupLayer` across 11 files: `query-task-list.tsx`, `query-task.tsx`, `query-result.tsx`, `results-menu.tsx`, `selection-utils.ts` (4 function signatures), `query-execution-handler.ts`, `query-clear-handler.ts`, `query-submit-handler.ts`, `record-removal-handler.ts`, `results-management-utils.ts`, `add-to-map-action.tsx` (3 function signatures). All terminal consumers (`addHighlightGraphics`, `removeHighlightGraphics`, `clearGraphicsLayerOrGroupLayer`, `getGraphicsCountFromLayer`, `forEachGraphicInLayer`) already accepted `GraphicsLayer | GroupLayer` and discriminated at runtime via `type === 'group'`. Switched widget.tsx render-prop sites (lines 1463, 1554) from `this.graphicsLayerRef.current` to `this.graphicsLayerManager.getResultsLayer()`.
+- **Site C (r027.089)**: Delegated `widget.tsx::clearGraphicsLayerRefs` to `this.graphicsLayerManager.initialize(id, mapView)`. Removed the duplicated inline `createOrGetGraphicsLayer` / `createOrGetResultGroupLayer` block. The manager now owns the single path for layer hierarchy creation after cleanup-and-recreate.
+- **Diagnostic reads**: Replaced all `.graphics?.length` and `.graphics?.map(...)` reads in `record-removal-handler.ts`, `query-execution-handler.ts`, and `query-task.tsx` with `getGraphicsCountFromLayer()` and `forEachGraphicInLayer()` utility functions (already GroupLayer-aware).
+- Added `import type GroupLayer from '@arcgis/core/layers/GroupLayer'` to 9 files that previously only imported `GraphicsLayer`.
+
+### Reverted
+- **r027.085**: Reverted r027.079 Site E (inner extraction in `clearGraphicsLayerRefs`). Legend regression: legend code walks the parent GroupLayer's `.layers` to find legend sublayers; storing the inner broke that walk.
+- **r027.088**: Reverted r027.087 (Site C solo attempt). Same legend regression shape: delegating to manager stored the inner, but render-prop sites still read `graphicsLayerRef.current` and passed it to legend-aware consumers.
+
+### Stats
+- **Widget TS errors**: 42 -> 41 (-1; the `GroupLayer not assignable to GraphicsLayer | null` error in clearGraphicsLayerRefs is eliminated).
+- **Tests**: 490/490 (full suite).
+- **Builds**: clean.
+- **Files touched**: 13 (widget.tsx, version.ts, graphics-layer-manager.ts, query-task-list.tsx, query-task.tsx, query-result.tsx, results-menu.tsx, selection-utils.ts, query-execution-handler.ts, query-clear-handler.ts, query-submit-handler.ts, record-removal-handler.ts, results-management-utils.ts, add-to-map-action.tsx).
+
+### Notes
+Sites C and D cannot ship independently. Site C alone breaks legend (render-prop sites still read the now-inner ref). Site D alone breaks legend after a config switch (manager's `this.groupLayer` goes stale because the inline path doesn't update it). Together: render-prop sites read `getResultsLayer()` (always current), and the manager is the single source of truth for layer creation. The r027.041 narrowing of `record-removal-handler.ts` from `GraphicsLayer | GroupLayer` -> `GraphicsLayer` (post-r027.033) is now reversed: the prop chain legitimately carries `GroupLayer` again, and the diagnostic reads use GroupLayer-aware utilities.
+
+## [1.20.0-r027.079] - 2026-05-04 - widget.tsx 12-error cluster (5 surgical sites)
+
+### Investigation
+12 errors at `widget.tsx`. Re-categorized at the start: not 12 independent fixes, but ~5 surgical edits across the type definitions and widget state.
+
+| Sub-pattern | Sites | Errors |
+|---|---|---|
+| SelectionRestorationState shape drift | 1 (line 92) | 1 |
+| RestorationDependencies shape drift | 3 (lines 691, 759, 1107) | 3 |
+| State type missing `shouldUseInitialQueryValueForSelection` / `jimuMapView` | 3 (lines 196, 859, 1331) | 3 |
+| `defaultPageSize` missing from `SettingConfig` | 3 (lines 1382, 1421, 1473) | 3 |
+| Stale wrapper-shape access (`ar.record`) | 1 (line 664) | 1 |
+| `GroupLayer | GraphicsLayer` assignment | 1 (line 979) | 1 |
+
+Two of the bugs were silent runtime issues that 1.20's stricter TS surfaced:
+- `accumulatedRecords?.some(ar => ar.record)` had been silently always-false since r027.072 dropped the `{configId, record}` wrapper — the `selectionRecordCount > 0` fallback was masking it.
+- `clearGraphicsLayerRefs` was assigning `GroupLayer | GraphicsLayer` to a `GraphicsLayer | null` ref, violating the CLAUDE.md "always expose inner GraphicsLayer" rule. The transient state was getting overwritten by the manager on next init, but the type was a lie.
+
+### Changed
+- **Site A — `selection-restoration-manager.ts`**:
+  - `SelectionRestorationState` fields relaxed to optional (`hasSelection?`, `selectionRecordCount?`, `resultsMode?`, `isPanelVisible?`). Matches the widget's State (which has all fields optional). The manager's runtime code already tolerates `undefined` per-field.
+  - `RestorationDependencies.mapViewRef` widened to `{ current: MapView | SceneView | null }`. Added `SceneView` import. Comment notes the structural-narrow `graphicsLayerManager` slot is deliberate (only `clearGraphics` is exercised here).
+- **Site B — `widget.tsx` State type**: Added `shouldUseInitialQueryValueForSelection?: boolean` and `jimuMapView?: JimuMapView | null` to the inline State at the `React.PureComponent<…, {…}>` declaration. Mirrors the field initializer at lines 117/119 and clears the three `setState({...})` errors.
+- **Site C — `config.ts` SettingConfig**: Added `defaultPageSize?: number`. Field was already passed through to QueryTaskList / QueryTaskListInline at runtime (3 call sites in widget.tsx + downstream consumers) but missing from the interface.
+- **Site D — `widget.tsx:670`**: Replaced `accumulatedRecords?.some(ar => ar.record)` with `!!accumulatedRecords?.length`. Comment explains the `.record` field had been undefined since r027.072 dropped the wrapper — the truthy-record branch was dead. Length check restores the pre-r027.072 truthy semantics (entries exist).
+- **Site E — `widget.tsx:985–1003`**: `clearGraphicsLayerRefs` now extracts the inner `GraphicsLayer` from a `GroupLayer` when `useGroupLayer` is true. Mirrors `graphics-layer-manager.ts:107-113` pattern. Imported `GroupLayer` from `@arcgis/core/layers/GroupLayer`. Honors the CLAUDE.md rule.
+
+### Stats
+- **Widget TS errors**: 53 → 41 (-12; full widget.tsx cluster cleared).
+- **Tests**: 362/362 (QS + shared) and 490/490 (full suite) at end of cluster.
+- **Builds**: clean throughout per-site.
+- **Cadence**: per-site test+tsc+build, halt on failure. Sites A→B→C→D→E all passed clean.
+
+### Notes
+Two real-but-silent bugs surfaced and fixed: the wrapper-shape vestige (Site D) and the wrong-shape ref assignment (Site E). Both were degraded behavior masked by other code paths; the type cleanup forced the cleanup. Three sites (A, B, C) are pure type-widening / declaration completeness — runtime unchanged.
+
+## [1.20.0-r027.078] - 2026-05-03 - pan-to-action.tsx (deprecated module) two TS errors
+
+### Investigation
+2 errors at `pan-to-action.tsx`. The module is deprecated as of r024.75 (see file header) — pan-to functionality moved to cached `resultsExtent` from widget state, exercised through `mapView.goTo({ center: resultsExtent.center })` in ResultsMenu. The functions in this file are kept for backwards compatibility but are not used by current code.
+
+1. **Line 47 (TS2345)** — `record.getGeometry()` returns `IGeometry` (REST shape from `@esri/arcgis-rest-feature-service`) but the code pushes into `Geometry[]` (JSAPI). The runtime value is a JSAPI `Geometry` instance; the type just doesn't reflect that.
+2. **Line 54 (TS2345)** — `unionOperator.executeMany(geometries)` typed as `GeometryUnion[]` in JSAPI 5.0; the local `geometries` is `Geometry[]`. Same pattern as r027.076 / r027.077.
+
+### Changed
+- **`pan-to-action.tsx:23`**: Added `import type { GeometryUnion } from '@arcgis/core/geometry/types.js'`. Sibling to the existing `Geometry` import.
+- **`pan-to-action.tsx:47`**: Cast `geometry as unknown as Geometry` at the push site. The double cast is required because IGeometry and JSAPI `Geometry` don't structurally overlap enough for a single cast.
+- **`pan-to-action.tsx:54`**: Cast `geometries as unknown as GeometryUnion[]` at the `executeMany` call.
+- All three sites carry r027.078 comments noting the casts go away when the deprecated module is removed.
+
+### Stats
+- **Widget TS errors**: 55 → 53 (-2; both errors cleared).
+- **Tests**: 362/362 (QS + shared) and 490/490 (full suite).
+- **Builds**: clean.
+
+### Notes
+The casts feel grimier than usual because they're protecting deprecated code that no current path exercises. The cleaner long-term move is deletion of the module — but that's not the surgical scope here. Casts unblock the security review's "no unexpected TS noise" target without changing runtime behavior.
+
+## [1.20.0-r027.077] - 2026-05-03 - SpatialTabContent.tsx two unrelated TS errors
+
+### Investigation
+2 errors at `SpatialTabContent.tsx`:
+1. **Line 402 (TS2345)** — `unionOperator.executeMany(geoms)` typed as `GeometryUnion[]` in JSAPI 5.0; the local `byType` bucket is `Geometry[]`. Same pattern as r027.076's `labelPointOperator` cast.
+2. **Line 606 (TS2339)** — `drawLayer.graphics.forEach` on a value typed `GraphicsLayer | MapNotesLayer`. `MapNotesLayer` doesn't expose `.graphics`. The factory ref's broad union type was already being cast to `GraphicsLayer` everywhere else in this file (lines 571, 1031, 1053); line 603 was the lone holdout.
+
+### Changed
+- **`SpatialTabContent.tsx:55`**: Added `import type { GeometryUnion } from '@arcgis/core/geometry/types.js'`. Sibling to the existing `Geometry` import.
+- **`SpatialTabContent.tsx:402`**: Cast `geoms` to `GeometryUnion[]` at the `executeMany` call.
+- **`SpatialTabContent.tsx:603`**: Added `as GraphicsLayer | undefined` cast to the `getDrawLayerRef.current?.()` return value, matching the established pattern at lines 571/1031/1053. Comment notes that the factory's union type is broader than what's actually set in practice.
+
+### Stats
+- **Widget TS errors**: 57 → 55 (-2; both errors cleared).
+- **Tests**: 362/362 (QS + shared) and 490/490 (full suite).
+- **Builds**: clean.
+
+### Notes
+The drawLayer cast was already the file's local convention; line 603 had simply missed it. Pure consistency fix, no behavior change.
+
+## [1.20.0-r027.076] - 2026-05-03 - query-result-item.tsx two unrelated TS errors
+
+### Investigation
+2 errors at `query-result-item.tsx`:
+1. **Line 557 (TS2345)** — `labelPointOperator.execute(geometry)` typed as `(geometry: GeometryUnion): Point` in JSAPI 5.0 (since 4.31). The local `geometry` came from `data.getJSAPIGeometry()` which returns the broader `Geometry` base. The runtime value is always one of the `GeometryUnion` members (Point, Polygon, Polyline, Multipoint, Extent, Mesh) so the call is safe, just untyped.
+2. **Line 876 (TS17017)** — `An @jsxFrag pragma is required when using an @jsx pragma with JSX fragments`. The file uses `/** @jsx jsx */` (emotion) at line 1 but uses `<>…</>` shorthand at line 876. Without a paired `@jsxFrag` pragma, TS rejects the shorthand.
+
+### Changed
+- **`query-result-item.tsx:22`**: Added `import type { GeometryUnion } from '@arcgis/core/geometry/types.js'`. Sibling to the existing `labelPointOperator` import.
+- **`query-result-item.tsx:557`**: `labelPointOperator.execute(geometry)` → `labelPointOperator.execute(geometry as GeometryUnion)` with comment explaining the runtime guarantee.
+- **`query-result-item.tsx:876,911`**: Replaced `<>…</>` with explicit `<React.Fragment>…</React.Fragment>`. Avoids modifying the file's `@jsx` pragma and is the smallest possible diff.
+
+### Stats
+- **Widget TS errors**: 59 → 57 (-2; both errors cleared).
+- **Tests**: 362/362 (QS + shared) and 490/490 (full suite).
+- **Builds**: clean.
+
+### Notes
+The fragment-pragma issue is a JSX-only check that the rest of the file silently passed because no fragments existed. Adding `@jsxFrag jsxFrag` to the pragma comment would also work but would mean adding a sibling import for a pragma helper across all 14 files using `/** @jsx jsx */` — explicit `React.Fragment` at the one site is more contained.
+
+## [1.20.0-r027.075] - 2026-05-03 - zoom-utils.ts two unrelated TS errors
+
+### Investigation
+2 errors at `zoom-utils.ts`:
+1. **Line 641 (TS1345)** — `An expression of type 'void' cannot be tested for truthiness`. `mapView.goTo(extent)` returns `Promise<void>` in JSAPI 5.0, so the local `goToResult` was typed `void`, and the diagnostic-log truthy check (`goToResult ? 'returned-value' : 'no-return-value'`) was meaningless under the new types.
+2. **Line 852 (TS2322)** — declared return type lied about the actual returned shape. The function declared `adjustedExtent: Extent | null` and `originalExtent: Extent | null`, but the success path actually returns plain coordinate-object literals (`{xmin, xmax, ymin, ymax, width, height, centerX, centerY, spatialReference}`) plus extra fields (`originalExpansionFactor`, `expansion`, `warning`) that weren't in the declaration at all. `captureAdjustedExtent` is window-attached for console-driven calibration only and has no typed callers.
+
+### Changed
+- **`zoom-utils.ts:615`**: Dropped the local `const goToResult = …`. The `await mapView.goTo(extent)` keeps its functional purpose (waits for the zoom animation to complete) without storing a void return.
+- **`zoom-utils.ts:641`** (debug log payload): replaced `goToResult: goToResult ? 'returned-value' : 'no-return-value'` with `goToResult: 'completed'`. Comment notes the JSAPI 5.0 signature change. Field name preserved so log greps still work.
+- **`zoom-utils.ts:725`**: Removed the explicit return type annotation. Letting TS infer keeps the declaration honest with what the function actually returns.
+
+### Stats
+- **Widget TS errors**: 61 → 59 (-2; both errors cleared).
+- **Tests**: 362/362 (QS + shared) and 490/490 (full suite).
+- **Builds**: clean.
+
+### Notes
+The declared return type on `captureAdjustedExtent` had been a lie since whenever the function got its richer shape. Pure type cleanup; the function's runtime behavior is unchanged. The `goToResult` variable was a stale diagnostic from when `goTo` returned a meaningful value.
+
+## [1.20.0-r027.074] - 2026-05-03 - simple-list.tsx two unrelated bugs
+
+### Investigation
+2 errors at `simple-list.tsx`:
+1. **Line 48 (TS2304)** — `Cannot find name 'ImmutableArray'`. The `queries?: ImmutableArray<ImmutableObject<QueryItemType>>` field declaration referenced a type that wasn't in the import block. `ImmutableObject` was already imported from `jimu-core`; `ImmutableArray` is a sibling export from the same module.
+2. **Line 303 (TS1117)** — `An object literal cannot have multiple properties with the same name`. The `record-template-not-in-cache` debug log object had `queryConfigId` defined twice:
+   ```
+   queryConfigId: recordQueryConfigId,    // line 302
+   queryConfigId: recordConfig.configId,  // line 303 — clobbers
+   ```
+   The second value is guaranteed equal to the first because the lookup at line 279 (`queries.find(q => q.configId === recordQueryConfigId)`) requires `recordConfig.configId === recordQueryConfigId`. So the duplicate clobbered itself at runtime — pure noise.
+
+### Changed
+- **`simple-list.tsx:9`**: Added `type ImmutableArray` to the existing `jimu-core` import block (sibling of `ImmutableObject`).
+- **`simple-list.tsx:303`**: Removed the duplicate `queryConfigId` property from the debug-log payload. Added a brief comment noting why the duplicate was redundant (the find-clause guarantees equality). Behavior unchanged — runtime was already only seeing the second value.
+
+### Stats
+- **Widget TS errors**: 63 → 61 (-2; both errors cleared).
+- **Tests**: 362/362 (QS + shared) and 490/490 (full suite).
+- **Builds**: clean.
+
+### Notes
+The duplicate-property bug had been silent since whenever it landed — TypeScript's strict object-literal check is the only thing that would have surfaced it. Runtime impact: zero (the two values were always identical), but worth fixing to keep the log shape clean.
+
+## [1.20.0-r027.073] - 2026-05-03 - export-utils.ts geometry toJSON cast
+
+### Investigation
+2 errors at `export-utils.ts:283` (columns 42 and 75) — both flavors of `Property 'toJSON' does not exist on type 'IGeometry'`. `featureRecord.getGeometry?.()` is typed `IGeometry` (the REST shape from `@esri/arcgis-rest-feature-service`, which only declares `spatialReference?: ISpatialReference`). At runtime the return value is sometimes a JSAPI `Geometry` instance (which has `.toJSON()`), sometimes already the REST JSON shape (no `.toJSON`). The existing defensive runtime check (`typeof esriGeom.toJSON === 'function' ? esriGeom.toJSON() : esriGeom`) handles both paths correctly — TS just doesn't know that.
+
+### Changed
+- **`export-utils.ts:283`**: Added a one-line `const geomAny = esriGeom as any` before the typeof check, then read `.toJSON` off `geomAny`. Smaller surface than introducing an `IGeometry` import just for a defensive cast at one site.
+
+### Stats
+- **Widget TS errors**: 65 → 63 (-2; one-off cleared).
+- **Tests**: 362/362 (QS + shared) and 490/490 (full suite).
+- **Builds**: clean.
+
+### Notes
+Pure cast. No runtime change — the defensive `typeof` check was already correct.
+
+## [1.20.0-r027.072] - 2026-05-01 - selection-restoration-manager.ts cleanup (type narrow + 1.20 API + dead-code)
+
+### Investigation
+3 errors at lines 322/326/431 of `selection-restoration-manager.ts` traced to a stale type declaration: the state field `accumulatedRecords` (line 19-22) and the `restoreAccumulatedRecords` method param (line 310) were both typed as `Array<{ configId: string, record: any }>` — a wrapper shape from an earlier API. Every other place in the codebase (record-removal-handler, query-execution-handler, query-clear-handler, results-management-utils, widget.tsx, accumulated-records-manager) types `accumulatedRecords` as `FeatureDataRecord[]`, and the consumer code in this file calls `record.getId()` / `record.getDataSource()` directly on entries and passes the array to `addHighlightGraphics(records: FeatureDataRecord[])` without unwrapping — confirming the runtime shape is bare records.
+
+Narrowing the type to `FeatureDataRecord[]` surfaced 6 additional latent issues that the loose type had been masking.
+
+### Changed
+- **Type narrowing (state + param)**: Both `SelectionRestorationState.accumulatedRecords` and the `restoreAccumulatedRecords` parameter changed from `Array<{ configId: string, record: any }>` to `FeatureDataRecord[]`. Added `FeatureDataRecord` to the `jimu-core` imports.
+- **Line 331 — `record.getDataSource?.()` → `record.dataSource`**: The `getDataSource()` method does not exist on `DataRecord` in 1.20; the API uses a `.dataSource` property (per `common-data-source-interface.d.ts:372`). The optional-chaining short-circuit in the original `getDataSource?.()` form had been silently failing every call (returning undefined for "method does not exist"), so this also fixes a runtime bug — Method 1 of the origin-DS resolution chain was effectively dead.
+- **Lines 419–425 — debug-log dead code**: A 7-line debug-log probe inspected `item.configId`, `item.record`, `item.record?.getId`, `Object.keys(item)`. All four of these field probes were artifacts from the wrapper-shape API; the comment at line 432 (`accumulatedRecords are the raw FeatureDataRecord objects, not wrapped`) literally documents that the transition is complete. Replaced with a brief sample-IDs log: `accumulatedRecordsCount: accumulatedRecords.length, sampleRecordIds: accumulatedRecords.slice(0, 5).map(r => String(r.getId()))`.
+
+### Stats
+- **Widget TS errors**: 68 → 65 (-3 net; 3 type-site errors cleared, 6 latent issues exposed and cleared, no new errors introduced).
+- **Tests**: 362/362 (QS + shared) and 490/490 (full suite).
+- **Builds**: clean.
+
+### Notes
+The `getDataSource()` → `.dataSource` change is the only one that affects runtime behavior — and it's a fix, not a regression. The optional-chaining call was always returning undefined in 1.20 because the method didn't exist; switching to the property gets the actual value, so Method 1 of the origin-DS resolution chain now works as originally intended. The dead-code debug-log block was probing for fields that were never present at runtime in the current state of the code, so removing it changes nothing observable.
+
+## [1.20.0-r027.071] - 2026-05-01 - log-extent-action.ts migrated to 1.20 AbstractMessageAction
+
+### Investigation
+5 errors in `query-simple/src/actions/log-extent-action.ts` from four distinct ExB 1.20 changes to the message-action contract:
+
+1. **`MessageType.MapViewExtentChange` does not exist** (lines 8, 17). The enum value in `jimu-core/lib/message/message-base-types.d.ts:13` is `ExtentChange = "EXTENT_CHANGE"`. The action's enum reference was a stale name from an older API.
+2. **`filterMessageType` removed from `AbstractMessageAction`**. The base class no longer has this method.
+3. **`filterMessageDescription` signature changed**: was `(messageType: MessageType): string` (label-returning); now `(messageDescription: MessageDescription): boolean` (predicate). The label moved to widget-manifest registration.
+4. **`message?.extent` / `message?.viewPoint` not on base `Message`**: those fields live on `ExtentChangeMessage`. Also note the property casing changed — it's `viewpoint` (lowercase 'p') in 1.20.
+
+### Changed
+- **`log-extent-action.ts`** rewritten to the 1.20 contract:
+  - `MessageType.MapViewExtentChange` → `MessageType.ExtentChange` (the actual enum value).
+  - Removed `filterMessageType` method (no longer on abstract base).
+  - Replaced the old label-returning `filterMessageDescription` with the new predicate form: `filterMessageDescription(messageDescription: MessageDescription): boolean { return messageDescription.messageType === MessageType.ExtentChange }`. The label `"Log Map Extent to Console"` is already in `manifest.json`, so no functionality is lost.
+  - Removed unused `extent` / `viewPoint` extractions in `onExecute` — they were scaffolding for a commented-out debug log block. With them gone, the action is a typed-correct no-op placeholder. Comment notes that any future debug logging should `cast message as ExtentChangeMessage` and use `.viewpoint` (lowercase 'p').
+  - Removed the now-unused `debugLogger` import.
+
+### Stats
+- **Widget TS errors**: 73 → 68 (-5; one-off cluster fully cleared).
+- **Tests**: 362/362 (QS + shared) and 490/490 (full suite).
+- **Builds**: clean.
+
+### Notes
+The action's runtime behavior was already a no-op (returned `true`, debug log commented out), so this is purely a contract-update + dead-code-removal pass. Manifest registration is untouched. If this action ever re-enables logging, the message must be cast to `ExtentChangeMessage` for typed access to `.extent` and `.viewpoint`.
+
+## [1.20.0-r027.070] - 2026-05-01 - popup-render-pool.ts one-off cluster (3 JSAPI 5.0 patterns)
+
+### Investigation
+5 errors in `popup-render-pool.ts` from three distinct JSAPI 5.0 type changes:
+
+1. **`defaultPopupTemplate` removed** (lines 385, 451): `FeatureLayer.defaultPopupTemplate` was removed in JSAPI 5.0; the documented replacement is `createPopupTemplate(options?): PopupTemplate | null | undefined` which generates a default template from the layer's schema on demand.
+2. **`DataSource.layer` not on base type** (lines 390, 462): The `layer?: __esri.FeatureLayer` field lives on `FeatureLayerDataSource` (per `feature-layer-data-source-interface.ts:22`), not on the base `DataSource`. The pool stores its dataSource as `DataSource | null`.
+3. **`PopupTemplate.title` is now `PopupTemplateTitle`** (line 410): Title widened from `string` to `string | (...) => string` (function for dynamic titles). `substituteTokens()` still expects a string.
+
+### Changed
+- **`popup-render-pool.ts:15`**: Added `FeatureLayerDataSource` to the `jimu-core` import.
+- **`popup-render-pool.ts:385` (debug log)**: Dropped `layerDefaultPopupTemplate: !!layer?.defaultPopupTemplate` from the diagnostic payload. The property no longer exists in 1.20 so the value would always be undefined.
+- **`popup-render-pool.ts:390` (debug log)**: Cast `this.dataSource` to `FeatureLayerDataSource | null` for `.layer.spatialReference` access.
+- **`popup-render-pool.ts:451`** (popup template fallback): `layer.popupTemplate ?? layer.defaultPopupTemplate` → `layer.popupTemplate ?? layer.createPopupTemplate()`. Same runtime semantics: prefer the assigned template, fall back to the schema-generated default.
+- **`popup-render-pool.ts:462`** (Feature widget construction): same cast as line 390 for `.layer.spatialReference`.
+- **`popup-render-pool.ts:408–410`** (title substitution): added `typeof rawTitle === 'string'` guard before passing to `substituteTokens`. Function-typed titles fall through to `''`, preserving the existing fallback behavior.
+
+### Stats
+- **Widget TS errors**: 78 → 73 (-5; one-off cluster fully cleared).
+- **Tests**: 362/362 (QS + shared) and 490/490 (full suite).
+- **Builds**: clean.
+
+### Notes
+The pool is only ever instantiated for feature layers, so the `FeatureLayerDataSource` cast at lines 390/462 is sound by construction. A future cleanup could narrow the field type itself (`private dataSource: FeatureLayerDataSource | null`) but that touches the constructor signature and goes beyond this surgical scope.
+
+## [1.20.0-r027.069] - 2026-05-01 - IMState->boolean cluster cleanup (widgetRender signature change)
+
+### Investigation
+5 errors in `query-simple/tests/widget.test.tsx` at lines 96/109/122/142/152: `Argument of type 'IMState' is not assignable to parameter of type 'boolean'`. ExB 1.20 changed `widgetRender`'s signature in `jimu-for-test`:
+
+- **1.19**: `widgetRender(initialState: IMState)` — accepted an init state object directly.
+- **1.20**: `widgetRender(needsStoreInit?: boolean, theme?: IMThemeVariables, locale?: string, messages?: I18nMessages, theme2?: IMThemeVariables)` — first arg is now a flag indicating whether to reset the Redux store.
+
+The test file was calling the 1.19 form: `widgetRender(initState)(...)` where `initState = getInitState()`. At runtime, the truthy `IMState` object coerces to `true` in JS, so the existing 490/490 test pass was already producing the same store-init behavior the new `widgetRender(true)` form would. The runtime path didn't change; the 1.20 type signature just made the implicit coercion explicit.
+
+### Changed
+- **`query-simple/tests/widget.test.tsx`** (one file, 5 sites + import):
+  - 5x `widgetRender(initState)` → `widgetRender(true)` (replace_all).
+  - 5x `const initState = getInitState();` removed (no longer needed; `getInitState` returned an empty init state object that was only being used for its truthiness in the now-changed first arg).
+  - `getInitState` dropped from the `jimu-for-test` import.
+
+### Stats
+- **Widget TS errors**: 90 → 85 (-5; cluster fully cleared).
+- **Tests**: 362/362 (QS + shared-code) and 490/490 (full suite).
+- **Builds**: clean.
+
+### Notes
+Tests are unchanged in behavior — `widgetRender(true)` resets the store on each render call, which is what the 1.19 form was doing implicitly via truthy coercion. No assertion changes, no fixture changes, no test logic changes.
+
+## [1.20.0-r027.068] - 2026-05-01 - DataRecord.feature cluster cleanup
+
+### Investigation
+5 errors at `query-execution-handler.ts:488/489/490/499` accessing `record.feature.attributes` on something typed `DataRecord`. The base `DataRecord` type doesn't carry `.feature` — that's on the `FeatureDataRecord` descendant. Tracing the type upstream: `result.records` is the resolved value of a Promise produced at line 292. The direct-query path explicitly widens its result via `records: directResult.records as DataRecord[]` at line 305, even though the underlying records are FeatureDataRecords; the legacy `executeQuery` path resolves through `outputDS.load()` which is typed `Promise<FeatureDataRecord[]>` upstream but flows through a `DataRecord[]` return on `executeQuery`. So both paths produce FeatureDataRecords at runtime; the type just got narrowed.
+
+The same casting pattern already exists in this file at line 414 (`result.records as FeatureDataRecord[]`). Reusing it keeps the fix consistent with prior practice.
+
+### Changed
+- **`query-execution-handler.ts:482`**: `result.records.forEach(record => …)` → `;(result.records as FeatureDataRecord[]).forEach(record => …)`. Single change at the forEach call site widens `record` to `FeatureDataRecord` for the entire inner block, clearing all 5 `.feature` access errors at lines 488/489/490/499 in one sweep. No inner-block edits needed.
+
+### Stats
+- **Widget TS errors**: 95 → 90 (-5; cluster fully cleared).
+- **Tests**: 362/362 (QS + shared-code) and 490/490 (full suite).
+- **Builds**: clean.
+
+### Notes
+The type widening at line 305 is itself a candidate for a future cleanup (declare the direct-query path's record array as `FeatureDataRecord[]` end to end), but that'd touch more than this cluster requires. Surgical scope kept tight.
+
+## [1.20.0-r027.067] - 2026-05-01 - getId() string|number cascade (QS sites)
+
+### Changed
+- **`query-task.tsx:1212`**: `recordsToDisplay.map(r => r.getId())` → `recordsToDisplay.map(r => String(r.getId()))`. `selectRecordsAndPublish` expects `string[]`. Matches the project's existing ID-coercion pattern from the earlier r027 batch.
+- **`tabs/QueryTabContent.tsx:290`**: `const recordId = record.getId()` → `const recordId = String(record.getId())`. Downstream `mergeResult.addedRecordIds.includes(recordId)` expects string.
+
+### Stats
+- **Widget TS errors**: 108 → 106 (-2; QS sub-cluster of the broader string|number cluster). Full cluster (13 errors) closed in concert with FS r005.009–010.
+- **Tests**: 362/362 (QS + shared-code targeted) and 490/490 (full suite at the end).
+- **Builds**: clean.
+
+### Notes
+This is the QS half of the broader string|number cluster — see `feed-simple/CHANGELOG.md` (r005.009 / r005.010) for the FS half (Calcite NumericInput widening + RangeColorBreak narrowing).
+
+## [1.20.0-r027.063 → r027.066] - 2026-05-01 - QueryParams cluster cleanup
+
+### Investigation
+ExB 1.20 narrowed `QueryParams` (the base interface in `jimu-core/lib/data-sources/interfaces/common-data-source-interface.d.ts`) to only carry `page` / `pageSize`. The SQL fields (`where`, `outFields`, `orderByFields`, `sqlExpression`, `honorOutFields`) moved to its descendant `SqlQueryParams`. Inheritance chain is now:
+
+```
+QueryParams (page, pageSize)
+  └ SqlQueryParams (where, outFields, orderByFields, sqlExpression, honorOutFields)
+    └ ArcGISQueryParams
+      └ FeatureLayerQueryParams (empty body, inherits all)
+```
+
+Smoking gun: `generateQueryParams()` in `query-utils.ts` declared its return type as the (now-too-narrow) base `QueryParams`, even though the function literally builds and returns a `FeatureLayerQueryParams`. That mismatch cascaded into every consumer that reads `.where` / `.orderByFields` / `.outFields` from the returned value — 11 errors in `query-execution-handler.ts`, plus 18 mirroring errors in `query-utils.test.ts` fixtures.
+
+### Changed
+- **Site A — `query-utils.ts:415` (r027.063)**: `generateQueryParams()` return type widened from `QueryParams` to `FeatureLayerQueryParams` to match what's actually returned. Pure type-widening; runtime unchanged. Cascaded to clear the 11 handler errors AND the 18 test-fixture errors automatically (Site E became no-op).
+- **Site B — `query-utils.ts:535,545` (r027.064)**: `executeCountQuery()` and `executeQuery()` param types widened from `QueryParams` to `FeatureLayerQueryParams` to match what callers pass. Self-documenting; runtime unchanged. Removed now-unused `QueryParams` import.
+- **Site C — `query-execution-handler.ts:20,91` (r027.065)**: `queryParamRef` type widened from `QueryParams` to `FeatureLayerQueryParams` to match what gets stored on `.current` and what's read back as `.where` / `.orderByFields`.
+- **Site D — `query-utils.ts:487 (r027.066)`**: `maxAllowableOffset` is a JSAPI `esri/rest/support/Query` property and is not modeled on jimu-core's `FeatureLayerQueryParams`, but the project deliberately threads it through to the underlying esri Query for geometry generalization (CLAUDE.md "Geometry Generalization" rule). Used an intersection type `FeatureLayerQueryParams & { maxAllowableOffset?: number }` to document the passthrough in place rather than reaching for `as any`.
+
+### Stats
+- **TS errors**: 158 → 127 (-31; full QueryParams cluster cleared).
+- **Validation cadence**: per-site test + tsc + webpack build, per user direction (halt on failure). All four sites passed cleanly with no regressions.
+- **Tests**: 362/362 passing throughout. (Note: total of 490 includes feed-simple suites not run in this targeted pattern.)
+- **Builds**: clean throughout.
+
+### Notes for reviewers
+The pattern of declaring a function as returning a base interface while constructing a more specific subtype was a 1.19-era convenience that 1.20's stricter type narrowing exposed. The cluster fix is purely declarative — every change is a type widening that documents what was already true at runtime. No behavior changes, no value-shape changes, no new casts except the documented `maxAllowableOffset` intersection (which itself replaces what would otherwise be an `as any`).
+
+## [1.20.0-r027.060] - 2026-05-01 - SqlClause Pattern C — undocumented `dataSource` field
+
+### Investigation
+Pattern C resolved the 3 remaining SqlClause errors at `query-task-form.tsx:269,278,279` — all accessing `part.dataSource?.source`. Read jimu-core's `lib/types/sql-expression.d.ts` in both 1.19 and 1.20 installs: **`SqlClause.dataSource` is not in the public type def in either version**. The only `dataSource`-related field in the SqlClause family is `SingleGroupSqlExpression.dataSourceId` (a different shape). Concluded that `dataSource` is an undocumented runtime field — possibly populated by `SqlExpressionRuntime` for clauses backed by a unique-values data source, or possibly cargo-cult defensive code from earlier AI-generated work.
+
+Confirmed an existing `(part as any).dataSource?.source` cast already in the codebase at `suggest-utils.ts:146` — same access pattern, with the same `as any` workaround. Whether `dataSource` is actually populated at runtime is unverified.
+
+### Changed
+- **`query-task-form.tsx:269` — `isList` validation cast** (r027.060): Replaced `(part.dataSource?.source)` with `((part as any).dataSource?.source)` to match the `suggest-utils.ts:146` pattern. Added a long comment documenting that the field is not in the public type def, that runtime presence is unverified, and that a future audit could drop the cast and the OR clause if `sourceType !== UserInput` is confirmed sufficient.
+
+### Removed
+- **`query-task-form.tsx:278-279` — debug log keys**: Deleted `hasDataSource: !!part.dataSource` and `dataSourceSource: part.dataSource?.source` from the validation-check-detail debug log payload. They were diagnostic for the `dataSource` defensive backstop. `source` (now `sourceType`) is still logged. Confirmed via grep that no other code, tests, or tooling parses these log keys.
+
+### Stats
+- **TS errors**: 161 → 158 (3 cleared — full SqlClause cluster done).
+- **SqlClause cluster total** (r027.059 + r027.060): 191 → 158 (33 cleared across 22 sites, plus the helper module).
+- **Validation cadence**: per-site test + tsc + webpack build, per user direction. Pattern C added 2 sites (cast + log deletion) with full validation between.
+- **Tests**: 490/490 passing.
+- **Builds**: clean.
+
+## [1.20.0-r027.059] - 2026-05-01 - SqlClause discriminated-union narrowing (Pattern A + B)
+
+### Added
+- **`runtime/sql-clause-utils.ts`** (new): Type guards and safe accessors for the jimu-core `SqlClause | SqlClauseSet` union. Both interfaces declare `type: ClauseType` (not a literal), so the union isn't a true discriminated union from TypeScript's perspective. The helpers wrap the runtime check in a type predicate that does narrow correctly.
+  - `isSqlClause(part)` / `isSqlClauseSet(part)` — type guards.
+  - `getClauseValue(part)` / `getClauseFieldName(part)` — safe accessors for read-only/debug-log call sites.
+
+### Changed
+- **Pattern A — narrowing within existing branches (5 sites)**: `query-task-form.tsx:262` and `query-utils.ts:204` previously used `if (part.type === 'SINGLE')` for narrowing, which doesn't work on TypeScript's enum-typed union. Switched to `if (isSqlClause(part))`. `query-task-form.tsx:823` switched the same way. Inside the narrowed blocks, `valueOptions` / `jimuFieldName` / `operator` accesses now type-check.
+- **Pattern B — read-only debug-log / hash-flow accessors (16 sites)**: Replaced `?.parts?.[i]?.valueOptions?.value` chains with `getClauseValue(?.parts?.[i])` and `?.parts?.[i]?.jimuFieldName` chains with `getClauseFieldName(?.parts?.[i])`. Files: `query-task-form.tsx` (×13), `query-task-list.tsx` (1), `query-task.tsx` (1), and `query-utils.ts` shared.
+- **Test fixture casts**: `tests/rebind-utils.test.ts` lines 258, 273-274, 309 — added `as SqlClause` / `as SqlClauseSet` casts at the test assertions where the test is intentionally checking shape.
+- **Field rename**: `query-task-form.tsx:264` — `valueOptions.source` → `valueOptions.sourceType` (jimu-core 1.20 renamed the field; ClauseValueOptions now has `sourceType: ClauseSourceType`).
+
+### Deferred
+- **Pattern C — `SqlClause.dataSource` accesses (3 sites in `query-task-form.tsx`)**: This property was removed entirely in jimu-core 1.20, not just narrowed. Replacement requires looking up the data source via `DataSourceManager` from `jimuFieldName`. Held for a separate, semantic-aware fix.
+
+### Stats
+- **TS errors**: 191 → 161 (30 cleared). The 3 remaining `SqlClause`-related errors are exactly the Pattern C deferred set.
+- **Validation cadence**: per-site `npm test` + `tsc --noEmit` + `npm run build:dev` after every edit per user direction. 21 sites total.
+- **Tests**: 490/490 passing.
+- **Builds**: clean.
+
+## [1.20.0-r027.058] - 2026-05-01 - `__esri.*` namespace migration COMPLETE (passes 15–17)
+
+The `__esri` namespace migration that started at r027.042 is now complete. This entry covers the final three files plus the wrap-up.
+
+### Changed
+- **`__esri.*` migration pass 15** (r027.058): `runtime/managers/use-buffer-preview.ts` (28 refs cleared). MapView | SceneView, Geometry, GraphicsLayer, Graphic, GroupLayer, Polygon, GeometryUnion, BufferParameters, plus four module-namespace refs replaced with inline `typeof import(...)`: bufferOperator, geodesicBufferOperator, geometryService, unionOperator.
+- **`__esri.*` migration pass 16** (r027.058): `runtime/graphics-cleanup-utils.ts` (34 refs cleared). GraphicsLayer ×8, GroupLayer ×4, Layer ×5, MapView | SceneView ×4, FeatureLayer, Graphic ×2 across cleanup helpers for the GroupLayer + GraphicsLayer + buffer + legend layers.
+- **`__esri.*` migration pass 17** (r027.058): `runtime/graphics-layer-utils.ts` (80 refs cleared). The biggest file in the migration. FeatureLayer, Graphic, GraphicsLayer, GroupLayer, Layer, MapView, SceneView, SimpleFillSymbol, SimpleLineSymbol, SimpleMarkerSymbol, Symbol, plus the `GraphicsLayer | GroupLayer` union retained for utilities that intentionally branch on layer kind.
+
+### Migration summary (r027.042 → r027.058)
+- **Files migrated**: 44.
+- **References cleared**: ~419 (everything except a single literal string in a `version.ts` comment).
+- **TS errors**: 191 throughout (the migration is type-only; the ambient `__esri` namespace still resolves in 5.0, so no compile-error reduction).
+- **Tests**: 490/490 passing through every commit.
+- **Builds**: clean through every commit.
+- **Validation cadence**: per-file `npm test` + `tsc --noEmit` + `npm run build:dev` after each edit.
+
+### New @arcgis/core type imports introduced over the migration
+Extent, Feature, FeatureLayer, FeatureLayerView, FeatureSet, FieldProperties, Geometry, GeometryUnion, Graphic, GraphicsLayer, GroupLayer, Handle / WatchHandle (aliased from `ResourceHandle`), Layer, MapNotesLayer, MapView, Point, Polygon, Polyline, PopupOpenOptions, PopupTemplate, Renderer, SceneView, SimpleFillSymbol, SimpleLineSymbol, SimpleMarkerSymbol, SpatialReference, Symbol, plus `BufferParameters` and the operator/service modules via `typeof import(...)`.
+
+## [1.20.0-r027.057] - 2026-04-30 - `__esri.*` namespace migration (passes 12–14)
+
+### Changed
+- **`__esri.*` migration pass 12** (r027.057): `runtime/managers/graphics-layer-manager.ts` (23 refs cleared). GraphicsLayer ×8, GroupLayer ×3, MapView | SceneView ×4, Layer cast.
+- **`__esri.*` migration pass 13** (r027.057): `feed-simple/utils/map-interaction.ts` (26 refs cleared). Graphic ×4, Polygon | Polyline ×3, Point ×3, MapView | SceneView ×6, FeatureLayer ×2, FeatureLayerView ×3.
+- **`__esri.*` migration pass 14** (r027.057): `feed-simple/utils/feed-layer-manager.ts` (27 refs cleared). FeatureLayer ×4, FieldProperties, PopupTemplate, Graphic ×8, MapView | SceneView ×4, Renderer, Point, PopupOpenOptions.
+
+### New @arcgis/core imports introduced
+- `@arcgis/core/layers/Layer`
+- `@arcgis/core/layers/support/Field` (`FieldProperties`)
+- `@arcgis/core/renderers/Renderer`
+- `@arcgis/core/widgets/Popup/types` (`PopupOpenOptions`)
+- `@arcgis/core/views/layers/FeatureLayerView`
+- `@arcgis/core/geometry/Polyline`
+
+### Stats
+- **`__esri` references**: 219 → 143.
+- **Files migrated to date** (passes 1–14): 41 of ~38 (count grew because audit undercounted).
+- **Files remaining** (3 files in the 28–80 ref range): use-buffer-preview, graphics-cleanup-utils, graphics-layer-utils.
+- **TS errors**: 191 (unchanged).
+- **Tests**: 490/490 passing.
+- **Builds**: clean.
+
+## [1.20.0-r027.056] - 2026-04-30 - `__esri.*` namespace migration (pass 11)
+
+### Changed
+- **`__esri.*` migration pass 11** (r027.056): `runtime/zoom-utils.ts` (21 refs cleared — Extent across calculateRecordsExtent return, Point casts in extent-collection helpers, SpatialReference in expansion / metric-detection helpers, MapView | SceneView for zoom/pan operations, plus an Extent diagnostic-window cast). `Extent` is already imported as a value (`import Extent from 'esri/geometry/Extent'`) so no new value import was needed for it.
+
+### Stats
+- **`__esri` references**: 240 → 219.
+- **Files migrated to date** (passes 1–11): 38 of ~38.
+- **Files remaining** (6 files in the 23–80 ref range): managers/graphics-layer-manager, map-interaction, feed-layer-manager, use-buffer-preview, graphics-cleanup-utils, graphics-layer-utils.
+- **TS errors**: 191 (unchanged).
+- **Tests**: 490/490 passing.
+- **Builds**: clean.
+
+## [1.20.0-r027.055] - 2026-04-30 - `__esri.*` namespace migration (pass 10)
+
+### Changed
+- **`__esri.*` migration pass 10** (r027.055): `runtime/tabs/SpatialTabContent.tsx` (20 refs cleared — MapView | SceneView, Geometry ×7, GraphicsLayer | MapNotesLayer (in a getDrawLayer ref signature), GraphicsLayer ×3, Graphic ×3, FeatureLayer cast, plus `typeof unionOperator` replaced with inline `typeof import(...)`. Single-file pass; the file is the spatial query / draw mode tab.
+
+### Stats
+- **`__esri` references**: 260 → 240.
+- **Files migrated to date** (passes 1–10): 37 of ~38.
+- **Files remaining** (7 files in the 21–80 ref range): zoom-utils, managers/graphics-layer-manager, map-interaction, feed-layer-manager, use-buffer-preview, graphics-cleanup-utils, graphics-layer-utils.
+- **TS errors**: 191 (unchanged).
+- **Tests**: 490/490 passing.
+- **Builds**: clean.
+
+## [1.20.0-r027.054] - 2026-04-30 - `__esri.*` namespace migration (pass 9)
+
+### Changed
+- **`__esri.*` migration pass 9** (r027.054): `runtime/graphics-state-manager.ts` (18 refs cleared — GroupLayer ×3, GraphicsLayer ×3, WatchHandle ×3, MapView | SceneView ×3, Graphic ×3 across the singleton's typed Map fields and accessors). Single-file pass; the file is the centralized graphics layer state manager.
+
+### Stats
+- **`__esri` references**: 278 → 260.
+- **Files migrated to date** (passes 1–9): 36 of ~38.
+- **Files remaining** (8 files in the 20–80 ref range): SpatialTabContent, zoom-utils, managers/graphics-layer-manager, map-interaction, feed-layer-manager, use-buffer-preview, graphics-cleanup-utils, graphics-layer-utils.
+- **TS errors**: 191 (unchanged).
+- **Tests**: 490/490 passing.
+- **Builds**: clean.
+
+## [1.20.0-r027.053] - 2026-04-30 - `__esri.*` namespace migration (pass 8)
+
+### Changed
+- **`__esri.*` migration pass 8** (r027.053): `runtime/popup-render-pool.ts` (12 refs cleared — PopupTemplate ×4, Feature ×3, MapView | SceneView ×2, Graphic, plus `typeof Feature` for the constructor reference field). Single-file pass; the file is the popup rendering service used by result cards.
+
+### Stats
+- **`__esri` references**: 290 → 278.
+- **Files migrated to date** (passes 1–8): 35 of ~38.
+- **Files remaining** (9 files in the 18–80 ref range): graphics-state-manager, SpatialTabContent, zoom-utils, managers/graphics-layer-manager, map-interaction, feed-layer-manager, use-buffer-preview, graphics-cleanup-utils, graphics-layer-utils.
+- **TS errors**: 191 (unchanged).
+- **Tests**: 490/490 passing.
+- **Builds**: clean.
+
+## [1.20.0-r027.052] - 2026-04-30 - `__esri.*` namespace migration (pass 7)
+
+### Changed
+- **`__esri.*` migration pass 7** (r027.052): 2 larger files. `runtime/selection-utils.ts` (10 refs — GraphicsLayer ×4, MapView | SceneView ×3); `runtime/geometry-from-draw.tsx` (12 refs — Geometry ×2, GraphicsLayer, Graphic ×2, BufferParameters, GeometryUnion ×2, plus three module-namespace refs replaced with `typeof import(...)`: bufferOperator, geodesicBufferOperator, geometryService). About 22 refs cleared.
+
+### Stats
+- **`__esri` references**: 312 → 290.
+- **Files migrated to date** (passes 1–7): 34 of ~38.
+- **Files remaining** (10 files in the 13–80 ref range): popup-render-pool (13), graphics-state-manager (18), SpatialTabContent (20), zoom-utils (21), managers/graphics-layer-manager (23), map-interaction (26), feed-layer-manager (27), use-buffer-preview (28), graphics-cleanup-utils (34), graphics-layer-utils (80).
+- **TS errors**: 191 (unchanged).
+- **Tests**: 490/490 passing.
+- **Builds**: clean.
+
+## [1.20.0-r027.050] - 2026-04-30 - `__esri.*` namespace migration (pass 6)
+
+### Changed
+- **`__esri.*` migration pass 6** (r027.050): 3 mid-size files. `runtime/managers/selection-restoration-manager.ts` (5 refs — GraphicsLayer ×3, MapView, Layer); `runtime/widget.tsx` (6 refs — Extent ×2, GraphicsLayer, MapView | SceneView, WatchHandle aliased from `@arcgis/core/core/Handles`); `data-actions/pan-to-action.tsx` (9 refs — Point ×2, Geometry, MapView | SceneView ×2, plus `typeof unionOperator` replaced with inline `typeof import('@arcgis/core/geometry/operators/unionOperator')`). About 20 refs cleared.
+
+### Stats
+- **`__esri` references**: 332 → 312.
+- **Files migrated to date** (passes 1–6): 32 of ~38.
+- **Files remaining**: ~12 in the 10–80 ref range (`selection-utils`, `geometry-from-draw`, `popup-render-pool`, `graphics-state-manager`, `SpatialTabContent`, `zoom-utils`, `managers/graphics-layer-manager`, `map-interaction`, `feed-layer-manager`, `use-buffer-preview`, `graphics-cleanup-utils`, `graphics-layer-utils`).
+- **TS errors**: 191 (unchanged).
+- **Tests**: 490/490 passing.
+- **Builds**: clean.
+
+## [1.20.0-r027.047–048] - 2026-04-30 - `__esri.*` namespace migration (pass 5)
+
+### Changed
+- **`__esri.*` migration pass 5** (r027.048): 2 five-reference files. `runtime/components/feature-info.tsx` (Graphic, PopupTemplate ×2, Feature already imported as runtime value, FeatureLayer); `runtime/direct-query.ts` (FeatureLayer ×2, SpatialReference, PopupTemplate ×2). About 11 refs cleared.
+
+### Documentation
+- **TODO + CHANGELOG refresh** (r027.047): TODO #1 `__esri` line updated with current ref count after passes 2–4; new combined CHANGELOG entry for r027.043–046 documenting all three migration passes plus the per-file build validation tightening.
+
+### Stats
+- **`__esri` references**: 343 → 332.
+- **Files migrated to date** (passes 1–5): 29 of ~38.
+- **TS errors**: 191 (unchanged — `__esri` migration is type-only).
+- **Tests**: 490/490 passing.
+- **Builds**: clean.
+
+## [1.20.0-r027.043–046] - 2026-04-30 - `__esri.*` namespace migration (passes 2–4)
+
+### Changed
+- **`__esri.*` migration pass 2** (r027.044): 8 two-reference files converted. `feed-simple/utils/feature-join.ts` (FeatureLayer), `query-simple/config.ts` (Graphic, GraphicsLayer), `query-simple/data-actions/index.tsx` (MapView | SceneView, GraphicsLayer), `query-simple/runtime/managers/use-zoom-to-records.ts` (MapView | SceneView), `query-simple/runtime/query-clear-handler.ts` (GraphicsLayer, MapView | SceneView), `query-simple/runtime/query-execution-handler.ts` (same), `query-simple/runtime/query-submit-handler.ts` (same), `query-simple/runtime/record-removal-handler.ts` (MapView | SceneView, GraphicsLayer). About 16 refs cleared.
+- **`__esri.*` migration pass 3** (r027.045): 8 three-reference files. `add-to-map-action.tsx` (GraphicsLayer ×3), `interactive-draw-tool.tsx` (Graphic, GraphicsLayer | MapNotesLayer), `managers/map-view-manager.ts` (MapView | SceneView ×3), `query-result-item.tsx` (MapView | SceneView, Graphic ref + cast), `query-result.tsx` (GraphicsLayer, MapView | SceneView, Extent), `query-task-list.tsx` (Extent, GraphicsLayer, MapView | SceneView), `query-utils.ts` (FeatureLayer, PopupTemplate ×2, Layer), `results-menu.tsx` (MapView | SceneView, Extent, GraphicsLayer). About 32 refs cleared.
+- **`__esri.*` migration pass 4** (r027.046): 4 four-reference files. `execute-spatial-query.ts` (Geometry, FeatureSet, FeatureLayer ×2), `feed-simple/runtime/widget.tsx` (MapView | SceneView, FeatureLayer ×2, Handle aliased from `@arcgis/core/core/Handles`), `geometry-from-map.tsx` (Geometry, GraphicsLayer, Graphic, typeof Polygon, reactiveUtils namespace via `typeof import(...)`, Extent), `query-task.tsx` (Extent, GraphicsLayer, MapView | SceneView, Geometry). About 20 refs cleared.
+
+### Tooling
+- **Per-file validation tightened** (r027.046): webpack dev build now runs after every file edit alongside jest and `tsc --noEmit`. Catches module-resolution errors that `tsc` would miss when the build runs `transpileOnly: true`.
+
+### Documentation
+- **TODO #1 refresh** (r027.043 + r027.047): `__esri` migration line updated each round with current ref count and which files have been completed. Consumer-narrowing line marked ✅ DONE in r027.041.
+
+### Stats
+- **`__esri` references**: 420 → 343 across 27 files migrated. ~17 files / ~343 refs remaining.
+- **TS errors**: 193 → 191 (down 2 from consumer narrowing in r027.041; `__esri` migration is type-only and produces no count change because the ambient namespace still resolves in JSAPI 5.0).
+- **Tests**: 490/490 passing throughout.
+- **Builds**: clean throughout.
+
+## [1.20.0-r027.040–042] - 2026-04-30 - Post-smoke hygiene
+
+### Changed
+- **Narrowed 5 consumer files `GraphicsLayer | GroupLayer` → `GraphicsLayer`** (r027.041): Manager refactor in r027.033 changed `graphics-layer-manager` to always supply the inner `GraphicsLayer`, but five downstream consumers still declared the wide union. Surgical narrow at each site: `results-management-utils.ts:310`, `selection-utils.ts:109,243,279`, `results-menu.tsx:63`, `query-result.tsx:75`, `add-to-map-action.tsx:46,330,399`. TS errors 193 → 191. Wide types intentionally retained in `graphics-layer-utils.ts` and `graphics-cleanup-utils.ts` where utilities branch on layer kind internally.
+- **`__esri.*` namespace migration started** (r027.042): First batch of replacing the deprecated ambient `__esri` namespace with explicit ESM type imports from `@arcgis/core`. 7 single-line files converted: `zoom-to-action.tsx` (MapView | SceneView), `geometry-from-ds.tsx` (Geometry), `query-task-form.tsx` (typeof unionOperator), `query-task-spatial-form.tsx` (Geometry, GraphicsLayer, Graphic), `results-management-utils.ts` (GraphicsLayer), `simple-list.tsx` (MapView | SceneView), `suggest-utils.ts` (FeatureLayer). About 11 refs cleared from a current total of ~420 across 38 files. TS count unchanged (these were silent type refs); webpack build clean for every new import path. Continuing file-by-file with smallest first.
+
+### Documentation
+- **TODO #1 refresh** (r027.040): Marked the manual smoke test ✅ DONE (2026-04-30). Moved dark mode work to a new "Deferred" subsection (no longer a 1.20 ship blocker per user direction). Added 7 completed entries covering r027.033–039. Refreshed the MED error-cluster line.
+- **CHANGELOG / CURRENT_STATUS / FLOW-10 refresh** (r027.040): QS and FS CHANGELOGs roll up the r027.027–039 work. Both `CURRENT_STATUS.md` files refreshed for 2026-04-30. `FLOW-10-SPATIAL-QUERY-EXECUTION.md` per-graphic stamping line updated to reflect JSAPI 5.0 sourceLayer/associatedLayer removal. Six other process flow docs reviewed and confirmed accurate.
+
+## [1.20.0-r027.027–039] - 2026-04-30 - 1.20 / JSAPI 5.0 source migration
+
+Working batch that takes the source past the initial 1.20 upgrade (r027.000–011) and into a state validated against the actual 1.20 install (JSAPI 5.0.4, Calcite 5.0.2, Node 24). Smoke test passed 2026-04-30 with all three widgets functional and 490/490 unit tests green.
+
+### Fixed
+- **Calcite 5.x event prop case** (r027.027): Calcite 5.0 enforces lowercase event prop names. Fixed `onCalcitePopoverClose` → `oncalcitePopoverClose` across 6 sites in `query-result.tsx`, `QueryTabContent.tsx`, and `SpatialTabContent.tsx`. Without the fix the close handlers never fire.
+- **`DataRecord.getId()` coercion gaps** (r027.027): The r027.000 sweep missed two functional sites and four cosmetic ones. `simple-list.tsx:158` — `Set<string>.has(getId())` was silently returning false because `getId()` now returns a number in 5.0; selections never matched. `query-execution-handler.ts:602` — removal logic compared numeric IDs against string IDs and the wrong record was removed. Plus four debug-log sites in `query-execution-handler.ts` cleaned up for consistency.
+- **`geometryEngine.union` removal** (r027.027): `pan-to-action.tsx:50` used the removed `geometryEngine.union()`. Switched to `unionOperator.executeMany()` to match the pattern already in `use-buffer-preview.ts` and `SpatialTabContent.tsx`.
+- **JSAPI 5.0 audit correction** (r027.030): Earlier audit notes said `Graphic.layer` was removed. It is not — it survives in 5.0. The actual removals are `Graphic.sourceLayer` and `FeatureLayer.associatedLayer`. Fixed 5 source sites and 2 test fixtures: `direct-query.ts:142–146`, `execute-spatial-query.ts:209–213`, `tests/direct-query.test.ts:163`, `tests/execute-spatial-query.test.ts:237` (deleted obsolete `should prefer associatedLayer` test). Test count moved from 491 to 490.
+- **Calcite 5.x type/a11y fixes** (r027.031): `type='number'` is no longer valid on Calcite TextInput in 5.0; replaced with `inputMode='numeric'` at `SpatialTabContent.tsx:813` and `query-item-main-mode.tsx:370`. Added `label='Spatial relationship information'` to the spatial-rel-info `<calcite-popover>` to satisfy the new label requirement.
+- **App config theme reference** (r027.038): Apps 4 and 5 referenced `themes/demo-theme/` which is not present in the 1.20 install. The framework auto-parses the missing theme as JSON, producing a "Not Found" SyntaxError at app load. Switched both to `themes/default/` in `config.json` and `resources/config/config.json` (per the "update both files" rule).
+
+### Changed
+- **`graphics-layer-manager.ts` — split groupLayer ref from graphicsLayerRef** (r027.033): Manager now always exposes the inner `GraphicsLayer` and tracks the parent `GroupLayer` separately for cleanup/clear operations. Resolves the latent useGroupLayer-mode runtime question flagged in TODO #1 (GroupLayer/GraphicsLayer ambiguity, 16 TS2339 errors). New public `getGroupLayer()` for parent-only operations. Constructor parameter type narrowed to match `widget.tsx`'s existing ref type. Callback signature `onGraphicsLayerInitialized` narrowed to `GraphicsLayer`.
+- **`record-removal-handler.ts` graphicsLayer parameter narrowed** (r027.034): Type narrowed `GraphicsLayer | GroupLayer` → `GraphicsLayer`. Post-r027.033 the manager only ever supplies the inner `GraphicsLayer`, so the union was dead surface area. Cleared 11 TS2339 errors.
+- **`exbVersion` bump** (r027.035): Updated `1.19.0` → `1.20.0` in all three widget manifests — `query-simple/manifest.json`, `helper-simple/manifest.json`, `feed-simple/manifest.json`.
+- **`client/package.json` version bump** (r027.036): `1.19.0` → `1.20.0`.
+
+### Added
+- **Captured 1.20 install patches under version control** (r027.028): The 1.20 install needs three patches to run our test/build flow correctly (jest symlink discovery, missing module mappers, dual-React fix). New `client/your-extensions/widgets/dev-setup/1.20-overrides/` holds the patched `jest.config.js` plus an idempotent `apply.sh` and a `README.md`. CLAUDE.md updated with the re-apply workflow so a fresh 1.20 install can be patched in one step.
+- **`server/public/apps/` symlink infrastructure** (r027.039): The 1.20 install now symlinks `server/public/apps/` to this repo, mirroring the widget symlink pattern. Builder edits land in this repo and are tracked. `apply.sh` recreates the symlink on each run with backup-then-link safety logic. Captured app 1 config drift surfaced from the 1.20 install in the same pass.
+- **Working tree cleanup** (r027.029): 25 legacy E2E specs archived from `client/tests/e2e/query-simple/*.spec.ts` to `client/tests/e2e/query-simple/legacy/pre-v2/`. App config drift captured for apps 1–4. Server lockfile security patches captured. `.claude/` added to `.gitignore`.
+- **TODO #1 doc roll-up** (r027.032): Rolled the 2026-04-30 batch progress into TODO #1 and logged a new HIGH item — GroupLayer/GraphicsLayer ambiguity (16 TS errors, useGroupLayer-mode runtime question). Subsequently resolved in r027.033/034.
+- **TODO #21** (r027.037): Added a low-priority follow-up — investigate explicit `SpatialReference` on our drawn geometries. Surfaced during 1.20 smoke testing; not a blocker, but worth a deliberate audit pass.
+
+### Verified
+- **1.20 manual smoke** (2026-04-30): User-driven manual pass against the 1.20 install. All three widgets (QS, HS, FS) loaded and ran end-to-end against JSAPI 5.0.4 / Calcite 5.0.2 / Node 24. Unit tests: 490/490 passing.
+
+---
+
+## [1.20.0-r027.024 / r027.025] - 2026-04-26 - Popover anchor visibility on alerts
+
+### Fixed
+- **Spatial tab no-results / error popover** (r027.024, `SpatialTabContent.tsx`): the popover anchors to an invisible div inside the scrollable spatial form. On smaller screens (or when scrolled to the top of the form), the popover rendered below the visible area — users clicked Apply and saw nothing happen. Added a `useEffect` that watches `noResultsAlert.show` and `queryErrorAlert.show` and calls `scrollIntoView({ block: 'center' })` on the anchor whenever either alert fires. Surfaced during E2E test development when the test couldn't find the popover; the test scenario was correct, the popover was just off-screen.
+- **Query tab no-results / error popover** (r027.025, `QueryTabContent.tsx`): same root cause as the spatial fix, plus the popover was placed below the form (`placement="bottom"`) instead of above. Flipped to `placement="top"` to match the spatial tab pattern, and added the same `scrollIntoView` watcher on `noResultsAlert.show` / `queryErrorAlert.show` so the popover is always visible regardless of viewport height.
+
+### Discovery
+The bug was found while writing v2 E2E spatial tests — the no-results assertion failed because the popover was off-screen, not because the popover wasn't rendering. The user verified manually that scrolling brought it into view, confirming this was a runtime UX issue rather than a test issue.
+
+---
+
+## [Tests] - 2026-04-25 - v2 E2E suite, Categories 5 & 6 (Spatial)
+
+### Added
+- **Cat 5 (Spatial Operations Mode)** — 6 tests: T-048 (default mode), T-049 (source indicator), T-053 (relationship combobox structure), T-057 (target layer multi-select), and two consolidated flows: T-050+T-052+T-059 (buffer journey 1500→50 + no-results execute) and T-058+T-061 (execute at 2500ft returns results).
+- **Cat 6 (Spatial Draw Mode)** — 4 tests: T-064 (toolbar tools), T-066+T-073 (drawing polyline updates indicator), T-074+no-results (buffer journey on drawn polyline + no-results execute), T-076 (execute on drawn polyline at 2500ft returns results).
+- **Consolidation principle**: combined realistic flows over isolated micro-tests. ~14 isolated inventory tests fold into 10 combined flows that cover the same T-IDs. Final spatial run: 9 passed, 2 skipped (data variance), 0 failed in 3.1 minutes — down from 53 minutes for the pre-consolidation suite.
+
+### Notes
+- The spatial relationship combobox is a `<calcite-combobox>` web component (Esri Calcite Design System). UI clicks on visible options don't trigger Calcite's internal selection state. Tests set the combobox's `value` programmatically and dispatch the `calciteComboboxChange` event the React handler listens for — see `SpatialTabContent.tsx ~line 554`.
+- Target layer combobox uses jimu-ui `AdvancedSelect` — UI click works, but option selectors must be scoped to known layer names because the spatial relationship listbox renders `[role="option"]` siblings nearby.
+- Apply button selector scoped to `[role="tabpanel"]:visible` because the Query tab keepMount keeps a hidden Apply button in the DOM.
+- Draw tests zoom in 6 ticks before drawing the polyline so the resulting geometry is small enough for fast spatial queries.
+
+---
+
+## [Tests] - 2026-04-25 - v2 E2E suite, Categories 1/3/4
+
+### Added
+- **Fresh v2 Playwright suite** at `client/tests/e2e/query-simple/v2/` built from the 2026-04-24/25 video captures. Replaces the legacy specs we no longer trust. Three category files landed: Category 1 (Query Execution Extended, P1), Category 3 (Results Interaction, P2), Category 4 (Accumulation Modes, P3). 24 tests total — final run was 21 passed, 3 skipped, 0 failed.
+- **`v2/README.md`** documents the suite layout, conventions, and per-category status. Includes a per-T-ID coverage matrix and a list of remaining batches (Categories 5-16 and the cross-cutting P4/P6 sequences).
+
+### Fixed
+- **`KCSearchHelpers.setResultsMode`** in `client/tests/e2e/fixtures/test-helpers.ts` was matching mode buttons with `^New$` / `^Add$` / `^Remove$`, but the actual button labels include a prefix glyph (`★ New`, `+ Add`, `− Remove`). Helper now scopes to `[role="radiogroup"]` and matches with a word-boundary regex.
+- **`playwright.config.ts`**: enabled 1 retry for local runs (was 0). Self-heals occasional flakes from network/timing variance.
+- **T-043 autocomplete race** (commit `490ca3dab`): the test originally used `enterQueryValue` which presses Enter after fill. Enter could pick a popover suggestion instead of submitting the typed value. Switched to a controlled `applyQuery` helper (fill + Escape + click Apply) — verified stable across 3 consecutive runs.
+
+---
+
+## [1.20.0-r027.019] - 2026-04-24 - Cross-Widget Output DS Crash Fix (retroactive doc)
+
+> **Note**: This entry was missed in the original r027.019 commit (`0a42c3046`). The change has been live since 2026-04-24. Documenting now during the r027.024 verification pass after a P6 test confirmed the guard fires correctly when a destroyed/unresolvable output DS is encountered.
+
+### Fixed
+- **`handleDataSourceInfoChange` crash on unresolvable output DS** in `query-result.tsx`: When two QS widgets share output DS IDs (typically from a copy-pasted widget config without ID regeneration), and one widget destroys or releases its output data source, the other widget's `handleDataSourceInfoChange` would call `DataSourceManager.getDataSource()`, get `undefined` back, and crash on the next `selectRecordsByIds()` call. Added a null guard immediately after the DS lookup that logs the skip event and returns early.
+- **Crash trace**: `TypeError: Cannot read properties of undefined (reading 'selectRecordsByIds')` at `query-result.tsx:731` (pre-fix line number).
+
+### Changed
+- **Diagnostic log cleanup**: removed the per-call `handleDataSourceInfoChange-fired` log and a secondary log inside the re-selection branch. Both were used during the r027.018 root-cause investigation. The new `handleDataSourceInfoChange-skipped` log fires only when the guard returns early, so it's quiet in healthy state and informative when the conflict is hit.
+
+### Verified
+- P6 multi-widget test sequence: widget_63 clears its output DS, widget_66's handler fires with the unresolvable DS reference, the guard logs and returns. No crash. Confirmed in console logs from the 2026-04-25 P6 run.
+
+---
+
+## [1.20.0-r027.023] - 2026-04-25 - Settings DS Conflict One-Click Fix
+
+### Added
+- **One-click fix button on the red banner**: The offending widget's settings panel now includes a "Fix: Regenerate IDs for widget_XX" button. Clicking it rewrites every queryItem's `outputDataSourceId` using the formula `${widgetId}_output_${configId}` (preserves existing configIds) and triggers `updateConfigForOptions` with `dsUpdateRequired: true`. The framework's existing `getAllDataSources()` flow rebuilds the `outputDataSources` array and registers new top-level dataSources entries. After the user saves the app, the change persists and the banners do not return on reload.
+- **Success banner**: After a successful fix, the component shows a green confirmation banner instructing the user to save the app to persist the change. The banner stays visible until the next render of the settings panel.
+
+### Notes
+- The amber banner on the victim widget remains informational only. The fix belongs on the offender's side.
+- The framework persists the change correctly when saved through the builder. Earlier versions of this work failed to persist due to other issues in the component (Fragment returns, unstable memo deps) that have since been resolved.
+
+---
+
+## [1.20.0-r027.022] - 2026-04-25 - Settings DS Conflict Warning (Bidirectional)
+
+### Added
+- **Amber warning banner for the "victim" widget**: When another QS widget has `queryItems[].outputDataSourceId` values referencing this widget's prefix, an amber banner appears in this widget's settings naming the offending widget by label and counting affected query items. The banner directs the user to open the offending widget's settings to fix the conflict at its source.
+- **Bidirectional detection in one pass**: `detectConflict()` now returns one of three results — `own-conflict`, `poached`, or null. A single `getAppConfigAction()` call covers both directions. Component renders the appropriate banner based on the result `type` discriminator.
+
+### Changed
+- **Component file**: `query-simple/src/setting/ds-conflict-guard.tsx` — extended detection function and added amber banner branch. Single `useMemo`, single function, no `React.Fragment` (preserves the constraints from r027.021).
+
+### Notes
+- Same normalization caveat applies: the banners catch partial (mixed-prefix) conflicts. Whole-widget copy-paste cases where the framework silently rewrites the prefix on load are not detected by the in-memory snapshot.
+
+---
+
+## [1.20.0-r027.021] - 2026-04-25 - Settings DS Conflict Warning
+
+### Added
+- **Output Data Source Conflict warning banner** in QS settings panel: Detects when this widget's `queryItems[].outputDataSourceId` values reference another widget's prefix (e.g., `widget_66` using `widget_63_output_*`). This happens when a widget config is copy-pasted in the builder without regenerating IDs, and causes runtime crashes when both widgets are active. The banner shows in the offending widget only, naming the foreign widget by label and counting affected query items. Detection-only in this iteration — no auto-fix.
+- **New file**: `query-simple/src/setting/ds-conflict-guard.tsx` — function component with single detection pass and a red warning banner styled with fixed colors and a `WarningOutlined` icon for theme-independent contrast.
+- **Spec**: `docs/specs/DS_CONFLICT_GUARD_SPEC.md` — documents the broader plan including a future amber banner for the "victim" widget, runtime null guard, and one-click fix mechanism. Each piece to be approved before implementation.
+
+### Notes
+- The banner fires when the conflict survives ExB's framework normalization. A copy-pasted widget where ALL queryItems reference the original widget's prefix may be silently rewritten by the framework on load. The banner reliably catches partial conflicts (mixed prefixes within one widget) which are the common copy-paste artifact.
+
+---
+
+## [1.20.0-r027.016] - 2026-04-06 - Selection Loss Fix (TODO #9)
+
+### Fixed
+- **Selection loss when switching between QS widgets** (TODO #9): When two QS widgets share the same origin data source, opening the second widget cleared the shared DS selection, causing the first widget's Results tab card highlights (pink `.selected` borders) to disappear. Root cause: `handleDataSourceInfoChange` in `query-result.tsx` relied on `getSelectedRecords()` — which always returns `[]` in ExB 1.20 (records not stored by `selectRecordsByIds()`). This made the protection check (`selectedRecords.length > 0`) permanently false, so the handler could never detect or prevent an external clear. Fixed by applying the same ID-based pattern from r027.010: dropped `getSelectedRecords()`, switched to `getSelectedRecordIds()`, and when accumulated records exist but the output DS shows zero selected IDs, re-selects from accumulated records to restore the Redux `selectedIds` that drive the card borders.
+
+### Removed
+- **Dead `restoreOutputDsSelection()` method**: Removed from `widget.tsx`. This method attempted to restore output DS selection on panel reopen via `handleVisibilityChange`, but the panel never transitions CLOSED→OPENED in the multi-widget scenario — both panels stay mounted. The fix belongs in `handleDataSourceInfoChange` where the DS change is actually detected.
+
+---
+
+## [1.20.0-r027.014] - 2026-04-06 - WidgetConfigManager & Configurable Spatial Relationships
+
+### Changed
+- **`HighlightConfigManager` renamed to `WidgetConfigManager`**: Singleton in `shared-code/mapsimple-common/widget-config-manager.ts` now reflects its broader role beyond highlight config. All source files updated. Legacy alias `highlightConfigManager` preserved for backward compatibility.
+- **Widget header retooled**: `widget.tsx` now uses `widgetConfigManager.getShowHeader(id)` instead of direct `config.showHeader` access.
+
+### Added
+- **Configurable spatial tab relationships** (TODO #18): New `spatialTabRelationships?: string[]` config property. Settings UI checkbox list in the "Spatial draw colors" section lets admins choose which spatial operations appear. `SpatialTabContent.tsx` filters the combobox via `widgetConfigManager.getSpatialTabRelationships(widgetId)`. Default: show all (current behavior).
+- **New `WidgetConfigManager` getters**: `getShowHeader()` and `getSpatialTabRelationships()`.
+
+### Fixed
+- **Stale variable references in `removeRecordsFromOriginSelections()`**: Fixed `remainingRecords` and `currentSelectedRecords` references in `results-management-utils.ts` — leftover from the r027.010 refactor. `DataRecordsSelectionChangeMessage` now passes `[]` for records since we use ID-based selection. 490/490 tests pass.
+
+---
+
+## [1.20.0-r027.013] - 2026-04-06 - Configurable Widget Header
+
+### Added
+- **`showHeader` config toggle**: New setting in Display section to show/hide widget header. Defaults to true (header visible).
+- **Header visibility binding**: Widget header div wrapped in conditional render `{config.showHeader !== false && (...)}` in `widget.tsx`.
+- **Setting panel UI**: "Show widget header" switch in new Display section of settings panel with i18n support.
+
+---
+
+## [1.20.0-r027.012] - 2026-04-03 - E2E Test Suite
+
+### Added
+- **E2E tests T-001a through T-006**: Full session-based test suite passing for both widget_63 and widget_66 in the same browser session (no window restart between widgets).
+- **Multi-widget session design**: T-002 and T-003 (URL hash / query string) are widget_63 only — widget_66 does not respond to URL params. All other tests run against both widgets.
+- **Test cleanup discipline**: Every test clears results and closes the widget panel before moving to the next widget to prevent cross-test state contamination.
+- **`test-helpers.ts` selector fixes**: Corrected `clickClearResults`, `switchToResultsTab`, and `removeResultItem` selectors to match actual DOM.
+- **`KCSearchHelpers` JSDoc gotchas**: Documented `keepMount` behavior, tab title with count suffix, remove button layout differences, and multiple `data-widgetid` element handling.
+
+---
+
+## [1.20.0-r027.000–011] - 2026-03-25 - ExB 1.20 Upgrade
+
+### Changed
+- **ExB 1.20 base version**: Upgraded from ExB 1.19 (JSAPI 4.34, Calcite 3.3.3, Node 22) to ExB 1.20 (JSAPI 5.0.4, Calcite 5.0.2, Node 24). React stays at 19.
+- **DataRecord.getId() coercion** (r027.000): `getId()` return type changed from `string` to `string | number` in ExB 1.20. All 12 affected files across QS and HS now coerce with `String(record.getId())` at point of use. Covers: record-removal-handler, query-result, query-result-item, selection-utils, results-management-utils, add-to-map-action, graphics-layer-utils, query-execution-handler, popup-render-pool, hash-utils, event-manager, selection-restoration-manager, and widget.tsx.
+- **`__esri` namespace removal** (r027.000): Replaced `__esri.Handle | __esri.WatchHandle` with structural type `{ remove: () => void }` in `shared-code/global-handle-manager.ts`. `__esri` is deprecated in JSAPI 5.0, removed in 6.0.
+
+### Fixed
+- **Calcite 5.0.2 combobox text invisible** (r027.002): `calcite-combobox-item` removed `textLabel` prop in Calcite 5.0. Updated `SpatialTabContent.tsx` to use `label` prop instead. Spatial relationship dropdown now displays selected value correctly.
+- **Multi-widget popover collision** (r027.003): When two QS widgets exist in the same app, the spatial relationship info popover only worked in the first widget opened. Root cause: hardcoded element IDs for `popoverTarget` and popover. Fixed by suffixing all element IDs with `widgetId` to ensure uniqueness.
+- **Selection loss on record removal** (r027.010): Removing a single result from the results list cleared all remaining selection highlights. Two root causes:
+  1. `record-removal-handler.ts:389` — `outputDS.getSelectedRecords()` returns `[]` in ExB 1.20 (records not stored by `selectRecordsByIds()`). Fixed by using `accumulatedRecords` as the source of truth.
+  2. `results-management-utils.ts:440` — Origin DS filter on `accumulatedRecords` failed because records don't carry origin DS metadata. Fixed by using `originDS.getSelectedRecordIds()` with ID-based filtering instead of record-object filtering.
+  Additionally, restored `String()` wrapping on record IDs passed to `selectRecordsByIds()` — ExB 1.20 `getId()` returns `number`, but Redux `selectedIds` from initial selection are strings. Card comparison (`includes(String(getId()))`) silently failed on type mismatch.
+
+### Added
+- **Dark mode detection** (r027.001): Wired `theme.sys.color.mode` detection into both QS (via `useTheme()`) and FS (via `this.props.theme`). New `DARK-MODE` debug logger tag registered for both widgets. Logs initial mode on mount and mode changes on toggle.
+- **Debugging Discipline and Precision in Language rules** (r027.011): Added two governance rules to `.cursor/rules/governance.mdc` and `CLAUDE.md`. Debugging Discipline: data before fixes, evidence over reasoning, instrumentation over guessing. Precision in Language: distinguish data from inference, never claim a fix works until tested. Expanded the Scalpel Rule from code-only to cover everything — code, debugging, language, and documentation.
+
+---
+
 ## [1.19.0-r026.018–024] - 2026-03-24 - Data Source Rebinding Tool
 
 ### Added

@@ -13,11 +13,51 @@
 
 import { type DataRecordSet, type DataAction, DataLevel, type IntlShape, type DataSource, MessageManager, DataRecordsSelectionChangeMessage, DataSourceManager, type ImmutableArray, type ImmutableObject } from 'jimu-core'
 import { createQuerySimpleDebugLogger } from 'widgets/shared-code/mapsimple-common'
+import { MapViewManager } from 'jimu-arcgis'
 import { getGraphicsCountFromLayer, forEachGraphicInLayer } from '../runtime/graphics-layer-utils'
 
 const debugLogger = createQuerySimpleDebugLogger()
 import type { FeatureDataRecord } from 'jimu-core'
 import type { QueryItemType } from '../config'
+import type GraphicsLayer from '@arcgis/core/layers/GraphicsLayer'
+import type GroupLayer from '@arcgis/core/layers/GroupLayer'
+
+/**
+ * r027.097: Result of a Select on Map operation.
+ * Tracks both overall success and whether the visual highlight was applied.
+ * When highlightApplied is false but success is true, the selection data was
+ * set in Redux but no blue outline appears on the map (non-HFL layer).
+ */
+export interface SelectOnMapResult {
+  success: boolean
+  highlightApplied: boolean
+}
+
+/**
+ * r027.096: Module-level highlight handle for direct layerView.highlight().
+ *
+ * The framework's indirect highlight chain (selectRecordsByIds → Redux observer →
+ * JimuLayerView → layerView.highlight) stopped producing visible blue outlines
+ * after the backing layer moved from a map-image service to a hosted feature layer.
+ * We now call layerView.highlight() directly after selectRecordsByIds and manage
+ * the handle here so it can be removed on the next selection or on clear.
+ */
+let currentHighlightHandle: { remove: () => void } | null = null
+
+/**
+ * Remove the current direct highlight handle.
+ * Call this from Clear All / Remove result paths to clean up blue outlines.
+ */
+export function clearSelectOnMapHighlight (): void {
+  if (currentHighlightHandle) {
+    currentHighlightHandle.remove()
+    currentHighlightHandle = null
+    debugLogger.log('DATA-ACTION', {
+      event: 'selectOnMap-highlight-cleared',
+      timestamp: Date.now()
+    })
+  }
+}
 
 /**
  * r023.3: Dedicated selection function for Add to Map action WITH multi-layer support
@@ -43,9 +83,11 @@ async function selectRecordsForAddToMap(
   widgetId: string,
   records: FeatureDataRecord[],
   outputDS: DataSource,
-  graphicsLayer?: __esri.GraphicsLayer | __esri.GroupLayer,
+  graphicsLayer?: GraphicsLayer | GroupLayer,
   queries?: ImmutableArray<ImmutableObject<QueryItemType>>
-): Promise<void> {
+): Promise<SelectOnMapResult> {
+  let highlightApplied = false
+
   debugLogger.log('DATA-ACTION', {
     event: 'selectRecordsForAddToMap-ENTRY',
     widgetId,
@@ -68,10 +110,11 @@ async function selectRecordsForAddToMap(
       note: 'Early return - no records to select',
       timestamp: Date.now()
     })
-    return
+    return { success: true, highlightApplied: false }
   }
   
-  const recordIds = records.map(r => r.getId())
+  // r027.000: ExB 1.20 — coerce getId() to string (now returns string | number)
+  const recordIds = records.map(r => String(r.getId()))
   const recordIdSet = new Set(recordIds)
   
   debugLogger.log('DATA-ACTION', {
@@ -119,7 +162,8 @@ async function selectRecordsForAddToMap(
     
     // Step 2: Group records by their origin data source using queryConfigId
     records.forEach((record, index) => {
-      const recordId = record.getId()
+      // r027.000: ExB 1.20 — coerce getId() to string (now returns string | number)
+      const recordId = String(record.getId())
       const queryConfigId = recordIdToQueryConfigId.get(recordId)
       
       if (!queryConfigId) {
@@ -245,6 +289,54 @@ async function selectRecordsForAddToMap(
         timestamp: Date.now()
       })
     }
+
+    // r027.096: Direct layerView.highlight() — framework-independent blue outline.
+    // The framework's indirect chain (selectRecordsByIds → Redux → observer → highlight)
+    // does not reliably produce visible highlights across layer types (map-image vs HFL)
+    // and ExB versions (1.19 vs 1.20). We call highlight() directly on the FeatureLayerView.
+    try {
+      const mvMgr = MapViewManager.getInstance()
+      const allViewIds = mvMgr.getAllJimuMapViewIds()
+
+      for (const jmvId of allViewIds) {
+        const jmv = mvMgr.getJimuMapViewById(jmvId)
+        if (!jmv) continue
+
+        const jimuLayerView = (jmv as any).getJimuLayerViewByDataSourceId?.(originDataSource.id)
+        if (!jimuLayerView?.view) continue
+
+        // Clear previous highlight before applying new one
+        if (currentHighlightHandle) {
+          currentHighlightHandle.remove()
+          currentHighlightHandle = null
+        }
+
+        // highlight() accepts number | string objectIds; use numbers for broadest JSAPI compat
+        const numericIds = data.ids.map(id => parseInt(id, 10)).filter(n => !isNaN(n))
+
+        if (numericIds.length > 0) {
+          currentHighlightHandle = jimuLayerView.view.highlight(numericIds)
+          highlightApplied = true
+
+          debugLogger.log('DATA-ACTION', {
+            event: 'selectOnMap-direct-highlight-applied',
+            originDSId: originDataSource.id,
+            layerTitle: jimuLayerView.layer?.title || null,
+            objectIds: numericIds.slice(0, 10),
+            timestamp: Date.now()
+          })
+        }
+
+        // First matching JimuMapView with a valid layer view is sufficient
+        break
+      }
+    } catch (highlightErr) {
+      debugLogger.log('DATA-ACTION', {
+        event: 'selectOnMap-direct-highlight-error',
+        error: highlightErr instanceof Error ? highlightErr.message : String(highlightErr),
+        timestamp: Date.now()
+      })
+    }
   }
   
   // Step 2: Update output DS (for Results tab highlighting)
@@ -306,9 +398,12 @@ async function selectRecordsForAddToMap(
     recordsCount: records.length,
     layersCount: recordsByOriginDS.size,
     layerIds: Array.from(recordsByOriginDS.keys()).map(ds => ds.id),
+    highlightApplied,
     note: 'r023.3: Dedicated selection function completed (multi-layer via graphics interrogation)',
     timestamp: Date.now()
   })
+
+  return { success: true, highlightApplied }
 }
 
 /**
@@ -325,9 +420,9 @@ export async function handleSelectOnMap(
   widgetId: string,
   outputDS: DataSource,
   records: FeatureDataRecord[],
-  graphicsLayer?: __esri.GraphicsLayer | __esri.GroupLayer,
+  graphicsLayer?: GraphicsLayer | GroupLayer,
   queries?: ImmutableArray<ImmutableObject<QueryItemType>>
-): Promise<boolean> {
+): Promise<SelectOnMapResult> {
   if (!outputDS || !records || records.length === 0) {
     debugLogger.log('DATA-ACTION', {
       action: 'handleSelectOnMap-EARLY-EXIT',
@@ -337,7 +432,7 @@ export async function handleSelectOnMap(
       recordsCount: records?.length || 0,
       timestamp: Date.now()
     })
-    return false
+    return { success: false, highlightApplied: false }
   }
   
   debugLogger.log('DATA-ACTION', {
@@ -350,16 +445,17 @@ export async function handleSelectOnMap(
   })
   
   try {
-    await selectRecordsForAddToMap(widgetId, records, outputDS, graphicsLayer, queries)
-    
+    const result = await selectRecordsForAddToMap(widgetId, records, outputDS, graphicsLayer, queries)
+
     debugLogger.log('DATA-ACTION', {
       action: 'handleSelectOnMap-SUCCESS',
       result: true,
+      highlightApplied: result.highlightApplied,
       recordsCount: records.length,
       timestamp: Date.now()
     })
-    
-    return true
+
+    return result
   } catch (error) {
     debugLogger.log('DATA-ACTION', {
       action: 'handleSelectOnMap-ERROR',
@@ -367,7 +463,7 @@ export async function handleSelectOnMap(
       error: error instanceof Error ? error.message : String(error),
       timestamp: Date.now()
     })
-    return false
+    return { success: false, highlightApplied: false }
   }
 }
 
@@ -394,7 +490,7 @@ export function createAddToMapAction(
   intl: IntlShape,
   queryItem?: QueryItemType,
   runtimeZoomToSelected?: boolean,
-  graphicsLayer?: __esri.GraphicsLayer | __esri.GroupLayer,
+  graphicsLayer?: GraphicsLayer | GroupLayer,
   queries?: ImmutableArray<ImmutableObject<QueryItemType>>
 ): DataAction {
   return {
@@ -528,7 +624,8 @@ export function createAddToMapAction(
       }
       
       // Get record IDs
-      const recordIds = allRecords.map(record => record.getId())
+      // r027.000: ExB 1.20 — coerce getId() to string (now returns string | number)
+      const recordIds = allRecords.map(record => String(record.getId()))
       
       debugLogger.log('DATA-ACTION', {
         action: 'addToMap-onExecute-BEFORE-SELECTION',
@@ -542,14 +639,15 @@ export function createAddToMapAction(
       // r023.3: Use dedicated selection function - interrogate graphics layer for multi-layer support
       // Graphics layer has queryConfigId in attributes, allowing us to map records to their layers
       try {
-        await selectRecordsForAddToMap(widgetId, allRecords, outputDS, graphicsLayer, queries)
-        
+        const selectResult = await selectRecordsForAddToMap(widgetId, allRecords, outputDS, graphicsLayer, queries)
+
         // Note: Zoom is now handled by the separate "Zoom To" action in the DataActionList
         // Users can click "Zoom To" from the action menu if they want to zoom to selected records
-        
+
         debugLogger.log('DATA-ACTION', {
           action: 'addToMap-onExecute-SUCCESS',
           result: true,
+          highlightApplied: selectResult.highlightApplied,
           message: 'r023.3: Successfully selected records via dedicated Add to Map function (multi-layer via graphics)',
           recordsCount: allRecords.length,
           hasGraphicsLayer: !!graphicsLayer,

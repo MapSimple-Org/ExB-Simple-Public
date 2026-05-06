@@ -21,7 +21,8 @@ import {
   focusElementInKeyboardMode,
   DataActionManager,
   DataLevel,
-  useIntl
+  useIntl,
+  type ImmutableArray
 } from 'jimu-core'
 import { Button, Icon, Tooltip } from 'jimu-ui'
 import { ResultsMenu } from './results-menu'
@@ -47,8 +48,16 @@ import {
   dispatchSelectionEvent 
 } from './selection-utils'
 import { executeRemoveRecord } from './record-removal-handler'
-import { createQuerySimpleDebugLogger, ErrorMessage, substituteTokens, convertTemplateToHtml } from 'widgets/shared-code/mapsimple-common'
+import { createQuerySimpleDebugLogger, ErrorMessage, substituteTokens, substituteLegacyTokens, convertTemplateToHtml } from 'widgets/shared-code/mapsimple-common'
 import * as labelPointOperator from '@arcgis/core/geometry/operators/labelPointOperator.js'
+import type GraphicsLayer from '@arcgis/core/layers/GraphicsLayer'
+import type GroupLayer from '@arcgis/core/layers/GroupLayer'
+import type MapView from '@arcgis/core/views/MapView'
+import type SceneView from '@arcgis/core/views/SceneView'
+import type Extent from '@arcgis/core/geometry/Extent'
+
+// r027.000: ExB 1.20 — DataRecord.getId() now returns string | number.
+// All record IDs are coerced to string via String() at point of use.
 
 const debugLogger = createQuerySimpleDebugLogger()
 const { iconMap } = getWidgetRuntimeDataMap()
@@ -69,11 +78,12 @@ export interface QueryTaskResultProps {
   records: DataRecord[]
   runtimeZoomToSelected?: boolean
   onNavBack: (clearResults?: boolean) => Promise<void> | void
-  graphicsLayer?: __esri.GraphicsLayer | __esri.GroupLayer
-  mapView?: __esri.MapView | __esri.SceneView
+  graphicsLayer?: GraphicsLayer | GroupLayer
+  mapView?: MapView | SceneView
+  // r027.091: hoverLayer prop removed — hover pins use mapView.graphics
   resultsMode?: SelectionType
   accumulatedRecords?: FeatureDataRecord[]
-  resultsExtent?: __esri.Extent | null  // r024.74: Cached extent for zoom/pan actions
+  resultsExtent?: Extent | null  // r024.74: Cached extent for zoom/pan actions
   onAccumulatedRecordsChange?: (records: FeatureDataRecord[]) => void
   eventManager?: import('./managers/event-manager').EventManager  // Chunk 7.1: Event Handling Manager
   // FIX (r018.96): Removed onManualRemoval - no longer needed
@@ -276,7 +286,7 @@ export function QueryTaskResult (props: QueryTaskResultProps) {
       
       // Priority 2: Try record.getDataSource() and get its origin
       if (!originDS) {
-        const recordDS = featureRecord.getDataSource?.() as FeatureLayerDataSource
+        const recordDS = (featureRecord as any).getDataSource?.() as FeatureLayerDataSource
         if (recordDS) {
           originDS = recordDS.getOriginDataSources()?.[0] as FeatureLayerDataSource || recordDS
           lookupMethod = 'record-getDataSource'
@@ -416,7 +426,7 @@ export function QueryTaskResult (props: QueryTaskResultProps) {
     // Check if these are new records (different from what we last queried)
     // IMPORTANT: Compare against original query results, not selected results
     // This prevents removedRecordIds from being reset when records are removed
-    const currentRecordIds = records?.map(record => record.getId()) || []
+    const currentRecordIds = records?.map(record => String(record.getId())) || []
     const recordsChanged = currentRecordIds.length !== lastQueryRecordIdsRef.current.length ||
       currentRecordIds.some((id, index) => id !== lastQueryRecordIdsRef.current[index])
     
@@ -466,11 +476,11 @@ export function QueryTaskResult (props: QueryTaskResultProps) {
       }
     } else if (records && records.length > 0 && outputDS && 
         (!hasSelectedRef.current || recordsChanged)) {
-      const recordIds = records.map(record => record.getId())
+      const recordIds = records.map(record => String(record.getId()))
       const fdr = records as FeatureDataRecord[]
-      
+
       // r022.71: Intelligent check - are these records already selected in outputDS?
-      const currentSelectedIds = outputDS.getSelectedRecordIds() || []
+      const currentSelectedIds = (outputDS.getSelectedRecordIds() || []).map(id => String(id))
       const recordIdsSet = new Set(recordIds)
       const currentSelectedIdsSet = new Set(currentSelectedIds)
       
@@ -694,73 +704,36 @@ export function QueryTaskResult (props: QueryTaskResultProps) {
   // The records-watching useEffect already handles selection updates, making this redundant
 
   const handleDataSourceInfoChange = React.useCallback(() => {
-    const ds = DataSourceManager.getInstance().getDataSource(outputDS?.id)
-    const dsRecords = ds?.getSelectedRecords()
-    const selectedIds = ds?.getSelectedRecordIds() ?? []
-    
-    // Capture records prop before using it (to avoid shadowing)
+    const closureOutputDSId = outputDS?.id
+    const ds = DataSourceManager.getInstance().getDataSource(closureOutputDSId)
+
+    // r027.019: Guard against destroyed or unresolvable output data source.
+    // This prevents the crash when another widget clears a shared origin DS
+    // or when a copy-pasted widget config references the wrong widget's output DS.
+    if (!ds) {
+      debugLogger.log('RESULTS-MODE', {
+        event: 'handleDataSourceInfoChange-skipped',
+        widgetId: widgetId,
+        closureOutputDSId: closureOutputDSId,
+        reason: 'output data source not resolvable'
+      })
+      return
+    }
+
+    const selectedIds = (ds.getSelectedRecordIds() ?? []).map(id => String(id))
     const recordsProp = records
-    
-    // Debug: Log what handleDataSourceInfoChange sees
-    debugLogger.log('RESULTS-MODE', {
-      event: 'handleDataSourceInfoChange-fired',
-      widgetId: widgetId,
-      outputDSId: outputDS?.id,
-      dsId: ds?.id,
-      selectedRecordsFromDS: dsRecords?.length || 0,
-      selectedIdsFromDS: selectedIds.length,
-      currentSelectedRecordsState: selectedRecords?.length || 0,
-      recordsPropCount: recordsProp?.length || 0,
-      note: 'r018.94: No removedRecordIds tracking',
-      timestamp: Date.now()
-    })
-    
-    // If we have records in the prop (accumulated records) but DS shows 0 selected,
-    // and we currently have selectedRecords, this is likely a query switch in "Add to" mode
-    // where re-selection hasn't happened yet. Don't clear selectedRecords - wait for re-selection.
-    if (recordsProp && recordsProp.length > 0 && selectedIds.length === 0 && selectedRecords && selectedRecords.length > 0) {
-      debugLogger.log('RESULTS-MODE', {
-        event: 'handleDataSourceInfoChange-skipping-clear-during-query-switch',
-        widgetId: widgetId,
-        reason: 'waiting-for-reselection',
-        recordsPropCount: recordsProp.length,
-        currentSelectedRecordsCount: selectedRecords.length
-      })
-      return // Skip updating - re-selection is coming
+
+    // r027.016: If accumulated records exist but DS shows 0 selected IDs,
+    // another widget cleared the shared origin DS. Re-select from accumulated
+    // records to restore the Redux selectedIds that drive the pink card borders.
+    // getSelectedRecords() is broken in ExB 1.20 (always returns []), so the
+    // old protection check (selectedRecords.length > 0) could never fire.
+    if (recordsProp && recordsProp.length > 0 && selectedIds.length === 0) {
+      const recordIds = recordsProp.map(r => String(r.getId()))
+      ds.selectRecordsByIds(recordIds, recordsProp as any)
+      return
     }
-    
-    // FIX (r018.94): Simplified - no removedRecordIds filtering needed
-    // Records prop is already filtered in Add/Remove mode
-    let shouldUpdate = false
-    if (selectedIds.length !== selectedRecords?.length) {
-      shouldUpdate = true
-    } else { // equal length
-      shouldUpdate = selectedIds.some(id => {
-        const target = selectedRecords.find((item) => item.getId() === id)
-        return target == null
-      })
-    }
-    if (shouldUpdate) {
-      debugLogger.log('RESULTS-MODE', {
-        event: 'handleDataSourceInfoChange-updating-selectedRecords',
-        widgetId: widgetId,
-        oldCount: selectedRecords?.length || 0,
-        newCount: dsRecords?.length || 0,
-        oldSelectedIds: (selectedRecords || []).map(r => r.getId()).slice(0, 5),
-        newSelectedIds: selectedIds.slice(0, 5),
-        note: 'r018.94: No removedRecordIds filtering',
-        timestamp: Date.now()
-      })
-      setSelectedRecords(dsRecords || [])
-    } else {
-      debugLogger.log('RESULTS-MODE', {
-        event: 'handleDataSourceInfoChange-skipping-update',
-        widgetId: widgetId,
-        reason: 'no-change-detected',
-        timestamp: Date.now()
-      })
-    }
-  }, [outputDS?.id, selectedRecords, widgetId, records])
+  }, [outputDS?.id, widgetId, records])
 
   /**
    * Generates the tip message showing how many features are displayed.
@@ -776,6 +749,8 @@ export function QueryTaskResult (props: QueryTaskResultProps) {
       // FIX (r018.83): Use displayedCount for both numerator and denominator
       // This ensures the count shows "118 / 118" after removing records, not "118 / 121"
       return `${getI18nMessage('featuresDisplayed')}: ${displayedCount} / ${displayedCount}`
+      // eslint-disable-next-line no-unreachable -- dead code from r018.83, kept for reference
+      const defaultPageSize = 10 // dead code: original constant no longer in scope
       const { page = 1, pageSize = defaultPageSize } = queryData
       const from = (page - 1) * pageSize + 1
       const to = from + pageSize - 1
@@ -842,9 +817,9 @@ export function QueryTaskResult (props: QueryTaskResultProps) {
    */
   // r022.105: Helper function to open popup for a record
   const openPopupForRecord = React.useCallback((data: FeatureDataRecord) => {
-    const dataId = data.getId()
+    const dataId = String(data.getId())
     const clickedFeature = (data as any).feature || data.getData?.() || null
-    
+
     if (!mapView || !clickedFeature) {
       debugLogger.log('POPUP', {
         event: 'popup-open-skipped',
@@ -874,7 +849,7 @@ export function QueryTaskResult (props: QueryTaskResultProps) {
     let calculationDetails: any = {}
     
     try {
-      popupLocation = labelPointOperator.execute(geometry)
+      popupLocation = labelPointOperator.execute(geometry as any)
       calculationDetails = {
         geometryType: geometry.type,
         method: 'labelPointOperator.execute',
@@ -924,17 +899,11 @@ export function QueryTaskResult (props: QueryTaskResultProps) {
           const attributes = clickedFeature.attributes || {}
           // Build resolved HTML using our shared pipeline
           let substituted = substituteTokens(contentTemplate, attributes)
-          substituted = substituted.replace(/(?<!\{)\{(\w+)\}(?!\})/g, (_m, field) => {
-            const val = attributes[field]
-            return val != null ? String(val) : ''
-          })
+          substituted = substituteLegacyTokens(substituted, attributes)
           const html = convertTemplateToHtml(substituted)
           // Resolve title
           let title = substituteTokens(titleTemplate, attributes)
-          title = title.replace(/(?<!\{)\{(\w+)\}(?!\})/g, (_m, field) => {
-            const val = attributes[field]
-            return val != null ? String(val) : ''
-          })
+          title = substituteLegacyTokens(title, attributes)
           // Create a simple popup with resolved HTML content
           const contentDiv = document.createElement('div')
           contentDiv.style.fontSize = '0.875rem'
@@ -981,13 +950,13 @@ export function QueryTaskResult (props: QueryTaskResultProps) {
   const toggleSelection = React.useCallback((data: FeatureDataRecord) => {
     // Ensure the clicked record is selected (it should already be, but ensure it)
     const selectedDatas = outputDS.getSelectedRecords() ?? []
-    const selectedIds = outputDS.getSelectedRecordIds() ?? []
-    const dataId = data.getId()
-    
+    const selectedIds = (outputDS.getSelectedRecordIds() ?? []).map(id => String(id))
+    const dataId = String(data.getId())
+
     // If this record isn't already selected, add it to the selection
     if (!selectedIds.includes(dataId)) {
       const updatedSelectedDatas = [...selectedDatas, data]
-      const recordIds = updatedSelectedDatas.map(record => record.getId())
+      const recordIds = updatedSelectedDatas.map(record => String(record.getId()))
       
       // Select records and publish selection message using utility function
       debugLogger.log('GRAPHICS-LAYER', {
@@ -1241,7 +1210,7 @@ export function QueryTaskResult (props: QueryTaskResultProps) {
           closable
           label={getI18nMessage('noRemovalAlertLabel')}
           open={noRemovalAlert.show}
-          onCalcitePopoverClose={() => {
+          oncalcitePopoverClose={() => {
             if (onDismissNoRemovalAlert) {
               onDismissNoRemovalAlert()
             }
@@ -1277,7 +1246,7 @@ export function QueryTaskResult (props: QueryTaskResultProps) {
           closable
           label={getI18nMessage('allDuplicatesAlertLabel')}
           open={allDuplicatesAlert.show}
-          onCalcitePopoverClose={() => {
+          oncalcitePopoverClose={() => {
             if (onDismissAllDuplicatesAlert) {
               onDismissAllDuplicatesAlert()
             }

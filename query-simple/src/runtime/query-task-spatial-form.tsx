@@ -1,6 +1,9 @@
 /** @jsx jsx */
 import { React, ReactRedux, type IMState, jsx, css, classNames, type ImmutableArray, type UseDataSource, hooks } from 'jimu-core'
 import { Select, Tooltip, Button } from 'jimu-ui'
+import type Geometry from '@arcgis/core/geometry/Geometry'
+import type GraphicsLayer from '@arcgis/core/layers/GraphicsLayer'
+import type Graphic from '@arcgis/core/Graphic'
 import { type CreateToolType, SpatialFilterType, type SpatialFilterObj, type SpatialRelation, UnitType } from '../config'
 import defaultMessage from './translations/default'
 import { GeometryFromDataSource } from './geometry-from-ds'
@@ -85,7 +88,7 @@ export function QueryTaskSpatialForm (props: QueryTaskItemProps) {
 
   const handleFilterTypeChanged = React.useCallback((evt) => { setCurrentFilterType(evt.target.value) }, [])
 
-  const handleGeometryChange = React.useCallback((geometry: __esri.Geometry, layer?: __esri.GraphicsLayer, graphic?: __esri.Graphic, clearAfterApply?: boolean) => {
+  const handleGeometryChange = React.useCallback((geometry: Geometry, layer?: GraphicsLayer, graphic?: Graphic, clearAfterApply?: boolean) => {
     onFilterChange({ geometry, graphic, layer, clearAfterApply })
   }, [onFilterChange])
 

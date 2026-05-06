@@ -367,7 +367,7 @@ export function QueryItemSettingMain (props: Props) {
                       aria-label={getI18nMessage('displayOrder')}
                       className='w-100'
                       size='sm'
-                      type='number'
+                      inputMode='numeric'
                       value={displayOrderValue}
                       onChange={(e) => { setDisplayOrderValue(e.target.value) }}
                       onAcceptValue={(value) => {

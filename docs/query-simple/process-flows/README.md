@@ -97,4 +97,4 @@ Add the new flow to the Flow Index table above.
 
 ---
 
-*Last updated: r025.072 (2026-03-15)*
+*Last updated: r027.017 (2026-04-06) — FLOW-03, FLOW-04, FLOW-05 line numbers corrected; FLOW-05 adds output DS selection recovery (r027.016)*
