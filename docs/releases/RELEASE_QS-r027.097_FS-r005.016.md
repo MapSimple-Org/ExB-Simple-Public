@@ -79,6 +79,28 @@ Fresh Playwright test suite built from video captures. Replaces legacy specs.
 
 No-results and error popovers on both the Query and Spatial tabs now `scrollIntoView()` when triggered, preventing the popover from rendering off-screen on smaller viewports.
 
+### Stability & Selection Fixes (r027.010, r027.016, r027.019)
+
+Three interrelated fixes addressing selection state management under ExB 1.20's changed runtime behavior.
+
+- **Selection loss on record removal** (r027.010): Removing a single result from the results list cleared all remaining selection highlights. Two root causes: `outputDS.getSelectedRecords()` returns `[]` in ExB 1.20 (records not stored by `selectRecordsByIds()`), and origin DS filtering compared numeric IDs against string IDs due to `getId()` returning `number`. Fixed by switching to `accumulatedRecords` as the source of truth and applying `String()` coercion on all IDs passed to `selectRecordsByIds()`.
+- **Selection loss when switching between QS widgets** (r027.016): When two QS widgets share the same origin data source, opening the second widget cleared the first widget's card highlights. Same `getSelectedRecords()` root cause. Fixed with ID-based detection via `getSelectedRecordIds()` and automatic re-selection from accumulated records.
+- **Cross-widget output DS crash** (r027.019): When two QS widgets share output DS IDs (from copy-pasted configs) and one destroys its output data source, the other widget's `handleDataSourceInfoChange` crashed on `selectRecordsByIds()`. Added null guard with diagnostic logging.
+
+### Configuration Enhancements (r027.013-014)
+
+- **Configurable widget header** (r027.013): New `showHeader` toggle in the Display section of settings. When disabled, the widget header bar is hidden, providing more vertical space for results.
+- **Configurable spatial relationships** (r027.014): New `spatialTabRelationships` setting lets admins choose which spatial operations appear in the Spatial tab dropdown. Checkbox list in settings. Default: show all.
+- **`WidgetConfigManager`** (r027.014): Former `HighlightConfigManager` renamed to reflect its broader role. New getters: `getShowHeader()`, `getSpatialTabRelationships()`.
+
+### Dark Mode Detection (r027.001)
+
+Theme mode detection (`theme.sys.color.mode`) wired into both QS (via `useTheme()`) and FS (via `this.props.theme`). New `DARK-MODE` debug logger tag. Logs initial mode on mount and mode changes on toggle. Foundation for future dark mode styling work.
+
+### SqlClause Type Safety (r027.059-061)
+
+New `sql-clause-utils.ts` module provides type guards and safe accessors for the jimu-core `SqlClause | SqlClauseSet` union. Type guards (`isSqlClause`, `isSqlClauseSet`) and safe accessors (`getClauseValue`, `getClauseFieldName`) replace unsafe property access across 21 consumption sites. 30 TypeScript errors cleared.
+
 ---
 
 ## FeedSimple Changes (r004.005 -> r005.016)
