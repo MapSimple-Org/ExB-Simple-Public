@@ -23,6 +23,10 @@ QuerySimple is designed to solve the common pain points of the standard Experien
 
 > Full release notes: [RELEASE_QS-r027.099_FS-r005.016](docs/releases/RELEASE_QS-r027.099_FS-r005.016.md)
 
+### View in Table Fix (r027.098-099)
+
+View in Table crashed on ExB 1.20 (`Cannot read properties of undefined (reading 'columnTemplates')`). The Table widget's internal enums changed to uppercase values in 1.20, and our data action was passing the old casing. Three enum values corrected: `layerHonorMode`, `selectMode`, `dataActionType`. If you downloaded QS r027.097, update to r027.099.
+
 ### Unified Markdown Template Engine
 
 Both QuerySimple and FeedSimple now share a single rendering engine in `shared-code/` with a unified `{{field | filter}}` token syntax. This was a major architectural merge: the template engine, token substitution, pipe filters, and markdown converter were extracted into shared code and are now identical across both widgets.
@@ -55,10 +59,6 @@ Three-group pass protecting the shared template engine and query pipeline. 45 ne
 ### Select on Map Fix
 
 Select on Map stopped working when layers migrated from map-image services to hosted feature layers. The fix bypasses the framework's unreliable highlight chain and calls `layerView.highlight()` directly. Non-HFL layers emit `console.warn` with bug ID `BUG-SELECT-MAP-IMAGE-001` automatically.
-
-### View in Table Fix (r027.098-099)
-
-View in Table crashed on ExB 1.20 (`Cannot read properties of undefined (reading 'columnTemplates')`). The Table widget's internal enums changed to uppercase values in 1.20, and our data action was passing the old casing. Three enum values corrected: `layerHonorMode`, `selectMode`, `dataActionType`. If you downloaded QS r027.097, update to r027.099.
 
 ### Builder and Settings
 
