@@ -4,7 +4,6 @@
 # Dependencies (if users run npm install)
 node_modules/
 
-# Build artifacts (should not be committed)
-dist/
+# Build artifacts
 dist-report/
 *.log
