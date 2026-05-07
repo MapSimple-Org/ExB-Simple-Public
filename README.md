@@ -267,6 +267,8 @@ Set `exbVersion` in `manifest.json` to match or be LESS than Enterprise's ExB ve
 
 ## Installation
 
+Per-widget zip downloads are available in the [`dist/`](dist/) folder. Each zip contains the widget folders and `shared-code/`, ready to extract into `your-extensions/widgets/`.
+
 ### QuerySimple + HelperSimple
 1. Copy `query-simple`, `helper-simple`, and `shared-code` into your `client/your-extensions/widgets` folder.
 2. Run `npm run build` from the `client` directory.
