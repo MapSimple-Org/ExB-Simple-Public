@@ -3,7 +3,7 @@
 Custom widgets for ArcGIS Experience Builder Developer Edition. Built for performance, deep-linking, and advanced result management.
 
 **Current Version**: QS `1.20.0-r027.099` | FS `1.20.0-r005.016`
-**Latest Update**: ExB 1.20 upgrade, security hardening, Select on Map fix (May 6, 2026)
+**Latest Update**: View in Table fix, ExB 1.20 upgrade, security hardening, Select on Map fix (May 7, 2026)
 
 ## Key Differentiators (Why QuerySimple?)
 
@@ -55,6 +55,10 @@ Three-group pass protecting the shared template engine and query pipeline. 45 ne
 ### Select on Map Fix
 
 Select on Map stopped working when layers migrated from map-image services to hosted feature layers. The fix bypasses the framework's unreliable highlight chain and calls `layerView.highlight()` directly. Non-HFL layers emit `console.warn` with bug ID `BUG-SELECT-MAP-IMAGE-001` automatically.
+
+### View in Table Fix (r027.098-099)
+
+View in Table crashed on ExB 1.20 (`Cannot read properties of undefined (reading 'columnTemplates')`). The Table widget's internal enums changed to uppercase values in 1.20, and our data action was passing the old casing. Three enum values corrected: `layerHonorMode`, `selectMode`, `dataActionType`. If you downloaded QS r027.097, update to r027.099.
 
 ### Builder and Settings
 
