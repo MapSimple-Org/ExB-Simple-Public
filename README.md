@@ -100,9 +100,10 @@ Fresh Playwright suite built from video captures of real user sessions.
 
 Polygon fill missing in production builds (minification race condition hypothesis). Structurally eliminated by r024 graphics rewrite. All symbol creation uses inline object literals. Never reproduced on 1.20.
 
-### Previous Release
+### Previous Releases
 
-[QS-r026.025 + FS-r004.005](docs/releases/RELEASE_QS-r026.025_FS-r004.005.md) (March 2026)
+- [QS-r027.097 + FS-r005.016](docs/releases/RELEASE_QS-r027.099_FS-r005.016.md) (May 6, 2026) — initial ExB 1.20 release
+- [QS-r026.025 + FS-r004.005](docs/releases/RELEASE_QS-r026.025_FS-r004.005.md) (March 2026)
 
 ---
 

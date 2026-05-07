@@ -20,6 +20,16 @@
 
 ## What's New
 
+### View in Table Fix (r027.098-099)
+
+View in Table crashed on ExB 1.20 with `Cannot read properties of undefined (reading 'columnTemplates')`. The Table widget's internal enums changed from PascalCase to uppercase in ExB 1.20 (`LayerHonorModeType.Webmap = 'WEBMAP'`, not `'Webmap'`). Three enum values corrected:
+
+- `layerHonorMode`: `'Webmap'` → `'WEBMAP'` (crash fix)
+- `selectMode`: `'Multiple'` → `'MULTIPLE'` (multi-row selection)
+- `dataActionType`: `'View'` → `'VIEW'` (tab deduplication and selection sync)
+
+Also fixed `selection-utils.ts` DS type check: `'FeatureLayer'` → `'FEATURE_LAYER'` to match `DataSourceTypes` enum.
+
 ### ExB 1.20 / JSAPI 5.0 Upgrade (r027.019-039)
 
 The entire widget suite has been upgraded to run natively on Experience Builder 1.20 with ArcGIS Maps SDK for JavaScript 5.0.4. This was a deep migration touching framework APIs, type systems, and runtime behavior.
@@ -113,16 +123,6 @@ Starting with r004 (shipped in the previous release), FeedSimple depends on `sha
 
 - **ExB 1.20 compatibility:** `getId()` coercion, `__esri` namespace migration (26 refs across 3 FS files), Calcite 5.0 NumericInput value widening (`number` -> `string | number`), ImmutableArray prop widening for ExB's immutable state, TS error cleanup to 0.
 - **Security hardening:** Inherits Group A (`escapeHtml()` on all substituted field values) and Group B (`isDangerousUrl()` blocking dangerous URL schemes) automatically from shared-code. 14 new security tests in `token-renderer.test.ts` covering both XSS prevention and URL scheme blocking.
-
-### View in Table Fix (r027.098-099)
-
-View in Table crashed on ExB 1.20 with `Cannot read properties of undefined (reading 'columnTemplates')`. The Table widget's internal enums changed from PascalCase to uppercase in ExB 1.20 (`LayerHonorModeType.Webmap = 'WEBMAP'`, not `'Webmap'`). Three enum values corrected:
-
-- `layerHonorMode`: `'Webmap'` → `'WEBMAP'` (crash fix)
-- `selectMode`: `'Multiple'` → `'MULTIPLE'` (multi-row selection)
-- `dataActionType`: `'View'` → `'VIEW'` (tab deduplication and selection sync)
-
-Also fixed `selection-utils.ts` DS type check: `'FeatureLayer'` → `'FEATURE_LAYER'` to match `DataSourceTypes` enum.
 
 ---
 
