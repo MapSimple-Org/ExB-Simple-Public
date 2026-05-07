@@ -2,7 +2,7 @@
 
 **Release Date:** 2026-05-07
 **Experience Builder Version:** 1.20.0+
-**Previous Release:** [QS-r026.025 + FS-r004.005](RELEASE_QS-r026.025_FS-r004.005.md)
+**Previous Release:** QS-r027.097 + FS-r005.016 (May 6, 2026)
 
 ## What's Included
 
