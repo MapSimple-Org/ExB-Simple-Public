@@ -86,7 +86,7 @@ export function getOriginDataSource(
   
   // If it doesn't have origin data sources, it might already be an origin data source
   // FeatureLayerDataSource should have a 'layer' property or 'getLayer' method
-  if ((outputDS as any).layer || (outputDS as any).getLayer || (outputDS as any).type === 'FeatureLayer') {
+  if ((outputDS as any).layer || (outputDS as any).getLayer || (outputDS as any).type === 'FEATURE_LAYER') {
     return outputDS as FeatureLayerDataSource
   }
   

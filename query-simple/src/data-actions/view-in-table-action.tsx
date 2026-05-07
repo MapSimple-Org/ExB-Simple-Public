@@ -323,10 +323,10 @@ async function createLayerConfigFromDataSet(
       enableShowHideColumn: true,
       enableSelect: true,
       enableDelete: false,
-      selectMode: 'Multiple',
-      layerHonorMode: 'Webmap',
+      selectMode: 'MULTIPLE',
+      layerHonorMode: 'WEBMAP',
       dataActionObject: true,
-      dataActionType: 'View',
+      dataActionType: 'VIEW',
       ...(isRuntimeData ? { dataActionDataSource: dataSource } : { useDataSource }),
       dataActionWidgetId: initiatorWidgetId
     }

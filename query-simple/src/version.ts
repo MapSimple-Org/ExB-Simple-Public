@@ -10,7 +10,7 @@
  */
 const BASE_VERSION = '1.20.0'
 const RELEASE_NUMBER = '027' // Increment on major changes (001, 002, 003, ...)
-const MINOR_VERSION = '097' // r027.097 Trap: warn user when Select on Map cannot highlight non-HFL layers (BUG-SELECT-MAP-IMAGE-001).
+const MINOR_VERSION = '099' // r027.099 Fix: Table widget enum casing — selectMode, dataActionType, DS type all uppercased to match ExB 1.20 enums.
 
 export const WIDGET_VERSION = MINOR_VERSION && Number(MINOR_VERSION) > 0
   ? `${BASE_VERSION}-r${RELEASE_NUMBER}.${MINOR_VERSION}`

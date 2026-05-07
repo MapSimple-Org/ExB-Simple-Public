@@ -1,6 +1,6 @@
-# Release QS-r027.097 + FS-r005.016
+# Release QS-r027.099 + FS-r005.016
 
-**Release Date:** 2026-05-06
+**Release Date:** 2026-05-07
 **Experience Builder Version:** 1.20.0+
 **Previous Release:** [QS-r026.025 + FS-r004.005](RELEASE_QS-r026.025_FS-r004.005.md)
 
@@ -8,7 +8,7 @@
 
 | Family | Version | Status |
 |--------|---------|--------|
-| **QuerySimple + HelperSimple** | 1.20.0-r027.097 | Major update |
+| **QuerySimple + HelperSimple** | 1.20.0-r027.099 | Major update |
 | **FeedSimple** | 1.20.0-r005.016 | Major update |
 | **shared-code** | Required by both | Updated (security) |
 
@@ -113,6 +113,16 @@ Starting with r004 (shipped in the previous release), FeedSimple depends on `sha
 
 - **ExB 1.20 compatibility:** `getId()` coercion, `__esri` namespace migration (26 refs across 3 FS files), Calcite 5.0 NumericInput value widening (`number` -> `string | number`), ImmutableArray prop widening for ExB's immutable state, TS error cleanup to 0.
 - **Security hardening:** Inherits Group A (`escapeHtml()` on all substituted field values) and Group B (`isDangerousUrl()` blocking dangerous URL schemes) automatically from shared-code. 14 new security tests in `token-renderer.test.ts` covering both XSS prevention and URL scheme blocking.
+
+### View in Table Fix (r027.098-099)
+
+View in Table crashed on ExB 1.20 with `Cannot read properties of undefined (reading 'columnTemplates')`. The Table widget's internal enums changed from PascalCase to uppercase in ExB 1.20 (`LayerHonorModeType.Webmap = 'WEBMAP'`, not `'Webmap'`). Three enum values corrected:
+
+- `layerHonorMode`: `'Webmap'` → `'WEBMAP'` (crash fix)
+- `selectMode`: `'Multiple'` → `'MULTIPLE'` (multi-row selection)
+- `dataActionType`: `'View'` → `'VIEW'` (tab deduplication and selection sync)
+
+Also fixed `selection-utils.ts` DS type check: `'FeatureLayer'` → `'FEATURE_LAYER'` to match `DataSourceTypes` enum.
 
 ---
 

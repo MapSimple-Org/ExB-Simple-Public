@@ -7,6 +7,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 > **Archive**: For releases r001-r021, see [CHANGELOG_ARCHIVE_r001-r021.md](docs/archive/CHANGELOG_ARCHIVE_r001-r021.md)
 
+## [1.20.0-r027.099] - 2026-05-07 - View in Table: ExB 1.20 enum casing fix
+
+### Context
+View in Table crashed with `Cannot read properties of undefined (reading 'columnTemplates')` on ExB 1.20. Root cause: ExB 1.20's Table widget enums use uppercase values (`'WEBMAP'`, `'MULTIPLE'`, `'VIEW'`) but our data action passed PascalCase (`'Webmap'`, `'Multiple'`, `'View'`). The `constructTableTemplate` function in the Table widget matched none of its three branches, leaving `tableTemplate` undefined.
+
+### Changed
+- **`query-simple/src/data-actions/view-in-table-action.tsx`** — `layerHonorMode: 'Webmap'` → `'WEBMAP'` (r027.098), `selectMode: 'Multiple'` → `'MULTIPLE'`, `dataActionType: 'View'` → `'VIEW'` (r027.099). All three values verified against `LayerHonorModeType`, `SelectionModeType`, and `TableDataActionType` enums in `dist/widgets/common/table/src/config.ts`.
+- **`query-simple/src/runtime/selection-utils.ts`** — `type === 'FeatureLayer'` → `'FEATURE_LAYER'` to match `DataSourceTypes.FeatureLayer`. Low-risk fallback path, fixed for correctness.
+
+### Tests
+- **Smoke test updated**: `docs/testing/EXB_1_20_JSAPI_5_MANUAL_SMOKE.md` — Added Section K (Data Actions) covering View in Table, Export to CSV, Zoom To, and Pan To from results menu.
+
+### Stats
+- **Tests**: 535/535
+- **TS errors**: 0
+
+---
+
 ## [1.20.0-r027.097] - 2026-05-06 - Select on Map: direct highlight + non-HFL guard
 
 ### Context

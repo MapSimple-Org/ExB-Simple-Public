@@ -2,7 +2,7 @@
 
 Custom widgets for ArcGIS Experience Builder Developer Edition. Built for performance, deep-linking, and advanced result management.
 
-**Current Version**: QS `1.20.0-r027.097` | FS `1.20.0-r005.016`
+**Current Version**: QS `1.20.0-r027.099` | FS `1.20.0-r005.016`
 **Latest Update**: ExB 1.20 upgrade, security hardening, Select on Map fix (May 6, 2026)
 
 ## Key Differentiators (Why QuerySimple?)
@@ -21,7 +21,7 @@ QuerySimple is designed to solve the common pain points of the standard Experien
 
 > **Breaking Change:** This release targets **Experience Builder 1.20.0** with **ArcGIS Maps SDK for JavaScript 5.0.4** (Calcite 5.0). It is **not backward-compatible** with ExB 1.19. If you are still on ExB 1.19, use the previous release ([QS-r026.025 + FS-r004.005](docs/releases/RELEASE_QS-r026.025_FS-r004.005.md)).
 
-> Full release notes: [RELEASE_QS-r027.097_FS-r005.016](docs/releases/RELEASE_QS-r027.097_FS-r005.016.md)
+> Full release notes: [RELEASE_QS-r027.099_FS-r005.016](docs/releases/RELEASE_QS-r027.099_FS-r005.016.md)
 
 ### Unified Markdown Template Engine
 
