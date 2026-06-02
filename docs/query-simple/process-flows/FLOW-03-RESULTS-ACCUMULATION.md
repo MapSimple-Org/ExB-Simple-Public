@@ -39,36 +39,36 @@ identically. Results mode (New/Add/Remove) works the same for spatial results.
 
 ```
  Query completes with result.records
-      │                               ← query-execution-handler.ts:346-351
+      │                               ← query-execution-handler.ts:355-356
       │
       ├── NewSelection ──────────────────────────────┐
       │   recordsToDisplay = result.records          │
-      │   (clearResult() was called before query)    │ ← query-execution-handler.ts:226-232
+      │   (clearResult() was called before query)    │ ← query-execution-handler.ts:232-239
       │                                              │
       ├── AddToSelection ────────────────────────────┤
       │   │                                          │
       │   ▼                                          │
       │   mergeResultsIntoAccumulated(               │
-      │     outputDS, newRecords, existingRecords)    │ ← query-execution-handler.ts:406
-      │                ← results-management-utils.ts:120
+      │     outputDS, newRecords, existingRecords)    │ ← query-execution-handler.ts:437
+      │                ← results-management-utils.ts:121
       │   │                                          │
-      │   ├── Build existing keys Set                │ :136-176
-      │   │   ├── Check __queryConfigId attribute    │ :144
-      │   │   ├── Look up origin DS via DSManager    │ :156-158
-      │   │   └── Fallback: use outputDS             │ :174
+      │   ├── Build existing keys Set                │ :137-177
+      │   │   ├── Check __queryConfigId attribute    │ :145
+      │   │   ├── Look up origin DS via DSManager    │ :158
+      │   │   └── Fallback: use outputDS             │ :175
       │   │                                          │
-      │   ├── For each new record:                   │ :183-195
-      │   │   ├── Generate key via getRecordKey()    │ :184
-      │   │   ├── Key exists? → duplicateRecordIds   │ :187-189
-      │   │   └── Key new? → uniqueNewRecords        │ :191-193
+      │   ├── For each new record:                   │ :184-196
+      │   │   ├── Generate key via getRecordKey()    │ :185
+      │   │   ├── Key exists? → duplicateRecordIds   │ :188-190
+      │   │   └── Key new? → uniqueNewRecords        │ :192-194
       │   │                                          │
-      │   └── Return {                               │ :209-213
+      │   └── Return {                               │ :210-214
       │         mergedRecords: [...existing, ...new], │
       │         addedRecordIds,                      │
       │         duplicateRecordIds                   │
       │       }                                      │
       │   │                                          │
-      │   ├── All duplicates? → show alert           │ ← query-execution-handler.ts:442
+      │   ├── All duplicates? → show alert           │ ← query-execution-handler.ts:474-475
       │   └── recordsToDisplay = mergedRecords       │
       │                                              │
       ├── RemoveFromSelection ───────────────────────┤
@@ -76,12 +76,12 @@ identically. Results mode (New/Add/Remove) works the same for spatial results.
       │   ▼                                          │
       │   removeResultsFromAccumulated(              │
       │     outputDS, recordsToRemove, existing)     │
-      │                ← results-management-utils.ts:229
+      │                ← results-management-utils.ts:230
       │   │                                          │
-      │   ├── Empty existing? → return []            │ :235
-      │   ├── Empty toRemove? → return existing      │ :244
-      │   ├── Build removeKeys Set                   │ :254-256
-      │   └── Filter: keep records not in removeKeys │ :262-271
+      │   ├── Empty existing? → return []            │ :236
+      │   ├── Empty toRemove? → return existing      │ :245
+      │   ├── Build removeKeys Set                   │ :255-257
+      │   └── Filter: keep records not in removeKeys │ :263-272
       │                                              │
       └─────────────────────────────────────────────-┘
       │
@@ -97,7 +97,7 @@ identically. Results mode (New/Add/Remove) works the same for spatial results.
 
 ## Record Key Generation
 
-`getRecordKey()` (results-management-utils.ts:21) creates a composite key:
+`getRecordKey()` (results-management-utils.ts:22) creates a composite key:
 
 ```
 key = "${originDSId}_${objectId}"
@@ -131,32 +131,49 @@ This prevents false duplicates when different layers share objectId values.
 ## Two Parallel Visualization Paths
 
 After accumulation logic completes, results are visualized through one of two
-paths controlled by `config.addResultsAsMapLayer`. The accumulation logic
-(merge, dedup, remove) is identical in both paths -- only the graphics layer
-type and persistence differ.
+paths, selected by `config.addResultsAsMapLayer`:
+
+- **Path 3 (FeatureLayer)** when `addResultsAsMapLayer === true`: a GroupLayer of
+  per-geometry FeatureLayers, visible in the LayerList with native popup/identify.
+- **Path 1 (highlight-only)** when `addResultsAsMapLayer === false` (default):
+  ephemeral highlight graphics on a GraphicsLayer, not in the LayerList.
+
+The accumulation logic (merge, dedup, remove) is identical across both paths; only
+the layer type, persistence, and capabilities differ. (Path 2, a GraphicsLayer plus
+LayerList-proxy FeatureLayer, was removed in the Path 2 Removal effort, TODO #24.)
 
 ```
  recordsToDisplay (from merge/replace/filter above)
       |
-      +-- addResultsAsMapLayer === true ----+    LAYERLIST PATH
-      |   GroupLayer with child             |
-      |   GraphicsLayer                     |
-      |   +-- Visible in LayerList widget   |
-      |   +-- Persistent across queries     |
-      |   +-- createOrGetResultGroupLayer() |    <- graphics-layer-utils.ts:433
-      |   +-- addHighlightGraphics(         |
-      |       groupLayer, records, mapView) |
-      |                                     |
-      +-- addResultsAsMapLayer === false ---+    HIGHLIGHT-ONLY PATH
-      |   Simple GraphicsLayer              |
-      |   +-- NOT visible in LayerList      |
-      |   +-- Temporary, destroyed on clear |
-      |   +-- createOrGetGraphicsLayer()    |
-      |   +-- addHighlightGraphics(         |
-      |       graphicsLayer, records,       |
-      |       mapView)                      |
-      |                                     |
-      +-------------------------------------+
+      +-- addResultsAsMapLayer === true ----------------+    PATH 3 — FEATURE LAYER (in LayerList)
+      |   GroupLayer with per-geometry-type             |
+      |   client-side FeatureLayer children             |
+      |   (one each for point / polyline / polygon)     |
+      |   +-- Visible in LayerList widget               |
+      |   +-- Native popup/identify via FeatureLayerView|
+      |   +-- Persistent across queries; features added |
+      |       via applyEdits() in batches               |
+      |   +-- createResultGroupLayer() / getOrCreate-   |    <- result-feature-layer-factory.ts
+      |       FeatureLayer()                            |
+      |   +-- syncResultFeatureLayers() diffs records   |    <- widget.tsx, serialized via
+      |       and applies adds/removes                  |       async-serializer (r028.087)
+      |   +-- Empty per-geometry FL has legendEnabled   |
+      |       toggled to false; re-enabled on add       |       (r028.086)
+      |   +-- GroupLayer auto-enabled to true if user   |
+      |       toggled it off and runs a new query       |       (r028.081)
+      |   +-- Popup auto-closed when user toggles       |
+      |       GroupLayer off in LayerList               |       (r028.082)
+      |                                                 |
+      +-- addResultsAsMapLayer === false (default) -----+    PATH 1 — HIGHLIGHT-ONLY (ephemeral)
+      |   Simple GraphicsLayer                          |
+      |   +-- NOT visible in LayerList                  |
+      |   +-- Temporary, destroyed on clear             |
+      |   +-- createOrGetGraphicsLayer()                |
+      |   +-- addHighlightGraphics(                     |
+      |       graphicsLayer, records,                   |
+      |       mapView)                                  |
+      |                                                 |
+      +-------------------------------------------------+
       |
       v
  selectRecordsInDataSources()  [shared]
@@ -177,32 +194,32 @@ When a user clicks the X button on a result row:
  X button click
       │
       ▼
- removeRecord(data)                          ← query-result.tsx:1038
+ removeRecord(data)                          ← query-result.tsx:1113
       │   (thin wrapper → delegates to executeRemoveRecord)
       │                          ← record-removal-handler.ts (r024.131)
       │
       ▼
- removeRecordsFromOriginSelections(          ← results-management-utils.ts:305
+ removeRecordsFromOriginSelections(          ← results-management-utils.ts:306
    widgetId, recordsToRemove, outputDS,
    useGraphicsLayer?, graphicsLayer?, accumulatedRecords?)
       │
-      ├── Remove from graphics layer (if using)  :331-352
+      ├── Remove from graphics layer (if using)  :332-353
       │   └── removeHighlightGraphics(layer, ids, records)
       │
-      ├── Group records by origin DS             :354-421
-      │   ├── Primary: __originDSId attribute → DSManager lookup  :366-370
-      │   ├── Fallback: .dataSource property → getOriginDataSources  :373-378
-      │   └── Final: outputDS.getOriginDataSources()  :382-384
+      ├── Group records by origin DS             :356-422
+      │   ├── Primary: __originDSId attribute → DSManager lookup  :367-371
+      │   ├── Fallback: .dataSource property → getOriginDataSources  :374-380
+      │   └── Final: outputDS.getOriginDataSources()  :383-402
       │
-      ├── For each origin DS:                    :434-end
-      │   ├── Get current IDs                    :440
+      ├── For each origin DS:                    :435-end
+      │   ├── Get current IDs                    :441
       │   │   └── originDS.getSelectedRecordIds()
       │   │       (r027.010: ID-based — records not available in 1.20)
-      │   ├── Build recordIdsToRemove Set        :443
+      │   ├── Build recordIdsToRemove Set        :444
       │   │   └── String(r.getId()) for type-safe comparison
-      │   ├── Filter: keep IDs not in remove set :446
+      │   ├── Filter: keep IDs not in remove set :447
       │   │   └── currentSelectedIds.filter(id => !recordIdsToRemove.has(String(id)))
-      │   ├── originDS.selectRecordsByIds(remainingIds, [])  :482
+      │   ├── originDS.selectRecordsByIds(remainingIds, [])  :483
       │   │   (r027.010: empty records array — 1.20 only stores IDs)
       │   └── Publish DataRecordsSelectionChangeMessage
       │
@@ -213,12 +230,12 @@ When a user clicks the X button on a result row:
 
 ## Test Coverage
 
-`tests/results-management-utils.test.ts` — 12 tests:
-- `getRecordKey`: origin DS key, fallback to outputDS
-- `mergeResultsIntoAccumulated`: merge with dedup, empty new, empty existing, all duplicates
-- `removeResultsFromAccumulated`: remove matching, empty existing, empty toRemove, remove all
-- `removeRecordsFromOriginSelections`: group by origin + update, empty input
+`tests/results-management-utils.test.ts` — 17 tests:
+- `getRecordKey` (7): origin DS key, fallback to outputDS, plus __originDSId-preference cases (r025)
+- `mergeResultsIntoAccumulated` (4): merge with dedup, empty new, empty existing, all duplicates
+- `removeResultsFromAccumulated` (4): remove matching, empty existing, empty toRemove, remove all
+- `removeRecordsFromOriginSelections` (2): group by origin + update, empty input
 
 ---
 
-*Last updated: r027.017 (2026-04-06) — corrected line numbers for results-management-utils.ts and query-result.tsx*
+*Last updated: r028.118 (2026-06-02) — line-ref accuracy audit: resynced results-management-utils.ts / query-execution-handler.ts / query-result.tsx line numbers and test counts to current code*

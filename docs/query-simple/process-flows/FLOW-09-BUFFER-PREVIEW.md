@@ -14,9 +14,9 @@ users visually confirm spatial extent before executing a query.
 | File | Purpose |
 |------|---------|
 | `runtime/managers/use-buffer-preview.ts` | Hook: per-geometry buffering, operator selection, layer creation, unmount cleanup. Accepts `inputGeometries: __esri.Geometry[]` (array). Stores last graphic in singleton. Returns `bufferedGeometry` for spatial query use. |
-| `runtime/tabs/SpatialTabContent.tsx` | Consumer: derives input geometries, passes to hook. Draw mode passes `drawnGeometries[]` directly as `allInputGeometries`. Uses returned `bufferedGeometry` as query geometry when buffer is active. |
-| `runtime/execute-spatial-query.ts` | Receives buffered geometry as `inputGeometry` (with `bufferDistance: 0`) — evaluates spatial relationships against the actual visible buffer shape. |
-| `runtime/geometry-from-draw.tsx` | Precedent: three-case buffer operator pattern (lines 63-129) |
+| `runtime/tabs/SpatialTabContent.tsx` | Consumer: derives input geometries, passes to hook. Draw mode assembles `drawnGeometries[]`, plus the current result geometries (`accumulatedRecords[].feature.geometry`) when the "Also include current results" checkbox is on (r028.118), then groups by type and unions same-type parts into `allInputGeometries`. Uses returned `bufferedGeometry` as query geometry when buffer is active. |
+| `runtime/execute-spatial-query.ts` | Receives `inputGeometries` (array, r028.101). The buffered case passes `[bufferedGeometry]` with `bufferDistance: 0`, evaluating spatial relationships against the actual visible buffer shape. |
+| `runtime/geometry-from-draw.tsx` | Precedent: three-case buffer operator pattern (`applyBufferEffect`, lines 85-134) |
 | `runtime/graphics-cleanup-utils.ts` | Buffer layer destroy on widget unmount; buffer `removeAll()` on explicit clear |
 | `runtime/managers/selection-restoration-manager.ts` | Imperative buffer clear on panel close (`clearSelectionFromMap`) and restore on reopen (`addSelectionToMap`) |
 | `runtime/graphics-state-manager.ts` | Singleton: stores last buffer graphic per widget for imperative restore |
@@ -30,13 +30,14 @@ Map Layers (top to bottom):
   │   Red CIM teardrop on card hover    │
   ├─────────────────────────────────────┤
   │ querysimple-buffer-{widgetId}       │  ← Buffer preview (this flow)
-  │   Semi-transparent yellow polygon   │
+  │   Semi-transparent polygon          │
+  │   (configurable color, default orange) │
   ├─────────────────────────────────────┤
   │ JimuDraw internal layer             │  ← Temporary drawn geometry
   │   (managed by JimuDraw, Draw mode)  │
   ├─────────────────────────────────────┤
-  │ querysimple-highlight-{widgetId}    │  ← Query result highlights
-  │   or querysimple-results-{widgetId} │
+  │ querysimple-highlight-{widgetId}    │  ← Path 1 query result graphics
+  │   or querysimple-fl-{widgetId}      │  ← Path 3 GroupLayer (per-geometry FLs)
   └─────────────────────────────────────┘
 ```
 
@@ -44,7 +45,7 @@ Map Layers (top to bottom):
 > map-level shared collection) onto a per-widget `querysimple-hover-{widgetId}`
 > GraphicsLayer. The earlier home was vulnerable to cross-widget collisions
 > when any QS widget called `mapView.graphics.removeAll()` during clear-results.
-> See `docs/bugs/HOVER-PIN-CROSS-WIDGET-BUG.md` for the investigation.
+> See `docs/bugs/archive/HOVER-PIN-CROSS-WIDGET-BUG.md` for the investigation.
 
 ---
 
@@ -104,8 +105,9 @@ Remove previous buffer graphic
   │
   ▼
 Add new Graphic to buffer layer
-  │  Symbol: yellow fill (0.25 opacity)
-  │  orange outline (1.5px)
+  │  Symbol: configurable color (default orange #FFA500)
+  │  fill 0.25 opacity, same-color outline 0.8 opacity 1.5px
+  │  (buildBufferSymbol via widgetConfigManager.getBufferColor)
   │
   ▼
 Store bufferedGeometry in state              ← r025.035
@@ -128,7 +130,7 @@ Return bufferedGeometry to SpatialTabContent  ← r025.035
 
 ### 1. Spatial Reference Branching
 
-Same three-case logic as `geometry-from-draw.tsx:79-128`:
+Same three-case logic as `geometry-from-draw.tsx:85-134`:
 
 | Condition | Operator | Load Method |
 |-----------|----------|-------------|
@@ -147,7 +149,15 @@ Buffer calculation skips (clears layer) when:
 | Spatial Mode | Input Geometry |
 |-------------|----------------|
 | **Operations** | Union of all accumulated record geometries (via `unionOperator.executeMany`) |
-| **Draw** | `drawnGeometries[]` passed directly as `allInputGeometries` (r025.041+) |
+| **Draw** | `drawnGeometries[]`, plus the current result geometries (`accumulatedRecords[].feature.geometry`) when the "Also include current results" checkbox is on (r028.118); same-type parts are grouped and unioned into `allInputGeometries` (r025.041+) |
+
+**r028.119 — `allInputGeometries` is assembled event-driven.** It is rebuilt only on real
+input events (a shape drawn/edited/cleared, the toggle, a mode change, smart-default, and
+an operations-mode prop-sync), not by a `useEffect` watching `[drawnGeometries,
+accumulatedRecords, ...]`. This is why the buffer no longer redraws after it is cleared:
+under the old reactive assembly, a post-query `accumulatedRecords` change re-emitted a new
+`allInputGeometries` reference, and this hook (which keys on `inputGeometries` by reference)
+treated it as a real change and re-buffered. Draw mode no longer reacts to results at all.
 
 ---
 
@@ -186,7 +196,7 @@ Union all buffer polygons → single preview polygon
 
 ### Creation
 
-The buffer preview layer is created lazily by the `useBufferPreview` hook when `enabled` becomes true for the first time. In GroupLayer mode (LayerList), it is added INSIDE the GroupLayer for automatic visibility inheritance. In GraphicsLayer mode (highlight), it is added directly to the map.
+The buffer preview layer is created lazily by the `useBufferPreview` hook when `enabled` becomes true for the first time. The parent is chosen based on which result-rendering path is active (r028.083, r028.096). When Path 3's GroupLayer exists the buffer is parented to it (so it inherits visibility); otherwise (Path 1) the buffer becomes a standalone top-level layer. The Path 2 GroupLayer fallback was removed with Path 2 (TODO #24).
 
 ```
 enabled = true (mapView + distance ≠ 0 + spatial tab + panel visible)
@@ -197,15 +207,15 @@ loadArcGISJSAPIModules(['esri/layers/GraphicsLayer', 'esri/Graphic'])
   ▼
 Create GraphicsLayer (id: querysimple-buffer-{widgetId}, listMode: 'hide')
   │
-  ├── GroupLayer exists (querysimple-results-{widgetId})?
+  ├── Path 3 GroupLayer exists (querysimple-fl-{widgetId})?
   │     │
   │     ▼
-  │   groupLayer.add(bufferLayer)      ← INSIDE GroupLayer, inherits visibility
+  │   path3Group.add(bufferLayer)      ← INSIDE Path 3 group, inherits visibility
   │
-  └── No GroupLayer?
+  └── No GroupLayer (Path 1)?
         │
         ▼
-      mapView.map.add(bufferLayer)     ← standalone on map
+      mapView.map.add(bufferLayer)     ← standalone on map; destroyed via hook unmount
 ```
 
 ### Cleanup & Visibility — Three Scenarios
@@ -313,18 +323,19 @@ User clicks Execute (buffer distance > 0)
   ▼
 SpatialTabContent checks: parsedBuffer > 0 && bufferedGeometry?
   │
-  ├── Yes: send bufferedGeometry as inputGeometry, bufferDistance=0
-  │         (server sees a polygon, no distance — clean spatial evaluation)
+  ├── Yes: send [bufferedGeometry] as inputGeometries, bufferDistance=0
+  │         (one unioned polygon covering every part, clean spatial evaluation)
   │
-  └── No buffer: send original inputGeometry as-is
-  │
-  ▼
-execute-spatial-query.ts receives inputGeometry
+  └── No buffer: send allInputGeometries (one geometry per type) as-is
   │
   ▼
-query.geometry = inputGeometry (the buffered polygon)
+execute-spatial-query.ts receives inputGeometries[] (r028.101)
+  │
+  ▼
+For each input geometry: query.geometry = geom
 query.spatialRelationship = selectedRelationship
 query.distance = 0  (no server-side buffer)
+matches deduped by objectId per layer, then combined
   │
   ▼
 featureLayer.queryFeatures(query)
@@ -363,4 +374,4 @@ creation patterns warrant it.*
 
 ---
 
-*Last updated: r025.044 (2026-03-10)*
+*Last updated: r028.119 (2026-06-02) -- allInputGeometries is now assembled event-driven (not a useEffect watching state), which fixes the buffer redrawing itself after being cleared on a spatial query: the old reactive assembly re-emitted a new inputGeometries reference on a post-query accumulatedRecords change, and this hook re-buffered on the reference change. Draw mode no longer reacts to results. Prior r028.118: Draw mode folds result geometries into the buffer input via the "Also include current results" checkbox; same-type parts unioned before buffering.*

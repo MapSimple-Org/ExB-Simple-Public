@@ -11,13 +11,17 @@
  * @since 1.19.0-r024.120
  */
 
-import type GroupLayer from '@arcgis/core/layers/GroupLayer'
+// r028.098 (Chunk D of Path 2 Removal): deleted all Path-2-only state from this
+// manager — the MapView cache (`_mapViewCache` + get/set/deleteMapView), the
+// GroupLayer creation-lock (`_groupLayerCreation` + get/set/delete/hasGroupLayerCreation),
+// and the legend-FL visibility handles (`_legendVisibilityHandles` /
+// `_legendVisibilityHandleIds` + their 6 accessors). All were caller-less after
+// Chunk C. Dropped the now-unused `GroupLayer` / `MapView` / `SceneView` imports, the
+// `WatchHandle` type, and the `debugLogger` (its only uses were the PATH-2
+// instrumentation logs inside the deleted methods). Remaining state is Path-1/Path-3
+// shared: the GraphicsLayer creation-lock and lastBufferGraphic.
 import type GraphicsLayer from '@arcgis/core/layers/GraphicsLayer'
-import type MapView from '@arcgis/core/views/MapView'
-import type SceneView from '@arcgis/core/views/SceneView'
 import type Graphic from '@arcgis/core/Graphic'
-/** Minimal handle type — JSAPI 5.0 exports ResourceHandle, 4.x does not. */
-type WatchHandle = { remove(): void }
 
 class GraphicsStateManager {
   private static instance: GraphicsStateManager
@@ -25,26 +29,14 @@ class GraphicsStateManager {
   // Global sequence counter for graphics operations to track timing across calls
   private _operationSequence: number = 0
 
-  // r024.17: Track in-progress GroupLayer creation to prevent race condition duplicates
-  private _groupLayerCreation = new Map<string, Promise<GroupLayer | null>>()
-
   // r024.61: Track in-progress GraphicsLayer creation to prevent race condition duplicates.
   // Without this, concurrent calls both pass the "does it exist?" check before either adds
   // to the map, creating two layers with the same ID.
   private _graphicsLayerCreation = new Map<string, Promise<GraphicsLayer | null>>()
 
-  // r024.19: Track Legend FeatureLayer visibility watch handles for cleanup
-  // r024.31: Now also tracked in globalHandleManager for centralized cleanup
-  private _legendVisibilityHandles = new Map<string, WatchHandle>()
-  private _legendVisibilityHandleIds = new Map<string, string>() // legendLayerId -> globalHandleManager handleId
-
   // r025.015: Buffer visibility watcher removed — buffer layer is now added
   // INSIDE the GroupLayer, so visibilityMode:'inherited' handles visibility
   // automatically. No watcher handle storage needed.
-
-  // r024.59: Cache mapView per widgetId so the legend-layer visibility watcher
-  // can close the popup when the user toggles the layer off in the Layer List.
-  private _mapViewCache = new Map<string, MapView | SceneView>()
 
   // r025.020: Store last buffer graphic per widget for imperative restore on panel reopen.
   // Effects are unreliable for panel close/reopen — imperative clear/restore is symmetric
@@ -72,26 +64,6 @@ class GraphicsStateManager {
   }
 
   // ---------------------------------------------------------------------------
-  // GroupLayer creation lock
-  // ---------------------------------------------------------------------------
-
-  public getGroupLayerCreation(layerId: string): Promise<GroupLayer | null> | undefined {
-    return this._groupLayerCreation.get(layerId)
-  }
-
-  public setGroupLayerCreation(layerId: string, promise: Promise<GroupLayer | null>): void {
-    this._groupLayerCreation.set(layerId, promise)
-  }
-
-  public deleteGroupLayerCreation(layerId: string): boolean {
-    return this._groupLayerCreation.delete(layerId)
-  }
-
-  public hasGroupLayerCreation(layerId: string): boolean {
-    return this._groupLayerCreation.has(layerId)
-  }
-
-  // ---------------------------------------------------------------------------
   // GraphicsLayer creation lock
   // ---------------------------------------------------------------------------
 
@@ -109,54 +81,6 @@ class GraphicsStateManager {
 
   public hasGraphicsLayerCreation(layerId: string): boolean {
     return this._graphicsLayerCreation.has(layerId)
-  }
-
-  // ---------------------------------------------------------------------------
-  // Legend visibility watch handles
-  // ---------------------------------------------------------------------------
-
-  public getLegendVisibilityHandle(legendLayerId: string): WatchHandle | undefined {
-    return this._legendVisibilityHandles.get(legendLayerId)
-  }
-
-  public setLegendVisibilityHandle(legendLayerId: string, handle: WatchHandle): void {
-    this._legendVisibilityHandles.set(legendLayerId, handle)
-  }
-
-  public deleteLegendVisibilityHandle(legendLayerId: string): boolean {
-    return this._legendVisibilityHandles.delete(legendLayerId)
-  }
-
-  // ---------------------------------------------------------------------------
-  // Legend visibility handle IDs (for globalHandleManager cleanup)
-  // ---------------------------------------------------------------------------
-
-  public getLegendVisibilityHandleId(legendLayerId: string): string | undefined {
-    return this._legendVisibilityHandleIds.get(legendLayerId)
-  }
-
-  public setLegendVisibilityHandleId(legendLayerId: string, handleId: string): void {
-    this._legendVisibilityHandleIds.set(legendLayerId, handleId)
-  }
-
-  public deleteLegendVisibilityHandleId(legendLayerId: string): boolean {
-    return this._legendVisibilityHandleIds.delete(legendLayerId)
-  }
-
-  // ---------------------------------------------------------------------------
-  // MapView cache
-  // ---------------------------------------------------------------------------
-
-  public getMapView(widgetId: string): MapView | SceneView | undefined {
-    return this._mapViewCache.get(widgetId)
-  }
-
-  public setMapView(widgetId: string, mapView: MapView | SceneView): void {
-    this._mapViewCache.set(widgetId, mapView)
-  }
-
-  public deleteMapView(widgetId: string): boolean {
-    return this._mapViewCache.delete(widgetId)
   }
 
   // ---------------------------------------------------------------------------

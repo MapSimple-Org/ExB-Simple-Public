@@ -201,6 +201,133 @@ class WidgetConfigManager {
     return this.hexToRgb(hex)
   }
 
+  // ─── Result Click Behavior ──────────────────────────────────────────
+
+  /**
+   * r028.049: Whether clicking a result zooms to it (default: false)
+   */
+  public getZoomOnResultClick(widgetId: string): boolean {
+    const config = this.configCache.get(widgetId)
+    return config?.zoomOnResultClick === true
+  }
+
+  /**
+   * r028.049: Whether clicking a result pans to it without zoom change (default: false).
+   * Mutually exclusive with zoomOnResultClick.
+   */
+  public getPanOnResultClick(widgetId: string): boolean {
+    const config = this.configCache.get(widgetId)
+    return config?.panOnResultClick === true
+  }
+
+  // ─── Hover Preview ────────────────────────────────────────────────
+
+  /**
+   * r028.049: Hover pin color hex (default: '#EA4335' red)
+   */
+  public getHoverPinColor(widgetId: string): string {
+    const config = this.configCache.get(widgetId)
+    return config?.hoverPinColor || '#EA4335'
+  }
+
+  // ─── Result Display ───────────────────────────────────────────────
+
+  /**
+   * r028.049: Result list direction (default: Vertical)
+   */
+  public getResultListDirection(widgetId: string): string {
+    const config = this.configCache.get(widgetId)
+    return (config?.resultListDirection as string) || 'Vertical'
+  }
+
+  /**
+   * r028.049: Result paging style (default: Simple)
+   */
+  public getResultPagingStyle(widgetId: string): string {
+    const config = this.configCache.get(widgetId)
+    return (config?.resultPagingStyle as string) || 'Simple'
+  }
+
+  /**
+   * r028.049: Default page size for query task lists (default: 10)
+   */
+  public getDefaultPageSize(widgetId: string): number {
+    const config = this.configCache.get(widgetId)
+    return config?.defaultPageSize ?? 10
+  }
+
+  /**
+   * r028.049: Lazy load initial page size (default: 20)
+   */
+  public getLazyLoadInitialPageSize(widgetId: string): number {
+    const config = this.configCache.get(widgetId)
+    return config?.lazyLoadInitialPageSize ?? 20
+  }
+
+  // ─── Mobile Popup Behavior ────────────────────────────────────────
+
+  /**
+   * r028.049: Open popup collapsed on mobile (default: false)
+   */
+  public getMobilePopupCollapsed(widgetId: string): boolean {
+    const config = this.configCache.get(widgetId)
+    return config?.mobilePopupCollapsed === true
+  }
+
+  /**
+   * r028.049: Dock position on mobile (default: '' for JSAPI auto)
+   */
+  public getMobilePopupDockPosition(widgetId: string): string {
+    const config = this.configCache.get(widgetId)
+    return (config?.mobilePopupDockPosition as string) || ''
+  }
+
+  /**
+   * r028.049: Hide dock toggle button on mobile (default: false)
+   */
+  public getMobilePopupHideDockButton(widgetId: string): boolean {
+    const config = this.configCache.get(widgetId)
+    return config?.mobilePopupHideDockButton === true
+  }
+
+  /**
+   * r028.049: Hide popup action bar on mobile (default: false)
+   */
+  public getMobilePopupHideActionBar(widgetId: string): boolean {
+    const config = this.configCache.get(widgetId)
+    return config?.mobilePopupHideActionBar === true
+  }
+
+  // ─── Query Items ──────────────────────────────────────────────────
+
+  /**
+   * r028.049: Get the full query items array. Returns empty array if not registered.
+   */
+  public getQueryItems(widgetId: string): any[] {
+    const config = this.configCache.get(widgetId)
+    const items = config?.queryItems
+    if (!items) return []
+    return Array.isArray(items) ? items : Array.from(items as any)
+  }
+
+  /**
+   * r028.049: Look up a single query item by configId.
+   */
+  public getQueryItemByConfigId(widgetId: string, configId: string): any | undefined {
+    return this.getQueryItems(widgetId).find((q: any) => q.configId === configId)
+  }
+
+  // ─── Path 3 Behavior ───────────────────────────────────────────────
+
+  /**
+   * r028.048: Whether to flash and scroll to the matching result card
+   * when a Path 3 feature is clicked on the map (default: true)
+   */
+  public getFlashOnMapIdentify(widgetId: string): boolean {
+    const config = this.configCache.get(widgetId)
+    return config?.flashOnMapIdentify !== false
+  }
+
   // ─── Zoom Behavior ─────────────────────────────────────────────────
 
   /**

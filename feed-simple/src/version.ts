@@ -10,7 +10,7 @@
  */
 const BASE_VERSION = '1.20.0'
 const RELEASE_NUMBER = '005' // Increment on major changes (001, 002, 003, ...)
-const MINOR_VERSION = '016' // r005.016: Security: isDangerousUrl() blocks dangerous schemes in markdown links/images + resolveExternalLinkUrl. 26 security tests added.
+const MINOR_VERSION = '018' // r005.018: Shared-code touch only — query-simple's Path 2 Removal P4-1 removed the 'PATH-2' debug flag from createQuerySimpleDebugLogger in shared-code/debug-logger.ts. FeedSimple's logger factory is untouched; no functional change. Bumped per the shared-code consumer rule.
 
 export const WIDGET_VERSION = MINOR_VERSION && Number(MINOR_VERSION) > 0
   ? `${BASE_VERSION}-r${RELEASE_NUMBER}.${MINOR_VERSION}`

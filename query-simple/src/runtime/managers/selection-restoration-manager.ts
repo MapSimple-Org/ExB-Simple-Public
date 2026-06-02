@@ -7,6 +7,10 @@ import type GraphicsLayer from '@arcgis/core/layers/GraphicsLayer'
 import type MapView from '@arcgis/core/views/MapView'
 import type SceneView from '@arcgis/core/views/SceneView'
 import type Layer from '@arcgis/core/layers/Layer'
+// r028.094: Path 3 GroupLayer ID for the panel-reopen restoration optimization
+// (see addSelectionToMap below). Pre-Phase-1 the optimization hardcoded Path 2's
+// `querysimple-results-*` prefix; post-Phase-1 it must use Path 3's `querysimple-fl-*`.
+import { getGroupLayerId as getPath3GroupLayerId } from '../result-feature-layer-factory'
 
 const debugLogger = createQuerySimpleDebugLogger()
 
@@ -263,16 +267,25 @@ export class SelectionRestorationManager {
       note: 'r022.2: lastSelection removed - accumulatedRecords is universal source of truth'
     })
 
-    // r024.3: When LayerList mode enabled and GroupLayer exists, skip restoration (graphics already there)
+    // r024.3 (original): When LayerList mode is enabled and the persistent results
+    // GroupLayer is still on the map, skip restoration — the results survived the
+    // panel close and don't need to be re-drawn.
+    //
+    // r028.094: Repointed at Path 3's GroupLayer ID. The optimization's intent
+    // applies equally to Path 3 (results in FeatureLayers inside `querysimple-fl-*`
+    // GroupLayer) as it did to Path 2 (`querysimple-results-*`). The hardcoded
+    // prefix was a pre-Phase-1 holdover that silently stopped firing once Phase 1
+    // flipped `addResultsAsMapLayer` semantics from "use Path 2" to "use Path 3",
+    // causing redundant restoration work on every Path-3 panel reopen.
     if (addResultsAsMapLayer && mapView) {
-      const groupLayerId = `querysimple-results-${this.widgetId}`
+      const groupLayerId = getPath3GroupLayerId(this.widgetId)
       const existingGroupLayer = mapView.map.layers.find((layer: Layer) => layer.id === groupLayerId)
       if (existingGroupLayer) {
         debugLogger.log('RESTORE', {
           event: 'addSelectionToMap-skipped-layerlist-mode',
           widgetId: this.widgetId,
           groupLayerId,
-          note: 'r024.3: GroupLayer exists on map - graphics already present, skipping restoration'
+          note: 'r028.094: Path 3 GroupLayer present — results persist across panel close, skipping restoration'
         })
         return
       }

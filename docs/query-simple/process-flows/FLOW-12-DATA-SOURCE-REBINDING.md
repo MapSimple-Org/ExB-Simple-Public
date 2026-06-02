@@ -14,8 +14,8 @@ analyzing field compatibility, and applying the rebinding across all affected
 query items in one operation.
 
 **Key files:**
-- `query-simple/src/setting/rebind-tool.tsx` -- rebinding UI component (517 lines)
-- `query-simple/src/setting/rebind-utils.ts` -- pure functions for analysis and remapping (341 lines)
+- `query-simple/src/setting/rebind-tool.tsx` -- rebinding UI component (516 lines)
+- `query-simple/src/setting/rebind-utils.ts` -- pure functions for analysis and remapping (350 lines)
 - `query-simple/src/setting/query-item-list.tsx` -- broken DS detection and banner (lines 49-66, 159-171)
 - `query-simple/src/setting/setting.tsx` -- `updateConfigForOptions` / `getAllDataSources` host
 - `query-simple/src/config.ts` -- QueryItemType definition
@@ -61,7 +61,7 @@ query items in one operation.
       +-- Fields differ --------> Field mapping table (manual or skip)
       |
       v
- applyRebinding() deep clones + remaps items       <- rebind-utils.ts:267-328
+ applyRebinding() deep clones + remaps items       <- rebind-utils.ts:267-338
       |
       v
  updateConfigForOptions(['queryItems', ...,         <- rebind-tool.tsx:259
@@ -220,7 +220,7 @@ All extracted field names are collected into a `Set<string>` for deduplication.
 
 ---
 
-## 4. Apply Flow (rebind-utils.ts:267-328)
+## 4. Apply Flow (rebind-utils.ts:267-338)
 
 `applyRebinding()` processes each query item in the config array. Items whose
 `useDataSource.dataSourceId` does not match `oldDsId` pass through unchanged.
@@ -252,6 +252,11 @@ remapped:
       +-- 5. Remap resultDisplayFields
       |       Array map: fieldMap[f] ?? f
       |
+      +-- 5b. Remap resultFieldAliases keys (r028.117)
+      |       Map keyed by field name; rebuild with
+      |       fieldMap[oldName] ?? oldName, value (label) preserved
+      |       (rebind-utils.ts:309-317)
+      |
       +-- 6. Remap sortOptions
       |       Each opt.jimuFieldName replaced via fieldMap
       |
@@ -265,7 +270,7 @@ remapped:
 ```
 
 For auto-heal mode, `buildIdentityFieldMap()` creates a map where each field
-maps to itself (rebind-utils.ts:334-340). This ensures `applyRebinding()`
+maps to itself (rebind-utils.ts:344-350). This ensures `applyRebinding()`
 still runs the full DS swap logic while leaving field names unchanged.
 
 ---
@@ -346,3 +351,7 @@ name are preserved in the output.
 Each query item's `outputDataSourceId` is not changed during rebinding.
 The `getAllDataSources()` rebuild handles updating the output DS metadata
 (URL, geometry type, etc.) from the new source data source automatically.
+
+---
+
+*Last updated: r028.118 (2026-06-02) -- documented the resultFieldAliases alias-map key remap (r028.117): on rebind, `applyRebinding()` rebuilds the alias map keyed by the new field names (`fieldMap[oldName] ?? oldName`) alongside `resultDisplayFields`, preserving per-field labels (rebind-utils.ts:309-317). Accuracy pass: corrected file line counts (rebind-tool.tsx 517->516, rebind-utils.ts 341->350) and drifted refs (applyRebinding :267-328->:267-338, buildIdentityFieldMap :334-340->:344-350).*

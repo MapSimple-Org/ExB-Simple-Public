@@ -45,6 +45,27 @@ export interface QueryErrorAlertState {
   timestamp?: number
 }
 
+/**
+ * r028.114: Result-set truncation. The service returned its maximum transfer
+ * count and `exceededTransferLimit` was true — there are MORE matching records
+ * than were returned. `recordLimit` is the returned (shown) count.
+ *
+ * r028.122: Both query paths now fetch the TRUE total matching count (via a
+ * count-only query) when truncation is real, so the alert can name the actual
+ * number. `totalMatchCount` is that total when known (undefined if the count
+ * couldn't be fetched — message falls back to the generic wording).
+ * `totalMatchCountIsLowerBound` is true when the total is a floor rather than
+ * exact (spatial multi-geometry input — the unique union can't be cheaply
+ * deduped, so we report the largest sub-query total as "at least N").
+ */
+export interface TruncationAlertState {
+  show: boolean
+  recordLimit: number
+  totalMatchCount?: number
+  totalMatchCountIsLowerBound?: boolean
+  timestamp?: number
+}
+
 /** r022.21: Add mode — all found records are duplicates */
 export interface AllDuplicatesAlertState {
   show: boolean
@@ -70,6 +91,8 @@ export interface QueryTaskState {
   queryErrorAlert: QueryErrorAlertState | null
   /** Zero results alert */
   noResultsAlert: NoResultsAlertState | null
+  /** r028.114: Result-set truncation alert (hit the service transfer limit) */
+  truncationAlert: TruncationAlertState | null
   /** Add mode — all duplicates alert */
   allDuplicatesAlert: AllDuplicatesAlertState | null
   /** Remove mode — no matching records alert */
@@ -95,6 +118,7 @@ export type QueryTaskAction =
   | { type: 'SET_ZOOM_ERROR'; payload: string | null }
   | { type: 'SET_QUERY_ERROR_ALERT'; payload: QueryErrorAlertState | null }
   | { type: 'SET_NO_RESULTS_ALERT'; payload: NoResultsAlertState | null }
+  | { type: 'SET_TRUNCATION_ALERT'; payload: TruncationAlertState | null }
   | { type: 'SET_ALL_DUPLICATES_ALERT'; payload: AllDuplicatesAlertState | null }
   | { type: 'SET_NO_REMOVAL_ALERT'; payload: NoRemovalAlertState | null }
   | { type: 'SET_QUERY_EXECUTED'; payload: boolean }
@@ -115,6 +139,7 @@ export const INITIAL_STATE: QueryTaskState = {
   zoomError: null,
   queryErrorAlert: null,
   noResultsAlert: null,
+  truncationAlert: null,
   allDuplicatesAlert: null,
   noRemovalAlert: null,
   queryJustExecuted: false,
@@ -147,6 +172,9 @@ export function queryTaskReducer (state: QueryTaskState, action: QueryTaskAction
     case 'SET_NO_RESULTS_ALERT':
       return { ...state, noResultsAlert: action.payload }
 
+    case 'SET_TRUNCATION_ALERT':
+      return { ...state, truncationAlert: action.payload }
+
     case 'SET_ALL_DUPLICATES_ALERT':
       return { ...state, allDuplicatesAlert: action.payload }
 
@@ -175,6 +203,7 @@ export function queryTaskReducer (state: QueryTaskState, action: QueryTaskAction
         zoomError: null,
         queryErrorAlert: null,
         noResultsAlert: null,
+        truncationAlert: null,
         allDuplicatesAlert: null,
         noRemovalAlert: null,
         queryJustExecuted: false,

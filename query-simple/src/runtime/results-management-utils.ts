@@ -6,7 +6,6 @@
 import type { FeatureLayerDataSource, FeatureDataRecord, DataRecord } from 'jimu-core'
 import { DataSourceManager, DataSourceStatus, MessageManager, DataRecordSetChangeMessage, RecordSetChangeType, DataRecordsSelectionChangeMessage } from 'jimu-core'
 import type GraphicsLayer from '@arcgis/core/layers/GraphicsLayer'
-import type GroupLayer from '@arcgis/core/layers/GroupLayer'
 import { createQuerySimpleDebugLogger } from 'widgets/shared-code/mapsimple-common'
 import { removeHighlightGraphics, getGraphicsCountFromLayer } from './graphics-layer-utils'
 
@@ -309,7 +308,7 @@ export function removeRecordsFromOriginSelections(
   recordsToRemove: FeatureDataRecord[],
   outputDS: FeatureLayerDataSource,
   useGraphicsLayer?: boolean,
-  graphicsLayer?: GraphicsLayer | GroupLayer,
+  graphicsLayer?: GraphicsLayer,
   accumulatedRecords?: FeatureDataRecord[]
 ): void {
   debugLogger.log('RESULTS-MODE', {

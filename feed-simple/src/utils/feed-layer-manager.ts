@@ -21,6 +21,7 @@ import { substituteTokens, type FilterContext } from './token-renderer'
 import { convertTemplateToHtml } from './markdown-template-utils'
 import { debugLogger } from './debug-logger'
 import { MOBILE_BREAKPOINT_PX } from '../constants'
+import { applyMobilePopupBehavior } from 'widgets/shared-code/mapsimple-common'
 import type MapView from '@arcgis/core/views/MapView'
 import type SceneView from '@arcgis/core/views/SceneView'
 import type Renderer from '@arcgis/core/renderers/Renderer'
@@ -654,58 +655,8 @@ function buildRenderer (config: IMConfig): Renderer {
 }
 
 // ── Mobile Popup Behavior ────────────────────────────────────────
-
-/** Popup behavior params — extracted from config so callers don't need IMConfig */
-export interface MobilePopupParams {
-  mobilePopupDockPosition?: string
-  mobilePopupHideDockButton?: boolean
-  mobilePopupHideActionBar?: boolean
-  mobilePopupCollapsed?: boolean
-}
-
-/**
- * Apply mobile-specific popup behavior when viewport ≤ 600px.
- * Sets dockEnabled / dockOptions on the Popup instance.
- * Restores JSAPI defaults on desktop-width viewports.
- *
- * Accepts either an IMConfig or a plain MobilePopupParams object,
- * so both feed-layer-manager and map-interaction can share this logic.
- */
-export function applyMobilePopupBehavior (
-  mapView: MapView | SceneView,
-  params: MobilePopupParams
-): void {
-  if (!mapView?.popup) return
-  const isMobile = mapView.width <= MOBILE_BREAKPOINT_PX
-
-  if (isMobile && params.mobilePopupDockPosition) {
-    mapView.popup.dockEnabled = true
-    mapView.popup.dockOptions = {
-      position: params.mobilePopupDockPosition,
-      buttonEnabled: !params.mobilePopupHideDockButton
-    } as any
-  } else if (!isMobile) {
-    // Restore JSAPI defaults for desktop
-    mapView.popup.dockEnabled = false
-    mapView.popup.dockOptions = {
-      buttonEnabled: true,
-      position: 'auto'
-    } as any
-  }
-
-  // Hide action bar (zoom-to, etc.) on mobile if configured
-  if (isMobile && params.mobilePopupHideActionBar) {
-    mapView.popup.visibleElements = {
-      ...mapView.popup.visibleElements as any,
-      actionBar: false
-    } as any
-  } else if (!isMobile) {
-    mapView.popup.visibleElements = {
-      ...mapView.popup.visibleElements as any,
-      actionBar: true
-    } as any
-  }
-}
+// applyMobilePopupBehavior and MobilePopupParams moved to shared-code
+// (widgets/shared-code/mapsimple-common/mobile-popup-behavior.ts)
 
 /**
  * Build popup.open() options, adding collapsed flag on mobile if configured.

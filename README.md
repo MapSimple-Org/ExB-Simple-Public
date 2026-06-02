@@ -2,8 +2,8 @@
 
 Custom widgets for ArcGIS Experience Builder Developer Edition. Built for performance, deep-linking, and advanced result management.
 
-**Current Version**: QS `1.20.0-r027.099` | FS `1.20.0-r005.016`
-**Latest Update**: View in Table fix, ExB 1.20 upgrade, security hardening, Select on Map fix (May 7, 2026)
+**Current Version**: QS `1.20.0-r028.122` | FS `1.20.0-r005.018`
+**Latest Update**: Native map popups & map-to-card identify, unified field-table renderer, spatial tab overhaul, truncation alerts (June 2, 2026)
 
 ## Key Differentiators (Why QuerySimple?)
 
@@ -17,93 +17,61 @@ QuerySimple is designed to solve the common pain points of the standard Experien
 
 ---
 
-## What's New (May 2026)
+## What's New (June 2026)
 
-> **Breaking Change:** This release targets **Experience Builder 1.20.0** with **ArcGIS Maps SDK for JavaScript 5.0.4** (Calcite 5.0). It is **not backward-compatible** with ExB 1.19. If you are still on ExB 1.19, use the previous release ([QS-r026.025 + FS-r004.005](docs/releases/RELEASE_QS-r026.025_FS-r004.005.md)).
+> Full release notes: [RELEASE_QS-r028.122_FS-r005.018](docs/releases/RELEASE_QS-r028.122_FS-r005.018.md)
 
-> Full release notes: [RELEASE_QS-r027.099_FS-r005.016](docs/releases/RELEASE_QS-r027.099_FS-r005.016.md)
+The r028 line is built on one change: query results now live in real client-side FeatureLayers. That single shift unlocks native map popups, map-to-card identify, and a unified renderer shared by the result card and the popup. It runs on the same Experience Builder 1.20 / JSAPI 5.0.4 stack as r027 (no framework version change).
 
-### View in Table Fix (r027.098-099)
+### Native Map Popups & Map-to-Card Identify
 
-View in Table crashed on ExB 1.20 (`Cannot read properties of undefined (reading 'columnTemplates')`). The Table widget's internal enums changed to uppercase values in 1.20, and our data action was passing the old casing. Three enum values corrected: `layerHonorMode`, `selectMode`, `dataActionType`. If you downloaded QS r027.097, update to r027.099.
+Query results are stored as real features in per-geometry-type FeatureLayers instead of plain graphics. That is what powers the rest of this release:
 
-### Unified Markdown Template Engine
+- **Native popups & identify** on result features, using the configured template — no custom click plumbing
+- **Map-to-card flash**: clicking a result feature on the map scrolls its result card into view and flashes it, so map and list stay in sync. New `flashOnMapIdentify` setting (default on) toggles it; the option appears only when FeatureLayer results are enabled.
+- **Native legend & LayerList** participation for result layers
+- **Leaner memory**: a slim popup registry keeps only the attributes and template it needs, and PopupSetting queries fetch only the fields the popup references. Polygon-heavy datasets shed megabytes of retained geometry.
 
-Both QuerySimple and FeedSimple now share a single rendering engine in `shared-code/` with a unified `{{field | filter}}` token syntax. This was a major architectural merge: the template engine, token substitution, pipe filters, and markdown converter were extracted into shared code and are now identical across both widgets.
+### Unified Field-Table Renderer (Card == Popup)
 
-- **16 chainable pipe filters** for date formatting (`{{field | date:MM/DD/YYYY}}`), math (`{{field | multiply:100 | round:2}}`), text styling (`{{field | uppercase}}`, `{{field | truncate:50}}`), and link generation (`{{field | autolink}}`)
-- **Markdown formatting**: headings (h1 through h6), **bold**, *italic*, `inline code`, links, images, blockquotes, ordered/unordered lists, horizontal rules
-- **Markdown tables**: pipe-delimited tables with header styling and column alignment (`:---` left, `:---:` center, `---:` right)
-- **Table Builder**: visual grid editor in settings (2-6 columns, 1-10 rows) that generates table markdown and inserts at cursor position
-- **Template migration**: one-click button in QS settings detects old `{FIELD}` tokens and converts to `{{FIELD}}` with before/after preview
-- **Syntax reference panel**: expandable inline reference in the settings template editor showing all available formatting, filters, and table syntax
+The result card, the map-feature popup, and the card-click popup now render through one shared engine, so they match exactly: alias labels, formatted dates and numbers, decoded coded-value domains, and the same striped table.
 
-### ExB 1.20 / JSAPI 5.0 Migration
+- **Per-field display labels**: rename any field for SelectAttributes mode in settings without touching the underlying schema. Labels survive a layer rebind.
+- **Title fixes**: double-brace `{{Field}}` titles render correctly on the card (they used to collapse to a stray `}`), and single- and double-brace token styles resolve identically.
 
-Ground-up migration to Experience Builder 1.20 (JSAPI 5.0.4, Calcite 5.0.2, Node 24). Full manual smoke test passed April 30 with all three widgets functional end-to-end.
+### Spatial Tab Overhaul
 
-- **`DataRecord.getId()` returns `number`** in JSAPI 5.0 (was `string`). All ID comparison, Redux selection, and Map key sites coerced with `String()` across 12+ files. Without this, selections silently fail.
-- **`__esri.*` namespace removed**: 419 references across 44 files replaced with ESM type imports from `@arcgis/core` in a 17-pass, per-file validated migration. Deprecated in 5.0, removed in 6.0.
-- **Calcite 5.0 compat**: event prop casing (`onCalcitePopoverClose` to lowercase), `inputMode='numeric'` replacing `type='number'`, `NumericInput` value type widening
-- **JSAPI 5.0 API changes**: `geometryEngine.union()` to `unionOperator.executeMany()`, `defaultPopupTemplate` to `createPopupTemplate()`, removed `sourceLayer`/`associatedLayer`
-- **TypeScript errors: 221 to 0** across all widgets, all type-only fixes, zero runtime changes
+- **Mixed-geometry queries**: a spatial query with mixed input shapes (e.g. a drawn polygon plus a line) now queries every shape and combines and de-dupes the matches, instead of silently keeping only the highest-dimension shape.
+- **Drawn shapes persist** across Draw and Operations mode switches — no more vanished line with a phantom buffer left behind.
+- **"Also include current results"**: a Draw-mode opt-in that folds the current result set into the draw input, so a drawn shape and already-selected results buffer and query together. Appears once a shape is drawn and results exist; default off.
+- **Deterministic target-layer labels**: the Target-layers picker shows the admin-configured label, not whatever the live service happens to advertise.
+- **Single-select relationship hardening**: the relationship dropdown can no longer desync into a multi-selected state.
 
-### Security Hardening
+### Result-Set Truncation Alert
 
-Three-group pass protecting the shared template engine and query pipeline. 45 new tests across 3 test files.
+Queries fetch up to the layer's max transfer count (commonly 1000/2000). A query that hit that cap used to look identical to a complete one.
 
-- **Group A (XSS)**: `escapeHtml()` on all substituted field values before pipe filters run. Markdown syntax unaffected, only raw data is escaped.
-- **Group B (URLs)**: `isDangerousUrl()` blocks `javascript:`, `data:`, `vbscript:` schemes in markdown links, images, and external link URLs. Dangerous content renders as plain text.
-- **Group C (SQL)**: `isValidFieldName()` regex guard on field names before WHERE clause interpolation in typeahead/suggest.
+- **Amber warning popover** on the Results panel when a query is truncated, following the same pattern as the no-results and query-error alerts
+- **Names the real total**: when the service flags truncation, a cheap count-only query reports the actual number of matching records ("matched N records but only M are shown"), not just the limit
+- **Guards against false alarms**: some older ArcGIS Server layers flag truncation on multipart query geometries even when nothing was dropped; the count check suppresses the alert in that case
 
-### Select on Map Fix
+### Internal Architecture
 
-Select on Map stopped working when layers migrated from map-image services to hosted feature layers. The fix bypasses the framework's unreliable highlight chain and calls `layerView.highlight()` directly. Non-HFL layers emit `console.warn` with bug ID `BUG-SELECT-MAP-IMAGE-001` automatically.
+- **Single rendering path**: the older dual GraphicsLayer path was removed end to end once FeatureLayer results became the default, simplifying the result pipeline
+- **Singleton config**: runtime config reads now go through a `widgetConfigManager` singleton instead of Redux selectors and prop-drilling chains
 
-### Builder and Settings
+### Removed: Select on Map
 
-- **DS conflict detection**: when two QS widgets share output DS IDs (from copy-paste), red banner on the offender with one-click "Regenerate IDs" fix, amber banner on the victim
-- **Data source rebinding**: rebind all queries when a layer is replaced in the web map (auto-heal for identical fields, interactive mapping table for changed fields)
-- **Per-result Pan To**: hand icon on each card centers the map without changing zoom. `panOnResultClick` toggle makes it the default click behavior.
-- **Configurable widget header**: `showHeader` toggle hides the header bar for more vertical space
-- **Configurable spatial relationships**: admin-selectable subset of operations in the Spatial tab dropdown
+The "Select on map" result action has been retired. Its blue-outline highlight relied on a framework path that could not be made reliable for map-image sublayers under ExB 1.20 (BUG-SELECT-MAP-IMAGE-001); rather than carry broken behavior forward, the feature was removed. Zoom To, Pan To, View in Table, and Export are unaffected.
 
-### Stability Fixes
+### FeedSimple (r005.017–018)
 
-- **Selection loss on record removal** (r027.010): `getSelectedRecords()` returns `[]` in ExB 1.20. Fixed with ID-based selection from accumulated records.
-- **Selection loss between QS widgets** (r027.016): switching widgets cleared shared DS highlights. Fixed with `getSelectedRecordIds()` and auto re-selection.
-- **Cross-widget DS crash** (r027.019): null guard when shared output DS is destroyed by another widget.
-- **Hover pin z-order** (r027.091): pins rendering behind result graphics. Moved to `mapView.graphics`. Removed ~190 lines.
-- **Popover visibility** (r027.024-025): `scrollIntoView()` on no-results and error popovers for smaller viewports.
-- **GraphicsLayer architecture** (r027.033-034): separated inner `GraphicsLayer` from parent `GroupLayer`, fixed legend regression, widened prop chain across 11 files.
-
-### E2E Test Suite v2
-
-Fresh Playwright suite built from video captures of real user sessions.
-
-| Category | Tests | Coverage |
-|----------|-------|----------|
-| **1: Query Execution Extended** | 8 | Query execution, URL parameters, result display |
-| **3: Results Interaction** | 6 | Card expansion, popup, zoom, Remove mode |
-| **4: Accumulation Modes** | 7 | New/Add/Remove transitions, cross-query accumulation |
-| **5: Spatial Operations** | 6 | Buffer config, target layers, spatial query execution |
-| **6: Spatial Draw Mode** | 4 | Draw tools, geometry drawing, spatial query from shapes |
-
-**Final run:** 35 passed, 4 skipped, 2 flaky, 0 failed across 8 spec files.
-
-### FeedSimple r005.016
-
-- **ExB 1.20**: `getId()` coercion, `__esri` migration (26 refs / 3 files), Calcite `NumericInput` widening, `ImmutableArray` prop widening (19 errors cleared), TS errors to 0
-- **Security**: inherits `escapeHtml()` and `isDangerousUrl()` from shared-code automatically. 14 new tests.
-
-### Resolved: BUG-GRAPHICS-PROD-001
-
-Polygon fill missing in production builds (minification race condition hypothesis). Structurally eliminated by r024 graphics rewrite. All symbol creation uses inline object literals. Never reproduced on 1.20.
+No user-facing changes. FeedSimple moves with the suite for shared-code alignment: mobile popup behavior was lifted into `shared-code/` (r005.017, shared with QuerySimple), and r005.018 is a passthrough version bump from the shared logger cleanup.
 
 ### Previous Releases
 
-- [QS-r027.097 + FS-r005.016](docs/releases/RELEASE_QS-r027.099_FS-r005.016.md) (May 6, 2026) — initial ExB 1.20 release
-- [QS-r026.025 + FS-r004.005](docs/releases/RELEASE_QS-r026.025_FS-r004.005.md) (March 2026)
+- [QS-r027.099 + FS-r005.016](docs/releases/RELEASE_QS-r027.099_FS-r005.016.md) (May 7, 2026) — ExB 1.20 upgrade, unified markdown engine, security hardening
+- [QS-r026.025 + FS-r004.005](docs/releases/RELEASE_QS-r026.025_FS-r004.005.md) (March 2026) — last ExB 1.19 release
 
 ---
 
@@ -292,8 +260,8 @@ Per-widget zip downloads are available in the [`dist/`](dist/) folder. Each zip 
 
 ## Test Results
 
-- **Unit tests:** 535/535 passing
-- **E2E tests:** 35 passed, 4 skipped, 2 flaky, 0 failed
+- **Unit tests:** 739/739 passing
+- **E2E tests:** 35 passed, 4 skipped, 2 flaky, 0 failed (Playwright v2 suite)
 - **TypeScript errors:** 0
 
 ---

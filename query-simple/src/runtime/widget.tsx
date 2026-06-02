@@ -23,11 +23,15 @@ import { GraphicsLayerManager } from './managers/graphics-layer-manager'
 import { AccumulatedRecordsManager } from './managers/accumulated-records-manager'
 import { EventManager, OPEN_WIDGET_EVENT, QUERYSIMPLE_SELECTION_EVENT, RESTORE_ON_IDENTIFY_CLOSE_EVENT } from './managers/event-manager'
 import { SelectionRestorationManager } from './managers/selection-restoration-manager'
+import { createResultGroupLayer, destroyResultLayers, buildCompositeKey, updateFeatureLayerRenderer } from './result-feature-layer-factory'
+import { addResultFeatures, removeResultFeatures, clearResultFeatures, getExistingCompositeKeys, resetObjectIdCounter, resetKeyTracking } from './result-feature-layer-sync'
+import { createAsyncSerializer } from '../utils/async-serializer'
+import { setQueryConfigs, clearQueryConfigs, clearRecordRegistry } from './result-feature-layer-popup'
 import type Extent from '@arcgis/core/geometry/Extent'
+import type GroupLayer from '@arcgis/core/layers/GroupLayer'
 import type GraphicsLayer from '@arcgis/core/layers/GraphicsLayer'
 import type MapView from '@arcgis/core/views/MapView'
 import type SceneView from '@arcgis/core/views/SceneView'
-import type { ResourceHandle as WatchHandle } from '@arcgis/core/core/Handles'
 
 const debugLogger = createQuerySimpleDebugLogger()
 const { iconMap } = getWidgetRuntimeDataMap()
@@ -81,6 +85,12 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
   // Refs must be declared before managers that use them
   private widgetRef = React.createRef<HTMLDivElement>()
   private graphicsLayerRef = React.createRef<GraphicsLayer | null>()
+  // r028.004: Path 3 result GroupLayer (parallel to graphicsLayerRef for Path 2)
+  private resultGroupLayerRef = React.createRef<GroupLayer | null>()
+  // r028.087: Serialize syncResultFeatureLayers calls so concurrent invocations
+  // (e.g. rapid query clicks) don't interleave diff/apply against the shared
+  // _keysByWidget Set and produce duplicate features on the map.
+  private syncResultFeatureLayersSerializer = createAsyncSerializer()
   // r027.091: hoverLayerRef removed — hover pins now use mapView.graphics
   // (always-on-top overlay). Per-graphic scoped cleanup prevents cross-widget
   // collateral damage. See docs/bugs/HOVER-PIN-CROSS-WIDGET-BUG.md.
@@ -94,8 +104,6 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
   private accumulatedRecordsManager = new AccumulatedRecordsManager()
   // Chunk 7: Event Handling Manager (r018.59) - Step 7.1: Create Event Manager
   private eventManager = new EventManager()
-  // r025.072: Mobile popup behavior — JSAPI watch handle
-  private popupVisibleHandle: WatchHandle | null = null
 
   // Chunk 3: Selection & Restoration Manager (r019.1) - Section 3.1: Selection State Tracking
   private selectionRestorationManager = new SelectionRestorationManager(
@@ -460,6 +468,21 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
     // Chunk 4: Graphics layer cleanup (r018.25 - Step 4.3: Remove old implementation)
     this.graphicsLayerManager.cleanup(this.props.id)
 
+    // r028.092: Path 3 FeatureLayer cleanup (gated by addResultsAsMapLayer)
+    if (this.props.config?.addResultsAsMapLayer === true) {
+      const unmountMapView = this.mapViewManager.getMapView() || this.mapViewRef.current
+      if (unmountMapView) {
+        void destroyResultLayers(this.props.id, unmountMapView as MapView)
+      }
+      clearRecordRegistry(this.props.id)
+      clearQueryConfigs(this.props.id)
+      // r028.044 (P4): Reset counters on unmount so stale state
+      // doesn't accumulate across mount/unmount cycles.
+      resetObjectIdCounter(this.props.id)
+      resetKeyTracking(this.props.id)
+      ;(this.resultGroupLayerRef as any).current = null
+    }
+
     // r027.091: Hover-pin layer cleanup removed — hover pins now live on
     // mapView.graphics and are cleaned up per-graphic on card unmount.
 
@@ -469,9 +492,6 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
     // Unregister widget config from HighlightConfigManager (r022.91)
     widgetConfigManager.unregisterConfig(this.props.id)
 
-    // r025.072: Clean up mobile popup watch handle
-    this.popupVisibleHandle?.remove()
-    
     debugLogger.log('WIDGET-STATE', {
       event: 'widget-closed',
       widgetId: this.props.id,
@@ -569,7 +589,7 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
       if (prevAddResultsAsMapLayer !== currAddResultsAsMapLayer) {
         // r024.4: Store mapView BEFORE cleanup (cleanup clears the ref)
         const mapView = this.mapViewManager.getMapView() || this.mapViewRef.current
-        
+
         debugLogger.log('GRAPHICS-LAYER', {
           event: 'addResultsAsMapLayer-toggle-changed',
           widgetId: this.props.id,
@@ -579,13 +599,13 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
           hasMapView: !!mapView,
           timestamp: Date.now()
         })
-        
+
         // Cleanup existing layer
         this.graphicsLayerManager.cleanup(this.props.id)
         this.graphicsLayerRef.current = null
-        
-        // Reinitialize with new layer type
-        if (mapView) {
+
+        // r028.008: Path 2 only — skip reinit when Path 3 FeatureLayers are active
+        if (this.props.config?.addResultsAsMapLayer !== true && mapView) {
           void this.graphicsLayerManager.initialize(this.props.id, mapView, {
             onGraphicsLayerInitialized: (graphicsLayer) => {
               this.graphicsLayerRef.current = graphicsLayer
@@ -593,14 +613,66 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
             }
           })
         }
+
+        // r028.006: Rebuild Path 3 FeatureLayers on toggle change (if enabled)
+        if (mapView && this.props.config?.addResultsAsMapLayer === true) {
+          void destroyResultLayers(this.props.id, mapView as MapView).then(() => {
+            // r028.044 (P4): Reset counters on rebuild so IDs start fresh
+            resetObjectIdCounter(this.props.id)
+            resetKeyTracking(this.props.id)
+            ;(this.resultGroupLayerRef as any).current = null
+            void this.initResultFeatureLayers(this.props.id, mapView as MapView)
+          })
+        }
+      }
+
+      // r028.092: Path 3 toggle-change cleanup (originally a useFeatureLayerResults
+      // detector; after Phase 1 routing both toggle detectors gate on addResultsAsMapLayer).
+      // The block above (r024.4) already handles graphics-layer init/cleanup and Path 3
+      // rebuild on toggle ON. This block adds Path 3-specific state cleanup on toggle OFF
+      // (registry, query configs, counters) that the block above doesn't do.
+      // TODO: collapse these two blocks in Phase 3 (Path 2 deletion pass).
+      const prevUseFLR = prevProps.config?.addResultsAsMapLayer === true
+      const currUseFLR = this.props.config?.addResultsAsMapLayer === true
+      if (prevUseFLR !== currUseFLR) {
+        const mapView = this.mapViewManager.getMapView() || this.mapViewRef.current
+        if (currUseFLR && mapView) {
+          void this.initResultFeatureLayers(this.props.id, mapView as MapView)
+        } else if (!currUseFLR && mapView) {
+          void destroyResultLayers(this.props.id, mapView as MapView)
+          clearRecordRegistry(this.props.id)
+          clearQueryConfigs(this.props.id)
+          // r028.044 (P4): Reset counters on toggle-off
+          resetObjectIdCounter(this.props.id)
+          resetKeyTracking(this.props.id)
+          ;(this.resultGroupLayerRef as any).current = null
+        }
+      }
+
+      // r028.005: Detect symbology config changes and update FeatureLayer renderers
+      if (this.props.config?.addResultsAsMapLayer === true) {
+        const symbologyFields = [
+          'highlightFillColor', 'highlightFillOpacity',
+          'highlightOutlineColor', 'highlightOutlineOpacity', 'highlightOutlineWidth',
+          'highlightPointSize', 'highlightPointOutlineWidth', 'highlightPointStyle'
+        ] as const
+        const symbologyChanged = symbologyFields.some(
+          f => prevProps.config?.[f] !== this.props.config?.[f]
+        )
+        if (symbologyChanged) {
+          this.updateResultFeatureLayerRenderers()
+        }
+      }
+
+      // r028.004: Update popup query configs when queryItems change
+      if (this.props.config?.addResultsAsMapLayer === true) {
+        const queryItems = this.props.config?.queryItems?.asMutable?.({ deep: true }) || []
+        setQueryConfigs(this.props.id, queryItems)
       }
     }
     
     // Chunk 4: Graphics layer is now required (r018.25 - Step 4.3: Remove config change handling)
     // No need to handle config changes for graphics layer since it's always enabled
-
-    // r025.072: No proactive re-apply needed — popup behavior is applied reactively
-    // each time a popup opens via the popup.visible watch in setupMobilePopupWatch().
   }
 
   /**
@@ -789,62 +861,7 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
     }
   }
 
-  /**
-   * r025.072: Set up a reactive watch on popup.visible via the view.
-   * The popup object is NOT initialized until the first popup opens, so we cannot
-   * touch mapView.popup proactively. Instead we watch 'popup.visible' on the view
-   * (JSAPI supports nested property watches) and apply all mobile behavior — dock,
-   * action bar, collapsed — each time a popup becomes visible.
-   * Separate from HelperSimple's MutationObserver (which tracks popup close for
-   * selection restoration).
-   */
-  private setupMobilePopupWatch (): void {
-    const mapView = this.mapViewManager.getMapView() || this.mapViewRef.current
-    if (!mapView) return
 
-    // Clean up previous handle
-    this.popupVisibleHandle?.remove()
-
-    // Watch popup.visible on the view — fires when popup opens or closes.
-    // At this point mapView.popup is guaranteed to exist.
-    this.popupVisibleHandle = mapView.watch('popup.visible', (visible: boolean) => {
-      if (!visible || !mapView.popup) return
-      const config = this.props.config
-      const isMobile = mapView.width <= 600
-
-      // Collapsed
-      if (isMobile && config.mobilePopupCollapsed) {
-        mapView.popup.collapsed = true
-      }
-
-      // Dock position
-      if (isMobile && config.mobilePopupDockPosition) {
-        mapView.popup.dockEnabled = true
-        mapView.popup.dockOptions = {
-          position: config.mobilePopupDockPosition,
-          buttonEnabled: !config.mobilePopupHideDockButton
-        } as any
-      }
-
-      // Hide action bar
-      if (isMobile && config.mobilePopupHideActionBar) {
-        mapView.popup.visibleElements = {
-          ...mapView.popup.visibleElements as any,
-          actionBar: false
-        } as any
-      }
-
-      debugLogger.log('POPUP', {
-        event: 'mobile-popup-behavior-applied',
-        isMobile,
-        collapsed: isMobile && !!config.mobilePopupCollapsed,
-        dockPosition: config.mobilePopupDockPosition || 'auto',
-        hideActionBar: !!config.mobilePopupHideActionBar,
-        viewportWidth: mapView.width,
-        timestamp: Date.now()
-      })
-    })
-  }
 
   /**
    * Handles map view change from JimuMapViewComponent.
@@ -877,8 +894,8 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
           this.setState({ jimuMapView: newJimuMapView })
           
           // Chunk 4: Graphics layer initialization (r018.25 - Step 4.3: Remove old implementation)
-          // Initialize graphics layer if map view is available and graphics layer should be initialized
-          if (this.graphicsLayerManager.shouldInitialize(config, newMapView) && newMapView) {
+          // r028.008: Path 2 only — skip when Path 3 FeatureLayers are active
+          if (config?.addResultsAsMapLayer !== true && this.graphicsLayerManager.shouldInitialize(config, newMapView) && newMapView) {
             // Use void to handle promise without blocking
             void this.graphicsLayerManager.initialize(id, newMapView, {
               onGraphicsLayerInitialized: (graphicsLayer) => {
@@ -890,33 +907,66 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
             })
           }
 
-          // r027.091: Hover-pin layer creation removed — hover pins now use
-          // mapView.graphics (always-on-top overlay) with per-graphic cleanup.
-
-          // r025.072: Set up reactive popup watch (applies behavior when popup opens)
-          this.setupMobilePopupWatch()
+          // r028.092: Path 3 FeatureLayer init (gated by addResultsAsMapLayer)
+          if (newMapView && config?.addResultsAsMapLayer === true) {
+            void this.initResultFeatureLayers(id, newMapView as MapView)
+          }
         }
       }
     )
   }
 
   /**
-   * Initializes graphics layer lazily when output data source becomes available.
-   * 
-   * This method is called by QueryTask component when an output data source is created.
-   * It retrieves the map view from MapViewManager and initializes the graphics layer
-   * using GraphicsLayerManager if not already initialized.
-   * 
-   * @param outputDS - The output data source that was created
-   * 
-   * @since 1.19.0-r017.0
-   * @see {@link GraphicsLayerManager.initializeFromOutputDS} for graphics layer initialization
-   * @see {@link MapViewManager.getMapView} for map view retrieval
+   * r028.004: Create Path 3 GroupLayer and register query configs for popup rendering.
    */
+  private async initResultFeatureLayers (widgetId: string, mapView: MapView): Promise<void> {
+    try {
+      const groupLayer = await createResultGroupLayer(widgetId, mapView)
+      ;(this.resultGroupLayerRef as any).current = groupLayer
+
+      const queryItems = this.props.config?.queryItems?.asMutable?.({ deep: true }) || []
+      setQueryConfigs(widgetId, queryItems)
+
+      debugLogger.log('FEATURE-LAYER', {
+        event: 'initResultFeatureLayers',
+        widgetId,
+        groupLayerId: groupLayer.id,
+        queryConfigCount: queryItems.length
+      })
+    } catch (err) {
+      debugLogger.log('FEATURE-LAYER', {
+        event: 'initResultFeatureLayers-error',
+        widgetId,
+        error: err instanceof Error ? err.message : 'Unknown'
+      })
+    }
+  }
+
+  /**
+   * r028.005: Swap renderers on existing FeatureLayers when symbology config changes.
+   */
+  private updateResultFeatureLayerRenderers (): void {
+    const groupLayer = this.resultGroupLayerRef.current
+    if (!groupLayer) return
+
+    const children = (groupLayer as any).layers?.toArray?.() || []
+    for (const layer of children) {
+      const geometryType = (layer as any).geometryType
+      if (geometryType) {
+        updateFeatureLayerRenderer(layer, geometryType, this.props.id)
+      }
+    }
+
+    debugLogger.log('FEATURE-LAYER', {
+      event: 'updateResultFeatureLayerRenderers',
+      widgetId: this.props.id,
+      layersUpdated: children.length
+    })
+  }
 
   /**
    * Initializes graphics layer lazily when output data source becomes available.
-   * 
+   *
    * This method is called by QueryTask component when an output data source is created.
    * It retrieves the map view from MapViewManager and initializes the graphics layer
    * using GraphicsLayerManager if not already initialized.
@@ -929,11 +979,14 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
    */
   public initializeGraphicsLayerFromOutputDS = async (outputDS: DataSource) => {
     const { id, config } = this.props
-    
+
+    // r028.008: Path 2 only — skip when Path 3 FeatureLayers are active
+    if (config?.addResultsAsMapLayer === true) return
+
     // Chunk 4: Graphics layer initialization (r018.25 - Step 4.3: Remove old implementation)
     // Use map view from manager if available
     const mapView = this.mapViewManager.getMapView() || this.mapViewRef.current
-    
+
     await this.graphicsLayerManager.initializeFromOutputDS(
       id,
       config,
@@ -977,6 +1030,9 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
   public clearGraphicsLayerRefs = async () => {
     const mapView = this.mapViewRef.current
     const { id } = this.props
+
+    // r028.008: Path 2 only — skip when Path 3 FeatureLayers are active
+    if (this.props.config?.addResultsAsMapLayer === true) return
 
     debugLogger.log('GRAPHICS-LAYER', {
       event: 'clearGraphicsLayerRefs-called',
@@ -1294,6 +1350,95 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
         timestamp: Date.now()
       })
     }
+
+    // r028.092: Sync Path 3 FeatureLayers (gated by addResultsAsMapLayer)
+    if (this.props.config?.addResultsAsMapLayer === true) {
+      void this.syncResultFeatureLayers(records, previousRecords)
+    }
+  }
+
+  /**
+   * r028.004: Diff accumulated records against FeatureLayer state and apply adds/removes.
+   * r028.087: Wrapped by the serializer so concurrent invocations queue FIFO rather than
+   * interleaving read-modify-write against the shared _keysByWidget Set.
+   */
+  private syncResultFeatureLayers (
+    records: FeatureDataRecord[],
+    previousRecords: FeatureDataRecord[]
+  ): Promise<void> {
+    return this.syncResultFeatureLayersSerializer(
+      () => this.doSyncResultFeatureLayers(records, previousRecords)
+    )
+  }
+
+  /**
+   * r028.087: Actual sync body — wrapped by syncResultFeatureLayers via the serializer.
+   * Do not call directly; always go through syncResultFeatureLayers.
+   */
+  private async doSyncResultFeatureLayers (
+    records: FeatureDataRecord[],
+    previousRecords: FeatureDataRecord[]
+  ): Promise<void> {
+    const groupLayer = this.resultGroupLayerRef.current
+    if (!groupLayer) return
+
+    const widgetId = this.props.id
+
+    try {
+      if (records.length === 0 && previousRecords.length > 0) {
+        await clearResultFeatures(groupLayer, widgetId)
+        debugLogger.log('FEATURE-LAYER', {
+          event: 'syncResultFeatureLayers-cleared',
+          widgetId,
+          previousCount: previousRecords.length
+        })
+        return
+      }
+
+      const existingKeys = getExistingCompositeKeys(widgetId)
+
+      // Build new keys from incoming records
+      const newKeyToRecord = new Map<string, { record: FeatureDataRecord, configId: string }>()
+      for (const record of records) {
+        const configId = (record as any).feature?.attributes?.__queryConfigId || ''
+        const recordId = String(record.getId())
+        const key = buildCompositeKey(configId, recordId)
+        newKeyToRecord.set(key, { record, configId })
+      }
+
+      // Remove features no longer in accumulated records
+      const keysToRemove = [...existingKeys].filter(k => !newKeyToRecord.has(k))
+      if (keysToRemove.length > 0) {
+        await removeResultFeatures(groupLayer, keysToRemove, widgetId)
+      }
+
+      // Add features not yet on the map, grouped by configId
+      const byConfig = new Map<string, FeatureDataRecord[]>()
+      for (const [key, { record, configId }] of newKeyToRecord) {
+        if (existingKeys.has(key)) continue
+        if (!byConfig.has(configId)) byConfig.set(configId, [])
+        byConfig.get(configId)!.push(record)
+      }
+
+      for (const [configId, configRecords] of byConfig) {
+        await addResultFeatures(groupLayer, configRecords, configId, widgetId)
+      }
+
+      debugLogger.log('FEATURE-LAYER', {
+        event: 'syncResultFeatureLayers',
+        widgetId,
+        existingCount: existingKeys.size,
+        removed: keysToRemove.length,
+        addedConfigs: byConfig.size,
+        totalRecords: records.length
+      })
+    } catch (err) {
+      debugLogger.log('FEATURE-LAYER', {
+        event: 'syncResultFeatureLayers-error',
+        widgetId,
+        error: err instanceof Error ? err.message : 'Unknown'
+      })
+    }
   }
 
   /**
@@ -1385,6 +1530,16 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
       id: '_widgetLabel',
       defaultMessage: defaultMessages._widgetLabel
     })
+    // r028.060: SETTINGS log for widget-level config
+    debugLogger.log('SETTINGS', {
+      event: 'singletonConfigRead',
+      source: 'widget',
+      widgetId: id,
+      showHeader: widgetConfigManager.getShowHeader(id),
+      addResultsAsMapLayer: widgetConfigManager.getAddResultsAsMapLayer(id),
+      resultsLayerTitle: widgetConfigManager.getResultsLayerTitle(id)
+    })
+
     if (!config.queryItems?.length) {
       return <WidgetPlaceholder icon={iconMap.iconQuery} widgetId={this.props.id} name={widgetLabel} />
     }
@@ -1403,7 +1558,6 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
                 widgetId={id}
                 isInPopper
                 queryItems={config.queryItems}
-                defaultPageSize={config.defaultPageSize}
                 className='pb-4'
                 initialQueryValue={this.state.initialQueryValue}
                 shouldUseInitialQueryValueForSelection={this.state.shouldUseInitialQueryValueForSelection}
@@ -1422,9 +1576,6 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
                 activeTab={this.state.activeTab}
                 onTabChange={this.handleTabChange}
                 eventManager={this.eventManager}
-                zoomOnResultClick={config.zoomOnResultClick}
-                panOnResultClick={config.panOnResultClick}
-                hoverPinColor={config.hoverPinColor}
                 isPanelVisible={this.state.isPanelVisible}
               />
           </TaskListPopperWrapper>
@@ -1442,7 +1593,6 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
             queryItems={config.queryItems}
             minSize={config.sizeMap?.arrangementIconPopper?.minSize}
             defaultSize={config.sizeMap?.arrangementIconPopper?.defaultSize}
-            defaultPageSize={config.defaultPageSize}
             initialQueryValue={this.state.initialQueryValue}
             onHashParameterUsed={this.handleHashParameterUsed}
           />
@@ -1494,7 +1644,6 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
               <QueryTaskList 
                 widgetId={id} 
                 queryItems={config.queryItems} 
-                defaultPageSize={config.defaultPageSize} 
                 initialQueryValue={this.state.initialQueryValue} 
                 shouldUseInitialQueryValueForSelection={this.state.shouldUseInitialQueryValueForSelection}
                 onHashParameterUsed={this.handleHashParameterUsed}
@@ -1511,9 +1660,6 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
                 activeTab={this.state.activeTab}
                 onTabChange={this.handleTabChange}
                 eventManager={this.eventManager}
-                zoomOnResultClick={config.zoomOnResultClick}
-                panOnResultClick={config.panOnResultClick}
-                hoverPinColor={config.hoverPinColor}
                 isPanelVisible={this.state.isPanelVisible}
                 jimuMapView={this.state.jimuMapView}
               />

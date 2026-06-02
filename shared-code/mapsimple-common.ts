@@ -19,5 +19,5 @@ export { substituteTokens, substituteLegacyTokens, resolveExternalLinkUrl } from
 export type { FilterContext } from './mapsimple-common/token-renderer'
 export { TableBuilder, parseMarkdownToTableState, findTableBlockAtCursor } from './mapsimple-common/table-builder'
 export type { TableBuilderProps, TableBuilderState } from './mapsimple-common/table-builder'
-
-
+export { applyMobilePopupBehavior, getPopupCollapsedOption, MOBILE_BREAKPOINT_PX } from './mapsimple-common/mobile-popup-behavior'
+export type { MobilePopupParams } from './mapsimple-common/mobile-popup-behavior'

@@ -8,9 +8,9 @@ complex logic while the main widget class manages React lifecycle and rendering.
 
 **Key files:**
 - `query-simple/src/runtime/widget.tsx` -- main widget class, manager instantiation, render logic
-- `query-simple/src/runtime/query-task-list.tsx` -- conditional query renderer (654 lines)
-- `query-simple/src/runtime/query-task.tsx` -- individual query executor (3,013 lines)
-- `helper-simple/src/runtime/widget.tsx` -- URL orchestrator (780 lines)
+- `query-simple/src/runtime/query-task-list.tsx` -- conditional query renderer (610 lines)
+- `query-simple/src/runtime/query-task.tsx` -- individual query executor (1,915 lines)
+- `helper-simple/src/runtime/widget.tsx` -- URL orchestrator (749 lines)
 
 ---
 
@@ -24,45 +24,45 @@ Widget mounts when ExB renders the widget component. Both widgets extend
 ## QuerySimple Initialization Sequence
 
 ```
- Widget Constructor                           <- widget.tsx:97
+ Widget Constructor                           <- widget.tsx:118
       |
-      +-- widgetConfigManager.registerConfig()  :99
+      +-- widgetConfigManager.registerConfig()  :120
       |   (early registration, before callbacks fire)
       |
       v
- componentDidMount()                         <- widget.tsx:373
+ componentDidMount()                         <- widget.tsx:350
       |
-      +-- [1] UrlConsumptionManager.setup()    :377-381
-      |   (no-op -- HelperSimple orchestrates via OPEN_WIDGET_EVENT)
-      |
-      +-- [2] WidgetVisibilityManager.setup()  :401-422
+      +-- [1] WidgetVisibilityManager.setup()  :369-385
       |   +-- IntersectionObserver registration
       |   +-- onVisibilityChange callback -> setState
-      |   +-- notifyMount() -> dispatches mount event
+      |   +-- notifyMount() -> dispatches mount event  :388
       |
-      +-- [3] AccumulatedRecordsManager sync   :424-438
+      +-- [2] AccumulatedRecordsManager sync   :394-405
       |   +-- handleResultsModeChange()
       |   +-- handleAccumulatedRecordsChange()
+      |   +-- setCallbacks()                    :411-425
       |
-      +-- [4] EventManager.setHandlers() + setup()  :477-484
+      +-- [3] EventManager.setHandlers() + setup()  :428-435
       |   +-- OPEN_WIDGET_EVENT listener
       |   +-- QUERYSIMPLE_SELECTION_EVENT listener
       |   +-- RESTORE_ON_IDENTIFY_CLOSE_EVENT listener
       |
-      +-- [5] SelectionRestorationManager.setWidgetId()  :487
+      +-- [4] SelectionRestorationManager.setWidgetId()  :438
       |
-      +-- [6] widgetConfigManager.registerConfig()  :491-492
+      +-- [5] widgetConfigManager.registerConfig()  :443
       |
       v
  [DEFERRED] JimuMapViewComponent.onActiveViewChange
       |
+      +-- handleJimuMapViewChanged()           <- widget.tsx:878
       +-- MapViewManager.handleJimuMapViewChanged()
-      +-- GraphicsLayerManager.initialize()
-          +-- Determine: GroupLayer or GraphicsLayer (r024.2)
-          +-- Add layer to mapView.map.layers
-      +-- applyMobilePopupBehavior() (r025.072)
-      +-- setupMobilePopupWatch() (r025.072)
-      +-- mapView.watch('width') → applyMobilePopupBehavior()
+      +-- Path 1 (addResultsAsMapLayer !== true):  :898-908
+      |   +-- GraphicsLayerManager.initialize() -> plain GraphicsLayer (r028.096)
+      |   +-- Add layer to mapView.map.layers
+      +-- Path 3 (addResultsAsMapLayer === true):   :911-913
+      |   +-- initResultFeatureLayers() -> GroupLayer (r028.092)
+      +-- Mobile popup behavior applied at popup open time in query-result.tsx (r028.001)
+          via applyMobilePopupBehavior() from shared-code
 ```
 
 ---
@@ -71,17 +71,19 @@ Widget mounts when ExB renders the widget component. Both widgets extend
 
 All managers are utility classes (not hooks) instantiated as private members:
 
+All manager files live in `query-simple/src/runtime/managers/`.
+
 | Manager | File | Responsibility |
 |---------|------|----------------|
-| UrlConsumptionManager | use-url-consumption.ts | Hash/query parameter parsing |
-| WidgetVisibilityManager | use-widget-visibility.ts | IntersectionObserver DOM visibility |
-| MapViewManager | use-map-view.ts | MapView ref caching |
-| GraphicsLayerManager | use-graphics-layer.ts | Layer create/cleanup, GroupLayer vs GraphicsLayer |
-| AccumulatedRecordsManager | use-accumulated-records.ts | Results mode + records state |
-| EventManager | use-event-handling.ts | Window event listener lifecycle |
-| SelectionRestorationManager | use-selection-restoration.ts | Selection state + panel restore |
+| UrlConsumptionManager | url-consumption-manager.ts | Hash/query parameter parsing |
+| WidgetVisibilityManager | widget-visibility-manager.ts | IntersectionObserver DOM visibility |
+| MapViewManager | map-view-manager.ts | MapView ref caching |
+| GraphicsLayerManager | graphics-layer-manager.ts | Path 1 GraphicsLayer create/cleanup (r028.096) |
+| AccumulatedRecordsManager | accumulated-records-manager.ts | Results mode + records state |
+| EventManager | event-manager.ts | Window event listener lifecycle |
+| SelectionRestorationManager | selection-restoration-manager.ts | Selection state + panel restore |
 
-Instantiation order (widget.tsx:68-93):
+Instantiation order (widget.tsx:81-114):
 ```
 urlConsumptionManager       = new UrlConsumptionManager()
 visibilityManager           = new WidgetVisibilityManager()
@@ -99,15 +101,15 @@ selectionRestorationManager = new SelectionRestorationManager(stateGetter, callb
 ```
 Widget (widget.tsx)
   |
-  +-- arrangeType === Popper && !controllerWidgetId   :1382-1419
+  +-- arrangeType === Popper && !controllerWidgetId   :1547-1583
   |   +-- TaskListPopperWrapper
   |       +-- QueryTaskList (isInPopper=true)
   |
-  +-- arrangeType === Inline && !controllerWidgetId   :1422-1437
+  +-- arrangeType === Inline && !controllerWidgetId   :1586-1601
   |   +-- TaskListInline
   |       +-- QueryTaskList
   |
-  +-- arrangeType === Block (default)                 :1440-1549
+  +-- arrangeType === Block (default)                 :1603-1716
       +-- JimuMapViewComponent (if highlightMapWidgetId)
       +-- QueryWidgetContext.Provider
           +-- QueryTaskList
@@ -122,18 +124,18 @@ Widget (widget.tsx)
 ## HelperSimple Initialization Sequence
 
 ```
- componentDidMount()                         <- helper-simple/widget.tsx:94
+ componentDidMount()                         <- helper-simple/widget.tsx:90
       |
-      +-- addEventListener('hashchange', handleHashChange)       :96
-      +-- addEventListener(QUERYSIMPLE_SELECTION_EVENT, ...)      :101
-      +-- addEventListener(QUERYSIMPLE_WIDGET_STATE_EVENT, ...)   :104
-      +-- addEventListener(QUERYSIMPLE_HASH_QUERY_EXECUTED, ...)  :107
+      +-- addEventListener('hashchange', handleHashChange)       :92
+      +-- addEventListener(QUERYSIMPLE_SELECTION_EVENT, ...)      :97
+      +-- addEventListener(QUERYSIMPLE_HASH_QUERY_EXECUTED, ...)  :100
+      |   (QUERYSIMPLE_WIDGET_STATE_EVENT listener removed -- see :446)
       |
-      +-- checkUrlParameters()                                    :98
+      +-- checkUrlParameters()                                    :94
       |   (immediate check on mount for URL hash match)
       |
-      +-- parseHashForWidgetSelection() -> previousHashEntry      :111
-      +-- startIdentifyPopupWatching() -> MutationObserver        :113
+      +-- parseHashForWidgetSelection() -> previousHashEntry      :104
+      +-- startIdentifyPopupWatching() -> MutationObserver        :106
 ```
 
 ---
@@ -147,9 +149,9 @@ Widget State
 QueryTaskList Props
     +-- initialQueryValue, shouldUseInitialQueryValueForSelection
     +-- resultsMode, accumulatedRecords, resultsExtent
-    +-- graphicsLayer, mapView
-    +-- eventManager, onInitializeGraphicsLayer, onClearGraphicsLayer
-    +-- activeTab, zoomOnResultClick, hoverPinColor
+    +-- graphicsLayer, mapView, jimuMapView
+    +-- eventManager, onInitializeGraphicsLayer, onClearGraphicsLayer, onDestroyGraphicsLayer
+    +-- activeTab, onTabChange, isPanelVisible
     |
     v
 QueryTask Props
@@ -173,9 +175,9 @@ SpatialTabContent Props
 
 ## Test Coverage
 
-- `tests/widget.test.tsx` -- 5 tests: render placeholder, dispatch state event, Block/Inline/Popper arrange, config registration
-- `helper-simple/tests/widget.test.tsx` -- 22 tests: DOM detection, hash parsing, lifecycle, getWidgetShortIds, event handlers
+- `tests/widget.test.tsx` -- 5 tests: render placeholder, dispatch state event, Block arrange, Inline arrange, config registration
+- `helper-simple/tests/widget.test.tsx` -- 20 tests: DOM detection (isIdentifyPopupOpen), hash parsing (parseHashForWidgetSelection), lifecycle, getWidgetShortIds, handleHashQueryExecuted
 
 ---
 
-*Last updated: r025.072 (2026-03-15)*
+*Last updated: r028.118 (2026-06-02) — line-ref accuracy audit*

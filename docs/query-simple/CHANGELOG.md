@@ -7,6 +7,1937 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 > **Archive**: For releases r001-r021, see [CHANGELOG_ARCHIVE_r001-r021.md](docs/archive/CHANGELOG_ARCHIVE_r001-r021.md)
 
+## [1.20.0-r028.122] - 2026-06-02 - Truncation alert shows the actual matching count (both query paths)
+
+### Context
+When a query hits a record limit, the warning now names the real total instead of just
+"reached the {limit}-record limit." Since r028.121 we already fetch the true count (via a
+count-only query) whenever the service flags truncation, so surfacing it is nearly free.
+
+### Changed
+- `direct-query.ts` (form path): the truncation flag and the new `trueMatchCount` come from
+  the count-only verification. Single where-clause query, so the count is **exact**. This also
+  extends the r028.121 spurious-flag guard to the form path (true == returned -> no alert).
+- `execute-spatial-query.ts`: each layer result carries `trueMatchCount` = the largest
+  per-sub-query true count (exact for one input geometry, a **lower bound** for several —
+  the unique union across geometries can't be cheaply deduped).
+- `query-task.tsx`: sums the true total across all target layers (truncated -> true count,
+  complete -> returned count) and flags a lower bound when >1 input geometry.
+- `query-execution-handler.ts`: threads the true count to the alert dispatch.
+- `query-result.tsx` + `translations`: message picks "matched {total}" / "matched at least
+  {total}" / falls back to the generic "{limit}-record limit" when the count is unavailable.
+
+### Added
+- `TruncationAlertState.totalMatchCount` + `totalMatchCountIsLowerBound`.
+- i18n: `truncationAlertMessageCount`, `truncationAlertMessageCountAtLeast`.
+- +7 tests (spatial true-count incl. multi-geometry max; form-path guard/count).
+
+### Notes
+- Count-only runs only on flagged sub-queries -> zero overhead on the normal path.
+- The genuine-cap path (recovering the missing records) remains TODO #28 (pagination).
+
+## [1.20.0-r028.121] - 2026-06-02 - Spatial truncation alert: guard against spurious service flags
+
+### Context
+A spatial query against a MapServer "Parcels" layer raised the truncation alert at 69 records
+when nothing was missed; the same query on Path 3's hosted layer did not. Instrumentation
+(r028.120, log-only) traced it to the **multipoint** sub-query: the MapServer set
+`exceededTransferLimit: true` even though it returned every match (a known older-ArcGIS-Server
+quirk on multipart query geometries). The alert was faithfully relaying a false service flag.
+
+### Changed
+- `execute-spatial-query.ts`: the per-layer flag now ORs **actual** truncation, not the raw
+  service flag. When a sub-query is flagged, a count-only query fetches the true total; the
+  alert fires only if `trueCount > returnedCount`. If the count query errors, fall back to
+  trusting the flag so a real truncation is never hidden. Count-only runs only when flagged.
+
+### Added
+- `spatial-subquery-complete` SPATIAL log (geometryIndex, returnedCount, trueCount,
+  actuallyTruncated, countedAsTruncated) for diagnosing future cases.
+- +4 tests (spurious suppressed, genuine surfaced, count-error fallback, no-count-when-clean).
+
+## [1.20.0-r028.119] - 2026-06-02 - Spatial input assembly made event-driven (fixes r028.118 buffer regression)
+
+### Context
+r028.118 added a `[...drawnGeometries]` spread to the Spatial tab's geometry-assembly
+`useEffect`. That effect re-ran whenever its deps changed — including `accumulatedRecords`,
+which changes when a spatial query completes — and emitted a NEW array reference each run.
+The buffer-preview hook keys on `inputGeometries` by reference, so it read the fresh-but-equal
+array as "the input changed" and redrew the buffer right after it had been cleared. Manual
+smoke caught it: draw → buffer → run query → buffer reappears and stays on the map.
+
+Root cause is the watch-from-outside pattern: an effect observing derived state and acting
+when it *looks* like something changed. Per the project's preference for cause-driven code
+(handle the event where it happens), the fix replaces the effect with event-driven assembly.
+
+### Changed
+- `runtime/tabs/SpatialTabContent.tsx`: removed the geometry-assembly `useEffect`.
+  `allInputGeometries` is now rebuilt only when a real input event fires — a shape is
+  drawn/edited/cleared (`updateDrawnGeometries`, the single mutation path), the
+  include-results toggle flips (`onChange`), the mode changes (`handleModeChange`), or the
+  Spatial tab is entered (smart-default). New helpers `assembleInputGeometries` (group-by-type
+  union with a seq guard for out-of-order async results), `assembleForDraw`,
+  `assembleForOperations`. Draw mode no longer depends on `accumulatedRecords`, so a
+  post-query results change can't touch the draw-mode buffer.
+- One `useEffect` remains: a prop-sync that keeps **operations-mode** input tracking the
+  `accumulatedRecords` prop (results genuinely ARE the operations input; this is legitimate
+  external-prop sync, not watch-from-outside guessing).
+
+### Removed
+- The r028.118 reset `useEffect` for the include-results toggle. The reset now happens in the
+  events that actually clear the draw (`handleDrawCleared`, post-query cleanup, Reset).
+- Net across r028.118 + r028.119: **zero** new `useEffect`s versus the pre-feature baseline.
+
+### Added
+- Refs `drawnGeometriesRef` / `spatialModeRef` / `includeResultsInputRef` so event handlers
+  read current state synchronously without re-subscribing.
+
+### Notes
+- Verified by manual smoke on both Path 1 and Path 3: buffer clears on query completion and
+  stays cleared (no spurious `buffer-preview-updated` after `buffer-preview-cleared`). Toggle
+  on/off and Operations mode confirmed correct. tsc CLEAN, Jest 730/730.
+- A cosmetic JimuDraw `SketchViewModel` "Missing parameter 'tool'" console error was observed
+  when drawing on top of existing results; researched and confirmed harmless (no functional
+  impact). Documented + deprioritized as TODO #33; no code change.
+- query-simple only.
+
+## [1.20.0-r028.118] - 2026-06-01 - Spatial Draw: "Also include current results" opt-in (TODO #29)
+
+### Context
+The Spatial tab's Draw and Operations modes were mutually exclusive: the buffer +
+spatial query took input from *either* drawn shapes *or* the result set, never both.
+A user who selected parcels then drew a line + buffer saw only the line buffer. This
+adds a Draw-mode opt-in to fold the current results into the draw input. TODO #29,
+un-shelved now that Path 2 Removal (#24) is closed. The work was small because
+r028.101 already made `executeSpatialQuery` multi-geometry — this is one additive
+branch plus a draw-gated checkbox.
+
+### Added
+- `runtime/tabs/SpatialTabContent.tsx`: "Also include current results (N)" checkbox in
+  Draw mode, shown only when `spatialMode === 'draw' && hasDrawnGeometry && hasResults`,
+  default OFF. Resets to OFF whenever it hides (mode switch, drawing cleared, results
+  cleared). When ON, `accumulatedRecords[].feature.geometry` is concatenated onto the
+  drawn geometries in the assembly effect; the existing group-by-type
+  `unionOperator.executeMany` merges same-type drawn + result parts.
+- `runtime/translations/default.ts`: `spatialIncludeResults` i18n key.
+
+### Changed
+- `runtime/tabs/SpatialTabContent.tsx`: assembly effect builds the Draw-mode geometry
+  array additively instead of `drawnGeometries`-only. No downstream change — buffer
+  preview and `executeSpatialQuery` already consume the multi-geometry array.
+
+### Notes
+- Runtime-only UI state, no config field. query-simple only; no shared-code touched.
+- SR-mixing is a non-issue: the main query path normalizes result geometries to the
+  map view SR (`query-execution-handler.ts` `outSpatialReference`), and drawn geometries
+  are already in map SR, so nothing is actually mixed at the union/buffer step.
+- The `resultsMode: 'new'` replace-the-input behavior is standard widget behavior, not
+  special-cased here. Large-result-set union cost (ties to TODO #28) is the one wrinkle
+  left to watch in smoke.
+- No unit test: `SpatialTabContent` is JimuDraw-bound with no test seam; the downstream
+  multi-geometry path is covered by `execute-spatial-query.test.ts`. Pending manual smoke.
+
+## [1.20.0-r028.117] - 2026-05-31 - Field-table Phase 2.1: per-field alias override
+
+### Context
+Phase 2.1 of the unified field-table renderer. Admins can now set a custom display
+label per field for SelectAttributes mode. The written spec (§9) proposed reshaping
+`resultDisplayFields` `string[]` → objects, but that field has 15 consumers and the
+settings field picker is ExB's framework `FieldSelector` (emits `string[]`).
+Reshaping it was high-risk for low gain, so we used a **sibling alias map** instead,
+leaving `resultDisplayFields` and all consumers untouched.
+
+> r028.115 (configurable record limit) + r028.116 (its revert) were rolled back,
+> never shipped — see `docs/development/RECORD_LIMIT_FINDINGS.md`. This is the next
+> shipped version after r028.114.
+
+### Added
+- `config.ts`: `resultFieldAliases?: { [fieldName: string]: string }` — sibling map
+  to `resultDisplayFields`; an admin alias here wins over the layer schema alias.
+- Settings UI (`results-field.tsx`): a per-field label text input below the field
+  picker, one row per selected field, showing the schema label + an override box.
+  Empty/whitespace = no override. i18n: `configFields`, `fieldAliases`,
+  `fieldAliasPlaceholder`.
+- `tests/popup-render-utils.test.ts` (+3): override wins; blank falls back; override
+  applies even when fieldMeta is undefined (the card-click regression guard).
+- `tests/rebind-utils.test.ts` (+1): alias-map keys remapped on layer rebind.
+
+### Changed
+- `runtime/popup-render-utils.ts`: `renderPopupContent` merges configured aliases
+  into `fieldMeta` once at the top, so all three render paths inherit it via the
+  builders' existing `meta.alias ?? name`. Merge iterates the union of alias keys and
+  does not require `fieldMeta` to exist (fix for the card-click path, which arrives
+  with empty fieldMeta but a config that has the aliases).
+- `runtime/query-utils.ts` (`getPopupTemplate`): returns `resultFieldAliases` so the
+  card renderer can apply overrides (it reconstructs a minimal queryConfig and would
+  otherwise lose them).
+- `runtime/simple-list.tsx` + `runtime/query-result-item.tsx`: thread
+  `resultFieldAliases` through the popup-template cache to the card prop and into the
+  reconstructed queryConfig (mirrors the existing `isSelectAttributes` plumbing).
+- `setting/rebind-utils.ts`: remap `resultFieldAliases` keys (field-name keyed)
+  alongside `resultDisplayFields` so labels survive a layer rebind.
+
+### Notes
+- SelectAttributes only. CustomTemplate uses its own `{{token}}` markdown; PopupSetting
+  uses the web map's popup. Verified by smoke: alias shows in result card, card-click
+  popup, and map-feature-click popup.
+- Phase 2.2 (per-field format dropdown) is next; see `docs/specs/FIELD_TABLE_RENDERER_SPEC.md` §9.
+
+### Files touched
+- `config.ts`, `runtime/popup-render-utils.ts`, `runtime/query-utils.ts`,
+  `runtime/simple-list.tsx`, `runtime/query-result-item.tsx`,
+  `setting/results-field.tsx`, `setting/results.tsx`,
+  `setting/rebind-utils.ts`, `setting/translations/default.ts`,
+  `tests/popup-render-utils.test.ts`, `tests/rebind-utils.test.ts`, `version.ts`,
+  `CHANGELOG.md`, `process-flows/README.md`, `docs/specs/FIELD_TABLE_RENDERER_SPEC.md` (§9)
+
+---
+
+## [1.20.0-r028.114] - 2026-05-30 - Result-set truncation alert
+
+### Context
+Queries fetch up to the layer's max transfer count (commonly 1000/2000). A query
+returning exactly that count looked identical whether it was complete or
+truncated — the user had no way to know more matching records existed. The
+service reports this via `exceededTransferLimit`, but on the main path it was
+captured by `executeDirectQuery` then dropped at the `.then`, and on the spatial
+path it was only logged. This surfaces it as a popover, following the existing
+no-results / query-error / duplicate alert pattern.
+
+### Added
+- `runtime/query-task-reducer.ts`: `TruncationAlertState` + `truncationAlert`
+  state + `SET_TRUNCATION_ALERT` action; cleared in `RESET_FOR_CLEAR`.
+- `runtime/query-result.tsx`: a calcite-popover anchored to the Results panel's
+  `remove-feedback-anchor` (amber warning styling, `exclamation-mark-triangle`).
+  Lives in the Results panel — not the input tabs — because a successful query
+  auto-switches there; an input-tab-anchored popover would mount on a now-hidden
+  tab and never show.
+- i18n keys `truncationAlert{Label,Title,Message}`. Message names the limit
+  ("reached the {limit}-record limit"). We know the returned count = the cap but
+  NOT the true total (that would need a separate count query).
+- `tests/query-task-reducer.test.ts` (new) — 5 tests: set/clear truncation,
+  no cross-talk with other alerts, RESET_FOR_CLEAR wipes it.
+
+### Changed
+- `runtime/query-execution-handler.ts` (main path): forward
+  `_directExceededTransferLimit` out of the `executeDirectQuery` `.then` and
+  dispatch the alert when true (clear when false). New-mode `clearResult` runs
+  before query execution here, so the dispatch survives.
+- `runtime/query-task.tsx` (spatial path): dispatch the alert based on any target
+  layer's `exceededTransferLimit`. **Dispatched LAST**, after ResultsMode handling
+  — New mode's `clearResult` wipes alert state, so an earlier dispatch was set
+  then immediately nuked before the Results panel rendered (the spatial-smoke
+  miss). Plumbed `truncationAlert` from reducer state to `QueryResult`.
+- `runtime/query-clear-handler.ts`: clear `truncationAlert` alongside the other
+  alerts on clear.
+
+### Notes
+- PopupSetting/web-map popups are unaffected. The fix is render-path agnostic —
+  both Query-tab and Spatial-tab truncating queries now show the alert on the
+  Results tab (verified by smoke on a 1000-cap Address points spatial query).
+
+### Files touched
+- `runtime/query-task-reducer.ts`, `runtime/query-execution-handler.ts`,
+  `runtime/query-task.tsx`, `runtime/query-clear-handler.ts`,
+  `runtime/query-result.tsx`, `runtime/translations/default.ts`,
+  `tests/query-task-reducer.test.ts` (new), `version.ts`, `CHANGELOG.md`,
+  `process-flows/README.md`
+
+---
+
+## [1.20.0-r028.113] - 2026-05-30 - Spatial Target-layers label determinism
+
+### Context
+Found during the r028.109–112 smoke test, not part of that arc, but addressed
+intentionally. The Spatial tab's "Target layers" picker showed different labels
+for the same underlying layer across two widgets: widget_63 read "Drainage
+Complaints", widget_66 read "Drainage complaint or study" — both bound to the
+identical layer (`KingCo_Stormwater/MapServer/1`, itemId `922071b5...`). The label
+was built as `ds?.layer?.title || ds?.getLabel() || item.name || dsId`, and the
+live `ds.layer.title` resolves lazily to whatever the portal item / service
+currently advertises, so it drifts by load timing and isn't admin-controlled.
+
+### Changed
+- `runtime/query-task.tsx` (`targetLayerOptions`): prefer the admin-configured
+  query item `name` (the settings "Label" field) first, falling back to live
+  `ds.layer.title` / `ds.getLabel()` / `dsId` only when `name` is unset. The
+  spatial picker is now deterministic and matches what the admin typed.
+
+### Notes
+- The settings **"Data" picker** in the same area is ExB's framework
+  `DataSourceSelector` (`jimu-ui/advanced/data-source-selector`) — its label is the
+  framework's, resolved from the live data source, and is **not** affected by this
+  change. If that picker's label needs to match, the lever is the web map / data
+  source side, not our code.
+
+### Files touched
+- `runtime/query-task.tsx`, `version.ts`, `CHANGELOG.md`
+
+---
+
+## [1.20.0-r028.112] - 2026-05-30 - Unified field-table renderer — Phase D (card-click popup)
+
+### Context
+Closes the last divergence. Clicking a result **card** opens an on-map popup via
+`openPopupForRecord` (`query-result.tsx`), which only routed CustomTemplate
+through our shared renderer; SelectAttributes fell through to Esri's web-map
+popup. So the card-click popup showed the web map's title and all fields in
+web-map order instead of our configured fields/aliases/order (confirmed by
+smoke: card-click popup ≠ map-feature-click popup).
+
+### Changed
+- `runtime/query-result.tsx` (`openPopupForRecord`): the shared-render branch now
+  handles `SelectAttributes` as well as `CustomTemplate`, via the same
+  `renderPopupContent` (fieldMeta from `clickedFeature.layer.fields`). All three
+  entry points now match: result card (C), map-feature click (B), card-click
+  popup (D).
+
+### Notes
+- `PopupSetting` / web-map popups and the rare SelectAttributes-with-no-display-
+  fields case still fall through to Esri (media/charts/attachments, or no explicit
+  field list). CustomTemplate unchanged.
+
+### Files touched
+- `runtime/query-result.tsx`, `version.ts`, `CHANGELOG.md`
+
+---
+
+## [1.20.0-r028.111] - 2026-05-30 - Unified field-table renderer — Phase C (result card)
+
+### Context
+The result **card** rendered SelectAttributes through Esri's `FeatureInfo`
+widget while the on-map popup (Phase B) used our renderer — so they diverged, and
+the card title bug surfaced: a double-brace `{{ActivityID}}` title rendered as a
+bare `}` because `FeatureInfo` only understands single-brace `{field}`.
+
+### Changed
+- `runtime/query-result-item.tsx`: the card renders SelectAttributes (and the
+  all-fields fallback) through the **same** `renderPopupContent` the popup uses —
+  alias labels, formatted dates/numbers, decoded domains, striped table, and
+  `resolvePopupTitle` (which handles both brace styles, fixing the `}` title).
+  PopupSetting / web-map popups stay on `FeatureInfo` (media/chart support).
+- `runtime/query-utils.ts` + `runtime/simple-list.tsx`: thread an
+  `isSelectAttributes` flag (mirrors the existing `isCustomTemplate` path:
+  `getPopupTemplate` → cache → prop). fieldMeta comes from the record's stamped
+  source layer (`data.feature.layer.fields`).
+
+### Added
+- `tests/popup-render-utils.test.ts` — 8 direct tests for `renderPopupContent` /
+  `resolvePopupTitle` against the real markdown engine: double-brace AND
+  single-brace titles (the `}` regression), alias labels, date/number/domain
+  formatting, the real `<table>` output, cell escaping, and the no-fieldMeta
+  fallback. This is also the card == popup parity guarantee (same fn, same inputs).
+
+### Files touched
+- `runtime/query-result-item.tsx`, `runtime/query-utils.ts`,
+  `runtime/simple-list.tsx`, `tests/popup-render-utils.test.ts`, `version.ts`,
+  `CHANGELOG.md`
+
+---
+
+## [1.20.0-r028.110] - 2026-05-30 - Unified field-table renderer — Phase B (on-map popup)
+
+### Context
+First wiring phase. The Path 3 on-map popup's field table (SelectAttributes /
+PopupSetting / AllAttributesFallback) was hand-built HTML with raw values and raw
+field names. Phase B routes it through our shared markdown engine so it shows
+aliases and formatted values — the visible payoff of the r028.109 groundwork.
+
+### Changed
+- `runtime/popup-render-utils.ts`: the field-table renderers
+  (`renderFieldTableHtml`, `renderFieldInfosTableHtml`) now build a headerless
+  striped Markdown table (`buildFieldTableMarkdown`) and render it via the shared
+  `convertTemplateToHtml` — same engine and styling as the result card. Labels use
+  the field alias; values are formatted via `value-formatter` (dates/numbers/
+  domains). `renderPopupContent` gains an optional `fieldMeta` param threaded to
+  both field-table paths.
+- `runtime/result-feature-layer-popup.ts`: `registerRecords` captures `fieldMeta`
+  (alias/type/domain) from `feature.layer.fields` at register time and stores it on
+  the slim popup record (the live layer is gone by popup-open). No threading
+  through direct-query/widget/sync needed.
+
+### Security
+- `escapeMarkdownCell`: field values are entity-encoded for the Markdown cell
+  (`& < > " | * _ \` [ ]`). `convertTemplateToHtml`'s table parser does no
+  backslash-escaping and no HTML-escaping, so a raw `|` would split the cell and
+  raw HTML would inject — entity encoding neutralizes both while rendering as the
+  literal glyph.
+
+### Added
+- `tests/result-feature-layer-popup.test.ts` — +5 tests (alias label, epoch-ms
+  date → 4-digit year, coded-domain decode, pipe/HTML/Markdown escaping, no-schema
+  fallback). Existing 35 retargeted from old-HTML-table assertions to the new
+  Markdown-table contract.
+
+### Notes
+- CustomTemplate popup path unchanged. The earlier spec assumed a dormant shared
+  `renderTableFromConfig`; it did not exist, so Phase B builds the pipe-table
+  string and feeds the existing `convertTemplateToHtml` instead — no new shared
+  module.
+
+### Files touched
+- `runtime/popup-render-utils.ts`, `runtime/result-feature-layer-popup.ts`,
+  `tests/result-feature-layer-popup.test.ts`, `version.ts`, `CHANGELOG.md`
+
+---
+
+## [1.20.0-r028.109] - 2026-05-30 - Unified field-table renderer — Phase A (groundwork)
+
+### Context
+A teammate reported the on-map popup not matching the Results card for a
+SelectAttributes query (raw epoch dates in the popup, formatted in the card).
+Investigation showed the card and popup run on different renderers (Esri
+`FeatureInfo` / `openPopup({features})` vs. our hand-built HTML table), and that
+Esri's formatting is reusable: `@arcgis/core/intl` is public and `formatDate`
+takes epoch-ms directly. Decision: unify card + popup on **our** renderer and
+borrow Esri's `intl` for values (Option 3). Full design in
+`docs/specs/FIELD_TABLE_RENDERER_SPEC.md`.
+
+This release is **Phase A only — groundwork, nothing wired yet.** Behavior is
+unchanged at runtime; the formatter is added and unit-tested in isolation so the
+wiring phases (B–D) stay small and reviewable.
+
+### Added
+- `runtime/value-formatter.ts` — formats a raw attribute value for display by
+  field type: coded-value domain decode (from the field schema), dates via Esri
+  `intl.formatDate(epochMs, convertDateFormatToIntlOptions(...))` (default
+  `short-date-short-time`, matching the card), numbers via `intl.formatNumber`
+  (`oid` excluded), strings raw. Plus `buildFieldMetaMap` to derive
+  name/alias/type/codedValues from a loaded FeatureLayer's fields.
+- `tests/value-formatter.test.ts` — 22 tests (domain decode incl. string-coerced,
+  date epoch-ms + override + fallbacks, number/oid, null/empty, meta mapping).
+  `@arcgis/core/intl` mocked; real format parity is the manual smoke test.
+
+### Notes
+- Supersedes the earlier r028.109 `getFormattedFieldValue` + intl-threading
+  approach, parked to `/tmp/r028.109-parked.patch` and reverted to the r028.108
+  baseline. Avoids the deprecated `esri/widgets/Feature` dependency (TODO #1).
+- Phases B–D will wire this into `popup-render-utils` / `result-feature-layer-popup`
+  / `query-result(-item)` and reuse the existing (dormant) shared
+  `renderTableFromConfig`.
+
+### Files touched
+- `runtime/value-formatter.ts` (new), `tests/value-formatter.test.ts` (new),
+  `version.ts`, `CHANGELOG.md`, `process-flows/README.md`, `TODO.md` (#30 wording),
+  `docs/specs/FIELD_TABLE_RENDERER_SPEC.md` (new)
+
+---
+
+## [1.20.0-r028.108] - 2026-05-29 - Spatial relationship single-select hardening
+
+### Context
+The Spatial relationship combobox (calcite, `selectionMode='single'`) could desync between
+calcite's internal selection and the React-controlled `selected` attributes, leaving more than
+one chip (e.g. Intersects + Overlaps). The query then sent a multi value to
+`query.spatialRelationship`, which the server rejected (`'spatialRel' parameter is invalid`).
+Reset also couldn't clear the stray chips because it only nulled React state, and calcite
+ignores a declarative deselect for selections it holds internally. Reproduced by a teammate
+(screenshot); the control only ever supported one relationship at a time.
+
+### Fixed
+- `runtime/tabs/SpatialTabContent.tsx`:
+  - `calciteComboboxChange` handler collapses to a single selection on every change event
+    (keeps calcite's reported value / last item, deselects the rest). Event-driven, no watcher.
+  - Apply requires `selectedRelationship` to be exactly one known relationship id before
+    querying, so a desynced/invalid `spatialRel` never reaches the server.
+  - Reset clears the combobox imperatively via its ref (deselect all items + clear value),
+    not just `setSelectedRelationship(null)`.
+
+### Verification
+- tsc clean; Jest 686/686. (Calcite web-component selection isn't unit-testable; verified by
+  build plus manual on the teammate's repro.)
+
+### Files touched
+- `runtime/tabs/SpatialTabContent.tsx`, `version.ts`, `CHANGELOG.md`
+
+---
+
+## [1.20.0-r028.107] - 2026-05-29 - Close TODO #24 (Path 2 Removal); archive plan doc
+
+### Context
+Bookkeeping close-out. Path 2 removal landed in full across r028.095-104 (chunked deletion,
+instrumentation cleanup, config-field deletion, docs scrub, type-union narrowing). This marks
+TODO #24 closed and archives its retrospective plan.
+
+### Changed
+- `TODO.md`: #24 marked CLOSED with a summary of what shipped and a note that the original
+  "Removal Strategy" section diverged (it assumed Path 1 was also removed; Path 1 was kept).
+- Moved `docs/development/PATH-2-REMOVAL-PLAN.md` to `docs/development/archive/`.
+
+### Note
+- No code or behavior change. TODO #25 was already closed in r028.102.
+
+---
+
+## [1.20.0-r028.106] - 2026-05-29 - CustomTemplate single-brace content field extraction fix
+
+### Context
+A result card rendered a broken image and empty values when its CustomTemplate content used
+legacy single-brace `{field}` tokens. `combineFields` extracts content fields via
+`extractFieldTokens`, whose regex matches only `{{double-brace}}`, so single-brace content
+tokens were never added to the query's outFields and those fields were never fetched. The
+title parser and the renderer already handle single-brace, so the template still rendered
+(with empty values) and the popup looked fine (it reads from a fuller attribute source),
+which masked the under-fetch. Confirmed by config: two widgets with the identical template,
+one using `{{ }}` (worked) and one using `{ }` (broke).
+
+### Fixed
+- `runtime/query-utils.ts` `combineFields`: after the `extractFieldTokens` pass, also extract
+  legacy single-brace `{field}` tokens from the content expression, mirroring the title
+  parser. The lookbehind/lookahead avoid matching the inner braces of a `{{field}}` token,
+  so mixed-syntax templates are not double-counted. Also benefits spatial result outFields
+  via the shared `combineFields`.
+
+### Added
+- `tests/query-utils.test.ts`: a single-brace content extraction test and a no-double-count
+  test for mixed `{{ }}` / `{ }`.
+
+### Verification
+- tsc clean; Jest 686/686.
+
+### Note
+- r028.105 was a temporary `resolveOutFields` diagnostic used to confirm this; it was reverted
+  and never committed.
+
+### Files touched
+- `runtime/query-utils.ts`, `tests/query-utils.test.ts`, `version.ts`,
+  `docs/query-simple/process-flows/README.md`, `CHANGELOG.md`
+
+---
+
+## [1.20.0-r028.104] - 2026-05-29 - Path 2 Removal tail: P4-2 type-union narrowing
+
+### Context
+Final code slice of TODO #24. After Path 2's removal, the result-layer functions still
+carried lenient `GraphicsLayer | GroupLayer` unions (kept during the chunked deletion to
+avoid a type cascade) and now-unreachable `if (type === 'group')` branches. All callers
+were verified (grep across `query-simple/src`) to pass only the Path 1 highlight
+GraphicsLayer, so the GroupLayer side is dead.
+
+### Changed
+- Narrowed `GraphicsLayer | GroupLayer` to `GraphicsLayer` on the threaded highlight-layer
+  prop and helper signatures across 11 files: `graphics-layer-utils.ts`,
+  `graphics-cleanup-utils.ts`, `record-removal-handler.ts`, `query-execution-handler.ts`,
+  `query-clear-handler.ts`, `results-management-utils.ts`, `query-task-list.tsx`,
+  `selection-utils.ts`, `query-task.tsx`, `query-submit-handler.ts`, `query-result.tsx`.
+
+### Removed
+- The dead GroupLayer branches inside `getGraphicsCountFromLayer`, `forEachGraphicInLayer`,
+  `addHighlightGraphics`, `removeHighlightGraphics`, and `clearGraphicsLayerOrGroupLayer`
+  (the last keeps its name for call-site compatibility but now takes only a GraphicsLayer).
+- Orphaned `GroupLayer` imports (11 files) and the orphaned `Layer` import
+  (`graphics-layer-utils.ts`).
+
+### Out of scope
+- The `GraphicsLayer | MapNotesLayer` unions (interactive-draw-tool, SpatialTabContent) are
+  JimuDraw's layer typing, unrelated to Path 2.
+
+### Verification
+- tsc clean (our widgets); Jest 684/684. No behavior change.
+
+### Files touched
+- The 11 files above, plus `version.ts`, `CHANGELOG.md`.
+
+---
+
+## [1.20.0-r028.103] - 2026-05-29 - Path 2 Removal tail: docs scrub (two-path world) + test-count reconciliation
+
+### Context
+Documentation pass for TODO #24. The flow docs still described three result-rendering paths
+gated on the deleted `useFeatureLayerResults`. Updated them to the real two-path model:
+Path 3 (FeatureLayer, in LayerList) when `addResultsAsMapLayer === true`, Path 1
+(highlight-only) when `false` (default). Path 2 is gone.
+
+### Changed
+- `process-flows/FLOW-03` and `FLOW-08`: three-path to two-path (diagrams, intros, and
+  FLOW-08's comparison table); Path 3 re-gated on `addResultsAsMapLayer`.
+- `process-flows/FLOW-09`: removed the Path 2 GroupLayer buffer-parent fallback (layer
+  stack, prose, decision diagram).
+- `process-flows/FLOW-05`: fixed the selection note ("Paths 1 or 2" to Path 1; Path 3 is
+  not the default).
+- `process-flows/README.md`: removed the "Path 2 removal pending" block; reconciled the
+  test-count table (Total 667 to 683, three rows corrected, async-serializer row added).
+- `SETTINGS_REFERENCE.md`: dropped the deleted `useFeatureLayerResults` row; fixed the
+  "Path 2 GraphicsLayer" highlight label to Path 1.
+
+### Notes
+- Docs only; no code or behavior change.
+- Remaining on TODO #24: P4-2 (`GraphicsLayer | GroupLayer` type narrowing), then close #24.
+
+### Files touched
+- `process-flows/FLOW-03-RESULTS-ACCUMULATION.md`, `process-flows/FLOW-05-SELECTION.md`,
+  `process-flows/FLOW-08-DATA-SOURCES.md`, `process-flows/FLOW-09-BUFFER-PREVIEW.md`,
+  `process-flows/README.md`, `SETTINGS_REFERENCE.md`, `version.ts`, `CHANGELOG.md`
+
+---
+
+## [1.20.0-r028.102] - 2026-05-29 - Path 2 Removal tail: delete dead useFeatureLayerResults; close TODO #25
+
+### Context
+Part of completing TODO #24 (Path 2 removal). The `useFeatureLayerResults` config field
+was already inert: its toggle UI was removed in r028.092 and runtime path selection keys
+off `addResultsAsMapLayer` (Path 1 highlight vs Path 3 FeatureLayer). This deletes the
+leftover field. Also closes TODO #25, whose premise ("LayerList toggle meaningless under
+Path 3") no longer holds.
+
+### Removed
+- `config.ts`: the `useFeatureLayerResults` interface field.
+- `config.json`: the `useFeatureLayerResults: true` default.
+- `setting/translations/default.ts`: the `useFeatureLayerResults` and
+  `useFeatureLayerResultsDescription` i18n keys (orphaned, no UI consumer).
+
+### Changed
+- `setting/setting.tsx`: refreshed the stale comment that referenced the removed field and
+  an already-completed deletion phase.
+- `TODO.md`: TODO #25 marked CLOSED with rationale.
+
+### Verification
+- No runtime readers of the field (grep confirmed only the declaration and comments remained).
+- tsc clean (our widgets); Jest 684/684. No behavior change.
+
+### Files touched
+- `config.ts`, `config.json`, `setting/translations/default.ts`, `setting/setting.tsx`,
+  `version.ts`, `TODO.md`, `docs/query-simple/CHANGELOG.md`
+
+---
+
+## [1.20.0-r028.101] - 2026-05-28 - Spatial mixed-geometry query fix (per-type execution + dedupe)
+
+### Context
+A spatial query with mixed input geometry types and no buffer silently used only the
+highest-dimension part and dropped the rest (a drawn polygon + line queried only the
+polygon). The source indicator listed both shapes, so the UI claimed both were used. The
+buffer path was unaffected because it unions every part into one polygon. Scope is per-mode
+(drawn OR results); cross-mode mixing remains the shelved include-results toggle.
+
+### Changed
+- `runtime/execute-spatial-query.ts`: `SpatialQueryParams.inputGeometry` became
+  `inputGeometries: Geometry[]`. Per target layer, outFields resolve once, then the query
+  runs once per input geometry and matches are deduped by objectId (object-identity fallback
+  when a feature has no OID) into one combined per-layer result. The per-layer result shape
+  is unchanged, so record conversion / results-mode / graphics are untouched.
+- `runtime/tabs/SpatialTabContent.tsx`: Apply passes the array (`[bufferedGeometry]` when
+  buffered, else `allInputGeometries`). The singular `inputGeometry` memo stays for warnings
+  and the canExecute guard.
+- `runtime/query-task.tsx`: `handleExecuteSpatialQuery` forwards `inputGeometries`.
+
+### Added
+- `tests/execute-spatial-query.test.ts`: 3 tests (per-geometry call count + objectId dedupe,
+  single geometry runs one query, buffer distance/unit forwarded per geometry).
+
+### Verification
+- tsc clean; Jest 684/684. Manual smoke (user, 2026-05-28) confirmed both modes with
+  points + lines + polygons: Draw 3-type query combined to 67 results, Operations 3-type
+  query combined to 123, `inputGeometryCount: 3` in the SPATIAL logs.
+
+### Files touched
+- `runtime/execute-spatial-query.ts`, `runtime/tabs/SpatialTabContent.tsx`,
+  `runtime/query-task.tsx`, `tests/execute-spatial-query.test.ts`, `version.ts`,
+  `docs/query-simple/process-flows/FLOW-10-SPATIAL-QUERY-EXECUTION.md`,
+  `docs/query-simple/process-flows/FLOW-09-BUFFER-PREVIEW.md`,
+  `docs/query-simple/process-flows/FLOW-11-SPATIAL-DRAW-MODE.md`
+
+---
+
+## [1.20.0-r028.100] - 2026-05-28 - Spatial draw fix: drawn graphics persist across mode switch
+
+### Context
+Drawing a line plus a buffer with parcels selected, then toggling Operations <-> Draw,
+made the drawn line vanish while its buffer stayed on the map (a phantom buffer). Root
+cause: JimuDraw was mounted only in Draw mode, so leaving Draw unmounted it and
+destroyed its draw GraphicsLayer and graphics, while `drawnGeometries` state and the
+state-driven buffer preview persisted.
+
+### Changed
+- `runtime/tabs/SpatialTabContent.tsx`: JimuDraw now stays mounted in both modes. The
+  Draw panel section is hidden via CSS (`drawSectionHiddenStyle`, `display:none`) in
+  Operations mode instead of being conditionally unmounted, so drawn shapes and the
+  draw layer survive mode switches. Stopped toggling `drawLayer.visible`, so drawn
+  shapes stay visible on the map in both modes (user preference).
+
+### Added
+- A `spatialMode` effect that cancels the JimuDraw Sketch (`drawSketchRef.current.cancel()`)
+  when leaving Draw mode. The Sketch keeps capturing map clicks even with its toolbar
+  hidden, so this disarm stops a stray map click from drawing in Operations mode. It
+  also covers the smart-default path that sets `spatialMode` without `handleModeChange`.
+
+### Verification
+- tsc clean (no query-simple/src errors); Jest 681/681. Manual smoke confirmed by user:
+  line stays visible when switching to Operations, buffer switches to the selected
+  parcels, line still present on return to Draw, and a map click in Operations does
+  not draw.
+
+### Files touched
+- `runtime/tabs/SpatialTabContent.tsx`, `version.ts`,
+  `docs/query-simple/process-flows/FLOW-11-SPATIAL-DRAW-MODE.md`
+
+---
+
+## [1.20.0-r028.099] - 2026-05-28 - Path 2 Removal: Phase 4-1 (remove PATH-2 instrumentation + dead return fields)
+
+### Context
+First slice of Phase 4 cleanup (PATH-2-REMOVAL-PLAN.md). The PATH-2 positive-control
+instrumentation added in Phase 2 (r028.093) has done its job: Path 2 was confirmed dead
+and deleted in Chunks A-D. This removes that scaffolding plus the always-false GroupLayer
+return fields left behind by Chunk B. No behavior change.
+
+### Removed
+- `runtime/widget.tsx`: the `componentDidMount` PATH-2 positive-control log.
+- `shared-code/mapsimple-common/debug-logger.ts`: the `PATH-2` debug-flag registration
+  in `createQuerySimpleDebugLogger`.
+- `runtime/graphics-cleanup-utils.ts`: the always-false `clearedGroupLayer` /
+  `cleanedGroupLayer` fields from the `clearAnyResultLayerContents` /
+  `cleanupAnyResultLayer` return shapes, and their log lines.
+- `runtime/query-clear-handler.ts`, `runtime/selection-utils.ts`: the two log readers
+  of `clearedGroupLayer`.
+
+### Verification
+- tsc clean; Jest 681/681. Logging-only and dead-field removal, no functional change.
+
+### Files touched
+- `runtime/widget.tsx`, `runtime/graphics-cleanup-utils.ts`,
+  `runtime/query-clear-handler.ts`, `runtime/selection-utils.ts`,
+  `shared-code/mapsimple-common/debug-logger.ts`, `version.ts`,
+  `feed-simple/src/version.ts` (shared-code consumer bump, r005.018)
+
+---
+
+## [1.20.0-r028.098] - 2026-05-28 - Path 2 Removal: Chunk D (delete P2-only graphics-state-manager state)
+
+### Context
+Chunk D of the chunked Phase 3 (PATH-2-REMOVAL-PLAN.md). Pure deletion pass. After
+Chunk C removed the last Path-2-only functions, the shared state those functions
+read/wrote in `GraphicsStateManager` had zero callers. This chunk deletes it. No
+behavior change — every deleted field and accessor was already unreachable.
+
+### Removed
+- `runtime/graphics-state-manager.ts`: the MapView cache (`_mapViewCache` +
+  `getMapView` / `setMapView` / `deleteMapView`), the GroupLayer creation-lock
+  (`_groupLayerCreation` + `get` / `set` / `delete` / `hasGroupLayerCreation`), and
+  the legend-FL visibility handles (`_legendVisibilityHandles` /
+  `_legendVisibilityHandleIds` + their 6 accessors). All fed Path 2's removed
+  legend-FL visibility watcher (r024.59) and were caller-less after Chunk C.
+- Now-unused imports/types: `GroupLayer`, `MapView`, `SceneView`, the `WatchHandle`
+  type, and `debugLogger` / `createQuerySimpleDebugLogger` (its only uses were the
+  PATH-2 instrumentation logs inside the deleted methods).
+
+### Kept (Path-1/Path-3 shared, still live)
+- `nextSequence`, the GraphicsLayer creation-lock (`_graphicsLayerCreation` + 4
+  accessors — 5 live callers in graphics-layer-utils + graphics-cleanup-utils), and
+  `lastBufferGraphic` (`_lastBufferGraphic` + 3 accessors — 4 live callers in
+  use-buffer-preview + selection-restoration-manager). Imports `GraphicsLayer` and
+  `Graphic` retained.
+
+### Verification
+- Grep across `query-simple/src` + `shared-code`: zero live references to any deleted
+  field or accessor (remaining hits are explanatory comments / the unrelated
+  `MapViewManager.getMapView()` on `this.mapViewManager`). Kept accessors confirmed
+  to still have live callers.
+- Manual smoke (`?debug=PATH-2`, Path 1 + Path 3): PATH-2 positive-control still fires
+  per mount; Path 3 `r028.094` skip log fires on reopen; select / 1000-record restore /
+  panel close-reopen / buffer preview clear-restore all functional across multiple
+  widget instances. No console errors reference the deleted state or the file.
+
+### Files touched
+- `runtime/graphics-state-manager.ts`, `version.ts`
+
+### Net effect
+File reduced ~232 → ~107 lines.
+
+### Next
+Phase 4 cleanup: remove PATH-2 positive-control instrumentation logging, drop the
+always-false `clearedGroupLayer` / `cleanedGroupLayer` return fields, and narrow the
+`GraphicsLayer | GroupLayer` type unions to GraphicsLayer-only across ~11 files.
+
+---
+
+## [1.20.0-r028.097] - 2026-05-28 - Path 2 Removal: Chunk C (delete orphaned P2-only functions)
+
+### Context
+Chunk C of the chunked Phase 3 (PATH-2-REMOVAL-PLAN.md). Pure deletion pass. After
+Chunk B collapsed the shared functions to single-path, the Path-2-exclusive helpers
+they used to call had zero callers. This chunk removes them outright. No behavior
+change — every deleted function was already unreachable.
+
+### Removed
+- `runtime/graphics-layer-utils.ts` (~466 lines): `createOrGetResultGroupLayer`,
+  `createGroupLayerInternal`, `getLegendLayerId`, the local P2 copy of
+  `normalizeGeometryType`, `createLegendFeatureLayer`, `ensureLegendFeatureLayer`,
+  `removeEmptyLegendFeatureLayers`, `getGraphicsSublayer`. Also dropped the
+  `FeatureLayerModule` lazy-load cache and the `FeatureLayer` import that only those
+  functions needed.
+- `runtime/graphics-cleanup-utils.ts` (~182 lines): `clearGroupLayerContents`,
+  `cleanupGroupLayer`. Also dropped now-orphaned imports: `globalHandleManager`
+  (used only by the deleted legend-handle teardown), `getLegendLayerId` /
+  `getGraphicsSublayer`, and the `Layer` / `FeatureLayer` type imports.
+- The re-export block in `graphics-layer-utils.ts` was trimmed to drop the deleted names.
+- 5 PATH-2 entry-point `debugLogger` calls died with their host functions.
+
+### Verification
+- Grep across `query-simple/src` + `shared-code`: zero live references to any deleted
+  symbol (remaining hits are explanatory comments / JSDoc only).
+- Manual smoke (`?debug=PATH-2`, Path 1 + Path 3): PATH-2 positive-control still fires
+  per mount; Path 3 `r028.094` skip log fires on reopen; select / accumulate /
+  identify-popup / panel close-reopen restoration all functional across multiple
+  widget instances. No console errors reference the deleted functions or either file.
+
+### Files touched
+- `runtime/graphics-layer-utils.ts`, `runtime/graphics-cleanup-utils.ts`, `version.ts`
+
+### Net effect
+~648 lines removed across the two utility files.
+
+### Next
+Chunk D deletes the Path-2-only state in `graphics-state-manager` (`_mapViewCache`
+and companions).
+
+---
+
+## [1.20.0-r028.096] - 2026-05-28 - Path 2 Removal: Chunk B (collapse shared functions to single-path)
+
+### Context
+Chunk B of the chunked Phase 3 (PATH-2-REMOVAL-PLAN.md). Strips every
+`isGroupLayer` / `useGroupLayer === true` branch inside shared functions so they
+become Path-1-only. The Path-2-exclusive functions those branches called are now
+orphaned (zero callers), set up for pure deletion in Chunk C.
+
+### Changed
+- `runtime/graphics-layer-utils.ts`: `addHighlightGraphics` and
+  `removeHighlightGraphics` collapsed to GraphicsLayer-only. Removed the legend-FL
+  ensure block (add path) and the empty-legend-prune block (remove path). Widget-ID
+  regex simplified from `^querysimple-(?:highlight|results)-` to Path-1-only.
+- `runtime/graphics-cleanup-utils.ts`: `clearGraphicsLayerOrGroupLayer` is now a
+  thin GraphicsLayer shim. `clearAnyResultLayerContents` / `cleanupAnyResultLayer`
+  lost their GroupLayer-lookup branches. The always-true `if (!clearedGroupLayer)`
+  gate around buffer cleanup was removed.
+- `runtime/managers/graphics-layer-manager.ts`: removed the `groupLayer` private
+  field and `getGroupLayer()` accessor (zero external callers). `initialize`,
+  `cleanup`, and `clearGraphics` collapsed to GraphicsLayer-only. `getResultsLayer`
+  is now a passthrough to `graphicsLayerRef.current`.
+- `runtime/managers/use-buffer-preview.ts`: dropped the Path 2 GroupLayer parenting
+  fallback. Buffer parents under Path 3's group when active, else top-level (Path 1).
+
+### Removed
+- 7 PATH-2 SH-branch instrumentation `debugLogger` calls (deleted along with their
+  host branches; no longer reachable).
+
+### Type-narrowing note
+SH function signatures retain `GraphicsLayer | GroupLayer` unions to avoid cascading
+type edits across the prop-chain (selection-utils, query-task, query-result, etc.).
+Narrowed once locally via cast. Full type tightening is queued for Phase 4.
+
+### Verification
+- TypeScript clean; Jest 539/539 across 23 suites.
+- Manual smoke (both Path 1 + Path 3, `?debug=PATH-2`): all 7 SH-branch PATH-2
+  events at zero, positive-control still fires per mount. Highlights, multi-select,
+  panel close/reopen restoration, buffer drawing + LayerList toggle, clear-buffer-
+  with-results all functional. Path 3 r028.094 skip log still fires on reopen.
+
+### Files touched
+- `runtime/graphics-layer-utils.ts`, `runtime/graphics-cleanup-utils.ts`,
+  `runtime/managers/graphics-layer-manager.ts`,
+  `runtime/managers/use-buffer-preview.ts`, `version.ts`
+
+### Net effect
+-223 lines (158 added incl. explanatory comments, 381 removed).
+
+---
+
+## [1.20.0-r028.095] - 2026-05-28 - Path 2 Removal: Chunk A (strip *MapView call sites)
+
+### Context
+Chunk A of the chunked Phase 3 (PATH-2-REMOVAL-PLAN.md). Unblocks the audit's
+breaking-risk finding before any deletion: two `graphicsStateManager` calls that
+fed Path 2's legend-FL visibility watcher were still invoked from Path-1-surviving
+code, so deleting `_mapViewCache` first would have broken Path 1.
+
+### Changed
+- `runtime/graphics-layer-utils.ts:878`: removed the `setMapView` call from
+  `addHighlightGraphics`'s unconditional body (was firing for Path 1 too).
+- `runtime/graphics-cleanup-utils.ts:343`: removed the `deleteMapView` call from
+  `cleanupGraphicsLayer` (Path 1 unmount path).
+
+Both call sites replaced with explanatory comments pointing forward to the Chunk D
+deletion of `_mapViewCache`.
+
+### Verification
+- TypeScript clean; Jest 539/539.
+- Manual smoke under `?debug=PATH-2`: `graphicsStateManager.setMapView-invoked`
+  went from 2 hits per Path 1 cycle to zero. Both widgets fully functional;
+  Path 1 restoration + Path 3 skip-optimization unchanged.
+
+### Files touched
+- `runtime/graphics-layer-utils.ts`, `runtime/graphics-cleanup-utils.ts`,
+  `version.ts`, plus `docs/development/PATH-2-REMOVAL-PLAN.md` (chunked Phase 3 plan).
+
+---
+
+## [1.20.0-r028.094] - 2026-05-28 - Restoration optimization: repoint panel-reopen skip at Path 3 GroupLayer
+
+### Context
+Caught during Phase 3 audit. `selection-restoration-manager.addSelectionToMap` had
+an `r024.3` optimization that short-circuited restoration on panel reopen when the
+persistent results GroupLayer was still on the map ("graphics already there, skip
+re-draw"). The check hardcoded the Path 2 GroupLayer ID prefix (`querysimple-results-*`).
+Once Phase 1 (r028.092) flipped `addResultsAsMapLayer` semantics from "use Path 2"
+to "use Path 3", the lookup silently stopped firing under Path 3 — the function
+fell through to redundant restoration work on every Path 3 panel reopen.
+
+### Changed
+- `query-simple/src/runtime/managers/selection-restoration-manager.ts`:
+  added `getGroupLayerId as getPath3GroupLayerId` import from
+  `../result-feature-layer-factory`. Replaced the hardcoded
+  `querysimple-results-${widgetId}` string with `getPath3GroupLayerId(this.widgetId)`.
+  Updated the inline comment + skip-log `note` to document the r028.094 reasoning.
+
+### Verification
+- TypeScript clean.
+- Jest: 680/680 pass across 28 suites. No regressions.
+- Manual smoke (Path 3 widget): close-reopen cycle now logs
+  `addSelectionToMap-skipped-layerlist-mode` with `groupLayerId: querysimple-fl-<widgetId>`
+  and r028.094 note. Results persist visually with no flicker. Optimization fires.
+- Manual smoke (Path 1 widget): outer `addResultsAsMapLayer` guard still short-circuits.
+  Restoration runs normally; graphics redrawn on reopen. No behavior change.
+- PATH-2 smoke test simultaneously confirmed empirical Path 2 deadness across all
+  exercised workflows — only one PATH-2 event fired (`graphicsStateManager.setMapView-invoked`
+  from `addHighlightGraphics`'s unconditional body), which matches audit finding #2
+  and is queued for the Phase 3 deletion pass.
+
+### Files touched
+- `query-simple/src/runtime/managers/selection-restoration-manager.ts`,
+  `query-simple/src/version.ts`
+
+---
+
+## [1.20.0-r028.093] - 2026-05-28 - Path 2 Removal: Phase 2 (PATH-2 verify-before-remove instrumentation)
+
+### Context
+Phase 2 of the PATH-2-REMOVAL-PLAN.md. Before deleting any Path 2 code in Phase 3,
+we need empirical evidence that no production code path still routes through it.
+First attempt at this verification (r028.089/.090, rolled back) used raw `console.warn`
+and instrumented shared functions that legitimately serve Path 1 — producing false
+positives. This pass corrects both errors.
+
+### Added
+- `shared-code/mapsimple-common/debug-logger.ts`: registered new `PATH-2` debug
+  feature flag in `createQuerySimpleDebugLogger()`. Without registration,
+  `debugLogger.log('PATH-2', ...)` would silently no-op per the registration gate
+  at `debug-logger.ts:111`.
+- 20 `debugLogger.log('PATH-2', ...)` instrumentation points across:
+  - `graphics-layer-utils.ts`: 3 P2-exclusive entries
+    (`createOrGetResultGroupLayer`, `getLegendLayerId`, `getGraphicsSublayer`)
+    + 2 SH-branch logs (`addHighlightGraphics`/`removeHighlightGraphics` GroupLayer paths)
+  - `graphics-cleanup-utils.ts`: 2 P2-exclusive entries
+    (`clearGroupLayerContents`, `cleanupGroupLayer`) + 3 SH-branch logs
+    (`clearGraphicsLayerOrGroupLayer`, `clearAnyResultLayerContents`, `cleanupAnyResultLayer`)
+  - `managers/graphics-layer-manager.ts`: 1 SH-branch log (`initialize` `useGroupLayer === true`)
+  - `graphics-state-manager.ts`: 7 P2-exclusive methods
+    (`get/set/has/delete GroupLayerCreation`, `get/set/delete MapView`)
+  - `managers/use-buffer-preview.ts`: 1 P2-branch log (Path 2 GroupLayer fallback)
+  - `widget.tsx` `componentDidMount`: 1 positive-control log (fires for every widget
+    mount regardless of path; confirms the PATH-2 logging pipeline is working when
+    the smoke test reports "zero events" elsewhere)
+
+### Verification
+- TypeScript clean (no errors in any of our widgets).
+- Jest: 539/539 tests pass (1 SIGSEGV worker crash on `direct-query.test.ts`
+  resolved on `--runInBand` rerun; environmental, not a logic failure).
+- Manual smoke: user activated `?debug=PATH-2`, exercised both Path 1
+  (`addResultsAsMapLayer: false`) and Path 3 (`addResultsAsMapLayer: true`) widgets.
+  Result: positive-control log fired on every mount; zero other PATH-2 events.
+  Pipeline confirmed working AND Path 2 confirmed empirically dead under all
+  tested workflows. Green light for Phase 3 deletion.
+
+### Followup
+- Phase 3 deletion plan refined via independent audit agent. Audit caught one
+  compile-break risk (`graphicsStateManager.deleteMapView` is called by Path 1's
+  surviving `cleanupGraphicsLayer`) and three plan gaps (additional `setMapView`
+  call site in `addHighlightGraphics`; `GraphicsLayerManager` sibling methods
+  beyond `initialize` need symmetric collapse; `selection-restoration-manager`
+  early-return block silently broken under Path 3). Plan updated; deletion not yet
+  executed.
+
+### Files touched
+- Source: `shared-code/mapsimple-common/debug-logger.ts`,
+  `query-simple/src/runtime/graphics-layer-utils.ts`,
+  `query-simple/src/runtime/graphics-cleanup-utils.ts`,
+  `query-simple/src/runtime/graphics-state-manager.ts`,
+  `query-simple/src/runtime/managers/graphics-layer-manager.ts`,
+  `query-simple/src/runtime/managers/use-buffer-preview.ts`,
+  `query-simple/src/runtime/widget.tsx`, `query-simple/src/version.ts`
+
+---
+
+## [1.20.0-r028.092] - 2026-05-28 - Path 2 Removal: Phase 1 (routing change — addResultsAsMapLayer is path selector)
+
+### Context
+Phase 1 of the PATH-2-REMOVAL-PLAN.md. The goal is to make `addResultsAsMapLayer`
+the sole config field that picks between Path 1 (ephemeral GraphicsLayer) and
+Path 3 (persistent per-geometry FeatureLayers in LayerList). No code deletion yet —
+this commit only flips routing decisions so future Phase 3 deletion has a clear
+target.
+
+### Changed
+- `query-simple/src/runtime/widget.tsx`: every reference to
+  `useFeatureLayerResults !== false` replaced with `addResultsAsMapLayer === true`
+  (and vice versa for the inverse checks). Same in `prevProps`-based comparators.
+  Toggle-change detector now fires on `addResultsAsMapLayer` change so runtime
+  toggling tears down old path and spins up new.
+- `query-simple/src/setting/setting.tsx`: `useFeatureLayerResults` toggle removed
+  from settings UI. Placeholder comment marks the deletion point.
+- Inline `r028.006: gated by useFeatureLayerResults` comments throughout
+  `widget.tsx` updated to `r028.092: gated by addResultsAsMapLayer` so the
+  routing intent is documented at the gate sites themselves.
+
+### Architecture target
+| Toggle | `addResultsAsMapLayer` | Active path |
+|---|---|---|
+| ON (default) | `true` | Path 3 (FeatureLayers in LayerList) |
+| OFF | `false` | Path 1 (GraphicsLayer, ephemeral, not in LayerList) |
+
+### Removed (UI-only; field still read at runtime)
+- The `useFeatureLayerResults` settings UI toggle. The field itself still lives
+  in `config.ts` and is read by Phase-3-slated call sites until that phase strips
+  the consumers.
+
+### Verification
+- TypeScript clean.
+- Jest: green.
+- Manual smoke: user confirmed both Path 1 and Path 3 widgets behave correctly
+  end-to-end. Path 3 widget: per-geometry FLs in LayerList, persists across panel
+  close/reopen. Path 1 widget: graphics on map only while open, no LayerList entry,
+  gone on close.
+
+### Followup
+- Phase 2 instrumentation added in r028.093.
+- TODO comment in `widget.tsx:629` flags duplicate toggle-change detector block
+  for collapse in Phase 3 (Path 2 deletion pass).
+
+### Files touched
+- `query-simple/src/runtime/widget.tsx`, `query-simple/src/setting/setting.tsx`,
+  `query-simple/src/version.ts`
+
+---
+
+## [1.20.0-r028.091] - 2026-05-27 - Fix: clearResultFeatures destroys buffer layer (ghost-layer trap)
+
+### Context
+User-reported buffer failure: "after one failure, no buffer works again until page
+reload." Diagnosis via debug logs traced it to an unintended interaction between
+two prior changes:
+- **r028.083** parented the buffer-preview layer under Path 3's GroupLayer for
+  inherited visibility (so toggling the Results group also hides the buffer).
+- **r028.088** rewrote `clearResultFeatures` to "destroy and recreate" — but it
+  iterated ALL children of the GroupLayer and destroyed them indiscriminately.
+The buffer layer was a child, so every clear destroyed it. The buffer hook's
+`bufferLayerRef.current` still pointed at the destroyed layer; `removeAll()` and
+`add()` calls on a destroyed JSAPI layer operate on the in-memory source array
+without throwing, so every subsequent buffer attempt silently no-op'd while
+emitting a false-positive `buffer-preview-updated` log. Visual: buffer never
+rendered again. Cure: page reload.
+
+### Changed
+- `query-simple/src/runtime/result-feature-layer-sync.ts`:
+  `clearResultFeatures` now filters child layers by ID prefix
+  (`querysimple-fl-{widgetId}-`) before detach/destroy. Result FLs are still
+  cleared; buffer layer and any other sibling layers (future use) survive.
+
+### Added
+- `query-simple/tests/result-feature-layer-sync.test.ts`: new test "should NOT
+  destroy non-result-FL children of the GroupLayer" — injects a fake buffer-like
+  layer, runs clearResultFeatures, asserts the fake layer's destroy was NOT
+  called and that it was NOT removed from the group.
+
+### Files touched
+- Source: `runtime/result-feature-layer-sync.ts`, `version.ts`
+- Tests: `tests/result-feature-layer-sync.test.ts`
+
+### Verification
+- Webpack build clean.
+- Jest: 680/680 tests pass across 28 suites (1 new test added).
+- Manual: user confirmed buffer survives clears now (was broken under same
+  conditions before the fix).
+
+### Followup
+- TODO #27 already flagged the dead code after early `return` in this same
+  function (lines 434-438). Not addressed here — separate small cleanup pass.
+
+---
+
+## [1.20.0-r028.088] - 2026-05-22 - Path 3 clear perf: destroy-and-recreate FLs
+
+### Context
+User-reported UX issue: with a high-feature result set (~460 features), `Clear all`
+took multiple seconds during which features remained visible on the map. User could
+pan/zoom and still see the stale features — looked broken. Root cause: prior
+implementation called `queryFeatures` + `applyEdits({deleteFeatures})` per child FL,
+iterating every feature one by one through JSAPI's renderer/spatial-index update.
+Heap-dump comparison also showed ~32-36 MB per-cycle accumulation (turned out
+to be unrelated to applyEdits — TODO #26 tracks the residual leak).
+
+### Changed
+- `query-simple/src/runtime/result-feature-layer-sync.ts`:
+  - `clearResultFeatures` reimplemented as destroy-and-recreate: synchronously
+    removes each child FL from the GroupLayer (map updates immediately), resets
+    our own state (ObjectId counter, key Set, popup registry), then destroys
+    layers asynchronously off the critical path.
+  - Next add lazily recreates per-geometry FLs via existing `getOrCreateFeatureLayer`.
+  - No more `queryFeatures` / `applyEdits` per child during clear.
+- `query-simple/tests/result-feature-layer-sync.test.ts`: 5 tests rewritten /
+  added to assert the new behavior — synchronous detach, async destroy, no
+  per-feature work, reset state, empty-layer handling, log payload, registry clear.
+
+### Added
+- `TODO.md` #26 — Memory leak investigation (per-cycle ~32 MB accumulation that
+  destroy-and-recreate did NOT fix; leak source unidentified, scales with
+  feature count, not blocking).
+
+### Files touched
+- Source: `runtime/result-feature-layer-sync.ts`, `version.ts`
+- Tests: `tests/result-feature-layer-sync.test.ts`
+- Docs: `TODO.md` (#26 + #24 dead-code notes), `docs/query-simple/process-flows/README.md`,
+  `FLOW-03-RESULTS-ACCUMULATION.md`, `FLOW-05-SELECTION.md`, `FLOW-08-DATA-SOURCES.md`,
+  `docs/testing/PATH3_FEATURE_PARITY_SMOKE.md` (Section D obsolete, K.3 criterion fix),
+  this changelog.
+
+### Verification
+- Webpack build clean.
+- Jest: 679/679 tests pass across 28 suites (2 net new tests).
+- Manual: user-validated 460-feature clear is now visibly instant.
+- **Path 3 smoke test 121/121 valid tests pass.** Path 3 formally validated
+  end-to-end. TODO #24 (Path 2 removal) is unblocked.
+
+---
+
+## [1.20.0-r028.087] - 2026-05-22 - Path 3 concurrency: serialize syncResultFeatureLayers
+
+### Context
+Proactive fix (not yet observed in real use). `widget.tsx:handleAccumulatedRecordsChange`
+fires `void this.syncResultFeatureLayers(records, previousRecords)` — fire-and-forget,
+no await. Two rapid-fire query invocations can produce concurrent in-flight sync calls.
+Inside each sync, `getExistingCompositeKeys` reads the shared `_keysByWidget` Set, then
+`addResultFeatures` mutates it *after* its own `applyEdits` await resolves. Two concurrent
+syncs reading-then-mutating the same Set across awaits is a classic read-modify-write
+race that can produce duplicate features on the map. Path 2 handled a similar concern
+via `pendingGraphicsOperation` (selection-utils.ts:24, r021.93).
+
+### Added
+- `query-simple/src/utils/async-serializer.ts` — small `createAsyncSerializer()`
+  factory. Returns a queue function that chains submitted async ops onto a
+  FIFO Promise chain. Errors in one queued op do NOT poison the chain
+  (caught silently so the next op still runs).
+- `query-simple/tests/async-serializer.test.ts` — 5 unit tests covering the
+  contract widget.tsx relies on: FIFO ordering, no interleaving, no poisoning
+  on rejection, per-call Promise resolution, many-call ordering.
+
+### Changed
+- `query-simple/src/runtime/widget.tsx`:
+  - Imports `createAsyncSerializer`.
+  - Adds instance field `syncResultFeatureLayersSerializer` initialized to a
+    fresh serializer.
+  - Refactors `syncResultFeatureLayers` into a thin wrapper that submits to
+    the serializer. Body moved verbatim into new private
+    `doSyncResultFeatureLayers`. No semantic change to the diff/apply logic
+    itself — only the invocation pattern is serialized.
+
+### Files touched
+- New: `runtime/utils/async-serializer.ts`, `tests/async-serializer.test.ts`
+- Changed: `runtime/widget.tsx`, `version.ts`
+
+### Verification
+- Webpack build clean.
+- Jest: 677/677 tests pass across 28 suites (5 new — all green).
+- Manual: deferred — race is hard to reproduce reliably; absence of duplicate
+  features under normal use confirms no regression.
+
+---
+
+## [1.20.0-r028.086] - 2026-05-22 - Path 3 parity: hide empty-bucket Legend entries
+
+### Context
+After clearing or mode-switching between queries of different geometry types
+(e.g. polygons → clear → points), the Legend widget kept showing entries for
+geometry types with zero remaining features. Stale UX — user sees a "Polygons"
+swatch when there are no polygons on the map. Path 2 already handled this
+(`graphics-layer-utils.ts:562-589`, r024.54) via `legendEnabled = false` on the
+empty-bucket FL; Path 3 had no equivalent.
+
+### Changed
+- `query-simple/src/runtime/result-feature-layer-sync.ts`:
+  - Added `disableLegendIfEmpty(layer, widgetId)` helper. Uses
+    `queryFeatureCount` to detect zero-feature state; toggles
+    `legendEnabled = false` (does NOT destroy the layer — ESRI's reactive
+    state survives for fast re-use).
+  - `removeResultFeatures`: calls the helper after each batch delete.
+  - `clearResultFeatures`: sets `legendEnabled = false` directly (clear
+    guarantees emptiness; no count query needed).
+  - `addResultFeatures`: inverse — re-enables `legendEnabled` if it was
+    previously hidden (mirrors Path 2 graphics-layer-utils.ts:497-501).
+
+### Added
+- Three unit tests in `tests/result-feature-layer-sync.test.ts`:
+  - "should disable legendEnabled when removing the last feature from a layer"
+  - "should leave legendEnabled true when other features remain after removal"
+  - "should re-enable legendEnabled when adding features to a layer that was hidden"
+
+### Files touched
+- Source: `runtime/result-feature-layer-sync.ts`, `version.ts`
+- Tests: `tests/result-feature-layer-sync.test.ts`
+
+### Verification
+- Webpack build clean.
+- Jest: 672/672 tests pass across 27 suites (3 new — all green).
+- Manual: user confirmed.
+
+---
+
+## [1.20.0-r028.085] - 2026-05-22 - Path 3 parity: emit SETTINGS log on renderer build
+
+### Context
+Path 2's `getDefaultHighlightSymbol` (graphics-layer-utils.ts:52-65, r028.060)
+emits a `SETTINGS / singletonConfigRead` debug event listing the 8 symbology
+config values read from `widgetConfigManager`. Path 3's
+`buildRendererForGeometryType` reads the same 8 values silently, breaking the
+documented SETTINGS-flag audit practice for Path 3 symbology investigations.
+
+### Changed
+- `query-simple/src/runtime/result-feature-layer-factory.ts`:
+  `buildRendererForGeometryType` now emits an equivalent `SETTINGS` log with
+  `source: 'result-feature-layer-factory'` (distinct from Path 2's
+  `source: 'graphics-layer-utils'`) and the same 8 config field names so both
+  paths surface side by side under a `?debug=SETTINGS` filter.
+
+### Files touched
+- Source: `runtime/result-feature-layer-factory.ts`, `version.ts`
+
+### Verification
+- Webpack build clean.
+- Jest: 669/669 tests pass.
+
+---
+
+## [1.20.0-r028.084] - 2026-05-22 - Path 3 parity: creation lock on getOrCreateFeatureLayer
+
+### Context
+Fourth Path 2 → Path 3 parity gap, fixed proactively to avoid re-introducing a
+bug Path 2 already hit at r024.17. Path 3's `getOrCreateFeatureLayer` had a
+find-then-add pattern with `await`s between the existence check and the
+`groupLayer.layers.add(layer)` call. Two concurrent calls for the same
+`widgetId` + geometryType would both pass the existence check, both run
+`createResultFeatureLayer` (including the slow `buildResultPopupTemplate`
+await), and both try to add the result. Path 2's lock pattern
+(`graphicsStateManager.hasGraphicsLayerCreation`, r024.17) had no Path 3
+equivalent. Hard to trigger in practice (requires concurrent sync calls on
+the very first creation of a given geometry type per widget), but exactly
+the kind of bug that bites once usage patterns shift.
+
+### Changed
+- `query-simple/src/runtime/result-feature-layer-factory.ts`:
+  - Added module-level `_creationsInFlight` Map keyed by full layer ID
+    (`querysimple-fl-{widgetId}-{geometryType}`).
+  - `getOrCreateFeatureLayer`: after the fast-path existence check, looks
+    for an in-flight Promise for the same key. If found, awaits and returns
+    it (no duplicate work). Otherwise stores its own Promise before the
+    first await so concurrent callers see it. `try/finally` guarantees
+    cleanup even if creation throws.
+  - New debug event: `getOrCreateFeatureLayer-awaiting-in-flight` fires when
+    a second caller hits the lock.
+  - Updated docstring; the prior "Thread-safe" claim was inaccurate.
+
+### Added
+- Two new unit tests in `tests/result-feature-layer-factory.test.ts`:
+  - "should serialize concurrent creations for the same key (no duplicate
+    construction)" — uses a deferred Promise to widen the race window, fires
+    two concurrent calls, asserts `MockFeatureLayer` and `groupLayer.layers.add`
+    were each called exactly once.
+  - "should still create a new layer on a subsequent call after the lock cleared"
+    — guards against the in-flight Map leaking entries between calls.
+
+### Files touched
+- Source: `runtime/result-feature-layer-factory.ts`, `version.ts`
+- Tests: `tests/result-feature-layer-factory.test.ts`
+
+### Verification
+- Webpack build clean.
+- Jest: 669/669 tests pass across 27 suites (added 2 new tests, both green).
+- Manual: deferred — race is hard to reproduce reliably; new
+  `getOrCreateFeatureLayer-awaiting-in-flight` log will surface it in
+  console if it ever fires in practice.
+
+---
+
+## [1.20.0-r028.083] - 2026-05-22 - Path 3 parity: buffer preview parents under active path
+
+### Context
+Third Path 2 → Path 3 parity gap. The buffer preview hook (`use-buffer-preview.ts`)
+hardcoded a lookup of Path 2's GroupLayer ID (`querysimple-results-{widgetId}`).
+When Path 3 was active, the lookup failed and the buffer fell through to the
+top-level `mapView.map.add(layer)` — escaping the inherited-visibility cascade.
+Toggling the Results group off in LayerList would hide the results but leave the
+buffer floating on the map.
+
+### Changed
+- `query-simple/src/runtime/managers/use-buffer-preview.ts`:
+  - Added import of `getGroupLayerId as getPath3GroupLayerId` from
+    `result-feature-layer-factory` (avoids a second hardcoded prefix).
+  - Replaced the single-lookup parenting logic with a three-way decision: try
+    Path 3's GroupLayer first, then Path 2's, then fall back to top-level
+    (Path 1, which has no GroupLayer). The debug log now reports the resolved
+    `activePath` (`'path1'` | `'path2'` | `'path3'`).
+  - Unmount cleanup unchanged — `layer.parent.remove(layer)` already handles
+    both GroupLayer-child and top-level cases.
+- `docs/query-simple/process-flows/FLOW-09-BUFFER-PREVIEW.md`: updated layer
+  stack diagram (line ~38) and creation flow diagram (~189) to reflect the
+  three-path parenting decision.
+
+### Files touched
+- Source: `runtime/managers/use-buffer-preview.ts`, `version.ts`
+- Docs: `process-flows/FLOW-09-BUFFER-PREVIEW.md`, this changelog
+
+### Verification
+- Webpack build clean.
+- Jest: 667/667 tests pass across 27 suites.
+- Manual: user tested all three paths simultaneously, no clashing — Path 3
+  buffer hides/shows with Results group toggle as expected, Path 2 unchanged,
+  Path 1 unchanged.
+
+---
+
+## [1.20.0-r028.082] - 2026-05-22 - Path 3 parity: close popup when GroupLayer toggled off
+
+### Context
+Second Path 2 → Path 3 parity gap from the post-r028.081 audit. Path 2 watched
+its legend FL's `visible` property and closed any open popup when the user
+toggled the layer off in the LayerList widget (`graphics-layer-utils.ts:435-462`,
+r024.59). Path 3 had no watcher — popup would hang over an empty/hidden map area.
+
+### Changed
+- `query-simple/src/runtime/result-feature-layer-factory.ts`:
+  - Added module-level `_visibilityWatchHandles` Map keyed by widgetId
+  - `createResultGroupLayer`: registers a `groupLayer.watch('visible', ...)` that
+    closes `mapView.popup` when the GroupLayer becomes invisible. mapView is
+    captured in the closure — no separate state-manager cache needed.
+  - `destroyResultLayers`: removes the watch handle and deletes from map
+- `query-simple/tests/result-feature-layer-factory.test.ts`,
+  `query-simple/tests/result-feature-layer-sync.test.ts`: added `watch()` stub
+  to GroupLayer mocks (returns a removable handle).
+
+### Files touched
+- Source: `result-feature-layer-factory.ts`, `version.ts`
+- Tests: `result-feature-layer-factory.test.ts`, `result-feature-layer-sync.test.ts`
+
+### Verification
+- Webpack build clean.
+- Jest: 667/667 tests pass across 27 suites.
+- Manual: user confirmed — popup closes immediately when layer toggled off;
+  re-enabling layer and clicking a feature opens popup normally.
+
+---
+
+## [1.20.0-r028.081] - 2026-05-22 - Path 3 parity: auto-enable layer visibility on feature add
+
+### Context
+Found during Path 3 smoke testing (`PATH3_FEATURE_PARITY_SMOKE.md`): if the user
+toggled the QuerySimple Results layer OFF in LayerList and then ran a query that
+added features, Path 3 left the layer hidden — new features rendered invisibly.
+Path 2 already had auto-enable logic (`graphics-layer-utils.ts:948-959`, r024.18).
+Path 3 had no equivalent.
+
+### Changed
+- `query-simple/src/runtime/result-feature-layer-sync.ts` — at the end of
+  `addResultFeatures()`, if any features were added and the GroupLayer is hidden,
+  set `groupLayer.visible = true` and emit a `FEATURE-LAYER` debug log. Mirrors
+  Path 2's behavior. `visibilityMode` is `'inherited'`, so toggling the GroupLayer
+  cascades to child FeatureLayers.
+
+### Files touched
+- `query-simple/src/runtime/result-feature-layer-sync.ts` (one conditional block added)
+- `query-simple/src/version.ts` (r028.080 → r028.081)
+
+### Verification
+- Webpack build clean.
+- Jest: 667/667 tests pass across 27 suites.
+- Manual: user confirmed working.
+
+---
+
+## [1.20.0-r028.080] - 2026-05-22 - Remove Select on Map feature
+
+### Context
+The Select on Map data action (the "Select on map" item in the results More-actions
+menu) was the entry point for BUG-SELECT-MAP-IMAGE-001 — the visual highlight (blue
+outline) regression on map-image sublayers under ExB 1.20. Multiple fix paths were
+attempted across r028.075–r028.079 (direct `layerView.highlight()`, `selectFeaturesByIds`,
+`tryCreateHighLightFeatureLayer` + `addFeaturesToHighlightFeatureLayer`, `selectFeaturesByQuery`
+with both `objectIds` and `where` clauses). All failed: framework methods either
+errored or silently returned without producing a highlight. The feature has been
+retired rather than carry the broken behavior forward.
+
+### Removed
+- `query-simple/src/data-actions/add-to-map-action.tsx` — deleted (exported `createAddToMapAction`,
+  `handleSelectOnMap`, `clearSelectOnMapHighlight`, `SelectOnMapResult`, `selectRecordsForAddToMap`).
+- `query-simple/src/runtime/assets/icons/show-on-map.svg` — deleted (referenced only by removed code).
+- BUG-SELECT-MAP-IMAGE-001 entry in `docs/bugs/BUGS.md`.
+- TODO #22 detail in `TODO.md`; entry replaced with closed status note.
+
+### Changed
+- `query-simple/src/runtime/results-menu.tsx` — removed `handleSelectOnMap` import,
+  `showOnMapIcon` constant, `handleSelectOnMapClick` handler (including the BUG-SELECT-MAP-IMAGE-001
+  diagnostic trap), `selectOnMap` label, the `<DropdownItem>` menu item, the
+  `graphicsLayer` and `queries` props from `ResultsMenuProps`, and now-unused
+  imports (`Icon`, `ImmutableArray`, `GraphicsLayer`, `GroupLayer`). The
+  `getAllFeatureRecords` helper was retained as dormant code (marked for removal
+  in a future cleanup pass; no current callers).
+- `query-simple/src/runtime/query-result.tsx` — stopped passing `graphicsLayer`
+  and `queries` to `<ResultsMenu>`; updated descriptive comment.
+- `query-simple/src/runtime/selection-utils.ts` — removed `clearSelectOnMapHighlight`
+  import and its call from `clearAllSelectionsForWidget`.
+- `query-simple/src/runtime/translations/default.ts` — removed `addToMap` label key.
+- `query-simple/src/data-actions/index.tsx` — removed import + invocation of
+  `createAddToMapAction`. `getExtraActions` now returns only the Zoom To action.
+- `query-simple/tests/selection-utils.test.ts` — removed jest mock for
+  `add-to-map-action` (now unnecessary).
+- `docs/bugs/BUGS.md`, `CURRENT_STATUS.md`, `README.md`, `TODO.md`,
+  `docs/development/DEVELOPMENT_GUIDE.md`, `docs/query-simple/ARCHITECTURE.md`,
+  `docs/testing/EDGE-CASE-TEST-PLAN.md`, `docs/testing/QS_E2E_TEST_INVENTORY.md`,
+  `docs/audit/GRAPHICS-SELECTION-AUDIT.md` — references updated to reflect removal.
+- `docs/releases/RELEASE_QS-r027.099_FS-r005.016.md` — added historical note that
+  the feature was later removed in r028.080.
+
+### Files touched
+- Source: `add-to-map-action.tsx` (deleted), `results-menu.tsx`, `query-result.tsx`,
+  `selection-utils.ts`, `translations/default.ts`, `data-actions/index.tsx`, `version.ts`
+- Asset: `assets/icons/show-on-map.svg` (deleted)
+- Tests: `tests/selection-utils.test.ts`
+- Docs: 10 files updated as listed above
+
+### Verification
+- Webpack build clean after edits (before deletion) and after deletion.
+- Jest: 373/373 tests pass across 17 suites.
+- Manual verification pending: confirm "Select on map" no longer appears in the More-actions
+  menu; confirm Pan to, View in table, and Export still work.
+
+---
+
+## [1.20.0-r028.073-074] - 2026-05-21 - Bug audit and doc reconciliation
+
+### Context
+Source code audit revealed 5 bug tags (`BUG-*`) in code but only 3 in BUGS.md.
+Cross-referenced all tags against the bug index and git history. Also confirmed
+BUG-ADD-MODE-001 was fixed months ago (r021.74-78 + r026.002-008) and updated
+its postmortem. Staged the remaining deletions from the r028.072 file cleanup
+that were not included in the prior commit.
+
+### Changed
+- **`docs/bugs/BUGS.md`** -- BUG-ADD-MODE-001 updated from DEFERRED to RESOLVED
+  (r021.74-78 initial fix via per-record `__queryConfigId` stamping, fully eliminated
+  by r026.002-008 HTML component conversion). Added BUG-SELECT-MAP-IMAGE-001 as OPEN
+  (map-image sublayer highlight regression from 1.19). Added BUG-HASH-DIRTY-001 as
+  RESOLVED (r020.1, commit `8a6ba6f9b`). Both entries added to open and resolved sections.
+- **`docs/bugs/BUG-ADD-MODE-001_POSTMORTEM.md`** -- Rewritten with resolution details.
+  Moved to `archive/`.
+- **`TODO.md`** -- TODO #25 added (LayerList toggle meaningless with Path 3). Memory
+  comparison data added to TODO #24 (Path 3 vs Path 2 heap snapshot results).
+
+### Investigation findings
+- **BUG-SELECT-MAP-IMAGE-001**: Originally classified as "architecture limitation"
+  (map-image sublayers lack FeatureLayerView). Reclassified as open bug: works in
+  ExB 1.19 and the native Select tool works in 1.20. Root cause is our r027.096
+  direct `highlight()` bypass skipping the framework's `JimuQueriableLayerView`
+  machinery (which creates a temporary FeatureLayer from sublayers via
+  `getOrCreateLayerViewBySubId()`). Three fix paths documented.
+- **BUG-HASH-DIRTY-001**: Confirmed fixed at r020.1. Safety guard still in
+  `widget.tsx:738`. No action needed.
+
+### Files touched
+- `docs/bugs/BUGS.md`
+- `docs/bugs/archive/BUG-ADD-MODE-001_POSTMORTEM.md` (moved from `docs/bugs/`)
+- `query-simple/src/version.ts`
+- `TODO.md`
+- `docs/query-simple/CHANGELOG.md`
+
+---
+
+## [1.20.0-r028.072] - 2026-05-20 - File organization cleanup
+
+### Context
+Project documentation had accumulated significant clutter over 6 months of active
+development: 66 files in `docs/bugs/` (16 from a single investigation), 36 in
+`docs/development/` with completed checklists alongside active guides, 7 stale
+architecture analysis files, and 12 root-level markdown files including misplaced
+release notes and superseded artifacts.
+
+### Changed
+- **`docs/bugs/BUGS.md`** -- Updated references to point at `archive/` paths for
+  resolved bug docs. Updated timestamp.
+
+### Added
+- **`docs/bugs/BUG-ADD-MODE-001_POSTMORTEM.md`** -- Consolidated 16 investigation
+  files into one postmortem covering failed approaches, the React hooks constraint,
+  and the path forward. Original files preserved in `archive/`.
+
+### Archived (moved to `archive/` subdirectories, recoverable via git)
+
+**`docs/bugs/archive/`** (63 files):
+- 16 BUG-ADD-MODE-001_* investigation files (consolidated into postmortem)
+- 7 supporting ADD-MODE analysis docs (PHASE1/2, STAGE1, APPEND_ONLY, etc.)
+- Resolved bug docs: BUG-ADD-MODE-GRAPHICS-DISAPPEAR, BUG-ADD-MODE-SELECTION-COUNT,
+  BUG-BUFFER-PREVIEW-CLEANUP, BUG-CROSS-LAYER-X-BUTTON-REMOVAL,
+  BUG-EXTENT-CACHE-001, BUG-FLASH-ADD-MODE-002 (+test plan),
+  BUG-GRAPHICS-FILL-MISSING/PRODUCTION, BUG-GRAPHICS-LAYER-ID-MISMATCH,
+  BUG-HASH-DIRTY-*, BUG-HASH-QUERY-WIDGET-CLOSED, BUG-REMOVAL-TWO-CLICK-001,
+  BUG-SELECTION-LOSS-ON-REMOVE/WIDGET-SWITCH, BUG-STALE-ACCUMULATED-COUNT-PLAN,
+  BUG_HASH_PARAMETER_AFTER_CLEAR
+- Diagnostic/analysis: MEMORY_LEAK_*, MEMORY_DIAGNOSTIC_*, MEMORY_TEST_*,
+  HEAP_SNAPSHOT_GUIDE, FAILED-POPUP-RENDER-POOL, HOVER-PIN-CROSS-WIDGET-BUG,
+  QUERY_SWITCH_FLOW_ANALYSIS, LEARNING-LOG-SELECTION-COUNT,
+  MANUAL_VS_PROGRAMMATIC_WORKFLOW_ANALYSIS, VIEW_IN_TABLE_NAMING_VISIBILITY
+- Versioned test/rationale docs: R021_50/74/76_*, TESTING_R021_50_*
+- React analysis: REACT_ERROR_185_ON_LOAD, REACT_HOOKS_COUNT_EXPLANATION
+- FORMATTING_FIX_TRADE_OFFS, OLD_VS_NEW_PLAN_COMPARISON
+
+**`docs/development/archive/`** (20 files):
+- Completed checklists: CHECKLIST_RENAME_SHARED_CODE (both versions),
+  CHECKLIST_GRAPHICS_CONFIG_INCREMENTAL
+- Done/superseded: ESRI_STANDARDS_ALIGNMENT, FIXES_TO_REAPPLY_AFTER_R022_94,
+  R021_51_BUTTON_CLICK_REMOVAL, TAB_EXTRACTION_IMPLEMENTATION_PLAN,
+  PLAIN_HTML_UI_PATTERN
+- Version-specific: ROLLBACK_STRATEGY_R022_87, PUBLIC_RELEASE_r021.112_PLAN,
+  AUDIT_r021_95-130, DEPLOYMENT_CHECKLIST_r022.26, r021.46_FINAL_SUMMARY,
+  COMMIT_HISTORY_R019.31_TO_R020.13
+- Stale: CURRENT_TODO_SUMMARY (r022.26), BUGHERD_QUICK_REFERENCE,
+  TEAM_TESTING_DEPLOYMENT (r019.22), UNIT_TESTING_PROGRESS (r17.41)
+- Superseded by skills: DEPLOY_TO_PUBLIC_SHARE, PUBLIC_SHARE_DEPLOYMENT_SAFE
+
+**`docs/architecture/archive/`** (8 items):
+- All CHUNK_* analysis files (migration complete)
+- COORDINATE_CAPTURE_SUMMARY
+- `preserved/r018-chunks/` snapshot
+
+### Moved (to correct locations)
+- `RELEASE_NOTES_r022.26.md` -- widgets root to `docs/releases/`
+- `RELEASE_NOTES_r022.30.md` -- widgets root to `docs/releases/`
+- `RELEASE_NOTES_r022.33.md` -- widgets root to `docs/releases/`
+
+### Removed (deleted, recoverable from this commit's parent)
+- `CONTEXT.md` -- superseded by CLAUDE.md
+- `DOCUMENTATION_UPDATES.md` -- one-time log from Jan 25
+- `README_PUBLIC_r021.112.md` -- superseded by r022.26 template
+- `draw-advanced.zip` -- not our widget
+- `last_500_lines.txt` -- debug artifact
+
+### Files touched
+- `version.ts` -- r028.072
+- `docs/query-simple/CHANGELOG.md` -- this entry
+- `docs/bugs/BUGS.md` -- updated references, timestamp
+
+---
+
+## [1.20.0-r028.070] - 2026-05-17 - SuggestPopover dual-path rendering
+
+### Context
+The typeahead suggestion dropdown was invisible on mobile due to two conflicting
+CSS constraints: MobilePanel's `transform` traps `position:fixed`, and multiple
+`overflow:hidden` ancestors clip `position:absolute`. Desktop was unaffected.
+
+### Changed
+- **`SuggestPopover.tsx`** -- Dual-path rendering. Desktop unchanged (`position:fixed`
+  with viewport coords from `getBoundingClientRect`). Mobile now uses `jimu-ui` `Popper`
+  (backed by `@floating-ui/react`) which portals to `document.body`, escaping both the
+  overflow clipping and the transform trap. Same pattern used in `results.tsx` (settings).
+- **`SuggestPopover.tsx`** -- Removed `box-shadow` from popover appearance and Popper wrapper.
+- **`SuggestPopover.tsx`** -- Popper config: `placement='bottom-start'`, `offsetOptions={[-10, 6]}`,
+  `flipOptions={false}` (prevents upward flip), `trapFocus={false}`, `autoFocus={false}`.
+
+### Removed
+- `getMobileStyle` function (replaced by Popper on mobile path)
+- `mobileTop` state and positioned ancestor walk-up logic
+- Box-shadow from `popoverBaseStyle`
+
+### Added
+- **`FLOW-14-TYPEAHEAD-SUGGEST.md`** -- New process flow documenting the full typeahead
+  pipeline: `useSuggest` state machine, `suggest-utils` fetch/cache, `SuggestPopover`
+  dual-path rendering, keyboard navigation, and integration points.
+
+### Dependencies
+- `jimu-ui` `Popper` component (already a project dependency, first use in runtime code)
+
+### Files touched
+- `SuggestPopover.tsx` -- Dual-path render, Popper import, removed mobile absolute positioning
+- `version.ts` -- r028.060 through r028.070
+- `docs/query-simple/process-flows/FLOW-14-TYPEAHEAD-SUGGEST.md` -- New
+- `docs/query-simple/process-flows/README.md` -- Added FLOW-14 to index
+
+---
+
+## [1.20.0-r028.058] - 2026-05-15 - Singleton migration complete (all phases)
+
+### Context
+Singleton migration fully complete. Phase 1 (r028.049): 12 getters. Phase 2 (r028.050-054): 6 Redux selectors replaced. Phase 3 (r028.055-058): 4 prop-drilling chains eliminated. Step 11 (`queryItems`) kept as prop by design.
+
+### Added
+- **`debug-logger.ts`** (shared-code) -- `SETTINGS` debug tag registered in QuerySimple features array. Activate with `?debug=SETTINGS`.
+- **`widget-config-manager.ts`** (shared-code) -- 12 new getters: `getZoomOnResultClick`, `getPanOnResultClick`, `getHoverPinColor`, `getResultListDirection`, `getResultPagingStyle`, `getDefaultPageSize`, `getLazyLoadInitialPageSize`, `getMobilePopupCollapsed`, `getMobilePopupDockPosition`, `getMobilePopupHideDockButton`, `getMobilePopupHideActionBar`, `getQueryItems`, `getQueryItemByConfigId`.
+
+### Changed (Phase 2: Redux selector replacement)
+- **`query-result.tsx`** (Steps 1-3) -- `resultPagingStyle`, `resultListDirection`, and 4 mobile popup properties: Redux selectors replaced with singleton calls. SETTINGS log with `source: 'query-result'`.
+- **`query-result-item.tsx`** (Step 4) -- `resultListDirection` Redux selector replaced with singleton call. SETTINGS log with `source: 'query-result-item'`.
+- **`query-task.tsx`** (Step 5) -- `resultPagingStyle` and `lazyLoadInitialPageSize` Redux selectors replaced. SETTINGS log with `source: 'query-task'`.
+- **`query-task-form.tsx`** (Step 6) -- `queryItems.find(...)` Redux selector replaced with `getQueryItemByConfigId`. SETTINGS log with `source: 'query-task-form'`.
+
+### Changed (Phase 3: Prop-drilling removal)
+- **Step 10 (`defaultPageSize`)** -- Dead prop. Removed from `widget.tsx` (3 JSX), `query-task-list.tsx`, `query-task-list-inline.tsx`. Never consumed.
+- **Step 9 (`hoverPinColor`)** -- Removed from 6-level chain. Singleton read at `query-result-item.tsx`. Declaration ordering fix (singleton reads must precede `useMemo` that references them).
+- **Steps 7-8 (`zoomOnResultClick`, `panOnResultClick`)** -- Removed from 6-level chain. Singleton reads at both consumers (`query-result.tsx`, `query-result-item.tsx`). Per-widget config isolation verified.
+- **Step 11 (`queryItems`)** -- Kept as prop. Full array genuinely needed at every level for rendering, template cache, cross-query resolution.
+- **r028.058** -- Added missing `source: 'query-result'` to SETTINGS log for console filter consistency.
+- **`query-result.test.tsx`** -- Mock expanded with `widgetConfigManager` (9 getter mocks), `applyMobilePopupBehavior`, `getPopupCollapsedOption`.
+
+### Files touched (Phase 3 prop removal)
+- `widget.tsx` -- Removed JSX attributes for `defaultPageSize` (3), `hoverPinColor` (2), `zoomOnResultClick` (2), `panOnResultClick` (2)
+- `query-task-list.tsx` -- Removed from interface, destructuring, pass-throughs (4 props)
+- `query-task-list-inline.tsx` -- Removed `defaultPageSize` from interface, destructuring, 2 pass-throughs
+- `query-task.tsx` -- Removed from interface, destructuring, pass-throughs (3 props)
+- `query-result.tsx` -- Removed from interface, destructuring (2 props); added singleton reads for zoom/pan
+- `simple-list.tsx` -- Removed from interface, destructuring, pass-throughs (3 props)
+- `query-result-item.tsx` -- Added singleton reads for `hoverPinColor`, `zoomOnResultClick`, `panOnResultClick`
+
+### Migration plan
+Full details in `docs/query-simple/SINGLETON_MIGRATION_PLAN.md`.
+
+### Stats
+- **Tests**: 373/373 (query-simple)
+- **TS errors**: 0
+- **Redux selectors for widget config in runtime**: 0 (down from 6)
+- **Prop-drilling chains eliminated**: 4 (zoom, pan, hoverPinColor, defaultPageSize)
+
+---
+
+## [1.20.0-r028.048] - 2026-05-14 - v28 Configurable flash/scroll on map click
+
+### Added
+- **`config.ts`** -- New `flashOnMapIdentify?: boolean` property (default true). Controls whether clicking a Path 3 feature on the map scrolls the matching result card into view and flashes it.
+- **`widget-config-manager.ts`** (shared-code) -- New `getFlashOnMapIdentify(widgetId)` getter in "Path 3 Behavior" section. Reads from the cached config via the existing singleton.
+- **`setting/translations/default.ts`** -- Two i18n keys: `flashOnMapIdentify` and `flashOnMapIdentifyDescription`.
+
+### Changed
+- **`setting/setting.tsx`** -- Switch toggle added to "Result Click Behavior" section after "Zoom expansion factor". Guarded by `config.useFeatureLayerResults !== false` so the toggle only appears when Path 3 is enabled.
+- **`query-result.tsx`** -- Imported `widgetConfigManager` from shared-code. Flash/scroll event handler calls `widgetConfigManager.getFlashOnMapIdentify(widgetId)` and returns early when disabled.
+
+### Behavior
+- Default on: existing apps and new apps get flash/scroll with no config change needed (`undefined` maps to `true` via `!== false`).
+- Toggle off: the `QUERYSIMPLE_POPUP_FEATURE_IDENTIFIED` event still fires (cheap, useful for debug), but the listener ignores it.
+- Toggle hidden when Path 3 is off (no flash/scroll without FeatureLayer results).
+
+### Stats
+- **Tests**: 373/373 (query-simple)
+- **TS errors**: 0
+
+---
+
+## [1.20.0-r028.047] - 2026-05-13 - v28 P1: Slim popup registry
+
+### Context
+The `_recordsByWidget` popup registry held full `FeatureDataRecord` objects (JSAPI Graphic with geometry, symbol, layer ref, DataSource wrapper). After the sync module copies geometry into the FeatureLayer graphic, the registry's copy keeps the original JSAPI objects alive unnecessarily. For polygon-heavy datasets (500 records), this retained 1-25 MB of duplicate geometry buffers.
+
+### Changed
+- **`result-feature-layer-popup.ts`** -- New `SlimPopupRecord` interface with only `attributes` and `sourcePopupTemplate`. Registry type changed from `Map<..., FeatureDataRecord>` to `Map<..., SlimPopupRecord>`. `registerRecords()` keeps its public signature (accepts `FeatureDataRecord`) but internally extracts the two fields and discards the rest. Creator closure and title function read directly from the slim struct instead of traversing `.feature.attributes` and `.feature.layer.popupTemplate`. No changes to sync module or widget lifecycle.
+
+### Behavior
+- PopupSetting mode preserved (sourcePopupTemplate captured at registration time). CustomTemplate and SelectAttributes unchanged. Flash/scroll composite key join-back unchanged.
+- GC can now collect the heavy JSAPI Graphic (geometry, symbol, layer ref) after sync completes instead of retaining it for the widget's lifetime.
+
+### Stats
+- **Tests**: 373/373 (query-simple)
+- **TS errors**: 0
+
+---
+
+## [1.20.0-r028.046] - 2026-05-13 - v28 ConfigId stamping order fix
+
+### Context
+Flash/scroll (map-to-card) did not fire for alternate data sources. Debug logs showed `syncResultFeatureLayers` building composite keys with an empty `__queryConfigId`, producing keys like `||12345` instead of `configA||12345`. Root cause: `query-execution-handler.ts` stamped `__queryConfigId` and `__originDSId` on records AFTER calling `onAccumulatedRecordsChange()`. The sync module read the records before stamping occurred.
+
+### Changed
+- **`query-execution-handler.ts`** -- In both Add mode and New mode, moved the `__queryConfigId` / `__originDSId` stamping loop to BEFORE the `onAccumulatedRecordsChange()` callback. Pure reorder of existing code, no new logic. `syncResultFeatureLayers` now sees stamped configIds when building composite keys for newly-added records.
+
+### Behavior
+- Composite keys are now deterministic from the first sync cycle regardless of data source. Flash/scroll (FLOW-13 popup-feature-identified event) and configId-based popup rendering work correctly for all query configs, including alternate data sources.
+
+### Stats
+- **Tests**: 667/667
+- **TS errors**: 0
+
+---
+
+## [1.20.0-r028.045] - 2026-05-13 - v28 P3/P4 cleanup + hover pin fix
+
+### Changed
+- **`result-feature-layer-factory.ts`** (P3) -- `destroyResultLayers()` now nulls `geometry` and `attributes` on each source graphic and `popupTemplate` on each child FeatureLayer before `remove` + `destroy`. Matches Path 2's r024.35 cleanup pattern in `graphics-cleanup-utils.ts`. Breaks circular references so GC can collect geometry buffers.
+- **`widget.tsx`** (P4) -- `resetObjectIdCounter()` and `resetKeyTracking()` called at all three Path 3 cleanup sites: `componentWillUnmount`, layer rebuild (config change), and `useFeatureLayerResults` toggle-off. Prevents stale counter accumulation across mount/unmount cycles.
+- **`query-result-item.tsx`** -- Hover pin graphics tagged with `{ __hoverPin: true, __widgetId }` attributes for bulk identification.
+- **`simple-list.tsx`** -- Added `hideHoverPins()` callback wired to `onPointerLeave` and `onScroll` on the results list container. Hides any visible hover pins when the pointer leaves the widget's results area or the list scrolls. Fixes remnant hover pins that survived panning because `mouseleave` doesn't fire when a card scrolls out from under the pointer.
+
+### Stats
+- **Tests**: 373/373 (query-simple)
+
+---
+
+## [1.20.0-r028.043] - 2026-05-12 - v28 Shared popup rendering function
+
+### Context
+On-screen map click popups (Path 3 FeatureLayer) rendered a generic field table instead of the configured CustomTemplate. Root cause: the lean 4-field graphic's `QUERY_CONFIG_ID` was empty, so the config lookup failed and fell through to the fallback. Meanwhile, the result-list click and Results Panel card both rendered correctly because they read `__queryConfigId` from the full record attributes. Three separate rendering implementations existed with no shared code.
+
+### Added
+- **`popup-render-utils.ts`** (new file) -- single source of truth for popup rendering. Exports `renderPopupContent(attributes, queryConfig, sourcePopupTemplate?)` which returns `{ title, contentHtml, mode }`. Handles all four rendering modes (CustomTemplate, SelectAttributes, PopupSetting, AllAttributesFallback). Also exports `resolvePopupTitle()` for title-only resolution, `createPopupContentDiv()` for wrapping HTML in a styled DOM div, and `POPUP_CONTENT_CSS` constant.
+- **FLOW-13-POPUP-RENDERING.md** -- new process flow documenting the three popup contexts, the shared rendering function, configId fallback, and registries.
+
+### Changed
+- **`result-feature-layer-popup.ts`** -- On-screen popup creator and title function now call `renderPopupContent()` and `resolvePopupTitle()` from the shared utils. ConfigId lookup falls back to `attributes.__queryConfigId` when the lean graphic's `QUERY_CONFIG_ID` is empty. Removed ~200 lines of redundant render helpers (`renderCustomTemplate`, `renderFieldTable`, `renderSourceTemplate`, `buildFieldsTableFromFieldInfos`).
+- **`query-result.tsx`** -- Result-list click CustomTemplate path in `openPopupForRecord()` now calls `renderPopupContent()` + `createPopupContentDiv()` instead of inline token substitution and div construction. Removed direct imports of `substituteTokens`, `substituteLegacyTokens`, `convertTemplateToHtml`.
+- **`result-feature-layer-popup.test.ts`** -- One assertion updated to account for styled wrapper div.
+- **process-flows/README.md** -- Added FLOW-13 to index, refreshed test coverage table (164 -> 667).
+
+### Behavior
+- On-screen click popups now render identically to result-list click popups for CustomTemplate mode. The configId fallback prevents silent fallthrough to the generic field table.
+- No change to SelectAttributes, PopupSetting, or fallback rendering for result-list clicks (those still pass features directly to JSAPI for native rendering).
+
+### Stats
+- **Tests**: 667/667
+- **TS errors**: 0
+
+---
+
+## [1.20.0-r028.042] - 2026-05-11 - v28 P2: Local composite key tracking
+
+### Context
+Every sync cycle called `queryFeatures({ where: '1=1' })` to get existing composite keys from the MemorySource worker. This round-trip was unnecessary since the module already controls all `applyEdits()` mutations.
+
+### Changed
+- **`result-feature-layer-sync.ts`** -- Added module-level `_keysByWidget: Map<string, Set<string>>` to track composite keys locally. `addResultFeatures` adds keys after successful `applyEdits`, `removeResultFeatures` deletes keys after successful `applyEdits`, `clearResultFeatures` resets via `resetKeyTracking()`. `getExistingCompositeKeys()` and `getResultFeatureCount()` are now synchronous reads from the local Set (were async, queried MemorySource worker). New exported `resetKeyTracking(widgetId)` for cleanup.
+- **`widget.tsx`** -- Updated caller to use synchronous `getExistingCompositeKeys(widgetId)` (was `await getExistingCompositeKeys(groupLayer)`).
+
+### Stats
+- **Tests**: 667/667
+- **TS errors**: 0
+
+---
+
+## [1.20.0-r028.037] - 2026-05-10 - v28 PopupSetting outFields: trim query to popup-referenced fields only
+
+### Context
+PopupSetting mode was requesting all layer fields (~70 for parcels) when the popup only uses 5-6. The popup uses text content with `{FIELD}` tokens instead of a fields table, so the existing `fieldInfos.visible` filter yielded nothing and fell through to all fields.
+
+### Changed
+- **`query-utils.ts`** — Added `extractPopupTextFields()` as a middle step in `resolvePopupOutFields()`. When `fieldInfos` visible filtering yields no fields, parses the popupInfo's `title`, `description`, and `popupElements` text entries for `{FIELD}` tokens. Cross-references against actual layer field names. Only falls back to all fields if text parsing also yields nothing.
+
+### Behavior
+- Queries for PopupSetting mode now request only fields referenced in the popup's text content and title, matching the existing behavior of CustomTemplate and SelectAttributes modes.
+- Table view and CSV export are unaffected; they read from the DataSource and request their own fields independently.
+
+### Stats
+- **Tests**: 664/664
+- **TS errors**: 0
+
+---
+
+## [1.20.0-r028.033–036] - 2026-05-09 - v28 Map-to-card flash: scroll and highlight result card on map identify
+
+### Context
+When a user clicks a Path 3 result feature on the map and the popup opens, the corresponding result card in the panel now scrolls into view and flashes briefly. This provides a visual link between the map interaction and the results list without changing the card's selection state.
+
+### Added
+- **`event-manager.ts`** — New `QUERYSIMPLE_POPUP_FEATURE_IDENTIFIED` event constant.
+- **`result-feature-layer-popup.ts`** — The PopupTemplate's CustomContent creator now dispatches `querysimple-popup-feature-identified` with `{ widgetId, compositeKey }` after resolving the record. No new click handlers or map interaction code; this piggybacks on the creator that already fires when JSAPI renders our popup.
+- **`simple-list.tsx`** — Builds factory-format composite key via `buildCompositeKey()` and passes it as `factoryCompositeKey` prop to each `QueryResultItem`.
+- **`query-result-item.tsx`** — New `factoryCompositeKey` prop, `data-composite-key` attribute on the root div, `@keyframes mapIdentifiedFlash` CSS animation (same purple tint as hover, 1.2s fade), `scroll-margin-top: 4px` for breathing room when scrolled to top.
+- **`query-result.tsx`** — `useEffect` listener for the event: filters by `widgetId`, finds matching card via `querySelector('[data-composite-key="..."]')`, calls `scrollIntoView({ behavior: 'smooth', block: 'start' })`, waits for `IntersectionObserver` to confirm visibility, then applies the flash class.
+
+### Behavior
+- User clicks Path 3 feature on map → JSAPI opens popup natively → our creator fires → event dispatched → panel scrolls to matching card → card flashes hover color for 1.2s → fades back to normal.
+- Flash is ephemeral (CSS animation, auto-removes via `animationend` listener). Does not change selection state.
+- Multi-widget safe: event filtered by `widgetId`.
+- If the card is already visible, the `IntersectionObserver` fires immediately and the flash starts without waiting for a scroll.
+
+### Stats
+- **Tests**: 664/664
+- **TS errors**: 0
+
+---
+
+## [1.20.0-r028.029] - 2026-05-09 - v28 Path 3 popup: back out custom click handler, use native PopupTemplate
+
+### Context
+Reverted the custom click handler approach (see r028.028 entry below for what was tried and why we moved on). With JSAPI's popup auto-highlight no longer combining with three other visual layers (the original "doubling" cause is gone for Path 3), the simplest path is to let JSAPI handle popup routing natively and just give it a properly-formatted `PopupTemplate`.
+
+### Changed
+- **`result-feature-layer-factory.ts`** — Flipped `popupEnabled` from `false` back to `true` on the result FeatureLayer. The `popupTemplate` (built by `buildResultPopupTemplate`) was already being passed to the constructor; it just wasn't being used because `popupEnabled` was `false`.
+- **`result-feature-layer-popup.ts`** — Removed `setupMapClickHandler`, `cleanupMapClickHandler`, `openResultPopup`, and the `_clickHandlers` map. Removed `MapView` and `GroupLayer` type imports (no longer referenced). The render helpers (`renderCustomTemplate`, `renderFieldTable`, `createFallbackDiv`) are kept — they're used by the PopupTemplate's `CustomContent` creator inside `buildResultPopupTemplate`. File dropped from ~510 to ~330 lines.
+- **`widget.tsx`** — Removed `setupMapClickHandler` / `cleanupMapClickHandler` import and the three call sites (init in `initResultFeatureLayers`, cleanup in `componentWillUnmount`, cleanup in `componentDidUpdate` toggle-off branch).
+- **`result-feature-layer-factory.test.ts`** — Updated `popupEnabled` assertion from `false` back to `true`.
+
+### Behavior
+- JSAPI handles all clicks natively. Multi-layer popup iteration with arrows works as designed.
+- Our feature appears in the iteration alongside other layers' features, rendered via our `PopupTemplate`'s `CustomContent` creator.
+- JSAPI's popup auto-highlight will now fire when our feature is the selected one. This is normal selection UX (a halo/tint), not the original "really dark" doubling that came from three stacked visuals.
+- No timing hacks, no `setTimeout` waits, no server-speed sensitivity.
+
+### Stats
+- **Tests**: 664/664
+- **TS errors**: 0
+
+---
+
+## [1.20.0-r028.028] - 2026-05-09 - v28 Path 3 popup: custom click handler experiment (preserved before backout)
+
+### Context
+Iterated on Path 3 (FeatureLayer) popup behavior. The factory was set to `popupEnabled: false` on the result FeatureLayer to avoid JSAPI's popup auto-highlight (which originally compounded with manual `layerView.highlight` calls and the GraphicsLayer selection graphic to produce visible "doubling"). With the manual highlight removed and origin-DS selection gated for Path 3, the only remaining source of doubling would be JSAPI's popup auto-highlight — which led us down a path of intercepting clicks ourselves so we could open custom popups without engaging JSAPI's popup pipeline.
+
+This entry preserves that work as a clean checkpoint before backing it out and trying a simpler approach (give the FeatureLayer a real `popupTemplate` and let JSAPI handle routing natively, accepting the popup highlight).
+
+### What was tried (and why we're not happy with it)
+1. **Custom click handler with `stopPropagation`** — We intercepted every click, hitTested our layers, opened our popup if ours was hit, and replicated JSAPI's popup routing for non-QS layers. Worked, but broke JSAPI's native multi-layer popup iteration (the arrows that let users page through overlapping features). Replicating that routing correctly would mean reimplementing `view.popup.fetchFeatures` ourselves — buffered hit-testing, popup-eligibility filtering, etc. Too much surface area to maintain.
+2. **Pause/resume via re-dispatched native click** — Tried `event.stopPropagation()` followed by re-dispatching a synthesized `MouseEvent` on `event.native.target`. Doesn't work: JSAPI's `view.on('click')` doesn't observe DOM click events on the canvas. JSAPI uses its own pointer-event pipeline and ignores the re-dispatched event entirely.
+3. **No `stopPropagation` + delayed open** — Let JSAPI run natively, await `hitTest`, then open our popup. Required guessing how long to wait for JSAPI's popup decision to settle (`fetchFeatures` is async and server-dependent). Settled on a 200ms `setTimeout` empirically. Works for fast/local data, brittle on slow networks.
+
+### Concerns with the current implementation
+- **Server-speed sensitivity**: 200ms is enough when JSAPI has nothing to fetch, but other popup-eligible layers (e.g., parcels) trigger `fetchFeatures` against the server. Slow connections could push JSAPI's popup-close decision past our window, putting us back in the flash-and-disappear bug.
+- **Fighting JSAPI**: Every approach adds timing hacks, watchers, or routing replication on top of a click pipeline that JSAPI is designed to own. Fragile.
+- **Multi-layer iteration is broken** when our handler replaces JSAPI's popup — users lose access to overlapping features they'd normally page through.
+- **The original "doubling" problem may no longer apply.** It came from three stacked visuals: renderer fill + GraphicsLayer selection graphic + manual `layerView.highlight`. Two of those are gone for Path 3. JSAPI's popup auto-highlight alone is normal selection UX, not the original symptom.
+
+### Plan
+Back out the custom click handler. Set `popupEnabled: true` on the FeatureLayer in the factory, assign `buildResultPopupTemplate(widgetId)` as the `popupTemplate`, and delete `setupMapClickHandler`/`cleanupMapClickHandler` and their wiring in `widget.tsx`. Let JSAPI handle all routing natively. Evaluate the resulting popup highlight visually — if it's acceptable, we're done. If not, revisit.
+
+### Stats
+- **Tests**: 664/664
+- **TS errors**: 0 (assumed; verified by jest run)
+
+---
+
+## [1.20.0-r028.006] - 2026-05-08 - Config toggle: useFeatureLayerResults gates Path 3
+
+### Context
+Added `useFeatureLayerResults` config toggle so Path 3 (FeatureLayer) and Path 2 (GraphicsLayer) can be tested side by side. New widgets default to Path 3 enabled. Existing widgets without the field also default to enabled (`!== false` check). All Path 3 code (init, sync, renderer update, cleanup, query configs) is gated behind this toggle.
+
+### Added
+- **`config.ts`** — `useFeatureLayerResults?: boolean` on `SettingConfig` interface.
+- **`config.json`** — `useFeatureLayerResults: true` as default for new widgets.
+- **`setting/translations/default.ts`** — i18n keys for toggle label and description.
+- **`setting/setting.tsx`** — Switch toggle in Graphics Symbology section.
+
+### Changed
+- **`widget.tsx`** — All 5 Path 3 integration points gated behind `config.useFeatureLayerResults !== false`: init in `handleJimuMapViewChanged`, sync in `handleAccumulatedRecordsChange`, renderer update and query config update in `componentDidUpdate`, cleanup in `componentWillUnmount`. Added toggle change detection in `componentDidUpdate` (init on enable, destroy+clear on disable).
+
+### Stats
+- **Tests**: 664/664
+- **TS errors**: 0
+
+---
+
+## [1.20.0-r028.005] - 2026-05-08 - v28 FeatureLayer migration Phase 4: renderer validation
+
+### Context
+Phase 4 of the v28 FeatureLayer migration: when symbology config changes in the builder (fill color, outline, point size, etc.), update renderers on existing FeatureLayers without rebuilding them. Uses the targeted `updateFeatureLayerRenderer()` swap (already in the factory) rather than full cleanup+reinit. Follows FeedSimple's field-list detection pattern.
+
+### Added
+- **`result-feature-layer-lifecycle.test.ts`** — 5 new renderer tests: skip when no ref, update each child layer, handle empty children, skip layers without geometryType, all three geometry types.
+
+### Changed
+- **`widget.tsx`** — Added `updateFeatureLayerRenderer` import. New `updateResultFeatureLayerRenderers()` method iterates GroupLayer children and swaps renderers. `componentDidUpdate` detects changes across 8 symbology fields (`highlightFillColor`, `highlightFillOpacity`, `highlightOutlineColor`, `highlightOutlineOpacity`, `highlightOutlineWidth`, `highlightPointSize`, `highlightPointOutlineWidth`, `highlightPointStyle`) using `.some()` pattern from FeedSimple.
+
+### Stats
+- **Tests**: 664/664 (+5 new renderer tests)
+- **TS errors**: 0
+
+---
+
+## [1.20.0-r028.004] - 2026-05-08 - v28 FeatureLayer migration Phase 3: widget lifecycle wiring
+
+### Context
+Phase 3 of the v28 FeatureLayer migration: wire the factory, sync, and popup modules into the QS widget lifecycle. Four integration points added to `widget.tsx`, parallel to the existing GraphicsLayer (Path 2) code. Diff-based sync keeps FeatureLayers in lockstep with accumulated records.
+
+### Added
+- **`result-feature-layer-lifecycle.test.ts`** (NEW) — 24 tests covering init (4), sync diff logic (10), unmount cleanup (6), config change handling (4). Uses a minimal harness that mirrors the widget's private methods.
+
+### Changed
+- **`widget.tsx`** — Added imports for factory/sync/popup modules. Added `resultGroupLayerRef` for Path 3 GroupLayer. Four integration points:
+  - `handleJimuMapViewChanged`: calls `initResultFeatureLayers()` to create GroupLayer and register query configs
+  - `handleAccumulatedRecordsChange`: calls `syncResultFeatureLayers()` for diff-based add/remove/clear
+  - `componentDidUpdate`: rebuilds FeatureLayers on `addResultsAsMapLayer` toggle, updates query configs on any config change
+  - `componentWillUnmount`: calls `destroyResultLayers()`, `clearRecordRegistry()`, `clearQueryConfigs()`, nulls ref
+
+### Stats
+- **Tests**: 659/659 (+24 new lifecycle tests)
+- **TS errors**: 0
+
+---
+
+## [1.20.0-r028.003] - 2026-05-08 - v28 FeatureLayer migration Phase 2: popup integration
+
+### Context
+Phase 2 of the v28 FeatureLayer migration: popup/identify support for Path 3 FeatureLayers. When a user clicks a result feature on the map, the PopupTemplate joins back to accumulated records via COMPOSITE_KEY to render full content (CustomTemplate, SelectAttributes, or AllAttributes). Also cleaned dead popup watch code from widget.tsx and wired sync module to maintain the popup record registry.
+
+### Added
+- **`result-feature-layer-popup.ts`** (NEW) — Record registry (`Map<widgetId, Map<compositeKey, FeatureDataRecord>>`), query config registry, PopupTemplate builder with CustomContent creator. Supports CustomTemplate (token substitution + markdown), SelectAttributes (configured fields), and AllAttributes (all non-internal fields). Dynamic title resolves per feature.
+- **`result-feature-layer-popup.test.ts`** (NEW) — 35 tests: record registry (7), query config registry (2), template structure (3), CustomContent creator (8), dynamic title (6), mutable closure verification (2), error/fallback states (7).
+
+### Changed
+- **`result-feature-layer-factory.ts`** — Awaits `buildResultPopupTemplate(widgetId)` and passes result as `popupTemplate` in FeatureLayer constructor.
+- **`result-feature-layer-sync.ts`** — `addResultFeatures()` calls `registerRecords()` after building graphics. `removeResultFeatures()` takes new `widgetId` param, calls `unregisterRecords()`. `clearResultFeatures()` calls `clearRecordRegistry()`.
+- **`result-feature-layer-factory.test.ts`** — Added popup module mock for `buildResultPopupTemplate`.
+- **`result-feature-layer-sync.test.ts`** — 4 new tests for popup registry integration (register on add, skip when no geometry, unregister on remove, clear on clear). Updated all `removeResultFeatures` calls for new 3-arg signature.
+- **`widget.tsx`** — Removed dead popup watch code: `WatchHandle` type alias, `popupVisibleHandle` property, cleanup in `componentWillUnmount`, stale comment in `componentDidUpdate`, `setupMobilePopupWatch()` stub, and its call in `handleJimuMapViewChanged`.
+
+### Stats
+- **Tests**: 635/635 (+39 new: 35 popup + 4 sync registry)
+- **TS errors**: 0
+
+---
+
+## [1.20.0-r028.001] - 2026-05-08 - v28 FeatureLayer migration Phase 1 + mobile popup shared behavior
+
+### Context
+Phase 1 of the v28 FeatureLayer migration: core infrastructure for storing query results as real features in client-side FeatureLayers (Path 3). This enables popup/identify, native legend, and LayerList integration. Existing GraphicsLayer code (Paths 1/2) is untouched.
+
+Also fixed two TS build errors in widget.tsx and ported mobile popup behavior to shared-code using the proven FeedSimple pattern.
+
+### Added
+- **`result-feature-layer-factory.ts`** (NEW) — Factory for creating per-geometry-type FeatureLayers inside a GroupLayer. Lean 4-field schema (OBJECTID, RECORD_ID, QUERY_CONFIG_ID, COMPOSITE_KEY). Renderer construction from widgetConfigManager symbology config.
+- **`result-feature-layer-sync.ts`** (NEW) — Sync module for feature CRUD via applyEdits(). Handles add, remove, clear, composite key queries, and feature counts. Batched in groups of 500.
+- **`result-feature-layer-factory.test.ts`** (NEW) — 35 tests covering factory, renderer, GroupLayer, FeatureLayer creation/reuse.
+- **`result-feature-layer-sync.test.ts`** (NEW) — 26 tests covering add/remove/clear features, ObjectId sequencing, composite key queries.
+- **`shared-code/mobile-popup-behavior.ts`** (NEW) — `applyMobilePopupBehavior()` and `getPopupCollapsedOption()` shared across QS and FS.
+
+### Changed
+- **`widget.tsx`** — Fixed broken `ResourceHandle` import (now `__esri.WatchHandle`). Replaced reactive `watch('popup.visible')` handler with no-op stub; mobile popup behavior moved to open-time in query-result.tsx.
+- **`query-result.tsx`** — Calls `applyMobilePopupBehavior()` and passes `collapsed` in `openPopup()` options at open time (matching FS pattern). Fixed empty popup content bug caused by the old watch-based reopen approach.
+- **`shared-code/mapsimple-common.ts`** — Added barrel exports for mobile-popup-behavior module.
+
+### Stats
+- **Tests**: 596/596 (+61 new)
+- **TS errors**: 0 (fixed 2 pre-existing errors)
+
+---
+
+## [1.20.0-r027.100] - 2026-05-07 - Type safety: const enums for Table widget config
+
+### Context
+The View in Table enum casing fix (r027.098-099) used bare string values (`'WEBMAP'`, `'MULTIPLE'`, `'VIEW'`). These pass at runtime but offer no compile-time protection if Esri changes enum values in a future release. Replaced with typed `const enum` declarations mirroring the Table widget's `config.ts`. Also updated the `selection-utils.test.ts` mock to use `'FEATURE_LAYER'` to match the code fix from r027.099.
+
+### Changed
+- **`query-simple/src/data-actions/view-in-table-action.tsx`** — Added local `const enum` declarations for `LayerHonorModeType`, `SelectionModeType`, and `TableDataActionType` mirroring `dist/widgets/common/table/src/config.ts`. Updated `LayersConfig` interface to use enum types instead of `string`. All three enum value sites now reference enum members (`LayerHonorModeType.Webmap`, `SelectionModeType.Multiple`, `TableDataActionType.View`) instead of bare strings.
+- **`query-simple/tests/selection-utils.test.ts`** — Updated mock DS type from `'FeatureLayer'` to `'FEATURE_LAYER'` to match the r027.099 code fix.
+
+### Why not import from Table widget?
+Cross-widget `import` from `widgets/common/table/src/config` fails under webpack with symlinked widget locations. Local `const enum` mirrors compile to the same inline string values with zero runtime cost.
+
+### Stats
+- **Tests**: 535/535
+- **TS errors**: 0
+
+---
+
 ## [1.20.0-r027.099] - 2026-05-07 - View in Table: ExB 1.20 enum casing fix
 
 ### Context

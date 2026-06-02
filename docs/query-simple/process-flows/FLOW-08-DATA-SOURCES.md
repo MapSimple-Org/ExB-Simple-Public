@@ -28,12 +28,12 @@ the **LayerList path** (persistent GroupLayer) and the **highlight-only path**
       |  (FeatureLayer reference from portal/server)
       |
       v
- DataSourceComponent                 <- query-task.tsx:1102
-      |  key={dsRecreationKey}       (r021.51: forced remount pattern)
+ DataSourceComponent                 <- query-task.tsx:1363
+      |  key={dsRecreationKey}       (r021.51: forced remount pattern)  :1364
       |  useDataSource={useOutputDs}
       |
-      +-- onDataSourceCreated        <- :593 (handleOutputDataSourceCreated)
-      |   +-- dispatch(SET_OUTPUT_DS, ds)  (r024.127: useState→useReducer)
+      +-- onDataSourceCreated        <- :632 (handleOutputDataSourceCreated)
+      |   +-- dispatch(SET_OUTPUT_DS, ds)  (r024.127: useState→useReducer)  :633
       |   +-- Execute pending query if queued
       |
       v
@@ -41,23 +41,23 @@ the **LayerList path** (persistent GroupLayer) and the **highlight-only path**
       |  ID pattern: {widgetId}_output_{configId}
       |  Generated: query-item-main-mode.tsx:65
       |
-      +-- getOriginDataSources()     <- selection-utils.ts:63
-      |   +-- Returns array of origin data sources
+      +-- getOriginDataSource()      <- selection-utils.ts:71
+      |   +-- Calls outputDS.getOriginDataSources() internally
       |   +-- Typically one FeatureLayerDataSource
       |
       v
  Origin DataSource (FeatureLayerDataSource)
       |
-      +-- createJSAPILayerByDataSource()  <- direct-query.ts:117
+      +-- createJSAPILayerByDataSource()  <- direct-query.ts:107
       |   +-- Creates __esri.FeatureLayer instance
       |
       v
  FeatureLayer (JS API)
       |
-      +-- queryFeatures(query)           <- direct-query.ts:152
+      +-- queryFeatures(query)           <- direct-query.ts:142
       |   +-- Returns FeatureSet with graphics
       |
-      +-- outputDS.buildRecord(graphic)  <- direct-query.ts:165
+      +-- outputDS.buildRecord(graphic)  <- direct-query.ts:158
       |   +-- Wraps graphic as FeatureDataRecord
       |   +-- Preserves coded domain formatting
       |
@@ -67,54 +67,72 @@ the **LayerList path** (persistent GroupLayer) and the **highlight-only path**
 
 ---
 
-## Two Parallel Paths: LayerList vs Highlight-Only
+## Two Parallel Paths: FeatureLayer (LayerList) and Highlight-Only
 
-After query results are obtained, the widget supports two visualization paths
-controlled by `config.addResultsAsMapLayer`:
+After query results are obtained, the widget supports two visualization paths,
+selected by `config.addResultsAsMapLayer`: Path 3 (FeatureLayer, in LayerList)
+when `true`, and Path 1 (highlight-only) when `false` (default). Path 2, a
+GraphicsLayer plus LayerList-proxy FeatureLayer, was removed in the Path 2
+Removal effort (TODO #24).
 
 ```
  Query results (FeatureDataRecord[])
       |
-      +-- addResultsAsMapLayer === true ----+    <- LAYERLIST PATH
-      |                                     |
-      |   createOrGetResultGroupLayer()     |    <- graphics-layer-utils.ts:433
-      |   +-- Find or create GroupLayer     |
-      |   +-- GroupLayer visible in         |
-      |   |   LayerList widget              |
-      |   +-- Persistent across queries     |
-      |   |   (survives clear/re-query)     |
-      |   +-- resultsLayerTitle from config |
-      |   |                                 |
-      |   addHighlightGraphics(             |
-      |     groupLayer, records, mapView)   |
-      |   +-- Build graphics with           |
-      |   |   highlight symbology           |
-      |   +-- Add to child GraphicsLayer    |
-      |   |   inside the GroupLayer         |
-      |                                     |
-      +-- addResultsAsMapLayer === false ---+    <- HIGHLIGHT-ONLY PATH
-      |                                     |
-      |   createOrGetGraphicsLayer()        |    <- graphics-layer-utils.ts
-      |   +-- Simple GraphicsLayer          |
-      |   +-- NOT visible in LayerList      |
-      |   +-- Temporary (destroyed on       |
-      |   |   widget close/clear)           |
-      |                                     |
-      |   addHighlightGraphics(             |
-      |     graphicsLayer, records, mapView) |
-      |   +-- Same symbology logic          |
-      |   +-- Add directly to layer         |
-      |                                     |
-      +------------------------------------+
+      +-- addResultsAsMapLayer === true ----------------+    <- PATH 3 — FEATURE LAYER (in LayerList)
+      |                                                 |
+      |   createResultGroupLayer()                      |    <- result-feature-layer-factory.ts
+      |   +-- GroupLayer (querysimple-fl-{widgetId})    |
+      |   +-- Visible in LayerList widget               |
+      |   +-- Native popup/identify via FeatureLayerView|
+      |   +-- visibilityMode: 'inherited' cascades      |
+      |   |   visibility to per-geometry children       |
+      |   +-- title from widgetConfigManager            |
+      |                                                 |
+      |   getOrCreateFeatureLayer(geomType)             |
+      |   +-- Lazy per-geometry FL (point / polyline /  |
+      |   |   polygon)                                  |
+      |   +-- listMode: 'hide' (only GroupLayer shown   |
+      |   |   in LayerList)                             |
+      |   +-- legendEnabled: true (toggled false when   |
+      |   |   bucket goes empty, r028.086)              |
+      |   +-- Concurrent-safe creation lock (r028.084)  |
+      |                                                 |
+      |   addResultFeatures(groupLayer, records,        |
+      |     queryConfigId, widgetId)                    |    <- result-feature-layer-sync.ts
+      |   +-- Group records by geometry type            |
+      |   +-- applyEdits({addFeatures}) per bucket      |
+      |   +-- Auto-enables GroupLayer.visible if user   |
+      |   |   toggled it off (r028.081)                 |
+      |   +-- Re-enables legendEnabled if hidden        |
+      |                                                 |
+      |   syncResultFeatureLayers() (widget.tsx)        |
+      |   +-- Diffs accumulated records vs FL state     |
+      |   +-- Serialized via async-serializer to        |
+      |   |   prevent concurrent interleaving (r028.087)|
+      |                                                 |
+      +-- addResultsAsMapLayer === false (default) -----+    <- PATH 1 — HIGHLIGHT-ONLY (ephemeral)
+      |                                                 |
+      |   createOrGetGraphicsLayer()                    |    <- graphics-layer-utils.ts
+      |   +-- Simple GraphicsLayer                      |
+      |   +-- NOT visible in LayerList                  |
+      |   +-- Temporary (destroyed on                   |
+      |   |   widget close/clear)                       |
+      |                                                 |
+      |   addHighlightGraphics(                         |
+      |     graphicsLayer, records, mapView)            |
+      |   +-- Same symbology logic                      |
+      |   +-- Add directly to layer                     |
+      |                                                 |
+      +------------------------------------------------+
       |
       v
  [Shared path continues]
       |
-      +-- selectRecordsInDataSources()     <- selection-utils.ts:99
+      +-- selectRecordsInDataSources()     <- selection-utils.ts:107
       |   +-- originDS.selectRecordsByIds()
       |   +-- outputDS.selectRecordsByIds()
       |
-      +-- publishSelectionMessage()         <- selection-utils.ts:468
+      +-- publishSelectionMessage()         <- selection-utils.ts:452
       |   +-- DataRecordsSelectionChangeMessage
       |
       +-- dispatchSelectionEvent()
@@ -122,31 +140,36 @@ controlled by `config.addResultsAsMapLayer`:
 
 ### Path Comparison
 
-| Aspect | LayerList Path | Highlight-Only Path |
-|--------|---------------|---------------------|
+| Aspect | Path 3 — FeatureLayer | Path 1 — Highlight-Only |
+|--------|----------------------|------------------------|
 | Config flag | `addResultsAsMapLayer = true` | `addResultsAsMapLayer = false` (default) |
-| Layer type | GroupLayer with child GraphicsLayer | Simple GraphicsLayer |
-| LayerList visibility | Visible, titled | Not visible |
+| Layer type | GroupLayer with per-geometry FeatureLayers | Simple GraphicsLayer |
+| LayerList visibility | GroupLayer visible; children hidden | Not visible |
+| Native popup/identify | Yes (via FeatureLayerView) | No |
 | Persistence | Survives clear/re-query | Destroyed on clear |
-| Layer title | `config.resultsLayerTitle` | N/A |
-| Create function | `createOrGetResultGroupLayer()` | `createOrGetGraphicsLayer()` |
-| Cleanup | `cleanupAnyResultLayer()` | `cleanupGraphicsLayer()` |
+| Layer title | From `widgetConfigManager` | N/A |
+| Create function | `createResultGroupLayer()` / `getOrCreateFeatureLayer()` | `createOrGetGraphicsLayer()` |
+| Cleanup | `destroyResultLayers()` | `cleanupGraphicsLayer()` |
 
-### Shared Behavior (Both Paths)
+### Shared Behavior (All Paths)
 
-Both paths share these operations:
-- `addHighlightGraphics()` -- same symbology and graphic building logic
-- Selection propagation to origin/output data sources
+All paths share these operations:
+- Selection propagation to origin/output data sources via `selectRecordsInDataSources()`
 - MessageManager selection change messages
 - Zoom-to-results behavior
 - Results accumulation (merge/dedup/remove)
 - Export functionality
 
+Path 1 uses `addHighlightGraphics()` (graphics-layer-utils.ts) for symbology and
+graphic building. Path 3 has its own renderer-based symbology
+(`buildRendererForGeometryType` in `result-feature-layer-factory.ts`) reading
+the same `widgetConfigManager` config values.
+
 ---
 
 ## Origin DS Resolution
 
-`getOriginDataSource()` (selection-utils.ts:63) resolves the origin data source:
+`getOriginDataSource()` (selection-utils.ts:71) resolves the origin data source:
 
 ```
  outputDS
@@ -208,12 +231,12 @@ See FLOW-03-RESULTS-ACCUMULATION.md for full accumulation flow.
 
 | Event | Trigger | Location |
 |-------|---------|----------|
-| DS created | DataSourceComponent mounts | query-task.tsx:593 (handleOutputDataSourceCreated) |
-| DS destroyed | Widget unmounts or DS recreation | query-task.tsx:1102 (key change) |
+| DS created | DataSourceComponent mounts | query-task.tsx:632 (handleOutputDataSourceCreated) |
+| DS destroyed | Widget unmounts or DS recreation | query-task.tsx:1363 (key change) |
 | DS recreation | Config change or error recovery | dsRecreationKey state update |
-| Selection change | Query results processed | selection-utils.ts:511 |
-| Selection clear | Clear results or widget close | selection-utils.ts:293 |
+| Selection change | Query results processed | selection-utils.ts:495 (selectRecordsAndPublish) |
+| Selection clear | Clear results or widget close | selection-utils.ts:242 (clearSelectionInDataSources) |
 
 ---
 
-*Last updated: r024.131 (2026-03-05) — corrected stale file:line references after r024.128-131 extractions*
+*Last updated: r028.118 (2026-06-02) — line-ref accuracy audit*

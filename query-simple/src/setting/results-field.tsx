@@ -7,6 +7,7 @@ import {
 import { withTheme } from 'jimu-theme'
 import { List, TreeItemActionType, type TreeItemsType, type TreeItemType } from 'jimu-ui/basic/list-tree'
 import { SettingRow } from 'jimu-ui/advanced/setting-components'
+import { TextInput, Label } from 'jimu-ui'
 import { getFieldInfosInPopupContent } from 'widgets/shared-code/mapsimple-common'
 
 interface Props {
@@ -15,6 +16,13 @@ interface Props {
   selectedFields: string[]
   theme?: IMThemeVariables
   onFieldsChanged: (fields: string[]) => void
+  // r028.117 (Phase 2.1): per-field alias overrides (name -> alias) + label for the
+  // alias section. Optional so the component is backward compatible if a caller
+  // doesn't wire aliases.
+  fieldAliases?: { [fieldName: string]: string }
+  aliasLabel?: string
+  aliasPlaceholder?: string
+  onFieldAliasesChanged?: (aliases: { [fieldName: string]: string }) => void
 }
 
 const advancedActionMap = {
@@ -48,7 +56,21 @@ const advancedActionMap = {
 }
 
 function ResultsFieldSettingComponent (props: Props) {
-  const { useDataSource, selectedFields, label, theme, onFieldsChanged } = props
+  const { useDataSource, selectedFields, label, theme, onFieldsChanged, fieldAliases, aliasLabel, aliasPlaceholder, onFieldAliasesChanged } = props
+
+  // r028.117 (Phase 2.1): update a single field's alias override in the map.
+  // Empty/whitespace removes the override (falls back to schema alias at render).
+  const handleAliasChange = (fieldName: string, value: string) => {
+    if (!onFieldAliasesChanged) return
+    const next = { ...(fieldAliases || {}) }
+    const trimmed = value.trim()
+    if (trimmed) {
+      next[fieldName] = value
+    } else {
+      delete next[fieldName]
+    }
+    onFieldAliasesChanged(next)
+  }
 
   const useDataSources = React.useMemo(() => Immutable([useDataSource]), [useDataSource])
   const allFields = React.useMemo(() => {
@@ -138,6 +160,33 @@ function ResultsFieldSettingComponent (props: Props) {
             }}
             {...advancedActionMap}
           />
+        </SettingRow>
+      )}
+      {/* r028.117 (Phase 2.1): per-field alias overrides. One text input per selected
+          field; empty falls back to the schema alias at render time. Only shown when
+          the caller wires onFieldAliasesChanged. */}
+      {onFieldAliasesChanged && currentFields.length > 0 && (
+        <SettingRow flow='wrap' label={aliasLabel}>
+          <div className='w-100'>
+            {currentFields.map((fieldName) => {
+              const schema = allFields.find(f => f.jimuName === fieldName || f.name === fieldName)
+              const schemaLabel = (schema as any)?.alias || (schema as any)?.name || fieldName
+              return (
+                <div key={fieldName} css={css`display:flex; align-items:center; gap:8px; margin-bottom:6px;`}>
+                  <Label className='text-truncate' css={css`flex:0 0 40%; font-size:12px; margin:0;`} title={schemaLabel}>
+                    {schemaLabel}
+                  </Label>
+                  <TextInput
+                    className='flex-grow-1'
+                    size='sm'
+                    value={fieldAliases?.[fieldName] ?? ''}
+                    placeholder={aliasPlaceholder}
+                    onChange={(e) => { handleAliasChange(fieldName, e.target.value) }}
+                  />
+                </div>
+              )
+            })}
+          </div>
         </SettingRow>
       )}
     </React.Fragment>

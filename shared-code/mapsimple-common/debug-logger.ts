@@ -186,14 +186,14 @@ export function createQuerySimpleDebugLogger() {
     widgetName: 'QUERYSIMPLE',
     features: [
       'HASH', 'HASH-EXEC', 'HASH-FIRST-LOAD', 'FORM', 'TASK', 'ZOOM', 'MAP-EXTENT', 'DATA-ACTION', 'GROUP',
-      'SELECTION', 'SELECTION-STATE-AUDIT', 'WIDGET-STATE', 'RESTORE', 'RESULTS-MODE', 'EXPAND-COLLAPSE', 'GRAPHICS-LAYER', 'EVENTS', 'POPUP',
+      'SELECTION', 'SELECTION-STATE-AUDIT', 'WIDGET-STATE', 'RESTORE', 'RESULTS-MODE', 'EXPAND-COLLAPSE', 'GRAPHICS-LAYER', 'FEATURE-LAYER', 'EVENTS', 'POPUP',
       'QUERY', 'QUERY-PATH', 'DIRECT-QUERY', 'SPATIAL', 'CSV', 'VIEW-TABLE', 'SUGGEST', 'DARK-MODE', 'REBIND',
       // r027.080: HOVER-PREVIEW, ERROR, QUERY were used in code (query-result-item.tsx,
       // query-clear-handler.ts, selection-utils.ts, query-submit-handler.ts, query-utils.ts)
       // but never registered here. The factory's `features.includes(feature)` gate at
       // debug-logger.ts:111 silently dropped them from any URL filter — making them
       // invisible to ?debug= unless ?debug=all was used. Registering closes that gap.
-      'HOVER-PREVIEW', 'ERROR',
+      'HOVER-PREVIEW', 'ERROR', 'SETTINGS',
       // Temporary migration features (will be removed after migration complete)
       'CHUNK-1-COMPARE', 'CHUNK-1-MISMATCH', 'CHUNK-2-COMPARE', 'CHUNK-2-MISMATCH', 'CHUNK-3-COMPARE', 'CHUNK-3-DECISION', 'CHUNK-3-FALLBACK',
       'CHUNK-4-COMPARE', 'CHUNK-5-COMPARE', 'CHUNK-6-COMPARE', 'CHUNK-6-MISMATCH'

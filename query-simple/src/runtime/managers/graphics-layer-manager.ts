@@ -1,13 +1,14 @@
 import React from 'react'
 import { type AllWidgetProps, type DataSource } from 'jimu-core'
 import { type IMConfig } from '../../config'
-import { createOrGetGraphicsLayer, createOrGetResultGroupLayer, cleanupGraphicsLayer, cleanupGroupLayer, clearGraphicsLayerOrGroupLayer } from '../graphics-layer-utils'
-import { createQuerySimpleDebugLogger, widgetConfigManager } from 'widgets/shared-code/mapsimple-common'
+// r028.096 (Chunk B of Path 2 Removal): dropped imports for `createOrGetResultGroupLayer`,
+// `cleanupGroupLayer` (slated for deletion in Chunk C) along with `GroupLayer` and `Layer`
+// type imports (no longer referenced after the manager collapsed to Path-1-only).
+import { createOrGetGraphicsLayer, cleanupGraphicsLayer, clearGraphicsLayerOrGroupLayer } from '../graphics-layer-utils'
+import { createQuerySimpleDebugLogger } from 'widgets/shared-code/mapsimple-common'
 import type GraphicsLayer from '@arcgis/core/layers/GraphicsLayer'
-import type GroupLayer from '@arcgis/core/layers/GroupLayer'
 import type MapView from '@arcgis/core/views/MapView'
 import type SceneView from '@arcgis/core/views/SceneView'
-import type Layer from '@arcgis/core/layers/Layer'
 
 const debugLogger = createQuerySimpleDebugLogger()
 
@@ -18,21 +19,20 @@ interface GraphicsLayerCallbacks {
 
 /**
  * Utility to manage graphics layer initialization and cleanup.
- * 
- * Centralizes graphics layer management logic for the widget.
- * Handles graphics layer creation, initialization, and cleanup.
- * 
- * Part of Chunk 4: Graphics Layer Management extraction.
- * 
+ *
+ * r028.096 (Chunk B of Path 2 Removal): manager collapsed to Path-1-only. The
+ * pre-collapse version dispatched between Path 2's empty-FL-proxy GroupLayer and
+ * a plain Path 1 GraphicsLayer based on `addResultsAsMapLayer`. Post-Phase-1,
+ * that flag means "use Path 3" (which has its own factory) and never routes
+ * through this manager — so the manager only ever creates Path 1 layers now.
+ * The `groupLayer` field, `getGroupLayer()` accessor, `useGroupLayer` branches,
+ * and `getResultsLayer()` dispatch are all gone.
+ *
  * Note: This is a utility class (not a hook) to work with class components.
  */
 export class GraphicsLayerManager {
   private graphicsLayerRef: React.RefObject<GraphicsLayer | null>
   private mapViewRef: React.RefObject<MapView | SceneView | null>
-  // r027.033: When useGroupLayer is true the GraphicsLayer is wrapped in a
-  // GroupLayer. Track the parent here so cleanup/clear can target it without
-  // exposing it to consumers (who only need the inner GraphicsLayer).
-  private groupLayer: GroupLayer | null = null
 
   constructor(
     graphicsLayerRef: React.RefObject<GraphicsLayer | null>,
@@ -43,24 +43,14 @@ export class GraphicsLayerManager {
   }
 
   /**
-   * r027.086: Returns the "results layer" — the layer that consumers should
-   * pass to `addHighlightGraphics`, `removeHighlightGraphics`, and
-   * `ensureLegendFeatureLayer`.
-   *
-   * In GroupLayer mode (`addResultsAsMapLayer: true`), that's the parent
-   * GroupLayer — those utility functions discriminate at runtime via
-   * `type === 'group'` and walk the GroupLayer's sublayers to find or
-   * maintain the legend FeatureLayer. In flat mode, it's the inner
-   * GraphicsLayer (same as `graphicsLayerRef.current`).
-   *
-   * `graphicsLayerRef.current` always holds the inner GraphicsLayer (the
-   * manager's invariant since r027.033). This accessor returns the parent
-   * GroupLayer when one exists, falling back to the inner GraphicsLayer
-   * otherwise. Use this instead of reading `graphicsLayerRef.current`
-   * directly anywhere the legend semantics matter.
+   * r027.086 (original) / r028.096 (Chunk B): Returns the "results layer" — the
+   * layer that consumers pass to `addHighlightGraphics` / `removeHighlightGraphics`.
+   * Post-Chunk-B this is always the inner GraphicsLayer (the `groupLayer` parent
+   * is gone). The accessor is kept as a thin passthrough so callers in widget.tsx
+   * don't need to change. Eligible for inlining + deletion in Phase 4 cleanup.
    */
-  public getResultsLayer (): GraphicsLayer | GroupLayer | null {
-    return this.groupLayer ?? this.graphicsLayerRef.current
+  public getResultsLayer (): GraphicsLayer | null {
+    return this.graphicsLayerRef.current
   }
 
   /**
@@ -80,9 +70,12 @@ export class GraphicsLayerManager {
     mapView: MapView | SceneView,
     callbacks?: GraphicsLayerCallbacks
   ): Promise<GraphicsLayer | null> {
-    // r024.2: Check if LayerList mode is enabled
-    const useGroupLayer = widgetConfigManager.getAddResultsAsMapLayer(widgetId)
-    
+    // r028.096 (Chunk B of Path 2 Removal): collapsed to Path-1-only. The
+    // `useGroupLayer` branch (which created Path 2's GroupLayer + extracted inner
+    // GraphicsLayer by id) is gone along with the `groupLayer` field and the
+    // PATH-2 instrumentation. All call sites in widget.tsx are gated on
+    // `addResultsAsMapLayer !== true`, so this manager is only entered for Path 1.
+
     // Chunk 4: Comparison logging - new implementation
     const newStateBefore = {
       hasGraphicsLayer: !!this.graphicsLayerRef.current,
@@ -90,68 +83,31 @@ export class GraphicsLayerManager {
       hasMapView: !!this.mapViewRef.current,
       viewType: this.mapViewRef.current?.type || null
     }
-    
+
     debugLogger.log('CHUNK-4-COMPARE', {
       event: 'new-implementation-initializeGraphicsLayer-before',
       widgetId,
-      useGroupLayer,
       newImplementation: {
         stateBefore: newStateBefore,
         mapViewType: mapView.type || 'unknown',
         timestamp: Date.now()
       }
     })
-    
+
     try {
-      // r024.2: Create GroupLayer or GraphicsLayer based on config
-      // r027.033: When useGroupLayer, the actual GraphicsLayer lives inside the
-      // GroupLayer. Resolve it by predictable child id and store the parent
-      // separately so consumers always see a real GraphicsLayer.
-      const layer = useGroupLayer
-        ? await createOrGetResultGroupLayer(widgetId, mapView)
-        : await createOrGetGraphicsLayer(widgetId, mapView)
-      if (!layer) {
+      const graphicsLayer = await createOrGetGraphicsLayer(widgetId, mapView)
+      if (!graphicsLayer) {
         debugLogger.log('CHUNK-4-COMPARE', {
           event: 'new-implementation-initializeGraphicsLayer-failed',
           widgetId,
-          useGroupLayer,
           newImplementation: {
             stateBefore: newStateBefore,
             result: 'failed',
-            reason: useGroupLayer ? 'group-layer-creation-failed' : 'graphics-layer-creation-failed',
+            reason: 'graphics-layer-creation-failed',
             timestamp: Date.now()
           }
         })
         return null
-      }
-
-      let graphicsLayer: GraphicsLayer
-      if (useGroupLayer) {
-        const groupLayer = layer as GroupLayer
-        // Inner id pattern set by createGroupLayerInternal: `${groupLayer.id}-graphics`
-        const innerId = `${groupLayer.id}-graphics`
-        const inner = groupLayer.layers.find(l => l.id === innerId) as GraphicsLayer | undefined
-        if (!inner) {
-          debugLogger.log('CHUNK-4-COMPARE', {
-            event: 'new-implementation-initializeGraphicsLayer-failed',
-            widgetId,
-            useGroupLayer,
-            newImplementation: {
-              stateBefore: newStateBefore,
-              result: 'failed',
-              reason: 'inner-graphics-layer-not-found',
-              groupLayerId: groupLayer.id,
-              expectedInnerId: innerId,
-              timestamp: Date.now()
-            }
-          })
-          return null
-        }
-        this.groupLayer = groupLayer
-        graphicsLayer = inner
-      } else {
-        this.groupLayer = null
-        graphicsLayer = layer as GraphicsLayer
       }
 
       // Store references
@@ -168,13 +124,12 @@ export class GraphicsLayerManager {
       debugLogger.log('CHUNK-4-COMPARE', {
         event: 'new-implementation-initializeGraphicsLayer-success',
         widgetId,
-        useGroupLayer,
         newImplementation: {
           stateBefore: newStateBefore,
           stateAfter: newStateAfter,
           result: 'success',
           layerId: graphicsLayer.id,
-          layerType: useGroupLayer ? 'group' : 'graphics',
+          layerType: 'graphics',
           viewType: mapView.type || 'unknown',
           timestamp: Date.now()
         }
@@ -282,23 +237,22 @@ export class GraphicsLayerManager {
     widgetId: string,
     callbacks?: GraphicsLayerCallbacks
   ): void {
-    // r027.033: groupLayer ref tells us which cleanup path to use without
-    // having to introspect a runtime type on a now-narrowed graphicsLayerRef.
-    const isGroupLayer = !!this.groupLayer
-    
+    // r028.096 (Chunk B of Path 2 Removal): the `isGroupLayer` dispatch (which chose
+    // between `cleanupGroupLayer` and `cleanupGraphicsLayer`) is gone. Manager
+    // only manages a Path 1 GraphicsLayer; cleanup always calls
+    // `cleanupGraphicsLayer`. `this.groupLayer` field also gone.
+
     // Chunk 4: Comparison logging - new implementation
     const newStateBefore = {
       hasGraphicsLayer: !!this.graphicsLayerRef.current,
       graphicsLayerId: this.graphicsLayerRef.current?.id || null,
       hasMapView: !!this.mapViewRef.current,
-      viewType: this.mapViewRef.current?.type || null,
-      isGroupLayer
+      viewType: this.mapViewRef.current?.type || null
     }
-    
+
     debugLogger.log('CHUNK-4-COMPARE', {
       event: 'new-implementation-cleanupGraphicsLayer-before',
       widgetId,
-      isGroupLayer,
       newImplementation: {
         stateBefore: newStateBefore,
         timestamp: Date.now()
@@ -307,15 +261,9 @@ export class GraphicsLayerManager {
 
     const mapView = this.mapViewRef.current
     if (mapView) {
-      // r024.2: Use appropriate cleanup based on layer type
-      if (isGroupLayer) {
-        cleanupGroupLayer(widgetId, mapView)
-      } else {
-        cleanupGraphicsLayer(widgetId, mapView)
-      }
+      cleanupGraphicsLayer(widgetId, mapView)
       this.mapViewRef.current = null
       this.graphicsLayerRef.current = null
-      this.groupLayer = null
 
       const newStateAfter = {
         hasGraphicsLayer: !!this.graphicsLayerRef.current,
@@ -327,7 +275,6 @@ export class GraphicsLayerManager {
       debugLogger.log('CHUNK-4-COMPARE', {
         event: 'new-implementation-cleanupGraphicsLayer-complete',
         widgetId,
-        isGroupLayer,
         newImplementation: {
           stateBefore: newStateBefore,
           stateAfter: newStateAfter,
@@ -362,44 +309,30 @@ export class GraphicsLayerManager {
    * @param config - Widget configuration
    */
   clearGraphics(widgetId: string, config: IMConfig): void {
-    // r027.033: Read group via dedicated ref, not by introspecting graphicsLayerRef.
+    // r028.096 (Chunk B of Path 2 Removal): collapsed. Pre-Phase-1 this method
+    // chose between clearing Path 2's parent GroupLayer (so legend sublayers
+    // also got cleared) and clearing the Path 1 GraphicsLayer alone. Path 2 is
+    // gone; only the GraphicsLayer is left to clear.
     const graphicsLayer = this.graphicsLayerRef.current
-    const isGroupLayer = !!this.groupLayer
-
-    // r024.2: Get graphics count based on layer type
-    let graphicsCount = 0
-    if (this.groupLayer) {
-      this.groupLayer.layers.forEach((sublayer: Layer) => {
-        const glSub = sublayer as GraphicsLayer
-        if (glSub.graphics) graphicsCount += glSub.graphics.length
-      })
-    } else if (graphicsLayer) {
-      graphicsCount = graphicsLayer.graphics?.length || 0
-    }
+    const graphicsCount = graphicsLayer?.graphics?.length || 0
 
     const newStateBefore = {
       hasGraphicsLayer: !!graphicsLayer,
       graphicsLayerId: graphicsLayer?.id || null,
-      graphicsCount,
-      isGroupLayer
+      graphicsCount
     }
-    
+
     debugLogger.log('CHUNK-4-COMPARE', {
       event: 'new-implementation-clearGraphicsLayerIfExists-before',
       widgetId,
-      isGroupLayer,
       newImplementation: {
         stateBefore: newStateBefore,
         timestamp: Date.now()
       }
     })
-    
-    // r027.033: Clear the parent group when present so legend sub-layers are
-    // also cleared; otherwise just the standalone GraphicsLayer.
-    const targetForClear = this.groupLayer || graphicsLayer
-    if (targetForClear) {
-      // r024.2: Use unified clear function
-      clearGraphicsLayerOrGroupLayer(targetForClear)
+
+    if (graphicsLayer) {
+      clearGraphicsLayerOrGroupLayer(graphicsLayer)
 
       const newStateAfter = {
         hasGraphicsLayer: !!this.graphicsLayerRef.current,
@@ -410,12 +343,11 @@ export class GraphicsLayerManager {
       debugLogger.log('CHUNK-4-COMPARE', {
         event: 'new-implementation-clearGraphicsLayerIfExists-complete',
         widgetId,
-        isGroupLayer,
         newImplementation: {
           stateBefore: newStateBefore,
           stateAfter: newStateAfter,
           result: 'complete',
-          layerId: targetForClear.id,
+          layerId: graphicsLayer.id,
           timestamp: Date.now()
         }
       })
@@ -435,20 +367,14 @@ export class GraphicsLayerManager {
 
   /**
    * Gets the inner GraphicsLayer (the one graphics are drawn into).
-   * Always a GraphicsLayer or null — never the outer GroupLayer.
    */
   getGraphicsLayer(): GraphicsLayer | null {
     return this.graphicsLayerRef.current
   }
 
-  /**
-   * r027.033: Returns the parent GroupLayer when useGroupLayer mode is active,
-   * else null. For parent-only ops (LayerList visibility, sibling legend
-   * layers). For graphics manipulation use getGraphicsLayer().
-   */
-  getGroupLayer(): GroupLayer | null {
-    return this.groupLayer
-  }
+  // r028.096 (Chunk B of Path 2 Removal): `getGroupLayer()` was here. It returned
+  // the Path 2 parent GroupLayer for LayerList/legend operations. Zero external
+  // callers (audit confirmed); deleted along with the `groupLayer` field.
 
   /**
    * Checks if graphics layer should be initialized based on config and current state.

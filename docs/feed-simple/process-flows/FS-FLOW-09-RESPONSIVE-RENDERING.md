@@ -10,8 +10,9 @@ viewport detection needed.
 |------|------|
 | `config.ts` | `cardTemplateMobile`, `toolbarPositionMobile`, `feedMapLayerPopupTemplateMobile`, `mobilePopupCollapsed`, `mobilePopupDockPosition`, `mobilePopupHideDockButton` fields |
 | `feed-card.tsx` | Responsive card content + toolbar rendering with CSS media query toggle |
-| `feed-layer-manager.ts` | Responsive popup template rendering in `buildPopupTemplate()`; `applyMobilePopupBehavior()` for dock/collapsed |
-| `map-interaction.ts` | Mobile popup behavior in `identifyFeatureOnMap()` for spatial join popups |
+| `feed-layer-manager.ts` | Responsive popup template rendering in `buildPopupTemplate()`; calls `applyMobilePopupBehavior()` from shared-code |
+| `map-interaction.ts` | Calls `applyMobilePopupBehavior()` from shared-code for spatial join popups |
+| `shared-code/mobile-popup-behavior.ts` | Shared `applyMobilePopupBehavior()` and `getPopupCollapsedOption()` used by both FS and QS |
 | `widget.tsx` | Passes mobile config props; popup change detection in `componentDidUpdate` |
 | `setting.tsx` | "Card Template (Mobile)", "Toolbar Position (Mobile)", "Popup Template (Mobile)", "Mobile Popup Behavior" UI |
 
@@ -264,4 +265,4 @@ array. Changing any of the three settings triggers `cleanupFeedLayer()` +
 
 ---
 
-*Last updated: r002.042 (2026-03-14)*
+*Last updated: r005.017 (2026-05-08)*

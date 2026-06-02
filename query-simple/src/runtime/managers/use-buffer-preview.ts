@@ -27,6 +27,7 @@ import { React, lodash, loadArcGISJSAPIModule, utils } from 'jimu-core'
 import { loadArcGISJSAPIModules } from 'jimu-arcgis'
 import { createQuerySimpleDebugLogger, widgetConfigManager } from 'widgets/shared-code/mapsimple-common'
 import { graphicsStateManager } from '../graphics-state-manager'
+import { getGroupLayerId as getPath3GroupLayerId } from '../result-feature-layer-factory'
 import type MapView from '@arcgis/core/views/MapView'
 import type SceneView from '@arcgis/core/views/SceneView'
 import type Geometry from '@arcgis/core/geometry/Geometry'
@@ -118,21 +119,31 @@ export function useBufferPreview (options: UseBufferPreviewOptions): Geometry | 
         visible: true
       })
 
-      // r025.015: Add buffer layer INSIDE GroupLayer when available.
-      // With visibilityMode:'inherited', toggling the GroupLayer in LayerList
-      // automatically hides/shows the buffer — no external watcher needed.
-      // Falls back to map-level for GraphicsLayer (highlight) mode.
-      const groupLayerId = `querysimple-results-${widgetId}`
-      const groupLayer = mapView.map.findLayerById(groupLayerId) as GroupLayer
-      let addedToGroupLayer = false
+      // r028.083: Parent buffer under Path 3's GroupLayer when active so
+      // visibilityMode:'inherited' cascades hide/show. Falls back to top-level for
+      // Path 1 (no GroupLayer; buffer is destroyed via this hook's unmount cleanup).
+      // r028.096 (Chunk B of Path 2 Removal): dropped the Path 2 GroupLayer
+      // fallback (`querysimple-results-*`). Path 2 no longer creates that group.
+      const path3GroupId = getPath3GroupLayerId(widgetId)
 
-      if (groupLayer && groupLayer.type === 'group') {
-        groupLayer.add(layer)
-        addedToGroupLayer = true
+      let parentGroup: GroupLayer | null = null
+      let parentId: string | null = null
+      let activePath: 'path1' | 'path3' = 'path1'
+
+      const path3 = mapView.map.findLayerById(path3GroupId) as GroupLayer | undefined
+      if (path3 && path3.type === 'group') {
+        parentGroup = path3
+        parentId = path3GroupId
+        activePath = 'path3'
+      }
+
+      if (parentGroup) {
+        parentGroup.add(layer)
       } else {
         mapView.map.add(layer)
       }
 
+      const addedToGroupLayer = parentGroup !== null
       bufferLayerRef.current = layer
 
       debugLogger.log('TASK', {
@@ -140,7 +151,8 @@ export function useBufferPreview (options: UseBufferPreviewOptions): Geometry | 
         layerId,
         widgetId,
         addedToGroupLayer,
-        parentLayerId: addedToGroupLayer ? groupLayerId : 'map'
+        parentLayerId: addedToGroupLayer ? parentId : 'map',
+        activePath
       })
     }
 

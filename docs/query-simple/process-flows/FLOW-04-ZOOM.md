@@ -19,11 +19,11 @@ receive a fixed-distance buffer before the expansion factor is applied.
 
 | Trigger | Location | Description |
 |---------|----------|-------------|
-| Auto-zoom after query | `query-execution-handler.ts:948` | Calls `zoomToRecords(recordsForZoom)` after results load |
-| Click result row | `query-result.tsx:989` | Zooms to single record on click |
-| Zoom-to button | `query-result.tsx:1022` | Manual zoom button on result item |
-| Zoom data action | `zoom-to-action.tsx:136` | ExB data action for external consumers |
-| Cached extent zoom | `query-result.tsx:602` | Uses pre-cached extent via `expandExtentByFactor()` |
+| Auto-zoom after query | `query-execution-handler.ts:990` | Calls `zoomToRecords(recordsForZoom)` after results load |
+| Click result row | `query-result.tsx:1064` | Zooms to single record on click (`handleRecordClick`) |
+| Zoom-to button | `query-result.tsx:1098` | Manual zoom button on result item (`handleZoomToRecord`) |
+| Zoom data action | `zoom-to-action.tsx:138` | ExB data action for external consumers |
+| Cached extent zoom | `query-result.tsx:684` | Uses pre-cached extent via `expandExtentByFactor()` (`zoomToAllResults`) |
 
 ---
 
@@ -33,51 +33,51 @@ receive a fixed-distance buffer before the expansion factor is applied.
  Entry Point (query-task / query-result / data-action)
       │
       ▼
- useZoomToRecords(mapView)          ← managers/use-zoom-to-records.ts:16
+ useZoomToRecords(mapView, widgetId)   ← managers/use-zoom-to-records.ts:27
       │  React.useCallback wrapper
       │  Returns async (records, options?) => void
       │
       ▼
- zoomToRecords(mapView, records, options?)   ← zoom-utils.ts:366
+ zoomToRecords(mapView, records, options?)   ← zoom-utils.ts:370
       │
-      ├── Guard: !mapView || !records → early exit   :371
+      ├── Guard: !mapView || !records → early exit   :375
       │
-      ├── Extract extents from records               :400-420
+      ├── Extract extents from records               :404-424
       │   ├── record.getJSAPIGeometry()
       │   ├── Point without .extent?
-      │   │   └── YES → new Extent({ x, x, y, y, sr })   :408-414
-      │   └── Other type → geom.extent                    :418
+      │   │   └── YES → new Extent({ x, x, y, y, sr })   :410-418
+      │   └── Other type → geom.extent                    :422
       │
-      ├── Filter null extents                        :420
-      │   └── No extents? → early exit               :429-436
+      ├── Filter null extents                        :424
+      │   └── No extents? → early exit               :433-440
       │
-      ├── Single vs Multi extent                     :440-478
-      │   ├── Single → use directly                  :442
-      │   └── Multiple → union loop                  :460-463
+      ├── Single vs Multi extent                     :444-482
+      │   ├── Single → use directly                  :446
+      │   └── Multiple → union loop                  :464-467
       │       extent = extents[0].clone()
       │       for i in 1..n: extent = extent.union(extents[i])
       │
-      ├── Zero-area check                            :486
+      ├── Zero-area check                            :490
       │   └── width === 0 || height === 0?
       │       └── YES + has SR →
-      │           ├── isMetricSpatialReference(sr)    :256
+      │           ├── isMetricSpatialReference(sr)    :260
       │           │   ├── 3857/102100 → metric (meters)
       │           │   ├── 4326 → metric
       │           │   └── 2225-2284 → feet (State Plane)
       │           ├── bufferDist = feet × 0.3048 (metric)
       │           │              or feet directly (feet SR)
-      │           └── expandZeroAreaExtent(extent, bufferDist)   :297
+      │           └── expandZeroAreaExtent(extent, bufferDist)   :301
       │               center ± bufferDist in all directions
       │
-      ├── Apply expansion factor                     :533-548
+      ├── Apply expansion factor                     :540-552
       │   centerX = (xmin + xmax) / 2
       │   centerY = (ymin + ymax) / 2
       │   halfW = width / 2 × factor
       │   halfH = height / 2 × factor
       │   extent = { center - halfW, center + halfW, ... }
       │
-      └── mapView.goTo(extent)                       :611
-          └── Store original extent on window        :642-646
+      └── mapView.goTo(extent)                       :615
+          └── Store original extent on window        :649-653
               for calibration tool
 ```
 
@@ -92,33 +92,33 @@ reused on subsequent zoom/pan actions:
  Records change (query-task.tsx / widget.tsx)
       │
       ▼
- calculateRecordsExtent(records)             ← zoom-utils.ts:107
+ calculateRecordsExtent(records)             ← zoom-utils.ts:111
       │
-      ├── Guard: !records || empty → null    :108
-      ├── Extract extents (same as above)    :123-143
-      ├── Filter nulls                       :143
-      ├── SR Validation Guard                :156-168
+      ├── Guard: !records || empty → null    :112
+      ├── Extract extents (same as above)    :127-146
+      ├── Filter nulls                       :147
+      ├── SR Validation Guard                :160-173
       │   └── extents.length > 1?
       │       └── Check all WKIDs match
       │           └── Mismatch → log WARNING (BUG-EXTENT-CACHE-001)
-      ├── Union loop                         :172-176
-      └── Return raw extent                  :193
+      ├── Union loop                         :176-180
+      └── Return raw extent                  :197
            │
            ▼
-      Stored as cachedResultsExtent (widget.tsx:1239)
+      Stored as state.resultsExtent (widget.tsx:1304/1324)
            │
            ▼
-      On zoom request:
-      expandExtentByFactor(cachedExtent, factor, sr, bufferFt)
-                                             ← zoom-utils.ts:208
+      On zoom request (zoomToAllResults):
+      expandExtentByFactor(resultsExtent, factor, sr, bufferFt)
+                                             ← zoom-utils.ts:212
            │
-           ├── Clone extent                  :214
-           ├── Zero-area buffer (if needed)  :219-226
-           ├── Apply expansion factor        :228-241
+           ├── Clone extent                  :218
+           ├── Zero-area buffer (if needed)  :223-229
+           ├── Apply expansion factor        :232-245
            └── Return expanded extent
                 │
                 ▼
-           mapView.goTo(expandedExtent)      ← query-result.tsx:628
+           mapView.goTo(expandedExtent)      ← query-result.tsx:710
 ```
 
 ---
@@ -130,7 +130,7 @@ by `direct-query.ts` setting `query.outSpatialReference = mapView.spatialReferen
 (added in r024.111 to fix BUG-EXTENT-CACHE-001).
 
 **Runtime guard:** `calculateRecordsExtent()` checks all extent WKIDs before
-union (zoom-utils.ts:156-168). Mismatches are logged but do not block the operation.
+union (zoom-utils.ts:160-173). Mismatches are logged but do not block the operation.
 
 **Unit conversion:** Zero-area buffer converts feet to the SR's native unit:
 - Web Mercator (3857): 300 ft × 0.3048 = 91.44 m
@@ -142,9 +142,9 @@ union (zoom-utils.ts:156-168). Mismatches are logged but do not block the operat
 
 | Constant | Value | Location | Description |
 |----------|-------|----------|-------------|
-| `DEFAULT_EXTENT_EXPANSION_FACTOR` | `1.2` | zoom-utils.ts:61 | 20% expansion (10% each side) |
-| `DEFAULT_ZERO_AREA_BUFFER_FEET` | `300` | zoom-utils.ts:70 | 600 ft × 600 ft around points |
-| `FEET_TO_METERS` | `0.3048` | zoom-utils.ts:73 | Conversion factor |
+| `DEFAULT_EXTENT_EXPANSION_FACTOR` | `1.2` | zoom-utils.ts:65 | 20% expansion (10% each side) |
+| `DEFAULT_ZERO_AREA_BUFFER_FEET` | `300` | zoom-utils.ts:74 | 600 ft × 600 ft around points |
+| `FEET_TO_METERS` | `0.3048` | zoom-utils.ts:77 | Conversion factor |
 
 ---
 
@@ -173,7 +173,7 @@ After any auto-zoom, run in browser console:
 window.__querySimpleCaptureAdjustedExtent()
 ```
 Manually adjust the map, then run again to calculate the optimal expansion factor.
-Defined at zoom-utils.ts:682.
+Defined at zoom-utils.ts:735 (`captureAdjustedExtent`).
 
 ---
 
@@ -185,4 +185,4 @@ Defined at zoom-utils.ts:682.
 
 ---
 
-*Last updated: r027.017 (2026-04-06) — corrected query-result.tsx and query-execution-handler.ts line numbers*
+*Last updated: r028.118 (2026-06-02) — re-synced all zoom-utils.ts, query-result.tsx, query-execution-handler.ts, and use-zoom-to-records.ts line refs; corrected cached-extent symbol name (state.resultsExtent) and calibration-tool line*

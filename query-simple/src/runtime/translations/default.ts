@@ -51,10 +51,10 @@ export default {
   spatialRelationship: 'Spatial relationship',
   spatialSourceFeatures: '{count} feature(s) from Results',
   spatialSourceNoFeatures: 'No features loaded',
+  spatialIncludeResults: 'Also include current results ({count})',
   expandAll: 'Expand all',
   collapseAll: 'Collapse all',
   scrollToTop: 'Scroll to top',
-  addToMap: 'Select on map',
   resultsModeLabel: 'Results Mode',
   resultsMode: 'Results mode',
   createNewResults: 'Create new results',
@@ -85,6 +85,13 @@ export default {
   queryErrorAlertLabel: 'Search failed',
   queryErrorAlertTitle: 'Search could not be completed',
   queryErrorAlertMessage: 'The map service may be temporarily unavailable. Please try again in a few minutes. If the problem persists, contact your administrator.',
+  // r028.114: Calcite Popover messages for result-set truncation (hit the service transfer limit)
+  truncationAlertLabel: 'More results available',
+  truncationAlertTitle: 'Showing a partial result set',
+  truncationAlertMessage: 'This search reached the {limit}-record limit and there are more matching records than are shown. Refine your search to see the rest.',
+  // r028.122: variants used when the true total matching count is known
+  truncationAlertMessageCount: 'This search matched {total} records but only {shown} are shown. Refine your search to see the rest.',
+  truncationAlertMessageCountAtLeast: 'This search matched at least {total} records but only {shown} are shown. Refine your search to see the rest.',
   // r024: Results menu action labels
   panTo: 'Pan to',
   viewInTable: 'View in table',

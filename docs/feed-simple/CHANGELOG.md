@@ -5,6 +5,36 @@ All notable changes to the FeedSimple widget will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.20.0-r005.018] - 2026-05-28 - Shared-code version alignment (no functional change)
+
+### Context
+Passthrough version bump. QuerySimple's Path 2 Removal (r028.099) stripped the unused
+`'PATH-2'` debug flag from `createQuerySimpleDebugLogger` in
+`shared-code/mapsimple-common/debug-logger.ts`. FeedSimple's logger factory is untouched
+and there is no functional change. Bumped per the shared-code consumer rule.
+
+### Changed
+- `src/version.ts` — MINOR_VERSION 017 -> 018.
+
+---
+
+## [1.20.0-r005.017] - 2026-05-08 - Move applyMobilePopupBehavior to shared-code
+
+### Context
+Mobile popup behavior (dock position, dock button, action bar visibility, desktop restoration) was implemented locally in `feed-layer-manager.ts`. QuerySimple needed the same behavior for its v28 FeatureLayer migration. Rather than duplicate it, the function was extracted to `shared-code/mapsimple-common/mobile-popup-behavior.ts` and both widgets now consume it from there.
+
+### Changed
+- **`feed-layer-manager.ts`** — Removed local `MobilePopupParams` interface and `applyMobilePopupBehavior()` function (~50 lines). Now imports from `widgets/shared-code/mapsimple-common`. Removed dead re-export that was no longer consumed after `map-interaction.ts` switched to a direct import.
+- **`map-interaction.ts`** — Changed `applyMobilePopupBehavior` import from `./feed-layer-manager` to `widgets/shared-code/mapsimple-common` (direct import, no re-export hop).
+- **`shared-code/mapsimple-common/mobile-popup-behavior.ts`** (NEW) — Shared module exporting `applyMobilePopupBehavior()`, `getPopupCollapsedOption()`, `MOBILE_BREAKPOINT_PX`, and `MobilePopupParams` type.
+- **`shared-code/mapsimple-common.ts`** — Added barrel exports for the new mobile-popup-behavior module.
+
+### Stats
+- **Tests**: 596/596 (full suite)
+- **TS errors**: 0
+
+---
+
 ## [1.20.0-r005.016] - 2026-05-05 - Security: dangerous URL scheme blocking + security test suite
 
 ### Context

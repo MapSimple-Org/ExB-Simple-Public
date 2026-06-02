@@ -17,7 +17,6 @@ export interface QueryTaskListProps {
   minSize: Size
   defaultSize: Size
   queryItems: ImmutableArray<QueryItemType>
-  defaultPageSize?: number
   initialQueryValue?: { shortId: string, value: string }
   onHashParameterUsed?: (shortId: string) => void
 }
@@ -32,7 +31,7 @@ const style = css`
 
 // show task label and an arrow to the task content
 export function TaskListInline (props: QueryTaskListProps) {
-  const { queryItems, widgetId, minSize, defaultSize, defaultPageSize, widgetLabel, wrap = false } = props
+  const { queryItems, widgetId, minSize, defaultSize, widgetLabel, wrap = false } = props
   const containerRef = React.useRef<HTMLDivElement>(undefined)
   const containerWidthRef = React.useRef<number>(0)
   const contentWidthRef = React.useRef<{ [key: string]: number }>({})
@@ -138,7 +137,6 @@ export function TaskListInline (props: QueryTaskListProps) {
               queryItem: currentItem,
               wrappedInPopper: true,
               className: 'pb-4',
-              defaultPageSize,
               initialInputValue: currentItem.shortId === props.initialQueryValue?.shortId ? props.initialQueryValue.value : undefined,
               onHashParameterUsed: props.onHashParameterUsed,
               queryItemShortId: currentItem.shortId
@@ -158,7 +156,7 @@ export function TaskListInline (props: QueryTaskListProps) {
           onOpenedChange={handlePopperOpenedChange}
           forceClose={openedPopper >= 0 && openedPopper !== expandedArray.length + 1}
         >
-          <QueryTaskList widgetId={widgetId} isInPopper defaultPageSize={defaultPageSize} queryItems={nonExpandedArray as any} className='pb-4' initialQueryValue={props.initialQueryValue} onHashParameterUsed={props.onHashParameterUsed} />
+          <QueryTaskList widgetId={widgetId} isInPopper queryItems={nonExpandedArray as any} className='pb-4' initialQueryValue={props.initialQueryValue} onHashParameterUsed={props.onHashParameterUsed} />
         </TaskListPopperWrapper>
       )}
     </div>

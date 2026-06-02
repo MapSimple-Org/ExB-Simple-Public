@@ -17,6 +17,7 @@ import type SceneView from '@arcgis/core/views/SceneView'
 import { type QueryItemType, ListDirection } from '../config'
 import { QueryResultItem } from './query-result-item'
 import { getPopupTemplate } from './query-utils'
+import { buildCompositeKey } from './result-feature-layer-factory'
 import { useAutoHeight } from './useAutoHeight'
 import defaultMessage from './translations/default'
 import { createQuerySimpleDebugLogger } from 'widgets/shared-code/mapsimple-common'
@@ -29,7 +30,6 @@ export interface SimpleListProps {
   outputDS: FeatureLayerDataSource
   records: DataRecord[]
   direction: ListDirection
-  hoverPinColor?: string // r022.106: Configurable hover pin color
   onEscape: () => void
   onSelectChange: (data: FeatureDataRecord) => void
   onRemove: (data: FeatureDataRecord) => void
@@ -38,9 +38,7 @@ export interface SimpleListProps {
   /** r026.009: Pan to single record (center without zoom). Passed to QueryResultItem. */
   onPanTo?: (data: FeatureDataRecord) => void
   /** r024.46: When true, clicking a result already zooms, so zoom button is redundant */
-  zoomOnResultClick?: boolean
   /** r026.009: When true, clicking a result pans (centers) without zoom */
-  panOnResultClick?: boolean
   expandByDefault?: boolean
   // r021.77: itemExpandStates removed - doesn't persist with no-rerender approach
   removedRecordIds?: Set<string>
@@ -99,15 +97,12 @@ export function SimpleList (props: SimpleListProps) {
     onRemove,
     onZoomTo,
     onPanTo,
-    zoomOnResultClick,
-    panOnResultClick,
     expandByDefault,
     // r021.77: itemExpandStates removed
     removedRecordIds,
     onRenderDone,
     queries,
     mapView,
-    hoverPinColor // r022.106: Configurable hover pin color
   } = props
   
   const isAutoHeight = useAutoHeight()
@@ -126,7 +121,7 @@ export function SimpleList (props: SimpleListProps) {
   
   // r021.76: Cache popup templates per queryConfig
   // Key: queryConfig.configId, Value: { popupTemplate, defaultPopupTemplate }
-  const popupTemplateCacheRef = React.useRef<Map<string, { popup: any, default: any, isCustomTemplate?: boolean, rawTemplate?: string }>>(new Map())
+  const popupTemplateCacheRef = React.useRef<Map<string, { popup: any, default: any, isCustomTemplate?: boolean, rawTemplate?: string, isSelectAttributes?: boolean, resultFieldAliases?: { [fieldName: string]: string } }>>(new Map())
   
   // r021.77 / r024.24: Cleanup cache on unmount
   // Popup templates may hold DOM references that prevent GC
@@ -228,7 +223,9 @@ export function SimpleList (props: SimpleListProps) {
               popup: rs.popupTemplate,
               default: rs.defaultPopupTemplate,
               isCustomTemplate: (rs as any).isCustomTemplate, // r026.002: Pass through for render pool
-              rawTemplate: (rs as any).rawTemplate // r026.005: Raw template for card renderer
+              rawTemplate: (rs as any).rawTemplate, // r026.005: Raw template for card renderer
+              isSelectAttributes: (rs as any).isSelectAttributes, // r028.111: card renders fieldInfos via our shared renderer
+              resultFieldAliases: (rs as any).resultFieldAliases // r028.117 (Phase 2.1): per-field alias overrides
             })
             
             // Force re-render to show new templates
@@ -255,11 +252,30 @@ export function SimpleList (props: SimpleListProps) {
     }
   }, [])
 
+  // r028.045: Hide any visible hover pins for this widget. Covers two edge
+  // cases where mouseleave on individual cards doesn't fire: (1) pointer
+  // leaves the results list for the map, (2) list scrolls a card out from
+  // under the pointer.
+  const hideHoverPins = React.useCallback(() => {
+    if (!mapView?.graphics) return
+    mapView.graphics.forEach((g: any) => {
+      if (g.attributes?.__hoverPin && g.attributes?.__widgetId === widgetId && g.visible) {
+        g.visible = false
+      }
+    })
+  }, [mapView, widgetId])
+
+  const handleScroll = React.useCallback((evt) => {
+    onScrollContainer(evt)
+    hideHoverPins()
+  }, [onScrollContainer, hideHoverPins])
+
   return (
     <div
       onKeyUp={handleKeyUp}
       onKeyDown={handleKeyDown}
-      onScroll={onScrollContainer}
+      onScroll={handleScroll}
+      onPointerLeave={hideHoverPins}
       className={classNames({ vertical: direction === ListDirection.Vertical })}
       css={getStyle(isAutoHeight)}
       ref={resultContainerRef}
@@ -277,7 +293,9 @@ export function SimpleList (props: SimpleListProps) {
           let recordDefaultPopupTemplate: any
           let recordIsCustomTemplate = false
           let recordRawTemplate: string | undefined
-          
+          let recordIsSelectAttributes = false
+          let recordFieldAliases: { [fieldName: string]: string } | undefined
+
           if (recordQueryConfigId) {
             const recordConfig = queries.find(q => q.configId === recordQueryConfigId)
             if (recordConfig) {
@@ -287,6 +305,8 @@ export function SimpleList (props: SimpleListProps) {
                 recordDefaultPopupTemplate = cachedTemplates.default
                 recordIsCustomTemplate = !!cachedTemplates.isCustomTemplate
                 recordRawTemplate = cachedTemplates.rawTemplate
+                recordIsSelectAttributes = !!cachedTemplates.isSelectAttributes
+                recordFieldAliases = cachedTemplates.resultFieldAliases
                 
                 debugLogger.log('RESULTS-MODE', {
                   event: 'record-template-lookup',
@@ -330,10 +350,13 @@ export function SimpleList (props: SimpleListProps) {
           
           // r021.94: Use composite key to prevent React key collisions when multiple records share same ID
           const compositeKey = recordQueryConfigId ? `${recordId}__${recordQueryConfigId}` : recordId
-          
+          // r028.033: Factory-format key for data attribute (matches COMPOSITE_KEY on FeatureLayer graphics)
+          const factoryCompositeKey = recordQueryConfigId ? buildCompositeKey(recordQueryConfigId, String(recordId)) : undefined
+
           return (
             <QueryResultItem
               key={compositeKey}
+              factoryCompositeKey={factoryCompositeKey}
               data={dataItem as FeatureDataRecord}
               dataSource={outputDS}
               widgetId={widgetId}
@@ -341,15 +364,14 @@ export function SimpleList (props: SimpleListProps) {
               defaultPopupTemplate={recordDefaultPopupTemplate}
               isCustomTemplate={recordIsCustomTemplate}
               rawTemplate={recordRawTemplate}
+              isSelectAttributes={recordIsSelectAttributes}
+              resultFieldAliases={recordFieldAliases}
               expandByDefault={expandByDefaultValue}
               onClick={onSelectChange}
               onRemove={onRemove}
               onZoomTo={onZoomTo}
               onPanTo={onPanTo}
-              zoomOnResultClick={zoomOnResultClick}
-              panOnResultClick={panOnResultClick}
               mapView={mapView}
-              hoverPinColor={hoverPinColor}
             />
           )
         })}

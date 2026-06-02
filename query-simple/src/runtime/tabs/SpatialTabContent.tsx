@@ -16,6 +16,23 @@
  * - r025.030–040: Warnings, relationship labels, buffer preview integration
  * - r025.041: JimuDraw integration, mixed geometry buffer fix (group-by-type union)
  * - r025.044: Multi-shape draw mode (Continuous creation, geometry accumulation)
+ * - r028.100: JimuDraw stays mounted across mode switches so drawn graphics persist
+ *   and stay visible on the map (fixes vanished-line / phantom-buffer on Operations<->Draw)
+ * - r028.101: Apply passes ALL input geometries (one per type) to executeSpatialQuery
+ *   instead of only the highest-dimension part, so a no-buffer mixed-type query no longer
+ *   drops the other types ([bufferedGeometry] when buffered, allInputGeometries otherwise)
+ * - r028.108: spatial relationship selector hardened to single-select — change handler
+ *   collapses to one selection (defends against calcite desync), Apply guards against a
+ *   multi/invalid spatialRel reaching the server, and Reset clears the combobox imperatively
+ * - r028.118: Draw mode "Also include current results" checkbox (TODO #29) — shown only
+ *   once a shape is drawn AND results exist; when on, folds accumulatedRecords geometries
+ *   into the draw input so a drawn shape and selected results buffer/query together
+ * - r028.119: input-geometry assembly made EVENT-DRIVEN. The r028.118 spread made the
+ *   assembly useEffect emit a new array reference on every run; re-running on post-query
+ *   accumulatedRecords changes redrew the buffer after it was cleared. allInputGeometries
+ *   is now recomputed only on real input events (draw end/edit/clear, toggle, mode change,
+ *   smart-default). Draw mode no longer reacts to results; one prop-sync effect remains for
+ *   operations mode (results ARE its input). Removed the r028.118 reset useEffect.
  *
  * Related:
  * - Requirements: docs/development/SPATIAL_TAB_REQUIREMENTS.md
@@ -33,7 +50,7 @@ import {
   type FeatureLayerDataSource,
   type FeatureDataRecord
 } from 'jimu-core'
-import { Button, Select, Option, TextInput, Tooltip, AdvancedSelect } from 'jimu-ui'
+import { Button, Select, Option, TextInput, Tooltip, AdvancedSelect, Checkbox } from 'jimu-ui'
 import { loadArcGISJSAPIModules, type JimuMapView } from 'jimu-arcgis'
 import type * as jimuMap from 'jimu-ui/advanced/map'
 import { TrashOutlined } from 'jimu-icons/outlined/editor/trash'
@@ -73,7 +90,7 @@ export interface SpatialTabContentProps {
   isPanelVisible?: boolean  // r025.013: Buffer preview clear/restore on panel close/open
   targetLayerOptions?: Array<{ value: string | number; label: string }>  // r025.007: Real layers from widget config
   onExecuteSpatialQuery?: (params: {
-    inputGeometry: Geometry
+    inputGeometries: Geometry[]
     selectedRelationship: string
     selectedLayers: Array<{ value: string | number; label: string }>
     bufferDistance: number
@@ -198,6 +215,14 @@ const sectionStyle = css`
   gap: 4px;
 `
 
+// r028.100: Hide the Draw section in the panel WITHOUT unmounting JimuDraw.
+// Keeping JimuDraw mounted across mode switches preserves its draw GraphicsLayer
+// (and any drawn graphics), so they survive Operations<->Draw toggles. display:none
+// only hides the panel UI; the map draw layer is independent and stays visible.
+const drawSectionHiddenStyle = css`
+  display: none;
+`
+
 const sectionTitleStyle = css`
   font-size: 0.8125rem;
   font-weight: 500;
@@ -254,6 +279,16 @@ export function SpatialTabContent (props: SpatialTabContentProps) {
     ? spatialRelationships.filter(r => allowedRelationshipIds.includes(r.id))
     : spatialRelationships
 
+  // r028.060: SETTINGS log for spatial tab config
+  debugLogger.log('SETTINGS', {
+    event: 'singletonConfigRead',
+    source: 'spatial-tab',
+    widgetId,
+    spatialTabRelationships: allowedRelationshipIds,
+    drawColor: widgetConfigManager.getDrawColor(widgetId),
+    bufferColor: widgetConfigManager.getBufferColor(widgetId)
+  })
+
   // Smart default: Operations if results exist, Draw if not
   const [spatialMode, setSpatialMode] = React.useState<SpatialMode>(
     hasResults ? 'operations' : 'draw'
@@ -269,7 +304,23 @@ export function SpatialTabContent (props: SpatialTabContentProps) {
   const [mapModule, setMapModule] = React.useState<typeof jimuMap>(null)
   const [drawnGeometries, setDrawnGeometries] = React.useState<Geometry[]>([])
   const hasDrawnGeometry = drawnGeometries.length > 0
+  // r028.118: Draw-mode opt-in to fold the current result geometries into the
+  // draw input (so a drawn shape AND already-selected results buffer/query together).
+  const [includeResultsInput, setIncludeResultsInput] = React.useState(false)
+  // r028.119: refs mirror current state so the event-driven input assembly below can
+  // read the latest values synchronously, without an effect re-subscribing. spatialMode
+  // and the toggle are render-synced; drawnGeometries flows through updateDrawnGeometries.
+  const drawnGeometriesRef = React.useRef<Geometry[]>(drawnGeometries)
+  const spatialModeRef = React.useRef(spatialMode)
+  spatialModeRef.current = spatialMode
+  const includeResultsInputRef = React.useRef(includeResultsInput)
+  includeResultsInputRef.current = includeResultsInput
   const getDrawLayerRef = React.useRef<(() => GraphicsLayer | MapNotesLayer) | null>(null)
+  // r028.100: Hold the JimuDraw Sketch so we can cancel an armed create operation
+  // when leaving Draw mode. JimuDraw now stays mounted across modes, and its Sketch
+  // keeps capturing map clicks even when the toolbar is hidden — without this a stray
+  // click could draw while in Operations mode.
+  const drawSketchRef = React.useRef<jimuMap.JimuDrawCreatedDescriptor['sketch'] | null>(null)
 
   // r025.052: Reset resultsMode to 'new' when accumulated records are cleared while on 'remove'
   // Matches Query tab behavior — Remove stays disabled AND deselected when nothing to remove from
@@ -354,43 +405,38 @@ export function SpatialTabContent (props: SpatialTabContentProps) {
     return sorted[0]
   }, [allInputGeometries])
 
-  React.useEffect(() => {
-    // Resolve raw geometries from current mode
-    let geometries: Geometry[]
-    if (spatialMode === 'draw') {
-      geometries = drawnGeometries
-    } else {
-      if (!hasResults) {
-        setAllInputGeometries([])
-        return
-      }
-      geometries = (accumulatedRecords
-        ?.map(r => r.feature?.geometry)
-        .filter(Boolean) || []) as Geometry[]
-    }
+  // ── r028.119: Event-driven input-geometry assembly ──
+  // Replaces the prior useEffect that watched [drawnGeometries, accumulatedRecords,
+  // hasResults, includeResultsInput, spatialMode, ...] and rebuilt allInputGeometries
+  // whenever ANY of them changed. That let a post-query accumulatedRecords change emit a
+  // NEW array reference and spuriously redraw the buffer (the r028.118 regression): the
+  // buffer hook keys on inputGeometries by reference, so a fresh-but-equal array looked
+  // like "the input changed." Now allInputGeometries is recomputed only when an actual
+  // input event fires — a shape is drawn/edited/cleared, the include-results toggle
+  // flips, the mode changes, or (operations mode) the results prop changes.
 
-    if (geometries.length === 0) {
-      setAllInputGeometries([])
+  // Group raw geometries by type, union within each group (one geometry per type), and
+  // publish to allInputGeometries. The seq guard drops an out-of-order async union result.
+  const assembleSeqRef = React.useRef(0)
+  const assembleInputGeometries = React.useCallback(async (rawGeometries: Geometry[]) => {
+    const seq = ++assembleSeqRef.current
+    if (!rawGeometries || rawGeometries.length === 0) {
+      if (seq === assembleSeqRef.current) setAllInputGeometries([])
       return
     }
-
-    if (geometries.length === 1) {
-      setAllInputGeometries(geometries)
+    if (rawGeometries.length === 1) {
+      if (seq === assembleSeqRef.current) setAllInputGeometries(rawGeometries)
       return
     }
-
-    // r025.041 + r025.050: Group by type, union within each group (unionOperator requires same type).
-    // Both Draw and Operations modes union same-type geometries so the spatial query
-    // receives one geometry per type (e.g., 3 drawn points → 1 multipoint).
-    let cancelled = false
-    loadArcGISJSAPIModules([
-      'esri/geometry/operators/unionOperator'
-    ]).then(modules => {
-      if (cancelled) return
+    // r025.041 + r025.050: Group by type, union within each group (unionOperator requires
+    // same type) so the spatial query receives one geometry per type (3 points → 1 multipoint).
+    try {
+      const modules = await loadArcGISJSAPIModules(['esri/geometry/operators/unionOperator'])
+      if (seq !== assembleSeqRef.current) return // a newer assemble superseded this one
       const operator: typeof import('@arcgis/core/geometry/operators/unionOperator') = modules[0]
 
       const byType = new Map<string, Geometry[]>()
-      for (const g of geometries) {
+      for (const g of rawGeometries) {
         const arr = byType.get(g.type) || []
         arr.push(g)
         byType.set(g.type, arr)
@@ -401,38 +447,74 @@ export function SpatialTabContent (props: SpatialTabContentProps) {
         if (geoms.length === 1) {
           unionedParts.push(geoms[0])
         } else {
-          // r027.077: unionOperator.executeMany() typed as GeometryUnion[]
-          // in JSAPI 5.0; the byType bucket is Geometry[]. Runtime values
+          // r027.077: executeMany() typed as GeometryUnion[] in JSAPI 5.0; runtime values
           // are always GeometryUnion members so the cast is safe.
           unionedParts.push(operator.executeMany(geoms as GeometryUnion[]))
         }
       }
 
       setAllInputGeometries(unionedParts)
-
       debugLogger.log('TASK', {
         event: 'buffer-input-geometries-grouped',
         widgetId,
-        mode: spatialMode,
-        totalGeometries: geometries.length,
+        totalGeometries: rawGeometries.length,
         typeGroups: [...byType.entries()].map(([type, geoms]) => ({ type, count: geoms.length })),
         unionedPartCount: unionedParts.length,
         mixedTypes: byType.size > 1,
         timestamp: Date.now()
       })
-    }).catch(error => {
+    } catch (error) {
       debugLogger.log('TASK', {
         event: 'buffer-input-geometry-union-error',
         widgetId,
         error: error?.toString(),
-        geometryCount: geometries.length,
-        geometryTypes: [...new Set(geometries.map(g => g.type))],
+        geometryCount: rawGeometries.length,
+        geometryTypes: [...new Set(rawGeometries.map(g => g.type))],
         timestamp: Date.now()
       })
-    })
+    }
+  }, [widgetId])
 
-    return () => { cancelled = true }
-  }, [hasResults, spatialMode, accumulatedRecords, widgetId, drawnGeometries])
+  // Draw-mode input = drawn shapes, plus the current result geometries when the
+  // "Also include current results" toggle is on (and a shape is actually drawn).
+  const assembleForDraw = React.useCallback((drawList: Geometry[], includeResults: boolean) => {
+    let raw = drawList
+    if (includeResults && drawList.length > 0 && accumulatedRecords && accumulatedRecords.length > 0) {
+      const resultGeometries = (accumulatedRecords
+        .map(r => r.feature?.geometry)
+        .filter(Boolean)) as Geometry[]
+      raw = drawList.concat(resultGeometries)
+    }
+    assembleInputGeometries(raw)
+  }, [accumulatedRecords, assembleInputGeometries])
+
+  // Operations-mode input = the accumulated result geometries.
+  const assembleForOperations = React.useCallback(() => {
+    const resultGeometries = (accumulatedRecords
+      ?.map(r => r.feature?.geometry)
+      .filter(Boolean) || []) as Geometry[]
+    assembleInputGeometries(resultGeometries)
+  }, [accumulatedRecords, assembleInputGeometries])
+
+  // Single mutation path for drawn geometries: keep state + ref in sync and recompute
+  // the draw-mode input from this real change (no effect watching from the outside).
+  const updateDrawnGeometries = React.useCallback((next: Geometry[]) => {
+    drawnGeometriesRef.current = next
+    setDrawnGeometries(next)
+    assembleForDraw(next, includeResultsInputRef.current)
+  }, [assembleForDraw])
+
+  // The ONE legitimate prop-sync: operations-mode input IS the accumulatedRecords prop,
+  // so it must track that prop. Draw mode is deliberately absent here — that decoupling
+  // is exactly what stops a post-query results change from touching the draw-mode buffer.
+  // Draw + toggle-on is the single cross-case where results feed the draw input.
+  React.useEffect(() => {
+    if (spatialModeRef.current === 'operations') {
+      assembleForOperations()
+    } else if (spatialModeRef.current === 'draw' && includeResultsInputRef.current) {
+      assembleForDraw(drawnGeometriesRef.current, true)
+    }
+  }, [accumulatedRecords, assembleForOperations, assembleForDraw])
 
   // Real-time buffer preview on the map
   // r025.020: Panel close/reopen handled imperatively by selection-restoration-manager
@@ -560,7 +642,13 @@ export function SpatialTabContent (props: SpatialTabContentProps) {
     if (!el) return
 
     const handleChange = () => {
-      setSelectedRelationship(el.value || null)
+      // r028.108: calcite single-select can desync and leave more than one chip.
+      // Collapse to one selection on every change event: keep calcite's reported value
+      // (fall back to the last selected item) and deselect everything else.
+      const items: any[] = Array.from(el.selectedItems ?? [])
+      const keep = el.value || (items.length ? items[items.length - 1].value : null)
+      items.forEach((item) => { if (item.value !== keep) item.selected = false })
+      setSelectedRelationship(keep || null)
     }
 
     el.addEventListener('calciteComboboxChange', handleChange)
@@ -569,21 +657,41 @@ export function SpatialTabContent (props: SpatialTabContentProps) {
 
   const handleModeChange = React.useCallback((mode: SpatialMode) => {
     userHasChosenModeRef.current = true
+    spatialModeRef.current = mode
     setSpatialMode(mode)
-
-    // r025.041: Show/hide draw layer graphics when switching modes
-    if (getDrawLayerRef.current) {
-      const drawLayer = getDrawLayerRef.current() as GraphicsLayer
-      if (drawLayer) {
-        drawLayer.visible = mode === 'draw'
-      }
+    // r028.119: recompute the spatial input for the new mode from this real event
+    // (instead of an effect watching spatialMode).
+    if (mode === 'draw') {
+      assembleForDraw(drawnGeometriesRef.current, includeResultsInputRef.current)
+    } else {
+      assembleForOperations()
     }
-  }, [])
+    // r028.100: Drawn graphics now persist AND stay visible on the map in both modes
+    // (user preference). JimuDraw stays mounted, so we no longer toggle drawLayer.visible.
+    // Disarming the Sketch when leaving Draw mode is handled by the effect below, which
+    // also covers the smart-default path that sets spatialMode without calling this.
+  }, [assembleForDraw, assembleForOperations])
 
   // r025.041: JimuDraw callbacks (same pattern as interactive-draw-tool.tsx)
   const handleDrawToolCreated = React.useCallback((descriptor: jimuMap.JimuDrawCreatedDescriptor) => {
     getDrawLayerRef.current = descriptor.getGraphicsLayer
+    drawSketchRef.current = descriptor.sketch // r028.100: keep Sketch ref for disarming
   }, [])
+
+  // r028.100: Cancel any active/armed Sketch create operation whenever we leave Draw
+  // mode. JimuDraw stays mounted across modes (so drawings persist), but the Sketch
+  // keeps listening to map clicks even with its toolbar hidden — without this a stray
+  // map click could draw while in Operations mode. Covers both the toggle button
+  // (handleModeChange) and the smart-default path that sets spatialMode directly.
+  React.useEffect(() => {
+    if (spatialMode !== 'draw') {
+      try {
+        drawSketchRef.current?.cancel()
+      } catch {
+        // Sketch may be idle or not yet created — safe to ignore
+      }
+    }
+  }, [spatialMode])
 
   const handleDrawStart = React.useCallback(() => {
     // r025.044: Multi-shape mode — don't clear previous graphics
@@ -592,14 +700,16 @@ export function SpatialTabContent (props: SpatialTabContentProps) {
   const handleDrawEnd = React.useCallback((graphic: Graphic) => {
     if (graphic?.geometry) {
       // r025.044: Accumulate drawn geometries (multi-shape mode)
-      setDrawnGeometries(prev => [...prev, graphic.geometry])
+      // r028.119: route through updateDrawnGeometries (syncs ref + recomputes input)
+      const next = [...drawnGeometriesRef.current, graphic.geometry]
+      updateDrawnGeometries(next)
       debugLogger.log('TASK', {
         event: 'spatial-draw-end',
         geometryType: graphic.geometry.type,
         widgetId
       })
     }
-  }, [widgetId])
+  }, [updateDrawnGeometries, widgetId])
 
   // r025.050: Track geometry edits (move, vertex changes, deletions via select tool)
   const handleDrawUpdate = React.useCallback((res: { type: string, graphics: Graphic[] }) => {
@@ -615,7 +725,7 @@ export function SpatialTabContent (props: SpatialTabContentProps) {
       drawLayer.graphics.forEach(g => {
         if (g.geometry) geometries.push(g.geometry)
       })
-      setDrawnGeometries(geometries)
+      updateDrawnGeometries(geometries) // r028.119: syncs ref + recomputes input
       debugLogger.log('TASK', {
         event: 'spatial-draw-updated',
         type: res.type,
@@ -623,15 +733,19 @@ export function SpatialTabContent (props: SpatialTabContentProps) {
         widgetId
       })
     }
-  }, [widgetId])
+  }, [updateDrawnGeometries, widgetId])
 
   const handleDrawCleared = React.useCallback(() => {
-    setDrawnGeometries([])
+    // r028.119: reset the toggle in the actual clear event (this replaces the old
+    // reset useEffect), then recompute the now-empty draw input via the mutation path.
+    includeResultsInputRef.current = false
+    setIncludeResultsInput(false)
+    updateDrawnGeometries([])
     debugLogger.log('TASK', {
       event: 'spatial-draw-cleared',
       widgetId
     })
-  }, [widgetId])
+  }, [updateDrawnGeometries, widgetId])
 
   // Smart default: re-evaluate when user switches TO the Spatial tab
   const prevActiveTabRef = React.useRef(activeTab)
@@ -642,15 +756,22 @@ export function SpatialTabContent (props: SpatialTabContentProps) {
 
     if (wasNotSpatial && isNowSpatial && !userHasChosenModeRef.current) {
       const smartDefault: SpatialMode = hasResults ? 'operations' : 'draw'
+      spatialModeRef.current = smartDefault
+      setSpatialMode(smartDefault)
+      // r028.119: seed the input for the defaulted mode (event = entering the Spatial tab)
+      if (smartDefault === 'draw') {
+        assembleForDraw(drawnGeometriesRef.current, includeResultsInputRef.current)
+      } else {
+        assembleForOperations()
+      }
       debugLogger.log('TASK', {
         event: 'spatial-smart-default',
         smartDefault,
         hasResults,
         accumulatedCount: accumulatedRecords?.length || 0
       })
-      setSpatialMode(smartDefault)
     }
-  }, [activeTab, hasResults, accumulatedRecords?.length])
+  }, [activeTab, hasResults, accumulatedRecords?.length, assembleForDraw, assembleForOperations])
 
   // r027.024: Scroll the popover anchor into view whenever a no-results or
   // error alert fires. The popover is anchored to the (invisible) feedback
@@ -741,12 +862,14 @@ export function SpatialTabContent (props: SpatialTabContentProps) {
       {/* Scrollable content area */}
       <div css={scrollableContentStyle}>
 
-        {/* Draw section — only in Draw mode, above operations */}
-        {spatialMode === 'draw' && (
-          <div css={sectionStyle}>
-            <h4 css={sectionTitleStyle}>{getI18nMessage('spatialModeDraw')}</h4>
-            {jimuMapView && mapModule?.JimuDraw ? (
-              <mapModule.JimuDraw
+        {/* Draw section — JimuDraw stays mounted in BOTH modes (r028.100) so its draw
+            GraphicsLayer and any drawn graphics survive Operations<->Draw switches. In
+            Operations mode the panel section is hidden via CSS; the map draw layer stays
+            visible so drawn shapes remain on the map. */}
+        <div css={spatialMode === 'draw' ? sectionStyle : [sectionStyle, drawSectionHiddenStyle]}>
+          <h4 css={sectionTitleStyle}>{getI18nMessage('spatialModeDraw')}</h4>
+          {jimuMapView && mapModule?.JimuDraw ? (
+            <mapModule.JimuDraw
                 jimuMapView={jimuMapView}
                 operatorWidgetId={widgetId}
                 disableSymbolSelector
@@ -786,7 +909,6 @@ export function SpatialTabContent (props: SpatialTabContentProps) {
               <StatusIndicator statusType={EntityStatusType.Loading} />
             )}
           </div>
-        )}
 
         {/* ─── Operations Panel ─── */}
 
@@ -819,6 +941,28 @@ export function SpatialTabContent (props: SpatialTabContentProps) {
             </div>
           )
         })()}
+
+        {/* r028.118: Draw mode — fold current results into the draw input. Shown only
+            once a shape is drawn AND results exist; reset to off when it hides. */}
+        {spatialMode === 'draw' && hasDrawnGeometry && hasResults && (
+          <label className='d-flex align-items-center' css={css`
+            font-size: 0.8125rem;
+            margin: 2px 0 0;
+            cursor: pointer;
+          `}>
+            <Checkbox
+              className='mr-2'
+              checked={includeResultsInput}
+              onChange={(_, checked) => {
+                // r028.119: recompute the draw input immediately from this toggle event
+                includeResultsInputRef.current = checked
+                setIncludeResultsInput(checked)
+                assembleForDraw(drawnGeometriesRef.current, checked)
+              }}
+            />
+            {getI18nMessage('spatialIncludeResults').replace('{count}', String(accumulatedRecords.length))}
+          </label>
+        )}
 
         {/* 2. Buffer Distance */}
         <div css={[sectionStyle, mobileInputZoomFix]}>
@@ -1009,7 +1153,10 @@ export function SpatialTabContent (props: SpatialTabContentProps) {
             type='primary'
             disabled={!canExecute || isExecuting}
             onClick={async () => {
-              if (!canExecute || !inputGeometry || !selectedRelationship || !onExecuteSpatialQuery) return
+              // r028.108: block a desynced multi/invalid relationship from reaching the
+              // server (it rejects 'spatialRel'). Require exactly one known relationship id.
+              const relIsValid = !!selectedRelationship && spatialRelationships.some(r => r.id === selectedRelationship)
+              if (!canExecute || !inputGeometry || !relIsValid || !onExecuteSpatialQuery) return
 
               setIsExecuting(true)
               // Dismiss any previous alerts
@@ -1022,8 +1169,13 @@ export function SpatialTabContent (props: SpatialTabContentProps) {
                 // actual buffered shape instead of relying on server-side query.distance
                 const parsedBuffer = parseFloat(bufferDistance) || 0
                 const useBufferedGeometry = parsedBuffer > 0 && bufferedGeometry
+                // r028.101: Pass ALL input geometries (one per type) so each type is
+                // queried and the results combined. The buffered case is already a
+                // single unioned polygon covering every part, so it stays one query;
+                // the no-buffer case sends the per-type array so mixed types aren't dropped.
+                const inputGeometries = useBufferedGeometry ? [bufferedGeometry] : allInputGeometries
                 const queryFoundResults = await onExecuteSpatialQuery({
-                  inputGeometry: useBufferedGeometry ? bufferedGeometry : inputGeometry,
+                  inputGeometries,
                   selectedRelationship,
                   selectedLayers,
                   bufferDistance: useBufferedGeometry ? 0 : parsedBuffer,
@@ -1035,7 +1187,11 @@ export function SpatialTabContent (props: SpatialTabContentProps) {
                   setBufferDistance('')
                   // Clear drawn features from map (same cleanup pattern as buffer)
                   if (spatialMode === 'draw') {
-                    setDrawnGeometries([])
+                    // r028.119: route through updateDrawnGeometries so the input (and buffer)
+                    // clear too; reset the toggle since the drawing is gone.
+                    includeResultsInputRef.current = false
+                    setIncludeResultsInput(false)
+                    updateDrawnGeometries([])
                     if (getDrawLayerRef.current) {
                       const drawLayer = getDrawLayerRef.current() as GraphicsLayer
                       drawLayer?.removeAll()
@@ -1056,8 +1212,18 @@ export function SpatialTabContent (props: SpatialTabContentProps) {
             onClick={() => {
               setBufferDistance('')
               setSelectedRelationship(null)
+              // r028.108: declarative deselect (selectedRelationship=null) isn't honored by
+              // calcite for desynced chips, so clear the combobox imperatively too.
+              const relEl: any = spatialRelComboboxRef.current
+              if (relEl) {
+                Array.from(relEl.selectedItems ?? []).forEach((item: any) => { item.selected = false })
+                try { relEl.value = '' } catch { /* value may be read-only mid-state */ }
+              }
               setSelectedLayers([])
-              setDrawnGeometries([])
+              // r028.119: clear the draw input through the single mutation path; reset toggle
+              includeResultsInputRef.current = false
+              setIncludeResultsInput(false)
+              updateDrawnGeometries([])
               if (getDrawLayerRef.current) {
                 const drawLayer = getDrawLayerRef.current() as GraphicsLayer
                 drawLayer?.removeAll()

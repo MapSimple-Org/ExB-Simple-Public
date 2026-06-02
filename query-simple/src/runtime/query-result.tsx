@@ -48,10 +48,12 @@ import {
   dispatchSelectionEvent 
 } from './selection-utils'
 import { executeRemoveRecord } from './record-removal-handler'
-import { createQuerySimpleDebugLogger, ErrorMessage, substituteTokens, substituteLegacyTokens, convertTemplateToHtml } from 'widgets/shared-code/mapsimple-common'
+import { QUERYSIMPLE_POPUP_FEATURE_IDENTIFIED } from './managers/event-manager'
+import { createQuerySimpleDebugLogger, ErrorMessage, applyMobilePopupBehavior, getPopupCollapsedOption, widgetConfigManager } from 'widgets/shared-code/mapsimple-common'
+import { renderPopupContent, createPopupContentDiv } from './popup-render-utils'
+import { buildFieldMetaMap } from './value-formatter'
 import * as labelPointOperator from '@arcgis/core/geometry/operators/labelPointOperator.js'
 import type GraphicsLayer from '@arcgis/core/layers/GraphicsLayer'
-import type GroupLayer from '@arcgis/core/layers/GroupLayer'
 import type MapView from '@arcgis/core/views/MapView'
 import type SceneView from '@arcgis/core/views/SceneView'
 import type Extent from '@arcgis/core/geometry/Extent'
@@ -73,12 +75,11 @@ export interface QueryTaskResultProps {
   maxPerPage: number
   queryParams: QueryParams
   outputDS: DataSource
-  hoverPinColor?: string // r022.106: Configurable hover pin color
   queryItem: ImmutableObject<QueryItemType>
   records: DataRecord[]
   runtimeZoomToSelected?: boolean
   onNavBack: (clearResults?: boolean) => Promise<void> | void
-  graphicsLayer?: GraphicsLayer | GroupLayer
+  graphicsLayer?: GraphicsLayer
   mapView?: MapView | SceneView
   // r027.091: hoverLayer prop removed — hover pins use mapView.graphics
   resultsMode?: SelectionType
@@ -111,9 +112,18 @@ export interface QueryTaskResultProps {
     timestamp?: number
   } | null
   onDismissAllDuplicatesAlert?: () => void
-  // r022.105: Configurable zoom on result click
-  zoomOnResultClick?: boolean
-  panOnResultClick?: boolean
+  // r028.114: Result-set truncation alert (hit the service transfer limit). Lives in
+  // the Results panel because that is where the user lands after any query (Query or
+  // Spatial tab) — the input-tab anchors are hidden once the widget auto-switches here.
+  truncationAlert?: {
+    show: boolean
+    recordLimit: number
+    totalMatchCount?: number // r028.122: true total when known
+    totalMatchCountIsLowerBound?: boolean
+    timestamp?: number
+  } | null
+  onDismissTruncationAlert?: () => void
+  // r028.056: zoomOnResultClick and panOnResultClick removed from props, now read from widgetConfigManager singleton
 }
 
 const resultStyle = css`
@@ -144,7 +154,7 @@ const resultStyle = css`
 `
 
 export function QueryTaskResult (props: QueryTaskResultProps) {
-  const { queryItem, queryParams, resultCount, maxPerPage, records, widgetId, outputDS, runtimeZoomToSelected, onNavBack, resultsMode, accumulatedRecords, resultsExtent, onAccumulatedRecordsChange, graphicsLayer, mapView, eventManager, isQuerySwitchInProgressRef, currentQueryRecordIds, queries, noRemovalAlert, onDismissNoRemovalAlert, allDuplicatesAlert, onDismissAllDuplicatesAlert, zoomOnResultClick, panOnResultClick, hoverPinColor, listResetKey } = props
+  const { queryItem, queryParams, resultCount, maxPerPage, records, widgetId, outputDS, runtimeZoomToSelected, onNavBack, resultsMode, accumulatedRecords, resultsExtent, onAccumulatedRecordsChange, graphicsLayer, mapView, eventManager, isQuerySwitchInProgressRef, currentQueryRecordIds, queries, noRemovalAlert, onDismissNoRemovalAlert, allDuplicatesAlert, onDismissAllDuplicatesAlert, truncationAlert, onDismissTruncationAlert, listResetKey } = props
   const getI18nMessage = hooks.useTranslation(defaultMessage)
   const intl = useIntl()
   const zoomToRecords = useZoomToRecords(mapView, widgetId)
@@ -221,7 +231,55 @@ export function QueryTaskResult (props: QueryTaskResultProps) {
       })
     }
   }, [widgetId])
-  
+
+  // r028.033: Map-to-card flash — when a Path 3 feature's popup opens on the map,
+  // scroll the matching result card into view and flash it briefly.
+  React.useEffect(() => {
+    const handler = (e: Event) => {
+      const detail = (e as CustomEvent).detail
+      if (detail?.widgetId !== widgetId) return
+
+      // r028.048: Skip flash/scroll when disabled in settings
+      if (!widgetConfigManager.getFlashOnMapIdentify(widgetId)) return
+
+      const compositeKey = detail?.compositeKey
+      if (!compositeKey) return
+
+      requestAnimationFrame(() => {
+        const cardEl = document.querySelector(`[data-composite-key="${compositeKey}"]`)
+        if (!cardEl) return
+
+        cardEl.scrollIntoView({ behavior: 'smooth', block: 'start' })
+
+        // Wait until the card is visible before starting the flash animation.
+        // scrollIntoView('smooth') is async with no callback, so we use
+        // IntersectionObserver to detect when the element enters the viewport.
+        const observer = new IntersectionObserver((entries) => {
+          if (entries[0]?.isIntersecting) {
+            observer.disconnect()
+            cardEl.classList.add('map-identified-flash')
+            const onEnd = () => {
+              cardEl.classList.remove('map-identified-flash')
+              cardEl.removeEventListener('animationend', onEnd)
+            }
+            cardEl.addEventListener('animationend', onEnd)
+          }
+        }, { threshold: 0.5 })
+        observer.observe(cardEl)
+
+        debugLogger.log('POPUP', {
+          event: 'map-to-card-flash',
+          widgetId,
+          compositeKey,
+          timestamp: Date.now()
+        })
+      })
+    }
+
+    window.addEventListener(QUERYSIMPLE_POPUP_FEATURE_IDENTIFIED, handler)
+    return () => { window.removeEventListener(QUERYSIMPLE_POPUP_FEATURE_IDENTIFIED, handler) }
+  }, [widgetId])
+
   // Error state for user-facing errors
   const [selectionError, setSelectionError] = React.useState<string>(null)
 
@@ -232,17 +290,36 @@ export function QueryTaskResult (props: QueryTaskResultProps) {
     return widgetJson.enableDataAction ?? true
   })
 
-  const pagingTypeInConfig = ReactRedux.useSelector((state: IMState) => {
-    const widgetJson = state.appConfig.widgets[widgetId]
-    return widgetJson.config.resultPagingStyle
+  // r028.049: Migrated from Redux selectors to WidgetConfigManager singleton
+  const pagingTypeInConfig = widgetConfigManager.getResultPagingStyle(widgetId)
+  const directionTypeInConfig = widgetConfigManager.getResultListDirection(widgetId)
+  // r028.050: Migrated from Redux selector to WidgetConfigManager singleton (Step 3)
+  const mobilePopupConfig = React.useMemo(() => ({
+    mobilePopupCollapsed: widgetConfigManager.getMobilePopupCollapsed(widgetId),
+    mobilePopupDockPosition: widgetConfigManager.getMobilePopupDockPosition(widgetId),
+    mobilePopupHideDockButton: widgetConfigManager.getMobilePopupHideDockButton(widgetId),
+    mobilePopupHideActionBar: widgetConfigManager.getMobilePopupHideActionBar(widgetId)
+  }), [widgetId])
+  debugLogger.log('SETTINGS', {
+    event: 'singletonConfigRead',
+    source: 'query-result',
+    widgetId,
+    resultPagingStyle: pagingTypeInConfig,
+    resultListDirection: directionTypeInConfig,
+    mobilePopupCollapsed: mobilePopupConfig.mobilePopupCollapsed,
+    mobilePopupDockPosition: mobilePopupConfig.mobilePopupDockPosition,
+    mobilePopupHideDockButton: mobilePopupConfig.mobilePopupHideDockButton,
+    mobilePopupHideActionBar: mobilePopupConfig.mobilePopupHideActionBar,
+    zoomOnResultClick: widgetConfigManager.getZoomOnResultClick(widgetId),
+    panOnResultClick: widgetConfigManager.getPanOnResultClick(widgetId),
+    flashOnMapIdentify: widgetConfigManager.getFlashOnMapIdentify(widgetId)
   })
-  const directionTypeInConfig = ReactRedux.useSelector((state: IMState) => {
-    const widgetJson = state.appConfig.widgets[widgetId]
-    return widgetJson.config.resultListDirection
-  })
+  // r028.056: Migrated from prop-drilling to WidgetConfigManager singleton (Steps 7-8)
+  const zoomOnResultClick = widgetConfigManager.getZoomOnResultClick(widgetId)
+  const panOnResultClick = widgetConfigManager.getPanOnResultClick(widgetId)
   // FORCE SimpleList - ignore config, we're done with lazy loading issues
   const pagingType = PagingType.Simple
-  const direction = directionTypeInConfig ?? ListDirection.Vertical
+  const direction = (directionTypeInConfig as ListDirection) ?? ListDirection.Vertical
 
   // Group records by origin data source for DataActionList
   // This ensures DataActionList recognizes records even when they come from different queries/origins
@@ -888,41 +965,38 @@ export function QueryTaskResult (props: QueryTaskResultProps) {
     })
     
     if (popupLocation) {
-      // r026.007: For CustomTemplate queries, build a CustomContent popup on the fly
-      // so it renders with markdown formatting instead of the layer's default field table.
+      // Apply mobile popup behavior (dock, action bar) before opening — same pattern as FS
+      applyMobilePopupBehavior(mapView, mobilePopupConfig)
+      const collapsed = getPopupCollapsedOption(mapView, mobilePopupConfig)
+
+      // r028.043 / r028.112: For CustomTemplate AND SelectAttributes queries, render
+      // via the shared renderPopupContent so the card-click popup matches the on-map
+      // popup and the result card exactly (Phase D — closes the last divergence).
+      // PopupSetting / web-map popups fall through to Esri below (may carry media,
+      // charts, attachments our field table does not render).
       const recordConfigId = clickedFeature?.attributes?.__queryConfigId
       const recordConfig = recordConfigId && queries?.find(q => q.configId === recordConfigId)
-      if (recordConfig && (recordConfig as any).resultFieldsType === 'CustomTemplate') {
-        const contentTemplate = (recordConfig as any).resultContentExpression || ''
-        const titleTemplate = (recordConfig as any).resultTitleExpression || ''
-        if (contentTemplate) {
-          const attributes = clickedFeature.attributes || {}
-          // Build resolved HTML using our shared pipeline
-          let substituted = substituteTokens(contentTemplate, attributes)
-          substituted = substituteLegacyTokens(substituted, attributes)
-          const html = convertTemplateToHtml(substituted)
-          // Resolve title
-          let title = substituteTokens(titleTemplate, attributes)
-          title = substituteLegacyTokens(title, attributes)
-          // Create a simple popup with resolved HTML content
-          const contentDiv = document.createElement('div')
-          contentDiv.style.fontSize = '0.875rem'
-          contentDiv.style.lineHeight = '1.4'
-          contentDiv.style.color = 'var(--sys-color-surface-paper-text, #333)'
-          const style = document.createElement('style')
-          style.textContent = 'p{margin:0 0 4px}a{color:var(--sys-color-primary-main, #0079c1);text-decoration:none}a:hover{text-decoration:underline}strong{font-weight:700}em{font-style:italic}h3,h4,h5,h6{font-style:normal;font-weight:600;margin:0 0 4px}'
-          contentDiv.appendChild(style)
-          contentDiv.innerHTML += html
+      const recordFieldsType = recordConfig && (recordConfig as any).resultFieldsType
+      if (recordConfig && (recordFieldsType === 'CustomTemplate' || recordFieldsType === 'SelectAttributes')) {
+        const attributes = clickedFeature.attributes || {}
+        // fieldMeta (alias/type/domain) from the record's stamped source layer, so
+        // SelectAttributes gets aliases + formatted values; harmless for CustomTemplate.
+        const fieldMeta = buildFieldMetaMap((clickedFeature as any).layer?.fields)
+        const result = renderPopupContent(attributes, recordConfig, undefined, fieldMeta)
+        if (result.mode === 'CustomTemplate' || result.mode === 'SelectAttributes') {
           mapView.openPopup({
-            title,
-            content: contentDiv,
+            title: result.title,
+            content: createPopupContentDiv(result.contentHtml),
             location: popupLocation,
-            shouldFocus: false
-          })
+            shouldFocus: false,
+            collapsed
+          } as any)
           debugLogger.log('POPUP', {
-            event: 'popup-opened-custom-template',
+            event: 'popup-opened-shared-render',
             recordId: dataId,
+            mode: result.mode,
             location: { x: popupLocation.x, y: popupLocation.y },
+            collapsed: !!collapsed,
             timestamp: Date.now()
           })
           return
@@ -932,20 +1006,22 @@ export function QueryTaskResult (props: QueryTaskResultProps) {
       mapView.openPopup({
         features: [clickedFeature],
         location: popupLocation,
-        shouldFocus: false // r022.98
-      })
-      
+        shouldFocus: false, // r022.98
+        collapsed
+      } as any)
+
       debugLogger.log('POPUP', {
         event: 'popup-opened',
         recordId: dataId,
         location: { x: popupLocation.x, y: popupLocation.y },
         calculationMethod,
         calculationDurationMs: calcDuration,
+        collapsed: !!collapsed,
         note: 'r022.98: shouldFocus=false to prevent Features widget warning',
         timestamp: Date.now()
       })
     }
-  }, [mapView, queries])
+  }, [mapView, queries, mobilePopupConfig])
 
   const toggleSelection = React.useCallback((data: FeatureDataRecord) => {
     // Ensure the clicked record is selected (it should already be, but ensure it)
@@ -968,9 +1044,12 @@ export function QueryTaskResult (props: QueryTaskResultProps) {
         note: 'r021.105: Calling from handleRecordClick',
         timestamp: Date.now()
       })
-      selectRecordsAndPublish(widgetId, outputDS, recordIds, updatedSelectedDatas as FeatureDataRecord[], true)
+      // r028.012: Skip origin DS selection for Path 3 (FeatureLayer) widgets.
+      // graphicsLayer is null when Path 3 is active (GraphicsLayerManager init gated).
+      const skipOriginDS = !graphicsLayer
+      selectRecordsAndPublish(widgetId, outputDS, recordIds, updatedSelectedDatas as FeatureDataRecord[], true, false, undefined, undefined, skipOriginDS)
     }
-    
+
     // r026.009: Determine click behavior — zoom, pan, or popup-only
     const shouldZoom = zoomOnResultClick === true
     const shouldPan = panOnResultClick === true
@@ -1011,7 +1090,7 @@ export function QueryTaskResult (props: QueryTaskResultProps) {
       // Open popup immediately without zooming
       openPopupForRecord(data)
     }
-  }, [outputDS, widgetId, zoomToRecords, panToRecordsHook, zoomOnResultClick, panOnResultClick, openPopupForRecord])
+  }, [outputDS, widgetId, zoomToRecords, panToRecordsHook, zoomOnResultClick, panOnResultClick, openPopupForRecord, graphicsLayer])
 
   /**
    * Zooms the map to a single record. Used by result row "Zoom to" (menu when collapsed, inline icon when expanded).
@@ -1123,7 +1202,8 @@ export function QueryTaskResult (props: QueryTaskResultProps) {
               </Tooltip>
             )}
             {/* r024: Custom hamburger menu with curated actions:
-                Pan to, View in table, Export (submenu), Zoom to selected, Select on map */}
+                Pan to, View in table, Export (submenu), Zoom to selected
+                (r028.080: Select on map removed) */}
             {enableDataAction && outputDS && (
               <React.Fragment>
                 <div css={css`width: 1px; height: 16px; background-color: var(--sys-color-divider-input);`}></div>
@@ -1135,8 +1215,6 @@ export function QueryTaskResult (props: QueryTaskResultProps) {
                   resultsExtent={resultsExtent}
                   intl={intl}
                   queryItem={queryItem}
-                  graphicsLayer={graphicsLayer}
-                  queries={queries}
                 />
               </React.Fragment>
             )}
@@ -1175,12 +1253,9 @@ export function QueryTaskResult (props: QueryTaskResultProps) {
             onRemove={stableRemoveRecord}
             onZoomTo={stableHandleZoomToRecord}
             onPanTo={stableHandlePanToRecord}
-            zoomOnResultClick={zoomOnResultClick}
-            panOnResultClick={panOnResultClick}
             expandByDefault={expandAll}
             queries={queries}
             mapView={mapView}
-            hoverPinColor={hoverPinColor}
           />
         )}
       </div>
@@ -1264,6 +1339,52 @@ export function QueryTaskResult (props: QueryTaskResultProps) {
             </div>
             <div style={{ fontSize: '13px', lineHeight: '1.5', color: '#2b2b2b' }}>
               {getI18nMessage('allDuplicatesAlertMessage', { recordsFound: allDuplicatesAlert.recordsFound })}
+            </div>
+          </div>
+        </calcite-popover>
+      )}
+
+      {/* r028.114: Calcite Popover for result-set truncation (hit the service transfer
+          limit). Anchored here in the Results panel — where the user lands after a
+          Query- or Spatial-tab query — so the auto-switch to Results doesn't hide it. */}
+      {truncationAlert?.show && (
+        <calcite-popover
+          key={`truncation-${truncationAlert.timestamp}`}
+          referenceElement="remove-feedback-anchor"
+          placement="top"
+          flipDisabled={true}
+          overlayPositioning="fixed"
+          triggerDisabled={true}
+          autoClose
+          closable
+          label={getI18nMessage('truncationAlertLabel')}
+          open={truncationAlert.show}
+          oncalcitePopoverClose={() => {
+            if (onDismissTruncationAlert) {
+              onDismissTruncationAlert()
+            }
+          }}
+          style={{
+            '--calcite-popover-max-size-x': '320px',
+            maxWidth: '320px',
+            width: '100%',
+            '--calcite-color-foreground-1': '#fffbeb'
+          } as React.CSSProperties}
+        >
+          <div style={{ padding: '12px', maxWidth: '320px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontWeight: 600, marginBottom: '8px', fontSize: '14px', color: '#92400e' }}>
+              <calcite-icon icon="exclamation-mark-triangle" scale="s" style={{ color: '#d97706' }} />
+              {getI18nMessage('truncationAlertTitle')}
+            </div>
+            <div style={{ fontSize: '13px', lineHeight: '1.5', color: '#2b2b2b' }}>
+              {/* r028.122: show the true total when known (exact, or "at least" for a lower
+                  bound); fall back to the generic limit message when the count is unavailable. */}
+              {truncationAlert.totalMatchCount != null
+                ? getI18nMessage(
+                    truncationAlert.totalMatchCountIsLowerBound ? 'truncationAlertMessageCountAtLeast' : 'truncationAlertMessageCount',
+                    { total: truncationAlert.totalMatchCount, shown: truncationAlert.recordLimit }
+                  )
+                : getI18nMessage('truncationAlertMessage', { limit: truncationAlert.recordLimit })}
             </div>
           </div>
         </calcite-popover>

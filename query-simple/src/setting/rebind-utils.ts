@@ -306,6 +306,16 @@ export function applyRebinding (
         .map(f => fieldMap[f] ?? f)
     }
 
+    // 5b. r028.117 (Phase 2.1): remap resultFieldAliases keys (keyed by field name)
+    // so per-field labels survive a layer rebind alongside resultDisplayFields.
+    if (item.resultFieldAliases) {
+      const remappedAliases: { [fieldName: string]: string } = {}
+      for (const oldName of Object.keys(item.resultFieldAliases)) {
+        remappedAliases[fieldMap[oldName] ?? oldName] = item.resultFieldAliases[oldName]
+      }
+      updated.resultFieldAliases = remappedAliases
+    }
+
     // 6. Remap sortOptions
     if (item.sortOptions) {
       updated.sortOptions = item.sortOptions.map(opt => ({

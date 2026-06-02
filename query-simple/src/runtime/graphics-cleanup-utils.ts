@@ -14,15 +14,16 @@
  * @since 1.19.0-r024.121
  */
 
-import { createQuerySimpleDebugLogger, globalHandleManager } from 'widgets/shared-code/mapsimple-common'
+// r028.097 (Chunk C of Path 2 Removal): dropped `globalHandleManager` (used only by
+// the deleted `cleanupGroupLayer` legend-handle teardown), the
+// `getLegendLayerId`/`getGraphicsSublayer` import (those functions were deleted from
+// graphics-layer-utils.ts in Chunk C), and the now-unused `Layer` / `FeatureLayer`
+// type imports.
+import { createQuerySimpleDebugLogger } from 'widgets/shared-code/mapsimple-common'
 import { graphicsStateManager } from './graphics-state-manager'
-import { getLegendLayerId, getGraphicsSublayer } from './graphics-layer-utils'
 import type GraphicsLayer from '@arcgis/core/layers/GraphicsLayer'
-import type GroupLayer from '@arcgis/core/layers/GroupLayer'
-import type Layer from '@arcgis/core/layers/Layer'
 import type MapView from '@arcgis/core/views/MapView'
 import type SceneView from '@arcgis/core/views/SceneView'
-import type FeatureLayer from '@arcgis/core/layers/FeatureLayer'
 import type Graphic from '@arcgis/core/Graphic'
 
 const debugLogger = createQuerySimpleDebugLogger()
@@ -59,117 +60,15 @@ export function clearGraphicsLayer(graphicsLayer: GraphicsLayer): void {
 }
 
 /**
- * r024.2: Clears all graphics from a GraphicsLayer or GroupLayer.
- * For GroupLayer, clears each sublayer.
- * r024.15: Also removes all Legend FeatureLayers when clearing a GroupLayer.
+ * r024.2: Clears all graphics from a GraphicsLayer.
+ * r028.104: GroupLayer handling removed with Path 2 (TODO #24). The name is kept
+ * for call-site compatibility, but the function now only takes a GraphicsLayer.
  */
 export function clearGraphicsLayerOrGroupLayer(
-  layer: GraphicsLayer | GroupLayer | null | undefined
+  layer: GraphicsLayer | null | undefined
 ): void {
   if (!layer) return
-  if ((layer as Layer).type === 'group') {
-    const gl = layer as GroupLayer
-    let totalRemoved = 0
-
-    // r024.15: Find and remove Legend FeatureLayers first
-    const legendLayersToRemove: Layer[] = []
-    gl.layers.forEach((sublayer: Layer) => {
-      if (sublayer.id.endsWith('-legend')) {
-        legendLayersToRemove.push(sublayer)
-      }
-    })
-    legendLayersToRemove.forEach(legendLayer => {
-      gl.layers.remove(legendLayer)
-      legendLayer.destroy()
-    })
-
-    // Clear graphics from GraphicsLayer sublayers
-    gl.layers.forEach((sublayer: Layer) => {
-      const glSub = sublayer as GraphicsLayer
-      if (glSub.graphics) {
-        totalRemoved += glSub.graphics.length
-        glSub.removeAll()
-      }
-    })
-
-    debugLogger.log('GRAPHICS-LAYER', {
-      event: 'clearGraphicsLayerOrGroupLayer-complete',
-      graphicsLayerId: layer.id,
-      layerType: 'group',
-      graphicsRemoved: totalRemoved,
-      legendLayersRemoved: legendLayersToRemove.length,
-      timestamp: Date.now()
-    })
-  } else {
-    clearGraphicsLayer(layer as GraphicsLayer)
-  }
-}
-
-/**
- * r024.53: Lightweight clear that preserves the GroupLayer on the map.
- * r024.54: Also preserves Legend FeatureLayers (hides them via legendEnabled = false
- * instead of destroying). Destroying Legend FLs orphans ESRI reactive DOM trees.
- *
- * Clears graphics from the GraphicsLayer sublayer and hides Legend FLs from
- * the legend display. Does NOT remove or destroy any layers.
- *
- * Use this for all "clear results" actions. Reserve cleanupGroupLayer()
- * for widget unmount only.
- */
-export function clearGroupLayerContents(
-  widgetId: string,
-  mapView: MapView | SceneView
-): boolean {
-  const seq = graphicsStateManager.nextSequence()
-  const layerId = `querysimple-results-${widgetId}`
-
-  const groupLayer = mapView.map.layers.find(layer => layer.id === layerId) as GroupLayer
-  if (!groupLayer) {
-    debugLogger.log('GRAPHICS-LAYER', {
-      event: 'clearGroupLayerContents-not-found',
-      seq,
-      widgetId,
-      layerId,
-      timestamp: Date.now()
-    })
-    return false
-  }
-
-  // r024.54: Hide Legend FeatureLayers instead of destroying them.
-  // Destroying triggers ESRI reactive teardown that creates orphaned DOM trees.
-  // Keep them alive so ESRI can reuse its internal infrastructure on the next query.
-  const geometryTypes = ['point', 'polyline', 'polygon']
-  let legendLayersHidden = 0
-  geometryTypes.forEach(geoType => {
-    const legendLayerId = getLegendLayerId(layerId, geoType)
-    const legendLayer = groupLayer.layers.find(l => l.id === legendLayerId) as FeatureLayer
-    if (legendLayer) {
-      legendLayer.legendEnabled = false
-      legendLayersHidden++
-    }
-  })
-
-  // Clear graphics from the single GraphicsLayer sublayer
-  let graphicsCleared = 0
-  const gfxLayer = getGraphicsSublayer(groupLayer)
-  if (gfxLayer && gfxLayer.graphics) {
-    graphicsCleared = gfxLayer.graphics.length
-    gfxLayer.removeAll()
-  }
-
-  debugLogger.log('GRAPHICS-LAYER', {
-    event: 'clearGroupLayerContents-complete',
-    seq,
-    widgetId,
-    layerId,
-    graphicsCleared,
-    legendLayersHidden,
-    groupLayerPreserved: true,
-    legendLayersPreserved: true,
-    timestamp: Date.now()
-  })
-
-  return true
+  clearGraphicsLayer(layer)
 }
 
 /**
@@ -183,16 +82,16 @@ export function clearGroupLayerContents(
 export function clearAnyResultLayerContents(
   widgetId: string,
   mapView: MapView | SceneView
-): { clearedGraphicsLayer: boolean; clearedGroupLayer: boolean } {
+): { clearedGraphicsLayer: boolean } {
   const seq = graphicsStateManager.nextSequence()
-  const result = { clearedGraphicsLayer: false, clearedGroupLayer: false }
+  const result = { clearedGraphicsLayer: false }
 
-  // Check for GroupLayer (LayerList mode)
-  const groupLayerId = `querysimple-results-${widgetId}`
-  const groupLayer = mapView.map.layers.find(layer => layer.id === groupLayerId) as GroupLayer
-  if (groupLayer) {
-    result.clearedGroupLayer = clearGroupLayerContents(widgetId, mapView)
-  }
+  // r028.096 (Chunk B of Path 2 Removal): the Path 2 GroupLayer-lookup branch
+  // was here. It searched for `querysimple-results-${widgetId}` and called
+  // `clearGroupLayerContents` when found. Both are gone — Path 2 no longer
+  // creates that GroupLayer, and `clearGroupLayerContents` was deleted in
+  // Chunk C. r028.099 (Phase 4): the always-false `clearedGroupLayer` return
+  // field is now dropped along with the two callers that logged it.
 
   // Check for GraphicsLayer (regular mode)
   const graphicsLayerId = `querysimple-highlight-${widgetId}`
@@ -203,27 +102,29 @@ export function clearAnyResultLayerContents(
   }
 
   // r025.016: Also clear buffer preview graphics on explicit clear (not destroy — just removeAll).
-  // In GroupLayer mode the buffer is a child of the GroupLayer, so
-  // clearGroupLayerContents already handled it. In GraphicsLayer mode
-  // the buffer is standalone on the map and needs explicit clearing.
+  // r028.096 (Chunk B of Path 2 Removal): the `if (!result.clearedGroupLayer)` gate was here.
+  // Pre-Phase-1 it skipped this block when Path 2's GroupLayer cleanup had already
+  // cleared the buffer as a child of that group. Path 2 cleanup never runs anymore,
+  // so the gate was always-true; removed for clarity. Path 3 buffer lives inside
+  // `querysimple-fl-*` GroupLayer and is cleared by Path 3's own logic; the
+  // `findLayerById` lookup below targets the standalone `querysimple-buffer-*`
+  // layer used by Path 1, returns undefined under Path 3, no-ops.
   // Note: Panel close/reopen is handled separately by selection-restoration-manager (r025.020).
-  if (!result.clearedGroupLayer) {
-    const bufferLayerId = `querysimple-buffer-${widgetId}`
-    const bufferLayer = mapView.map.findLayerById(bufferLayerId) as GraphicsLayer
-    if (bufferLayer) {
-      const bufferGraphicsCount = bufferLayer.graphics?.length || 0
-      bufferLayer.removeAll()
+  const bufferLayerId = `querysimple-buffer-${widgetId}`
+  const bufferLayer = mapView.map.findLayerById(bufferLayerId) as GraphicsLayer
+  if (bufferLayer) {
+    const bufferGraphicsCount = bufferLayer.graphics?.length || 0
+    bufferLayer.removeAll()
 
-      if (bufferGraphicsCount > 0) {
-        debugLogger.log('GRAPHICS-LAYER', {
-          event: 'buffer-preview-cleared-on-explicit-clear',
-          seq,
-          widgetId,
-          bufferLayerId,
-          graphicsCleared: bufferGraphicsCount,
-          timestamp: Date.now()
-        })
-      }
+    if (bufferGraphicsCount > 0) {
+      debugLogger.log('GRAPHICS-LAYER', {
+        event: 'buffer-preview-cleared-on-explicit-clear',
+        seq,
+        widgetId,
+        bufferLayerId,
+        graphicsCleared: bufferGraphicsCount,
+        timestamp: Date.now()
+      })
     }
   }
 
@@ -232,7 +133,6 @@ export function clearAnyResultLayerContents(
     seq,
     widgetId,
     clearedGraphicsLayer: result.clearedGraphicsLayer,
-    clearedGroupLayer: result.clearedGroupLayer,
     timestamp: Date.now()
   })
 
@@ -315,115 +215,19 @@ export function cleanupGraphicsLayer(
       })
     }
 
-    // r024.59: Clear cached mapView reference for this widget
-    graphicsStateManager.deleteMapView(widgetId)
+    // r028.095 (Chunk A of Path 2 Removal): removed the
+    // `graphicsStateManager.deleteMapView(widgetId)` call. This was the
+    // companion teardown for the `setMapView` call in addHighlightGraphics
+    // (also removed in Chunk A). Both existed solely to feed Path 2's legend-FL
+    // visibility watcher (r024.59). With that watcher dying in Chunk B/C,
+    // these calls are pre-emptively orphaned so `_mapViewCache` can be
+    // deleted cleanly in Chunk D.
 
     // r024.61: Clear creation lock so next createOrGetGraphicsLayer starts fresh
     graphicsStateManager.deleteGraphicsLayerCreation(layerId)
   } catch (error) {
     debugLogger.log('GRAPHICS-LAYER', {
       event: 'cleanupGraphicsLayer-error',
-      seq,
-      widgetId,
-      layerId,
-      error: error instanceof Error ? error.message : String(error),
-      errorStack: error instanceof Error ? error.stack : undefined,
-      timestamp: Date.now()
-    })
-  }
-}
-
-/**
- * r024.2: Removes the GroupLayer (LayerList results) from the map.
- * r024.22: Cleans up Legend FeatureLayer visibility watch handles.
- * r024.56: Removal protection listener deleted; Remove action is now disabled
- * at the source via __exb_layer_from_runtime = false.
- *
- * r024.53: Now reserved for WIDGET UNMOUNT only. For clearing results,
- * use clearGroupLayerContents() instead to avoid the +58 MB destroy/recreate cost.
- */
-export function cleanupGroupLayer(
-  widgetId: string,
-  mapView: MapView | SceneView
-): void {
-  const seq = graphicsStateManager.nextSequence()
-  const layerId = `querysimple-results-${widgetId}`
-
-  try {
-    // r024.22: Clean up all legend visibility watch handles for this GroupLayer
-    // r024.31: Also remove from globalHandleManager
-    const geometryTypes = ['point', 'polyline', 'polygon']
-    let watchHandlesCleaned = 0
-    let globalHandlesRemoved = 0
-    geometryTypes.forEach(geoType => {
-      const legendLayerId = getLegendLayerId(layerId, geoType)
-      const watchHandle = graphicsStateManager.getLegendVisibilityHandle(legendLayerId)
-      if (watchHandle) {
-        watchHandle.remove()
-        graphicsStateManager.deleteLegendVisibilityHandle(legendLayerId)
-        watchHandlesCleaned++
-      }
-
-      // r024.31: Also remove from globalHandleManager
-      const handleId = graphicsStateManager.getLegendVisibilityHandleId(legendLayerId)
-      if (handleId) {
-        globalHandleManager.remove(widgetId, handleId)
-        graphicsStateManager.deleteLegendVisibilityHandleId(legendLayerId)
-        globalHandlesRemoved++
-      }
-    })
-
-    // r025.015: Buffer visibility watcher removed — buffer layer is now INSIDE
-    // the GroupLayer, so groupLayer.destroy() below destroys it automatically.
-    // No explicit buffer cleanup needed in this path.
-
-    const groupLayer = mapView.map.layers.find(layer => layer.id === layerId) as GroupLayer
-    if (groupLayer) {
-      let graphicsCount = 0
-      // r024.35: Null graphic properties before removal to break circular references
-      groupLayer.layers.forEach((sublayer: Layer) => {
-        const glSub = sublayer as GraphicsLayer
-        if (glSub.graphics) {
-          glSub.graphics.forEach((graphic: Graphic) => {
-            graphicsCount++
-            // Break potential circular references that prevent GC
-            try {
-              graphic.popupTemplate = null
-              graphic.symbol = null
-              graphic.geometry = null
-            } catch (e) { /* Ignore - some properties may be read-only */ }
-          })
-          glSub.removeAll()
-        }
-      })
-      mapView.map.remove(groupLayer)
-      groupLayer.destroy()
-
-      debugLogger.log('GRAPHICS-LAYER', {
-        event: 'cleanupGroupLayer-complete',
-        seq,
-        widgetId,
-        layerId,
-        graphicsCountBeforeCleanup: graphicsCount,
-        watchHandlesCleaned,
-        globalHandlesRemoved,
-        destroyed: true,
-        timestamp: Date.now()
-      })
-    } else {
-      debugLogger.log('GRAPHICS-LAYER', {
-        event: 'cleanupGroupLayer-not-found',
-        seq,
-        widgetId,
-        layerId,
-        watchHandlesCleaned,
-        globalHandlesRemoved,
-        timestamp: Date.now()
-      })
-    }
-  } catch (error) {
-    debugLogger.log('GRAPHICS-LAYER', {
-      event: 'cleanupGroupLayer-error',
       seq,
       widgetId,
       layerId,
@@ -448,17 +252,16 @@ export function cleanupGroupLayer(
 export function cleanupAnyResultLayer(
   widgetId: string,
   mapView: MapView | SceneView
-): { cleanedGraphicsLayer: boolean; cleanedGroupLayer: boolean } {
+): { cleanedGraphicsLayer: boolean } {
   const seq = graphicsStateManager.nextSequence()
-  const result = { cleanedGraphicsLayer: false, cleanedGroupLayer: false }
+  const result = { cleanedGraphicsLayer: false }
 
-  // Check for GroupLayer (LayerList mode)
-  const groupLayerId = `querysimple-results-${widgetId}`
-  const groupLayer = mapView.map.layers.find(layer => layer.id === groupLayerId) as GroupLayer
-  if (groupLayer) {
-    cleanupGroupLayer(widgetId, mapView)
-    result.cleanedGroupLayer = true
-  }
+  // r028.096 (Chunk B of Path 2 Removal): the Path 2 GroupLayer-lookup branch
+  // was here. It looked for `querysimple-results-${widgetId}` and called
+  // `cleanupGroupLayer` when found. Path 2 no longer creates that GroupLayer
+  // and `cleanupGroupLayer` itself was deleted in Chunk C. r028.099 (Phase 4):
+  // the always-false `cleanedGroupLayer` return field is now dropped (it had no
+  // external readers).
 
   // Check for GraphicsLayer (regular mode)
   // r024.43: FIX - ID was wrong (querysimple-graphics- vs querysimple-highlight-)
@@ -474,7 +277,6 @@ export function cleanupAnyResultLayer(
     seq,
     widgetId,
     cleanedGraphicsLayer: result.cleanedGraphicsLayer,
-    cleanedGroupLayer: result.cleanedGroupLayer,
     timestamp: Date.now()
   })
 

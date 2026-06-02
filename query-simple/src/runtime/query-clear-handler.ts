@@ -22,7 +22,6 @@ import { clearAllSelectionsForWidget } from './selection-utils'
 import { createQuerySimpleDebugLogger, globalHandleManager } from 'widgets/shared-code/mapsimple-common'
 import type { EventManager } from './managers/event-manager'
 import type GraphicsLayer from '@arcgis/core/layers/GraphicsLayer'
-import type GroupLayer from '@arcgis/core/layers/GroupLayer'
 import type MapView from '@arcgis/core/views/MapView'
 import type SceneView from '@arcgis/core/views/SceneView'
 
@@ -60,7 +59,7 @@ export interface ClearResultContext {
   widgetId: string
   queryItemConfigId: string
   accumulatedRecords?: FeatureDataRecord[]
-  graphicsLayer?: GraphicsLayer | GroupLayer
+  graphicsLayer?: GraphicsLayer
   mapView?: MapView | SceneView
   eventManager?: EventManager
   onAccumulatedRecordsChange?: (records: FeatureDataRecord[]) => void
@@ -189,6 +188,7 @@ export async function executeClearResult (
   dispatch({ type: 'SET_NO_REMOVAL_ALERT', payload: null })
   dispatch({ type: 'SET_ALL_DUPLICATES_ALERT', payload: null })
   dispatch({ type: 'SET_QUERY_ERROR_ALERT', payload: null })
+  dispatch({ type: 'SET_TRUNCATION_ALERT', payload: null }) // r028.114
 
   // r024.19: YIELD to let React unmount children
   // The isClearing=true above makes effectiveRecords=[] which triggers React to
@@ -254,7 +254,6 @@ export async function executeClearResult (
         widgetId,
         reason,
         clearedGraphicsLayer: cleanupResult.clearedGraphicsLayer,
-        clearedGroupLayer: cleanupResult.clearedGroupLayer,
         hasOutputDS: !!outputDS,
         timestamp: Date.now()
       })

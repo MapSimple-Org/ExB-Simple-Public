@@ -99,6 +99,9 @@ export async function executeDirectQuery (
     popupTemplate: PopupTemplate | null
     defaultPopupTemplate: PopupTemplate | null
     exceededTransferLimit: boolean
+    /** r028.122: true total matching count when genuinely truncated (exact for the form
+     *  path's single where-clause query); undefined when not truncated or count fetch failed. */
+    trueMatchCount?: number
   }> {
   const startTime = performance.now()
 
@@ -161,6 +164,32 @@ export async function executeDirectQuery (
   const popupTemplate = featureLayer.popupTemplate || null
   const defaultPopupTemplate = (featureLayer as any).defaultPopupTemplate || null
 
+  // r028.122: when the service flags truncation, verify with a count-only query (same where,
+  // returnCountOnly — a few bytes, not subject to maxRecordCount). If the true total equals
+  // what we returned, the flag is spurious (e.g. an older MapServer quirk) and there's no real
+  // truncation. Otherwise it's a genuine cap and trueMatchCount is the exact total for the
+  // alert. If the count query fails, trust the flag so a real truncation is never hidden.
+  // Only runs when flagged, so zero overhead on the normal path.
+  const rawExceeded = featureSet.exceededTransferLimit ?? false
+  let exceededTransferLimit = rawExceeded
+  let trueMatchCount: number | undefined
+  if (rawExceeded) {
+    try {
+      const countQuery = featureLayer.createQuery()
+      countQuery.where = whereClause
+      countQuery.returnGeometry = false
+      const total = await featureLayer.queryFeatureCount(countQuery)
+      exceededTransferLimit = total > records.length
+      trueMatchCount = exceededTransferLimit ? total : undefined
+    } catch (countErr) {
+      debugLogger.log('DIRECT-QUERY', {
+        event: 'truncation-count-error',
+        error: countErr instanceof Error ? countErr.message : String(countErr)
+      })
+      // keep exceededTransferLimit = rawExceeded (trust the flag)
+    }
+  }
+
   debugLogger.log('DIRECT-QUERY', {
     event: 'complete',
     fetchTime,
@@ -169,7 +198,9 @@ export async function executeDirectQuery (
     hasPopupTemplate: !!popupTemplate,
     hasDefaultPopupTemplate: !!defaultPopupTemplate,
     geometryType: featureSet.geometryType,
-    exceededTransferLimit: featureSet.exceededTransferLimit
+    rawExceededTransferLimit: rawExceeded,
+    exceededTransferLimit,
+    trueMatchCount: trueMatchCount ?? null
   })
 
   return {
@@ -177,6 +208,7 @@ export async function executeDirectQuery (
     fields: outFields,
     popupTemplate,
     defaultPopupTemplate,
-    exceededTransferLimit: featureSet.exceededTransferLimit ?? false
+    exceededTransferLimit,
+    trueMatchCount
   }
 }

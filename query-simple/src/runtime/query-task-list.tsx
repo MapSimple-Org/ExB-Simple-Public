@@ -11,7 +11,6 @@ import type { EventManager } from './managers/event-manager'
 import { getClauseFieldName } from './sql-clause-utils'
 import type Extent from '@arcgis/core/geometry/Extent'
 import type GraphicsLayer from '@arcgis/core/layers/GraphicsLayer'
-import type GroupLayer from '@arcgis/core/layers/GroupLayer'
 import type MapView from '@arcgis/core/views/MapView'
 import type SceneView from '@arcgis/core/views/SceneView'
 
@@ -21,22 +20,18 @@ export interface QueryTaskListProps {
   widgetId: string
   queryItems: ImmutableArray<QueryItemType>
   isInPopper?: boolean
-  defaultPageSize?: number
   className?: string
-  hoverPinColor?: string // r022.106: Configurable hover pin color
   initialQueryValue?: { shortId: string, value: string }
   shouldUseInitialQueryValueForSelection?: boolean
   onHashParameterUsed?: (shortId: string) => void
   resultsMode?: SelectionType
   onResultsModeChange?: (mode: SelectionType) => void
   // r022.105: Configurable zoom on result click
-  zoomOnResultClick?: boolean
   // r026.009: Configurable pan on result click
-  panOnResultClick?: boolean
   accumulatedRecords?: FeatureDataRecord[]
   resultsExtent?: Extent | null  // r024.74: Cached extent for zoom/pan actions
   onAccumulatedRecordsChange?: (records: FeatureDataRecord[]) => void
-  graphicsLayer?: GraphicsLayer | GroupLayer
+  graphicsLayer?: GraphicsLayer
   mapView?: MapView | SceneView
   // r027.091: hoverLayer prop removed — hover pins use mapView.graphics
   onInitializeGraphicsLayer?: (outputDS: DataSource) => Promise<void>
@@ -142,7 +137,7 @@ const getQueryDisplayName = (item: ImmutableObject<QueryItemType>): string => {
 }
 
 export function QueryTaskList (props: QueryTaskListProps) {
-  const { queryItems, widgetId, defaultPageSize, isInPopper = false, className = '', initialQueryValue, shouldUseInitialQueryValueForSelection = false, onHashParameterUsed, resultsMode, onResultsModeChange, accumulatedRecords, resultsExtent, onAccumulatedRecordsChange, graphicsLayer, mapView, onInitializeGraphicsLayer, onClearGraphicsLayer, onDestroyGraphicsLayer, activeTab, onTabChange, eventManager, zoomOnResultClick, panOnResultClick, hoverPinColor, isPanelVisible, jimuMapView } = props
+  const { queryItems, widgetId, isInPopper = false, className = '', initialQueryValue, shouldUseInitialQueryValueForSelection = false, onHashParameterUsed, resultsMode, onResultsModeChange, accumulatedRecords, resultsExtent, onAccumulatedRecordsChange, graphicsLayer, mapView, onInitializeGraphicsLayer, onClearGraphicsLayer, onDestroyGraphicsLayer, activeTab, onTabChange, eventManager, isPanelVisible, jimuMapView } = props
   const getI18nMessage = hooks.useTranslation(defaultMessages)
   
   // Sort queries by display order before grouping
@@ -600,9 +595,6 @@ export function QueryTaskList (props: QueryTaskListProps) {
             activeTab={activeTab}
             onTabChange={onTabChange}
             eventManager={eventManager}
-            zoomOnResultClick={zoomOnResultClick}
-            panOnResultClick={panOnResultClick}
-            hoverPinColor={hoverPinColor}
             isPanelVisible={isPanelVisible}
             jimuMapView={jimuMapView}
               // No onNavBack - no navigation needed

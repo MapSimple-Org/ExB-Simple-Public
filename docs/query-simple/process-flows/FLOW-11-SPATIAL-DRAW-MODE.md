@@ -20,7 +20,7 @@ are all managed within `SpatialTabContent.tsx`.
 | `runtime/tabs/SpatialTabContent.tsx` | Component: mode toggle, JimuDraw rendering, geometry accumulation, smart defaults, post-query cleanup |
 | `jimu-ui/advanced/map` (JimuDraw) | Esri drawing widget: sketch tools, continuous creation mode, draw layer management |
 | `runtime/managers/use-buffer-preview.ts` | Hook: receives drawn geometries as `inputGeometries`, renders buffer preview on map |
-| `runtime/execute-spatial-query.ts` | Receives drawn geometry (or buffered geometry) as `inputGeometry` for spatial query execution |
+| `runtime/execute-spatial-query.ts` | Receives `inputGeometries` (array, r028.101): the per-type drawn geometries (or `[bufferedGeometry]` when buffered) for spatial query execution |
 | `runtime/query-task.tsx` | Parent: threads `jimuMapView` prop down to SpatialTabContent, handles `onExecuteSpatialQuery` callback |
 | `runtime/query-task-list.tsx` | Intermediary: passes `jimuMapView` from widget to QueryTask |
 | `runtime/widget.tsx` | Root: obtains `jimuMapView` from `JimuMapViewComponent`, stores in state |
@@ -115,37 +115,39 @@ clearing removes all shapes at once.
 User completes a shape on the map
   |
   v
-onDrawingFinished(graphic)
+onDrawingFinished(graphic) --> handleDrawEnd
   |
   +-- graphic.geometry exists?
   |     |
   |     +-- No  --> return (skip)
   |     |
-  |     +-- Yes --> setDrawnGeometries(prev => [...prev, graphic.geometry])
+  |     +-- Yes --> next = [...drawnGeometriesRef.current, graphic.geometry]
+  |                 updateDrawnGeometries(next)          (r028.119)
   |                   |
-  |                   v
-  |                 drawnGeometries = [geom1, geom2, ..., geomN]
+  |                   +-- drawnGeometriesRef.current = next
+  |                   +-- setDrawnGeometries(next)
+  |                   |     |
+  |                   |     v
+  |                   |   hasDrawnGeometry = drawnGeometries.length > 0
+  |                   |   operationsEnabled = true (enables Execute button)
   |                   |
-  |                   v
-  |                 hasDrawnGeometry = drawnGeometries.length > 0
-  |                   |
-  |                   v
-  |                 operationsEnabled = true (enables Execute button)
-  |                   |
-  |                   v
-  |                 useEffect syncs: setAllInputGeometries(drawnGeometries)
-  |                   |
-  |                   v
-  |                 useBufferPreview receives updated inputGeometries[]
+  |                   +-- assembleForDraw(next, includeResultsInputRef.current)
+  |                         |
+  |                         v
+  |                       setAllInputGeometries(...)  (group-by-type union)
+  |                         |
+  |                         v
+  |                       useBufferPreview receives updated inputGeometries[]
   |
   v
 User clicks delete/clear in JimuDraw toolbar
   |
   v
-onDrawingCleared()
+onDrawingCleared() --> handleDrawCleared
   |
   v
-setDrawnGeometries([])
+includeResultsInputRef.current = false; setIncludeResultsInput(false)
+updateDrawnGeometries([])
   |
   v
 drawnGeometries = []
@@ -158,12 +160,25 @@ allInputGeometries = []
 each shape is placed, so the user can draw additional shapes without
 re-selecting a tool.
 
+**r028.119 — event-driven assembly.** `allInputGeometries` is rebuilt *imperatively*
+from the events that actually change the input (draw end/edit/clear, the include-results
+toggle, mode switch, smart-default), not by a `useEffect` watching state. The single
+mutation path `updateDrawnGeometries` keeps `drawnGeometries` (state) and
+`drawnGeometriesRef` (read synchronously by handlers) in sync and calls `assembleForDraw`.
+This replaced a `useEffect` that watched `[drawnGeometries, accumulatedRecords, hasResults,
+includeResultsInput, ...]` and re-emitted a new `allInputGeometries` reference whenever
+results changed post-query — which redrew the buffer after it was cleared (the r028.118
+regression). Draw mode no longer reacts to `accumulatedRecords` at all.
+
 ---
 
 ## 4. Mode Switching (Operations <-> Draw)
 
 The two-button toggle at the top of the Spatial tab controls which mode is
-active. Switching modes shows/hides the JimuDraw layer on the map.
+active. As of r028.100, JimuDraw stays mounted in BOTH modes so its draw
+GraphicsLayer and any drawn shapes survive a switch. The Draw panel section is
+hidden via CSS in Operations mode (not unmounted), and drawn shapes stay
+visible on the map in both modes.
 
 ```
 User clicks mode toggle button
@@ -174,18 +189,28 @@ handleModeChange(newMode)
   +-- userHasChosenModeRef.current = true    <-- Prevents smart default override
   |
   +-- setSpatialMode(newMode)
+       (no drawLayer.visible toggle -- r028.100: drawn graphics persist AND
+        stay visible in both modes per user preference)
+
+Disarm effect (useEffect on spatialMode):
   |
-  +-- getDrawLayerRef.current exists?
+  +-- spatialMode !== 'draw'?
         |
-        +-- Yes --> drawLayer = getDrawLayerRef.current()
-        |             |
-        |             +-- newMode === 'draw'?
-        |             |     drawLayer.visible = true
-        |             |
-        |             +-- newMode === 'operations'?
-        |                   drawLayer.visible = false
+        +-- Yes --> drawSketchRef.current?.cancel()
+        |             Cancels any armed/active Sketch create so a stray map
+        |             click cannot draw while in Operations. The Sketch keeps
+        |             listening to map clicks even with its toolbar hidden, so
+        |             this disarm replaces the old unmount. Also covers the
+        |             smart-default path that sets spatialMode without
+        |             handleModeChange.
         |
-        +-- No  --> skip (JimuDraw not yet initialized)
+        +-- No  --> no-op (Draw mode keeps the Sketch armed)
+
+Panel rendering:
+  |
+  +-- Draw section <div> css:
+        spatialMode === 'draw' ? sectionStyle
+          : [sectionStyle, drawSectionHiddenStyle]   <-- display:none, no unmount
 
 State effects after mode switch:
   |
@@ -197,10 +222,22 @@ State effects after mode switch:
   |     Operations: enabled = hasResults
   |     Draw: enabled = hasDrawnGeometry
   |
-  +-- allInputGeometries re-syncs:
-        Operations: union of accumulatedRecords geometries
-        Draw: drawnGeometries[] directly
+  +-- allInputGeometries recomputed for the new mode (r028.119, in handleModeChange):
+        Operations: assembleForOperations() -- union of accumulatedRecords geometries
+        Draw: assembleForDraw(drawnGeometriesRef.current, includeResultsInputRef.current)
+              -- drawn geometries, plus accumulatedRecords geometries when the
+              "Also include current results" checkbox is on (r028.118)
 ```
+
+**r028.118 — "Also include current results" (Draw mode):** A checkbox appears in
+Draw mode only once a shape is drawn AND results exist (`spatialMode === 'draw' &&
+hasDrawnGeometry && hasResults`), default OFF, and resets to OFF when it hides
+(drawing cleared via `handleDrawCleared`, or mode/results change). When ON, the input
+assembly concatenates `accumulatedRecords[].feature.geometry` onto the drawn geometries
+before the group-by-type union, so a drawn shape and already-selected results
+buffer/query together. **r028.119:** the toggle's `onChange` recomputes the input
+immediately (`assembleForDraw(drawnGeometriesRef.current, checked)`); the reset-on-hide
+is handled in the clear/cleanup events, not a `useEffect`.
 
 ---
 
@@ -403,12 +440,16 @@ All four conditions must be true:
 | Zero results | Preserve | Preserve | Preserve |
 | Error thrown | Preserve | Preserve | Preserve |
 
-### 6. Input Geometry Sync by Mode
+### 6. Input Geometry Assembly by Mode (r028.119: event-driven)
 
-| Mode | `allInputGeometries` Source | Processing |
-|------|---------------------------|------------|
-| Draw | `drawnGeometries[]` directly | No union needed (each shape is separate) |
-| Operations | `accumulatedRecords[].feature.geometry` | Group by type, union within each group via `unionOperator.executeMany` |
+`allInputGeometries` is recomputed only on real input events (draw end/edit/clear,
+toggle, mode change, smart-default) via `assembleForDraw` / `assembleForOperations` —
+not by a `useEffect` watching state. Draw mode does NOT depend on `accumulatedRecords`.
+
+| Mode | `allInputGeometries` Source | Triggered by | Processing |
+|------|---------------------------|--------------|------------|
+| Draw | `drawnGeometries[]`, plus `accumulatedRecords[].feature.geometry` when "Also include current results" is on (r028.118) | `handleDrawEnd/Update/Cleared`, toggle `onChange`, `handleModeChange`, smart-default | Group by type, union within each group via `unionOperator.executeMany` |
+| Operations | `accumulatedRecords[].feature.geometry` | `handleModeChange`, smart-default, and a prop-sync `useEffect` on `accumulatedRecords` (results ARE the input here) | Group by type, union within each group via `unionOperator.executeMany` |
 
 ---
 
@@ -425,7 +466,7 @@ All four conditions must be true:
 7. Select a spatial relationship and target layer, click Execute
 8. **Verify:** query runs, results appear, drawn shapes are cleared from map
 9. Switch to Operations mode, then back to Draw
-10. **Verify:** mode toggles correctly, draw layer visibility toggles
+10. **Verify:** mode toggles correctly; drawn shapes stay visible on the map in BOTH modes (r028.100 — no visibility toggle); the Sketch is disarmed in Operations so a stray map click can't draw
 11. Draw a shape, run query that returns 0 results
 12. **Verify:** drawn shapes are preserved on map, no-results alert shows
 13. Close widget, reopen, navigate to Spatial tab
@@ -441,4 +482,4 @@ if extracted to a custom hook.*
 
 ---
 
-*Last updated: r025.052 (2026-03-11)*
+*Last updated: r028.119 (2026-06-02) -- input-geometry assembly is now event-driven: allInputGeometries is rebuilt only on real input events (draw end/edit/clear via updateDrawnGeometries, toggle onChange, handleModeChange, smart-default), not a useEffect watching state. Fixes the r028.118 regression where a post-query accumulatedRecords change re-emitted a new array reference and redrew the buffer after it was cleared. Draw mode no longer depends on accumulatedRecords; one prop-sync useEffect remains for Operations mode. Prior r028.118: "Also include current results" checkbox. Prior r028.100: mode switch no longer unmounts JimuDraw or toggles drawLayer.visible; a Sketch-cancel disarm fires on leaving Draw mode.*

@@ -428,6 +428,10 @@ export default class Setting extends React.PureComponent<AllWidgetSettingProps<I
                     />
                   </SettingRow>
                 )}
+                {/* The legacy useFeatureLayerResults toggle was removed in r028.092 and
+                    its config field deleted in the Path 2 removal tail (r028.102, TODO #24).
+                    Path 3 (FeatureLayer) is selected when addResultsAsMapLayer === true;
+                    Path 1 (GraphicsLayer, ephemeral) when false. */}
                 <SettingRow label={this.getI18nMessage('fillColor')} flow='wrap'>
                   <ThemeColorPicker
                     specificTheme={this.props.theme2}
@@ -674,6 +678,22 @@ export default class Setting extends React.PureComponent<AllWidgetSettingProps<I
             <div css={css`font-size: 0.875rem; margin-top: 4px; padding: 0 16px 8px; opacity: 0.8;`}>
               {this.getI18nMessage('zoomExpansionFactorDescription')}
             </div>
+            {config.addResultsAsMapLayer === true && (
+              <React.Fragment>
+                <SettingRow label={this.getI18nMessage('flashOnMapIdentify')}>
+                  <Switch
+                    checked={config.flashOnMapIdentify !== false}
+                    onChange={(e) => {
+                      this.updateConfigForOptions(['flashOnMapIdentify', e.target.checked])
+                    }}
+                    aria-label={this.getI18nMessage('flashOnMapIdentify')}
+                  />
+                </SettingRow>
+                <div css={css`font-size: 0.875rem; margin-top: 4px; padding: 0 16px 8px; opacity: 0.8;`}>
+                  {this.getI18nMessage('flashOnMapIdentifyDescription')}
+                </div>
+              </React.Fragment>
+            )}
           </SettingSection>
         )}
         {/* r025.072: Mobile Popup Behavior */}

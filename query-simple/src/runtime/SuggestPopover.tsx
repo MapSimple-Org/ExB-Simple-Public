@@ -1,33 +1,42 @@
 /** @jsx jsx */
 /**
- * SuggestPopover.tsx — Typeahead suggestion dropdown (r025.053)
+ * SuggestPopover.tsx — Typeahead suggestion dropdown (r028.070)
  *
- * Renders an absolutely positioned dropdown below SqlExpressionRuntime's input.
+ * Dual-path rendering for desktop vs mobile:
+ *   Desktop: position:fixed with viewport coords from getBoundingClientRect.
+ *   Mobile:  jimu-ui Popper portals to document.body, escaping both
+ *            overflow:hidden ancestors and MobilePanel's CSS transform trap.
+ *
  * Highlights matching prefix in bold. ARIA listbox pattern for screen readers.
  * Uses Calcite design tokens for consistent styling.
  */
-import { React, jsx, css } from 'jimu-core'
+import { React, jsx, css, hooks } from 'jimu-core'
+import { Popper } from 'jimu-ui'
 import type { SuggestPopoverProps } from './useSuggest'
+import { createQuerySimpleDebugLogger } from 'widgets/shared-code/mapsimple-common'
+
+const debugLogger = createQuerySimpleDebugLogger()
 
 // ============================================================================
 // Styles
 // ============================================================================
 
-const getPopoverStyle = (rect: DOMRect | null) => css`
+/**
+ * Desktop style: position fixed with viewport coordinates from getBoundingClientRect.
+ * Mobile uses jimu-ui Popper instead (see render section below).
+ */
+const getDesktopStyle = (rect: DOMRect, maxHeight: number) => css`
   position: fixed;
   z-index: 1000;
-  ${rect ? `
-    top: ${rect.bottom + 2}px;
-    width: ${rect.width}px;
-  ` : `
-    display: none;
-  `}
+  top: ${rect.bottom}px;
+  width: ${rect.width}px;
+  max-height: ${maxHeight}px;
+`
 
+const popoverBaseStyle = css`
   background: var(--sys-color-surface-paper);
   border: 1px solid var(--sys-color-divider-secondary);
   border-radius: 4px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  max-height: 240px;
   overflow-y: auto;
   overflow-x: hidden;
 
@@ -133,28 +142,41 @@ export function SuggestPopover (props: SuggestPopoverProps) {
   } = props
 
   const listRef = React.useRef<HTMLDivElement>(null)
+  const isMobile = hooks.useCheckSmallBrowserSizeMode()
   const [inputRect, setInputRect] = React.useState<DOMRect | null>(null)
+  const [maxHeight, setMaxHeight] = React.useState(240)
 
-  // Track input element position (updates on open and scroll)
+  // Track input position + available space below
   React.useEffect(() => {
     if (!isOpen || !inputElement) {
       setInputRect(null)
       return
     }
 
-    const updateRect = () => {
-      setInputRect(inputElement.getBoundingClientRect())
-    }
-    updateRect()
+    const update = () => {
+      const rect = inputElement.getBoundingClientRect()
+      const computed = Math.max(60, Math.min(240, window.innerHeight - rect.bottom - 16))
 
-    // Re-position on scroll/resize (parent panels may scroll)
-    window.addEventListener('scroll', updateRect, { capture: true })
-    window.addEventListener('resize', updateRect)
-    return () => {
-      window.removeEventListener('scroll', updateRect, { capture: true })
-      window.removeEventListener('resize', updateRect)
+      debugLogger.log('SUGGEST', {
+        event: 'popover-position',
+        isMobile,
+        rectBottom: Math.round(rect.bottom),
+        windowInnerHeight: window.innerHeight,
+        spaceBelow: Math.round(window.innerHeight - rect.bottom),
+        computedMaxHeight: Math.round(computed)
+      })
+      setInputRect(rect)
+      setMaxHeight(computed)
     }
-  }, [isOpen, inputElement])
+    update()
+
+    window.addEventListener('scroll', update, { capture: true })
+    window.addEventListener('resize', update)
+    return () => {
+      window.removeEventListener('scroll', update, { capture: true })
+      window.removeEventListener('resize', update)
+    }
+  }, [isOpen, inputElement, isMobile])
 
   // Scroll active item into view
   React.useEffect(() => {
@@ -166,16 +188,11 @@ export function SuggestPopover (props: SuggestPopoverProps) {
     }
   }, [activeIndex])
 
-  if (!isOpen || !inputRect) return null
+  if (!isOpen || !inputElement) return null
 
-  return (
-    <div
-      ref={listRef}
-      css={getPopoverStyle(inputRect)}
-      role='listbox'
-      aria-label='Suggestions'
-      id='suggest-popover-listbox'
-    >
+  // Shared suggestion content (identical for both render paths)
+  const suggestionContent = (
+    <React.Fragment>
       {isLoading && suggestions.length === 0 && (
         <div className='suggest-loading' role='status' aria-live='polite'>
           Loading...
@@ -205,6 +222,49 @@ export function SuggestPopover (props: SuggestPopoverProps) {
           No matches found
         </div>
       )}
+    </React.Fragment>
+  )
+
+  // Mobile: Popper portals to document.body (escapes overflow:hidden + transform trap)
+  if (isMobile) {
+    return (
+      <Popper
+        open
+        reference={inputElement}
+        placement='bottom-start'
+        offsetOptions={[-10, 6]}
+        flipOptions={false}
+        autoUpdate
+        trapFocus={false}
+        autoFocus={false}
+        style={{ boxShadow: 'none' }}
+      >
+        <div
+          ref={listRef}
+          css={popoverBaseStyle}
+          style={{ maxHeight, width: inputElement.getBoundingClientRect().width }}
+          role='listbox'
+          aria-label='Suggestions'
+          id='suggest-popover-listbox'
+        >
+          {suggestionContent}
+        </div>
+      </Popper>
+    )
+  }
+
+  // Desktop: position fixed (no transform trap outside MobilePanel)
+  if (!inputRect) return null
+
+  return (
+    <div
+      ref={listRef}
+      css={[getDesktopStyle(inputRect, maxHeight), popoverBaseStyle]}
+      role='listbox'
+      aria-label='Suggestions'
+      id='suggest-popover-listbox'
+    >
+      {suggestionContent}
     </div>
   )
 }

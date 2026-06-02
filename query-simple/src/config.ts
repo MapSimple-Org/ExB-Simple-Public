@@ -157,6 +157,12 @@ export interface QueryItemType {
   resultTitleExpression?: string
   resultContentExpression?: string // r023.18: Markdown template for CustomTemplate mode
   resultDisplayFields?: string[]
+  /** r028.117 (field-table Phase 2.1): per-field display label overrides for
+   *  SelectAttributes mode, keyed by field name. An admin-set alias here wins over
+   *  the layer schema alias in the result card + popup field table. Sibling map to
+   *  resultDisplayFields (which stays string[]); a field absent from this map falls
+   *  back to the schema alias, then the field name. Empty/whitespace = no override. */
+  resultFieldAliases?: { [fieldName: string]: string }
   resultSymbolType?: SymbolType
   resultCustomSymbol?: any
   resultAllowChangeSymbol?: boolean
@@ -237,6 +243,9 @@ export interface SettingConfig {
   addResultsAsMapLayer?: boolean
   /** Custom title for the results layer in LayerList. Default: 'QuerySimple Results'. */
   resultsLayerTitle?: string
+  // r028.005: Path 3 FeatureLayer results
+  /** r028.048: Default true. When true, clicking a Path 3 feature on the map scrolls the matching result card into view and flashes it briefly. */
+  flashOnMapIdentify?: boolean
   // Mobile Popup Behavior (≤ 600px viewport)
   /** Open popup collapsed (title only) on mobile viewports ≤ 600px (default false) */
   mobilePopupCollapsed?: boolean

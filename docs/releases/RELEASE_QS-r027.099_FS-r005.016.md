@@ -4,6 +4,8 @@
 **Experience Builder Version:** 1.20.0+
 **Previous Release:** QS-r027.097 + FS-r005.016 (May 6, 2026)
 
+> **Historical note (r028.080, 2026-05-22):** The Select on Map feature and BUG-SELECT-MAP-IMAGE-001 referenced in this release were retired in r028.080 — the feature was removed after the map-image sublayer highlight regression could not be resolved on ExB 1.20. References below are preserved for historical accuracy.
+
 ## What's Included
 
 | Family | Version | Status |

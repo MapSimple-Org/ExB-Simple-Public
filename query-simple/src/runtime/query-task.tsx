@@ -60,11 +60,10 @@ import defaultMessage from './translations/default'
 import { ArrowLeftOutlined } from 'jimu-icons/outlined/directional/arrow-left'
 import { LoadingResult } from './loading-result'
 import { clearSelectionInDataSources, selectRecordsAndPublish, findClearResultsButton, dispatchSelectionEvent, getOriginDataSource, clearAllSelectionsForWidget } from './selection-utils'
-import { createQuerySimpleDebugLogger, globalHandleManager } from 'widgets/shared-code/mapsimple-common'
+import { createQuerySimpleDebugLogger, globalHandleManager, widgetConfigManager } from 'widgets/shared-code/mapsimple-common'
 import { queryTaskReducer, INITIAL_STATE } from './query-task-reducer'
 import type Extent from '@arcgis/core/geometry/Extent'
 import type GraphicsLayer from '@arcgis/core/layers/GraphicsLayer'
-import type GroupLayer from '@arcgis/core/layers/GroupLayer'
 import type MapView from '@arcgis/core/views/MapView'
 import type SceneView from '@arcgis/core/views/SceneView'
 import type Geometry from '@arcgis/core/geometry/Geometry'
@@ -80,7 +79,6 @@ export interface QueryTaskProps {
   total: number
   queryItem: ImmutableObject<QueryItemType>
   wrappedInPopper?: boolean
-  hoverPinColor?: string // r022.106: Configurable hover pin color
   className?: string
   isInPopper?: boolean
   onNavBack?: () => void
@@ -107,7 +105,7 @@ export interface QueryTaskProps {
   resultsExtent?: Extent | null  // r024.74: Cached extent for zoom/pan actions
   onAccumulatedRecordsChange?: (records: FeatureDataRecord[]) => void
   // Graphics layer props
-  graphicsLayer?: GraphicsLayer | GroupLayer
+  graphicsLayer?: GraphicsLayer
   mapView?: MapView | SceneView
   // r027.091: hoverLayer prop removed — hover pins use mapView.graphics
   onInitializeGraphicsLayer?: (outputDS: DataSource) => Promise<void>
@@ -117,9 +115,7 @@ export interface QueryTaskProps {
   onTabChange?: (tab: 'query' | 'spatial' | 'results') => void
   eventManager?: import('./managers/event-manager').EventManager  // Chunk 7.1: Event Handling Manager
   // r022.105: Configurable zoom on result click
-  zoomOnResultClick?: boolean
   // r026.009: Configurable pan on result click
-  panOnResultClick?: boolean
   isPanelVisible?: boolean  // r025.013: Buffer preview clear/restore on panel close/open
   jimuMapView?: JimuMapView | null  // r025.041: JimuMapView for JimuDraw in Spatial tab Draw mode
 }
@@ -182,7 +178,7 @@ const style = css`
 `
 
 export function QueryTask (props: QueryTaskProps) {
-  const { queryItem, onNavBack, total, isInPopper = false, wrappedInPopper = false, className = '', index, initialInputValue, onHashParameterUsed, queryItems, selectedQueryIndex, onQueryChange, groups, ungrouped, groupOrder, selectedGroupId, selectedGroupQueryIndex, onGroupChange, onGroupQueryChange, onUngroupedChange, resultsMode, onResultsModeChange, accumulatedRecords, resultsExtent, onAccumulatedRecordsChange, graphicsLayer, mapView, onInitializeGraphicsLayer, onClearGraphicsLayer, onDestroyGraphicsLayer, activeTab: propActiveTab, onTabChange: propOnTabChange, eventManager, zoomOnResultClick, panOnResultClick, hoverPinColor, jimuMapView, ...otherProps } = props
+  const { queryItem, onNavBack, total, isInPopper = false, wrappedInPopper = false, className = '', index, initialInputValue, onHashParameterUsed, queryItems, selectedQueryIndex, onQueryChange, groups, ungrouped, groupOrder, selectedGroupId, selectedGroupQueryIndex, onGroupChange, onGroupQueryChange, onUngroupedChange, resultsMode, onResultsModeChange, accumulatedRecords, resultsExtent, onAccumulatedRecordsChange, graphicsLayer, mapView, onInitializeGraphicsLayer, onClearGraphicsLayer, onDestroyGraphicsLayer, activeTab: propActiveTab, onTabChange: propOnTabChange, eventManager, jimuMapView, ...otherProps } = props
   const getI18nMessage = hooks.useTranslation(defaultMessage)
   const zoomToRecords = useZoomToRecords(mapView, props.widgetId)
   // stage now in useReducer (r024.126 — A2b)
@@ -205,7 +201,13 @@ export function QueryTask (props: QueryTaskProps) {
       seen.add(dsId)
 
       const ds = DataSourceManager.getInstance().getDataSource(dsId) as FeatureLayerDataSource
-      const label = ds?.layer?.title || ds?.getLabel() || item.name || dsId
+      // r028.113: Prefer the admin-configured query item name (the settings "Label"
+      // field) over the live ds.layer.title. The live layer title is resolved lazily
+      // and varies by load timing / what the portal item currently advertises, so two
+      // widgets bound to the SAME layer could show different labels here (observed:
+      // "Drainage Complaints" vs "Drainage complaint or study"). The configured name is
+      // stable and intentional; fall back to the live title / DS label only when unset.
+      const label = item.name || ds?.layer?.title || ds?.getLabel() || dsId
       options.push({ value: dsId, label })
     })
 
@@ -289,7 +291,7 @@ export function QueryTask (props: QueryTaskProps) {
   // A2b: stage, resultCount, queryJustExecuted
   // A2c: isClearing, outputDS, dsRecreationKey
   const [state, dispatch] = React.useReducer(queryTaskReducer, INITIAL_STATE)
-  const { selectionError, zoomError, queryErrorAlert, noResultsAlert, allDuplicatesAlert, noRemovalAlert, stage, resultCount, queryJustExecuted, isClearing, outputDS, dsRecreationKey } = state
+  const { selectionError, zoomError, queryErrorAlert, noResultsAlert, truncationAlert, allDuplicatesAlert, noRemovalAlert, stage, resultCount, queryJustExecuted, isClearing, outputDS, dsRecreationKey } = state
   const attributeFilterSqlExprObj = React.useRef<IMSqlExpression>(queryItem.sqlExprObj)
   const spatialFilterObj = React.useRef(null)
   const backBtnRef = React.useRef<HTMLButtonElement>(undefined)
@@ -365,18 +367,15 @@ export function QueryTask (props: QueryTaskProps) {
     focusElementInKeyboardMode(backBtnRef.current)
   })
 
-  // Get the pagination style from widget config (MultiPage or LazyLoad/Single-page)
-  const pagingTypeInConfig = ReactRedux.useSelector((state: IMState) => {
-    const widgetJson = state.appConfig.widgets[props.widgetId]
-    return widgetJson.config.resultPagingStyle
-  })
-
-  // Get the initial page size for single-page (LazyLoad) results
-  // This allows users to configure how many records are loaded initially when using single-page mode
-  // Defaults to 100 if not configured
-  const lazyLoadInitialPageSize = ReactRedux.useSelector((state: IMState) => {
-    const widgetJson = state.appConfig.widgets[props.widgetId]
-    return widgetJson.config.lazyLoadInitialPageSize
+  // r028.052: Migrated from Redux selectors to WidgetConfigManager singleton (Step 5)
+  const pagingTypeInConfig = widgetConfigManager.getResultPagingStyle(props.widgetId)
+  const lazyLoadInitialPageSize = widgetConfigManager.getLazyLoadInitialPageSize(props.widgetId)
+  debugLogger.log('SETTINGS', {
+    event: 'singletonConfigRead',
+    source: 'query-task',
+    widgetId: props.widgetId,
+    resultPagingStyle: pagingTypeInConfig,
+    lazyLoadInitialPageSize
   })
 
 
@@ -1066,7 +1065,7 @@ export function QueryTask (props: QueryTaskProps) {
   // ─── Spatial Query Execution ────────────────────────────────────────
   // r025.031: Full pipeline — execute spatial query, convert to records, apply mode, graphics, zoom
   const handleExecuteSpatialQuery = React.useCallback(async (params: {
-    inputGeometry: Geometry
+    inputGeometries: Geometry[]
     selectedRelationship: string
     selectedLayers: Array<{ value: string | number; label: string }>
     bufferDistance: number
@@ -1105,7 +1104,7 @@ export function QueryTask (props: QueryTaskProps) {
 
     // 1. Execute the spatial query
     const result: SpatialQueryResult = await executeSpatialQuery({
-      inputGeometry: params.inputGeometry,
+      inputGeometries: params.inputGeometries,
       spatialRelationship: params.selectedRelationship,
       targetLayerIds,
       targetUseDataSources,
@@ -1247,6 +1246,35 @@ export function QueryTask (props: QueryTaskProps) {
     dispatch({ type: 'SET_RESULT_COUNT', payload: recordsToDisplay.length })
     dispatch({ type: 'SET_STAGE', payload: 1 })
     dispatch({ type: 'SET_QUERY_EXECUTED', payload: true })
+
+    // r028.114: Surface result-set truncation LAST — after New-mode's clearResult
+    // (which wipes alert state) has already run. Dispatching earlier set the alert
+    // and then clearResult immediately nuked it before the Results panel rendered.
+    // exceededTransferLimit propagates per-layer from execute-spatial-query.ts
+    // (also logged there as spatial-query-layer-complete); recordLimit is the
+    // returned count (the per-layer cap that was hit).
+    const spatialExceeded = result.layerResults.some(r => r.exceededTransferLimit)
+    if (spatialExceeded) {
+      // r028.122: true total across ALL target layers — a truncated layer contributes its
+      // true matching count, a complete layer contributes what it returned. Layers are
+      // distinct data sources, so summing is correct (no cross-layer dedup). Each layer's
+      // trueMatchCount is exact for one input geometry and a lower bound for several, so the
+      // aggregate is a lower bound whenever multiple geometries were input. If any truncated
+      // layer's true count couldn't be fetched, we can't state a number — fall back to generic.
+      const anyTruncatedCountMissing = result.layerResults.some(r => r.exceededTransferLimit && r.trueMatchCount == null)
+      const totalMatchCount = anyTruncatedCountMissing
+        ? undefined
+        : result.layerResults.reduce((sum, r) => sum + (r.exceededTransferLimit ? (r.trueMatchCount as number) : r.featureCount), 0)
+      dispatch({ type: 'SET_TRUNCATION_ALERT', payload: {
+        show: true,
+        recordLimit: result.totalFeatureCount,
+        totalMatchCount,
+        totalMatchCountIsLowerBound: params.inputGeometries.length > 1,
+        timestamp: Date.now()
+      } })
+    } else {
+      dispatch({ type: 'SET_TRUNCATION_ALERT', payload: null })
+    }
 
     // 9. Zoom to results
     if (recordsToDisplay.length > 0) {
@@ -1808,14 +1836,13 @@ export function QueryTask (props: QueryTaskProps) {
                 eventManager={eventManager}
                 isQuerySwitchInProgressRef={isQuerySwitchInProgressRef}
                 queries={queryItems as any}
-                zoomOnResultClick={zoomOnResultClick}
-                panOnResultClick={panOnResultClick}
-                hoverPinColor={hoverPinColor}
                 listResetKey={queryExecutionKeyRef.current}
                 noRemovalAlert={noRemovalAlert}
                 onDismissNoRemovalAlert={() => dispatch({ type: 'SET_NO_REMOVAL_ALERT', payload: null })}
                 allDuplicatesAlert={allDuplicatesAlert}
                 onDismissAllDuplicatesAlert={() => dispatch({ type: 'SET_ALL_DUPLICATES_ALERT', payload: null })}
+                truncationAlert={truncationAlert}
+                onDismissTruncationAlert={() => dispatch({ type: 'SET_TRUNCATION_ALERT', payload: null })}
                 onNavBack={async (clearResults = false) => {
                   // Handle navigation from QueryTaskResult
                   // r025.031: Navigate back to whichever tab initiated the query (query or spatial)

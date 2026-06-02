@@ -94,6 +94,60 @@ import {
 } from 'jimu-core'
 import { createQuerySimpleDebugLogger } from 'widgets/shared-code/mapsimple-common'
 
+// ---------------------------------------------------------------------------
+// Table widget enum mirrors (from widgets/common/table/src/config.ts)
+// ---------------------------------------------------------------------------
+// We can't import directly from the Table widget because webpack can't resolve
+// cross-widget paths from our symlinked location. These const enums mirror the
+// Table widget's runtime values and give TypeScript the narrow types it needs
+// to catch mismatches at compile time. Verified against ExB 1.20 config.ts.
+//
+// If Esri changes these values in a future version, the mismatch will surface
+// as a runtime bug (same as r027.098), not a TS error. That's the tradeoff.
+// ---------------------------------------------------------------------------
+const enum LayerHonorModeType {
+  Webmap = 'WEBMAP',
+  MapTable = 'MAPTABLE',
+  Custom = 'CUSTOM'
+}
+
+const enum SelectionModeType {
+  Single = 'SINGLE',
+  Multiple = 'MULTIPLE'
+}
+
+const enum TableDataActionType {
+  View = 'VIEW',
+  Add = 'ADD'
+}
+
+// LayersConfig mirrors the Table widget's interface with enum-typed fields
+// instead of bare strings, so assignments like `selectMode: 'Webmap'` will
+// fail at compile time.
+interface LayersConfig {
+  id: string
+  name: string
+  allFields: any[]
+  tableFields: any[]
+  enableAttachments: boolean
+  enableEdit: boolean
+  allowCsv: boolean
+  showCount: boolean
+  enableSearch: boolean
+  searchFields: string[]
+  enableRefresh: boolean
+  enableShowHideColumn: boolean
+  enableSelect: boolean
+  enableDelete: boolean
+  selectMode: SelectionModeType
+  layerHonorMode: LayerHonorModeType
+  dataActionObject: boolean
+  dataActionType: TableDataActionType
+  useDataSource?: UseDataSource
+  dataActionDataSource?: any
+  dataActionWidgetId: string
+}
+
 const debugLogger = createQuerySimpleDebugLogger()
 
 const { SELECTION_DATA_VIEW_ID } = CONSTANTS
@@ -123,31 +177,6 @@ async function switchActiveTab(tableWidgetId: string, tabId: string): Promise<vo
     appActions.widgetStatePropChange(tableWidgetId, 'activeTabId', tabId)
   )
   await new Promise(resolve => setTimeout(resolve, TAB_SWITCH_WAIT_MS))
-}
-
-// LayersConfig type from Table widget (simplified)
-interface LayersConfig {
-  id: string
-  name: string
-  allFields: any[]
-  tableFields: any[]
-  enableAttachments: boolean
-  enableEdit: boolean
-  allowCsv: boolean
-  showCount: boolean
-  enableSearch: boolean
-  searchFields: string[]
-  enableRefresh: boolean
-  enableShowHideColumn: boolean
-  enableSelect: boolean
-  enableDelete: boolean
-  selectMode: string
-  layerHonorMode: string
-  dataActionObject: boolean
-  dataActionType: string
-  useDataSource?: UseDataSource
-  dataActionDataSource?: any
-  dataActionWidgetId: string
 }
 
 /**
@@ -323,10 +352,10 @@ async function createLayerConfigFromDataSet(
       enableShowHideColumn: true,
       enableSelect: true,
       enableDelete: false,
-      selectMode: 'MULTIPLE',
-      layerHonorMode: 'WEBMAP',
+      selectMode: SelectionModeType.Multiple,
+      layerHonorMode: LayerHonorModeType.Webmap,
       dataActionObject: true,
-      dataActionType: 'VIEW',
+      dataActionType: TableDataActionType.View,
       ...(isRuntimeData ? { dataActionDataSource: dataSource } : { useDataSource }),
       dataActionWidgetId: initiatorWidgetId
     }

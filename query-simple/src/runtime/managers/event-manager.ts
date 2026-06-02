@@ -8,6 +8,8 @@ const debugLogger = createQuerySimpleDebugLogger()
 export const QUERYSIMPLE_SELECTION_EVENT = 'querysimple-selection-changed'
 export const RESTORE_ON_IDENTIFY_CLOSE_EVENT = 'querysimple-restore-on-identify-close'
 export const OPEN_WIDGET_EVENT = 'helpersimple-open-widget'
+/** r028.033: Dispatched by PopupTemplate creator when a Path 3 feature's popup renders on map click. */
+export const QUERYSIMPLE_POPUP_FEATURE_IDENTIFIED = 'querysimple-popup-feature-identified'
 
 /**
  * Event handler callbacks for EventManager.

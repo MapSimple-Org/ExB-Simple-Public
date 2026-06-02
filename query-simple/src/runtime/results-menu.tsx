@@ -23,16 +23,14 @@ import {
   type DataRecordSet,
   type DataSource,
   type IntlShape,
-  type ImmutableArray,
   type ImmutableObject,
   type FeatureDataRecord
 } from 'jimu-core'
-import { 
-  Dropdown, 
-  DropdownButton, 
-  DropdownMenu, 
+import {
+  Dropdown,
+  DropdownButton,
+  DropdownMenu,
   DropdownItem,
-  Icon,
   Tooltip
 } from 'jimu-ui'
 import { MenuOutlined } from 'jimu-icons/outlined/editor/menu'
@@ -44,16 +42,10 @@ import type { QueryItemType } from '../config'
 import type MapView from '@arcgis/core/views/MapView'
 import type SceneView from '@arcgis/core/views/SceneView'
 import type Extent from '@arcgis/core/geometry/Extent'
-import type GraphicsLayer from '@arcgis/core/layers/GraphicsLayer'
-import type GroupLayer from '@arcgis/core/layers/GroupLayer'
 
 // Import action handlers
 import { handleViewInTable, isTableWidgetAvailable } from '../data-actions/view-in-table-action'
-import { handleSelectOnMap as executeSelectOnMap } from '../data-actions/add-to-map-action'
 import { handleExportFormat } from '../utils/export-utils'
-
-// Custom icon for "Select on map"
-const showOnMapIcon = require('./assets/icons/show-on-map.svg')
 
 const debugLogger = createQuerySimpleDebugLogger()
 
@@ -65,8 +57,6 @@ export interface ResultsMenuProps {
   resultsExtent?: Extent | null
   intl: IntlShape
   queryItem?: ImmutableObject<QueryItemType>
-  graphicsLayer?: GraphicsLayer | GroupLayer
-  queries?: ImmutableArray<ImmutableObject<QueryItemType>>
 }
 
 const menuStyles = css`
@@ -105,7 +95,10 @@ export function ResultsMenu(props: ResultsMenuProps): React.ReactElement {
     return dataSets.reduce((sum, ds) => sum + (ds.records?.length || 0), 0)
   }, [dataSets])
   
-  // Collect all feature records from data sets - use ref to avoid recreating
+  // DORMANT — MARKED FOR REMOVAL (r028.080): Previously used by handleSelectOnMapClick
+  // (Select on Map feature removed r028.080). Currently has no callers. Safe to delete
+  // along with the FeatureDataRecord import in a future cleanup pass.
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const getAllFeatureRecords = React.useCallback((): FeatureDataRecord[] => {
     const currentDataSets = propsRef.current.dataSets
     const allRecords: FeatureDataRecord[] = []
@@ -169,31 +162,6 @@ export function ResultsMenu(props: ResultsMenuProps): React.ReactElement {
     await handleViewInTable(widgetId, dataSets)
   }, [])
   
-  // Select on map handler
-  const handleSelectOnMapClick = React.useCallback(async () => {
-    const { widgetId, outputDS, graphicsLayer, queries } = propsRef.current
-    const allRecords = getAllFeatureRecords()
-    debugLogger.log('DATA-ACTION', { action: 'resultsMenu-selectOnMap-clicked' })
-    setIsOpen(false)
-
-    if (allRecords.length > 0 && outputDS) {
-      const result = await executeSelectOnMap(widgetId, outputDS, allRecords, graphicsLayer, queries)
-
-      // r027.097: Trap for non-HFL layers (BUG-SELECT-MAP-IMAGE-001).
-      // Selection data is applied to Redux, but visual highlight (blue outline)
-      // requires a FeatureLayerView which only exists for hosted feature layers.
-      if (result?.success && !result.highlightApplied) {
-        debugLogger.log('BUG', {
-          bugId: 'BUG-SELECT-MAP-IMAGE-001',
-          category: 'DATA-ACTION',
-          description: 'Select on Map: Visual highlight (blue outline) not available for this layer type. ' +
-            'Selection data was applied but map highlighting requires a hosted feature layer.',
-          action: 'resultsMenu-selectOnMap-no-highlight'
-        })
-      }
-    }
-  }, [getAllFeatureRecords])
-  
   // Export handlers - use shared handleExportFormat
   const handleExportCSVClick = React.useCallback(async () => {
     await handleExportFormat(propsRef.current.dataSets, 'csv', closeMenus)
@@ -212,7 +180,6 @@ export function ResultsMenu(props: ResultsMenuProps): React.ReactElement {
     panTo: intl.formatMessage({ id: 'panTo', defaultMessage: 'Pan to' }),
     viewInTable: intl.formatMessage({ id: 'viewInTable', defaultMessage: 'View in table' }),
     export: intl.formatMessage({ id: 'export', defaultMessage: 'Export' }),
-    selectOnMap: intl.formatMessage({ id: 'addToMap', defaultMessage: 'Select on map' }),
     actionsMenu: intl.formatMessage({ id: 'actionsMenu', defaultMessage: 'More actions' })
   }), [intl])
   
@@ -274,12 +241,6 @@ export function ResultsMenu(props: ResultsMenuProps): React.ReactElement {
               <DropdownItem onClick={handleExportJSONClick}>JSON</DropdownItem>
             </DropdownMenu>
           </Dropdown>
-          
-          {/* Select on map */}
-          <DropdownItem onClick={handleSelectOnMapClick} disabled={!hasRecords}>
-            <Icon icon={showOnMapIcon} className="mr-2" />
-            {labels.selectOnMap}
-          </DropdownItem>
         </DropdownMenu>
       </Dropdown>
     </div>

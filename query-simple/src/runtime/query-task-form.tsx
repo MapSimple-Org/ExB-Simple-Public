@@ -26,7 +26,7 @@ import { isSqlClause, getClauseValue } from './sql-clause-utils'
 import defaultMessage from './translations/default'
 import { QueryTaskSpatialForm } from './query-task-spatial-form'
 import { useAutoHeight } from './useAutoHeight'
-import { createQuerySimpleDebugLogger } from 'widgets/shared-code/mapsimple-common'
+import { createQuerySimpleDebugLogger, widgetConfigManager } from 'widgets/shared-code/mapsimple-common'
 import { useSuggest } from './useSuggest'
 import { SuggestPopover } from './SuggestPopover'
 import { detectFreeFormInput } from './suggest-utils'
@@ -108,9 +108,14 @@ const getFormStyle = (isAutoHeight: boolean) => {
 export function QueryTaskForm (props: QueryTaskItemProps) {
   const { widgetId, configId, outputDS, spatialFilterEnabled, datasourceReady, onFormSubmit, dataActionFilter, initialInputValue, onHashParameterUsed, queryItemShortId, activeTab, onTabChange } = props
   const preDataActionFilter = hooks.usePrevious(dataActionFilter)
-  const queryItem: ImmutableObject<QueryItemType> = ReactRedux.useSelector((state: IMState) => {
-    const widgetJson = state.appConfig.widgets[widgetId]
-    return widgetJson.config.queryItems.find(item => item.configId === configId)
+  // r028.053: Migrated from Redux selector to WidgetConfigManager singleton (Step 6)
+  const queryItem = widgetConfigManager.getQueryItemByConfigId(widgetId, configId) as ImmutableObject<QueryItemType>
+  debugLogger.log('SETTINGS', {
+    event: 'singletonConfigRead',
+    source: 'query-task-form',
+    widgetId,
+    configId,
+    queryItemFound: !!queryItem
   })
   const currentItem = Object.assign({}, DEFAULT_QUERY_ITEM, queryItem)
   const getI18nMessage = hooks.useTranslation(defaultMessage)

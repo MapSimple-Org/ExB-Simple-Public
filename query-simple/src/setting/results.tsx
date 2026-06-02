@@ -363,6 +363,10 @@ export function ResultsSetting (props: Props) {
           label={getI18nMessage('configFields')}
           selectedFields={queryItem.resultDisplayFields as any}
           onFieldsChanged={(fields: string[]) => { onPropertyChanged('resultDisplayFields', fields, true) }}
+          fieldAliases={queryItem.resultFieldAliases as any}
+          aliasLabel={getI18nMessage('fieldAliases')}
+          aliasPlaceholder={getI18nMessage('fieldAliasPlaceholder')}
+          onFieldAliasesChanged={(aliases) => { onPropertyChanged('resultFieldAliases', aliases, true) }}
         />
       )}
 

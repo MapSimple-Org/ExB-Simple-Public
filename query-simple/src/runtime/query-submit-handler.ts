@@ -28,7 +28,6 @@ import { clearSelectionInDataSources, dispatchSelectionEvent } from './selection
 import { createQuerySimpleDebugLogger, globalHandleManager } from 'widgets/shared-code/mapsimple-common'
 import type { EventManager } from './managers/event-manager'
 import type GraphicsLayer from '@arcgis/core/layers/GraphicsLayer'
-import type GroupLayer from '@arcgis/core/layers/GroupLayer'
 import type MapView from '@arcgis/core/views/MapView'
 import type SceneView from '@arcgis/core/views/SceneView'
 
@@ -77,7 +76,7 @@ export interface SubmitContext {
   queryItemConfigId: string
   resultsMode?: SelectionType
   initialInputValue?: string
-  graphicsLayer?: GraphicsLayer | GroupLayer
+  graphicsLayer?: GraphicsLayer
   mapView?: MapView | SceneView
   eventManager?: EventManager
   onAccumulatedRecordsChange?: (records: FeatureDataRecord[]) => void

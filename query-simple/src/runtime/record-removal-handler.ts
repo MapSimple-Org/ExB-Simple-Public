@@ -21,7 +21,6 @@ import { removeHighlightGraphics, getGraphicsCountFromLayer, forEachGraphicInLay
 import { removeRecordIdFromHashParams, removeRecordIdFromDataS } from './hash-utils'
 import { createQuerySimpleDebugLogger } from 'widgets/shared-code/mapsimple-common'
 import type GraphicsLayer from '@arcgis/core/layers/GraphicsLayer'
-import type GroupLayer from '@arcgis/core/layers/GroupLayer'
 import type MapView from '@arcgis/core/views/MapView'
 import type SceneView from '@arcgis/core/views/SceneView'
 
@@ -46,7 +45,7 @@ export interface RemoveRecordContext {
 
   // Map references
   mapView: MapView | SceneView
-  graphicsLayer: GraphicsLayer | GroupLayer
+  graphicsLayer: GraphicsLayer
 
   // Accumulated records
   accumulatedRecords: FeatureDataRecord[]

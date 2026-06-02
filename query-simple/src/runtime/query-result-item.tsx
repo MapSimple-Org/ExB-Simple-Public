@@ -12,7 +12,9 @@ import {
 // r024.41: Removed Button, Tooltip, Popper, Icon - replaced with plain HTML to avoid Calcite overhead
 import FeatureInfo from './components/feature-info'
 import { ListDirection } from '../config'
-import { createQuerySimpleDebugLogger, substituteTokens, substituteLegacyTokens, convertTemplateToHtml } from 'widgets/shared-code/mapsimple-common'
+import { createQuerySimpleDebugLogger, substituteTokens, substituteLegacyTokens, convertTemplateToHtml, widgetConfigManager } from 'widgets/shared-code/mapsimple-common'
+import { renderPopupContent } from './popup-render-utils'
+import { buildFieldMetaMap } from './value-formatter'
 import defaultMessages from './translations/default'
 import { hooks } from 'jimu-core'
 import Graphic from '@arcgis/core/Graphic'
@@ -238,7 +240,7 @@ export interface ResultItemProps {
   defaultPopupTemplate: any
   data: FeatureDataRecord
   dataSource: DataSource
-  hoverPinColor?: string // r022.106: Configurable hover pin color
+  // r028.055: hoverPinColor removed from props, now read from widgetConfigManager singleton
   expandByDefault: boolean
   onClick: (record: FeatureDataRecord) => void
   onRemove: (record: FeatureDataRecord) => void
@@ -246,14 +248,22 @@ export interface ResultItemProps {
   onZoomTo?: (record: FeatureDataRecord) => void
   /** r026.009: Pan to single record (center without zoom). */
   onPanTo?: (record: FeatureDataRecord) => void
-  /** r024.46: When true, clicking a result already zooms, so zoom button is redundant */
-  zoomOnResultClick?: boolean
-  /** r026.009: When true, clicking a result pans without zoom, so pan button is redundant */
-  panOnResultClick?: boolean
+  // r028.056: zoomOnResultClick and panOnResultClick removed from props, now read from widgetConfigManager singleton
   /** r026.002: When true, render using our own {{field}} substitution + markdown instead of Esri Feature widget */
   isCustomTemplate?: boolean
   /** r026.005: Raw template string for card rendering (stored in cache, not on popupTemplate) */
   rawTemplate?: string
+  /** r028.111: When true, render the SelectAttributes field table through our shared
+   *  renderer (renderPopupContent) instead of Esri FeatureInfo, so the card matches
+   *  the on-map popup (aliases, formatted dates/numbers, coded domains, both brace
+   *  styles in the title). PopupSetting/web-map popups stay on FeatureInfo. */
+  isSelectAttributes?: boolean
+  /** r028.117 (Phase 2.1): per-field alias overrides (fieldName -> label) for the
+   *  reconstructed SelectAttributes queryConfig. Without this the card loses the
+   *  admin label overrides the on-map popup gets from the real query config. */
+  resultFieldAliases?: { [fieldName: string]: string }
+  /** r028.033: Factory-format composite key for map-to-card identification (matches COMPOSITE_KEY on FeatureLayer graphics) */
+  factoryCompositeKey?: string
   // r022.106: Hover preview props
   mapView?: MapView | SceneView
   // r022.106: Hover pins live on mapView.graphics (always renders on top of
@@ -271,6 +281,8 @@ const style = css`
   min-height: 2rem;
   position: relative;
   transition: background-color 0.15s ease-in-out;
+  /* r028.036: Breathing room when scrollIntoView({ block: 'start' }) pins this card to the top */
+  &[data-composite-key] { scroll-margin-top: 4px; }
   
   /* r023.34: When expanded, stacked action icons (64px) + content need more height */
   &.result-item-expanded {
@@ -288,7 +300,18 @@ const style = css`
   &:hover {
     background-color: rgba(204, 0, 255, 0.08);  /* Neon purple tint */
   }
-  
+
+  /* r028.033: Map-to-card flash when popup opens for this feature on the map */
+  &.map-identified-flash {
+    animation: mapIdentifiedFlash 1.2s ease-in-out;
+  }
+  @keyframes mapIdentifiedFlash {
+    0% { background-color: transparent; }
+    15% { background-color: rgba(204, 0, 255, 0.14); }
+    50% { background-color: rgba(204, 0, 255, 0.14); }
+    100% { background-color: transparent; }
+  }
+
   .result-actions-menu {
     position: absolute;
     top: 4px;
@@ -365,7 +388,7 @@ function hexToRgb(hex: string, alpha: number = 230): [number, number, number, nu
 }
 
 export const QueryResultItem = (props: ResultItemProps) => {
-  const { widgetId, data, dataSource, popupTemplate, defaultPopupTemplate, onClick, onRemove, onZoomTo, onPanTo, zoomOnResultClick, panOnResultClick, isCustomTemplate, rawTemplate, expandByDefault = false, mapView, hoverPinColor } = props
+  const { widgetId, data, dataSource, popupTemplate, defaultPopupTemplate, onClick, onRemove, onZoomTo, onPanTo, isCustomTemplate, rawTemplate, isSelectAttributes, resultFieldAliases, expandByDefault = false, factoryCompositeKey, mapView } = props
   const getI18nMessage = hooks.useTranslation(defaultMessages)
   const [menuOpen, setMenuOpen] = React.useState(false)
   const [menuDropUp, setMenuDropUp] = React.useState(false)
@@ -391,6 +414,25 @@ export const QueryResultItem = (props: ResultItemProps) => {
   const hoverTimeoutRef = React.useRef<number | null>(null)
   const animationRef = React.useRef<number | null>(null) // r022.108: Spring animation ID
   
+  // r028.052: Migrated from Redux selector to WidgetConfigManager singleton (Step 4)
+  const resultListDirection = widgetConfigManager.getResultListDirection(widgetId)
+  const isVerticalAlign = resultListDirection !== ListDirection.Horizontal
+  // r028.055: Migrated from prop-drilling to WidgetConfigManager singleton (Step 9)
+  const hoverPinColor = widgetConfigManager.getHoverPinColor(widgetId)
+  // r028.056: Migrated from prop-drilling to WidgetConfigManager singleton (Steps 7-8)
+  const zoomOnResultClick = widgetConfigManager.getZoomOnResultClick(widgetId)
+  const panOnResultClick = widgetConfigManager.getPanOnResultClick(widgetId)
+  debugLogger.log('SETTINGS', {
+    event: 'singletonConfigRead',
+    source: 'query-result-item',
+    widgetId,
+    resultListDirection,
+    isVerticalAlign,
+    hoverPinColor,
+    zoomOnResultClick,
+    panOnResultClick
+  })
+
   // r024.25: Memoized CIM symbol data to avoid creating new objects on every hover/animation frame
   // The symbol data is created ONCE when color changes, not on every hover
   const memoizedSymbolData = React.useMemo(() => {
@@ -403,11 +445,11 @@ export const QueryResultItem = (props: ResultItemProps) => {
     ]
     return createCIMPinSymbolData(baseColor, lighterColor)
   }, [hoverPinColor])
-  
+
   // r024.25: Ref to hold the live symbol data during animation (mutable)
   // This allows us to update anchorPoint without cloning the entire structure
   const symbolDataRef = React.useRef<ReturnType<typeof createCIMPinSymbolData> | null>(null)
-  
+
   // Log when QueryResultItem renders
   React.useEffect(() => {
     debugLogger.log('EXPAND-COLLAPSE', {
@@ -417,18 +459,12 @@ export const QueryResultItem = (props: ResultItemProps) => {
       timestamp: Date.now()
     })
   }, [recordId, expandByDefault])
-  
+
   // Check if this record is currently selected
   const selected = ReactRedux.useSelector((state: IMState) =>
     // r027.000: ExB 1.20 — coerce getId() to string (now returns string | number)
     state.dataSourcesInfo?.[dataSource.id]?.selectedIds?.includes(String(data.getId()))
   )
-
-  // Determine if list is displayed vertically (affects FeatureInfo expandability)
-  const isVerticalAlign = ReactRedux.useSelector((state: IMState) => {
-    const widgetJson = state.appConfig.widgets[widgetId]
-    return widgetJson.config.resultListDirection !== ListDirection.Horizontal
-  })
 
   /**
    * Handle clicking on the result item.
@@ -609,7 +645,9 @@ export const QueryResultItem = (props: ResultItemProps) => {
           
           hoverGraphicRef.current = new Graphic({
             geometry: labelPoint,
-            symbol: cimSymbol as any
+            symbol: cimSymbol as any,
+            // r028.045: Tag for bulk hide on pointerleave/scroll
+            attributes: { __hoverPin: true, __widgetId: widgetId }
           })
           // r027.091: Add to mapView.graphics (map-level overlay, always
           // renders on top of all layers). Scoped cleanup on unmount removes
@@ -794,6 +832,7 @@ export const QueryResultItem = (props: ResultItemProps) => {
   return (
     <div
       className={classNames('query-result-item', { selected, 'result-item-expanded': isExpanded || !isVerticalAlign })}
+      data-composite-key={factoryCompositeKey}
       onClick={handleClickResultItem}
       onKeyUp={onKeyUp}
       onMouseEnter={handleMouseEnter}
@@ -804,8 +843,10 @@ export const QueryResultItem = (props: ResultItemProps) => {
       tabIndex={0}
     >
       {/* r026.002: CustomTemplate mode — our own {{field}} substitution + markdown rendering.
-          Bypasses Esri Feature widget but matches FeatureInfo's DOM structure exactly. */}
-      {isCustomTemplate && rawTemplate ? (
+          r028.111: SelectAttributes mode also renders here (via renderPopupContent), so the
+          card matches the on-map popup. Both bypass the Esri Feature widget but reuse its
+          DOM structure/styling. PopupSetting (web-map popups) still falls through to FeatureInfo. */}
+      {(isCustomTemplate && rawTemplate) || isSelectAttributes ? (
         <div
           className={classNames('feature-info-component d-flex align-items-center', { 'feature-info-expanded': isExpanded })}
           style={{ padding: '3px 4px' }}
@@ -869,13 +910,40 @@ export const QueryResultItem = (props: ResultItemProps) => {
           )}
           <div className='flex-grow-1' dangerouslySetInnerHTML={{ __html: (() => {
             const attributes = data.feature?.attributes || {}
-            let substituted = substituteTokens(rawTemplate, attributes)
-            substituted = substituteLegacyTokens(substituted, attributes)
-            const html = convertTemplateToHtml(substituted)
+            let title: string
+            let html: string
+
+            if (isSelectAttributes) {
+              // r028.111: Render the field table through the SAME shared function and the
+              // SAME branch the on-map popup uses (SelectAttributes → renderFieldTableHtml),
+              // so card == popup: alias labels, formatted dates/numbers, decoded domains.
+              // The display field list is reconstructed from the popupTemplate's fieldInfos
+              // (getPopupTemplate built those from the query item's resultDisplayFields).
+              // fieldMeta (alias/type/domain) comes from the record's source layer schema.
+              const fieldMeta = buildFieldMetaMap((data.feature as any)?.layer?.fields)
+              const displayFields = ((popupTemplate?.fieldInfos as any[]) || [])
+                .map(fi => fi?.fieldName)
+                .filter(Boolean)
+              const queryConfig = {
+                resultFieldsType: 'SelectAttributes',
+                resultDisplayFields: displayFields,
+                resultTitleExpression: popupTemplate?.title || '',
+                resultFieldAliases // r028.117 (Phase 2.1): admin label overrides
+              }
+              const result = renderPopupContent(attributes, queryConfig, undefined, fieldMeta)
+              title = result.title
+              html = result.contentHtml
+            } else {
+              // CustomTemplate mode (r026.002): {{field}} substitution + markdown.
+              let substituted = substituteTokens(rawTemplate, attributes)
+              substituted = substituteLegacyTokens(substituted, attributes)
+              html = convertTemplateToHtml(substituted)
+              const titleTemplate = popupTemplate.title || ''
+              title = substituteTokens(titleTemplate, attributes)
+              title = substituteLegacyTokens(title, attributes)
+            }
+
             // Match Esri Feature widget DOM: title heading + text content
-            const titleTemplate = popupTemplate.title || ''
-            let title = substituteTokens(titleTemplate, attributes)
-            title = substituteLegacyTokens(title, attributes)
             const titleHtml = title ? `<div class="esri-widget__heading">${title}</div>` : ''
             const contentHtml = isExpanded || !isVerticalAlign ? `<div class="esri-feature__text">${html}</div>` : ''
             return `${titleHtml}${contentHtml}`

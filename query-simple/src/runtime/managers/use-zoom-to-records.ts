@@ -13,7 +13,9 @@ import type { FeatureDataRecord } from 'jimu-core'
 import type MapView from '@arcgis/core/views/MapView'
 import type SceneView from '@arcgis/core/views/SceneView'
 import { zoomToRecords, panToRecords, type ZoomToRecordsOptions } from '../zoom-utils'
-import { widgetConfigManager } from 'widgets/shared-code/mapsimple-common'
+import { createQuerySimpleDebugLogger, widgetConfigManager } from 'widgets/shared-code/mapsimple-common'
+
+const debugLogger = createQuerySimpleDebugLogger()
 
 /**
  * Returns a function that zooms the map to the given records.
@@ -43,6 +45,14 @@ export function useZoomToRecords(
     if (widgetId && mergedOptions.expansionFactor === undefined) {
       mergedOptions.expansionFactor = widgetConfigManager.getZoomExpansionFactor(widgetId)
     }
+    // r028.060: SETTINGS log for zoom config
+    debugLogger.log('SETTINGS', {
+      event: 'singletonConfigRead',
+      source: 'use-zoom-to-records',
+      widgetId,
+      pointZoomBufferFeet: mergedOptions.zeroAreaBufferFeet,
+      zoomExpansionFactor: mergedOptions.expansionFactor
+    })
     await zoomToRecords(mapView, records, mergedOptions)
   }, [mapView, widgetId])
 }

@@ -44,6 +44,13 @@ export function combineFields (resultDisplayFields: ImmutableArray<string>, resu
   // r023.18: Extract fields from Custom Template content expression
   if (resultContentExpression) {
     extractFieldTokens(resultContentExpression).forEach(f => fields.add(f))
+    // r028.106: extractFieldTokens / RE_EXTRACT_TOKEN match only {{field}}. Legacy
+    // single-brace {field} content tokens were never requested, so CustomTemplate
+    // configs authored with {field} under-fetched (only the title field + objectId),
+    // breaking result-card images/values. Pull them too, mirroring the legacy title
+    // pass above; the lookbehind/lookahead skip the inner braces of a {{field}} token.
+    resultContentExpression.match(/(?<!\{)\{(\w+)\}(?!\})/g)
+      ?.forEach(t => fields.add(t.slice(1, -1)))
   }
   if (idField) {
     fields.add(idField)
@@ -88,17 +95,44 @@ export function resolvePopupOutFields (
 ): string[] {
   const objectIdField = featureLayer.objectIdField
 
+  // r028.041: Diagnostic — test ExB's built-in getPopupInfoFields() to see
+  // if it returns useful field names. This does NOT change the resolution
+  // logic; it only logs what the method returns for evaluation.
+  const originDS = ds.getOriginDataSources?.()?.[0] as FeatureLayerDataSource
+  const builtInFields = (ds as any).getPopupInfoFields?.() || []
+  const originBuiltInFields = (originDS as any)?.getPopupInfoFields?.() || []
+  debugLogger.log('QUERY', {
+    event: 'resolvePopupOutFields-P5-probe',
+    outputDS_getPopupInfoFields: builtInFields,
+    outputDS_getPopupInfoFieldsCount: builtInFields.length,
+    originDS_getPopupInfoFields: originBuiltInFields,
+    originDS_getPopupInfoFieldsCount: originBuiltInFields.length,
+    outputDS_hasGetPopupInfoFields: typeof (ds as any).getPopupInfoFields === 'function',
+    originDS_hasGetPopupInfoFields: typeof (originDS as any)?.getPopupInfoFields === 'function',
+    featureLayerFieldCount: featureLayer.fields?.length,
+    featureLayerTitle: featureLayer.title
+  })
+
   // r025.065: Use DIRECT popupInfo only for outFields resolution — not inherited.
   // Inherited GL popup may restrict fields for popup display; outFields needs
   // all available fields so table view and exports have full data.
   const popupInfo = ds.getPopupInfo?.() ||
-    (ds.getOriginDataSources?.()?.[0] as FeatureLayerDataSource)?.getPopupInfo?.()
+    (originDS as FeatureLayerDataSource)?.getPopupInfo?.()
 
   if (popupInfo?.fieldInfos) {
     const layerFieldNames = featureLayer.fields.map(f => f.name)
+    // r028.039: Use visible === true (strict), not visible !== false.
     const visibleFields = popupInfo.fieldInfos
-      .filter(fi => fi.visible !== false && layerFieldNames.includes(fi.fieldName))
+      .filter(fi => fi.visible === true && layerFieldNames.includes(fi.fieldName))
       .map(fi => fi.fieldName)
+
+    debugLogger.log('QUERY', {
+      event: 'resolvePopupOutFields-fieldInfos',
+      fieldInfosCount: popupInfo.fieldInfos.length,
+      visibleCount: visibleFields.length,
+      visibleFields,
+      sampleVisibleValues: popupInfo.fieldInfos.slice(0, 3).map((fi: any) => ({ name: fi.fieldName, visible: fi.visible }))
+    })
 
     if (visibleFields.length > 0) {
       if (objectIdField && !visibleFields.includes(objectIdField)) {
@@ -108,12 +142,96 @@ export function resolvePopupOutFields (
     }
   }
 
-  // Fallback: all layer fields (explicit names, not '*')
+  // r028.037-038: Parse text content for {FIELD} tokens from both
+  // the DS popupInfo and the JSAPI featureLayer.popupTemplate.
+  const tokenFields = extractPopupTextFields(popupInfo, featureLayer)
+
+  debugLogger.log('QUERY', {
+    event: 'resolvePopupOutFields-tokenParse',
+    hasPopupInfo: !!popupInfo,
+    hasPopupTemplate: !!featureLayer.popupTemplate,
+    popupTemplateTitle: typeof featureLayer.popupTemplate?.title === 'string' ? featureLayer.popupTemplate.title : typeof featureLayer.popupTemplate?.title,
+    popupTemplateContentType: Array.isArray(featureLayer.popupTemplate?.content)
+      ? featureLayer.popupTemplate.content.map((c: any) => c?.type)
+      : typeof featureLayer.popupTemplate?.content,
+    tokenFieldsFound: tokenFields
+  })
+
+  if (tokenFields.length > 0) {
+    if (objectIdField && !tokenFields.includes(objectIdField)) {
+      tokenFields.push(objectIdField)
+    }
+    return tokenFields
+  }
+
+  // Final fallback: all layer fields (explicit names, not '*')
   const allFields = featureLayer.fields.map(f => f.name)
   if (objectIdField && !allFields.includes(objectIdField)) {
     allFields.push(objectIdField)
   }
+  debugLogger.log('QUERY', {
+    event: 'resolvePopupOutFields-fallback-all-fields',
+    allFieldsCount: allFields.length
+  })
   return allFields
+}
+
+/**
+ * r028.037: Extract field names referenced as {FIELD} tokens in popup text.
+ * r028.038: Checks both the ExB DataSource popupInfo AND the JSAPI
+ * featureLayer.popupTemplate. The text content (title, description,
+ * popupElements/content) often lives on the layer's popupTemplate
+ * rather than on the DataSource's popupInfo.
+ * Only returns fields that actually exist on the layer.
+ */
+function extractPopupTextFields (
+  popupInfo: any,
+  featureLayer: FeatureLayer
+): string[] {
+  const fields = new Set<string>()
+  const layerFieldNames = new Set(featureLayer.fields.map(f => f.name))
+
+  // Collect all text that might contain {FIELD} tokens from both sources
+  const textSources: string[] = []
+
+  // Source 1: ExB DataSource popupInfo
+  if (popupInfo) {
+    if (popupInfo.title) textSources.push(popupInfo.title)
+    if (popupInfo.description) textSources.push(popupInfo.description)
+    for (const el of (popupInfo.popupElements || [])) {
+      if (el?.type === 'text' && el?.text) textSources.push(el.text)
+    }
+  }
+
+  // Source 2: JSAPI featureLayer.popupTemplate (loaded from web map service)
+  const pt = featureLayer.popupTemplate
+  if (pt) {
+    if (typeof pt.title === 'string') textSources.push(pt.title)
+    const content = pt.content
+    if (typeof content === 'string') {
+      textSources.push(content)
+    } else if (Array.isArray(content)) {
+      for (const item of content) {
+        if (item?.type === 'text' && (item as any)?.text) textSources.push((item as any).text)
+      }
+    }
+  }
+
+  // Parse {FIELD} tokens (Esri's native syntax) from all text sources
+  for (const text of textSources) {
+    // Match {FIELD_NAME} but not {{FIELD_NAME}} (double-brace is our custom syntax)
+    const matches = text.match(/(?<!\{)\{(\w+)\}(?!\})/g)
+    if (matches) {
+      for (const token of matches) {
+        const fieldName = token.substring(1, token.length - 1)
+        if (layerFieldNames.has(fieldName)) {
+          fields.add(fieldName)
+        }
+      }
+    }
+  }
+
+  return Array.from(fields)
 }
 
 /**
@@ -291,7 +409,14 @@ export async function getPopupTemplate (
             type: 'fields'
           }],
           title: resultTitleExpression
-        }
+        },
+        // r028.111: Card renders this fieldInfos template through our shared
+        // renderer (matches the on-map popup) instead of Esri FeatureInfo.
+        isSelectAttributes: true,
+        // r028.117 (Phase 2.1): carry the per-field alias map so the card renderer
+        // can apply admin label overrides (the card reconstructs a minimal
+        // queryConfig and would otherwise lose them).
+        resultFieldAliases: queryItem.resultFieldAliases
       } as any
     }
     return {
@@ -304,8 +429,10 @@ export async function getPopupTemplate (
           type: 'fields'
         }],
         title: resultTitleExpression
-      } as any
-    }
+      },
+      isSelectAttributes: true,
+      resultFieldAliases: queryItem.resultFieldAliases // r028.117 (Phase 2.1)
+    } as any
   }
   // r026.005: Custom Template mode — use CustomContent (same pattern as FeedSimple).
   // Esri calls our creator() per feature; we run substituteTokens → convertTemplateToHtml

@@ -32,7 +32,6 @@ import { clearSelectionInDataSources, dispatchSelectionEvent } from './selection
 import { createQuerySimpleDebugLogger } from 'widgets/shared-code/mapsimple-common'
 import type { EventManager } from './managers/event-manager'
 import type GraphicsLayer from '@arcgis/core/layers/GraphicsLayer'
-import type GroupLayer from '@arcgis/core/layers/GroupLayer'
 import type MapView from '@arcgis/core/views/MapView'
 import type SceneView from '@arcgis/core/views/SceneView'
 
@@ -101,7 +100,7 @@ export interface QueryExecutionContext {
   currentItem: QueryItemType
   resultsMode?: SelectionType
   accumulatedRecords?: FeatureDataRecord[]
-  graphicsLayer?: GraphicsLayer | GroupLayer
+  graphicsLayer?: GraphicsLayer
   mapView?: MapView | SceneView
   eventManager?: EventManager
   initialInputValue?: string
@@ -306,7 +305,13 @@ export async function executeQueryInternal (
         records: directResult.records as DataRecord[],
         fields: directResult.fields,
         _directPopupTemplate: directResult.popupTemplate,
-        _directDefaultPopupTemplate: directResult.defaultPopupTemplate
+        _directDefaultPopupTemplate: directResult.defaultPopupTemplate,
+        // r028.114: carry the truncation flag through so the result handler can
+        // tell "exactly N matched" from "N returned, more exist (hit the limit)".
+        _directExceededTransferLimit: directResult.exceededTransferLimit,
+        // r028.122: the true total matching count (when genuinely truncated) so the alert
+        // can show the actual number.
+        _directTrueCount: directResult.trueMatchCount
       }))
     : executeQuery(widgetId, queryItem, featureDS, queryParamRef.current)
   ).catch(error => {
@@ -386,6 +391,34 @@ export async function executeQueryInternal (
       } else {
         // Clear any existing alert when query succeeds
         dispatch({ type: 'SET_NO_RESULTS_ALERT', payload: null })
+      }
+
+      // r028.114: Surface result-set truncation. exceededTransferLimit === true
+      // means the service returned its max transfer count and MORE records match
+      // than were returned — the user is seeing a partial set. Distinct from a
+      // query that simply has exactly `recordLimit` matches (flag false).
+      const exceededTransferLimit = (result as any)._directExceededTransferLimit === true
+      if (exceededTransferLimit) {
+        // r028.122: form path verified the true total via count-only (exact — single where
+        // query, so never a lower bound).
+        const totalMatchCount = (result as any)._directTrueCount as number | undefined
+        dispatch({ type: 'SET_TRUNCATION_ALERT', payload: {
+          show: true,
+          recordLimit: queryResultCount, // returned (shown) count
+          totalMatchCount,
+          totalMatchCountIsLowerBound: false,
+          timestamp: Date.now()
+        } })
+        debugLogger.log('RESULTS-MODE', {
+          event: 'truncation-alert-triggered',
+          widgetId,
+          resultsMode,
+          recordLimit: queryResultCount,
+          totalMatchCount: totalMatchCount ?? null,
+          timestamp: Date.now()
+        })
+      } else {
+        dispatch({ type: 'SET_TRUNCATION_ALERT', payload: null })
       }
 
       let recordsToDisplay = result.records || []
@@ -469,17 +502,16 @@ export async function executeQueryInternal (
               dispatch({ type: 'SET_ALL_DUPLICATES_ALERT', payload: null })
             }
 
-            // Update widget-level accumulated records so they persist across query switches
-            if (onAccumulatedRecordsChange) {
-              onAccumulatedRecordsChange(mergedRecords)
-            }
-
             // r021.87: Store queryConfigId directly on record when added - no map needed
             currentQueryRecordIdsRef.current = addedIds
 
             // r023.30: Get origin DS ID for cross-layer removal support
             const originDSId = featureDS.getOriginDataSources()?.[0]?.id || featureDS.id
 
+            // r028.046: Stamp BEFORE onAccumulatedRecordsChange so that
+            // syncResultFeatureLayers sees __queryConfigId when building
+            // composite keys. Previously stamped after the callback, causing
+            // empty configId in keys for newly-added records.
             // r027.068: Cast to FeatureDataRecord[] for .feature access. result.records
             // is typed DataRecord[] (the direct-query path at line 305 widens the cast),
             // but at runtime both paths return FeatureDataRecord[]. Same cast pattern
@@ -506,6 +538,11 @@ export async function executeQueryInternal (
                 })
               }
             })
+
+            // Update widget-level accumulated records so they persist across query switches
+            if (onAccumulatedRecordsChange) {
+              onAccumulatedRecordsChange(mergedRecords)
+            }
           } catch (error) {
             debugLogger.log('RESULTS-MODE', {
               event: 'add-mode-error',
@@ -727,18 +764,10 @@ export async function executeQueryInternal (
         // FIX (r018.97): For "New" mode, populate accumulatedRecords with query results
         // This ensures tab count updates correctly when records are removed in New mode
         if (onAccumulatedRecordsChange && recordsToDisplay && recordsToDisplay.length > 0) {
-          onAccumulatedRecordsChange(recordsToDisplay as FeatureDataRecord[])
-          debugLogger.log('RESULTS-MODE', {
-            event: 'new-mode-populating-accumulated-records',
-            widgetId,
-            recordsCount: recordsToDisplay.length,
-            note: 'r018.97: Populate accumulatedRecords in New mode for universal tab count',
-            timestamp: Date.now()
-          })
-
           // r021.87: In NEW mode, stamp queryConfigId on all records
           // r023.30: Also stamp originDSId for cross-layer removal support
           // r027.000: ExB 1.20 — coerce getId() to string (now returns string | number)
+          // r028.046: Stamp BEFORE onAccumulatedRecordsChange (same fix as Add mode)
           currentQueryRecordIdsRef.current = (recordsToDisplay as FeatureDataRecord[]).map(r => String(r.getId()));
           const originDSIdForNew = featureDS.getOriginDataSources()?.[0]?.id || featureDS.id
 
@@ -747,6 +776,15 @@ export async function executeQueryInternal (
               record.feature.attributes.__queryConfigId = queryItem.configId
               record.feature.attributes.__originDSId = originDSIdForNew
             }
+          })
+
+          onAccumulatedRecordsChange(recordsToDisplay as FeatureDataRecord[])
+          debugLogger.log('RESULTS-MODE', {
+            event: 'new-mode-populating-accumulated-records',
+            widgetId,
+            recordsCount: recordsToDisplay.length,
+            note: 'r018.97: Populate accumulatedRecords in New mode for universal tab count',
+            timestamp: Date.now()
           })
         } else if (onAccumulatedRecordsChange) {
           // No results - clear accumulatedRecords

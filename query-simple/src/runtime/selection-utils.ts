@@ -12,10 +12,8 @@ import { MessageManager, DataRecordsSelectionChangeMessage, DataSourceManager, D
 import { addHighlightGraphics as addGraphicsLayerGraphics, clearGraphicsLayerOrGroupLayer, createOrGetGraphicsLayer, cleanupGraphicsLayer, cleanupAnyResultLayer, clearAnyResultLayerContents } from './graphics-layer-utils'
 import { createQuerySimpleDebugLogger } from 'widgets/shared-code/mapsimple-common'
 import { clearDataSFromHash } from './hash-utils'
-import { clearSelectOnMapHighlight } from '../data-actions/add-to-map-action'
 import type { EventManager } from './managers/event-manager'
 import type GraphicsLayer from '@arcgis/core/layers/GraphicsLayer'
-import type GroupLayer from '@arcgis/core/layers/GroupLayer'
 import type MapView from '@arcgis/core/views/MapView'
 import type SceneView from '@arcgis/core/views/SceneView'
 
@@ -111,7 +109,7 @@ export async function selectRecordsInDataSources(
   recordIds: string[],
   records?: FeatureDataRecord[],
   useGraphicsLayer: boolean = false,
-  graphicsLayer?: GraphicsLayer | GroupLayer,
+  graphicsLayer?: GraphicsLayer,
   mapView?: MapView | SceneView,
   skipOriginDSSelection: boolean = false
 ): Promise<void> {
@@ -245,7 +243,7 @@ export async function clearSelectionInDataSources (
   widgetId: string,
   outputDS: DataSource | null | undefined,
   useGraphicsLayer: boolean = false,
-  graphicsLayer?: GraphicsLayer | GroupLayer
+  graphicsLayer?: GraphicsLayer
 ): Promise<void> {
   // Clear graphics layer if using graphics layer mode
   if (useGraphicsLayer && graphicsLayer) {
@@ -281,7 +279,7 @@ export async function clearAllSelectionsForWidget(options: {
   widgetId: string
   outputDS: DataSource | null | undefined
   useGraphicsLayer: boolean
-  graphicsLayer?: GraphicsLayer | GroupLayer
+  graphicsLayer?: GraphicsLayer
   mapView?: MapView | SceneView
   eventManager?: EventManager
   queryItemConfigId?: string
@@ -365,7 +363,6 @@ export async function clearAllSelectionsForWidget(options: {
           event: 'clearAllSelectionsForWidget-layer-cleanup',
           widgetId,
           clearedGraphicsLayer: cleanupResult.clearedGraphicsLayer,
-          clearedGroupLayer: cleanupResult.clearedGroupLayer,
           graphicsLayerRefWasTruthy: !!graphicsLayer,
           timestamp: Date.now()
         })
@@ -378,9 +375,6 @@ export async function clearAllSelectionsForWidget(options: {
         })
       }
     }
-
-    // r027.096: Clear any direct highlight from Select on Map
-    clearSelectOnMapHighlight()
 
     // Close popup
     if (mapView?.popup?.visible) {
@@ -505,7 +499,7 @@ export async function selectRecordsAndPublish(
   records: FeatureDataRecord[],
   alsoPublishToOutputDS: boolean = false,
   useGraphicsLayer: boolean = false,
-  graphicsLayer?: GraphicsLayer | GroupLayer,
+  graphicsLayer?: GraphicsLayer,
   mapView?: MapView | SceneView,
   skipOriginDSSelection: boolean = false
 ): Promise<void> {
