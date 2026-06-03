@@ -23,14 +23,14 @@ QuerySimple is designed to solve the common pain points of the standard Experien
 
 The r028 line is built on one change: query results now live in real client-side FeatureLayers. That single shift unlocks native map popups, map-to-card identify, and a unified renderer shared by the result card and the popup. It runs on the same Experience Builder 1.20 / JSAPI 5.0.4 stack as r027 (no framework version change).
 
-### Native Map Popups & Map-to-Card Identify
+### Native Map Identify (Results Become Real Features)
 
-Query results are stored as real features in per-geometry-type FeatureLayers instead of plain graphics. That is what powers the rest of this release:
+Visually, nothing changes. Functionally, everything does. Query results used to be plain graphics drawn on the map: a colored shape and nothing more. In r028 they are stored as real features in client-side FeatureLayers, so they behave like any other layer instead of inert decoration.
 
-- **Native popups & identify** on result features, using the configured template — no custom click plumbing
-- **Map-to-card flash**: clicking a result feature on the map scrolls its result card into view and flashes it, so map and list stay in sync. New `flashOnMapIdentify` setting (default on) toggles it; the option appears only when FeatureLayer results are enabled.
-- **Native legend & LayerList** participation for result layers
-- **Leaner memory**: a slim popup registry keeps only the attributes and template it needs, and PopupSetting queries fetch only the fields the popup references. Polygon-heavy datasets shed megabytes of retained geometry.
+- **Click to identify.** Click any result on the map and its popup opens, using the configured template. The old graphics could not be clicked; these respond.
+- **Map-to-card flash.** Clicking a result on the map scrolls its card into view and flashes it, keeping the map and the list in sync. New `flashOnMapIdentify` setting (default on) toggles it.
+- **Native legend and LayerList.** Result layers appear and behave like real layers.
+- **Leaner memory.** A slim popup registry and popup-only field fetching shed retained geometry on polygon-heavy datasets.
 
 ### Unified Field-Table Renderer (Card == Popup)
 
@@ -39,21 +39,26 @@ The result card, the map-feature popup, and the card-click popup now render thro
 - **Per-field display labels**: rename any field for SelectAttributes mode in settings without touching the underlying schema. Labels survive a layer rebind.
 - **Title fixes**: double-brace `{{Field}}` titles render correctly on the card (they used to collapse to a stray `}`), and single- and double-brace token styles resolve identically.
 
+### Spatial Mixed-Geometry Fix (re-run affected queries)
+
+Before r028, an un-buffered spatial query with mixed input shapes (for example a polygon and a line) kept only the highest-dimension shape and silently dropped the rest, while the source indicator listed both shapes as if both were used. Results were incomplete with no warning. Buffered queries were unaffected, since the buffer unions every shape into one polygon first. r028 queries every input shape and de-dupes the matches. If you relied on un-buffered mixed-geometry spatial queries, re-run them: earlier results may have been short.
+
 ### Spatial Tab Overhaul
 
-- **Mixed-geometry queries**: a spatial query with mixed input shapes (e.g. a drawn polygon plus a line) now queries every shape and combines and de-dupes the matches, instead of silently keeping only the highest-dimension shape.
 - **Drawn shapes persist** across Draw and Operations mode switches — no more vanished line with a phantom buffer left behind.
 - **"Also include current results"**: a Draw-mode opt-in that folds the current result set into the draw input, so a drawn shape and already-selected results buffer and query together. Appears once a shape is drawn and results exist; default off.
 - **Deterministic target-layer labels**: the Target-layers picker shows the admin-configured label, not whatever the live service happens to advertise.
 - **Single-select relationship hardening**: the relationship dropdown can no longer desync into a multi-selected state.
 
-### Result-Set Truncation Alert
+### Know When Results Are Capped
 
-Queries fetch up to the layer's max transfer count (commonly 1000/2000). A query that hit that cap used to look identical to a complete one.
+Feature services return up to a maximum record count per query (often 1000 or 2000). Until now, a query that hit that ceiling looked identical to one that returned everything, so you could be missing records and never know.
 
-- **Amber warning popover** on the Results panel when a query is truncated, following the same pattern as the no-results and query-error alerts
-- **Names the real total**: when the service flags truncation, a cheap count-only query reports the actual number of matching records ("matched N records but only M are shown"), not just the limit
-- **Guards against false alarms**: some older ArcGIS Server layers flag truncation on multipart query geometries even when nothing was dropped; the count check suppresses the alert in that case
+- **Amber notice on the results panel** when a query is truncated.
+- **Names the real total.** A lightweight count-only query reports the actual number of matching records ("matched N, showing M"), so you know exactly how much you are not seeing.
+- **No false alarms.** Some older ArcGIS Server layers flag truncation on multipart query geometries even when nothing was dropped; the count check suppresses the notice in that case.
+
+Knowing the true total is also the foundation for fetching beyond the first page in a future release.
 
 ### Internal Architecture
 
