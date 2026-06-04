@@ -530,6 +530,15 @@ export default class Setting extends React.PureComponent<AllWidgetSettingProps<I
         )}
         {this.props.config.queryItems.length > 0 && (
           <SettingSection role='group' aria-label={this.getI18nMessage('hoverPinColor')} title={this.getI18nMessage('hoverPinColor')}>
+            <SettingRow label={this.getI18nMessage('showHoverPin')}>
+              <Switch
+                checked={config.hoverPinEnabled !== false}
+                onChange={(e) => {
+                  this.updateConfigForOptions(['hoverPinEnabled', e.target.checked])
+                }}
+                aria-label={this.getI18nMessage('showHoverPin')}
+              />
+            </SettingRow>
             <SettingRow label={this.getI18nMessage('pinColor')} flow='wrap'>
               <ThemeColorPicker
                 specificTheme={this.props.theme2}
@@ -541,6 +550,31 @@ export default class Setting extends React.PureComponent<AllWidgetSettingProps<I
             </SettingRow>
             <div css={css`font-size: 0.875rem; margin-top: 4px; padding: 0 16px 8px; opacity: 0.8;`}>
               {this.getI18nMessage('hoverPinColorDescription')}
+            </div>
+          </SettingSection>
+        )}
+        {this.props.config.queryItems.length > 0 && (
+          <SettingSection role='group' aria-label={this.getI18nMessage('hoverHighlight')} title={this.getI18nMessage('hoverHighlight')}>
+            <SettingRow label={this.getI18nMessage('showHoverHighlight')}>
+              <Switch
+                checked={config.hoverHighlightFeature !== false}
+                onChange={(e) => {
+                  this.updateConfigForOptions(['hoverHighlightFeature', e.target.checked])
+                }}
+                aria-label={this.getI18nMessage('showHoverHighlight')}
+              />
+            </SettingRow>
+            <SettingRow label={this.getI18nMessage('highlightColor')} flow='wrap'>
+              <ThemeColorPicker
+                specificTheme={this.props.theme2}
+                value={config.hoverHighlightColor || '#EA4335'}
+                onChange={(color: string) => {
+                  this.updateConfigForOptions(['hoverHighlightColor', color])
+                }}
+              />
+            </SettingRow>
+            <div css={css`font-size: 0.875rem; margin-top: 4px; padding: 0 16px 8px; opacity: 0.8;`}>
+              {this.getI18nMessage('hoverHighlightColorDescription')}
             </div>
           </SettingSection>
         )}

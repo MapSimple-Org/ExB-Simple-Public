@@ -344,10 +344,10 @@ export function QueryItemSettingMain (props: Props) {
                     </div>
                   </SettingRow>
                 </SettingSection>
-                <SettingSection role='group' aria-label='Search alias' title='Search alias'>
-                  <SettingRow flow='wrap' label='Search alias'>
+                <SettingSection role='group' aria-label='Search by' title='Search by'>
+                  <SettingRow flow='wrap' label='Search by'>
                     <TextInput
-                      aria-label='Search alias'
+                      aria-label='Search by'
                       className='w-100'
                       size='sm'
                       value={searchAliasValue}

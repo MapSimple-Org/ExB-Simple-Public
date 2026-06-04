@@ -26,6 +26,20 @@ type GeometryUnion = any
 
 const debugLogger = createQuerySimpleDebugLogger()
 
+// r028.123/124: Hover feature highlight symbol per geometry type. Color is the configured
+// hover-highlight color (Phase 2 — default #EA4335, matching the pin). Plain symbol JSON.
+function buildHoverHighlightSymbol (geometryType: string, rgb: [number, number, number]): any {
+  switch (geometryType) {
+    case 'polyline':
+      return { type: 'simple-line', color: [...rgb, 1], width: 4 }
+    case 'polygon':
+    case 'extent':
+      return { type: 'simple-fill', color: [...rgb, 0.15], outline: { color: [...rgb, 1], width: 3 } }
+    default: // point, multipoint
+      return { type: 'simple-marker', style: 'circle', color: [...rgb, 0], size: 16, outline: { color: [...rgb, 1], width: 3 } }
+  }
+}
+
 /**
  * r024.25: Factory function to create CIM teardrop pin symbol structure
  * Creates the symbol ONCE and returns the data structure for reuse.
@@ -413,12 +427,20 @@ export const QueryResultItem = (props: ResultItemProps) => {
   const hoverGraphicRef = React.useRef<Graphic | null>(null)
   const hoverTimeoutRef = React.useRef<number | null>(null)
   const animationRef = React.useRef<number | null>(null) // r022.108: Spring animation ID
+  // r028.123: Hover feature highlight graphic (in addition to the pin). One per item;
+  // the item's geometry is constant, so it is created once and toggled visible.
+  const hoverHighlightRef = React.useRef<Graphic | null>(null)
   
   // r028.052: Migrated from Redux selector to WidgetConfigManager singleton (Step 4)
   const resultListDirection = widgetConfigManager.getResultListDirection(widgetId)
   const isVerticalAlign = resultListDirection !== ListDirection.Horizontal
   // r028.055: Migrated from prop-drilling to WidgetConfigManager singleton (Step 9)
   const hoverPinColor = widgetConfigManager.getHoverPinColor(widgetId)
+  // r028.124: Hover feature highlight color (Phase 2), read from the singleton.
+  const hoverHighlightColor = widgetConfigManager.getHoverHighlightColor(widgetId)
+  // r028.125: Hover on/off toggles (Phase 3), default on.
+  const hoverPinEnabled = widgetConfigManager.getHoverPinEnabled(widgetId)
+  const hoverHighlightEnabled = widgetConfigManager.getHoverHighlightFeature(widgetId)
   // r028.056: Migrated from prop-drilling to WidgetConfigManager singleton (Steps 7-8)
   const zoomOnResultClick = widgetConfigManager.getZoomOnResultClick(widgetId)
   const panOnResultClick = widgetConfigManager.getPanOnResultClick(widgetId)
@@ -445,6 +467,12 @@ export const QueryResultItem = (props: ResultItemProps) => {
     ]
     return createCIMPinSymbolData(baseColor, lighterColor)
   }, [hoverPinColor])
+
+  // r028.124: Memoized RGB for the hover feature highlight color (Phase 2).
+  const hoverHighlightRgb = React.useMemo<[number, number, number]>(() => {
+    const [r, g, b] = hexToRgb(hoverHighlightColor || '#EA4335', 255)
+    return [r, g, b]
+  }, [hoverHighlightColor])
 
   // r024.25: Ref to hold the live symbol data during animation (mutable)
   // This allows us to update anchorPoint without cloning the entire structure
@@ -493,7 +521,12 @@ export const QueryResultItem = (props: ResultItemProps) => {
         timestamp: Date.now()
       })
     }
-    
+
+    // r028.123: Hide the hover feature highlight on click (matches the pin)
+    if (hoverHighlightRef.current) {
+      hoverHighlightRef.current.visible = false
+    }
+
     onClick(data)
   }, [onClick, data, recordId])
 
@@ -564,6 +597,21 @@ export const QueryResultItem = (props: ResultItemProps) => {
         }
         hoverGraphicRef.current = null
       }
+
+      // r028.123: Remove the hover feature highlight from mapView.graphics on unmount.
+      if (hoverHighlightRef.current && mapView?.graphics) {
+        try {
+          mapView.graphics.remove(hoverHighlightRef.current)
+        } catch (error) {
+          debugLogger.log('HOVER-PREVIEW', {
+            event: 'hover-highlight-remove-error-on-unmount',
+            recordId,
+            error: error?.toString(),
+            timestamp: Date.now()
+          })
+        }
+        hoverHighlightRef.current = null
+      }
     }
     // r027.091: mapView in deps so cleanup re-binds if view changes.
   }, [mapView, recordId])
@@ -610,7 +658,38 @@ export const QueryResultItem = (props: ResultItemProps) => {
           })
           return
         }
-        
+
+        // r028.125: highlight gated by its on/off toggle (Phase 3, default on).
+        if (hoverHighlightEnabled) {
+          // r028.123: Show the hover feature highlight — the record's full geometry drawn on
+          // mapView.graphics. Added before the pin so the pin renders on top. Created once per
+          // item (geometry is constant); r028.124 re-applies the symbol on reuse so a configured
+          // color change takes effect on the next hover.
+          if (!hoverHighlightRef.current) {
+            hoverHighlightRef.current = new Graphic({
+              geometry,
+              symbol: buildHoverHighlightSymbol(geometry.type, hoverHighlightRgb) as any,
+              attributes: { __hoverHighlight: true, __widgetId: widgetId }
+            })
+            mapView.graphics.add(hoverHighlightRef.current)
+            debugLogger.log('HOVER-PREVIEW', {
+              event: 'hover-highlight-created',
+              recordId,
+              geometryType: geometry.type,
+              timestamp: Date.now()
+            })
+          } else {
+            hoverHighlightRef.current.symbol = buildHoverHighlightSymbol(geometry.type, hoverHighlightRgb) as any
+            hoverHighlightRef.current.visible = true
+          }
+        }
+
+        // r028.125: pin gated by its on/off toggle (Phase 3, default on). When off, skip the
+        // pin section below; the highlight (if enabled) was already handled above.
+        if (!hoverPinEnabled) {
+          return
+        }
+
         // Calculate label point (same as popup logic)
         // r027.076: labelPointOperator.execute() typed `geometry: GeometryUnion`
         // in JSAPI 5.0; data.getJSAPIGeometry() returns the broader Geometry
@@ -798,7 +877,7 @@ export const QueryResultItem = (props: ResultItemProps) => {
       }
     }, 100) // 100ms debounce
     // r027.091: mapView.graphics is always available when mapView is.
-  }, [mapView, data, recordId, hoverPinColor, memoizedSymbolData])
+  }, [mapView, data, recordId, hoverPinColor, memoizedSymbolData, hoverHighlightRgb, hoverPinEnabled, hoverHighlightEnabled])
 
   /**
    * r022.106: Handle mouse leave - hide hover preview pin
@@ -820,12 +899,17 @@ export const QueryResultItem = (props: ResultItemProps) => {
     // Hide hover graphic (don't destroy - reuse it)
     if (hoverGraphicRef.current) {
       hoverGraphicRef.current.visible = false
-      
+
       debugLogger.log('HOVER-PREVIEW', {
         event: 'hover-graphic-hidden',
         recordId,
         timestamp: Date.now()
       })
+    }
+
+    // r028.123: Hide the hover feature highlight (reuse, don't destroy)
+    if (hoverHighlightRef.current) {
+      hoverHighlightRef.current.visible = false
     }
   }, [recordId])
 

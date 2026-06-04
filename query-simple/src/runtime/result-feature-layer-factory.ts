@@ -262,10 +262,14 @@ async function createResultGroupLayer (
     layers: []
   })
 
-  // Prevent ExB LayerList "Remove" button on runtime-created layers
-  ;(groupLayer as any).__exb_layer_from_runtime = false
-
   mapView.map.add(groupLayer)
+
+  // r028.127: Prevent the ExB LayerList "Remove" button on this runtime-created layer.
+  // Must run AFTER map.add(): the framework's before-add listener force-sets
+  // __exb_layer_from_runtime = true during the add, so a pre-add write gets clobbered back
+  // to true (which is why Remove reappeared). The original r024.56 design set the flag
+  // post-add; the Path 2 -> Path 3 move accidentally moved it before the add.
+  ;(groupLayer as any).__exb_layer_from_runtime = false
 
   // Push results above operational layers
   const topIndex = mapView.map.layers.length - 1

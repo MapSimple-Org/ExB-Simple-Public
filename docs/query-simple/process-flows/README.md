@@ -1,6 +1,6 @@
 # Process Flow Documentation
 
-End-to-end reference for the 14 major functions of the QuerySimple and
+End-to-end reference for the 15 major functions of the QuerySimple and
 HelperSimple widgets. Each document includes ASCII flow diagrams, file:line
 references, decision points, and test coverage notes.
 
@@ -22,6 +22,7 @@ references, decision points, and test coverage notes.
 | 12 | [FLOW-12-DATA-SOURCE-REBINDING](FLOW-12-DATA-SOURCE-REBINDING.md) | Rebind tool workflow for remapping query items when a layer is replaced in the web map. Covers broken DS detection, auto-heal vs field mapping, and orphan cleanup |
 | 13 | [FLOW-13-POPUP-RENDERING](FLOW-13-POPUP-RENDERING.md) | Shared popup rendering across on-screen click, result-list click, and Results Panel card. ConfigId fallback fix, rendering mode detection |
 | 14 | [FLOW-14-TYPEAHEAD-SUGGEST](FLOW-14-TYPEAHEAD-SUGGEST.md) | Typeahead dropdown: useSuggest state machine, suggest-utils fetch/cache, dual-path rendering (desktop fixed, mobile Popper) |
+| 15 | [FLOW-15-HOVER-PREVIEW](FLOW-15-HOVER-PREVIEW.md) | Hover preview on result rows: animated CIM pin + path-independent geometry highlight on mapView.graphics, debounce, per-cue toggles/colors, bulk-hide on leave/scroll |
 
 ## Key Architectural Patterns
 
@@ -119,4 +120,4 @@ Add the new flow to the Flow Index table above.
 
 ---
 
-*Last updated: r028.118 (2026-06-02) -- flow-currency pass: the Spatial Draw include-results feature (FLOW-09/10/11) and the field-table Customize settings/rebind/render docs (FLOW-07/12/13) were brought current. No tests changed; Table Total is still 729 (our four widgets). Jest's full-suite total is 730; the extra 1 is the excluded `simple` sample widget, which is not part of this project.*
+*Last updated: r028.125 (2026-06-04) -- added FLOW-15 (Hover Preview pin + feature highlight, TODO #34, Phases 1-3, r028.123-125). No tests changed; Table Total is still 729 (our four widgets). Jest's full-suite total is 730; the extra 1 is the excluded `simple` sample widget, which is not part of this project.*

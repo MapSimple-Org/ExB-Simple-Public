@@ -226,6 +226,10 @@ export interface SettingConfig {
   highlightPointStyle?: 'circle' | 'square' | 'cross' | 'x' | 'diamond'  // default: 'circle'
   // Hover Preview Pin Configuration
   hoverPinColor?: string              // Hex color (e.g., '#EA4335' - red) - default: '#EA4335'
+  hoverPinEnabled?: boolean           // r028.125 Show the hover preview pin (Phase 3, default true)
+  // r028.124/125: Hover feature highlight color (Phase 2) + on/off (Phase 3)
+  hoverHighlightColor?: string        // Hex color (default '#EA4335', matches the pin)
+  hoverHighlightFeature?: boolean     // r028.125 Show the hover feature highlight (Phase 3, default true)
   // Spatial Tab Draw & Buffer Color Configuration
   drawColor?: string                  // Hex color for draw symbols (default: '#32FF00' - lime green)
   bufferColor?: string                // Hex color for buffer preview (default: '#FFA500' - orange)

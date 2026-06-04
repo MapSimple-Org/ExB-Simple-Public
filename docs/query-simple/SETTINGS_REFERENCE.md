@@ -62,6 +62,9 @@ Controls the visual appearance of query result highlights on the map (Path 1 hig
 | Property | Type | Default | Singleton Getter | Description |
 |----------|------|---------|------------------|-------------|
 | `hoverPinColor` | `string` (hex) | `'#EA4335'` | `getHoverPinColor()` | Color of the hover pin that appears when hovering over a result card. |
+| `hoverHighlightColor` | `string` (hex) | `'#EA4335'` | `getHoverHighlightColor()` | Color of the feature highlight drawn on the map when hovering a result card. |
+| `hoverPinEnabled` | `boolean` | `true` | `getHoverPinEnabled()` | Whether the hover preview pin is shown. |
+| `hoverHighlightFeature` | `boolean` | `true` | `getHoverHighlightFeature()` | Whether the hover feature highlight is shown. |
 
 ---
 

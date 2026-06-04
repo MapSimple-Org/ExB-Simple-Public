@@ -10,7 +10,7 @@
  */
 const BASE_VERSION = '1.20.0'
 const RELEASE_NUMBER = '005' // Increment on major changes (001, 002, 003, ...)
-const MINOR_VERSION = '018' // r005.018: Shared-code touch only — query-simple's Path 2 Removal P4-1 removed the 'PATH-2' debug flag from createQuerySimpleDebugLogger in shared-code/debug-logger.ts. FeedSimple's logger factory is untouched; no functional change. Bumped per the shared-code consumer rule.
+const MINOR_VERSION = '020' // r005.020: Shared-code consumer bump (no functional change). QuerySimple's r028.125 hover-highlight Phase 3 added getHoverPinEnabled + getHoverHighlightFeature to shared-code/mapsimple-common/widget-config-manager.ts; FeedSimple is untouched. Bumped per the shared-code consumer rule. PRIOR r005.019: getHoverHighlightColor (Phase 2 consumer bump).
 
 export const WIDGET_VERSION = MINOR_VERSION && Number(MINOR_VERSION) > 0
   ? `${BASE_VERSION}-r${RELEASE_NUMBER}.${MINOR_VERSION}`

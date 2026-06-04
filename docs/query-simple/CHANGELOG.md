@@ -7,6 +7,148 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 > **Archive**: For releases r001-r021, see [CHANGELOG_ARCHIVE_r001-r021.md](docs/archive/CHANGELOG_ARCHIVE_r001-r021.md)
 
+## [1.20.0-r028.127] - 2026-06-04 - Fix: results layer removable in the LayerList (ordering bug)
+
+### Context
+The Path 3 results GroupLayer showed a "Remove" button in the ExB LayerList, which we had
+blocked previously. Root cause (traced through the compiled 1.20 framework): not a framework
+change. ExB's LayerList shows Remove only when `__exb_layer_from_runtime` is truthy, and the
+framework's `before-add` listener force-sets that flag to `true` during `map.add()`. Our code
+set it to `false` BEFORE the add, so the framework clobbered it back to `true`. The original
+r024.56 design set it AFTER the add; the Path 2 -> Path 3 move accidentally reordered it.
+
+### Fixed
+- `runtime/result-feature-layer-factory.ts` (`createResultGroupLayer`): moved
+  `__exb_layer_from_runtime = false` to AFTER `mapView.map.add(groupLayer)` so the framework's
+  before-add stamp can't overwrite it. One-line move; the flag (key, value, target GroupLayer)
+  was already correct, only the timing was wrong.
+
+### Notes
+- Gate is identical 1.19 -> 1.20 (verified), so this restores the working 1.19 behavior. A
+  defensive `after-remove` re-add watcher was considered but not added (the post-add write is
+  durable: before-add does not re-fire on reorder, after-add only reads). query-simple only.
+
+## [1.20.0-r028.126] - 2026-06-04 - Rename grouped-query label "Search alias" to "Search by"
+
+### Changed
+- `runtime/query-task.tsx`: the runtime label above the grouped-query dropdown now reads
+  "Search by" instead of "Search alias".
+- `setting/query-item-main-mode.tsx`: the matching settings section (title, row label, and
+  aria-labels) renamed to "Search by" so settings and runtime stay consistent.
+
+### Notes
+- Hardcoded UI strings (not i18n keys). Text-only, no behavior change. query-simple only.
+
+## [1.20.0-r028.125] - 2026-06-04 - Hover feature highlight (Phase 3: on/off toggles) + docs + tests
+
+### Context
+Phase 3 (final) of the hover feature highlight (TODO #34, `docs/specs/HOVER_HIGHLIGHT_SPEC.md`).
+Adds independent on/off toggles for the hover pin and the feature highlight, both default on. Also
+lands the documentation set for the feature and unit coverage for the hover config getters. Stays
+in the r028 line.
+
+### Added
+- `config.ts`: `hoverPinEnabled` + `hoverHighlightFeature` (both default true).
+- `shared-code/mapsimple-common/widget-config-manager.ts`: `getHoverPinEnabled` +
+  `getHoverHighlightFeature` (default true via `config?.x !== false`).
+- `setting.tsx`: "Show pin on hover" Switch (Hover Preview Pin section) and "Show highlight on hover"
+  Switch (Hover Feature Highlight section). i18n: `showHoverPin`, `showHoverHighlight`.
+- Docs: new `process-flows/FLOW-15-HOVER-PREVIEW.md` (pin + highlight, end to end) + index entry;
+  `FEATURE_LIST.md`, `SETTINGS_REFERENCE.md`, and user-guide section 15 updated for the new color +
+  toggles.
+- `shared-code/mapsimple-common/tests/widget-config-manager.test.ts`: +12 tests covering all four
+  hover getters (including the previously-untested `getHoverPinColor`). Suite 739 -> 751.
+
+### Changed
+- `query-result-item.tsx`: the highlight block is gated on `hoverHighlightEnabled`; when
+  `hoverPinEnabled` is false the handler early-returns past the pin section. Defaults preserve
+  the Phase 1-2 behavior (both on), so updating apps are unaffected.
+
+### Notes
+- Shared-code touched (two getters) -> feed-simple consumer bump (r005.020). No FS behavior change.
+- Completes the phased HOVER_HIGHLIGHT_SPEC. Validated by manual smoke (user, 2026-06-04): all
+  pin/highlight on/off combinations. tsc CLEAN; Jest 751/751.
+
+### Files touched
+- `query-simple/src/config.ts`, `query-simple/src/runtime/query-result-item.tsx`,
+  `query-simple/src/setting/setting.tsx`, `query-simple/src/setting/translations/default.ts`,
+  `query-simple/src/version.ts`, `feed-simple/src/version.ts`,
+  `shared-code/mapsimple-common/widget-config-manager.ts`,
+  `shared-code/mapsimple-common/tests/widget-config-manager.test.ts`,
+  `docs/query-simple/process-flows/FLOW-15-HOVER-PREVIEW.md` (new),
+  `docs/query-simple/process-flows/README.md`, `docs/FEATURE_LIST.md`,
+  `docs/query-simple/SETTINGS_REFERENCE.md`, `docs/specs/HOVER_HIGHLIGHT_SPEC.md`,
+  `docs/user-guide/QUERYSIMPLE_CONFIGURATION_GUIDE.md`, `docs/query-simple/CHANGELOG.md`
+
+## [1.20.0-r028.124] - 2026-06-04 - Hover feature highlight (Phase 2: configurable color)
+
+### Context
+Phase 2 of the hover feature highlight (TODO #34, `docs/specs/HOVER_HIGHLIGHT_SPEC.md`). Phase 1
+shipped the highlight with a hardcoded red; Phase 2 makes the highlight color an admin setting.
+Stays in the r028 line.
+
+### Added
+- `config.ts`: `hoverHighlightColor?` (default `#EA4335`, matching the pin).
+- `shared-code/mapsimple-common/widget-config-manager.ts`: `getHoverHighlightColor(widgetId)` getter.
+- `setting.tsx`: a new "Hover Feature Highlight" settings section with a color picker (separate
+  from the pin section, so the pin UI is untouched).
+- `setting/translations/default.ts`: `hoverHighlight`, `highlightColor`, `hoverHighlightColorDescription`.
+
+### Changed
+- `query-result-item.tsx`: `buildHoverHighlightSymbol` now takes an rgb; the runtime reads the
+  configured color, converts via `hexToRgb`, and re-applies the symbol on each show, so a color
+  change takes effect on the next hover.
+
+### Notes
+- Shared-code touched (the new getter) → feed-simple consumer bump (r005.019). No FS behavior change.
+- Phase 3 (on/off toggles for the highlight and the pin, default on) is next.
+- Validated by manual smoke (user, 2026-06-04). tsc CLEAN; Jest 739/739.
+
+### Files touched
+- `query-simple/src/config.ts`, `query-simple/src/runtime/query-result-item.tsx`,
+  `query-simple/src/setting/setting.tsx`, `query-simple/src/setting/translations/default.ts`,
+  `query-simple/src/version.ts`, `feed-simple/src/version.ts`,
+  `shared-code/mapsimple-common/widget-config-manager.ts`,
+  `docs/specs/HOVER_HIGHLIGHT_SPEC.md`, `docs/query-simple/CHANGELOG.md`
+
+## [1.20.0-r028.123] - 2026-06-04 - Hover feature highlight (Phase 1)
+
+### Context
+QuerySimple already drops a hover preview pin when you mouse over a result. A request from
+James Kellough on the Esri Community (ArcIMS query-tool parity; transmission-line sections)
+asked to also highlight the feature geometry on the map so the hovered feature stands out
+from its neighbors. This is
+Phase 1 of the phased rollout in `docs/specs/HOVER_HIGHLIGHT_SPEC.md` (TODO #34). Stays in
+the r028 line (extension of an existing feature, no RELEASE_NUMBER bump).
+
+### Added
+- `query-result-item.tsx`: a hover feature highlight alongside the pin. `buildHoverHighlightSymbol`
+  builds a red (`#EA4335`, matching the pin) symbol per geometry type — polyline 4px line,
+  polygon/extent outline + faint fill, point/multipoint ring. A `hoverHighlightRef` graphic of
+  `data.getJSAPIGeometry()` is drawn on `mapView.graphics` (added before the pin so the pin sits
+  on top), created once per item (geometry is constant) and reused by toggling `visible`. Tagged
+  `__hoverHighlight` + `__widgetId`.
+
+### Changed
+- `query-result-item.tsx`: highlight hidden on hover-out and on click (reuse, don't destroy),
+  removed from `mapView.graphics` on unmount — lifecycle mirrors the existing pin.
+- `simple-list.tsx`: `hideHoverPins` extended to also clear `__hoverHighlight` on pointerleave/scroll.
+
+### Notes
+- **Geometry-overlay approach, not `layerView.highlight`.** The spec originally assumed the latter,
+  but `direct-query` stamps the origin layer on the graphic and the Path 3 layer reassigns OBJECTIDs
+  (a record maps back only by COMPOSITE_KEY, async). The overlay is synchronous, path-independent
+  (Path 1 and Path 3), and reuses the proven pin overlay. Spec updated to match.
+- Phase 1 = no config (always on, hardcoded color). Phase 2 adds a configurable color; Phase 3 adds
+  on/off toggles for the highlight and the pin.
+- No unit tests: the hover handler is JSAPI/mapView-bound (project convention is not to mock JSAPI).
+  Validated by manual smoke (user, 2026-06-04): point/line/polygon on both Path 1 and Path 3.
+- tsc CLEAN; Jest 739/739. query-simple only; no shared-code touched.
+
+### Files touched
+- `query-simple/src/runtime/query-result-item.tsx`, `query-simple/src/runtime/simple-list.tsx`,
+  `query-simple/src/version.ts`, `docs/specs/HOVER_HIGHLIGHT_SPEC.md`, `docs/query-simple/CHANGELOG.md`
+
 ## [1.20.0-r028.122] - 2026-06-02 - Truncation alert shows the actual matching count (both query paths)
 
 ### Context

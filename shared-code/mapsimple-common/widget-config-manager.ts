@@ -230,6 +230,30 @@ class WidgetConfigManager {
     return config?.hoverPinColor || '#EA4335'
   }
 
+  /**
+   * r028.124: Hover feature highlight color hex (Phase 2). Defaults to the pin red.
+   */
+  public getHoverHighlightColor(widgetId: string): string {
+    const config = this.configCache.get(widgetId)
+    return config?.hoverHighlightColor || '#EA4335'
+  }
+
+  /**
+   * r028.125: Whether the hover preview pin is shown (Phase 3, default true).
+   */
+  public getHoverPinEnabled(widgetId: string): boolean {
+    const config = this.configCache.get(widgetId)
+    return config?.hoverPinEnabled !== false
+  }
+
+  /**
+   * r028.125: Whether the hover feature highlight is shown (Phase 3, default true).
+   */
+  public getHoverHighlightFeature(widgetId: string): boolean {
+    const config = this.configCache.get(widgetId)
+    return config?.hoverHighlightFeature !== false
+  }
+
   // ─── Result Display ───────────────────────────────────────────────
 
   /**

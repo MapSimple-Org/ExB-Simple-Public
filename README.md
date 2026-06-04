@@ -2,8 +2,8 @@
 
 Custom widgets for ArcGIS Experience Builder Developer Edition. Built for performance, deep-linking, and advanced result management.
 
-**Current Version**: QS `1.20.0-r028.122` | FS `1.20.0-r005.018`
-**Latest Update**: Native map popups & map-to-card identify, unified field-table renderer, spatial tab overhaul, truncation alerts (June 2, 2026)
+**Current Version**: QS `1.20.0-r028.127` | FS `1.20.0-r005.020`
+**Latest Update**: Hover feature highlight, "Search by" rename, and a LayerList remove-button fix (June 4, 2026)
 
 ## Key Differentiators (Why QuerySimple?)
 
@@ -17,7 +17,33 @@ QuerySimple is designed to solve the common pain points of the standard Experien
 
 ---
 
-## What's New (June 2026)
+## What's New (r028.127, June 4, 2026)
+
+> Full release notes: [RELEASE_QS-r028.127_FS-r005.020](docs/releases/RELEASE_QS-r028.127_FS-r005.020.md)
+
+A focused follow-up to the r028.122 release below.
+
+### Hover Feature Highlight
+
+Hovering a result already drops a preview pin on the map. Now it can also highlight the feature's geometry, so the hovered feature stands out from its neighbors. Especially handy for lines and polygons, where a pin alone does not tell you which feature you are on.
+
+- Pin and highlight both run on hover, each with its own on/off toggle (use one, the other, or both).
+- Configurable highlight color (defaults to the pin's red).
+- On by default, so existing apps get it with no config change.
+
+Thanks to James Kellough in the Esri Community for the request and the use case.
+
+### "Search alias" renamed to "Search by"
+
+On grouped queries, the "Search alias" label (runtime dropdown and settings) now reads "Search by". Cosmetic only.
+
+### Fix: results layer was removable from the LayerList
+
+Being upfront: we introduced this one. The flag that hides the LayerList "Remove" button on the results layer was being set just before the layer was added to the map, and Experience Builder re-stamps that flag during the add, so it got overwritten and the Remove button reappeared. Fixed by setting the flag right after the add. The results layer is no longer user-removable.
+
+---
+
+## What's New in r028.122 (June 2, 2026)
 
 > Full release notes: [RELEASE_QS-r028.122_FS-r005.018](docs/releases/RELEASE_QS-r028.122_FS-r005.018.md)
 
@@ -265,7 +291,7 @@ Per-widget zip downloads are available in the [`dist/`](dist/) folder. Each zip 
 
 ## Test Results
 
-- **Unit tests:** 739/739 passing
+- **Unit tests:** 751/751 passing
 - **E2E tests:** 35 passed, 4 skipped, 2 flaky, 0 failed (Playwright v2 suite)
 - **TypeScript errors:** 0
 

@@ -256,10 +256,13 @@ export function SimpleList (props: SimpleListProps) {
   // cases where mouseleave on individual cards doesn't fire: (1) pointer
   // leaves the results list for the map, (2) list scrolls a card out from
   // under the pointer.
+  // r028.123: Also clears the hover feature highlight (__hoverHighlight), which
+  // shares the same overlay and the same two edge cases.
   const hideHoverPins = React.useCallback(() => {
     if (!mapView?.graphics) return
     mapView.graphics.forEach((g: any) => {
-      if (g.attributes?.__hoverPin && g.attributes?.__widgetId === widgetId && g.visible) {
+      if (g.attributes?.__widgetId === widgetId && g.visible &&
+          (g.attributes?.__hoverPin || g.attributes?.__hoverHighlight)) {
         g.visible = false
       }
     })
