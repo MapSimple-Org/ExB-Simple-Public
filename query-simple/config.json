@@ -1,5 +1,6 @@
 {
   "queryItems": [],
+  "addResultsAsMapLayer": true,
   "arrangeType": "BLOCK",
   "arrangeWrap": false,
   "resultListDirection": "Vertical",

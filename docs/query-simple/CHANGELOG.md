@@ -7,6 +7,108 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 > **Archive**: For releases r001-r021, see [CHANGELOG_ARCHIVE_r001-r021.md](docs/archive/CHANGELOG_ARCHIVE_r001-r021.md)
 
+## [1.20.0-r028.132] - 2026-06-08 - Settings-at-a-glance doc + public-push wiring (docs/tooling only)
+
+### Context
+The settings panel has grown enough to feel overwhelming. Added a scannable end-user reference, then ran a 54-row agent verification sweep against the code to be sure it never advertises a choice the user does not actually have. No widget runtime change.
+
+### Added
+- `docs/user-guide/SETTINGS_AT_A_GLANCE.md`: every QuerySimple and HelperSimple setting as a scan table (panel label, default, location), plus a runtime-behaviors section and `?debug=` troubleshooting.
+- TODO #35 "Settings Level-Set": dead-code cleanup umbrella (forced-Simple paging, `allowExport` dead key, Short ID case-sensitivity decision).
+
+### Changed
+- 10 at-a-glance rows corrected against the code: Arrangement labels are Vertical/Horizontal/Icon (not Block/Inline/Popper); "Point zoom distance (ft)"; graphics ranges 1-10px / 8-32px / 1-6px; Dock Top/Bottom; Short ID is case-SENSITIVE; "Search by" drives the runtime dropdown and popup title; Display order is group-conditional; Export is not gated by `allowExport`.
+- Cross-linked the three settings docs (SETTINGS_REFERENCE and at-a-glance both ways, CONFIGURATION_GUIDE to at-a-glance).
+- `docs/features/SPATIAL_RELATIONSHIPS_REFERENCE.md`: removed 2 unfinished TODO diagram notes; fixed a broken FLOW-09 link.
+- `scripts/stage-public-release.py`: new `USER_DOCS` list ships the at-a-glance, the DebugLogger guide (with its drop-in logger source inlined as a code block), and the Spatial Relationships reference. Dry-run confirmed.
+- `.claude/skills/wrap/SKILL.md`: added a "Settings Docs" maintenance step so a settings change updates all three docs. Not committed with this batch (`.claude/` is outside the widget repo).
+
+### Files touched
+`query-simple/src/version.ts` (r028.132), `docs/query-simple/CHANGELOG.md`, `docs/query-simple/SETTINGS_REFERENCE.md`, `docs/user-guide/SETTINGS_AT_A_GLANCE.md` (new), `docs/user-guide/QUERYSIMPLE_CONFIGURATION_GUIDE.md`, `docs/features/SPATIAL_RELATIONSHIPS_REFERENCE.md`, `TODO.md`, `scripts/stage-public-release.py`
+
+## [1.20.0-r028.131] - 2026-06-05 - New-widget default: Path 3 (LayerList) instead of Path 1
+
+### Context
+New QuerySimple widgets should default to Path 3 (results as FeatureLayers in the map's LayerList)
+rather than Path 1 (highlight graphics). Existing apps must be honored, no behavior change for
+already-configured widgets.
+
+### Changed
+- `query-simple/config.json` (widget default config): added `"addResultsAsMapLayer": true`. ExB seeds
+  this into a freshly-dropped widget's config, so new widgets start in Path 3. The runtime reads
+  (`config?.addResultsAsMapLayer === true`, ~13 sites in widget.tsx) are unchanged, so existing
+  saved configs, including an unset field that resolves to Path 1, are preserved.
+
+### Notes
+- **Verify in smoke:** that ExB seeds config.json only for new widget instances and does not back-fill
+  the default into existing saved configs. Existing app with the toggle unset must stay Path 1; a
+  newly-dropped widget must come up Path 3. If existing apps flip, ExB is back-filling and the
+  fallback is to set the default in the settings init (strictly new-widget-only) instead.
+- query-simple only.
+
+## [1.20.0-r028.130] - 2026-06-04 - Copy query to another widget (Phase 3: tests)
+
+### Context
+Final phase. Same-index positioning was confirmed fine in testing, so no position picker was added.
+This phase makes the copy logic unit-tested.
+
+### Added
+- `setting/query-copy-utils.ts` (new): `buildQueryCopyPayload`, the pure transformation behind the
+  copy (regenerate IDs on the target prefix, insert at the same index, merge the source layer into
+  the target's useDataSources, clone the source output DS for the new id). Plain JS in/out.
+- `tests/query-copy-utils.test.ts` (new): +11 tests covering ID regen, `_copy` suffixing,
+  same-index insert + clamp, no-mutation of caller arrays, output-DS clone, and useDataSources merge/no-dup.
+
+### Changed
+- `setting/query-item-list.tsx` (`handleCopyToWidget`): delegates the transformation to
+  `buildQueryCopyPayload`; behavior is identical, the handler just does the Immutable-boundary
+  conversions and the `editWidget()` apply.
+
+### Notes
+- Completes the "copy query to another widget" feature. tsc CLEAN; Jest 762/762 (+11). query-simple only.
+
+## [1.20.0-r028.129] - 2026-06-04 - Copy query to another widget (Phase 2: make it functional)
+
+### Context
+Phase 1 copied the query item with regenerated IDs but it was not runtime-functional (no output
+data source, source layer not wired). Phase 2 finishes that.
+
+### Changed
+- `setting/query-item-list.tsx` (`handleCopyToWidget`): in addition to copying the item, it now
+  - clones the source query's already-registered output data source for the new `outputDataSourceId`
+    (the DS JSON carries no widget back-reference, so only the `id` changes), and
+  - adds the source query's `useDataSource` to the target widget's `useDataSources` if missing.
+  Both, plus the config edit, are applied in one builder `editWidget(partialWidget, [outputDsJson]).exec()`
+  call (replaces the Phase 1 `editWidgetConfig`).
+
+### Notes
+- The copied query is now runtime-functional in the target widget: it queries the source layer and
+  produces its own output data source, with no ID collisions. Phase 3 adds position control + tests.
+- tsc CLEAN; Jest 751/751. query-simple only.
+
+## [1.20.0-r028.128] - 2026-06-04 - Copy query to another widget (Phase 1: copy the item)
+
+### Context
+Porting a query from one QuerySimple widget to another is a common task, and the in-widget
+Duplicate button only copies within the same widget. Phase 1 of a cross-widget copy: a new
+"Copy to widget" command that copies the query ITEM into another widget's config. Phase 2 will
+register the new output data source and wire the source layer; Phase 3 adds position control + tests.
+
+### Added
+- `setting/query-item-list.tsx`: a "Copy to widget" command on each query item. It discovers the
+  other QuerySimple widgets in the app (`getAppConfigAction().appConfig.widgets`, uri
+  `widgets/query-simple/`, excluding self), shows a SidePopper target picker, and on selection
+  copies the query into the target widget's config via `editWidgetConfig().exec()`. IDs are
+  regenerated (new `configId`, `outputDataSourceId` with the TARGET widget's prefix, reusing the
+  Duplicate ID-regen), and the query is inserted at the same index it had in the source.
+- i18n: `copyToWidget`, `copyPickTarget`, `copyNoTargets`.
+
+### Notes
+- **Phase 1 copies the query item only.** The new output data source is not registered yet and the
+  target may not have the source layer, so the copied query appears in the target's settings but is
+  not runtime-functional until Phase 2. The builder writes both config files, so no hand-editing.
+- tsc CLEAN; Jest 751/751 (no new tests this phase; coverage lands in Phase 3). query-simple only.
+
 ## [1.20.0-r028.127] - 2026-06-04 - Fix: results layer removable in the LayerList (ordering bug)
 
 ### Context

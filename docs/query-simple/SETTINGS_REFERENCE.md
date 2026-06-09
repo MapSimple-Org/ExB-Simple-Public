@@ -2,6 +2,8 @@
 
 Complete catalog of configurable widget settings. All settings are defined in `query-simple/src/config.ts` (`SettingConfig` interface) and read at runtime through the `widgetConfigManager` singleton (`shared-code/mapsimple-common/widget-config-manager.ts`).
 
+**End-user counterpart:** For a non-technical, scan-friendly version (panel labels, defaults, and where to find each setting), see [`SETTINGS_AT_A_GLANCE.md`](../user-guide/SETTINGS_AT_A_GLANCE.md). Keep the two in sync when settings change.
+
 **Debug:** Append `?debug=SETTINGS` to the app URL to trace singleton reads in the browser console.
 
 **Rule:** All runtime config reads go through `widgetConfigManager` (see CLAUDE.md, "The Singleton Rule"). Never use Redux selectors for widget config in runtime modules.

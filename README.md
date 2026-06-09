@@ -2,8 +2,8 @@
 
 Custom widgets for ArcGIS Experience Builder Developer Edition. Built for performance, deep-linking, and advanced result management.
 
-**Current Version**: QS `1.20.0-r028.127` | FS `1.20.0-r005.020`
-**Latest Update**: Hover feature highlight, "Search by" rename, and a LayerList remove-button fix (June 4, 2026)
+**Current Version**: QS `1.20.0-r028.132` | FS `1.20.0-r005.020`
+**Latest Update**: Copy a query between widgets, new widgets default to the LayerList, and new end-user docs (June 9, 2026)
 
 ## Key Differentiators (Why QuerySimple?)
 
@@ -16,6 +16,24 @@ QuerySimple is designed to solve the common pain points of the standard Experien
 - **Persistence & Restoration**: Selections are maintained even when the identify tool is used, ensuring users never lose their search context.
 
 ---
+
+## What's New (r028.132, June 9, 2026)
+
+> Full release notes: [RELEASE_QS-r028.132_FS-r005.020](docs/releases/RELEASE_QS-r028.132_FS-r005.020.md)
+
+### Copy a query to another widget
+
+A new "Copy to widget" action in QuerySimple settings copies a configured query into another QuerySimple widget on the page, regenerating its internal IDs and wiring up the output data source and source layer automatically. No more hand-editing app config to move a query between widgets.
+
+### New widgets default to results in the LayerList
+
+A freshly added QuerySimple widget now shows its results as a real, interactive map layer in the LayerList, with native popups and a layer that persists when the widget closes. This affects newly added widgets only; existing widgets keep whatever they were set to.
+
+### New end-user documentation
+
+Three references now ship with the distribution: Settings at a Glance (every setting, its default, and where to find it), a DebugLogger guide (the `?debug=` URL flags plus a portable drop-in logger), and a Spatial Relationships reference.
+
+FeedSimple is unchanged this release, carried forward at r005.020.
 
 ## What's New (r028.127, June 4, 2026)
 

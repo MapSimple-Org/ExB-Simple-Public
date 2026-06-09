@@ -1,5 +1,6 @@
 /** @jsx jsx */
 import { React, jsx, css, Immutable, type ImmutableArray, type ImmutableObject, urlUtils, polished, classNames, hooks } from 'jimu-core'
+import { getAppConfigAction } from 'jimu-for-builder'
 import { Button, Icon } from 'jimu-ui'
 import { List, TreeItemActionType, type TreeItemsType, type TreeItemType, type CommandActionDataType } from 'jimu-ui/basic/list-tree'
 import { SettingRow, SettingSection, SidePopper } from 'jimu-ui/advanced/setting-components'
@@ -8,6 +9,7 @@ import type { QueryItemType, QueryArrangeType } from '../config'
 import { DataSourceTip } from 'widgets/shared-code/mapsimple-common'
 import { widgetSettingDataMap } from './setting-config'
 import { QueryItemSetting } from './query-item-setting'
+import { buildQueryCopyPayload } from './query-copy-utils'
 
 const { iconMap, iconPropMap } = widgetSettingDataMap
 
@@ -43,6 +45,8 @@ export function QueryItemList (props: Props) {
   const sidePopperTrigger = React.useRef<HTMLDivElement>(null)
   const newQueryBtn = React.useRef<HTMLButtonElement>(null)
   const [selectedIndex, setSelectedIndex] = React.useState(-1)
+  // r028.128 Phase 1: index of the query whose "Copy to widget" picker is open (-1 = closed)
+  const [copyMenuIndex, setCopyMenuIndex] = React.useState(-1)
   const getI18nMessage = hooks.useTranslation(defaultMessages)
   const selectedIndexRef = hooks.useLatest(selectedIndex)
 
@@ -96,6 +100,56 @@ export function QueryItemList (props: Props) {
     
     onNewQueryItemAdded(duplicatedQuery)
   }, [queryItems, props.widgetId, onNewQueryItemAdded])
+
+  // r028.128 Phase 1: other QuerySimple widgets in this app, as copy targets.
+  const getCopyTargets = React.useCallback((): Array<{ id: string, label: string }> => {
+    const targets: Array<{ id: string, label: string }> = []
+    try {
+      const widgets = getAppConfigAction().appConfig?.widgets as Record<string, any> | undefined
+      if (widgets) {
+        for (const [wid, wdata] of Object.entries(widgets)) {
+          if (wid === props.widgetId) continue
+          if (!wdata || wdata.uri !== 'widgets/query-simple/') continue
+          targets.push({ id: wid, label: wdata.label || wid })
+        }
+      }
+    } catch (_e) { /* app config unavailable */ }
+    return targets
+  }, [props.widgetId])
+
+  // r028.128/129: copy a query item into another QuerySimple widget.
+  // The query is copied with regenerated IDs (new configId + outputDataSourceId on the
+  // TARGET widget's prefix). r028.129 (Phase 2) also makes it runtime-functional: it clones
+  // the source query's already-registered output data source (just a new id; the DS JSON has
+  // no widget back-reference) and wires the source layer into the target's useDataSources.
+  // One builder editWidget() apply covers the config, the useDataSources, and the output DS.
+  const handleCopyToWidget = React.useCallback((sourceIndex: number, targetWidgetId: string) => {
+    const sourceQuery = queryItems[sourceIndex]
+    if (!sourceQuery) return
+    const action = getAppConfigAction()
+    const appConfig: any = action.appConfig
+    const targetWidget = appConfig?.widgets?.[targetWidgetId]
+    if (!targetWidget) return
+
+    // r028.130: the pure copy logic lives in buildQueryCopyPayload (unit-tested). Here we
+    // just convert at the Immutable boundary and apply via the builder editWidget() action.
+    const sourceOutputDs = appConfig?.dataSources?.[sourceQuery.outputDataSourceId]
+    const payload = buildQueryCopyPayload({
+      sourceQuery: (sourceQuery as any).asMutable({ deep: true }),
+      sourceIndex,
+      targetWidgetId,
+      targetQueryItems: targetWidget.config?.queryItems ? targetWidget.config.queryItems.asMutable({ deep: false }) : [],
+      targetUseDataSources: targetWidget.useDataSources ? targetWidget.useDataSources.asMutable({ deep: false }) : [],
+      sourceOutputDs: sourceOutputDs ? sourceOutputDs.asMutable({ deep: true }) : null,
+      newConfigId: `${Math.random()}`.slice(2)
+    })
+
+    const newConfig = (targetWidget.config ?? Immutable({})).set('queryItems', Immutable(payload.newQueryItems))
+    const partialWidget: any = { id: targetWidgetId, config: newConfig, useDataSources: Immutable(payload.newUseDataSources) }
+    const outputDataSourceJsons = payload.clonedOutputDs ? [Immutable(payload.clonedOutputDs)] : []
+    action.editWidget(partialWidget, outputDataSourceJsons as any).exec()
+    setCopyMenuIndex(-1)
+  }, [queryItems])
 
   const advancedActionMap = {
     overrideItemBlockInfo: ({ itemBlockInfo }, refComponent) => {
@@ -188,6 +242,14 @@ export function QueryItemList (props: Props) {
                   }
                 },
                 {
+                  label: getI18nMessage('copyToWidget'),
+                  iconProps: () => ({ icon: iconMap.iconDuplicate, size: 12 }),
+                  action: ({ data }: CommandActionDataType) => {
+                    const { itemJsons: [currentItemJson] } = data
+                    setCopyMenuIndex(+currentItemJson.itemKey)
+                  }
+                },
+                {
                   label: getI18nMessage('remove'),
                   iconProps: () => ({ icon: iconMap.iconClose, size: 12 }),
                   action: ({ data }: CommandActionDataType) => {
@@ -273,6 +335,37 @@ export function QueryItemList (props: Props) {
             onQueryItemAdded={onNewQueryItemAdded}
             onQueryItemChanged={onQueryItemChanged}
           />
+        </div>
+      </SidePopper>
+      {/* r028.128 Phase 1: "Copy to widget" target picker */}
+      <SidePopper
+        isOpen={copyMenuIndex >= 0 && !urlUtils.getAppIdPageIdFromUrl().pageId}
+        toggle={() => setCopyMenuIndex(-1)}
+        position='right'
+        trigger={sidePopperTrigger.current}
+        title={getI18nMessage('copyToWidget')}
+        backToFocusNode={newQueryBtn.current}
+      >
+        <div className='w-100 h-100 p-3'>
+          {(() => {
+            const targets = getCopyTargets()
+            if (targets.length === 0) {
+              return <p css={css`font-size: 0.875rem;`}>{getI18nMessage('copyNoTargets')}</p>
+            }
+            const srcName = copyMenuIndex >= 0 ? queryItems[copyMenuIndex]?.name : ''
+            return (
+              <div>
+                <p css={css`font-size: 0.875rem; margin-bottom: 12px;`}>
+                  {getI18nMessage('copyPickTarget', { query: srcName })}
+                </p>
+                {targets.map(t => (
+                  <Button key={t.id} className='w-100 mb-2 text-truncate' onClick={() => { handleCopyToWidget(copyMenuIndex, t.id) }}>
+                    {t.label}
+                  </Button>
+                ))}
+              </div>
+            )
+          })()}
         </div>
       </SidePopper>
     </div>
