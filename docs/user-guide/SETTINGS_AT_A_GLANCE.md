@@ -84,6 +84,20 @@ Two independent cues when a user hovers a result card. Both on by default.
 | Show highlight on hover | On | Outlines the hovered feature's geometry (great for lines/polygons). |
 | Highlight color | #EA4335 (red) | Color of the hover feature highlight. |
 
+### Tab help
+
+A "?" button beside the Query / Spatial / Results tabs opens a short description of the current tab. Each description ships with standard text; override any of them here. Markdown works (bold, lists, paragraphs).
+
+| Setting (panel label) | Default | What it does |
+|---|---|---|
+| Show tab help | On | Master switch. Off removes the "?" button (and the screen-reader tab descriptions) entirely. |
+| Popup background | Theme default | Background color of the help popup. Text color adjusts automatically for readability. "Use theme default" resets it. |
+| Query tab text | Standard description (shown as the placeholder) | Help popover text for the Query tab. Leave blank to keep the standard text. |
+| Spatial tab text | Standard description (shown as the placeholder) | Help popover text for the Spatial tab. Leave blank to keep the standard text. |
+| Results tab text | Standard description (shown as the placeholder) | Help popover text for the Results tab. Leave blank to keep the standard text. |
+| Operations mode text | Standard description (shown as the placeholder) | Help text for the "?" beside the Spatial tab's Operations/Draw toggle, shown when Operations is active. |
+| Draw mode text | Standard description (shown as the placeholder) | Same "?" when Draw is active. |
+
 ### Spatial tab colors
 
 | Setting (panel label) | Default | What it does |

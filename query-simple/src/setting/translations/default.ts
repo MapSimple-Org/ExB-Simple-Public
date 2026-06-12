@@ -139,6 +139,18 @@ export default {
   mobilePopupHideDockButtonDescription: 'Prevent users from undocking the popup.',
   mobilePopupHideActionBar: 'Hide action bar',
   mobilePopupHideActionBarDescription: 'Remove zoom-to and other action buttons on mobile.',
+  // r028.134: Tab help (TAB_HELP_SPEC Phase 2, TODO #36); r028.135 Phase 3 switch + background
+  tabHelpSection: 'Tab Help',
+  tabHelpEnabledLabel: 'Show tab help',
+  tabHelpBgLabel: 'Popup background',
+  tabHelpBgReset: 'Use theme default',
+  tabHelpQueryLabel: 'Query tab text',
+  tabHelpSpatialLabel: 'Spatial tab text',
+  tabHelpResultsLabel: 'Results tab text',
+  tabHelpOperationsLabel: 'Operations mode text',
+  tabHelpDrawLabel: 'Draw mode text',
+  tabHelpDescription: 'Text shown in the "?" help popover for each tab. Markdown is supported. Leave a field blank to use the standard description shown as its placeholder. Field tokens are not replaced in help text.',
+  tabHelpSyntax: '**bold**   *italic*   # heading   - list item\n[text](url) link   blank line = new paragraph',
   // r026.018: Data Source Rebinding Tool
   rebindDataSourceMgmt: 'Data Source Management',
   rebindButton: 'Rebind',

@@ -254,6 +254,79 @@ class WidgetConfigManager {
     return config?.hoverHighlightFeature !== false
   }
 
+  // ─── Tab Help ───────────────────────────────────────────────────────
+
+  /**
+   * r028.134: Configured markdown help text for the Query tab "?" popover
+   * (TAB_HELP_SPEC Phase 2). Blank/whitespace counts as unset; returns
+   * undefined so the runtime falls back to the shipped i18n default.
+   */
+  public getTabHelpQueryText(widgetId: string): string | undefined {
+    const config = this.configCache.get(widgetId)
+    const text = config?.tabHelpQueryText
+    return typeof text === 'string' && text.trim() !== '' ? text : undefined
+  }
+
+  /**
+   * r028.134: Configured markdown help text for the Spatial tab "?" popover.
+   * Same blank-is-unset semantics as getTabHelpQueryText.
+   */
+  public getTabHelpSpatialText(widgetId: string): string | undefined {
+    const config = this.configCache.get(widgetId)
+    const text = config?.tabHelpSpatialText
+    return typeof text === 'string' && text.trim() !== '' ? text : undefined
+  }
+
+  /**
+   * r028.134: Configured markdown help text for the Results tab "?" popover.
+   * Same blank-is-unset semantics as getTabHelpQueryText.
+   */
+  public getTabHelpResultsText(widgetId: string): string | undefined {
+    const config = this.configCache.get(widgetId)
+    const text = config?.tabHelpResultsText
+    return typeof text === 'string' && text.trim() !== '' ? text : undefined
+  }
+
+  /**
+   * r028.136: Configured markdown help text for the Spatial Operations mode
+   * "?" popover (TAB_HELP_SPEC Phase 4). Same blank-is-unset semantics.
+   */
+  public getTabHelpOperationsText(widgetId: string): string | undefined {
+    const config = this.configCache.get(widgetId)
+    const text = config?.tabHelpOperationsText
+    return typeof text === 'string' && text.trim() !== '' ? text : undefined
+  }
+
+  /**
+   * r028.136: Configured markdown help text for the Spatial Draw mode
+   * "?" popover (Phase 4). Same blank-is-unset semantics.
+   */
+  public getTabHelpDrawText(widgetId: string): string | undefined {
+    const config = this.configCache.get(widgetId)
+    const text = config?.tabHelpDrawText
+    return typeof text === 'string' && text.trim() !== '' ? text : undefined
+  }
+
+  /**
+   * r028.135: Whether the tab-help "?" button and SR descriptions are shown
+   * (TAB_HELP_SPEC Phase 3, default true).
+   */
+  public getTabHelpEnabled(widgetId: string): boolean {
+    const config = this.configCache.get(widgetId)
+    return config?.tabHelpEnabled !== false
+  }
+
+  /**
+   * r028.135: Configured hex background for the tab-help popover (Phase 3).
+   * Blank/unset returns undefined = use the theme surface. The runtime
+   * auto-computes a contrasting text color from this value.
+   */
+  public getTabHelpBackgroundColor(widgetId: string): string | undefined {
+    const config = this.configCache.get(widgetId)
+    const color = config?.tabHelpBackgroundColor
+    return typeof color === 'string' && color.trim() !== '' ? color : undefined
+  }
+
   // ─── Result Display ───────────────────────────────────────────────
 
   /**

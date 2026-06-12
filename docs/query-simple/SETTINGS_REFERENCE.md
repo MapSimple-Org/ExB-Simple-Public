@@ -70,6 +70,22 @@ Controls the visual appearance of query result highlights on the map (Path 1 hig
 
 ---
 
+## Tab Help
+
+r028.133-134 (TODO #36, `docs/specs/TAB_HELP_SPEC.md`). A "?" button at the right end of the tab strip opens a popover describing the active tab. Each text is markdown rendered through the shared engine; `{{field}}` tokens are NOT substituted (no record context). Blank/unset = the shipped i18n default (`tabHelpQueryDefault` / `tabHelpSpatialDefault` / `tabHelpResultsDefault` in runtime translations). The same resolved text, flattened by `stripMarkdownToText()`, feeds the hidden per-tab screen-reader descriptions.
+
+| Property | Type | Default | Singleton Getter | Description |
+|----------|------|---------|------------------|-------------|
+| `tabHelpEnabled` | `boolean` | `true` | `getTabHelpEnabled()` | Master switch (r028.135). `false` removes the "?" button AND the per-tab SR descriptions. |
+| `tabHelpBackgroundColor` | `string` (hex) | unset (theme surface) | `getTabHelpBackgroundColor()` | Popover background (r028.135). Blank/unset = theme surface. Text color is auto-computed (YIQ, `contrast-utils.ts`) — never configurable, so help can't be made unreadable. |
+| `tabHelpQueryText` | `string` (markdown) | unset (shipped default) | `getTabHelpQueryText()` | Help popover text for the Query tab. Getter returns `undefined` for blank/whitespace so the runtime falls back to the default. |
+| `tabHelpSpatialText` | `string` (markdown) | unset (shipped default) | `getTabHelpSpatialText()` | Help popover text for the Spatial tab. Same blank-is-unset semantics. |
+| `tabHelpResultsText` | `string` (markdown) | unset (shipped default) | `getTabHelpResultsText()` | Help popover text for the Results tab. Same blank-is-unset semantics. |
+| `tabHelpOperationsText` | `string` (markdown) | unset (shipped default) | `getTabHelpOperationsText()` | Help popover text for the Spatial Operations mode "?" (r028.136, replaces the old hardcoded description line). |
+| `tabHelpDrawText` | `string` (markdown) | unset (shipped default) | `getTabHelpDrawText()` | Help popover text for the Spatial Draw mode "?" (r028.136). |
+
+---
+
 ## Spatial Tab
 
 | Property | Type | Default | Singleton Getter | Description |

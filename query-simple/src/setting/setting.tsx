@@ -19,11 +19,13 @@ import {
   DataSourceRemoveWaringReason,
   dataComponentsUtils
 } from 'jimu-ui/advanced/data-source-selector'
-import { NumericInput, Select, Switch, TextInput, defaultMessages as jimuUIDefaultMessages } from 'jimu-ui'
+import { Button, NumericInput, Select, Switch, TextArea, TextInput, defaultMessages as jimuUIDefaultMessages } from 'jimu-ui'
 import { ThemeColorPicker } from 'jimu-ui/basic/color-picker'
 import { SettingRow, SettingSection, DirectionSelector, MapWidgetSelector } from 'jimu-ui/advanced/setting-components'
 import { type IMConfig, type QueryArrangeType, type QueryItemType, PagingType, ListDirection, FieldsType } from '../config'
 import defaultMessages from './translations/default'
+// r028.134: runtime defaults reused as tab-help placeholders so admins see the text they are replacing
+import runtimeMessages from '../runtime/translations/default'
 // Inlined from shared-code/mapsimple-common to avoid SystemJS load failure in builder settings context
 type GetI18nMessageType = (id: string, options?: { messages?: any, values?: any }) => string
 function createGetI18nMessage (options: { intl: any, defaultMessages?: any }) {
@@ -575,6 +577,132 @@ export default class Setting extends React.PureComponent<AllWidgetSettingProps<I
             </SettingRow>
             <div css={css`font-size: 0.875rem; margin-top: 4px; padding: 0 16px 8px; opacity: 0.8;`}>
               {this.getI18nMessage('hoverHighlightColorDescription')}
+            </div>
+          </SettingSection>
+        )}
+        {this.props.config.queryItems.length > 0 && (
+          <SettingSection role='group' aria-label={this.getI18nMessage('tabHelpSection')} title={this.getI18nMessage('tabHelpSection')}>
+            <SettingRow label={this.getI18nMessage('tabHelpEnabledLabel')}>
+              <Switch
+                checked={config.tabHelpEnabled !== false}
+                onChange={(e) => {
+                  this.updateConfigForOptions(['tabHelpEnabled', e.target.checked])
+                }}
+                aria-label={this.getI18nMessage('tabHelpEnabledLabel')}
+              />
+            </SettingRow>
+            <SettingRow label={this.getI18nMessage('tabHelpQueryLabel')} flow='wrap'>
+              <TextArea
+                aria-label={this.getI18nMessage('tabHelpQueryLabel')}
+                className='w-100'
+                css={css`
+                  background-color: var(--ref-palette-neutral-300);
+                  font-family: monospace;
+                  font-size: 0.85rem;
+                `}
+                height={80}
+                value={config.tabHelpQueryText || ''}
+                placeholder={runtimeMessages.tabHelpQueryDefault}
+                onChange={(e) => {
+                  this.updateConfigForOptions(['tabHelpQueryText', e.target.value])
+                }}
+              />
+            </SettingRow>
+            <SettingRow label={this.getI18nMessage('tabHelpSpatialLabel')} flow='wrap'>
+              <TextArea
+                aria-label={this.getI18nMessage('tabHelpSpatialLabel')}
+                className='w-100'
+                css={css`
+                  background-color: var(--ref-palette-neutral-300);
+                  font-family: monospace;
+                  font-size: 0.85rem;
+                `}
+                height={80}
+                value={config.tabHelpSpatialText || ''}
+                placeholder={runtimeMessages.tabHelpSpatialDefault}
+                onChange={(e) => {
+                  this.updateConfigForOptions(['tabHelpSpatialText', e.target.value])
+                }}
+              />
+            </SettingRow>
+            <SettingRow label={this.getI18nMessage('tabHelpResultsLabel')} flow='wrap'>
+              <TextArea
+                aria-label={this.getI18nMessage('tabHelpResultsLabel')}
+                className='w-100'
+                css={css`
+                  background-color: var(--ref-palette-neutral-300);
+                  font-family: monospace;
+                  font-size: 0.85rem;
+                `}
+                height={80}
+                value={config.tabHelpResultsText || ''}
+                placeholder={runtimeMessages.tabHelpResultsDefault}
+                onChange={(e) => {
+                  this.updateConfigForOptions(['tabHelpResultsText', e.target.value])
+                }}
+              />
+            </SettingRow>
+            <SettingRow label={this.getI18nMessage('tabHelpOperationsLabel')} flow='wrap'>
+              <TextArea
+                aria-label={this.getI18nMessage('tabHelpOperationsLabel')}
+                className='w-100'
+                css={css`
+                  background-color: var(--ref-palette-neutral-300);
+                  font-family: monospace;
+                  font-size: 0.85rem;
+                `}
+                height={80}
+                value={config.tabHelpOperationsText || ''}
+                placeholder={runtimeMessages.tabHelpOperationsDefault}
+                onChange={(e) => {
+                  this.updateConfigForOptions(['tabHelpOperationsText', e.target.value])
+                }}
+              />
+            </SettingRow>
+            <SettingRow label={this.getI18nMessage('tabHelpDrawLabel')} flow='wrap'>
+              <TextArea
+                aria-label={this.getI18nMessage('tabHelpDrawLabel')}
+                className='w-100'
+                css={css`
+                  background-color: var(--ref-palette-neutral-300);
+                  font-family: monospace;
+                  font-size: 0.85rem;
+                `}
+                height={80}
+                value={config.tabHelpDrawText || ''}
+                placeholder={runtimeMessages.tabHelpDrawDefault}
+                onChange={(e) => {
+                  this.updateConfigForOptions(['tabHelpDrawText', e.target.value])
+                }}
+              />
+            </SettingRow>
+            <SettingRow label={this.getI18nMessage('tabHelpBgLabel')} flow='wrap'>
+              <ThemeColorPicker
+                specificTheme={this.props.theme2}
+                value={config.tabHelpBackgroundColor || ''}
+                onChange={(color: string) => {
+                  this.updateConfigForOptions(['tabHelpBackgroundColor', color])
+                }}
+              />
+            </SettingRow>
+            {config.tabHelpBackgroundColor && (
+              <SettingRow>
+                <Button
+                  size='sm'
+                  type='tertiary'
+                  onClick={() => {
+                    this.updateConfigForOptions(['tabHelpBackgroundColor', ''])
+                  }}
+                >
+                  {this.getI18nMessage('tabHelpBgReset')}
+                </Button>
+              </SettingRow>
+            )}
+            <div css={css`font-size: 0.875rem; margin-top: 4px; padding: 0 16px 8px; opacity: 0.8;`}>
+              {this.getI18nMessage('tabHelpDescription')}
+              <div css={css`font-family: monospace; font-size: 0.8rem; margin-top: 4px; white-space: pre-line;`}>
+                {this.getI18nMessage('tabHelpSyntax')}
+              </div>
             </div>
           </SettingSection>
         )}

@@ -57,3 +57,27 @@ export function extractFieldTokens (template: string): string[] {
   }
   return fields
 }
+
+/**
+ * r028.134: Flatten markdown to plain text for screen-reader descriptions
+ * (TAB_HELP_SPEC Phase 2). Converts through the real engine and strips the
+ * tags, so the SR text always tracks exactly what the popover renders.
+ */
+export function stripMarkdownToText (markdown: string): string {
+  if (!markdown) return ''
+  return convertTemplateToHtml(markdown)
+    // Block boundaries become spaces so adjacent blocks don't fuse words;
+    // inline tags (<strong>, <em>, ...) are deleted outright so no stray
+    // space lands before punctuation.
+    .replace(/<\/(p|li|ul|ol|h[1-6]|tr|td|th|table|div)>/gi, ' ')
+    .replace(/<br\s*\/?>/gi, ' ')
+    .replace(/<[^>]*>/g, '')
+    .replace(/&amp;/g, '&')
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'")
+    .replace(/&nbsp;/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim()
+}

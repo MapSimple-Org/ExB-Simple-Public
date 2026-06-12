@@ -42,6 +42,7 @@ import { getClauseFieldName } from './sql-clause-utils'
 import { type JimuMapView } from 'jimu-arcgis'
 import { QueryTabContent } from './tabs/QueryTabContent'
 import { SpatialTabContent } from './tabs/SpatialTabContent'
+import { TabHelp } from './components/tab-help'
 import { QueryTaskForm } from './query-task-form'
 import { QueryTaskResult } from './query-result'
 import { DataSourceTip, useDataSourceExists, ErrorMessage } from 'widgets/shared-code/mapsimple-common'
@@ -268,6 +269,13 @@ export function QueryTask (props: QueryTaskProps) {
       setInternalActiveTab(tab)
     }
   }, [propOnTabChange])
+
+  // r028.133 TAB_HELP_SPEC Phase 1: tab strip buttons captured for aria-describedby
+  // wiring in TabHelp. innerRef is in 1.20's TabProps but marked internal — re-verify
+  // it still populates on ExB upgrades.
+  const queryTabBtnRef = React.useRef<HTMLButtonElement>(null)
+  const spatialTabBtnRef = React.useRef<HTMLButtonElement>(null)
+  const resultsTabBtnRef = React.useRef<HTMLButtonElement>(null)
   const [enabled, setEnabled] = React.useState(true)
   // resultCount now in useReducer (r024.126 — A2b)
   // FIX (r018.92): Track when a query switch is in progress to prevent handleRenderDone interference
@@ -1380,6 +1388,15 @@ export function QueryTask (props: QueryTaskProps) {
       />
       
       {/* Tab Navigation - Moved to top */}
+      {/* r028.133 TAB_HELP_SPEC Phase 1: "?" help button + active-tab popover + hidden SR
+          descriptions. Rendered before Tabs so its focus position matches its visual spot
+          on the strip; absolutely positioned into the reserved nav padding below. */}
+      <TabHelp
+        widgetId={props.widgetId}
+        activeTab={activeTab}
+        getI18nMessage={getI18nMessage}
+        tabRefs={{ query: queryTabBtnRef, spatial: spatialTabBtnRef, results: resultsTabBtnRef }}
+      />
       <Tabs
         value={activeTab}
         onChange={(id) => handleTabChange(id as 'query' | 'spatial' | 'results')}
@@ -1392,11 +1409,15 @@ export function QueryTask (props: QueryTaskProps) {
           flex-direction: column;
           overflow: hidden;
           min-height: 0;
+          .nav, [role='tablist'] {
+            padding-right: 38px;
+          }
         `}
       >
         <Tab
           id='query'
           title={getI18nMessage('queryTab')}
+          innerRef={queryTabBtnRef}
         >
           <div 
             className={classNames('query-task__content', {
@@ -1747,6 +1768,7 @@ export function QueryTask (props: QueryTaskProps) {
         <Tab
           id='spatial'
           title={getI18nMessage('spatialTab')}
+          innerRef={spatialTabBtnRef}
         >
           <div
             className={classNames('query-task__content', {
@@ -1780,6 +1802,7 @@ export function QueryTask (props: QueryTaskProps) {
         </Tab>
         <Tab
           id='results'
+          innerRef={resultsTabBtnRef}
           title={
             <span>
               {getI18nMessage('resultsTab')}

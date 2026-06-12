@@ -37,13 +37,20 @@ export default {
   queryTab: 'Query',
   spatialTab: 'Spatial',
   resultsTab: 'Results',
+  // r028.133: Tab help defaults (TAB_HELP_SPEC Phase 1, TODO #36). Org-configurable in Phase 2.
+  // r028.136: Phase 4 adds the Operations/Draw mode help (replaces spatialModeOperationsDesc/spatialModeDrawDesc).
+  tabHelpButtonLabel: 'About this tab',
+  tabHelpModeButtonLabel: 'About this mode',
+  tabHelpOperationsDefault: 'Compare features with another layer. Pick a spatial relationship (intersects, contains, and more), optionally add a buffer distance, choose the target layers, and Execute. Operations use the current results as input, so run a query first.',
+  tabHelpDrawDefault: 'Draw points, lines, or shapes on the map and select features from the target layers that they touch. Drawn shapes can be buffered, and current results can be included as part of the search input.',
+  tabHelpQueryDefault: 'Search a layer by attributes. Choose a search layer and field, enter a value, and matching features are selected on the map and listed in the Results tab.',
+  tabHelpSpatialDefault: 'Select features by location. Use Operations to apply a buffer or spatial relationship using the current results, or Draw to sketch a shape on the map and select the features it touches.',
+  tabHelpResultsDefault: 'Review the features your search selected. Click a result to zoom to it and see details. Use the menu for export and table options. Results stay until you clear them or run a new search.',
   // r025: Spatial tab toggle and placeholder text
   spatialModeOperations: 'Operations',
   spatialModeDraw: 'Draw',
   spatialModeOperationsTitle: 'Spatial operations',
   spatialModeDrawTitle: 'Draw graphics',
-  spatialModeOperationsDesc: 'Select features using spatial geometry operations, e.g., intersects, overlaps.',
-  spatialModeDrawDesc: 'Select features using graphics drawn on the map.',
   spatialRelationshipInfoTooltip: 'About this spatial relationship',
   spatialDrawPlaceholder: 'Use the drawing tools to create a search geometry.',
   spatialDrawHint: 'Draw a shape above to enable spatial operations',

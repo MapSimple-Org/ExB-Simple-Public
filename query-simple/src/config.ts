@@ -263,6 +263,23 @@ export interface SettingConfig {
    *  Values are SpatialTabContent relationship ids: 'contains', 'intersects', 'envelope-intersects', 'overlaps', 'within', 'touches', 'crosses'.
    *  When undefined or empty, all relationships are shown (default). */
   spatialTabRelationships?: string[]
+  // r028.134: Tab help configurable text (TAB_HELP_SPEC Phase 2, TODO #36)
+  // r028.135: Phase 3 master switch + popup background
+  /** Default true. When false, the tab-help "?" button and the per-tab SR descriptions are removed entirely. */
+  tabHelpEnabled?: boolean
+  /** Hex background for the tab-help popover. Unset = theme surface. Text color is auto-computed for contrast. */
+  tabHelpBackgroundColor?: string
+  /** Markdown help text for the Query tab "?" popover. Blank/unset = shipped default. {{field}} tokens are NOT substituted. */
+  tabHelpQueryText?: string
+  /** Markdown help text for the Spatial tab "?" popover. Blank/unset = shipped default. */
+  tabHelpSpatialText?: string
+  /** Markdown help text for the Results tab "?" popover. Blank/unset = shipped default. */
+  tabHelpResultsText?: string
+  // r028.136: Phase 4 — Spatial Operations/Draw mode help (replaces the r025.061 description line)
+  /** Markdown help text for the Spatial Operations mode "?" popover. Blank/unset = shipped default. */
+  tabHelpOperationsText?: string
+  /** Markdown help text for the Spatial Draw mode "?" popover. Blank/unset = shipped default. */
+  tabHelpDrawText?: string
   sizeMap?: {
     arrangementIconPopper?: SizeMap
   }

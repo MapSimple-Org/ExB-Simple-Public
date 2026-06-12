@@ -66,6 +66,7 @@ import defaultMessage from '../translations/default'
 import { createQuerySimpleDebugLogger, EntityStatusType, StatusIndicator, widgetConfigManager } from 'widgets/shared-code/mapsimple-common'
 import { useBufferPreview } from '../managers/use-buffer-preview'
 import { ResultsModeControl, type ResultsModeValue } from '../components/ResultsModeControl'
+import { SpatialModeHelp } from '../components/tab-help'
 import type MapView from '@arcgis/core/views/MapView'
 import type SceneView from '@arcgis/core/views/SceneView'
 import type Geometry from '@arcgis/core/geometry/Geometry'
@@ -798,43 +799,39 @@ export function SpatialTabContent (props: SpatialTabContentProps) {
   // Can execute when: operations enabled + relationship selected + at least one layer selected + geometry exists
   const canExecute = operationsEnabled && selectedRelationship && (selectedLayers?.length ?? 0) > 0 && !!inputGeometry
 
+  // r028.136 TAB_HELP_SPEC Phase 4: gates the aria-describedby on the mode buttons so
+  // it never points at description spans that SpatialModeHelp is not rendering.
+  const tabHelpEnabled = widgetConfigManager.getTabHelpEnabled(widgetId)
+
   return (
     <div css={containerStyle}>
-      {/* Two-way toggle */}
-      <div css={toggleGroupStyle} role='group' aria-label='Spatial mode'>
-        <button
-          css={spatialMode === 'operations' ? toggleActiveStyle : undefined}
-          onClick={() => handleModeChange('operations')}
-          aria-pressed={spatialMode === 'operations'}
-          title={getI18nMessage('spatialModeOperationsTitle')}
-        >
-          {getI18nMessage('spatialModeOperations')}
-        </button>
-        <button
-          css={spatialMode === 'draw' ? toggleActiveStyle : undefined}
-          onClick={() => handleModeChange('draw')}
-          aria-pressed={spatialMode === 'draw'}
-          title={getI18nMessage('spatialModeDrawTitle')}
-        >
-          {getI18nMessage('spatialModeDraw')}
-        </button>
-      </div>
-
-      {/* r025.061: Mode description text */}
-      <div css={css`
-        margin-bottom: 6px;
-        padding: 4px 8px;
-        border-radius: 3px;
-        font-size: 0.8rem;
-        line-height: 1.3;
-        background: var(--sys-color-surface);
-        color: var(--sys-color-text-secondary);
-        border-left: 3px solid var(--sys-color-primary-main);
-      `}>
-        {spatialMode === 'operations'
-          ? getI18nMessage('spatialModeOperationsDesc')
-          : getI18nMessage('spatialModeDrawDesc')
-        }
+      {/* Two-way toggle + r028.136 mode help "?" (replaces the r025.061 description line) */}
+      <div css={css`display: flex; align-items: center; gap: 4px; margin-bottom: 8px;`}>
+        <div css={[toggleGroupStyle, css`flex: 1; margin-bottom: 0;`]} role='group' aria-label='Spatial mode'>
+          <button
+            css={spatialMode === 'operations' ? toggleActiveStyle : undefined}
+            onClick={() => handleModeChange('operations')}
+            aria-pressed={spatialMode === 'operations'}
+            aria-describedby={tabHelpEnabled ? `${widgetId}-tab-help-desc-operations` : undefined}
+            title={getI18nMessage('spatialModeOperationsTitle')}
+          >
+            {getI18nMessage('spatialModeOperations')}
+          </button>
+          <button
+            css={spatialMode === 'draw' ? toggleActiveStyle : undefined}
+            onClick={() => handleModeChange('draw')}
+            aria-pressed={spatialMode === 'draw'}
+            aria-describedby={tabHelpEnabled ? `${widgetId}-tab-help-desc-draw` : undefined}
+            title={getI18nMessage('spatialModeDrawTitle')}
+          >
+            {getI18nMessage('spatialModeDraw')}
+          </button>
+        </div>
+        <SpatialModeHelp
+          widgetId={widgetId}
+          spatialMode={spatialMode}
+          getI18nMessage={getI18nMessage}
+        />
       </div>
 
       {/* Header row — Clear All button */}

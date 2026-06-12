@@ -7,6 +7,110 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 > **Archive**: For releases r001-r021, see [CHANGELOG_ARCHIVE_r001-r021.md](docs/archive/CHANGELOG_ARCHIVE_r001-r021.md)
 
+## [1.20.0-r028.137] - 2026-06-12 - Tab help polish: change-signal pulse + SETTINGS logging
+
+### Context
+Team review feedback: with a static "?" it is not obvious that the help content changes per tab. Added an industry-standard attention cue, then SETTINGS debug logging for the config reads (which the tab-help work had been missing).
+
+### Added
+- One-shot halo pulse on both "?" buttons when their context changes: theme-primary ring, 750ms ease-out, 0.35 peak opacity, scale 0.85 → 1.4, `aria-hidden`, suppressed under `prefers-reduced-motion`. Lives in the shared `HelpPopoverButton` (new `contextId` prop), so the main tab button and the Operations/Draw mode button both get it.
+- Fires on every real context change AND once on mount (user call: the help is new, draw the eye on load — note this means each widget panel reopen pulses once). When the popover is open, a tab click light-dismisses it (calcite `autoClose`), so the pulse fires then too — it is the only remaining signal (user-reported during smoke; an earlier skip-while-open guard was removed as based on a wrong assumption).
+- `SETTINGS` debug logging at both consumption sites, matching the `singletonConfigRead` house pattern: `source: 'tab-help'` (active tab, switch, background, auto-contrast result, per-tab text source config-vs-default) and `source: 'tab-help-mode'` (mode text sources). Visible via `?debug=SETTINGS`; no new tag.
+
+### Notes
+- No config (always-on cue), no shared-code change, no FS bump. Timing tuned live with the user: 600ms/0.30 → 750ms/0.35.
+- Manual smoke passed (user, 2026-06-12): pulse on load, on tab and mode changes, and after popover dismissal into a tab switch.
+
+### Files touched
+`query-simple/src/runtime/components/tab-help.tsx`, `query-simple/src/version.ts` (r028.137), `docs/query-simple/CHANGELOG.md`, `docs/specs/TAB_HELP_SPEC.md`
+
+## [1.20.0-r028.136] - 2026-06-12 - Tab help Phase 4: Operations/Draw mode help
+
+### Context
+User request after Phase 3 shipped, reversing the spec's original "leave the one-liners alone" call: the hardcoded r025.061 description line under the Spatial Operations/Draw toggle reads as a worse version of what tab help already does. Replaced it with the same "?" pattern.
+
+### Added
+- `SpatialModeHelp` (in `tab-help.tsx`): a "?" at the far right of the Operations/Draw toggle row; the popover describes the ACTIVE mode. The button+popover internals were extracted into a shared `HelpPopoverButton` used by both the main-tab and mode help (no behavior change to the main button).
+- Config keys `tabHelpOperationsText` / `tabHelpDrawText` + shared-code getters (same blank-is-unset semantics) → feed-simple consumer bump (r005.023). Two matching text areas in the Tab Help settings section.
+- Richer shipped defaults than the old one-liners (`tabHelpOperationsDefault` / `tabHelpDrawDefault`). Per user feedback, the Operations default does not cross-reference Draw mode; it says Operations use the current results as input, so run a query first.
+- SR: description spans for both modes; `aria-describedby` set directly on the mode toggle buttons in `SpatialTabContent` (our own buttons, no innerRef indirection), gated on the master switch.
+- The master `tabHelpEnabled` switch and `tabHelpBackgroundColor` + auto-contrast govern the mode popover identically.
+
+### Removed
+- The r025.061 mode description block in `SpatialTabContent.tsx` and its now-dead i18n keys `spatialModeOperationsDesc` / `spatialModeDrawDesc`. The toggle row reflowed to flex (toggle `flex: 1`, "?" at the right, spacing preserved).
+
+### Notes
+- +1 getter test (786/786). tsc clean. Settings docs triple-updated. Spec Phase 4 section added; Decided behavior #7 marked REVERSED with the rationale.
+- Manual smoke passed (user, 2026-06-12): one-liner gone, popover follows the active mode, custom text + clear-to-default works, master switch removes both "?" buttons, background color applies to the mode popup.
+
+### Files touched
+`query-simple/src/config.ts`, `query-simple/src/runtime/components/tab-help.tsx`, `query-simple/src/runtime/tabs/SpatialTabContent.tsx`, `query-simple/src/runtime/translations/default.ts`, `query-simple/src/setting/setting.tsx`, `query-simple/src/setting/translations/default.ts`, `query-simple/src/version.ts` (r028.136), `feed-simple/src/version.ts` (r005.023), `shared-code/mapsimple-common/widget-config-manager.ts`, `shared-code/mapsimple-common/tests/widget-config-manager.test.ts`, `docs/query-simple/SETTINGS_REFERENCE.md`, `docs/user-guide/SETTINGS_AT_A_GLANCE.md`, `docs/user-guide/QUERYSIMPLE_CONFIGURATION_GUIDE.md`, `docs/specs/TAB_HELP_SPEC.md`, `TODO.md`
+
+## [1.20.0-r028.135] - 2026-06-11 - Tab help Phase 3: master switch + popup background (completes TODO #36)
+
+### Context
+Final phase of `TAB_HELP_SPEC`: governance and theming. Orgs can now remove the help affordance entirely or restyle the popup to match their site's help scheme (the KC iMap yellow was the driving case). Completes the phased rollout started in r028.133.
+
+### Added
+- `tabHelpEnabled` (default `true`): master switch. Off removes the "?" button, the popover, AND the per-tab SR descriptions; the aria-stamping effect gained a cleanup so no `aria-describedby` is left pointing at unmounted spans.
+- `tabHelpBackgroundColor` (unset = theme surface): popover background, applied via `--calcite-color-foreground-1` (the house error-popover pattern) plus `--calcite-color-text-1`.
+- Auto-contrast text: new `runtime/contrast-utils.ts` (`parseHexColor`, `pickTextColorForBackground` — YIQ ≥ 128 → dark text, else white; unparseable → dark). Deliberately NOT a setting, so help can never be configured unreadable.
+- Settings: "Show tab help" Switch, "Popup background" ThemeColorPicker, and a "Use theme default" reset button that appears only while a color is set (clears to `''`, which the getter treats as unset).
+- Shared-code getters `getTabHelpEnabled` / `getTabHelpBackgroundColor` → feed-simple consumer bump (r005.022).
+- +12 tests (5 getter, 7 contrast). Suite 785/785.
+
+### Notes
+- Settings docs triple-updated with the two new rows.
+- Manual smoke passed (user, 2026-06-11): switch removes/restores the button, yellow background renders dark text, dark background flips to white text, reset returns the theme surface.
+
+### Files touched
+`query-simple/src/config.ts`, `query-simple/src/runtime/components/tab-help.tsx`, `query-simple/src/runtime/contrast-utils.ts` (new), `query-simple/src/setting/setting.tsx`, `query-simple/src/setting/translations/default.ts`, `query-simple/src/version.ts` (r028.135), `feed-simple/src/version.ts` (r005.022), `shared-code/mapsimple-common/widget-config-manager.ts`, `shared-code/mapsimple-common/tests/widget-config-manager.test.ts`, `query-simple/tests/contrast-utils.test.ts` (new), `docs/query-simple/SETTINGS_REFERENCE.md`, `docs/user-guide/SETTINGS_AT_A_GLANCE.md`, `docs/user-guide/QUERYSIMPLE_CONFIGURATION_GUIDE.md`, `docs/specs/TAB_HELP_SPEC.md`, `TODO.md`
+
+## [1.20.0-r028.134] - 2026-06-11 - Tab help Phase 2: per-tab configurable markdown text
+
+### Context
+Phase 2 of TODO #36 (`TAB_HELP_SPEC`): the Phase 1 "?" popover text becomes org-configurable per tab. Unset or blank fields fall back to the shipped defaults, so zero-config deployments are unchanged.
+
+### Added
+- Config keys `tabHelpQueryText` / `tabHelpSpatialText` / `tabHelpResultsText` (optional markdown) in `config.ts`.
+- Shared-code singleton getters `getTabHelpQueryText` / `getTabHelpSpatialText` / `getTabHelpResultsText`: blank/whitespace counts as unset and returns `undefined` so the runtime falls back to the default. Shared-code touched → feed-simple consumer bump (r005.021; helper-simple has no version.ts).
+- "Tab Help" settings section: one text area per tab, placeholder = the shipped default text (imported from runtime translations, single source of truth), monospace-on-neutral styling matching the Custom Template editor, and a visible markdown syntax reference line (`tabHelpSyntax`).
+- `stripMarkdownToText()` in QS `markdown-template-utils`: converts through the real engine then strips tags/decodes entities, feeding the hidden SR description spans so they always track what the popover renders. First cut replaced inline tags with spaces leaving `buffer .` artifacts; fixed to delete inline tags and space only block boundaries — caught by the new unit tests.
+- +11 tests: 5 getter tests (shared `widget-config-manager.test.ts`), 6 strip tests (new `tests/markdown-strip.test.ts`). Suite 773/773.
+
+### Changed
+- `tab-help.tsx` resolves per-tab text via the singleton (configured text wins, shipped default as fallback) for both the popover body and the SR spans.
+
+### Notes
+- No app config seeding by design: unset IS the default state.
+- Settings docs triple-updated: Tab Help section in `SETTINGS_REFERENCE.md`, Tab help table in `SETTINGS_AT_A_GLANCE.md`, new §22 in `QUERYSIMPLE_CONFIGURATION_GUIDE.md` (authoring notes: markdown syntax, literal `{{field}}` tokens, keep it short).
+- Manual smoke passed (user, 2026-06-11): markdown renders in the popover, cleared field returns the default, settings section reads clearly as markdown-in.
+- Noted in passing, not fixed (scope): `contentTemplateTip` in setting translations is a dead key, referenced nowhere.
+
+### Files touched
+`query-simple/src/config.ts`, `query-simple/src/runtime/components/tab-help.tsx`, `query-simple/src/runtime/markdown-template-utils.ts`, `query-simple/src/setting/setting.tsx`, `query-simple/src/setting/translations/default.ts`, `query-simple/src/version.ts` (r028.134), `feed-simple/src/version.ts` (r005.021), `shared-code/mapsimple-common/widget-config-manager.ts`, `shared-code/mapsimple-common/tests/widget-config-manager.test.ts`, `query-simple/tests/markdown-strip.test.ts` (new), `docs/query-simple/SETTINGS_REFERENCE.md`, `docs/user-guide/SETTINGS_AT_A_GLANCE.md`, `docs/user-guide/QUERYSIMPLE_CONFIGURATION_GUIDE.md`, `docs/specs/TAB_HELP_SPEC.md`
+
+## [1.20.0-r028.133] - 2026-06-11 - Tab help Phase 1: "?" button + active-tab popover
+
+### Context
+A deployment team (KC iMap) has a single "?" popup carrying ALL tab guidance as one wall of text, because one tooltip is all the widget offered. TODO #36 / `docs/specs/TAB_HELP_SPEC.md`: per-tab help, rolled out in phases. Phase 1 ships the affordance with shipped default text; configuration comes in Phases 2-3.
+
+### Added
+- `runtime/components/tab-help.tsx`: single clickable "?" button at the right end of the tab strip. Opens a calcite-popover describing the ACTIVE tab — heading is the tab name, body is the default i18n text rendered through the shared markdown engine (`convertTemplateToHtml`; `{{field}}` tokens not substituted). Follows the house click-driven popover pattern (controlled `open` + `triggerDisabled` + `autoClose` + `closable`); focus returns to the button on close.
+- Screen-reader layer: visually-hidden per-tab description spans, wired to the tab buttons as `aria-describedby`. jimu's `Tab` forwards no aria props, so the buttons are captured via the Tab `innerRef` (typed in 1.20 but marked internal — re-verify on ExB upgrades) and the attribute is stamped after render.
+- i18n: `tabHelpButtonLabel`, `tabHelpQueryDefault`, `tabHelpSpatialDefault`, `tabHelpResultsDefault`.
+
+### Changed
+- `query-task.tsx`: renders TabHelp, captures the three tab buttons via `innerRef`, reserves 38px right padding on the tab nav so the button never underlaps the Results tab.
+- Smoke finding (2026-06-11): a `max-height` + `overflow-y: auto` body constraint rendered an always-visible scrollbar even on short default text; removed — the Phase 1 popover grows to fit. Long-content strategy deferred to Phase 2 (spec open question updated).
+
+### Notes
+- No new config keys, no settings UI, no shared-code changes (no FS consumer bump), no flow docs affected (standalone UI affordance). Settings docs update lands with Phases 2-3 when settings exist.
+- Manual smoke passed (user, 2026-06-11): all three tabs show the correct popover; placement clear of the Results tab. tsc clean, Jest 762/762, dev build compiles.
+
+### Files touched
+`query-simple/src/runtime/components/tab-help.tsx` (new), `query-simple/src/runtime/query-task.tsx`, `query-simple/src/runtime/translations/default.ts`, `query-simple/src/version.ts` (r028.133), `docs/specs/TAB_HELP_SPEC.md`, `docs/query-simple/CHANGELOG.md`
+
 ## [1.20.0-r028.132] - 2026-06-08 - Settings-at-a-glance doc + public-push wiring (docs/tooling only)
 
 ### Context
@@ -19,12 +123,14 @@ The settings panel has grown enough to feel overwhelming. Added a scannable end-
 ### Changed
 - 10 at-a-glance rows corrected against the code: Arrangement labels are Vertical/Horizontal/Icon (not Block/Inline/Popper); "Point zoom distance (ft)"; graphics ranges 1-10px / 8-32px / 1-6px; Dock Top/Bottom; Short ID is case-SENSITIVE; "Search by" drives the runtime dropdown and popup title; Display order is group-conditional; Export is not gated by `allowExport`.
 - Cross-linked the three settings docs (SETTINGS_REFERENCE and at-a-glance both ways, CONFIGURATION_GUIDE to at-a-glance).
-- `docs/features/SPATIAL_RELATIONSHIPS_REFERENCE.md`: removed 2 unfinished TODO diagram notes; fixed a broken FLOW-09 link.
-- `scripts/stage-public-release.py`: new `USER_DOCS` list ships the at-a-glance, the DebugLogger guide (with its drop-in logger source inlined as a code block), and the Spatial Relationships reference. Dry-run confirmed.
+- All three shipped end-user references consolidated under `docs/user-guide/`: the DebugLogger guide moved out of `docs/development/` and the Spatial Relationships reference out of `docs/features/`, so they sit beside Settings-at-a-Glance where the README says they live. No internal-looking folders ship.
+- DebugLogger drop-in (`debug-logger-standalone.ts`) inlined into the guide as a fenced code block and the loose `.ts` deleted, so no source file lives in the docs tree.
+- `docs/user-guide/SPATIAL_RELATIONSHIPS_REFERENCE.md`: removed 2 unfinished TODO diagram notes; fixed a broken FLOW-09 link.
+- `scripts/stage-public-release.py`: new `USER_DOCS` list ships the at-a-glance, the DebugLogger guide, and the Spatial Relationships reference; added the r028.132 release doc to `RELEASE_DOCS`. Dry-run confirmed.
 - `.claude/skills/wrap/SKILL.md`: added a "Settings Docs" maintenance step so a settings change updates all three docs. Not committed with this batch (`.claude/` is outside the widget repo).
 
 ### Files touched
-`query-simple/src/version.ts` (r028.132), `docs/query-simple/CHANGELOG.md`, `docs/query-simple/SETTINGS_REFERENCE.md`, `docs/user-guide/SETTINGS_AT_A_GLANCE.md` (new), `docs/user-guide/QUERYSIMPLE_CONFIGURATION_GUIDE.md`, `docs/features/SPATIAL_RELATIONSHIPS_REFERENCE.md`, `TODO.md`, `scripts/stage-public-release.py`
+`query-simple/src/version.ts` (r028.132), `docs/query-simple/CHANGELOG.md`, `docs/query-simple/SETTINGS_REFERENCE.md`, `docs/user-guide/SETTINGS_AT_A_GLANCE.md` (new), `docs/user-guide/QUERYSIMPLE_CONFIGURATION_GUIDE.md`, `docs/user-guide/DEBUG_LOGGER_GUIDE.md` (relocated from docs/development, source inlined), `docs/user-guide/SPATIAL_RELATIONSHIPS_REFERENCE.md` (relocated from docs/features), `docs/development/debug-logger-standalone.ts` (deleted, inlined into the guide), `docs/releases/RELEASE_QS-r028.132_FS-r005.020.md` (new), `TODO.md`, `scripts/stage-public-release.py`
 
 ## [1.20.0-r028.131] - 2026-06-05 - New-widget default: Path 3 (LayerList) instead of Path 1
 

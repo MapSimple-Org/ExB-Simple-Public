@@ -2,8 +2,8 @@
 
 Custom widgets for ArcGIS Experience Builder Developer Edition. Built for performance, deep-linking, and advanced result management.
 
-**Current Version**: QS `1.20.0-r028.132` | FS `1.20.0-r005.020`
-**Latest Update**: Copy a query between widgets, new widgets default to the LayerList, and new end-user docs (June 9, 2026)
+**Current Version**: QS `1.20.0-r028.137` | FS `1.20.0-r005.023`
+**Latest Update**: Configurable tab help — every tab explains itself, with org-customizable text and styling (June 12, 2026)
 
 ## Key Differentiators (Why QuerySimple?)
 
@@ -16,6 +16,24 @@ QuerySimple is designed to solve the common pain points of the standard Experien
 - **Persistence & Restoration**: Selections are maintained even when the identify tool is used, ensuring users never lose their search context.
 
 ---
+
+## What's New (r028.137, June 12, 2026)
+
+> Full release notes: [RELEASE_QS-r028.137_FS-r005.023](docs/releases/RELEASE_QS-r028.137_FS-r005.023.md)
+
+### Tab help: every tab explains itself
+
+A "?" button beside the Query / Spatial / Results tabs opens a short description of whichever tab is active, and the Spatial tab's Operations/Draw toggle gets its own "?" for the active mode. Standard descriptions ship out of the box; all five texts are customizable per organization in the widget settings, with the same markdown support as Custom Templates (bold, lists, links, paragraphs).
+
+### Style it, or switch it off
+
+The help popup's background color is configurable to match your site's help scheme, with text contrast handled automatically so it stays readable on any color. A master "Show tab help" switch removes the affordance entirely if you prefer. The "?" gives a single subtle pulse on load and when its content changes, and respects users' reduced-motion preference.
+
+### Built for screen readers
+
+Each tab carries a hidden description announced when the tab receives focus, the popover is fully keyboard-accessible, and help configuration reads are visible under `?debug=SETTINGS` for troubleshooting.
+
+FeedSimple has no functional changes this release; its version advances to r005.023 tracking shared-code updates.
 
 ## What's New (r028.132, June 9, 2026)
 
