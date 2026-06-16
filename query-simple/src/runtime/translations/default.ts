@@ -46,6 +46,11 @@ export default {
   tabHelpQueryDefault: 'Search a layer by attributes. Choose a search layer and field, enter a value, and matching features are selected on the map and listed in the Results tab.',
   tabHelpSpatialDefault: 'Select features by location. Use Operations to apply a buffer or spatial relationship using the current results, or Draw to sketch a shape on the map and select the features it touches.',
   tabHelpResultsDefault: 'Review the features your search selected. Click a result to zoom to it and see details. Use the menu for export and table options. Results stay until you clear them or run a new search.',
+  // r028.138: Screen-reader announcements for programmatic context changes (TODO #38).
+  // {token} placeholders are substituted by buildAnnouncement (announce-utils.ts), not by formatMessage.
+  tabSwitchAnnouncement: '{tab} tab.',
+  tabSwitchAnnouncementResults: '{tab} tab, {count} items.',
+  tabHelpModeAnnouncement: '{mode} mode. Help updated.',
   // r025: Spatial tab toggle and placeholder text
   spatialModeOperations: 'Operations',
   spatialModeDraw: 'Draw',

@@ -43,6 +43,8 @@ import { type JimuMapView } from 'jimu-arcgis'
 import { QueryTabContent } from './tabs/QueryTabContent'
 import { SpatialTabContent } from './tabs/SpatialTabContent'
 import { TabHelp } from './components/tab-help'
+import { buildAnnouncement } from './announce-utils'
+import { useLiveAnnouncer } from './useLiveAnnouncer'
 import { QueryTaskForm } from './query-task-form'
 import { QueryTaskResult } from './query-result'
 import { DataSourceTip, useDataSourceExists, ErrorMessage } from 'widgets/shared-code/mapsimple-common'
@@ -269,6 +271,14 @@ export function QueryTask (props: QueryTaskProps) {
       setInternalActiveTab(tab)
     }
   }, [propOnTabChange])
+
+  // r028.138 TODO #38: single live region for programmatic context-change announcements
+  // (tab switches the user's focus does not carry, plus the Spatial mode toggle). The
+  // user-driven tablist path opts out via suppressTabAnnounceRef; its focus-read tab
+  // descriptions already cover it. useLiveAnnouncer handles debounce + same-message re-announce.
+  const { message: liveAnnouncement, announce } = useLiveAnnouncer()
+  const suppressTabAnnounceRef = React.useRef(false)
+  const prevAnnouncedTabRef = React.useRef(activeTab)
 
   // r028.133 TAB_HELP_SPEC Phase 1: tab strip buttons captured for aria-describedby
   // wiring in TabHelp. innerRef is in 1.20's TabProps but marked internal — re-verify
@@ -953,6 +963,9 @@ export function QueryTask (props: QueryTaskProps) {
     
     // Mark this as a manual switch to prevent auto-switch useEffect from interfering
     manualTabSwitchRef.current = true
+    // r028.138 TODO #38: user-driven tablist nav. Suppress the live-region announcement —
+    // the tab's focus-read description already covers a user-initiated switch.
+    suppressTabAnnounceRef.current = true
     setActiveTab(tab)
     
     // Reset the flag after a short delay to allow the state update to complete
@@ -1324,6 +1337,19 @@ export function QueryTask (props: QueryTaskProps) {
   
   // FIX (r018.95): Use effectiveRecords.length to reflect real-time count updates when records are removed
   const effectiveResultCount = (isClearing || isVirtualClearActive) ? 0 : effectiveRecords.length
+
+  // r028.138 TODO #38: announce programmatic tab switches via the live region. Fires for any
+  // switch the user's focus does not carry (auto-to-Results, clear-back, query-switch, results
+  // back-button, restore). The user tablist path sets suppressTabAnnounceRef and is skipped.
+  React.useEffect(() => {
+    if (prevAnnouncedTabRef.current === activeTab) return
+    prevAnnouncedTabRef.current = activeTab
+    if (suppressTabAnnounceRef.current) {
+      suppressTabAnnounceRef.current = false
+      return
+    }
+    announce(buildAnnouncement({ type: 'tab', tab: activeTab, resultCount: effectiveResultCount }, getI18nMessage))
+  }, [activeTab, effectiveResultCount, announce, getI18nMessage])
   
   // r023.15: Keep recordsRef in sync with accumulatedRecords when records are removed.
   // The reselection block (line ~867) sets recordsRef.current = accumulatedRecords during query
@@ -1377,6 +1403,27 @@ export function QueryTask (props: QueryTaskProps) {
       flex-direction: column;
       overflow: hidden;
     `}>
+      {/* r028.138 TODO #38: single visually-hidden live region for programmatic context-change
+          announcements (tab switches focus does not carry, plus the Spatial mode toggle).
+          Rendered once and always present in the DOM; text is mutated via state. User tablist
+          navigation is NOT announced here (focus-read tab descriptions cover it). */}
+      <div
+        role='status'
+        aria-live='polite'
+        aria-atomic='true'
+        data-testid='tab-context-announcer'
+        css={css`
+          position: absolute;
+          width: 1px;
+          height: 1px;
+          margin: -1px;
+          padding: 0;
+          border: 0;
+          overflow: hidden;
+          clip: rect(0 0 0 0);
+          white-space: nowrap;
+        `}
+      >{liveAnnouncement}</div>
       {/* r021.51: Key prop forces remount when DS is destroyed. Changing this key tells React
           to treat DataSourceComponent as a new instance, triggering full unmount/remount cycle
           and natural DS recreation. This is the proper React pattern for forced remounting. */}
@@ -1785,6 +1832,7 @@ export function QueryTask (props: QueryTaskProps) {
           >
             <SpatialTabContent
               activeTab={activeTab}
+              onAnnounce={announce}
               accumulatedRecords={accumulatedRecords}
               onClearResults={() => { clearResult('spatial-trash-click', 'spatial') }}
               mapView={mapView}

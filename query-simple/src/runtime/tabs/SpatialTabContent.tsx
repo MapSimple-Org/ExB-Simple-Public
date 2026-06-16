@@ -67,6 +67,7 @@ import { createQuerySimpleDebugLogger, EntityStatusType, StatusIndicator, widget
 import { useBufferPreview } from '../managers/use-buffer-preview'
 import { ResultsModeControl, type ResultsModeValue } from '../components/ResultsModeControl'
 import { SpatialModeHelp } from '../components/tab-help'
+import { buildAnnouncement } from '../announce-utils'
 import type MapView from '@arcgis/core/views/MapView'
 import type SceneView from '@arcgis/core/views/SceneView'
 import type Geometry from '@arcgis/core/geometry/Geometry'
@@ -83,6 +84,8 @@ export type SpatialMode = 'operations' | 'draw'
 
 export interface SpatialTabContentProps {
   activeTab: 'query' | 'spatial' | 'results'
+  /** r028.138 TODO #38: announce a context change to the widget's shared SR live region. */
+  onAnnounce?: (message: string) => void
   accumulatedRecords?: FeatureDataRecord[]
   onClearResults?: () => void
   mapView?: MapView | SceneView
@@ -270,7 +273,7 @@ const disabledHintStyle = css`
 // ─── Component ─────────────────────────────────────────────────────
 
 export function SpatialTabContent (props: SpatialTabContentProps) {
-  const { activeTab, accumulatedRecords, onClearResults, mapView, jimuMapView, widgetId, isPanelVisible, targetLayerOptions, onExecuteSpatialQuery, queryErrorAlert, onDismissQueryErrorAlert, noResultsAlert, onDismissNoResultsAlert } = props
+  const { activeTab, accumulatedRecords, onClearResults, mapView, jimuMapView, widgetId, isPanelVisible, targetLayerOptions, onExecuteSpatialQuery, queryErrorAlert, onDismissQueryErrorAlert, noResultsAlert, onDismissNoResultsAlert, onAnnounce } = props
   const getI18nMessage = hooks.useTranslation(defaultMessage)
   const hasResults = accumulatedRecords && accumulatedRecords.length > 0
 
@@ -660,6 +663,10 @@ export function SpatialTabContent (props: SpatialTabContentProps) {
     userHasChosenModeRef.current = true
     spatialModeRef.current = mode
     setSpatialMode(mode)
+    // r028.138 TODO #38: announce the mode change to the shared SR live region. The toggle
+    // changes the active help inside the tab with no focus event carrying it, so this is the
+    // only signal a screen-reader user gets that the help re-targeted.
+    onAnnounce?.(buildAnnouncement({ type: 'mode', mode }, getI18nMessage))
     // r028.119: recompute the spatial input for the new mode from this real event
     // (instead of an effect watching spatialMode).
     if (mode === 'draw') {
@@ -671,7 +678,7 @@ export function SpatialTabContent (props: SpatialTabContentProps) {
     // (user preference). JimuDraw stays mounted, so we no longer toggle drawLayer.visible.
     // Disarming the Sketch when leaving Draw mode is handled by the effect below, which
     // also covers the smart-default path that sets spatialMode without calling this.
-  }, [assembleForDraw, assembleForOperations])
+  }, [assembleForDraw, assembleForOperations, onAnnounce, getI18nMessage])
 
   // r025.041: JimuDraw callbacks (same pattern as interactive-draw-tool.tsx)
   const handleDrawToolCreated = React.useCallback((descriptor: jimuMap.JimuDrawCreatedDescriptor) => {

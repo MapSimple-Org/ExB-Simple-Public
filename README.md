@@ -2,8 +2,8 @@
 
 Custom widgets for ArcGIS Experience Builder Developer Edition. Built for performance, deep-linking, and advanced result management.
 
-**Current Version**: QS `1.20.0-r028.137` | FS `1.20.0-r005.023`
-**Latest Update**: Configurable tab help — every tab explains itself, with org-customizable text and styling (June 12, 2026)
+**Current Version**: QS `1.20.0-r028.139` | FS `1.20.0-r005.023`
+**Latest Update**: Screen-reader announcements — context changes (results arriving, tab/mode switches) are now spoken to assistive technology (June 15, 2026)
 
 ## Key Differentiators (Why QuerySimple?)
 
@@ -16,6 +16,14 @@ QuerySimple is designed to solve the common pain points of the standard Experien
 - **Persistence & Restoration**: Selections are maintained even when the identify tool is used, ensuring users never lose their search context.
 
 ---
+
+## What's New (r028.139, June 15, 2026)
+
+> Full release notes: [RELEASE_QS-r028.139_FS-r005.023](docs/releases/RELEASE_QS-r028.139_FS-r005.023.md)
+
+### Screen-reader announcements for context changes
+
+QuerySimple now speaks the context changes that a sighted user sees but a screen-reader user previously could not. When the widget moves you somewhere without your keyboard focus moving with it, a screen reader announces it: results arriving after a search ("Results tab, 23 items."), returning to the search after clearing results, and switching the Spatial tab between Operations and Draw. It's additive and quiet, a visually hidden live region, nothing changes on screen, and user-driven tab navigation stays silent so nothing is announced twice. FeedSimple is unchanged this release (carried forward at r005.023).
 
 ## What's New (r028.137, June 12, 2026)
 

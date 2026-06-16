@@ -7,6 +7,32 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 > **Archive**: For releases r001-r021, see [CHANGELOG_ARCHIVE_r001-r021.md](docs/archive/CHANGELOG_ARCHIVE_r001-r021.md)
 
+## [1.20.0-r028.139] - 2026-06-15 - Test/debug hook on the #38 live region
+
+### Added
+- `data-testid="tab-context-announcer"` on the screen-reader live region (`query-task.tsx`). A collision-safe test/debug handle: QueryTask mounts per query item, so a semantic `id` would risk duplicate ids; `data-testid` is duplicate-tolerant and the conventional E2E target. Chosen over an `id` because the region has no ARIA relationship that an id would serve, so an id would be tooling-driven noise. Invisible, a11y-neutral, no behavior change. query-simple only.
+
+## [1.20.0-r028.138] - 2026-06-13 - Screen-reader announcements for programmatic context changes (TODO #38)
+
+### Context
+Accessibility gap from the tab-help work: a screen-reader user gets no signal when content changes without their focus moving. The tabs' focus-read descriptions cover user-driven tab navigation, but every programmatic change is silent — most importantly the auto-switch to Results after a query (results appear, nothing is announced), plus the Operations/Draw mode toggle. Scope grew during design from "the sub-tab" to "every context change focus does not carry."
+
+### Added
+- One shared, persistent, visually-hidden live region (`role="status"` `aria-live="polite"` `aria-atomic="true"`) rendered once at the QueryTask root. Always in the DOM; text mutated via state.
+- `runtime/useLiveAnnouncer.ts`: hook driving the region with a 150ms debounce (rapid toggles collapse to the last message) and a same-message clear-then-reset so identical text re-fires aria-live.
+- `runtime/announce-utils.ts`: pure `buildAnnouncement()` reusing the existing tab/mode labels plus new i18n keys `tabSwitchAnnouncement`, `tabSwitchAnnouncementResults` (includes the count), `tabHelpModeAnnouncement`.
+- Programmatic tab switches announce via a guard in the `activeTab` effect (auto-to-Results with count, clear-back, query-switch, results back-button, restore). The user tablist path (`handleTabChange`) sets `suppressTabAnnounceRef` so its focus-read description is not doubled.
+- The Spatial Operations/Draw toggle announces via a new `onAnnounce` prop on `SpatialTabContent` (`handleModeChange`).
+- +9 tests: `announce-utils` (5) and `useLiveAnnouncer` fake-timer debounce/reset (4). Suite 795/795.
+
+### Notes
+- The focus-read tab descriptions, the r028.137 visual pulse, and reduced-motion handling are all unchanged; the live region complements them. User-driven tab navigation is deliberately NOT announced here (no double-announce).
+- query-simple only; no shared-code, no FS bump.
+- Manual VoiceOver verification pending (the "no double-announce on user tab nav" guarantee is structural but best confirmed by ear).
+
+### Files touched
+`query-simple/src/runtime/announce-utils.ts` (new), `query-simple/src/runtime/useLiveAnnouncer.ts` (new), `query-simple/src/runtime/query-task.tsx`, `query-simple/src/runtime/tabs/SpatialTabContent.tsx`, `query-simple/src/runtime/translations/default.ts`, `query-simple/src/version.ts` (r028.138), `query-simple/tests/announce-utils.test.ts` (new), `query-simple/tests/useLiveAnnouncer.test.tsx` (new), `docs/query-simple/CHANGELOG.md`
+
 ## [1.20.0-r028.137] - 2026-06-12 - Tab help polish: change-signal pulse + SETTINGS logging
 
 ### Context
