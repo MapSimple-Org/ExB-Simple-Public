@@ -2,8 +2,8 @@
 
 Custom widgets for ArcGIS Experience Builder Developer Edition. Built for performance, deep-linking, and advanced result management.
 
-**Current Version**: QS `1.20.0-r028.139` | FS `1.20.0-r005.023`
-**Latest Update**: Screen-reader announcements — context changes (results arriving, tab/mode switches) are now spoken to assistive technology (June 15, 2026)
+**Current Version**: QS `1.20.0-r028.140` | FS `1.20.0-r005.023`
+**Latest Update**: Deep links now open QuerySimple in Section / Sidebar layouts, not just inside a Controller (June 24, 2026)
 
 ## Key Differentiators (Why QuerySimple?)
 
@@ -16,6 +16,14 @@ QuerySimple is designed to solve the common pain points of the standard Experien
 - **Persistence & Restoration**: Selections are maintained even when the identify tool is used, ensuring users never lose their search context.
 
 ---
+
+## What's New (r028.140, June 24, 2026)
+
+> Full release notes: [RELEASE_QS-r028.140_FS-r005.023](docs/releases/RELEASE_QS-r028.140_FS-r005.023.md)
+
+### Deep links now open QuerySimple in Section / Sidebar layouts
+
+HelperSimple opens QuerySimple when a URL parameter matches a configured Short ID (for example a `#pin=...` deep link). Previously that only worked when QuerySimple sat inside a **Controller** widget. In layouts where QuerySimple lives directly in a **Section view** (a toolbox sidebar that switches between Basemap, Layers, Search, and so on), the deep link was detected and the search ran, but the panel never came forward. HelperSimple now works out where the widget lives and reveals it the right way: in a Section/Sidebar it activates the holding view by triggering the same control a user would click (opening any wrapping sidebar too); in a Controller the original behavior is unchanged. Nothing to configure - it picks the right path automatically based on your layout. FeedSimple is unchanged this release (carried forward at r005.023).
 
 ## What's New (r028.139, June 15, 2026)
 

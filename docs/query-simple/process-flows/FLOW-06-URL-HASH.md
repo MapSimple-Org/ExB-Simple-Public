@@ -40,32 +40,39 @@ linking: a URL like `#pin=2223059013` opens the widget and executes the query.
       +-- Guard: no hash && no query -> exit          :317
       |
       +-- Check: qsopen=true?                        :325
-      |   +-- YES -> openWidget(managedWidgetId)      :331
+      |   +-- YES -> revealManagedWidget(managedWidgetId)  :420
       |   +-- return
       |
-      +-- getWidgetShortIds(managedWidgetId)           :336
+      +-- getWidgetShortIds(managedWidgetId)
       |   +-- Read appConfig.widgets[id].config.queryItems
       |   +-- Return array of non-empty shortIds
       |
-      +-- For each shortId:                            :343
+      +-- For each shortId:
       |   +-- hashParams.get(shortId) || queryParams.get(shortId)
       |   +-- Match found?
       |       +-- currentHash = "${shortId}=${hashValue}"
-      |       +-- Already executed (== lastExecutedHash)?      :361
-      |       |   +-- YES -> skip (prevent re-execution)   :372
-      |       |   +-- NO  -> openWidget(managedWidgetId)    :370
+      |       +-- Already executed (== lastExecutedHash)?
+      |       |   +-- YES -> skip (prevent re-execution)
+      |       |   +-- NO  -> revealManagedWidget(managedWidgetId)  :459
       |
       v
- openWidget(widgetId)                 <- :232
+ revealManagedWidget(widgetId)        <- :243   (r028.140: replaces the old openWidget)
       |
-      +-- loadWidgetClass(widgetId)    :241
-      |   +-- WidgetManager.loadWidgetClass() if not loaded
+      +-- resolveWidgetSectionView(widgetId, appConfig)   widget-placement.ts
+      |   (walks layouts -> views -> sections to find the widget's section + view)
       |
-      +-- getAppStore().dispatch(openWidget action)  :243
+      +-- Section/view resolved? (logged as helpersimple-reveal-strategy)
+      |   +-- YES -> revealInSection: clickSectionViewNavItem(sectionId, viewId)   :293
+      |   |          clicks the Navigator tab [aria-controls="${sectionId}_${viewId}"]
+      |   |          (visible responsive instance; polls ~1.8s; not-found -> BUG warn
+      |   |           + controller fallback). ExB runs its own switch incl. opening a
+      |   |           wrapping sidebar - what the user's click does.
+      |   +-- NO  -> openInController: getAppStore().dispatch(openWidget action)   :330
+      |              (the original controller path; controllers fall through here)
       |
-      +-- setTimeout(500ms)                          :252
-      |   +-- Dispatch OPEN_WIDGET_EVENT
-      |       { detail: { widgetId } }
+      +-- notifyManagedWidget(widgetId)   :343   (ALWAYS, regardless of branch)
+      |   +-- loadWidgetClass(widgetId)
+      |   +-- setTimeout(500ms) -> dispatch OPEN_WIDGET_EVENT { detail: { widgetId } }
       |
       v
  [QuerySimple receives OPEN_WIDGET_EVENT]
@@ -184,4 +191,4 @@ open/close state may be brought back).
 
 ---
 
-*Last updated: r028.118 (2026-06-02) -- accuracy audit: corrected drifted line refs, test count (22->20), widget-state event note*
+*Last updated: r028.140 (2026-06-24) -- open mechanism rewritten: openWidget -> placement-aware revealManagedWidget (section nav-tab click via widget-placement.ts vs the original controller open). Refs in the reveal block corrected (243/293/330/343/420/459); upstream refs (checkUrlParameters/qsopen/getWidgetShortIds/shortId loop) drifted ~+89 lines from the reveal-method insertion and still need a full ref re-audit.*

@@ -107,6 +107,7 @@ Add the new flow to the Flow Index table above.
 | `query-simple/tests/async-serializer.test.ts` | 5 | Async operation serializer, queue ordering |
 | `query-simple/tests/query-task-reducer.test.ts` | 5 | Alert state machine; truncation alert set/clear, RESET_FOR_CLEAR (r028.114) |
 | `helper-simple/tests/widget.test.tsx` | 20 | Hash parsing, lifecycle, event handlers |
+| `helper-simple/tests/widget-placement.test.ts` | 10 | resolveWidgetSectionView (6) + clickSectionViewNavItem (4) (r028.140) |
 | `shared-code/mapsimple-common/tests/utils.test.ts` | 6 | Toggle array, popup field extraction |
 | `shared-code/mapsimple-common/tests/markdown-template-utils.test.ts` | 79 | Markdown to HTML, token rendering |
 | `shared-code/mapsimple-common/tests/widget-config-manager.test.ts` | 62 | Config persistence, validation |
@@ -116,8 +117,8 @@ Add the new flow to the Flow Index table above.
 | `feed-simple/tests/feed-pipeline.test.ts` | 37 | Feed fetch, parse, transform pipeline |
 | `feed-simple/tests/custom-xml-parser.test.ts` | 22 | XML/RSS/Atom parsing |
 | `feed-simple/tests/markdown-template-utils.test.ts` | 12 | Feed markdown rendering |
-| **Total** | **729** | |
+| **Total** | **739** | |
 
 ---
 
-*Last updated: r028.125 (2026-06-04) -- added FLOW-15 (Hover Preview pin + feature highlight, TODO #34, Phases 1-3, r028.123-125). No tests changed; Table Total is still 729 (our four widgets). Jest's full-suite total is 730; the extra 1 is the excluded `simple` sample widget, which is not part of this project.*
+*Last updated: r028.140 (2026-06-24) -- added `helper-simple/tests/widget-placement.test.ts` (10) for the HS section-reveal open. Table Total 739. NOTE: this table now lags the full suite (~805 per CURRENT_STATUS) - test files added across r028.126-139 were never rowed in here; a full table reconciliation is pending.*

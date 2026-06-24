@@ -7,6 +7,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 > **Archive**: For releases r001-r021, see [CHANGELOG_ARCHIVE_r001-r021.md](docs/archive/CHANGELOG_ARCHIVE_r001-r021.md)
 
+## [1.20.0-r028.140] - 2026-06-24 - HelperSimple: URL-param open works for section-placed widgets
+
+### Context
+HelperSimple opens its managed widget (QuerySimple) when a URL param matches a shortId. That used `appActions.openWidget`, which only reveals a widget held in a **Controller**. The KC iMap template places QuerySimple directly in a **Section view** (no controller), so the open did nothing - the param was detected and the hash reached QS, but the panel never came forward.
+
+### Added
+- `helper-simple/src/runtime/widget-placement.ts` (new): `resolveWidgetSectionView` walks the app config (layouts -> views -> sections) to find the managed widget's section + view; `clickSectionViewNavItem` clicks the Navigator tab ExB renders with `aria-controls="${sectionId}_${viewId}"`, targeting the visible responsive instance and skipping an already-selected tab.
+- +10 tests (`helper-simple/tests/widget-placement.test.ts`: 6 resolver + 4 nav-click).
+
+### Changed
+- `widget.tsx` `revealManagedWidget` replaces the bare `openWidget` call. It resolves placement and branches: a section/view => click the Navigator tab (lets ExB run its real switch, including opening a wrapping sidebar - a raw `sectionNavInfoChanged` dispatch left the selector and panel content out of sync); null => the original `appActions.openWidget` controller path (controllers fall through automatically, no special-casing). Section reveal polls ~1.8s for deep-link-on-load timing. The hash-delivery event (`notifyManagedWidget`) is unconditional.
+
+### Notes
+- Chosen direction is logged as `helpersimple-reveal-strategy`. A resolved-section-but-no-nav-tab case logs at BUG level (always console.warn) and falls back to the controller open.
+- Nesting (a section inside a section, controller-in-section) is deliberately out of scope.
+- helper-simple only; HS has no version.ts so this rides the QS family version (r028.140); no shared-code, no FS bump.
+
+### Files touched
+`helper-simple/src/runtime/widget-placement.ts` (new), `helper-simple/src/runtime/widget.tsx`, `helper-simple/tests/widget-placement.test.ts` (new), `query-simple/src/version.ts` (r028.140), `docs/query-simple/CHANGELOG.md`
+
 ## [1.20.0-r028.139] - 2026-06-15 - Test/debug hook on the #38 live region
 
 ### Added

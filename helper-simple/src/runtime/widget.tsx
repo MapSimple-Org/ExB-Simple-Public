@@ -1,5 +1,6 @@
 /** @jsx jsx */
 import { React, jsx, css, type AllWidgetProps, getAppStore, type IMState, WidgetManager, appActions, DataSourceManager, type DataSource, type FeatureLayerDataSource } from 'jimu-core'
+import { resolveWidgetSectionView, clickSectionViewNavItem } from './widget-placement'
 import { type IMConfig } from '../config'
 import { versionManager } from '../version-manager'
 import { createHelperSimpleDebugLogger } from 'widgets/shared-code/mapsimple-common'
@@ -218,37 +219,130 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
   }
 
   /**
-   * Opens a widget in a controller using the Experience Builder API.
-   * 
-   * This method:
-   * 1. Loads the widget class if not already loaded
-   * 2. Dispatches the openWidget action via Redux
-   * 3. Notifies the widget to process hash parameters after opening
-   * 
-   * @param widgetId - The ID of the widget to open
-   * 
-   * @see https://developers.arcgis.com/experience-builder/sample-code/widgets/control-the-widget-state/
+   * Reveal the managed widget when a matching URL parameter is detected.
+   *
+   * How the reveal direction is decided (the split):
+   *   `resolveWidgetSectionView` walks the app config (layouts -> views -> sections).
+   *   - Resolves to a section + view => the widget is surfaced by a Navigator tab, so we
+   *     CLICK that tab (revealInSection). This is the KC-template / section-in-sidebar case.
+   *   - Returns null => the widget is not in a section (a Controller, a page layout, or a
+   *     plain panel), so we fall through to `appActions.openWidget` (openInController), the
+   *     original controller behavior. Controllers aren't found by the section walk, so they
+   *     land here automatically with no special-casing.
+   *
+   * The chosen direction is logged as `helpersimple-reveal-strategy` so it can be surfaced.
+   * If a section resolves but no Navigator tab is found (e.g. a section with no Navigator),
+   * that is logged at BUG level (console.warn, always on) and we fall back to the controller
+   * path as a last resort - see revealInSection.
+   *
+   * In every case `notifyManagedWidget` runs, so the hash reaches the widget no matter which
+   * reveal path fired.
+   *
+   * @param widgetId - The ID of the managed widget to reveal
    */
-  openWidget = (widgetId: string): void => {
-    const openAction = appActions.openWidget(widgetId)
-    
+  revealManagedWidget = (widgetId: string): void => {
     debugLogger.log('HASH-EXEC', {
-      event: 'helpersimple-openwidget-starting',
+      event: 'helpersimple-reveal-starting',
       widgetId,
       timestamp: Date.now()
     })
-    
+
+    try {
+      const state: IMState = getAppStore().getState()
+      const appConfig = window.jimuConfig?.isBuilder
+        ? state.appStateInBuilder?.appConfig
+        : state.appConfig
+      const placement = resolveWidgetSectionView(widgetId, appConfig as any)
+      debugLogger.log('HASH-EXEC', {
+        event: 'helpersimple-reveal-strategy',
+        widgetId,
+        strategy: placement ? 'section-nav-click' : 'controller-open',
+        placement: placement || null,
+        timestamp: Date.now()
+      })
+
+      if (placement) {
+        this.revealInSection(widgetId, placement.sectionId, placement.viewId)
+      } else {
+        this.openInController(widgetId)
+      }
+    } catch (error) {
+      debugLogger.log('HASH-EXEC', {
+        event: 'helpersimple-reveal-error',
+        widgetId,
+        error: error instanceof Error ? error.message : String(error),
+        timestamp: Date.now()
+      })
+      // Safety net: fall back to the controller open path
+      this.openInController(widgetId)
+    }
+
+    // Always deliver the hash to the widget so it processes the parameter.
+    this.notifyManagedWidget(widgetId)
+  }
+
+  /**
+   * Reveal a widget that lives in a Section's view by clicking the Navigator tab
+   * for that view - the same control the user clicks. ExB renders that tab with
+   * `aria-controls="${sectionId}_${viewId}"`, so we click it and let ExB run its
+   * real switch (including opening a wrapping sidebar and re-rendering content),
+   * which a raw state dispatch could not do for nested section-in-sidebar layouts.
+   *
+   * Polls briefly because the tab may not be in the DOM yet on a deep-link load.
+   */
+  private revealInSection = (widgetId: string, sectionId: string, viewId: string, attemptsLeft = 6): void => {
+    const result = clickSectionViewNavItem(sectionId, viewId)
+
+    if (result !== 'not-found') {
+      debugLogger.log('HASH-EXEC', {
+        event: 'helpersimple-reveal-navitem-' + result,
+        widgetId,
+        sectionId,
+        viewId,
+        timestamp: Date.now()
+      })
+      return
+    }
+
+    if (attemptsLeft > 0) {
+      // Tab not rendered yet - retry shortly (covers deep-link-on-load timing).
+      setTimeout(() => this.revealInSection(widgetId, sectionId, viewId, attemptsLeft - 1), 300)
+      return
+    }
+
+    // Retries exhausted: resolved to a section but no Navigator tab was found. Surface it
+    // as a warning (BUG level always console.warns) and fall back to the controller path.
+    debugLogger.log('BUG', {
+      bugId: 'HS-REVEAL-NAVITEM-NOT-FOUND',
+      category: 'REVEAL',
+      widgetId,
+      sectionId,
+      viewId,
+      message: `Resolved to section ${sectionId} / ${viewId} but found no Navigator tab after retries; falling back to controller open.`
+    })
+    this.openInController(widgetId)
+  }
+
+  /**
+   * Reveal a widget held in a Controller via the standard ExB openWidget action.
+   * Harmless no-op for widgets not in a controller.
+   */
+  private openInController = (widgetId: string): void => {
+    debugLogger.log('HASH-EXEC', {
+      event: 'helpersimple-reveal-controller-fallback',
+      widgetId,
+      timestamp: Date.now()
+    })
+    getAppStore().dispatch(appActions.openWidget(widgetId))
+  }
+
+  /**
+   * Notify the managed widget to process hash parameters once it is mounted.
+   * This is the proven hash-delivery flow; only the reveal step above varies.
+   */
+  private notifyManagedWidget = (widgetId: string): void => {
     this.loadWidgetClass(widgetId)
       .then(() => {
-        getAppStore().dispatch(openAction)
-        debugLogger.log('HASH-EXEC', {
-          event: 'helpersimple-openwidget-action-dispatched',
-          widgetId,
-          timestamp: Date.now()
-        })
-      })
-      .then(() => {
-        // Give the widget a moment to mount, then notify it to process hash parameters
         setTimeout(() => {
           debugLogger.log('HASH-EXEC', {
             event: 'helpersimple-openwidget-dispatching-event',
@@ -270,16 +364,11 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
       })
       .catch((error) => {
         debugLogger.log('HASH-EXEC', {
-          event: 'helpersimple-openwidget-error',
+          event: 'helpersimple-notify-error',
           widgetId,
           error: error instanceof Error ? error.message : String(error),
           timestamp: Date.now()
         })
-        // Silently handle errors - widget may already be open or not in a controller
-        // eslint-disable-next-line no-console
-        if (process.env.NODE_ENV === 'development') {
-          console.error('[HelperSimple] Error opening widget:', error)
-        }
       })
   }
 
@@ -328,7 +417,7 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
         widgetId: config.managedWidgetId,
         timestamp: Date.now()
       })
-      this.openWidget(config.managedWidgetId)
+      this.revealManagedWidget(config.managedWidgetId)
       return 
     }
 
@@ -367,7 +456,7 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
             timestamp: Date.now()
           })
           // Open the widget using the proper API
-          this.openWidget(config.managedWidgetId)
+          this.revealManagedWidget(config.managedWidgetId)
         } else {
           debugLogger.log('HASH-EXEC', {
             event: 'helpersimple-checkurl-skipping-already-executed-hash',
