@@ -17,7 +17,7 @@ The Spatial tab provides two modes for selecting features by location, controlle
 
 Select features from accumulated query results using spatial geometry operations (e.g., intersects, overlaps). This mode requires existing results from a prior Query tab search -- the accumulated result geometries serve as the input for the spatial operation.
 
-**Layout:** Source indicator, Buffer distance, Mode toggle, Relationship selector, Target layers, Apply/Reset buttons.
+**Layout:** Source indicator, Buffer distance, Mode toggle, Relationship selector, Target layers, Search/Reset buttons.
 
 **Mode help text** (r025.061): A contextual description appears below the toggle -- "Select features using spatial geometry operations, e.g., intersects, overlaps." Styled with surface background, text-secondary color, primary-main left border accent, 0.8rem font.
 
@@ -25,7 +25,7 @@ Select features from accumulated query results using spatial geometry operations
 
 Select features using graphics drawn directly on the map. Supports point, polyline, polygon, rectangle, and circle tools with continuous multi-shape drawing and geometry accumulation.
 
-**Layout:** Draw tools, Buffer distance, Mode toggle, Relationship selector, Target layers, Apply/Reset buttons.
+**Layout:** Draw tools, Buffer distance, Mode toggle, Relationship selector, Target layers, Search/Reset buttons.
 
 **Mode help text** (r025.061): "Select features using graphics drawn on the map." Same styling as Operations mode help text.
 

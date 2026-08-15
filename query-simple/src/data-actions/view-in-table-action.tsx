@@ -93,6 +93,7 @@ import {
   type FeatureDataRecord
 } from 'jimu-core'
 import { createQuerySimpleDebugLogger } from 'widgets/shared-code/mapsimple-common'
+import { revealTableWidget } from '../runtime/table-reveal-utils'
 
 // ---------------------------------------------------------------------------
 // Table widget enum mirrors (from widgets/common/table/src/config.ts)
@@ -542,6 +543,10 @@ export async function handleViewInTable(
         activeTabId: lastReusableTabId
       })
 
+      // r028.157 (TODO #44, P2): the reused-tab path gets the same reveal - same click, same
+      // user confusion if the pane stays shut.
+      revealTableWidget(tableWidgetId)
+
       return true
     }
 
@@ -727,6 +732,10 @@ export async function handleViewInTable(
       scenario: (!hasExistingTabs && createdTabs.length === 1) ? 2 : (hasExistingTabs ? 1 : 3),
       activeTabId
     })
+
+    // r028.157 (TODO #44): reveal the table AFTER data delivery (ordering probe-verified in both
+    // apps, r028.156 gate). Bug fix, unconditional - no toggle by ruling.
+    revealTableWidget(tableWidgetId)
 
     return true
   } catch (error) {

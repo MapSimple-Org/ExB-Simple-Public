@@ -22,6 +22,9 @@ import { SqlExpressionRuntime, getShownClauseNumberByExpression } from 'jimu-ui/
 import { type QueryItemType, type SpatialFilterObj, SpatialRelation, type UnitType } from '../config'
 import { DEFAULT_QUERY_ITEM } from '../default-query-item'
 import { sanitizeSqlExpression, isQueryInputValid } from './query-utils'
+import { getQueryFormBlockReason, QUERY_FORM_REASON_I18N } from './block-reason-utils'
+import { blockedButtonStyle } from './blocked-button-style'
+import { requiredMarkDeclarations } from './required-marker-style'
 import { isSqlClause, getClauseValue } from './sql-clause-utils'
 import defaultMessage from './translations/default'
 import { QueryTaskSpatialForm } from './query-task-spatial-form'
@@ -77,6 +80,8 @@ export interface QueryTaskItemProps {
   queryItemShortId?: string
   activeTab?: 'query' | 'results'
   onTabChange?: (tab: 'query' | 'results') => void
+  /** r028.143: polite live-region announce (r028.138 announcer), threaded from query-task */
+  onAnnounce?: (message: string) => void
 }
 
 const getFormStyle = (isAutoHeight: boolean) => {
@@ -106,7 +111,7 @@ const getFormStyle = (isAutoHeight: boolean) => {
 }
 
 export function QueryTaskForm (props: QueryTaskItemProps) {
-  const { widgetId, configId, outputDS, spatialFilterEnabled, datasourceReady, onFormSubmit, dataActionFilter, initialInputValue, onHashParameterUsed, queryItemShortId, activeTab, onTabChange } = props
+  const { widgetId, configId, outputDS, spatialFilterEnabled, datasourceReady, onFormSubmit, dataActionFilter, initialInputValue, onHashParameterUsed, queryItemShortId, activeTab, onTabChange, onAnnounce } = props
   const preDataActionFilter = hooks.usePrevious(dataActionFilter)
   // r028.053: Migrated from Redux selector to WidgetConfigManager singleton (Step 6)
   const queryItem = widgetConfigManager.getQueryItemByConfigId(widgetId, configId) as ImmutableObject<QueryItemType>
@@ -160,6 +165,10 @@ export function QueryTaskForm (props: QueryTaskItemProps) {
   const spatialRelationRef = React.useRef<SpatialRelation>(SpatialRelation.Intersect)
   const bufferRef = React.useRef<{ distance: number, unit: UnitType }>(null)
   const applyButtonRef = React.useRef<HTMLButtonElement>(null)
+  // r028.143 (DCE item 1): Search/Reset are aria-disabled (focusable, self-explaining), not
+  // natively disabled. Reset ref exists so the effect below can stamp the attribute on it too.
+  const resetButtonRef = React.useRef<HTMLButtonElement>(null)
+  const [searchRefusal, setSearchRefusal] = React.useState<{ show: boolean, message: string, timestamp: number }>({ show: false, message: '', timestamp: 0 })
   const formContentRef = React.useRef<HTMLDivElement>(null)
   const sqlExprRuntimeContainerRef = React.useRef<HTMLDivElement>(null) // Container for SqlExpressionRuntime DOM manipulation
   const isAutoHeight = useAutoHeight()
@@ -703,38 +712,79 @@ export function QueryTaskForm (props: QueryTaskItemProps) {
     })
   }, [onFormSubmit, outputDS, runtimeZoomToSelected])
 
+  // r028.143 (DCE items 1+5): user-activation wrapper around applyQuery. The refusal guard lives
+  // HERE and only here - the hash-conversion listener and the dataActionFilter auto-trigger call
+  // applyQuery() directly and must never be refused (brief P1.9; validity STATE can lag the
+  // ref-held value on those paths). r028.144: declared BEFORE handleKeyDown, which lists
+  // showSearchRefusal in its deps - the deps array evaluates at render time, so declaring this
+  // below it was a temporal-dead-zone crash on mount.
+  const applyBlocked = !datasourceReady || !isInputValid
+  const showSearchRefusal = React.useCallback(() => {
+    const reason = getQueryFormBlockReason(datasourceReady, isInputValid)
+    if (!reason) return
+    const message = getI18nMessage(QUERY_FORM_REASON_I18N[reason])
+    setSearchRefusal({ show: true, message, timestamp: Date.now() })
+    onAnnounce?.(message)
+    debugLogger.log('FORM', { event: 'search-refused', source: 'query-task-form', widgetId, configId, reason })
+  }, [datasourceReady, isInputValid, getI18nMessage, onAnnounce, widgetId, configId])
+
+  const handleSearchClick = React.useCallback(() => {
+    if (applyBlocked) {
+      showSearchRefusal()
+      return
+    }
+    setSearchRefusal(prev => (prev.show ? { ...prev, show: false } : prev))
+    applyQuery()
+  }, [applyBlocked, showSearchRefusal, applyQuery])
+
+  // Stamp aria-disabled imperatively: the jimu Button overwrites a caller-supplied aria-disabled
+  // prop with its own disabled prop's value (CRR E1), so the attribute has to land on the DOM node
+  // directly. Re-verify on ExB upgrades (framework touchpoint).
+  React.useEffect(() => {
+    applyButtonRef.current?.setAttribute('aria-disabled', String(applyBlocked))
+  }, [applyBlocked])
+
   const handleKeyDown = React.useCallback((event: React.KeyboardEvent) => {
     // r025.053: If suggest popover is open with an active selection, let useSuggest handle Enter
     if (event.key === 'Enter' && suggestProps.isOpen && suggestProps.activeIndex >= 0) return
+    if (event.key !== 'Enter') return
 
-    if (event.key === 'Enter' && datasourceReady && isInputValid) {
+    // r028.143 (brief P1.5 / CRR E4): blocked Enter shows the SAME refusal as a blocked click.
+    // The old outer guard silently swallowed Enter when input was invalid - the keyboard user got
+    // nothing while the mouse user got a message.
+    if (!datasourceReady || !isInputValid) {
       event.preventDefault()
-      
-      // Find the active input field
-      const activeElement = document.activeElement as HTMLInputElement
-      if (activeElement && activeElement.tagName === 'INPUT' && activeElement.type === 'text') {
-        // Force blur to trigger SqlExpressionRuntime's input processing
-        activeElement.blur()
-        
-        // Wait for blur processing, then click the Apply button
-        // This uses the exact same code path as clicking the button manually
-        setTimeout(() => {
-          if (applyButtonRef.current && !applyButtonRef.current.disabled) {
-            applyButtonRef.current.click()
-          } else {
-            applyQuery()
-          }
-        }, 200)
-      } else {
-        // Not in an input field, safe to apply immediately
-        if (applyButtonRef.current && !applyButtonRef.current.disabled) {
+      showSearchRefusal()
+      return
+    }
+
+    event.preventDefault()
+
+    // Find the active input field
+    const activeElement = document.activeElement as HTMLInputElement
+    if (activeElement && activeElement.tagName === 'INPUT' && activeElement.type === 'text') {
+      // Force blur to trigger SqlExpressionRuntime's input processing
+      activeElement.blur()
+
+      // Wait for blur processing, then click the Search button - same code path as a manual
+      // click. r028.143: the click routes through handleSearchClick, which re-checks the CURRENT
+      // blocked state (the old .disabled property check is meaningless under aria-disabled).
+      setTimeout(() => {
+        if (applyButtonRef.current) {
           applyButtonRef.current.click()
         } else {
           applyQuery()
         }
+      }, 200)
+    } else {
+      // Not in an input field, safe to apply immediately
+      if (applyButtonRef.current) {
+        applyButtonRef.current.click()
+      } else {
+        applyQuery()
       }
     }
-  }, [datasourceReady, applyQuery, isInputValid, suggestProps.isOpen, suggestProps.activeIndex])
+  }, [datasourceReady, applyQuery, isInputValid, suggestProps.isOpen, suggestProps.activeIndex, showSearchRefusal])
 
   React.useEffect(() => {
     if (!dataActionFilter) return
@@ -1005,6 +1055,12 @@ export function QueryTaskForm (props: QueryTaskItemProps) {
 
   const showAttributeFilter = useAttributeFilter && sqlExprObj != null
   const showSpatialFilter = spatialFilterEnabled && useSpatialFilter && (spatialFilterTypes.length > 0 || spatialIncludeRuntimeData || spatialRelationUseDataSources?.length > 0)
+  // r028.143 (DCE item 1): Reset blocked = nothing to reset. Blocked Reset is a silent no-op by
+  // ruling (P1.3) - no nag popover - but it still gets aria-disabled + the blocked styling.
+  const resetBlocked = attributeFilterSqlExprObj === sqlExprObj && !showSpatialFilter
+  React.useEffect(() => {
+    resetButtonRef.current?.setAttribute('aria-disabled', String(resetBlocked))
+  }, [resetBlocked])
 
   // Debug logging for form rendering
   React.useEffect(() => {
@@ -1338,7 +1394,27 @@ export function QueryTaskForm (props: QueryTaskItemProps) {
                 )}
               </div>
               {originDS && (
-                <div ref={sqlExprRuntimeContainerRef} css={css`margin: -10px 0px; position: relative;`}>
+                <div
+                  ref={sqlExprRuntimeContainerRef}
+                  css={css`
+                    margin: -10px 0px;
+                    position: relative;
+                    /* r028.150: REQUIRED marker inline after the clause label (Adam: same line,
+                       not a line of its own - r028.149 put it on the form-title row, which some
+                       items do not configure, leaving the marker floating). Scoped CSS decoration
+                       inside OUR container ref, the same compose-around boundary the typeahead
+                       uses; the Esri component itself is untouched. First clause only - the
+                       validity rule is 'at least one clause has a value', so marking every clause
+                       of a multi-clause item would overstate the requirement. Clears the moment
+                       isInputValid flips (first typed character via the instant-typing path). */
+                    ${!isInputValid
+                      ? `.sql-expression-single:first-of-type .sql-expression-label::after {
+                          content: '${getI18nMessage('qsRequiredMarker').replace(/['"\\]/g, '')}';
+                          ${requiredMarkDeclarations}
+                        }`
+                      : ''}
+                  `}
+                >
                   <SqlExpressionRuntime
                     key={`${configId}-${getClauseValue(attributeFilterSqlExprObj?.parts?.[0]) || 'empty'}`}
                     widgetId={widgetId}
@@ -1378,19 +1454,56 @@ export function QueryTaskForm (props: QueryTaskItemProps) {
           )}
         </div>
         <div className='query-form__actions px-4 d-flex align-items-center'>
-          <Checkbox
-            checked={runtimeZoomToSelected}
-            onChange={(_, checked) => setRuntimeZoomToSelected(checked)}
-            className='mr-2'
-          />
-          <span className='mr-auto' css={css`font-size: 0.875rem; color: var(--sys-color-text-primary);`}>
-            {getI18nMessage('zoomToSelected')}
-          </span>
-          <Button ref={applyButtonRef} color='primary' className='ml-auto' disabled={!datasourceReady || !isInputValid} onClick={applyQuery}>
-            {getI18nMessage('apply')}
+          {/* r028.141: label-wrapped per house pattern (DCE a11y: checkbox had no accessible name) */}
+          <label className='d-flex align-items-center mr-auto' css={css`margin-bottom: 0; cursor: pointer;`}>
+            <Checkbox
+              checked={runtimeZoomToSelected}
+              onChange={(_, checked) => setRuntimeZoomToSelected(checked)}
+              className='mr-2'
+            />
+            <span css={css`font-size: 0.875rem; color: var(--sys-color-text-primary);`}>
+              {getI18nMessage('zoomToSelected')}
+            </span>
+          </label>
+          {/* r028.143 (DCE items 1+5): aria-disabled instead of native disabled - focusable,
+              readable, and a blocked activation explains itself (handleSearchClick). The attribute
+              is stamped by effect (jimu Button clobbers the prop, CRR E1). */}
+          <Button ref={applyButtonRef} color='primary' className='ml-auto' css={blockedButtonStyle} onClick={handleSearchClick}>
+            {getI18nMessage('searchButtonLabel')}
           </Button>
-          <Button className='ml-2' disabled={attributeFilterSqlExprObj === sqlExprObj && !showSpatialFilter} onClick={resetQuery}>{getI18nMessage('reset')}</Button>
+          <Button ref={resetButtonRef} className='ml-2' css={blockedButtonStyle} onClick={() => { if (resetBlocked) return; resetQuery() }}>{getI18nMessage('reset')}</Button>
         </div>
+        {/* r028.143: refusal popover anchor + popover (house feedback pattern; per-widget id per
+            CRR M3 - the legacy bare query-feedback-anchor is not reused) */}
+        <div id={`search-refusal-anchor-${widgetId}`} css={css`height: 0; width: 100%;`} />
+        {searchRefusal.show && (
+          <calcite-popover
+            key={`search-refusal-${searchRefusal.timestamp}`}
+            referenceElement={`search-refusal-anchor-${widgetId}`}
+            placement="top"
+            flipDisabled={true}
+            overlayPositioning="fixed"
+            triggerDisabled={true}
+            autoClose
+            closable
+            label={searchRefusal.message}
+            open={searchRefusal.show}
+            oncalcitePopoverClose={() => { setSearchRefusal(prev => ({ ...prev, show: false })) }}
+            style={{
+              '--calcite-popover-max-size-x': '320px',
+              maxWidth: '320px',
+              width: '100%',
+              '--calcite-color-foreground-1': '#fffbeb'
+            } as React.CSSProperties}
+          >
+            <div style={{ padding: '12px', maxWidth: '320px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '13px', lineHeight: '1.5', color: '#92400e' }}>
+                <calcite-icon icon="information" scale="s" style={{ color: '#b45309' }} />
+                {searchRefusal.message}
+              </div>
+            </div>
+          </calcite-popover>
+        )}
       </div>
     </QueryTaskContext.Provider>
   )

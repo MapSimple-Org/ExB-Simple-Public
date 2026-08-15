@@ -2,8 +2,8 @@
 
 Custom widgets for ArcGIS Experience Builder Developer Edition. Built for performance, deep-linking, and advanced result management.
 
-**Current Version**: QS `1.20.0-r028.140` | FS `1.20.0-r005.023`
-**Latest Update**: Deep links now open QuerySimple in Section / Sidebar layouts, not just inside a Controller (June 24, 2026)
+**Current Version**: QS `1.20.0-r028.157` | FS `1.20.0-r005.023`
+**Latest Update**: Accessibility batch (self-explaining Search, required-field markers) + View in Table now opens the table panel (August 14, 2026)
 
 ## Key Differentiators (Why QuerySimple?)
 
@@ -16,6 +16,22 @@ QuerySimple is designed to solve the common pain points of the standard Experien
 - **Persistence & Restoration**: Selections are maintained even when the identify tool is used, ensuring users never lose their search context.
 
 ---
+
+## What's New (r028.157, August 14, 2026)
+
+> Full release notes: [RELEASE_QS-r028.157_FS-r005.023](docs/releases/RELEASE_QS-r028.157_FS-r005.023.md)
+
+### Buttons that explain themselves (accessibility review)
+
+The Search and Reset buttons no longer sit silently disabled. They stay focusable and readable (WCAG-contrast label even when inactive), and activating a blocked Search - click or Enter - shows a message naming exactly what's missing ("Enter a value to search," "Select a spatial relationship," "Select at least one target layer"), one actionable reason at a time, announced to screen readers as well. Deep-link/URL automation is untouched. The button also reads **Search** now instead of "Apply," and required fields carry a REQUIRED marker until satisfied - the spatial relationship selector is no longer disabled before you draw, so you can set up a spatial query in any order.
+
+### View in Table now opens the table
+
+Clicking **View in Table** used to load results into a Table widget that might be sitting in a collapsed panel - nothing visibly happened. It now reveals the table: the widget walks your layout and expands exactly the collapsed container(s) hiding it (unrelated panels you've closed stay closed), on first and repeat clicks, with no configuration. Controller and section-view placements are covered too.
+
+### Result-list fixes
+
+Result cards grow to fit the three-icon action toolbar (no more icons bleeding onto the card below), the per-card "..." menu no longer paints under neighboring cards, the Results-mode control text and star are larger, and the "Zoom to selected" checkbox is properly labeled for screen readers and text-clicks. FeedSimple is unchanged this release (carried forward at r005.023).
 
 ## What's New (r028.140, June 24, 2026)
 

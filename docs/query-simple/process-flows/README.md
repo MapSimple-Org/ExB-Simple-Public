@@ -23,6 +23,7 @@ references, decision points, and test coverage notes.
 | 13 | [FLOW-13-POPUP-RENDERING](FLOW-13-POPUP-RENDERING.md) | Shared popup rendering across on-screen click, result-list click, and Results Panel card. ConfigId fallback fix, rendering mode detection |
 | 14 | [FLOW-14-TYPEAHEAD-SUGGEST](FLOW-14-TYPEAHEAD-SUGGEST.md) | Typeahead dropdown: useSuggest state machine, suggest-utils fetch/cache, dual-path rendering (desktop fixed, mobile Popper) |
 | 15 | [FLOW-15-HOVER-PREVIEW](FLOW-15-HOVER-PREVIEW.md) | Hover preview on result rows: animated CIM pin + path-independent geometry highlight on mapView.graphics, debounce, per-cue toggles/colors, bulk-hide on leave/scroll |
+| 16 | [FLOW-16-VIEW-IN-TABLE](FLOW-16-VIEW-IN-TABLE.md) | View in Table: data-action tab delivery to the ExB Table widget (dedup/reuse, MutableStore choreography) + the r028.157 reveal walker (per-size-mode chain, collapseSide check, sidebar/controller/section legs) |
 
 ## Key Architectural Patterns
 
@@ -104,6 +105,8 @@ Add the new flow to the Flow Index table above.
 | `query-simple/tests/result-feature-layer-lifecycle.test.ts` | 29 | Layer lifecycle, cleanup, unmount |
 | `query-simple/tests/results-mode-control.test.tsx` | 13 | Results mode switching, state transitions |
 | `query-simple/tests/widget-visibility-manager.test.ts` | 3 | Observer self-disconnect, mount/unmount events |
+| `query-simple/tests/block-reason-utils.test.ts` | 32 | Cold-room: Search refusal reasons - form order, U1 transient, Christie case, absence combinations, i18n maps (r028.143) |
+| `query-simple/tests/table-reveal-utils.test.ts` | 20 | Cold-room: reveal chain resolution vs REAL apps/1+7 configs, P9 exclusions by id, absence/degenerate, sizeModes, determinism (r028.157) |
 | `query-simple/tests/async-serializer.test.ts` | 5 | Async operation serializer, queue ordering |
 | `query-simple/tests/query-task-reducer.test.ts` | 5 | Alert state machine; truncation alert set/clear, RESET_FOR_CLEAR (r028.114) |
 | `helper-simple/tests/widget.test.tsx` | 20 | Hash parsing, lifecycle, event handlers |
@@ -121,4 +124,4 @@ Add the new flow to the Flow Index table above.
 
 ---
 
-*Last updated: r028.140 (2026-06-24) -- added `helper-simple/tests/widget-placement.test.ts` (10) for the HS section-reveal open. Table Total 739. NOTE: this table now lags the full suite (~805 per CURRENT_STATUS) - test files added across r028.126-139 were never rowed in here; a full table reconciliation is pending.*
+*Last updated: r028.157 (2026-08-14) -- added FLOW-16 (View in Table + reveal) and the two cold-room suites from the DCE/reveal branch (block-reason 32, table-reveal 20). NOTE: the r028.140 caveat still stands - test files added across r028.126-139 were never rowed in here and the table lags the full suite (856 per CURRENT_STATUS); full reconciliation still pending.*

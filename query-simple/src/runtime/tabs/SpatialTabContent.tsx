@@ -54,6 +54,9 @@ import { Button, Select, Option, TextInput, Tooltip, AdvancedSelect, Checkbox } 
 import { loadArcGISJSAPIModules, type JimuMapView } from 'jimu-arcgis'
 import type * as jimuMap from 'jimu-ui/advanced/map'
 import { TrashOutlined } from 'jimu-icons/outlined/editor/trash'
+import { getSpatialBlockReason, SPATIAL_REASON_I18N } from '../block-reason-utils'
+import { blockedButtonStyle } from '../blocked-button-style'
+import { requiredMarkStyle } from '../required-marker-style'
 import { InfoOutlined } from 'jimu-icons/outlined/suggested/info'
 
 // r025.069: Esri spatial relationship SVG diagrams
@@ -79,6 +82,7 @@ import type Graphic from '@arcgis/core/Graphic'
 import type FeatureLayer from '@arcgis/core/layers/FeatureLayer'
 
 const debugLogger = createQuerySimpleDebugLogger()
+
 
 export type SpatialMode = 'operations' | 'draw'
 
@@ -806,6 +810,57 @@ export function SpatialTabContent (props: SpatialTabContentProps) {
   // Can execute when: operations enabled + relationship selected + at least one layer selected + geometry exists
   const canExecute = operationsEnabled && selectedRelationship && (selectedLayers?.length ?? 0) > 0 && !!inputGeometry
 
+  // r028.143 (DCE items 1+5): aria-disabled Search/Reset + refusal that names the first unmet
+  // requirement (Christie's report: blocked Search gave no clue the relationship was missing).
+  // Attribute stamped by effect - the jimu Button clobbers a caller aria-disabled prop (CRR E1).
+  const executeButtonRef = React.useRef<HTMLButtonElement>(null)
+  const resetSpatialButtonRef = React.useRef<HTMLButtonElement>(null)
+  const [searchRefusal, setSearchRefusal] = React.useState<{ show: boolean, message: string, timestamp: number }>({ show: false, message: '', timestamp: 0 })
+  const executeBlocked = !canExecute || isExecuting
+  const resetSpatialBlocked = bufferDistance === '' && drawnGeometries.length === 0 && selectedRelationship === null && selectedLayers.length === 0
+  React.useEffect(() => {
+    executeButtonRef.current?.setAttribute('aria-disabled', String(executeBlocked))
+  }, [executeBlocked])
+  React.useEffect(() => {
+    resetSpatialButtonRef.current?.setAttribute('aria-disabled', String(resetSpatialBlocked))
+  }, [resetSpatialBlocked])
+
+  // r028.155: prove the placeholder pin with data (Adam: "prove things with data" - the fix that
+  // finally landed was found via a console snippet; this makes that evidence repeatable under
+  // ?debug=TASK). Waits for calcite's lazy hydration via componentOnReady (whenDefined resolves
+  // at boot for the CDN's proxy elements, before the shadow root exists - the r028.153 lesson).
+  React.useEffect(() => {
+    const el: any = spatialRelComboboxRef.current
+    if (!el?.componentOnReady) return
+    let cancelled = false
+    el.componentOnReady().then(() => {
+      if (cancelled) return
+      const input = el.shadowRoot?.querySelector('input')
+      debugLogger.log('TASK', {
+        event: 'placeholder-pin-state',
+        widgetId,
+        tokenOnHost: getComputedStyle(el).getPropertyValue('--calcite-input-placeholder-text-color').trim() || 'NOT DELIVERED',
+        placeholderColor: input ? getComputedStyle(input, '::placeholder').color : 'no-input-in-shadow-root'
+      })
+    })
+    return () => { cancelled = true }
+  }, [widgetId])
+  const showSearchRefusal = React.useCallback(() => {
+    const reason = getSpatialBlockReason({
+      spatialMode,
+      hasResults: !!hasResults,
+      hasDrawnGeometry,
+      hasInputGeometry: !!inputGeometry,
+      relationshipSelected: !!selectedRelationship,
+      layerCount: selectedLayers?.length ?? 0
+    })
+    if (!reason) return
+    const message = getI18nMessage(SPATIAL_REASON_I18N[reason])
+    setSearchRefusal({ show: true, message, timestamp: Date.now() })
+    onAnnounce?.(message)
+    debugLogger.log('TASK', { event: 'search-refused', source: 'spatial-tab', widgetId, spatialMode, reason })
+  }, [spatialMode, hasResults, hasDrawnGeometry, inputGeometry, selectedRelationship, selectedLayers, getI18nMessage, onAnnounce, widgetId])
+
   // r028.136 TAB_HELP_SPEC Phase 4: gates the aria-describedby on the mode buttons so
   // it never points at description spans that SpatialModeHelp is not rendering.
   const tabHelpEnabled = widgetConfigManager.getTabHelpEnabled(widgetId)
@@ -1019,7 +1074,7 @@ export function SpatialTabContent (props: SpatialTabContentProps) {
 
         {/* 4. Spatial Relationship — Calcite combobox (searchable by label + description) */}
         <div css={[sectionStyle, mobileInputZoomFix]}>
-          <h4 css={sectionTitleStyle}>{getI18nMessage('spatialRelationship')}</h4>
+          <h4 css={sectionTitleStyle}>{getI18nMessage('spatialRelationship')}{!selectedRelationship && <span css={requiredMarkStyle}>{getI18nMessage('qsRequiredMarker')}</span>}</h4>
           {spatialMode === 'draw' && !hasDrawnGeometry && (
             <p css={disabledHintStyle}>{getI18nMessage('spatialDrawHint')}</p>
           )}
@@ -1027,15 +1082,24 @@ export function SpatialTabContent (props: SpatialTabContentProps) {
             <p css={disabledHintStyle}>{getI18nMessage('spatialNoResults')}</p>
           )}
           <div css={css`display: flex; align-items: center; gap: 4px;`}>
+            {/* r028.151 (Adam's ruling, DCE-batch consistency): no native disabled gating - a
+                required selector stays enabled and legible even before the mode has input
+                (picking a relationship first is a valid order; canExecute still gates the
+                search, the hints above explain, the refusal names what is missing). Placeholder
+                color (r028.155): inline style pins calcite's own placeholder token to currentColor,
+                so the placeholder matches the control's typed-text color. Console evidence closed
+                two failure modes at once: the .154 wrapper rule was NOT DELIVERED to the host, and
+                --sys-color-text-primary is UNDEFINED in this app's theme (see TODO #43). Inline
+                style is the house-proven delivery route (truncation popover precedent). */}
             <calcite-combobox
               ref={spatialRelComboboxRef}
               selectionMode='single'
               placeholder='Search or select a relationship...'
-              disabled={!operationsEnabled || undefined}
               scale='m'
               overlayPositioning='fixed'
               label={getI18nMessage('spatialRelationship')}
               css={css`flex: 1;`}
+              style={{ '--calcite-input-placeholder-text-color': 'currentColor' } as React.CSSProperties}
             >
               {visibleRelationships.map((rel) => (
                 <calcite-combobox-item
@@ -1100,7 +1164,7 @@ export function SpatialTabContent (props: SpatialTabContentProps) {
 
         {/* 5. Target Layers */}
         <div css={[sectionStyle, mobileInputZoomFix]}>
-          <h4 css={sectionTitleStyle}>Target layers</h4>
+          <h4 css={sectionTitleStyle}>Target layers{(selectedLayers?.length ?? 0) === 0 && <span css={requiredMarkStyle}>{getI18nMessage('qsRequiredMarker')}</span>}</h4>
           <AdvancedSelect
             staticValues={targetLayerOptions || []}
             selectedValues={selectedLayers}
@@ -1153,10 +1217,19 @@ export function SpatialTabContent (props: SpatialTabContentProps) {
         {/* 7. Execute + Reset Buttons (r025.029, r025.056) */}
         <div className='d-flex align-items-center' css={css`gap: 8px; flex-shrink: 0;`}>
           <Button
+            ref={executeButtonRef}
             id='spatial-execute-btn'
             type='primary'
-            disabled={!canExecute || isExecuting}
+            css={blockedButtonStyle}
             onClick={async () => {
+              // r028.143: blocked activation explains itself. Re-entry during a run stays silent
+              // (P1.8 - double-click protection, not a user error).
+              if (isExecuting) return
+              if (!canExecute) {
+                showSearchRefusal()
+                return
+              }
+              setSearchRefusal(prev => (prev.show ? { ...prev, show: false } : prev))
               // r028.108: block a desynced multi/invalid relationship from reaching the
               // server (it rejects 'spatialRel'). Require exactly one known relationship id.
               const relIsValid = !!selectedRelationship && spatialRelationships.some(r => r.id === selectedRelationship)
@@ -1209,11 +1282,13 @@ export function SpatialTabContent (props: SpatialTabContentProps) {
               }
             }}
           >
-            {isExecuting ? 'Running...' : getI18nMessage('apply')}
+            {isExecuting ? 'Running...' : getI18nMessage('searchButtonLabel')}
           </Button>
           <Button
-            disabled={bufferDistance === '' && drawnGeometries.length === 0 && selectedRelationship === null && selectedLayers.length === 0}
+            ref={resetSpatialButtonRef}
+            css={blockedButtonStyle}
             onClick={() => {
+              if (resetSpatialBlocked) return
               setBufferDistance('')
               setSelectedRelationship(null)
               // r028.108: declarative deselect (selectedRelationship=null) isn't honored by
@@ -1242,6 +1317,36 @@ export function SpatialTabContent (props: SpatialTabContentProps) {
 
         {/* r025.063: Centered invisible anchor for popover alignment */}
         <div id={`spatial-feedback-anchor-${widgetId}`} css={css`height: 0; width: 100%;`} />
+
+        {/* r028.143: refusal popover - names the first unmet requirement (house feedback pattern) */}
+        {searchRefusal.show && (
+          <calcite-popover
+            key={`spatial-refusal-${searchRefusal.timestamp}`}
+            referenceElement={`spatial-feedback-anchor-${widgetId}`}
+            placement="top"
+            flipDisabled={true}
+            overlayPositioning="fixed"
+            triggerDisabled={true}
+            autoClose
+            closable
+            label={searchRefusal.message}
+            open={searchRefusal.show}
+            oncalcitePopoverClose={() => { setSearchRefusal(prev => ({ ...prev, show: false })) }}
+            style={{
+              '--calcite-popover-max-size-x': '320px',
+              maxWidth: '320px',
+              width: '100%',
+              '--calcite-color-foreground-1': '#fffbeb'
+            } as React.CSSProperties}
+          >
+            <div style={{ padding: '12px', maxWidth: '320px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '13px', lineHeight: '1.5', color: '#92400e' }}>
+                <calcite-icon icon="information" scale="s" style={{ color: '#b45309' }} />
+                {searchRefusal.message}
+              </div>
+            </div>
+          </calcite-popover>
+        )}
 
         {/* r025.031: Calcite popover for spatial query errors — same pattern as Query tab */}
         {queryErrorAlert?.show && (

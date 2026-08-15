@@ -23,7 +23,7 @@ const MODE_COLORS = {
 } as const
 
 const MODE_ICONS: Record<ResultsModeValue, { char: string; size: string }> = {
-  new: { char: '★', size: '0.6rem' },
+  new: { char: '★', size: '0.7rem' },
   add: { char: '+', size: '0.7rem' },
   remove: { char: '\u2212', size: '0.7rem' }
 }
@@ -48,7 +48,7 @@ const groupStyle = css`
 
 const buttonBase = css`
   flex: 1;
-  font-size: 0.8125rem;
+  font-size: 0.875rem;
   font-weight: 600;
   padding: 2px 10px;
   min-height: 26px;
@@ -71,7 +71,7 @@ const summaryBarBase = css`
   display: flex;
   align-items: center;
   gap: 4px;
-  font-size: 0.8rem;
+  font-size: 0.8125rem;
   line-height: 1.3;
   transition: all 0.15s ease;
 `

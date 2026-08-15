@@ -64,6 +64,9 @@ const debugLogger = createQuerySimpleDebugLogger()
 export interface QueryTabContentProps {
   // Widget identification
   widgetId: string
+
+  // r028.143: polite live-region announce (r028.138 announcer), threaded to QueryTaskForm
+  onAnnounce?: (message: string) => void
   
   // Query configuration
   queryItem: ImmutableObject<QueryItemType>
@@ -157,6 +160,7 @@ export function QueryTabContent(props: QueryTabContentProps) {
     onDismissNoResultsAlert,
     queryErrorAlert,
     onDismissQueryErrorAlert,
+    onAnnounce,
     otherProps
   } = props
   
@@ -397,6 +401,7 @@ export function QueryTabContent(props: QueryTabContentProps) {
               queryItemShortId={queryItem.shortId}
               activeTab={activeTab}
               onTabChange={setActiveTab}
+              onAnnounce={onAnnounce}
             />
           </div>
         )}

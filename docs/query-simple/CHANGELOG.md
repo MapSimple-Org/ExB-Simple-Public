@@ -7,6 +7,82 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 > **Archive**: For releases r001-r021, see [CHANGELOG_ARCHIVE_r001-r021.md](docs/archive/CHANGELOG_ARCHIVE_r001-r021.md)
 
+## [1.20.0-r028.156 - r028.157] - 2026-08-14 - View in Table now opens the table (TODO #44)
+
+### Context
+"When someone clicks View Table... people have no clue if that tab isn't open." Both production
+apps park the Table widget in a collapsed sidebar - the one placement ExB's auto-open ignores
+(Esri KB 000038171). Ruled a bug fix (the behavior users always expected): no config toggle.
+Full gated pipeline in one day: research agent -> spec-shaped brief -> feasibility probe (.156,
+verified in both apps) -> CRR (caught the non-concealing-sidebar trap and a spec self-contradiction
+that the no-toggle ruling dissolved) -> build (.157) -> cold-room tests passed unmodified.
+
+### Added
+- `runtime/table-reveal-utils.ts`: pure `resolveRevealSteps` (config walk per browser size mode;
+  sidebar step ONLY when the table's chain rides that sidebar's collapse side - app 7's toolbox/nav
+  sidebars are the live exclusion; controller-open + section-nav legs for future placements) and
+  `executeRevealSteps` (the framework's own dispatches; full `table-reveal` logging under
+  `?debug=VIEW-TABLE`).
+- 20 cold-room tests (`tests/table-reveal-utils.test.ts`) against the real apps/1 + apps/7 configs.
+
+### Changed
+- Both View-in-Table handler paths (new-tab AND reused-tab early return) now reveal after data
+  delivery. The r028.156 throwaway probe was removed by the build.
+
+### Verified
+- Adam, live, both apps: app 7 reused-tab click dispatched exactly the 3 concealing sidebars
+  (P9 - the probe had blasted 9); repeat-click reopened a manually collapsed pane. Suite 856/856.
+
+## [1.20.0-r028.141 - r028.155] - 2026-08-14 - DCE accessibility batch: self-explaining blocked Search, required markers, card-bleed fix
+
+### Context
+DCE accessibility review + user testing feedback (Christie Most, Joe Geigel), worked as a
+cold-room-reviewed batch brief (`docs/specs/DCE_FEEDBACK_AUG2026_BRIEF.md`). Six feedback items plus
+the fixes surfaced by Adam's manual walkthrough. All query-simple; no shared-code, no FS bump.
+
+### Changed
+- **Search/Reset buttons (both tabs) moved from native `disabled` to `aria-disabled`** (.143): focusable,
+  WCAG-contrast blocked styling, and activating a blocked Search shows an amber refusal popover naming
+  the first unmet requirement + polite live-region announce + FORM/TASK `search-refused` logging.
+  Refusal guard lives in the user-activation wrapper ONLY - hash/dataAction automation paths untouched.
+  Enter shows the same refusal as a click (the old path swallowed it silently).
+- **"Apply" renamed "Search"** (.141, landed .146): the i18n key had to be renamed (`apply` ->
+  `searchButtonLabel`) because jimu-core ships its own localized `apply` string that silently shadows
+  widget keys. Same collision hit the required marker (`requiredField` -> `qsRequiredMarker`, .148).
+- **Result cards grow to fit the 3-icon action stack** (.142, TODO #42): `data-action-count` +
+  per-count min-height; inner feature-info floor stretches with the card at 3 icons (.145). 1-2 icon
+  rows keep their height.
+- **Spatial required indication** (.143, Christie's report): REQUIRED markers on the Relationship and
+  Target layers headers; per-reason refusal messages. Query tab got the same marker inline on the
+  clause label via scoped ::after (.149-.150).
+- **Spatial relationship selector always enabled** (.151): the native disabled gating made a REQUIRED
+  control read as inert; canExecute still gates execution. Placeholder pinned to `currentColor` via
+  inline style on the host (.155) after console evidence showed the theme var was undefined AND the
+  wrapper-rule delivery failed; `placeholder-pin-state` TASK debug event makes the evidence repeatable.
+- **Results Mode control sizes** (.141): labels to the 0.875rem house body size, star glyph to 0.7rem.
+- **"Zoom to selected" checkbox** (.141): label-wrapped per house pattern (was an unnamed checkbox).
+- **Dropdown z-order** (.147, pre-existing r024-era bug): open three-dot menu no longer paints under
+  sibling cards' toolbars.
+
+### Added
+- `block-reason-utils.ts` (pure refusal-reason resolvers) + 32 cold-room-authored tests (a separately
+  launched agent wrote them from the brief; 1 assertion adapted with recorded reason - its own flagged
+  ambiguity, actionable reasons win over the self-resolving transient).
+- `blocked-button-style.ts`, `required-marker-style.ts` (shared, both tabs).
+- i18n: `searchButtonLabel`, 6 refusal-message keys, `qsRequiredMarker`.
+
+### Fixed along the way
+- .144 TDZ crash on form mount (deps-array ordering; caught by manual run - nothing mounts
+  QueryTaskForm in Jest).
+
+### Files touched
+`query-task-form.tsx`, `tabs/SpatialTabContent.tsx`, `tabs/QueryTabContent.tsx`, `query-task.tsx`,
+`query-result-item.tsx`, `components/ResultsModeControl.tsx`, `translations/default.ts`, new
+`block-reason-utils.ts` / `blocked-button-style.ts` / `required-marker-style.ts`, tests, FLOW-02/-10,
+user-guide docs, E2E `validation.spec.ts` (+ the 1.19-install E2E fixture, outside this repo).
+Suite: 836/836. TODO #42 closed pending final sign-off; TODO #43 opened (`--sys-color-text-primary`
+undefined in app theme, 11 silent usages).
+
 ## [1.20.0-r028.140] - 2026-06-24 - HelperSimple: URL-param open works for section-placed widgets
 
 ### Context

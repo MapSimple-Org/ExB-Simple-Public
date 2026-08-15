@@ -21,9 +21,9 @@ and optionally trigger auto-zoom.
 
 | Trigger | Location | Description |
 |---------|----------|-------------|
-| User clicks Search | `query-task.tsx:1050` | `handleFormSubmit` callback, passed to `QueryTaskForm` at `query-task.tsx:1721` |
-| URL hash auto-execute | `query-task.tsx:1023` | Hash-value-converted listener calls `handleFormSubmitInternal` |
-| Data action | `query-task.tsx:1050` | External widget triggers query via `handleFormSubmit` |
+| User clicks Search | `query-task.tsx:1050` | `handleFormSubmit` callback, passed to `QueryTaskForm` at `query-task.tsx:1721`. r028.143: the click first passes `handleSearchClick` (query-task-form.tsx), the user-activation wrapper - if blocked (`getQueryFormBlockReason`: datasource-loading / input-invalid) it shows the refusal popover + live-region announce + FORM `search-refused` log and never reaches `applyQuery`. Enter routes through the same wrapper (the old silent Enter swallow is gone). Search/Reset are aria-disabled (focusable, WCAG-contrast blocked look), never natively disabled. |
+| URL hash auto-execute | `query-task.tsx:1023` | Hash-value-converted listener calls `handleFormSubmitInternal`. r028.143: deliberately UNGUARDED - calls `applyQuery` directly, never refused (brief P1.9; validity state can lag on this path). |
+| Data action | `query-task.tsx:1050` | External widget triggers query via `handleFormSubmit`. r028.143: also unguarded by design, same as the hash path. |
 
 ---
 
@@ -194,4 +194,4 @@ user-facing alert. Processing errors propagate up the chain.
 
 ---
 
-*Last updated: r028.118 (2026-06-02) — line-ref accuracy audit: resynced query-execution-handler.ts / query-utils.ts / direct-query.ts / query-task.tsx line numbers, entry points, and test counts to current code*
+*Last updated: r028.143 (2026-08-14) — user-activation refusal wrapper documented in Entry Points (blocked click/Enter show a refusal, hash/dataAction paths deliberately unguarded). Prior: r028.118 (2026-06-02) — line-ref accuracy audit: resynced query-execution-handler.ts / query-utils.ts / direct-query.ts / query-task.tsx line numbers, entry points, and test counts to current code*

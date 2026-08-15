@@ -1,8 +1,22 @@
 export default {
   _widgetLabel: 'QuerySimple',
   reset: 'Reset',
+  // r028.143 DCE batch items 1+5: refusal messages for blocked Search + spatial required markers
+  searchBlockedNoValue: 'Enter a value to search',
+  searchBlockedLoading: 'The data source is still loading. Try again in a moment.',
+  spatialBlockedNoDrawing: 'Draw a shape on the map first',
+  spatialBlockedNoResults: 'Run a search first. Operations use the current results as input.',
+  spatialBlockedNoRelationship: 'Select a spatial relationship',
+  spatialBlockedNoLayers: 'Select at least one target layer',
+  // r028.148: named to dodge jimu-core's own 'requiredField' key ("This is a required
+  // field." in en, localized everywhere), which shadowed our terse marker exactly like the
+  // 'apply' collision in r028.146. Widget-unique names only.
+  qsRequiredMarker: 'Required',
   searchLayer: 'Search layer',
-  apply: 'Apply',
+  // r028.146: key renamed from 'apply' - jimu-core ships an 'apply' key in every locale and
+  // the IntlProvider resolves by id BEFORE widget defaults, so our value was shadowed and the
+  // button kept showing the framework's 'Apply'. Widget-unique key dodges the collision.
+  searchButtonLabel: 'Search',
   noDataAvailable: 'Error in loading data',
   noQueryItem: 'No query',
   newQueryHint: 'Add content by clicking the "{label}" button on the configuration panel',
@@ -17,7 +31,7 @@ export default {
   mapMustBeVisible: 'Map must be visible',
   chooseFilterType: 'Choose the filter type',
   chooseGeometryType: 'Choose the geometry type',
-  clearDrawing: 'Clear the graphic when applying',
+  clearDrawing: 'Clear the graphic when searching',
   featureFromDs: 'Selecting features from data source',
   featureFromMap: 'Geometries from a map',
   chooseFilterLayer: 'Choose a filter layer',
@@ -41,10 +55,10 @@ export default {
   // r028.136: Phase 4 adds the Operations/Draw mode help (replaces spatialModeOperationsDesc/spatialModeDrawDesc).
   tabHelpButtonLabel: 'About this tab',
   tabHelpModeButtonLabel: 'About this mode',
-  tabHelpOperationsDefault: 'Compare features with another layer. Pick a spatial relationship (intersects, contains, and more), optionally add a buffer distance, choose the target layers, and Execute. Operations use the current results as input, so run a query first.',
+  tabHelpOperationsDefault: 'Compare features with another layer. Pick a spatial relationship (intersects, contains, and more), optionally add a buffer distance, choose the target layers, and Search. Operations use the current results as input, so run a query first.',
   tabHelpDrawDefault: 'Draw points, lines, or shapes on the map and select features from the target layers that they touch. Drawn shapes can be buffered, and current results can be included as part of the search input.',
   tabHelpQueryDefault: 'Search a layer by attributes. Choose a search layer and field, enter a value, and matching features are selected on the map and listed in the Results tab.',
-  tabHelpSpatialDefault: 'Select features by location. Use Operations to apply a buffer or spatial relationship using the current results, or Draw to sketch a shape on the map and select the features it touches.',
+  tabHelpSpatialDefault: 'Select features by location. Use Operations to apply a buffer or spatial relationship using the current results, or Draw to sketch a shape on the map and select the features it touches. A spatial relationship must be selected before Search is available.',
   tabHelpResultsDefault: 'Review the features your search selected. Click a result to zoom to it and see details. Use the menu for export and table options. Results stay until you clear them or run a new search.',
   // r028.138: Screen-reader announcements for programmatic context changes (TODO #38).
   // {token} placeholders are substituted by buildAnnouncement (announce-utils.ts), not by formatMessage.

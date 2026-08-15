@@ -298,9 +298,24 @@ const style = css`
   /* r028.036: Breathing room when scrollIntoView({ block: 'start' }) pins this card to the top */
   &[data-composite-key] { scroll-margin-top: 4px; }
   
-  /* r023.34: When expanded, stacked action icons (64px) + content need more height */
+  /* r023.34: When expanded, stacked action icons + content need more height. The 4.5rem floor was
+     sized for a 2-icon stack (2x32 + gap + offsets fits in 72px). */
   &.result-item-expanded {
     min-height: 4.5rem;
+  }
+  /* r028.142 (TODO #42): the default config stacks THREE icons (~104px), which escaped the
+     overflow:visible card and bled onto the next card. Floor follows the count; 1-2 icons keep
+     today's height (Adam's ruling: grow the card, actions stay one click away). */
+  &.result-item-expanded[data-action-count='3'] {
+    min-height: 6.75rem;
+  }
+  /* r028.145: the inner feature-info box carries its own border and floors at 4.5rem, so when the
+     CARD grew to 6.75rem its bottom border ended mid-card as a stray short line (Adam's manual
+     pass, 2026-08-14). Stretch the inner box with the card in the 3-icon case only - both content
+     branches use .feature-info-expanded; specificity (0,3,0) outranks their own (0,2,0) floors.
+     1-2 icon rows keep the untouched 4.5rem inner floor by design. */
+  &.result-item-expanded[data-action-count='3'] .feature-info-expanded {
+    min-height: 6.75rem;
   }
   
   /* Add right padding to prevent header text from running into action buttons */
@@ -444,6 +459,10 @@ export const QueryResultItem = (props: ResultItemProps) => {
   // r028.056: Migrated from prop-drilling to WidgetConfigManager singleton (Steps 7-8)
   const zoomOnResultClick = widgetConfigManager.getZoomOnResultClick(widgetId)
   const panOnResultClick = widgetConfigManager.getPanOnResultClick(widgetId)
+  // r028.142 (TODO #42): stacked-toolbar button count - trash always renders, zoom/pan mirror the
+  // gates on the buttons themselves (~line 1057/1069). Drives data-action-count so the card's
+  // expanded min-height fits the stack instead of letting it bleed onto the next card.
+  const stackedActionCount = 1 + (onZoomTo && !zoomOnResultClick ? 1 : 0) + (onPanTo && !panOnResultClick ? 1 : 0)
   debugLogger.log('SETTINGS', {
     event: 'singletonConfigRead',
     source: 'query-result-item',
@@ -916,6 +935,7 @@ export const QueryResultItem = (props: ResultItemProps) => {
   return (
     <div
       className={classNames('query-result-item', { selected, 'result-item-expanded': isExpanded || !isVerticalAlign })}
+      data-action-count={stackedActionCount}
       data-composite-key={factoryCompositeKey}
       onClick={handleClickResultItem}
       onKeyUp={onKeyUp}
@@ -1047,7 +1067,12 @@ export const QueryResultItem = (props: ResultItemProps) => {
       {/* r024.41: Plain HTML action buttons - NO jimu-ui, NO Calcite, NO click-outside listener */}
       {/* r024.46: When zoomOnResultClick is on, skip zoom button entirely.
           If collapsed and no zoom button, show trash directly (no three-dot menu needed). */}
-      <div className={classNames('result-actions-menu', { 'result-actions-expanded': (isExpanded || !isVerticalAlign) })}>
+      {/* r028.147: while this card's dropdown is open, lift its toolbar container above the
+          siblings. The container's z-index:10 creates a stacking context, so the popup's own
+          z-index:1000 is flattened to 10 outside it - and sibling toolbars (also 10, later in
+          DOM) painted over the open menu. Pre-existing (r024.46-era), surfaced in the DCE
+          walkthrough. */}
+      <div className={classNames('result-actions-menu', { 'result-actions-expanded': (isExpanded || !isVerticalAlign) })} style={menuOpen ? { zIndex: 20 } : undefined}>
         {(isExpanded || !isVerticalAlign) ? (
           // r027.076: Explicit React.Fragment instead of <>…</> — the file uses
           // /** @jsx jsx */ (emotion) without a paired @jsxFrag pragma, so the

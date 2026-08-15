@@ -1784,6 +1784,7 @@ export function QueryTask (props: QueryTaskProps) {
             
             <QueryTabContent
               widgetId={props.widgetId}
+              onAnnounce={announce}
               queryItem={queryItem}
               queryItems={queryItems}
               resultsMode={resultsMode}

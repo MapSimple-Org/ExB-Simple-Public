@@ -77,11 +77,22 @@ regression). Draw mode no longer reacts to `accumulatedRecords`.
 ## Flow Diagram: Execute Button (onClick)
 
 ```
- User clicks "Run spatial query"       <- SpatialTabContent.tsx:1104
+ User clicks "Search" (aria-disabled pattern, r028.143 - the button is ALWAYS clickable)
       |
-      +-- Guard: !canExecute || !inputGeometry || !relIsValid
-      |          || !onExecuteSpatialQuery -> exit
-      |                                 <- SpatialTabContent.tsx:1108
+      +-- isExecuting -> silent exit (double-click protection)
+      |
+      +-- !canExecute -> REFUSAL, then exit  <- r028.143 DCE items 1+5
+      |     getSpatialBlockReason picks the FIRST unmet requirement in form order
+      |     (no-drawing / no-results -> no-relationship -> no-layers; actionable
+      |     reasons win over the transient assembly-in-flight state), shows the
+      |     amber refusal popover on spatial-feedback-anchor-{widgetId}, announces
+      |     politely (r028.138 live region), logs TASK search-refused.
+      |     Christie's case: geometry drawn, no relationship -> "Select a spatial
+      |     relationship". Required markers also sit on the Relationship and
+      |     Target layers headers while unmet (block-reason-utils.ts).
+      |
+      +-- Inner safety guard: !inputGeometry || !relIsValid
+      |          || !onExecuteSpatialQuery -> silent exit (r028.108, kept)
       |
       +-- setIsExecuting(true)          <- SpatialTabContent.tsx:1110
       |
@@ -462,4 +473,4 @@ existing template resolution pipeline (`queries.find(q => q.configId === configI
 
 ---
 
-*Last updated: r028.119 (2026-06-02) -- Input Geometry Preparation is now EVENT-DRIVEN: allInputGeometries is rebuilt only on real input events (draw end/edit/clear, toggle, mode change, smart-default, and an operations-mode prop-sync), via assembleForDraw/assembleForOperations/assembleInputGeometries — not a useEffect watching state. Fixes the r028.118 buffer-redraw-after-clear regression. NOTE: the r028.119 refactor added ~35 lines above the Apply/executeSpatialQuery sections, so SpatialTabContent.tsx refs below the assembly (Execute onClick, handleExecuteSpatialQuery) have shifted from the values in the r028.118 audit — re-verify if consulting those exact lines. Prior r028.118: "Also include current results" checkbox folds result geometries into the draw input.*
+*Last updated: r028.143 (2026-08-14) — Execute flow now starts with the aria-disabled refusal guard (isExecuting silent, !canExecute names the first unmet requirement); r028.151 removed the combobox's native disabled gating. Prior: r028.119 (2026-06-02) -- Input Geometry Preparation is now EVENT-DRIVEN: allInputGeometries is rebuilt only on real input events (draw end/edit/clear, toggle, mode change, smart-default, and an operations-mode prop-sync), via assembleForDraw/assembleForOperations/assembleInputGeometries — not a useEffect watching state. Fixes the r028.118 buffer-redraw-after-clear regression. NOTE: the r028.119 refactor added ~35 lines above the Apply/executeSpatialQuery sections, so SpatialTabContent.tsx refs below the assembly (Execute onClick, handleExecuteSpatialQuery) have shifted from the values in the r028.118 audit — re-verify if consulting those exact lines. Prior r028.118: "Also include current results" checkbox folds result geometries into the draw input.*
