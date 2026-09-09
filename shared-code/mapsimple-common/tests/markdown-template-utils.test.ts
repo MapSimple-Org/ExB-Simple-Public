@@ -107,8 +107,8 @@ describe('convertTemplateToHtml — links and images', () => {
 
   it('should preserve underscores in image URLs with token substitution', () => {
     // Simulates the case where {{Popup_Photo}} resolves to TH_SM_AT.jpg
-    const result = convertTemplateToHtml('![Trail image](https://your.kingcounty.gov/ftp/gis/Web/images/RTS/TH_SM_AT.jpg)')
-    expect(result).toContain('src="https://your.kingcounty.gov/ftp/gis/Web/images/RTS/TH_SM_AT.jpg"')
+    const result = convertTemplateToHtml('![Trail image](https://example.org/images/trail.jpg)')
+    expect(result).toContain('src="https://example.org/images/trail.jpg"')
     expect(result).not.toContain('<em>')
   })
 })

@@ -73,7 +73,9 @@ auto-opens Widget-Controller placements, which our apps do not use).
 - **Repeat click re-reveals** (P10): the collapse state prop is stateless-dispatch friendly - a
   fresh `collapse: true` always wins over a user's manual collapse.
 - **Resolver is pure and cold-room tested** (20 tests, `tests/table-reveal-utils.test.ts`) against
-  the REAL `apps/1/config.json` and `apps/7/config.json` fixtures; app 7 is the discriminating one.
+  structural projections of two real app configs, shipped at `tests/fixtures/table-reveal/`
+  (r028.159; originally read the full app configs, which exist only in the private repo). App 7 is
+  the discriminating one.
 - Accepted limitations: first table-uri widget wins if an app has several tables; every QS widget
   reveals the same shared table.
 - Debug: `?debug=VIEW-TABLE` (tag registered in shared-code debug-logger; also carries the tab

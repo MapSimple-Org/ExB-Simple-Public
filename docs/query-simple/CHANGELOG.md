@@ -39,8 +39,8 @@ Field reports of a ~3 ft offset and visible generalization on result graphics. R
 `maxAllowableOffset: 0.1` (about 7 cm at this latitude) was done to take the widget off the suspect
 list. It was not the cause: the offset is a datum transformation disagreement between the AGOL
 hosted feature service (no NAD83(HARN) to WGS84 shift on `outSR` reprojection, documented) and the
-print service (applies one, documented), ~1.3 m locally. Full evidence in
-`docs/team/PARCEL_OFFSET_FINDINGS.md`. Removal kept anyway: it was dropping nothing measurable.
+print service (applies one, documented), ~1.3 m locally; documented in an internal findings
+write-up, not part of the public package. Removal kept anyway: it was dropping nothing measurable.
 
 ### Changed
 - `query-execution-handler.ts`, `query-utils.ts`, `direct-query.ts`: no default
