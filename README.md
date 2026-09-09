@@ -23,7 +23,7 @@ QuerySimple is designed to solve the common pain points of the standard Experien
 
 ### Unit tests ship with the widgets
 
-All 39 Jest suites (856 tests) are now included under each widget's `tests/` folder, with run instructions in [`query-simple/tests/README.md`](query-simple/tests/README.md). Three steps: copy the four widget folders into `client/your-extensions/widgets/` of an Experience Builder 1.20 Developer Edition install, add one `moduleNameMapper` line to Esri's stock `client/jest.config.js`, and run `npx jest your-extensions/widgets` from `client/`. Verified in exactly that layout. The suite covers the deterministic logic (SQL building, URL and hash parsing, selection and zoom utilities, template rendering, config resolution); visual behavior is not covered.
+All 39 Jest suites (856 tests) are now included under each widget's `tests/` folder, with run instructions in [`query-simple/tests/README.md`](query-simple/tests/README.md). Two steps: copy the four widget folders into `client/your-extensions/widgets/` of an Experience Builder 1.20 Developer Edition install, then from `client/` run `npx jest --config your-extensions/widgets/query-simple/tests/jest.config.js your-extensions/widgets`. The shipped config extends Esri's own Jest config at runtime; no Esri file is edited. FeedSimple-only installs have the same config at `feed-simple/tests/jest.config.js`. Verified in exactly those layouts. The suite covers the deterministic logic (SQL building, URL and hash parsing, selection and zoom utilities, template rendering, config resolution); visual behavior is not covered.
 
 ### Result geometry at full precision
 

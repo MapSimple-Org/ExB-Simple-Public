@@ -44,9 +44,13 @@ plus `query-simple/tests/README.md` with the run instructions:
 
 1. Copy the four widget folders into `client/your-extensions/widgets/` of an Experience Builder
    1.20 Developer Edition install.
-2. Add one line to Esri's stock `client/jest.config.js`, inside `moduleNameMapper`:
-   `"^widgets/(.*)": "<rootDir>/your-extensions/widgets/$1",`
-3. From `client/`: `npx jest your-extensions/widgets`
+2. From `client/`:
+   `npx jest --config your-extensions/widgets/query-simple/tests/jest.config.js your-extensions/widgets`
+
+The shipped `tests/jest.config.js` extends Esri's own Jest config at runtime and adds the one
+module mapping the widgets need; no Esri file is edited. A FeedSimple-only install has the same config at
+`feed-simple/tests/jest.config.js`. (The README also documents the
+equivalent one-line manual edit for anyone who prefers a single config.)
 
 Expected: 39 suites, 856 tests, all passing. Verified in exactly that layout against the stock
 1.20 config. The one suite that previously depended on private application configs now reads two

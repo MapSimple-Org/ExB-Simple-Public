@@ -38,28 +38,33 @@ there.
 
    Keep the `tests/` folders and their `fixtures/` subfolders. They are part of the package.
 
-2. **Add one line to `client/jest.config.js`.** The widgets import each other through the
-   `widgets/...` path (for example `widgets/shared-code/mapsimple-common`). Esri's stock config has
-   no mapping for that path. Inside the `moduleNameMapper: { ... }` block, add:
-
-   ```js
-   "^widgets/(.*)": "<rootDir>/your-extensions/widgets/$1",
-   ```
-
-   Nothing else in the config needs to change.
-
-3. **Run the tests from the `client/` folder:**
+2. **Run the tests from the `client/` folder** using the launch config that ships in this folder:
 
    ```bash
-   npx jest your-extensions/widgets
+   npx jest --config your-extensions/widgets/query-simple/tests/jest.config.js your-extensions/widgets
    ```
 
-   To run a single widget or a single suite:
+   That config loads Esri's own `client/jest.config.js` at runtime and adds the one module
+   mapping the widgets need (`widgets/...` -> `your-extensions/widgets/...`). Nothing in Esri's
+   files is edited. It refuses to run, with a message saying where it expected to be, if the
+   folders are not in the location above.
+
+   To run a single widget or suite, narrow the last argument:
 
    ```bash
-   npx jest your-extensions/widgets/query-simple
-   npx jest your-extensions/widgets/query-simple/tests/selection-utils
+   npx jest --config your-extensions/widgets/query-simple/tests/jest.config.js your-extensions/widgets/query-simple
+   npx jest --config your-extensions/widgets/query-simple/tests/jest.config.js your-extensions/widgets/query-simple/tests/selection-utils
    ```
+
+**FeedSimple-only installs:** the same launch config ships at `feed-simple/tests/jest.config.js`; see
+`feed-simple/tests/README.md`.
+
+**Alternative (no second config):** add one line inside the `moduleNameMapper: { ... }` block of
+`client/jest.config.js`, then run plain `npx jest your-extensions/widgets`:
+
+```js
+"^widgets/(.*)": "<rootDir>/your-extensions/widgets/$1",
+```
 
 ## Fixtures
 
@@ -76,7 +81,7 @@ package and need no regeneration.
 
 | Symptom | Cause |
 |---|---|
-| `Cannot find module 'widgets/shared-code/mapsimple-common'` | The `moduleNameMapper` line from step 2 is missing. |
+| `Cannot find module 'widgets/shared-code/mapsimple-common'` | Jest was run without `--config .../tests/jest.config.js` and without the manual mapper line. |
 | `No tests found` or only Esri's own sample test runs | The widgets were symlinked rather than copied. Jest does not follow symlinks by default. Copy them, or add `haste: { enableSymlinks: true }` and `watchman: false` to the config. |
 | `ENOENT ... fixtures/table-reveal/app1-layout.json` | The `tests/fixtures/` folder was not copied along with the tests. |
 | Hook errors mentioning two copies of React | Only happens with symlinked widgets whose parent folder has its own `node_modules`. Copying the widgets in avoids it. |
@@ -86,5 +91,5 @@ package and need no regeneration.
 The Playwright end-to-end suite is not part of this package. It depends on fixtures and a running
 application that live outside the widget folders.
 
-Verified on Experience Builder 1.20 with the stock `jest.config.js` plus the single mapper line
-above, 2026-09-09.
+Verified on Experience Builder 1.20 in exactly this layout (copied widgets, stock Esri config, the
+shipped launch config), 2026-09-09.

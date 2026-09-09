@@ -35,8 +35,11 @@ Read these files for context before making changes:
 
 5. **Unit Tests**: `query-simple/tests/README.md`
    - How to run the 39 Jest suites (856 tests) inside an Experience Builder 1.20 install: copy the
-     widgets into `client/your-extensions/widgets/`, add one `moduleNameMapper` line, run
-     `npx jest your-extensions/widgets`
+     widgets into `client/your-extensions/widgets/`, then from `client/` run
+     `npx jest --config your-extensions/widgets/query-simple/tests/jest.config.js your-extensions/widgets`
+     (that config extends Esri's own jest.config.js; no edits to Esri files)
+   - FeedSimple-only installs: same config at `feed-simple/tests/jest.config.js`, see
+     `feed-simple/tests/README.md`
    - Tests validate what the code should do; when changing behavior, update or add tests rather
      than weakening assertions
 

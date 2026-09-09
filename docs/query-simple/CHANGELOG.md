@@ -28,6 +28,11 @@ a downstream-style layout (physical copies in `your-extensions/widgets`, stock 1
 ### Added
 - `widgets/query-simple/tests/README.md`: three-step run instructions, expected counts, fixture
   provenance, troubleshooting table. Pointer READMEs in the other three test folders.
+- Follow-up (same day): `tests/jest.config.js`, a launch config that `require`s Esri's stock
+  `client/jest.config.js` and adds only the `widgets/` mapper, so downstream runs need no edits
+  to Esri files. Fails with a location message if not at
+  `client/your-extensions/widgets/query-simple/tests/`. Same file at `feed-simple/tests/` with its own
+  README, since FeedSimple also ships standalone. No version bump (test tooling only, by ruling).
 
 ### Verified
 - Downstream-style layout after the fixture change: 39/39 suites, 856/856 tests. Local: identical.
