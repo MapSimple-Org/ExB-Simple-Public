@@ -1,0 +1,538 @@
+{
+  "mainSizeMode": "LARGE",
+  "widgets": {
+    "widget_3": {
+      "id": "widget_3",
+      "uri": "widgets/common/text/"
+    },
+    "widget_5": {
+      "id": "widget_5",
+      "uri": "widgets/common/controller/",
+      "layouts": {
+        "controller": {
+          "LARGE": "layout_2",
+          "MEDIUM": "layout_83",
+          "SMALL": "layout_92"
+        },
+        "_openwidget": {
+          "LARGE": "layout_3",
+          "MEDIUM": "layout_84",
+          "SMALL": "layout_93"
+        }
+      }
+    },
+    "widget_6": {
+      "id": "widget_6",
+      "uri": "widgets/arcgis/arcgis-map/",
+      "layouts": {
+        "MapFixedLayout": {
+          "LARGE": "layout_4",
+          "MEDIUM": "layout_80",
+          "SMALL": "layout_89"
+        }
+      }
+    },
+    "widget_8": {
+      "id": "widget_8",
+      "uri": "widgets/arcgis/map-layers/"
+    },
+    "widget_12": {
+      "id": "widget_12",
+      "uri": "widgets/layout/sidebar/",
+      "layouts": {
+        "FIRST": {
+          "LARGE": "layout_16"
+        },
+        "SECOND": {
+          "LARGE": "layout_17"
+        }
+      },
+      "config": {
+        "collapseSide": "SECOND"
+      }
+    },
+    "widget_13": {
+      "id": "widget_13",
+      "uri": "widgets/common/table/"
+    },
+    "widget_22": {
+      "id": "widget_22",
+      "uri": "widgets/common/search/"
+    },
+    "widget_29": {
+      "id": "widget_29",
+      "uri": "widgets/common/text/"
+    },
+    "widget_30": {
+      "id": "widget_30",
+      "uri": "widgets/common/text/"
+    },
+    "widget_31": {
+      "id": "widget_31",
+      "uri": "widgets/common/share/"
+    },
+    "widget_32": {
+      "id": "widget_32",
+      "uri": "widgets/arcgis/basemap-gallery/"
+    },
+    "widget_35": {
+      "id": "widget_35",
+      "uri": "widgets/common/controller/",
+      "layouts": {
+        "controller": {
+          "LARGE": "layout_55",
+          "MEDIUM": "layout_81",
+          "SMALL": "layout_90"
+        }
+      }
+    },
+    "widget_41": {
+      "id": "widget_41",
+      "uri": "widgets/common/text/"
+    },
+    "widget_44": {
+      "id": "widget_44",
+      "uri": "widgets/common/text/"
+    },
+    "widget_45": {
+      "id": "widget_45",
+      "uri": "widgets/layout/flowrow/",
+      "layouts": {
+        "DEFAULT": {
+          "LARGE": "layout_76"
+        }
+      }
+    },
+    "widget_46": {
+      "id": "widget_46",
+      "uri": "widgets/layout/flowrow/",
+      "layouts": {
+        "DEFAULT": {
+          "LARGE": "layout_77"
+        }
+      }
+    },
+    "widget_58": {
+      "id": "widget_58",
+      "uri": "widgets/layout/sidebar/",
+      "layouts": {
+        "FIRST": {
+          "MEDIUM": "layout_79"
+        },
+        "SECOND": {
+          "MEDIUM": "layout_86"
+        }
+      },
+      "config": {
+        "collapseSide": "SECOND"
+      }
+    },
+    "widget_59": {
+      "id": "widget_59",
+      "uri": "widgets/layout/flowrow/",
+      "layouts": {
+        "DEFAULT": {
+          "MEDIUM": "layout_82"
+        }
+      }
+    },
+    "widget_60": {
+      "id": "widget_60",
+      "uri": "widgets/layout/flowrow/",
+      "layouts": {
+        "DEFAULT": {
+          "MEDIUM": "layout_85"
+        }
+      }
+    },
+    "widget_61": {
+      "id": "widget_61",
+      "uri": "widgets/layout/sidebar/",
+      "layouts": {
+        "FIRST": {
+          "SMALL": "layout_88"
+        },
+        "SECOND": {
+          "SMALL": "layout_95"
+        }
+      },
+      "config": {
+        "collapseSide": "SECOND"
+      }
+    },
+    "widget_62": {
+      "id": "widget_62",
+      "uri": "widgets/layout/flowrow/",
+      "layouts": {
+        "DEFAULT": {
+          "SMALL": "layout_91"
+        }
+      }
+    },
+    "widget_63": {
+      "id": "widget_63",
+      "uri": "widgets/query-simple/"
+    },
+    "widget_64": {
+      "id": "widget_64",
+      "uri": "widgets/helper-simple/"
+    },
+    "widget_66": {
+      "id": "widget_66",
+      "uri": "widgets/query-simple/"
+    },
+    "widget_67": {
+      "id": "widget_67",
+      "uri": "widgets/common/print/"
+    }
+  },
+  "layouts": {
+    "home-layout-large": {
+      "type": "FIXED",
+      "content": {
+        "2": {
+          "type": "WIDGET",
+          "widgetId": "widget_12"
+        }
+      }
+    },
+    "layout_2": {
+      "type": "FIXED",
+      "content": {
+        "0": {
+          "type": "WIDGET",
+          "widgetId": "widget_8"
+        },
+        "2": {
+          "type": "WIDGET",
+          "widgetId": "widget_32"
+        },
+        "3": {
+          "type": "WIDGET",
+          "widgetId": "widget_63"
+        },
+        "5": {
+          "type": "WIDGET",
+          "widgetId": "widget_66"
+        },
+        "6": {
+          "type": "WIDGET",
+          "widgetId": "widget_67"
+        }
+      }
+    },
+    "layout_3": {
+      "type": null,
+      "content": {}
+    },
+    "layout_4": {
+      "type": "FIXED",
+      "content": {
+        "0": {
+          "type": "WIDGET",
+          "widgetId": "widget_22"
+        },
+        "1": {
+          "type": "WIDGET",
+          "widgetId": "widget_35"
+        },
+        "2": {
+          "type": "WIDGET",
+          "widgetId": "widget_64"
+        }
+      }
+    },
+    "layout_16": {
+      "type": "FIXED",
+      "content": {
+        "1": {
+          "type": "WIDGET",
+          "widgetId": "widget_6"
+        },
+        "2": {
+          "type": "WIDGET",
+          "widgetId": "widget_45"
+        }
+      }
+    },
+    "layout_17": {
+      "type": "FIXED",
+      "content": {
+        "0": {
+          "type": "WIDGET",
+          "widgetId": "widget_13"
+        }
+      }
+    },
+    "layout_47": {
+      "type": "FIXED",
+      "content": {
+        "4": {
+          "type": "WIDGET",
+          "widgetId": "widget_29"
+        }
+      }
+    },
+    "layout_49": {
+      "type": "FIXED",
+      "content": {
+        "0": {
+          "type": "WIDGET",
+          "widgetId": "widget_30"
+        },
+        "1": {
+          "type": "WIDGET",
+          "widgetId": "widget_31"
+        }
+      }
+    },
+    "layout_53": {
+      "type": "FIXED",
+      "content": {
+        "4": {
+          "type": "WIDGET",
+          "widgetId": "widget_29"
+        }
+      }
+    },
+    "layout_54": {
+      "type": "FIXED",
+      "content": {
+        "0": {
+          "type": "WIDGET",
+          "widgetId": "widget_30"
+        },
+        "1": {
+          "type": "WIDGET",
+          "widgetId": "widget_31"
+        }
+      }
+    },
+    "layout_55": {
+      "type": "FIXED",
+      "content": {}
+    },
+    "layout_75": {
+      "type": "FIXED",
+      "content": {
+        "0": {
+          "type": "WIDGET",
+          "widgetId": "widget_44"
+        }
+      }
+    },
+    "layout_76": {
+      "type": "FLEX_ROW",
+      "content": {
+        "0": {
+          "type": "WIDGET",
+          "widgetId": "widget_5"
+        },
+        "1": {
+          "type": "WIDGET",
+          "widgetId": "widget_46"
+        }
+      }
+    },
+    "layout_77": {
+      "type": "FLEX_ROW",
+      "content": {
+        "1": {
+          "type": "WIDGET",
+          "widgetId": "widget_3"
+        },
+        "2": {
+          "type": "WIDGET",
+          "widgetId": "widget_41"
+        }
+      }
+    },
+    "layout_78": {
+      "type": "FIXED",
+      "content": {
+        "2": {
+          "type": "WIDGET",
+          "widgetId": "widget_58"
+        }
+      }
+    },
+    "layout_79": {
+      "type": "FIXED",
+      "content": {
+        "1": {
+          "type": "WIDGET",
+          "widgetId": "widget_6"
+        },
+        "2": {
+          "type": "WIDGET",
+          "widgetId": "widget_59"
+        }
+      }
+    },
+    "layout_80": {
+      "type": "FIXED",
+      "content": {
+        "0": {
+          "type": "WIDGET",
+          "widgetId": "widget_22"
+        },
+        "1": {
+          "type": "WIDGET",
+          "widgetId": "widget_35"
+        },
+        "2": {
+          "type": "WIDGET",
+          "widgetId": "widget_64"
+        }
+      }
+    },
+    "layout_81": {
+      "type": "FIXED",
+      "content": {}
+    },
+    "layout_82": {
+      "type": "FLEX_ROW",
+      "content": {
+        "0": {
+          "type": "WIDGET",
+          "widgetId": "widget_5"
+        },
+        "1": {
+          "type": "WIDGET",
+          "widgetId": "widget_60"
+        }
+      }
+    },
+    "layout_83": {
+      "type": "FIXED",
+      "content": {
+        "0": {
+          "type": "WIDGET",
+          "widgetId": "widget_8"
+        },
+        "2": {
+          "type": "WIDGET",
+          "widgetId": "widget_32"
+        },
+        "3": {
+          "type": "WIDGET",
+          "widgetId": "widget_63"
+        }
+      }
+    },
+    "layout_84": {
+      "type": null,
+      "content": {}
+    },
+    "layout_85": {
+      "type": "FLEX_ROW",
+      "content": {
+        "1": {
+          "type": "WIDGET",
+          "widgetId": "widget_3"
+        },
+        "2": {
+          "type": "WIDGET",
+          "widgetId": "widget_41"
+        }
+      }
+    },
+    "layout_86": {
+      "type": "FIXED",
+      "content": {
+        "0": {
+          "type": "WIDGET",
+          "widgetId": "widget_13"
+        }
+      }
+    },
+    "layout_87": {
+      "type": "FIXED",
+      "content": {
+        "2": {
+          "type": "WIDGET",
+          "widgetId": "widget_61"
+        }
+      }
+    },
+    "layout_88": {
+      "type": "FIXED",
+      "content": {
+        "1": {
+          "type": "WIDGET",
+          "widgetId": "widget_6"
+        },
+        "2": {
+          "type": "WIDGET",
+          "widgetId": "widget_62"
+        }
+      }
+    },
+    "layout_89": {
+      "type": "FIXED",
+      "content": {
+        "0": {
+          "type": "WIDGET",
+          "widgetId": "widget_22"
+        },
+        "1": {
+          "type": "WIDGET",
+          "widgetId": "widget_35"
+        },
+        "2": {
+          "type": "WIDGET",
+          "widgetId": "widget_64"
+        }
+      }
+    },
+    "layout_90": {
+      "type": "FIXED",
+      "content": {}
+    },
+    "layout_91": {
+      "type": "FLEX_ROW",
+      "content": {
+        "0": {
+          "type": "WIDGET",
+          "widgetId": "widget_5"
+        },
+        "2": {
+          "type": "WIDGET",
+          "widgetId": "widget_3"
+        }
+      }
+    },
+    "layout_92": {
+      "type": "FIXED",
+      "content": {
+        "0": {
+          "type": "WIDGET",
+          "widgetId": "widget_8"
+        },
+        "2": {
+          "type": "WIDGET",
+          "widgetId": "widget_32"
+        },
+        "3": {
+          "type": "WIDGET",
+          "widgetId": "widget_63"
+        }
+      }
+    },
+    "layout_93": {
+      "type": null,
+      "content": {}
+    },
+    "layout_95": {
+      "type": "FIXED",
+      "content": {
+        "0": {
+          "type": "WIDGET",
+          "widgetId": "widget_13"
+        }
+      }
+    }
+  },
+  "views": {},
+  "sections": {}
+}

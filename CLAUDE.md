@@ -33,6 +33,13 @@ Read these files for context before making changes:
 4. **Release Notes**: `docs/releases/`
    - Per-release summaries
 
+5. **Unit Tests**: `query-simple/tests/README.md`
+   - How to run the 39 Jest suites (856 tests) inside an Experience Builder 1.20 install: copy the
+     widgets into `client/your-extensions/widgets/`, add one `moduleNameMapper` line, run
+     `npx jest your-extensions/widgets`
+   - Tests validate what the code should do; when changing behavior, update or add tests rather
+     than weakening assertions
+
 ## Technical Rules
 
 - **React imports**: Import React from `jimu-core`, never from `'react'` directly

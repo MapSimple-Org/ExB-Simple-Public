@@ -2,8 +2,8 @@
 
 Custom widgets for ArcGIS Experience Builder Developer Edition. Built for performance, deep-linking, and advanced result management.
 
-**Current Version**: QS `1.20.0-r028.157` | FS `1.20.0-r005.023`
-**Latest Update**: Accessibility batch (self-explaining Search, required-field markers) + View in Table now opens the table panel (August 14, 2026)
+**Current Version**: QS `1.20.0-r028.159` | FS `1.20.0-r005.023`
+**Latest Update**: Result geometry at full precision + the Jest unit tests now ship in the package with run instructions (September 9, 2026)
 
 ## Key Differentiators (Why QuerySimple?)
 
@@ -16,6 +16,18 @@ QuerySimple is designed to solve the common pain points of the standard Experien
 - **Persistence & Restoration**: Selections are maintained even when the identify tool is used, ensuring users never lose their search context.
 
 ---
+
+## What's New (r028.159, September 9, 2026)
+
+> Full release notes: [RELEASE_QS-r028.159_FS-r005.023](docs/releases/RELEASE_QS-r028.159_FS-r005.023.md)
+
+### Unit tests ship with the widgets
+
+All 39 Jest suites (856 tests) are now included under each widget's `tests/` folder, with run instructions in [`query-simple/tests/README.md`](query-simple/tests/README.md). Three steps: copy the four widget folders into `client/your-extensions/widgets/` of an Experience Builder 1.20 Developer Edition install, add one `moduleNameMapper` line to Esri's stock `client/jest.config.js`, and run `npx jest your-extensions/widgets` from `client/`. Verified in exactly that layout. The suite covers the deterministic logic (SQL building, URL and hash parsing, selection and zoom utilities, template rendering, config resolution); visual behavior is not covered.
+
+### Result geometry at full precision
+
+Display queries no longer ask the service to generalize result geometry. Results come back exactly as stored (previously a 0.1 map-unit tolerance, roughly 7 cm on the ground, was applied). If you are investigating an offset between printed and on-screen maps, note that this change is not the cause of one: that class of offset comes from datum transformation differences between the hosted feature service and the print service, which the release notes describe. FeedSimple is unchanged this release (carried forward at r005.023).
 
 ## What's New (r028.157, August 14, 2026)
 
@@ -359,9 +371,9 @@ Per-widget zip downloads are available in the [`dist/`](dist/) folder. Each zip 
 
 ## Test Results
 
-- **Unit tests:** 751/751 passing
-- **E2E tests:** 35 passed, 4 skipped, 2 flaky, 0 failed (Playwright v2 suite)
+- **Unit tests:** 856/856 passing across 39 Jest suites. The suites ship in this package; run them yourself with the instructions in [`query-simple/tests/README.md`](query-simple/tests/README.md).
 - **TypeScript errors:** 0
+- The Playwright end-to-end suite is run internally before each release and is not included in the package.
 
 ---
 

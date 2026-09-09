@@ -608,18 +608,17 @@ export function generateQueryParams (
   }
 
   // compose query params for query
-  // r027.066: maxAllowableOffset is a JSAPI esri/rest/support/Query property,
-  // not modeled on jimu-core's FeatureLayerQueryParams. It is intentionally
-  // threaded through to the underlying esri Query for geometry generalization
-  // (CLAUDE.md "Geometry Generalization" rule). The intersection type
-  // documents this passthrough in place rather than reaching for `as any`.
-  const queryParams: FeatureLayerQueryParams & { maxAllowableOffset?: number } = {
+  // r028.158: maxAllowableOffset REMOVED (was 0.1, threaded through as a JSAPI
+  // esri/rest/support/Query property via an intersection type - see r027.066 in the
+  // changelog for that history). Geometry now returns at full service precision so the
+  // widget can be ruled out of the field reports of ~3ft offset and visible
+  // generalization. Note the spatial query path never set it, so that path was already
+  // full-precision; the two paths are now consistent. Re-introduce only with measured
+  // evidence that payload size is hurting, and prefer a per-call option over a blanket
+  // default (see direct-query.ts).
+  const queryParams: FeatureLayerQueryParams = {
     // url: ds.url,
     returnGeometry: true,
-    /**
-     * PERFORMANCE OPTIMIZATION: Force lower precision for all display queries.
-     */
-    maxAllowableOffset: 0.1,
     page,
     // Limit pageSize to a sane default if not provided or too large
     pageSize: (pageSize && pageSize < 1000) ? pageSize : 1000,
@@ -637,7 +636,9 @@ export function generateQueryParams (
     fieldsCount: queryParams.outFields?.length,
     fields: queryParams.outFields?.join(', '),
     pageSize: queryParams.pageSize,
-    offset: queryParams.maxAllowableOffset
+    // r028.158: was `offset: queryParams.maxAllowableOffset`. Kept as an explicit marker so
+    // ?debug=TASK still shows the generalization posture of the running build.
+    geometryGeneralization: 'none'
   })
 
   if (useSpatialFilter && spatialFilter?.geometry) {

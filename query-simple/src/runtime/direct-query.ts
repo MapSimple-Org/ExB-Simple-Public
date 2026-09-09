@@ -129,7 +129,13 @@ export async function executeDirectQuery (
   query.where = whereClause
   query.outFields = outFields
   query.returnGeometry = options.returnGeometry ?? true
-  query.maxAllowableOffset = options.maxAllowableOffset ?? 0.1
+  // r028.158: no default generalization. The property is only set when a caller explicitly
+  // asks for it, so geometry comes back at full service precision by default. The option is
+  // deliberately KEPT (not deleted) so generalization can be re-enabled per-call with evidence
+  // if payload size ever becomes the problem it was in the r017 era.
+  if (options.maxAllowableOffset !== undefined) {
+    query.maxAllowableOffset = options.maxAllowableOffset
+  }
 
   if (options.pageSize) {
     query.num = options.pageSize

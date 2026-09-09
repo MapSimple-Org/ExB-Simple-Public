@@ -295,8 +295,11 @@ export async function executeQueryInternal (
         queryItem,
         queryParams.where || '1=1',
         {
+          // r028.158: maxAllowableOffset REMOVED. Geometry now returns at full service
+          // precision so QuerySimple can be ruled out of the ~3ft offset / generalization
+          // reports from the field. (The spatial path never set it, so it was already
+          // full-precision - this makes the two paths consistent.)
           returnGeometry: true,
-          maxAllowableOffset: 0.1,
           pageSize: queryParams.pageSize as number,
           orderByFields: queryParams.orderByFields as string[],
           outSpatialReference: mapView?.spatialReference

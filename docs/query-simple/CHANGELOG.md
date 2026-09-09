@@ -7,6 +7,51 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 > **Archive**: For releases r001-r021, see [CHANGELOG_ARCHIVE_r001-r021.md](docs/archive/CHANGELOG_ARCHIVE_r001-r021.md)
 
+## [1.20.0-r028.159] - 2026-09-09 - Unit tests ship in the public package
+
+### Context
+King County is standing up a mirror of QS/HS for continuity and asked for the tests and harness.
+The Jest harness is Esri's stock `client/jest.config.js`; everything in `dev-setup/1.20-overrides`
+is symlink plumbing with local paths and is NOT needed downstream. Proven by running the suite in
+a downstream-style layout (physical copies in `your-extensions/widgets`, stock 1.20 config plus one
+`widgets/` moduleNameMapper): 836/836 passed and one suite could not start.
+
+### Changed
+- `scripts/stage-public-release.py` no longer excludes `tests/`; all 39 suites and their fixtures
+  ship with the widgets.
+- `tests/table-reveal-utils.test.ts` loads structural projections
+  (`tests/fixtures/table-reveal/app{1,7}-layout.json`: widget uri/layouts/collapseSide, layout
+  content widgetId/sectionId, view layout, section views) instead of the private `apps/1` and
+  `apps/7` configs. Only the input source moved; assertions untouched. Fixtures grep-verified free
+  of URLs, item ids, and org strings.
+
+### Added
+- `widgets/query-simple/tests/README.md`: three-step run instructions, expected counts, fixture
+  provenance, troubleshooting table. Pointer READMEs in the other three test folders.
+
+### Verified
+- Downstream-style layout after the fixture change: 39/39 suites, 856/856 tests. Local: identical.
+
+## [1.20.0-r028.158] - 2026-08-19 - Geometry generalization removed from display queries
+
+### Context
+Field reports of a ~3 ft offset and visible generalization on result graphics. Removing our
+`maxAllowableOffset: 0.1` (about 7 cm at this latitude) was done to take the widget off the suspect
+list. It was not the cause: the offset is a datum transformation disagreement between the AGOL
+hosted feature service (no NAD83(HARN) to WGS84 shift on `outSR` reprojection, documented) and the
+print service (applies one, documented), ~1.3 m locally. Full evidence in
+`docs/team/PARCEL_OFFSET_FINDINGS.md`. Removal kept anyway: it was dropping nothing measurable.
+
+### Changed
+- `query-execution-handler.ts`, `query-utils.ts`, `direct-query.ts`: no default
+  `maxAllowableOffset`. The per-call option in `direct-query.ts` is retained (conditional set, no
+  default). The spatial path never set it, so both paths are now consistent.
+- CLAUDE.md Geometry Generalization rule, FEATURE_LIST, DEVELOPMENT_GUIDE updated; history docs
+  left alone. `?debug=TASK` logs `geometryGeneralization: 'none'`.
+
+### Verified
+- Jest 856/856, tsc clean. Live: results still align with the parcel layer on screen.
+
 ## [1.20.0-r028.156 - r028.157] - 2026-08-14 - View in Table now opens the table (TODO #44)
 
 ### Context
