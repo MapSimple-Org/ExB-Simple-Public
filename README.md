@@ -2,8 +2,8 @@
 
 Custom widgets for ArcGIS Experience Builder Developer Edition. Built for performance, deep-linking, and advanced result management.
 
-**Current Version**: QS `1.20.0-r028.159` | FS `1.20.0-r005.023`
-**Latest Update**: Result geometry at full precision + the Jest unit tests now ship in the package with run instructions (September 9, 2026)
+**Current Version**: QS `1.20.0-r028.160` | FS `1.20.0-r005.024`
+**Latest Update**: One command runs the shipped unit tests, with a launch config for each family (September 9, 2026)
 
 ## Key Differentiators (Why QuerySimple?)
 
@@ -17,13 +17,21 @@ QuerySimple is designed to solve the common pain points of the standard Experien
 
 ---
 
+## What's New (r028.160 + r005.024, September 9, 2026)
+
+> Full release notes: [RELEASE_QS-r028.160_FS-r005.024](docs/releases/RELEASE_QS-r028.160_FS-r005.024.md)
+
+### One command runs the tests
+
+r028.159 shipped the unit tests but still asked you to hand-edit Esri's `client/jest.config.js`. That step is gone. Each package carries a launch config, so from the `client/` folder it is one command: `npx jest --config your-extensions/widgets/query-simple/tests/jest.config.js your-extensions/widgets` for the full package, or the same with `feed-simple` in the path for a FeedSimple-only install. The config loads Esri's own Jest configuration at runtime and adds only the one module mapping the widgets need, so nothing of Esri's is copied or edited and it keeps working across ExB patch updates. Verified against the stock 1.20 setup: 39 suites and 856 tests for the full package, 9 suites and 298 tests for FeedSimple alone.
+
 ## What's New (r028.159, September 9, 2026)
 
 > Full release notes: [RELEASE_QS-r028.159_FS-r005.023](docs/releases/RELEASE_QS-r028.159_FS-r005.023.md)
 
 ### Unit tests ship with the widgets
 
-All 39 Jest suites (856 tests) are now included under each widget's `tests/` folder, with run instructions in [`query-simple/tests/README.md`](query-simple/tests/README.md). Two steps: copy the four widget folders into `client/your-extensions/widgets/` of an Experience Builder 1.20 Developer Edition install, then from `client/` run `npx jest --config your-extensions/widgets/query-simple/tests/jest.config.js your-extensions/widgets`. The shipped config extends Esri's own Jest config at runtime; no Esri file is edited. FeedSimple-only installs have the same config at `feed-simple/tests/jest.config.js`. Verified in exactly those layouts. The suite covers the deterministic logic (SQL building, URL and hash parsing, selection and zoom utilities, template rendering, config resolution); visual behavior is not covered.
+All 39 Jest suites (856 tests) are now included under each widget's `tests/` folder, with run instructions in [`query-simple/tests/README.md`](query-simple/tests/README.md). Three steps: copy the four widget folders into `client/your-extensions/widgets/` of an Experience Builder 1.20 Developer Edition install, add one `moduleNameMapper` line to Esri's stock `client/jest.config.js`, and run `npx jest your-extensions/widgets` from `client/`. Verified in exactly that layout. The suite covers the deterministic logic (SQL building, URL and hash parsing, selection and zoom utilities, template rendering, config resolution); visual behavior is not covered.
 
 ### Result geometry at full precision
 

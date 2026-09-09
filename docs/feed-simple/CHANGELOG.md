@@ -5,6 +5,18 @@ All notable changes to the FeedSimple widget will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.20.0-r005.024] - 2026-09-09 - Test launch config
+
+### Added
+- `tests/jest.config.js`: requires Esri's stock `client/jest.config.js` at runtime and adds only the
+  `widgets/` moduleNameMapper, so the unit tests run with one command from `client/` and no edits to
+  Esri files. FeedSimple ships standalone, so it carries its own copy rather than relying on
+  query-simple's.
+- A full `tests/README.md` for the FeedSimple-only install (feed-simple + shared-code).
+
+### Verified
+- FeedSimple-only layout against the stock 1.20 config, widgets copied in: 9/9 suites, 298/298 tests.
+
 ## [1.20.0-r005.018] - 2026-05-28 - Shared-code version alignment (no functional change)
 
 ### Context

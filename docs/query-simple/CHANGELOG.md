@@ -7,6 +7,37 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 > **Archive**: For releases r001-r021, see [CHANGELOG_ARCHIVE_r001-r021.md](docs/archive/CHANGELOG_ARCHIVE_r001-r021.md)
 
+## [1.20.0-r028.160 / FS 1.20.0-r005.024] - 2026-09-09 - Test launch configs: one command, no edits to Esri files
+
+### Context
+King County is mirroring QS/HS for continuity. r028.159 shipped the Jest suites but still required
+the adopter to hand-edit Esri's `client/jest.config.js` to add a `widgets/` moduleNameMapper. This
+removes that step.
+
+### Added
+- `widgets/query-simple/tests/jest.config.js` and `widgets/feed-simple/tests/jest.config.js`: each
+  `require`s Esri's stock `client/jest.config.js` at runtime and adds only the `widgets/` mapper.
+  Nothing of Esri's is copied or edited, so the configs stay correct across ExB patches. Each throws
+  a plain location message if it is not at `client/your-extensions/widgets/<widget>/tests/`.
+  FeedSimple gets its own because it ships standalone without query-simple.
+- A full `widgets/feed-simple/tests/README.md` (was a pointer), covering the FeedSimple-only install.
+
+### Changed
+- `widgets/shared-code/mapsimple-common/tests/markdown-template-utils.test.ts`: the sample image URL
+  is a neutral placeholder instead of a county resource. Text-transform assertion only, no network.
+- Tests READMEs lead with the launch-config command; the manual mapper edit is documented as the
+  alternative. Public CLAUDE.md, public README, and the staging script's RELEASE_DOCS follow.
+
+### Verified
+- Full package, stock Esri config from the official 1.20 zip, widgets copied in: 39/39 suites,
+  856/856 tests. FeedSimple-only layout: 9/9 suites, 298/298 tests.
+
+### Release-integrity note
+This content was first published on 2026-09-09 by overwriting the r028.159 release zips in place,
+without a version bump, so that tag briefly served two different artifacts under one name. The
+r028.159 assets and release notes were restored to their as-published state (from staging commit
+0b3ccb653) and this content now carries its own version.
+
 ## [1.20.0-r028.159] - 2026-09-09 - Unit tests ship in the public package
 
 ### Context
@@ -28,11 +59,6 @@ a downstream-style layout (physical copies in `your-extensions/widgets`, stock 1
 ### Added
 - `widgets/query-simple/tests/README.md`: three-step run instructions, expected counts, fixture
   provenance, troubleshooting table. Pointer READMEs in the other three test folders.
-- Follow-up (same day): `tests/jest.config.js`, a launch config that `require`s Esri's stock
-  `client/jest.config.js` and adds only the `widgets/` mapper, so downstream runs need no edits
-  to Esri files. Fails with a location message if not at
-  `client/your-extensions/widgets/query-simple/tests/`. Same file at `feed-simple/tests/` with its own
-  README, since FeedSimple also ships standalone. No version bump (test tooling only, by ruling).
 
 ### Verified
 - Downstream-style layout after the fixture change: 39/39 suites, 856/856 tests. Local: identical.
